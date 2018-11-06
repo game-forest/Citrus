@@ -95,11 +95,11 @@ namespace Tangerine.UI.SceneView
 			var label = propertyNames[index].ToString()[0].ToString();
 			var fontHeight = 20;
 			if (index % 2 == 0) {
-				Center = new Vector2(a.X, (a.Y + b.Y) / 2);
+				Center = new Vector2(A.X, (A.Y + B.Y) / 2);
 			} else {
-				Center = new Vector2((a.X + b.X) / 2, a.Y);
+				Center = new Vector2((A.X + B.X) / 2, A.Y);
 			}
-			Center -= new Vector2(fontHeight / 4, fontHeight / 2);
+			Center = matrix.TransformVector(Center);
 			var lt = new Vector2(Center.X - 2, Center.Y);
 			var rb = new Vector2(Center.X + fontHeight / 2 + 1, Center.Y + fontHeight);
 			Renderer.DrawRect(lt, rb, Color4.Yellow);
