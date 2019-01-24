@@ -17,6 +17,9 @@ namespace Tangerine.UI
 
 			public TextViewWriter(ThemedTextView textView)
 			{
+				Instance.log = "";
+				Instance.logBackup = "";
+				Instance.logSize = TryGetLogFileSize();
 				this.textView = textView;
 			}
 
@@ -30,12 +33,19 @@ namespace Tangerine.UI
 				value = Encoding.UTF8.GetString(
 					Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(value))
 				);
+				if (string.IsNullOrEmpty(value)) {
+					return;
+				}
 				Application.InvokeOnMainThread(() => {
+					var timestamped = $"[{DateTime.Now.ToLongTimeString()}] {value}";
 #if DEBUG
-					System.Diagnostics.Debug.Write(value);
+					System.Diagnostics.Debug.Write(timestamped);
 #endif // DEBUG
-					SystemOut?.Write(value);
-					textView.Append(value);
+					SystemOut?.Write(timestamped);
+					textView.Append(timestamped);
+					Instance.log += timestamped;
+					Instance.logBackup += timestamped;
+					Instance.logSize += timestamped.Length;
 				});
 				Application.InvokeOnNextUpdate(textView.ScrollToEnd);
 			}
@@ -44,11 +54,22 @@ namespace Tangerine.UI
 		}
 
 		public static Console Instance { get; private set; }
+		public static string LogFileName
+		{
+			get {
+				var date = DateTime.Today;
+				return $"{Path.GetTempPath()}TangerineConsoleLog-{date.Day}-{date.Month}-{date.Year}.txt";
+			}
+		}
 
 		private Panel panel;
 		public readonly Widget RootWidget;
 		private ThemedTextView textView;
 		private TextWriter textWriter;
+		private string log;
+		private string logBackup;
+		private string lastWriteDate;
+		private int logSize;
 
 		public Console(Panel panel)
 		{
@@ -66,28 +87,87 @@ namespace Tangerine.UI
 			RootWidget.AddNode(CreateTextView());
 		}
 
-		private ICommand commandClear = new Command("Clear");
-
 		private Widget CreateTextView()
 		{
-			textView = new ThemedTextView { SquashDuplicateLines = true };
+			textView = new ThemedTextView {
+				SquashDuplicateLines = true
+			};
 			textWriter = new TextViewWriter(textView) {
 				SystemOut = System.Console.Out,
 			};
 			System.Console.SetOut(textWriter);
 			System.Console.SetError(textWriter);
-			var menu = new Menu();
-			menu.Add(Command.Copy);
+			textView.Tasks.Add(ManageTextViewTask);
+			return textView;
+		}
 
-			menu.Add(commandClear);
-			textView.Updated += (dt) => {
-				if (
-					textView.Input.WasKeyPressed(Key.Mouse0) ||
-					textView.Input.WasKeyPressed(Key.Mouse1)
-				) {
+		public void Show()
+		{
+			DockManager.Instance.ShowPanel(panel.Id);
+		}
+
+		private static int TryGetLogFileSize()
+		{
+			try {
+				return (int)new FileInfo($@"{LogFileName}").Length;
+			} catch (FileNotFoundException) {
+				File.WriteAllText(LogFileName, string.Empty);
+				return 0;
+			}
+		}
+
+		private IEnumerator<object> ManageTextViewTask()
+		{
+			var menu = new Menu() {
+				new Command("View in editor", () => {
+					var proj =  Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
+					try {
+						var header = $"\n========== {proj} console log time: {DateTime.Now.ToLongTimeString()}\n";
+						if (lastWriteDate != null) {
+							if (DateTime.Today.ToLongDateString() != lastWriteDate) {
+								header += "========== Changes detected: Date\n";
+							} else if (logSize != TryGetLogFileSize() + log.Length) {
+								header += "========== Changes detected: File has been modified during current session\n";
+							} else {
+								goto skipBackupLoad;
+							}
+							header += "========== Writing current session's log backup\n";
+							log = logBackup;
+						}
+						skipBackupLoad:
+						if (!string.IsNullOrEmpty(log)) {
+							File.AppendAllText(LogFileName, $"{header}{log}");
+							logSize = TryGetLogFileSize();
+							lastWriteDate = DateTime.Today.ToLongDateString();
+						}
+						System.Diagnostics.Process.Start($@"{LogFileName}");
+					} catch (System.Exception) {
+						// ignored
+					}
+					log = "";
+				}),
+				Command.MenuSeparator,
+				new Command("Clear", () => {
+					textView.Clear();
+					log = "";
+					logSize = TryGetLogFileSize();
+				}),
+				Command.Copy
+			};
+			textView.Gestures.Add(
+				new ClickGesture(0, () => {
 					textView.SetFocus();
 					Window.Current.Activate();
-				}
+				})
+			);
+			textView.Gestures.Add(
+				new ClickGesture(1, () => {
+					textView.SetFocus();
+					Window.Current.Activate();
+					menu.Popup();
+				})
+			);
+			while (true) {
 				if (textView.IsFocused()) {
 					Command.Copy.Enabled = true;
 					if (Command.Copy.WasIssued()) {
@@ -95,30 +175,11 @@ namespace Tangerine.UI
 						Clipboard.Text = textView.DisplayText;
 					}
 				}
-				if (textView.Input.WasKeyPressed(Key.Mouse1)) {
-					menu.Popup();
-				}
-				if (textView.IsFocused() && Command.Copy.WasIssued()) {
-					Command.Copy.Consume();
-					Clipboard.Text = textView.Text;
-				}
-				if (commandClear.WasIssued()) {
-					commandClear.Consume();
-					textView.Clear();
-				}
-				var i = textView.Content.Nodes.Count;
-				// numbers choosen by guess
-				if (i >= 500) {
+				if (textView.Content.Nodes.Count >= 500) {
 					textView.Content.Nodes.RemoveRange(0, 250);
 				}
-			};
-
-			return textView;
-		}
-
-		public void Show()
-		{
-			DockManager.Instance.ShowPanel(panel.Id);
+				yield return null;
+			}
 		}
 	}
 }
