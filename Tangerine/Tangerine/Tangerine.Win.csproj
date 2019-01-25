@@ -34,6 +34,10 @@
 
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="Resources\Icons\Dark\Tools\ConsoleCaseSensitive.png" />
+    <Content Include="Resources\Icons\Dark\Tools\ConsoleRegex.png" />
+    <Content Include="Resources\Icons\Light\Tools\ConsoleCaseSensitive.png" />
+    <Content Include="Resources\Icons\Light\Tools\ConsoleRegex.png" />
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
 

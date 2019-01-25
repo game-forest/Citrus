@@ -59,7 +59,11 @@ namespace Tangerine.UI
 						} else {
 							logBeforeProjectOpened.Append(fileMessage);
 						}
+						var start = textView.Content.Nodes.Count;
 						textView.Append(message);
+						Console.Instance.UpdateFontHeight(
+							Instance.currentFontHeight, start, textView.Content.Nodes.Count
+						);
 					}
 					file?.Flush();
 					Application.InvokeOnNextUpdate(textView.ScrollToEnd);
@@ -108,14 +112,26 @@ namespace Tangerine.UI
 		private ThemedTextView textView;
 		private TextViewWriter textWriter;
 		private string toFind;
-		private int currentTextPos;
+		private int currentHighlightIndex;
+		private int currentVersion;
+		private int lastSearchVersion;
+		private float lastSearchScrollPos;
 		private bool isCaseSensitive;
 		private bool isMatchingRegex;
+		private float currentFontHeight;
+		private readonly float defaultFontHeight;
+		private List<(Rectangle rect, int line)> highlights;
 
 		public Console(Panel panel)
 		{
 			toFind = "";
-			currentTextPos = -1;
+			currentHighlightIndex = -1;
+			currentVersion = -1;
+			lastSearchVersion = -1;
+			lastSearchScrollPos = 0;
+			defaultFontHeight = 15;
+			currentFontHeight = 15;
+			highlights = new List<(Rectangle rect, int line)>();
 			isCaseSensitive = false;
 			isMatchingRegex = false;
 			if (Instance != null) {
@@ -128,8 +144,7 @@ namespace Tangerine.UI
 					Spacing = 6,
 				},
 				Nodes = {
-					CreateSearchBox(),
-					CreateSearchCheckboxes(),
+					CreateSearchPanel(),
 					CreateTextView(),
 				}
 			};
@@ -137,78 +152,97 @@ namespace Tangerine.UI
 		}
 
 		private ICommand commandClear = new Command("Clear");
+		private ICommand commandResetZoom = new Command("Reset Zoom");
 
-		private Widget CreateSearchBox()
+		private Widget CreateSearchPanel()
 		{
 			var searchBox = new ThemedEditBox {
 				LayoutCell = new LayoutCell(Alignment.Center),
 			};
 			searchBox.AddChangeWatcher(
 				() => searchBox.Text,
-				_ => { toFind = _; }
+				_ => {
+					toFind = _;
+					++currentVersion;
+					currentHighlightIndex = -1;
+				}
 			);
+			var caseSensitiveButton = new ToolbarButton {
+				MinMaxSize = new Vector2(24),
+				Size = new Vector2(24),
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+				Anchors = Anchors.Left,
+				Clicked = () => {
+					isCaseSensitive = !isCaseSensitive;
+					++currentVersion;
+					currentHighlightIndex = -1;
+				},
+				Texture = IconPool.GetTexture("Tools.ConsoleCaseSensitive"),
+				Tooltip = "Case Sensitive Matching"
+			};
+			caseSensitiveButton.Clicked += () => caseSensitiveButton.Checked = !caseSensitiveButton.Checked;
+			var regexButton = new ToolbarButton {
+				MinMaxSize = new Vector2(24),
+				Size = new Vector2(24),
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+				Anchors = Anchors.Left,
+				Clicked = () => {
+					isMatchingRegex = !isMatchingRegex;
+					++currentVersion;
+					currentHighlightIndex = -1;
+				},
+				Texture = IconPool.GetTexture("Tools.ConsoleRegex"),
+				Tooltip = "Regex Matching"
+			};
+			regexButton.Clicked += () => regexButton.Checked = !regexButton.Checked;
 			return new Widget {
 				Layout = new HBoxLayout(),
 				Padding = Theme.Metrics.ControlsPadding,
 				LayoutCell = new LayoutCell { StretchX = 2 },
 				Nodes = {
+					new ToolbarButton {
+						MinMaxSize = new Vector2(24),
+						Size = new Vector2(24),
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
+						Anchors = Anchors.Left,
+						Clicked = () => {
+							UpdateFontHeight(currentFontHeight + 2);
+						},
+						Texture = IconPool.GetTexture("SceneView.ZoomIn"),
+					},
+					new ToolbarButton {
+						MinMaxSize = new Vector2(24),
+						Size = new Vector2(24),
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
+						Anchors = Anchors.Left,
+						Clicked = () => {
+							UpdateFontHeight(currentFontHeight - 2);
+						},
+						Texture = IconPool.GetTexture("SceneView.ZoomOut"),
+					},
+					caseSensitiveButton,
+					regexButton,
 					new ThemedSimpleText("Find: ") {
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
+						Padding = new Thickness(left: 2, right: 2),
 					},
 					searchBox,
 					new ThemedButton() {
 						LayoutCell = new LayoutCell(Alignment.Center),
 						Text = "Next",
-						Clicked = () =>
-							Find(i => {
-								return (i + 1) % textView.Content.Nodes.Count;
-							})
+						Clicked = () => {
+							++currentHighlightIndex;
+							Find();
+						}
 					},
 					new ThemedButton() {
 						LayoutCell = new LayoutCell(Alignment.Center),
 						Text = "Previous",
-						Clicked = () =>
-							Find(i => {
-								--i;
-								while (i < 0) {
-									i += textView.Content.Nodes.Count;
-								}
-								return i % textView.Content.Nodes.Count;
-							})
+						Clicked = () => {
+							--currentHighlightIndex;
+							Find();
+						}
 					}
-				}
-			};
-		}
-
-		private Widget CreateSearchCheckboxes()
-		{
-			var caseSensitiveCheckBox = new ThemedCheckBox {
-				TabTravesable = null
-			};
-			caseSensitiveCheckBox.Changed += args => { isCaseSensitive = !isCaseSensitive; };
-			var regexMatchingCheckBox = new ThemedCheckBox {
-				TabTravesable = null
-			};
-			regexMatchingCheckBox.Changed += args => { isMatchingRegex = !isMatchingRegex; };
-			return new Widget {
-				Layout = new HBoxLayout(),
-				Padding = Theme.Metrics.ControlsPadding,
-				LayoutCell = new LayoutCell { StretchX = 2, StretchY = 0 },
-				Nodes = {
-					caseSensitiveCheckBox,
-					new ThemedSimpleText {
-						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-						Padding = new Thickness(left: 2, right: 8),
-						Text = "Case sensitive",
-						ForceUncutText = true
-					},
-					regexMatchingCheckBox,
-					new ThemedSimpleText {
-						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-						Padding = new Thickness(left: 2, right: 8),
-						Text = "Regex",
-						ForceUncutText = true
-					},
 				}
 			};
 		}
@@ -251,6 +285,8 @@ namespace Tangerine.UI
 					textView.Clear();
 				}),
 				Command.Copy,
+				commandClear,
+				commandResetZoom
 			};
 			textView.Gestures.Add(
 				new ClickGesture(0, () => {
@@ -274,6 +310,20 @@ namespace Tangerine.UI
 						Clipboard.Text = textView.DisplayText;
 					}
 				}
+				if (commandClear.WasIssued()) {
+					commandClear.Consume();
+					if (textView.Content.Nodes.Count > 0) {
+						textView.Clear();
+						currentVersion = -1;
+						currentHighlightIndex = -1;
+					}
+				}
+				if (commandResetZoom.WasIssued()) {
+					commandResetZoom.Consume();
+					if (currentFontHeight != defaultFontHeight) {
+						UpdateFontHeight(defaultFontHeight);
+					}
+				}
 				if (textView.Content.Nodes.Count > TextViewWriter.MaxMessages) {
 					textView.Content.Nodes.RemoveRange(
 						0, textView.Content.Nodes.Count - TextViewWriter.MaxMessages / 2
@@ -284,63 +334,120 @@ namespace Tangerine.UI
 			}
 		}
 
-		private void Find(Func<int, int> inc)
+		private void Find()
 		{
-			var pattern = isCaseSensitive ? toFind : toFind.ToLower();
-			var lines = textView.Content.Nodes;
-			var maxScrollPos = Mathf.Abs(textView.Content.Height - textView.ContentHeight);
-			for (var counter = 0; counter < lines.Count; ++counter) {
-				currentTextPos = inc.Invoke(currentTextPos);
-				if (lines[currentTextPos] is ThemedSimpleText text) {
-					var s = isCaseSensitive ? text.Text : text.Text.ToLower();
-					if (isMatchingRegex ? Regex.Matches(s, pattern).Count > 0 : s.Contains(pattern)) {
-						textView.ScrollPosition = Mathf.Clamp((currentTextPos) * text.Height, 0, maxScrollPos);
-						break;
-					}
-				}
+			if (highlights.Count > 0) {
+				ClampHighlightIndex();
+				var maxScrollPos = Mathf.Abs(textView.Content.Height - textView.ContentHeight);
+				var currentTextPos = highlights[currentHighlightIndex].line;
+				textView.ScrollPosition =
+					Mathf.Clamp(currentTextPos * highlights[currentHighlightIndex].rect.Height, 0, maxScrollPos);
+			}
+		}
+
+		private void ClampHighlightIndex()
+		{
+			if (currentHighlightIndex < 0) {
+				currentHighlightIndex = highlights.Count - 1;
+			} else {
+				currentHighlightIndex %= highlights.Count;
 			}
 		}
 
 		public void HighlightText()
 		{
-			if (string.IsNullOrEmpty(toFind)) {
-				return;
-			}
-			var pattern = isCaseSensitive ? toFind : toFind.ToLower();
-			var lines = textView.Content.Nodes;
-			for (var i = 0; i < lines.Count; ++i) {
-				if (lines[i] is ThemedSimpleText text) {
-					var s = isCaseSensitive ? text.Text : text.Text.ToLower();
-					if (isMatchingRegex ? Regex.Matches(s, pattern).Count > 0 : s.Contains(pattern)) {
-						textView.PrepareRendererState();
-						int index;
-						int previousIndex = 0;
-						var size = Vector2.Zero;
-						var pos = text.CalcPositionInSpaceOf(textView);
-						pos.X += text.Padding.Left;
-						pos.Y += text.Padding.Top;
-						var match = isMatchingRegex ? Regex.Match(s, pattern) : null;
-						var newPattern = isMatchingRegex ? match.ToString() : pattern;
-						while ((index = s.IndexOf(isMatchingRegex ? newPattern : pattern, previousIndex, StringComparison.Ordinal)) >= 0) {
-							var filterSize = text.Font.MeasureTextLine(isMatchingRegex ? newPattern : toFind, text.FontHeight, text.LetterSpacing);
-							string skippedText = text.Text.Substring(previousIndex, index - previousIndex);
-							var skippedSize = text.Font.MeasureTextLine(skippedText, text.FontHeight, text.LetterSpacing);
-							size.X += skippedSize.X;
-							size.Y = Mathf.Max(size.Y, skippedSize.Y);
-							Renderer.DrawRect(pos.X + size.X, pos.Y, pos.X + size.X + filterSize.X, pos.Y + size.Y, ColorTheme.Current.Hierarchy.MatchColor);
-							size.X += filterSize.X;
-							size.Y = Mathf.Max(size.Y, filterSize.Y);
-							previousIndex = index + toFind.Length;
-							match?.NextMatch();
-							if (isMatchingRegex) {
-								if (!match.Success) {
-									break;
-								} else {
-									newPattern = match.ToString();
+			if (currentVersion != lastSearchVersion) {
+				lastSearchVersion = currentVersion;
+				lastSearchScrollPos = textView.ScrollPosition;
+				highlights.Clear();
+				if (string.IsNullOrEmpty(toFind)) {
+					return;
+				}
+				var pattern = isCaseSensitive ? toFind : toFind.ToLower();
+				if (isMatchingRegex) {
+					try {
+						Regex.Match(string.Empty, pattern);
+					}
+					catch (ArgumentException) {
+						return;
+					}
+				}
+				var lines = textView.Content.Nodes;
+				for (var i = 0; i < lines.Count; ++i) {
+					if (lines[i] is ThemedSimpleText text) {
+						var s = isCaseSensitive ? text.Text : text.Text.ToLower();
+						if (isMatchingRegex ? Regex.Matches(s, pattern).Count > 0 : s.Contains(pattern)) {
+							textView.PrepareRendererState();
+							int index;
+							int previousIndex = 0;
+							var size = Vector2.Zero;
+							var pos = text.CalcPositionInSpaceOf(textView);
+							pos.X += text.Padding.Left;
+							pos.Y += text.Padding.Top;
+							var match = isMatchingRegex ? Regex.Match(s, pattern) : null;
+							var newPattern = isMatchingRegex ? match.ToString() : pattern;
+							while ((index = s.IndexOf(isMatchingRegex ? newPattern : pattern, previousIndex, StringComparison.Ordinal)) >= 0) {
+								var filterSize =
+									text.Font.MeasureTextLine(
+										isMatchingRegex ?
+											text.Text.Substring(index, newPattern.Length) :
+											toFind,
+										text.FontHeight,
+										text.LetterSpacing
+									);
+								string skippedText = text.Text.Substring(previousIndex, index - previousIndex);
+								var skippedSize = text.Font.MeasureTextLine(skippedText, text.FontHeight, text.LetterSpacing);
+								size.X += skippedSize.X;
+								size.Y = Mathf.Max(size.Y, skippedSize.Y);
+								var rect = new Rectangle(pos.X + size.X, pos.Y, pos.X + size.X + filterSize.X, pos.Y + size.Y);
+								highlights.Add((rect, i));
+								Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.Hierarchy.MatchColor);
+								size.X += filterSize.X;
+								size.Y = Mathf.Max(size.Y, filterSize.Y);
+								previousIndex = index + (isMatchingRegex ? newPattern.Length : toFind.Length);
+								if (isMatchingRegex) {
+									match = match.NextMatch();
+									if (!match.Success) {
+										break;
+									} else {
+										newPattern = match.ToString();
+									}
 								}
 							}
 						}
 					}
+				}
+			} else {
+				var diff = textView.ScrollPosition - lastSearchScrollPos;
+				var shift =
+					textView.Behaviour.ScrollDirection == ScrollDirection.Vertical ?
+					new Vector2(0, diff) :
+					new Vector2(diff, 0);
+				for (var i = 0; i < highlights.Count; ++i) {
+					var rect = highlights[i].rect;
+					rect.A -= shift;
+					rect.B -= shift;
+					if (i == currentHighlightIndex) {
+						Renderer.DrawRect(rect.A - Vector2.One, rect.B + Vector2.One, Color4.Gray.Transparentify(0.5f));
+					}
+					Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.Hierarchy.MatchColor);
+				}
+			}
+		}
+
+		public void UpdateFontHeight(float value)
+		{
+			UpdateFontHeight(value, 0, textView.Content.Nodes.Count);
+		}
+
+		public void UpdateFontHeight(float value, int start, int end)
+		{
+			++currentVersion;
+			++currentFontHeight;
+			currentFontHeight = Mathf.Clamp(value, 15, 48);
+			for (var i = start; i < end; ++i) {
+				if (textView.Content.Nodes[i] is ThemedSimpleText text) {
+					text.FontHeight = value;
 				}
 			}
 		}
