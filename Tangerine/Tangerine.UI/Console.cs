@@ -151,9 +151,6 @@ namespace Tangerine.UI
 			panel.ContentWidget.AddNode(RootWidget);
 		}
 
-		private ICommand commandClear = new Command("Clear");
-		private ICommand commandResetZoom = new Command("Reset Zoom");
-
 		private Widget CreateSearchPanel()
 		{
 			var searchBox = new ThemedEditBox {
@@ -173,28 +170,30 @@ namespace Tangerine.UI
 				LayoutCell = new LayoutCell(Alignment.LeftCenter),
 				Anchors = Anchors.Left,
 				Clicked = () => {
-					isCaseSensitive = !isCaseSensitive;
-					++currentVersion;
-					currentHighlightIndex = -1;
+					ToggleCaseSensitiveMatching();
 				},
 				Texture = IconPool.GetTexture("Tools.ConsoleCaseSensitive"),
 				Tooltip = "Case Sensitive Matching"
 			};
-			caseSensitiveButton.Clicked += () => caseSensitiveButton.Checked = !caseSensitiveButton.Checked;
+			caseSensitiveButton.AddChangeWatcher(
+				() => isCaseSensitive,
+				_ => { caseSensitiveButton.Checked = _; }
+			);
 			var regexButton = new ToolbarButton {
 				MinMaxSize = new Vector2(24),
 				Size = new Vector2(24),
 				LayoutCell = new LayoutCell(Alignment.LeftCenter),
 				Anchors = Anchors.Left,
 				Clicked = () => {
-					isMatchingRegex = !isMatchingRegex;
-					++currentVersion;
-					currentHighlightIndex = -1;
+					ToggleRegexMatching();
 				},
 				Texture = IconPool.GetTexture("Tools.ConsoleRegex"),
 				Tooltip = "Regex Matching"
 			};
-			regexButton.Clicked += () => regexButton.Checked = !regexButton.Checked;
+			regexButton.AddChangeWatcher(
+				() => isMatchingRegex,
+				_ => { regexButton.Checked = _; }
+			);
 			return new Widget {
 				Layout = new HBoxLayout(),
 				Padding = Theme.Metrics.ControlsPadding,
@@ -206,7 +205,7 @@ namespace Tangerine.UI
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 						Anchors = Anchors.Left,
 						Clicked = () => {
-							UpdateFontHeight(currentFontHeight + 2);
+							Zoom(2);
 						},
 						Texture = IconPool.GetTexture("SceneView.ZoomIn"),
 					},
@@ -216,7 +215,7 @@ namespace Tangerine.UI
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 						Anchors = Anchors.Left,
 						Clicked = () => {
-							UpdateFontHeight(currentFontHeight - 2);
+							Zoom(-2);
 						},
 						Texture = IconPool.GetTexture("SceneView.ZoomOut"),
 					},
@@ -281,12 +280,14 @@ namespace Tangerine.UI
 					}
 				})),
 				Command.MenuSeparator,
-				new Command("Clear", () => {
-					textView.Clear();
-				}),
+				ConsoleCommands.ZoomIn,
+				ConsoleCommands.ZoomOut,
+				ConsoleCommands.ResetZoom,
+				ConsoleCommands.CaseSensitiveMatching,
+				ConsoleCommands.RegexMatching,
+				Command.MenuSeparator,
+				ConsoleCommands.Clear,
 				Command.Copy,
-				commandClear,
-				commandResetZoom
 			};
 			textView.Gestures.Add(
 				new ClickGesture(0, () => {
@@ -310,19 +311,35 @@ namespace Tangerine.UI
 						Clipboard.Text = textView.DisplayText;
 					}
 				}
-				if (commandClear.WasIssued()) {
-					commandClear.Consume();
+				if (ConsoleCommands.Clear.WasIssued()) {
+					ConsoleCommands.Clear.Consume();
 					if (textView.Content.Nodes.Count > 0) {
 						textView.Clear();
 						currentVersion = -1;
 						currentHighlightIndex = -1;
 					}
 				}
-				if (commandResetZoom.WasIssued()) {
-					commandResetZoom.Consume();
+				if (ConsoleCommands.ResetZoom.WasIssued()) {
+					ConsoleCommands.ResetZoom.Consume();
 					if (currentFontHeight != defaultFontHeight) {
 						UpdateFontHeight(defaultFontHeight);
 					}
+				}
+				if (ConsoleCommands.ZoomIn.WasIssued()) {
+					ConsoleCommands.ZoomIn.Consume();
+					Zoom(2);
+				}
+				if (ConsoleCommands.ZoomOut.WasIssued()) {
+					ConsoleCommands.ZoomOut.Consume();
+					Zoom(-2);
+				}
+				if (ConsoleCommands.CaseSensitiveMatching.WasIssued()) {
+					ConsoleCommands.CaseSensitiveMatching.Consume();
+					ToggleCaseSensitiveMatching();
+				}
+				if (ConsoleCommands.RegexMatching.WasIssued()) {
+					ConsoleCommands.RegexMatching.Consume();
+					ToggleRegexMatching();
 				}
 				if (textView.Content.Nodes.Count > TextViewWriter.MaxMessages) {
 					textView.Content.Nodes.RemoveRange(
@@ -332,6 +349,25 @@ namespace Tangerine.UI
 				textWriter.ProcessPendingMessages();
 				yield return null;
 			}
+		}
+
+		private void ToggleCaseSensitiveMatching()
+		{
+			isCaseSensitive = !isCaseSensitive;
+			++currentVersion;
+			currentHighlightIndex = -1;
+		}
+
+		private void ToggleRegexMatching()
+		{
+			isMatchingRegex = !isMatchingRegex;
+			++currentVersion;
+			currentHighlightIndex = -1;
+		}
+
+		private void Zoom(float value)
+		{
+			UpdateFontHeight(currentFontHeight + value);
 		}
 
 		private void Find()
@@ -375,7 +411,8 @@ namespace Tangerine.UI
 				var lines = textView.Content.Nodes;
 				for (var i = 0; i < lines.Count; ++i) {
 					if (lines[i] is ThemedSimpleText text) {
-						var s = isCaseSensitive ? text.Text : text.Text.ToLower();
+						var t = text.Text.Trim();
+						var s = isCaseSensitive ? t : t.ToLower();
 						if (isMatchingRegex ? Regex.Matches(s, pattern).Count > 0 : s.Contains(pattern)) {
 							textView.PrepareRendererState();
 							int index;
@@ -390,18 +427,18 @@ namespace Tangerine.UI
 								var filterSize =
 									text.Font.MeasureTextLine(
 										isMatchingRegex ?
-											text.Text.Substring(index, newPattern.Length) :
+											t.Substring(index, newPattern.Length) :
 											toFind,
 										text.FontHeight,
 										text.LetterSpacing
 									);
-								string skippedText = text.Text.Substring(previousIndex, index - previousIndex);
+								string skippedText = t.Substring(previousIndex, index - previousIndex);
 								var skippedSize = text.Font.MeasureTextLine(skippedText, text.FontHeight, text.LetterSpacing);
 								size.X += skippedSize.X;
 								size.Y = Mathf.Max(size.Y, skippedSize.Y);
 								var rect = new Rectangle(pos.X + size.X, pos.Y, pos.X + size.X + filterSize.X, pos.Y + size.Y);
 								highlights.Add((rect, i));
-								Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.Hierarchy.MatchColor);
+								Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.Console.MatchColor);
 								size.X += filterSize.X;
 								size.Y = Mathf.Max(size.Y, filterSize.Y);
 								previousIndex = index + (isMatchingRegex ? newPattern.Length : toFind.Length);
@@ -427,10 +464,15 @@ namespace Tangerine.UI
 					var rect = highlights[i].rect;
 					rect.A -= shift;
 					rect.B -= shift;
-					if (i == currentHighlightIndex) {
-						Renderer.DrawRect(rect.A - Vector2.One, rect.B + Vector2.One, Color4.Gray.Transparentify(0.5f));
-					}
-					Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.Hierarchy.MatchColor);
+					Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.Console.MatchColor);
+				}
+				if (currentHighlightIndex != -1) {
+					var selectionRect = highlights[currentHighlightIndex].rect;
+					Renderer.DrawRect(
+						selectionRect.A - shift - Vector2.One,
+						selectionRect.B - shift + Vector2.One,
+						ColorTheme.Current.Console.SelectionColor
+					);
 				}
 			}
 		}

@@ -315,6 +315,15 @@ namespace Tangerine.UI
 			public Color4 AssemblyBuildFailedIcon { get; set; }
 		}
 
+		public class ConsoleColors : Theme.DefaultColors
+		{
+			[YuzuOptional]
+			public Color4 SelectionColor { get; set; }
+
+			[YuzuOptional]
+			public Color4 MatchColor { get; set; }
+		}
+
 		[YuzuOptional]
 		public bool IsDark { get; set; }
 		[YuzuOptional]
@@ -343,6 +352,8 @@ namespace Tangerine.UI
 		public AnimationsColors Animations { get; set; }
 		[YuzuOptional]
 		public RemoteScriptingColors RemoteScripting { get; set; }
+		[YuzuOptional]
+		public ConsoleColors Console { get; set; }
 
 		public ColorTheme Clone()
 		{
@@ -517,6 +528,10 @@ namespace Tangerine.UI
 				AssemblyBuildSucceededIcon = new Color4(0, 163, 0),
 				AssemblyBuildFailedIcon = new Color4(163, 0, 0),
 			};
+			var console = new ConsoleColors {
+				SelectionColor = Color4.Black.Transparentify(0.5f),
+				MatchColor = Color4.Orange.Transparentify(0.6f),
+			};
 			return new ColorTheme {
 				IsDark = true,
 				Toolbar = toolbar,
@@ -532,6 +547,7 @@ namespace Tangerine.UI
 				Hierarchy = hierarchy,
 				Animations = animations,
 				RemoteScripting = remoteScripting,
+				Console = console,
 			};
 		}
 
@@ -695,6 +711,10 @@ namespace Tangerine.UI
 				AssemblyBuildSucceededIcon = new Color4(0, 220, 0),
 				AssemblyBuildFailedIcon = Color4.Red,
 			};
+			var console = new ConsoleColors {
+				SelectionColor = Color4.Gray.Transparentify(0.5f),
+				MatchColor = Color4.Yellow.Darken(0.5f).Transparentify(0.6f),
+			};
 			return new ColorTheme {
 				IsDark = false,
 				Toolbar = toolbar,
@@ -710,6 +730,7 @@ namespace Tangerine.UI
 				Hierarchy = hierarchy,
 				Animations = animations,
 				RemoteScripting = remoteScripting,
+				Console = console,
 			};
 		}
 	}
