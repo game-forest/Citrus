@@ -17,9 +17,6 @@ namespace Tangerine.UI
 
 			public TextViewWriter(ThemedTextView textView)
 			{
-				Instance.log = "";
-				Instance.logBackup = "";
-				Instance.logSize = TryGetLogFileSize();
 				this.textView = textView;
 			}
 
@@ -37,15 +34,22 @@ namespace Tangerine.UI
 					return;
 				}
 				Application.InvokeOnMainThread(() => {
-					var timestamped = $"[{DateTime.Now.ToLongTimeString()}] {value}";
+					var time = DateTime.Now.ToLongTimeString();
+					var proj = $"{Path.GetFileNameWithoutExtension(Project.Current?.CitprojPath ?? string.Empty)} ".TrimStart(' ');
+					var timestamped = $"[{proj}{time}] {value}".Replace("\r\n", "\n").Replace("\r", "\n");
+#if WIN
+					timestamped = timestamped.Replace("\n", "\r\n");
+#endif // WIN
+#if MAC
+					timestamped = timestamped.Replace("\n", "\r");
+#endif // MAC
 #if DEBUG
 					System.Diagnostics.Debug.Write(timestamped);
 #endif // DEBUG
 					SystemOut?.Write(timestamped);
 					textView.Append(timestamped);
-					Instance.log += timestamped;
+					File.AppendAllText(LogFileName, timestamped);
 					Instance.logBackup += timestamped;
-					Instance.logSize += timestamped.Length;
 				});
 				Application.InvokeOnNextUpdate(textView.ScrollToEnd);
 			}
@@ -54,11 +58,21 @@ namespace Tangerine.UI
 		}
 
 		public static Console Instance { get; private set; }
+
 		public static string LogFileName
 		{
-			get {
-				var date = DateTime.Today;
-				return $"{Path.GetTempPath()}TangerineConsoleLog-{date.Day}-{date.Month}-{date.Year}.txt";
+			get
+			{
+				var tempPath = Path.GetTempPath();
+				var logDir = Project.Current?.CitprojPath?.Replace(Path.GetFileName(Project.Current.CitprojPath), "Logs") ?? tempPath;
+				if (!Directory.Exists(logDir)) {
+					Directory.CreateDirectory(logDir);
+				}
+				var path = $"{logDir}\\TangerineConsoleLog [{Instance.sessionStartTime}].txt";
+				if (logDir == tempPath) {
+					File.AppendAllText(path, Instance.logBackup);
+				}
+				return path;
 			}
 		}
 
@@ -66,13 +80,13 @@ namespace Tangerine.UI
 		public readonly Widget RootWidget;
 		private ThemedTextView textView;
 		private TextWriter textWriter;
-		private string log;
 		private string logBackup;
-		private string lastWriteDate;
-		private int logSize;
+		private string sessionStartTime;
 
 		public Console(Panel panel)
 		{
+			logBackup = "";
+			sessionStartTime = DateTime.Now.ToString().Replace('/', '-').Replace(':', '-');
 			if (Instance != null) {
 				throw new InvalidOperationException();
 			}
@@ -120,37 +134,11 @@ namespace Tangerine.UI
 		{
 			var menu = new Menu() {
 				new Command("View in editor", () => {
-					var proj =  Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
-					try {
-						var header = $"\n========== {proj} console log time: {DateTime.Now.ToLongTimeString()}\n";
-						if (lastWriteDate != null) {
-							if (DateTime.Today.ToLongDateString() != lastWriteDate) {
-								header += "========== Changes detected: Date\n";
-							} else if (logSize != TryGetLogFileSize() + log.Length) {
-								header += "========== Changes detected: File has been modified during current session\n";
-							} else {
-								goto skipBackupLoad;
-							}
-							header += "========== Writing current session's log backup\n";
-							log = logBackup;
-						}
-						skipBackupLoad:
-						if (!string.IsNullOrEmpty(log)) {
-							File.AppendAllText(LogFileName, $"{header}{log}");
-							logSize = TryGetLogFileSize();
-							lastWriteDate = DateTime.Today.ToLongDateString();
-						}
-						System.Diagnostics.Process.Start($@"{LogFileName}");
-					} catch (System.Exception) {
-						// ignored
-					}
-					log = "";
+					System.Diagnostics.Process.Start($@"{LogFileName}");
 				}),
 				Command.MenuSeparator,
 				new Command("Clear", () => {
 					textView.Clear();
-					log = "";
-					logSize = TryGetLogFileSize();
 				}),
 				Command.Copy
 			};
