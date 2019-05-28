@@ -7244,6 +7244,178 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static void Read_Lime_PolygonMesh__PolygonMesh(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.PolygonMesh.PolygonMesh)obj;
+			var dg = (BinaryDeserializerGen)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				result.Anchors = (global::Lime.Anchors)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					while (--tmp1 >= 0) {
+						var tmp2 = (global::Lime.Animation)dg.ReadObject<global::Lime.Animation>();
+						result.Animations.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
+				var tmp3 = d.Reader.ReadInt32();
+				if (tmp3 >= 0) {
+					while (--tmp3 >= 0) {
+						var tmp4 = (global::Lime.IAnimator)dg.ReadObject<global::Lime.IAnimator>();
+						result.Animators.Add(tmp4);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (4 == fd.OurIndex) {
+				result.Blending = (global::Lime.Blending)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (5 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Color4));
+				var tmp5 = new global::Lime.Color4();
+				tmp5.ABGR = d.Reader.ReadUInt32();
+				result.Color = tmp5;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (6 == fd.OurIndex) {
+				var tmp6 = d.Reader.ReadInt32();
+				if (tmp6 >= 0) {
+					while (--tmp6 >= 0) {
+						var tmp7 = (global::Lime.NodeComponent)dg.ReadObject<global::Lime.NodeComponent>();
+						result.Components.Add(tmp7);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (7 == fd.OurIndex) {
+				result.ContentsPath = d.Reader.ReadString();
+				if (result.ContentsPath == "" && d.Reader.ReadBoolean()) result.ContentsPath = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (8 == fd.OurIndex) {
+				result.CurrentState = (global::Lime.PolygonMesh.PolygonMesh.State)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (9 == fd.OurIndex) {
+				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
+				var tmp8 = d.Reader.ReadInt32();
+				if (tmp8 >= 0) {
+					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+					while (--tmp8 >= 0) {
+						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
+						result.Folders.Add(tmp9);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (10 == fd.OurIndex) {
+				result.HitTestMethod = (global::Lime.HitTestMethod)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (11 == fd.OurIndex) {
+				result.Id = d.Reader.ReadString();
+				if (result.Id == "" && d.Reader.ReadBoolean()) result.Id = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (12 == fd.OurIndex) {
+				var tmp10 = d.Reader.ReadInt32();
+				if (tmp10 >= 0) {
+					while (--tmp10 >= 0) {
+						var tmp11 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
+						result.Nodes.Add(tmp11);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (13 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Thickness));
+				var tmp12 = new global::Lime.Thickness();
+				tmp12.Left = d.Reader.ReadSingle();
+				tmp12.Right = d.Reader.ReadSingle();
+				tmp12.Top = d.Reader.ReadSingle();
+				tmp12.Bottom = d.Reader.ReadSingle();
+				result.Padding = tmp12;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (14 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp13 = new global::Lime.Vector2();
+				tmp13.X = d.Reader.ReadSingle();
+				tmp13.Y = d.Reader.ReadSingle();
+				result.Pivot = tmp13;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (15 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp14 = new global::Lime.Vector2();
+				tmp14.X = d.Reader.ReadSingle();
+				tmp14.Y = d.Reader.ReadSingle();
+				result.Position = tmp14;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (16 == fd.OurIndex) {
+				result.Rotation = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (17 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp15 = new global::Lime.Vector2();
+				tmp15.X = d.Reader.ReadSingle();
+				tmp15.Y = d.Reader.ReadSingle();
+				result.Scale = tmp15;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (18 == fd.OurIndex) {
+				result.Shader = (global::Lime.ShaderId)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (19 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp16 = new global::Lime.Vector2();
+				tmp16.X = d.Reader.ReadSingle();
+				tmp16.Y = d.Reader.ReadSingle();
+				result.SilentSize = tmp16;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (20 == fd.OurIndex) {
+				result.SkinningWeights = (global::Lime.SkinningWeights)dg.ReadObject<global::Lime.SkinningWeights>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (21 == fd.OurIndex) {
+				result.Tag = d.Reader.ReadString();
+				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (22 == fd.OurIndex) {
+				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (23 == fd.OurIndex) {
+				result.Texture = (global::Lime.ITexture)dg.ReadObject<global::Lime.ITexture>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (24 == fd.OurIndex) {
+				result.Visible = d.Reader.ReadBoolean();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime_PolygonMesh__PolygonMesh(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.PolygonMesh.PolygonMesh();
+			Read_Lime_PolygonMesh__PolygonMesh(d, def, result);
+			return result;
+		}
+
 		private static void Read_Lime__Polyline(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.Polyline)obj;
@@ -11584,6 +11756,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.ParticleModifier)] = Read_Lime__ParticleModifier;
 			readCache[typeof(global::Lime.ParticlesMagnet)] = Read_Lime__ParticlesMagnet;
 			readCache[typeof(global::Lime.PointObject)] = Read_Lime__PointObject;
+			readCache[typeof(global::Lime.PolygonMesh.PolygonMesh)] = Read_Lime_PolygonMesh__PolygonMesh;
 			readCache[typeof(global::Lime.Polyline)] = Read_Lime__Polyline;
 			readCache[typeof(global::Lime.PolylinePoint)] = Read_Lime__PolylinePoint;
 			readCache[typeof(global::Lime.PostProcessingComponent)] = Read_Lime__PostProcessingComponent;
@@ -11789,6 +11962,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.ParticlesMagnet)] = Make_Lime__ParticlesMagnet;
 			makeCache[typeof(global::Lime.Plane)] = Make_Lime__Plane;
 			makeCache[typeof(global::Lime.PointObject)] = Make_Lime__PointObject;
+			makeCache[typeof(global::Lime.PolygonMesh.PolygonMesh)] = Make_Lime_PolygonMesh__PolygonMesh;
 			makeCache[typeof(global::Lime.Polyline)] = Make_Lime__Polyline;
 			makeCache[typeof(global::Lime.PolylinePoint)] = Make_Lime__PolylinePoint;
 			makeCache[typeof(global::Lime.PostProcessingComponent)] = Make_Lime__PostProcessingComponent;
