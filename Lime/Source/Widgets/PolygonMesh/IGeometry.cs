@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Lime.Source.Optimizations;
 
 namespace Lime.PolygonMesh
 {
@@ -410,7 +411,7 @@ namespace Lime.PolygonMesh
 			var i = HalfEdges.Count;
 			var new1 = new HalfEdge(i, he1.Origin, he1.Twin);
 			var new2 = new HalfEdge(i + 1, he2.Origin, he2.Twin);
-			var new3 = new HalfEdge(i + 1, vertex);
+			var new3 = new HalfEdge(i + 2, vertex);
 			if (he1.Twin != -1) {
 				MakeTwins(i, he1.Twin);
 			}
@@ -443,8 +444,44 @@ namespace Lime.PolygonMesh
 
 		public void AddVertex(Vertex vertex)
 		{
-			Vertices.Add(vertex);
-			// TO DO: Call triangulator.
+			new Triangulator().AddPoint(this, vertex);
+		}
+
+		public void Invalidate()
+		{
+			var i = 0;
+			var edges = new List<HalfEdge>();
+			for (var j = 0; j < HalfEdges.Count; j++) {
+				var edge = HalfEdges[j];
+				if (edge.Index != -1) {
+					var halfEdge = edge;
+					halfEdge.Index = i++;
+					edges.Add(halfEdge);
+					if (halfEdge.Twin != -1) {
+						if (halfEdge.Twin < halfEdge.Index) {
+							var tmp = edges[halfEdge.Twin];
+							tmp.Twin = halfEdge.Index;
+							edges[halfEdge.Twin] = tmp;
+						} else {
+							var tmp = HalfEdges[halfEdge.Twin];
+							tmp.Twin = halfEdge.Index;
+							HalfEdges[halfEdge.Twin] = tmp;
+						}
+					}
+				}
+			}
+			Faces.Clear();
+			i = 0;
+			while (i < edges.Count) {
+				Faces.Add(i);
+				i += 3;
+			}
+			HalfEdges = edges;
+#if DEBUG
+			foreach (var halfEdge in HalfEdges) {
+				System.Diagnostics.Debug.Assert(halfEdge.Twin == -1 || halfEdge.Index == HalfEdges[halfEdge.Twin].Twin);
+			}
+#endif
 		}
 	}
 }
