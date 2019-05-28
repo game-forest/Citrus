@@ -291,6 +291,7 @@ namespace Tangerine.UI.SceneView
 				new DragSplinePoint3DProcessor(),
 				new DragAnimationPathPointProcessor(),
 				new DragWidgetsProcessor(),
+				new PolygonMeshEdittingProcessor(),
 				new ResizeWidgetsProcessor(),
 				new RescalePointObjectSelectionProcessor(),
 				new RotatePointObjectSelectionProcessor(),
@@ -323,6 +324,7 @@ namespace Tangerine.UI.SceneView
 			new NineGridLinePresenter(this);
 			new Animation2DPathPresenter(this);
 			new WavePivotPresenter(this);
+			new PolygonMeshStructurePresenter(this);
 		}
 
 		public void CreateNode(Type nodeType, ICommand command)
