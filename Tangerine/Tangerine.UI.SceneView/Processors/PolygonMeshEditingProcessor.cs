@@ -1,16 +1,12 @@
 using Lime;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tangerine.Core;
 using Lime.PolygonMesh;
-using Lime.PolygonMesh.Structure;
 
 namespace Tangerine.UI.SceneView
 {
-	public class PolygonMeshEdittingProcessor : ITaskProvider
+	public class PolygonMeshEditingProcessor : ITaskProvider
 	{
 		private PolygonMesh mesh = null;
 		private Matrix32 meshToSceneWidgetTransform = Matrix32.Identity;
@@ -33,11 +29,10 @@ namespace Tangerine.UI.SceneView
 				}
 				mesh = meshes[0];
 				meshToSceneWidgetTransform = mesh.CalcTransitionToSpaceOf(SceneView.Instance.Scene);
-				IPolygonMeshStructureObject target = null;
-				foreach (var type in PolygonMesh.Geometry.StructureObjectsTypesArray) {
-					foreach (var obj in mesh.Structure[type]) {
-						var hitTest = obj.Transform(meshToSceneWidgetTransform).HitTest(SceneView.Instance.MousePosition, SceneView.Instance.Scene.Scale.X);
-						obj.InversionTransform();
+				ITangerineGeometryPrimitive target = null;
+				foreach (var primitive in PolygonMesh.Primitives) {
+					foreach (var obj in mesh.Geometry[primitive]) {
+						var hitTest = obj.HitTest(SceneView.Instance.MousePosition, meshToSceneWidgetTransform, radius: 4.0f, scale: SceneView.Instance.Scene.Scale.X);
 						if (hitTest) {
 							target = obj;
 							goto skip;
@@ -55,13 +50,13 @@ namespace Tangerine.UI.SceneView
 						}
 						break;
 					case PolygonMesh.State.Create:
-						Utils.ChangeCursorIfDefault(Cursors.DragHandOpen);
+						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-							yield return Create();
+							yield return Create(target);
 						}
 						break;
 					case PolygonMesh.State.Remove:
-						Utils.ChangeCursorIfDefault(Cursors.DragHandClosed);
+						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Remove(target);
 						}
@@ -71,16 +66,15 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		private IEnumerator<object> Modify(IPolygonMeshStructureObject obj)
+		private IEnumerator<object> Modify(ITangerineGeometryPrimitive obj)
 		{
 			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
 			var mousePos = SceneView.Instance.MousePosition * transform;
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
 				while (SceneView.Instance.Input.IsMousePressed()) {
-					// TO DO: Animator
 					Utils.ChangeCursorIfDefault(cursor);
-					obj.Move(mousePos, SceneView.Instance.MousePosition * transform, SceneView.Instance.Input.IsKeyPressed(Key.Control));
+					obj.Move(SceneView.Instance.MousePosition * transform - mousePos);
 					mousePos = SceneView.Instance.MousePosition * transform;
 					yield return null;
 				}
@@ -89,12 +83,19 @@ namespace Tangerine.UI.SceneView
 			yield return null;
 		}
 
-		private IEnumerator<object> Create()
+		private IEnumerator<object> Create(ITangerineGeometryPrimitive obj)
 		{
+			if (!(obj is TangerineFace)) {
+				yield return null;
+			}
+			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
+			var mousePos = SceneView.Instance.MousePosition * transform;
+			var cursor = WidgetContext.Current.MouseCursor;
+			mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos * transform });
 			yield return null;
 		}
 
-		private IEnumerator<object> Remove(IPolygonMeshStructureObject obj)
+		private IEnumerator<object> Remove(ITangerineGeometryPrimitive obj)
 		{
 			yield return null;
 		}

@@ -1,12 +1,7 @@
 using Lime;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tangerine.Core;
 using Lime.PolygonMesh;
-using Lime.PolygonMesh.Structure;
 
 namespace Tangerine.UI.SceneView
 {
@@ -36,20 +31,20 @@ namespace Tangerine.UI.SceneView
 			var meshToSceneWidgetTransform = mesh.CalcTransitionToSpaceOf(SceneView.Instance.Scene);
 			var mousePos = SceneView.Instance.MousePosition;
 			SceneView.Instance.Frame.PrepareRendererState();
-			foreach (var type in PolygonMesh.Geometry.StructureObjectsTypesArray.Reverse()) {
-				foreach (var obj in mesh.Structure[type]) {
-					var hitTest = obj.Transform(meshToSceneWidgetTransform).HitTest(mousePos, SceneView.Instance.Scene.Scale.X);
-					obj.InversionTransform();
+			foreach (var primitive in PolygonMesh.Primitives.Reverse()) {
+				foreach (var obj in mesh.Geometry[primitive]) {
+					var hitTest = obj.HitTest(mousePos, meshToSceneWidgetTransform, radius: 4.0f, scale: SceneView.Instance.Scene.Scale.X);
 					var shouldHighlight = hitTest && !wasHighlighted;
-					if (type == PolygonMesh.Geometry.StructureObjectsTypes.Face && !shouldHighlight) {
+					if (primitive == GeometryPrimitive.Face && !shouldHighlight) {
 						continue;
 					}
-					obj.Transform(meshToSceneFrameTransform).Render(
+					obj.Render(
+						meshToSceneFrameTransform,
 						shouldHighlight ?
 						Color4.Orange.Transparentify(0.2f) :
-						Color4.Green.Lighten(0.2f)
+						Color4.Green.Lighten(0.2f),
+						radius: 4.0f
 					);
-					obj.InversionTransform();
 					if (shouldHighlight) {
 						wasHighlighted = true;
 					}
