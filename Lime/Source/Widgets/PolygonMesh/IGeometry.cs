@@ -29,6 +29,7 @@ namespace Lime.PolygonMesh
 		bool HitTest(Vector2 position, Matrix32 transform, float radius = 1.0f, float scale = 1.0f);
 		void Move(Vector2 positionDelta);
 		void Render(Matrix32 transform, Color4 color, float radius = 1.0f);
+		Vector2 InterpolateUv(Vector2 position);
 	}
 
 	public struct TangerineVertex : ITangerineGeometryPrimitive
@@ -69,6 +70,10 @@ namespace Lime.PolygonMesh
 				color,
 				color
 			);
+		}
+		public Vector2 InterpolateUv(Vector2 position)
+		{
+			throw new InvalidOperationException();
 		}
 	}
 
@@ -141,6 +146,16 @@ namespace Lime.PolygonMesh
 				);
 			}
 		}
+
+		public Vector2 InterpolateUv(Vector2 position)
+		{
+			var v1 = Owner.Vertices[VerticeIndices[0]];
+			var v2 = Owner.Vertices[VerticeIndices[1]];
+			var len = Vector2.Distance(v1.Pos, v2.Pos);
+			var w1 = 1 - Vector2.Distance(position, v1.Pos) / len;
+			var w2 = 1 - w1;
+			return w1 * v1.UV1 + w2 * v2.UV1;
+		}
 	}
 
 	public struct TangerineFace : ITangerineGeometryPrimitive
@@ -208,6 +223,28 @@ namespace Lime.PolygonMesh
 				new Vertex() { Pos = p3, Color = color },
 			};
 			Renderer.DrawTriangleStrip(texture, vertices, vertices.Length);
+		}
+
+		/// <summary>
+		/// https://en.wikipedia.org/wiki/Barycentric_coordinate_system#Conversion_between_barycentric_and_Cartesian_coordinates
+		/// </summary>
+		public Vector2 InterpolateUv(Vector2 position)
+		{
+			var v1 = Owner.Vertices[VerticeIndices[0]];
+			var v2 = Owner.Vertices[VerticeIndices[1]];
+			var v3 = Owner.Vertices[VerticeIndices[2]];
+
+			var w1 =
+				((v2.Pos.Y - v3.Pos.Y) * (position.X - v3.Pos.X) + (v3.Pos.X - v2.Pos.X) * (position.Y - v3.Pos.Y)) /
+				((v2.Pos.Y - v3.Pos.Y) * (v1.Pos.X - v3.Pos.X) + (v3.Pos.X - v2.Pos.X) * (v1.Pos.Y - v3.Pos.Y));
+
+			var w2 =
+				((v3.Pos.Y - v1.Pos.Y) * (position.X - v3.Pos.X) + (v1.Pos.X - v3.Pos.X) * (position.Y - v3.Pos.Y)) /
+				((v2.Pos.Y - v3.Pos.Y) * (v1.Pos.X - v3.Pos.X) + (v3.Pos.X - v2.Pos.X) * (v1.Pos.Y - v3.Pos.Y));
+
+			var w3 = 1 - w1 - w2;
+
+			return w1 * v1.UV1 + w2 * v2.UV1 + w3 * v3.UV1;
 		}
 	}
 

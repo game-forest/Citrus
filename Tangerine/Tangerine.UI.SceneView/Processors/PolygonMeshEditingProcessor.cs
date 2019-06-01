@@ -85,13 +85,16 @@ namespace Tangerine.UI.SceneView
 
 		private IEnumerator<object> Create(ITangerineGeometryPrimitive obj)
 		{
-			if (!(obj is TangerineFace)) {
+			if (obj is TangerineVertex) {
 				yield return null;
 			}
 			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
 			var mousePos = SceneView.Instance.MousePosition * transform;
 			var cursor = WidgetContext.Current.MouseCursor;
-			mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos * transform });
+			using (Document.Current.History.BeginTransaction()) {
+				mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor });
+				Document.Current.History.CommitTransaction();
+			}
 			yield return null;
 		}
 
