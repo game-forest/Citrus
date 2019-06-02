@@ -7,6 +7,8 @@ namespace Lime.Source.Optimizations
 {
 	public class Triangulator
 	{
+		public static Triangulator Instance { get; } = new Triangulator();
+
 		public void AddPoint(Geometry geometry, Vertex vertex)
 		{
 			geometry.Vertices.Add(vertex);

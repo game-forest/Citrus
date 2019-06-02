@@ -481,7 +481,7 @@ namespace Lime.PolygonMesh
 
 		public void AddVertex(Vertex vertex)
 		{
-			new Triangulator().AddPoint(this, vertex);
+			Triangulator.Instance.AddPoint(this, vertex);
 		}
 
 		public void Invalidate()
