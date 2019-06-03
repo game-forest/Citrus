@@ -18,6 +18,7 @@ namespace Lime.PolygonMesh
 		ITangerineGeometryPrimitive[] this[GeometryPrimitive primitive] { get; }
 
 		void AddVertex(Vertex vertex);
+		void RemoveVertex(int index);
 		void MoveVertex(int index, Vector2 positionDelta);
 		void MoveVertices(int[] indices, Vector2 positionDelta);
 		void MoveVertexUv(int index, Vector2 uvDelta);
@@ -322,9 +323,9 @@ namespace Lime.PolygonMesh
 		[YuzuMember]
 		public List<HalfEdge> HalfEdges { get; set; }
 
-		public HalfEdge DummyHalfEdge => new HalfEdge(-1, -1);
+		public static HalfEdge DummyHalfEdge => new HalfEdge(-1, -1);
 
-		public Vertex DummyVertex => new Vertex();
+		public static Vertex DummyVertex => new Vertex();
 
 #if TANGERINE
 		public ITangerineGeometryPrimitive[] TangerineVertices;
@@ -497,6 +498,7 @@ namespace Lime.PolygonMesh
 			he2.Twin = first;
 			HalfEdges[first] = he1;
 			HalfEdges[second] = he2;
+			System.Diagnostics.Debug.Assert(he1.Origin != he2.Origin && he1.Origin == Next(he2).Origin && he2.Origin == Next(he1).Origin);
 		}
 
 		public void Connect(HalfEdge halfEdge, int vertex)
@@ -527,6 +529,11 @@ namespace Lime.PolygonMesh
 			HalfEdges.Add(new1);
 			HalfEdges.Add(new2);
 			HalfEdges.Add(new3);
+		}
+
+		public void RemoveVertex(int index)
+		{
+			Triangulator.Instance.RemoveVertex(this, index);
 		}
 
 		public void MoveVertex(int index, Vector2 positionDelta)
@@ -574,10 +581,10 @@ namespace Lime.PolygonMesh
 
 		public void AddVertex(Vertex vertex)
 		{
-			Triangulator.Instance.AddPoint(this, vertex);
+			Triangulator.Instance.AddVertex(this, vertex);
 		}
 
-		public void Invalidate()
+		public void Invalidate(int removedVertex = -1)
 		{
 			var i = 0;
 			var edges = new List<HalfEdge>();
@@ -586,6 +593,9 @@ namespace Lime.PolygonMesh
 				if (edge.Index != -1) {
 					var halfEdge = edge;
 					halfEdge.Index = i++;
+					if (removedVertex != -1 && halfEdge.Origin == Vertices.Count) {
+						halfEdge.Origin = removedVertex;
+					}
 					edges.Add(halfEdge);
 					if (halfEdge.Twin != -1) {
 						if (halfEdge.Twin < halfEdge.Index) {

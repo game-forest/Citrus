@@ -113,6 +113,10 @@ namespace Tangerine.UI.SceneView
 
 		private IEnumerator<object> Remove(ITangerineGeometryPrimitive obj)
 		{
+			if (obj is TangerineVertex vertex) {
+				mesh.Geometry.RemoveVertex(vertex.VerticeIndices[0]);
+				Window.Current.Invalidate();
+			}
 			yield return null;
 		}
 	}
