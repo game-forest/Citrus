@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lime.Source.Optimizations;
+using Yuzu;
 
 namespace Lime.PolygonMesh
 {
@@ -291,8 +292,13 @@ namespace Lime.PolygonMesh
 	{
 		public struct HalfEdge
 		{
+			[YuzuMember]
 			public int Origin;
+
+			[YuzuMember]
 			public int Index;
+
+			[YuzuMember]
 			public int Twin;
 
 			public HalfEdge(int index, int origin)
@@ -310,8 +316,10 @@ namespace Lime.PolygonMesh
 			}
 		}
 
+		[YuzuMember]
 		public List<Vertex> Vertices { get; set; }
 
+		[YuzuMember]
 		public List<HalfEdge> HalfEdges { get; set; }
 
 		public HalfEdge DummyHalfEdge => new HalfEdge(-1, -1);

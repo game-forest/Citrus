@@ -19,7 +19,9 @@ namespace Lime.PolygonMesh
 		public static GeometryPrimitive[] Primitives =
 			Enum.GetValues(typeof(GeometryPrimitive)) as GeometryPrimitive[];
 
-		public readonly IGeometry Geometry;
+		[YuzuMember]
+		[TangerineIgnore]
+		public IGeometry Geometry { get; set; }
 
 		[YuzuMember]
 		public State CurrentState { get; set; }
