@@ -74,8 +74,20 @@ namespace Tangerine.UI.SceneView
 			using (Document.Current.History.BeginTransaction()) {
 				while (SceneView.Instance.Input.IsMousePressed()) {
 					Utils.ChangeCursorIfDefault(cursor);
-					obj.Move(SceneView.Instance.MousePosition * transform - mousePos);
-					mousePos = SceneView.Instance.MousePosition * transform;
+					var newMousePos = SceneView.Instance.MousePosition * transform;
+					var positionDelta = newMousePos - mousePos;
+					var uvDelta = positionDelta / mesh.Size;
+					mousePos = newMousePos;
+					var isCtrlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
+					var isAltPressed = SceneView.Instance.Input.IsKeyPressed(Key.Alt);
+					if (isCtrlPressed) {
+						obj.MoveUv(uvDelta);
+						if (!isAltPressed) {
+							obj.Move(positionDelta);
+						}
+					} else {
+						obj.Move(positionDelta);
+					}
 					yield return null;
 				}
 				Document.Current.History.CommitTransaction();
@@ -95,6 +107,7 @@ namespace Tangerine.UI.SceneView
 				mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor });
 				Document.Current.History.CommitTransaction();
 			}
+			Window.Current.Invalidate();
 			yield return null;
 		}
 

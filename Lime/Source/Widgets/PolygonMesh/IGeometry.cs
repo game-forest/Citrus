@@ -18,9 +18,13 @@ namespace Lime.PolygonMesh
 
 		void AddVertex(Vertex vertex);
 		void MoveVertex(int index, Vector2 positionDelta);
+		void MoveVertices(int[] indices, Vector2 positionDelta);
+		void MoveVertexUv(int index, Vector2 uvDelta);
+		void MoveVerticesUv(int[] indices, Vector2 uvDelta);
 		int[] Traverse();
 	}
 
+#if TANGERINE
 	public interface ITangerineGeometryPrimitive
 	{
 		IGeometry Owner { get; set; }
@@ -28,6 +32,7 @@ namespace Lime.PolygonMesh
 
 		bool HitTest(Vector2 position, Matrix32 transform, float radius = 1.0f, float scale = 1.0f);
 		void Move(Vector2 positionDelta);
+		void MoveUv(Vector2 uvDelta);
 		void Render(Matrix32 transform, Color4 color, float radius = 1.0f);
 		Vector2 InterpolateUv(Vector2 position);
 	}
@@ -52,6 +57,11 @@ namespace Lime.PolygonMesh
 		public void Move(Vector2 positionDelta)
 		{
 			Owner.MoveVertex(VerticeIndices[0], positionDelta);
+		}
+
+		public void MoveUv(Vector2 uvDelta)
+		{
+			Owner.MoveVertexUv(VerticeIndices[0], uvDelta);
 		}
 
 		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
@@ -116,8 +126,12 @@ namespace Lime.PolygonMesh
 
 		public void Move(Vector2 positionDelta)
 		{
-			Owner.MoveVertex(VerticeIndices[0], positionDelta);
-			Owner.MoveVertex(VerticeIndices[1], positionDelta);
+			Owner.MoveVertices(VerticeIndices, positionDelta);
+		}
+
+		public void MoveUv(Vector2 uvDelta)
+		{
+			Owner.MoveVerticesUv(VerticeIndices, uvDelta);
 		}
 
 		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
@@ -155,6 +169,27 @@ namespace Lime.PolygonMesh
 			var w1 = 1 - Vector2.Distance(position, v1.Pos) / len;
 			var w2 = 1 - w1;
 			return w1 * v1.UV1 + w2 * v2.UV1;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (!(obj is TangerineEdge te)) {
+				return false;
+			}
+			var v11 = VerticeIndices[0];
+			var v12 = VerticeIndices[1];
+			var v21 = te.VerticeIndices[0];
+			var v22 = te.VerticeIndices[1];
+			return
+				v11 == v21 && v12 == v22 ||
+				v11 == v22 && v12 == v21;
+		}
+
+		public override int GetHashCode()
+		{
+			return
+				(VerticeIndices[0], VerticeIndices[1]).GetHashCode() +
+				(VerticeIndices[1], VerticeIndices[0]).GetHashCode();
 		}
 	}
 
@@ -198,9 +233,12 @@ namespace Lime.PolygonMesh
 
 		public void Move(Vector2 positionDelta)
 		{
-			Owner.MoveVertex(VerticeIndices[0], positionDelta);
-			Owner.MoveVertex(VerticeIndices[1], positionDelta);
-			Owner.MoveVertex(VerticeIndices[2], positionDelta);
+			Owner.MoveVertices(VerticeIndices, positionDelta);
+		}
+
+		public void MoveUv(Vector2 uvDelta)
+		{
+			Owner.MoveVerticesUv(VerticeIndices, uvDelta);
 		}
 
 		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
@@ -247,6 +285,7 @@ namespace Lime.PolygonMesh
 			return w1 * v1.UV1 + w2 * v2.UV1 + w3 * v3.UV1;
 		}
 	}
+#endif
 
 	public class Geometry : IGeometry
 	{
@@ -275,58 +314,81 @@ namespace Lime.PolygonMesh
 
 		public List<HalfEdge> HalfEdges { get; set; }
 
-		public List<int> Faces { get; set; }
-
 		public HalfEdge DummyHalfEdge => new HalfEdge(-1, -1);
 
 		public Vertex DummyVertex => new Vertex();
+
+#if TANGERINE
+		public ITangerineGeometryPrimitive[] TangerineVertices;
+
+		public ITangerineGeometryPrimitive[] TangerineEdges;
+
+		public ITangerineGeometryPrimitive[] TangerineFaces;
 
 		public ITangerineGeometryPrimitive[] this[GeometryPrimitive primitive]
 		{
 			get
 			{
-				ITangerineGeometryPrimitive[] objects = null;
+				ITangerineGeometryPrimitive[] primitives = null;
+				var facesCount = HalfEdges.Count / 3;
 				switch (primitive) {
 					case GeometryPrimitive.Vertex:
-						objects = new ITangerineGeometryPrimitive[Vertices.Count];
-						for (var i = 0; i < Vertices.Count; ++i) {
-							objects[i] = new TangerineVertex(this, i);
+						if (TangerineVertices == null) {
+							primitives = new ITangerineGeometryPrimitive[Vertices.Count];
+							for (var i = 0; i < Vertices.Count; ++i) {
+								primitives[i] = new TangerineVertex(this, i);
+							}
+							TangerineVertices = primitives;
+						} else {
+							primitives = TangerineVertices;
 						}
 						break;
 					case GeometryPrimitive.Edge:
-						objects = new ITangerineGeometryPrimitive[Faces.Count * 3];
-						for (var i = 0; i < Faces.Count; ++i) {
-							var v1v2 = HalfEdges[Faces[i]];
-							var v2v3 = HalfEdges[Next(Faces[i])];
-							var v3v1 = HalfEdges[Prev(Faces[i])];
-							objects[3 * i] =
-								new TangerineEdge(this, v1v2.Origin, v2v3.Origin, v1v2.Twin == -1);
-							objects[3 * i + 1] =
-								new TangerineEdge(this, v2v3.Origin, v3v1.Origin, v2v3.Twin == -1);
-							objects[3 * i + 2] =
-								new TangerineEdge(this, v3v1.Origin, v1v2.Origin, v3v1.Twin == -1);
+						if (TangerineEdges == null) {
+							var edges = new HashSet<ITangerineGeometryPrimitive>();
+							for (var i = 0; i < HalfEdges.Count; i += 3) {
+								var v1v2 = HalfEdges[i];
+								var v2v3 = HalfEdges[i + 1];
+								var v3v1 = HalfEdges[i + 2];
+								edges.Add(
+									new TangerineEdge(this, v1v2.Origin, v2v3.Origin, v1v2.Twin == -1));
+								edges.Add(
+									new TangerineEdge(this, v2v3.Origin, v3v1.Origin, v2v3.Twin == -1));
+								edges.Add(
+									new TangerineEdge(this, v3v1.Origin, v1v2.Origin, v3v1.Twin == -1));
+							}
+							primitives = new ITangerineGeometryPrimitive[edges.Count];
+							edges.CopyTo(primitives);
+							TangerineEdges = primitives;
+						} else {
+							primitives = TangerineEdges;
 						}
 						break;
 					case GeometryPrimitive.Face:
-						objects = new ITangerineGeometryPrimitive[Faces.Count];
-						for (var i = 0; i < Faces.Count; ++i) {
-							var v1v2 = HalfEdges[Faces[i]];
-							var v2v3 = HalfEdges[Next(Faces[i])];
-							var v3v1 = HalfEdges[Prev(Faces[i])];
-							objects[i] =
-								new TangerineFace(this, v1v2.Origin, v2v3.Origin, v3v1.Origin);
+						if (TangerineFaces == null) {
+							primitives = new ITangerineGeometryPrimitive[facesCount];
+							for (var i = 0; i < facesCount; ++i) {
+								var v1v2 = HalfEdges[3 * i];
+								var v2v3 = HalfEdges[3 * i + 1];
+								var v3v1 = HalfEdges[3 * i + 2];
+								primitives[i] =
+									new TangerineFace(this, v1v2.Origin, v2v3.Origin, v3v1.Origin);
+							}
+							TangerineFaces = primitives;
+						} else {
+							primitives = TangerineFaces;
 						}
 						break;
 				}
-				return objects;
+				return primitives;
 			}
 		}
+#endif
 
 		public Geometry()
 		{
 			Vertices = new List<Vertex>();
 			HalfEdges = new List<HalfEdge>();
-			Faces = new List<int>();
 		}
 
 		public Geometry(List<Vertex> vertices) : this()
@@ -440,7 +502,6 @@ namespace Lime.PolygonMesh
 			HalfEdges.Add(new HalfEdge(i, v1));
 			HalfEdges.Add(new HalfEdge(i + 1, v2));
 			HalfEdges.Add(new HalfEdge(i + 2, v3));
-			Faces.Add(i);
 		}
 
 		public void Connect(HalfEdge he1, HalfEdge he2, int vertex)
@@ -458,7 +519,6 @@ namespace Lime.PolygonMesh
 			HalfEdges.Add(new1);
 			HalfEdges.Add(new2);
 			HalfEdges.Add(new3);
-			Faces.Add(i);
 		}
 
 		public void MoveVertex(int index, Vector2 positionDelta)
@@ -468,13 +528,38 @@ namespace Lime.PolygonMesh
 			Vertices[index] = v;
 		}
 
+		public void MoveVertexUv(int index, Vector2 uvDelta)
+		{
+			var v = Vertices[index];
+			v.UV1 += uvDelta;
+			Vertices[index] = v;
+		}
+
+		public void MoveVertices(int[] indices, Vector2 positionDelta)
+		{
+			foreach (var index in indices) {
+				var v = Vertices[index];
+				v.Pos += positionDelta;
+				Vertices[index] = v;
+			}
+		}
+
+		public void MoveVerticesUv(int[] indices, Vector2 uvDelta)
+		{
+			foreach (var index in indices) {
+				var v = Vertices[index];
+				v.UV1 += uvDelta;
+				Vertices[index] = v;
+			}
+		}
+
 		public int[] Traverse()
 		{
-			var order = new int[Faces.Count * 3];
-			for (var i = 0; i < Faces.Count; ++i) {
-				order[3 * i] = HalfEdges[Faces[i]].Origin; 
-				order[3 * i + 1] = HalfEdges[Next(Faces[i])].Origin; 
-				order[3 * i + 2] = HalfEdges[Prev(Faces[i])].Origin;
+			var order = new int[HalfEdges.Count];
+			for (var i = 0; i < HalfEdges.Count; i += 3) {
+				order[i] = HalfEdges[i].Origin; 
+				order[i + 1] = HalfEdges[i + 1].Origin; 
+				order[i + 2] = HalfEdges[i + 2].Origin;
 			}
 			return order;
 		}
@@ -507,13 +592,12 @@ namespace Lime.PolygonMesh
 					}
 				}
 			}
-			Faces.Clear();
-			i = 0;
-			while (i < edges.Count) {
-				Faces.Add(i);
-				i += 3;
-			}
 			HalfEdges = edges;
+#if TANGERINE
+			TangerineVertices = null;
+			TangerineEdges = null;
+			TangerineFaces = null;
+#endif
 #if DEBUG
 			foreach (var halfEdge in HalfEdges) {
 				System.Diagnostics.Debug.Assert(halfEdge.Twin == -1 || halfEdge.Index == HalfEdges[halfEdge.Twin].Twin);
