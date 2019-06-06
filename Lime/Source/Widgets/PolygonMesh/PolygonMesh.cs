@@ -41,6 +41,36 @@ namespace Lime.PolygonMesh
 			Geometry = new Geometry(vertices);
 		}
 
+		public bool HitTest(Vector2 position, Matrix32 transform, out ITangerineGeometryPrimitive target, float scale = 1.0f)
+		{
+			target = null;
+			foreach (var primitive in Primitives) {
+				var minDistance = float.MaxValue;
+				foreach (var obj in Geometry[primitive]) {
+					if (obj.HitTest(
+							position,
+							transform,
+							out var distance,
+							radius: primitive == GeometryPrimitive.Vertex ? 16.0f : 8.0f,
+							scale: scale
+						)
+					) {
+						if (distance < minDistance) {
+							minDistance = distance;
+							target = obj;
+							if (primitive == GeometryPrimitive.Face) {
+								return true;
+							}
+						}
+					}
+				}
+				if (target != null) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		protected override void OnSizeChanged(Vector2 sizeDelta)
 		{
 			base.OnSizeChanged(sizeDelta);

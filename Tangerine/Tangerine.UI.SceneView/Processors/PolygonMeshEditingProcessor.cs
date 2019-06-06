@@ -9,7 +9,6 @@ namespace Tangerine.UI.SceneView
 	public class PolygonMeshEditingProcessor : ITaskProvider
 	{
 		private PolygonMesh mesh = null;
-		private Matrix32 meshToSceneWidgetTransform = Matrix32.Identity;
 
 		public IEnumerator<object> Task()
 		{
@@ -28,20 +27,17 @@ namespace Tangerine.UI.SceneView
 					continue;
 				}
 				mesh = meshes[0];
-				meshToSceneWidgetTransform = mesh.CalcTransitionToSpaceOf(SceneView.Instance.Scene);
-				ITangerineGeometryPrimitive target = null;
-				foreach (var primitive in PolygonMesh.Primitives) {
-					foreach (var obj in mesh.Geometry[primitive]) {
-						var hitTest = obj.HitTest(SceneView.Instance.MousePosition, meshToSceneWidgetTransform, radius: 4.0f, scale: SceneView.Instance.Scene.Scale.X);
-						if (hitTest) {
-							target = obj;
-							goto skip;
-						}
-					}
+				if (
+					!mesh.HitTest(
+						SceneView.Instance.MousePosition,
+						mesh.CalcTransitionToSpaceOf(SceneView.Instance.Scene),
+						out var target,
+						SceneView.Instance.Scene.Scale.X
+					)
+				) {
+					yield return null;
+					continue;
 				}
-				yield return null;
-				continue;
-				skip:
 				switch (mesh.CurrentState) {
 					case PolygonMesh.State.Modify:
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
@@ -50,7 +46,7 @@ namespace Tangerine.UI.SceneView
 						}
 						break;
 					case PolygonMesh.State.Create:
-						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+						Utils.ChangeCursorIfDefault(target is TangerineVertex ? MouseCursor.Default : MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Create(target);
 						}
@@ -78,15 +74,24 @@ namespace Tangerine.UI.SceneView
 					var positionDelta = newMousePos - mousePos;
 					var uvDelta = positionDelta / mesh.Size;
 					mousePos = newMousePos;
+					var uvOffset =
+						mesh.Geometry.Vertices[obj.VerticeIndices[0]].UV1 -
+						mesh.Geometry.Vertices[obj.VerticeIndices[0]].Pos / mesh.Size;
 					var isCtrlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
 					var isAltPressed = SceneView.Instance.Input.IsKeyPressed(Key.Alt);
 					if (isCtrlPressed) {
 						obj.MoveUv(uvDelta);
-						if (!isAltPressed) {
-							obj.Move(positionDelta);
-						}
 					} else {
-						obj.Move(positionDelta);
+						var i = obj.VerticeIndices[0];
+						var v = mesh.Geometry.Vertices[i];
+						mesh.Geometry.RemoveVertex(i);
+						mesh.Geometry.AddVertex(new Vertex() {
+							Pos = v.Pos + positionDelta,
+							Color = v.Color,
+							UV1 = uvOffset + ((v.Pos + positionDelta) / mesh.Size),
+							UV2 = v.UV2
+						});
+						obj = mesh.Geometry[GeometryPrimitive.Vertex].Last();
 					}
 					yield return null;
 				}
@@ -99,16 +104,17 @@ namespace Tangerine.UI.SceneView
 		{
 			if (obj is TangerineVertex) {
 				yield return null;
+			} else { 
+				var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
+				var mousePos = SceneView.Instance.MousePosition * transform;
+				var cursor = WidgetContext.Current.MouseCursor;
+				using (Document.Current.History.BeginTransaction()) {
+					mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor });
+					Document.Current.History.CommitTransaction();
+				}
+				Window.Current.Invalidate();
+				yield return null;
 			}
-			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
-			var mousePos = SceneView.Instance.MousePosition * transform;
-			var cursor = WidgetContext.Current.MouseCursor;
-			using (Document.Current.History.BeginTransaction()) {
-				mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor });
-				Document.Current.History.CommitTransaction();
-			}
-			Window.Current.Invalidate();
-			yield return null;
 		}
 
 		private IEnumerator<object> Remove(ITangerineGeometryPrimitive obj)

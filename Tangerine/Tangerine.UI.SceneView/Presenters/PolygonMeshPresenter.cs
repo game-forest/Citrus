@@ -2,6 +2,8 @@ using Lime;
 using System.Linq;
 using Tangerine.Core;
 using Lime.PolygonMesh;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Tangerine.UI.SceneView
 {
@@ -26,29 +28,35 @@ namespace Tangerine.UI.SceneView
 			if (mesh.CurrentState == PolygonMesh.State.Display) {
 				return;
 			}
-			var wasHighlighted = false;
 			var meshToSceneFrameTransform = mesh.CalcTransitionToSpaceOf(SceneView.Instance.Frame);
 			var meshToSceneWidgetTransform = mesh.CalcTransitionToSpaceOf(SceneView.Instance.Scene);
-			var mousePos = SceneView.Instance.MousePosition;
 			SceneView.Instance.Frame.PrepareRendererState();
-			foreach (var primitive in PolygonMesh.Primitives.Reverse()) {
+			mesh.HitTest(
+				SceneView.Instance.MousePosition,
+				meshToSceneWidgetTransform,
+				out var primaryHitTestTarget,
+				SceneView.Instance.Scene.Scale.X
+			);
+			var renderQueue = new Queue<(ITangerineGeometryPrimitive Primitive, Color4 Color)>();
+			var defaultColor = Color4.Green.Lighten(0.2f);
+			var hoverColor =
+				mesh.CurrentState == PolygonMesh.State.Remove ?
+				Color4.Red.Transparentify(0.1f) :
+				Color4.Orange.Transparentify(0.2f);
+			var hitTestTargets = new HashSet<ITangerineGeometryPrimitive> { primaryHitTestTarget };
+			if (primaryHitTestTarget != null && mesh.CurrentState == PolygonMesh.State.Remove) {
+				hitTestTargets.UnionWith(primaryHitTestTarget.GetAdjacent());
+			}
+			if (primaryHitTestTarget is TangerineFace) {
+				renderQueue.Enqueue((primaryHitTestTarget, hoverColor));
+			}
+			foreach (var primitive in new[] { GeometryPrimitive.Edge, GeometryPrimitive.Vertex }) {
 				foreach (var obj in mesh.Geometry[primitive]) {
-					var hitTest = obj.HitTest(mousePos, meshToSceneWidgetTransform, radius: 4.0f, scale: SceneView.Instance.Scene.Scale.X);
-					var shouldHighlight = hitTest && !wasHighlighted;
-					if (primitive == GeometryPrimitive.Face && !shouldHighlight) {
-						continue;
-					}
-					obj.Render(
-						meshToSceneFrameTransform,
-						shouldHighlight ?
-						Color4.Orange.Transparentify(0.2f) :
-						Color4.Green.Lighten(0.2f),
-						radius: 4.0f
-					);
-					if (shouldHighlight) {
-						wasHighlighted = true;
-					}
+					renderQueue.Enqueue((obj, hitTestTargets.Contains(obj) ? hoverColor : defaultColor));
 				}
+			}
+			foreach (var (Primitive, Color) in renderQueue) {
+				Primitive.Render(meshToSceneFrameTransform, Color, radius: 4.0f);
 			}
 		}
 	}

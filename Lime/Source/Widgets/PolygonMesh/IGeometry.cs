@@ -15,6 +15,9 @@ namespace Lime.PolygonMesh
 	public interface IGeometry
 	{
 		List<Vertex> Vertices { get; set; }
+#if TANGERINE
+		List<int> FramingVertices { get; }
+#endif
 		ITangerineGeometryPrimitive[] this[GeometryPrimitive primitive] { get; }
 
 		void AddVertex(Vertex vertex);
@@ -32,11 +35,12 @@ namespace Lime.PolygonMesh
 		IGeometry Owner { get; set; }
 		int[] VerticeIndices { get; set; }
 
-		bool HitTest(Vector2 position, Matrix32 transform, float radius = 1.0f, float scale = 1.0f);
+		bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f);
 		void Move(Vector2 positionDelta);
 		void MoveUv(Vector2 uvDelta);
 		void Render(Matrix32 transform, Color4 color, float radius = 1.0f);
 		Vector2 InterpolateUv(Vector2 position);
+		HashSet<ITangerineGeometryPrimitive> GetAdjacent();
 	}
 
 	public struct TangerineVertex : ITangerineGeometryPrimitive
@@ -50,10 +54,10 @@ namespace Lime.PolygonMesh
 			VerticeIndices = new int[] { vertex };
 		}
 
-		public bool HitTest(Vector2 position, Matrix32 transform, float radius = 1.0f, float scale = 1.0f)
+		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f)
 		{
 			var p = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
-			return Vector2.Distance(p, position) <= radius / scale;
+			return PolygonMeshUtils.PointPointIntersection(p, position, radius / scale, out distance);
 		}
 
 		public void Move(Vector2 positionDelta)
@@ -87,6 +91,20 @@ namespace Lime.PolygonMesh
 		{
 			throw new InvalidOperationException();
 		}
+
+		public HashSet<ITangerineGeometryPrimitive> GetAdjacent()
+		{
+			var adjacent = new HashSet<ITangerineGeometryPrimitive>();
+			foreach (var edge in Owner[GeometryPrimitive.Edge]) {
+				if (
+					edge.VerticeIndices[0] == VerticeIndices[0] ||
+					edge.VerticeIndices[1] == VerticeIndices[0]
+				) {
+					adjacent.Add(edge);
+				}
+			}
+			return adjacent;
+		}
 	}
 
 	public struct TangerineEdge : ITangerineGeometryPrimitive
@@ -102,28 +120,11 @@ namespace Lime.PolygonMesh
 			IsFraming = isFraming;
 		}
 
-		public bool HitTest(Vector2 position, Matrix32 transform, float radius = 1.0f, float scale = 1.0f)
+		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f)
 		{
 			var p1 = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
 			var p2 = transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos);
-			var len = Vector2.Distance(p1, p2);
-			return
-				DistanceFromPoint(p1, p2, position, out var intersectionPoint) <= radius / (scale * 2.0f) &&
-				(p1 - intersectionPoint).Length <= len - radius / scale &&
-				(p2 - intersectionPoint).Length <= len - radius / scale;
-		}
-
-		private float DistanceFromPoint(Vector2 p1, Vector2 p2, Vector2 p3, out Vector2 intersectionPoint)
-		{
-			var d = Vector2.Distance(p1, p2);
-			if (d <= 1.0f) {
-				intersectionPoint = p1;
-				return Vector2.Distance(p1, p3);
-			}
-
-			var u = ((p3.X - p1.X) * (p2.X - p1.X) + (p3.Y - p1.Y) * (p2.Y - p1.Y)) / (d * d);
-			intersectionPoint = new Vector2(p1.X + u * (p2.X - p1.X), p1.Y + u * (p2.Y - p1.Y));
-			return Vector2.Distance(intersectionPoint, p3);
+			return PolygonMeshUtils.PointLineIntersection(position, p1, p2, radius / scale, out distance);
 		}
 
 		public void Move(Vector2 positionDelta)
@@ -193,6 +194,16 @@ namespace Lime.PolygonMesh
 				(VerticeIndices[0], VerticeIndices[1]).GetHashCode() +
 				(VerticeIndices[1], VerticeIndices[0]).GetHashCode();
 		}
+
+		public HashSet<ITangerineGeometryPrimitive> GetAdjacent()
+		{
+			var adjacent = new HashSet<ITangerineGeometryPrimitive>();
+			foreach (var index in VerticeIndices) {
+				adjacent.Add(Owner[GeometryPrimitive.Vertex][index]);
+				adjacent.UnionWith(Owner[GeometryPrimitive.Vertex][index].GetAdjacent());
+			}
+			return adjacent;
+		}
 	}
 
 	public struct TangerineFace : ITangerineGeometryPrimitive
@@ -206,7 +217,7 @@ namespace Lime.PolygonMesh
 			VerticeIndices = new int[] { vertex1, vertex2, vertex3 };
 		}
 
-		public bool HitTest(Vector2 position, Matrix32 transform, float radius = 1.0f, float scale = 1.0f)
+		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f)
 		{
 			var p1 = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
 			var p2 = transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos);
@@ -216,21 +227,8 @@ namespace Lime.PolygonMesh
 			p2 += radius / (scale * 2.0f) * ((p1 - p2).Normalized + (p3 - p2).Normalized);
 			p3 += radius / (scale * 2.0f) * ((p2 - p3).Normalized + (p1 - p3).Normalized);
 
-			var d1 = CrossProduct(position, p1, p2);
-			var d2 = CrossProduct(position, p2, p3);
-			var d3 = CrossProduct(position, p3, p1);
-
-			return !(
-				((d1 < 0) || (d2 < 0) || (d3 < 0)) &&
-				((d1 > 0) || (d2 > 0) || (d3 > 0))
-			);
-		}
-
-		private float CrossProduct(Vector2 p1, Vector2 p2, Vector2 p3)
-		{
-			return
-				(p1.X - p3.X) * (p2.Y - p3.Y) -
-				(p2.X - p3.X) * (p1.Y - p3.Y);
+			distance = 0.0f;
+			return PolygonMeshUtils.PointTriangleIntersection(position, p1, p2, p3);
 		}
 
 		public void Move(Vector2 positionDelta)
@@ -286,6 +284,16 @@ namespace Lime.PolygonMesh
 
 			return w1 * v1.UV1 + w2 * v2.UV1 + w3 * v3.UV1;
 		}
+
+		public HashSet<ITangerineGeometryPrimitive> GetAdjacent()
+		{
+			var adjacent = new HashSet<ITangerineGeometryPrimitive>();
+			foreach (var index in VerticeIndices) {
+				adjacent.Add(Owner[GeometryPrimitive.Vertex][index]);
+				adjacent.UnionWith(Owner[GeometryPrimitive.Vertex][index].GetAdjacent());
+			}
+			return adjacent;
+		}
 	}
 #endif
 
@@ -328,11 +336,29 @@ namespace Lime.PolygonMesh
 		public static Vertex DummyVertex => new Vertex();
 
 #if TANGERINE
-		public ITangerineGeometryPrimitive[] TangerineVertices;
-
-		public ITangerineGeometryPrimitive[] TangerineEdges;
-
-		public ITangerineGeometryPrimitive[] TangerineFaces;
+		private List<int> framingVertices;
+		public List<int> FramingVertices
+		{
+			get
+			{
+				if (framingVertices == null) {
+					framingVertices = new List<int>();
+					foreach (var edge in HalfEdges) {
+						if (edge.Twin == -1) {
+							framingVertices.Add(edge.Origin);
+						}
+					}
+				}
+				return framingVertices;
+			}
+			private set
+			{
+				framingVertices = value;
+			}
+		}
+		private ITangerineGeometryPrimitive[] tangerineVertices;
+		private ITangerineGeometryPrimitive[] tangerineEdges;
+		private ITangerineGeometryPrimitive[] tangerineFaces;
 
 		public ITangerineGeometryPrimitive[] this[GeometryPrimitive primitive]
 		{
@@ -342,18 +368,18 @@ namespace Lime.PolygonMesh
 				var facesCount = HalfEdges.Count / 3;
 				switch (primitive) {
 					case GeometryPrimitive.Vertex:
-						if (TangerineVertices == null) {
+						if (tangerineVertices == null) {
 							primitives = new ITangerineGeometryPrimitive[Vertices.Count];
 							for (var i = 0; i < Vertices.Count; ++i) {
 								primitives[i] = new TangerineVertex(this, i);
 							}
-							TangerineVertices = primitives;
+							tangerineVertices = primitives;
 						} else {
-							primitives = TangerineVertices;
+							primitives = tangerineVertices;
 						}
 						break;
 					case GeometryPrimitive.Edge:
-						if (TangerineEdges == null) {
+						if (tangerineEdges == null) {
 							var edges = new HashSet<ITangerineGeometryPrimitive>();
 							for (var i = 0; i < HalfEdges.Count; i += 3) {
 								var v1v2 = HalfEdges[i];
@@ -368,13 +394,13 @@ namespace Lime.PolygonMesh
 							}
 							primitives = new ITangerineGeometryPrimitive[edges.Count];
 							edges.CopyTo(primitives);
-							TangerineEdges = primitives;
+							tangerineEdges = primitives;
 						} else {
-							primitives = TangerineEdges;
+							primitives = tangerineEdges;
 						}
 						break;
 					case GeometryPrimitive.Face:
-						if (TangerineFaces == null) {
+						if (tangerineFaces == null) {
 							primitives = new ITangerineGeometryPrimitive[facesCount];
 							for (var i = 0; i < facesCount; ++i) {
 								var v1v2 = HalfEdges[3 * i];
@@ -383,9 +409,9 @@ namespace Lime.PolygonMesh
 								primitives[i] =
 									new TangerineFace(this, v1v2.Origin, v2v3.Origin, v3v1.Origin);
 							}
-							TangerineFaces = primitives;
+							tangerineFaces = primitives;
 						} else {
-							primitives = TangerineFaces;
+							primitives = tangerineFaces;
 						}
 						break;
 				}
@@ -612,9 +638,10 @@ namespace Lime.PolygonMesh
 			}
 			HalfEdges = edges;
 #if TANGERINE
-			TangerineVertices = null;
-			TangerineEdges = null;
-			TangerineFaces = null;
+			framingVertices = null;
+			tangerineVertices = null;
+			tangerineEdges = null;
+			tangerineFaces = null;
 #endif
 #if DEBUG
 			foreach (var halfEdge in HalfEdges) {
