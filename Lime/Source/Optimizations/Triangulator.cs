@@ -20,7 +20,10 @@ namespace Lime.Source.Optimizations
 		{
 			var vertex = geometry.Vertices[vi];
 			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, geometry.HalfEdges[0], vertex), vi));
-			RestoreDelaunayProperty(geometry, TriangulateByEarClipping(geometry, polygon));
+			RestoreDelaunayProperty(geometry,
+				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
+					RemovePolygon(geometry, polygon) :
+					TriangulateByEarClipping(geometry, polygon));
 			geometry.Vertices[vi] = geometry.Vertices[geometry.Vertices.Count - 1];
 			geometry.Vertices.RemoveAt(geometry.Vertices.Count - 1);
 			geometry.Invalidate(vi);
@@ -135,23 +138,21 @@ namespace Lime.Source.Optimizations
 				} else {
 					polygon.AddLast(geometry.Next(i));
 				}
-				current.Index = -1;
-				geometry.HalfEdges[i] = current;
 				var next = geometry.HalfEdges[reverse ? i : geometry.Next(polygon.Last.Value)];
 				if (next.Twin == -1) {
-					polygon.AddLast(next.Index);
 					if (reverse) {
+						polygon.AddFirst(next.Index);
 						break;
 					}
+					polygon.RemoveFirst();
+					polygon.AddLast(next.Index);
 					reverse = true;
 					current = incident;
-					polygon.RemoveFirst();
 					continue;
 				}
-				i = next.Index;
-				next.Index = -1;
-				current = geometry.HalfEdges[next.Twin];
-				geometry.HalfEdges[i] = next;
+				geometry.RemoveHalfEdge(current.Index);
+				current = reverse ? geometry.HalfEdges[geometry.Next(next.Twin)] : geometry.HalfEdges[next.Twin];
+				geometry.RemoveHalfEdge(next.Index);
 			}
 			return polygon;
 		}
@@ -303,6 +304,58 @@ namespace Lime.Source.Optimizations
 			if (next.Twin != -1) {
 				geometry.MakeTwins(next.Index, next.Twin);
 			}
+		}
+
+		private HalfEdge FakeTwin(Geometry geometry, HalfEdge he1, HalfEdge he2)
+		{
+			var twin = new HalfEdge(geometry.HalfEdges.Count, he1.Origin, geometry.HalfEdges.Count - 1);
+			geometry.HalfEdges.Add(twin);
+			geometry.HalfEdges.Add(new HalfEdge(-1, geometry.Next(he2).Origin, -1));
+			geometry.HalfEdges.Add(Geometry.DummyHalfEdge);
+			return twin;
+		}
+
+		private Queue<int> RemovePolygon(Geometry geometry, LinkedList<int> polygon)
+		{
+			var current = polygon.First;
+			var queue = new Queue<int>();
+			while (current != null) {
+				var next = current.Next;
+				if (geometry.HalfEdges[current.Value].Twin == -1) {
+					polygon.Remove(current);
+					geometry.RemoveHalfEdge(current.Value);
+				} else {
+					geometry.RemoveHalfEdge(geometry.Next(current.Value));
+					geometry.RemoveHalfEdge(geometry.Prev(current.Value));
+				}
+				current = next;
+			}
+			current = polygon.First;
+			while (current?.Next != null) {
+				var he1 = geometry.HalfEdges[current.Value];
+				var he2 = geometry.HalfEdges[current.Next.Value];
+				var v1 = geometry.Vertices[he1.Origin].Pos;
+				var v2 = geometry.Vertices[he2.Origin].Pos;
+				var v3 = geometry.Vertices[geometry.HalfEdges[geometry.Next(current.Next.Value)].Origin].Pos;
+				if (Area(v1, v2, v3) > 0) {
+					Connect(geometry, he1, he2);
+					queue.Enqueue(geometry.HalfEdges.Count - 1);
+					var twin = FakeTwin(geometry, he1, he2);
+					polygon.AddAfter(current.Next, twin.Index);
+					geometry.RemoveHalfEdge(he1.Index);
+					geometry.RemoveHalfEdge(he2.Index);
+					polygon.Remove(current.Next);
+					polygon.Remove(current);
+					current = polygon.First;
+					continue;
+				}
+				current = current.Next;
+			}
+			foreach (var side in polygon) {
+				geometry.Untwin(side);
+				geometry.RemoveHalfEdge(side);
+			}
+			return queue;
 		}
 	}
 }

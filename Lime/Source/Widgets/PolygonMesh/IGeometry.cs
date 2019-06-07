@@ -649,5 +649,29 @@ namespace Lime.PolygonMesh
 			}
 #endif
 		}
+
+		public void Untwin(int index)
+		{
+			if (index < 0) {
+				return;
+			}
+			var he = HalfEdges[index];
+			if (he.Twin != -1) {
+				var twin = HalfEdges[he.Twin];
+				twin.Twin = -1;
+				HalfEdges[he.Twin] = twin;
+				he.Twin = -1;
+				HalfEdges[index] = he;
+			}
+		}
+
+		public void RemoveHalfEdge(int index)
+		{
+			if (index >= 0) {
+				var he = HalfEdges[index];
+				he.Index = -1;
+				HalfEdges[index] = he;
+			}
+		}
 	}
 }
