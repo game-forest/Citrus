@@ -11,6 +11,7 @@ namespace Lime.PolygonMesh
 		public enum State
 		{
 			Display,
+			Animate,
 			Modify,
 			Create,
 			Remove,

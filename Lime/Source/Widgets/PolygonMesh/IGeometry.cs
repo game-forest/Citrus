@@ -62,7 +62,9 @@ namespace Lime.PolygonMesh
 
 		public void Move(Vector2 positionDelta)
 		{
-			Owner.MoveVertex(VerticeIndices[0], positionDelta);
+			var v = Owner.Vertices[VerticeIndices[0]];
+			v.Pos += positionDelta;
+			Owner.Vertices[VerticeIndices[0]] = v;
 		}
 
 		public void MoveUv(Vector2 uvDelta)
@@ -129,7 +131,11 @@ namespace Lime.PolygonMesh
 
 		public void Move(Vector2 positionDelta)
 		{
-			Owner.MoveVertices(VerticeIndices, positionDelta);
+			foreach (var i in VerticeIndices) {
+				var v = Owner.Vertices[i];
+				v.Pos += positionDelta;
+				Owner.Vertices[i] = v;
+			}
 		}
 
 		public void MoveUv(Vector2 uvDelta)
@@ -233,7 +239,11 @@ namespace Lime.PolygonMesh
 
 		public void Move(Vector2 positionDelta)
 		{
-			Owner.MoveVertices(VerticeIndices, positionDelta);
+			foreach (var i in VerticeIndices) {
+				var v = Owner.Vertices[i];
+				v.Pos += positionDelta;
+				Owner.Vertices[i] = v;
+			}
 		}
 
 		public void MoveUv(Vector2 uvDelta)
