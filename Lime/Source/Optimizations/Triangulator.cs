@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Lime.PolygonMesh;
 using HalfEdge = Lime.PolygonMesh.Geometry.HalfEdge;
 
@@ -13,13 +14,18 @@ namespace Lime.Source.Optimizations
 		public void AddVertex(Geometry geometry, int vi)
 		{
 			var vertex = geometry.Vertices[vi];
-			Triangulate(geometry, GetContourPolygon(geometry, LocateTriangle(geometry, geometry.HalfEdges[0], vertex), vertex), vi);
+			var t = LocateTriangle(geometry, geometry.HalfEdges[0], vertex, out var inside);
+			if (inside) {
+				Triangulate(geometry, GetContourPolygon(geometry, t, vertex), vi);
+			} else {
+				TriangulateVisibleBoundary(geometry, GetVisibleBoundary(geometry, vertex, t), vi);
+			}
 		}
 
 		public void RemoveVertex(Geometry geometry, int vi)
 		{
 			var vertex = geometry.Vertices[vi];
-			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, geometry.HalfEdges[0], vertex), vi));
+			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, geometry.HalfEdges[0], vertex, out _), vi));
 			RestoreDelaunayProperty(geometry,
 				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
 					RemovePolygon(geometry, polygon) :
@@ -50,20 +56,31 @@ namespace Lime.Source.Optimizations
 			return true;
 		}
 
-		private HalfEdge LocateTriangle(Geometry geometry, HalfEdge start, Vertex vertex)
+		private bool AreOnOppositeSides(Vector2 s1, Vector2 s2, Vector2 p1, Vector2 p2)
+		{
+			var side = s2 - s1;
+			var v1 = p1 - s1;
+			var v2 = p2 - s1;
+			return Mathf.Sign(Vector2.CrossProduct(side, v1)) * Mathf.Sign(Vector2.CrossProduct(side, v2)) < 0;
+		}
+
+		private HalfEdge LocateTriangle(Geometry geometry, HalfEdge start, Vertex vertex, out bool inside)
 		{
 			var current = geometry.HalfEdges[0];
+			inside = true;
 			do {
 				var next = geometry.Next(current);
 				Vector2 p1 = geometry.Vertices[current.Origin].Pos;
 				var side = geometry.Vertices[next.Origin].Pos - p1;
 				var v1 = geometry.Vertices[geometry.Next(next).Origin].Pos - p1;
 				var v2 = vertex.Pos - p1;
-				if (
-					Mathf.Sign(Vector2.CrossProduct(side, v1)) * Mathf.Sign(Vector2.CrossProduct(side, v2)) < 0 &&
-					current.Twin != -1
-				) {
+				var areOpposite = AreOnOppositeSides(p1, geometry.Vertices[next.Origin].Pos, geometry.Vertices[geometry.Next(next).Origin].Pos, vertex.Pos);
+				var kek = Mathf.Sign(Vector2.CrossProduct(side, v1)) * Mathf.Sign(Vector2.CrossProduct(side, v2)) < 0;
+				System.Diagnostics.Debug.Assert(kek == areOpposite);
+				inside &= !areOpposite;
+				if (areOpposite && current.Twin != -1) {
 					start = current = geometry.HalfEdges[current.Twin];
+					inside = true;
 				}
 				current = geometry.Next(current);
 			} while (current.Index != start.Index);
@@ -127,7 +144,7 @@ namespace Lime.Source.Optimizations
 			var polygon = new LinkedList<int>();
 			bool reverse = false;
 			var current = incident;
-			while (current.Index != -1) {
+			do {
 				var i = current.Index;
 				if (reverse) {
 					polygon.AddFirst(geometry.Next(i));
@@ -137,19 +154,20 @@ namespace Lime.Source.Optimizations
 				var next = geometry.HalfEdges[reverse ? i : geometry.Next(polygon.Last.Value)];
 				if (next.Twin == -1) {
 					if (reverse) {
+						System.Diagnostics.Debug.Assert(next.Index != -1);
 						polygon.AddFirst(next.Index);
-						break;
+						return polygon;
 					}
 					polygon.RemoveFirst();
 					polygon.AddLast(next.Index);
+					System.Diagnostics.Debug.Assert(next.Index != -1);
 					reverse = true;
 					current = incident;
 					continue;
 				}
-				geometry.RemoveHalfEdge(current.Index);
 				current = reverse ? geometry.HalfEdges[geometry.Next(next.Twin)] : geometry.HalfEdges[next.Twin];
-				geometry.RemoveHalfEdge(next.Index);
-			}
+			} while (polygon.First.Value != polygon.Last.Value || polygon.Count < 2);
+			polygon.Remove(polygon.Last);
 			return polygon;
 		}
 
@@ -224,6 +242,7 @@ namespace Lime.Source.Optimizations
 				if (CanCreateTriangle(current.Value, next.Value)) {
 					var he1 = geometry.HalfEdges[current.Value];
 					var he2 = geometry.HalfEdges[next.Value];
+					he2.Index = next.Value;
 					Connect(geometry, he1, he2);
 					queue.Enqueue(geometry.HalfEdges.Count - 1);
 					var twin = new HalfEdge(geometry.HalfEdges.Count, he1.Origin, geometry.HalfEdges.Count - 1);
@@ -231,10 +250,8 @@ namespace Lime.Source.Optimizations
 					geometry.HalfEdges.Add(twin);
 					geometry.HalfEdges.Add(new HalfEdge(-1, geometry.Next(he2).Origin, -1));
 					geometry.HalfEdges.Add(Geometry.DummyHalfEdge);
-					he1.Index = -1;
-					he2.Index = -1;
-					geometry.HalfEdges[next.Value] = he2;
-					geometry.HalfEdges[current.Value] = he1;
+					geometry.RemoveTriangle(he1.Index);
+					geometry.RemoveTriangle(he2.Index);
 					polygon.Remove(next);
 					polygon.Remove(current);
 					current = polygon.First;
@@ -249,8 +266,7 @@ namespace Lime.Source.Optimizations
 			if (last.Twin != -1) {
 				geometry.MakeTwins(last.Twin, lastOriginal.Index);
 			}
-			last.Index = -1;
-			geometry.HalfEdges[polygon.Last.Value] = last;
+			geometry.RemoveTriangle(last.Index);
 			geometry.HalfEdges[lastOriginal.Index] = lastOriginal;
 			queue.Enqueue(lastOriginal.Index);
 			geometry.HalfEdges[polygon.First.Value] = Geometry.DummyHalfEdge;
@@ -319,7 +335,7 @@ namespace Lime.Source.Optimizations
 				var next = current.Next;
 				if (geometry.HalfEdges[current.Value].Twin == -1) {
 					polygon.Remove(current);
-					geometry.RemoveHalfEdge(current.Value);
+					geometry.RemoveTriangle(current.Value);
 				} else {
 					geometry.RemoveHalfEdge(geometry.Next(current.Value));
 					geometry.RemoveHalfEdge(geometry.Prev(current.Value));
@@ -330,6 +346,7 @@ namespace Lime.Source.Optimizations
 			while (current?.Next != null) {
 				var he1 = geometry.HalfEdges[current.Value];
 				var he2 = geometry.HalfEdges[current.Next.Value];
+				he2.Index = current.Next.Value;
 				var v1 = geometry.Vertices[he1.Origin].Pos;
 				var v2 = geometry.Vertices[he2.Origin].Pos;
 				var v3 = geometry.Vertices[geometry.HalfEdges[geometry.Next(current.Next.Value)].Origin].Pos;
@@ -338,7 +355,7 @@ namespace Lime.Source.Optimizations
 					queue.Enqueue(geometry.HalfEdges.Count - 1);
 					var twin = FakeTwin(geometry, he1, he2);
 					polygon.AddAfter(current.Next, twin.Index);
-					geometry.RemoveHalfEdge(he1.Index);
+					geometry.RemoveTriangle(he1.Index);
 					geometry.RemoveHalfEdge(he2.Index);
 					polygon.Remove(current.Next);
 					polygon.Remove(current);
@@ -349,9 +366,80 @@ namespace Lime.Source.Optimizations
 			}
 			foreach (var side in polygon) {
 				geometry.Untwin(side);
-				geometry.RemoveHalfEdge(side);
+				geometry.RemoveTriangle(side);
 			}
 			return queue;
+		}
+
+		private float PointToSegmentSqrDistance(Vector2 v, Vector2 w, Vector2 p)
+		{
+			var t = Mathf.Max(0f, Mathf.Min(Vector2.DotProduct(p - v, w - v) / (w - v).SqrLength, 1));
+			return (v + t * (w - v)).Length;
+		}
+
+		private LinkedList<int> GetVisibleBoundary(Geometry geometry, Vertex vertex, HalfEdge start)
+		{
+			var minD = float.MaxValue;
+			var current = start;
+			for (int i = 0; i < 3; i++) {
+				var s1 = geometry.Vertices[current.Origin].Pos;
+				var s2 = geometry.Vertices[geometry.Next(current).Origin].Pos;
+				var p1 = geometry.Vertices[geometry.Prev(current).Origin].Pos;
+				var d = PointToSegmentSqrDistance(s1, s2, vertex.Pos);
+				if (AreOnOppositeSides(s1, s2, p1, vertex.Pos) && d < minD) {
+					minD = d;
+					start = current;
+				}
+				current = geometry.Next(current);
+			}
+			var boundary = new LinkedList<int>();
+			boundary.AddFirst(start.Index);
+			var right = true;
+			while (true) {
+				var prev = geometry.HalfEdges[right ? boundary.Last.Value : boundary.First.Value];
+				var next = right ? geometry.Next(prev) : geometry.Prev(prev);
+				while (next.Twin != -1) {
+					next = geometry.HalfEdges[right ? geometry.Next(next.Twin) : geometry.Prev(next.Twin)];
+				}
+				var c = right ? geometry.Vertices[geometry.Next(next).Origin].Pos : geometry.Vertices[next.Origin].Pos;
+				var listNode = boundary.First;
+				while (listNode != null) {
+					current = geometry.HalfEdges[listNode.Value];
+					var a = geometry.Vertices[current.Origin].Pos;
+					var b = geometry.Vertices[geometry.Next(current).Origin].Pos;
+					if (PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, c, out _)) {
+						break;
+					}
+					listNode = listNode.Next;
+				}
+				if (listNode != null) {
+					if (!right) {
+						break;
+					}
+					right = false;
+					continue;
+				}
+				if (right) {
+					boundary.AddLast(next.Index);
+				} else {
+					boundary.AddFirst(next.Index);
+				}
+			}
+			return boundary;
+		}
+
+		public void TriangulateVisibleBoundary(Geometry geometry, LinkedList<int> boundary, int vi)
+		{
+			var current = boundary.First;
+			while (current != null) {
+				var v = geometry.HalfEdges[geometry.Next(current.Value)].Origin;
+				geometry.Connect(v, geometry.HalfEdges[current.Value].Origin, vi);
+				geometry.MakeTwins(current.Value, geometry.HalfEdges.Count - 3);
+				if (current.Previous != null) {
+					geometry.MakeTwins(geometry.HalfEdges.Count - 2, geometry.HalfEdges.Count - 4);
+				}
+				current = current.Next;
+			}
 		}
 	}
 }

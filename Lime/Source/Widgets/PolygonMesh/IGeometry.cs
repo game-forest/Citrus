@@ -573,6 +573,7 @@ namespace Lime.PolygonMesh
 			Vertices[index] = Vertices[Vertices.Count - 1];
 			Vertices.RemoveAt(Vertices.Count - 1);
 			Invalidate(index);
+			System.Diagnostics.Debug.Assert(HalfEdges.Count % 3 == 0);
 			System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
 		}
 
@@ -584,7 +585,7 @@ namespace Lime.PolygonMesh
 			v.Pos += positionDelta;
 			Vertices[index] = v;
 			Triangulator.Instance.AddVertex(this, index);
-			System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
+			//System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
 		}
 
 		public void MoveVertexUv(int index, Vector2 uvDelta)
@@ -627,7 +628,20 @@ namespace Lime.PolygonMesh
 		{
 			Vertices.Add(vertex);
 			Triangulator.Instance.AddVertex(this, Vertices.Count - 1);
+#if TANGERINE
+			ResetCache();
+#endif
 		}
+
+#if TANGERINE
+		public void ResetCache()
+		{
+			framingVertices = null;
+			tangerineVertices = null;
+			tangerineEdges = null;
+			tangerineFaces = null;
+		}
+#endif
 
 		public void Invalidate(int removedVertex = -1)
 		{
@@ -691,6 +705,13 @@ namespace Lime.PolygonMesh
 				he.Index = -1;
 				HalfEdges[index] = he;
 			}
+		}
+
+		public void RemoveTriangle(int index)
+		{
+			RemoveHalfEdge(index);
+			RemoveHalfEdge(Next(index));
+			RemoveHalfEdge(Prev(index));
 		}
 	}
 }
