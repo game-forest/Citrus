@@ -10,10 +10,10 @@ namespace Lime.Source.Optimizations
 	{
 		public static Triangulator Instance { get; } = new Triangulator();
 
-		public void AddVertex(Geometry geometry, Vertex vertex)
+		public void AddVertex(Geometry geometry, int vi)
 		{
-			geometry.Vertices.Add(vertex);
-			Triangulate(geometry, GetContourPolygon(geometry, LocateTriangle(geometry, geometry.HalfEdges[0], vertex), vertex), geometry.Vertices.Count - 1);
+			var vertex = geometry.Vertices[vi];
+			Triangulate(geometry, GetContourPolygon(geometry, LocateTriangle(geometry, geometry.HalfEdges[0], vertex), vertex), vi);
 		}
 
 		public void RemoveVertex(Geometry geometry, int vi)
@@ -24,13 +24,9 @@ namespace Lime.Source.Optimizations
 				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
 					RemovePolygon(geometry, polygon) :
 					TriangulateByEarClipping(geometry, polygon));
-			geometry.Vertices[vi] = geometry.Vertices[geometry.Vertices.Count - 1];
-			geometry.Vertices.RemoveAt(geometry.Vertices.Count - 1);
-			geometry.Invalidate(vi);
-			System.Diagnostics.Debug.Assert(FullCheck(geometry));
 		}
 
-		private bool FullCheck(Geometry geometry)
+		public bool FullCheck(Geometry geometry)
 		{
 			for (int i = 0; i < geometry.HalfEdges.Count; i += 3) {
 				if (

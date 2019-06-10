@@ -83,15 +83,11 @@ namespace Tangerine.UI.SceneView
 						obj.MoveUv(uvDelta);
 					} else {
 						var i = obj.VerticeIndices[0];
+						mesh.Geometry.MoveVertex(i, positionDelta);
 						var v = mesh.Geometry.Vertices[i];
-						mesh.Geometry.RemoveVertex(i);
-						mesh.Geometry.AddVertex(new Vertex() {
-							Pos = v.Pos + positionDelta,
-							Color = v.Color,
-							UV1 = uvOffset + ((v.Pos + positionDelta) / mesh.Size),
-							UV2 = v.UV2
-						});
-						obj = mesh.Geometry[GeometryPrimitive.Vertex].Last();
+						v.UV1 = uvOffset + v.Pos / mesh.Size;
+						mesh.Geometry.Vertices[i] = v;
+						obj = mesh.Geometry[GeometryPrimitive.Vertex][i];
 					}
 					yield return null;
 				}
