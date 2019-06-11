@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -91,6 +91,12 @@
     <Compile Include="TangerineSingleInstanceKeeper.cs" />
     <Compile Include="Tools\AlignTools.cs" />
     <Compile Include="Tools\FitTools.cs" />
+    <Compile Include="AppUserPreferences.cs" />
+    <Compile Include="Main.Mac.cs" />
+    <Compile Include="Panels\BackupHistoryPanel.cs" />
+    <Compile Include="Panels\HierarchyPanel.cs" />
+    <Compile Include="Panels\TreeView.cs" />
+    <Compile Include="Tools\PolygonMeshTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj">

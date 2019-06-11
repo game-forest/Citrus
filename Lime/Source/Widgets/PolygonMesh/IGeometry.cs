@@ -12,9 +12,10 @@ namespace Lime.PolygonMesh
 		Face
 	}
 
-	public interface IGeometry
+	public interface IGeometry : IAnimable
 	{
 		List<Vertex> Vertices { get; set; }
+		List<int> IndexBuffer { get; set; }
 #if TANGERINE
 		List<int> FramingVertices { get; }
 #endif
@@ -26,7 +27,9 @@ namespace Lime.PolygonMesh
 		void MoveVertices(int[] indices, Vector2 positionDelta);
 		void MoveVertexUv(int index, Vector2 uvDelta);
 		void MoveVerticesUv(int[] indices, Vector2 uvDelta);
-		int[] Traverse();
+#if TANGERINE
+		void ResetCache();
+#endif
 	}
 
 #if TANGERINE
@@ -173,10 +176,8 @@ namespace Lime.PolygonMesh
 		{
 			var v1 = Owner.Vertices[VerticeIndices[0]];
 			var v2 = Owner.Vertices[VerticeIndices[1]];
-			var len = Vector2.Distance(v1.Pos, v2.Pos);
-			var w1 = 1 - Vector2.Distance(position, v1.Pos) / len;
-			var w2 = 1 - w1;
-			return w1 * v1.UV1 + w2 * v2.UV1;
+			var weights = PolygonMeshUtils.CalcSegmentRelativeBarycentricCoordinates(position, v1.Pos, v2.Pos);
+			return weights[0] * v1.UV1 + weights[1] * v2.UV1;
 		}
 
 		public override bool Equals(object obj)
@@ -280,18 +281,8 @@ namespace Lime.PolygonMesh
 			var v1 = Owner.Vertices[VerticeIndices[0]];
 			var v2 = Owner.Vertices[VerticeIndices[1]];
 			var v3 = Owner.Vertices[VerticeIndices[2]];
-
-			var w1 =
-				((v2.Pos.Y - v3.Pos.Y) * (position.X - v3.Pos.X) + (v3.Pos.X - v2.Pos.X) * (position.Y - v3.Pos.Y)) /
-				((v2.Pos.Y - v3.Pos.Y) * (v1.Pos.X - v3.Pos.X) + (v3.Pos.X - v2.Pos.X) * (v1.Pos.Y - v3.Pos.Y));
-
-			var w2 =
-				((v3.Pos.Y - v1.Pos.Y) * (position.X - v3.Pos.X) + (v1.Pos.X - v3.Pos.X) * (position.Y - v3.Pos.Y)) /
-				((v2.Pos.Y - v3.Pos.Y) * (v1.Pos.X - v3.Pos.X) + (v3.Pos.X - v2.Pos.X) * (v1.Pos.Y - v3.Pos.Y));
-
-			var w3 = 1 - w1 - w2;
-
-			return w1 * v1.UV1 + w2 * v2.UV1 + w3 * v3.UV1;
+			var weights = PolygonMeshUtils.CalcTriangleRelativeBarycentricCoordinates(position, v1.Pos, v2.Pos, v3.Pos);
+			return weights[0] * v1.UV1 + weights[1] * v2.UV1 + weights[2] * v3.UV1;
 		}
 
 		public HashSet<ITangerineGeometryPrimitive> GetAdjacent()
@@ -334,15 +325,16 @@ namespace Lime.PolygonMesh
 			}
 		}
 
+		public IAnimable Owner { get; set; }
+
 		[YuzuMember]
 		public List<Vertex> Vertices { get; set; }
 
 		[YuzuMember]
+		public List<int> IndexBuffer { get; set; }
+
+		[YuzuMember]
 		public List<HalfEdge> HalfEdges { get; set; }
-
-		public static HalfEdge DummyHalfEdge => new HalfEdge(-1, -1);
-
-		public static Vertex DummyVertex => new Vertex();
 
 #if TANGERINE
 		private List<int> framingVertices;
@@ -429,22 +421,32 @@ namespace Lime.PolygonMesh
 		}
 #endif
 
+		public static HalfEdge DummyHalfEdge => new HalfEdge(-1, -1);
+
+		public static Vertex DummyVertex => new Vertex();
+
 		public Geometry()
 		{
 			Vertices = new List<Vertex>();
+			IndexBuffer = new List<int>();
 			HalfEdges = new List<HalfEdge>();
 		}
 
-		public Geometry(List<Vertex> vertices) : this()
+		public Geometry(List<Vertex> vertices, List<int> indexBuffer, IAnimable owner)
 		{
 			if (vertices.Count != 4) {
 				throw new InvalidOperationException();
 			}
 
+			Owner = owner;
 			Vertices = vertices;
+			IndexBuffer = indexBuffer;
+			HalfEdges = new List<HalfEdge>();
+
 			Connect(0, 1, 2);
 			Connect(2, 1, 3);
 			MakeTwins(1, 3);
+			Traverse();
 		}
 
 		public bool TryFindHalfEdgeIndexByVertex(Vertex vertex, out int index)
@@ -584,6 +586,7 @@ namespace Lime.PolygonMesh
 			v.Pos += positionDelta;
 			Vertices[index] = v;
 			Triangulator.Instance.AddVertex(this, index);
+			Traverse();
 			//System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
 		}
 
@@ -612,24 +615,12 @@ namespace Lime.PolygonMesh
 			}
 		}
 
-		public int[] Traverse()
-		{
-			var order = new int[HalfEdges.Count];
-			for (var i = 0; i < HalfEdges.Count; i += 3) {
-				order[i] = HalfEdges[i].Origin; 
-				order[i + 1] = HalfEdges[i + 1].Origin; 
-				order[i + 2] = HalfEdges[i + 2].Origin;
-			}
-			return order;
-		}
-
 		public void AddVertex(Vertex vertex)
 		{
 			Vertices.Add(vertex);
 			Triangulator.Instance.AddVertex(this, Vertices.Count - 1);
-#if TANGERINE
 			ResetCache();
-#endif
+			Traverse();
 		}
 
 #if TANGERINE
@@ -641,6 +632,15 @@ namespace Lime.PolygonMesh
 			tangerineFaces = null;
 		}
 #endif
+		public void Traverse()
+		{
+			IndexBuffer.Clear();
+			for (var j = 0; j < HalfEdges.Count; j += 3) {
+				IndexBuffer.Add(HalfEdges[j].Origin);
+				IndexBuffer.Add(HalfEdges[j + 1].Origin);
+				IndexBuffer.Add(HalfEdges[j + 2].Origin);
+			}
+		}
 
 		public void Invalidate(int removedVertex = -1)
 		{
@@ -669,11 +669,9 @@ namespace Lime.PolygonMesh
 				}
 			}
 			HalfEdges = edges;
+			Traverse();
 #if TANGERINE
-			framingVertices = null;
-			tangerineVertices = null;
-			tangerineEdges = null;
-			tangerineFaces = null;
+			ResetCache();
 #endif
 #if DEBUG
 			foreach (var halfEdge in HalfEdges) {
@@ -711,6 +709,16 @@ namespace Lime.PolygonMesh
 			RemoveHalfEdge(index);
 			RemoveHalfEdge(Next(index));
 			RemoveHalfEdge(Prev(index));
+		}
+
+		public bool IsValid()
+		{
+			foreach (var he in HalfEdges) {
+				if (he.Index == -1) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }

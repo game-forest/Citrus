@@ -143,5 +143,28 @@ namespace Lime
 			}
 			return intersectionPoints.Count > 0;
 		}
+
+		public static float[] CalcSegmentRelativeBarycentricCoordinates(Vector2 point, Vector2 p1, Vector2 p2)
+		{
+			var len = Vector2.Distance(p1, p2);
+			var w1 = 1 - Vector2.Distance(point, p1) / len;
+			var w2 = 1 - w1;
+			return new[] { w1, w2 };
+		}
+
+		public static float[] CalcTriangleRelativeBarycentricCoordinates(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3)
+		{
+			var w1 =
+				((p2.Y - p3.Y) * (point.X - p3.X) + (p3.X - p2.X) * (point.Y - p3.Y)) /
+				((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
+
+			var w2 =
+				((p3.Y - p1.Y) * (point.X - p3.X) + (p1.X - p3.X) * (point.Y - p3.Y)) /
+				((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
+
+			var w3 = 1 - w1 - w2;
+
+			return new[] { w1, w2, w3 };
+		}
 	}
 }

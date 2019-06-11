@@ -523,4 +523,23 @@ namespace Lime
 			);
 		}
 	}
+
+	public class VertexListAnimator : Animator<List<Vertex>>
+	{
+		protected override List<Vertex> InterpolateLinear(float t)
+		{
+			var r = new List<Vertex>();
+			for (var i = 0; i < Math.Min(Value2.Count, Value3.Count); ++i) {
+				var pos = Value2[i].Pos + (Value3[i].Pos - Value2[i].Pos) * t;
+				var uv1 = Value2[i].UV1 + (Value3[i].UV1 - Value2[i].UV1) * t;
+				var A = Value2[i].Color.A + (Value3[i].Color.A - Value2[i].Color.A) * t;
+				var R = Value2[i].Color.R + (Value3[i].Color.R - Value2[i].Color.R) * t;
+				var G = Value2[i].Color.G + (Value3[i].Color.G - Value2[i].Color.G) * t;
+				var B = Value2[i].Color.B + (Value3[i].Color.B - Value2[i].Color.B) * t;
+				var color = new Color4((byte)R, (byte)G, (byte)B, (byte)A);
+				r.Add(new Vertex() { Pos = pos, UV1 = uv1, Color = color });
+			}
+			return r;
+		}
+	}
 }

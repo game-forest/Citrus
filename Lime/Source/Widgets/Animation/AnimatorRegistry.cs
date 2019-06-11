@@ -79,6 +79,7 @@ namespace Lime
 			Add(typeof(HAlignment), new AnimatorFactory<HAlignment>());
 			Add(typeof(VAlignment), new AnimatorFactory<VAlignment>());
 			Add(typeof(Alignment), new AnimatorFactory<Alignment>());
+			Add(typeof(List<Vertex>), new VertexListAnimatorFactory());
 		}
 
 		public bool Contains(Type propertyType) => propertyType.IsEnum || map.ContainsKey(propertyType);
@@ -194,6 +195,12 @@ namespace Lime
 			public IEasedAnimator CreateEasedAnimator() => (IEasedAnimator)easedAnimatorFactory();
 			public IChainedAnimator CreateChainedAnimator() => (IChainedAnimator)chainedAnimatorFactory();
 			public IBlendedAnimator CreateBlendedAnimator() => (IBlendedAnimator)blendedAnimatorFactory();
+		}
+
+		private class VertexListAnimatorFactory : AnimatorFactory<VertexListAnimator>
+		{
+			public override IAnimator CreateAnimator() => new VertexListAnimator();
+			public override IBlendedAnimator CreateBlendedAnimator() => new VertexListBlendedAnimator();
 		}
 	}
 }

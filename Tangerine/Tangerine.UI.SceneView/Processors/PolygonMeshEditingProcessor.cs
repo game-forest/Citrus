@@ -13,16 +13,16 @@ namespace Tangerine.UI.SceneView
 		public IEnumerator<object> Task()
 		{
 			while (true) {
+				if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
+					yield return null;
+					continue;
+				}
 				if (!SceneView.Instance.InputArea.IsMouseOverThisOrDescendant()) {
 					yield return null;
 					continue;
 				}
 				var meshes = Document.Current.SelectedNodes().Editable().OfType<PolygonMesh>().ToList();
 				if (meshes.Count != 1) {
-					yield return null;
-					continue;
-				}
-				if (meshes[0].CurrentState == PolygonMesh.State.Display) {
 					yield return null;
 					continue;
 				}
@@ -45,11 +45,11 @@ namespace Tangerine.UI.SceneView
 							yield return Animate(target);
 						}
 						break;
-					case PolygonMesh.State.Modify:
+					case PolygonMesh.State.Deform:
 						if (target is TangerineVertex) {
 							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-								yield return Modify(target);
+								yield return Deform(target);
 							}
 						}
 						break;
@@ -62,9 +62,11 @@ namespace Tangerine.UI.SceneView
 						}
 						break;
 					case PolygonMesh.State.Remove:
-						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-							yield return Remove(target);
+						if (target is TangerineVertex) {
+							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+								yield return Remove(target);
+							}
 						}
 						break;
 				}
@@ -84,46 +86,42 @@ namespace Tangerine.UI.SceneView
 					var positionDelta = newMousePos - mousePos;
 					var uvDelta = positionDelta / mesh.Size;
 					mousePos = newMousePos;
-					var isCtrlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
-					var isAltPressed = SceneView.Instance.Input.IsKeyPressed(Key.Alt);
-					if (isCtrlPressed) {
+					if (SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
 						obj.MoveUv(uvDelta);
 					} else {
 						obj.Move(positionDelta);
 					}
+					Core.Operations.SetAnimableProperty.Perform(
+						mesh,
+						$"{nameof(PolygonMesh.Vertices)}",
+						new List<Vertex>(mesh.Vertices),
+						createAnimatorIfNeeded: true,
+						createInitialKeyframeForNewAnimator: true
+					);
 					yield return null;
 				}
+				mesh.Animators.Invalidate();
 				Document.Current.History.CommitTransaction();
 			}
 			yield return null;
 		}
 
-		private IEnumerator<object> Modify(ITangerineGeometryPrimitive obj)
+		private IEnumerator<object> Deform(ITangerineGeometryPrimitive obj)
 		{
 			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
 			var mousePos = SceneView.Instance.MousePosition * transform;
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
+				var newMousePos = SceneView.Instance.MousePosition * transform;
+				var positionDelta = newMousePos - mousePos;
+				var uvDelta = positionDelta / mesh.Size;
 				while (SceneView.Instance.Input.IsMousePressed()) {
 					Utils.ChangeCursorIfDefault(cursor);
-					var newMousePos = SceneView.Instance.MousePosition * transform;
-					var positionDelta = newMousePos - mousePos;
-					var uvDelta = positionDelta / mesh.Size;
+					newMousePos = SceneView.Instance.MousePosition * transform;
+					positionDelta = newMousePos - mousePos;
+					uvDelta = positionDelta / mesh.Size;
 					mousePos = newMousePos;
-					var uvOffset =
-						mesh.Geometry.Vertices[obj.VerticeIndices[0]].UV1 -
-						mesh.Geometry.Vertices[obj.VerticeIndices[0]].Pos / mesh.Size;
-					var isCtrlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
-					var isAltPressed = SceneView.Instance.Input.IsKeyPressed(Key.Alt);
-					if (isCtrlPressed) {
-						obj.MoveUv(uvDelta);
-					} else {
-						var i = obj.VerticeIndices[0];
-						mesh.Geometry.MoveVertex(i, positionDelta);
-						var v = mesh.Geometry.Vertices[i];
-						v.UV1 = uvOffset + v.Pos / mesh.Size;
-						mesh.Geometry.Vertices[i] = v;
-					}
+					Core.Operations.PolygonMeshModification.Deform.Perform(mesh, positionDelta, uvDelta, obj.VerticeIndices[0]);
 					yield return null;
 				}
 				Document.Current.History.CommitTransaction();
@@ -142,7 +140,37 @@ namespace Tangerine.UI.SceneView
 			}
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
-				mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor });
+				var animatedPos = mousePos;
+				var deformedPos = mousePos;
+				switch (obj) {
+					case TangerineEdge te:
+						var w1 =
+							PolygonMeshUtils.CalcSegmentRelativeBarycentricCoordinates(
+								deformedPos,
+								mesh.Geometry.Vertices[obj.VerticeIndices[0]].Pos,
+								mesh.Geometry.Vertices[obj.VerticeIndices[1]].Pos
+							);
+						animatedPos =
+							w1[0] * mesh.Vertices[obj.VerticeIndices[0]].Pos +
+							w1[1] * mesh.Vertices[obj.VerticeIndices[1]].Pos;
+						break;
+					case TangerineFace tf:
+						var w2 =
+							PolygonMeshUtils.CalcTriangleRelativeBarycentricCoordinates(
+								deformedPos,
+								mesh.Geometry.Vertices[obj.VerticeIndices[0]].Pos,
+								mesh.Geometry.Vertices[obj.VerticeIndices[1]].Pos,
+								mesh.Geometry.Vertices[obj.VerticeIndices[2]].Pos
+							);
+						animatedPos =
+							w2[0] * mesh.Vertices[obj.VerticeIndices[0]].Pos +
+							w2[1] * mesh.Vertices[obj.VerticeIndices[1]].Pos +
+							w2[2] * mesh.Vertices[obj.VerticeIndices[2]].Pos;
+						break;
+				}
+				var animatedVertex = new Vertex() { Pos = animatedPos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor };
+				var deformedVertex = new Vertex() { Pos = deformedPos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor };
+				Core.Operations.PolygonMeshModification.Create.Perform(mesh, animatedVertex, deformedVertex);
 				Document.Current.History.CommitTransaction();
 			}
 			Window.Current.Invalidate();
@@ -151,21 +179,18 @@ namespace Tangerine.UI.SceneView
 
 		private IEnumerator<object> Remove(ITangerineGeometryPrimitive obj)
 		{
-			var targets = obj.GetAdjacent().Where(v => v is TangerineVertex).ToList();
-			if (mesh.Geometry.Vertices.Count - targets.Count - 1 < 3) {
+			if (mesh.Geometry.Vertices.Count == 4) {
 				new AlertDialog("Mesh can't contain less than 3 vertices", "Continue").Show();
 				yield return null;
 			} else {
-				for (var i = 0; i < obj.VerticeIndices.Length; ++i) {
-					var current = obj.VerticeIndices[i];
-					if (current < mesh.Geometry.Vertices.Count - 1) {
-						for (var j = i + 1; j < obj.VerticeIndices.Length; ++j) {
-							if (obj.VerticeIndices[j] == mesh.Geometry.Vertices.Count - 1) {
-								obj.VerticeIndices[j] = current;
-							}
-						}
-					}
-					mesh.Geometry.RemoveVertex(current);
+				using (Document.Current.History.BeginTransaction()) { 
+					Core.Operations.PolygonMeshModification.Remove.Perform(
+						mesh,
+						mesh.Vertices[obj.VerticeIndices[0]],
+						mesh.Geometry.Vertices[obj.VerticeIndices[0]],
+						obj.VerticeIndices[0]
+					);
+					Document.Current.History.CommitTransaction();
 				}
 				Window.Current.Invalidate();
 				yield return null;

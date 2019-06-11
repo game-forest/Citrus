@@ -502,7 +502,9 @@
     <Compile Include="Source\YuzuGeneratedBinaryDeserializer.cs" />
     <Compile Include="Source\YuzuGeneratedCloners.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshStructure.cs" />
+    <Compile Include="Source\Optimizations\Triangulator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\IGeometry.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />

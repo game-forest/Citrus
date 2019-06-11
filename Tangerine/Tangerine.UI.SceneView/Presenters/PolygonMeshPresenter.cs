@@ -25,9 +25,6 @@ namespace Tangerine.UI.SceneView
 				return;
 			}
 			var mesh = meshes[0];
-			if (mesh.CurrentState == PolygonMesh.State.Display) {
-				return;
-			}
 			var defaultColor = Color4.Green.Lighten(0.2f);
 			var hoverColor =
 				mesh.CurrentState == PolygonMesh.State.Remove ?
@@ -44,10 +41,13 @@ namespace Tangerine.UI.SceneView
 				SceneView.Instance.Scene.Scale.X
 			);
 			var hitTestTargets = new HashSet<ITangerineGeometryPrimitive>();
-			if (mesh.CurrentState == PolygonMesh.State.Modify && !(primaryHitTestTarget is TangerineVertex)) {
+			if (mesh.CurrentState == PolygonMesh.State.Deform && !(primaryHitTestTarget is TangerineVertex)) {
 				goto render;
 			}
 			if (mesh.CurrentState == PolygonMesh.State.Create && primaryHitTestTarget is TangerineVertex) {
+				goto render;
+			}
+			if (mesh.CurrentState == PolygonMesh.State.Remove && !(primaryHitTestTarget is TangerineVertex)) {
 				goto render;
 			}
 			if (primaryHitTestTarget != null) {
@@ -55,12 +55,12 @@ namespace Tangerine.UI.SceneView
 				if (primaryHitTestTarget is TangerineFace) {
 					renderQueue.Enqueue((primaryHitTestTarget, hoverColor));
 				}
-				if (mesh.CurrentState == PolygonMesh.State.Remove) {
+				if (mesh.CurrentState == PolygonMesh.State.Remove && primaryHitTestTarget is TangerineVertex) {
 					hitTestTargets.UnionWith(primaryHitTestTarget.GetAdjacent());
 				}
 			}
 
-			render:
+		render:
 			foreach (var primitive in new[] { GeometryPrimitive.Edge, GeometryPrimitive.Vertex }) {
 				foreach (var obj in mesh.Geometry[primitive]) {
 					renderQueue.Enqueue((obj, hitTestTargets.Contains(obj) ? hoverColor : defaultColor));
@@ -88,7 +88,10 @@ namespace Tangerine.UI.SceneView
 				}
 			}
 #if DEBUG
-			if (SceneView.Instance.Input.IsKeyPressed(Key.Keypad0)) {
+			if (
+				mesh.CurrentContext == PolygonMesh.Context.Deformation &&
+				SceneView.Instance.Input.IsKeyPressed(Key.Alt)
+			) {
 				var g = (Geometry)mesh.Geometry;
 				foreach (var he in g.HalfEdges) {
 					var vPos = g.Vertices[he.Origin].Pos;

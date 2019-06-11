@@ -10,36 +10,100 @@ namespace Lime.PolygonMesh
 	{
 		public enum State
 		{
-			Display,
 			Animate,
-			Modify,
+			Deform,
 			Create,
 			Remove,
 		}
 
+		private List<Vertex> vertices;
+
 		public static GeometryPrimitive[] Primitives =
 			Enum.GetValues(typeof(GeometryPrimitive)) as GeometryPrimitive[];
+
+		[YuzuMember]
+		public override ITexture Texture { get; set; }
+
+		[YuzuMember]
+		[TangerineIgnore]
+		public List<Vertex> Vertices
+		{
+			get => vertices;
+			set
+			{
+				vertices = value;
+				if (Geometry != null && currentContext == Context.Animation) {
+					Geometry.Vertices = vertices;
+				}
+			}
+		}
+
+		[YuzuMember]
+		[TangerineIgnore]
+		public List<int> IndexBuffer { get; set; }
+
+#if TANGERINE
+		public enum Context
+		{
+			Animation,
+			Deformation
+		}
+
+		private State currentState = State.Animate;
+		private Context currentContext = Context.Animation;
 
 		[YuzuMember]
 		[TangerineIgnore]
 		public IGeometry Geometry { get; set; }
 
 		[YuzuMember]
-		public State CurrentState { get; set; }
+		[TangerineIgnore]
+		public List<Vertex> DeformedVertices { get; set; }
 
-		[YuzuMember]
-		public override ITexture Texture { get; set; }
-
-		public PolygonMesh()
+		public State CurrentState
 		{
-			Texture = new SerializableTexture();
-			var vertices = new List<Vertex> {
-				new Vertex() { Pos = Vector2.Zero, UV1 = Vector2.Zero, Color = GlobalColor },
-				new Vertex() { Pos = new Vector2(Width, 0.0f), UV1 = new Vector2(1, 0), Color = GlobalColor },
-				new Vertex() { Pos = new Vector2(0.0f, Height), UV1 = new Vector2(0, 1), Color = GlobalColor },
-				new Vertex() { Pos = Size, UV1 = Vector2.One, Color = GlobalColor },
-			};
-			Geometry = new Geometry(vertices);
+			get => currentState;
+			set
+			{
+				if (currentState != value) {
+					switch (value) {
+						case State.Animate:
+							CurrentContext = Context.Animation;
+							break;
+						case State.Deform:
+						case State.Create:
+						case State.Remove:
+							CurrentContext = Context.Deformation;
+							break;
+					}
+					currentState = value;
+				}
+			}
+		}
+
+		public Context CurrentContext
+		{
+			get => currentContext;
+			set
+			{
+				if (currentContext != value) {
+					SwapContext();
+					currentContext = value;
+				}
+			}
+		}
+
+		public void SwapContext()
+		{
+			switch (CurrentContext) {
+				case Context.Animation:
+					Geometry.Vertices = DeformedVertices;
+					break;
+				case Context.Deformation:
+					Geometry.Vertices = Vertices;
+					break;
+			}
+			Geometry.ResetCache();
 		}
 
 		public bool HitTest(Vector2 position, Matrix32 transform, out ITangerineGeometryPrimitive target, float scale = 1.0f)
@@ -71,15 +135,43 @@ namespace Lime.PolygonMesh
 			}
 			return false;
 		}
+#endif
+
+		public PolygonMesh()
+		{
+			Texture = new SerializableTexture();
+			IndexBuffer = new List<int>();
+			Vertices = new List<Vertex> {
+				new Vertex() { Pos = Vector2.Zero, UV1 = Vector2.Zero, Color = GlobalColor },
+				new Vertex() { Pos = new Vector2(Width, 0.0f), UV1 = new Vector2(1, 0), Color = GlobalColor },
+				new Vertex() { Pos = new Vector2(0.0f, Height), UV1 = new Vector2(0, 1), Color = GlobalColor },
+				new Vertex() { Pos = Size, UV1 = Vector2.One, Color = GlobalColor },
+			};
+			Geometry = new Geometry(Vertices, IndexBuffer, this);
+#if TANGERINE
+			DeformedVertices = new List<Vertex>();
+			foreach (var v in Vertices) {
+				DeformedVertices.Add(v);
+			}
+#endif
+		}
 
 		protected override void OnSizeChanged(Vector2 sizeDelta)
 		{
 			base.OnSizeChanged(sizeDelta);
 			if (Geometry != null) {
-				for (var i = 0; i < Geometry.Vertices.Count; ++i) {
-					var v = Geometry.Vertices[i];
-					v.Pos *= Size / (Size - sizeDelta);
-					Geometry.Vertices[i] = v;
+				var verticeArrays = new[] {
+#if TANGERINE
+					DeformedVertices,
+#endif
+					Vertices
+				};
+				foreach (var verticeArray in verticeArrays) {
+					for (var i = 0; i < verticeArray.Count; ++i) {
+						var v = verticeArray[i];
+						v.Pos *= Size / (Size - sizeDelta);
+						verticeArray[i] = v;
+					}
 				}
 			}
 		}
@@ -96,11 +188,15 @@ namespace Lime.PolygonMesh
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			ro.CaptureRenderState(this);
 			ro.Texture = Texture;
-			foreach (var v in Geometry.Vertices) {
+			var vertices =
+				CurrentContext == Context.Animation ?
+				Vertices :
+				DeformedVertices;
+			foreach (var v in vertices) {
 				ro.Vertices.Add(v);
 			}
-			foreach (var i in Geometry.Traverse()) {
-				ro.Order.Add(i);
+			foreach (var i in IndexBuffer) {
+				ro.IndexBuffer.Add(i);
 			}
 			return ro;
 		}
@@ -110,23 +206,23 @@ namespace Lime.PolygonMesh
 			public static Vertex[] Polygon = new Vertex[3];
 
 			public readonly List<Vertex> Vertices = new List<Vertex>();
-			public readonly List<int> Order = new List<int>();
+			public readonly List<int> IndexBuffer = new List<int>();
 			public ITexture Texture;
 
 			protected override void OnRelease()
 			{
 				Texture = null;
 				Vertices.Clear();
-				Order.Clear();
+				IndexBuffer.Clear();
 			}
 
 			public override void Render()
 			{
 				PrepareRenderState();
-				if (Texture != null && Vertices.Count > 0 && Order.Count > 0) {
-					for (var i = 0; i < Order.Count; i += Polygon.Length) {
+				if (Texture != null && Vertices.Count > 0 && IndexBuffer.Count > 0) {
+					for (var i = 0; i < IndexBuffer.Count; i += Polygon.Length) {
 						for (int j = 0; j < Polygon.Length; ++j) {
-							Polygon[j] = Vertices[Order[i + j]];
+							Polygon[j] = Vertices[IndexBuffer[i + j]];
 						}
 						Renderer.DrawTriangleFan(Texture, Polygon, Polygon.Length);
 					}

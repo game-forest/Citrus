@@ -496,7 +496,9 @@
     <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\CustomSetAssetBundle.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshStructure.cs" />
+    <Compile Include="Source\Optimizations\Triangulator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\IGeometry.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Application\Application.cs" />

@@ -132,7 +132,7 @@
     <Compile Include="Processors\ShiftTimelineProcessor.cs" />
     <Compile Include="Processors\FrameProgressionProcessor.cs" />
     <Compile Include="Presenters\PolygonMeshPresenter.cs" />
-    <Compile Include="Processors\PolygonMeshEdittingProcessor.cs" />
+    <Compile Include="Processors\PolygonMeshEditingProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lime\Lime.Mac.csproj">
