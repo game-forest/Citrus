@@ -74,12 +74,11 @@ namespace Lime.PolygonMesh
 
 		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
 		{
-			Renderer.DrawRound(
+			Renderer.DrawCircle(
 				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
-				1.3f * radius,
-				64,
-				Color4.Black.Lighten(0.1f),
-				Color4.Black.Transparentify(0.2f)
+				1.12f * radius,
+				32,
+				Color4.Black.Lighten(0.1f).Transparentify(0.2f)
 			);
 			Renderer.DrawRound(
 				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
@@ -164,7 +163,7 @@ namespace Lime.PolygonMesh
 				Renderer.DrawDashedLine(
 					p1,
 					p2,
-					color,
+					color.Transparentify(0.4f),
 					new Vector2(radius * 2.0f, radius / 2.0f)
 				);
 			}

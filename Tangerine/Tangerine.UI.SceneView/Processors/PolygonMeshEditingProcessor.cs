@@ -135,6 +135,11 @@ namespace Tangerine.UI.SceneView
 		{
 			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
 			var mousePos = SceneView.Instance.MousePosition * transform;
+			if (obj is TangerineEdge) {
+				var v1 = mesh.Geometry.Vertices[obj.VerticeIndices[0]];
+				var v2 = mesh.Geometry.Vertices[obj.VerticeIndices[1]];
+				mousePos = PolygonMeshUtils.PointProjectionToLine(mousePos, v1.Pos, v2.Pos, out var isInside);
+			}
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
 				mesh.Geometry.AddVertex(new Vertex() { Pos = mousePos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor });
@@ -146,19 +151,25 @@ namespace Tangerine.UI.SceneView
 
 		private IEnumerator<object> Remove(ITangerineGeometryPrimitive obj)
 		{
-			for (var i = 0; i < obj.VerticeIndices.Length; ++i) {
-				var current = obj.VerticeIndices[i];
-				if (current < mesh.Geometry.Vertices.Count - 1) {
-					for (var j = i + 1; j < obj.VerticeIndices.Length; ++j) {
-						if (obj.VerticeIndices[j] == mesh.Geometry.Vertices.Count - 1) {
-							obj.VerticeIndices[j] = current;
+			var targets = obj.GetAdjacent().Where(v => v is TangerineVertex).ToList();
+			if (mesh.Geometry.Vertices.Count - targets.Count - 1 < 3) {
+				new AlertDialog("Mesh can't contain less than 3 vertices", "Continue").Show();
+				yield return null;
+			} else {
+				for (var i = 0; i < obj.VerticeIndices.Length; ++i) {
+					var current = obj.VerticeIndices[i];
+					if (current < mesh.Geometry.Vertices.Count - 1) {
+						for (var j = i + 1; j < obj.VerticeIndices.Length; ++j) {
+							if (obj.VerticeIndices[j] == mesh.Geometry.Vertices.Count - 1) {
+								obj.VerticeIndices[j] = current;
+							}
 						}
 					}
+					mesh.Geometry.RemoveVertex(current);
 				}
-				mesh.Geometry.RemoveVertex(current);
+				Window.Current.Invalidate();
+				yield return null;
 			}
-			Window.Current.Invalidate();
-			yield return null;
 		}
 	}
 }

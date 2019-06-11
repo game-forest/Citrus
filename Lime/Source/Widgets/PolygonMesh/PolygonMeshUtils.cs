@@ -44,6 +44,17 @@ namespace Lime
 			return Vector2.Distance(intersectionPoint, point);
 		}
 
+		public static Vector2 PointProjectionToLine(Vector2 point, Vector2 p1, Vector2 p2, out bool isInside)
+		{
+			var a = point - p1;
+			var b = (p2 - p1) / Vector2.Distance(p1, p2);
+			point = Vector2.DotProduct(a, b) * b + p1;
+			isInside =
+				Vector2.Distance(a, point) <= Vector2.Distance(a, b) &&
+				Vector2.Distance(b, point) <= Vector2.Distance(a, b);
+			return point;
+		}
+
 		public static bool PointPointIntersection(Vector2 p1, Vector2 p2, float threshold, out float distance)
 		{
 			distance = Vector2.Distance(p1, p2);
