@@ -87,13 +87,12 @@ namespace Lime
 		{
 			intersectionPoint = new Vector2(float.NaN, float.NaN);
 			var d = (a1.X - b1.X) * (a2.Y - b2.Y) - (a1.Y - b1.Y) * (a2.X - b2.X);
+			var uNumerator = ((a1.Y - b1.Y) * (a1.X - a2.X) - (a1.X - b1.X) * (a1.Y - a2.Y));
 			if (Mathf.Abs(d) <= Mathf.ZeroTolerance) {
-				return
-					(Mathf.Abs(a2.Y - b1.Y) <= Mathf.ZeroTolerance && a2.X <= b1.X) ||
-					(Mathf.Abs(a2.X - b1.X) <= Mathf.ZeroTolerance && a2.Y <= b1.Y);
+				return uNumerator == 0;
 			}
 			var t = ((a1.X - a2.X) * (a2.Y - b2.Y) - (a1.Y - a2.Y) * (a2.X - b2.X)) / d;
-			var u = ((a1.Y - b1.Y) * (a1.X - a2.X) - (a1.X - b1.X) * (a1.Y - a2.Y)) / d;
+			var u = uNumerator / d;
 			if (t >= 0.0f && t <= 1.0f && u >= 0.0f && u <= 1.0f) {
 				intersectionPoint.X = a1.X + t * (b1.X - a1.X);
 				intersectionPoint.Y = a1.Y + t * (b1.Y - a1.Y);

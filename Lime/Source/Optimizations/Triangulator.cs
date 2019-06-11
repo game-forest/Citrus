@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using Lime.PolygonMesh;
 using HalfEdge = Lime.PolygonMesh.Geometry.HalfEdge;
 
@@ -18,7 +16,10 @@ namespace Lime.Source.Optimizations
 			if (inside) {
 				Triangulate(geometry, GetContourPolygon(geometry, t, vertex), vi);
 			} else {
-				TriangulateVisibleBoundary(geometry, GetVisibleBoundary(geometry, vertex, t), vi);
+				var q = TriangulateVisibleBoundary(geometry, GetVisibleBoundary(geometry, vertex, GetTriangulationBoundary(geometry, vertex, t)), vi);
+				System.Diagnostics.Debug.Assert(q.Count > 0);
+				RestoreDelaunayProperty(geometry, q);
+				System.Diagnostics.Debug.Assert(FullCheck(geometry));
 			}
 		}
 
@@ -377,7 +378,7 @@ namespace Lime.Source.Optimizations
 			return (v + t * (w - v)).Length;
 		}
 
-		private LinkedList<int> GetVisibleBoundary(Geometry geometry, Vertex vertex, HalfEdge start)
+		private LinkedList<int> GetTriangulationBoundary(Geometry geometry, Vertex vertex, HalfEdge start)
 		{
 			var minD = float.MaxValue;
 			var current = start;
@@ -394,52 +395,76 @@ namespace Lime.Source.Optimizations
 			}
 			var boundary = new LinkedList<int>();
 			boundary.AddFirst(start.Index);
-			var right = true;
-			while (true) {
-				var prev = geometry.HalfEdges[right ? boundary.Last.Value : boundary.First.Value];
-				var next = right ? geometry.Next(prev) : geometry.Prev(prev);
+			do {
+				var prev = geometry.HalfEdges[boundary.Last.Value];
+				var next = geometry.Next(prev);
 				while (next.Twin != -1) {
-					next = geometry.HalfEdges[right ? geometry.Next(next.Twin) : geometry.Prev(next.Twin)];
+					next = geometry.HalfEdges[geometry.Next(next.Twin)];
 				}
-				var c = right ? geometry.Vertices[geometry.Next(next).Origin].Pos : geometry.Vertices[next.Origin].Pos;
+				boundary.AddLast(next.Index);
+			} while (boundary.First.Value != boundary.Last.Value);
+			boundary.RemoveLast();
+			return boundary;
+		}
+
+		private LinkedList<int> GetVisibleBoundary(Geometry geometry, Vertex vertex, LinkedList<int> boundary)
+		{
+			var broke = false;
+			LinkedListNode<int> first = null;
+			LinkedList<int> visibleBoundary = new LinkedList<int>();
+			foreach (var side in boundary) {
+				var currentHe = geometry.HalfEdges[side];
+				var c = geometry.Vertices[currentHe.Origin].Pos;
+				var d = geometry.Vertices[geometry.Next(currentHe).Origin].Pos;
 				var listNode = boundary.First;
 				while (listNode != null) {
-					current = geometry.HalfEdges[listNode.Value];
+					var current = geometry.HalfEdges[listNode.Value];
 					var a = geometry.Vertices[current.Origin].Pos;
 					var b = geometry.Vertices[geometry.Next(current).Origin].Pos;
-					if (PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, c, out _)) {
+					if (
+						listNode.Value != side &&
+						(b != c && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, c, out var i) ||
+						a != d && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, d, out i))
+					) {
 						break;
 					}
 					listNode = listNode.Next;
 				}
 				if (listNode != null) {
-					if (!right) {
-						break;
+					if (!broke) {
+						first = visibleBoundary.First;
 					}
-					right = false;
+					broke = true;
 					continue;
 				}
-				if (right) {
-					boundary.AddLast(next.Index);
+				if (broke) {
+					if (first == null) {
+						visibleBoundary.AddFirst(side);
+					} else {
+						visibleBoundary.AddBefore(first, side);
+					}
 				} else {
-					boundary.AddFirst(next.Index);
+					visibleBoundary.AddLast(side);
 				}
 			}
-			return boundary;
+			return visibleBoundary;
 		}
 
-		public void TriangulateVisibleBoundary(Geometry geometry, LinkedList<int> boundary, int vi)
+		public Queue<int> TriangulateVisibleBoundary(Geometry geometry, LinkedList<int> boundary, int vi)
 		{
 			var current = boundary.First;
+			var q = new Queue<int>();
 			while (current != null) {
 				var v = geometry.HalfEdges[geometry.Next(current.Value)].Origin;
 				geometry.Connect(v, geometry.HalfEdges[current.Value].Origin, vi);
 				geometry.MakeTwins(current.Value, geometry.HalfEdges.Count - 3);
+				q.Enqueue(geometry.HalfEdges.Count - 1);
 				if (current.Previous != null) {
 					geometry.MakeTwins(geometry.HalfEdges.Count - 2, geometry.HalfEdges.Count - 4);
 				}
 				current = current.Next;
 			}
+			return q;
 		}
 	}
 }
