@@ -330,17 +330,16 @@ namespace Lime.Source.Optimizations
 
 		private Queue<int> RemovePolygon(Geometry geometry, LinkedList<int> polygon)
 		{
+			geometry.RemoveTriangle(polygon.First.Value);
+			polygon.Remove(polygon.First);
+			geometry.RemoveTriangle(polygon.Last.Value);
+			polygon.Remove(polygon.Last);
 			var current = polygon.First;
 			var queue = new Queue<int>();
 			while (current != null) {
 				var next = current.Next;
-				if (geometry.HalfEdges[current.Value].Twin == -1) {
-					polygon.Remove(current);
-					geometry.RemoveTriangle(current.Value);
-				} else {
-					geometry.RemoveHalfEdge(geometry.Next(current.Value));
-					geometry.RemoveHalfEdge(geometry.Prev(current.Value));
-				}
+				geometry.RemoveHalfEdge(geometry.Next(current.Value));
+				geometry.RemoveHalfEdge(geometry.Prev(current.Value));
 				current = next;
 			}
 			current = polygon.First;
