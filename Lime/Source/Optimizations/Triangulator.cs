@@ -416,18 +416,20 @@ namespace Lime.Source.Optimizations
 				var c = geometry.Vertices[currentHe.Origin].Pos;
 				var d = geometry.Vertices[geometry.Next(currentHe).Origin].Pos;
 				var listNode = boundary.First;
-				while (listNode != null) {
-					var current = geometry.HalfEdges[listNode.Value];
-					var a = geometry.Vertices[current.Origin].Pos;
-					var b = geometry.Vertices[geometry.Next(current).Origin].Pos;
-					if (
-						listNode.Value != side &&
-						(b != c && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, c, out var i) ||
-						a != d && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, d, out i))
-					) {
-						break;
+				if (Area(c, vertex.Pos, d) > 0) {
+					while (listNode != null) {
+						var current = geometry.HalfEdges[listNode.Value];
+						var a = geometry.Vertices[current.Origin].Pos;
+						var b = geometry.Vertices[geometry.Next(current).Origin].Pos;
+						if (
+							listNode.Value != side &&
+							(b != c && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, c, out _) ||
+							 a != d && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, d, out _))
+						) {
+							break;
+						}
+						listNode = listNode.Next;
 					}
-					listNode = listNode.Next;
 				}
 				if (listNode != null) {
 					if (!broke) {
