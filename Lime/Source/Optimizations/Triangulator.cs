@@ -14,7 +14,7 @@ namespace Lime.Source.Optimizations
 			var vertex = geometry.Vertices[vi];
 			var t = LocateTriangle(geometry, geometry.HalfEdges[0], vertex, out var inside);
 			if (inside) {
-				Triangulate(geometry, GetContourPolygon(geometry, t, vertex), vi);
+				TriangulateStarShapedPolygon(geometry, GetContourPolygon(geometry, t, vertex), vi);
 			} else {
 				var q = TriangulateVisibleBoundary(geometry, GetVisibleBoundary(geometry, vertex, GetTriangulationBoundary(geometry, vertex, t)), vi);
 				System.Diagnostics.Debug.Assert(q.Count > 0);
@@ -30,7 +30,7 @@ namespace Lime.Source.Optimizations
 			RestoreDelaunayProperty(geometry,
 				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
 					RemovePolygon(geometry, polygon) :
-					TriangulateByEarClipping(geometry, polygon));
+					TriangulatePolygonByEarClipping(geometry, polygon));
 		}
 
 		public bool FullCheck(Geometry geometry)
@@ -193,7 +193,7 @@ namespace Lime.Source.Optimizations
 
 		private float Area(Vector2 v1, Vector2 v2, Vector2 v3) => (v2.X - v1.X) * (v3.Y - v1.Y) - (v2.Y - v1.Y) * (v3.X - v1.X);
 
-		private void Triangulate(Geometry geometry, LinkedList<int> polygon, int vi)
+		private void TriangulateStarShapedPolygon(Geometry geometry, LinkedList<int> polygon, int vi)
 		{
 			var current = polygon.First;
 			while (current != null) {
@@ -211,7 +211,7 @@ namespace Lime.Source.Optimizations
 			geometry.Invalidate();
 		}
 
-		private Queue<int> TriangulateByEarClipping(Geometry geometry, LinkedList<int> polygon)
+		private Queue<int> TriangulatePolygonByEarClipping(Geometry geometry, LinkedList<int> polygon)
 		{
 			var queue = new Queue<int>();
 			bool CanCreateTriangle(int cur, int next)
