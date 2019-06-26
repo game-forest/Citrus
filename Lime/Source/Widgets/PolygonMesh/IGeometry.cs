@@ -125,12 +125,14 @@ namespace Lime.PolygonMesh
 		public IGeometry Owner { get; set; }
 		public int[] VerticeIndices { get; set; }
 		public readonly bool IsFraming;
+		public readonly bool IsConstrained;
 
-		public TangerineEdge(IGeometry owner, int vertex1, int vertex2, bool isFraming)
+		public TangerineEdge(IGeometry owner, int vertex1, int vertex2, bool isFraming, bool isConstrained)
 		{
 			Owner = owner;
-			VerticeIndices = new int[] { vertex1, vertex2 };
+			VerticeIndices = new[] { vertex1, vertex2 };
 			IsFraming = isFraming;
+			IsConstrained = isConstrained;
 		}
 
 		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float scale = 1.0f)
@@ -158,61 +160,72 @@ namespace Lime.PolygonMesh
 
 		public void Render(Matrix32 transform)
 		{
-			var foregroundColor =
-				IsFraming ?
-				Theme.Colors.PolygonMeshFramingEdgeColor :
-				Theme.Colors.PolygonMeshInnerEdgeColor;
-			var framingBackgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
-			var framingForegroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
-			var framingBackgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
-			var dashedBackgroundSize = new Vector2(
-				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
-				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
-			);
-			var dashedForegroundSize = new Vector2(
+			var foregroundColor = Theme.Colors.PolygonMeshInnerEdgeColor;
+			var backgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
+			var foregroundSize = new Vector2(
 				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
 				Theme.Metrics.PolygonMeshEdgeThickness
 			);
-			var dashedBackgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
-
+			var backgroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
+			);
+			if (IsFraming) {
+				foregroundColor = Theme.Colors.PolygonMeshFramingEdgeColor;
+				backgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
+			}
+			else if (IsConstrained) {
+				foregroundColor = Theme.Colors.PolygonMeshFixedEdgeColor;
+				backgroundColor = Theme.Colors.PolygonMeshFixedEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness);
+			}
 			PolygonMeshUtils.RenderLine(
 				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
 				transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos),
-				IsFraming ? framingBackgroundSize : dashedBackgroundSize,
-				IsFraming ? framingForegroundSize : dashedForegroundSize,
-				IsFraming ? framingBackgroundColor : dashedBackgroundColor,
+				backgroundSize,
+				foregroundSize,
+				backgroundColor,
 				foregroundColor,
-				!IsFraming
+				!(IsFraming || IsConstrained)
 			);
 		}
 
 		public void RenderHovered(Matrix32 transform, bool isRemoving = false)
 		{
-			var hoverColor =
+			var foregroundColor =
 				isRemoving ?
 				Theme.Colors.PolygonMeshRemovalColor :
 				Theme.Colors.PolygonMeshHoverColor;
-			var framingBackgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
-			var framingForegroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
-			var framingBackgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
-			var dashedBackgroundSize = new Vector2(
-				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
-				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
-			);
-			var dashedForegroundSize = new Vector2(
+			var backgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
+			var foregroundSize = new Vector2(
 				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
 				Theme.Metrics.PolygonMeshEdgeThickness
 			);
-			var dashedBackgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
-
+			var backgroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
+			);
+			if (IsFraming) {
+				backgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
+			}
+			else if (IsConstrained) {
+				backgroundColor = Theme.Colors.PolygonMeshFixedEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness);
+			}
 			PolygonMeshUtils.RenderLine(
 				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
 				transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos),
-				IsFraming ? framingBackgroundSize : dashedBackgroundSize,
-				IsFraming ? framingForegroundSize : dashedForegroundSize,
-				IsFraming ? framingBackgroundColor : dashedBackgroundColor,
-				hoverColor,
-				!IsFraming
+				backgroundSize,
+				foregroundSize,
+				backgroundColor,
+				foregroundColor,
+				!(IsFraming || IsConstrained)
 			);
 		}
 
@@ -346,11 +359,15 @@ namespace Lime.PolygonMesh
 			[YuzuMember]
 			public int Twin;
 
+			[YuzuMember]
+			public bool Constrained;
+
 			public HalfEdge(int index, int origin)
 			{
 				Origin = origin;
 				Index = index;
 				Twin = -1;
+				Constrained = false;
 			}
 
 			public HalfEdge(int index, int origin, int twin)
@@ -358,6 +375,7 @@ namespace Lime.PolygonMesh
 				Origin = origin;
 				Index = index;
 				Twin = twin;
+				Constrained = false;
 			}
 		}
 
@@ -423,11 +441,11 @@ namespace Lime.PolygonMesh
 								var v2v3 = HalfEdges[i + 1];
 								var v3v1 = HalfEdges[i + 2];
 								edges.Add(
-									new TangerineEdge(this, v1v2.Origin, v2v3.Origin, v1v2.Twin == -1));
+									new TangerineEdge(this, v1v2.Origin, v2v3.Origin, v1v2.Twin == -1, v1v2.Constrained));
 								edges.Add(
-									new TangerineEdge(this, v2v3.Origin, v3v1.Origin, v2v3.Twin == -1));
+									new TangerineEdge(this, v2v3.Origin, v3v1.Origin, v2v3.Twin == -1, v2v3.Constrained));
 								edges.Add(
-									new TangerineEdge(this, v3v1.Origin, v1v2.Origin, v3v1.Twin == -1));
+									new TangerineEdge(this, v3v1.Origin, v1v2.Origin, v3v1.Twin == -1, v3v1.Constrained));
 							}
 							primitives = new ITangerineGeometryPrimitive[edges.Count];
 							edges.CopyTo(primitives);
@@ -574,6 +592,18 @@ namespace Lime.PolygonMesh
 			System.Diagnostics.Debug.Assert(he1.Origin != he2.Origin && he1.Origin == Next(he2).Origin && he2.Origin == Next(he1).Origin);
 		}
 
+		public void SetConstrain(int index, bool constrained)
+		{
+			var he = HalfEdges[index];
+			he.Constrained = constrained;
+			if (he.Twin != -1) {
+				var twin = HalfEdges[he.Twin];
+				twin.Constrained = constrained;
+				HalfEdges[he.Twin] = twin;
+			}
+			HalfEdges[index] = he;
+		}
+
 		public void Connect(HalfEdge halfEdge, int vertex)
 		{
 			Connect(halfEdge.Origin, Next(halfEdge).Origin, vertex);
@@ -616,12 +646,13 @@ namespace Lime.PolygonMesh
 
 		public void MoveVertex(int index, Vector2 positionDelta)
 		{
-			Triangulator.Instance.RemoveVertex(this, index);
+			Triangulator.Instance.RemoveVertex(this, index, true);
 			Invalidate();
 			var v = Vertices[index];
 			v.Pos += positionDelta;
 			Vertices[index] = v;
 			Triangulator.Instance.AddVertex(this, index);
+			Invalidate();
 			Traverse();
 			//System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
 		}
@@ -655,6 +686,7 @@ namespace Lime.PolygonMesh
 		{
 			Vertices.Add(vertex);
 			Triangulator.Instance.AddVertex(this, Vertices.Count - 1);
+			Invalidate();
 			ResetCache();
 			Traverse();
 		}
@@ -755,6 +787,12 @@ namespace Lime.PolygonMesh
 				}
 			}
 			return true;
+		}
+
+		public void InsertConstrainedEdge(int vi1, int vi2)
+		{
+			Triangulator.Instance.InsertConstrainedEdge(this, (vi1, vi2));
+			Invalidate();
 		}
 	}
 }

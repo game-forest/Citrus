@@ -159,9 +159,10 @@ namespace Tangerine.UI
 		public static readonly ICommand FitToContent = new Command("Fit to Content") { Icon = IconPool.GetIcon("Tools.FitToContent") };
 		public static readonly ICommand CenterView = new Command("Center View") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
 		public static readonly ICommand PolygonMeshAnimate = new Command("Animate PolygonMesh") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
-		public static readonly ICommand PolygonMeshDeform = new Command("Deform PolygonMesh Structure") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
-		public static readonly ICommand PolygonMeshCreate = new Command("Create PolygonMesh Vertex") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
-		public static readonly ICommand PolygonMeshRemove = new Command("Remove PolygonMesh Vertex") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
+		public static readonly ICommand PolygonMeshDeform = new Command("Deform PolygonMesh Structure") { Icon = IconPool.GetIcon("Tools.DistributeBottom") };
+		public static readonly ICommand PolygonMeshCreate = new Command("Create PolygonMesh Vertex") { Icon = IconPool.GetIcon("Tools.FlipV") };
+		public static readonly ICommand PolygonMeshRemove = new Command("Remove PolygonMesh Vertex") { Icon = IconPool.GetIcon("Tools.RestoreOriginalSize") };
+		public static readonly ICommand PolygonMeshConstrain = new Command("Constrain PolygonMesh Edge") { Icon = IconPool.GetIcon("Tools.FlipH") };
 	}
 
 	public static class ToolsCommands

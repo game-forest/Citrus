@@ -61,4 +61,17 @@ namespace Tangerine
 			mesh.CurrentState = PolygonMesh.State.Remove;
 		}
 	}
+
+	public class PolygonMeshConstrain : DocumentCommandHandler
+	{
+		public override void ExecuteTransaction()
+		{
+			var meshes = Document.Current.SelectedNodes().Editable().OfType<PolygonMesh>().ToList();
+			if (meshes.Count != 1) {
+				return;
+			}
+			var mesh = meshes[0];
+			mesh.CurrentState = PolygonMesh.State.Constrain;
+		}
+	}
 }

@@ -9,7 +9,7 @@ namespace Tangerine.UI.SceneView
 	public class PolygonMeshEditingProcessor : ITaskProvider
 	{
 		private PolygonMesh mesh = null;
-
+		private ITangerineGeometryPrimitive last = null;
 		public IEnumerator<object> Task()
 		{
 			while (true) {
@@ -69,9 +69,29 @@ namespace Tangerine.UI.SceneView
 							}
 						}
 						break;
+					case PolygonMesh.State.Constrain:
+						if (target is TangerineVertex) {
+							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+								if (last == null) {
+									last = target;
+								} else {
+									yield return Constrain(target);
+								}
+							}
+						}
+						break;
 				}
 				yield return null;
 			}
+		}
+
+		private IEnumerator<object> Constrain(ITangerineGeometryPrimitive obj)
+		{
+			TangerineVertex v1 = (TangerineVertex) last, v2 = (TangerineVertex) obj;
+			((Geometry) mesh.Geometry).InsertConstrainedEdge(v1.VerticeIndices[0], v2.VerticeIndices[0]);
+			last = null;
+			yield return null;
 		}
 
 		private IEnumerator<object> Animate(ITangerineGeometryPrimitive obj)

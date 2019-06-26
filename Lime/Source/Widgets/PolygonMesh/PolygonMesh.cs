@@ -14,6 +14,7 @@ namespace Lime.PolygonMesh
 			Deform,
 			Create,
 			Remove,
+			Constrain,
 		}
 
 		private List<Vertex> vertices;
@@ -76,6 +77,7 @@ namespace Lime.PolygonMesh
 						case State.Deform:
 						case State.Create:
 						case State.Remove:
+						case State.Constrain:
 							CurrentContext = Context.Deformation;
 							break;
 					}
