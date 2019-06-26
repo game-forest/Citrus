@@ -14,6 +14,11 @@ namespace Lime.Source.Optimizations
 			var vertex = geometry.Vertices[vi];
 			var t = LocateTriangle(geometry, geometry.HalfEdges[0], vertex, out var inside);
 			if (inside) {
+				if (OnEdge(geometry, t, vi, out var edge)) {
+					SplitEdge(geometry, edge, vi);
+					geometry.Invalidate();
+					return;
+				}
 				TriangulateStarShapedPolygon(geometry, GetContourPolygon(geometry, t, vertex), vi);
 			} else {
 				var q = TriangulateVisibleBoundary(geometry, GetVisibleBoundary(geometry, vertex, GetTriangulationBoundary(geometry, vertex, t)), vi);
@@ -57,6 +62,31 @@ namespace Lime.Source.Optimizations
 			return true;
 		}
 
+		private bool OnEdge(Geometry geometry, HalfEdge triangle, int vi, out HalfEdge edge)
+		{
+			var v1 = geometry.Vertices[triangle.Origin].Pos;
+			var v2 = geometry.Vertices[geometry.Next(triangle).Origin].Pos;
+			var v3 = geometry.Vertices[geometry.Prev(triangle).Origin].Pos;
+			var v = geometry.Vertices[vi].Pos;
+			edge = triangle;
+			var p = PolygonMeshUtils.PointProjectionToLine(v, v1, v2, out bool isInside);
+			const float zt2 = Mathf.ZeroTolerance * Mathf.ZeroTolerance;
+			if (isInside && Math.Abs((p - v).SqrLength) < zt2) {
+				return true;
+			}
+			p = PolygonMeshUtils.PointProjectionToLine(v, v2, v3, out isInside);
+			if (isInside && Math.Abs((p - v).SqrLength) < zt2) {
+				edge = geometry.Next(triangle);
+				return true;
+			}
+			p = PolygonMeshUtils.PointProjectionToLine(v, v3, v1, out isInside);
+			if (isInside && Math.Abs((p - v).SqrLength) < zt2) {
+				edge = geometry.Prev(triangle);
+				return true;
+			}
+			return false;
+		}
+
 		private bool AreOnOppositeSides(Vector2 s1, Vector2 s2, Vector2 p1, Vector2 p2)
 		{
 			var side = s2 - s1;
@@ -72,12 +102,7 @@ namespace Lime.Source.Optimizations
 			do {
 				var next = geometry.Next(current);
 				Vector2 p1 = geometry.Vertices[current.Origin].Pos;
-				var side = geometry.Vertices[next.Origin].Pos - p1;
-				var v1 = geometry.Vertices[geometry.Next(next).Origin].Pos - p1;
-				var v2 = vertex.Pos - p1;
 				var areOpposite = AreOnOppositeSides(p1, geometry.Vertices[next.Origin].Pos, geometry.Vertices[geometry.Next(next).Origin].Pos, vertex.Pos);
-				var kek = Mathf.Sign(Vector2.CrossProduct(side, v1)) * Mathf.Sign(Vector2.CrossProduct(side, v2)) < 0;
-				System.Diagnostics.Debug.Assert(kek == areOpposite);
 				inside &= !areOpposite;
 				if (areOpposite && current.Twin != -1) {
 					start = current = geometry.HalfEdges[current.Twin];
@@ -193,17 +218,45 @@ namespace Lime.Source.Optimizations
 
 		private float Area(Vector2 v1, Vector2 v2, Vector2 v3) => (v2.X - v1.X) * (v3.Y - v1.Y) - (v2.Y - v1.Y) * (v3.X - v1.X);
 
+		private (int, int) SplitEdge(Geometry geometry, HalfEdge edge, int splitPoint)
+		{
+			void IternalSplitEdge(HalfEdge e, int sp)
+			{
+				var next = geometry.Next(e);
+				var prev = geometry.Prev(e);
+				geometry.Connect(e.Origin, sp, prev.Origin);
+				geometry.Connect(sp, next.Origin, prev.Origin);
+				if (next.Twin != -1) {
+					geometry.MakeTwins(geometry.HalfEdges.Count - 2, next.Twin);
+				}
+				if (prev.Twin != -1) {
+					geometry.MakeTwins(geometry.HalfEdges.Count - 4, prev.Twin);
+				}
+				geometry.MakeTwins(geometry.HalfEdges.Count - 5, geometry.HalfEdges.Count - 1);
+			}
+			IternalSplitEdge(edge, splitPoint);
+			var res = (geometry.HalfEdges.Count - 6, geometry.HalfEdges.Count - 3);
+			if (edge.Twin != -1) {
+				IternalSplitEdge(geometry.HalfEdges[edge.Twin], splitPoint);
+				geometry.MakeTwins(res.Item2, geometry.HalfEdges.Count - 6);
+				geometry.MakeTwins(res.Item1, geometry.HalfEdges.Count - 3);
+				geometry.RemoveTriangle(edge.Twin);
+			}
+			geometry.RemoveTriangle(edge.Index);
+			return res;
+		}
+
 		private void TriangulateStarShapedPolygon(Geometry geometry, LinkedList<int> polygon, int vi)
 		{
 			var current = polygon.First;
+			var vertex = geometry.Vertices[vi].Pos;
 			while (current != null) {
 				var edge = geometry.HalfEdges[current.Value];
 				Connect(geometry, geometry.HalfEdges[current.Value], vi);
 				if (current.Previous != null) {
 					geometry.MakeTwins(geometry.HalfEdges.Count - 1, geometry.Next(current.Previous.Value));
 				}
-				edge.Index = -1;
-				geometry.HalfEdges[current.Value] = edge;
+				geometry.RemoveHalfEdge(edge.Index);
 				current.Value = geometry.HalfEdges.Count - 3;
 				current = current.Next;
 			}

@@ -50,8 +50,8 @@ namespace Lime
 			var b = (p2 - p1) / Vector2.Distance(p1, p2);
 			point = Vector2.DotProduct(a, b) * b + p1;
 			isInside =
-				Vector2.Distance(a, point) <= Vector2.Distance(a, b) &&
-				Vector2.Distance(b, point) <= Vector2.Distance(a, b);
+				point.X >= Mathf.Min(p1.X, p2.X) && point.X <= Mathf.Max(p1.X, p2.X) &&
+				point.Y >= Mathf.Min(p1.Y, p2.Y) && point.Y <= Mathf.Max(p1.Y, p2.Y);
 			return point;
 		}
 
