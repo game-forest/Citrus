@@ -21,6 +21,9 @@ namespace Lime.PolygonMesh
 		public static GeometryPrimitive[] Primitives =
 			Enum.GetValues(typeof(GeometryPrimitive)) as GeometryPrimitive[];
 
+		public static GeometryPrimitive[] PrimitivesRenderChain =
+			new[] { GeometryPrimitive.Edge, GeometryPrimitive.Vertex };
+
 		[YuzuMember]
 		public override ITexture Texture { get; set; }
 
@@ -116,7 +119,6 @@ namespace Lime.PolygonMesh
 							position,
 							transform,
 							out var distance,
-							radius: primitive == GeometryPrimitive.Vertex ? 16.0f : 8.0f,
 							scale: scale
 						)
 					) {

@@ -19,6 +19,12 @@ namespace Lime
 			public static readonly Vector2 MinTabSize = new Vector2(25, 24);
 			public static readonly Vector2 CloseButtonSize = new Vector2(16, 16);
 			public static readonly Thickness ControlsPadding = new Thickness(2);
+			public static readonly float PolygonMeshVertexRadius = 4.0f;
+			public static readonly float PolygonMeshBackgroundVertexRadius = 1.4f * PolygonMeshVertexRadius;
+			public static readonly float PolygonMeshEdgeThickness = 2.0f;
+			public static readonly float PolygonMeshBackgroundEdgeThickness = 2.0f * PolygonMeshEdgeThickness;
+			public static readonly float PolygonMeshVertexHitTestRadius = 4.0f * PolygonMeshVertexRadius;
+			public static readonly float PolygonMeshEdgeHitTestRadius = 2.0f * PolygonMeshVertexRadius;
 		}
 
 		// to set all colors to the value of default one, making them more noticeable
@@ -131,6 +137,28 @@ namespace Lime
 			public Color4 RedText { get; set; }
 			[YuzuOptional]
 			public Color4 WarningBackground { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshVertexColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshVertexBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshAnimatedVertexColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshFramingEdgeColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshFramingEdgeBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshFixedEdgeColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshFixedEdgeBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshInnerEdgeColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshInnerEdgeBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshHoverColor { get; set; }
+			[YuzuOptional]
+			public Color4 PolygonMeshRemovalColor { get; set; }
 
 			public static ColorTheme CreateDarkTheme()
 			{
@@ -183,6 +211,17 @@ namespace Lime
 					ZebraColor1 = grayBackground.Lighten(0.2f),
 					ZebraColor2 = grayBackground.Lighten(0.3f),
 					WarningBackground = new Color4(255, 194, 26),
+					PolygonMeshVertexColor = new Color4(255, 107, 129),
+					PolygonMeshVertexBackgroundColor = new Color4(255, 71, 87).Darken(0.8f),
+					PolygonMeshAnimatedVertexColor = new Color4(1, 1, 1, 1),
+					PolygonMeshFramingEdgeColor = new Color4(123, 237, 159),
+					PolygonMeshFramingEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					PolygonMeshFixedEdgeColor = new Color4(236, 204, 104),
+					PolygonMeshFixedEdgeBackgroundColor = new Color4(255, 165, 2).Darken(0.8f),
+					PolygonMeshInnerEdgeColor = new Color4(123, 237, 159),
+					PolygonMeshInnerEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					PolygonMeshHoverColor = Color4.White,
+					PolygonMeshRemovalColor = Color4.Red.Lighten(0.2f),
 				};
 
 			}
@@ -237,6 +276,17 @@ namespace Lime
 					ZebraColor1 = Color4.White,
 					ZebraColor2 = Color4.White.Darken(0.1f),
 					WarningBackground = new Color4(255, 194, 26),
+					PolygonMeshVertexColor = new Color4(255, 107, 129),
+					PolygonMeshVertexBackgroundColor = new Color4(255, 71, 87).Darken(0.8f),
+					PolygonMeshAnimatedVertexColor = new Color4(1, 1, 1, 1),
+					PolygonMeshFramingEdgeColor = new Color4(123, 237, 159),
+					PolygonMeshFramingEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					PolygonMeshFixedEdgeColor = new Color4(236, 204, 104),
+					PolygonMeshFixedEdgeBackgroundColor = new Color4(255, 165, 2).Darken(0.8f),
+					PolygonMeshInnerEdgeColor = new Color4(123, 237, 159),
+					PolygonMeshInnerEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					PolygonMeshHoverColor = Color4.White,
+					PolygonMeshRemovalColor = Color4.Red.Lighten(0.2f),
 				};
 			}
 

@@ -38,10 +38,11 @@ namespace Lime.PolygonMesh
 		IGeometry Owner { get; set; }
 		int[] VerticeIndices { get; set; }
 
-		bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f);
+		bool HitTest(Vector2 position, Matrix32 transform, out float distance, float scale = 1.0f);
 		void Move(Vector2 positionDelta);
 		void MoveUv(Vector2 uvDelta);
-		void Render(Matrix32 transform, Color4 color, float radius = 1.0f);
+		void Render(Matrix32 transform);
+		void RenderHovered(Matrix32 transform, bool isRemoving = false);
 		Vector2 InterpolateUv(Vector2 position);
 		HashSet<ITangerineGeometryPrimitive> GetAdjacent();
 	}
@@ -57,10 +58,12 @@ namespace Lime.PolygonMesh
 			VerticeIndices = new int[] { vertex };
 		}
 
-		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f)
+		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float scale = 1.0f)
 		{
 			var p = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
-			return PolygonMeshUtils.PointPointIntersection(p, position, radius / scale, out distance);
+			return PolygonMeshUtils.PointPointIntersection(
+				p, position, Theme.Metrics.PolygonMeshVertexHitTestRadius / scale, out distance
+			);
 		}
 
 		public void Move(Vector2 positionDelta)
@@ -75,22 +78,28 @@ namespace Lime.PolygonMesh
 			Owner.MoveVertexUv(VerticeIndices[0], uvDelta);
 		}
 
-		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
+		public void Render(Matrix32 transform)
 		{
-			Renderer.DrawCircle(
+			PolygonMeshUtils.RenderVertex(
 				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
-				1.12f * radius,
-				32,
-				Color4.Black.Lighten(0.1f).Transparentify(0.2f)
-			);
-			Renderer.DrawRound(
-				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
-				radius,
-				32,
-				color,
-				color
+				Theme.Metrics.PolygonMeshBackgroundVertexRadius,
+				Theme.Metrics.PolygonMeshVertexRadius,
+				Theme.Colors.PolygonMeshVertexBackgroundColor,
+				Theme.Colors.PolygonMeshVertexColor
 			);
 		}
+
+		public void RenderHovered(Matrix32 transform, bool isRemoving = false)
+		{
+			PolygonMeshUtils.RenderVertex(
+				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
+				1.3f * Theme.Metrics.PolygonMeshBackgroundVertexRadius,
+				1.3f * Theme.Metrics.PolygonMeshVertexRadius,
+				Theme.Colors.PolygonMeshHoverColor.Darken(0.7f),
+				isRemoving ? Theme.Colors.PolygonMeshRemovalColor : Theme.Colors.PolygonMeshHoverColor
+			);
+		}
+
 		public Vector2 InterpolateUv(Vector2 position)
 		{
 			throw new InvalidOperationException();
@@ -124,11 +133,13 @@ namespace Lime.PolygonMesh
 			IsFraming = isFraming;
 		}
 
-		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f)
+		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float scale = 1.0f)
 		{
 			var p1 = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
 			var p2 = transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos);
-			return PolygonMeshUtils.PointLineIntersection(position, p1, p2, radius / scale, out distance);
+			return PolygonMeshUtils.PointLineIntersection(
+				position, p1, p2, Theme.Metrics.PolygonMeshEdgeHitTestRadius / scale, out distance
+			);
 		}
 
 		public void Move(Vector2 positionDelta)
@@ -145,31 +156,64 @@ namespace Lime.PolygonMesh
 			Owner.MoveVerticesUv(VerticeIndices, uvDelta);
 		}
 
-		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
+		public void Render(Matrix32 transform)
 		{
-			var p1 = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
-			var p2 = transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos);
-			if (IsFraming) {
-				Renderer.DrawLine(
-					p1,
-					p2,
-					Color4.Black.Transparentify(0.2f),
-					radius
-				);
-				Renderer.DrawLine(
-					p1,
-					p2,
-					color,
-					radius / 2.0f
-				);
-			} else {
-				Renderer.DrawDashedLine(
-					p1,
-					p2,
-					color.Transparentify(0.4f),
-					new Vector2(radius * 2.0f, radius / 2.0f)
-				);
-			}
+			var foregroundColor =
+				IsFraming ?
+				Theme.Colors.PolygonMeshFramingEdgeColor :
+				Theme.Colors.PolygonMeshInnerEdgeColor;
+			var framingBackgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
+			var framingForegroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+			var framingBackgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
+			var dashedBackgroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
+			);
+			var dashedForegroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshEdgeThickness
+			);
+			var dashedBackgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
+
+			PolygonMeshUtils.RenderLine(
+				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
+				transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos),
+				IsFraming ? framingBackgroundSize : dashedBackgroundSize,
+				IsFraming ? framingForegroundSize : dashedForegroundSize,
+				IsFraming ? framingBackgroundColor : dashedBackgroundColor,
+				foregroundColor,
+				!IsFraming
+			);
+		}
+
+		public void RenderHovered(Matrix32 transform, bool isRemoving = false)
+		{
+			var hoverColor =
+				isRemoving ?
+				Theme.Colors.PolygonMeshRemovalColor :
+				Theme.Colors.PolygonMeshHoverColor;
+			var framingBackgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
+			var framingForegroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+			var framingBackgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
+			var dashedBackgroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
+			);
+			var dashedForegroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshEdgeThickness
+			);
+			var dashedBackgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
+
+			PolygonMeshUtils.RenderLine(
+				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
+				transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos),
+				IsFraming ? framingBackgroundSize : dashedBackgroundSize,
+				IsFraming ? framingForegroundSize : dashedForegroundSize,
+				IsFraming ? framingBackgroundColor : dashedBackgroundColor,
+				hoverColor,
+				!IsFraming
+			);
 		}
 
 		public Vector2 InterpolateUv(Vector2 position)
@@ -223,15 +267,15 @@ namespace Lime.PolygonMesh
 			VerticeIndices = new int[] { vertex1, vertex2, vertex3 };
 		}
 
-		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float radius = 1.0f, float scale = 1.0f)
+		public bool HitTest(Vector2 position, Matrix32 transform, out float distance, float scale = 1.0f)
 		{
 			var p1 = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
 			var p2 = transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos);
 			var p3 = transform.TransformVector(Owner.Vertices[VerticeIndices[2]].Pos);
 
-			p1 += radius / (scale * 2.0f) * ((p2 - p1).Normalized + (p3 - p1).Normalized);
-			p2 += radius / (scale * 2.0f) * ((p1 - p2).Normalized + (p3 - p2).Normalized);
-			p3 += radius / (scale * 2.0f) * ((p2 - p3).Normalized + (p1 - p3).Normalized);
+			p1 += Theme.Metrics.PolygonMeshEdgeHitTestRadius / (scale * 2.0f) * ((p2 - p1).Normalized + (p3 - p1).Normalized);
+			p2 += Theme.Metrics.PolygonMeshEdgeHitTestRadius / (scale * 2.0f) * ((p1 - p2).Normalized + (p3 - p2).Normalized);
+			p3 += Theme.Metrics.PolygonMeshEdgeHitTestRadius / (scale * 2.0f) * ((p2 - p3).Normalized + (p1 - p3).Normalized);
 
 			distance = 0.0f;
 			return PolygonMeshUtils.PointTriangleIntersection(position, p1, p2, p3);
@@ -251,26 +295,18 @@ namespace Lime.PolygonMesh
 			Owner.MoveVerticesUv(VerticeIndices, uvDelta);
 		}
 
-		public void Render(Matrix32 transform, Color4 color, float radius = 1.0f)
+		public void Render(Matrix32 transform)
 		{
-			var size = 2;
-			var texture = new Texture2D();
-			var image = new Color4[size * size];
-			for (int y = 0; y < size; ++y) {
-				for (int x = 0; x < size; ++x) {
-					image[y * size + x] = color.Transparentify(0.8f);
-				}
-			}
-			texture.LoadImage(image, size, size);
-			var p1 = transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos);
-			var p2 = transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos);
-			var p3 = transform.TransformVector(Owner.Vertices[VerticeIndices[2]].Pos);
-			var vertices = new[] {
-				new Vertex() { Pos = p1, Color = color },
-				new Vertex() { Pos = p2, Color = color },
-				new Vertex() { Pos = p3, Color = color },
-			};
-			Renderer.DrawTriangleStrip(texture, vertices, vertices.Length);
+		}
+
+		public void RenderHovered(Matrix32 transform, bool isRemoving = false)
+		{
+			PolygonMeshUtils.RenderTriangle(
+				transform.TransformVector(Owner.Vertices[VerticeIndices[0]].Pos),
+				transform.TransformVector(Owner.Vertices[VerticeIndices[1]].Pos),
+				transform.TransformVector(Owner.Vertices[VerticeIndices[2]].Pos),
+				isRemoving ? Theme.Colors.PolygonMeshRemovalColor : Theme.Colors.PolygonMeshHoverColor
+			);
 		}
 
 		/// <summary>
