@@ -38,14 +38,14 @@ namespace Lime.Source.Optimizations
 		private HalfEdge RandomEdge(Geometry geometry) =>
 			geometry.HalfEdges[random.Next(0, geometry.HalfEdges.Count - 1)];
 
-		public void RemoveVertex(Geometry geometry, int vi, bool keepConstrainedEdges = false)
+		public void RemoveVertex(Geometry geometry, int vi)
 		{
 			var vertex = geometry.Vertices[vi];
 			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, RandomValidEdge(geometry), vertex, out _), vi));
 			RestoreDelaunayProperty(geometry,
 				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
-					RemovePolygon(geometry, polygon, keepConstrainedEdges) :
-					TriangulatePolygonByEarClipping(geometry, polygon, keepConstrainedEdges));
+					RemovePolygon(geometry, polygon) :
+					TriangulatePolygonByEarClipping(geometry, polygon));
 		}
 
 		public bool FullCheck(Geometry geometry)
@@ -283,6 +283,9 @@ namespace Lime.Source.Optimizations
 		private void TriangulateStarShapedPolygon(Geometry geometry, LinkedList<int> polygon, int vi)
 		{
 			var current = polygon.First;
+			foreach (var side in polygon) {
+				KeepConstrainedEdges(geometry, side);
+			}
 			while (current != null) {
 				var edge = geometry.HalfEdges[current.Value];
 				Connect(geometry, geometry.HalfEdges[current.Value], vi);
@@ -297,7 +300,7 @@ namespace Lime.Source.Optimizations
 			geometry.MakeTwins(geometry.Next(polygon.Last.Value), geometry.Prev(polygon.First.Value));
 		}
 
-		private Queue<int> TriangulatePolygonByEarClipping(Geometry geometry, LinkedList<int> polygon, bool keepConstrainedEdges = false)
+		private Queue<int> TriangulatePolygonByEarClipping(Geometry geometry, LinkedList<int> polygon)
 		{
 			var queue = new Queue<int>();
 			bool CanCreateTriangle(int cur, int next)
@@ -324,6 +327,9 @@ namespace Lime.Source.Optimizations
 				return true;
 			}
 			var current = polygon.First;
+			foreach (var side in polygon) {
+				KeepConstrainedEdges(geometry, side);
+			}
 			while (polygon.Count > 2) {
 				var next = current.Next ?? polygon.First;
 				if (CanCreateTriangle(current.Value, next.Value)) {
@@ -339,12 +345,10 @@ namespace Lime.Source.Optimizations
 					geometry.HalfEdges.Add(Geometry.DummyHalfEdge);
 					geometry.RemoveTriangle(he1.Index);
 					geometry.RemoveTriangle(he2.Index);
-					if (keepConstrainedEdges) {
-						if (he1.Index != -1) {
-							KeepConstrainedEdges(geometry, he1.Index);
-						}
-						KeepConstrainedEdges(geometry, he2.Index);
+					if (he1.Index != -1) {
+						KeepConstrainedEdges(geometry, he1.Index);
 					}
+					KeepConstrainedEdges(geometry, he2.Index);
 					polygon.Remove(next);
 					polygon.Remove(current);
 					current = polygon.First;
@@ -360,9 +364,7 @@ namespace Lime.Source.Optimizations
 				geometry.MakeTwins(last.Twin, lastOriginal.Index);
 			}
 			geometry.RemoveTriangle(last.Index);
-			if (keepConstrainedEdges) {
-				KeepConstrainedEdges(geometry, polygon.Last.Value);
-			}
+			KeepConstrainedEdges(geometry, polygon.Last.Value);
 			geometry.HalfEdges[lastOriginal.Index] = lastOriginal;
 			queue.Enqueue(lastOriginal.Index);
 			geometry.HalfEdges[polygon.First.Value] = Geometry.DummyHalfEdge;
@@ -423,14 +425,12 @@ namespace Lime.Source.Optimizations
 			return twin;
 		}
 
-		private Queue<int> RemovePolygon(Geometry geometry, LinkedList<int> polygon, bool keepConstrainedEdges = false)
+		private Queue<int> RemovePolygon(Geometry geometry, LinkedList<int> polygon)
 		{
 			geometry.RemoveTriangle(polygon.First.Value);
 			geometry.RemoveTriangle(polygon.Last.Value);
-			if (keepConstrainedEdges) {
-				KeepConstrainedEdges(geometry, polygon.First.Value);
-				KeepConstrainedEdges(geometry, polygon.Last.Value);
-			}
+			KeepConstrainedEdges(geometry, polygon.First.Value);
+			KeepConstrainedEdges(geometry, polygon.Last.Value);
 			polygon.Remove(polygon.First);
 			polygon.Remove(polygon.Last);
 			var current = polygon.First;
@@ -439,9 +439,7 @@ namespace Lime.Source.Optimizations
 				var next = current.Next;
 				geometry.RemoveHalfEdge(geometry.Next(current.Value));
 				geometry.RemoveHalfEdge(geometry.Prev(current.Value));
-				if (keepConstrainedEdges) {
-					KeepConstrainedEdges(geometry, current.Value);
-				}
+				KeepConstrainedEdges(geometry, current.Value);
 				current = next;
 			}
 			current = polygon.First;
@@ -673,10 +671,15 @@ namespace Lime.Source.Optimizations
 			if (constrainedEdges.Count == 0) {
 				return;
 			}
-			foreach (var constrainedEdge in constrainedEdges) {
+			foreach (var constrainedEdge in constrainedEdges.ToList()) {
 				InsertConstrainedEdge(geometry, constrainedEdge);
 			}
 			geometry.Invalidate();
+		}
+
+		public void DoNotKeepConstrainedEdges()
+		{
+			constrainedEdges.Clear();
 		}
 	}
 }

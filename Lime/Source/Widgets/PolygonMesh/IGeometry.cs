@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lime.Source.Optimizations;
 using Yuzu;
 
@@ -639,6 +640,7 @@ namespace Lime.PolygonMesh
 			Triangulator.Instance.RemoveVertex(this, index);
 			Vertices[index] = Vertices[Vertices.Count - 1];
 			Vertices.RemoveAt(Vertices.Count - 1);
+			Triangulator.Instance.DoNotKeepConstrainedEdges();
 			Invalidate(index);
 			System.Diagnostics.Debug.Assert(HalfEdges.Count % 3 == 0);
 			System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
@@ -646,7 +648,13 @@ namespace Lime.PolygonMesh
 
 		public void MoveVertex(int index, Vector2 positionDelta)
 		{
-			Triangulator.Instance.RemoveVertex(this, index, true);
+			if (
+				Mathf.Abs(positionDelta.X) < Mathf.ZeroTolerance &&
+				Mathf.Abs(positionDelta.Y) < Mathf.ZeroTolerance
+			) {
+				return;
+			}
+			Triangulator.Instance.RemoveVertex(this, index);
 			var v = Vertices[index];
 			v.Pos += positionDelta;
 			Vertices[index] = v;
