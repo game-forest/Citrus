@@ -17,7 +17,7 @@ namespace Lime.Source.Optimizations
 		public void AddVertex(Geometry geometry, int vi)
 		{
 			var vertex = geometry.Vertices[vi];
-			var t = LocateTriangle(geometry, RandomEdge(geometry), vertex, out var inside);
+			var t = LocateTriangle(geometry, RandomValidEdge(geometry), vertex, out var inside);
 			if (inside) {
 				if (OnEdge(geometry, t, vi, out var edge)) {
 					SplitEdge(geometry, edge, vi);
@@ -41,7 +41,7 @@ namespace Lime.Source.Optimizations
 		public void RemoveVertex(Geometry geometry, int vi, bool keepConstrainedEdges = false)
 		{
 			var vertex = geometry.Vertices[vi];
-			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, RandomEdge(geometry), vertex, out _), vi));
+			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, RandomValidEdge(geometry), vertex, out _), vi));
 			RestoreDelaunayProperty(geometry,
 				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
 					RemovePolygon(geometry, polygon, keepConstrainedEdges) :
@@ -295,7 +295,6 @@ namespace Lime.Source.Optimizations
 				current = current.Next;
 			}
 			geometry.MakeTwins(geometry.Next(polygon.Last.Value), geometry.Prev(polygon.First.Value));
-			geometry.Invalidate();
 		}
 
 		private Queue<int> TriangulatePolygonByEarClipping(Geometry geometry, LinkedList<int> polygon, bool keepConstrainedEdges = false)
@@ -671,6 +670,9 @@ namespace Lime.Source.Optimizations
 
 		public void InsertConstrainedEdges(Geometry geometry, List<(int, int)> constrainedEdges)
 		{
+			if (constrainedEdges.Count == 0) {
+				return;
+			}
 			foreach (var constrainedEdge in constrainedEdges) {
 				InsertConstrainedEdge(geometry, constrainedEdge);
 			}

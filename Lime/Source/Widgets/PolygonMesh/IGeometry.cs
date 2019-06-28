@@ -647,14 +647,12 @@ namespace Lime.PolygonMesh
 		public void MoveVertex(int index, Vector2 positionDelta)
 		{
 			Triangulator.Instance.RemoveVertex(this, index, true);
-			Invalidate();
 			var v = Vertices[index];
 			v.Pos += positionDelta;
 			Vertices[index] = v;
 			Triangulator.Instance.AddVertex(this, index);
 			Invalidate();
 			Traverse();
-			//System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
 		}
 
 		public void MoveVertexUv(int index, Vector2 uvDelta)
@@ -687,7 +685,6 @@ namespace Lime.PolygonMesh
 			Vertices.Add(vertex);
 			Triangulator.Instance.AddVertex(this, Vertices.Count - 1);
 			Invalidate();
-			ResetCache();
 			Traverse();
 		}
 
