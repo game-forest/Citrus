@@ -23,11 +23,12 @@ namespace Lime.PolygonMesh
 		ITangerineGeometryPrimitive[] this[GeometryPrimitive primitive] { get; }
 
 		void AddVertex(Vertex vertex);
-		void RemoveVertex(int index);
+		void RemoveVertex(int index, bool keepConstrainedEdges = false);
 		void MoveVertex(int index, Vector2 positionDelta);
 		void MoveVertices(int[] indices, Vector2 positionDelta);
 		void MoveVertexUv(int index, Vector2 uvDelta);
 		void MoveVerticesUv(int[] indices, Vector2 uvDelta);
+		void SetConstrain(int index, bool constrained);
 #if TANGERINE
 		void ResetCache();
 #endif
@@ -635,12 +636,14 @@ namespace Lime.PolygonMesh
 			HalfEdges.Add(new3);
 		}
 
-		public void RemoveVertex(int index)
+		public void RemoveVertex(int index, bool keepConstrainedEdges = false)
 		{
 			Triangulator.Instance.RemoveVertex(this, index);
 			Vertices[index] = Vertices[Vertices.Count - 1];
 			Vertices.RemoveAt(Vertices.Count - 1);
-			Triangulator.Instance.DoNotKeepConstrainedEdges();
+			if (!keepConstrainedEdges) {
+				Triangulator.Instance.DoNotKeepConstrainedEdges();
+			}
 			Invalidate(index);
 			System.Diagnostics.Debug.Assert(HalfEdges.Count % 3 == 0);
 			System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
@@ -750,6 +753,8 @@ namespace Lime.PolygonMesh
 			foreach (var halfEdge in HalfEdges) {
 				System.Diagnostics.Debug.Assert(halfEdge.Twin == -1 || halfEdge.Index == HalfEdges[halfEdge.Twin].Twin);
 			}
+			var c = HalfEdges.Count(edge => edge.Constrained && edge.Twin != -1 && !HalfEdges[edge.Twin].Constrained);
+			System.Diagnostics.Debug.Assert(c == 0);
 #endif
 		}
 

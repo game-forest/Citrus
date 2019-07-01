@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
 using Lime.PolygonMesh;
+using System;
 
 namespace Tangerine.UI.SceneView
 {
 	public class PolygonMeshEditingProcessor : ITaskProvider
 	{
 		private PolygonMesh mesh = null;
-		private ITangerineGeometryPrimitive last = null;
 		public IEnumerator<object> Task()
 		{
 			while (true) {
@@ -54,11 +54,9 @@ namespace Tangerine.UI.SceneView
 						}
 						break;
 					case PolygonMesh.State.Create:
-						if (!(target is TangerineVertex)) {
-							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-								yield return Create(target);
-							}
+						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+							yield return CreateConstrain(target);
 						}
 						break;
 					case PolygonMesh.State.Remove:
@@ -69,29 +67,9 @@ namespace Tangerine.UI.SceneView
 							}
 						}
 						break;
-					case PolygonMesh.State.Constrain:
-						if (target is TangerineVertex) {
-							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-								if (last == null) {
-									last = target;
-								} else {
-									yield return Constrain(target);
-								}
-							}
-						}
-						break;
 				}
 				yield return null;
 			}
-		}
-
-		private IEnumerator<object> Constrain(ITangerineGeometryPrimitive obj)
-		{
-			TangerineVertex v1 = (TangerineVertex) last, v2 = (TangerineVertex) obj;
-			((Geometry) mesh.Geometry).InsertConstrainedEdge(v1.VerticeIndices[0], v2.VerticeIndices[0]);
-			last = null;
-			yield return null;
 		}
 
 		private IEnumerator<object> Animate(ITangerineGeometryPrimitive obj)
@@ -149,7 +127,53 @@ namespace Tangerine.UI.SceneView
 			yield return null;
 		}
 
-		private IEnumerator<object> Create(ITangerineGeometryPrimitive obj)
+		private IEnumerator<object> CreateConstrain(ITangerineGeometryPrimitive obj)
+		{
+			var initialTarget = obj;
+			if (!(obj is TangerineVertex)) {
+				Document.Current.History.DoTransaction(() => {
+					Create(obj);
+				});
+				initialTarget = mesh.Geometry[GeometryPrimitive.Vertex].Last();
+			}
+			var meshToSceneWidget = mesh.CalcTransitionToSpaceOf(SceneView.Instance.Scene);
+			using (Document.Current.History.BeginTransaction()) {
+				while (SceneView.Instance.Input.IsMousePressed()) {
+					Document.Current.History.RollbackTransaction();
+					mesh.HitTest(
+						SceneView.Instance.MousePosition,
+						meshToSceneWidget,
+						out var target,
+						SceneView.Instance.Scene.Scale.X
+					);
+					var constrainIndex = mesh.Geometry.Vertices.Count;
+					switch (target) {
+						case TangerineVertex tv:
+							constrainIndex = target.VerticeIndices[0];
+							break;
+						case TangerineEdge te:
+						case TangerineFace tf:
+							Create(target);
+							break;
+						default:
+							yield return null;
+							continue;
+					}
+					Core.Operations.PolygonMeshModification.Constrain.Perform(
+						mesh,
+						initialTarget.VerticeIndices[0],
+						constrainIndex
+					);
+					Window.Current.Invalidate();
+					SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0);
+					yield return null;
+				}
+				Document.Current.History.CommitTransaction();
+			}
+			yield return null;
+		}
+
+		private void Create(ITangerineGeometryPrimitive obj)
 		{
 			var transform = SceneView.Instance.Scene.CalcTransitionToSpaceOf(mesh);
 			var mousePos = SceneView.Instance.MousePosition * transform;
@@ -159,42 +183,13 @@ namespace Tangerine.UI.SceneView
 				mousePos = PolygonMeshUtils.PointProjectionToLine(mousePos, v1.Pos, v2.Pos, out var isInside);
 			}
 			var cursor = WidgetContext.Current.MouseCursor;
-			using (Document.Current.History.BeginTransaction()) {
 				var animatedPos = mousePos;
 				var deformedPos = mousePos;
-				switch (obj) {
-					case TangerineEdge te:
-						var w1 =
-							PolygonMeshUtils.CalcSegmentRelativeBarycentricCoordinates(
-								deformedPos,
-								mesh.Geometry.Vertices[obj.VerticeIndices[0]].Pos,
-								mesh.Geometry.Vertices[obj.VerticeIndices[1]].Pos
-							);
-						animatedPos =
-							w1[0] * mesh.Vertices[obj.VerticeIndices[0]].Pos +
-							w1[1] * mesh.Vertices[obj.VerticeIndices[1]].Pos;
-						break;
-					case TangerineFace tf:
-						var w2 =
-							PolygonMeshUtils.CalcTriangleRelativeBarycentricCoordinates(
-								deformedPos,
-								mesh.Geometry.Vertices[obj.VerticeIndices[0]].Pos,
-								mesh.Geometry.Vertices[obj.VerticeIndices[1]].Pos,
-								mesh.Geometry.Vertices[obj.VerticeIndices[2]].Pos
-							);
-						animatedPos =
-							w2[0] * mesh.Vertices[obj.VerticeIndices[0]].Pos +
-							w2[1] * mesh.Vertices[obj.VerticeIndices[1]].Pos +
-							w2[2] * mesh.Vertices[obj.VerticeIndices[2]].Pos;
-						break;
-				}
+
 				var animatedVertex = new Vertex() { Pos = animatedPos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor };
 				var deformedVertex = new Vertex() { Pos = deformedPos, UV1 = obj.InterpolateUv(mousePos), Color = mesh.GlobalColor };
 				Core.Operations.PolygonMeshModification.Create.Perform(mesh, animatedVertex, deformedVertex);
-				Document.Current.History.CommitTransaction();
-			}
 			Window.Current.Invalidate();
-			yield return null;
 		}
 
 		private IEnumerator<object> Remove(ITangerineGeometryPrimitive obj)

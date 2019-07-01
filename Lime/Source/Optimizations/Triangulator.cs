@@ -261,9 +261,11 @@ namespace Lime.Source.Optimizations
 				geometry.Connect(sp, next.Origin, prev.Origin);
 				if (next.Twin != -1) {
 					geometry.MakeTwins(geometry.HalfEdges.Count - 2, next.Twin);
+					geometry.SetConstrain(geometry.HalfEdges.Count - 2, next.Constrained || geometry.HalfEdges[next.Twin].Constrained);
 				}
 				if (prev.Twin != -1) {
 					geometry.MakeTwins(geometry.HalfEdges.Count - 4, prev.Twin);
+					geometry.SetConstrain(geometry.HalfEdges.Count - 4, prev.Constrained || geometry.HalfEdges[prev.Twin].Constrained);
 				}
 				geometry.MakeTwins(geometry.HalfEdges.Count - 5, geometry.HalfEdges.Count - 1);
 			}
@@ -338,17 +340,15 @@ namespace Lime.Source.Optimizations
 					he2.Index = next.Value;
 					Connect(geometry, he1, he2);
 					queue.Enqueue(geometry.HalfEdges.Count - 1);
-					var twin = new HalfEdge(geometry.HalfEdges.Count, he1.Origin, geometry.HalfEdges.Count - 1);
+					var twin = new HalfEdge(geometry.HalfEdges.Count, he1.Origin, geometry.HalfEdges.Count - 1) {
+						Constrained = geometry.HalfEdges[geometry.HalfEdges.Count - 1].Constrained
+					};
 					polygon.AddAfter(next, geometry.HalfEdges.Count);
 					geometry.HalfEdges.Add(twin);
 					geometry.HalfEdges.Add(new HalfEdge(-1, geometry.Next(he2).Origin, -1));
 					geometry.HalfEdges.Add(Geometry.DummyHalfEdge);
 					geometry.RemoveTriangle(he1.Index);
 					geometry.RemoveTriangle(he2.Index);
-					if (he1.Index != -1) {
-						KeepConstrainedEdges(geometry, he1.Index);
-					}
-					KeepConstrainedEdges(geometry, he2.Index);
 					polygon.Remove(next);
 					polygon.Remove(current);
 					current = polygon.First;
@@ -359,13 +359,13 @@ namespace Lime.Source.Optimizations
 			System.Diagnostics.Debug.Assert(polygon.Count == 2);
 			var last = geometry.HalfEdges[polygon.Last.Value];
 			var lastOriginal = geometry.HalfEdges[geometry.HalfEdges[polygon.First.Value].Twin];
+			geometry.HalfEdges[lastOriginal.Index] = lastOriginal;
 			lastOriginal.Twin = last.Twin;
 			if (last.Twin != -1) {
 				geometry.MakeTwins(last.Twin, lastOriginal.Index);
+				geometry.SetConstrain(last.Twin, lastOriginal.Constrained || geometry.HalfEdges[last.Twin].Constrained);
 			}
 			geometry.RemoveTriangle(last.Index);
-			KeepConstrainedEdges(geometry, polygon.Last.Value);
-			geometry.HalfEdges[lastOriginal.Index] = lastOriginal;
 			queue.Enqueue(lastOriginal.Index);
 			geometry.HalfEdges[polygon.First.Value] = Geometry.DummyHalfEdge;
 			return queue;

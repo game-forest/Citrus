@@ -165,6 +165,51 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
+		public class Constrain : Operation
+		{
+			public override bool IsChangingDocument => true;
+
+			private PolygonMesh mesh;
+			private int startIndex;
+			private int endIndex;
+
+			private Constrain(PolygonMesh mesh, int startIndex, int endIndex)
+			{
+				this.mesh = mesh;
+				this.startIndex = startIndex;
+				this.endIndex = endIndex;
+			}
+
+			public static void Perform(PolygonMesh mesh, int startIndex, int endIndex)
+			{
+				Document.Current.History.Perform(new Constrain(mesh, startIndex, endIndex));
+			}
+
+			public class Processor : OperationProcessor<Constrain>
+			{
+				protected override void InternalRedo(Constrain op)
+				{
+					if (op.startIndex != op.endIndex) {
+						((Geometry)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
+					}
+				}
+
+				protected override void InternalUndo(Constrain op)
+				{
+					if (op.startIndex != op.endIndex) {
+						op.mesh.Geometry.SetConstrain(
+							((Geometry)op.mesh.Geometry).HalfEdges.Where(i =>
+								(i.Origin == op.startIndex && ((Geometry)op.mesh.Geometry).Next(i).Origin == op.endIndex) ||
+								(i.Origin == op.endIndex && ((Geometry)op.mesh.Geometry).Next(i).Origin == op.startIndex)
+							).First().Index,
+							constrained: false
+						);
+						op.mesh.Geometry.MoveVertex(op.startIndex, Vector2.Zero);
+					}
+				}
+			}
+		}
+
 		public class Remove : Operation
 		{
 			public override bool IsChangingDocument => true;

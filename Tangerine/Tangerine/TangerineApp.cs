@@ -267,6 +267,7 @@ namespace Tangerine
 			DocumentHistory.AddOperationProcessorTypes(new[] {
 				typeof(Core.Operations.PolygonMeshModification.Deform.Processor),
 				typeof(Core.Operations.PolygonMeshModification.Create.Processor),
+				typeof(Core.Operations.PolygonMeshModification.Constrain.Processor),
 				typeof(Core.Operations.PolygonMeshModification.Remove.Processor),
 				typeof(Core.Operations.TimelineHorizontalShift.Processor),
 				typeof(Core.Operations.TimelineColumnRemove.Processor),
