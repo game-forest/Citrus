@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime.PolygonMesh;
-using Yuzu;
 using HalfEdge = Lime.PolygonMesh.Geometry.HalfEdge;
 
 namespace Lime.Source.Optimizations
@@ -11,7 +10,7 @@ namespace Lime.Source.Optimizations
 	{
 		public static Triangulator Instance { get; } = new Triangulator();
 
-		private List<(int, int)> constrainedEdges = new List<(int, int)>();
+		private HashSet<(int, int)> constrainedEdges = new HashSet<(int, int)>();
 		private readonly Random random = new Random();
 
 		public void AddVertex(Geometry geometry, int vi)
@@ -665,7 +664,7 @@ namespace Lime.Source.Optimizations
 			}
 		}
 
-		public void InsertConstrainedEdges(Geometry geometry, List<(int, int)> constrainedEdges)
+		public void InsertConstrainedEdges(Geometry geometry, HashSet<(int, int)> constrainedEdges)
 		{
 			if (constrainedEdges.Count == 0) {
 				return;
