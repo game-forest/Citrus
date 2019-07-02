@@ -82,17 +82,16 @@ namespace Lime.Source.Optimizations
 			var v = geometry.Vertices[vi].Pos;
 			edge = triangle;
 			var p = PolygonMeshUtils.PointProjectionToLine(v, v1, v2, out bool isInside);
-			const float zt2 = Mathf.ZeroTolerance * Mathf.ZeroTolerance;
-			if (isInside && Math.Abs((p - v).SqrLength) < zt2) {
+			if (isInside && Math.Abs((p - v).SqrLength) < Mathf.ZeroTolerance) {
 				return true;
 			}
 			p = PolygonMeshUtils.PointProjectionToLine(v, v2, v3, out isInside);
-			if (isInside && Math.Abs((p - v).SqrLength) < zt2) {
+			if (isInside && Math.Abs((p - v).SqrLength) < Mathf.ZeroTolerance) {
 				edge = geometry.Next(triangle);
 				return true;
 			}
 			p = PolygonMeshUtils.PointProjectionToLine(v, v3, v1, out isInside);
-			if (isInside && Math.Abs((p - v).SqrLength) < zt2) {
+			if (isInside && Math.Abs((p - v).SqrLength) < Mathf.ZeroTolerance) {
 				edge = geometry.Prev(triangle);
 				return true;
 			}
