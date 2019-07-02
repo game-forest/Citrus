@@ -16,7 +16,7 @@ namespace Lime.Source.Optimizations
 		public void AddVertex(Geometry geometry, int vi)
 		{
 			var vertex = geometry.Vertices[vi];
-			var t = LocateTriangle(geometry, RandomValidEdge(geometry), vertex, out var inside);
+			var t = LocateTriangle(geometry, LastValidEdge(geometry), vertex, out var inside);
 			if (inside) {
 				if (OnEdge(geometry, t, vi, out var edge)) {
 					SplitEdge(geometry, edge, vi);
@@ -40,7 +40,7 @@ namespace Lime.Source.Optimizations
 		public void RemoveVertex(Geometry geometry, int vi)
 		{
 			var vertex = geometry.Vertices[vi];
-			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, RandomValidEdge(geometry), vertex, out _), vi));
+			var polygon = GetBoundaryPolygon(geometry, FindIncidentEdge(geometry, LocateTriangle(geometry, LastValidEdge(geometry), vertex, out _), vi));
 			RestoreDelaunayProperty(geometry,
 				geometry.HalfEdges[geometry.Next(polygon.Last.Value)].Origin == vi ?
 					RemovePolygon(geometry, polygon) :
@@ -575,6 +575,17 @@ namespace Lime.Source.Optimizations
 			return Math.Abs(denominator) < Mathf.ZeroTolerance && Math.Abs(numerator) < Mathf.ZeroTolerance;
 		}
 
+		private HalfEdge LastValidEdge(Geometry geometry)
+		{
+			for (int i = geometry.HalfEdges.Count - 1; i >= 0; --i) {
+				var he = geometry.HalfEdges[i];
+				if (he.Index != -1) {
+					return he;
+				}
+			}
+			throw new InvalidOperationException();
+		}
+
 		private HalfEdge RandomValidEdge(Geometry geometry)
 		{
 			while (true) {
@@ -588,7 +599,7 @@ namespace Lime.Source.Optimizations
 		public void InsertConstrainedEdge(Geometry geometry, (int a, int b) ce)
 		{
 			var start = FindIncidentEdge(geometry,
-				LocateTriangle(geometry, RandomValidEdge(geometry), geometry.Vertices[ce.Item1], out _), ce.a);
+				LocateTriangle(geometry, LastValidEdge(geometry), geometry.Vertices[ce.Item1], out _), ce.a);
 			var current = start;
 			Vector2 a = geometry.Vertices[ce.a].Pos, b = geometry.Vertices[ce.b].Pos;
 			var upPolygon = new LinkedList<int>();
