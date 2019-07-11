@@ -392,7 +392,9 @@ namespace Lime.PolygonMesh
 		[YuzuMember]
 		public List<HalfEdge> HalfEdges { get; set; }
 
+		private Triangulator Triangulator { get; }
 #if TANGERINE
+
 		private List<int> framingVertices;
 		public List<int> FramingVertices
 		{
@@ -486,6 +488,7 @@ namespace Lime.PolygonMesh
 			Vertices = new List<Vertex>();
 			IndexBuffer = new List<int>();
 			HalfEdges = new List<HalfEdge>();
+			Triangulator = new Triangulator(this);
 		}
 
 		public Geometry(List<Vertex> vertices, List<int> indexBuffer, IAnimable owner)
@@ -493,7 +496,7 @@ namespace Lime.PolygonMesh
 			if (vertices.Count != 4) {
 				throw new InvalidOperationException();
 			}
-
+			Triangulator = new Triangulator(this);
 			Owner = owner;
 			Vertices = vertices;
 			IndexBuffer = indexBuffer;
@@ -591,7 +594,6 @@ namespace Lime.PolygonMesh
 			he2.Twin = first;
 			HalfEdges[first] = he1;
 			HalfEdges[second] = he2;
-			System.Diagnostics.Debug.Assert(he1.Origin != he2.Origin && he1.Origin == Next(he2).Origin && he2.Origin == Next(he1).Origin);
 		}
 
 		public void SetConstrain(int index, bool constrained)
@@ -638,15 +640,15 @@ namespace Lime.PolygonMesh
 
 		public void RemoveVertex(int index, bool keepConstrainedEdges = false)
 		{
-			Triangulator.Instance.RemoveVertex(this, index);
+			Triangulator.RemoveVertex(this, index);
 			Vertices[index] = Vertices[Vertices.Count - 1];
 			Vertices.RemoveAt(Vertices.Count - 1);
 			if (!keepConstrainedEdges) {
-				Triangulator.Instance.DoNotKeepConstrainedEdges();
+				Triangulator.DoNotKeepConstrainedEdges();
 			}
 			Invalidate(index);
 			System.Diagnostics.Debug.Assert(HalfEdges.Count % 3 == 0);
-			System.Diagnostics.Debug.Assert(Triangulator.Instance.FullCheck(this));
+			System.Diagnostics.Debug.Assert(Triangulator.FullCheck(this));
 		}
 
 		public void MoveVertex(int index, Vector2 positionDelta)
@@ -657,11 +659,11 @@ namespace Lime.PolygonMesh
 			) {
 				return;
 			}
-			Triangulator.Instance.RemoveVertex(this, index);
+			Triangulator.RemoveVertex(this, index);
 			var v = Vertices[index];
 			v.Pos += positionDelta;
 			Vertices[index] = v;
-			Triangulator.Instance.AddVertex(this, index);
+			Triangulator.AddVertex(this, index);
 			Invalidate();
 			Traverse();
 		}
@@ -694,7 +696,7 @@ namespace Lime.PolygonMesh
 		public void AddVertex(Vertex vertex)
 		{
 			Vertices.Add(vertex);
-			Triangulator.Instance.AddVertex(this, Vertices.Count - 1);
+			Triangulator.AddVertex(this, Vertices.Count - 1);
 			Invalidate();
 			Traverse();
 		}
@@ -801,7 +803,7 @@ namespace Lime.PolygonMesh
 
 		public void InsertConstrainedEdge(int vi1, int vi2)
 		{
-			Triangulator.Instance.InsertConstrainedEdge(this, (vi1, vi2));
+			Triangulator.InsertConstrainedEdge(this, (vi1, vi2));
 			Invalidate();
 		}
 	}
