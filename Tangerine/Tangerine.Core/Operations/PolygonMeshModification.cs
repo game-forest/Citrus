@@ -172,39 +172,52 @@ namespace Tangerine.Core.Operations
 			private PolygonMesh mesh;
 			private int startIndex;
 			private int endIndex;
+			private bool value;
 
-			private Constrain(PolygonMesh mesh, int startIndex, int endIndex)
+			private Constrain(PolygonMesh mesh, int startIndex, int endIndex, bool value)
 			{
 				this.mesh = mesh;
 				this.startIndex = startIndex;
 				this.endIndex = endIndex;
+				this.value = value;
 			}
 
-			public static void Perform(PolygonMesh mesh, int startIndex, int endIndex)
+			public static void Perform(PolygonMesh mesh, int startIndex, int endIndex, bool value = true)
 			{
-				Document.Current.History.Perform(new Constrain(mesh, startIndex, endIndex));
+				Document.Current.History.Perform(new Constrain(mesh, startIndex, endIndex, value));
 			}
 
 			public class Processor : OperationProcessor<Constrain>
 			{
 				protected override void InternalRedo(Constrain op)
 				{
-					if (op.startIndex != op.endIndex) {
+					if (op.startIndex != op.endIndex && op.value) {
 						((Geometry)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
+					} else if (op.startIndex != op.endIndex) {
+						var he = ((Geometry) op.mesh.Geometry).HalfEdges.First(i =>
+								(i.Origin == op.startIndex &&
+								 ((Geometry) op.mesh.Geometry).Next(i).Origin == op.endIndex))
+							.Index;
+						op.mesh.Geometry.SetConstrain(he, constrained: false);
+						op.mesh.Geometry.MoveVertex(op.startIndex, Vector2.Zero);
 					}
 				}
 
 				protected override void InternalUndo(Constrain op)
 				{
-					if (op.startIndex != op.endIndex) {
-						op.mesh.Geometry.SetConstrain(
-							((Geometry)op.mesh.Geometry).HalfEdges.Where(i =>
-								(i.Origin == op.startIndex && ((Geometry)op.mesh.Geometry).Next(i).Origin == op.endIndex) ||
-								(i.Origin == op.endIndex && ((Geometry)op.mesh.Geometry).Next(i).Origin == op.startIndex)
-							).First().Index,
-							constrained: false
-						);
+					if (op.startIndex != op.endIndex && op.value) {
+						var he = ((Geometry)op.mesh.Geometry).HalfEdges.First(i =>
+								(i.Origin == op.startIndex &&
+								 ((Geometry)op.mesh.Geometry).Next(i).Origin == op.endIndex) ||
+								(i.Origin == op.endIndex &&
+								 ((Geometry)op.mesh.Geometry).Next(i).Origin == op.startIndex))
+							.Index;
+						System.Diagnostics.Debug.Assert(((Geometry)op.mesh.Geometry).HalfEdges[he].Constrained);
+						op.mesh.Geometry.SetConstrain(he, constrained: false);
 						op.mesh.Geometry.MoveVertex(op.startIndex, Vector2.Zero);
+
+					} else if (op.startIndex != op.endIndex) {
+						((Geometry)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
 					}
 				}
 			}

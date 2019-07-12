@@ -653,12 +653,6 @@ namespace Lime.PolygonMesh
 
 		public void MoveVertex(int index, Vector2 positionDelta)
 		{
-			if (
-				Mathf.Abs(positionDelta.X) < Mathf.ZeroTolerance &&
-				Mathf.Abs(positionDelta.Y) < Mathf.ZeroTolerance
-			) {
-				return;
-			}
 			Triangulator.RemoveVertex(this, index);
 			var v = Vertices[index];
 			v.Pos += positionDelta;
@@ -791,19 +785,10 @@ namespace Lime.PolygonMesh
 			RemoveHalfEdge(Prev(index));
 		}
 
-		public bool IsValid()
-		{
-			foreach (var he in HalfEdges) {
-				if (he.Index == -1) {
-					return false;
-				}
-			}
-			return true;
-		}
-
 		public void InsertConstrainedEdge(int vi1, int vi2)
 		{
 			Triangulator.InsertConstrainedEdge(this, (vi1, vi2));
+			Triangulator.DoNotKeepConstrainedEdges();
 			Invalidate();
 		}
 	}

@@ -4,6 +4,7 @@ using System.Linq;
 using Tangerine.Core;
 using Lime.PolygonMesh;
 using System;
+using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.SceneView
 {
@@ -64,6 +65,14 @@ namespace Tangerine.UI.SceneView
 							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Remove(target);
+							}
+						} else if (target is TangerineEdge) {
+							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+								using (Document.Current.History.BeginTransaction()) {
+									PolygonMeshModification.Constrain.Perform(mesh, target.VerticeIndices[0], target.VerticeIndices[1], false);
+									Document.Current.History.CommitTransaction();
+								}
 							}
 						}
 						break;

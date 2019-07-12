@@ -49,6 +49,7 @@ namespace Lime.Source.Optimizations
 			if (inside) {
 				if (OnEdge(t, vi, out var edge)) {
 					SplitEdge(edge, vi);
+					InsertConstrainedEdges(geometry, constrainedEdges);
 					geometry.Invalidate();
 					return;
 				}
@@ -382,7 +383,6 @@ namespace Lime.Source.Optimizations
 					current = next;
 				}
 			}
-			System.Diagnostics.Debug.Assert(polygon.Count == 2);
 			var last = HalfEdges[polygon.Last.Value];
 			var lastOriginal = HalfEdges[HalfEdges[polygon.First.Value].Twin];
 			HalfEdges[lastOriginal.Index] = lastOriginal;
@@ -700,6 +700,7 @@ namespace Lime.Source.Optimizations
 			foreach (var constrainedEdge in constrainedEdges.ToList()) {
 				InsertConstrainedEdge(geometry, constrainedEdge);
 			}
+			this.constrainedEdges.Clear();
 			Geometry.Invalidate();
 		}
 
