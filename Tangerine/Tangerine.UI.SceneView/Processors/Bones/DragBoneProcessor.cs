@@ -22,12 +22,12 @@ namespace Tangerine.UI.SceneView
 					var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
 					var t = Document.Current.Container.AsWidget.LocalToWorldTransform;
 					if (sv.HitTestControlPoint(t * entry.Joint, 20)) {
-						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+						UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Drag(bone, entry);
 						}
 					} else if (sv.HitTestControlPoint(t * entry.Tip, 20)) {
-						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+						UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return DragTip(bone, entry);
 						}
@@ -49,7 +49,7 @@ namespace Tangerine.UI.SceneView
 					Document.Current.History.RollbackTransaction();
 
 					var snapEnabled = sv.Input.IsKeyPressed(Key.Alt);
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var items = Document.Current.Container.AsWidget.BoneArray.items;
 					index = 0;
 					SceneView.Instance.Components.GetOrAdd<CreateBoneHelper>().HitTip = default(Vector2);
@@ -102,7 +102,7 @@ namespace Tangerine.UI.SceneView
 				var accumulativeRotationsHelpersByBones = new Dictionary<Bone, AccumulativeRotationHelper>();
 
 				while (sv.Input.IsMousePressed()) {
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					if (sv.Input.IsKeyPressed(Key.Control)) {
 						var parent = bone.Parent.AsWidget.BoneArray[bone.BaseIndex];
 						var dir = (sv.MousePosition * transform -

@@ -31,7 +31,7 @@ namespace Tangerine.UI.SceneView
 
 				var transform = Document.Current.Container.AsWidget.LocalToWorldTransform;
 				if (sv.InputArea.IsMouseOver()) {
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
 				var items = Document.Current.Container.AsWidget.BoneArray.items;
 				var index = 0;

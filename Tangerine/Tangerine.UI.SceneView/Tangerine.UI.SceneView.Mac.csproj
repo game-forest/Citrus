@@ -131,8 +131,12 @@
     <Compile Include="VisualHints.cs" />
     <Compile Include="Processors\ShiftTimelineProcessor.cs" />
     <Compile Include="Processors\FrameProgressionProcessor.cs" />
-    <Compile Include="Presenters\PolygonMeshPresenter.cs" />
     <Compile Include="Processors\PolygonMeshEditingProcessor.cs" />
+    <Compile Include="Presenters\PolygonMesh\PolygonMeshStructurePresenter.cs" />
+    <Compile Include="Utils\PolygonMesh\ITopologyPrimitive.cs" />
+    <Compile Include="Utils\PolygonMesh\PolygonMeshManager.cs" />
+    <Compile Include="Utils\PolygonMesh\TopologyDataProvider.cs" />
+    <Compile Include="Utils\PolygonMesh\TopologyProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lime\Lime.Mac.csproj">

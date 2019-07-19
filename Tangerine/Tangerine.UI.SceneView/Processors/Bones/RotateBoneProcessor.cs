@@ -24,7 +24,7 @@ namespace Tangerine.UI.SceneView
 					var t = Document.Current.Container.AsWidget.LocalToWorldTransform;
 					var hull = BonePresenter.CalcRect(bone) * t;
 					if (hull.Contains(sv.MousePosition) && !sv.Input.IsKeyPressed(Key.Control)) {
-						Utils.ChangeCursorIfDefault(Cursors.Rotate);
+						UI.Utils.ChangeCursorIfDefault(Cursors.Rotate);
 						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Rotate(bone, entry);
 						}

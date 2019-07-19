@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Lime.PolygonMesh;
-using HalfEdge = Lime.PolygonMesh.Geometry.HalfEdge;
+using HalfEdge = Lime.PolygonMesh.HalfEdgeTopology.HalfEdge;
 
 namespace Lime.Source.Optimizations
 {
 	public class Triangulator
 	{
-		public Geometry Geometry { get; }
+		public HalfEdgeTopology Geometry { get; }
 		private HashSet<(int, int)> constrainedEdges = new HashSet<(int, int)>();
 		private readonly Random random = new Random();
 
-		public Triangulator(Geometry geometry)
+		public Triangulator(HalfEdgeTopology geometry)
 		{
 			Geometry = geometry;
 		}
@@ -42,7 +42,7 @@ namespace Lime.Source.Optimizations
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void Connect(int v1, int v2, int v3) => Geometry.Connect(v1, v2, v3);
 
-		public void AddVertex(Geometry geometry, int vi)
+		public void AddVertex(HalfEdgeTopology geometry, int vi)
 		{
 			var vertex = Vertices[vi];
 			var t = LocateTriangle(LastValidEdge(), vertex, out var inside);
@@ -67,7 +67,7 @@ namespace Lime.Source.Optimizations
 		private HalfEdge RandomEdge() =>
 			HalfEdges[random.Next(0, HalfEdges.Count - 1)];
 
-		public void RemoveVertex(Geometry geometry, int vi)
+		public void RemoveVertex(HalfEdgeTopology geometry, int vi)
 		{
 			var vertex = Vertices[vi];
 			var polygon = GetBoundaryPolygon(FindIncidentEdge(LocateTriangle(LastValidEdge(), vertex, out _), vi));
@@ -76,7 +76,7 @@ namespace Lime.Source.Optimizations
 					TriangulatePolygonByEarClipping(polygon));
 		}
 
-		public bool FullCheck(Geometry geometry)
+		public bool FullCheck(HalfEdgeTopology geometry)
 		{
 			return true;
 			for (int i = 0; i < HalfEdges.Count; i += 3) {
@@ -177,7 +177,7 @@ namespace Lime.Source.Optimizations
 			return (a * p.SqrLength - b * p.X + c * p.Y - d) * Math.Sign(a) < 0;
 		}
 
-		private LinkedList<int> GetContourPolygon(Geometry geometry, HalfEdge start, Vertex vertex)
+		private LinkedList<int> GetContourPolygon(HalfEdgeTopology geometry, HalfEdge start, Vertex vertex)
 		{
 			var polygon = new LinkedList<int>();
 			polygon.AddLast(start.Index);
@@ -373,7 +373,7 @@ namespace Lime.Source.Optimizations
 					polygon.AddAfter(next, HalfEdges.Count);
 					HalfEdges.Add(twin);
 					HalfEdges.Add(new HalfEdge(-1, Next(he2).Origin, -1));
-					HalfEdges.Add(Geometry.DummyHalfEdge);
+					HalfEdges.Add(HalfEdgeTopology.DummyHalfEdge);
 					RemoveTriangle(he1.Index);
 					RemoveTriangle(he2.Index);
 					polygon.Remove(next);
@@ -393,7 +393,7 @@ namespace Lime.Source.Optimizations
 			}
 			RemoveTriangle(last.Index);
 			queue.Enqueue(lastOriginal.Index);
-			HalfEdges[polygon.First.Value] = Geometry.DummyHalfEdge;
+			HalfEdges[polygon.First.Value] = HalfEdgeTopology.DummyHalfEdge;
 			return queue;
 		}
 
@@ -447,7 +447,7 @@ namespace Lime.Source.Optimizations
 			var twin = new HalfEdge(HalfEdges.Count, he1.Origin, HalfEdges.Count - 1);
 			HalfEdges.Add(twin);
 			HalfEdges.Add(new HalfEdge(-1, Next(he2).Origin, -1));
-			HalfEdges.Add(Geometry.DummyHalfEdge);
+			HalfEdges.Add(HalfEdgeTopology.DummyHalfEdge);
 			return twin;
 		}
 
@@ -614,7 +614,7 @@ namespace Lime.Source.Optimizations
 			throw new InvalidOperationException();
 		}
 
-		public void InsertConstrainedEdge(Geometry geometry, (int a, int b) ce)
+		public void InsertConstrainedEdge(HalfEdgeTopology geometry, (int a, int b) ce)
 		{
 			var start = FindIncidentEdge(LocateTriangle(LastValidEdge(), Vertices[ce.Item1], out _), ce.a);
 			var current = start;
@@ -692,7 +692,7 @@ namespace Lime.Source.Optimizations
 			}
 		}
 
-		public void InsertConstrainedEdges(Geometry geometry, HashSet<(int, int)> constrainedEdges)
+		public void InsertConstrainedEdges(HalfEdgeTopology geometry, HashSet<(int, int)> constrainedEdges)
 		{
 			if (constrainedEdges.Count == 0) {
 				return;

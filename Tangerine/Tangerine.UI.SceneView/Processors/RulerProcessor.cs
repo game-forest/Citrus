@@ -38,7 +38,7 @@ namespace Tangerine.UI.SceneView
 						line = GetLineUnderMouse();
 					}
 					if (line != null) {
-						Utils.ChangeCursorIfDefault(line.RulerOrientation == RulerOrientation.Horizontal ? MouseCursor.SizeNS : MouseCursor.SizeWE);
+						UI.Utils.ChangeCursorIfDefault(line.RulerOrientation == RulerOrientation.Horizontal ? MouseCursor.SizeNS : MouseCursor.SizeWE);
 						if (sceneView.Input.ConsumeKeyPress(Key.Mouse0) || lineCaptured) {
 							Window.Current.Invalidate();
 							using (Document.Current.History.BeginTransaction()) {
@@ -81,7 +81,7 @@ namespace Tangerine.UI.SceneView
 			if (!sceneView.Input.IsKeyPressed(Key.Shift)) {
 				step = (float)Math.Truncate(RulersWidget.CalculateEffectiveStep()) / RulersWidget.Tesselation;
 			}
-			var curValue = new Vector2(Utils.RoundTo(mousePos.X, step), Utils.RoundTo(mousePos.Y, step));
+			var curValue = new Vector2(UI.Utils.RoundTo(mousePos.X, step), UI.Utils.RoundTo(mousePos.Y, step));
 
 			if (SceneViewCommands.SnapRulerLinesToWidgets.Checked) {
 				var mask = line.RulerOrientation.GetDirection();

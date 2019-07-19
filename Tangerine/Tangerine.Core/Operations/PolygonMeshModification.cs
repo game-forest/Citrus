@@ -36,58 +36,58 @@ namespace Tangerine.Core.Operations
 			{
 				protected override void InternalRedo(Deform op)
 				{
-					var wasContextSwapped = false;
-					if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
-						op.mesh.SwapContext();
-						wasContextSwapped = true;
-					}
-					op.mesh.Geometry.MoveVertex(op.vertexIndex, op.positionDelta);
-					op.mesh.Geometry.MoveVertexUv(op.vertexIndex, op.uvDelta);
-					var v = op.mesh.Vertices[op.vertexIndex];
-					v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
-					op.mesh.Vertices[op.vertexIndex] = v;
-					if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
-						foreach (var key in animator.Keys.ToList()) {
-							var newKey = key.Clone();
-							v = (newKey.Value as List<Vertex>)[op.vertexIndex];
-							v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
-							(newKey.Value as List<Vertex>)[op.vertexIndex] = v;
-							animator.Keys.AddOrdered(newKey);
-							animator.ResetCache();
-						}
-						op.mesh.Animators.Invalidate();
-					}
-					if (wasContextSwapped) {
-						op.mesh.SwapContext();
-					}
+					//var wasContextSwapped = false;
+					//if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
+					//	op.mesh.SwapContext();
+					//	wasContextSwapped = true;
+					//}
+					//op.mesh.Geometry.TranslateVertex(op.vertexIndex, op.positionDelta);
+					//op.mesh.Geometry.TranslateVertexUV(op.vertexIndex, op.uvDelta);
+					//var v = op.mesh.Vertices[op.vertexIndex];
+					//v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
+					//op.mesh.Vertices[op.vertexIndex] = v;
+					//if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
+					//	foreach (var key in animator.Keys.ToList()) {
+					//		var newKey = key.Clone();
+					//		v = (newKey.Value as List<Vertex>)[op.vertexIndex];
+					//		v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
+					//		(newKey.Value as List<Vertex>)[op.vertexIndex] = v;
+					//		animator.Keys.AddOrdered(newKey);
+					//		animator.ResetCache();
+					//	}
+					//	op.mesh.Animators.Invalidate();
+					//}
+					//if (wasContextSwapped) {
+					//	op.mesh.SwapContext();
+					//}
 				}
 
 				protected override void InternalUndo(Deform op)
 				{
-					var wasContextSwapped = false;
-					if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
-						op.mesh.SwapContext();
-						wasContextSwapped = true;
-					}
-					op.mesh.Geometry.MoveVertex(op.vertexIndex, -op.positionDelta);
-					op.mesh.Geometry.MoveVertexUv(op.vertexIndex, -op.uvDelta);
-					var v = op.mesh.Vertices[op.vertexIndex];
-					v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
-					op.mesh.Vertices[op.vertexIndex] = v;
-					if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
-						foreach (var key in animator.Keys.ToList()) {
-							var newKey = key.Clone();
-							v = (newKey.Value as List<Vertex>)[op.vertexIndex];
-							v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
-							(newKey.Value as List<Vertex>)[op.vertexIndex] = v;
-							animator.Keys.AddOrdered(newKey);
-							animator.ResetCache();
-						}
-						op.mesh.Animators.Invalidate();
-					}
-					if (wasContextSwapped) {
-						op.mesh.SwapContext();
-					}
+					//var wasContextSwapped = false;
+					//if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
+					//	op.mesh.SwapContext();
+					//	wasContextSwapped = true;
+					//}
+					//op.mesh.Geometry.TranslateVertex(op.vertexIndex, -op.positionDelta);
+					//op.mesh.Geometry.TranslateVertexUV(op.vertexIndex, -op.uvDelta);
+					//var v = op.mesh.Vertices[op.vertexIndex];
+					//v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
+					//op.mesh.Vertices[op.vertexIndex] = v;
+					//if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
+					//	foreach (var key in animator.Keys.ToList()) {
+					//		var newKey = key.Clone();
+					//		v = (newKey.Value as List<Vertex>)[op.vertexIndex];
+					//		v.UV1 = op.mesh.Geometry.Vertices[op.vertexIndex].UV1;
+					//		(newKey.Value as List<Vertex>)[op.vertexIndex] = v;
+					//		animator.Keys.AddOrdered(newKey);
+					//		animator.ResetCache();
+					//	}
+					//	op.mesh.Animators.Invalidate();
+					//}
+					//if (wasContextSwapped) {
+					//	op.mesh.SwapContext();
+					//}
 				}
 			}
 		}
@@ -116,51 +116,51 @@ namespace Tangerine.Core.Operations
 			{
 				protected override void InternalRedo(Create op)
 				{
-					var wasContextSwapped = false;
-					if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
-						op.mesh.SwapContext();
-						wasContextSwapped = true;
-					}
-					op.mesh.Geometry.AddVertex(op.deformedVertex);
-					if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
-						foreach (var key in animator.Keys.ToList()) {
-							var newKey = key.Clone();
-							(newKey.Value as List<Vertex>).Add(op.animatedVertex);
-							animator.Keys.AddOrdered(newKey);
-							animator.ResetCache();
-						}
-						op.mesh.Animators.Invalidate();
-					} else {
-						op.mesh.Vertices.Add(op.animatedVertex);
-					}
-					if (wasContextSwapped) {
-						op.mesh.SwapContext();
-					}
+					//var wasContextSwapped = false;
+					//if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
+					//	op.mesh.SwapContext();
+					//	wasContextSwapped = true;
+					//}
+					//op.mesh.Geometry.AddVertex(op.deformedVertex);
+					//if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
+					//	foreach (var key in animator.Keys.ToList()) {
+					//		var newKey = key.Clone();
+					//		(newKey.Value as List<Vertex>).Add(op.animatedVertex);
+					//		animator.Keys.AddOrdered(newKey);
+					//		animator.ResetCache();
+					//	}
+					//	op.mesh.Animators.Invalidate();
+					//} else {
+					//	op.mesh.Vertices.Add(op.animatedVertex);
+					//}
+					//if (wasContextSwapped) {
+					//	op.mesh.SwapContext();
+					//}
 				}
 
 				protected override void InternalUndo(Create op)
 				{
-					var wasContextSwapped = false;
-					if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
-						op.mesh.SwapContext();
-						wasContextSwapped = true;
-					}
-					var i = op.mesh.Geometry.Vertices.Count - 1;
-					op.mesh.Geometry.RemoveVertex(i);
-					if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
-						foreach (var key in animator.Keys.ToList()) {
-							var newKey = key.Clone();
-							(newKey.Value as List<Vertex>).RemoveAt(i);
-							animator.Keys.AddOrdered(newKey);
-							animator.ResetCache();
-						}
-						op.mesh.Animators.Invalidate();
-					} else {
-						op.mesh.Vertices.RemoveAt(i);
-					}
-					if (wasContextSwapped) {
-						op.mesh.SwapContext();
-					}
+					//	var wasContextSwapped = false;
+					//	if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
+					//		op.mesh.SwapContext();
+					//		wasContextSwapped = true;
+					//	}
+					//	var i = op.mesh.Geometry.Vertices.Count - 1;
+					//	op.mesh.Geometry.RemoveVertex(i);
+					//	if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
+					//		foreach (var key in animator.Keys.ToList()) {
+					//			var newKey = key.Clone();
+					//			(newKey.Value as List<Vertex>).RemoveAt(i);
+					//			animator.Keys.AddOrdered(newKey);
+					//			animator.ResetCache();
+					//		}
+					//		op.mesh.Animators.Invalidate();
+					//	} else {
+					//		op.mesh.Vertices.RemoveAt(i);
+					//	}
+					//	if (wasContextSwapped) {
+					//		op.mesh.SwapContext();
+					//	}
 				}
 			}
 		}
@@ -191,34 +191,34 @@ namespace Tangerine.Core.Operations
 			{
 				protected override void InternalRedo(Constrain op)
 				{
-					if (op.startIndex != op.endIndex && op.value) {
-						((Geometry)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
-					} else if (op.startIndex != op.endIndex) {
-						var he = ((Geometry) op.mesh.Geometry).HalfEdges.First(i =>
-								(i.Origin == op.startIndex &&
-								 ((Geometry) op.mesh.Geometry).Next(i).Origin == op.endIndex))
-							.Index;
-						op.mesh.Geometry.SetConstrain(he, constrained: false);
-						op.mesh.Geometry.MoveVertex(op.startIndex, Vector2.Zero);
-					}
+					//if (op.startIndex != op.endIndex && op.value) {
+					//	((HalfEdgeTopology)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
+					//} else if (op.startIndex != op.endIndex) {
+					//	var he = ((HalfEdgeTopology) op.mesh.Geometry).HalfEdges.First(i =>
+					//			(i.Origin == op.startIndex &&
+					//			 ((HalfEdgeTopology) op.mesh.Geometry).Next(i).Origin == op.endIndex))
+					//		.Index;
+					//	op.mesh.Geometry.SetConstrain(he, constrained: false);
+					//	op.mesh.Geometry.TranslateVertex(op.startIndex, Vector2.Zero);
+					//}
 				}
 
 				protected override void InternalUndo(Constrain op)
 				{
-					if (op.startIndex != op.endIndex && op.value) {
-						var he = ((Geometry)op.mesh.Geometry).HalfEdges.First(i =>
-								(i.Origin == op.startIndex &&
-								 ((Geometry)op.mesh.Geometry).Next(i).Origin == op.endIndex) ||
-								(i.Origin == op.endIndex &&
-								 ((Geometry)op.mesh.Geometry).Next(i).Origin == op.startIndex))
-							.Index;
-						System.Diagnostics.Debug.Assert(((Geometry)op.mesh.Geometry).HalfEdges[he].Constrained);
-						op.mesh.Geometry.SetConstrain(he, constrained: false);
-						op.mesh.Geometry.MoveVertex(op.startIndex, Vector2.Zero);
+					//if (op.startIndex != op.endIndex && op.value) {
+					//	var he = ((HalfEdgeTopology)op.mesh.Geometry).HalfEdges.First(i =>
+					//			(i.Origin == op.startIndex &&
+					//			 ((HalfEdgeTopology)op.mesh.Geometry).Next(i).Origin == op.endIndex) ||
+					//			(i.Origin == op.endIndex &&
+					//			 ((HalfEdgeTopology)op.mesh.Geometry).Next(i).Origin == op.startIndex))
+					//		.Index;
+					//	System.Diagnostics.Debug.Assert(((HalfEdgeTopology)op.mesh.Geometry).HalfEdges[he].Constrained);
+					//	op.mesh.Geometry.SetConstrain(he, constrained: false);
+					//	op.mesh.Geometry.TranslateVertex(op.startIndex, Vector2.Zero);
 
-					} else if (op.startIndex != op.endIndex) {
-						((Geometry)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
-					}
+					//} else if (op.startIndex != op.endIndex) {
+					//	((HalfEdgeTopology)op.mesh.Geometry).InsertConstrainedEdge(op.startIndex, op.endIndex);
+					//}
 				}
 			}
 		}
@@ -249,75 +249,75 @@ namespace Tangerine.Core.Operations
 			{
 				protected override void InternalRedo(Remove op)
 				{
-					var wasContextSwapped = false;
-					if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
-						op.mesh.SwapContext();
-						wasContextSwapped = true;
-					}
-					var i = op.mesh.Vertices.Count - 1;
-					op.mesh.Geometry.RemoveVertex(op.vertexIndex);
-					op.mesh.Vertices[op.vertexIndex] = op.mesh.Vertices[i];
-					op.mesh.IndexBuffer = op.mesh.Geometry.IndexBuffer;
-					if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
-						using (Document.Current.History.BeginTransaction()) {
-							foreach (var key in animator.Keys.ToList()) {
-								var newKey = key.Clone();
-								(newKey.Value as List<Vertex>).RemoveAt(i);
-								animator.Keys.AddOrdered(newKey);
-								animator.ResetCache();
-							}
-							op.mesh.Animators.Invalidate();
-						}
-					} else {
-						op.mesh.Vertices.RemoveAt(i);
-					}
-					if (wasContextSwapped) {
-						op.mesh.SwapContext();
-					}
+					//var wasContextSwapped = false;
+					//if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
+					//	op.mesh.SwapContext();
+					//	wasContextSwapped = true;
+					//}
+					//var i = op.mesh.Vertices.Count - 1;
+					//op.mesh.Geometry.RemoveVertex(op.vertexIndex);
+					//op.mesh.Vertices[op.vertexIndex] = op.mesh.Vertices[i];
+					//op.mesh.IndexBuffer = op.mesh.Geometry.IndexBuffer;
+					//if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
+					//	using (Document.Current.History.BeginTransaction()) {
+					//		foreach (var key in animator.Keys.ToList()) {
+					//			var newKey = key.Clone();
+					//			(newKey.Value as List<Vertex>).RemoveAt(i);
+					//			animator.Keys.AddOrdered(newKey);
+					//			animator.ResetCache();
+					//		}
+					//		op.mesh.Animators.Invalidate();
+					//	}
+					//} else {
+					//	op.mesh.Vertices.RemoveAt(i);
+					//}
+					//if (wasContextSwapped) {
+					//	op.mesh.SwapContext();
+					//}
 				}
 
 				protected override void InternalUndo(Remove op)
 				{
-					var wasContextSwapped = false;
-					if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
-						op.mesh.SwapContext();
-						wasContextSwapped = true;
-					}
-					var i = op.mesh.Vertices.Count - 1;
-					if (i == op.vertexIndex - 1) {
-						op.mesh.Geometry.AddVertex(op.deformedVertex);
-					} else {
-						var v = op.mesh.Geometry.Vertices[op.vertexIndex];
-						op.mesh.Geometry.MoveVertex(op.vertexIndex, op.deformedVertex.Pos - v.Pos);
-						op.mesh.Geometry.AddVertex(v);
-						op.mesh.Geometry.Vertices[op.vertexIndex] = op.deformedVertex;
-						(op.mesh.Geometry as Geometry).Invalidate();
-					}
-					if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
-						foreach (var key in animator.Keys.ToList()) {
-							var newKey = key.Clone();
-							var list = (newKey.Value as List<Vertex>);
-							if (i == op.vertexIndex - 1) {
-								list.Add(op.animatedVertex);
-							} else {
-								list.Add(list[op.vertexIndex]);
-								list[op.vertexIndex] = op.animatedVertex;
-							}
-							animator.Keys.AddOrdered(newKey);
-							animator.ResetCache();
-						}
-						op.mesh.Animators.Invalidate();
-					} else {
-						if (i == op.vertexIndex - 1) {
-							op.mesh.Vertices.Add(op.animatedVertex);
-						} else {
-							op.mesh.Vertices.Add(op.mesh.Vertices[op.vertexIndex]);
-							op.mesh.Vertices[op.vertexIndex] = op.animatedVertex;
-						}
-					}
-					if (wasContextSwapped) {
-						op.mesh.SwapContext();
-					}
+					//var wasContextSwapped = false;
+					//if (op.mesh.CurrentContext == PolygonMesh.Context.Animation) {
+					//	op.mesh.SwapContext();
+					//	wasContextSwapped = true;
+					//}
+					//var i = op.mesh.Vertices.Count - 1;
+					//if (i == op.vertexIndex - 1) {
+					//	op.mesh.Geometry.AddVertex(op.deformedVertex);
+					//} else {
+					//	var v = op.mesh.Geometry.Vertices[op.vertexIndex];
+					//	op.mesh.Geometry.TranslateVertex(op.vertexIndex, op.deformedVertex.Pos - v.Pos);
+					//	op.mesh.Geometry.AddVertex(v);
+					//	op.mesh.Geometry.Vertices[op.vertexIndex] = op.deformedVertex;
+					//	(op.mesh.Geometry as HalfEdgeTopology).Invalidate();
+					//}
+					//if (op.mesh.Animators.TryFind($"{nameof(mesh.Vertices)}", out var animator)) {
+					//	foreach (var key in animator.Keys.ToList()) {
+					//		var newKey = key.Clone();
+					//		var list = (newKey.Value as List<Vertex>);
+					//		if (i == op.vertexIndex - 1) {
+					//			list.Add(op.animatedVertex);
+					//		} else {
+					//			list.Add(list[op.vertexIndex]);
+					//			list[op.vertexIndex] = op.animatedVertex;
+					//		}
+					//		animator.Keys.AddOrdered(newKey);
+					//		animator.ResetCache();
+					//	}
+					//	op.mesh.Animators.Invalidate();
+					//} else {
+					//	if (i == op.vertexIndex - 1) {
+					//		op.mesh.Vertices.Add(op.animatedVertex);
+					//	} else {
+					//		op.mesh.Vertices.Add(op.mesh.Vertices[op.vertexIndex]);
+					//		op.mesh.Vertices[op.vertexIndex] = op.animatedVertex;
+					//	}
+					//}
+					//if (wasContextSwapped) {
+					//	op.mesh.SwapContext();
+					//}
 				}
 			}
 		}

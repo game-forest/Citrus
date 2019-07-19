@@ -78,6 +78,10 @@
     <Compile Include="Processors\DragNineGridLineProcessor.cs" />
     <Compile Include="Processors\ResolutionPreviewProcessor.cs" />
     <Compile Include="ResolutionHandlers.cs" />
+    <Compile Include="Utils\PolygonMesh\ITopologyPrimitive.cs" />
+    <Compile Include="Utils\PolygonMesh\TopologyDataProvider.cs" />
+    <Compile Include="Utils\PolygonMesh\PolygonMeshManager.cs" />
+    <Compile Include="Utils\PolygonMesh\TopologyProvider.cs" />
     <Compile Include="VisualHints.cs" />
     <Compile Include="Widgets\ZoomWidget.cs" />
     <Compile Include="WidgetTransforms\WidgetTransformsHelper.cs" />

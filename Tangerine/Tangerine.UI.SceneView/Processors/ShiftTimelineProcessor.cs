@@ -14,7 +14,7 @@ namespace Tangerine.UI.SceneView
 		{
 			while(true) {
 				if (sv.InputArea.IsMouseOverThisOrDescendant() && sv.Input.IsKeyPressed(Key.Alt)) {
-					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
 					if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 						yield return Advance();
 					}
@@ -40,7 +40,7 @@ namespace Tangerine.UI.SceneView
 				var prevDirection = DragDirection.None;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
 					var curMousePos = sv.MousePosition * matrix;
 					var curDirection = (DragDirection)Math.Sign(curMousePos.X - prevMousPos.X);
 					if (curDirection != DragDirection.None && curDirection != prevDirection) {

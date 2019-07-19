@@ -28,7 +28,7 @@ namespace Tangerine.UI.SceneView
 			command.Checked = true;
 			while (true) {
 				if (sv.InputArea.IsMouseOver()) {
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
 				CreateNodeRequestComponent.Consume<Node>(sv.Components);
 				if (input.ConsumeKeyPress(Key.Mouse0)) {
@@ -79,7 +79,7 @@ namespace Tangerine.UI.SceneView
 			}
 
 			command.Checked = false;
-			Utils.ChangeCursorIfDefault(MouseCursor.Default);
+			UI.Utils.ChangeCursorIfDefault(MouseCursor.Default);
 		}
 	}
 }

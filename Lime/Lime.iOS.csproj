@@ -503,8 +503,8 @@
     <Compile Include="Source\YuzuGeneratedCloners.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
     <Compile Include="Source\Optimizations\Triangulator.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\IGeometry.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshUtils.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\ITopology.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />

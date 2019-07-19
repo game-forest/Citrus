@@ -22,7 +22,7 @@ namespace Tangerine.UI.SceneView
 					for (int i = 0; i < 2; i++) {
 						var p = CalcTangentKnobPosition(point, i);
 						if (sv.HitTestControlPoint(p, 5)) {
-							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+							UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Drag(point, i);
 							}
@@ -47,7 +47,7 @@ namespace Tangerine.UI.SceneView
 				var matrix = (Document.Current.Container as Widget).LocalToWorldTransform.CalcInversed();
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var curMousePos = sv.MousePosition;
 					if ((curMousePos - iniMousePos).Snap(Vector2.Zero) != Vector2.Zero) {
 						var p = matrix * curMousePos;

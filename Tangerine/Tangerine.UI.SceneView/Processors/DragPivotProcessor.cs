@@ -20,7 +20,7 @@ namespace Tangerine.UI.SceneView
 					Utils.CalcHullAndPivot(widgets, out var hull, out var pivot) &&
 					sv.HitTestControlPoint(pivot))
 				{
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 						yield return sv.Input.IsKeyPressed(Key.Alt) ? DragShared(hull) : Drag();
 					}
@@ -70,7 +70,7 @@ namespace Tangerine.UI.SceneView
 				Utils.CalcHullAndPivot(widgets, out var hull, out var iniPivot);
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var curMousePos = sv.MousePosition;
 					var shiftPressed = sv.Input.IsKeyPressed(Key.Shift);
 					if (shiftPressed && dragDirection != DragDirection.Any) {

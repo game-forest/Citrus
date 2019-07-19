@@ -40,7 +40,7 @@ namespace Tangerine.UI.SceneView
 								var transform = node.Parent.AsWidget.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
 								foreach (var key in keys) {
 									if ((mousePosition - (Vector2)key.Value * transform).Length < 20) {
-										Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+										UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 										if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 											yield return Drag(node as Widget, animator, key);
 										}
@@ -63,7 +63,7 @@ namespace Tangerine.UI.SceneView
 			using (Document.Current.History.BeginTransaction()) {
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var curMousePos = sv.MousePosition * transform;
 					var diff = curMousePos - initMousePos;
 					animator.ResetCache();

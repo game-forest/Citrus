@@ -25,7 +25,7 @@ namespace Tangerine.UI.SceneView
 				if (Utils.CalcHullAndPivot(widgets, out hull, out pivot)) {
 					for (int i = 0; i < 4; i++) {
 						if (sv.HitTestControlPoint(hull[i])) {
-							Utils.ChangeCursorIfDefault(Cursors.Rotate);
+							UI.Utils.ChangeCursorIfDefault(Cursors.Rotate);
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Rotate(pivot);
 							}
@@ -48,7 +48,7 @@ namespace Tangerine.UI.SceneView
 					).ToList();
 
 				while (sv.Input.IsMousePressed()) {
-					Utils.ChangeCursorIfDefault(Cursors.Rotate);
+					UI.Utils.ChangeCursorIfDefault(Cursors.Rotate);
 					Document.Current.History.RollbackTransaction();
 					RotateWidgets(pivot, widgets, sv.MousePosition, mouseStartPos, sv.Input.IsKeyPressed(Key.Shift), accumulateRotationHelpers);
 					yield return null;

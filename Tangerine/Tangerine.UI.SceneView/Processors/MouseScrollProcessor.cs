@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Lime;
@@ -16,7 +16,7 @@ namespace Tangerine.UI.SceneView
 			while (true) {
 
 				if (sv.Input.IsKeyPressed(Key.Space) && sv.InputArea.IsMouseOver()) {
-					Utils.ChangeCursorIfDefault(Cursors.DragHandOpen);
+					UI.Utils.ChangeCursorIfDefault(Cursors.DragHandOpen);
 				}
 				
 				if (sv.Input.WasMousePressed(0) && CommonWindow.Current.Input.IsKeyPressed(Key.Space) || sv.Input.WasMousePressed(2)) {
@@ -25,7 +25,7 @@ namespace Tangerine.UI.SceneView
 					sv.Input.ConsumeKey(Key.Mouse0);
 					sv.Input.ConsumeKey(Key.Mouse2);
 					while (sv.Input.IsMousePressed(0) || sv.Input.IsMousePressed(2)) {
-						Utils.ChangeCursorIfDefault(Cursors.DragHandClosed);
+						UI.Utils.ChangeCursorIfDefault(Cursors.DragHandClosed);
 						sv.Scene.Position = (sv.Input.MousePosition - initialMouse) + initialPosition;
 						yield return null;
 					}
