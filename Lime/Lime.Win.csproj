@@ -360,6 +360,9 @@
     <Compile Include="Source\Localization\Pluralizer.cs" />
     <Compile Include="Source\Mathf.cs" />
     <Compile Include="Source\Mathf.Easings.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopologyModificator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTriangulator.cs" />
     <Compile Include="Source\NumericExtensions.cs" />
     <Compile Include="Source\Optimizations\BoundingRectCalculator.cs" />
     <Compile Include="Source\Optimizations\ContentSizeComponent.cs" />

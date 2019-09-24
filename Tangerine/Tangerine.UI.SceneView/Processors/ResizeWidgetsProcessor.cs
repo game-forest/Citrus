@@ -41,7 +41,7 @@ namespace Tangerine.UI.SceneView
 						var a = hull[i];
 						if (SceneView.HitTestResizeControlPoint(a)) {
 							var cursor = i % 2 == 0 ? MouseCursor.SizeNWSE : MouseCursor.SizeNESW;
-							UI.Utils.ChangeCursorIfDefault(cursor);
+							Utils.ChangeCursorIfDefault(cursor);
 							if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Resize(hull, i * 2, pivot);
 							}
@@ -49,7 +49,7 @@ namespace Tangerine.UI.SceneView
 						var b = hull[(i + 1) % 4];
 						if (SceneView.HitTestResizeControlPoint((a + b) / 2)) {
 							var cursor = (b.X - a.X).Abs() > (b.Y - a.Y).Abs() ? MouseCursor.SizeNS : MouseCursor.SizeWE;
-							UI.Utils.ChangeCursorIfDefault(cursor);
+							Utils.ChangeCursorIfDefault(cursor);
 							if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Resize(hull, i * 2 + 1, pivot);
 							}
@@ -69,7 +69,7 @@ namespace Tangerine.UI.SceneView
 				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Matrix32 transform = Matrix32.Identity;
-					UI.Utils.ChangeCursorIfDefault(cursor);
+					Utils.ChangeCursorIfDefault(cursor);
 					var proportional = SceneView.Input.IsKeyPressed(Key.Shift);
 					var isChangingScale = SceneView.Input.IsKeyPressed(Key.Control);
 					var areChildrenFreezed =

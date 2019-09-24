@@ -24,7 +24,7 @@ namespace Tangerine.UI.SceneView
 				foreach (var grid in grids) {
 					foreach (var line in NineGridLine.GetForNineGrid(grid)) {
 						if (line.HitTest(mousePosition, sv.Scene)) {
-							UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Drag(line);
 							}
@@ -53,7 +53,7 @@ namespace Tangerine.UI.SceneView
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 
-					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var curMousePos = sv.MousePosition * transform;
 					var diff = Vector2.DotProduct((curMousePos - initMousePos), dir) / size;
 					if (Mathf.Abs(diff) > Mathf.ZeroTolerance) {

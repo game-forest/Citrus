@@ -34,7 +34,7 @@ namespace Tangerine.UI.SceneView
 				}
 
 				if (sv.InputArea.IsMouseOver()) {
-					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
 				var container = Document.Current.Container as Widget;
 				CreateNodeRequestComponent.Consume<Node>(sv.Components);
@@ -68,7 +68,7 @@ namespace Tangerine.UI.SceneView
 					}
 
 					nodeTypeActive = null;
-					UI.Utils.ChangeCursorIfDefault(MouseCursor.Default);
+					Utils.ChangeCursorIfDefault(MouseCursor.Default);
 				}
 
 				yield return null;

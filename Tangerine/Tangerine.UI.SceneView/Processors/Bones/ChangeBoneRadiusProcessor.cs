@@ -27,7 +27,7 @@ namespace Tangerine.UI.SceneView
 						hull[i] = t * hull[i];
 					}
 					if (hull.Contains(sv.MousePosition) && sv.Input.IsKeyPressed(Key.Shift)) {
-						UI.Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
+						Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
 						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Resize(bones.First());
 						}
@@ -46,7 +46,7 @@ namespace Tangerine.UI.SceneView
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 
-					UI.Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
+					Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
 					var dragDelta = sv.MousePosition - iniMousePos;
 					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.EffectiveRadius), initEffectiveRadius + dragDelta.X, CoreUserPreferences.Instance.AutoKeyframes);
 					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.FadeoutZone), initFadeoutZone + dragDelta.Y, CoreUserPreferences.Instance.AutoKeyframes);

@@ -22,7 +22,7 @@ namespace Tangerine.UI.SceneView
 				var points = Document.Current.SelectedNodes().Editable().OfType<SplinePoint3D>();
 				foreach (var point in points) {
 					if (HitTestControlPoint(spline, point.Position)) {
-						UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return DragPoints(points);
 							break;
@@ -30,7 +30,7 @@ namespace Tangerine.UI.SceneView
 					}
 					for (int i = 0; i < 2; i++) {
 						if (HitTestControlPoint(spline, point.Position + GetTangent(point, i))) {
-							UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+							Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return DragTangent(point, i);
 							}
@@ -63,7 +63,7 @@ namespace Tangerine.UI.SceneView
 				while (input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 
-					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var currentMouse = input.MousePosition;
 					var shiftPressed = input.IsKeyPressed(Key.Shift);
 					if (shiftPressed && dragDirection != DragDirection.Any) {

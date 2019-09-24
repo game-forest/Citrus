@@ -1,73 +1,75 @@
+using Lime.PolygonMesh.Topology;
+using Lime.PolygonMesh.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Lime.PolygonMesh;
-using HalfEdge = Lime.PolygonMesh.HalfEdgeTopology.HalfEdge;
+using HalfEdge = Lime.PolygonMesh.Topology.HalfEdgeTopology.HalfEdge;
 
-namespace Lime.Source.Optimizations
+namespace Lime.PolygonMesh
 {
-	public class Triangulator
+	internal class HalfEdgeTriangulator
 	{
-		public HalfEdgeTopology Geometry { get; }
+		public HalfEdgeTopology Topology { get; }
+
 		private HashSet<(int, int)> constrainedEdges = new HashSet<(int, int)>();
 		private readonly Random random = new Random();
 
-		public Triangulator(HalfEdgeTopology geometry)
+		public HalfEdgeTriangulator(HalfEdgeTopology topology)
 		{
-			Geometry = geometry;
+			Topology = topology;
 		}
 
-		private List<HalfEdge> HalfEdges => Geometry.HalfEdges;
-		private List<Vertex> Vertices => Geometry.Vertices;
+		private List<HalfEdge> HalfEdges => Topology.HalfEdges;
+		private List<Vertex> Vertices => Topology.Vertices;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private HalfEdge Next(HalfEdge he) => Geometry.Next(he);
+		private HalfEdge Next(HalfEdge he) => Topology.Next(he);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private int Next(int index) => Geometry.Next(index);
+		private int Next(int index) => Topology.Next(index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private HalfEdge Prev(HalfEdge he) => Geometry.Prev(he);
+		private HalfEdge Prev(HalfEdge he) => Topology.Prev(he);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private int Prev(int index) => Geometry.Prev(index);
+		private int Prev(int index) => Topology.Prev(index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void MakeTwins(int lhs, int rhs) => Geometry.MakeTwins(lhs, rhs);
+		private void MakeTwins(int lhs, int rhs) => Topology.MakeTwins(lhs, rhs);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void SetConstrain(int index, bool value) => Geometry.SetConstrain(index, value);
+		private void SetEdgeConstraint(int index, bool value) => Topology.SetEdgeConstraint(index, value);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void RemoveHalfEdge(int index) => Geometry.RemoveHalfEdge(index);
+		private void RemoveHalfEdge(int index) => Topology.RemoveHalfEdge(index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void RemoveTriangle(int index) => Geometry.RemoveTriangle(index);
+		private void RemoveTriangle(int index) => Topology.RemoveTriangle(index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void Untwin(int index) => Geometry.Untwin(index);
+		private void Untwin(int index) => Topology.Untwin(index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void Connect(int v1, int v2, int v3) => Geometry.Connect(v1, v2, v3);
+		private void Connect(int v1, int v2, int v3) => Topology.Connect(v1, v2, v3);
 
-		public void AddVertex(HalfEdgeTopology geometry, int vi)
+		public void AddVertex(int vi)
 		{
 			var vertex = Vertices[vi];
 			var t = LocateTriangle(LastValidEdge(), vertex, out var inside);
 			if (inside) {
 				if (OnEdge(t, vi, out var edge)) {
 					SplitEdge(edge, vi);
-					InsertConstrainedEdges(geometry, constrainedEdges);
-					geometry.Invalidate();
+					InsertConstrainedEdges(constrainedEdges);
+					Topology.Invalidate();
 					return;
 				}
-				TriangulateStarShapedPolygon(GetContourPolygon(geometry, t, vertex), vi);
+				TriangulateStarShapedPolygon(GetContourPolygon( t, vertex), vi);
 			} else {
 				var q = TriangulateVisibleBoundary(GetVisibleBoundary(vertex, GetTriangulationBoundary(vertex, t)), vi);
 				System.Diagnostics.Debug.Assert(q.Count > 0);
 				RestoreDelaunayProperty(q);
-				System.Diagnostics.Debug.Assert(FullCheck(geometry));
+				System.Diagnostics.Debug.Assert(FullCheck());
 			}
-			InsertConstrainedEdges(geometry, constrainedEdges);
+			InsertConstrainedEdges(constrainedEdges);
 			constrainedEdges.Clear();
 		}
 
 		private HalfEdge RandomEdge() =>
 			HalfEdges[random.Next(0, HalfEdges.Count - 1)];
 
-		public void RemoveVertex(HalfEdgeTopology geometry, int vi)
+		public void RemoveVertex(int vi)
 		{
 			var vertex = Vertices[vi];
 			var polygon = GetBoundaryPolygon(FindIncidentEdge(LocateTriangle(LastValidEdge(), vertex, out _), vi));
@@ -76,7 +78,7 @@ namespace Lime.Source.Optimizations
 					TriangulatePolygonByEarClipping(polygon));
 		}
 
-		public bool FullCheck(HalfEdgeTopology geometry)
+		public bool FullCheck()
 		{
 			return true;
 			for (int i = 0; i < HalfEdges.Count; i += 3) {
@@ -135,7 +137,8 @@ namespace Lime.Source.Optimizations
 		}
 
 		private HalfEdge LocateTriangle(HalfEdge start, Vertex vertex, out bool inside)
-		{
+
+{
 			var current = start;
 			inside = true;
 			do {
@@ -177,7 +180,7 @@ namespace Lime.Source.Optimizations
 			return (a * p.SqrLength - b * p.X + c * p.Y - d) * Math.Sign(a) < 0;
 		}
 
-		private LinkedList<int> GetContourPolygon(HalfEdgeTopology geometry, HalfEdge start, Vertex vertex)
+		private LinkedList<int> GetContourPolygon(HalfEdge start, Vertex vertex)
 		{
 			var polygon = new LinkedList<int>();
 			polygon.AddLast(start.Index);
@@ -244,7 +247,7 @@ namespace Lime.Source.Optimizations
 			if (he.Twin != -1) {
 				MakeTwins(he.Twin, HalfEdges.Count - 3);
 			}
-			SetConstrain(HalfEdges.Count - 3, he.Constrained);
+			SetEdgeConstraint(HalfEdges.Count - 3, he.Constrained);
 		}
 
 		private void Connect(HalfEdge he1, HalfEdge he2)
@@ -256,8 +259,8 @@ namespace Lime.Source.Optimizations
 			if (he2.Twin != -1) {
 				MakeTwins(he2.Twin, HalfEdges.Count - 2);
 			}
-			SetConstrain(HalfEdges.Count - 3, he1.Constrained);
-			SetConstrain(HalfEdges.Count - 2, he2.Constrained);
+			SetEdgeConstraint(HalfEdges.Count - 3, he1.Constrained);
+			SetEdgeConstraint(HalfEdges.Count - 2, he2.Constrained);
 		}
 
 		private float Area(Vector2 v1, Vector2 v2, Vector2 v3) =>
@@ -288,11 +291,11 @@ namespace Lime.Source.Optimizations
 				Connect(sp, next.Origin, prev.Origin);
 				if (next.Twin != -1) {
 					MakeTwins(HalfEdges.Count - 2, next.Twin);
-					SetConstrain(HalfEdges.Count - 2, next.Constrained || HalfEdges[next.Twin].Constrained);
+					SetEdgeConstraint(HalfEdges.Count - 2, next.Constrained || HalfEdges[next.Twin].Constrained);
 				}
 				if (prev.Twin != -1) {
 					MakeTwins(HalfEdges.Count - 4, prev.Twin);
-					SetConstrain(HalfEdges.Count - 4, prev.Constrained || HalfEdges[prev.Twin].Constrained);
+					SetEdgeConstraint(HalfEdges.Count - 4, prev.Constrained || HalfEdges[prev.Twin].Constrained);
 				}
 				MakeTwins(HalfEdges.Count - 5, HalfEdges.Count - 1);
 			}
@@ -304,8 +307,8 @@ namespace Lime.Source.Optimizations
 				MakeTwins(res.Item1, HalfEdges.Count - 3);
 				RemoveTriangle(edge.Twin);
 			}
-			SetConstrain(res.Item1, edge.Constrained);
-			SetConstrain(res.Item2, edge.Constrained);
+			SetEdgeConstraint(res.Item1, edge.Constrained);
+			SetEdgeConstraint(res.Item2, edge.Constrained);
 			RemoveTriangle(edge.Index);
 		}
 
@@ -389,7 +392,7 @@ namespace Lime.Source.Optimizations
 			lastOriginal.Twin = last.Twin;
 			if (last.Twin != -1) {
 				MakeTwins(last.Twin, lastOriginal.Index);
-				SetConstrain(last.Twin, lastOriginal.Constrained || HalfEdges[last.Twin].Constrained);
+				SetEdgeConstraint(last.Twin, lastOriginal.Constrained || HalfEdges[last.Twin].Constrained);
 			}
 			RemoveTriangle(last.Index);
 			queue.Enqueue(lastOriginal.Index);
@@ -614,7 +617,7 @@ namespace Lime.Source.Optimizations
 			throw new InvalidOperationException();
 		}
 
-		public void InsertConstrainedEdge(HalfEdgeTopology geometry, (int a, int b) ce)
+		public void InsertConstrainedEdge((int a, int b) ce)
 		{
 			var start = FindIncidentEdge(LocateTriangle(LastValidEdge(), Vertices[ce.Item1], out _), ce.a);
 			var current = start;
@@ -628,26 +631,26 @@ namespace Lime.Source.Optimizations
 				var prev = Prev(current);
 				// Check if constrained edge equals to existing edge of triangle (and make it constrained if it's true)
 				if (next.Origin == ce.b) {
-					SetConstrain(current.Index, true);
+					SetEdgeConstraint(current.Index, true);
 					return;
 				}
 				if (prev.Origin == ce.b) {
-					SetConstrain(prev.Index, true);
+					SetEdgeConstraint(prev.Index, true);
 					return;
 				}
 				Vector2 nextV = Vertices[next.Origin].Pos;
 				Vector2 prevV = Vertices[prev.Origin].Pos;
 				// Check whether constrained edge is collinear to incident edges (then split constrained edge if it's true)
-				if (AreEdgesCollinear(a, nextV, a, b)) {
-					SetConstrain(current.Index, true);
-					InsertConstrainedEdge(geometry, (next.Origin, ce.b));
-					return;
-				}
-				if (AreEdgesCollinear(a, prevV, a, b)) {
-					SetConstrain(prev.Index, true);
-					InsertConstrainedEdge(geometry, (prev.Origin, ce.b));
-					return;
-				}
+				//if (AreEdgesCollinear(a, nextV, a, b)) {
+				//	SetEdgeConstraint(current.Index, true);
+				//	InsertConstrainedEdge((next.Origin, ce.b));
+				//	return;
+				//}
+				//if (AreEdgesCollinear(a, prevV, a, b)) {
+				//	SetEdgeConstraint(prev.Index, true);
+				//	InsertConstrainedEdge((prev.Origin, ce.b));
+				//	return;
+				//}
 				if (PolygonMeshUtils.LineLineIntersection(nextV, prevV, a, b, out _)) {
 					break;
 				}
@@ -672,7 +675,7 @@ namespace Lime.Source.Optimizations
 					Connect(prev.Origin, first.Origin, 0);
 					Connect(first.Origin, prev.Origin, 0);
 					MakeTwins(HalfEdges.Count - 3, HalfEdges.Count - 6);
-					SetConstrain(HalfEdges.Count - 3, true);
+					SetEdgeConstraint(HalfEdges.Count - 3, true);
 					upPolygon.AddLast(HalfEdges.Count - 6);
 					downPolygon.AddFirst(HalfEdges.Count - 3);
 					var q1 = TriangulatePolygonByEarClipping(upPolygon);
@@ -692,16 +695,16 @@ namespace Lime.Source.Optimizations
 			}
 		}
 
-		public void InsertConstrainedEdges(HalfEdgeTopology geometry, HashSet<(int, int)> constrainedEdges)
+		public void InsertConstrainedEdges(HashSet<(int, int)> constrainedEdges)
 		{
 			if (constrainedEdges.Count == 0) {
 				return;
 			}
 			foreach (var constrainedEdge in constrainedEdges.ToList()) {
-				InsertConstrainedEdge(geometry, constrainedEdge);
+				InsertConstrainedEdge(constrainedEdge);
 			}
 			this.constrainedEdges.Clear();
-			Geometry.Invalidate();
+			Topology.Invalidate();
 		}
 
 		public void DoNotKeepConstrainedEdges()

@@ -25,7 +25,7 @@ namespace Tangerine.UI.SceneView
 						sv.Frame.CalcTransitionToSpaceOf(sv.Scene);
 					for (var i = 0; i < 4; i++) {
 						if (sv.HitTestControlPoint(expandedBoundsInSceneCoords[i])) {
-							UI.Utils.ChangeCursorIfDefault(Cursors.Rotate);
+							Utils.ChangeCursorIfDefault(Cursors.Rotate);
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Rotate(hull, selectedPointObjects);
 							}
@@ -47,7 +47,7 @@ namespace Tangerine.UI.SceneView
 				var rotation = 0f;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					UI.Utils.ChangeCursorIfDefault(Cursors.Rotate);
+					Utils.ChangeCursorIfDefault(Cursors.Rotate);
 					var b = (sv.MousePosition * t - center * size) / size;
 					var angle = 0f;
 					if (mousePosInitial.Length > Mathf.ZeroTolerance && b.Length > Mathf.ZeroTolerance) {
@@ -55,7 +55,7 @@ namespace Tangerine.UI.SceneView
 						rotation = angle;
 					}
 					if (Math.Abs(angle) > Mathf.ZeroTolerance) {
-						var effectiveAngle = sv.Input.IsKeyPressed(Key.Shift) ? UI.Utils.RoundTo(rotation, 15) : angle;
+						var effectiveAngle = sv.Input.IsKeyPressed(Key.Shift) ? Utils.RoundTo(rotation, 15) : angle;
 						Quadrangle newBounds = new Quadrangle();
 						for (int i = 0; i < 4; i++) {
 							newBounds[i] = Vector2.RotateDeg(hull[i] - center, effectiveAngle) + center;

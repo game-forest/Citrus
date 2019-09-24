@@ -32,7 +32,7 @@ namespace Tangerine.UI.SceneView
 					for (int i = 0; i < 4; i++) {
 						if (Mathf.Abs(hullSize.X) > Mathf.ZeroTolerance && Mathf.Abs(hullSize.Y) > Mathf.ZeroTolerance) {
 							if (sv.HitTestResizeControlPoint(expandedHullInSceneCoords[i])) {
-								UI.Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
+								Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
 								if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 									yield return Rescale(i * 2, MouseCursor.SizeNS, points);
 								}
@@ -56,7 +56,7 @@ namespace Tangerine.UI.SceneView
 							} else {
 								cursor = (b.X - a.X).Abs() > (b.Y - a.Y).Abs() ? MouseCursor.SizeNS : MouseCursor.SizeWE;
 							}
-							UI.Utils.ChangeCursorIfDefault(cursor);
+							Utils.ChangeCursorIfDefault(cursor);
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Rescale(i * 2 + 1, cursor, points);
 							}
@@ -71,11 +71,11 @@ namespace Tangerine.UI.SceneView
 		{
 			var t = Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 			using (Document.Current.History.BeginTransaction()) {
-				UI.Utils.ChangeCursorIfDefault(cursor);
+				Utils.ChangeCursorIfDefault(cursor);
 				initialMousePosition = sv.MousePosition;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					UI.Utils.ChangeCursorIfDefault(cursor);
+					Utils.ChangeCursorIfDefault(cursor);
 					RescaleHelper(
 						points,
 						controlPointIndex,

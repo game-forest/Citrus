@@ -110,7 +110,7 @@ namespace Tangerine.UI.SceneView
 				(SceneView.MousePosition - initialMousePos).Length <= Threshold &&
 				SceneView.Input.IsMousePressed()
 			) {
-				UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+				Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				yield return null;
 			}
 			if (!SceneView.Input.IsMousePressed()) {
@@ -126,7 +126,7 @@ namespace Tangerine.UI.SceneView
 				pivot = pivot * Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var curMousePos = SceneView.MousePosition;
 					var shiftPressed = SceneView.Input.IsKeyPressed(Key.Shift);
 					if (shiftPressed) {

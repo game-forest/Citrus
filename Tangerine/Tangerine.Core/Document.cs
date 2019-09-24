@@ -540,6 +540,16 @@ namespace Tangerine.Core
 			return Orange.Toolbox.CreateCloneForSerialization(node);
 		}
 
+		public IEnumerable<Node> Nodes()
+		{
+			foreach (var row in Rows) {
+				var nr = row.Components.Get<NodeRow>();
+				if (nr != null) {
+					yield return nr.Node;
+				}
+			}
+		}
+
 		public IEnumerable<Row> SelectedRows()
 		{
 			foreach (var row in Rows) {
