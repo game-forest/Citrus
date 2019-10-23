@@ -261,6 +261,7 @@
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageSummary.cs" />
     <Compile Include="Source\Profilers\TasksProfiler.cs" />
     <Compile Include="Source\ReferenceEqualityComparer.cs" />
+    <Compile Include="Source\Serialization.cs" />
     <Compile Include="Source\ServiceProviderExtensions.cs" />
     <Compile Include="Source\ServiceRegistry.cs" />
     <Compile Include="Source\StringExtensions.cs" />
@@ -427,6 +428,12 @@
     <Compile Include="Source\Widgets\ParticleModifier.cs" />
     <Compile Include="Source\Widgets\ParticlesMagnet.cs" />
     <Compile Include="Source\Widgets\PointObject.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopologyModificator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTriangulator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\ITopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Utils\PolygonMeshUtils.cs" />
     <Compile Include="Source\Widgets\Polyline.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSetupProcessor.cs" />
@@ -497,10 +504,6 @@
     <Compile Include="Source\Widgets\WindowWidget.cs" />
     <Compile Include="Source\YuzuGeneratedBinaryDeserializer.cs" />
     <Compile Include="Source\YuzuGeneratedCloners.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
-    <Compile Include="Source\Optimizations\Triangulator.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshUtils.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\ITopology.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lemon\Lemon.Android.csproj">

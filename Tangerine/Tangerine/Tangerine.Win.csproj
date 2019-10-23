@@ -96,7 +96,6 @@
     <Compile Include="Panels\BackupHistoryPanel.cs" />
     <Compile Include="Panels\HierarchyPanel.cs" />
     <Compile Include="Panels\TreeView.cs" />
-    <Compile Include="Tools\PolygonMeshTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj">
