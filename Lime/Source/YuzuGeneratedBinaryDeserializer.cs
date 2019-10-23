@@ -1513,6 +1513,44 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static void Read_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				result.AnimationId = d.Reader.ReadString();
+				if (result.AnimationId == "" && d.Reader.ReadBoolean()) result.AnimationId = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>)null;
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+					while (--tmp1 >= 0) {
+						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>>();
+						result.ReadonlyKeys.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
+				result.TargetPropertyPath = d.Reader.ReadString();
+				if (result.TargetPropertyPath == "" && d.Reader.ReadBoolean()) result.TargetPropertyPath = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+			Read_Lime__Animator_List_Vertex(d, def, result);
+			return result;
+		}
+
 		private static void Read_Lime__Animator_Int32(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.Animator<int>)obj;
@@ -4615,6 +4653,30 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static void Read_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
+			var dg = (LimeDeserializer)d;
+			result.Frame = d.Reader.ReadInt32();
+			result.PackedParams = d.Reader.ReadInt32();
+			result.Value = (global::System.Collections.Generic.List<global::Lime.Vertex>)null;
+			var tmp1 = d.Reader.ReadInt32();
+			if (tmp1 >= 0) {
+				result.Value = new global::System.Collections.Generic.List<global::Lime.Vertex>();
+				while (--tmp1 >= 0) {
+					var tmp2 = (global::Lime.Vertex)dg.ReadStruct<global::Lime.Vertex>();
+					result.Value.Add(tmp2);
+				}
+			}
+		}
+
+		private static object Make_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+			Read_Lime__Keyframe_List_Vertex(d, def, result);
+			return result;
+		}
+
 		private static void Read_Lime__Keyframe_Int32(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.Keyframe<int>)obj;
@@ -7244,72 +7306,10 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime_PolygonMesh__Geometry(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.PolygonMesh.Geometry)obj;
-			var dg = (BinaryDeserializerGen)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				result.HalfEdges = (global::System.Collections.Generic.List<global::Lime.PolygonMesh.Geometry.HalfEdge>)null;
-				var tmp1 = d.Reader.ReadInt32();
-				if (tmp1 >= 0) {
-					result.HalfEdges = new global::System.Collections.Generic.List<global::Lime.PolygonMesh.Geometry.HalfEdge>();
-					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.PolygonMesh.Geometry.HalfEdge)dg.ReadStruct<global::Lime.PolygonMesh.Geometry.HalfEdge>();
-						result.HalfEdges.Add(tmp2);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				result.Vertices = (global::System.Collections.Generic.List<global::Lime.Vertex>)null;
-				var tmp3 = d.Reader.ReadInt32();
-				if (tmp3 >= 0) {
-					result.Vertices = new global::System.Collections.Generic.List<global::Lime.Vertex>();
-					while (--tmp3 >= 0) {
-						var tmp4 = (global::Lime.Vertex)dg.ReadStruct<global::Lime.Vertex>();
-						result.Vertices.Add(tmp4);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-		}
-
-		private static object Make_Lime_PolygonMesh__Geometry(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.PolygonMesh.Geometry();
-			Read_Lime_PolygonMesh__Geometry(d, def, result);
-			return result;
-		}
-
-		private static object Make_Lime_PolygonMesh__Geometry__HalfEdge(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.PolygonMesh.Geometry.HalfEdge();
-			var dg = (BinaryDeserializerGen)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				result.Index = d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				result.Origin = d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (3 == fd.OurIndex) {
-				result.Twin = d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			return result;
-		}
-
 		private static void Read_Lime_PolygonMesh__PolygonMesh(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.PolygonMesh.PolygonMesh)obj;
-			var dg = (BinaryDeserializerGen)d;
+			var dg = (LimeDeserializer)d;
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
 			if (1 == fd.OurIndex) {
@@ -7358,28 +7358,44 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
+				result.ConstrainedVertices = (global::System.Collections.Generic.List<global::Lime.PolygonMesh.PolygonMesh.Edge>)null;
+				var tmp8 = d.Reader.ReadInt32();
+				if (tmp8 >= 0) {
+					result.ConstrainedVertices = new global::System.Collections.Generic.List<global::Lime.PolygonMesh.PolygonMesh.Edge>();
+					while (--tmp8 >= 0) {
+						var tmp9 = (global::Lime.PolygonMesh.PolygonMesh.Edge)dg.ReadStruct<global::Lime.PolygonMesh.PolygonMesh.Edge>();
+						result.ConstrainedVertices.Add(tmp9);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (8 == fd.OurIndex) {
 				result.ContentsPath = d.Reader.ReadString();
 				if (result.ContentsPath == "" && d.Reader.ReadBoolean()) result.ContentsPath = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (8 == fd.OurIndex) {
-				result.CurrentState = (global::Lime.PolygonMesh.PolygonMesh.State)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
-				var tmp8 = d.Reader.ReadInt32();
-				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
-					while (--tmp8 >= 0) {
-						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
-						result.Folders.Add(tmp9);
+				result.Faces = (global::System.Collections.Generic.List<global::Lime.PolygonMesh.PolygonMesh.Face>)null;
+				var tmp10 = d.Reader.ReadInt32();
+				if (tmp10 >= 0) {
+					result.Faces = new global::System.Collections.Generic.List<global::Lime.PolygonMesh.PolygonMesh.Face>();
+					while (--tmp10 >= 0) {
+						var tmp11 = (global::Lime.PolygonMesh.PolygonMesh.Face)dg.ReadStruct<global::Lime.PolygonMesh.PolygonMesh.Face>();
+						result.Faces.Add(tmp11);
 					}
 				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (10 == fd.OurIndex) {
-				result.Geometry = (global::Lime.PolygonMesh.IGeometry)dg.ReadObject<global::Lime.PolygonMesh.IGeometry>();
+				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
+				var tmp12 = d.Reader.ReadInt32();
+				if (tmp12 >= 0) {
+					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+					while (--tmp12 >= 0) {
+						var tmp13 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
+						result.Folders.Add(tmp13);
+					}
+				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (11 == fd.OurIndex) {
@@ -7392,39 +7408,39 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (13 == fd.OurIndex) {
-				var tmp10 = d.Reader.ReadInt32();
-				if (tmp10 >= 0) {
-					while (--tmp10 >= 0) {
-						var tmp11 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
-						result.Nodes.Add(tmp11);
+				var tmp14 = d.Reader.ReadInt32();
+				if (tmp14 >= 0) {
+					while (--tmp14 >= 0) {
+						var tmp15 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
+						result.Nodes.Add(tmp15);
 					}
 				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (14 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Thickness));
-				var tmp12 = new global::Lime.Thickness();
-				tmp12.Left = d.Reader.ReadSingle();
-				tmp12.Right = d.Reader.ReadSingle();
-				tmp12.Top = d.Reader.ReadSingle();
-				tmp12.Bottom = d.Reader.ReadSingle();
-				result.Padding = tmp12;
+				var tmp16 = new global::Lime.Thickness();
+				tmp16.Left = d.Reader.ReadSingle();
+				tmp16.Right = d.Reader.ReadSingle();
+				tmp16.Top = d.Reader.ReadSingle();
+				tmp16.Bottom = d.Reader.ReadSingle();
+				result.Padding = tmp16;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (15 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp13 = new global::Lime.Vector2();
-				tmp13.X = d.Reader.ReadSingle();
-				tmp13.Y = d.Reader.ReadSingle();
-				result.Pivot = tmp13;
+				var tmp17 = new global::Lime.Vector2();
+				tmp17.X = d.Reader.ReadSingle();
+				tmp17.Y = d.Reader.ReadSingle();
+				result.Pivot = tmp17;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (16 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp14 = new global::Lime.Vector2();
-				tmp14.X = d.Reader.ReadSingle();
-				tmp14.Y = d.Reader.ReadSingle();
-				result.Position = tmp14;
+				var tmp18 = new global::Lime.Vector2();
+				tmp18.X = d.Reader.ReadSingle();
+				tmp18.Y = d.Reader.ReadSingle();
+				result.Position = tmp18;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (17 == fd.OurIndex) {
@@ -7433,10 +7449,10 @@ namespace YuzuGenerated
 			}
 			if (18 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp15 = new global::Lime.Vector2();
-				tmp15.X = d.Reader.ReadSingle();
-				tmp15.Y = d.Reader.ReadSingle();
-				result.Scale = tmp15;
+				var tmp19 = new global::Lime.Vector2();
+				tmp19.X = d.Reader.ReadSingle();
+				tmp19.Y = d.Reader.ReadSingle();
+				result.Scale = tmp19;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (19 == fd.OurIndex) {
@@ -7445,10 +7461,10 @@ namespace YuzuGenerated
 			}
 			if (20 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp16 = new global::Lime.Vector2();
-				tmp16.X = d.Reader.ReadSingle();
-				tmp16.Y = d.Reader.ReadSingle();
-				result.SilentSize = tmp16;
+				var tmp20 = new global::Lime.Vector2();
+				tmp20.X = d.Reader.ReadSingle();
+				tmp20.Y = d.Reader.ReadSingle();
+				result.SilentSize = tmp20;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (21 == fd.OurIndex) {
@@ -7469,6 +7485,18 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (25 == fd.OurIndex) {
+				result.Vertices = (global::System.Collections.Generic.List<global::Lime.Vertex>)null;
+				var tmp21 = d.Reader.ReadInt32();
+				if (tmp21 >= 0) {
+					result.Vertices = new global::System.Collections.Generic.List<global::Lime.Vertex>();
+					while (--tmp21 >= 0) {
+						var tmp22 = (global::Lime.Vertex)dg.ReadStruct<global::Lime.Vertex>();
+						result.Vertices.Add(tmp22);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (26 == fd.OurIndex) {
 				result.Visible = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
@@ -7479,6 +7507,23 @@ namespace YuzuGenerated
 		{
 			var result = new global::Lime.PolygonMesh.PolygonMesh();
 			Read_Lime_PolygonMesh__PolygonMesh(d, def, result);
+			return result;
+		}
+
+		private static object Make_Lime_PolygonMesh__PolygonMesh__Edge(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.PolygonMesh.PolygonMesh.Edge();
+			result.Index0 = d.Reader.ReadUInt16();
+			result.Index1 = d.Reader.ReadUInt16();
+			return result;
+		}
+
+		private static object Make_Lime_PolygonMesh__PolygonMesh__Face(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.PolygonMesh.PolygonMesh.Face();
+			result.Index0 = d.Reader.ReadUInt16();
+			result.Index1 = d.Reader.ReadUInt16();
+			result.Index2 = d.Reader.ReadUInt16();
 			return result;
 		}
 
@@ -10830,7 +10875,7 @@ namespace YuzuGenerated
 		private static object Make_Lime__Vertex(BinaryDeserializer d, ReaderClassDef def)
 		{
 			var result = new global::Lime.Vertex();
-			var dg = (BinaryDeserializerGen)d;
+			var dg = (LimeDeserializer)d;
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
 			if (1 == fd.OurIndex) {
@@ -10859,6 +10904,44 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+			return result;
+		}
+
+		private static void Read_Lime__VertexListAnimator(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.VertexListAnimator)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				result.AnimationId = d.Reader.ReadString();
+				if (result.AnimationId == "" && d.Reader.ReadBoolean()) result.AnimationId = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>)null;
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+					while (--tmp1 >= 0) {
+						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>>();
+						result.ReadonlyKeys.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
+				result.TargetPropertyPath = d.Reader.ReadString();
+				if (result.TargetPropertyPath == "" && d.Reader.ReadBoolean()) result.TargetPropertyPath = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__VertexListAnimator(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.VertexListAnimator();
+			Read_Lime__VertexListAnimator(d, def, result);
 			return result;
 		}
 
@@ -11757,6 +11840,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Animator<global::Lime.Vector2>)] = Read_Lime__Animator_Vector2;
 			readCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Read_Lime__Animator_Vector3;
 			readCache[typeof(global::Lime.Animator<bool>)] = Read_Lime__Animator_Boolean;
+			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Animator_List_Vertex;
 			readCache[typeof(global::Lime.Animator<int>)] = Read_Lime__Animator_Int32;
 			readCache[typeof(global::Lime.Animator<sbyte>)] = Read_Lime__Animator_SByte;
 			readCache[typeof(global::Lime.Animator<float>)] = Read_Lime__Animator_Single;
@@ -11822,6 +11906,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Keyframe<global::Lime.Vector2>)] = Read_Lime__Keyframe_Vector2;
 			readCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Read_Lime__Keyframe_Vector3;
 			readCache[typeof(global::Lime.Keyframe<bool>)] = Read_Lime__Keyframe_Boolean;
+			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Keyframe_List_Vertex;
 			readCache[typeof(global::Lime.Keyframe<int>)] = Read_Lime__Keyframe_Int32;
 			readCache[typeof(global::Lime.Keyframe<sbyte>)] = Read_Lime__Keyframe_SByte;
 			readCache[typeof(global::Lime.Keyframe<float>)] = Read_Lime__Keyframe_Single;
@@ -11857,7 +11942,6 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.ParticleModifier)] = Read_Lime__ParticleModifier;
 			readCache[typeof(global::Lime.ParticlesMagnet)] = Read_Lime__ParticlesMagnet;
 			readCache[typeof(global::Lime.PointObject)] = Read_Lime__PointObject;
-			readCache[typeof(global::Lime.PolygonMesh.Geometry)] = Read_Lime_PolygonMesh__Geometry;
 			readCache[typeof(global::Lime.PolygonMesh.PolygonMesh)] = Read_Lime_PolygonMesh__PolygonMesh;
 			readCache[typeof(global::Lime.Polyline)] = Read_Lime__Polyline;
 			readCache[typeof(global::Lime.PolylinePoint)] = Read_Lime__PolylinePoint;
@@ -11900,6 +11984,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.VBoxLayout)] = Read_Lime__VBoxLayout;
 			readCache[typeof(global::Lime.Vector2Animator)] = Read_Lime__Vector2Animator;
 			readCache[typeof(global::Lime.Vector3Animator)] = Read_Lime__Vector3Animator;
+			readCache[typeof(global::Lime.VertexListAnimator)] = Read_Lime__VertexListAnimator;
 			readCache[typeof(global::Lime.VideoPlayer)] = Read_Lime__VideoPlayer;
 			readCache[typeof(global::Lime.Viewport3D)] = Read_Lime__Viewport3D;
 			readCache[typeof(global::Lime.VignetteMaterial)] = Read_Lime__VignetteMaterial;
@@ -11947,6 +12032,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Animator<global::Lime.Vector2>)] = Make_Lime__Animator_Vector2;
 			makeCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Make_Lime__Animator_Vector3;
 			makeCache[typeof(global::Lime.Animator<bool>)] = Make_Lime__Animator_Boolean;
+			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Animator_List_Vertex;
 			makeCache[typeof(global::Lime.Animator<int>)] = Make_Lime__Animator_Int32;
 			makeCache[typeof(global::Lime.Animator<sbyte>)] = Make_Lime__Animator_SByte;
 			makeCache[typeof(global::Lime.Animator<float>)] = Make_Lime__Animator_Single;
@@ -12022,6 +12108,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Keyframe<global::Lime.Vector2>)] = Make_Lime__Keyframe_Vector2;
 			makeCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Make_Lime__Keyframe_Vector3;
 			makeCache[typeof(global::Lime.Keyframe<bool>)] = Make_Lime__Keyframe_Boolean;
+			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Keyframe_List_Vertex;
 			makeCache[typeof(global::Lime.Keyframe<int>)] = Make_Lime__Keyframe_Int32;
 			makeCache[typeof(global::Lime.Keyframe<sbyte>)] = Make_Lime__Keyframe_SByte;
 			makeCache[typeof(global::Lime.Keyframe<float>)] = Make_Lime__Keyframe_Single;
@@ -12064,9 +12151,9 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.ParticlesMagnet)] = Make_Lime__ParticlesMagnet;
 			makeCache[typeof(global::Lime.Plane)] = Make_Lime__Plane;
 			makeCache[typeof(global::Lime.PointObject)] = Make_Lime__PointObject;
-			makeCache[typeof(global::Lime.PolygonMesh.Geometry)] = Make_Lime_PolygonMesh__Geometry;
-			makeCache[typeof(global::Lime.PolygonMesh.Geometry.HalfEdge)] = Make_Lime_PolygonMesh__Geometry__HalfEdge;
 			makeCache[typeof(global::Lime.PolygonMesh.PolygonMesh)] = Make_Lime_PolygonMesh__PolygonMesh;
+			makeCache[typeof(global::Lime.PolygonMesh.PolygonMesh.Edge)] = Make_Lime_PolygonMesh__PolygonMesh__Edge;
+			makeCache[typeof(global::Lime.PolygonMesh.PolygonMesh.Face)] = Make_Lime_PolygonMesh__PolygonMesh__Face;
 			makeCache[typeof(global::Lime.Polyline)] = Make_Lime__Polyline;
 			makeCache[typeof(global::Lime.PolylinePoint)] = Make_Lime__PolylinePoint;
 			makeCache[typeof(global::Lime.PostProcessingComponent)] = Make_Lime__PostProcessingComponent;
@@ -12118,6 +12205,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Vector3Animator)] = Make_Lime__Vector3Animator;
 			makeCache[typeof(global::Lime.Vector4)] = Make_Lime__Vector4;
 			makeCache[typeof(global::Lime.Vertex)] = Make_Lime__Vertex;
+			makeCache[typeof(global::Lime.VertexListAnimator)] = Make_Lime__VertexListAnimator;
 			makeCache[typeof(global::Lime.VideoPlayer)] = Make_Lime__VideoPlayer;
 			makeCache[typeof(global::Lime.Viewport3D)] = Make_Lime__Viewport3D;
 			makeCache[typeof(global::Lime.VignetteMaterial)] = Make_Lime__VignetteMaterial;

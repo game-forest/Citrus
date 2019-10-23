@@ -78,8 +78,6 @@
     <Compile Include="Presenters\Animation2DPathPresenter.cs" />
     <Compile Include="Presenters\Animation3DPathPresenter.cs" />
     <Compile Include="Presenters\WavePivotPresenter.cs" />
-    <Compile Include="Presenters\PolygonMeshPresenter.cs" />
-    <Compile Include="Presenters\PolygonMesh\PolygonMeshStructurePresenter.cs" />
     <Compile Include="PolygonMesh\PolygonMeshPresenter.cs" />
     <Compile Include="Processors\FrameProgressionProcessor.cs" />
     <Compile Include="Presenters\InspectRootNodePresenter.cs" />

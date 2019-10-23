@@ -324,7 +324,6 @@ namespace Tangerine.UI.SceneView
 			new NineGridLinePresenter(this);
 			new Animation2DPathPresenter(this);
 			new WavePivotPresenter(this);
-			new PolygonMeshStructurePresenter(this);
 			new PolygonMeshPresenter(this);
 		}
 

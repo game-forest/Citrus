@@ -185,9 +185,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 		}
 
-		protected override void OnBeforeClone()
+		protected override void OnBeforeNodeSerialization()
 		{
-			base.OnBeforeClone();
+			base.OnBeforeNodeSerialization();
 			PolygonMeshTools.ControllerStateBeforeClone = State;
 			if (Owner != null) {
 				Owner.Components.Remove(this);
