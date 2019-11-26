@@ -265,6 +265,7 @@
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\Environment.cs" />
     <Compile Include="Source\Exception.cs" />
+    <Compile Include="Source\GeneratedDeserializersBIN.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />
@@ -360,9 +361,6 @@
     <Compile Include="Source\Localization\Pluralizer.cs" />
     <Compile Include="Source\Mathf.cs" />
     <Compile Include="Source\Mathf.Easings.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopologyModificator.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTriangulator.cs" />
     <Compile Include="Source\NumericExtensions.cs" />
     <Compile Include="Source\Optimizations\BoundingRectCalculator.cs" />
     <Compile Include="Source\Optimizations\ContentSizeComponent.cs" />
@@ -370,7 +368,6 @@
     <Compile Include="Source\Optimizations\RenderOptimizerHelpers.cs" />
     <Compile Include="Source\Optimizations\ViewProjector.cs" />
     <Compile Include="Source\Persistence.cs" />
-    <Compile Include="Source\Optimizations\Triangulator.cs" />
     <Compile Include="Source\Profilers\NodeProfiler.cs" />
     <Compile Include="Source\Profilers\NodeProfilerHelpers\ResultExporter.cs" />
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageData.cs" />
@@ -543,6 +540,12 @@
     <Compile Include="Source\Widgets\ParticleModifier.cs" />
     <Compile Include="Source\Widgets\ParticlesMagnet.cs" />
     <Compile Include="Source\Widgets\PointObject.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopologyModificator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTriangulator.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\ITopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Utils\PolygonMeshUtils.cs" />
     <Compile Include="Source\Widgets\Polyline.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSetupProcessor.cs" />
