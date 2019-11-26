@@ -11,6 +11,7 @@ using ModificationMode = Lime.PolygonMesh.PolygonMesh.ModificationMode;
 namespace Tangerine.UI.SceneView.PolygonMesh
 {
 	[YuzuDontGenerateDeserializer]
+	[NodeComponentDontSerialize]
 	[AllowedComponentOwnerTypes(typeof(Lime.PolygonMesh.PolygonMesh))]
 	public abstract class PolygonMeshController : NodeComponent
 	{
@@ -182,15 +183,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				State = PolygonMeshTools.ControllerStateBeforeClone;
 			} else if (oldOwner != null) {
 				oldOwner.Components.Remove(this);
-			}
-		}
-
-		protected override void OnBeforeNodeSerialization()
-		{
-			base.OnBeforeNodeSerialization();
-			PolygonMeshTools.ControllerStateBeforeClone = State;
-			if (Owner != null) {
-				Owner.Components.Remove(this);
 			}
 		}
 
