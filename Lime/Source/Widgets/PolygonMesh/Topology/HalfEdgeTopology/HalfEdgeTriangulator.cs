@@ -137,8 +137,7 @@ namespace Lime.PolygonMesh
 		}
 
 		private HalfEdge LocateTriangle(HalfEdge start, Vertex vertex, out bool inside)
-
-{
+		{
 			var current = start;
 			inside = true;
 			do {
@@ -153,6 +152,29 @@ namespace Lime.PolygonMesh
 				current = Next(current);
 			} while (current.Index != start.Index);
 			return current;
+		}
+
+		private HalfEdge LocateTriangle(Vertex vertex)
+		{
+			var p = vertex.Pos;
+			for (var i = 0; i < HalfEdges.Count; i += 3) {
+				var he = HalfEdges[i];
+				if (he.Index == -1) {
+					continue;
+				}
+				var next = Next(he);
+				var prev = Prev(he);
+				var p1 = Vertices[he.Origin].Pos;
+				var p2 = Vertices[next.Origin].Pos;
+				var p3 = Vertices[prev.Origin].Pos;
+				if (
+					AreOnOppositeSides(p1, p2, p3, p) && AreOnOppositeSides(p2, p3, p1, p) &&
+					AreOnOppositeSides(p3, p1, p2, p) || (p == p1 || p == p2 || p == p3)
+				) {
+					return he;
+				}
+			}
+			return HalfEdgeTopology.DummyHalfEdge;
 		}
 
 		private HalfEdge FindIncidentEdge(HalfEdge edge, int vi)
@@ -619,7 +641,7 @@ namespace Lime.PolygonMesh
 
 		public void InsertConstrainedEdge((int a, int b) ce)
 		{
-			var start = FindIncidentEdge(LocateTriangle(LastValidEdge(), Vertices[ce.Item1], out _), ce.a);
+			var start = FindIncidentEdge(LocateTriangle(Vertices[ce.a]), ce.a);
 			var current = start;
 			Vector2 a = Vertices[ce.a].Pos, b = Vertices[ce.b].Pos;
 			var upPolygon = new LinkedList<int>();
@@ -640,17 +662,6 @@ namespace Lime.PolygonMesh
 				}
 				Vector2 nextV = Vertices[next.Origin].Pos;
 				Vector2 prevV = Vertices[prev.Origin].Pos;
-				// Check whether constrained edge is collinear to incident edges (then split constrained edge if it's true)
-				//if (AreEdgesCollinear(a, nextV, a, b)) {
-				//	SetEdgeConstraint(current.Index, true);
-				//	InsertConstrainedEdge((next.Origin, ce.b));
-				//	return;
-				//}
-				//if (AreEdgesCollinear(a, prevV, a, b)) {
-				//	SetEdgeConstraint(prev.Index, true);
-				//	InsertConstrainedEdge((prev.Origin, ce.b));
-				//	return;
-				//}
 				if (PolygonMeshUtils.LineLineIntersection(nextV, prevV, a, b, out _)) {
 					break;
 				}
