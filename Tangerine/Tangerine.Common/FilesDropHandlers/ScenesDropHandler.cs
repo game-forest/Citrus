@@ -74,6 +74,7 @@ namespace Tangerine.Common.FilesDropHandlers
 						var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
 						var node = CreateNode.Perform(scene.GetType());
 						SetProperty.Perform(node, nameof(Widget.ContentsPath), assetPath);
+						SetProperty.Perform(node, nameof(Widget.Id), Path.GetFileNameWithoutExtension(assetPath));
 						if (node is IPropertyLocker propertyLocker) {
 							var id = propertyLocker.IsPropertyLocked("Id", true) ? scene.Id : Path.GetFileName(assetPath);
 							SetProperty.Perform(node, nameof(Node.Id), id);
