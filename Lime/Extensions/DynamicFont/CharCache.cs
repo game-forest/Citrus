@@ -84,8 +84,7 @@ namespace Lime
 				KerningPairs = glyph.KerningPairs,
 				TextureIndex = textureIndex,
 				VerticalOffset = Math.Min(0, glyph.VerticalOffset),
-				// Invisible glyphs doesn't have padding
-				Padding = char.IsWhiteSpace(code) ? 0 : Padding,
+				Padding = Padding,
 			};
 			position.X += paddedWidth + spacing;
 			return fontChar;
