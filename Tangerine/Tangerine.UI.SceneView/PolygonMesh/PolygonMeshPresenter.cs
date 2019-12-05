@@ -21,6 +21,7 @@ namespace Tangerine.UI.SceneView
 			}
 			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.PolygonMesh.PolygonMesh>().ToList();
 			if (meshes.Count != 0) {
+				canvas.PrepareRendererState();
 				foreach (var mesh in meshes) {
 					mesh.Controller().Render(sv.Frame, sv.Scene, sv.MousePosition, sv.Scene.Scale.X);
 				}

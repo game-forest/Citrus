@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuzu;
 
 namespace Lime.PolygonMesh
@@ -130,7 +131,7 @@ namespace Lime.PolygonMesh
 			Setup
 		}
 
-		public ModificationMode Mode { get; set; } 
+		public ModificationMode Mode { get; set; }
 #endif
 
 		public PolygonMesh()
@@ -207,13 +208,7 @@ namespace Lime.PolygonMesh
 				ro.VertexBuffer1.Add(v1);
 			}
 			ro.VertexBufferLength = Vertices.Count;
-			var m = LocalToWorldTransform;
-			ro.LocalToWorldTransform44 = new Matrix44 {
-				M11 = m.UX, M12 = m.UY, M13 = 0, M14 = 0,
-				M21 = m.VX, M22 = m.VY, M23 = 0, M24 = 0,
-				M31 =    0, M32 =    0, M33 = 1, M34 = 0,
-				M41 = m.TX, M42 = m.TY, M43 = 0, M44 = 1
-			};
+			ro.LocalToWorldTransform = LocalToWorldTransform;
 			return ro;
 		}
 
@@ -223,50 +218,57 @@ namespace Lime.PolygonMesh
 			public float BlendFactor;
 			public int IndexBufferLength;
 			public int VertexBufferLength;
-			public Matrix44 LocalToWorldTransform44;
+			public Matrix32 LocalToWorldTransform;
 			public readonly List<ushort> IndexBuffer = new List<ushort>();
 			public readonly List<Vertex> VertexBuffer0 = new List<Vertex>();
 			public readonly List<Vertex> VertexBuffer1 = new List<Vertex>();
 
-			protected override void OnRelease()
+			private static Shader[] shaders;
+			private static VertexInputLayoutAttribute[] layoutAttribs;
+			private static VertexInputLayoutBinding[] layoutBindings;
+			private static VertexInputLayout vertexInputLayout;
+			private static ShaderProgram.AttribLocation[] attribLocations;
+			private static ShaderProgram.Sampler[] samplers;
+			private static ShaderProgram program;
+
+			static RenderObject()
 			{
-				Texture = null;
-				BlendFactor = 0.0f;
-				IndexBufferLength = 0;
-				VertexBufferLength = 0;
-				LocalToWorldTransform44 = Matrix44.Identity;
-				IndexBuffer.Clear();
-				VertexBuffer0.Clear();
-				VertexBuffer1.Clear();
-			}
+				shaders = new Shader[] {
+					new VertexShader(@"
+						attribute vec4 in_Pos1;
+						attribute vec4 in_Pos2;
+						attribute vec4 in_Color1;
+						attribute vec4 in_Color2;
+						attribute vec2 in_TexCoords1;
+						attribute vec2 in_TexCoords2;
 
-			public override void Render()
-			{
-				if (IndexBufferLength == 0) {
-					return;
-				}
-				var vb0 = new VertexBuffer(false);
-				var vb1 = new VertexBuffer(false);
+						uniform float blendFactor;
+						uniform mat4 matProjection;
+						uniform mat4 globalTransform;
 
-				var vb0Data = new Vertex[VertexBufferLength];
-				var vb1Data = new Vertex[VertexBufferLength];
+						varying lowp vec4 color;
+						varying lowp vec2 texCoords;
 
-				for (var i = 0; i < VertexBufferLength; ++i) {
-					vb0Data[i] = VertexBuffer0[i];
-					vb1Data[i] = VertexBuffer1[i];
-				}
+						void main()
+						{
+							color = (1.0 - blendFactor) * in_Color1 + blendFactor * in_Color2;
+							texCoords = (1.0 - blendFactor) * in_TexCoords1 + blendFactor * in_TexCoords2;
+							gl_Position = matProjection * (globalTransform * ((1.0 - blendFactor) * in_Pos1 + blendFactor * in_Pos2));
+						}
+					"),
+					new FragmentShader(@"
+						uniform sampler2D tex;
 
-				vb0.SetData(vb0Data, VertexBufferLength);
-				vb1.SetData(vb1Data, VertexBufferLength);
+						varying lowp vec4 color;
+						varying lowp vec2 texCoords;
 
-				var ib = new IndexBuffer(false);
-				var ibData = new ushort[IndexBufferLength];
-				for (var i = 0; i < IndexBuffer.Count; ++i) {
-					ibData[i] = IndexBuffer[i];
-				}
-				ib.SetData(ibData, IndexBufferLength);
-
-				var layoutAttribs = new[] {
+						void main()
+						{
+							gl_FragColor = color * texture2D(tex, texCoords);
+						}
+					")
+				};
+				layoutAttribs = new[] {
 					new VertexInputLayoutAttribute {
 						Format = Format.R32G32B32A32_SFloat,
 						Slot = 0,
@@ -304,8 +306,7 @@ namespace Lime.PolygonMesh
 						Offset = sizeof(Vector4) + sizeof(Color4),
 					}
 				};
-
-				var layoutBindings = new[] {
+				layoutBindings = new[] {
 					new VertexInputLayoutBinding {
 						Slot = 0,
 						Stride = sizeof(Vertex),
@@ -315,46 +316,8 @@ namespace Lime.PolygonMesh
 						Stride = sizeof(Vertex),
 					}
 				};
-
-				var vertexInputLayout = VertexInputLayout.New(layoutBindings, layoutAttribs);
-
-				var shaders = new Shader[] {
-					new VertexShader(@"
-						attribute vec4 in_Pos1;
-						attribute vec4 in_Pos2;
-						attribute vec4 in_Color1;
-						attribute vec4 in_Color2;
-						attribute vec2 in_TexCoords1;
-						attribute vec2 in_TexCoords2;
-
-						uniform float blendFactor;
-						uniform mat4 matProjection;
-						uniform mat4 globalTransform;
-
-						varying lowp vec4 color;
-						varying lowp vec2 texCoords;
-
-						void main()
-						{
-							color = (1.0 - blendFactor) * in_Color1 + blendFactor * in_Color2;
-							texCoords = (1.0 - blendFactor) * in_TexCoords1 + blendFactor * in_TexCoords2;
-							gl_Position = matProjection * (globalTransform * ((1.0 - blendFactor) * in_Pos1 + blendFactor * in_Pos2));
-						}
-					"),
-					new FragmentShader(@"
-						uniform sampler2D tex;
-
-						varying lowp vec4 color;
-						varying lowp vec2 texCoords;
-
-						void main()
-						{
-							gl_FragColor = color * texture2D(tex, texCoords);
-						}
-					")
-				};
-
-				var attribLocations = new ShaderProgram.AttribLocation[] {
+				vertexInputLayout = VertexInputLayout.New(layoutBindings, layoutAttribs);
+				attribLocations = new[] {
 					new ShaderProgram.AttribLocation {
 						Name = "in_Pos1",
 						Index = 0,
@@ -380,15 +343,52 @@ namespace Lime.PolygonMesh
 						Index = 5,
 					}
 				};
-
-				var samplers = new ShaderProgram.Sampler[] {
+				samplers = new[] {
 					new ShaderProgram.Sampler {
 						Name = "tex",
 						Stage = 0,
 					}
 				};
+				program = new ShaderProgram(shaders, attribLocations, samplers);
+			}
 
-				var program = new ShaderProgram(shaders, attribLocations, samplers);
+			protected override void OnRelease()
+			{
+				Texture = null;
+				BlendFactor = 0.0f;
+				IndexBufferLength = 0;
+				VertexBufferLength = 0;
+				LocalToWorldTransform = Matrix32.Identity;
+				IndexBuffer.Clear();
+				VertexBuffer0.Clear();
+				VertexBuffer1.Clear();
+			}
+
+			public override void Render()
+			{
+				if (IndexBufferLength == 0) {
+					return;
+				}
+				var vb0 = new VertexBuffer(false);
+				var vb1 = new VertexBuffer(false);
+
+				var vb0Data = new Vertex[VertexBufferLength];
+				var vb1Data = new Vertex[VertexBufferLength];
+
+				for (var i = 0; i < VertexBufferLength; ++i) {
+					vb0Data[i] = VertexBuffer0[i];
+					vb1Data[i] = VertexBuffer1[i];
+				}
+
+				vb0.SetData(vb0Data, VertexBufferLength);
+				vb1.SetData(vb1Data, VertexBufferLength);
+
+				var ib = new IndexBuffer(false);
+				var ibData = new ushort[IndexBufferLength];
+				for (var i = 0; i < IndexBuffer.Count; ++i) {
+					ibData[i] = IndexBuffer[i];
+				}
+				ib.SetData(ibData, IndexBufferLength);
 				var shaderParams = new ShaderParams();
 				var shaderParamsArray = new[] { shaderParams };
 				var blendFactor = shaderParams.GetParamKey<float>("blendFactor");
@@ -396,7 +396,7 @@ namespace Lime.PolygonMesh
 				var globalTransform = shaderParams.GetParamKey<Matrix44>("globalTransform");
 				shaderParams.Set(blendFactor, BlendFactor);
 				shaderParams.Set(matProjection, Renderer.FixupWVP(Renderer.WorldViewProjection));
-				shaderParams.Set(globalTransform, LocalToWorldTransform44);
+				shaderParams.Set(globalTransform, (Matrix44)(LocalToWorldTransform * Renderer.Transform2));
 
 				Renderer.Flush();
 				PlatformRenderer.SetTexture(0, Texture);

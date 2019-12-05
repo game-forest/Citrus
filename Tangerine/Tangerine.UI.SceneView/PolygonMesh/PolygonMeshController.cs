@@ -190,7 +190,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		{
 			Update();
 			HitTestTarget = NullHitTestTarget;
-			position = context.CalcTransitionToSpaceOf(Owner.AsWidget).TransformVector(position);
+			position = Owner.AsWidget.LocalToWorldTransform.CalcInversed().TransformVector(position);
 			foreach (var type in Policies.HitTesting.Order[State]) {
 				if (HitTestHelper(position, scale, type)) {
 					return true;
@@ -228,10 +228,12 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public override void Render(Widget renderContext)
 		{
 			Update();
-			Renderer.Transform1 = renderContext.LocalToWorldTransform;
-			Renderer.Blending = renderContext.GlobalBlending;
-			Renderer.Shader = renderContext.GlobalShader;
-			var transform = Owner.AsWidget.CalcTransitionToSpaceOf(renderContext);
+			//Renderer.Transform1 = renderContext.LocalToWorldTransform;
+			//Renderer.Blending = renderContext.GlobalBlending;
+			//Renderer.Shader = renderContext.GlobalShader;
+			//SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
+			//var transform = Owner.AsWidget.LocalToWorldTransform;//SceneView.Instance.CalcTransitionFromSceneSpace(renderContext); // Owner.AsWidget.CalcTransitionToSpaceOf(renderContext);
+			var transform = Owner.AsWidget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
 
 			if (HitTestTarget.Type == TopologyDataType.Face) {
 				TopologyAggregator[HitTestTarget.Type][HitTestTarget.Index].RenderHovered(
@@ -277,7 +279,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public override IEnumerator<object> AnimationTask()
 		{
-			var transform = sv.Scene.CalcTransitionToSpaceOf(Topology.Mesh);
+			var transform = Topology.Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
 			var lastPos = transform.TransformVector(sv.MousePosition);
 			var target = HitTestTarget;
@@ -308,7 +310,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public override IEnumerator<object> TriangulationTask()
 		{
-			var transform = sv.Scene.CalcTransitionToSpaceOf(Topology.Mesh);
+			var transform = Topology.Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
 			var lastPos = transform.TransformVector(sv.MousePosition);
 			var target = HitTestTarget;
@@ -364,7 +366,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		private Vector2 ClampMousePositionToHitTestTarget()
 		{
-			var transform = sv.Scene.CalcTransitionToSpaceOf(Topology.Mesh);
+			var transform = Topology.Mesh.LocalToWorldTransform.CalcInversed();
 			var pos = transform.TransformVector(sv.MousePosition) / Topology.Mesh.Size;
 			var data = TopologyAggregator[HitTestTarget.Type][HitTestTarget.Index];
 			if (data is EdgeData ed) {
