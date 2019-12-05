@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Lime.Source.Widgets.PolygonMesh;
 using HalfEdge = Lime.PolygonMesh.Topology.HalfEdgeTopology.HalfEdge;
 
 namespace Lime.PolygonMesh
@@ -130,10 +131,8 @@ namespace Lime.PolygonMesh
 
 		private bool AreOnOppositeSides(Vector2 s1, Vector2 s2, Vector2 p1, Vector2 p2)
 		{
-			var side = s2 - s1;
-			var v1 = p1 - s1;
-			var v2 = p2 - s1;
-			return Mathf.Sign(Vector2.CrossProduct(side, v1)) * Mathf.Sign(Vector2.CrossProduct(side, v2)) < 0;
+			return GeometricPredicates.ExactOrient2D(s1.X, s1.Y, s2.X, s2.Y, p1.X, p1.Y) *
+			       GeometricPredicates.ExactOrient2D(s1.X, s1.Y, s2.X, s2.Y, p2.X, p2.Y) < 0;
 		}
 
 		private HalfEdge LocateTriangle(HalfEdge start, Vertex vertex, out bool inside)
@@ -186,20 +185,11 @@ namespace Lime.PolygonMesh
 
 		private bool InCircumcircle(HalfEdge edge, Vertex vertex)
 		{
+			var pos = vertex.Pos;
 			var v1 = Vertices[edge.Origin].Pos;
-			var next = Next(edge);
-			var v2 = Vertices[next.Origin].Pos;
-			var v3 = Vertices[Next(next).Origin].Pos;
-			var p = vertex.Pos;
-			var n1 = (double)v1.SqrLength;
-			var n2 = (double)v2.SqrLength;
-			var n3 = (double)v3.SqrLength;
-			var a = (double)v1.X * v2.Y + (double)v2.X * v3.Y + (double)v3.X * v1.Y -
-					((double)v2.Y * v3.X + (double)v3.Y * v1.X + (double)v1.Y * v2.X);
-			var b = n1 * v2.Y + n2 * v3.Y + n3 * v1.Y - (v2.Y * n3 + v3.Y * n1 + v1.Y * n2);
-			var c = n1 * v2.X + n2 * v3.X + n3 * v1.X - (v2.X * n3 + v3.X * n1 + v1.X * n2);
-			var d = n1 * v2.X * v3.Y + n2 * v3.X * v1.Y + n3 * v1.X * v2.Y - (v2.X * n3 * v1.Y + v3.X * n1 * v2.Y + v1.X * n2 * v3.Y);
-			return (a * p.SqrLength - b * p.X + c * p.Y - d) * Math.Sign(a) < 0;
+			var v2 = Vertices[Next(edge).Origin].Pos;
+			var v3 = Vertices[Prev(edge).Origin].Pos;
+			return GeometricPredicates.ExactInCircle(v1.X, v1.Y, v2.X, v2.Y, v3.X, v3.Y, pos.X, pos.Y) > 0;
 		}
 
 		private LinkedList<int> GetContourPolygon(HalfEdge start, Vertex vertex)
@@ -373,7 +363,11 @@ namespace Lime.PolygonMesh
 					var j = HalfEdges[i].Origin;
 					if (j != o1 && j != o2 && j != o3) {
 						var v = Vertices[j].Pos;
-						if (Area(v, v1, v2) >= 0 && Area(v, v2, v3) >= 0 && Area(v, v3, v1) >= 0) {
+						if (
+							GeometricPredicates.AdaptiveOrient2D(v.X, v.Y, v1.X, v1.Y, v2.X, v2.Y) >= 0 &&
+							GeometricPredicates.AdaptiveOrient2D(v.X, v.Y, v2.X, v2.Y, v3.X, v3.Y) >= 0 &&
+							GeometricPredicates.AdaptiveOrient2D(v.X, v.Y, v3.X, v3.Y, v1.X, v1.Y) >= 0
+						) {
 							return false;
 						}
 					}

@@ -539,7 +539,9 @@
     <Compile Include="Source\Widgets\ParticleModifier.cs" />
     <Compile Include="Source\Widgets\ParticlesMagnet.cs" />
     <Compile Include="Source\Widgets\PointObject.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\ExactArithmetic.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\GeometricPredicates.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopologyModificator.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTriangulator.cs" />
