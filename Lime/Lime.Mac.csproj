@@ -192,7 +192,6 @@
     <Compile Include="Source\Cloner.cs" />
     <Compile Include="Source\ComponentCollection.cs" />
     <Compile Include="Source\EnumExtensions.cs" />
-    <Compile Include="Source\GeneratedDeserializersBIN.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />

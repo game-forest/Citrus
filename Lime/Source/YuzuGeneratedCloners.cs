@@ -3105,6 +3105,7 @@ namespace YuzuGenerated
 				foreach (var tmp9 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp10(tmp9));
 			}
+			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -3132,6 +3133,7 @@ namespace YuzuGenerated
 			}
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
+			result.OnAfterDeserialization();
 			return result;
 		}
 
