@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Lime.Source.Widgets.PolygonMesh;
+using OpenTK.Audio;
 using HalfEdge = Lime.PolygonMesh.Topology.HalfEdgeTopology.HalfEdge;
 
 namespace Lime.PolygonMesh
@@ -33,6 +34,10 @@ namespace Lime.PolygonMesh
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private int Prev(int index) => Topology.Prev(index);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private HalfEdge Twin(HalfEdge he) => HalfEdges[he.Twin];
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private HalfEdge Twin(int index) => Twin(HalfEdges[index]);
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void MakeTwins(int lhs, int rhs) => Topology.MakeTwins(lhs, rhs);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void SetEdgeConstraint(int index, bool value) => Topology.SetEdgeConstraint(index, value);
@@ -48,8 +53,8 @@ namespace Lime.PolygonMesh
 		public void AddVertex(int vi)
 		{
 			var vertex = Vertices[vi];
-			var t = LocateTriangle(LastValidEdge(), vertex, out var inside);
-			if (inside) {
+			var t = LocateClosestTriangle(vertex, out var isInside);
+			if (isInside) {
 				if (OnEdge(t, vi, out var edge)) {
 					SplitEdge(edge, vi);
 					InsertConstrainedEdges(constrainedEdges);
@@ -58,7 +63,7 @@ namespace Lime.PolygonMesh
 				}
 				TriangulateStarShapedPolygon(GetContourPolygon( t, vertex), vi);
 			} else {
-				var q = TriangulateVisibleBoundary(GetVisibleBoundary(vertex, GetTriangulationBoundary(vertex, t)), vi);
+				var q = TriangulateVisibleBoundary(GetVisibleBoundary(vertex.Pos, GetTriangulationBoundary(t)), vi);
 				System.Diagnostics.Debug.Assert(q.Count > 0);
 				RestoreDelaunayProperty(q);
 				System.Diagnostics.Debug.Assert(FullCheck());
@@ -153,6 +158,44 @@ namespace Lime.PolygonMesh
 			return current;
 		}
 
+		private HalfEdge LocateClosestTriangle(Vertex vertex, out bool isInside)
+		{
+			var p = vertex.Pos;
+			var closest = HalfEdgeTopology.DummyHalfEdge;
+			var closestDistance = float.MaxValue;
+			isInside = false;
+			for (var i = 0; i < HalfEdges.Count; i += 3) {
+				var he = HalfEdges[i];
+				if (he.Index == -1) {
+					continue;
+				}
+				var next = Next(he);
+				var prev = Prev(he);
+				var p1 = Vertices[he.Origin].Pos;
+				var p2 = Vertices[next.Origin].Pos;
+				var p3 = Vertices[prev.Origin].Pos;
+				if (
+					!AreOnOppositeSides(p1, p2, p3, p) && !AreOnOppositeSides(p2, p3, p1, p) &&
+					!AreOnOppositeSides(p3, p1, p2, p)
+				) {
+					isInside = true;
+					return he;
+				}
+				UpdateClosest(p1, p2, he);
+				UpdateClosest(p2, p3, next);
+				UpdateClosest(p3, p1, prev);
+				void UpdateClosest(Vector2 start, Vector2 end, HalfEdge edge)
+				{
+					var d = PointToSegmentSqrDistance(start, end, p);
+					if (d < closestDistance) {
+						closestDistance = d;
+						closest = edge;
+					}
+				}
+			}
+			return closest;
+		}
+
 		private HalfEdge LocateTriangle(Vertex vertex)
 		{
 			var p = vertex.Pos;
@@ -167,8 +210,8 @@ namespace Lime.PolygonMesh
 				var p2 = Vertices[next.Origin].Pos;
 				var p3 = Vertices[prev.Origin].Pos;
 				if (
-					AreOnOppositeSides(p1, p2, p3, p) && AreOnOppositeSides(p2, p3, p1, p) &&
-					AreOnOppositeSides(p3, p1, p2, p) || (p == p1 || p == p2 || p == p3)
+					!AreOnOppositeSides(p1, p2, p3, p) && !AreOnOppositeSides(p2, p3, p1, p) &&
+					!AreOnOppositeSides(p3, p1, p2, p)
 				) {
 					return he;
 				}
@@ -516,27 +559,20 @@ namespace Lime.PolygonMesh
 			return queue;
 		}
 
-		private float PointToSegmentSqrDistance(Vector2 v, Vector2 w, Vector2 p)
+		private static float PointToSegmentSqrDistance(Vector2 v, Vector2 w, Vector2 p)
 		{
-			var t = Mathf.Max(0f, Mathf.Min(Vector2.DotProduct(p - v, w - v) / (w - v).SqrLength, 1));
-			return (v + t * (w - v)).Length;
+			var l2 = (w - v).SqrLength;
+			if (l2 == 0) {
+				return (p - v).SqrLength;
+			}
+			var t = Mathf.Max(0, Mathf.Min(1, Vector2.DotProduct(p - v, w - v) / l2));
+			var proj = v + t * (w - v);
+			return (p - proj).SqrLength;
 		}
 
-		private LinkedList<int> GetTriangulationBoundary(Vertex vertex, HalfEdge start)
+		private LinkedList<int> GetTriangulationBoundary(HalfEdge start)
 		{
-			var minD = float.MaxValue;
-			var current = start;
-			for (int i = 0; i < 3; i++) {
-				var s1 = Vertices[current.Origin].Pos;
-				var s2 = Vertices[Next(current).Origin].Pos;
-				var p1 = Vertices[Prev(current).Origin].Pos;
-				var d = PointToSegmentSqrDistance(s1, s2, vertex.Pos);
-				if (AreOnOppositeSides(s1, s2, p1, vertex.Pos) && d < minD) {
-					minD = d;
-					start = current;
-				}
-				current = Next(current);
-			}
+			start = RotateToBoundary(start);
 			var boundary = new LinkedList<int>();
 			boundary.AddFirst(start.Index);
 			do {
@@ -551,7 +587,18 @@ namespace Lime.PolygonMesh
 			return boundary;
 		}
 
-		private LinkedList<int> GetVisibleBoundary(Vertex vertex, LinkedList<int> boundary)
+		// Origin of `start` is a pivot of rotation
+
+		private HalfEdge RotateToBoundary(HalfEdge start)
+		{
+			var current = start;
+			while (current.Twin != -1) {
+				current = Next(Twin(current));
+			}
+			return current;
+		}
+
+		private LinkedList<int> GetVisibleBoundary(Vector2 vertex, LinkedList<int> boundary)
 		{
 			var broke = false;
 			LinkedListNode<int> first = null;
@@ -561,15 +608,15 @@ namespace Lime.PolygonMesh
 				var c = Vertices[currentHe.Origin].Pos;
 				var d = Vertices[Next(currentHe).Origin].Pos;
 				var listNode = boundary.First;
-				if (Area(c, vertex.Pos, d) > 0) {
+				if (Area(c, vertex, d) > 0) {
 					while (listNode != null) {
 						var current = HalfEdges[listNode.Value];
 						var a = Vertices[current.Origin].Pos;
 						var b = Vertices[Next(current).Origin].Pos;
 						if (
 							listNode.Value != side &&
-							(b != c && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, c, out _) ||
-							 a != d && PolygonMeshUtils.LineLineIntersection(a, b, vertex.Pos, d, out _))
+							(b != c && PolygonMeshUtils.LineLineIntersection(a, b, vertex, c, out _) ||
+							 a != d && PolygonMeshUtils.LineLineIntersection(a, b, vertex, d, out _))
 						) {
 							break;
 						}
