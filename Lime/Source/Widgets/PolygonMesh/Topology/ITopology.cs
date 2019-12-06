@@ -21,5 +21,6 @@ namespace Lime.PolygonMesh.Topology
 		void TranslateVertex(int index, Vector2 positionDelta, bool modifyStructure);
 		void TranslateVertexUV(int index, Vector2 uvDelta);
 		void ConstrainEdge(int index0, int index1);
+		void Concave(Vector2 position);
 	}
 }

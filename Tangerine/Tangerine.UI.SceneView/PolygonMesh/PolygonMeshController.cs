@@ -22,7 +22,8 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			Animation,
 			Triangulation,
 			Creation,
-			Removal
+			Removal,
+			Concave,
 		}
 
 		private ModificationState state;
@@ -39,6 +40,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					case ModificationState.Triangulation:
 					case ModificationState.Creation:
 					case ModificationState.Removal:
+					case ModificationState.Concave:
 						Mode = ModificationMode.Setup;
 						break;
 				}
@@ -73,6 +75,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public abstract IEnumerator<object> TriangulationTask();
 		public abstract IEnumerator<object> CreationTask();
 		public abstract IEnumerator<object> RemovalTask();
+		public abstract IEnumerator<object> ConcaveTask();
 	}
 
 	[YuzuDontGenerateDeserializer]
@@ -111,7 +114,11 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 						[ModificationState.Removal] = new[] {
 							TopologyDataType.Vertex,
-						}
+						},
+
+						[ModificationState.Concave] = new[] {
+							TopologyDataType.Face,
+						},
 					};
 			}
 		}
@@ -417,9 +424,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						keyframes = new List<IKeyframe>();
 						foreach (var key in animator.Keys.ToList()) {
 							var newKey = key.Clone();
-							var vertices = new List<Vertex>(newKey.Value as List<Vertex>) {
-							vertex
-						};
+							var vertices = new List<Vertex>(newKey.Value as List<Vertex>) { vertex };
 							newKey.Value = vertices;
 							keyframes.Add(newKey);
 							animator.ResetCache();
@@ -564,6 +569,55 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				}
 				yield return null;
 			}
+		}
+
+		public override IEnumerator<object> ConcaveTask()
+		{
+			UI.Utils.ChangeCursorIfDefault(WidgetContext.Current.MouseCursor);
+			using (Document.Current.History.BeginTransaction()) {
+				List<IKeyframe> keyframes = null;
+				Topology.Mesh.Animators.TryFind(
+					nameof(Topology.Mesh.TransientVertices),
+					out var animator
+				);
+				var sliceBefore = new PolygonMeshSlice {
+					State = ModificationState.Removal,
+					Vertices = new List<Vertex>(Topology.Mesh.Vertices),
+					IndexBuffer = new List<Face>(Topology.Mesh.Faces),
+					ConstrainedVertices = new List<Edge>(Topology.Mesh.ConstrainedVertices),
+					Keyframes = animator?.Keys.ToList()
+				};
+				if (HitTestTarget.Type != TopologyDataType.None) {
+					var local = Topology.Mesh.LocalToWorldTransform.CalcInversed().TransformVector(sv.MousePosition) / Topology.Mesh.Size;
+					TopologyModificator.Concave(local);
+				}
+				if (animator != null) {
+					keyframes = new List<IKeyframe>();
+					foreach (var key in animator.Keys.ToList()) {
+						var newKey = key.Clone();
+						var vertices = new List<Vertex>(newKey.Value as List<Vertex>);
+						vertices[HitTestTarget.Index] = vertices[vertices.Count - 1];
+						vertices.RemoveAt(vertices.Count - 1);
+						newKey.Value = vertices;
+						keyframes.Add(newKey);
+						animator.ResetCache();
+					}
+				}
+				var sliceAfter = new PolygonMeshSlice {
+					State = ModificationState.Removal,
+					Vertices = new List<Vertex>(Topology.Mesh.Vertices),
+					IndexBuffer = new List<Face>(Topology.Mesh.Faces),
+					ConstrainedVertices = new List<Edge>(Topology.Mesh.ConstrainedVertices),
+					Keyframes = keyframes
+				};
+				PolygonMeshModification.Slice.Perform(
+					Topology.Mesh,
+					sliceBefore,
+					sliceAfter
+				);
+				Document.Current.History.CommitTransaction();
+			}
+			yield return null;
 		}
 	}
 }

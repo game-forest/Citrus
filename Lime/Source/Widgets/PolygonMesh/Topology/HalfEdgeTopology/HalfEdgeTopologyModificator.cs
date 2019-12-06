@@ -58,5 +58,11 @@ namespace Lime.PolygonMesh.Topology
 		{
 			topology.InsertConstrainedEdge(index0, index1);
 		}
+
+		public void Concave(Vector2 position)
+		{
+			topology.Triangulator.TryConcave(position);
+			topology.Invalidate();
+		}
 	}
 }

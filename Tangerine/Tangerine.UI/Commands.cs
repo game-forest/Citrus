@@ -162,6 +162,7 @@ namespace Tangerine.UI
 		public static readonly ICommand PolygonMeshTriangulate = new Command("Modify Mesh Triangulation") { Icon = IconPool.GetIcon("Tools.DistributeBottom") };
 		public static readonly ICommand PolygonMeshCreate = new Command("Create Mesh Vertex or Constraint") { Icon = IconPool.GetIcon("Tools.FlipV") };
 		public static readonly ICommand PolygonMeshRemove = new Command("Remove Mesh Vertex") { Icon = IconPool.GetIcon("Tools.RestoreOriginalSize") };
+		public static readonly ICommand PolygonMeshConcave = new Command("Hole Mesh Vertex") { Icon = IconPool.GetIcon("Tools.RestoreOriginalSize") };
 	}
 
 	public static class ToolsCommands

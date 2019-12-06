@@ -267,9 +267,13 @@ namespace Lime.PolygonMesh.Topology
 							var tmp = edges[halfEdge.Twin];
 							tmp.Twin = halfEdge.Index;
 							edges[halfEdge.Twin] = tmp;
-						}
-						else {
+						} else {
 							var tmp = HalfEdges[halfEdge.Twin];
+							if (tmp.Index == -1) {
+								halfEdge.Twin = -1;
+								edges[edges.Count - 1] = halfEdge;
+								continue;
+							}
 							tmp.Twin = halfEdge.Index;
 							HalfEdges[halfEdge.Twin] = tmp;
 						}

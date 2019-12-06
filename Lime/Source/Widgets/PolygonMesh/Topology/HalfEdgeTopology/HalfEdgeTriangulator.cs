@@ -50,10 +50,31 @@ namespace Lime.PolygonMesh
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void Connect(int v1, int v2, int v3) => Topology.Connect(v1, v2, v3);
 
+		private bool TryGetTwin(HalfEdge edge, out HalfEdge twin)
+		{
+			if (edge.Twin != -1) {
+				twin = HalfEdges[edge.Twin];
+				return true;
+			}
+			twin = HalfEdgeTopology.DummyHalfEdge;
+			return false;
+		}
+
+		private bool TryGetTwin(int index, out HalfEdge twin)
+		{
+			var edge = HalfEdges[index];
+			if (edge.Twin != -1) {
+				twin = HalfEdges[edge.Twin];
+				return true;
+			}
+			twin = HalfEdgeTopology.DummyHalfEdge;
+			return false;
+		}
+
 		public void AddVertex(int vi)
 		{
 			var vertex = Vertices[vi];
-			var t = LocateClosestTriangle(vertex, out var isInside);
+			var t = LocateClosestTriangle(vertex.Pos, out var isInside);
 			if (isInside) {
 				if (OnEdge(t, vi, out var edge)) {
 					SplitEdge(edge, vi);
@@ -78,7 +99,7 @@ namespace Lime.PolygonMesh
 		public void RemoveVertex(int vi)
 		{
 			var vertex = Vertices[vi];
-			var polygon = GetBoundaryPolygon(FindIncidentEdge(LocateTriangle(LastValidEdge(), vertex, out _), vi));
+			var polygon = GetBoundaryPolygon(FindIncidentEdge(LocateTriangle(vertex.Pos), vi));
 			RestoreDelaunayProperty(HalfEdges[Next(polygon.Last.Value)].Origin == vi ?
 					RemovePolygon(polygon) :
 					TriangulatePolygonByEarClipping(polygon));
@@ -158,9 +179,8 @@ namespace Lime.PolygonMesh
 			return current;
 		}
 
-		private HalfEdge LocateClosestTriangle(Vertex vertex, out bool isInside)
+		private HalfEdge LocateClosestTriangle(Vector2 position, out bool isInside)
 		{
-			var p = vertex.Pos;
 			var closest = HalfEdgeTopology.DummyHalfEdge;
 			var closestDistance = float.MaxValue;
 			isInside = false;
@@ -175,8 +195,8 @@ namespace Lime.PolygonMesh
 				var p2 = Vertices[next.Origin].Pos;
 				var p3 = Vertices[prev.Origin].Pos;
 				if (
-					!AreOnOppositeSides(p1, p2, p3, p) && !AreOnOppositeSides(p2, p3, p1, p) &&
-					!AreOnOppositeSides(p3, p1, p2, p)
+					!AreOnOppositeSides(p1, p2, p3, position) && !AreOnOppositeSides(p2, p3, p1, position) &&
+					!AreOnOppositeSides(p3, p1, p2, position)
 				) {
 					isInside = true;
 					return he;
@@ -186,7 +206,7 @@ namespace Lime.PolygonMesh
 				UpdateClosest(p3, p1, prev);
 				void UpdateClosest(Vector2 start, Vector2 end, HalfEdge edge)
 				{
-					var d = PointToSegmentSqrDistance(start, end, p);
+					var d = PointToSegmentSqrDistance(start, end, position);
 					if (d < closestDistance) {
 						closestDistance = d;
 						closest = edge;
@@ -196,9 +216,8 @@ namespace Lime.PolygonMesh
 			return closest;
 		}
 
-		private HalfEdge LocateTriangle(Vertex vertex)
+		private HalfEdge LocateTriangle(Vector2 position)
 		{
-			var p = vertex.Pos;
 			for (var i = 0; i < HalfEdges.Count; i += 3) {
 				var he = HalfEdges[i];
 				if (he.Index == -1) {
@@ -210,8 +229,8 @@ namespace Lime.PolygonMesh
 				var p2 = Vertices[next.Origin].Pos;
 				var p3 = Vertices[prev.Origin].Pos;
 				if (
-					!AreOnOppositeSides(p1, p2, p3, p) && !AreOnOppositeSides(p2, p3, p1, p) &&
-					!AreOnOppositeSides(p3, p1, p2, p)
+					!AreOnOppositeSides(p1, p2, p3, position) && !AreOnOppositeSides(p2, p3, p1, position) &&
+					!AreOnOppositeSides(p3, p1, p2, position)
 				) {
 					return he;
 				}
@@ -682,7 +701,7 @@ namespace Lime.PolygonMesh
 
 		public void InsertConstrainedEdge((int a, int b) ce)
 		{
-			var start = FindIncidentEdge(LocateTriangle(Vertices[ce.a]), ce.a);
+			var start = FindIncidentEdge(LocateTriangle(Vertices[ce.a].Pos), ce.a);
 			var current = start;
 			Vector2 a = Vertices[ce.a].Pos, b = Vertices[ce.b].Pos;
 			var upPolygon = new LinkedList<int>();
@@ -707,6 +726,9 @@ namespace Lime.PolygonMesh
 					break;
 				}
 				forward = forward ? prev.Twin != -1 : forward;
+				if (current.Twin == -1) {
+					return;
+				}
 				current = forward ? HalfEdges[prev.Twin]  : HalfEdges[Next(current.Twin)];
 			}
 			upPolygon.AddLast(current.Index);
@@ -762,6 +784,65 @@ namespace Lime.PolygonMesh
 		public void DoNotKeepConstrainedEdges()
 		{
 			constrainedEdges.Clear();
+		}
+
+		public bool TryConcave(Vector2 position)
+		{
+			var triangle = LocateClosestTriangle(position, out var isInside);
+			if (!isInside) {
+				return false;
+			}
+			var used = new HashSet<int>();
+			var queue = new Queue<int>();
+			var verticesThatShouldProbablyBeRemoved = new HashSet<int>();
+			queue.Enqueue(triangle.Index);
+			queue.Enqueue(Next(triangle).Index);
+			queue.Enqueue(Prev(triangle).Index);
+			used.Add(triangle.Index);
+			used.Add(Next(triangle).Index);
+			used.Add(Prev(triangle).Index);
+			while (queue.Count > 0) {
+				var i = queue.Dequeue();
+				var t = HalfEdges[i];
+				if (TryGetTwin(i, out var twin) && !twin.Constrained) {
+					var next = Next(twin.Index);
+					var prev = Prev(twin.Index);
+					if (used.Add(twin.Index)) {
+						queue.Enqueue(twin.Index);
+						verticesThatShouldProbablyBeRemoved.Add(twin.Origin);
+					}
+					if (used.Add(next)) {
+						queue.Enqueue(next);
+						verticesThatShouldProbablyBeRemoved.Add(HalfEdges[next].Origin);
+					}
+					if (used.Add(prev)) {
+						queue.Enqueue(prev);
+						verticesThatShouldProbablyBeRemoved.Add(HalfEdges[prev].Origin);
+					}
+				}
+				if (t.Twin != -1) {
+					Untwin(i);
+				}
+			}
+			foreach (var i in used) {
+				RemoveHalfEdge(i);
+			}
+			foreach (var vertexIndex in verticesThatShouldProbablyBeRemoved.OrderByDescending(i => i)) {
+				if (IsVertexIsolated(vertexIndex)) {
+					Topology.Vertices.RemoveAt(vertexIndex);
+				}
+			}
+			return true;
+		}
+
+		private bool IsVertexIsolated(int index)
+		{
+			foreach (HalfEdge he in HalfEdges) {
+				if (he.Index != -1 && he.Origin == index) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }

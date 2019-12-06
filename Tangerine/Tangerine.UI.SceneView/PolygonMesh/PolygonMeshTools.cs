@@ -40,6 +40,11 @@ namespace Tangerine
 			public override void ExecuteTransaction() =>
 				ChangeState(PolygonMeshController.ModificationState.Removal);
 		}
+		public class Concave : DocumentCommandHandler
+		{
+			public override void ExecuteTransaction() =>
+				ChangeState(PolygonMeshController.ModificationState.Concave);
+		}
 	}
 
 
