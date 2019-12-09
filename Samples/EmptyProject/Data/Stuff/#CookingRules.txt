@@ -1,2 +1,0 @@
-TextureAtlas ${DirectoryName}
-PVRFormat PVRTC4
