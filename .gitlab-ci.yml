@@ -75,7 +75,6 @@ push_to_github:
     - ((Get-Content $env:GAME_FOREST_BOT_RSA) -join "`n") + "`n" | Set-Content -NoNewline $env:GAME_FOREST_BOT_RSA
     # override ssh command for git to ignore remote host fingerprint and provide custom private key
     - $env:GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $env:GAME_FOREST_BOT_RSA -F /dev/null"
-    # make a shallow clone of github pages branch
     - git config user.email bot@game-forest.com
     - git config user.name Game Forest
     - git remote add github git@github.com:game-forest/Citrus.git; if ($?) { } else { echo "remote already set" }
