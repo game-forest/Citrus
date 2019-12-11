@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" ">
+    <meta name="generator" content="docfx 2.48.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>1.) Открыть файл *.citproj проекта и прописать в нём информацию, необходимую для сбора ресурсов XCode-проекта.
+Блок информации	выглядит следующим образом (на примере проекта MM6):</p>
+<pre><code>XCodeProject: {
+	DoSvnUpdate: false,
+	DoSvnCommit: false,
+	Resources: '*.dll *.exe *.png MM6 Data.iOS .monotouch-32 .monotouch-64',
+	DataFolder: 'MM6_XCode_Project_Data',
+	Version: '6.55'
+}
+
+Следует обратить особое внимание на поля &quot;Resources&quot; и &quot;DataFolder&quot;. В поле &quot;Resources&quot; указываются
+через пробел маски файлов и папок, которые на следующем шаге будут автоматически скопированы в папку
+проекта XCode. В примере, приведённом выше, маску &quot;MM6&quot; нужно заменить на соответствующую названию
+проекта. Все остальные маски нужно оставить как есть, при необходимости можно добавить другие маски в
+целях копирования в XCode-проект других файлов.
+
+В поле &quot;DataFolder&quot; указывается каталог, в котором у нас будет создан XCode-проект. Этот каталог лучше
+создать в каталоге iOS-проекта игры.
+</code></pre>
+<p>2.) Запускаем Orange на Mac. Загружаем citproj-файл проекта в Citrus Project. Выбираем в Target platform
+режим iPhone/iPad. Внизу в выпадающем списке слева от кнопки &quot;Go&quot; выбираем пункт &quot;Update XCode Project&quot;.
+Нажимаем кнопку &quot;Go&quot;. Набираемся терпения и ждём. Убеждаемся по логу в консоли, что всё прошло нормально
+и все необходимые файлы успешно скопированы. В конце лога мы должны увидеть надпись &quot;Elapsed Time ...&quot;</p>
+<p>3.) Открываем XCode. Заходим последовательно через меню в File --&gt; New --&gt; Project.
+Выбираем iOS -&gt; Application -&gt; Single View Application. В &quot;Product Name&quot; пишем название нашего проекта.
+Выбираем папку, куда будет сохранён наш XCode-проект. В качестве этой папки выбираем ранее созданную на
+первом шаге папку, находящуюся в папке iOS-проекта нашей игры. Нажимаем кнопку &quot;Create&quot;.</p>
+<pre><code>В дереве файлов созданного XCode-проекта удаляем всё лишнее, кроме файлов &quot;Info.plist&quot; и &quot;*.app&quot;
+(* - название проекта). Каталоги, в которых лежат эти (&quot;Info.plist&quot; и &quot;*.app&quot;) файлы, соответственно
+тоже не удаляем.
+</code></pre>
+<p>4.) Теперь нам осталось добавить в наш XCode-проект файлы нашей игры, которые подготовил Orange на втором
+шаге. Но здесь есть один важный момент. Библиотеки *.dll для нашей игры положились в папки &quot;.monotouch-32&quot; и
+&quot;.monotouch-64&quot;. А для Мака папки, имя которых начинается с точки, считаются скрытыми и более того,
+оболочка XCode не разрешит в дерева проекта создавать папки с использованием символа точки в имени.
+Поэтому, нужно во-первых, сделать, чтобы Mac в Finder'е показывал скрытые файлы и папки. Для этого нужно
+выполнить следующие команды в консоли:</p>
+<pre><code>defaults write com.apple.finder AppleShowAllFiles -bool YES
+killall Finder
+
+Перезапускаем Finder, заходим в каталог XCode-проекта и убеждаемся, что папки &quot;.monotouch-32&quot; и
+&quot;.monotouch-64&quot; стали видны. Далее, убираем точку в имени с обеих папок.
+
+Теперь в дереве файлов проекта в XCode вверху на названии проекта делаем правый клик и выбираем
+&quot;Add files to...&quot;. Открываем в появившемя окошке папку с проектом XCode, выбираем все файлы
+и папки &quot;monotouch-32&quot; и &quot;monotouch-64&quot; (без точек, т.к. мы их переименовали), скопированные
+Orange на втором шаге и добавляем их в проект.
+
+Теперь сохраняем проект, закрываем XCode, идём в папку проекта, ставим обратно точки вначале имён папок
+&quot;monotouch-32&quot; и &quot;monotouch-64&quot;. А теперь эти точки нужно также поставить в файле проекта XCode. Поскольку
+оболочка XCode не позволяет использовать точки в именах папок, то делать это прийдётся вручную и с помощью
+хорошего текстового редактора (стандартный TextEdit не пойдёт, он нарушает кодировку; нужен, например,
+Sublime Text). Скачиваем и устанавливаем Sublime Text, открываем xcodeproj путём правого клика и выбора
+пункта &quot;Show Package Contents&quot;. Открываем через Sublime Text файл &quot;project.pbxproj&quot;, ищем при помощи поиска
+ссылки на папки &quot;monotouch-32&quot; и &quot;monotouch-64&quot;, ставим там точки в начале их имени. Сохраняем файл, выходим.
+
+Снова открываем проект в XCode. Запускаем. Всё.
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

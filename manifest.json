@@ -8993,6 +8993,78 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/Android.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Android.html",
+          "hash": "j16DL5tLaR+eNfMvWiO6xw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/CodingConventions.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/CodingConventions.html",
+          "hash": "/SIGIurSDSRY+YKcMoBJ0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/CookingRules.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/CookingRules.html",
+          "hash": "88zQCTTrnZgnVC2Ej2/UKA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/HowToMakeStandaloneBuildOnWin32.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/HowToMakeStandaloneBuildOnWin32.html",
+          "hash": "DavNWsQl3j5zlpg1+3/vsg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Making XCode Project for Big Fish.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Making XCode Project for Big Fish.html",
+          "hash": "W77DgHdTJg2OVw2HgP2+Yg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SmoothAssetsLoading.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SmoothAssetsLoading.html",
+          "hash": "RnvNbu6yH6is930U/uLWQg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/intro.md",
       "output": {
         ".html": {
@@ -9004,12 +9076,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Toc",
       "source_relative_path": "articles/toc.yml",
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "gB8AESyvNru97tzIZofEEg=="
+          "hash": "QXMZHYY0ERZAjqxszbrz1Q=="
         }
       },
       "is_incremental": false,
@@ -9051,16 +9126,16 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 9,
+          "skipped_file_count": 0
+        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 747,
-          "skipped_file_count": 0
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 3,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {

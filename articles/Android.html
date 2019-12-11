@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1055;&#1056;&#1048;&#1050;&#1056;&#1045;&#1055;&#1051;&#1045;&#1053;&#1048;&#1045; &#1056;&#1045;&#1057;&#1059;&#1056;&#1057;&#1054;&#1042; &#1050; &#1055;&#1056;&#1048;&#1051;&#1054;&#1046;&#1045;&#1053;&#1048;&#1070; </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1055;&#1056;&#1048;&#1050;&#1056;&#1045;&#1055;&#1051;&#1045;&#1053;&#1048;&#1045; &#1056;&#1045;&#1057;&#1059;&#1056;&#1057;&#1054;&#1042; &#1050; &#1055;&#1056;&#1048;&#1051;&#1054;&#1046;&#1045;&#1053;&#1048;&#1070; ">
+    <meta name="generator" content="docfx 2.48.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="прикрепление-ресурсов-к-приложению">ПРИКРЕПЛЕНИЕ РЕСУРСОВ К ПРИЛОЖЕНИЮ</h1>
+
+<p>В Xamarin.Android ресурсы приложения могут быть представлены 3 способами: AndroidAssets, AndroidResources и EmbeddedResources.
+Первые 2 способа нативны для платформы андроид, третий способ -- универсальный для любых .NET приложений.
+Отличие AndroidAssets от AndroidResources в том, что первый способ предполагает хранение сырых ресурсов, в то время как в AndroidResources могут включаться файлы только определенных типов и для них препроцессор генерит код для быстрого доступа. Оба этих способа нам не подходят так-как Data.Android нельзя положить в AndroidResources (препроцессор не знает что это вообще за хрень такая), а если положить этот файл в AndroidAssets, то Xamarin.Android предоставляет только потоковый доступ к файлу (нельзя читать его с произвольной позиции).
+Ресурсы мы будем прикреплять методом EmbeddedResources. Однако, если положить Data.Android в главную сборку, то нагибается оптимизация Fast assembly deployment (главная сборка игры будет включать XXX мегабайтный файл ресурсов и заливаться на устройство каждый раз при запуске приложения). Поэтому рекомендуется создать одельную сборку для ресурсов (скажем: Assets.Anroid) и в нее положить Data.Android. В результате ресурсы будут копироваться на устройство только после их пересборки.
+Резюме:
+Ресурсы нужно хранить в отдельной сборке (Assets.Android) методом EmbeddedResources.</p>
+<h1 id="поддержка-сжатых-текстур">ПОДДЕРЖКА СЖАТЫХ ТЕКСТУР</h1>
+<p>Как хорошо известно, Андроид поддерживает зоопарк стандартов сжатых текстур. Чтобы не создавать отдельный дистрибутив под каждый формат, Цитрус использует единственный поддерживаемый всеми формат - ETC1. К сожалению данный формат не поддерживает альфа-канал.
+Для решения этой проблемы существует несколько способов, описанных в статье:
+<a href="http://malideveloper.arm.com/develop-for-mali/sample-code/etcv1-texture-compression-and-alpha-channels/">http://malideveloper.arm.com/develop-for-mali/sample-code/etcv1-texture-compression-and-alpha-channels/</a>
+В цитрусе мы реализуем способ №2 - для каждой текстуры с альфа каналом создается отдельная текстура с маской.</p>
+<h1 id="как-использовать-нативные-библиотеки">КАК ИСПОЛЬЗОВАТЬ НАТИВНЫЕ БИБЛИОТЕКИ</h1>
+<p>Руководство здесь: developer.xamarin.com/guides/android/advanced_topics/using_native_libraries/
+Но вот кое-что авторы не доработали: если какая-либо сборка содержит нативную библиотеку, то на эту сборку обязана ссылаться главная сборка приложения. В противном случае вы будете долго разбираться: почему же моя нативная библиотека не попала в .apk? В частности главная сборка игры ОБЯЗАНА иметь ссылку на Lemon.Android.dll
+Если нативная библиотека использует JNI, то для того чтобы она была проинициализирована нужно вызвать: Java.Lang.JavaSystem.LoadLibrary(&quot;library&quot;);</p>
+<h1 id="как-пересобирать-openal">КАК ПЕРЕСОБИРАТЬ OPENAL</h1>
+<p>OpenAL для андроида скачивается с <a href="http://repo.or.cz/w/openal-soft/android.git">http://repo.or.cz/w/openal-soft/android.git</a>
+Чтобы OpenTK не падал нужно пропатчить модуль ALc.с. При возвращении из alcGetString() нужно делать поверку на NULL: return (value == NULL) ? &quot;&quot; : value;</p>
+<h1 id="как-пересобирать-bigfish-sdk">КАК ПЕРЕСОБИРАТЬ BIGFISH SDK</h1>
+<ol>
+<li>В файле bfgLib/project.properties поставить target=android-12</li>
+<li>Настроить путь к Android SDK в bfgLib/local.properties</li>
+<li>Сделать ant clean release (apache ant нужно предварительно установить)</li>
+<li>Заархивировать папку bin и res в BFGLib.zip и положить архив рядом с BFGLib.csproj</li>
+</ol>
+<h1 id="как-поставить-adb-драйвер-для-kindle-fire-phone">КАК ПОСТАВИТЬ ADB-ДРАЙВЕР ДЛЯ KINDLE FIRE PHONE</h1>
+<p>Дравера качаются отсюда, а не из Android SDK Manager:
+<a href="https://s3.amazonaws.com/android-sdk-manager/redist/Fire_Phone.zip">https://s3.amazonaws.com/android-sdk-manager/redist/Fire_Phone.zip</a></p>
+<h1 id="как-залепить-проблему-jartoxml--unsupported-majorminor-version-510">КАК ЗАЛЕПИТЬ ПРОБЛЕМУ &quot;JARTOXML ... Unsupported major.minor version 51.0&quot;</h1>
+<p>Нужно установить Jdk1.7
+<a href="http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-windows-i586.exe">http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-windows-i586.exe</a>
+Затем в Program Files(x86)/Java, переименовать jdk.1.6.0_39 во что-то непотребное</p>
+<h1 id="как-собирать-билд-в-бфг">КАК СОБИРАТЬ БИЛД В БФГ</h1>
+<ol>
+<li>Увеличить version code</li>
+<li>Собрать apk</li>
+<li>Из неподписанного apk (e.g: com.bigfishgames.gummydropgoogle.apk) удалить файл assets/Cheats</li>
+<li>Установить путь к продакшен серверу в файле assets/ServerURL.txt: <a href="http://cdn-f2p.bigfishgames.com/WorldSaga">http://cdn-f2p.bigfishgames.com/WorldSaga</a></li>
+<li>Закоммитить AndroidManifest.xml с комментарием &quot;Android: bump version code&quot;</li>
+<li>Залить apk в BFG SVN папку Google/December_XX и туда же положить словари</li>
+</ol>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
