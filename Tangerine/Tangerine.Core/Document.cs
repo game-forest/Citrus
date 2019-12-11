@@ -205,6 +205,9 @@ namespace Tangerine.Core
 			}
 			Manager.RootNodes.Clear();
 			Manager.RootNodes.Add(RootNode);
+			if (RootNode is Widget w) {
+				w.LayoutManager = Manager.ServiceProvider.GetService<LayoutManager>();
+			}
 			Decorate(RootNode);
 			Container = RootNode;
 			History.PerformingOperation += Document_PerformingOperation;
@@ -284,6 +287,9 @@ namespace Tangerine.Core
 				}
 				Manager.RootNodes.Clear();
 				Manager.RootNodes.Add(RootNode);
+				if (RootNode is Widget w) {
+					w.LayoutManager = Manager.ServiceProvider.GetService<LayoutManager>();
+				}
 				Decorate(RootNode);
 				Container = RootNode;
 				if (Format == DocumentFormat.Tan) {
@@ -700,7 +706,7 @@ namespace Tangerine.Core
 				}
 			}
 		}
-		
+
 
 		public void ForceAnimationUpdate()
 		{
