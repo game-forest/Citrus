@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Tangerine.UI
@@ -8,15 +9,25 @@ namespace Tangerine.UI
 
 		public override Stream GetResourceStream()
 		{
-			var assembly = GetAssembly();
-			var stream = assembly.GetManifestResourceStream(GetResourceId(themed: true));
-			return stream ?? assembly.GetManifestResourceStream(GetResourceId(themed: false));
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+				Stream stream;
+				try {
+					stream = assembly.GetManifestResourceStream(GetResourceId(themed: true, assembly.GetName().Name));
+					stream = stream ?? assembly.GetManifestResourceStream(GetResourceId(themed: false, assembly.GetName().Name));
+				} catch (Exception) {
+					stream = null;
+				}
+				if (stream != null) {
+					return stream;
+				}
+			}
+			return null;
 		}
 
-		private string GetResourceId(bool themed)
+		private string GetResourceId(bool themed, string assemblyName)
 		{
 			var theme = themed ? $"{(ColorTheme.Current.IsDark ? "Dark" : "Light")}." : string.Empty;
-            return $"{AssemblyName}.Resources.Icons.{theme}{ResourceId}.png";
+            return $"{assemblyName}.Resources.Icons.{theme}{ResourceId}.png";
 		}
 	}
 }
