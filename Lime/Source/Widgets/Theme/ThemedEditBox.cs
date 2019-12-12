@@ -83,7 +83,7 @@ namespace Lime
 			var dragGesture = new DragGesture(exclusive: true, dragThreshold: 2.0f);
 			Updated += (delta) => {
 				if (Editor.FocusableWidget.IsFocused()) {
-					dragGesture.Cancel();
+					dragGesture.OnCancel();
 				} else if (IsMouseOverThisOrDescendant() || isDragging) {
 					WidgetContext.Current.MouseCursor = MouseCursor.SizeWE;
 				}

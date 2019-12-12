@@ -1,100 +1,115 @@
 using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Lime
 {
-	public struct TapGestureOptions
+	public class ClickGesture : Gesture
 	{
-		public int ButtonIndex;
-		public float MinTapDuration;
-		public bool CanRecognizeByTapDuration;
-	}
-
-	public abstract class TapGesture : Gesture
-	{
-		private enum State
+		enum State
 		{
 			Idle,
-			Scheduled,
+			WaitDrags,
 			Began
-		}
+		};
 
-		public static float Threshold = 3;
+		private readonly float ClickBeginDelay = 0.064f;
 
-		private readonly TapGestureOptions options;
+		private State state;
+		private float tapDuration;
+		private PollableEvent began;
+		private PollableEvent canceled;
+		private PollableEvent recognized;
 
 		internal Action InternalRecognized;
-		private float tapDuration;
-		private State state;
+		public static float Threshold;
+		internal bool Deferred;
 
-		public override bool IsActive => state != State.Idle;
+		/// <summary>
+		/// Occurs if a user has touched upon the widget.
+		/// If the widget lies within a scrollable panel,
+		/// the began event might be deferred in order to give the priority to drag gesture.
+		/// </summary>
+		public event Action Began { add { began.Handler += value; } remove { began.Handler -= value; } }
+		/// <summary>
+		/// Occurs if click was canceled by drag gesture.
+		/// </summary>
+		public event Action Canceled { add { canceled.Handler += value; } remove { canceled.Handler -= value; } }
+		/// <summary>
+		/// Occurs when the gesture is fully recognized.
+		/// </summary>
+		public event Action Recognized { add { recognized.Handler += value; } remove { recognized.Handler -= value; } }
 
 		public Vector2 MousePressPosition { get; private set; }
 
-		public int ButtonIndex => options.ButtonIndex;
+		public bool WasBegan() => began.HasOccurred;
+		public bool WasCanceled() => canceled.HasOccurred;
+		public bool WasRecognized() => recognized.HasOccurred;
+		public bool WasRecognizedOrCanceled() => WasCanceled() || WasRecognized();
 
-		protected TapGesture(Action onRecognized, TapGestureOptions tapOptions) : base(onRecognized)
+		public int ButtonIndex { get; }
+
+		public ClickGesture(int buttonIndex, Action recognized = null)
 		{
-			options = tapOptions;
+			ButtonIndex = buttonIndex;
+			if (recognized != null) {
+				Recognized += recognized;
+			}
 		}
 
-		protected internal override bool Cancel(Gesture sender)
+		public ClickGesture(Action recognized = null)
+			: this(0, recognized)
+		{
+		}
+
+		internal protected override void OnCancel()
 		{
 			if (state == State.Began) {
-				RaiseCanceled();
-				RaiseEnded();
+				canceled.Raise();
 			}
 			state = State.Idle;
-			return true;
 		}
 
-		protected internal override void Update(float delta)
+		internal protected override bool OnUpdate(float delta)
 		{
 			if (Input.GetNumTouches() > 1) {
-				Cancel(this);
-				return;
+				OnCancel();
+				return false;
 			}
-
-			if ((state == State.Idle) && Input.WasMousePressed(ButtonIndex)) {
+			bool result = false;
+			if (state == State.Idle && Input.WasMousePressed(ButtonIndex)) {
 				tapDuration = 0.0f;
 				MousePressPosition = Input.MousePosition;
-				state = State.Scheduled;
-				return;
+				state = State.WaitDrags;
 			}
-
 			tapDuration += delta;
-			if (state == State.Scheduled) {
-				state = State.Began;
-				RaiseBegan();
-			}
-
-			if (state == State.Began) {
-				bool isTapTooShort = tapDuration < options.MinTapDuration;
-				if (!Input.IsMousePressed(ButtonIndex)) {
-					if (isTapTooShort) {
-						RaiseCanceled();
-						RaiseEnded();
-					} else {
-						Finish();
-					}
-				} else if (options.CanRecognizeByTapDuration && !isTapTooShort) {
-					Finish();
-				}
-			}
-
-			void Finish()
-			{
-				state = State.Idle;
+			if (state == State.WaitDrags) {
+				// Defer began event if there are any drag gesture.
 				if (
-					(Input.MousePosition - MousePressPosition).SqrLength < Threshold.Sqr() ||
-					Owner.IsMouseOverThisOrDescendant()
+					!Deferred ||
+					tapDuration > ClickBeginDelay ||
+					!Input.IsMousePressed(ButtonIndex)
 				) {
-					InternalRecognized?.Invoke();
-					RaiseRecognized();
-				} else {
-					RaiseCanceled();
+					state = State.Began;
+					began.Raise();
 				}
-				RaiseEnded();
 			}
+			if (state == State.Began) {
+				if (!Input.IsMousePressed(ButtonIndex)) {
+					state = State.Idle;
+					if ((Input.MousePosition - MousePressPosition).SqrLength < Threshold.Sqr() ||
+						 Owner.IsMouseOverThisOrDescendant()
+					) {
+						InternalRecognized?.Invoke();
+						recognized.Raise();
+						result = true;
+					} else {
+						canceled.Raise();
+					}
+				}
+			}
+			return result;
 		}
 	}
 }

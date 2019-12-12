@@ -6,80 +6,78 @@ namespace Lime
 {
 	public class GestureList : IList<Gesture>
 	{
-		private readonly List<Gesture> gestures;
+		private readonly List<Gesture> gestures = new List<Gesture>();
 		private readonly Node owner;
 
 		public int Count => gestures.Count;
 		public bool IsReadOnly => false;
 
-		public GestureList(Node gesturesOwner)
+		public GestureList(Node owner)
 		{
-			gestures = new List<Gesture>();
-			owner = gesturesOwner;
+			this.owner = owner;
 		}
 
-		public void Add(Gesture item)
+		public void Add(Gesture gesture)
 		{
-			ResetOwner(item, owner);
-			gestures.Add(item);
+			CheckOwner(gesture);
+			gesture.Owner = owner;
+			gestures.Add(gesture);
 		}
 
-		public bool Remove(Gesture item)
+		public void Insert(int index, Gesture gesture)
 		{
-			if (gestures.Remove(item)) {
-				ResetOwner(item);
+			CheckOwner(gesture);
+			gesture.Owner = owner;
+			gestures.Insert(index, gesture);
+		}
+
+		public Gesture this[int index]
+		{
+			get { return gestures[index]; }
+			set
+			{
+				CheckOwner(value);
+				gestures[index].Owner = null;
+				gestures[index] = value;
+				value.Owner = owner;
+			}
+		}
+
+		public void RemoveAt(int index)
+		{
+			gestures[index].Owner = null;
+			gestures.RemoveAt(index);
+		}
+
+		public bool Remove(Gesture gesture)
+		{
+			if (gestures.Remove(gesture)) {
+				gesture.Owner = null;
 				return true;
 			}
 			return false;
 		}
 
-		public void Insert(int index, Gesture item)
-		{
-			ResetOwner(item, owner);
-			gestures.Insert(index, item);
-		}
-
-		public void RemoveAt(int index)
-		{
-			ResetOwner(gestures[index]);
-			gestures.RemoveAt(index);
-		}
-
 		public void Clear()
 		{
-			gestures.ForEach(ResetOwner);
+			foreach (var g in gestures) {
+				g.Owner = null;
+			}
 			gestures.Clear();
 		}
 
-		public Gesture this[int index]
-		{
-			get => gestures[index];
-			set
-			{
-				ResetOwner(value, owner);
-				ResetOwner(gestures[index]);
-				gestures[index] = value;
-			}
-		}
-
-		public int IndexOf(Gesture item) => gestures.IndexOf(item);
-		public bool Contains(Gesture item) => gestures.Contains(item);
+		public int IndexOf(Gesture gesture) => gestures.IndexOf(gesture);
+		public bool Contains(Gesture gesture) => gestures.Contains(gesture);
 		public void CopyTo(Gesture[] array, int arrayIndex) => gestures.CopyTo(array, arrayIndex);
 		public List<Gesture>.Enumerator GetEnumerator() => gestures.GetEnumerator();
 		IEnumerator<Gesture> IEnumerable<Gesture>.GetEnumerator() => gestures.GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => gestures.GetEnumerator();
 
-		private static void ResetOwner(Gesture gesture)
+		private static void CheckOwner(Gesture gesture)
 		{
-			gesture.Owner = null;
-		}
-
-		private static void ResetOwner(Gesture gesture, Node newOwner)
-		{
-			if (newOwner != null && gesture.Owner != null) {
-				throw new InvalidOperationException("Gesture already owned");
+			if (gesture.Owner != null) {
+				throw new InvalidOperationException("Gesture already has an owner.");
 			}
-			gesture.Owner = newOwner;
 		}
 	}
 }
