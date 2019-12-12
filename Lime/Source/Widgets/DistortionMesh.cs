@@ -64,11 +64,10 @@ namespace Lime
 				localPoint.Y = -localPoint.Y;
 				size.Y = -size.Y;
 			}
-			for (int i = 0; i < (NumRows + 1) * NumCols; i++) {
+			for (int i = 0; i < NumRows * (NumCols + 1); i++) {
 				if ((i + 1) % (NumCols + 1) == 0) {
 					continue;
 				}
-
 				var n1 = (DistortionMeshPoint)Nodes[i];
 				var n2 = (DistortionMeshPoint)Nodes[i + NumCols + 1];
 				var n3 = (DistortionMeshPoint)Nodes[i + NumCols + 2];
