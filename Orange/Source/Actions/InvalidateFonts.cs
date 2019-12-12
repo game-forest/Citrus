@@ -21,14 +21,6 @@ namespace Orange.Source.Actions
 				Console.WriteLine($"Processing {configPath}..");
 				try {
 					var tftPath = Path.ChangeExtension(configPath, "tft");
-					if (
-						File.Exists(tftPath) &&
-						new System.IO.FileInfo(configPath).LastWriteTime <=
-						new System.IO.FileInfo(tftPath).LastWriteTime
-					) {
-						Console.WriteLine($"{tftPath} is up to date.");
-						continue;
-					}
 					FontGenerator.UpdateCharSetsAndGenerateFont(
 						new Uri(The.Workspace.AssetsDirectory + "\\").MakeRelativeUri(new Uri(configPath)).OriginalString,
 						The.Workspace.AssetsDirectory
