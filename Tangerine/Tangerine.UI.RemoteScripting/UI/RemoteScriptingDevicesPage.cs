@@ -19,6 +19,7 @@ namespace Tangerine.UI.RemoteScripting
 		private CancellationToken cancellationToken;
 		private RemoteScriptingWidgets.Toolbar mainToolbar;
 		private ThemedScrollView devicesScrollView;
+		private ThemedScrollView testsScrollView;
 		private Widget deviceWidgetPlaceholder;
 		private volatile int selectedDeviceIndex = -1;
 
@@ -31,25 +32,36 @@ namespace Tangerine.UI.RemoteScripting
 				Layout = new VBoxLayout(),
 				Nodes = {
 					(mainToolbar = new RemoteScriptingWidgets.Toolbar()),
-					new Widget {
-						Layout = new HBoxLayout(),
+					new ThemedHSplitter {
+						SeparatorWidth = 1f,
+						Padding = new Thickness(5f),
+						Stretches = {0.15f, 0.15f, 0.7f},
 						Nodes = {
-							(devicesScrollView = new ThemedScrollView {
-								MinMaxWidth = 300,
-								TabTravesable = new TabTraversable()
+							(testsScrollView = new ThemedScrollView {
+								MinWidth = 150,
+								TabTravesable = new TabTraversable(),
 							}),
-							(deviceWidgetPlaceholder = new Widget() {
-								Layout = new HBoxLayout()
+							(devicesScrollView = new ThemedScrollView {
+								MinWidth = 150,
+								TabTravesable = new TabTraversable(),
+							}),
+							(deviceWidgetPlaceholder = new Widget {
+								MinWidth = 300,
+								Layout = new HBoxLayout(),
 							})
 						}
 					}
 				}
 			};
-			RefreshMainToolbar();
+			devicesScrollView.Content.Layout = new VBoxLayout { Spacing = 2f };
+			devicesScrollView.CompoundPresenter.Add(new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder));
+			testsScrollView.Content.Layout = new VBoxLayout{ Spacing = 2f };
+			testsScrollView.CompoundPresenter.Add(new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder));
+			RefreshUI();
 			Content.AddChangeWatcher(
 				() => CompiledAssembly.Instance,
 				_ => {
-					RefreshMainToolbar();
+					RefreshUI();
 				}
 			);
 
@@ -74,10 +86,15 @@ namespace Tangerine.UI.RemoteScripting
 			}));
 		}
 
-		private void RefreshMainToolbar()
+		/// <summary>
+		/// Recreates test list and main toolbar
+		/// </summary>
+		private void RefreshUI()
 		{
 			mainToolbar.Tasks.Stop();
 			mainToolbar.Content.Nodes.Clear();
+			testsScrollView.Tasks.Stop();
+			testsScrollView.Content.Nodes.Clear();
 
 			ToolbarButton startHostButton;
 			ToolbarButton stopHostButton;
@@ -88,15 +105,14 @@ namespace Tangerine.UI.RemoteScripting
 			var assembly = CompiledAssembly.Instance;
 			if (assembly != null) {
 				foreach (var entryPoint in assembly.PortableAssembly.EntryPoints) {
-					void RemoteRunEntryPoint()
-					{
+					var button = new ToolbarButton($"{entryPoint.Summary}") { Clicked = () => {
+						// Run entry point remotely
 						if (TryGetActiveDevice(out var device)) {
 							device.RemoteProcedureCall(assembly.RawBytes, assembly.PdbRawBytes, entryPoint.ClassName, entryPoint.MethodName);
 						}
-					}
-					var button = new ToolbarButton($"{entryPoint.Summary}") { Clicked = RemoteRunEntryPoint };
-					mainToolbar.Content.Nodes.Add(button);
-					mainToolbar.AddChangeWatcher(
+					} };
+					testsScrollView.Content.AddNode(button);
+					testsScrollView.AddChangeWatcher(
 						CalcSelectedDeviceHashCode,
 						_ => button.Enabled = TryGetActiveDevice(out var _)
 					);
