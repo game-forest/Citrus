@@ -45,6 +45,9 @@ namespace Lime
 					switch (gesture) {
 						case DragGesture dg: {
 							foreach (var g in activeGestures) {
+								if (g == gesture) {
+									continue;
+								}
 								var clickGesture = g as ClickGesture;
 								if (clickGesture?.ButtonIndex == dg.ButtonIndex) {
 									g.OnCancel();
