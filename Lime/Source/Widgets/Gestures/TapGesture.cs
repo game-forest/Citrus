@@ -5,16 +5,24 @@ using System.Collections.Generic;
 
 namespace Lime
 {
-	public class ClickGesture : Gesture
+	public struct TapGestureOptions
+	{
+		public int ButtonIndex;
+		public float MinTapDuration;
+		public bool CanRecognizeByTapDuration;
+	}
+
+	public abstract class TapGesture : Gesture
 	{
 		enum State
 		{
 			Idle,
-			WaitDrags,
+			Scheduled,
 			Began
 		};
 
 		private readonly float ClickBeginDelay = 0.064f;
+		private readonly TapGestureOptions options;
 
 		private State state;
 		private float tapDuration;
@@ -23,7 +31,7 @@ namespace Lime
 		private PollableEvent recognized;
 
 		internal Action InternalRecognized;
-		public static float Threshold;
+		public static float Threshold = 3;
 		internal bool Deferred;
 
 		/// <summary>
@@ -48,19 +56,14 @@ namespace Lime
 		public bool WasRecognized() => recognized.HasOccurred;
 		public bool WasRecognizedOrCanceled() => WasCanceled() || WasRecognized();
 
-		public int ButtonIndex { get; }
+		public int ButtonIndex => options.ButtonIndex;
 
-		public ClickGesture(int buttonIndex, Action recognized = null)
+		public TapGesture(Action onRecognized, TapGestureOptions options)
 		{
-			ButtonIndex = buttonIndex;
-			if (recognized != null) {
-				Recognized += recognized;
+			this.options = options;
+			if (onRecognized != null) {
+				Recognized += onRecognized;
 			}
-		}
-
-		public ClickGesture(Action recognized = null)
-			: this(0, recognized)
-		{
 		}
 
 		internal protected override void OnCancel()
@@ -81,10 +84,10 @@ namespace Lime
 			if (state == State.Idle && Input.WasMousePressed(ButtonIndex)) {
 				tapDuration = 0.0f;
 				MousePressPosition = Input.MousePosition;
-				state = State.WaitDrags;
+				state = State.Scheduled;
 			}
 			tapDuration += delta;
-			if (state == State.WaitDrags) {
+			if (state == State.Scheduled) {
 				// Defer began event if there are any drag gesture.
 				if (
 					!Deferred ||
@@ -96,20 +99,34 @@ namespace Lime
 				}
 			}
 			if (state == State.Began) {
+				bool isTapTooShort = tapDuration < options.MinTapDuration;
 				if (!Input.IsMousePressed(ButtonIndex)) {
 					state = State.Idle;
-					if ((Input.MousePosition - MousePressPosition).SqrLength < Threshold.Sqr() ||
-						 Owner.IsMouseOverThisOrDescendant()
-					) {
-						InternalRecognized?.Invoke();
-						recognized.Raise();
-						result = true;
+					if (!isTapTooShort) {
+						result = Finish();
 					} else {
+						state = State.Idle;
 						canceled.Raise();
 					}
+				} else if (options.CanRecognizeByTapDuration && !isTapTooShort) {
+					result = Finish();
 				}
 			}
 			return result;
+		}
+
+		private bool Finish()
+		{
+			if ((Input.MousePosition - MousePressPosition).SqrLength < Threshold.Sqr() ||
+			    Owner.IsMouseOverThisOrDescendant()
+			) {
+				InternalRecognized?.Invoke();
+				recognized.Raise();
+				return true;
+			} else {
+				canceled.Raise();
+				return false;
+			}
 		}
 	}
 }
