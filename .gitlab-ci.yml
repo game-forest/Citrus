@@ -35,9 +35,8 @@ osx_build:
 generate_docs:
   stage: build
   only:
-  - /^docs$/
+  - /^master$/
   tags:
-    - python3
     - win
     - docfx
     - git_usr_bin_in_path
@@ -64,7 +63,7 @@ generate_docs:
 push_to_github:
   stage: build
   only:
-  - /^docs$/
+  - /^master$/
   tags:
     - win
     - git_usr_bin_in_path
