@@ -8,7 +8,7 @@ export ASSEMBLIES="$GAME.Game Lime LemonBinding Kumquat OpenTK protobuf-net"
 
 # Cygwin package requirements: gcc-mingw, pkg-config
 # If you want to pass -z to mkbundle: mingw-zlib1, mingw-zlib-devel
- 
+
 export MONO=/cygdrive/c/Mono-2.10.8/
 # Required to find mkbundle
 export PATH=$PATH:$MONO/bin

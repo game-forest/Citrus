@@ -1,7 +1,7 @@
 variables:
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
-  
+
 windows_build:
   stage: build
   tags:
@@ -17,7 +17,7 @@ windows_build:
   - 'Orange\Toolchain.Win\nuget.exe restore Tangerine\Tangerine.Win.sln'
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Tangerine\Tangerine.Win.sln'
   - echo "Tangerine build OK"
-  
+
 osx_build:
   stage: build
   tags:
@@ -31,3 +31,53 @@ osx_build:
   - if [ -s ./../changes.txt ]; then exit 1; else echo "Orange build OK"; fi
   - './Orange/Launcher/bin/Mac/Release/Launcher.app/Contents/MacOS/Launcher -c -j -b $CITRUS_PATH/Tangerine/Tangerine.Mac.sln'
   - echo "Tangerine build OK"
+
+generate_docs:
+  stage: build
+  only:
+  - /^master$/
+  tags:
+    - win
+    - docfx
+    - git_usr_bin_in_path
+  script:
+    # generate docs using docfx (into ./Docs/site_/)
+    - docfx Docs/docfx.json
+    # replace backslashes with forwards slashes in a path to private key
+    - $env:GAME_FOREST_BOT_RSA=$env:GAME_FOREST_BOT_RSA -replace "[\\]", "/"
+    # replace crlf in last line of private key, because gitlab is broken (and -NoNewLine option because powershell is also broken)
+    - ((Get-Content $env:GAME_FOREST_BOT_RSA) -join "`n") + "`n" | Set-Content -NoNewline $env:GAME_FOREST_BOT_RSA
+    # override ssh command for git to ignore remote host fingerprint and provide custom private key
+    - $env:GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $env:GAME_FOREST_BOT_RSA -F /dev/null"
+    # make a shallow clone of github pages branch
+    - git clone git@github.com:game-forest/Citrus.git --depth 1 --branch gh-pages --single-branch citrus_gh_pages
+    - cd citrus_gh_pages
+    - git config user.email bot@game-forest.com
+    - git config user.name Game Forest
+    - git rm -r *
+    - mv ../Docs/_site/* .
+    - git add -A
+    - git diff-index --quiet HEAD; if ($?) { echo "no changes; skipping commit" } else { git commit -m"update docs" }
+    - git push origin gh-pages
+
+push_to_github:
+  stage: build
+  only:
+  - /^master$/
+  tags:
+    - win
+    - git_usr_bin_in_path
+  script:
+    # replace backslashes with forwards slashes in a path to private key
+    - $env:GAME_FOREST_BOT_RSA=$env:GAME_FOREST_BOT_RSA -replace "[\\]", "/"
+    # replace crlf in last line of private key, because gitlab is broken (and -NoNewLine option because powershell is also broken)
+    - ((Get-Content $env:GAME_FOREST_BOT_RSA) -join "`n") + "`n" | Set-Content -NoNewline $env:GAME_FOREST_BOT_RSA
+    # override ssh command for git to ignore remote host fingerprint and provide custom private key
+    - $env:GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $env:GAME_FOREST_BOT_RSA -F /dev/null"
+    - git config user.email bot@game-forest.com
+    - git config user.name Game Forest
+    - git remote add github git@github.com:game-forest/Citrus.git; if ($?) { } else { echo "remote already set" }
+    - git fetch github
+    - git branch -D $env:CI_BUILD_REF_NAME; if ($?) { } else { echo "branch doesn't exist" }
+    - git checkout --track origin/$env:CI_BUILD_REF_NAME
+    - git push github $env:CI_BUILD_REF_NAME
