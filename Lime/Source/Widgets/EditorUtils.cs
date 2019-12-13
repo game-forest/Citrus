@@ -189,16 +189,16 @@ namespace Lime
 			public Rectangle Bounds;
 			public float FontHeight;
 
-			private static List<Rectangle> PrepareRows(Vector2 s, Vector2 e, float fh)
+			private static List<Rectangle> PrepareRows(Vector2 s, Vector2 e, float fontHeight)
 			{
 				var rows = new List<Rectangle>();
-				if (s.Y == e.Y) {
-					rows.Add(new Rectangle(s, e + Vector2.Down * fh));
+				if (e.Y - s.Y < fontHeight) {
+					rows.Add(new Rectangle(s, e + Vector2.Down * fontHeight));
 				} else { // Multi-line selection.
-					rows.Add(new Rectangle(s, new Vector2(float.PositiveInfinity, s.Y + fh)));
-					if (s.Y + fh < e.Y)
-						rows.Add(new Rectangle(0, s.Y + fh, float.PositiveInfinity, e.Y));
-					rows.Add(new Rectangle(new Vector2(0, e.Y), e + Vector2.Down * fh));
+					rows.Add(new Rectangle(s, new Vector2(float.PositiveInfinity, s.Y + fontHeight)));
+					if (s.Y + fontHeight < e.Y)
+						rows.Add(new Rectangle(0, s.Y + fontHeight, float.PositiveInfinity, e.Y));
+					rows.Add(new Rectangle(new Vector2(0, e.Y), e + Vector2.Down * fontHeight));
 				}
 				return rows;
 			}
@@ -335,7 +335,7 @@ namespace Lime
 			return s == "-" || Double.TryParse(s, numberStyle, CultureInfo.InvariantCulture, out temp);
 		}
 	}
-	
+
 	public static class WordUtils
 	{
 		private enum CharClass
