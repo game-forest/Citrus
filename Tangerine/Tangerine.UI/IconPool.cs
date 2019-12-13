@@ -21,9 +21,14 @@ namespace Tangerine.UI
 		private static Icon CreateIcon(string id, string defaultId = null)
 		{
 			while (true) {
-				var png = new ThemedIconResource(id, "Tangerine").GetResourceStream();
-				if (png != null) {
-					return new Icon(new Bitmap(png));
+				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+					try {
+						var png = new ThemedIconResource(id, assembly.GetName().Name).GetResourceStream();
+						if (png != null) {
+							return new Icon(new Bitmap(png));
+						}
+					} catch (System.Exception) {
+					}
 				}
 				id = defaultId ?? throw new ArgumentException($"Icon '{id}' doesn't exist");
 				defaultId = null;
