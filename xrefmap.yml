@@ -15961,6 +15961,22 @@ references:
   isSpec: "True"
   fullName: Lime.DistortionMesh.NumRows
   nameWithType: DistortionMesh.NumRows
+- uid: Lime.DistortionMesh.PartialHitTestByContents(Lime.HitTestArgs@)
+  name: PartialHitTestByContents(ref HitTestArgs)
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_PartialHitTestByContents_Lime_HitTestArgs__
+  commentId: M:Lime.DistortionMesh.PartialHitTestByContents(Lime.HitTestArgs@)
+  name.vb: PartialHitTestByContents(ByRef HitTestArgs)
+  fullName: Lime.DistortionMesh.PartialHitTestByContents(ref Lime.HitTestArgs)
+  fullName.vb: Lime.DistortionMesh.PartialHitTestByContents(ByRef Lime.HitTestArgs)
+  nameWithType: DistortionMesh.PartialHitTestByContents(ref HitTestArgs)
+  nameWithType.vb: DistortionMesh.PartialHitTestByContents(ByRef HitTestArgs)
+- uid: Lime.DistortionMesh.PartialHitTestByContents*
+  name: PartialHitTestByContents
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_PartialHitTestByContents_
+  commentId: Overload:Lime.DistortionMesh.PartialHitTestByContents
+  isSpec: "True"
+  fullName: Lime.DistortionMesh.PartialHitTestByContents
+  nameWithType: DistortionMesh.PartialHitTestByContents
 - uid: Lime.DistortionMesh.points
   name: points
   href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_points
