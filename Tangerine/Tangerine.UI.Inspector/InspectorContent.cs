@@ -523,7 +523,7 @@ namespace Tangerine.UI.Inspector
 				var keyColor = KeyframePalette.Colors[editor.EditorParams.TangerineAttribute.ColorIndex];
 				var allowedKeyFunctions = PropertyAttributes<TangerineKeyframeInterpolationAttribute>
 					.Get(editor.EditorParams.PropertyInfo)?.KeyframeInterpolations;
-		var keyframeButton = new KeyframeButton {
+				var keyframeButton = new KeyframeButton {
 					LayoutCell = new LayoutCell(Alignment.LeftCenter, stretchX: 0),
 					KeyColor = keyColor,
 					AllowedKeyFunctions = allowedKeyFunctions,
