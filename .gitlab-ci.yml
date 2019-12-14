@@ -53,7 +53,7 @@ generate_docs:
     - git clone git@github.com:game-forest/Citrus.git --depth 1 --branch gh-pages --single-branch citrus_gh_pages
     - cd citrus_gh_pages
     - git config user.email bot@game-forest.com
-    - git config user.name Game Forest
+    - git config --replace-all user.name "Game Forest"
     - git rm -r *
     - mv ../Docs/_site/* .
     - git add -A
@@ -75,7 +75,7 @@ push_to_github:
     # override ssh command for git to ignore remote host fingerprint and provide custom private key
     - $env:GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $env:GAME_FOREST_BOT_RSA -F /dev/null"
     - git config user.email bot@game-forest.com
-    - git config user.name "Game Forest"
+    - git config --replace-all user.name "Game Forest"
     - git remote add github git@github.com:game-forest/Citrus.git; if ($?) { } else { echo "remote already set" }
     - git fetch github
     - git branch -D $env:CI_BUILD_REF_NAME; if ($?) { } else { echo "branch doesn't exist" }
