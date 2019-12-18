@@ -113,7 +113,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\SegoeUIRegular.ttf" />
+    <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="..\..\Lemon\Library\bin\Mac\Release\libLemon.dylib">
