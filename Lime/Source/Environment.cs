@@ -42,7 +42,7 @@ namespace Lime
 			startInfo.FileName = "explorer.exe";
 			startInfo.Arguments = $"/select, \"{path}\"";
 #elif MAC
-			string appleScript = 
+			string appleScript =
 				"'tell application \"Finder\"\n" +
 				"activate\n" +
 				$"make new Finder window to (POSIX file \"{path}\")\n" +
@@ -113,6 +113,14 @@ namespace Lime
 #elif WIN
 			var device = OpenTK.DisplayDevice.Default;
 			return new Vector2(device.Width, device.Height);
+#endif
+		}
+
+		public static Rectangle GetDesktopBounds()
+		{
+#if WIN
+			var vd = System.Windows.Forms.SystemInformation.VirtualScreen;
+			return new Rectangle(vd.Left, vd.Top, vd.Right, vd.Bottom);
 #endif
 		}
 	}

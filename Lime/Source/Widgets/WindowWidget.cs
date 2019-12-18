@@ -213,7 +213,6 @@ namespace Lime
 			}
 			if (showing) {
 				UpdateAndResize(0);
-				Window.Center();
 			}
 		}
 

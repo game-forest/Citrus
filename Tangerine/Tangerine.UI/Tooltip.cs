@@ -20,7 +20,7 @@ namespace Lime
 				FixedSize = false,
 				Visible = false,
 				Centered = false,
-				ToolWindow = true,
+				Type = WindowType.ToolTip,
 			});
 			tooltip = new ThemedFrame {
 				LayoutCell = new LayoutCell { Ignore = true },
@@ -61,10 +61,11 @@ namespace Lime
 							if (!wasResized) {
 								wasResized = true;
 								tooltipWindow.Visible = true;
-								if (pos.X + tooltip.Width >= Environment.GetDesktopSize().X) {
-									pos.X = Environment.GetDesktopSize().X - tooltip.Width - Theme.Metrics.ControlsPadding.Right;
+								var bounds = Environment.GetDesktopBounds();
+								if (pos.X + tooltip.Width >= bounds.Right) {
+									pos.X = bounds.Right - tooltip.Width - Theme.Metrics.ControlsPadding.Right;
 								}
-								if (pos.Y + tooltip.Height >= Environment.GetDesktopSize().Y) {
+								if (pos.Y + tooltip.Height >= bounds.Bottom) {
 									pos.Y -= 2 * tooltip.Height + Theme.Metrics.ControlsPadding.Bottom;
 								}
 								tooltipWindow.ClientSize = tooltipWindow.DecoratedSize = tooltip.Size = tooltip.EffectiveMinSize;

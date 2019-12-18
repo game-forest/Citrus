@@ -430,8 +430,10 @@ namespace Lime
 			if (options.UseTimer && options.AsyncRendering) {
 				throw new Lime.Exception("Can't use both timer and async rendering");
 			}
-			if (options.ToolWindow) {
+			if (options.Type == WindowType.Tool) {
 				form = new ToolForm();
+			} else if (options.Type == WindowType.ToolTip) {
+				form = new ToolTipForm();
 			} else {
 				form = new Form();
 			}
@@ -1177,7 +1179,7 @@ namespace Lime
 	{
 		public ToolForm() : base()
 		{
-			this.ShowInTaskbar = false;
+			ShowInTaskbar = false;
 		}
 
 		protected override CreateParams CreateParams
@@ -1188,6 +1190,30 @@ namespace Lime
 				return cp;
 			}
 		}
+	}
+
+	public class ToolTipForm : Form
+	{
+		public ToolTipForm() : base()
+		{
+			ShowInTaskbar = false;
+			DoubleBuffered = true;
+		}
+
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams cp = base.CreateParams;
+				// WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP
+				cp.Style = unchecked((int)0x80000000) | 0x01 | 0x02;
+				// WS_EX_TOOLWINDOW | WS_EX_TOPMOST
+				cp.ExStyle = 0x00000080 | 0x00000008;
+				return cp;
+			}
+		}
+
+		protected override bool ShowWithoutActivation => true;
 	}
 }
 #endif
