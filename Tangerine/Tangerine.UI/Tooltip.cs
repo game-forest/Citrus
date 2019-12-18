@@ -21,21 +21,22 @@ namespace Lime
 				Visible = false,
 				Centered = false,
 				Type = WindowType.ToolTip,
+				Title = "Tooltip",
 			});
 			tooltip = new ThemedFrame {
 				LayoutCell = new LayoutCell { Ignore = true },
 				Layout = new StackLayout(),
 				Nodes = {
-					(tooltipText = new ThemedSimpleText { Padding = new Thickness(4) }),
+					(tooltipText = new ThemedSimpleText { Padding = new Thickness(4), }),
 				},
-				Presenter = new ThemedFramePresenter(Color4.Yellow.Transparentify(0.8f), Color4.Black)
+				Presenter = new ThemedFramePresenter(Color4.Yellow.Transparentify(0.8f), Color4.Black),
 			};
 			rootWidget = new ThemedInvalidableWindowWidget(tooltipWindow) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
 				Nodes = {
 					tooltip
-				}
+				},
 			};
 		}
 
@@ -61,6 +62,7 @@ namespace Lime
 							if (!wasResized) {
 								wasResized = true;
 								tooltipWindow.Visible = true;
+								tooltipWindow.ClientSize = tooltipWindow.DecoratedSize = tooltip.Size = tooltip.EffectiveMinSize;
 								var bounds = Environment.GetDesktopBounds();
 								if (pos.X + tooltip.Width >= bounds.Right) {
 									pos.X = bounds.Right - tooltip.Width - Theme.Metrics.ControlsPadding.Right;
@@ -68,7 +70,6 @@ namespace Lime
 								if (pos.Y + tooltip.Height >= bounds.Bottom) {
 									pos.Y -= 2 * tooltip.Height + Theme.Metrics.ControlsPadding.Bottom;
 								}
-								tooltipWindow.ClientSize = tooltipWindow.DecoratedSize = tooltip.Size = tooltip.EffectiveMinSize;
 								tooltipWindow.ClientPosition = tooltipWindow.DecoratedPosition = new Vector2(pos.X.Truncate(), pos.Y.Truncate());
 							}
 						}

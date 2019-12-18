@@ -99,28 +99,22 @@ namespace Lime
 			return path;
 		}
 
-		public static Vector2 GetDesktopSize()
-		{
-#if iOS
-			UIScreen screen = UIScreen.MainScreen;
-			return new Vector2((float)screen.Bounds.Width, (float)screen.Bounds.Height);
-#elif ANDROID
-			var s = ActivityDelegate.Instance.GameView.Size;
-			return new Vector2(s.Width, s.Height);
-#elif MAC || MONOMAC
-			var device = Lime.Platform.DisplayDevice.Default;
-			return new Vector2(device.Width, device.Height);
-#elif WIN
-			var device = OpenTK.DisplayDevice.Default;
-			return new Vector2(device.Width, device.Height);
-#endif
-		}
+		public static Vector2 GetDesktopSize() => GetDesktopBounds().Size;
 
 		public static Rectangle GetDesktopBounds()
 		{
 #if WIN
-			var vd = System.Windows.Forms.SystemInformation.VirtualScreen;
-			return new Rectangle(vd.Left, vd.Top, vd.Right, vd.Bottom);
+			var vs = System.Windows.Forms.SystemInformation.VirtualScreen;
+			return new Rectangle(vs.Left, vs.Top, vs.Right, vs.Bottom);
+#elif MAC || MONOMAC
+			var screen = NSScreen.MainScreen.Frame;
+			return new Rectangle((float)screen.Left, (float)screen.Top, (float)screen.Right, (float)screen.Bottom);
+#elif ANDROID
+			var s = ActivityDelegate.Instance.GameView.Size;
+			return new Rectangle(0, 0, s.Width, s.Height);
+#elif iOS
+			UIScreen screen = UIScreen.MainScreen;
+			return new Rectangle(0, 0, (float)screen.Bounds.Width, (float)screen.Bounds.Height);
 #endif
 		}
 	}
