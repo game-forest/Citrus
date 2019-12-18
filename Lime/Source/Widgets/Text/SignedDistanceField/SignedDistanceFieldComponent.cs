@@ -148,6 +148,7 @@ namespace Lime
 	}
 
 	[TangerineRegisterComponent]
+	[MutuallyExclusiveDerivedComponents]
 	[AllowedComponentOwnerTypes(typeof(SimpleText), typeof(TextStyle))]
 	public class SignedDistanceFieldComponent : NodeComponent
 	{
