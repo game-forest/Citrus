@@ -30,9 +30,9 @@ namespace Lime
 		{
 		}
 
-		protected internal override void Update(float delta)
+		protected internal override bool OnUpdate(float delta)
 		{
-			base.Update(delta);
+			var r = base.OnUpdate(delta);
 
 			if (WasBegan()) {
 				TouchPressDistance = Vector2.Distance(Touch0, Touch1);
@@ -42,10 +42,11 @@ namespace Lime
 				TouchDistance = Vector2.Distance(Touch0, Touch1);
 				LastPinchScale = TouchDistance / previousTouchDistance;
 				if (LastPinchScale != 1.0f) {
-					RaiseChanged();
+					changed.Raise();
 					LastPinchScale = 1.0f;
 				}
 			}
+			return r;
 		}
 
 		protected override bool TryGetStartDragPosition(out Vector2 position)

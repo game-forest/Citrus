@@ -38,13 +38,7 @@ namespace Lime
 				vc.Width = eb.Editor.OverwriteMode && !eb.Editor.HasSelection() ?
 					tw.Font.CharSource.Get(eb.Editor.CurrentChar(), tw.FontHeight)?.Width ?? 5f : 0f;
 				if (eb.IsMouseOverThisOrDescendant() && WidgetContext.Current.MouseCursor == MouseCursor.Default) {
-					var rect = new Rectangle {
-						A = tw.ContentPosition,
-						B = tw.ContentPosition + tw.ContentSize,
-					};
-					if (rect.Contains(tw.LocalMousePosition())) {
-						WidgetContext.Current.MouseCursor = MouseCursor.IBeam;
-					}
+					WidgetContext.Current.MouseCursor = MouseCursor.IBeam;
 				}
 			};
 			new CaretDisplay(
@@ -83,7 +77,7 @@ namespace Lime
 			var dragGesture = new DragGesture(exclusive: true, dragThreshold: 2.0f);
 			Updated += (delta) => {
 				if (Editor.FocusableWidget.IsFocused()) {
-					dragGesture.Cancel();
+					dragGesture.OnCancel();
 				} else if (IsMouseOverThisOrDescendant() || isDragging) {
 					WidgetContext.Current.MouseCursor = MouseCursor.SizeWE;
 				}

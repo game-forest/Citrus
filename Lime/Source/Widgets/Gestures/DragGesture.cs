@@ -4,9 +4,16 @@ using static Lime.Mathf;
 
 namespace Lime
 {
+	public enum DragDirection
+	{
+		Any,
+		Horizontal,
+		Vertical
+	}
+
 	public class DragGesture : Gesture
 	{
-		private enum State
+		enum State
 		{
 			Idle,
 			Recognizing,
@@ -14,194 +21,37 @@ namespace Lime
 		}
 
 		protected const float DefaultDragThreshold = 5;
-		private PollableEvent changed;
+
 		private State state;
 		private readonly IMotionStrategy motionStrategy;
 		private const int MaxTouchHistorySize = 3;
 		private readonly Queue<(Vector2 Distance, float Duration)> touchHistory;
-		private PollableEvent ending;
 		private Vector2 previousMotionStrategyPosition;
 		private float motionStrategyTime;
 		private bool isMotionStrategyActive;
 		private Vector2 lastDragDelta;
+		private bool IsMotionInProgress() => motionStrategy == null ? false : isMotionStrategyActive;
 
-		/// <summary>
-		/// Will cancel any other drag gestures.
-		/// </summary>
-		public virtual bool Exclusive { get; set; }
+		public int ButtonIndex { get; }
+		public DragDirection Direction { get; private set; }
+		public float DragThreshold { get; set; }
+		// Will cancel any other drag gestures
+		public bool Exclusive { get; set; }
 
+		public Vector2 MousePressPosition { get; private set; }
 		/// <summary>
 		/// MousePosition depends on DragDirection so (MousePosition - DragDirection).X or Y
 		/// will always be zero if DragDirection is Vertical or Horizontal respectively.
 		/// This fact is used when checking for threshold.
 		/// </summary>
-		public override bool IsActive => state != State.Idle || IsMotionInProgress();
-
 		public virtual Vector2 MousePosition => IsMotionInProgress() ? motionStrategy.Position : ClampMousePositionByDirection(Direction);
-		public Vector2 MousePressPosition { get; private set; }
+
 		public Vector2 TotalDragDistance => MousePosition - MousePressPosition;
 		public Vector2 LastDragDistance => MousePosition - PreviousMousePosition;
-		public DragDirection Direction { get; private set; }
-		public int ButtonIndex { get; }
 
 		private Vector2 previousMousePosition;
 		protected virtual Vector2 PreviousMousePosition => IsMotionInProgress() ? previousMotionStrategyPosition : previousMousePosition;
-		public float DragThreshold { get; set; }
 
-		/// <summary>
-		/// Occurs when dragged.
-		/// </summary>
-		public virtual event Action Changed
-		{
-			add => changed.Handler += value;
-			remove => changed.Handler -= value;
-		}
-
-		/// <summary>
-		/// Occurs when the drag is completed and the special movement begins.
-		/// </summary>
-		public virtual event Action Ending
-		{
-			add => ending.Handler += value;
-			remove => ending.Handler -= value;
-		}
-
-		public DragGesture(
-			int buttonIndex = 0,
-			DragDirection direction = DragDirection.Any,
-			bool exclusive = false,
-			float dragThreshold = DefaultDragThreshold,
-			IMotionStrategy motionStrategy = null
-		)
-			: this(motionStrategy)
-		{
-			ButtonIndex = buttonIndex;
-			Direction = direction;
-			Exclusive = exclusive;
-			DragThreshold = dragThreshold;
-		}
-
-		public DragGesture(IMotionStrategy motionStrategy)
-		{
-			this.motionStrategy = motionStrategy;
-			if (motionStrategy != null) {
-				touchHistory = new Queue<(Vector2 distance, float duration)>();
-			}
-		}
-
-		public virtual bool WasChanged() => changed.HasOccurred;
-		public bool WasEnding() => ending.HasOccurred;
-		public bool IsRecognizing() => state == State.Recognizing;
-		public bool IsChanging() => state == State.Changing;
-		public void RaiseEnding() => ending.Raise();
-		protected void RaiseChanged() => changed.Raise();
-		protected virtual bool TryGetStartDragPosition(out Vector2 position)
-		{
-			if (Input.WasMousePressed(ButtonIndex)) {
-				return TryGetDragPosition(out position);
-			}
-			position = Vector2.NaN;
-			return false;
-		}
-		protected virtual bool TryGetDragPosition(out Vector2 position)
-		{
-			position = Input.MousePosition;
-			return true;
-		}
-		protected virtual bool IsDragging() => Input.IsMousePressed(ButtonIndex);
-		protected virtual bool CanStartDrag() => (MousePosition - MousePressPosition).SqrLength > DragThreshold.Sqr();
-
-		protected internal override bool Cancel(Gesture sender = null)
-		{
-			if (motionStrategy != null && IsMotionInProgress()) {
-				if (sender == null) {
-					return false;
-				}
-				isMotionStrategyActive = false;
-			}
-			if (sender != null && (sender as DragGesture)?.Exclusive != true) {
-				return false;
-			}
-			if (state != State.Idle) {
-				RaiseCanceled();
-				state = State.Idle;
-			}
-			return true;
-		}
-
-		protected internal override void Update(float delta)
-		{
-			if (motionStrategy != null && IsMotionInProgress()) {
-				if (Input.WasMousePressed(ButtonIndex) && Owner.IsMouseOverThisOrDescendant()) {
-					isMotionStrategyActive = false;
-					RaiseEnded();
-				} else {
-					previousMotionStrategyPosition = motionStrategy.Position;
-					motionStrategyTime += delta;
-					motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
-					if (motionStrategyTime > motionStrategy.Duration) {
-						isMotionStrategyActive = false;
-					}
-					if (IsMotionInProgress()) {
-						RaiseChanged();
-					} else {
-						RaiseEnded();
-					}
-				}
-				return;
-			}
-			var savedPreviousMousePosition = previousMousePosition;
-			bool wasChanging = IsChanging();
-			if (state == State.Idle && TryGetStartDragPosition(out var startPosition)) {
-				state = State.Recognizing;
-				MousePressPosition = startPosition;
-				RaiseBegan();
-			}
-			if (state == State.Recognizing) {
-				if (!IsDragging()) {
-					state = State.Idle;
-					RaiseCanceled();
-				} else if (CanStartDrag()) {
-					state = State.Changing;
-					if (TryGetDragPosition(out var mousePosition)) {
-						previousMousePosition = mousePosition;
-					}
-					RaiseRecognized();
-				}
-			}
-			if (state == State.Changing) {
-				if (
-					TryGetDragPosition(out var mousePosition) &&
-					(previousMousePosition != mousePosition)
-				) {
-					RaiseChanged();
-					previousMousePosition = mousePosition;
-				}
-
-				if (!IsDragging()) {
-					if (motionStrategy != null) {
-						RaiseEnding();
-					} else {
-						RaiseEnded();
-					}
-					state = State.Idle;
-				}
-			}
-			if (motionStrategy != null && wasChanging) {
-				if (WasEnding()) {
-					motionStrategy.Start(ClampMousePositionByDirection(Direction), touchHistory);
-					touchHistory.Clear();
-					motionStrategyTime = 0.0f;
-					isMotionStrategyActive = true;
-				} else {
-					lastDragDelta = ClampMousePositionByDirection(Direction) - savedPreviousMousePosition;
-					touchHistory.Enqueue((lastDragDelta, delta));
-					if (touchHistory.Count > MaxTouchHistorySize) {
-						touchHistory.Dequeue();
-					}
-				}
-			}
-		}
 
 		private Vector2 ClampMousePositionByDirection(DragDirection direction)
 		{
@@ -221,8 +71,179 @@ namespace Lime
 			}
 		}
 
-		private bool IsMotionInProgress() => motionStrategy == null ? false : isMotionStrategyActive;
+		protected virtual bool TryGetStartDragPosition(out Vector2 position)
+		{
+			if (Input.WasMousePressed(ButtonIndex)) {
+				return TryGetDragPosition(out position);
+			}
+			position = Vector2.NaN;
+			return false;
+		}
+		protected virtual bool TryGetDragPosition(out Vector2 position)
+		{
+			position = Input.MousePosition;
+			return true;
+		}
 
+		protected virtual bool IsDragging() => Input.IsMousePressed(ButtonIndex);
+		protected virtual bool CanStartDrag() => (MousePosition - MousePressPosition).SqrLength > DragThreshold.Sqr();
+
+		private PollableEvent began;
+		private PollableEvent recognized;
+		protected PollableEvent changed;
+		private PollableEvent ending;
+		private PollableEvent ended;
+
+		/// <summary>
+		/// Occurs if a user started gesture in a valid direction.
+		/// </summary>
+		public event Action Recognized
+		{
+			add { recognized.Handler += value; }
+			remove { recognized.Handler -= value; }
+		}
+		/// <summary>
+		/// Occurs when the drag is completed and the motion defined by motion strategy begins.
+		/// </summary>
+		public virtual event Action Ending
+		{
+			add => ending.Handler += value;
+			remove => ending.Handler -= value;
+		}
+		/// <summary>
+		/// Occurs when drag position is being changed by either user or motion strategy.
+		/// </summary>
+		public event Action Changed
+		{
+			add { changed.Handler += value; }
+			remove { changed.Handler -= value; }
+		}
+		/// <summary>
+		/// Occurs when either a user released input or motion strategy is done.
+		/// </summary>
+		public event Action Ended
+		{
+			add { ended.Handler += value; }
+			remove { ended.Handler -= value; }
+		}
+
+		public bool WasBegan() => began.HasOccurred;
+		public bool WasRecognized() => recognized.HasOccurred;
+		public bool WasChanged() => changed.HasOccurred;
+		public bool WasEnding() => ending.HasOccurred;
+		public bool WasEnded() => ended.HasOccurred;
+
+		public bool IsRecognizing() => state == State.Recognizing;
+		public bool IsChanging() => state == State.Changing;
+
+		public DragGesture(
+			int buttonIndex = 0,
+			DragDirection direction = DragDirection.Any,
+			bool exclusive = false,
+			float dragThreshold = DefaultDragThreshold,
+			IMotionStrategy motionStrategy = null
+		)
+			: this(motionStrategy)
+		{
+			ButtonIndex = buttonIndex;
+			Direction = direction;
+			DragThreshold = dragThreshold;
+			Exclusive = exclusive;
+		}
+
+		public DragGesture(IMotionStrategy motionStrategy)
+		{
+			this.motionStrategy = motionStrategy;
+			if (motionStrategy != null) {
+				touchHistory = new Queue<(Vector2 distance, float duration)>();
+			}
+		}
+
+		internal protected override void OnCancel()
+		{
+			if (state == State.Changing) {
+				ended.Raise();
+			}
+			state = State.Idle;
+			isMotionStrategyActive = false;
+		}
+
+		internal protected override bool OnUpdate(float delta)
+		{
+			bool result = false;
+			if (motionStrategy != null && IsMotionInProgress()) {
+				if (Input.WasMousePressed(ButtonIndex) && Owner.IsMouseOverThisOrDescendant()) {
+					isMotionStrategyActive = false;
+					ended.Raise();
+				} else {
+					previousMotionStrategyPosition = motionStrategy.Position;
+					motionStrategyTime += delta;
+					motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
+					if (motionStrategyTime > motionStrategy.Duration) {
+						isMotionStrategyActive = false;
+					}
+					if (IsMotionInProgress()) {
+						// TODO: raise changed only and only if prev mpos != current mpos?
+						changed.Raise();
+					} else {
+						ended.Raise();
+					}
+				}
+				return result;
+			}
+			var savedPreviousMousePosition = previousMousePosition;
+			bool wasChanging = IsChanging();
+			if (state == State.Idle && TryGetStartDragPosition(out var startPosition)) {
+				state = State.Recognizing;
+				MousePressPosition = startPosition;
+				began.Raise();
+			}
+			if (state == State.Recognizing) {
+				if (!Input.IsMousePressed(ButtonIndex)) {
+					state = State.Idle;
+					ended.Raise();
+				} else if (CanStartDrag()) {
+					state = State.Changing;
+					if (TryGetDragPosition(out var mousePosition)) {
+						previousMousePosition = mousePosition;
+					}
+					recognized.Raise();
+					result = true;
+				}
+			}
+			if (state == State.Changing) {
+				if (
+					TryGetDragPosition(out var mousePosition) &&
+					(previousMousePosition != mousePosition)
+				) {
+					changed.Raise();
+					previousMousePosition = mousePosition;
+				}
+				if (!IsDragging()) {
+					if (motionStrategy != null) {
+						ending.Raise();
+					} else {
+						ended.Raise();
+					}
+					state = State.Idle;
+				}
+			}
+			if (motionStrategy != null && wasChanging) {
+				if (WasEnding()) {
+					motionStrategy.Start(ClampMousePositionByDirection(Direction), touchHistory);
+					touchHistory.Clear();
+					motionStrategyTime = 0.0f;
+					isMotionStrategyActive = true;
+				} else {
+					lastDragDelta = ClampMousePositionByDirection(Direction) - savedPreviousMousePosition;
+					touchHistory.Enqueue((lastDragDelta, delta));
+					if (touchHistory.Count > MaxTouchHistorySize) {
+						touchHistory.Dequeue();
+					}
+				}
+			}
+			return result;
+		}
 		/// <summary>
 		/// Defines a motion strategy.
 		/// </summary>
@@ -314,7 +335,7 @@ namespace Lime
 
 			// Solves SpeedOverTime = targetSpeed for time
 			private static float CalcDurationUntilMinSpeedReached(float targetSpeed, float a1, float a2, float a3) =>
-				(Sqrt(-Log(Sqrt(Pi) * targetSpeed/(2.0f * a1 * a2))) - a3) / a2;
+				(Sqrt(-Log(Sqrt(Pi) * targetSpeed / (2.0f * a1 * a2))) - a3) / a2;
 
 			private static (float k1, float k2, float k3) CalculateErfFactors(float d1, float d2)
 			{

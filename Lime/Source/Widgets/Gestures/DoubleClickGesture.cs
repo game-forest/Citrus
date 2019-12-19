@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace Lime
 {
 	public class DoubleClickGesture : Gesture
 	{
-		private enum State
+		enum State
 		{
 			Idle,
 			FirstPress,
@@ -28,83 +29,61 @@ namespace Lime
 			new Vector2(5f, 5f) / 2f;
 #endif // WIN
 
-
 		private State state;
 		private float timeSinceFirstPress;
 		private Vector2 firstPressPosition;
 
-		public override bool IsActive => state != State.Idle;
-
 		public int ButtonIndex { get; }
 
-		public DoubleClickGesture() : this(0, null)
+		public event Action Recognized
 		{
+			add => recognized.Handler += value;
+			remove => recognized.Handler -= value;
 		}
 
-		public DoubleClickGesture(int buttonIndex) : this(buttonIndex, null)
-		{
-		}
+		private PollableEvent recognized;
+		public bool WasRecognized() => recognized.HasOccurred;
 
-		public DoubleClickGesture(Action onRecognized) : this(0, onRecognized)
+		public DoubleClickGesture(int buttonIndex, Action recognized = null)
 		{
-		}
-
-		public DoubleClickGesture(int buttonIndex, Action onRecognized) : base(onRecognized)
-		{
+			if (recognized != null) {
+				Recognized += recognized;
+			}
 			ButtonIndex = buttonIndex;
 		}
 
-		protected internal override bool Cancel(Gesture sender)
-		{
-			if (state == State.Idle) {
-				return sender == null || !(sender is TapGesture);
-			}
-			if (sender == null || sender is TapGesture) {
-				return false;
-			}
-			if (state == State.WaitSecondPress) {
-				RaiseCanceled();
-			}
-			return true;
-		}
+		public DoubleClickGesture(Action recognized = null)
+			: this(0, recognized)
+		{ }
 
-		protected internal override void Update(float delta)
+		internal protected override void OnCancel()
+		{ }
+
+		internal protected override bool OnUpdate(float delta)
 		{
+			bool result = false;
 			timeSinceFirstPress += delta;
 
 			if (state != State.Idle && timeSinceFirstPress > MaxDelayBetweenClicks) {
 				state = State.Idle;
-				if (state == State.WaitSecondPress) {
-					RaiseCanceled();
-				}
-				RaiseEnded();
-				return;
 			}
-
 			if (state == State.Idle && Input.WasMousePressed(ButtonIndex)) {
-				if (WasRecognized()) {
-					// Prevent a spurious call on the same frame as the recognition.
-					return;
-				}
 				timeSinceFirstPress = 0.0f;
 				firstPressPosition = Input.MousePosition;
 				state = State.FirstPress;
 			}
-
 			if (state == State.FirstPress && !Input.IsMousePressed(ButtonIndex)) {
 				state = State.WaitSecondPress;
-				RaiseBegan();
 			}
-
 			if (state == State.WaitSecondPress && Input.WasMousePressed(ButtonIndex)) {
 				state = State.Idle;
 				if (Input.GetNumTouches() == 1 && IsCloseToFirstPressPosition(Input.MousePosition)) {
-					RaiseRecognized();
-				} else {
-					RaiseCanceled();
+					recognized.Raise();
+					result = true;
 				}
-				RaiseEnded();
 			}
+
+			return result;
 
 			bool IsCloseToFirstPressPosition(Vector2 mousePosition)
 			{
