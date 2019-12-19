@@ -114,45 +114,6 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public abstract class Gesture</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="Lime_Gesture__ctor_" data-uid="Lime.Gesture.#ctor*"></a>
-  <h4 id="Lime_Gesture__ctor" data-uid="Lime.Gesture.#ctor">Gesture()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Gesture()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_Gesture__ctor_" data-uid="Lime.Gesture.#ctor*"></a>
-  <h4 id="Lime_Gesture__ctor_System_Action_" data-uid="Lime.Gesture.#ctor(System.Action)">Gesture(Action)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Gesture(Action onRecognized)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
-        <td><span class="parametername">onRecognized</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   
@@ -176,31 +137,6 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Lime.WindowInput.html">WindowInput</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Gesture_IsActive_" data-uid="Lime.Gesture.IsActive*"></a>
-  <h4 id="Lime_Gesture_IsActive" data-uid="Lime.Gesture.IsActive">IsActive</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract bool IsActive { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -234,95 +170,23 @@
   </h3>
   
   
-  <a id="Lime_Gesture_Cancel_" data-uid="Lime.Gesture.Cancel*"></a>
-  <h4 id="Lime_Gesture_Cancel_Lime_Gesture_" data-uid="Lime.Gesture.Cancel(Lime.Gesture)">Cancel(Gesture)</h4>
+  <a id="Lime_Gesture_OnCancel_" data-uid="Lime.Gesture.OnCancel*"></a>
+  <h4 id="Lime_Gesture_OnCancel" data-uid="Lime.Gesture.OnCancel">OnCancel()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract bool Cancel(Gesture sender)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Gesture.html">Gesture</a></td>
-        <td><span class="parametername">sender</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Gesture_RaiseBegan_" data-uid="Lime.Gesture.RaiseBegan*"></a>
-  <h4 id="Lime_Gesture_RaiseBegan" data-uid="Lime.Gesture.RaiseBegan">RaiseBegan()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void RaiseBegan()</code></pre>
+    <pre><code class="lang-csharp hljs">protected abstract void OnCancel()</code></pre>
   </div>
   
   
-  <a id="Lime_Gesture_RaiseCanceled_" data-uid="Lime.Gesture.RaiseCanceled*"></a>
-  <h4 id="Lime_Gesture_RaiseCanceled" data-uid="Lime.Gesture.RaiseCanceled">RaiseCanceled()</h4>
+  <a id="Lime_Gesture_OnUpdate_" data-uid="Lime.Gesture.OnUpdate*"></a>
+  <h4 id="Lime_Gesture_OnUpdate_System_Single_" data-uid="Lime.Gesture.OnUpdate(System.Single)">OnUpdate(Single)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void RaiseCanceled()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_Gesture_RaiseEnded_" data-uid="Lime.Gesture.RaiseEnded*"></a>
-  <h4 id="Lime_Gesture_RaiseEnded" data-uid="Lime.Gesture.RaiseEnded">RaiseEnded()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void RaiseEnded()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_Gesture_RaiseRecognized_" data-uid="Lime.Gesture.RaiseRecognized*"></a>
-  <h4 id="Lime_Gesture_RaiseRecognized" data-uid="Lime.Gesture.RaiseRecognized">RaiseRecognized()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void RaiseRecognized()</code></pre>
-  </div>
-  
-  
-  <a id="Lime_Gesture_Update_" data-uid="Lime.Gesture.Update*"></a>
-  <h4 id="Lime_Gesture_Update_System_Single_" data-uid="Lime.Gesture.Update(System.Single)">Update(Single)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract void Update(float delta)</code></pre>
+    <pre><code class="lang-csharp hljs">protected abstract bool OnUpdate(float delta)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -341,16 +205,6 @@
       </tr>
     </tbody>
   </table>
-  
-  
-  <a id="Lime_Gesture_WasBegan_" data-uid="Lime.Gesture.WasBegan*"></a>
-  <h4 id="Lime_Gesture_WasBegan" data-uid="Lime.Gesture.WasBegan">WasBegan()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool WasBegan()</code></pre>
-  </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -362,210 +216,6 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Gesture_WasCanceled_" data-uid="Lime.Gesture.WasCanceled*"></a>
-  <h4 id="Lime_Gesture_WasCanceled" data-uid="Lime.Gesture.WasCanceled">WasCanceled()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool WasCanceled()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Gesture_WasEnded_" data-uid="Lime.Gesture.WasEnded*"></a>
-  <h4 id="Lime_Gesture_WasEnded" data-uid="Lime.Gesture.WasEnded">WasEnded()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool WasEnded()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Gesture_WasRecognized_" data-uid="Lime.Gesture.WasRecognized*"></a>
-  <h4 id="Lime_Gesture_WasRecognized" data-uid="Lime.Gesture.WasRecognized">WasRecognized()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool WasRecognized()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Gesture_WasRecognizedOrCanceled_" data-uid="Lime.Gesture.WasRecognizedOrCanceled*"></a>
-  <h4 id="Lime_Gesture_WasRecognizedOrCanceled" data-uid="Lime.Gesture.WasRecognizedOrCanceled">WasRecognizedOrCanceled()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool WasRecognizedOrCanceled()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="events">Events
-  </h3>
-  
-  
-  <h4 id="Lime_Gesture_Began" data-uid="Lime.Gesture.Began">Began</h4>
-  <div class="markdown level1 summary"><p>Occurs when gesture recognition began.
-If the owner has other gestures, the began event
-might be deferred to resolve priority of another gestures.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual event Action Began</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Gesture_Canceled" data-uid="Lime.Gesture.Canceled">Canceled</h4>
-  <div class="markdown level1 summary"><p>Occurs if the gesture has been canceled.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual event Action Canceled</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Gesture_Ended" data-uid="Lime.Gesture.Ended">Ended</h4>
-  <div class="markdown level1 summary"><p>Occurs when gesture is ended.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual event Action Ended</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Gesture_Recognized" data-uid="Lime.Gesture.Recognized">Recognized</h4>
-  <div class="markdown level1 summary"><p>Occurs when the gesture is fully recognized.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual event Action Recognized</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Action</span></td>
         <td></td>
       </tr>
     </tbody>

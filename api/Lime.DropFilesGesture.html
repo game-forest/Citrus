@@ -84,46 +84,10 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Began">Gesture.Began</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Canceled">Gesture.Canceled</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Ended">Gesture.Ended</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Owner">Gesture.Owner</a>
     </div>
     <div>
       <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Input">Gesture.Input</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasBegan">Gesture.WasBegan()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasCanceled">Gesture.WasCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasRecognized">Gesture.WasRecognized()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasRecognizedOrCanceled">Gesture.WasRecognizedOrCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasEnded">Gesture.WasEnded()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseBegan">Gesture.RaiseBegan()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseCanceled">Gesture.RaiseCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseRecognized">Gesture.RaiseRecognized()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseEnded">Gesture.RaiseEnded()</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -153,46 +117,29 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class DropFilesGesture : Gesture</code></pre>
   </div>
-  <h3 id="properties">Properties
-  </h3>
-  
-  
-  <a id="Lime_DropFilesGesture_IsActive_" data-uid="Lime.DropFilesGesture.IsActive*"></a>
-  <h4 id="Lime_DropFilesGesture_IsActive" data-uid="Lime.DropFilesGesture.IsActive">IsActive</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool IsActive { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_IsActive">Gesture.IsActive</a></div>
   <h3 id="methods">Methods
   </h3>
   
   
-  <a id="Lime_DropFilesGesture_Cancel_" data-uid="Lime.DropFilesGesture.Cancel*"></a>
-  <h4 id="Lime_DropFilesGesture_Cancel_Lime_Gesture_" data-uid="Lime.DropFilesGesture.Cancel(Lime.Gesture)">Cancel(Gesture)</h4>
+  <a id="Lime_DropFilesGesture_OnCancel_" data-uid="Lime.DropFilesGesture.OnCancel*"></a>
+  <h4 id="Lime_DropFilesGesture_OnCancel" data-uid="Lime.DropFilesGesture.OnCancel">OnCancel()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override bool Cancel(Gesture sender)</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void OnCancel()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnCancel">Gesture.OnCancel()</a></div>
+  
+  
+  <a id="Lime_DropFilesGesture_OnUpdate_" data-uid="Lime.DropFilesGesture.OnUpdate*"></a>
+  <h4 id="Lime_DropFilesGesture_OnUpdate_System_Single_" data-uid="Lime.DropFilesGesture.OnUpdate(System.Single)">OnUpdate(Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override bool OnUpdate(float delta)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -205,8 +152,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.Gesture.html">Gesture</a></td>
-        <td><span class="parametername">sender</span></td>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">delta</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -227,36 +174,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_Cancel_Lime_Gesture_">Gesture.Cancel(Gesture)</a></div>
-  
-  
-  <a id="Lime_DropFilesGesture_Update_" data-uid="Lime.DropFilesGesture.Update*"></a>
-  <h4 id="Lime_DropFilesGesture_Update_System_Single_" data-uid="Lime.DropFilesGesture.Update(System.Single)">Update(Single)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Update(float delta)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_Update_System_Single_">Gesture.Update(Single)</a></div>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnUpdate_System_Single_">Gesture.OnUpdate(Single)</a></div>
   <h3 id="events">Events
   </h3>
   

@@ -16092,24 +16092,12 @@ references:
   commentId: T:Lime.DoubleClickGesture
   fullName: Lime.DoubleClickGesture
   nameWithType: DoubleClickGesture
-- uid: Lime.DoubleClickGesture.#ctor
-  name: DoubleClickGesture()
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture__ctor
-  commentId: M:Lime.DoubleClickGesture.#ctor
-  fullName: Lime.DoubleClickGesture.DoubleClickGesture()
-  nameWithType: DoubleClickGesture.DoubleClickGesture()
 - uid: Lime.DoubleClickGesture.#ctor(System.Action)
   name: DoubleClickGesture(Action)
   href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture__ctor_System_Action_
   commentId: M:Lime.DoubleClickGesture.#ctor(System.Action)
   fullName: Lime.DoubleClickGesture.DoubleClickGesture(System.Action)
   nameWithType: DoubleClickGesture.DoubleClickGesture(Action)
-- uid: Lime.DoubleClickGesture.#ctor(System.Int32)
-  name: DoubleClickGesture(Int32)
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture__ctor_System_Int32_
-  commentId: M:Lime.DoubleClickGesture.#ctor(System.Int32)
-  fullName: Lime.DoubleClickGesture.DoubleClickGesture(System.Int32)
-  nameWithType: DoubleClickGesture.DoubleClickGesture(Int32)
 - uid: Lime.DoubleClickGesture.#ctor(System.Int32,System.Action)
   name: DoubleClickGesture(Int32, Action)
   href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture__ctor_System_Int32_System_Action_
@@ -16136,45 +16124,51 @@ references:
   isSpec: "True"
   fullName: Lime.DoubleClickGesture.ButtonIndex
   nameWithType: DoubleClickGesture.ButtonIndex
-- uid: Lime.DoubleClickGesture.Cancel(Lime.Gesture)
-  name: Cancel(Gesture)
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_Cancel_Lime_Gesture_
-  commentId: M:Lime.DoubleClickGesture.Cancel(Lime.Gesture)
-  fullName: Lime.DoubleClickGesture.Cancel(Lime.Gesture)
-  nameWithType: DoubleClickGesture.Cancel(Gesture)
-- uid: Lime.DoubleClickGesture.Cancel*
-  name: Cancel
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_Cancel_
-  commentId: Overload:Lime.DoubleClickGesture.Cancel
+- uid: Lime.DoubleClickGesture.OnCancel
+  name: OnCancel()
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnCancel
+  commentId: M:Lime.DoubleClickGesture.OnCancel
+  fullName: Lime.DoubleClickGesture.OnCancel()
+  nameWithType: DoubleClickGesture.OnCancel()
+- uid: Lime.DoubleClickGesture.OnCancel*
+  name: OnCancel
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnCancel_
+  commentId: Overload:Lime.DoubleClickGesture.OnCancel
   isSpec: "True"
-  fullName: Lime.DoubleClickGesture.Cancel
-  nameWithType: DoubleClickGesture.Cancel
-- uid: Lime.DoubleClickGesture.IsActive
-  name: IsActive
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_IsActive
-  commentId: P:Lime.DoubleClickGesture.IsActive
-  fullName: Lime.DoubleClickGesture.IsActive
-  nameWithType: DoubleClickGesture.IsActive
-- uid: Lime.DoubleClickGesture.IsActive*
-  name: IsActive
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_IsActive_
-  commentId: Overload:Lime.DoubleClickGesture.IsActive
+  fullName: Lime.DoubleClickGesture.OnCancel
+  nameWithType: DoubleClickGesture.OnCancel
+- uid: Lime.DoubleClickGesture.OnUpdate(System.Single)
+  name: OnUpdate(Single)
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnUpdate_System_Single_
+  commentId: M:Lime.DoubleClickGesture.OnUpdate(System.Single)
+  fullName: Lime.DoubleClickGesture.OnUpdate(System.Single)
+  nameWithType: DoubleClickGesture.OnUpdate(Single)
+- uid: Lime.DoubleClickGesture.OnUpdate*
+  name: OnUpdate
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnUpdate_
+  commentId: Overload:Lime.DoubleClickGesture.OnUpdate
   isSpec: "True"
-  fullName: Lime.DoubleClickGesture.IsActive
-  nameWithType: DoubleClickGesture.IsActive
-- uid: Lime.DoubleClickGesture.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_Update_System_Single_
-  commentId: M:Lime.DoubleClickGesture.Update(System.Single)
-  fullName: Lime.DoubleClickGesture.Update(System.Single)
-  nameWithType: DoubleClickGesture.Update(Single)
-- uid: Lime.DoubleClickGesture.Update*
-  name: Update
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_Update_
-  commentId: Overload:Lime.DoubleClickGesture.Update
+  fullName: Lime.DoubleClickGesture.OnUpdate
+  nameWithType: DoubleClickGesture.OnUpdate
+- uid: Lime.DoubleClickGesture.Recognized
+  name: Recognized
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_Recognized
+  commentId: E:Lime.DoubleClickGesture.Recognized
+  fullName: Lime.DoubleClickGesture.Recognized
+  nameWithType: DoubleClickGesture.Recognized
+- uid: Lime.DoubleClickGesture.WasRecognized
+  name: WasRecognized()
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_WasRecognized
+  commentId: M:Lime.DoubleClickGesture.WasRecognized
+  fullName: Lime.DoubleClickGesture.WasRecognized()
+  nameWithType: DoubleClickGesture.WasRecognized()
+- uid: Lime.DoubleClickGesture.WasRecognized*
+  name: WasRecognized
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_WasRecognized_
+  commentId: Overload:Lime.DoubleClickGesture.WasRecognized
   isSpec: "True"
-  fullName: Lime.DoubleClickGesture.Update
-  nameWithType: DoubleClickGesture.Update
+  fullName: Lime.DoubleClickGesture.WasRecognized
+  nameWithType: DoubleClickGesture.WasRecognized
 - uid: Lime.DragDirection
   name: DragDirection
   href: api/Lime.DragDirection.html
@@ -16237,19 +16231,6 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.ButtonIndex
   nameWithType: DragGesture.ButtonIndex
-- uid: Lime.DragGesture.Cancel(Lime.Gesture)
-  name: Cancel(Gesture)
-  href: api/Lime.DragGesture.html#Lime_DragGesture_Cancel_Lime_Gesture_
-  commentId: M:Lime.DragGesture.Cancel(Lime.Gesture)
-  fullName: Lime.DragGesture.Cancel(Lime.Gesture)
-  nameWithType: DragGesture.Cancel(Gesture)
-- uid: Lime.DragGesture.Cancel*
-  name: Cancel
-  href: api/Lime.DragGesture.html#Lime_DragGesture_Cancel_
-  commentId: Overload:Lime.DragGesture.Cancel
-  isSpec: "True"
-  fullName: Lime.DragGesture.Cancel
-  nameWithType: DragGesture.Cancel
 - uid: Lime.DragGesture.CanStartDrag
   name: CanStartDrag()
   href: api/Lime.DragGesture.html#Lime_DragGesture_CanStartDrag
@@ -16263,6 +16244,12 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.CanStartDrag
   nameWithType: DragGesture.CanStartDrag
+- uid: Lime.DragGesture.changed
+  name: changed
+  href: api/Lime.DragGesture.html#Lime_DragGesture_changed
+  commentId: F:Lime.DragGesture.changed
+  fullName: Lime.DragGesture.changed
+  nameWithType: DragGesture.changed
 - uid: Lime.DragGesture.Changed
   name: Changed
   href: api/Lime.DragGesture.html#Lime_DragGesture_Changed
@@ -16375,6 +16362,12 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.DragThreshold
   nameWithType: DragGesture.DragThreshold
+- uid: Lime.DragGesture.Ended
+  name: Ended
+  href: api/Lime.DragGesture.html#Lime_DragGesture_Ended
+  commentId: E:Lime.DragGesture.Ended
+  fullName: Lime.DragGesture.Ended
+  nameWithType: DragGesture.Ended
 - uid: Lime.DragGesture.Ending
   name: Ending
   href: api/Lime.DragGesture.html#Lime_DragGesture_Ending
@@ -16455,19 +16448,6 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.IMotionStrategy.Update
   nameWithType: DragGesture.IMotionStrategy.Update
-- uid: Lime.DragGesture.IsActive
-  name: IsActive
-  href: api/Lime.DragGesture.html#Lime_DragGesture_IsActive
-  commentId: P:Lime.DragGesture.IsActive
-  fullName: Lime.DragGesture.IsActive
-  nameWithType: DragGesture.IsActive
-- uid: Lime.DragGesture.IsActive*
-  name: IsActive
-  href: api/Lime.DragGesture.html#Lime_DragGesture_IsActive_
-  commentId: Overload:Lime.DragGesture.IsActive
-  isSpec: "True"
-  fullName: Lime.DragGesture.IsActive
-  nameWithType: DragGesture.IsActive
 - uid: Lime.DragGesture.IsChanging
   name: IsChanging()
   href: api/Lime.DragGesture.html#Lime_DragGesture_IsChanging
@@ -16546,6 +16526,32 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.MousePressPosition
   nameWithType: DragGesture.MousePressPosition
+- uid: Lime.DragGesture.OnCancel
+  name: OnCancel()
+  href: api/Lime.DragGesture.html#Lime_DragGesture_OnCancel
+  commentId: M:Lime.DragGesture.OnCancel
+  fullName: Lime.DragGesture.OnCancel()
+  nameWithType: DragGesture.OnCancel()
+- uid: Lime.DragGesture.OnCancel*
+  name: OnCancel
+  href: api/Lime.DragGesture.html#Lime_DragGesture_OnCancel_
+  commentId: Overload:Lime.DragGesture.OnCancel
+  isSpec: "True"
+  fullName: Lime.DragGesture.OnCancel
+  nameWithType: DragGesture.OnCancel
+- uid: Lime.DragGesture.OnUpdate(System.Single)
+  name: OnUpdate(Single)
+  href: api/Lime.DragGesture.html#Lime_DragGesture_OnUpdate_System_Single_
+  commentId: M:Lime.DragGesture.OnUpdate(System.Single)
+  fullName: Lime.DragGesture.OnUpdate(System.Single)
+  nameWithType: DragGesture.OnUpdate(Single)
+- uid: Lime.DragGesture.OnUpdate*
+  name: OnUpdate
+  href: api/Lime.DragGesture.html#Lime_DragGesture_OnUpdate_
+  commentId: Overload:Lime.DragGesture.OnUpdate
+  isSpec: "True"
+  fullName: Lime.DragGesture.OnUpdate
+  nameWithType: DragGesture.OnUpdate
 - uid: Lime.DragGesture.PreviousMousePosition
   name: PreviousMousePosition
   href: api/Lime.DragGesture.html#Lime_DragGesture_PreviousMousePosition
@@ -16559,32 +16565,12 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.PreviousMousePosition
   nameWithType: DragGesture.PreviousMousePosition
-- uid: Lime.DragGesture.RaiseChanged
-  name: RaiseChanged()
-  href: api/Lime.DragGesture.html#Lime_DragGesture_RaiseChanged
-  commentId: M:Lime.DragGesture.RaiseChanged
-  fullName: Lime.DragGesture.RaiseChanged()
-  nameWithType: DragGesture.RaiseChanged()
-- uid: Lime.DragGesture.RaiseChanged*
-  name: RaiseChanged
-  href: api/Lime.DragGesture.html#Lime_DragGesture_RaiseChanged_
-  commentId: Overload:Lime.DragGesture.RaiseChanged
-  isSpec: "True"
-  fullName: Lime.DragGesture.RaiseChanged
-  nameWithType: DragGesture.RaiseChanged
-- uid: Lime.DragGesture.RaiseEnding
-  name: RaiseEnding()
-  href: api/Lime.DragGesture.html#Lime_DragGesture_RaiseEnding
-  commentId: M:Lime.DragGesture.RaiseEnding
-  fullName: Lime.DragGesture.RaiseEnding()
-  nameWithType: DragGesture.RaiseEnding()
-- uid: Lime.DragGesture.RaiseEnding*
-  name: RaiseEnding
-  href: api/Lime.DragGesture.html#Lime_DragGesture_RaiseEnding_
-  commentId: Overload:Lime.DragGesture.RaiseEnding
-  isSpec: "True"
-  fullName: Lime.DragGesture.RaiseEnding
-  nameWithType: DragGesture.RaiseEnding
+- uid: Lime.DragGesture.Recognized
+  name: Recognized
+  href: api/Lime.DragGesture.html#Lime_DragGesture_Recognized
+  commentId: E:Lime.DragGesture.Recognized
+  fullName: Lime.DragGesture.Recognized
+  nameWithType: DragGesture.Recognized
 - uid: Lime.DragGesture.TotalDragDistance
   name: TotalDragDistance
   href: api/Lime.DragGesture.html#Lime_DragGesture_TotalDragDistance
@@ -16630,19 +16616,19 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.TryGetStartDragPosition
   nameWithType: DragGesture.TryGetStartDragPosition
-- uid: Lime.DragGesture.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.DragGesture.html#Lime_DragGesture_Update_System_Single_
-  commentId: M:Lime.DragGesture.Update(System.Single)
-  fullName: Lime.DragGesture.Update(System.Single)
-  nameWithType: DragGesture.Update(Single)
-- uid: Lime.DragGesture.Update*
-  name: Update
-  href: api/Lime.DragGesture.html#Lime_DragGesture_Update_
-  commentId: Overload:Lime.DragGesture.Update
+- uid: Lime.DragGesture.WasBegan
+  name: WasBegan()
+  href: api/Lime.DragGesture.html#Lime_DragGesture_WasBegan
+  commentId: M:Lime.DragGesture.WasBegan
+  fullName: Lime.DragGesture.WasBegan()
+  nameWithType: DragGesture.WasBegan()
+- uid: Lime.DragGesture.WasBegan*
+  name: WasBegan
+  href: api/Lime.DragGesture.html#Lime_DragGesture_WasBegan_
+  commentId: Overload:Lime.DragGesture.WasBegan
   isSpec: "True"
-  fullName: Lime.DragGesture.Update
-  nameWithType: DragGesture.Update
+  fullName: Lime.DragGesture.WasBegan
+  nameWithType: DragGesture.WasBegan
 - uid: Lime.DragGesture.WasChanged
   name: WasChanged()
   href: api/Lime.DragGesture.html#Lime_DragGesture_WasChanged
@@ -16656,6 +16642,19 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.WasChanged
   nameWithType: DragGesture.WasChanged
+- uid: Lime.DragGesture.WasEnded
+  name: WasEnded()
+  href: api/Lime.DragGesture.html#Lime_DragGesture_WasEnded
+  commentId: M:Lime.DragGesture.WasEnded
+  fullName: Lime.DragGesture.WasEnded()
+  nameWithType: DragGesture.WasEnded()
+- uid: Lime.DragGesture.WasEnded*
+  name: WasEnded
+  href: api/Lime.DragGesture.html#Lime_DragGesture_WasEnded_
+  commentId: Overload:Lime.DragGesture.WasEnded
+  isSpec: "True"
+  fullName: Lime.DragGesture.WasEnded
+  nameWithType: DragGesture.WasEnded
 - uid: Lime.DragGesture.WasEnding
   name: WasEnding()
   href: api/Lime.DragGesture.html#Lime_DragGesture_WasEnding
@@ -16669,6 +16668,19 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.WasEnding
   nameWithType: DragGesture.WasEnding
+- uid: Lime.DragGesture.WasRecognized
+  name: WasRecognized()
+  href: api/Lime.DragGesture.html#Lime_DragGesture_WasRecognized
+  commentId: M:Lime.DragGesture.WasRecognized
+  fullName: Lime.DragGesture.WasRecognized()
+  nameWithType: DragGesture.WasRecognized()
+- uid: Lime.DragGesture.WasRecognized*
+  name: WasRecognized
+  href: api/Lime.DragGesture.html#Lime_DragGesture_WasRecognized_
+  commentId: Overload:Lime.DragGesture.WasRecognized
+  isSpec: "True"
+  fullName: Lime.DragGesture.WasRecognized
+  nameWithType: DragGesture.WasRecognized
 - uid: Lime.DropDownList
   name: DropDownList
   href: api/Lime.DropDownList.html
@@ -16694,51 +16706,38 @@ references:
   commentId: T:Lime.DropFilesGesture
   fullName: Lime.DropFilesGesture
   nameWithType: DropFilesGesture
-- uid: Lime.DropFilesGesture.Cancel(Lime.Gesture)
-  name: Cancel(Gesture)
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_Cancel_Lime_Gesture_
-  commentId: M:Lime.DropFilesGesture.Cancel(Lime.Gesture)
-  fullName: Lime.DropFilesGesture.Cancel(Lime.Gesture)
-  nameWithType: DropFilesGesture.Cancel(Gesture)
-- uid: Lime.DropFilesGesture.Cancel*
-  name: Cancel
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_Cancel_
-  commentId: Overload:Lime.DropFilesGesture.Cancel
+- uid: Lime.DropFilesGesture.OnCancel
+  name: OnCancel()
+  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnCancel
+  commentId: M:Lime.DropFilesGesture.OnCancel
+  fullName: Lime.DropFilesGesture.OnCancel()
+  nameWithType: DropFilesGesture.OnCancel()
+- uid: Lime.DropFilesGesture.OnCancel*
+  name: OnCancel
+  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnCancel_
+  commentId: Overload:Lime.DropFilesGesture.OnCancel
   isSpec: "True"
-  fullName: Lime.DropFilesGesture.Cancel
-  nameWithType: DropFilesGesture.Cancel
-- uid: Lime.DropFilesGesture.IsActive
-  name: IsActive
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_IsActive
-  commentId: P:Lime.DropFilesGesture.IsActive
-  fullName: Lime.DropFilesGesture.IsActive
-  nameWithType: DropFilesGesture.IsActive
-- uid: Lime.DropFilesGesture.IsActive*
-  name: IsActive
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_IsActive_
-  commentId: Overload:Lime.DropFilesGesture.IsActive
+  fullName: Lime.DropFilesGesture.OnCancel
+  nameWithType: DropFilesGesture.OnCancel
+- uid: Lime.DropFilesGesture.OnUpdate(System.Single)
+  name: OnUpdate(Single)
+  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnUpdate_System_Single_
+  commentId: M:Lime.DropFilesGesture.OnUpdate(System.Single)
+  fullName: Lime.DropFilesGesture.OnUpdate(System.Single)
+  nameWithType: DropFilesGesture.OnUpdate(Single)
+- uid: Lime.DropFilesGesture.OnUpdate*
+  name: OnUpdate
+  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnUpdate_
+  commentId: Overload:Lime.DropFilesGesture.OnUpdate
   isSpec: "True"
-  fullName: Lime.DropFilesGesture.IsActive
-  nameWithType: DropFilesGesture.IsActive
+  fullName: Lime.DropFilesGesture.OnUpdate
+  nameWithType: DropFilesGesture.OnUpdate
 - uid: Lime.DropFilesGesture.Recognized
   name: Recognized
   href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_Recognized
   commentId: E:Lime.DropFilesGesture.Recognized
   fullName: Lime.DropFilesGesture.Recognized
   nameWithType: DropFilesGesture.Recognized
-- uid: Lime.DropFilesGesture.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_Update_System_Single_
-  commentId: M:Lime.DropFilesGesture.Update(System.Single)
-  fullName: Lime.DropFilesGesture.Update(System.Single)
-  nameWithType: DropFilesGesture.Update(Single)
-- uid: Lime.DropFilesGesture.Update*
-  name: Update
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_Update_
-  commentId: Overload:Lime.DropFilesGesture.Update
-  isSpec: "True"
-  fullName: Lime.DropFilesGesture.Update
-  nameWithType: DropFilesGesture.Update
 - uid: Lime.DummyWindow
   name: DummyWindow
   href: api/Lime.DummyWindow.html
@@ -20176,56 +20175,6 @@ references:
   commentId: T:Lime.Gesture
   fullName: Lime.Gesture
   nameWithType: Gesture
-- uid: Lime.Gesture.#ctor
-  name: Gesture()
-  href: api/Lime.Gesture.html#Lime_Gesture__ctor
-  commentId: M:Lime.Gesture.#ctor
-  fullName: Lime.Gesture.Gesture()
-  nameWithType: Gesture.Gesture()
-- uid: Lime.Gesture.#ctor(System.Action)
-  name: Gesture(Action)
-  href: api/Lime.Gesture.html#Lime_Gesture__ctor_System_Action_
-  commentId: M:Lime.Gesture.#ctor(System.Action)
-  fullName: Lime.Gesture.Gesture(System.Action)
-  nameWithType: Gesture.Gesture(Action)
-- uid: Lime.Gesture.#ctor*
-  name: Gesture
-  href: api/Lime.Gesture.html#Lime_Gesture__ctor_
-  commentId: Overload:Lime.Gesture.#ctor
-  isSpec: "True"
-  fullName: Lime.Gesture.Gesture
-  nameWithType: Gesture.Gesture
-- uid: Lime.Gesture.Began
-  name: Began
-  href: api/Lime.Gesture.html#Lime_Gesture_Began
-  commentId: E:Lime.Gesture.Began
-  fullName: Lime.Gesture.Began
-  nameWithType: Gesture.Began
-- uid: Lime.Gesture.Cancel(Lime.Gesture)
-  name: Cancel(Gesture)
-  href: api/Lime.Gesture.html#Lime_Gesture_Cancel_Lime_Gesture_
-  commentId: M:Lime.Gesture.Cancel(Lime.Gesture)
-  fullName: Lime.Gesture.Cancel(Lime.Gesture)
-  nameWithType: Gesture.Cancel(Gesture)
-- uid: Lime.Gesture.Cancel*
-  name: Cancel
-  href: api/Lime.Gesture.html#Lime_Gesture_Cancel_
-  commentId: Overload:Lime.Gesture.Cancel
-  isSpec: "True"
-  fullName: Lime.Gesture.Cancel
-  nameWithType: Gesture.Cancel
-- uid: Lime.Gesture.Canceled
-  name: Canceled
-  href: api/Lime.Gesture.html#Lime_Gesture_Canceled
-  commentId: E:Lime.Gesture.Canceled
-  fullName: Lime.Gesture.Canceled
-  nameWithType: Gesture.Canceled
-- uid: Lime.Gesture.Ended
-  name: Ended
-  href: api/Lime.Gesture.html#Lime_Gesture_Ended
-  commentId: E:Lime.Gesture.Ended
-  fullName: Lime.Gesture.Ended
-  nameWithType: Gesture.Ended
 - uid: Lime.Gesture.Input
   name: Input
   href: api/Lime.Gesture.html#Lime_Gesture_Input
@@ -20239,19 +20188,32 @@ references:
   isSpec: "True"
   fullName: Lime.Gesture.Input
   nameWithType: Gesture.Input
-- uid: Lime.Gesture.IsActive
-  name: IsActive
-  href: api/Lime.Gesture.html#Lime_Gesture_IsActive
-  commentId: P:Lime.Gesture.IsActive
-  fullName: Lime.Gesture.IsActive
-  nameWithType: Gesture.IsActive
-- uid: Lime.Gesture.IsActive*
-  name: IsActive
-  href: api/Lime.Gesture.html#Lime_Gesture_IsActive_
-  commentId: Overload:Lime.Gesture.IsActive
+- uid: Lime.Gesture.OnCancel
+  name: OnCancel()
+  href: api/Lime.Gesture.html#Lime_Gesture_OnCancel
+  commentId: M:Lime.Gesture.OnCancel
+  fullName: Lime.Gesture.OnCancel()
+  nameWithType: Gesture.OnCancel()
+- uid: Lime.Gesture.OnCancel*
+  name: OnCancel
+  href: api/Lime.Gesture.html#Lime_Gesture_OnCancel_
+  commentId: Overload:Lime.Gesture.OnCancel
   isSpec: "True"
-  fullName: Lime.Gesture.IsActive
-  nameWithType: Gesture.IsActive
+  fullName: Lime.Gesture.OnCancel
+  nameWithType: Gesture.OnCancel
+- uid: Lime.Gesture.OnUpdate(System.Single)
+  name: OnUpdate(Single)
+  href: api/Lime.Gesture.html#Lime_Gesture_OnUpdate_System_Single_
+  commentId: M:Lime.Gesture.OnUpdate(System.Single)
+  fullName: Lime.Gesture.OnUpdate(System.Single)
+  nameWithType: Gesture.OnUpdate(Single)
+- uid: Lime.Gesture.OnUpdate*
+  name: OnUpdate
+  href: api/Lime.Gesture.html#Lime_Gesture_OnUpdate_
+  commentId: Overload:Lime.Gesture.OnUpdate
+  isSpec: "True"
+  fullName: Lime.Gesture.OnUpdate
+  nameWithType: Gesture.OnUpdate
 - uid: Lime.Gesture.Owner
   name: Owner
   href: api/Lime.Gesture.html#Lime_Gesture_Owner
@@ -20303,142 +20265,6 @@ references:
   isSpec: "True"
   fullName: Lime.Gesture.PollableEvent.Raise
   nameWithType: Gesture.PollableEvent.Raise
-- uid: Lime.Gesture.RaiseBegan
-  name: RaiseBegan()
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseBegan
-  commentId: M:Lime.Gesture.RaiseBegan
-  fullName: Lime.Gesture.RaiseBegan()
-  nameWithType: Gesture.RaiseBegan()
-- uid: Lime.Gesture.RaiseBegan*
-  name: RaiseBegan
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseBegan_
-  commentId: Overload:Lime.Gesture.RaiseBegan
-  isSpec: "True"
-  fullName: Lime.Gesture.RaiseBegan
-  nameWithType: Gesture.RaiseBegan
-- uid: Lime.Gesture.RaiseCanceled
-  name: RaiseCanceled()
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseCanceled
-  commentId: M:Lime.Gesture.RaiseCanceled
-  fullName: Lime.Gesture.RaiseCanceled()
-  nameWithType: Gesture.RaiseCanceled()
-- uid: Lime.Gesture.RaiseCanceled*
-  name: RaiseCanceled
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseCanceled_
-  commentId: Overload:Lime.Gesture.RaiseCanceled
-  isSpec: "True"
-  fullName: Lime.Gesture.RaiseCanceled
-  nameWithType: Gesture.RaiseCanceled
-- uid: Lime.Gesture.RaiseEnded
-  name: RaiseEnded()
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseEnded
-  commentId: M:Lime.Gesture.RaiseEnded
-  fullName: Lime.Gesture.RaiseEnded()
-  nameWithType: Gesture.RaiseEnded()
-- uid: Lime.Gesture.RaiseEnded*
-  name: RaiseEnded
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseEnded_
-  commentId: Overload:Lime.Gesture.RaiseEnded
-  isSpec: "True"
-  fullName: Lime.Gesture.RaiseEnded
-  nameWithType: Gesture.RaiseEnded
-- uid: Lime.Gesture.RaiseRecognized
-  name: RaiseRecognized()
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseRecognized
-  commentId: M:Lime.Gesture.RaiseRecognized
-  fullName: Lime.Gesture.RaiseRecognized()
-  nameWithType: Gesture.RaiseRecognized()
-- uid: Lime.Gesture.RaiseRecognized*
-  name: RaiseRecognized
-  href: api/Lime.Gesture.html#Lime_Gesture_RaiseRecognized_
-  commentId: Overload:Lime.Gesture.RaiseRecognized
-  isSpec: "True"
-  fullName: Lime.Gesture.RaiseRecognized
-  nameWithType: Gesture.RaiseRecognized
-- uid: Lime.Gesture.Recognized
-  name: Recognized
-  href: api/Lime.Gesture.html#Lime_Gesture_Recognized
-  commentId: E:Lime.Gesture.Recognized
-  fullName: Lime.Gesture.Recognized
-  nameWithType: Gesture.Recognized
-- uid: Lime.Gesture.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.Gesture.html#Lime_Gesture_Update_System_Single_
-  commentId: M:Lime.Gesture.Update(System.Single)
-  fullName: Lime.Gesture.Update(System.Single)
-  nameWithType: Gesture.Update(Single)
-- uid: Lime.Gesture.Update*
-  name: Update
-  href: api/Lime.Gesture.html#Lime_Gesture_Update_
-  commentId: Overload:Lime.Gesture.Update
-  isSpec: "True"
-  fullName: Lime.Gesture.Update
-  nameWithType: Gesture.Update
-- uid: Lime.Gesture.WasBegan
-  name: WasBegan()
-  href: api/Lime.Gesture.html#Lime_Gesture_WasBegan
-  commentId: M:Lime.Gesture.WasBegan
-  fullName: Lime.Gesture.WasBegan()
-  nameWithType: Gesture.WasBegan()
-- uid: Lime.Gesture.WasBegan*
-  name: WasBegan
-  href: api/Lime.Gesture.html#Lime_Gesture_WasBegan_
-  commentId: Overload:Lime.Gesture.WasBegan
-  isSpec: "True"
-  fullName: Lime.Gesture.WasBegan
-  nameWithType: Gesture.WasBegan
-- uid: Lime.Gesture.WasCanceled
-  name: WasCanceled()
-  href: api/Lime.Gesture.html#Lime_Gesture_WasCanceled
-  commentId: M:Lime.Gesture.WasCanceled
-  fullName: Lime.Gesture.WasCanceled()
-  nameWithType: Gesture.WasCanceled()
-- uid: Lime.Gesture.WasCanceled*
-  name: WasCanceled
-  href: api/Lime.Gesture.html#Lime_Gesture_WasCanceled_
-  commentId: Overload:Lime.Gesture.WasCanceled
-  isSpec: "True"
-  fullName: Lime.Gesture.WasCanceled
-  nameWithType: Gesture.WasCanceled
-- uid: Lime.Gesture.WasEnded
-  name: WasEnded()
-  href: api/Lime.Gesture.html#Lime_Gesture_WasEnded
-  commentId: M:Lime.Gesture.WasEnded
-  fullName: Lime.Gesture.WasEnded()
-  nameWithType: Gesture.WasEnded()
-- uid: Lime.Gesture.WasEnded*
-  name: WasEnded
-  href: api/Lime.Gesture.html#Lime_Gesture_WasEnded_
-  commentId: Overload:Lime.Gesture.WasEnded
-  isSpec: "True"
-  fullName: Lime.Gesture.WasEnded
-  nameWithType: Gesture.WasEnded
-- uid: Lime.Gesture.WasRecognized
-  name: WasRecognized()
-  href: api/Lime.Gesture.html#Lime_Gesture_WasRecognized
-  commentId: M:Lime.Gesture.WasRecognized
-  fullName: Lime.Gesture.WasRecognized()
-  nameWithType: Gesture.WasRecognized()
-- uid: Lime.Gesture.WasRecognized*
-  name: WasRecognized
-  href: api/Lime.Gesture.html#Lime_Gesture_WasRecognized_
-  commentId: Overload:Lime.Gesture.WasRecognized
-  isSpec: "True"
-  fullName: Lime.Gesture.WasRecognized
-  nameWithType: Gesture.WasRecognized
-- uid: Lime.Gesture.WasRecognizedOrCanceled
-  name: WasRecognizedOrCanceled()
-  href: api/Lime.Gesture.html#Lime_Gesture_WasRecognizedOrCanceled
-  commentId: M:Lime.Gesture.WasRecognizedOrCanceled
-  fullName: Lime.Gesture.WasRecognizedOrCanceled()
-  nameWithType: Gesture.WasRecognizedOrCanceled()
-- uid: Lime.Gesture.WasRecognizedOrCanceled*
-  name: WasRecognizedOrCanceled
-  href: api/Lime.Gesture.html#Lime_Gesture_WasRecognizedOrCanceled_
-  commentId: Overload:Lime.Gesture.WasRecognizedOrCanceled
-  isSpec: "True"
-  fullName: Lime.Gesture.WasRecognizedOrCanceled
-  nameWithType: Gesture.WasRecognizedOrCanceled
 - uid: Lime.GestureList
   name: GestureList
   href: api/Lime.GestureList.html
@@ -46826,6 +46652,19 @@ references:
   isSpec: "True"
   fullName: Lime.PinchGesture.LastPinchScale
   nameWithType: PinchGesture.LastPinchScale
+- uid: Lime.PinchGesture.OnUpdate(System.Single)
+  name: OnUpdate(Single)
+  href: api/Lime.PinchGesture.html#Lime_PinchGesture_OnUpdate_System_Single_
+  commentId: M:Lime.PinchGesture.OnUpdate(System.Single)
+  fullName: Lime.PinchGesture.OnUpdate(System.Single)
+  nameWithType: PinchGesture.OnUpdate(Single)
+- uid: Lime.PinchGesture.OnUpdate*
+  name: OnUpdate
+  href: api/Lime.PinchGesture.html#Lime_PinchGesture_OnUpdate_
+  commentId: Overload:Lime.PinchGesture.OnUpdate
+  isSpec: "True"
+  fullName: Lime.PinchGesture.OnUpdate
+  nameWithType: PinchGesture.OnUpdate
 - uid: Lime.PinchGesture.TotalPinchScale
   name: TotalPinchScale
   href: api/Lime.PinchGesture.html#Lime_PinchGesture_TotalPinchScale
@@ -46897,19 +46736,6 @@ references:
   isSpec: "True"
   fullName: Lime.PinchGesture.TryGetStartDragPosition
   nameWithType: PinchGesture.TryGetStartDragPosition
-- uid: Lime.PinchGesture.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.PinchGesture.html#Lime_PinchGesture_Update_System_Single_
-  commentId: M:Lime.PinchGesture.Update(System.Single)
-  fullName: Lime.PinchGesture.Update(System.Single)
-  nameWithType: PinchGesture.Update(Single)
-- uid: Lime.PinchGesture.Update*
-  name: Update
-  href: api/Lime.PinchGesture.html#Lime_PinchGesture_Update_
-  commentId: Overload:Lime.PinchGesture.Update
-  isSpec: "True"
-  fullName: Lime.PinchGesture.Update
-  nameWithType: PinchGesture.Update
 - uid: Lime.Plane
   name: Plane
   href: api/Lime.Plane.html
@@ -61290,6 +61116,12 @@ references:
   isSpec: "True"
   fullName: Lime.TapGesture.TapGesture
   nameWithType: TapGesture.TapGesture
+- uid: Lime.TapGesture.Began
+  name: Began
+  href: api/Lime.TapGesture.html#Lime_TapGesture_Began
+  commentId: E:Lime.TapGesture.Began
+  fullName: Lime.TapGesture.Began
+  nameWithType: TapGesture.Began
 - uid: Lime.TapGesture.ButtonIndex
   name: ButtonIndex
   href: api/Lime.TapGesture.html#Lime_TapGesture_ButtonIndex
@@ -61303,32 +61135,12 @@ references:
   isSpec: "True"
   fullName: Lime.TapGesture.ButtonIndex
   nameWithType: TapGesture.ButtonIndex
-- uid: Lime.TapGesture.Cancel(Lime.Gesture)
-  name: Cancel(Gesture)
-  href: api/Lime.TapGesture.html#Lime_TapGesture_Cancel_Lime_Gesture_
-  commentId: M:Lime.TapGesture.Cancel(Lime.Gesture)
-  fullName: Lime.TapGesture.Cancel(Lime.Gesture)
-  nameWithType: TapGesture.Cancel(Gesture)
-- uid: Lime.TapGesture.Cancel*
-  name: Cancel
-  href: api/Lime.TapGesture.html#Lime_TapGesture_Cancel_
-  commentId: Overload:Lime.TapGesture.Cancel
-  isSpec: "True"
-  fullName: Lime.TapGesture.Cancel
-  nameWithType: TapGesture.Cancel
-- uid: Lime.TapGesture.IsActive
-  name: IsActive
-  href: api/Lime.TapGesture.html#Lime_TapGesture_IsActive
-  commentId: P:Lime.TapGesture.IsActive
-  fullName: Lime.TapGesture.IsActive
-  nameWithType: TapGesture.IsActive
-- uid: Lime.TapGesture.IsActive*
-  name: IsActive
-  href: api/Lime.TapGesture.html#Lime_TapGesture_IsActive_
-  commentId: Overload:Lime.TapGesture.IsActive
-  isSpec: "True"
-  fullName: Lime.TapGesture.IsActive
-  nameWithType: TapGesture.IsActive
+- uid: Lime.TapGesture.Canceled
+  name: Canceled
+  href: api/Lime.TapGesture.html#Lime_TapGesture_Canceled
+  commentId: E:Lime.TapGesture.Canceled
+  fullName: Lime.TapGesture.Canceled
+  nameWithType: TapGesture.Canceled
 - uid: Lime.TapGesture.MousePressPosition
   name: MousePressPosition
   href: api/Lime.TapGesture.html#Lime_TapGesture_MousePressPosition
@@ -61342,25 +61154,96 @@ references:
   isSpec: "True"
   fullName: Lime.TapGesture.MousePressPosition
   nameWithType: TapGesture.MousePressPosition
+- uid: Lime.TapGesture.OnCancel
+  name: OnCancel()
+  href: api/Lime.TapGesture.html#Lime_TapGesture_OnCancel
+  commentId: M:Lime.TapGesture.OnCancel
+  fullName: Lime.TapGesture.OnCancel()
+  nameWithType: TapGesture.OnCancel()
+- uid: Lime.TapGesture.OnCancel*
+  name: OnCancel
+  href: api/Lime.TapGesture.html#Lime_TapGesture_OnCancel_
+  commentId: Overload:Lime.TapGesture.OnCancel
+  isSpec: "True"
+  fullName: Lime.TapGesture.OnCancel
+  nameWithType: TapGesture.OnCancel
+- uid: Lime.TapGesture.OnUpdate(System.Single)
+  name: OnUpdate(Single)
+  href: api/Lime.TapGesture.html#Lime_TapGesture_OnUpdate_System_Single_
+  commentId: M:Lime.TapGesture.OnUpdate(System.Single)
+  fullName: Lime.TapGesture.OnUpdate(System.Single)
+  nameWithType: TapGesture.OnUpdate(Single)
+- uid: Lime.TapGesture.OnUpdate*
+  name: OnUpdate
+  href: api/Lime.TapGesture.html#Lime_TapGesture_OnUpdate_
+  commentId: Overload:Lime.TapGesture.OnUpdate
+  isSpec: "True"
+  fullName: Lime.TapGesture.OnUpdate
+  nameWithType: TapGesture.OnUpdate
+- uid: Lime.TapGesture.Recognized
+  name: Recognized
+  href: api/Lime.TapGesture.html#Lime_TapGesture_Recognized
+  commentId: E:Lime.TapGesture.Recognized
+  fullName: Lime.TapGesture.Recognized
+  nameWithType: TapGesture.Recognized
 - uid: Lime.TapGesture.Threshold
   name: Threshold
   href: api/Lime.TapGesture.html#Lime_TapGesture_Threshold
   commentId: F:Lime.TapGesture.Threshold
   fullName: Lime.TapGesture.Threshold
   nameWithType: TapGesture.Threshold
-- uid: Lime.TapGesture.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.TapGesture.html#Lime_TapGesture_Update_System_Single_
-  commentId: M:Lime.TapGesture.Update(System.Single)
-  fullName: Lime.TapGesture.Update(System.Single)
-  nameWithType: TapGesture.Update(Single)
-- uid: Lime.TapGesture.Update*
-  name: Update
-  href: api/Lime.TapGesture.html#Lime_TapGesture_Update_
-  commentId: Overload:Lime.TapGesture.Update
+- uid: Lime.TapGesture.WasBegan
+  name: WasBegan()
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasBegan
+  commentId: M:Lime.TapGesture.WasBegan
+  fullName: Lime.TapGesture.WasBegan()
+  nameWithType: TapGesture.WasBegan()
+- uid: Lime.TapGesture.WasBegan*
+  name: WasBegan
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasBegan_
+  commentId: Overload:Lime.TapGesture.WasBegan
   isSpec: "True"
-  fullName: Lime.TapGesture.Update
-  nameWithType: TapGesture.Update
+  fullName: Lime.TapGesture.WasBegan
+  nameWithType: TapGesture.WasBegan
+- uid: Lime.TapGesture.WasCanceled
+  name: WasCanceled()
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasCanceled
+  commentId: M:Lime.TapGesture.WasCanceled
+  fullName: Lime.TapGesture.WasCanceled()
+  nameWithType: TapGesture.WasCanceled()
+- uid: Lime.TapGesture.WasCanceled*
+  name: WasCanceled
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasCanceled_
+  commentId: Overload:Lime.TapGesture.WasCanceled
+  isSpec: "True"
+  fullName: Lime.TapGesture.WasCanceled
+  nameWithType: TapGesture.WasCanceled
+- uid: Lime.TapGesture.WasRecognized
+  name: WasRecognized()
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasRecognized
+  commentId: M:Lime.TapGesture.WasRecognized
+  fullName: Lime.TapGesture.WasRecognized()
+  nameWithType: TapGesture.WasRecognized()
+- uid: Lime.TapGesture.WasRecognized*
+  name: WasRecognized
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasRecognized_
+  commentId: Overload:Lime.TapGesture.WasRecognized
+  isSpec: "True"
+  fullName: Lime.TapGesture.WasRecognized
+  nameWithType: TapGesture.WasRecognized
+- uid: Lime.TapGesture.WasRecognizedOrCanceled
+  name: WasRecognizedOrCanceled()
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasRecognizedOrCanceled
+  commentId: M:Lime.TapGesture.WasRecognizedOrCanceled
+  fullName: Lime.TapGesture.WasRecognizedOrCanceled()
+  nameWithType: TapGesture.WasRecognizedOrCanceled()
+- uid: Lime.TapGesture.WasRecognizedOrCanceled*
+  name: WasRecognizedOrCanceled
+  href: api/Lime.TapGesture.html#Lime_TapGesture_WasRecognizedOrCanceled_
+  commentId: Overload:Lime.TapGesture.WasRecognizedOrCanceled
+  isSpec: "True"
+  fullName: Lime.TapGesture.WasRecognizedOrCanceled
+  nameWithType: TapGesture.WasRecognizedOrCanceled
 - uid: Lime.TapGestureOptions
   name: TapGestureOptions
   href: api/Lime.TapGestureOptions.html

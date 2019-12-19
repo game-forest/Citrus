@@ -86,49 +86,10 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Began">Gesture.Began</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Canceled">Gesture.Canceled</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Recognized">Gesture.Recognized</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Ended">Gesture.Ended</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Owner">Gesture.Owner</a>
     </div>
     <div>
       <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Input">Gesture.Input</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasBegan">Gesture.WasBegan()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasCanceled">Gesture.WasCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasRecognized">Gesture.WasRecognized()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasRecognizedOrCanceled">Gesture.WasRecognizedOrCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasEnded">Gesture.WasEnded()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseBegan">Gesture.RaiseBegan()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseCanceled">Gesture.RaiseCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseRecognized">Gesture.RaiseRecognized()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseEnded">Gesture.RaiseEnded()</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -168,7 +129,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected TapGesture(Action onRecognized, TapGestureOptions tapOptions)</code></pre>
+    <pre><code class="lang-csharp hljs">public TapGesture(Action onRecognized, TapGestureOptions options)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -187,7 +148,7 @@
       </tr>
       <tr>
         <td><a class="xref" href="Lime.TapGestureOptions.html">TapGestureOptions</a></td>
-        <td><span class="parametername">tapOptions</span></td>
+        <td><span class="parametername">options</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -247,33 +208,6 @@
   </table>
   
   
-  <a id="Lime_TapGesture_IsActive_" data-uid="Lime.TapGesture.IsActive*"></a>
-  <h4 id="Lime_TapGesture_IsActive" data-uid="Lime.TapGesture.IsActive">IsActive</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool IsActive { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_IsActive">Gesture.IsActive</a></div>
-  
-  
   <a id="Lime_TapGesture_MousePressPosition_" data-uid="Lime.TapGesture.MousePressPosition*"></a>
   <h4 id="Lime_TapGesture_MousePressPosition" data-uid="Lime.TapGesture.MousePressPosition">MousePressPosition</h4>
   <div class="markdown level1 summary"></div>
@@ -301,13 +235,25 @@
   </h3>
   
   
-  <a id="Lime_TapGesture_Cancel_" data-uid="Lime.TapGesture.Cancel*"></a>
-  <h4 id="Lime_TapGesture_Cancel_Lime_Gesture_" data-uid="Lime.TapGesture.Cancel(Lime.Gesture)">Cancel(Gesture)</h4>
+  <a id="Lime_TapGesture_OnCancel_" data-uid="Lime.TapGesture.OnCancel*"></a>
+  <h4 id="Lime_TapGesture_OnCancel" data-uid="Lime.TapGesture.OnCancel">OnCancel()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override bool Cancel(Gesture sender)</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void OnCancel()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnCancel">Gesture.OnCancel()</a></div>
+  
+  
+  <a id="Lime_TapGesture_OnUpdate_" data-uid="Lime.TapGesture.OnUpdate*"></a>
+  <h4 id="Lime_TapGesture_OnUpdate_System_Single_" data-uid="Lime.TapGesture.OnUpdate(System.Single)">OnUpdate(Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override bool OnUpdate(float delta)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -320,8 +266,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.Gesture.html">Gesture</a></td>
-        <td><span class="parametername">sender</span></td>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">delta</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -342,36 +288,186 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_Cancel_Lime_Gesture_">Gesture.Cancel(Gesture)</a></div>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnUpdate_System_Single_">Gesture.OnUpdate(Single)</a></div>
   
   
-  <a id="Lime_TapGesture_Update_" data-uid="Lime.TapGesture.Update*"></a>
-  <h4 id="Lime_TapGesture_Update_System_Single_" data-uid="Lime.TapGesture.Update(System.Single)">Update(Single)</h4>
+  <a id="Lime_TapGesture_WasBegan_" data-uid="Lime.TapGesture.WasBegan*"></a>
+  <h4 id="Lime_TapGesture_WasBegan" data-uid="Lime.TapGesture.WasBegan">WasBegan()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Update(float delta)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool WasBegan()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
+        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_Update_System_Single_">Gesture.Update(Single)</a></div>
+  
+  
+  <a id="Lime_TapGesture_WasCanceled_" data-uid="Lime.TapGesture.WasCanceled*"></a>
+  <h4 id="Lime_TapGesture_WasCanceled" data-uid="Lime.TapGesture.WasCanceled">WasCanceled()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WasCanceled()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_TapGesture_WasRecognized_" data-uid="Lime.TapGesture.WasRecognized*"></a>
+  <h4 id="Lime_TapGesture_WasRecognized" data-uid="Lime.TapGesture.WasRecognized">WasRecognized()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WasRecognized()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_TapGesture_WasRecognizedOrCanceled_" data-uid="Lime.TapGesture.WasRecognizedOrCanceled*"></a>
+  <h4 id="Lime_TapGesture_WasRecognizedOrCanceled" data-uid="Lime.TapGesture.WasRecognizedOrCanceled">WasRecognizedOrCanceled()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WasRecognizedOrCanceled()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  
+  
+  <h4 id="Lime_TapGesture_Began" data-uid="Lime.TapGesture.Began">Began</h4>
+  <div class="markdown level1 summary"><p>Occurs if a user has touched upon the widget.
+If the widget lies within a scrollable panel,
+the began event might be deferred in order to give the priority to drag gesture.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action Began</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_TapGesture_Canceled" data-uid="Lime.TapGesture.Canceled">Canceled</h4>
+  <div class="markdown level1 summary"><p>Occurs if click was canceled by drag gesture.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action Canceled</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_TapGesture_Recognized" data-uid="Lime.TapGesture.Recognized">Recognized</h4>
+  <div class="markdown level1 summary"><p>Occurs when the gesture is fully recognized.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action Recognized</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           

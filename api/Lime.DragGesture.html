@@ -85,49 +85,10 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Began">Gesture.Began</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Canceled">Gesture.Canceled</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Recognized">Gesture.Recognized</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Ended">Gesture.Ended</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Owner">Gesture.Owner</a>
     </div>
     <div>
       <a class="xref" href="Lime.Gesture.html#Lime_Gesture_Input">Gesture.Input</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasBegan">Gesture.WasBegan()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasCanceled">Gesture.WasCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasRecognized">Gesture.WasRecognized()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasRecognizedOrCanceled">Gesture.WasRecognizedOrCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_WasEnded">Gesture.WasEnded()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseBegan">Gesture.RaiseBegan()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseCanceled">Gesture.RaiseCanceled()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseRecognized">Gesture.RaiseRecognized()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.Gesture.html#Lime_Gesture_RaiseEnded">Gesture.RaiseEnded()</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -237,6 +198,30 @@
   </h3>
   
   
+  <h4 id="Lime_DragGesture_changed" data-uid="Lime.DragGesture.changed">changed</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Gesture.PollableEvent changed</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Gesture.PollableEvent.html">Gesture.PollableEvent</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <h4 id="Lime_DragGesture_DefaultDragThreshold" data-uid="Lime.DragGesture.DefaultDragThreshold">DefaultDragThreshold</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
@@ -340,12 +325,11 @@
   
   <a id="Lime_DragGesture_Exclusive_" data-uid="Lime.DragGesture.Exclusive*"></a>
   <h4 id="Lime_DragGesture_Exclusive" data-uid="Lime.DragGesture.Exclusive">Exclusive</h4>
-  <div class="markdown level1 summary"><p>Will cancel any other drag gestures.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool Exclusive { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Exclusive { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -362,36 +346,6 @@
       </tr>
     </tbody>
   </table>
-  
-  
-  <a id="Lime_DragGesture_IsActive_" data-uid="Lime.DragGesture.IsActive*"></a>
-  <h4 id="Lime_DragGesture_IsActive" data-uid="Lime.DragGesture.IsActive">IsActive</h4>
-  <div class="markdown level1 summary"><p>MousePosition depends on DragDirection so (MousePosition - DragDirection).X or Y
-will always be zero if DragDirection is Vertical or Horizontal respectively.
-This fact is used when checking for threshold.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool IsActive { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_IsActive">Gesture.IsActive</a></div>
   
   
   <a id="Lime_DragGesture_LastDragDistance_" data-uid="Lime.DragGesture.LastDragDistance*"></a>
@@ -421,7 +375,10 @@ This fact is used when checking for threshold.</p>
   
   <a id="Lime_DragGesture_MousePosition_" data-uid="Lime.DragGesture.MousePosition*"></a>
   <h4 id="Lime_DragGesture_MousePosition" data-uid="Lime.DragGesture.MousePosition">MousePosition</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>MousePosition depends on DragDirection so (MousePosition - DragDirection).X or Y
+will always be zero if DragDirection is Vertical or Horizontal respectively.
+This fact is used when checking for threshold.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -519,50 +476,6 @@ This fact is used when checking for threshold.</p>
   </table>
   <h3 id="methods">Methods
   </h3>
-  
-  
-  <a id="Lime_DragGesture_Cancel_" data-uid="Lime.DragGesture.Cancel*"></a>
-  <h4 id="Lime_DragGesture_Cancel_Lime_Gesture_" data-uid="Lime.DragGesture.Cancel(Lime.Gesture)">Cancel(Gesture)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override bool Cancel(Gesture sender = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Gesture.html">Gesture</a></td>
-        <td><span class="parametername">sender</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_Cancel_Lime_Gesture_">Gesture.Cancel(Gesture)</a></div>
   
   
   <a id="Lime_DragGesture_CanStartDrag_" data-uid="Lime.DragGesture.CanStartDrag*"></a>
@@ -665,24 +578,60 @@ This fact is used when checking for threshold.</p>
   </table>
   
   
-  <a id="Lime_DragGesture_RaiseChanged_" data-uid="Lime.DragGesture.RaiseChanged*"></a>
-  <h4 id="Lime_DragGesture_RaiseChanged" data-uid="Lime.DragGesture.RaiseChanged">RaiseChanged()</h4>
+  <a id="Lime_DragGesture_OnCancel_" data-uid="Lime.DragGesture.OnCancel*"></a>
+  <h4 id="Lime_DragGesture_OnCancel" data-uid="Lime.DragGesture.OnCancel">OnCancel()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void RaiseChanged()</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void OnCancel()</code></pre>
   </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnCancel">Gesture.OnCancel()</a></div>
   
   
-  <a id="Lime_DragGesture_RaiseEnding_" data-uid="Lime.DragGesture.RaiseEnding*"></a>
-  <h4 id="Lime_DragGesture_RaiseEnding" data-uid="Lime.DragGesture.RaiseEnding">RaiseEnding()</h4>
+  <a id="Lime_DragGesture_OnUpdate_" data-uid="Lime.DragGesture.OnUpdate*"></a>
+  <h4 id="Lime_DragGesture_OnUpdate_System_Single_" data-uid="Lime.DragGesture.OnUpdate(System.Single)">OnUpdate(Single)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void RaiseEnding()</code></pre>
+    <pre><code class="lang-csharp hljs">protected override bool OnUpdate(float delta)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">delta</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnUpdate_System_Single_">Gesture.OnUpdate(Single)</a></div>
   
   
   <a id="Lime_DragGesture_TryGetDragPosition_" data-uid="Lime.DragGesture.TryGetDragPosition*"></a>
@@ -769,33 +718,29 @@ This fact is used when checking for threshold.</p>
   </table>
   
   
-  <a id="Lime_DragGesture_Update_" data-uid="Lime.DragGesture.Update*"></a>
-  <h4 id="Lime_DragGesture_Update_System_Single_" data-uid="Lime.DragGesture.Update(System.Single)">Update(Single)</h4>
+  <a id="Lime_DragGesture_WasBegan_" data-uid="Lime.DragGesture.WasBegan*"></a>
+  <h4 id="Lime_DragGesture_WasBegan" data-uid="Lime.DragGesture.WasBegan">WasBegan()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Update(float delta)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool WasBegan()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">delta</span></td>
+        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_Update_System_Single_">Gesture.Update(Single)</a></div>
   
   
   <a id="Lime_DragGesture_WasChanged_" data-uid="Lime.DragGesture.WasChanged*"></a>
@@ -804,7 +749,32 @@ This fact is used when checking for threshold.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual bool WasChanged()</code></pre>
+    <pre><code class="lang-csharp hljs">public bool WasChanged()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_DragGesture_WasEnded_" data-uid="Lime.DragGesture.WasEnded*"></a>
+  <h4 id="Lime_DragGesture_WasEnded" data-uid="Lime.DragGesture.WasEnded">WasEnded()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WasEnded()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -846,17 +816,67 @@ This fact is used when checking for threshold.</p>
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="Lime_DragGesture_WasRecognized_" data-uid="Lime.DragGesture.WasRecognized*"></a>
+  <h4 id="Lime_DragGesture_WasRecognized" data-uid="Lime.DragGesture.WasRecognized">WasRecognized()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WasRecognized()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="events">Events
   </h3>
   
   
   <h4 id="Lime_DragGesture_Changed" data-uid="Lime.DragGesture.Changed">Changed</h4>
-  <div class="markdown level1 summary"><p>Occurs when dragged.</p>
+  <div class="markdown level1 summary"><p>Occurs when drag position is being changed by either user or motion strategy.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual event Action Changed</code></pre>
+    <pre><code class="lang-csharp hljs">public event Action Changed</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_DragGesture_Ended" data-uid="Lime.DragGesture.Ended">Ended</h4>
+  <div class="markdown level1 summary"><p>Occurs when either a user released input or motion strategy is done.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action Ended</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -876,12 +896,37 @@ This fact is used when checking for threshold.</p>
   
   
   <h4 id="Lime_DragGesture_Ending" data-uid="Lime.DragGesture.Ending">Ending</h4>
-  <div class="markdown level1 summary"><p>Occurs when the drag is completed and the special movement begins.</p>
+  <div class="markdown level1 summary"><p>Occurs when the drag is completed and the motion defined by motion strategy begins.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual event Action Ending</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_DragGesture_Recognized" data-uid="Lime.DragGesture.Recognized">Recognized</h4>
+  <div class="markdown level1 summary"><p>Occurs if a user started gesture in a valid direction.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action Recognized</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
   <table class="table table-bordered table-striped table-condensed">
