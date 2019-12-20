@@ -333,14 +333,7 @@ namespace Tangerine
 					UI.SceneView.SceneView.ShowNodeDecorationsPanelButton.Clicked = () => dockManager.TogglePanel(visualHintsPanel);
 				}
 			};
-			var proj = AppUserPreferences.Instance.CurrentProject;
-			if (proj != null) {
-				try {
-					new Project(proj).Open();
-				} catch {
-					AlertDialog.Show($"Cannot open project '{proj}'. It may be deleted or be otherwise unavailable.");
-				}
-			}
+			LoadProject();
 			OpenDocumentsFromArgs(args);
 			WidgetContext.Current.Root.AddChangeWatcher(() => Project.Current, project => TangerineMenu.OnProjectChanged(project));
 
@@ -356,6 +349,18 @@ namespace Tangerine
 
 			Documentation.Init();
 			DocumentationComponent.Clicked = page => Documentation.ShowHelp(page);
+		}
+
+		private void LoadProject()
+		{
+			Orange.Toolbox.TryGetParentProject(AppUserPreferences.Instance.CurrentProject, out string proj);
+			if (!string.IsNullOrEmpty(proj)) {
+				try {
+					new Project(proj).Open();
+				} catch {
+					AlertDialog.Show($"Cannot open project '{proj}'. It may be deleted or be otherwise unavailable.");
+				}
+			}
 		}
 
 		private void ChangeTangerineSettingsFolderIfNeed()

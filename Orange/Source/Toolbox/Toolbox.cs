@@ -68,6 +68,22 @@ namespace Orange
 			return path;
 		}
 
+		public static bool TryGetParentProject(string defaultPath, out string path)
+		{
+			path = Uri.UnescapeDataString((new Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath);
+			var directoryInfo = (new DirectoryInfo(path)).Parent;
+			while (directoryInfo != null) {
+				var citprojFiles = directoryInfo.EnumerateFiles("*.citproj");
+				if (citprojFiles.Any()) {
+					path = citprojFiles.First().FullName;
+					return true;
+				}
+				directoryInfo = directoryInfo.Parent;
+			}
+			path = defaultPath;
+			return false;
+		}
+
 		public static string GetMonoPath()
 		{
 			return "/Library/Frameworks/Mono.framework/Versions/Current/bin/mono";
