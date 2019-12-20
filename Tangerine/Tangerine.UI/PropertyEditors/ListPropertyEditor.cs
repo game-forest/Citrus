@@ -14,13 +14,14 @@ namespace Tangerine.UI
 		private readonly Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd;
 		private IList list;
 		private ThemedAddButton addButton;
-		private Action removeCallback;
 		private List<Button> buttons;
+		private List<int> pendingRemoval;
 
 		public ListPropertyEditor(IPropertyEditorParams editorParams, Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd) : base(editorParams)
 		{
 			this.onAdd = onAdd;
 			buttons = new List<Button>();
+			pendingRemoval = new List<int>();
 			if (EditorParams.Objects.Skip(1).Any()) {
 				// Dont create editor interface if > 1 objects are selected
 				EditorContainer.AddNode(new Widget() {
@@ -50,19 +51,36 @@ namespace Tangerine.UI
 			};
 			Expanded = true;
 			EditorContainer.AddNode(addButton);
-			ContainerWidget.Updating += _ => removeCallback?.Invoke();
-			ContainerWidget.AddChangeWatcher(() => list?.Count ?? 0, Build);
+			ContainerWidget.AddChangeWatcher(() => (list?.Count ?? 0) - pendingRemoval.Count, RemoveAndBuild);
 		}
 
-		private void Build(int newCount)
+		private void RemoveAndBuild(int newCount)
 		{
-			if (list != null) {
-				for (int i = ExpandableContent.Nodes.Count - 1; i >= 0; i--) {
-					ExpandableContent.Nodes[i].UnlinkAndDispose();
+			if (list == null) {
+				return;
+			}
+
+			// We have to remove items exactly before rebuilding
+			// because there is no mechanism to update dataflows
+			// (in this case -- CoalescedPropertyValue with IndexedProperty underneath)
+			if (pendingRemoval.Count > 0) {
+				pendingRemoval.Sort();
+				using (Document.Current.History.BeginTransaction())
+				{
+					for (int i = pendingRemoval.Count - 1; i >= 0; --i) {
+						RemoveFromList.Perform(list, pendingRemoval[i]);
+						buttons.RemoveAt(pendingRemoval[i]);
+					}
+					pendingRemoval.Clear();
+					Document.Current.History.CommitTransaction();
 				}
-				for (int i = 0; i < newCount; i++) {
-					AfterInsertNewElement(i);
-				}
+			}
+
+			for (int i = ExpandableContent.Nodes.Count - 1; i >= 0; i--) {
+				ExpandableContent.Nodes[i].UnlinkAndDispose();
+			}
+			for (int i = 0; i < newCount; i++) {
+				AfterInsertNewElement(i);
 			}
 		}
 
@@ -89,21 +107,9 @@ namespace Tangerine.UI
 			buttons.Add(removeButton = new ThemedDeleteButton {
 				Enabled = Enabled
 			});
-			void RemoveClicked()
-			{
-				removeCallback = null;
-				using (Document.Current.History.BeginTransaction()) {
-					RemoveFromList.Perform(list, p.IndexInList);
-					Document.Current.History.CommitTransaction();
-					var i = ExpandableContent.Nodes.Count - 1;
-					// We have to rebuild every list item with index greater than current item's
-					// because there is no mechanism to update dataflows (in this case --
-					// CoalescedPropertyValue with IndexedProperty underneath)
-					buttons.RemoveAt(p.IndexInList);
-				}
-			}
+
 			ExpandableContent.Nodes.Insert(index, elementContainer);
-			removeButton.Clicked += () => removeCallback = RemoveClicked;
+			removeButton.Clicked += () => pendingRemoval.Add(p.IndexInList);
 			editor.EditorContainer.AddNode(removeButton);
 		}
 
