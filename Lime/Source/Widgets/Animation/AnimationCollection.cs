@@ -84,15 +84,12 @@ namespace Lime
 			return false;
 		}
 
-		public bool TryRun(string animationId, string markerId = null, double animationTimeCorrection = 0)
-		{
-			Animation animation;
-			return TryFind(animationId, out animation) && animation.TryRun(markerId, animationTimeCorrection);
-		}
+		public bool TryRun(string animationId, string markerId = null, double animationTimeCorrection = 0) =>
+			TryFind(animationId, out var animation) && animation.TryRun(markerId, animationTimeCorrection);
 
-		public void Run(string animationId, string markerId = null)
+		public Animation Run(string animationId, string markerId = null)
 		{
-			if (!TryRun(animationId, markerId)) {
+			if (!(TryFind(animationId, out var animation) && animation.TryRun(markerId, 0))) {
 				if (animationId != null && markerId != null) {
 					throw new Lime.Exception(string.Format("Unknown animation ({0}) or marker ({1})", animationId, markerId));
 				} else if (animationId != null && markerId == null) {
@@ -103,6 +100,7 @@ namespace Lime
 					throw new Lime.Exception("Unknown animation or marker");
 				}
 			}
+			return animation;
 		}
 
 		public void Add(Animation item) => Insert(Count, item);

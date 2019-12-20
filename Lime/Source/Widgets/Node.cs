@@ -680,11 +680,7 @@ namespace Lime
 		/// Throws an exception if sought-for animation or marker doesn't exist.
 		/// Returns this (to use with yield return)
 		/// </summary>
-		public Node RunAnimation(string markerId, string animationId = null)
-		{
-			Animations.Run(animationId, markerId);
-			return this;
-		}
+		public Animation RunAnimation(string markerId, string animationId = null) => Animations.Run(animationId, markerId);
 
 		[YuzuBeforeSerialization]
 		public void OnBeforeSerialization()

@@ -98,30 +98,44 @@ namespace Lime
 
 		private void HandleYieldedResult(object result)
 		{
-			if (result == null) {
-				waitTime = 0;
-			} else if (result is int) {
-				waitTime = (int)result;
-			} else if (result is float) {
-				waitTime = (float)result;
-			} else if (result is double) {
-				waitTime = (float)((double)result);
-			} else if (result is IEnumerator<object>) {
-				callStack = new StackEntry { Enumerator = (IEnumerator<object>)result, Caller = callStack };
-				Advance(0);
-			} else if (result is WaitPredicate) {
-				waitPredicate = (WaitPredicate)result;
-			} else if (result is Node3D node3D) {
-				var ac = node3D.Components.Get<AnimationComponent>();
-				var firstAnimation = ac != null && ac.Animations.Count > 0 ? ac.Animations[0] : null;
-				waitPredicate = firstAnimation != null ? WaitForAnimation(firstAnimation) : null;
-			} else if (result is Node node) {
-				var defaultAnimation = node.Components.Get<AnimationComponent>()?.DefaultAnimation;
-				waitPredicate = defaultAnimation != null ? WaitForAnimation(defaultAnimation) : null;
-			} else if (result is IEnumerable<object>) {
-				throw new InvalidOperationException("Use IEnumerator<object> instead of IEnumerable<object> for " + result);
-			} else {
-				throw new InvalidOperationException("Invalid object yielded " + result);
+			switch (result) {
+				case null:
+					waitTime = 0;
+					break;
+				case int i:
+					waitTime = i;
+					break;
+				case float f:
+					waitTime = f;
+					break;
+				case double d:
+					waitTime = (float)d;
+					break;
+				case IEnumerator<object> enumerator:
+					callStack = new StackEntry { Enumerator = enumerator, Caller = callStack };
+					Advance(0);
+					break;
+				case WaitPredicate predicate:
+					waitPredicate = predicate;
+					break;
+				case Node3D node3D: {
+					var ac = node3D.Components.Get<AnimationComponent>();
+					var firstAnimation = ac != null && ac.Animations.Count > 0 ? ac.Animations[0] : null;
+					waitPredicate = firstAnimation != null ? WaitForAnimation(firstAnimation) : null;
+					break;
+				}
+				case Animation animation:
+					waitPredicate = WaitForAnimation(animation);
+					break;
+				case Node node: {
+					var defaultAnimation = node.Components.Get<AnimationComponent>()?.DefaultAnimation;
+					waitPredicate = defaultAnimation != null ? WaitForAnimation(defaultAnimation) : null;
+					break;
+				}
+				case IEnumerable<object> _:
+					throw new InvalidOperationException("Use IEnumerator<object> instead of IEnumerable<object> for " + result);
+				default:
+					throw new InvalidOperationException("Invalid object yielded " + result);
 			}
 		}
 
