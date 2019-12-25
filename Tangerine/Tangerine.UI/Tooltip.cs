@@ -55,12 +55,12 @@ namespace Lime
 					}
 					if (showTooltip) {
 						var wasResized = false;
-						tooltipText.Text = textGetter();
 						var pos = Application.Input.DesktopMousePosition + new Vector2(0, source.Height);
 						while (source.IsMouseOver()) {
 							yield return null;
 							if (!wasResized) {
 								wasResized = true;
+								tooltipText.Text = textGetter();
 								tooltipWindow.Visible = true;
 								tooltipWindow.ClientSize = tooltipWindow.DecoratedSize = tooltip.Size = tooltip.EffectiveMinSize;
 								var bounds = Environment.GetDesktopBounds();
