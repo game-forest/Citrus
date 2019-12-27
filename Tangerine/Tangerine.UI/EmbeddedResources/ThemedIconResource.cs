@@ -1,10 +1,11 @@
+using System;
 using System.IO;
 
 namespace Tangerine.UI
 {
-    public class ThemedIconResource : EmbeddedResource
+	public class ThemedIconResource : EmbeddedResource
 	{
-        public ThemedIconResource(string iconId, string assemblyName) : base(iconId, assemblyName) { }
+		public ThemedIconResource(string iconId, string assemblyName) : base(iconId, assemblyName) { }
 
 		public override Stream GetResourceStream()
 		{
@@ -16,7 +17,7 @@ namespace Tangerine.UI
 		private string GetResourceId(bool themed)
 		{
 			var theme = themed ? $"{(ColorTheme.Current.IsDark ? "Dark" : "Light")}." : string.Empty;
-            return $"{AssemblyName}.Resources.Icons.{theme}{ResourceId}.png";
+			return $"{AssemblyName}.Resources.Icons.{theme}{ResourceId}.png";
 		}
 	}
 }
