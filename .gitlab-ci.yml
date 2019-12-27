@@ -17,6 +17,8 @@ windows_build:
   - 'Orange\Toolchain.Win\nuget.exe restore Tangerine\Tangerine.Win.sln'
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Tangerine\Tangerine.Win.sln'
   - echo "Tangerine build OK"
+  - '.\Orange\bin\Win\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Win --command:"Build"'
+  - echo "Empty project - OK"
 
 osx_build:
   stage: build
