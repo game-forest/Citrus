@@ -1,17 +1,22 @@
+using System;
 using System.Collections.Generic;
+using Lime.Widgets.PolygonMesh.Topology;
 
 namespace Lime.PolygonMesh.Topology
 {
 	public interface ITopology
 	{
-		PolygonMesh Mesh { get; }
 		List<Vertex> Vertices { get; }
 
-		void Sync();
+		void Sync(List<Vertex> vertices, List<Edge> constrainedEdges, List<Face> faces);
 		void Invalidate();
 #if TANGERINE
 		void EmplaceVertices(List<Vertex> vertices);
 #endif
+
+		IEnumerable<Face> Faces { get; }
+
+		event Action<ITopology> OnTopologyChanged;
 	}
 
 	public interface ITopologyModificator

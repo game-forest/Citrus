@@ -2,12 +2,13 @@ using Lime;
 using Lime.PolygonMesh.Topology;
 using Lime.PolygonMesh.Utils;
 using System;
+using Lime.Widgets.PolygonMesh.Topology;
 
 namespace Tangerine.UI.SceneView.PolygonMesh
 {
 	public struct FaceData : ITopologyData, IEquatable<FaceData>
 	{
-		private readonly Lime.PolygonMesh.PolygonMesh.Face face;
+		private readonly Face face;
 
 		public int TopologicalIndex0 => face[0];
 		public int TopologicalIndex1 => face[1];
@@ -17,7 +18,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public FaceData(int topologicalIndex0, int topologicalIndex1, int topologicalIndex2)
 		{
-			face = new Lime.PolygonMesh.PolygonMesh.Face {
+			face = new Face {
 				Index0 = (ushort)topologicalIndex0,
 				Index1 = (ushort)topologicalIndex1,
 				Index2 = (ushort)topologicalIndex2

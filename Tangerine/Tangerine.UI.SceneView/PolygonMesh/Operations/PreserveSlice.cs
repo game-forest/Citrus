@@ -9,25 +9,25 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		{
 			public override bool IsChangingDocument => true;
 
-			private Lime.PolygonMesh.PolygonMesh mesh;
+			private Lime.Widgets.PolygonMesh.PolygonMesh mesh;
 			private PolygonMeshSlice sliceBefore;
 			private PolygonMeshSlice sliceAfter;
 
-			private Slice(Lime.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore, PolygonMeshSlice sliceAfter)
+			private Slice(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore, PolygonMeshSlice sliceAfter)
 			{
 				this.mesh = mesh;
 				this.sliceBefore = sliceBefore;
 				this.sliceAfter = sliceAfter;
 			}
 
-			public static void Perform(Lime.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore, PolygonMeshSlice sliceAfter)
+			public static void Perform(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore, PolygonMeshSlice sliceAfter)
 			{
 				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter));
 			}
 
 			public class Processor : OperationProcessor<Slice>
 			{
-				private void Do(Lime.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice slice)
+				private void Do(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice slice)
 				{
 					var controller = mesh.Controller();
 					controller.State = slice.State;
@@ -39,11 +39,11 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					foreach (var i in slice.IndexBuffer) {
 						mesh.Faces.Add(i);
 					}
-					mesh.ConstrainedVertices.Clear();
+					mesh.ConstrainedEdges.Clear();
 					foreach (var cp in slice.ConstrainedVertices) {
-						mesh.ConstrainedVertices.Add(cp);
+						mesh.ConstrainedEdges.Add(cp);
 					}
-					controller.Topology.Sync();
+					controller.Topology.Sync(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
 					if (mesh.Animators.TryFind(nameof(mesh.TransientVertices), out var animator)) {
 						animator.Keys.Clear();
 						foreach (var key in slice.Keyframes) {

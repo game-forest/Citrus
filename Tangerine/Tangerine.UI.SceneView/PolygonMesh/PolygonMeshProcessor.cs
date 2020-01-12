@@ -22,7 +22,7 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.PolygonMesh.PolygonMesh>().ToList();
+				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
 				foreach (var mesh in meshes) {
 					if (mesh.Controller().HitTest(sv.Scene, sv.MousePosition, sv.Scene.Scale.X)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);

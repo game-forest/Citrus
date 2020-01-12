@@ -19,7 +19,7 @@ namespace Tangerine.UI.SceneView
 			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
 				return;
 			}
-			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.PolygonMesh.PolygonMesh>().ToList();
+			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
 			if (meshes.Count != 0) {
 				canvas.PrepareRendererState();
 				foreach (var mesh in meshes) {

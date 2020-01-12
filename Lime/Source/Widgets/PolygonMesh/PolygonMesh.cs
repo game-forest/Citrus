@@ -1,111 +1,13 @@
-using System;
 using System.Collections.Generic;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using Lime.Widgets.PolygonMesh.Topology;
 using Yuzu;
 
-namespace Lime.PolygonMesh
+namespace Lime.Widgets.PolygonMesh
 {
 	[TangerineRegisterNode(Order = 32)]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Polygon Mesh")]
 	public class PolygonMesh : Widget
 	{
-		[YuzuCompact]
-		public struct Edge : IEquatable<Edge>
-		{
-			[YuzuMember("0")]
-			public ushort Index0;
-
-			[YuzuMember("1")]
-			public ushort Index1;
-
-			public ushort this[int index]
-			{
-				get
-				{
-					switch (index) {
-						case 0:
-							return Index0;
-						case 1:
-							return Index1;
-					}
-					throw new IndexOutOfRangeException();
-				}
-			}
-
-			public Edge(ushort index0, ushort index1)
-			{
-				Index0 = index0;
-				Index1 = index1;
-			}
-
-			public bool Equals(Edge other)
-			{
-				return
-					(Index0 == other.Index0 && Index1 == other.Index1) ||
-					(Index0 == other.Index1 && Index1 == other.Index0);
-			}
-
-			public override int GetHashCode()
-			{
-				return
-					(Index0, Index1).GetHashCode() +
-					(Index1, Index0).GetHashCode();
-			}
-		}
-
-		[YuzuCompact]
-		public struct Face : IEquatable<Face>
-		{
-			[YuzuMember("0")]
-			public ushort Index0;
-
-			[YuzuMember("1")]
-			public ushort Index1;
-
-			[YuzuMember("2")]
-			public ushort Index2;
-
-			public int this[int index]
-			{
-				get {
-					switch (index) {
-						case 0:
-							return Index0;
-						case 1:
-							return Index1;
-						case 2:
-							return Index2;
-					}
-					throw new IndexOutOfRangeException();
-				}
-			}
-
-			public bool Equals(Face other) =>
-				Index0 == other.Index0 &&
-				Index1 == other.Index1 &&
-				Index2 == other.Index2 ||
-
-				Index0 == other.Index0 &&
-				Index1 == other.Index2 &&
-				Index2 == other.Index1 ||
-
-				Index1 == other.Index1 &&
-				Index0 == other.Index2 &&
-				Index2 == other.Index0 ||
-
-				Index2 == other.Index2 &&
-				Index0 == other.Index1 &&
-				Index1 == other.Index0;
-
-			public override int GetHashCode()
-			{
-				return
-					(Index0, Index1, Index2).GetHashCode() +
-					(Index2, Index0, Index1).GetHashCode() +
-					(Index1, Index2, Index0).GetHashCode();
-			}
-		}
-
 		[YuzuMember]
 		[TangerineStaticProperty]
 		public override ITexture Texture { get; set; }
@@ -120,7 +22,8 @@ namespace Lime.PolygonMesh
 
 		[YuzuMember]
 		[TangerineIgnore]
-		public List<Edge> ConstrainedVertices { get; set; }
+		// TODO Move to topology
+		public List<Edge> ConstrainedEdges { get; set; }
 
 		public List<Vertex> TransientVertices { get; set; }
 
@@ -139,7 +42,7 @@ namespace Lime.PolygonMesh
 			Texture = new SerializableTexture();
 			Vertices = new List<Vertex>();
 			Faces = new List<Face>();
-			ConstrainedVertices = new List<Edge>();
+			ConstrainedEdges = new List<Edge>();
 		}
 
 		public override void AddToRenderChain(RenderChain chain)

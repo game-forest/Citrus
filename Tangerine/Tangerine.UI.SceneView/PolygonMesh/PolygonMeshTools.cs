@@ -1,5 +1,6 @@
 using Lime.PolygonMesh;
 using System.Linq;
+using Lime.Widgets.PolygonMesh;
 using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.SceneView.PolygonMesh;

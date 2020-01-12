@@ -1,11 +1,10 @@
-using Lime.PolygonMesh.Topology;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology;
 
-namespace Tangerine.UI.SceneView.PolygonMesh
+namespace Tangerine.UI.SceneView.PolygonMesh.Topology
 {
-	public sealed class HalfEdgeTopologyAggregator : ITopologyAggregator
+	public class HalfEdgeTopologyAggregator : ITopologyAggregator
 	{
 		private readonly HalfEdgeTopology topology;
 		private List<ITopologyData> vertexBulkData;
@@ -120,11 +119,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		private List<EdgeData> ExtractEdgeData()
 		{
 			var edges = new HashSet<EdgeData>();
-			for (var i = 0; i < topology.Mesh.Faces.Count; ++i) {
-				var face = topology.Mesh.Faces[i];
-				edges.Add(new EdgeData(face[0], face[1], topology[face[0], face[1]].Twin == -1, topology[face[0], face[1]].Constrained));
-				edges.Add(new EdgeData(face[1], face[2], topology[face[1], face[2]].Twin == -1, topology[face[1], face[2]].Constrained));
-				edges.Add(new EdgeData(face[2], face[0], topology[face[2], face[0]].Twin == -1, topology[face[2], face[0]].Constrained));
+			foreach (var edge in topology.HalfEdges) {
+				// TODO Change when we get constrained edges work
+				edges.Add(new EdgeData(edge.Origin, edge.Next.Origin, edge.Twin == null, false));
 			}
 			return edges.ToList();
 		}
@@ -132,8 +129,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		private List<FaceData> ExtractFaceData()
 		{
 			var faces = new List<FaceData>();
-			for (var i = 0; i < topology.Mesh.Faces.Count; ++i) {
-				var face = topology.Mesh.Faces[i];
+			foreach (var face in topology.Faces) {
 				faces.Add(new FaceData(face[0], face[1], face[2]));
 			}
 			return faces;
@@ -166,16 +162,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			return dict;
 		}
 
-		private int GetVertexOrderIndexByTopologicalIndex(int topologicalIndex)
-		{
-			for (var i = 0; i < VertexData.Count; ++i) {
-				if (VertexData[i].TopologicalIndex == topologicalIndex) {
-					return i;
-				}
-			}
-			throw new MemberAccessException();
-		}
-
 		private bool TryAddAdjacent(Dictionary<int, List<(TopologyDataType Type, int Index)>> dict, VertexData vertex, int key)
 		{
 			dict[key] = new List<(TopologyDataType, int)>();
@@ -189,8 +175,8 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		private bool TryAddAdjacent(Dictionary<int, List<(TopologyDataType Type, int Index)>> dict, EdgeData edge, int key)
 		{
 			dict[key] = new List<(TopologyDataType, int)> {
-				(TopologyDataType.Vertex, GetVertexOrderIndexByTopologicalIndex(edge.TopologicalIndex0)),
-				(TopologyDataType.Vertex, GetVertexOrderIndexByTopologicalIndex(edge.TopologicalIndex1))
+				(TopologyDataType.Vertex, edge.TopologicalIndex0),
+				(TopologyDataType.Vertex, edge.TopologicalIndex1)
 			};
 			return TryAddAdjacentEdges(
 				TopologyDataType.Edge,
@@ -203,9 +189,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		private bool TryAddAdjacent(Dictionary<int, List<(TopologyDataType Type, int Index)>> dict, FaceData face, int key)
 		{
 			dict[key] = new List<(TopologyDataType, int)> {
-				(TopologyDataType.Vertex, GetVertexOrderIndexByTopologicalIndex(face.TopologicalIndex0)),
-				(TopologyDataType.Vertex, GetVertexOrderIndexByTopologicalIndex(face.TopologicalIndex1)),
-				(TopologyDataType.Vertex, GetVertexOrderIndexByTopologicalIndex(face.TopologicalIndex2))
+				(TopologyDataType.Vertex, face.TopologicalIndex0),
+				(TopologyDataType.Vertex, face.TopologicalIndex1),
+				(TopologyDataType.Vertex, face.TopologicalIndex2)
 			};
 			return TryAddAdjacentEdges(
 				TopologyDataType.Face,
@@ -232,7 +218,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				foreach (var index in topologicalIndices) {
 					if (index == edge.TopologicalIndex0 || index == edge.TopologicalIndex1) {
 						adjacencySet.Add((TopologyDataType.Edge, i));
-						success |= true;
+						success = true;
 					}
 				}
 			}

@@ -2,12 +2,13 @@ using Lime;
 using Lime.PolygonMesh.Topology;
 using Lime.PolygonMesh.Utils;
 using System;
+using Lime.Widgets.PolygonMesh.Topology;
 
 namespace Tangerine.UI.SceneView.PolygonMesh
 {
 	public struct EdgeData : ITopologyData, IEquatable<EdgeData>
 	{
-		private readonly Lime.PolygonMesh.PolygonMesh.Edge edge;
+		private readonly Edge edge;
 
 		public int TopologicalIndex0 => edge[0];
 		public int TopologicalIndex1 => edge[1];
@@ -18,9 +19,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public EdgeData(int topologicalIndex0, int topologicalIndex1, bool isFraming, bool isConstrained)
 		{
-			edge = new Lime.PolygonMesh.PolygonMesh.Edge {
+			edge = new Edge {
 				Index0 = (ushort)topologicalIndex0,
-				Index1 = (ushort)topologicalIndex1
+				Index1 = (ushort)topologicalIndex1,
 			};
 			IsFraming = isFraming;
 			IsConstrained = isConstrained;
