@@ -17,10 +17,6 @@ namespace Lime
 		public void Update(float delta)
 		{
 			CurrentIteration++;
-			if (!(activeNode as Widget)?.GloballyVisible ?? false) {
-				activeNode = null;
-				CancelGestures();
-			}
 			UpdateGestures(delta);
 			if (context.NodeCapturedByMouse != activeNode) {
 				activeNode = context.NodeCapturedByMouse;

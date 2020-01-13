@@ -84,12 +84,16 @@ namespace Lime
 			// Find the node under mouse, using the render chain built on one frame before.
 			context.NodeUnderMouse = LookForNodeUnderMouse(renderChain);
 
-			// Assign NodeCapturedByMouse if any mouse button was pressed or files were dropped
+			// Assign NodeCapturedByMouse if any mouse button was pressed or files were dropped.
 			var anyCaptureKeyPressed = IsAnyCaptureKeyPressed();
 			if (!prevAnyCaptureKeyPressed && anyCaptureKeyPressed || Window.Input.DroppedFiles.Count > 0) {
 				context.NodeCapturedByMouse = context.NodeUnderMouse;
-			} else if (!anyCaptureKeyPressed) {
-				// Set NodeCapturedByMouse to null if all mouse buttons are released.
+			} else if (
+				!anyCaptureKeyPressed
+				|| (!(context.NodeCapturedByMouse as Widget)?.GloballyVisible ?? false)
+				|| (!(context.NodeCapturedByMouse as Node3D)?.GloballyVisible ?? false)
+			) {
+				// Set NodeCapturedByMouse to null if all mouse buttons are released or widget became invisible.
 				context.NodeCapturedByMouse = null;
 			}
 			prevAnyCaptureKeyPressed = anyCaptureKeyPressed;
