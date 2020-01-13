@@ -480,7 +480,9 @@ namespace Lime
 			form.Deactivate += OnDeactivate;
 			form.FormClosing += OnClosing;
 			form.FormClosed += OnClosed;
-			form.Shown += OnShown;
+			if (options.Type != WindowType.ToolTip) {
+				form.Shown += OnShown;
+			}
 			active = Form.ActiveForm == form;
 
 			if (options.UseTimer) {
