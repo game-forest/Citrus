@@ -445,5 +445,21 @@ namespace Lime
 			}
 #endif // WIN || MAC || MONOMAC
 		}
+
+		/// <summary>
+		/// Enumerates rendering backends supported by current device. Only implemented for WIN and MAC and throws NotImplmentedException on other platforms.
+		/// </summary>
+		public static IEnumerable<RenderingBackend> EnumerateSupportedRenderingBackends()
+		{
+#if WIN || MAC
+			yield return RenderingBackend.OpenGL;
+			yield return RenderingBackend.ES20;
+			if (Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported()) {
+				yield return RenderingBackend.Vulkan;
+			}
+#else
+			throw new NotImplementedException($"{nameof(EnumerateSupportedRenderingBackends)} is not implemented for current platform.");
+#endif //  WIN || MAC
+		}
 	}
 }

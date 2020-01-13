@@ -180,6 +180,49 @@ namespace Lime.Graphics.Platform.Vulkan
 			physicalDevice = instance.PhysicalDevices[0];
 		}
 
+		public static bool IsSupported()
+		{
+			SharpVulkan.Instance instance = default;
+			var enabledLayerNames = new List<IntPtr>();
+			var enabledExtensionNames = new List<IntPtr>();
+			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_KHR_surface"));
+#if WIN
+			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_KHR_win32_surface"));
+#elif MAC
+			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_MVK_macos_surface"));
+#elif iOS
+			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_MVK_ios_surface"));
+			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_IMG_format_pvrtc"));
+#endif
+			try {
+				fixed (IntPtr* enabledLayerNamesPtr = enabledLayerNames.ToArray())
+				fixed (IntPtr* enabledExtensionNamesPtr = enabledExtensionNames.ToArray()) {
+					var createInfo = new SharpVulkan.InstanceCreateInfo {
+						StructureType = SharpVulkan.StructureType.InstanceCreateInfo,
+						EnabledLayerCount = (uint) enabledLayerNames.Count,
+						EnabledLayerNames = new IntPtr(enabledLayerNamesPtr),
+						EnabledExtensionCount = (uint) enabledExtensionNames.Count,
+						EnabledExtensionNames = new IntPtr(enabledExtensionNamesPtr)
+					};
+					instance = SharpVulkan.Vulkan.CreateInstance(ref createInfo);
+				}
+				SharpVulkan.Ext.VulkanExt VKExt = new SharpVulkan.Ext.VulkanExt();
+				VKExt.LoadInstanceEntryPoints(instance);
+				var physicalDevice = instance.PhysicalDevices[0];
+			} catch {
+				return false;
+			} finally {
+				foreach (var i in enabledLayerNames) {
+					Marshal.FreeHGlobal(i);
+				}
+				foreach (var i in enabledExtensionNames) {
+					Marshal.FreeHGlobal(i);
+				}
+				instance.Destroy();
+			}
+			return true;
+		}
+
 		private void CreateDebugReportCallback()
 		{
 			var createInfo = new SharpVulkan.DebugReportCallbackCreateInfo {
