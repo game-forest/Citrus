@@ -13,6 +13,12 @@ namespace Lime
 		private static Tooltip instance;
 		public static Tooltip Instance => instance ?? (instance = new Tooltip());
 
+#if MAC || MONOMAC
+		private static float offsetCoefficient = -2f;
+#else
+		private static float offsetCoefficient = 1f;
+#endif
+
 		private Tooltip()
 		{
 			tooltipWindow = new Window(new WindowOptions {
@@ -55,7 +61,7 @@ namespace Lime
 					}
 					if (showTooltip) {
 						var wasResized = false;
-						var pos = Application.Input.DesktopMousePosition + new Vector2(0, source.Height);
+						var pos = Application.Input.DesktopMousePosition + offsetCoefficient * new Vector2(0, source.Height);
 						while (source.IsMouseOver()) {
 							yield return null;
 							if (!wasResized) {
