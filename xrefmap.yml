@@ -17891,6 +17891,19 @@ references:
   isSpec: "True"
   fullName: Lime.Environment.GetDataDirectory
   nameWithType: Environment.GetDataDirectory
+- uid: Lime.Environment.GetDesktopBounds
+  name: GetDesktopBounds()
+  href: api/Lime.Environment.html#Lime_Environment_GetDesktopBounds
+  commentId: M:Lime.Environment.GetDesktopBounds
+  fullName: Lime.Environment.GetDesktopBounds()
+  nameWithType: Environment.GetDesktopBounds()
+- uid: Lime.Environment.GetDesktopBounds*
+  name: GetDesktopBounds
+  href: api/Lime.Environment.html#Lime_Environment_GetDesktopBounds_
+  commentId: Overload:Lime.Environment.GetDesktopBounds
+  isSpec: "True"
+  fullName: Lime.Environment.GetDesktopBounds
+  nameWithType: Environment.GetDesktopBounds
 - uid: Lime.Environment.GetDesktopSize
   name: GetDesktopSize()
   href: api/Lime.Environment.html#Lime_Environment_GetDesktopSize
@@ -65380,6 +65393,51 @@ references:
   isSpec: "True"
   fullName: Lime.ToolForm.CreateParams
   nameWithType: ToolForm.CreateParams
+- uid: Lime.ToolTipForm
+  name: ToolTipForm
+  href: api/Lime.ToolTipForm.html
+  commentId: T:Lime.ToolTipForm
+  fullName: Lime.ToolTipForm
+  nameWithType: ToolTipForm
+- uid: Lime.ToolTipForm.#ctor
+  name: ToolTipForm()
+  href: api/Lime.ToolTipForm.html#Lime_ToolTipForm__ctor
+  commentId: M:Lime.ToolTipForm.#ctor
+  fullName: Lime.ToolTipForm.ToolTipForm()
+  nameWithType: ToolTipForm.ToolTipForm()
+- uid: Lime.ToolTipForm.#ctor*
+  name: ToolTipForm
+  href: api/Lime.ToolTipForm.html#Lime_ToolTipForm__ctor_
+  commentId: Overload:Lime.ToolTipForm.#ctor
+  isSpec: "True"
+  fullName: Lime.ToolTipForm.ToolTipForm
+  nameWithType: ToolTipForm.ToolTipForm
+- uid: Lime.ToolTipForm.CreateParams
+  name: CreateParams
+  href: api/Lime.ToolTipForm.html#Lime_ToolTipForm_CreateParams
+  commentId: P:Lime.ToolTipForm.CreateParams
+  fullName: Lime.ToolTipForm.CreateParams
+  nameWithType: ToolTipForm.CreateParams
+- uid: Lime.ToolTipForm.CreateParams*
+  name: CreateParams
+  href: api/Lime.ToolTipForm.html#Lime_ToolTipForm_CreateParams_
+  commentId: Overload:Lime.ToolTipForm.CreateParams
+  isSpec: "True"
+  fullName: Lime.ToolTipForm.CreateParams
+  nameWithType: ToolTipForm.CreateParams
+- uid: Lime.ToolTipForm.ShowWithoutActivation
+  name: ShowWithoutActivation
+  href: api/Lime.ToolTipForm.html#Lime_ToolTipForm_ShowWithoutActivation
+  commentId: P:Lime.ToolTipForm.ShowWithoutActivation
+  fullName: Lime.ToolTipForm.ShowWithoutActivation
+  nameWithType: ToolTipForm.ShowWithoutActivation
+- uid: Lime.ToolTipForm.ShowWithoutActivation*
+  name: ShowWithoutActivation
+  href: api/Lime.ToolTipForm.html#Lime_ToolTipForm_ShowWithoutActivation_
+  commentId: Overload:Lime.ToolTipForm.ShowWithoutActivation
+  isSpec: "True"
+  fullName: Lime.ToolTipForm.ShowWithoutActivation
+  nameWithType: ToolTipForm.ShowWithoutActivation
 - uid: Lime.Transform2
   name: Transform2
   href: api/Lime.Transform2.html
@@ -73435,12 +73493,12 @@ references:
   commentId: F:Lime.WindowOptions.Title
   fullName: Lime.WindowOptions.Title
   nameWithType: WindowOptions.Title
-- uid: Lime.WindowOptions.ToolWindow
-  name: ToolWindow
-  href: api/Lime.WindowOptions.html#Lime_WindowOptions_ToolWindow
-  commentId: F:Lime.WindowOptions.ToolWindow
-  fullName: Lime.WindowOptions.ToolWindow
-  nameWithType: WindowOptions.ToolWindow
+- uid: Lime.WindowOptions.Type
+  name: Type
+  href: api/Lime.WindowOptions.html#Lime_WindowOptions_Type
+  commentId: F:Lime.WindowOptions.Type
+  fullName: Lime.WindowOptions.Type
+  nameWithType: WindowOptions.Type
 - uid: Lime.WindowOptions.UseTimer
   name: UseTimer
   href: api/Lime.WindowOptions.html#Lime_WindowOptions_UseTimer
@@ -73627,6 +73685,30 @@ references:
   commentId: F:Lime.WindowStyle.Regular
   fullName: Lime.WindowStyle.Regular
   nameWithType: WindowStyle.Regular
+- uid: Lime.WindowType
+  name: WindowType
+  href: api/Lime.WindowType.html
+  commentId: T:Lime.WindowType
+  fullName: Lime.WindowType
+  nameWithType: WindowType
+- uid: Lime.WindowType.Common
+  name: Common
+  href: api/Lime.WindowType.html#Lime_WindowType_Common
+  commentId: F:Lime.WindowType.Common
+  fullName: Lime.WindowType.Common
+  nameWithType: WindowType.Common
+- uid: Lime.WindowType.Tool
+  name: Tool
+  href: api/Lime.WindowType.html#Lime_WindowType_Tool
+  commentId: F:Lime.WindowType.Tool
+  fullName: Lime.WindowType.Tool
+  nameWithType: WindowType.Tool
+- uid: Lime.WindowType.ToolTip
+  name: ToolTip
+  href: api/Lime.WindowType.html#Lime_WindowType_ToolTip
+  commentId: F:Lime.WindowType.ToolTip
+  fullName: Lime.WindowType.ToolTip
+  nameWithType: WindowType.ToolTip
 - uid: Lime.WindowWidget
   name: WindowWidget
   href: api/Lime.WindowWidget.html
