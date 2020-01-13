@@ -13,6 +13,12 @@ namespace Lime
 		private static Tooltip instance;
 		public static Tooltip Instance => instance ?? (instance = new Tooltip());
 
+#if MAC || MONOMAC
+		private static float offsetCoefficient = -2f;
+#else
+		private static float offsetCoefficient = 1f;
+#endif
+
 		private Tooltip()
 		{
 			tooltipWindow = new Window(new WindowOptions {
@@ -20,22 +26,23 @@ namespace Lime
 				FixedSize = false,
 				Visible = false,
 				Centered = false,
-				ToolWindow = true,
+				Type = WindowType.ToolTip,
+				Title = "Tooltip",
 			});
 			tooltip = new ThemedFrame {
 				LayoutCell = new LayoutCell { Ignore = true },
 				Layout = new StackLayout(),
 				Nodes = {
-					(tooltipText = new ThemedSimpleText { Padding = new Thickness(4) }),
+					(tooltipText = new ThemedSimpleText { Padding = new Thickness(4), }),
 				},
-				Presenter = new ThemedFramePresenter(Color4.Yellow.Transparentify(0.8f), Color4.Black)
+				Presenter = new ThemedFramePresenter(Color4.Yellow.Transparentify(0.8f), Color4.Black),
 			};
 			rootWidget = new ThemedInvalidableWindowWidget(tooltipWindow) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
 				Nodes = {
 					tooltip
-				}
+				},
 			};
 		}
 
@@ -54,20 +61,21 @@ namespace Lime
 					}
 					if (showTooltip) {
 						var wasResized = false;
-						tooltipText.Text = textGetter();
-						var pos = Application.Input.DesktopMousePosition + new Vector2(0, source.Height);
+						var pos = Application.Input.DesktopMousePosition + offsetCoefficient * new Vector2(0, source.Height);
 						while (source.IsMouseOver()) {
 							yield return null;
 							if (!wasResized) {
 								wasResized = true;
+								tooltipText.Text = textGetter();
 								tooltipWindow.Visible = true;
-								if (pos.X + tooltip.Width >= Environment.GetDesktopSize().X) {
-									pos.X = Environment.GetDesktopSize().X - tooltip.Width - Theme.Metrics.ControlsPadding.Right;
+								tooltipWindow.ClientSize = tooltipWindow.DecoratedSize = tooltip.Size = tooltip.EffectiveMinSize;
+								var bounds = Environment.GetDesktopBounds();
+								if (pos.X + tooltip.Width >= bounds.Right) {
+									pos.X = bounds.Right - tooltip.Width - Theme.Metrics.ControlsPadding.Right;
 								}
-								if (pos.Y + tooltip.Height >= Environment.GetDesktopSize().Y) {
+								if (pos.Y + tooltip.Height >= bounds.Bottom) {
 									pos.Y -= 2 * tooltip.Height + Theme.Metrics.ControlsPadding.Bottom;
 								}
-								tooltipWindow.ClientSize = tooltipWindow.DecoratedSize = tooltip.Size = tooltip.EffectiveMinSize;
 								tooltipWindow.ClientPosition = tooltipWindow.DecoratedPosition = new Vector2(pos.X.Truncate(), pos.Y.Truncate());
 							}
 						}

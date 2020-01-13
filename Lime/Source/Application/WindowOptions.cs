@@ -15,6 +15,13 @@ namespace Lime
 		Disallowed
 	}
 
+	public enum WindowType
+	{
+		Common,
+		Tool,
+		ToolTip,
+	}
+
 	public class WindowOptions
 	{
 		public int? Screen = null;
@@ -35,7 +42,7 @@ namespace Lime
 		/// System.Drawing.Icon on Windows
 		/// </summary>
 		public object Icon;
-		public bool ToolWindow;
+		public WindowType Type;
 	}
 }
 

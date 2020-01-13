@@ -251,6 +251,9 @@ namespace Lime
 			if (options.Centered) {
 				Center();
 			}
+			if (options.Type == WindowType.ToolTip) {
+				window.Level = NSWindowLevel.Floating;
+			}
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
 		}
