@@ -200,8 +200,8 @@ namespace Lime
 			}
 			if (state == State.Recognizing) {
 				if (!Input.IsMousePressed(ButtonIndex)) {
-					state = State.Idle;
 					ended.Raise();
+					state = State.Idle;
 				} else if (CanStartDrag()) {
 					state = State.Changing;
 					if (TryGetDragPosition(out var mousePosition)) {
