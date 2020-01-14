@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lime
 {
@@ -17,17 +18,16 @@ namespace Lime
 		public void Update(float delta)
 		{
 			CurrentIteration++;
-			if (!(activeNode as Widget)?.GloballyVisible ?? false) {
-				activeNode = null;
-				CancelGestures();
-			}
 			UpdateGestures(delta);
 			if (context.NodeCapturedByMouse != activeNode) {
 				activeNode = context.NodeCapturedByMouse;
+				var doubleClickGestures = activeGestures.Where(g => g is DoubleClickGesture).Cast<DoubleClickGesture>().ToList();
 				CancelGestures();
 				if (activeNode != null) {
 					activeGestures.AddRange(EnumerateGestures(activeNode));
 					UpdateGestures(delta);
+				} else {
+					activeGestures.AddRange(doubleClickGestures);
 				}
 			}
 		}
