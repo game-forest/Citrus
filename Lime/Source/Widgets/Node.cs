@@ -546,10 +546,6 @@ namespace Lime
 		/// </summary>
 		public bool HitTestTarget;
 
-#if TANGERINE
-		public static bool TangerineFastForwardInProgress = false;
-#endif
-
 		public static int CreatedCount = 0;
 		public static int FinalizedCount = 0;
 
