@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Tangerine.Core;
 using Lime;
@@ -12,6 +12,7 @@ namespace Tangerine.UI.Timeline
 		private readonly Image thumbnailImage;
 		private readonly OverviewPane overviewPane;
 		private readonly ThemedSimpleText label;
+		private readonly Vector2 thumbnailOffset = new Vector2(30);
 
 		public SceneViewThumbnail(OverviewPane overviewPane)
 		{
@@ -77,12 +78,16 @@ namespace Tangerine.UI.Timeline
 		private void RefreshThumbnailPosition(IWindow window)
 		{
 			var pos = Application.Input.DesktopMousePosition;
-			pos.Y -= window.DecoratedSize.Y + 30;
-			pos.X += 30;
+#if MAC
+			pos.Y -= window.DecoratedSize.Y + thumbnailOffset.Y;
+#else
+			pos.Y += thumbnailOffset.Y;
+#endif
+			pos.X += thumbnailOffset.X;
 			if (pos.X + root.Width >= Lime.Environment.GetDesktopSize().X) {
 				pos.X = Lime.Environment.GetDesktopSize().X - root.Width - Theme.Metrics.ControlsPadding.Right;
 			}
-			window.ClientPosition = new Vector2(pos.X.Truncate(), pos.Y.Truncate());
+			window.DecoratedPosition = new Vector2(pos.X.Truncate(), pos.Y.Truncate());
 		}
 
 		private void UpdateThumbnailTexture()
