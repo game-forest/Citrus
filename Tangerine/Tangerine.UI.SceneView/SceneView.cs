@@ -395,11 +395,11 @@ namespace Tangerine.UI.SceneView
 			var ap = new AnimationPositioner();
 			int savedFrame = document.AnimationFrame;
 			renderChain.Clear();
-			ap.SetAnimationFrame(document.Animation, frame, animationMode: true, stopAnimations: false);
+			ap.SetAnimationFrame(document.Animation, frame, animationMode: true, stopAnimations: true);
 			sceneViewFrame.RenderChainBuilder?.AddToRenderChain(renderChain);
 			renderList.Clear();
 			renderChain.GetRenderObjects(renderList);
-			ap.SetAnimationFrame(document.Animation, savedFrame, animationMode: true, stopAnimations: false);
+			ap.SetAnimationFrame(document.Animation, savedFrame, animationMode: true, stopAnimations: true);
 			Window.Current.InvokeOnRendering(() => RenderThumbnail(callback));
 		}
 
