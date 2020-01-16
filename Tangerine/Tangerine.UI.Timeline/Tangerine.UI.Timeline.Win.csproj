@@ -94,6 +94,7 @@
     <Compile Include="Processors\GridPane\GridContextMenuProcessor.cs" />
     <Compile Include="Processors\GridPane\SelectAndDragKeyframesProcessor.cs" />
     <Compile Include="Processors\ImageCombinerLinkIndicationProcessor.cs" />
+    <Compile Include="Processors\OverviewPane\OverviewNavigateByRightClickProcessor.cs" />
     <Compile Include="Processors\SlowMotionProcessor.cs" />
     <Compile Include="Processors\SplineGearLinkIndicationProcessor.cs" />
     <Compile Include="Processors\BoneLinkIndicationProcessor.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="RollPane.cs" />
     <Compile Include="Rulerbar.cs" />
     <Compile Include="LinkIndicatorButton.cs" />
+    <Compile Include="SceneViewThumbnail.cs" />
     <Compile Include="Timeline.cs" />
     <Compile Include="Toolbar.cs" />
     <Compile Include="Components\DragKeyframesRequest.cs" />
