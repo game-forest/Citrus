@@ -309,9 +309,6 @@ namespace Lime
 			window.Title = options.Title;
 			window.WindowShouldClose += OnShouldClose;
 			window.WillClose += OnWillClose;
-			if (options.Floating) {
-				window.Level = NSWindowLevel.Floating;
-			}
 			window.DidResize += (s, e) => {
 				needUpdateGLContext = true;
 				HandleResize(s, e);

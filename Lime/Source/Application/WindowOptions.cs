@@ -27,10 +27,6 @@ namespace Lime
 		public int? Screen = null;
 		public bool FullScreen = false;
 		public bool FixedSize = true;
-		/// <summary>
-		/// Get or sets whether window floats over other application windows.
-		/// </summary>
-		public bool Floating = false;
 		public bool Centered = true;
 		public WindowStyle Style = WindowStyle.Regular;
 		public MacWindowTabbingMode MacWindowTabbingMode = MacWindowTabbingMode.Automatic;

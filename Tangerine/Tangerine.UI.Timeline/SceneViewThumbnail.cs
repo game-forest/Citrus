@@ -18,11 +18,10 @@ namespace Tangerine.UI.Timeline
 			this.overviewPane = overviewPane;
 			window = new Window(new WindowOptions {
 				Style = WindowStyle.Borderless,
-				Floating = true,
 				FixedSize = true,
 				Visible = false,
 				Centered = false,
-				ToolWindow = true,
+				Type = WindowType.ToolTip
 			});
 			root = new ThemedFrame {
 				Layout = new StackLayout(),
