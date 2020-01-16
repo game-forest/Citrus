@@ -145,6 +145,8 @@
     <Compile Include="Toolbar.cs" />
     <Compile Include="Utils\KeyframeFigure.cs" />
     <Compile Include="Utils\TimelineMetrics.cs" />
+    <Compile Include="SceneViewThumbnail.cs" />
+    <Compile Include="Processors\OverviewPane\OverviewNavigateByRightClickProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Mac.csproj">
