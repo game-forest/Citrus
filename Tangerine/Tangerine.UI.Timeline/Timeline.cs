@@ -197,6 +197,7 @@ namespace Tangerine.UI.Timeline
 				new SlowMotionProcessor(),
 				new AnimationStretchProcessor(),
 				new OverviewScrollProcessor(),
+				new OverviewNavigateByRightClickProcessor(),
 				new MouseWheelProcessor(this),
 				new RollMouseScrollProcessor(),
 				new SelectAndDragKeyframesProcessor(),
