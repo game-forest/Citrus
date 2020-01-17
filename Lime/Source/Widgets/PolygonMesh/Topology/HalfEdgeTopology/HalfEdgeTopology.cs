@@ -14,6 +14,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			public HalfEdge Prev => Next.Next;
 			public HalfEdge Twin { get; private set; }
 
+			public bool Detached => Next == null && Twin == null;
+
 			public HalfEdge(int origin)
 			{
 				Origin = origin;
@@ -22,7 +24,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			/// <summary>
 			/// Removes edge from triangulation.
 			/// </summary>
-			public void Remove()
+			public void Detach()
 			{
 				Next = null;
 				Twin = null;
