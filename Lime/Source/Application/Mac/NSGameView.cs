@@ -115,7 +115,7 @@ namespace Lime.Platform
 			input.SetKeyState(Key.Mouse0, true);
 			input.SetKeyState(Key.Touch0, true);
 			capturedByMouseView = this;
-			if (theEvent.ClickCount == 2) {
+			if (theEvent.ClickCount >= 2) {
 				input.SetKeyState(Key.Mouse0DoubleClick, true);
 			}
 		}
@@ -123,7 +123,7 @@ namespace Lime.Platform
 		public override void RightMouseDown(NSEvent theEvent)
 		{
 			input.SetKeyState(Key.Mouse1, true);
-			if (theEvent.ClickCount == 2) {
+			if (theEvent.ClickCount >= 2) {
 				input.SetKeyState(Key.Mouse1DoubleClick, true);
 			}
 		}
@@ -136,23 +136,19 @@ namespace Lime.Platform
 		public override void RightMouseUp(NSEvent theEvent)
 		{
 			input.SetKeyState(Key.Mouse1, false);
-			if (theEvent.ClickCount == 2) {
-				input.SetKeyState(Key.Mouse1DoubleClick, false);
-			}
+			input.SetKeyState(Key.Mouse1DoubleClick, false);
 		}
 
 		public override void MouseUp(NSEvent theEvent)
 		{
 			input.SetKeyState(Key.Mouse0, false);
 			input.SetKeyState(Key.Touch0, false);
+			input.SetKeyState(Key.Mouse0DoubleClick, false);
 			capturedByMouseView = null;
 			firstExited?.DidMouseExit?.Invoke();
 			lastEntered?.DidMouseEnter?.Invoke();
 			firstExited = null;
 			lastEntered = null;
-			if (theEvent.ClickCount == 2) {
-				input.SetKeyState(Key.Mouse0DoubleClick, false);
-			}
 		}
 
 		public override void OtherMouseUp(NSEvent theEvent)
