@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>__UNIFIED__;__MACOS__;DEBUG;MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -36,12 +36,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AOTMode>None</AOTMode>
     <LangVersion>7.3</LangVersion>
+    <AssemblyName></AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>__UNIFIED__;__MACOS__;MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -146,7 +146,6 @@
     <Compile Include="Utils\KeyframeFigure.cs" />
     <Compile Include="Utils\TimelineMetrics.cs" />
     <Compile Include="SceneViewThumbnail.cs" />
-    <Compile Include="Processors\OverviewPane\OverviewNavigateByRightClickProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Mac.csproj">
