@@ -94,7 +94,12 @@ namespace Tangerine.UI.Timeline
 		{
 			var doc = Document.Current;
 			var frame = CalcPreviewFrameIndex();
-			label.Text = frame.ToString();
+			var marker = FindMarker(frame);
+			if (marker != null && !string.IsNullOrEmpty(marker.Id)) {
+				label.Text = $"{frame} - {marker.Id}";
+			} else {
+				label.Text = frame.ToString();
+			}
 			doc.SceneViewThumbnailProvider.Generate(frame, texture => {
 				var sceneSize = (Vector2)texture.ImageSize;
 				var thumbSize = new Vector2(200);
@@ -107,6 +112,20 @@ namespace Tangerine.UI.Timeline
 				thumbnailImage.MinMaxSize = thumbSize;
 				window.Invalidate();
 			});
+		}
+
+		private Marker FindMarker(int frame)
+		{
+			Marker result = null;
+			foreach (var m in Document.Current.Animation.Markers) {
+				if (m.Frame > frame) {
+					break;
+				}
+				if (!string.IsNullOrEmpty(m.Id)) {
+					result = m;
+				}
+			}
+			return result;
 		}
 
 		private int CalcPreviewFrameIndex()
