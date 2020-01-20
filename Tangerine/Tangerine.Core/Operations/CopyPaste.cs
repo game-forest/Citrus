@@ -119,8 +119,22 @@ namespace Tangerine.Core.Operations
 					PasteNodes(data, loc, mousePosition);
 				}
 			}
-			foreach (var node in Document.Current.SelectedNodes()) {
-				node.LoadExternalScenes();
+			using (Document.Current.History.BeginTransaction()) {
+				int removedAnimatorsCount = 0;
+				foreach (var node in Document.Current.SelectedNodes()) {
+					removedAnimatorsCount += node.RemoveDanglingAnimators();
+					node.LoadExternalScenes();
+				}
+				if (removedAnimatorsCount > 0) {
+					string message = "Your exported content has references to external animations. It's forbidden.\n";
+					if (removedAnimatorsCount == 1) {
+						message += "1 dangling animator has been removed!";
+					} else {
+						message += $"{removedAnimatorsCount} dangling animators have been removed!";
+					}
+					Document.Current.ShowWarning(message);
+				}
+				Document.Current.History.CommitTransaction();
 			}
 		}
 
