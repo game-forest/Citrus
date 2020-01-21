@@ -13,13 +13,23 @@ namespace Tangerine.UI
 		private class TextViewWriter : TextWriter
 		{
 			private readonly ThemedTextView textView;
+			private string logBeforeProjectOpened = string.Empty;
+			public string LogFilePath { get; private set; }
 			public TextWriter SystemOut;
 
 			public TextViewWriter(ThemedTextView textView)
 			{
 				this.textView = textView;
+				Project.Opening += path => {
+					var logDir = Path.GetDirectoryName(path);
+					if (!Directory.Exists(logDir)) {
+						Directory.CreateDirectory(logDir);
+					}
+					LogFilePath = Path.Combine(logDir, "TangerineLog.txt");
+					File.WriteAllText(LogFilePath, logBeforeProjectOpened);
+				};
 			}
-
+			
 			public override void WriteLine(string value)
 			{
 				Write(value + '\n');
@@ -27,29 +37,27 @@ namespace Tangerine.UI
 
 			public override void Write(string value)
 			{
-				value = Encoding.UTF8.GetString(
-					Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(value))
-				);
 				if (string.IsNullOrEmpty(value)) {
 					return;
 				}
+				value = Encoding.UTF8.GetString(
+					Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(value))
+				);
 				Application.InvokeOnMainThread(() => {
-					var time = DateTime.Now.ToLongTimeString();
-					var proj = $"{Path.GetFileNameWithoutExtension(Project.Current?.CitprojPath ?? string.Empty)} ".TrimStart(' ');
-					var timestamped = $"[{proj}{time}] {value}".Replace("\r\n", "\n").Replace("\r", "\n");
-#if WIN
-					timestamped = timestamped.Replace("\n", "\r\n");
-#endif // WIN
-#if MAC
-					timestamped = timestamped.Replace("\n", "\r");
-#endif // MAC
+					value = $"[{DateTime.Now.ToLongTimeString()}] {value}";
+					value = value.Replace("\r\n", "\n").Replace('\r', '\n');
+					value = value.Replace("\n", System.Environment.NewLine);
 #if DEBUG
-					System.Diagnostics.Debug.Write(timestamped);
+					System.Diagnostics.Debug.Write(value);
 #endif // DEBUG
-					SystemOut?.Write(timestamped);
-					textView.Append(timestamped);
-					File.AppendAllText(LogFileName, timestamped);
-					Instance.logBackup += timestamped;
+					
+					SystemOut?.Write(value);
+					textView.Append(value);
+					if (LogFilePath != null) {
+						File.AppendAllText(LogFilePath, value);
+					} else {
+						logBeforeProjectOpened += value;
+					}
 				});
 				Application.InvokeOnNextUpdate(textView.ScrollToEnd);
 			}
@@ -59,34 +67,13 @@ namespace Tangerine.UI
 
 		public static Console Instance { get; private set; }
 
-		public static string LogFileName
-		{
-			get
-			{
-				var tempPath = Path.GetTempPath();
-				var logDir = Project.Current?.CitprojPath?.Replace(Path.GetFileName(Project.Current.CitprojPath), "Logs") ?? tempPath;
-				if (!Directory.Exists(logDir)) {
-					Directory.CreateDirectory(logDir);
-				}
-				var path = $"{logDir}\\TangerineConsoleLog [{Instance.sessionStartTime}].txt";
-				if (logDir == tempPath) {
-					File.AppendAllText(path, Instance.logBackup);
-				}
-				return path;
-			}
-		}
-
-		private Panel panel;
+		private readonly Panel panel;
 		public readonly Widget RootWidget;
 		private ThemedTextView textView;
-		private TextWriter textWriter;
-		private string logBackup;
-		private string sessionStartTime;
+		private TextViewWriter textWriter;
 
 		public Console(Panel panel)
 		{
-			logBackup = "";
-			sessionStartTime = DateTime.Now.ToString().Replace('/', '-').Replace(':', '-');
 			if (Instance != null) {
 				throw new InvalidOperationException();
 			}
@@ -120,21 +107,13 @@ namespace Tangerine.UI
 			DockManager.Instance.ShowPanel(panel.Id);
 		}
 
-		private static int TryGetLogFileSize()
-		{
-			try {
-				return (int)new FileInfo($@"{LogFileName}").Length;
-			} catch (FileNotFoundException) {
-				File.WriteAllText(LogFileName, string.Empty);
-				return 0;
-			}
-		}
-
 		private IEnumerator<object> ManageTextViewTask()
 		{
 			var menu = new Menu() {
-				new Command("View in editor", () => {
-					System.Diagnostics.Process.Start($@"{LogFileName}");
+				new Command("View in External Editor", () => {
+					if (textWriter.LogFilePath != null) {
+						System.Diagnostics.Process.Start(textWriter.LogFilePath);
+					}
 				}),
 				Command.MenuSeparator,
 				new Command("Clear", () => {
