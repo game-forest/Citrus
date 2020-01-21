@@ -23,12 +23,7 @@ namespace Tangerine.UI
 		public bool Enabled
 		{
 			get => PropertyContainerWidget.Enabled;
-			set
-			{
-				if (value != PropertyContainerWidget.Enabled) {
-					PropertyContainerWidget.Enabled = value;
-				}
-			}
+			set => PropertyContainerWidget.Enabled = value;
 		}
 
 		public CommonPropertyEditor(IPropertyEditorParams editorParams)
