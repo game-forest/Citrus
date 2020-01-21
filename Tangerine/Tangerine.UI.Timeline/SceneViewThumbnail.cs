@@ -130,8 +130,7 @@ namespace Tangerine.UI.Timeline
 
 		private int CalcPreviewFrameIndex()
 		{
-			var input = overviewPane.RootWidget.Input;
-			return (input.MousePosition.X / (TimelineMetrics.ColWidth * overviewPane.ContentWidget.Scale.X)).Round();
+			return (overviewPane.RootWidget.LocalMousePosition().X / (TimelineMetrics.ColWidth * overviewPane.ContentWidget.Scale.X)).Round();
 		}
 	}
 }
