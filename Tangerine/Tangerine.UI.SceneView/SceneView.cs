@@ -145,7 +145,8 @@ namespace Tangerine.UI.SceneView
 				public override void Render()
 				{
 					Renderer.PushState(RenderState.All);
-					Renderer.Transform2 = LocalToWorldTransform;
+					// Hack: use the current state of Transform2 since it may be configured for generating SceneViewThumbnail.
+					Renderer.Transform2 = LocalToWorldTransform * Renderer.Transform2;
 					SceneObjects.Render();
 					Renderer.PopState();
 				}
@@ -179,7 +180,7 @@ namespace Tangerine.UI.SceneView
 			InputArea = new Widget { HitTestTarget = true, Anchors = Anchors.LeftRightTopBottom };
 			InputArea.FocusScope = new KeyboardFocusScope(InputArea);
 			InputArea.Gestures.Add(DropFilesGesture = new DropFilesGesture());
-			Scene = new Widget();
+			Scene = new Widget { Anchors = Anchors.LeftRightTopBottom };
 			Scene.Components.Add(new SceneBehavior());
 			Scene.PostPresenter = new ScenePresenter(Document.Current.RootNode);
 			Frame = new Widget {
@@ -235,6 +236,7 @@ namespace Tangerine.UI.SceneView
 		public void Attach()
 		{
 			Instance = this;
+			Document.Current.SceneViewThumbnailProvider = new SceneViewThumbnailProvider(Document.Current, Frame);
 			Panel.AddNode(ShowNodeDecorationsPanelButton);
 			Panel.AddNode(ZoomWidget);
 			Panel.AddNode(RulersWidget);
@@ -364,6 +366,77 @@ namespace Tangerine.UI.SceneView
 		{
 			Type type;
 			return Consume<T>(components, out type, out command);
+		}
+	}
+
+	public class SceneViewThumbnailProvider : ISceneViewThumbnailProvider
+	{
+		private readonly RenderChain renderChain = new RenderChain();
+		private readonly RenderObjectList renderList = new RenderObjectList();
+		private readonly Document document;
+		private readonly Widget sceneViewFrame;
+		private RenderTexture texture;
+
+		public SceneViewThumbnailProvider(Document document, Widget sceneViewFrame)
+		{
+			this.document = document;
+			this.sceneViewFrame = sceneViewFrame;
+		}
+
+		public void Generate(int frame, Action<ITexture> callback)
+		{
+			var sceneSize = sceneViewFrame.Size;
+			var thumbSize = new Vector2(200);
+			if (sceneSize.X > sceneSize.Y) {
+				thumbSize.Y *= sceneSize.Y / sceneSize.X;
+			} else {
+				thumbSize.X *= sceneSize.X / sceneSize.Y;
+			}
+			var ap = new AnimationPositioner();
+			int savedFrame = document.AnimationFrame;
+			renderChain.Clear();
+			ap.SetAnimationFrame(document.Animation, frame, animationMode: true, stopAnimations: true);
+			sceneViewFrame.RenderChainBuilder?.AddToRenderChain(renderChain);
+			renderList.Clear();
+			renderChain.GetRenderObjects(renderList);
+			ap.SetAnimationFrame(document.Animation, savedFrame, animationMode: true, stopAnimations: true);
+			Window.Current.InvokeOnRendering(() => RenderThumbnail(callback));
+		}
+
+		private void RenderThumbnail(Action<ITexture> callback)
+		{
+			var pixelScale = Window.Current.PixelScale;
+			var scaledWidth = (int)(sceneViewFrame.Width * pixelScale);
+			var scaledHeight = (int)(sceneViewFrame.Height * pixelScale);
+			if (texture == null || texture.ImageSize != new Size(scaledWidth, scaledHeight)) {
+				texture?.Dispose();
+				texture = new RenderTexture(scaledWidth, scaledHeight);
+			}
+			if (sceneViewFrame.Width > 0 && sceneViewFrame.Height > 0) {
+				texture.SetAsRenderTarget();
+				Renderer.PushState(
+					RenderState.ScissorState |
+					RenderState.View |
+					RenderState.World |
+					RenderState.View |
+					RenderState.Projection |
+					RenderState.DepthState |
+					RenderState.CullMode |
+					RenderState.Transform2);
+				Renderer.ScissorState = ScissorState.ScissorDisabled;
+				Renderer.Viewport = new Viewport(0, 0, texture.ImageSize.Width, texture.ImageSize.Height);
+				Renderer.Clear(Color4.Zero);
+				Renderer.World = Matrix44.Identity;
+				Renderer.View = Matrix44.Identity;
+				Renderer.SetOrthogonalProjection(0, 0, sceneViewFrame.Width, sceneViewFrame.Height);
+				Renderer.DepthState = DepthState.DepthDisabled;
+				Renderer.CullMode = CullMode.None;
+				Renderer.Transform2 = sceneViewFrame.Parent.AsWidget.LocalToWorldTransform.CalcInversed();
+				renderList.Render();
+				Renderer.PopState();
+				texture.RestoreRenderTarget();
+				callback?.Invoke(texture);
+			}
 		}
 	}
 }

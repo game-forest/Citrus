@@ -176,7 +176,7 @@ namespace Lime
 		public Vector2 DesktopToLocal(Vector2 desktopPosition)
 		{
 			return SDToLime.Convert(
-				renderControl.PointToClient(new Point((int) desktopPosition.X, (int) desktopPosition.Y)),
+				renderControl.PointToClient(LimeToSD.ConvertToPoint(desktopPosition, PixelScale)),
 				PixelScale
 			);
 		}
@@ -747,7 +747,7 @@ namespace Lime
 				return;
 			}
 			lastMousePosition = Control.MousePosition;
-			Application.Input.DesktopMousePosition = new Vector2(lastMousePosition.X, lastMousePosition.Y);
+			Application.Input.DesktopMousePosition = SDToLime.Convert(lastMousePosition, PixelScale);
 			Application.Input.SetDesktopTouchPosition(0, Application.Input.DesktopMousePosition);
 		}
 

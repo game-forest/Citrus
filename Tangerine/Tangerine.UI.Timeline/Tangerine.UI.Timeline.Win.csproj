@@ -111,6 +111,7 @@
     <Compile Include="RollPane.cs" />
     <Compile Include="Rulerbar.cs" />
     <Compile Include="LinkIndicatorButton.cs" />
+    <Compile Include="SceneViewThumbnail.cs" />
     <Compile Include="Timeline.cs" />
     <Compile Include="Toolbar.cs" />
     <Compile Include="Components\DragKeyframesRequest.cs" />

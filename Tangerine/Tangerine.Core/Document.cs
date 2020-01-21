@@ -20,6 +20,11 @@ namespace Tangerine.Core
 		Fbx
 	}
 
+	public interface ISceneViewThumbnailProvider
+	{
+		void Generate(int frame, Action<ITexture> callback);
+	}
+
 	public sealed class Document
 	{
 		public enum CloseAction
@@ -85,6 +90,8 @@ namespace Tangerine.Core
 		/// Gets the root node for the current document.
 		/// </summary>
 		public Node RootNode { get; private set; }
+
+		public ISceneViewThumbnailProvider SceneViewThumbnailProvider { get; set; }
 
 		private Node container;
 

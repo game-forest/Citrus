@@ -7,6 +7,13 @@ namespace Lime
 		public override void AdvanceAnimation(Animation animation, double delta)
 		{
 			base.AdvanceAnimation(animation, delta);
+#if TANGERINE
+			// Do not blend animations while fast forwarding is in progress.
+			// Otherwise the scene thumbnail generation will cause animation on the scene view.
+			if (!Audio.GloballyEnable) {
+				return;
+			}
+#endif
 			Blending(animation, delta);
 		}
 

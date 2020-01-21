@@ -33,6 +33,7 @@ namespace Tangerine.UI.Timeline
 				},
 				SizeChanged = RefreshContentScale
 			};
+			new SceneViewThumbnail(this);
 		}
 
 		void RefreshContentScale()

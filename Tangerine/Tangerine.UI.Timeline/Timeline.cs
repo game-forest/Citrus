@@ -146,13 +146,6 @@ namespace Tangerine.UI.Timeline
 			Detached?.Invoke();
 		}
 
-		private static void FilesDropOnHandling()
-		{
-			if (!Window.Current.Active) {
-				Window.Current.Activate();
-			}
-		}
-
 		void InitializeWidgets()
 		{
 			RootWidget.Layout = new StackLayout();

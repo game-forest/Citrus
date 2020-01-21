@@ -8,7 +8,7 @@ namespace Tangerine.Core
 		void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations);
 	}
 
-	class AnimationPositioner : IAnimationPositioner
+	public class AnimationPositioner : IAnimationPositioner
 	{
 		public void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations)
 		{
