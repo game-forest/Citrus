@@ -94,7 +94,6 @@
     <Compile Include="Processors\GridPane\GridContextMenuProcessor.cs" />
     <Compile Include="Processors\GridPane\SelectAndDragKeyframesProcessor.cs" />
     <Compile Include="Processors\ImageCombinerLinkIndicationProcessor.cs" />
-    <Compile Include="Processors\OverviewPane\OverviewNavigateByRightClickProcessor.cs" />
     <Compile Include="Processors\SlowMotionProcessor.cs" />
     <Compile Include="Processors\SplineGearLinkIndicationProcessor.cs" />
     <Compile Include="Processors\BoneLinkIndicationProcessor.cs" />
