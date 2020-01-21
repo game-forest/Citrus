@@ -128,8 +128,8 @@ namespace Tangerine.Core
 					HandleFileSystemWatcherEvent(path);
 				} else if (Directory.Exists(path)) {
 					foreach (var f in new ScanOptimizedFileEnumerator(path, null).Enumerate()) {
-						HandleFileSystemWatcherEvent(Path.Combine(previousPath, f.Path));
-						HandleFileSystemWatcherEvent(Path.Combine(path, f.Path));
+						HandleFileSystemWatcherEvent(Path.Combine(previousPath, f.SrcPath));
+						HandleFileSystemWatcherEvent(Path.Combine(path, f.SrcPath));
 					}
 				}
 			};

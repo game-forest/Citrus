@@ -118,9 +118,11 @@ namespace Orange
 
 			var defaultAssetsEnumerator = The.Workspace.AssetFiles;
 			var assetsFileInfo = assets
-				.Select(asset => new FileInfo { Path = asset, LastWriteTime = DateTime.Now })
+				.Select(asset => new FileInfo(asset, asset, DateTime.Now))
 				.ToList();
-			The.Workspace.AssetFiles = new CustomFilesEnumerator(defaultAssetsEnumerator.Directory, assetsFileInfo);
+			The.Workspace.AssetFiles = new AliasedFileEnumerator(
+				new CustomFilesEnumerator(defaultAssetsEnumerator.Directory, assetsFileInfo)
+			);
 
 			var defaultCookingProfile = AssetCooker.cookingProfile;
 			AssetCooker.cookingProfile = CookingProfile.Partial;
@@ -184,7 +186,9 @@ namespace Orange
 			foreach (var bundleName in bundles) {
 				using (var bundle = CreateBundle(bundleName)) {
 					AssetBundle.SetCurrent(bundle, false);
-					The.Workspace.AssetFiles = new FilteredFileEnumerator(savedWorkspaceAssetFiles, (info) => AssetIsInBundlePredicate(info, bundleName));
+					The.Workspace.AssetFiles = new AliasedFileEnumerator(
+						new FilteredFileEnumerator(savedWorkspaceAssetFiles, (info) => AssetIsInBundlePredicate(info, bundleName))
+					);
 					using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 						var profileCookStages = cookStages
 							.Where(kv => kv.Value.Contains(cookingProfile))
@@ -238,36 +242,10 @@ namespace Orange
 			return new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
 		}
 
-		private class FilteredFileEnumerator : IFileEnumerator
-		{
-			private IFileEnumerator sourceFileEnumerator;
-			private List<FileInfo> files = new List<FileInfo>();
-			public FilteredFileEnumerator(IFileEnumerator fileEnumerator, Predicate<FileInfo> predicate)
-			{
-				sourceFileEnumerator = fileEnumerator;
-				sourceFileEnumerator.EnumerationFilter = predicate;
-				files = sourceFileEnumerator.Enumerate().ToList();
-				sourceFileEnumerator.EnumerationFilter = null;
-			}
-			public string Directory { get { return sourceFileEnumerator.Directory; } }
-
-			public Predicate<FileInfo> EnumerationFilter { get { return null; } set { } }
-
-			public IEnumerable<FileInfo> Enumerate(string extension = null)
-			{
-				return files.Where(file => extension == null || file.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase));
-			}
-
-			public void Rescan()
-			{
-
-			}
-		}
-
 		private static bool AssetIsInBundlePredicate(FileInfo info, string bundleName)
 		{
 			CookingRules rules;
-			if (CookingRulesMap.TryGetValue(info.Path, out rules)) {
+			if (CookingRulesMap.TryGetValue(info.SrcPath, out rules)) {
 				if (rules.Ignore) {
 					return false;
 				}
@@ -282,7 +260,9 @@ namespace Orange
 		{
 			Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
 			var assetFilesEnumerator = The.Workspace.AssetFiles;
-			The.Workspace.AssetFiles = new FilteredFileEnumerator(assetFilesEnumerator, (info) => AssetIsInBundlePredicate(info, bundleName));
+			The.Workspace.AssetFiles = new AliasedFileEnumerator(
+				new FilteredFileEnumerator(assetFilesEnumerator, (info) => AssetIsInBundlePredicate(info, bundleName))
+			);
 			// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
 			atlasesPostfix = bundleName != CookingRulesBuilder.MainBundleName ? bundleName : "";
 			try {

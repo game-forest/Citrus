@@ -8,6 +8,7 @@ namespace Orange
 	{
 		public class AtlasItem
 		{
+			public string SrcPath;
 			public string Path;
 			public IntRectangle AtlasRect;
 			public bool Allocated;
@@ -50,7 +51,7 @@ namespace Orange
 
 		public static Bitmap OpenAtlasItemBitmapAndRescaleIfNeeded(TargetPlatform platform, AtlasItem item)
 		{
-			var srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(item.Path, item.SourceExtension));
+			var srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(item.SrcPath, item.SourceExtension));
 			Bitmap bitmap;
 			using (var stream = File.OpenRead(srcTexturePath)) {
 				bitmap = new Bitmap(stream);

@@ -45,7 +45,8 @@ namespace Tangerine.UI.FilesystemView
 			cookingRulesPath = Path.Combine(FullName, CookingRulesBuilder.CookingRulesFilename);
 			if (File.Exists(cookingRulesPath)) {
 				var fi = new System.IO.FileInfo(cookingRulesPath);
-				files.Add(new Orange.FileInfo { Path = ProcessPath(cookingRulesPath), LastWriteTime = fi.LastWriteTime });
+				string path = ProcessPath(cookingRulesPath);
+				files.Add(new Orange.FileInfo(path, path, fi.LastWriteTime));
 			}
 		}
 
@@ -63,7 +64,8 @@ namespace Tangerine.UI.FilesystemView
 			trunc.Reverse();
 			string cookingRulesPath = "";
 			foreach (var di in trunc) {
-				files.Add(new Orange.FileInfo { Path = ProcessPath(di.FullName), LastWriteTime = di.LastWriteTime });
+				string path = ProcessPath(di.FullName);
+				files.Add(new Orange.FileInfo(path, path, di.LastWriteTime));
 				TryAddCookingRulesInDirectory(di.FullName, ref cookingRulesPath);
 			}
 			string innerCookingRulesPath = null;
@@ -74,7 +76,8 @@ namespace Tangerine.UI.FilesystemView
 				if (file == cookingRulesPath) {
 					continue;
 				}
-				files.Add(new Orange.FileInfo { Path = ProcessPath(file), LastWriteTime = fileInfo.LastWriteTime });
+				var path = ProcessPath(file);
+				files.Add(new Orange.FileInfo(path, path, fileInfo.LastWriteTime));
 				if (fileInfo.Attributes == FileAttributes.Directory) {
 					TryAddCookingRulesInDirectory(fileInfo.FullName, ref innerCookingRulesPath);
 				}
@@ -86,7 +89,7 @@ namespace Tangerine.UI.FilesystemView
 			if (extension == null && EnumerationFilter == null) {
 				return files;
 			}
-			return files.Where(file => extension == null || file.Path.EndsWith(extension))
+			return files.Where(file => extension == null || file.SrcPath.EndsWith(extension))
 				.Where(file => EnumerationFilter == null || EnumerationFilter(file));
 		}
 	}

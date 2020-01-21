@@ -77,12 +77,12 @@ namespace Orange
 								}
 								Directory.CreateDirectory(tempPath);
 								foreach (var fi in new FileEnumerator(exePath).Enumerate()) {
-									if (fi.Path == "UPDATING") {
+									if (fi.SrcPath == "UPDATING") {
 										continue;
 									}
-									var dstPath = Path.Combine(tempPath, fi.Path);
+									var dstPath = Path.Combine(tempPath, fi.SrcPath);
 									Directory.CreateDirectory(Path.GetDirectoryName(dstPath));
-									File.Move(Path.Combine(exePath, fi.Path), dstPath);
+									File.Move(Path.Combine(exePath, fi.SrcPath), dstPath);
 								}
 								zipArchive.ExtractToDirectory(exePath);
 							}

@@ -13,23 +13,23 @@ namespace Orange
 		{
 			var previousFileEnumerator = The.Workspace.AssetFiles;
 			AssetBundle.Current = new UnpackedAssetBundle(The.Workspace.AssetsDirectory);
-			The.Workspace.AssetFiles = new Orange.FileEnumerator(The.Workspace.AssetsDirectory);
+			The.Workspace.AssetFiles = new AliasedFileEnumerator(new FileEnumerator(The.Workspace.AssetsDirectory));
 			foreach (var file in The.Workspace.AssetFiles.Enumerate()) {
-				var filename = Path.GetFileName(file.Path);
+				var filename = Path.GetFileName(file.SrcPath);
 				if (!filename.EndsWith("tan", StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}
 				var node = Node.CreateFromAssetBundle(
-					path: Path.ChangeExtension(file.Path, null),
+					path: Path.ChangeExtension(file.SrcPath, null),
 					ignoreExternals: true
 				);
 				InternalPersistence.Instance.WriteObjectToBundle(
 					bundle: AssetBundle.Current,
-					path: file.Path,
+					path: file.DstPath,
 					instance: node,
 					format: Persistence.Format.Json,
 					sourceExtension: "tan",
-					time: File.GetLastWriteTime(file.Path),
+					time: File.GetLastWriteTime(file.SrcPath),
 					attributes: AssetAttributes.None,
 					cookingRulesSHA1: null
 				);

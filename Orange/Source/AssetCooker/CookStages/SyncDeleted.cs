@@ -30,7 +30,7 @@ namespace Orange
 			var result = 0;
 			var assetFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate()) {
-				assetFiles.Add(fileInfo.Path);
+				assetFiles.Add(fileInfo.SrcPath);
 			}
 			foreach (var path in AssetCooker.AssetBundle.EnumerateFiles()) {
 				if (!path.StartsWith("Atlases") &&
@@ -46,7 +46,7 @@ namespace Orange
 		{
 			var assetFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate()) {
-				assetFiles.Add(fileInfo.Path);
+				assetFiles.Add(fileInfo.DstPath);
 			}
 			foreach (var path in AssetCooker.AssetBundle.EnumerateFiles().ToList()) {
 				// Ignoring texture atlases

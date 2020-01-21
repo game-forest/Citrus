@@ -10,6 +10,8 @@ namespace Orange
 {
 	public static class CodeCooker
 	{
+		private static readonly string[] scenesExtensions = { ".scene", ".tan", ".model" };
+
 		public static void Cook(Target target, Dictionary<string, CookingRules> assetToCookingRules, List<string> cookingBundles)
 		{
 			var cache = LoadCodeCookerCache();
@@ -20,64 +22,67 @@ namespace Orange
 			var allScenes = new List<string>();
 			var modifiedScenes = new List<string>();
 
-			using (var dc = new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				foreach (var kv in assetToCookingRules) {
-					var scenePath = kv.Key;
-					bool presentInCookingBundles = false;
-					foreach (var bundle in kv.Value.Bundles) {
-						if (cookingBundles.Contains(bundle)) {
-							presentInCookingBundles = true;
-							break;
+			var aliasedFiles = new AliasedFileEnumerator(
+				new FilteredFileEnumerator(new FileEnumerator(The.Workspace.AssetsDirectory), info => {
+					var rule = assetToCookingRules[info.SrcPath];
+					bool presentInCookingBundles = rule.Bundles.Any(cookingBundles.Contains);
+					bool isCookingObject = scenesExtensions.Any(
+						f => info.DstPath.EndsWith(f, StringComparison.OrdinalIgnoreCase));
+
+					return !rule.Ignore && presentInCookingBundles && isCookingObject;
+				})
+			);
+
+			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
+				foreach (var fileInfo in aliasedFiles.Enumerate()) {
+					var srcRule = assetToCookingRules[fileInfo.SrcPath];
+					var dateModified = File.GetLastWriteTime(fileInfo.SrcPath).ToUniversalTime();
+
+					allScenes.Add(fileInfo.DstPath);
+					sceneToBundleMap[fileInfo.DstPath] = srcRule.Bundles.First();
+
+					if (!cache.SceneFiles.ContainsKey(fileInfo.DstPath)) {
+						modifiedScenes.Add(fileInfo.DstPath);
+						scenesToCook.Add(fileInfo.DstPath);
+
+						var bundles = srcRule.Bundles;
+						foreach (string bundle in bundles) {
+							usedBundles.Add(bundle);
 						}
-					}
-					if (
-						(
-							scenePath.EndsWith(".tan", StringComparison.OrdinalIgnoreCase) ||
-							scenePath.EndsWith(".model", StringComparison.OrdinalIgnoreCase)
-						) &&
-							!kv.Value.Ignore &&
-							presentInCookingBundles
-					) {
-						allScenes.Add(scenePath);
-						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
-						var dateModified = File.GetLastWriteTime(scenePath).ToUniversalTime();
-						if (!cache.SceneFiles.ContainsKey(scenePath)) {
-							modifiedScenes.Add(scenePath);
-							scenesToCook.Add(scenePath);
-							var bundles = assetToCookingRules[scenePath].Bundles;
-							foreach (var bundle in bundles) {
+
+						cache.SceneFiles.Add(fileInfo.DstPath, new SceneRecord {
+							Bundle = bundles.First(),
+							DateModified = dateModified
+						});
+					} else {
+						var cacheRecord = cache.SceneFiles[fileInfo.DstPath];
+
+						if (dateModified == cacheRecord.DateModified) {
+							continue;
+						}
+
+						var queue = new Queue<string>();
+						if (!visitedScenes.Contains(fileInfo.DstPath)) {
+							queue.Enqueue(fileInfo.DstPath);
+							visitedScenes.Add(fileInfo.DstPath);
+						}
+
+						while (queue.Count != 0) {
+							var scene = queue.Dequeue();
+							scenesToCook.Add(scene);
+							var bundles = assetToCookingRules[scene].Bundles;
+							foreach (string bundle in bundles) {
 								usedBundles.Add(bundle);
 							}
-							cache.SceneFiles.Add(scenePath, new SceneRecord {
-								Bundle = bundles.First(),
-								DateModified = dateModified
-							});
-						} else {
-							var cacheRecord = cache.SceneFiles[kv.Key];
-							if (dateModified > cacheRecord.DateModified) {
-								var queue = new Queue<string>();
-								if (!visitedScenes.Contains(scenePath)) {
-									queue.Enqueue(scenePath);
-									visitedScenes.Add(scenePath);
+							foreach (string referringScene in cache.SceneFiles[scene].ReferringScenes) {
+								if (!visitedScenes.Contains(referringScene)) {
+									visitedScenes.Add(referringScene);
+									queue.Enqueue(referringScene);
 								}
-								while (queue.Count != 0) {
-									var scene = queue.Dequeue();
-									scenesToCook.Add(scene);
-									var bundles = assetToCookingRules[scene].Bundles;
-									foreach (var bundle in bundles) {
-										usedBundles.Add(bundle);
-									}
-									foreach (var referringScene in cache.SceneFiles[scene].ReferringScenes) {
-										if (!visitedScenes.Contains(referringScene)) {
-											visitedScenes.Add(referringScene);
-											queue.Enqueue(referringScene);
-										}
-									}
-								}
-								cache.SceneFiles[scenePath].DateModified = dateModified;
-								modifiedScenes.Add(scenePath);
 							}
 						}
+						cache.SceneFiles[fileInfo.DstPath].DateModified = dateModified;
+						modifiedScenes.Add(fileInfo.DstPath);
 					}
 				}
 			}

@@ -61,7 +61,7 @@ namespace Orange
 			AssetBundle.Current = new AggregateAssetBundle(bundles.Select(i => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, i))).ToArray());
 			The.Workspace.AssetFiles.EnumerationFilter = (info) => {
 				CookingRules rules;
-				if (cookingRulesMap.TryGetValue(info.Path, out rules)) {
+				if (cookingRulesMap.TryGetValue(info.SrcPath, out rules)) {
 					if (rules.Ignore)
 						return false;
 				}
@@ -70,8 +70,8 @@ namespace Orange
 			var usedImages = new HashSet<string>();
 			var usedSounds = new HashSet<string>();
 			foreach (var srcFileInfo in The.Workspace.AssetFiles.Enumerate(".tan")) {
-				var srcPath = srcFileInfo.Path;
-				using (var scene = (Frame)Node.CreateFromAssetBundle(srcPath)) {
+				var srcPath = srcFileInfo.SrcPath;
+				using (var scene = (Frame)Node.CreateFromAssetBundle(srcFileInfo.DstPath)) {
 					foreach (var j in scene.Descendants) {
 						var checkTexture = new Action<SerializableTexture>((Lime.SerializableTexture t) => {
 							if (t == null) {
@@ -175,7 +175,7 @@ namespace Orange
 
 			var allImages = new Dictionary<string, bool>();
 			foreach (var img in The.Workspace.AssetFiles.Enumerate(".png")) {
-				var key = Path.Combine(Path.GetDirectoryName(img.Path), Path.GetFileNameWithoutExtension(img.Path)).Replace('\\', '/');
+				var key = Path.Combine(Path.GetDirectoryName(img.SrcPath), Path.GetFileNameWithoutExtension(img.SrcPath)).Replace('\\', '/');
 				if (!key.StartsWith("Fonts")) {
 					allImages[key] = false;
 				}
@@ -187,7 +187,7 @@ namespace Orange
 
 			var allSounds = new Dictionary<string, bool>();
 			foreach (var sound in The.Workspace.AssetFiles.Enumerate(".ogg")) {
-				var key = Path.Combine(Path.GetDirectoryName(sound.Path), Path.GetFileNameWithoutExtension(sound.Path))
+				var key = Path.Combine(Path.GetDirectoryName(sound.SrcPath), Path.GetFileNameWithoutExtension(sound.SrcPath))
 					.Replace('\\', '/');
 				allSounds[key] = false;
 			}
