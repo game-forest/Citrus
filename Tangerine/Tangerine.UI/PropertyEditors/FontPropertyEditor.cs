@@ -7,12 +7,11 @@ namespace Tangerine.UI
 {
 	public class FontPropertyEditor : CommonPropertyEditor<SerializableFont>
 	{
-		private DropDownList selector;
 		private static string defaultFontDirectory = "Fonts/";
 
 		public FontPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			selector = editorParams.DropDownListFactory();
+			var selector = editorParams.DropDownListFactory();
 			selector.LayoutCell = new LayoutCell(Alignment.Center);
 			EditorContainer.AddNode(selector);
 			var propType = editorParams.PropertyInfo.PropertyType;
@@ -31,12 +30,6 @@ namespace Tangerine.UI
 			selector.AddChangeLateWatcher(CoalescedPropertyValue(), i => {
 				selector.Text = i.IsDefined ? GetFontName(i.Value): ManyValuesText;
 			});
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			selector.Enabled = Enabled;
 		}
 
 		private static string GetFontName(SerializableFont i)

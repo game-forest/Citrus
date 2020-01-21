@@ -10,7 +10,6 @@ namespace Tangerine.UI
 {
 	public class InstancePropertyEditor<T> : ExpandablePropertyEditor<T>
 	{
-		private ToolbarButton resetToDefaultButton;
 		public DropDownList Selector { get; }
 
 		public InstancePropertyEditor(IPropertyEditorParams editorParams, Action<Widget> OnValueChanged) : base(editorParams)
@@ -46,7 +45,7 @@ namespace Tangerine.UI
 			object defaultValue = null;
 			if (propertyMetaItem != null) {
 				defaultValue = propertyMetaItem.GetValue(meta.Default);
-				resetToDefaultButton = new ToolbarButton(IconPool.GetTexture("Tools.Revert")) {
+				var resetToDefaultButton = new ToolbarButton(IconPool.GetTexture("Tools.Revert")) {
 					Clicked = () => SetProperty(defaultValue)
 				};
 				if (Selector.Items.Count == 1) {
@@ -95,15 +94,6 @@ namespace Tangerine.UI
 				OnValueChanged?.Invoke(ExpandableContent);
 			} else {
 				EditorContainer.Nodes.Insert(0, Selector);
-			}
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			Selector.Enabled = Enabled;
-			if (resetToDefaultButton != null) {
-				resetToDefaultButton.Enabled = Enabled;
 			}
 		}
 

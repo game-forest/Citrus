@@ -13,14 +13,11 @@ namespace Tangerine.UI
 	{
 		private readonly Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd;
 		private IList list;
-		private ThemedAddButton addButton;
-		private List<Button> buttons;
 		private List<int> pendingRemoval;
 
 		public ListPropertyEditor(IPropertyEditorParams editorParams, Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd) : base(editorParams)
 		{
 			this.onAdd = onAdd;
-			buttons = new List<Button>();
 			pendingRemoval = new List<int>();
 			if (EditorParams.Objects.Skip(1).Any()) {
 				// Dont create editor interface if > 1 objects are selected
@@ -33,7 +30,9 @@ namespace Tangerine.UI
 			}
 			ExpandableContent.Padding = new Thickness(left: 4.0f, right: 0.0f, top: 4.0f, bottom: 4.0f);
 			list = (IList)EditorParams.PropertyInfo.GetValue(EditorParams.Objects.First());
-			addButton = new ThemedAddButton() {
+			Expanded = true;
+
+			EditorContainer.AddNode(new ThemedAddButton() {
 				Clicked = () => {
 					Expanded = true;
 					if (list == null) {
@@ -48,9 +47,8 @@ namespace Tangerine.UI
 						Document.Current.History.CommitTransaction();
 					}
 				}
-			};
-			Expanded = true;
-			EditorContainer.AddNode(addButton);
+			});
+
 			ContainerWidget.AddChangeWatcher(() => (list?.Count ?? 0) - pendingRemoval.Count, RemoveAndBuild);
 		}
 
@@ -65,21 +63,19 @@ namespace Tangerine.UI
 			// (in this case -- CoalescedPropertyValue with IndexedProperty underneath)
 			if (pendingRemoval.Count > 0) {
 				pendingRemoval.Sort();
-				using (Document.Current.History.BeginTransaction())
-				{
+				using (Document.Current.History.BeginTransaction()) {
 					for (int i = pendingRemoval.Count - 1; i >= 0; --i) {
 						RemoveFromList.Perform(list, pendingRemoval[i]);
-						buttons.RemoveAt(pendingRemoval[i]);
 					}
 					pendingRemoval.Clear();
 					Document.Current.History.CommitTransaction();
 				}
 			}
 
-			for (int i = ExpandableContent.Nodes.Count - 1; i >= 0; i--) {
+			for (int i = ExpandableContent.Nodes.Count - 1; i >= 0; --i) {
 				ExpandableContent.Nodes[i].UnlinkAndDispose();
 			}
-			for (int i = 0; i < newCount; i++) {
+			for (int i = 0; i < newCount; ++i) {
 				AfterInsertNewElement(i);
 			}
 		}
@@ -103,21 +99,13 @@ namespace Tangerine.UI
 					SetAnimableProperty.Perform(@object, name, value, CoreUserPreferences.Instance.AutoKeyframes))
 				: (@object, name, value) => SetIndexedProperty.Perform(@object, name, index, value);
 			var editor = onAdd(p, elementContainer, list).ToList().First();
-			ThemedDeleteButton removeButton;
-			buttons.Add(removeButton = new ThemedDeleteButton {
+			var removeButton = new ThemedDeleteButton {
 				Enabled = Enabled
-			});
+			};
 
 			ExpandableContent.Nodes.Insert(index, elementContainer);
 			removeButton.Clicked += () => pendingRemoval.Add(p.IndexInList);
 			editor.EditorContainer.AddNode(removeButton);
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			buttons.ForEach(b => b.Enabled = Enabled);
-			addButton.Enabled = Enabled;
 		}
 	}
 }

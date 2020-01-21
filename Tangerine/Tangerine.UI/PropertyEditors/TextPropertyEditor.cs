@@ -7,10 +7,10 @@ namespace Tangerine.UI
 	{
 		const int maxLines = 5;
 		private EditBox editor;
-		private ThemedButton button;
 
 		public TextPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
+			ThemedButton button;
 			EditorContainer.AddNode(new Widget {
 				Layout = new HBoxLayout(),
 				Nodes = {
@@ -64,13 +64,6 @@ namespace Tangerine.UI
 		public override void Submit()
 		{
 			SetProperty(editor.Text);
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editor.Enabled = Enabled;
-			button.Enabled = Enabled;
 		}
 	}
 }

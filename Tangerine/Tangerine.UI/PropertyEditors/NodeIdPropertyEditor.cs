@@ -28,11 +28,5 @@ namespace Tangerine.UI
 			SetProperty(editor.Text);
 			editor.Text = SameValues() ? PropertyValue(EditorParams.Objects.First()).GetValue() : ManyValuesText;
 		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editor.Enabled = Enabled;
-		}
 	}
 }

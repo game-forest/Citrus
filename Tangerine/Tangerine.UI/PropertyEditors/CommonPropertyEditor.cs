@@ -20,19 +20,16 @@ namespace Tangerine.UI
 		public Widget WarningsContainer { get; private set; }
 		public Widget PropertyContainerWidget { get; private set; }
 
-		private bool enabled = true;
 		public bool Enabled
 		{
-			get => enabled;
-			set {
-				if (value != enabled) {
-					enabled = value;
-					EnabledChanged();
+			get => PropertyContainerWidget.Enabled;
+			set
+			{
+				if (value != PropertyContainerWidget.Enabled) {
+					PropertyContainerWidget.Enabled = value;
 				}
 			}
 		}
-
-		protected virtual void EnabledChanged() { }
 
 		public CommonPropertyEditor(IPropertyEditorParams editorParams)
 		{

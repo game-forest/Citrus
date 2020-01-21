@@ -33,11 +33,5 @@ namespace Tangerine.UI
 		{
 			SetComponent(editor.Text);
 		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editor.Enabled = Enabled;
-		}
 	}
 }

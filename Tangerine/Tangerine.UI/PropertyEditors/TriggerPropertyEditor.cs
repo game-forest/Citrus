@@ -8,7 +8,6 @@ namespace Tangerine.UI
 	public class TriggerPropertyEditor : CommonPropertyEditor<string>
 	{
 		private readonly EditBox editBox;
-		private readonly Button button;
 		private readonly Node node;
 
 		private List<string> CurrentTriggers
@@ -29,7 +28,7 @@ namespace Tangerine.UI
 				return;
 			}
 			node = (Node)editorParams.Objects.First();
-			button = new ThemedButton {
+			var button = new ThemedButton {
 				Text = "...",
 				MinMaxWidth = 20,
 				LayoutCell = new LayoutCell(Alignment.Center)
@@ -110,12 +109,6 @@ namespace Tangerine.UI
 				},
 				Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
 			};
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editBox.Enabled = button.Enabled = Enabled;
 		}
 
 		private string FilterTriggers(string text)
