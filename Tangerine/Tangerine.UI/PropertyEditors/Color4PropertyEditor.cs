@@ -11,15 +11,13 @@ namespace Tangerine.UI
 	{
 		private EditBox editor;
 		private Color4 previousColor;
-		private ToolbarButton pipetteButton;
-		private readonly ColorPickerPanel panel;
 
 		public event Action Changed;
 
 		public Color4PropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
 			ColorBoxButton colorBox;
-			panel = new ColorPickerPanel();
+			var panel = new ColorPickerPanel();
 			var objects = EditorParams.Objects.ToList();
 			var first = PropertyValue(objects.First()).GetValue();
 			var @default = objects.All(o =>
@@ -127,7 +125,7 @@ namespace Tangerine.UI
 
 		private Node CreatePipetteButton()
 		{
-			pipetteButton = new ToolbarButton {
+			var pipetteButton = new ToolbarButton {
 				Texture = IconPool.GetTexture("Tools.Pipette"),
 			};
 			var current = CoalescedPropertyValue();
@@ -137,14 +135,6 @@ namespace Tangerine.UI
 				SetProperty(v);
 			}));
 			return pipetteButton;
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editor.Enabled = Enabled;
-			panel.Enabled = Enabled;
-			pipetteButton.Enabled = Enabled;
 		}
 
 		class ColorBoxButton : Button

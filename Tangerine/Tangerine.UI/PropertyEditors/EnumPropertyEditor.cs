@@ -33,11 +33,5 @@ namespace Tangerine.UI
 				}
 			});
 		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			Selector.Enabled = Enabled;
-		}
 	}
 }

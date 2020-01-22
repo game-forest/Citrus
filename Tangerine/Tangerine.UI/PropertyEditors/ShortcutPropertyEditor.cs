@@ -119,11 +119,5 @@ namespace Tangerine.UI
 				k => input.WasKeyRepeated(k) || input.WasKeyPressed(k) || input.WasKeyReleased(k)));
 			Command.ConsumeRange(Command.Editing);
 		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editor.Enabled = Enabled;
-		}
 	}
 }

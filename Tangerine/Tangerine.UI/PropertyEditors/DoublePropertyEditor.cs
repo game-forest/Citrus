@@ -6,11 +6,9 @@ namespace Tangerine.UI
 {
 	public class DoublePropertyEditor : CommonPropertyEditor<double>
 	{
-		private NumericEditBox editor;
-
 		public DoublePropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			editor = editorParams.NumericEditBoxFactory();
+			var editor = editorParams.NumericEditBoxFactory();
 			EditorContainer.AddNode(editor);
 			var current = CoalescedPropertyValue();
 			editor.Submitted += text => {
@@ -23,12 +21,6 @@ namespace Tangerine.UI
 			};
 			editor.AddChangeLateWatcher(current, v => editor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
 			ManageManyValuesOnFocusChange(editor, current);
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			editor.Enabled = Enabled;
 		}
 	}
 }

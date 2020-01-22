@@ -5,11 +5,9 @@ namespace Tangerine.UI
 {
 	public class BooleanPropertyEditor : CommonPropertyEditor<bool>
 	{
-		private CheckBox checkBox;
-
 		public BooleanPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			checkBox = new ThemedCheckBox { LayoutCell = new LayoutCell(Alignment.LeftCenter) };
+			var checkBox = new ThemedCheckBox { LayoutCell = new LayoutCell(Alignment.LeftCenter) };
 			EditorContainer.AddNode(checkBox);
 			EditorContainer.AddNode(Spacer.HStretch());
 			checkBox.Changed += args => {
@@ -19,12 +17,6 @@ namespace Tangerine.UI
 			};
 			checkBox.AddChangeLateWatcher(CoalescedPropertyValue(), v => checkBox.State = v.IsDefined
 				? v.Value ? CheckBoxState.Checked : CheckBoxState.Unchecked : CheckBoxState.Indeterminate);
-		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			checkBox.Enabled = Enabled;
 		}
 	}
 }

@@ -57,12 +57,5 @@ namespace Tangerine.UI
 			SetComponent(EditorParams, 0, medEditor, currentMed.GetValue());
 			SetComponent(EditorParams, 1, dispEditor, currentDisp.GetValue());
 		}
-
-		protected override void EnabledChanged()
-		{
-			base.EnabledChanged();
-			medEditor.Enabled = Enabled;
-			dispEditor.Enabled = Enabled;
-		}
 	}
 }
