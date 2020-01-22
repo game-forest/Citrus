@@ -168,7 +168,7 @@ namespace Orange
 			}
 #if MAC
 			// Mono 6.0 breaks files order
-			files.Sort((a, b) => string.Compare(a.Path, b.Path));
+			files.Sort((a, b) => string.Compare(a.SrcPath, b.SrcPath));
 #endif
 		}
 
@@ -227,7 +227,7 @@ namespace Orange
 			}
 #if MAC
 			// Mono 6.0 breaks files order
-			files.Sort ((a, b) => string.Compare (a.Path, b.Path));
+			files.Sort ((a, b) => string.Compare (a.SrcPath, b.SrcPath));
 #endif
 		}
 
