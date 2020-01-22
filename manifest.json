@@ -441,7 +441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Application.html",
-          "hash": "QX4JD0aFir2I5NylpY/7Ow=="
+          "hash": "rq8gWq9eeUpKD/ykeJLmSg=="
         }
       },
       "is_incremental": false,
@@ -2793,7 +2793,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html",
-          "hash": "qWEOE/xlgEXwL04LWOy2fg=="
+          "hash": "7cC0FLLrtA6eaPVQYv9qxw=="
         }
       },
       "is_incremental": false,

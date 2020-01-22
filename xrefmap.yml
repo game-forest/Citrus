@@ -4986,6 +4986,19 @@ references:
   isSpec: "True"
   fullName: Lime.Application.DoExiting
   nameWithType: Application.DoExiting
+- uid: Lime.Application.EnumerateSupportedRenderingBackends
+  name: EnumerateSupportedRenderingBackends()
+  href: api/Lime.Application.html#Lime_Application_EnumerateSupportedRenderingBackends
+  commentId: M:Lime.Application.EnumerateSupportedRenderingBackends
+  fullName: Lime.Application.EnumerateSupportedRenderingBackends()
+  nameWithType: Application.EnumerateSupportedRenderingBackends()
+- uid: Lime.Application.EnumerateSupportedRenderingBackends*
+  name: EnumerateSupportedRenderingBackends
+  href: api/Lime.Application.html#Lime_Application_EnumerateSupportedRenderingBackends_
+  commentId: Overload:Lime.Application.EnumerateSupportedRenderingBackends
+  isSpec: "True"
+  fullName: Lime.Application.EnumerateSupportedRenderingBackends
+  nameWithType: Application.EnumerateSupportedRenderingBackends
 - uid: Lime.Application.Exit
   name: Exit()
   href: api/Lime.Application.html#Lime_Application_Exit
@@ -22326,6 +22339,19 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.GetPipelineCacheData
   nameWithType: PlatformRenderContext.GetPipelineCacheData
+- uid: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported
+  name: IsSupported()
+  href: api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html#Lime_Graphics_Platform_Vulkan_PlatformRenderContext_IsSupported
+  commentId: M:Lime.Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported
+  fullName: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported()
+  nameWithType: PlatformRenderContext.IsSupported()
+- uid: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported*
+  name: IsSupported
+  href: api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html#Lime_Graphics_Platform_Vulkan_PlatformRenderContext_IsSupported_
+  commentId: Overload:Lime.Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported
+  isSpec: "True"
+  fullName: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.IsSupported
+  nameWithType: PlatformRenderContext.IsSupported
 - uid: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.MaxTextureSlots
   name: MaxTextureSlots
   href: api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html#Lime_Graphics_Platform_Vulkan_PlatformRenderContext_MaxTextureSlots
