@@ -3,6 +3,7 @@ using System;
 #elif MAC
 using AppKit;
 #endif
+using System.Linq;
 using Lime;
 
 namespace Orange
@@ -18,8 +19,13 @@ namespace Orange
 			PluginLoader.RegisterAssembly(typeof(MainClass).Assembly);
 			var thisExe = System.Reflection.Assembly.GetExecutingAssembly();
 			var resources = thisExe.GetManifestResourceNames();
+			var supportedRenderingBackends = Lime.Application.EnumerateSupportedRenderingBackends().ToList();
+			var renderingBackend = RenderingBackend.OpenGL;
+			if (supportedRenderingBackends.Contains(RenderingBackend.Vulkan)) {
+				renderingBackend = RenderingBackend.Vulkan;
+			}
 			Application.Initialize(new ApplicationOptions {
-				RenderingBackend = RenderingBackend.Vulkan
+				RenderingBackend = renderingBackend
 			});
 			OrangeApp.Initialize();
 			Application.Run();

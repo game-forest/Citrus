@@ -181,7 +181,7 @@ namespace Lime
 	public enum CompareFunc
 	{
 		Always,
-        Never,
+		Never,
 		Less,
 		LessEqual,
 		Greater,
@@ -198,7 +198,7 @@ namespace Lime
 		Increment,
 		IncrementSaturation,
 		Decrement,
-        DecrementSaturation,
+		DecrementSaturation,
 		Invert,
 	}
 
