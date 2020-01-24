@@ -285,6 +285,105 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			return edge;
 		}
 
+		/// <summary>
+		/// Removes vertex from triangulation.
+		/// </summary>
+		/// <param name="vertexIndex">Vertex index.</param>
+		private void RemoveVertex(int vertexIndex)
+		{
+			var polygon = GetBoundingPolygon(vertexIndex);
+			var isBorderVertex = polygon[0].Origin == vertexIndex;
+			// Vertex to remove + isolated vertices (until we agree on UI/UX).
+			var verticesToBeRemoved = new List<int> { vertexIndex };
+			if (isBorderVertex) {
+				// I keep implementation of erasing polygon from triangulation here
+				// because it depends on whether we will support holes or not.
+				// Remove polygon from triangulation
+				Root = null;
+				var prevEdgeHadNoTwin = true;
+				for (int i = 1; i < polygon.Count - 1; i++) {
+					var edge = polygon[i];
+					if (prevEdgeHadNoTwin && edge.Twin == null) {
+						// That means that `edge.Origin` becomes isolated
+						// so we'd better remove it too.
+						verticesToBeRemoved.Add(edge.Origin);
+					}
+					Root = Root ?? edge.Twin;
+					prevEdgeHadNoTwin = edge.Twin == null;
+					edge.Prev.Detach();
+					edge.Next.Detach();
+					edge.Detach();
+				}
+				if (prevEdgeHadNoTwin) {
+					verticesToBeRemoved.Add(polygon[polygon.Count - 1].Origin);
+				}
+			} else {
+				// Create polygonal hole and triangulate it.
+			}
+			verticesToBeRemoved.Sort((lhs, rhs) => rhs - lhs);
+			var map = new List<int>(Vertices.Count);
+			for (int i = 0; i < Vertices.Count; i++) {
+				map.Add(i);
+			}
+			foreach (var i in verticesToBeRemoved) {
+				Toolbox.Swap(Vertices, i, Vertices.Count - 1);
+				Toolbox.Swap(map, i, Vertices.Count - 1);
+				// Shorten a path to the length of 1
+				map[map[i]] = i;
+				Vertices.RemoveAt(Vertices.Count - 1);
+			}
+			foreach (var he in HalfEdges) {
+				he.Origin = map[he.Origin];
+			}
+		}
+
+		/// <summary>
+		/// Gets bounding polygon of <paramref name="vertexIndex"/>.
+		/// Bounding polygon is a polygon constructed on the edges of triangles that
+		/// lies opposite to <paramref name="vertexIndex"/>.
+		/// </summary>
+		/// <param name="vertexIndex">Vertex index.</param>
+		/// <param name="start">Triangle that contains <paramref name="vertexIndex"/></param>
+		/// <returns>Bounding polygon</returns>
+		private List<HalfEdge> GetBoundingPolygon(int vertexIndex, HalfEdge start = null)
+		{
+			// Find triangle that contains given vertex;
+			start = start ?? LocateClosestTriangle(vertexIndex, out _);
+			// Find edge that is incident to given vertex
+			start = start.Origin == vertexIndex ? start : start.Next.Origin == vertexIndex ? start.Next : start.Prev;
+			System.Diagnostics.Debug.Assert(start.Origin == vertexIndex);
+			// Find polygon constructed from edges that lies
+			// opposite to vertex to be removed.
+			// First: check if vertex is not on the border of triangulation
+			// otherwise get border edge to start from. That is needed in order to
+			// avoid iterating back and forward and then merging edge chains to form polygon.
+			var current = start;
+			var isBorderVertex = false;
+			do {
+				if (current.Twin == null) {
+					isBorderVertex = true;
+					break;
+				}
+				current = current.Twin.Next;
+			} while (current != start);
+			// Second: iterate over incident edges to form polygon.
+			var polygon = new List<HalfEdge>();
+			start = current;
+			if (isBorderVertex) {
+				polygon.Add(start);
+			}
+			do {
+				polygon.Add(current.Next);
+				current = current.Prev;
+				if (current.Twin == null) {
+					polygon.Add(current);
+					break;
+				}
+				current = current.Twin;
+			} while (current != start);
+			return polygon;
+		}
+
 		#region HelperMethods
 
 		/// <summary>

@@ -9,7 +9,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 	{
 		public class HalfEdge
 		{
-			public int Origin { get; private set; }
+			public int Origin { get; internal set; }
 			public HalfEdge Next { get; set; }
 			public HalfEdge Prev => Next.Next;
 			public HalfEdge Twin { get; private set; }
@@ -27,6 +27,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			public void Detach()
 			{
 				Next = null;
+				if (Twin != null) {
+					Twin.Twin = null;
+				}
 				Twin = null;
 			}
 
@@ -196,7 +199,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		public void RemoveVertex(int index, bool keepConstrainedEdges = false)
 		{
-			throw new NotImplementedException();
+			RemoveVertex(index);
+			OnTopologyChanged?.Invoke(this);
 		}
 
 		public void TranslateVertex(int index, Vector2 positionDelta, bool modifyStructure)
