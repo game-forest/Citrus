@@ -5930,6 +5930,19 @@ references:
   isSpec: "True"
   fullName: Lime.Audio.AddToRenderChain
   nameWithType: Audio.AddToRenderChain
+- uid: Lime.Audio.AuxiliaryPitch
+  name: AuxiliaryPitch
+  href: api/Lime.Audio.html#Lime_Audio_AuxiliaryPitch
+  commentId: P:Lime.Audio.AuxiliaryPitch
+  fullName: Lime.Audio.AuxiliaryPitch
+  nameWithType: Audio.AuxiliaryPitch
+- uid: Lime.Audio.AuxiliaryPitch*
+  name: AuxiliaryPitch
+  href: api/Lime.Audio.html#Lime_Audio_AuxiliaryPitch_
+  commentId: Overload:Lime.Audio.AuxiliaryPitch
+  isSpec: "True"
+  fullName: Lime.Audio.AuxiliaryPitch
+  nameWithType: Audio.AuxiliaryPitch
 - uid: Lime.Audio.AuxiliaryVolume
   name: AuxiliaryVolume
   href: api/Lime.Audio.html#Lime_Audio_AuxiliaryVolume
