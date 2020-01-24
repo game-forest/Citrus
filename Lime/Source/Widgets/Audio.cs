@@ -66,7 +66,7 @@ namespace Lime
 			set
 			{
 				pitch = value;
-				sound.Pitch = pitch;
+				sound.Pitch = pitch * auxiliaryPitch;
 			}
 		}
 
@@ -98,6 +98,18 @@ namespace Lime
 			}
 		}
 
+		private float auxiliaryPitch = 1f;
+
+		public float AuxiliaryPitch
+		{
+			get => auxiliaryPitch;
+			set
+			{
+				auxiliaryPitch = value;
+				sound.Pitch = pitch * auxiliaryPitch;
+			}
+		}
+
 		public Audio()
 		{
 			RenderChainBuilder = null;
@@ -107,7 +119,9 @@ namespace Lime
 		public virtual void Play()
 		{
 			if (Sample != null) {
-				sound = Sample.Play(Group, false, 0f, Looping, Priority, Volume * AuxiliaryVolume, Pan, Pitch);
+				sound = Sample.Play(
+					Group, false, 0f, Looping, Priority, Volume * AuxiliaryVolume, Pan, Pitch * AuxiliaryPitch
+				);
 				sound.StopChecker = ShouldStop;
 			}
 		}
