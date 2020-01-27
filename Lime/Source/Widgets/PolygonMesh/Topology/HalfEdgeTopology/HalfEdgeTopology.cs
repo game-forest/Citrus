@@ -39,7 +39,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			/// <param name="edge">Edge to be twined with.</param>
 			public void TwinWith(HalfEdge edge)
 			{
-				System.Diagnostics.Debug.Assert(edge.Next.Origin == Origin && Next.Origin == edge.Origin);
+				System.Diagnostics.Debug.Assert((edge.Next?.Origin ?? Origin) == Origin &&
+				                                (Next?.Origin ?? edge.Origin) == edge.Origin);
 				edge.Twin = this;
 				Twin = edge;
 			}

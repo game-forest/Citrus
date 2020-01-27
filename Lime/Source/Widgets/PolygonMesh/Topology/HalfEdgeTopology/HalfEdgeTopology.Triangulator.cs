@@ -259,7 +259,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var he = possiblyNonDelaunay[possiblyNonDelaunay.Count - 1];
 				possiblyNonDelaunay.RemoveAt(possiblyNonDelaunay.Count - 1);
 				if (he.Twin != null && !he.Detached && InCircumcircle(he.Twin, Vertices[he.Prev.Origin].Pos)) {
-					he = Flip(he);
+					Root = he = Flip(he);
 					possiblyNonDelaunay.Add(he.Next);
 					possiblyNonDelaunay.Add(he.Prev);
 					possiblyNonDelaunay.Add(he.Twin.Next);
@@ -319,6 +319,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			} else {
 				// Create polygonal hole and triangulate it.
+				TriangulatePolygonByEarClipping(polygon);
 			}
 			verticesToBeRemoved.Sort((lhs, rhs) => rhs - lhs);
 			var map = new List<int>(Vertices.Count);
@@ -382,6 +383,64 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				current = current.Twin;
 			} while (current != start);
 			return polygon;
+		}
+
+		/// <summary>
+		/// Triangulates polygon using Ear Clipping method.
+		/// Complexity is O(N^2). Can be improved to O(NlogN) (Seidel algorithm),
+		/// O(Nlog*N) or O(N) (Chazelle algorithm, there is no existing implementation).
+		/// </summary>
+		/// <param name="polygon">Polygon.</param>
+		private void TriangulatePolygonByEarClipping(List<HalfEdge> polygon)
+		{
+			// An ear of a polygon is defined as a vertex v such that the line segment between
+			// the two neighbors of v lies entirely in the interior of the polygon.
+			// The two ears theorem states that every simple polygon has at least two ears.
+			var p = new LinkedList<HalfEdge>(polygon);
+			var prev = p.First;
+			var current = prev.Next;
+			while (p.Count > 3) {
+				var next = current.Next ?? p.First;
+				HalfEdge e1 = prev.Value, e2 = current.Value, e3 = next.Value;
+				int o1 = e1.Origin, o2 = e2.Origin, o3 = e3.Origin;
+				Vector2 v1 = Vertices[o1].Pos, v2 = Vertices[o2].Pos, v3 = Vertices[o3].Pos;
+				if (AreClockwiseOrdered(v1, v2, v3)) {
+					var other = next.Next ?? p.First;
+					var isEar = true;
+					while (other != prev) {
+						var e = other.Value;
+						if (VertexInsideTriangle(Vertices[e.Origin].Pos, v1, v2, v3)) {
+							// Definitely not an ear
+							isEar = false;
+							break;
+						}
+						other = other.Next ?? p.First;
+					}
+					if (isEar) {
+						e1.Next?.Next?.Detach();
+						e1.Next?.Detach();
+						e2.Next?.Next?.Detach();
+						e2.Next?.Detach();
+						e1.Next = e2;
+						e2.Next = new HalfEdge(o3) { Next = e1 };
+						var twin = new HalfEdge(o1);
+						polygon.Add(e2.Next);
+						e2.Next.TwinWith(twin);
+						p.AddAfter(current, twin);
+						current = current.Next;
+						p.Remove(prev.Next);
+						p.Remove(prev);
+					}
+				}
+				prev = current;
+				current = next;
+			}
+			HalfEdge he1 = p.First.Value, he2 = p.First.Next.Value, he3 = p.Last.Value;
+			he1.Next = he2;
+			he2.Next = he3;
+			he3.Next = he1;
+			Root = he1;
+			RestoreDelaunayProperty(polygon);
 		}
 
 		#region HelperMethods
