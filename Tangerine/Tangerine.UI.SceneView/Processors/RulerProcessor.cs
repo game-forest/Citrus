@@ -73,7 +73,7 @@ namespace Tangerine.UI.SceneView
 		private static void SnapLineToNearestPoint(RulerLine line, IEnumerable<Quadrangle> hulls)
 		{
 			var step = 1f;
-			var mousePos = container.LocalMousePosition();
+			var mousePos = SceneView.Instance.Scene.LocalMousePosition();
 			if (!sceneView.Input.IsKeyPressed(Key.Shift)) {
 				step = (float)Math.Truncate(RulersWidget.CalculateEffectiveStep()) / RulersWidget.Tesselation;
 			}
