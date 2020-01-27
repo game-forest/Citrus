@@ -229,9 +229,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						var d = Vertices[other.Next.Origin].Pos;
 						if (
 							self.Origin != other.Next.Origin &&
-							SegmentSegmentIntersection(a, vertex, c, d, out _) ||
+							RobustSegmentSegmentIntersection(a, vertex, c, d) ||
 							self.Next.Origin != other.Origin &&
-						    SegmentSegmentIntersection(b, vertex, c, d, out _)
+							RobustSegmentSegmentIntersection(b, vertex, c, d)
 						) {
 							doesIntersectTriangulation = true;
 							break;
@@ -464,7 +464,13 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		private static bool AreClockwiseOrdered(Vector2 a, Vector2 b, Vector2 c) =>
 			GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y) > 0;
 
-		public static bool SegmentSegmentIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
+		private static bool RobustSegmentSegmentIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d) =>
+			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y)) *
+			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, d.X, d.Y)) < 0 &&
+			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, a.X, a.Y)) *
+			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, d.X, d.Y, b.X, b.Y)) < 0;
+
+		private static bool SegmentSegmentIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
 		{
 			intersectionPoint = new Vector2(float.NaN, float.NaN);
 			var d = (a1.X - b1.X) * (a2.Y - b2.Y) - (a1.Y - b1.Y) * (a2.X - b2.X);
