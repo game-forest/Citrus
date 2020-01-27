@@ -94,14 +94,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\App.config" />
-    <EmbeddedResource Include="Resources\SegoeUIRegular.ttf" />
-  </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="..\Orange.ico" />
-    <EmbeddedResource Include="Resources\Orange.ico" />
+    <None Include="..\App.config" />
+    <Content Include="Orange.ico" />
+    <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.GUI.cs" />

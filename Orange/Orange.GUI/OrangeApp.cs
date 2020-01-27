@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Lime;
 using System.IO;
 
@@ -31,9 +32,20 @@ namespace Orange
 
 		private static void LoadFont()
 		{
-			var fontData = new EmbeddedResource("Orange.GUI.Resources.SegoeUIRegular.ttf", "Orange.GUI").GetResourceBytes();
-			var font = new DynamicFont(fontData);
-			FontPool.Instance.AddFont("Default", font);
+			var defaultFonts = new List<IFont>();
+			var fontResourcePaths = new string[] {
+				"Orange.GUI.Resources.SegoeUIRegular.ttf",
+				"Orange.GUI.Resources.NotoSansCJKtc-Regular.ttf",
+			};
+			foreach (var resource in fontResourcePaths) {
+				try {
+					defaultFonts.Add(new DynamicFont(new EmbeddedResource(resource, "Orange.GUI").GetResourceBytes()));
+				} catch (SystemException e) {
+					System.Console.WriteLine($"Couldn't load font {resource}: {e}");
+				}
+			}
+			var compoundFont = new CompoundFont(defaultFonts);
+			FontPool.Instance.AddFont(FontPool.DefaultFontName, compoundFont);
 		}
 	}
 }

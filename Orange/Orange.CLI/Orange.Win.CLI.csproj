@@ -74,13 +74,6 @@
     <None Include="..\app.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\App.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="..\Orange.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Actions\BuildGame.cs" />
     <Compile Include="Main.CLI.cs" />
     <Compile Include="UI\ConsoleUI.cs" />

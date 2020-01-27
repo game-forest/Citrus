@@ -37,12 +37,6 @@ namespace Tangerine.UI
 
 			public override void Write(string value)
 			{
-				if (string.IsNullOrEmpty(value)) {
-					return;
-				}
-				value = Encoding.UTF8.GetString(
-					Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(value))
-				);
 				Application.InvokeOnMainThread(() => {
 					value = $"[{DateTime.Now.ToLongTimeString()}] {value}";
 					value = value.Replace("\r\n", "\n").Replace('\r', '\n');
