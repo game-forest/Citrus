@@ -13,7 +13,9 @@ namespace Orange
 		{
 			None = 0,
 			RedirectOutput = 1,
-			RedirectErrors = 2
+			RedirectErrors = 2,
+			AllowCP1251 = 4,
+			All = 7
 		}
 
 		public static int Start(string app, string args, string workingDirectory = null,
@@ -30,7 +32,7 @@ namespace Orange
 			p.StartInfo.CreateNoWindow = true;
 			p.StartInfo.WorkingDirectory = workingDirectory ?? Path.GetDirectoryName(app);
 			int cp = System.Text.Encoding.Default.CodePage;
-			if (cp == 1251) {
+			if ((options & Options.AllowCP1251) == 0 && cp == 1251) {
 				cp = 866;
 			}
 			p.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(cp);

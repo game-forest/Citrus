@@ -135,8 +135,9 @@ namespace Orange
 #if WIN
 			var applicationPath = GetApplicationPath();
 			if (File.Exists(applicationPath)) {
-				using (new DirectoryChanger(Path.GetDirectoryName(applicationPath))) {
-					return Process.Start(applicationPath, arguments);
+				string workDir = Path.GetDirectoryName(applicationPath);
+				using (new DirectoryChanger(workDir)) {
+					return Process.Start(applicationPath, arguments, workDir, Process.Options.All);
 				}
 			} else {
 				Console.WriteLine("Error: File not found: " + applicationPath);
