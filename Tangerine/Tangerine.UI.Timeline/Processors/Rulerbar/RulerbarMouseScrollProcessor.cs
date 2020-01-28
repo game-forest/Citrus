@@ -19,7 +19,6 @@ namespace Tangerine.UI.Timeline
 			var input = rulerWidget.Input;
 			while (true) {
 				if (input.WasMousePressed()) {
-					yield return null;
 					using (Document.Current.History.BeginTransaction()) {
 						int initialCurrentColumn = CalcColumn(rulerWidget.LocalMousePosition().X);
 						Document.Current.AnimationFrame = initialCurrentColumn;
@@ -55,7 +54,7 @@ namespace Tangerine.UI.Timeline
 							SetCurrentColumn.RollbackHistoryWithoutScrolling();
 							SetCurrentColumn.IsFrozen = false;
 
-							if (isEditing && !input.WasMousePressed()) {
+							if (isEditing) {
 								if (isShifting) {
 									ShiftTimeline(CalcColumn(mp));
 								} else if (startShifting && CalcColumn(mp) == initialCurrentColumn) {
