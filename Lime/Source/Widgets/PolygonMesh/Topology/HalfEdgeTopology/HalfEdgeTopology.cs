@@ -125,6 +125,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
+
+		private HalfEdge FaceToHalfEdge(Face face)
+		{
+			var e = new HalfEdge(face[0]) { Next = new HalfEdge(face[1]) { Next = new HalfEdge(face[2]) } };
+			e.Prev.Next = e;
+			return e;
+		}
+
 		private HalfEdge Root { get; set; }
 
 		// Stays public until we get LocateClosestTriangle work O(logN) (cause otherwise rendering will
@@ -168,6 +176,20 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		public void Sync(List<Vertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
 		{
 			Vertices = vertices;
+			// (vertex, vertex) -> HalfEdge
+			// Used to restore connection between half edges.
+			// Simple bfs doesn't work because there exist multiple paths
+			// to reach some triangle
+			HalfEdge[,] table = new HalfEdge[vertices.Count, vertices.Count];
+			foreach (var face in faces) {
+				var current = Root = FaceToHalfEdge(face);
+				do {
+					table[current.Origin, current.Next.Origin] = current;
+					var possibleTwin = table[current.Next.Origin, current.Origin];
+					possibleTwin?.TwinWith(current);
+					current = current.Next;
+				} while (current != Root);
+			}
 		}
 
 		public void Invalidate()
@@ -196,6 +218,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		{
 			Vertices.Add(vertex);
 			AddVertex(Vertices.Count - 1);
+			OnTopologyChanged?.Invoke(this);
 		}
 
 		public void RemoveVertex(int index, bool keepConstrainedEdges = false)
