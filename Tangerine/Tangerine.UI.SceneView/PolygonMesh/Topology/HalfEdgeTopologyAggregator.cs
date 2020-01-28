@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology;
+using Tangerine.UI.SceneView.PolygonMesh.TopologyData;
 
 namespace Tangerine.UI.SceneView.PolygonMesh.Topology
 {

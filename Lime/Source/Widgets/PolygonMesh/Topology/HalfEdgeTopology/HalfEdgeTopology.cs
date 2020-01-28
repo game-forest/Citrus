@@ -5,7 +5,7 @@ using Lime.PolygonMesh.Topology;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 {
-	public partial class HalfEdgeTopology : ITopology, ITopologyModificator
+	public partial class HalfEdgeTopology : ITopology
 	{
 		public class HalfEdge
 		{
@@ -192,16 +192,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-		public void Invalidate()
-		{
-			//throw new System.NotImplementedException();
-		}
-
-		public void EmplaceVertices(List<Vertex> vertices)
-		{
-			//throw new System.NotImplementedException();
-		}
-
 		public IEnumerable<Face> Faces
 		{
 			get
@@ -227,14 +217,12 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			OnTopologyChanged?.Invoke(this);
 		}
 
-		public void TranslateVertex(int index, Vector2 positionDelta, bool modifyStructure)
+		public void TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta)
 		{
-			throw new NotImplementedException();
-		}
-
-		public void TranslateVertexUV(int index, Vector2 uvDelta)
-		{
-			throw new NotImplementedException();
+			var v = Vertices[index];
+			v.Pos += positionDelta;
+			v.UV1 += uvDelta;
+			Vertices[index] = v;
 		}
 
 		public void ConstrainEdge(int index0, int index1)

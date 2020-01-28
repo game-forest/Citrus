@@ -15,10 +15,10 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 	public interface ITopologyData
 	{
-		bool HitTest(ITopology topology, Vector2 position, out float distance, Vector2 contextSize, float scale = 1.0f);
-		void Render(ITopology topology, Matrix32 transform, Vector2 contextSize);
-		void RenderHovered(ITopology topology, Matrix32 transform, PolygonMeshController.ModificationState state, Vector2 contextSize);
-		Vector2 InterpolateUV(ITopology topology, Vector2 position);
+		bool HitTest(IList<Vertex> vertices, Vector2 position, out float distance, Vector2 contextSize, float scale = 1.0f);
+		void Render(IList<Vertex> vertices, Matrix32 transform, Vector2 contextSize);
+		void RenderHovered(IList<Vertex> vertices, Matrix32 transform, PolygonMeshController.ModificationState state, Vector2 contextSize);
+		Vector2 InterpolateUV(IList<Vertex> vertices, Vector2 position);
 	}
 
 	public static class TopologyDataListExtenstions

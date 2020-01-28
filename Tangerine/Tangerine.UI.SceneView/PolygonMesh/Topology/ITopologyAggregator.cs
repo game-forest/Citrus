@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Tangerine.UI.SceneView.PolygonMesh.TopologyData;
 
 namespace Tangerine.UI.SceneView.PolygonMesh
 {
