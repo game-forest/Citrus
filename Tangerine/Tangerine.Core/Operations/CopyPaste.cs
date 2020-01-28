@@ -222,12 +222,14 @@ namespace Tangerine.Core.Operations
 					InsertFolderItem.Perform(
 						Document.Current.Container,
 						folderLocation, bone);
+					folderLocation.Index++;
 					foreach (var b in children) {
 						b.BaseIndex = map[b.BaseIndex];
 						map.Add(b.Index, b.Index = ++newIndex);
 						InsertFolderItem.Perform(
 							Document.Current.Container,
 							folderLocation, b);
+						folderLocation.Index++;
 						items.Remove(b);
 					}
 					Document.Current.Container.RootFolder().SyncDescriptorsAndNodes(Document.Current.Container);
@@ -238,6 +240,7 @@ namespace Tangerine.Core.Operations
 						InsertFolderItem.Perform(
 							Document.Current.Container,
 							folderLocation, item);
+						folderLocation.Index++;
 						SelectRow.Perform(Document.Current.GetRowForObject(item));
 					}
 				}
