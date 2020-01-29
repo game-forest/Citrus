@@ -424,6 +424,16 @@ namespace Lime
 				i--;
 			}
 			FreeLastParticles(particlesToFreeCount);
+			if (particles.Count == 0) {
+				return;
+			}
+			var basicWidget = GetBasicWidget();
+			if (basicWidget != null) {
+				// AABB for particles is calculated in space of linked widget (and it's ok)
+				// But ParticleEmitter is responsible of drawing particles
+				// So we should expand its bounding box to pass ClipRegionTest
+				currentBoundingRect = currentBoundingRect.Transform(basicWidget.CalcTransitionToSpaceOf(this));
+			}
 			ExpandBoundingRect(currentBoundingRect);
 		}
 
@@ -916,7 +926,7 @@ namespace Lime
 #if !TANGERINE
 				particles.Count > 0 &&
 #endif // !TANGERINE
-				(ParticlesLinkage != ParticlesLinkage.Parent || ClipRegionTest(chain.ClipRegion))
+				ClipRegionTest(chain.ClipRegion)
 			) {
 				AddSelfToRenderChain(chain, Layer);
 			}
