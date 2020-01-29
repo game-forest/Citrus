@@ -25,25 +25,22 @@ namespace Tangerine.UI.SceneView
 					continue;
 				}
 				Renderer.Flush();
-				SceneView.Instance.Frame.PrepareRendererState();
-				Renderer.PushState(
-					RenderState.Projection |
-					RenderState.World |
-					RenderState.View |
-					RenderState.CullMode);
-				Renderer.World = Matrix44.Identity;
-				Renderer.View = Matrix44.Identity;
-				Renderer.CullMode = CullMode.None;
-				Renderer.Projection = ((WindowWidget)spline.GetRoot()).GetProjection();
-				DrawSpline(spline, viewport);
-				if (Document.Current.Container == spline) {
-					var selectedPoints = GetSelectedPoints();
-					foreach (var p in spline.Nodes) {
-						DrawSplinePoint((SplinePoint3D)p, viewport, spline.GlobalTransform, selectedPoints.Contains(p));
+				Renderer.PushState(RenderState.Transform2);
+				try {
+					SceneView.Instance.Frame.PrepareRendererState();
+					Renderer.Transform2 = Matrix32.Identity;
+					DrawSpline(spline, viewport);
+					if (Document.Current.Container == spline) {
+						var selectedPoints = GetSelectedPoints();
+						foreach (var p in spline.Nodes) {
+							DrawSplinePoint((SplinePoint3D)p, viewport, spline.GlobalTransform, selectedPoints.Contains(p));
+						}
 					}
+
+					Renderer.Flush();
+				} finally {
+					Renderer.PopState();
 				}
-				Renderer.Flush();
-				Renderer.PopState();
 			}
 		}
 
@@ -72,7 +69,6 @@ namespace Tangerine.UI.SceneView
 
 		void DrawSpline(Spline3D spline, Viewport3D viewport)
 		{
-			var splineWorldMatrix = spline.GlobalTransform;
 			var sv = SceneView.Instance;
 			var viewportToSceneFrame = viewport.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
 			for (var i = 0; i < spline.Nodes.Count - 1; i++) {
