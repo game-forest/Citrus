@@ -36,7 +36,7 @@ namespace Tangerine.UI.SceneView
 				RenderState.Projection |
 				RenderState.DepthState);
 			Renderer.View = vp.Camera.View;
-			Renderer.Projection = Viewport3D.MakeProjection(vp.Width, vp.Height, vp.LocalToWorldTransform, cameraProjection, Renderer.Projection);
+			Renderer.Projection = Viewport3D.MakeProjection(vp.Width, vp.Height, vp.LocalToWorldTransform * SceneView.Instance.Scene.LocalToWorldTransform, cameraProjection, Renderer.Projection);
 			Renderer.DepthState = DepthState.DepthReadWrite;
 			Renderer.Clear(ClearOptions.DepthBuffer);
 			foreach (var node in nodes) {

@@ -46,7 +46,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var viewport = spline.Viewport;
 			var sv = SceneView.Instance;
-			var viewportToScene = viewport.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
+			var viewportToScene = viewport.LocalToWorldTransform;
 			var screenPoint = (Vector2)viewport.WorldToViewportPoint(pointInSplineCoordinates * spline.GlobalTransform) * viewportToScene;
 			return sv.HitTestControlPoint(screenPoint);
 		}
@@ -73,7 +73,7 @@ namespace Tangerine.UI.SceneView
 							currentMouse.X = initialMouse.X;
 						}
 					}
-					var ray = viewport.ScreenPointToRay(currentMouse);
+					var ray = viewport.ScreenPointToRay(currentMouse * SceneView.Instance.Scene.LocalToWorldTransform.CalcInversed());
 					if (shiftPressed && dragDirection == DragDirection.Any) {
 						if ((currentMouse - initialMouse).Length > 5 / SceneView.Instance.Scene.Scale.X) {
 							var mouseDelta = currentMouse - initialMouse;
@@ -111,7 +111,7 @@ namespace Tangerine.UI.SceneView
 					Document.Current.History.RollbackTransaction();
 
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var ray = viewport.ScreenPointToRay(input.MousePosition);
+					var ray = viewport.ScreenPointToRay(input.MousePosition * SceneView.Instance.Scene.LocalToWorldTransform.CalcInversed());
 					var distance = ray.Intersects(plane);
 					if (distance.HasValue) {
 						var pos = (ray.Position + ray.Direction * distance.Value) * spline.GlobalTransform.CalcInverted() - point.Position;
