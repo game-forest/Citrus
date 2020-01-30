@@ -213,16 +213,60 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		public void RemoveVertex(int index, bool keepConstrainedEdges = false)
 		{
-			RemoveVertex(index);
+			var isolatedVertices = RemoveVertex(index);
+			isolatedVertices.Sort((lhs, rhs) => rhs - lhs);
+			var map = new List<int>(Vertices.Count);
+			for (int i = 0; i < Vertices.Count; i++) {
+				map.Add(i);
+			}
+			foreach (var i in isolatedVertices) {
+				Toolbox.Swap(Vertices, i, Vertices.Count - 1);
+				Toolbox.Swap(map, i, Vertices.Count - 1);
+				// Shorten a path to the length of 1
+				map[map[i]] = i;
+				Vertices.RemoveAt(Vertices.Count - 1);
+			}
+			foreach (var he in HalfEdges) {
+				he.Origin = map[he.Origin];
+			}
 			OnTopologyChanged?.Invoke(this);
 		}
 
 		public void TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta)
 		{
-			var v = Vertices[index];
-			v.Pos += positionDelta;
-			v.UV1 += uvDelta;
-			Vertices[index] = v;
+			LocateClosestTriangle(index, out var he);
+			var original = Vertices[index];
+			var translated = original;
+			translated.Pos += positionDelta;
+			translated.UV1 += uvDelta;
+			if (
+				TryFindBorderEdge(he, out var borderEdge) &&
+				(borderEdge.Origin == index || borderEdge.Next.Origin == index)
+			) {
+				// If it's boundary vertex than triangle bases determine
+				// vertex translation constrains
+				var p = GetBoundingPolygon(index, borderEdge);
+				var intersectsAny = false;
+				for (int i = 1; i < p.Count - 1; i++) {
+					var edge = p[i];
+					var s1 = Vertices[edge.Origin].Pos;
+					var s2 = Vertices[edge.Next.Origin].Pos;
+					if (ArePointsOnOppositeSidesOfSegment(s1, s2, translated.Pos, original.Pos)) {
+						intersectsAny = true;
+						break;
+					}
+				}
+				if (!intersectsAny) {
+					Vertices[index] = translated;
+					OnTopologyChanged?.Invoke(this);
+				}
+			} else {
+				// Otherwise just delete original and add translated
+				RemoveVertex(index);
+				Vertices[index] = translated;
+				AddVertex(index);
+				OnTopologyChanged?.Invoke(this);
+			}
 		}
 
 		public void ConstrainEdge(int index0, int index1)

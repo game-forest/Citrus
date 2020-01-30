@@ -7,6 +7,11 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 	public partial class HalfEdgeTopology
 	{
 
+		private enum LocationResult
+		{
+			SameVertex, OnEdge, InsideTriangle, Outside,
+		}
+
 		/// <summary>
 		/// Adds a vertex to current triangulation using incremental algorithm Bowyer-Watson
 		/// algorithm if vertex is completely inside triangulation otherwise
@@ -18,13 +23,17 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// First: locate the given vertex.
 			// Determine whether it's in the specific triangle or
 			// lies outside of triangulation.
-			var halfEdge = LocateClosestTriangle(vertexIndex, out var isInsideTriangle);
-			if (isInsideTriangle) {
-				// Check special cases:
-				// Same vertex already exists:
-
-				// Vertex lies on the edge:
-
+			var vertex = Vertices[vertexIndex].Pos;
+			var result = LocateClosestTriangle(vertexIndex, out var halfEdge);
+			// Check special cases:
+			// Same vertex already exists:
+			if (result == LocationResult.SameVertex) {
+				// Shouldn't insert vertex
+				return;
+			} else if (result == LocationResult.OnEdge) {
+				// Should split edge
+				return;
+			} else if (result == LocationResult.InsideTriangle) {
 				// Boywer-Watson algorithm
 				Root = BowyerWatson(vertexIndex, halfEdge);
 			} else {
@@ -54,6 +63,11 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 
+		private LocationResult LocateClosestTriangle(int index, out HalfEdge edge)
+		{
+			return LocateClosestTriangle(Vertices[index].Pos, out edge);
+		}
+
 		/// <summary>
 		/// Locates a triangle that has specified vertex inside or
 		/// closest one on the border to triangulation.
@@ -61,23 +75,33 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// and holes. Further improvement is using spatial information data structures
 		/// (e.g. R-tree).
 		/// </summary>
-		/// <param name="vertexIndex"></param>
-		/// <returns>HalfEdge that uniquely identifies triangle</returns>
-		private HalfEdge LocateClosestTriangle(int vertexIndex, out bool isInsideTriangle)
+		/// <param name="vertex">Vertex.</param>
+		/// <param name="edge">Closest triangle identified by single edge.</param>
+		/// <returns>Location result.
+		/// If LocationResult.SameVertex then <paramref name="edge"/>'s Origin is that vertex.
+		/// If LocationResult.OnEdge then <paramref name="edge"/> is edge that vertex lies on.
+		/// If LocationResult.InsideTriangle then <paramref name="edge"/> identifies closest triangle.
+		/// If LocationResult.Outside then <paramref name="edge"/> is the closest edge.
+		/// </returns>
+		private LocationResult LocateClosestTriangle(Vector2 vertex, out HalfEdge edge)
 		{
 			HalfEdge closest = null;
-			var vertex = Vertices[vertexIndex].Pos;
-			isInsideTriangle = false;
 			var minDistance = float.MaxValue;
 			foreach (var (e1, e2, e3) in Triangles()) {
 				var (p1, p2, p3) = (Vertices[e1.Origin].Pos, Vertices[e2.Origin].Pos, Vertices[e3.Origin].Pos);
-				if (
-					e1.Origin == vertexIndex || e2.Origin == vertexIndex ||
-					e3.Origin == vertexIndex || p1 == vertex  || p2 == vertex ||
-					p3 == vertex || VertexInsideTriangle(vertex, e1)
-				) {
-					isInsideTriangle = true;
-					return e1;
+				if (p1 == vertex) {
+					edge = e1;
+					return LocationResult.SameVertex;
+				} else if (p2 == vertex) {
+					edge = e2;
+					return LocationResult.SameVertex;
+				} else if (p3 == vertex) {
+					edge = e3;
+					return LocationResult.SameVertex;
+				} else if (VertexInsideTriangle(vertex, e1)) {
+					edge = e1;
+					// TODO Check OnEdge
+					return LocationResult.InsideTriangle;
 				}
 				UpdateMinDistance(e1, e2);
 				UpdateMinDistance(e2, e3);
@@ -94,7 +118,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					}
 				}
 			}
-			return closest;
+			edge = closest;
+			return LocationResult.Outside;
 		}
 
 		/// <summary>
@@ -110,8 +135,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		{
 			if (start == null) {
 				// Find triangle that contains given vertex
-				start = LocateClosestTriangle(vertexIndex, out var isInsideTriangle);
-				if (!isInsideTriangle) {
+				var result = LocateClosestTriangle(vertexIndex, out start);
+				if (result == LocationResult.Outside) {
 					throw new InvalidOperationException("There is no triangle in triangulation that contains given vertex.");
 				}
 			}
@@ -163,8 +188,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		{
 			if (start == null) {
 				// Find triangle that contains given vertex
-				start = LocateClosestTriangle(sightPoint, out var isInsideTriangle);
-				if (isInsideTriangle) {
+				var result = LocateClosestTriangle(sightPoint, out start);
+				if (result != LocationResult.Outside) {
 					throw new InvalidOperationException("Sight point is inside triangulation.");
 				}
 			}
@@ -289,7 +314,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// Removes vertex from triangulation.
 		/// </summary>
 		/// <param name="vertexIndex">Vertex index.</param>
-		private void RemoveVertex(int vertexIndex)
+		/// <returns>List of isolated vertices.</returns>
+		private List<int> RemoveVertex(int vertexIndex)
 		{
 			var polygon = GetBoundingPolygon(vertexIndex);
 			var isBorderVertex = polygon[0].Origin == vertexIndex;
@@ -321,21 +347,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				// Create polygonal hole and triangulate it.
 				TriangulatePolygonByEarClipping(polygon);
 			}
-			verticesToBeRemoved.Sort((lhs, rhs) => rhs - lhs);
-			var map = new List<int>(Vertices.Count);
-			for (int i = 0; i < Vertices.Count; i++) {
-				map.Add(i);
-			}
-			foreach (var i in verticesToBeRemoved) {
-				Toolbox.Swap(Vertices, i, Vertices.Count - 1);
-				Toolbox.Swap(map, i, Vertices.Count - 1);
-				// Shorten a path to the length of 1
-				map[map[i]] = i;
-				Vertices.RemoveAt(Vertices.Count - 1);
-			}
-			foreach (var he in HalfEdges) {
-				he.Origin = map[he.Origin];
-			}
+			return verticesToBeRemoved;
 		}
 
 		/// <summary>
@@ -349,7 +361,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		private List<HalfEdge> GetBoundingPolygon(int vertexIndex, HalfEdge start = null)
 		{
 			// Find triangle that contains given vertex;
-			start = start ?? LocateClosestTriangle(vertexIndex, out _);
+			if (start == null) {
+				LocateClosestTriangle(vertexIndex, out start);
+			}
 			// Find edge that is incident to given vertex
 			start = start.Origin == vertexIndex ? start : start.Next.Origin == vertexIndex ? start.Next : start.Prev;
 			System.Diagnostics.Debug.Assert(start.Origin == vertexIndex);
@@ -358,20 +372,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// First: check if vertex is not on the border of triangulation
 			// otherwise get border edge to start from. That is needed in order to
 			// avoid iterating back and forward and then merging edge chains to form polygon.
-			var current = start;
-			var isBorderVertex = false;
-			do {
-				if (current.Twin == null) {
-					isBorderVertex = true;
-					break;
-				}
-				current = current.Twin.Next;
-			} while (current != start);
+			var isBorderVertex = TryFindBorderEdge(start, out var current);
 			// Second: iterate over incident edges to form polygon.
 			var polygon = new List<HalfEdge>();
-			start = current;
 			if (isBorderVertex) {
+				start = current;
 				polygon.Add(start);
+			} else {
+				current = start;
 			}
 			do {
 				polygon.Add(current.Next);
@@ -383,6 +391,20 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				current = current.Twin;
 			} while (current != start);
 			return polygon;
+		}
+
+		private bool TryFindBorderEdge(HalfEdge start, out HalfEdge borderEdge)
+		{
+			borderEdge = null;
+			var current = start;
+			do {
+				if (current.Twin == null) {
+					borderEdge = current;
+					return true;
+				}
+				current = current.Twin.Next;
+			} while (current != start);
+			return false;
 		}
 
 		/// <summary>
@@ -463,6 +485,22 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		#region Predicates
 
+		private bool IsVertexLiesOnTriangleBorder(Vector2 vertex, HalfEdge triangle, out HalfEdge edge)
+		{
+			var current = triangle;
+			do {
+				var v1 = Vertices[current.Origin].Pos;
+				var v2 = Vertices[current.Next.Origin].Pos;
+				if (GeometricPredicates.ExactOrient2D(v1.X, v1.Y, vertex.X, vertex.Y, v2.X, v2.Y) == 0f) {
+					edge = current;
+					return true;
+				}
+				current = current.Next;
+			} while (current != triangle);
+			edge = null;
+			return false;
+		}
+
 		private bool InCircumcircle(HalfEdge triangle, Vector2 vertex)
 		{
 			var v1 = Vertices[triangle.Origin].Pos;
@@ -527,7 +565,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y)) *
 			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, d.X, d.Y)) < 0 &&
 			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, a.X, a.Y)) *
-			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, d.X, d.Y, b.X, b.Y)) < 0;
+			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, b.X, b.Y)) < 0;
 
 		private static bool SegmentSegmentIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
 		{
