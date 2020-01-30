@@ -58,10 +58,11 @@ namespace Tangerine.UI
 					}
 				};
 				PropertyLabel.Tasks.Add(ManageLabelTask());
-				var tooltip = PropertyAttributes<TangerinePropertyTooltipAttribute>.Get(EditorParams.PropertyInfo)?.Tooltip ?? PropertyLabel.Text;
+				var tooltip = PropertyAttributes<TangerinePropertyTooltipAttribute>.Get(editorParams.PropertyInfo)?.Tooltip ?? PropertyLabel.Text;
 				PropertyContainerWidget.Tasks.Add(Tooltip.Instance.ShowOnMouseOverTask(PropertyLabel, () => tooltip));
 				PropertyContainerWidget.AddNode(LabelContainer);
 				EditorContainer = new Widget {
+					Enabled = PropertyAttributes<TangerineReadOnlyAttribute>.Get(editorParams.PropertyInfo) == null,
 					Layout = new HBoxLayout(),
 					LayoutCell = new LayoutCell { StretchX = 2.0f },
 				};
