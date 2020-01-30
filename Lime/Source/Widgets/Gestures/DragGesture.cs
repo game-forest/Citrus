@@ -17,7 +17,8 @@ namespace Lime
 		{
 			Idle,
 			Recognizing,
-			Changing
+			Changing,
+			ChangingUsingMotion,
 		}
 
 		protected const float DefaultDragThreshold = 5;
@@ -28,9 +29,7 @@ namespace Lime
 		private readonly Queue<(Vector2 Distance, float Duration)> touchHistory;
 		private Vector2 previousMotionStrategyPosition;
 		private float motionStrategyTime;
-		private bool isMotionStrategyActive;
 		private Vector2 lastDragDelta;
-		private bool IsMotionInProgress() => motionStrategy == null ? false : isMotionStrategyActive;
 
 		public int ButtonIndex { get; }
 		public DragDirection Direction { get; private set; }
@@ -44,13 +43,13 @@ namespace Lime
 		/// will always be zero if DragDirection is Vertical or Horizontal respectively.
 		/// This fact is used when checking for threshold.
 		/// </summary>
-		public virtual Vector2 MousePosition => IsMotionInProgress() ? motionStrategy.Position : ClampMousePositionByDirection(Direction);
+		public virtual Vector2 MousePosition => state == State.ChangingUsingMotion ? motionStrategy.Position : ClampMousePositionByDirection(Direction);
 
 		public Vector2 TotalDragDistance => MousePosition - MousePressPosition;
 		public Vector2 LastDragDistance => MousePosition - PreviousMousePosition;
 
 		private Vector2 previousMousePosition;
-		protected virtual Vector2 PreviousMousePosition => IsMotionInProgress() ? previousMotionStrategyPosition : previousMousePosition;
+		protected virtual Vector2 PreviousMousePosition => state == State.ChangingUsingMotion ? previousMotionStrategyPosition : previousMousePosition;
 
 
 		private Vector2 ClampMousePositionByDirection(DragDirection direction)
@@ -95,6 +94,14 @@ namespace Lime
 		private PollableEvent ended;
 
 		/// <summary>
+		/// Occurs when gesture activates and starts recognition.
+		/// </summary>
+		public event Action Began
+		{
+			add { began.Handler += value; }
+			remove { began.Handler -= value; }
+		}
+		/// <summary>
 		/// Occurs if a user started gesture in a valid direction.
 		/// </summary>
 		public event Action Recognized
@@ -134,7 +141,7 @@ namespace Lime
 		public bool WasEnded() => ended.HasOccurred;
 
 		public bool IsRecognizing() => state == State.Recognizing;
-		public bool IsChanging() => state == State.Changing;
+		public bool IsChanging() => state == State.Changing || state == State.ChangingUsingMotion;
 
 		public DragGesture(
 			int buttonIndex = 0,
@@ -159,43 +166,30 @@ namespace Lime
 			}
 		}
 
-		internal protected override void OnCancel()
+		internal protected override void OnCancel(Gesture sender)
 		{
-			if (state == State.Changing) {
-				ended.Raise();
+			if (sender != null) {
+				if (state == State.Changing || state == State.ChangingUsingMotion) {
+					ended.Raise();
+				}
+				state = State.Idle;
 			}
-			state = State.Idle;
-			isMotionStrategyActive = false;
 		}
 
 		internal protected override bool OnUpdate(float delta)
 		{
 			bool result = false;
-			if (motionStrategy != null && IsMotionInProgress()) {
+			if (state == State.ChangingUsingMotion) {
 				if (Input.WasMousePressed(ButtonIndex) && Owner.IsMouseOverThisOrDescendant()) {
-					isMotionStrategyActive = false;
 					ended.Raise();
-				} else {
-					previousMotionStrategyPosition = motionStrategy.Position;
-					motionStrategyTime += delta;
-					motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
-					if (motionStrategyTime > motionStrategy.Duration) {
-						isMotionStrategyActive = false;
-					}
-					if (IsMotionInProgress()) {
-						// TODO: raise changed only and only if prev mpos != current mpos?
-						changed.Raise();
-					} else {
-						ended.Raise();
-					}
+					state = State.Idle;
 				}
-				return result;
 			}
 			var savedPreviousMousePosition = previousMousePosition;
 			bool wasChanging = IsChanging();
 			if (state == State.Idle && TryGetStartDragPosition(out var startPosition)) {
 				state = State.Recognizing;
-				MousePressPosition = startPosition;
+				savedPreviousMousePosition = previousMousePosition = MousePressPosition = startPosition;
 				began.Raise();
 			}
 			if (state == State.Recognizing) {
@@ -230,10 +224,14 @@ namespace Lime
 			}
 			if (motionStrategy != null && wasChanging) {
 				if (WasEnding()) {
-					motionStrategy.Start(ClampMousePositionByDirection(Direction), touchHistory);
-					touchHistory.Clear();
-					motionStrategyTime = 0.0f;
-					isMotionStrategyActive = true;
+					if (motionStrategy.Start(ClampMousePositionByDirection(Direction), touchHistory)) {
+						touchHistory.Clear();
+						motionStrategyTime = 0.0f;
+						state = State.ChangingUsingMotion;
+						Owner.Tasks.Add(UpdateMotionStrategyTask());
+					} else {
+						ended.Raise();
+					}
 				} else {
 					lastDragDelta = ClampMousePositionByDirection(Direction) - savedPreviousMousePosition;
 					touchHistory.Enqueue((lastDragDelta, delta));
@@ -244,6 +242,31 @@ namespace Lime
 			}
 			return result;
 		}
+
+		private IEnumerator<object> UpdateMotionStrategyTask()
+		{
+			while (state == State.ChangingUsingMotion) {
+				if (Owner is Widget w && !w.GloballyVisible) {
+					ended.Raise();
+					state = State.Idle;
+					yield break;
+				}
+				motionStrategyTime += Task.Current.Delta;
+				previousMotionStrategyPosition = motionStrategy.Position;
+				motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
+				if (motionStrategyTime > motionStrategy.Duration) {
+					state = State.Idle;
+				}
+				if (state == State.ChangingUsingMotion) {
+					// TODO: raise changed only and only if prev mpos != current mpos?
+					changed.Raise();
+				} else {
+					ended.Raise();
+				}
+				yield return null;
+			}
+		}
+
 		/// <summary>
 		/// Defines a motion strategy.
 		/// </summary>
@@ -256,7 +279,7 @@ namespace Lime
 			/// </summary>
 			/// <param name="startPosition">The position motion should begin at.</param>
 			/// <param name="touchHistory">Sequence of distance and duration pairs for a couple of last frames.</param>
-			void Start(Vector2 startPosition, IEnumerable<(Vector2 Distance, float Duration)> touchHistory);
+			bool Start(Vector2 startPosition, IEnumerable<(Vector2 Distance, float Duration)> touchHistory);
 
 			/// <summary>
 			/// Recalculates position.
@@ -302,13 +325,16 @@ namespace Lime
 				maxSpeed = maxStartSpeed;
 			}
 
-			public void Start(Vector2 startPosition, IEnumerable<(Vector2 Distance, float Duration)> touchHistory)
+			public bool Start(Vector2 startPosition, IEnumerable<(Vector2 Distance, float Duration)> touchHistory)
 			{
 				direction = Vector2.Zero;
 				float totalDuration = 0.0f;
 				foreach (var (distance, duration) in touchHistory) {
 					direction += distance;
 					totalDuration += duration;
+				}
+				if (direction.Length == 0.0f) {
+					return false;
 				}
 				if (totalDuration > 0.0f) {
 					speed = direction.Length / totalDuration;
@@ -323,6 +349,7 @@ namespace Lime
 						: CalcDurationUntilMinSpeedReached(minSpeed, k1 * initialSpeed, k2, k3);
 					p0 = PositionOverTime(0, k1 * initialSpeed, k2, k3);
 				}
+				return true;
 			}
 
 			public void Update(float time) =>

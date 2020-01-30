@@ -50,10 +50,10 @@ namespace Lime
 								}
 								var clickGesture = g as ClickGesture;
 								if (clickGesture?.ButtonIndex == dg.ButtonIndex) {
-									g.OnCancel();
+									g.OnCancel(dg);
 								}
 								if (dg.Exclusive) {
-									(g as DragGesture)?.OnCancel();
+									(g as DragGesture)?.OnCancel(dg);
 								}
 							}
 							break;
@@ -61,7 +61,7 @@ namespace Lime
 						case DoubleClickGesture dcg: {
 							foreach (var g in activeGestures) {
 								if (g != dcg) {
-									g.OnCancel();
+									g.OnCancel(dcg);
 								}
 							}
 							break;
@@ -74,7 +74,7 @@ namespace Lime
 		private void CancelGestures()
 		{
 			foreach (var g in activeGestures) {
-				g.OnCancel();
+				g.OnCancel(null);
 			}
 			activeGestures.Clear();
 		}
