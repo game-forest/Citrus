@@ -3,6 +3,8 @@ using System;
 namespace Lime.Source.Widgets.PolygonMesh
 {
 	using EA = ExactArithmetic;
+
+	[System.Diagnostics.DebuggerStepThrough]
 	public static class GeometricPredicates
 	{
 		// epsilon is equal to Math.Pow(2.0, -53) and is the largest power of

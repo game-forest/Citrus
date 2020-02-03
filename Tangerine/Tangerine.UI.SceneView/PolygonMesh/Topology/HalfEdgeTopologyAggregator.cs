@@ -121,8 +121,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh.Topology
 		{
 			var edges = new HashSet<EdgeData>();
 			foreach (var edge in topology.HalfEdges) {
-				// TODO Change when we get constrained edges work
-				edges.Add(new EdgeData(edge.Origin, edge.Next.Origin, edge.Twin == null, false));
+				edges.Add(new EdgeData(edge.Origin, edge.Next.Origin, edge.Twin == null, edge.Constrained));
 			}
 			return edges.ToList();
 		}

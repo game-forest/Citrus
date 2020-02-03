@@ -178,6 +178,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					});
 				}
 				Topology = (T)Activator.CreateInstance(typeof(T), mesh.Vertices);
+				if (mesh.Faces.Count > 0) {
+					Topology.Sync(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
+				}
 				Mesh = mesh;
 				Mesh.Faces.AddRange(Topology.Faces);
 				Topology.OnTopologyChanged += UpdateMeshFaces;
@@ -200,7 +203,11 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		{
 			if (Mesh != null) {
 				Mesh.Faces.Clear();
+				Mesh.ConstrainedEdges.Clear();
 				Mesh.Faces.AddRange(topology.Faces);
+				foreach (var edge in topology.ConstrainedEdges) {
+					Mesh.ConstrainedEdges.Add(new Edge((ushort)edge.Item1, (ushort)edge.Item2));
+				}
 			}
 		}
 

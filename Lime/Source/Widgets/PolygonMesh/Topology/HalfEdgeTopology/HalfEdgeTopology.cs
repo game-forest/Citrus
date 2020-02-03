@@ -9,10 +9,23 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 	{
 		public class HalfEdge
 		{
+			private bool constrained;
 			public int Origin { get; internal set; }
 			public HalfEdge Next { get; set; }
 			public HalfEdge Prev => Next.Next;
 			public HalfEdge Twin { get; private set; }
+
+			public bool Constrained
+			{
+				get => constrained;
+				set
+				{
+					constrained = value;
+					if (Twin != null) {
+						Twin.constrained = value;
+					}
+				}
+			}
 
 			public bool Detached => Next == null && Twin == null;
 
@@ -43,6 +56,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				                                (Next?.Origin ?? edge.Origin) == edge.Origin);
 				edge.Twin = this;
 				Twin = edge;
+				Constrained |= edge.Constrained;
 			}
 
 			public class HalfEdgesEnumerable : IEnumerable<HalfEdge>
@@ -135,6 +149,18 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private HalfEdge Root { get; set; }
 
+		public IEnumerable<(int, int)> ConstrainedEdges
+		{
+			get
+			{
+				foreach (var halfEdge in HalfEdges) {
+					if (halfEdge.Constrained) {
+						yield return (halfEdge.Origin, halfEdge.Next.Origin);
+					}
+				}
+			}
+		}
+
 		// Stays public until we get LocateClosestTriangle work O(logN) (cause otherwise rendering will
 		// be laggy).
 		public IEnumerable<HalfEdge> HalfEdges => new HalfEdge.HalfEdgesEnumerable(Root);
@@ -157,7 +183,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		public HalfEdgeTopology()
 		{
-
 			Vertices = new List<Vertex>();
 		}
 
@@ -189,6 +214,13 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					possibleTwin?.TwinWith(current);
 					current = current.Next;
 				} while (current != Root);
+			}
+
+			foreach (var edge in constrainedEdges) {
+				var he = table[edge.Index0, edge.Index1];
+				if (he != null) {
+					he.Constrained = true;
+				}
 			}
 		}
 
@@ -261,22 +293,43 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					OnTopologyChanged?.Invoke(this);
 				}
 			} else {
-				// Otherwise just delete original and add translated
+				// Otherwise just delete original and add translated.
+				// Don't forget to save constrained edges.
+				var constrainedEdges = new List<(int, int)>();
+				foreach (var adjacent in AdjacentEdges(he)) {
+					if (adjacent.Constrained) {
+						constrainedEdges.Add((adjacent.Origin, adjacent.Next.Origin));
+					}
+				}
 				RemoveVertex(index);
 				Vertices[index] = translated;
 				AddVertex(index);
+				foreach (var edge in constrainedEdges) {
+					InsertConstrainEdge(edge.Item1, edge.Item2);
+				}
 				OnTopologyChanged?.Invoke(this);
 			}
 		}
 
 		public void ConstrainEdge(int index0, int index1)
 		{
-			throw new NotImplementedException();
+			InsertConstrainEdge(index0, index1);
+			OnTopologyChanged?.Invoke(this);
 		}
 
 		public void Concave(Vector2 position)
 		{
 			throw new NotImplementedException();
+		}
+
+		private bool SelfCheck()
+		{
+			foreach (var (e1, e2, e3) in Triangles()) {
+				if (!IsDelaunay(e1) || !IsDelaunay(e2) || !IsDelaunay(e3)) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }

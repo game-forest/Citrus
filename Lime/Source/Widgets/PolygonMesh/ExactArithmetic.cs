@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace Lime.Source.Widgets.PolygonMesh
 {
+	[System.Diagnostics.DebuggerStepThrough]
 	public static class ExactArithmetic
 	{
 		// Only valid if |a| >= |b|

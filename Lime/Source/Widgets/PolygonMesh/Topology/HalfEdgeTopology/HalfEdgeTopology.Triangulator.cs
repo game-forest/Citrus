@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lime.Source.Widgets.PolygonMesh;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
@@ -32,6 +33,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				return;
 			} else if (result == LocationResult.OnEdge) {
 				// Should split edge
+				SplitEdge(vertexIndex, halfEdge);
 				return;
 			} else if (result == LocationResult.InsideTriangle) {
 				// Boywer-Watson algorithm
@@ -92,15 +94,28 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				if (p1 == vertex) {
 					edge = e1;
 					return LocationResult.SameVertex;
-				} else if (p2 == vertex) {
+				}
+				if (p2 == vertex) {
 					edge = e2;
 					return LocationResult.SameVertex;
-				} else if (p3 == vertex) {
+				}
+				if (p3 == vertex) {
 					edge = e3;
 					return LocationResult.SameVertex;
-				} else if (VertexInsideTriangle(vertex, e1)) {
+				}
+				if (VertexInsideTriangle(vertex, e1)) {
 					edge = e1;
-					// TODO Check OnEdge
+					if (IsVertexOnEdge(vertex, e1)) {
+						return LocationResult.OnEdge;
+					}
+					if (IsVertexOnEdge(vertex, e2)) {
+						edge = e2;
+						return LocationResult.OnEdge;
+					}
+					if (IsVertexOnEdge(vertex, e3)) {
+						edge = e3;
+						return LocationResult.OnEdge;
+					}
 					return LocationResult.InsideTriangle;
 				}
 				UpdateMinDistance(e1, e2);
@@ -155,7 +170,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			queue.Push(start);
 			while (queue.Count > 0) {
 				var halfEdge = queue.Pop();
-				if (halfEdge.Twin == null || !InCircumcircle(halfEdge.Twin, vertex)) {
+				if (halfEdge.Constrained || halfEdge.Twin == null || !InCircumcircle(halfEdge.Twin, vertex)) {
 					polygon.Add(halfEdge);
 					continue;
 				}
@@ -283,7 +298,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			while (possiblyNonDelaunay.Count > 0) {
 				var he = possiblyNonDelaunay[possiblyNonDelaunay.Count - 1];
 				possiblyNonDelaunay.RemoveAt(possiblyNonDelaunay.Count - 1);
-				if (he.Twin != null && !he.Detached && InCircumcircle(he.Twin, Vertices[he.Prev.Origin].Pos)) {
+				if (!IsDelaunay(he)) {
 					Root = he = Flip(he);
 					possiblyNonDelaunay.Add(he.Next);
 					possiblyNonDelaunay.Add(he.Prev);
@@ -292,6 +307,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 		}
+
+		private bool IsDelaunay(HalfEdge edge) =>
+			edge.Constrained || edge.Twin == null || edge.Detached || !InCircumcircle(edge.Twin, Vertices[edge.Prev.Origin].Pos);
 
 		private HalfEdge Flip(HalfEdge edge)
 		{
@@ -412,8 +430,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// Complexity is O(N^2). Can be improved to O(NlogN) (Seidel algorithm),
 		/// O(Nlog*N) or O(N) (Chazelle algorithm, there is no existing implementation).
 		/// </summary>
-		/// <param name="polygon">Polygon.</param>
-		private void TriangulatePolygonByEarClipping(List<HalfEdge> polygon)
+		/// <param name="polygon">Input polygon. </param>
+		/// <param name="restoreDelaunay">If true methods calls RestoreDelaunayProperty on newly created triangles, otherwise
+		/// leaves newly created triangles in <paramref name="polygon"/>.</param>
+		private void TriangulatePolygonByEarClipping(List<HalfEdge> polygon, bool restoreDelaunay = true)
 		{
 			// An ear of a polygon is defined as a vertex v such that the line segment between
 			// the two neighbors of v lies entirely in the interior of the polygon.
@@ -439,10 +459,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						other = other.Next ?? p.First;
 					}
 					if (isEar) {
-						e1.Next?.Next?.Detach();
-						e1.Next?.Detach();
-						e2.Next?.Next?.Detach();
-						e2.Next?.Detach();
 						e1.Next = e2;
 						e2.Next = new HalfEdge(o3) { Next = e1 };
 						var twin = new HalfEdge(o1);
@@ -450,7 +466,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						e2.Next.TwinWith(twin);
 						p.AddAfter(current, twin);
 						current = current.Next;
-						p.Remove(prev.Next);
+						p.Remove(prev.Next ?? p.First);
 						p.Remove(prev);
 					}
 				}
@@ -462,7 +478,251 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			he2.Next = he3;
 			he3.Next = he1;
 			Root = he1;
-			RestoreDelaunayProperty(polygon);
+			if (restoreDelaunay) {
+				RestoreDelaunayProperty(polygon);
+			}
+		}
+
+		private void InsertConstrainEdge(int index0, int index1)
+		{
+			var location = LocateClosestTriangle(index0, out var start);
+			System.Diagnostics.Debug.Assert(location == LocationResult.SameVertex);
+			System.Diagnostics.Debug.Assert(start.Origin == index0);
+			// Check test cases for explanation
+			var upperUsed = new HashSet<int>();
+			var lowerUsed = new HashSet<int>();
+			var shouldBeReinserted = new HashSet<int>();
+			var shouldBeReconstrained = new List<(int, int)>();
+			var a = Vertices[index0].Pos;
+			var b = Vertices[index1].Pos;
+			var ab = b - a;
+			var signab = new IntVector2(Mathf.Sign(ab.X), Mathf.Sign(ab.Y));
+			// In order to insert a constrain edge we have to delete all
+			// triangles that (index0, index1) crosses. Thereafter we
+			// have 2 polygonal holes that should be triangulated.
+			List<HalfEdge> upperPolygon = null, lowerPolygon = null;
+			var current = start;
+			foreach (var adjacentEdge in AdjacentEdges(start)) {
+				var next = adjacentEdge.Next;
+				var prev = next.Next;
+				// Special case: requested edge already exists.
+				if (next.Origin == index1) {
+					adjacentEdge.Constrained = true;
+					return;
+				}
+				if (prev.Origin == index1) {
+					prev.Constrained = true;
+					return;
+				}
+				var c = Vertices[next.Origin].Pos;
+				var d = Vertices[prev.Origin].Pos;
+				var e = Vertices[adjacentEdge.Origin].Pos;
+				// Special case: requested edge lies on the same line as [e, c] or [e, d].
+				// If true then mark edge as constrained and insert edge [next.Origin, index1] or [prev.Origin, index1].
+				if (IsVertexOnLine(a, e, c) && IsVertexOnLine(b, e, c)) {
+					var ec = c - e;
+					// Check for co-directionality in order to prevent looping
+					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
+						adjacentEdge.Constrained = true;
+						InsertConstrainEdge(next.Origin, index1);
+						return;
+					}
+
+				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
+					var ed = d - e;
+					// Check for co-directionality in order to prevent looping
+					if (Mathf.Sign(ed.X) == signab.X && Mathf.Sign(ed.Y) == signab.Y) {
+						prev.Constrained = true;
+						InsertConstrainEdge(prev.Origin, index1);
+						return;
+					}
+				} else if (RobustSegmentSegmentIntersection(a, b, c, d)) {
+					// Then we should start traversing
+					upperPolygon = new List<HalfEdge> { adjacentEdge };
+					lowerPolygon = new List<HalfEdge> { prev };
+					lowerUsed.Add(prev.Origin);
+					upperUsed.Add(adjacentEdge.Origin);
+					current = next;
+					break;
+				}
+			}
+			while (true) {
+				if (current.Twin == null) {
+					// Something horrible has happened..
+					// Something like trying to connect two vertices trough concavity.
+					// Probably should not do anything.
+					return;
+				}
+				current = current.Twin;
+				var next = current.Next;
+				var prev = next.Next;
+				if (prev.Origin == index1) {
+					// We found the end of the requested edge.
+					// Stop traversing and triangulate both polygons.
+					AddLower(prev);
+					AddUpper(next);
+					Finish(index0, index1);
+					break;
+				}
+				var c = Vertices[next.Origin].Pos;
+				var d = Vertices[prev.Origin].Pos;
+				var e = Vertices[current.Origin].Pos;
+				if (IsVertexOnLine(d, a, b)) {
+					// Special case: [a, b] intersects triangle exactly in the
+					// vertex that is opposite to basis (`current` edge).
+					// Should finish traversing and insert constrain edge
+					// between prev.Origin and index1.
+					AddLower(prev);
+					AddUpper(next);
+					Finish(index0, prev.Origin);
+					InsertConstrainEdge(prev.Origin, index1);
+					return;
+
+				}
+				if (RobustSegmentSegmentIntersection(a, b, c, d)) {
+					AddLower(prev);
+					current = next;
+				} else if (RobustSegmentSegmentIntersection(a, b, d, e)) {
+					AddUpper(next);
+					current = prev;
+				} else {
+					System.Diagnostics.Debug.Fail("This is impossible case.");
+				}
+			}
+			void AddUpper(HalfEdge e)
+			{
+				if (upperUsed.Add(e.Origin)) {
+					upperPolygon.Add(e);
+				} else {
+					// It means that triangles from i to polygon.Count should be removed.
+					// Removing those triangles makes some vertices isolated and
+					// also may remove previously inserted constrained edges.
+					// So we keep that in mind in order to reinsert missing elements later.
+					var i = upperPolygon.FindIndex(edge => edge.Origin == e.Origin);
+					for (int j = upperPolygon.Count - 1; j >= i; j--) {
+						var t = upperPolygon[j];
+						shouldBeReinserted.Add(t.Origin);
+						shouldBeReinserted.Add(t.Next.Origin);
+						if (t.Constrained) {
+							shouldBeReconstrained.Add((t.Origin, t.Next.Origin));
+						}
+						upperPolygon.RemoveAt(j);
+					}
+					upperPolygon.Add(e);
+				}
+			}
+			void AddLower(HalfEdge e)
+			{
+				if (lowerUsed.Add(e.Origin)) {
+					lowerPolygon.Add(e);
+				} else {
+					// Same as for upper polygon except that it is filled in reverse order.
+					var i = lowerPolygon.FindIndex(edge => edge.Origin == e.Origin);
+					for (int j = lowerPolygon.Count - 1; j > i; j--) {
+						var t = lowerPolygon[j];
+						shouldBeReinserted.Add(t.Origin);
+						shouldBeReinserted.Add(t.Next.Origin);
+						if (t.Constrained) {
+							shouldBeReconstrained.Add((t.Origin, t.Next.Origin));
+						}
+						lowerPolygon.RemoveAt(j);
+					}
+					shouldBeReinserted.Add(e.Next.Origin);
+				}
+			}
+			void Finish(int i0, int i1)
+			{
+				// Create (i0, i1) half edges.
+				var e1 = new HalfEdge(i1);
+				var e2 = new HalfEdge(i0);
+				e1.TwinWith(e2);
+				e1.Constrained = true;
+				AddUpper(e1);
+				AddLower(e2);
+				lowerPolygon.Reverse();
+				// Triangulate both polygonal holes.
+				TriangulatePolygonByEarClipping(upperPolygon, false);
+				TriangulatePolygonByEarClipping(lowerPolygon);
+				RestoreDelaunayProperty(upperPolygon);
+				// Reinsert missing elements.
+				foreach (var vertexIndex in shouldBeReinserted) {
+					AddVertex(vertexIndex);
+				}
+				foreach (var edge in shouldBeReconstrained) {
+					InsertConstrainEdge(edge.Item1, edge.Item2);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets all edges adjacent to <c>edge.Origin</c>.
+		/// </summary>
+		/// <param name="start">Edge that determines vertex.</param>
+		/// <returns>Edges adjacent to <c>edge.Origin</c></returns>
+		private IEnumerable<HalfEdge> AdjacentEdges(HalfEdge start)
+		{
+			var current = start;
+			var backward = false;
+			do {
+				yield return current;
+				var next = current.Next;
+				var prev = next.Next;
+				if (current.Twin == null && !backward) {
+					backward = true;
+					current = start;
+					prev = start.Prev;
+					if (prev.Twin != null) {
+						current = prev.Twin;
+					}
+					continue;
+				}
+				if (prev.Twin == null && backward) {
+					yield break;
+				}
+				current = backward ? prev.Twin : current.Twin.Next;
+			} while (current != start);
+		}
+
+		/// <summary>
+		/// Split an edge with <paramref name="vertexIndex"/>.
+		/// For each half edge two new triangles replace old one.
+		/// </summary>
+		/// <param name="vertexIndex">Vertex index.</param>
+		/// <param name="edge">Half edge.</param>
+		private void SplitEdge(int vertexIndex, HalfEdge edge)
+		{
+			var twin = edge.Twin;
+			var edgesToCheck = new List<HalfEdge>(12);
+			SplitHalfEdge(edge);
+			if (twin != null) {
+				SplitHalfEdge(twin);
+				var twinSplitNext = twin.Next.Twin.Next;
+				twin.TwinWith(edge.Next.Twin.Next);
+				twinSplitNext.TwinWith(edge);
+			}
+			edge.Constrained = edge.Constrained;
+			edge.Next.Twin.Next.Constrained = edge.Constrained;
+			RestoreDelaunayProperty(edgesToCheck);
+			void SplitHalfEdge(HalfEdge e)
+			{
+				var next = e.Next;
+				var prev = next.Next;
+				// Form first triangle
+				var split = new HalfEdge(vertexIndex) { Next = prev, };
+				e.Next = split;
+				// Form second triangle
+				var splitTwin = new HalfEdge(prev.Origin);
+				var splitTwinNext = new HalfEdge(vertexIndex) { Next = next, };
+				splitTwin.Next = splitTwinNext;
+				next.Next = splitTwin;
+				splitTwin.TwinWith(split);
+				edgesToCheck.Add(e);
+				edgesToCheck.Add(split);
+				edgesToCheck.Add(prev);
+				edgesToCheck.Add(splitTwin);
+				edgesToCheck.Add(splitTwinNext);
+				edgesToCheck.Add(next);
+			}
 		}
 
 		#region HelperMethods
@@ -484,22 +744,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		#endregion
 
 		#region Predicates
-
-		private bool IsVertexLiesOnTriangleBorder(Vector2 vertex, HalfEdge triangle, out HalfEdge edge)
-		{
-			var current = triangle;
-			do {
-				var v1 = Vertices[current.Origin].Pos;
-				var v2 = Vertices[current.Next.Origin].Pos;
-				if (GeometricPredicates.ExactOrient2D(v1.X, v1.Y, vertex.X, vertex.Y, v2.X, v2.Y) == 0f) {
-					edge = current;
-					return true;
-				}
-				current = current.Next;
-			} while (current != triangle);
-			edge = null;
-			return false;
-		}
 
 		private bool InCircumcircle(HalfEdge triangle, Vector2 vertex)
 		{
@@ -562,10 +806,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y) > 0;
 
 		private static bool RobustSegmentSegmentIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d) =>
+			Mathf.Max(Mathf.Min(a.X, b.X), Mathf.Min(c.X, d.X)) <=
+			Mathf.Min(Mathf.Max(a.X, b.X), Mathf.Max(c.X, d.X)) &&
+			Mathf.Max(Mathf.Min(a.Y, b.Y), Mathf.Min(c.Y, d.Y)) <=
+			Mathf.Min(Mathf.Max(a.Y, b.Y), Mathf.Max(c.Y, d.Y)) &&
 			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y)) *
-			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, d.X, d.Y)) < 0 &&
+			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, d.X, d.Y)) <= 0 &&
 			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, a.X, a.Y)) *
-			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, b.X, b.Y)) < 0;
+			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, b.X, b.Y)) <= 0;
 
 		private static bool SegmentSegmentIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
 		{
@@ -584,6 +832,17 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 			return false;
 		}
+
+		private bool IsVertexOnEdge(Vector2 vertex, HalfEdge edge) =>
+			IsVertexOnEdge(vertex, Vertices[edge.Origin].Pos, Vertices[edge.Next.Origin].Pos);
+
+		private static bool IsVertexOnEdge(Vector2 vertex, Vector2 s, Vector2 e) =>
+			vertex.X <= Mathf.Max(s.X, e.X) && vertex.X >= Mathf.Min(s.X, e.X) &&
+			vertex.Y <= Mathf.Max(s.Y, e.Y) && vertex.Y >= Mathf.Min(s.Y, e.Y) &&
+			IsVertexOnLine(vertex, s, e);
+
+		private static bool IsVertexOnLine(Vector2 vertex, Vector2 s, Vector2 e) =>
+			GeometricPredicates.ExactOrient2D(vertex.X, vertex.Y, s.X, s.Y, e.X, e.Y) == 0;
 
 		#endregion
 	}
