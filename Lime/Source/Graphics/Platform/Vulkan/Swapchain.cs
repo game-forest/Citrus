@@ -26,6 +26,7 @@ namespace Lime.Graphics.Platform.Vulkan
 		private int width;
 		private int height;
 		private ulong swapchainDestroyFenceValue;
+		private bool vSync;
 
 		internal SharpVulkan.Format BackbufferFormat => backbufferFormat;
 		internal SharpVulkan.Format DepthStencilFormat => depthStencilFormat;
@@ -35,13 +36,15 @@ namespace Lime.Graphics.Platform.Vulkan
 
 		public int Width => width;
 		public int Height => height;
+		public bool VSync => vSync;
 
-		public Swapchain(PlatformRenderContext context, IntPtr windowHandle, int width, int height)
+		public Swapchain(PlatformRenderContext context, IntPtr windowHandle, int width, int height, bool vSync = true)
 		{
 			this.context = context;
 			this.windowHandle = windowHandle;
 			this.width = width;
 			this.height = height;
+			this.vSync = vSync;
 			CreateSurface();
 			CreateSwapchain();
 		}
@@ -155,12 +158,21 @@ namespace Lime.Graphics.Platform.Vulkan
 			if ((surfaceCapabilities.SupportedUsageFlags & backbufferUsage) == 0) {
 				throw new NotSupportedException();
 			}
+			var supportedPresentModes = context.PhysicalDevice.GetSurfacePresentModes(surface);
+			var presentMode = SharpVulkan.PresentMode.Fifo;
+			if (!vSync) {
+				if (Array.IndexOf(supportedPresentModes, SharpVulkan.PresentMode.Immediate) >= 0) {
+					presentMode = SharpVulkan.PresentMode.Immediate;
+				} else if (Array.IndexOf(supportedPresentModes, SharpVulkan.PresentMode.Mailbox) >= 0) {
+					presentMode = SharpVulkan.PresentMode.Mailbox;
+				}
+			}
 			var oldSwapchain = swapchain;
 			DestroySwapchain();
 			var createInfo = new SharpVulkan.SwapchainCreateInfo {
 				StructureType = SharpVulkan.StructureType.SwapchainCreateInfo,
 				Surface = surface,
-				PresentMode = SharpVulkan.PresentMode.Fifo,
+				PresentMode = presentMode,
 				PreTransform = preTransform,
 				CompositeAlpha = compositeAlpha,
 				ImageUsage = backbufferUsage,

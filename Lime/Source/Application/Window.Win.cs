@@ -261,11 +261,18 @@ namespace Lime
 				graphicsContext = new OpenTK.Graphics.GraphicsContext(graphicsMode, windowInfo, major, minor, graphicsContextFlags);
 				graphicsContext.MakeCurrent(windowInfo);
 				graphicsContext.LoadAll();
-				graphicsContext.SwapInterval = 1;
+				graphicsContext.SwapInterval = VSync ? 1 : 0;
 				if (platformRenderContext == null) {
 					platformRenderContext = new Graphics.Platform.OpenGL.PlatformRenderContext();
 					PlatformRenderer.Initialize(platformRenderContext);
 				}
+				graphicsContext.MakeCurrent(null);
+			}
+
+			protected override void OnVSyncChanged()
+			{
+				graphicsContext.MakeCurrent(windowInfo);
+				graphicsContext.SwapInterval = VSync ? 1 : 0;
 				graphicsContext.MakeCurrent(null);
 			}
 
@@ -322,7 +329,13 @@ namespace Lime
 					platformRenderContext = new Graphics.Platform.Vulkan.PlatformRenderContext();
 					PlatformRenderer.Initialize(platformRenderContext);
 				}
-				swapchain = new Graphics.Platform.Vulkan.Swapchain(platformRenderContext, Handle, ClientSize.Width, ClientSize.Height);
+				RecreateSwapchain();
+			}
+
+			private void RecreateSwapchain()
+			{
+				swapchain?.Dispose();
+				swapchain = new Graphics.Platform.Vulkan.Swapchain(platformRenderContext, Handle, ClientSize.Width, ClientSize.Height, VSync);
 			}
 
 			protected override void OnHandleDestroyed(EventArgs e)
@@ -354,15 +367,34 @@ namespace Lime
 			public override void UnbindContext()
 			{
 			}
+
+			protected override void OnVSyncChanged()
+			{
+				RecreateSwapchain();
+			}
 		}
 
 		private abstract class RenderControl : UserControl
 		{
-			public bool VSync { get; set; }
+			private bool vSync = true;
+
+			public bool VSync
+			{
+				get => vSync;
+				set
+				{
+					if (vSync != value) {
+						BeforeVSyncChanged?.Invoke();
+						vSync = value;
+						OnVSyncChanged();
+					}
+				}
+			}
 
 			public virtual bool CanRender => true;
 
 			public event Action BeforeBoundsChanged;
+			public event Action BeforeVSyncChanged;
 
 			public RenderControl()
 			{
@@ -383,6 +415,8 @@ namespace Lime
 					return cp;
 				}
 			}
+
+			protected abstract void OnVSyncChanged();
 
 			// Without this at least Left, Right, Up, Down and Tab keys are not submitted OnKeyDown
 			protected override bool IsInputKey(Keys keyData)
@@ -475,6 +509,7 @@ namespace Lime
 				}
 			};
 			renderControl.BeforeBoundsChanged += WaitForRendering;
+			renderControl.BeforeVSyncChanged += WaitForRendering;
 			form.Move += OnMove;
 			form.Activated += OnActivated;
 			form.Deactivate += OnDeactivate;
@@ -548,7 +583,6 @@ namespace Lime
 			{
 				if (vSync != value && timer == null) {
 					vSync = value;
-					WaitForRendering();
 					renderControl.VSync = value;
 				}
 			}
