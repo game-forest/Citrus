@@ -131,8 +131,10 @@ namespace Lime
 			ActivityDelegate.Instance.GameView.SurfaceCreating += () => requestForRedraw = true;
 			ActivityDelegate.Instance.GameView.SurfaceDestroing += WaitForRendering;
 
-			ActivityDelegate.Instance.GameView.SetOnApplyWindowInsetsListener(new InsetsListener(this));
-			ActivityDelegate.Instance.GameView.RequestApplyInsets();
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.P) {
+				ActivityDelegate.Instance.GameView.SetOnApplyWindowInsetsListener(new InsetsListener(this));
+				ActivityDelegate.Instance.GameView.RequestApplyInsets();
+			}
 
 			PixelScale = Resources.System.DisplayMetrics.Density;
 

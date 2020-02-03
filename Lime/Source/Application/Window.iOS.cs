@@ -161,7 +161,15 @@ namespace Lime
 
 		private Rectangle FetchSafeAreaInsets()
 		{
-			var insets = UIApplication.SharedApplication.KeyWindow.SafeAreaInsets;
+			UIEdgeInsets insets = UIEdgeInsets.Zero;
+			if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0)) {
+				try {
+					insets = UIApplication.SharedApplication.KeyWindow?.SafeAreaInsets ?? UIEdgeInsets.Zero;
+				} catch (System.Exception e) {
+					// Some Xamarin.iOS versions crash when trying to get safe area insets
+					Logger.Write($"Failed to get safe are insets: {e.Message}");
+				}
+			}
 			return new Rectangle(
 				(float) insets.Left,
 				(float) insets.Top,
