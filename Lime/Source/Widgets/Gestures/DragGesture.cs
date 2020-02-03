@@ -18,7 +18,7 @@ namespace Lime
 			Idle,
 			Recognizing,
 			Changing,
-			ChangingUsingMotion,
+			ChangingByMotion,
 		}
 
 		protected const float DefaultDragThreshold = 5;
@@ -43,13 +43,13 @@ namespace Lime
 		/// will always be zero if DragDirection is Vertical or Horizontal respectively.
 		/// This fact is used when checking for threshold.
 		/// </summary>
-		public virtual Vector2 MousePosition => state == State.ChangingUsingMotion ? motionStrategy.Position : ClampMousePositionByDirection(Direction);
+		public virtual Vector2 MousePosition => state == State.ChangingByMotion ? motionStrategy.Position : ClampMousePositionByDirection(Direction);
 
 		public Vector2 TotalDragDistance => MousePosition - MousePressPosition;
 		public Vector2 LastDragDistance => MousePosition - PreviousMousePosition;
 
 		private Vector2 previousMousePosition;
-		protected virtual Vector2 PreviousMousePosition => state == State.ChangingUsingMotion ? previousMotionStrategyPosition : previousMousePosition;
+		protected virtual Vector2 PreviousMousePosition => state == State.ChangingByMotion ? previousMotionStrategyPosition : previousMousePosition;
 
 
 		private Vector2 ClampMousePositionByDirection(DragDirection direction)
@@ -141,7 +141,9 @@ namespace Lime
 		public bool WasEnded() => ended.HasOccurred;
 
 		public bool IsRecognizing() => state == State.Recognizing;
-		public bool IsChanging() => state == State.Changing || state == State.ChangingUsingMotion;
+		public bool IsChanging() => state == State.Changing || state == State.ChangingByMotion;
+
+		internal bool IsChangingByMotion() => state == State.ChangingByMotion;
 
 		public DragGesture(
 			int buttonIndex = 0,
@@ -169,7 +171,7 @@ namespace Lime
 		internal protected override void OnCancel(Gesture sender)
 		{
 			if (sender != null) {
-				if (state == State.Changing || state == State.ChangingUsingMotion) {
+				if (state == State.Changing || state == State.ChangingByMotion) {
 					ended.Raise();
 				}
 				state = State.Idle;
@@ -178,15 +180,24 @@ namespace Lime
 
 		internal protected override bool OnUpdate(float delta)
 		{
-			bool result = false;
-			if (state == State.ChangingUsingMotion) {
+			var result = false;
+			if (state == State.ChangingByMotion) {
 				if (Input.WasMousePressed(ButtonIndex) && Owner.IsMouseOverThisOrDescendant()) {
-					ended.Raise();
 					state = State.Idle;
+					ended.Raise();
+				} else {
+					previousMotionStrategyPosition = motionStrategy.Position;
+					motionStrategyTime += delta;
+					motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
+					changed.Raise();
+					if (motionStrategyTime > motionStrategy.Duration) {
+						state = State.Idle;
+						ended.Raise();
+					}
 				}
 			}
 			var savedPreviousMousePosition = previousMousePosition;
-			bool wasChanging = IsChanging();
+			bool wasChanging = state == State.Changing;
 			if (state == State.Idle && TryGetStartDragPosition(out var startPosition)) {
 				state = State.Recognizing;
 				savedPreviousMousePosition = previousMousePosition = MousePressPosition = startPosition;
@@ -227,8 +238,7 @@ namespace Lime
 					if (motionStrategy.Start(ClampMousePositionByDirection(Direction), touchHistory)) {
 						touchHistory.Clear();
 						motionStrategyTime = 0.0f;
-						state = State.ChangingUsingMotion;
-						Owner.Tasks.Add(UpdateMotionStrategyTask());
+						state = State.ChangingByMotion;
 					} else {
 						ended.Raise();
 					}
@@ -243,29 +253,6 @@ namespace Lime
 			return result;
 		}
 
-		private IEnumerator<object> UpdateMotionStrategyTask()
-		{
-			while (state == State.ChangingUsingMotion) {
-				if (Owner is Widget w && !w.GloballyVisible) {
-					ended.Raise();
-					state = State.Idle;
-					yield break;
-				}
-				motionStrategyTime += Task.Current.Delta;
-				previousMotionStrategyPosition = motionStrategy.Position;
-				motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
-				if (motionStrategyTime > motionStrategy.Duration) {
-					state = State.Idle;
-				}
-				if (state == State.ChangingUsingMotion) {
-					// TODO: raise changed only and only if prev mpos != current mpos?
-					changed.Raise();
-				} else {
-					ended.Raise();
-				}
-				yield return null;
-			}
-		}
 
 		/// <summary>
 		/// Defines a motion strategy.

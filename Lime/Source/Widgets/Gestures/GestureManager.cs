@@ -21,7 +21,12 @@ namespace Lime
 			UpdateGestures(delta);
 			if (context.NodeCapturedByMouse != activeNode) {
 				activeNode = context.NodeCapturedByMouse;
-				var doubleClickGestures = activeGestures.Where(g => g is DoubleClickGesture).Cast<DoubleClickGesture>().ToList();
+				// In case active node will change to null, which means capture button is released we need to
+				// preserve double click gestures because it's recognition state spans across capture-button-release-boundary.
+				var doubleClickGestures = activeGestures.Where(g => g is DoubleClickGesture).ToList();
+				// We need to continue updating drag gestures with motion strategy currently active even if activeNode has been changed
+				// or they'll stop moving by inertial drag otherwise.
+				var dragGesturesChangingByMotion = activeGestures.Where(g => g is DragGesture gd && gd.IsChangingByMotion()).ToList();
 				CancelGestures();
 				if (activeNode != null) {
 					activeGestures.AddRange(EnumerateGestures(activeNode));
@@ -29,6 +34,8 @@ namespace Lime
 				} else {
 					activeGestures.AddRange(doubleClickGestures);
 				}
+				dragGesturesChangingByMotion = dragGesturesChangingByMotion.Where(g => !activeGestures.Contains(g)).ToList();
+				activeGestures.AddRange(dragGesturesChangingByMotion);
 			}
 		}
 
