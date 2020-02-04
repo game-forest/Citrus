@@ -14,9 +14,6 @@ namespace Orange.Source.Actions
 		[ExportMetadata("Label", "Invalidate Fonts")]
 		public static string InvalidateFontsAction()
 		{
-			if (AppDomain.CurrentDomain.FriendlyName.Contains("Orange")) {
-				return "Run this command from Tangerine!";
-			}
 			foreach (var configPath in EnumerateFontConfigs(AssetPath.Combine(The.Workspace.AssetsDirectory, "Fonts/"))) {
 				Console.WriteLine($"Processing {configPath}..");
 				try {

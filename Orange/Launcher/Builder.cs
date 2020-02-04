@@ -190,14 +190,14 @@ namespace Launcher
 		{
 #if WIN
 			process.StartInfo.Arguments =
-				$"\"{solutionPath}\" /t:Build /p:Configuration=Release /p:Platform=x86 /verbosity:minimal";
+				$"\"{solutionPath}\" /t:Build /p:Configuration=Release /p:Platform=\"Any CPU\" /verbosity:minimal";
 			var cp = Encoding.Default.CodePage;
 			if (cp == 1251)
 				cp = 866;
 			process.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(cp);
 			process.StartInfo.StandardErrorEncoding = Encoding.GetEncoding(cp);
 #elif MAC
-			process.StartInfo.Arguments = $"build \"{solutionPath}\" -t:Build -c:Release|x86";
+			process.StartInfo.Arguments = $"build \"{solutionPath}\" -t:Build -c:Release|\"Any CPU\"";
 #endif // WIN
 		}
 
