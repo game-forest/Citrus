@@ -226,7 +226,7 @@ namespace Lime
 		/// glyph is rendered with padding.
 		/// </summary>
 		[YuzuMember]
-		public float Padding { get; set; } = 1;
+		public float Padding { get; set; }
 
 		/// <summary>
 		/// Width including padding from right and left.
