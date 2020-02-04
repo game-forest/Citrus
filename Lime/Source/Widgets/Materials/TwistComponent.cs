@@ -28,7 +28,9 @@ namespace Lime
 			}
 			if (Owner != null) {
 				var image = (Image)Owner;
-				updateUVOnTextureChangeTask = image.Tasks.Add(UpdateUVOnTextureChange(image));
+				// Usually Texture or Owner is changed before LateUpdate stage
+				// so we'd better check on texture change at least as late as LateUpdate stage.
+				updateUVOnTextureChangeTask = image.LateTasks.Add(UpdateUVOnTextureChange(image));
 				UpdateUV(image);
 			}
 		}
