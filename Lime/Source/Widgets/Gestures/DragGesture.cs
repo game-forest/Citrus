@@ -170,7 +170,7 @@ namespace Lime
 
 		internal protected override void OnCancel(Gesture sender)
 		{
-			if (sender != null) {
+			if (sender != null || state != State.ChangingByMotion) {
 				if (state == State.Changing || state == State.ChangingByMotion) {
 					ended.Raise();
 				}
