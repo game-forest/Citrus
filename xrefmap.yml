@@ -22647,12 +22647,12 @@ references:
   commentId: T:Lime.Graphics.Platform.Vulkan.Swapchain
   fullName: Lime.Graphics.Platform.Vulkan.Swapchain
   nameWithType: Swapchain
-- uid: Lime.Graphics.Platform.Vulkan.Swapchain.#ctor(Lime.Graphics.Platform.Vulkan.PlatformRenderContext,System.IntPtr,System.Int32,System.Int32)
-  name: Swapchain(PlatformRenderContext, IntPtr, Int32, Int32)
-  href: api/Lime.Graphics.Platform.Vulkan.Swapchain.html#Lime_Graphics_Platform_Vulkan_Swapchain__ctor_Lime_Graphics_Platform_Vulkan_PlatformRenderContext_System_IntPtr_System_Int32_System_Int32_
-  commentId: M:Lime.Graphics.Platform.Vulkan.Swapchain.#ctor(Lime.Graphics.Platform.Vulkan.PlatformRenderContext,System.IntPtr,System.Int32,System.Int32)
-  fullName: Lime.Graphics.Platform.Vulkan.Swapchain.Swapchain(Lime.Graphics.Platform.Vulkan.PlatformRenderContext, System.IntPtr, System.Int32, System.Int32)
-  nameWithType: Swapchain.Swapchain(PlatformRenderContext, IntPtr, Int32, Int32)
+- uid: Lime.Graphics.Platform.Vulkan.Swapchain.#ctor(Lime.Graphics.Platform.Vulkan.PlatformRenderContext,System.IntPtr,System.Int32,System.Int32,System.Boolean)
+  name: Swapchain(PlatformRenderContext, IntPtr, Int32, Int32, Boolean)
+  href: api/Lime.Graphics.Platform.Vulkan.Swapchain.html#Lime_Graphics_Platform_Vulkan_Swapchain__ctor_Lime_Graphics_Platform_Vulkan_PlatformRenderContext_System_IntPtr_System_Int32_System_Int32_System_Boolean_
+  commentId: M:Lime.Graphics.Platform.Vulkan.Swapchain.#ctor(Lime.Graphics.Platform.Vulkan.PlatformRenderContext,System.IntPtr,System.Int32,System.Int32,System.Boolean)
+  fullName: Lime.Graphics.Platform.Vulkan.Swapchain.Swapchain(Lime.Graphics.Platform.Vulkan.PlatformRenderContext, System.IntPtr, System.Int32, System.Int32, System.Boolean)
+  nameWithType: Swapchain.Swapchain(PlatformRenderContext, IntPtr, Int32, Int32, Boolean)
 - uid: Lime.Graphics.Platform.Vulkan.Swapchain.#ctor*
   name: Swapchain
   href: api/Lime.Graphics.Platform.Vulkan.Swapchain.html#Lime_Graphics_Platform_Vulkan_Swapchain__ctor_
@@ -22686,6 +22686,19 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.Vulkan.Swapchain.Height
   nameWithType: Swapchain.Height
+- uid: Lime.Graphics.Platform.Vulkan.Swapchain.VSync
+  name: VSync
+  href: api/Lime.Graphics.Platform.Vulkan.Swapchain.html#Lime_Graphics_Platform_Vulkan_Swapchain_VSync
+  commentId: P:Lime.Graphics.Platform.Vulkan.Swapchain.VSync
+  fullName: Lime.Graphics.Platform.Vulkan.Swapchain.VSync
+  nameWithType: Swapchain.VSync
+- uid: Lime.Graphics.Platform.Vulkan.Swapchain.VSync*
+  name: VSync
+  href: api/Lime.Graphics.Platform.Vulkan.Swapchain.html#Lime_Graphics_Platform_Vulkan_Swapchain_VSync_
+  commentId: Overload:Lime.Graphics.Platform.Vulkan.Swapchain.VSync
+  isSpec: "True"
+  fullName: Lime.Graphics.Platform.Vulkan.Swapchain.VSync
+  nameWithType: Swapchain.VSync
 - uid: Lime.Graphics.Platform.Vulkan.Swapchain.Width
   name: Width
   href: api/Lime.Graphics.Platform.Vulkan.Swapchain.html#Lime_Graphics_Platform_Vulkan_Swapchain_Width

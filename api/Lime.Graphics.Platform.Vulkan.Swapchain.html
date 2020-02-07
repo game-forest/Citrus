@@ -119,12 +119,12 @@
   
   
   <a id="Lime_Graphics_Platform_Vulkan_Swapchain__ctor_" data-uid="Lime.Graphics.Platform.Vulkan.Swapchain.#ctor*"></a>
-  <h4 id="Lime_Graphics_Platform_Vulkan_Swapchain__ctor_Lime_Graphics_Platform_Vulkan_PlatformRenderContext_System_IntPtr_System_Int32_System_Int32_" data-uid="Lime.Graphics.Platform.Vulkan.Swapchain.#ctor(Lime.Graphics.Platform.Vulkan.PlatformRenderContext,System.IntPtr,System.Int32,System.Int32)">Swapchain(PlatformRenderContext, IntPtr, Int32, Int32)</h4>
+  <h4 id="Lime_Graphics_Platform_Vulkan_Swapchain__ctor_Lime_Graphics_Platform_Vulkan_PlatformRenderContext_System_IntPtr_System_Int32_System_Int32_System_Boolean_" data-uid="Lime.Graphics.Platform.Vulkan.Swapchain.#ctor(Lime.Graphics.Platform.Vulkan.PlatformRenderContext,System.IntPtr,System.Int32,System.Int32,System.Boolean)">Swapchain(PlatformRenderContext, IntPtr, Int32, Int32, Boolean)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Swapchain(PlatformRenderContext context, IntPtr windowHandle, int width, int height)</code></pre>
+    <pre><code class="lang-csharp hljs">public Swapchain(PlatformRenderContext context, IntPtr windowHandle, int width, int height, bool vSync = true)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -156,6 +156,11 @@
         <td><span class="parametername">height</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">vSync</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
@@ -181,6 +186,31 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Graphics_Platform_Vulkan_Swapchain_VSync_" data-uid="Lime.Graphics.Platform.Vulkan.Swapchain.VSync*"></a>
+  <h4 id="Lime_Graphics_Platform_Vulkan_Swapchain_VSync" data-uid="Lime.Graphics.Platform.Vulkan.Swapchain.VSync">VSync</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool VSync { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>
