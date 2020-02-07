@@ -18,7 +18,7 @@ namespace Tangerine.UI.SceneView
 				emitter.DrawCustomShape(
 					ColorTheme.Current.SceneView.EmitterCustomShape,
 					ColorTheme.Current.SceneView.EmitterCustomShapeLine,
-					emitter.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame));
+					emitter.LocalToWorldTransform * sv.Frame.LocalToWorldTransform.CalcInversed());
 			}
 		}
 	}
