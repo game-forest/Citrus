@@ -25,7 +25,7 @@ namespace Lime
 		private readonly TapGestureOptions options;
 
 		private State state;
-		private float tapDuration;
+		private float tapStartTime;
 		private PollableEvent began;
 		private PollableEvent canceled;
 		private PollableEvent recognized;
@@ -74,7 +74,7 @@ namespace Lime
 			state = State.Idle;
 		}
 
-		internal protected override bool OnUpdate(float delta)
+		internal protected override bool OnUpdate()
 		{
 			if (Input.GetNumTouches() > 1) {
 				OnCancel(this);
@@ -82,16 +82,15 @@ namespace Lime
 			}
 			bool result = false;
 			if (state == State.Idle && Input.WasMousePressed(ButtonIndex)) {
-				tapDuration = 0.0f;
+				tapStartTime = WidgetContext.Current.GestureManager.AccumulatedDelta;
 				MousePressPosition = Input.MousePosition;
 				state = State.Scheduled;
 			}
-			tapDuration += delta;
 			if (state == State.Scheduled) {
 				// Defer began event if there are any drag gesture.
 				if (
 					!Deferred ||
-					tapDuration > ClickBeginDelay ||
+					(WidgetContext.Current.GestureManager.AccumulatedDelta - tapStartTime) > ClickBeginDelay ||
 					!Input.IsMousePressed(ButtonIndex)
 				) {
 					state = State.Began;
@@ -99,7 +98,7 @@ namespace Lime
 				}
 			}
 			if (state == State.Began) {
-				bool isTapTooShort = tapDuration < options.MinTapDuration;
+				bool isTapTooShort = (WidgetContext.Current.GestureManager.AccumulatedDelta - tapStartTime) < options.MinTapDuration;
 				if (!Input.IsMousePressed(ButtonIndex)) {
 					if (!isTapTooShort) {
 						result = Finish();

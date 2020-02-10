@@ -28,7 +28,7 @@ namespace Lime
 		private const int MaxTouchHistorySize = 3;
 		private readonly Queue<(Vector2 Distance, float Duration)> touchHistory;
 		private Vector2 previousMotionStrategyPosition;
-		private float motionStrategyTime;
+		private float motionStrategyStartTime;
 		private Vector2 lastDragDelta;
 
 		public int ButtonIndex { get; }
@@ -47,7 +47,7 @@ namespace Lime
 
 		public Vector2 TotalDragDistance => MousePosition - MousePressPosition;
 		public Vector2 LastDragDistance => MousePosition - PreviousMousePosition;
-
+		private float previousTime;
 		private Vector2 previousMousePosition;
 		protected virtual Vector2 PreviousMousePosition => state == State.ChangingByMotion ? previousMotionStrategyPosition : previousMousePosition;
 
@@ -178,7 +178,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override bool OnUpdate(float delta)
+		internal protected override bool OnUpdate()
 		{
 			var result = false;
 			if (state == State.ChangingByMotion) {
@@ -187,10 +187,9 @@ namespace Lime
 					ended.Raise();
 				} else {
 					previousMotionStrategyPosition = motionStrategy.Position;
-					motionStrategyTime += delta;
-					motionStrategy.Update(Min(motionStrategyTime, motionStrategy.Duration));
+					motionStrategy.Update(Min(WidgetContext.Current.GestureManager.AccumulatedDelta - motionStrategyStartTime, motionStrategy.Duration));
 					changed.Raise();
-					if (motionStrategyTime > motionStrategy.Duration) {
+					if ((WidgetContext.Current.GestureManager.AccumulatedDelta - motionStrategyStartTime) > motionStrategy.Duration) {
 						state = State.Idle;
 						ended.Raise();
 					}
@@ -212,6 +211,7 @@ namespace Lime
 					if (TryGetDragPosition(out var mousePosition)) {
 						previousMousePosition = mousePosition;
 					}
+					previousTime = WidgetContext.Current.GestureManager.AccumulatedDelta;
 					recognized.Raise();
 					result = true;
 				}
@@ -237,14 +237,14 @@ namespace Lime
 				if (WasEnding()) {
 					if (motionStrategy.Start(ClampMousePositionByDirection(Direction), touchHistory)) {
 						touchHistory.Clear();
-						motionStrategyTime = 0.0f;
+						motionStrategyStartTime = WidgetContext.Current.GestureManager.AccumulatedDelta;
 						state = State.ChangingByMotion;
 					} else {
 						ended.Raise();
 					}
 				} else {
 					lastDragDelta = ClampMousePositionByDirection(Direction) - savedPreviousMousePosition;
-					touchHistory.Enqueue((lastDragDelta, delta));
+					touchHistory.Enqueue((lastDragDelta, WidgetContext.Current.GestureManager.AccumulatedDelta - previousTime));
 					if (touchHistory.Count > MaxTouchHistorySize) {
 						touchHistory.Dequeue();
 					}

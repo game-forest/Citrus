@@ -30,9 +30,9 @@ namespace Lime
 		{
 		}
 
-		protected internal override bool OnUpdate(float delta)
+		protected internal override bool OnUpdate()
 		{
-			var r = base.OnUpdate(delta);
+			var r = base.OnUpdate();
 
 			if (WasBegan()) {
 				TouchPressDistance = Vector2.Distance(Touch0, Touch1);
