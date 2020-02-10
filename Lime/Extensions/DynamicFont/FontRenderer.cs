@@ -44,7 +44,7 @@ namespace Lime
 #if SUBPIXEL_TEXT
 			LcdSupported = true;
 			try {
-				// can not use any other filtration to achive a windows like look, 
+				// can not use any other filtration to achive a windows like look,
 				// becouse filtering creates wrong spacing between chars, and no visible way to correct it
 				library.SetLcdFilter(LcdFilter.None);
 			} catch (FreeTypeException) {
