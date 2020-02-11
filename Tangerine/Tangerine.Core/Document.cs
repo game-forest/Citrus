@@ -633,7 +633,11 @@ namespace Tangerine.Core
 			}
 			var animations = new List<Animation>();
 			GetAnimations(animations);
-			if (Animation.IsLegacy || animations.Contains(Animation)) {
+			if (Animation.IsLegacy) {
+				SelectedAnimation = null;
+				return;
+			}
+			if (animations.Contains(Animation)) {
 				return;
 			}
 			if (selectedAnimationPerContainer.TryGetValue(Container, out var animation) && animations.Contains(animation)) {
