@@ -15,31 +15,29 @@ namespace Lime
 			this.context = context;
 		}
 
+		internal float AccumulatedDelta;
+
 		public void Update(float delta)
 		{
+			AccumulatedDelta += delta;
 			CurrentIteration++;
-			UpdateGestures(delta);
+			UpdateGestures();
 			if (context.NodeCapturedByMouse != activeNode) {
 				activeNode = context.NodeCapturedByMouse;
-				// In case active node will change to null, which means capture button is released we need to
-				// preserve double click gestures because it's recognition state spans across capture-button-release-boundary.
-				var doubleClickGestures = activeGestures.Where(g => g is DoubleClickGesture).ToList();
 				// We need to continue updating drag gestures with motion strategy currently active even if activeNode has been changed
 				// or they'll stop moving by inertial drag otherwise.
 				var dragGesturesChangingByMotion = activeGestures.Where(g => g is DragGesture gd && gd.IsChangingByMotion()).ToList();
 				CancelGestures();
 				if (activeNode != null) {
 					activeGestures.AddRange(EnumerateGestures(activeNode));
-					UpdateGestures(delta);
-				} else {
-					activeGestures.AddRange(doubleClickGestures);
+					UpdateGestures();
 				}
 				dragGesturesChangingByMotion = dragGesturesChangingByMotion.Where(g => !activeGestures.Contains(g)).ToList();
 				activeGestures.AddRange(dragGesturesChangingByMotion);
 			}
 		}
 
-		private void UpdateGestures(float delta)
+		private void UpdateGestures()
 		{
 			foreach (var gesture in activeGestures) {
 				if (gesture is ClickGesture cg) {
@@ -48,7 +46,7 @@ namespace Lime
 						cg.Deferred |= g is DragGesture dg && dg.ButtonIndex == cg.ButtonIndex;
 					}
 				}
-				if (gesture.OnUpdate(delta)) {
+				if (gesture.OnUpdate()) {
 					switch (gesture) {
 						case DragGesture dg: {
 							foreach (var g in activeGestures) {

@@ -30,7 +30,7 @@ namespace Lime
 #endif // WIN
 
 		private State state;
-		private float timeSinceFirstPress;
+		private float firstPressTime;
 		private Vector2 firstPressPosition;
 
 		public int ButtonIndex { get; }
@@ -56,16 +56,15 @@ namespace Lime
 			: this(0, recognized)
 		{ }
 
-		internal protected override bool OnUpdate(float delta)
+		internal protected override bool OnUpdate()
 		{
 			bool result = false;
-			timeSinceFirstPress += delta;
 
-			if (state != State.Idle && timeSinceFirstPress > MaxDelayBetweenClicks) {
+			if (state != State.Idle && (WidgetContext.Current.GestureManager.AccumulatedDelta - firstPressTime) > MaxDelayBetweenClicks) {
 				state = State.Idle;
 			}
 			if (state == State.Idle && Input.WasMousePressed(ButtonIndex)) {
-				timeSinceFirstPress = 0.0f;
+				firstPressTime = WidgetContext.Current.GestureManager.AccumulatedDelta;
 				firstPressPosition = Input.MousePosition;
 				state = State.FirstPress;
 			}

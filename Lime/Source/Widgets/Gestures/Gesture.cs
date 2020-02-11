@@ -10,7 +10,7 @@ namespace Lime
 		internal protected virtual void OnCancel(Gesture sender)
 		{ }
 
-		internal protected abstract bool OnUpdate(float delta);
+		internal protected abstract bool OnUpdate();
 
 		protected struct PollableEvent
 		{
