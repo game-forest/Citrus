@@ -31,8 +31,7 @@ namespace Lime.Text
 			while (pos < text.Length) {
 				if (IsNbsp()) {
 					ParseNbsp();
-				}
-				if (text[pos] == '<') {
+				} else if (text[pos] == '<') {
 					ParseTag();
 				} else {
 					ParseText();
