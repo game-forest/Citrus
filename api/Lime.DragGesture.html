@@ -579,15 +579,32 @@ This fact is used when checking for threshold.</p>
   
   
   <a id="Lime_DragGesture_OnCancel_" data-uid="Lime.DragGesture.OnCancel*"></a>
-  <h4 id="Lime_DragGesture_OnCancel" data-uid="Lime.DragGesture.OnCancel">OnCancel()</h4>
+  <h4 id="Lime_DragGesture_OnCancel_Lime_Gesture_" data-uid="Lime.DragGesture.OnCancel(Lime.Gesture)">OnCancel(Gesture)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void OnCancel()</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void OnCancel(Gesture sender)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Gesture.html">Gesture</a></td>
+        <td><span class="parametername">sender</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnCancel">Gesture.OnCancel()</a></div>
+  <div><a class="xref" href="Lime.Gesture.html#Lime_Gesture_OnCancel_Lime_Gesture_">Gesture.OnCancel(Gesture)</a></div>
   
   
   <a id="Lime_DragGesture_OnUpdate_" data-uid="Lime.DragGesture.OnUpdate*"></a>
@@ -843,6 +860,31 @@ This fact is used when checking for threshold.</p>
   </table>
   <h3 id="events">Events
   </h3>
+  
+  
+  <h4 id="Lime_DragGesture_Began" data-uid="Lime.DragGesture.Began">Began</h4>
+  <div class="markdown level1 summary"><p>Occurs when gesture activates and starts recognition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action Began</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <h4 id="Lime_DragGesture_Changed" data-uid="Lime.DragGesture.Changed">Changed</h4>

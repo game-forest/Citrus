@@ -16150,19 +16150,6 @@ references:
   isSpec: "True"
   fullName: Lime.DoubleClickGesture.ButtonIndex
   nameWithType: DoubleClickGesture.ButtonIndex
-- uid: Lime.DoubleClickGesture.OnCancel
-  name: OnCancel()
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnCancel
-  commentId: M:Lime.DoubleClickGesture.OnCancel
-  fullName: Lime.DoubleClickGesture.OnCancel()
-  nameWithType: DoubleClickGesture.OnCancel()
-- uid: Lime.DoubleClickGesture.OnCancel*
-  name: OnCancel
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnCancel_
-  commentId: Overload:Lime.DoubleClickGesture.OnCancel
-  isSpec: "True"
-  fullName: Lime.DoubleClickGesture.OnCancel
-  nameWithType: DoubleClickGesture.OnCancel
 - uid: Lime.DoubleClickGesture.OnUpdate(System.Single)
   name: OnUpdate(Single)
   href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnUpdate_System_Single_
@@ -16244,6 +16231,12 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.DragGesture
   nameWithType: DragGesture.DragGesture
+- uid: Lime.DragGesture.Began
+  name: Began
+  href: api/Lime.DragGesture.html#Lime_DragGesture_Began
+  commentId: E:Lime.DragGesture.Began
+  fullName: Lime.DragGesture.Began
+  nameWithType: DragGesture.Began
 - uid: Lime.DragGesture.ButtonIndex
   name: ButtonIndex
   href: api/Lime.DragGesture.html#Lime_DragGesture_ButtonIndex
@@ -16552,12 +16545,12 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.MousePressPosition
   nameWithType: DragGesture.MousePressPosition
-- uid: Lime.DragGesture.OnCancel
-  name: OnCancel()
-  href: api/Lime.DragGesture.html#Lime_DragGesture_OnCancel
-  commentId: M:Lime.DragGesture.OnCancel
-  fullName: Lime.DragGesture.OnCancel()
-  nameWithType: DragGesture.OnCancel()
+- uid: Lime.DragGesture.OnCancel(Lime.Gesture)
+  name: OnCancel(Gesture)
+  href: api/Lime.DragGesture.html#Lime_DragGesture_OnCancel_Lime_Gesture_
+  commentId: M:Lime.DragGesture.OnCancel(Lime.Gesture)
+  fullName: Lime.DragGesture.OnCancel(Lime.Gesture)
+  nameWithType: DragGesture.OnCancel(Gesture)
 - uid: Lime.DragGesture.OnCancel*
   name: OnCancel
   href: api/Lime.DragGesture.html#Lime_DragGesture_OnCancel_
@@ -16732,19 +16725,6 @@ references:
   commentId: T:Lime.DropFilesGesture
   fullName: Lime.DropFilesGesture
   nameWithType: DropFilesGesture
-- uid: Lime.DropFilesGesture.OnCancel
-  name: OnCancel()
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnCancel
-  commentId: M:Lime.DropFilesGesture.OnCancel
-  fullName: Lime.DropFilesGesture.OnCancel()
-  nameWithType: DropFilesGesture.OnCancel()
-- uid: Lime.DropFilesGesture.OnCancel*
-  name: OnCancel
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnCancel_
-  commentId: Overload:Lime.DropFilesGesture.OnCancel
-  isSpec: "True"
-  fullName: Lime.DropFilesGesture.OnCancel
-  nameWithType: DropFilesGesture.OnCancel
 - uid: Lime.DropFilesGesture.OnUpdate(System.Single)
   name: OnUpdate(Single)
   href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnUpdate_System_Single_
@@ -20227,12 +20207,12 @@ references:
   isSpec: "True"
   fullName: Lime.Gesture.Input
   nameWithType: Gesture.Input
-- uid: Lime.Gesture.OnCancel
-  name: OnCancel()
-  href: api/Lime.Gesture.html#Lime_Gesture_OnCancel
-  commentId: M:Lime.Gesture.OnCancel
-  fullName: Lime.Gesture.OnCancel()
-  nameWithType: Gesture.OnCancel()
+- uid: Lime.Gesture.OnCancel(Lime.Gesture)
+  name: OnCancel(Gesture)
+  href: api/Lime.Gesture.html#Lime_Gesture_OnCancel_Lime_Gesture_
+  commentId: M:Lime.Gesture.OnCancel(Lime.Gesture)
+  fullName: Lime.Gesture.OnCancel(Lime.Gesture)
+  nameWithType: Gesture.OnCancel(Gesture)
 - uid: Lime.Gesture.OnCancel*
   name: OnCancel
   href: api/Lime.Gesture.html#Lime_Gesture_OnCancel_
@@ -61219,12 +61199,12 @@ references:
   isSpec: "True"
   fullName: Lime.TapGesture.MousePressPosition
   nameWithType: TapGesture.MousePressPosition
-- uid: Lime.TapGesture.OnCancel
-  name: OnCancel()
-  href: api/Lime.TapGesture.html#Lime_TapGesture_OnCancel
-  commentId: M:Lime.TapGesture.OnCancel
-  fullName: Lime.TapGesture.OnCancel()
-  nameWithType: TapGesture.OnCancel()
+- uid: Lime.TapGesture.OnCancel(Lime.Gesture)
+  name: OnCancel(Gesture)
+  href: api/Lime.TapGesture.html#Lime_TapGesture_OnCancel_Lime_Gesture_
+  commentId: M:Lime.TapGesture.OnCancel(Lime.Gesture)
+  fullName: Lime.TapGesture.OnCancel(Lime.Gesture)
+  nameWithType: TapGesture.OnCancel(Gesture)
 - uid: Lime.TapGesture.OnCancel*
   name: OnCancel
   href: api/Lime.TapGesture.html#Lime_TapGesture_OnCancel_
