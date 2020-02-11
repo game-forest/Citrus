@@ -755,10 +755,9 @@ namespace Tangerine
 		{
 			try {
 				Core.Operations.Paste.Perform(
-					pasteAtMouse:
-						UI.SceneView.SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() &&
-						pasteAtMouse &&
-						!CoreUserPreferences.Instance.DontPasteAtMouse
+					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() && pasteAtMouse &&
+					!CoreUserPreferences.Instance.DontPasteAtMouse ?
+					new Vector2?(SceneView.Instance.Scene.LocalMousePosition()) : null
 				);
 			} catch (InvalidOperationException e) {
 				Document.Current.History.RollbackTransaction();

@@ -105,7 +105,7 @@ namespace Tangerine.Core.Operations
 
 	public static class Paste
 	{
-		public static void Perform(bool pasteAtMouse = false)
+		public static void Perform(Vector2? mousePosition = null)
 		{
 			var row = Document.Current.SelectedRows().FirstOrDefault();
 			var loc = row == null ?
@@ -116,7 +116,7 @@ namespace Tangerine.Core.Operations
 				if (Document.Current.Animation.IsCompound) {
 					PasteAnimationTracks(data, loc);
 				} else {
-					PasteNodes(data, loc, pasteAtMouse);
+					PasteNodes(data, loc, mousePosition);
 				}
 			}
 			foreach (var node in Document.Current.SelectedNodes()) {
@@ -143,7 +143,7 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static bool PasteNodes(string data, RowLocation location, bool pasteAtMouse = false)
+		public static bool PasteNodes(string data, RowLocation location, Vector2? mousePosition)
 		{
 			bool CanPaste()
 			{
@@ -191,12 +191,12 @@ namespace Tangerine.Core.Operations
 			if (!folderLocation.Folder.Expanded) {
 				SetProperty.Perform(folderLocation.Folder, nameof(Folder.Expanded), true);
 			}
-			var mousePosition = Document.Current.Container.AsWidget?.LocalMousePosition();
+			mousePosition *= Document.Current.Container.AsWidget?.LocalToWorldTransform.CalcInversed();
 			var shift = mousePosition - items.OfType<Widget>().FirstOrDefault()?.Position;
 			foreach (var n in items.OfType<Node>()) {
 				Document.Current.Decorate(n);
 			}
-			if (shift.HasValue && pasteAtMouse) {
+			if (shift.HasValue) {
 				foreach (var w in items.OfType<Widget>()) {
 					w.Position += shift.Value;
 				}
