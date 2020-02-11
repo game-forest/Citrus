@@ -44,7 +44,7 @@ namespace Lime
 #if SUBPIXEL_TEXT
 			LcdSupported = true;
 			try {
-				// can not use any other filtration to achive a windows like look, 
+				// can not use any other filtration to achive a windows like look,
 				// becouse filtering creates wrong spacing between chars, and no visible way to correct it
 				library.SetLcdFilter(LcdFilter.None);
 			} catch (FreeTypeException) {
@@ -91,7 +91,7 @@ namespace Lime
 			var bearingX = (float) Face.Glyph.Metrics.HorizontalBearingX;
 			bool rgbIntensity = bitmap.PixelMode == PixelMode.Lcd || bitmap.PixelMode == PixelMode.VerticalLcd;
 			var glyph = new Glyph {
-				Pixels = char.IsWhiteSpace(@char) ? new byte[0] : bitmap.BufferData,
+				Pixels = bitmap.Buffer != IntPtr.Zero ? bitmap.BufferData : null,
 				RgbIntensity = rgbIntensity,
 				Pitch = bitmap.Pitch,
 				Width = rgbIntensity ? bitmap.Width / 3 : bitmap.Width,
