@@ -66,7 +66,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override void OnCancel()
+		internal protected override void OnCancel(Gesture sender)
 		{
 			if (state == State.Began) {
 				canceled.Raise();
@@ -77,7 +77,7 @@ namespace Lime
 		internal protected override bool OnUpdate(float delta)
 		{
 			if (Input.GetNumTouches() > 1) {
-				OnCancel();
+				OnCancel(this);
 				return false;
 			}
 			bool result = false;
@@ -101,7 +101,6 @@ namespace Lime
 			if (state == State.Began) {
 				bool isTapTooShort = tapDuration < options.MinTapDuration;
 				if (!Input.IsMousePressed(ButtonIndex)) {
-					state = State.Idle;
 					if (!isTapTooShort) {
 						result = Finish();
 					} else {
@@ -117,6 +116,7 @@ namespace Lime
 
 		private bool Finish()
 		{
+			state = State.Idle;
 			if ((Input.MousePosition - MousePressPosition).SqrLength < Threshold.Sqr() ||
 			    Owner.IsMouseOverThisOrDescendant()
 			) {

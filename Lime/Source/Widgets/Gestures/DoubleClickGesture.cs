@@ -56,9 +56,6 @@ namespace Lime
 			: this(0, recognized)
 		{ }
 
-		internal protected override void OnCancel()
-		{ }
-
 		internal protected override bool OnUpdate(float delta)
 		{
 			bool result = false;

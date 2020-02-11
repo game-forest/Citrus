@@ -11,8 +11,6 @@ namespace Lime
 		/// </summary>
 		public event Action<List<string>> Recognized;
 
-		internal protected override void OnCancel() { }
-
 		internal protected override bool OnUpdate(float delta)
 		{
 			if (Input.DroppedFiles.Count > 0) {
