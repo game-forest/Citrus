@@ -16150,12 +16150,12 @@ references:
   isSpec: "True"
   fullName: Lime.DoubleClickGesture.ButtonIndex
   nameWithType: DoubleClickGesture.ButtonIndex
-- uid: Lime.DoubleClickGesture.OnUpdate(System.Single)
-  name: OnUpdate(Single)
-  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnUpdate_System_Single_
-  commentId: M:Lime.DoubleClickGesture.OnUpdate(System.Single)
-  fullName: Lime.DoubleClickGesture.OnUpdate(System.Single)
-  nameWithType: DoubleClickGesture.OnUpdate(Single)
+- uid: Lime.DoubleClickGesture.OnUpdate
+  name: OnUpdate()
+  href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnUpdate
+  commentId: M:Lime.DoubleClickGesture.OnUpdate
+  fullName: Lime.DoubleClickGesture.OnUpdate()
+  nameWithType: DoubleClickGesture.OnUpdate()
 - uid: Lime.DoubleClickGesture.OnUpdate*
   name: OnUpdate
   href: api/Lime.DoubleClickGesture.html#Lime_DoubleClickGesture_OnUpdate_
@@ -16558,12 +16558,12 @@ references:
   isSpec: "True"
   fullName: Lime.DragGesture.OnCancel
   nameWithType: DragGesture.OnCancel
-- uid: Lime.DragGesture.OnUpdate(System.Single)
-  name: OnUpdate(Single)
-  href: api/Lime.DragGesture.html#Lime_DragGesture_OnUpdate_System_Single_
-  commentId: M:Lime.DragGesture.OnUpdate(System.Single)
-  fullName: Lime.DragGesture.OnUpdate(System.Single)
-  nameWithType: DragGesture.OnUpdate(Single)
+- uid: Lime.DragGesture.OnUpdate
+  name: OnUpdate()
+  href: api/Lime.DragGesture.html#Lime_DragGesture_OnUpdate
+  commentId: M:Lime.DragGesture.OnUpdate
+  fullName: Lime.DragGesture.OnUpdate()
+  nameWithType: DragGesture.OnUpdate()
 - uid: Lime.DragGesture.OnUpdate*
   name: OnUpdate
   href: api/Lime.DragGesture.html#Lime_DragGesture_OnUpdate_
@@ -16725,12 +16725,12 @@ references:
   commentId: T:Lime.DropFilesGesture
   fullName: Lime.DropFilesGesture
   nameWithType: DropFilesGesture
-- uid: Lime.DropFilesGesture.OnUpdate(System.Single)
-  name: OnUpdate(Single)
-  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnUpdate_System_Single_
-  commentId: M:Lime.DropFilesGesture.OnUpdate(System.Single)
-  fullName: Lime.DropFilesGesture.OnUpdate(System.Single)
-  nameWithType: DropFilesGesture.OnUpdate(Single)
+- uid: Lime.DropFilesGesture.OnUpdate
+  name: OnUpdate()
+  href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnUpdate
+  commentId: M:Lime.DropFilesGesture.OnUpdate
+  fullName: Lime.DropFilesGesture.OnUpdate()
+  nameWithType: DropFilesGesture.OnUpdate()
 - uid: Lime.DropFilesGesture.OnUpdate*
   name: OnUpdate
   href: api/Lime.DropFilesGesture.html#Lime_DropFilesGesture_OnUpdate_
@@ -20220,12 +20220,12 @@ references:
   isSpec: "True"
   fullName: Lime.Gesture.OnCancel
   nameWithType: Gesture.OnCancel
-- uid: Lime.Gesture.OnUpdate(System.Single)
-  name: OnUpdate(Single)
-  href: api/Lime.Gesture.html#Lime_Gesture_OnUpdate_System_Single_
-  commentId: M:Lime.Gesture.OnUpdate(System.Single)
-  fullName: Lime.Gesture.OnUpdate(System.Single)
-  nameWithType: Gesture.OnUpdate(Single)
+- uid: Lime.Gesture.OnUpdate
+  name: OnUpdate()
+  href: api/Lime.Gesture.html#Lime_Gesture_OnUpdate
+  commentId: M:Lime.Gesture.OnUpdate
+  fullName: Lime.Gesture.OnUpdate()
+  nameWithType: Gesture.OnUpdate()
 - uid: Lime.Gesture.OnUpdate*
   name: OnUpdate
   href: api/Lime.Gesture.html#Lime_Gesture_OnUpdate_
@@ -46697,12 +46697,12 @@ references:
   isSpec: "True"
   fullName: Lime.PinchGesture.LastPinchScale
   nameWithType: PinchGesture.LastPinchScale
-- uid: Lime.PinchGesture.OnUpdate(System.Single)
-  name: OnUpdate(Single)
-  href: api/Lime.PinchGesture.html#Lime_PinchGesture_OnUpdate_System_Single_
-  commentId: M:Lime.PinchGesture.OnUpdate(System.Single)
-  fullName: Lime.PinchGesture.OnUpdate(System.Single)
-  nameWithType: PinchGesture.OnUpdate(Single)
+- uid: Lime.PinchGesture.OnUpdate
+  name: OnUpdate()
+  href: api/Lime.PinchGesture.html#Lime_PinchGesture_OnUpdate
+  commentId: M:Lime.PinchGesture.OnUpdate
+  fullName: Lime.PinchGesture.OnUpdate()
+  nameWithType: PinchGesture.OnUpdate()
 - uid: Lime.PinchGesture.OnUpdate*
   name: OnUpdate
   href: api/Lime.PinchGesture.html#Lime_PinchGesture_OnUpdate_
@@ -61212,12 +61212,12 @@ references:
   isSpec: "True"
   fullName: Lime.TapGesture.OnCancel
   nameWithType: TapGesture.OnCancel
-- uid: Lime.TapGesture.OnUpdate(System.Single)
-  name: OnUpdate(Single)
-  href: api/Lime.TapGesture.html#Lime_TapGesture_OnUpdate_System_Single_
-  commentId: M:Lime.TapGesture.OnUpdate(System.Single)
-  fullName: Lime.TapGesture.OnUpdate(System.Single)
-  nameWithType: TapGesture.OnUpdate(Single)
+- uid: Lime.TapGesture.OnUpdate
+  name: OnUpdate()
+  href: api/Lime.TapGesture.html#Lime_TapGesture_OnUpdate
+  commentId: M:Lime.TapGesture.OnUpdate
+  fullName: Lime.TapGesture.OnUpdate()
+  nameWithType: TapGesture.OnUpdate()
 - uid: Lime.TapGesture.OnUpdate*
   name: OnUpdate
   href: api/Lime.TapGesture.html#Lime_TapGesture_OnUpdate_
