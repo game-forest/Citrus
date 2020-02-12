@@ -1,19 +1,24 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
 using Lime.PolygonMesh.Topology;
+using Lime.PolygonMesh.Utils;
 using Lime.Widgets.PolygonMesh.Topology;
-using Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology;
-using Lime.Widgets.PolygonMesh;
 using Tangerine.Core;
-using Tangerine.UI.SceneView.PolygonMesh.Topology;
-using Tangerine.UI.SceneView.PolygonMesh.TopologyData;
+using Vertex = Lime.Vertex;
 
 namespace Tangerine.UI.SceneView.PolygonMesh
 {
+	internal static class TopologyPrimitiveExtensions
+	{
+		public static bool IsVertex(this ITopologyPrimitive self) => self.Count == 1;
+
+		public static bool IsEdge(this ITopologyPrimitive self) => self.Count == 2;
+
+		public static bool IsFace(this ITopologyPrimitive self) => self.Count == 3;
+	}
+
 	[YuzuDontGenerateDeserializer]
 	[NodeComponentDontSerialize]
 	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.PolygonMesh.PolygonMesh))]
@@ -86,46 +91,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.PolygonMesh.PolygonMesh))]
 	public abstract class TopologyController : PolygonMeshController
 	{
-		public static class Policies
-		{
-			public static class Rendering
-			{
-				public static readonly TopologyDataType[] Order = new[] {
-					TopologyDataType.Edge,
-					TopologyDataType.Vertex
-				};
-			}
-
-			public static class HitTesting
-			{
-				public static readonly Dictionary<ModificationState, TopologyDataType[]> Order =
-					new Dictionary<ModificationState, TopologyDataType[]> {
-						[ModificationState.Animation] = new[] {
-							TopologyDataType.Vertex,
-							TopologyDataType.Edge,
-							TopologyDataType.Face
-						},
-
-						[ModificationState.Triangulation] = new[] {
-							TopologyDataType.Vertex,
-						},
-
-						[ModificationState.Creation] = new[] {
-							TopologyDataType.Vertex,
-							TopologyDataType.Edge,
-							TopologyDataType.Face
-						},
-
-						[ModificationState.Removal] = new[] {
-							TopologyDataType.Vertex,
-						},
-
-						[ModificationState.Concave] = new[] {
-							TopologyDataType.Face,
-						},
-					};
-			}
-		}
 
 		public Lime.Widgets.PolygonMesh.PolygonMesh Mesh { get; protected set; }
 
@@ -134,12 +99,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public IList<Vertex> Vertices => Mode == Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode.Animation
 			? Mesh.TransientVertices
 			: Mesh.Vertices;
-
-		public ITopologyAggregator TopologyAggregator { get; protected set; }
-
-		public (TopologyDataType Type, int Index) HitTestTarget { get; protected set; }
-
-		public (TopologyDataType Type, int Index) NullHitTestTarget => (TopologyDataType.None, -1);
 
 		public override void Update()
 		{
@@ -184,11 +143,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				Mesh = mesh;
 				Mesh.Faces.AddRange(Topology.Faces);
 				Topology.OnTopologyChanged += UpdateMeshFaces;
-				switch (Topology) {
-					case HalfEdgeTopology het:
-						TopologyAggregator = new HalfEdgeTopologyAggregator(het);
-						break;
-				}
 				if (mesh.TransientVertices == null) {
 					mesh.TransientVertices = new List<Vertex>(mesh.Vertices);
 				}
@@ -211,38 +165,51 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 		}
 
-		public override bool HitTest(Widget context, Vector2 position, float scale)
+		private bool HitTest(Vector2 position, float scale, out TopologyHitTestResult result)
 		{
 			Update();
-			HitTestTarget = NullHitTestTarget;
-			position = Owner.AsWidget.LocalToWorldTransform.CalcInversed().TransformVector(position);
-			foreach (var type in Policies.HitTesting.Order[State]) {
-				if (HitTestHelper(position, scale, type)) {
-					return true;
-				}
+			var transform = Mesh.LocalToWorldTransform.CalcInversed();
+			position = transform.TransformVector(position);
+			var normalizedPosition = position / Owner.AsWidget.Size;
+			if (!Topology.HitTest(normalizedPosition, out result)) {
+				return false;
 			}
-			return false;
-		}
-
-		private bool HitTestHelper(Vector2 position, float scale, TopologyDataType type)
-		{
-			var index = -1;
-			var success = false;
-			var minDistance = float.MaxValue;
-			var data = TopologyAggregator[type];
-			for (var i = 0; i < data.Count; ++i) {
-				if (data[i].HitTest(Vertices, position, out var distance, Owner.AsWidget.Size, scale)) {
-					if (distance < minDistance) {
-						minDistance = distance;
-						index = i;
+			// Topology does exact testing so that's almost impossible to hit edge\vertex.
+			// So we try to clamp position to edge/vertex if they're close enough.
+			var target = result.Target;
+			var info = result.Info;
+			var hitRadius = Theme.Metrics.PolygonMeshVertexHitTestRadius / scale;
+			var sqrHitRadius = hitRadius * hitRadius;
+			if (target.Count == 3) {
+				var faceInfo = info as Face.FaceInfo;
+				for (int i = 0; i < 3; i++) {
+					var v1 = Vertices[target[i]].Pos * Mesh.Size;
+					var v2 = Vertices[target[(i + 1) % 3]].Pos * Mesh.Size;
+					if ((v1 - position).SqrLength <= sqrHitRadius) {
+						result = new TopologyHitTestResult {
+							Target = new Lime.Widgets.PolygonMesh.Topology.Vertex { Index = target[i], },
+						};
+						break;
+					}
+					if (
+						PolygonMeshUtils.DistanceFromPointToLine(position, v1, v2, out _) <=
+						Theme.Metrics.PolygonMeshEdgeHitTestRadius
+					) {
+						var edgeInfo = faceInfo?[i];
+						result = new TopologyHitTestResult {
+							Target = new Edge(target[i], target[(i + 1) % 3]),
+							Info = new Edge.EdgeInfo {
+								IsFraming = edgeInfo?.IsFraming ?? false,
+								IsConstrained = edgeInfo?.IsConstrained ?? false,
+							}
+						};
 					}
 				}
 			}
-			if (success = index != -1) {
-				HitTestTarget = (type, index);
-			}
-			return success;
+			return true;
 		}
+
+		public override bool HitTest(Widget context, Vector2 position, float scale) => HitTest(position, scale, out _);
 
 		public override void Render(Widget renderContext, Widget hitTestContext, Vector2 position, float scale)
 		{
@@ -253,47 +220,52 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public override void Render(Widget renderContext)
 		{
 			Update();
-			//Renderer.Transform1 = renderContext.LocalToWorldTransform;
-			//Renderer.Blending = renderContext.GlobalBlending;
-			//Renderer.Shader = renderContext.GlobalShader;
-			//SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
-			//var transform = Owner.AsWidget.LocalToWorldTransform;//SceneView.Instance.CalcTransitionFromSceneSpace(renderContext); // Owner.AsWidget.CalcTransitionToSpaceOf(renderContext);
 			var transform = Owner.AsWidget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
-
-			if (HitTestTarget.Type == TopologyDataType.Face) {
-				TopologyAggregator[HitTestTarget.Type][HitTestTarget.Index].RenderHovered(
-					Vertices,
-					transform,
-					State,
-					Owner.AsWidget.Size
+			var isHitTestSuccessful = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var hitTestResult);
+			var hitTestTarget = isHitTestSuccessful ? hitTestResult.Target : null;
+			if (hitTestTarget != null && hitTestTarget.IsFace()) {
+				Utils.RenderTriangle(
+					transform.TransformVector(Vertices[hitTestTarget[0]].Pos * Owner.AsWidget.Size),
+					transform.TransformVector(Vertices[hitTestTarget[1]].Pos * Owner.AsWidget.Size),
+					transform.TransformVector(Vertices[hitTestTarget[2]].Pos * Owner.AsWidget.Size),
+					State == ModificationState.Removal ?
+						Theme.Colors.PolygonMeshRemovalColor :
+						Theme.Colors.PolygonMeshHoverColor
 				);
 			}
-
-			foreach (var type in Policies.Rendering.Order) {
-				for (var i = 0; i < TopologyAggregator[type].Count; ++i) {
-					if (
-						HitTestTarget.Type == type &&
-						HitTestTarget.Index == i &&
-						Policies.HitTesting.Order[State].Contains(type) ||
-						State == ModificationState.Removal &&
-						HitTestTarget != NullHitTestTarget &&
-						TopologyAggregator[HitTestTarget.Type, HitTestTarget.Index].Contains((type, i))
-					) {
-						TopologyAggregator[type][i].RenderHovered(Vertices, transform, State, Owner.AsWidget.Size);
-						continue;
+			var isHitTestResultTargetEdge = hitTestTarget != null && hitTestTarget.IsEdge();
+			var isHitTestResultTargetVertex = hitTestTarget != null && hitTestTarget.IsVertex();
+			foreach (var (face, info) in Topology.FacesWithInfo) {
+				var prevVertex = transform.TransformVector(Vertices[face.Index0].Pos * Mesh.Size);
+				for (int i = 0; i < 3; i++) {
+					var prevVertexIndex = face[i];
+					var nextVertexIndex = face[(i + 1) % 3];
+					var nextVertex = transform.TransformVector(Vertices[nextVertexIndex].Pos * Mesh.Size);
+					var edgeInfo = info[i];
+					var isEdgeHovered = isHitTestResultTargetEdge &&
+										(hitTestTarget[0] == prevVertexIndex && hitTestTarget[1] == nextVertexIndex ||
+										hitTestTarget[0] == nextVertexIndex && hitTestTarget[1] == prevVertexIndex);
+					var isEdgePossiblyWillBeRemoved = isHitTestResultTargetVertex && State == ModificationState.Removal &&
+										(hitTestTarget[0] == prevVertexIndex || hitTestTarget[0] == nextVertexIndex);
+					if (isEdgeHovered || isEdgePossiblyWillBeRemoved) {
+						RenderEdgeHovered(prevVertex, nextVertex, edgeInfo.IsFraming, edgeInfo.IsConstrained);
+					} else {
+						RenderEdge(prevVertex, nextVertex, edgeInfo.IsFraming, edgeInfo.IsConstrained);
 					}
-					TopologyAggregator[type][i].Render(Vertices, transform, Owner.AsWidget.Size);
+					prevVertex = nextVertex;
 				}
 			}
-			if (
-				State == ModificationState.Creation &&
-				(
-					HitTestTarget.Type == TopologyDataType.Edge ||
-					HitTestTarget.Type == TopologyDataType.Face
-				)
-			) {
+			for (int i = 0; i < Vertices.Count; i++) {
+				var v = transform.TransformVector(Vertices[i].Pos * Mesh.Size);
+				if (isHitTestResultTargetVertex && i == hitTestTarget[0]) {
+					RenderVertexHovered(v);
+				} else {
+					RenderVertex(v);
+				}
+			}
+			if (State == ModificationState.Creation && hitTestTarget != null && !hitTestTarget.IsVertex()) {
 				Utils.RenderVertex(
-					transform.TransformVector(ClampMousePositionToHitTestTarget() * Owner.AsWidget.Size),
+					transform.TransformVector(SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget) * Owner.AsWidget.Size),
 					Theme.Metrics.PolygonMeshBackgroundVertexRadius,
 					Theme.Metrics.PolygonMeshVertexRadius,
 					Color4.White.Transparentify(0.5f),
@@ -302,22 +274,110 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 		}
 
+		private void RenderEdge(Vector2 start, Vector2 end, bool isFraming, bool isConstrained, bool isHovered = false)
+		{
+			var foregroundColor = Theme.Colors.PolygonMeshInnerEdgeColor;
+			var backgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
+			var foregroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshEdgeThickness
+			);
+			var backgroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
+			);
+			if (isFraming) {
+				foregroundColor = Theme.Colors.PolygonMeshFramingEdgeColor;
+				backgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
+			} else if (isConstrained) {
+				foregroundColor = Theme.Colors.PolygonMeshFixedEdgeColor;
+				backgroundColor = Theme.Colors.PolygonMeshFixedEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness);
+			}
+			Utils.RenderLine(
+				start,
+				end,
+				backgroundSize,
+				foregroundSize,
+				backgroundColor,
+				foregroundColor,
+				!(isFraming || isConstrained)
+			);
+		}
+
+		private void RenderEdgeHovered(Vector2 start, Vector2 end, bool isFraming, bool isConstrained)
+		{
+			var foregroundColor =  State == ModificationState.Removal ?
+				Theme.Colors.PolygonMeshRemovalColor : Theme.Colors.PolygonMeshHoverColor;
+			var backgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
+			var foregroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshEdgeThickness
+			);
+			var backgroundSize = new Vector2(
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 2.0f,
+				Theme.Metrics.PolygonMeshBackgroundEdgeThickness
+			);
+			if (isFraming) {
+				backgroundColor = Theme.Colors.PolygonMeshFramingEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness * 1.7f);
+			} else if (isConstrained) {
+				backgroundColor = Theme.Colors.PolygonMeshFixedEdgeBackgroundColor;
+				foregroundSize = new Vector2(Theme.Metrics.PolygonMeshEdgeThickness);
+				backgroundSize = new Vector2(Theme.Metrics.PolygonMeshBackgroundEdgeThickness);
+			}
+			Utils.RenderLine(
+				start,
+				end,
+				backgroundSize,
+				foregroundSize,
+				backgroundColor,
+				foregroundColor,
+				!(isFraming || isConstrained)
+			);
+		}
+
+		private void RenderVertex(Vector2 position) =>
+			Utils.RenderVertex(
+				position,
+				Theme.Metrics.PolygonMeshBackgroundVertexRadius,
+				Theme.Metrics.PolygonMeshVertexRadius,
+				Theme.Colors.PolygonMeshVertexBackgroundColor,
+				Theme.Colors.PolygonMeshVertexColor
+			);
+
+		private void RenderVertexHovered(Vector2 position) =>
+			Utils.RenderVertex(
+				position,
+				1.3f * Theme.Metrics.PolygonMeshBackgroundVertexRadius,
+				1.3f * Theme.Metrics.PolygonMeshVertexRadius,
+				Theme.Colors.PolygonMeshHoverColor.Darken(0.7f),
+				State == ModificationState.Removal ?
+					Theme.Colors.PolygonMeshRemovalColor :
+					Theme.Colors.PolygonMeshHoverColor
+			);
+
+		// TODO: That is incorrect and should be improved later.
 		public override IEnumerator<object> AnimationTask()
 		{
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
 			var lastPos = transform.TransformVector(sv.MousePosition);
-			var target = HitTestTarget;
+			var hitTestTarget = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result) ? result.Target : null;
+			if (hitTestTarget == null) {
+				yield break;
+			}
 			using (Document.Current.History.BeginTransaction()) {
 				while (SceneView.Instance.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var positionDelta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
 					lastPos = transform.TransformVector(sv.MousePosition);
-					TranslateTransientVertices(
-						TopologyAggregator[target.Type][target.Index],
-						positionDelta
-					);
+					TranslateTransientVertices(hitTestTarget, positionDelta);
 					Core.Operations.SetAnimableProperty.Perform(
 						Mesh,
 						nameof(Lime.Widgets.PolygonMesh.PolygonMesh.TransientVertices),
@@ -338,7 +398,11 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
 			var lastPos = transform.TransformVector(sv.MousePosition);
-			var target = HitTestTarget;
+			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result);
+			if (result == null || !result.Target.IsVertex()) {
+				yield break;
+			}
+			var target = ((Lime.Widgets.PolygonMesh.Topology.Vertex)result.Target);
 			using (Document.Current.History.BeginTransaction()) {
 				List<IKeyframe> keyframes = null;
 				Mesh.Animators.TryFind(
@@ -387,50 +451,44 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			yield return null;
 		}
 
-		private Vector2 ClampMousePositionToHitTestTarget()
+		private Vector2 SnapMousePositionToTopologyPrimitiveIfPossible(ITopologyPrimitive primitive)
 		{
-			var transform = Mesh.LocalToWorldTransform.CalcInversed();
-			var pos = transform.TransformVector(sv.MousePosition) / Mesh.Size;
-			var data = TopologyAggregator[HitTestTarget.Type][HitTestTarget.Index];
-			if (data is EdgeData ed) {
-				var v0 = Topology.Vertices[ed.TopologicalIndex0];
-				var v1 = Topology.Vertices[ed.TopologicalIndex1];
-				pos = Lime.PolygonMesh.Utils.PolygonMeshUtils.PointProjectionToLine(
-					pos,
-					v0.Pos,
-					v1.Pos,
-					out var isInside
-				);
+			var mousePos = Mesh.LocalToWorldTransform.CalcInversed().TransformVector(sv.MousePosition) / Mesh.Size;
+			if (primitive != null) {
+				if (primitive.IsEdge()) {
+					var v1 = Vertices[primitive[0]].Pos;
+					var v2 = Vertices[primitive[1]].Pos;
+					return PolygonMeshUtils.PointProjectionToLine(mousePos, v1, v2, out _);
+				}
 			}
-			return pos;
+			return mousePos;
 		}
 
-		private Vertex CreateVertex()
+		private Vector2 InterpolateUV(ITopologyPrimitive primitive, Vector2 position)
 		{
-			var pos = ClampMousePositionToHitTestTarget();
-			var data = TopologyAggregator[HitTestTarget.Type][HitTestTarget.Index];
-			return new Vertex {
-				Pos = pos,
-				UV1 = data.InterpolateUV(Vertices, pos),
-				Color = Mesh.Color
-			};
+			if (primitive.IsFace()) {
+				var v1 = Vertices[primitive[0]];
+				var v2 = Vertices[primitive[1]];
+				var v3 = Vertices[primitive[2]];
+				var weights = PolygonMeshUtils.CalcTriangleRelativeBarycentricCoordinates(position, v1.Pos, v2.Pos, v3.Pos);
+				return weights[0] * v1.UV1 + weights[1] * v2.UV1 + weights[2] * v3.UV1;
+			}
+			if (primitive.IsEdge()) {
+				var v1 = Vertices[primitive[0]];
+				var v2 = Vertices[primitive[1]];
+				var weights = PolygonMeshUtils.CalcSegmentRelativeBarycentricCoordinates(position, v1.Pos, v2.Pos);
+				return weights[0] * v1.UV1 + weights[1] * v2.UV1;
+			}
+			if (primitive.IsVertex()) {
+				return Vertices[primitive[0]].UV1;
+			}
+			throw new InvalidOperationException();
 		}
 
-		public void TranslateTransientVertices(ITopologyData data, Vector2 delta)
+		public void TranslateTransientVertices(ITopologyPrimitive primitive, Vector2 delta)
 		{
-			switch (data) {
-				case VertexData vd:
-					TranslateTransientVertex(vd.TopologicalIndex, delta);
-					break;
-				case EdgeData ed:
-					TranslateTransientVertex(ed.TopologicalIndex0, delta);
-					TranslateTransientVertex(ed.TopologicalIndex1, delta);
-					break;
-				case FaceData fd:
-					TranslateTransientVertex(fd.TopologicalIndex0, delta);
-					TranslateTransientVertex(fd.TopologicalIndex1, delta);
-					TranslateTransientVertex(fd.TopologicalIndex2, delta);
-					break;
+			for (var i = 0; i < primitive.Count; i++) {
+				TranslateTransientVertex(primitive[i], delta);
 			}
 		}
 
@@ -444,9 +502,11 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public override IEnumerator<object> CreationTask()
 		{
-			var cursor = WidgetContext.Current.MouseCursor;
-			var initialHitTestTarget = (TopologyDataType.Vertex, HitTestTarget.Index);
-			if (HitTestTarget.Type != TopologyDataType.Vertex) {
+			if (!HitTest(sv.MousePosition, sv.Scene.Scale.X, out var initialHitTestResult)) {
+				yield break;
+			}
+			var initialHitTestTarget = initialHitTestResult.Target;
+			if (!initialHitTestTarget.IsVertex()) {
 				using (Document.Current.History.BeginTransaction()) {
 					List<IKeyframe> keyframes = null;
 					Mesh.Animators.TryFind(
@@ -460,7 +520,12 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
 						Keyframes = animator?.Keys.ToList()
 					};
-					var vertex = CreateVertex();
+					var pos = SnapMousePositionToTopologyPrimitiveIfPossible(initialHitTestTarget);
+					var vertex = new Vertex {
+						Pos = pos,
+						Color = Mesh.Color,
+						UV1 = InterpolateUV(initialHitTestTarget, pos),
+					};
 					Topology.AddVertex(vertex);
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
@@ -487,13 +552,15 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					Window.Current.Invalidate();
 					Document.Current.History.CommitTransaction();
 				}
-				initialHitTestTarget.Index = Mesh.Vertices.Count - 1;
+				// Perhaps Topology.AddVertex should return an index where new vertex was placed or -1
+				// if it wasn't inserted. Now we assume it's always pushed back.
+				initialHitTestTarget = new Lime.Widgets.PolygonMesh.Topology.Vertex { Index = (ushort)(Vertices.Count - 1), };
 			}
 
-			yield return ConstrainingTask(initialHitTestTarget);
+			yield return ConstrainingTask((Lime.Widgets.PolygonMesh.Topology.Vertex)initialHitTestTarget);
 		}
 
-		private IEnumerator<object> ConstrainingTask((TopologyDataType Type, int Index) initialHitTestTarget)
+		private IEnumerator<object> ConstrainingTask(Lime.Widgets.PolygonMesh.Topology.Vertex initialHitTestTarget)
 		{
 			yield return null;
 			using (Document.Current.History.BeginTransaction()) {
@@ -512,18 +579,25 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					keyframes = animator?.Keys.ToList();
-					HitTest(sv.Scene, sv.MousePosition, sv.Scene.Scale.X);
+					var hitTestTarget = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result)
+						? result.Target
+						: null;
 					if (
-						HitTestTarget == NullHitTestTarget ||
-						HitTestTarget == initialHitTestTarget
+						hitTestTarget == null ||
+					    hitTestTarget.IsVertex() && initialHitTestTarget.Index == hitTestTarget[0]
 					) {
 						yield return null;
 						continue;
 					}
 					var startIndex = initialHitTestTarget.Index;
-					var endIndex = HitTestTarget.Index;
-					if (HitTestTarget.Type != TopologyDataType.Vertex) {
-						var vertex = CreateVertex();
+					var endIndex = hitTestTarget[0];
+					if (!hitTestTarget.IsVertex()) {
+						var pos = SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget);
+						var vertex = new Vertex {
+							Pos = pos,
+							Color = Mesh.Color,
+							UV1 = InterpolateUV(hitTestTarget, pos),
+						};
 						Topology.AddVertex(vertex);
 						if (animator != null) {
 							keyframes = new List<IKeyframe>();
@@ -537,7 +611,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 								animator.ResetCache();
 							}
 						}
-						endIndex = Mesh.Vertices.Count - 1;
+						endIndex = (ushort)(Mesh.Vertices.Count - 1);
 					}
 					Topology.ConstrainEdge(startIndex, endIndex);
 					var sliceAfter = new PolygonMeshSlice {
@@ -570,6 +644,12 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				yield return null;
 			} else {
 				using (Document.Current.History.BeginTransaction()) {
+					var hitTestTarget = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result)
+						? result.Target
+						: null;
+					if (hitTestTarget == null != hitTestTarget.IsFace()) {
+						yield break;
+					}
 					List<IKeyframe> keyframes = null;
 					Mesh.Animators.TryFind(
 						nameof(Mesh.TransientVertices),
@@ -582,18 +662,23 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
 						Keyframes = animator?.Keys.ToList()
 					};
-					Topology.RemoveVertex(HitTestTarget.Index);
-					if (animator != null) {
-						keyframes = new List<IKeyframe>();
-						foreach (var key in animator.Keys.ToList()) {
-							var newKey = key.Clone();
-							var vertices = new List<Vertex>(newKey.Value as List<Vertex>);
-							vertices[HitTestTarget.Index] = vertices[vertices.Count - 1];
-							vertices.RemoveAt(vertices.Count - 1);
-							newKey.Value = vertices;
-							keyframes.Add(newKey);
-							animator.ResetCache();
+					if (hitTestTarget.IsVertex()) {
+						Topology.RemoveVertex(hitTestTarget[0]);
+						if (animator != null) {
+							keyframes = new List<IKeyframe>();
+							foreach (var key in animator.Keys.ToList()) {
+								var newKey = key.Clone();
+								var vertices = new List<Vertex>(newKey.Value as List<Vertex>);
+								vertices[hitTestTarget[0]] = vertices[vertices.Count - 1];
+								vertices.RemoveAt(vertices.Count - 1);
+								newKey.Value = vertices;
+								keyframes.Add(newKey);
+								animator.ResetCache();
+							}
 						}
+					} else {
+						// It's an edge. If edge is constrain than try to deconstrain it.
+						// TODO
 					}
 					var sliceAfter = new PolygonMeshSlice {
 						State = ModificationState.Removal,
@@ -613,53 +698,10 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 		}
 
+		// TODO: provide implementation
 		public override IEnumerator<object> ConcaveTask()
 		{
-			UI.Utils.ChangeCursorIfDefault(WidgetContext.Current.MouseCursor);
-			using (Document.Current.History.BeginTransaction()) {
-				List<IKeyframe> keyframes = null;
-				Mesh.Animators.TryFind(
-					nameof(Mesh.TransientVertices),
-					out var animator
-				);
-				var sliceBefore = new PolygonMeshSlice {
-					State = ModificationState.Removal,
-					Vertices = new List<Vertex>(Mesh.Vertices),
-					IndexBuffer = new List<Face>(Mesh.Faces),
-					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
-					Keyframes = animator?.Keys.ToList()
-				};
-				if (HitTestTarget.Type != TopologyDataType.None) {
-					var local = Mesh.LocalToWorldTransform.CalcInversed().TransformVector(sv.MousePosition) / Mesh.Size;
-					Topology.Concave(local);
-				}
-				if (animator != null) {
-					keyframes = new List<IKeyframe>();
-					foreach (var key in animator.Keys.ToList()) {
-						var newKey = key.Clone();
-						var vertices = new List<Vertex>(newKey.Value as List<Vertex>);
-						vertices[HitTestTarget.Index] = vertices[vertices.Count - 1];
-						vertices.RemoveAt(vertices.Count - 1);
-						newKey.Value = vertices;
-						keyframes.Add(newKey);
-						animator.ResetCache();
-					}
-				}
-				var sliceAfter = new PolygonMeshSlice {
-					State = ModificationState.Removal,
-					Vertices = new List<Vertex>(Mesh.Vertices),
-					IndexBuffer = new List<Face>(Mesh.Faces),
-					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
-					Keyframes = keyframes
-				};
-				PolygonMeshModification.Slice.Perform(
-					Mesh,
-					sliceBefore,
-					sliceAfter
-				);
-				Document.Current.History.CommitTransaction();
-			}
-			yield return null;
+			yield break;
 		}
 	}
 }

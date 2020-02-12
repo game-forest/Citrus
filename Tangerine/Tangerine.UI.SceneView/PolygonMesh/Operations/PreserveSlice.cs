@@ -57,7 +57,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 							mesh.TransientVertices.Add(v);
 						}
 					}
-					controller.TopologyAggregator.Invalidate();
 				}
 
 				protected override void InternalRedo(Slice op) =>

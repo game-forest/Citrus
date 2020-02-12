@@ -68,13 +68,7 @@
     <Compile Include="PolygonMesh\Operations\PreserveSlice.cs" />
     <Compile Include="PolygonMesh\PolygonMeshController.cs" />
     <Compile Include="PolygonMesh\PolygonMeshTools.cs" />
-    <Compile Include="PolygonMesh\TopologyData\EdgeData.cs" />
-    <Compile Include="PolygonMesh\TopologyData\FaceData.cs" />
-    <Compile Include="PolygonMesh\Topology\HalfEdgeTopologyAggregator.cs" />
-    <Compile Include="PolygonMesh\Topology\ITopologyAggregator.cs" />
-    <Compile Include="PolygonMesh\TopologyData\ITopologyData.cs" />
     <Compile Include="PolygonMesh\Utils.cs" />
-    <Compile Include="PolygonMesh\TopologyData\VertexData.cs" />
     <Compile Include="Presenters\Animation2DPathPresenter.cs" />
     <Compile Include="Presenters\Animation3DPathPresenter.cs" />
     <Compile Include="Presenters\WavePivotPresenter.cs" />

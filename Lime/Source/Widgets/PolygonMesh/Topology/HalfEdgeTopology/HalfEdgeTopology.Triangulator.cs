@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Lime.Source.Widgets.PolygonMesh;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
@@ -10,7 +9,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private enum LocationResult
 		{
-			SameVertex, OnEdge, InsideTriangle, Outside,
+			SameVertex, OnEdge, InsideTriangle, OutsideTriangulation,
 		}
 
 		/// <summary>
@@ -83,7 +82,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// If LocationResult.SameVertex then <paramref name="edge"/>'s Origin is that vertex.
 		/// If LocationResult.OnEdge then <paramref name="edge"/> is edge that vertex lies on.
 		/// If LocationResult.InsideTriangle then <paramref name="edge"/> identifies closest triangle.
-		/// If LocationResult.Outside then <paramref name="edge"/> is the closest edge.
+		/// If LocationResult.OutsideTriangulation then <paramref name="edge"/> is the closest edge.
 		/// </returns>
 		private LocationResult LocateClosestTriangle(Vector2 vertex, out HalfEdge edge)
 		{
@@ -134,7 +133,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 			edge = closest;
-			return LocationResult.Outside;
+			return LocationResult.OutsideTriangulation;
 		}
 
 		/// <summary>
@@ -151,7 +150,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			if (start == null) {
 				// Find triangle that contains given vertex
 				var result = LocateClosestTriangle(vertexIndex, out start);
-				if (result == LocationResult.Outside) {
+				if (result == LocationResult.OutsideTriangulation) {
 					throw new InvalidOperationException("There is no triangle in triangulation that contains given vertex.");
 				}
 			}
@@ -204,7 +203,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			if (start == null) {
 				// Find triangle that contains given vertex
 				var result = LocateClosestTriangle(sightPoint, out start);
-				if (result != LocationResult.Outside) {
+				if (result != LocationResult.OutsideTriangulation) {
 					throw new InvalidOperationException("Sight point is inside triangulation.");
 				}
 			}

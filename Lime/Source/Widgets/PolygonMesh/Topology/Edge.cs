@@ -4,8 +4,14 @@ using Yuzu;
 namespace Lime.Widgets.PolygonMesh.Topology
 {
 	[YuzuCompact]
-	public struct Edge : IEquatable<Edge>
+	public struct Edge : IEquatable<Edge>, ITopologyPrimitive
 	{
+		public class EdgeInfo
+		{
+			public bool IsConstrained;
+			public bool IsFraming;
+		}
+
 		[YuzuMember("0")]
 		public ushort Index0;
 
@@ -25,6 +31,7 @@ namespace Lime.Widgets.PolygonMesh.Topology
 				throw new IndexOutOfRangeException();
 			}
 		}
+		public int Count => 2;
 
 		public Edge(ushort index0, ushort index1)
 		{

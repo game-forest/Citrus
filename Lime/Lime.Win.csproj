@@ -547,6 +547,8 @@
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.Triangulator.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\ITopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\ITopologyPrimitive.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\Vertex.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Utils\PolygonMeshUtils.cs" />
     <Compile Include="Source\Widgets\Polyline.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />

@@ -5,8 +5,10 @@ using Lime.PolygonMesh.Topology;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 {
+	using Vertex = Lime.Vertex;
 	public partial class HalfEdgeTopology : ITopology
 	{
+
 		public class HalfEdge
 		{
 			private bool constrained;
@@ -28,7 +30,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 
 			public bool Detached => Next == null && Twin == null;
-
 			public HalfEdge(int origin)
 			{
 				Origin = origin;
@@ -160,6 +161,45 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 		}
+		public bool HitTest(Vector2 position, out TopologyHitTestResult result)
+		{
+			var location = LocateClosestTriangle(position, out var edge);
+			switch (location) {
+				case LocationResult.SameVertex:
+					result = new TopologyHitTestResult {
+						Target = new Topology.Vertex { Index = (ushort)edge.Origin, },
+					};
+					return true;
+				case LocationResult.OnEdge:
+					result = new TopologyHitTestResult {
+						Target = new Edge { Index0 = (ushort)edge.Origin, Index1 = (ushort)edge.Next.Origin, },
+						Info = new Edge.EdgeInfo() { IsConstrained = edge.Constrained, IsFraming = edge.Twin == null, },
+					};
+					return true;
+				case LocationResult.InsideTriangle:
+					var next = edge.Next;
+					var prev = next.Next;
+					result = new TopologyHitTestResult {
+						Target = new Face {
+							Index0 = (ushort)edge.Origin,
+							Index1 = (ushort)next.Origin,
+							Index2 = (ushort)prev.Origin,
+						},
+						Info = new Face.FaceInfo {
+							IsConstrained0 = edge.Constrained,
+							IsConstrained1 = next.Constrained,
+							IsConstrained2 = prev.Constrained,
+							IsFraming0 = edge.Twin == null,
+							IsFraming1 = next.Twin == null,
+							IsFraming2 = prev.Twin == null,
+						}
+					};
+					return true;
+				default:
+					result = null;
+					return false;
+			}
+		}
 
 		// Stays public until we get LocateClosestTriangle work O(logN) (cause otherwise rendering will
 		// be laggy).
@@ -233,6 +273,31 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 		}
+
+#if TANGERINE
+		public IEnumerable<(Face, Face.FaceInfo)> FacesWithInfo
+		{
+			get
+			{
+				foreach (var (e1, e2, e3) in Triangles()) {
+					yield return (
+						new Face {
+							Index0 = (ushort)e1.Origin,
+							Index1 = (ushort)e2.Origin,
+							Index2 = (ushort)e3.Origin,
+						},
+						new Face.FaceInfo {
+							IsConstrained0 = e1.Constrained,
+							IsConstrained1 = e2.Constrained,
+							IsConstrained2 = e3.Constrained,
+							IsFraming0 = e1.Twin == null,
+							IsFraming1 = e2.Twin == null,
+							IsFraming2 = e3.Twin == null,
+						});
+				}
+			}
+		}
+#endif
 
 		public event Action<ITopology> OnTopologyChanged;
 
