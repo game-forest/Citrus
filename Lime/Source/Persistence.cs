@@ -51,7 +51,7 @@ namespace Lime
 		public Persistence(CommonOptions yuzuCommonOptions, JsonSerializeOptions yuzuJsonOptions) : this()
 		{
 			YuzuCommonOptions = yuzuCommonOptions;
-			YuzuJsonOptions = yuzuJsonOptions;
+			YuzuJsonOptions = yuzuJsonOptions ?? defaultYuzuJsonOptions;
 		}
 
 		public readonly CommonOptions YuzuCommonOptions = DefaultYuzuCommonOptions;
@@ -141,8 +141,9 @@ namespace Lime
 
 		public T ReadObjectFromFile<T>(string path, object obj = null)
 		{
-			using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+			using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
 				return ReadObject<T>(path, stream, obj);
+			}
 		}
 
 		public int CalcObjectCheckSum<T>(string path, T obj)

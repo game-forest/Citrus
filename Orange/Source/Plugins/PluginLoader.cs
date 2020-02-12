@@ -201,7 +201,7 @@ namespace Orange
 		}
 
 		public static IEnumerable<Assembly> EnumerateOrangeAndTangerinePluginAssemblies() =>
-			EnumerateOrangeAndTangerinePluginAssemblyPaths(The.Workspace.ProjectFile)
+			EnumerateOrangeAndTangerinePluginAssemblyPaths(The.Workspace.ProjectFilePath)
 			.Select(s => PluginLoader.TryLoadAssembly(s));
 
 		private static IEnumerable<string> EnumerateOrangeAndTangerinePluginAssemblyPaths(string citrusProjectFile)

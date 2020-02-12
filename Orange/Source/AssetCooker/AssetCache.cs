@@ -72,7 +72,7 @@ namespace Orange
 			dynamic data = The.Workspace.ProjectJson.AsDynamic.AssetCache;
 			if (data == null) {
 				Mode = AssetCacheMode.None;
-				Console.WriteLine($"[Cache] Warning: 'AssetCache' field not found in {The.Workspace.ProjectFile}. Cache disabled");
+				Console.WriteLine($"[Cache] Warning: 'AssetCache' field not found in {The.Workspace.ProjectFilePath}. Cache disabled");
 				return;
 			}
 			Mode = The.Workspace.AssetCacheMode;
@@ -87,17 +87,17 @@ namespace Orange
 			}
 			serverAddress = (string)data.ServerAddress;
 			if (serverAddress == null) {
-				HandleSetupFailure($"'ServerAddress' field not found in AssetCache settings in {The.Workspace.ProjectFile}");
+				HandleSetupFailure($"'ServerAddress' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
 				return;
 			}
 			serverUsername = (string)data.ServerUsername;
 			if (serverUsername == null) {
-				HandleSetupFailure($"'ServerUsername' field not found in AssetCache settings in {The.Workspace.ProjectFile}");
+				HandleSetupFailure($"'ServerUsername' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
 				return;
 			}
 			serverPath = (string)data.ServerPath;
 			if (serverPath == null) {
-				HandleSetupFailure($"'ServerPath' field not found in AssetCache settings in {The.Workspace.ProjectFile}");
+				HandleSetupFailure($"'ServerPath' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
 				return;
 			}
 			if (Mode == AssetCacheMode.Remote) {

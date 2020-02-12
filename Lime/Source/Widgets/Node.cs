@@ -376,7 +376,7 @@ namespace Lime
 
 		/// <summary>
 		/// Collections of Components.
-		/// If node component class don't need to be serialized mark it with <see cref="NodeComponentDontSerializeAttribute">.
+		/// If node component class don't need to be serialized mark it with <see cref="NodeComponentDontSerializeAttribute"/>.
 		/// </summary>
 		[YuzuMember]
 		public NodeComponentCollection Components { get; private set; }

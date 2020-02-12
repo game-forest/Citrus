@@ -8,7 +8,11 @@ namespace Orange
 {
 	public class Workspace
 	{
-		public string ProjectFile { get; private set; }
+		/// <summary>
+		/// Absolute path to currently open project file. Located at the root level of project directory, has <c>*.citproj</c> extension.
+		/// If no project is open has value of <c>null</c>.
+		/// </summary>
+		public string ProjectFilePath { get; private set; }
 		public string ProjectDirectory { get; private set; }
 		public string AssetsDirectory { get; private set; }
 		public string Title { get; private set; }
@@ -90,15 +94,20 @@ namespace Orange
 			// if found, ignore the one saved in app data, since we're opening citrus directory
 			// related to found game project as a submodule
 			var config = WorkspaceConfig.Load();
-			Toolbox.TryGetParentProject(config.CitrusProject, out config.CitrusProject);
-			Open(config.CitrusProject);
-			The.UI.LoadFromWorkspaceConfig(config);
+			if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)) {
+				Open(projectFilePath);
+				The.UI.UpdateOpenedProjectPath(projectFilePath);
+			}
+			var projectConfig = config.GetProjectConfig(projectFilePath);
+			The.UI.LoadFromWorkspaceConfig(config, projectConfig);
 			var citrusVersion = CitrusVersion.Load();
 			if (citrusVersion.IsStandalone) {
 				Console.WriteLine($"Welcome to Citrus. Version {citrusVersion.Version}, build number: {citrusVersion.BuildNumber}");
 			}
 			BenchmarkEnabled = config.BenchmarkEnabled;
-			BundlePickerVisible = config.BundlePickerVisible;
+			if (projectConfig != null) {
+				BundlePickerVisible = projectConfig.BundlePickerVisible;
+			}
 #pragma warning disable CS4014
 			Orange.Updater.CheckForUpdates();
 #pragma warning restore CS4014
@@ -108,9 +117,10 @@ namespace Orange
 		public void LoadCacheSettings()
 		{
 			var config = WorkspaceConfig.Load();
-			if (ProjectFile != string.Empty) {
-				AssetCacheMode = config.AssetCacheMode;
-				LocalAssetCachePath = config.LocalAssetCachePath;
+			var projectConfig = config.GetProjectConfig(ProjectFilePath);
+			if (projectConfig != null) {
+				AssetCacheMode = projectConfig.AssetCacheMode;
+				LocalAssetCachePath = projectConfig.LocalAssetCachePath;
 				if (ProjectDirectory != null && !Path.IsPathRooted(LocalAssetCachePath)) {
 					LocalAssetCachePath = Path.Combine(ProjectDirectory, LocalAssetCachePath);
 				}
@@ -120,26 +130,28 @@ namespace Orange
 		public void Save()
 		{
 			var config = WorkspaceConfig.Load();
-			config.CitrusProject = ProjectFile;
-			config.AssetCacheMode = AssetCacheMode;
-			The.UI.SaveToWorkspaceConfig(ref config);
+			var projectConfig = config.GetProjectConfig(ProjectFilePath);
+			if (projectConfig != null) {
+				projectConfig.AssetCacheMode = AssetCacheMode;
+			}
+			The.UI.SaveToWorkspaceConfig(ref config, projectConfig);
 			WorkspaceConfig.Save(config);
 		}
 
-		public void Open(string file)
+		public void Open(string projectFilePath)
 		{
 			try {
 				The.UI.ClearLog();
-				ProjectFile = file;
-				ReadProject(file);
-				ProjectDirectory = Path.GetDirectoryName(file);
+				ProjectFilePath = projectFilePath;
+				ReadProject(projectFilePath);
+				ProjectDirectory = Path.GetDirectoryName(projectFilePath);
 				AssetsDirectory = Path.Combine(ProjectDirectory, dataFolderName);
 				if (!Directory.Exists(AssetsDirectory)) {
 					throw new Lime.Exception("Assets folder '{0}' doesn't exist", AssetsDirectory);
 				}
 				PluginLoader.ScanForPlugins(!string.IsNullOrWhiteSpace(pluginName)
-					? Path.Combine(Path.GetDirectoryName(file), pluginName)
-					: file);
+					? Path.Combine(Path.GetDirectoryName(projectFilePath), pluginName)
+					: projectFilePath);
 				if (defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate == null) {
 					defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate = CsprojSynchronization.SkipUnwantedDirectoriesPredicate;
 				}
@@ -151,9 +163,8 @@ namespace Orange
 				TangerineCacheBundle = GetTangerineCacheBundlePath();
 				The.UI.OnWorkspaceOpened();
 				The.UI.ReloadBundlePicker();
-			}
-			catch (System.Exception e) {
-				Console.WriteLine($"Can't open {file}:\n{e.Message}");
+			} catch (System.Exception e) {
+				Console.WriteLine($"Can't open {projectFilePath}:\n{e.Message}");
 			}
 		}
 
@@ -229,7 +240,7 @@ namespace Orange
 		private static string GetTangerineCacheBundlePath()
 		{
 			var name = string
-				.Join("_", The.Workspace.ProjectFile.Split(new[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries))
+				.Join("_", The.Workspace.ProjectFilePath.Split(new[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries))
 				.ToLower(System.Globalization.CultureInfo.InvariantCulture);
 			name = Path.ChangeExtension(name, "tancache");
 			return Path.Combine(WorkspaceConfig.GetDataPath(), name);

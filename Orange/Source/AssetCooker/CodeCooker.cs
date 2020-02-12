@@ -105,7 +105,7 @@ namespace Orange
 
 		public static string GetCodeCachePath()
 		{
-			var name = string.Join("_", The.Workspace.ProjectFile.Split(new string[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries)).ToLower(CultureInfo.InvariantCulture);
+			var name = string.Join("_", The.Workspace.ProjectFilePath.Split(new string[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries)).ToLower(CultureInfo.InvariantCulture);
 			return Path.Combine(WorkspaceConfig.GetDataPath(), name, "code_cooker_cache.json");
 		}
 

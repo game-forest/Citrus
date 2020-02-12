@@ -65,8 +65,10 @@ namespace Orange
 
 		public abstract void DestroyPluginUI();
 
-		public virtual void SaveToWorkspaceConfig(ref WorkspaceConfig config) { }
+		public virtual void SaveToWorkspaceConfig(ref WorkspaceConfig config, ProjectConfig projectConfig) { }
 
-		public virtual void LoadFromWorkspaceConfig(WorkspaceConfig config) { }
+		public virtual void LoadFromWorkspaceConfig(WorkspaceConfig config, ProjectConfig projectConfig) { }
+
+		public virtual void UpdateOpenedProjectPath(string projectPath) { }
 	}
 }
