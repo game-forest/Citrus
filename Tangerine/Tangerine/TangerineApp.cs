@@ -353,12 +353,11 @@ namespace Tangerine
 
 		private void LoadProject()
 		{
-			Orange.Toolbox.TryGetParentProject(AppUserPreferences.Instance.CurrentProject, out string proj);
-			if (!string.IsNullOrEmpty(proj)) {
+			if (Orange.Toolbox.TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)) {
 				try {
-					new Project(proj).Open();
+					new Project(projectFilePath).Open();
 				} catch {
-					AlertDialog.Show($"Cannot open project '{proj}'. It may be deleted or be otherwise unavailable.");
+					AlertDialog.Show($"Cannot open project '{projectFilePath}'. It may be deleted or be otherwise unavailable.");
 				}
 			}
 		}

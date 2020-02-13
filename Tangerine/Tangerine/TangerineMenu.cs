@@ -284,7 +284,8 @@ namespace Tangerine
 					orangeInterfaceInstance.CacheNone,
 				})
 			}));
-			Orange.The.UI.LoadFromWorkspaceConfig(Orange.WorkspaceConfig.Load());
+			var config = Orange.WorkspaceConfig.Load();
+			Orange.The.UI.LoadFromWorkspaceConfig(config, config.GetProjectConfig(citprojPath));
 			Orange.The.Workspace.LoadCacheSettings();
 		}
 

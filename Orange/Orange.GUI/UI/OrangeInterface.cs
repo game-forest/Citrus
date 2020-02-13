@@ -432,24 +432,22 @@ namespace Orange
 			}
 		}
 
-		public override void SaveToWorkspaceConfig(ref WorkspaceConfig config)
+		public override void SaveToWorkspaceConfig(ref WorkspaceConfig config, ProjectConfig projectConfig)
 		{
-			config.ActiveTargetIndex = platformPicker.Index;
-			config.BundlePickerVisible = bundlePickerWidget.Visible;
+			if (projectConfig != null) {
+				projectConfig.ActiveTargetIndex = platformPicker.Index;
+				projectConfig.BundlePickerVisible = bundlePickerWidget.Visible;
+			}
 			if (window.State != WindowState.Minimized) {
 				config.ClientPosition = window.ClientPosition;
 				config.ClientSize = window.ClientSize;
 			}
 		}
 
-		public override void LoadFromWorkspaceConfig(WorkspaceConfig config)
+		public override void UpdateOpenedProjectPath(string projectPath) => projectPicker.ChosenFile = projectPath;
+
+		public override void LoadFromWorkspaceConfig(WorkspaceConfig config, ProjectConfig projectConfig)
 		{
-			var newIndex = config.ActiveTargetIndex;
-			if (newIndex < 0 || newIndex >= platformPicker.Items.Count) {
-				newIndex = 0;
-			}
-			platformPicker.Index = newIndex;
-			projectPicker.ChosenFile = config.CitrusProject;
 			if (config.ClientPosition.X < 0) {
 				config.ClientPosition.X = 0;
 			}
@@ -462,8 +460,17 @@ namespace Orange
 			if (config.ClientSize != Vector2.Zero) {
 				window.ClientSize = config.ClientSize;
 			}
-			UpdateCacheModeCheckboxes(config.AssetCacheMode);
-			UpdateBundlePicker(config.BundlePickerVisible);
+			if (projectConfig != null) {
+				var newIndex = projectConfig.ActiveTargetIndex;
+				if (newIndex < 0 || newIndex >= platformPicker.Items.Count) {
+					newIndex = 0;
+				}
+				platformPicker.Index = newIndex;
+				UpdateCacheModeCheckboxes(projectConfig.AssetCacheMode);
+				UpdateBundlePicker(projectConfig.BundlePickerVisible);
+			} else {
+				UpdateBundlePicker(false);
+			}
 		}
 
 		private class BundlePickerWidget : Widget

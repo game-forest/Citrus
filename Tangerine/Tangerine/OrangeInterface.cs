@@ -83,7 +83,12 @@ namespace Tangerine
 			The.Workspace.AssetCacheMode = state;
 		}
 
-		public override void LoadFromWorkspaceConfig(WorkspaceConfig config) => UpdateCacheModeCheckboxes(config.AssetCacheMode);
+		public override void LoadFromWorkspaceConfig(WorkspaceConfig config, ProjectConfig projectConfig)
+		{
+			if (projectConfig != null) {
+				UpdateCacheModeCheckboxes(projectConfig.AssetCacheMode);
+			}
+		}
 	}
 
 	public class PlatformPicker : ThemedDropDownList

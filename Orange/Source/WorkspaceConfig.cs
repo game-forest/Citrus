@@ -1,23 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Yuzu;
 using Lime;
 
 namespace Orange
 {
-	public class WorkspaceConfig
+	public class ProjectConfig
 	{
-		[YuzuMember]
-		public string CitrusProject = "";
-
-		[YuzuMember]
+		[YuzuOptional]
 		public int ActiveTargetIndex;
-
-		[YuzuMember]
-		public Vector2 ClientSize;
-
-		[YuzuMember]
-		public Vector2 ClientPosition;
 
 		/// <summary>
 		/// Asset cache mode that will be used  on workspace load
@@ -32,10 +24,34 @@ namespace Orange
 		public string LocalAssetCachePath = Path.Combine(".orange", "Cache");
 
 		[YuzuOptional]
+		public bool BundlePickerVisible = false;
+	}
+
+	public class WorkspaceConfig
+	{
+		[YuzuMember]
+		public Vector2 ClientSize;
+
+		[YuzuMember]
+		public Vector2 ClientPosition;
+
+		[YuzuOptional]
 		public bool BenchmarkEnabled;
 
 		[YuzuOptional]
-		public bool BundlePickerVisible = false;
+		public Dictionary<string, ProjectConfig> PerProjectConfig = new Dictionary<string, ProjectConfig>();
+
+		public ProjectConfig GetProjectConfig(string projectFilePath)
+		{
+			if (string.IsNullOrEmpty(projectFilePath)) {
+				return null;
+			}
+			projectFilePath = projectFilePath.Replace('\\', '/');
+			if (!PerProjectConfig.TryGetValue(projectFilePath, out ProjectConfig projectConfig)) {
+				PerProjectConfig.Add(projectFilePath, projectConfig = new ProjectConfig());
+			}
+			return projectConfig;
+		}
 
 		public static string GetDataPath()
 		{
@@ -49,25 +65,17 @@ namespace Orange
 			return configPath;
 		}
 
+		private static Lime.Persistence persistence = new Lime.Persistence(new CommonOptions { AllowUnknownFields = true }, null);
+
 		public static WorkspaceConfig Load()
 		{
 			try {
-				using(FileStream stream = new FileStream(GetConfigPath(), FileMode.Open, FileAccess.Read, FileShare.None)) {
-					var jd = new Yuzu.Json.JsonDeserializer();
-					return (WorkspaceConfig)jd.FromStream(new WorkspaceConfig(), stream);
-				}
-			}
-			catch {
+				return persistence.ReadObjectFromFile<WorkspaceConfig>(GetConfigPath());
+			} catch {
 				return new WorkspaceConfig();
 			}
 		}
 
-		public static void Save(WorkspaceConfig config)
-		{
-			using(FileStream stream = new FileStream(GetConfigPath(), FileMode.Create, FileAccess.Write, FileShare.None)) {
-				var js = new Yuzu.Json.JsonSerializer();
-				js.ToStream(config, stream);
-			}
-		}
+		public static void Save(WorkspaceConfig config) => persistence.WriteObjectToFile(GetConfigPath(), config, Persistence.Format.Json);
 	}
 }

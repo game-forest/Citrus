@@ -283,7 +283,7 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Quaternion"/> from the specified <see cref="Matrix"/>.
+		/// Creates a new <see cref="Quaternion"/> from the specified <see cref="Matrix44"/>.
 		/// </summary>
 		/// <param name="matrix">The rotation matrix.</param>
 		/// <returns>A quaternion composed from the rotation part of the matrix.</returns>
@@ -342,7 +342,7 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Quaternion"/> from the specified <see cref="Matrix"/>.
+		/// Fills existing <see cref="Quaternion"/> from the specified <see cref="Matrix44"/>.
 		/// </summary>
 		/// <param name="matrix">The rotation matrix.</param>
 		/// <param name="result">A quaternion composed from the rotation part of the matrix as an output parameter.</param>

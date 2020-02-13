@@ -68,19 +68,39 @@ namespace Orange
 			return path;
 		}
 
-		public static bool TryGetParentProject(string defaultPath, out string path)
+		/// <summary>
+		/// Locates citrus project containing executing assembly. See <see cref="TryFindCitrusProject"/>
+		/// </summary>
+		public static bool TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)
 		{
-			path = Uri.UnescapeDataString((new Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath);
+			return TryFindCitrusProject(Uri.UnescapeDataString(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath), out projectFilePath);
+		}
+
+		/// <summary>
+		/// Locates citrus project up the directory tree, starting from <paramref name="startingPath"/>.
+		/// Searches for any <c>*.citproj</c> file until there's no parent directory.
+		/// First directory containing <c>*.citproj</c> file is considered a project directory.
+		/// </summary>
+		/// <param name="startingPath">Path serving as starting point of the search.</param>
+		/// <param name="projectFilePath">Path to <c>*.citproj</c> file if found, or <c>null</c> otherwise.</param>
+		/// <returns><c>true</c> if project has been found <c>false</c> otherwise.</returns>
+		/// <exception cref="InvalidOperationException">If there are multiple <c>*.citproj</c> files in the same directory.</exception>
+		public static bool TryFindCitrusProject(string startingPath, out string projectFilePath)
+		{
+			projectFilePath = null;
+			var path = startingPath;
 			var directoryInfo = (new DirectoryInfo(path)).Parent;
 			while (directoryInfo != null) {
 				var citprojFiles = directoryInfo.EnumerateFiles("*.citproj");
 				if (citprojFiles.Any()) {
-					path = citprojFiles.First().FullName;
+					if (citprojFiles.Count() > 1) {
+						throw new InvalidOperationException($"Multiple *.citproj files found in the same directory: {string.Join(",", citprojFiles)}");
+					}
+					projectFilePath = citprojFiles.First().FullName;
 					return true;
 				}
 				directoryInfo = directoryInfo.Parent;
 			}
-			path = defaultPath;
 			return false;
 		}
 

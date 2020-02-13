@@ -104,7 +104,7 @@ namespace Orange
 
 		private static string GetXCodeProjectDataFolder()
 		{
-			var p = Path.GetDirectoryName(The.Workspace.ProjectFile);
+			var p = Path.GetDirectoryName(The.Workspace.ProjectFilePath);
 			p = Path.Combine(p, The.Workspace.ProjectJson["XCodeProject/DataFolder"] as string);
 			return p;
 		}
