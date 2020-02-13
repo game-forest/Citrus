@@ -1,0 +1,7 @@
+# Integration with Issue Tracker
+#
+# (note that '\' need to be escaped).
+
+[issuetracker "Citrus"]
+  regex = "CIT-(\\d+)"
+  url = "https://jira.game-forest.com:2000/CIT-$1"
