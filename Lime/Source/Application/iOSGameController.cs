@@ -17,6 +17,8 @@ namespace Lime
 		private UITouch[] activeTouches = new UITouch[Input.MaxTouches];
 		private CustomUITextView textView;
 		private string pendingTextInput = string.Empty;
+		private UIRectEdge preferredScreenEdgesDeferringSystemGestures = UIRectEdge.All;
+		private bool prefersHomeIndicatorAutoHidden = true;
 
 		public event EventHandler OnResize;
 
@@ -397,9 +399,22 @@ namespace Lime
 			}
 		}
 
-		public override bool PrefersHomeIndicatorAutoHidden => false;
+		public override bool PrefersHomeIndicatorAutoHidden => prefersHomeIndicatorAutoHidden;
 
-		public override UIRectEdge PreferredScreenEdgesDeferringSystemGestures => UIRectEdge.All;
+		public void SetPrefersHomeIndicatorAutoHidden(bool value)
+		{
+			prefersHomeIndicatorAutoHidden = value;
+			SetNeedsUpdateOfHomeIndicatorAutoHidden();
+		}
+
+		public override UIRectEdge PreferredScreenEdgesDeferringSystemGestures =>
+			preferredScreenEdgesDeferringSystemGestures;
+
+		public void SetPreferredScreenEdgesDeferringSystemGestures(UIRectEdge rectEdge)
+		{
+			preferredScreenEdgesDeferringSystemGestures = rectEdge;
+			SetNeedsUpdateOfScreenEdgesDeferringSystemGestures();
+		}
 
 		private class SoftKeyboard : ISoftKeyboard
 		{
