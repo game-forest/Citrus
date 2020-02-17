@@ -63,31 +63,6 @@ namespace Lime
 			return clone;
 		}
 
-		// In asian languages some characters are not allowed at the start or the end of the line.
-		const string NotAllowedAtTheStart =
-			"!%),.:;>?]}¢¨°·ˇˉ―‖’”„‟†‡›℃∶、。〃〆〈《「『〕〗〞︵︹︽︿﹃﹘﹚﹜！＂％＇），．：；？］｀｜｝～" +
-			"ヽヾーァィゥェォッャュョヮヵヶぁぃぅぇぉっゃゅょゎゕゖㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ々〻";
-		const string NotAllowedAtTheEnd =
-			"$(*,£¥·‘“〈《「『【〔〖〝﹗﹙﹛＄（．［｛￡￥([｛〔〘｟«";
-		const string NotAllowedToSplit = "0123456789-";
-
-		internal static void AdjustLineBreakPosition(string text, ref int position)
-		{
-			if (position > 1 && NotAllowedAtTheStart.IndexOf(text[position]) >= 0) {
-				position -= 1;
-			} else if (position > 2 && NotAllowedAtTheEnd.IndexOf(text[position - 1]) >= 0) {
-				position -= 2;
-			}
-
-			while (
-				position > 1 &&
-				NotAllowedToSplit.IndexOf(text[position]) >= 0 &&
-				NotAllowedToSplit.IndexOf(text[position - 1]) >= 0
-			) {
-				position--;
-			}
-		}
-
 		internal static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> d, TKey key)
 		{
 			return GetValueOrDefault(d, key, default(TValue));

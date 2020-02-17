@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Lime.Text
 {
@@ -395,14 +393,12 @@ namespace Lime.Text
 				word.Width = CalcWordWidth(word);
 				var t = texts[word.TextIndex];
 				var isTextOrBullet = (t.Length > 0 && t[word.Start] > ' ') || IsBullet(word);
-				// Attempt to split
 				if (x + word.Width > maxWidth && isTextOrBullet) {
-					// Word splitting is allowed
-					if (wordSplitAllowed || t.HasJapaneseSymbols(word.Start, word.Length)) {
+					if (wordSplitAllowed || t.HasJapaneseChineseSymbols(word.Start, word.Length)) {
 						var fittedCharsCount = CalcFittedCharactersCount(word, maxWidth - x);
 						if (fittedCharsCount > 0) {
 							var wordEnd = word.Start + fittedCharsCount;
-							Toolbox.AdjustLineBreakPosition(t, ref wordEnd);
+							TextLineSplitter.AdjustLineBreakPosition(t, ref wordEnd, word.Start + word.Length - 1);
 							if (wordEnd > word.Start)
 								fittedCharsCount = wordEnd - word.Start;
 							var newWord = word.Clone();
