@@ -372,18 +372,27 @@ namespace Orange
 		{
 			EffectiveRules = CommonRules.InheritClone();
 			if (target != null) {
-				var targetRules = TargetRules[target];
-				foreach (var i in targetRules.FieldOverrides) {
-					i.SetValue(EffectiveRules, i.GetValue(targetRules));
+				var targetStack = new Stack<Target>();
+				var t = target;
+				while (t != null) {
+					targetStack.Push(t);
+					t = t.BaseTarget;
 				}
-				// TODO: implement this workaround in a general way
-				if (target.Platform == TargetPlatform.Android) {
-					switch (EffectiveRules.PVRFormat) {
-						case PVRFormat.PVRTC2:
-						case PVRFormat.PVRTC4:
-						case PVRFormat.PVRTC4_Forced:
-							EffectiveRules.PVRFormat = PVRFormat.ETC2;
-							break;
+				while (targetStack.Count != 0) {
+					t = targetStack.Pop();
+					var targetRules = TargetRules[t];
+					foreach (var i in targetRules.FieldOverrides) {
+						i.SetValue(EffectiveRules, i.GetValue(targetRules));
+					}
+					// TODO: implement this workaround in a general way
+					if (t.Platform == TargetPlatform.Android) {
+						switch (EffectiveRules.PVRFormat) {
+							case PVRFormat.PVRTC2:
+							case PVRFormat.PVRTC4:
+							case PVRFormat.PVRTC4_Forced:
+								EffectiveRules.PVRFormat = PVRFormat.ETC2;
+								break;
+						}
 					}
 				}
 			}

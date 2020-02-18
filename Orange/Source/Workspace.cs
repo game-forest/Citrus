@@ -216,14 +216,56 @@ namespace Orange
 			citrusLocation = ProjectJson.GetValue("CitrusLocation", string.Empty);
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
 
+			var targetToBaseTarget = new Dictionary<Target, string>();
 			foreach (var target in ProjectJson.GetArray("Targets", new Dictionary<string, object>[0])) {
 				var cleanBeforeBuild = false;
 				if (target.ContainsKey("CleanBeforeBuild")) {
 					cleanBeforeBuild = (bool)target["CleanBeforeBuild"];
 				}
-
-				Targets.Add(new Target(target["Name"] as string, target["Project"] as string,
-											 cleanBeforeBuild, GetPlaformByName(target["Platform"] as string)));
+				var targetName = target["Name"] as string;
+				if (Targets.Where(t => t.Name == targetName).Any()) {
+					throw new System.InvalidOperationException($"Target {targetName} already exists.");
+				}
+				Target newTarget = null;
+				Targets.Add(newTarget = new Target(
+					targetName,
+					target["Project"] as string,
+					cleanBeforeBuild,
+					GetPlaformByName(target["Platform"] as string)
+				));
+				if (target.TryGetValue("BaseTarget", out object baseTargetName)) {
+					targetToBaseTarget[newTarget] = baseTargetName as string;
+				}
+			}
+			foreach (var (k, v) in targetToBaseTarget) {
+				var derivedTarget = k;
+				if (string.IsNullOrEmpty(v)) {
+					continue;
+				}
+				var baseTarget = Targets.Where(t => t.Name == v).FirstOrDefault();
+				if (baseTarget == null) {
+					throw new System.InvalidOperationException($"Base target {v} not found.");
+				}
+				derivedTarget.BaseTarget = baseTarget;
+			}
+			var visited = new Dictionary<Target, int>();
+			Action<Target> visit = null;
+			visit = (t) => {
+				if (t == null) {
+					return;
+				}
+				if (!visited.ContainsKey(t)) {
+					visited.Add(t, 0);
+				}
+				if (visited[t] == 1) {
+					throw new Lime.CyclicDependencyException($"Cyclic dependency in target {t.Name}");
+				}
+				visited[t]++;
+				visit(t.BaseTarget);
+				visited[t]--;
+			};
+			foreach (var t in Targets) {
+				visit(t);
 			}
 		}
 

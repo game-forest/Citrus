@@ -1,4 +1,4 @@
-﻿namespace Orange
+namespace Orange
 {
 	public class Target
 	{
@@ -6,6 +6,7 @@
 		public readonly string ProjectPath;
 		public readonly bool CleanBeforeBuild;
 		public readonly TargetPlatform Platform;
+		public Target BaseTarget;
 
 		public Target(string name, string projectPath, bool cleanBeforeBuild, TargetPlatform platform)
 		{
