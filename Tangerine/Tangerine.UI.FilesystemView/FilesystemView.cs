@@ -31,7 +31,7 @@ namespace Tangerine.UI.FilesystemView
 		private Lime.FileSystemWatcher fsWatcher;
 		private CookingRulesEditor crEditor;
 		private Preview preview;
-		private List<(string, FilesystemSelection)> navigationHistory = new List<(string, FilesystemSelection)>();
+		private List<(string Path, FilesystemSelection Selection)> navigationHistory = new List<(string, FilesystemSelection)>();
 		private int navigationHistoryIndex = -1;
 		private NodeToggler toggleCookingRules;
 		private NodeToggler togglePreview;
@@ -117,7 +117,7 @@ namespace Tangerine.UI.FilesystemView
 
 		private void AddToNavHystory(string path)
 		{
-			if (navigationHistory.Count > 0 && navigationHistory[navigationHistoryIndex].Item1 == path) {
+			if (navigationHistory.Count > 0 && navigationHistory[navigationHistoryIndex].Path == path) {
 				return;
 			}
 			var i = (path, filesystemSelection.Clone());

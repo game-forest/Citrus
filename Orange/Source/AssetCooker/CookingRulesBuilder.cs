@@ -280,11 +280,11 @@ namespace Orange
 
 		public ParticularCookingRules EffectiveRules { get; private set; }
 
-		public IEnumerable<KeyValuePair<Target, ParticularCookingRules>> Enumerate()
+		public IEnumerable<(Target Target, ParticularCookingRules Rules)> Enumerate()
 		{
-			yield return new KeyValuePair<Target, ParticularCookingRules>(null, CommonRules);
-			foreach (var kv in TargetRules) {
-				yield return kv;
+			yield return (null, CommonRules);
+			foreach (var (k, v) in TargetRules) {
+				yield return (k, v);
 			}
 		}
 
