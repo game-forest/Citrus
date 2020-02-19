@@ -48,6 +48,8 @@ namespace Lime
 				Get(code) : (charMap[code] = FontChar.Null);
 		}
 
+		public bool Contains(char code) => charMap[code] != null && charMap[code] != FontChar.Null;
+
 		private FontChar CreateFontChar(char code)
 		{
 			var glyph = FontRenderer.Render(code, fontHeight);
