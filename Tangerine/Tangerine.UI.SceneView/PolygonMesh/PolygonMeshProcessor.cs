@@ -24,7 +24,7 @@ namespace Tangerine.UI.SceneView
 				}
 				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
 				foreach (var mesh in meshes) {
-					if (mesh.Controller().HitTest(sv.Scene, sv.MousePosition, sv.Scene.Scale.X)) {
+					if (mesh.Controller().HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
 							switch (mesh.Controller().State) {

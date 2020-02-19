@@ -7,8 +7,6 @@ namespace Tangerine.UI.SceneView
 {
 	public class PolygonMeshPresenter
 	{
-		private static SceneView sv => SceneView.Instance;
-
 		public PolygonMeshPresenter(SceneView sceneView)
 		{
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
@@ -23,7 +21,7 @@ namespace Tangerine.UI.SceneView
 			if (meshes.Count != 0) {
 				canvas.PrepareRendererState();
 				foreach (var mesh in meshes) {
-					mesh.Controller().Render(sv.Frame, sv.Scene, sv.MousePosition, sv.Scene.Scale.X);
+					mesh.Controller().Render(canvas);
 				}
 			}
 		}

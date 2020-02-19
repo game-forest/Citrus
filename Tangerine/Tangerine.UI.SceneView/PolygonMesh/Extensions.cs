@@ -11,8 +11,5 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			controller.Update();
 			return controller;
 		}
-
-		public static PolygonMeshController.ModificationState State(this Lime.Widgets.PolygonMesh.PolygonMesh mesh) =>
-			mesh.Controller().State;
 	}
 }

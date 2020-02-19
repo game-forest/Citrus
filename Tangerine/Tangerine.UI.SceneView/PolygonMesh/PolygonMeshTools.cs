@@ -47,7 +47,4 @@ namespace Tangerine
 				ChangeState(PolygonMeshController.ModificationState.Concave);
 		}
 	}
-
-
-
 }

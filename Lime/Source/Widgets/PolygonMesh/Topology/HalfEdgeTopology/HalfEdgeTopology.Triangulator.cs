@@ -6,7 +6,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 {
 	public partial class HalfEdgeTopology
 	{
-
 		private enum LocationResult
 		{
 			SameVertex, OnEdge, InsideTriangle, OutsideTriangulation,

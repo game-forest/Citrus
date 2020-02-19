@@ -33,6 +33,16 @@ namespace Lime.PolygonMesh.Topology
 		void ConstrainEdge(int index0, int index1);
 		void Concave(Vector2 position);
 		IEnumerable<(int, int)> ConstrainedEdges { get; }
-		bool HitTest(Vector2 position, out TopologyHitTestResult result);
+
+		/// <summary>
+		/// Carries out a test to determine the most suitable
+		/// topology primitive for a given position.
+		/// </summary>
+		/// <param name="position">Position in local space.</param>
+		/// <param name="vertexHitRadius">Admissible radius for vertex testing.</param>
+		/// <param name="edgeHitRadius">Admissible radius for edge testing.</param>
+		/// <param name="result">Primitive and its appropriate info if test was successful, null otherwise.</param>
+		/// <returns>Test success verdict.</returns>
+		bool HitTest(Vector2 position, float vertexHitRadius, float edgeHitRadius, out TopologyHitTestResult result);
 	}
 }

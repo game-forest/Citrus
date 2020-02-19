@@ -62,7 +62,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 			public class HalfEdgesEnumerable : IEnumerable<HalfEdge>
 			{
-				private HalfEdge root;
+				private readonly HalfEdge root;
 
 				/// <summary>
 				/// Enumerates all HalfEdges that are reachable from specified <paramref name="root"/>
@@ -140,7 +140,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-
 		private HalfEdge FaceToHalfEdge(Face face)
 		{
 			var e = new HalfEdge(face[0]) { Next = new HalfEdge(face[1]) { Next = new HalfEdge(face[2]) } };
@@ -161,9 +160,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 		}
-		public bool HitTest(Vector2 position, out TopologyHitTestResult result)
-		{
+
+		public bool HitTest(
+			Vector2 position,
+			float vertexHitRadius,
+			float edgeHitRadius,
+			out TopologyHitTestResult result
+		) {
 			var location = LocateClosestTriangle(position, out var edge);
+			var sqrVertexHitRadius = vertexHitRadius * vertexHitRadius;
+			var sqrEdgeHitRadius = edgeHitRadius * edgeHitRadius;
 			switch (location) {
 				case LocationResult.SameVertex:
 					result = new TopologyHitTestResult {
@@ -175,8 +181,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						Target = new Edge { Index0 = (ushort)edge.Origin, Index1 = (ushort)edge.Next.Origin, },
 						Info = new Edge.EdgeInfo() { IsConstrained = edge.Constrained, IsFraming = edge.Twin == null, },
 					};
+					var v1 = Vertices[result.Target[0]].Pos;
+					var v2 = Vertices[result.Target[1]].Pos;
+					var i = ((v1 - position).SqrLength <= (v2 - position).SqrLength) ? 0 : 1;
+					if (((i == 0 ? v1 : v2) - position).SqrLength <= sqrVertexHitRadius) {
+						result = new TopologyHitTestResult {
+							Target = new Topology.Vertex { Index = result.Target[i], },
+						};
+					}
 					return true;
-				case LocationResult.InsideTriangle:
+				default:
 					var next = edge.Next;
 					var prev = next.Next;
 					result = new TopologyHitTestResult {
@@ -194,11 +208,40 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 							IsFraming2 = prev.Twin == null,
 						}
 					};
-					return true;
-				default:
-					result = null;
-					return false;
+					break;
 			}
+			// Since using exact testing, we should check whether given position
+			// lies in the closest triangle's vertex/edge proximity in order to prioritize
+			// inbound primitives or correctly test position that is slightly outside of triangulation.
+			var inbound = location == LocationResult.InsideTriangle;
+			var faceInfo = result.Info as Face.FaceInfo;
+			var target = result.Target;
+			for (var i = 0; i < 3; ++i) {
+				var v1 = Vertices[target[i]].Pos;
+				var v2 = Vertices[target[(i + 1) % 3]].Pos;
+				if ((v1 - position).SqrLength <= sqrVertexHitRadius) {
+					inbound = true;
+					result = new TopologyHitTestResult {
+						Target = new Topology.Vertex { Index = target[i], },
+					};
+					break;
+				}
+				if (PointToSegmentSqrDistance(v1, v2, position) <= sqrEdgeHitRadius) {
+					inbound = true;
+					var edgeInfo = faceInfo?[i];
+					result = new TopologyHitTestResult {
+						Target = new Edge(target[i], target[(i + 1) % 3]),
+						Info = new Edge.EdgeInfo {
+							IsFraming = edgeInfo?.IsFraming ?? false,
+							IsConstrained = edgeInfo?.IsConstrained ?? false,
+						}
+					};
+				}
+			}
+			if (!inbound) {
+				result = null;
+			}
+			return inbound;
 		}
 
 		// Stays public until we get LocateClosestTriangle work O(logN) (cause otherwise rendering will
