@@ -185,7 +185,6 @@ namespace Tangerine.UI.FilesystemView
 						MinMagFilter = TextureFilter.Nearest
 					};
 				}
-
 				w.PrepareRendererState();
 				Renderer.DrawSprite(cachedZebraTexture, Color4.White, Vector2.Zero, w.Size, Vector2.Zero, w.Size / (Vector2)cachedZebraTexture.ImageSize / RowHeight);
 			});
@@ -354,8 +353,8 @@ namespace Tangerine.UI.FilesystemView
 			Func<ITexture> btnTexture = () => IsOverridedByAssociatedCookingRules(crc, path, yi) ? IconPool.GetTexture("Filesystem.Cross") : IconPool.GetTexture("Filesystem.Plus");
 			Widget foldButton;
 			headerWidget.Nodes.AddRange(
-				(foldButton = CreateFoldButton(overridesWidget)),
-				(new ThemedSimpleText {
+				foldButton = CreateFoldButton(overridesWidget),
+				new ThemedSimpleText {
 					ForceUncutText = false,
 					VAlignment = VAlignment.Center,
 					HAlignment = HAlignment.Left,
@@ -365,19 +364,19 @@ namespace Tangerine.UI.FilesystemView
 					MinSize = new Vector2(100, RowHeight),
 					MaxSize = new Vector2(200, RowHeight),
 					Text = yi.Name,
-				}),
-				(computedValueText = new ThemedSimpleText {
+				},
+				computedValueText = new ThemedSimpleText {
 					LayoutCell = new LayoutCell { StretchX = 3 },
 					ForceUncutText = false,
 					HAlignment = HAlignment.Left,
 					Size = new Vector2(150, RowHeight),
 					MinSize = new Vector2(50, RowHeight),
 					MaxSize = new Vector2(300, RowHeight),
-				}),
-				(createOrDestroyOverride = new ToolbarButton {
+				},
+				createOrDestroyOverride = new ToolbarButton {
 					Texture = btnTexture(),
 					Clicked = () => CreateOrDestroyFieldOverride(crc, path, yi, overridesWidget, createOrDestroyOverride),
-				})
+				}
 			);
 			headerWidget.Clicked = foldButton.Clicked;
 			createOrDestroyOverride.Padding = Thickness.Zero;
