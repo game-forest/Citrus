@@ -213,6 +213,7 @@ namespace Tangerine.UI.FilesystemView
 		private void NavigateAndSelect(string filename)
 		{
 			GoTo(Path.GetDirectoryName(filename));
+			filesystemSelection.Clear();
 			filesystemSelection.Select(filename);
 		}
 
