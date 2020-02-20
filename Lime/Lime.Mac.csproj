@@ -433,11 +433,10 @@
     <Compile Include="Source\Widgets\PolygonMesh\ExactArithmetic.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\GeometricPredicates.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\Topology\Edge.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\Topology\Face.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\HalfEdgeTopology\HalfEdgeTopology.Triangulator.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Topology\ITopology.cs" />
+    <Compile Include="Source\Widgets\PolygonMesh\Topology\ITopologyPrimitive.cs" />
     <Compile Include="Source\Widgets\PolygonMesh\Utils\PolygonMeshUtils.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSetupProcessor.cs" />

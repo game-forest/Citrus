@@ -3056,7 +3056,7 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		protected static global::Lime.Widgets.PolygonMesh.PolygonMesh Clone_Lime_PolygonMesh__PolygonMesh(Cloner cl, object src)
+		protected static global::Lime.Widgets.PolygonMesh.PolygonMesh Clone_Lime_Widgets_PolygonMesh__PolygonMesh(Cloner cl, object src)
 		{
 			if (src == null) return null;
 			if (src.GetType() != typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh))
@@ -4892,7 +4892,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.ParticlesMagnet)] = Clone_Lime__ParticlesMagnet;
 			clonerCache[typeof(global::Lime.Plane)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.PointObject)] = Clone_Lime__PointObject;
-			clonerCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh)] = Clone_Lime_PolygonMesh__PolygonMesh;
+			clonerCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh)] = Clone_Lime_Widgets_PolygonMesh__PolygonMesh;
 			clonerCache[typeof(global::Lime.Polyline)] = Clone_Lime__Polyline;
 			clonerCache[typeof(global::Lime.PolylinePoint)] = Clone_Lime__PolylinePoint;
 			clonerCache[typeof(global::Lime.PostProcessingComponent)] = Clone_Lime__PostProcessingComponent;
