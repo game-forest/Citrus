@@ -10,6 +10,7 @@ namespace Tangerine
 	public static class PolygonMeshTools
 	{
 		public static PolygonMeshController.ModificationState ControllerStateBeforeClone { get; set; }
+		public static PolygonMeshController.ModificationState ControllerStateBeforeAnimationPreview { get; set; }
 
 		public static void ChangeState(PolygonMeshController.ModificationState state)
 		{

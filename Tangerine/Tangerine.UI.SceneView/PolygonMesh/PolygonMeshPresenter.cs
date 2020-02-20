@@ -7,6 +7,8 @@ namespace Tangerine.UI.SceneView
 {
 	public class PolygonMeshPresenter
 	{
+		private static bool wasAnimationForced;
+
 		public PolygonMeshPresenter(SceneView sceneView)
 		{
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
@@ -14,15 +16,25 @@ namespace Tangerine.UI.SceneView
 
 		private static void Render(Widget canvas)
 		{
-			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
+			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
+			if (meshes.Count == 0) {
 				return;
 			}
-			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
-			if (meshes.Count != 0) {
-				canvas.PrepareRendererState();
-				foreach (var mesh in meshes) {
-					mesh.Controller().Render(canvas);
+			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
+				if (!wasAnimationForced) {
+					wasAnimationForced = true;
+					PolygonMeshTools.ControllerStateBeforeAnimationPreview = meshes[0].Controller().State;
+					PolygonMeshTools.ChangeState(PolygonMeshController.ModificationState.Animation);
 				}
+				return;
+			}
+			if (wasAnimationForced) {
+				wasAnimationForced = false;
+				PolygonMeshTools.ChangeState(PolygonMeshTools.ControllerStateBeforeAnimationPreview);
+			}
+			canvas.PrepareRendererState();
+			foreach (var mesh in meshes) {
+				mesh.Controller().Render(canvas);
 			}
 		}
 	}

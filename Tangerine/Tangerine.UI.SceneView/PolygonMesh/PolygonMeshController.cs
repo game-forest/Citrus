@@ -35,6 +35,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			Concave,
 		}
 
+		/// TODO: Most probably should be moved to <see cref="PolygonMeshTools"/>.
 		private ModificationState state;
 		internal ModificationState State
 		{
@@ -65,6 +66,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			public List<IKeyframe> Keyframes;
 		}
 
+		/// TODO: Most probably should be moved to <see cref="PolygonMeshTools"/>.
 		private Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode mode;
 		protected Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode Mode
 		{
@@ -103,6 +105,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public override void Update()
 		{
 			Mesh.Mode = Mode;
+			Topology.EmplaceVertices(Vertices as List<Vertex>);
 		}
 	}
 
@@ -167,7 +170,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		private bool HitTest(Vector2 position, float scale, out TopologyHitTestResult result)
 		{
-			Update();
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			position = transform.TransformVector(position);
 			var normalizedPosition = position / Mesh.Size;
@@ -206,7 +208,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public override void Render(Widget renderContext)
 		{
-			Update();
 			var transform = Mesh.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var hitTestResult);
 			var isHitTestSuccessful = ValidateHitTestResult(hitTestResult, ignoreState: false);
@@ -232,6 +233,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					var edgeInfo = info[i];
 					var v1 = prevVertex;
 					var v2 = nextVertex;
+					// Keep the same render order for each edge.
 					if (v2.X < v1.X || (v2.X == v1.X && v2.Y < v1.Y)) {
 						Toolbox.Swap(ref v1, ref v2);
 					}
@@ -365,8 +367,14 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				yield break;
 			}
 			using (Document.Current.History.BeginTransaction()) {
+				Core.Operations.SetAnimableProperty.Perform(
+					Mesh,
+					nameof(Lime.Widgets.PolygonMesh.PolygonMesh.TransientVertices),
+					new List<Vertex>(Vertices),
+					createAnimatorIfNeeded: true,
+					createInitialKeyframeForNewAnimator: true
+				);
 				while (SceneView.Instance.Input.IsMousePressed()) {
-					Document.Current.History.RollbackTransaction();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var positionDelta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
 					lastPos = transform.TransformVector(sv.MousePosition);
@@ -490,7 +498,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			var v = Mesh.TransientVertices[index];
 			v.Pos += delta;
 			Mesh.TransientVertices[index] = v;
-
 		}
 
 		public override IEnumerator<object> CreationTask()

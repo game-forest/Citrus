@@ -25,6 +25,9 @@ namespace Lime.Widgets.PolygonMesh
 		// TODO Move to topology
 		public List<Edge> ConstrainedEdges { get; set; }
 
+		/// <summary>
+		/// An auxiliary property, which is needed to store values from the <see cref="Animator{T}"/>.
+		/// </summary>
 		public List<Vertex> TransientVertices { get; set; }
 
 #if TANGERINE

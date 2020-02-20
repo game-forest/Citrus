@@ -54,7 +54,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			public void TwinWith(HalfEdge edge)
 			{
 				System.Diagnostics.Debug.Assert((edge.Next?.Origin ?? Origin) == Origin &&
-				                                (Next?.Origin ?? edge.Origin) == edge.Origin);
+												(Next?.Origin ?? edge.Origin) == edge.Origin);
 				edge.Twin = this;
 				Twin = edge;
 				Constrained |= edge.Constrained;
@@ -213,6 +213,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// Since using exact testing, we should check whether given position
 			// lies in the closest triangle's vertex/edge proximity in order to prioritize
 			// inbound primitives or correctly test position that is slightly outside of triangulation.
+
+			/// TODO place inside <see cref="LocateClosestTriangle(Vector2, out HalfEdge)"/>
 			var inbound = location == LocationResult.InsideTriangle;
 			var faceInfo = result.Info as Face.FaceInfo;
 			var target = result.Target;
@@ -343,6 +345,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 #endif
 
 		public event Action<ITopology> OnTopologyChanged;
+
+#if TANGERINE
+		public void EmplaceVertices(List<Vertex> vertices) => Vertices = vertices;
+#endif
 
 		public void AddVertex(Vertex vertex)
 		{

@@ -27,6 +27,16 @@ namespace Lime.PolygonMesh.Topology
 
 		event Action<ITopology> OnTopologyChanged;
 
+#if TANGERINE
+		/// <summary>
+		/// To switch between the animation and setup modes (<see cref="Widgets.PolygonMesh.PolygonMesh.ModificationMode"/>)
+		/// while working with the mesh in Tangerine, we need to make sure it is
+		/// possible for the topology controller to emplace current set of vertices with
+		/// the other one, i.e. <see cref="Widgets.PolygonMesh.PolygonMesh.TransientVertices"/>.
+		/// </summary>
+		/// <param name="vertices"></param>
+		void EmplaceVertices(List<Vertex> vertices);
+#endif
 		void AddVertex(Vertex vertex);
 		void RemoveVertex(int index, bool keepConstrainedEdges = false);
 		void TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta);
