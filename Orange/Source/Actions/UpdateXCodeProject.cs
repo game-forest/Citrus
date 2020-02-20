@@ -19,9 +19,6 @@ namespace Orange
 				UserInterface.Instance.ExitWithErrorIfPossible();
 				return "Error updating XCode project: active target must target iOS platform.";
 			}
-			if (The.Workspace.ProjectJson.GetValue<bool>("XCodeProject/DoSvnUpdate")) {
-				Subversion.Update(GetXCodeProjectFolder());
-			}
 			AssetCooker.CookForTarget(
 				target,
 				new List<string> { CookingRulesBuilder.MainBundleName }
@@ -46,9 +43,6 @@ namespace Orange
 			} else {
 				UserInterface.Instance.ExitWithErrorIfPossible();
 				return "Build system has returned error";
-			}
-			if (The.Workspace.ProjectJson.GetValue<bool>("XCodeProject/DoSvnCommit")) {
-				Subversion.Commit(GetXCodeProjectFolder(), "");
 			}
 			return null;
 		}

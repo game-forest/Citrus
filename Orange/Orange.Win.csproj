@@ -241,7 +241,6 @@
     <Compile Include="Source\Toolbox\IFileEnumerator.cs" />
     <Compile Include="Source\Toolbox\Json.cs" />
     <Compile Include="Source\Toolbox\Process.cs" />
-    <Compile Include="Source\Toolbox\Subversion.cs" />
     <Compile Include="Source\Toolbox\Toolbox.cs" />
     <Compile Include="Source\UI\UserInterface.cs" />
     <Compile Include="Source\Updater.cs" />

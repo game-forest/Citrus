@@ -29,20 +29,6 @@ namespace Orange
 			projectName = Path.GetFileNameWithoutExtension(projectDirectory);
 		}
 
-		public void SvnUpdate(Target target)
-		{
-			Subversion.Update(Path.GetDirectoryName(The.Workspace.GetLimeCsprojFilePath(target.Platform)));
-			Subversion.Update(Path.GetDirectoryName(projectDirectory));
-		}
-
-		public static void CopyFile(string srcDir, string dstDir, string fileName)
-		{
-			var srcFile = Path.Combine(srcDir, fileName);
-			var dstFile = Path.Combine(dstDir, fileName);
-			Console.WriteLine("Copying: {0}", dstFile);
-			File.Copy(srcFile, dstFile, true);
-		}
-
 		private static void SynchronizeAll()
 		{
 			var dontSynchronizeProject = The.Workspace.ProjectJson["DontSynchronizeProject"] as bool?;
