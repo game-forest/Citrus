@@ -22,14 +22,14 @@ namespace Orange
 
 		public static CitrusVersion Load()
 		{
-			using (var stream = File.Open(Path.Combine(Toolbox.CalcCitrusDirectory(), Filename), FileMode.Open)) {
+			using (var stream = File.Open(Path.Combine(Toolbox.FindCitrusDirectory(), Filename), FileMode.Open)) {
 				return Load(stream);
 			}
 		}
 
 		public static void Save(CitrusVersion citrusVersion)
 		{
-			using (var stream = File.Open(Path.Combine(Toolbox.CalcCitrusDirectory(), Filename), FileMode.Open)) {
+			using (var stream = File.Open(Path.Combine(Toolbox.FindCitrusDirectory(), Filename), FileMode.Open)) {
 				Save(citrusVersion, stream);
 			}
 		}

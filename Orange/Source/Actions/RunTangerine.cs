@@ -13,7 +13,7 @@ namespace Orange
 		public static string RunTangerine()
 		{
 			const string projectName = "Tangerine";
-			var projectDirectory = Path.Combine(Toolbox.CalcCitrusDirectory(), projectName);
+			var projectDirectory = Path.Combine(Toolbox.FindCitrusDirectory(), projectName);
 #if WIN
 			var solutionPath = Path.Combine(projectDirectory, projectName + ".Win.sln");
 			MSBuild.TryGetMSBuildPath(out var msbuildPath);

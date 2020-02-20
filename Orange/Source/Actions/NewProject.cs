@@ -31,7 +31,7 @@ namespace Orange
 		public static void NewProjectAction(Func<string, bool> projectOpened)
 		{
 			Application.InvokeOnMainThread(() => {
-				var citrusPath = Toolbox.CalcCitrusDirectory();
+				var citrusPath = Toolbox.FindCitrusDirectory();
 				var dlg = new FileDialog {
 					AllowedFileTypes = new string[] { "" },
 					Mode = FileDialogMode.SelectFolder
