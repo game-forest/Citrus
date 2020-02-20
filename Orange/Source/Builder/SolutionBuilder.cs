@@ -21,7 +21,7 @@ namespace Orange
 #if WIN
 			buildSystem = new MSBuild(target);
 #elif MAC
-			buildSystem = new MDTool(platform, solutionPath, configuration);
+			buildSystem = new MDTool(target);
 #else
 			throw new NotSupportedException();
 #endif
@@ -83,11 +83,11 @@ namespace Orange
 		public string GetApplicationPath()
 		{
 #if MAC
-			if (buildSystem.Platform == TargetPlatform.Mac) {
+			if (target.Platform == TargetPlatform.Mac) {
 				return Path.Combine(
 					projectDirectory,
 					"bin",
-					buildSystem.Configuration,
+					target.Configuration,
 					projectName + ".app",
 					"Contents/MacOS",
 					projectName);
@@ -130,7 +130,7 @@ namespace Orange
 				return 1;
 			}
 #else
-			if (buildSystem.Platform == TargetPlatform.Mac) {
+			if (target.Platform == TargetPlatform.Mac) {
 				return Process.Start(GetMacAppName(), string.Empty);
 			} else {
 				var args = "--sdkroot=/Applications/Xcode.app" + ' ' + "--installdev=" + GetIOSAppName();
@@ -214,7 +214,8 @@ namespace Orange
 				androidSdk = Path.Combine(appData, "Android", "android-sdk");
 				executable = Path.Combine(androidSdk, "platform-tools", "adb.exe");
 #elif MAC
-				androidSdk = ""; // TODO: Find defualt sdk path on OSX and assign executable
+				// TODO: Find defualt sdk path on OSX and assign executable
+				androidSdk = "";
 #endif
 			}
 
