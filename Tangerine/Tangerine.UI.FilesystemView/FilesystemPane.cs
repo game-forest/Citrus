@@ -32,7 +32,11 @@ namespace Tangerine.UI.FilesystemView
 
 		private void Initialize()
 		{
-			// TODO: clear references from user preferences tree to widgets from tree disposed
+			views.Clear();
+			// clear unwanted Widget references for GC to collect
+			foreach (var (_, viewNode) in FilesystemUserPreferences.Instance.ViewRootPerProjectFile) {
+				viewNode.Widget = null;
+			}
 			rootWidget?.UnlinkAndDispose();
 			var up = FilesystemUserPreferences.Instance;
 			var q = new Queue<ViewNode>();
