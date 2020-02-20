@@ -45,14 +45,13 @@ namespace Orange
 		public Workspace()
 		{
 			Targets = new List<Target>();
-			FillDefaultTargets();
 		}
 
 		public string GetPlatformSuffix(TargetPlatform platform)
 		{
 			return "." + platform.ToString();
 		}
-		
+
 		public string GetTangerineCacheBundlePath()
 		{
 			var name = string
@@ -313,7 +312,7 @@ namespace Orange
 		public string GetBundlePath(TargetPlatform platform, string bundleName)
 		{
 			if (bundleName == CookingRulesBuilder.MainBundleName) {
-				return The.Workspace.GetMainBundlePath(platform);
+				return GetMainBundlePath(platform);
 			} else {
 				return Path.Combine(Path.GetDirectoryName(AssetsDirectory), bundleName + GetPlatformSuffix(platform));
 			}
