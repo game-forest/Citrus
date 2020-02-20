@@ -26,9 +26,9 @@ namespace Orange
 		private string dataFolderName;
 		private string pluginName;
 		/// <summary>
-		/// Location of Citrus used by currently loaded project. Not a location of general Citrus project
+		/// Absolute path to directory of Citrus used by loaded project which is not necessarily a location of running Citrus.
 		/// </summary>
-		private string citrusLocation;
+		private string projectRelatedCitrusDirectory;
 
 		/// <summary>
 		/// Currently used asset cache mode
@@ -77,21 +77,9 @@ namespace Orange
 		/// <summary>
 		/// Returns Citrus/Lime project path.
 		/// </summary>
-		public string GetLimeCsprojFilePath(TargetPlatform platform)
+		public string GetProjectRelatedLimeCsprojFilePath(TargetPlatform platform)
 		{
-			// Now Citrus can either be located beside the game or inside the game directory.
-			// In future projects Citrus location should be specified through "CitrusLocation" in citproj config file
-			var suffix = Path.Combine("Lime", "Lime" + GetPlatformSuffix(platform) + ".csproj");
-			string result;
-			if (!string.IsNullOrEmpty(citrusLocation)) {
-				result = Path.Combine(ProjectDirectory, citrusLocation, suffix);
-			} else {
-				result = Path.Combine(ProjectDirectory, "Citrus", suffix);
-				if (!File.Exists(result)) {
-					result = Path.Combine(Path.GetDirectoryName(ProjectDirectory), "Citrus", suffix);
-				}
-			}
-			return result;
+			return Path.Combine(projectRelatedCitrusDirectory, "Lime", "Lime" + GetPlatformSuffix(platform) + ".csproj");
 		}
 
 		public static readonly Workspace Instance = new Workspace();
@@ -157,8 +145,8 @@ namespace Orange
 			try {
 				The.UI.ClearLog();
 				ProjectFilePath = projectFilePath;
-				ReadProject(projectFilePath);
 				ProjectDirectory = Path.GetDirectoryName(projectFilePath);
+				ReadProject(projectFilePath);
 				AssetsDirectory = Path.Combine(ProjectDirectory, dataFolderName);
 				var tangerineAssetBundle = new Tangerine.Core.TangerineAssetBundle(AssetsDirectory);
 				if (!tangerineAssetBundle.IsActual()) {
@@ -183,6 +171,12 @@ namespace Orange
 				The.UI.ReloadBundlePicker();
 			} catch (System.Exception e) {
 				Console.WriteLine($"Can't open {projectFilePath}:\n{e.Message}");
+				// TODO: make a general way to close project and reset everything to default state
+				ProjectFilePath = null;
+				ProjectDirectory = null;
+				AssetsDirectory = null;
+				AssetFiles = null;
+				TangerineCacheBundle = null;
 			}
 		}
 
@@ -215,8 +209,26 @@ namespace Orange
 			GeneratedScenesPath = string.IsNullOrEmpty(generatedScenesConfigPath) ? "GeneratedScenes" : generatedScenesConfigPath;
 			dataFolderName = ProjectJson.GetValue("DataFolderName", "Data");
 			pluginName = ProjectJson.GetValue("Plugin", "");
-			citrusLocation = ProjectJson.GetValue("CitrusLocation", string.Empty);
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
+
+			// Standard Citrus locations are beside the project directory or inside it.
+			// If the location deviates from the standard, it should be specified through "CitrusDirectory" in citproj file.
+			projectRelatedCitrusDirectory = ProjectJson.GetValue("CitrusDirectory", string.Empty);
+			if (!string.IsNullOrEmpty(projectRelatedCitrusDirectory)) {
+				if (!System.IO.Path.IsPathRooted(projectRelatedCitrusDirectory)) {
+					projectRelatedCitrusDirectory = Path.Combine(ProjectDirectory, projectRelatedCitrusDirectory);
+				}
+			} else {
+				// If Citrus Directory is not set via citproj file, try default values from past precedents
+				// first a Citrus directory inside project directory, second Citrus directory one level above project directory
+				projectRelatedCitrusDirectory = Path.Combine(ProjectDirectory, "Citrus");
+				if (!Directory.Exists(projectRelatedCitrusDirectory)) {
+					projectRelatedCitrusDirectory = Path.Combine(Path.GetDirectoryName(ProjectDirectory), "Citrus");
+				}
+			}
+			if (!File.Exists(Path.Combine(projectRelatedCitrusDirectory, CitrusVersion.Filename))) {
+				throw new InvalidOperationException($"Unable to locate project related Citrus directory at \"{projectRelatedCitrusDirectory}\", check value of \"CitrusDirectory\" in \"{ProjectFilePath}\"");
+			}
 
 			// Initialize default and parse project specific targets.
 			Targets = new List<Target>();

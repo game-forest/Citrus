@@ -41,7 +41,7 @@ namespace Orange
 				cutDirectoryPrefix: false
 			);
 			foreach (var target in The.Workspace.Targets) {
-				var limeProj = CsprojSynchronization.ToUnixSlashes(The.Workspace.GetLimeCsprojFilePath(target.Platform));
+				var limeProj = CsprojSynchronization.ToUnixSlashes(The.Workspace.GetProjectRelatedLimeCsprojFilePath(target.Platform));
 				CsprojSynchronization.SynchronizeProject(limeProj);
 				using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 					var dirInfo = new System.IO.DirectoryInfo(The.Workspace.ProjectDirectory);
