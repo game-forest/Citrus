@@ -2,6 +2,9 @@ namespace Lime
 {
 	public class BlendAnimationEngine : DefaultAnimationEngine
 	{
+#if TANGERINE
+		public static bool ApplyAnimationBlenderInTangerine { get; set; }
+#endif
 		public new static BlendAnimationEngine Instance = new BlendAnimationEngine();
 
 		public override void AdvanceAnimation(Animation animation, double delta)
@@ -10,7 +13,7 @@ namespace Lime
 #if TANGERINE
 			// Do not blend animations while fast forwarding is in progress.
 			// Otherwise the scene thumbnail generation will cause animation on the scene view.
-			if (!Audio.GloballyEnable) {
+			if (!Audio.GloballyEnable && !ApplyAnimationBlenderInTangerine) {
 				return;
 			}
 #endif
