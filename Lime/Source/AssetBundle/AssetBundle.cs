@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Lime
 {
+	public struct FileInfo
+	{
+		public string Path;
+		public DateTime LastWriteTime;
+	}
+
 	[Flags]
 	public enum AssetAttributes
 	{
@@ -56,11 +64,11 @@ namespace Lime
 		[Obsolete("Field is deprecated, please use CurrentLanguage in Application class instead.")]
 		public static string CurrentLanguage;
 
-		public abstract Stream OpenFile(string path);
+		public abstract Stream OpenFile(string path, FileMode fileMode = FileMode.Open);
 
 		public byte[] ReadFile(string path)
 		{
-			using (var stream = OpenFile(path)) {
+			using (var stream = OpenFile(path, FileMode.Open)) {
 				using (var memoryStream = new MemoryStream()) {
 					stream.CopyTo(memoryStream);
 					return memoryStream.ToArray();
@@ -68,7 +76,15 @@ namespace Lime
 			}
 		}
 
+		public string ReadAllText(string path, Encoding encoding)
+		{
+			using (var streamReader = new StreamReader(OpenFile(path), encoding, detectEncodingFromByteOrderMarks: true)) {
+				return streamReader.ReadToEnd();
+			}
+		}
+
 		public abstract DateTime GetFileLastWriteTime(string path);
+		public abstract void SetFileLastWriteTime(string path, DateTime time);
 		public abstract byte[] GetCookingRulesSHA1(string path);
 		public abstract int GetFileSize(string path);
 
@@ -77,7 +93,15 @@ namespace Lime
 
 		public abstract void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1);
 
-		public abstract IEnumerable<string> EnumerateFiles(string path = null);
+		/// <summary>
+		/// Enumerates all file infos by given path and having the given extension.
+		/// </summary>
+		public abstract IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null);
+
+		/// <summary>
+		/// Enumerates all files by given path and having the given extension.
+		/// </summary>
+		public IEnumerable<string> EnumerateFiles(string path = null, string extension = null) => EnumerateFileInfos(path, extension).Select(i => i.Path);
 
 		public void ImportFile(string srcPath, string dstPath, int reserve, string sourceExtension, AssetAttributes attributes, DateTime time, byte[] cookingRulesSHA1)
 		{
@@ -85,6 +109,16 @@ namespace Lime
 				ImportFile(dstPath, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
 			}
 		}
+
+		/// <summary>
+		/// Translates bundle path to the asset in the file system. Raises UnsupportedException() for PackedAssetBundle.
+		/// </summary>
+		public abstract string ToSystemPath(string bundlePath);
+
+		/// <summary>
+		/// Translates absolute system file path to the asset path. Raises UnsupportedException() for PackedAssetBundle.
+		/// </summary>
+		public abstract string FromSystemPath(string systemPath);
 
 		public Stream OpenFileLocalized(string path)
 		{

@@ -41,13 +41,13 @@ namespace Lime
 			}
 		}
 
-		public override Stream OpenFile(string path)
+		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.OpenFile(path);
+						return bundle.OpenFile(path, mode);
 					}
 				}
 			} finally {
@@ -82,6 +82,11 @@ namespace Lime
 				sync.ExitReadLock();
 			}
 			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
+		}
+
+		public override void SetFileLastWriteTime(string path, DateTime time)
+		{
+			throw new NotImplementedException();
 		}
 
 		public override byte[] GetCookingRulesSHA1(string path)
@@ -140,14 +145,18 @@ namespace Lime
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}
 
-		public override IEnumerable<string> EnumerateFiles(string path = null)
+		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
 		{
 			sync.EnterReadLock();
 			try {
-				return bundles.SelectMany(bundle => bundle.EnumerateFiles(path));
+				return bundles.SelectMany(bundle => bundle.EnumerateFileInfos(path, extension));
 			} finally {
 				sync.ExitReadLock();
 			}
 		}
+		
+		public override string FromSystemPath(string systemPath) => throw new NotImplementedException();
+
+		public override string ToSystemPath(string bundlePath) => throw new NotImplementedException();
 	}
 }
