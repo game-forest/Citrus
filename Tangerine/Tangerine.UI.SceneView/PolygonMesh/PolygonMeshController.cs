@@ -76,9 +76,11 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 		}
 
+		protected abstract bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState);
+
 		public abstract void Update();
-		public abstract bool HitTest(Vector2 position, float scale);
 		public abstract void Render(Widget renderContext);
+		public abstract bool HitTest(Vector2 position, float scale, bool ignoreState = false);
 		public abstract IEnumerator<object> AnimationTask();
 		public abstract IEnumerator<object> TriangulationTask();
 		public abstract IEnumerator<object> CreationTask();
@@ -174,10 +176,14 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			return Topology.HitTest(normalizedPosition, vertexHitRadius, edgeHitRadius, out result);
 		}
 
-		private bool ValidateHitTestResult(TopologyHitTestResult result)
+		protected override bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState)
 		{
 			if (result == null) {
 				return false;
+			}
+
+			if (ignoreState) {
+				return true;
 			}
 
 			switch (State) {
@@ -192,10 +198,10 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 		}
 
-		public override bool HitTest(Vector2 position, float scale)
+		public override bool HitTest(Vector2 position, float scale, bool ignoreState = false)
 		{
 			HitTest(position, scale, out var result);
-			return ValidateHitTestResult(result);
+			return ValidateHitTestResult(result, ignoreState);
 		}
 
 		public override void Render(Widget renderContext)
@@ -203,7 +209,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			Update();
 			var transform = Mesh.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var hitTestResult);
-			var isHitTestSuccessful = ValidateHitTestResult(hitTestResult);
+			var isHitTestSuccessful = ValidateHitTestResult(hitTestResult, ignoreState: false);
 			var hitTestTarget = isHitTestSuccessful ? hitTestResult.Target : null;
 			if (hitTestTarget != null && hitTestTarget.IsFace()) {
 				Utils.RenderTriangle(
