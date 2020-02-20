@@ -48,7 +48,7 @@ namespace Orange
 					foreach (var fileInfo in fileEnumerator.Enumerate(The.Workspace.GetPlatformSuffix(target.Platform) + ".csproj")) {
 						CsprojSynchronization.SynchronizeProject(fileInfo.Path);
 					};
-					if (target.ProjectPath != null) {
+					if (target.ProjectPath != null && target.ProjectPath.EndsWith(".csproj")) {
 						foreach (var targetCsprojFile in fileEnumerator.Enumerate(Path.GetFileName(target.ProjectPath))) {
 							CsprojSynchronization.SynchronizeProject(targetCsprojFile.Path);
 						}
