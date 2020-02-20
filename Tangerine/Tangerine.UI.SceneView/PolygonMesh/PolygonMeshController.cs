@@ -26,61 +26,17 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 	{
 		protected static SceneView sv => SceneView.Instance;
 
-		public enum ModificationState
-		{
-			Animation,
-			Triangulation,
-			Creation,
-			Removal,
-			Concave,
-		}
-
-		/// TODO: Most probably should be moved to <see cref="PolygonMeshTools"/>.
-		private ModificationState state;
-		internal ModificationState State
-		{
-			get => state;
-			set
-			{
-				state = value;
-				switch (value) {
-					case ModificationState.Animation:
-						Mode = Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode.Animation;
-						break;
-					case ModificationState.Triangulation:
-					case ModificationState.Creation:
-					case ModificationState.Removal:
-					case ModificationState.Concave:
-						Mode = Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode.Setup;
-						break;
-				}
-			}
-		}
-
 		public struct PolygonMeshSlice
 		{
-			public ModificationState State;
+			public PolygonMeshTools.ModificationState State;
 			public List<Vertex> Vertices;
 			public List<Face> IndexBuffer;
 			public List<Edge> ConstrainedVertices;
 			public List<IKeyframe> Keyframes;
 		}
 
-		/// TODO: Most probably should be moved to <see cref="PolygonMeshTools"/>.
-		private Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode mode;
-		protected Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode Mode
-		{
-			get => mode;
-			set
-			{
-				mode = value;
-				Update();
-			}
-		}
-
 		protected abstract bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState);
 
-		public abstract void Update();
 		public abstract void Render(Widget renderContext);
 		public abstract bool HitTest(Vector2 position, float scale, bool ignoreState = false);
 		public abstract IEnumerator<object> AnimationTask();
@@ -98,15 +54,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public ITopology Topology { get; protected set; }
 
-		public IList<Vertex> Vertices => Mode == Lime.Widgets.PolygonMesh.PolygonMesh.ModificationMode.Animation
+		public IList<Vertex> Vertices => PolygonMeshTools.Mode == PolygonMeshTools.ModificationMode.Animation
 			? Mesh.TransientVertices
 			: Mesh.Vertices;
-
-		public override void Update()
-		{
-			Mesh.Mode = Mode;
-			Topology.EmplaceVertices(Vertices as List<Vertex>);
-		}
 	}
 
 	[YuzuDontGenerateDeserializer]
@@ -149,7 +99,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				if (mesh.TransientVertices == null) {
 					mesh.TransientVertices = new List<Vertex>(mesh.Vertices);
 				}
-				State = PolygonMeshTools.ControllerStateBeforeClone;
+				PolygonMeshTools.State = PolygonMeshTools.ModificationState.Animation;
 			} else if (oldOwner != null) {
 				oldOwner.Components.Remove(this);
 				Topology.OnTopologyChanged -= UpdateMeshFaces;
@@ -170,6 +120,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		private bool HitTest(Vector2 position, float scale, out TopologyHitTestResult result)
 		{
+			if (PolygonMeshTools.Mode == PolygonMeshTools.ModificationMode.Animation) {
+				Mesh.Update();
+			}
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			position = transform.TransformVector(position);
 			var normalizedPosition = position / Mesh.Size;
@@ -188,12 +141,12 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				return true;
 			}
 
-			switch (State) {
-				case ModificationState.Animation:
-				case ModificationState.Creation:
+			switch (PolygonMeshTools.State) {
+				case PolygonMeshTools.ModificationState.Animation:
+				case PolygonMeshTools.ModificationState.Creation:
 					return true;
-				case ModificationState.Triangulation:
-				case ModificationState.Removal:
+				case PolygonMeshTools.ModificationState.Triangulation:
+				case PolygonMeshTools.ModificationState.Removal:
 					return result.Target.IsVertex();
 				default:
 					return false;
@@ -208,7 +161,10 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public override void Render(Widget renderContext)
 		{
-			var transform = Mesh.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(renderContext);
+			if (PolygonMeshTools.Mode == PolygonMeshTools.ModificationMode.Animation) {
+				Mesh.Update();
+			}
+			var transform = Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(renderContext);
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var hitTestResult);
 			var isHitTestSuccessful = ValidateHitTestResult(hitTestResult, ignoreState: false);
 			var hitTestTarget = isHitTestSuccessful ? hitTestResult.Target : null;
@@ -217,7 +173,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					transform.TransformVector(Vertices[hitTestTarget[0]].Pos * Mesh.Size),
 					transform.TransformVector(Vertices[hitTestTarget[1]].Pos * Mesh.Size),
 					transform.TransformVector(Vertices[hitTestTarget[2]].Pos * Mesh.Size),
-					State == ModificationState.Removal ?
+					PolygonMeshTools.State == PolygonMeshTools.ModificationState.Removal ?
 						Theme.Colors.PolygonMeshRemovalColor :
 						Theme.Colors.PolygonMeshHoverColor
 				);
@@ -240,8 +196,10 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					var isEdgeHovered = isHitTestResultTargetEdge &&
 										(hitTestTarget[0] == prevVertexIndex && hitTestTarget[1] == nextVertexIndex ||
 										hitTestTarget[0] == nextVertexIndex && hitTestTarget[1] == prevVertexIndex);
-					var isEdgePossiblyWillBeRemoved = isHitTestResultTargetVertex && State == ModificationState.Removal &&
-										(hitTestTarget[0] == prevVertexIndex || hitTestTarget[0] == nextVertexIndex);
+					var isEdgePossiblyWillBeRemoved =
+						isHitTestResultTargetVertex &&
+						PolygonMeshTools.State == PolygonMeshTools.ModificationState.Removal &&
+						(hitTestTarget[0] == prevVertexIndex || hitTestTarget[0] == nextVertexIndex);
 					if (isEdgeHovered || isEdgePossiblyWillBeRemoved) {
 						RenderEdgeHovered(v1, v2, edgeInfo.IsFraming, edgeInfo.IsConstrained);
 					} else {
@@ -258,7 +216,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					RenderVertex(v);
 				}
 			}
-			if (State == ModificationState.Creation && hitTestTarget != null && !hitTestTarget.IsVertex()) {
+			if (PolygonMeshTools.State == PolygonMeshTools.ModificationState.Creation && hitTestTarget != null && !hitTestTarget.IsVertex()) {
 				Utils.RenderVertex(
 					transform.TransformVector(SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget) * Mesh.Size),
 					Theme.Metrics.PolygonMeshBackgroundVertexRadius,
@@ -305,7 +263,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		private void RenderEdgeHovered(Vector2 start, Vector2 end, bool isFraming, bool isConstrained)
 		{
-			var foregroundColor =  State == ModificationState.Removal ?
+			var foregroundColor = PolygonMeshTools.State == PolygonMeshTools.ModificationState.Removal ?
 				Theme.Colors.PolygonMeshRemovalColor : Theme.Colors.PolygonMeshHoverColor;
 			var backgroundColor = Theme.Colors.PolygonMeshInnerEdgeBackgroundColor;
 			var foregroundSize = new Vector2(
@@ -351,7 +309,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				1.3f * Theme.Metrics.PolygonMeshBackgroundVertexRadius,
 				1.3f * Theme.Metrics.PolygonMeshVertexRadius,
 				Theme.Colors.PolygonMeshHoverColor.Darken(0.7f),
-				State == ModificationState.Removal ?
+				PolygonMeshTools.State == PolygonMeshTools.ModificationState.Removal ?
 					Theme.Colors.PolygonMeshRemovalColor :
 					Theme.Colors.PolygonMeshHoverColor
 			);
@@ -374,7 +332,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					createAnimatorIfNeeded: true,
 					createInitialKeyframeForNewAnimator: true
 				);
-				while (SceneView.Instance.Input.IsMousePressed()) {
+				while (sv.Input.IsMousePressed()) {
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var positionDelta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
 					lastPos = transform.TransformVector(sv.MousePosition);
@@ -411,13 +369,13 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					out var animator
 				);
 				var sliceBefore = new PolygonMeshSlice {
-					State = ModificationState.Triangulation,
+					State = PolygonMeshTools.ModificationState.Triangulation,
 					Vertices = new List<Vertex>(Mesh.Vertices),
 					IndexBuffer = new List<Face>(Mesh.Faces),
 					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
 					Keyframes = animator?.Keys.ToList()
 				};
-				while (SceneView.Instance.Input.IsMousePressed()) {
+				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
@@ -434,7 +392,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						}
 					}
 					var sliceAfter = new PolygonMeshSlice {
-						State = ModificationState.Triangulation,
+						State = PolygonMeshTools.ModificationState.Triangulation,
 						Vertices = new List<Vertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -514,7 +472,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						out var animator
 					);
 					var sliceBefore = new PolygonMeshSlice {
-						State = ModificationState.Creation,
+						State = PolygonMeshTools.ModificationState.Creation,
 						Vertices = new List<Vertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -538,7 +496,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						}
 					}
 					var sliceAfter = new PolygonMeshSlice {
-						State = ModificationState.Creation,
+						State = PolygonMeshTools.ModificationState.Creation,
 						Vertices = new List<Vertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -570,7 +528,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					out var animator
 				);
 				var sliceBefore = new PolygonMeshSlice {
-					State = ModificationState.Creation,
+					State = PolygonMeshTools.ModificationState.Creation,
 					Vertices = new List<Vertex>(Mesh.Vertices),
 					IndexBuffer = new List<Face>(Mesh.Faces),
 					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -615,7 +573,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					}
 					Topology.ConstrainEdge(startIndex, endIndex);
 					var sliceAfter = new PolygonMeshSlice {
-						State = ModificationState.Creation,
+						State = PolygonMeshTools.ModificationState.Creation,
 						Vertices = new List<Vertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -656,7 +614,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						out var animator
 					);
 					var sliceBefore = new PolygonMeshSlice {
-						State = ModificationState.Removal,
+						State = PolygonMeshTools.ModificationState.Removal,
 						Vertices = new List<Vertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -681,7 +639,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						// TODO
 					}
 					var sliceAfter = new PolygonMeshSlice {
-						State = ModificationState.Removal,
+						State = PolygonMeshTools.ModificationState.Removal,
 						Vertices = new List<Vertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),

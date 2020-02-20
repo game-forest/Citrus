@@ -31,13 +31,7 @@ namespace Lime.Widgets.PolygonMesh
 		public List<Vertex> TransientVertices { get; set; }
 
 #if TANGERINE
-		public enum ModificationMode
-		{
-			Animation,
-			Setup
-		}
-
-		public ModificationMode Mode { get; set; }
+		public bool IsBeingAnimatedExternally;
 #endif
 
 		public PolygonMesh()
@@ -71,7 +65,7 @@ namespace Lime.Widgets.PolygonMesh
 			var lkf = 0;
 			var rkf = 0;
 #if TANGERINE
-			if (Mode == ModificationMode.Animation) {
+			if (IsBeingAnimatedExternally) {
 #endif
 				if (Animators.TryFind(nameof(TransientVertices), out var animator)) {
 					foreach (var key in animator.Keys) {

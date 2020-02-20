@@ -27,20 +27,20 @@ namespace Tangerine.UI.SceneView
 					if (mesh.Controller().HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-							switch (mesh.Controller().State) {
-								case PolygonMeshController.ModificationState.Animation:
+							switch (PolygonMeshTools.State) {
+								case PolygonMeshTools.ModificationState.Animation:
 									yield return mesh.Controller().AnimationTask();
 									break;
-								case PolygonMeshController.ModificationState.Triangulation:
+								case PolygonMeshTools.ModificationState.Triangulation:
 									yield return mesh.Controller().TriangulationTask();
 									break;
-								case PolygonMeshController.ModificationState.Creation:
+								case PolygonMeshTools.ModificationState.Creation:
 									yield return mesh.Controller().CreationTask();
 									break;
-								case PolygonMeshController.ModificationState.Removal:
+								case PolygonMeshTools.ModificationState.Removal:
 									yield return mesh.Controller().RemovalTask();
 									break;
-								case PolygonMeshController.ModificationState.Concave:
+								case PolygonMeshTools.ModificationState.Concave:
 									yield return mesh.Controller().ConcaveTask();
 									break;
 							}

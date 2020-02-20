@@ -14,11 +14,8 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 			public class Processor : OperationProcessor<Animate>
 			{
-				protected override void InternalRedo(Animate op) =>
-					PolygonMeshTools.ChangeState(PolygonMeshController.ModificationState.Animation);
-
-				protected override void InternalUndo(Animate op) =>
-					PolygonMeshTools.ChangeState(PolygonMeshController.ModificationState.Animation);
+				protected override void InternalRedo(Animate op) => PolygonMeshTools.State = PolygonMeshTools.ModificationState.Animation;
+				protected override void InternalUndo(Animate op) => PolygonMeshTools.State = PolygonMeshTools.ModificationState.Animation;
 			}
 		}
 	}

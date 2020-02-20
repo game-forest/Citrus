@@ -30,7 +30,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				private void Do(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice slice)
 				{
 					var controller = mesh.Controller();
-					controller.State = slice.State;
+					PolygonMeshTools.State = slice.State;
 					mesh.Vertices.Clear();
 					foreach (var v in slice.Vertices) {
 						mesh.Vertices.Add(v);

@@ -16,21 +16,21 @@ namespace Tangerine.UI.SceneView
 
 		private static void Render(Widget canvas)
 		{
-			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
-			if (meshes.Count == 0) {
-				return;
-			}
 			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
 				if (!wasAnimationForced) {
 					wasAnimationForced = true;
-					PolygonMeshTools.ControllerStateBeforeAnimationPreview = meshes[0].Controller().State;
-					PolygonMeshTools.ChangeState(PolygonMeshController.ModificationState.Animation);
+					PolygonMeshTools.StateBeforeAnimationPreview = PolygonMeshTools.State;
+					PolygonMeshTools.State = PolygonMeshTools.ModificationState.Animation;
 				}
 				return;
 			}
 			if (wasAnimationForced) {
 				wasAnimationForced = false;
-				PolygonMeshTools.ChangeState(PolygonMeshTools.ControllerStateBeforeAnimationPreview);
+				PolygonMeshTools.State = PolygonMeshTools.StateBeforeAnimationPreview;
+			}
+			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
+			if (meshes.Count == 0) {
+				return;
 			}
 			canvas.PrepareRendererState();
 			foreach (var mesh in meshes) {

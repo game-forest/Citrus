@@ -1,51 +1,89 @@
-using Lime.PolygonMesh;
 using System.Linq;
 using Lime.Widgets.PolygonMesh;
 using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.SceneView.PolygonMesh;
+using Lime;
 
 namespace Tangerine
 {
 	public static class PolygonMeshTools
 	{
-		public static PolygonMeshController.ModificationState ControllerStateBeforeClone { get; set; }
-		public static PolygonMeshController.ModificationState ControllerStateBeforeAnimationPreview { get; set; }
-
-		public static void ChangeState(PolygonMeshController.ModificationState state)
+		public enum ModificationMode
 		{
-			foreach (var mesh in Document.Current.Nodes().OfType<PolygonMesh>().ToList()) {
-				mesh.Controller().State = state;
+			Animation,
+			Setup
+		}
+
+		public enum ModificationState
+		{
+			Animation,
+			Triangulation,
+			Creation,
+			Removal,
+			Concave,
+		}
+
+		private static ModificationMode mode;
+		public static ModificationMode Mode
+		{
+			get => mode;
+			set
+			{
+				mode = value;
+				foreach (var mesh in Document.Current.Nodes().OfType<PolygonMesh>().ToList()) {
+					mesh.IsBeingAnimatedExternally = mode == ModificationMode.Animation;
+					mesh.Update();
+				}
 			}
 		}
 
+		private static ModificationState state;
+		public static ModificationState State
+		{
+			get => state;
+			set
+			{
+				state = value;
+				switch (value) {
+					case ModificationState.Animation:
+						Mode = ModificationMode.Animation;
+						break;
+					case ModificationState.Triangulation:
+					case ModificationState.Creation:
+					case ModificationState.Removal:
+					case ModificationState.Concave:
+						Mode = ModificationMode.Setup;
+						break;
+				}
+			}
+		}
+
+		public static ModificationState StateBeforeAnimationPreview { get; set; }
+
 		public class Animate : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() =>
-				ChangeState(PolygonMeshController.ModificationState.Animation);
+			public override void ExecuteTransaction() => State = ModificationState.Animation;
 		}
 
 		public class Triangulate : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() =>
-				ChangeState(PolygonMeshController.ModificationState.Triangulation);
+			public override void ExecuteTransaction() => State = ModificationState.Triangulation;
 		}
 
 		public class Create : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() =>
-				ChangeState(PolygonMeshController.ModificationState.Creation);
+			public override void ExecuteTransaction() => State = ModificationState.Creation;
 		}
 
 		public class Remove : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() =>
-				ChangeState(PolygonMeshController.ModificationState.Removal);
+			public override void ExecuteTransaction() => State = ModificationState.Removal;
 		}
+
 		public class Concave : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() =>
-				ChangeState(PolygonMeshController.ModificationState.Concave);
+			public override void ExecuteTransaction() => State = ModificationState.Concave;
 		}
 	}
 }
