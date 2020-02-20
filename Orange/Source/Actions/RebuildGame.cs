@@ -31,7 +31,7 @@ namespace Orange
 			DeleteAllBundlesInTopDirectory(target);
 			DeleteAllBundlesReferredInCookingRules(target);
 
-			var builder = new SolutionBuilder(target.Platform, target.ProjectPath);
+			var builder = new SolutionBuilder(target);
 			if (!builder.Clean()) {
 				Console.WriteLine("CLEANUP FAILED");
 				return false;

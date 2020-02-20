@@ -10,22 +10,22 @@ namespace Orange
 	public class SolutionBuilder
 	{
 		private readonly BuildSystem buildSystem;
-
+		private readonly Target target;
 		private readonly string projectDirectory;
 		private readonly string projectName;
 
 
-		public SolutionBuilder(
-			TargetPlatform platform, string solutionPath, string configuration = BuildConfiguration.Release)
+		public SolutionBuilder(Target target)
 		{
+			this.target = target;
 #if WIN
-			buildSystem = new MSBuild(platform, solutionPath, configuration);
+			buildSystem = new MSBuild(target);
 #elif MAC
 			buildSystem = new MDTool(platform, solutionPath, configuration);
 #else
 			throw new NotSupportedException();
 #endif
-			projectDirectory = Path.GetDirectoryName(buildSystem.SolutionPath);
+			projectDirectory = Path.GetDirectoryName(target.ProjectPath);
 			projectName = Path.GetFileNameWithoutExtension(projectDirectory);
 		}
 
@@ -98,7 +98,7 @@ namespace Orange
 			return Path.Combine(
 				projectDirectory,
 				"bin",
-				buildSystem.Configuration,
+				target.Configuration,
 				projectName + ".exe");
 #endif
 		}
@@ -107,7 +107,7 @@ namespace Orange
 		{
 			Console.WriteLine("------------- Starting Application -------------");
 
-			if (buildSystem.Platform == TargetPlatform.Android) {
+			if (target.Platform == TargetPlatform.Android) {
 				var signedApks = Directory.GetFiles(buildSystem.BinariesDirectory)
 					.Where(file => file.EndsWith("-Signed.apk"));
 
@@ -147,7 +147,7 @@ namespace Orange
 		private string GetIOSAppName()
 		{
 			var directory = Path.Combine(
-				projectDirectory, "bin", "iPhone", buildSystem.Configuration);
+				projectDirectory, "bin", "iPhone", target.Configuration);
 			var all = new DirectoryInfo(directory).EnumerateDirectories("*.app");
 			if (all.Any()) {
 				var allSorted = all.ToList();
@@ -159,7 +159,7 @@ namespace Orange
 
 		private string GetMacAppName()
 		{
-			var directory = Path.Combine(projectDirectory, "bin", buildSystem.Configuration);
+			var directory = Path.Combine(projectDirectory, "bin", target.Configuration);
 			var all = new DirectoryInfo(directory).EnumerateDirectories("*.app");
 			if (all.Any()) {
 				var allSorted = all.ToList();

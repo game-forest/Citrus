@@ -14,24 +14,18 @@ namespace Orange.Source
 
 	abstract class BuildSystem
 	{
-		private List<string> arguments;
-
-		public TargetPlatform Platform { get; }
-		public string SolutionPath { get; }
-		public string Configuration { get; }
+		private readonly List<string> arguments = new List<string>();
+		protected readonly Target target;
 
 		protected string Args => string.Join(" ", arguments);
 
 		public string BinariesDirectory => Path.Combine(
-			Path.GetDirectoryName(SolutionPath), "bin", Configuration);
+			Path.GetDirectoryName(target.ProjectPath), "bin", target.Configuration);
 
 
-		public BuildSystem(TargetPlatform platform, string solutionPath, string configuration)
+		public BuildSystem(Target target)
 		{
-			arguments = new List<string>();
-			Platform = platform;
-			SolutionPath = solutionPath ?? The.Workspace.GetSolutionFilePath(platform);
-			Configuration = configuration ?? BuildConfiguration.Release;
+			this.target = target;
 		}
 
 		public int Execute(BuildAction buildAction, StringBuilder output = null)

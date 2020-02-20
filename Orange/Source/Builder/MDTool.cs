@@ -9,8 +9,8 @@ namespace Orange.Source
 		private readonly string builderPath;
 
 
-		public MDTool(TargetPlatform platform, string solutionPath, string configuration)
-			: base(platform, solutionPath, configuration)
+		public MDTool(Target target)
+			: base(target)
 		{
 #if MAC
 			builderPath = "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild";
@@ -24,7 +24,7 @@ namespace Orange.Source
 
 		protected override int Execute(StringBuilder output)
 		{
-			return Process.Start(builderPath, $"\"{SolutionPath}\" {Args}", output: output);
+			return Process.Start(builderPath, $"\"{target.ProjectPath}\" {Args}", output: output);
 		}
 
 		protected override void DecorateBuild()
@@ -45,7 +45,7 @@ namespace Orange.Source
 		protected override void DecorateConfiguration()
 		{
 			string platformSpecification;
-			switch (Platform) {
+			switch (target.Platform) {
 				case TargetPlatform.iOS: {
 					AddArgument ($"-p:Platform=\"iPhone\"");
 					break;
@@ -61,7 +61,7 @@ namespace Orange.Source
 					throw new NotSupportedException();
 				}
 			}
-			AddArgument($"-p:Configuration=\"{Configuration}\"");
+			AddArgument($"-p:Configuration=\"{target.Configuration}\"");
 		}
 	}
 }

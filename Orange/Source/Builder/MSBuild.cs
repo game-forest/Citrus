@@ -20,8 +20,8 @@ namespace Orange.Source
 		private readonly string builderPath;
 
 
-		public MSBuild(TargetPlatform platform, string solutionPath, string configuration)
-			: base(platform, solutionPath, configuration)
+		public MSBuild(Target target)
+			: base(target)
 		{
 			if (!TryGetMSBuildPath(out builderPath)) {
 				const string MSBuildDownloadUrl = "https://visualstudio.microsoft.com/ru/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15";
@@ -36,13 +36,13 @@ namespace Orange.Source
 
 		protected override int Execute(StringBuilder output)
 		{
-			return Process.Start($"cmd", $"/C \"set BUILDING_WITH_ORANGE=true & \"{builderPath}\" \"{SolutionPath}\" {Args}\"", output: output);
+			return Process.Start($"cmd", $"/C \"set BUILDING_WITH_ORANGE=true & \"{builderPath}\" \"{target.ProjectPath}\" {Args}\"", output: output);
 		}
 
 		protected override void DecorateBuild()
 		{
 			AddArgument("/verbosity:minimal");
-			if (Platform == TargetPlatform.Android) {
+			if (target.Platform == TargetPlatform.Android) {
 				AddArgument("/t:PackageForAndroid");
 				AddArgument("/t:SignAndroidPackage");
 			}
@@ -60,7 +60,7 @@ namespace Orange.Source
 
 		protected override void DecorateConfiguration()
 		{
-			AddArgument("/p:Configuration=" + Configuration);
+			AddArgument("/p:Configuration=" + target.Configuration);
 		}
 
 		public static bool TryGetMSBuildPath(out string path)

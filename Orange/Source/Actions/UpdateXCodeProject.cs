@@ -23,8 +23,8 @@ namespace Orange
 				target,
 				new List<string> { CookingRulesBuilder.MainBundleName }
 			);
-			var solutionPath = The.Workspace.GetSolutionFilePath(TargetPlatform.iOS);
-			var builder = new SolutionBuilder(TargetPlatform.iOS, solutionPath);
+			var solutionPath = The.Workspace.GetDefaultProjectSolutionPath(TargetPlatform.iOS);
+			var builder = new SolutionBuilder(new Target("UpdateXCodeProject", solutionPath, false, TargetPlatform.iOS, BuildConfiguration.Release));
 			var output = new StringBuilder();
 			builder.Clean();
 			if (builder.Build(output)) {
@@ -144,7 +144,7 @@ namespace Orange
 				var s = mtouch.Split(new string[] { "execution started with arguments:" }, StringSplitOptions.None);
 				app = s[0].Trim();
 				args = s[1];
-				var dir = Path.GetDirectoryName(The.Workspace.GetSolutionFilePath(target.Platform));
+				var dir = Path.GetDirectoryName(The.Workspace.GetDefaultProjectSolutionPath(target.Platform));
 				using (new DirectoryChanger(dir)) {
 					Process.Start(app, args);
 				}

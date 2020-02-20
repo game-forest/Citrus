@@ -10,35 +10,22 @@ namespace Orange
 		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
 		[ExportMetadata("Label", "Build and Run")]
 		[ExportMetadata("Priority", 0)]
-		public static string BuildAndRunAction()
-		{
-			var target = The.UI.GetActiveTarget();
-			return BuildAndRun(target, BuildConfiguration.Release);
-		}
+		public static string BuildAndRunAction() => BuildAndRun(The.UI.GetActiveTarget());
 
-		public static string BuildAndRun(Target target, string configuration)
+		public static string BuildAndRun(Target target)
 		{
 			AssetCooker.CookForTarget(target);
-			if (!BuildGame(target, configuration)) {
+			if (!BuildGame(target)) {
 				return "Can not BuildGame";
 			}
 			The.UI.ScrollLogToEnd();
-			RunGame(target.Platform, target.ProjectPath, configuration);
+			RunGame(target);
 			return null;
 		}
 
-		public static void RunGame(Target target)
+		public static bool RunGame(Target target)
 		{
-			RunGame(
-				target.Platform,
-				target.ProjectPath,
-				BuildConfiguration.Release);
-		}
-
-		public static bool RunGame(
-			TargetPlatform platform, string solutionPath, string configuration)
-		{
-			var builder = new SolutionBuilder(platform, solutionPath, configuration);
+			var builder = new SolutionBuilder(target);
 			string arguments = string.Join(" ",
 				PluginLoader.GetCommandLineArguments(),
 				Toolbox.GetCommandLineArg(ConsoleCommandPassArguments));

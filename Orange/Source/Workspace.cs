@@ -65,13 +65,13 @@ namespace Orange
 		/// <summary>
 		/// Returns solution path. E.g: Zx3.Win/Zx3.Win.sln
 		/// </summary>
-		public string GetSolutionFilePath(TargetPlatform platform)
+		public string GetDefaultProjectSolutionPath(TargetPlatform platform)
 		{
-			string platformProjectName = The.Workspace.Title + GetPlatformSuffix(platform);
-			return Path.Combine(
-				The.Workspace.ProjectDirectory,
-				platformProjectName,
-				platformProjectName + ".sln");
+			if (string.IsNullOrEmpty(ProjectDirectory)) {
+				throw new InvalidOperationException("Can't generate default solution path for project when there's no project loaded.");
+			}
+			string platformProjectName = Title + GetPlatformSuffix(platform);
+			return Path.Combine(ProjectDirectory, platformProjectName, platformProjectName + ".sln");
 		}
 
 		/// <summary>
@@ -195,7 +195,13 @@ namespace Orange
 			if (defaultTargets == null) {
 				defaultTargets = new List<Target>();
 				foreach (TargetPlatform platform in Enum.GetValues(typeof(TargetPlatform))) {
-					defaultTargets.Add(new Target(Enum.GetName(typeof(TargetPlatform), platform), null, false, platform));
+					defaultTargets.Add(new Target(
+						name: Enum.GetName(typeof(TargetPlatform), platform),
+						projectPath: GetDefaultProjectSolutionPath(platform),
+						cleanBeforeBuild: false,
+						platform: platform,
+						configuration: BuildConfiguration.Release
+					));
 				}
 			}
 			Targets.AddRange(defaultTargets);
@@ -205,20 +211,19 @@ namespace Orange
 		{
 			ProjectJson = new Json(file);
 			Title = ProjectJson["Title"] as string;
-
 			var generatedScenesConfigPath = ProjectJson["GeneratedScenesPath"] as string;
 			GeneratedScenesPath = string.IsNullOrEmpty(generatedScenesConfigPath) ? "GeneratedScenes" : generatedScenesConfigPath;
-
-			Targets = new List<Target>();
-			FillDefaultTargets();
 			dataFolderName = ProjectJson.GetValue("DataFolderName", "Data");
 			pluginName = ProjectJson.GetValue("Plugin", "");
 			citrusLocation = ProjectJson.GetValue("CitrusLocation", string.Empty);
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
 
+			// Initialize default and parse project specific targets.
+			Targets = new List<Target>();
+			FillDefaultTargets();
 			var targetToBaseTarget = new Dictionary<Target, string>();
 			foreach (var target in ProjectJson.GetArray("Targets", new Dictionary<string, object>[0])) {
-				var cleanBeforeBuild = false;
+				bool? cleanBeforeBuild = null;
 				if (target.ContainsKey("CleanBeforeBuild")) {
 					cleanBeforeBuild = (bool)target["CleanBeforeBuild"];
 				}
@@ -226,12 +231,26 @@ namespace Orange
 				if (Targets.Where(t => t.Name == targetName).Any()) {
 					throw new System.InvalidOperationException($"Target {targetName} already exists.");
 				}
+				string configuration = null;
+				if (target.TryGetValue("Configuration", out object configurationValue)) {
+					configuration = configurationValue as string;
+				}
+				string projectPath = null;
+				if (target.TryGetValue("Project", out object projectPathValue)) {
+					projectPath = target["Project"] as string;
+					if (!string.IsNullOrEmpty(projectPath)) {
+						if (!System.IO.Path.IsPathRooted(projectPath)) {
+							projectPath = System.IO.Path.Combine(ProjectDirectory, projectPath);
+						}
+					}
+				}
 				Target newTarget = null;
 				Targets.Add(newTarget = new Target(
 					targetName,
-					target["Project"] as string,
+					projectPath,
 					cleanBeforeBuild,
-					GetPlaformByName(target["Platform"] as string)
+					null,
+					configuration
 				));
 				if (target.TryGetValue("BaseTarget", out object baseTargetName)) {
 					targetToBaseTarget[newTarget] = baseTargetName as string;
