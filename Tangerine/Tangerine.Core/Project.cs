@@ -52,11 +52,15 @@ namespace Tangerine.Core
 		public static event Action<Document> DocumentSaving;
 		public static event Action<Document> DocumentSaved;
 		public static event Action<string> Opening;
-
+		
 		private Project() { }
 
 		public Project(string citprojPath)
 		{
+			if (Current != Null) {
+				throw new InvalidOperationException();
+			}
+			Current = this;
 			CitprojPath = citprojPath;
 			UserprefsPath = Path.ChangeExtension(citprojPath, ".userprefs");
 			AssetsDirectory = Path.Combine(Path.GetDirectoryName(CitprojPath), "Data");
@@ -74,20 +78,8 @@ namespace Tangerine.Core
 			}
 			The.Workspace.Open(citprojPath);
 			UpdateTextureParams();
-		}
 
-		public void Open()
-		{
 			Opening?.Invoke(CitprojPath);
-			if (Current != Null) {
-				throw new InvalidOperationException();
-			}
-			Current = this;
-			TangerineAssetBundle tangerineAssetBundle = new TangerineAssetBundle(AssetsDirectory);
-			if (!tangerineAssetBundle.IsActual()) {
-				tangerineAssetBundle.CleanupBundle();
-			}
-			AssetBundle.Current = tangerineAssetBundle;
 			Preferences = new ProjectPreferences();
 			Preferences.Initialize();
 			FileSystemWatcher = new FileSystemWatcher(AssetsDirectory, includeSubdirectories: true);
@@ -158,6 +150,8 @@ namespace Tangerine.Core
 				}
 			}
 		}
+		
+		public string GetTangerineCacheBundlePath() => The.Workspace.GetTangerineCacheBundlePath();
 
 		public bool Close()
 		{
@@ -479,7 +473,7 @@ namespace Tangerine.Core
 
 		private void UpdateTextureParams()
 		{
-			var rules = CookingRulesBuilder.Build(The.Workspace.AssetFiles, null);
+			var rules = CookingRulesBuilder.Build(AssetBundle.Current, null);
 			foreach (var kv in rules) {
 				var path = kv.Key;
 				var rule = kv.Value;

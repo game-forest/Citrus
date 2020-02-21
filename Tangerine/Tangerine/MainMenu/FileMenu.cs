@@ -20,7 +20,7 @@ namespace Tangerine
 		{
 			if (fileName != default && Project.Current.Close() && fileName.Length > 0) {
 				FontPool.Instance.Clear(preserveDefaultFont: true);
-				new Project(fileName).Open();
+				new Project(fileName);
 				AddRecentProject(fileName);
 				return true;
 			}
