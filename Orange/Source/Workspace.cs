@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Lime;
 using Newtonsoft.Json.Linq;
 
 namespace Orange
@@ -197,6 +198,10 @@ namespace Orange
 			pluginName = ProjectJson.GetValue("Plugin", "");
 			citrusLocation = ProjectJson.GetValue("CitrusLocation", string.Empty);
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
+#if TANGERINE
+			BlendAnimationEngine.ApplyAnimationBlenderInTangerine =
+				The.Workspace.ProjectJson.GetValue<bool>("ApplyAnimationBlenderInTangerine");
+#endif
 
 			foreach (var target in ProjectJson.GetArray("Targets", new Dictionary<string, object>[0])) {
 				var cleanBeforeBuild = false;
