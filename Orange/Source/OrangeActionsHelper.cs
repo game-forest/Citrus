@@ -7,6 +7,15 @@ namespace Orange.Source
 {
 	public static class OrangeActionsHelper
 	{
+		public static void ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd,
+			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
+		{
+			IEnumerator<object> enumerator = ExecuteOrangeAction(action, onBegin, onEnd, onCreateOrNotAsynchTask);
+			while (enumerator.MoveNext()) {
+				Thread.Yield();
+			}
+		}
+
 		public static IEnumerator<object> ExecuteOrangeAction(Func<string> action, Action onBegin, Action onEnd,
 			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
 		{
