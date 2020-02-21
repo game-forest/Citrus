@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Lime;
 
 namespace Orange
 {
-	public struct FileInfo
-	{
-		public string Path;
-		public DateTime LastWriteTime;
-	}
+	using FileInfo = Lime.FileInfo;
 
 	public class FileEnumerator : IFileEnumerator
 	{
@@ -27,7 +24,6 @@ namespace Orange
 		{
 			files.Clear();
 			var dirInfo = new DirectoryInfo(Directory);
-
 			foreach (var fileInfo in dirInfo.GetFiles("*.*", SearchOption.AllDirectories)) {
 				var file = fileInfo.FullName;
 				if (file.Contains(".svn"))
@@ -36,10 +32,8 @@ namespace Orange
 				file = CsprojSynchronization.ToUnixSlashes(file);
 				files.Add(new FileInfo { Path = file, LastWriteTime = fileInfo.LastWriteTime });
 			}
-#if MAC
-			// Mono 6.0 breaks files order
+			// According to documentation the file order is not guaranteed.
 			files.Sort((a, b) => string.Compare(a.Path, b.Path));
-#endif
 		}
 
 		public IEnumerable<FileInfo> Enumerate(string extension = null)
@@ -95,10 +89,8 @@ namespace Orange
 					}
 				}
 			}
-#if MAC
-			// Mono 6.0 breaks files order
-			files.Sort ((a, b) => string.Compare (a.Path, b.Path));
-#endif
+			// According to documentation the file order is not guaranteed.
+			files.Sort((a, b) => string.Compare(a.Path, b.Path));
 		}
 
 		public IEnumerable<FileInfo> Enumerate(string extension = null)
