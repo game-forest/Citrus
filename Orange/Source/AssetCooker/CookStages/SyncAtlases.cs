@@ -16,45 +16,43 @@ namespace Orange
 
 		public SyncAtlases(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => The.Workspace.AssetFiles.Enumerate(textureExtension).Count();
+		public int GetOperationCount() => AssetCooker.InputBundle.EnumerateFiles(null, textureExtension).Count();
 
 		public void Action()
 		{
 			var textures = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
-			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate(textureExtension)) {
+			foreach (var fileInfo in AssetCooker.InputBundle.EnumerateFileInfos(null, textureExtension)) {
 				textures[fileInfo.Path] = fileInfo.LastWriteTime;
 			}
 			var atlasChainsToRebuild = new HashSet<string>();
 			// Figure out atlas chains to rebuild
-			foreach (var atlasPartPath in AssetCooker.AssetBundle.EnumerateFiles().ToList()) {
+			foreach (var atlasPartPath in AssetCooker.OutputBundle.EnumerateFiles().ToList()) {
 				if (!atlasPartPath.EndsWith(atlasPartExtension, StringComparison.OrdinalIgnoreCase))
 					continue;
 
 				// If atlas part has been outdated we should rebuild full atlas chain
 				var srcTexturePath = Path.ChangeExtension(atlasPartPath, textureExtension);
-				var bundleSHA1 = AssetCooker.AssetBundle.GetCookingRulesSHA1(atlasPartPath);
+				var bundleSHA1 = AssetCooker.OutputBundle.GetCookingRulesSHA1(atlasPartPath);
 				if (bundleSHA1 == null) {
 					throw new InvalidOperationException("CookingRules SHA1 for atlas part shouldn't be null");
 				}
 				if (
 					!textures.ContainsKey(srcTexturePath) ||
-					AssetCooker.AssetBundle.GetFileLastWriteTime(atlasPartPath) != textures[srcTexturePath] ||
+					AssetCooker.OutputBundle.GetFileLastWriteTime(atlasPartPath) != textures[srcTexturePath] ||
 					(!AssetCooker.CookingRulesMap[srcTexturePath].SHA1.SequenceEqual(bundleSHA1))
 				) {
 					srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, srcTexturePath);
-					var part = InternalPersistence.Instance.ReadObject<TextureAtlasElement.Params>(atlasPartPath);
+					var part = InternalPersistence.Instance.ReadObjectFromBundle<TextureAtlasElement.Params>(AssetCooker.OutputBundle, atlasPartPath);
 					var atlasChain = Path.GetFileNameWithoutExtension(part.AtlasPath);
 					atlasChainsToRebuild.Add(atlasChain);
 					if (!textures.ContainsKey(srcTexturePath)) {
 						AssetCooker.DeleteFileFromBundle(atlasPartPath);
-					}
-					else {
+					} else {
 						srcTexturePath = Path.ChangeExtension(atlasPartPath, textureExtension);
 						if (AssetCooker.CookingRulesMap[srcTexturePath].TextureAtlas != null) {
 							var rules = AssetCooker.CookingRulesMap[srcTexturePath];
 							atlasChainsToRebuild.Add(rules.TextureAtlas);
-						}
-						else {
+						} else {
 							AssetCooker.DeleteFileFromBundle(atlasPartPath);
 						}
 					}
@@ -64,11 +62,10 @@ namespace Orange
 			foreach (var t in textures) {
 				var atlasPartPath = Path.ChangeExtension(t.Key, atlasPartExtension);
 				var cookingRules = AssetCooker.CookingRulesMap[t.Key];
-				var atlasNeedRebuld = cookingRules.TextureAtlas != null && !AssetCooker.AssetBundle.FileExists(atlasPartPath);
+				var atlasNeedRebuld = cookingRules.TextureAtlas != null && !AssetCooker.OutputBundle.FileExists(atlasPartPath);
 				if (atlasNeedRebuld) {
 					atlasChainsToRebuild.Add(cookingRules.TextureAtlas);
-				}
-				else {
+				} else {
 					UserInterface.Instance.IncreaseProgressBar();
 				}
 			}
@@ -82,7 +79,7 @@ namespace Orange
 		{
 			for (var i = 0; i < AssetCooker.MaxAtlasChainLength; i++) {
 				var atlasPath = AssetCooker.GetAtlasPath(atlasChain, i);
-				if (AssetCooker.AssetBundle.FileExists(atlasPath)) {
+				if (AssetCooker.OutputBundle.FileExists(atlasPath)) {
 					AssetCooker.DeleteFileFromBundle(atlasPath);
 				}
 				else {
@@ -93,22 +90,20 @@ namespace Orange
 			var items = new Dictionary<AtlasOptimization, List<TextureTools.AtlasItem>>();
 			items[AtlasOptimization.Memory] = new List<TextureTools.AtlasItem>();
 			items[AtlasOptimization.DrawCalls] = new List<TextureTools.AtlasItem>();
-			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate(textureExtension)) {
+			foreach (var fileInfo in AssetBundle.Current.EnumerateFileInfos(null, textureExtension)) {
 				var cookingRules = AssetCooker.CookingRulesMap[fileInfo.Path];
 				if (cookingRules.TextureAtlas == atlasChain) {
-
 					var item = new TextureTools.AtlasItem {
 						Path = Path.ChangeExtension(fileInfo.Path, atlasPartExtension),
 						CookingRules = cookingRules,
 						SourceExtension = Path.GetExtension(fileInfo.Path)
 					};
-					var bitmapInfo = TextureTools.BitmapInfo.FromFile(fileInfo.Path);
+					var bitmapInfo = TextureTools.BitmapInfo.FromFile(AssetCooker.InputBundle, fileInfo.Path);
 					if (bitmapInfo == null) {
 						using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(AssetCooker.Platform, item)) {
 							item.BitmapInfo = TextureTools.BitmapInfo.FromBitmap(bitmap);
 						}
-					}
-					else {
+					} else {
 						var srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(item.Path, item.SourceExtension));
 						if (TextureTools.ShouldDownscale(AssetCooker.Platform, bitmapInfo, item.CookingRules)) {
 							TextureTools.DownscaleTextureInfo(AssetCooker.Platform, bitmapInfo, srcTexturePath, item.CookingRules);
@@ -144,8 +139,7 @@ namespace Orange
 						var nonSquare = kv.Value.Where(item => !isRequireSquare(item.CookingRules.PVRFormat)).ToList();
 						initialAtlasId = PackItemsToAtlas(atlasChain, square, kv.Key, initialAtlasId, true);
 						initialAtlasId = PackItemsToAtlas(atlasChain, nonSquare, kv.Key, initialAtlasId, false);
-					}
-					else {
+					} else {
 						initialAtlasId = PackItemsToAtlas(atlasChain, kv.Value, kv.Key, initialAtlasId, false);
 					}
 				}
@@ -198,12 +192,10 @@ namespace Orange
 								if (notAllocatedCount < minItemsLeft) {
 									minItemsLeft = notAllocatedCount;
 									bestSize = size;
-								}
-								else if (notAllocatedCount == minItemsLeft) {
+								} else if (notAllocatedCount == minItemsLeft) {
 									if (items.Where(i => i.Allocated).SequenceEqual(prevAllocated)) {
 										continue;
-									}
-									else {
+									} else {
 										minItemsLeft = notAllocatedCount;
 										bestSize = size;
 									}
@@ -314,11 +306,11 @@ namespace Orange
 					AtlasPath = Path.ChangeExtension(atlasPath, null)
 				};
 				var srcPath = Path.ChangeExtension(item.Path, item.SourceExtension);
-				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.AssetBundle, item.Path, atlasPart, Persistence.Format.Binary,
-					item.SourceExtension, File.GetLastWriteTime(srcPath), AssetAttributes.None, item.CookingRules.SHA1);
+				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, item.Path, atlasPart, Persistence.Format.Binary,
+					item.SourceExtension, AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, item.CookingRules.SHA1);
 				// Delete non-atlased texture since now its useless
 				var texturePath = Path.ChangeExtension(item.Path, AssetCooker.GetPlatformTextureExtension());
-				if (AssetCooker.AssetBundle.FileExists(texturePath)) {
+				if (AssetCooker.OutputBundle.FileExists(texturePath)) {
 					AssetCooker.DeleteFileFromBundle(texturePath);
 				}
 				UserInterface.Instance.IncreaseProgressBar();
@@ -326,7 +318,7 @@ namespace Orange
 			Console.WriteLine("+ " + atlasPath);
 			var firstItem = items.First(i => i.Allocated);
 			using (var atlas = new Bitmap(atlasPixels, size.Width, size.Height)) {
-				AssetCooker.ImportTexture(atlasPath, atlas, firstItem.CookingRules, File.GetLastWriteTime(atlasPath), CookingRulesSHA1: null);
+				AssetCooker.ImportTexture(atlasPath, atlas, firstItem.CookingRules, AssetCooker.InputBundle.GetFileLastWriteTime(atlasPath), CookingRulesSHA1: null);
 			}
 		}
 

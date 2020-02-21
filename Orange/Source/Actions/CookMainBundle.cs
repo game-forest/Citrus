@@ -1,4 +1,5 @@
 using System.ComponentModel.Composition;
+using System.Collections.Generic;
 
 namespace Orange
 {
@@ -13,7 +14,7 @@ namespace Orange
 
 			AssetCooker.CookForTarget(
 				target,
-				new [] { CookingRulesBuilder.MainBundleName }
+				new List<string>() { CookingRulesBuilder.MainBundleName }
 			);
 		}
 	}

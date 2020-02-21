@@ -16,9 +16,9 @@ namespace Orange
 
 		private string PlatformTextureExtension => AssetCooker.GetPlatformTextureExtension();
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(originalTextureExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(originalTextureExtension);
 
-		public void Action() => SyncUpdated.Sync(originalTextureExtension, PlatformTextureExtension, AssetBundle.Current, Converter);
+		public void Action() => AssetCooker.SyncUpdated(originalTextureExtension, PlatformTextureExtension, Converter);
 
 		private bool Converter(string srcPath, string dstPath)
 		{
@@ -27,14 +27,15 @@ namespace Orange
 				// No need to cache this texture since it is a part of texture atlas.
 				return false;
 			}
-			using (var stream = File.OpenRead(srcPath)) {
+			using (var stream = AssetCooker.InputBundle.OpenFile(srcPath)) {
 				var bitmap = new Bitmap(stream);
 				if (TextureTools.ShouldDownscale(AssetCooker.Platform, bitmap, rules)) {
 					var scaledBitmap = TextureTools.DownscaleTexture(AssetCooker.Platform, bitmap, srcPath, rules);
 					bitmap.Dispose();
 					bitmap = scaledBitmap;
 				}
-				AssetCooker.ImportTexture(dstPath, bitmap, rules, File.GetLastWriteTime(srcPath), rules.SHA1);
+				AssetCooker.ImportTexture(dstPath, bitmap, rules,
+					AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), rules.SHA1);
 				bitmap.Dispose();
 			}
 			return true;

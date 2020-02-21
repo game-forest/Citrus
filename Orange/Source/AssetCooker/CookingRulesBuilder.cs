@@ -145,7 +145,7 @@ namespace Orange
 		// so adding a field with binary triggers rebuild of all bundles
 		private static Yuzu.Json.JsonSerializer yjs = new Yuzu.Json.JsonSerializer();
 
-		public byte[] SHA1 { get { return sha1.ComputeHash(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower())); } }
+		public byte[] SHA1 => sha1.ComputeHash(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
 
 		public DateTime LastChangeTime;
 
@@ -226,12 +226,23 @@ namespace Orange
 
 	public class CookingRules : ICookingRules
 	{
-		public string SourceFilename;
-		public Dictionary<Target, ParticularCookingRules> TargetRules = new Dictionary<Target, ParticularCookingRules>();
+		/// <summary>
+		/// Path to the cooking rules source file within input AssetBundle.
+		/// </summary>
+		public string SourcePath;
+
+		/// <summary>
+		/// Path to the cooking rules source file within OS file system.
+		/// </summary>
+		public string SystemSourcePath
+		{
+			get => AssetBundle.Current.ToSystemPath(SourcePath);
+			set => SourcePath = AssetBundle.Current.FromSystemPath(value);
+		}
+		
+		public readonly Dictionary<Target, ParticularCookingRules> TargetRules = new Dictionary<Target, ParticularCookingRules>();
 		public ParticularCookingRules CommonRules;
 		public CookingRules Parent;
-		public static List<string> KnownBundles = new List<string>();
-
 		public string TextureAtlas => EffectiveRules.TextureAtlas;
 		public bool MipMaps => EffectiveRules.MipMaps;
 		public bool HighQualityCompression => EffectiveRules.HighQualityCompression;
@@ -306,7 +317,7 @@ namespace Orange
 
 		public void Save()
 		{
-			using (var fs = new FileStream(SourceFilename, FileMode.Create)) {
+			using (var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create)) {
 				using (var sw = new StreamWriter(fs)) {
 					SaveCookingRules(sw, CommonRules, null);
 					foreach (var kv in TargetRules) {
@@ -328,10 +339,11 @@ namespace Orange
 			} else if (value is DDSFormat) {
 				return (DDSFormat)value == DDSFormat.DXTi ? "DXTi" : "RGBA8";
 			} else if (yi.Name == "TextureAtlas") {
-				var fi = new System.IO.FileInfo(SourceFilename);
-				var atlasName = fi.DirectoryName.Substring(The.Workspace.AssetsDirectory.Length).Replace('\\', '#');
+				var atlasName = Path.GetDirectoryName(SourcePath).
+					Replace('\\', '#').
+					Replace('/', '#');
 				if (!atlasName.StartsWith("#")) {
-					atlasName = "#" + atlasName;
+					atlasName = '#' + atlasName;
 				}
 				if (atlasName == value.ToString()) {
 					return CookingRulesBuilder.DirectoryNameToken;
@@ -397,9 +409,8 @@ namespace Orange
 		public const string DirectoryNameToken = "${DirectoryName}";
 
 		// pass target as null to build cooking rules disregarding targets
-		public static Dictionary<string, CookingRules> Build(IFileEnumerator fileEnumerator, Target target)
+		public static Dictionary<string, CookingRules> Build(AssetBundle bundle, Target target, string path = null)
 		{
-			var shouldRescanEnumerator = false;
 			var pathStack = new Stack<string>();
 			var rulesStack = new Stack<CookingRules>();
 			var map = new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
@@ -407,62 +418,56 @@ namespace Orange
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
 			rulesStack.Push(rootRules);
-			using (new DirectoryChanger(fileEnumerator.Directory)) {
-				foreach (var fileInfo in fileEnumerator.Enumerate()) {
-					var path = fileInfo.Path;
-					while (!path.StartsWith(pathStack.Peek())) {
-						rulesStack.Pop();
-						pathStack.Pop();
+			foreach (var fileInfo in bundle.EnumerateFileInfos(path)) {
+				var filePath = fileInfo.Path;
+				while (!filePath.StartsWith(pathStack.Peek())) {
+					rulesStack.Pop();
+					pathStack.Pop();
+				}
+				if (Path.GetFileName(filePath) == CookingRulesFilename) {
+					var dirName = AssetPath.GetDirectoryName(filePath);
+					pathStack.Push(dirName == string.Empty ? "" : dirName + "/");
+					var rules = ParseCookingRules(bundle, rulesStack.Peek(), filePath, target);
+					rules.SourcePath = filePath;
+					rulesStack.Push(rules);
+					// Add 'ignore' cooking rules for this #CookingRules.txt itself
+					var ignoreRules = rules.InheritClone();
+					ignoreRules.Ignore = true;
+					map[filePath] = ignoreRules;
+					var directoryName = pathStack.Peek();
+					if (!string.IsNullOrEmpty(directoryName)) {
+						directoryName = directoryName.Remove(directoryName.Length - 1);
+						// it is possible for map to not contain this directoryName since not every IFileEnumerator enumerates directories
+						if (map.ContainsKey(directoryName)) {
+							map[directoryName] = rules;
+						}
 					}
-					if (Path.GetFileName(path) == CookingRulesFilename) {
-						var dirName = Lime.AssetPath.GetDirectoryName(path);
-						pathStack.Push(dirName == string.Empty ? "" : dirName + "/");
-						var rules = ParseCookingRules(rulesStack.Peek(), path, target);
-						rules.SourceFilename = AssetPath.Combine(fileEnumerator.Directory, path);
-						rulesStack.Push(rules);
-						// Add 'ignore' cooking rules for this #CookingRules.txt itself
+				} else  {
+					if (Path.GetExtension(filePath) == ".txt") {
+						var filename = filePath.Remove(filePath.Length - 4);
+						if (File.Exists(filename) || Directory.Exists(filename)) {
+							continue;
+						}
+					}
+					var rulesFile = filePath + ".txt";
+					var rules = rulesStack.Peek();
+					if (File.Exists(rulesFile)) {
+						rules = ParseCookingRules(bundle, rulesStack.Peek(), rulesFile, target);
+						rules.SourcePath = rulesFile;
+						// Add 'ignore' cooking rules for this cooking rules text file
 						var ignoreRules = rules.InheritClone();
 						ignoreRules.Ignore = true;
-						map[path] = ignoreRules;
-						var directoryName = pathStack.Peek();
-						if (!string.IsNullOrEmpty(directoryName)) {
-							directoryName = directoryName.Remove(directoryName.Length - 1);
-							// it is possible for map to not contain this directoryName since not every IFileEnumerator enumerates directories
-							if (map.ContainsKey(directoryName)) {
-								map[directoryName] = rules;
-							}
-						}
-					} else  {
-						if (Path.GetExtension(path) == ".txt") {
-							var filename = path.Remove(path.Length - 4);
-							if (File.Exists(filename) || Directory.Exists(filename)) {
-								continue;
-							}
-						}
-						var rulesFile = path + ".txt";
-						var rules = rulesStack.Peek();
-						if (File.Exists(rulesFile)) {
-							rules = ParseCookingRules(rulesStack.Peek(), rulesFile, target);
-							rules.SourceFilename = AssetPath.Combine(fileEnumerator.Directory, rulesFile);
-							// Add 'ignore' cooking rules for this cooking rules text file
-							var ignoreRules = rules.InheritClone();
-							ignoreRules.Ignore = true;
-							map[rulesFile] = ignoreRules;
-						}
-						if (rules.CommonRules.LastChangeTime > fileInfo.LastWriteTime) {
-							try {
-								File.SetLastWriteTime(path, rules.CommonRules.LastChangeTime);
-							} catch (UnauthorizedAccessException) {
-								// In case this is a folder
-							}
-							shouldRescanEnumerator = true;
-						}
-						map[path] = rules;
+						map[rulesFile] = ignoreRules;
 					}
+					if (rules.CommonRules.LastChangeTime > fileInfo.LastWriteTime) {
+						try {
+							bundle.SetFileLastWriteTime(filePath, rules.CommonRules.LastChangeTime);
+						} catch (UnauthorizedAccessException) {
+							// In case this is a folder
+						}
+					}
+					map[filePath] = rules;
 				}
-			}
-			if (shouldRescanEnumerator) {
-				fileEnumerator.Rescan();
 			}
 			return map;
 		}
@@ -540,13 +545,13 @@ namespace Orange
 			}
 		}
 
-		private static CookingRules ParseCookingRules(CookingRules basicRules, string path, Target target)
+		private static CookingRules ParseCookingRules(AssetBundle bundle, CookingRules basicRules, string path, Target target)
 		{
 			var rules = basicRules.InheritClone();
 			var currentRules = rules.CommonRules;
 			try {
 				rules.CommonRules.LastChangeTime = File.GetLastWriteTime(path);
-				using (var s = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (var s = bundle.OpenFile(path)) {
 					TextReader r = new StreamReader(s);
 					string line;
 					while ((line = r.ReadLine()) != null) {

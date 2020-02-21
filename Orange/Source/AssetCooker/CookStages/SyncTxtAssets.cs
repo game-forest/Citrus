@@ -14,9 +14,9 @@ namespace Orange
 
 		public SyncTxtAssets(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(txtExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(txtExtension);
 
-		public void Action() => SyncUpdated.Sync(txtExtension, txtExtension, AssetBundle.Current, Converter);
+		public void Action() => AssetCooker.SyncUpdated(txtExtension, txtExtension, Converter);
 
 		private bool Converter(string srcPath, string dstPath)
 		{
@@ -24,7 +24,8 @@ namespace Orange
 			if (modelAttachmentExtIndex >= 0) {
 				AssetCooker.ModelsToRebuild.Add(dstPath.Remove(modelAttachmentExtIndex) + t3dExtension);
 			}
-			AssetCooker.AssetBundle.ImportFile(srcPath, dstPath, 0, txtExtension, AssetAttributes.Zipped, File.GetLastWriteTime(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1);
+			AssetCooker.OutputBundle.ImportFile(AssetCooker.InputBundle.ToSystemPath(srcPath), dstPath, 0, txtExtension, AssetAttributes.Zipped,
+				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1);
 			return true;
 		}
 	}

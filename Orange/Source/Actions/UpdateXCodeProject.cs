@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Orange
 			}
 			AssetCooker.CookForTarget(
 				target,
-				new [] { CookingRulesBuilder.MainBundleName }
+				new List<string> { CookingRulesBuilder.MainBundleName }
 			);
 			var solutionPath = The.Workspace.GetSolutionFilePath(TargetPlatform.iOS);
 			var builder = new SolutionBuilder(TargetPlatform.iOS, solutionPath);

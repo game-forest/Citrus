@@ -16,9 +16,9 @@ namespace Orange
 
 		public SyncModels(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(fbxExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(fbxExtension);
 
-		public void Action() => SyncUpdated.Sync(fbxExtension, t3dExtension, AssetBundle.Current, Converter, (srcPath, dstPath) => AssetCooker.ModelsToRebuild.Contains(dstPath));
+		public void Action() => AssetCooker.SyncUpdated(fbxExtension, t3dExtension, Converter, (srcPath, dstPath) => AssetCooker.ModelsToRebuild.Contains(dstPath));
 
 		private bool Converter(string srcPath, string dstPath)
 		{
@@ -51,8 +51,8 @@ namespace Orange
 			AssetCooker.DeleteModelExternalAnimations(animationPathPrefix);
 			AssetCooker.ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
 			model.RemoveAnimatorsForExternalAnimations();
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.AssetBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
-				File.GetLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
+			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
+				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
 			return true;
 		}
 	}

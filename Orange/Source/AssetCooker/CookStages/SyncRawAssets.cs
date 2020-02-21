@@ -19,13 +19,14 @@ namespace Orange
 			this.attributes = attributes;
 		}
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(extension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(extension);
 
-		public void Action() => SyncUpdated.Sync(extension, extension, AssetBundle.Current, Converter);
+		public void Action() => AssetCooker.SyncUpdated(extension, extension, Converter);
 
 		private bool Converter(string srcPath, string dstPath)
 		{
-			AssetCooker.AssetBundle.ImportFile(srcPath, dstPath, 0, extension, attributes, File.GetLastWriteTime(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1);
+			AssetCooker.OutputBundle.ImportFile(AssetCooker.InputBundle.ToSystemPath(srcPath), dstPath, 0, extension, attributes,
+				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1);
 			return true;
 		}
 	}

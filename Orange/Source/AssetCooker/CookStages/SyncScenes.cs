@@ -13,15 +13,15 @@ namespace Orange
 
 		public SyncScenes(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(sceneExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(sceneExtension);
 
-		public void Action() => SyncUpdated.Sync(sceneExtension, sceneExtension, AssetBundle.Current, Converter);
+		public void Action() => AssetCooker.SyncUpdated(sceneExtension, sceneExtension, Converter);
 
 		private bool Converter(string srcPath, string dstPath)
 		{
-			var node = InternalPersistence.Instance.ReadObjectFromFile<Node>(srcPath);
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.AssetBundle, dstPath, node, Persistence.Format.Binary, sceneExtension,
-				File.GetLastWriteTime(srcPath), AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
+			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(AssetCooker.InputBundle, srcPath);
+			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, node, Persistence.Format.Binary, sceneExtension,
+				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
 			return true;
 		}
 	}

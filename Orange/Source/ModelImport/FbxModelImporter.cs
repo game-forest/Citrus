@@ -155,7 +155,7 @@ namespace Orange.FbxImporter
 					var cookingRules = options.CookingRulesMap[rulesPath] = options.CookingRulesMap[rulesPath].InheritClone();
 					if (cookingRules.CommonRules.WrapMode != mode) {
 						cookingRules.CommonRules.WrapMode = mode;
-						cookingRules.SourceFilename = rulesPath + ".txt";
+						cookingRules.SourcePath = rulesPath + ".txt";
 						cookingRules.CommonRules.Override(nameof(ParticularCookingRules.WrapMode));
 						cookingRules.DeduceEffectiveRules(options.Target);
 						cookingRules.Save();

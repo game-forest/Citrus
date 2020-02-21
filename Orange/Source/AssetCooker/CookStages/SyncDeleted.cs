@@ -25,14 +25,14 @@ namespace Orange
 
 		public SyncDeleted(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount()
+		public int GetOperationCount()
 		{
 			var result = 0;
 			var assetFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate()) {
-				assetFiles.Add(fileInfo.Path);
+			foreach (var path in AssetCooker.InputBundle.EnumerateFiles()) {
+				assetFiles.Add(path);
 			}
-			foreach (var path in AssetCooker.AssetBundle.EnumerateFiles()) {
+			foreach (var path in AssetCooker.OutputBundle.EnumerateFiles()) {
 				if (!path.StartsWith("Atlases") &&
 				    !toDeleteExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase) &&
 				    !assetFiles.Contains(Path.ChangeExtension(path, AssetCooker.GetOriginalAssetExtension(path)))) {
@@ -45,10 +45,10 @@ namespace Orange
 		public void Action()
 		{
 			var assetFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate()) {
-				assetFiles.Add(fileInfo.Path);
+			foreach (var path in AssetCooker.InputBundle.EnumerateFiles()) {
+				assetFiles.Add(path);
 			}
-			foreach (var path in AssetCooker.AssetBundle.EnumerateFiles().ToList()) {
+			foreach (var path in AssetCooker.OutputBundle.EnumerateFiles().ToList()) {
 				// Ignoring texture atlases
 				if (path.StartsWith("Atlases")) {
 					continue;

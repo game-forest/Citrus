@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using Lime;
 
 namespace Orange.FbxImporter
 {
@@ -25,7 +26,7 @@ namespace Orange.FbxImporter
 		[HandleProcessCorruptedStateExceptions]
 		public FbxScene LoadScene(FbxImportOptions options)
 		{
-			var native = FbxManagerLoadScene(NativePtr, new StringBuilder(options.Path));
+			var native = FbxManagerLoadScene(NativePtr, new StringBuilder(AssetBundle.Current.ToSystemPath(options.Path)));
 			if (native == IntPtr.Zero) {
 				throw new FbxImportException("An error has occured while loading scene");
 			}

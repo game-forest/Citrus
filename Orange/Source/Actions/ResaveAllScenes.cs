@@ -11,30 +11,26 @@ namespace Orange
 		[ExportMetadata(nameof(IMenuItemMetadata.Label), "Resave All Scenes")]
 		public static void ResaveAllScenes()
 		{
-			var previousFileEnumerator = The.Workspace.AssetFiles;
-			AssetBundle.Current = new UnpackedAssetBundle(The.Workspace.AssetsDirectory);
-			The.Workspace.AssetFiles = new Orange.FileEnumerator(The.Workspace.AssetsDirectory);
-			foreach (var file in The.Workspace.AssetFiles.Enumerate()) {
-				var filename = Path.GetFileName(file.Path);
+			foreach (var file in AssetBundle.Current.EnumerateFiles()) {
+				var filename = Path.GetFileName(file);
 				if (!filename.EndsWith("tan", StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}
 				var node = Node.CreateFromAssetBundle(
-					path: Path.ChangeExtension(file.Path, null),
+					path: Path.ChangeExtension(file, null),
 					ignoreExternals: true
 				);
 				InternalPersistence.Instance.WriteObjectToBundle(
 					bundle: AssetBundle.Current,
-					path: file.Path,
+					path: file,
 					instance: node,
 					format: Persistence.Format.Json,
 					sourceExtension: "tan",
-					time: File.GetLastWriteTime(file.Path),
+					time: AssetBundle.Current.GetFileLastWriteTime(file),
 					attributes: AssetAttributes.None,
 					cookingRulesSHA1: null
 				);
 			}
-			The.Workspace.AssetFiles = previousFileEnumerator;
 		}
 	}
 }

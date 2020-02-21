@@ -15,17 +15,16 @@ namespace Orange
 
 		public RemoveDeprecatedModels(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => The.Workspace.AssetFiles.Enumerate(modelExtension).Count();
+		public int GetOperationCount() => AssetCooker.InputBundle.EnumerateFiles(null, modelExtension).Count();
 
 		public void Action()
 		{
-			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate(modelExtension)) {
-				var path = fileInfo.Path;
+			foreach (var path in AssetCooker.InputBundle.EnumerateFiles(null, modelExtension)) {
 				if (AssetCooker.CookingRulesMap.ContainsKey(path)) {
 					AssetCooker.CookingRulesMap.Remove(path);
 				}
 				Logger.Write($"Removing deprecated .model file: {path}");
-				File.Delete(path);
+				AssetCooker.InputBundle.DeleteFile(path);
 				UserInterface.Instance.IncreaseProgressBar();
 			}
 		}
