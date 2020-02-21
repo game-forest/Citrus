@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Lime;
 using Tangerine.Core;
 using Tangerine.UI.Docking;
+using Debug = System.Diagnostics.Debug;
 
 namespace Tangerine.UI
 {
@@ -12,8 +14,12 @@ namespace Tangerine.UI
 	{
 		private class TextViewWriter : TextWriter
 		{
+			public const int MaxMessages = 500;
 			private readonly ThemedTextView textView;
-			private string logBeforeProjectOpened = string.Empty;
+			private readonly StringBuilder logBeforeProjectOpened = new StringBuilder();
+			private StreamWriter file;
+			private readonly ConcurrentQueue<string> messageQueue = new ConcurrentQueue<string>();
+
 			public string LogFilePath { get; private set; }
 			public TextWriter SystemOut;
 
@@ -26,10 +32,12 @@ namespace Tangerine.UI
 						Directory.CreateDirectory(logDir);
 					}
 					LogFilePath = Path.Combine(logDir, "TangerineLog.txt");
-					File.WriteAllText(LogFilePath, logBeforeProjectOpened);
+					File.WriteAllText(LogFilePath, logBeforeProjectOpened.ToString());
+					file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write));
+					logBeforeProjectOpened.Clear();
 				};
 			}
-			
+
 			public override void WriteLine(string value)
 			{
 				Write(value + '\n');
@@ -37,23 +45,30 @@ namespace Tangerine.UI
 
 			public override void Write(string value)
 			{
-				Application.InvokeOnMainThread(() => {
-					value = $"[{DateTime.Now.ToLongTimeString()}] {value}";
-					value = value.Replace("\r\n", "\n").Replace('\r', '\n');
-					value = value.Replace("\n", System.Environment.NewLine);
+				value = $"[{DateTime.Now.ToLongTimeString()}] {value}";
+				value = value.Replace("\r\n", "\n").Replace('\r', '\n');
+				value = value.Replace("\n", System.Environment.NewLine);
+				messageQueue.Enqueue(value);
+			}
+
+			public void ProcessPendingMessages()
+			{
+
+				if (messageQueue.Count > 0) {
+					while (messageQueue.TryDequeue(out string message)) {
 #if DEBUG
-					System.Diagnostics.Debug.Write(value);
+						Debug.Write(message);
 #endif // DEBUG
-					
-					SystemOut?.Write(value);
-					textView.Append(value);
-					if (LogFilePath != null) {
-						File.AppendAllText(LogFilePath, value);
-					} else {
-						logBeforeProjectOpened += value;
+						SystemOut?.Write(message);
+						if (LogFilePath != null) {
+							file.Write(message);
+						} else {
+							logBeforeProjectOpened.Append(message);
+						}
+						textView.Append(message);
 					}
-				});
-				Application.InvokeOnNextUpdate(textView.ScrollToEnd);
+					Application.InvokeOnNextUpdate(textView.ScrollToEnd);
+				}
 			}
 
 			public override Encoding Encoding { get; }
@@ -136,9 +151,10 @@ namespace Tangerine.UI
 						Clipboard.Text = textView.DisplayText;
 					}
 				}
-				if (textView.Content.Nodes.Count >= 500) {
-					textView.Content.Nodes.RemoveRange(0, 250);
+				if (textView.Content.Nodes.Count > TextViewWriter.MaxMessages) {
+					textView.Content.Nodes.RemoveRange(0, textView.Content.Nodes.Count - TextViewWriter.MaxMessages / 2);
 				}
+				textWriter.ProcessPendingMessages();
 				yield return null;
 			}
 		}
