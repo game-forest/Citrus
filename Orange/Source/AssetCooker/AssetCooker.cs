@@ -6,26 +6,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using Lime;
 using Orange.FbxImporter;
+using Debug = Lime.Debug;
+using FileInfo = Lime.FileInfo;
 
 namespace Orange
 {
-	public enum CookingProfile
-	{
-		Total,
-		Partial
-	}
-
 	public class AssetCooker
 	{
-		private static readonly CookingProfile[] defaultCookingProfiles = { CookingProfile.Total, CookingProfile.Partial };
-		private readonly Dictionary<ICookStage, CookingProfile[]> cookStages = new Dictionary<ICookStage, CookingProfile[]>();
-		private static CookingProfile cookingProfile = CookingProfile.Total;
-		public IEnumerable<ICookStage> CookStages => cookStages.Keys;
+		public List<ICookStage> CookStages { get; } = new List<ICookStage>();
 
-		private delegate bool Converter(string srcPath, string dstPath);
+		public delegate bool Converter(string srcPath, string dstPath);
 
-		public AssetBundle AssetBundle => AssetBundle.Current;
-		//public static TargetPlatform Platform;
+		public AssetBundle InputBundle => AssetBundle.Current;
+		public AssetBundle OutputBundle { get; private set; }
+
 		public static Dictionary<string, CookingRules> CookingRulesMap;
 		public static HashSet<string> ModelsToRebuild = new HashSet<string>();
 
@@ -37,12 +31,11 @@ namespace Orange
 		public static event Action EndCookBundles;
 
 		private static bool cookCanceled = false;
-		private ICollection<string> bundleBackupFiles;
 
 		public readonly Target Target;
 		public TargetPlatform Platform => Target.Platform;
 
-		public static void CookForTarget(Target target, IEnumerable<string> bundles = null)
+		public static void CookForTarget(Target target, List<string> bundles = null)
 		{
 			var assetCooker = new AssetCooker(target);
 			var skipCooking = The.Workspace.ProjectJson.GetValue<bool>("SkipAssetsCooking");
@@ -53,14 +46,14 @@ namespace Orange
 			}
 		}
 
-		public void AddStage(ICookStage stage, params CookingProfile[] cookingProfiles)
+		public void AddStage(ICookStage stage)
 		{
-			cookStages.Add(stage, cookingProfiles.Length == 0 ? defaultCookingProfiles : cookingProfiles);
+			CookStages.Add(stage);
 		}
 
 		public void RemoveStage(ICookStage stage)
 		{
-			cookStages.Remove(stage);
+			CookStages.Remove(stage);
 		}
 
 		public static string GetOriginalAssetExtension(string path)
@@ -84,7 +77,7 @@ namespace Orange
 
 		public List<string> GetListOfAllBundles()
 		{
-			var cookingRulesMap = CookingRulesBuilder.Build(The.Workspace.AssetFiles, Target);
+			var cookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
 			var bundles = new HashSet<string>();
 			foreach (var dictionaryItem in cookingRulesMap) {
 				foreach (var bundle in dictionaryItem.Value.Bundles) {
@@ -105,33 +98,10 @@ namespace Orange
 			}
 		}
 
-		public void Cook(IEnumerable<string> bundles)
+		public void Cook(List<string> bundles)
 		{
 			AssetCache.Instance.Initialize();
-			CookingRulesMap = CookingRulesBuilder.Build(The.Workspace.AssetFiles, Target);
-			CookBundles(bundles);
-		}
-
-		public void CookCustomAssets(List<string> assets)
-		{
-			CookingRulesMap = CookingRulesBuilder.Build(The.Workspace.AssetFiles, Target);
-
-			var defaultAssetsEnumerator = The.Workspace.AssetFiles;
-			var assetsFileInfo = assets
-				.Select(asset => new FileInfo { Path = asset, LastWriteTime = DateTime.Now })
-				.ToList();
-			The.Workspace.AssetFiles = new CustomFilesEnumerator(defaultAssetsEnumerator.Directory, assetsFileInfo);
-
-			var defaultCookingProfile = AssetCooker.cookingProfile;
-			AssetCooker.cookingProfile = CookingProfile.Partial;
-
-			CookBundles(GetListOfAllBundles(), false);
-			The.Workspace.AssetFiles = defaultAssetsEnumerator;
-			AssetCooker.cookingProfile = defaultCookingProfile;
-		}
-
-		private void CookBundles(IEnumerable<string> bundles, bool requiredCookCode = true)
-		{
+			CookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
 			LogText = "";
 			var allTimer = StartBenchmark(
 				$"Asset cooking. Asset cache mode: {AssetCache.Instance.Mode}. Active platform: {Target.Platform}" +
@@ -139,24 +109,18 @@ namespace Orange
 				DateTime.Now +
 				System.Environment.NewLine
 			);
-
 			PluginLoader.BeforeBundlesCooking();
-
-			bool skipCodeCooking = The.Workspace.ProjectJson.GetValue<bool>("SkipCodeCooking");
-			if (skipCodeCooking) {
-				requiredCookCode = false;
-			}
-
+			var requiredCookCode = !The.Workspace.ProjectJson.GetValue<bool>("SkipCodeCooking");
+			var bundleBackups = new List<string>();
 			try {
-				UserInterface.Instance.SetupProgressBar(CalculateAssetCount(bundles));
+				UserInterface.Instance.SetupProgressBar(CalculateOperationCount(bundles));
 				BeginCookBundles?.Invoke();
-
-				foreach (var bundle in bundles) {
+				var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFileInfos(), bundles);
+				for (int i = 0; i < bundles.Count; i++) {
 					var extraTimer = StartBenchmark();
-					CookBundle(bundle);
-					StopBenchmark(extraTimer, $"{bundle} cooked: ");
+					CookBundle(bundles[i], assetsGroupedByBundles[i], bundleBackups);
+					StopBenchmark(extraTimer, $"{bundles[i]} cooked: ");
 				}
-
 				var extraBundles = bundles.ToList();
 				extraBundles.Remove(CookingRulesBuilder.MainBundleName);
 				extraBundles.Reverse();
@@ -166,65 +130,107 @@ namespace Orange
 				}
 				StopBenchmark(allTimer, "All bundles cooked: ");
 				PrintBenchmark();
-			} catch (OperationCanceledException e) {
+			} catch (System.Exception e) {
 				Console.WriteLine(e.Message);
-				RestoreBackups();
+				RestoreBackups(bundleBackups);
 			} finally {
 				cookCanceled = false;
-				RemoveBackups();
+				RemoveBackups(bundleBackups);
 				EndCookBundles?.Invoke();
 				UserInterface.Instance.StopProgressBar();
 			}
 		}
 
-		private int CalculateAssetCount(IEnumerable<string> bundles)
+		private int CalculateOperationCount(List<string> bundles)
 		{
 			var assetCount = 0;
-			var savedWorkspaceAssetFiles = The.Workspace.AssetFiles;
-			foreach (var bundleName in bundles) {
-				using (var bundle = CreateBundle(bundleName)) {
-					AssetBundle.SetCurrent(bundle, false);
-					The.Workspace.AssetFiles = new FilteredFileEnumerator(savedWorkspaceAssetFiles, (info) => AssetIsInBundlePredicate(info, bundleName));
-					using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-						var profileCookStages = cookStages
-							.Where(kv => kv.Value.Contains(cookingProfile))
-							.Select(kv => kv.Key);
-						foreach (var stage in profileCookStages) {
-							assetCount += stage.GetOperationsCount();
-						}
-					}
+			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFileInfos(), bundles);
+			for (int i = 0; i < bundles.Count; i++) {
+				var savedInputBundle = InputBundle;
+				AssetBundle.SetCurrent(
+					new CustomSetAssetBundle(InputBundle, assetsGroupedByBundles[i]),
+					resetTexturePool: false);
+				OutputBundle = CreateOutputBundle(bundles[i], bundleBackups: null);
+				try {
+					assetCount += CookStages.Sum(stage => stage.GetOperationCount());
+				} finally {
+					OutputBundle.Dispose();
+					OutputBundle = null;
+					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
 				}
 			}
-			The.Workspace.AssetFiles = savedWorkspaceAssetFiles;
 			return assetCount;
 		}
 
-		private void CookBundle(string bundleName)
+		private void CookBundle(string bundleName, List<FileInfo> assets, List<string> bundleBackups)
 		{
-			string bundlePath = The.Workspace.GetBundlePath(Target.Platform, bundleName);
-			bool wasBundleModified = false;
-			using (var bundle = CreateBundle(bundleName)) {
-				AssetBundle.SetCurrent(bundle, false);
-				(AssetBundle.Current as PackedAssetBundle).OnModifying += () => {
-					if (!wasBundleModified) {
-						wasBundleModified = true;
-						string backupFilePath;
-						TryMakeBackup(bundlePath, out backupFilePath);
-						bundleBackupFiles.Add(backupFilePath);
-					}
-				};
-				CookBundleHelper(bundleName);
+			var bundlePath = The.Workspace.GetBundlePath(Target.Platform, bundleName);
+			OutputBundle = CreateOutputBundle(bundleName, bundleBackups);
+			try {
+				CookBundleHelper();
 				// Open the bundle again in order to make some plugin post-processing (e.g. generate code from scene assets)
 				using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 					PluginLoader.AfterAssetsCooked(bundleName);
 				}
+			} finally {
+				OutputBundle.Dispose();
+				OutputBundle = null;
 			}
-			if (wasBundleModified) {
-				PackedAssetBundle.RefreshBundleCheckSum(bundlePath);
+			
+			void CookBundleHelper()
+			{
+				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
+				var savedInputBundle = InputBundle;
+				AssetBundle.SetCurrent(new CustomSetAssetBundle(InputBundle, assets), resetTexturePool: false);
+				// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
+				atlasesPostfix = bundleName != CookingRulesBuilder.MainBundleName ? bundleName : "";
+				try {
+					foreach (var stage in CookStages) {
+						CheckCookCancelation();
+						stage.Action();
+					}
+					// Warn about non-power of two textures
+					foreach (var path in OutputBundle.EnumerateFiles()) {
+						if ((OutputBundle.GetAttributes(path) & AssetAttributes.NonPowerOf2Texture) != 0) {
+							Console.WriteLine("Warning: non-power of two texture: {0}", path);
+						}
+					}
+				} finally {
+					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
+					ModelsToRebuild.Clear();
+					atlasesPostfix = "";
+				}
 			}
 		}
 
-		private AssetBundle CreateBundle(string bundleName)
+		List<FileInfo>[] GetAssetsGroupedByBundles(IEnumerable<FileInfo> fileInfos, List<string> bundles)
+		{
+			string[] emptyBundleNamesArray = {};
+			string[] mainBundleNameArray = { CookingRulesBuilder.MainBundleName };
+
+			var assets = Enumerable.Range(0, bundles.Count).Select(i => new List<FileInfo>()).ToArray(); 
+			foreach (var fi in fileInfos) {
+				foreach (var bundleName in GetAssetBundleNames(fi.Path)) {
+					var i = bundles.IndexOf(bundleName);
+					if (i != -1) {
+						assets[i].Add(fi);
+					}
+				}
+			}
+			return assets;
+			
+			string[] GetAssetBundleNames(string path)
+			{
+				if (CookingRulesMap.TryGetValue(path, out var rules)) {
+					return rules.Ignore ? emptyBundleNamesArray : rules.Bundles;
+				} else {
+					// There are no cooking rules for text files, consider them as part of the main bundle.
+					return mainBundleNameArray;
+				}
+			}
+		}
+
+		private AssetBundle CreateOutputBundle(string bundleName, List<string> bundleBackups)
 		{
 			var bundlePath = The.Workspace.GetBundlePath(Target.Platform, bundleName);
 			// Create directory for bundle if it placed in subdirectory
@@ -234,89 +240,28 @@ namespace Orange
 				Lime.Debug.Write("Failed to create directory: {0} {1}", Path.GetDirectoryName(bundlePath));
 				throw;
 			}
-
-			return new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
-		}
-
-		private class FilteredFileEnumerator : IFileEnumerator
-		{
-			private IFileEnumerator sourceFileEnumerator;
-			private List<FileInfo> files = new List<FileInfo>();
-			public FilteredFileEnumerator(IFileEnumerator fileEnumerator, Predicate<FileInfo> predicate)
-			{
-				sourceFileEnumerator = fileEnumerator;
-				sourceFileEnumerator.EnumerationFilter = predicate;
-				files = sourceFileEnumerator.Enumerate().ToList();
-				sourceFileEnumerator.EnumerationFilter = null;
-			}
-			public string Directory { get { return sourceFileEnumerator.Directory; } }
-
-			public Predicate<FileInfo> EnumerationFilter { get { return null; } set { } }
-
-			public IEnumerable<FileInfo> Enumerate(string extension = null)
-			{
-				return files.Where(file => extension == null || file.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase));
-			}
-
-			public void Rescan()
-			{
-
-			}
-		}
-
-		private static bool AssetIsInBundlePredicate(FileInfo info, string bundleName)
-		{
-			CookingRules rules;
-			if (CookingRulesMap.TryGetValue(info.Path, out rules)) {
-				if (rules.Ignore) {
-					return false;
+			var bundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
+			bundle.OnWrite += () => {
+				var backupPath = bundlePath + ".bak";
+				if (bundleBackups.Contains(backupPath) || !File.Exists(bundlePath)) {
+					return;
 				}
-				return Array.IndexOf(rules.Bundles, bundleName) != -1;
-			} else {
-				// There are no cooking rules for text files, consider them as part of the main bundle.
-				return bundleName == CookingRulesBuilder.MainBundleName;
-			}
-		}
-
-		private void CookBundleHelper(string bundleName)
-		{
-			Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
-			var assetFilesEnumerator = The.Workspace.AssetFiles;
-			The.Workspace.AssetFiles = new FilteredFileEnumerator(assetFilesEnumerator, (info) => AssetIsInBundlePredicate(info, bundleName));
-			// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
-			atlasesPostfix = bundleName != CookingRulesBuilder.MainBundleName ? bundleName : "";
-			try {
-				using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-					var profileCookStages = cookStages
-						.Where(kv => kv.Value.Contains(cookingProfile))
-						.Select(kv => kv.Key);
-					foreach (var stage in profileCookStages) {
-						CheckCookCancelation();
-						stage.Action();
-					}
-
-					// Warn about non-power of two textures
-					foreach (var path in AssetBundle.EnumerateFiles()) {
-						if ((AssetBundle.GetAttributes(path) & AssetAttributes.NonPowerOf2Texture) != 0) {
-							Console.WriteLine("Warning: non-power of two texture: {0}", path);
-						}
-					}
+				try {
+					File.Copy(bundlePath, backupPath, overwrite: true);
+				} catch (System.Exception e) {
+					Console.WriteLine(e);
 				}
-			} finally {
-				The.Workspace.AssetFiles = assetFilesEnumerator;
-				ModelsToRebuild.Clear();
-				atlasesPostfix = "";
-			}
+				bundleBackups.Add(backupPath);
+			};
+			return bundle;
 		}
-
+		
 		public AssetCooker(Target target)
 		{
 			this.Target = target;
-			bundleBackupFiles = new List<String>();
-
 			AddStage(new RemoveDeprecatedModels(this));
-			AddStage(new SyncAtlases(this), CookingProfile.Total);
-			AddStage(new SyncDeleted(this), CookingProfile.Total);
+			AddStage(new SyncAtlases(this));
+			AddStage(new SyncDeleted(this));
 			AddStage(new SyncRawAssets(this, ".json", AssetAttributes.ZippedDeflate));
 			AddStage(new SyncRawAssets(this, ".cfg", AssetAttributes.ZippedDeflate));
 			AddStage(new SyncTxtAssets(this));
@@ -327,9 +272,9 @@ namespace Orange
 					AddStage(new SyncRawAssets(this, extension, AssetAttributes.ZippedDeflate));
 				}
 			}
-			AddStage(new SyncTextures(this), CookingProfile.Total);
-			AddStage(new DeleteOrphanedMasks(this), CookingProfile.Total);
-			AddStage(new DeleteOrphanedTextureParams(this), CookingProfile.Total);
+			AddStage(new SyncTextures(this));
+			AddStage(new DeleteOrphanedMasks(this));
+			AddStage(new DeleteOrphanedTextureParams(this));
 			AddStage(new SyncFonts(this));
 			AddStage(new SyncCompoundFonts(this));
 			AddStage(new SyncRawAssets(this, ".ttf"));
@@ -347,7 +292,7 @@ namespace Orange
 		public void DeleteFileFromBundle(string path)
 		{
 			Console.WriteLine("- " + path);
-			AssetBundle.DeleteFile(path);
+			OutputBundle.DeleteFile(path);
 		}
 
 		public string GetAtlasPath(string atlasChain, int index)
@@ -376,22 +321,22 @@ namespace Orange
 			if (!AreTextureParamsDefault(rules)) {
 				TextureTools.UpscaleTextureIfNeeded(ref texture, rules, false);
 				var isNeedToRewriteTexParams = true;
-				if (AssetBundle.FileExists(textureParamsPath)) {
-					var oldTexParams = InternalPersistence.Instance.ReadObject<TextureParams>(textureParamsPath, AssetBundle.OpenFile(textureParamsPath));
+				if (OutputBundle.FileExists(textureParamsPath)) {
+					var oldTexParams = InternalPersistence.Instance.ReadObjectFromBundle<TextureParams>(OutputBundle, textureParamsPath);
 					isNeedToRewriteTexParams = !oldTexParams.Equals(textureParams);
 				}
 				if (isNeedToRewriteTexParams) {
-					InternalPersistence.Instance.WriteObjectToBundle(AssetBundle, textureParamsPath, textureParams, Persistence.Format.Binary, ".texture",
-						File.GetLastWriteTime(textureParamsPath), AssetAttributes.None, null);
+					InternalPersistence.Instance.WriteObjectToBundle(OutputBundle, textureParamsPath, textureParams, Persistence.Format.Binary, ".texture",
+						InputBundle.GetFileLastWriteTime(textureParamsPath), AssetAttributes.None, null);
 				}
 			} else {
-				if (AssetBundle.FileExists(textureParamsPath)) {
+				if (OutputBundle.FileExists(textureParamsPath)) {
 					DeleteFileFromBundle(textureParamsPath);
 				}
 			}
 			if (rules.GenerateOpacityMask) {
 				var maskPath = Path.ChangeExtension(path, ".mask");
-				OpacityMaskCreator.CreateMask(AssetBundle, texture, maskPath);
+				OpacityMaskCreator.CreateMask(OutputBundle, texture, maskPath);
 			}
 			var attributes = AssetAttributes.ZippedDeflate;
 			if (!TextureConverterUtils.IsPowerOf2(texture.Width) || !TextureConverterUtils.IsPowerOf2(texture.Height)) {
@@ -402,17 +347,17 @@ namespace Orange
 				//case TargetPlatform.iOS:
 					var f = rules.PVRFormat;
 					if (f == PVRFormat.ARGB8 || f == PVRFormat.RGB565 || f == PVRFormat.RGBA4) {
-						TextureConverter.RunPVRTexTool(texture, AssetBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, CookingRulesSHA1, time);
+						TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, CookingRulesSHA1, time);
 					} else {
-						TextureConverter.RunEtcTool(texture, AssetBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, CookingRulesSHA1, time);
+						TextureConverter.RunEtcTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, CookingRulesSHA1, time);
 					}
 					break;
 				case TargetPlatform.iOS:
-					TextureConverter.RunPVRTexTool(texture, AssetBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, CookingRulesSHA1, time);
+					TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, CookingRulesSHA1, time);
 					break;
 				case TargetPlatform.Win:
 				case TargetPlatform.Mac:
-					TextureConverter.RunNVCompress(texture, AssetBundle, path, attributes, rules.DDSFormat, rules.MipMaps, CookingRulesSHA1, time);
+					TextureConverter.RunNVCompress(texture, OutputBundle, path, attributes, rules.DDSFormat, rules.MipMaps, CookingRulesSHA1, time);
 					break;
 				default:
 					throw new Lime.Exception();
@@ -421,9 +366,9 @@ namespace Orange
 
 		public void DeleteModelExternalAnimations(string pathPrefix)
 		{
-			foreach (var path in AssetBundle.EnumerateFiles().ToList()) {
+			foreach (var path in OutputBundle.EnumerateFiles().ToList()) {
 				if (path.EndsWith(".ant") && path.StartsWith(pathPrefix)) {
-					AssetBundle.DeleteFile(path);
+					OutputBundle.DeleteFile(path);
 					Console.WriteLine("- " + path);
 				}
 			}
@@ -440,7 +385,7 @@ namespace Orange
 				var path = pathWithoutExt + ".ant";
 				var data = animation.GetData();
 				animation.ContentsPath = pathWithoutExt;
-				InternalPersistence.Instance.WriteObjectToBundle(AssetBundle, path, data, Persistence.Format.Binary, ".ant", File.GetLastWriteTime(path), assetAttributes, cookingRulesSHA1);
+				InternalPersistence.Instance.WriteObjectToBundle(OutputBundle, path, data, Persistence.Format.Binary, ".ant", InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
 				Console.WriteLine("+ " + path);
 			}
 		}
@@ -461,63 +406,33 @@ namespace Orange
 				throw new OperationCanceledException("------------- Cooking canceled -------------");
 			}
 		}
-
-		private static bool TryMakeBackup(string filePath, out string backupFilePath)
+		
+		private void RemoveBackups(List<string> bundleBackups)
 		{
-			backupFilePath = filePath + ".bak";
-
-			if (!File.Exists(filePath) ) {
-				return false;
-			}
-
-			try {
-				File.Copy(filePath, backupFilePath);
-				return true;
-			} catch (System.Exception e) {
-				Console.WriteLine(e);
-			}
-
-			return false;
-		}
-
-		private static bool TryRestoreBackup(string backupFilePath)
-		{
-			if (!backupFilePath.EndsWith(".bak", StringComparison.OrdinalIgnoreCase)) {
-				return false;
-			}
-
-			// Remove ".bak" extension.
-			string targetFilePath = Path.ChangeExtension(backupFilePath, null);
-
-			try {
-				if (File.Exists(targetFilePath)) {
-					File.Delete(targetFilePath);
-				}
-				File.Move(backupFilePath, targetFilePath);
-				return true;
-			} catch (System.Exception e) {
-				Console.WriteLine(e);
-			}
-
-			return false;
-		}
-
-		private void RemoveBackups()
-		{
-			foreach (var backupPath in bundleBackupFiles) {
+			foreach (var path in bundleBackups) {
 				try {
-					File.Delete(backupPath);
+					if (File.Exists(path)) {
+						File.Delete(path);
+					}
 				} catch (System.Exception e) {
-					Console.WriteLine("Failed to delete backupFile: {0} {1}", backupPath, e);
+					Console.WriteLine($"Failed to delete a bundle backup: {path} {e}");
 				}
 			}
-			bundleBackupFiles.Clear();
 		}
 
-		private void RestoreBackups()
+		private void RestoreBackups(List<string> bundleBackups)
 		{
-			foreach (var backupPath in bundleBackupFiles) {
-				TryRestoreBackup(backupPath);
+			foreach (var backupPath in bundleBackups) {
+				// Remove ".bak" extension.
+				var bundlePath = Path.ChangeExtension(backupPath, null);
+				try {
+					if (File.Exists(bundlePath)) {
+						File.Delete(bundlePath);
+					}
+					File.Move(backupPath, bundlePath);
+				} catch (System.Exception e) {
+					Console.WriteLine(e);
+				}
 			}
 		}
 
@@ -551,6 +466,47 @@ namespace Orange
 				w.WriteLine(LogText);
 				w.WriteLine();
 				w.WriteLine();
+			}
+		}
+
+		public int GetUpdateOperationCount(string fileExtension) => InputBundle.EnumerateFileInfos(null, fileExtension).Count();
+
+		public void SyncUpdated(string fileExtension, string bundleAssetExtension, Converter converter, Func<string, string, bool> extraOutOfDateChecker = null)
+		{
+			foreach (var fileInfo in InputBundle.EnumerateFileInfos(null, fileExtension)) {
+				UserInterface.Instance.IncreaseProgressBar();
+				var srcPath = fileInfo.Path;
+				var dstPath = Path.ChangeExtension(srcPath, bundleAssetExtension);
+				var bundled = OutputBundle.FileExists(dstPath);
+				var srcRules = CookingRulesMap[srcPath];
+				var needUpdate = !bundled || fileInfo.LastWriteTime != OutputBundle.GetFileLastWriteTime(dstPath);
+				needUpdate = needUpdate || !srcRules.SHA1.SequenceEqual(OutputBundle.GetCookingRulesSHA1(dstPath));
+				needUpdate = needUpdate || (extraOutOfDateChecker?.Invoke(srcPath, dstPath) ?? false);
+				if (needUpdate) {
+					if (converter != null) {
+						try {
+							if (converter(srcPath, dstPath)) {
+								Console.WriteLine((bundled ? "* " : "+ ") + dstPath);
+								CookingRules rules = null;
+								if (!string.IsNullOrEmpty(dstPath)) {
+									CookingRulesMap.TryGetValue(dstPath, out rules);
+								}
+								PluginLoader.AfterAssetUpdated(OutputBundle, rules, dstPath);
+							}
+						} catch (System.Exception e) {
+							Console.WriteLine(
+								"An exception was caught while processing '{0}': {1}\n", srcPath, e.Message);
+							throw;
+						}
+					} else {
+						Console.WriteLine((bundled ? "* " : "+ ") + dstPath);
+						using (var stream = InputBundle.OpenFile(srcPath)) {
+							OutputBundle.ImportFile(dstPath, stream, 0, fileExtension,
+								InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None,
+								CookingRulesMap[srcPath].SHA1);
+						}
+					}
+				}
 			}
 		}
 	}
