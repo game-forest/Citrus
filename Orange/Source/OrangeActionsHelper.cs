@@ -1,57 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Lime;
 
 namespace Orange.Source
 {
 	public static class OrangeActionsHelper
 	{
-
-		public static void ExecuteOrangeActionInstantly(Action action, Action onBegin, Action onEnd,
-			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
-		{
-			IEnumerator<object> enumerator = ExecuteOrangeAction(action, onBegin, onEnd, onCreateOrNotAsynchTask);
-			while (enumerator.MoveNext()) {
-				Thread.Yield();
-			}
-		}
-
-		public static void ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd,
-			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
-		{
-			IEnumerator<object> enumerator = ExecuteOrangeAction(action, onBegin, onEnd, onCreateOrNotAsynchTask);
-			while (enumerator.MoveNext()) {
-				Thread.Yield();
-			}
-		}
-
-		public static IEnumerator<object> ExecuteOrangeAction(Action action, Action onBegin, Action onEnd,
-			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
-		{
-			return ExecuteOrangeAction(() => {
-				action();
-				return null;
-			}, onBegin, onEnd, onCreateOrNotAsynchTask);
-		}
-
 		public static IEnumerator<object> ExecuteOrangeAction(Func<string> action, Action onBegin, Action onEnd,
 			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
 		{
 			var startTime = DateTime.Now;
 			onBegin();
-			string executonResultReadable = "Build Failed! Unknown Error.";
+			var executionResult = "Build Failed! Unknown Error.";
 			try {
-				The.Workspace?.AssetFiles?.Rescan();
-
-				executonResultReadable = "Done.";
-
+				executionResult = "Done.";
 				Action mainAction = () => {
-					string errorDetails = SafeExecuteWithErrorDetails(action);
-					if (errorDetails != null) {
-						if (errorDetails.Length > 0) {
-							Console.WriteLine(errorDetails);
+					var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
+					var bundle = new Tangerine.Core.TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
+					AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+					try {
+						var errorDetails = SafeExecuteWithErrorDetails(action);
+						if (errorDetails != null) {
+							if (errorDetails.Length > 0) {
+								Console.WriteLine(errorDetails);
+							}
+							executionResult = "Build Failed!";
 						}
-						executonResultReadable = "Build Failed!";
+					} finally {
+						bundle.Dispose();
+						AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
 					}
 				};
 				if (onCreateOrNotAsynchTask != null) {
@@ -60,7 +38,7 @@ namespace Orange.Source
 					mainAction();
 				}
 			} finally {
-				Console.WriteLine(executonResultReadable);
+				Console.WriteLine(executionResult);
 				Console.WriteLine(@"Elapsed time {0:hh\:mm\:ss}", DateTime.Now - startTime);
 				onEnd();
 			}
@@ -76,7 +54,7 @@ namespace Orange.Source
 					System.Diagnostics.Process.Start(e.DownloadUrl);
 				}
 				return e.ToString();
-			} catch (Exception ex) {
+			} catch (System.Exception ex) {
 				return ex.ToString();
 			}
 		}
