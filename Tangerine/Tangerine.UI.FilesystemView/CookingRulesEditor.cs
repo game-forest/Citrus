@@ -62,7 +62,7 @@ namespace Tangerine.UI.FilesystemView
 				}
 			};
 		}
-
+		
 		private static bool IsInAssetDir(string path)
 		{
 			return AssetPath.CorrectSlashes(path).StartsWith(AssetPath.CorrectSlashes(The.Workspace.AssetsDirectory));
@@ -107,7 +107,7 @@ namespace Tangerine.UI.FilesystemView
 				var crPath = AssetPath.Combine(path, Orange.CookingRulesBuilder.CookingRulesFilename);
 				if (crc.ContainsKey(key)) {
 					cr = crc[key];
-					if (cr.SourceFilename != crPath) {
+					if (cr.SystemSourcePath != crPath) {
 						if (createIfNotExists) {
 							cr = cr.InheritClone();
 							crc[key] = cr;
@@ -119,7 +119,7 @@ namespace Tangerine.UI.FilesystemView
 				} else {
 					throw new Lime.Exception("CookingRule record for directory should already be present in collection");
 				}
-				cr.SourceFilename = crPath;
+				cr.SystemSourcePath = crPath;
 			} else {
 				bool isPerDirectory = Path.GetFileName(path) == CookingRulesBuilder.CookingRulesFilename;
 				bool isPerFile = path.EndsWith(".txt") && File.Exists(path.Remove(path.Length - 4));
@@ -141,7 +141,7 @@ namespace Tangerine.UI.FilesystemView
 						return null;
 					} else if (crc.ContainsKey(NormalizePath(path))) {
 						cr = crc[NormalizePath(path)].InheritClone();
-						cr.SourceFilename = crPath;
+						cr.SystemSourcePath = crPath;
 						ignoreRules(crPath, cr);
 						crc[key] = cr;
 					} else {
@@ -164,12 +164,15 @@ namespace Tangerine.UI.FilesystemView
 			if (filesystemSelection == null || filesystemSelection.Empty) {
 				return;
 			}
-			var targetDir = new System.IO.FileInfo(filesystemSelection.First()).Directory.FullName;
+			var targetDir = Path.GetDirectoryName(filesystemSelection.First());
 			if (Orange.The.Workspace.AssetsDirectory == null || !targetDir.StartsWith(Orange.The.Workspace.AssetsDirectory)) {
 				// We're somewhere outside the project directory
 				return;
 			}
-			var t = Orange.CookingRulesBuilder.Build(new FileEnumerator(Orange.The.Workspace.AssetsDirectory, targetDir), activeTarget);
+			var t = Orange.CookingRulesBuilder.Build(
+				new BundleForCookingRulesBuilder(AssetBundle.Current, Orange.The.Workspace.AssetsDirectory, targetDir),
+				activeTarget, 
+				AssetBundle.Current.FromSystemPath(targetDir));
 			foreach (var path in filesystemSelection) {
 				CreateEditingInterfaceForPath(t, path);
 			}
@@ -251,9 +254,9 @@ namespace Tangerine.UI.FilesystemView
 		private void CreateOverridesWidgets(CookingRulesCollection crc, string key, Target target, Meta.Item yi, CookingRules rules, Widget overridesWidget)
 		{
 			Widget innerContainer;
-			var sourceFilenameText = string.IsNullOrEmpty(rules.SourceFilename)
+			var sourceFilenameText = string.IsNullOrEmpty(rules.SystemSourcePath)
 				? "Default"
-				: rules.SourceFilename.Substring(The.Workspace.AssetsDirectory.Length);
+				: rules.SystemSourcePath.Substring(The.Workspace.AssetsDirectory.Length);
 			var targetName = target == null ? "" : $" ({target.Name})";
 			var container = new Widget {
 				Padding = new Thickness { Right = 30 },
@@ -275,7 +278,7 @@ namespace Tangerine.UI.FilesystemView
 						Padding = Thickness.Zero,
 						Size = RowHeight * Vector2.One,
 						MinMaxSize = RowHeight * Vector2.One,
-						Clicked = () => navigateAndSelect(rules.SourceFilename),
+						Clicked = () => navigateAndSelect(rules.SystemSourcePath),
 					})
 				},
 				Layout = new HBoxLayout(),
@@ -412,12 +415,12 @@ namespace Tangerine.UI.FilesystemView
 				targetRules.FieldOverrides.Remove(yi);
 				cr.Save();
 				if (!cr.HasOverrides()) {
-					var acr = GetAssociatedCookingRules(crc, cr.SourceFilename);
-					if (!acr.SourceFilename.EndsWith(key)) {
+					var acr = GetAssociatedCookingRules(crc, cr.SystemSourcePath);
+					if (!acr.SystemSourcePath.EndsWith(key)) {
 						crc[key] = cr.Parent;
 					}
-					crc.Remove(NormalizePath(acr.SourceFilename));
-					System.IO.File.Delete(cr.SourceFilename);
+					crc.Remove(NormalizePath(acr.SystemSourcePath));
+					System.IO.File.Delete(cr.SystemSourcePath);
 				}
 				List<Node> toUnlink = new List<Node>();
 				foreach (var node in overridesWidget.Nodes) {
