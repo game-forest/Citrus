@@ -190,7 +190,7 @@ namespace Tangerine.UI.FilesystemView
 			if (extension == ".tan") {
 				return DocumentPreview.ReadAsTexture2D(filename);
 			} else {
-				var fi = new FileInfo(filename);
+				var fi = new System.IO.FileInfo(filename);
 				if (fi.Length > 1024 * 1024 * 10) {
 					return null;
 				}

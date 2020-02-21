@@ -212,13 +212,13 @@ namespace Tangerine
 			var shouldInvalidateAttachment = false;
 			var lastMetaWriteTime = DateTime.MinValue;
 			var lastAttachmentWriteTime = DateTime.MinValue;
-			using (var cacheBundle = new PackedAssetBundle(Orange.The.Workspace.TangerineCacheBundle)) {
+			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
 				lastMetaWriteTime =
 					cacheBundle.GetFileLastWriteTime(Path.ChangeExtension(model3DContentsPath,
 						Model3DAttachmentMeta.FileExtension));
 			}
 
-			using (var cacheBundle = new PackedAssetBundle(Orange.The.Workspace.TangerineCacheBundle)) {
+			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
 				var path = Path.ChangeExtension(model3DContentsPath, Model3DAttachment.FileExtension);
 				if (cacheBundle.FileExists(path)) {
 					lastAttachmentWriteTime = cacheBundle.GetFileLastWriteTime(path);
@@ -545,7 +545,7 @@ namespace Tangerine
 			var metaPath = source.ContentsPath + Model3DAttachmentMeta.FileExtension;
 			Model3DAttachmentMeta meta = null;
 			bool metaCached;
-			using (var cacheBundle = new PackedAssetBundle(Orange.The.Workspace.TangerineCacheBundle)) {
+			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
 				metaCached = cacheBundle.FileExists(metaPath);
 				if (metaCached) {
 					using (var assetStream = cacheBundle.OpenFile(metaPath)) {
@@ -573,7 +573,7 @@ namespace Tangerine
 			var path = source.ContentsPath + Model3DAttachment.FileExtension;
 			Model3DAttachment attachment = null;
 			bool attachmentCached;
-			using (var cacheBundle = new PackedAssetBundle(Orange.The.Workspace.TangerineCacheBundle)) {
+			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
 				attachmentCached = cacheBundle.FileExists(path);
 				if (attachmentCached) {
 					using (var assetStream = cacheBundle.OpenFile(path)){
