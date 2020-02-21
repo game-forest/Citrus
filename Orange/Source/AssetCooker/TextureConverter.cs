@@ -220,7 +220,7 @@ namespace Orange
 #endif
 			var toolPath = Path.Combine(toolChainDirectory, tool);
 #if MAC
-			Process.Start("chmod", $"+x {toolPath}");
+			Process.Start("/bin/chmod", $"+x {toolPath}");
 #endif
 			return toolPath;
 		}
