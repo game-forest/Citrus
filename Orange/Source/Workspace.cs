@@ -16,7 +16,7 @@ namespace Orange
 		public string ProjectFilePath { get; private set; }
 		public string ProjectDirectory { get; private set; }
 		public string AssetsDirectory { get; private set; }
-		public string Title { get; private set; }
+		public string ProjectName { get; private set; }
 		public string GeneratedScenesPath { get; private set; }
 		[Obsolete("Use AssetBundle.Current or AssetCooker.InputBundle instead")]
 		public IFileEnumerator AssetFiles { get; set; }
@@ -69,7 +69,7 @@ namespace Orange
 			if (string.IsNullOrEmpty(ProjectDirectory)) {
 				throw new InvalidOperationException("Can't generate default solution path for project when there's no project loaded.");
 			}
-			string platformProjectName = Title + GetPlatformSuffix(platform);
+			string platformProjectName = ProjectName + GetPlatformSuffix(platform);
 			return Path.Combine(ProjectDirectory, platformProjectName, platformProjectName + ".sln");
 		}
 
@@ -203,11 +203,11 @@ namespace Orange
 		private void ReadProject(string file)
 		{
 			ProjectJson = new Json(file);
-			Title = ProjectJson["Title"] as string;
 			var generatedScenesConfigPath = ProjectJson["GeneratedScenesPath"] as string;
 			GeneratedScenesPath = string.IsNullOrEmpty(generatedScenesConfigPath) ? "GeneratedScenes" : generatedScenesConfigPath;
 			dataFolderName = ProjectJson.GetValue("DataFolderName", "Data");
 			pluginName = ProjectJson.GetValue("Plugin", "");
+			ProjectName = ProjectJson["Name"] as string;
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
 
 			// Standard Citrus locations are beside the project directory or inside it.

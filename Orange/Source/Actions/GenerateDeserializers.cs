@@ -43,13 +43,13 @@ namespace Orange
 				generatedDeserializersPath = Path.Combine(generatedDeserializersPath, token.ToString());
 			}
 			Generate(Path.Combine(generatedDeserializersPath, "YuzuGeneratedBinaryDeserializer.cs"),
-				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.Title}Deserializer", "LimeDeserializer") {
+				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.ProjectName}Deserializer", "LimeDeserializer") {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(PluginLoader.EnumerateOrangeAndTangerinePluginAssemblies())
 			);
 			Generate(Path.Combine(generatedDeserializersPath, "YuzuGeneratedCloners.cs"),
-				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.Title}Cloner", "LimeCloner") {
+				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.ProjectName}Cloner", "LimeCloner") {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(PluginLoader.EnumerateOrangeAndTangerinePluginAssemblies())
