@@ -32,10 +32,10 @@ namespace Tangerine.UI
 						Directory.CreateDirectory(logDir);
 					}
 					LogFilePath = Path.Combine(logDir, "TangerineLog.txt");
-					File.WriteAllText(LogFilePath, logBeforeProjectOpened.ToString());
 					if (file != null) {
 						file.Close();
 					}
+					File.WriteAllText(LogFilePath, logBeforeProjectOpened.ToString());
 					file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write));
 					logBeforeProjectOpened.Clear();
 				};
