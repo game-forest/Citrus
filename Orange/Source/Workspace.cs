@@ -98,15 +98,19 @@ namespace Orange
 
 		public JObject JObject { get; private set; }
 
-		public void Load()
+		public void Load(string projectFilePath = null)
 		{
 			// heuristic behavior: always try to go up and search for a citproj file
 			// if found, ignore the one saved in app data, since we're opening citrus directory
 			// related to found game project as a submodule
 			var config = WorkspaceConfig.Load();
-			if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)) {
+			if (projectFilePath != null) {
+				Open(projectFilePath);
+			} else if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out projectFilePath)) {
 				Open(projectFilePath);
 				The.UI.UpdateOpenedProjectPath(projectFilePath);
+			} else {
+				throw new InvalidOperationException("Can't find .citproj");
 			}
 			var projectConfig = config.GetProjectConfig(projectFilePath);
 			The.UI.LoadFromWorkspaceConfig(config, projectConfig);
@@ -211,10 +215,6 @@ namespace Orange
 			pluginName = ProjectJson.GetValue("Plugin", "");
 			citrusLocation = ProjectJson.GetValue("CitrusLocation", string.Empty);
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
-#if TANGERINE
-			BlendAnimationEngine.ApplyAnimationBlenderInTangerine =
-				The.Workspace.ProjectJson.GetValue<bool>("ApplyAnimationBlenderInTangerine");
-#endif
 
 			foreach (var target in ProjectJson.GetArray("Targets", new Dictionary<string, object>[0])) {
 				var cleanBeforeBuild = false;
