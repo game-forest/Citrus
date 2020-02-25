@@ -1,15 +1,4 @@
 {
-	Title: 'EmptyProject',
-	CitrusDirectory: "../../",
-	Version: '1.0',
-	AssetCache: {
-		ServerAddress: "192.168.0.209",
-		ServerUsername: "ftp",
-		ServerPath: "Cache",
-	},
-	PluginAssemblies: {
-		OrangeAndTangerine: [],
-		Orange: [],
-		Tangerine: []
-	}
+	"Name": "EmptyProject",
+	"CitrusDirectory": "../../",
 }

@@ -163,12 +163,12 @@ namespace Orange
 				The.UI.OnWorkspaceOpened();
 				The.UI.ReloadBundlePicker();
 			} catch (System.Exception e) {
-				Console.WriteLine($"Can't open {projectFilePath}:\n{e.Message}");
 				// TODO: make a general way to close project and reset everything to default state
 				ProjectFilePath = null;
 				AssetsDirectory = null;
 				AssetFiles = null;
 				TangerineCacheBundle = null;
+				throw new System.Exception($"Can't open {projectFilePath}:\n{e.Message}");
 			}
 		}
 
@@ -198,6 +198,9 @@ namespace Orange
 			ProjectJson = new Json(file);
 
 			ProjectName = ProjectJson["Name"] as string;
+			if (string.IsNullOrEmpty(ProjectName)) {
+				throw new Lime.Exception($"Project configuration incomplete: 'Name' is not set.");
+			}
 
 			AssetsDirectory = Path.Combine(ProjectDirectory, ProjectJson.GetValue("AssetsDirectory", "Data"));
 			if (!Directory.Exists(AssetsDirectory)) {

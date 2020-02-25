@@ -163,8 +163,6 @@ namespace Orange
 					if (tangerine.Length > 0) {
 						Console.WriteLine("Tangerine specific assemblies loaded successfully");
 					}
-				} else {
-					Console.WriteLine($"WARNING: Field '{TangerineField}' not found in '{PluginsField}' in {The.Workspace.ProjectFilePath}");
 				}
 #else
 				var orange = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeField}");
@@ -175,8 +173,6 @@ namespace Orange
 					if (orange.Length > 0) {
 						Console.WriteLine("Orange specific assemblies loaded successfully");
 					}
-				} else {
-					Console.WriteLine($"WARNING: Field '{OrangeField}' not found in '{PluginsField}' in {The.Workspace.ProjectFilePath}");
 				}
 #endif
 				ValidateComposition();
@@ -205,15 +201,13 @@ namespace Orange
 
 		private static IEnumerable<string> EnumerateOrangeAndTangerinePluginAssemblyPaths()
 		{
-			The.Workspace.ProjectJson.JObject.TryGetValue(PluginsField, out var token);
-			if (token == null) {
-				throw new KeyNotFoundException($"Warning: Field '{PluginsField}' not found in {The.Workspace.ProjectFilePath}");
+			var array = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeAndTangerineField}");
+			if (array ==  null) {
+				yield break;
 			}
-			(token as JObject).TryGetValue(OrangeAndTangerineField, out token);
-			if (token == null) {
-				throw new KeyNotFoundException($"Warning: Field '{OrangeAndTangerineField}' not found in '{PluginsField}' in {The.Workspace.ProjectFilePath}");
+			foreach (var v in array) {
+				yield return v;
 			}
-			return The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeAndTangerineField}");
 		}
 
 		private static Assembly TryLoadAssembly(string assemblyPath)
@@ -369,9 +363,12 @@ namespace Orange
 					continue;
 				}
 
-				Type[] exportedTypes;
+				Type[] exportedTypes = null;
 				try {
-					exportedTypes = assembly.GetExportedTypes();
+					// dynamic assemblies don't support GetExportedTypes()
+					if (!assembly.IsDynamic) {
+						exportedTypes = assembly.GetExportedTypes();
+					}
 				} catch (System.Exception) {
 					exportedTypes = null;
 				}
