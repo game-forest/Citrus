@@ -128,8 +128,11 @@ namespace Launcher
 			var originalArgs = args;
 #if MAC
 			args = args.Where(s => !s.StartsWith("-psn")).ToArray();
-#endif // MAC
+			// Workaround see LauncherConsole.
+			var cli = new CommandLineApplication(LauncherConsole.Instance);
+#else
 			var cli = new CommandLineApplication();
+#endif
 			cli.Name = "Orange";
 			cli.Description = "Orange Launcher";
 			cli.HelpOption("-h --help");

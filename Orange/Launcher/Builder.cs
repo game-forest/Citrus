@@ -197,7 +197,8 @@ namespace Launcher
 			process.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(cp);
 			process.StartInfo.StandardErrorEncoding = Encoding.GetEncoding(cp);
 #elif MAC
-			process.StartInfo.Arguments = $"build \"{solutionPath}\" -t:Build -c:Release|\"Any CPU\"";
+			// Perhaps we should refuse mdtool and vstool.
+			process.StartInfo.Arguments = $"build \"{solutionPath}\" -t:Build -c:Release";
 #endif // WIN
 		}
 
@@ -249,15 +250,17 @@ namespace Launcher
 #elif MAC
 		private string builderPath
 		{
-				get {
+			get
+			{
 				var mdtool = "/Applications/Xamarin Studio.app/Contents/MacOS/mdtool";
 				var vstool = "/Applications/Visual Studio.app/Contents/MacOS/vstool";
-
-				if (File.Exists(vstool)) {
+				if (File.Exists (vstool)) {
 					return vstool;
-				} else {
+				}
+				if (File.Exists (vstool)) {
 					return mdtool;
 				}
+				return null;
 			}
 		}
 #endif // WIN

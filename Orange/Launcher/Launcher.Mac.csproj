@@ -64,10 +64,10 @@
     <Reference Include="Xamarin.Mac" />
     <Reference Include="System.Xml" />
     <Reference Include="McMaster.Extensions.CommandLineUtils">
-      <HintPath>$(SolutionDir)packages\McMaster.Extensions.CommandLineUtils.2.2.1\lib\netstandard2.0\McMaster.Extensions.CommandLineUtils.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\McMaster.Extensions.CommandLineUtils.2.5.1\lib\netstandard2.0\McMaster.Extensions.CommandLineUtils.dll</HintPath>
     </Reference>
     <Reference Include="Octokit">
-      <HintPath>$(SolutionDir)packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Octokit.0.41.0\lib\netstandard2.0\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -140,6 +140,7 @@
       <Link>CitrusVersion.cs</Link>
     </Compile>
     <Compile Include="Toolbox.cs" />
+    <Compile Include="LauncherConsole.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Mac\MainWindow.xib" />
