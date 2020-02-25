@@ -31,8 +31,7 @@ namespace Orange
 
 		private static void SynchronizeAll()
 		{
-			var dontSynchronizeProject = The.Workspace.ProjectJson["DontSynchronizeProject"] as bool?;
-			if (dontSynchronizeProject != null && dontSynchronizeProject.Value) {
+			if (The.Workspace.ProjectJson.GetValue("DontSynchronizeProject", false)) {
 				return;
 			}
 			var fileEnumerator = new ScanOptimizedFileEnumerator(

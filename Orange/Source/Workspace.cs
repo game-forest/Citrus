@@ -10,11 +10,12 @@ namespace Orange
 	public class Workspace
 	{
 		/// <summary>
-		/// Absolute path to currently open project file. Located at the root level of project directory, has <c>*.citproj</c> extension.
-		/// If no project is open has value of <c>null</c>.
+		/// Absolute path of currently open project file.
+		/// Located at the root level of project directory, has <c>*.citproj</c> extension.
+		/// <c>null</c> when no project is opened.
 		/// </summary>
 		public string ProjectFilePath { get; private set; }
-		public string ProjectDirectory { get; private set; }
+		public string ProjectDirectory => !string.IsNullOrEmpty(ProjectFilePath) ? Path.GetDirectoryName(ProjectFilePath) : null;
 		public string AssetsDirectory { get; private set; }
 		public string ProjectName { get; private set; }
 		public string GeneratedScenesPath { get; private set; }
@@ -22,9 +23,9 @@ namespace Orange
 		public IFileEnumerator AssetFiles { get; set; }
 		public Json ProjectJson { get; private set; }
 		public List<Target> Targets { get; private set; }
+		public string TangerineCacheBundle { get; private set; }
+		public string UnresolvedAssembliesDirectory { get; private set; }
 
-		private string dataFolderName;
-		private string pluginName;
 		/// <summary>
 		/// Absolute path to directory of Citrus used by loaded project which is not necessarily a location of running Citrus.
 		/// </summary>
@@ -144,20 +145,13 @@ namespace Orange
 			try {
 				The.UI.ClearLog();
 				ProjectFilePath = projectFilePath;
-				ProjectDirectory = Path.GetDirectoryName(projectFilePath);
 				ReadProject(projectFilePath);
-				AssetsDirectory = Path.Combine(ProjectDirectory, dataFolderName);
 				var tangerineAssetBundle = new Tangerine.Core.TangerineAssetBundle(AssetsDirectory);
 				if (!tangerineAssetBundle.IsActual()) {
 					tangerineAssetBundle.CleanupBundle();
 				}
 				Lime.AssetBundle.Current = tangerineAssetBundle;
-				if (!Directory.Exists(AssetsDirectory)) {
-					throw new Lime.Exception("Assets folder '{0}' doesn't exist", AssetsDirectory);
-				}
-				PluginLoader.ScanForPlugins(!string.IsNullOrWhiteSpace(pluginName)
-					? Path.Combine(Path.GetDirectoryName(projectFilePath), pluginName)
-					: projectFilePath);
+				PluginLoader.ScanForPlugins();
 				if (defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate == null) {
 					defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate = CsprojSynchronization.SkipUnwantedDirectoriesPredicate;
 				}
@@ -172,7 +166,6 @@ namespace Orange
 				Console.WriteLine($"Can't open {projectFilePath}:\n{e.Message}");
 				// TODO: make a general way to close project and reset everything to default state
 				ProjectFilePath = null;
-				ProjectDirectory = null;
 				AssetsDirectory = null;
 				AssetFiles = null;
 				TangerineCacheBundle = null;
@@ -203,11 +196,19 @@ namespace Orange
 		private void ReadProject(string file)
 		{
 			ProjectJson = new Json(file);
-			var generatedScenesConfigPath = ProjectJson["GeneratedScenesPath"] as string;
-			GeneratedScenesPath = string.IsNullOrEmpty(generatedScenesConfigPath) ? "GeneratedScenes" : generatedScenesConfigPath;
-			dataFolderName = ProjectJson.GetValue("DataFolderName", "Data");
-			pluginName = ProjectJson.GetValue("Plugin", "");
+
 			ProjectName = ProjectJson["Name"] as string;
+
+			AssetsDirectory = Path.Combine(ProjectDirectory, ProjectJson.GetValue("AssetsDirectory", "Data"));
+			if (!Directory.Exists(AssetsDirectory)) {
+				throw new Lime.Exception("Assets directory \"{0}\" doesn't exist", AssetsDirectory);
+			}
+
+			UnresolvedAssembliesDirectory = Path.Combine(ProjectDirectory,
+				ProjectJson.GetValue("UnresolvedAssembliesDirectory", $"{ProjectName}.OrangePlugin/bin/$(CONFIGURATION)/"));
+
+			GeneratedScenesPath = ProjectJson.GetValue("GeneratedScenesPath", "GeneratedScenes");
+
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
 
 			// Standard Citrus locations are beside the project directory or inside it.

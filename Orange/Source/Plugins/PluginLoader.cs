@@ -81,7 +81,6 @@ namespace Orange
 
 	public static class PluginLoader
 	{
-		public static string CurrentPluginDirectory;
 		public static OrangePlugin CurrentPlugin = new OrangePlugin();
 		private static CompositionContainer compositionContainer;
 		private static readonly AggregateCatalog catalog;
@@ -113,6 +112,8 @@ namespace Orange
 #else
 		private const string pluginConfiguration = BuildConfiguration.Release;
 #endif
+		private const string configurationSubstituteToken = "$(CONFIGURATION)";
+		private const string hostApplicationSubstituteToken = "$(HOST_APPLICATION)";
 
 		static PluginLoader()
 		{
@@ -143,16 +144,14 @@ namespace Orange
 			ResetPlugins();
 		}
 
-		public static void ScanForPlugins(string citrusProjectFile)
+		public static void ScanForPlugins()
 		{
-			var pluginRoot = Path.ChangeExtension(citrusProjectFile, ".OrangePlugin");
-			CurrentPluginDirectory = Path.Combine(pluginRoot, "bin", pluginConfiguration);
 			CurrentPlugin?.Finalize?.Invoke();
 			The.UI.DestroyPluginUI();
 			CurrentPlugin = new OrangePlugin();
 			ResetPlugins();
 			try {
-				foreach (var path in EnumerateOrangeAndTangerinePluginAssemblyPaths(citrusProjectFile)) {
+				foreach (var path in EnumerateOrangeAndTangerinePluginAssemblyPaths()) {
 					TryLoadAssembly(path);
 				}
 #if TANGERINE
@@ -165,7 +164,7 @@ namespace Orange
 						Console.WriteLine("Tangerine specific assemblies loaded successfully");
 					}
 				} else {
-					Console.WriteLine($"WARNING: Field '{TangerineField}' not found in '{PluginsField}' in {citrusProjectFile}");
+					Console.WriteLine($"WARNING: Field '{TangerineField}' not found in '{PluginsField}' in {The.Workspace.ProjectFilePath}");
 				}
 #else
 				var orange = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeField}");
@@ -177,7 +176,7 @@ namespace Orange
 						Console.WriteLine("Orange specific assemblies loaded successfully");
 					}
 				} else {
-					Console.WriteLine($"WARNING: Field '{OrangeField}' not found in '{PluginsField}' in {citrusProjectFile}");
+					Console.WriteLine($"WARNING: Field '{OrangeField}' not found in '{PluginsField}' in {The.Workspace.ProjectFilePath}");
 				}
 #endif
 				ValidateComposition();
@@ -201,34 +200,34 @@ namespace Orange
 		}
 
 		public static IEnumerable<Assembly> EnumerateOrangeAndTangerinePluginAssemblies() =>
-			EnumerateOrangeAndTangerinePluginAssemblyPaths(The.Workspace.ProjectFilePath)
+			EnumerateOrangeAndTangerinePluginAssemblyPaths()
 			.Select(s => PluginLoader.TryLoadAssembly(s));
 
-		private static IEnumerable<string> EnumerateOrangeAndTangerinePluginAssemblyPaths(string citrusProjectFile)
+		private static IEnumerable<string> EnumerateOrangeAndTangerinePluginAssemblyPaths()
 		{
 			The.Workspace.ProjectJson.JObject.TryGetValue(PluginsField, out var token);
 			if (token == null) {
-				throw new KeyNotFoundException($"Warning: Field '{PluginsField}' not found in {citrusProjectFile}");
+				throw new KeyNotFoundException($"Warning: Field '{PluginsField}' not found in {The.Workspace.ProjectFilePath}");
 			}
-				(token as JObject).TryGetValue(OrangeAndTangerineField, out token);
+			(token as JObject).TryGetValue(OrangeAndTangerineField, out token);
 			if (token == null) {
-				throw new KeyNotFoundException($"Warning: Field '{OrangeAndTangerineField}' not found in '{PluginsField}' in {citrusProjectFile}");
+				throw new KeyNotFoundException($"Warning: Field '{OrangeAndTangerineField}' not found in '{PluginsField}' in {The.Workspace.ProjectFilePath}");
 			}
 			return The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeAndTangerineField}");
 		}
 
 		private static Assembly TryLoadAssembly(string assemblyPath)
 		{
-			if (!assemblyPath.Contains("$(CONFIGURATION)")) {
+			if (!assemblyPath.Contains(configurationSubstituteToken)) {
 				Console.WriteLine(
-					"Warning: Using '$(CONFIGURATION)' instead of 'Debug' or 'Release' in dll path" +
-					$" is strictly recommended ($(CONFIGURATION) line not found in {assemblyPath}");
+					$"Warning: Using '{configurationSubstituteToken}' instead of 'Debug' or 'Release' in dll path" +
+					$" is strictly recommended ('{configurationSubstituteToken}' line not found in {assemblyPath}");
 			}
-			assemblyPath = assemblyPath.Replace("$(CONFIGURATION)", pluginConfiguration);
+			assemblyPath = assemblyPath.Replace(configurationSubstituteToken, pluginConfiguration);
 #if TANGERINE
-			assemblyPath = assemblyPath.Replace("$(HOST_APPLICATION)", "Tangerine");
+			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Tangerine");
 #else
-			assemblyPath = assemblyPath.Replace("$(HOST_APPLICATION)", "Orange");
+			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Orange");
 #endif
 			var absPath = Path.Combine(The.Workspace.ProjectDirectory, assemblyPath);
 			if (!File.Exists(absPath)) {
@@ -406,7 +405,7 @@ namespace Orange
 				}
 
 				var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-				var dllPath = Path.Combine(CurrentPluginDirectory, foundPath) + ".dll";
+				var dllPath = Path.Combine(The.Workspace.UnresolvedAssembliesDirectory.Replace(configurationSubstituteToken, pluginConfiguration), foundPath) + ".dll";
 				if (TryFindDomainAssembliesByPath(domainAssemblies, dllPath, out assembly)) {
 					resolvedAssemblies.Add(name, assembly);
 					return assembly;
