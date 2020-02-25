@@ -26,8 +26,11 @@ namespace Orange.Source
 				executionResult = "Done.";
 				Action mainAction = () => {
 					var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
-					var bundle = new Tangerine.Core.TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
-					AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+					AssetBundle bundle = null;
+					if (Workspace.Instance.AssetsDirectory != null) {
+						bundle = new Tangerine.Core.TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
+						AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+					}
 					try {
 						var errorDetails = SafeExecuteWithErrorDetails(action);
 						if (errorDetails != null) {
@@ -37,8 +40,10 @@ namespace Orange.Source
 							executionResult = "Build Failed!";
 						}
 					} finally {
-						bundle.Dispose();
-						AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+						if (bundle != null) {
+							bundle.Dispose();
+							AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+						}
 					}
 				};
 				if (onCreateOrNotAsynchTask != null) {

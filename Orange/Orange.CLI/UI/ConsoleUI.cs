@@ -32,7 +32,7 @@ namespace Orange
 			RunCommand(Toolbox.GetCommandLineArg("--command"));
 		}
 
-		public static void OpenWorkspace()
+		private static void OpenWorkspace()
 		{
 			var args = System.Environment.GetCommandLineArgs();
 			if (args.Length >= 3 && !args[1].StartsWith("-")) {
@@ -41,8 +41,6 @@ namespace Orange
 					throw new FileNotFoundException($"Project file '{projectFile}' does not exist");
 				}
 				The.Workspace.Load(projectFile);
-			} else {
-				The.Workspace.Load();
 			}
 		}
 
