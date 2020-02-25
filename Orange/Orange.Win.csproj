@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -191,7 +191,6 @@
     <Compile Include="Source\AssetCooker\CookStages\SyncSounds.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncTextures.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncTxtAssets.cs" />
-    <Compile Include="Source\AssetCooker\CookStages\SyncUpdated.cs" />
     <Compile Include="Source\AssetCooker\ICookStage.cs" />
     <Compile Include="Source\AssetCooker\OpacityMaskCreator.cs" />
     <Compile Include="Source\AssetCooker\RectAllocator.cs" />
@@ -229,6 +228,8 @@
     <Compile Include="Source\OrangeActionsHelper.cs" />
     <Compile Include="Source\Plugins\IPluginUIBuilder.cs" />
     <Compile Include="Source\Plugins\PluginLoader.cs" />
+    <Compile Include="Source\TangerineAssetBundle.cs" />
+    <Compile Include="Source\TangerinePersistence.cs" />
     <Compile Include="Source\Target.cs" />
     <Compile Include="Source\TargetPlatform.cs" />
     <Compile Include="Source\The.cs" />
