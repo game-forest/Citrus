@@ -17,6 +17,7 @@
     "content": [
       {
         "files": [
+          "index.md",
           "api/**.yml",
           "api/index.md"
         ]
@@ -52,9 +53,17 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default",
+      "templates/material"
     ],
-    "postProcessors": [],
+    "postProcessors": [ "ExtractSearchIndex" ],
+    "globalMetadata": {
+      "_appTitle": "Citrus Engine",
+      "_appFooter": "",
+      "_gitContribute": {
+        "branch": "master"
+      }
+    },
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
     "keepFileLink": false,

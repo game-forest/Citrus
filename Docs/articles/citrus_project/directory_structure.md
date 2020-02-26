@@ -1,0 +1,26 @@
+# Citrus Project Directory Structure
+
+- `./<ProjectName>.citproj` [project configuration](configuration.md)
+- `./Data/` default assets directory
+  - `/Localization/` default dictionaries path
+  - `/Fonts/` fixed path for fonts
+- `./<ProjectName>.Android/`
+  - `<ProjectName>.Android.csproj`
+  - `<ProjectName>.Android.sln`
+- `./<ProjectName>.Game/`
+  - `<ProjectName>.Game.projitems`
+  - `<ProjectName>.Game.shproj`
+- `./<ProjectName>.GeneratedScenes/`
+  - `<ProjectName>.GeneratedScenes.Android.csproj`
+  - `<ProjectName>.GeneratedScenes.iOS.csproj`
+  - `<ProjectName>.GeneratedScenes.Mac.csproj`
+  - `<ProjectName>.GeneratedScenes.Win.csproj      `
+- `./<ProjectName>.iOS/`
+  - `<ProjectName>.iOS.csproj`
+  - `<ProjectName>.iOS.sln`
+- `./<ProjectName>.Mac/`
+    - `<ProjectName>.Mac.csproj`
+    - `<ProjectName>.Mac.sln`
+- `./<ProjectName>.Win/`
+  - `<ProjectName>.Win.csproj`
+  - `<ProjectName>.Win.sln`
