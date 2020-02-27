@@ -5,7 +5,7 @@ namespace Lime
 		public float TouchDistance { get; private set; }
 		public float TouchPressDistance { get; private set; }
 		public float TotalPinchScale => TouchDistance / TouchPressDistance;
-		public float LastPinchScale { get; private set; }
+		public float LastPinchScale { get; private set; } = 1.0f;
 
 		private Vector2 Touch0 => Input.GetTouchPosition(0);
 		private Vector2 Touch1 => Input.GetTouchPosition(1);
