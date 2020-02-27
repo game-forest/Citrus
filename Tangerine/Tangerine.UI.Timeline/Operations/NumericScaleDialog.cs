@@ -76,6 +76,9 @@ namespace Tangerine.UI.Timeline
 						continue;
 					}
 					foreach (var animator in animable.Animators.ToList()) {
+						if (animator.AnimationId != Document.Current.AnimationId) {
+							continue;
+						}
 						saved.Clear();
 						IEnumerable<IKeyframe> keys = animator.ReadonlyKeys.Where(k =>
 							k.Frame >= boundaries.Left && k.Frame < boundaries.Right
