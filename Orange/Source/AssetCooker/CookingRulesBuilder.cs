@@ -239,7 +239,7 @@ namespace Orange
 			get => AssetBundle.Current.ToSystemPath(SourcePath);
 			set => SourcePath = AssetBundle.Current.FromSystemPath(value);
 		}
-		
+
 		public readonly Dictionary<Target, ParticularCookingRules> TargetRules = new Dictionary<Target, ParticularCookingRules>();
 		public ParticularCookingRules CommonRules;
 		public CookingRules Parent;
@@ -317,7 +317,8 @@ namespace Orange
 
 		public void Save()
 		{
-			using (var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create)) {
+			using (
+				var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create)) {
 				using (var sw = new StreamWriter(fs)) {
 					SaveCookingRules(sw, CommonRules, null);
 					foreach (var kv in TargetRules) {
@@ -443,15 +444,15 @@ namespace Orange
 						}
 					}
 				} else  {
-					if (Path.GetExtension(filePath) == ".txt") {
+					if (filePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) {
 						var filename = filePath.Remove(filePath.Length - 4);
-						if (File.Exists(filename) || Directory.Exists(filename)) {
+						if (bundle.FileExists(filename)) {
 							continue;
 						}
 					}
 					var rulesFile = filePath + ".txt";
 					var rules = rulesStack.Peek();
-					if (File.Exists(rulesFile)) {
+					if (bundle.FileExists(rulesFile)) {
 						rules = ParseCookingRules(bundle, rulesStack.Peek(), rulesFile, target);
 						rules.SourcePath = rulesFile;
 						// Add 'ignore' cooking rules for this cooking rules text file

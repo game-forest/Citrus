@@ -38,10 +38,15 @@ namespace Orange.FbxImporter
 			var model = new Model3D();
 			model.Nodes.Add(ImportNodes(scene.Root));
 			ImportAnimations(model, scene);
-			if (options.ApplyAttachment && Model3DAttachmentParser.IsAttachmentExists(options.Path)) {
+			if (options.ApplyAttachment && IsAttachmentExists(options.Path)) {
 				Model3DAttachmentParser.GetModel3DAttachment(options.Path).Apply(model);
 			}
 			return model;
+		}
+
+		private static bool IsAttachmentExists(string modelPath)
+		{
+			return AssetBundle.Current.FileExists(Model3DAttachmentParser.GetAttachmentPath(modelPath));
 		}
 
 		public FbxScene LoadRaw()

@@ -164,7 +164,6 @@ namespace Orange
 
 		private void CookBundle(string bundleName, List<FileInfo> assets, List<string> bundleBackups)
 		{
-			var bundlePath = The.Workspace.GetBundlePath(Target.Platform, bundleName);
 			OutputBundle = CreateOutputBundle(bundleName, bundleBackups);
 			try {
 				CookBundleHelper();
@@ -176,7 +175,7 @@ namespace Orange
 				OutputBundle.Dispose();
 				OutputBundle = null;
 			}
-			
+
 			void CookBundleHelper()
 			{
 				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
@@ -374,22 +373,6 @@ namespace Orange
 			}
 		}
 
-		public void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
-		{
-			foreach (var animation in model.Animations) {
-				if (animation.IsLegacy) {
-					continue;
-				}
-				var pathWithoutExt = pathPrefix + animation.Id;
-				pathWithoutExt = Animation.FixAntPath(pathWithoutExt);
-				var path = pathWithoutExt + ".ant";
-				var data = animation.GetData();
-				animation.ContentsPath = pathWithoutExt;
-				InternalPersistence.Instance.WriteObjectToBundle(OutputBundle, path, data, Persistence.Format.Binary, ".ant", InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
-				Console.WriteLine("+ " + path);
-			}
-		}
-
 		public static string GetModelAnimationPathPrefix(string modelPath)
 		{
 			return Toolbox.ToUnixSlashes(Path.GetDirectoryName(modelPath) + "/" + Path.GetFileNameWithoutExtension(modelPath) + "@");
@@ -406,7 +389,7 @@ namespace Orange
 				throw new OperationCanceledException("------------- Cooking canceled -------------");
 			}
 		}
-		
+
 		private void RemoveBackups(List<string> bundleBackups)
 		{
 			foreach (var path in bundleBackups) {

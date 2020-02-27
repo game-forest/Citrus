@@ -782,20 +782,15 @@ namespace Lime
 			public int? Blending = null;
 		}
 
-		private static string GetAttachmentPath(string modelPath)
+		public static string GetAttachmentPath(string modelPath)
 		{
 			return AssetPath.CorrectSlashes(Path.ChangeExtension(modelPath, Model3DAttachment.FileExtension));
-		}
-
-		public static bool IsAttachmentExists(string modelPath)
-		{
-			return File.Exists(GetAttachmentPath(modelPath));
 		}
 
 		public static Model3DAttachment GetModel3DAttachment(string modelPath)
 		{
 			return GetModel3DAttachment(
-				InternalPersistence.Instance.ReadObjectFromFile<ModelAttachmentFormat>(GetAttachmentPath(modelPath)),
+				InternalPersistence.Instance.ReadObjectFromBundle<ModelAttachmentFormat>(AssetBundle.Current, GetAttachmentPath(modelPath)),
 				modelPath);
 		}
 

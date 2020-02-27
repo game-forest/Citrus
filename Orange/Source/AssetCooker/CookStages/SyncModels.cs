@@ -49,11 +49,27 @@ namespace Orange
 			}
 			var animationPathPrefix = AssetCooker.GetModelAnimationPathPrefix(dstPath);
 			AssetCooker.DeleteModelExternalAnimations(animationPathPrefix);
-			AssetCooker.ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
+			ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
 			model.RemoveAnimatorsForExternalAnimations();
 			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
 				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
 			return true;
+		}
+
+		private void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
+		{
+			foreach (var animation in model.Animations) {
+				if (animation.IsLegacy) {
+					continue;
+				}
+				var pathWithoutExt = pathPrefix + animation.Id;
+				pathWithoutExt = Animation.FixAntPath(pathWithoutExt);
+				var path = pathWithoutExt + ".ant";
+				var data = animation.GetData();
+				animation.ContentsPath = pathWithoutExt;
+				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".ant", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
+				Console.WriteLine("+ " + path);
+			}
 		}
 	}
 }
