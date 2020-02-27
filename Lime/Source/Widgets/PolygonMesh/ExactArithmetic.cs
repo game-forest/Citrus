@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 namespace Lime.Source.Widgets.PolygonMesh
 {
 	[System.Diagnostics.DebuggerStepThrough]
-	public static class ExactArithmetic
+	public static unsafe class ExactArithmetic
 	{
 		// Only valid if |a| >= |b|
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.NoOptimization)]
@@ -306,13 +306,13 @@ namespace Lime.Source.Widgets.PolygonMesh
 		// NOTE: This algorithm is not actually used further, but good for checking the S. paper.
 		// Adds a single value to an expansion - predicates version
 		// e and h can be the same.
-		public static int GrowExpansion(int elen, double[] e, double b, double[] h)
+		public static int GrowExpansion(int elen, double* e, double b, double* h)
 		{
 			double Q;
 			int eindex;
 
 			Q = b;
-			for (eindex = 0; eindex < e.Length; eindex++) {
+			for (eindex = 0; eindex < elen; eindex++) {
 				TwoSum(Q, e[eindex], out Q, out h[eindex]);
 			}
 			h[eindex] = Q;
@@ -322,7 +322,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		// Algorithm Expansion-Sum
 		// NOTE: This algorithm is not actually used further, but good for checking the S. paper.
 		// e and h can be the same, but f and h cannot.
-		public static int ExpansionSum(int elen, double[] e, int flen, double[] f, double[] h)
+		public static int ExpansionSum(int elen, double* e, int flen, double* f, double* h)
 		{
 			double Q, Qnew;
 			int findex, hindex, hlast;
@@ -358,7 +358,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		// h cannot be the same as e or f
 		// Read this code together with fast_expansion_sum in predicates.c
 		// There are some minor changes here, because we don't want to read outside the array bounds.
-		public static int FastExpansionSum(int elen, double[] e, int flen, double[] f, double[] h)
+		public static int FastExpansionSum(int elen, double* e, int flen, double* f, double* h)
 		{
 			double Q;
 			double Qnew;
@@ -461,7 +461,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		// h cannot be the same as e or f
 		// Read this code together with fast_expansion_sum_zeroelim in predicates.c
 		// There are some minor changes here, because we don't want to read outside the array bounds.
-		public static int FastExpansionSumZeroElim(int elen, double[] e, int flen, double[] f, double[] h)
+		public static int FastExpansionSumZeroElim(int elen, double* e, int flen, double* f, double* h)
 		{
 			double Q;
 			double Qnew;
@@ -577,7 +577,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		//
 		// Given a sorted, nonoverlapping expansion e, produces a sorted non-overlapping expansion h = be.
 		// If e is nonadjacent then h is nonadjacent
-		public static int ScaleExpansion(int elen, double[] e, double b, double[] h)
+		public static int ScaleExpansion(int elen, double* e, double b, double* h)
 		{
 			double Q, sum;
 			double product1;
@@ -611,7 +611,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		//
 		// Given a sorted, nonoverlapping expansion e, produces a sorted non-overlapping expansion h = be.
 		// If e is nonadjacent then h is nonadjacent
-		public static int ScaleExpansionZeroElim(int elen, double[] e, double b, double[] h)
+		public static int ScaleExpansionZeroElim(int elen, double* e, double b, double* h)
 		{
 			double Q, sum;
 			double hh;
@@ -648,7 +648,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		// Produce a one double estimate of an expansion's value
 		// Also referred to as 'Approximate' in S.
 		// This assumes e is sorted
-		public static double Estimate(int elen, double[] e)
+		public static double Estimate(int elen, double* e)
 		{
 			double Q;
 			int eindex;
@@ -661,7 +661,7 @@ namespace Lime.Source.Widgets.PolygonMesh
 		}
 
 		// Compress an expansion
-		public static int Compress(int elen, double[] e, double[] h)
+		public static int Compress(int elen, double* e, double* h)
 		{
 			double Q, q;
 			double Qnew;
