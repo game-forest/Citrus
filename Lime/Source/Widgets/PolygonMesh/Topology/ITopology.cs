@@ -38,10 +38,9 @@ namespace Lime.PolygonMesh.Topology
 		void EmplaceVertices(List<Vertex> vertices);
 #endif
 		void AddVertex(Vertex vertex);
-		void RemoveVertex(int index, bool keepConstrainedEdges = false);
+		void RemoveVertex(int index);
 		void TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta);
 		void ConstrainEdge(int index0, int index1);
-		void Concave(Vector2 position);
 		IEnumerable<(int, int)> ConstrainedEdges { get; }
 
 		/// <summary>

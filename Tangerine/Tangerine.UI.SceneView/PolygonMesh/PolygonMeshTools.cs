@@ -21,7 +21,6 @@ namespace Tangerine
 			Triangulation,
 			Creation,
 			Removal,
-			Concave,
 		}
 
 		private static ModificationMode mode;
@@ -52,7 +51,6 @@ namespace Tangerine
 					case ModificationState.Triangulation:
 					case ModificationState.Creation:
 					case ModificationState.Removal:
-					case ModificationState.Concave:
 						Mode = ModificationMode.Setup;
 						break;
 				}
@@ -79,11 +77,6 @@ namespace Tangerine
 		public class Remove : DocumentCommandHandler
 		{
 			public override void ExecuteTransaction() => State = ModificationState.Removal;
-		}
-
-		public class Concave : DocumentCommandHandler
-		{
-			public override void ExecuteTransaction() => State = ModificationState.Concave;
 		}
 	}
 }

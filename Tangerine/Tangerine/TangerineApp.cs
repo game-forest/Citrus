@@ -668,7 +668,6 @@ namespace Tangerine
 			h.Connect(Tools.PolygonMeshTriangulate, new PolygonMeshTools.Triangulate());
 			h.Connect(Tools.PolygonMeshCreate, new PolygonMeshTools.Create());
 			h.Connect(Tools.PolygonMeshRemove, new PolygonMeshTools.Remove());
-			h.Connect(Tools.PolygonMeshConcave, new PolygonMeshTools.Concave());
 			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard, IsCopyPasteAllowedForSelection);
 			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform, IsCopyPasteAllowedForSelection));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));

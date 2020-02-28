@@ -40,9 +40,6 @@ namespace Tangerine.UI.SceneView
 								case PolygonMeshTools.ModificationState.Removal:
 									yield return mesh.Controller().RemovalTask();
 									break;
-								case PolygonMeshTools.ModificationState.Concave:
-									yield return mesh.Controller().ConcaveTask();
-									break;
 							}
 						}
 					}

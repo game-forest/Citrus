@@ -331,7 +331,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// </summary>
 		/// <param name="vertexIndex">Vertex index.</param>
 		/// <returns>List of isolated vertices.</returns>
-		private List<int> RemoveVertex(int vertexIndex)
+		private List<int> InnerRemoveVertex(int vertexIndex)
 		{
 			var polygon = GetBoundingPolygon(vertexIndex);
 			var isBorderVertex = polygon[0].Origin == vertexIndex;

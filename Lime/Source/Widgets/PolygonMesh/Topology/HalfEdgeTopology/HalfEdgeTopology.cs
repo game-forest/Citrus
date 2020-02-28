@@ -246,8 +246,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			return inbound;
 		}
 
-		// Stays public until we get LocateClosestTriangle work O(logN) (cause otherwise rendering will
-		// be laggy).
 		public IEnumerable<HalfEdge> HalfEdges => new HalfEdge.HalfEdgesEnumerable(Root);
 
 		private IEnumerable<(HalfEdge, HalfEdge, HalfEdge)> Triangles()
@@ -357,9 +355,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			OnTopologyChanged?.Invoke(this);
 		}
 
-		public void RemoveVertex(int index, bool keepConstrainedEdges = false)
+		public void RemoveVertex(int index)
 		{
-			var isolatedVertices = RemoveVertex(index);
+			var isolatedVertices = InnerRemoveVertex(index);
 			isolatedVertices.Sort((lhs, rhs) => rhs - lhs);
 			var map = new List<int>(Vertices.Count);
 			for (int i = 0; i < Vertices.Count; i++) {
@@ -415,7 +413,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						constrainedEdges.Add((adjacent.Origin, adjacent.Next.Origin));
 					}
 				}
-				RemoveVertex(index);
+				InnerRemoveVertex(index);
 				Vertices[index] = translated;
 				AddVertex(index);
 				foreach (var edge in constrainedEdges) {
@@ -429,11 +427,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		{
 			InsertConstrainEdge(index0, index1);
 			OnTopologyChanged?.Invoke(this);
-		}
-
-		public void Concave(Vector2 position)
-		{
-			throw new NotImplementedException();
 		}
 
 		private bool SelfCheck()

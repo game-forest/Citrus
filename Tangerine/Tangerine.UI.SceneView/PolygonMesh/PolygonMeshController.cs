@@ -43,7 +43,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public abstract IEnumerator<object> TriangulationTask();
 		public abstract IEnumerator<object> CreationTask();
 		public abstract IEnumerator<object> RemovalTask();
-		public abstract IEnumerator<object> ConcaveTask();
 	}
 
 	[YuzuDontGenerateDeserializer]
@@ -654,12 +653,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				}
 				yield return null;
 			}
-		}
-
-		// TODO: provide implementation
-		public override IEnumerator<object> ConcaveTask()
-		{
-			yield break;
 		}
 	}
 }
