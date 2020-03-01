@@ -52,7 +52,7 @@ namespace Tangerine.UI.Timeline
 		{
 			while (true) {
 				yield return null;
-				if (overviewPane.RootWidget.IsMouseOver()) {
+				if (CoreUserPreferences.Instance.ShowSceneThumbnail && overviewPane.RootWidget.IsMouseOver()) {
 					var showPopup = true;
 					for (float t = 0; t < 0.5f; t += Task.Current.Delta) {
 						if (!overviewPane.RootWidget.IsMouseOver()) {

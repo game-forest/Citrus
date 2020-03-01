@@ -25,6 +25,9 @@ namespace Tangerine.Core
 		public bool StopAnimationOnCurrentFrame { get; set; }
 
 		[YuzuOptional]
+		public bool ShowSceneThumbnail  { get; set; }
+
+		[YuzuOptional]
 		public bool ShowSplinesGlobally { get; set; }
 
 		[YuzuOptional]
@@ -56,6 +59,7 @@ namespace Tangerine.Core
 			AnimationMode = false;
 			DefaultKeyFunction = KeyFunction.Linear;
 			StopAnimationOnCurrentFrame = false;
+			ShowSceneThumbnail = true;
 			ShowSplinesGlobally = false;
 			InspectorExpandableEditorsState = new Dictionary<string, bool>();
 		}

@@ -342,6 +342,8 @@ namespace Tangerine
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.StopAnimationOnCurrentFrame),  displayName: "Stop animaion on current frame")),
 				new BooleanPropertyEditor(
+					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ShowSceneThumbnail),  displayName: "Show scene thumbnail")),
+				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ShowSplinesGlobally),  displayName: "Show splines globally")),
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.DontPasteAtMouse),  displayName: "Don't paste at mouse pointer")),
