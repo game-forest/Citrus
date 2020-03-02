@@ -17,6 +17,7 @@
 * **Animation mode** - активировать ли триггеры при проигрывании анимации.
 * **Autosave delay** - период сохранения сейвов.
 * **Stop animation on current frame** - останавливать анимацию на текущем фрейме (вкл/выкл).
+* **Show scene thumbnail** - показывать ли превью сцены на таймлайне.
 * **Don't paste at mouse pointer** - отключить вставку на место курсора.
 * **Inverse Shift behavior when dragging keyframe** - инвертировать поведение Shift при перетаскивании кейфреймов.
 * **Bone Width** - настроить ширину кости.
