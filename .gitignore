@@ -58,4 +58,5 @@ Lemon/Library/Android/libs/
 !Orange/bin/Win/Release/Orange.exe
 
 .orange/
-
+*.sublime-workspace
+TangerineLog.txt
