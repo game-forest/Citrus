@@ -75,8 +75,9 @@
     <Compile Include="PropertyEditors\ListPropertyEditor.cs" />
     <Compile Include="PropertyEditors\NodeIdPropertyEditor.cs" />
     <Compile Include="PropertyEditors\SBytePropertyEditor.cs" />
-    <Compile Include="Tooltip.cs" />
-    <Compile Include="UIProcessors.cs" />
+    <Compile Include="Tooltip\Tooltip.cs" />
+    <Compile Include="Tooltip\TooltipComponent.cs" />
+    <Compile Include="Tooltip\TooltipProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPicker.Mac.cs" />
