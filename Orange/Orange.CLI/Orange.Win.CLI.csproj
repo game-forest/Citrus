@@ -90,7 +90,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>..\..\..\..\Orange\bin\Win\Release\Orange.CLI.exe --command:"Generate Lime deserializers"
+    <PostBuildEvent>..\..\..\..\Orange\bin\Win\Release\Orange.CLI.exe --command:"Generate Lime Deserializers And Cloners"
 set errno=0</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
