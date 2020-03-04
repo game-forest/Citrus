@@ -75,8 +75,7 @@ namespace Lime.Text
 						lineBreak = true;
 					}
 					curr++;
-				}
-				else {
+				} else {
 					while (curr < length && t[curr] > ' ') {
 						curr++;
 					}
