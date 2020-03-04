@@ -176,7 +176,7 @@ namespace Lime
 					for (int t = 0; t < 5; t++) {
 						polygon[t + 1] = Vertices[Indices[i + (t % 4)]];
 					}
-					Renderer.DrawTriangleFan(Texture, null, Material ,polygon , 6);
+					Renderer.DrawTriangleFan(Texture, null, Material, polygon, 6);
 				}
 			}
 
