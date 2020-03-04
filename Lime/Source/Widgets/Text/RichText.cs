@@ -41,7 +41,7 @@ namespace Lime
 		{
 			get
 			{
-				if (displayText == null) {
+				if (displayText == null && Text != null) {
 					displayText = Localizable ? Text.Localize() : Text;
 					GlobalTextProcessor?.Invoke(ref displayText, this);
 					textProcessor?.Invoke(ref displayText, this);
