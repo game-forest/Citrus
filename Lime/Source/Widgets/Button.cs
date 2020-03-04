@@ -257,6 +257,7 @@ namespace Lime
 	{
 		private Widget widget;
 		private List<Widget> textPresenters;
+		public const string TextPresenterId = "TextPresenter";
 
 		public TextPresentersFeeder(Widget widget)
 		{
@@ -265,7 +266,19 @@ namespace Lime
 
 		public void Update()
 		{
+#if TANGERINE
+			// TextPresenters in Tangerine can be added or deleted by artists that's
+			// why we have to somehow update list of text presenters.
+			// There is a way to use NodeManager.HierarchyChanged and also track SetProperty operation.
+			if (textPresenters == null) {
+				textPresenters = new List<Widget>();
+			}
+			textPresenters.Clear();
+			textPresenters.AddRange(widget.Descendants.OfType<Widget>().Where(i => i.Id == TextPresenterId));
+#else
 			textPresenters = textPresenters ?? widget.Descendants.OfType<Widget>().Where(i => i.Id == "TextPresenter").ToList();
+#endif
+
 			foreach (var i in textPresenters) {
 				i.Text = widget.Text;
 			}
