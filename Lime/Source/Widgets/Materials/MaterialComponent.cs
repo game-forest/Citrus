@@ -1,15 +1,16 @@
 namespace Lime
 {
-	public interface ITextureRenderWidget
+	public interface IMaterialComponentOwner
 	{
-		IMaterial Material { get; set; }
-		ITexture Texture { get; set; }
-		Vector2 UV0 { get; set; }
-		Vector2 UV1 { get; set; }
+		void AssignMaterial(IMaterial material);
+		void ResetMaterial();
+		ITexture Texture { get; }
+		Vector2 UV0 { get; }
+		Vector2 UV1 { get; }
 	}
 
 	[MutuallyExclusiveDerivedComponents]
-	[AllowedComponentOwnerTypes(typeof(ITextureRenderWidget))]
+	[AllowedComponentOwnerTypes(typeof(IMaterialComponentOwner))]
 	public class MaterialComponent : NodeComponent
 	{
 
@@ -18,7 +19,6 @@ namespace Lime
 	public class MaterialComponent<T> : MaterialComponent where T : IMaterial, new()
 	{
 		protected T CustomMaterial { get; private set; }
-		private IMaterial savedCustomMaterial;
 
 		public MaterialComponent()
 		{
@@ -28,12 +28,11 @@ namespace Lime
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
-			if (oldOwner != null) {
-				((ITextureRenderWidget)oldOwner).Material = savedCustomMaterial;
+			if (oldOwner is IMaterialComponentOwner w) {
+				w.ResetMaterial();
 			}
-			if (Owner != null) {
-				savedCustomMaterial = ((ITextureRenderWidget)Owner).Material;
-				((ITextureRenderWidget)Owner).Material = CustomMaterial;
+			if (Owner is IMaterialComponentOwner w1) {
+				w1.AssignMaterial(CustomMaterial);
 			}
 		}
 	}

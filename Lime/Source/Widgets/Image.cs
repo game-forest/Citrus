@@ -4,7 +4,7 @@ namespace Lime
 {
 	[TangerineRegisterNode(Order = 2)]
 	[TangerineVisualHintGroup("/All/Nodes/Images")]
-	public class Image : Widget, IImageCombinerArg, ITextureRenderWidget
+	public class Image : Widget, IImageCombinerArg, IMaterialComponentOwner
 	{
 		private bool skipRender;
 		private ITexture texture;
@@ -77,6 +77,10 @@ namespace Lime
 			}
 			skipRender = false;
 		}
+
+		public void AssignMaterial(IMaterial material) => Material = material;
+
+		public void ResetMaterial() => Material = null;
 
 		ITexture IImageCombinerArg.GetTexture()
 		{

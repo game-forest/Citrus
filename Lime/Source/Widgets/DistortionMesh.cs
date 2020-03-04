@@ -7,7 +7,7 @@ namespace Lime
 	[TangerineRegisterNode(Order = 14)]
 	[TangerineAllowedChildrenTypes(typeof(DistortionMeshPoint))]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Distortion Mesh")]
-	public class DistortionMesh : Widget, ITextureRenderWidget
+	public class DistortionMesh : Widget, IMaterialComponentOwner
 	{
 		private IMaterial defaultMaterial;
 
@@ -27,8 +27,8 @@ namespace Lime
 
 		public IMaterial DefaultMaterial => defaultMaterial ?? (defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1));
 
-		public Vector2 UV0 { get => Vector2.Zero; set { } }
-		public Vector2 UV1 { get => Vector2.One; set { } }
+		public Vector2 UV0 { get => Vector2.Zero; }
+		public Vector2 UV1 { get => Vector2.One;}
 
 		public DistortionMesh()
 		{
@@ -60,6 +60,10 @@ namespace Lime
 				}
 			}
 		}
+
+		public void AssignMaterial(IMaterial material) => Material = material;
+
+		public void ResetMaterial() => Material = null;
 
 		protected internal override bool PartialHitTestByContents(ref HitTestArgs args)
 		{
