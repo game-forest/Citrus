@@ -1,7 +1,15 @@
 namespace Lime
 {
+	public interface ITextureRenderWidget
+	{
+		IMaterial Material { get; set; }
+		ITexture Texture { get; set; }
+		Vector2 UV0 { get; set; }
+		Vector2 UV1 { get; set; }
+	}
+
 	[MutuallyExclusiveDerivedComponents]
-	[AllowedComponentOwnerTypes(typeof(Image))]
+	[AllowedComponentOwnerTypes(typeof(ITextureRenderWidget))]
 	public class MaterialComponent : NodeComponent
 	{
 
@@ -21,11 +29,11 @@ namespace Lime
 		{
 			base.OnOwnerChanged(oldOwner);
 			if (oldOwner != null) {
-				((Image)oldOwner).CustomMaterial = savedCustomMaterial;
+				((ITextureRenderWidget)oldOwner).Material = savedCustomMaterial;
 			}
 			if (Owner != null) {
-				savedCustomMaterial = ((Image)Owner).CustomMaterial;
-				((Image)Owner).CustomMaterial = CustomMaterial;
+				savedCustomMaterial = ((ITextureRenderWidget)Owner).Material;
+				((ITextureRenderWidget)Owner).Material = CustomMaterial;
 			}
 		}
 	}
