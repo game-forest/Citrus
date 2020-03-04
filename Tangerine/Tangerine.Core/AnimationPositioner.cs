@@ -5,12 +5,13 @@ namespace Tangerine.Core
 {
 	public interface IAnimationPositioner
 	{
+		void SetAnimationTime(Animation animation, double time, bool animationMode, bool stopAnimations);
 		void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations);
 	}
 
 	public class AnimationPositioner : IAnimationPositioner
 	{
-		public void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations)
+		public void SetAnimationTime(Animation animation, double time, bool animationMode, bool stopAnimations)
 		{
 			Audio.GloballyEnable = false;
 			try {
@@ -19,9 +20,9 @@ namespace Tangerine.Core
 				animation.Time = 0;
 				animation.OwnerNode.SetTangerineFlag(TangerineFlags.IgnoreMarkers, true);
 				// Advance animation on Threshold more than needed to ensure the last trigger will be processed.
-				AdvanceAnimation(animation.OwnerNode, AnimationUtils.FramesToSeconds(frame) + AnimationUtils.Threshold);
-				// Set animation exactly on the given frame.
-				animation.Frame = frame;
+				AdvanceAnimation(animation.OwnerNode, time + AnimationUtils.Threshold);
+				// Set animation exactly on the given time.
+				animation.Time = time;
 				animation.OwnerNode.SetTangerineFlag(TangerineFlags.IgnoreMarkers, false);
 				if (stopAnimations) {
 					StopAnimations(animation.OwnerNode);
@@ -29,6 +30,11 @@ namespace Tangerine.Core
 			} finally {
 				Audio.GloballyEnable = true;
 			}
+		}
+
+		public void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations)
+		{
+			SetAnimationTime(animation, AnimationUtils.FramesToSeconds(frame), animationMode,  stopAnimations);
 		}
 
 		private void AdvanceAnimation(Node node, double delta)
