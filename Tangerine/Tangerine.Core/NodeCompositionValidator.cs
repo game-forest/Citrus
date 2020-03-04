@@ -50,7 +50,7 @@ namespace Tangerine.Core
 			for (var t = componentType; t != null && t != typeof(NodeComponent); t = t.BaseType) {
 				var a = ClassAttributes<AllowedComponentOwnerTypes>.Get(t);
 				if (a != null) {
-					return a.Types.Any(ownerType => ownerType == nodeType || nodeType.IsSubclassOf(ownerType));
+					return a.Types.Any(ownerType => ownerType == nodeType || ownerType.IsAssignableFrom(nodeType));
 				}
 			}
 			return true;
