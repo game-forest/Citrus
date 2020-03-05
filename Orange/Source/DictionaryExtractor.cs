@@ -129,11 +129,9 @@ namespace Orange
 
 		private static void LoadDictionary(LocalizationDictionary dictionary, string path)
 		{
-			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				if (File.Exists(path)) {
-					using (var stream = new FileStream(path, FileMode.Open)) {
-						dictionary.ReadFromStream(CreateSerializer(), stream);
-					}
+			if (AssetBundle.Current.FileExists(path)) {
+				using (var stream = AssetBundle.Current.OpenFile(path)) {
+					dictionary.ReadFromStream(CreateSerializer(), stream);
 				}
 			}
 		}
@@ -153,27 +151,23 @@ namespace Orange
 
 			var sourceFiles = new ScanOptimizedFileEnumerator(The.Workspace.ProjectDirectory, ScanFilter);
 			using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
-				var files = sourceFiles.Enumerate(".cs");
-				foreach (var fileInfo in files) {
-					ProcessSourceFile(fileInfo.Path);
+				foreach (var fileInfo in sourceFiles.Enumerate(".cs")) {
+					var content = File.ReadAllText(fileInfo.Path, Encoding.UTF8);
+					ProcessSourceFile(fileInfo.Path, content);
 				}
 			}
-			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				var files = The.Workspace.AssetFiles.Enumerate(".json");
-				foreach (var fileInfo in files) {
-					// First of all scan lines like this: "[]..."
-					ProcessSourceFile(fileInfo.Path);
-					// Then like this: Text "..."
-					if (!ShouldLocalizeOnlyTaggedSceneTexts()) {
-						ProcessSceneFile(fileInfo.Path);
-					}
+			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".json")) {
+				// First of all scan lines like this: "[]..."
+				var content = AssetBundle.Current.ReadAllText(file, Encoding.UTF8);
+				ProcessSourceFile(file, content);
+				// Then like this: Text "..."
+				if (!ShouldLocalizeOnlyTaggedSceneTexts()) {
+					ProcessSceneFile(file, content);
 				}
 			}
-			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				var files = The.Workspace.AssetFiles.Enumerate(".tan");
-				foreach (var fileInfo in files) {
-					ProcessTanFile(fileInfo.Path);
-				}
+			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".tan")) {
+				var content = AssetBundle.Current.ReadAllText(file, Encoding.UTF8);
+				ProcessTanFile(file, content);
 			}
 		}
 
@@ -183,11 +177,10 @@ namespace Orange
 		private static bool ShouldAddContextToLocalizedDictionary() =>
 			The.Workspace.ProjectJson.GetValue("AddContextToLocalizedDictionary", true);
 
-		private void ProcessSourceFile(string file)
+		private void ProcessSourceFile(string path, string content)
 		{
-			var code = File.ReadAllText(file, Encoding.UTF8);
-			var context = GetContext(file);
-			foreach (var match in sourceTextMatcher.Matches(code)) {
+			var context = GetContext(path);
+			foreach (var match in sourceTextMatcher.Matches(content)) {
 				var m = match as Match;
 				var prefix = m.Groups["prefix"].Value;
 				var s = m.Groups["string"].Value;
@@ -202,12 +195,11 @@ namespace Orange
 			}
 		}
 
-		private void ProcessSceneFile(string file)
+		private void ProcessSceneFile(string path, string content)
 		{
 			const string textPropertiesPattern = @"^(\s*Text)\s""([^""\\]*(?:\\.[^""\\]*)*)""$";
-			var code = File.ReadAllText(file, Encoding.Default);
-			var context = GetContext(file);
-			foreach (var match in Regex.Matches(code, textPropertiesPattern, RegexOptions.Multiline)) {
+			var context = GetContext(path);
+			foreach (var match in Regex.Matches(content, textPropertiesPattern, RegexOptions.Multiline)) {
 				var s = ((Match)match).Groups[2].Value;
 				if (HasAlphabeticCharacters(s)) {
 					AddToDictionary(s, context);
@@ -215,9 +207,8 @@ namespace Orange
 			}
 		}
 
-		private void ProcessTanFile(string path)
+		private void ProcessTanFile(string path, string content)
 		{
-			var content = File.ReadAllText(path, Encoding.UTF8);
 			var context = GetContext(path);
 			var onlyTagged = ShouldLocalizeOnlyTaggedSceneTexts();
 			var matches1 = tanTextMatcher.Matches(content);

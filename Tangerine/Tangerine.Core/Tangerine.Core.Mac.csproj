@@ -69,7 +69,6 @@
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="SceneCache.cs" />
     <Compile Include="SyncPresenters.cs" />
-    <Compile Include="TangerinePersistence.cs" />
     <Compile Include="AnimationPositioner.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,7 +111,6 @@
     <Compile Include="Row.cs" />
     <Compile Include="RowsSynchronizer.cs" />
     <Compile Include="Ruler.cs" />
-    <Compile Include="TangerineAssetBundle.cs" />
     <Compile Include="TriggersValidation.cs" />
     <Compile Include="UserPreferences.cs" />
     <Compile Include="VersionedCollection.cs" />

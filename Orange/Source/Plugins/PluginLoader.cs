@@ -427,7 +427,7 @@ namespace Orange
 		{
 			assembly = domainAssemblies.FirstOrDefault(i => {
 				try {
-					return string.Equals(Path.GetFullPath(i.Location), Path.GetFullPath(path), StringComparison.CurrentCultureIgnoreCase);
+					return !string.IsNullOrEmpty(i.Location) && string.Equals(Path.GetFullPath(i.Location), Path.GetFullPath(path), StringComparison.CurrentCultureIgnoreCase);
 				} catch {
 					return false;
 				}

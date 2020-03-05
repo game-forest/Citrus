@@ -156,7 +156,7 @@ namespace Lime
 		private readonly System.Reflection.Assembly resourcesAssembly;
 		private bool wasModified { get; set; }
 		public string Path { get; private set; }
-		public event Action OnModifying;
+		public event Action OnWrite;
 
 		PackedAssetBundle() {}
 
@@ -318,8 +318,11 @@ namespace Lime
 			}
 		}
 
-		public override Stream OpenFile(string path)
+		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
+			if (mode != FileMode.Open) {
+				throw new NotSupportedException();
+			}
 			var stream = new AssetStream(this, path);
 			var desc = stream.descriptor;
 			if (CommandLineArgs.SimulateSlowExternalStorage) {
@@ -347,6 +350,11 @@ namespace Lime
 			return GetDescriptor(path).ModificationTime;
 		}
 
+		public override void SetFileLastWriteTime(string path, DateTime time)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override byte[] GetCookingRulesSHA1(string path)
 		{
 			return GetDescriptor(path).CookingRulesSHA1;
@@ -359,7 +367,7 @@ namespace Lime
 
 		public override void DeleteFile(string path)
 		{
-			OnModifying?.Invoke();
+			OnWrite?.Invoke();
 			path = AssetPath.CorrectSlashes(path);
 			var desc = GetDescriptor(path);
 			index.Remove(path);
@@ -379,7 +387,7 @@ namespace Lime
 
 		public override void SetAttributes(string path, AssetAttributes attributes)
 		{
-			OnModifying?.Invoke();
+			OnWrite?.Invoke();
 			var desc = GetDescriptor(path);
 			index[AssetPath.CorrectSlashes(path)] = desc;
 			wasModified = true;
@@ -387,7 +395,7 @@ namespace Lime
 
 		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
 		{
-			OnModifying?.Invoke();
+			OnWrite?.Invoke();
 			AssetDescriptor d;
 			if ((attributes & AssetAttributes.Zipped) != 0) {
 				stream = CompressAssetStream(stream, attributes);
@@ -522,11 +530,17 @@ namespace Lime
 			}
 		}
 
-		public override IEnumerable<string> EnumerateFiles(string path = null)
+		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
 		{
+			if (extension != null && !extension.StartsWith(".")) {
+				throw new InvalidOperationException();
+			}
 			foreach (var file in index) {
-				if (path == null || file.Key.StartsWith(path)) {
-					yield return file.Key;
+				if (path == null || file.Key.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+					if (extension != null && !file.Key.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+						continue;
+					}
+					yield return new FileInfo { Path = file.Key, LastWriteTime = file.Value.ModificationTime };
 				}
 			}
 		}
@@ -565,5 +579,10 @@ namespace Lime
 			}
 			throw new Exception("Asset '{0}' doesn't exist", path);
 		}
+
+
+		public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
+
+		public override string FromSystemPath(string systemPath) => throw new NotSupportedException();
 	}
 }

@@ -61,10 +61,10 @@ namespace Orange.Source.Actions
 				}
 			}
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				var files = The.Workspace.AssetFiles.Enumerate(".tan");
+				var files = AssetBundle.Current.EnumerateFiles(null, ".tan");
 				foreach (var fileInfo in files) {
-					Console.WriteLine("* " + fileInfo.Path);
-					ProcessSourceFile(fileInfo.Path);
+					Console.WriteLine("* " + fileInfo);
+					ProcessSourceFile(fileInfo);
 				}
 			}
 		}

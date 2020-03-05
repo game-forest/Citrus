@@ -29,9 +29,9 @@ namespace Tangerine.MainMenu
 		{
 			if (
 				new AlertDialog("Are you sure you want to clear project cache?", "Yes", "Cancel").Show() == 0 &&
-				File.Exists(Orange.The.Workspace.TangerineCacheBundle)
+				File.Exists(Project.Current.GetTangerineCacheBundlePath())
 			) {
-				File.Delete(Orange.The.Workspace.TangerineCacheBundle);
+				File.Delete(Project.Current.GetTangerineCacheBundlePath());
 			}
 		}
 	}

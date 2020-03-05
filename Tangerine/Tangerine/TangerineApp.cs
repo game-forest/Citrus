@@ -355,7 +355,7 @@ namespace Tangerine
 		{
 			if (Orange.Toolbox.TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)) {
 				try {
-					new Project(projectFilePath).Open();
+					new Project(projectFilePath);
 				} catch {
 					AlertDialog.Show($"Cannot open project '{projectFilePath}'. It may be deleted or be otherwise unavailable.");
 				}

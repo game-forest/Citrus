@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using Lime;
 
 namespace Orange
 {
@@ -15,14 +16,14 @@ namespace Orange
 
 		public DeleteOrphanedMasks(AssetCooker assetCooker) : base(assetCooker)	{ }
 
-		public int GetOperationsCount() => The.Workspace.AssetFiles.Enumerate(maskExtension).Count();
+		public int GetOperationCount() => AssetCooker.InputBundle.EnumerateFiles(null, maskExtension).Count();
 
 		public void Action()
 		{
-			foreach (var maskPath in AssetCooker.AssetBundle.EnumerateFiles().ToList()) {
+			foreach (var maskPath in AssetCooker.InputBundle.EnumerateFiles().ToList()) {
 				if (maskPath.EndsWith(maskExtension, StringComparison.OrdinalIgnoreCase)) {
 					var origImageFile = Path.ChangeExtension(maskPath, AssetCooker.GetPlatformTextureExtension());
-					if (!AssetCooker.AssetBundle.FileExists(origImageFile)) {
+					if (!AssetCooker.OutputBundle.FileExists(origImageFile)) {
 						AssetCooker.DeleteFileFromBundle(maskPath);
 					}
 					UserInterface.Instance.IncreaseProgressBar();

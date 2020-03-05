@@ -510,7 +510,7 @@ namespace Tangerine.Core
 				var a = ms.ToArray();
 				fs.Write(a, 0, a.Length);
 			}
-			var FileInfo = new FileInfo(filePath);
+			var FileInfo = new System.IO.FileInfo(filePath);
 			FileInfo.Attributes |= attributes;
 		}
 

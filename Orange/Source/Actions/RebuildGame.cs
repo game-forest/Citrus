@@ -67,7 +67,7 @@ namespace Orange
 			var bundles = new HashSet<string>() {
 				CookingRulesBuilder.MainBundleName
 			};
-			var cookingRulesMap = CookingRulesBuilder.Build(The.Workspace.AssetFiles, target);
+			var cookingRulesMap = CookingRulesBuilder.Build(Lime.AssetBundle.Current, target);
 			foreach (var bundle in cookingRulesMap.SelectMany(i => i.Value.Bundles.Where(bundle => bundle != CookingRulesBuilder.MainBundleName))) {
 				bundles.Add(bundle);
 			}

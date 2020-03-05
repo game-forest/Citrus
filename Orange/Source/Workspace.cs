@@ -18,10 +18,10 @@ namespace Orange
 		public string AssetsDirectory { get; private set; }
 		public string Title { get; private set; }
 		public string GeneratedScenesPath { get; private set; }
+		[Obsolete("Use AssetBundle.Current or AssetCooker.InputBundle instead")]
 		public IFileEnumerator AssetFiles { get; set; }
 		public Json ProjectJson { get; private set; }
 		public List<Target> Targets { get; private set; }
-		public string TangerineCacheBundle { get; private set; }
 
 		private string dataFolderName;
 		private string pluginName;
@@ -51,6 +51,15 @@ namespace Orange
 		public string GetPlatformSuffix(TargetPlatform platform)
 		{
 			return "." + platform.ToString();
+		}
+		
+		public string GetTangerineCacheBundlePath()
+		{
+			var name = string
+				.Join("_", ProjectFilePath.Split(new[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries))
+				.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+			name = Path.ChangeExtension(name, "tancache");
+			return Path.Combine(WorkspaceConfig.GetDataPath(), name);
 		}
 
 		/// <summary>
@@ -89,15 +98,19 @@ namespace Orange
 
 		public JObject JObject { get; private set; }
 
-		public void Load()
+		public void Load(string projectFilePath = null)
 		{
 			// heuristic behavior: always try to go up and search for a citproj file
 			// if found, ignore the one saved in app data, since we're opening citrus directory
 			// related to found game project as a submodule
 			var config = WorkspaceConfig.Load();
-			if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)) {
+			if (projectFilePath != null) {
+				Open(projectFilePath);
+			} else if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out projectFilePath)) {
 				Open(projectFilePath);
 				The.UI.UpdateOpenedProjectPath(projectFilePath);
+			} else {
+				throw new InvalidOperationException("Can't find .citproj");
 			}
 			var projectConfig = config.GetProjectConfig(projectFilePath);
 			The.UI.LoadFromWorkspaceConfig(config, projectConfig);
@@ -147,6 +160,11 @@ namespace Orange
 				ReadProject(projectFilePath);
 				ProjectDirectory = Path.GetDirectoryName(projectFilePath);
 				AssetsDirectory = Path.Combine(ProjectDirectory, dataFolderName);
+				var tangerineAssetBundle = new Tangerine.Core.TangerineAssetBundle(AssetsDirectory);
+				if (!tangerineAssetBundle.IsActual()) {
+					tangerineAssetBundle.CleanupBundle();
+				}
+				Lime.AssetBundle.Current = tangerineAssetBundle;
 				if (!Directory.Exists(AssetsDirectory)) {
 					throw new Lime.Exception("Assets folder '{0}' doesn't exist", AssetsDirectory);
 				}
@@ -161,7 +179,6 @@ namespace Orange
 				};
 				AssetFiles = new FileEnumerator(AssetsDirectory);
 				LoadCacheSettings();
-				TangerineCacheBundle = GetTangerineCacheBundlePath();
 				The.UI.OnWorkspaceOpened();
 				The.UI.ReloadBundlePicker();
 			} catch (System.Exception e) {
@@ -198,10 +215,6 @@ namespace Orange
 			pluginName = ProjectJson.GetValue("Plugin", "");
 			citrusLocation = ProjectJson.GetValue("CitrusLocation", string.Empty);
 			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
-#if TANGERINE
-			BlendAnimationEngine.ApplyAnimationBlenderInTangerine =
-				The.Workspace.ProjectJson.GetValue<bool>("ApplyAnimationBlenderInTangerine");
-#endif
 
 			foreach (var target in ProjectJson.GetArray("Targets", new Dictionary<string, object>[0])) {
 				var cleanBeforeBuild = false;
@@ -240,15 +253,6 @@ namespace Orange
 			} catch (ArgumentException) {
 				throw new Lime.Exception($"Unknown sub-target platform name: {name}");
 			}
-		}
-
-		private static string GetTangerineCacheBundlePath()
-		{
-			var name = string
-				.Join("_", The.Workspace.ProjectFilePath.Split(new[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries))
-				.ToLower(System.Globalization.CultureInfo.InvariantCulture);
-			name = Path.ChangeExtension(name, "tancache");
-			return Path.Combine(WorkspaceConfig.GetDataPath(), name);
 		}
 	}
 }

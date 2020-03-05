@@ -16,9 +16,9 @@ namespace Orange
 
 		public SyncModels(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(fbxExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(fbxExtension);
 
-		public void Action() => SyncUpdated.Sync(fbxExtension, t3dExtension, AssetBundle.Current, Converter, (srcPath, dstPath) => AssetCooker.ModelsToRebuild.Contains(dstPath));
+		public void Action() => AssetCooker.SyncUpdated(fbxExtension, t3dExtension, Converter, (srcPath, dstPath) => AssetCooker.ModelsToRebuild.Contains(dstPath));
 
 		private bool Converter(string srcPath, string dstPath)
 		{
@@ -49,11 +49,27 @@ namespace Orange
 			}
 			var animationPathPrefix = AssetCooker.GetModelAnimationPathPrefix(dstPath);
 			AssetCooker.DeleteModelExternalAnimations(animationPathPrefix);
-			AssetCooker.ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
+			ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
 			model.RemoveAnimatorsForExternalAnimations();
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.AssetBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
-				File.GetLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
+			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
+				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
 			return true;
+		}
+
+		private void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
+		{
+			foreach (var animation in model.Animations) {
+				if (animation.IsLegacy) {
+					continue;
+				}
+				var pathWithoutExt = pathPrefix + animation.Id;
+				pathWithoutExt = Animation.FixAntPath(pathWithoutExt);
+				var path = pathWithoutExt + ".ant";
+				var data = animation.GetData();
+				animation.ContentsPath = pathWithoutExt;
+				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".ant", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
+				Console.WriteLine("+ " + path);
+			}
 		}
 	}
 }

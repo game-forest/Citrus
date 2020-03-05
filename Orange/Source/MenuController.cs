@@ -40,7 +40,7 @@ namespace Orange
 			if (PluginLoader.CurrentPlugin == null) {
 				return;
 			}
-			foreach (Lazy<Action, IMenuItemMetadata> menuItem in PluginLoader.CurrentPlugin?.MenuItems) {
+			foreach (var menuItem in PluginLoader.CurrentPlugin?.MenuItems) {
 				Items.Add(new MenuItem(() => {
 						menuItem.Value();
 						return null;
@@ -49,8 +49,7 @@ namespace Orange
 					menuItem.Metadata.ApplicableToBundleSubset)
 				);
 			}
-			foreach (Lazy<Func<string>, IMenuItemMetadata> menuItem in PluginLoader.CurrentPlugin?.MenuItemsWithErrorDetails)
-			{
+			foreach (var menuItem in PluginLoader.CurrentPlugin?.MenuItemsWithErrorDetails) {
 				Items.Add(new MenuItem(
 					menuItem.Value,
 					menuItem.Metadata.Label,

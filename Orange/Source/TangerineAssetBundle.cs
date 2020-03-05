@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Lime;
+using Orange;
 using Orange.FbxImporter;
 using Yuzu;
 
@@ -55,7 +56,7 @@ namespace Tangerine.Core
 			}
 		}
 
-		public override Stream OpenFile(string path)
+		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
 			var ext = Path.GetExtension(path);
 			if (ext == ".t3d") {
@@ -65,18 +66,18 @@ namespace Tangerine.Core
 				if (existsFbx && exists3DScene) {
 					throw new Lime.Exception($"Ambiguity between: {path} and {fbxPath}");
 				}
-				return exists3DScene ? base.OpenFile(path) : OpenFbx(path);
+				return exists3DScene ? base.OpenFile(path, mode) : OpenFbx(path);
 			}
 			if (ext == ".ant") {
 				var fbxPath = GetFbxPathFromAnimationPath(path);
 				if (fbxPath != null) {
 					CheckFbx(fbxPath);
 					using (var cacheBundle = OpenCacheBundle()) {
-						return cacheBundle.OpenFile(path);
+						return cacheBundle.OpenFile(path, mode);
 					}
 				}
 			}
-			return base.OpenFile(path);
+			return base.OpenFile(path, mode);
 		}
 
 		private Stream OpenFbx(string path)
@@ -89,7 +90,7 @@ namespace Tangerine.Core
 
 		private AssetBundle OpenCacheBundle(AssetBundleFlags flags = AssetBundleFlags.None)
 		{
-			return new PackedAssetBundle(Orange.The.Workspace.TangerineCacheBundle, flags);
+			return new PackedAssetBundle(The.Workspace.GetTangerineCacheBundlePath(), flags);
 		}
 
 		private void CheckFbx(string path)

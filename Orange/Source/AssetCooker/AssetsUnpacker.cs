@@ -24,14 +24,14 @@ namespace Orange
 			The.UI.StopProgressBar();
 		}
 
-		public static void Delete(Target target, IEnumerable<string> bundles = null)
+		public static void DeleteBundles(Target target, List<string> bundles = null)
 		{
 			if (bundles == null) {
 				bundles = new AssetCooker(target).GetListOfAllBundles();
 			}
-			The.UI.SetupProgressBar(bundles.Count());
+			The.UI.SetupProgressBar(bundles.Count);
 			foreach (var bundleName in bundles) {
-				string bundlePath = The.Workspace.GetBundlePath(target.Platform, bundleName) + UnpackedSuffix;
+				var bundlePath = The.Workspace.GetBundlePath(target.Platform, bundleName) + UnpackedSuffix;
 				DeleteBundle(bundlePath);
 				The.UI.IncreaseProgressBar();
 			}
@@ -105,7 +105,7 @@ namespace Orange
 			return assetCount;
 		}
 
-		public static void DeleteBundle(string bundlePath)
+		private static void DeleteBundle(string bundlePath)
 		{
 			if (!Directory.Exists(bundlePath)) {
 				Console.WriteLine($"WARNING: {bundlePath} do not exists! Skipping...");

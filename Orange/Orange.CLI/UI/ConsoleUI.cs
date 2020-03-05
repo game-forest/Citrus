@@ -27,39 +27,33 @@ namespace Orange
 #else
 			AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
 #endif
-			var args = System.Environment.GetCommandLineArgs();
-			CreateMenuItems();
-			if (args.Length >= 3) {
-					if (!args[1].StartsWith("-")) {
-						OpenWorkspace(args);
-					}
-			}
+			CreateMenuItems(); 
+			OpenWorkspace();
 			RunCommand(Toolbox.GetCommandLineArg("--command"));
 		}
 
-		private static void OpenWorkspace(string[] args)
+		private static void OpenWorkspace()
 		{
-			var projectFile = args[1];
-			projectFile = Path.Combine(Directory.GetCurrentDirectory(), projectFile);
-			if (!System.IO.File.Exists(projectFile)) {
-				throw new FileNotFoundException("Project file '{0}' does not exist", projectFile);
+			var args = System.Environment.GetCommandLineArgs();
+			if (args.Length >= 3 && !args[1].StartsWith("-")) {
+				var projectFile = Path.Combine(Directory.GetCurrentDirectory(), args[1]);
+				if (!File.Exists(projectFile)) {
+					throw new FileNotFoundException($"Project file '{projectFile}' does not exist");
+				}
+				The.Workspace.Load(projectFile);
 			}
-			The.Workspace.Open(projectFile);
-			The.Workspace.LoadCacheSettings();
 		}
 
-		void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			var te = e.ExceptionObject as TerminateException;
-			if (te != null) {
+			if (e.ExceptionObject is TerminateException te) {
 				System.Environment.Exit(te.Code);
 			}
 		}
-
+		
 		void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
 		{
-			var te = e.Exception as TerminateException;
-			if (te != null) {
+			if (e.Exception is TerminateException te) {
 				System.Environment.Exit(te.Code);
 			}
 		}
@@ -137,6 +131,13 @@ namespace Orange
 		public override Target GetActiveTarget()
 		{
 			var specifiedTarget = Toolbox.GetCommandLineArg("--target");
+			if (specifiedTarget == null) {
+	#if MAC
+				specifiedTarget = "Mac";
+	#else
+				specifiedTarget = "Win";
+	#endif
+			}
 			foreach (var target in The.Workspace.Targets) {
 				if (string.Equals(specifiedTarget, target.Name, StringComparison.OrdinalIgnoreCase)) {
 					return target;

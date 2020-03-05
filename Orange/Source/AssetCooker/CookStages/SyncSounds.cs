@@ -15,18 +15,19 @@ namespace Orange
 
 		public SyncSounds(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(oggExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(oggExtension);
 
-		public void Action() => SyncUpdated.Sync(oggExtension, soundExtension, AssetBundle.Current, Converter);
+		public void Action() => AssetCooker.SyncUpdated(oggExtension, soundExtension, Converter);
 
 		private bool Converter(string srcPath, string dstPath)
 		{
-			using (var stream = new FileStream(srcPath, FileMode.Open)) {
+			using (var stream = AssetCooker.InputBundle.OpenFile(srcPath)) {
 				// All sounds below 100kb size (can be changed with cooking rules) are converted
 				// from OGG to Wav/Adpcm
 				var rules = AssetCooker.CookingRulesMap[srcPath];
 				if (stream.Length > rules.ADPCMLimit * 1024) {
-					AssetCooker.AssetBundle.ImportFile(dstPath, stream, 0, oggExtension, File.GetLastWriteTime(srcPath),
+					AssetCooker.OutputBundle.ImportFile(dstPath, stream, 0, oggExtension,
+						AssetCooker.InputBundle.GetFileLastWriteTime(srcPath),
 						AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
 				}
 				else {
@@ -35,7 +36,8 @@ namespace Orange
 						using (var output = new MemoryStream()) {
 							WaveIMA4Converter.Encode(input, output);
 							output.Seek(0, SeekOrigin.Begin);
-							AssetCooker.AssetBundle.ImportFile(dstPath, output, 0, oggExtension, File.GetLastWriteTime(srcPath),
+							AssetCooker.OutputBundle.ImportFile(dstPath, output, 0, oggExtension,
+								AssetCooker.InputBundle.GetFileLastWriteTime(srcPath),
 								AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
 						}
 					}

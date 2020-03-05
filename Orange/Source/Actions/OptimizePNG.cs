@@ -26,7 +26,7 @@ namespace Orange
 			ulong totalLengthAfter = 0;
 			ulong totalLengthBefore = 0;
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				foreach (var fi in The.Workspace.AssetFiles.Enumerate(".png")) {
+				foreach (var fi in Lime.AssetBundle.Current.EnumerateFileInfos(null, ".png")) {
 					ulong lengthBefore = (ulong)(new System.IO.FileInfo(fi.Path)).Length;
 					totalLengthBefore += lengthBefore;
 					TextureConverter.OptimizePNG(fi.Path);

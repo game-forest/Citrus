@@ -9,15 +9,34 @@ namespace Lime
 	public class UnpackedAssetBundle : AssetBundle
 	{
 		public readonly string BaseDirectory;
+		private IFileSystemWatcher watcher;
+		private bool assetsCached;
+		private string cachedPath;
+		private List<FileInfo> cachedAssets;
 
 		public UnpackedAssetBundle(string baseDirectory)
 		{
-			BaseDirectory = baseDirectory;
+			BaseDirectory = NormalizeDirectoryPath(baseDirectory);
+			watcher = new FileSystemWatcher(BaseDirectory, includeSubdirectories: true);
+			watcher.Changed += _ => assetsCached = false;
+			watcher.Created += _ => assetsCached = false;
+			watcher.Deleted += _ => assetsCached = false;
+			watcher.Renamed += (_, __) => assetsCached = false;
 		}
 
-		public override Stream OpenFile(string path)
+		public override void Dispose()
 		{
-			return new FileStream(Path.Combine(BaseDirectory, path), FileMode.Open, FileAccess.Read);
+			watcher?.Dispose();
+			watcher = null;
+			base.Dispose();
+		}
+
+		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
+		{
+			return new FileStream(
+				Path.Combine(BaseDirectory, path), mode, 
+				mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
+				FileShare.Read);
 		}
 
 		public override DateTime GetFileLastWriteTime(string path)
@@ -25,9 +44,15 @@ namespace Lime
 			return File.GetLastWriteTime(Path.Combine(BaseDirectory, path));
 		}
 
+		public override void SetFileLastWriteTime(string path, DateTime time)
+		{
+			assetsCached = false;
+			File.SetLastWriteTime(Path.Combine(BaseDirectory, path), time);
+		}
+
 		public override int GetFileSize(string path)
 		{
-			return (int)(new FileInfo(path).Length);
+			return (int)(new System.IO.FileInfo(path).Length);
 		}
 
 		public override byte[] GetCookingRulesSHA1(string path)
@@ -55,19 +80,62 @@ namespace Lime
 			File.WriteAllBytes(Path.Combine(BaseDirectory, path), bytes);
 		}
 
-		public override IEnumerable<string> EnumerateFiles(string path = null)
+		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
 		{
-			var baseDirectory = BaseDirectory;
-			if (path != null) {
-				baseDirectory = Path.Combine(baseDirectory, path);
+			if (extension != null && !extension.StartsWith(".")) {
+				throw new InvalidOperationException();
+			} 
+			if (!assetsCached || path != cachedPath) {
+				assetsCached = true;
+				cachedPath = path;
+				var baseDirectory = BaseDirectory;
+				if (path != null) {
+					baseDirectory = NormalizeDirectoryPath(Path.Combine(baseDirectory, path));
+				}
+				cachedAssets = cachedAssets ?? new List<FileInfo>();
+				cachedAssets.Clear();
+				var dirInfo = new DirectoryInfo(baseDirectory);
+				foreach (var fileInfo in dirInfo.GetFiles("*", SearchOption.AllDirectories)) {
+					var file = fileInfo.FullName;
+					file = file.Substring(dirInfo.FullName.Length).Replace('\\', '/');
+					cachedAssets.Add(new FileInfo { Path = file, LastWriteTime = fileInfo.LastWriteTime });
+				}
+				// According to documentation the file order is not guaranteed.
+				cachedAssets.Sort((a, b) => string.Compare(a.Path, b.Path));
 			}
-			baseDirectory += '/';
-			var baseUri = new Uri($"{BaseDirectory}/");
-			foreach (var i in Directory.EnumerateFiles(baseDirectory, "*.*", SearchOption.AllDirectories)) {
-				var relativePath = baseUri.MakeRelativeUri(new Uri(i)).ToString();
-				relativePath = Uri.UnescapeDataString(relativePath);
-				yield return relativePath;
+			foreach (var asset in cachedAssets) {
+				if (extension != null && !asset.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+					continue;
+				}
+				yield return asset;
 			}
+		}
+
+		private static string NormalizeDirectoryPath(string path)
+		{
+			path = path.Replace('\\', '/');
+			if (!path.EndsWith("/")) {
+				path += '/';
+			}
+			return path;
+		}
+
+		public override string ToSystemPath(string bundlePath) => Path.Combine(BaseDirectory, bundlePath);
+
+		public override string FromSystemPath(string systemPath)
+		{
+			systemPath = systemPath.Replace('\\', '/');
+			// Check if systemPath starts with BaseDirectory without trailing '/'  
+			if (string.Compare(
+				systemPath,0,BaseDirectory, 0, BaseDirectory.Length - 1,
+				StringComparison.OrdinalIgnoreCase) != 0) 
+			{
+				throw new InvalidOperationException(
+					$"'{systemPath}' outside of the bundle directory '{BaseDirectory}'");
+			}
+			return systemPath.Length == BaseDirectory.Length - 1 ? 
+				string.Empty : 
+				systemPath.Substring(BaseDirectory.Length);
 		}
 	}
 }

@@ -408,7 +408,7 @@ namespace Tangerine
 					System.IO.Path.GetDirectoryName(i));
 				menu.Add(new Command(name, () =>  {
 					if (Project.Current.Close()) {
-						new Project(i).Open();
+						new Project(i);
 						FileOpenProject.AddRecentProject(i);
 					}
 				}));
@@ -459,20 +459,6 @@ namespace Tangerine
 				}
 				Application.InvalidateWindows();
 			}
-		}
-
-		private static IEnumerator<object> OrangeTask(Action action)
-		{
-			Tangerine.UI.Console.Instance.Show();
-			Orange.The.Workspace?.AssetFiles?.Rescan();
-			yield return Task.ExecuteAsync(() => {
-				try {
-					action();
-				} catch (System.Exception e) {
-					System.Console.WriteLine(e);
-				}
-			});
-			System.Console.WriteLine("Done");
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Lime;
 
 namespace Orange
 {
@@ -25,7 +26,6 @@ namespace Orange
 				throw new InvalidOperationException($"Can't find nuget.exe.");
 			}
 #if MAC
-			var chmodResult = Process.Start("chmod", $"+x {nugetPath}");
 			monoPath = Toolbox.GetMonoPath();
 #endif
 		}

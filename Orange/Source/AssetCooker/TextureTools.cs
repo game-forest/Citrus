@@ -24,26 +24,23 @@ namespace Orange
 
 			public static BitmapInfo FromBitmap(Bitmap bitmap)
 			{
-				return new BitmapInfo() {
+				return new BitmapInfo {
 					Width = bitmap.Width,
 					Height = bitmap.Height,
 					HasAlpha = bitmap.HasAlpha
 				};
 			}
 
-			public static BitmapInfo FromFile(string file)
+			public static BitmapInfo FromFile(AssetBundle bundle, string path)
 			{
-				int width;
-				int height;
-				bool hasAlpha;
-				if (TextureConverterUtils.GetPngFileInfo(file, out width, out height, out hasAlpha, false)) {
-					return new BitmapInfo() {
+				if (TextureConverterUtils.GetPngFileInfo(bundle, path, out var width, out var height, out var hasAlpha)) {
+					return new BitmapInfo {
 						Width = width,
 						Height = height,
 						HasAlpha = hasAlpha
 					};
 				}
-				Debug.Write("Failed to read image info {0}", file);
+				Debug.Write($"Failed to read image info {path}");
 				return null;
 			}
 		}

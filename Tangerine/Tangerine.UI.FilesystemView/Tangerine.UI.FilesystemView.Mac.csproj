@@ -67,7 +67,7 @@
   <ItemGroup>
     <Compile Include="FilesystemView.cs" />
     <Compile Include="FilesystemToolbar.cs" />
-    <Compile Include="FileEnumerator.cs" />
+    <Compile Include="BundleForCookingRulesBuilder.cs" />
     <Compile Include="SystemIconTextureCache.Mac.cs" />
     <Compile Include="CookingRulesEditor.cs" />
     <Compile Include="FilesystemPane.cs" />

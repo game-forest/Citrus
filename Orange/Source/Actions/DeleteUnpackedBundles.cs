@@ -8,6 +8,6 @@ namespace Orange
 		[ExportMetadata("Label", "Delete Unpacked Bundles")]
 		[ExportMetadata("Priority", 31)]
 		[ExportMetadata("ApplicableToBundleSubset", true)]
-		public static void DeleteUnpackedBundlesAction() => AssetsUnpacker.Delete(The.UI.GetActiveTarget(), The.UI.GetSelectedBundles());
+		public static void DeleteUnpackedBundlesAction() => AssetsUnpacker.DeleteBundles(The.UI.GetActiveTarget(), The.UI.GetSelectedBundles());
 	}
 }

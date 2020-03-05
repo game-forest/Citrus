@@ -92,7 +92,13 @@ namespace Lime
 				PopCurrent();
 			}
 		}
-
+		
+		public T ReadObjectFromBundle<T>(AssetBundle bundle, string path, object obj = null)
+		{
+			using (Stream stream = bundle.OpenFileLocalized(path))
+				return ReadObject<T>(path, stream, obj);
+		}
+		
 		public override T ReadObject<T>(string path, Stream stream, object obj = null)
 		{
 			pathStack.Push(path);

@@ -1,5 +1,6 @@
 using System;
 using Lime;
+using Orange;
 
 namespace Tangerine.Core.Commands
 {
@@ -27,7 +28,15 @@ namespace Tangerine.Core.Commands
 		{
 			object WrappedAction()
 			{
-				action();
+				var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
+				var bundle = new TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
+				AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+				try {
+					action();
+				} finally {
+					bundle.Dispose();
+					AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+				}
 				return null;
 			}
 			_ = ExecuteAsync(WrappedAction);
@@ -35,17 +44,28 @@ namespace Tangerine.Core.Commands
 
 		protected async System.Threading.Tasks.Task<T> ExecuteAsync<T>(Func<T> function)
 		{
+			T WrappedFunction()
+			{
+				var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
+				var bundle = new TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
+				AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+				try {
+					return function();
+				} finally {
+					bundle.Dispose();
+					AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+				}
+			}
+			
 			var result = default(T);
 			try {
 				if (isExecuting) {
 					Console.WriteLine("Orange is busy with a previous request.");
 					return result;
 				}
-
 				isExecuting = true;
 				Executing?.Invoke();
-				Orange.The.Workspace?.AssetFiles?.Rescan();
-				result = await System.Threading.Tasks.Task<T>.Factory.StartNew(function);
+				result = await System.Threading.Tasks.Task<T>.Factory.StartNew(WrappedFunction);
 				await System.Threading.Tasks.Task.Delay(500);
 			} catch (System.Exception e) {
 				Console.WriteLine(e);

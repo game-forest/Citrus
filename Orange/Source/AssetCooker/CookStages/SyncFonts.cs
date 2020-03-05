@@ -13,15 +13,15 @@ namespace Orange
 
 		public SyncFonts(AssetCooker assetCooker) : base(assetCooker) { }
 
-		public int GetOperationsCount() => SyncUpdated.GetOperationsCount(fontExtension);
+		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(fontExtension);
 
-		public void Action() => SyncUpdated.Sync(fontExtension, fontExtension, AssetBundle.Current, Converter);
+		public void Action() => AssetCooker.SyncUpdated(fontExtension, fontExtension, Converter);
 
 		private bool Converter(string srcPath, string dstPath)
 		{
-			var font = InternalPersistence.Instance.ReadObjectFromFile<Font>(srcPath);
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.AssetBundle, dstPath, font, Persistence.Format.Binary, fontExtension,
-				File.GetLastWriteTime(srcPath), AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
+			var font = InternalPersistence.Instance.ReadObjectFromBundle<Font>(AssetCooker.InputBundle, srcPath);
+			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, font, Persistence.Format.Binary, fontExtension,
+				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
 			return true;
 		}
 	}

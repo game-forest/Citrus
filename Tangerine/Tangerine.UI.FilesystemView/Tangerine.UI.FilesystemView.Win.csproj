@@ -49,8 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressBar.cs" />
+    <Compile Include="BundleForCookingRulesBuilder.cs" />
     <Compile Include="CookingRulesEditor.cs" />
-    <Compile Include="FileEnumerator.cs" />
     <Compile Include="FilesystemPane.cs" />
     <Compile Include="FilesystemView.cs" />
     <Compile Include="FilesystemViewExtensions.cs" />
