@@ -82,6 +82,7 @@
       <div class="level2"><a class="xref" href="Lime.AggregateAssetBundle.html">AggregateAssetBundle</a></div>
       <div class="level2"><a class="xref" href="Lime.PackedAssetBundle.html">PackedAssetBundle</a></div>
       <div class="level2"><a class="xref" href="Lime.UnpackedAssetBundle.html">UnpackedAssetBundle</a></div>
+      <div class="level2"><a class="xref" href="Lime.WrappedAssetBundle.html">WrappedAssetBundle</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -237,13 +238,14 @@ public static string CurrentLanguage</code></pre>
   </div>
   
   
-  <a id="Lime_AssetBundle_EnumerateFiles_" data-uid="Lime.AssetBundle.EnumerateFiles*"></a>
-  <h4 id="Lime_AssetBundle_EnumerateFiles_System_String_" data-uid="Lime.AssetBundle.EnumerateFiles(System.String)">EnumerateFiles(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Lime_AssetBundle_EnumerateFileInfos_" data-uid="Lime.AssetBundle.EnumerateFileInfos*"></a>
+  <h4 id="Lime_AssetBundle_EnumerateFileInfos_System_String_System_String_" data-uid="Lime.AssetBundle.EnumerateFileInfos(System.String,System.String)">EnumerateFileInfos(String, String)</h4>
+  <div class="markdown level1 summary"><p>Enumerates all file infos by given path and having the given extension.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract IEnumerable&lt;string&gt; EnumerateFiles(string path = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract IEnumerable&lt;FileInfo&gt; EnumerateFileInfos(string path = null, string extension = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -258,6 +260,59 @@ public static string CurrentLanguage</code></pre>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">extension</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.FileInfo.html">FileInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_AssetBundle_EnumerateFiles_" data-uid="Lime.AssetBundle.EnumerateFiles*"></a>
+  <h4 id="Lime_AssetBundle_EnumerateFiles_System_String_System_String_" data-uid="Lime.AssetBundle.EnumerateFiles(System.String,System.String)">EnumerateFiles(String, String)</h4>
+  <div class="markdown level1 summary"><p>Enumerates all files by given path and having the given extension.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;string&gt; EnumerateFiles(string path = null, string extension = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">extension</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -315,6 +370,49 @@ public static string CurrentLanguage</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_AssetBundle_FromSystemPath_" data-uid="Lime.AssetBundle.FromSystemPath*"></a>
+  <h4 id="Lime_AssetBundle_FromSystemPath_System_String_" data-uid="Lime.AssetBundle.FromSystemPath(System.String)">FromSystemPath(String)</h4>
+  <div class="markdown level1 summary"><p>Translates absolute system file path to the asset path. Raises UnsupportedException() for PackedAssetBundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string FromSystemPath(string systemPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">systemPath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -646,12 +744,12 @@ public static string CurrentLanguage</code></pre>
   
   
   <a id="Lime_AssetBundle_OpenFile_" data-uid="Lime.AssetBundle.OpenFile*"></a>
-  <h4 id="Lime_AssetBundle_OpenFile_System_String_" data-uid="Lime.AssetBundle.OpenFile(System.String)">OpenFile(String)</h4>
+  <h4 id="Lime_AssetBundle_OpenFile_System_String_System_IO_FileMode_" data-uid="Lime.AssetBundle.OpenFile(System.String,System.IO.FileMode)">OpenFile(String, FileMode)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract Stream OpenFile(string path)</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract Stream OpenFile(string path, FileMode fileMode = FileMode.Open)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -666,6 +764,11 @@ public static string CurrentLanguage</code></pre>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.FileMode</span></td>
+        <td><span class="parametername">fileMode</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -723,6 +826,53 @@ public static string CurrentLanguage</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.IO.Stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_AssetBundle_ReadAllText_" data-uid="Lime.AssetBundle.ReadAllText*"></a>
+  <h4 id="Lime_AssetBundle_ReadAllText_System_String_System_Text_Encoding_" data-uid="Lime.AssetBundle.ReadAllText(System.String,System.Text.Encoding)">ReadAllText(String, Encoding)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ReadAllText(string path, Encoding encoding)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Text.Encoding</span></td>
+        <td><span class="parametername">encoding</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -829,6 +979,81 @@ public static string CurrentLanguage</code></pre>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
         <td><span class="parametername">resetTexturePool</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_AssetBundle_SetFileLastWriteTime_" data-uid="Lime.AssetBundle.SetFileLastWriteTime*"></a>
+  <h4 id="Lime_AssetBundle_SetFileLastWriteTime_System_String_System_DateTime_" data-uid="Lime.AssetBundle.SetFileLastWriteTime(System.String,System.DateTime)">SetFileLastWriteTime(String, DateTime)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void SetFileLastWriteTime(string path, DateTime time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="parametername">time</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_AssetBundle_ToSystemPath_" data-uid="Lime.AssetBundle.ToSystemPath*"></a>
+  <h4 id="Lime_AssetBundle_ToSystemPath_System_String_" data-uid="Lime.AssetBundle.ToSystemPath(System.String)">ToSystemPath(String)</h4>
+  <div class="markdown level1 summary"><p>Translates bundle path to the asset in the file system. Raises UnsupportedException() for PackedAssetBundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string ToSystemPath(string bundlePath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">bundlePath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>

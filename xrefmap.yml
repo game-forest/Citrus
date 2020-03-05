@@ -87,19 +87,19 @@ references:
   isSpec: "True"
   fullName: Lime.AggregateAssetBundle.Dispose
   nameWithType: AggregateAssetBundle.Dispose
-- uid: Lime.AggregateAssetBundle.EnumerateFiles(System.String)
-  name: EnumerateFiles(String)
-  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_EnumerateFiles_System_String_
-  commentId: M:Lime.AggregateAssetBundle.EnumerateFiles(System.String)
-  fullName: Lime.AggregateAssetBundle.EnumerateFiles(System.String)
-  nameWithType: AggregateAssetBundle.EnumerateFiles(String)
-- uid: Lime.AggregateAssetBundle.EnumerateFiles*
-  name: EnumerateFiles
-  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_EnumerateFiles_
-  commentId: Overload:Lime.AggregateAssetBundle.EnumerateFiles
+- uid: Lime.AggregateAssetBundle.EnumerateFileInfos(System.String,System.String)
+  name: EnumerateFileInfos(String, String)
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_EnumerateFileInfos_System_String_System_String_
+  commentId: M:Lime.AggregateAssetBundle.EnumerateFileInfos(System.String,System.String)
+  fullName: Lime.AggregateAssetBundle.EnumerateFileInfos(System.String, System.String)
+  nameWithType: AggregateAssetBundle.EnumerateFileInfos(String, String)
+- uid: Lime.AggregateAssetBundle.EnumerateFileInfos*
+  name: EnumerateFileInfos
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_EnumerateFileInfos_
+  commentId: Overload:Lime.AggregateAssetBundle.EnumerateFileInfos
   isSpec: "True"
-  fullName: Lime.AggregateAssetBundle.EnumerateFiles
-  nameWithType: AggregateAssetBundle.EnumerateFiles
+  fullName: Lime.AggregateAssetBundle.EnumerateFileInfos
+  nameWithType: AggregateAssetBundle.EnumerateFileInfos
 - uid: Lime.AggregateAssetBundle.FileExists(System.String)
   name: FileExists(String)
   href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_FileExists_System_String_
@@ -113,6 +113,19 @@ references:
   isSpec: "True"
   fullName: Lime.AggregateAssetBundle.FileExists
   nameWithType: AggregateAssetBundle.FileExists
+- uid: Lime.AggregateAssetBundle.FromSystemPath(System.String)
+  name: FromSystemPath(String)
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_FromSystemPath_System_String_
+  commentId: M:Lime.AggregateAssetBundle.FromSystemPath(System.String)
+  fullName: Lime.AggregateAssetBundle.FromSystemPath(System.String)
+  nameWithType: AggregateAssetBundle.FromSystemPath(String)
+- uid: Lime.AggregateAssetBundle.FromSystemPath*
+  name: FromSystemPath
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_FromSystemPath_
+  commentId: Overload:Lime.AggregateAssetBundle.FromSystemPath
+  isSpec: "True"
+  fullName: Lime.AggregateAssetBundle.FromSystemPath
+  nameWithType: AggregateAssetBundle.FromSystemPath
 - uid: Lime.AggregateAssetBundle.GetCookingRulesSHA1(System.String)
   name: GetCookingRulesSHA1(String)
   href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_GetCookingRulesSHA1_System_String_
@@ -168,12 +181,12 @@ references:
   isSpec: "True"
   fullName: Lime.AggregateAssetBundle.ImportFile
   nameWithType: AggregateAssetBundle.ImportFile
-- uid: Lime.AggregateAssetBundle.OpenFile(System.String)
-  name: OpenFile(String)
-  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_OpenFile_System_String_
-  commentId: M:Lime.AggregateAssetBundle.OpenFile(System.String)
-  fullName: Lime.AggregateAssetBundle.OpenFile(System.String)
-  nameWithType: AggregateAssetBundle.OpenFile(String)
+- uid: Lime.AggregateAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  name: OpenFile(String, FileMode)
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_OpenFile_System_String_System_IO_FileMode_
+  commentId: M:Lime.AggregateAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  fullName: Lime.AggregateAssetBundle.OpenFile(System.String, System.IO.FileMode)
+  nameWithType: AggregateAssetBundle.OpenFile(String, FileMode)
 - uid: Lime.AggregateAssetBundle.OpenFile*
   name: OpenFile
   href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_OpenFile_
@@ -181,6 +194,32 @@ references:
   isSpec: "True"
   fullName: Lime.AggregateAssetBundle.OpenFile
   nameWithType: AggregateAssetBundle.OpenFile
+- uid: Lime.AggregateAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  name: SetFileLastWriteTime(String, DateTime)
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_SetFileLastWriteTime_System_String_System_DateTime_
+  commentId: M:Lime.AggregateAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  fullName: Lime.AggregateAssetBundle.SetFileLastWriteTime(System.String, System.DateTime)
+  nameWithType: AggregateAssetBundle.SetFileLastWriteTime(String, DateTime)
+- uid: Lime.AggregateAssetBundle.SetFileLastWriteTime*
+  name: SetFileLastWriteTime
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_SetFileLastWriteTime_
+  commentId: Overload:Lime.AggregateAssetBundle.SetFileLastWriteTime
+  isSpec: "True"
+  fullName: Lime.AggregateAssetBundle.SetFileLastWriteTime
+  nameWithType: AggregateAssetBundle.SetFileLastWriteTime
+- uid: Lime.AggregateAssetBundle.ToSystemPath(System.String)
+  name: ToSystemPath(String)
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_ToSystemPath_System_String_
+  commentId: M:Lime.AggregateAssetBundle.ToSystemPath(System.String)
+  fullName: Lime.AggregateAssetBundle.ToSystemPath(System.String)
+  nameWithType: AggregateAssetBundle.ToSystemPath(String)
+- uid: Lime.AggregateAssetBundle.ToSystemPath*
+  name: ToSystemPath
+  href: api/Lime.AggregateAssetBundle.html#Lime_AggregateAssetBundle_ToSystemPath_
+  commentId: Overload:Lime.AggregateAssetBundle.ToSystemPath
+  isSpec: "True"
+  fullName: Lime.AggregateAssetBundle.ToSystemPath
+  nameWithType: AggregateAssetBundle.ToSystemPath
 - uid: Lime.Alignment
   name: Alignment
   href: api/Lime.Alignment.html
@@ -5451,12 +5490,25 @@ references:
   isSpec: "True"
   fullName: Lime.AssetBundle.Dispose
   nameWithType: AssetBundle.Dispose
-- uid: Lime.AssetBundle.EnumerateFiles(System.String)
-  name: EnumerateFiles(String)
-  href: api/Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFiles_System_String_
-  commentId: M:Lime.AssetBundle.EnumerateFiles(System.String)
-  fullName: Lime.AssetBundle.EnumerateFiles(System.String)
-  nameWithType: AssetBundle.EnumerateFiles(String)
+- uid: Lime.AssetBundle.EnumerateFileInfos(System.String,System.String)
+  name: EnumerateFileInfos(String, String)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFileInfos_System_String_System_String_
+  commentId: M:Lime.AssetBundle.EnumerateFileInfos(System.String,System.String)
+  fullName: Lime.AssetBundle.EnumerateFileInfos(System.String, System.String)
+  nameWithType: AssetBundle.EnumerateFileInfos(String, String)
+- uid: Lime.AssetBundle.EnumerateFileInfos*
+  name: EnumerateFileInfos
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFileInfos_
+  commentId: Overload:Lime.AssetBundle.EnumerateFileInfos
+  isSpec: "True"
+  fullName: Lime.AssetBundle.EnumerateFileInfos
+  nameWithType: AssetBundle.EnumerateFileInfos
+- uid: Lime.AssetBundle.EnumerateFiles(System.String,System.String)
+  name: EnumerateFiles(String, String)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFiles_System_String_System_String_
+  commentId: M:Lime.AssetBundle.EnumerateFiles(System.String,System.String)
+  fullName: Lime.AssetBundle.EnumerateFiles(System.String, System.String)
+  nameWithType: AssetBundle.EnumerateFiles(String, String)
 - uid: Lime.AssetBundle.EnumerateFiles*
   name: EnumerateFiles
   href: api/Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFiles_
@@ -5477,6 +5529,19 @@ references:
   isSpec: "True"
   fullName: Lime.AssetBundle.FileExists
   nameWithType: AssetBundle.FileExists
+- uid: Lime.AssetBundle.FromSystemPath(System.String)
+  name: FromSystemPath(String)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_FromSystemPath_System_String_
+  commentId: M:Lime.AssetBundle.FromSystemPath(System.String)
+  fullName: Lime.AssetBundle.FromSystemPath(System.String)
+  nameWithType: AssetBundle.FromSystemPath(String)
+- uid: Lime.AssetBundle.FromSystemPath*
+  name: FromSystemPath
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_FromSystemPath_
+  commentId: Overload:Lime.AssetBundle.FromSystemPath
+  isSpec: "True"
+  fullName: Lime.AssetBundle.FromSystemPath
+  nameWithType: AssetBundle.FromSystemPath
 - uid: Lime.AssetBundle.GetAttributes(System.String)
   name: GetAttributes(String)
   href: api/Lime.AssetBundle.html#Lime_AssetBundle_GetAttributes_System_String_
@@ -5580,12 +5645,12 @@ references:
   isSpec: "True"
   fullName: Lime.AssetBundle.Initialized
   nameWithType: AssetBundle.Initialized
-- uid: Lime.AssetBundle.OpenFile(System.String)
-  name: OpenFile(String)
-  href: api/Lime.AssetBundle.html#Lime_AssetBundle_OpenFile_System_String_
-  commentId: M:Lime.AssetBundle.OpenFile(System.String)
-  fullName: Lime.AssetBundle.OpenFile(System.String)
-  nameWithType: AssetBundle.OpenFile(String)
+- uid: Lime.AssetBundle.OpenFile(System.String,System.IO.FileMode)
+  name: OpenFile(String, FileMode)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_OpenFile_System_String_System_IO_FileMode_
+  commentId: M:Lime.AssetBundle.OpenFile(System.String,System.IO.FileMode)
+  fullName: Lime.AssetBundle.OpenFile(System.String, System.IO.FileMode)
+  nameWithType: AssetBundle.OpenFile(String, FileMode)
 - uid: Lime.AssetBundle.OpenFile*
   name: OpenFile
   href: api/Lime.AssetBundle.html#Lime_AssetBundle_OpenFile_
@@ -5606,6 +5671,19 @@ references:
   isSpec: "True"
   fullName: Lime.AssetBundle.OpenFileLocalized
   nameWithType: AssetBundle.OpenFileLocalized
+- uid: Lime.AssetBundle.ReadAllText(System.String,System.Text.Encoding)
+  name: ReadAllText(String, Encoding)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_ReadAllText_System_String_System_Text_Encoding_
+  commentId: M:Lime.AssetBundle.ReadAllText(System.String,System.Text.Encoding)
+  fullName: Lime.AssetBundle.ReadAllText(System.String, System.Text.Encoding)
+  nameWithType: AssetBundle.ReadAllText(String, Encoding)
+- uid: Lime.AssetBundle.ReadAllText*
+  name: ReadAllText
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_ReadAllText_
+  commentId: Overload:Lime.AssetBundle.ReadAllText
+  isSpec: "True"
+  fullName: Lime.AssetBundle.ReadAllText
+  nameWithType: AssetBundle.ReadAllText
 - uid: Lime.AssetBundle.ReadFile(System.String)
   name: ReadFile(String)
   href: api/Lime.AssetBundle.html#Lime_AssetBundle_ReadFile_System_String_
@@ -5645,6 +5723,32 @@ references:
   isSpec: "True"
   fullName: Lime.AssetBundle.SetCurrent
   nameWithType: AssetBundle.SetCurrent
+- uid: Lime.AssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  name: SetFileLastWriteTime(String, DateTime)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_SetFileLastWriteTime_System_String_System_DateTime_
+  commentId: M:Lime.AssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  fullName: Lime.AssetBundle.SetFileLastWriteTime(System.String, System.DateTime)
+  nameWithType: AssetBundle.SetFileLastWriteTime(String, DateTime)
+- uid: Lime.AssetBundle.SetFileLastWriteTime*
+  name: SetFileLastWriteTime
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_SetFileLastWriteTime_
+  commentId: Overload:Lime.AssetBundle.SetFileLastWriteTime
+  isSpec: "True"
+  fullName: Lime.AssetBundle.SetFileLastWriteTime
+  nameWithType: AssetBundle.SetFileLastWriteTime
+- uid: Lime.AssetBundle.ToSystemPath(System.String)
+  name: ToSystemPath(String)
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_ToSystemPath_System_String_
+  commentId: M:Lime.AssetBundle.ToSystemPath(System.String)
+  fullName: Lime.AssetBundle.ToSystemPath(System.String)
+  nameWithType: AssetBundle.ToSystemPath(String)
+- uid: Lime.AssetBundle.ToSystemPath*
+  name: ToSystemPath
+  href: api/Lime.AssetBundle.html#Lime_AssetBundle_ToSystemPath_
+  commentId: Overload:Lime.AssetBundle.ToSystemPath
+  isSpec: "True"
+  fullName: Lime.AssetBundle.ToSystemPath
+  nameWithType: AssetBundle.ToSystemPath
 - uid: Lime.AssetBundleFlags
   name: AssetBundleFlags
   href: api/Lime.AssetBundleFlags.html
@@ -14316,6 +14420,41 @@ references:
   fullName.vb: Lime.CustomPresenter(Of T).Render
   nameWithType: CustomPresenter<T>.Render
   nameWithType.vb: CustomPresenter(Of T).Render
+- uid: Lime.CustomSetAssetBundle
+  name: CustomSetAssetBundle
+  href: api/Lime.CustomSetAssetBundle.html
+  commentId: T:Lime.CustomSetAssetBundle
+  fullName: Lime.CustomSetAssetBundle
+  nameWithType: CustomSetAssetBundle
+- uid: Lime.CustomSetAssetBundle.#ctor(Lime.AssetBundle,System.Collections.Generic.IEnumerable{Lime.FileInfo})
+  name: CustomSetAssetBundle(AssetBundle, IEnumerable<FileInfo>)
+  href: api/Lime.CustomSetAssetBundle.html#Lime_CustomSetAssetBundle__ctor_Lime_AssetBundle_System_Collections_Generic_IEnumerable_Lime_FileInfo__
+  commentId: M:Lime.CustomSetAssetBundle.#ctor(Lime.AssetBundle,System.Collections.Generic.IEnumerable{Lime.FileInfo})
+  name.vb: CustomSetAssetBundle(AssetBundle, IEnumerable(Of FileInfo))
+  fullName: Lime.CustomSetAssetBundle.CustomSetAssetBundle(Lime.AssetBundle, System.Collections.Generic.IEnumerable<Lime.FileInfo>)
+  fullName.vb: Lime.CustomSetAssetBundle.CustomSetAssetBundle(Lime.AssetBundle, System.Collections.Generic.IEnumerable(Of Lime.FileInfo))
+  nameWithType: CustomSetAssetBundle.CustomSetAssetBundle(AssetBundle, IEnumerable<FileInfo>)
+  nameWithType.vb: CustomSetAssetBundle.CustomSetAssetBundle(AssetBundle, IEnumerable(Of FileInfo))
+- uid: Lime.CustomSetAssetBundle.#ctor*
+  name: CustomSetAssetBundle
+  href: api/Lime.CustomSetAssetBundle.html#Lime_CustomSetAssetBundle__ctor_
+  commentId: Overload:Lime.CustomSetAssetBundle.#ctor
+  isSpec: "True"
+  fullName: Lime.CustomSetAssetBundle.CustomSetAssetBundle
+  nameWithType: CustomSetAssetBundle.CustomSetAssetBundle
+- uid: Lime.CustomSetAssetBundle.EnumerateFileInfos(System.String,System.String)
+  name: EnumerateFileInfos(String, String)
+  href: api/Lime.CustomSetAssetBundle.html#Lime_CustomSetAssetBundle_EnumerateFileInfos_System_String_System_String_
+  commentId: M:Lime.CustomSetAssetBundle.EnumerateFileInfos(System.String,System.String)
+  fullName: Lime.CustomSetAssetBundle.EnumerateFileInfos(System.String, System.String)
+  nameWithType: CustomSetAssetBundle.EnumerateFileInfos(String, String)
+- uid: Lime.CustomSetAssetBundle.EnumerateFileInfos*
+  name: EnumerateFileInfos
+  href: api/Lime.CustomSetAssetBundle.html#Lime_CustomSetAssetBundle_EnumerateFileInfos_
+  commentId: Overload:Lime.CustomSetAssetBundle.EnumerateFileInfos
+  isSpec: "True"
+  fullName: Lime.CustomSetAssetBundle.EnumerateFileInfos
+  nameWithType: CustomSetAssetBundle.EnumerateFileInfos
 - uid: Lime.CyclicDependencyException
   name: CyclicDependencyException
   href: api/Lime.CyclicDependencyException.html
@@ -18310,6 +18449,24 @@ references:
   commentId: F:Lime.FileDialogMode.SelectFolder
   fullName: Lime.FileDialogMode.SelectFolder
   nameWithType: FileDialogMode.SelectFolder
+- uid: Lime.FileInfo
+  name: FileInfo
+  href: api/Lime.FileInfo.html
+  commentId: T:Lime.FileInfo
+  fullName: Lime.FileInfo
+  nameWithType: FileInfo
+- uid: Lime.FileInfo.LastWriteTime
+  name: LastWriteTime
+  href: api/Lime.FileInfo.html#Lime_FileInfo_LastWriteTime
+  commentId: F:Lime.FileInfo.LastWriteTime
+  fullName: Lime.FileInfo.LastWriteTime
+  nameWithType: FileInfo.LastWriteTime
+- uid: Lime.FileInfo.Path
+  name: Path
+  href: api/Lime.FileInfo.html#Lime_FileInfo_Path
+  commentId: F:Lime.FileInfo.Path
+  fullName: Lime.FileInfo.Path
+  nameWithType: FileInfo.Path
 - uid: Lime.FileSystemWatcher
   name: FileSystemWatcher
   href: api/Lime.FileSystemWatcher.html
@@ -27457,6 +27614,22 @@ references:
   fullName.vb: Lime.InternalPersistence.ReadObject(Of T)(System.String, System.IO.Stream, System.Object)
   nameWithType: InternalPersistence.ReadObject<T>(String, Stream, Object)
   nameWithType.vb: InternalPersistence.ReadObject(Of T)(String, Stream, Object)
+- uid: Lime.InternalPersistence.ReadObjectFromBundle*
+  name: ReadObjectFromBundle
+  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_ReadObjectFromBundle_
+  commentId: Overload:Lime.InternalPersistence.ReadObjectFromBundle
+  isSpec: "True"
+  fullName: Lime.InternalPersistence.ReadObjectFromBundle
+  nameWithType: InternalPersistence.ReadObjectFromBundle
+- uid: Lime.InternalPersistence.ReadObjectFromBundle``1(Lime.AssetBundle,System.String,System.Object)
+  name: ReadObjectFromBundle<T>(AssetBundle, String, Object)
+  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_ReadObjectFromBundle__1_Lime_AssetBundle_System_String_System_Object_
+  commentId: M:Lime.InternalPersistence.ReadObjectFromBundle``1(Lime.AssetBundle,System.String,System.Object)
+  name.vb: ReadObjectFromBundle(Of T)(AssetBundle, String, Object)
+  fullName: Lime.InternalPersistence.ReadObjectFromBundle<T>(Lime.AssetBundle, System.String, System.Object)
+  fullName.vb: Lime.InternalPersistence.ReadObjectFromBundle(Of T)(Lime.AssetBundle, System.String, System.Object)
+  nameWithType: InternalPersistence.ReadObjectFromBundle<T>(AssetBundle, String, Object)
+  nameWithType.vb: InternalPersistence.ReadObjectFromBundle(Of T)(AssetBundle, String, Object)
 - uid: Lime.InternalPersistence.WriteObject*
   name: WriteObject
   href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_WriteObject_
@@ -38593,6 +38766,19 @@ references:
   isSpec: "True"
   fullName: Lime.Model3DAttachmentParser.ConvertToModelAttachmentFormat
   nameWithType: Model3DAttachmentParser.ConvertToModelAttachmentFormat
+- uid: Lime.Model3DAttachmentParser.GetAttachmentPath(System.String)
+  name: GetAttachmentPath(String)
+  href: api/Lime.Model3DAttachmentParser.html#Lime_Model3DAttachmentParser_GetAttachmentPath_System_String_
+  commentId: M:Lime.Model3DAttachmentParser.GetAttachmentPath(System.String)
+  fullName: Lime.Model3DAttachmentParser.GetAttachmentPath(System.String)
+  nameWithType: Model3DAttachmentParser.GetAttachmentPath(String)
+- uid: Lime.Model3DAttachmentParser.GetAttachmentPath*
+  name: GetAttachmentPath
+  href: api/Lime.Model3DAttachmentParser.html#Lime_Model3DAttachmentParser_GetAttachmentPath_
+  commentId: Overload:Lime.Model3DAttachmentParser.GetAttachmentPath
+  isSpec: "True"
+  fullName: Lime.Model3DAttachmentParser.GetAttachmentPath
+  nameWithType: Model3DAttachmentParser.GetAttachmentPath
 - uid: Lime.Model3DAttachmentParser.GetModel3DAttachment(Lime.Model3DAttachmentParser.ModelAttachmentFormat,System.String)
   name: GetModel3DAttachment(Model3DAttachmentParser.ModelAttachmentFormat, String)
   href: api/Lime.Model3DAttachmentParser.html#Lime_Model3DAttachmentParser_GetModel3DAttachment_Lime_Model3DAttachmentParser_ModelAttachmentFormat_System_String_
@@ -38612,19 +38798,6 @@ references:
   isSpec: "True"
   fullName: Lime.Model3DAttachmentParser.GetModel3DAttachment
   nameWithType: Model3DAttachmentParser.GetModel3DAttachment
-- uid: Lime.Model3DAttachmentParser.IsAttachmentExists(System.String)
-  name: IsAttachmentExists(String)
-  href: api/Lime.Model3DAttachmentParser.html#Lime_Model3DAttachmentParser_IsAttachmentExists_System_String_
-  commentId: M:Lime.Model3DAttachmentParser.IsAttachmentExists(System.String)
-  fullName: Lime.Model3DAttachmentParser.IsAttachmentExists(System.String)
-  nameWithType: Model3DAttachmentParser.IsAttachmentExists(String)
-- uid: Lime.Model3DAttachmentParser.IsAttachmentExists*
-  name: IsAttachmentExists
-  href: api/Lime.Model3DAttachmentParser.html#Lime_Model3DAttachmentParser_IsAttachmentExists_
-  commentId: Overload:Lime.Model3DAttachmentParser.IsAttachmentExists
-  isSpec: "True"
-  fullName: Lime.Model3DAttachmentParser.IsAttachmentExists
-  nameWithType: Model3DAttachmentParser.IsAttachmentExists
 - uid: Lime.Model3DAttachmentParser.MeshOptionFormat
   name: Model3DAttachmentParser.MeshOptionFormat
   href: api/Lime.Model3DAttachmentParser.MeshOptionFormat.html
@@ -45106,19 +45279,19 @@ references:
   isSpec: "True"
   fullName: Lime.PackedAssetBundle.Dispose
   nameWithType: PackedAssetBundle.Dispose
-- uid: Lime.PackedAssetBundle.EnumerateFiles(System.String)
-  name: EnumerateFiles(String)
-  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_EnumerateFiles_System_String_
-  commentId: M:Lime.PackedAssetBundle.EnumerateFiles(System.String)
-  fullName: Lime.PackedAssetBundle.EnumerateFiles(System.String)
-  nameWithType: PackedAssetBundle.EnumerateFiles(String)
-- uid: Lime.PackedAssetBundle.EnumerateFiles*
-  name: EnumerateFiles
-  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_EnumerateFiles_
-  commentId: Overload:Lime.PackedAssetBundle.EnumerateFiles
+- uid: Lime.PackedAssetBundle.EnumerateFileInfos(System.String,System.String)
+  name: EnumerateFileInfos(String, String)
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_EnumerateFileInfos_System_String_System_String_
+  commentId: M:Lime.PackedAssetBundle.EnumerateFileInfos(System.String,System.String)
+  fullName: Lime.PackedAssetBundle.EnumerateFileInfos(System.String, System.String)
+  nameWithType: PackedAssetBundle.EnumerateFileInfos(String, String)
+- uid: Lime.PackedAssetBundle.EnumerateFileInfos*
+  name: EnumerateFileInfos
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_EnumerateFileInfos_
+  commentId: Overload:Lime.PackedAssetBundle.EnumerateFileInfos
   isSpec: "True"
-  fullName: Lime.PackedAssetBundle.EnumerateFiles
-  nameWithType: PackedAssetBundle.EnumerateFiles
+  fullName: Lime.PackedAssetBundle.EnumerateFileInfos
+  nameWithType: PackedAssetBundle.EnumerateFileInfos
 - uid: Lime.PackedAssetBundle.FileExists(System.String)
   name: FileExists(String)
   href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_FileExists_System_String_
@@ -45132,6 +45305,19 @@ references:
   isSpec: "True"
   fullName: Lime.PackedAssetBundle.FileExists
   nameWithType: PackedAssetBundle.FileExists
+- uid: Lime.PackedAssetBundle.FromSystemPath(System.String)
+  name: FromSystemPath(String)
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_FromSystemPath_System_String_
+  commentId: M:Lime.PackedAssetBundle.FromSystemPath(System.String)
+  fullName: Lime.PackedAssetBundle.FromSystemPath(System.String)
+  nameWithType: PackedAssetBundle.FromSystemPath(String)
+- uid: Lime.PackedAssetBundle.FromSystemPath*
+  name: FromSystemPath
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_FromSystemPath_
+  commentId: Overload:Lime.PackedAssetBundle.FromSystemPath
+  isSpec: "True"
+  fullName: Lime.PackedAssetBundle.FromSystemPath
+  nameWithType: PackedAssetBundle.FromSystemPath
 - uid: Lime.PackedAssetBundle.GetAttributes(System.String)
   name: GetAttributes(String)
   href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_GetAttributes_System_String_
@@ -45213,18 +45399,18 @@ references:
   isSpec: "True"
   fullName: Lime.PackedAssetBundle.IsBundleCorrupted
   nameWithType: PackedAssetBundle.IsBundleCorrupted
-- uid: Lime.PackedAssetBundle.OnModifying
-  name: OnModifying
-  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_OnModifying
-  commentId: E:Lime.PackedAssetBundle.OnModifying
-  fullName: Lime.PackedAssetBundle.OnModifying
-  nameWithType: PackedAssetBundle.OnModifying
-- uid: Lime.PackedAssetBundle.OpenFile(System.String)
-  name: OpenFile(String)
-  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_OpenFile_System_String_
-  commentId: M:Lime.PackedAssetBundle.OpenFile(System.String)
-  fullName: Lime.PackedAssetBundle.OpenFile(System.String)
-  nameWithType: PackedAssetBundle.OpenFile(String)
+- uid: Lime.PackedAssetBundle.OnWrite
+  name: OnWrite
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_OnWrite
+  commentId: E:Lime.PackedAssetBundle.OnWrite
+  fullName: Lime.PackedAssetBundle.OnWrite
+  nameWithType: PackedAssetBundle.OnWrite
+- uid: Lime.PackedAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  name: OpenFile(String, FileMode)
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_OpenFile_System_String_System_IO_FileMode_
+  commentId: M:Lime.PackedAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  fullName: Lime.PackedAssetBundle.OpenFile(System.String, System.IO.FileMode)
+  nameWithType: PackedAssetBundle.OpenFile(String, FileMode)
 - uid: Lime.PackedAssetBundle.OpenFile*
   name: OpenFile
   href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_OpenFile_
@@ -45271,6 +45457,32 @@ references:
   isSpec: "True"
   fullName: Lime.PackedAssetBundle.SetAttributes
   nameWithType: PackedAssetBundle.SetAttributes
+- uid: Lime.PackedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  name: SetFileLastWriteTime(String, DateTime)
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_SetFileLastWriteTime_System_String_System_DateTime_
+  commentId: M:Lime.PackedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  fullName: Lime.PackedAssetBundle.SetFileLastWriteTime(System.String, System.DateTime)
+  nameWithType: PackedAssetBundle.SetFileLastWriteTime(String, DateTime)
+- uid: Lime.PackedAssetBundle.SetFileLastWriteTime*
+  name: SetFileLastWriteTime
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_SetFileLastWriteTime_
+  commentId: Overload:Lime.PackedAssetBundle.SetFileLastWriteTime
+  isSpec: "True"
+  fullName: Lime.PackedAssetBundle.SetFileLastWriteTime
+  nameWithType: PackedAssetBundle.SetFileLastWriteTime
+- uid: Lime.PackedAssetBundle.ToSystemPath(System.String)
+  name: ToSystemPath(String)
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_ToSystemPath_System_String_
+  commentId: M:Lime.PackedAssetBundle.ToSystemPath(System.String)
+  fullName: Lime.PackedAssetBundle.ToSystemPath(System.String)
+  nameWithType: PackedAssetBundle.ToSystemPath(String)
+- uid: Lime.PackedAssetBundle.ToSystemPath*
+  name: ToSystemPath
+  href: api/Lime.PackedAssetBundle.html#Lime_PackedAssetBundle_ToSystemPath_
+  commentId: Overload:Lime.PackedAssetBundle.ToSystemPath
+  isSpec: "True"
+  fullName: Lime.PackedAssetBundle.ToSystemPath
+  nameWithType: PackedAssetBundle.ToSystemPath
 - uid: Lime.ParticleEmitter
   name: ParticleEmitter
   href: api/Lime.ParticleEmitter.html
@@ -66256,19 +66468,32 @@ references:
   isSpec: "True"
   fullName: Lime.UnpackedAssetBundle.DeleteFile
   nameWithType: UnpackedAssetBundle.DeleteFile
-- uid: Lime.UnpackedAssetBundle.EnumerateFiles(System.String)
-  name: EnumerateFiles(String)
-  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_EnumerateFiles_System_String_
-  commentId: M:Lime.UnpackedAssetBundle.EnumerateFiles(System.String)
-  fullName: Lime.UnpackedAssetBundle.EnumerateFiles(System.String)
-  nameWithType: UnpackedAssetBundle.EnumerateFiles(String)
-- uid: Lime.UnpackedAssetBundle.EnumerateFiles*
-  name: EnumerateFiles
-  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_EnumerateFiles_
-  commentId: Overload:Lime.UnpackedAssetBundle.EnumerateFiles
+- uid: Lime.UnpackedAssetBundle.Dispose
+  name: Dispose()
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_Dispose
+  commentId: M:Lime.UnpackedAssetBundle.Dispose
+  fullName: Lime.UnpackedAssetBundle.Dispose()
+  nameWithType: UnpackedAssetBundle.Dispose()
+- uid: Lime.UnpackedAssetBundle.Dispose*
+  name: Dispose
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_Dispose_
+  commentId: Overload:Lime.UnpackedAssetBundle.Dispose
   isSpec: "True"
-  fullName: Lime.UnpackedAssetBundle.EnumerateFiles
-  nameWithType: UnpackedAssetBundle.EnumerateFiles
+  fullName: Lime.UnpackedAssetBundle.Dispose
+  nameWithType: UnpackedAssetBundle.Dispose
+- uid: Lime.UnpackedAssetBundle.EnumerateFileInfos(System.String,System.String)
+  name: EnumerateFileInfos(String, String)
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_EnumerateFileInfos_System_String_System_String_
+  commentId: M:Lime.UnpackedAssetBundle.EnumerateFileInfos(System.String,System.String)
+  fullName: Lime.UnpackedAssetBundle.EnumerateFileInfos(System.String, System.String)
+  nameWithType: UnpackedAssetBundle.EnumerateFileInfos(String, String)
+- uid: Lime.UnpackedAssetBundle.EnumerateFileInfos*
+  name: EnumerateFileInfos
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_EnumerateFileInfos_
+  commentId: Overload:Lime.UnpackedAssetBundle.EnumerateFileInfos
+  isSpec: "True"
+  fullName: Lime.UnpackedAssetBundle.EnumerateFileInfos
+  nameWithType: UnpackedAssetBundle.EnumerateFileInfos
 - uid: Lime.UnpackedAssetBundle.FileExists(System.String)
   name: FileExists(String)
   href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_FileExists_System_String_
@@ -66282,6 +66507,19 @@ references:
   isSpec: "True"
   fullName: Lime.UnpackedAssetBundle.FileExists
   nameWithType: UnpackedAssetBundle.FileExists
+- uid: Lime.UnpackedAssetBundle.FromSystemPath(System.String)
+  name: FromSystemPath(String)
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_FromSystemPath_System_String_
+  commentId: M:Lime.UnpackedAssetBundle.FromSystemPath(System.String)
+  fullName: Lime.UnpackedAssetBundle.FromSystemPath(System.String)
+  nameWithType: UnpackedAssetBundle.FromSystemPath(String)
+- uid: Lime.UnpackedAssetBundle.FromSystemPath*
+  name: FromSystemPath
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_FromSystemPath_
+  commentId: Overload:Lime.UnpackedAssetBundle.FromSystemPath
+  isSpec: "True"
+  fullName: Lime.UnpackedAssetBundle.FromSystemPath
+  nameWithType: UnpackedAssetBundle.FromSystemPath
 - uid: Lime.UnpackedAssetBundle.GetCookingRulesSHA1(System.String)
   name: GetCookingRulesSHA1(String)
   href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_GetCookingRulesSHA1_System_String_
@@ -66337,12 +66575,12 @@ references:
   isSpec: "True"
   fullName: Lime.UnpackedAssetBundle.ImportFile
   nameWithType: UnpackedAssetBundle.ImportFile
-- uid: Lime.UnpackedAssetBundle.OpenFile(System.String)
-  name: OpenFile(String)
-  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_OpenFile_System_String_
-  commentId: M:Lime.UnpackedAssetBundle.OpenFile(System.String)
-  fullName: Lime.UnpackedAssetBundle.OpenFile(System.String)
-  nameWithType: UnpackedAssetBundle.OpenFile(String)
+- uid: Lime.UnpackedAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  name: OpenFile(String, FileMode)
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_OpenFile_System_String_System_IO_FileMode_
+  commentId: M:Lime.UnpackedAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  fullName: Lime.UnpackedAssetBundle.OpenFile(System.String, System.IO.FileMode)
+  nameWithType: UnpackedAssetBundle.OpenFile(String, FileMode)
 - uid: Lime.UnpackedAssetBundle.OpenFile*
   name: OpenFile
   href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_OpenFile_
@@ -66350,6 +66588,32 @@ references:
   isSpec: "True"
   fullName: Lime.UnpackedAssetBundle.OpenFile
   nameWithType: UnpackedAssetBundle.OpenFile
+- uid: Lime.UnpackedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  name: SetFileLastWriteTime(String, DateTime)
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_SetFileLastWriteTime_System_String_System_DateTime_
+  commentId: M:Lime.UnpackedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  fullName: Lime.UnpackedAssetBundle.SetFileLastWriteTime(System.String, System.DateTime)
+  nameWithType: UnpackedAssetBundle.SetFileLastWriteTime(String, DateTime)
+- uid: Lime.UnpackedAssetBundle.SetFileLastWriteTime*
+  name: SetFileLastWriteTime
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_SetFileLastWriteTime_
+  commentId: Overload:Lime.UnpackedAssetBundle.SetFileLastWriteTime
+  isSpec: "True"
+  fullName: Lime.UnpackedAssetBundle.SetFileLastWriteTime
+  nameWithType: UnpackedAssetBundle.SetFileLastWriteTime
+- uid: Lime.UnpackedAssetBundle.ToSystemPath(System.String)
+  name: ToSystemPath(String)
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_ToSystemPath_System_String_
+  commentId: M:Lime.UnpackedAssetBundle.ToSystemPath(System.String)
+  fullName: Lime.UnpackedAssetBundle.ToSystemPath(System.String)
+  nameWithType: UnpackedAssetBundle.ToSystemPath(String)
+- uid: Lime.UnpackedAssetBundle.ToSystemPath*
+  name: ToSystemPath
+  href: api/Lime.UnpackedAssetBundle.html#Lime_UnpackedAssetBundle_ToSystemPath_
+  commentId: Overload:Lime.UnpackedAssetBundle.ToSystemPath
+  isSpec: "True"
+  fullName: Lime.UnpackedAssetBundle.ToSystemPath
+  nameWithType: UnpackedAssetBundle.ToSystemPath
 - uid: Lime.UpdatableNodeBehavior
   name: UpdatableNodeBehavior
   href: api/Lime.UpdatableNodeBehavior.html
@@ -73959,6 +74223,177 @@ references:
   isSpec: "True"
   fullName: Lime.WordUtils.WordAt
   nameWithType: WordUtils.WordAt
+- uid: Lime.WrappedAssetBundle
+  name: WrappedAssetBundle
+  href: api/Lime.WrappedAssetBundle.html
+  commentId: T:Lime.WrappedAssetBundle
+  fullName: Lime.WrappedAssetBundle
+  nameWithType: WrappedAssetBundle
+- uid: Lime.WrappedAssetBundle.#ctor(Lime.AssetBundle)
+  name: WrappedAssetBundle(AssetBundle)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle__ctor_Lime_AssetBundle_
+  commentId: M:Lime.WrappedAssetBundle.#ctor(Lime.AssetBundle)
+  fullName: Lime.WrappedAssetBundle.WrappedAssetBundle(Lime.AssetBundle)
+  nameWithType: WrappedAssetBundle.WrappedAssetBundle(AssetBundle)
+- uid: Lime.WrappedAssetBundle.#ctor*
+  name: WrappedAssetBundle
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle__ctor_
+  commentId: Overload:Lime.WrappedAssetBundle.#ctor
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.WrappedAssetBundle
+  nameWithType: WrappedAssetBundle.WrappedAssetBundle
+- uid: Lime.WrappedAssetBundle.Bundle
+  name: Bundle
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_Bundle
+  commentId: F:Lime.WrappedAssetBundle.Bundle
+  fullName: Lime.WrappedAssetBundle.Bundle
+  nameWithType: WrappedAssetBundle.Bundle
+- uid: Lime.WrappedAssetBundle.DeleteFile(System.String)
+  name: DeleteFile(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_DeleteFile_System_String_
+  commentId: M:Lime.WrappedAssetBundle.DeleteFile(System.String)
+  fullName: Lime.WrappedAssetBundle.DeleteFile(System.String)
+  nameWithType: WrappedAssetBundle.DeleteFile(String)
+- uid: Lime.WrappedAssetBundle.DeleteFile*
+  name: DeleteFile
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_DeleteFile_
+  commentId: Overload:Lime.WrappedAssetBundle.DeleteFile
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.DeleteFile
+  nameWithType: WrappedAssetBundle.DeleteFile
+- uid: Lime.WrappedAssetBundle.EnumerateFileInfos(System.String,System.String)
+  name: EnumerateFileInfos(String, String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_EnumerateFileInfos_System_String_System_String_
+  commentId: M:Lime.WrappedAssetBundle.EnumerateFileInfos(System.String,System.String)
+  fullName: Lime.WrappedAssetBundle.EnumerateFileInfos(System.String, System.String)
+  nameWithType: WrappedAssetBundle.EnumerateFileInfos(String, String)
+- uid: Lime.WrappedAssetBundle.EnumerateFileInfos*
+  name: EnumerateFileInfos
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_EnumerateFileInfos_
+  commentId: Overload:Lime.WrappedAssetBundle.EnumerateFileInfos
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.EnumerateFileInfos
+  nameWithType: WrappedAssetBundle.EnumerateFileInfos
+- uid: Lime.WrappedAssetBundle.FileExists(System.String)
+  name: FileExists(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_FileExists_System_String_
+  commentId: M:Lime.WrappedAssetBundle.FileExists(System.String)
+  fullName: Lime.WrappedAssetBundle.FileExists(System.String)
+  nameWithType: WrappedAssetBundle.FileExists(String)
+- uid: Lime.WrappedAssetBundle.FileExists*
+  name: FileExists
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_FileExists_
+  commentId: Overload:Lime.WrappedAssetBundle.FileExists
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.FileExists
+  nameWithType: WrappedAssetBundle.FileExists
+- uid: Lime.WrappedAssetBundle.FromSystemPath(System.String)
+  name: FromSystemPath(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_FromSystemPath_System_String_
+  commentId: M:Lime.WrappedAssetBundle.FromSystemPath(System.String)
+  fullName: Lime.WrappedAssetBundle.FromSystemPath(System.String)
+  nameWithType: WrappedAssetBundle.FromSystemPath(String)
+- uid: Lime.WrappedAssetBundle.FromSystemPath*
+  name: FromSystemPath
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_FromSystemPath_
+  commentId: Overload:Lime.WrappedAssetBundle.FromSystemPath
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.FromSystemPath
+  nameWithType: WrappedAssetBundle.FromSystemPath
+- uid: Lime.WrappedAssetBundle.GetCookingRulesSHA1(System.String)
+  name: GetCookingRulesSHA1(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetCookingRulesSHA1_System_String_
+  commentId: M:Lime.WrappedAssetBundle.GetCookingRulesSHA1(System.String)
+  fullName: Lime.WrappedAssetBundle.GetCookingRulesSHA1(System.String)
+  nameWithType: WrappedAssetBundle.GetCookingRulesSHA1(String)
+- uid: Lime.WrappedAssetBundle.GetCookingRulesSHA1*
+  name: GetCookingRulesSHA1
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetCookingRulesSHA1_
+  commentId: Overload:Lime.WrappedAssetBundle.GetCookingRulesSHA1
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.GetCookingRulesSHA1
+  nameWithType: WrappedAssetBundle.GetCookingRulesSHA1
+- uid: Lime.WrappedAssetBundle.GetFileLastWriteTime(System.String)
+  name: GetFileLastWriteTime(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileLastWriteTime_System_String_
+  commentId: M:Lime.WrappedAssetBundle.GetFileLastWriteTime(System.String)
+  fullName: Lime.WrappedAssetBundle.GetFileLastWriteTime(System.String)
+  nameWithType: WrappedAssetBundle.GetFileLastWriteTime(String)
+- uid: Lime.WrappedAssetBundle.GetFileLastWriteTime*
+  name: GetFileLastWriteTime
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileLastWriteTime_
+  commentId: Overload:Lime.WrappedAssetBundle.GetFileLastWriteTime
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.GetFileLastWriteTime
+  nameWithType: WrappedAssetBundle.GetFileLastWriteTime
+- uid: Lime.WrappedAssetBundle.GetFileSize(System.String)
+  name: GetFileSize(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileSize_System_String_
+  commentId: M:Lime.WrappedAssetBundle.GetFileSize(System.String)
+  fullName: Lime.WrappedAssetBundle.GetFileSize(System.String)
+  nameWithType: WrappedAssetBundle.GetFileSize(String)
+- uid: Lime.WrappedAssetBundle.GetFileSize*
+  name: GetFileSize
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileSize_
+  commentId: Overload:Lime.WrappedAssetBundle.GetFileSize
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.GetFileSize
+  nameWithType: WrappedAssetBundle.GetFileSize
+- uid: Lime.WrappedAssetBundle.ImportFile(System.String,System.IO.Stream,System.Int32,System.String,System.DateTime,Lime.AssetAttributes,System.Byte[])
+  name: ImportFile(String, Stream, Int32, String, DateTime, AssetAttributes, Byte[])
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ImportFile_System_String_System_IO_Stream_System_Int32_System_String_System_DateTime_Lime_AssetAttributes_System_Byte___
+  commentId: M:Lime.WrappedAssetBundle.ImportFile(System.String,System.IO.Stream,System.Int32,System.String,System.DateTime,Lime.AssetAttributes,System.Byte[])
+  name.vb: ImportFile(String, Stream, Int32, String, DateTime, AssetAttributes, Byte())
+  fullName: Lime.WrappedAssetBundle.ImportFile(System.String, System.IO.Stream, System.Int32, System.String, System.DateTime, Lime.AssetAttributes, System.Byte[])
+  fullName.vb: Lime.WrappedAssetBundle.ImportFile(System.String, System.IO.Stream, System.Int32, System.String, System.DateTime, Lime.AssetAttributes, System.Byte())
+  nameWithType: WrappedAssetBundle.ImportFile(String, Stream, Int32, String, DateTime, AssetAttributes, Byte[])
+  nameWithType.vb: WrappedAssetBundle.ImportFile(String, Stream, Int32, String, DateTime, AssetAttributes, Byte())
+- uid: Lime.WrappedAssetBundle.ImportFile*
+  name: ImportFile
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ImportFile_
+  commentId: Overload:Lime.WrappedAssetBundle.ImportFile
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.ImportFile
+  nameWithType: WrappedAssetBundle.ImportFile
+- uid: Lime.WrappedAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  name: OpenFile(String, FileMode)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_OpenFile_System_String_System_IO_FileMode_
+  commentId: M:Lime.WrappedAssetBundle.OpenFile(System.String,System.IO.FileMode)
+  fullName: Lime.WrappedAssetBundle.OpenFile(System.String, System.IO.FileMode)
+  nameWithType: WrappedAssetBundle.OpenFile(String, FileMode)
+- uid: Lime.WrappedAssetBundle.OpenFile*
+  name: OpenFile
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_OpenFile_
+  commentId: Overload:Lime.WrappedAssetBundle.OpenFile
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.OpenFile
+  nameWithType: WrappedAssetBundle.OpenFile
+- uid: Lime.WrappedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  name: SetFileLastWriteTime(String, DateTime)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_SetFileLastWriteTime_System_String_System_DateTime_
+  commentId: M:Lime.WrappedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)
+  fullName: Lime.WrappedAssetBundle.SetFileLastWriteTime(System.String, System.DateTime)
+  nameWithType: WrappedAssetBundle.SetFileLastWriteTime(String, DateTime)
+- uid: Lime.WrappedAssetBundle.SetFileLastWriteTime*
+  name: SetFileLastWriteTime
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_SetFileLastWriteTime_
+  commentId: Overload:Lime.WrappedAssetBundle.SetFileLastWriteTime
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.SetFileLastWriteTime
+  nameWithType: WrappedAssetBundle.SetFileLastWriteTime
+- uid: Lime.WrappedAssetBundle.ToSystemPath(System.String)
+  name: ToSystemPath(String)
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ToSystemPath_System_String_
+  commentId: M:Lime.WrappedAssetBundle.ToSystemPath(System.String)
+  fullName: Lime.WrappedAssetBundle.ToSystemPath(System.String)
+  nameWithType: WrappedAssetBundle.ToSystemPath(String)
+- uid: Lime.WrappedAssetBundle.ToSystemPath*
+  name: ToSystemPath
+  href: api/Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ToSystemPath_
+  commentId: Overload:Lime.WrappedAssetBundle.ToSystemPath
+  isSpec: "True"
+  fullName: Lime.WrappedAssetBundle.ToSystemPath
+  nameWithType: WrappedAssetBundle.ToSystemPath
 - uid: Lime.YuzuDontGenerateDeserializerAttribute
   name: YuzuDontGenerateDeserializerAttribute
   href: api/Lime.YuzuDontGenerateDeserializerAttribute.html

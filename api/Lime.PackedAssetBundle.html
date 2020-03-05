@@ -103,6 +103,12 @@
       <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ReadFile_System_String_">AssetBundle.ReadFile(String)</a>
     </div>
     <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ReadAllText_System_String_System_Text_Encoding_">AssetBundle.ReadAllText(String, Encoding)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFiles_System_String_System_String_">AssetBundle.EnumerateFiles(String, String)</a>
+    </div>
+    <div>
       <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ImportFile_System_String_System_String_System_Int32_System_String_Lime_AssetAttributes_System_DateTime_System_Byte___">AssetBundle.ImportFile(String, String, Int32, String, AssetAttributes, DateTime, Byte[])</a>
     </div>
     <div>
@@ -329,13 +335,13 @@
   <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_Dispose">AssetBundle.Dispose()</a></div>
   
   
-  <a id="Lime_PackedAssetBundle_EnumerateFiles_" data-uid="Lime.PackedAssetBundle.EnumerateFiles*"></a>
-  <h4 id="Lime_PackedAssetBundle_EnumerateFiles_System_String_" data-uid="Lime.PackedAssetBundle.EnumerateFiles(System.String)">EnumerateFiles(String)</h4>
+  <a id="Lime_PackedAssetBundle_EnumerateFileInfos_" data-uid="Lime.PackedAssetBundle.EnumerateFileInfos*"></a>
+  <h4 id="Lime_PackedAssetBundle_EnumerateFileInfos_System_String_System_String_" data-uid="Lime.PackedAssetBundle.EnumerateFileInfos(System.String,System.String)">EnumerateFileInfos(String, String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;string&gt; EnumerateFiles(string path = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;FileInfo&gt; EnumerateFileInfos(string path = null, string extension = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -352,6 +358,11 @@
         <td><span class="parametername">path</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">extension</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -364,13 +375,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.FileInfo.html">FileInfo</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFiles_System_String_">AssetBundle.EnumerateFiles(String)</a></div>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_EnumerateFileInfos_System_String_System_String_">AssetBundle.EnumerateFileInfos(String, String)</a></div>
   
   
   <a id="Lime_PackedAssetBundle_FileExists_" data-uid="Lime.PackedAssetBundle.FileExists*"></a>
@@ -415,6 +426,50 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_FileExists_System_String_">AssetBundle.FileExists(String)</a></div>
+  
+  
+  <a id="Lime_PackedAssetBundle_FromSystemPath_" data-uid="Lime.PackedAssetBundle.FromSystemPath*"></a>
+  <h4 id="Lime_PackedAssetBundle_FromSystemPath_System_String_" data-uid="Lime.PackedAssetBundle.FromSystemPath(System.String)">FromSystemPath(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string FromSystemPath(string systemPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">systemPath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_FromSystemPath_System_String_">AssetBundle.FromSystemPath(String)</a></div>
   
   
   <a id="Lime_PackedAssetBundle_GetAttributes_" data-uid="Lime.PackedAssetBundle.GetAttributes*"></a>
@@ -695,12 +750,12 @@
   
   
   <a id="Lime_PackedAssetBundle_OpenFile_" data-uid="Lime.PackedAssetBundle.OpenFile*"></a>
-  <h4 id="Lime_PackedAssetBundle_OpenFile_System_String_" data-uid="Lime.PackedAssetBundle.OpenFile(System.String)">OpenFile(String)</h4>
+  <h4 id="Lime_PackedAssetBundle_OpenFile_System_String_System_IO_FileMode_" data-uid="Lime.PackedAssetBundle.OpenFile(System.String,System.IO.FileMode)">OpenFile(String, FileMode)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override Stream OpenFile(string path)</code></pre>
+    <pre><code class="lang-csharp hljs">public override Stream OpenFile(string path, FileMode mode = FileMode.Open)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -715,6 +770,11 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.FileMode</span></td>
+        <td><span class="parametername">mode</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -735,7 +795,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_OpenFile_System_String_">AssetBundle.OpenFile(String)</a></div>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_OpenFile_System_String_System_IO_FileMode_">AssetBundle.OpenFile(String, FileMode)</a></div>
   
   
   <a id="Lime_PackedAssetBundle_RefreshBundleCheckSum_" data-uid="Lime.PackedAssetBundle.RefreshBundleCheckSum*"></a>
@@ -797,16 +857,94 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_SetAttributes_System_String_Lime_AssetAttributes_">AssetBundle.SetAttributes(String, AssetAttributes)</a></div>
-  <h3 id="events">Events
-  </h3>
   
   
-  <h4 id="Lime_PackedAssetBundle_OnModifying" data-uid="Lime.PackedAssetBundle.OnModifying">OnModifying</h4>
+  <a id="Lime_PackedAssetBundle_SetFileLastWriteTime_" data-uid="Lime.PackedAssetBundle.SetFileLastWriteTime*"></a>
+  <h4 id="Lime_PackedAssetBundle_SetFileLastWriteTime_System_String_System_DateTime_" data-uid="Lime.PackedAssetBundle.SetFileLastWriteTime(System.String,System.DateTime)">SetFileLastWriteTime(String, DateTime)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event Action OnModifying</code></pre>
+    <pre><code class="lang-csharp hljs">public override void SetFileLastWriteTime(string path, DateTime time)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="parametername">time</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_SetFileLastWriteTime_System_String_System_DateTime_">AssetBundle.SetFileLastWriteTime(String, DateTime)</a></div>
+  
+  
+  <a id="Lime_PackedAssetBundle_ToSystemPath_" data-uid="Lime.PackedAssetBundle.ToSystemPath*"></a>
+  <h4 id="Lime_PackedAssetBundle_ToSystemPath_System_String_" data-uid="Lime.PackedAssetBundle.ToSystemPath(System.String)">ToSystemPath(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToSystemPath(string bundlePath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">bundlePath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ToSystemPath_System_String_">AssetBundle.ToSystemPath(String)</a></div>
+  <h3 id="events">Events
+  </h3>
+  
+  
+  <h4 id="Lime_PackedAssetBundle_OnWrite" data-uid="Lime.PackedAssetBundle.OnWrite">OnWrite</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action OnWrite</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
   <table class="table table-bordered table-striped table-condensed">

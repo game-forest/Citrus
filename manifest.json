@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AggregateAssetBundle.html",
-          "hash": "Zhq4waCzx9a4nKJEETjJqg=="
+          "hash": "Fmm5gR2pV6PN/mF8X+Vo5w=="
         }
       },
       "is_incremental": false,
@@ -489,7 +489,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AssetBundle.html",
-          "hash": "bPtNebdOraZ2WkMm6FpQnQ=="
+          "hash": "35CbCZ3e3m4PRcJOqsEukQ=="
         }
       },
       "is_incremental": false,
@@ -1709,6 +1709,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.CustomSetAssetBundle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.CustomSetAssetBundle.html",
+          "hash": "c0Z3pu9fFAEY5z37Gk3QTg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.CyclicDependencyException.yml",
       "output": {
         ".html": {
@@ -2254,6 +2266,18 @@
         ".html": {
           "relative_path": "api/Lime.FileDialogMode.html",
           "hash": "aoLptCK7YaaBCphzK2GPWQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.FileInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.FileInfo.html",
+          "hash": "cvJIKsSVEL7D5VUVndCMmQ=="
         }
       },
       "is_incremental": false,
@@ -3741,7 +3765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.InternalPersistence.html",
-          "hash": "xA3c7gQc0xKQovPggQbXCw=="
+          "hash": "yXLZRJXKfJxvQZEAZ4DRBg=="
         }
       },
       "is_incremental": false,
@@ -4617,7 +4641,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Model3DAttachmentParser.html",
-          "hash": "USYtbXg5omhndXrDOqLdHw=="
+          "hash": "zjdRP+WtOKteB5JjkryvBQ=="
         }
       },
       "is_incremental": false,
@@ -5145,7 +5169,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PackedAssetBundle.html",
-          "hash": "u9Me9KfOA2vtlA/npsiBYw=="
+          "hash": "gwCFHdRSyzSv944V7M+ZGw=="
         }
       },
       "is_incremental": false,
@@ -8097,7 +8121,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.UnpackedAssetBundle.html",
-          "hash": "IytygXT1oj3chN0SLQUlSA=="
+          "hash": "QIWrcpz+WSlj6h/O2ombBQ=="
         }
       },
       "is_incremental": false,
@@ -8921,6 +8945,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.WrappedAssetBundle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.WrappedAssetBundle.html",
+          "hash": "oVNauIcPW+8X/VAp53W66A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.YuzuDontGenerateDeserializerAttribute.yml",
       "output": {
         ".html": {
@@ -8949,7 +8985,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "GcEDFeAlEyz8VH30JxMWvw=="
+          "hash": "EoQAtq6gGwDFlsLUPgSpFg=="
         }
       },
       "is_incremental": false,
@@ -9009,7 +9045,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "VIxM/XC+glYrhSAR/V/zcQ=="
+          "hash": "MMDvwRxIRotWzNob90ryIQ=="
         }
       },
       "is_incremental": false,
@@ -9150,16 +9186,16 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 752,
+          "skipped_file_count": 0
+        },
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 9,
-          "skipped_file_count": 0
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 749,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
