@@ -20,7 +20,7 @@ namespace Orange
 		public void Action()
 		{
 			foreach (var fileInfo in The.Workspace.AssetFiles.Enumerate(modelExtension)) {
-				var path = fileInfo.SrcPath;
+				var path = fileInfo.Path;
 				if (AssetCooker.CookingRulesMap.ContainsKey(path)) {
 					AssetCooker.CookingRulesMap.Remove(path);
 				}

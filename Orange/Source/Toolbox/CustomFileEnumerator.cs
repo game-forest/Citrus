@@ -25,7 +25,7 @@ namespace Orange
 				return files;
 			}
 			return files
-				.Where(file => extension == null || file.SrcPath.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+				.Where(file => extension == null || file.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
 				.Where(file => EnumerationFilter == null || EnumerationFilter(file));
 		}
 	}

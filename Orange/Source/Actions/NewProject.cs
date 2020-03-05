@@ -54,10 +54,10 @@ namespace Orange
 					using (var dc = new DirectoryChanger($"{citrusPath}/Samples/EmptyProject/")) {
 						var fe = new FileEnumerator(".");
 						foreach (var f in fe.Enumerate()) {
-							var targetPath = Path.Combine(dlg.FileName, f.SrcPath.Replace("EmptyProject", projectName));
-							Console.WriteLine($"Copying: {f.SrcPath} => {targetPath}");
+							var targetPath = Path.Combine(dlg.FileName, f.Path.Replace("EmptyProject", projectName));
+							Console.WriteLine($"Copying: {f.Path} => {targetPath}");
 							Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
-							System.IO.File.Copy(f.SrcPath, targetPath);
+							System.IO.File.Copy(f.Path, targetPath);
 							if (textfileExtensions.Contains(Path.GetExtension(targetPath).ToLower(CultureInfo.InvariantCulture))) {
 								string text = File.ReadAllText(targetPath);
 								text = text.Replace("EmptyProject", projectName);

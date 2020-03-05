@@ -159,7 +159,7 @@ namespace Orange
 				CsprojSynchronization.SkipUnwantedDirectoriesPredicate = (di) => {
 					return defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate(di) && !di.FullName.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase);
 				};
-				AssetFiles = new AliasedFileEnumerator(new FileEnumerator(AssetsDirectory));
+				AssetFiles = new FileEnumerator(AssetsDirectory);
 				LoadCacheSettings();
 				TangerineCacheBundle = GetTangerineCacheBundlePath();
 				The.UI.OnWorkspaceOpened();

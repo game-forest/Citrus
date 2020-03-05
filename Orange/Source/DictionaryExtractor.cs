@@ -155,24 +155,24 @@ namespace Orange
 			using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 				var files = sourceFiles.Enumerate(".cs");
 				foreach (var fileInfo in files) {
-					ProcessSourceFile(fileInfo.SrcPath);
+					ProcessSourceFile(fileInfo.Path);
 				}
 			}
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 				var files = The.Workspace.AssetFiles.Enumerate(".json");
 				foreach (var fileInfo in files) {
 					// First of all scan lines like this: "[]..."
-					ProcessSourceFile(fileInfo.SrcPath);
+					ProcessSourceFile(fileInfo.Path);
 					// Then like this: Text "..."
 					if (!ShouldLocalizeOnlyTaggedSceneTexts()) {
-						ProcessSceneFile(fileInfo.SrcPath);
+						ProcessSceneFile(fileInfo.Path);
 					}
 				}
 			}
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 				var files = The.Workspace.AssetFiles.Enumerate(".tan");
 				foreach (var fileInfo in files) {
-					ProcessTanFile(fileInfo.SrcPath);
+					ProcessTanFile(fileInfo.Path);
 				}
 			}
 		}

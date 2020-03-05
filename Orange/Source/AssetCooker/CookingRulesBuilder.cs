@@ -66,8 +66,6 @@ namespace Orange
 		DDSFormat DDSFormat { get; }
 		string[] Bundles { get; }
 		bool Ignore { get; }
-		bool Only { get; }
-		string Alias { get; }
 		int ADPCMLimit { get; }
 		AtlasOptimization AtlasOptimization { get; }
 		ModelCompression ModelCompression { get; }
@@ -114,12 +112,6 @@ namespace Orange
 
 		[YuzuMember]
 		public bool Ignore { get; set; }
-
-		[YuzuMember]
-		public bool Only { get; set; }
-
-		[YuzuMember]
-		public string Alias { get; set; }
 
 		[YuzuMember]
 		public int ADPCMLimit { get; set; } // Kb
@@ -214,8 +206,6 @@ namespace Orange
 				LastChangeTime = new DateTime(0),
 				Bundles = new[] { CookingRulesBuilder.MainBundleName },
 				Ignore = false,
-				Only = false,
-				Alias = string.Empty,
 				ADPCMLimit = 100,
 				AtlasOptimization = AtlasOptimization.Memory,
 				ModelCompression = ModelCompression.Deflate,
@@ -259,9 +249,7 @@ namespace Orange
 		public TextureFilter MagFilter => EffectiveRules.MagFilter;
 		public string CustomRule => EffectiveRules.CustomRule;
 		public int AtlasItemPadding => EffectiveRules.AtlasItemPadding;
-		public bool Only => EffectiveRules.Only;
-		public string Alias => EffectiveRules.Alias;
-		
+
 		public byte[] SHA1 => EffectiveRules.SHA1;
 
 		public bool Ignore
@@ -375,9 +363,6 @@ namespace Orange
 				foreach (var i in targetRules.FieldOverrides) {
 					i.SetValue(EffectiveRules, i.GetValue(targetRules));
 				}
-				if (!EffectiveRules.Only && TargetRules.Any(f => f.Key != target && f.Value.Only)) {
-					EffectiveRules.Ignore = true;
-				}
 				// TODO: implement this workaround in a general way
 				if (target.Platform == TargetPlatform.Android) {
 					switch (EffectiveRules.PVRFormat) {
@@ -424,7 +409,7 @@ namespace Orange
 			rulesStack.Push(rootRules);
 			using (new DirectoryChanger(fileEnumerator.Directory)) {
 				foreach (var fileInfo in fileEnumerator.Enumerate()) {
-					var path = fileInfo.SrcPath;
+					var path = fileInfo.Path;
 					while (!path.StartsWith(pathStack.Peek())) {
 						rulesStack.Pop();
 						pathStack.Pop();
@@ -579,6 +564,7 @@ namespace Orange
 							if (cut >= 0) {
 								string targetName = words[0].Substring(cut + 1, words[0].Length - cut - 2);
 								words[0] = words[0].Substring(0, cut);
+								currentRules = null;
 								Target currentTarget = null;
 								foreach (var t in The.Workspace.Targets) {
 									if (targetName == t.Name) {
@@ -658,12 +644,6 @@ namespace Orange
 					break;
 				case "Ignore":
 					rules.Ignore = ParseBool(words[1]);
-					break;
-				case "Only":
-					rules.Only = ParseBool(words[1]);
-					break;
-				case "Alias":
-					rules.Alias = words[1];
 					break;
 				case "ADPCMLimit":
 					rules.ADPCMLimit = int.Parse(words[1]);

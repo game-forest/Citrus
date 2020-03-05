@@ -27,12 +27,12 @@ namespace Orange
 			ulong totalLengthBefore = 0;
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 				foreach (var fi in The.Workspace.AssetFiles.Enumerate(".png")) {
-					ulong lengthBefore = (ulong)(new System.IO.FileInfo(fi.SrcPath)).Length;
+					ulong lengthBefore = (ulong)(new System.IO.FileInfo(fi.Path)).Length;
 					totalLengthBefore += lengthBefore;
-					TextureConverter.OptimizePNG(fi.SrcPath);
-					ulong lengthAfter = (ulong)(new System.IO.FileInfo(fi.SrcPath)).Length;
+					TextureConverter.OptimizePNG(fi.Path);
+					ulong lengthAfter = (ulong)(new System.IO.FileInfo(fi.Path)).Length;
 					totalLengthAfter += lengthAfter;
-					Console.WriteLine($"{fi.SrcPath} : {f(lengthBefore)} => {f(lengthAfter)}, diff: {f(lengthBefore - lengthAfter)}");
+					Console.WriteLine($"{fi.Path} : {f(lengthBefore)} => {f(lengthAfter)}, diff: {f(lengthBefore - lengthAfter)}");
 				}
 			}
 			Console.WriteLine($"Totals: {f(totalLengthBefore)} => {f(totalLengthAfter)}, diff: {f(totalLengthBefore - totalLengthAfter)}");

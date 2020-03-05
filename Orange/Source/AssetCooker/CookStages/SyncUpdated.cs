@@ -15,8 +15,8 @@ namespace Orange
 		{
 			foreach (var srcFileInfo in The.Workspace.AssetFiles.Enumerate(fileExtension)) {
 				UserInterface.Instance.IncreaseProgressBar();
-				var srcPath = srcFileInfo.SrcPath;
-				var dstPath = Path.ChangeExtension(srcFileInfo.DstPath, bundleAssetExtension);
+				var srcPath = srcFileInfo.Path;
+				var dstPath = Path.ChangeExtension(srcPath, bundleAssetExtension);
 				var bundled = bundle.FileExists(dstPath);
 				var srcRules = AssetCooker.CookingRulesMap[srcPath];
 				var needUpdate = !bundled || srcFileInfo.LastWriteTime != bundle.GetFileLastWriteTime(dstPath);

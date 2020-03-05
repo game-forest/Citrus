@@ -60,11 +60,11 @@ namespace Orange
 				using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 					var dirInfo = new System.IO.DirectoryInfo(The.Workspace.ProjectDirectory);
 					foreach (var fileInfo in fileEnumerator.Enumerate(The.Workspace.GetPlatformSuffix(target.Platform) + ".csproj")) {
-						CsprojSynchronization.SynchronizeProject(fileInfo.SrcPath);
+						CsprojSynchronization.SynchronizeProject(fileInfo.Path);
 					};
 					if (target.ProjectPath != null) {
 						foreach (var targetCsprojFile in fileEnumerator.Enumerate(Path.GetFileName(target.ProjectPath))) {
-							CsprojSynchronization.SynchronizeProject(targetCsprojFile.SrcPath);
+							CsprojSynchronization.SynchronizeProject(targetCsprojFile.Path);
 						}
 					}
 				}
