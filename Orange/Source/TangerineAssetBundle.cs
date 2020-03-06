@@ -16,7 +16,7 @@ namespace Tangerine.Core
 
 		public class CacheMeta
 		{
-			private const string CurrentVersion = "1.10";
+			private const string CurrentVersion = "1.20";
 
 			[YuzuRequired]
 			public string Version { get; set; } = CurrentVersion;
@@ -106,14 +106,13 @@ namespace Tangerine.Core
 				var fbxUpToDate = fbxCached == fbxExists &&
 					(!fbxExists || cacheBundle.GetFileLastWriteTime(path) >= base.GetFileLastWriteTime(fbxPath));
 
-				var fbxFullPath = Path.Combine(Orange.The.Workspace.AssetsDirectory, fbxPath);
 				var attachmentPath = Path.ChangeExtension(path, Model3DAttachment.FileExtension);
 				var attachmentExists = base.FileExists(attachmentPath);
 				var attachmentCached = cacheBundle.FileExists(attachmentPath);
 				var attachmentUpToDate = attachmentCached == attachmentExists &&
 					(!attachmentExists || cacheBundle.GetFileLastWriteTime(attachmentPath) >= base.GetFileLastWriteTime(attachmentPath));
 				var fbxImportOptions = new FbxImportOptions {
-					Path = fbxFullPath,
+					Path = fbxPath,
 					Target = target,
 					ApplyAttachment = false
 				};
@@ -165,7 +164,7 @@ namespace Tangerine.Core
 						}
 					}
 					if (attachmentExists) {
-						attachment = Model3DAttachmentParser.GetModel3DAttachment(fbxFullPath);
+						attachment = Model3DAttachmentParser.GetModel3DAttachment(fbxPath);
 						if (attachment.Animations != null) {
 							foreach (var animation in attachment.Animations) {
 								if (animation.SourceAnimationId == null) {
