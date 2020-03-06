@@ -52,7 +52,7 @@ namespace Tangerine.Core
 		public static event Action<Document> DocumentSaving;
 		public static event Action<Document> DocumentSaved;
 		public static event Action<string> Opening;
-		
+
 		private Project() { }
 
 		public Project(string citprojPath)
@@ -125,16 +125,11 @@ namespace Tangerine.Core
 					}
 				}
 			};
-			var overlaysPath = Path.Combine(Current.AssetsDirectory, "Overlays");
-			if (Directory.Exists(overlaysPath)) {
-				var files = Directory.EnumerateFiles(overlaysPath)
-					.Where(file => file.EndsWith(".tan", StringComparison.OrdinalIgnoreCase));
-				foreach (var file in files) {
-					Current.Overlays.Add(Path.GetFileNameWithoutExtension(file),
-						(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(file, null), null, TangerinePersistence.Instance));
-				}
+			foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
+				var path = Path.Combine("Overlays", file);
+				Current.Overlays.Add(Path.GetFileNameWithoutExtension(path),
+					(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(path, null), null, TangerinePersistence.Instance));
 			}
-
 			registeredNodeTypes.AddRange(GetNodesTypesOrdered("Lime"));
 			registeredComponentTypes.AddRange(GetComponentsTypes("Lime"));
 			foreach (var type in PluginLoader.EnumerateTangerineExportedTypes()) {
@@ -150,7 +145,7 @@ namespace Tangerine.Core
 				}
 			}
 		}
-		
+
 		public string GetTangerineCacheBundlePath() => The.Workspace.GetTangerineCacheBundlePath();
 
 		public bool Close()
