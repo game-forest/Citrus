@@ -4,6 +4,7 @@ using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.SceneView.PolygonMesh;
 using Lime;
+using System;
 
 namespace Tangerine
 {
@@ -31,8 +32,8 @@ namespace Tangerine
 			{
 				mode = value;
 				foreach (var mesh in Document.Current.Nodes().OfType<PolygonMesh>().ToList()) {
-					mesh.IsBeingAnimatedExternally = mode == ModificationMode.Animation;
-					mesh.Update();
+					mesh.TangerineAnimationModeEnabled = mode == ModificationMode.Animation;
+					mesh.SyncTopologyWithModificationMode();
 				}
 			}
 		}

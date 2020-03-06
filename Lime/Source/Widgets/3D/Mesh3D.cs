@@ -30,6 +30,8 @@ namespace Lime
 			[YuzuMember("3")]
 			public byte Index3 { get => (byte)index3; set => index3 = value; }
 
+			public byte[] ToArray() => new[] { Index0, Index1, Index2, Index3 };
+
 			public bool Equals(BlendIndices other)
 			{
 				return index0 == other.index0 &&
@@ -65,6 +67,8 @@ namespace Lime
 
 			[YuzuMember("3")]
 			public float Weight3;
+
+			public float[] ToArray() => new[] { Weight0, Weight1, Weight2, Weight3 };
 
 			public bool Equals(BlendWeights other)
 			{

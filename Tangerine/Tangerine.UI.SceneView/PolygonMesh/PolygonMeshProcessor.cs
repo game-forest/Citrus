@@ -22,13 +22,18 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
+
 				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
 
 				/// Skinning bootstrap
 				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
 				foreach (var mesh in meshes) {
-					if (SceneView.Instance.Input.IsKeyPressed(Key.Control) && SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-						mesh.Controller().TieVertexWithBones(bones);
+					if (SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
+						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+							mesh.Controller().TieVertexWithBones(bones);
+						} else if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
+							mesh.Controller().UntieVertexFromBones(bones);
+						}
 					}
 				}
 				/// Skinning bootstrap

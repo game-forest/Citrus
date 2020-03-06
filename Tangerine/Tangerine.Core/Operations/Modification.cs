@@ -1158,7 +1158,7 @@ namespace Tangerine.Core.Operations
 			if (!widgets.Any() || !bones.Any()) {
 				return;
 			}
-			if (!CheckConsistency(bones, widgets)) throw new InvalidOperationException("Not all bones and widgets have the same parent");
+			if (!BoneUtils.CheckConsistency(bones, widgets.ToArray())) throw new InvalidOperationException("Not all bones and widgets have the same parent");
 			foreach (var widget in widgets) {
 				if (widget is DistortionMesh) {
 					var mesh = widget as DistortionMesh;
@@ -1167,14 +1167,14 @@ namespace Tangerine.Core.Operations
 							throw new TieWidgetsWithBonesException(point);
 						}
 						SetProperty.Perform(point, nameof(PointObject.SkinningWeights),
-							CalcSkinningWeight(point.SkinningWeights, point.CalcPositionInSpaceOf(widget.ParentWidget), boneList));
+							BoneUtils.CalcSkinningWeight(point.SkinningWeights, point.CalcPositionInSpaceOf(widget.ParentWidget), boneList));
 					}
 				} else {
 					if (!CanApplyBone(widget.SkinningWeights)) {
 						throw new TieWidgetsWithBonesException(widget);
 					}
 					SetProperty.Perform(widget, nameof(Widget.SkinningWeights),
-						CalcSkinningWeight(widget.SkinningWeights, widget.Position, boneList));
+						BoneUtils.CalcSkinningWeight(widget.SkinningWeights, widget.Position, boneList));
 				}
 			}
 			foreach (var bone in bones) {
@@ -1193,52 +1193,6 @@ namespace Tangerine.Core.Operations
 				}
 			}
 			return false;
-		}
-
-		private static bool CheckConsistency(IEnumerable<Bone> bones, IEnumerable<Widget> widgets)
-		{
-			var container = bones.First().Parent.AsWidget;
-			foreach (var bone in bones) {
-				if (bone.Parent == null || bone.Parent != container) return false;
-			}
-
-			foreach (var widget in widgets) {
-				if (widget.Parent == null || widget.Parent != container) return false;
-			}
-			return true;
-		}
-
-		private static SkinningWeights CalcSkinningWeight(SkinningWeights oldSkinningWeights, Vector2 position, List<Bone> bones)
-		{
-			var skinningWeights = new SkinningWeights();
-			var i = 0;
-			var overallWeight = 0f;
-			while (oldSkinningWeights[i].Index != 0) {
-				skinningWeights[i] = oldSkinningWeights[i];
-				overallWeight += skinningWeights[i].Weight;
-				i++;
-			}
-			var j = 0;
-			while (j < bones.Count && i < 4) {
-				var weight = bones[j].CalcWeightForPoint(position);
-				if (Mathf.Abs(weight) > Mathf.ZeroTolerance) {
-					skinningWeights[i] = new BoneWeight {
-						Weight = weight,
-						Index = bones[j].Index
-					};
-					overallWeight += skinningWeights[i].Weight;
-					i++;
-				}
-				j++;
-			}
-			if (overallWeight != 0) {
-				for(i = 0; i < 4; i++) {
-					var bw = skinningWeights[i];
-					bw.Weight /= overallWeight;
-					skinningWeights[i] = bw;
-				}
-			}
-			return skinningWeights;
 		}
 	}
 
@@ -1251,89 +1205,64 @@ namespace Tangerine.Core.Operations
 				return;
 			}
 
-			if (!CheckConsistency(bones, mesh)) {
-				throw new InvalidOperationException("Not all bones and meshes have the same parent");
+			if (!BoneUtils.CheckConsistency(bones, mesh)) {
+				Console.WriteLine("Not all bones and meshes have the same parent");
+				return;
 			}
 
+			var appliedBones = new HashSet<Bone>();
 			foreach (var index in indices) {
 				var v = mesh.Vertices[index];
 				var sw = v.SkinningWeights;
-				if (!CanApplyBone(sw)) {
-					throw new TieWidgetsWithBonesException(mesh);
+				var filteredBones = sortedBones.Where(i =>
+					i.Index != sw.Bone0.Index &&
+					i.Index != sw.Bone1.Index &&
+					i.Index != sw.Bone2.Index &&
+					i.Index != sw.Bone3.Index
+				).ToList();
+				if (filteredBones.Count > 0) {
+					filteredBones.ForEach(i => appliedBones.Add(i));
+					sw = BoneUtils.CalcSkinningWeight(sw, mesh.CalcLocalToParentTransform().TransformVector(v.Pos * mesh.Size), filteredBones);
+					v.SkinningWeights = sw;
+					mesh.Vertices[index] = v;
+					v = mesh.TransientVertices[index];
+					v.SkinningWeights = sw;
+					mesh.TransientVertices[index] = v;
 				}
-				sw = CalcSkinningWeight(sw, mesh.CalcLocalToParentTransform().TransformVector(v.Pos * mesh.Size), sortedBones);
-				v.SkinningWeights = sw;
-				mesh.Vertices[index] = v;
-				v = mesh.TransientVertices[index];
-				v.SkinningWeights = sw;
-				mesh.TransientVertices[index] = v;
 			}
 
-			foreach (var bone in bones) {
+			foreach (var bone in appliedBones) {
 				var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
 				SetAnimableProperty.Perform(bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes);
 				SetAnimableProperty.Perform(bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes);
 				SetAnimableProperty.Perform(bone, nameof(Bone.RefRotation), entry.Rotation, CoreUserPreferences.Instance.AutoKeyframes);
 			}
 		}
+	}
 
-		private static bool CheckConsistency(IEnumerable<Bone> bones, Lime.Widgets.PolygonMesh.PolygonMesh mesh)
+	public static class UntieSkinnedVerticesFromBones
+	{
+		public static void Perform(IEnumerable<Bone> bones, Lime.Widgets.PolygonMesh.PolygonMesh mesh, params int[] indices)
 		{
-			var container = bones.First().Parent.AsWidget;
-			foreach (var bone in bones) {
-				if (bone.Parent == null || bone.Parent != container) {
-					return false;
-				}
+			var sortedBones = BoneUtils.SortBones(bones);
+			if (!sortedBones.Any()) {
+				return;
 			}
 
-			if (mesh.Parent == null || mesh.Parent != container) {
-				return false;
+			if (!BoneUtils.CheckConsistency(bones, mesh)) {
+				Console.WriteLine("Not all bones and meshes have the same parent");
+				return;
 			}
 
-			return true;
-		}
-
-		private static bool CanApplyBone(SkinningWeights skinningWeights)
-		{
-			for (var i = 0; i < 4; i++) {
-				if (skinningWeights[i].Index == 0) {
-					return true;
-				}
+			var boneIndices = bones.Select(i => i.Index).ToArray();
+			foreach (var index in indices) {
+				var v = mesh.Vertices[index];
+				v.SkinningWeights = v.SkinningWeights.Release(boneIndices);
+				mesh.Vertices[index] = v;
+				v = mesh.TransientVertices[index];
+				v.SkinningWeights = v.SkinningWeights.Release(boneIndices);
+				mesh.TransientVertices[index] = v;
 			}
-			return false;
-		}
-
-		private static SkinningWeights CalcSkinningWeight(SkinningWeights oldSkinningWeights, Vector2 position, List<Bone> bones)
-		{
-			var skinningWeights = new SkinningWeights();
-			var i = 0;
-			var overallWeight = 0f;
-			while (oldSkinningWeights[i].Index != 0) {
-				skinningWeights[i] = oldSkinningWeights[i];
-				overallWeight += skinningWeights[i].Weight;
-				i++;
-			}
-			var j = 0;
-			while (j < bones.Count && i < 4) {
-				var weight = bones[j].CalcWeightForPoint(position);
-				if (Mathf.Abs(weight) > Mathf.ZeroTolerance) {
-					skinningWeights[i] = new BoneWeight {
-						Weight = weight,
-						Index = bones[j].Index
-					};
-					overallWeight += skinningWeights[i].Weight;
-					i++;
-				}
-				j++;
-			}
-			if (overallWeight != 0) {
-				for (i = 0; i < 4; i++) {
-					var bw = skinningWeights[i];
-					bw.Weight /= overallWeight;
-					skinningWeights[i] = bw;
-				}
-			}
-			return skinningWeights;
 		}
 	}
 

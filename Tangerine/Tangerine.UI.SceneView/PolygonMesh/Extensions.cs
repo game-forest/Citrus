@@ -10,7 +10,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		public static TopologyController Controller(this Lime.Widgets.PolygonMesh.PolygonMesh mesh) =>
 			mesh.Components.GetOrAdd<TopologyController<HalfEdgeTopology>>();
 
-		public static void Update(this Lime.Widgets.PolygonMesh.PolygonMesh mesh) =>
+		public static void SyncTopologyWithModificationMode(this Lime.Widgets.PolygonMesh.PolygonMesh mesh) =>
 			mesh.Controller().Topology.EmplaceVertices(mesh.Controller().Vertices as List<SkinnedVertex>);
 
 		public static Vector2 ApplySkinning(this Lime.Widgets.PolygonMesh.PolygonMesh mesh, Vector2 vector, SkinningWeights weights) =>

@@ -16,6 +16,7 @@ namespace Tangerine.UI.SceneView
 
 		private static void Render(Widget canvas)
 		{
+			Document.Current.Nodes().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList().ForEach(m => m.Controller());
 			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
 				if (!wasAnimationForced) {
 					wasAnimationForced = true;

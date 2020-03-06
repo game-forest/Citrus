@@ -281,6 +281,11 @@ namespace Tangerine.Core.Operations
 						UnlinkFolderItem.Perform(doc.Container, bone);
 						doc.Container.AsWidget.BoneArray[bone.Index] = default;
 					}
+					doc.History.DoTransaction(() => {
+						foreach (var mesh in doc.Container.Nodes.OfType<Lime.Widgets.PolygonMesh.PolygonMesh>()) {
+							mesh.OnBoneArrayChanged?.Invoke();
+						}
+					});
 				} else if (Row.GetFolderItem(row) is IFolderItem item) {
 					UnlinkFolderItem.Perform(doc.Container, item);
 				}

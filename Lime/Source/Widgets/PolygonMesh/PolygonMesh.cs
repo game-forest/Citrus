@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Lime.Widgets.PolygonMesh.Topology;
@@ -79,7 +80,8 @@ namespace Lime.Widgets.PolygonMesh
 		public List<SkinnedVertex> TransientVertices { get; set; }
 
 #if TANGERINE
-		public bool IsBeingAnimatedExternally;
+		public Action OnBoneArrayChanged;
+		public bool TangerineAnimationModeEnabled;
 #endif
 
 		public PolygonMesh()
@@ -113,7 +115,7 @@ namespace Lime.Widgets.PolygonMesh
 			var lkf = 0;
 			var rkf = 0;
 #if TANGERINE
-			if (IsBeingAnimatedExternally) {
+			if (TangerineAnimationModeEnabled) {
 #endif
 				if (Animators.TryFind(nameof(TransientVertices), out var animator)) {
 					foreach (var key in animator.Keys) {
@@ -181,16 +183,9 @@ namespace Lime.Widgets.PolygonMesh
 				v0.Pos = v0.Pos * Size;
 				v1.Pos = v1.Pos * Size;
 #if TANGERINE
-				if (!IsBeingAnimatedExternally) {
-					v0.BlendWeights.Weight0 = 0;
-					v0.BlendWeights.Weight1 = 0;
-					v0.BlendWeights.Weight2 = 0;
-					v0.BlendWeights.Weight3 = 0;
-
-					v1.BlendWeights.Weight0 = 0;
-					v1.BlendWeights.Weight1 = 0;
-					v1.BlendWeights.Weight2 = 0;
-					v1.BlendWeights.Weight3 = 0;
+				if (!TangerineAnimationModeEnabled) {
+					v0.SkinningWeights = new SkinningWeights();
+					v1.SkinningWeights = new SkinningWeights();
 				}
 #endif
 				remap(ref v0);
@@ -230,9 +225,12 @@ namespace Lime.Widgets.PolygonMesh
 			static RenderObject()
 			{
 				shaders = new Shader[] {
-					new VertexShader(@"
-						#define DEBUG
+					new VertexShader(
+#if DEBUG
+						"#define DEBUG\n" +
+#endif
 
+						@"
 						#ifdef GL_ES
 						precision highp float;
 						#endif
