@@ -29,35 +29,33 @@ namespace Lime
 			if (ContentsPath != null) {
 				var attachmentPath = System.IO.Path.ChangeExtension(ContentsPath, ".Attachment.txt");
 				if (AssetBundle.Current.FileExists(attachmentPath)) {
-					using (var stream = AssetBundle.Current.OpenFileLocalized(attachmentPath)) {
-						var attachment = persistence.ReadObject<Model3DAttachmentParser.ModelAttachmentFormat>(attachmentPath, stream);
-						if (string.IsNullOrEmpty(attachment.EntryTrigger)) {
-							return;
-						}
-						var blender = Components.Get<AnimationBlender>();
-						var enabledBlending = false;
-						if (blender != null) {
-							enabledBlending = blender.Enabled;
-							blender.Enabled = false;
-						}
+					var attachment = persistence.ReadObjectFromBundle<Model3DAttachmentParser.ModelAttachmentFormat>(AssetBundle.Current, attachmentPath);
+					if (string.IsNullOrEmpty(attachment.EntryTrigger)) {
+						return;
+					}
+					var blender = Components.Get<AnimationBlender>();
+					var enabledBlending = false;
+					if (blender != null) {
+						enabledBlending = blender.Enabled;
+						blender.Enabled = false;
+					}
 
-						// TODO: Move this to Orange.FbxModelImporter
-						var oldTrigger = Trigger;
-						Trigger = attachment.EntryTrigger;
-						TriggerMultipleAnimations(Trigger);
-						var animationBehavior = Components.Get<AnimationComponent>();
-						if (animationBehavior != null) {
-							foreach (var a in animationBehavior.Animations) {
-								if (a.IsRunning) {
-									a.Advance(0);
-								}
+					// TODO: Move this to Orange.FbxModelImporter
+					var oldTrigger = Trigger;
+					Trigger = attachment.EntryTrigger;
+					TriggerMultipleAnimations(Trigger);
+					var animationBehavior = Components.Get<AnimationComponent>();
+					if (animationBehavior != null) {
+						foreach (var a in animationBehavior.Animations) {
+							if (a.IsRunning) {
+								a.Advance(0);
 							}
 						}
-						Trigger = oldTrigger;
+					}
+					Trigger = oldTrigger;
 
-						if (blender != null) {
-							blender.Enabled = enabledBlending;
-						}
+					if (blender != null) {
+						blender.Enabled = enabledBlending;
 					}
 				}
 			}
