@@ -34,25 +34,25 @@ namespace Lime
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
 			return new FileStream(
-				Path.Combine(BaseDirectory, path), mode, 
+				ToSystemPath(path), mode,
 				mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
 				FileShare.Read);
 		}
 
 		public override DateTime GetFileLastWriteTime(string path)
 		{
-			return File.GetLastWriteTime(Path.Combine(BaseDirectory, path));
+			return File.GetLastWriteTime(ToSystemPath(path));
 		}
 
 		public override void SetFileLastWriteTime(string path, DateTime time)
 		{
 			assetsCached = false;
-			File.SetLastWriteTime(Path.Combine(BaseDirectory, path), time);
+			File.SetLastWriteTime(ToSystemPath(path), time);
 		}
 
 		public override int GetFileSize(string path)
 		{
-			return (int)(new System.IO.FileInfo(path).Length);
+			return (int)(new System.IO.FileInfo(ToSystemPath(path)).Length);
 		}
 
 		public override byte[] GetCookingRulesSHA1(string path)
@@ -62,12 +62,12 @@ namespace Lime
 
 		public override void DeleteFile(string path)
 		{
-			File.Delete(Path.Combine(BaseDirectory, path));
+			File.Delete(ToSystemPath(path));
 		}
 
 		public override bool FileExists(string path)
 		{
-			return File.Exists(Path.Combine(BaseDirectory, path));
+			return File.Exists(ToSystemPath(path));
 		}
 
 		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
@@ -84,7 +84,7 @@ namespace Lime
 		{
 			if (extension != null && !extension.StartsWith(".")) {
 				throw new InvalidOperationException();
-			} 
+			}
 			if (!assetsCached || path != cachedPath) {
 				assetsCached = true;
 				cachedPath = path;
@@ -120,21 +120,27 @@ namespace Lime
 			return path;
 		}
 
-		public override string ToSystemPath(string bundlePath) => Path.Combine(BaseDirectory, bundlePath);
+		public override string ToSystemPath(string bundlePath)
+		{
+			if (Path.IsPathRooted(bundlePath)) {
+				throw new InvalidOperationException();
+			}
+			return Path.Combine(BaseDirectory, bundlePath);
+		}
 
 		public override string FromSystemPath(string systemPath)
 		{
 			systemPath = systemPath.Replace('\\', '/');
-			// Check if systemPath starts with BaseDirectory without trailing '/'  
+			// Check if systemPath starts with BaseDirectory without trailing '/'
 			if (string.Compare(
 				systemPath,0,BaseDirectory, 0, BaseDirectory.Length - 1,
-				StringComparison.OrdinalIgnoreCase) != 0) 
+				StringComparison.OrdinalIgnoreCase) != 0)
 			{
 				throw new InvalidOperationException(
 					$"'{systemPath}' outside of the bundle directory '{BaseDirectory}'");
 			}
-			return systemPath.Length == BaseDirectory.Length - 1 ? 
-				string.Empty : 
+			return systemPath.Length == BaseDirectory.Length - 1 ?
+				string.Empty :
 				systemPath.Substring(BaseDirectory.Length);
 		}
 	}
