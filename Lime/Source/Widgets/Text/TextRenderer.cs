@@ -75,8 +75,7 @@ namespace Lime.Text
 						lineBreak = true;
 					}
 					curr++;
-				}
-				else {
+				} else {
 					while (curr < length && t[curr] > ' ') {
 						curr++;
 					}
@@ -382,61 +381,75 @@ namespace Lime.Text
 			fittedWords.AddRange(words);
 			longestLineWidth = 0;
 			float x = 0;
+			// We're using breakStart to join multiple words into one with &nbsp;
+			int breakStart = 0;
 			for (int i = 0; i < fittedWords.Count; i++) {
-				var word = fittedWords[i];
-				word = word.Clone();
+				var word = fittedWords[i].Clone();
 				word.LineBreak = word.ForceLineBreak;
 				if (word.LineBreak) {
 					x = 0;
 				}
+				if (i > 0 && !fittedWords[i - 1].IsNbsp && !word.IsNbsp) {
+					breakStart = i;
+				}
 				word.Width = CalcWordWidth(word);
-				var isLongerThanWidth = x + word.Width > maxWidth;
 				var t = texts[word.TextIndex];
 				var isTextOrBullet = (t.Length > 0 && t[word.Start] > ' ') || IsBullet(word);
-				if (isLongerThanWidth && isTextOrBullet && (wordSplitAllowed || t.HasJapaneseSymbols(word.Start, word.Length))) {
-					var fittedCharsCount = CalcFittedCharactersCount(word, maxWidth - x);
-					if (fittedCharsCount > 0) {
-						var wordEnd = word.Start + fittedCharsCount;
-						Toolbox.AdjustLineBreakPosition(t, ref wordEnd);
-						if (wordEnd > word.Start)
-							fittedCharsCount = wordEnd - word.Start;
-						var newWord = word.Clone();
-						newWord.IsTagBegin = false;
-						newWord.Start = word.Start + fittedCharsCount;
-						newWord.Length = word.Length - fittedCharsCount;
-						newWord.Width = CalcWordWidth(newWord);
-						newWord.ForceLineBreak = true;
-						word.Length = fittedCharsCount;
-						word.Width = CalcWordWidth(word);
-						word.X = x;
-						fittedWords.Insert(i + 1, newWord);
-						goto skip_default_placement;
+				// Attempt to split
+				if (x + word.Width > maxWidth && isTextOrBullet) {
+					// Word splitting is allowed
+					if (wordSplitAllowed || t.HasJapaneseSymbols(word.Start, word.Length)) {
+						var fittedCharsCount = CalcFittedCharactersCount(word, maxWidth - x);
+						if (fittedCharsCount > 0) {
+							var wordEnd = word.Start + fittedCharsCount;
+							Toolbox.AdjustLineBreakPosition(t, ref wordEnd);
+							if (wordEnd > word.Start)
+								fittedCharsCount = wordEnd - word.Start;
+							var newWord = word.Clone();
+							newWord.IsTagBegin = false;
+							newWord.Start = word.Start + fittedCharsCount;
+							newWord.Length = word.Length - fittedCharsCount;
+							newWord.Width = CalcWordWidth(newWord);
+							newWord.ForceLineBreak = true;
+							word.Length = fittedCharsCount;
+							word.Width = CalcWordWidth(word);
+							word.X = x;
+							fittedWords.Insert(i + 1, newWord);
+							goto skip_default_placement;
+						}
 					}
-				}
-
-				if (isLongerThanWidth && isTextOrBullet && x > 0 && !fittedWords[i - 1].IsNbsp) {
+					// Splitting by words
 					var isWordContinue =
+						breakStart < i ||
 						word.TextIndex > 0 &&
 						word.Start == 0 &&
 						t.Length > 0 &&
 						t[word.Start] > ' ' &&
 						(GetLastChar(texts[fittedWords[i - 1].TextIndex]) > ' ' || IsBullet(fittedWords[i - 1]));
 					if (isWordContinue) {
-						var prev = fittedWords[i - 1];
-						prev.X = 0;
-						prev.LineBreak = true;
-						word.X = prev.Width;
-						x = word.X + word.Width;
-						goto skip_default_placement;
+						breakStart = Math.Min(breakStart, i - 1);
+						fittedWords[breakStart].LineBreak = true;
+						x = 0;
+						Word prev = null;
+						// It's required to save our cloned word
+						fittedWords[i] = word;
+						for (var j = breakStart; j <= i; j++) {
+							prev = fittedWords[j];
+							prev.X = x;
+							x += prev.Width;
+						}
+						word = prev ?? word;
+					} else {
+						word.X = 0;
+						word.LineBreak = true;
+						word.Width = CalcWordWidth(word);
+						x = word.Width;
 					}
-					word.X = 0;
-					word.LineBreak = true;
-					word.Width = CalcWordWidth(word);
-					x = word.Width;
 				} else {
 					word.X = x;
 					x += word.Width;
 				}
+
 			skip_default_placement:
 
 				if (overflowMode == TextOverflowMode.Ellipsis) {

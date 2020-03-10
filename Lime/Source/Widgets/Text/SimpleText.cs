@@ -373,7 +373,7 @@ namespace Lime
 			var bestHeight = minH;
 			var spacingKoeff = Spacing / FontHeight;
 			while (maxH - minH > 1) {
-				Rectangle rect = RenderHelper(null, dummyCaret);
+				var rect = RenderHelper(null, dummyCaret);
 				var fit = (rect.Width <= ContentWidth && rect.Height <= ContentHeight);
 				if (fit) {
 					minH = FontHeight;
@@ -403,7 +403,7 @@ namespace Lime
 			}
 			caret.ClampTextPos(DisplayText.Length);
 			caret.ClampLine(lines.Count);
-			Rectangle rect = new Rectangle(Vector2.PositiveInfinity, Vector2.NegativeInfinity);
+			var rect = new Rectangle(Vector2.PositiveInfinity, Vector2.NegativeInfinity);
 			int i = 0;
 			foreach (var line in lines) {
 				bool lastLine = ++i == lines.Count;
@@ -415,10 +415,10 @@ namespace Lime
 						Font, pos, line, Color4.White, FontHeight, 0, line.Length,
 						font.Spacing + letterSpacing, spriteList, caret.Sync, -1);
 				}
-				Rectangle lineRect = new Rectangle(pos.X, pos.Y, pos.X + lineWidth, pos.Y + FontHeight);
-					if (lastLine) {
-						// There is no end-of-text character, so simulate it.
-						caret.Sync(line.Length, new Vector2(lineRect.Right, lineRect.Top), Vector2.Down * fontHeight);
+				var lineRect = new Rectangle(pos.X, pos.Y, pos.X + lineWidth, pos.Y + FontHeight);
+				if (lastLine) {
+					// There is no end-of-text character, so simulate it.
+					caret.Sync(line.Length, new Vector2(lineRect.Right, lineRect.Top), Vector2.Down * fontHeight);
 				}
 				pos.Y += Spacing + FontHeight;
 				caret.NextLine();
