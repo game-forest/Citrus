@@ -172,25 +172,20 @@ namespace Orange
 			}
 		}
 
-		// Preserving default targets references just in case since they're used as keys in cooking rules for target
-		private static List<Target> defaultTargets;
 		private Predicate<DirectoryInfo> defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate;
 
 		private void FillDefaultTargets()
 		{
-			if (defaultTargets == null) {
-				defaultTargets = new List<Target>();
-				foreach (TargetPlatform platform in Enum.GetValues(typeof(TargetPlatform))) {
-					defaultTargets.Add(new Target(
-						name: Enum.GetName(typeof(TargetPlatform), platform),
-						projectPath: GetDefaultProjectSolutionPath(platform),
-						cleanBeforeBuild: false,
-						platform: platform,
-						configuration: BuildConfiguration.Release
-					));
-				}
+			Targets.Clear();
+			foreach (TargetPlatform platform in Enum.GetValues(typeof(TargetPlatform))) {
+				Targets.Add(new Target(
+					name: Enum.GetName(typeof(TargetPlatform), platform),
+					projectPath: GetDefaultProjectSolutionPath(platform),
+					cleanBeforeBuild: false,
+					platform: platform,
+					configuration: BuildConfiguration.Release
+				));
 			}
-			Targets.AddRange(defaultTargets);
 		}
 
 		private void ReadProject(string file)
