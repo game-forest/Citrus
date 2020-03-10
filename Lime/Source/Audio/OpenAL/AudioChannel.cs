@@ -199,6 +199,7 @@ namespace Lime
 			} else {
 				fadeSpeed = 0;
 				fadeVolume = 1;
+				fadePurpose = FadePurpose.None;
 			}
 			Volume = volume;
 			PlayImmediate();
