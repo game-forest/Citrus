@@ -591,10 +591,8 @@ namespace Orange
 								}
 								currentRules = rules.TargetRules[currentTarget];
 								{
-									var targetPlatformAttribute = (TargetPlatformsAttribute)typeof(ICookingRules)
-										.GetProperty(words[0]).GetCustomAttribute(typeof(TargetPlatformsAttribute));
-									if (targetPlatformAttribute != null && !targetPlatformAttribute.TargetPlatforms.Contains(currentTarget.Platform)) {
-										throw new Lime.Exception($"Invalid platform {currentTarget.Platform} for cooking rule {words[0]}");
+									if (!CanSetRulePerTarget(words[0], currentTarget)) {
+										throw new Lime.Exception($"Invalid platform {target.Platform} for cooking rule {words[0]}");
 									}
 								}
 							}
@@ -612,6 +610,20 @@ namespace Orange
 			}
 			rules.DeduceEffectiveRules(target);
 			return rules;
+		}
+
+		public static bool CanSetRulePerTarget(string cookingRulePropertyName, Target target)
+		{
+			if (target == null) {
+				return true;
+			}
+			var targetPlatformAttribute = (TargetPlatformsAttribute)typeof(ICookingRules)
+				.GetProperty(cookingRulePropertyName)
+				.GetCustomAttribute(typeof(TargetPlatformsAttribute));
+			if (targetPlatformAttribute != null && !targetPlatformAttribute.TargetPlatforms.Contains(target.Platform)) {
+				return false;
+			}
+			return true;
 		}
 
 		private static void ParseRule(ParticularCookingRules rules, IReadOnlyList<string> words, string path)

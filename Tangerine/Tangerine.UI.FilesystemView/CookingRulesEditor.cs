@@ -245,7 +245,8 @@ namespace Tangerine.UI.FilesystemView
 				createOrDestroyOverride = new ToolbarButton {
 					Texture = btnTexture(),
 					Clicked = () => CreateOrDestroyFieldOverride(rulesMap, path, yi, overridesWidget, createOrDestroyOverride),
-				}
+					Enabled = CookingRulesBuilder.CanSetRulePerTarget(yi.Name, ActiveTarget),
+			}
 			);
 			headerWidget.Clicked = foldButton.Clicked;
 			createOrDestroyOverride.Padding = Thickness.Zero;
