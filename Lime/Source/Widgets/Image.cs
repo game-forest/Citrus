@@ -4,11 +4,11 @@ namespace Lime
 {
 	[TangerineRegisterNode(Order = 2)]
 	[TangerineVisualHintGroup("/All/Nodes/Images")]
-	public class Image : Widget, IImageCombinerArg
+	public class Image : Widget, IImageCombinerArg, IMaterialComponentOwner
 	{
 		private bool skipRender;
 		private ITexture texture;
-		private IMaterial material;
+		private IMaterial defaultMaterial;
 
 		[YuzuMember]
 		[YuzuSerializeIf(nameof(IsNotRenderTexture))]
@@ -28,7 +28,7 @@ namespace Lime
 
 		protected override void DiscardMaterial()
 		{
-			material = null;
+			defaultMaterial = null;
 		}
 
 		[YuzuMember]
@@ -39,7 +39,9 @@ namespace Lime
 		[TangerineKeyframeColor(17)]
 		public Vector2 UV1 { get; set; }
 
-		public IMaterial CustomMaterial { get; set; }
+		public IMaterial Material { get; set; }
+
+		public IMaterial DefaultMaterial => defaultMaterial ?? (defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1));
 
 		public Image()
 		{
@@ -75,6 +77,8 @@ namespace Lime
 			}
 			skipRender = false;
 		}
+
+		public void AssignMaterial(IMaterial material) => Material = material;
 
 		ITexture IImageCombinerArg.GetTexture()
 		{
@@ -121,14 +125,9 @@ namespace Lime
 
 		protected internal virtual Lime.RenderObject GetRenderObject<TRenderObject>() where TRenderObject : RenderObject, new()
 		{
-			var blending = GlobalBlending;
-			var shader = GlobalShader;
-			if (material == null) {
-				material = WidgetMaterial.GetInstance(blending, shader, 1);
-			}
 			var ro = RenderObjectPool<TRenderObject>.Acquire();
 			ro.Texture = Texture;
-			ro.Material = CustomMaterial ?? material;
+			ro.Material = Material ?? DefaultMaterial;
 			ro.UV0 = UV0;
 			ro.UV1 = UV1;
 			ro.LocalToWorldTransform = LocalToWorldTransform;

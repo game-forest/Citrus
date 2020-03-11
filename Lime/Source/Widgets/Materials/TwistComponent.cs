@@ -27,15 +27,15 @@ namespace Lime
 				oldOwner.Tasks.Remove(updateUVOnTextureChangeTask);
 			}
 			if (Owner != null) {
-				var image = (Image)Owner;
+				var image = (IMaterialComponentOwner)Owner;
 				// Usually Texture or Owner is changed before LateUpdate stage
 				// so we'd better check on texture change at least as late as LateUpdate stage.
-				updateUVOnTextureChangeTask = image.LateTasks.Add(UpdateUVOnTextureChange(image));
+				updateUVOnTextureChangeTask = Owner.AsWidget.LateTasks.Add(UpdateUVOnTextureChange(image));
 				UpdateUV(image);
 			}
 		}
 
-		private void UpdateUV(Image owner)
+		private void UpdateUV(IMaterialComponentOwner owner)
 		{
 			var uv0 = owner.UV0;
 			var uv1 = owner.UV1;
@@ -47,7 +47,7 @@ namespace Lime
 
 		private Task updateUVOnTextureChangeTask;
 
-		private IEnumerator<object> UpdateUVOnTextureChange(Image owner)
+		private IEnumerator<object> UpdateUVOnTextureChange(IMaterialComponentOwner owner)
 		{
 			ITexture texture = null;
 			while (true) {

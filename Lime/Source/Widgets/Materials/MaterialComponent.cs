@@ -1,16 +1,32 @@
 namespace Lime
 {
+	/// <summary>
+	/// This interface must implements every node which can be used as a owner of MaterialComponent.
+	/// </summary>
+	public interface IMaterialComponentOwner
+	{
+		/// <summary>
+		/// Assign provided material
+		/// </summary>
+		void AssignMaterial(IMaterial material);
+		ITexture Texture { get; }
+		Vector2 UV0 { get; }
+		Vector2 UV1 { get; }
+	}
+
 	[MutuallyExclusiveDerivedComponents]
-	[AllowedComponentOwnerTypes(typeof(Image))]
+	[AllowedComponentOwnerTypes(typeof(IMaterialComponentOwner))]
 	public class MaterialComponent : NodeComponent
 	{
 
 	}
 
+	/// <summary>
+	/// Replace owner material with specified material
+	/// </summary>
 	public class MaterialComponent<T> : MaterialComponent where T : IMaterial, new()
 	{
 		protected T CustomMaterial { get; private set; }
-		private IMaterial savedCustomMaterial;
 
 		public MaterialComponent()
 		{
@@ -20,12 +36,11 @@ namespace Lime
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
-			if (oldOwner != null) {
-				((Image)oldOwner).CustomMaterial = savedCustomMaterial;
+			if (oldOwner is IMaterialComponentOwner w) {
+				w.AssignMaterial(null);
 			}
-			if (Owner != null) {
-				savedCustomMaterial = ((Image)Owner).CustomMaterial;
-				((Image)Owner).CustomMaterial = CustomMaterial;
+			if (Owner is IMaterialComponentOwner w1) {
+				w1.AssignMaterial(CustomMaterial);
 			}
 		}
 	}

@@ -7,8 +7,10 @@ namespace Lime
 	[TangerineRegisterNode(Order = 14)]
 	[TangerineAllowedChildrenTypes(typeof(DistortionMeshPoint))]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Distortion Mesh")]
-	public class DistortionMesh : Widget
+	public class DistortionMesh : Widget, IMaterialComponentOwner
 	{
+		private IMaterial defaultMaterial;
+
 		[YuzuMember]
 		[TangerineStaticProperty]
 		public int NumCols { get; set; }
@@ -20,6 +22,13 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(4)]
 		public override ITexture Texture { get; set; }
+
+		public IMaterial Material { get; set; }
+
+		public IMaterial DefaultMaterial => defaultMaterial ?? (defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1));
+
+		public Vector2 UV0 { get => Vector2.Zero; }
+		public Vector2 UV1 { get => Vector2.One;}
 
 		public DistortionMesh()
 		{
@@ -51,6 +60,8 @@ namespace Lime
 				}
 			}
 		}
+
+		public void AssignMaterial(IMaterial material) => Material = material;
 
 		protected internal override bool PartialHitTestByContents(ref HitTestArgs args)
 		{
@@ -122,6 +133,7 @@ namespace Lime
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			ro.CaptureRenderState(this);
 			ro.Texture = Texture;
+			ro.Material = Material ?? DefaultMaterial;
 			for (var n = FirstChild; n != null; n = n.NextSibling) {
 				var p = (DistortionMeshPoint)n;
 				ro.Vertices.Add(new Vertex {
@@ -149,6 +161,7 @@ namespace Lime
 			public readonly List<Vertex> Vertices = new List<Vertex>();
 			public readonly List<int> Indices = new List<int>();
 			public ITexture Texture;
+			public IMaterial Material;
 
 			protected override void OnRelease()
 			{
@@ -165,7 +178,7 @@ namespace Lime
 					for (int t = 0; t < 5; t++) {
 						polygon[t + 1] = Vertices[Indices[i + (t % 4)]];
 					}
-					Renderer.DrawTriangleFan(Texture, polygon, 6);
+					Renderer.DrawTriangleFan(Texture, null, Material, polygon, 6);
 				}
 			}
 
