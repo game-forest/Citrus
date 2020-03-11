@@ -10,6 +10,9 @@ namespace Tangerine.UI
 		public override Stream GetResourceStream()
 		{
 			var assembly = GetAssembly();
+			if (assembly.IsDynamic) {
+				return null;
+			}
 			var stream = assembly.GetManifestResourceStream(GetResourceId(themed: true));
 			return stream ?? assembly.GetManifestResourceStream(GetResourceId(themed: false));
 		}
