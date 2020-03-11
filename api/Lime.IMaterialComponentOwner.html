@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class MaterialComponent
+    <title>Interface IMaterialComponentOwner
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class MaterialComponent
+    <meta name="title" content="Interface IMaterialComponentOwner
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.48.0.0">
     
@@ -78,98 +78,127 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.MaterialComponent">
+            <article class="content wrap" id="_content" data-uid="Lime.IMaterialComponentOwner">
   
   
-  <h1 id="Lime_MaterialComponent" data-uid="Lime.MaterialComponent" class="text-break">Class MaterialComponent
+  <h1 id="Lime_IMaterialComponentOwner" data-uid="Lime.IMaterialComponentOwner" class="text-break">Interface IMaterialComponentOwner
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>This interface must implements every node which can be used as a owner of MaterialComponent.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="Lime.Component.html">Component</a></div>
-    <div class="level2"><a class="xref" href="Lime.NodeComponent.html">NodeComponent</a></div>
-    <div class="level3"><span class="xref">MaterialComponent</span></div>
-      <div class="level4"><a class="xref" href="Lime.MaterialComponent-1.html">MaterialComponent&lt;T&gt;</a></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-    <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_Lime_IAnimable_Owner">NodeComponent.IAnimable.Owner</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_Owner">NodeComponent.Owner</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_OnOwnerChanged_Lime_Node_">NodeComponent.OnOwnerChanged(Node)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_Dispose">NodeComponent.Dispose()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_IsSerializable_System_Type_">NodeComponent.IsSerializable(Type)</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_OnBeforeNodeSerialization">NodeComponent.OnBeforeNodeSerialization()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_OnAfterNodeSerialization">NodeComponent.OnAfterNodeSerialization()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_OnAfterDeserialization">NodeComponent.OnAfterDeserialization()</a>
-    </div>
-    <div>
-      <a class="xref" href="Lime.NodeComponent.html#Lime_NodeComponent_OnBuilt">NodeComponent.OnBuilt()</a>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_MaterialComponent_syntax">Syntax</h5>
+  <h5 id="Lime_IMaterialComponentOwner_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[AllowedComponentOwnerTypes(new Type[]{typeof(IMaterialComponentOwner)})]
-public class MaterialComponent : NodeComponent, IDisposable, IAnimable</code></pre>
+    <pre><code class="lang-csharp hljs">public interface IMaterialComponentOwner</code></pre>
   </div>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="Lime_IMaterialComponentOwner_Texture_" data-uid="Lime.IMaterialComponentOwner.Texture*"></a>
+  <h4 id="Lime_IMaterialComponentOwner_Texture" data-uid="Lime.IMaterialComponentOwner.Texture">Texture</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ITexture Texture { get; }</code></pre>
   </div>
-  <div>
-      <a class="xref" href="Lime.IAnimable.html">IAnimable</a>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.ITexture.html">ITexture</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_IMaterialComponentOwner_UV0_" data-uid="Lime.IMaterialComponentOwner.UV0*"></a>
+  <h4 id="Lime_IMaterialComponentOwner_UV0" data-uid="Lime.IMaterialComponentOwner.UV0">UV0</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Vector2 UV0 { get; }</code></pre>
   </div>
-  <h3 id="extensionmethods">Extension Methods</h3>
-  <div>
-      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_GetAnimationHost_Lime_IAnimable_">IAnimableExtensions.GetAnimationHost(IAnimable)</a>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_IMaterialComponentOwner_UV1_" data-uid="Lime.IMaterialComponentOwner.UV1*"></a>
+  <h4 id="Lime_IMaterialComponentOwner_UV1" data-uid="Lime.IMaterialComponentOwner.UV1">UV1</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Vector2 UV1 { get; }</code></pre>
   </div>
-  <div>
-      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_UnbindAnimators_Lime_IAnimable_">IAnimableExtensions.UnbindAnimators(IAnimable)</a>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="Lime_IMaterialComponentOwner_AssignMaterial_" data-uid="Lime.IMaterialComponentOwner.AssignMaterial*"></a>
+  <h4 id="Lime_IMaterialComponentOwner_AssignMaterial_Lime_IMaterial_" data-uid="Lime.IMaterialComponentOwner.AssignMaterial(Lime.IMaterial)">AssignMaterial(IMaterial)</h4>
+  <div class="markdown level1 summary"><p>Assign provided material</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void AssignMaterial(IMaterial material)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td><span class="parametername">material</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           

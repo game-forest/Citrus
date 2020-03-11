@@ -103,6 +103,7 @@
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
     <div><span class="xref">System.ICloneable</span></div>
     <div><a class="xref" href="Lime.IImageCombinerArg.html">IImageCombinerArg</a></div>
+    <div><a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -757,7 +758,7 @@
   <h5 id="Lime_Image_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[TangerineVisualHintGroup(&quot;/All/Nodes/Images&quot;, null)]
-public class Image : Widget, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable, IImageCombinerArg</code></pre>
+public class Image : Widget, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable, IImageCombinerArg, IMaterialComponentOwner</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -829,13 +830,38 @@ public class Image : Widget, IDisposable, IAnimationHost, IFolderItem, IFolderCo
   </h3>
   
   
-  <a id="Lime_Image_CustomMaterial_" data-uid="Lime.Image.CustomMaterial*"></a>
-  <h4 id="Lime_Image_CustomMaterial" data-uid="Lime.Image.CustomMaterial">CustomMaterial</h4>
+  <a id="Lime_Image_DefaultMaterial_" data-uid="Lime.Image.DefaultMaterial*"></a>
+  <h4 id="Lime_Image_DefaultMaterial" data-uid="Lime.Image.DefaultMaterial">DefaultMaterial</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IMaterial CustomMaterial { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IMaterial DefaultMaterial { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Image_Material_" data-uid="Lime.Image.Material*"></a>
+  <h4 id="Lime_Image_Material" data-uid="Lime.Image.Material">Material</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IMaterial Material { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -967,6 +993,33 @@ public Vector2 UV1 { get; set; }</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.Widget.html#Lime_Widget_AddToRenderChain_Lime_RenderChain_">Widget.AddToRenderChain(RenderChain)</a></div>
+  
+  
+  <a id="Lime_Image_AssignMaterial_" data-uid="Lime.Image.AssignMaterial*"></a>
+  <h4 id="Lime_Image_AssignMaterial_Lime_IMaterial_" data-uid="Lime.Image.AssignMaterial(Lime.IMaterial)">AssignMaterial(IMaterial)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AssignMaterial(IMaterial material)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td><span class="parametername">material</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="Lime_Image_CalcContentSize_" data-uid="Lime.Image.CalcContentSize*"></a>
@@ -1229,6 +1282,9 @@ public Vector2 UV1 { get; set; }</code></pre>
   </div>
   <div>
       <a class="xref" href="Lime.IImageCombinerArg.html">IImageCombinerArg</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>

@@ -101,6 +101,7 @@
     <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
     <div><span class="xref">System.ICloneable</span></div>
+    <div><a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -762,7 +763,7 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[TangerineAllowedChildrenTypes(new Type[]{typeof(DistortionMeshPoint)})]
 [TangerineVisualHintGroup(&quot;/All/Nodes/Images&quot;, &quot;Distortion Mesh&quot;)]
-public class DistortionMesh : Widget, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
+public class DistortionMesh : Widget, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable, IMaterialComponentOwner</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -804,6 +805,56 @@ public class DistortionMesh : Widget, IDisposable, IAnimationHost, IFolderItem, 
   </table>
   <h3 id="properties">Properties
   </h3>
+  
+  
+  <a id="Lime_DistortionMesh_DefaultMaterial_" data-uid="Lime.DistortionMesh.DefaultMaterial*"></a>
+  <h4 id="Lime_DistortionMesh_DefaultMaterial" data-uid="Lime.DistortionMesh.DefaultMaterial">DefaultMaterial</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IMaterial DefaultMaterial { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_DistortionMesh_Material_" data-uid="Lime.DistortionMesh.Material*"></a>
+  <h4 id="Lime_DistortionMesh_Material" data-uid="Lime.DistortionMesh.Material">Material</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IMaterial Material { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="Lime_DistortionMesh_NumCols_" data-uid="Lime.DistortionMesh.NumCols*"></a>
@@ -885,6 +936,56 @@ public override ITexture Texture { get; set; }</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.Widget.html#Lime_Widget_Texture">Widget.Texture</a></div>
+  
+  
+  <a id="Lime_DistortionMesh_UV0_" data-uid="Lime.DistortionMesh.UV0*"></a>
+  <h4 id="Lime_DistortionMesh_UV0" data-uid="Lime.DistortionMesh.UV0">UV0</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector2 UV0 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_DistortionMesh_UV1_" data-uid="Lime.DistortionMesh.UV1*"></a>
+  <h4 id="Lime_DistortionMesh_UV1" data-uid="Lime.DistortionMesh.UV1">UV1</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector2 UV1 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   
@@ -916,6 +1017,33 @@ public override ITexture Texture { get; set; }</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.Widget.html#Lime_Widget_AddToRenderChain_Lime_RenderChain_">Widget.AddToRenderChain(RenderChain)</a></div>
+  
+  
+  <a id="Lime_DistortionMesh_AssignMaterial_" data-uid="Lime.DistortionMesh.AssignMaterial*"></a>
+  <h4 id="Lime_DistortionMesh_AssignMaterial_Lime_IMaterial_" data-uid="Lime.DistortionMesh.AssignMaterial(Lime.IMaterial)">AssignMaterial(IMaterial)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AssignMaterial(IMaterial material)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
+        <td><span class="parametername">material</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="Lime_DistortionMesh_GetPoint_" data-uid="Lime.DistortionMesh.GetPoint*"></a>
@@ -1055,6 +1183,9 @@ public override ITexture Texture { get; set; }</code></pre>
   </div>
   <div>
       <span class="xref">System.ICloneable</span>
+  </div>
+  <div>
+      <a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>

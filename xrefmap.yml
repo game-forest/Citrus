@@ -16074,6 +16074,32 @@ references:
   isSpec: "True"
   fullName: Lime.DistortionMesh.AddToRenderChain
   nameWithType: DistortionMesh.AddToRenderChain
+- uid: Lime.DistortionMesh.AssignMaterial(Lime.IMaterial)
+  name: AssignMaterial(IMaterial)
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_AssignMaterial_Lime_IMaterial_
+  commentId: M:Lime.DistortionMesh.AssignMaterial(Lime.IMaterial)
+  fullName: Lime.DistortionMesh.AssignMaterial(Lime.IMaterial)
+  nameWithType: DistortionMesh.AssignMaterial(IMaterial)
+- uid: Lime.DistortionMesh.AssignMaterial*
+  name: AssignMaterial
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_AssignMaterial_
+  commentId: Overload:Lime.DistortionMesh.AssignMaterial
+  isSpec: "True"
+  fullName: Lime.DistortionMesh.AssignMaterial
+  nameWithType: DistortionMesh.AssignMaterial
+- uid: Lime.DistortionMesh.DefaultMaterial
+  name: DefaultMaterial
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_DefaultMaterial
+  commentId: P:Lime.DistortionMesh.DefaultMaterial
+  fullName: Lime.DistortionMesh.DefaultMaterial
+  nameWithType: DistortionMesh.DefaultMaterial
+- uid: Lime.DistortionMesh.DefaultMaterial*
+  name: DefaultMaterial
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_DefaultMaterial_
+  commentId: Overload:Lime.DistortionMesh.DefaultMaterial
+  isSpec: "True"
+  fullName: Lime.DistortionMesh.DefaultMaterial
+  nameWithType: DistortionMesh.DefaultMaterial
 - uid: Lime.DistortionMesh.GetPoint(System.Int32,System.Int32)
   name: GetPoint(Int32, Int32)
   href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_GetPoint_System_Int32_System_Int32_
@@ -16100,6 +16126,19 @@ references:
   isSpec: "True"
   fullName: Lime.DistortionMesh.GetRenderObject
   nameWithType: DistortionMesh.GetRenderObject
+- uid: Lime.DistortionMesh.Material
+  name: Material
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_Material
+  commentId: P:Lime.DistortionMesh.Material
+  fullName: Lime.DistortionMesh.Material
+  nameWithType: DistortionMesh.Material
+- uid: Lime.DistortionMesh.Material*
+  name: Material
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_Material_
+  commentId: Overload:Lime.DistortionMesh.Material
+  isSpec: "True"
+  fullName: Lime.DistortionMesh.Material
+  nameWithType: DistortionMesh.Material
 - uid: Lime.DistortionMesh.NumCols
   name: NumCols
   href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_NumCols
@@ -16161,6 +16200,32 @@ references:
   isSpec: "True"
   fullName: Lime.DistortionMesh.Texture
   nameWithType: DistortionMesh.Texture
+- uid: Lime.DistortionMesh.UV0
+  name: UV0
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_UV0
+  commentId: P:Lime.DistortionMesh.UV0
+  fullName: Lime.DistortionMesh.UV0
+  nameWithType: DistortionMesh.UV0
+- uid: Lime.DistortionMesh.UV0*
+  name: UV0
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_UV0_
+  commentId: Overload:Lime.DistortionMesh.UV0
+  isSpec: "True"
+  fullName: Lime.DistortionMesh.UV0
+  nameWithType: DistortionMesh.UV0
+- uid: Lime.DistortionMesh.UV1
+  name: UV1
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_UV1
+  commentId: P:Lime.DistortionMesh.UV1
+  fullName: Lime.DistortionMesh.UV1
+  nameWithType: DistortionMesh.UV1
+- uid: Lime.DistortionMesh.UV1*
+  name: UV1
+  href: api/Lime.DistortionMesh.html#Lime_DistortionMesh_UV1_
+  commentId: Overload:Lime.DistortionMesh.UV1
+  isSpec: "True"
+  fullName: Lime.DistortionMesh.UV1
+  nameWithType: DistortionMesh.UV1
 - uid: Lime.DistortionMeshPoint
   name: DistortionMeshPoint
   href: api/Lime.DistortionMeshPoint.html
@@ -25758,6 +25823,19 @@ references:
   isSpec: "True"
   fullName: Lime.Image.AddToRenderChain
   nameWithType: Image.AddToRenderChain
+- uid: Lime.Image.AssignMaterial(Lime.IMaterial)
+  name: AssignMaterial(IMaterial)
+  href: api/Lime.Image.html#Lime_Image_AssignMaterial_Lime_IMaterial_
+  commentId: M:Lime.Image.AssignMaterial(Lime.IMaterial)
+  fullName: Lime.Image.AssignMaterial(Lime.IMaterial)
+  nameWithType: Image.AssignMaterial(IMaterial)
+- uid: Lime.Image.AssignMaterial*
+  name: AssignMaterial
+  href: api/Lime.Image.html#Lime_Image_AssignMaterial_
+  commentId: Overload:Lime.Image.AssignMaterial
+  isSpec: "True"
+  fullName: Lime.Image.AssignMaterial
+  nameWithType: Image.AssignMaterial
 - uid: Lime.Image.CalcContentSize
   name: CalcContentSize()
   href: api/Lime.Image.html#Lime_Image_CalcContentSize
@@ -25771,19 +25849,19 @@ references:
   isSpec: "True"
   fullName: Lime.Image.CalcContentSize
   nameWithType: Image.CalcContentSize
-- uid: Lime.Image.CustomMaterial
-  name: CustomMaterial
-  href: api/Lime.Image.html#Lime_Image_CustomMaterial
-  commentId: P:Lime.Image.CustomMaterial
-  fullName: Lime.Image.CustomMaterial
-  nameWithType: Image.CustomMaterial
-- uid: Lime.Image.CustomMaterial*
-  name: CustomMaterial
-  href: api/Lime.Image.html#Lime_Image_CustomMaterial_
-  commentId: Overload:Lime.Image.CustomMaterial
+- uid: Lime.Image.DefaultMaterial
+  name: DefaultMaterial
+  href: api/Lime.Image.html#Lime_Image_DefaultMaterial
+  commentId: P:Lime.Image.DefaultMaterial
+  fullName: Lime.Image.DefaultMaterial
+  nameWithType: Image.DefaultMaterial
+- uid: Lime.Image.DefaultMaterial*
+  name: DefaultMaterial
+  href: api/Lime.Image.html#Lime_Image_DefaultMaterial_
+  commentId: Overload:Lime.Image.DefaultMaterial
   isSpec: "True"
-  fullName: Lime.Image.CustomMaterial
-  nameWithType: Image.CustomMaterial
+  fullName: Lime.Image.DefaultMaterial
+  nameWithType: Image.DefaultMaterial
 - uid: Lime.Image.DiscardMaterial
   name: DiscardMaterial()
   href: api/Lime.Image.html#Lime_Image_DiscardMaterial
@@ -25883,6 +25961,19 @@ references:
   fullName: Lime.Image.Lime.IImageCombinerArg.UVTransform
   nameWithType: Image.IImageCombinerArg.UVTransform
   nameWithType.vb: Image.Lime.IImageCombinerArg.UVTransform
+- uid: Lime.Image.Material
+  name: Material
+  href: api/Lime.Image.html#Lime_Image_Material
+  commentId: P:Lime.Image.Material
+  fullName: Lime.Image.Material
+  nameWithType: Image.Material
+- uid: Lime.Image.Material*
+  name: Material
+  href: api/Lime.Image.html#Lime_Image_Material_
+  commentId: Overload:Lime.Image.Material
+  isSpec: "True"
+  fullName: Lime.Image.Material
+  nameWithType: Image.Material
 - uid: Lime.Image.PartialHitTestByContents(Lime.HitTestArgs@)
   name: PartialHitTestByContents(ref HitTestArgs)
   href: api/Lime.Image.html#Lime_Image_PartialHitTestByContents_Lime_HitTestArgs__
@@ -26226,6 +26317,64 @@ references:
   isSpec: "True"
   fullName: Lime.IMaterial.PassCount
   nameWithType: IMaterial.PassCount
+- uid: Lime.IMaterialComponentOwner
+  name: IMaterialComponentOwner
+  href: api/Lime.IMaterialComponentOwner.html
+  commentId: T:Lime.IMaterialComponentOwner
+  fullName: Lime.IMaterialComponentOwner
+  nameWithType: IMaterialComponentOwner
+- uid: Lime.IMaterialComponentOwner.AssignMaterial(Lime.IMaterial)
+  name: AssignMaterial(IMaterial)
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_AssignMaterial_Lime_IMaterial_
+  commentId: M:Lime.IMaterialComponentOwner.AssignMaterial(Lime.IMaterial)
+  fullName: Lime.IMaterialComponentOwner.AssignMaterial(Lime.IMaterial)
+  nameWithType: IMaterialComponentOwner.AssignMaterial(IMaterial)
+- uid: Lime.IMaterialComponentOwner.AssignMaterial*
+  name: AssignMaterial
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_AssignMaterial_
+  commentId: Overload:Lime.IMaterialComponentOwner.AssignMaterial
+  isSpec: "True"
+  fullName: Lime.IMaterialComponentOwner.AssignMaterial
+  nameWithType: IMaterialComponentOwner.AssignMaterial
+- uid: Lime.IMaterialComponentOwner.Texture
+  name: Texture
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_Texture
+  commentId: P:Lime.IMaterialComponentOwner.Texture
+  fullName: Lime.IMaterialComponentOwner.Texture
+  nameWithType: IMaterialComponentOwner.Texture
+- uid: Lime.IMaterialComponentOwner.Texture*
+  name: Texture
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_Texture_
+  commentId: Overload:Lime.IMaterialComponentOwner.Texture
+  isSpec: "True"
+  fullName: Lime.IMaterialComponentOwner.Texture
+  nameWithType: IMaterialComponentOwner.Texture
+- uid: Lime.IMaterialComponentOwner.UV0
+  name: UV0
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_UV0
+  commentId: P:Lime.IMaterialComponentOwner.UV0
+  fullName: Lime.IMaterialComponentOwner.UV0
+  nameWithType: IMaterialComponentOwner.UV0
+- uid: Lime.IMaterialComponentOwner.UV0*
+  name: UV0
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_UV0_
+  commentId: Overload:Lime.IMaterialComponentOwner.UV0
+  isSpec: "True"
+  fullName: Lime.IMaterialComponentOwner.UV0
+  nameWithType: IMaterialComponentOwner.UV0
+- uid: Lime.IMaterialComponentOwner.UV1
+  name: UV1
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_UV1
+  commentId: P:Lime.IMaterialComponentOwner.UV1
+  fullName: Lime.IMaterialComponentOwner.UV1
+  nameWithType: IMaterialComponentOwner.UV1
+- uid: Lime.IMaterialComponentOwner.UV1*
+  name: UV1
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_UV1_
+  commentId: Overload:Lime.IMaterialComponentOwner.UV1
+  isSpec: "True"
+  fullName: Lime.IMaterialComponentOwner.UV1
+  nameWithType: IMaterialComponentOwner.UV1
 - uid: Lime.IMaterialFog
   name: IMaterialFog
   href: api/Lime.IMaterialFog.html

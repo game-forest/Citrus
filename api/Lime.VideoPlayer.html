@@ -103,6 +103,7 @@
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
     <div><span class="xref">System.ICloneable</span></div>
     <div><a class="xref" href="Lime.IImageCombinerArg.html">IImageCombinerArg</a></div>
+    <div><a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a></div>
     <div><a class="xref" href="Lime.IUpdatableNode.html">IUpdatableNode</a></div>
   </div>
   <div class="inheritedMembers">
@@ -120,13 +121,19 @@
       <a class="xref" href="Lime.Image.html#Lime_Image_UV1">Image.UV1</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Image.html#Lime_Image_CustomMaterial">Image.CustomMaterial</a>
+      <a class="xref" href="Lime.Image.html#Lime_Image_Material">Image.Material</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Image.html#Lime_Image_DefaultMaterial">Image.DefaultMaterial</a>
     </div>
     <div>
       <a class="xref" href="Lime.Image.html#Lime_Image_CalcContentSize">Image.CalcContentSize()</a>
     </div>
     <div>
       <a class="xref" href="Lime.Image.html#Lime_Image_AddToRenderChain_Lime_RenderChain_">Image.AddToRenderChain(RenderChain)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Image.html#Lime_Image_AssignMaterial_Lime_IMaterial_">Image.AssignMaterial(IMaterial)</a>
     </div>
     <div>
       <a class="xref" href="Lime.Image.html#Lime_Image_Lime_IImageCombinerArg_GetTexture">Image.IImageCombinerArg.GetTexture()</a>
@@ -793,7 +800,7 @@
   <h6><strong>Assembly</strong>: Lime.dll</h6>
   <h5 id="Lime_VideoPlayer_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class VideoPlayer : Image, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable, IImageCombinerArg, IUpdatableNode</code></pre>
+    <pre><code class="lang-csharp hljs">public class VideoPlayer : Image, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable, IImageCombinerArg, IMaterialComponentOwner, IUpdatableNode</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -1127,6 +1134,9 @@
   </div>
   <div>
       <a class="xref" href="Lime.IImageCombinerArg.html">IImageCombinerArg</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a>
   </div>
   <div>
       <a class="xref" href="Lime.IUpdatableNode.html">IUpdatableNode</a>
