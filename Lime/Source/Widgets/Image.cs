@@ -80,8 +80,6 @@ namespace Lime
 
 		public void AssignMaterial(IMaterial material) => Material = material;
 
-		public void ResetMaterial() => Material = null;
-
 		ITexture IImageCombinerArg.GetTexture()
 		{
 			return Texture;

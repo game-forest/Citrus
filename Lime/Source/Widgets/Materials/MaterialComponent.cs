@@ -9,10 +9,6 @@ namespace Lime
 		/// Assign provided material
 		/// </summary>
 		void AssignMaterial(IMaterial material);
-		/// <summary>
-		/// Reset material to default
-		/// </summary>
-		void ResetMaterial();
 		ITexture Texture { get; }
 		Vector2 UV0 { get; }
 		Vector2 UV1 { get; }
@@ -41,7 +37,7 @@ namespace Lime
 		{
 			base.OnOwnerChanged(oldOwner);
 			if (oldOwner is IMaterialComponentOwner w) {
-				w.ResetMaterial();
+				w.AssignMaterial(null);
 			}
 			if (Owner is IMaterialComponentOwner w1) {
 				w1.AssignMaterial(CustomMaterial);
