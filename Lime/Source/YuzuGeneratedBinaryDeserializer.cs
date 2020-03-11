@@ -1779,7 +1779,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Audio(BinaryDeserializer d, ReaderClassDef def)
@@ -2072,7 +2071,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Bone(BinaryDeserializer d, ReaderClassDef def)
@@ -2316,7 +2314,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Button(BinaryDeserializer d, ReaderClassDef def)
@@ -2475,7 +2472,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Camera3D(BinaryDeserializer d, ReaderClassDef def)
@@ -2983,7 +2979,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__DistortionMesh(BinaryDeserializer d, ReaderClassDef def)
@@ -3106,7 +3101,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__DistortionMeshPoint(BinaryDeserializer d, ReaderClassDef def)
@@ -3206,7 +3200,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__EmitterShapePoint(BinaryDeserializer d, ReaderClassDef def)
@@ -3506,7 +3499,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Frame(BinaryDeserializer d, ReaderClassDef def)
@@ -3909,7 +3901,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Image(BinaryDeserializer d, ReaderClassDef def)
@@ -4013,7 +4004,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__ImageCombiner(BinaryDeserializer d, ReaderClassDef def)
@@ -5155,7 +5145,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Mesh3D(BinaryDeserializer d, ReaderClassDef def)
@@ -5943,7 +5932,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Movie(BinaryDeserializer d, ReaderClassDef def)
@@ -6132,7 +6120,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__NineGrid(BinaryDeserializer d, ReaderClassDef def)
@@ -6289,7 +6276,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Node3D(BinaryDeserializer d, ReaderClassDef def)
@@ -6752,7 +6738,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__ParticleEmitter(BinaryDeserializer d, ReaderClassDef def)
@@ -6907,7 +6892,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__ParticleModifier(BinaryDeserializer d, ReaderClassDef def)
@@ -7088,7 +7072,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__ParticlesMagnet(BinaryDeserializer d, ReaderClassDef def)
@@ -7209,7 +7192,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__PointObject(BinaryDeserializer d, ReaderClassDef def)
@@ -7390,7 +7372,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Polyline(BinaryDeserializer d, ReaderClassDef def)
@@ -7490,7 +7471,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__PolylinePoint(BinaryDeserializer d, ReaderClassDef def)
@@ -8125,7 +8105,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__RichText(BinaryDeserializer d, ReaderClassDef def)
@@ -8784,7 +8763,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__SimpleText(BinaryDeserializer d, ReaderClassDef def)
@@ -9002,7 +8980,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Slider(BinaryDeserializer d, ReaderClassDef def)
@@ -9175,7 +9152,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Spline(BinaryDeserializer d, ReaderClassDef def)
@@ -9314,7 +9290,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Spline3D(BinaryDeserializer d, ReaderClassDef def)
@@ -9418,7 +9393,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__SplineGear(BinaryDeserializer d, ReaderClassDef def)
@@ -9518,7 +9492,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__SplineGear3D(BinaryDeserializer d, ReaderClassDef def)
@@ -9630,7 +9603,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__SplinePoint(BinaryDeserializer d, ReaderClassDef def)
@@ -9749,7 +9721,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__SplinePoint3D(BinaryDeserializer d, ReaderClassDef def)
@@ -10046,7 +10017,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__TextStyle(BinaryDeserializer d, ReaderClassDef def)
@@ -10348,7 +10318,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__TiledImage(BinaryDeserializer d, ReaderClassDef def)
@@ -10734,7 +10703,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__VideoPlayer(BinaryDeserializer d, ReaderClassDef def)
@@ -10911,7 +10879,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Viewport3D(BinaryDeserializer d, ReaderClassDef def)
@@ -11268,7 +11235,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__Widget(BinaryDeserializer d, ReaderClassDef def)
@@ -11403,7 +11369,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime__WidgetAdapter3D(BinaryDeserializer d, ReaderClassDef def)

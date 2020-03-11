@@ -669,7 +669,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Volume = s.Volume;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -798,7 +797,6 @@ namespace YuzuGenerated
 			result.Tag = s.Tag;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -888,7 +886,6 @@ namespace YuzuGenerated
 			result.Text = s.Text;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -950,7 +947,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -1181,7 +1177,6 @@ namespace YuzuGenerated
 			result.Texture = (global::Lime.ITexture)cl.DeepObject(s.Texture);
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -1235,7 +1230,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.UV = s.UV;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -1286,7 +1280,6 @@ namespace YuzuGenerated
 			result.Tag = s.Tag;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -1400,7 +1393,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -1564,7 +1556,6 @@ namespace YuzuGenerated
 			result.UV1 = s.UV1;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -1617,7 +1608,6 @@ namespace YuzuGenerated
 			result.Tag = s.Tag;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2287,7 +2277,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2540,7 +2529,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2610,7 +2598,6 @@ namespace YuzuGenerated
 			result.TopOffset = s.TopOffset;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2666,7 +2653,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2836,7 +2822,6 @@ namespace YuzuGenerated
 			result.WindDirection = s.WindDirection;
 			result.Zoom = s.Zoom;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2899,7 +2884,6 @@ namespace YuzuGenerated
 			result.Velocity = s.Velocity;
 			result.WindAmount = s.WindAmount;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -2967,7 +2951,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3021,7 +3004,6 @@ namespace YuzuGenerated
 			result.Tag = s.Tag;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3089,7 +3071,6 @@ namespace YuzuGenerated
 			result.Thickness = s.Thickness;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3140,7 +3121,6 @@ namespace YuzuGenerated
 			result.Tag = s.Tag;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3295,7 +3275,6 @@ namespace YuzuGenerated
 			result.Visible = s.Visible;
 			result.WordSplitAllowed = s.WordSplitAllowed;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3549,7 +3528,6 @@ namespace YuzuGenerated
 			result.Visible = s.Visible;
 			result.WordSplitAllowed = s.WordSplitAllowed;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3635,7 +3613,6 @@ namespace YuzuGenerated
 			result.Value = s.Value;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3701,7 +3678,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3758,7 +3734,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3811,7 +3786,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.WidgetRef = Clone_Lime__NodeReference_Widget(cl, s.WidgetRef);
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3863,7 +3837,6 @@ namespace YuzuGenerated
 			result.Tag = s.Tag;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3917,7 +3890,6 @@ namespace YuzuGenerated
 			result.TangentWeight = s.TangentWeight;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -3970,7 +3942,6 @@ namespace YuzuGenerated
 			result.TangentB = s.TangentB;
 			result.TangerineFlags = s.TangerineFlags;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -4094,7 +4065,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.TextColor = s.TextColor;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -4196,7 +4166,6 @@ namespace YuzuGenerated
 			result.TileSize = s.TileSize;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -4366,7 +4335,6 @@ namespace YuzuGenerated
 			result.UV1 = s.UV1;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -4433,7 +4401,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -4551,7 +4518,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
@@ -4607,7 +4573,6 @@ namespace YuzuGenerated
 			result.TangerineFlags = s.TangerineFlags;
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 

@@ -694,9 +694,6 @@ namespace Lime
 			}
 		}
 
-		[YuzuAfterDeserialization]
-		public virtual void OnAfterDeserialization() { }
-
 		/// <summary>
 		/// Returns the <see cref="string"/> representation of this <see cref="Node"/>.
 		/// </summary>
