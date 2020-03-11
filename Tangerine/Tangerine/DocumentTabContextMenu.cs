@@ -19,8 +19,10 @@ namespace Tangerine
 				closeAllButThis,
 				FilesystemCommands.NavigateTo,
 				FilesystemCommands.OpenInSystemFileManager,
+				InspectorCommands.CopyAssetPath,
 			};
 			var path = System.IO.Path.Combine(Project.Current.AssetsDirectory, doc.Path);
+			InspectorCommands.CopyAssetPath.UserData = new System.Collections.Generic.List<Node>(1) { doc.RootNode };
 			FilesystemCommands.NavigateTo.UserData = path;
 			FilesystemCommands.OpenInSystemFileManager.UserData = path;
 			menu.Popup();
