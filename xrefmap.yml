@@ -41165,19 +41165,6 @@ references:
   isSpec: "True"
   fullName: Lime.Node.NotifyOnBuiltSuperficial
   nameWithType: Node.NotifyOnBuiltSuperficial
-- uid: Lime.Node.OnAfterDeserialization
-  name: OnAfterDeserialization()
-  href: api/Lime.Node.html#Lime_Node_OnAfterDeserialization
-  commentId: M:Lime.Node.OnAfterDeserialization
-  fullName: Lime.Node.OnAfterDeserialization()
-  nameWithType: Node.OnAfterDeserialization()
-- uid: Lime.Node.OnAfterDeserialization*
-  name: OnAfterDeserialization
-  href: api/Lime.Node.html#Lime_Node_OnAfterDeserialization_
-  commentId: Overload:Lime.Node.OnAfterDeserialization
-  isSpec: "True"
-  fullName: Lime.Node.OnAfterDeserialization
-  nameWithType: Node.OnAfterDeserialization
 - uid: Lime.Node.OnAfterSerialization
   name: OnAfterSerialization()
   href: api/Lime.Node.html#Lime_Node_OnAfterSerialization
