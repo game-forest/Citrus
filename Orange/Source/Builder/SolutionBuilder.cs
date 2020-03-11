@@ -10,43 +10,28 @@ namespace Orange
 	public class SolutionBuilder
 	{
 		private readonly BuildSystem buildSystem;
-
+		private readonly Target target;
 		private readonly string projectDirectory;
 		private readonly string projectName;
 
 
-		public SolutionBuilder(
-			TargetPlatform platform, string solutionPath, string configuration = BuildConfiguration.Release)
+		public SolutionBuilder(Target target)
 		{
+			this.target = target;
 #if WIN
-			buildSystem = new MSBuild(platform, solutionPath, configuration);
+			buildSystem = new MSBuild(target);
 #elif MAC
-			buildSystem = new MDTool(platform, solutionPath, configuration);
+			buildSystem = new MDTool(target);
 #else
 			throw new NotSupportedException();
 #endif
-			projectDirectory = Path.GetDirectoryName(buildSystem.SolutionPath);
+			projectDirectory = Path.GetDirectoryName(target.ProjectPath);
 			projectName = Path.GetFileNameWithoutExtension(projectDirectory);
-		}
-
-		public void SvnUpdate(Target target)
-		{
-			Subversion.Update(Path.GetDirectoryName(The.Workspace.GetLimeCsprojFilePath(target.Platform)));
-			Subversion.Update(Path.GetDirectoryName(projectDirectory));
-		}
-
-		public static void CopyFile(string srcDir, string dstDir, string fileName)
-		{
-			var srcFile = Path.Combine(srcDir, fileName);
-			var dstFile = Path.Combine(dstDir, fileName);
-			Console.WriteLine("Copying: {0}", dstFile);
-			File.Copy(srcFile, dstFile, true);
 		}
 
 		private static void SynchronizeAll()
 		{
-			var dontSynchronizeProject = The.Workspace.ProjectJson["DontSynchronizeProject"] as bool?;
-			if (dontSynchronizeProject != null && dontSynchronizeProject.Value) {
+			if (The.Workspace.ProjectJson.GetValue("DontSynchronizeProject", false)) {
 				return;
 			}
 			var fileEnumerator = new ScanOptimizedFileEnumerator(
@@ -55,14 +40,14 @@ namespace Orange
 				cutDirectoryPrefix: false
 			);
 			foreach (var target in The.Workspace.Targets) {
-				var limeProj = CsprojSynchronization.ToUnixSlashes(The.Workspace.GetLimeCsprojFilePath(target.Platform));
+				var limeProj = CsprojSynchronization.ToUnixSlashes(The.Workspace.GetProjectRelatedLimeCsprojFilePath(target.Platform));
 				CsprojSynchronization.SynchronizeProject(limeProj);
 				using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 					var dirInfo = new System.IO.DirectoryInfo(The.Workspace.ProjectDirectory);
 					foreach (var fileInfo in fileEnumerator.Enumerate(The.Workspace.GetPlatformSuffix(target.Platform) + ".csproj")) {
 						CsprojSynchronization.SynchronizeProject(fileInfo.Path);
 					};
-					if (target.ProjectPath != null) {
+					if (target.ProjectPath != null && target.ProjectPath.EndsWith(".csproj")) {
 						foreach (var targetCsprojFile in fileEnumerator.Enumerate(Path.GetFileName(target.ProjectPath))) {
 							CsprojSynchronization.SynchronizeProject(targetCsprojFile.Path);
 						}
@@ -97,11 +82,11 @@ namespace Orange
 		public string GetApplicationPath()
 		{
 #if MAC
-			if (buildSystem.Platform == TargetPlatform.Mac) {
+			if (target.Platform == TargetPlatform.Mac) {
 				return Path.Combine(
 					projectDirectory,
 					"bin",
-					buildSystem.Configuration,
+					target.Configuration,
 					projectName + ".app",
 					"Contents/MacOS",
 					projectName);
@@ -112,7 +97,7 @@ namespace Orange
 			return Path.Combine(
 				projectDirectory,
 				"bin",
-				buildSystem.Configuration,
+				target.Configuration,
 				projectName + ".exe");
 #endif
 		}
@@ -121,7 +106,7 @@ namespace Orange
 		{
 			Console.WriteLine("------------- Starting Application -------------");
 
-			if (buildSystem.Platform == TargetPlatform.Android) {
+			if (target.Platform == TargetPlatform.Android) {
 				var signedApks = Directory.GetFiles(buildSystem.BinariesDirectory)
 					.Where(file => file.EndsWith("-Signed.apk"));
 
@@ -144,7 +129,7 @@ namespace Orange
 				return 1;
 			}
 #else
-			if (buildSystem.Platform == TargetPlatform.Mac) {
+			if (target.Platform == TargetPlatform.Mac) {
 				return Process.Start(GetMacAppName(), string.Empty);
 			} else {
 				var args = "--sdkroot=/Applications/Xcode.app" + ' ' + "--installdev=" + GetIOSAppName();
@@ -161,7 +146,7 @@ namespace Orange
 		private string GetIOSAppName()
 		{
 			var directory = Path.Combine(
-				projectDirectory, "bin", "iPhone", buildSystem.Configuration);
+				projectDirectory, "bin", "iPhone", target.Configuration);
 			var all = new DirectoryInfo(directory).EnumerateDirectories("*.app");
 			if (all.Any()) {
 				var allSorted = all.ToList();
@@ -173,7 +158,7 @@ namespace Orange
 
 		private string GetMacAppName()
 		{
-			var directory = Path.Combine(projectDirectory, "bin", buildSystem.Configuration);
+			var directory = Path.Combine(projectDirectory, "bin", target.Configuration);
 			var all = new DirectoryInfo(directory).EnumerateDirectories("*.app");
 			if (all.Any()) {
 				var allSorted = all.ToList();
@@ -228,7 +213,8 @@ namespace Orange
 				androidSdk = Path.Combine(appData, "Android", "android-sdk");
 				executable = Path.Combine(androidSdk, "platform-tools", "adb.exe");
 #elif MAC
-				androidSdk = ""; // TODO: Find defualt sdk path on OSX and assign executable
+				// TODO: Find defualt sdk path on OSX and assign executable
+				androidSdk = "";
 #endif
 			}
 

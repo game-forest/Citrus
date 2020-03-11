@@ -88,7 +88,7 @@ namespace Orange
 				new ScenesCodeCooker(
 					The.Workspace.ProjectDirectory,
 					The.Workspace.GeneratedScenesPath,
-					The.Workspace.Title,
+					The.Workspace.ProjectName,
 					CookingRulesBuilder.MainBundleName,
 					sceneToBundleMap,
 					scenesToCook,
@@ -111,7 +111,7 @@ namespace Orange
 
 		public static CodeCookerCache LoadCodeCookerCache()
 		{
-			var scenesPath = $@"{The.Workspace.ProjectDirectory}/{The.Workspace.Title}.{The.Workspace.GeneratedScenesPath}/Scenes";
+			var scenesPath = $@"{The.Workspace.ProjectDirectory}/{The.Workspace.ProjectName}.{The.Workspace.GeneratedScenesPath}/Scenes";
 			var codeCachePath = GetCodeCachePath();
 			if (!File.Exists(codeCachePath)) {
 				return InvalidateCache(scenesPath);
@@ -128,7 +128,7 @@ namespace Orange
 						throw new System.Exception("Code cooker cache has deprecated version.");
 					}
 					using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
-						var projectName = The.Workspace.Title;
+						var projectName = The.Workspace.ProjectName;
 						foreach (var platform in Enum.GetValues(typeof(TargetPlatform))) {
 							var platformName = Enum.GetName(typeof(TargetPlatform), platform);
 							var projectPath = $"{projectName}.{The.Workspace.GeneratedScenesPath}/{projectName}.GeneratedScenes.{platformName}.csproj";
@@ -152,7 +152,7 @@ namespace Orange
 		{
 			codeCookerCache.GeneratedProjectFileToModificationDate.Clear();
 			using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
-				var projectName = The.Workspace.Title;
+				var projectName = The.Workspace.ProjectName;
 				foreach (var platform in Enum.GetValues(typeof(TargetPlatform))) {
 					var platformName = Enum.GetName(typeof(TargetPlatform), platform);
 					var projectPath = $"{projectName}.{The.Workspace.GeneratedScenesPath}/{projectName}.GeneratedScenes.{platformName}.csproj";

@@ -83,7 +83,7 @@ namespace Tangerine.UI.FilesystemView
 		{
 			return new ToolbarButton(IconPool.GetTexture("Filesystem.ArrowLeft")) {
 				Clicked = () => {
-					view.ScrollView.SetFocus();
+					view.SetFocus();
 					view.GoBackward();
 				},
 			};
@@ -144,7 +144,7 @@ namespace Tangerine.UI.FilesystemView
 		{
 			return new ToolbarButton(IconPool.GetTexture("Filesystem.ArrowRight")) {
 				Clicked = () => {
-					view.ScrollView.SetFocus();
+					view.SetFocus();
 					view.GoForward();
 				},
 			};
@@ -155,7 +155,7 @@ namespace Tangerine.UI.FilesystemView
 			return new ToolbarButton(IconPool.GetTexture("Filesystem.Home")) {
 				Clicked = () => {
 					if (Project.Current != Project.Null) {
-						view.ScrollView.SetFocus();
+						view.SetFocus();
 						view.GoTo(Project.Current.AssetsDirectory ?? System.IO.Directory.GetDirectoryRoot(System.IO.Directory.GetCurrentDirectory()));
 					}
 				}
@@ -166,7 +166,7 @@ namespace Tangerine.UI.FilesystemView
 		{
 			return new ToolbarButton(IconPool.GetTexture("Filesystem.ArrowUp")) {
 				Clicked = () => {
-					view.ScrollView.SetFocus();
+					view.SetFocus();
 					view.GoUp();
 				}
 			};

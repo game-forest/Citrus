@@ -17,12 +17,7 @@ namespace Orange
 
 		public static bool BuildGame(Target target)
 		{
-			return BuildGame(target, BuildConfiguration.Release);
-		}
-
-		public static bool BuildGame(Target target, string configuration)
-		{
-			var builder = new SolutionBuilder(target.Platform, target.ProjectPath, configuration);
+			var builder = new SolutionBuilder(target);
 			if (target.CleanBeforeBuild == true) {
 				builder.Clean();
 			}

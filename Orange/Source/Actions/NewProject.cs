@@ -31,7 +31,7 @@ namespace Orange
 		public static void NewProjectAction(Func<string, bool> projectOpened)
 		{
 			Application.InvokeOnMainThread(() => {
-				var citrusPath = Toolbox.CalcCitrusDirectory();
+				var citrusPath = Toolbox.FindCitrusDirectory();
 				var dlg = new FileDialog {
 					AllowedFileTypes = new string[] { "" },
 					Mode = FileDialogMode.SelectFolder
@@ -69,7 +69,7 @@ namespace Orange
 								// TODO: apply only to .sln and .csproj file
 								text = text.Replace("..\\..\\..", relativeUri.ToString());
 								if (targetPath.EndsWith(".citproj", StringComparison.OrdinalIgnoreCase)) {
-									text = text.Replace("CitrusLocation: \"..\",", $"CitrusLocation: \"{relativeUri}\",");
+									text = text.Replace("CitrusDirectory: \"../../\",", $"CitrusDirectory: \"{relativeUri}\",");
 									newProjectCitprojPath = targetPath;
 								}
 								File.WriteAllText(targetPath, text);

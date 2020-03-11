@@ -32,6 +32,9 @@ namespace Tangerine.UI
 						Directory.CreateDirectory(logDir);
 					}
 					LogFilePath = Path.Combine(logDir, "TangerineLog.txt");
+					if (file != null) {
+						file.Close();
+					}
 					File.WriteAllText(LogFilePath, logBeforeProjectOpened.ToString());
 					file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write));
 					logBeforeProjectOpened.Clear();
@@ -45,7 +48,6 @@ namespace Tangerine.UI
 
 			public override void Write(string value)
 			{
-				value = $"[{DateTime.Now.ToLongTimeString()}] {value}";
 				value = value.Replace("\r\n", "\n").Replace('\r', '\n');
 				value = value.Replace("\n", System.Environment.NewLine);
 				messageQueue.Enqueue(value);
@@ -60,10 +62,11 @@ namespace Tangerine.UI
 						Debug.Write(message);
 #endif // DEBUG
 						SystemOut?.Write(message);
+						var fileMessage = $"[{DateTime.Now.ToLongTimeString()}] {message}";
 						if (LogFilePath != null) {
-							file.Write(message);
+							file.Write(fileMessage);
 						} else {
-							logBeforeProjectOpened.Append(message);
+							logBeforeProjectOpened.Append(fileMessage);
 						}
 						textView.Append(message);
 					}

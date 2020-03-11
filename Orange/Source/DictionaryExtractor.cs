@@ -117,15 +117,7 @@ namespace Orange
 			}
 		}
 
-		private static ILocalizationDictionarySerializer CreateSerializer()
-		{
-			var format = The.Workspace.ProjectJson.GetValue("LocalizationDictionaryFormat", "Text");
-			if (format == "Text") {
-				return new LocalizationDictionaryTextSerializer();
-			} else {
-				throw new Lime.Exception();
-			}
-		}
+		private static ILocalizationDictionarySerializer CreateSerializer() => new LocalizationDictionaryTextSerializer();
 
 		private static void LoadDictionary(LocalizationDictionary dictionary, string path)
 		{

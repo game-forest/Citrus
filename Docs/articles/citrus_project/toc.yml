@@ -1,0 +1,7 @@
+- name: Project Configuration
+  href: configuration.md
+- name: Directory Structure
+  href: directory_structure.md
+- name: Cooking Rules
+  href: cooking_rules.md
+

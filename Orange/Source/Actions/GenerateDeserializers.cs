@@ -43,13 +43,13 @@ namespace Orange
 				generatedDeserializersPath = Path.Combine(generatedDeserializersPath, token.ToString());
 			}
 			Generate(Path.Combine(generatedDeserializersPath, "YuzuGeneratedBinaryDeserializer.cs"),
-				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.Title}Deserializer", "LimeDeserializer") {
+				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.ProjectName}Deserializer", "LimeDeserializer") {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(PluginLoader.EnumerateOrangeAndTangerinePluginAssemblies())
 			);
 			Generate(Path.Combine(generatedDeserializersPath, "YuzuGeneratedCloners.cs"),
-				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.Title}Cloner", "LimeCloner") {
+				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, $"{The.Workspace.ProjectName}Cloner", "LimeCloner") {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(PluginLoader.EnumerateOrangeAndTangerinePluginAssemblies())
@@ -59,13 +59,13 @@ namespace Orange
 		public static void GenerateBinaryDeserializersAndCloners()
 		{
 			var assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("Lime", StringComparison.OrdinalIgnoreCase)).First();
-			Generate(Path.Combine(Toolbox.CalcCitrusDirectory(), "Lime", "Source", "YuzuGeneratedBinaryDeserializer.cs"),
+			Generate(Path.Combine(Toolbox.FindCitrusDirectory(), "Lime", "Source", "YuzuGeneratedBinaryDeserializer.cs"),
 				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, "LimeDeserializer") {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(new[] { assembly })
 			);
-			Generate(Path.Combine(Toolbox.CalcCitrusDirectory(), "Lime", "Source", "YuzuGeneratedCloners.cs"),
+			Generate(Path.Combine(Toolbox.FindCitrusDirectory(), "Lime", "Source", "YuzuGeneratedCloners.cs"),
 				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuCommonOptions, "LimeCloner") {
 					LineSeparator = "\n",
 				},

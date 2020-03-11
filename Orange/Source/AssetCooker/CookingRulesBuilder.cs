@@ -280,11 +280,11 @@ namespace Orange
 
 		public ParticularCookingRules EffectiveRules { get; private set; }
 
-		public IEnumerable<KeyValuePair<Target, ParticularCookingRules>> Enumerate()
+		public IEnumerable<(Target Target, ParticularCookingRules Rules)> Enumerate()
 		{
-			yield return new KeyValuePair<Target, ParticularCookingRules>(null, CommonRules);
-			foreach (var kv in TargetRules) {
-				yield return kv;
+			yield return (null, CommonRules);
+			foreach (var (k, v) in TargetRules) {
+				yield return (k, v);
 			}
 		}
 
@@ -372,18 +372,27 @@ namespace Orange
 		{
 			EffectiveRules = CommonRules.InheritClone();
 			if (target != null) {
-				var targetRules = TargetRules[target];
-				foreach (var i in targetRules.FieldOverrides) {
-					i.SetValue(EffectiveRules, i.GetValue(targetRules));
+				var targetStack = new Stack<Target>();
+				var t = target;
+				while (t != null) {
+					targetStack.Push(t);
+					t = t.BaseTarget;
 				}
-				// TODO: implement this workaround in a general way
-				if (target.Platform == TargetPlatform.Android) {
-					switch (EffectiveRules.PVRFormat) {
-						case PVRFormat.PVRTC2:
-						case PVRFormat.PVRTC4:
-						case PVRFormat.PVRTC4_Forced:
-							EffectiveRules.PVRFormat = PVRFormat.ETC2;
-							break;
+				while (targetStack.Count != 0) {
+					t = targetStack.Pop();
+					var targetRules = TargetRules[t];
+					foreach (var i in targetRules.FieldOverrides) {
+						i.SetValue(EffectiveRules, i.GetValue(targetRules));
+					}
+					// TODO: implement this workaround in a general way
+					if (t.Platform == TargetPlatform.Android) {
+						switch (EffectiveRules.PVRFormat) {
+							case PVRFormat.PVRTC2:
+							case PVRFormat.PVRTC4:
+							case PVRFormat.PVRTC4_Forced:
+								EffectiveRules.PVRFormat = PVRFormat.ETC2;
+								break;
+						}
 					}
 				}
 			}
@@ -582,10 +591,8 @@ namespace Orange
 								}
 								currentRules = rules.TargetRules[currentTarget];
 								{
-									var targetPlatformAttribute = (TargetPlatformsAttribute)typeof(ICookingRules)
-										.GetProperty(words[0]).GetCustomAttribute(typeof(TargetPlatformsAttribute));
-									if (targetPlatformAttribute != null && !targetPlatformAttribute.TargetPlatforms.Contains(currentTarget.Platform)) {
-										throw new Lime.Exception($"Invalid platform {currentTarget.Platform} for cooking rule {words[0]}");
+									if (!CanSetRulePerTarget(words[0], currentTarget)) {
+										throw new Lime.Exception($"Invalid platform {target.Platform} for cooking rule {words[0]}");
 									}
 								}
 							}
@@ -603,6 +610,20 @@ namespace Orange
 			}
 			rules.DeduceEffectiveRules(target);
 			return rules;
+		}
+
+		public static bool CanSetRulePerTarget(string cookingRulePropertyName, Target target)
+		{
+			if (target == null) {
+				return true;
+			}
+			var targetPlatformAttribute = (TargetPlatformsAttribute)typeof(ICookingRules)
+				.GetProperty(cookingRulePropertyName)
+				.GetCustomAttribute(typeof(TargetPlatformsAttribute));
+			if (targetPlatformAttribute != null && !targetPlatformAttribute.TargetPlatforms.Contains(target.Platform)) {
+				return false;
+			}
+			return true;
 		}
 
 		private static void ParseRule(ParticularCookingRules rules, IReadOnlyList<string> words, string path)
