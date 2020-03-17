@@ -43,7 +43,11 @@ namespace Lime
 			if (pathStack.Count == 0 || string.IsNullOrEmpty(path)) {
 				return path;
 			}
-			var d = GetCurrentSerializationDirectory() + '/';
+			var d = GetCurrentSerializationDirectory();
+			if (string.IsNullOrEmpty(d)) {
+				return path;
+			}
+			d += '/';
 			return path.StartsWith(d) ? path.Substring(d.Length) : '/' + path;
 		}
 
@@ -52,7 +56,15 @@ namespace Lime
 			if (pathStack.Count == 0 || string.IsNullOrEmpty(path)) {
 				return path;
 			}
-			return (path[0] == '/') ? path.Substring(1) : GetCurrentSerializationDirectory() + '/' + path;
+			if (path[0] == '/') {
+				return path.Substring(1);
+			} else {
+				var d = GetCurrentSerializationDirectory();
+				if (string.IsNullOrEmpty(d)) {
+					return path;
+				}
+				return d + '/' + path;
+			}
 		}
 
 		internal string GetCurrentSerializationPath()
