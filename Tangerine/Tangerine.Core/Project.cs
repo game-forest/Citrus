@@ -125,10 +125,12 @@ namespace Tangerine.Core
 					}
 				}
 			};
-			foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
-				var path = Path.Combine("Overlays", file);
-				Current.Overlays.Add(Path.GetFileNameWithoutExtension(path),
-					(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(path, null), null, TangerinePersistence.Instance));
+			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
+				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
+					var path = Path.Combine("Overlays", file);
+					Current.Overlays.Add(Path.GetFileNameWithoutExtension(path),
+						(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(path, null), null, TangerinePersistence.Instance));
+				}
 			}
 			registeredNodeTypes.AddRange(GetNodesTypesOrdered("Lime"));
 			registeredComponentTypes.AddRange(GetComponentsTypes("Lime"));
