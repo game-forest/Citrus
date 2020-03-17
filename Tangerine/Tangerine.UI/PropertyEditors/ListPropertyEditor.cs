@@ -40,7 +40,9 @@ namespace Tangerine.UI
 						var o = EditorParams.Objects.First();
 						pi.SetValue(o, list = Activator.CreateInstance<TList>());
 					}
-					var newElement = typeof(TElement) == typeof(string) ? (TElement)(object)string.Empty : Activator.CreateInstance<TElement>();
+					var newElement = typeof(TElement) == typeof(string) ?
+						(TElement)(object)string.Empty : typeof(TElement).IsInterface ?
+							default :  Activator.CreateInstance<TElement>();
 					using (Document.Current.History.BeginTransaction()) {
 						int newIndex = list.Count;
 						InsertIntoList.Perform(list, newIndex, newElement);

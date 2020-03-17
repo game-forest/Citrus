@@ -10,6 +10,7 @@ namespace Tangerine.UI
 		{
 			var editor = editorParams.NumericEditBoxFactory();
 			EditorContainer.AddNode(editor);
+			EditorContainer.AddNode(Spacer.HStretch());
 			var current = CoalescedPropertyValue();
 			editor.Submitted += text => {
 				if (Parser.TryParse(text, out double newValue)) {
