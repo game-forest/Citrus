@@ -38,6 +38,7 @@ namespace Tangerine.UI.Inspector
 		{
 			CommandHandlerList.Global.Connect(InspectorCommands.InspectRootNodeCommand, () => Document.Current.InspectRootNode = !Document.Current.InspectRootNode);
 			CommandHandlerList.Global.Connect(InspectorCommands.InspectEasing, new InspectEasingCommandHandler());
+			CommandHandlerList.Global.Connect(InspectorCommands.CopyAssetPath, new CopyAssetPathCommandHandler());
 		}
 
 		class InspectEasingCommandHandler : CommandHandler
@@ -50,6 +51,16 @@ namespace Tangerine.UI.Inspector
 			public override void Execute()
 			{
 				CoreUserPreferences.Instance.InspectEasing = !CoreUserPreferences.Instance.InspectEasing;
+			}
+		}
+
+		class CopyAssetPathCommandHandler : CommandHandler
+		{
+			public override void Execute()
+			{
+				var node = (InspectorCommands.CopyAssetPath.UserData as IEnumerable<Node>) ?? Document.Current?.SelectedNodes();
+				Clipboard.Text = string.Join("\n", node?.Select((n, i) => n.GetRelativePath()));
+				InspectorCommands.CopyAssetPath.UserData = null;
 			}
 		}
 
@@ -102,7 +113,7 @@ namespace Tangerine.UI.Inspector
 								Index = 0,
 								Title = "Inspector Toolbar Panel",
 								Draggable = false,
-								CommandIds = { "InspectRootNodeCommand", "InspectEasing" }
+								CommandIds = { "InspectRootNodeCommand", "InspectEasing", "CopyAssetPath" }
 							}
 						}
 					}

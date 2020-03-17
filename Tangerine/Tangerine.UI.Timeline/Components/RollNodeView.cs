@@ -301,6 +301,7 @@ namespace Tangerine.UI.Timeline.Components
 			Menu submenu;
 			var menu = new Menu {
 				GenericCommands.ExportScene,
+				InspectorCommands.CopyAssetPath,
 				Command.MenuSeparator,
 				Command.Cut,
 				Command.Copy,

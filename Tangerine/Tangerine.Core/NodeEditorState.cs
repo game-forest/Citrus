@@ -90,5 +90,16 @@ namespace Tangerine.Core
 		{
 			return NodeCompositionValidator.IsCopyPasteAllowed(node.GetType());
 		}
+
+		public static string GetRelativePath(this Node node)
+		{
+			var root = node.GetRoot();
+			var bundlePath = root.Components.Get<Node.AssetBundlePathComponent>()?.Path;
+			var nodePath = Node.ResolveScenePath(node.ContentsPath);
+			return
+				nodePath == null ?
+				(root == node ? bundlePath : $"{bundlePath} [{node.ToString()}]") :
+				$"{nodePath} [{node.ToString()}]";
+		}
 	}
 }
