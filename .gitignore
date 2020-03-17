@@ -59,6 +59,7 @@ Lemon/Library/Android/libs/
 
 .orange/
 *.sublime-workspace
+*.sublime-project
 TangerineLog.txt
 
 Samples/EmptyProject/TangerineLog.txt
