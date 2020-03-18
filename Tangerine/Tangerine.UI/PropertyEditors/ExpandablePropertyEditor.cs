@@ -37,7 +37,7 @@ namespace Tangerine.UI
 				LayoutCell = new LayoutCell(Alignment.LeftCenter)
 			};
 			ExpandButton.Clicked += () => Expanded = !Expanded;
-			editorParams.InspectorPane.AddNode(ExpandableContent);
+			ContainerWidget.AddNode(ExpandableContent);
 			ExpandableContent.AddChangeWatcher(() => EditorContainer.GloballyEnabled,
 				enabled => ExpandableContent.Enabled = enabled);
 			LabelContainer.Nodes.Insert(0, ExpandButton);

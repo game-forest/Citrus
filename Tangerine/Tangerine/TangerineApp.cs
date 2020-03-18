@@ -260,6 +260,8 @@ namespace Tangerine
 				typeof(Core.Operations.RemoveFromList.Processor),
 				typeof(Core.Operations.InsertIntoList<,>.Processor),
 				typeof(Core.Operations.RemoveFromList<,>.Processor),
+				typeof(Core.Operations.InsertIntoDictionary<,,>.Processor),
+				typeof(Core.Operations.RemoveFromDictionary<,,>.Processor),
 				typeof(Core.Operations.UnlinkFolderItem.Processor),
 				typeof(Core.Operations.MoveNodes.Processor),
 				typeof(Core.Operations.SetMarker.Processor),

@@ -528,6 +528,71 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
+	public class InsertIntoDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
+	{
+		public readonly TDictionary Dictionary;
+		public readonly TKey Key;
+		public readonly TValue Value;
+		public readonly TValue OldValue;
+		public readonly bool HadValue;
+
+		public override bool IsChangingDocument => true;
+
+		protected InsertIntoDictionary(TDictionary dictionary, TKey key, TValue value)
+		{
+			Dictionary = dictionary;
+			Key = key;
+			Value = value;
+			HadValue = dictionary.TryGetValue(key, out OldValue);
+		}
+
+		public static void Perform(TDictionary dictionary, TKey key, TValue value) =>
+			DocumentHistory.Current.Perform(new InsertIntoDictionary<TDictionary, TKey, TValue>(dictionary, key, value));
+
+		public class Processor : OperationProcessor<InsertIntoDictionary<TDictionary, TKey, TValue>>
+		{
+			protected override void InternalRedo(InsertIntoDictionary<TDictionary, TKey, TValue> op) =>
+				op.Dictionary[op.Key] = op.Value;
+
+			protected override void InternalUndo(InsertIntoDictionary<TDictionary, TKey, TValue> op)
+			{
+				if (op.HadValue) {
+					op.Dictionary[op.Key] = op.OldValue;
+				} else {
+					op.Dictionary.Remove(op.Key);
+				}
+			}
+		}
+	}
+
+	public class RemoveFromDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
+	{
+		public readonly TDictionary Dictionary;
+		public readonly TKey Key;
+		public readonly TValue Value;
+
+		public override bool IsChangingDocument => true;
+
+		protected RemoveFromDictionary(TDictionary dictionary, TKey key)
+		{
+			Dictionary = dictionary;
+			Key = key;
+			Value = dictionary[key];
+		}
+
+		public static void Perform(TDictionary dictionary, TKey key) =>
+			DocumentHistory.Current.Perform(new RemoveFromDictionary<TDictionary, TKey, TValue>(dictionary, key));
+
+		public class Processor : OperationProcessor<RemoveFromDictionary<TDictionary, TKey, TValue>>
+		{
+			protected override void InternalRedo(RemoveFromDictionary<TDictionary, TKey, TValue> op) =>
+				op.Dictionary.Remove(op.Key);
+
+			protected override void InternalUndo(RemoveFromDictionary<TDictionary, TKey, TValue> op) =>
+				op.Dictionary.Add(op.Key, op.Value);
+		}
+	}
+
 	public class InsertFolderItem : Operation
 	{
 		public readonly Node Container;

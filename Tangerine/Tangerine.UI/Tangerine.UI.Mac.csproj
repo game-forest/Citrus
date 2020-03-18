@@ -70,6 +70,7 @@
     <Compile Include="EmbeddedResources\ThemedIconResource.cs" />
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
     <Compile Include="PropertyEditors\CustomFilePropertyEditor.cs" />
+    <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
     <Compile Include="PropertyEditors\DropDownListPropertyEditor.cs" />
     <Compile Include="PropertyEditors\FolderPropertyEditor.cs" />
     <Compile Include="PropertyEditors\ListPropertyEditor.cs" />
