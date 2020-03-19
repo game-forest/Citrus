@@ -9,6 +9,7 @@ namespace Lime
 		/// Assign provided material
 		/// </summary>
 		void AssignMaterial(IMaterial material);
+		IMaterial Material { get; }
 		ITexture Texture { get; }
 		Vector2 UV0 { get; }
 		Vector2 UV1 { get; }
