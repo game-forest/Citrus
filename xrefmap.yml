@@ -26336,6 +26336,19 @@ references:
   isSpec: "True"
   fullName: Lime.IMaterialComponentOwner.AssignMaterial
   nameWithType: IMaterialComponentOwner.AssignMaterial
+- uid: Lime.IMaterialComponentOwner.Material
+  name: Material
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_Material
+  commentId: P:Lime.IMaterialComponentOwner.Material
+  fullName: Lime.IMaterialComponentOwner.Material
+  nameWithType: IMaterialComponentOwner.Material
+- uid: Lime.IMaterialComponentOwner.Material*
+  name: Material
+  href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_Material_
+  commentId: Overload:Lime.IMaterialComponentOwner.Material
+  isSpec: "True"
+  fullName: Lime.IMaterialComponentOwner.Material
+  nameWithType: IMaterialComponentOwner.Material
 - uid: Lime.IMaterialComponentOwner.Texture
   name: Texture
   href: api/Lime.IMaterialComponentOwner.html#Lime_IMaterialComponentOwner_Texture
