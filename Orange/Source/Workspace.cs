@@ -295,6 +295,10 @@ namespace Orange
 			foreach (var t in Targets) {
 				visit(t);
 			}
+#if TANGERINE
+			BlendAnimationEngine.ApplyAnimationBlenderInTangerine =
+				The.Workspace.ProjectJson.GetValue<bool>("ApplyAnimationBlenderInTangerine");
+#endif
 		}
 
 		public void SaveCurrentProject()

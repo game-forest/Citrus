@@ -27,6 +27,7 @@ Property                          | Type                                      | 
 `AssetCache`                      | [AssetCache](#assetcache)                 | Asset Cache settings
 `RemoteScripting`                 | [RemoteScripting](#remotescripting)       | TODO
 `ResolutionSettings`              | [ResolutionSettings](#resolutionsettings) | TODO
+`ApplyAnimationBlenderInTangerine`| bool                                      | Allows you to enable BlendAnimationEngine in Tangerine which is turned off by default
 ## Target
 
 Default target names are `iOS`, `Android`, `Win`, `Mac`.
