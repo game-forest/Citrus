@@ -78,8 +78,6 @@ namespace Lime
 			skipRender = false;
 		}
 
-		public void AssignMaterial(IMaterial material) => Material = material;
-
 		ITexture IImageCombinerArg.GetTexture()
 		{
 			return Texture;
