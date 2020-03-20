@@ -177,6 +177,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Source\Actions\AnalyzeResources.cs" />
+    <Compile Include="Source\Actions\BenchmarkPersistence.cs" />
     <Compile Include="Source\Actions\BuildGame.cs" />
     <Compile Include="Source\Actions\BuildGameAndRun.cs" />
     <Compile Include="Source\Actions\ConvertDictionaryToNewFormat.cs" />
