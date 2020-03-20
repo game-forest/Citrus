@@ -77,6 +77,7 @@ namespace Tangerine.UI
 		public ToolbarButton()
 		{
 			highlightable = true;
+			FreezeInvisible = false;
 			Nodes.Clear();
 			Padding = new Thickness(2);
 			Size = MinMaxSize = Theme.Metrics.DefaultToolbarButtonSize;
