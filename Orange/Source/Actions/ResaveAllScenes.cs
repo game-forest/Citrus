@@ -2,6 +2,7 @@ using System.ComponentModel.Composition;
 using System;
 using Lime;
 using System.IO;
+using Tangerine.Core;
 
 namespace Orange
 {
@@ -11,11 +12,9 @@ namespace Orange
 		[ExportMetadata(nameof(IMenuItemMetadata.Label), "Resave All Scenes")]
 		public static void ResaveAllScenes()
 		{
-			foreach (var file in AssetBundle.Current.EnumerateFiles()) {
-				var filename = Path.GetFileName(file);
-				if (!filename.EndsWith("tan", StringComparison.OrdinalIgnoreCase)) {
-					continue;
-				}
+			var savedAssetBundle = AssetBundle.Current;
+			AssetBundle.Current = new TangerineAssetBundle(The.Workspace.AssetsDirectory);
+			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".tan")) {
 				var node = Node.CreateFromAssetBundle(
 					path: Path.ChangeExtension(file, null),
 					ignoreExternals: true
@@ -26,11 +25,12 @@ namespace Orange
 					instance: node,
 					format: Persistence.Format.Json,
 					sourceExtension: "tan",
-					time: AssetBundle.Current.GetFileLastWriteTime(file),
+					time: File.GetLastWriteTime(file),
 					attributes: AssetAttributes.None,
 					cookingRulesSHA1: null
 				);
 			}
+			AssetBundle.Current = savedAssetBundle;
 		}
 	}
 }

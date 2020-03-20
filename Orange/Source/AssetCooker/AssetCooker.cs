@@ -75,6 +75,7 @@ namespace Orange
 			}
 		}
 
+		// TODO: Shouldn't be part of asset cooker
 		public List<string> GetListOfAllBundles()
 		{
 			var cookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
