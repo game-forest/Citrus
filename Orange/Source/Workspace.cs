@@ -97,8 +97,6 @@ namespace Orange
 			} else if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out projectFilePath)) {
 				Open(projectFilePath);
 				The.UI.UpdateOpenedProjectPath(projectFilePath);
-			} else {
-				throw new InvalidOperationException("Can't find .citproj");
 			}
 			var projectConfig = config.GetProjectConfig(projectFilePath);
 			The.UI.LoadFromWorkspaceConfig(config, projectConfig);

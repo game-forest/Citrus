@@ -40,6 +40,8 @@ namespace Orange
 				if (!File.Exists(projectFile)) {
 					throw new FileNotFoundException($"Project file '{projectFile}' does not exist");
 				}
+				// TODO: consider if Load or Open should really be called.
+				// Also, this is somehow chained with getting rid of "The" namespace
 				The.Workspace.Load(projectFile);
 			}
 		}
