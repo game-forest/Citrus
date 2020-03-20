@@ -24,7 +24,7 @@ namespace Orange
 			};
 			AddNode(button);
 			editor.Submitted += ChooseFileByUser;
-			button.Clicked += ButtonClicked;
+			button.Clicked += () => ShowOpenCitrusProjectDialog(ChooseFileByUser, InitialDirectory);
 		}
 
 		private void ChooseFileByUser(string file)
@@ -33,15 +33,16 @@ namespace Orange
 			FileChosenByUser?.Invoke(file);
 		}
 
-		private void ButtonClicked()
+		public static void ShowOpenCitrusProjectDialog(Action<string> OnChoose, string initialDirectory)
 		{
 			var dialog = new FileDialog {
 				AllowedFileTypes = new[] { "citproj" },
 				Mode = FileDialogMode.Open,
-				InitialDirectory = InitialDirectory
+				InitialDirectory = initialDirectory
 			};
-			if (dialog.RunModal())
-				ChooseFileByUser(dialog.FileName);
+			if (dialog.RunModal()) {
+				OnChoose(dialog.FileName);
+			}
 		}
 
 		private string InitialDirectory => !string.IsNullOrEmpty(ChosenFile) ?
