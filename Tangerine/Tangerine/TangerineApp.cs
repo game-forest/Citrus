@@ -213,7 +213,10 @@ namespace Tangerine
 				}
 			};
 			Project.Tasks = dockManager.MainWindowWidget.Tasks;
-			Project.Tasks.Add(new AutosaveProcessor(() => AppUserPreferences.Instance.AutosaveDelay));
+			Project.Tasks.Add(
+				new AutosaveProcessor(() => AppUserPreferences.Instance.AutosaveDelay),
+				new TooltipProcessor()
+			);
 			BackupManager.Instance.Activate(Project.Tasks);
 			Document.NodeDecorators.AddFor<Spline>(n => n.CompoundPostPresenter.Add(new UI.SceneView.SplinePresenter()));
 			Document.NodeDecorators.AddFor<Viewport3D>(n => n.CompoundPostPresenter.Add(new UI.SceneView.Spline3DPresenter()));
@@ -565,7 +568,7 @@ namespace Tangerine
 				tabBar.Nodes.Clear();
 				foreach (var doc in Project.Current.Documents) {
 					var tab = new ThemedTab { Closable = true };
-					tab.Tasks.Add(Tooltip.Instance.ShowOnMouseOverTask(tab, () => doc.FullPath.Replace('/', '\\')));
+					tab.Components.Add(new TooltipComponent(() => doc.FullPath.Replace('/', '\\')));
 					tab.AddChangeWatcher(() => Document.Current, _ => {
 						if (doc == Document.Current) {
 							tabBar.ActivateTab(tab);
