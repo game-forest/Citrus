@@ -107,6 +107,9 @@ namespace Tangerine.UI.Timeline
 					continue;
 				}
 				foreach (var animator in animable.Animators.ToList()) {
+					if (animator.AnimationId != Document.Current.AnimationId) {
+						continue;
+					}
 					IEnumerable<IKeyframe> saved = savedKeyframes[animator];
 					if (
 						side == DragSide.Left && length < oldLength ||
