@@ -1,7 +1,5 @@
 #if MAC
 using System;
-using System.Drawing;
-using Lime;
 using Foundation;
 using AppKit;
 using WebKit;
@@ -12,7 +10,7 @@ namespace Lime
 	[YuzuDontGenerateDeserializer]
 	public class WebBrowser : Widget, IUpdatableNode
 	{
-		private WebView webView;
+		private WKWebView webView;
 
 		public Uri Url { get { return GetUrl(); } set { SetUrl(value); } }	
 
@@ -31,7 +29,7 @@ namespace Lime
 
 		public WebBrowser()
 		{
-			webView = new WebView();
+			webView = new WKWebView(CGRect.Empty, new WKWebViewConfiguration());
 			webView.AutoresizingMask = NSViewResizingMask.HeightSizable | NSViewResizingMask.WidthSizable; 
 			webView.WantsLayer = true;
 			Window.Current.NSGameView.AddSubview(webView);
@@ -41,7 +39,7 @@ namespace Lime
 		public override void Dispose()
 		{
 			if (webView != null) {
-				webView.MainFrame.StopLoading();
+				webView.StopLoading();
 				var localWebView = webView;
 				Application.InvokeOnMainThread(() => {
 					localWebView.RemoveFromSuperview(); // RemoveFromSuperview must run in main thread only.
@@ -86,13 +84,13 @@ namespace Lime
 
 		private Uri GetUrl()
 		{
-			return new Uri(webView.MainFrame.DataSource.Request.Url.AbsoluteString);
+			return new Uri(webView.Url.AbsoluteString);
 		}
 
 		private void SetUrl(Uri value)
 		{
 			NSUrlRequest request = new NSUrlRequest(new NSUrl(value.AbsoluteUri));
-			webView.MainFrame.LoadRequest(request);
+			webView.LoadRequest(request);
 		}
 
 	}

@@ -4,12 +4,13 @@ using System.Drawing;
 using Lime;
 using Foundation;
 using UIKit;
+using WebKit;
 
 namespace Lime
 {
 	public class WebBrowser : Widget, IUpdatableNode
 	{
-		private UIWebView webView;
+		private WKWebView webView;
 		private UIActivityIndicatorView activityIndicator;
 		private bool isActivityIndicatorVisible = false;
 		private Rectangle aabbInDeviceSpace;
@@ -22,17 +23,18 @@ namespace Lime
 
 		public WebBrowser()
 		{
-			webView = new UIWebView {
+			webView = new WKWebView(CoreGraphics.CGRect.Empty, new WKWebViewConfiguration()) {
 				AutoresizingMask = UIViewAutoresizing.FlexibleDimensions,
-				ScalesPageToFit = true,
 				Opaque = false,
 				BackgroundColor = UIColor.Black,
 				Hidden = true,
 			};
 			webView.ScrollView.Bounces = false;
 			webView.ScrollView.BouncesZoom = false;
-			webView.LoadStarted += WebView_LoadStarted;
-			webView.LoadFinished += WebView_LoadFinished;
+			var webViewDelegate = new WebBrowserDelegate();
+			webViewDelegate.LoadStarted += WebView_LoadStarted;
+			webViewDelegate.LoadFinished += WebView_LoadStarted;
+			webView.NavigationDelegate = webViewDelegate;
 			GameView.AddSubview(webView);
 			Components.Add(new UpdatableNodeBehavior());
 		}	
@@ -46,7 +48,7 @@ namespace Lime
 
 		public Uri Url 
 		{ 
-			get { return new Uri(webView.Request.Url.AbsoluteString); } 
+			get { return new Uri(webView.Url.AbsoluteString); } 
 			set 
 			{ 
 				var request = new NSUrlRequest(new NSUrl(value.AbsoluteUri));
@@ -54,7 +56,7 @@ namespace Lime
 			} 
 		}
 
-		private void WebView_LoadStarted(object sender, EventArgs e) {
+		private void WebView_LoadStarted() {
 			if (activityIndicator == null) {
 				activityIndicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.WhiteLarge);
 				activityIndicator.Center = ActivityIndicatorPosition;
@@ -69,7 +71,7 @@ namespace Lime
 			get { return Window.Current.UIViewController.View; }
 		}
 
-		private void WebView_LoadFinished(object sender, EventArgs e) {
+		private void WebView_LoadFinished() {
 			activityIndicator.StopAnimating();
 			activityIndicator.RemoveFromSuperview();
 			isActivityIndicatorVisible = false;
@@ -118,7 +120,7 @@ namespace Lime
 			}
 			if (webView != null) {
 				webView.StopLoading();
-				webView.Delegate = null;
+				//webView.Delegate = null;
 				var localWebView = webView;
 				Application.InvokeOnMainThread(() => {
 					localWebView.RemoveFromSuperview(); // RemoveFromSuperview must run in main thread only.
@@ -127,7 +129,23 @@ namespace Lime
 				webView = null;
 			}
 		}
-	
+
+		private class WebBrowserDelegate : WKNavigationDelegate
+		{
+			public event Action LoadStarted;
+			public event Action LoadFinished;
+
+			public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
+			{
+				LoadStarted?.Invoke();
+			}
+
+			public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
+			{
+				LoadFinished?.Invoke();
+			}
+		}
+
 		private static Rectangle CalculateAABBInDeviceSpace(Widget widget)
 		{
 			var aabb = widget.CalcAABBInSpaceOf(WidgetContext.Current.Root);
