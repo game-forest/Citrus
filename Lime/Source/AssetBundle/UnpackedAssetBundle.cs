@@ -11,7 +11,6 @@ namespace Lime
 		public readonly string BaseDirectory;
 		private IFileSystemWatcher watcher;
 		private bool assetsCached;
-		private string cachedPath;
 		private List<FileInfo> cachedAssets;
 
 		public UnpackedAssetBundle(string baseDirectory)
@@ -85,25 +84,26 @@ namespace Lime
 			if (extension != null && !extension.StartsWith(".")) {
 				throw new InvalidOperationException();
 			}
-			if (!assetsCached || path != cachedPath) {
+			if (!assetsCached) {
 				assetsCached = true;
-				cachedPath = path;
-				var baseDirectory = BaseDirectory;
-				if (path != null) {
-					baseDirectory = NormalizeDirectoryPath(Path.Combine(baseDirectory, path));
-				}
 				cachedAssets = cachedAssets ?? new List<FileInfo>();
 				cachedAssets.Clear();
-				var dirInfo = new DirectoryInfo(baseDirectory);
+				var dirInfo = new DirectoryInfo(BaseDirectory);
 				foreach (var fileInfo in dirInfo.GetFiles("*", SearchOption.AllDirectories)) {
 					var file = fileInfo.FullName;
 					file = file.Substring(dirInfo.FullName.Length).Replace('\\', '/');
 					cachedAssets.Add(new FileInfo { Path = file, LastWriteTime = fileInfo.LastWriteTime });
 				}
 				// According to documentation the file order is not guaranteed.
-				cachedAssets.Sort((a, b) => string.Compare(a.Path, b.Path));
+				cachedAssets.Sort((a, b) => string.Compare(a.Path, b.Path, StringComparison.Ordinal));
+			}
+			if (path != null) {
+				path = NormalizeDirectoryPath(path);
 			}
 			foreach (var asset in cachedAssets) {
+				if (path != null && !asset.Path.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+					continue;
+				}
 				if (extension != null && !asset.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}

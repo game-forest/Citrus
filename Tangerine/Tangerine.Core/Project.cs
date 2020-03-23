@@ -127,9 +127,8 @@ namespace Tangerine.Core
 			};
 			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
 				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
-					var path = Path.Combine("Overlays", file);
-					Current.Overlays.Add(Path.GetFileNameWithoutExtension(path),
-						(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(path, null), null, TangerinePersistence.Instance));
+					Current.Overlays.Add(Path.GetFileNameWithoutExtension(file),
+						(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(file, null), null, TangerinePersistence.Instance));
 				}
 			}
 			registeredNodeTypes.AddRange(GetNodesTypesOrdered("Lime"));
