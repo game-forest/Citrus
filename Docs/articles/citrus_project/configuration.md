@@ -24,6 +24,7 @@ Property                          | Type                                      | 
 `Targets`                         | List<[Target](#target)>                   | Lists user defined targets.
 `XCodeProject`                    | [XCodeProject](#xcodeproject)             | Setting specific to XCodePproject generation.
 `PluginAssemblies`                | [PluginAssemblies](#pluginassemblies)     | Describes which assemblies should be loaded by Orange/Tangerine.
+`AssetCache`                      | [AssetCache](#assetcache)                 | Asset Cache settings
 `RemoteScripting`                 | [RemoteScripting](#remotescripting)       | TODO
 `ResolutionSettings`              | [ResolutionSettings](#resolutionsettings) | TODO
 ## Target

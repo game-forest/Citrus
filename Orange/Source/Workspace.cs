@@ -96,7 +96,6 @@ namespace Orange
 				Open(projectFilePath);
 			} else if (Toolbox.TryFindCitrusProjectForExecutingAssembly(out projectFilePath)) {
 				Open(projectFilePath);
-				The.UI.UpdateOpenedProjectPath(projectFilePath);
 			}
 			var projectConfig = config.GetProjectConfig(projectFilePath);
 			The.UI.LoadFromWorkspaceConfig(config, projectConfig);
@@ -130,6 +129,7 @@ namespace Orange
 		public void Save()
 		{
 			var config = WorkspaceConfig.Load();
+			config.RegisterRecentProject(ProjectFilePath);
 			var projectConfig = config.GetProjectConfig(ProjectFilePath);
 			if (projectConfig != null) {
 				projectConfig.AssetCacheMode = AssetCacheMode;
@@ -160,6 +160,7 @@ namespace Orange
 				LoadCacheSettings();
 				The.UI.OnWorkspaceOpened();
 				The.UI.ReloadBundlePicker();
+				The.UI.UpdateOpenedProjectPath(projectFilePath);
 			} catch (System.Exception e) {
 				// TODO: make a general way to close project and reset everything to default state
 				ProjectFilePath = null;
@@ -322,6 +323,13 @@ namespace Orange
 			} catch (ArgumentException) {
 				throw new Lime.Exception($"Unknown sub-target platform name: {name}");
 			}
+		}
+
+		public void RemoveRecentProject(string projectPath)
+		{
+			var config = WorkspaceConfig.Load();
+			config.RemoveRecentProject(projectPath);
+			WorkspaceConfig.Save(config);
 		}
 	}
 }

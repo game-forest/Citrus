@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using Lime;
@@ -12,7 +13,6 @@ namespace Orange
 	{
 		private readonly Window window;
 		private readonly WindowWidget windowWidget;
-		private Widget hBox;
 		private Widget mainVBox;
 		private BundlePickerWidget bundlePickerWidget;
 		private FileChooser projectPicker;
@@ -36,7 +36,7 @@ namespace Orange
 		{
 			bundlePicker = new BundlePicker();
 			bundlePickerWidget = new BundlePickerWidget(bundlePicker);
-			hBox.AddNode(bundlePickerWidget);
+			mainInterfaceWidget.AddNode(bundlePickerWidget);
 		}
 
 		public OrangeInterface()
@@ -59,7 +59,7 @@ namespace Orange
 				Padding = new Thickness(6),
 				Size = windowSize
 			};
-			hBox = new Widget {
+			mainInterfaceWidget = new Widget {
 				Layout = new HBoxLayout {
 					Spacing = 6
 				}
@@ -74,10 +74,12 @@ namespace Orange
 			progressBarField = new ProgressBarField();
 			mainVBox.AddNode(progressBarField);
 			mainVBox.AddNode(CreateFooterSection());
-			hBox.AddNode(mainVBox);
-			windowWidget.AddNode(hBox);
+			mainInterfaceWidget.AddNode(mainVBox);
 			CreateMenu();
 		}
+
+		private Widget mainInterfaceWidget;
+		private Widget startPageWidget;
 
 		private void CreateMenu()
 		{
@@ -295,7 +297,7 @@ namespace Orange
 			goButton.Visible = value;
 			abortButton.Visible = !value;
 			EnableChildren(windowWidget, value);
-			hBox.Enabled = true;
+			mainInterfaceWidget.Enabled = true;
 			mainVBox.Enabled = true;
 			EnableChildren(mainVBox, value);
 			footerSection.Enabled = true;
@@ -316,6 +318,8 @@ namespace Orange
 
 		public override void OnWorkspaceOpened()
 		{
+			windowWidget.Nodes.Clear();
+			windowWidget.Nodes.Add(mainInterfaceWidget);
 			platformPicker.Reload();
 			AssetCooker.BeginCookBundles += () => abortButton.Enabled = true;
 			AssetCooker.EndCookBundles += () => abortButton.Enabled = false;
@@ -419,13 +423,13 @@ namespace Orange
 				return;
 			}
 			pluginPanel = builder.SidePanel as PluginPanel;
-			windowWidget.AddNode(pluginPanel);
+			mainInterfaceWidget.AddNode(pluginPanel);
 			window.ClientSize = new Vector2(window.ClientSize.X + 150, window.ClientSize.Y);
 		}
 
 		public override void DestroyPluginUI()
 		{
-			windowWidget.Nodes.Remove(pluginPanel);
+			mainInterfaceWidget.Nodes.Remove(pluginPanel);
 			if (pluginPanel != null) {
 				window.ClientSize = new Vector2(window.ClientSize.X - 150, window.ClientSize.Y);
 				pluginPanel = null;
@@ -441,6 +445,7 @@ namespace Orange
 			if (window.State != WindowState.Minimized) {
 				config.ClientPosition = window.ClientPosition;
 				config.ClientSize = window.ClientSize;
+				config.WindowState = window.State;
 			}
 		}
 
@@ -460,6 +465,9 @@ namespace Orange
 			if (config.ClientSize != Vector2.Zero) {
 				window.ClientSize = config.ClientSize;
 			}
+			if (config.WindowState != WindowState.Minimized) {
+				window.State = config.WindowState;
+			}
 			if (projectConfig != null) {
 				var newIndex = projectConfig.ActiveTargetIndex;
 				if (newIndex < 0 || newIndex >= platformPicker.Items.Count) {
@@ -470,6 +478,9 @@ namespace Orange
 				UpdateBundlePicker(projectConfig.BundlePickerVisible);
 			} else {
 				UpdateBundlePicker(false);
+				startPageWidget = ProduceStartPage(config.RecentProjects);
+				windowWidget.Nodes.Clear();
+				windowWidget.AddNode(startPageWidget);
 			}
 		}
 
@@ -664,6 +675,53 @@ namespace Orange
 					}
 					yield return null;
 				}
+			}
+		}
+
+		public static Widget ProduceStartPage(IEnumerable<string> recentProjects)
+		{
+			ThemedButton openButton = null;
+			var root = new Frame {
+				Layout = new LinearLayout(LayoutDirection.TopToBottom),
+				Nodes = {
+					(openButton = new ThemedButton("Open") {
+						Clicked = () => FileChooser.ShowOpenCitrusProjectDialog(The.Workspace.Open, recentProjects.FirstOrDefault()),
+					})
+				},
+			};
+			DecorateButton(openButton);
+			foreach (var projectPath in recentProjects) {
+				var projectPathBound = projectPath;
+				Frame f = null;
+				var projectName = Path.GetFileNameWithoutExtension(projectPath);
+				root.AddNode(
+					f = new Frame {
+						Layout = new LinearLayout(LayoutDirection.LeftToRight),
+						Nodes = {
+							(openButton = new ThemedButton($"{projectName}\n at \"{projectPathBound}\"") {
+								Clicked = () => The.Workspace.Load(projectPathBound),
+							}),
+							new ThemedButton("X") {
+								Clicked = () => {
+									The.Workspace.RemoveRecentProject(projectPathBound);
+									root.Nodes.Remove(f);
+								},
+							}
+						}
+
+					}
+				);
+				DecorateButton(openButton);
+			}
+			return root;
+
+			void DecorateButton(ThemedButton b)
+			{
+				b.MinSize = Vector2.Zero;
+				b.MaxSize = Vector2.PositiveInfinity;
+				var buttonText = (b["TextPresenter"] as SimpleText);
+				buttonText.FontHeight = 100;
+				buttonText.OverflowMode = TextOverflowMode.Minify;
 			}
 		}
 

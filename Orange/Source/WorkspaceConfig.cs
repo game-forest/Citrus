@@ -41,6 +41,28 @@ namespace Orange
 		[YuzuOptional]
 		public Dictionary<string, ProjectConfig> PerProjectConfig = new Dictionary<string, ProjectConfig>();
 
+		[YuzuOptional]
+		public List<string> RecentProjects = new List<string>();
+
+		[YuzuOptional]
+		public WindowState WindowState { get; set; } = WindowState.Normal;
+
+		public void RegisterRecentProject(string projectPath)
+		{
+			if (projectPath == null) {
+				return;
+			}
+			if (!Path.IsPathRooted(projectPath)) {
+				throw new InvalidOperationException("Project path must be rooted.");
+			}
+			var index = RecentProjects.FindIndex((s) =>
+				string.Compare(NormalizePath(s), NormalizePath(projectPath), StringComparison.OrdinalIgnoreCase) == 0);
+			if (index != -1) {
+				RecentProjects.RemoveAt(index);
+			}
+			RecentProjects.Insert(0, projectPath);
+		}
+
 		public ProjectConfig GetProjectConfig(string projectFilePath)
 		{
 			if (string.IsNullOrEmpty(projectFilePath)) {
@@ -65,7 +87,7 @@ namespace Orange
 			return configPath;
 		}
 
-		private static Lime.Persistence persistence = new Lime.Persistence(new CommonOptions { AllowUnknownFields = true }, null);
+		private static readonly Lime.Persistence persistence = new Lime.Persistence(new CommonOptions { AllowUnknownFields = true }, null);
 
 		public static WorkspaceConfig Load()
 		{
@@ -77,5 +99,21 @@ namespace Orange
 		}
 
 		public static void Save(WorkspaceConfig config) => persistence.WriteObjectToFile(GetConfigPath(), config, Persistence.Format.Json);
+
+		public void RemoveRecentProject(string projectPath)
+		{
+			var index = RecentProjects.FindIndex((s) =>
+				string.Compare(NormalizePath(s), NormalizePath(projectPath), StringComparison.OrdinalIgnoreCase) == 0);
+			if (index != -1) {
+				RecentProjects.RemoveAt(index);
+			}
+		}
+
+		private string NormalizePath(string path)
+		{
+			return Path.GetFullPath(new Uri(path).LocalPath)
+				.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+				.ToUpperInvariant();
+		}
 	}
 }
