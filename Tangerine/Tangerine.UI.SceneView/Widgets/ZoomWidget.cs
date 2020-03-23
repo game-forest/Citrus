@@ -73,9 +73,9 @@ namespace Tangerine.UI.SceneView
 				MinMaxWidth = 50
 			};
 			zoomEditor.Submitted += value => {
-				var success = float.TryParse(value.TrimEnd('%'), out var zoom);
+				var success = float.TryParse(value.TrimEnd('%'), out var zoom) && zoomTable.Count > 0;
 				if (success) {
-					Zoom(zoom / 100);
+					Zoom(Mathf.Clamp(zoom / 100, zoomTable[0], zoomTable[zoomTable.Count - 1]));
 				}
 			};
 
