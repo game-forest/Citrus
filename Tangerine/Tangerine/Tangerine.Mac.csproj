@@ -86,47 +86,48 @@
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-32%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-512.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-512%402x.png" />
+    <Compile Include="Dialogs\RenderToPngSequenceDialog.cs" />
+    <Compile Include="ExceptionHandling.cs" />
     <Compile Include="Main.Win.cs" />
-    <Compile Include="TangerineSingleInstanceKeeper.cs" />
+    <Compile Include="MainMenu\GitMenu.cs" />
+    <Compile Include="MainMenu\OrangeMenu.cs" />
+    <Compile Include="MainMenu\SystemMenu.cs" />
+    <Compile Include="MainMenu\ToolsMenu.cs" />
+    <Compile Include="Panels\AnimationsPanel.cs" />
+    <Compile Include="Panels\AttachmentPanel.cs" />
     <Compile Include="Panels\BackupHistoryPanel.cs" />
     <Compile Include="Panels\HierarchyPanel.cs" />
     <Compile Include="Panels\TreeView.cs" />
-    <Compile Include="Panels\AttachmentPanel.cs" />
-    <Compile Include="Dialogs\RenderToPngSequenceDialog.cs" />
-    <Compile Include="MainMenu\GitMenu.cs" />
-    <Compile Include="MainMenu\ToolsMenu.cs" />
-    <Compile Include="MainMenu\SystemMenu.cs" />
-    <Compile Include="Panels\AnimationsPanel.cs" />
-    <Compile Include="MainMenu\OrangeMenu.cs" />
+    <Compile Include="TangerineSingleInstanceKeeper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dialogs\SaveRulerDialog.cs" />
+    <Compile Include="AlignPreferences.cs" />
+    <Compile Include="AppUserPreferences.cs" />
+    <Compile Include="CommandHandlers.cs" />
+    <Compile Include="Dialogs\ColorThemeEditor.cs" />
+    <Compile Include="Dialogs\HotkeyEditor.cs" />
     <Compile Include="Dialogs\ManageRulersDialog.cs" />
+    <Compile Include="Dialogs\OrangePluginOptionsDialog.cs" />
     <Compile Include="Dialogs\PreferencesDialog.cs" />
-    <Compile Include="TangerineApp.cs" />
+    <Compile Include="Dialogs\SaveRulerDialog.cs" />
+    <Compile Include="Dialogs\ToolbarModelEditor.cs" />
+    <Compile Include="DisplayResolutions.cs" />
+    <Compile Include="DocumentTabContextMenu.cs" />
+    <Compile Include="HotkeyRegistry.cs" />
     <Compile Include="Main.Mac.cs" />
-    <Compile Include="MainMenu\WindowMenu.cs" />
+    <Compile Include="MainMenu\CreateMenu.cs" />
+    <Compile Include="MainMenu\EditMenu.cs" />
     <Compile Include="MainMenu\FileMenu.cs" />
     <Compile Include="MainMenu\ViewMenu.cs" />
-    <Compile Include="MainMenu\CreateMenu.cs" />
+    <Compile Include="MainMenu\WindowMenu.cs" />
+    <Compile Include="OrangeInterface.cs" />
+    <Compile Include="TangerineApp.cs" />
     <Compile Include="TangerineMenu.cs" />
     <Compile Include="Tools\AlignTools.cs" />
     <Compile Include="Tools\FitTools.cs" />
-    <Compile Include="MainMenu\EditMenu.cs" />
-    <Compile Include="OrangeInterface.cs" />
-    <Compile Include="DisplayResolutions.cs" />
-    <Compile Include="AppUserPreferences.cs" />
-    <Compile Include="HotkeyRegistry.cs" />
-    <Compile Include="Dialogs\HotkeyEditor.cs" />
-    <Compile Include="DocumentTabContextMenu.cs" />
-    <Compile Include="AlignPreferences.cs" />
-    <Compile Include="Dialogs\OrangePluginOptionsDialog.cs" />
-    <Compile Include="Dialogs\ColorThemeEditor.cs" />
-    <Compile Include="Dialogs\ToolbarModelEditor.cs" />
-    <Compile Include="CommandHandlers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ItemGroup>

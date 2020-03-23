@@ -241,35 +241,7 @@ namespace Tangerine
 			VisualHintsRegistry.Instance.RegisterDefaultHints();
 
 			Document.NodeDecorators.AddFor<Node>(n => n.SetTangerineFlag(TangerineFlags.SceneNode, true));
-			dockManager.UnhandledExceptionOccurred += e => {
-				AlertDialog.Show(e.Message + "\n" + e.StackTrace);
-				var doc = Document.Current;
-				if (doc != null) {
-					while (doc.History.IsTransactionActive) {
-						doc.History.EndTransaction();
-					}
-					var closeConfirmation = Document.CloseConfirmation;
-					try {
-						Document.CloseConfirmation = d => {
-							var alert = new AlertDialog($"Save the changes to document '{d.Path}' before closing?", "Yes", "No");
-							switch (alert.Show()) {
-								case 0: return Document.CloseAction.SaveChanges;
-								default: return Document.CloseAction.DiscardChanges;
-							}
-						};
-						var fullPath = doc.FullPath;
-
-						if (!File.Exists(fullPath)) {
-							doc.Save();
-						}
-						var path = doc.Path;
-						Project.Current.CloseDocument(doc);
-						Project.Current.OpenDocument(path);
-					} finally {
-						Document.CloseConfirmation = closeConfirmation;
-					}
-				}
-			};
+			dockManager.UnhandledExceptionOccurred += ExceptionHandling.Handle;
 
 			Document.NodeDecorators.AddFor<ParticleEmitter>(n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter()));
 			DocumentHistory.AddOperationProcessorTypes(new[] {

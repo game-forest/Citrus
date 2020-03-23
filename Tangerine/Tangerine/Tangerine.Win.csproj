@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -54,41 +54,42 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlignPreferences.cs" />
+    <Compile Include="AppUserPreferences.cs" />
     <Compile Include="CommandHandlers.cs" />
-    <Compile Include="Dialogs\RenderToPngSequenceDialog.cs" />
-    <Compile Include="MainMenu\GitMenu.cs" />
-    <Compile Include="MainMenu\OrangeMenu.cs" />
-    <Compile Include="MainMenu\ToolsMenu.cs" />
-    <Compile Include="MainMenu\SystemMenu.cs" />
-    <Compile Include="Panels\AnimationsPanel.cs" />
-    <Compile Include="Panels\AttachmentPanel.cs" />
     <Compile Include="Dialogs\ColorThemeEditor.cs" />
+    <Compile Include="Dialogs\HotkeyEditor.cs" />
     <Compile Include="Dialogs\ManageRulersDialog.cs" />
     <Compile Include="Dialogs\OrangePluginOptionsDialog.cs" />
     <Compile Include="Dialogs\PreferencesDialog.cs" />
-    <Compile Include="Dialogs\HotkeyEditor.cs" />
+    <Compile Include="Dialogs\RenderToPngSequenceDialog.cs" />
     <Compile Include="Dialogs\SaveRulerDialog.cs" />
     <Compile Include="Dialogs\ToolbarModelEditor.cs" />
+    <Compile Include="DisplayResolutions.cs" />
     <Compile Include="DocumentTabContextMenu.cs" />
+    <Compile Include="ExceptionHandling.cs" />
+    <Compile Include="HotkeyRegistry.cs" />
+    <Compile Include="Main.Mac.cs" />
+    <Compile Include="Main.Win.cs" />
     <Compile Include="MainMenu\CreateMenu.cs" />
     <Compile Include="MainMenu\EditMenu.cs" />
     <Compile Include="MainMenu\FileMenu.cs" />
+    <Compile Include="MainMenu\GitMenu.cs" />
+    <Compile Include="MainMenu\OrangeMenu.cs" />
+    <Compile Include="MainMenu\SystemMenu.cs" />
+    <Compile Include="MainMenu\ToolsMenu.cs" />
     <Compile Include="MainMenu\ViewMenu.cs" />
     <Compile Include="MainMenu\WindowMenu.cs" />
     <Compile Include="OrangeInterface.cs" />
-    <Compile Include="DisplayResolutions.cs" />
-    <Compile Include="HotkeyRegistry.cs" />
+    <Compile Include="Panels\AnimationsPanel.cs" />
+    <Compile Include="Panels\AttachmentPanel.cs" />
+    <Compile Include="Panels\BackupHistoryPanel.cs" />
+    <Compile Include="Panels\HierarchyPanel.cs" />
+    <Compile Include="Panels\TreeView.cs" />
     <Compile Include="TangerineApp.cs" />
-    <Compile Include="Main.Win.cs" />
     <Compile Include="TangerineMenu.cs" />
     <Compile Include="TangerineSingleInstanceKeeper.cs" />
     <Compile Include="Tools\AlignTools.cs" />
     <Compile Include="Tools\FitTools.cs" />
-    <Compile Include="AppUserPreferences.cs" />
-    <Compile Include="Main.Mac.cs" />
-    <Compile Include="Panels\BackupHistoryPanel.cs" />
-    <Compile Include="Panels\HierarchyPanel.cs" />
-    <Compile Include="Panels\TreeView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj">
