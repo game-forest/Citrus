@@ -12,13 +12,14 @@ namespace Orange
 		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
 		[ExportMetadata("Label", "Rebuild Game")]
 		[ExportMetadata("Priority", 2)]
+		[ExportMetadata("ApplicableToBundleSubset", true)]
 		public static string RebuildGameAction()
 		{
 			var target = The.UI.GetActiveTarget();
 
 			if (The.UI.AskConfirmation("Are you sure you want to rebuild the game?")) {
 				CleanupGame(target);
-				AssetCooker.CookForTarget(target);
+				AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles());
 				if (!BuildGame(target)) {
 					return "Can not BuildGame";
 				}

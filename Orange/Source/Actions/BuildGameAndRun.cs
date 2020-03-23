@@ -10,11 +10,12 @@ namespace Orange
 		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
 		[ExportMetadata("Label", "Build and Run")]
 		[ExportMetadata("Priority", 0)]
+		[ExportMetadata("ApplicableToBundleSubset", true)]
 		public static string BuildAndRunAction() => BuildAndRun(The.UI.GetActiveTarget());
 
 		public static string BuildAndRun(Target target)
 		{
-			AssetCooker.CookForTarget(target);
+			AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles());
 			if (!BuildGame(target)) {
 				return "Can not BuildGame";
 			}
