@@ -61,8 +61,6 @@ namespace Lime
 			}
 		}
 
-		public void AssignMaterial(IMaterial material) => Material = material;
-
 		protected internal override bool PartialHitTestByContents(ref HitTestArgs args)
 		{
 			Vector2 localPoint = LocalToWorldTransform.CalcInversed().TransformVector(args.Point);

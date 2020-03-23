@@ -5,11 +5,7 @@ namespace Lime
 	/// </summary>
 	public interface IMaterialComponentOwner
 	{
-		/// <summary>
-		/// Assign provided material
-		/// </summary>
-		void AssignMaterial(IMaterial material);
-		IMaterial Material { get; }
+		IMaterial Material { get; set; }
 		ITexture Texture { get; }
 		Vector2 UV0 { get; }
 		Vector2 UV1 { get; }
@@ -38,10 +34,10 @@ namespace Lime
 		{
 			base.OnOwnerChanged(oldOwner);
 			if (oldOwner is IMaterialComponentOwner w) {
-				w.AssignMaterial(null);
+				w.Material = null;
 			}
 			if (Owner is IMaterialComponentOwner w1) {
-				w1.AssignMaterial(CustomMaterial);
+				w1.Material = CustomMaterial;
 			}
 		}
 	}
