@@ -281,11 +281,9 @@ namespace Lime
 		public override void Clear()
 		{
 			animationComponent = null;
-			for (int i = 0; i < buckets.Length; i++) {
-				if (buckets[i].Key > 0) {
-					buckets[i].Component.Owner = null;
-					owner.Manager?.UnregisterComponent(buckets[i].Component, owner);
-				}
+			foreach (var component in this) {
+				component.Owner = null;
+				owner.Manager?.UnregisterComponent(component, owner);
 			}
 			base.Clear();
 		}

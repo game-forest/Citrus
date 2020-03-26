@@ -41,9 +41,7 @@ namespace Lime
 
 	public class ComponentCollection<TComponent> : ICollection<TComponent> where TComponent : Component
 	{
-		private static Bucket[] emptyBuckets = new Bucket[0];
-
-		protected Bucket[] buckets = emptyBuckets;
+		private (int Key, TComponent Component)[] list;
 
 		public int Count { get; private set; }
 
@@ -55,13 +53,15 @@ namespace Lime
 
 		private bool ContainsKey(int key)
 		{
-			for (var i = 0; i < buckets.Length; i++) {
-				var b = buckets[(key + i) & (buckets.Length - 1)];
-				if (b.Key == key) {
+			if (list == null) {
+				return false;
+			}
+			foreach (var (k, c) in list) {
+				if (k == key) {
 					return true;
 				}
-				if (b.Key == 0) {
-					break;
+				if (c == null) {
+					return false;
 				}
 			}
 			return false;
@@ -69,16 +69,18 @@ namespace Lime
 
 		private TComponent Get(int key)
 		{
-			for (var i = 0; i < buckets.Length; i++) {
-				var b = buckets[(key + i) & (buckets.Length - 1)];
-				if (b.Key == key) {
-					return b.Component;
+			if (list == null) {
+				return default;
+			}
+			foreach (var (k, c) in list) {
+				if (c == null) {
+					return default;
 				}
-				if (b.Key == 0) {
-					break;
+				if (k == key) {
+					return c;
 				}
 			}
-			return default(TComponent);
+			return default;
 		}
 
 		public TComponent Get(Type type) => Get(Component.GetKeyForType(type));
@@ -100,37 +102,16 @@ namespace Lime
 			if (Contains(component.GetType())) {
 				throw new InvalidOperationException("Attempt to add a component twice.");
 			}
-			if (buckets.Length == 0) {
-				buckets = new Bucket[1];
+			if (list == null) {
+				list = new (int, TComponent)[4];
+				list[0] = (component.GetKey(), component);
+				Count = 1;
+				return;
 			}
-			var loadFactor = CalcLoadFactor();
-			if (loadFactor >= 0.7f) {
-				var newBuckets = new Bucket[buckets.Length * 2];
-				foreach (var b in buckets) {
-					if (b.Key > 0) {
-						AddHelper(newBuckets, b.Component);
-					}
-				}
-				buckets = newBuckets;
+			if (Count == list.Length) {
+				Array.Resize(ref list, Count * 2);
 			}
-			AddHelper(buckets, component);
-			Count++;
-		}
-
-		private float CalcLoadFactor() => (float)Count / buckets.Length;
-
-		private static void AddHelper(Bucket[] buckets, TComponent component)
-		{
-			int key = component.GetKey();
-			for (var i = 0; i < buckets.Length; i++) {
-				var j = (key + i) & (buckets.Length - 1);
-				if (buckets[j].Key <= 0) {
-					buckets[j].Key = key;
-					buckets[j].Component = component;
-					return;
-				}
-			}
-			throw new InvalidOperationException();
+			list[Count++] = (component.GetKey(), component);
 		}
 
 		public bool Remove<T>() where T : TComponent
@@ -147,17 +128,24 @@ namespace Lime
 
 		public virtual bool Remove(TComponent component)
 		{
-			var key = component.GetKey();
-			for (var i = 0; i < buckets.Length; i++) {
-				var j = (key + i) & (buckets.Length - 1);
-				if (buckets[j].Key == key) {
-					buckets[j].Key = -1;
-					buckets[j].Component = default(TComponent);
-					Count--;
-					return true;
+			if (list == null) {
+				return false;
+			}
+			int index = -1;
+			for (int i = 0; i < Count; i++) {
+				if (index == -1) {
+					if (list[i].Component == component) {
+						index = i;
+					}
+				} else {
+					list[i - 1] = list[i];
 				}
 			}
-			return false;
+			if (index == -1) {
+				return false;
+			}
+			list[--Count] = (-1, null);
+			return true;
 		}
 
 		public bool Replace<T>(T component) where T : TComponent
@@ -167,74 +155,65 @@ namespace Lime
 			return r;
 		}
 
-		IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator() => new Enumerator(buckets);
+		IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator() => new Enumerator(list, Count);
 
-		IEnumerator IEnumerable.GetEnumerator() => new Enumerator(buckets);
+		IEnumerator IEnumerable.GetEnumerator() => new Enumerator(list, Count);
 
-		public Enumerator GetEnumerator() => new Enumerator(buckets);
-
-		public struct Enumerator : IEnumerator<TComponent>
-		{
-			private int index;
-			private Bucket[] buckets;
-
-			public Enumerator(Bucket[] buckets)
-			{
-				index = -1;
-				this.buckets = buckets;
-			}
-
-			public TComponent Current => buckets[index].Component;
-			object IEnumerator.Current => buckets[index].Component;
-
-			public bool MoveNext()
-			{
-				for (index++; index < buckets.Length; index++) {
-					if (buckets[index].Key > 0) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			public void Reset()
-			{
-				index = -1;
-			}
-
-			public void Dispose() { }
-		}
+		public Enumerator GetEnumerator() => new Enumerator(list, Count);
 
 		public virtual void Clear()
 		{
-			for (int i = 0; i < buckets.Length; i++) {
-				buckets[i].Key = 0;
-				buckets[i].Component = default(TComponent);
+			for (int i = 0; i < Count; i++) {
+				list[i] = (-1, null);
 			}
 			Count = 0;
 		}
 
 		public void CopyTo(TComponent[] array, int arrayIndex)
 		{
-			for (var i = 0; i < buckets.Length; i++) {
-				if (buckets[i].Key > 0) {
-					array[arrayIndex++] = buckets[i].Component;
-				}
+			if (list == null) {
+				return;
 			}
+			for (var i = 0; i < Count; i++) {
+				array[arrayIndex++] = list[i].Component;
+			}
+		}
+
+		public struct Enumerator : IEnumerator<TComponent>
+		{
+			private readonly (int Key, TComponent Component)[] list;
+			private readonly int length;
+			private int index;
+
+			public Enumerator((int, TComponent)[] list, int length)
+			{
+				this.list = list;
+				this.length = length;
+				index = -1;
+			}
+
+			public TComponent Current => list?[index].Component;
+			object IEnumerator.Current => list?[index].Component;
+
+			public bool MoveNext()
+			{
+				if (list == null) {
+					return false;
+				}
+				if (++index < length) {
+					return true;
+				}
+				return false;
+			}
+
+			public void Reset() => index = -1;
+
+			public void Dispose() { }
 		}
 
 		private static class ComponentKeyResolver<T> where T : TComponent
 		{
 			public static readonly int Key = Component.GetKeyForType(typeof(T));
-		}
-
-		public struct Bucket
-		{
-			// Key special values:
-			//  0 - means an empty bucket.
-			// -1 - a deleted component.
-			public int Key;
-			public TComponent Component;
 		}
 	}
 }
