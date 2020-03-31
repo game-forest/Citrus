@@ -102,6 +102,7 @@ There's a list of default targets, which are Win, Mac, iOS and Android. Other ta
 | `Bundles`                | `<default>`, `data` | main bundle |
 |                          | `<bundle_name>`     | user defined bundle name; it's possible to specify multiple bundles; it's possible to include directory name e.g. `Bundles/Restaurant` |
 | `Ignore`                 | `Yes`, `No`         | if set to `Yes` applicable assets won't make it to bundle |
+| `Only`                   | `Yes`, `No`         | Asset will make it into bundle only if selected target has this rule set to `Yes` or there is no other target that has `Only` set to `Yes` |
 | `ADPCMLimit`             | int                 | |
 | `TextureScaleFactor`     | float               | designed to be texture size multiplier. however if it's not 1.0f texture size multiplied by 0.75 with a mix of some logic. see code for detail. |
 | `AtlasPacker`            | string              | custom packer defined via plugin |
