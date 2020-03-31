@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,7 +148,7 @@ namespace Orange
 		private static System.Security.Cryptography.SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
 		// using json format for SHA1 since binary one includes all fields definitions header anyway.
 		// so adding a field with binary triggers rebuild of all bundles
-		private static Yuzu.Json.JsonSerializer yjs = new Yuzu.Json.JsonSerializer();
+		private static JsonSerializer yjs = new JsonSerializer();
 
 		public byte[] SHA1 => sha1.ComputeHash(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
 
@@ -272,7 +271,7 @@ namespace Orange
 
 		public bool Ignore
 		{
-			get { return EffectiveRules.Ignore; }
+			get => EffectiveRules.Ignore;
 			set
 			{
 				foreach (var target in The.Workspace.Targets) {
