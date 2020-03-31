@@ -5,13 +5,13 @@ namespace Tangerine.Core
 {
 	public interface IAnimationPositioner
 	{
-		void SetAnimationTime(Animation animation, double time, bool animationMode, bool stopAnimations);
-		void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations);
+		void SetAnimationTime(Animation animation, double time, bool stopAnimations);
+		void SetAnimationFrame(Animation animation, int frame, bool stopAnimations);
 	}
 
 	public class AnimationPositioner : IAnimationPositioner
 	{
-		public void SetAnimationTime(Animation animation, double time, bool animationMode, bool stopAnimations)
+		public void SetAnimationTime(Animation animation, double time, bool stopAnimations)
 		{
 			Audio.GloballyEnable = false;
 			try {
@@ -32,9 +32,9 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void SetAnimationFrame(Animation animation, int frame, bool animationMode, bool stopAnimations)
+		public void SetAnimationFrame(Animation animation, int frame, bool stopAnimations)
 		{
-			SetAnimationTime(animation, AnimationUtils.FramesToSeconds(frame), animationMode,  stopAnimations);
+			SetAnimationTime(animation, AnimationUtils.FramesToSeconds(frame),  stopAnimations);
 		}
 
 		private void AdvanceAnimation(Node node, double delta)

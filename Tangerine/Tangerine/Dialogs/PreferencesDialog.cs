@@ -335,8 +335,6 @@ namespace Tangerine
 					new PreferencesPropertyEditorParams(pane.Content, Tangerine.AppUserPreferences.Instance, propertyName: nameof(Tangerine.AppUserPreferences.DefaultSceneDimensions),  displayName: "Default scene dimensions")),
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.AutoKeyframes),  displayName: "Automatic keyframes")),
-				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.AnimationMode),  displayName: "Animation mode")),
 				new IntPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, Tangerine.AppUserPreferences.Instance, propertyName: nameof(Tangerine.AppUserPreferences.AutosaveDelay),  displayName: "Autosave delay")),
 				new BooleanPropertyEditor(

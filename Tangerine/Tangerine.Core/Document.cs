@@ -661,7 +661,7 @@ namespace Tangerine.Core
 
 		public static void SetCurrentFrameToNode(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
-			Current.animationPositioner.SetAnimationFrame(animation, frameIndex, CoreUserPreferences.Instance.AnimationMode, stopAnimations);
+			Current.animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
 		}
 
 		public void TogglePreviewAnimation()
