@@ -396,11 +396,11 @@ namespace Tangerine.UI.SceneView
 			var savedTime = document.Animation.Time;
 			var savedIsRunning = Document.Current.Animation.IsRunning;
 			renderChain.Clear();
-			ap.SetAnimationFrame(document.Animation, frame, animationMode: true, stopAnimations: true);
+			ap.SetAnimationFrame(document.Animation, frame, stopAnimations: true);
 			sceneViewFrame.RenderChainBuilder?.AddToRenderChain(renderChain);
 			renderList.Clear();
 			renderChain.GetRenderObjects(renderList);
-			ap.SetAnimationTime(document.Animation, savedTime, animationMode: true, stopAnimations: true);
+			ap.SetAnimationTime(document.Animation, savedTime, stopAnimations: true);
 			Document.Current.Animation.IsRunning = savedIsRunning;
 			Window.Current.InvokeOnRendering(() => RenderThumbnail(callback));
 		}

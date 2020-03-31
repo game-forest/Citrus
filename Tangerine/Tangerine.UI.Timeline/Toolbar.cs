@@ -19,7 +19,6 @@ namespace Tangerine.UI.Timeline
 				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
 				Nodes = {
-					CreateAnimationModeButton(),
 					CreateAutoKeyframesButton(),
 					CreateFolderButton(),
 					CreateCurveEditorButton(),
@@ -40,15 +39,6 @@ namespace Tangerine.UI.Timeline
 
 		TimelineUserPreferences UserPreferences => TimelineUserPreferences.Instance;
 		CoreUserPreferences CoreUserPreferences => Core.CoreUserPreferences.Instance;
-
-		ToolbarButton CreateAnimationModeButton()
-		{
-			var button = new ToolbarButton(IconPool.GetTexture("Timeline.AnimationMode")) { Tooltip = "Animation mode" };
-			button.AddChangeWatcher(() => CoreUserPreferences.AnimationMode, i => button.Checked = i);
-			button.Clicked += () => CoreUserPreferences.AnimationMode = !CoreUserPreferences.AnimationMode;
-			button.Components.Add(new DocumentationComponent("AnimationMode"));
-			return button;
-		}
 
 		ToolbarButton CreateCurveEditorButton()
 		{

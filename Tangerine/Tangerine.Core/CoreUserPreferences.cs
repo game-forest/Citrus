@@ -10,9 +10,6 @@ namespace Tangerine.Core
 		public bool AutoKeyframes { get; set; }
 
 		[YuzuOptional]
-		public bool AnimationMode { get; set; }
-
-		[YuzuOptional]
 		public bool InspectEasing { get; set; }
 
 		[YuzuOptional]
@@ -56,7 +53,6 @@ namespace Tangerine.Core
 		public void ResetToDefaults()
 		{
 			AutoKeyframes = false;
-			AnimationMode = false;
 			DefaultKeyFunction = KeyFunction.Linear;
 			StopAnimationOnCurrentFrame = false;
 			ShowSceneThumbnail = true;
