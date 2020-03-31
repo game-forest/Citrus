@@ -43,8 +43,13 @@ namespace Lime
 			if (pathStack.Count == 0 || string.IsNullOrEmpty(path)) {
 				return path;
 			}
+			// when current directory is an empty string it means the root of assets directory,
+			// thus every path is being treated as relative to it, so we don't add leading '/'.
+			// And when current directory is null, it means calling code wants to treat all paths as absolute (e.g. copy/paste)
 			var d = GetCurrentSerializationDirectory();
-			if (string.IsNullOrEmpty(d)) {
+			if (d == null) {
+				return '/' + path;
+			} else if (d == string.Empty) {
 				return path;
 			}
 			d += '/';
@@ -104,13 +109,13 @@ namespace Lime
 				PopCurrent();
 			}
 		}
-		
+
 		public T ReadObjectFromBundle<T>(AssetBundle bundle, string path, object obj = null)
 		{
 			using (Stream stream = bundle.OpenFileLocalized(path))
 				return ReadObject<T>(path, stream, obj);
 		}
-		
+
 		public override T ReadObject<T>(string path, Stream stream, object obj = null)
 		{
 			pathStack.Push(path);

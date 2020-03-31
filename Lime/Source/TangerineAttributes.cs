@@ -202,7 +202,9 @@ namespace Lime
 
 	public enum ValidationResult
 	{
-		Ok, Warning, Error,
+		Ok,
+		Warning,
+		Error,
 	}
 
 	/// <summary>
