@@ -66,6 +66,10 @@ namespace Orange
 		DDSFormat DDSFormat { get; }
 		string[] Bundles { get; }
 		bool Ignore { get; }
+		/// <summary>
+		/// Asset goes into the bundle Only if specified target is chosen.
+		/// </summary>
+		bool Only { get; }
 		int ADPCMLimit { get; }
 		AtlasOptimization AtlasOptimization { get; }
 		ModelCompression ModelCompression { get; }
@@ -112,6 +116,8 @@ namespace Orange
 
 		[YuzuMember]
 		public bool Ignore { get; set; }
+		[YuzuMember]
+		public bool Only { get; set; }
 
 		[YuzuMember]
 		public int ADPCMLimit { get; set; } // Kb
@@ -206,6 +212,7 @@ namespace Orange
 				LastChangeTime = new DateTime(0),
 				Bundles = new[] { CookingRulesBuilder.MainBundleName },
 				Ignore = false,
+				Only = false,
 				ADPCMLimit = 100,
 				AtlasOptimization = AtlasOptimization.Memory,
 				ModelCompression = ModelCompression.Deflate,
@@ -277,6 +284,8 @@ namespace Orange
 				}
 			}
 		}
+
+		public bool Only => EffectiveRules.Only;
 
 		public ParticularCookingRules EffectiveRules { get; private set; }
 
@@ -394,6 +403,9 @@ namespace Orange
 								break;
 						}
 					}
+				}
+				if (!EffectiveRules.Only && TargetRules.Any(f => f.Key != target && f.Value.Only)) {
+					EffectiveRules.Ignore = true;
 				}
 			}
 			if (EffectiveRules.WrapMode != TextureWrapMode.Clamp) {
@@ -671,6 +683,9 @@ namespace Orange
 					break;
 				case "Ignore":
 					rules.Ignore = ParseBool(words[1]);
+					break;
+				case "Only":
+					rules.Only = ParseBool(words[1]);
 					break;
 				case "ADPCMLimit":
 					rules.ADPCMLimit = int.Parse(words[1]);
