@@ -20,15 +20,10 @@ namespace Lime
 			{
 				if (texture != value) {
 					texture = value;
-					DiscardMaterial();
+					defaultMaterial = null;
 					Window.Current?.Invalidate();
 				}
 			}
-		}
-
-		protected override void DiscardMaterial()
-		{
-			defaultMaterial = null;
 		}
 
 		[YuzuMember]
@@ -41,7 +36,16 @@ namespace Lime
 
 		public IMaterial Material { get; set; }
 
-		public IMaterial DefaultMaterial => defaultMaterial ?? (defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1));
+		public IMaterial DefaultMaterial
+		{
+			get
+			{
+				if (defaultMaterial == null || CleanDirtyFlags(DirtyFlags.Material)) {
+					defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1);
+				}
+				return defaultMaterial;
+			}
+		}
 
 		public Image()
 		{
