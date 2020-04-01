@@ -59964,19 +59964,19 @@ references:
   isSpec: "True"
   fullName: Lime.StringExtensions.Format
   nameWithType: StringExtensions.Format
-- uid: Lime.StringExtensions.HasJapaneseSymbols(System.String,System.Int32,System.Int32)
-  name: HasJapaneseSymbols(String, Int32, Int32)
-  href: api/Lime.StringExtensions.html#Lime_StringExtensions_HasJapaneseSymbols_System_String_System_Int32_System_Int32_
-  commentId: M:Lime.StringExtensions.HasJapaneseSymbols(System.String,System.Int32,System.Int32)
-  fullName: Lime.StringExtensions.HasJapaneseSymbols(System.String, System.Int32, System.Int32)
-  nameWithType: StringExtensions.HasJapaneseSymbols(String, Int32, Int32)
-- uid: Lime.StringExtensions.HasJapaneseSymbols*
-  name: HasJapaneseSymbols
-  href: api/Lime.StringExtensions.html#Lime_StringExtensions_HasJapaneseSymbols_
-  commentId: Overload:Lime.StringExtensions.HasJapaneseSymbols
+- uid: Lime.StringExtensions.HasJapaneseChineseSymbols(System.String,System.Int32,System.Int32)
+  name: HasJapaneseChineseSymbols(String, Int32, Int32)
+  href: api/Lime.StringExtensions.html#Lime_StringExtensions_HasJapaneseChineseSymbols_System_String_System_Int32_System_Int32_
+  commentId: M:Lime.StringExtensions.HasJapaneseChineseSymbols(System.String,System.Int32,System.Int32)
+  fullName: Lime.StringExtensions.HasJapaneseChineseSymbols(System.String, System.Int32, System.Int32)
+  nameWithType: StringExtensions.HasJapaneseChineseSymbols(String, Int32, Int32)
+- uid: Lime.StringExtensions.HasJapaneseChineseSymbols*
+  name: HasJapaneseChineseSymbols
+  href: api/Lime.StringExtensions.html#Lime_StringExtensions_HasJapaneseChineseSymbols_
+  commentId: Overload:Lime.StringExtensions.HasJapaneseChineseSymbols
   isSpec: "True"
-  fullName: Lime.StringExtensions.HasJapaneseSymbols
-  nameWithType: StringExtensions.HasJapaneseSymbols
+  fullName: Lime.StringExtensions.HasJapaneseChineseSymbols
+  nameWithType: StringExtensions.HasJapaneseChineseSymbols
 - uid: Lime.StringExtensions.Localize(System.String)
   name: Localize(String)
   href: api/Lime.StringExtensions.html#Lime_StringExtensions_Localize_System_String_
