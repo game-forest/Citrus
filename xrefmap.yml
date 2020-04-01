@@ -25836,19 +25836,6 @@ references:
   isSpec: "True"
   fullName: Lime.Image.DefaultMaterial
   nameWithType: Image.DefaultMaterial
-- uid: Lime.Image.DiscardMaterial
-  name: DiscardMaterial()
-  href: api/Lime.Image.html#Lime_Image_DiscardMaterial
-  commentId: M:Lime.Image.DiscardMaterial
-  fullName: Lime.Image.DiscardMaterial()
-  nameWithType: Image.DiscardMaterial()
-- uid: Lime.Image.DiscardMaterial*
-  name: DiscardMaterial
-  href: api/Lime.Image.html#Lime_Image_DiscardMaterial_
-  commentId: Overload:Lime.Image.DiscardMaterial
-  isSpec: "True"
-  fullName: Lime.Image.DiscardMaterial
-  nameWithType: Image.DiscardMaterial
 - uid: Lime.Image.GetRenderObject
   name: GetRenderObject()
   href: api/Lime.Image.html#Lime_Image_GetRenderObject
@@ -40787,6 +40774,12 @@ references:
   commentId: F:Lime.Node.DirtyFlags.LocalTransform
   fullName: Lime.Node.DirtyFlags.LocalTransform
   nameWithType: Node.DirtyFlags.LocalTransform
+- uid: Lime.Node.DirtyFlags.Material
+  name: Material
+  href: api/Lime.Node.DirtyFlags.html#Lime_Node_DirtyFlags_Material
+  commentId: F:Lime.Node.DirtyFlags.Material
+  fullName: Lime.Node.DirtyFlags.Material
+  nameWithType: Node.DirtyFlags.Material
 - uid: Lime.Node.DirtyFlags.None
   name: None
   href: api/Lime.Node.DirtyFlags.html#Lime_Node_DirtyFlags_None
@@ -53622,19 +53615,6 @@ references:
   isSpec: "True"
   fullName: Lime.RichText.Caret
   nameWithType: RichText.Caret
-- uid: Lime.RichText.DiscardMaterial
-  name: DiscardMaterial()
-  href: api/Lime.RichText.html#Lime_RichText_DiscardMaterial
-  commentId: M:Lime.RichText.DiscardMaterial
-  fullName: Lime.RichText.DiscardMaterial()
-  nameWithType: RichText.DiscardMaterial()
-- uid: Lime.RichText.DiscardMaterial*
-  name: DiscardMaterial
-  href: api/Lime.RichText.html#Lime_RichText_DiscardMaterial_
-  commentId: Overload:Lime.RichText.DiscardMaterial
-  isSpec: "True"
-  fullName: Lime.RichText.DiscardMaterial
-  nameWithType: RichText.DiscardMaterial
 - uid: Lime.RichText.DisplayText
   name: DisplayText
   href: api/Lime.RichText.html#Lime_RichText_DisplayText
@@ -57419,19 +57399,6 @@ references:
   isSpec: "True"
   fullName: Lime.SimpleText.Caret
   nameWithType: SimpleText.Caret
-- uid: Lime.SimpleText.DiscardMaterial
-  name: DiscardMaterial()
-  href: api/Lime.SimpleText.html#Lime_SimpleText_DiscardMaterial
-  commentId: M:Lime.SimpleText.DiscardMaterial
-  fullName: Lime.SimpleText.DiscardMaterial()
-  nameWithType: SimpleText.DiscardMaterial()
-- uid: Lime.SimpleText.DiscardMaterial*
-  name: DiscardMaterial
-  href: api/Lime.SimpleText.html#Lime_SimpleText_DiscardMaterial_
-  commentId: Overload:Lime.SimpleText.DiscardMaterial
-  isSpec: "True"
-  fullName: Lime.SimpleText.DiscardMaterial
-  nameWithType: SimpleText.DiscardMaterial
 - uid: Lime.SimpleText.DisplayText
   name: DisplayText
   href: api/Lime.SimpleText.html#Lime_SimpleText_DisplayText
@@ -65481,19 +65448,6 @@ references:
   isSpec: "True"
   fullName: Lime.TiledImage.CustomMaterial
   nameWithType: TiledImage.CustomMaterial
-- uid: Lime.TiledImage.DiscardMaterial
-  name: DiscardMaterial()
-  href: api/Lime.TiledImage.html#Lime_TiledImage_DiscardMaterial
-  commentId: M:Lime.TiledImage.DiscardMaterial
-  fullName: Lime.TiledImage.DiscardMaterial()
-  nameWithType: TiledImage.DiscardMaterial()
-- uid: Lime.TiledImage.DiscardMaterial*
-  name: DiscardMaterial
-  href: api/Lime.TiledImage.html#Lime_TiledImage_DiscardMaterial_
-  commentId: Overload:Lime.TiledImage.DiscardMaterial
-  isSpec: "True"
-  fullName: Lime.TiledImage.DiscardMaterial
-  nameWithType: TiledImage.DiscardMaterial
 - uid: Lime.TiledImage.GetRenderObject
   name: GetRenderObject()
   href: api/Lime.TiledImage.html#Lime_TiledImage_GetRenderObject
@@ -70905,19 +70859,6 @@ references:
   commentId: F:Lime.Widget.DefaultWidgetSize
   fullName: Lime.Widget.DefaultWidgetSize
   nameWithType: Widget.DefaultWidgetSize
-- uid: Lime.Widget.DiscardMaterial
-  name: DiscardMaterial()
-  href: api/Lime.Widget.html#Lime_Widget_DiscardMaterial
-  commentId: M:Lime.Widget.DiscardMaterial
-  fullName: Lime.Widget.DiscardMaterial()
-  nameWithType: Widget.DiscardMaterial()
-- uid: Lime.Widget.DiscardMaterial*
-  name: DiscardMaterial
-  href: api/Lime.Widget.html#Lime_Widget_DiscardMaterial_
-  commentId: Overload:Lime.Widget.DiscardMaterial
-  isSpec: "True"
-  fullName: Lime.Widget.DiscardMaterial
-  nameWithType: Widget.DiscardMaterial
 - uid: Lime.Widget.Dispose
   name: Dispose()
   href: api/Lime.Widget.html#Lime_Widget_Dispose
