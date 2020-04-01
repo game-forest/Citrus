@@ -499,12 +499,12 @@ namespace Lime
 		[TangerineKeyframeColor(22)]
 		public Blending Blending
 		{
-			get { return blending; }
+			get => blending;
 			set
 			{
 				if (blending != value) {
 					blending = value;
-					PropagateDirtyFlags(DirtyFlags.Blending);
+					PropagateDirtyFlags(DirtyFlags.Blending | DirtyFlags.Material);
 				}
 			}
 		}
@@ -513,12 +513,12 @@ namespace Lime
 		[TangerineKeyframeColor(18)]
 		public ShaderId Shader
 		{
-			get { return shader; }
+			get => shader;
 			set
 			{
 				if (shader != value) {
 					shader = value;
-					PropagateDirtyFlags(DirtyFlags.Shader);
+					PropagateDirtyFlags(DirtyFlags.Shader | DirtyFlags.Material);
 				}
 			}
 		}
@@ -656,7 +656,6 @@ namespace Lime
 			} else {
 				globalBlending = Blending;
 			}
-			DiscardMaterial();
 		}
 
 		/// <summary>
@@ -682,10 +681,7 @@ namespace Lime
 			} else {
 				globalShader = Shader;
 			}
-			DiscardMaterial();
 		}
-
-		protected virtual void DiscardMaterial() { }
 
 		/// <summary>
 		/// Indicates whether the widget is actually enabled.

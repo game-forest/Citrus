@@ -28,7 +28,7 @@ namespace Lime
 			set {
 				if (texture != value) {
 					texture = value;
-					DiscardMaterial();
+					material = null;
 					Window.Current?.Invalidate();
 				}
 			}
@@ -40,11 +40,6 @@ namespace Lime
 			TileSize = (Vector2)texture.ImageSize;
 		}
 #endif // TANGERINE
-
-		protected override void DiscardMaterial()
-		{
-			material = null;
-		}
 
 		[YuzuMember]
 		[TangerineKeyframeColor(16)]
@@ -158,10 +153,8 @@ namespace Lime
 
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
-			var blending = GlobalBlending;
-			var shader = GlobalShader;
-			if (material == null) {
-				material = WidgetMaterial.GetInstance(blending, shader, 1);
+			if (material == null || CleanDirtyFlags(DirtyFlags.Material)) {
+				material = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1);
 			}
 			var UV1 = CalcUV1();
 			var ro = RenderObjectPool<RenderObject>.Acquire();

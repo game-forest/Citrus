@@ -25,7 +25,16 @@ namespace Lime
 
 		public IMaterial Material { get; set; }
 
-		public IMaterial DefaultMaterial => defaultMaterial ?? (defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1));
+		public IMaterial DefaultMaterial
+		{
+			get
+			{
+				if (defaultMaterial == null || CleanDirtyFlags(DirtyFlags.Material)) {
+					defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1);
+				}
+				return defaultMaterial;
+			}
+		}
 
 		public Vector2 UV0 { get => Vector2.Zero; }
 		public Vector2 UV1 { get => Vector2.One;}

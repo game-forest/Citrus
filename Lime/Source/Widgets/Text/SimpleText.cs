@@ -267,22 +267,13 @@ namespace Lime
 			Invalidate();
 		}
 
-		protected override void DiscardMaterial()
-		{
-			Invalidate();
-		}
-
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
 			PrepareSpriteListAndSyncCaret();
-			//ro.CaptureRenderState causes SimpleText invalidation on every frame,
-			//so use local values for blending and shader
 			var component = Components.Get<SignedDistanceFieldComponent>();
 			if (component == null) {
 				var ro = RenderObjectPool<TextRenderObject>.Acquire();
-				ro.LocalToWorldTransform = LocalToWorldTransform;
-				ro.Blending = Blending;
-				ro.Shader = Shader;
+				ro.CaptureRenderState(this);
 				ro.SpriteList = spriteList;
 				ro.GradientMapIndex = GradientMapIndex;
 				ro.RenderMode = RenderMode;
@@ -291,9 +282,7 @@ namespace Lime
 			} else {
 				var ro = component.GetRenderObject();
 				foreach (var item in ro.Objects) {
-					item.LocalToWorldTransform = LocalToWorldTransform;
-					item.Blending = Blending;
-					item.Shader = Shader;
+					item.CaptureRenderState(this);
 					item.SpriteList = spriteList;
 					item.Color = GlobalColor * TextColor;
 				}
@@ -316,6 +305,9 @@ namespace Lime
 
 		private void PrepareSpriteListAndExtent()
 		{
+			if (CleanDirtyFlags(DirtyFlags.Material)) {
+				Invalidate();
+			}
 			if (spriteList != null) {
 				return;
 			}

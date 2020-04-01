@@ -169,20 +169,11 @@ namespace Lime
 			}
 		}
 
-		protected override void DiscardMaterial()
-		{
-			Invalidate();
-		}
-
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
 			EnsureSpriteLists();
 			var ro = RenderObjectPool<RenderObject>.Acquire();
-			//ro.CaptureRenderState causes RichText invalidation on every frame,
-			//so use local values for blending and shader
-			ro.LocalToWorldTransform = LocalToWorldTransform;
-			ro.Blending = Blending;
-			ro.Shader = Shader;
+			ro.CaptureRenderState(this);
 			ro.Objects = new RenderObjectList();
 			var scale = Mathf.Sqrt(Math.Max(LocalToWorldTransform.U.SqrLength, LocalToWorldTransform.V.SqrLength));
 			for (int i = 0; i < renderer.Styles.Count; i++) {
@@ -193,9 +184,7 @@ namespace Lime
 					foreach (var obj in sdfRO.Objects) {
 						obj.SpriteList = spriteLists[i];
 						obj.Color = GlobalColor;
-						obj.LocalToWorldTransform = LocalToWorldTransform;
-						obj.Shader = Shader;
-						obj.Blending = Blending;
+						obj.CaptureRenderState(this);
 					}
 					ro.Objects.Add(sdfRO);
 				} else {
@@ -204,9 +193,7 @@ namespace Lime
 					styleRO.RenderMode = TextRenderingMode.TwoPasses;
 					styleRO.Color = GlobalColor;
 					styleRO.GradientMapIndex = style.GradientMapIndex;
-					styleRO.LocalToWorldTransform = LocalToWorldTransform;
-					styleRO.Shader = Shader;
-					styleRO.Blending = Blending;
+					styleRO.CaptureRenderState(this);
 					ro.Objects.Add(styleRO);
 				}
 			}
@@ -215,6 +202,9 @@ namespace Lime
 
 		private void EnsureSpriteLists()
 		{
+			if (CleanDirtyFlags(DirtyFlags.Material)) {
+				Invalidate();
+			}
 			if (spriteLists == null) {
 				PrepareRenderer();
 				spriteLists = new SpriteList[renderer.Styles.Count];

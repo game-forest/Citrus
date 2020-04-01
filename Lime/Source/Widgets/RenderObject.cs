@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Lime
 {
@@ -34,7 +35,7 @@ namespace Lime
 		{
 			objects.Add(obj);
 		}
-		
+
 		public void Clear()
 		{
 			foreach (var obj in objects) {
@@ -42,7 +43,7 @@ namespace Lime
 			}
 			objects.Clear();
 		}
-		
+
 		public void Render()
 		{
 			foreach (var ro in objects) {
@@ -63,6 +64,7 @@ namespace Lime
 		public Blending Blending;
 		public ShaderId Shader;
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void CaptureRenderState(Widget widget)
 		{
 			LocalToWorldTransform = widget.LocalToWorldTransform;
