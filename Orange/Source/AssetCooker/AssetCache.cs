@@ -70,11 +70,6 @@ namespace Orange
 		private void GetSettings()
 		{
 			dynamic data = The.Workspace.ProjectJson.AsDynamic.AssetCache;
-			if (data == null) {
-				Mode = AssetCacheMode.None;
-				Console.WriteLine($"[Cache] Warning: 'AssetCache' field not found in {The.Workspace.ProjectFilePath}. Cache disabled");
-				return;
-			}
 			Mode = The.Workspace.AssetCacheMode;
 			if (Mode == AssetCacheMode.None) {
 				Console.WriteLine("[Cache] Cache disabled via WorkspaceConfig");
@@ -85,17 +80,17 @@ namespace Orange
 				Console.WriteLine("[Cache] Using LOCAL cache");
 				return;
 			}
-			serverAddress = (string)data.ServerAddress;
+			serverAddress = (string)data?.ServerAddress;
 			if (serverAddress == null) {
 				HandleSetupFailure($"'ServerAddress' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
 				return;
 			}
-			serverUsername = (string)data.ServerUsername;
+			serverUsername = (string)data?.ServerUsername;
 			if (serverUsername == null) {
 				HandleSetupFailure($"'ServerUsername' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
 				return;
 			}
-			serverPath = (string)data.ServerPath;
+			serverPath = (string)data?.ServerPath;
 			if (serverPath == null) {
 				HandleSetupFailure($"'ServerPath' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
 				return;
