@@ -136,15 +136,17 @@ namespace Lime
 
 		private static string NormalizeDirectoryPath(string path)
 		{
+			// Resolve ".." spec symbol in path.
+			string fullPath = Path.GetFullPath(path);
+			if (!Path.IsPathRooted(path)) {
+				path = fullPath.Substring(Path.GetFullPath(System.Environment.CurrentDirectory).Length + 1);
+			} else {
+				path = fullPath;
+			}
+
 			path = path.Replace('\\', '/');
 			if (!path.EndsWith("/")) {
 				path += '/';
-			}
-			// Resolve ".." spec symbol in path.
-			bool wasSlashStarted = path.StartsWith("/");
-			path = Regex.Replace(path, "(/|^)[^/\\n]*?/\\.\\.", "");
-			if (!wasSlashStarted && path.StartsWith("/")) {
-				path = path.Substring(1);
 			}
 			return path;
 		}
