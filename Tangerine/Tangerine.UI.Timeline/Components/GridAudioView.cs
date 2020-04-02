@@ -20,7 +20,7 @@ namespace Tangerine.UI.Timeline.Components
 		{
 			base.Render(widget);
 			Animator<AudioAction> actionAnimator;
-			if (!audio.Animators.TryFind("Action", out actionAnimator, Document.Current.AnimationId)) {
+			if (!audio.Animators.TryFind(nameof(Audio.Action), out actionAnimator, Document.Current.AnimationId)) {
 				return;
 			}
 			foreach (var key in actionAnimator.ReadonlyKeys) {
@@ -44,7 +44,7 @@ namespace Tangerine.UI.Timeline.Components
 		SerializableSample GetSampleAtFrame(int frame)
 		{
 			Animator<SerializableSample> sampleAnimator;
-			if (!audio.Animators.TryFind("Sample", out sampleAnimator)) {
+			if (!audio.Animators.TryFind(nameof(Audio.Sample), out sampleAnimator, Document.Current.AnimationId)) {
 				return audio.Sample;
 			}
 			var keys = sampleAnimator.ReadonlyKeys;
