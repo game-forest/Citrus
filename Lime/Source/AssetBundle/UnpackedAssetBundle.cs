@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Lime
 {
@@ -138,6 +139,12 @@ namespace Lime
 			path = path.Replace('\\', '/');
 			if (!path.EndsWith("/")) {
 				path += '/';
+			}
+			// Resolve ".." spec symbol in path.
+			bool wasSlashStarted = path.StartsWith("/");
+			path = Regex.Replace(path, "(/|^)[^/\\n]*?/\\.\\.", "");
+			if (!wasSlashStarted && path.StartsWith("/")) {
+				path = path.Substring(1);
 			}
 			return path;
 		}
