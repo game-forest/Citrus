@@ -61,7 +61,7 @@ namespace Lime
 				chars.FontRenderer = new FontRenderer(fontData) { LcdSupported = false };
 				missingCharacters.Clear();
 				foreach (var c in charSet.Chars) {
-					if (config.ExcludeChars.Any(character => character == c)) {
+					if (config.ExcludeChars.Any(character => character == c) || chars.Contains(c)) {
 						continue;
 					}
 					var fontChar = chars.Get(c);
