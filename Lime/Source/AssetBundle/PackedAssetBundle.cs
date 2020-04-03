@@ -528,6 +528,7 @@ namespace Lime
 				writer.Write((int)p.Value.Attributes);
 				writer.Write(p.Value.SourceExtension);
 			}
+			writer.Flush();
 		}
 
 		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
