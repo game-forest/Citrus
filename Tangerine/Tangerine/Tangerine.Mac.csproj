@@ -100,7 +100,6 @@
     <Compile Include="Panels\HierarchyPanel.cs" />
     <Compile Include="Panels\TreeView.cs" />
     <Compile Include="TangerineSingleInstanceKeeper.cs" />
-    <Compile Include="Tools\PolygonMeshTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

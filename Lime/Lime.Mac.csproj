@@ -176,8 +176,10 @@
     <Compile Include="Source\AssetBundle\AggregateAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundleToolbox.cs" />
+    <Compile Include="Source\AssetBundle\CustomSetAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\PackedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\UnpackedAssetBundle.cs" />
+    <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
     <Compile Include="Source\Audio\IAudioChannel.cs" />
     <Compile Include="Source\Audio\OpenAL\ALMOB\OpenAL.cs" />
     <Compile Include="Source\Audio\OpenAL\ALMOB\OpenALC.cs" />
@@ -501,12 +503,6 @@
     <Compile Include="Source\Widgets\WindowWidget.cs" />
     <Compile Include="Source\YuzuGeneratedBinaryDeserializer.cs" />
     <Compile Include="Source\YuzuGeneratedCloners.cs" />
-    <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
-    <Compile Include="Source\AssetBundle\CustomSetAssetBundle.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\PolygonMesh.cs" />
-    <Compile Include="Source\Optimizations\Triangulator.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\PolygonMeshUtils.cs" />
-    <Compile Include="Source\Widgets\PolygonMesh\ITopology.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Application\Application.cs" />

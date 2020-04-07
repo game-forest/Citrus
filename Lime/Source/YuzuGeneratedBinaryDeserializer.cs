@@ -11777,7 +11777,6 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			result.OnAfterDeserialization();
 		}
 
 		private static object Make_Lime_Widgets_PolygonMesh__PolygonMesh(BinaryDeserializer d, ReaderClassDef def)

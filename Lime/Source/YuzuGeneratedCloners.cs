@@ -3133,7 +3133,6 @@ namespace YuzuGenerated
 			}
 			result.Visible = s.Visible;
 			s.OnAfterSerialization();
-			result.OnAfterDeserialization();
 			return result;
 		}
 
