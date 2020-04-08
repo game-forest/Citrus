@@ -9,7 +9,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 	public partial class HalfEdgeTopology : ITopology
 	{
 
-		public class HalfEdge
+		private class HalfEdge
 		{
 			private bool constrained;
 			public int Origin { get; internal set; }
@@ -246,7 +246,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			return inbound;
 		}
 
-		public IEnumerable<HalfEdge> HalfEdges => new HalfEdge.HalfEdgesEnumerable(Root);
+		private IEnumerable<HalfEdge> HalfEdges => new HalfEdge.HalfEdgesEnumerable(Root);
 
 		private IEnumerable<(HalfEdge, HalfEdge, HalfEdge)> Triangles()
 		{
