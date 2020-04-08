@@ -16,6 +16,9 @@ namespace Lime
 
 		public readonly static TexturePool Instance = new TexturePool();
 
+		public delegate void TextureCreatedDelegate(string path, ITexture texture);
+		public event TextureCreatedDelegate TextureCreated;
+
 		private TexturePool() {}
 
 		[Obsolete("Use DiscardTexturesUnderPressure()")]
@@ -66,25 +69,22 @@ namespace Lime
 		public ITexture GetTexture(string path)
 		{
 			lock (textures) {
-				ITexture texture;
-				WeakReference r;
 				if (path == null) {
 					path = string.Empty;
 				}
 				if (path.StartsWith("#")) { // It's supposed render target texture
 					path = path.ToLower();
 				}
-				if (!textures.TryGetValue(path, out r)) {
-					texture = CreateTexture(path);
-					textures[path] = new WeakReference(texture);
-					return texture;
+				ITexture texture;
+				if (textures.TryGetValue(path, out var weakReference)) {
+					texture = weakReference.Target as ITexture;
+					if (texture != null && !texture.IsDisposed) {
+						return texture;
+					}
 				}
-				texture = r.Target as ITexture;
-				if (texture == null || texture.IsDisposed) {
-					texture = CreateTexture(path);
-					textures[path] = new WeakReference(texture);
-					return texture;
-				}
+				texture = CreateTexture(path);
+				textures[path] = new WeakReference(texture);
+				TextureCreated?.Invoke(path, texture);
 				return texture;
 			}
 		}
