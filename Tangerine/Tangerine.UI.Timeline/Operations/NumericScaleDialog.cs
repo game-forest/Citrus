@@ -70,15 +70,28 @@ namespace Tangerine.UI.Timeline
 		private void ScaleKeyframes()
 		{
 			if (GridSelection.GetSelectionBoundaries(out var boundaries) && Scale > Mathf.ZeroTolerance) {
+				var processed = new HashSet<IAnimator>();
 				var saved = new List<IKeyframe>();
+				var animators = new List<IAnimator>();
+				var rows = Document.Current.Rows.ToList();
+				IAnimationHost animable = null;
 				for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
-					if (!(Document.Current.Rows[i].Components.Get<NodeRow>()?.Node is IAnimationHost animable)) {
+					animators.Clear();
+					var components = rows[i].Components;
+					if (components.Get<NodeRow>()?.Node is IAnimationHost node) {
+						animable = node;
+						animators.AddRange(animable.Animators.ToList());
+					} else if (components.Get<PropertyRow>() is PropertyRow prop && prop.Node is IAnimationHost) {
+						animable = prop.Node;
+						animators.Add(prop.Animator);
+					} else {
 						continue;
 					}
-					foreach (var animator in animable.Animators.ToList()) {
-						if (animator.AnimationId != Document.Current.AnimationId) {
+					foreach (var animator in animators) {
+						if (animator.AnimationId != Document.Current.AnimationId || processed.Contains(animator)) {
 							continue;
 						}
+						processed.Add(animator);
 						saved.Clear();
 						IEnumerable<IKeyframe> keys = animator.ReadonlyKeys.Where(k =>
 							k.Frame >= boundaries.Left && k.Frame < boundaries.Right
