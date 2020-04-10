@@ -8,6 +8,7 @@ using Tangerine.Core;
 using Tangerine.Core.Operations;
 using System.Collections;
 using System.Collections.ObjectModel;
+using Tangerine.UI.PropertyEditors;
 
 namespace Tangerine.UI.Inspector
 {
@@ -280,11 +281,18 @@ namespace Tangerine.UI.Inspector
 
 					if (!isPropertyRegistered) {
 						var propertyType = param.PropertyInfo.PropertyType;
-						var iListInterface = propertyType.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>));
+						var interfaces = propertyType.GetInterfaces();
+						var iListInterface = interfaces.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>));
+						var iDictionaryInterface = interfaces.FirstOrDefault(i =>
+							i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>) &&
+							i.GetGenericArguments()[0] == typeof(string)
+						);
 						if (propertyType.IsEnum) {
 							editor = CreateEditorForEnum(param);
 						} else if (iListInterface != null) {
 							editor = PopulateEditorsForListType(objects, rootObjects, param, iListInterface);
+						} else if (iDictionaryInterface != null) {
+							editor = PopulateEditorsForDictionaryType(objects, rootObjects, param, iDictionaryInterface);
 						} else if ((propertyType.IsClass || propertyType.IsInterface) && !propertyType.GetInterfaces().Contains(typeof(IEnumerable))) {
 							editor = PopulateEditorsForInstanceType(objects, rootObjects, param);
 						}
@@ -304,6 +312,21 @@ namespace Tangerine.UI.Inspector
 					}
 				}
 			}
+		}
+
+		private IPropertyEditor PopulateEditorsForDictionaryType(IEnumerable<object> objects, IEnumerable<object> rootObjects, PropertyEditorParams param, Type iDictionaryInterface)
+		{
+			var dictionaryGenericArgument = iDictionaryInterface.GetGenericArguments().ToArray();
+			var genericArguments = new[] { param.PropertyInfo.PropertyType, dictionaryGenericArgument[1], };
+
+			IEnumerable<IPropertyEditor> OnAdd(Type type, PropertyEditorParams p, Widget w, object list)
+			{
+				return PopulatePropertyEditors(type, new[] { list }, rootObjects, w, new Dictionary<string, List<PropertyEditorParams>> { { "", new List<PropertyEditorParams> { p } } });
+			}
+
+			var specializedEditorType = typeof(DictionaryPropertyEditor<,>).MakeGenericType(genericArguments);
+			var editor = Activator.CreateInstance(specializedEditorType, param, (Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>>) OnAdd);
+			return (IPropertyEditor)editor;
 		}
 
 		private IPropertyEditor PopulateEditorsForListType(IEnumerable<object> objects, IEnumerable<object> rootObjects, PropertyEditorParams param, Type iListInterface)

@@ -47,9 +47,10 @@
     <None Include="packages.config" />
     <Compile Include="ColorPicker.Mac.cs" />
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
-    <Compile Include="Tooltip\Tooltip.cs" />
+    <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
     <Compile Include="PropertyEditors\SBytePropertyEditor.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
+    <Compile Include="Tooltip\Tooltip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPicker.Win.cs" />

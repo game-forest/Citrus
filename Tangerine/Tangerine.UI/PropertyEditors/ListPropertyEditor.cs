@@ -29,7 +29,7 @@ namespace Tangerine.UI
 				return;
 			}
 			ExpandableContent.Padding = new Thickness(left: 4.0f, right: 0.0f, top: 4.0f, bottom: 4.0f);
-			list = (IList)EditorParams.PropertyInfo.GetValue(EditorParams.Objects.First());
+			list = PropertyValue(EditorParams.Objects.First()).GetValue();
 			Expanded = true;
 
 			EditorContainer.AddNode(new ThemedAddButton() {
@@ -50,8 +50,15 @@ namespace Tangerine.UI
 					}
 				}
 			});
-
+			var current = PropertyValue(EditorParams.Objects.First());
 			ContainerWidget.AddChangeWatcher(() => (list?.Count ?? 0) - pendingRemoval.Count, RemoveAndBuild);
+			ContainerWidget.AddChangeWatcher(() => current.GetValue(), l => {
+				list = l;
+				pendingRemoval.Clear();
+				if (list != null) {
+					RemoveAndBuild(list.Count);
+				}
+			});
 		}
 
 		private void RemoveAndBuild(int newCount)
