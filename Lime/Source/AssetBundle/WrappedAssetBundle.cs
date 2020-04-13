@@ -23,6 +23,8 @@ namespace Lime
 
 		public override DateTime GetFileLastWriteTime(string path) => Bundle.GetFileLastWriteTime(path);
 
+		public override string GetSourceExtension(string path) => Bundle.GetSourceExtension(path);
+
 		public override void SetFileLastWriteTime(string path, DateTime time) => Bundle.SetFileLastWriteTime(path, time);
 
 		public override int GetFileSize(string path) => Bundle.GetFileSize(path);

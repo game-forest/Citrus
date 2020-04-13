@@ -123,6 +123,21 @@ namespace Lime
 			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
 		}
 
+		public override string GetSourceExtension(string path)
+		{
+			sync.EnterReadLock();
+			try {
+				foreach (var bundle in bundles) {
+					if (bundle.FileExists(path)) {
+						return bundle.GetSourceExtension(path);
+					}
+				}
+			} finally {
+				sync.ExitReadLock();
+			}
+			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
+		}
+
 		public override void DeleteFile(string path)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");

@@ -370,6 +370,11 @@ namespace Lime
 			return GetDescriptor(path).Length;
 		}
 
+		public override string GetSourceExtension(string path)
+		{
+			return GetDescriptor(path).SourceExtension;
+		}
+
 		public override void DeleteFile(string path)
 		{
 			OnWrite?.Invoke();

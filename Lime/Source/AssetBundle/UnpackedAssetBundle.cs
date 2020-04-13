@@ -64,6 +64,11 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
+		public override string GetSourceExtension(string path)
+		{
+			throw new NotSupportedException();
+		}
+
 		public override void DeleteFile(string path)
 		{
 			File.Delete(ToSystemPath(path));

@@ -161,6 +161,8 @@ namespace Lime
 			return AssetAttributes.None;
 		}
 
+		public abstract string GetSourceExtension(string path);
+
 		public virtual void SetAttributes(string path, AssetAttributes attributes)
 		{
 		}
