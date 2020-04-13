@@ -20022,19 +20022,6 @@ references:
   isSpec: "True"
   fullName: Lime.Frame.ClipChildren
   nameWithType: Frame.ClipChildren
-- uid: Lime.Frame.CreateSubframe(System.String)
-  name: CreateSubframe(String)
-  href: api/Lime.Frame.html#Lime_Frame_CreateSubframe_System_String_
-  commentId: M:Lime.Frame.CreateSubframe(System.String)
-  fullName: Lime.Frame.CreateSubframe(System.String)
-  nameWithType: Frame.CreateSubframe(String)
-- uid: Lime.Frame.CreateSubframe*
-  name: CreateSubframe
-  href: api/Lime.Frame.html#Lime_Frame_CreateSubframe_
-  commentId: Overload:Lime.Frame.CreateSubframe
-  isSpec: "True"
-  fullName: Lime.Frame.CreateSubframe
-  nameWithType: Frame.CreateSubframe
 - uid: Lime.Frame.GetRenderObject
   name: GetRenderObject()
   href: api/Lime.Frame.html#Lime_Frame_GetRenderObject
