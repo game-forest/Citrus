@@ -188,8 +188,6 @@ namespace Lime
 		public string Path { get; private set; }
 		public event Action OnWrite;
 
-		PackedAssetBundle() {}
-
 		public PackedAssetBundle(string resourceId, string assemblyName)
 		{
 			this.Path = resourceId;
