@@ -425,7 +425,22 @@ namespace Tangerine.Core
 
 		public void RefreshExternalScenes()
 		{
-			RootNode.LoadExternalScenes();
+			RootNode.LoadExternalScenes(TangerinePersistence.Instance);
+			// restore animation state in reloaded external scenes by applying all animations at their current frame
+			var s = new Stack<Node>(new [] { RootNode });
+			while (s.Count != 0) {
+				var n = s.Pop();
+				foreach (var animation in n.Animations) {
+					Current.animationPositioner.SetAnimationFrame(animation, animation.Frame, true);
+				}
+				foreach (var c in n.Nodes) {
+					// don't go into prefab, since it's animation state is completely
+					// driven by animations of the scene, prefab's been instantiated into
+					if (!string.IsNullOrEmpty(c.ContentsPath)) {
+						s.Push(c);
+					}
+				}
+			}
 		}
 
 		private static void DetachViews()
