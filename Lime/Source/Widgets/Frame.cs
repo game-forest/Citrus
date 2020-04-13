@@ -115,19 +115,6 @@ namespace Lime
 			}
 		}
 
-		public static Frame CreateSubframe(string path)
-		{
-			var frame = (Frame)CreateFromAssetBundle(path).Nodes[0];
-			frame.Unlink();
-			var pathComponent = frame.Components.Get<AssetBundlePathComponent>();
-			if (pathComponent == null) {
-				frame.Components.Add(new AssetBundlePathComponent(path));
-			} else {
-				pathComponent.Path = path;
-			}
-			return frame;
-		}
-
 		private static ITexture CreateRenderTargetTexture(RenderTarget value)
 		{
 			switch (value) {
