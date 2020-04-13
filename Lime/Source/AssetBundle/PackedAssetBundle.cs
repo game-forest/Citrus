@@ -629,10 +629,34 @@ namespace Lime
 			}
 			throw new Exception("Asset '{0}' doesn't exist", path);
 		}
-
-
+		
 		public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
 
 		public override string FromSystemPath(string systemPath) => throw new NotSupportedException();
+
+		public void ApplyPatch(PackedAssetBundle patchBundle)
+		{
+			foreach (var file in patchBundle.EnumerateFiles()) {
+				if (FileExists(file)) {
+					DeleteFile(file);
+				}
+				using (var stream = patchBundle.OpenFileRaw(file)) {
+					ImportFileRaw(
+						file, stream, 0,
+						patchBundle.GetSourceExtension(file),
+						patchBundle.GetFileLastWriteTime(file),
+						patchBundle.GetAttributes(file),
+						patchBundle.GetCookingRulesSHA1(file)
+					);
+				}
+			}
+			if (patchBundle.FileExists(Manifest.FileName)) {
+				var manifest =
+					InternalPersistence.Instance.ReadObjectFromBundle<Manifest>(patchBundle, Manifest.FileName);
+				foreach (var file in manifest.DeletedAssets) {
+					DeleteFile(file);
+				}
+			}
+		}
 	}
 }
