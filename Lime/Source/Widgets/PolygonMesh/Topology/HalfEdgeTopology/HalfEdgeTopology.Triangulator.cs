@@ -22,7 +22,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// First: locate the given vertex.
 			// Determine whether it's in the specific triangle or
 			// lies outside of triangulation.
-			var vertex = Vertices[vertexIndex].Pos;
+			var vertex = InnerVertices[vertexIndex].Pos;
 			var result = LocateClosestTriangle(vertexIndex, out var halfEdge);
 			// Check special cases:
 			// Same vertex already exists:
@@ -65,7 +65,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private LocationResult LocateClosestTriangle(int index, out HalfEdge edge)
 		{
-			return LocateClosestTriangle(Vertices[index].Pos, out edge);
+			return LocateClosestTriangle(InnerVertices[index].Pos, out edge);
 		}
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			HalfEdge closest = null;
 			var minDistance = float.MaxValue;
 			foreach (var (e1, e2, e3) in Triangles()) {
-				var (p1, p2, p3) = (Vertices[e1.Origin].Pos, Vertices[e2.Origin].Pos, Vertices[e3.Origin].Pos);
+				var (p1, p2, p3) = (InnerVertices[e1.Origin].Pos, InnerVertices[e2.Origin].Pos, InnerVertices[e3.Origin].Pos);
 				if (p1 == vertex) {
 					edge = e1;
 					return LocationResult.SameVertex;
@@ -122,8 +122,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 				void UpdateMinDistance(HalfEdge s, HalfEdge e)
 				{
-					var v = Vertices[s.Origin].Pos;
-					var w = Vertices[e.Origin].Pos;
+					var v = InnerVertices[s.Origin].Pos;
+					var w = InnerVertices[e.Origin].Pos;
 					var distance = PointToSegmentSqrDistance(v, w, vertex);
 					if (distance < minDistance) {
 						minDistance = distance;
@@ -153,7 +153,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					throw new InvalidOperationException("There is no triangle in triangulation that contains given vertex.");
 				}
 			}
-			var vertex = Vertices[vertexIndex].Pos;
+			var vertex = InnerVertices[vertexIndex].Pos;
 			if (!VertexInsideTriangle(vertex, start)) {
 				throw new InvalidOperationException("There is no triangle in triangulation that contains given vertex.");
 			}
@@ -206,13 +206,13 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					throw new InvalidOperationException("Sight point is inside triangulation.");
 				}
 			}
-			var vertex = Vertices[sightPoint].Pos;
+			var vertex = InnerVertices[sightPoint].Pos;
 			// Ensure that 'start' is edge of the boundary (Twin is null).
 			// Find boundary edge otherwise.
 			if (start.Twin != null) {
 				// Check which HalfEdge is closer to sightPoint `start` or it's twin.
-				var d1 = (vertex - Vertices[start.Origin].Pos).SqrLength;
-				var d2 = (vertex - Vertices[start.Twin.Origin].Pos).SqrLength;
+				var d1 = (vertex - InnerVertices[start.Origin].Pos).SqrLength;
+				var d2 = (vertex - InnerVertices[start.Twin.Origin].Pos).SqrLength;
 				start = d1 > d2 ? start : start.Twin;
 				// Check adjacent edges (for start.Origin) until boundary edge is found.
 				while (start.Twin != null) {
@@ -232,15 +232,15 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 			// Skip first possibly visible edges in order to
 			// get rid of need to merge set of edges that we accidentally splitted.
-			var a = Vertices[start.Origin].Pos;
-			var b = Vertices[start.Next.Origin].Pos;
+			var a = InnerVertices[start.Origin].Pos;
+			var b = InnerVertices[start.Next.Origin].Pos;
 			while (AreClockwiseOrdered(a, vertex, b)) {
 				do {
 					start = start.Next;
 					start = start.Twin ?? start;
 				} while (start.Twin != null);
-				a = Vertices[start.Origin].Pos;
-				b = Vertices[start.Next.Origin].Pos;
+				a = InnerVertices[start.Origin].Pos;
+				b = InnerVertices[start.Next.Origin].Pos;
 			}
 			var boundary = new List<HalfEdge>();
 			var current = start;
@@ -255,16 +255,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var visibleBoundary = new List<List<HalfEdge>> {};
 			bool isContinuous = false;
 			foreach (var self in boundary) {
-				a = Vertices[self.Origin].Pos;
-				b = Vertices[self.Next.Origin].Pos;
+				a = InnerVertices[self.Origin].Pos;
+				b = InnerVertices[self.Next.Origin].Pos;
 				if (AreClockwiseOrdered(a, vertex, b)) {
 					var doesIntersectTriangulation = false;
 					foreach (var other in boundary) {
 						if (self == other) {
 							continue;
 						}
-						var c = Vertices[other.Origin].Pos;
-						var d = Vertices[other.Next.Origin].Pos;
+						var c = InnerVertices[other.Origin].Pos;
+						var d = InnerVertices[other.Next.Origin].Pos;
 						if (
 							self.Origin != other.Next.Origin &&
 							RobustSegmentSegmentIntersection(a, vertex, c, d) ||
@@ -307,7 +307,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		private bool IsDelaunay(HalfEdge edge) =>
-			edge.Constrained || edge.Twin == null || edge.Detached || !InCircumcircle(edge.Twin, Vertices[edge.Prev.Origin].Pos);
+			edge.Constrained || edge.Twin == null || edge.Detached || !InCircumcircle(edge.Twin, InnerVertices[edge.Prev.Origin].Pos);
 
 		private HalfEdge Flip(HalfEdge edge)
 		{
@@ -443,13 +443,13 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var next = current.Next ?? p.First;
 				HalfEdge e1 = prev.Value, e2 = current.Value, e3 = next.Value;
 				int o1 = e1.Origin, o2 = e2.Origin, o3 = e3.Origin;
-				Vector2 v1 = Vertices[o1].Pos, v2 = Vertices[o2].Pos, v3 = Vertices[o3].Pos;
+				Vector2 v1 = InnerVertices[o1].Pos, v2 = InnerVertices[o2].Pos, v3 = InnerVertices[o3].Pos;
 				if (AreClockwiseOrdered(v1, v2, v3)) {
 					var other = next.Next ?? p.First;
 					var isEar = true;
 					while (other != prev) {
 						var e = other.Value;
-						if (VertexInsideTriangle(Vertices[e.Origin].Pos, v1, v2, v3)) {
+						if (VertexInsideTriangle(InnerVertices[e.Origin].Pos, v1, v2, v3)) {
 							// Definitely not an ear
 							isEar = false;
 							break;
@@ -491,8 +491,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var lowerUsed = new HashSet<int>();
 			var shouldBeReinserted = new HashSet<int>();
 			var shouldBeReconstrained = new List<(int, int)>();
-			var a = Vertices[index0].Pos;
-			var b = Vertices[index1].Pos;
+			var a = InnerVertices[index0].Pos;
+			var b = InnerVertices[index1].Pos;
 			var ab = b - a;
 			var signab = new IntVector2(Mathf.Sign(ab.X), Mathf.Sign(ab.Y));
 			// In order to insert a constrain edge we have to delete all
@@ -512,9 +512,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					prev.Constrained = true;
 					return;
 				}
-				var c = Vertices[next.Origin].Pos;
-				var d = Vertices[prev.Origin].Pos;
-				var e = Vertices[adjacentEdge.Origin].Pos;
+				var c = InnerVertices[next.Origin].Pos;
+				var d = InnerVertices[prev.Origin].Pos;
+				var e = InnerVertices[adjacentEdge.Origin].Pos;
 				// Special case: requested edge lies on the same line as [e, c] or [e, d].
 				// If true then mark edge as constrained and insert edge [next.Origin, index1] or [prev.Origin, index1].
 				if (IsVertexOnLine(a, e, c) && IsVertexOnLine(b, e, c)) {
@@ -562,9 +562,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					Finish(index0, index1);
 					break;
 				}
-				var c = Vertices[next.Origin].Pos;
-				var d = Vertices[prev.Origin].Pos;
-				var e = Vertices[current.Origin].Pos;
+				var c = InnerVertices[next.Origin].Pos;
+				var d = InnerVertices[prev.Origin].Pos;
+				var e = InnerVertices[current.Origin].Pos;
 				if (IsVertexOnLine(d, a, b)) {
 					// Special case: [a, b] intersects triangle exactly in the
 					// vertex that is opposite to basis (`current` edge).
@@ -745,9 +745,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private bool InCircumcircle(HalfEdge triangle, Vector2 vertex)
 		{
-			var v1 = Vertices[triangle.Origin].Pos;
-			var v2 = Vertices[triangle.Next.Origin].Pos;
-			var v3 = Vertices[triangle.Prev.Origin].Pos;
+			var v1 = InnerVertices[triangle.Origin].Pos;
+			var v2 = InnerVertices[triangle.Next.Origin].Pos;
+			var v3 = InnerVertices[triangle.Prev.Origin].Pos;
 			return InCircle(vertex, v1, v2, v3);
 		}
 
@@ -769,9 +769,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		{
 			var next = triangle.Next;
 			var prev = triangle.Prev;
-			var v1 = Vertices[triangle.Origin].Pos;
-			var v2 = Vertices[next.Origin].Pos;
-			var v3 = Vertices[prev.Origin].Pos;
+			var v1 = InnerVertices[triangle.Origin].Pos;
+			var v2 = InnerVertices[next.Origin].Pos;
+			var v3 = InnerVertices[prev.Origin].Pos;
 			return VertexInsideTriangle(vertex, v1, v2, v3);
 		}
 
@@ -832,7 +832,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		private bool IsVertexOnEdge(Vector2 vertex, HalfEdge edge) =>
-			IsVertexOnEdge(vertex, Vertices[edge.Origin].Pos, Vertices[edge.Next.Origin].Pos);
+			IsVertexOnEdge(vertex, InnerVertices[edge.Origin].Pos, InnerVertices[edge.Next.Origin].Pos);
 
 		private static bool IsVertexOnEdge(Vector2 vertex, Vector2 s, Vector2 e) =>
 			vertex.X <= Mathf.Max(s.X, e.X) && vertex.X >= Mathf.Min(s.X, e.X) &&

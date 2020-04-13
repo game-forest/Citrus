@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Lime.PolygonMesh.Topology;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
@@ -140,6 +141,20 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
+		private class VerticesIndexer
+		{
+			private readonly List<Vertex> boundingFigureVertices;
+			private readonly List<Vertex> vertices;
+
+			public VerticesIndexer(List<Vertex> boundingFigureVertices, List<Vertex> vertices)
+			{
+				this.boundingFigureVertices = boundingFigureVertices;
+				this.vertices = vertices;
+			}
+
+			public Vertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
+		}
+
 		private HalfEdge FaceToHalfEdge(Face face)
 		{
 			var e = new HalfEdge(face[0]) { Next = new HalfEdge(face[1]) { Next = new HalfEdge(face[2]) } };
@@ -148,6 +163,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		private HalfEdge Root { get; set; }
+		private List<Vertex> BoundingFigureVertices { get; set; }
+		// Vertices + bounding figure vertices.
+		private VerticesIndexer InnerVertices { get; set; }
 
 		public IEnumerable<(int, int)> ConstrainedEdges
 		{
@@ -271,13 +289,15 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		public HalfEdgeTopology(List<Vertex> vertices)
 		{
-
+			// TODO: fix this constructor after reimplementation (if it'll happen).
 			Vertices = vertices;
 			var e1 = new HalfEdge(0) { Next = new HalfEdge(1) { Next = new HalfEdge(2) } };
 			e1.Prev.Next = e1;
 			var e2 = new HalfEdge(2) { Next = new HalfEdge(1) { Next = new HalfEdge(3) } };
 			e2.Prev.Next = e2;
 			e2.TwinWith(e1.Next);
+			BoundingFigureVertices = new List<Vertex>(Vertices.Take(4));
+			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
 			Root = e1;
 		}
 
