@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lzma;
+using Yuzu;
 
 namespace Lime
 {
@@ -144,6 +145,35 @@ namespace Lime
 
 	public class PackedAssetBundle : AssetBundle
 	{
+		/// <summary>
+		/// This class contains a specific data needed for applying asset bundle patches.
+		/// </summary>
+		public class Manifest
+		{
+			public const string FileName = ".Manifest";
+			
+			[YuzuMember]
+			public int BaseBundleVersion { get; set; }
+			
+			[YuzuMember]
+			public readonly List<string> DeletedAssets = new List<string>();
+
+			public static Manifest Create(AssetBundle bundle)
+			{
+				if (bundle.FileExists(FileName)) {
+					return InternalPersistence.Instance.ReadObjectFromBundle<Manifest>(bundle, FileName);
+				}
+				return new Manifest();
+			}
+
+			public void Write(AssetBundle bundle)
+			{
+				InternalPersistence.Instance.WriteObjectToBundle(
+					bundle, FileName, this, Persistence.Format.Binary, FileName,
+					DateTime.MinValue, AssetAttributes.None, null);
+			}
+		}
+		
 		private readonly Stack<Stream> streamPool = new Stack<Stream>();
 		const int Signature = 0x13AF;
 		private int indexOffset;
