@@ -403,13 +403,22 @@ namespace Lime
 			wasModified = true;
 		}
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFile(
+			string path, Stream stream, int reserve, string sourceExtension,
+			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
 		{
-			OnWrite?.Invoke();
-			AssetDescriptor d;
 			if ((attributes & AssetAttributes.Zipped) != 0) {
 				stream = CompressAssetStream(stream, attributes);
 			}
+			ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+		}
+
+		public override void ImportFileRaw(
+			string path, Stream stream, int reserve, string sourceExtension, 
+			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		{
+			OnWrite?.Invoke();
+			AssetDescriptor d;
 			bool reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
 				(d.AllocatedSize >= stream.Length) &&
 				(d.AllocatedSize <= stream.Length + reserve);
