@@ -32,8 +32,15 @@ namespace Lime
 			Bundle.ImportFile(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
 		}
 
+		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		{
+			Bundle.ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+		}
+
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open) => Bundle.OpenFile(path, mode);
 
+		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open) => Bundle.OpenFileRaw(path, mode);
+		
 		public override string ToSystemPath(string bundlePath) => Bundle.ToSystemPath(bundlePath);
 
 		public override string FromSystemPath(string systemPath) => Bundle.FromSystemPath(systemPath);

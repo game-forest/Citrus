@@ -32,6 +32,11 @@ namespace Lime
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
+			return OpenFileRaw(path, mode);
+		}
+
+		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open)
+		{
 			return new FileStream(
 				ToSystemPath(path), mode,
 				mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
@@ -68,8 +73,20 @@ namespace Lime
 		{
 			return File.Exists(ToSystemPath(path));
 		}
+		
+		public override void ImportFile(
+			string path, Stream stream, int reserve, string sourceExtension, DateTime time,
+			AssetAttributes attributes, byte[] cookingRulesSHA1)
+		{
+			if ((attributes & (AssetAttributes.Zipped | AssetAttributes.ZippedDeflate)) != 0) {
+				throw new NotSupportedException();
+			}
+			ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+		}
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFileRaw(
+			string path, Stream stream, int reserve, string sourceExtension, DateTime time,
+			AssetAttributes attributes, byte[] cookingRulesSHA1)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			var bytes = new byte[stream.Length];
@@ -78,7 +95,7 @@ namespace Lime
 			Directory.CreateDirectory(dir);
 			File.WriteAllBytes(Path.Combine(BaseDirectory, path), bytes);
 		}
-
+		
 		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
 		{
 			if (extension != null && !extension.StartsWith(".")) {

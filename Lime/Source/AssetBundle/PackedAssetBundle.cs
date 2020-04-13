@@ -317,19 +317,24 @@ namespace Lime
 				streamPool.Pop().Dispose();
 			}
 		}
-
+		
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
+		{
+			var stream = (AssetStream)OpenFileRaw(path, mode);
+			if ((stream.descriptor.Attributes & AssetAttributes.Zipped) != 0) {
+				return DecompressAssetStream(stream, stream.descriptor.Attributes);
+			}
+			return stream;
+		}
+
+		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open)
 		{
 			if (mode != FileMode.Open) {
 				throw new NotSupportedException();
 			}
 			var stream = new AssetStream(this, path);
-			var desc = stream.descriptor;
 			if (CommandLineArgs.SimulateSlowExternalStorage) {
-				ExternalStorageLagsSimulator.SimulateReadDelay(path, desc.Length);
-			}
-			if ((desc.Attributes & AssetAttributes.Zipped) != 0) {
-				return DecompressAssetStream(stream, desc.Attributes);
+				ExternalStorageLagsSimulator.SimulateReadDelay(path, stream.descriptor.Length);
 			}
 			return stream;
 		}

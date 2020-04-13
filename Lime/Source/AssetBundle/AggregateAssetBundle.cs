@@ -41,13 +41,17 @@ namespace Lime
 			}
 		}
 
-		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
+		public override Stream OpenFile(string path, FileMode mode = FileMode.Open) => OpenFileHelper(false, path, mode);
+
+		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open) => OpenFileHelper(true, path, mode);
+
+		private Stream OpenFileHelper(bool raw, string path, FileMode mode = FileMode.Open)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.OpenFile(path, mode);
+						return raw ? bundle.OpenFileRaw(path, mode) : bundle.OpenFile(path, mode);
 					}
 				}
 			} finally {
@@ -140,6 +144,12 @@ namespace Lime
 		}
 
 		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time,
+			AssetAttributes attributes = AssetAttributes.None, byte[] cookingRulesSHA1 = null)
+		{
+			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
+		}
+
+		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time,
 			AssetAttributes attributes = AssetAttributes.None, byte[] cookingRulesSHA1 = null)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
