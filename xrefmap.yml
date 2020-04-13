@@ -63309,6 +63309,18 @@ references:
   commentId: F:Lime.TexturePool.Instance
   fullName: Lime.TexturePool.Instance
   nameWithType: TexturePool.Instance
+- uid: Lime.TexturePool.TextureCreated
+  name: TextureCreated
+  href: api/Lime.TexturePool.html#Lime_TexturePool_TextureCreated
+  commentId: E:Lime.TexturePool.TextureCreated
+  fullName: Lime.TexturePool.TextureCreated
+  nameWithType: TexturePool.TextureCreated
+- uid: Lime.TexturePool.TextureCreatedDelegate
+  name: TexturePool.TextureCreatedDelegate
+  href: api/Lime.TexturePool.TextureCreatedDelegate.html
+  commentId: T:Lime.TexturePool.TextureCreatedDelegate
+  fullName: Lime.TexturePool.TextureCreatedDelegate
+  nameWithType: TexturePool.TextureCreatedDelegate
 - uid: Lime.TexturePool.TextureMissing
   name: TextureMissing
   href: api/Lime.TexturePool.html#Lime_TexturePool_TextureMissing

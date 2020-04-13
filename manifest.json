@@ -7598,11 +7598,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TexturePool.TextureCreatedDelegate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TexturePool.TextureCreatedDelegate.html",
+          "hash": "TSAO72M5XMa1i4CZAuWZgw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TexturePool.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.TexturePool.html",
-          "hash": "X9LAsOiWKUth3aBCO/uWkw=="
+          "hash": "w0f1qCELb+DfDLk3Z6dqGA=="
         }
       },
       "is_incremental": false,
@@ -9006,7 +9018,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "O4Azas2rotLnGJ9FeVg2tg=="
+          "hash": "3UAFjhvR4o5xgBMB8vkbOg=="
         }
       },
       "is_incremental": false,
@@ -9054,7 +9066,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "/pc5cKJm+zLTuBvVOH7zDw=="
+          "hash": "WqrlcXuWLT4CB5pFbDk4aA=="
         }
       },
       "is_incremental": false,
@@ -9237,7 +9249,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 753,
+          "total_file_count": 754,
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
