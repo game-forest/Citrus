@@ -32,6 +32,9 @@ namespace Lime
 					key = ++keyCounter;
 					keyMap.Add(t, key);
 				}
+				if (!keyMap.TryGetValue(type, out _)) {
+					keyMap.Add(type, key);
+				}
 				return key;
 			}
 		}
