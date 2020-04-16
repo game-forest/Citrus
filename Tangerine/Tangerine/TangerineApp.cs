@@ -615,6 +615,7 @@ namespace Tangerine
 			h.Connect(GenericCommands.HelpMode, () => Documentation.IsHelpModeOn = !Documentation.IsHelpModeOn);
 			h.Connect(GenericCommands.ViewChangelog, () => Documentation.ShowHelp(Documentation.ChangelogPageName));
 			h.Connect(GenericCommands.ConvertToButton, new ConvertToButton());
+			h.Connect(GenericCommands.OpenLookupDialog, () => new LookupDialog());
 			h.Connect(Tools.AlignLeft, new AlignLeft());
 			h.Connect(Tools.AlignRight, new AlignRight());
 			h.Connect(Tools.AlignTop, new AlignTop());

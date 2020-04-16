@@ -126,6 +126,7 @@ namespace Tangerine
 					Command.MenuSeparator,
 #if !MAC
 					GenericCommands.PreferencesDialog,
+					GenericCommands.OpenLookupDialog,
 					Command.MenuSeparator,
 #endif
 					GenericCommands.Close,
