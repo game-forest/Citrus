@@ -58,6 +58,7 @@
     <Compile Include="CommandHandlers.cs" />
     <Compile Include="Dialogs\ColorThemeEditor.cs" />
     <Compile Include="Dialogs\HotkeyEditor.cs" />
+    <Compile Include="Dialogs\LookupDialog.cs" />
     <Compile Include="Dialogs\ManageRulersDialog.cs" />
     <Compile Include="Dialogs\OrangePluginOptionsDialog.cs" />
     <Compile Include="Dialogs\PreferencesDialog.cs" />

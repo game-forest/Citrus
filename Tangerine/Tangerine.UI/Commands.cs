@@ -78,6 +78,7 @@ namespace Tangerine.UI
 		public static readonly ICommand NextDocument = new Command("Next Document", new Shortcut(Modifiers.Control, Key.Tab));
 		public static readonly ICommand PreviousDocument = new Command("Previous Document", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.Tab));
 		public static readonly ICommand CloseProject = new Command("Close Project", new Shortcut(Modifiers.Alt, Key.Q));
+		public static readonly ICommand OpenLookupDialog = new Command("Open Lookup Dialog", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.P));
 #if MAC
 		public static readonly ICommand Quit = new Command("Quit", new Shortcut(Modifiers.Command, Key.Q));
 #else
