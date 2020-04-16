@@ -37,11 +37,12 @@ namespace Tangerine.Core.Operations
 				} else {
 					Node namesakeAnimationOwner = null;
 					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
+						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
+							continue;
+						}
 						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
 							namesakeAnimationOwner = descendant;
 							RemoveTimelineColumn(op, descendant);
-						}
-						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
 							continue;
 						}
 						namesakeAnimationOwner = null;
@@ -80,11 +81,12 @@ namespace Tangerine.Core.Operations
 				} else {
 					Node namesakeAnimationOwner = null;
 					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
+						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
+							continue;
+						}
 						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
 							namesakeAnimationOwner = descendant;
 							ProcessNode(descendant);
-						}
-						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
 							continue;
 						}
 						namesakeAnimationOwner = null;
