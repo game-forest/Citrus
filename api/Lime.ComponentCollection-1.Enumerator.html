@@ -123,12 +123,12 @@
   
   
   <a id="Lime_ComponentCollection_1_Enumerator__ctor_" data-uid="Lime.ComponentCollection`1.Enumerator.#ctor*"></a>
-  <h4 id="Lime_ComponentCollection_1_Enumerator__ctor_Lime_ComponentCollection__0__Bucket___" data-uid="Lime.ComponentCollection`1.Enumerator.#ctor(Lime.ComponentCollection{`0}.Bucket[])">Enumerator(ComponentCollection&lt;TComponent&gt;.Bucket[])</h4>
+  <h4 id="Lime_ComponentCollection_1_Enumerator__ctor_System_ValueTuple_System_Int32__0____System_Int32_" data-uid="Lime.ComponentCollection`1.Enumerator.#ctor(System.ValueTuple{System.Int32,`0}[],System.Int32)">Enumerator((Int32, TComponent)[], Int32)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Enumerator(ComponentCollection&lt;TComponent&gt;.Bucket[] buckets)</code></pre>
+    <pre><code class="lang-csharp hljs">public Enumerator((int, TComponent)[] list, int length)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -141,8 +141,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.ComponentCollection-1.Bucket.html">ComponentCollection.Bucket</a>&lt;&gt;[]</td>
-        <td><span class="parametername">buckets</span></td>
+        <td><span class="xref">System.ValueTuple</span>&lt;<span class="xref">System.Int32</span>, TComponent&gt;[]</td>
+        <td><span class="parametername">list</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
         <td></td>
       </tr>
     </tbody>

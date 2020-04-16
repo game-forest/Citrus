@@ -13446,39 +13446,6 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).Add
   nameWithType: ComponentCollection<TComponent>.Add
   nameWithType.vb: ComponentCollection(Of TComponent).Add
-- uid: Lime.ComponentCollection`1.Bucket
-  name: ComponentCollection<TComponent>.Bucket
-  href: api/Lime.ComponentCollection-1.Bucket.html
-  commentId: T:Lime.ComponentCollection`1.Bucket
-  name.vb: ComponentCollection(Of TComponent).Bucket
-  fullName: Lime.ComponentCollection<TComponent>.Bucket
-  fullName.vb: Lime.ComponentCollection(Of TComponent).Bucket
-  nameWithType: ComponentCollection<TComponent>.Bucket
-  nameWithType.vb: ComponentCollection(Of TComponent).Bucket
-- uid: Lime.ComponentCollection`1.Bucket.Component
-  name: Component
-  href: api/Lime.ComponentCollection-1.Bucket.html#Lime_ComponentCollection_1_Bucket_Component
-  commentId: F:Lime.ComponentCollection`1.Bucket.Component
-  fullName: Lime.ComponentCollection<TComponent>.Bucket.Component
-  fullName.vb: Lime.ComponentCollection(Of TComponent).Bucket.Component
-  nameWithType: ComponentCollection<TComponent>.Bucket.Component
-  nameWithType.vb: ComponentCollection(Of TComponent).Bucket.Component
-- uid: Lime.ComponentCollection`1.Bucket.Key
-  name: Key
-  href: api/Lime.ComponentCollection-1.Bucket.html#Lime_ComponentCollection_1_Bucket_Key
-  commentId: F:Lime.ComponentCollection`1.Bucket.Key
-  fullName: Lime.ComponentCollection<TComponent>.Bucket.Key
-  fullName.vb: Lime.ComponentCollection(Of TComponent).Bucket.Key
-  nameWithType: ComponentCollection<TComponent>.Bucket.Key
-  nameWithType.vb: ComponentCollection(Of TComponent).Bucket.Key
-- uid: Lime.ComponentCollection`1.buckets
-  name: buckets
-  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_buckets
-  commentId: F:Lime.ComponentCollection`1.buckets
-  fullName: Lime.ComponentCollection<TComponent>.buckets
-  fullName.vb: Lime.ComponentCollection(Of TComponent).buckets
-  nameWithType: ComponentCollection<TComponent>.buckets
-  nameWithType.vb: ComponentCollection(Of TComponent).buckets
 - uid: Lime.ComponentCollection`1.Clear
   name: Clear()
   href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Clear
@@ -13574,15 +13541,15 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).Enumerator
   nameWithType: ComponentCollection<TComponent>.Enumerator
   nameWithType.vb: ComponentCollection(Of TComponent).Enumerator
-- uid: Lime.ComponentCollection`1.Enumerator.#ctor(Lime.ComponentCollection{`0}.Bucket[])
-  name: Enumerator(ComponentCollection<TComponent>.Bucket[])
-  href: api/Lime.ComponentCollection-1.Enumerator.html#Lime_ComponentCollection_1_Enumerator__ctor_Lime_ComponentCollection__0__Bucket___
-  commentId: M:Lime.ComponentCollection`1.Enumerator.#ctor(Lime.ComponentCollection{`0}.Bucket[])
-  name.vb: Enumerator(ComponentCollection(Of TComponent).Bucket())
-  fullName: Lime.ComponentCollection<TComponent>.Enumerator.Enumerator(Lime.ComponentCollection<TComponent>.Bucket[])
-  fullName.vb: Lime.ComponentCollection(Of TComponent).Enumerator.Enumerator(Lime.ComponentCollection(Of TComponent).Bucket())
-  nameWithType: ComponentCollection<TComponent>.Enumerator.Enumerator(ComponentCollection<TComponent>.Bucket[])
-  nameWithType.vb: ComponentCollection(Of TComponent).Enumerator.Enumerator(ComponentCollection(Of TComponent).Bucket())
+- uid: Lime.ComponentCollection`1.Enumerator.#ctor(System.ValueTuple{System.Int32,`0}[],System.Int32)
+  name: Enumerator((Int32, TComponent)[], Int32)
+  href: api/Lime.ComponentCollection-1.Enumerator.html#Lime_ComponentCollection_1_Enumerator__ctor_System_ValueTuple_System_Int32__0____System_Int32_
+  commentId: M:Lime.ComponentCollection`1.Enumerator.#ctor(System.ValueTuple{System.Int32,`0}[],System.Int32)
+  name.vb: Enumerator((Int32, TComponent)(), Int32)
+  fullName: Lime.ComponentCollection<TComponent>.Enumerator.Enumerator(System.ValueTuple<System.Int32, TComponent>[], System.Int32)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).Enumerator.Enumerator(System.ValueTuple(Of System.Int32, TComponent)(), System.Int32)
+  nameWithType: ComponentCollection<TComponent>.Enumerator.Enumerator((Int32, TComponent)[], Int32)
+  nameWithType.vb: ComponentCollection(Of TComponent).Enumerator.Enumerator((Int32, TComponent)(), Int32)
 - uid: Lime.ComponentCollection`1.Enumerator.#ctor*
   name: Enumerator
   href: api/Lime.ComponentCollection-1.Enumerator.html#Lime_ComponentCollection_1_Enumerator__ctor_
