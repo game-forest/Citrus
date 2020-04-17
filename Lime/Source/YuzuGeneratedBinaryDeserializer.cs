@@ -6482,6 +6482,37 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static void Read_Lime__PackedAssetBundle__Manifest(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.PackedAssetBundle.Manifest)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				result.BaseBundleVersion = d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					while (--tmp1 >= 0) {
+						var tmp2 = d.Reader.ReadString();
+						if (tmp2 == "" && d.Reader.ReadBoolean()) tmp2 = null;
+						result.DeletedAssets.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__PackedAssetBundle__Manifest(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.PackedAssetBundle.Manifest();
+			Read_Lime__PackedAssetBundle__Manifest(d, def, result);
+			return result;
+		}
+
 		private static void Read_Lime__ParticleEmitter(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.ParticleEmitter)obj;
@@ -11522,6 +11553,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.NoiseMaterial)] = Read_Lime__NoiseMaterial;
 			readCache[typeof(global::Lime.NumericAnimator)] = Read_Lime__NumericAnimator;
 			readCache[typeof(global::Lime.NumericRangeAnimator)] = Read_Lime__NumericRangeAnimator;
+			readCache[typeof(global::Lime.PackedAssetBundle.Manifest)] = Read_Lime__PackedAssetBundle__Manifest;
 			readCache[typeof(global::Lime.ParticleEmitter)] = Read_Lime__ParticleEmitter;
 			readCache[typeof(global::Lime.ParticleModifier)] = Read_Lime__ParticleModifier;
 			readCache[typeof(global::Lime.ParticlesMagnet)] = Read_Lime__ParticlesMagnet;
@@ -11725,6 +11757,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.NumericAnimator)] = Make_Lime__NumericAnimator;
 			makeCache[typeof(global::Lime.NumericRange)] = Make_Lime__NumericRange;
 			makeCache[typeof(global::Lime.NumericRangeAnimator)] = Make_Lime__NumericRangeAnimator;
+			makeCache[typeof(global::Lime.PackedAssetBundle.Manifest)] = Make_Lime__PackedAssetBundle__Manifest;
 			makeCache[typeof(global::Lime.ParticleEmitter)] = Make_Lime__ParticleEmitter;
 			makeCache[typeof(global::Lime.ParticleModifier)] = Make_Lime__ParticleModifier;
 			makeCache[typeof(global::Lime.ParticlesMagnet)] = Make_Lime__ParticlesMagnet;
