@@ -156,7 +156,7 @@ namespace Lime
 			public int BaseBundleVersion { get; set; }
 			
 			[YuzuMember]
-			public readonly List<string> DeletedAssets = new List<string>();
+			public List<string> DeletedAssets { get; } = new List<string>();
 
 			public static Manifest Create(AssetBundle bundle)
 			{
