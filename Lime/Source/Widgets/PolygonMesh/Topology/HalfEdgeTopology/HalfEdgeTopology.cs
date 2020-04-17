@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Lime.PolygonMesh.Topology;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
@@ -155,6 +156,71 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			public Vertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
 		}
 
+		private class Boundary : IEnumerable<int>
+		{
+			private readonly LinkedList<int> boundary = new LinkedList<int>();
+			private readonly Dictionary<int, LinkedListNode<int>> vertexIndexToBoundaryIndex = new Dictionary<int, LinkedListNode<int>>();
+
+			public int Count => boundary.Count;
+
+			public void Add(int vertexIndex)
+			{
+				System.Diagnostics.Debug.Assert(vertexIndex >= 0);
+				if (!vertexIndexToBoundaryIndex.ContainsKey(vertexIndex)) {
+					boundary.AddLast(vertexIndex);
+					vertexIndexToBoundaryIndex.Add(vertexIndex, boundary.Last);
+				}
+			}
+
+			public void Remove(int boundaryVertexIndex)
+			{
+				if (vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n)) {
+					boundary.Remove(n);
+					vertexIndexToBoundaryIndex.Remove(boundaryVertexIndex);
+				}
+			}
+
+			public void Insert(int boundaryVertexIndex, int vertexIndex)
+			{
+				System.Diagnostics.Debug.Assert(vertexIndex >= 0);
+				if (vertexIndexToBoundaryIndex.ContainsKey(vertexIndex)) {
+					throw new InvalidOperationException();
+				}
+				var n = vertexIndexToBoundaryIndex[boundaryVertexIndex];
+				boundary.AddAfter(n, vertexIndex);
+				vertexIndexToBoundaryIndex.Add(vertexIndex, n.Next);
+			}
+
+			public void Clear()
+			{
+				vertexIndexToBoundaryIndex.Clear();
+				boundary.Clear();
+			}
+
+			public bool Contains(int vertexIndex) => vertexIndexToBoundaryIndex.ContainsKey(vertexIndex);
+
+			public int Next(int boundaryVertexIndex) =>
+				vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n) ? (n.Next ?? boundary.First).Value : -1;
+
+			public int Prev(int boundaryVertexIndex) =>
+				vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n) ? (n.Previous ?? boundary.Last).Value : -1;
+
+			public void Remap(List<int> map)
+			{
+				var current = boundary.First;
+				while (current != null) {
+					vertexIndexToBoundaryIndex.Remove(current.Value);
+					current.Value = map[current.Value];
+					vertexIndexToBoundaryIndex.Add(current.Value, current);
+					current = current.Next;
+				}
+			}
+
+			public IEnumerator<int> GetEnumerator() => boundary.GetEnumerator();
+
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+		}
+
 		private HalfEdge FaceToHalfEdge(Face face)
 		{
 			var e = new HalfEdge(face[0]) { Next = new HalfEdge(face[1]) { Next = new HalfEdge(face[2]) } };
@@ -166,6 +232,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		private List<Vertex> BoundingFigureVertices { get; set; }
 		// Vertices + bounding figure vertices.
 		private VerticesIndexer InnerVertices { get; set; }
+		// A boundary of `true` triangulation.
+		private Boundary InnerBoundary { get; set; }
+		private Rectangle BoundingBox { get; set; }
 
 		public IEnumerable<(int, int)> ConstrainedEdges
 		{
@@ -186,6 +255,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			out TopologyHitTestResult result
 		) {
 			var location = LocateClosestTriangle(position, out var edge);
+			result = null;
+			if (!IsPointInsideTrueTriangulation(position)) {
+				return false;
+			}
 			var sqrVertexHitRadius = vertexHitRadius * vertexHitRadius;
 			var sqrEdgeHitRadius = edgeHitRadius * edgeHitRadius;
 			switch (location) {
@@ -298,7 +371,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			e2.TwinWith(e1.Next);
 			BoundingFigureVertices = new List<Vertex>(Vertices.Take(4));
 			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
+			InnerBoundary = new Boundary() { 0, 1, 3, 2, };
 			Root = e1;
+			BoundingBox = new Rectangle(0f, 0f, 1f, 1f);
 		}
 
 		public void Sync(List<Vertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
@@ -309,8 +384,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// Simple bfs doesn't work because there exist multiple paths
 			// to reach some triangle
 			HalfEdge[,] table = new HalfEdge[vertices.Count, vertices.Count];
+			var usedBoundingFigureVertices = new bool[4];
 			foreach (var face in faces) {
 				var current = Root = FaceToHalfEdge(face);
+				for (int i = 0; i < 3; i++) {
+					if (BelongsToBoundingFigure(face[i], out var bfvi)) {
+						usedBoundingFigureVertices[bfvi] = true;
+					}
+				}
 				do {
 					table[current.Origin, current.Next.Origin] = current;
 					var possibleTwin = table[current.Next.Origin, current.Origin];
@@ -318,13 +399,35 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					current = current.Next;
 				} while (current != Root);
 			}
-
 			foreach (var edge in constrainedEdges) {
 				var he = table[edge.Index0, edge.Index1];
 				if (he != null) {
 					he.Constrained = true;
 				}
 			}
+			HalfEdge start = null;
+			foreach (var edge in HalfEdges) {
+				if (edge.Twin == null) {
+					start = edge;
+					break;
+				}
+			}
+			InnerBoundary.Clear();
+			var c = start;
+			do {
+				InnerBoundary.Add(c.Origin);
+				c = NextBorderEdge(c);
+			} while (c != start);
+			for (int i = 0; i < 4; i++) {
+				if (!usedBoundingFigureVertices[i]) {
+					AddVertex(-i);
+				}
+			}
+			BoundingBox = Rectangle.Empty;
+			foreach (var vertex in Vertices) {
+				BoundingBox = BoundingBox.IncludingPoint(vertex.Pos);
+			}
+			ToConvexHull();
 		}
 
 		public IEnumerable<Face> Faces
@@ -332,7 +435,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			get
 			{
 				foreach (var (e1, e2, e3) in Triangles()) {
-					yield return new Face { Index0 = (ushort)e1.Origin, Index1 = (ushort)e2.Origin, Index2 = (ushort)e3.Origin, };
+					if (e1.Origin >= 0 && e2.Origin >= 0 && e3.Origin >= 0) {
+						yield return new Face { Index0 = (ushort)e1.Origin, Index1 = (ushort)e2.Origin, Index2 = (ushort)e3.Origin, };
+					}
 				}
 			}
 		}
@@ -343,20 +448,23 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			get
 			{
 				foreach (var (e1, e2, e3) in Triangles()) {
-					yield return (
-						new Face {
-							Index0 = (ushort)e1.Origin,
-							Index1 = (ushort)e2.Origin,
-							Index2 = (ushort)e3.Origin,
-						},
-						new Face.FaceInfo {
-							IsConstrained0 = e1.Constrained,
-							IsConstrained1 = e2.Constrained,
-							IsConstrained2 = e3.Constrained,
-							IsFraming0 = e1.Twin == null,
-							IsFraming1 = e2.Twin == null,
-							IsFraming2 = e3.Twin == null,
-						});
+					if (e1.Origin >= 0 && e2.Origin >= 0 && e3.Origin >= 0) {
+						yield return (
+							new Face {
+								Index0 = (ushort)e1.Origin,
+								Index1 = (ushort)e2.Origin,
+								Index2 = (ushort)e3.Origin,
+							},
+							new Face.FaceInfo {
+								IsConstrained0 = e1.Constrained,
+								IsConstrained1 = e2.Constrained,
+								IsConstrained2 = e3.Constrained,
+								IsFraming0 = e1.Twin == null || InnerBoundary.Contains(e1.Origin) && InnerBoundary.Next(e1.Origin) == e2.Origin,
+								IsFraming1 = e2.Twin == null || InnerBoundary.Contains(e2.Origin) && InnerBoundary.Next(e2.Origin) == e3.Origin,
+								IsFraming2 = e3.Twin == null || InnerBoundary.Contains(e3.Origin) && InnerBoundary.Next(e3.Origin) == e1.Origin,
+							}
+						);
+					}
 				}
 			}
 		}
@@ -391,8 +499,11 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				Vertices.RemoveAt(Vertices.Count - 1);
 			}
 			foreach (var he in HalfEdges) {
-				he.Origin = map[he.Origin];
+				if (he.Origin >= 0) {
+					he.Origin = map[he.Origin];
+				}
 			}
+			InnerBoundary.Remap(map);
 			OnTopologyChanged?.Invoke(this);
 		}
 
@@ -457,6 +568,34 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 			return true;
+		}
+
+		private bool BelongsToBoundingFigure(int vertexIndex, out int boundingFigureVertexIndex)
+		{
+			var p = Vertices[vertexIndex].Pos;
+			for (int i = 0; i < 4; i++) {
+				if (BoundingFigureVertices[i].Pos == p) {
+					boundingFigureVertexIndex = i;
+					return true;
+				}
+			}
+			boundingFigureVertexIndex = -1;
+			return false;
+		}
+
+		private bool IsPointInsideTrueTriangulation(Vector2 point)
+		{
+			var count = 0;
+			var rayStart = new Vector2(BoundingBox.Left, point.Y);
+			foreach (var i in InnerBoundary) {
+				var current = Vertices[i].Pos;
+				var next = Vertices[InnerBoundary.Next(i)].Pos;
+				// TODO MAKE INTERSECTION EXCLUDING END OF SEGMENT
+				if (RobustSegmentSegmentIntersection(rayStart, point, current, next)) {
+					count++;
+				}
+			}
+			return count % 2 == 1;
 		}
 	}
 }

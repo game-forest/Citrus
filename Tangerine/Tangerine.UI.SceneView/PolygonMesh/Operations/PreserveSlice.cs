@@ -9,25 +9,31 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 		{
 			public override bool IsChangingDocument => true;
 
-			private Lime.Widgets.PolygonMesh.PolygonMesh mesh;
-			private PolygonMeshSlice sliceBefore;
-			private PolygonMeshSlice sliceAfter;
+			private readonly Lime.Widgets.PolygonMesh.PolygonMesh mesh;
+			private readonly PolygonMeshSlice sliceBefore;
+			private readonly PolygonMeshSlice sliceAfter;
+			// First sync is redundant because mesh should already be in correct states.
+			// So we skip it in order to ensure mesh operations correctness and to improve performance.
+			private bool skipFirstSync;
 
-			private Slice(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore, PolygonMeshSlice sliceAfter)
+			private Slice(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore,
+				PolygonMeshSlice sliceAfter, bool skipFirstSync)
 			{
 				this.mesh = mesh;
 				this.sliceBefore = sliceBefore;
 				this.sliceAfter = sliceAfter;
+				this.skipFirstSync = skipFirstSync;
 			}
 
-			public static void Perform(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore, PolygonMeshSlice sliceAfter)
+			public static void Perform(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore,
+				PolygonMeshSlice sliceAfter, bool skipFirstSync = true)
 			{
-				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter));
+				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter, skipFirstSync));
 			}
 
 			public class Processor : OperationProcessor<Slice>
 			{
-				private void Do(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice slice)
+				private void Do(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice slice, bool skipSync)
 				{
 					var controller = mesh.Controller();
 					PolygonMeshTools.State = slice.State;
@@ -43,7 +49,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					foreach (var cp in slice.ConstrainedVertices) {
 						mesh.ConstrainedEdges.Add(cp);
 					}
-					controller.Topology.Sync(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
+					if (!skipSync) {
+						controller.Topology.Sync(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
+					}
 					if (mesh.Animators.TryFind(nameof(mesh.TransientVertices), out var animator)) {
 						animator.Keys.Clear();
 						foreach (var key in slice.Keyframes) {
@@ -59,11 +67,14 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					}
 				}
 
-				protected override void InternalRedo(Slice op) =>
-					Do(op.mesh, op.sliceAfter);
+				protected override void InternalRedo(Slice op)
+				{
+					Do(op.mesh, op.sliceAfter, op.skipFirstSync);
+					op.skipFirstSync = false;
+				}
 
 				protected override void InternalUndo(Slice op) =>
-					Do(op.mesh, op.sliceBefore);
+					Do(op.mesh, op.sliceBefore, false);
 			}
 		}
 	}

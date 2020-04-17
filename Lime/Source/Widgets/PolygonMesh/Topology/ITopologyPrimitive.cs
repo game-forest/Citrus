@@ -148,5 +148,7 @@ namespace Lime.Widgets.PolygonMesh.Topology
 				(Index2, Index0, Index1).GetHashCode() +
 				(Index1, Index2, Index0).GetHashCode();
 		}
+
+		public override string ToString() => $"{Index0}, {Index1}, {Index2}";
 	}
 }

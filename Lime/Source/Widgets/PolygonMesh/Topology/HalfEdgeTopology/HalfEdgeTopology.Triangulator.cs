@@ -23,7 +23,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// Determine whether it's in the specific triangle or
 			// lies outside of triangulation.
 			var vertex = InnerVertices[vertexIndex].Pos;
-			var result = LocateClosestTriangle(vertexIndex, out var halfEdge);
+			var result = LocateClosestTriangle(vertex, out var halfEdge);
 			// Check special cases:
 			// Same vertex already exists:
 			if (result == LocationResult.SameVertex) {
@@ -335,9 +335,38 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		{
 			var polygon = GetBoundingPolygon(vertexIndex);
 			var isBorderVertex = polygon[0].Origin == vertexIndex;
+			var v = Vertices[vertexIndex];
 			// Vertex to remove + isolated vertices (until we agree on UI/UX).
 			var verticesToBeRemoved = new List<int> { vertexIndex };
 			if (isBorderVertex) {
+				var bfvi = BoundingFigureVertices.FindIndex(vertex => vertex.Pos == v.Pos);
+				var prev = InnerBoundary.Prev(vertexIndex);
+				var prevBorderVertex = InnerVertices[prev].Pos;
+				var next = InnerBoundary.Next(vertexIndex);
+				var last = next;
+				if (bfvi >= 0) {
+					var areCwOrdered = AreClockwiseOrdered(InnerVertices[prev].Pos, InnerVertices[vertexIndex].Pos, InnerVertices[next].Pos);
+					foreach (var adjacentEdge in AdjacentEdges(polygon[0])) {
+						if (
+							areCwOrdered && adjacentEdge.Next.Origin != next && adjacentEdge.Origin != prev &&
+							AreClockwiseOrdered(prevBorderVertex, InnerVertices[adjacentEdge.Next.Origin].Pos,InnerVertices[last].Pos)
+						) {
+							InnerBoundary.Insert(vertexIndex, adjacentEdge.Next.Origin);
+							last = adjacentEdge.Next.Origin;
+						}
+						adjacentEdge.Origin = -bfvi;
+					}
+
+					InnerBoundary.Remove(vertexIndex);
+					var current = next;
+					while (current != prev) {
+						var p = InnerBoundary.Prev(current);
+						InsertConstrainEdge(current, p);
+						current = p;
+					}
+					return verticesToBeRemoved;
+				}
+
 				// I keep implementation of erasing polygon from triangulation here
 				// because it depends on whether we will support holes or not.
 				// Remove polygon from triangulation
@@ -722,6 +751,58 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				edgesToCheck.Add(next);
 			}
 		}
+
+		private void ToConvexHull(HalfEdge borderEdge = null)
+		{
+			var current = borderEdge;
+			if (current == null) {
+				foreach (var halfEdge in HalfEdges) {
+					if (halfEdge.Twin == null) {
+						current = halfEdge;
+					}
+				}
+			}
+			var prev = PrevBorderEdge(current);
+			var start = current;
+			do {
+				var p1 = InnerVertices[prev.Origin].Pos;
+				var p2 = InnerVertices[current.Origin].Pos;
+				var p3 = InnerVertices[current.Next.Origin].Pos;
+				if (!AreClockwiseOrdered(p1, p2, p3)) {
+					var t = new HalfEdge(current.Next.Origin) {
+						Next = new HalfEdge(current.Origin) {
+							Next = new HalfEdge(prev.Origin),
+						},
+					};
+					t.Prev.Next = t;
+					t.TwinWith(current);
+					t.Next.TwinWith(prev);
+					start = current = t.Prev;
+				}
+				prev = current;
+				current = NextBorderEdge(current);
+			} while (current != start);
+		}
+
+		private HalfEdge NextBorderEdge(HalfEdge borderEdge)
+		{
+			do {
+				borderEdge = borderEdge.Next;
+				borderEdge = borderEdge.Twin ?? borderEdge;
+			} while (borderEdge.Twin != null);
+			return borderEdge;
+		}
+
+		private HalfEdge PrevBorderEdge(HalfEdge borderEdge)
+		{
+			do {
+				borderEdge = borderEdge.Prev;
+				borderEdge = borderEdge.Twin ?? borderEdge;
+			} while (borderEdge.Twin != null);
+			return borderEdge;
+		}
+
+
 
 		#region HelperMethods
 
