@@ -44,9 +44,9 @@ namespace Lime
 					if (!patch.FileExists(file)) {
 						continue;
 					}
+					// Don't compare last write time because it can be different for the same files on different machines.
 					if (
 						currentBundle.GetAttributes(file) == patch.GetAttributes(file) &&
-						currentBundle.GetFileLastWriteTime(file) == patch.GetFileLastWriteTime(file) &&
 						currentBundle.GetSourceExtension(file) == patch.GetSourceExtension(file) &&
 						AreByteArraysEqual(currentBundle.GetCookingRulesSHA1(file), patch.GetCookingRulesSHA1(file)) &&
 						AreFilesEqual(file, patch, currentBundle)
