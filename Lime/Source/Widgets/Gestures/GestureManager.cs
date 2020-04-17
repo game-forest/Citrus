@@ -71,6 +71,18 @@ namespace Lime
 							}
 							break;
 						}
+						case LongTapGesture ltg: {
+							foreach (var g in activeGestures) {
+								if (g == gesture) {
+									continue;
+								}
+								var longTapGesture = g as LongTapGesture;
+								if (longTapGesture?.ButtonIndex == ltg.ButtonIndex) {
+									g.OnCancel(ltg);
+								}
+							}
+							break;
+						}
 					}
 				}
 			}
