@@ -539,9 +539,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				// Otherwise just delete original and add translated.
 				// Don't forget to save constrained edges.
 				var constrainedEdges = new List<(int, int)>();
-				foreach (var adjacent in AdjacentEdges(he)) {
-					if (adjacent.Constrained) {
-						constrainedEdges.Add((adjacent.Origin, adjacent.Next.Origin));
+				foreach (var incident in IncidentEdges(he)) {
+					if (incident.Constrained) {
+						constrainedEdges.Add((incident.Origin, incident.Next.Origin));
 					}
 				}
 				InnerRemoveVertex(index);

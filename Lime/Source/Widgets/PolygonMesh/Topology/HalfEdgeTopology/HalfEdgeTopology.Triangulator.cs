@@ -214,7 +214,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var d1 = (vertex - InnerVertices[start.Origin].Pos).SqrLength;
 				var d2 = (vertex - InnerVertices[start.Twin.Origin].Pos).SqrLength;
 				start = d1 > d2 ? start : start.Twin;
-				// Check adjacent edges (for start.Origin) until boundary edge is found.
+				// Check incident edges (for start.Origin) until boundary edge is found.
 				while (start.Twin != null) {
 					start = start.Twin.Prev;
 				}
@@ -346,15 +346,15 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var last = next;
 				if (bfvi >= 0) {
 					var areCwOrdered = AreClockwiseOrdered(InnerVertices[prev].Pos, InnerVertices[vertexIndex].Pos, InnerVertices[next].Pos);
-					foreach (var adjacentEdge in AdjacentEdges(polygon[0])) {
+					foreach (var incidentEdge in IncidentEdges(polygon[0])) {
 						if (
-							areCwOrdered && adjacentEdge.Next.Origin != next && adjacentEdge.Origin != prev &&
-							AreClockwiseOrdered(prevBorderVertex, InnerVertices[adjacentEdge.Next.Origin].Pos,InnerVertices[last].Pos)
+							areCwOrdered && incidentEdge.Next.Origin != next && incidentEdge.Origin != prev &&
+							AreClockwiseOrdered(prevBorderVertex, InnerVertices[incidentEdge.Next.Origin].Pos,InnerVertices[last].Pos)
 						) {
-							InnerBoundary.Insert(vertexIndex, adjacentEdge.Next.Origin);
-							last = adjacentEdge.Next.Origin;
+							InnerBoundary.Insert(vertexIndex, incidentEdge.Next.Origin);
+							last = incidentEdge.Next.Origin;
 						}
-						adjacentEdge.Origin = -bfvi;
+						incidentEdge.Origin = -bfvi;
 					}
 
 					InnerBoundary.Remove(vertexIndex);
@@ -529,12 +529,12 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// have 2 polygonal holes that should be triangulated.
 			List<HalfEdge> upperPolygon = null, lowerPolygon = null;
 			var current = start;
-			foreach (var adjacentEdge in AdjacentEdges(start)) {
-				var next = adjacentEdge.Next;
+			foreach (var incidentEdge in IncidentEdges(start)) {
+				var next = incidentEdge.Next;
 				var prev = next.Next;
 				// Special case: requested edge already exists.
 				if (next.Origin == index1) {
-					adjacentEdge.Constrained = true;
+					incidentEdge.Constrained = true;
 					return;
 				}
 				if (prev.Origin == index1) {
@@ -543,14 +543,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 				var c = InnerVertices[next.Origin].Pos;
 				var d = InnerVertices[prev.Origin].Pos;
-				var e = InnerVertices[adjacentEdge.Origin].Pos;
+				var e = InnerVertices[incidentEdge.Origin].Pos;
 				// Special case: requested edge lies on the same line as [e, c] or [e, d].
 				// If true then mark edge as constrained and insert edge [next.Origin, index1] or [prev.Origin, index1].
 				if (IsVertexOnLine(a, e, c) && IsVertexOnLine(b, e, c)) {
 					var ec = c - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
-						adjacentEdge.Constrained = true;
+						incidentEdge.Constrained = true;
 						InsertConstrainEdge(next.Origin, index1);
 						return;
 					}
@@ -565,10 +565,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					}
 				} else if (RobustSegmentSegmentIntersection(a, b, c, d)) {
 					// Then we should start traversing
-					upperPolygon = new List<HalfEdge> { adjacentEdge };
+					upperPolygon = new List<HalfEdge> { incidentEdge };
 					lowerPolygon = new List<HalfEdge> { prev };
 					lowerUsed.Add(prev.Origin);
-					upperUsed.Add(adjacentEdge.Origin);
+					upperUsed.Add(incidentEdge.Origin);
 					current = next;
 					break;
 				}
@@ -682,11 +682,11 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		/// <summary>
-		/// Gets all edges adjacent to <c>edge.Origin</c>.
+		/// Gets all edges incident to <c>edge.Origin</c>.
 		/// </summary>
 		/// <param name="start">Edge that determines vertex.</param>
-		/// <returns>Edges adjacent to <c>edge.Origin</c></returns>
-		private IEnumerable<HalfEdge> AdjacentEdges(HalfEdge start)
+		/// <returns>Edges incident to <c>edge.Origin</c></returns>
+		private IEnumerable<HalfEdge> IncidentEdges(HalfEdge start)
 		{
 			var current = start;
 			var backward = false;
