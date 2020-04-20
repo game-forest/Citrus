@@ -153,8 +153,11 @@ namespace Lime
 			public const string FileName = ".Manifest";
 			
 			[YuzuMember]
-			public int BaseBundleVersion { get; set; }
-			
+			public int? BaseBundleVersion { get; set; }
+
+			[YuzuMember]
+			public int? BundleVersion { get; set; }
+
 			[YuzuMember]
 			public List<string> DeletedAssets { get; } = new List<string>();
 
@@ -634,7 +637,17 @@ namespace Lime
 
 		public void ApplyPatch(PackedAssetBundle patchBundle)
 		{
+			var manifest = Manifest.Create(this);
+			var patchManifest = Manifest.Create(patchBundle);
+			if (patchManifest.BaseBundleVersion.HasValue) {
+				if (manifest.BundleVersion.HasValue && patchManifest.BaseBundleVersion != manifest.BundleVersion) {
+					throw new InvalidOperationException("Patch base version should be equal patched bundle version");
+				} else if (patchManifest.BundleVersion.HasValue) {
+					manifest.BundleVersion = patchManifest.BundleVersion;
+				}
+			}
 			foreach (var file in patchBundle.EnumerateFiles()) {
+				manifest.DeletedAssets.Remove(file);
 				if (FileExists(file)) {
 					DeleteFile(file);
 				}
@@ -648,13 +661,15 @@ namespace Lime
 					);
 				}
 			}
-			if (patchBundle.FileExists(Manifest.FileName)) {
-				var manifest =
-					InternalPersistence.Instance.ReadObjectFromBundle<Manifest>(patchBundle, Manifest.FileName);
-				foreach (var file in manifest.DeletedAssets) {
+			foreach (var file in patchManifest.DeletedAssets) {
+				if (FileExists(file)) {
 					DeleteFile(file);
+					if (!manifest.DeletedAssets.Contains(file)) {
+						manifest.DeletedAssets.Add(file);
+					}
 				}
 			}
+			manifest.Write(this);
 		}
 	}
 }
