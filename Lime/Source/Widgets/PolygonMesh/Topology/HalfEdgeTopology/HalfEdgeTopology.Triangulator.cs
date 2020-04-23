@@ -17,7 +17,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// creates triangles on visible boundary and restores delaunay property.
 		/// </summary>
 		/// <param name="vertexIndex">Vertex index.</param>
-		private void AddVertex(int vertexIndex)
+		private bool AddVertex(int vertexIndex)
 		{
 			// First: locate the given vertex.
 			// Determine whether it's in the specific triangle or
@@ -28,11 +28,31 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// Same vertex already exists:
 			if (result == LocationResult.SameVertex) {
 				// Shouldn't insert vertex
-				return;
+				int sameVertexIndex = -1;
+				for (int i = 0; i < Vertices.Count; i++) {
+					if (i != vertexIndex && Vertices[i].Pos == vertex) {
+						sameVertexIndex = i;
+						break;
+					}
+				}
+				if (sameVertexIndex >= 0) {
+					return false;
+				}
+				// otherwise it's definitely bounding figure vertex.
+				var boundingFigureVertexIndex = BoundingFigureVertices.FindIndex(v => v.Pos == vertex);
+				System.Diagnostics.Debug.Assert(boundingFigureVertexIndex >= 0 && halfEdge.Origin == -boundingFigureVertexIndex);
+				foreach (var incidentEdge in IncidentEdges(halfEdge)) {
+					incidentEdge.Origin = vertexIndex;
+				}
 			} else if (result == LocationResult.OnEdge) {
 				// Should split edge
+				var prev = halfEdge.Origin;
+				var next = halfEdge.Next.Origin;
 				SplitEdge(vertexIndex, halfEdge);
-				return;
+				if (InnerBoundary.Contains(prev) && InnerBoundary.Next(prev) == next) {
+					// Then we splitted boundary edge.
+					InnerBoundary.Insert(prev, vertexIndex);
+				}
 			} else if (result == LocationResult.InsideTriangle) {
 				// Boywer-Watson algorithm
 				Root = BowyerWatson(vertexIndex, halfEdge);
@@ -60,6 +80,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 				RestoreDelaunayProperty(edgesToCheck);
 			}
+			return true;
 		}
 
 
@@ -339,59 +360,18 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			// Vertex to remove + isolated vertices (until we agree on UI/UX).
 			var verticesToBeRemoved = new List<int> { vertexIndex };
 			if (isBorderVertex) {
-				var bfvi = BoundingFigureVertices.FindIndex(vertex => vertex.Pos == v.Pos);
-				var prev = InnerBoundary.Prev(vertexIndex);
-				var prevBorderVertex = InnerVertices[prev].Pos;
-				var next = InnerBoundary.Next(vertexIndex);
-				var last = next;
-				if (bfvi >= 0) {
-					var areCwOrdered = AreClockwiseOrdered(InnerVertices[prev].Pos, InnerVertices[vertexIndex].Pos, InnerVertices[next].Pos);
-					foreach (var incidentEdge in IncidentEdges(polygon[0])) {
-						if (
-							areCwOrdered && incidentEdge.Next.Origin != next && incidentEdge.Origin != prev &&
-							AreClockwiseOrdered(prevBorderVertex, InnerVertices[incidentEdge.Next.Origin].Pos,InnerVertices[last].Pos)
-						) {
-							InnerBoundary.Insert(vertexIndex, incidentEdge.Next.Origin);
-							last = incidentEdge.Next.Origin;
-						}
-						incidentEdge.Origin = -bfvi;
-					}
-
-					InnerBoundary.Remove(vertexIndex);
-					var current = next;
-					while (current != prev) {
-						var p = InnerBoundary.Prev(current);
-						InsertConstrainEdge(current, p);
-						current = p;
-					}
-					return verticesToBeRemoved;
-				}
-
-				// I keep implementation of erasing polygon from triangulation here
-				// because it depends on whether we will support holes or not.
-				// Remove polygon from triangulation
-				Root = null;
-				var prevEdgeHadNoTwin = true;
-				for (int i = 1; i < polygon.Count - 1; i++) {
-					var edge = polygon[i];
-					if (prevEdgeHadNoTwin && edge.Twin == null) {
-						// That means that `edge.Origin` becomes isolated
-						// so we'd better remove it too.
-						verticesToBeRemoved.Add(edge.Origin);
-					}
-					Root = Root ?? edge.Twin;
-					prevEdgeHadNoTwin = edge.Twin == null;
-					edge.Prev.Detach();
-					edge.Next.Detach();
-					edge.Detach();
-				}
-				if (prevEdgeHadNoTwin) {
-					verticesToBeRemoved.Add(polygon[polygon.Count - 1].Origin);
-				}
-			} else {
-				// Create polygonal hole and triangulate it.
-				TriangulatePolygonByEarClipping(polygon);
+				// Then it is definitely a vertex that lies on bounding figure.
+				// (Btw, bounding figure vertices are handled on a higher abstraction level).
+				// So here is steps to remove it:
+				// 1. Merge the first and the second edge of the bounding polygon;
+				// 2. Triangulate polygonal hole.
+				polygon.RemoveAt(0);
+				polygon[polygon.Count - 1].Next = polygon[0].Next;
+				// And this vertex belongs to InnerBoundary for sure
+				System.Diagnostics.Debug.Assert(InnerBoundary.Contains(vertexIndex));
+				InnerBoundary.Remove(vertexIndex);
 			}
+			TriangulatePolygonByEarClipping(polygon);
 			return verticesToBeRemoved;
 		}
 
@@ -694,19 +674,18 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				yield return current;
 				var next = current.Next;
 				var prev = next.Next;
-				if (current.Twin == null && !backward) {
+				if (prev.Twin == null && !backward) {
 					backward = true;
 					current = start;
-					prev = start.Prev;
-					if (prev.Twin != null) {
-						current = prev.Twin;
+					if (current.Twin != null) {
+						current = current.Twin.Next;
 					}
 					continue;
 				}
-				if (prev.Twin == null && backward) {
+				if (current.Twin == null && backward) {
 					yield break;
 				}
-				current = backward ? prev.Twin : current.Twin.Next;
+				current = backward ? current.Twin.Next : prev.Twin;
 			} while (current != start);
 		}
 
