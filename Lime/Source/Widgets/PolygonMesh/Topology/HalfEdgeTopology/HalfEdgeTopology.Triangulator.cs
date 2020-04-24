@@ -902,6 +902,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		private static bool IsVertexOnLine(Vector2 vertex, Vector2 s, Vector2 e) =>
 			GeometricPredicates.ExactOrient2D(vertex.X, vertex.Y, s.X, s.Y, e.X, e.Y) == 0;
 
+		private static int Orient2D(Vector2 a, Vector2 b, Vector2 c) =>
+			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y));
+
 		#endregion
 	}
 }

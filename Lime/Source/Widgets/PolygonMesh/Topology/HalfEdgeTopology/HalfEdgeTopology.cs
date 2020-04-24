@@ -788,9 +788,18 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			foreach (var i in InnerBoundary) {
 				var current = Vertices[i].Pos;
 				var next = Vertices[InnerBoundary.Next(i)].Pos;
-				// TODO MAKE INTERSECTION EXCLUDING END OF SEGMENT
 				if (RobustSegmentSegmentIntersection(rayStart, point, current, next)) {
-					count++;
+					if (current.Y == point.Y) {
+						if (Orient2D(rayStart, point, next) < 0) {
+							count++;
+						}
+					} else if (next.Y == point.Y) {
+						if (Orient2D(rayStart, point, current) < 0) {
+							count++;
+						}
+					} else {
+						count++;
+					}
 				}
 			}
 			return count % 2 == 1;
