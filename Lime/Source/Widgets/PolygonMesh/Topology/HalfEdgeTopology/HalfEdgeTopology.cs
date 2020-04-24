@@ -691,12 +691,9 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						return;
 					}
 				}
-				var isLeftDegenerated = GeometricPredicates.ExactOrient2D(prev.X, prev.Y, originalPos.X,
-																originalPos.Y, translatedPos.X, translatedPos.Y) == 0f;
-				var isRightDegenerated = GeometricPredicates.ExactOrient2D(next.X, next.Y, translatedPos.X,
-																translatedPos.Y, originalPos.X, originalPos.Y) == 0f;
-				var isTriangleDegenerated = GeometricPredicates.ExactOrient2D(prev.X, prev.Y, translatedPos.X,
-																translatedPos.Y, next.X, next.Y) == 0f;
+				var isLeftDegenerated = Orient2D(prev,	 originalPos, translatedPos) == 0;
+				var isRightDegenerated = Orient2D(next,  translatedPos, originalPos) == 0;
+				var isTriangleDegenerated = Orient2D(prev,	 translatedPos, next) == 0;
 				var isAngleConvex = AreClockwiseOrdered(prev, originalPos, next);
 				var mustBeRemoved = new List<int>();
 				for (int i = 0; i < Vertices.Count; i++) {

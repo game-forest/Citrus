@@ -860,18 +860,15 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// <param name="b">Vertex b.</param>
 		/// <param name="c">Vertex c.</param>
 		/// <returns><c>true</c> if clockwise ordered and <c>false</c> otherwise.</returns>
-		private static bool AreClockwiseOrdered(Vector2 a, Vector2 b, Vector2 c) =>
-			GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y) > 0;
+		private static bool AreClockwiseOrdered(Vector2 a, Vector2 b, Vector2 c) => Orient2D(a, b, c) > 0;
 
 		private static bool RobustSegmentSegmentIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d) =>
 			Mathf.Max(Mathf.Min(a.X, b.X), Mathf.Min(c.X, d.X)) <=
 			Mathf.Min(Mathf.Max(a.X, b.X), Mathf.Max(c.X, d.X)) &&
 			Mathf.Max(Mathf.Min(a.Y, b.Y), Mathf.Min(c.Y, d.Y)) <=
 			Mathf.Min(Mathf.Max(a.Y, b.Y), Mathf.Max(c.Y, d.Y)) &&
-			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y)) *
-			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, d.X, d.Y)) <= 0 &&
-			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, a.X, a.Y)) *
-			Math.Sign(GeometricPredicates.ExactOrient2D(c.X, c.Y, d.X, d.Y, b.X, b.Y)) <= 0;
+			Orient2D(a, b, c) * Orient2D(a, b, d) <= 0 &&
+			Orient2D(c, d, a) * Orient2D(c, d, b) <= 0;
 
 		private static bool SegmentSegmentIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
 		{
@@ -900,7 +897,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			IsVertexOnLine(vertex, s, e);
 
 		private static bool IsVertexOnLine(Vector2 vertex, Vector2 s, Vector2 e) =>
-			GeometricPredicates.ExactOrient2D(vertex.X, vertex.Y, s.X, s.Y, e.X, e.Y) == 0;
+			Orient2D(vertex, s, e) == 0;
 
 		private static int Orient2D(Vector2 a, Vector2 b, Vector2 c) =>
 			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y));
