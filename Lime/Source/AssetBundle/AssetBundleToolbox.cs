@@ -111,7 +111,13 @@ namespace Lime
 
 		private static unsafe bool AreByteArraysEqual(byte[] array1, byte[] array2)
 		{
-			if (array1.Length != array2.Length) {
+			if (array1 == null && array2 == null) {
+				return true;
+			} else if (
+				array1 == null ||
+				array2 == null ||
+				array1.Length != array2.Length
+			) {
 				return false;
 			}
 			fixed (byte* ptr1 = array1) {
