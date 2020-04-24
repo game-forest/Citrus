@@ -836,9 +836,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		private static bool VertexInsideTriangle(Vector2 vertex, Vector2 v1, Vector2 v2, Vector2 v3) =>
-			!ArePointsOnOppositeSidesOfSegment(v1, v2, vertex, v3) &&
-			!ArePointsOnOppositeSidesOfSegment(v2, v3, vertex, v1) &&
-			!ArePointsOnOppositeSidesOfSegment(v3, v1, vertex, v2);
+			Orient2D(v1, v2, vertex) >= 0 && Orient2D(v2, v3, vertex) >= 0 && Orient2D(v3, v1, vertex) >= 0;
 
 		/// <summary>
 		/// Tells weather <paramref name="p1"/> and <paramref name="p2"/> lies on
