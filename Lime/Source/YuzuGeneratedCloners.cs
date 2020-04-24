@@ -2142,6 +2142,7 @@ namespace YuzuGenerated
 			var s = (global::Lime.PackedAssetBundle.Manifest)src;
 			var result = new global::Lime.PackedAssetBundle.Manifest();
 			result.BaseBundleVersion = s.BaseBundleVersion;
+			result.BundleVersion = s.BundleVersion;
 			if (s.DeletedAssets != null && result.DeletedAssets != null) {
 				foreach (var tmp1 in s.DeletedAssets)
 					result.DeletedAssets.Add(tmp1);

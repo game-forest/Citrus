@@ -6489,10 +6489,14 @@ namespace YuzuGenerated
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
 			if (1 == fd.OurIndex) {
-				result.BaseBundleVersion = d.Reader.ReadInt32();
+				result.BaseBundleVersion = d.Reader.ReadBoolean() ? (int?)null : d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (2 == fd.OurIndex) {
+				result.BundleVersion = d.Reader.ReadBoolean() ? (int?)null : d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
 				var tmp1 = d.Reader.ReadInt32();
 				if (tmp1 >= 0) {
 					while (--tmp1 >= 0) {
