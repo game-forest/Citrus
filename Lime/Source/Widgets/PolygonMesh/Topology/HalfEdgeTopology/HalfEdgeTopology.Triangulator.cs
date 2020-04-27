@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms.VisualStyles;
 using Lime.Source.Widgets.PolygonMesh;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
@@ -92,67 +93,62 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// <summary>
 		/// Locates a triangle that has specified vertex inside or
 		/// closest one on the border to triangulation.
-		/// Complexity is O(N) because we assume that triangulation may have concavities
-		/// and holes. Further improvement is using spatial information data structures
-		/// (e.g. R-tree).
+		/// Complexity is O(sqrt(N)) in general case (see Skvortsov A.V. work about Delaunay triangulation).
 		/// </summary>
 		/// <param name="vertex">Vertex.</param>
 		/// <param name="edge">Closest triangle identified by single edge.</param>
+		/// <param name="start">Search start.</param>
 		/// <returns>Location result.
 		/// If LocationResult.SameVertex then <paramref name="edge"/>'s Origin is that vertex.
 		/// If LocationResult.OnEdge then <paramref name="edge"/> is edge that vertex lies on.
 		/// If LocationResult.InsideTriangle then <paramref name="edge"/> identifies closest triangle.
 		/// If LocationResult.OutsideTriangulation then <paramref name="edge"/> is the closest edge.
 		/// </returns>
-		private LocationResult LocateClosestTriangle(Vector2 vertex, out HalfEdge edge)
+		private LocationResult LocateClosestTriangle(Vector2 vertex, out HalfEdge edge, HalfEdge start = null)
 		{
-			HalfEdge closest = null;
-			var minDistance = float.MaxValue;
-			foreach (var (e1, e2, e3) in Triangles()) {
-				var (p1, p2, p3) = (InnerVertices[e1.Origin].Pos, InnerVertices[e2.Origin].Pos, InnerVertices[e3.Origin].Pos);
-				if (p1 == vertex) {
-					edge = e1;
-					return LocationResult.SameVertex;
+			start = start ?? Root;
+			var current = start;
+			do {
+				var next = current.Next;
+				var b1 = InnerVertices[current.Origin].Pos;
+				var b2 = InnerVertices[next.Origin].Pos;
+				var v = InnerVertices[next.Next.Origin].Pos;
+				if (current.Twin != null && ArePointsOnOppositeSidesOfSegment(b1, b2, v, vertex)) {
+					current = start = current.Twin;
 				}
-				if (p2 == vertex) {
-					edge = e2;
-					return LocationResult.SameVertex;
-				}
-				if (p3 == vertex) {
-					edge = e3;
-					return LocationResult.SameVertex;
-				}
-				if (VertexInsideTriangle(vertex, e1)) {
-					edge = e1;
-					if (IsVertexOnEdge(vertex, e1)) {
-						return LocationResult.OnEdge;
-					}
-					if (IsVertexOnEdge(vertex, e2)) {
-						edge = e2;
-						return LocationResult.OnEdge;
-					}
-					if (IsVertexOnEdge(vertex, e3)) {
-						edge = e3;
-						return LocationResult.OnEdge;
-					}
-					return LocationResult.InsideTriangle;
-				}
-				UpdateMinDistance(e1, e2);
-				UpdateMinDistance(e2, e3);
-				UpdateMinDistance(e3, e1);
-
-				void UpdateMinDistance(HalfEdge s, HalfEdge e)
-				{
-					var v = InnerVertices[s.Origin].Pos;
-					var w = InnerVertices[e.Origin].Pos;
-					var distance = PointToSegmentSqrDistance(v, w, vertex);
-					if (distance < minDistance) {
-						minDistance = distance;
-						closest = s;
-					}
-				}
+				current = current.Next;
+			} while (current != start);
+			var v1 = InnerVertices[current.Origin].Pos;
+			var v2 = InnerVertices[current.Next.Origin].Pos;
+			var v3 = InnerVertices[current.Prev.Origin].Pos;
+			if (v1 == vertex) {
+				edge = current;
+				return LocationResult.SameVertex;
 			}
-			edge = closest;
+			if (v2 == vertex) {
+				edge = current.Next;
+				return LocationResult.SameVertex;
+			}
+			if (v3 == vertex) {
+				edge = current.Prev;
+				return LocationResult.SameVertex;
+			}
+			if (VertexInsideTriangle(vertex, v1, v2, v3)) {
+				edge = current;
+				if (IsVertexOnEdge(vertex, current)) {
+					return LocationResult.OnEdge;
+				}
+				if (IsVertexOnEdge(vertex, current.Next)) {
+					edge = current.Next;
+					return LocationResult.OnEdge;
+				}
+				if (IsVertexOnEdge(vertex, current.Prev)) {
+					edge = current.Prev;
+					return LocationResult.OnEdge;
+				}
+				return LocationResult.InsideTriangle;
+			}
+			edge = current;
 			return LocationResult.OutsideTriangulation;
 		}
 
@@ -230,6 +226,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var vertex = InnerVertices[sightPoint].Pos;
 			// Ensure that 'start' is edge of the boundary (Twin is null).
 			// Find boundary edge otherwise.
+			var current = start;
+			do {
+				if (current.Twin == null) {
+					start = current;
+					break;
+				}
+				current = current.Next;
+			} while (current != start);
 			if (start.Twin != null) {
 				// Check which HalfEdge is closer to sightPoint `start` or it's twin.
 				var d1 = (vertex - InnerVertices[start.Origin].Pos).SqrLength;
@@ -264,7 +268,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				b = InnerVertices[start.Next.Origin].Pos;
 			}
 			var boundary = new List<HalfEdge>();
-			var current = start;
+			current = start;
 			do {
 				boundary.Add(current);
 				do {

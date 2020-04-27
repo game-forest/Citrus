@@ -780,26 +780,22 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private bool IsPointInsideTrueTriangulation(Vector2 point)
 		{
-			var count = 0;
+			bool inside = false;
 			var rayStart = new Vector2(BoundingBox.Left, point.Y);
 			foreach (var i in InnerBoundary) {
 				var current = Vertices[i].Pos;
 				var next = Vertices[InnerBoundary.Next(i)].Pos;
 				if (RobustSegmentSegmentIntersection(rayStart, point, current, next)) {
-					if (current.Y == point.Y) {
-						if (Orient2D(rayStart, point, next) < 0) {
-							count++;
-						}
-					} else if (next.Y == point.Y) {
-						if (Orient2D(rayStart, point, current) < 0) {
-							count++;
-						}
-					} else {
-						count++;
+					if (current.Y == point.Y && point.Y > next.Y) {
+						inside = !inside;
+					} else if (next.Y == point.Y && point.Y > current.Y) {
+						inside = !inside;
+					} else if (current.Y != point.Y && next.Y != point.Y) {
+						inside = !inside;
 					}
 				}
 			}
-			return count % 2 == 1;
+			return inside;
 		}
 	}
 }
