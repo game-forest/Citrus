@@ -1242,6 +1242,101 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
+	public static class TieSkinnedVerticesWithBones
+	{
+		public static void Perform(IEnumerable<Bone> bones, Lime.Widgets.PolygonMesh.PolygonMesh mesh, params int[] indices)
+		{
+			var sortedBones = BoneUtils.SortBones(bones);
+			if (!sortedBones.Any()) {
+				return;
+			}
+
+			if (!CheckConsistency(bones, mesh)) {
+				throw new InvalidOperationException("Not all bones and meshes have the same parent");
+			}
+
+			foreach (var index in indices) {
+				var v = mesh.Vertices[index];
+				var sw = v.SkinningWeights;
+				if (!CanApplyBone(sw)) {
+					throw new TieWidgetsWithBonesException(mesh);
+				}
+				sw = CalcSkinningWeight(sw, mesh.CalcLocalToParentTransform().TransformVector(v.Pos * mesh.Size), sortedBones);
+				v.SkinningWeights = sw;
+				mesh.Vertices[index] = v;
+				v = mesh.TransientVertices[index];
+				v.SkinningWeights = sw;
+				mesh.TransientVertices[index] = v;
+			}
+
+			foreach (var bone in bones) {
+				var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
+				SetAnimableProperty.Perform(bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes);
+				SetAnimableProperty.Perform(bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes);
+				SetAnimableProperty.Perform(bone, nameof(Bone.RefRotation), entry.Rotation, CoreUserPreferences.Instance.AutoKeyframes);
+			}
+		}
+
+		private static bool CheckConsistency(IEnumerable<Bone> bones, Lime.Widgets.PolygonMesh.PolygonMesh mesh)
+		{
+			var container = bones.First().Parent.AsWidget;
+			foreach (var bone in bones) {
+				if (bone.Parent == null || bone.Parent != container) {
+					return false;
+				}
+			}
+
+			if (mesh.Parent == null || mesh.Parent != container) {
+				return false;
+			}
+
+			return true;
+		}
+
+		private static bool CanApplyBone(SkinningWeights skinningWeights)
+		{
+			for (var i = 0; i < 4; i++) {
+				if (skinningWeights[i].Index == 0) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private static SkinningWeights CalcSkinningWeight(SkinningWeights oldSkinningWeights, Vector2 position, List<Bone> bones)
+		{
+			var skinningWeights = new SkinningWeights();
+			var i = 0;
+			var overallWeight = 0f;
+			while (oldSkinningWeights[i].Index != 0) {
+				skinningWeights[i] = oldSkinningWeights[i];
+				overallWeight += skinningWeights[i].Weight;
+				i++;
+			}
+			var j = 0;
+			while (j < bones.Count && i < 4) {
+				var weight = bones[j].CalcWeightForPoint(position);
+				if (Mathf.Abs(weight) > Mathf.ZeroTolerance) {
+					skinningWeights[i] = new BoneWeight {
+						Weight = weight,
+						Index = bones[j].Index
+					};
+					overallWeight += skinningWeights[i].Weight;
+					i++;
+				}
+				j++;
+			}
+			if (overallWeight != 0) {
+				for (i = 0; i < 4; i++) {
+					var bw = skinningWeights[i];
+					bw.Weight /= overallWeight;
+					skinningWeights[i] = bw;
+				}
+			}
+			return skinningWeights;
+		}
+	}
+
 	public static class PropagateMarkers
 	{
 		public static void Perform(Node node)

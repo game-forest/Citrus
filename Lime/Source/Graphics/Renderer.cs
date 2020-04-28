@@ -90,16 +90,9 @@ namespace Lime
 			set { Pos4 = new Vector4(value.X, value.Y, 0, 1.0f); }
 		}
 
-		[YuzuMember]
 		public Vector4 Pos4;
-
-		[YuzuMember]
 		public Color4 Color;
-
-		[YuzuMember]
 		public Vector2 UV1;
-
-		[YuzuMember]
 		public Vector2 UV2;
 	}
 

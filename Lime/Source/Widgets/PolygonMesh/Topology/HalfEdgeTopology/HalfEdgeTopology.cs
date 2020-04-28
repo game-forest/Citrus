@@ -6,13 +6,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Lime.PolygonMesh.Topology;
 using Lime.Source.Widgets.PolygonMesh;
+using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 {
-	using Vertex = Lime.Vertex;
 	public partial class HalfEdgeTopology : ITopology
 	{
-
 		private class HalfEdge
 		{
 			private bool constrained;
@@ -146,16 +145,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private class VerticesIndexer
 		{
-			private readonly List<Vertex> boundingFigureVertices;
-			private readonly List<Vertex> vertices;
+			private readonly List<SkinnedVertex> boundingFigureVertices;
+			private readonly List<SkinnedVertex> vertices;
 
-			public VerticesIndexer(List<Vertex> boundingFigureVertices, List<Vertex> vertices)
+			public VerticesIndexer(List<SkinnedVertex> boundingFigureVertices, List<SkinnedVertex> vertices)
 			{
 				this.boundingFigureVertices = boundingFigureVertices;
 				this.vertices = vertices;
 			}
 
-			public Vertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
+			public SkinnedVertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
 		}
 
 		private class Boundary : IEnumerable<int>
@@ -241,7 +240,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		private HalfEdge Root { get; set; }
-		private List<Vertex> BoundingFigureVertices { get; set; }
+		private List<SkinnedVertex> BoundingFigureVertices { get; set; }
 		// Vertices + bounding figure vertices.
 		private VerticesIndexer InnerVertices { get; set; }
 		// A boundary of `true` triangulation.
@@ -415,14 +414,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-		public List<Vertex> Vertices { get; private set; }
+		public List<SkinnedVertex> Vertices { get; private set; }
 
 		public HalfEdgeTopology()
 		{
-			Vertices = new List<Vertex>();
+			Vertices = new List<SkinnedVertex>();
 		}
 
-		public HalfEdgeTopology(List<Vertex> vertices)
+		public HalfEdgeTopology(List<SkinnedVertex> vertices)
 		{
 			// TODO: fix this constructor after reimplementation (if it'll happen).
 			Vertices = vertices;
@@ -441,17 +440,17 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			e2.Prev.Constrained = true;
 			e2.Prev.Next = e2;
 			e2.TwinWith(e1.Next);
-			BoundingFigureVertices = new List<Vertex>(Vertices.Take(4));
+			BoundingFigureVertices = new List<SkinnedVertex>(Vertices.Take(4));
 			// 0 doesn't have a sign, so this is a hack to mark bounding figure's vertices
 			// with negative indices.
-			BoundingFigureVertices.Insert(0, new Vertex { Pos = new Vector2(float.NegativeInfinity), });
+			BoundingFigureVertices.Insert(0, new SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), });
 			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
 			InnerBoundary = new Boundary { 0, 1, 3, 2, };
 			Root = e1;
 			BoundingBox = new Rectangle(0f, 0f, 1f, 1f);
 		}
 
-		public void Sync(List<Vertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
+		public void Sync(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
 		{
 			Vertices = vertices;
 			// (vertex, vertex) -> HalfEdge
@@ -554,10 +553,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 #if TANGERINE
-		public void EmplaceVertices(List<Vertex> vertices) => Vertices = vertices;
+		public void EmplaceVertices(List<SkinnedVertex> vertices) => Vertices = vertices;
 #endif
 
-		public void AddVertex(Vertex vertex)
+		public void AddVertex(SkinnedVertex vertex)
 		{
 			Vertices.Add(vertex);
 			if (AddVertex(Vertices.Count - 1)) {

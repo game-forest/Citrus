@@ -23,10 +23,20 @@ namespace Tangerine.UI.SceneView
 					continue;
 				}
 				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
+
+				/// Skinning bootstrap
+				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
+				foreach (var mesh in meshes) {
+					if (SceneView.Instance.Input.IsKeyPressed(Key.Control) && SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+						mesh.Controller().TieVertexWithBones(bones);
+					}
+				}
+				/// Skinning bootstrap
+
 				foreach (var mesh in meshes) {
 					if (mesh.Controller().HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0) && !SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
 							switch (PolygonMeshTools.State) {
 								case PolygonMeshTools.ModificationState.Animation:
 									yield return mesh.Controller().AnimationTask();

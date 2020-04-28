@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lime.Widgets.PolygonMesh.Topology;
-using Vertex = Lime.Vertex;
+using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
 
 namespace Lime.PolygonMesh.Topology
 {
@@ -13,9 +13,9 @@ namespace Lime.PolygonMesh.Topology
 
 	public interface ITopology
 	{
-		List<Vertex> Vertices { get; }
+		List<SkinnedVertex> Vertices { get; }
 
-		void Sync(List<Vertex> vertices, List<Edge> constrainedEdges, List<Face> faces);
+		void Sync(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces);
 		IEnumerable<Face> Faces { get; }
 #if TANGERINE
 		/// <summary>
@@ -35,9 +35,9 @@ namespace Lime.PolygonMesh.Topology
 		/// the other one, i.e. <see cref="Widgets.PolygonMesh.PolygonMesh.TransientVertices"/>.
 		/// </summary>
 		/// <param name="vertices"></param>
-		void EmplaceVertices(List<Vertex> vertices);
+		void EmplaceVertices(List<SkinnedVertex> vertices);
 #endif
-		void AddVertex(Vertex vertex);
+		void AddVertex(SkinnedVertex vertex);
 		void RemoveVertex(int index);
 		void TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta);
 		void ConstrainEdge(int index0, int index1);
