@@ -153,30 +153,18 @@ namespace Lime.Widgets.PolygonMesh
 			for (var i = 0; i < ro.BoneTransforms.Length; ++i) {
 				ro.BoneTransforms[i] = Matrix44.Identity;
 			}
-			var transformMap = new Dictionary<byte, byte>() { [0] = 0, };
-			byte j = 0;
-			void remap(ref SkinnedVertex vertex)
-			{
-				var indices = new[] {
-					vertex.BlendIndices.Index0,
-					vertex.BlendIndices.Index1,
-					vertex.BlendIndices.Index2,
-					vertex.BlendIndices.Index3
-				};
-				for (var i = 0; i < 4; ++i) {
-					if (transformMap.ContainsKey(indices[i])) {
-						indices[i] = transformMap[indices[i]];
-					} else {
-						ro.BoneTransforms[++j] = (Matrix44)ParentWidget.BoneArray[indices[i]].RelativeTransform;
-						indices[i] = transformMap[indices[i]] = j;
-					}
-				}
-				vertex.BlendIndices.Index0 = indices[0];
-				vertex.BlendIndices.Index1 = indices[1];
-				vertex.BlendIndices.Index2 = indices[2];
-				vertex.BlendIndices.Index3 = indices[3];
+			foreach (var vertex in Vertices) {
+				// Assuming that parent can't have more than 100 bones.
+				ro.BoneTransforms[vertex.BlendIndices.Index0] =
+					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index0].RelativeTransform;
+				ro.BoneTransforms[vertex.BlendIndices.Index1] =
+					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index1].RelativeTransform;
+				ro.BoneTransforms[vertex.BlendIndices.Index2] =
+					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index2].RelativeTransform;
+				ro.BoneTransforms[vertex.BlendIndices.Index3] =
+					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index3].RelativeTransform;
 			}
-
+			ro.BoneTransforms[0] = Matrix44.Identity;
 			for (var i = 0; i < Vertices.Count; ++i) {
 				var v0 = vb0[i];
 				var v1 = vb1[i];
@@ -188,8 +176,6 @@ namespace Lime.Widgets.PolygonMesh
 					v1.SkinningWeights = new SkinningWeights();
 				}
 #endif
-				remap(ref v0);
-				remap(ref v1);
 				ro.VertexBuffer0.Add(v0);
 				ro.VertexBuffer1.Add(v1);
 			}
