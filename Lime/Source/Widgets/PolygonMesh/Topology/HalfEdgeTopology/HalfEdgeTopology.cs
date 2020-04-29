@@ -552,10 +552,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			remove => TopologyChanged -= value;
 		}
 
-#if TANGERINE
-		public void EmplaceVertices(List<SkinnedVertex> vertices) => Vertices = vertices;
-#endif
-
 		public void AddVertex(SkinnedVertex vertex)
 		{
 			Vertices.Add(vertex);

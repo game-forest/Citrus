@@ -17,7 +17,7 @@ namespace Lime.PolygonMesh.Utils
 
 			public int GetHashCode(Vector2 v)
 			{
-				// If Equals() returns true for a pair of objects  
+				// If Equals() returns true for a pair of objects
 				// then GetHashCode() must return the same value for these objects.
 				// https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable.distinct?view=netframework-4.8
 				return 0;
@@ -165,6 +165,17 @@ namespace Lime.PolygonMesh.Utils
 			var w3 = 1 - w1 - w2;
 
 			return new[] { w1, w2, w3 };
+		}
+
+		public static float SqrDistanceFromPointToSegment(Vector2 v, Vector2 w, Vector2 p)
+		{
+			var l2 = (w - v).SqrLength;
+			if (l2 == 0) {
+				return (p - v).SqrLength;
+			}
+			var t = Mathf.Max(0, Mathf.Min(1, Vector2.DotProduct(p - v, w - v) / l2));
+			var proj = v + t * (w - v);
+			return (p - proj).SqrLength;
 		}
 	}
 }

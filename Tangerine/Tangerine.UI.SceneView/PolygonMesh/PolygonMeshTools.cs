@@ -33,7 +33,6 @@ namespace Tangerine
 				mode = value;
 				foreach (var mesh in Document.Current.Nodes().OfType<PolygonMesh>().ToList()) {
 					mesh.TangerineAnimationModeEnabled = mode == ModificationMode.Animation;
-					mesh.SyncTopologyWithModificationMode();
 				}
 			}
 		}

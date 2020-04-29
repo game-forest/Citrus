@@ -141,78 +141,46 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		private bool HitTest(Vector2 position, float scale, out TopologyHitTestResult result)
 		{
-			// TODO: Refactor.
 			if (PolygonMeshTools.Mode == PolygonMeshTools.ModificationMode.Animation) {
-				result = null;
-				Mesh.SyncTopologyWithModificationMode();
+				result = new TopologyHitTestResult();
 				position = sv.CalcTransitionFromSceneSpace(sv.Frame).TransformVector(position);
+				var transformedVertices = new Vector2[3];
 				foreach (var (face, info) in Topology.FacesWithInfo) {
-					var prevVertex = CalcTransformedVertexPosition(face.Index0);
-					var isInside = PolygonMeshUtils.PointTriangleIntersection(
-						position,
-						CalcTransformedVertexPosition(face[0]),
-						CalcTransformedVertexPosition(face[1]),
-						CalcTransformedVertexPosition(face[2])
-					);
-					for (var i = 0; i < 3; i++) {
-						var prevVertexIndex = face[i];
-						var nextVertexIndex = face[(i + 1) % 3];
-						var nextVertex = CalcTransformedVertexPosition(nextVertexIndex);
-						var (isFraming, isConstrained) = info[i];
-						var v1 = prevVertex;
-						var v2 = nextVertex;
-						var v1d = Vector2.Distance(v1, position);
-						var v2d = Vector2.Distance(v2, position);
-						var targetVertex = -1;
-						var isTargetEdge = isInside &&
-							PolygonMeshUtils.DistanceFromPointToLine(position, prevVertex, nextVertex, out var _) <= Theme.Metrics.PolygonMeshEdgeHitTestRadius;
-						if (v1d <= v2d && v1d <= Theme.Metrics.PolygonMeshEdgeHitTestRadius) {
-							targetVertex = prevVertexIndex;
-						} else if (v2d <= v1d && v2d <= Theme.Metrics.PolygonMeshEdgeHitTestRadius) {
-							targetVertex = nextVertexIndex;
-						}
-						prevVertex = nextVertex;
-						if (isTargetEdge && targetVertex == -1) {
-							if (result == null ) {
-								result = new TopologyHitTestResult {
-									Info = new EdgeInfo { IsConstrained = isConstrained, IsFraming = isFraming },
-									Target = new Edge { Index0 = prevVertexIndex, Index1 = nextVertexIndex }
-								};
-							} else if (result.Target is Edge e) {
-								var e1d = PolygonMeshUtils.DistanceFromPointToLine(position, prevVertex, nextVertex, out var _);
-								var e2d = PolygonMeshUtils.DistanceFromPointToLine(position, CalcTransformedVertexPosition(e[0]), CalcTransformedVertexPosition(e[1]), out _);
-								if (e1d < e2d) {
-									result.Info = new EdgeInfo { IsConstrained = isConstrained, IsFraming = isFraming };
-									result.Target = new Edge { Index0 = prevVertexIndex, Index1 = nextVertexIndex };
-								}
-							} 
-						}
-						if (targetVertex != -1) {
-							if (result == null || !(result.Target is Lime.Widgets.PolygonMesh.Topology.Vertex v)) {
-								result = new TopologyHitTestResult {
-									Target = new Lime.Widgets.PolygonMesh.Topology.Vertex { Index = (ushort)targetVertex }
-								};
-							} else {
-								v1d = Vector2.Distance(position, CalcTransformedVertexPosition(targetVertex));
-								v2d = Vector2.Distance(position, CalcTransformedVertexPosition(result.Target[0]));
-								if (v1d < v2d) {
-									result.Target = new Lime.Widgets.PolygonMesh.Topology.Vertex { Index = (ushort)targetVertex };
-								}
-							}
-						}
+					transformedVertices[0] = CalcTransformedVertexPosition(face[0]);
+					transformedVertices[1] = CalcTransformedVertexPosition(face[1]);
+					transformedVertices[2] = CalcTransformedVertexPosition(face[2]);
+					if (
+						PolygonMeshUtils.PointTriangleIntersection(position, transformedVertices[0],
+							transformedVertices[1], transformedVertices[2])
+					) {
+						result.Target = face;
+						result.Info = info;
 					}
-					if (result != null) {
-						return true;
-					}
-					if (isInside) {
-						result = new TopologyHitTestResult {
-							Info = info,
-							Target = new Face { Index0 = face[0], Index1 = face[1], Index2 = face[2] }
-						};
-						return true;
+					for (ushort i = 0; i < 3; i++) {
+						var s1 = transformedVertices[i];
+						var s2 = transformedVertices[(i + 1) % 3];
+						if (
+							Vector2.Distance(transformedVertices[i], position) <=
+							Theme.Metrics.PolygonMeshVertexHitTestRadius
+						) {
+							result.Target = new Lime.Widgets.PolygonMesh.Topology.Vertex { Index = face[i], };
+							result.Info = null;
+							break;
+						}
+						if (
+							PolygonMeshUtils.SqrDistanceFromPointToSegment(s1, s2, position) <=
+							Theme.Metrics.PolygonMeshEdgeHitTestRadius * Theme.Metrics.PolygonMeshEdgeHitTestRadius
+						) {
+							result.Target = new Edge(face[i], face[(i + 1) % 3]);
+							result.Info = new EdgeInfo {
+								IsConstrained = info[i].IsConstrained,
+								IsFraming = info[i].IsFraming,
+							};
+						}
 					}
 				}
-				return false;
+				result = result.Target == null ? null : result;
+				return result != null;
 			}
 			var vertexHitRadius = Theme.Metrics.PolygonMeshVertexHitTestRadius / scale / Mesh.Size.Length;
 			var edgeHitRadius = Theme.Metrics.PolygonMeshEdgeHitTestRadius / scale / Mesh.Size.Length;
@@ -252,10 +220,6 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 
 		public override void Render(Widget renderContext)
 		{
-			if (PolygonMeshTools.Mode == PolygonMeshTools.ModificationMode.Animation) {
-				Mesh.SyncTopologyWithModificationMode();
-			}
-
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var hitTestResult);
 			var isHitTestSuccessful = ValidateHitTestResult(hitTestResult, ignoreState: false);
 			var hitTestTarget = isHitTestSuccessful ? hitTestResult.Target : null;
