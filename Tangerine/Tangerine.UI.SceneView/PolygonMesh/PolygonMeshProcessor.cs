@@ -27,12 +27,14 @@ namespace Tangerine.UI.SceneView
 
 				/// Skinning bootstrap
 				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
-				foreach (var mesh in meshes) {
-					if (SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
-						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-							mesh.Controller().TieVertexWithBones(bones);
-						} else if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
-							mesh.Controller().UntieVertexFromBones(bones);
+				if (PolygonMeshTools.State == PolygonMeshTools.ModificationState.Animation) {
+					foreach (var mesh in meshes) {
+						if (SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
+							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
+								mesh.Controller().TieVertexWithBones(bones);
+							} else if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
+								mesh.Controller().UntieVertexFromBones(bones);
+							}
 						}
 					}
 				}

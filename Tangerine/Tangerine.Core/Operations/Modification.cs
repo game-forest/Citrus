@@ -1212,7 +1212,7 @@ namespace Tangerine.Core.Operations
 
 			var appliedBones = new HashSet<Bone>();
 			foreach (var index in indices) {
-				var v = mesh.Vertices[index];
+				var v = mesh.TransientVertices[index];
 				var sw = v.SkinningWeights;
 				var filteredBones = sortedBones.Where(i =>
 					i.Index != sw.Bone0.Index &&
