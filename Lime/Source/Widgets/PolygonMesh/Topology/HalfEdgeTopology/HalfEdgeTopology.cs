@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Lime.PolygonMesh.Topology;
-using Lime.Source.Widgets.PolygonMesh;
 using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
@@ -267,85 +264,91 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		) {
 			var location = LocateClosestTriangle(position, out var edge);
 			result = null;
-			if (!IsPointInsideTrueTriangulation(position)) {
-				return false;
-			}
-			var sqrVertexHitRadius = vertexHitRadius * vertexHitRadius;
-			var sqrEdgeHitRadius = edgeHitRadius * edgeHitRadius;
 			switch (location) {
 				case LocationResult.SameVertex:
+					if (edge.Origin < 0) {
+						return false;
+					}
 					result = new TopologyHitTestResult {
-						Target = new Topology.Vertex { Index = (ushort)edge.Origin, },
+						Target = new Vertex { Index = (ushort)edge.Origin, },
 					};
-					return true;
+					break;
 				case LocationResult.OnEdge:
-					result = new TopologyHitTestResult {
-						Target = new Edge { Index0 = (ushort)edge.Origin, Index1 = (ushort)edge.Next.Origin, },
-						Info = new Edge.EdgeInfo() { IsConstrained = edge.Constrained, IsFraming = edge.Twin == null, },
-					};
-					var v1 = Vertices[result.Target[0]].Pos;
-					var v2 = Vertices[result.Target[1]].Pos;
-					var i = ((v1 - position).SqrLength <= (v2 - position).SqrLength) ? 0 : 1;
-					if (((i == 0 ? v1 : v2) - position).SqrLength <= sqrVertexHitRadius) {
+					if (HitVertex(edge.Origin, out result) || HitVertex(edge.Next.Origin, out result)) {
+						return true;
+					}
+					var belongsToInnerTriangle = IsPointInsideTrueTriangulation(Centroid(edge));
+					var twinBelongsToInnerTriangle = !belongsToInnerTriangle &&
+						edge.Twin != null && IsPointInsideTrueTriangulation(Centroid(edge.Twin));
+					if (belongsToInnerTriangle || twinBelongsToInnerTriangle) {
+						edge = belongsToInnerTriangle ? edge : edge.Twin;
 						result = new TopologyHitTestResult {
-							Target = new Topology.Vertex { Index = result.Target[i], },
+							Target = new Edge((ushort)edge.Origin, (ushort)edge.Next.Origin),
+							Info = new Edge.EdgeInfo {
+								IsConstrained = edge.Constrained,
+								IsFraming = edge.Twin == null || InnerBoundary.Contains(edge.Origin) &&
+											InnerBoundary.Next(edge.Origin) == edge.Next.Origin,
+							},
 						};
 					}
-					return true;
+					break;
+				case LocationResult.InsideTriangle:
+				case LocationResult.OutsideTriangulation:
+					if (
+						HitVertex(edge.Origin, out result) || HitVertex(edge.Next.Origin, out result) ||
+						HitVertex(edge.Prev.Origin, out result)
+					) {
+						return true;
+					}
+					var belongsToTriangulation = location != LocationResult.OutsideTriangulation &&
+						IsPointInsideTrueTriangulation(position);
+					var start = edge;
+					do {
+						var twinBelongsToTriangulation = belongsToTriangulation ||
+							edge.Twin != null && IsPointInsideTrueTriangulation(Centroid(edge.Twin));
+						if (belongsToTriangulation || twinBelongsToTriangulation) {
+							var edgeToCheck = belongsToTriangulation ? edge : edge.Twin;
+							var s1 = Vertices[edgeToCheck.Origin].Pos;
+							var s2 = Vertices[edgeToCheck.Next.Origin].Pos;
+							if (PointToSegmentSqrDistance(s1, s2, position) <= edgeHitRadius * edgeHitRadius) {
+								result = new TopologyHitTestResult {
+									Target = new Edge((ushort)edgeToCheck.Origin, (ushort)edgeToCheck.Next.Origin),
+									Info = new Edge.EdgeInfo {
+										IsConstrained = edgeToCheck.Constrained,
+										IsFraming = edgeToCheck.Twin == null || InnerBoundary.Contains(edgeToCheck.Origin) &&
+													InnerBoundary.Next(edgeToCheck.Origin) == edgeToCheck.Next.Origin,
+									},
+								};
+								return true;
+							}
+						}
+						edge = edge.Next;
+					} while (edge != start);
+					if (belongsToTriangulation) {
+						result = new TopologyHitTestResult {
+							Target = new Face((ushort)edge.Origin, (ushort)edge.Next.Origin, (ushort)edge.Prev.Origin),
+							Info = CreateFaceInfo(edge),
+						};
+					}
+					break;
 				default:
-					var next = edge.Next;
-					var prev = next.Next;
-					result = new TopologyHitTestResult {
-						Target = new Face {
-							Index0 = (ushort)edge.Origin,
-							Index1 = (ushort)next.Origin,
-							Index2 = (ushort)prev.Origin,
-						},
-						Info = new Face.FaceInfo {
-							IsConstrained0 = edge.Constrained,
-							IsConstrained1 = next.Constrained,
-							IsConstrained2 = prev.Constrained,
-							IsFraming0 = edge.Twin == null,
-							IsFraming1 = next.Twin == null,
-							IsFraming2 = prev.Twin == null,
-						}
-					};
-					break;
+					throw new ArgumentOutOfRangeException();
 			}
-			// Since using exact testing, we should check whether given position
-			// lies in the closest triangle's vertex/edge proximity in order to prioritize
-			// inbound primitives or correctly test position that is slightly outside of triangulation.
+			bool HitVertex(int index, out TopologyHitTestResult r)
+			{
+				var didHit = index >= 0 && (Vertices[index].Pos - position).SqrLength <= vertexHitRadius * vertexHitRadius;
+				r = didHit ? new TopologyHitTestResult { Target = new Vertex { Index = (ushort)index, }, } : null;
+				return didHit;
+			}
+			return result != null;
+		}
 
-			/// TODO place inside <see cref="LocateClosestTriangle(Vector2, out HalfEdge)"/>
-			var inbound = location == LocationResult.InsideTriangle;
-			var faceInfo = result.Info as Face.FaceInfo;
-			var target = result.Target;
-			for (var i = 0; i < 3; ++i) {
-				var v1 = Vertices[target[i]].Pos;
-				var v2 = Vertices[target[(i + 1) % 3]].Pos;
-				if ((v1 - position).SqrLength <= sqrVertexHitRadius) {
-					inbound = true;
-					result = new TopologyHitTestResult {
-						Target = new Topology.Vertex { Index = target[i], },
-					};
-					break;
-				}
-				if (PointToSegmentSqrDistance(v1, v2, position) <= sqrEdgeHitRadius) {
-					inbound = true;
-					var edgeInfo = faceInfo?[i];
-					result = new TopologyHitTestResult {
-						Target = new Edge(target[i], target[(i + 1) % 3]),
-						Info = new Edge.EdgeInfo {
-							IsFraming = edgeInfo?.IsFraming ?? false,
-							IsConstrained = edgeInfo?.IsConstrained ?? false,
-						}
-					};
-				}
-			}
-			if (!inbound) {
-				result = null;
-			}
-			return inbound;
+		private Vector2 Centroid(HalfEdge triangle)
+		{
+			var v1 = InnerVertices[triangle.Origin].Pos;
+			var v2 = InnerVertices[triangle.Next.Origin].Pos;
+			var v3 = InnerVertices[triangle.Prev.Origin].Pos;
+			return (v1 + v2 + v3) / 3;
 		}
 
 		private IEnumerable<HalfEdge> HalfEdges => new HalfEdge.HalfEdgesEnumerable(Root);
@@ -526,19 +529,25 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 							Index1 = (ushort)e2.Origin,
 							Index2 = (ushort)e3.Origin,
 						},
-						new Face.FaceInfo {
-							IsConstrained0 = e1.Constrained,
-							IsConstrained1 = e2.Constrained,
-							IsConstrained2 = e3.Constrained,
-							IsFraming0 = e1.Twin == null || InnerBoundary.Contains(e1.Origin) && InnerBoundary.Next(e1.Origin) == e2.Origin,
-							IsFraming1 = e2.Twin == null || InnerBoundary.Contains(e2.Origin) && InnerBoundary.Next(e2.Origin) == e3.Origin,
-							IsFraming2 = e3.Twin == null || InnerBoundary.Contains(e3.Origin) && InnerBoundary.Next(e3.Origin) == e1.Origin,
-						}
+						CreateFaceInfo(e1, e2, e3)
 					);
 				}
 			}
 		}
 #endif
+
+		private Face.FaceInfo CreateFaceInfo(HalfEdge triangle) =>
+			CreateFaceInfo(triangle, triangle.Next, triangle.Prev);
+
+		private Face.FaceInfo CreateFaceInfo(HalfEdge e1, HalfEdge e2, HalfEdge e3) =>
+			new Face.FaceInfo {
+				IsConstrained0 = e1.Constrained,
+				IsConstrained1 = e2.Constrained,
+				IsConstrained2 = e3.Constrained,
+				IsFraming0 = e1.Twin == null || InnerBoundary.Contains(e1.Origin) && InnerBoundary.Next(e1.Origin) == e2.Origin,
+				IsFraming1 = e2.Twin == null || InnerBoundary.Contains(e2.Origin) && InnerBoundary.Next(e2.Origin) == e3.Origin,
+				IsFraming2 = e3.Twin == null || InnerBoundary.Contains(e3.Origin) && InnerBoundary.Next(e3.Origin) == e1.Origin,
+			};
 
 		public event Action<ITopology> TopologyChanged;
 

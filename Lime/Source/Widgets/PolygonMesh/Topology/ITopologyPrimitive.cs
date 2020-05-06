@@ -97,6 +97,13 @@ namespace Lime.Widgets.PolygonMesh.Topology
 			}
 		}
 
+		public Face(ushort index0, ushort index1, ushort index2)
+		{
+			Index0 = index0;
+			Index1 = index1;
+			Index2 = index2;
+		}
+
 		[YuzuMember("0")]
 		public ushort Index0;
 
