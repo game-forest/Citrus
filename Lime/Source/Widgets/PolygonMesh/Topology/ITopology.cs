@@ -30,6 +30,7 @@ namespace Lime.PolygonMesh.Topology
 		void RemoveVertex(int index);
 		bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta);
 		void ConstrainEdge(int index0, int index1);
+		void DeconstrainEdge(int index0, int index1);
 		IEnumerable<(int, int)> ConstrainedEdges { get; }
 
 		/// <summary>

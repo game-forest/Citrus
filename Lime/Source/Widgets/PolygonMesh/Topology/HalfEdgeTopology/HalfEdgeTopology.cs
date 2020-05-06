@@ -197,6 +197,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 			public bool Contains(int vertexIndex) => vertexIndexToBoundaryIndex.ContainsKey(vertexIndex);
 
+			public bool ContainsEdge(int index0, int index1) => Contains(index0) && Next(index0) == index1;
+
 			public int Next(int boundaryVertexIndex) =>
 				vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n) ? (n.Next ?? boundary.First).Value : -1;
 
@@ -756,6 +758,69 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 			InsertConstrainEdge(index0, index1);
 			TopologyChanged?.Invoke(this);
+		}
+
+		public void DeconstrainEdge(int index0, int index1)
+		{
+			if (index0 == index1 || InnerBoundary.ContainsEdge(index0, index1)) {
+				return;
+			}
+			var location = LocateClosestTriangle(index0, out var start);
+			System.Diagnostics.Debug.Assert(location == LocationResult.SameVertex);
+			System.Diagnostics.Debug.Assert(start.Origin == index0);
+			var a = InnerVertices[index0].Pos;
+			var b = InnerVertices[index1].Pos;
+			var ab = b - a;
+			var signab = new IntVector2(Mathf.Sign(ab.X), Mathf.Sign(ab.Y));
+			var en = IncidentEdges(start).GetEnumerator();
+			// Needs to resolve degenerated case when there is some vertex v
+			// that lies on the line between a and b vertices
+			// (edges (a, v) and (a, v) becomes constrained see InsertConstrainEdge).
+			var path = new List<HalfEdge>();
+			while (en.MoveNext()) {
+				var incidentEdge = en.Current;
+				var next = incidentEdge.Next;
+				var prev = next.Next;
+				if (next.Origin == index1 || prev.Origin == index1) {
+					var edge = next.Origin == index1 ? incidentEdge : prev;
+					if (!edge.Constrained) {
+						return;
+					}
+					foreach (var halfEdge in path) {
+						halfEdge.Constrained = false;
+					}
+					edge.Constrained = false;
+					path.Add(edge);
+					RestoreDelaunayProperty(path);
+					TopologyChanged?.Invoke(this);
+					break;
+				}
+				var c = InnerVertices[next.Origin].Pos;
+				var d = InnerVertices[prev.Origin].Pos;
+				var e = InnerVertices[incidentEdge.Origin].Pos;
+				if (IsVertexOnLine(a, e, c) && IsVertexOnLine(b, e, c)) {
+					var ec = c - e;
+					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
+						if (!incidentEdge.Constrained) {
+							return;
+						}
+						path.Add(incidentEdge);
+						en.Dispose();
+						en = IncidentEdges(next).GetEnumerator();
+					}
+
+				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
+					var ed = d - e;
+					if (Mathf.Sign(ed.X) == signab.X && Mathf.Sign(ed.Y) == signab.Y) {
+						if (!prev.Constrained) {
+							return;
+						}
+						path.Add(prev);
+						en.Dispose();
+						en = IncidentEdges(prev).GetEnumerator();
+					}
+				}
+			}
 		}
 
 		private bool SelfCheck()

@@ -205,8 +205,10 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				case PolygonMeshTools.ModificationState.Creation:
 					return true;
 				case PolygonMeshTools.ModificationState.Triangulation:
-				case PolygonMeshTools.ModificationState.Removal:
 					return result.Target.IsVertex();
+				case PolygonMeshTools.ModificationState.Removal:
+					return result.Target.IsVertex() || result.Target.IsEdge() &&
+							(result.Info as EdgeInfo).IsConstrained;
 				default:
 					return false;
 			}
@@ -845,9 +847,9 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 								animator.ResetCache();
 							}
 						}
-					} else {
-						// It's an edge. If edge is constrain than try to deconstrain it.
-						// TODO
+					} else if (hitTestTarget.IsEdge() && result.Info is EdgeInfo ei && ei.IsConstrained) {
+						var edge = (Edge)hitTestTarget;
+						Topology.DeconstrainEdge(edge.Index0, edge.Index1);
 					}
 					var sliceAfter = new PolygonMeshSlice {
 						State = PolygonMeshTools.ModificationState.Removal,
