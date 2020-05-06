@@ -567,7 +567,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			if (result == null || !result.Target.IsVertex()) {
 				yield break;
 			}
-			var target = ((Lime.Widgets.PolygonMesh.Topology.Vertex)result.Target);
+			var target = (Lime.Widgets.PolygonMesh.Topology.Vertex)result.Target;
 			using (Document.Current.History.BeginTransaction()) {
 				List<IKeyframe> keyframes = null;
 				Mesh.Animators.TryFind(
@@ -581,12 +581,17 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
 					Keyframes = animator?.Keys.ToList()
 				};
+				var lastValidDelta = Vector2.Zero;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var delta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
-					Topology.TranslateVertex(target.Index, delta, delta);
+					if (Topology.TranslateVertex(target.Index, delta, delta)) {
+						lastValidDelta = delta;
+					} else if (lastValidDelta != Vector2.Zero) {
+						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidDelta);
+					}
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
 						foreach (var key in animator.Keys.ToList()) {

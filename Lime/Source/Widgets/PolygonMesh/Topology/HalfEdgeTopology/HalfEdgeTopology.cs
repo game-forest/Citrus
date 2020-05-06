@@ -661,7 +661,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			InnerBoundary.Remap(map);
 		}
 
-		public void TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta)
+		public bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta)
 		{
 			LocateClosestTriangle(index, out var he);
 			var original = Vertices[index];
@@ -672,7 +672,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var translatedPos = translated.Pos;
 			// TODO THAT NEEDS TO BE DISCUSSED. (Expand bounding figure or not)
 			if (!new Rectangle(0, 0, 1f + 0.001f, 1f + 0.001f).Contains(translated.Pos)) {
-				return;
+				return false;
 			}
 			List<(int, int)> constrainedEdges = null;
 			var isBoundaryVertex = InnerBoundary.Contains(index);
@@ -691,8 +691,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 							(s != nextIndex && RobustSegmentSegmentIntersection(translatedPos, next, sp, ep) ||
 							 e != prevIndex && RobustSegmentSegmentIntersection(prev, translatedPos, sp, ep))
 					) {
-						// TODO Or should snap.
-						return;
+						return false;
 					}
 				}
 				var isLeftDegenerated = Orient2D(prev,	 originalPos, translatedPos) == 0;
@@ -720,7 +719,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				LocateClosestTriangle(originalPos, out he);
 				index = he.Origin;
 			} else if (!IsPointInsideTrueTriangulation(translatedPos)) {
-				return;
+				return false;
 			}
 			// Otherwise just delete original and add translated.
 			// Don't forget to save constrained edges.
@@ -738,6 +737,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerRemoveVertex(index);
 			}
 			Vertices[index] = translated;
+			// TODO Check translation on another vertex.
 			AddVertex(index);
 			foreach (var edge in constrainedEdges) {
 				InsertConstrainEdge(edge.Item1, edge.Item2);
@@ -746,6 +746,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerBoundary.Insert(prevIndex, index);
 			}
 			TopologyChanged?.Invoke(this);
+			return true;
 		}
 
 		public void ConstrainEdge(int index0, int index1)
