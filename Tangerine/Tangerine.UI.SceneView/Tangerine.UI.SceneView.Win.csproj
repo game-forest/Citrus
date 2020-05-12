@@ -66,6 +66,8 @@
     <Compile Include="PolygonMesh\Extensions.cs" />
     <Compile Include="PolygonMesh\Operations\Animate.cs" />
     <Compile Include="PolygonMesh\Operations\PreserveSlice.cs" />
+    <Compile Include="PolygonMesh\PolygonMeshContextualPanel.cs" />
+    <Compile Include="PolygonMesh\PolygonMeshContextualPanelProcessor.cs" />
     <Compile Include="PolygonMesh\PolygonMeshController.cs" />
     <Compile Include="PolygonMesh\PolygonMeshTools.cs" />
     <Compile Include="PolygonMesh\Utils.cs" />

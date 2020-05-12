@@ -5,6 +5,7 @@ using Lime;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.UI.SceneView.PolygonMesh;
 using Tangerine.UI.SceneView.Presenters;
 
 namespace Tangerine.UI.SceneView
@@ -303,7 +304,8 @@ namespace Tangerine.UI.SceneView
 				new ShiftClickProcessor(),
 				new PreviewAnimationProcessor(),
 				new ResolutionPreviewProcessor(),
-				new FrameProgressionProcessor()
+				new FrameProgressionProcessor(),
+				new PolygonMeshContextualPanelProcessor()
 			);
 		}
 
