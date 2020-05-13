@@ -88,8 +88,11 @@ namespace Lime
 			uiWindow.MakeKeyAndVisible();
 			var view = (IGameView)UIView;
 			AppDelegate.Instance.Activated += () => {
-				// Run() creates OpenGL context
-				view.Run();
+				// Postpone view.Run() until the view is appeared. This is a freeze fix on iOS 9.X
+				if (UIViewController.IsViewAppeared) {
+					// Run() creates OpenGL context
+					view.Run();
+				}
 				UIViewController.LockDeviceOrientation = false;
 				Active = true;
 				AudioSystem.Active = true;
