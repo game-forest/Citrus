@@ -1,0 +1,12 @@
+- name: Camera3D
+  href: camera_3d.md
+- name: Model3D
+  href: model_3d.md
+- name: Node3D
+  href: node_3d.md
+- name: Viewport3D
+  href: viewport_3d.md
+- name: WidgetAdapter3D
+  href: widget_adapter_3d.md
+- name: Spline3D
+  href: spline_3d/toc.yml

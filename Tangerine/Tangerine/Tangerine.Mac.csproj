@@ -208,9 +208,6 @@
     </NativeReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Documentation\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Panels\" />
   </ItemGroup>
 </Project>
