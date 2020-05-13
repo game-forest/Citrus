@@ -20,9 +20,9 @@ namespace Tangerine.UI
 
 		public static string PageExtension { get; set; } = ".md";
 		public static string DocExtension { get; set; } = ".html";
-		public static string StartPageName { get; set; } = "StartPage";
+		public static string StartPageName { get; set; } = "https://game-forest.github.io/Citrus/tangerine/intro.html";
 		public static string ErrorPageName { get; set; } = "ErrorPage";
-		public static string ChangelogPageName { get; set; } = "Changelog";
+		public static string ChangelogPageName { get; set; } = "https://game-forest.github.io/Citrus/tangerine/changelog.html";
 
 		public static string GetPagePath(string pageName)
 		{
@@ -41,6 +41,8 @@ namespace Tangerine.UI
 
 		public static void Init()
 		{
+			return;
+			// TODO: removing this code will be next step in help refactoring process
 			if (!Directory.Exists(HtmlDocumentationPath)) {
 				Directory.CreateDirectory(HtmlDocumentationPath);
 			}
@@ -115,17 +117,14 @@ namespace Tangerine.UI
 
 		public static void ShowHelp(string pageName)
 		{
-			string path = GetDocPath(pageName);
+			// TODO: carefully think if we still need documentation and markdown related code in this file.
+			// for example if we'll want to locally render md files into advanced tips windows.
 			// Evgeny Polikutin: if help is open in the same thread,
 			// weird crashes in GestureManager occur (something changes activeGestures collection).
 			// Remove at your own risk
 			new Thread(() => {
 				Thread.CurrentThread.IsBackground = true;
-				if (File.Exists(path)) {
-					System.Diagnostics.Process.Start(path);
-				} else {
-					System.Diagnostics.Process.Start(GetDocPath(ErrorPageName));
-				}
+				System.Diagnostics.Process.Start(pageName);
 			}).Start();
 		}
 	}
