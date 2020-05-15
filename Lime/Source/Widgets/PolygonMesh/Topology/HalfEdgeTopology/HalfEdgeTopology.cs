@@ -420,6 +420,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		public List<SkinnedVertex> Vertices { get; private set; }
+		public float VertexHitTestRadius { get; set; }
+		public float EdgeHitTestDistance { get; set; }
 
 		public HalfEdgeTopology()
 		{
@@ -672,7 +674,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			translated.Pos += positionDelta;
 			translated.UV1 += uvDelta;
 			var translatedPos = translated.Pos;
-			// TODO THAT NEEDS TO BE DISCUSSED. (Expand bounding figure or not)
 			if (!new Rectangle(0, 0, 1f + 0.001f, 1f + 0.001f).Contains(translated.Pos)) {
 				return false;
 			}
@@ -740,7 +741,17 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 			Vertices[index] = translated;
 			// TODO Check translation on another vertex.
-			AddVertex(index);
+			var wasAdded = AddVertex(index);
+			if (!wasAdded) {
+				var savedVertexHitTestRadius = VertexHitTestRadius;
+				var savedEdgeHitTestDistance = EdgeHitTestDistance;
+				VertexHitTestRadius = EdgeHitTestDistance = 0f;
+				Vertices[index] = original;
+				var returnedOriginal = AddVertex(index);
+				System.Diagnostics.Debug.Assert(returnedOriginal);
+				VertexHitTestRadius = savedVertexHitTestRadius;
+				EdgeHitTestDistance = savedEdgeHitTestDistance;
+			}
 			foreach (var edge in constrainedEdges) {
 				InsertConstrainEdge(edge.Item1, edge.Item2);
 			}
@@ -748,7 +759,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerBoundary.Insert(prevIndex, index);
 			}
 			TopologyChanged?.Invoke(this);
-			return true;
+			return wasAdded;
 		}
 
 		public void ConstrainEdge(int index0, int index1)

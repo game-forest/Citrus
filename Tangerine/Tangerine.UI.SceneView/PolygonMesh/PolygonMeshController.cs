@@ -584,6 +584,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					Keyframes = animator?.Keys.ToList()
 				};
 				var lastValidDelta = Vector2.Zero;
+				Topology.VertexHitTestRadius = Topology.EdgeHitTestDistance = 0f;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					keyframes = animator?.Keys.ToList();
@@ -634,6 +635,14 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				}
 			}
 			return mousePos;
+		}
+
+		private void UpdateHitTestMetrics()
+		{
+			var vertexHitRadius = Theme.Metrics.PolygonMeshVertexHitTestRadius / sv.Scene.Scale.X / Mesh.Size.Length;
+			var edgeHitRadius = Theme.Metrics.PolygonMeshEdgeHitTestRadius / sv.Scene.Scale.X / Mesh.Size.Length;
+			Topology.VertexHitTestRadius = vertexHitRadius;
+			Topology.EdgeHitTestDistance = edgeHitRadius;
 		}
 
 		private Vector2 InterpolateUV(ITopologyPrimitive primitive, Vector2 position)
@@ -697,6 +706,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						Color = Mesh.Color,
 						UV1 = InterpolateUV(initialHitTestTarget, pos),
 					};
+					UpdateHitTestMetrics();
 					Topology.AddVertex(vertex);
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
@@ -748,6 +758,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					Keyframes = animator?.Keys.ToList()
 				};
 				while (sv.Input.IsMousePressed()) {
+					UpdateHitTestMetrics();
 					Document.Current.History.RollbackTransaction();
 					keyframes = animator?.Keys.ToList();
 					var hitTestTarget = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result)

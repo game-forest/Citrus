@@ -39,9 +39,11 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				if (sameVertexIndex >= 0) {
 					return false;
 				}
-				// otherwise it's definitely bounding figure vertex.
+				// otherwise it can be bounding figure vertex.
 				var boundingFigureVertexIndex = BoundingFigureVertices.FindIndex(v => v.Pos == vertex);
-				System.Diagnostics.Debug.Assert(boundingFigureVertexIndex >= 0 && halfEdge.Origin == -boundingFigureVertexIndex);
+				if (boundingFigureVertexIndex < 0 || halfEdge.Origin != -boundingFigureVertexIndex) {
+					return false;
+				}
 				foreach (var incidentEdge in IncidentEdges(halfEdge)) {
 					incidentEdge.Origin = vertexIndex;
 				}
@@ -121,28 +123,40 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var v1 = InnerVertices[current.Origin].Pos;
 			var v2 = InnerVertices[current.Next.Origin].Pos;
 			var v3 = InnerVertices[current.Prev.Origin].Pos;
-			if (v1 == vertex) {
+			var r2 = VertexHitTestRadius * VertexHitTestRadius;
+			if (v1 == vertex || (vertex - v1).SqrLength <= r2) {
 				edge = current;
 				return LocationResult.SameVertex;
 			}
-			if (v2 == vertex) {
+			if (v2 == vertex || (vertex - v2).SqrLength <= r2) {
 				edge = current.Next;
 				return LocationResult.SameVertex;
 			}
-			if (v3 == vertex) {
+			if (v3 == vertex || (vertex - v3).SqrLength <= r2) {
 				edge = current.Prev;
 				return LocationResult.SameVertex;
 			}
+			var isExactEdgeHitTesting = EdgeHitTestDistance == 0f;
+			var d2 = EdgeHitTestDistance * EdgeHitTestDistance;
 			if (VertexInsideTriangle(vertex, v1, v2, v3)) {
 				edge = current;
-				if (IsVertexOnEdge(vertex, current)) {
+				if (
+					isExactEdgeHitTesting && IsVertexOnEdge(vertex, current) ||
+					!isExactEdgeHitTesting && PointToSegmentSqrDistance(v1, v2, vertex) <= d2
+				) {
 					return LocationResult.OnEdge;
 				}
-				if (IsVertexOnEdge(vertex, current.Next)) {
+				if (
+					isExactEdgeHitTesting && IsVertexOnEdge(vertex, current.Next) ||
+					!isExactEdgeHitTesting && PointToSegmentSqrDistance(v2, v3, vertex) <= d2
+				) {
 					edge = current.Next;
 					return LocationResult.OnEdge;
 				}
-				if (IsVertexOnEdge(vertex, current.Prev)) {
+				if (
+					isExactEdgeHitTesting && IsVertexOnEdge(vertex, current.Prev) ||
+					!isExactEdgeHitTesting && PointToSegmentSqrDistance(v3, v1, vertex) <= d2
+				) {
 					edge = current.Prev;
 					return LocationResult.OnEdge;
 				}

@@ -43,5 +43,7 @@ namespace Lime.PolygonMesh.Topology
 		/// <param name="result">Primitive and its appropriate info if test was successful, null otherwise.</param>
 		/// <returns>Test success verdict.</returns>
 		bool HitTest(Vector2 position, float vertexHitRadius, float edgeHitRadius, out TopologyHitTestResult result);
+		float VertexHitTestRadius { get; set; }
+		float EdgeHitTestDistance { get; set; }
 	}
 }
