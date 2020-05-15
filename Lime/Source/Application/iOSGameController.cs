@@ -25,6 +25,8 @@ namespace Lime
 		public bool SoftKeyboardBeingShownOrHid { get; private set; }
 		public bool LockDeviceOrientation { get; set; }
 
+		public bool IsViewAppeared { get; private set; }
+
 		public GameController(Input input) : base()
 		{
 			this.input = input;
@@ -251,6 +253,21 @@ namespace Lime
 			if (keyboardDidChangeFrameNotification != null) {
 				keyboardDidChangeFrameNotification.Dispose();
 			}
+		}
+
+		public override void ViewDidAppear(bool animated)
+		{
+			base.ViewDidAppear(animated);
+			if (!IsViewAppeared) {
+				(View as IGameView)?.Run();
+			}
+			IsViewAppeared = true;
+		}
+
+		public override void ViewDidDisappear(bool animated)
+		{
+			IsViewAppeared = false;
+			base.ViewDidDisappear(animated);
 		}
 
 		private void KeyboardWillChangeFrameCallback(object sender, UIKeyboardEventArgs args)
