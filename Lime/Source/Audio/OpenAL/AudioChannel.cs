@@ -333,15 +333,13 @@ namespace Lime
 			if (fadePurpose != FadePurpose.None) {
 				if (fadeSpeed != 0) {
 					fadeVolume += delta * fadeSpeed;
-					if (fadeVolume > 1) {
+					if (fadeVolume > 1 || fadeVolume < 0) {
 						fadeSpeed = 0;
-						fadeVolume = 1;
-					} else if (fadeVolume < 0) {
-						fadeSpeed = 0;
-						fadeVolume = 0;
+						fadeVolume = Mathf.Clamp(fadeVolume, 0, 1);
 					}
 					Volume = volume;
-				} else {
+				}
+				if (fadeSpeed == 0) {
 					FadeFinished();
 				}
 			}
