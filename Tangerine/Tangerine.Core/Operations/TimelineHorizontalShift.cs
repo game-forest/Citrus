@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Lime;
 
@@ -30,17 +31,15 @@ namespace Tangerine.Core.Operations
 						Shift(node);
 					}
 				} else {
-					Node namesakeAnimationOwner = null;
-					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
-						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
-							namesakeAnimationOwner = descendant;
-							Shift(descendant);
+					var toProcessNodes = new List<Node>();
+					toProcessNodes.AddRange(Document.Current.Animation.OwnerNode.Nodes);
+					while (toProcessNodes.Count > 0) {
+						var processNode = toProcessNodes[toProcessNodes.Count - 1];
+						toProcessNodes.RemoveAt(toProcessNodes.Count - 1);
+						Shift(processNode);
+						if (!processNode.Animations.TryFind(Document.Current.AnimationId, out _)) {
+							toProcessNodes.AddRange(processNode.Nodes);
 						}
-						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
-							continue;
-						}
-						namesakeAnimationOwner = null;
-						Shift(descendant);
 					}
 				}
 				void Shift(Node node)
