@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Layouts | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Layouts | Citrus Engine ">
+    <meta name="generator" content="docfx 2.48.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="layouts">Layouts</h1>
+
+<p>В редакторе есть возможность использовать несколько способов размещения виджетов (лэйаутов):</p>
+<ul>
+<li><strong>Flow Layout</strong> - лэйаут, отображение элементов которой зависит от размера его элементов.</li>
+<li><strong>Linear Layout</strong> - линейный лэйаут (отображение по вертикали/горизонтали).</li>
+<li><strong>Stack Layout</strong> - лэйаут в виде списка, где элементы расположены слоями.</li>
+<li><strong>Table Layout</strong> - лэйаут в виде таблицы.</li>
+</ul>
+<p>Также для лэйаутов используются следующие компоненты:</p>
+<ul>
+<li><strong>Layout Cell</strong> - присваивается по-умолчанию каждому дочернему виджету, используемому в формировании лэйаута. Содержит в себе настройки особенности расположения виджета в ячейке.</li>
+<li><strong>Layout Constraints</strong> - используется для задания минимальных/максимальных размеров виджета в ячейке.</li>
+</ul>
+<p>При применении любого компонента Layout на виджет, его дочерним виджетам <strong>всегда</strong> добавляется кастомный компонент Layout Constraints.</p>
+<p>Для всех Layout работают общие свойства:</p>
+<ul>
+<li><strong>DefaultCell</strong> - настройки ячеек по-умолчанию. На данный момент там доступен один пункт - <strong>DefaultLayoutCell</strong>.</li>
+<li><strong>IgnoreHidden</strong> - игнорировать настройки видимости дочерних виджетов.</li>
+</ul>
+<hr>
+<p><strong>DefaultLayoutCell</strong> имеет следующие свойства:</p>
+<ul>
+<li><strong>HorizontalAlignment</strong> - выравнивание по горизонтали.</li>
+<li><strong>VerticalAlignment</strong> - выравнивание по вертикали.</li>
+<li><strong>ColumnSpan</strong> - количество ячеек, объединенных по вертикали.</li>
+<li><strong>RowSpan</strong> - количество ячеек, объединенных по горизонтали.</li>
+<li><strong>Stretch</strong> - растягивание ячеек по горизонтали/вертикали</li>
+<li><strong>Ignore</strong> - игнорировать все настройки</li>
+</ul>
+<hr>
+<p>Подробнее о каждом лэйауте:</p>
+<p><strong>Flow Layout</strong> - лэйаут, в котором отображение виджетов зависит от размера:</p>
+<p>Для того, чтобы всё заработало, необходимо выставить MinSize в Layout Constraints, иначе никаких изменений не будет видно.</p>
+<ul>
+<li><strong>Spacing</strong> - промежуток между ячейками.</li>
+<li><strong>RowAligment</strong> - выравнивание строк.</li>
+<li><strong>ColumnAligment</strong> - выравнивание столбцов.</li>
+<li><strong>Direction</strong> - направление компоновки виджетов.</li>
+</ul>
+<p><img src="../images/flow_layout.gif" alt="flow"></p>
+<hr>
+<p><strong>Linear Layout</strong> - лэйаут, в котором виджеты выстраиваются в одну линию, по горизонтали/по вертикали:</p>
+<ul>
+<li><strong>Spacing</strong> - промежуток между ячейками.</li>
+<li><strong>Direction</strong> - направление компоновки виджетов.</li>
+</ul>
+<p><img src="../images/linear_layout.gif" alt="linear"></p>
+<hr>
+<p><strong>Stack Layout</strong> - лэйаут, в котором виджеты накладываются один на другой (наподобие слоёв):</p>
+<ul>
+<li><strong>HorizontallySizeable</strong> - блокирует изменение размера внутри лэйаута по горизонтали.</li>
+<li><strong>VerticallySizeable</strong> - блокирует изменение размера внутри лэйаута по вертикали.</li>
+</ul>
+<p><img src="../images/stack_layout.gif" alt="stack"></p>
+<hr>
+<p><strong>Table Layout</strong> - лэйаут, в котором виджеты выстраиваются в виде таблицы:</p>
+<ul>
+<li><strong>RowCount</strong> - количество строк.</li>
+<li><strong>ColumnCount</strong> - количество столбцов.</li>
+<li><strong>ColumnSpacing</strong> - промежуток между столбцами.</li>
+<li><strong>RowSpacing</strong> - промежуток между строками.</li>
+</ul>
+<p><img src="../images/table_layout.gif" alt="table"></p>
+<hr>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            GameForest 2020
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
