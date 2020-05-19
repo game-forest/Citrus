@@ -382,7 +382,8 @@ namespace Tangerine
 		{
 			private readonly InstancePropertyEditor<IMaterial> editor;
 
-			public MaterialRow(Model3DAttachment.MaterialRemap material, ObservableCollection<Model3DAttachment.MaterialRemap> materials) : base(material, materials)
+			public MaterialRow(Model3DAttachment.MaterialRemap material, ObservableCollection<Model3DAttachment.MaterialRemap> materials)
+				: base(material, materials)
 			{
 				Nodes.Clear();
 				deleteButton.Unlink();
@@ -391,15 +392,13 @@ namespace Tangerine
 					History = history
 				};
 				ic.BuildForObjects(new[] { material });
-				HeaderContainer = Nodes.First().AsWidget;
 				// Change displayed property name to material name.
 				editor = ic.ReadonlyEditors.OfType<InstancePropertyEditor<IMaterial>>().First();
+				HeaderContainer = editor.ContainerWidget;
 				editor.EditorParams.DisplayName = material.SourceName;
 				// Remove redundant node.
-				HeaderContainer.Nodes.Last().UnlinkAndDispose();
-				HeaderContainer.Layout = new HBoxLayout { Spacing = AttachmentMetrics.Spacing };
 				HeaderContainer.Presenter = DefaultPresenter.Instance;
-				HeaderContainer.AddNode(deleteButton);
+				editor.EditorContainer.AddNode(deleteButton);
 				Padding = Thickness.Zero;
 			}
 
@@ -460,7 +459,7 @@ namespace Tangerine
 				var list = new Widget {
 					Layout = new VBoxLayout { Spacing = AttachmentMetrics.Spacing },
 					Padding = new Thickness(10f, 5f),
-					Visible = false
+					Visible = false,
 				};
 				list.Components.Add(new CreateContentOnVisibleBehaviour(() => {
 					var widgetFactory = new AttachmentWidgetFactory<IMaterial>(
@@ -482,7 +481,7 @@ namespace Tangerine
 					Padding = new Thickness { Left = 4f, Right = 10f, Top = 15f },
 					Nodes = { button, sourceMaterialNameWidget }
 				};
-				list.AddChangeWatcher(() => button.Expanded, v => list.Visible = v);
+				button.AddChangeWatcher(() => button.Expanded, v => list.Visible = v);
 				container.Content.AddNode(header);
 				container.Content.AddNode(list);
 				container.Content.AddChangeWatcher(() => container.ScrollPosition, sp => panelState.MaterialsScrollPosition = sp);
@@ -534,7 +533,7 @@ namespace Tangerine
 					};
 					ic.BuildForObjects(new[] { source });
 				}));
-				wrapper.AddChangeWatcher(() => button.Expanded, v => wrapper.Visible = v);
+				button.AddChangeWatcher(() => button.Expanded, v => wrapper.Visible = v);
 				Padding = new Thickness(0f, 5f);
 				Presenter = Presenters.StripePresenter;
 			}
