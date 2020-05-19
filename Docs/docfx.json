@@ -26,6 +26,8 @@
         "files": [
           "articles/**.md",
           "articles/**/toc.yml",
+          "tangerine/**.md",
+          "tangerine/**/toc.yml",
           "toc.yml",
           "*.md"
         ]
@@ -34,7 +36,11 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "**.png",
+          "**.jpg",
+          "**.svg",
+          "**.ico",
+          "**.gif",
         ]
       }
     ],
@@ -59,7 +65,9 @@
     "postProcessors": [ "ExtractSearchIndex" ],
     "globalMetadata": {
       "_appTitle": "Citrus Engine",
-      "_appFooter": "",
+      "_appLogoPath": "images/logo.png",
+      "_appFaviconPath": "images/favicon.ico",
+      "_appFooter": "GameForest 2020",
       "_gitContribute": {
         "branch": "master"
       }
