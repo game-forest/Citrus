@@ -218,8 +218,7 @@ namespace Tangerine.UI.SceneView
 						animation.TryRun(marker);
 					}
 				}
-				Apply(rootNode);
-				foreach (var descendant in rootNode.Descendants) {
+				foreach (var descendant in rootNode.SelfAndDescendants) {
 					Apply(descendant);
 				}
 			}

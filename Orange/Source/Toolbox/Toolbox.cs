@@ -139,9 +139,7 @@ namespace Orange
 			var clone = node.Clone();
 			var savedNodesAndTangerineFlags = new List<(Node, TangerineFlags)>();
 
-			CleanNode(clone);
-			SaveAndSetFlags(clone);
-			foreach (var n in clone.Descendants) {
+			foreach (var n in clone.SelfAndDescendants) {
 				CleanNode(n);
 				SaveAndSetFlags(n);
 			}
@@ -156,8 +154,7 @@ namespace Orange
 			}
 			// Need to clean the clone twice, because in Update() there can be logic that
 			// creates some content for external scenes.
-			CleanNode(clone);
-			foreach (var n in clone.Descendants) {
+			foreach (var n in clone.SelfAndDescendants) {
 				CleanNode(n);
 			}
 			void CleanNode(Node n)

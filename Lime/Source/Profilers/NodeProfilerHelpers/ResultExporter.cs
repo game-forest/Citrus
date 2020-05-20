@@ -41,8 +41,7 @@ namespace Lime.Source.Profilers.NodeProfilerHelpers
 
 		private static void RemoveNodeComponents(Node node)
 		{
-			node.Components.Clear();
-			foreach (var n in node.Descendants) {
+			foreach (var n in node.SelfAndDescendants) {
 				n.Components.Clear();
 			}
 		}
