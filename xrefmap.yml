@@ -41522,6 +41522,19 @@ references:
   commentId: T:Lime.Node.SceneLoadingDelegate
   fullName: Lime.Node.SceneLoadingDelegate
   nameWithType: Node.SceneLoadingDelegate
+- uid: Lime.Node.SelfAndDescendants
+  name: SelfAndDescendants
+  href: api/Lime.Node.html#Lime_Node_SelfAndDescendants
+  commentId: P:Lime.Node.SelfAndDescendants
+  fullName: Lime.Node.SelfAndDescendants
+  nameWithType: Node.SelfAndDescendants
+- uid: Lime.Node.SelfAndDescendants*
+  name: SelfAndDescendants
+  href: api/Lime.Node.html#Lime_Node_SelfAndDescendants_
+  commentId: Overload:Lime.Node.SelfAndDescendants
+  isSpec: "True"
+  fullName: Lime.Node.SelfAndDescendants
+  nameWithType: Node.SelfAndDescendants
 - uid: Lime.Node.SetTangerineFlag(Lime.TangerineFlags,System.Boolean)
   name: SetTangerineFlag(TangerineFlags, Boolean)
   href: api/Lime.Node.html#Lime_Node_SetTangerineFlag_Lime_TangerineFlags_System_Boolean_

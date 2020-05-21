@@ -704,7 +704,7 @@ or creates an animation if the collection is empty.</p>
   
   <a id="Lime_Node_Descendants_" data-uid="Lime.Node.Descendants*"></a>
   <h4 id="Lime_Node_Descendants" data-uid="Lime.Node.Descendants">Descendants</h4>
-  <div class="markdown level1 summary"><p>Gets a DFS-enumeration of all descendant nodes.</p>
+  <div class="markdown level1 summary"><p>Gets a DFS-enumeration of all descendant nodes not including itself.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1227,6 +1227,32 @@ TODO: Add Add/RemovePresenter methods. Remove CompoundPresenter property and Pre
     <tbody>
       <tr>
         <td><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Node_SelfAndDescendants_" data-uid="Lime.Node.SelfAndDescendants*"></a>
+  <h4 id="Lime_Node_SelfAndDescendants" data-uid="Lime.Node.SelfAndDescendants">SelfAndDescendants</h4>
+  <div class="markdown level1 summary"><p>Gets a DFS-enumeration of all descendant nodes starting with itself.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Node&gt; SelfAndDescendants { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Node.html">Node</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
