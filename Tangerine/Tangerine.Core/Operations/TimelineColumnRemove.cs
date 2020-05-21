@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lime;
 
 namespace Tangerine.Core.Operations
@@ -35,17 +32,9 @@ namespace Tangerine.Core.Operations
 						RemoveTimelineColumn(op, node);
 					}
 				} else {
-					Node namesakeAnimationOwner = null;
-					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
-						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
-							continue;
-						}
-						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
-							namesakeAnimationOwner = descendant;
-							RemoveTimelineColumn(op, descendant);
-							continue;
-						}
-						namesakeAnimationOwner = null;
+					var owner = Document.Current.Animation.OwnerNode;
+					var animationId = Document.Current.AnimationId;
+					foreach (var descendant in owner.DescendantsSkippingNamesakeAnimationOwners(animationId)) {
 						RemoveTimelineColumn(op, descendant);
 					}
 				}
@@ -79,20 +68,13 @@ namespace Tangerine.Core.Operations
 						ProcessNode(node);
 					}
 				} else {
-					Node namesakeAnimationOwner = null;
-					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
-						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
-							continue;
-						}
-						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
-							namesakeAnimationOwner = descendant;
-							ProcessNode(descendant);
-							continue;
-						}
-						namesakeAnimationOwner = null;
+					var owner = Document.Current.Animation.OwnerNode;
+					var animationId = Document.Current.AnimationId;
+					foreach (var descendant in owner.DescendantsSkippingNamesakeAnimationOwners(animationId)) {
 						ProcessNode(descendant);
 					}
 				}
+
 				void ProcessNode(Node node)
 				{
 					foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId)) {

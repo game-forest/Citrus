@@ -30,19 +30,13 @@ namespace Tangerine.Core.Operations
 						Shift(node);
 					}
 				} else {
-					Node namesakeAnimationOwner = null;
-					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
-						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
-							namesakeAnimationOwner = descendant;
-							Shift(descendant);
-						}
-						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
-							continue;
-						}
-						namesakeAnimationOwner = null;
+					var owner = Document.Current.Animation.OwnerNode;
+					var animationId = Document.Current.AnimationId;
+					foreach (var descendant in owner.DescendantsSkippingNamesakeAnimationOwners(animationId)) {
 						Shift(descendant);
 					}
 				}
+
 				void Shift(Node node)
 				{
 					foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId)) {
