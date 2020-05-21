@@ -1022,9 +1022,14 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Gets a DFS-enumeration of all descendant nodes.
+		/// Gets a DFS-enumeration of all descendant nodes not including itself.
 		/// </summary>
-		public IEnumerable<Node> Descendants => new DescendantsEnumerable(this);
+		public IEnumerable<Node> Descendants => new DescendantsEnumerable(this, enumerateRoot: false);
+
+		/// <summary>
+		/// Gets a DFS-enumeration of all descendant nodes starting with itself.
+		/// </summary>
+		public IEnumerable<Node> SelfAndDescendants => new DescendantsEnumerable(this, enumerateRoot: true);
 
 		/// <summary>
 		/// Enumerate all node's ancestors.
@@ -1389,30 +1394,28 @@ namespace Lime
 		private class DescendantsEnumerable : IEnumerable<Node>
 		{
 			private readonly Node root;
+			private readonly bool enumerateRoot;
 
-			public DescendantsEnumerable(Node root)
+			public DescendantsEnumerable(Node root, bool enumerateRoot)
 			{
 				this.root = root;
+				this.enumerateRoot = enumerateRoot;
 			}
 
-			public IEnumerator<Node> GetEnumerator()
-			{
-				return new Enumerator(root);
-			}
+			public IEnumerator<Node> GetEnumerator() => new Enumerator(root, enumerateRoot);
 
-			IEnumerator IEnumerable.GetEnumerator()
-			{
-				return GetEnumerator();
-			}
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 			private class Enumerator : IEnumerator<Node>
 			{
 				private readonly Node root;
+				private readonly bool enumerateRoot;
 				private Node current;
 
-				public Enumerator(Node root)
+				public Enumerator(Node root, bool enumerateRoot)
 				{
 					this.root = root;
+					this.enumerateRoot = enumerateRoot;
 				}
 
 				public Node Current
@@ -1428,15 +1431,15 @@ namespace Lime
 
 				object IEnumerator.Current => Current;
 
-				public void Dispose()
-				{
-					current = null;
-				}
+				public void Dispose() => current = null;
 
 				public bool MoveNext()
 				{
 					if (current == null) {
 						current = root;
+						if (enumerateRoot) {
+							return true;
+						}
 					}
 					var node = current.FirstChild;
 					if (node != null) {
@@ -1456,10 +1459,7 @@ namespace Lime
 					return true;
 				}
 
-				public void Reset()
-				{
-					current = null;
-				}
+				public void Reset() => current = null;
 			}
 		}
 

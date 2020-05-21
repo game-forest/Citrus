@@ -716,8 +716,7 @@ namespace Tangerine.Core
 						animation.IsRunning = false;
 					}
 				}
-				StopAnimation(node);
-				foreach (var descendant in node.Descendants) {
+				foreach (var descendant in node.SelfAndDescendants) {
 					StopAnimation(descendant);
 				}
 			}
