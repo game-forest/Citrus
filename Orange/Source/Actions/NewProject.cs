@@ -26,7 +26,7 @@ namespace Orange
 
 		private static readonly List<char> ValidChars =
 			Enumerable.Range(1, 128).Select(i => (char)i).
-			Where(c => char.IsLetterOrDigit(c)).ToList();
+			Where(char.IsLetterOrDigit).Append('_').ToList();
 
 		public static void NewProjectAction(Func<string, bool> projectOpened)
 		{
