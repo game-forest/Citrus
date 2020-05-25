@@ -13,7 +13,8 @@ namespace Tangerine.UI.PropertyEditors
 	{
 		private readonly Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>> populateEditors;
 		private static TValue DefaultValue => typeof(TValue) == typeof(string) ?
-			(TValue)(object)string.Empty : typeof(TValue).IsInterface ? default : Activator.CreateInstance<TValue>();
+			(TValue)(object)string.Empty : typeof(TValue).IsInterface || typeof(TValue).IsAbstract ?
+				default : Activator.CreateInstance<TValue>();
 		private KeyValuePair keyValueToAdd = new KeyValuePair { Key = "", Value = DefaultValue, };
 		private TDictionary dictionary;
 		private HashSet<KeyValuePair> pairs = new HashSet<KeyValuePair>();

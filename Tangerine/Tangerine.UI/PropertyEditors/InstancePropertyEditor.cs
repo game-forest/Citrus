@@ -18,7 +18,7 @@ namespace Tangerine.UI
 			Selector.LayoutCell = new LayoutCell(Alignment.Center);
 			var propertyType = typeof(T);
 			var meta = Yuzu.Metadata.Meta.Get(editorParams.Type, InternalPersistence.Instance.YuzuCommonOptions);
-			if (!propertyType.IsInterface) {
+			if (!propertyType.IsInterface && !propertyType.IsAbstract) {
 				Selector.Items.Add(new CommonDropDownList.Item(propertyType.Name, propertyType));
 			}
 			foreach (var t in DerivedTypesCache.GetDerivedTypesFor(propertyType)) {
@@ -116,6 +116,7 @@ namespace Tangerine.UI
 								.GetTypes()
 								.Where(t =>
 									!t.IsInterface &&
+									!t.IsAbstract &&
 									t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null &&
 									t != propertyType &&
 									propertyType.IsAssignableFrom(t)).ToList();

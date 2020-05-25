@@ -41,7 +41,7 @@ namespace Tangerine.UI
 						pi.SetValue(o, list = Activator.CreateInstance<TList>());
 					}
 					var newElement = typeof(TElement) == typeof(string) ?
-						(TElement)(object)string.Empty : typeof(TElement).IsInterface ?
+						(TElement)(object)string.Empty : typeof(TElement).IsInterface || typeof(TElement).IsAbstract ?
 							default :  Activator.CreateInstance<TElement>();
 					using (Document.Current.History.BeginTransaction()) {
 						int newIndex = list.Count;
