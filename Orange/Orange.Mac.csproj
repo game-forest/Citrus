@@ -177,7 +177,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Source\Actions\AnalyzeResources.cs" />
-    <Compile Include="Source\Actions\BenchmarkPersistence.cs" />
     <Compile Include="Source\Actions\BuildGame.cs" />
     <Compile Include="Source\Actions\BuildGameAndRun.cs" />
     <Compile Include="Source\Actions\ConvertDictionaryToNewFormat.cs" />
@@ -188,6 +187,7 @@
     <Compile Include="Source\Actions\InvalidateFonts.cs" />
     <Compile Include="Source\Actions\NewProject.cs" />
     <Compile Include="Source\Actions\OptimizePNG.cs" />
+    <Compile Include="Source\Actions\PersistentDataStatistics.cs" />
     <Compile Include="Source\Actions\RebuildGame.cs" />
     <Compile Include="Source\Actions\ResaveAllScenes.cs" />
     <Compile Include="Source\Actions\RevealCookedAssets.cs" />
