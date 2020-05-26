@@ -146,7 +146,7 @@ namespace Orange
 			private readonly StatisticsRecord t3dTotalStatistics = new StatisticsRecord("t3d total");
 			private readonly StatisticsRecord antTotalStatistics = new StatisticsRecord("ant total");
 			private const int MeasurementCount = 13;
-			private readonly Dictionary<string, StatisticsRecord> statisticsForPath = new Dictionary<string, StatisticsRecord>();
+			private readonly Dictionary<string, StatisticsRecord> statisticsForPath = new Dictionary<string, StatisticsRecord>(StringComparer.OrdinalIgnoreCase);
 			private readonly Stopwatch antStopwatch = new Stopwatch();
 			private readonly string[] extensions = new[] { ".t3d", ".tan", ".ant" };
 			private readonly (StatisticsRecord Totals, string Extension)[] totalsPerExtension;
