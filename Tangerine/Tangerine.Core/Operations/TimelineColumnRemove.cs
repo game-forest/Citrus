@@ -35,15 +35,18 @@ namespace Tangerine.Core.Operations
 						RemoveTimelineColumn(op, node);
 					}
 				} else {
-					var toProcessNodes = new List<Node>();
-					toProcessNodes.AddRange(Document.Current.Animation.OwnerNode.Nodes);
-					while (toProcessNodes.Count > 0) {
-						var processNode = toProcessNodes[toProcessNodes.Count - 1];
-						toProcessNodes.RemoveAt(toProcessNodes.Count - 1);
-						RemoveTimelineColumn(op, processNode);
-						if (!processNode.Animations.TryFind(Document.Current.AnimationId, out _)) {
-							toProcessNodes.AddRange(processNode.Nodes);
+					Node namesakeAnimationOwner = null;
+					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
+						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
+							continue;
 						}
+						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
+							namesakeAnimationOwner = descendant;
+							RemoveTimelineColumn(op, descendant);
+							continue;
+						}
+						namesakeAnimationOwner = null;
+						RemoveTimelineColumn(op, descendant);
 					}
 				}
 				var markers = Document.Current.Animation.Markers;
@@ -76,15 +79,18 @@ namespace Tangerine.Core.Operations
 						ProcessNode(node);
 					}
 				} else {
-					var toProcessNodes = new List<Node>();
-					toProcessNodes.AddRange(Document.Current.Animation.OwnerNode.Nodes);
-					while (toProcessNodes.Count > 0) {
-						var processNode = toProcessNodes[toProcessNodes.Count - 1];
-						toProcessNodes.RemoveAt(toProcessNodes.Count - 1);
-						ProcessNode(processNode);
-						if (!processNode.Animations.TryFind(Document.Current.AnimationId, out _)) {
-							toProcessNodes.AddRange(processNode.Nodes);
+					Node namesakeAnimationOwner = null;
+					foreach (var descendant in Document.Current.Animation.OwnerNode.Descendants) {
+						if (namesakeAnimationOwner != null && descendant != namesakeAnimationOwner.NextSibling) {
+							continue;
 						}
+						if (descendant.Animations.TryFind(Document.Current.AnimationId, out _)) {
+							namesakeAnimationOwner = descendant;
+							ProcessNode(descendant);
+							continue;
+						}
+						namesakeAnimationOwner = null;
+						ProcessNode(descendant);
 					}
 				}
 				void ProcessNode(Node node)
