@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Lime;
-using Newtonsoft.Json.Linq;
 
 namespace Orange
 {
@@ -227,7 +226,6 @@ namespace Orange
 			if (!File.Exists(absPath)) {
 				throw new FileNotFoundException("File not found on attempt to import PluginAssemblies: " + absPath);
 			}
-
 			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 			if (!TryFindDomainAssembliesByPath(domainAssemblies, absPath, out var assembly)) {
 				var assemblyName = AssemblyName.GetAssemblyName(absPath);
@@ -445,15 +443,7 @@ namespace Orange
 
 		private static Assembly LoadAssembly(string path)
 		{
-			var readAllDllBytes = File.ReadAllBytes(path);
-			byte[] readAllPdbBytes = null;
-#if DEBUG
-			var pdbPath = Path.ChangeExtension(path, ".pdb");
-			if (File.Exists(pdbPath)) {
-				readAllPdbBytes = File.ReadAllBytes(pdbPath);
-			}
-#endif
-			return Assembly.Load(readAllDllBytes, readAllPdbBytes);
+			return Assembly.LoadFrom(path);
 		}
 	}
 }
