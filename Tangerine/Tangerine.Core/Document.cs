@@ -50,6 +50,7 @@ namespace Tangerine.Core
 		public bool SlowMotion { get; set; }
 
 		public static event Action<Document> AttachingViews;
+		public static event Action<Document, string> ShowingWarning;
 		public static Func<Document, CloseAction> CloseConfirmation;
 		public static PathSelectorDelegate PathSelector;
 
@@ -453,6 +454,11 @@ namespace Tangerine.Core
 			}
 		}
 
+		public void ShowWarning(string message)
+		{
+			ShowingWarning?.Invoke(this, message);
+		}
+
 		public bool Close()
 		{
 			if (!IsModified) {
@@ -518,6 +524,16 @@ namespace Tangerine.Core
 			var ms = new MemoryStream();
 			// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().
 			using (node = CreateCloneForSerialization(node)) {
+				int removedAnimatorsCount = node.RemoveDanglingAnimators();
+				if (removedAnimatorsCount > 0) {
+					string message = "Your exported content has references to external animations. It's forbidden.\n";
+					if (removedAnimatorsCount == 1) {
+						message += "1 dangling animator has been removed!";
+					} else {
+						message += $"{removedAnimatorsCount} dangling animators have been removed!";
+					}
+					Document.Current.ShowWarning(message);
+				}
 				TangerinePersistence.Instance.WriteObject(assetPath, ms, node, Persistence.Format.Json);
 			}
 			FileMode fileModeForHiddenFile = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
