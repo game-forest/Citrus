@@ -200,7 +200,20 @@ namespace Lime
 
 		private int[] pointerIds = new int[Input.MaxTouches];
 
-		public override bool OnTouchEvent(Android.Views.MotionEvent e)
+		public override bool OnGenericMotionEvent(MotionEvent e)
+		{
+			switch (e.ActionMasked) {
+			case MotionEventActions.HoverMove:
+				HandleHoverMoveAction(e);
+				break;
+			case MotionEventActions.Scroll:
+				HandleScrollAction(e);
+				break;
+			}
+			return base.OnGenericMotionEvent(e);
+		}
+
+		public override bool OnTouchEvent(MotionEvent e)
 		{
 			switch (e.ActionMasked) {
 			case MotionEventActions.Down:
@@ -277,6 +290,19 @@ namespace Lime
 			}
 			var key = (Key)((int)Key.Touch0 + touchIndex);
 			input.SetKeyState(key, false);
+		}
+		 
+		void HandleHoverMoveAction(MotionEvent e)
+		{
+			if (e.PointerCount == 1) {
+				input.DesktopMousePosition = new Vector2(e.GetX(), e.GetY());
+			}
+		}
+
+		void HandleScrollAction(MotionEvent e)
+		{
+			var value = e.GetAxisValue(Axis.Vscroll) * Application.ScreenDPI;
+			input.SetWheelScrollAmount(value.Y);
 		}
 
 		public void ProcessTextInput()

@@ -109,9 +109,9 @@ namespace Lime
 			} else {
 				Content.Tasks.Add(MainTask());
 			}
-#if MAC || WIN
-			Content.Tasks.Add(WheelScrollingTask());
-#endif
+			if (Toolbox.IsMouseWheelSupported()) {
+				Content.Tasks.Add(WheelScrollingTask());
+			}
 			Frame.Layout = new Layout(scrollDirection, Content);
 			dragGesture = new DragGesture(0, (DragDirection)ScrollDirection);
 			Frame.Gestures.Add(dragGesture);
