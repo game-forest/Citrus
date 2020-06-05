@@ -116,14 +116,13 @@ namespace Orange
 
 		static PluginLoader()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve += TrueAssemblyResolve;
-			//AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
+			AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
 			catalog = new AggregateCatalog();
 			RegisterAssembly(typeof(PluginLoader).Assembly);
 			ResetPlugins();
 		}
 
-		private static Assembly TrueAssemblyResolve(object sender, ResolveEventArgs args)
+		private static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
 		{
 			foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
 				var i = args.Name.IndexOf(',');
@@ -392,41 +391,6 @@ namespace Orange
 					}
 				}
 			}
-		}
-
-		private static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
-		{
-			var commaIndex = args.Name.IndexOf(',');
-			var name = commaIndex < 0 ? Path.GetFileName(args.Name) : args.Name.Substring(0, commaIndex);
-			if (string.IsNullOrEmpty(name)) {
-				return null;
-			}
-
-			if (!resolvedAssemblies.TryGetValue(name, out var assembly)) {
-				var requiredAssemblies = CurrentPlugin?.GetRequiredAssemblies?.Invoke();
-				var foundPath = requiredAssemblies?.FirstOrDefault(assemblyPath =>
-					assemblyPath == name || Path.GetFileName(assemblyPath).Equals(name, StringComparison.InvariantCultureIgnoreCase)
-				);
-				if (foundPath == null) {
-					return null;
-				}
-
-				var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-				var dllPath = Path.Combine(The.Workspace.UnresolvedAssembliesDirectory.Replace(configurationSubstituteToken, pluginConfiguration), foundPath) + ".dll";
-				if (TryFindDomainAssembliesByPath(domainAssemblies, dllPath, out assembly)) {
-					resolvedAssemblies.Add(name, assembly);
-					return assembly;
-				}
-				if (TryFindDomainAssembliesByName(domainAssemblies, name, out assembly)) {
-					throw new InvalidOperationException(
-						$"WARNING: Assembly {name} with path {assembly.Location} has already loaded in domain." +
-						$"\nAssembly {name} with path {dllPath} leads to exception."
-					);
-				}
-				assembly = LoadAssembly(dllPath);
-				resolvedAssemblies.Add(name, assembly);
-			}
-			return assembly;
 		}
 
 		private static bool TryFindDomainAssembliesByPath(Assembly[] domainAssemblies, string path, out Assembly assembly)
