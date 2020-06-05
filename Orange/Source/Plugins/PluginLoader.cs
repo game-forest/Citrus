@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Lime;
-using Newtonsoft.Json.Linq;
 
 namespace Orange
 {
@@ -117,10 +116,23 @@ namespace Orange
 
 		static PluginLoader()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
+			AppDomain.CurrentDomain.AssemblyResolve += TrueAssemblyResolve;
+			//AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
 			catalog = new AggregateCatalog();
 			RegisterAssembly(typeof(PluginLoader).Assembly);
 			ResetPlugins();
+		}
+
+		private static Assembly TrueAssemblyResolve(object sender, ResolveEventArgs args)
+		{
+			foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
+				var i = args.Name.IndexOf(',');
+				var assemblyName = i > 0 ? args.Name.Substring(0, i) : args.Name;
+				if (Path.GetFileNameWithoutExtension(ResolveAssemblyPath(path)) == assemblyName) {
+					return TryLoadAssembly(path);
+				}
+			}
+			return null;
 		}
 
 		private static void ResetPlugins()
@@ -149,32 +161,12 @@ namespace Orange
 			CurrentPlugin?.Finalize?.Invoke();
 			The.UI.DestroyPluginUI();
 			CurrentPlugin = new OrangePlugin();
+			resolvedAssemblies.Clear();
 			ResetPlugins();
 			try {
-				foreach (var path in EnumerateOrangeAndTangerinePluginAssemblyPaths()) {
+				foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
 					TryLoadAssembly(path);
 				}
-#if TANGERINE
-				var tangerine = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{TangerineField}");
-				if (tangerine != null) {
-					foreach (var path in tangerine) {
-						TryLoadAssembly(path);
-					}
-					if (tangerine.Length > 0) {
-						Console.WriteLine("Tangerine specific assemblies loaded successfully");
-					}
-				}
-#else
-				var orange = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeField}");
-				if (orange != null) {
-					foreach (var path in orange) {
-						TryLoadAssembly(path);
-					}
-					if (orange.Length > 0) {
-						Console.WriteLine("Orange specific assemblies loaded successfully");
-					}
-				}
-#endif
 				ValidateComposition();
 			} catch (BadImageFormatException e) {
 				Console.WriteLine(e.Message);
@@ -196,18 +188,29 @@ namespace Orange
 		}
 
 		public static IEnumerable<Assembly> EnumerateOrangeAndTangerinePluginAssemblies() =>
-			EnumerateOrangeAndTangerinePluginAssemblyPaths()
-			.Select(s => PluginLoader.TryLoadAssembly(s));
+			EnumeratePluginAssemblyPaths(OrangeAndTangerineField)
+			.Select(TryLoadAssembly);
 
-		private static IEnumerable<string> EnumerateOrangeAndTangerinePluginAssemblyPaths()
+		private static IEnumerable<string> EnumeratePluginAssemblyPaths(string projectToken)
 		{
-			var array = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{OrangeAndTangerineField}");
-			if (array ==  null) {
+			var array = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{projectToken}");
+			if (array == null) {
 				yield break;
 			}
 			foreach (var v in array) {
 				yield return v;
 			}
+		}
+
+		private static IEnumerable<string> EnumerateCurrentApplicationPluginAssemblyPaths()
+		{
+			var paths = EnumeratePluginAssemblyPaths(OrangeAndTangerineField);
+#if TANGERINE
+			paths = paths.Concat(EnumeratePluginAssemblyPaths(TangerineField));
+#else
+			paths = paths.Concat(EnumeratePluginAssemblyPaths(OrangeField));
+#endif
+			return paths;
 		}
 
 		private static Assembly TryLoadAssembly(string assemblyPath)
@@ -217,17 +220,10 @@ namespace Orange
 					$"Warning: Using '{configurationSubstituteToken}' instead of 'Debug' or 'Release' in dll path" +
 					$" is strictly recommended ('{configurationSubstituteToken}' line not found in {assemblyPath}");
 			}
-			assemblyPath = assemblyPath.Replace(configurationSubstituteToken, pluginConfiguration);
-#if TANGERINE
-			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Tangerine");
-#else
-			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Orange");
-#endif
-			var absPath = Path.Combine(The.Workspace.ProjectDirectory, assemblyPath);
+			var absPath = Path.Combine(The.Workspace.ProjectDirectory, ResolveAssemblyPath(assemblyPath));
 			if (!File.Exists(absPath)) {
 				throw new FileNotFoundException("File not found on attempt to import PluginAssemblies: " + absPath);
 			}
-
 			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 			if (!TryFindDomainAssembliesByPath(domainAssemblies, absPath, out var assembly)) {
 				var assemblyName = AssemblyName.GetAssemblyName(absPath);
@@ -237,24 +233,38 @@ namespace Orange
 				if (assembly == null) {
 					assembly = LoadAssembly(absPath);
 				}
-				catalog.Catalogs.Add(new AssemblyCatalog(assembly));
-			}
-			catch (ReflectionTypeLoadException e) {
+				if (!resolvedAssemblies.ContainsKey(assembly.GetName().Name)) {
+					catalog.Catalogs.Add(new AssemblyCatalog(assembly));
+				}
+			} catch (ReflectionTypeLoadException e) {
 				var msg = "Failed to import OrangePluginAssemblies: " + absPath;
 				foreach (var loaderException in e.LoaderExceptions) {
 					msg += $"\n{loaderException}";
 				}
 				throw new System.Exception(msg);
-			}
-			catch (System.Exception e) {
+			} catch (System.Exception e) {
 				var msg = $"Unhandled exception while importing OrangePluginAssemblies: {absPath}\n{e}";
 				throw new System.Exception(msg);
 			}
 			resolvedAssemblies[assembly.GetName().Name] = assembly;
-
 			ProcessPluginInitializeActions();
-
 			return assembly;
+		}
+
+		/// <summary>
+		/// Resolves assembly path substituting engine defined tokens.
+		/// </summary>
+		/// <param name="assemblyPath">Assembly path with tokens.</param>
+		/// <returns></returns>
+		public static string ResolveAssemblyPath(string assemblyPath)
+		{
+			assemblyPath = assemblyPath.Replace(configurationSubstituteToken, pluginConfiguration);
+#if TANGERINE
+			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Tangerine");
+#else
+			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Orange");
+#endif
+			return assemblyPath;
 		}
 
 		private static void ProcessPluginInitializeActions()
@@ -445,15 +455,7 @@ namespace Orange
 
 		private static Assembly LoadAssembly(string path)
 		{
-			var readAllDllBytes = File.ReadAllBytes(path);
-			byte[] readAllPdbBytes = null;
-#if DEBUG
-			var pdbPath = Path.ChangeExtension(path, ".pdb");
-			if (File.Exists(pdbPath)) {
-				readAllPdbBytes = File.ReadAllBytes(pdbPath);
-			}
-#endif
-			return Assembly.Load(readAllDllBytes, readAllPdbBytes);
+			return Assembly.LoadFrom(path);
 		}
 	}
 }
