@@ -674,7 +674,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			translated.Pos += positionDelta;
 			translated.UV1 += uvDelta;
 			var translatedPos = translated.Pos;
-			if (!new Rectangle(0, 0, 1f + 0.001f, 1f + 0.001f).Contains(translated.Pos)) {
+			// Check if translated vertex is contained inside bounding figure.
+			if (translatedPos.Y < 0f || translatedPos.Y > 1f || translatedPos.X < 0f || translatedPos.X > 1f) {
 				return false;
 			}
 			List<(int, int)> constrainedEdges = null;
