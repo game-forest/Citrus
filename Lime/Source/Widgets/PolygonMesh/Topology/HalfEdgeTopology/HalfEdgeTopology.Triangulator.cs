@@ -55,6 +55,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				if (InnerBoundary.Contains(prev) && InnerBoundary.Next(prev) == next) {
 					// Then we splitted boundary edge.
 					InnerBoundary.Insert(prev, vertexIndex);
+				} else if (InnerBoundary.Contains(next) && InnerBoundary.Next(next) == prev) {
+					InnerBoundary.Insert(next, vertexIndex);
 				}
 			} else if (result == LocationResult.InsideTriangle) {
 				// Boywer-Watson algorithm
