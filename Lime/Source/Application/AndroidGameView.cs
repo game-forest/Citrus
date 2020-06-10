@@ -77,6 +77,15 @@ namespace Lime
 						return Key.Home;
 					case Keycode.MoveEnd:
 						return Key.End;
+					case Keycode.ShiftLeft:
+					case Keycode.ShiftRight:
+						return Key.Shift;
+					case Keycode.AltLeft:
+					case Keycode.AltRight:
+						return Key.Alt;
+					case Keycode.CtrlLeft:
+					case Keycode.CtrlRight:
+						return Key.Control;
 					// TODO: add all alpha-numeric keys
 					default:
 						return Key.Unknown;
@@ -147,9 +156,12 @@ namespace Lime
 			return baseInputConnection;
 		}
 
+		public override bool OnKeyDown(Keycode keyCode, KeyEvent e) => keyboardHandler.OnKey(this, keyCode, e);
+		public override bool OnKeyUp(Keycode keyCode, KeyEvent e) => keyboardHandler.OnKey(this, keyCode, e);
+
 		public override bool OnKeyPreIme(Keycode keyCode, KeyEvent e)
 		{
-			if (keyCode == Keycode.Back && e.Action == KeyEventActions.Up) {
+			if ((keyCode == Keycode.Escape || keyCode == Keycode.Back) && e.Action == KeyEventActions.Up) {
 				input.SetKeyState(Key.DismissSoftKeyboard, true);
 				input.SetKeyState(Key.DismissSoftKeyboard, false);
 				return false;
