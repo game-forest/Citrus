@@ -5,6 +5,7 @@ using Lime;
 using Lime.PolygonMesh.Topology;
 using Lime.PolygonMesh.Utils;
 using Lime.Widgets.PolygonMesh.Topology;
+using Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology;
 using Tangerine.Core;
 using Vertex = Lime.Vertex;
 using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
@@ -238,33 +239,54 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 			}
 			var isHitTestResultTargetEdge = hitTestTarget != null && hitTestTarget.IsEdge();
 			var isHitTestResultTargetVertex = hitTestTarget != null && hitTestTarget.IsVertex();
-			foreach (var (face, info) in Topology.FacesWithInfo) {
-				var prevVertex = CalcTransformedVertexPosition(face.Index0);
-				for (var i = 0; i < 3; i++) {
-					var prevVertexIndex = face[i];
-					var nextVertexIndex = face[(i + 1) % 3];
-					var nextVertex = CalcTransformedVertexPosition(nextVertexIndex);
-					var (isFraming, isConstrained) = info[i];
-					var v1 = prevVertex;
-					var v2 = nextVertex;
-					// Keep the same render order for each edge.
-					if (v2.X < v1.X || (v2.X == v1.X && v2.Y < v1.Y)) {
-						Toolbox.Swap(ref v1, ref v2);
+			if (Window.Current.Input.IsKeyPressed(Key.Alt)) {
+				var transform = Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
+				var bfv = new[] { Vector2.Zero, Vector2.Zero, Vector2.East, Vector2.Down, Vector2.One, };
+				foreach (var (i1, i2, i3, t) in ((HalfEdgeTopology)Topology).DebugTriangles()) {
+					var v1 = transform.TransformVector((i1 >= 0 ? Vertices[i1].Pos : bfv[-i1]) * Mesh.Size);
+					var v2 = transform.TransformVector((i2 >= 0 ? Vertices[i2].Pos : bfv[-i2]) * Mesh.Size);
+					var v3 = transform.TransformVector((i3 >= 0 ? Vertices[i3].Pos : bfv[-i3]) * Mesh.Size);
+					render(v1, v2);
+					render(v2, v3);
+					render(v3, v1);
+				}
+
+				void render(Vector2 s, Vector2 e)
+				{
+					if (e.X < s.X || (e.X == s.X && e.Y < s.Y)) {
+						Toolbox.Swap(ref s, ref e);
 					}
-					var isEdgeHovered =
-						isHitTestResultTargetEdge &&
-						(hitTestTarget[0] == prevVertexIndex && hitTestTarget[1] == nextVertexIndex ||
-						hitTestTarget[0] == nextVertexIndex && hitTestTarget[1] == prevVertexIndex);
-					var isEdgePossiblyWillBeRemoved =
-						isHitTestResultTargetVertex &&
-						PolygonMeshTools.State == PolygonMeshTools.ModificationState.Removal &&
-						(hitTestTarget[0] == prevVertexIndex || hitTestTarget[0] == nextVertexIndex);
-					if (isEdgeHovered || isEdgePossiblyWillBeRemoved) {
-						RenderEdgeHovered(v1, v2, isFraming, isConstrained);
-					} else {
-						RenderEdge(v1, v2, isFraming, isConstrained);
+					RenderEdge(s, e, false, false, false);
+				}
+			} else {
+				foreach (var (face, info) in Topology.FacesWithInfo) {
+					var prevVertex = CalcTransformedVertexPosition(face.Index0);
+					for (var i = 0; i < 3; i++) {
+						var prevVertexIndex = face[i];
+						var nextVertexIndex = face[(i + 1) % 3];
+						var nextVertex = CalcTransformedVertexPosition(nextVertexIndex);
+						var (isFraming, isConstrained) = info[i];
+						var v1 = prevVertex;
+						var v2 = nextVertex;
+						// Keep the same render order for each edge.
+						if (v2.X < v1.X || (v2.X == v1.X && v2.Y < v1.Y)) {
+							Toolbox.Swap(ref v1, ref v2);
+						}
+						var isEdgeHovered =
+							isHitTestResultTargetEdge &&
+							(hitTestTarget[0] == prevVertexIndex && hitTestTarget[1] == nextVertexIndex ||
+							 hitTestTarget[0] == nextVertexIndex && hitTestTarget[1] == prevVertexIndex);
+						var isEdgePossiblyWillBeRemoved =
+							isHitTestResultTargetVertex &&
+							PolygonMeshTools.State == PolygonMeshTools.ModificationState.Removal &&
+							(hitTestTarget[0] == prevVertexIndex || hitTestTarget[0] == nextVertexIndex);
+						if (isEdgeHovered || isEdgePossiblyWillBeRemoved) {
+							RenderEdgeHovered(v1, v2, isFraming, isConstrained);
+						} else {
+							RenderEdge(v1, v2, isFraming, isConstrained);
+						}
+						prevVertex = nextVertex;
 					}
-					prevVertex = nextVertex;
 				}
 			}
 			for (var i = 0; i < Vertices.Count; i++) {

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms.VisualStyles;
 using Lime.Source.Widgets.PolygonMesh;
 
 namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology

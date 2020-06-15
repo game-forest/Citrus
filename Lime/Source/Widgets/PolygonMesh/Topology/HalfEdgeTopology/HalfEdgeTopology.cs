@@ -355,6 +355,13 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private IEnumerable<HalfEdge> HalfEdges => new HalfEdge.HalfEdgesEnumerable(Root);
 
+		public IEnumerable<(int, int, int, bool)> DebugTriangles()
+		{
+			foreach (var (e1, e2, e3) in Triangles()) {
+				yield return (e1.Origin, e2.Origin, e3.Origin, IsPointInsideTrueTriangulation(Centroid(e1)));
+			}
+		}
+
 		private IEnumerable<(HalfEdge, HalfEdge, HalfEdge)> Triangles()
 		{
 			var enumerator = HalfEdges.GetEnumerator();
@@ -447,10 +454,15 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			e2.Prev.Constrained = true;
 			e2.Prev.Next = e2;
 			e2.TwinWith(e1.Next);
-			BoundingFigureVertices = new List<SkinnedVertex>(Vertices.Take(4));
 			// 0 doesn't have a sign, so this is a hack to mark bounding figure's vertices
 			// with negative indices.
-			BoundingFigureVertices.Insert(0, new SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), });
+			BoundingFigureVertices = new List<SkinnedVertex>() {
+				new SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), },
+				new SkinnedVertex { Pos = Vector2.Zero, },
+				new SkinnedVertex { Pos = Vector2.East, },
+				new SkinnedVertex { Pos = Vector2.Down, },
+				new SkinnedVertex { Pos = Vector2.One, },
+			};
 			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
 			InnerBoundary = new Boundary { 0, 1, 3, 2, };
 			Root = e1;
@@ -499,6 +511,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerBoundary.Add(c.Origin);
 				c = NextBorderEdge(c);
 			} while (c != start);
+			// Because there are so many degenerated cases..
+			ToConvexHull();
 			for (int i = 1; i < usedBoundingFigureVertices.Length; i++) {
 				if (!usedBoundingFigureVertices[i]) {
 					AddVertex(-i);
