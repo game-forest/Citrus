@@ -124,9 +124,17 @@ namespace Orange
 
 		private static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
 		{
+			var i = args.Name.IndexOf(',');
+			var assemblyName = i > 0 ? args.Name.Substring(0, i) : args.Name;
+			// For some reason first call of Type.GetType on custom types doesn't find already
+			// proper loaded assembly and calls AssemblyResolve. Returning already loaded assembly
+			// solves the problem but looks like bad workaround. Need to go deeper in investigation (see CIT-1647).
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+				if (assembly.GetName().Name == assemblyName) {
+					return assembly;
+				}
+			}
 			foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
-				var i = args.Name.IndexOf(',');
-				var assemblyName = i > 0 ? args.Name.Substring(0, i) : args.Name;
 				if (Path.GetFileNameWithoutExtension(ResolveAssemblyPath(path)) == assemblyName) {
 					return TryLoadAssembly(path);
 				}
