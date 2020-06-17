@@ -522,9 +522,9 @@ namespace Tangerine.Core
 		{
 			// Save the document into memory at first to avoid a torn file in the case of a serialization error.
 			var ms = new MemoryStream();
+			int removedAnimatorsCount = node.RemoveDanglingAnimators();
 			// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().
 			using (node = CreateCloneForSerialization(node)) {
-				int removedAnimatorsCount = node.RemoveDanglingAnimators();
 				if (removedAnimatorsCount > 0) {
 					string message = "Your exported content has references to external animations. It's forbidden.\n";
 					if (removedAnimatorsCount == 1) {
