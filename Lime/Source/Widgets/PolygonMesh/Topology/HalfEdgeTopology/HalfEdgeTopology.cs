@@ -723,7 +723,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 							i != index && i != nextIndex && i != prevIndex &&
 									(isAngleConvex && (!isLeftDegenerated && VertexInsideTriangle(v, prev, originalPos, translatedPos) ||
 											!isRightDegenerated && VertexInsideTriangle(v, originalPos, next, translatedPos)) ||
-									!isAngleConvex && !isTriangleDegenerated && VertexInsideTriangle(v, prev, translatedPos, next))
+									!isAngleConvex && !isTriangleDegenerated && VertexInsideTriangle(v, next, translatedPos, prev))
 					) {
 						mustBeRemoved.Add(i);
 					}
@@ -732,10 +732,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					// Removing inside-triangulation vertex doesn't make any other vertex isolated.
 					InnerRemoveVertex(vertex);
 				}
-				constrainedEdges = new List<(int, int)> { (prevIndex, index), };
 				FixupTopologyAfterVerticesRemoval(mustBeRemoved);
 				LocateClosestTriangle(originalPos, out he);
 				index = he.Origin;
+				constrainedEdges = new List<(int, int)> { (prevIndex, index), };
 			} else if (!IsPointInsideTrueTriangulation(translatedPos)) {
 				return false;
 			}
