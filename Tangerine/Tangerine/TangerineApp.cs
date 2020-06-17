@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Lime;
+using Orange;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 using Tangerine.MainMenu;
 using Tangerine.UI;
 using Tangerine.UI.SceneView;
@@ -152,6 +154,22 @@ namespace Tangerine
 			dockManager.ImportState(AppUserPreferences.Instance.DockState);
 			Document.ShowingWarning += (doc, message) => {
 				AlertDialog.Show($"{doc.Path} : {message}");
+			};
+			Core.Operations.Paste.Pasted += () => {
+				int removedAnimatorsCount = 0;
+				foreach (var node in Document.Current.SelectedNodes()) {
+					removedAnimatorsCount += node.RemoveDanglingAnimators();
+				}
+				if (removedAnimatorsCount != 0) {
+					var message = "Your exported content has references to external animations. It's forbidden.\n";
+					if (removedAnimatorsCount == 1) {
+						message += "1 dangling animator has been removed!";
+					} else {
+						message += $"{removedAnimatorsCount} dangling animators have been removed!";
+					}
+
+					Document.Current.ShowWarning(message);
+				}
 			};
 			Document.CloseConfirmation += doc => {
 				var alert = new AlertDialog($"Save the changes to document '{doc.Path}' before closing?", "Yes", "No", "Cancel");

@@ -8,6 +8,7 @@ using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 using Node = Lime.Node;
 using System.IO;
+using Orange;
 
 namespace Tangerine
 {
@@ -368,7 +369,17 @@ namespace Tangerine
 						clone.Visible = true;
 						clone.LoadExternalScenes();
 						clone.ContentsPath = null;
+						int removedAnimatorsCount = clone.RemoveDanglingAnimators();
 						Document.ExportNodeToFile(dlg.FileName, assetPath, Document.Current.Format, clone);
+						if (removedAnimatorsCount != 0) {
+							var message = "Your exported content has references to external animations. It's forbidden.\n";
+							if (removedAnimatorsCount == 1) {
+								message += "1 dangling animator has been removed!";
+							} else {
+								message += $"{removedAnimatorsCount} dangling animators have been removed!";
+							}
+							Document.Current.ShowWarning(message);
+						}
 					} catch (System.Exception e) {
 						AlertDialog.Show(e.Message);
 					}

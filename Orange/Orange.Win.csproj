@@ -153,6 +153,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NodeExtensions.cs" />
     <Compile Include="Source\Actions\AnalyzeResources.cs" />
     <Compile Include="Source\Actions\PersistentDataStatistics.cs" />
     <Compile Include="Source\Actions\BuildGame.cs" />
