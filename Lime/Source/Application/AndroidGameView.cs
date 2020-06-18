@@ -38,20 +38,25 @@ namespace Lime
 			{
 				if (e.KeyCode == Keycode.Del && e.Action != KeyEventActions.Up) {
 					textInput += '\b';
+					return true;
 				} else if (keyCode == Keycode.Unknown) {
 					textInput += e.Characters;
+					return true;
 				} else if (e.IsPrintingKey && e.Action != KeyEventActions.Up) {
 					textInput += (char) e.UnicodeChar;
+					return true;
 				} else if (e.KeyCode == Keycode.Space && e.Action != KeyEventActions.Up) {
 					textInput += ' ';
+					return true;
 				} else if (e.Action != KeyEventActions.Multiple) {
 					var key = TranslateKeycode(keyCode);
 					if (key != Key.Unknown) {
 						var state = e.Action != KeyEventActions.Up;
 						input.SetKeyState(key, state);
+						return true;
 					}
 				}
-				return true;
+				return false;
 			}
 
 			private static Key TranslateKeycode(Keycode key)
@@ -303,7 +308,7 @@ namespace Lime
 			var key = (Key)((int)Key.Touch0 + touchIndex);
 			input.SetKeyState(key, false);
 		}
-		 
+
 		void HandleHoverMoveAction(MotionEvent e)
 		{
 			if (e.PointerCount == 1) {
