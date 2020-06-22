@@ -386,9 +386,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				// 2. Triangulate polygonal hole.
 				polygon.RemoveAt(0);
 				polygon[polygon.Count - 1].Next = polygon[0].Next;
-				// And this vertex belongs to InnerBoundary for sure
-				System.Diagnostics.Debug.Assert(InnerBoundary.Contains(vertexIndex));
-				InnerBoundary.Remove(vertexIndex);
 			}
 			TriangulatePolygonByEarClipping(polygon);
 			return verticesToBeRemoved;
@@ -766,7 +763,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var p1 = InnerVertices[prev.Origin].Pos;
 				var p2 = InnerVertices[current.Origin].Pos;
 				var p3 = InnerVertices[current.Next.Origin].Pos;
-				if (!AreClockwiseOrdered(p1, p2, p3)) {
+				if (!AreClockwiseOrderedOrCollinear(p1, p2, p3)) {
 					var t = new HalfEdge(current.Next.Origin) {
 						Next = new HalfEdge(current.Origin) {
 							Next = new HalfEdge(prev.Origin),
@@ -878,6 +875,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// <param name="c">Vertex c.</param>
 		/// <returns><c>true</c> if clockwise ordered and <c>false</c> otherwise.</returns>
 		private static bool AreClockwiseOrdered(Vector2 a, Vector2 b, Vector2 c) => Orient2D(a, b, c) > 0;
+
+		private static bool AreClockwiseOrderedOrCollinear(Vector2 a, Vector2 b, Vector2 c) => Orient2D(a, b, c) >= 0;
 
 		private static bool RobustSegmentSegmentIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d) =>
 			Mathf.Max(Mathf.Min(a.X, b.X), Mathf.Min(c.X, d.X)) <=

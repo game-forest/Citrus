@@ -637,7 +637,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						break;
 					}
 					if (
-						areCwOrdered && incident.Next.Origin != next && incident.Origin != prev &&
+						areCwOrdered && incident.Next.Origin != next && incident.Origin != prev && incident.Next.Origin >= 0 &&
 						AreClockwiseOrdered(prevBorderVertex, InnerVertices[incident.Next.Origin].Pos, InnerVertices[last].Pos)
 					) {
 						InnerBoundary.Insert(vertexIndex, incident.Next.Origin);
