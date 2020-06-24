@@ -755,6 +755,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				FixupTopologyAfterVerticesRemoval(mustBeRemoved);
 				LocateClosestTriangle(originalPos, out he);
 				index = he.Origin;
+				prevIndex = InnerBoundary.Prev(index);
 				constrainedEdges = new List<(int, int)> { (prevIndex, index), };
 			} else if (!IsPointInsideTrueTriangulation(translatedPos)) {
 				return false;
