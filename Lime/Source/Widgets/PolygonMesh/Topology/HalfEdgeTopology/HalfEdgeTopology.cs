@@ -467,6 +467,26 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			InnerBoundary = new Boundary { 0, 1, 3, 2, };
 			Root = e1;
 			BoundingBox = new Rectangle(0f, 0f, 1f, 1f);
+#if DEBUG
+			TopologyChanged += topology => {
+				if (!SelfCheck()) {
+					Console.WriteLine("Triangulation is not Delaunay!");
+				}
+
+				foreach (var (edge1, edge2, edge3) in Triangles()) {
+					var v1 = InnerVertices[edge1.Origin].Pos;
+					var v2 = InnerVertices[edge2.Origin].Pos;
+					var v3 = InnerVertices[edge3.Origin].Pos;
+					var o = Orient2D(v1, v2, v3);
+					if (o == 0f) {
+						Console.WriteLine($"Degenerated triangle found!!!!! ({v1}, {v2}, {v3})");
+					}
+					if (o < 0) {
+						Console.WriteLine($"Triangle has wrong orientation!!!! ({v1}, {v2}, {v3})");
+					}
+				}
+			};
+#endif
 		}
 
 		public void Sync(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
