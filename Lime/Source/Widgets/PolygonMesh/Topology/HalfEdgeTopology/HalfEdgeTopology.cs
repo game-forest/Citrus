@@ -531,8 +531,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerBoundary.Add(c.Origin);
 				c = NextBorderEdge(c);
 			} while (c != start);
-			// Because there are so many degenerated cases..
-			ToConvexHull();
 			for (int i = 1; i < usedBoundingFigureVertices.Length; i++) {
 				if (!usedBoundingFigureVertices[i]) {
 					AddVertex(-i);

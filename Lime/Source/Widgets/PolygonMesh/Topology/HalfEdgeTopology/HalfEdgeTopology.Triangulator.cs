@@ -754,29 +754,59 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				foreach (var halfEdge in HalfEdges) {
 					if (halfEdge.Twin == null) {
 						current = halfEdge;
+						break;
 					}
 				}
 			}
+			var edgesToCheck = new List<HalfEdge>();
 			var prev = PrevBorderEdge(current);
 			var start = current;
+			// Same as Ear clipping method but for 'outside' ears.
 			do {
-				var p1 = InnerVertices[prev.Origin].Pos;
-				var p2 = InnerVertices[current.Origin].Pos;
-				var p3 = InnerVertices[current.Next.Origin].Pos;
+				var o1 = prev.Origin;
+				var o2 = current.Origin;
+				var o3 = current.Next.Origin;
+				var p1 = InnerVertices[o1].Pos;
+				var p2 = InnerVertices[o2].Pos;
+				var p3 = InnerVertices[o3].Pos;
 				if (!AreClockwiseOrderedOrCollinear(p1, p2, p3)) {
-					var t = new HalfEdge(current.Next.Origin) {
-						Next = new HalfEdge(current.Origin) {
-							Next = new HalfEdge(prev.Origin),
-						},
-					};
-					t.Prev.Next = t;
-					t.TwinWith(current);
-					t.Next.TwinWith(prev);
-					start = current = t.Prev;
+					var c = start;
+					var intersectAny = false;
+					do {
+						if (c.Origin == o1 || c.Origin == o2 || c.Origin == o3 || c.Next.Origin == o1) {
+							c = NextBorderEdge(c);
+							continue;
+						}
+						var s1 = InnerVertices[c.Origin].Pos;
+						var s2 = InnerVertices[c.Next.Origin].Pos;
+						if (RobustSegmentSegmentIntersection(p1, p3, s1, s2)) {
+							intersectAny = true;
+							break;
+						}
+						c = NextBorderEdge(c);
+					} while (start != c);
+					if (!intersectAny) {
+						var t = new HalfEdge(current.Next.Origin) {
+							Next = new HalfEdge(current.Origin) {
+								Next = new HalfEdge(prev.Origin),
+							},
+						};
+						edgesToCheck.Add(t.Prev);
+						t.Prev.Next = t;
+						t.TwinWith(current);
+						t.Next.TwinWith(prev);
+						start = current = t.Prev;
+						prev = PrevBorderEdge(start);
+						continue;
+					}
 				}
 				prev = current;
 				current = NextBorderEdge(current);
-			} while (current != start);
+				if (current == start) {
+					break;
+				}
+			} while (true);
+			RestoreDelaunayProperty(edgesToCheck);
 		}
 
 		private HalfEdge NextBorderEdge(HalfEdge borderEdge)
