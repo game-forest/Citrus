@@ -794,7 +794,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						continue;
 					}
 					var startIndex = initialHitTestTarget.Index;
-					var endIndex = hitTestTarget[0];
+					int endIndex = hitTestTarget[0];
 					if (!hitTestTarget.IsVertex()) {
 						var pos = SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget);
 						var vertex = new SkinnedVertex {
@@ -802,7 +802,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 							Color = Mesh.Color,
 							UV1 = InterpolateUV(hitTestTarget, pos),
 						};
-						Topology.AddVertex(vertex);
+						endIndex = Topology.AddVertex(vertex);
 						if (animator != null) {
 							keyframes = new List<IKeyframe>();
 							foreach (var key in animator.Keys.ToList()) {
@@ -815,23 +815,24 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 								animator.ResetCache();
 							}
 						}
-						endIndex = (ushort)(Mesh.Vertices.Count - 1);
 					}
-					Topology.ConstrainEdge(startIndex, endIndex);
-					var sliceAfter = new PolygonMeshSlice {
-						State = PolygonMeshTools.ModificationState.Creation,
-						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
-						Keyframes = keyframes
-					};
+					if (endIndex >= 0) {
+						Topology.ConstrainEdge(startIndex, endIndex);
+						var sliceAfter = new PolygonMeshSlice {
+							State = PolygonMeshTools.ModificationState.Creation,
+							Vertices = new List<SkinnedVertex>(Mesh.Vertices),
+							IndexBuffer = new List<Face>(Mesh.Faces),
+							ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+							Keyframes = keyframes
+						};
 
-					PolygonMeshModification.Slice.Perform(
-						Mesh,
-						sliceBefore,
-						sliceAfter
-					);
-					Window.Current.Invalidate();
+						PolygonMeshModification.Slice.Perform(
+							Mesh,
+							sliceBefore,
+							sliceAfter
+						);
+						Window.Current.Invalidate();
+					}
 					sv.Input.ConsumeKeyPress(Key.Mouse0);
 					yield return null;
 				}

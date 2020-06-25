@@ -599,15 +599,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			remove => TopologyChanged -= value;
 		}
 
-		public void AddVertex(SkinnedVertex vertex)
+		public int AddVertex(SkinnedVertex vertex)
 		{
 			Vertices.Add(vertex);
 			if (AddVertex(Vertices.Count - 1)) {
 				TopologyChanged?.Invoke(this);
+				return Vertices.Count - 1;
 			} else {
 				Vertices.RemoveAt(Vertices.Count - 1);
+				return -1;
 			}
-
 		}
 
 		public void RemoveVertex(int index)
