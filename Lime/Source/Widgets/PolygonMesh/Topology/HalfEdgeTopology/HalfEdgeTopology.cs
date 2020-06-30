@@ -720,6 +720,21 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var nextIndex = InnerBoundary.Next(index);
 				var prev = Vertices[prevIndex].Pos;
 				var next = Vertices[nextIndex].Pos;
+				// In case 4 vertices we can move border vertex and have no
+				// intersections with boundary. Just try it.
+				if (InnerBoundary.Count == 4) {
+					Vertices[index] = translated;
+					double area = 0;
+					foreach (var (s, e) in InnerBoundary.Edges()) {
+						var sp = Vertices[s].Pos;
+						var ep = Vertices[e].Pos;
+						area += ((double)sp.X * ep.Y - (double)sp.Y * ep.X);
+					}
+					Vertices[index] = original;
+					if (Math.Sign(area) <= 0) {
+						return false;
+					}
+				}
 				foreach (var (s, e) in InnerBoundary.Edges()) {
 					var sp = Vertices[s].Pos;
 					var ep = Vertices[e].Pos;
@@ -731,22 +746,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						return false;
 					}
 				}
-				var isLeftDegenerated = Orient2D(prev,	 originalPos, translatedPos) == 0;
-				var isRightDegenerated = Orient2D(next,  translatedPos, originalPos) == 0;
-				var isTriangleDegenerated = Orient2D(prev,	 translatedPos, next) == 0;
-				var isAngleConvex = AreClockwiseOrdered(prev, originalPos, next);
 				var mustBeRemoved = new List<int>();
+				// Good hack. Delete vertices that new border does not contain.
+				Vertices[index] = translated;
 				for (int i = 0; i < Vertices.Count; i++) {
 					var v = Vertices[i].Pos;
-					if (
-							i != index && i != nextIndex && i != prevIndex &&
-									(isAngleConvex && (!isLeftDegenerated && VertexInsideTriangle(v, prev, originalPos, translatedPos) ||
-											!isRightDegenerated && VertexInsideTriangle(v, originalPos, next, translatedPos)) ||
-									!isAngleConvex && !isTriangleDegenerated && VertexInsideTriangle(v, next, translatedPos, prev))
-					) {
+					if (!InnerBoundary.Contains(i) && !IsPointInsideTrueTriangulation(v)) {
 						mustBeRemoved.Add(i);
 					}
 				}
+				Vertices[index] = original;
 				foreach (var vertex in mustBeRemoved) {
 					// Removing inside-triangulation vertex doesn't make any other vertex isolated.
 					InnerRemoveVertex(vertex);
