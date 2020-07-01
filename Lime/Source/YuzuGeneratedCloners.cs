@@ -644,6 +644,7 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.Continuous = s.Continuous;
+			result.Exclusive = s.Exclusive;
 			result.FadeTime = s.FadeTime;
 			if (s.Folders != null) {
 				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();

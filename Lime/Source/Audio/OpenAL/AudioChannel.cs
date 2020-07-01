@@ -46,7 +46,7 @@ namespace Lime
 			Pause,
 			Suspend
 		}
-		
+
 		public bool Streaming { get { return streaming; } }
 
 		public float Pitch
@@ -60,7 +60,7 @@ namespace Lime
 			get { return volume; }
 			set { SetVolume(value); }
 		}
-	
+
 		public AudioChannelState State
 		{
 			get
@@ -119,7 +119,7 @@ namespace Lime
 				AL.DeleteBuffer(bid);
 			}
 		}
-		
+
 		public void Dispose()
 		{
 			if (!AudioSystem.Active) {
@@ -254,6 +254,7 @@ namespace Lime
 
 		private void StopImmediate()
 		{
+			PlatformAudioSystem.CheckExclusiveStop(this);
 			lock (streamingSync) {
 				streaming = false;
 				using (new PlatformAudioSystem.ErrorChecker(throwException: false)) {
@@ -312,7 +313,7 @@ namespace Lime
 				return;
 			}
 			volume = Mathf.Clamp(value, 0, 1);
-			float gain = volume * AudioSystem.GetGroupVolume(Group) * fadeVolume;
+			float gain = volume * fadeVolume * AudioSystem.GetGroupVolume(Group) * PlatformAudioSystem.GetExclusiveVolume(this);
 			using (new PlatformAudioSystem.ErrorChecker()) {
 				AL.Source(source, ALSourcef.Gain, gain);
 			}
@@ -431,7 +432,7 @@ namespace Lime
 				}
 			}
 		}
-		
+
 		int AcquireBuffer()
 		{
 			int c = processedBuffers.Count;

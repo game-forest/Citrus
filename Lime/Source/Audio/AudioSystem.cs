@@ -14,6 +14,7 @@ namespace Lime
 		public float Priority = 0.5f;
 		public bool Looping = false;
 		public bool Paused = false;
+		public bool Exclusive = false;
 
 		public void Dispose()
 		{
@@ -24,7 +25,7 @@ namespace Lime
 	public static class AudioSystem
 	{
 		static readonly float[] groupVolumes = { 1, 1, 1 };
-	
+
 		public static void Initialize(ApplicationOptions options)
 		{
 			PlatformAudioSystem.Initialize(options);
@@ -98,7 +99,7 @@ namespace Lime
 			PlatformAudioSystem.Update();
 		}
 
-		public static Sound Play(string path, AudioChannelGroup group, bool looping = false, float priority = 0.5f, float fadeinTime = 0f, bool paused = false, float volume = 1f, float pan = 0f, float pitch = 1f)
+		public static Sound Play(string path, AudioChannelGroup group, bool looping = false, float priority = 0.5f, float fadeinTime = 0f, bool paused = false, float volume = 1f, float pan = 0f, float pitch = 1f, bool exclusive = false)
 		{
 			if (group == AudioChannelGroup.Music && CommandLineArgs.NoMusic) {
 				return new Sound();
@@ -111,7 +112,8 @@ namespace Lime
 				Paused = paused,
 				Volume = volume,
 				Pan = pan,
-				Pitch = pitch
+				Pitch = pitch,
+				Exclusive = exclusive,
 			},
 			fadeinTime);
 		}

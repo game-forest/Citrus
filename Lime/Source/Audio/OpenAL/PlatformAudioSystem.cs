@@ -33,11 +33,14 @@ namespace Lime
 		unsafe static extern void AlcDeviceResumeSoft(IntPtr device);
 #endif
 
-		static readonly List<AudioChannel> channels = new List<AudioChannel>();
-		static AudioContext context;
-		static Thread streamingThread = null;
-		static volatile bool shouldTerminateThread;
-		static readonly AudioCache cache = new AudioCache();
+		private static readonly List<AudioChannel> channels = new List<AudioChannel>();
+		private static readonly List<AudioChannel> exclusiveChannels = new List<AudioChannel>();
+		public static readonly float[] exclusiveVolumes = { 1, 1, 1 };
+		public static readonly float[] exclusiveFadeSpeed = { 0, 0, 0 };
+		private static AudioContext context;
+		private static Thread streamingThread = null;
+		private static volatile bool shouldTerminateThread;
+		private static readonly AudioCache cache = new AudioCache();
 #if iOS
 		static NSObject interruptionNotification;
 		static bool audioSessionInterruptionEnded;
@@ -117,6 +120,8 @@ namespace Lime
 		}
 
 		public static IEnumerable<IAudioChannel> Channels => channels;
+
+		public const float GroupExclusiveFadeTime = 0.5f;
 
 #if ANDROID
 		private static void SetActive(bool value)
@@ -200,7 +205,39 @@ namespace Lime
 			return delta;
 		}
 
-		static void RunStreamingLoop()
+		private static AudioChannel FindTopExclusiveChannel(AudioChannelGroup group)
+		{
+			for (int i = exclusiveChannels.Count - 1; i >= 0; i--) {
+				if (exclusiveChannels[i].Group == group) {
+					return exclusiveChannels[i];
+				}
+			}
+			return null;
+		}
+
+		internal static void CheckExclusiveStop(AudioChannel audioChannel)
+		{
+			var group = audioChannel.Group;
+			AudioChannel topChannel = FindTopExclusiveChannel(group);
+			if (topChannel == null) {
+				return;
+			}
+			exclusiveChannels.Remove(audioChannel);
+			// ??? not stopped ???
+			if (topChannel == audioChannel) {
+				var nextExclusiveChannel = FindTopExclusiveChannel(group);
+				if (nextExclusiveChannel == null) {
+					// exclusiveVolumes[(int)group] = 1.0f;
+					exclusiveFadeSpeed[(int)group] = 1.0f / GroupExclusiveFadeTime;
+				}
+				foreach (var channel in channels) {
+					channel.Volume = channel.Volume;
+				}
+				//}
+			}
+		}
+
+		private static void RunStreamingLoop()
 		{
 			while (!shouldTerminateThread) {
 				UpdateChannels();
@@ -228,7 +265,21 @@ namespace Lime
 		private static void UpdateChannels()
 		{
 			float delta = GetTimeDelta() * 0.001f;
+
+			for (int i = 0; i < 3; i++) {
+				var fadeSpeed = exclusiveFadeSpeed[i];
+				if (fadeSpeed != 0) {
+					exclusiveVolumes[i] += delta * fadeSpeed;
+					var fadeVolume = exclusiveVolumes[i];
+					if (fadeVolume > 1 || fadeVolume < 0) {
+						exclusiveFadeSpeed[i] = 0;
+						exclusiveVolumes[i] = Mathf.Clamp(fadeVolume, 0, 1);
+					}
+				}
+			}
+
 			foreach (var channel in channels) {
+				channel.Volume = channel.Volume;
 				channel.Update(delta);
 			}
 		}
@@ -259,6 +310,11 @@ namespace Lime
 				}
 			}
 		}
+
+		internal static float GetExclusiveVolume(AudioChannel audioChannel) =>
+			FindTopExclusiveChannel(audioChannel.Group) == audioChannel
+				? 1.0f
+				: exclusiveVolumes[(int)audioChannel.Group];
 
 		public static void PauseAll()
 		{
@@ -320,6 +376,19 @@ namespace Lime
 				return sound;
 			}
 			channel.SamplePath = path;
+			if (parameters.Exclusive) {
+				if (exclusiveChannels.Contains(channel)) {
+					exclusiveChannels.Remove(channel);
+				}
+				exclusiveFadeSpeed[(int)channel.Group] = -1.0f / GroupExclusiveFadeTime;
+				// exclusiveVolumes[(int)channel.Group] = 0.0f;
+				exclusiveChannels.Add(channel);
+				foreach (var c in channels) {
+					if (c.Group == channel.Group) {
+						c.Volume = c.Volume;
+					}
+				}
+			}
 			return sound;
 		}
 
@@ -426,8 +495,8 @@ namespace Lime
 
 		public struct ErrorChecker : IDisposable
 		{
-			string comment;
-			bool throwException;
+			private string comment;
+			private bool throwException;
 
 			public ErrorChecker(string comment = null, bool throwException = true)
 			{

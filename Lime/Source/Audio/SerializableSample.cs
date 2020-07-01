@@ -20,9 +20,9 @@ namespace Lime
 			set => Path = InternalPersistence.Current?.ExpandPath(value) ?? value;
 		}
 
-		public Sound Play(AudioChannelGroup group, bool paused, float fadeinTime = 0, bool looping = false, float priority = 0.5f, float volume = 1, float pan = 0, float pitch = 1)
+		public Sound Play(AudioChannelGroup group, bool paused, float fadeinTime = 0, bool looping = false, float priority = 0.5f, float volume = 1, float pan = 0, float pitch = 1, bool exclusive = false)
 		{
-			return AudioSystem.Play(Path, group, looping, priority, fadeinTime, paused, volume, pan, pitch);
+			return AudioSystem.Play(Path, group, looping, priority, fadeinTime, paused, volume, pan, pitch, exclusive);
 		}
 	}
 }

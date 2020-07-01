@@ -86,6 +86,10 @@ namespace Lime
 		[TangerineKeyframeColor(27)]
 		public bool Continuous { get; set; }
 
+		[YuzuMember]
+		[TangerineStaticProperty]
+		public bool Exclusive { get; set; }
+
 		private float auxiliaryVolume = 1f;
 
 		public float AuxiliaryVolume
@@ -120,7 +124,7 @@ namespace Lime
 		{
 			if (Sample != null) {
 				sound = Sample.Play(
-					Group, false, 0f, Looping, Priority, Volume * AuxiliaryVolume, Pan, Pitch * AuxiliaryPitch
+					Group, false, 0f, Looping, Priority, Volume * AuxiliaryVolume, Pan, Pitch * AuxiliaryPitch, Exclusive
 				);
 				sound.StopChecker = ShouldStop;
 			}
