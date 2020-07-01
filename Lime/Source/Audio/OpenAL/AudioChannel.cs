@@ -37,6 +37,8 @@ namespace Lime
 
 		private IAudioDecoder decoder;
 		private readonly IntPtr decodedData;
+		private AudioChannelState previousState = AudioChannelState.Invalid;
+		internal Action<AudioChannel, AudioChannelState, AudioChannelState> OnStateChanged;
 
 		private enum FadePurpose
 		{
@@ -51,14 +53,14 @@ namespace Lime
 
 		public float Pitch
 		{
-			get { return pitch; }
-			set { SetPitch(value); }
+			get => pitch;
+			set => SetPitch(value);
 		}
 
 		public float Volume
 		{
-			get { return volume; }
-			set { SetVolume(value); }
+			get => volume;
+			set => SetVolume(value);
 		}
 
 		public AudioChannelState State
@@ -81,9 +83,10 @@ namespace Lime
 
 		public Sound Sound { get; private set; }
 
-		public float Pan {
-			get { return pan; }
-			set { SetPan(value); }
+		public float Pan
+		{
+			get => pan;
+			set => SetPan(value);
 		}
 
 		public string SamplePath { get; set; }
@@ -151,7 +154,7 @@ namespace Lime
 			}
 			var state = AL.GetSourceState(source);
 			if (state != ALSourceState.Initial && state != ALSourceState.Stopped) {
-				// Don't know why is it happens, but it's better to warn than crush the game
+				// Don't know why is it happens, but it's better to warn than crash the game
 				Debug.Write("AudioSource must be stopped before play");
 				return false;
 			}
@@ -254,7 +257,6 @@ namespace Lime
 
 		private void StopImmediate()
 		{
-			PlatformAudioSystem.CheckExclusiveStop(this);
 			lock (streamingSync) {
 				streaming = false;
 				using (new PlatformAudioSystem.ErrorChecker(throwException: false)) {
@@ -324,6 +326,11 @@ namespace Lime
 			if (!AudioSystem.Active) {
 				return;
 			}
+			var state = State;
+			if (previousState != state) {
+				OnStateChanged?.Invoke(this, previousState, state);
+				previousState = state;
+			}
 			if (streaming) {
 				lock (streamingSync) {
 					if (streaming) {
@@ -367,7 +374,7 @@ namespace Lime
 			fadePurpose = FadePurpose.None;
 		}
 
-		void QueueBuffers()
+		private void QueueBuffers()
 		{
 			if (decoder == null) {
 				throw new InvalidOperationException("Audio decoder is not set");
@@ -384,7 +391,7 @@ namespace Lime
 			}
 		}
 
-		bool QueueOneBuffer()
+		private bool QueueOneBuffer()
 		{
 			int buffer = AcquireBuffer();
 			if (buffer != 0) {
@@ -420,7 +427,7 @@ namespace Lime
 			return false;
 		}
 
-		void UnqueueProcessedBuffers()
+		private void UnqueueProcessedBuffers()
 		{
 			AL.GetError();
 			int numProcessed;
@@ -433,7 +440,7 @@ namespace Lime
 			}
 		}
 
-		int AcquireBuffer()
+		private int AcquireBuffer()
 		{
 			int c = processedBuffers.Count;
 			if (c == 0) {

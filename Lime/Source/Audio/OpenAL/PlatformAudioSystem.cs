@@ -34,6 +34,7 @@ namespace Lime
 #endif
 
 		private static readonly List<AudioChannel> channels = new List<AudioChannel>();
+		private static readonly List<AudioChannel> exclusiveChannelsStack = new List<AudioChannel>();
 		private static readonly List<AudioChannel> exclusiveChannels = new List<AudioChannel>();
 		public static readonly float[] exclusiveVolumes = { 1, 1, 1 };
 		private static AudioContext context;
@@ -94,12 +95,24 @@ namespace Lime
 			if (err == ALError.NoError) {
 				for (int i = 0; i < options.NumChannels; i++) {
 					channels.Add(new AudioChannel(i));
+					channels[i].OnStateChanged = OnAudioChannelStateChanged;
 				}
 			}
 			if (options.DecodeAudioInSeparateThread) {
 				streamingThread = new Thread(RunStreamingLoop);
 				streamingThread.IsBackground = true;
 				streamingThread.Start();
+			}
+		}
+
+		private static void OnAudioChannelStateChanged(AudioChannel channel, AudioChannelState previousState, AudioChannelState newState)
+		{
+			if (exclusiveChannels.Contains(channel)) {
+				if (newState == AudioChannelState.Stopped || newState == AudioChannelState.Paused) {
+					OnExclusiveChannelStoppedOrPaused(channel);
+				} else if (newState == AudioChannelState.Playing && previousState == AudioChannelState.Paused) {
+					OnExclusiveChannelPlayed(channel);
+				}
 			}
 		}
 
@@ -188,39 +201,19 @@ namespace Lime
 #endif
 		}
 
-		private static long tickCount;
+		internal static float GetExclusiveVolume(AudioChannel audioChannel) =>
+			FindTopExclusiveChannel(audioChannel.Group) == audioChannel
+				? 1.0f
+				: exclusiveVolumes[(int)audioChannel.Group];
 
-		private static long GetTimeDelta()
-		{
-			long delta = (DateTime.Now.Ticks / 10000L) - tickCount;
-			if (tickCount == 0) {
-				tickCount = delta;
-				delta = 0;
-			} else {
-				tickCount += delta;
-			}
-			return delta;
-		}
-
-		private static AudioChannel FindTopExclusiveChannel(AudioChannelGroup group)
-		{
-			for (int i = exclusiveChannels.Count - 1; i >= 0; i--) {
-				if (exclusiveChannels[i].Group == group) {
-					return exclusiveChannels[i];
-				}
-			}
-			return null;
-		}
-
-		internal static void CheckExclusiveStop(AudioChannel audioChannel)
+		internal static void OnExclusiveChannelStoppedOrPaused(AudioChannel audioChannel)
 		{
 			var group = audioChannel.Group;
 			AudioChannel topChannel = FindTopExclusiveChannel(group);
 			if (topChannel == null) {
 				return;
 			}
-			exclusiveChannels.Remove(audioChannel);
-			// ??? not stopped ???
+			exclusiveChannelsStack.Remove(audioChannel);
 			if (topChannel == audioChannel) {
 				var nextExclusiveChannel = FindTopExclusiveChannel(group);
 				if (nextExclusiveChannel == null) {
@@ -229,8 +222,17 @@ namespace Lime
 				foreach (var channel in channels) {
 					channel.Volume = channel.Volume;
 				}
-				//}
 			}
+		}
+
+		private static AudioChannel FindTopExclusiveChannel(AudioChannelGroup group)
+		{
+			for (int i = exclusiveChannelsStack.Count - 1; i >= 0; i--) {
+				if (exclusiveChannelsStack[i].Group == group) {
+					return exclusiveChannelsStack[i];
+				}
+			}
+			return null;
 		}
 
 		private static void RunStreamingLoop()
@@ -267,6 +269,21 @@ namespace Lime
 			}
 		}
 
+		private static long tickCount;
+
+		private static long GetTimeDelta()
+		{
+			long delta = (DateTime.Now.Ticks / 10000L) - tickCount;
+			if (tickCount == 0) {
+				tickCount = delta;
+				delta = 0;
+			}
+			else {
+				tickCount += delta;
+			}
+			return delta;
+		}
+
 		public static void SetGroupVolume(AudioChannelGroup group, float value)
 		{
 			foreach (var channel in channels) {
@@ -293,11 +310,6 @@ namespace Lime
 				}
 			}
 		}
-
-		internal static float GetExclusiveVolume(AudioChannel audioChannel) =>
-			FindTopExclusiveChannel(audioChannel.Group) == audioChannel
-				? 1.0f
-				: exclusiveVolumes[(int)audioChannel.Group];
 
 		public static void PauseAll()
 		{
@@ -331,80 +343,6 @@ namespace Lime
 					channel.Stop(fadeoutTime);
 				}
 			}
-		}
-
-		private static Sound LoadSoundToChannel(AudioChannel channel, PlayParameters parameters, float fadeinTime)
-		{
-			if (context == null) {
-				return new Sound();
-			}
-			var path = parameters.Path;
-			var sound = new Sound();
-			var decoder = parameters.Decoder;
-			if (decoder == null) {
-#if TANGERINE
-				path += ".ogg";
-#else
-				path += ".sound";
-#endif // TANGERINE
-				var stream = cache.OpenStream(path);
-				if (stream == null) {
-					AudioMissing?.Invoke(path);
-					return sound;
-				}
-				decoder = AudioDecoderFactory.CreateDecoder(stream);
-			}
-			if (channel == null || !channel.Play(sound, decoder, parameters.Looping, parameters.Paused, fadeinTime)) {
-				decoder.Dispose();
-				return sound;
-			}
-			channel.SamplePath = path;
-			if (parameters.Exclusive) {
-				if (exclusiveChannels.Contains(channel)) {
-					exclusiveChannels.Remove(channel);
-				}
-				exclusiveVolumes[(int)channel.Group] = 0.0f;
-				exclusiveChannels.Add(channel);
-				foreach (var c in channels) {
-					if (c.Group == channel.Group) {
-						c.Volume = c.Volume;
-					}
-				}
-			}
-			return sound;
-		}
-
-		private static AudioChannel AllocateChannel(float priority)
-		{
-			channels.Sort((a, b) => {
-				if (a.Priority != b.Priority) {
-					return Mathf.Sign(a.Priority - b.Priority);
-				}
-				if (a.StartupTime == b.StartupTime) {
-					return a.Id - b.Id;
-				}
-				return (a.StartupTime < b.StartupTime) ? -1 : 1;
-			});
-			// Looking for stopped channels
-			foreach (var channel in channels) {
-				if (channel.Streaming) {
-					continue;
-				}
-				var state = channel.State;
-				if (state == AudioChannelState.Stopped || state == AudioChannelState.Initial) {
-					return channel;
-				}
-			}
-			// Trying to stop first channel in order of priority
-			foreach (var channel in channels) {
-				if (channel.Priority <= priority) {
-					channel.Stop();
-					if (channel.State == AudioChannelState.Stopped) {
-						return channel;
-					}
-				}
-			}
-			return null;
 		}
 
 		public static Sound Play(PlayParameters parameters, float fadeinTime = 0f)
@@ -452,6 +390,56 @@ namespace Lime
 			return sound;
 		}
 
+		private static Sound LoadSoundToChannel(AudioChannel channel, PlayParameters parameters, float fadeinTime)
+		{
+			if (context == null) {
+				return new Sound();
+			}
+			var path = parameters.Path;
+			var sound = new Sound();
+			var decoder = parameters.Decoder;
+			if (decoder == null) {
+#if TANGERINE
+				path += ".ogg";
+#else
+				path += ".sound";
+#endif // TANGERINE
+				var stream = cache.OpenStream(path);
+				if (stream == null) {
+					AudioMissing?.Invoke(path);
+					return sound;
+				}
+				decoder = AudioDecoderFactory.CreateDecoder(stream);
+			}
+			if (channel == null || !channel.Play(sound, decoder, parameters.Looping, parameters.Paused, fadeinTime)) {
+				decoder.Dispose();
+				return sound;
+			}
+			channel.SamplePath = path;
+			if (exclusiveChannels.Contains(channel)) {
+				exclusiveChannels.Remove(channel);
+			}
+			if (parameters.Exclusive) {
+				exclusiveChannels.Add(channel);
+				OnExclusiveChannelPlayed(channel);
+			}
+			return sound;
+		}
+
+		private static void OnExclusiveChannelPlayed(AudioChannel channel)
+		{
+			if (exclusiveChannelsStack.Contains(channel)) {
+				exclusiveChannelsStack.Remove(channel);
+			}
+			exclusiveChannelsStack.Add(channel);
+			exclusiveVolumes[(int)channel.Group] = 0.0f;
+			foreach (var c in channels) {
+				if (c.Group == channel.Group) {
+					c.Volume = c.Volume;
+				}
+			}
+		}
+
 		private static AudioChannel GetAudioChannel(
 			AudioChannelGroup group,
 			float priority = 0.5f,
@@ -473,6 +461,39 @@ namespace Lime
 			channel.Pitch = pitch;
 			channel.Pan = pan;
 			return channel;
+		}
+
+		private static AudioChannel AllocateChannel(float priority)
+		{
+			channels.Sort((a, b) => {
+				if (a.Priority != b.Priority) {
+					return Mathf.Sign(a.Priority - b.Priority);
+				}
+				if (a.StartupTime == b.StartupTime) {
+					return a.Id - b.Id;
+				}
+				return (a.StartupTime < b.StartupTime) ? -1 : 1;
+			});
+			// Looking for stopped channels
+			foreach (var channel in channels) {
+				if (channel.Streaming) {
+					continue;
+				}
+				var state = channel.State;
+				if (state == AudioChannelState.Stopped || state == AudioChannelState.Initial) {
+					return channel;
+				}
+			}
+			// Trying to stop first channel in order of priority
+			foreach (var channel in channels) {
+				if (channel.Priority <= priority) {
+					channel.Stop();
+					if (channel.State == AudioChannelState.Stopped) {
+						return channel;
+					}
+				}
+			}
+			return null;
 		}
 
 		public struct ErrorChecker : IDisposable

@@ -6,7 +6,8 @@ namespace Lime
 	public enum AudioAction
 	{
 		Play,
-		Stop
+		Stop,
+		Pause,
 	}
 
 	[TangerineRegisterNode(Order = 3)]
@@ -26,15 +27,17 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(21)]
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
 		public float FadeTime { get; set; }
 
 		private float volume = 0.5f;
 
 		[YuzuMember]
 		[TangerineKeyframeColor(22)]
+		[TangerineValidRange(0.0f, 1.0f)]
 		public float Volume
 		{
-			get { return volume; }
+			get => volume;
 			set
 			{
 				volume = value;
@@ -46,9 +49,10 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(23)]
+		[TangerineValidRange(-1.0f, 1.0f)]
 		public float Pan
 		{
-			get { return pan; }
+			get => pan;
 			set
 			{
 				pan = value;
@@ -60,9 +64,10 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(24)]
+		[TangerineValidRange(0.0625f, 16.0f)]
 		public float Pitch
 		{
-			get { return pitch; }
+			get => pitch;
 			set
 			{
 				pitch = value;
@@ -130,20 +135,15 @@ namespace Lime
 			}
 		}
 
-		public virtual void Stop()
-		{
-			sound.Stop(FadeTime);
-		}
+		public virtual void Stop() => sound.Stop(FadeTime);
 
-		private bool ShouldStop()
-		{
-			return !Continuous && (Manager == null || GloballyFrozen);
-		}
+		public virtual void Pause() => sound.Pause(FadeTime);
 
-		public bool IsPlaying()
-		{
-			return !sound.IsStopped;
-		}
+		public virtual void Resume() => sound.Resume();
+
+		private bool ShouldStop() => !Continuous && (Manager == null || GloballyFrozen);
+
+		public bool IsPlaying() => !sound.IsStopped && !sound.IsPaused;
 
 		public override void AddToRenderChain(RenderChain chain)
 		{
@@ -155,10 +155,20 @@ namespace Lime
 			if (property == "Action") {
 				var action = (AudioAction)value;
 				if (GloballyEnable && !GetTangerineFlag(TangerineFlags.Hidden)) {
-					if (action == AudioAction.Play) {
-						Play();
-					} else {
-						Stop();
+					switch (action) {
+						case AudioAction.Play:
+							if (sound.IsPaused) {
+								Resume();
+							} else {
+								Play();
+							}
+							break;
+						case AudioAction.Stop:
+							Stop();
+							break;
+						case AudioAction.Pause:
+							Pause();
+							break;
 					}
 				}
 			}

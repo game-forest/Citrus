@@ -25,6 +25,8 @@ namespace Lime
 
 		public bool IsStopped { get { return ChannelInternal.State == AudioChannelState.Stopped; } }
 
+		public bool IsPaused => ChannelInternal.State == AudioChannelState.Paused;
+
 		public float Volume
 		{
 			get { return ChannelInternal.Volume; }
