@@ -599,6 +599,17 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		public int AddVertex(SkinnedVertex vertex)
 		{
+			var result = LocateClosestTriangle(vertex.Pos, out var halfEdge);
+			var isTrueTriangle = IsPointInsideTrueTriangulation(Centroid(halfEdge));
+			if (result == LocationResult.InsideTriangle && !isTrueTriangle) {
+				return -1;
+			}
+			if (
+				result == LocationResult.OnEdge &&
+				!(isTrueTriangle || halfEdge.Twin != null && IsPointInsideTrueTriangulation(Centroid(halfEdge.Twin)))
+			) {
+				return -1;
+			}
 			Vertices.Add(vertex);
 			if (AddVertex(Vertices.Count - 1)) {
 				TopologyChanged?.Invoke(this);

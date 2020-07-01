@@ -141,25 +141,33 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var d2 = EdgeHitTestDistance * EdgeHitTestDistance;
 			if (VertexInsideTriangle(vertex, v1, v2, v3)) {
 				edge = current;
-				if (
-					isExactEdgeHitTesting && IsVertexOnEdge(vertex, current) ||
-					!isExactEdgeHitTesting && PointToSegmentSqrDistance(v1, v2, vertex) <= d2
-				) {
-					return LocationResult.OnEdge;
-				}
-				if (
-					isExactEdgeHitTesting && IsVertexOnEdge(vertex, current.Next) ||
-					!isExactEdgeHitTesting && PointToSegmentSqrDistance(v2, v3, vertex) <= d2
-				) {
-					edge = current.Next;
-					return LocationResult.OnEdge;
-				}
-				if (
-					isExactEdgeHitTesting && IsVertexOnEdge(vertex, current.Prev) ||
-					!isExactEdgeHitTesting && PointToSegmentSqrDistance(v3, v1, vertex) <= d2
-				) {
-					edge = current.Prev;
-					return LocationResult.OnEdge;
+				if (isExactEdgeHitTesting) {
+					if (IsVertexOnEdge(vertex, current)) {
+						return LocationResult.OnEdge;
+					}
+					if (IsVertexOnEdge(vertex, current.Next)) {
+						edge = current.Next;
+						return LocationResult.OnEdge;
+					}
+					if (IsVertexOnEdge(vertex, current.Prev)) {
+						edge = current.Prev;
+						return LocationResult.OnEdge;
+					}
+				} else {
+					var de1 = PointToSegmentSqrDistance(v1, v2, vertex);
+					var de2 = PointToSegmentSqrDistance(v2, v3, vertex);
+					var de3 = PointToSegmentSqrDistance(v3, v1, vertex);
+					if (de1 <= d2 && de1 <= de2 && de1 <= de3) {
+						return LocationResult.OnEdge;
+					}
+					if (de2 <= d2 && de2 <= de1 && de2 <= de3) {
+						edge = current.Next;
+						return LocationResult.OnEdge;
+					}
+					if (de3 <= d2 && de3 <= de1 && de3 <= de2) {
+						edge = current.Next;
+						return LocationResult.OnEdge;
+					}
 				}
 				return LocationResult.InsideTriangle;
 			}
