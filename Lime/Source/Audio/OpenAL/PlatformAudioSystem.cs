@@ -36,7 +36,6 @@ namespace Lime
 		private static readonly List<AudioChannel> channels = new List<AudioChannel>();
 		private static readonly List<AudioChannel> exclusiveChannels = new List<AudioChannel>();
 		public static readonly float[] exclusiveVolumes = { 1, 1, 1 };
-		public static readonly float[] exclusiveFadeSpeed = { 0, 0, 0 };
 		private static AudioContext context;
 		private static Thread streamingThread = null;
 		private static volatile bool shouldTerminateThread;
@@ -120,8 +119,6 @@ namespace Lime
 		}
 
 		public static IEnumerable<IAudioChannel> Channels => channels;
-
-		public const float GroupExclusiveFadeTime = 0.5f;
 
 #if ANDROID
 		private static void SetActive(bool value)
@@ -227,8 +224,7 @@ namespace Lime
 			if (topChannel == audioChannel) {
 				var nextExclusiveChannel = FindTopExclusiveChannel(group);
 				if (nextExclusiveChannel == null) {
-					// exclusiveVolumes[(int)group] = 1.0f;
-					exclusiveFadeSpeed[(int)group] = 1.0f / GroupExclusiveFadeTime;
+					exclusiveVolumes[(int)group] = 1.0f;
 				}
 				foreach (var channel in channels) {
 					channel.Volume = channel.Volume;
@@ -265,19 +261,6 @@ namespace Lime
 		private static void UpdateChannels()
 		{
 			float delta = GetTimeDelta() * 0.001f;
-
-			for (int i = 0; i < 3; i++) {
-				var fadeSpeed = exclusiveFadeSpeed[i];
-				if (fadeSpeed != 0) {
-					exclusiveVolumes[i] += delta * fadeSpeed;
-					var fadeVolume = exclusiveVolumes[i];
-					if (fadeVolume > 1 || fadeVolume < 0) {
-						exclusiveFadeSpeed[i] = 0;
-						exclusiveVolumes[i] = Mathf.Clamp(fadeVolume, 0, 1);
-					}
-				}
-			}
-
 			foreach (var channel in channels) {
 				channel.Volume = channel.Volume;
 				channel.Update(delta);
@@ -380,8 +363,7 @@ namespace Lime
 				if (exclusiveChannels.Contains(channel)) {
 					exclusiveChannels.Remove(channel);
 				}
-				exclusiveFadeSpeed[(int)channel.Group] = -1.0f / GroupExclusiveFadeTime;
-				// exclusiveVolumes[(int)channel.Group] = 0.0f;
+				exclusiveVolumes[(int)channel.Group] = 0.0f;
 				exclusiveChannels.Add(channel);
 				foreach (var c in channels) {
 					if (c.Group == channel.Group) {
