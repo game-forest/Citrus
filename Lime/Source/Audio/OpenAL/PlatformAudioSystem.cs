@@ -214,10 +214,24 @@ namespace Lime
 				return;
 			}
 			exclusiveChannelsStack.Remove(audioChannel);
+			if (audioChannel.State == AudioChannelState.Stopped) {
+				exclusiveChannels.Remove(audioChannel);
+			}
 			if (topChannel == audioChannel) {
 				var nextExclusiveChannel = FindTopExclusiveChannel(group);
 				if (nextExclusiveChannel == null) {
 					exclusiveVolumes[(int)group] = 1.0f;
+					foreach (var channel in channels) {
+						if (
+							channel.State != AudioChannelState.Stopped &&
+							channel.State != AudioChannelState.Paused &&
+							channel.Group == group
+						) {
+							channel.FadeIn(AudioChannel.FadePurpose.ExclusiveWake);
+						}
+					}
+				} else {
+					nextExclusiveChannel.FadeIn(AudioChannel.FadePurpose.ExclusiveWake);
 				}
 				foreach (var channel in channels) {
 					channel.Volume = channel.Volume;
@@ -345,7 +359,7 @@ namespace Lime
 			}
 		}
 
-		public static Sound Play(PlayParameters parameters, float fadeinTime = 0f)
+		public static Sound Play(PlayParameters parameters)
 		{
 			var channel = AllocateChannel(parameters.Priority);
 			if (channel == null) {
@@ -359,7 +373,9 @@ namespace Lime
 			channel.Volume = parameters.Volume;
 			channel.Pitch = parameters.Pitch;
 			channel.Pan = parameters.Pan;
-			return LoadSoundToChannel(channel, parameters, fadeinTime);
+			channel.FadeInTime = parameters.FadeInTime;
+			channel.FadeOutTime = parameters.FadeOutTime;
+			return LoadSoundToChannel(channel, parameters);
 		}
 
 		public static Sound Play(
@@ -390,7 +406,7 @@ namespace Lime
 			return sound;
 		}
 
-		private static Sound LoadSoundToChannel(AudioChannel channel, PlayParameters parameters, float fadeinTime)
+		private static Sound LoadSoundToChannel(AudioChannel channel, PlayParameters parameters)
 		{
 			if (context == null) {
 				return new Sound();
@@ -411,7 +427,7 @@ namespace Lime
 				}
 				decoder = AudioDecoderFactory.CreateDecoder(stream);
 			}
-			if (channel == null || !channel.Play(sound, decoder, parameters.Looping, parameters.Paused, fadeinTime)) {
+			if (channel == null || !channel.Play(sound, decoder, parameters.Looping, parameters.Paused, parameters.FadeInTime)) {
 				decoder.Dispose();
 				return sound;
 			}
@@ -435,6 +451,9 @@ namespace Lime
 			exclusiveVolumes[(int)channel.Group] = 0.0f;
 			foreach (var c in channels) {
 				if (c.Group == channel.Group) {
+					if (!exclusiveChannelsStack.Contains(c)) {
+						c.FadeOut(AudioChannel.FadePurpose.ExclusiveMute);
+					}
 					c.Volume = c.Volume;
 				}
 			}

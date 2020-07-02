@@ -14,8 +14,7 @@ namespace Lime
 	public class Audio : Node
 	{
 		public static bool GloballyEnable = true;
-
-		Sound sound = new Sound();
+		private Sound sound = new Sound();
 
 		[YuzuMember]
 		[TangerineKeyframeColor(19)]
@@ -28,7 +27,14 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(21)]
 		[TangerineValidRange(0.0f, float.PositiveInfinity)]
+		[TangerineDisplayName("Fade Out Time")]
 		public float FadeTime { get; set; }
+
+		[YuzuMember]
+		[TangerineKeyframeColor(21)]
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
+		[TangerineDisplayName("Fade In Time")]
+		public float FadeInTime { get; set; }
 
 		private float volume = 0.5f;
 
@@ -129,7 +135,16 @@ namespace Lime
 		{
 			if (Sample != null) {
 				sound = Sample.Play(
-					Group, false, 0f, Looping, Priority, Volume * AuxiliaryVolume, Pan, Pitch * AuxiliaryPitch, Exclusive
+					group: Group,
+					paused: false,
+					fadeInTime: FadeInTime,
+					looping: Looping,
+					priority: Priority,
+					volume: Volume * AuxiliaryVolume,
+					pan: Pan,
+					pitch: Pitch * AuxiliaryPitch,
+					exclusive: Exclusive,
+					fadeOutTime: FadeTime
 				);
 				sound.StopChecker = ShouldStop;
 			}
@@ -139,7 +154,7 @@ namespace Lime
 
 		public virtual void Pause() => sound.Pause(FadeTime);
 
-		public virtual void Resume() => sound.Resume();
+		public virtual void Resume() => sound.Resume(FadeInTime);
 
 		private bool ShouldStop() => !Continuous && (Manager == null || GloballyFrozen);
 
