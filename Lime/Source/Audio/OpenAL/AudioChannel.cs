@@ -39,6 +39,7 @@ namespace Lime
 		private readonly IntPtr decodedData;
 		private AudioChannelState previousState = AudioChannelState.Invalid;
 		internal Action<AudioChannel, AudioChannelState, AudioChannelState> OnStateChanged;
+		private float delayTime;
 
 		internal enum FadePurpose
 		{
@@ -200,6 +201,14 @@ namespace Lime
 			if (decoder == null) {
 				throw new InvalidOperationException("Audio decoder is not set");
 			}
+			delayTime = PlatformAudioSystem.GetDelayBeforePlayOrResume(this);
+			if (delayTime == 0.0f) {
+				ResumeWithoutDelay();
+			}
+		}
+
+		private void ResumeWithoutDelay()
+		{
 			FadeIn(FadePurpose.Play);
 			Volume = volume;
 			PlayImmediate();
@@ -329,7 +338,7 @@ namespace Lime
 				return;
 			}
 			volume = Mathf.Clamp(value, 0, 1);
-			float gain = volume * fadeVolume * AudioSystem.GetGroupVolume(Group) * PlatformAudioSystem.GetExclusiveVolume(this);
+			float gain = volume * fadeVolume * AudioSystem.GetGroupVolume(Group);
 			using (new PlatformAudioSystem.ErrorChecker()) {
 				AL.Source(source, ALSourcef.Gain, gain);
 			}
@@ -350,6 +359,13 @@ namespace Lime
 					if (streaming) {
 						QueueBuffers();
 					}
+				}
+			}
+			if (delayTime > 0.0f) {
+				delayTime -= delta;
+				if (delayTime <= 0.0f) {
+					delayTime = 0.0f;
+					ResumeWithoutDelay();
 				}
 			}
 			if (fadePurpose != FadePurpose.None) {

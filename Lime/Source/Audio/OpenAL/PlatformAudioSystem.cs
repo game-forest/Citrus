@@ -36,7 +36,6 @@ namespace Lime
 		private static readonly List<AudioChannel> channels = new List<AudioChannel>();
 		private static readonly List<AudioChannel> exclusiveChannelsStack = new List<AudioChannel>();
 		private static readonly List<AudioChannel> exclusiveChannels = new List<AudioChannel>();
-		public static readonly float[] exclusiveVolumes = { 1, 1, 1 };
 		private static AudioContext context;
 		private static Thread streamingThread = null;
 		private static volatile bool shouldTerminateThread;
@@ -110,7 +109,7 @@ namespace Lime
 			if (exclusiveChannels.Contains(channel)) {
 				if (newState == AudioChannelState.Stopped || newState == AudioChannelState.Paused) {
 					OnExclusiveChannelStoppedOrPaused(channel);
-				} else if (newState == AudioChannelState.Playing && previousState == AudioChannelState.Paused) {
+				} else if (newState == AudioChannelState.Playing) {
 					OnExclusiveChannelPlayed(channel);
 				}
 			}
@@ -201,11 +200,6 @@ namespace Lime
 #endif
 		}
 
-		internal static float GetExclusiveVolume(AudioChannel audioChannel) =>
-			FindTopExclusiveChannel(audioChannel.Group) == audioChannel
-				? 1.0f
-				: exclusiveVolumes[(int)audioChannel.Group];
-
 		internal static void OnExclusiveChannelStoppedOrPaused(AudioChannel audioChannel)
 		{
 			var group = audioChannel.Group;
@@ -220,7 +214,6 @@ namespace Lime
 			if (topChannel == audioChannel) {
 				var nextExclusiveChannel = FindTopExclusiveChannel(group);
 				if (nextExclusiveChannel == null) {
-					exclusiveVolumes[(int)group] = 1.0f;
 					foreach (var channel in channels) {
 						if (
 							channel.State != AudioChannelState.Stopped &&
@@ -237,6 +230,46 @@ namespace Lime
 					channel.Volume = channel.Volume;
 				}
 			}
+		}
+
+		private static void OnExclusiveChannelPlayed(AudioChannel channel)
+		{
+			if (exclusiveChannelsStack.Contains(channel)) {
+				exclusiveChannelsStack.Remove(channel);
+			}
+			exclusiveChannelsStack.Add(channel);
+			foreach (var c in channels) {
+				if (c.Group == channel.Group) {
+					if (!exclusiveChannelsStack.Contains(c)) {
+						c.FadeOut(AudioChannel.FadePurpose.ExclusiveMute);
+					}
+					c.Volume = c.Volume;
+				}
+			}
+		}
+
+		internal static float GetDelayBeforePlayOrResume(AudioChannel channel)
+		{
+			if (
+				channel.State == AudioChannelState.Playing ||
+				!exclusiveChannels.Contains(channel)
+			) {
+				return 0.0f;
+			}
+			var group = channel.Group;
+			var topExclusiveChannel = FindTopExclusiveChannel(group);
+			if (topExclusiveChannel != null) {
+				return topExclusiveChannel.FadeOutTime;
+			}
+			var r = 0.0f;
+			foreach (var c in channels) {
+				if (c.Group == group && c.State == AudioChannelState.Playing && !exclusiveChannels.Contains(c)) {
+					if (c.FadeOutTime > r) {
+						r = channel.FadeOutTime;
+					}
+				}
+			}
+			return r;
 		}
 
 		private static AudioChannel FindTopExclusiveChannel(AudioChannelGroup group)
@@ -427,36 +460,27 @@ namespace Lime
 				}
 				decoder = AudioDecoderFactory.CreateDecoder(stream);
 			}
-			if (channel == null || !channel.Play(sound, decoder, parameters.Looping, parameters.Paused, parameters.FadeInTime)) {
+
+			if (channel == null) {
 				decoder.Dispose();
 				return sound;
 			}
-			channel.SamplePath = path;
+
 			if (exclusiveChannels.Contains(channel)) {
 				exclusiveChannels.Remove(channel);
 			}
+			channel.SamplePath = path;
 			if (parameters.Exclusive) {
 				exclusiveChannels.Add(channel);
-				OnExclusiveChannelPlayed(channel);
 			}
-			return sound;
-		}
 
-		private static void OnExclusiveChannelPlayed(AudioChannel channel)
-		{
-			if (exclusiveChannelsStack.Contains(channel)) {
-				exclusiveChannelsStack.Remove(channel);
+			if (!channel.Play(sound, decoder, parameters.Looping, parameters.Paused, parameters.FadeInTime)) {
+				exclusiveChannels.Remove(channel);
+				decoder.Dispose();
+				return sound;
 			}
-			exclusiveChannelsStack.Add(channel);
-			exclusiveVolumes[(int)channel.Group] = 0.0f;
-			foreach (var c in channels) {
-				if (c.Group == channel.Group) {
-					if (!exclusiveChannelsStack.Contains(c)) {
-						c.FadeOut(AudioChannel.FadePurpose.ExclusiveMute);
-					}
-					c.Volume = c.Volume;
-				}
-			}
+
+			return sound;
 		}
 
 		private static AudioChannel GetAudioChannel(
