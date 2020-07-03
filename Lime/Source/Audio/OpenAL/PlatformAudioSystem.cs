@@ -220,11 +220,11 @@ namespace Lime
 							channel.State != AudioChannelState.Paused &&
 							channel.Group == group
 						) {
-							channel.FadeIn(AudioChannel.FadePurpose.ExclusiveWake);
+							channel.FadeIn(AudioChannel.FadePurpose.Exclusive);
 						}
 					}
 				} else {
-					nextExclusiveChannel.FadeIn(AudioChannel.FadePurpose.ExclusiveWake);
+					nextExclusiveChannel.FadeIn(AudioChannel.FadePurpose.Exclusive);
 				}
 				foreach (var channel in channels) {
 					channel.Volume = channel.Volume;
@@ -241,7 +241,7 @@ namespace Lime
 			foreach (var c in channels) {
 				if (c.Group == channel.Group) {
 					if (!exclusiveChannelsStack.Contains(c)) {
-						c.FadeOut(AudioChannel.FadePurpose.ExclusiveMute);
+						c.FadeOut(AudioChannel.FadePurpose.Exclusive);
 					}
 					c.Volume = c.Volume;
 				}
@@ -324,8 +324,7 @@ namespace Lime
 			if (tickCount == 0) {
 				tickCount = delta;
 				delta = 0;
-			}
-			else {
+			} else {
 				tickCount += delta;
 			}
 			return delta;

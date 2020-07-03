@@ -48,8 +48,7 @@ namespace Lime
 			Stop,
 			Pause,
 			Suspend,
-			ExclusiveWake,
-			ExclusiveMute,
+			Exclusive,
 		}
 
 		public bool Streaming { get { return streaming; } }
@@ -399,6 +398,8 @@ namespace Lime
 					break;
 				case FadePurpose.Suspend:
 					SuspendImmediate();
+					break;
+				case FadePurpose.Exclusive:
 					break;
 			}
 			fadePurpose = FadePurpose.None;
