@@ -474,15 +474,27 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 
 				foreach (var (edge1, edge2, edge3) in Triangles()) {
-					var v1 = InnerVertices[edge1.Origin].Pos;
-					var v2 = InnerVertices[edge2.Origin].Pos;
-					var v3 = InnerVertices[edge3.Origin].Pos;
+					var o1 = edge1.Origin;
+					var o2 = edge2.Origin;
+					var o3 = edge3.Origin;
+					var v1 = InnerVertices[o1].Pos;
+					var v2 = InnerVertices[o2].Pos;
+					var v3 = InnerVertices[o3].Pos;
 					var o = Orient2D(v1, v2, v3);
 					if (o == 0f) {
 						Console.WriteLine($"Degenerated triangle found!!!!! ({v1}, {v2}, {v3})");
 					}
 					if (o < 0) {
 						Console.WriteLine($"Triangle has wrong orientation!!!! ({v1}, {v2}, {v3})");
+					}
+					CheckBoundaryEdgeCorrectness(o1, o2, edge1);
+					CheckBoundaryEdgeCorrectness(o2, o3, edge2);
+					CheckBoundaryEdgeCorrectness(o3, o1, edge3);
+					void CheckBoundaryEdgeCorrectness(int index1, int index2, HalfEdge edge)
+					{
+						if (InnerBoundary.ContainsEdge(index1, index2) && !edge.Constrained) {
+							Console.WriteLine($"Boundary edge is not constrained!!! ({index1}, {index2})");
+						}
 					}
 				}
 			};
