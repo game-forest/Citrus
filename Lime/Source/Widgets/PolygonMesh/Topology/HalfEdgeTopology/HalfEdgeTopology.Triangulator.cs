@@ -165,7 +165,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						return LocationResult.OnEdge;
 					}
 					if (de3 <= d2 && de3 <= de1 && de3 <= de2) {
-						edge = current.Next;
+						edge = current.Prev;
 						return LocationResult.OnEdge;
 					}
 				}
@@ -514,7 +514,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-		private void InsertConstrainEdge(int index0, int index1)
+		private bool InsertConstrainEdge(int index0, int index1)
 		{
 			var location = LocateClosestTriangle(index0, out var start);
 			System.Diagnostics.Debug.Assert(location == LocationResult.SameVertex);
@@ -538,12 +538,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				var prev = next.Next;
 				// Special case: requested edge already exists.
 				if (next.Origin == index1) {
-					incidentEdge.Constrained = true;
-					return;
+					return incidentEdge.Constrained = true;
 				}
 				if (prev.Origin == index1) {
-					prev.Constrained = true;
-					return;
+					return prev.Constrained = true;
 				}
 				var c = InnerVertices[next.Origin].Pos;
 				var d = InnerVertices[prev.Origin].Pos;
@@ -554,20 +552,20 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					var ec = c - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
-						incidentEdge.Constrained = true;
-						InsertConstrainEdge(next.Origin, index1);
-						return;
+						return incidentEdge.Constrained = InsertConstrainEdge(next.Origin, index1);
 					}
 
 				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
 					var ed = d - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ed.X) == signab.X && Mathf.Sign(ed.Y) == signab.Y) {
-						prev.Constrained = true;
-						InsertConstrainEdge(prev.Origin, index1);
-						return;
+						return prev.Constrained = InsertConstrainEdge(prev.Origin, index1);
 					}
 				} else if (RobustSegmentSegmentIntersection(a, b, c, d)) {
+					// Should not delete existing constrain edges.
+					if (next.Constrained) {
+						return false;
+					}
 					// Then we should start traversing
 					upperPolygon = new List<HalfEdge> { incidentEdge };
 					lowerPolygon = new List<HalfEdge> { prev };
@@ -581,8 +579,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				if (current.Twin == null) {
 					// Something horrible has happened..
 					// Something like trying to connect two vertices trough concavity.
-					// Probably should not do anything.
-					return;
+					// Should not happen at all in current implementation.
+					return false;
 				}
 				current = current.Twin;
 				var next = current.Next;
@@ -593,7 +591,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					AddLower(prev);
 					AddUpper(next);
 					Finish(index0, index1);
-					break;
+					return true;
 				}
 				var c = InnerVertices[next.Origin].Pos;
 				var d = InnerVertices[prev.Origin].Pos;
@@ -605,15 +603,23 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					// between prev.Origin and index1.
 					AddLower(prev);
 					AddUpper(next);
-					Finish(index0, prev.Origin);
-					InsertConstrainEdge(prev.Origin, index1);
-					return;
+					var edge = Finish(index0, prev.Origin);
+					edge.Constrained = InsertConstrainEdge(prev.Origin, index1);
+					RestoreDelaunayProperty(upperPolygon);
+					RestoreDelaunayProperty(lowerPolygon);
+					return edge.Constrained;
 
 				}
 				if (RobustSegmentSegmentIntersection(a, b, c, d)) {
+					if (next.Constrained) {
+						return false;
+					}
 					AddLower(prev);
 					current = next;
 				} else if (RobustSegmentSegmentIntersection(a, b, d, e)) {
+					if (prev.Constrained) {
+						return false;
+					}
 					AddUpper(next);
 					current = prev;
 				} else {
@@ -661,7 +667,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					shouldBeReinserted.Add(e.Next.Origin);
 				}
 			}
-			void Finish(int i0, int i1)
+			HalfEdge Finish(int i0, int i1)
 			{
 				// Create (i0, i1) half edges.
 				var e1 = new HalfEdge(i1);
@@ -673,7 +679,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				lowerPolygon.Reverse();
 				// Triangulate both polygonal holes.
 				TriangulatePolygonByEarClipping(upperPolygon, false);
-				TriangulatePolygonByEarClipping(lowerPolygon);
+				TriangulatePolygonByEarClipping(lowerPolygon, false);
 				RestoreDelaunayProperty(upperPolygon);
 				// Reinsert missing elements.
 				foreach (var vertexIndex in shouldBeReinserted) {
@@ -682,6 +688,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				foreach (var edge in shouldBeReconstrained) {
 					InsertConstrainEdge(edge.Item1, edge.Item2);
 				}
+				return e2;
 			}
 		}
 
