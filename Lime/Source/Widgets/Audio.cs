@@ -97,8 +97,16 @@ namespace Lime
 		[TangerineKeyframeColor(27)]
 		public bool Continuous { get; set; }
 
+		/// <summary>
+		/// Mute all audio channels withing same <see cref="Group"/> when this audio is playing.
+		/// Multiple exclusive audio mute and unmute each other in stack order.
+		/// <see cref="FadeInTime"/> and <see cref="FadeTime"/> are used for transitions between exclusive audio.
+		/// </summary>
 		[YuzuMember]
 		[TangerineStaticProperty]
+		[TangerinePropertyTooltip(@"Mute all audio channels within same audio group when this audio is playing.
+Multiple exclusive audio mute and unmute each other in stack order.
+Use Fade In Time and Fade Out Time for transitions.")]
 		public bool Exclusive { get; set; }
 
 		private float auxiliaryVolume = 1f;
