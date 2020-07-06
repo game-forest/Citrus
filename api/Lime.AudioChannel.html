@@ -280,6 +280,56 @@
   </h3>
   
   
+  <a id="Lime_AudioChannel_FadeInTime_" data-uid="Lime.AudioChannel.FadeInTime*"></a>
+  <h4 id="Lime_AudioChannel_FadeInTime" data-uid="Lime.AudioChannel.FadeInTime">FadeInTime</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float FadeInTime { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_AudioChannel_FadeOutTime_" data-uid="Lime.AudioChannel.FadeOutTime*"></a>
+  <h4 id="Lime_AudioChannel_FadeOutTime" data-uid="Lime.AudioChannel.FadeOutTime">FadeOutTime</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float FadeOutTime { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="Lime_AudioChannel_Group_" data-uid="Lime.AudioChannel.Group*"></a>
   <h4 id="Lime_AudioChannel_Group" data-uid="Lime.AudioChannel.Group">Group</h4>
   <div class="markdown level1 summary"></div>
@@ -518,7 +568,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Pause(float fadeoutTime = 0F)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Pause(float fadeOutTime = 0F)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -532,7 +582,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fadeoutTime</span></td>
+        <td><span class="parametername">fadeOutTime</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -545,7 +595,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Resume(float fadeinTime = 0F)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Resume(float fadeInTime = 0F)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -559,7 +609,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fadeinTime</span></td>
+        <td><span class="parametername">fadeInTime</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -572,7 +622,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Stop(float fadeoutTime = 0F)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Stop(float fadeOutTime = 0F)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -586,7 +636,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fadeoutTime</span></td>
+        <td><span class="parametername">fadeOutTime</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -599,7 +649,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PlayParameters Suspend(float fadeoutTime = 0F)</code></pre>
+    <pre><code class="lang-csharp hljs">public PlayParameters Suspend(float fadeOutTime = 0F)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -613,7 +663,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fadeoutTime</span></td>
+        <td><span class="parametername">fadeOutTime</span></td>
         <td></td>
       </tr>
     </tbody>

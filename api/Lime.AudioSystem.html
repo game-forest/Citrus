@@ -283,12 +283,12 @@
   
   
   <a id="Lime_AudioSystem_Play_" data-uid="Lime.AudioSystem.Play*"></a>
-  <h4 id="Lime_AudioSystem_Play_Lime_PlayParameters_System_Single_" data-uid="Lime.AudioSystem.Play(Lime.PlayParameters,System.Single)">Play(PlayParameters, Single)</h4>
+  <h4 id="Lime_AudioSystem_Play_Lime_PlayParameters_" data-uid="Lime.AudioSystem.Play(Lime.PlayParameters)">Play(PlayParameters)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Sound Play(PlayParameters parameters, float fadeinTime = 0F)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Sound Play(PlayParameters parameters)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -303,11 +303,6 @@
       <tr>
         <td><a class="xref" href="Lime.PlayParameters.html">PlayParameters</a></td>
         <td><span class="parametername">parameters</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fadeinTime</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -330,12 +325,12 @@
   
   
   <a id="Lime_AudioSystem_Play_" data-uid="Lime.AudioSystem.Play*"></a>
-  <h4 id="Lime_AudioSystem_Play_System_String_Lime_AudioChannelGroup_System_Boolean_System_Single_System_Single_System_Boolean_System_Single_System_Single_System_Single_" data-uid="Lime.AudioSystem.Play(System.String,Lime.AudioChannelGroup,System.Boolean,System.Single,System.Single,System.Boolean,System.Single,System.Single,System.Single)">Play(String, AudioChannelGroup, Boolean, Single, Single, Boolean, Single, Single, Single)</h4>
+  <h4 id="Lime_AudioSystem_Play_System_String_Lime_AudioChannelGroup_System_Boolean_System_Single_System_Single_System_Boolean_System_Single_System_Single_System_Single_System_Boolean_System_Single_" data-uid="Lime.AudioSystem.Play(System.String,Lime.AudioChannelGroup,System.Boolean,System.Single,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Boolean,System.Single)">Play(String, AudioChannelGroup, Boolean, Single, Single, Boolean, Single, Single, Single, Boolean, Single)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Sound Play(string path, AudioChannelGroup group, bool looping = false, float priority = 0.5F, float fadeinTime = 0F, bool paused = false, float volume = 1F, float pan = 0F, float pitch = 1F)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Sound Play(string path, AudioChannelGroup group, bool looping = false, float priority = 0.5F, float fadeInTime = 0F, bool paused = false, float volume = 1F, float pan = 0F, float pitch = 1F, bool exclusive = false, float fadeOutTime = 0F)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -369,7 +364,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.Single</span></td>
-        <td><span class="parametername">fadeinTime</span></td>
+        <td><span class="parametername">fadeInTime</span></td>
         <td></td>
       </tr>
       <tr>
@@ -390,6 +385,16 @@
       <tr>
         <td><span class="xref">System.Single</span></td>
         <td><span class="parametername">pitch</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">exclusive</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">fadeOutTime</span></td>
         <td></td>
       </tr>
     </tbody>

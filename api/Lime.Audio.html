@@ -597,6 +597,65 @@ public bool Continuous { get; set; }</code></pre>
   </table>
   
   
+  <a id="Lime_Audio_Exclusive_" data-uid="Lime.Audio.Exclusive*"></a>
+  <h4 id="Lime_Audio_Exclusive" data-uid="Lime.Audio.Exclusive">Exclusive</h4>
+  <div class="markdown level1 summary"><p>Mute all audio channels withing same <a class="xref" href="Lime.Audio.html#Lime_Audio_Group">Group</a> when this audio is playing.
+Multiple exclusive audio mute and unmute each other in stack order.
+<a class="xref" href="Lime.Audio.html#Lime_Audio_FadeInTime">FadeInTime</a> and <a class="xref" href="Lime.Audio.html#Lime_Audio_FadeTime">FadeTime</a> are used for transitions between exclusive audio.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuMember]
+[TangerinePropertyTooltip(&quot;Mute all audio channels within same audio group when this audio is playing.\nMultiple exclusive audio mute and unmute each other in stack order.\nUse Fade In Time and Fade Out Time for transitions.&quot;)]
+public bool Exclusive { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Audio_FadeInTime_" data-uid="Lime.Audio.FadeInTime*"></a>
+  <h4 id="Lime_Audio_FadeInTime" data-uid="Lime.Audio.FadeInTime">FadeInTime</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuMember]
+[TangerineKeyframeColor(21)]
+[TangerineValidRange(0F, InfinityF)]
+[TangerineDisplayName(&quot;Fade In Time&quot;)]
+public float FadeInTime { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="Lime_Audio_FadeTime_" data-uid="Lime.Audio.FadeTime*"></a>
   <h4 id="Lime_Audio_FadeTime" data-uid="Lime.Audio.FadeTime">FadeTime</h4>
   <div class="markdown level1 summary"></div>
@@ -605,6 +664,8 @@ public bool Continuous { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(21)]
+[TangerineValidRange(0F, InfinityF)]
+[TangerineDisplayName(&quot;Fade Out Time&quot;)]
 public float FadeTime { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -686,6 +747,7 @@ public bool Looping { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(23)]
+[TangerineValidRange(-1F, 1F)]
 public float Pan { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -713,6 +775,7 @@ public float Pan { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(24)]
+[TangerineValidRange(0.0625F, 16F)]
 public float Pitch { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -794,6 +857,7 @@ public SerializableSample Sample { get; set; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
 [TangerineKeyframeColor(22)]
+[TangerineValidRange(0F, 1F)]
 public float Volume { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
@@ -908,6 +972,16 @@ public float Volume { get; set; }</code></pre>
   <div><a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(String, Object, Double)</a></div>
   
   
+  <a id="Lime_Audio_Pause_" data-uid="Lime.Audio.Pause*"></a>
+  <h4 id="Lime_Audio_Pause" data-uid="Lime.Audio.Pause">Pause()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Pause()</code></pre>
+  </div>
+  
+  
   <a id="Lime_Audio_Play_" data-uid="Lime.Audio.Play*"></a>
   <h4 id="Lime_Audio_Play" data-uid="Lime.Audio.Play">Play()</h4>
   <div class="markdown level1 summary"></div>
@@ -915,6 +989,16 @@ public float Volume { get; set; }</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual void Play()</code></pre>
+  </div>
+  
+  
+  <a id="Lime_Audio_Resume_" data-uid="Lime.Audio.Resume*"></a>
+  <h4 id="Lime_Audio_Resume" data-uid="Lime.Audio.Resume">Resume()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Resume()</code></pre>
   </div>
   
   

@@ -6073,6 +6073,32 @@ references:
   isSpec: "True"
   fullName: Lime.Audio.Continuous
   nameWithType: Audio.Continuous
+- uid: Lime.Audio.Exclusive
+  name: Exclusive
+  href: api/Lime.Audio.html#Lime_Audio_Exclusive
+  commentId: P:Lime.Audio.Exclusive
+  fullName: Lime.Audio.Exclusive
+  nameWithType: Audio.Exclusive
+- uid: Lime.Audio.Exclusive*
+  name: Exclusive
+  href: api/Lime.Audio.html#Lime_Audio_Exclusive_
+  commentId: Overload:Lime.Audio.Exclusive
+  isSpec: "True"
+  fullName: Lime.Audio.Exclusive
+  nameWithType: Audio.Exclusive
+- uid: Lime.Audio.FadeInTime
+  name: FadeInTime
+  href: api/Lime.Audio.html#Lime_Audio_FadeInTime
+  commentId: P:Lime.Audio.FadeInTime
+  fullName: Lime.Audio.FadeInTime
+  nameWithType: Audio.FadeInTime
+- uid: Lime.Audio.FadeInTime*
+  name: FadeInTime
+  href: api/Lime.Audio.html#Lime_Audio_FadeInTime_
+  commentId: Overload:Lime.Audio.FadeInTime
+  isSpec: "True"
+  fullName: Lime.Audio.FadeInTime
+  nameWithType: Audio.FadeInTime
 - uid: Lime.Audio.FadeTime
   name: FadeTime
   href: api/Lime.Audio.html#Lime_Audio_FadeTime
@@ -6157,6 +6183,19 @@ references:
   isSpec: "True"
   fullName: Lime.Audio.Pan
   nameWithType: Audio.Pan
+- uid: Lime.Audio.Pause
+  name: Pause()
+  href: api/Lime.Audio.html#Lime_Audio_Pause
+  commentId: M:Lime.Audio.Pause
+  fullName: Lime.Audio.Pause()
+  nameWithType: Audio.Pause()
+- uid: Lime.Audio.Pause*
+  name: Pause
+  href: api/Lime.Audio.html#Lime_Audio_Pause_
+  commentId: Overload:Lime.Audio.Pause
+  isSpec: "True"
+  fullName: Lime.Audio.Pause
+  nameWithType: Audio.Pause
 - uid: Lime.Audio.Pitch
   name: Pitch
   href: api/Lime.Audio.html#Lime_Audio_Pitch
@@ -6196,6 +6235,19 @@ references:
   isSpec: "True"
   fullName: Lime.Audio.Priority
   nameWithType: Audio.Priority
+- uid: Lime.Audio.Resume
+  name: Resume()
+  href: api/Lime.Audio.html#Lime_Audio_Resume
+  commentId: M:Lime.Audio.Resume
+  fullName: Lime.Audio.Resume()
+  nameWithType: Audio.Resume()
+- uid: Lime.Audio.Resume*
+  name: Resume
+  href: api/Lime.Audio.html#Lime_Audio_Resume_
+  commentId: Overload:Lime.Audio.Resume
+  isSpec: "True"
+  fullName: Lime.Audio.Resume
+  nameWithType: Audio.Resume
 - uid: Lime.Audio.Sample
   name: Sample
   href: api/Lime.Audio.html#Lime_Audio_Sample
@@ -6241,6 +6293,12 @@ references:
   commentId: T:Lime.AudioAction
   fullName: Lime.AudioAction
   nameWithType: AudioAction
+- uid: Lime.AudioAction.Pause
+  name: Pause
+  href: api/Lime.AudioAction.html#Lime_AudioAction_Pause
+  commentId: F:Lime.AudioAction.Pause
+  fullName: Lime.AudioAction.Pause
+  nameWithType: AudioAction.Pause
 - uid: Lime.AudioAction.Play
   name: Play
   href: api/Lime.AudioAction.html#Lime_AudioAction_Play
@@ -6317,6 +6375,32 @@ references:
   isSpec: "True"
   fullName: Lime.AudioChannel.DisposeOpenALResources
   nameWithType: AudioChannel.DisposeOpenALResources
+- uid: Lime.AudioChannel.FadeInTime
+  name: FadeInTime
+  href: api/Lime.AudioChannel.html#Lime_AudioChannel_FadeInTime
+  commentId: P:Lime.AudioChannel.FadeInTime
+  fullName: Lime.AudioChannel.FadeInTime
+  nameWithType: AudioChannel.FadeInTime
+- uid: Lime.AudioChannel.FadeInTime*
+  name: FadeInTime
+  href: api/Lime.AudioChannel.html#Lime_AudioChannel_FadeInTime_
+  commentId: Overload:Lime.AudioChannel.FadeInTime
+  isSpec: "True"
+  fullName: Lime.AudioChannel.FadeInTime
+  nameWithType: AudioChannel.FadeInTime
+- uid: Lime.AudioChannel.FadeOutTime
+  name: FadeOutTime
+  href: api/Lime.AudioChannel.html#Lime_AudioChannel_FadeOutTime
+  commentId: P:Lime.AudioChannel.FadeOutTime
+  fullName: Lime.AudioChannel.FadeOutTime
+  nameWithType: AudioChannel.FadeOutTime
+- uid: Lime.AudioChannel.FadeOutTime*
+  name: FadeOutTime
+  href: api/Lime.AudioChannel.html#Lime_AudioChannel_FadeOutTime_
+  commentId: Overload:Lime.AudioChannel.FadeOutTime
+  isSpec: "True"
+  fullName: Lime.AudioChannel.FadeOutTime
+  nameWithType: AudioChannel.FadeOutTime
 - uid: Lime.AudioChannel.Group
   name: Group
   href: api/Lime.AudioChannel.html#Lime_AudioChannel_Group
@@ -6546,6 +6630,12 @@ references:
   commentId: F:Lime.AudioChannelState.Initial
   fullName: Lime.AudioChannelState.Initial
   nameWithType: AudioChannelState.Initial
+- uid: Lime.AudioChannelState.Invalid
+  name: Invalid
+  href: api/Lime.AudioChannelState.html#Lime_AudioChannelState_Invalid
+  commentId: F:Lime.AudioChannelState.Invalid
+  fullName: Lime.AudioChannelState.Invalid
+  nameWithType: AudioChannelState.Invalid
 - uid: Lime.AudioChannelState.Paused
   name: Paused
   href: api/Lime.AudioChannelState.html#Lime_AudioChannelState_Paused
@@ -6810,18 +6900,18 @@ references:
   isSpec: "True"
   fullName: Lime.AudioSystem.PauseGroup
   nameWithType: AudioSystem.PauseGroup
-- uid: Lime.AudioSystem.Play(Lime.PlayParameters,System.Single)
-  name: Play(PlayParameters, Single)
-  href: api/Lime.AudioSystem.html#Lime_AudioSystem_Play_Lime_PlayParameters_System_Single_
-  commentId: M:Lime.AudioSystem.Play(Lime.PlayParameters,System.Single)
-  fullName: Lime.AudioSystem.Play(Lime.PlayParameters, System.Single)
-  nameWithType: AudioSystem.Play(PlayParameters, Single)
-- uid: Lime.AudioSystem.Play(System.String,Lime.AudioChannelGroup,System.Boolean,System.Single,System.Single,System.Boolean,System.Single,System.Single,System.Single)
-  name: Play(String, AudioChannelGroup, Boolean, Single, Single, Boolean, Single, Single, Single)
-  href: api/Lime.AudioSystem.html#Lime_AudioSystem_Play_System_String_Lime_AudioChannelGroup_System_Boolean_System_Single_System_Single_System_Boolean_System_Single_System_Single_System_Single_
-  commentId: M:Lime.AudioSystem.Play(System.String,Lime.AudioChannelGroup,System.Boolean,System.Single,System.Single,System.Boolean,System.Single,System.Single,System.Single)
-  fullName: Lime.AudioSystem.Play(System.String, Lime.AudioChannelGroup, System.Boolean, System.Single, System.Single, System.Boolean, System.Single, System.Single, System.Single)
-  nameWithType: AudioSystem.Play(String, AudioChannelGroup, Boolean, Single, Single, Boolean, Single, Single, Single)
+- uid: Lime.AudioSystem.Play(Lime.PlayParameters)
+  name: Play(PlayParameters)
+  href: api/Lime.AudioSystem.html#Lime_AudioSystem_Play_Lime_PlayParameters_
+  commentId: M:Lime.AudioSystem.Play(Lime.PlayParameters)
+  fullName: Lime.AudioSystem.Play(Lime.PlayParameters)
+  nameWithType: AudioSystem.Play(PlayParameters)
+- uid: Lime.AudioSystem.Play(System.String,Lime.AudioChannelGroup,System.Boolean,System.Single,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Boolean,System.Single)
+  name: Play(String, AudioChannelGroup, Boolean, Single, Single, Boolean, Single, Single, Single, Boolean, Single)
+  href: api/Lime.AudioSystem.html#Lime_AudioSystem_Play_System_String_Lime_AudioChannelGroup_System_Boolean_System_Single_System_Single_System_Boolean_System_Single_System_Single_System_Single_System_Boolean_System_Single_
+  commentId: M:Lime.AudioSystem.Play(System.String,Lime.AudioChannelGroup,System.Boolean,System.Single,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Boolean,System.Single)
+  fullName: Lime.AudioSystem.Play(System.String, Lime.AudioChannelGroup, System.Boolean, System.Single, System.Single, System.Boolean, System.Single, System.Single, System.Single, System.Boolean, System.Single)
+  nameWithType: AudioSystem.Play(String, AudioChannelGroup, Boolean, Single, Single, Boolean, Single, Single, Single, Boolean, Single)
 - uid: Lime.AudioSystem.Play*
   name: Play
   href: api/Lime.AudioSystem.html#Lime_AudioSystem_Play_
@@ -47662,6 +47752,24 @@ references:
   isSpec: "True"
   fullName: Lime.PlayParameters.Dispose
   nameWithType: PlayParameters.Dispose
+- uid: Lime.PlayParameters.Exclusive
+  name: Exclusive
+  href: api/Lime.PlayParameters.html#Lime_PlayParameters_Exclusive
+  commentId: F:Lime.PlayParameters.Exclusive
+  fullName: Lime.PlayParameters.Exclusive
+  nameWithType: PlayParameters.Exclusive
+- uid: Lime.PlayParameters.FadeInTime
+  name: FadeInTime
+  href: api/Lime.PlayParameters.html#Lime_PlayParameters_FadeInTime
+  commentId: F:Lime.PlayParameters.FadeInTime
+  fullName: Lime.PlayParameters.FadeInTime
+  nameWithType: PlayParameters.FadeInTime
+- uid: Lime.PlayParameters.FadeOutTime
+  name: FadeOutTime
+  href: api/Lime.PlayParameters.html#Lime_PlayParameters_FadeOutTime
+  commentId: F:Lime.PlayParameters.FadeOutTime
+  fullName: Lime.PlayParameters.FadeOutTime
+  nameWithType: PlayParameters.FadeOutTime
 - uid: Lime.PlayParameters.Group
   name: Group
   href: api/Lime.PlayParameters.html#Lime_PlayParameters_Group
@@ -54887,12 +54995,12 @@ references:
   commentId: F:Lime.SerializableSample.Path
   fullName: Lime.SerializableSample.Path
   nameWithType: SerializableSample.Path
-- uid: Lime.SerializableSample.Play(Lime.AudioChannelGroup,System.Boolean,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Single)
-  name: Play(AudioChannelGroup, Boolean, Single, Boolean, Single, Single, Single, Single)
-  href: api/Lime.SerializableSample.html#Lime_SerializableSample_Play_Lime_AudioChannelGroup_System_Boolean_System_Single_System_Boolean_System_Single_System_Single_System_Single_System_Single_
-  commentId: M:Lime.SerializableSample.Play(Lime.AudioChannelGroup,System.Boolean,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Single)
-  fullName: Lime.SerializableSample.Play(Lime.AudioChannelGroup, System.Boolean, System.Single, System.Boolean, System.Single, System.Single, System.Single, System.Single)
-  nameWithType: SerializableSample.Play(AudioChannelGroup, Boolean, Single, Boolean, Single, Single, Single, Single)
+- uid: Lime.SerializableSample.Play(Lime.AudioChannelGroup,System.Boolean,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Single)
+  name: Play(AudioChannelGroup, Boolean, Single, Boolean, Single, Single, Single, Single, Boolean, Single)
+  href: api/Lime.SerializableSample.html#Lime_SerializableSample_Play_Lime_AudioChannelGroup_System_Boolean_System_Single_System_Boolean_System_Single_System_Single_System_Single_System_Single_System_Boolean_System_Single_
+  commentId: M:Lime.SerializableSample.Play(Lime.AudioChannelGroup,System.Boolean,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Single)
+  fullName: Lime.SerializableSample.Play(Lime.AudioChannelGroup, System.Boolean, System.Single, System.Boolean, System.Single, System.Single, System.Single, System.Single, System.Boolean, System.Single)
+  nameWithType: SerializableSample.Play(AudioChannelGroup, Boolean, Single, Boolean, Single, Single, Single, Single, Boolean, Single)
 - uid: Lime.SerializableSample.Play*
   name: Play
   href: api/Lime.SerializableSample.html#Lime_SerializableSample_Play_
@@ -58182,6 +58290,19 @@ references:
   isSpec: "True"
   fullName: Lime.Sound.IsLoading
   nameWithType: Sound.IsLoading
+- uid: Lime.Sound.IsPaused
+  name: IsPaused
+  href: api/Lime.Sound.html#Lime_Sound_IsPaused
+  commentId: P:Lime.Sound.IsPaused
+  fullName: Lime.Sound.IsPaused
+  nameWithType: Sound.IsPaused
+- uid: Lime.Sound.IsPaused*
+  name: IsPaused
+  href: api/Lime.Sound.html#Lime_Sound_IsPaused_
+  commentId: Overload:Lime.Sound.IsPaused
+  isSpec: "True"
+  fullName: Lime.Sound.IsPaused
+  nameWithType: Sound.IsPaused
 - uid: Lime.Sound.IsStopped
   name: IsStopped
   href: api/Lime.Sound.html#Lime_Sound_IsStopped
