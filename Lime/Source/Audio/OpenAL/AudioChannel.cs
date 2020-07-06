@@ -37,30 +37,34 @@ namespace Lime
 
 		private IAudioDecoder decoder;
 		private readonly IntPtr decodedData;
+		private AudioChannelState previousState = AudioChannelState.Invalid;
+		internal Action<AudioChannel, AudioChannelState, AudioChannelState> OnStateChanged;
+		private float delayTime;
 
-		private enum FadePurpose
+		internal enum FadePurpose
 		{
 			None,
 			Play,
 			Stop,
 			Pause,
-			Suspend
+			Suspend,
+			Exclusive,
 		}
-		
+
 		public bool Streaming { get { return streaming; } }
 
 		public float Pitch
 		{
-			get { return pitch; }
-			set { SetPitch(value); }
+			get => pitch;
+			set => SetPitch(value);
 		}
 
 		public float Volume
 		{
-			get { return volume; }
-			set { SetVolume(value); }
+			get => volume;
+			set => SetVolume(value);
 		}
-	
+
 		public AudioChannelState State
 		{
 			get
@@ -81,12 +85,15 @@ namespace Lime
 
 		public Sound Sound { get; private set; }
 
-		public float Pan {
-			get { return pan; }
-			set { SetPan(value); }
+		public float Pan
+		{
+			get => pan;
+			set => SetPan(value);
 		}
 
 		public string SamplePath { get; set; }
+		public float FadeInTime { get; internal set; }
+		public float FadeOutTime { get; internal set; }
 
 		public AudioChannel(int index)
 		{
@@ -119,7 +126,7 @@ namespace Lime
 				AL.DeleteBuffer(bid);
 			}
 		}
-		
+
 		public void Dispose()
 		{
 			if (!AudioSystem.Active) {
@@ -144,14 +151,14 @@ namespace Lime
 			}
 		}
 
-		internal bool Play(Sound sound, IAudioDecoder decoder, bool looping, bool paused, float fadeinTime)
+		internal bool Play(Sound sound, IAudioDecoder decoder, bool looping, bool paused, float fadeInTime)
 		{
 			if (!AudioSystem.Active) {
 				return false;
 			}
 			var state = AL.GetSourceState(source);
 			if (state != ALSourceState.Initial && state != ALSourceState.Stopped) {
-				// Don't know why is it happens, but it's better to warn than crush the game
+				// Don't know why is it happens, but it's better to warn than crash the game
 				Debug.Write("AudioSource must be stopped before play");
 				return false;
 			}
@@ -171,7 +178,7 @@ namespace Lime
 			sound.ChannelInternal = this;
 			StartupTime = DateTime.Now;
 			if (!paused) {
-				Resume(fadeinTime);
+				Resume(fadeInTime);
 			}
 			return true;
 		}
@@ -184,23 +191,24 @@ namespace Lime
 			processedBuffers = new Stack<int>(allBuffers);
 		}
 
-		public void Resume(float fadeinTime = 0)
+		public void Resume(float fadeInTime = 0)
 		{
+			FadeInTime = fadeInTime;
 			if (!AudioSystem.Active) {
 				return;
 			}
 			if (decoder == null) {
 				throw new InvalidOperationException("Audio decoder is not set");
 			}
-			if (fadeinTime > 0) {
-				fadeVolume = 0;
-				fadeSpeed = 1 / fadeinTime;
-				fadePurpose = FadePurpose.Play;
-			} else {
-				fadeSpeed = 0;
-				fadeVolume = 1;
-				fadePurpose = FadePurpose.None;
+			delayTime = PlatformAudioSystem.GetDelayBeforePlayOrResume(this);
+			if (delayTime == 0.0f) {
+				ResumeWithoutDelay();
 			}
+		}
+
+		private void ResumeWithoutDelay()
+		{
+			FadeIn(FadePurpose.Play);
 			Volume = volume;
 			PlayImmediate();
 		}
@@ -213,17 +221,13 @@ namespace Lime
 			}
 		}
 
-		public void Pause(float fadeoutTime = 0)
+		public void Pause(float fadeOutTime = 0)
 		{
+			FadeOutTime = fadeOutTime;
 			if (!AudioSystem.Active) {
 				return;
 			}
-			if (fadeoutTime > 0) {
-				fadeSpeed = -1 / fadeoutTime;
-				fadePurpose = FadePurpose.Pause;
-			} else {
-				fadeSpeed = 0;
-				fadeVolume = 0;
+			if (!FadeOut(FadePurpose.Pause)) {
 				PauseImmediate();
 			}
 			Volume = volume;
@@ -236,17 +240,13 @@ namespace Lime
 			}
 		}
 
-		public void Stop(float fadeoutTime = 0)
+		public void Stop(float fadeOutTime = 0)
 		{
+			FadeOutTime = fadeOutTime;
 			if (!AudioSystem.Active) {
 				return;
 			}
-			if (fadeoutTime > 0) {
-				fadeSpeed = -1 / fadeoutTime;
-				fadePurpose = FadePurpose.Stop;
-			} else {
-				fadeSpeed = 0;
-				fadeVolume = 0;
+			if (!FadeOut(FadePurpose.Stop)) {
 				StopImmediate();
 			}
 			Volume = volume;
@@ -262,17 +262,13 @@ namespace Lime
 			}
 		}
 
-		public PlayParameters Suspend(float fadeoutTime = 0)
+		public PlayParameters Suspend(float fadeOutTime = 0)
 		{
+			FadeOutTime = fadeOutTime;
 			if (!AudioSystem.Active) {
 				return null;
 			}
-			if (fadeoutTime > 0) {
-				fadeSpeed = -1 / fadeoutTime;
-				fadePurpose = FadePurpose.Suspend;
-			} else {
-				fadeSpeed = 0;
-				fadeVolume = 0;
+			if (!FadeOut(FadePurpose.Suspend)) {
 				SuspendImmediate();
 			}
 			Volume = volume;
@@ -286,6 +282,35 @@ namespace Lime
 				Priority = Priority,
 				Looping = looping,
 			};
+		}
+
+		internal bool FadeIn(FadePurpose purpose)
+		{
+			if (FadeInTime > 0) {
+				fadeVolume = 0;
+				fadeSpeed = 1 / FadeInTime;
+				fadePurpose = purpose;
+				return true;
+			} else {
+				fadeSpeed = 0;
+				fadeVolume = 1;
+				fadePurpose = FadePurpose.None;
+				return false;
+			}
+		}
+
+		internal bool FadeOut(FadePurpose purpose)
+		{
+			if (FadeOutTime > 0) {
+				fadeSpeed = -1 / FadeOutTime;
+				fadePurpose = purpose;
+				return true;
+			} else {
+				fadeSpeed = 0;
+				fadeVolume = 0;
+				fadePurpose = FadePurpose.None;
+				return false;
+			}
 		}
 
 		private void SuspendImmediate()
@@ -312,7 +337,7 @@ namespace Lime
 				return;
 			}
 			volume = Mathf.Clamp(value, 0, 1);
-			float gain = volume * AudioSystem.GetGroupVolume(Group) * fadeVolume;
+			float gain = volume * fadeVolume * AudioSystem.GetGroupVolume(Group);
 			using (new PlatformAudioSystem.ErrorChecker()) {
 				AL.Source(source, ALSourcef.Gain, gain);
 			}
@@ -323,11 +348,23 @@ namespace Lime
 			if (!AudioSystem.Active) {
 				return;
 			}
+			var state = State;
+			if (previousState != state) {
+				OnStateChanged?.Invoke(this, previousState, state);
+				previousState = state;
+			}
 			if (streaming) {
 				lock (streamingSync) {
 					if (streaming) {
 						QueueBuffers();
 					}
+				}
+			}
+			if (delayTime > 0.0f) {
+				delayTime -= delta;
+				if (delayTime <= 0.0f) {
+					delayTime = 0.0f;
+					ResumeWithoutDelay();
 				}
 			}
 			if (fadePurpose != FadePurpose.None) {
@@ -362,11 +399,13 @@ namespace Lime
 				case FadePurpose.Suspend:
 					SuspendImmediate();
 					break;
+				case FadePurpose.Exclusive:
+					break;
 			}
 			fadePurpose = FadePurpose.None;
 		}
 
-		void QueueBuffers()
+		private void QueueBuffers()
 		{
 			if (decoder == null) {
 				throw new InvalidOperationException("Audio decoder is not set");
@@ -383,7 +422,7 @@ namespace Lime
 			}
 		}
 
-		bool QueueOneBuffer()
+		private bool QueueOneBuffer()
 		{
 			int buffer = AcquireBuffer();
 			if (buffer != 0) {
@@ -419,7 +458,7 @@ namespace Lime
 			return false;
 		}
 
-		void UnqueueProcessedBuffers()
+		private void UnqueueProcessedBuffers()
 		{
 			AL.GetError();
 			int numProcessed;
@@ -431,8 +470,8 @@ namespace Lime
 				}
 			}
 		}
-		
-		int AcquireBuffer()
+
+		private int AcquireBuffer()
 		{
 			int c = processedBuffers.Count;
 			if (c == 0) {

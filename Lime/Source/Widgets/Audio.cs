@@ -6,15 +6,15 @@ namespace Lime
 	public enum AudioAction
 	{
 		Play,
-		Stop
+		Stop,
+		Pause,
 	}
 
 	[TangerineRegisterNode(Order = 3)]
 	public class Audio : Node
 	{
 		public static bool GloballyEnable = true;
-
-		Sound sound = new Sound();
+		private Sound sound = new Sound();
 
 		[YuzuMember]
 		[TangerineKeyframeColor(19)]
@@ -26,15 +26,24 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(21)]
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
+		[TangerineDisplayName("Fade Out Time")]
 		public float FadeTime { get; set; }
+
+		[YuzuMember]
+		[TangerineKeyframeColor(21)]
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
+		[TangerineDisplayName("Fade In Time")]
+		public float FadeInTime { get; set; }
 
 		private float volume = 0.5f;
 
 		[YuzuMember]
 		[TangerineKeyframeColor(22)]
+		[TangerineValidRange(0.0f, 1.0f)]
 		public float Volume
 		{
-			get { return volume; }
+			get => volume;
 			set
 			{
 				volume = value;
@@ -46,9 +55,10 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(23)]
+		[TangerineValidRange(-1.0f, 1.0f)]
 		public float Pan
 		{
-			get { return pan; }
+			get => pan;
 			set
 			{
 				pan = value;
@@ -60,9 +70,10 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(24)]
+		[TangerineValidRange(0.0625f, 16.0f)]
 		public float Pitch
 		{
-			get { return pitch; }
+			get => pitch;
 			set
 			{
 				pitch = value;
@@ -85,6 +96,18 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(27)]
 		public bool Continuous { get; set; }
+
+		/// <summary>
+		/// Mute all audio channels withing same <see cref="Group"/> when this audio is playing.
+		/// Multiple exclusive audio mute and unmute each other in stack order.
+		/// <see cref="FadeInTime"/> and <see cref="FadeTime"/> are used for transitions between exclusive audio.
+		/// </summary>
+		[YuzuMember]
+		[TangerineStaticProperty]
+		[TangerinePropertyTooltip(@"Mute all audio channels within same audio group when this audio is playing.
+Multiple exclusive audio mute and unmute each other in stack order.
+Use Fade In Time and Fade Out Time for transitions.")]
+		public bool Exclusive { get; set; }
 
 		private float auxiliaryVolume = 1f;
 
@@ -120,26 +143,30 @@ namespace Lime
 		{
 			if (Sample != null) {
 				sound = Sample.Play(
-					Group, false, 0f, Looping, Priority, Volume * AuxiliaryVolume, Pan, Pitch * AuxiliaryPitch
+					group: Group,
+					paused: false,
+					fadeInTime: FadeInTime,
+					looping: Looping,
+					priority: Priority,
+					volume: Volume * AuxiliaryVolume,
+					pan: Pan,
+					pitch: Pitch * AuxiliaryPitch,
+					exclusive: Exclusive,
+					fadeOutTime: FadeTime
 				);
 				sound.StopChecker = ShouldStop;
 			}
 		}
 
-		public virtual void Stop()
-		{
-			sound.Stop(FadeTime);
-		}
+		public virtual void Stop() => sound.Stop(FadeTime);
 
-		private bool ShouldStop()
-		{
-			return !Continuous && (Manager == null || GloballyFrozen);
-		}
+		public virtual void Pause() => sound.Pause(FadeTime);
 
-		public bool IsPlaying()
-		{
-			return !sound.IsStopped;
-		}
+		public virtual void Resume() => sound.Resume(FadeInTime);
+
+		private bool ShouldStop() => !Continuous && (Manager == null || GloballyFrozen);
+
+		public bool IsPlaying() => !sound.IsStopped && !sound.IsPaused;
 
 		public override void AddToRenderChain(RenderChain chain)
 		{
@@ -151,10 +178,20 @@ namespace Lime
 			if (property == "Action") {
 				var action = (AudioAction)value;
 				if (GloballyEnable && !GetTangerineFlag(TangerineFlags.Hidden)) {
-					if (action == AudioAction.Play) {
-						Play();
-					} else {
-						Stop();
+					switch (action) {
+						case AudioAction.Play:
+							if (sound.IsPaused) {
+								Resume();
+							} else {
+								Play();
+							}
+							break;
+						case AudioAction.Stop:
+							Stop();
+							break;
+						case AudioAction.Pause:
+							Pause();
+							break;
 					}
 				}
 			}

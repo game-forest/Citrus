@@ -81,10 +81,7 @@ namespace Lime
 			Lemon.Api.OggResetToBeginning(oggFile);
 		}
 
-		public int GetBlockSize()
-		{
-			return 1;
-		}
+		public int GetBlockSize() => 1;
 
 		public int ReadBlocks(IntPtr buffer,int startIndex,int blockCount)
 		{

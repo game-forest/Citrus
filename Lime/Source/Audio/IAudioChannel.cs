@@ -6,7 +6,8 @@ namespace Lime
 		Initial,
 		Playing,
 		Stopped,
-		Paused
+		Paused,
+		Invalid,
 	}
 
 	public enum AudioChannelGroup

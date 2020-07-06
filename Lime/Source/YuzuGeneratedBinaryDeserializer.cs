@@ -1711,10 +1711,18 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (6 == fd.OurIndex) {
-				result.FadeTime = d.Reader.ReadSingle();
+				result.Exclusive = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
+				result.FadeInTime = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (8 == fd.OurIndex) {
+				result.FadeTime = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (9 == fd.OurIndex) {
 				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
@@ -1726,20 +1734,20 @@ namespace YuzuGenerated
 				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (8 == fd.OurIndex) {
+			if (10 == fd.OurIndex) {
 				result.Group = (global::Lime.AudioChannelGroup)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (9 == fd.OurIndex) {
+			if (11 == fd.OurIndex) {
 				result.Id = d.Reader.ReadString();
 				if (result.Id == "" && d.Reader.ReadBoolean()) result.Id = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (10 == fd.OurIndex) {
+			if (12 == fd.OurIndex) {
 				result.Looping = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (11 == fd.OurIndex) {
+			if (13 == fd.OurIndex) {
 				var tmp9 = d.Reader.ReadInt32();
 				if (tmp9 >= 0) {
 					while (--tmp9 >= 0) {
@@ -1749,32 +1757,32 @@ namespace YuzuGenerated
 				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (12 == fd.OurIndex) {
+			if (14 == fd.OurIndex) {
 				result.Pan = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (13 == fd.OurIndex) {
+			if (15 == fd.OurIndex) {
 				result.Pitch = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (14 == fd.OurIndex) {
+			if (16 == fd.OurIndex) {
 				result.Priority = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (15 == fd.OurIndex) {
+			if (17 == fd.OurIndex) {
 				result.Sample = (global::Lime.SerializableSample)dg.ReadObject<global::Lime.SerializableSample>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (16 == fd.OurIndex) {
+			if (18 == fd.OurIndex) {
 				result.Tag = d.Reader.ReadString();
 				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (17 == fd.OurIndex) {
+			if (19 == fd.OurIndex) {
 				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (18 == fd.OurIndex) {
+			if (20 == fd.OurIndex) {
 				result.Volume = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}

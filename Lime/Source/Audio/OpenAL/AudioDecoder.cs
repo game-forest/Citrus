@@ -16,7 +16,7 @@ namespace Lime
 		Stereo16,
 		Mono16
 	}
-	
+
 	public interface IAudioDecoder : IDisposable
 	{
 		AudioFormat GetFormat();
