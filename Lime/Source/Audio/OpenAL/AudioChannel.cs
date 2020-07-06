@@ -286,9 +286,12 @@ namespace Lime
 
 		internal bool FadeIn(FadePurpose purpose)
 		{
-			if (FadeInTime > 0) {
+			var fadeTime = purpose == FadePurpose.Exclusive && FadeInTime == 0.0f
+				? AudioSystem.ExclusiveAudioDefaultCrossfadeTime
+				: FadeInTime;
+			if (fadeTime > 0) {
 				fadeVolume = 0;
-				fadeSpeed = 1 / FadeInTime;
+				fadeSpeed = 1 / fadeTime;
 				fadePurpose = purpose;
 				return true;
 			} else {
@@ -301,8 +304,11 @@ namespace Lime
 
 		internal bool FadeOut(FadePurpose purpose)
 		{
-			if (FadeOutTime > 0) {
-				fadeSpeed = -1 / FadeOutTime;
+			var fadeTime = purpose == FadePurpose.Exclusive && FadeOutTime == 0.0f
+				? AudioSystem.ExclusiveAudioDefaultCrossfadeTime
+				: FadeOutTime;
+			if (fadeTime > 0) {
+				fadeSpeed = -1 / fadeTime;
 				fadePurpose = purpose;
 				return true;
 			} else {
