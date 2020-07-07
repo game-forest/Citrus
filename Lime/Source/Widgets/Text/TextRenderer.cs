@@ -394,7 +394,7 @@ namespace Lime.Text
 				var t = texts[word.TextIndex];
 				var isTextOrBullet = (t.Length > 0 && t[word.Start] > ' ') || IsBullet(word);
 				if (x + word.Width > maxWidth && isTextOrBullet) {
-					if (overflowMode != TextOverflowMode.Minify && (wordSplitAllowed || t.HasJapaneseChineseSymbols(word.Start, word.Length))) {
+					if (wordSplitAllowed || t.HasJapaneseChineseSymbols(word.Start, word.Length)) {
 						var fittedCharsCount = CalcFittedCharactersCount(word, maxWidth - x);
 						if (fittedCharsCount > 0) {
 							var wordEnd = word.Start + fittedCharsCount;

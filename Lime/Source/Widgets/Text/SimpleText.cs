@@ -479,14 +479,12 @@ namespace Lime
 					}
 				}
 				// Trying to split long lines. If a line can't be split it gets clipped.
-				if (OverflowMode != TextOverflowMode.Minify) {
-					while (MeasureTextLine(strings[i]).X > Math.Abs(ContentWidth)) {
-						if (!TextLineSplitter.CarryLastWordToNextLine(strings, i, WordSplitAllowed, IsTextLinePartFitToWidth)) {
-							if (OverflowMode == TextOverflowMode.Ellipsis) {
-								strings[i] = ClipLineWithEllipsis(strings[i]);
-							}
-							break;
+				while (MeasureTextLine(strings[i]).X > Math.Abs(ContentWidth)) {
+					if (!TextLineSplitter.CarryLastWordToNextLine(strings, i, WordSplitAllowed, IsTextLinePartFitToWidth)) {
+						if (OverflowMode == TextOverflowMode.Ellipsis) {
+							strings[i] = ClipLineWithEllipsis(strings[i]);
 						}
+						break;
 					}
 				}
 			}
