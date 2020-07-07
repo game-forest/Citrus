@@ -149,12 +149,12 @@ namespace Lime.Widgets.PolygonMesh
 				var rkt = rkf * AnimationUtils.SecondsPerFrame;
 				ro.BlendFactor = (float)((time - lkt) / (rkt - lkt));
 			}
-			ro.BoneTransforms = new Matrix44[100];
+			ro.BoneTransforms = new Matrix44[50];
 			for (var i = 0; i < ro.BoneTransforms.Length; ++i) {
 				ro.BoneTransforms[i] = Matrix44.Identity;
 			}
 			foreach (var vertex in Vertices) {
-				// Assuming that parent can't have more than 100 bones.
+				// Assuming that parent can't have more than 50 bones.
 				ro.BoneTransforms[vertex.BlendIndices.Index0] =
 					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index0].RelativeTransform;
 				ro.BoneTransforms[vertex.BlendIndices.Index1] =
@@ -170,6 +170,10 @@ namespace Lime.Widgets.PolygonMesh
 				var v1 = vb1[i];
 				v0.Pos = v0.Pos * Size;
 				v1.Pos = v1.Pos * Size;
+				if (Texture != null) {
+					Texture.TransformUVCoordinatesToAtlasSpace(ref v0.UV1);
+					Texture.TransformUVCoordinatesToAtlasSpace(ref v1.UV1);
+				}
 #if TANGERINE
 				if (!TangerineAnimationModeEnabled) {
 					v0.SkinningWeights = new SkinningWeights();
@@ -203,10 +207,10 @@ namespace Lime.Widgets.PolygonMesh
 			private static Shader[] shaders;
 			private static VertexInputLayoutAttribute[] layoutAttribs;
 			private static VertexInputLayoutBinding[] layoutBindings;
-			private static VertexInputLayout vertexInputLayout;
+			private static readonly VertexInputLayout vertexInputLayout;
 			private static ShaderProgram.AttribLocation[] attribLocations;
 			private static ShaderProgram.Sampler[] samplers;
-			private static ShaderProgram program;
+			private static readonly ShaderProgram program;
 
 			static RenderObject()
 			{
@@ -238,7 +242,7 @@ namespace Lime.Widgets.PolygonMesh
 						uniform mat4 u_GlobalTransform;
 						uniform mat4 u_LocalToParentTransform;
 						uniform mat4 u_ParentToLocalTransform;
-						uniform mat4 u_Bones[100];
+						uniform mat4 u_Bones[50];
 
 						void main()
 						{
@@ -443,13 +447,13 @@ namespace Lime.Widgets.PolygonMesh
 				var matProjection = shaderParams.GetParamKey<Matrix44>("u_MatProjection");
 				var globalTransform = shaderParams.GetParamKey<Matrix44>("u_GlobalTransform");
 				var localToParentTransform = shaderParams.GetParamKey<Matrix44>("u_LocalToParentTransform");
-				var parenttoLocalTransform = shaderParams.GetParamKey<Matrix44>("u_ParentToLocalTransform");
+				var parentToLocalTransform = shaderParams.GetParamKey<Matrix44>("u_ParentToLocalTransform");
 				var bones = shaderParams.GetParamKey<Matrix44>("u_Bones");
 				shaderParams.Set(blendFactor, BlendFactor);
 				shaderParams.Set(matProjection, Renderer.FixupWVP(Renderer.WorldViewProjection));
 				shaderParams.Set(globalTransform, (Matrix44)(LocalToWorldTransform * Renderer.Transform2));
 				shaderParams.Set(localToParentTransform, (Matrix44)LocalToParentTransform);
-				shaderParams.Set(parenttoLocalTransform, (Matrix44)ParentToLocalTransform);
+				shaderParams.Set(parentToLocalTransform, (Matrix44)ParentToLocalTransform);
 				shaderParams.Set(bones, BoneTransforms, BoneTransforms.Length);
 
 				Renderer.Flush();
