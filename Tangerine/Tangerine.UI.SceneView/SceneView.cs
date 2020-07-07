@@ -32,6 +32,7 @@ namespace Tangerine.UI.SceneView
 			MinMaxSize = new Vector2(24),
 			LayoutCell = new LayoutCell(new Alignment { X = HAlignment.Left, Y = VAlignment.Bottom } )
 		};
+		public static readonly PolygonMeshContextualPanel PolygonMeshPanel = new PolygonMeshContextualPanel();
 		public static Action<SceneView> OnCreate;
 
 		/// <summary>
@@ -238,6 +239,7 @@ namespace Tangerine.UI.SceneView
 		{
 			Instance = this;
 			Document.Current.SceneViewThumbnailProvider = new SceneViewThumbnailProvider(Document.Current, Frame);
+			Panel.AddNode(PolygonMeshPanel.RootNode);
 			Panel.AddNode(ShowNodeDecorationsPanelButton);
 			Panel.AddNode(ZoomWidget);
 			Panel.AddNode(RulersWidget);
@@ -247,6 +249,7 @@ namespace Tangerine.UI.SceneView
 		public void Detach()
 		{
 			Instance = null;
+			PolygonMeshPanel.RootNode.Unlink();
 			Frame.Unlink();
 			ShowNodeDecorationsPanelButton.Unlink();
 			RulersWidget.Unlink();
@@ -305,7 +308,7 @@ namespace Tangerine.UI.SceneView
 				new PreviewAnimationProcessor(),
 				new ResolutionPreviewProcessor(),
 				new FrameProgressionProcessor(),
-				new PolygonMeshContextualPanelProcessor()
+				new PolygonMeshContextualPanelProcessor(this, PolygonMeshPanel)
 			);
 		}
 

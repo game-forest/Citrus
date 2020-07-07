@@ -6,18 +6,20 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 {
 	class PolygonMeshContextualPanelProcessor : ITaskProvider
 	{
-		private SceneView sv => SceneView.Instance;
+		private readonly SceneView sv;
+		private readonly PolygonMeshContextualPanel panel;
+
+		public PolygonMeshContextualPanelProcessor(SceneView sceneView, PolygonMeshContextualPanel panel)
+		{
+			sv = sceneView;
+			this.panel = panel;
+		}
 
 		public IEnumerator<object> Task()
 		{
 			while (true) {
-				if (Document.Current.SelectedNodes().Any(node => node is Lime.Widgets.PolygonMesh.PolygonMesh)) {
-					if (!sv.Panel.Nodes.Contains(PolygonMeshContextualPanel.Instance.RootNode)) {
-						sv.Panel.Nodes.Insert(0, PolygonMeshContextualPanel.Instance.RootNode);
-					}
-				} else {
-					sv.Panel.Nodes.Remove(PolygonMeshContextualPanel.Instance.RootNode);
-				}
+				panel.RootNode.Visible = Document.Current.SelectedNodes()
+					.Any(node => node is Lime.Widgets.PolygonMesh.PolygonMesh);
 				yield return null;
 			}
 		}
