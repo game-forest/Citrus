@@ -23,6 +23,13 @@ namespace Lime
 
 	public static class AudioSystem
 	{
+		/// <summary>
+		/// Default time for fade in and fade out when performing cross fade between exclusive channels.
+		/// To override for corresponding kind of fade set either
+		/// <see cref="Audio.FadeTime"/> or <see cref="Audio.FadeInTime"/> to non zero.
+		/// </summary>
+		public static float ExclusiveAudioDefaultCrossfadeTime = 0.1f;
+
 		static readonly float[] groupVolumes = { 1, 1, 1 };
 
 		public static void Initialize(ApplicationOptions options) => PlatformAudioSystem.Initialize(options);
