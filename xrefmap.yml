@@ -6848,6 +6848,12 @@ references:
   isSpec: "True"
   fullName: Lime.AudioSystem.Channels
   nameWithType: AudioSystem.Channels
+- uid: Lime.AudioSystem.ExclusiveAudioDefaultCrossfadeTime
+  name: ExclusiveAudioDefaultCrossfadeTime
+  href: api/Lime.AudioSystem.html#Lime_AudioSystem_ExclusiveAudioDefaultCrossfadeTime
+  commentId: F:Lime.AudioSystem.ExclusiveAudioDefaultCrossfadeTime
+  fullName: Lime.AudioSystem.ExclusiveAudioDefaultCrossfadeTime
+  nameWithType: AudioSystem.ExclusiveAudioDefaultCrossfadeTime
 - uid: Lime.AudioSystem.GetGroupVolume(Lime.AudioChannelGroup)
   name: GetGroupVolume(AudioChannelGroup)
   href: api/Lime.AudioSystem.html#Lime_AudioSystem_GetGroupVolume_Lime_AudioChannelGroup_
