@@ -24,6 +24,9 @@ namespace Tangerine
 			Removal,
 		}
 
+		public static ModificationState NextState(this ModificationState state) =>
+			(ModificationState)(((int)state + 1) % 4);
+
 		private static ModificationMode mode;
 		public static ModificationMode Mode
 		{

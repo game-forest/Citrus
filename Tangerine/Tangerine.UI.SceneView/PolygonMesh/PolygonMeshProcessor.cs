@@ -22,9 +22,14 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-
 				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
-
+				if (meshes.Count == 0) {
+					yield return null;
+					continue;
+				}
+				if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
+					PolygonMeshTools.State = PolygonMeshTools.State.NextState();
+				}
 				/// Skinning bootstrap
 				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
 				if (PolygonMeshTools.State == PolygonMeshTools.ModificationState.Animation) {
