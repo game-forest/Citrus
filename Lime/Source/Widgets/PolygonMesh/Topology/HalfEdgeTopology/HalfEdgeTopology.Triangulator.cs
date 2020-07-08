@@ -514,7 +514,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-		private bool InsertConstrainEdge(int index0, int index1)
+		private bool InsertConstrainEdge(int index0, int index1, bool destroyConstrained = false)
 		{
 			var location = LocateClosestTriangle(index0, out var start);
 			System.Diagnostics.Debug.Assert(location == LocationResult.SameVertex);
@@ -552,18 +552,18 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					var ec = c - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
-						return incidentEdge.Constrained = InsertConstrainEdge(next.Origin, index1);
+						return incidentEdge.Constrained = InsertConstrainEdge(next.Origin, index1, destroyConstrained);
 					}
 
 				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
 					var ed = d - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ed.X) == signab.X && Mathf.Sign(ed.Y) == signab.Y) {
-						return prev.Constrained = InsertConstrainEdge(prev.Origin, index1);
+						return prev.Constrained = InsertConstrainEdge(prev.Origin, index1, destroyConstrained);
 					}
 				} else if (RobustSegmentSegmentIntersection(a, b, c, d)) {
 					// Should not delete existing constrain edges.
-					if (next.Constrained) {
+					if (next.Constrained && !destroyConstrained) {
 						return false;
 					}
 					// Then we should start traversing
@@ -604,20 +604,20 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					AddLower(prev);
 					AddUpper(next);
 					var edge = Finish(index0, prev.Origin);
-					edge.Constrained = InsertConstrainEdge(prev.Origin, index1);
+					edge.Constrained = InsertConstrainEdge(prev.Origin, index1, destroyConstrained);
 					RestoreDelaunayProperty(upperPolygon);
 					RestoreDelaunayProperty(lowerPolygon);
 					return edge.Constrained;
 
 				}
 				if (RobustSegmentSegmentIntersection(a, b, c, d)) {
-					if (next.Constrained) {
+					if (next.Constrained && !destroyConstrained) {
 						return false;
 					}
 					AddLower(prev);
 					current = next;
 				} else if (RobustSegmentSegmentIntersection(a, b, d, e)) {
-					if (prev.Constrained) {
+					if (prev.Constrained && !destroyConstrained) {
 						return false;
 					}
 					AddUpper(next);

@@ -691,7 +691,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var current = next;
 			while (current != prev) {
 				var p = InnerBoundary.Prev(current);
-				InsertConstrainEdge(current, p);
+				InsertConstrainEdge(current, p, true);
 				current = p;
 			}
 		}
@@ -821,7 +821,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				EdgeHitTestDistance = savedEdgeHitTestDistance;
 			}
 			foreach (var edge in constrainedEdges) {
-				InsertConstrainEdge(edge.Item1, edge.Item2);
+				InsertConstrainEdge(edge.Item1, edge.Item2, true);
 			}
 			if (isBoundaryVertex && !InnerBoundary.Contains(index)) {
 				InnerBoundary.Insert(prevIndex, index);
