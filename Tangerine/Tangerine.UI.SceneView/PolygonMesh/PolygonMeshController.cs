@@ -612,19 +612,32 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 					keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var delta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
-					if (Topology.TranslateVertex(target.Index, delta, delta)) {
+					if (Topology.TranslateVertex(target.Index, delta, delta, out var removedVertices)) {
 						lastValidDelta = delta;
 					} else if (lastValidDelta != Vector2.Zero) {
-						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidDelta);
+						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidDelta, out removedVertices);
 					}
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
+						var targetIndex = target.Index;
 						foreach (var key in animator.Keys.ToList()) {
 							var newKey = key.Clone();
-							var v = (newKey.Value as List<SkinnedVertex>)[target.Index];
-							v.UV1 = Mesh.Vertices[target.Index].UV1;
-							(newKey.Value as List<SkinnedVertex>)[target.Index] = v;
+							var vertices = new List<SkinnedVertex>((List<SkinnedVertex>)newKey.Value);
+							if (removedVertices != null) {
+								foreach (var removedIndex in removedVertices) {
+									vertices[removedIndex] = vertices[vertices.Count - 1];
+									if (vertices.Count - 1 == targetIndex) {
+										targetIndex = (ushort)removedIndex;
+									}
+									vertices.RemoveAt(vertices.Count - 1);
+								}
+							}
+							var v = vertices[targetIndex];
+							v.UV1 = Mesh.Vertices[targetIndex].UV1;
+							vertices[targetIndex] = v;
+							newKey.Value = vertices;
 							keyframes.Add(newKey);
+							animator.ResetCache();
 						}
 					}
 					var sliceAfter = new PolygonMeshSlice {

@@ -28,7 +28,7 @@ namespace Lime.PolygonMesh.Topology
 		event Action<ITopology> OnTopologyChanged;
 		int AddVertex(SkinnedVertex vertex);
 		void RemoveVertex(int index);
-		bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta);
+		bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta, out List<int> deletedVertices);
 		void ConstrainEdge(int index0, int index1);
 		void DeconstrainEdge(int index0, int index1);
 		IEnumerable<(int, int)> ConstrainedEdges { get; }

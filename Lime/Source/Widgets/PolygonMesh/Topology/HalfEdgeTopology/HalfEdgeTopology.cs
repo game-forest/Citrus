@@ -721,7 +721,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			InnerBoundary.Remap(map);
 		}
 
-		public bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta)
+		public bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta, out List<int> deleted)
 		{
 			LocateClosestTriangle(index, out var he);
 			var original = Vertices[index];
@@ -730,6 +730,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			translated.Pos += positionDelta;
 			translated.UV1 += uvDelta;
 			var translatedPos = translated.Pos;
+			deleted = null;
 			// Check if translated vertex is contained inside bounding figure.
 			if (translatedPos.Y < 0f || translatedPos.Y > 1f || translatedPos.X < 0f || translatedPos.X > 1f) {
 				return false;
@@ -769,7 +770,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 						return false;
 					}
 				}
-				var mustBeRemoved = new List<int>();
+				var mustBeRemoved = deleted = new List<int>();
 				// Good hack. Delete vertices that new border does not contain.
 				Vertices[index] = translated;
 				for (int i = 0; i < Vertices.Count; i++) {
