@@ -39,8 +39,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					return false;
 				}
 				// otherwise it can be bounding figure vertex.
-				var boundingFigureVertexIndex = BoundingFigureVertices.FindIndex(v => v.Pos == vertex);
-				if (boundingFigureVertexIndex < 0 || halfEdge.Origin != -boundingFigureVertexIndex) {
+				if (!BelongsToBoundingFigure(vertex, out var bfvi) || halfEdge.Origin != -bfvi) {
 					return false;
 				}
 				foreach (var incidentEdge in IncidentEdges(halfEdge)) {
@@ -514,7 +513,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-		private bool InsertConstrainEdge(int index0, int index1, bool destroyConstrained = false)
+		private bool InnerInsertConstrainedEdge(int index0, int index1, bool destroyConstrained = false)
 		{
 			var location = LocateClosestTriangle(index0, out var start);
 			System.Diagnostics.Debug.Assert(location == LocationResult.SameVertex);
@@ -552,14 +551,14 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					var ec = c - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
-						return incidentEdge.Constrained = InsertConstrainEdge(next.Origin, index1, destroyConstrained);
+						return incidentEdge.Constrained = InnerInsertConstrainedEdge(next.Origin, index1, destroyConstrained);
 					}
 
 				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
 					var ed = d - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ed.X) == signab.X && Mathf.Sign(ed.Y) == signab.Y) {
-						return prev.Constrained = InsertConstrainEdge(prev.Origin, index1, destroyConstrained);
+						return prev.Constrained = InnerInsertConstrainedEdge(prev.Origin, index1, destroyConstrained);
 					}
 				} else if (RobustSegmentSegmentIntersection(a, b, c, d)) {
 					// Should not delete existing constrain edges.
@@ -604,7 +603,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					AddLower(prev);
 					AddUpper(next);
 					var edge = Finish(index0, prev.Origin);
-					edge.Constrained = InsertConstrainEdge(prev.Origin, index1, destroyConstrained);
+					edge.Constrained = InnerInsertConstrainedEdge(prev.Origin, index1, destroyConstrained);
 					RestoreDelaunayProperty(upperPolygon);
 					RestoreDelaunayProperty(lowerPolygon);
 					return edge.Constrained;
@@ -686,7 +685,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 					AddVertex(vertexIndex);
 				}
 				foreach (var edge in shouldBeReconstrained) {
-					InsertConstrainEdge(edge.Item1, edge.Item2);
+					InnerInsertConstrainedEdge(edge.Item1, edge.Item2);
 				}
 				return e2;
 			}

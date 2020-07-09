@@ -97,7 +97,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				}
 				Topology = (T)Activator.CreateInstance(typeof(T), mesh.Vertices);
 				if (mesh.Faces.Count > 0) {
-					Topology.Sync(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
+					Topology.ConstructFrom(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
 				} else {
 					mesh.Faces.AddRange(Topology.Faces);
 				}
@@ -830,7 +830,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						}
 					}
 					if (endIndex >= 0) {
-						Topology.ConstrainEdge(startIndex, endIndex);
+						Topology.InsertConstrainedEdge(startIndex, endIndex);
 						var sliceAfter = new PolygonMeshSlice {
 							State = PolygonMeshTools.ModificationState.Creation,
 							Vertices = new List<SkinnedVertex>(Mesh.Vertices),
@@ -896,7 +896,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						}
 					} else if (hitTestTarget.IsEdge() && result.Info is EdgeInfo ei && ei.IsConstrained) {
 						var edge = (Edge)hitTestTarget;
-						Topology.DeconstrainEdge(edge.Index0, edge.Index1);
+						Topology.RemoveConstrainedEdge(edge.Index0, edge.Index1);
 					}
 					var sliceAfter = new PolygonMeshSlice {
 						State = PolygonMeshTools.ModificationState.Removal,

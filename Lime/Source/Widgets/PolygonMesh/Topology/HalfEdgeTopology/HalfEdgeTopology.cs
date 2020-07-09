@@ -501,7 +501,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 #endif
 		}
 
-		public void Sync(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
+		public void ConstructFrom(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
 		{
 			Vertices = vertices;
 			// (vertex, vertex) -> HalfEdge
@@ -635,8 +635,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		public void RemoveVertex(int index)
 		{
 			var pos = Vertices[index].Pos;
-			var bfvi = BoundingFigureVertices.FindIndex(vertex => vertex.Pos == pos);
-			if (bfvi >= 0) {
+			if (BelongsToBoundingFigure(index, out var bfvi)) {
 				LocateClosestTriangle(index, out var e);
 				// if vertex is belongs to bounding figure than it is definitely belongs to InnerBoundary.
 				RemoveVertexFromBoundary(index, e);
@@ -691,7 +690,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var current = next;
 			while (current != prev) {
 				var p = InnerBoundary.Prev(current);
-				InsertConstrainEdge(current, p, true);
+				InnerInsertConstrainedEdge(current, p, true);
 				current = p;
 			}
 		}
@@ -794,7 +793,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 			// Otherwise just delete original and add translated.
 			// Don't forget to save constrained edges.
-			var bfvi = BoundingFigureVertices.FindIndex(vertex => vertex.Pos == originalPos);
+			BelongsToBoundingFigure(originalPos, out var bfvi);
 			constrainedEdges = constrainedEdges ?? new List<(int, int)>();
 			foreach (var incident in IncidentEdges(he)) {
 				if (incident.Constrained) {
@@ -808,7 +807,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerRemoveVertex(index);
 			}
 			Vertices[index] = translated;
-			// TODO Check translation on another vertex.
 			var wasAdded = AddVertex(index);
 			if (!wasAdded) {
 				var savedVertexHitTestRadius = VertexHitTestRadius;
@@ -821,7 +819,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				EdgeHitTestDistance = savedEdgeHitTestDistance;
 			}
 			foreach (var edge in constrainedEdges) {
-				InsertConstrainEdge(edge.Item1, edge.Item2, true);
+				InnerInsertConstrainedEdge(edge.Item1, edge.Item2, true);
 			}
 			if (isBoundaryVertex && !InnerBoundary.Contains(index)) {
 				InnerBoundary.Insert(prevIndex, index);
@@ -830,18 +828,18 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			return wasAdded;
 		}
 
-		public void ConstrainEdge(int index0, int index1)
+		public void InsertConstrainedEdge(int index0, int index1)
 		{
 			if (index0 == index1) {
 				return;
 			}
-			InsertConstrainEdge(index0, index1);
+			InnerInsertConstrainedEdge(index0, index1);
 			TopologyChanged?.Invoke(this);
 		}
 
-		public void DeconstrainEdge(int index0, int index1)
+		public void RemoveConstrainedEdge(int index0, int index1)
 		{
-			if (index0 == index1 || InnerBoundary.ContainsEdge(index0, index1)) {
+			if (index0 == index1 || InnerBoundary.ContainsEdge(index0, index1) || InnerBoundary.ContainsEdge(index1, index0)) {
 				return;
 			}
 			var location = LocateClosestTriangle(index0, out var start);
@@ -854,7 +852,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			var en = IncidentEdges(start).GetEnumerator();
 			// Needs to resolve degenerated case when there is some vertex v
 			// that lies on the line between a and b vertices
-			// (edges (a, v) and (a, v) becomes constrained see InsertConstrainEdge).
+			// (edges (a, v) and (a, v) becomes constrained see InnerInsertConstrainedEdge).
 			var path = new List<HalfEdge>();
 			while (en.MoveNext()) {
 				var incidentEdge = en.Current;

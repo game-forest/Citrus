@@ -14,8 +14,7 @@ namespace Lime.PolygonMesh.Topology
 	public interface ITopology
 	{
 		List<SkinnedVertex> Vertices { get; }
-
-		void Sync(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces);
+		void ConstructFrom(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces);
 		IEnumerable<Face> Faces { get; }
 #if TANGERINE
 		/// <summary>
@@ -24,13 +23,12 @@ namespace Lime.PolygonMesh.Topology
 		/// </summary>
 		IEnumerable<(Face, Face.FaceInfo)> FacesWithInfo { get; }
 #endif
-
 		event Action<ITopology> OnTopologyChanged;
 		int AddVertex(SkinnedVertex vertex);
 		void RemoveVertex(int index);
 		bool TranslateVertex(int index, Vector2 positionDelta, Vector2 uvDelta, out List<int> deletedVertices);
-		void ConstrainEdge(int index0, int index1);
-		void DeconstrainEdge(int index0, int index1);
+		void InsertConstrainedEdge(int index0, int index1);
+		void RemoveConstrainedEdge(int index0, int index1);
 		IEnumerable<(int, int)> ConstrainedEdges { get; }
 
 		/// <summary>

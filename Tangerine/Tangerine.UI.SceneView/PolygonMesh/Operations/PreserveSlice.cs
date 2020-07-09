@@ -50,7 +50,7 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 						mesh.ConstrainedEdges.Add(cp);
 					}
 					if (!skipSync) {
-						controller.Topology.Sync(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
+						controller.Topology.ConstructFrom(mesh.Vertices, mesh.ConstrainedEdges, mesh.Faces);
 					}
 					if (mesh.Animators.TryFind(nameof(mesh.TransientVertices), out var animator)) {
 						animator.Keys.Clear();
