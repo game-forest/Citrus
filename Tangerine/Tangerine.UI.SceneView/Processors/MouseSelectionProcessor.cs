@@ -3,8 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
-using Tangerine.UI.SceneView.PolygonMesh;
-using Lime.PolygonMesh.Utils;
+using Tangerine.UI.SceneView.Animesh;
+using Lime.Animesh.Utils;
 
 namespace Tangerine.UI.SceneView
 {
@@ -18,7 +18,7 @@ namespace Tangerine.UI.SceneView
 			Probers.Add(new WidgetProber());
 			Probers.Add(new PointObjectProber());
 			Probers.Add(new SplinePoint3DProber());
-			Probers.Add(new PolygonMeshProber());
+			Probers.Add(new AnimeshProber());
 		}
 
 		public IEnumerator<object> Task()
@@ -202,9 +202,9 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		public class PolygonMeshProber : Prober<Lime.Widgets.PolygonMesh.PolygonMesh>
+		public class AnimeshProber : Prober<Lime.Widgets.Animesh.Animesh>
 		{
-			protected override bool ProbeInternal(Lime.Widgets.PolygonMesh.PolygonMesh mesh, Vector2 point)
+			protected override bool ProbeInternal(Lime.Widgets.Animesh.Animesh mesh, Vector2 point)
 			{
 				if (!mesh.GloballyVisible) {
 					return false;
@@ -212,7 +212,7 @@ namespace Tangerine.UI.SceneView
 				return mesh.Controller().HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
 			}
 
-			protected override bool ProbeInternal(Lime.Widgets.PolygonMesh.PolygonMesh mesh, Rectangle rectangle)
+			protected override bool ProbeInternal(Lime.Widgets.Animesh.Animesh mesh, Rectangle rectangle)
 			{
 				if (!mesh.GloballyVisible) {
 					return false;
@@ -226,7 +226,7 @@ namespace Tangerine.UI.SceneView
 							if (
 								rectangle.Contains(v0) || rectangle.Contains(v1) ||
 								(points[(i + 1) % points.Length] - points[i]).Length >= 1f &&
-								PolygonMeshUtils.LineLineIntersection(points[i], points[(i + 1) % points.Length], v0, v1, out var p)
+								AnimeshUtils.LineLineIntersection(points[i], points[(i + 1) % points.Length], v0, v1, out var p)
 							) {
 								return true;
 							}

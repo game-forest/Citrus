@@ -1,7 +1,7 @@
 using System;
 using Yuzu;
 
-namespace Lime.Widgets.PolygonMesh.Topology
+namespace Lime.Widgets.Animesh.Topology
 {
 	public interface ITopologyPrimitive
 	{

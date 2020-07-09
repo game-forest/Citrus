@@ -1,6 +1,6 @@
 using System;
 
-namespace Lime.Source.Widgets.PolygonMesh
+namespace Lime.Source.Widgets.Animesh
 {
 	using EA = ExactArithmetic;
 

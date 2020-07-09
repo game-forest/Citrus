@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Lime.Source.Widgets.PolygonMesh
+namespace Lime.Source.Widgets.Animesh
 {
 	[System.Diagnostics.DebuggerStepThrough]
 	public static unsafe class ExactArithmetic

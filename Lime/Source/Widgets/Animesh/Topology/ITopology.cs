@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Lime.Widgets.PolygonMesh.Topology;
-using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
+using Lime.Widgets.Animesh.Topology;
+using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
 
-namespace Lime.PolygonMesh.Topology
+namespace Lime.Animesh.Topology
 {
 	public class TopologyHitTestResult
 	{

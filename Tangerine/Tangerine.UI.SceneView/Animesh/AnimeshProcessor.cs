@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
 using Lime;
-using Tangerine.UI.SceneView.PolygonMesh;
+using Tangerine.UI.SceneView.Animesh;
 
 namespace Tangerine.UI.SceneView
 {
-	public class PolygonMeshProcessor : ITaskProvider
+	public class AnimeshProcessor : ITaskProvider
 	{
 		private static SceneView sv => SceneView.Instance;
 
@@ -22,17 +22,17 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.PolygonMesh.PolygonMesh>().ToList();
+				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.Animesh.Animesh>().ToList();
 				if (meshes.Count == 0) {
 					yield return null;
 					continue;
 				}
 				if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
-					PolygonMeshTools.State = PolygonMeshTools.State.NextState();
+					AnimeshTools.State = AnimeshTools.State.NextState();
 				}
 				/// Skinning bootstrap
 				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
-				if (PolygonMeshTools.State == PolygonMeshTools.ModificationState.Animation) {
+				if (AnimeshTools.State == AnimeshTools.ModificationState.Animation) {
 					foreach (var mesh in meshes) {
 						if (SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
 							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
@@ -49,17 +49,17 @@ namespace Tangerine.UI.SceneView
 					if (mesh.Controller().HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0) && !SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
-							switch (PolygonMeshTools.State) {
-								case PolygonMeshTools.ModificationState.Animation:
+							switch (AnimeshTools.State) {
+								case AnimeshTools.ModificationState.Animation:
 									yield return mesh.Controller().AnimationTask();
 									break;
-								case PolygonMeshTools.ModificationState.Triangulation:
+								case AnimeshTools.ModificationState.Triangulation:
 									yield return mesh.Controller().TriangulationTask();
 									break;
-								case PolygonMeshTools.ModificationState.Creation:
+								case AnimeshTools.ModificationState.Creation:
 									yield return mesh.Controller().CreationTask();
 									break;
-								case PolygonMeshTools.ModificationState.Removal:
+								case AnimeshTools.ModificationState.Removal:
 									yield return mesh.Controller().RemovalTask();
 									break;
 							}

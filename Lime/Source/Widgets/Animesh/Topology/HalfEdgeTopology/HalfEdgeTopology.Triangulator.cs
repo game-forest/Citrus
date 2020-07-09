@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Lime.Source.Widgets.PolygonMesh;
+using Lime.Source.Widgets.Animesh;
 
-namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
+namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 {
 	public partial class HalfEdgeTopology
 	{

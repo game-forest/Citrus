@@ -282,7 +282,7 @@ namespace Tangerine.Core.Operations
 						doc.Container.AsWidget.BoneArray[bone.Index] = default;
 					}
 					doc.History.DoTransaction(() => {
-						foreach (var mesh in doc.Container.Nodes.OfType<Lime.Widgets.PolygonMesh.PolygonMesh>()) {
+						foreach (var mesh in doc.Container.Nodes.OfType<Lime.Widgets.Animesh.Animesh>()) {
 							mesh.OnBoneArrayChanged?.Invoke();
 						}
 					});

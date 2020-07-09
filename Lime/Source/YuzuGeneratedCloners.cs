@@ -564,13 +564,13 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		protected static global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>> Clone_Lime__Animator_List_PolygonMesh__SkinnedVertex(Cloner cl, object src)
+		protected static global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>> Clone_Lime__Animator_List_Animesh__SkinnedVertex(Cloner cl, object src)
 		{
 			if (src == null) return null;
-			if (src.GetType() != typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>))
-				return (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)cl.DeepObject(src);
-			var s = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)src;
-			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>();
+			if (src.GetType() != typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>))
+				return (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)cl.DeepObject(src);
+			var s = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)src;
+			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>();
 			result.AnimationId = s.AnimationId;
 			result.ReadonlyKeys = s.ReadonlyKeys;
 			result.TargetPropertyPath = s.TargetPropertyPath;
@@ -626,6 +626,86 @@ namespace YuzuGenerated
 			result.AnimationId = s.AnimationId;
 			result.ReadonlyKeys = s.ReadonlyKeys;
 			result.TargetPropertyPath = s.TargetPropertyPath;
+			return result;
+		}
+
+		protected static global::Lime.Widgets.Animesh.Animesh Clone_Lime_Widgets_Animesh__Animesh(Cloner cl, object src)
+		{
+			if (src == null) return null;
+			if (src.GetType() != typeof(global::Lime.Widgets.Animesh.Animesh))
+				return (global::Lime.Widgets.Animesh.Animesh)cl.DeepObject(src);
+			var s = (global::Lime.Widgets.Animesh.Animesh)src;
+			s.OnBeforeSerialization();
+			var result = new global::Lime.Widgets.Animesh.Animesh();
+			result.Anchors = s.Anchors;
+			if (s.NeedSerializeAnimations()) {
+				if (s.Animations != null && result.Animations != null) {
+					foreach (var tmp1 in s.Animations)
+						result.Animations.Add(Clone_Lime__Animation(cl, tmp1));
+				}
+			}
+			if (s.Animators != null && result.Animators != null) {
+				var tmp3 = cl.GetCloner<global::Lime.IAnimator>();
+				foreach (var tmp2 in s.Animators)
+					result.Animators.Add((global::Lime.IAnimator)tmp3(tmp2));
+			}
+			result.Blending = s.Blending;
+			if (s.IsNotDecorated()) {
+				result.Color = s.Color;
+			}
+			if (s.Components != null && result.Components != null) {
+				var tmp5 = cl.GetCloner<global::Lime.NodeComponent>();
+				int tmp6 = 0;
+				foreach (var tmp4 in s.Components) {
+					if (s.Components.SerializeItemIf(tmp6++, tmp4))
+						result.Components.Add((global::Lime.NodeComponent)tmp5(tmp4));
+				}
+			}
+			if (s.ConstrainedEdges != null) {
+				result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Edge>();
+				foreach (var tmp7 in s.ConstrainedEdges)
+					result.ConstrainedEdges.Add(tmp7);
+			}
+			result.ContentsPath = s.ContentsPath;
+			if (s.Faces != null) {
+				result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Face>();
+				foreach (var tmp8 in s.Faces)
+					result.Faces.Add(tmp8);
+			}
+			if (s.Folders != null) {
+				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+				var tmp10 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp9 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp10(tmp9));
+			}
+			result.FreezeInvisible = s.FreezeInvisible;
+			result.HitTestMethod = s.HitTestMethod;
+			result.Id = s.Id;
+			if (s.ShouldSerializeNodes()) {
+				if (s.Nodes != null && result.Nodes != null) {
+					var tmp12 = cl.GetCloner<global::Lime.Node>();
+					foreach (var tmp11 in s.Nodes)
+						result.Nodes.Add((global::Lime.Node)tmp12(tmp11));
+				}
+			}
+			result.Padding = s.Padding;
+			result.Pivot = s.Pivot;
+			result.Position = s.Position;
+			result.Rotation = s.Rotation;
+			result.Scale = s.Scale;
+			result.Shader = s.Shader;
+			result.SilentSize = s.SilentSize;
+			result.SkinningWeights = Clone_Lime__SkinningWeights(cl, s.SkinningWeights);
+			result.Tag = s.Tag;
+			result.TangerineFlags = s.TangerineFlags;
+			result.Texture = (global::Lime.ITexture)cl.DeepObject(s.Texture);
+			if (s.Vertices != null) {
+				result.Vertices = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>();
+				foreach (var tmp13 in s.Vertices)
+					result.Vertices.Add(tmp13);
+			}
+			result.Visible = s.Visible;
+			s.OnAfterSerialization();
 			return result;
 		}
 
@@ -1259,8 +1339,8 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static global::Lime.Widgets.PolygonMesh.Topology.Edge Clone_Lime_Widgets_PolygonMesh_Topology__Edge(Cloner cl, object src) =>
-			(global::Lime.Widgets.PolygonMesh.Topology.Edge)src;
+		private static global::Lime.Widgets.Animesh.Topology.Edge Clone_Lime_Widgets_Animesh_Topology__Edge(Cloner cl, object src) =>
+			(global::Lime.Widgets.Animesh.Topology.Edge)src;
 
 		protected static global::Lime.EmitterShapePoint Clone_Lime__EmitterShapePoint(Cloner cl, object src)
 		{
@@ -1312,8 +1392,8 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static global::Lime.Widgets.PolygonMesh.Topology.Face Clone_Lime_Widgets_PolygonMesh_Topology__Face(Cloner cl, object src) =>
-			(global::Lime.Widgets.PolygonMesh.Topology.Face)src;
+		private static global::Lime.Widgets.Animesh.Topology.Face Clone_Lime_Widgets_Animesh_Topology__Face(Cloner cl, object src) =>
+			(global::Lime.Widgets.Animesh.Topology.Face)src;
 
 		protected static global::Lime.Font Clone_Lime__Font(Cloner cl, object src)
 		{
@@ -2085,17 +2165,17 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		protected static global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>> Clone_Lime__Keyframe_List_PolygonMesh__SkinnedVertex(Cloner cl, object src)
+		protected static global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>> Clone_Lime__Keyframe_List_Animesh__SkinnedVertex(Cloner cl, object src)
 		{
 			if (src == null) return null;
-			if (src.GetType() != typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>))
-				return (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)cl.DeepObject(src);
-			var s = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)src;
-			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>();
+			if (src.GetType() != typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>))
+				return (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)cl.DeepObject(src);
+			var s = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)src;
+			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>();
 			result.Frame = s.Frame;
 			result.PackedParams = s.PackedParams;
 			if (s.Value != null) {
-				result.Value = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>();
+				result.Value = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>();
 				foreach (var tmp1 in s.Value)
 					result.Value.Add(tmp1);
 			}
@@ -3086,86 +3166,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		protected static global::Lime.Widgets.PolygonMesh.PolygonMesh Clone_Lime_Widgets_PolygonMesh__PolygonMesh(Cloner cl, object src)
-		{
-			if (src == null) return null;
-			if (src.GetType() != typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh))
-				return (global::Lime.Widgets.PolygonMesh.PolygonMesh)cl.DeepObject(src);
-			var s = (global::Lime.Widgets.PolygonMesh.PolygonMesh)src;
-			s.OnBeforeSerialization();
-			var result = new global::Lime.Widgets.PolygonMesh.PolygonMesh();
-			result.Anchors = s.Anchors;
-			if (s.NeedSerializeAnimations()) {
-				if (s.Animations != null && result.Animations != null) {
-					foreach (var tmp1 in s.Animations)
-						result.Animations.Add(Clone_Lime__Animation(cl, tmp1));
-				}
-			}
-			if (s.Animators != null && result.Animators != null) {
-				var tmp3 = cl.GetCloner<global::Lime.IAnimator>();
-				foreach (var tmp2 in s.Animators)
-					result.Animators.Add((global::Lime.IAnimator)tmp3(tmp2));
-			}
-			result.Blending = s.Blending;
-			if (s.IsNotDecorated()) {
-				result.Color = s.Color;
-			}
-			if (s.Components != null && result.Components != null) {
-				var tmp5 = cl.GetCloner<global::Lime.NodeComponent>();
-				int tmp6 = 0;
-				foreach (var tmp4 in s.Components) {
-					if (s.Components.SerializeItemIf(tmp6++, tmp4))
-						result.Components.Add((global::Lime.NodeComponent)tmp5(tmp4));
-				}
-			}
-			if (s.ConstrainedEdges != null) {
-				result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.Topology.Edge>();
-				foreach (var tmp7 in s.ConstrainedEdges)
-					result.ConstrainedEdges.Add(tmp7);
-			}
-			result.ContentsPath = s.ContentsPath;
-			if (s.Faces != null) {
-				result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.Topology.Face>();
-				foreach (var tmp8 in s.Faces)
-					result.Faces.Add(tmp8);
-			}
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
-				var tmp10 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-				foreach (var tmp9 in s.Folders)
-					result.Folders.Add((global::Lime.Folder.Descriptor)tmp10(tmp9));
-			}
-			result.FreezeInvisible = s.FreezeInvisible;
-			result.HitTestMethod = s.HitTestMethod;
-			result.Id = s.Id;
-			if (s.ShouldSerializeNodes()) {
-				if (s.Nodes != null && result.Nodes != null) {
-					var tmp12 = cl.GetCloner<global::Lime.Node>();
-					foreach (var tmp11 in s.Nodes)
-						result.Nodes.Add((global::Lime.Node)tmp12(tmp11));
-				}
-			}
-			result.Padding = s.Padding;
-			result.Pivot = s.Pivot;
-			result.Position = s.Position;
-			result.Rotation = s.Rotation;
-			result.Scale = s.Scale;
-			result.Shader = s.Shader;
-			result.SilentSize = s.SilentSize;
-			result.SkinningWeights = Clone_Lime__SkinningWeights(cl, s.SkinningWeights);
-			result.Tag = s.Tag;
-			result.TangerineFlags = s.TangerineFlags;
-			result.Texture = (global::Lime.ITexture)cl.DeepObject(s.Texture);
-			if (s.Vertices != null) {
-				result.Vertices = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>();
-				foreach (var tmp13 in s.Vertices)
-					result.Vertices.Add(tmp13);
-			}
-			result.Visible = s.Visible;
-			s.OnAfterSerialization();
-			return result;
-		}
-
 		protected static global::Lime.Polyline Clone_Lime__Polyline(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -3693,8 +3693,8 @@ namespace YuzuGenerated
 		private static global::Lime.Size Clone_Lime__Size(Cloner cl, object src) =>
 			(global::Lime.Size)src;
 
-		private static global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex Clone_Lime_Widgets_PolygonMesh__PolygonMesh__SkinnedVertex(Cloner cl, object src) =>
-			(global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex)src;
+		private static global::Lime.Widgets.Animesh.Animesh.SkinnedVertex Clone_Lime_Widgets_Animesh__Animesh__SkinnedVertex(Cloner cl, object src) =>
+			(global::Lime.Widgets.Animesh.Animesh.SkinnedVertex)src;
 
 		protected static global::Lime.SkinnedVertexListAnimator Clone_Lime__SkinnedVertexListAnimator(Cloner cl, object src)
 		{
@@ -4811,11 +4811,12 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Clone_Lime__Animator_Vector3;
 			clonerCache[typeof(global::Lime.Animator<bool>)] = Clone_Lime__Animator_Boolean;
 			clonerCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Clone_Lime__Animator_List_Vertex;
-			clonerCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)] = Clone_Lime__Animator_List_PolygonMesh__SkinnedVertex;
+			clonerCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)] = Clone_Lime__Animator_List_Animesh__SkinnedVertex;
 			clonerCache[typeof(global::Lime.Animator<int>)] = Clone_Lime__Animator_Int32;
 			clonerCache[typeof(global::Lime.Animator<sbyte>)] = Clone_Lime__Animator_SByte;
 			clonerCache[typeof(global::Lime.Animator<float>)] = Clone_Lime__Animator_Single;
 			clonerCache[typeof(global::Lime.Animator<string>)] = Clone_Lime__Animator_String;
+			clonerCache[typeof(global::Lime.Widgets.Animesh.Animesh)] = Clone_Lime_Widgets_Animesh__Animesh;
 			clonerCache[typeof(global::Lime.Node.AssetBundlePathComponent)] = Clone_Lime__Node__AssetBundlePathComponent;
 			clonerCache[typeof(global::Lime.Audio)] = Clone_Lime__Audio;
 			clonerCache[typeof(global::Lime.AudioRandomizerComponent)] = Clone_Lime__AudioRandomizerComponent;
@@ -4847,9 +4848,9 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.DistortionMaterial)] = Clone_Lime__DistortionMaterial;
 			clonerCache[typeof(global::Lime.DistortionMesh)] = Clone_Lime__DistortionMesh;
 			clonerCache[typeof(global::Lime.DistortionMeshPoint)] = Clone_Lime__DistortionMeshPoint;
-			clonerCache[typeof(global::Lime.Widgets.PolygonMesh.Topology.Edge)] = ValueCopyCloner;
+			clonerCache[typeof(global::Lime.Widgets.Animesh.Topology.Edge)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.EmitterShapePoint)] = Clone_Lime__EmitterShapePoint;
-			clonerCache[typeof(global::Lime.Widgets.PolygonMesh.Topology.Face)] = ValueCopyCloner;
+			clonerCache[typeof(global::Lime.Widgets.Animesh.Topology.Face)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.Font)] = Clone_Lime__Font;
 			clonerCache[typeof(global::Lime.FontChar)] = Clone_Lime__FontChar;
 			clonerCache[typeof(global::Lime.Frame)] = Clone_Lime__Frame;
@@ -4897,7 +4898,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Clone_Lime__Keyframe_Vector3;
 			clonerCache[typeof(global::Lime.Keyframe<bool>)] = Clone_Lime__Keyframe_Boolean;
 			clonerCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Clone_Lime__Keyframe_List_Vertex;
-			clonerCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)] = Clone_Lime__Keyframe_List_PolygonMesh__SkinnedVertex;
+			clonerCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)] = Clone_Lime__Keyframe_List_Animesh__SkinnedVertex;
 			clonerCache[typeof(global::Lime.Keyframe<int>)] = Clone_Lime__Keyframe_Int32;
 			clonerCache[typeof(global::Lime.Keyframe<sbyte>)] = Clone_Lime__Keyframe_SByte;
 			clonerCache[typeof(global::Lime.Keyframe<float>)] = Clone_Lime__Keyframe_Single;
@@ -4936,7 +4937,6 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.ParticlesMagnet)] = Clone_Lime__ParticlesMagnet;
 			clonerCache[typeof(global::Lime.Plane)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.PointObject)] = Clone_Lime__PointObject;
-			clonerCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh)] = Clone_Lime_Widgets_PolygonMesh__PolygonMesh;
 			clonerCache[typeof(global::Lime.Polyline)] = Clone_Lime__Polyline;
 			clonerCache[typeof(global::Lime.PolylinePoint)] = Clone_Lime__PolylinePoint;
 			clonerCache[typeof(global::Lime.PostProcessingComponent)] = Clone_Lime__PostProcessingComponent;
@@ -4958,7 +4958,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.SignedDistanceField.SignedDistanceFieldMaterial)] = Clone_Lime_SignedDistanceField__SignedDistanceFieldMaterial;
 			clonerCache[typeof(global::Lime.SimpleText)] = Clone_Lime__SimpleText;
 			clonerCache[typeof(global::Lime.Size)] = ValueCopyCloner;
-			clonerCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex)] = ValueCopyCloner;
+			clonerCache[typeof(global::Lime.Widgets.Animesh.Animesh.SkinnedVertex)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.SkinnedVertexListAnimator)] = Clone_Lime__SkinnedVertexListAnimator;
 			clonerCache[typeof(global::Lime.SkinningWeights)] = Clone_Lime__SkinningWeights;
 			clonerCache[typeof(global::Lime.Slider)] = Clone_Lime__Slider;

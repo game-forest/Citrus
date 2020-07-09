@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Lime.PolygonMesh.Topology;
-using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
+using Lime.Animesh.Topology;
+using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
 
-namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
+namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 {
 	public partial class HalfEdgeTopology : ITopology
 	{
@@ -142,16 +142,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 
 		private class VerticesIndexer
 		{
-			private readonly List<SkinnedVertex> boundingFigureVertices;
-			private readonly List<SkinnedVertex> vertices;
+			private readonly List<Animesh.SkinnedVertex> boundingFigureVertices;
+			private readonly List<Animesh.SkinnedVertex> vertices;
 
-			public VerticesIndexer(List<SkinnedVertex> boundingFigureVertices, List<SkinnedVertex> vertices)
+			public VerticesIndexer(List<Animesh.SkinnedVertex> boundingFigureVertices, List<Animesh.SkinnedVertex> vertices)
 			{
 				this.boundingFigureVertices = boundingFigureVertices;
 				this.vertices = vertices;
 			}
 
-			public SkinnedVertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
+			public Animesh.SkinnedVertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
 		}
 
 		private class Boundary : IEnumerable<int>
@@ -252,7 +252,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		}
 
 		private HalfEdge Root { get; set; }
-		private List<SkinnedVertex> BoundingFigureVertices { get; set; }
+		private List<Animesh.SkinnedVertex> BoundingFigureVertices { get; set; }
 		// Vertices + bounding figure vertices.
 		private VerticesIndexer InnerVertices { get; set; }
 		// A boundary of `true` triangulation.
@@ -439,16 +439,16 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			}
 		}
 
-		public List<SkinnedVertex> Vertices { get; private set; }
+		public List<Animesh.SkinnedVertex> Vertices { get; private set; }
 		public float VertexHitTestRadius { get; set; }
 		public float EdgeHitTestDistance { get; set; }
 
 		public HalfEdgeTopology()
 		{
-			Vertices = new List<SkinnedVertex>();
+			Vertices = new List<Animesh.SkinnedVertex>();
 		}
 
-		public HalfEdgeTopology(List<SkinnedVertex> vertices)
+		public HalfEdgeTopology(List<Animesh.SkinnedVertex> vertices)
 		{
 			// TODO: fix this constructor after reimplementation (if it'll happen).
 			Vertices = vertices;
@@ -469,12 +469,12 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			e2.TwinWith(e1.Next);
 			// 0 doesn't have a sign, so this is a hack to mark bounding figure's vertices
 			// with negative indices.
-			BoundingFigureVertices = new List<SkinnedVertex>() {
-				new SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), },
-				new SkinnedVertex { Pos = Vector2.Zero, },
-				new SkinnedVertex { Pos = Vector2.East, },
-				new SkinnedVertex { Pos = Vector2.Down, },
-				new SkinnedVertex { Pos = Vector2.One, },
+			BoundingFigureVertices = new List<Animesh.SkinnedVertex>() {
+				new Animesh.SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), },
+				new Animesh.SkinnedVertex { Pos = Vector2.Zero, },
+				new Animesh.SkinnedVertex { Pos = Vector2.East, },
+				new Animesh.SkinnedVertex { Pos = Vector2.Down, },
+				new Animesh.SkinnedVertex { Pos = Vector2.One, },
 			};
 			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
 			InnerBoundary = new Boundary { 0, 1, 3, 2, };
@@ -514,7 +514,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 #endif
 		}
 
-		public void ConstructFrom(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
+		public void ConstructFrom(List<Animesh.SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
 		{
 			Vertices = vertices;
 			// (vertex, vertex) -> HalfEdge
@@ -622,7 +622,7 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 			remove => TopologyChanged -= value;
 		}
 
-		public int AddVertex(SkinnedVertex vertex)
+		public int AddVertex(Animesh.SkinnedVertex vertex)
 		{
 			var result = LocateClosestTriangle(vertex.Pos, out var halfEdge);
 			var isTrueTriangle = IsPointInsideTrueTriangulation(Centroid(halfEdge));

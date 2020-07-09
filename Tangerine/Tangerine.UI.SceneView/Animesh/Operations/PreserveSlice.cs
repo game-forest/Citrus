@@ -1,23 +1,22 @@
 using Tangerine.Core;
-using PolygonMeshSlice = Tangerine.UI.SceneView.PolygonMesh.PolygonMeshController.PolygonMeshSlice;
 
-namespace Tangerine.UI.SceneView.PolygonMesh
+namespace Tangerine.UI.SceneView.Animesh
 {
-	public static partial class PolygonMeshModification
+	public static partial class AnimeshModification
 	{
 		public class Slice : Operation
 		{
 			public override bool IsChangingDocument => true;
 
-			private readonly Lime.Widgets.PolygonMesh.PolygonMesh mesh;
-			private readonly PolygonMeshSlice sliceBefore;
-			private readonly PolygonMeshSlice sliceAfter;
+			private readonly Lime.Widgets.Animesh.Animesh mesh;
+			private readonly AnimeshController.AnimeshSlice sliceBefore;
+			private readonly AnimeshController.AnimeshSlice sliceAfter;
 			// First sync is redundant because mesh should already be in correct states.
 			// So we skip it in order to ensure mesh operations correctness and to improve performance.
 			private bool skipFirstSync;
 
-			private Slice(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore,
-				PolygonMeshSlice sliceAfter, bool skipFirstSync)
+			private Slice(Lime.Widgets.Animesh.Animesh mesh, AnimeshController.AnimeshSlice sliceBefore,
+				AnimeshController.AnimeshSlice sliceAfter, bool skipFirstSync)
 			{
 				this.mesh = mesh;
 				this.sliceBefore = sliceBefore;
@@ -25,18 +24,18 @@ namespace Tangerine.UI.SceneView.PolygonMesh
 				this.skipFirstSync = skipFirstSync;
 			}
 
-			public static void Perform(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice sliceBefore,
-				PolygonMeshSlice sliceAfter, bool skipFirstSync = true)
+			public static void Perform(Lime.Widgets.Animesh.Animesh mesh, AnimeshController.AnimeshSlice sliceBefore,
+				AnimeshController.AnimeshSlice sliceAfter, bool skipFirstSync = true)
 			{
 				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter, skipFirstSync));
 			}
 
 			public class Processor : OperationProcessor<Slice>
 			{
-				private void Do(Lime.Widgets.PolygonMesh.PolygonMesh mesh, PolygonMeshSlice slice, bool skipSync)
+				private void Do(Lime.Widgets.Animesh.Animesh mesh, AnimeshController.AnimeshSlice slice, bool skipSync)
 				{
 					var controller = mesh.Controller();
-					PolygonMeshTools.State = slice.State;
+					AnimeshTools.State = slice.State;
 					mesh.Vertices.Clear();
 					foreach (var v in slice.Vertices) {
 						mesh.Vertices.Add(v);

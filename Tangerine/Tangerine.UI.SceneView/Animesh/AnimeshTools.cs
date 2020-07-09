@@ -1,14 +1,11 @@
 using System.Linq;
-using Lime.Widgets.PolygonMesh;
+using Lime.Widgets.Animesh;
 using Tangerine.Core;
 using Tangerine.UI;
-using Tangerine.UI.SceneView.PolygonMesh;
-using Lime;
-using System;
 
 namespace Tangerine
 {
-	public static class PolygonMeshTools
+	public static class AnimeshTools
 	{
 		public enum ModificationMode
 		{
@@ -34,7 +31,7 @@ namespace Tangerine
 			set
 			{
 				mode = value;
-				foreach (var mesh in Document.Current.Nodes().OfType<PolygonMesh>().ToList()) {
+				foreach (var mesh in Document.Current.Nodes().OfType<Animesh>().ToList()) {
 					mesh.TangerineAnimationModeEnabled = mode == ModificationMode.Animation;
 				}
 			}

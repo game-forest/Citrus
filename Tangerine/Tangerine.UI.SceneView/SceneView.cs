@@ -5,7 +5,7 @@ using Lime;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
-using Tangerine.UI.SceneView.PolygonMesh;
+using Tangerine.UI.SceneView.Animesh;
 using Tangerine.UI.SceneView.Presenters;
 
 namespace Tangerine.UI.SceneView
@@ -32,7 +32,7 @@ namespace Tangerine.UI.SceneView
 			MinMaxSize = new Vector2(24),
 			LayoutCell = new LayoutCell(new Alignment { X = HAlignment.Left, Y = VAlignment.Bottom } )
 		};
-		public static readonly PolygonMeshContextualPanel PolygonMeshPanel = new PolygonMeshContextualPanel();
+		public static readonly AnimeshContextualPanel AnimeshPanel = new AnimeshContextualPanel();
 		public static Action<SceneView> OnCreate;
 
 		/// <summary>
@@ -239,7 +239,7 @@ namespace Tangerine.UI.SceneView
 		{
 			Instance = this;
 			Document.Current.SceneViewThumbnailProvider = new SceneViewThumbnailProvider(Document.Current, Frame);
-			Panel.AddNode(PolygonMeshPanel.RootNode);
+			Panel.AddNode(AnimeshPanel.RootNode);
 			Panel.AddNode(ShowNodeDecorationsPanelButton);
 			Panel.AddNode(ZoomWidget);
 			Panel.AddNode(RulersWidget);
@@ -249,7 +249,7 @@ namespace Tangerine.UI.SceneView
 		public void Detach()
 		{
 			Instance = null;
-			PolygonMeshPanel.RootNode.Unlink();
+			AnimeshPanel.RootNode.Unlink();
 			Frame.Unlink();
 			ShowNodeDecorationsPanelButton.Unlink();
 			RulersWidget.Unlink();
@@ -295,7 +295,7 @@ namespace Tangerine.UI.SceneView
 				new DragSplinePoint3DProcessor(),
 				new DragAnimationPathPointProcessor(),
 				new DragWidgetsProcessor(),
-				new PolygonMeshProcessor(),
+				new AnimeshProcessor(),
 				new ResizeWidgetsProcessor(),
 				new RescalePointObjectSelectionProcessor(),
 				new RotatePointObjectSelectionProcessor(),
@@ -308,7 +308,7 @@ namespace Tangerine.UI.SceneView
 				new PreviewAnimationProcessor(),
 				new ResolutionPreviewProcessor(),
 				new FrameProgressionProcessor(),
-				new PolygonMeshContextualPanelProcessor(this, PolygonMeshPanel)
+				new AnimeshContextualPanelProcessor(AnimeshPanel)
 			);
 		}
 
@@ -329,7 +329,7 @@ namespace Tangerine.UI.SceneView
 			new NineGridLinePresenter(this);
 			new Animation2DPathPresenter(this);
 			new WavePivotPresenter(this);
-			new PolygonMeshPresenter(this);
+			new AnimeshPresenter(this);
 		}
 
 		public void CreateNode(Type nodeType, ICommand command)

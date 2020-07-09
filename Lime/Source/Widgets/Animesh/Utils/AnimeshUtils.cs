@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lime.PolygonMesh.Utils
+namespace Lime.Animesh.Utils
 {
-	public class PolygonMeshUtils
+	public class AnimeshUtils
 	{
 		private class Vector2Comparer : IEqualityComparer<Vector2>
 		{

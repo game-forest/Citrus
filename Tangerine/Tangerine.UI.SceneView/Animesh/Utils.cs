@@ -1,6 +1,6 @@
 using Lime;
 
-namespace Tangerine.UI.SceneView.PolygonMesh
+namespace Tangerine.UI.SceneView.Animesh
 {
 	public static class Utils
 	{

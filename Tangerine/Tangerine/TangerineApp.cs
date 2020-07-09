@@ -265,8 +265,8 @@ namespace Tangerine
 
 			Document.NodeDecorators.AddFor<ParticleEmitter>(n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter()));
 			DocumentHistory.AddOperationProcessorTypes(new[] {
-				typeof(UI.SceneView.PolygonMesh.PolygonMeshModification.Animate.Processor),
-				typeof(UI.SceneView.PolygonMesh.PolygonMeshModification.Slice.Processor),
+				typeof(UI.SceneView.Animesh.AnimeshModification.Animate.Processor),
+				typeof(UI.SceneView.Animesh.AnimeshModification.Slice.Processor),
 				typeof(Core.Operations.TimelineHorizontalShift.Processor),
 				typeof(Core.Operations.TimelineColumnRemove.Processor),
 				typeof(Core.Operations.RemoveKeyframeRange.Processor),
@@ -664,10 +664,10 @@ namespace Tangerine
 			h.Connect(Tools.FlipX, new FlipX());
 			h.Connect(Tools.FlipY, new FlipY());
 			h.Connect(Tools.CenterView, new CenterView());
-			h.Connect(Tools.PolygonMeshAnimate, new PolygonMeshTools.Animate());
-			h.Connect(Tools.PolygonMeshTriangulate, new PolygonMeshTools.Triangulate());
-			h.Connect(Tools.PolygonMeshCreate, new PolygonMeshTools.Create());
-			h.Connect(Tools.PolygonMeshRemove, new PolygonMeshTools.Remove());
+			h.Connect(Tools.AnimeshAnimate, new AnimeshTools.Animate());
+			h.Connect(Tools.AnimeshTriangulate, new AnimeshTools.Triangulate());
+			h.Connect(Tools.AnimeshCreate, new AnimeshTools.Create());
+			h.Connect(Tools.AnimeshRemove, new AnimeshTools.Remove());
 			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard, IsCopyPasteAllowedForSelection);
 			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform, IsCopyPasteAllowedForSelection));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));

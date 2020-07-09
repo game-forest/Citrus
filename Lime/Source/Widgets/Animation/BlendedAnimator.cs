@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SkinnedVertex = Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex;
+using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
 
 namespace Lime
 {

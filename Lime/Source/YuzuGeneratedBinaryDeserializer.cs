@@ -1551,9 +1551,9 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime__Animator_List_PolygonMesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def, object obj)
+		private static void Read_Lime__Animator_List_Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
-			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)obj;
+			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)obj;
 			var dg = (LimeDeserializer)d;
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
@@ -1563,12 +1563,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (2 == fd.OurIndex) {
-				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)null;
+				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)null;
 				var tmp1 = d.Reader.ReadInt32();
 				if (tmp1 >= 0) {
-					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>();
+					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>();
 					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>>();
+						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>>();
 						result.ReadonlyKeys.Add(tmp2);
 					}
 				}
@@ -1582,10 +1582,10 @@ namespace YuzuGenerated
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
 		}
 
-		private static object Make_Lime__Animator_List_PolygonMesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime__Animator_List_Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>();
-			Read_Lime__Animator_List_PolygonMesh__SkinnedVertex(d, def, result);
+			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>();
+			Read_Lime__Animator_List_Animesh__SkinnedVertex(d, def, result);
 			return result;
 		}
 
@@ -4715,27 +4715,27 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime__Keyframe_List_PolygonMesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def, object obj)
+		private static void Read_Lime__Keyframe_List_Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
-			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)obj;
+			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)obj;
 			var dg = (LimeDeserializer)d;
 			result.Frame = d.Reader.ReadInt32();
 			result.PackedParams = d.Reader.ReadInt32();
-			result.Value = (global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>)null;
+			result.Value = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>)null;
 			var tmp1 = d.Reader.ReadInt32();
 			if (tmp1 >= 0) {
-				result.Value = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>();
+				result.Value = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>();
 				while (--tmp1 >= 0) {
-					var tmp2 = (global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex)dg.ReadStruct<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>();
+					var tmp2 = (global::Lime.Widgets.Animesh.Animesh.SkinnedVertex)dg.ReadStruct<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>();
 					result.Value.Add(tmp2);
 				}
 			}
 		}
 
-		private static object Make_Lime__Keyframe_List_PolygonMesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime__Keyframe_List_Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>();
-			Read_Lime__Keyframe_List_PolygonMesh__SkinnedVertex(d, def, result);
+			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>();
+			Read_Lime__Keyframe_List_Animesh__SkinnedVertex(d, def, result);
 			return result;
 		}
 
@@ -8959,12 +8959,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (2 == fd.OurIndex) {
-				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)null;
+				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)null;
 				var tmp1 = d.Reader.ReadInt32();
 				if (tmp1 >= 0) {
-					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>();
+					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>();
 					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>>();
+						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>>();
 						result.ReadonlyKeys.Add(tmp2);
 					}
 				}
@@ -11643,9 +11643,9 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime_Widgets_PolygonMesh__PolygonMesh(BinaryDeserializer d, ReaderClassDef def, object obj)
+		private static void Read_Lime_Widgets_Animesh__Animesh(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
-			var result = (global::Lime.Widgets.PolygonMesh.PolygonMesh)obj;
+			var result = (global::Lime.Widgets.Animesh.Animesh)obj;
 			var dg = (LimeDeserializer)d;
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
@@ -11695,12 +11695,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
-				result.ConstrainedEdges = (global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.Topology.Edge>)null;
+				result.ConstrainedEdges = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Edge>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.Topology.Edge>();
+					result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Edge>();
 					while (--tmp8 >= 0) {
-						var tmp9 = (global::Lime.Widgets.PolygonMesh.Topology.Edge)dg.ReadStruct<global::Lime.Widgets.PolygonMesh.Topology.Edge>();
+						var tmp9 = (global::Lime.Widgets.Animesh.Topology.Edge)dg.ReadStruct<global::Lime.Widgets.Animesh.Topology.Edge>();
 						result.ConstrainedEdges.Add(tmp9);
 					}
 				}
@@ -11712,12 +11712,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Faces = (global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.Topology.Face>)null;
+				result.Faces = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Face>)null;
 				var tmp10 = d.Reader.ReadInt32();
 				if (tmp10 >= 0) {
-					result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.Topology.Face>();
+					result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Face>();
 					while (--tmp10 >= 0) {
-						var tmp11 = (global::Lime.Widgets.PolygonMesh.Topology.Face)dg.ReadStruct<global::Lime.Widgets.PolygonMesh.Topology.Face>();
+						var tmp11 = (global::Lime.Widgets.Animesh.Topology.Face)dg.ReadStruct<global::Lime.Widgets.Animesh.Topology.Face>();
 						result.Faces.Add(tmp11);
 					}
 				}
@@ -11826,12 +11826,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (26 == fd.OurIndex) {
-				result.Vertices = (global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>)null;
+				result.Vertices = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>)null;
 				var tmp21 = d.Reader.ReadInt32();
 				if (tmp21 >= 0) {
-					result.Vertices = new global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>();
+					result.Vertices = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>();
 					while (--tmp21 >= 0) {
-						var tmp22 = (global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex)dg.ReadStruct<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>();
+						var tmp22 = (global::Lime.Widgets.Animesh.Animesh.SkinnedVertex)dg.ReadStruct<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>();
 						result.Vertices.Add(tmp22);
 					}
 				}
@@ -11844,16 +11844,16 @@ namespace YuzuGenerated
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
 		}
 
-		private static object Make_Lime_Widgets_PolygonMesh__PolygonMesh(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime_Widgets_Animesh__Animesh(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Widgets.PolygonMesh.PolygonMesh();
-			Read_Lime_Widgets_PolygonMesh__PolygonMesh(d, def, result);
+			var result = new global::Lime.Widgets.Animesh.Animesh();
+			Read_Lime_Widgets_Animesh__Animesh(d, def, result);
 			return result;
 		}
 
-		private static object Make_Lime_Widgets_PolygonMesh__PolygonMesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime_Widgets_Animesh__Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex();
+			var result = new global::Lime.Widgets.Animesh.Animesh.SkinnedVertex();
 			var dg = (LimeDeserializer)d;
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
@@ -11896,17 +11896,17 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static object Make_Lime_Widgets_PolygonMesh_Topology__Edge(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime_Widgets_Animesh_Topology__Edge(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Widgets.PolygonMesh.Topology.Edge();
+			var result = new global::Lime.Widgets.Animesh.Topology.Edge();
 			result.Index0 = d.Reader.ReadUInt16();
 			result.Index1 = d.Reader.ReadUInt16();
 			return result;
 		}
 
-		private static object Make_Lime_Widgets_PolygonMesh_Topology__Face(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime_Widgets_Animesh_Topology__Face(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Widgets.PolygonMesh.Topology.Face();
+			var result = new global::Lime.Widgets.Animesh.Topology.Face();
 			result.Index0 = d.Reader.ReadUInt16();
 			result.Index1 = d.Reader.ReadUInt16();
 			result.Index2 = d.Reader.ReadUInt16();
@@ -11955,7 +11955,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Read_Lime__Animator_Vector3;
 			readCache[typeof(global::Lime.Animator<bool>)] = Read_Lime__Animator_Boolean;
 			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Animator_List_Vertex;
-			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)] = Read_Lime__Animator_List_PolygonMesh__SkinnedVertex;
+			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)] = Read_Lime__Animator_List_Animesh__SkinnedVertex;
 			readCache[typeof(global::Lime.Animator<int>)] = Read_Lime__Animator_Int32;
 			readCache[typeof(global::Lime.Animator<sbyte>)] = Read_Lime__Animator_SByte;
 			readCache[typeof(global::Lime.Animator<float>)] = Read_Lime__Animator_Single;
@@ -12022,7 +12022,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Read_Lime__Keyframe_Vector3;
 			readCache[typeof(global::Lime.Keyframe<bool>)] = Read_Lime__Keyframe_Boolean;
 			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Keyframe_List_Vertex;
-			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)] = Read_Lime__Keyframe_List_PolygonMesh__SkinnedVertex;
+			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)] = Read_Lime__Keyframe_List_Animesh__SkinnedVertex;
 			readCache[typeof(global::Lime.Keyframe<int>)] = Read_Lime__Keyframe_Int32;
 			readCache[typeof(global::Lime.Keyframe<sbyte>)] = Read_Lime__Keyframe_SByte;
 			readCache[typeof(global::Lime.Keyframe<float>)] = Read_Lime__Keyframe_Single;
@@ -12108,7 +12108,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.WaveMaterial)] = Read_Lime__WaveMaterial;
 			readCache[typeof(global::Lime.Widget)] = Read_Lime__Widget;
 			readCache[typeof(global::Lime.WidgetAdapter3D)] = Read_Lime__WidgetAdapter3D;
-			readCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh)] = Read_Lime_Widgets_PolygonMesh__PolygonMesh;
+			readCache[typeof(global::Lime.Widgets.Animesh.Animesh)] = Read_Lime_Widgets_Animesh__Animesh;
 			makeCache[typeof(global::Lime.Alignment)] = Make_Lime__Alignment;
 			makeCache[typeof(global::Lime.AlphaIntensityComponent)] = Make_Lime__AlphaIntensityComponent;
 			makeCache[typeof(global::Lime.AlphaIntensityMaterial)] = Make_Lime__AlphaIntensityMaterial;
@@ -12150,7 +12150,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Make_Lime__Animator_Vector3;
 			makeCache[typeof(global::Lime.Animator<bool>)] = Make_Lime__Animator_Boolean;
 			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Animator_List_Vertex;
-			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)] = Make_Lime__Animator_List_PolygonMesh__SkinnedVertex;
+			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)] = Make_Lime__Animator_List_Animesh__SkinnedVertex;
 			makeCache[typeof(global::Lime.Animator<int>)] = Make_Lime__Animator_Int32;
 			makeCache[typeof(global::Lime.Animator<sbyte>)] = Make_Lime__Animator_SByte;
 			makeCache[typeof(global::Lime.Animator<float>)] = Make_Lime__Animator_Single;
@@ -12227,7 +12227,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Make_Lime__Keyframe_Vector3;
 			makeCache[typeof(global::Lime.Keyframe<bool>)] = Make_Lime__Keyframe_Boolean;
 			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Keyframe_List_Vertex;
-			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex>>)] = Make_Lime__Keyframe_List_PolygonMesh__SkinnedVertex;
+			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Animesh.SkinnedVertex>>)] = Make_Lime__Keyframe_List_Animesh__SkinnedVertex;
 			makeCache[typeof(global::Lime.Keyframe<int>)] = Make_Lime__Keyframe_Int32;
 			makeCache[typeof(global::Lime.Keyframe<sbyte>)] = Make_Lime__Keyframe_SByte;
 			makeCache[typeof(global::Lime.Keyframe<float>)] = Make_Lime__Keyframe_Single;
@@ -12329,10 +12329,10 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.WaveMaterial)] = Make_Lime__WaveMaterial;
 			makeCache[typeof(global::Lime.Widget)] = Make_Lime__Widget;
 			makeCache[typeof(global::Lime.WidgetAdapter3D)] = Make_Lime__WidgetAdapter3D;
-			makeCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh)] = Make_Lime_Widgets_PolygonMesh__PolygonMesh;
-			makeCache[typeof(global::Lime.Widgets.PolygonMesh.PolygonMesh.SkinnedVertex)] = Make_Lime_Widgets_PolygonMesh__PolygonMesh__SkinnedVertex;
-			makeCache[typeof(global::Lime.Widgets.PolygonMesh.Topology.Edge)] = Make_Lime_Widgets_PolygonMesh_Topology__Edge;
-			makeCache[typeof(global::Lime.Widgets.PolygonMesh.Topology.Face)] = Make_Lime_Widgets_PolygonMesh_Topology__Face;
+			makeCache[typeof(global::Lime.Widgets.Animesh.Animesh)] = Make_Lime_Widgets_Animesh__Animesh;
+			makeCache[typeof(global::Lime.Widgets.Animesh.Animesh.SkinnedVertex)] = Make_Lime_Widgets_Animesh__Animesh__SkinnedVertex;
+			makeCache[typeof(global::Lime.Widgets.Animesh.Topology.Edge)] = Make_Lime_Widgets_Animesh_Topology__Edge;
+			makeCache[typeof(global::Lime.Widgets.Animesh.Topology.Face)] = Make_Lime_Widgets_Animesh_Topology__Face;
 		}
 	}
 }

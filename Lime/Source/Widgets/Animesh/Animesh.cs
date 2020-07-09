@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Lime.Widgets.PolygonMesh.Topology;
+using Lime.Widgets.Animesh.Topology;
 using Yuzu;
 
-namespace Lime.Widgets.PolygonMesh
+namespace Lime.Widgets.Animesh
 {
 	[TangerineRegisterNode(Order = 32)]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Polygon Mesh")]
-	public class PolygonMesh : Widget
+	public class Animesh : Widget
 	{
 		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 68)]
 		public struct SkinnedVertex
@@ -84,7 +84,7 @@ namespace Lime.Widgets.PolygonMesh
 		public bool TangerineAnimationModeEnabled;
 #endif
 
-		public PolygonMesh()
+		public Animesh()
 		{
 			Texture = new SerializableTexture();
 			Vertices = new List<SkinnedVertex>();
