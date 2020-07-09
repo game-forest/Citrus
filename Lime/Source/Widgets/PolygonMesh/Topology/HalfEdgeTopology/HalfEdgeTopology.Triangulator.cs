@@ -378,13 +378,10 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 		/// </summary>
 		/// <param name="vertexIndex">Vertex index.</param>
 		/// <returns>List of isolated vertices.</returns>
-		private List<int> InnerRemoveVertex(int vertexIndex)
+		private void InnerRemoveVertex(int vertexIndex)
 		{
 			var polygon = GetBoundingPolygon(vertexIndex);
 			var isBorderVertex = polygon[0].Origin == vertexIndex;
-			var v = Vertices[vertexIndex];
-			// Vertex to remove + isolated vertices (until we agree on UI/UX).
-			var verticesToBeRemoved = new List<int> { vertexIndex };
 			if (isBorderVertex) {
 				// Then it is definitely a vertex that lies on bounding figure.
 				// (Btw, bounding figure vertices are handled on a higher abstraction level).
@@ -395,7 +392,6 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				polygon[polygon.Count - 1].Next = polygon[0].Next;
 			}
 			TriangulatePolygonByEarClipping(polygon);
-			return verticesToBeRemoved;
 		}
 
 		/// <summary>

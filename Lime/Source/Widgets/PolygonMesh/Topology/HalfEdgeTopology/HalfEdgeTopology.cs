@@ -216,6 +216,19 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				}
 			}
 
+			public void Remap(int from, int to)
+			{
+				var current = boundary.First;
+				while (current != null) {
+					if (current.Value == from) {
+						vertexIndexToBoundaryIndex.Remove(current.Value);
+						current.Value = to;
+						vertexIndexToBoundaryIndex.Add(current.Value, current);
+					}
+					current = current.Next;
+				}
+			}
+
 			public IEnumerator<int> GetEnumerator() => boundary.GetEnumerator();
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -647,8 +660,8 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				if (InnerBoundary.Contains(index)) {
 					RemoveVertexFromBoundary(index);
 				}
-				var isolatedVertices = InnerRemoveVertex(index);
-				FixupTopologyAfterVerticesRemoval(isolatedVertices);
+				InnerRemoveVertex(index);
+				FixupTopologyAfterVerticesRemoval(index);
 			}
 
 			TopologyChanged?.Invoke(this);
@@ -693,6 +706,21 @@ namespace Lime.Widgets.PolygonMesh.Topology.HalfEdgeTopology
 				InnerInsertConstrainedEdge(current, p, true);
 				current = p;
 			}
+		}
+
+		private void FixupTopologyAfterVerticesRemoval(int index)
+		{
+			if (Vertices.Count - 1 != index) {
+				var swapped = Vertices.Count - 1;
+				Toolbox.Swap(Vertices, index, Vertices.Count - 1);
+				foreach (var he in HalfEdges) {
+					if (he.Origin == swapped) {
+						he.Origin = index;
+					}
+				}
+				InnerBoundary.Remap(swapped, index);
+			}
+			Vertices.RemoveAt(Vertices.Count - 1);
 		}
 
 		private void FixupTopologyAfterVerticesRemoval(List<int> removedVertices)
