@@ -868,7 +868,7 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 		}
 
 		private static bool InCircle(Vector2 vertex, Vector2 v1, Vector2 v2, Vector2 v3) =>
-			GeometricPredicates.ExactInCircle(v1.X, v1.Y, v2.X, v2.Y, v3.X, v3.Y, vertex.X, vertex.Y) > 0;
+			GeometricPredicates.AdaptiveInCircle(v1.X, v1.Y, v2.X, v2.Y, v3.X, v3.Y, vertex.X, vertex.Y) > 0;
 
 		private static float PointToSegmentSqrDistance(Vector2 v, Vector2 w, Vector2 p)
 		{
@@ -903,8 +903,8 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 		/// <param name="p1">First point.</param>
 		/// <param name="p2">Second point.</param>
 		private static bool ArePointsOnOppositeSidesOfSegment(Vector2 s1, Vector2 s2, Vector2 p1, Vector2 p2) =>
-			GeometricPredicates.ExactOrient2D(s1.X, s1.Y, s2.X, s2.Y, p1.X, p1.Y) *
-			GeometricPredicates.ExactOrient2D(s1.X, s1.Y, s2.X, s2.Y, p2.X, p2.Y) < 0;
+			GeometricPredicates.AdaptiveOrient2D(s1.X, s1.Y, s2.X, s2.Y, p1.X, p1.Y) *
+			GeometricPredicates.AdaptiveOrient2D(s1.X, s1.Y, s2.X, s2.Y, p2.X, p2.Y) < 0;
 
 
 		/// <summary>
@@ -956,7 +956,7 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 			Orient2D(vertex, s, e) == 0;
 
 		private static int Orient2D(Vector2 a, Vector2 b, Vector2 c) =>
-			Math.Sign(GeometricPredicates.ExactOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y));
+			Math.Sign(GeometricPredicates.AdaptiveOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y));
 
 		#endregion
 	}
