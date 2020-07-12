@@ -22,11 +22,13 @@ namespace Tangerine.UI.SceneView
 				) {
 					RulerLine line;
 					bool lineCaptured;
+					Func<bool> isHovered = null;
 					var hulls = Document.Current.Container.Nodes.OfType<Widget>().Editable()
 						.Select(w => w.CalcHullInSpaceOf(container)).ToList();
 					if (lineCaptured = SceneView.Instance.Components.Contains<CreateLineRequestComponent>()) {
 						var comp = SceneView.Instance.Components.Get<CreateLineRequestComponent>();
 						line = new RulerLine(Vector2.Zero, comp.Orientation);
+						isHovered = comp.IsHovered;
 						SnapLineToNearestPoint(line, hulls);
 						if (IsRulerContainLine(line.Value, line.RulerOrientation)) {
 							line = GetLineUnderMouse();
@@ -49,8 +51,10 @@ namespace Tangerine.UI.SceneView
 									SnapLineToNearestPoint(line, hulls);
 									yield return null;
 								}
-								Core.Operations.CreateRuler.Perform(ProjectUserPreferences.Instance.ActiveRuler, line = line.Clone());
-								Document.Current.History.CommitTransaction();
+								if (isHovered == null || !isHovered()) {
+									Core.Operations.CreateRuler.Perform(ProjectUserPreferences.Instance.ActiveRuler, line = line.Clone());
+									Document.Current.History.CommitTransaction();
+								}
 							}
 							Window.Current.Invalidate();
 							SceneView.Instance.Components.Remove<LineSelectionComponent>();
