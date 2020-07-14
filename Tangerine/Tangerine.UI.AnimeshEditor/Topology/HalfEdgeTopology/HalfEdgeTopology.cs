@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Lime.Animesh.Topology;
-using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
+using Lime;
+using Lime.Widgets.Animesh;
+using TopologyVertex = Lime.Widgets.Animesh.Vertex;
 
-namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
+namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 {
 	public partial class HalfEdgeTopology : ITopology
 	{
@@ -285,7 +285,7 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 						return false;
 					}
 					result = new TopologyHitTestResult {
-						Target = new Vertex { Index = (ushort)edge.Origin, },
+						Target = new TopologyVertex { Index = (ushort)edge.Origin, },
 					};
 					break;
 				case LocationResult.OnEdge:
@@ -352,7 +352,7 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 			bool HitVertex(int index, out TopologyHitTestResult r)
 			{
 				var didHit = index >= 0 && (Vertices[index].Pos - position).SqrLength <= vertexHitRadius * vertexHitRadius;
-				r = didHit ? new TopologyHitTestResult { Target = new Vertex { Index = (ushort)index, }, } : null;
+				r = didHit ? new TopologyHitTestResult { Target = new TopologyVertex { Index = (ushort)index, }, } : null;
 				return didHit;
 			}
 			return result != null;
@@ -483,7 +483,7 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 #if DEBUG
 			TopologyChanged += topology => {
 				if (!SelfCheck()) {
-					Console.WriteLine("Triangulation is not Delaunay!");
+					System.Console.WriteLine("Triangulation is not Delaunay!");
 				}
 
 				foreach (var (edge1, edge2, edge3) in Triangles()) {
@@ -495,10 +495,10 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 					var v3 = InnerVertices[o3].Pos;
 					var o = Orient2D(v1, v2, v3);
 					if (o == 0f) {
-						Console.WriteLine($"Degenerated triangle found!!!!! ({v1}, {v2}, {v3})");
+						System.Console.WriteLine($"Degenerated triangle found!!!!! ({v1}, {v2}, {v3})");
 					}
 					if (o < 0) {
-						Console.WriteLine($"Triangle has wrong orientation!!!! ({v1}, {v2}, {v3})");
+						System.Console.WriteLine($"Triangle has wrong orientation!!!! ({v1}, {v2}, {v3})");
 					}
 					CheckBoundaryEdgeCorrectness(o1, o2, edge1);
 					CheckBoundaryEdgeCorrectness(o2, o3, edge2);
@@ -506,7 +506,7 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 					void CheckBoundaryEdgeCorrectness(int index1, int index2, HalfEdge edge)
 					{
 						if (InnerBoundary.ContainsEdge(index1, index2) && !edge.Constrained) {
-							Console.WriteLine($"Boundary edge is not constrained!!! ({index1}, {index2})");
+							System.Console.WriteLine($"Boundary edge is not constrained!!! ({index1}, {index2})");
 						}
 					}
 				}
@@ -578,7 +578,6 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 			}
 		}
 
-#if TANGERINE
 		public IEnumerable<(Face, Face.FaceInfo)> FacesWithInfo
 		{
 			get
@@ -595,7 +594,6 @@ namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
 				}
 			}
 		}
-#endif
 
 		private Face.FaceInfo CreateFaceInfo(HalfEdge triangle) =>
 			CreateFaceInfo(triangle, triangle.Next, triangle.Prev);

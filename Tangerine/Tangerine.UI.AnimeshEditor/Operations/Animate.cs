@@ -1,6 +1,6 @@
 using Tangerine.Core;
 
-namespace Tangerine.UI.SceneView.Animesh
+namespace Tangerine.UI.AnimeshEditor.Operations
 {
 	public static partial class AnimeshModification
 	{

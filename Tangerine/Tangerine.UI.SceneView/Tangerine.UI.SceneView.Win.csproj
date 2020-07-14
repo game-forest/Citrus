@@ -63,23 +63,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animesh\Extensions.cs" />
-    <Compile Include="Animesh\Operations\Animate.cs" />
-    <Compile Include="Animesh\Operations\PreserveSlice.cs" />
-    <Compile Include="Animesh\AnimeshContextualPanel.cs" />
-    <Compile Include="Animesh\AnimeshContextualPanelProcessor.cs" />
-    <Compile Include="Animesh\AnimeshController.cs" />
-    <Compile Include="Animesh\AnimeshTools.cs" />
-    <Compile Include="Animesh\Utils.cs" />
     <Compile Include="Presenters\Animation2DPathPresenter.cs" />
     <Compile Include="Presenters\Animation3DPathPresenter.cs" />
     <Compile Include="Presenters\WavePivotPresenter.cs" />
-    <Compile Include="Animesh\AnimeshPresenter.cs" />
     <Compile Include="Processors\FrameProgressionProcessor.cs" />
     <Compile Include="Presenters\InspectRootNodePresenter.cs" />
     <Compile Include="Presenters\NineGridLinePresenter.cs" />
     <Compile Include="Presenters\ParticleEmitterPresenter.cs" />
-    <Compile Include="Animesh\AnimeshProcessor.cs" />
     <Compile Include="Processors\ShiftTimelineProcessor.cs" />
     <Compile Include="Processors\DragAnimationPathPointProcessor.cs" />
     <Compile Include="Processors\DragNineGridLineProcessor.cs" />
@@ -147,7 +137,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
       <Project>{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}</Project>
-      <Name>Yuzu</Name>
+      <Name>Yuzu.Win</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj">
       <Project>{259c5e1f-1507-4131-8b4e-dd3c51f7462a}</Project>
@@ -156,6 +146,10 @@
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj">
       <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
       <Name>Tangerine.Core.Win</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Win.csproj">
+      <Project>{32771586-53bf-4212-930d-bfdeac20b3da}</Project>
+      <Name>Tangerine.UI.AnimeshEditor.Win</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj">
       <Project>{e62ba18f-4e1a-466a-8299-67ad567f17e5}</Project>

@@ -60,6 +60,7 @@
     <Compile Include="GridSelection.cs" />
     <Compile Include="GridSpanList.cs" />
     <Compile Include="IDataflow.cs" />
+    <Compile Include="ISceneView.cs" />
     <Compile Include="ITaskProvider.cs" />
     <Compile Include="KeyHandler.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
@@ -112,7 +113,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
       <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu</Name>
+      <Name>Yuzu.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

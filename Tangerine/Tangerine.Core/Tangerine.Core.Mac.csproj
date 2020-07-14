@@ -64,6 +64,7 @@
     <Compile Include="DescendantsSkippingNamesakeAnimationOwnersEnumerable.cs" />
     <Compile Include="GridSelection.cs" />
     <Compile Include="GridSpanList.cs" />
+    <Compile Include="ISceneView.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
     <Compile Include="NodeExtensions.cs" />
     <Compile Include="Operations\RemoveKeyframeRange.cs" />

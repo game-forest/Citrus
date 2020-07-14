@@ -1,7 +1,7 @@
 using Lime;
 using Tangerine.Core;
 
-namespace Tangerine.UI.SceneView.Animesh
+namespace Tangerine.UI.AnimeshEditor
 {
 	public class AnimeshContextualPanel
 	{

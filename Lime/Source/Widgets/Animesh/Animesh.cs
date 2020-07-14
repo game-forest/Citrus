@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Lime.Widgets.Animesh.Topology;
 using Yuzu;
 
 namespace Lime.Widgets.Animesh

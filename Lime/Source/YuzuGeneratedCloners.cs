@@ -662,13 +662,13 @@ namespace YuzuGenerated
 				}
 			}
 			if (s.ConstrainedEdges != null) {
-				result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Edge>();
+				result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Edge>();
 				foreach (var tmp7 in s.ConstrainedEdges)
 					result.ConstrainedEdges.Add(tmp7);
 			}
 			result.ContentsPath = s.ContentsPath;
 			if (s.Faces != null) {
-				result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Face>();
+				result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Face>();
 				foreach (var tmp8 in s.Faces)
 					result.Faces.Add(tmp8);
 			}
@@ -1339,8 +1339,8 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static global::Lime.Widgets.Animesh.Topology.Edge Clone_Lime_Widgets_Animesh_Topology__Edge(Cloner cl, object src) =>
-			(global::Lime.Widgets.Animesh.Topology.Edge)src;
+		private static global::Lime.Widgets.Animesh.Edge Clone_Lime_Widgets_Animesh__Edge(Cloner cl, object src) =>
+			(global::Lime.Widgets.Animesh.Edge)src;
 
 		protected static global::Lime.EmitterShapePoint Clone_Lime__EmitterShapePoint(Cloner cl, object src)
 		{
@@ -1392,8 +1392,8 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static global::Lime.Widgets.Animesh.Topology.Face Clone_Lime_Widgets_Animesh_Topology__Face(Cloner cl, object src) =>
-			(global::Lime.Widgets.Animesh.Topology.Face)src;
+		private static global::Lime.Widgets.Animesh.Face Clone_Lime_Widgets_Animesh__Face(Cloner cl, object src) =>
+			(global::Lime.Widgets.Animesh.Face)src;
 
 		protected static global::Lime.Font Clone_Lime__Font(Cloner cl, object src)
 		{
@@ -4848,9 +4848,9 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.DistortionMaterial)] = Clone_Lime__DistortionMaterial;
 			clonerCache[typeof(global::Lime.DistortionMesh)] = Clone_Lime__DistortionMesh;
 			clonerCache[typeof(global::Lime.DistortionMeshPoint)] = Clone_Lime__DistortionMeshPoint;
-			clonerCache[typeof(global::Lime.Widgets.Animesh.Topology.Edge)] = ValueCopyCloner;
+			clonerCache[typeof(global::Lime.Widgets.Animesh.Edge)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.EmitterShapePoint)] = Clone_Lime__EmitterShapePoint;
-			clonerCache[typeof(global::Lime.Widgets.Animesh.Topology.Face)] = ValueCopyCloner;
+			clonerCache[typeof(global::Lime.Widgets.Animesh.Face)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.Font)] = Clone_Lime__Font;
 			clonerCache[typeof(global::Lime.FontChar)] = Clone_Lime__FontChar;
 			clonerCache[typeof(global::Lime.Frame)] = Clone_Lime__Frame;

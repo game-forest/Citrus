@@ -1,4 +1,3 @@
-#if TANGERINE
 using System.Runtime.CompilerServices;
 
 namespace Lime.Source.Widgets.Animesh
@@ -697,4 +696,3 @@ namespace Lime.Source.Widgets.Animesh
 		}
 	}
 }
-#endif

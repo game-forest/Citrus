@@ -152,7 +152,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
       <Project>{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}</Project>
-      <Name>Yuzu</Name>
+      <Name>Yuzu.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

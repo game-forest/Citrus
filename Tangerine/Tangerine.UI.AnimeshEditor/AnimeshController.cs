@@ -2,19 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
-using Lime.Animesh.Topology;
-using Lime.Animesh.Utils;
-using Lime.Widgets.Animesh.Topology;
-using Lime.Widgets.Animesh.Topology.HalfEdgeTopology;
+using Lime.Widgets.Animesh;
 using Tangerine.Core;
-using Vertex = Lime.Vertex;
+using Tangerine.Core.Operations;
+using Tangerine.UI.AnimeshEditor.Operations;
+using Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology;
 using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
-using static Lime.Widgets.Animesh.Topology.Edge;
+using TopologyVertex = Lime.Widgets.Animesh.Vertex;
 
-// Note: This will be heavily refactored once the necessary
-// functionality is implemented within both frontend and backend.
-
-namespace Tangerine.UI.SceneView.Animesh
+namespace Tangerine.UI.AnimeshEditor
 {
 	internal static class TopologyPrimitiveExtensions
 	{
@@ -28,8 +24,6 @@ namespace Tangerine.UI.SceneView.Animesh
 	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
 	public abstract class AnimeshController : NodeComponent
 	{
-		protected static SceneView sv => SceneView.Instance;
-
 		public struct AnimeshSlice
 		{
 			public AnimeshTools.ModificationState State;
@@ -53,7 +47,7 @@ namespace Tangerine.UI.SceneView.Animesh
 	}
 
 	[YuzuDontGenerateDeserializer]
-	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
+	[AllowedComponentOwnerTypes(typeof(Animesh))]
 	public abstract class TopologyController : AnimeshController
 	{
 		public Lime.Widgets.Animesh.Animesh Mesh { get; protected set; }
@@ -69,6 +63,13 @@ namespace Tangerine.UI.SceneView.Animesh
 	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
 	public sealed class TopologyController<T> : TopologyController where T : ITopology
 	{
+		private readonly ISceneView sv;
+
+		public TopologyController(ISceneView sv)
+		{
+			this.sv = sv;
+		}
+
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
@@ -164,7 +165,7 @@ namespace Tangerine.UI.SceneView.Animesh
 							Vector2.Distance(transformedVertices[i], position) <=
 							Theme.Metrics.AnimeshVertexHitTestRadius
 						) {
-							result.Target = new Lime.Widgets.Animesh.Topology.Vertex { Index = face[i], };
+							result.Target = new TopologyVertex { Index = face[i], };
 							result.Info = null;
 							break;
 						}
@@ -173,7 +174,7 @@ namespace Tangerine.UI.SceneView.Animesh
 							Theme.Metrics.AnimeshEdgeHitTestRadius * Theme.Metrics.AnimeshEdgeHitTestRadius
 						) {
 							result.Target = new Edge(face[i], face[(i + 1) % 3]);
-							result.Info = new EdgeInfo {
+							result.Info = new Edge.EdgeInfo {
 								IsConstrained = info[i].IsConstrained,
 								IsFraming = info[i].IsFraming,
 							};
@@ -209,7 +210,7 @@ namespace Tangerine.UI.SceneView.Animesh
 					return result.Target.IsVertex();
 				case AnimeshTools.ModificationState.Removal:
 					return result.Target.IsVertex() || result.Target.IsEdge() &&
-							(result.Info as EdgeInfo).IsConstrained;
+							(result.Info as Edge.EdgeInfo).IsConstrained;
 				default:
 					return false;
 			}
@@ -228,7 +229,7 @@ namespace Tangerine.UI.SceneView.Animesh
 			var hitTestTarget = isHitTestSuccessful ? hitTestResult.Target : null;
 
 			if (hitTestTarget != null && hitTestTarget.IsFace()) {
-				Utils.RenderTriangle(
+				AnimeshUtils.RenderTriangle(
 					CalcTransformedVertexPosition(hitTestTarget[0]),
 					CalcTransformedVertexPosition(hitTestTarget[1]),
 					CalcTransformedVertexPosition(hitTestTarget[2]),
@@ -298,7 +299,7 @@ namespace Tangerine.UI.SceneView.Animesh
 				}
 			}
 			if (AnimeshTools.State == AnimeshTools.ModificationState.Creation && hitTestTarget != null && !hitTestTarget.IsVertex()) {
-				Utils.RenderVertex(
+				AnimeshUtils.RenderVertex(
 					(Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame)).TransformVector(SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget) * Mesh.Size),
 					Theme.Metrics.AnimeshBackgroundVertexRadius,
 					Theme.Metrics.AnimeshVertexRadius,
@@ -331,7 +332,7 @@ namespace Tangerine.UI.SceneView.Animesh
 				foregroundSize = new Vector2(Theme.Metrics.AnimeshEdgeThickness);
 				backgroundSize = new Vector2(Theme.Metrics.AnimeshBackgroundEdgeThickness);
 			}
-			Utils.RenderLine(
+			AnimeshUtils.RenderLine(
 				start,
 				end,
 				backgroundSize,
@@ -364,7 +365,7 @@ namespace Tangerine.UI.SceneView.Animesh
 				foregroundSize = new Vector2(Theme.Metrics.AnimeshEdgeThickness);
 				backgroundSize = new Vector2(Theme.Metrics.AnimeshBackgroundEdgeThickness);
 			}
-			Utils.RenderLine(
+			AnimeshUtils.RenderLine(
 				start,
 				end,
 				backgroundSize,
@@ -376,7 +377,7 @@ namespace Tangerine.UI.SceneView.Animesh
 		}
 
 		private void RenderVertex(Vector2 position) =>
-			Utils.RenderVertex(
+			AnimeshUtils.RenderVertex(
 				position,
 				Theme.Metrics.AnimeshBackgroundVertexRadius,
 				Theme.Metrics.AnimeshVertexRadius,
@@ -385,7 +386,7 @@ namespace Tangerine.UI.SceneView.Animesh
 			);
 
 		private void RenderVertexHovered(Vector2 position) =>
-			Utils.RenderVertex(
+			AnimeshUtils.RenderVertex(
 				position,
 				1.3f * Theme.Metrics.AnimeshBackgroundVertexRadius,
 				1.3f * Theme.Metrics.AnimeshVertexRadius,
@@ -591,9 +592,8 @@ namespace Tangerine.UI.SceneView.Animesh
 			if (result == null || !result.Target.IsVertex()) {
 				yield break;
 			}
-			var target = (Lime.Widgets.Animesh.Topology.Vertex)result.Target;
+			var target = (TopologyVertex)result.Target;
 			using (Document.Current.History.BeginTransaction()) {
-				List<IKeyframe> keyframes = null;
 				Mesh.Animators.TryFind(
 					nameof(Mesh.TransientVertices),
 					out var animator
@@ -609,7 +609,7 @@ namespace Tangerine.UI.SceneView.Animesh
 				Topology.VertexHitTestRadius = Topology.EdgeHitTestDistance = 0f;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
-					keyframes = animator?.Keys.ToList();
+					var keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var delta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
 					if (Topology.TranslateVertex(target.Index, delta, delta, out var removedVertices)) {
@@ -770,13 +770,13 @@ namespace Tangerine.UI.SceneView.Animesh
 				}
 				// Perhaps Topology.AddVertex should return an index where new vertex was placed or -1
 				// if it wasn't inserted. Now we assume it's always pushed back.
-				initialHitTestTarget = new Lime.Widgets.Animesh.Topology.Vertex { Index = (ushort)(Vertices.Count - 1), };
+				initialHitTestTarget = new TopologyVertex { Index = (ushort)(Vertices.Count - 1), };
 			}
 
-			yield return ConstrainingTask((Lime.Widgets.Animesh.Topology.Vertex)initialHitTestTarget);
+			yield return ConstrainingTask((TopologyVertex)initialHitTestTarget);
 		}
 
-		private IEnumerator<object> ConstrainingTask(Lime.Widgets.Animesh.Topology.Vertex initialHitTestTarget)
+		private IEnumerator<object> ConstrainingTask(TopologyVertex initialHitTestTarget)
 		{
 			yield return null;
 			using (Document.Current.History.BeginTransaction()) {
@@ -894,7 +894,7 @@ namespace Tangerine.UI.SceneView.Animesh
 								animator.ResetCache();
 							}
 						}
-					} else if (hitTestTarget.IsEdge() && result.Info is EdgeInfo ei && ei.IsConstrained) {
+					} else if (hitTestTarget.IsEdge() && result.Info is Edge.EdgeInfo ei && ei.IsConstrained) {
 						var edge = (Edge)hitTestTarget;
 						Topology.RemoveConstrainedEdge(edge.Index0, edge.Index1);
 					}

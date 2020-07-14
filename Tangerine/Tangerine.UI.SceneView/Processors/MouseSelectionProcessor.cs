@@ -3,8 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
-using Tangerine.UI.SceneView.Animesh;
-using Lime.Animesh.Utils;
+using Tangerine.UI.AnimeshEditor;
 
 namespace Tangerine.UI.SceneView
 {

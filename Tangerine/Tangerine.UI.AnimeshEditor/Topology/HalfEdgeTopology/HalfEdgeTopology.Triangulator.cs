@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Lime;
 using Lime.Source.Widgets.Animesh;
 
-namespace Lime.Widgets.Animesh.Topology.HalfEdgeTopology
+namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 {
 	public partial class HalfEdgeTopology
 	{

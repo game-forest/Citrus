@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Lime.Widgets.Animesh.Topology;
+using Lime;
 using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
 
-namespace Lime.Animesh.Topology
+namespace Lime.Widgets.Animesh
 {
 	public class TopologyHitTestResult
 	{
@@ -16,13 +16,12 @@ namespace Lime.Animesh.Topology
 		List<SkinnedVertex> Vertices { get; }
 		void ConstructFrom(List<SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces);
 		IEnumerable<Face> Faces { get; }
-#if TANGERINE
+
 		/// <summary>
 		/// We need private information in Tangerine in order to show them to end user.
 		/// In any other application there is no need to know inner information about topology.
 		/// </summary>
 		IEnumerable<(Face, Face.FaceInfo)> FacesWithInfo { get; }
-#endif
 		event Action<ITopology> OnTopologyChanged;
 		int AddVertex(SkinnedVertex vertex);
 		void RemoveVertex(int index);

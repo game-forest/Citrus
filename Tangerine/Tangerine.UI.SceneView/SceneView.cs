@@ -1,28 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Lime;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
-using Tangerine.UI.SceneView.Animesh;
+using Tangerine.UI.AnimeshEditor;
 using Tangerine.UI.SceneView.Presenters;
 
 namespace Tangerine.UI.SceneView
 {
-	public class SceneView : IDocumentView
+	public class SceneView : IDocumentView, ISceneView
 	{
 		private Vector2 mousePositionOnFilesDrop;
 
 		// Given panel.
-		public readonly Widget Panel;
+		public Widget Panel { get; }
 		// Widget which is a direct child of the panel.
-		public readonly Widget Frame;
+		public Widget Frame { get; }
 		// Widget having the same size as panel, used for intercepting mouse events above the canvas.
-		public readonly Widget InputArea;
+		public Widget InputArea { get; }
 		public WidgetInput Input => InputArea.Input;
 		// Container for the document root node.
-		public readonly Widget Scene;
+		public Widget Scene { get; }
 		public readonly DropFilesGesture DropFilesGesture;
 		public static readonly RulersWidget RulersWidget = new RulersWidget();
 		public static readonly ZoomWidget ZoomWidget = new ZoomWidget();
@@ -295,7 +296,7 @@ namespace Tangerine.UI.SceneView
 				new DragSplinePoint3DProcessor(),
 				new DragAnimationPathPointProcessor(),
 				new DragWidgetsProcessor(),
-				new AnimeshProcessor(),
+				new AnimeshProcessor(this),
 				new ResizeWidgetsProcessor(),
 				new RescalePointObjectSelectionProcessor(),
 				new RotatePointObjectSelectionProcessor(),

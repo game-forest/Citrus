@@ -324,13 +324,8 @@
     <Compile Include="Source\Widgets\Animation\Keyframe.cs" />
     <Compile Include="Source\Widgets\Animation\TypedKeyframeList.cs" />
     <Compile Include="Source\Widgets\Animesh\Animesh.cs" />
-    <Compile Include="Source\Widgets\Animesh\ExactArithmetic.cs" />
-    <Compile Include="Source\Widgets\Animesh\GeometricPredicates.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\HalfEdgeTopology\HalfEdgeTopology.Triangulator.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\ITopology.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\ITopologyPrimitive.cs" />
-    <Compile Include="Source\Widgets\Animesh\Utils\AnimeshUtils.cs" />
+    <Compile Include="Source\Widgets\Animesh\ITopology.cs" />
+    <Compile Include="Source\Widgets\Animesh\ITopologyPrimitive.cs" />
     <Compile Include="Source\Widgets\Audio.cs" />
     <Compile Include="Source\Widgets\BehaviorComponent.cs" />
     <Compile Include="Source\Widgets\Bone.cs" />

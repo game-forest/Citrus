@@ -1,14 +1,22 @@
 using Lime;
-using Lime.Widgets.Animesh.Topology.HalfEdgeTopology;
-using System.Collections.Generic;
-using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
+using Tangerine.Core;
+using Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology;
 
-namespace Tangerine.UI.SceneView.Animesh
+namespace Tangerine.UI.AnimeshEditor
 {
 	public static class Extensions
 	{
 		public static TopologyController Controller(this Lime.Widgets.Animesh.Animesh mesh) =>
-			mesh.Components.GetOrAdd<TopologyController<HalfEdgeTopology>>();
+			mesh.Components.Get<TopologyController<HalfEdgeTopology>>();
+
+		public static TopologyController Controller(this Lime.Widgets.Animesh.Animesh mesh, ISceneView sv)
+		{
+			var controller = mesh.Components.Get<TopologyController<HalfEdgeTopology>>();
+			if (controller == null) {
+				mesh.Components.Add(controller = new TopologyController<HalfEdgeTopology>(sv));
+			}
+			return controller;
+		}
 
 		public static Vector2 ApplySkinning(this Lime.Widgets.Animesh.Animesh mesh, Vector2 vector, SkinningWeights weights) =>
 			mesh.ParentWidget.BoneArray.ApplySkinningToVector(vector, weights);

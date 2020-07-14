@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
 
-namespace Tangerine.UI.SceneView.Animesh
+namespace Tangerine.UI.AnimeshEditor
 {
-	class AnimeshContextualPanelProcessor : ITaskProvider
+	public class AnimeshContextualPanelProcessor : ITaskProvider
 	{
 		private readonly AnimeshContextualPanel panel;
 

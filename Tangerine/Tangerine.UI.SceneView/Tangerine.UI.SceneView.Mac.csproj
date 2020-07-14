@@ -65,16 +65,6 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animesh\AnimeshContextualPanel.cs" />
-    <Compile Include="Animesh\AnimeshContextualPanelProcessor.cs" />
-    <Compile Include="Animesh\AnimeshController.cs" />
-    <Compile Include="Animesh\AnimeshPresenter.cs" />
-    <Compile Include="Animesh\AnimeshProcessor.cs" />
-    <Compile Include="Animesh\AnimeshTools.cs" />
-    <Compile Include="Animesh\Extensions.cs" />
-    <Compile Include="Animesh\Operations\Animate.cs" />
-    <Compile Include="Animesh\Operations\PreserveSlice.cs" />
-    <Compile Include="Animesh\Utils.cs" />
     <Compile Include="Components\CommandComponent.cs" />
     <Compile Include="IKSolver.cs" />
     <Compile Include="Presenters\Animation2DPathPresenter.cs" />

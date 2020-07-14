@@ -1,9 +1,8 @@
 using System.Linq;
 using Lime.Widgets.Animesh;
 using Tangerine.Core;
-using Tangerine.UI;
 
-namespace Tangerine
+namespace Tangerine.UI.AnimeshEditor
 {
 	public static class AnimeshTools
 	{

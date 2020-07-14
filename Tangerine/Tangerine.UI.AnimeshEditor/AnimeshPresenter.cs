@@ -1,15 +1,14 @@
-using Lime;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
-using Tangerine.UI.SceneView.Animesh;
 
-namespace Tangerine.UI.SceneView
+namespace Tangerine.UI.AnimeshEditor
 {
 	public class AnimeshPresenter
 	{
 		private static bool wasAnimationForced;
 
-		public AnimeshPresenter(SceneView sceneView)
+		public AnimeshPresenter(ISceneView sceneView)
 		{
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
 		}

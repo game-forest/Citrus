@@ -1,14 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
-using Tangerine.Core;
 using Lime;
-using Tangerine.UI.SceneView.Animesh;
+using Tangerine.Core;
 
-namespace Tangerine.UI.SceneView
+namespace Tangerine.UI.AnimeshEditor
 {
 	public class AnimeshProcessor : ITaskProvider
 	{
-		private static SceneView sv => SceneView.Instance;
+		private ISceneView sv;
+
+		public AnimeshProcessor(ISceneView sv)
+		{
+			this.sv = sv;
+		}
 
 		public IEnumerator<object> Task()
 		{
@@ -18,7 +22,7 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				if (!SceneView.Instance.InputArea.IsMouseOverThisOrDescendant()) {
+				if (!sv.InputArea.IsMouseOverThisOrDescendant()) {
 					yield return null;
 					continue;
 				}
@@ -27,18 +31,18 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
+				if (sv.Input.ConsumeKeyPress(Key.Mouse1)) {
 					AnimeshTools.State = AnimeshTools.State.NextState();
 				}
 				/// Skinning bootstrap
 				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
 				if (AnimeshTools.State == AnimeshTools.ModificationState.Animation) {
 					foreach (var mesh in meshes) {
-						if (SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
-							if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0)) {
-								mesh.Controller().TieVertexWithBones(bones);
-							} else if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse1)) {
-								mesh.Controller().UntieVertexFromBones(bones);
+						if (sv.Input.IsKeyPressed(Key.Control)) {
+							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+								mesh.Controller(sv).TieVertexWithBones(bones);
+							} else if (sv.Input.ConsumeKeyPress(Key.Mouse1)) {
+								mesh.Controller(sv).UntieVertexFromBones(bones);
 							}
 						}
 					}
@@ -46,9 +50,9 @@ namespace Tangerine.UI.SceneView
 				/// Skinning bootstrap
 
 				foreach (var mesh in meshes) {
-					if (mesh.Controller().HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
-						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-						if (SceneView.Instance.Input.ConsumeKeyPress(Key.Mouse0) && !SceneView.Instance.Input.IsKeyPressed(Key.Control)) {
+					if (mesh.Controller(sv).HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
+						UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
+						if (sv.Input.ConsumeKeyPress(Key.Mouse0) && !sv.Input.IsKeyPressed(Key.Control)) {
 							switch (AnimeshTools.State) {
 								case AnimeshTools.ModificationState.Animation:
 									yield return mesh.Controller().AnimationTask();

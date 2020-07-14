@@ -435,6 +435,8 @@
     <Compile Include="Source\Widgets\Animation\IAnimable.cs" />
     <Compile Include="Source\Widgets\Animation\Keyframe.cs" />
     <Compile Include="Source\Widgets\Animation\TypedKeyframeList.cs" />
+    <Compile Include="Source\Widgets\Animesh\ITopology.cs" />
+    <Compile Include="Source\Widgets\Animesh\ITopologyPrimitive.cs" />
     <Compile Include="Source\Widgets\Audio.cs" />
     <Compile Include="Source\Widgets\BehaviorComponent.cs" />
     <Compile Include="Source\Widgets\Bone.cs" />
@@ -539,14 +541,7 @@
     <Compile Include="Source\Widgets\ParticleModifier.cs" />
     <Compile Include="Source\Widgets\ParticlesMagnet.cs" />
     <Compile Include="Source\Widgets\PointObject.cs" />
-    <Compile Include="Source\Widgets\Animesh\ExactArithmetic.cs" />
     <Compile Include="Source\Widgets\Animesh\Animesh.cs" />
-    <Compile Include="Source\Widgets\Animesh\GeometricPredicates.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\HalfEdgeTopology\HalfEdgeTopology.Triangulator.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\ITopology.cs" />
-    <Compile Include="Source\Widgets\Animesh\Topology\ITopologyPrimitive.cs" />
-    <Compile Include="Source\Widgets\Animesh\Utils\AnimeshUtils.cs" />
     <Compile Include="Source\Widgets\Polyline.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSetupProcessor.cs" />
@@ -654,7 +649,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Yuzu\Yuzu.Win.csproj">
       <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu</Name>
+      <Name>Yuzu.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

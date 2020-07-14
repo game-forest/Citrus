@@ -11695,12 +11695,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
-				result.ConstrainedEdges = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Edge>)null;
+				result.ConstrainedEdges = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Edge>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Edge>();
+					result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Edge>();
 					while (--tmp8 >= 0) {
-						var tmp9 = (global::Lime.Widgets.Animesh.Topology.Edge)dg.ReadStruct<global::Lime.Widgets.Animesh.Topology.Edge>();
+						var tmp9 = (global::Lime.Widgets.Animesh.Edge)dg.ReadStruct<global::Lime.Widgets.Animesh.Edge>();
 						result.ConstrainedEdges.Add(tmp9);
 					}
 				}
@@ -11712,12 +11712,12 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Faces = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Face>)null;
+				result.Faces = (global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Face>)null;
 				var tmp10 = d.Reader.ReadInt32();
 				if (tmp10 >= 0) {
-					result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Topology.Face>();
+					result.Faces = new global::System.Collections.Generic.List<global::Lime.Widgets.Animesh.Face>();
 					while (--tmp10 >= 0) {
-						var tmp11 = (global::Lime.Widgets.Animesh.Topology.Face)dg.ReadStruct<global::Lime.Widgets.Animesh.Topology.Face>();
+						var tmp11 = (global::Lime.Widgets.Animesh.Face)dg.ReadStruct<global::Lime.Widgets.Animesh.Face>();
 						result.Faces.Add(tmp11);
 					}
 				}
@@ -11896,17 +11896,17 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static object Make_Lime_Widgets_Animesh_Topology__Edge(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime_Widgets_Animesh__Edge(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Widgets.Animesh.Topology.Edge();
+			var result = new global::Lime.Widgets.Animesh.Edge();
 			result.Index0 = d.Reader.ReadUInt16();
 			result.Index1 = d.Reader.ReadUInt16();
 			return result;
 		}
 
-		private static object Make_Lime_Widgets_Animesh_Topology__Face(BinaryDeserializer d, ReaderClassDef def)
+		private static object Make_Lime_Widgets_Animesh__Face(BinaryDeserializer d, ReaderClassDef def)
 		{
-			var result = new global::Lime.Widgets.Animesh.Topology.Face();
+			var result = new global::Lime.Widgets.Animesh.Face();
 			result.Index0 = d.Reader.ReadUInt16();
 			result.Index1 = d.Reader.ReadUInt16();
 			result.Index2 = d.Reader.ReadUInt16();
@@ -12331,8 +12331,8 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.WidgetAdapter3D)] = Make_Lime__WidgetAdapter3D;
 			makeCache[typeof(global::Lime.Widgets.Animesh.Animesh)] = Make_Lime_Widgets_Animesh__Animesh;
 			makeCache[typeof(global::Lime.Widgets.Animesh.Animesh.SkinnedVertex)] = Make_Lime_Widgets_Animesh__Animesh__SkinnedVertex;
-			makeCache[typeof(global::Lime.Widgets.Animesh.Topology.Edge)] = Make_Lime_Widgets_Animesh_Topology__Edge;
-			makeCache[typeof(global::Lime.Widgets.Animesh.Topology.Face)] = Make_Lime_Widgets_Animesh_Topology__Face;
+			makeCache[typeof(global::Lime.Widgets.Animesh.Edge)] = Make_Lime_Widgets_Animesh__Edge;
+			makeCache[typeof(global::Lime.Widgets.Animesh.Face)] = Make_Lime_Widgets_Animesh__Face;
 		}
 	}
 }

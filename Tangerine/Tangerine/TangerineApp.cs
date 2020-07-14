@@ -10,6 +10,8 @@ using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.MainMenu;
 using Tangerine.UI;
+using Tangerine.UI.AnimeshEditor;
+using Tangerine.UI.AnimeshEditor.Operations;
 using Tangerine.UI.SceneView;
 using Tangerine.UI.Docking;
 using Tangerine.UI.Timeline;
@@ -265,8 +267,8 @@ namespace Tangerine
 
 			Document.NodeDecorators.AddFor<ParticleEmitter>(n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter()));
 			DocumentHistory.AddOperationProcessorTypes(new[] {
-				typeof(UI.SceneView.Animesh.AnimeshModification.Animate.Processor),
-				typeof(UI.SceneView.Animesh.AnimeshModification.Slice.Processor),
+				typeof(AnimeshModification.Animate.Processor),
+				typeof(AnimeshModification.Slice.Processor),
 				typeof(Core.Operations.TimelineHorizontalShift.Processor),
 				typeof(Core.Operations.TimelineColumnRemove.Processor),
 				typeof(Core.Operations.RemoveKeyframeRange.Processor),
