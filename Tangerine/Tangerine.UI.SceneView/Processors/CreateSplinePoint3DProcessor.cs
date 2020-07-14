@@ -36,8 +36,7 @@ namespace Tangerine.UI.SceneView
 						SplinePoint3D point;
 						try {
 							point = (SplinePoint3D) CreateNode.Perform(typeof(SplinePoint3D), aboveSelected: false);
-						}
-						catch (InvalidOperationException e) {
+						} catch (InvalidOperationException e) {
 							AlertDialog.Show(e.Message);
 							yield break;
 						}
@@ -72,7 +71,6 @@ namespace Tangerine.UI.SceneView
 						}
 						history.CommitTransaction();
 					}
-					history.CommitTransaction();
 				}
 				if (input.WasMousePressed(1) || input.WasKeyPressed(Key.Escape)) {
 					break;
