@@ -215,11 +215,7 @@ namespace Lime
 				var nextExclusiveChannel = FindTopExclusiveChannel(group);
 				if (nextExclusiveChannel == null) {
 					foreach (var channel in channels) {
-						if (
-							channel.State != AudioChannelState.Stopped &&
-							channel.State != AudioChannelState.Paused &&
-							channel.Group == group
-						) {
+						if (channel.Group == group && channel.State == AudioChannelState.Playing) {
 							channel.FadeIn(AudioChannel.FadePurpose.Exclusive);
 						}
 					}
@@ -239,8 +235,8 @@ namespace Lime
 			}
 			exclusiveChannelsStack.Add(channel);
 			foreach (var c in channels) {
-				if (c.Group == channel.Group) {
-					if (!exclusiveChannelsStack.Contains(c)) {
+				if (c.Group == channel.Group && c != channel && c.State == AudioChannelState.Playing) {
+					if (exclusiveChannelsStack.Contains(c) || !exclusiveChannels.Contains(c)) {
 						c.FadeOut(AudioChannel.FadePurpose.Exclusive);
 					}
 					c.Volume = c.Volume;
@@ -270,6 +266,19 @@ namespace Lime
 				}
 			}
 			return r;
+		}
+
+		internal static bool ShouldResumeMuted(AudioChannel audioChannel)
+		{
+			if (exclusiveChannels.Contains(audioChannel)) {
+				return false;
+			}
+			foreach (var c in exclusiveChannelsStack) {
+				if (c.Group == audioChannel.Group) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private static AudioChannel FindTopExclusiveChannel(AudioChannelGroup group)

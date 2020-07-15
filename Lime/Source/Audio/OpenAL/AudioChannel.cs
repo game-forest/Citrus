@@ -208,7 +208,13 @@ namespace Lime
 
 		private void ResumeWithoutDelay()
 		{
-			FadeIn(FadePurpose.Play);
+			if (PlatformAudioSystem.ShouldResumeMuted(this)) {
+				fadeVolume = 0.0f;
+				fadeSpeed = 0.0f;
+				fadePurpose = FadePurpose.None;
+			} else {
+				FadeIn(FadePurpose.Play);
+			}
 			Volume = volume;
 			PlayImmediate();
 		}
