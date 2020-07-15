@@ -76,6 +76,8 @@ namespace Launcher
 			Sync("Tangerine/Tangerine.UI.Timeline/Tangerine.UI.Timeline.Mac.csproj");
 			Sync("Tangerine/Tangerine/Tangerine.Win.csproj");
 			Sync("Tangerine/Tangerine/Tangerine.Mac.csproj");
+			Sync("Tangerine/Tangerine.UI.AnimeshEditor/Tangerine.UI.AnimeshEditor.Win.csproj");
+			Sync("Tangerine/Tangerine.UI.AnimeshEditor/Tangerine.UI.AnimeshEditor.Mac.csproj");
 		}
 
 		public Task Start()
