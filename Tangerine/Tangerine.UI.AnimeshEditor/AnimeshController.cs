@@ -78,22 +78,26 @@ namespace Tangerine.UI.AnimeshEditor
 					mesh.Vertices.Add(new SkinnedVertex {
 						Pos = Vector2.Zero,
 						UV1 = Vector2.Zero,
-						Color = mesh.Color
+						Color = mesh.Color,
+						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 					mesh.Vertices.Add(new SkinnedVertex {
 						Pos = new Vector2(1.0f, 0.0f),
 						UV1 = new Vector2(1.0f, 0.0f),
-						Color = mesh.Color
+						Color = mesh.Color,
+						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 					mesh.Vertices.Add(new SkinnedVertex {
 						Pos = new Vector2(0.0f, 1.0f),
 						UV1 = new Vector2(0.0f, 1.0f),
-						Color = mesh.Color
+						Color = mesh.Color,
+						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 					mesh.Vertices.Add(new SkinnedVertex {
 						Pos = Vector2.One,
 						UV1 = Vector2.One,
-						Color = mesh.Color
+						Color = mesh.Color,
+						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 				}
 				Topology = (T)Activator.CreateInstance(typeof(T), mesh.Vertices);
@@ -740,6 +744,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Pos = pos,
 						Color = Mesh.Color,
 						UV1 = InterpolateUV(initialHitTestTarget, pos),
+						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					};
 					UpdateHitTestMetrics();
 					Topology.AddVertex(vertex);
@@ -814,6 +819,7 @@ namespace Tangerine.UI.AnimeshEditor
 							Pos = pos,
 							Color = Mesh.Color,
 							UV1 = InterpolateUV(hitTestTarget, pos),
+							BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 						};
 						endIndex = Topology.AddVertex(vertex);
 						if (animator != null) {

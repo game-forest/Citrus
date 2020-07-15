@@ -10,10 +10,10 @@ namespace Tangerine.UI.AnimeshEditor
 
 		public AnimeshPresenter(ISceneView sceneView)
 		{
-			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
+			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(widget => Render(widget, sceneView)));
 		}
 
-		private static void Render(Widget canvas)
+		private static void Render(Widget canvas, ISceneView sv)
 		{
 			Document.Current.Nodes().OfType<Lime.Widgets.Animesh.Animesh>().ToList().ForEach(m => m.Controller());
 			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
@@ -34,7 +34,7 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 			canvas.PrepareRendererState();
 			foreach (var mesh in meshes) {
-				mesh.Controller().Render(canvas);
+				mesh.Controller(sv).Render(canvas);
 			}
 		}
 	}

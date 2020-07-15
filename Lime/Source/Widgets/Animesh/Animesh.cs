@@ -14,8 +14,8 @@ namespace Lime.Widgets.Animesh
 		{
 			public Vector2 Pos
 			{
-				get { return new Vector2(Pos4.X, Pos4.Y); }
-				set { Pos4 = new Vector4(value.X, value.Y, 0, 1.0f); }
+				get => new Vector2(Pos4.X, Pos4.Y);
+				set => Pos4 = new Vector4(value.X, value.Y, 0, 1.0f);
 			}
 
 			public SkinningWeights SkinningWeights
@@ -175,8 +175,8 @@ namespace Lime.Widgets.Animesh
 				}
 #if TANGERINE
 				if (!TangerineAnimationModeEnabled) {
-					v0.SkinningWeights = new SkinningWeights();
-					v1.SkinningWeights = new SkinningWeights();
+					v0.SkinningWeights = new SkinningWeights { Bone0 = new BoneWeight { Index = 0, Weight = 1f, }};
+					v1.SkinningWeights = new SkinningWeights { Bone0 = new BoneWeight { Index = 0, Weight = 1f, }};
 				}
 #endif
 				ro.VertexBuffer0.Add(v0);
@@ -203,23 +203,13 @@ namespace Lime.Widgets.Animesh
 			public readonly List<SkinnedVertex> VertexBuffer0 = new List<SkinnedVertex>();
 			public readonly List<SkinnedVertex> VertexBuffer1 = new List<SkinnedVertex>();
 
-			private static Shader[] shaders;
-			private static VertexInputLayoutAttribute[] layoutAttribs;
-			private static VertexInputLayoutBinding[] layoutBindings;
 			private static readonly VertexInputLayout vertexInputLayout;
-			private static ShaderProgram.AttribLocation[] attribLocations;
-			private static ShaderProgram.Sampler[] samplers;
 			private static readonly ShaderProgram program;
 
 			static RenderObject()
 			{
-				shaders = new Shader[] {
-					new VertexShader(
-#if DEBUG
-						"#define DEBUG\n" +
-#endif
-
-						@"
+				var shaders = new Shader[] {
+					new VertexShader(@"
 						#ifdef GL_ES
 						precision highp float;
 						#endif
@@ -237,19 +227,13 @@ namespace Lime.Widgets.Animesh
 						varying lowp vec2 texCoords;
 
 						uniform float u_BlendFactor;
-						uniform mat4 u_MatProjection;
-						uniform mat4 u_GlobalTransform;
+						uniform mat4 u_MVP;
 						uniform mat4 u_LocalToParentTransform;
-						uniform mat4 u_ParentToLocalTransform;
 						uniform mat4 u_Bones[50];
 
 						void main()
 						{
-							color =
-							#ifdef DEBUG
-								0.75 * (vec4(in_BlendWeights.x, in_BlendWeights.y, in_BlendWeights.z, 1.0)) + 0.25 *
-							#endif
-								((1.0 - u_BlendFactor) * in_Color1 + u_BlendFactor * in_Color2);
+							color = ((1.0 - u_BlendFactor) * in_Color1 + u_BlendFactor * in_Color2);
 							texCoords = (1.0 - u_BlendFactor) * in_UV1 + u_BlendFactor * in_UV2;
 							vec4 position = u_LocalToParentTransform * ((1.0 - u_BlendFactor) * in_Pos1 + u_BlendFactor * in_Pos2);
 							mat4 skinTransform =
@@ -257,16 +241,8 @@ namespace Lime.Widgets.Animesh
 								u_Bones[int(in_BlendIndices.y)] * in_BlendWeights.y +
 								u_Bones[int(in_BlendIndices.z)] * in_BlendWeights.z +
 								u_Bones[int(in_BlendIndices.w)] * in_BlendWeights.w;
-							float overallWeight = in_BlendWeights.x + in_BlendWeights.y + in_BlendWeights.z + in_BlendWeights.w;
-							vec4 result = skinTransform * position;
-							if ((int(in_BlendIndices.x) == 0 && int(in_BlendIndices.y) == 0 && int(in_BlendIndices.z) == 0 && int(in_BlendIndices.w) == 0) || overallWeight < 0.0) {
-								result = position;
-							} else if (overallWeight >= 0.0 && overallWeight < 1.0) {
-								result += (1.0 - overallWeight) * position;
-							} else {
-								result /= overallWeight;
-							}
-							gl_Position = u_MatProjection * u_GlobalTransform * (u_ParentToLocalTransform * result);
+							position = skinTransform * position;
+							gl_Position = u_MVP * position;
 						}
 					"),
 					new FragmentShader(@"
@@ -281,7 +257,7 @@ namespace Lime.Widgets.Animesh
 						}
 					")
 				};
-				layoutAttribs = new[] {
+				var layoutAttribs = new[] {
 					// in_Pos1
 					new VertexInputLayoutAttribute {
 						Format = Format.R32G32B32A32_SFloat,
@@ -346,7 +322,7 @@ namespace Lime.Widgets.Animesh
 						Offset = 2 * sizeof(Vector4) + sizeof(Color4) + sizeof(Vector2),
 					}
 				};
-				layoutBindings = new[] {
+				var layoutBindings = new[] {
 					new VertexInputLayoutBinding {
 						Slot = 0,
 						Stride = sizeof(SkinnedVertex),
@@ -357,7 +333,7 @@ namespace Lime.Widgets.Animesh
 					},
 				};
 				vertexInputLayout = VertexInputLayout.New(layoutBindings, layoutAttribs);
-				attribLocations = new[] {
+				var attribLocations = new[] {
 					new ShaderProgram.AttribLocation {
 						Name = "in_Pos1",
 						Index = 0,
@@ -391,7 +367,7 @@ namespace Lime.Widgets.Animesh
 						Index = 7,
 					}
 				};
-				samplers = new[] {
+				var samplers = new[] {
 					new ShaderProgram.Sampler {
 						Name = "u_Tex",
 						Stage = 0,
@@ -443,16 +419,16 @@ namespace Lime.Widgets.Animesh
 				var shaderParams = new ShaderParams();
 				var shaderParamsArray = new[] { shaderParams };
 				var blendFactor = shaderParams.GetParamKey<float>("u_BlendFactor");
-				var matProjection = shaderParams.GetParamKey<Matrix44>("u_MatProjection");
-				var globalTransform = shaderParams.GetParamKey<Matrix44>("u_GlobalTransform");
+				var mvpTransform = shaderParams.GetParamKey<Matrix44>("u_MVP");
 				var localToParentTransform = shaderParams.GetParamKey<Matrix44>("u_LocalToParentTransform");
-				var parentToLocalTransform = shaderParams.GetParamKey<Matrix44>("u_ParentToLocalTransform");
 				var bones = shaderParams.GetParamKey<Matrix44>("u_Bones");
 				shaderParams.Set(blendFactor, BlendFactor);
-				shaderParams.Set(matProjection, Renderer.FixupWVP(Renderer.WorldViewProjection));
-				shaderParams.Set(globalTransform, (Matrix44)(LocalToWorldTransform * Renderer.Transform2));
+				shaderParams.Set(
+					mvpTransform,
+					(Matrix44)ParentToLocalTransform * (Matrix44)(LocalToWorldTransform * Renderer.Transform2) *
+					Renderer.FixupWVP(Renderer.WorldViewProjection)
+				);
 				shaderParams.Set(localToParentTransform, (Matrix44)LocalToParentTransform);
-				shaderParams.Set(parentToLocalTransform, (Matrix44)ParentToLocalTransform);
 				shaderParams.Set(bones, BoneTransforms, BoneTransforms.Length);
 
 				Renderer.Flush();
