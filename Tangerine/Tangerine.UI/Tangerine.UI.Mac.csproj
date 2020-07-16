@@ -83,6 +83,9 @@
     <Compile Include="Tooltip\Tooltip.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
     <Compile Include="Tooltip\TooltipProcessor.cs" />
+    <Compile Include="Utils\SimpleTextHighlightPresenter.cs" />
+    <Compile Include="Widgets\Lookup.cs" />
+    <Compile Include="Widgets\LookupItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPicker.Mac.cs" />
