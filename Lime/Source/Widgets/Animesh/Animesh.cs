@@ -167,8 +167,8 @@ namespace Lime.Widgets.Animesh
 			for (var i = 0; i < Vertices.Count; ++i) {
 				var v0 = vb0[i];
 				var v1 = vb1[i];
-				v0.Pos = v0.Pos * Size;
-				v1.Pos = v1.Pos * Size;
+				v0.Pos = v0.Pos;
+				v1.Pos = v1.Pos;
 				if (Texture != null) {
 					Texture.TransformUVCoordinatesToAtlasSpace(ref v0.UV1);
 					Texture.TransformUVCoordinatesToAtlasSpace(ref v1.UV1);

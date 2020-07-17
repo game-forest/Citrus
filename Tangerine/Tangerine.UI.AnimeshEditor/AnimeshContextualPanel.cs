@@ -12,7 +12,7 @@ namespace Tangerine.UI.AnimeshEditor
 			RootNode = new Widget {
 				MinMaxSize = new Vector2(100f, 50f),
 				Nodes = {
-					CreateAnimeshStateButton(AnimeshTools.ModificationState.Triangulation, (Command)Tools.AnimeshTriangulate),
+					CreateAnimeshStateButton(AnimeshTools.ModificationState.Modification, (Command)Tools.AnimeshTriangulate),
 					CreateAnimeshStateButton(AnimeshTools.ModificationState.Creation, (Command)Tools.AnimeshCreate),
 					CreateAnimeshStateButton(AnimeshTools.ModificationState.Removal, (Command)Tools.AnimeshRemove),
 					CreateAnimeshStateButton(AnimeshTools.ModificationState.Animation, (Command)Tools.AnimeshAnimate),

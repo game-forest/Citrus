@@ -667,7 +667,7 @@ namespace Tangerine
 			h.Connect(Tools.FlipY, new FlipY());
 			h.Connect(Tools.CenterView, new CenterView());
 			h.Connect(Tools.AnimeshAnimate, new AnimeshTools.Animate());
-			h.Connect(Tools.AnimeshTriangulate, new AnimeshTools.Triangulate());
+			h.Connect(Tools.AnimeshModify, new AnimeshTools.Modify());
 			h.Connect(Tools.AnimeshCreate, new AnimeshTools.Create());
 			h.Connect(Tools.AnimeshRemove, new AnimeshTools.Remove());
 			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard, IsCopyPasteAllowedForSelection);

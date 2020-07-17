@@ -41,7 +41,7 @@ namespace Tangerine.UI.AnimeshEditor
 		public abstract void TieVertexWithBones(List<Bone> bones);
 		public abstract void UntieVertexFromBones(List<Bone> bones);
 		public abstract IEnumerator<object> AnimationTask();
-		public abstract IEnumerator<object> TriangulationTask();
+		public abstract IEnumerator<object> ModificationTask();
 		public abstract IEnumerator<object> CreationTask();
 		public abstract IEnumerator<object> RemovalTask();
 	}
@@ -82,19 +82,19 @@ namespace Tangerine.UI.AnimeshEditor
 						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 					mesh.Vertices.Add(new SkinnedVertex {
-						Pos = new Vector2(1.0f, 0.0f),
+						Pos = new Vector2(mesh.Size.X, 0.0f),
 						UV1 = new Vector2(1.0f, 0.0f),
 						Color = mesh.Color,
 						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 					mesh.Vertices.Add(new SkinnedVertex {
-						Pos = new Vector2(0.0f, 1.0f),
+						Pos = new Vector2(0.0f, mesh.Size.Y),
 						UV1 = new Vector2(0.0f, 1.0f),
 						Color = mesh.Color,
 						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					});
 					mesh.Vertices.Add(new SkinnedVertex {
-						Pos = Vector2.One,
+						Pos = mesh.Size,
 						UV1 = Vector2.One,
 						Color = mesh.Color,
 						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
@@ -188,12 +188,11 @@ namespace Tangerine.UI.AnimeshEditor
 				result = result.Target == null ? null : result;
 				return result != null;
 			}
-			var vertexHitRadius = Theme.Metrics.AnimeshVertexHitTestRadius / scale / Mesh.Size.Length;
-			var edgeHitRadius = Theme.Metrics.AnimeshEdgeHitTestRadius / scale / Mesh.Size.Length;
+			var vertexHitRadius = Theme.Metrics.AnimeshVertexHitTestRadius / scale;
+			var edgeHitRadius = Theme.Metrics.AnimeshEdgeHitTestRadius / scale;
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			position = transform.TransformVector(position);
-			var normalizedPosition = position / Mesh.Size;
-			return Topology.HitTest(normalizedPosition, vertexHitRadius, edgeHitRadius, out result);
+			return Topology.HitTest(position, vertexHitRadius, edgeHitRadius, out result);
 		}
 
 		protected override bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState)
@@ -210,7 +209,7 @@ namespace Tangerine.UI.AnimeshEditor
 				case AnimeshTools.ModificationState.Animation:
 				case AnimeshTools.ModificationState.Creation:
 					return true;
-				case AnimeshTools.ModificationState.Triangulation:
+				case AnimeshTools.ModificationState.Modification:
 					return result.Target.IsVertex();
 				case AnimeshTools.ModificationState.Removal:
 					return result.Target.IsVertex() || result.Target.IsEdge() &&
@@ -248,9 +247,9 @@ namespace Tangerine.UI.AnimeshEditor
 				var transform = Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
 				var bfv = new[] { Vector2.Zero, Vector2.Zero, Vector2.East, Vector2.Down, Vector2.One, };
 				foreach (var (i1, i2, i3, t) in ((HalfEdgeTopology)Topology).DebugTriangles()) {
-					var v1 = transform.TransformVector((i1 >= 0 ? Vertices[i1].Pos : bfv[-i1]) * Mesh.Size);
-					var v2 = transform.TransformVector((i2 >= 0 ? Vertices[i2].Pos : bfv[-i2]) * Mesh.Size);
-					var v3 = transform.TransformVector((i3 >= 0 ? Vertices[i3].Pos : bfv[-i3]) * Mesh.Size);
+					var v1 = transform.TransformVector((i1 >= 0 ? Vertices[i1].Pos : bfv[-i1]));
+					var v2 = transform.TransformVector((i2 >= 0 ? Vertices[i2].Pos : bfv[-i2]));
+					var v3 = transform.TransformVector((i3 >= 0 ? Vertices[i3].Pos : bfv[-i3]));
 					render(v1, v2);
 					render(v2, v3);
 					render(v3, v1);
@@ -304,7 +303,8 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 			if (AnimeshTools.State == AnimeshTools.ModificationState.Creation && hitTestTarget != null && !hitTestTarget.IsVertex()) {
 				AnimeshUtils.RenderVertex(
-					(Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame)).TransformVector(SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget) * Mesh.Size),
+					(Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame))
+						.TransformVector(SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget)),
 					Theme.Metrics.AnimeshBackgroundVertexRadius,
 					Theme.Metrics.AnimeshVertexRadius,
 					Color4.White.Transparentify(0.5f),
@@ -569,7 +569,7 @@ namespace Tangerine.UI.AnimeshEditor
 				);
 				while (sv.Input.IsMousePressed()) {
 					UI.Utils.ChangeCursorIfDefault(cursor);
-					var positionDelta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
+					var positionDelta = (transform.TransformVector(sv.MousePosition) - lastPos);
 					lastPos = transform.TransformVector(sv.MousePosition);
 					TranslateTransientVertices(hitTestTarget, positionDelta);
 					Core.Operations.SetAnimableProperty.Perform(
@@ -587,7 +587,7 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 		}
 
-		public override IEnumerator<object> TriangulationTask()
+		public override IEnumerator<object> ModificationTask()
 		{
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
@@ -603,7 +603,7 @@ namespace Tangerine.UI.AnimeshEditor
 					out var animator
 				);
 				var sliceBefore = new AnimeshSlice {
-					State = AnimeshTools.ModificationState.Triangulation,
+					State = AnimeshTools.ModificationState.Modification,
 					Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 					IndexBuffer = new List<Face>(Mesh.Faces),
 					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -615,11 +615,11 @@ namespace Tangerine.UI.AnimeshEditor
 					Document.Current.History.RollbackTransaction();
 					var keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
-					var delta = (transform.TransformVector(sv.MousePosition) - lastPos) / Mesh.Size;
-					if (Topology.TranslateVertex(target.Index, delta, delta, out var removedVertices)) {
+					var delta = (transform.TransformVector(sv.MousePosition) - lastPos);
+					if (Topology.TranslateVertex(target.Index, delta, delta / Mesh.Size, out var removedVertices)) {
 						lastValidDelta = delta;
 					} else if (lastValidDelta != Vector2.Zero) {
-						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidDelta, out removedVertices);
+						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidDelta / Mesh.Size, out removedVertices);
 					}
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
@@ -645,7 +645,7 @@ namespace Tangerine.UI.AnimeshEditor
 						}
 					}
 					var sliceAfter = new AnimeshSlice {
-						State = AnimeshTools.ModificationState.Triangulation,
+						State = AnimeshTools.ModificationState.Modification,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<Face>(Mesh.Faces),
 						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
@@ -665,7 +665,7 @@ namespace Tangerine.UI.AnimeshEditor
 
 		private Vector2 SnapMousePositionToTopologyPrimitiveIfPossible(ITopologyPrimitive primitive)
 		{
-			var mousePos = Mesh.LocalToWorldTransform.CalcInversed().TransformVector(sv.MousePosition) / Mesh.Size;
+			var mousePos = Mesh.LocalToWorldTransform.CalcInversed().TransformVector(sv.MousePosition);
 			if (primitive != null) {
 				if (primitive.IsEdge()) {
 					var v1 = Vertices[primitive[0]].Pos;
@@ -678,8 +678,8 @@ namespace Tangerine.UI.AnimeshEditor
 
 		private void UpdateHitTestMetrics()
 		{
-			var vertexHitRadius = Theme.Metrics.AnimeshVertexHitTestRadius / sv.Scene.Scale.X / Mesh.Size.Length;
-			var edgeHitRadius = Theme.Metrics.AnimeshEdgeHitTestRadius / sv.Scene.Scale.X / Mesh.Size.Length;
+			var vertexHitRadius = Theme.Metrics.AnimeshVertexHitTestRadius / sv.Scene.Scale.X;
+			var edgeHitRadius = Theme.Metrics.AnimeshEdgeHitTestRadius / sv.Scene.Scale.X;
 			Topology.VertexHitTestRadius = vertexHitRadius;
 			Topology.EdgeHitTestDistance = edgeHitRadius;
 		}

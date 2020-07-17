@@ -83,7 +83,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					return GetEnumerator();
 				}
 
-				public class Enumerator : IEnumerator<HalfEdge>
+				private class Enumerator : IEnumerator<HalfEdge>
 				{
 					private readonly HalfEdge root;
 					private HalfEdge current;
@@ -467,19 +467,21 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			e2.Prev.Constrained = true;
 			e2.Prev.Next = e2;
 			e2.TwinWith(e1.Next);
+			foreach (var vertex in vertices) {
+				BoundingBox.IncludingPoint(vertex.Pos);
+			}
 			// 0 doesn't have a sign, so this is a hack to mark bounding figure's vertices
 			// with negative indices.
 			BoundingFigureVertices = new List<Animesh.SkinnedVertex>() {
 				new Animesh.SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), },
-				new Animesh.SkinnedVertex { Pos = Vector2.Zero, },
-				new Animesh.SkinnedVertex { Pos = Vector2.East, },
-				new Animesh.SkinnedVertex { Pos = Vector2.Down, },
-				new Animesh.SkinnedVertex { Pos = Vector2.One, },
+				new Animesh.SkinnedVertex { Pos = BoundingBox.A, },
+				new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.BX, BoundingBox.AY), },
+				new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.AX, BoundingBox.BY), },
+				new Animesh.SkinnedVertex { Pos = BoundingBox.B, },
 			};
 			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
 			InnerBoundary = new Boundary { 0, 1, 3, 2, };
 			Root = e1;
-			BoundingBox = new Rectangle(0f, 0f, 1f, 1f);
 #if DEBUG
 			TopologyChanged += topology => {
 				if (!SelfCheck()) {
@@ -525,11 +527,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			var usedBoundingFigureVertices = new bool[BoundingFigureVertices.Count];
 			foreach (var face in faces) {
 				var current = Root = FaceToHalfEdge(face);
-				for (int i = 0; i < 3; i++) {
-					if (BelongsToBoundingFigure(face[i], out var bfvi)) {
-						usedBoundingFigureVertices[bfvi] = true;
-					}
-				}
 				do {
 					table[current.Origin, current.Next.Origin] = current;
 					var possibleTwin = table[current.Next.Origin, current.Origin];
@@ -556,14 +553,25 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				InnerBoundary.Add(c.Origin);
 				c = NextBorderEdge(c);
 			} while (c != start);
+			BoundingBox = Rectangle.Empty;
+			foreach (var vertex in Vertices) {
+				BoundingBox = BoundingBox.IncludingPoint(vertex.Pos);
+			}
+			BoundingFigureVertices.Clear();
+			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), });
+			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = BoundingBox.A, });
+			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.BX, BoundingBox.AY), });
+			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.AX, BoundingBox.BY), });
+			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = BoundingBox.B, });
+			foreach (var vertex in Vertices) {
+				if (BelongsToBoundingFigure(vertex.Pos, out var bfvi)) {
+					usedBoundingFigureVertices[bfvi] = true;
+				}
+			}
 			for (int i = 1; i < usedBoundingFigureVertices.Length; i++) {
 				if (!usedBoundingFigureVertices[i]) {
 					AddVertex(-i);
 				}
-			}
-			BoundingBox = Rectangle.Empty;
-			foreach (var vertex in Vertices) {
-				BoundingBox = BoundingBox.IncludingPoint(vertex.Pos);
 			}
 			ToConvexHull();
 		}
@@ -757,7 +765,10 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			var translatedPos = translated.Pos;
 			deleted = null;
 			// Check if translated vertex is contained inside bounding figure.
-			if (translatedPos.Y < 0f || translatedPos.Y > 1f || translatedPos.X < 0f || translatedPos.X > 1f) {
+			if (
+				translatedPos.X < BoundingBox.AX || translatedPos.X > BoundingBox.BX ||
+				translatedPos.Y < BoundingBox.AY || translatedPos.Y > BoundingBox.BY
+			) {
 				return false;
 			}
 			List<(int, int)> constrainedEdges = null;

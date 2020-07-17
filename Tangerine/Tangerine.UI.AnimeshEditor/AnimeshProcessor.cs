@@ -57,8 +57,8 @@ namespace Tangerine.UI.AnimeshEditor
 								case AnimeshTools.ModificationState.Animation:
 									yield return mesh.Controller().AnimationTask();
 									break;
-								case AnimeshTools.ModificationState.Triangulation:
-									yield return mesh.Controller().TriangulationTask();
+								case AnimeshTools.ModificationState.Modification:
+									yield return mesh.Controller().ModificationTask();
 									break;
 								case AnimeshTools.ModificationState.Creation:
 									yield return mesh.Controller().CreationTask();

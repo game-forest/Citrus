@@ -15,7 +15,7 @@ namespace Tangerine.UI.AnimeshEditor
 		public enum ModificationState
 		{
 			Animation,
-			Triangulation,
+			Modification,
 			Creation,
 			Removal,
 		}
@@ -47,7 +47,7 @@ namespace Tangerine.UI.AnimeshEditor
 					case ModificationState.Animation:
 						Mode = ModificationMode.Animation;
 						break;
-					case ModificationState.Triangulation:
+					case ModificationState.Modification:
 					case ModificationState.Creation:
 					case ModificationState.Removal:
 						Mode = ModificationMode.Setup;
@@ -63,9 +63,9 @@ namespace Tangerine.UI.AnimeshEditor
 			public override void ExecuteTransaction() => State = ModificationState.Animation;
 		}
 
-		public class Triangulate : DocumentCommandHandler
+		public class Modify : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() => State = ModificationState.Triangulation;
+			public override void ExecuteTransaction() => State = ModificationState.Modification;
 		}
 
 		public class Create : DocumentCommandHandler
