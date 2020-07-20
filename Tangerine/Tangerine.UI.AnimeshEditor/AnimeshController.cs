@@ -19,53 +19,30 @@ namespace Tangerine.UI.AnimeshEditor
 		public static bool IsFace(this ITopologyPrimitive self) => self.Count == 3;
 	}
 
-	[YuzuDontGenerateDeserializer]
-	[NodeComponentDontSerialize]
-	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
-	public abstract class AnimeshController : NodeComponent
+	public struct AnimeshSlice
 	{
-		public struct AnimeshSlice
-		{
-			public AnimeshTools.ModificationState State;
-			public List<SkinnedVertex> Vertices;
-			public List<Face> IndexBuffer;
-			public List<Edge> ConstrainedVertices;
-			public List<IKeyframe> Keyframes;
-		}
-
-		protected abstract bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState);
-		protected abstract void RecalcVertexBoneTies();
-
-		public abstract void Render(Widget renderContext);
-		public abstract bool HitTest(Vector2 position, float scale, bool ignoreState = false);
-		public abstract void TieVertexWithBones(List<Bone> bones);
-		public abstract void UntieVertexFromBones(List<Bone> bones);
-		public abstract IEnumerator<object> AnimationTask();
-		public abstract IEnumerator<object> ModificationTask();
-		public abstract IEnumerator<object> CreationTask();
-		public abstract IEnumerator<object> RemovalTask();
+		public AnimeshTools.ModificationState State;
+		public List<SkinnedVertex> Vertices;
+		public List<Face> IndexBuffer;
+		public List<Edge> ConstrainedVertices;
+		public List<IKeyframe> Keyframes;
 	}
 
 	[YuzuDontGenerateDeserializer]
-	[AllowedComponentOwnerTypes(typeof(Animesh))]
-	public abstract class TopologyController : AnimeshController
+	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
+	public sealed class AnimeshController<T> : NodeComponent where T : ITopology
 	{
-		public Lime.Widgets.Animesh.Animesh Mesh { get; protected set; }
-
-		public ITopology Topology { get; protected set; }
-
+		public Animesh Mesh { get; private set; }
+		public ITopology Topology { get; private set; }
 		public IList<SkinnedVertex> Vertices => AnimeshTools.Mode == AnimeshTools.ModificationMode.Animation
 			? Mesh.TransientVertices
 			: Mesh.Vertices;
-	}
 
-	[YuzuDontGenerateDeserializer]
-	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
-	public sealed class TopologyController<T> : TopologyController where T : ITopology
-	{
 		private readonly ISceneView sv;
 
-		public TopologyController(ISceneView sv)
+		public AnimeshController() { }
+
+		public AnimeshController(ISceneView sv)
 		{
 			this.sv = sv;
 		}
@@ -195,7 +172,7 @@ namespace Tangerine.UI.AnimeshEditor
 			return Topology.HitTest(position, vertexHitRadius, edgeHitRadius, out result);
 		}
 
-		protected override bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState)
+		protected bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState)
 		{
 			if (result == null) {
 				return false;
@@ -219,13 +196,13 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 		}
 
-		public override bool HitTest(Vector2 position, float scale, bool ignoreState = false)
+		public bool HitTest(Vector2 position, float scale, bool ignoreState = false)
 		{
 			HitTest(position, scale, out var result);
 			return ValidateHitTestResult(result, ignoreState);
 		}
 
-		public override void Render(Widget renderContext)
+		public void Render(Widget renderContext)
 		{
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var hitTestResult);
 			var isHitTestSuccessful = ValidateHitTestResult(hitTestResult, ignoreState: false);
@@ -407,7 +384,7 @@ namespace Tangerine.UI.AnimeshEditor
 					Theme.Colors.AnimeshHoverColor
 			);
 
-		public override void TieVertexWithBones(List<Bone> bones)
+		public void TieVertexWithBones(List<Bone> bones)
 		{
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result);
 			if (result.Target.IsVertex()) {
@@ -449,7 +426,7 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 		}
 
-		public override void UntieVertexFromBones(List<Bone> bones)
+		public void UntieVertexFromBones(List<Bone> bones)
 		{
 			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result);
 			if (result.Target.IsVertex()) {
@@ -491,7 +468,7 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 		}
 
-		protected override void RecalcVertexBoneTies()
+		protected void RecalcVertexBoneTies()
 		{
 			List<IKeyframe> keyframes = null;
 			Mesh.Animators.TryFind(
@@ -557,7 +534,7 @@ namespace Tangerine.UI.AnimeshEditor
 		}
 
 		// TODO: That is incorrect and should be improved later.
-		public override IEnumerator<object> AnimationTask()
+		public IEnumerator<object> AnimationTask()
 		{
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
@@ -594,7 +571,7 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 		}
 
-		public override IEnumerator<object> ModificationTask()
+		public IEnumerator<object> ModificationTask()
 		{
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
@@ -731,7 +708,7 @@ namespace Tangerine.UI.AnimeshEditor
 			Mesh.TransientVertices[index] = v;
 		}
 
-		public override IEnumerator<object> CreationTask()
+		public IEnumerator<object> CreationTask()
 		{
 			if (!HitTest(sv.MousePosition, sv.Scene.Scale.X, out var initialHitTestResult)) {
 				yield break;
@@ -872,7 +849,7 @@ namespace Tangerine.UI.AnimeshEditor
 			yield return null;
 		}
 
-		public override IEnumerator<object> RemovalTask()
+		public  IEnumerator<object> RemovalTask()
 		{
 			UI.Utils.ChangeCursorIfDefault(WidgetContext.Current.MouseCursor);
 			if (Topology.Vertices.Count == 3) {

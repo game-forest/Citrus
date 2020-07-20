@@ -7,14 +7,14 @@ namespace Tangerine.UI.AnimeshEditor
 {
 	public static class Extensions
 	{
-		public static TopologyController Controller(this Animesh mesh) =>
-			mesh.Components.Get<TopologyController<HalfEdgeTopology>>();
+		public static AnimeshController<HalfEdgeTopology> Controller(this Animesh mesh) =>
+			mesh.Components.Get<AnimeshController<HalfEdgeTopology>>();
 
-		public static TopologyController Controller(this Animesh mesh, ISceneView sv)
+		public static AnimeshController<HalfEdgeTopology> Controller(this Animesh mesh, ISceneView sv)
 		{
-			var controller = mesh.Components.Get<TopologyController<HalfEdgeTopology>>();
+			var controller = mesh.Components.Get<AnimeshController<HalfEdgeTopology>>();
 			if (controller == null) {
-				mesh.Components.Add(controller = new TopologyController<HalfEdgeTopology>(sv));
+				mesh.Components.Add(controller = new AnimeshController<HalfEdgeTopology>(sv));
 			}
 			return controller;
 		}
