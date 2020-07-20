@@ -384,15 +384,38 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			var polygon = GetBoundingPolygon(vertexIndex);
 			var isBorderVertex = polygon[0].Origin == vertexIndex;
 			if (isBorderVertex) {
-				// Then it is definitely a vertex that lies on bounding figure.
-				// (Btw, bounding figure vertices are handled on a higher abstraction level).
-				// So here is steps to remove it:
+				var v1 = InnerVertices[polygon[polygon.Count - 1].Origin].Pos;
+				var v2 = InnerVertices[polygon[0].Origin].Pos;
+				var v3 = InnerVertices[polygon[1].Origin].Pos;
+				// if vertex lies on bounding figure:
 				// 1. Merge the first and the second edge of the bounding polygon;
 				// 2. Triangulate polygonal hole.
-				polygon.RemoveAt(0);
-				polygon[polygon.Count - 1].Next = polygon[0].Next;
+				System.Diagnostics.Debug.Assert(Orient2D(v1, v2, v3) >= 0);
+				if (Orient2D(v1, v2, v3) == 0) {
+					polygon.RemoveAt(0);
+					polygon[polygon.Count - 1].Next = polygon[0].Next;
+				} else {
+					// Otherwise it's bounding figure vertex itself.
+					ErasePolygon(polygon);
+					return;
+				}
+				// Other cases are impossible (vertex is outside of bounding figure)
 			}
 			TriangulatePolygonByEarClipping(polygon);
+		}
+
+		/// <summary>
+		/// Completely erases polygon from triangulation.
+		/// </summary>
+		/// <param name="polygon"></param>
+		private void ErasePolygon(List<HalfEdge> polygon)
+		{
+			foreach (var halfEdge in polygon) {
+				if (halfEdge.Twin != null) {
+					Root = halfEdge.Twin;
+				}
+				halfEdge.Detach();
+			}
 		}
 
 		/// <summary>

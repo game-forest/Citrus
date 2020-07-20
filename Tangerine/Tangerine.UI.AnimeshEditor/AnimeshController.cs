@@ -245,16 +245,23 @@ namespace Tangerine.UI.AnimeshEditor
 			var isHitTestResultTargetVertex = hitTestTarget != null && hitTestTarget.IsVertex();
 			if (Window.Current.Input.IsKeyPressed(Key.Alt)) {
 				var transform = Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
-				var bfv = new[] { Vector2.Zero, Vector2.Zero, Vector2.East, Vector2.Down, Vector2.One, };
+				var bbox = Rectangle.Empty;
+				foreach (var vertex in Vertices) {
+					bbox = bbox.IncludingPoint(vertex.Pos);
+				}
+				var bfv = new[] { Vector2.Zero, bbox.A, new Vector2(bbox.BX, bbox.AY), new Vector2(bbox.AX, bbox.BY), bbox.B, };
 				foreach (var (i1, i2, i3, t) in ((HalfEdgeTopology)Topology).DebugTriangles()) {
-					var v1 = transform.TransformVector((i1 >= 0 ? Vertices[i1].Pos : bfv[-i1]));
-					var v2 = transform.TransformVector((i2 >= 0 ? Vertices[i2].Pos : bfv[-i2]));
-					var v3 = transform.TransformVector((i3 >= 0 ? Vertices[i3].Pos : bfv[-i3]));
+					var v1 = transform.TransformVector(i1 >= 0 ? Vertices[i1].Pos : bfv[-i1]);
+					var v2 = transform.TransformVector(i2 >= 0 ? Vertices[i2].Pos : bfv[-i2]);
+					var v3 = transform.TransformVector(i3 >= 0 ? Vertices[i3].Pos : bfv[-i3]);
 					render(v1, v2);
 					render(v2, v3);
 					render(v3, v1);
 				}
-
+				AnimeshUtils.RenderLine(transform.TransformVector(bfv[1]), transform.TransformVector(bfv[2]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
+				AnimeshUtils.RenderLine(transform.TransformVector(bfv[2]), transform.TransformVector(bfv[4]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
+				AnimeshUtils.RenderLine(transform.TransformVector(bfv[4]), transform.TransformVector(bfv[3]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
+				AnimeshUtils.RenderLine(transform.TransformVector(bfv[3]), transform.TransformVector(bfv[1]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
 				void render(Vector2 s, Vector2 e)
 				{
 					if (e.X < s.X || (e.X == s.X && e.Y < s.Y)) {
@@ -610,16 +617,21 @@ namespace Tangerine.UI.AnimeshEditor
 					Keyframes = animator?.Keys.ToList()
 				};
 				var lastValidDelta = Vector2.Zero;
+				var lastValidUVDelta = Vector2.Zero;
 				Topology.VertexHitTestRadius = Topology.EdgeHitTestDistance = 0f;
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					var keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var delta = (transform.TransformVector(sv.MousePosition) - lastPos);
-					if (Topology.TranslateVertex(target.Index, delta, delta / Mesh.Size, out var removedVertices)) {
+					var vertex = Mesh.Vertices[target.Index];
+					var uvDelta = delta / Mesh.Size;
+					uvDelta = Vector2.Clamp(vertex.UV1 + uvDelta, Vector2.Zero, Vector2.One) - vertex.UV1;
+					if (Topology.TranslateVertex(target.Index, delta, uvDelta, out var removedVertices)) {
 						lastValidDelta = delta;
+						lastValidUVDelta = uvDelta;
 					} else if (lastValidDelta != Vector2.Zero) {
-						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidDelta / Mesh.Size, out removedVertices);
+						Topology.TranslateVertex(target.Index, lastValidDelta, lastValidUVDelta, out removedVertices);
 					}
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();

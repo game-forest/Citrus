@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Lime;
 using Lime.Widgets.Animesh;
 using TopologyVertex = Lime.Widgets.Animesh.Vertex;
@@ -468,50 +469,18 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			e2.Prev.Next = e2;
 			e2.TwinWith(e1.Next);
 			foreach (var vertex in vertices) {
-				BoundingBox.IncludingPoint(vertex.Pos);
+				BoundingBox = BoundingBox.IncludingPoint(vertex.Pos);
 			}
 			// 0 doesn't have a sign, so this is a hack to mark bounding figure's vertices
 			// with negative indices.
-			BoundingFigureVertices = new List<Animesh.SkinnedVertex>() {
-				new Animesh.SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), },
-				new Animesh.SkinnedVertex { Pos = BoundingBox.A, },
-				new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.BX, BoundingBox.AY), },
-				new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.AX, BoundingBox.BY), },
-				new Animesh.SkinnedVertex { Pos = BoundingBox.B, },
-			};
+			BoundingFigureVertices = new List<Animesh.SkinnedVertex>(5);
+			RefreshBoundingFigure(BoundingBox);
 			InnerVertices = new VerticesIndexer(BoundingFigureVertices, Vertices);
 			InnerBoundary = new Boundary { 0, 1, 3, 2, };
 			Root = e1;
 #if DEBUG
 			TopologyChanged += topology => {
-				if (!SelfCheck()) {
-					System.Console.WriteLine("Triangulation is not Delaunay!");
-				}
-
-				foreach (var (edge1, edge2, edge3) in Triangles()) {
-					var o1 = edge1.Origin;
-					var o2 = edge2.Origin;
-					var o3 = edge3.Origin;
-					var v1 = InnerVertices[o1].Pos;
-					var v2 = InnerVertices[o2].Pos;
-					var v3 = InnerVertices[o3].Pos;
-					var o = Orient2D(v1, v2, v3);
-					if (o == 0f) {
-						System.Console.WriteLine($"Degenerated triangle found!!!!! ({v1}, {v2}, {v3})");
-					}
-					if (o < 0) {
-						System.Console.WriteLine($"Triangle has wrong orientation!!!! ({v1}, {v2}, {v3})");
-					}
-					CheckBoundaryEdgeCorrectness(o1, o2, edge1);
-					CheckBoundaryEdgeCorrectness(o2, o3, edge2);
-					CheckBoundaryEdgeCorrectness(o3, o1, edge3);
-					void CheckBoundaryEdgeCorrectness(int index1, int index2, HalfEdge edge)
-					{
-						if (InnerBoundary.ContainsEdge(index1, index2) && !edge.Constrained) {
-							System.Console.WriteLine($"Boundary edge is not constrained!!! ({index1}, {index2})");
-						}
-					}
-				}
+				SelfCheck();
 			};
 #endif
 		}
@@ -558,11 +527,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				BoundingBox = BoundingBox.IncludingPoint(vertex.Pos);
 			}
 			BoundingFigureVertices.Clear();
-			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), });
-			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = BoundingBox.A, });
-			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.BX, BoundingBox.AY), });
-			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = new Vector2(BoundingBox.AX, BoundingBox.BY), });
-			BoundingFigureVertices.Add(new Animesh.SkinnedVertex { Pos = BoundingBox.B, });
+			RefreshBoundingFigure(BoundingBox);
 			foreach (var vertex in Vertices) {
 				if (BelongsToBoundingFigure(vertex.Pos, out var bfvi)) {
 					usedBoundingFigureVertices[bfvi] = true;
@@ -769,7 +734,8 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				translatedPos.X < BoundingBox.AX || translatedPos.X > BoundingBox.BX ||
 				translatedPos.Y < BoundingBox.AY || translatedPos.Y > BoundingBox.BY
 			) {
-				return false;
+				BoundingBox = BoundingBox.IncludingPoint(translatedPos);
+				RefreshBoundingFigure(BoundingBox);
 			}
 			List<(int, int)> constrainedEdges = null;
 			var isBoundaryVertex = InnerBoundary.Contains(index);
@@ -941,7 +907,32 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 		{
 			foreach (var (e1, e2, e3) in Triangles()) {
 				if (!IsDelaunay(e1) || !IsDelaunay(e2) || !IsDelaunay(e3)) {
+					System.Console.WriteLine("Triangulation is not Delaunay!");
 					return false;
+				}
+				var o1 = e1.Origin;
+				var o2 = e2.Origin;
+				var o3 = e3.Origin;
+				var v1 = InnerVertices[o1].Pos;
+				var v2 = InnerVertices[o2].Pos;
+				var v3 = InnerVertices[o3].Pos;
+				var o = Orient2D(v1, v2, v3);
+				if (o == 0f) {
+					System.Console.WriteLine($"Degenerated triangle found!!!!! ({v1}, {v2}, {v3})");
+					return false;
+				}
+				if (o < 0) {
+					System.Console.WriteLine($"Triangle has wrong orientation!!!! ({v1}, {v2}, {v3})");
+					return false;
+				}
+				CheckBoundaryEdgeCorrectness(o1, o2, e1);
+				CheckBoundaryEdgeCorrectness(o2, o3, e2);
+				CheckBoundaryEdgeCorrectness(o3, o1, e3);
+				void CheckBoundaryEdgeCorrectness(int index1, int index2, HalfEdge edge)
+				{
+					if (InnerBoundary.ContainsEdge(index1, index2) && !edge.Constrained) {
+						System.Console.WriteLine($"Boundary edge is not constrained!!! ({index1}, {index2})");
+					}
 				}
 			}
 			return true;
@@ -980,6 +971,36 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				}
 			}
 			return inside;
+		}
+
+		// BoundingBox should be subset or equal to Boundingbox. We're not narrowing Bounding Figure.
+		private unsafe void RefreshBoundingFigure(Rectangle rect)
+		{
+			var newVertices = stackalloc Animesh.SkinnedVertex[] {
+				new Animesh.SkinnedVertex { Pos = new Vector2(float.NegativeInfinity), },
+				new Animesh.SkinnedVertex { Pos = rect.A, },
+				new Animesh.SkinnedVertex { Pos = new Vector2(rect.BX, rect.AY), },
+				new Animesh.SkinnedVertex { Pos = new Vector2(rect.AX, rect.BY), },
+				new Animesh.SkinnedVertex { Pos = rect.B, },
+			};
+			if (BoundingFigureVertices.Count > 0) {
+				for (int i = 1; i < BoundingFigureVertices.Count; i++) {
+					if (BoundingFigureVertices[i].Pos != newVertices[i].Pos) {
+						var result = LocateClosestTriangle(BoundingFigureVertices[i].Pos, out var edge);
+						System.Diagnostics.Debug.Assert(result == LocationResult.SameVertex);
+						if (edge.Origin < 0) {
+							InnerRemoveVertex(edge.Origin);
+						}
+						BoundingFigureVertices[i] = newVertices[i];
+						AddVertex(-i);
+						ToConvexHull();
+					}
+				}
+			}
+			BoundingFigureVertices.Clear();
+			for (int i = 0; i < 5; i++) {
+				BoundingFigureVertices.Add(newVertices[i]);
+			}
 		}
 	}
 }

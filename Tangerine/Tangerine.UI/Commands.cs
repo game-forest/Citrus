@@ -159,7 +159,7 @@ namespace Tangerine.UI
 		public static readonly ICommand FitToContent = new Command("Fit to Content") { Icon = IconPool.GetIcon("Tools.FitToContent") };
 		public static readonly ICommand CenterView = new Command("Center View") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
 		public static readonly ICommand AnimeshAnimate = new Command("Animate Mesh") { Icon = IconPool.GetIcon("Tools.ToolsCenterView") };
-		public static readonly ICommand AnimeshTriangulate = new Command("Modify Mesh Triangulation") { Icon = IconPool.GetIcon("Tools.DistributeBottom") };
+		public static readonly ICommand AnimeshModify = new Command("Modify Mesh Triangulation") { Icon = IconPool.GetIcon("Tools.DistributeBottom") };
 		public static readonly ICommand AnimeshCreate = new Command("Create Mesh Vertex or Constraint") { Icon = IconPool.GetIcon("Tools.FlipV") };
 		public static readonly ICommand AnimeshRemove = new Command("Remove Mesh Vertex") { Icon = IconPool.GetIcon("Tools.RestoreOriginalSize") };
 	}
