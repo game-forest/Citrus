@@ -57,7 +57,7 @@ namespace Lime
 				}
 			}
 			foreach (var child in node.Nodes) {
-				GetComponentsForProcessor(node, processor, result);
+				GetComponentsForProcessor(child, processor, result);
 			}
 		}
 
