@@ -15129,6 +15129,19 @@ references:
   isSpec: "True"
   fullName: Lime.DeferredRendererWrapper.DrawCircle
   nameWithType: DeferredRendererWrapper.DrawCircle
+- uid: Lime.DeferredRendererWrapper.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)
+  name: DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+  href: api/Lime.DeferredRendererWrapper.html#Lime_DeferredRendererWrapper_DrawDashedLine_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Vector2_
+  commentId: M:Lime.DeferredRendererWrapper.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)
+  fullName: Lime.DeferredRendererWrapper.DrawDashedLine(Lime.Vector2, Lime.Vector2, Lime.Color4, Lime.Vector2)
+  nameWithType: DeferredRendererWrapper.DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+- uid: Lime.DeferredRendererWrapper.DrawDashedLine*
+  name: DrawDashedLine
+  href: api/Lime.DeferredRendererWrapper.html#Lime_DeferredRendererWrapper_DrawDashedLine_
+  commentId: Overload:Lime.DeferredRendererWrapper.DrawDashedLine
+  isSpec: "True"
+  fullName: Lime.DeferredRendererWrapper.DrawDashedLine
+  nameWithType: DeferredRendererWrapper.DrawDashedLine
 - uid: Lime.DeferredRendererWrapper.DrawLine(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single,Lime.LineCap)
   name: DrawLine(Vector2, Vector2, Color4, Single, LineCap)
   href: api/Lime.DeferredRendererWrapper.html#Lime_DeferredRendererWrapper_DrawLine_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_Lime_LineCap_
@@ -26720,6 +26733,19 @@ references:
   isSpec: "True"
   fullName: Lime.ImmediateRendererWrapper.DrawCircle
   nameWithType: ImmediateRendererWrapper.DrawCircle
+- uid: Lime.ImmediateRendererWrapper.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)
+  name: DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+  href: api/Lime.ImmediateRendererWrapper.html#Lime_ImmediateRendererWrapper_DrawDashedLine_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Vector2_
+  commentId: M:Lime.ImmediateRendererWrapper.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)
+  fullName: Lime.ImmediateRendererWrapper.DrawDashedLine(Lime.Vector2, Lime.Vector2, Lime.Color4, Lime.Vector2)
+  nameWithType: ImmediateRendererWrapper.DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+- uid: Lime.ImmediateRendererWrapper.DrawDashedLine*
+  name: DrawDashedLine
+  href: api/Lime.ImmediateRendererWrapper.html#Lime_ImmediateRendererWrapper_DrawDashedLine_
+  commentId: Overload:Lime.ImmediateRendererWrapper.DrawDashedLine
+  isSpec: "True"
+  fullName: Lime.ImmediateRendererWrapper.DrawDashedLine
+  nameWithType: ImmediateRendererWrapper.DrawDashedLine
 - uid: Lime.ImmediateRendererWrapper.DrawLine(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single,Lime.LineCap)
   name: DrawLine(Vector2, Vector2, Color4, Single, LineCap)
   href: api/Lime.ImmediateRendererWrapper.html#Lime_ImmediateRendererWrapper_DrawLine_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_Lime_LineCap_
@@ -51950,6 +51976,19 @@ references:
   isSpec: "True"
   fullName: Lime.RendererWrapper.DrawCircle
   nameWithType: RendererWrapper.DrawCircle
+- uid: Lime.RendererWrapper.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)
+  name: DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+  href: api/Lime.RendererWrapper.html#Lime_RendererWrapper_DrawDashedLine_Lime_Vector2_Lime_Vector2_Lime_Color4_Lime_Vector2_
+  commentId: M:Lime.RendererWrapper.DrawDashedLine(Lime.Vector2,Lime.Vector2,Lime.Color4,Lime.Vector2)
+  fullName: Lime.RendererWrapper.DrawDashedLine(Lime.Vector2, Lime.Vector2, Lime.Color4, Lime.Vector2)
+  nameWithType: RendererWrapper.DrawDashedLine(Vector2, Vector2, Color4, Vector2)
+- uid: Lime.RendererWrapper.DrawDashedLine*
+  name: DrawDashedLine
+  href: api/Lime.RendererWrapper.html#Lime_RendererWrapper_DrawDashedLine_
+  commentId: Overload:Lime.RendererWrapper.DrawDashedLine
+  isSpec: "True"
+  fullName: Lime.RendererWrapper.DrawDashedLine
+  nameWithType: RendererWrapper.DrawDashedLine
 - uid: Lime.RendererWrapper.DrawLine(Lime.Vector2,Lime.Vector2,Lime.Color4,System.Single,Lime.LineCap)
   name: DrawLine(Vector2, Vector2, Color4, Single, LineCap)
   href: api/Lime.RendererWrapper.html#Lime_RendererWrapper_DrawLine_Lime_Vector2_Lime_Vector2_Lime_Color4_System_Single_Lime_LineCap_
