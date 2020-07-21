@@ -402,7 +402,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Keyframes = animator?.Keys.ToList()
 					};
 					keyframes = animator?.Keys.ToList();
-					Core.Operations.TieSkinnedVerticesWithBones.Perform(bones, Mesh, result.Target[0]);
+					TieSkinnedVerticesWithBones.Perform(bones, Mesh, result.Target[0]);
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
 						foreach (var key in animator.Keys.ToList()) {

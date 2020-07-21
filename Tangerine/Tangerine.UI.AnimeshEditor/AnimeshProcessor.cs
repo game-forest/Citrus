@@ -34,21 +34,20 @@ namespace Tangerine.UI.AnimeshEditor
 				if (sv.Input.ConsumeKeyPress(Key.Mouse1)) {
 					AnimeshTools.State = AnimeshTools.State.NextState();
 				}
-				/// Skinning bootstrap
 				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
 				if (AnimeshTools.State == AnimeshTools.ModificationState.Animation) {
 					foreach (var mesh in meshes) {
 						if (sv.Input.IsKeyPressed(Key.Control)) {
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
-								mesh.Controller(sv).TieVertexWithBones(bones);
-							} else if (sv.Input.ConsumeKeyPress(Key.Mouse1)) {
-								mesh.Controller(sv).UntieVertexFromBones(bones);
+								if (sv.Input.IsKeyPressed(Key.Shift)) {
+									mesh.Controller(sv).UntieVertexFromBones(bones);
+								} else {
+									mesh.Controller(sv).TieVertexWithBones(bones);
+								}
 							}
 						}
 					}
 				}
-				/// Skinning bootstrap
-
 				foreach (var mesh in meshes) {
 					if (mesh.Controller(sv).HitTest(sv.MousePosition, sv.Scene.Scale.X)) {
 						UI.Utils.ChangeCursorIfDefault(MouseCursor.Hand);
