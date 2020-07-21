@@ -103,6 +103,8 @@ namespace Lime
 
 		public abstract void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt);
 
+		public abstract void DrawDashedLine(Vector2 a, Vector2 b, Color4 color, Vector2 dashSize);
+
 		public void Clear(Color4 color)
 		{
 			Clear(ClearOptions.All, color);
@@ -295,6 +297,11 @@ namespace Lime
 		public override void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
 		{
 			Renderer.DrawLine(a, b, color, thickness, cap);
+		}
+
+		public override void DrawDashedLine(Vector2 a, Vector2 b, Color4 color, Vector2 dashSize)
+		{
+			Renderer.DrawDashedLine(a, b, color, dashSize);
 		}
 
 		public override void DrawRenderChain(RenderChain renderChain)
@@ -603,6 +610,15 @@ namespace Lime
 			cmd.Color = color;
 			cmd.Thickness = thickness;
 			cmd.Cap = cap;
+		}
+
+		public override void DrawDashedLine(Vector2 a, Vector2 b, Color4 color, Vector2 dashSize)
+		{
+			var cmd = AddCommand<DrawDashedLineCommand>();
+			cmd.A = a;
+			cmd.B = b;
+			cmd.Color = color;
+			cmd.DashSize = dashSize;
 		}
 
 		public override void DrawRenderChain(RenderChain renderChain)
@@ -1046,6 +1062,21 @@ namespace Lime
 			public override void Execute(RendererWrapper renderer)
 			{
 				renderer.DrawLine(A, B, Color, Thickness, Cap);
+			}
+
+			public override void Release() => ReleaseCommand(this);
+		}
+
+		private class DrawDashedLineCommand : Command
+		{
+			public Vector2 A;
+			public Vector2 B;
+			public Color4 Color;
+			public Vector2 DashSize;
+
+			public override void Execute(RendererWrapper renderer)
+			{
+				renderer.DrawDashedLine(A, B, Color, DashSize);
 			}
 
 			public override void Release() => ReleaseCommand(this);
