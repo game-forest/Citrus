@@ -208,7 +208,7 @@ namespace Tangerine.UI.SceneView
 				if (!mesh.GloballyVisible) {
 					return false;
 				}
-				return mesh.Controller().HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
+				return mesh.Controller(SceneView.Instance).HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
 			}
 
 			protected override bool ProbeInternal(Lime.Widgets.Animesh.Animesh mesh, Rectangle rectangle)
@@ -220,8 +220,8 @@ namespace Tangerine.UI.SceneView
 				for (var i = 0; i < points.Length; ++i) {
 					foreach (var face in mesh.Faces) {
 						for (var j = 0; j < 3; ++j) {
-							var v0 = mesh.Controller().Vertices[face[j]].Pos * mesh.Size * mesh.LocalToWorldTransform;
-							var v1 = mesh.Controller().Vertices[face[(j + 1) % 3]].Pos * mesh.Size * mesh.LocalToWorldTransform;
+							var v0 = mesh.Controller(SceneView.Instance).Vertices[face[j]].Pos * mesh.Size * mesh.LocalToWorldTransform;
+							var v1 = mesh.Controller(SceneView.Instance).Vertices[face[(j + 1) % 3]].Pos * mesh.Size * mesh.LocalToWorldTransform;
 							if (
 								rectangle.Contains(v0) || rectangle.Contains(v1) ||
 								(points[(i + 1) % points.Length] - points[i]).Length >= 1f &&
