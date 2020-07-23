@@ -29,6 +29,7 @@ namespace Tangerine.UI.AnimeshEditor
 	}
 
 	[YuzuDontGenerateDeserializer]
+	[NodeComponentDontSerialize]
 	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
 	public sealed class AnimeshController<T> : NodeComponent where T : ITopology
 	{
