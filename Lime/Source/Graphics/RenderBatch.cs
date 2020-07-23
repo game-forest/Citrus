@@ -17,8 +17,8 @@ namespace Lime
 
 	public static class RenderBatchLimits
 	{
-		public const int MaxVertices = 400;
-		public const int MaxIndices = 600;
+		public static int MaxVertices = 400;
+		public static int MaxIndices = 600;
 	}
 
 	public class RenderBatch<TVertex> : IRenderBatch where TVertex : unmanaged

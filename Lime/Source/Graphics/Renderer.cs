@@ -632,7 +632,14 @@ namespace Lime
 						continue;
 					}
 				}
-				if (batchLength == 0 || batchLength < batchedSprites.Length && s.Texture1 == batchedSprites[0].Texture1 && s.Texture2 == batchedSprites[0].Texture2 && s.Material == batchedSprites[0].Material) {
+				if (
+					batchLength == 0 ||
+					batchLength < batchedSprites.Length &&
+					s.Texture1 == batchedSprites[0].Texture1 && s.Texture2 == batchedSprites[0].Texture2 &&
+					s.Material == batchedSprites[0].Material &&
+					4 * (batchLength + 1) <= RenderBatchLimits.MaxVertices &&
+					6 * (batchLength + 1) <= RenderBatchLimits.MaxIndices
+				) {
 					batchedSprites[batchLength++] = s;
 					continue;
 				}
