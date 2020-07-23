@@ -1195,6 +1195,7 @@ namespace Tangerine.Core.Operations
 							BoneUtils.CalcSkinningWeight(point.SkinningWeights, point.CalcPositionInSpaceOf(mesh.ParentWidget), boneList));
 					}
 				} else if (widget is Animesh animesh) {
+					var localToParent = animesh.CalcLocalToParentTransform();
 					for (var i = 0; i < animesh.Vertices.Count; i++) {
 						var vertex = animesh.Vertices[i];
 						var sw = vertex.SkinningWeights;
@@ -1202,7 +1203,7 @@ namespace Tangerine.Core.Operations
 							throw new TieWidgetsWithBonesException(animesh);
 						}
 						vertex.SkinningWeights =
-							BoneUtils.CalcSkinningWeight(vertex.SkinningWeights, vertex.Pos, boneList);
+							BoneUtils.CalcSkinningWeight(vertex.SkinningWeights, localToParent.TransformVector(vertex.Pos), boneList);
 						if (vertex.SkinningWeights.IsEmpty()) {
 							vertex.BlendWeights.Weight0 = 1f;
 						}
@@ -1262,6 +1263,7 @@ namespace Tangerine.Core.Operations
 				return;
 			}
 			var appliedBones = new HashSet<Bone>();
+			var localToParent = mesh.CalcLocalToParentTransform();
 			foreach (var index in indices) {
 				var v = mesh.TransientVertices[index];
 				var sw = v.SkinningWeights;
@@ -1273,7 +1275,7 @@ namespace Tangerine.Core.Operations
 				).ToList();
 				if (filteredBones.Count > 0) {
 					filteredBones.ForEach(i => appliedBones.Add(i));
-					sw = BoneUtils.CalcSkinningWeight(sw, mesh.CalcLocalToParentTransform().TransformVector(v.Pos), filteredBones);
+					sw = BoneUtils.CalcSkinningWeight(sw, localToParent.TransformVector(v.Pos), filteredBones);
 					if (sw.IsEmpty()) {
 						sw.Bone0.Weight = 1f;
 					}
