@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tangerine.UI.AnimeshEditor</RootNamespace>
-    <AssemblyName>Tangerine.UI.AnimeshEditor.Win</AssemblyName>
+    <AssemblyName>Tangerine.UI.AnimeshEditor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
