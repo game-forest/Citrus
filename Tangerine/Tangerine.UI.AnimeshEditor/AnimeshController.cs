@@ -534,16 +534,24 @@ namespace Tangerine.UI.AnimeshEditor
 			AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
 		}
 
-		// TODO: That is incorrect and should be improved later.
 		public IEnumerator<object> AnimationTask()
 		{
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
-			var lastPos = transform.TransformVector(sv.MousePosition);
+			var lastPosLocalPosition = transform.TransformVector(sv.MousePosition);
+			var lastPositionsBeforeBonesApplication = new [] { lastPosLocalPosition, lastPosLocalPosition, lastPosLocalPosition, };
 			var hitTestTarget = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result) ? result.Target : null;
 			if (hitTestTarget == null) {
 				yield break;
 			}
+			var invSkinningMatrices = new[] { Matrix32.Identity, Matrix32.Identity, Matrix32.Identity, };
+			for (int i = 0; i < hitTestTarget.Count; i++) {
+				invSkinningMatrices[i] = Mesh.ParentWidget.BoneArray.
+					CalcWeightedRelativeTransform(Mesh.Vertices[hitTestTarget[i]].SkinningWeights).CalcInversed();
+				lastPositionsBeforeBonesApplication[i] = invSkinningMatrices[i].TransformVector(lastPositionsBeforeBonesApplication[i]);
+			}
+			var positionDeltas = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, };
+			var mousePositionsBeforeBonesApplication = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, };
 			using (Document.Current.History.BeginTransaction()) {
 				Core.Operations.SetAnimableProperty.Perform(
 					Mesh,
@@ -554,9 +562,14 @@ namespace Tangerine.UI.AnimeshEditor
 				);
 				while (sv.Input.IsMousePressed()) {
 					UI.Utils.ChangeCursorIfDefault(cursor);
-					var positionDelta = (transform.TransformVector(sv.MousePosition) - lastPos);
-					lastPos = transform.TransformVector(sv.MousePosition);
-					TranslateTransientVertices(hitTestTarget, positionDelta);
+					var mousePositionInMeshSpace = transform.TransformVector(sv.MousePosition);
+					for (int i = 0; i < hitTestTarget.Count; i++) {
+						mousePositionsBeforeBonesApplication[i] =
+							invSkinningMatrices[i].TransformVector(mousePositionInMeshSpace);
+						positionDeltas[i] = mousePositionsBeforeBonesApplication[i] - lastPositionsBeforeBonesApplication[i];
+						lastPositionsBeforeBonesApplication[i] = mousePositionsBeforeBonesApplication[i];
+					}
+					TranslateTransientVertices(hitTestTarget, positionDeltas);
 					Core.Operations.SetAnimableProperty.Perform(
 						Mesh,
 						nameof(Lime.Widgets.Animesh.Animesh.TransientVertices),
@@ -699,6 +712,13 @@ namespace Tangerine.UI.AnimeshEditor
 		{
 			for (var i = 0; i < primitive.Count; i++) {
 				TranslateTransientVertex(primitive[i], delta);
+			}
+		}
+
+		public void TranslateTransientVertices(ITopologyPrimitive primitive, params Vector2[] delta)
+		{
+			for (var i = 0; i < primitive.Count; i++) {
+				TranslateTransientVertex(primitive[i], delta[i]);
 			}
 		}
 
