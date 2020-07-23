@@ -18,6 +18,7 @@ namespace Lime.Widgets.Animesh
 				set => Pos4 = new Vector4(value.X, value.Y, 0, 1.0f);
 			}
 
+#if TANGERINE
 			public SkinningWeights SkinningWeights
 			{
 				get => new SkinningWeights {
@@ -39,6 +40,7 @@ namespace Lime.Widgets.Animesh
 					BlendWeights.Weight3 = value.Bone3.Weight;
 				}
 			}
+#endif
 
 			[YuzuMember]
 			public Vector4 Pos4;
