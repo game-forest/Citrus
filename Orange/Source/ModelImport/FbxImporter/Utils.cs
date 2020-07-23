@@ -20,7 +20,8 @@ namespace Orange.FbxImporter
 	{
 		public static T ToStruct<T>(this IntPtr ptr)
 		{
-			try {				return ptr != IntPtr.Zero ? (T)Marshal.PtrToStructure(ptr, typeof(T)) : default(T);
+			try {
+				return ptr != IntPtr.Zero ? (T)Marshal.PtrToStructure(ptr, typeof(T)) : default(T);
 			} finally {
 				Utils.ReleaseNative(ptr);
 			}
