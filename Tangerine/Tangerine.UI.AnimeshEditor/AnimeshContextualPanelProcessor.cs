@@ -17,7 +17,7 @@ namespace Tangerine.UI.AnimeshEditor
 		{
 			while (true) {
 				panel.RootNode.Visible = Document.Current.SelectedNodes()
-					.Any(node => node is Lime.Widgets.Animesh.Animesh);
+					.Any(node => node is Lime.Animesh);
 				yield return null;
 			}
 		}

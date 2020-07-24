@@ -26,7 +26,7 @@ namespace Tangerine.UI.AnimeshEditor
 					yield return null;
 					continue;
 				}
-				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.Animesh.Animesh>().ToList();
+				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Animesh>().ToList();
 				if (meshes.Count == 0) {
 					yield return null;
 					continue;

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 using Lime;
 using System.Reflection;
-using Lime.Widgets.Animesh;
 using Tangerine.Core.Components;
 
 namespace Tangerine.Core.Operations
@@ -1252,7 +1251,7 @@ namespace Tangerine.Core.Operations
 
 	public static class TieSkinnedVerticesWithBones
 	{
-		public static void Perform(IEnumerable<Bone> bones, Lime.Widgets.Animesh.Animesh mesh, params int[] indices)
+		public static void Perform(IEnumerable<Bone> bones, Lime.Animesh mesh, params int[] indices)
 		{
 			var sortedBones = BoneUtils.SortBones(bones);
 			if (!sortedBones.Any()) {
@@ -1298,7 +1297,7 @@ namespace Tangerine.Core.Operations
 
 	public static class UntieSkinnedVerticesFromBones
 	{
-		public static void Perform(IEnumerable<Bone> bones, Lime.Widgets.Animesh.Animesh mesh, params int[] indices)
+		public static void Perform(IEnumerable<Bone> bones, Lime.Animesh mesh, params int[] indices)
 		{
 			var sortedBones = BoneUtils.SortBones(bones);
 			if (!sortedBones.Any()) {

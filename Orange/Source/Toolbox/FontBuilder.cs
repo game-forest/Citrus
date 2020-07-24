@@ -40,7 +40,7 @@ namespace Orange
 			return font;
 		}
 
-		private static float CalcPixelSize(Face face, int height)
+		private static float CalcPixelSize(TopologyFace face, int height)
 		{
 			// See http://www.freetype.org/freetype2/docs/tutorial/step2.html
 			// Chapter: Scaling Distances to Device Space
@@ -51,7 +51,7 @@ namespace Orange
 			return pixelSize;
 		}
 
-		private void RenderFont(Font font, Face face)
+		private void RenderFont(Font font, TopologyFace face)
 		{
 			var pixels = new Color4[TextureSize * TextureSize];
 			int x = 0;

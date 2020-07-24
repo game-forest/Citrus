@@ -15,7 +15,7 @@ namespace Tangerine.UI.AnimeshEditor
 
 		private static void Render(Widget canvas, ISceneView sv)
 		{
-			Document.Current.Nodes().OfType<Lime.Widgets.Animesh.Animesh>().ToList().ForEach(m => m.Controller());
+			Document.Current.Nodes().OfType<Lime.Animesh>().ToList().ForEach(m => m.Controller());
 			if (Document.Current.ExpositionMode || Document.Current.PreviewAnimation) {
 				if (!wasAnimationForced) {
 					wasAnimationForced = true;
@@ -28,7 +28,7 @@ namespace Tangerine.UI.AnimeshEditor
 				wasAnimationForced = false;
 				AnimeshTools.State = AnimeshTools.StateBeforeAnimationPreview;
 			}
-			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Widgets.Animesh.Animesh>().ToList();
+			var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Animesh>().ToList();
 			if (meshes.Count == 0) {
 				return;
 			}

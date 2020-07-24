@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Yuzu;
-using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
+using SkinnedVertex = Lime.Animesh.SkinnedVertex;
 
 namespace Lime
 {

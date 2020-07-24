@@ -1,7 +1,7 @@
 using System;
 using Yuzu;
 
-namespace Lime.Widgets.Animesh
+namespace Lime
 {
 	public interface ITopologyPrimitive
 	{
@@ -9,7 +9,7 @@ namespace Lime.Widgets.Animesh
 		int Count { get; }
 	}
 
-	public struct Vertex : ITopologyPrimitive
+	public struct TopologyVertex : ITopologyPrimitive
 	{
 		public ushort Index;
 		public ushort this[int index] => Index;
@@ -17,7 +17,7 @@ namespace Lime.Widgets.Animesh
 	}
 
 	[YuzuCompact]
-	public struct Edge : IEquatable<Edge>, ITopologyPrimitive
+	public struct TopologyEdge : IEquatable<TopologyEdge>, ITopologyPrimitive
 	{
 		public class EdgeInfo
 		{
@@ -47,13 +47,13 @@ namespace Lime.Widgets.Animesh
 
 		public int Count => 2;
 
-		public Edge(ushort index0, ushort index1)
+		public TopologyEdge(ushort index0, ushort index1)
 		{
 			Index0 = index0;
 			Index1 = index1;
 		}
 
-		public bool Equals(Edge other)
+		public bool Equals(TopologyEdge other)
 		{
 			return
 				(Index0 == other.Index0 && Index1 == other.Index1) ||
@@ -69,7 +69,7 @@ namespace Lime.Widgets.Animesh
 	}
 
 	[YuzuCompact]
-	public struct Face : IEquatable<Face>, ITopologyPrimitive
+	public struct TopologyFace : IEquatable<TopologyFace>, ITopologyPrimitive
 	{
 		public class FaceInfo
 		{
@@ -97,7 +97,7 @@ namespace Lime.Widgets.Animesh
 			}
 		}
 
-		public Face(ushort index0, ushort index1, ushort index2)
+		public TopologyFace(ushort index0, ushort index1, ushort index2)
 		{
 			Index0 = index0;
 			Index1 = index1;
@@ -131,7 +131,7 @@ namespace Lime.Widgets.Animesh
 
 		public int Count => 3;
 
-		public bool Equals(Face other) =>
+		public bool Equals(TopologyFace other) =>
 			Index0 == other.Index0 &&
 			Index1 == other.Index1 &&
 			Index2 == other.Index2 ||

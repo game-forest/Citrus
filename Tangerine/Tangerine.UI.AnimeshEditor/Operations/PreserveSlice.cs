@@ -8,14 +8,14 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 		{
 			public override bool IsChangingDocument => true;
 
-			private readonly Lime.Widgets.Animesh.Animesh mesh;
+			private readonly Lime.Animesh mesh;
 			private readonly AnimeshSlice sliceBefore;
 			private readonly AnimeshSlice sliceAfter;
 			// First sync is redundant because mesh should already be in correct states.
 			// So we skip it in order to ensure mesh operations correctness and to improve performance.
 			private bool skipFirstSync;
 
-			private Slice(Lime.Widgets.Animesh.Animesh mesh, AnimeshSlice sliceBefore,
+			private Slice(Lime.Animesh mesh, AnimeshSlice sliceBefore,
 				AnimeshSlice sliceAfter, bool skipFirstSync)
 			{
 				this.mesh = mesh;
@@ -24,7 +24,7 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 				this.skipFirstSync = skipFirstSync;
 			}
 
-			public static void Perform(Lime.Widgets.Animesh.Animesh mesh, AnimeshSlice sliceBefore,
+			public static void Perform(Lime.Animesh mesh, AnimeshSlice sliceBefore,
 				AnimeshSlice sliceAfter, bool skipFirstSync = true)
 			{
 				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter, skipFirstSync));
@@ -32,7 +32,7 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 
 			public class Processor : OperationProcessor<Slice>
 			{
-				private void Do(Lime.Widgets.Animesh.Animesh mesh, AnimeshSlice slice, bool skipSync)
+				private void Do(Lime.Animesh mesh, AnimeshSlice slice, bool skipSync)
 				{
 					var controller = mesh.Controller();
 					AnimeshTools.State = slice.State;

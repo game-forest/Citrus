@@ -1,5 +1,4 @@
 using Lime;
-using Lime.Widgets.Animesh;
 using Tangerine.Core;
 using Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology;
 

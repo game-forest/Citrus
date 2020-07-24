@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Yuzu;
 
-namespace Lime.Widgets.Animesh
+namespace Lime
 {
 	[TangerineRegisterNode(Order = 32)]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Polygon Mesh")]
@@ -68,7 +68,7 @@ namespace Lime.Widgets.Animesh
 
 		[YuzuMember]
 		[TangerineIgnore]
-		public List<Face> Faces { get; set; }
+		public List<TopologyFace> Faces { get; set; }
 
 		[YuzuMember]
 		[TangerineIgnore]
@@ -76,7 +76,7 @@ namespace Lime.Widgets.Animesh
 
 		[YuzuMember]
 		[TangerineIgnore]
-		public List<Edge> ConstrainedEdges { get; set; }
+		public List<TopologyEdge> ConstrainedEdges { get; set; }
 
 		/// <summary>
 		/// An auxiliary property, which is needed to store values from the <see cref="Animator{T}"/>.
@@ -92,8 +92,8 @@ namespace Lime.Widgets.Animesh
 		{
 			Texture = new SerializableTexture();
 			Vertices = new List<SkinnedVertex>();
-			Faces = new List<Face>();
-			ConstrainedEdges = new List<Edge>();
+			Faces = new List<TopologyFace>();
+			ConstrainedEdges = new List<TopologyEdge>();
 		}
 
 		public void Invalidate()

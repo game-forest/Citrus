@@ -201,9 +201,9 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		public class AnimeshProber : Prober<Lime.Widgets.Animesh.Animesh>
+		public class AnimeshProber : Prober<Lime.Animesh>
 		{
-			protected override bool ProbeInternal(Lime.Widgets.Animesh.Animesh mesh, Vector2 point)
+			protected override bool ProbeInternal(Lime.Animesh mesh, Vector2 point)
 			{
 				if (!mesh.GloballyVisible) {
 					return false;
@@ -211,7 +211,7 @@ namespace Tangerine.UI.SceneView
 				return mesh.Controller(SceneView.Instance).HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
 			}
 
-			protected override bool ProbeInternal(Lime.Widgets.Animesh.Animesh mesh, Rectangle rectangle)
+			protected override bool ProbeInternal(Lime.Animesh mesh, Rectangle rectangle)
 			{
 				if (!mesh.GloballyVisible) {
 					return false;

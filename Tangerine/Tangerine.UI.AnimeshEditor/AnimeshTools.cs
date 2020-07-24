@@ -1,5 +1,5 @@
 using System.Linq;
-using Lime.Widgets.Animesh;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.AnimeshEditor

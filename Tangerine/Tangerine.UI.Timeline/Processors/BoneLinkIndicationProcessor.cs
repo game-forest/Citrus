@@ -2,7 +2,6 @@ using Lime;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Lime.Widgets.Animesh;
 using Tangerine.Core;
 using Tangerine.UI.Timeline.Components;
 

@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
-using Lime.Widgets.Animesh;
-using TopologyVertex = Lime.Widgets.Animesh.Vertex;
 
 namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 {
@@ -245,7 +243,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			}
 		}
 
-		private HalfEdge FaceToHalfEdge(Face face)
+		private HalfEdge FaceToHalfEdge(TopologyFace face)
 		{
 			var e = new HalfEdge(face[0]) { Next = new HalfEdge(face[1]) { Next = new HalfEdge(face[2]) } };
 			e.Prev.Next = e;
@@ -299,8 +297,8 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					if (belongsToInnerTriangle || twinBelongsToInnerTriangle) {
 						edge = belongsToInnerTriangle ? edge : edge.Twin;
 						result = new TopologyHitTestResult {
-							Target = new Edge((ushort)edge.Origin, (ushort)edge.Next.Origin),
-							Info = new Edge.EdgeInfo {
+							Target = new TopologyEdge((ushort)edge.Origin, (ushort)edge.Next.Origin),
+							Info = new TopologyEdge.EdgeInfo {
 								IsConstrained = edge.Constrained,
 								IsFraming = edge.Twin == null || InnerBoundary.Contains(edge.Origin) &&
 											InnerBoundary.Next(edge.Origin) == edge.Next.Origin,
@@ -328,8 +326,8 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 							var s2 = Vertices[edgeToCheck.Next.Origin].Pos;
 							if (PointToSegmentSqrDistance(s1, s2, position) <= edgeHitRadius * edgeHitRadius) {
 								result = new TopologyHitTestResult {
-									Target = new Edge((ushort)edgeToCheck.Origin, (ushort)edgeToCheck.Next.Origin),
-									Info = new Edge.EdgeInfo {
+									Target = new TopologyEdge((ushort)edgeToCheck.Origin, (ushort)edgeToCheck.Next.Origin),
+									Info = new TopologyEdge.EdgeInfo {
 										IsConstrained = edgeToCheck.Constrained,
 										IsFraming = edgeToCheck.Twin == null || InnerBoundary.Contains(edgeToCheck.Origin) &&
 													InnerBoundary.Next(edgeToCheck.Origin) == edgeToCheck.Next.Origin,
@@ -342,7 +340,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					} while (edge != start);
 					if (belongsToTriangulation) {
 						result = new TopologyHitTestResult {
-							Target = new Face((ushort)edge.Origin, (ushort)edge.Next.Origin, (ushort)edge.Prev.Origin),
+							Target = new TopologyFace((ushort)edge.Origin, (ushort)edge.Next.Origin, (ushort)edge.Prev.Origin),
 							Info = CreateFaceInfo(edge),
 						};
 					}
@@ -485,7 +483,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 #endif
 		}
 
-		public void ConstructFrom(List<Animesh.SkinnedVertex> vertices, List<Edge> constrainedEdges, List<Face> faces)
+		public void ConstructFrom(List<Animesh.SkinnedVertex> vertices, List<TopologyEdge> constrainedEdges, List<TopologyFace> faces)
 		{
 			Vertices = vertices;
 			// (vertex, vertex) -> HalfEdge
@@ -541,23 +539,23 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			ToConvexHull();
 		}
 
-		public IEnumerable<Face> Faces
+		public IEnumerable<TopologyFace> Faces
 		{
 			get
 			{
 				foreach (var (e1, e2, e3) in InnerTriangles()) {
-					yield return new Face { Index0 = (ushort) e1.Origin, Index1 = (ushort) e2.Origin, Index2 = (ushort) e3.Origin, };
+					yield return new TopologyFace { Index0 = (ushort) e1.Origin, Index1 = (ushort) e2.Origin, Index2 = (ushort) e3.Origin, };
 				}
 			}
 		}
 
-		public IEnumerable<(Face, Face.FaceInfo)> FacesWithInfo
+		public IEnumerable<(TopologyFace, TopologyFace.FaceInfo)> FacesWithInfo
 		{
 			get
 			{
 				foreach (var (e1, e2, e3) in InnerTriangles()) {
 					yield return (
-						new Face {
+						new TopologyFace {
 							Index0 = (ushort)e1.Origin,
 							Index1 = (ushort)e2.Origin,
 							Index2 = (ushort)e3.Origin,
@@ -568,11 +566,11 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			}
 		}
 
-		private Face.FaceInfo CreateFaceInfo(HalfEdge triangle) =>
+		private TopologyFace.FaceInfo CreateFaceInfo(HalfEdge triangle) =>
 			CreateFaceInfo(triangle, triangle.Next, triangle.Prev);
 
-		private Face.FaceInfo CreateFaceInfo(HalfEdge e1, HalfEdge e2, HalfEdge e3) =>
-			new Face.FaceInfo {
+		private TopologyFace.FaceInfo CreateFaceInfo(HalfEdge e1, HalfEdge e2, HalfEdge e3) =>
+			new TopologyFace.FaceInfo {
 				IsConstrained0 = e1.Constrained,
 				IsConstrained1 = e2.Constrained,
 				IsConstrained2 = e3.Constrained,

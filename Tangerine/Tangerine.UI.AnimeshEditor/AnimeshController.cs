@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
-using Lime.Widgets.Animesh;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.UI.AnimeshEditor.Operations;
 using Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology;
-using SkinnedVertex = Lime.Widgets.Animesh.Animesh.SkinnedVertex;
-using TopologyVertex = Lime.Widgets.Animesh.Vertex;
+using SkinnedVertex = Lime.Animesh.SkinnedVertex;
 
 namespace Tangerine.UI.AnimeshEditor
 {
@@ -23,14 +21,14 @@ namespace Tangerine.UI.AnimeshEditor
 	{
 		public AnimeshTools.ModificationState State;
 		public List<SkinnedVertex> Vertices;
-		public List<Face> IndexBuffer;
-		public List<Edge> ConstrainedVertices;
+		public List<TopologyFace> IndexBuffer;
+		public List<TopologyEdge> ConstrainedVertices;
 		public List<IKeyframe> Keyframes;
 	}
 
 	[YuzuDontGenerateDeserializer]
 	[NodeComponentDontSerialize]
-	[AllowedComponentOwnerTypes(typeof(Lime.Widgets.Animesh.Animesh))]
+	[AllowedComponentOwnerTypes(typeof(Lime.Animesh))]
 	public sealed class AnimeshController<T> : NodeComponent where T : ITopology
 	{
 		public Animesh Mesh { get; private set; }
@@ -51,7 +49,7 @@ namespace Tangerine.UI.AnimeshEditor
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
-			if (Owner is Lime.Widgets.Animesh.Animesh mesh) {
+			if (Owner is Lime.Animesh mesh) {
 				if (mesh.Vertices.Count == 0) {
 					mesh.Vertices.Add(new SkinnedVertex {
 						Pos = Vector2.Zero,
@@ -104,7 +102,7 @@ namespace Tangerine.UI.AnimeshEditor
 				Mesh.ConstrainedEdges.Clear();
 				Mesh.Faces.AddRange(topology.Faces);
 				foreach (var edge in topology.ConstrainedEdges) {
-					Mesh.ConstrainedEdges.Add(new Edge((ushort)edge.Item1, (ushort)edge.Item2));
+					Mesh.ConstrainedEdges.Add(new TopologyEdge((ushort)edge.Item1, (ushort)edge.Item2));
 				}
 			}
 		}
@@ -155,8 +153,8 @@ namespace Tangerine.UI.AnimeshEditor
 							AnimeshUtils.SqrDistanceFromPointToSegment(s1, s2, position) <=
 							Theme.Metrics.AnimeshEdgeHitTestRadius * Theme.Metrics.AnimeshEdgeHitTestRadius
 						) {
-							result.Target = new Edge(face[i], face[(i + 1) % 3]);
-							result.Info = new Edge.EdgeInfo {
+							result.Target = new TopologyEdge(face[i], face[(i + 1) % 3]);
+							result.Info = new TopologyEdge.EdgeInfo {
 								IsConstrained = info[i].IsConstrained,
 								IsFraming = info[i].IsFraming,
 							};
@@ -173,7 +171,7 @@ namespace Tangerine.UI.AnimeshEditor
 			return Topology.HitTest(position, vertexHitRadius, edgeHitRadius, out result);
 		}
 
-		protected bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState)
+		private bool ValidateHitTestResult(TopologyHitTestResult result, bool ignoreState)
 		{
 			if (result == null) {
 				return false;
@@ -191,7 +189,7 @@ namespace Tangerine.UI.AnimeshEditor
 					return result.Target.IsVertex();
 				case AnimeshTools.ModificationState.Removal:
 					return result.Target.IsVertex() || result.Target.IsEdge() &&
-							(result.Info as Edge.EdgeInfo).IsConstrained;
+							(result.Info as TopologyEdge.EdgeInfo).IsConstrained;
 				default:
 					return false;
 			}
@@ -398,8 +396,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceBefore = new AnimeshSlice {
 						State = AnimeshTools.State,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = animator?.Keys.ToList()
 					};
 					keyframes = animator?.Keys.ToList();
@@ -418,8 +416,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceAfter = new AnimeshSlice {
 						State = AnimeshTools.State,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = keyframes
 					};
 					AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
@@ -440,8 +438,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceBefore = new AnimeshSlice {
 						State = AnimeshTools.State,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = animator?.Keys.ToList()
 					};
 					keyframes = animator?.Keys.ToList();
@@ -460,8 +458,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceAfter = new AnimeshSlice {
 						State = AnimeshTools.State,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = keyframes
 					};
 					AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
@@ -479,8 +477,8 @@ namespace Tangerine.UI.AnimeshEditor
 			var sliceBefore = new AnimeshSlice {
 				State = AnimeshTools.State,
 				Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-				IndexBuffer = new List<Face>(Mesh.Faces),
-				ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+				IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+				ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 				Keyframes = animator?.Keys.ToList()
 			};
 			keyframes = animator?.Keys.ToList();
@@ -527,8 +525,8 @@ namespace Tangerine.UI.AnimeshEditor
 			var sliceAfter = new AnimeshSlice {
 				State = AnimeshTools.State,
 				Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-				IndexBuffer = new List<Face>(Mesh.Faces),
-				ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+				IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+				ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 				Keyframes = keyframes
 			};
 			AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
@@ -555,7 +553,7 @@ namespace Tangerine.UI.AnimeshEditor
 			using (Document.Current.History.BeginTransaction()) {
 				Core.Operations.SetAnimableProperty.Perform(
 					Mesh,
-					nameof(Lime.Widgets.Animesh.Animesh.TransientVertices),
+					nameof(Lime.Animesh.TransientVertices),
 					new List<SkinnedVertex>(Vertices),
 					createAnimatorIfNeeded: true,
 					createInitialKeyframeForNewAnimator: true
@@ -572,7 +570,7 @@ namespace Tangerine.UI.AnimeshEditor
 					TranslateTransientVertices(hitTestTarget, positionDeltas);
 					Core.Operations.SetAnimableProperty.Perform(
 						Mesh,
-						nameof(Lime.Widgets.Animesh.Animesh.TransientVertices),
+						nameof(Lime.Animesh.TransientVertices),
 						new List<SkinnedVertex>(Vertices),
 						createAnimatorIfNeeded: true,
 						createInitialKeyframeForNewAnimator: true
@@ -604,8 +602,8 @@ namespace Tangerine.UI.AnimeshEditor
 				var sliceBefore = new AnimeshSlice {
 					State = AnimeshTools.ModificationState.Modification,
 					Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-					IndexBuffer = new List<Face>(Mesh.Faces),
-					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+					IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+					ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 					Keyframes = animator?.Keys.ToList()
 				};
 				var lastValidDelta = Vector2.Zero;
@@ -651,8 +649,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceAfter = new AnimeshSlice {
 						State = AnimeshTools.ModificationState.Modification,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = keyframes
 					};
 					AnimeshModification.Slice.Perform(
@@ -746,8 +744,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceBefore = new AnimeshSlice {
 						State = AnimeshTools.ModificationState.Creation,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = animator?.Keys.ToList()
 					};
 					var pos = SnapMousePositionToTopologyPrimitiveIfPossible(initialHitTestTarget);
@@ -772,8 +770,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceAfter = new AnimeshSlice {
 						State = AnimeshTools.ModificationState.Creation,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = keyframes
 					};
 					AnimeshModification.Slice.Perform(
@@ -804,8 +802,8 @@ namespace Tangerine.UI.AnimeshEditor
 				var sliceBefore = new AnimeshSlice {
 					State = AnimeshTools.ModificationState.Creation,
 					Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-					IndexBuffer = new List<Face>(Mesh.Faces),
-					ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+					IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+					ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 					Keyframes = animator?.Keys.ToList()
 				};
 				while (sv.Input.IsMousePressed()) {
@@ -851,8 +849,8 @@ namespace Tangerine.UI.AnimeshEditor
 						var sliceAfter = new AnimeshSlice {
 							State = AnimeshTools.ModificationState.Creation,
 							Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-							IndexBuffer = new List<Face>(Mesh.Faces),
-							ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+							IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+							ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 							Keyframes = keyframes
 						};
 
@@ -893,8 +891,8 @@ namespace Tangerine.UI.AnimeshEditor
 					var sliceBefore = new AnimeshSlice {
 						State = AnimeshTools.ModificationState.Removal,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = animator?.Keys.ToList()
 					};
 					if (hitTestTarget.IsVertex()) {
@@ -911,15 +909,15 @@ namespace Tangerine.UI.AnimeshEditor
 								animator.ResetCache();
 							}
 						}
-					} else if (hitTestTarget.IsEdge() && result.Info is Edge.EdgeInfo ei && ei.IsConstrained) {
-						var edge = (Edge)hitTestTarget;
+					} else if (hitTestTarget.IsEdge() && result.Info is TopologyEdge.EdgeInfo ei && ei.IsConstrained) {
+						var edge = (TopologyEdge)hitTestTarget;
 						Topology.RemoveConstrainedEdge(edge.Index0, edge.Index1);
 					}
 					var sliceAfter = new AnimeshSlice {
 						State = AnimeshTools.ModificationState.Removal,
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
-						IndexBuffer = new List<Face>(Mesh.Faces),
-						ConstrainedVertices = new List<Edge>(Mesh.ConstrainedEdges),
+						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
+						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 						Keyframes = keyframes
 					};
 					AnimeshModification.Slice.Perform(
