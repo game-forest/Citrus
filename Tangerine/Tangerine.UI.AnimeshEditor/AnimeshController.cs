@@ -577,6 +577,7 @@ namespace Tangerine.UI.AnimeshEditor
 						createAnimatorIfNeeded: true,
 						createInitialKeyframeForNewAnimator: true
 					);
+					Mesh.Invalidate();
 					yield return null;
 				}
 				Mesh.Animators.Invalidate();

@@ -64,6 +64,7 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 							mesh.TransientVertices.Add(v);
 						}
 					}
+					mesh.Invalidate();
 				}
 
 				protected override void InternalRedo(Slice op)

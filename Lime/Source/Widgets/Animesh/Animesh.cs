@@ -58,6 +58,10 @@ namespace Lime.Widgets.Animesh
 			public Mesh3D.BlendWeights BlendWeights;
 		}
 
+		private bool invalidate = true;
+		private VertexBuffer vbo = null;
+		private IndexBuffer ibo = null;
+
 		[YuzuMember]
 		[TangerineStaticProperty]
 		public override ITexture Texture { get; set; }
@@ -72,7 +76,6 @@ namespace Lime.Widgets.Animesh
 
 		[YuzuMember]
 		[TangerineIgnore]
-		// TODO Move to topology
 		public List<Edge> ConstrainedEdges { get; set; }
 
 		/// <summary>
@@ -93,6 +96,11 @@ namespace Lime.Widgets.Animesh
 			ConstrainedEdges = new List<Edge>();
 		}
 
+		public void Invalidate()
+		{
+			invalidate = true;
+		}
+
 		public override void AddToRenderChain(RenderChain chain)
 		{
 			if (GloballyVisible && ClipRegionTest(chain.ClipRegion)) {
@@ -103,30 +111,90 @@ namespace Lime.Widgets.Animesh
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
 			var ro = RenderObjectPool<RenderObject>.Acquire();
-			ro.Texture = Texture;
-			ro.IndexBufferLength = Faces.Count * 3;
-			foreach (var f in Faces) {
-				ro.IndexBuffer.Add(f.Index0);
-				ro.IndexBuffer.Add(f.Index1);
-				ro.IndexBuffer.Add(f.Index2);
+			IAnimator animator;
+			if (invalidate) {
+				vbo = new VertexBuffer(false);
+				ibo = new IndexBuffer(false);
+				var iboData = new ushort[Faces.Count * 3];
+				for (int i = 0; i < Faces.Count; i++) {
+					var triangleIndex = i * 3;
+					var face = Faces[i];
+					iboData[triangleIndex] = face.Index0;
+					iboData[triangleIndex + 1] = face.Index1;
+					iboData[triangleIndex + 2] = face.Index2;
+				}
+				ibo.SetData(iboData, iboData.Length);
+				// We put the vertices into the buffer like this:
+				// {[VerticesWithNoBones,] Vertices, keyframe1, keyframe2, ..., keyframeN}
+				// Vertices with no bone indices present only in tangerine for
+				// the sake of triangulation.
+				var vboDataLength = Vertices.Count;
+#if TANGERINE
+				vboDataLength += Vertices.Count;
+#endif // TANGERINE
+				var animatorWasFound = Animators.TryFind(nameof(TransientVertices), out animator);
+				if (animatorWasFound) {
+					vboDataLength += animator.Keys.Count * Vertices.Count;
+				}
+				var vboData = new SkinnedVertex[vboDataLength];
+				var k = 0;
+#if TANGERINE
+				foreach (var vertex in Vertices) {
+					var v = vertex;
+					Texture?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
+					// Zero bone is Identity transform.
+					v.SkinningWeights = new SkinningWeights {
+						Bone0 = new BoneWeight { Index = 0, Weight = 1f, },
+					};
+					vboData[k++] = v;
+				}
+#endif // TANGERINE
+				foreach (var vertex in Vertices) {
+					var v = vertex;
+					Texture?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
+					vboData[k++] = v;
+				}
+				if (animatorWasFound) {
+					foreach (var key in animator.Keys) {
+						var vertices = ((List<SkinnedVertex>)key.Value);
+						foreach (var vertex in vertices) {
+							var v = vertex;
+							Texture?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
+							vboData[k++] = v;
+						}
+					}
+				}
+				vbo.SetData(vboData, vboDataLength);
+				invalidate = false;
 			}
-			List<SkinnedVertex> vb0 = null;
-			List<SkinnedVertex> vb1 = null;
 			var frame = Parent?.DefaultAnimation.Frame ?? 0;
-			var lkf = 0;
-			var rkf = 0;
+			var originPoseFrame = 0;
+			var endPoseFrame = 0;
+			var originPoseVboOffset = 0;
+			var endPoseVboOffset = 0;
+			var j = 0;
 #if TANGERINE
 			if (TangerineAnimationModeEnabled) {
+				j = 1;
+				unsafe {
+					originPoseVboOffset = Vertices.Count * sizeof(SkinnedVertex);
+					endPoseVboOffset = Vertices.Count * sizeof(SkinnedVertex);
+				}
 #endif
-				if (Animators.TryFind(nameof(TransientVertices), out var animator)) {
+				if (Animators.TryFind(nameof(TransientVertices), out animator)) {
 					foreach (var key in animator.Keys) {
+						j++;
 						if (key.Frame <= frame) {
-							lkf = key.Frame;
-							vb0 = key.Value as List<SkinnedVertex>;
+							unsafe {
+								originPoseVboOffset = j * Vertices.Count * sizeof(SkinnedVertex);
+							}
+							originPoseFrame = key.Frame;
 						}
 						if (key.Frame >= frame) {
-							rkf = key.Frame;
-							vb1 = key.Value as List<SkinnedVertex>;
+							unsafe {
+								endPoseVboOffset = j * Vertices.Count * sizeof(SkinnedVertex);
+							}
+							endPoseFrame = key.Frame;
 							break;
 						}
 					}
@@ -134,20 +202,10 @@ namespace Lime.Widgets.Animesh
 #if TANGERINE
 			}
 #endif
-			if (vb0 == null && vb1 != null) {
-				vb0 = new List<SkinnedVertex>(vb1);
-				lkf = rkf;
-			} else if (vb0 != null && vb1 == null) {
-				vb1 = new List<SkinnedVertex>(vb0);
-				rkf = lkf;
-			} else if (vb0 == null && vb1 == null) {
-				vb0 = new List<SkinnedVertex>(Vertices);
-				vb1 = new List<SkinnedVertex>(Vertices);
-			}
-			if (rkf - lkf > 0) {
+			if (endPoseFrame - originPoseFrame > 0) {
 				var time = Parent.DefaultAnimation.Time;
-				var lkt = lkf * AnimationUtils.SecondsPerFrame;
-				var rkt = rkf * AnimationUtils.SecondsPerFrame;
+				var lkt = originPoseFrame * AnimationUtils.SecondsPerFrame;
+				var rkt = endPoseFrame * AnimationUtils.SecondsPerFrame;
 				ro.BlendFactor = (float)((time - lkt) / (rkt - lkt));
 			}
 			ro.BoneTransforms = new Matrix44[50];
@@ -166,28 +224,15 @@ namespace Lime.Widgets.Animesh
 					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index3].RelativeTransform;
 			}
 			ro.BoneTransforms[0] = Matrix44.Identity;
-			for (var i = 0; i < Vertices.Count; ++i) {
-				var v0 = vb0[i];
-				var v1 = vb1[i];
-				v0.Pos = v0.Pos;
-				v1.Pos = v1.Pos;
-				if (Texture != null) {
-					Texture.TransformUVCoordinatesToAtlasSpace(ref v0.UV1);
-					Texture.TransformUVCoordinatesToAtlasSpace(ref v1.UV1);
-				}
-#if TANGERINE
-				if (!TangerineAnimationModeEnabled) {
-					v0.SkinningWeights = new SkinningWeights { Bone0 = new BoneWeight { Index = 0, Weight = 1f, }};
-					v1.SkinningWeights = new SkinningWeights { Bone0 = new BoneWeight { Index = 0, Weight = 1f, }};
-				}
-#endif
-				ro.VertexBuffer0.Add(v0);
-				ro.VertexBuffer1.Add(v1);
-			}
-			ro.VertexBufferLength = Vertices.Count;
+			ro.IndexBufferLength = Faces.Count * 3;
+			ro.Texture = Texture;
 			ro.LocalToWorldTransform = LocalToWorldTransform;
 			ro.LocalToParentTransform = CalcLocalToParentTransform();
 			ro.ParentToLocalTransform = ro.LocalToParentTransform.CalcInversed();
+			ro.OriginPoseVboOffset = originPoseVboOffset;
+			ro.EndPoseVboOffset = endPoseVboOffset;
+			ro.Vbo = vbo;
+			ro.Ibo = ibo;
 			return ro;
 		}
 
@@ -196,14 +241,14 @@ namespace Lime.Widgets.Animesh
 			public ITexture Texture;
 			public float BlendFactor;
 			public int IndexBufferLength;
-			public int VertexBufferLength;
 			public Matrix44[] BoneTransforms;
 			public Matrix32 LocalToWorldTransform;
 			public Matrix32 LocalToParentTransform;
 			public Matrix32 ParentToLocalTransform;
-			public readonly List<ushort> IndexBuffer = new List<ushort>();
-			public readonly List<SkinnedVertex> VertexBuffer0 = new List<SkinnedVertex>();
-			public readonly List<SkinnedVertex> VertexBuffer1 = new List<SkinnedVertex>();
+			public int OriginPoseVboOffset;
+			public int EndPoseVboOffset;
+			public VertexBuffer Vbo;
+			public IndexBuffer Ibo;
 
 			private static readonly VertexInputLayout vertexInputLayout;
 			private static readonly ShaderProgram program;
@@ -383,41 +428,14 @@ namespace Lime.Widgets.Animesh
 				Texture = null;
 				BlendFactor = 0.0f;
 				IndexBufferLength = 0;
-				VertexBufferLength = 0;
 				BoneTransforms = null;
 				LocalToWorldTransform = Matrix32.Identity;
 				LocalToParentTransform = Matrix32.Identity;
 				ParentToLocalTransform = Matrix32.Identity;
-				IndexBuffer.Clear();
-				VertexBuffer0.Clear();
-				VertexBuffer1.Clear();
 			}
 
 			public override void Render()
 			{
-				if (IndexBufferLength == 0) {
-					return;
-				}
-				var vb0 = new VertexBuffer(false);
-				var vb1 = new VertexBuffer(false);
-
-				var vb0Data = new SkinnedVertex[VertexBufferLength];
-				var vb1Data = new SkinnedVertex[VertexBufferLength];
-
-				for (var i = 0; i < VertexBufferLength; ++i) {
-					vb0Data[i] = VertexBuffer0[i];
-					vb1Data[i] = VertexBuffer1[i];
-				}
-
-				vb0.SetData(vb0Data, VertexBufferLength);
-				vb1.SetData(vb1Data, VertexBufferLength);
-
-				var ib = new IndexBuffer(false);
-				var ibData = new ushort[IndexBufferLength];
-				for (var i = 0; i < IndexBuffer.Count; ++i) {
-					ibData[i] = IndexBuffer[i];
-				}
-				ib.SetData(ibData, IndexBufferLength);
 				var shaderParams = new ShaderParams();
 				var shaderParamsArray = new[] { shaderParams };
 				var blendFactor = shaderParams.GetParamKey<float>("u_BlendFactor");
@@ -435,9 +453,9 @@ namespace Lime.Widgets.Animesh
 
 				Renderer.Flush();
 				PlatformRenderer.SetTexture(0, Texture);
-				PlatformRenderer.SetIndexBuffer(ib, 0, IndexFormat.Index16Bits);
-				PlatformRenderer.SetVertexBuffer(0, vb0, 0);
-				PlatformRenderer.SetVertexBuffer(1, vb1, 0);
+				PlatformRenderer.SetIndexBuffer(Ibo, 0, IndexFormat.Index16Bits);
+				PlatformRenderer.SetVertexBuffer(0, Vbo, OriginPoseVboOffset);
+				PlatformRenderer.SetVertexBuffer(1, Vbo, EndPoseVboOffset);
 				PlatformRenderer.SetVertexInputLayout(vertexInputLayout);
 				PlatformRenderer.SetShaderProgram(program);
 				PlatformRenderer.SetShaderParams(shaderParamsArray);
