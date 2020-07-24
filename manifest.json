@@ -5622,7 +5622,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.RenderBatchLimits.html",
-          "hash": "rxHAW/mj44ylTV9yezGhNg=="
+          "hash": "qgovln6QzBt3EX1BuKYuSw=="
         }
       },
       "is_incremental": false,
@@ -11120,17 +11120,17 @@
           "total_file_count": 71,
           "skipped_file_count": 0
         },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 753,
+          "skipped_file_count": 0
+        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
-          "skipped_file_count": 0
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 753,
           "skipped_file_count": 0
         }
       }
