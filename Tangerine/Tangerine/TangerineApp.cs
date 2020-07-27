@@ -613,6 +613,7 @@ namespace Tangerine
 			h.Connect(GenericCommands.CloseAllButCurrent, new FileCloseAllButCurrent());
 			h.Connect(GenericCommands.Quit, Application.Exit);
 			h.Connect(GenericCommands.PreferencesDialog, () => new PreferencesDialog());
+			h.Connect(GenericCommands.OpenLookupDialog, () => new LookupDialog());
 			h.Connect(GenericCommands.Group, new GroupNodes());
 			h.Connect(GenericCommands.Ungroup, new UngroupNodes());
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
@@ -629,7 +630,6 @@ namespace Tangerine
 			h.Connect(GenericCommands.HelpMode, () => Documentation.IsHelpModeOn = !Documentation.IsHelpModeOn);
 			h.Connect(GenericCommands.ViewChangelog, () => Documentation.ShowHelp(Documentation.ChangelogPageName));
 			h.Connect(GenericCommands.ConvertToButton, new ConvertToButton());
-			h.Connect(GenericCommands.OpenGoToAnythingDialog, () => new GoToAnythingDialog());
 			h.Connect(Tools.AlignLeft, new AlignLeft());
 			h.Connect(Tools.AlignRight, new AlignRight());
 			h.Connect(Tools.AlignTop, new AlignTop());
