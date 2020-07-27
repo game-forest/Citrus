@@ -68,6 +68,7 @@ namespace Tangerine.UI
 		public static readonly ICommand OpenProject = new Command("Open Project...", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.O));
 		public static readonly ICommand RecentProjects = new Command("Recent Projects", new Menu());
 		public static readonly ICommand PreferencesDialog = new Command("Preferences...", new Shortcut(Modifiers.Command, Key.P));
+		public static readonly ICommand OpenLookupDialog = new Command("Open Lookup Dialog", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.P));
 		public static readonly ICommand Close = new Command("Close");
 		public static readonly ICommand CloseAll = new Command("Close All");
 		public static readonly ICommand CloseAllButCurrent = new Command("Close All but Current");
@@ -78,7 +79,6 @@ namespace Tangerine.UI
 		public static readonly ICommand NextDocument = new Command("Next Document", new Shortcut(Modifiers.Control, Key.Tab));
 		public static readonly ICommand PreviousDocument = new Command("Previous Document", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.Tab));
 		public static readonly ICommand CloseProject = new Command("Close Project", new Shortcut(Modifiers.Alt, Key.Q));
-		public static readonly ICommand OpenGoToAnythingDialog = new Command("Go To Anything...", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.P));
 #if MAC
 		public static readonly ICommand Quit = new Command("Quit", new Shortcut(Modifiers.Command, Key.Q));
 #else

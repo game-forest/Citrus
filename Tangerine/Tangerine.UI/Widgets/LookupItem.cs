@@ -13,7 +13,7 @@ namespace Tangerine.UI
 		public int[] HighlightSymbolsIndices { get; set; }
 		public Color4 HighlightColor => Theme.Colors.TextSelection;
 
-		public LookupItem(string text, Action action, Action<LookupItem> submitAction)
+		public LookupItem(LookupWidget owner, string text, Action action)
 		{
 			Text = text;
 			Action = action;
@@ -29,7 +29,7 @@ namespace Tangerine.UI
 					})
 				},
 				Layout = new HBoxLayout(),
-				Clicked = () => submitAction(this),
+				Clicked = () => owner.Submit(this),
 				HitTestTarget = true,
 				Padding = new Thickness(10),
 			};

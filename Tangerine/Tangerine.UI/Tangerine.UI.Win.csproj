@@ -55,7 +55,9 @@
     <Compile Include="Tooltip\Tooltip.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
     <Compile Include="Utils\SimpleTextHighlightPresenter.cs" />
-    <Compile Include="Widgets\Lookup.cs" />
+    <Compile Include="Widgets\LookupDataSource.cs" />
+    <Compile Include="Widgets\LookupFilter.cs" />
+    <Compile Include="Widgets\LookupWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPicker.Win.cs" />
