@@ -686,6 +686,8 @@ namespace Orange
 
 			public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1) => throw new NotSupportedException();
 
+			public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1) => throw new NotImplementedException();
+
 			public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)
 			{
 				var stream = files[path];
@@ -694,6 +696,13 @@ namespace Orange
 			}
 
 			public override void SetFileLastWriteTime(string path, DateTime time) => throw new NotSupportedException();
+
+			public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open) => OpenFile(path, fileMode);
+
+			public override string GetSourceExtension(string path)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }
