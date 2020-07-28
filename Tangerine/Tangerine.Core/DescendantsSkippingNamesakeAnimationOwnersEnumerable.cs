@@ -5,6 +5,9 @@ using Lime;
 
 namespace Tangerine.Core
 {
+	// DFS-enumerates descendants of root node(excluding root node).
+	// If given descendant has an animation with Id same as animationId
+	// this descendant is returned but it's descendants are skipped
 	public class DescendantsSkippingNamesakeAnimationOwnersEnumerable : IEnumerable<Node>
 	{
 		private readonly Node root;
@@ -57,12 +60,12 @@ namespace Tangerine.Core
 				Node node = null;
 				if (!skip) {
 					node = current.FirstChild;
-					skip = current != root && current.Animations.TryFind(animationId, out _);
 				} else {
 					skip = false;
 				}
 				if (node != null) {
 					current = node;
+					skip = current.Animations.TryFind(animationId, out _);
 					return true;
 				}
 				if (current == root) {
