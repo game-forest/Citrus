@@ -1513,44 +1513,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
-			var dg = (LimeDeserializer)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				result.AnimationId = d.Reader.ReadString();
-				if (result.AnimationId == "" && d.Reader.ReadBoolean()) result.AnimationId = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>)null;
-				var tmp1 = d.Reader.ReadInt32();
-				if (tmp1 >= 0) {
-					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>>();
-						result.ReadonlyKeys.Add(tmp2);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (3 == fd.OurIndex) {
-				result.TargetPropertyPath = d.Reader.ReadString();
-				if (result.TargetPropertyPath == "" && d.Reader.ReadBoolean()) result.TargetPropertyPath = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-		}
-
-		private static object Make_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-			Read_Lime__Animator_List_Vertex(d, def, result);
-			return result;
-		}
-
 		private static void Read_Lime__Animator_List_Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)obj;
@@ -1586,6 +1548,44 @@ namespace YuzuGenerated
 		{
 			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>();
 			Read_Lime__Animator_List_Animesh__SkinnedVertex(d, def, result);
+			return result;
+		}
+
+		private static void Read_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				result.AnimationId = d.Reader.ReadString();
+				if (result.AnimationId == "" && d.Reader.ReadBoolean()) result.AnimationId = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>)null;
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+					while (--tmp1 >= 0) {
+						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>>();
+						result.ReadonlyKeys.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
+				result.TargetPropertyPath = d.Reader.ReadString();
+				if (result.TargetPropertyPath == "" && d.Reader.ReadBoolean()) result.TargetPropertyPath = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+			Read_Lime__Animator_List_Vertex(d, def, result);
 			return result;
 		}
 
@@ -1738,6 +1738,259 @@ namespace YuzuGenerated
 		{
 			var result = new global::Lime.Animator<string>();
 			Read_Lime__Animator_String(d, def, result);
+			return result;
+		}
+
+		private static void Read_Lime__Animesh(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.Animesh)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				result.Anchors = (global::Lime.Anchors)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					while (--tmp1 >= 0) {
+						var tmp2 = (global::Lime.Animation)dg.ReadObject<global::Lime.Animation>();
+						result.Animations.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
+				var tmp3 = d.Reader.ReadInt32();
+				if (tmp3 >= 0) {
+					while (--tmp3 >= 0) {
+						var tmp4 = (global::Lime.IAnimator)dg.ReadObject<global::Lime.IAnimator>();
+						result.Animators.Add(tmp4);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (4 == fd.OurIndex) {
+				result.Blending = (global::Lime.Blending)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (5 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Color4));
+				var tmp5 = new global::Lime.Color4();
+				tmp5.ABGR = d.Reader.ReadUInt32();
+				result.Color = tmp5;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (6 == fd.OurIndex) {
+				var tmp6 = d.Reader.ReadInt32();
+				if (tmp6 >= 0) {
+					while (--tmp6 >= 0) {
+						var tmp7 = (global::Lime.NodeComponent)dg.ReadObject<global::Lime.NodeComponent>();
+						result.Components.Add(tmp7);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (7 == fd.OurIndex) {
+				result.ConstrainedEdges = (global::System.Collections.Generic.List<global::Lime.TopologyEdge>)null;
+				var tmp8 = d.Reader.ReadInt32();
+				if (tmp8 >= 0) {
+					result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.TopologyEdge>();
+					while (--tmp8 >= 0) {
+						var tmp9 = (global::Lime.TopologyEdge)dg.ReadStruct<global::Lime.TopologyEdge>();
+						result.ConstrainedEdges.Add(tmp9);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (8 == fd.OurIndex) {
+				result.ContentsPath = d.Reader.ReadString();
+				if (result.ContentsPath == "" && d.Reader.ReadBoolean()) result.ContentsPath = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (9 == fd.OurIndex) {
+				result.Faces = (global::System.Collections.Generic.List<global::Lime.TopologyFace>)null;
+				var tmp10 = d.Reader.ReadInt32();
+				if (tmp10 >= 0) {
+					result.Faces = new global::System.Collections.Generic.List<global::Lime.TopologyFace>();
+					while (--tmp10 >= 0) {
+						var tmp11 = (global::Lime.TopologyFace)dg.ReadStruct<global::Lime.TopologyFace>();
+						result.Faces.Add(tmp11);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (10 == fd.OurIndex) {
+				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
+				var tmp12 = d.Reader.ReadInt32();
+				if (tmp12 >= 0) {
+					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+					while (--tmp12 >= 0) {
+						var tmp13 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
+						result.Folders.Add(tmp13);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (11 == fd.OurIndex) {
+				result.FreezeInvisible = d.Reader.ReadBoolean();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (12 == fd.OurIndex) {
+				result.HitTestMethod = (global::Lime.HitTestMethod)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (13 == fd.OurIndex) {
+				result.Id = d.Reader.ReadString();
+				if (result.Id == "" && d.Reader.ReadBoolean()) result.Id = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (14 == fd.OurIndex) {
+				var tmp14 = d.Reader.ReadInt32();
+				if (tmp14 >= 0) {
+					while (--tmp14 >= 0) {
+						var tmp15 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
+						result.Nodes.Add(tmp15);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (15 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Thickness));
+				var tmp16 = new global::Lime.Thickness();
+				tmp16.Left = d.Reader.ReadSingle();
+				tmp16.Right = d.Reader.ReadSingle();
+				tmp16.Top = d.Reader.ReadSingle();
+				tmp16.Bottom = d.Reader.ReadSingle();
+				result.Padding = tmp16;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (16 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp17 = new global::Lime.Vector2();
+				tmp17.X = d.Reader.ReadSingle();
+				tmp17.Y = d.Reader.ReadSingle();
+				result.Pivot = tmp17;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (17 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp18 = new global::Lime.Vector2();
+				tmp18.X = d.Reader.ReadSingle();
+				tmp18.Y = d.Reader.ReadSingle();
+				result.Position = tmp18;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (18 == fd.OurIndex) {
+				result.Rotation = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (19 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp19 = new global::Lime.Vector2();
+				tmp19.X = d.Reader.ReadSingle();
+				tmp19.Y = d.Reader.ReadSingle();
+				result.Scale = tmp19;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (20 == fd.OurIndex) {
+				result.Shader = (global::Lime.ShaderId)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (21 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp20 = new global::Lime.Vector2();
+				tmp20.X = d.Reader.ReadSingle();
+				tmp20.Y = d.Reader.ReadSingle();
+				result.SilentSize = tmp20;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (22 == fd.OurIndex) {
+				result.SkinningWeights = (global::Lime.SkinningWeights)dg.ReadObject<global::Lime.SkinningWeights>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (23 == fd.OurIndex) {
+				result.Tag = d.Reader.ReadString();
+				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (24 == fd.OurIndex) {
+				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (25 == fd.OurIndex) {
+				result.Texture = (global::Lime.ITexture)dg.ReadObject<global::Lime.ITexture>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (26 == fd.OurIndex) {
+				result.Vertices = (global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>)null;
+				var tmp21 = d.Reader.ReadInt32();
+				if (tmp21 >= 0) {
+					result.Vertices = new global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>();
+					while (--tmp21 >= 0) {
+						var tmp22 = (global::Lime.Animesh.SkinnedVertex)dg.ReadStruct<global::Lime.Animesh.SkinnedVertex>();
+						result.Vertices.Add(tmp22);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (27 == fd.OurIndex) {
+				result.Visible = d.Reader.ReadBoolean();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__Animesh(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Animesh();
+			Read_Lime__Animesh(d, def, result);
+			return result;
+		}
+
+		private static object Make_Lime__Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Animesh.SkinnedVertex();
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Mesh3D.BlendIndices));
+				result.BlendIndices.Index0 = d.Reader.ReadByte();
+				result.BlendIndices.Index1 = d.Reader.ReadByte();
+				result.BlendIndices.Index2 = d.Reader.ReadByte();
+				result.BlendIndices.Index3 = d.Reader.ReadByte();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Mesh3D.BlendWeights));
+				result.BlendWeights.Weight0 = d.Reader.ReadSingle();
+				result.BlendWeights.Weight1 = d.Reader.ReadSingle();
+				result.BlendWeights.Weight2 = d.Reader.ReadSingle();
+				result.BlendWeights.Weight3 = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (3 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Color4));
+				result.Color.ABGR = d.Reader.ReadUInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (4 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector4));
+				result.Pos4.X = d.Reader.ReadSingle();
+				result.Pos4.Y = d.Reader.ReadSingle();
+				result.Pos4.Z = d.Reader.ReadSingle();
+				result.Pos4.W = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (5 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				result.UV1.X = d.Reader.ReadSingle();
+				result.UV1.Y = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
 			return result;
 		}
 
@@ -4691,30 +4944,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
-			var dg = (LimeDeserializer)d;
-			result.Frame = d.Reader.ReadInt32();
-			result.PackedParams = d.Reader.ReadInt32();
-			result.Value = (global::System.Collections.Generic.List<global::Lime.Vertex>)null;
-			var tmp1 = d.Reader.ReadInt32();
-			if (tmp1 >= 0) {
-				result.Value = new global::System.Collections.Generic.List<global::Lime.Vertex>();
-				while (--tmp1 >= 0) {
-					var tmp2 = (global::Lime.Vertex)dg.ReadStruct<global::Lime.Vertex>();
-					result.Value.Add(tmp2);
-				}
-			}
-		}
-
-		private static object Make_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-			Read_Lime__Keyframe_List_Vertex(d, def, result);
-			return result;
-		}
-
 		private static void Read_Lime__Keyframe_List_Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)obj;
@@ -4736,6 +4965,30 @@ namespace YuzuGenerated
 		{
 			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>();
 			Read_Lime__Keyframe_List_Animesh__SkinnedVertex(d, def, result);
+			return result;
+		}
+
+		private static void Read_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
+			var dg = (LimeDeserializer)d;
+			result.Frame = d.Reader.ReadInt32();
+			result.PackedParams = d.Reader.ReadInt32();
+			result.Value = (global::System.Collections.Generic.List<global::Lime.Vertex>)null;
+			var tmp1 = d.Reader.ReadInt32();
+			if (tmp1 >= 0) {
+				result.Value = new global::System.Collections.Generic.List<global::Lime.Vertex>();
+				while (--tmp1 >= 0) {
+					var tmp2 = (global::Lime.Vertex)dg.ReadStruct<global::Lime.Vertex>();
+					result.Value.Add(tmp2);
+				}
+			}
+		}
+
+		private static object Make_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>();
+			Read_Lime__Keyframe_List_Vertex(d, def, result);
 			return result;
 		}
 
@@ -10532,6 +10785,23 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static object Make_Lime__TopologyEdge(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.TopologyEdge();
+			result.Index0 = d.Reader.ReadUInt16();
+			result.Index1 = d.Reader.ReadUInt16();
+			return result;
+		}
+
+		private static object Make_Lime__TopologyFace(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.TopologyFace();
+			result.Index0 = d.Reader.ReadUInt16();
+			result.Index1 = d.Reader.ReadUInt16();
+			result.Index2 = d.Reader.ReadUInt16();
+			return result;
+		}
+
 		private static void Read_Lime__TwistComponent(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.TwistComponent)obj;
@@ -11643,276 +11913,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime_Widgets_Animesh__Animesh(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.Animesh)obj;
-			var dg = (LimeDeserializer)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				result.Anchors = (global::Lime.Anchors)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				var tmp1 = d.Reader.ReadInt32();
-				if (tmp1 >= 0) {
-					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.Animation)dg.ReadObject<global::Lime.Animation>();
-						result.Animations.Add(tmp2);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (3 == fd.OurIndex) {
-				var tmp3 = d.Reader.ReadInt32();
-				if (tmp3 >= 0) {
-					while (--tmp3 >= 0) {
-						var tmp4 = (global::Lime.IAnimator)dg.ReadObject<global::Lime.IAnimator>();
-						result.Animators.Add(tmp4);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (4 == fd.OurIndex) {
-				result.Blending = (global::Lime.Blending)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (5 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Color4));
-				var tmp5 = new global::Lime.Color4();
-				tmp5.ABGR = d.Reader.ReadUInt32();
-				result.Color = tmp5;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (6 == fd.OurIndex) {
-				var tmp6 = d.Reader.ReadInt32();
-				if (tmp6 >= 0) {
-					while (--tmp6 >= 0) {
-						var tmp7 = (global::Lime.NodeComponent)dg.ReadObject<global::Lime.NodeComponent>();
-						result.Components.Add(tmp7);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (7 == fd.OurIndex) {
-				result.ConstrainedEdges = (global::System.Collections.Generic.List<global::Lime.TopologyEdge>)null;
-				var tmp8 = d.Reader.ReadInt32();
-				if (tmp8 >= 0) {
-					result.ConstrainedEdges = new global::System.Collections.Generic.List<global::Lime.TopologyEdge>();
-					while (--tmp8 >= 0) {
-						var tmp9 = (global::Lime.TopologyEdge)dg.ReadStruct<global::Lime.TopologyEdge>();
-						result.ConstrainedEdges.Add(tmp9);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (8 == fd.OurIndex) {
-				result.ContentsPath = d.Reader.ReadString();
-				if (result.ContentsPath == "" && d.Reader.ReadBoolean()) result.ContentsPath = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (9 == fd.OurIndex) {
-				result.Faces = (global::System.Collections.Generic.List<global::Lime.TopologyFace>)null;
-				var tmp10 = d.Reader.ReadInt32();
-				if (tmp10 >= 0) {
-					result.Faces = new global::System.Collections.Generic.List<global::Lime.TopologyFace>();
-					while (--tmp10 >= 0) {
-						var tmp11 = (global::Lime.TopologyFace)dg.ReadStruct<global::Lime.TopologyFace>();
-						result.Faces.Add(tmp11);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (10 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
-				var tmp12 = d.Reader.ReadInt32();
-				if (tmp12 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
-					while (--tmp12 >= 0) {
-						var tmp13 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
-						result.Folders.Add(tmp13);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (11 == fd.OurIndex) {
-				result.FreezeInvisible = d.Reader.ReadBoolean();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (12 == fd.OurIndex) {
-				result.HitTestMethod = (global::Lime.HitTestMethod)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (13 == fd.OurIndex) {
-				result.Id = d.Reader.ReadString();
-				if (result.Id == "" && d.Reader.ReadBoolean()) result.Id = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (14 == fd.OurIndex) {
-				var tmp14 = d.Reader.ReadInt32();
-				if (tmp14 >= 0) {
-					while (--tmp14 >= 0) {
-						var tmp15 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
-						result.Nodes.Add(tmp15);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (15 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Thickness));
-				var tmp16 = new global::Lime.Thickness();
-				tmp16.Left = d.Reader.ReadSingle();
-				tmp16.Right = d.Reader.ReadSingle();
-				tmp16.Top = d.Reader.ReadSingle();
-				tmp16.Bottom = d.Reader.ReadSingle();
-				result.Padding = tmp16;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (16 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp17 = new global::Lime.Vector2();
-				tmp17.X = d.Reader.ReadSingle();
-				tmp17.Y = d.Reader.ReadSingle();
-				result.Pivot = tmp17;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (17 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp18 = new global::Lime.Vector2();
-				tmp18.X = d.Reader.ReadSingle();
-				tmp18.Y = d.Reader.ReadSingle();
-				result.Position = tmp18;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (18 == fd.OurIndex) {
-				result.Rotation = d.Reader.ReadSingle();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (19 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp19 = new global::Lime.Vector2();
-				tmp19.X = d.Reader.ReadSingle();
-				tmp19.Y = d.Reader.ReadSingle();
-				result.Scale = tmp19;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (20 == fd.OurIndex) {
-				result.Shader = (global::Lime.ShaderId)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (21 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp20 = new global::Lime.Vector2();
-				tmp20.X = d.Reader.ReadSingle();
-				tmp20.Y = d.Reader.ReadSingle();
-				result.SilentSize = tmp20;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (22 == fd.OurIndex) {
-				result.SkinningWeights = (global::Lime.SkinningWeights)dg.ReadObject<global::Lime.SkinningWeights>();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (23 == fd.OurIndex) {
-				result.Tag = d.Reader.ReadString();
-				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (24 == fd.OurIndex) {
-				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (25 == fd.OurIndex) {
-				result.Texture = (global::Lime.ITexture)dg.ReadObject<global::Lime.ITexture>();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (26 == fd.OurIndex) {
-				result.Vertices = (global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>)null;
-				var tmp21 = d.Reader.ReadInt32();
-				if (tmp21 >= 0) {
-					result.Vertices = new global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>();
-					while (--tmp21 >= 0) {
-						var tmp22 = (global::Lime.Animesh.SkinnedVertex)dg.ReadStruct<global::Lime.Animesh.SkinnedVertex>();
-						result.Vertices.Add(tmp22);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (27 == fd.OurIndex) {
-				result.Visible = d.Reader.ReadBoolean();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-		}
-
-		private static object Make_Lime_Widgets_Animesh__Animesh(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.Animesh();
-			Read_Lime_Widgets_Animesh__Animesh(d, def, result);
-			return result;
-		}
-
-		private static object Make_Lime_Widgets_Animesh__Animesh__SkinnedVertex(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.Animesh.SkinnedVertex();
-			var dg = (LimeDeserializer)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Mesh3D.BlendIndices));
-				result.BlendIndices.Index0 = d.Reader.ReadByte();
-				result.BlendIndices.Index1 = d.Reader.ReadByte();
-				result.BlendIndices.Index2 = d.Reader.ReadByte();
-				result.BlendIndices.Index3 = d.Reader.ReadByte();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Mesh3D.BlendWeights));
-				result.BlendWeights.Weight0 = d.Reader.ReadSingle();
-				result.BlendWeights.Weight1 = d.Reader.ReadSingle();
-				result.BlendWeights.Weight2 = d.Reader.ReadSingle();
-				result.BlendWeights.Weight3 = d.Reader.ReadSingle();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (3 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Color4));
-				result.Color.ABGR = d.Reader.ReadUInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (4 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector4));
-				result.Pos4.X = d.Reader.ReadSingle();
-				result.Pos4.Y = d.Reader.ReadSingle();
-				result.Pos4.Z = d.Reader.ReadSingle();
-				result.Pos4.W = d.Reader.ReadSingle();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (5 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				result.UV1.X = d.Reader.ReadSingle();
-				result.UV1.Y = d.Reader.ReadSingle();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-			return result;
-		}
-
-		private static object Make_Lime_Widgets_Animesh__Edge(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.TopologyEdge();
-			result.Index0 = d.Reader.ReadUInt16();
-			result.Index1 = d.Reader.ReadUInt16();
-			return result;
-		}
-
-		private static object Make_Lime_Widgets_Animesh__Face(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.TopologyFace();
-			result.Index0 = d.Reader.ReadUInt16();
-			result.Index1 = d.Reader.ReadUInt16();
-			result.Index2 = d.Reader.ReadUInt16();
-			return result;
-		}
-
 		static LimeDeserializer()
 		{
 			readCache[typeof(global::Lime.AlphaIntensityComponent)] = Read_Lime__AlphaIntensityComponent;
@@ -11954,12 +11954,13 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Animator<global::Lime.Vector2>)] = Read_Lime__Animator_Vector2;
 			readCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Read_Lime__Animator_Vector3;
 			readCache[typeof(global::Lime.Animator<bool>)] = Read_Lime__Animator_Boolean;
-			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Animator_List_Vertex;
 			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Read_Lime__Animator_List_Animesh__SkinnedVertex;
+			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Animator_List_Vertex;
 			readCache[typeof(global::Lime.Animator<int>)] = Read_Lime__Animator_Int32;
 			readCache[typeof(global::Lime.Animator<sbyte>)] = Read_Lime__Animator_SByte;
 			readCache[typeof(global::Lime.Animator<float>)] = Read_Lime__Animator_Single;
 			readCache[typeof(global::Lime.Animator<string>)] = Read_Lime__Animator_String;
+			readCache[typeof(global::Lime.Animesh)] = Read_Lime__Animesh;
 			readCache[typeof(global::Lime.Audio)] = Read_Lime__Audio;
 			readCache[typeof(global::Lime.AudioRandomizerComponent)] = Read_Lime__AudioRandomizerComponent;
 			readCache[typeof(global::Lime.BlendingOption)] = Read_Lime__BlendingOption;
@@ -12021,8 +12022,8 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Keyframe<global::Lime.Vector2>)] = Read_Lime__Keyframe_Vector2;
 			readCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Read_Lime__Keyframe_Vector3;
 			readCache[typeof(global::Lime.Keyframe<bool>)] = Read_Lime__Keyframe_Boolean;
-			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Keyframe_List_Vertex;
 			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Read_Lime__Keyframe_List_Animesh__SkinnedVertex;
+			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Keyframe_List_Vertex;
 			readCache[typeof(global::Lime.Keyframe<int>)] = Read_Lime__Keyframe_Int32;
 			readCache[typeof(global::Lime.Keyframe<sbyte>)] = Read_Lime__Keyframe_SByte;
 			readCache[typeof(global::Lime.Keyframe<float>)] = Read_Lime__Keyframe_Single;
@@ -12108,7 +12109,6 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.WaveMaterial)] = Read_Lime__WaveMaterial;
 			readCache[typeof(global::Lime.Widget)] = Read_Lime__Widget;
 			readCache[typeof(global::Lime.WidgetAdapter3D)] = Read_Lime__WidgetAdapter3D;
-			readCache[typeof(global::Lime.Animesh)] = Read_Lime_Widgets_Animesh__Animesh;
 			makeCache[typeof(global::Lime.Alignment)] = Make_Lime__Alignment;
 			makeCache[typeof(global::Lime.AlphaIntensityComponent)] = Make_Lime__AlphaIntensityComponent;
 			makeCache[typeof(global::Lime.AlphaIntensityMaterial)] = Make_Lime__AlphaIntensityMaterial;
@@ -12149,12 +12149,14 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Animator<global::Lime.Vector2>)] = Make_Lime__Animator_Vector2;
 			makeCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Make_Lime__Animator_Vector3;
 			makeCache[typeof(global::Lime.Animator<bool>)] = Make_Lime__Animator_Boolean;
-			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Animator_List_Vertex;
 			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Make_Lime__Animator_List_Animesh__SkinnedVertex;
+			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Animator_List_Vertex;
 			makeCache[typeof(global::Lime.Animator<int>)] = Make_Lime__Animator_Int32;
 			makeCache[typeof(global::Lime.Animator<sbyte>)] = Make_Lime__Animator_SByte;
 			makeCache[typeof(global::Lime.Animator<float>)] = Make_Lime__Animator_Single;
 			makeCache[typeof(global::Lime.Animator<string>)] = Make_Lime__Animator_String;
+			makeCache[typeof(global::Lime.Animesh)] = Make_Lime__Animesh;
+			makeCache[typeof(global::Lime.Animesh.SkinnedVertex)] = Make_Lime__Animesh__SkinnedVertex;
 			makeCache[typeof(global::Lime.Audio)] = Make_Lime__Audio;
 			makeCache[typeof(global::Lime.AudioRandomizerComponent)] = Make_Lime__AudioRandomizerComponent;
 			makeCache[typeof(global::Lime.BezierEasing)] = Make_Lime__BezierEasing;
@@ -12226,8 +12228,8 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Keyframe<global::Lime.Vector2>)] = Make_Lime__Keyframe_Vector2;
 			makeCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Make_Lime__Keyframe_Vector3;
 			makeCache[typeof(global::Lime.Keyframe<bool>)] = Make_Lime__Keyframe_Boolean;
-			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Keyframe_List_Vertex;
 			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Make_Lime__Keyframe_List_Animesh__SkinnedVertex;
+			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Keyframe_List_Vertex;
 			makeCache[typeof(global::Lime.Keyframe<int>)] = Make_Lime__Keyframe_Int32;
 			makeCache[typeof(global::Lime.Keyframe<sbyte>)] = Make_Lime__Keyframe_SByte;
 			makeCache[typeof(global::Lime.Keyframe<float>)] = Make_Lime__Keyframe_Single;
@@ -12313,6 +12315,8 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Thickness)] = Make_Lime__Thickness;
 			makeCache[typeof(global::Lime.ThicknessAnimator)] = Make_Lime__ThicknessAnimator;
 			makeCache[typeof(global::Lime.TiledImage)] = Make_Lime__TiledImage;
+			makeCache[typeof(global::Lime.TopologyEdge)] = Make_Lime__TopologyEdge;
+			makeCache[typeof(global::Lime.TopologyFace)] = Make_Lime__TopologyFace;
 			makeCache[typeof(global::Lime.TwistComponent)] = Make_Lime__TwistComponent;
 			makeCache[typeof(global::Lime.TwistMaterial)] = Make_Lime__TwistMaterial;
 			makeCache[typeof(global::Lime.VBoxLayout)] = Make_Lime__VBoxLayout;
@@ -12329,10 +12333,6 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.WaveMaterial)] = Make_Lime__WaveMaterial;
 			makeCache[typeof(global::Lime.Widget)] = Make_Lime__Widget;
 			makeCache[typeof(global::Lime.WidgetAdapter3D)] = Make_Lime__WidgetAdapter3D;
-			makeCache[typeof(global::Lime.Animesh)] = Make_Lime_Widgets_Animesh__Animesh;
-			makeCache[typeof(global::Lime.Animesh.SkinnedVertex)] = Make_Lime_Widgets_Animesh__Animesh__SkinnedVertex;
-			makeCache[typeof(global::Lime.TopologyEdge)] = Make_Lime_Widgets_Animesh__Edge;
-			makeCache[typeof(global::Lime.TopologyFace)] = Make_Lime_Widgets_Animesh__Face;
 		}
 	}
 }
