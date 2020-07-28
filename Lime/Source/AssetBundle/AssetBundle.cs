@@ -66,6 +66,11 @@ namespace Lime
 
 		public abstract Stream OpenFile(string path, FileMode fileMode = FileMode.Open);
 
+		/// <summary>
+		/// Returns file data as it stored in the asset bundle, e.g. compressed.
+		/// </summary>
+		public abstract Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open);
+		
 		public byte[] ReadFile(string path)
 		{
 			using (var stream = OpenFile(path, FileMode.Open)) {
@@ -90,20 +95,34 @@ namespace Lime
 
 		public abstract void DeleteFile(string path);
 		public abstract bool FileExists(string path);
-
-		public abstract void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1);
-
+		
 		/// <summary>
 		/// Enumerates all file infos by given path and having the given extension.
 		/// </summary>
 		public abstract IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null);
 
+		public abstract void ImportFile(
+			string path, Stream stream, int reserve,
+			string sourceExtension, DateTime time, AssetAttributes attributes,
+			byte[] cookingRulesSHA1);
+
+		/// <summary>
+		/// Imports a file assuming that the input stream is already compressed.
+		/// </summary>
+		public abstract void ImportFileRaw(
+			string path, Stream stream, int reserve, 
+			string sourceExtension, DateTime time, AssetAttributes attributes,
+			byte[] cookingRulesSHA1);
+		
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
 		/// </summary>
 		public IEnumerable<string> EnumerateFiles(string path = null, string extension = null) => EnumerateFileInfos(path, extension).Select(i => i.Path);
 
-		public void ImportFile(string srcPath, string dstPath, int reserve, string sourceExtension, AssetAttributes attributes, DateTime time, byte[] cookingRulesSHA1)
+		public void ImportFile(
+			string srcPath, string dstPath, int reserve, 
+			string sourceExtension, AssetAttributes attributes, 
+			DateTime time, byte[] cookingRulesSHA1)
 		{
 			using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
 				ImportFile(dstPath, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
@@ -141,6 +160,8 @@ namespace Lime
 		{
 			return AssetAttributes.None;
 		}
+
+		public abstract string GetSourceExtension(string path);
 
 		public virtual void SetAttributes(string path, AssetAttributes attributes)
 		{

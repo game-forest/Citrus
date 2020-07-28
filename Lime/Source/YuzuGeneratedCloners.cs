@@ -2134,6 +2134,22 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		protected static global::Lime.PackedAssetBundle.Manifest Clone_Lime__PackedAssetBundle__Manifest(Cloner cl, object src)
+		{
+			if (src == null) return null;
+			if (src.GetType() != typeof(global::Lime.PackedAssetBundle.Manifest))
+				return (global::Lime.PackedAssetBundle.Manifest)cl.DeepObject(src);
+			var s = (global::Lime.PackedAssetBundle.Manifest)src;
+			var result = new global::Lime.PackedAssetBundle.Manifest();
+			result.BaseBundleVersion = s.BaseBundleVersion;
+			result.BundleVersion = s.BundleVersion;
+			if (s.DeletedAssets != null && result.DeletedAssets != null) {
+				foreach (var tmp1 in s.DeletedAssets)
+					result.DeletedAssets.Add(tmp1);
+			}
+			return result;
+		}
+
 		protected static global::Lime.Marker Clone_Lime__Marker(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -4709,6 +4725,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.LayoutCell)] = Clone_Lime__LayoutCell;
 			clonerCache[typeof(global::Lime.LayoutConstraints)] = Clone_Lime__LayoutConstraints;
 			clonerCache[typeof(global::Lime.LinearLayout)] = Clone_Lime__LinearLayout;
+			clonerCache[typeof(global::Lime.PackedAssetBundle.Manifest)] = Clone_Lime__PackedAssetBundle__Manifest;
 			clonerCache[typeof(global::Lime.Marker)] = Clone_Lime__Marker;
 			clonerCache[typeof(global::Lime.MarkerBlending)] = Clone_Lime__MarkerBlending;
 			clonerCache[typeof(global::Lime.Model3DAttachment.MaterialRemap)] = Clone_Lime__Model3DAttachment__MaterialRemap;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lzma;
+using Yuzu;
 
 namespace Lime
 {
@@ -144,6 +145,38 @@ namespace Lime
 
 	public class PackedAssetBundle : AssetBundle
 	{
+		/// <summary>
+		/// This class contains a specific data needed for applying asset bundle patches.
+		/// </summary>
+		public class Manifest
+		{
+			public const string FileName = ".Manifest";
+			
+			[YuzuMember]
+			public int? BaseBundleVersion { get; set; }
+
+			[YuzuMember]
+			public int? BundleVersion { get; set; }
+
+			[YuzuMember]
+			public List<string> DeletedAssets { get; } = new List<string>();
+
+			public static Manifest Create(AssetBundle bundle)
+			{
+				if (bundle.FileExists(FileName)) {
+					return InternalPersistence.Instance.ReadObjectFromBundle<Manifest>(bundle, FileName);
+				}
+				return new Manifest();
+			}
+
+			public void Write(AssetBundle bundle)
+			{
+				InternalPersistence.Instance.WriteObjectToBundle(
+					bundle, FileName, this, Persistence.Format.Binary, FileName,
+					DateTime.MinValue, AssetAttributes.None, null);
+			}
+		}
+		
 		private readonly Stack<Stream> streamPool = new Stack<Stream>();
 		const int Signature = 0x13AF;
 		private int indexOffset;
@@ -157,8 +190,6 @@ namespace Lime
 		private bool wasModified { get; set; }
 		public string Path { get; private set; }
 		public event Action OnWrite;
-
-		PackedAssetBundle() {}
 
 		public PackedAssetBundle(string resourceId, string assemblyName)
 		{
@@ -317,19 +348,24 @@ namespace Lime
 				streamPool.Pop().Dispose();
 			}
 		}
-
+		
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
+		{
+			var stream = (AssetStream)OpenFileRaw(path, mode);
+			if ((stream.descriptor.Attributes & AssetAttributes.Zipped) != 0) {
+				return DecompressAssetStream(stream, stream.descriptor.Attributes);
+			}
+			return stream;
+		}
+
+		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open)
 		{
 			if (mode != FileMode.Open) {
 				throw new NotSupportedException();
 			}
 			var stream = new AssetStream(this, path);
-			var desc = stream.descriptor;
 			if (CommandLineArgs.SimulateSlowExternalStorage) {
-				ExternalStorageLagsSimulator.SimulateReadDelay(path, desc.Length);
-			}
-			if ((desc.Attributes & AssetAttributes.Zipped) != 0) {
-				return DecompressAssetStream(stream, desc.Attributes);
+				ExternalStorageLagsSimulator.SimulateReadDelay(path, stream.descriptor.Length);
 			}
 			return stream;
 		}
@@ -365,6 +401,11 @@ namespace Lime
 			return GetDescriptor(path).Length;
 		}
 
+		public override string GetSourceExtension(string path)
+		{
+			return GetDescriptor(path).SourceExtension;
+		}
+
 		public override void DeleteFile(string path)
 		{
 			OnWrite?.Invoke();
@@ -393,13 +434,22 @@ namespace Lime
 			wasModified = true;
 		}
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFile(
+			string path, Stream stream, int reserve, string sourceExtension,
+			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
 		{
-			OnWrite?.Invoke();
-			AssetDescriptor d;
 			if ((attributes & AssetAttributes.Zipped) != 0) {
 				stream = CompressAssetStream(stream, attributes);
 			}
+			ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+		}
+
+		public override void ImportFileRaw(
+			string path, Stream stream, int reserve, string sourceExtension, 
+			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		{
+			OnWrite?.Invoke();
+			AssetDescriptor d;
 			bool reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
 				(d.AllocatedSize >= stream.Length) &&
 				(d.AllocatedSize <= stream.Length + reserve);
@@ -580,10 +630,46 @@ namespace Lime
 			}
 			throw new Exception("Asset '{0}' doesn't exist", path);
 		}
-
-
+		
 		public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
 
 		public override string FromSystemPath(string systemPath) => throw new NotSupportedException();
+
+		public void ApplyPatch(PackedAssetBundle patchBundle)
+		{
+			var manifest = Manifest.Create(this);
+			var patchManifest = Manifest.Create(patchBundle);
+			if (patchManifest.BaseBundleVersion.HasValue) {
+				if (manifest.BundleVersion.HasValue && patchManifest.BaseBundleVersion != manifest.BundleVersion) {
+					throw new InvalidOperationException("Patch base version should be equal patched bundle version");
+				} else if (patchManifest.BundleVersion.HasValue) {
+					manifest.BundleVersion = patchManifest.BundleVersion;
+				}
+			}
+			foreach (var file in patchBundle.EnumerateFiles()) {
+				manifest.DeletedAssets.Remove(file);
+				if (FileExists(file)) {
+					DeleteFile(file);
+				}
+				using (var stream = patchBundle.OpenFileRaw(file)) {
+					ImportFileRaw(
+						file, stream, 0,
+						patchBundle.GetSourceExtension(file),
+						patchBundle.GetFileLastWriteTime(file),
+						patchBundle.GetAttributes(file),
+						patchBundle.GetCookingRulesSHA1(file)
+					);
+				}
+			}
+			foreach (var file in patchManifest.DeletedAssets) {
+				if (FileExists(file)) {
+					DeleteFile(file);
+					if (!manifest.DeletedAssets.Contains(file)) {
+						manifest.DeletedAssets.Add(file);
+					}
+				}
+			}
+			manifest.Write(this);
+		}
 	}
 }
