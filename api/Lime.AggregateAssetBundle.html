@@ -558,6 +558,50 @@
   <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_GetFileSize_System_String_">AssetBundle.GetFileSize(String)</a></div>
   
   
+  <a id="Lime_AggregateAssetBundle_GetSourceExtension_" data-uid="Lime.AggregateAssetBundle.GetSourceExtension*"></a>
+  <h4 id="Lime_AggregateAssetBundle_GetSourceExtension_System_String_" data-uid="Lime.AggregateAssetBundle.GetSourceExtension(System.String)">GetSourceExtension(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string GetSourceExtension(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_GetSourceExtension_System_String_">AssetBundle.GetSourceExtension(String)</a></div>
+  
+  
   <a id="Lime_AggregateAssetBundle_ImportFile_" data-uid="Lime.AggregateAssetBundle.ImportFile*"></a>
   <h4 id="Lime_AggregateAssetBundle_ImportFile_System_String_System_IO_Stream_System_Int32_System_String_System_DateTime_Lime_AssetAttributes_System_Byte___" data-uid="Lime.AggregateAssetBundle.ImportFile(System.String,System.IO.Stream,System.Int32,System.String,System.DateTime,Lime.AssetAttributes,System.Byte[])">ImportFile(String, Stream, Int32, String, DateTime, AssetAttributes, Byte[])</h4>
   <div class="markdown level1 summary"></div>
@@ -617,6 +661,65 @@
   <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ImportFile_System_String_System_IO_Stream_System_Int32_System_String_System_DateTime_Lime_AssetAttributes_System_Byte___">AssetBundle.ImportFile(String, Stream, Int32, String, DateTime, AssetAttributes, Byte[])</a></div>
   
   
+  <a id="Lime_AggregateAssetBundle_ImportFileRaw_" data-uid="Lime.AggregateAssetBundle.ImportFileRaw*"></a>
+  <h4 id="Lime_AggregateAssetBundle_ImportFileRaw_System_String_System_IO_Stream_System_Int32_System_String_System_DateTime_Lime_AssetAttributes_System_Byte___" data-uid="Lime.AggregateAssetBundle.ImportFileRaw(System.String,System.IO.Stream,System.Int32,System.String,System.DateTime,Lime.AssetAttributes,System.Byte[])">ImportFileRaw(String, Stream, Int32, String, DateTime, AssetAttributes, Byte[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes = AssetAttributes.None, byte[] cookingRulesSHA1 = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">reserve</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">sourceExtension</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="parametername">time</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.AssetAttributes.html">AssetAttributes</a></td>
+        <td><span class="parametername">attributes</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">cookingRulesSHA1</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ImportFileRaw_System_String_System_IO_Stream_System_Int32_System_String_System_DateTime_Lime_AssetAttributes_System_Byte___">AssetBundle.ImportFileRaw(String, Stream, Int32, String, DateTime, AssetAttributes, Byte[])</a></div>
+  
+  
   <a id="Lime_AggregateAssetBundle_OpenFile_" data-uid="Lime.AggregateAssetBundle.OpenFile*"></a>
   <h4 id="Lime_AggregateAssetBundle_OpenFile_System_String_System_IO_FileMode_" data-uid="Lime.AggregateAssetBundle.OpenFile(System.String,System.IO.FileMode)">OpenFile(String, FileMode)</h4>
   <div class="markdown level1 summary"></div>
@@ -664,6 +767,55 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_OpenFile_System_String_System_IO_FileMode_">AssetBundle.OpenFile(String, FileMode)</a></div>
+  
+  
+  <a id="Lime_AggregateAssetBundle_OpenFileRaw_" data-uid="Lime.AggregateAssetBundle.OpenFileRaw*"></a>
+  <h4 id="Lime_AggregateAssetBundle_OpenFileRaw_System_String_System_IO_FileMode_" data-uid="Lime.AggregateAssetBundle.OpenFileRaw(System.String,System.IO.FileMode)">OpenFileRaw(String, FileMode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.FileMode</span></td>
+        <td><span class="parametername">mode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_OpenFileRaw_System_String_System_IO_FileMode_">AssetBundle.OpenFileRaw(String, FileMode)</a></div>
   
   
   <a id="Lime_AggregateAssetBundle_SetFileLastWriteTime_" data-uid="Lime.AggregateAssetBundle.SetFileLastWriteTime*"></a>
