@@ -1551,44 +1551,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
-			var dg = (LimeDeserializer)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				result.AnimationId = d.Reader.ReadString();
-				if (result.AnimationId == "" && d.Reader.ReadBoolean()) result.AnimationId = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>)null;
-				var tmp1 = d.Reader.ReadInt32();
-				if (tmp1 >= 0) {
-					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>>();
-						result.ReadonlyKeys.Add(tmp2);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (3 == fd.OurIndex) {
-				result.TargetPropertyPath = d.Reader.ReadString();
-				if (result.TargetPropertyPath == "" && d.Reader.ReadBoolean()) result.TargetPropertyPath = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-		}
-
-		private static object Make_Lime__Animator_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-			Read_Lime__Animator_List_Vertex(d, def, result);
-			return result;
-		}
-
 		private static void Read_Lime__Animator_Int32(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.Animator<int>)obj;
@@ -4965,30 +4927,6 @@ namespace YuzuGenerated
 		{
 			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>();
 			Read_Lime__Keyframe_List_Animesh__SkinnedVertex(d, def, result);
-			return result;
-		}
-
-		private static void Read_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)obj;
-			var dg = (LimeDeserializer)d;
-			result.Frame = d.Reader.ReadInt32();
-			result.PackedParams = d.Reader.ReadInt32();
-			result.Value = (global::System.Collections.Generic.List<global::Lime.Vertex>)null;
-			var tmp1 = d.Reader.ReadInt32();
-			if (tmp1 >= 0) {
-				result.Value = new global::System.Collections.Generic.List<global::Lime.Vertex>();
-				while (--tmp1 >= 0) {
-					var tmp2 = (global::Lime.Vertex)dg.ReadStruct<global::Lime.Vertex>();
-					result.Value.Add(tmp2);
-				}
-			}
-		}
-
-		private static object Make_Lime__Keyframe_List_Vertex(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-			Read_Lime__Keyframe_List_Vertex(d, def, result);
 			return result;
 		}
 
@@ -11021,44 +10959,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static void Read_Lime__VertexListAnimator(BinaryDeserializer d, ReaderClassDef def, object obj)
-		{
-			var result = (global::Lime.VertexListAnimator)obj;
-			var dg = (LimeDeserializer)d;
-			ReaderClassDef.FieldDef fd;
-			fd = def.Fields[d.Reader.ReadInt16()];
-			if (1 == fd.OurIndex) {
-				result.AnimationId = d.Reader.ReadString();
-				if (result.AnimationId == "" && d.Reader.ReadBoolean()) result.AnimationId = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (2 == fd.OurIndex) {
-				result.ReadonlyKeys = (global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>)null;
-				var tmp1 = d.Reader.ReadInt32();
-				if (tmp1 >= 0) {
-					result.ReadonlyKeys = new global::Lime.TypedKeyframeList<global::System.Collections.Generic.List<global::Lime.Vertex>>();
-					while (--tmp1 >= 0) {
-						var tmp2 = (global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)dg.ReadObject<global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>>();
-						result.ReadonlyKeys.Add(tmp2);
-					}
-				}
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (3 == fd.OurIndex) {
-				result.TargetPropertyPath = d.Reader.ReadString();
-				if (result.TargetPropertyPath == "" && d.Reader.ReadBoolean()) result.TargetPropertyPath = null;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
-		}
-
-		private static object Make_Lime__VertexListAnimator(BinaryDeserializer d, ReaderClassDef def)
-		{
-			var result = new global::Lime.VertexListAnimator();
-			Read_Lime__VertexListAnimator(d, def, result);
-			return result;
-		}
-
 		private static void Read_Lime__VideoPlayer(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.VideoPlayer)obj;
@@ -11955,7 +11855,6 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Read_Lime__Animator_Vector3;
 			readCache[typeof(global::Lime.Animator<bool>)] = Read_Lime__Animator_Boolean;
 			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Read_Lime__Animator_List_Animesh__SkinnedVertex;
-			readCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Animator_List_Vertex;
 			readCache[typeof(global::Lime.Animator<int>)] = Read_Lime__Animator_Int32;
 			readCache[typeof(global::Lime.Animator<sbyte>)] = Read_Lime__Animator_SByte;
 			readCache[typeof(global::Lime.Animator<float>)] = Read_Lime__Animator_Single;
@@ -12023,7 +11922,6 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Read_Lime__Keyframe_Vector3;
 			readCache[typeof(global::Lime.Keyframe<bool>)] = Read_Lime__Keyframe_Boolean;
 			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Read_Lime__Keyframe_List_Animesh__SkinnedVertex;
-			readCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Read_Lime__Keyframe_List_Vertex;
 			readCache[typeof(global::Lime.Keyframe<int>)] = Read_Lime__Keyframe_Int32;
 			readCache[typeof(global::Lime.Keyframe<sbyte>)] = Read_Lime__Keyframe_SByte;
 			readCache[typeof(global::Lime.Keyframe<float>)] = Read_Lime__Keyframe_Single;
@@ -12101,7 +11999,6 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.VBoxLayout)] = Read_Lime__VBoxLayout;
 			readCache[typeof(global::Lime.Vector2Animator)] = Read_Lime__Vector2Animator;
 			readCache[typeof(global::Lime.Vector3Animator)] = Read_Lime__Vector3Animator;
-			readCache[typeof(global::Lime.VertexListAnimator)] = Read_Lime__VertexListAnimator;
 			readCache[typeof(global::Lime.VideoPlayer)] = Read_Lime__VideoPlayer;
 			readCache[typeof(global::Lime.Viewport3D)] = Read_Lime__Viewport3D;
 			readCache[typeof(global::Lime.VignetteMaterial)] = Read_Lime__VignetteMaterial;
@@ -12150,7 +12047,6 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Animator<global::Lime.Vector3>)] = Make_Lime__Animator_Vector3;
 			makeCache[typeof(global::Lime.Animator<bool>)] = Make_Lime__Animator_Boolean;
 			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Make_Lime__Animator_List_Animesh__SkinnedVertex;
-			makeCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Animator_List_Vertex;
 			makeCache[typeof(global::Lime.Animator<int>)] = Make_Lime__Animator_Int32;
 			makeCache[typeof(global::Lime.Animator<sbyte>)] = Make_Lime__Animator_SByte;
 			makeCache[typeof(global::Lime.Animator<float>)] = Make_Lime__Animator_Single;
@@ -12229,7 +12125,6 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Keyframe<global::Lime.Vector3>)] = Make_Lime__Keyframe_Vector3;
 			makeCache[typeof(global::Lime.Keyframe<bool>)] = Make_Lime__Keyframe_Boolean;
 			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Make_Lime__Keyframe_List_Animesh__SkinnedVertex;
-			makeCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Vertex>>)] = Make_Lime__Keyframe_List_Vertex;
 			makeCache[typeof(global::Lime.Keyframe<int>)] = Make_Lime__Keyframe_Int32;
 			makeCache[typeof(global::Lime.Keyframe<sbyte>)] = Make_Lime__Keyframe_SByte;
 			makeCache[typeof(global::Lime.Keyframe<float>)] = Make_Lime__Keyframe_Single;
@@ -12325,7 +12220,6 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Vector3)] = Make_Lime__Vector3;
 			makeCache[typeof(global::Lime.Vector3Animator)] = Make_Lime__Vector3Animator;
 			makeCache[typeof(global::Lime.Vector4)] = Make_Lime__Vector4;
-			makeCache[typeof(global::Lime.VertexListAnimator)] = Make_Lime__VertexListAnimator;
 			makeCache[typeof(global::Lime.VideoPlayer)] = Make_Lime__VideoPlayer;
 			makeCache[typeof(global::Lime.Viewport3D)] = Make_Lime__Viewport3D;
 			makeCache[typeof(global::Lime.VignetteMaterial)] = Make_Lime__VignetteMaterial;
