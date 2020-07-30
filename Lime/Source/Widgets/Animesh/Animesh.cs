@@ -110,6 +110,9 @@ namespace Lime
 
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
+			if (Faces.Count == 0) {
+				return null;
+			}
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			IAnimator animator;
 			if (invalidate) {

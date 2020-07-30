@@ -16,7 +16,7 @@ namespace Tangerine.Common.FilesDropHandlers
 	{
 		private static readonly Type[] imageTypes = {
 			typeof(Image), typeof(DistortionMesh), typeof(NineGrid),
-			typeof(TiledImage), typeof(ParticleModifier),
+			typeof(TiledImage), typeof(ParticleModifier), typeof(Animesh),
 		};
 
 		private readonly Action onBeforeDrop;
