@@ -61,6 +61,8 @@ namespace Lime
 		private bool invalidate = true;
 		private VertexBuffer vbo = null;
 		private IndexBuffer ibo = null;
+		private Vector2 leftUpperCorner = Vector2.Zero;
+		private Vector2 rightBottomCorner = Vector2.One;
 
 		[YuzuMember]
 		[TangerineStaticProperty]
@@ -118,6 +120,10 @@ namespace Lime
 			if (invalidate) {
 				vbo = new VertexBuffer(false);
 				ibo = new IndexBuffer(false);
+				leftUpperCorner = Vector2.Zero;
+				rightBottomCorner = Vector2.One;
+				Texture?.TransformUVCoordinatesToAtlasSpace(ref leftUpperCorner);
+				Texture?.TransformUVCoordinatesToAtlasSpace(ref rightBottomCorner);
 				var iboData = new ushort[Faces.Count * 3];
 				for (int i = 0; i < Faces.Count; i++) {
 					var triangleIndex = i * 3;
@@ -236,6 +242,8 @@ namespace Lime
 			ro.EndPoseVboOffset = endPoseVboOffset;
 			ro.Vbo = vbo;
 			ro.Ibo = ibo;
+			ro.LeftUpperCorner = leftUpperCorner;
+			ro.RightBottomCorner = rightBottomCorner;
 			return ro;
 		}
 
@@ -252,6 +260,8 @@ namespace Lime
 			public int EndPoseVboOffset;
 			public VertexBuffer Vbo;
 			public IndexBuffer Ibo;
+			public Vector2 LeftUpperCorner;
+			public Vector2 RightBottomCorner;
 
 			private static readonly VertexInputLayout vertexInputLayout;
 			private static readonly ShaderProgram program;
@@ -300,10 +310,15 @@ namespace Lime
 						varying lowp vec2 texCoords;
 
 						uniform sampler2D u_Tex;
+						uniform lowp vec2 u_LeftUpperCorner;
+						uniform lowp vec2 u_RightBottomCorner;
 
 						void main()
 						{
 							gl_FragColor = color * texture2D(u_Tex, texCoords);
+							gl_FragColor = texCoords.x <= u_RightBottomCorner.x && texCoords.x >= u_LeftUpperCorner.x &&
+								texCoords.y <= u_RightBottomCorner.y && texCoords.y >= u_LeftUpperCorner.y ?
+									gl_FragColor : vec4(0.0);
 						}
 					")
 				};
@@ -445,6 +460,8 @@ namespace Lime
 				var mvpTransform = shaderParams.GetParamKey<Matrix44>("u_MVP");
 				var localToParentTransform = shaderParams.GetParamKey<Matrix44>("u_LocalToParentTransform");
 				var bones = shaderParams.GetParamKey<Matrix44>("u_Bones");
+				var leftUpperCorner = shaderParams.GetParamKey<Vector2>("u_LeftUpperCorner");
+				var rightBottomCorner = shaderParams.GetParamKey<Vector2>("u_RightBottomCorner");
 				shaderParams.Set(blendFactor, BlendFactor);
 				shaderParams.Set(
 					mvpTransform,
@@ -453,6 +470,8 @@ namespace Lime
 				);
 				shaderParams.Set(localToParentTransform, (Matrix44)LocalToParentTransform);
 				shaderParams.Set(bones, BoneTransforms, BoneTransforms.Length);
+				shaderParams.Set(leftUpperCorner, LeftUpperCorner);
+				shaderParams.Set(rightBottomCorner, RightBottomCorner);
 
 				Renderer.Flush();
 				PlatformRenderer.SetTexture(0, Texture);
