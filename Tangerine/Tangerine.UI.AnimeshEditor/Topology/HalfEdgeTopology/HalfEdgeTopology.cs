@@ -820,7 +820,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				EdgeHitTestDistance = savedEdgeHitTestDistance;
 			}
 			foreach (var edge in constrainedEdges) {
-				InnerInsertConstrainedEdge(edge.Item1, edge.Item2, true);
+				InnerInsertConstrainedEdge(edge.Item1, edge.Item2, isBoundaryVertex);
 			}
 			if (isBoundaryVertex && !InnerBoundary.Contains(index)) {
 				InnerBoundary.Insert(prevIndex, index);
