@@ -614,9 +614,7 @@ namespace Tangerine.UI.AnimeshEditor
 					var keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
 					var delta = (transform.TransformVector(sv.MousePosition) - lastPos);
-					var vertex = Mesh.Vertices[target.Index];
 					var uvDelta = delta / Mesh.Size;
-					uvDelta = Vector2.Clamp(vertex.UV1 + uvDelta, Vector2.Zero, Vector2.One) - vertex.UV1;
 					if (Topology.TranslateVertex(target.Index, delta, uvDelta, out var removedVertices)) {
 						lastValidDelta = delta;
 						lastValidUVDelta = uvDelta;
