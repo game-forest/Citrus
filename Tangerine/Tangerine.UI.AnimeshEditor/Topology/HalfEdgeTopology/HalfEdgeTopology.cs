@@ -291,9 +291,9 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					if (HitVertex(edge.Origin, out result) || HitVertex(edge.Next.Origin, out result)) {
 						return true;
 					}
-					var belongsToInnerTriangle = IsPointInsideTrueTriangulation(Centroid(edge));
+					var belongsToInnerTriangle = IsPointInsideInnerTriangulation(Centroid(edge));
 					var twinBelongsToInnerTriangle = !belongsToInnerTriangle &&
-						edge.Twin != null && IsPointInsideTrueTriangulation(Centroid(edge.Twin));
+						edge.Twin != null && IsPointInsideInnerTriangulation(Centroid(edge.Twin));
 					if (belongsToInnerTriangle || twinBelongsToInnerTriangle) {
 						edge = belongsToInnerTriangle ? edge : edge.Twin;
 						result = new TopologyHitTestResult {
@@ -315,11 +315,11 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 						return true;
 					}
 					var belongsToTriangulation = location != LocationResult.OutsideTriangulation &&
-						IsPointInsideTrueTriangulation(position);
+						IsPointInsideInnerTriangulation(position);
 					var start = edge;
 					do {
 						var twinBelongsToTriangulation = belongsToTriangulation ||
-							edge.Twin != null && IsPointInsideTrueTriangulation(Centroid(edge.Twin));
+							edge.Twin != null && IsPointInsideInnerTriangulation(Centroid(edge.Twin));
 						if (belongsToTriangulation || twinBelongsToTriangulation) {
 							var edgeToCheck = belongsToTriangulation ? edge : edge.Twin;
 							var s1 = Vertices[edgeToCheck.Origin].Pos;
@@ -370,7 +370,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 		public IEnumerable<(int, int, int, bool)> DebugTriangles()
 		{
 			foreach (var (e1, e2, e3) in Triangles()) {
-				yield return (e1.Origin, e2.Origin, e3.Origin, IsPointInsideTrueTriangulation(Centroid(e1)));
+				yield return (e1.Origin, e2.Origin, e3.Origin, IsPointInsideInnerTriangulation(Centroid(e1)));
 			}
 		}
 
@@ -397,7 +397,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					var v2 = Vertices[e2.Origin].Pos;
 					var v3 = Vertices[e3.Origin].Pos;
 					var centroid = (v1 + v2 + v3) / 3;
-					if (IsPointInsideTrueTriangulation(centroid)) {
+					if (IsPointInsideInnerTriangulation(centroid)) {
 						start = e1;
 						break;
 					}
@@ -437,6 +437,11 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				}
 			}
 		}
+
+		private bool saved = false;
+		private float savedVertexHitTestRadius;
+		private float savedEdgeHitTestDistance;
+
 
 		public List<Animesh.SkinnedVertex> Vertices { get; private set; }
 		public float VertexHitTestRadius { get; set; }
@@ -544,7 +549,8 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			get
 			{
 				foreach (var (e1, e2, e3) in InnerTriangles()) {
-					yield return new TopologyFace { Index0 = (ushort) e1.Origin, Index1 = (ushort) e2.Origin, Index2 = (ushort) e3.Origin, };
+					System.Diagnostics.Debug.Assert(e1.Origin >= 0 && e2.Origin >= 0 && e3.Origin >= 0);
+					yield return new TopologyFace { Index0 = (ushort)e1.Origin, Index1 = (ushort)e2.Origin, Index2 = (ushort)e3.Origin, };
 				}
 			}
 		}
@@ -594,13 +600,13 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 		public int AddVertex(Animesh.SkinnedVertex vertex)
 		{
 			var result = LocateClosestTriangle(vertex.Pos, out var halfEdge);
-			var isTrueTriangle = IsPointInsideTrueTriangulation(Centroid(halfEdge));
+			var isTrueTriangle = IsPointInsideInnerTriangulation(Centroid(halfEdge));
 			if (result == LocationResult.InsideTriangle && !isTrueTriangle) {
 				return -1;
 			}
 			if (
 				result == LocationResult.OnEdge &&
-				!(isTrueTriangle || halfEdge.Twin != null && IsPointInsideTrueTriangulation(Centroid(halfEdge.Twin)))
+				!(isTrueTriangle || halfEdge.Twin != null && IsPointInsideInnerTriangulation(Centroid(halfEdge.Twin)))
 			) {
 				return -1;
 			}
@@ -775,7 +781,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				Vertices[index] = translated;
 				for (int i = 0; i < Vertices.Count; i++) {
 					var v = Vertices[i].Pos;
-					if (!InnerBoundary.Contains(i) && !IsPointInsideTrueTriangulation(v)) {
+					if (!InnerBoundary.Contains(i) && !IsPointInsideInnerTriangulation(v)) {
 						mustBeRemoved.Add(i);
 					}
 				}
@@ -789,8 +795,37 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				index = he.Origin;
 				prevIndex = InnerBoundary.Prev(index);
 				constrainedEdges = new List<(int, int)> { (prevIndex, index), };
-			} else if (!IsPointInsideTrueTriangulation(translatedPos)) {
-				return false;
+			} else if (!IsPointInsideInnerTriangulation(translatedPos)) {
+				// Try project to closest inner triangulation border edge.
+				var minDistance = float.MaxValue;
+				var edgeToProjectOn = (-1, -1);
+				foreach (var (s, f) in InnerBoundary.Edges()) {
+					var sv = Vertices[s].Pos;
+					var fv = Vertices[f].Pos;
+					if (RobustSegmentSegmentIntersection(sv, fv, originalPos, translatedPos)) {
+						var distance = PointToSegmentSqrDistance(sv, fv, translatedPos);
+						if (distance < minDistance) {
+							edgeToProjectOn = (s, f);
+							minDistance = distance;
+						}
+					}
+				}
+				var startVertex = Vertices[edgeToProjectOn.Item1].Pos;
+				var endVertex = Vertices[edgeToProjectOn.Item2].Pos;
+				var n = (endVertex - startVertex).Normalized;
+				var projectedPos = startVertex + n * Vector2.DotProduct(translatedPos - startVertex, n);
+				translatedPos = Vector2.Clamp(projectedPos,
+					new Vector2(Mathf.Min(startVertex.X, endVertex.X), Mathf.Min(startVertex.Y, endVertex.Y)),
+					new Vector2(Mathf.Max(startVertex.X, endVertex.X), Mathf.Max(startVertex.Y, endVertex.Y))
+				);
+				translated.Pos = translatedPos;
+				translated.UV1 = original.UV1 + (translatedPos - originalPos) * original.UV1 / originalPos;
+				// This is the only one place where we don't have robustness,
+				// so we have to force epsilon checks.
+				if (EdgeHitTestDistance == 0f) {
+					SaveHitTestParameters();
+					EdgeHitTestDistance = 1e-4f;
+				}
 			}
 			// Otherwise just delete original and add translated.
 			// Don't forget to save constrained edges.
@@ -825,6 +860,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			if (isBoundaryVertex && !InnerBoundary.Contains(index)) {
 				InnerBoundary.Insert(prevIndex, index);
 			}
+			RestoreHitTestParameters();
 			TopologyChanged?.Invoke(this);
 			return wasAdded;
 		}
@@ -951,19 +987,23 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 		private bool BelongsToBoundingFigure(int vertexIndex, out int boundingFigureVertexIndex) =>
 			BelongsToBoundingFigure(InnerVertices[vertexIndex].Pos, out boundingFigureVertexIndex);
 
-		private bool IsPointInsideTrueTriangulation(Vector2 point)
+		private bool IsPointInsideInnerTriangulation(Vector2 point)
 		{
 			bool inside = false;
 			var rayStart = new Vector2(BoundingBox.Left, point.Y);
-			foreach (var i in InnerBoundary) {
-				var current = Vertices[i].Pos;
-				var next = Vertices[InnerBoundary.Next(i)].Pos;
-				if (RobustSegmentSegmentIntersection(rayStart, point, current, next)) {
-					if (current.Y == point.Y && point.Y > next.Y) {
+			foreach (var (s, e) in InnerBoundary.Edges()) {
+				var start = Vertices[s].Pos;
+				var end = Vertices[e].Pos;
+				// Cause it's inclusive check.
+				if (RobustSegmentSegmentIntersection(point, point, start, end)) {
+					return true;
+				}
+				if (RobustSegmentSegmentIntersection(rayStart, point, start, end)) {
+					if (start.Y == point.Y && point.Y > end.Y) {
 						inside = !inside;
-					} else if (next.Y == point.Y && point.Y > current.Y) {
+					} else if (end.Y == point.Y && point.Y > start.Y) {
 						inside = !inside;
-					} else if (current.Y != point.Y && next.Y != point.Y) {
+					} else if (start.Y != point.Y && end.Y != point.Y) {
 						inside = !inside;
 					}
 				}
@@ -998,6 +1038,22 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			BoundingFigureVertices.Clear();
 			for (int i = 0; i < 5; i++) {
 				BoundingFigureVertices.Add(newVertices[i]);
+			}
+		}
+
+		private void SaveHitTestParameters()
+		{
+			saved = true;
+			savedEdgeHitTestDistance = EdgeHitTestDistance;
+			savedVertexHitTestRadius = VertexHitTestRadius;
+		}
+
+		private void RestoreHitTestParameters()
+		{
+			if (saved) {
+				saved = false;
+				EdgeHitTestDistance = savedEdgeHitTestDistance;
+				VertexHitTestRadius = savedVertexHitTestRadius;
 			}
 		}
 	}
