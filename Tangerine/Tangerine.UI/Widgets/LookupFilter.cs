@@ -50,14 +50,14 @@ namespace Tangerine.UI
 		public IEnumerable<LookupItem> Apply(string text, List<LookupItem> items)
 		{
 			var itemsTemp = new List<(LookupItem item, int Distance)>();
-			var matches = new List<int>();
 			if (!string.IsNullOrEmpty(text)) {
+				var matches = new List<int>(text.Length);
 				foreach (var item in items) {
 					var i = -1;
 					var d = 0;
 					foreach (var c in text) {
 						if (i == item.Text.Length - 1) {
-							i = -1;
+							break;
 						}
 						var ip = i;
 						var lci = item.Text.IndexOf(char.ToLowerInvariant(c), i + 1);
@@ -72,7 +72,7 @@ namespace Tangerine.UI
 							d += (i - ip) * (i - ip);
 						}
 					}
-					if (i != -1) {
+					if (matches.Count == text.Length) {
 						itemsTemp.Add((item, d));
 						item.HighlightSymbolsIndices = matches.ToArray();
 					}
