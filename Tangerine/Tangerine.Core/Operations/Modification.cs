@@ -1065,6 +1065,7 @@ namespace Tangerine.Core.Operations
 							v.SkinningWeights = sw;
 							SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
 						}
+						animesh.Invalidate();
 					}
 					if (animesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator)) {
 						foreach (var key in animator.Keys.ToList()) {
@@ -1214,6 +1215,7 @@ namespace Tangerine.Core.Operations
 							v.SkinningWeights = vertex.SkinningWeights;
 							SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
 						}
+						animesh.Invalidate();
 					}
 					if (animesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator)) {
 						foreach (var key in animator.Keys.ToList()) {

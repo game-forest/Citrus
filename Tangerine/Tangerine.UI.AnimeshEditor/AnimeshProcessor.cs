@@ -44,6 +44,7 @@ namespace Tangerine.UI.AnimeshEditor
 								} else {
 									mesh.Controller(sv).TieVertexWithBones(bones);
 								}
+								mesh.Invalidate();
 							}
 						}
 					}
