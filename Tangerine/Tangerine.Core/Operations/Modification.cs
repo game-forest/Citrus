@@ -1060,9 +1060,11 @@ namespace Tangerine.Core.Operations
 						}
 						vertex.SkinningWeights = sw;
 						SetIndexedProperty.Perform(animesh.Vertices, "Item", i, vertex);
-						var v = animesh.TransientVertices[i];
-						v.SkinningWeights = sw;
-						SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
+						if (animesh.TransientVertices != null) {
+							var v = animesh.TransientVertices[i];
+							v.SkinningWeights = sw;
+							SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
+						}
 					}
 					if (animesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator)) {
 						foreach (var key in animator.Keys.ToList()) {
@@ -1207,9 +1209,11 @@ namespace Tangerine.Core.Operations
 							vertex.BlendWeights.Weight0 = 1f;
 						}
 						SetIndexedProperty.Perform(animesh.Vertices, "Item", i, vertex);
-						var v = animesh.TransientVertices[i];
-						v.SkinningWeights = vertex.SkinningWeights;
-						SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
+						if (animesh.TransientVertices != null) {
+							var v = animesh.TransientVertices[i];
+							v.SkinningWeights = vertex.SkinningWeights;
+							SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
+						}
 					}
 					if (animesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator)) {
 						foreach (var key in animator.Keys.ToList()) {
