@@ -62,7 +62,9 @@ namespace Tangerine.UI
 				PropertyLabel.Components.Add(new TooltipComponent(() => tooltip));
 				PropertyContainerWidget.AddNode(LabelContainer);
 				EditorContainer = new Widget {
-					Enabled = PropertyAttributes<TangerineReadOnlyAttribute>.Get(editorParams.PropertyInfo) == null,
+					Enabled = PropertyAttributes<TangerineReadOnlyAttribute>.Get(editorParams.PropertyInfo) == null &&
+						!editorParams.Objects.Any(o =>
+							ClassAttributes<TangerineReadOnlyPropertiesAttribute>.Get(o.GetType())?.Contains(editorParams.PropertyName) ?? false),
 					Layout = new HBoxLayout(),
 					LayoutCell = new LayoutCell { StretchX = 2.0f },
 				};

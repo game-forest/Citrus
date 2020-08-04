@@ -6,7 +6,8 @@ using Yuzu;
 namespace Lime
 {
 	[TangerineRegisterNode(Order = 32)]
-	[TangerineVisualHintGroup("/All/Nodes/Images", "Polygon Mesh")]
+	[TangerineVisualHintGroup("/All/Nodes/Images", "Animesh")]
+	[TangerineReadOnlyProperties(nameof(Widget.Size))]
 	public class Animesh : Widget
 	{
 		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 68)]

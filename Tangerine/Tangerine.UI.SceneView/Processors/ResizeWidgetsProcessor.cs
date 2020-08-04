@@ -72,6 +72,9 @@ namespace Tangerine.UI.SceneView
 					Utils.ChangeCursorIfDefault(cursor);
 					var proportional = SceneView.Input.IsKeyPressed(Key.Shift);
 					var isChangingScale = SceneView.Input.IsKeyPressed(Key.Control);
+					if (!isChangingScale) {
+						widgets = widgets.Where(w => !(w is Animesh)).ToList();
+					}
 					var areChildrenFreezed =
 						SceneView.Input.IsKeyPressed(Key.Z) &&
 						!isChangingScale &&
