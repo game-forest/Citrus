@@ -244,6 +244,7 @@ namespace Lime
 			ro.Ibo = ibo;
 			ro.LeftUpperCorner = leftUpperCorner;
 			ro.RightBottomCorner = rightBottomCorner;
+			ro.WidgetColor = Color;
 			return ro;
 		}
 
@@ -262,6 +263,7 @@ namespace Lime
 			public IndexBuffer Ibo;
 			public Vector2 LeftUpperCorner;
 			public Vector2 RightBottomCorner;
+			public Color4 WidgetColor;
 
 			private static readonly VertexInputLayout vertexInputLayout;
 			private static readonly ShaderProgram program;
@@ -290,10 +292,11 @@ namespace Lime
 						uniform mat4 u_MVP;
 						uniform mat4 u_LocalToParentTransform;
 						uniform mat4 u_Bones[50];
+						uniform vec4 u_WidgetColor;
 
 						void main()
 						{
-							color = ((1.0 - u_BlendFactor) * in_Color1 + u_BlendFactor * in_Color2);
+							color = u_WidgetColor * ((1.0 - u_BlendFactor) * in_Color1 + u_BlendFactor * in_Color2);
 							texCoords = (1.0 - u_BlendFactor) * in_UV1 + u_BlendFactor * in_UV2;
 							vec4 position = u_LocalToParentTransform * ((1.0 - u_BlendFactor) * in_Pos1 + u_BlendFactor * in_Pos2);
 							mat4 skinTransform =
@@ -462,6 +465,7 @@ namespace Lime
 				var bones = shaderParams.GetParamKey<Matrix44>("u_Bones");
 				var leftUpperCorner = shaderParams.GetParamKey<Vector2>("u_LeftUpperCorner");
 				var rightBottomCorner = shaderParams.GetParamKey<Vector2>("u_RightBottomCorner");
+				var widgetColor = shaderParams.GetParamKey<Vector4>("u_WidgetColor");
 				shaderParams.Set(blendFactor, BlendFactor);
 				shaderParams.Set(
 					mvpTransform,
@@ -472,6 +476,7 @@ namespace Lime
 				shaderParams.Set(bones, BoneTransforms, BoneTransforms.Length);
 				shaderParams.Set(leftUpperCorner, LeftUpperCorner);
 				shaderParams.Set(rightBottomCorner, RightBottomCorner);
+				shaderParams.Set(widgetColor, WidgetColor.ToVector4());
 
 				Renderer.Flush();
 				PlatformRenderer.SetTexture(0, Texture);
