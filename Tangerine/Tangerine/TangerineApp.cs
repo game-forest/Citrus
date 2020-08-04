@@ -666,10 +666,11 @@ namespace Tangerine
 			h.Connect(Tools.FlipX, new FlipX());
 			h.Connect(Tools.FlipY, new FlipY());
 			h.Connect(Tools.CenterView, new CenterView());
-			h.Connect(Tools.AnimeshAnimate, new AnimeshTools.Animate());
-			h.Connect(Tools.AnimeshModify, new AnimeshTools.Modify());
-			h.Connect(Tools.AnimeshCreate, new AnimeshTools.Create());
-			h.Connect(Tools.AnimeshRemove, new AnimeshTools.Remove());
+			h.Connect(Tools.AnimeshAnimate, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Animation));
+			h.Connect(Tools.AnimeshModify, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Modification));
+			h.Connect(Tools.AnimeshCreate, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Creation));
+			h.Connect(Tools.AnimeshRemove, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Removal));
+			h.Connect(Tools.AnimeshTransform, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Transformation));
 			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard, IsCopyPasteAllowedForSelection);
 			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform, IsCopyPasteAllowedForSelection));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));

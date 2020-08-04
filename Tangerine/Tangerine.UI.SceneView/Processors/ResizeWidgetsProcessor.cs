@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.UI.AnimeshEditor;
 using Tangerine.UI.SceneView.WidgetTransforms;
 
 namespace Tangerine.UI.SceneView
@@ -36,6 +37,9 @@ namespace Tangerine.UI.SceneView
 					continue;
 				}
 				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
+				if (AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
+					widgets = widgets.Where(w => !(w is Animesh));
+				}
 				if (Utils.CalcHullAndPivot(widgets, out var hull, out var pivot)) {
 					for (var i = 0; i < 4; i++) {
 						var a = hull[i];
@@ -64,7 +68,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
+				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
 				var mouseStartPos = SceneView.MousePosition;
 				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
@@ -72,24 +76,23 @@ namespace Tangerine.UI.SceneView
 					Utils.ChangeCursorIfDefault(cursor);
 					var proportional = SceneView.Input.IsKeyPressed(Key.Shift);
 					var isChangingScale = SceneView.Input.IsKeyPressed(Key.Control);
-					if (!isChangingScale) {
-						widgets = widgets.Where(w => !(w is Animesh)).ToList();
-					}
+					var toBeTransformed = widgets.Where(w => isChangingScale ?
+						!w.IsPropertyReadOnly(nameof(Widget.Scale)) : !w.IsPropertyReadOnly(nameof(Widget.Size))).ToList();
 					var areChildrenFreezed =
 						SceneView.Input.IsKeyPressed(Key.Z) &&
 						!isChangingScale &&
-						widgets.Count == 1;
+						toBeTransformed.Count == 1;
 					if (areChildrenFreezed) {
-						transform = widgets[0].CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
+						transform = toBeTransformed[0].CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
 					}
 					var pivotPoint =
 						isChangingScale ?
-						(widgets.Count <= 1 ? (Vector2?)null : pivot) :
+						(toBeTransformed.Count <= 1 ? (Vector2?)null : pivot) :
 						hull[lookupPivotIndex[controlPointIndex] / 2];
 					RescaleWidgets(
-						widgets.Count <= 1,
+						toBeTransformed.Count <= 1,
 						pivotPoint,
-						widgets,
+						toBeTransformed,
 						controlPointIndex,
 						SceneView.MousePosition,
 						mouseStartPos,
@@ -97,8 +100,8 @@ namespace Tangerine.UI.SceneView
 						!isChangingScale
 					);
 					if (areChildrenFreezed) {
-						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(widgets[0]);
-						RestoreChildrenPositions(widgets[0], transform);
+						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(toBeTransformed[0]);
+						RestoreChildrenPositions(toBeTransformed[0], transform);
 					}
 					yield return null;
 				}

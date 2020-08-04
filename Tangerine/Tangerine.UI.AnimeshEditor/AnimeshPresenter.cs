@@ -32,9 +32,11 @@ namespace Tangerine.UI.AnimeshEditor
 			if (meshes.Count == 0) {
 				return;
 			}
-			canvas.PrepareRendererState();
-			foreach (var mesh in meshes) {
-				mesh.Controller(sv).Render(canvas);
+			if (AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
+				canvas.PrepareRendererState();
+				foreach (var mesh in meshes) {
+					mesh.Controller(sv).Render(canvas);
+				}
 			}
 		}
 	}

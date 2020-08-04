@@ -162,6 +162,7 @@ namespace Tangerine.UI
 		public static readonly ICommand AnimeshModify = new Command("Modify Mesh Triangulation") { Icon = IconPool.GetIcon("Tools.DistributeBottom") };
 		public static readonly ICommand AnimeshCreate = new Command("Create Mesh Vertex or Constraint") { Icon = IconPool.GetIcon("Tools.FlipV") };
 		public static readonly ICommand AnimeshRemove = new Command("Remove Mesh Vertex") { Icon = IconPool.GetIcon("Tools.RestoreOriginalSize") };
+		public static readonly ICommand AnimeshTransform = new Command("Transform Mesh") { Icon = IconPool.GetIcon("Cursors.DragHandOpen") };
 	}
 
 	public static class ToolsCommands

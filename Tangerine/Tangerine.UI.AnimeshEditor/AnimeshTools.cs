@@ -15,13 +15,16 @@ namespace Tangerine.UI.AnimeshEditor
 		public enum ModificationState
 		{
 			Animation,
+			Transformation,
 			Modification,
 			Creation,
 			Removal,
 		}
 
+		private static readonly int stateCount = typeof(ModificationState).GetEnumValues().Length;
+
 		public static ModificationState NextState(this ModificationState state) =>
-			(ModificationState)(((int)state + 1) % 4);
+			(ModificationState)(((int)state + 1) % stateCount);
 
 		private static ModificationMode mode;
 		public static ModificationMode Mode
@@ -50,6 +53,7 @@ namespace Tangerine.UI.AnimeshEditor
 					case ModificationState.Modification:
 					case ModificationState.Creation:
 					case ModificationState.Removal:
+					case ModificationState.Transformation:
 						Mode = ModificationMode.Setup;
 						break;
 				}
@@ -58,24 +62,19 @@ namespace Tangerine.UI.AnimeshEditor
 
 		public static ModificationState StateBeforeAnimationPreview { get; set; }
 
-		public class Animate : DocumentCommandHandler
+		public class ChangeState : DocumentCommandHandler
 		{
-			public override void ExecuteTransaction() => State = ModificationState.Animation;
-		}
+			private readonly ModificationState toState;
 
-		public class Modify : DocumentCommandHandler
-		{
-			public override void ExecuteTransaction() => State = ModificationState.Modification;
-		}
+			public ChangeState(ModificationState toState)
+			{
+				this.toState = toState;
+			}
 
-		public class Create : DocumentCommandHandler
-		{
-			public override void ExecuteTransaction() => State = ModificationState.Creation;
-		}
-
-		public class Remove : DocumentCommandHandler
-		{
-			public override void ExecuteTransaction() => State = ModificationState.Removal;
+			public override void ExecuteTransaction()
+			{
+				State = toState;
+			}
 		}
 	}
 }

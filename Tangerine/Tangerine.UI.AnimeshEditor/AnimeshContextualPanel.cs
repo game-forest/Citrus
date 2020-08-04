@@ -16,8 +16,9 @@ namespace Tangerine.UI.AnimeshEditor
 					CreateAnimeshStateButton(AnimeshTools.ModificationState.Creation, (Command)Tools.AnimeshCreate, "Create"),
 					CreateAnimeshStateButton(AnimeshTools.ModificationState.Removal, (Command)Tools.AnimeshRemove, "Remove"),
 					CreateAnimeshStateButton(AnimeshTools.ModificationState.Animation, (Command)Tools.AnimeshAnimate, "Animate"),
+					CreateAnimeshStateButton(AnimeshTools.ModificationState.Transformation, (Command)Tools.AnimeshTransform, "Transform"),
 				},
-				Layout = new TableLayout { RowCount = 1, ColumnCount = 4, },
+				Layout = new TableLayout { RowCount = 1, ColumnCount = 5, },
 				LayoutCell = new LayoutCell(new Alignment { X = HAlignment.Center, Y = VAlignment.Bottom, }),
 				CompoundPresenter = { new WidgetFlatFillPresenter(Theme.Colors.GrayBackground), new WidgetBoundsPresenter(Color4.Red) },
 			};
