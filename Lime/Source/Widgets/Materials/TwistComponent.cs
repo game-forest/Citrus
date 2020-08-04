@@ -20,6 +20,20 @@ namespace Lime
 			set => CustomMaterial.Angle = value;
 		}
 
+		[YuzuMember]
+		public Vector2 Pivot
+		{
+			get => CustomMaterial.Pivot;
+			set => CustomMaterial.Pivot = value;
+		}
+
+		[YuzuMember]
+		public float RadiusFactor
+		{
+			get => CustomMaterial.RadiusFactor;
+			set => CustomMaterial.RadiusFactor = value;
+		}
+
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
