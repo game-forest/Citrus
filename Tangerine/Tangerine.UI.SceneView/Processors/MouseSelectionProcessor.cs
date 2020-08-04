@@ -218,10 +218,10 @@ namespace Tangerine.UI.SceneView
 				}
 				var points = new[] { rectangle.A, new Vector2(rectangle.BX, rectangle.AY), rectangle.B, new Vector2(rectangle.AX, rectangle.BY) };
 				for (var i = 0; i < points.Length; ++i) {
-					foreach (var face in mesh.Faces) {
+					foreach (var face in mesh.Faces.ToArray()) {
 						for (var j = 0; j < 3; ++j) {
-							var v0 = mesh.Controller(SceneView.Instance).Vertices[face[j]].Pos * mesh.Size * mesh.LocalToWorldTransform;
-							var v1 = mesh.Controller(SceneView.Instance).Vertices[face[(j + 1) % 3]].Pos * mesh.Size * mesh.LocalToWorldTransform;
+							var v0 = mesh.Controller(SceneView.Instance).Vertices[face[j]].Pos * mesh.LocalToWorldTransform;
+							var v1 = mesh.Controller(SceneView.Instance).Vertices[face[(j + 1) % 3]].Pos * mesh.LocalToWorldTransform;
 							if (
 								rectangle.Contains(v0) || rectangle.Contains(v1) ||
 								(points[(i + 1) % points.Length] - points[i]).Length >= 1f &&
