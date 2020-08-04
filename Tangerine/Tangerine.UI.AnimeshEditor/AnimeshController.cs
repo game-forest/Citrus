@@ -385,8 +385,7 @@ namespace Tangerine.UI.AnimeshEditor
 
 		public void TieVertexWithBones(List<Bone> bones)
 		{
-			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result);
-			if (result.Target.IsVertex()) {
+			if (HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result) && result.Target.IsVertex()) {
 				Document.Current.History.DoTransaction(() => {
 					List<IKeyframe> keyframes = null;
 					Mesh.Animators.TryFind(
@@ -427,8 +426,7 @@ namespace Tangerine.UI.AnimeshEditor
 
 		public void UntieVertexFromBones(List<Bone> bones)
 		{
-			HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result);
-			if (result.Target.IsVertex()) {
+			if (HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result) && result.Target.IsVertex()) {
 				Document.Current.History.DoTransaction(() => {
 					List<IKeyframe> keyframes = null;
 					Mesh.Animators.TryFind(
