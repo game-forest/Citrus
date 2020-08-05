@@ -10384,6 +10384,18 @@ namespace YuzuGenerated
 				result.Blending = (global::Lime.Blending)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
+			if (3 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp1 = new global::Lime.Vector2();
+				tmp1.X = d.Reader.ReadSingle();
+				tmp1.Y = d.Reader.ReadSingle();
+				result.Pivot = tmp1;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (4 == fd.OurIndex) {
+				result.RadiusFactor = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
 			result.OnAfterDeserialization();
 		}
@@ -10411,11 +10423,21 @@ namespace YuzuGenerated
 			}
 			if (3 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				result.Pivot.X = d.Reader.ReadSingle();
+				result.Pivot.Y = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (4 == fd.OurIndex) {
+				result.RadiusFactor = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (5 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
 				result.UV0.X = d.Reader.ReadSingle();
 				result.UV0.Y = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (4 == fd.OurIndex) {
+			if (6 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
 				result.UV1.X = d.Reader.ReadSingle();
 				result.UV1.Y = d.Reader.ReadSingle();

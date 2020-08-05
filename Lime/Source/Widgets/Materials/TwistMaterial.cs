@@ -10,6 +10,8 @@ namespace Lime
 		private readonly ShaderParamKey<float> angleKey;
 		private readonly ShaderParamKey<Vector2> uv0Key;
 		private readonly ShaderParamKey<Vector2> uv1Key;
+		private readonly ShaderParamKey<Vector2> pivotKey;
+		private readonly ShaderParamKey<float> radiusFactorKey;
 
 		[YuzuMember]
 		public float Angle = 0;
@@ -19,6 +21,10 @@ namespace Lime
 		public Vector2 UV1;
 		[YuzuMember]
 		public Blending Blending;
+		[YuzuMember]
+		public Vector2 Pivot = new Vector2(0.5f, 0.5f);
+		[YuzuMember]
+		public float RadiusFactor = 1;
 
 		public string Id { get; set; }
 		public int PassCount => 1;
@@ -30,6 +36,8 @@ namespace Lime
 			angleKey = shaderParams.GetParamKey<float>("angle");
 			uv0Key = shaderParams.GetParamKey<Vector2>("uv0");
 			uv1Key = shaderParams.GetParamKey<Vector2>("uv1");
+			pivotKey = shaderParams.GetParamKey<Vector2>("pivot");
+			radiusFactorKey = shaderParams.GetParamKey<float>("radiusFactor");
 		}
 
 		public void Apply(int pass)
@@ -37,6 +45,9 @@ namespace Lime
 			shaderParams.Set(angleKey, Angle);
 			shaderParams.Set(uv1Key, UV1);
 			shaderParams.Set(uv0Key, UV0);
+			shaderParams.Set(pivotKey, Pivot);
+			// coefficient 1.11104f for backward compatibility
+			shaderParams.Set(radiusFactorKey, RadiusFactor * 1.11104f);
 			PlatformRenderer.SetBlendState(Blending.GetBlendState());
 			PlatformRenderer.SetShaderProgram(TwistShaderProgram.Instance);
 			PlatformRenderer.SetShaderParams(shaderParamsArray);
@@ -71,17 +82,19 @@ namespace Lime
 				uniform lowp float angle;
 				uniform lowp vec2 uv0;
 				uniform lowp vec2 uv1;
+				uniform lowp vec2 pivot;
+				uniform lowp float radiusFactor;
 
 				varying lowp vec2 texCoords1;
 				varying lowp vec4 outColor;
 
 				void main()
 				{
-					lowp vec2 localUV = (texCoords1 - uv0) / (uv1 - uv0) - vec2(0.5);
-					lowp float newAngle = angle * pow(0.8 - length(localUV) * 1.11104, 3.0); // 1.3888 * 0.8 = 1.11104
+					lowp vec2 localUV = (texCoords1 - uv0) / (uv1 - uv0) - pivot;
+					lowp float newAngle = angle * pow(max(0.0, 0.8 - length(localUV) * radiusFactor), 3.0);
 					lowp float cosAngle = cos(newAngle);
 					lowp float sinAngle = sin(newAngle);
-					lowp vec2 uv = mat2(cosAngle, -sinAngle, sinAngle, cosAngle) * localUV + vec2(0.5);
+					lowp vec2 uv = clamp(mat2(cosAngle, -sinAngle, sinAngle, cosAngle) * localUV + pivot, vec2(0), vec2(1));
 					gl_FragColor = texture2D(tex1, uv0 + uv * (uv1 - uv0)) * outColor;
 				}";
 

@@ -4196,6 +4196,8 @@ namespace YuzuGenerated
 			var result = new global::Lime.TwistComponent();
 			result.Angle = s.Angle;
 			result.Blending = s.Blending;
+			result.Pivot = s.Pivot;
+			result.RadiusFactor = s.RadiusFactor;
 			result.OnAfterDeserialization();
 			return result;
 		}
@@ -4209,6 +4211,8 @@ namespace YuzuGenerated
 			var result = new global::Lime.TwistMaterial();
 			result.Angle = s.Angle;
 			result.Blending = s.Blending;
+			result.Pivot = s.Pivot;
+			result.RadiusFactor = s.RadiusFactor;
 			result.UV0 = s.UV0;
 			result.UV1 = s.UV1;
 			return result;
