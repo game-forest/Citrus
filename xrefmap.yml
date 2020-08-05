@@ -66230,6 +66230,32 @@ references:
   isSpec: "True"
   fullName: Lime.TwistComponent.OnOwnerChanged
   nameWithType: TwistComponent.OnOwnerChanged
+- uid: Lime.TwistComponent.Pivot
+  name: Pivot
+  href: api/Lime.TwistComponent.html#Lime_TwistComponent_Pivot
+  commentId: P:Lime.TwistComponent.Pivot
+  fullName: Lime.TwistComponent.Pivot
+  nameWithType: TwistComponent.Pivot
+- uid: Lime.TwistComponent.Pivot*
+  name: Pivot
+  href: api/Lime.TwistComponent.html#Lime_TwistComponent_Pivot_
+  commentId: Overload:Lime.TwistComponent.Pivot
+  isSpec: "True"
+  fullName: Lime.TwistComponent.Pivot
+  nameWithType: TwistComponent.Pivot
+- uid: Lime.TwistComponent.RadiusFactor
+  name: RadiusFactor
+  href: api/Lime.TwistComponent.html#Lime_TwistComponent_RadiusFactor
+  commentId: P:Lime.TwistComponent.RadiusFactor
+  fullName: Lime.TwistComponent.RadiusFactor
+  nameWithType: TwistComponent.RadiusFactor
+- uid: Lime.TwistComponent.RadiusFactor*
+  name: RadiusFactor
+  href: api/Lime.TwistComponent.html#Lime_TwistComponent_RadiusFactor_
+  commentId: Overload:Lime.TwistComponent.RadiusFactor
+  isSpec: "True"
+  fullName: Lime.TwistComponent.RadiusFactor
+  nameWithType: TwistComponent.RadiusFactor
 - uid: Lime.TwistMaterial
   name: TwistMaterial
   href: api/Lime.TwistMaterial.html
@@ -66313,6 +66339,18 @@ references:
   isSpec: "True"
   fullName: Lime.TwistMaterial.PassCount
   nameWithType: TwistMaterial.PassCount
+- uid: Lime.TwistMaterial.Pivot
+  name: Pivot
+  href: api/Lime.TwistMaterial.html#Lime_TwistMaterial_Pivot
+  commentId: F:Lime.TwistMaterial.Pivot
+  fullName: Lime.TwistMaterial.Pivot
+  nameWithType: TwistMaterial.Pivot
+- uid: Lime.TwistMaterial.RadiusFactor
+  name: RadiusFactor
+  href: api/Lime.TwistMaterial.html#Lime_TwistMaterial_RadiusFactor
+  commentId: F:Lime.TwistMaterial.RadiusFactor
+  fullName: Lime.TwistMaterial.RadiusFactor
+  nameWithType: TwistMaterial.RadiusFactor
 - uid: Lime.TwistMaterial.TwistShaderProgram
   name: TwistMaterial.TwistShaderProgram
   href: api/Lime.TwistMaterial.TwistShaderProgram.html
