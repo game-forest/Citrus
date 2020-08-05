@@ -66,7 +66,6 @@ namespace Lime
 		private Vector2 rightBottomCorner = Vector2.One;
 
 		[YuzuMember]
-		[TangerineStaticProperty]
 		public override ITexture Texture { get; set; }
 
 		[YuzuMember]
