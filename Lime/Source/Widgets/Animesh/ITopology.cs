@@ -42,5 +42,6 @@ namespace Lime
 		bool HitTest(Vector2 position, float vertexHitRadius, float edgeHitRadius, out TopologyHitTestResult result);
 		float VertexHitTestRadius { get; set; }
 		float EdgeHitTestDistance { get; set; }
+		void Scale(Vector2 scale);
 	}
 }

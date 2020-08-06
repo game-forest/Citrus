@@ -1056,5 +1056,22 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				VertexHitTestRadius = savedVertexHitTestRadius;
 			}
 		}
+
+		public void Scale(Vector2 scale)
+		{
+			BoundingBox = Rectangle.Empty;
+			for (int i = 0; i < Vertices.Count; i++) {
+				var v = Vertices[i];
+				v.Pos *= scale;
+				BoundingBox = BoundingBox.IncludingPoint(v.Pos);
+				Vertices[i] = v;
+			}
+			for (int i = 1; i < BoundingFigureVertices.Count; i++) {
+				var v = BoundingFigureVertices[i];
+				v.Pos *= scale;
+				BoundingBox = BoundingBox.IncludingPoint(v.Pos);
+				BoundingFigureVertices[i] = v;
+			}
+		}
 	}
 }

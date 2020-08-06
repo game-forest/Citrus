@@ -83,6 +83,7 @@ namespace Tangerine.UI.AnimeshEditor
 					mesh.Faces.AddRange(Topology.Faces);
 				}
 				mesh.OnBoneArrayChanged = RecalcVertexBoneTies;
+				mesh.AddChangeWatcher(() => mesh.Texture, texture => UpdateMeshVerticesOnTextureChange(mesh));
 				Mesh = mesh;
 				Topology.OnTopologyChanged += UpdateMeshFaces;
 				if (mesh.TransientVertices == null) {
@@ -462,6 +463,59 @@ namespace Tangerine.UI.AnimeshEditor
 					};
 					AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
 				});
+			}
+		}
+
+		private static void UpdateMeshVerticesOnTextureChange(Animesh animesh)
+		{
+			if (animesh.Texture == null) {
+				return;
+			}
+			using (Document.Current.History.BeginTransaction()) {
+				var prevSize = animesh.Size;
+				animesh.Size = (Vector2)animesh.Texture.ImageSize;
+				animesh.Animators.TryFind(
+					nameof(animesh.TransientVertices),
+					out var animator
+				);
+				var sliceBefore = new AnimeshSlice {
+					State = AnimeshTools.State,
+					Vertices = new List<SkinnedVertex>(animesh.Vertices),
+					IndexBuffer = new List<TopologyFace>(animesh.Faces),
+					ConstrainedVertices = new List<TopologyEdge>(animesh.ConstrainedEdges),
+					Keyframes = animator?.Keys.ToList()
+				};
+				var scale = animesh.Size / prevSize;
+				animesh.Controller().Topology.Scale(scale);
+				for (int i = 0; i < animesh.TransientVertices.Count; i++) {
+					var v = animesh.TransientVertices[i];
+					v.Pos *= scale;
+					animesh.TransientVertices[i] = v;
+				}
+				List<IKeyframe> keyframes = animator?.Keys.ToList();
+				if (animator != null) {
+					keyframes = new List<IKeyframe>(animator.Keys.Count);
+					foreach (var key in animator.Keys.ToList()) {
+						var newKey = key.Clone();
+						var vertices = (List<SkinnedVertex>)newKey.Value;
+						for (var i = 0; i < animesh.Vertices.Count; ++i) {
+							var v = vertices[i];
+							v.Pos *= scale;
+							vertices[i] = v;
+						}
+						keyframes.Add(newKey);
+					}
+				}
+				var sliceAfter = new AnimeshSlice {
+					State = AnimeshTools.State,
+					Vertices = new List<SkinnedVertex>(animesh.Vertices),
+					IndexBuffer = new List<TopologyFace>(animesh.Faces),
+					ConstrainedVertices = new List<TopologyEdge>(animesh.ConstrainedEdges),
+					Keyframes = keyframes
+				};
+				AnimeshModification.Slice.Perform(animesh, sliceBefore, sliceAfter);
+				animesh.Invalidate();
+				Document.Current.History.CommitTransaction();
 			}
 		}
 
