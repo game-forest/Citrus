@@ -69,13 +69,13 @@ namespace Lime
 			}
 
 			var weightToDistribute = 0.0f;
-			for (var i = 0; i < 4 && i < boneIndices.Length; ++i) {
-				if (boneIndices[i] <= 0) {
+			foreach (var boneIndex in boneIndices) {
+				if (boneIndex <= 0) {
 					continue;
 				}
 				for (var j = 0; j < 4; ++j) {
 					var sw = this[j];
-					if (sw.Index == boneIndices[i]) {
+					if (sw.Index == boneIndex) {
 						weightToDistribute += sw.Weight;
 						sw.Weight = sw.Index = 0;
 						this[j] = sw;
