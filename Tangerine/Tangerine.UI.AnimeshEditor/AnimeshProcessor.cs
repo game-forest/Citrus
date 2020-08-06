@@ -7,7 +7,8 @@ namespace Tangerine.UI.AnimeshEditor
 {
 	public class AnimeshProcessor : ITaskProvider
 	{
-		private ISceneView sv;
+		private readonly ISceneView sv;
+		private readonly Dictionary<Animesh, int> cachedAnimatorVersions = new Dictionary<Animesh, int>();
 
 		public AnimeshProcessor(ISceneView sv)
 		{
@@ -22,11 +23,26 @@ namespace Tangerine.UI.AnimeshEditor
 					yield return null;
 					continue;
 				}
+				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Animesh>().ToList();
+				foreach (var mesh in meshes) {
+					var alreadyCached = cachedAnimatorVersions.TryGetValue(mesh, out var oldVersion);
+					var hasAnimator = mesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator);
+					if (!alreadyCached && hasAnimator) {
+						cachedAnimatorVersions[mesh] = animator.Version;
+						mesh.Invalidate();
+					} else if (alreadyCached && !hasAnimator) {
+						cachedAnimatorVersions.Remove(mesh);
+						mesh.TransientVertices = new List<Animesh.SkinnedVertex>(mesh.Vertices);
+						mesh.Invalidate();
+					} else if (alreadyCached && oldVersion != animator.Version) {
+						cachedAnimatorVersions[mesh] = animator.Version;
+						mesh.Invalidate();
+					}
+				}
 				if (!sv.InputArea.IsMouseOverThisOrDescendant()) {
 					yield return null;
 					continue;
 				}
-				var meshes = Document.Current.SelectedNodes().Editable().OfType<Lime.Animesh>().ToList();
 				if (meshes.Count == 0) {
 					yield return null;
 					continue;
@@ -34,8 +50,8 @@ namespace Tangerine.UI.AnimeshEditor
 				if (sv.Input.ConsumeKeyPress(Key.Mouse1)) {
 					AnimeshTools.State = AnimeshTools.State.NextState();
 				}
-				var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
 				if (AnimeshTools.State == AnimeshTools.ModificationState.Animation) {
+					var bones = Document.Current.SelectedNodes().Editable().OfType<Bone>().ToList();
 					foreach (var mesh in meshes) {
 						if (sv.Input.IsKeyPressed(Key.Control)) {
 							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
