@@ -11,27 +11,28 @@ namespace Tangerine
 		public override string Prefix { get; } = null;
 		public override string HintText => "Type '?' to open the help menu";
 
+		public LookupInitialSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			LookupDialog.Sections.Help.FillLookup(lookupWidget);
-			LookupDialog.Sections.Commands.FillLookup(lookupWidget);
+			Sections.Help.FillLookup(lookupWidget);
+			Sections.Commands.FillLookup(lookupWidget);
 		}
 
-		public override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
+		protected override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
 		{
 			if (string.IsNullOrEmpty(text)) {
-				LookupDialog.Sections.DropAndPush(this);
 				return;
 			}
-			foreach (var section in LookupDialog.Sections.List) {
+			foreach (var section in Sections.List) {
 				if (!string.IsNullOrEmpty(section.Prefix) && text.StartsWith(section.Prefix)) {
-					LookupDialog.Sections.DropAndPush(section);
+					Sections.DropAndPush(section);
 					return;
 				}
 			}
 		}
 
-		public override IEnumerable<LookupItem> ApplyLookupFilter(string text, List<LookupItem> items) =>
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, List<LookupItem> items) =>
 			!string.IsNullOrEmpty(text) ? base.ApplyLookupFilter(text, items) : emptyItems;
 	}
 }

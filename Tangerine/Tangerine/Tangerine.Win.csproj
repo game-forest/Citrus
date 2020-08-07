@@ -61,6 +61,7 @@
     <Compile Include="Dialogs\Lookup\LookupAnimationsSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupCommandsSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupComponentsSection.cs" />
+    <Compile Include="Dialogs\Lookup\LookupDialogItem.cs" />
     <Compile Include="Dialogs\Lookup\LookupFilesSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupHelpSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupInitialSection.cs" />

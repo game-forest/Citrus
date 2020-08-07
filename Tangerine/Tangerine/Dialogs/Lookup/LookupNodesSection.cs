@@ -14,35 +14,30 @@ namespace Tangerine
 		public override string Prefix { get; } = $"{PrefixConst} ";
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for node in the current document";
 
+		public LookupNodesSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			if (Project.Current == null) {
-				lookupWidget.AddItem(
-					"Open any project to use Go To Node function",
-					() => {
-						new FileOpenProject();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			if (Document.Current == null) {
-				lookupWidget.AddItem(
-					"Open any document to use Go To Node function",
-					() => {
-						new FileOpen();
-						LookupDialog.Sections.Drop();
-					}
-				);
+			if (
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Node function") ||
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Node function")
+			) {
 				return;
 			}
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
 				var nodeClosed = node;
+				var nodeType = node.GetType();
 				lookupWidget.AddItem(
-					node.ToString(),
-					() => {
-						NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
-						LookupDialog.Sections.Drop();
+					new LookupDialogItem(
+						lookupWidget,
+						string.IsNullOrEmpty(node.Id) ? "<No Name>": node.Id,
+						$"Type: {nodeType.Name}; {(node.Parent != null ? $"Parent: {node.Parent}" : "Root node")}",
+						() => {
+							NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
+							Sections.Drop();
+						}
+					) {
+						IconTexture = NodeIconPool.GetIcon(nodeType).AsTexture
 					}
 				);
 			}

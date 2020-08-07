@@ -10,26 +10,28 @@ namespace Tangerine
 		public override string Breadcrumb { get; } = "Help";
 		public override string Prefix { get; } = PrefixConst;
 
+		public LookupHelpSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			foreach (var section in LookupDialog.Sections.List) {
+			foreach (var section in Sections.List) {
 				if (!string.IsNullOrEmpty(section.HelpText)) {
 					Action action;
 					if (!string.IsNullOrEmpty(section.Prefix)) {
-						action = () => LookupDialog.Sections.DropAndPush(section);
+						action = () => Sections.DropAndPush(section);
 					} else {
 						action = () => { };
 					}
-					lookupWidget.AddItem(section.HelpText, action);
+					lookupWidget.AddItem(new LookupDialogItem(lookupWidget, section.HelpText, null, action));
 				}
 			}
 		}
 
-		public override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
+		protected override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
 		{
-			foreach (var section in LookupDialog.Sections.List) {
+			foreach (var section in Sections.List) {
 				if (!string.IsNullOrEmpty(section.Prefix) && text.StartsWith(section.Prefix)) {
-					LookupDialog.Sections.DropAndPush(section);
+					Sections.DropAndPush(section);
 					return;
 				}
 			}

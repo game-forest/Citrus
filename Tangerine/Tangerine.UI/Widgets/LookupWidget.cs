@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
-using Tangerine.Core;
 
 namespace Tangerine.UI
 {
@@ -13,7 +12,8 @@ namespace Tangerine.UI
 		private int selectedIndex = -1;
 		private ILookupDataSource dataSource;
 		private ILookupFilter filter = LookupFuzzyFilter.Instance;
-		private bool isApplyingFilter;
+		private bool isFilterDirty;
+		private string previousFilterText;
 
 		public readonly ThemedEditBox FilterEditBox;
 		public readonly ThemedSimpleText BreadcrumbSimpleText;
@@ -65,9 +65,7 @@ namespace Tangerine.UI
 					return;
 				}
 				filter = value;
-				if (!isApplyingFilter) {
-					FilterChanged(FilterText);
-				}
+				isFilterDirty = true;
 			}
 		}
 
@@ -95,7 +93,11 @@ namespace Tangerine.UI
 				Color = Theme.Colors.GrayText,
 			};
 			FilterEditBox.AddNode(HintSimpleText);
-			FilterEditBox.AddChangeWatcher(() => FilterText, FilterChanged);
+			FilterEditBox.LateTasks.AddLoop(() => {
+				if (isFilterDirty || FilterText != previousFilterText) {
+					FilterChanged(FilterText);
+				}
+			});
 
 			ScrollView = new ThemedScrollView {
 				Content = { Layout = new VBoxLayout() }
@@ -116,8 +118,7 @@ namespace Tangerine.UI
 				new { Command = Commands.SelectPreviousPage, Action = (Action)SelectPreviousPage },
 				new { Command = Commands.SelectNextPage, Action = (Action)SelectNextPage },
 			};
-			var inputUpdateBehavior = Components.GetOrAdd<PreEarlyUpdateBehavior>();
-			inputUpdateBehavior.Updating += () => {
+			Components.GetOrAdd<PreEarlyUpdateBehavior>().Updating += () => {
 				if (string.IsNullOrEmpty(FilterText) && Commands.NavigateBack.Consume()) {
 					NavigateBack();
 				}
@@ -134,14 +135,14 @@ namespace Tangerine.UI
 		{
 			HintSimpleText.Visible = string.IsNullOrEmpty(text);
 
-			isApplyingFilter = true;
+			isFilterDirty = false;
+			previousFilterText = text;
 			filter?.Applying(this, text);
 
 			DeselectItem();
 			filteredItems.Clear();
 			foreach (var item in items) {
-				item.Selected = false;
-				item.HighlightSymbolsIndices = null;
+				item.IsSelected = false;
 			}
 			ScrollView.Content.Nodes.Clear();
 
@@ -149,7 +150,8 @@ namespace Tangerine.UI
 			foreach (var item in filteredItems) {
 				ScrollView.Content.Nodes.Add(item.Widget);
 			}
-			isApplyingFilter = false;
+			SelectItem(index: 0);
+			ScrollView.ScrollPosition = 0;
 
 			filter?.Applied(this);
 		}
@@ -161,21 +163,22 @@ namespace Tangerine.UI
 			BreadcrumbSimpleText.Text = breadcrumbs?.Aggregate(string.Empty, (s, i) => $"{s}{i} > ");
 		}
 
-		public void AddItem(string text, Action action)
+		public void AddItem(string text, Action action) => AddItem(new LookupItem(this, text, action));
+
+		public void AddItem(LookupItem item)
 		{
-			var item = new LookupItem(this, text, action);
 			items.Add(item);
 			filteredItems.Add(item);
 			ScrollView.Content.AddNode(item.Widget);
 		}
 
-		private void SelectItem(int index)
+		public void SelectItem(int index)
 		{
 			DeselectItem();
 			selectedIndex = Mathf.Clamp(index, 0, filteredItems.Count - 1);
 			var selectedItem = SelectedItem;
 			if (selectedItem != null) {
-				selectedItem.Selected = true;
+				selectedItem.IsSelected = true;
 				var p = selectedItem.Widget.Y;
 				if (ScrollView.ScrollPosition > p) {
 					ScrollView.ScrollPosition = p;
@@ -195,7 +198,7 @@ namespace Tangerine.UI
 		{
 			var selectedItem = SelectedItem;
 			if (selectedItem != null) {
-				selectedItem.Selected = false;
+				selectedItem.IsSelected = false;
 			}
 			selectedIndex = -1;
 		}

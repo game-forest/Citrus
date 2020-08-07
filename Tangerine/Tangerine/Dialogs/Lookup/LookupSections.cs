@@ -22,17 +22,17 @@ namespace Tangerine
 			lookupWidget.NavigatedBack += NavigatedBack;
 
 			List = new LookupSection[] {
-				Initial = new LookupInitialSection(),
-				Help = new LookupHelpSection(),
-				Commands = new LookupCommandsSection(),
-				new LookupFilesSection(),
-				new LookupNodesSection(),
-				new LookupAnimationMarkersSection(), 
-				new LookupDocumentMarkersSection(),
-				new LookupAnimationFramesSection(),
-				new LookupNodeAnimationsSection(),
-				new LookupDocumentAnimationsSection(),
-				new LookupComponentsSection(),
+				Initial = new LookupInitialSection(this),
+				Help = new LookupHelpSection(this),
+				Commands = new LookupCommandsSection(this),
+				new LookupFilesSection(this),
+				new LookupNodesSection(this),
+				new LookupAnimationMarkersSection(this), 
+				new LookupDocumentMarkersSection(this),
+				new LookupAnimationFramesSection(this),
+				new LookupNodeAnimationsSection(this),
+				new LookupDocumentAnimationsSection(this),
+				new LookupComponentsSection(this),
 			};
 		}
 
@@ -65,10 +65,10 @@ namespace Tangerine
 
 		private void SetupSection(LookupSection section)
 		{
+			lookupWidget.FilterText = null;
 			lookupWidget.DataSource = section?.DataSource;
 			lookupWidget.Filter = section?.Filter;
 			lookupWidget.HintText = section?.HintText;
-			lookupWidget.FilterText = null;
 			lookupWidget.SetBreadcrumbsNavigation(stack.Select(s => s.Breadcrumb).Reverse().Where(s => !string.IsNullOrEmpty(s)));
 		}
 

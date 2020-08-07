@@ -8,13 +8,17 @@ namespace Tangerine
 {
 	public abstract class LookupAnimationsSection : LookupSection
 	{
+		protected LookupAnimationsSection(LookupSections sections) : base(sections) { }
+
 		protected void FillLookupByAnimations(LookupWidget lookupWidget, IEnumerable<Animation> animations, bool navigateToNode = false)
 		{
 			foreach (var animation in animations) {
 				var aClosed = animation;
 				navigateToNode &= animation.OwnerNode != Document.Current.Container;
-				lookupWidget.AddItem(
-					$"Animation: {(animation.IsLegacy ? "[Legacy]" : animation.Id)} in {animation.OwnerNode}",
+				lookupWidget.AddItem(new LookupDialogItem(
+					lookupWidget,
+					animation.IsLegacy ? "[Legacy]" : animation.Id,
+					$"Node: {animation.OwnerNode}",
 					() => {
 						var a = aClosed;
 						if (navigateToNode) {
@@ -28,9 +32,9 @@ namespace Tangerine
 						Document.Current.History.DoTransaction(() => {
 							SetProperty.Perform(document, nameof(Document.SelectedAnimation), a, isChangingDocument: false);
 						});
-						LookupDialog.Sections.Drop();
+						Sections.Drop();
 					}
-				);
+				));
 			}
 		}
 	}
@@ -43,26 +47,14 @@ namespace Tangerine
 		public override string Prefix { get; } = $"{PrefixConst} ";
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for animation in current node";
 
+		public LookupNodeAnimationsSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			if (Project.Current == null) {
-				lookupWidget.AddItem(
-					"Open any project to use Go To File function",
-					() => {
-						new FileOpenProject();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			if (Document.Current == null) {
-				lookupWidget.AddItem(
-					"Open any document to use Go To Marker function",
-					() => {
-						new FileOpen();
-						LookupDialog.Sections.Drop();
-					}
-				);
+			if (
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Animation function") ||
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Animation function")
+			) {
 				return;
 			}
 			var animations = new List<Animation>();
@@ -79,26 +71,14 @@ namespace Tangerine
 		public override string Prefix { get; } = $"{PrefixConst} ";
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for animation in current document";
 
+		public LookupDocumentAnimationsSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			if (Project.Current == null) {
-				lookupWidget.AddItem(
-					"Open any project to use Go To File function",
-					() => {
-						new FileOpenProject();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			if (Document.Current == null) {
-				lookupWidget.AddItem(
-					"Open any document to use Go To Marker function",
-					() => {
-						new FileOpen();
-						LookupDialog.Sections.Drop();
-					}
-				);
+			if (
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Animation function") ||
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Animation function")
+			) {
 				return;
 			}
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {

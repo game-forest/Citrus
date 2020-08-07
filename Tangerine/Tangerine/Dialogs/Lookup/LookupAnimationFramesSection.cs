@@ -13,46 +13,53 @@ namespace Tangerine
 		public override string Prefix => PrefixConst;
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to go to a frame in current animation";
 
+		public LookupAnimationFramesSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			if (Project.Current == null) {
-				lookupWidget.AddItem(
-					"Open any project to use Go To Animation Frame function",
-					() => {
-						new FileOpenProject();
-						LookupDialog.Sections.Drop();
-					}
-				);
+			if (
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Animation Frame function") ||
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Animation Frame function") ||
+				!RequireNonEmptyTimelineOrAddAlertItem(
+					lookupWidget,
+					"Select any node with keyframes to use Go To Animation Frame function",
+					out var lastFrameIndex
+				)
+			) {
 				return;
 			}
-			if (Document.Current == null) {
-				lookupWidget.AddItem(
-					"Open any document to use Go To Animation Frame function",
-					() => {
-						new FileOpen();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			var lastFrameIndex = GetLastAnimationFrame();
-			if (lastFrameIndex == 0) {
-				lookupWidget.AddItem("Select any node with keyframes to use Go To Animation Frame function", LookupDialog.Sections.Drop);
-				return;
-			}
+			var animation = Document.Current.Animation;
+			var description = $"Animation:{(animation.IsLegacy ? "[Legacy]" : animation.Id)}; Node: {animation.OwnerNode}";
 			for (var frame = 0; frame <= lastFrameIndex; frame++) {
-				var animationClosed = Document.Current.Animation;
 				var frameClosed = frame;
-				lookupWidget.AddItem(
-				$"Frame {frame} in {animationClosed.Owner.Owner}",
-				() => {
-					Document.Current.History.DoTransaction(() => {
-						SetCurrentColumn.Perform(frameClosed, animationClosed);
-						CenterTimelineOnCurrentColumn.Perform();
-					});
-					LookupDialog.Sections.Drop();
-				});
+				lookupWidget.AddItem(new LookupDialogItem(
+					lookupWidget,
+					frame.ToString(),
+					description,
+					() => {
+						Document.Current.History.DoTransaction(() => {
+							SetCurrentColumn.Perform(frameClosed, animation);
+							CenterTimelineOnCurrentColumn.Perform();
+						});
+						Sections.Drop();
+					}
+				));
 			}
+		}
+
+		private bool RequireNonEmptyTimelineOrAddAlertItem(LookupWidget lookupWidget, string alertText, out int lastFrameIndex)
+		{
+			lastFrameIndex = GetLastAnimationFrame();
+			if (lastFrameIndex > 0) {
+				return true;
+			}
+			lookupWidget.AddItem(new LookupDialogItem(
+				lookupWidget,
+				alertText,
+				null,
+				Sections.Drop
+			));
+			return false;
 		}
 
 		private static int GetLastAnimationFrame()
@@ -68,6 +75,11 @@ namespace Tangerine
 					if (key != null && key.Frame > lastFrameIndex) {
 						lastFrameIndex = key.Frame;
 					}
+				}
+			}
+			foreach (var marker in Document.Current.Animation.Markers) {
+				if (marker.Frame > lastFrameIndex) {
+					lastFrameIndex = marker.Frame;
 				}
 			}
 			return lastFrameIndex;

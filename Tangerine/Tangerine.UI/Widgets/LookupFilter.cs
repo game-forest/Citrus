@@ -47,34 +47,17 @@ namespace Tangerine.UI
 
 		public virtual void Applying(LookupWidget lookupWidget, string text) { }
 
-		public IEnumerable<LookupItem> Apply(string text, List<LookupItem> items)
+		public virtual IEnumerable<LookupItem> Apply(string text, List<LookupItem> items)
 		{
 			var itemsTemp = new List<(LookupItem item, int Distance)>();
 			if (!string.IsNullOrEmpty(text)) {
 				var matches = new List<int>(text.Length);
 				foreach (var item in items) {
-					var i = -1;
-					var d = 0;
-					foreach (var c in text) {
-						if (i == item.Text.Length - 1) {
-							break;
-						}
-						var ip = i;
-						var lci = item.Text.IndexOf(char.ToLowerInvariant(c), i + 1);
-						var uci = item.Text.IndexOf(char.ToUpperInvariant(c), i + 1);
-						i = lci != -1 && uci != -1 ? Math.Min(lci, uci) :
-							lci == -1 ? uci : lci;
-						if (i == -1) {
-							break;
-						}
-						matches.Add(i);
-						if (ip != -1) {
-							d += (i - ip) * (i - ip);
-						}
-					}
-					if (matches.Count == text.Length) {
-						itemsTemp.Add((item, d));
-						item.HighlightSymbolsIndices = matches.ToArray();
+					if (DoesTextMatchFuzzySearch(item.Name.Text, text, matches, out var distance)) {
+						itemsTemp.Add((item, distance));
+						item.Name.HighlightSymbolsIndices = matches.ToArray();
+					} else {
+						item.Name.HighlightSymbolsIndices = null;
 					}
 					matches.Clear();
 				}
@@ -84,11 +67,42 @@ namespace Tangerine.UI
 				}
 			} else {
 				foreach (var item in items) {
+					item.Name.HighlightSymbolsIndices = null;
 					yield return item;
 				}
 			}
 		}
 
 		public virtual void Applied(LookupWidget lookupWidget) { }
+
+		public static bool DoesTextMatchFuzzySearch(string text, string pattern, ICollection<int> matches, out int value)
+		{
+			var i = -1;
+			value = 0;
+			if (string.IsNullOrEmpty(text)) {
+				return string.IsNullOrEmpty(pattern);
+			}
+			if (string.IsNullOrEmpty(pattern)) {
+				return true;
+			}
+			foreach (var c in pattern) {
+				if (i == text.Length - 1) {
+					break;
+				}
+				var ip = i;
+				var lci = text.IndexOf(char.ToLowerInvariant(c), i + 1);
+				var uci = text.IndexOf(char.ToUpperInvariant(c), i + 1);
+				i = lci != -1 && uci != -1 ? Math.Min(lci, uci) :
+					lci == -1 ? uci : lci;
+				if (i == -1) {
+					break;
+				}
+				matches.Add(i);
+				if (ip != -1) {
+					value += (i - ip) * (i - ip);
+				}
+			}
+			return matches.Count == pattern.Length;
+		}
 	}
 }

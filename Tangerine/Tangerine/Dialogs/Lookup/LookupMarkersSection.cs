@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
@@ -8,12 +9,27 @@ namespace Tangerine
 {
 	public abstract class LookupMarkersSection : LookupSection
 	{
+		private static readonly Dictionary<MarkerAction, Icon> markerActionsIcons;
+
+		static LookupMarkersSection()
+		{
+			markerActionsIcons = new Dictionary<MarkerAction, Icon> {
+				{ MarkerAction.Play, IconPool.GetIcon("Lookup.MarkerPlayAction") },
+				{ MarkerAction.Jump, IconPool.GetIcon("Lookup.MarkerJumpAction") },
+				{ MarkerAction.Stop, IconPool.GetIcon("Lookup.MarkerStopAction") },
+			};
+		}
+
+		protected LookupMarkersSection(LookupSections sections) : base(sections) { }
+
 		protected void FillLookupByAnimationMarkers(LookupWidget lookupWidget, Animation animation, bool navigateToNode = true)
 		{
 			foreach (var m in animation.Markers) {
 				var mClosed = m;
-				lookupWidget.AddItem(
-					$"{m.Action} Marker '{m.Id}' at Frame: {m.Frame} in Animation: {(animation.IsLegacy ? "[Legacy]" : animation.Id)} in {animation.OwnerNode}",
+				var item = new LookupDialogItem(
+					lookupWidget,
+					m.Id,
+					$"{m.Action} Marker at Frame: {m.Frame}; Animation: {(animation.IsLegacy ? "[Legacy]" : animation.Id)}; Node: {animation.OwnerNode}",
 					() => {
 						var a = animation;
 						if (navigateToNode) {
@@ -31,9 +47,15 @@ namespace Tangerine
 							SetCurrentColumn.Perform(mClosed.Frame, a);
 							CenterTimelineOnCurrentColumn.Perform();
 						});
-						LookupDialog.Sections.Drop();
+						Sections.Drop();
 					}
-				);
+				) {
+					IconTexture = markerActionsIcons[m.Action].AsTexture,
+				};
+				if (string.IsNullOrEmpty(m.Id)) {
+					item.HeaderSimpleText.Text = "<No Name>";
+				}
+				lookupWidget.AddItem(item);
 			}
 		}
 	}
@@ -46,33 +68,32 @@ namespace Tangerine
 		public override string Prefix { get; } = $"{PrefixConst} ";
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for marker in current animation";
 
+		public LookupAnimationMarkersSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			if (Project.Current == null) {
-				lookupWidget.AddItem(
-					"Open any project to use Go To Marker function",
-					() => {
-						new FileOpenProject();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			if (Document.Current == null) {
-				lookupWidget.AddItem(
-					"Open any document to use Go To Marker function",
-					() => {
-						new FileOpen();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			if (Document.Current.Animation.Markers.Count == 0) {
-				lookupWidget.AddItem("Select any node with markers to use Go To Marker function", LookupDialog.Sections.Drop);
+			if (
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Marker function") ||
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Marker function") ||
+				!RequireAnimationWithMarkersOrAddAlertItem(lookupWidget, "Select any node with markers to use Go To Marker function")
+			) {
 				return;
 			}
 			FillLookupByAnimationMarkers(lookupWidget, Document.Current.Animation);
+		}
+
+		private bool RequireAnimationWithMarkersOrAddAlertItem(LookupWidget lookupWidget, string alertText)
+		{
+			if (Document.Current.Animation.Markers.Count > 0) {
+				return true;
+			}
+			lookupWidget.AddItem(new LookupDialogItem(
+				lookupWidget,
+				alertText,
+				null,
+				Sections.Drop
+			));
+			return false;
 		}
 	}
 
@@ -84,26 +105,14 @@ namespace Tangerine
 		public override string Prefix { get; } = $"{PrefixConst} ";
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for marker in current document";
 
+		public LookupDocumentMarkersSection(LookupSections sections) : base(sections) { }
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
-			if (Project.Current == null) {
-				lookupWidget.AddItem(
-					"Open any project to use Go To File function",
-					() => {
-						new FileOpenProject();
-						LookupDialog.Sections.Drop();
-					}
-				);
-				return;
-			}
-			if (Document.Current == null) {
-				lookupWidget.AddItem(
-					"Open any document to use Go To Marker function",
-					() => {
-						new FileOpen();
-						LookupDialog.Sections.Drop();
-					}
-				);
+			if (
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Marker function") ||
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Marker function")
+			) {
 				return;
 			}
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
