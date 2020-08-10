@@ -807,8 +807,7 @@ namespace YuzuGenerated
 			var s = (global::Lime.BoneArray)src;
 			var result = new global::Lime.BoneArray();
 			if (s.items != null) {
-				result.items = new global::Lime.BoneArray.Entry[s.items.Length];
-				Array.Copy(s.items, result.items, s.items.Length);
+				result.items = (global::Lime.BoneArray.Entry[])s.items.Clone();
 			}
 			return result;
 		}
@@ -1023,8 +1022,7 @@ namespace YuzuGenerated
 			var s = (global::Lime.RenderOptimizer.ContentPlane)src;
 			var result = new global::Lime.RenderOptimizer.ContentPlane();
 			if (s.Data != null) {
-				result.Data = new global::Lime.Vector3[s.Data.Length];
-				Array.Copy(s.Data, result.Data, s.Data.Length);
+				result.Data = (global::Lime.Vector3[])s.Data.Clone();
 			}
 			return result;
 		}
@@ -2220,17 +2218,14 @@ namespace YuzuGenerated
 			var s = (global::Lime.Mesh<global::Lime.Mesh3D.Vertex>)src;
 			var result = new global::Lime.Mesh<global::Lime.Mesh3D.Vertex>();
 			if (s.AttributeLocations != null) {
-				result.AttributeLocations = new int[s.AttributeLocations.Length];
-				Array.Copy(s.AttributeLocations, result.AttributeLocations, s.AttributeLocations.Length);
+				result.AttributeLocations = (int[])s.AttributeLocations.Clone();
 			}
 			if (s.Indices != null) {
-				result.Indices = new ushort[s.Indices.Length];
-				Array.Copy(s.Indices, result.Indices, s.Indices.Length);
+				result.Indices = (ushort[])s.Indices.Clone();
 			}
 			result.Topology = s.Topology;
 			if (s.Vertices != null) {
-				result.Vertices = new global::Lime.Mesh3D.Vertex[s.Vertices.Length];
-				Array.Copy(s.Vertices, result.Vertices, s.Vertices.Length);
+				result.Vertices = (global::Lime.Mesh3D.Vertex[])s.Vertices.Clone();
 			}
 			return result;
 		}
