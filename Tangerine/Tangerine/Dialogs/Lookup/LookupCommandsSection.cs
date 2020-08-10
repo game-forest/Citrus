@@ -38,6 +38,7 @@ namespace Tangerine
 							command.Shortcut,
 							() => {
 								action();
+								Sections.SaveRecentlySubmittedData(LookupSections.SectionType.Command, text);
 								Sections.Drop();
 							}
 						));

@@ -54,7 +54,7 @@ namespace Tangerine
 			lookupWidget.Submitted += LookupSubmitted;
 			lookupWidget.Canceled += LookupCanceled;
 			windowWidget.FocusScope.SetDefaultFocus();
-			sections.Push(sections.Initial);
+			sections.Initialize();
 
 			// TODO: Adaptive window height. Fix problem with "window.Resized += deviceRotated => UpdateAndResize(0);" at DefaultWindowWidget class.
 			//var layoutProcessor = windowWidget.Manager.Processors.OfType<LayoutProcessor>().First();

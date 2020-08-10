@@ -23,6 +23,7 @@ namespace Tangerine.UI
 		public event Action Submitted;
 		public event Action NavigatedBack;
 		public event Action Canceled;
+		public event Action FilterApplied;
 
 		public string FilterText
 		{
@@ -154,6 +155,7 @@ namespace Tangerine.UI
 			ScrollView.ScrollPosition = 0;
 
 			filter?.Applied(this);
+			FilterApplied?.Invoke();
 		}
 
 		public void SetBreadcrumbsNavigation(params string[] breadcrumbs) => SetBreadcrumbsNavigation((IEnumerable<string>)breadcrumbs);
@@ -202,6 +204,8 @@ namespace Tangerine.UI
 			}
 			selectedIndex = -1;
 		}
+
+		public int FindIndex(Predicate<LookupItem> match) => filteredItems.FindIndex(match);
 
 		private void Submit()
 		{

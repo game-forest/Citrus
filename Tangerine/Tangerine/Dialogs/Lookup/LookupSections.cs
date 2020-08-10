@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tangerine.UI;
@@ -6,6 +7,8 @@ namespace Tangerine
 {
 	public class LookupSections
 	{
+		private static SubmittedData recentlySubmittedData;
+
 		private readonly LookupWidget lookupWidget;
 		private readonly Stack<LookupSection> stack = new Stack<LookupSection>();
 
@@ -34,6 +37,29 @@ namespace Tangerine
 				new LookupDocumentAnimationsSection(this),
 				new LookupComponentsSection(this),
 			};
+		}
+
+		public void Initialize()
+		{
+			if (recentlySubmittedData == null) {
+				Push(Initial);
+			} else {
+				Push(recentlySubmittedData.GetSection(this));
+				lookupWidget.FilterText = recentlySubmittedData.FilterText;
+				var itemName = recentlySubmittedData.ItemName;
+
+				void SelectRecentlyItem()
+				{
+					var selectedItem = lookupWidget.FindIndex(i => ((LookupDialogItem)i).Header.Text == itemName);
+					if (selectedItem > 0) {
+						lookupWidget.SelectItem(selectedItem);
+					}
+					lookupWidget.FilterApplied -= SelectRecentlyItem;
+				}
+				lookupWidget.FilterApplied += SelectRecentlyItem;
+
+				recentlySubmittedData = null;
+			}
 		}
 
 		public void Push(LookupSection section)
@@ -81,6 +107,35 @@ namespace Tangerine
 			if (stack.Count == 0) {
 				Push(Initial);
 			}
+		}
+
+		public void SaveRecentlySubmittedData(SectionType sectionType, string itemName)
+		{
+			recentlySubmittedData = new SubmittedData {
+				SectionType = sectionType,
+				FilterText = lookupWidget.FilterText,
+				ItemName = itemName,
+			};
+		}
+
+		private class SubmittedData
+		{
+			public SectionType SectionType;
+			public string FilterText;
+			public string ItemName;
+
+			public LookupSection GetSection(LookupSections sections)
+			{
+				switch (SectionType) {
+					case SectionType.Command: return sections.Commands;
+					default: throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+
+		public enum SectionType
+		{
+			Command,
 		}
 	}
 }
