@@ -276,8 +276,14 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			float edgeHitRadius,
 			out TopologyHitTestResult result
 		) {
-			var location = LocateClosestTriangle(position, out var edge);
 			result = null;
+			if (
+				float.IsNaN(position.X) || float.IsNaN(position.Y) ||
+				float.IsInfinity(position.X) || float.IsInfinity(position.Y)
+			) {
+				return false;
+			}
+			var location = LocateClosestTriangle(position, out var edge);
 			switch (location) {
 				case LocationResult.SameVertex:
 					if (edge.Origin < 0) {
