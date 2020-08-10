@@ -651,7 +651,7 @@ namespace Tangerine
 
 			var h = CommandHandlerList.Global;
 			h.Connect(GenericCommands.NewProject, new ProjectNew());
-			h.Connect(GenericCommands.NewTan, new FileNew());
+			h.Connect(GenericCommands.NewScene, new FileNew());
 			h.Connect(GenericCommands.Open, new FileOpen());
 			h.Connect(GenericCommands.OpenProject, new FileOpenProject());
 			h.Connect(GenericCommands.Save, new FileSave());

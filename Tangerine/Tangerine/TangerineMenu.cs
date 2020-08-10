@@ -54,7 +54,7 @@ namespace Tangerine
 
 		public static void RebuildCreateImportedTypeMenu()
 		{
-			var menus = new[] { customNodes.Menu, GenericCommands.NewTanWithCustomRoot.Menu, create };
+			var menus = new[] { customNodes.Menu, GenericCommands.NewSceneWithCustomRoot.Menu, create };
 			foreach (var menu in menus) {
 				foreach (var command in menu) {
 					CommandHandlerList.Global.Disconnect(command);
@@ -62,7 +62,7 @@ namespace Tangerine
 			}
 			CreateNodeCommands.Clear();
 			customNodes.Menu.Clear();
-			GenericCommands.NewTanWithCustomRoot.Menu.Clear();
+			GenericCommands.NewSceneWithCustomRoot.Menu.Clear();
 			create.Clear();
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
 			var registeredNodeTypes =
@@ -101,11 +101,11 @@ namespace Tangerine
 					var newFileCmd = new Command(type.Name);
 					var format = typeof(Node3D).IsAssignableFrom(type) ? DocumentFormat.T3D : DocumentFormat.Tan;
 					CommandHandlerList.Global.Connect(newFileCmd, new FileNew(format, type));
-					GenericCommands.NewTanWithCustomRoot.Menu.Add(newFileCmd);
+					GenericCommands.NewSceneWithCustomRoot.Menu.Add(newFileCmd);
 				}
 			}
 			customNodes.Enabled = customNodes.Menu.Count > 0;
-			GenericCommands.NewTanWithCustomRoot.Enabled = GenericCommands.NewTanWithCustomRoot.Menu.Count > 0;
+			GenericCommands.NewSceneWithCustomRoot.Enabled = GenericCommands.NewSceneWithCustomRoot.Menu.Count > 0;
 			HotkeyRegistry.CurrentProjectName = Project.Current == null
 				? null
 				: System.IO.Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
@@ -130,8 +130,8 @@ namespace Tangerine
 #endif
 				new Command("File", new Menu {
 					new Command("New", new Menu {
-						GenericCommands.NewTan,
-						GenericCommands.NewTanWithCustomRoot,
+						GenericCommands.NewScene,
+						GenericCommands.NewSceneWithCustomRoot,
 					}),
 					GenericCommands.NewProject,
 					Command.MenuSeparator,
