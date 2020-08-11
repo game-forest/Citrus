@@ -266,6 +266,7 @@
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageSummary.cs" />
     <Compile Include="Source\Profilers\TasksProfiler.cs" />
     <Compile Include="Source\Profiler\IProfileableObject.cs" />
+    <Compile Include="Source\Profiler\SceneProfilingInfo.cs" />
     <Compile Include="Source\ReferenceEqualityComparer.cs" />
     <Compile Include="Source\ServiceProviderExtensions.cs" />
     <Compile Include="Source\ServiceRegistry.cs" />
