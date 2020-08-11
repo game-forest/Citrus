@@ -54,7 +54,13 @@ namespace Lime
 		public void Render()
 		{
 			foreach (var ro in objects) {
+#if PROFILER
+				RenderObjectOwnerInfo.PushState(ro.OwnerInfo);
+#endif // PROFILER
 				ro.Render();
+#if PROFILER
+				RenderObjectOwnerInfo.PopState();
+#endif // PROFILER
 			}
 		}
 
