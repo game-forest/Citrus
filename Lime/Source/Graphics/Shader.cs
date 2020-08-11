@@ -6,13 +6,14 @@ namespace Lime
 	public class Shader : IDisposable
 	{
 		private IPlatformShader platformShader;
-		private string source;
-		private ShaderStageMask stage;
+
+		public string Source { get; }
+		public ShaderStageMask Stage { get; }
 
 		protected Shader(ShaderStageMask stage, string source)
 		{
-			this.stage = stage;
-			this.source = source;
+			Stage = stage;
+			Source = source;
 		}
 
 		~Shader()
@@ -40,7 +41,7 @@ namespace Lime
 		internal IPlatformShader GetPlatformShader()
 		{
 			if (platformShader == null) {
-				platformShader = PlatformRenderer.Context.CreateShader(stage, source);
+				platformShader = PlatformRenderer.Context.CreateShader(Stage, Source);
 			}
 			return platformShader;
 		}
