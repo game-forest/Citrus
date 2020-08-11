@@ -57,6 +57,7 @@ namespace Tangerine.UI.SceneView
 			ConnectCommand(SceneViewCommands.Duplicate, DuplicateNodes);
 			ConnectCommand(SceneViewCommands.TieWidgetsWithBones, TieWidgetsWithBones);
 			ConnectCommand(SceneViewCommands.UntieWidgetsFromBones, UntieWidgetsFromBones);
+			ConnectCommand(SceneViewCommands.ToggleOverdrawMod, ToggleOverdrawMod);
 		}
 
 		private static void ConnectCommand(ICommand command, DocumentCommandHandler handler)
@@ -83,6 +84,14 @@ namespace Tangerine.UI.SceneView
 		public Matrix32 CalcTransitionFromSceneSpace(Widget targetSpace)
 		{
 			return Scene.LocalToWorldTransform * targetSpace.LocalToWorldTransform.CalcInversed();
+		}
+
+		private static void ToggleOverdrawMod()
+		{
+#if PROFILER
+			Overdraw.Enabled = !Overdraw.EnabledAtUpdateThread;
+#endif // PROFILER
+			Window.Current.Invalidate();
 		}
 
 		private static void TieWidgetsWithBones()
