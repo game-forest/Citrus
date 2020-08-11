@@ -16,7 +16,7 @@ namespace Tangerine.UI
 		private string previousFilterText;
 
 		public readonly ThemedEditBox FilterEditBox;
-		public readonly ThemedSimpleText BreadcrumbSimpleText;
+		public readonly Widget BreadcrumbWidget;
 		public readonly ThemedSimpleText HintSimpleText;
 		public readonly ThemedScrollView ScrollView;
 
@@ -80,9 +80,9 @@ namespace Tangerine.UI
 			AddNode(new Widget {
 				Layout = new HBoxLayout(),
 				Nodes = {
-					(BreadcrumbSimpleText = new ThemedSimpleText {
-						Padding = Theme.Metrics.ControlsPadding,
-						VAlignment = VAlignment.Center,
+					(BreadcrumbWidget = new ThemedSimpleText {
+						Layout = new HBoxLayout(),
+						Padding = new Thickness(right: Theme.Metrics.ControlsPadding.Right),
 					}),
 					(FilterEditBox = new ThemedEditBox()),
 				}
@@ -164,7 +164,28 @@ namespace Tangerine.UI
 
 		public void SetBreadcrumbsNavigation(IEnumerable<string> breadcrumbs)
 		{
-			BreadcrumbSimpleText.Text = breadcrumbs?.Aggregate(string.Empty, (s, i) => $"{s}{i} > ");
+			BreadcrumbWidget.Nodes.Clear();
+			var index = 0;
+			foreach (var breadcrumb in breadcrumbs.Reverse()) {
+				var button = new ThemedButton(breadcrumb) {
+					MinMaxHeight = Theme.Metrics.DefaultEditBoxSize.Y,
+				};
+				BreadcrumbWidget.PushNode(button);
+				var simpleText = button.Descendants.OfType<SimpleText>().First();
+				var v = simpleText.Font.MeasureTextLine(breadcrumb, simpleText.FontHeight, simpleText.LetterSpacing);
+				button.MinMaxWidth =
+					v.X +
+					button.Padding.Left + button.Padding.Right +
+					simpleText.Padding.Left + simpleText.Padding.Right +
+					Theme.Metrics.ControlsPadding.Left + Theme.Metrics.ControlsPadding.Right;
+				var indexClosed = index++;
+				button.Clicked += () => {
+					for (var i = 0; i < indexClosed; i++) {
+						NavigateBack();
+					}
+					FilterEditBox.SetFocus();
+				};
+			}
 		}
 
 		public void AddItem(string text, Action action) => AddItem(new LookupItem(this, text, action));

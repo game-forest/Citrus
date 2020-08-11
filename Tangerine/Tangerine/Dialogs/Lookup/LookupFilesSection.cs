@@ -86,7 +86,7 @@ namespace Tangerine
 							action = () => Sections.Push(new LookupSceneMenuSection(Sections, assetPath, assetType));
 							break;
 						case ".png":
-							action = () => Sections.Push(new LookupImageMenuSection(Sections, assetPath));
+							action = () => Sections.Push(new LookupImageMenuSection(Sections, assetPath, assetType));
 							break;
 						case ".ogg":
 							action = () => {
@@ -198,7 +198,7 @@ namespace Tangerine
 		{
 			this.assetPath = assetPath;
 			this.assetType = assetType;
-			Breadcrumb = Path.GetFileName(assetPath);
+			Breadcrumb = Path.GetFileName(assetPath) + assetType;
 		}
 
 		public override void FillLookup(LookupWidget lookupWidget)
@@ -260,10 +260,10 @@ namespace Tangerine
 		public override string Breadcrumb { get; }
 		public override string Prefix { get; } = null;
 
-		public LookupImageMenuSection(LookupSections sections, string assetPath) : base(sections)
+		public LookupImageMenuSection(LookupSections sections, string assetPath, string assetType) : base(sections)
 		{
 			this.assetPath = assetPath;
-			Breadcrumb = Path.GetFileName(assetPath);
+			Breadcrumb = Path.GetFileName(assetPath) + assetType;
 		}
 
 		public override void FillLookup(LookupWidget lookupWidget)
