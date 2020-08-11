@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Lime;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
@@ -101,7 +104,7 @@ namespace Tangerine.UI.SceneView
 			Core.Operations.UntieWidgetsFromBones.Perform(bones, widgets);
 		}
 
-		class ScenePresenter : IPresenter
+		private class ScenePresenter : IPresenter
 		{
 			private RenderChain renderChain = new RenderChain();
 			private Node content;
@@ -121,6 +124,12 @@ namespace Tangerine.UI.SceneView
 				} finally {
 					renderChain.Clear();
 				}
+#if PROFILER
+				ro.Frame = new RenderObject.FrameInfo {
+					Transform = node.Parent.AsWidget.LocalToWorldTransform,
+					Size = (Size)node.Parent.AsWidget.Size
+				};
+#endif // PROFILER
 				ro.LocalToWorldTransform = w.LocalToWorldTransform;
 				return ro;
 			}
@@ -139,8 +148,15 @@ namespace Tangerine.UI.SceneView
 				}
 			}
 
-			class RenderObject : Lime.RenderObject
+			private class RenderObject : Lime.RenderObject
 			{
+#if PROFILER
+				private static readonly RenderTargetsQueue renderTargetsManager
+					= new RenderTargetsQueue();
+
+				public FrameInfo Frame;
+#endif // PROFILER
+
 				public Matrix32 LocalToWorldTransform;
 				public RenderObjectList SceneObjects = new RenderObjectList();
 
@@ -149,14 +165,61 @@ namespace Tangerine.UI.SceneView
 					Renderer.PushState(RenderState.All);
 					// Hack: use the current state of Transform2 since it may be configured for generating SceneViewThumbnail.
 					Renderer.Transform2 = LocalToWorldTransform * Renderer.Transform2;
+#if PROFILER
+					RenderTexture renderTexture = null;
+					if (Overdraw.EnabledAtRenderThread) {
+						Renderer.PushState(
+							RenderState.ScissorState |
+							RenderState.Viewport |
+							RenderState.Projection |
+							RenderState.Transform1 |
+							RenderState.Transform2);
+						var viewportSize = (Size)((Vector2)Frame.Size * Window.Current.PixelScale);
+						renderTexture = renderTargetsManager.Acquire(viewportSize);
+						renderTexture.SetAsRenderTarget();
+						Renderer.ScissorState = ScissorState.ScissorDisabled;
+						Renderer.Viewport = new Viewport(0, 0, viewportSize.Width, viewportSize.Height);
+						Renderer.SetOrthogonalProjection(0, 0, Frame.Size.Width, Frame.Size.Height);
+						Renderer.Transform1 = Matrix32.Identity;
+						Renderer.Transform2 = LocalToWorldTransform * Frame.Transform.CalcInversed();
+						Renderer.Clear(Color4.Zero);
+						OverdrawMaterialsScope.Enter();
+					}
+#endif // PROFILER
 					SceneObjects.Render();
+#if PROFILER
+					if (Overdraw.EnabledAtRenderThread) {
+						OverdrawMaterialsScope.Leave();
+						renderTexture.RestoreRenderTarget();
+						renderTargetsManager.Free(renderTexture);
+						Renderer.PopState();
+					}
+#endif // PROFILER
 					Renderer.PopState();
+#if PROFILER
+					if (Overdraw.EnabledAtRenderThread) {
+						OverdrawInterpreter.DrawResults(renderTexture, Frame.Transform, Frame.Size);
+						Renderer.PushState(RenderState.Transform2);
+						Renderer.Transform2 = LocalToWorldTransform * Renderer.Transform2;
+						OverdrawForeground.Render();
+						Renderer.PopState();
+					}
+#endif // PROFILER
 				}
 
 				protected override void OnRelease()
 				{
 					SceneObjects.Clear();
 					base.OnRelease();
+				}
+
+				/// <summary>
+				/// Describes <see cref="SceneView.Frame"/> positioning.
+				/// </summary>
+				public struct FrameInfo
+				{
+					public Matrix32 Transform;
+					public Size Size;
 				}
 			}
 		}
