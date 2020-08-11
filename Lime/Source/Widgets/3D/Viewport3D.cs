@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using Yuzu;
 using System;
 using System.Linq;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 #if OPENGL
 #if !MAC && !MONOMAC
 using OpenTK.Graphics.ES20;
@@ -207,6 +210,9 @@ namespace Lime
 					foreach (var item in layer) {
 						var renderObject = item.Presenter.GetRenderObject(item.Node);
 						if (renderObject != null) {
+#if PROFILER
+							renderObject.OwnerInfo.Initialize(item.Node);
+#endif // PROFILER
 							ro.Objects.Add(renderObject);
 						}
 					}

@@ -100,6 +100,9 @@ namespace Lime
 					index = 0;
 				if (item.Free) {
 					item.Free = false;
+#if PROFILER
+					item.OwnerInfo.Reset();
+#endif // PROFILER
 					return item;
 				}
 			}
@@ -109,6 +112,9 @@ namespace Lime
 				items[i] = new T();
 			}
 			items[index].Free = false;
+#if PROFILER
+			items[index].OwnerInfo.Reset();
+#endif // PROFILER
 			return items[index];
 		}
 	}
