@@ -295,6 +295,7 @@
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageData.cs" />
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageSummary.cs" />
     <Compile Include="Source\Profilers\TasksProfiler.cs" />
+    <Compile Include="Source\Profiler\Graphics\Overdraw.cs" />
     <Compile Include="Source\Profiler\Graphics\RenderBatchOwnersInfo.cs" />
     <Compile Include="Source\Profiler\Graphics\RenderObjectOwnerInfo.cs" />
     <Compile Include="Source\Profiler\IProfileableObject.cs" />

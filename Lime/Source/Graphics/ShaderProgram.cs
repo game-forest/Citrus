@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime.Graphics.Platform;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -28,11 +31,29 @@ namespace Lime
 		private BoundShaderParam[] boundParams;
 		private Uniform[] uniforms;
 
-		public ShaderProgram(IEnumerable<Shader> shaders, IEnumerable<AttribLocation> attribLocations, IEnumerable<Sampler> samplers)
+#if PROFILER
+		public OverdrawBehavior OverdrawBehavior { get; }
+#endif // PROFILER
+
+		public ShaderProgram(
+			IEnumerable<Shader>         shaders,
+			IEnumerable<AttribLocation> attribLocations,
+			IEnumerable<Sampler>        samplers
+#if PROFILER
+			, OverdrawBehavior          overdrawBehavior = null
+#endif // PROFILER
+			)
 		{
 			this.shaders = shaders.ToArray();
 			this.attribLocations = attribLocations.ToArray();
 			this.samplers = samplers.ToArray();
+#if PROFILER
+			OverdrawBehavior CreateDefaultOverdrawBehavior() {
+				var program = new OverdrawShaderProgram(shaders, attribLocations, samplers);
+				return new OverdrawBehavior(program, OverdrawBehavior.DefaultBlending);
+			}
+			OverdrawBehavior = overdrawBehavior ?? CreateDefaultOverdrawBehavior();
+#endif // PROFILER
 		}
 
 		~ShaderProgram()
