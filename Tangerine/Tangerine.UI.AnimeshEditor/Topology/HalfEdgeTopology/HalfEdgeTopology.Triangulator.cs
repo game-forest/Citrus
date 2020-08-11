@@ -124,24 +124,40 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			var v1 = InnerVertices[current.Origin].Pos;
 			var v2 = InnerVertices[current.Next.Origin].Pos;
 			var v3 = InnerVertices[current.Prev.Origin].Pos;
-			var r2 = VertexHitTestRadius * VertexHitTestRadius;
-			if (v1 == vertex || (vertex - v1).SqrLength <= r2) {
-				edge = current;
-				return LocationResult.SameVertex;
+			if (VertexHitTestRadius == 0f) {
+				if (v1 == vertex) {
+					edge = current;
+					return LocationResult.SameVertex;
+				}
+				if (v2 == vertex) {
+					edge = current.Next;
+					return LocationResult.SameVertex;
+				}
+				if (v3 == vertex) {
+					edge = current.Prev;
+					return LocationResult.SameVertex;
+				}
+			} else {
+				var r2 = VertexHitTestRadius * VertexHitTestRadius;
+				var d1 = (vertex - v1).SqrLength;
+				var d2 = (vertex - v2).SqrLength;
+				var d3 = (vertex - v3).SqrLength;
+				if (d1 <= r2 && d1 <= d2 && d1 <= d3) {
+					edge = current;
+					return LocationResult.SameVertex;
+				}
+				if (d2 <= r2 && d2 <= d1 && d2 <= d3) {
+					edge = current.Next;
+					return LocationResult.SameVertex;
+				}
+				if (d3 <= r2 && d3 <= d1 && d3 <= d2) {
+					edge = current.Prev;
+					return LocationResult.SameVertex;
+				}
 			}
-			if (v2 == vertex || (vertex - v2).SqrLength <= r2) {
-				edge = current.Next;
-				return LocationResult.SameVertex;
-			}
-			if (v3 == vertex || (vertex - v3).SqrLength <= r2) {
-				edge = current.Prev;
-				return LocationResult.SameVertex;
-			}
-			var isExactEdgeHitTesting = EdgeHitTestDistance == 0f;
-			var d2 = EdgeHitTestDistance * EdgeHitTestDistance;
 			if (VertexInsideTriangle(vertex, v1, v2, v3)) {
 				edge = current;
-				if (isExactEdgeHitTesting) {
+				if (EdgeHitTestDistance == 0f) {
 					if (IsVertexOnEdge(vertex, current)) {
 						return LocationResult.OnEdge;
 					}
@@ -154,6 +170,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 						return LocationResult.OnEdge;
 					}
 				} else {
+					var d2 = EdgeHitTestDistance * EdgeHitTestDistance;
 					var de1 = PointToSegmentSqrDistance(v1, v2, vertex);
 					var de2 = PointToSegmentSqrDistance(v2, v3, vertex);
 					var de3 = PointToSegmentSqrDistance(v3, v1, vertex);
