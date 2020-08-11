@@ -1,5 +1,8 @@
 using System;
 using System.Threading;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -43,12 +46,65 @@ namespace Lime
 			get { return isRenderingPhase; }
 		}
 
+#if !TANGERINE && PROFILER
+		private readonly RenderTargetsQueue renderTargetsManager = new RenderTargetsQueue();
+
+		private Action overdrawBegin;
+		private Action overdrawEnd;
+#endif // PROFILER
+
 		protected CommonWindow()
 		{
 			if (Current == null) {
 				Current = (IWindow)this;
 			}
 			Context = new Context(Property.Create(() => Current, (v) => Current = v), this);
+			InitializeOverdrawActions();
+		}
+
+		private void InitializeOverdrawActions()
+		{
+#if PROFILER
+			Sync += () => {
+				Overdraw.Sync();
+				OverdrawForeground.Sync();
+			};
+#if !TANGERINE
+			RenderTexture renderTexture = null;
+			overdrawBegin = () => {
+				if (Overdraw.EnabledAtRenderThread) {
+					var viewportSize = (Size)(Current.ClientSize * Current.PixelScale);
+					renderTexture = renderTargetsManager.Acquire(viewportSize);
+					renderTexture.SetAsRenderTarget();
+					Renderer.Clear(Color4.Zero);
+					OverdrawMaterialsScope.Enter();
+				}
+			};
+			overdrawEnd = () => {
+				if (Overdraw.EnabledAtRenderThread) {
+					OverdrawMaterialsScope.Leave();
+					renderTexture.RestoreRenderTarget();
+					renderTargetsManager.Free(renderTexture);
+					Renderer.PushState(
+						RenderState.Transform1 |
+						RenderState.Transform2 |
+						RenderState.ScissorState |
+						RenderState.Viewport |
+						RenderState.Projection);
+					Renderer.Transform1 = Matrix32.Identity;
+					Renderer.Transform2 = Matrix32.Identity;
+					Renderer.ScissorState = ScissorState.ScissorDisabled;
+					var windowSize = (Size)Current.ClientSize;
+					var viewportSize = (Size)(Current.ClientSize * Current.PixelScale);
+					Renderer.Viewport = new Viewport(0, 0, viewportSize.Width, viewportSize.Height);
+					Renderer.SetOrthogonalProjection(0, 0, windowSize.Width, windowSize.Height);
+					OverdrawInterpreter.DrawResults(renderTexture, Matrix32.Identity, (Size)Current.ClientSize);
+					Renderer.PopState();
+					OverdrawForeground.Render();
+				}
+			};
+#endif // TANGERINE
+#endif // PROFILER
 		}
 
 		protected void RaiseActivated()
@@ -78,7 +134,19 @@ namespace Lime
 				isRenderingPhase = true;
 				try {
 					NofityPendingActionsOnRendering();
+#if !TANGERINE && PROFILER
+					if (Application.MainWindow == this) {
+						Renderer.FrameStarted += overdrawBegin;
+						Renderer.FrameFinishing += overdrawEnd;
+					}
+#endif // !TANGERINE && PROFILER
 					Rendering?.Invoke();
+#if !TANGERINE && PROFILER
+					if (Application.MainWindow == this) {
+						Renderer.FrameStarted -= overdrawBegin;
+						Renderer.FrameFinishing -= overdrawEnd;
+					}
+#endif // !TANGERINE && PROFILER
 				} finally {
 					isRenderingPhase = false;
 				}
@@ -116,16 +184,29 @@ namespace Lime
 
 		private void RaiseUpdatingHelper(float delta)
 		{
+#if PROFILER
+			Overdraw.UpdateStarted();
+#endif // PROFILER
 			if (Current.Active) {
 				Command.ResetConsumedCommands();
 				CommandQueue.Instance.IssueCommands();
 				try {
 					Updating?.Invoke(delta);
+#if PROFILER
+					if (Application.MainWindow == this) {
+						OverdrawForeground.GetRenderObjects();
+					}
+#endif // PROFILER
 				} finally {
 					Application.MainMenu?.Refresh();
 				}
 			} else {
 				Updating?.Invoke(delta);
+#if PROFILER
+				if (Application.MainWindow == this) {
+					OverdrawForeground.GetRenderObjects();
+				}
+#endif // PROFILER
 			}
 		}
 
