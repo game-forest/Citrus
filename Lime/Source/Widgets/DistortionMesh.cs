@@ -7,6 +7,7 @@ namespace Lime
 	[TangerineRegisterNode(Order = 14)]
 	[TangerineAllowedChildrenTypes(typeof(DistortionMeshPoint))]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Distortion Mesh")]
+	[TangerineLockChildrenNodeList]
 	public class DistortionMesh : Widget, IMaterialComponentOwner
 	{
 		private IMaterial defaultMaterial;

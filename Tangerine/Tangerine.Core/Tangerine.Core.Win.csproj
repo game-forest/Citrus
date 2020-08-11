@@ -79,9 +79,9 @@
     <Compile Include="Operations\EnterLeaveNode.cs" />
     <Compile Include="Operations\Modification.cs" />
     <Compile Include="Operations\RulerAction.cs" />
+    <Compile Include="Operations\SceneTree.cs" />
     <Compile Include="Operations\SelectRow.cs" />
     <Compile Include="Operations\SelectRowRange.cs" />
-    <Compile Include="Operations\SyncFolderDescriptorsProcessor.cs" />
     <Compile Include="Operations\TimelineColumnRemove.cs" />
     <Compile Include="Operations\TimelineHorizontalShift.cs" />
     <Compile Include="Project.cs" />
@@ -92,9 +92,9 @@
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="ResolutionPreview.cs" />
     <Compile Include="Row.cs" />
-    <Compile Include="RowsSynchronizer.cs" />
     <Compile Include="Ruler.cs" />
     <Compile Include="SceneCache.cs" />
+    <Compile Include="SceneTreeBuilder.cs" />
     <Compile Include="SyncPresenters.cs" />
     <Compile Include="TriggersValidation.cs" />
     <Compile Include="UserPreferences.cs" />

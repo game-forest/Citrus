@@ -27,19 +27,22 @@ namespace Tangerine
 			var aabb = hull.ToAABB();
 			var container = Document.Current.Container;
 			foreach (var row in Document.Current.SelectedRows()) {
-				if (row.Components.Contains<BoneRow>()) {
-					var boneRow = row.Components.Get<BoneRow>();
-					if (!boneRow.ChildrenExpanded) {
-						selectedNodes.AddRange(BoneUtils.FindBoneDescendats(boneRow.Bone, container.Nodes.OfType<Bone>()));
+				var br = row.Components.Get<BoneRow>();
+				if (br != null) {
+					if (!row.Expanded) {
+						selectedNodes.AddRange(BoneUtils.FindBoneDescendats(br.Bone, container.Nodes.OfType<Bone>()));
 					}
 				}
 			}
 			var selectedBones = selectedNodes.OfType<Bone>().ToList();
 
-			var loc = container.RootFolder().Find(selectedNodes[0]);
 			Frame group;
 			try {
-				group = (Frame)Core.Operations.CreateNode.Perform(container, loc, typeof(Frame));
+				var firstItem = Document.Current.GetSceneItemForObject(selectedNodes[0]);
+				group = (Frame)Core.Operations.CreateNode.Perform(
+					firstItem.Parent, 
+					firstItem.Parent.Rows.IndexOf(firstItem),
+					typeof(Frame));
 			} catch (InvalidOperationException e) {
 				AlertDialog.Show(e.Message);
 				return;
@@ -74,11 +77,13 @@ namespace Tangerine
 			}
 			SetKeyframes(nodeKeyframesDict);
 			foreach (var n in selectedNodes) {
-				UnlinkFolderItem.Perform(container, n);
+				if (n.Parent != null) {
+					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(n));
+				}
 			}
 			int i = 0;
 			foreach (var node in selectedNodes) {
-				InsertFolderItem.Perform(group, new FolderItemLocation(group.RootFolder(), i++), node);
+				LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group), i++, node);
 				if (node is Widget) {
 					TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => v - aabb.A);
 				}
@@ -250,18 +255,19 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			var groups = Document.Current?.SelectedNodes().OfType<Frame>().ToList();
-			if (groups?.Count == 0) {
+			var groups = SceneTreeUtils.EnumerateSelectedTopSceneItems()
+				.Select(i => i.GetNode()).OfType<Frame>().ToList();
+			if (groups.Count == 0) {
 				return;
 			}
 			var container = (Widget)Document.Current.Container;
-			var p = container.RootFolder().Find(groups[0]);
 			ClearRowSelection.Perform();
 			UntieWidgetsFromBones.Perform(Document.Current.Container.Nodes.OfType<Bone>(), groups);
+			var containerItem = Document.Current.GetSceneItemForObject(container);
+			int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(groups[0]));
 			foreach (var group in groups) {
-				UnlinkFolderItem.Perform(container, group);
+				UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
 			}
-
 			foreach (var group in groups) {
 				var flipXFactor = group.Scale.X < 0 ? -1 : 1;
 				var flipYFactor = group.Scale.Y < 0 ? -1 : 1;
@@ -270,10 +276,9 @@ namespace Tangerine
 				var groupNodes = group.Nodes.ToList().Where(GroupNodes.IsValidNode).ToList();
 				var localToParentTransform = group.CalcLocalToParentTransform();
 				foreach (var node in groupNodes) {
-					UnlinkFolderItem.Perform(group, node);
-					InsertFolderItem.Perform(container, p, node);
+					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(node));
+					LinkSceneItem.Perform(containerItem, index++, node);
 					SelectNode.Perform(node);
-					p.Index++;
 					if (node is Widget) {
 						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => localToParentTransform * v);
 						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Scale), v => v * group.Scale);
@@ -404,9 +409,11 @@ namespace Tangerine
 			var node = nodes[0];
 			var clone = node.Clone();
 			clone.ContentsPath = null;
-			var location = Document.Current.Container.RootFolder().Find(node);
-			UnlinkFolderItem.Perform(Document.Current.Container, node);
-			InsertFolderItem.Perform(Document.Current.Container, location, clone);
+			var nodeItem = Document.Current.GetSceneItemForObject(node);
+			var parentItem = nodeItem.Parent;
+			var index = parentItem.Rows.IndexOf(nodeItem);
+			UnlinkSceneItem.Perform(nodeItem);
+			LinkSceneItem.Perform(parentItem, index, clone);
 		}
 	}
 

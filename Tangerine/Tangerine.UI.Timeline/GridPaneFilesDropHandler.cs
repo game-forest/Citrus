@@ -15,8 +15,6 @@ namespace Tangerine.UI.Timeline
 		public void Handle(List<string> files)
 		{
 			var grid = Timeline.Instance.Grid;
-			var rowLocationUnderMouseOnFilesDrop =
-				SelectAndDragRowsProcessor.MouseToRowLocation(grid.RootWidget.Input.MousePosition);
 			var handled = new List<string>();
 			var cellUnderMouseOnFilesDrop = grid.CellUnderMouse();
 			var animateTextureCellOffset = 0;
@@ -57,16 +55,6 @@ namespace Tangerine.UI.Timeline
 						}
 						case ".ogg": {
 							var node = CreateNode.Perform(typeof(Audio));
-							if (rowLocationUnderMouseOnFilesDrop.HasValue) {
-								var location = rowLocationUnderMouseOnFilesDrop.Value;
-								var row = Document.Current.Rows.FirstOrDefault(r => r.Components.Get<Core.Components.NodeRow>()?.Node == node);
-								if (row != null) {
-									if (location.Index >= row.Index) {
-										location.Index++;
-									}
-									SelectAndDragRowsProcessor.Probers.Any(p => p.Probe(row, location));
-								}
-							}
 							var sample = new SerializableSample(assetPath);
 							SetProperty.Perform(node, nameof(Audio.Sample), sample);
 							SetProperty.Perform(node, nameof(Node.Id), assetPath);

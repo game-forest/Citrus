@@ -8,9 +8,9 @@ namespace Tangerine.Core.Components
 {
 	public sealed class CurveRow : Component
 	{
-		public Node Node { get; private set; }
-		public IAnimator Animator { get; private set; }
-		public CurveEditorState State { get; private set; }
+		public Node Node { get; }
+		public IAnimator Animator { get; }
+		public CurveEditorState State { get; }
 
 		public CurveRow(Node node, IAnimator animator, CurveEditorState state)
 		{
@@ -22,91 +22,89 @@ namespace Tangerine.Core.Components
 
 	public sealed class NodeRow : Component
 	{
-		public Node Node { get; private set; }
-
-		public NodeVisibility Visibility
-		{
-			get { return Node.EditorState().Visibility; }
-			set { Node.EditorState().Visibility = value; }
-		}
-
-		public bool Locked
-		{
-			get { return Node.EditorState().Locked; }
-			set { Node.EditorState().Locked = value; }
-		}
-
-		public bool Expanded
-		{
-			get { return Node.EditorState().PropertiesExpanded; }
-			set { Node.EditorState().PropertiesExpanded = value; }
-		}
-
-		public NodeRow(Node node)
-		{
-			Node = node;
-		}
+		public Node Node { get; set; }
 	}
 
 	public sealed class FolderRow : Component
 	{
-		public Folder Folder { get; private set; }
-
-		public FolderRow(Folder folder)
-		{
-			Folder = folder;
-		}
+		public Folder.Descriptor Folder { get; set; }
 	}
 
 	public sealed class PropertyRow : Component
 	{
-		public Node Node { get; private set; }
-		public IAnimator Animator { get; private set; }
-
-		public PropertyRow(Node node, IAnimator animator)
-		{
-			Node = node;
-			Animator = animator;
-		}
+		public Node Node { get; set; }
+		public IAnimator Animator { get; set; }
 	}
 
 	public sealed class BoneRow : Component
 	{
-		public Bone Bone { get; private set; }
-
-		public bool ChildrenExpanded
-		{
-			get { return Bone.EditorState().ChildrenExpanded; }
-			set { Bone.EditorState().ChildrenExpanded = value; }
-		}
-
-		public bool HaveChildren { get; set; }
-
-		public BoneRow(Bone bone)
-		{
-			Bone = bone;
-		}
+		public Bone Bone { get; set; }
+	}
+	
+	public sealed class AnimationRow : Component
+	{
+		public Animation Animation { get; set; }
 	}
 
 	public sealed class AnimationTrackRow : Component
 	{
-		public AnimationTrack Track { get; private set; }
+		public AnimationTrack Track { get; set; }
+	}
+	
+	[MutuallyExclusiveDerivedComponents]
+	public abstract class CommonRowData : Component
+	{
+		public abstract string Id { get; set; }
+	}
 
-		public AnimationTrackRow(AnimationTrack track)
+	public sealed class CommonNodeRowData : CommonRowData
+	{
+		public Node Node { get; set; }
+
+		public override string Id
 		{
-			Track = track;
+			get => Node.Id;
+			set => Node.Id = value;
 		}
+	}
 
-		public AnimationTrackVisibility Visibility
+	public sealed class CommonFolderRowData : CommonRowData
+	{
+		public Folder.Descriptor Folder { get; set; }
+		
+		public override string Id
 		{
-			get { return Track.EditorState().Visibility; }
-			set { Track.EditorState().Visibility = value; }
+			get => Folder.Id;
+			set => Folder.Id = value;
 		}
-
-		public bool Locked
+	}
+	
+	public sealed class CommonPropertyRowData : CommonRowData
+	{
+		public IAnimator Animator { get; set; }
+		
+		public override string Id
 		{
-			get { return Track.EditorState().Locked; }
-			set { Track.EditorState().Locked = value; }
+			get => Animator.TargetPropertyPath;
+			set { }
+		}
+	}
+
+	public class CommonAnimationRowData : CommonRowData
+	{
+		public Animation Animation { get; set; }
+		
+		public override string Id { get; set; }
+	}
+
+	public sealed class CommonAnimationTrackRowData : CommonRowData
+	{
+		public AnimationTrack Track { get; set; }
+
+		public override string Id
+		{
+			get => Track.Id;
+			set => Track.Id = value;
 		}
 	}
 

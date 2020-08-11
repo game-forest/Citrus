@@ -41,7 +41,6 @@ namespace Tangerine.UI.Timeline
 		public CurveEditorPane(Timeline timeline)
 		{
 			this.timeline = timeline;
-			timeline.OffsetChanged += value => ContentWidget.X = -value.X;
 			MainAreaWidget = new Frame {
 				Layout = new StackLayout { HorizontallySizeable = true, VerticallySizeable = true },
 				ClipChildren = ClipMethod.ScissorTest,
@@ -53,6 +52,7 @@ namespace Tangerine.UI.Timeline
 				Layout = new VBoxLayout { Spacing = TimelineMetrics.RowSpacing },
 				Presenter = new SyncDelegatePresenter<Node>(RenderBackgroundAndGrid),
 			};
+			MainAreaWidget.Updated += _ => ContentWidget.X = -Timeline.Instance.OffsetX;
 			MainAreaWidget.AddNode(ContentWidget);
 			toolbar = new Widget {
 				Padding = new Thickness(2, 0),

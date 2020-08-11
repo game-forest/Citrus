@@ -9,6 +9,7 @@ using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.MainMenu;
+using Tangerine.Panels;
 using Tangerine.UI;
 using Tangerine.UI.AnimeshEditor;
 using Tangerine.UI.AnimeshEditor.Operations;
@@ -272,13 +273,12 @@ namespace Tangerine
 				typeof(Core.Operations.TimelineHorizontalShift.Processor),
 				typeof(Core.Operations.TimelineColumnRemove.Processor),
 				typeof(Core.Operations.RemoveKeyframeRange.Processor),
-				typeof(Core.Operations.SelectRow.Processor),
 				typeof(Core.Operations.RenameAnimationProcessor),
+				typeof(Core.Operations.DelegateOperation.Processor),
 				typeof(Core.Operations.SetProperty.Processor),
 				typeof(Core.Operations.SetIndexedProperty.Processor),
 				typeof(Core.Operations.RemoveKeyframe.Processor),
 				typeof(Core.Operations.SetKeyframe.Processor),
-				typeof(Core.Operations.InsertFolderItem.Processor),
 				typeof(Core.Operations.AddIntoCollection<,>.Processor),
 				typeof(Core.Operations.RemoveFromCollection<,>.Processor),
 				typeof(Core.Operations.InsertIntoList.Processor),
@@ -287,14 +287,11 @@ namespace Tangerine
 				typeof(Core.Operations.RemoveFromList<,>.Processor),
 				typeof(Core.Operations.InsertIntoDictionary<,,>.Processor),
 				typeof(Core.Operations.RemoveFromDictionary<,,>.Processor),
-				typeof(Core.Operations.UnlinkFolderItem.Processor),
-				typeof(Core.Operations.MoveNodes.Processor),
 				typeof(Core.Operations.SetMarker.Processor),
 				typeof(Core.Operations.DeleteMarker.Processor),
 				typeof(Core.Operations.SetComponent.Processor),
 				typeof(Core.Operations.DeleteComponent.Processor),
 				typeof(Core.Operations.DistortionMeshProcessor),
-				typeof(Core.Operations.SyncFolderDescriptorsProcessor),
 				typeof(UI.SceneView.ResolutionPreviewOperation.Processor),
 				typeof(UI.Timeline.Operations.SelectGridSpan.Processor),
 				typeof(UI.Timeline.Operations.DeselectGridSpan.Processor),
@@ -305,7 +302,6 @@ namespace Tangerine
 				typeof(TriggersValidatorOnSetProperty),
 				typeof(TriggersValidatorOnSetKeyframe),
 				typeof(UpdateNodesAndApplyAnimatorsProcessor),
-				typeof(RowsSynchronizer),
 				typeof(Core.Operations.ReplaceContents.Processor),
 				typeof(Core.Operations.DeleteRuler.Processor),
 				typeof(Core.Operations.CreateRuler.Processor),
@@ -672,10 +668,10 @@ namespace Tangerine
 			h.Connect(Tools.AnimeshCreate, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Creation));
 			h.Connect(Tools.AnimeshRemove, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Removal));
 			h.Connect(Tools.AnimeshTransform, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Transformation));
-			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard, IsCopyPasteAllowedForSelection);
-			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform, IsCopyPasteAllowedForSelection));
+			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard);
+			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));
-			h.Connect(Command.Delete, new DocumentDelegateCommandHandler(Core.Operations.Delete.Perform, IsCopyPasteAllowedForSelection));
+			h.Connect(Command.Delete, new DocumentDelegateCommandHandler(Core.Operations.Delete.Perform));
 			h.Connect(Command.SelectAll, new DocumentDelegateCommandHandler(() => {
 				foreach (var row in Document.Current.Rows) {
 					Core.Operations.SelectRow.Perform(row, true);
@@ -739,11 +735,6 @@ namespace Tangerine
 			else {
 				HotkeyRegistry.CurrentProfile = defaultProfile;
 			}
-		}
-
-		private static bool IsCopyPasteAllowedForSelection()
-		{
-			return (Document.Current?.InspectRootNode ?? false) || (Document.Current?.TopLevelSelectedRows().Any(row => row.IsCopyPasteAllowed()) ?? false);
 		}
 
 		private void ClearActiveRuler()

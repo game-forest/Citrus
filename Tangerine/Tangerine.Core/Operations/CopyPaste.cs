@@ -1,11 +1,6 @@
 using System;
 using System.Linq;
 using Lime;
-using Tangerine.Core;
-using Tangerine.Core.Components;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Orange;
 
 namespace Tangerine.Core.Operations
 {
@@ -19,78 +14,13 @@ namespace Tangerine.Core.Operations
 			Clipboard.Text = CopyToString();
 		}
 
-		public static string CopyToString()
+		private static string CopyToString()
 		{
 			var stream = new System.IO.MemoryStream();
-			if (Document.Current.Animation.IsCompound) {
-				CopyAnimationTracks(stream);
-			} else {
-				CopyNodes(stream);
-			}
+			var topItems = SceneTreeUtils.EnumerateTopSceneItems(Document.Current.SelectedRows()).ToList();
+			CopySceneItemsToStream.Perform(topItems, stream);
 			var text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 			return text;
-		}
-
-		private static void CopyAnimationTracks(System.IO.MemoryStream stream)
-		{
-			var animation = new Animation { IsCompound = true };
-			foreach (var row in Document.Current.TopLevelSelectedRows()) {
-				if (row.Components.Get<AnimationTrackRow>()?.Track is AnimationTrack track) {
-					animation.Tracks.Add(Cloner.Clone(track));
-				}
-			}
-			TangerinePersistence.Instance.WriteObject(Document.Current.Path, stream, animation, Persistence.Format.Json);
-		}
-
-		private static void CopyNodes(System.IO.MemoryStream stream)
-		{
-			var frame = new Frame();
-			foreach (var row in Document.Current.TopLevelSelectedRows()) {
-				if (!row.IsCopyPasteAllowed()) {
-					continue;
-				}
-				var bone = row.Components.Get<BoneRow>()?.Bone;
-				if (bone != null) {
-					var c = (Bone)Document.CreateCloneForSerialization(bone);
-					c.BaseIndex = 0;
-					frame.RootFolder().Items.Add(c);
-					if (!bone.EditorState().ChildrenExpanded) {
-						var children = BoneUtils.FindBoneDescendats(bone, Document.Current.Container.Nodes.OfType<Bone>());
-						foreach (var b in children) {
-							c = (Bone)Document.CreateCloneForSerialization(b);
-							frame.RootFolder().Items.Add(c);
-						}
-					}
-					continue;
-				}
-				var node = row.Components.Get<NodeRow>()?.Node;
-				if (node != null) {
-					frame.RootFolder().Items.Add(Document.CreateCloneForSerialization(node));
-				}
-				var folder = row.Components.Get<FolderRow>()?.Folder;
-				if (folder != null) {
-					frame.RootFolder().Items.Add(CloneFolder(folder));
-				}
-				var animator = Cloner.Clone(row.Components.Get<PropertyRow>()?.Animator);
-				if (animator != null) {
-					frame.Animators.Add(animator);
-				}
-			}
-			frame.SyncFolderDescriptorsAndNodes();
-			TangerinePersistence.Instance.WriteObject(null, stream, frame, Persistence.Format.Json);
-		}
-
-		static Folder CloneFolder(Folder folder)
-		{
-			var clone = new Folder { Id = folder.Id, Expanded = folder.Expanded };
-			foreach (var i in folder.Items) {
-				if (i is Folder) {
-					clone.Items.Add(CloneFolder(i as Folder));
-				} else if (i is Node) {
-					clone.Items.Add(Document.CreateCloneForSerialization(i as Node));
-				}
-			}
-			return clone;
 		}
 	}
 
@@ -109,147 +39,18 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(Vector2? mousePosition = null)
 		{
-			var row = Document.Current.SelectedRows().FirstOrDefault();
-			var loc = row == null ?
-				new RowLocation(Document.Current.RowTree, 0) :
-				new RowLocation(row.Parent, row.Parent.Rows.IndexOf(row));
+			SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var index);
 			var data = Clipboard.Text;
 			if (!string.IsNullOrEmpty(data)) {
-				if (Document.Current.Animation.IsCompound) {
-					PasteAnimationTracks(data, loc);
-				} else {
-					PasteNodes(data, loc, mousePosition);
-				}
-			}
-			Pasted?.Invoke();
-			foreach (var node in Document.Current.SelectedNodes()) {
-				node.LoadExternalScenes();
-			}
-		}
-
-		private static void PasteAnimationTracks(string data, RowLocation loc)
-		{
-			try {
 				var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
-				var animation = TangerinePersistence.Instance.ReadObject<Animation>(string.Empty, stream);
-				ClearRowSelection.Perform();
-				var tracks = animation.Tracks.ToList();
-				animation.Tracks.Clear();
-				int i = Document.Current.Animation.Tracks.Count == 0 ? 0 : loc.Index + 1;
-				foreach (var t in tracks) {
-					InsertIntoList<AnimationTrackList, AnimationTrack>.Perform(Document.Current.Animation.Tracks, i++, t);
-					SelectRow.Perform(Document.Current.GetRowForObject(t));
-				}
-			} catch (System.Exception e) {
-				Debug.Write(e);
-				return;
-			}
-		}
-
-		public static bool PasteNodes(string data, RowLocation location, Vector2? mousePosition)
-		{
-			bool CanPaste()
-			{
-				// We are support only paste into folders for now.
-				return location.ParentRow.Components.Contains<FolderRow>() ||
-					   location.ParentRow.Components.Contains<BoneRow>();
-			}
-
-			if (!CanPaste()) {
-				return false;
-			}
-			Frame frame;
-			try {
-				var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
-				frame = TangerinePersistence.Instance.ReadObject<Frame>(Document.Current.Path, stream);
-			} catch (System.Exception e) {
-				Debug.Write(e);
-				return false;
-			}
-			var animators = frame.Animators;
-			var items = frame.RootFolder().Items.Where(item => NodeCompositionValidator.IsCopyPasteAllowed(item.GetType())).ToList();
-			if (items.Count == 0) {
-				if (animators.Count != 0) {
-					foreach (var row in Document.Current.TopLevelSelectedRows().ToList()) {
-						if (!(row.Components.Get<NodeRow>()?.Node is IAnimationHost animable)) {
-							continue;
-						}
-						Document.Current.History.DoTransaction(() => {
-							foreach (var animator in animators) {
-								if (animable.GetType().GetProperty(animator.TargetPropertyPath) == null) {
-									continue;
-								}
-								foreach (var keyframe in animator.Keys) {
-									SetKeyframe.Perform(animable, animator.TargetPropertyPath, animator.AnimationId, keyframe);
-								}
-							}
-						});
+				Document.Current.History.DoTransaction(() => {
+					ClearRowSelection.Perform();
+					PasteSceneItemsFromStream.Perform(stream, parent, index, mousePosition, out var pastedItems);
+					foreach (var i in pastedItems) {
+						SelectRow.Perform(i);
 					}
-				}
-				return true;
+				});
 			}
-			var folderLocation = location.ParentRow.Rows.Count > 0 ?
-				Row.GetFolderItemLocation(location.ParentRow.Rows[location.Index]) :
-				new FolderItemLocation { Index = 0, Folder = location.ParentRow.Components.Get<FolderRow>().Folder };
-			if (!folderLocation.Folder.Expanded) {
-				SetProperty.Perform(folderLocation.Folder, nameof(Folder.Expanded), true);
-			}
-			mousePosition *= Document.Current.Container.AsWidget?.LocalToWorldTransform.CalcInversed();
-			var shift = mousePosition - items.OfType<Widget>().FirstOrDefault()?.Position;
-			foreach (var n in items.OfType<Node>()) {
-				Document.Current.Decorate(n);
-			}
-			if (shift.HasValue) {
-				foreach (var w in items.OfType<Widget>()) {
-					w.Position += shift.Value;
-				}
-			}
-			frame.RootFolder().Items.Clear();
-			frame.RootFolder().SyncDescriptorsAndNodes(frame);
-			ClearRowSelection.Perform();
-			while (items.Count > 0) {
-				var item = items.First();
-				if (item is Bone bone) {
-					if (bone.BaseIndex != 0) {
-						continue;
-					}
-					var newIndex = 1;
-					var bones = Document.Current.Container.Nodes.OfType<Bone>();
-					if (bones.Any()) {
-						newIndex = bones.Max(b => b.Index) + 1;
-					}
-					var children = BoneUtils.FindBoneDescendats(bone, items.OfType<Bone>()).ToList();
-					var map = new Dictionary<int, int> { { bone.Index, newIndex } };
-					bone.BaseIndex = location.ParentRow.Components.Get<BoneRow>()?.Bone.Index ?? 0;
-					bone.Index = newIndex;
-					InsertFolderItem.Perform(
-						Document.Current.Container,
-						folderLocation, bone);
-					folderLocation.Index++;
-					foreach (var b in children) {
-						b.BaseIndex = map[b.BaseIndex];
-						map.Add(b.Index, b.Index = ++newIndex);
-						InsertFolderItem.Perform(
-							Document.Current.Container,
-							folderLocation, b);
-						folderLocation.Index++;
-						items.Remove(b);
-					}
-					Document.Current.Container.RootFolder().SyncDescriptorsAndNodes(Document.Current.Container);
-					SortBonesInChain.Perform(bone);
-					SelectRow.Perform(Document.Current.GetRowForObject(item));
-				} else {
-					if (!location.ParentRow.Components.Contains<BoneRow>()) {
-						InsertFolderItem.Perform(
-							Document.Current.Container,
-							folderLocation, item);
-						folderLocation.Index++;
-						SelectRow.Perform(Document.Current.GetRowForObject(item));
-					}
-				}
-				items.Remove(item);
-			}
-			return true;
 		}
 	}
 
@@ -258,37 +59,27 @@ namespace Tangerine.Core.Operations
 		public static void Perform()
 		{
 			var doc = Document.Current;
-			foreach (var row in doc.TopLevelSelectedRows().ToList()) {
-				if (!row.IsCopyPasteAllowed()) {
-					continue;
+			doc.History.DoTransaction(() => {
+				Row newFocused = null;
+				foreach (var item in SceneTreeUtils.EnumerateSelectedTopSceneItems().ToList()) {
+					newFocused = FindFocusedAfterUnlink(item);
+					UnlinkSceneItem.Perform(item);
 				}
-				if (row.Components.Get<PropertyRow>()?.Animator is IAnimator animator) {
-					doc.History.DoTransaction(() => {
-						foreach (var keyframe in animator.Keys.ToList()) {
-							RemoveKeyframe.Perform(animator, keyframe.Frame);
-						}
-					});
-				} else if (row.Components.Get<AnimationTrackRow>()?.Track is AnimationTrack track) {
-					doc.History.DoTransaction(() => {
-						RemoveFromList<AnimationTrackList, AnimationTrack>.Perform(doc.Animation.Tracks, track);
-					});
-				} else if (row.Components.Get<BoneRow>()?.Bone is Bone currentBone) {
-					var bones = doc.Container.Nodes.OfType<Bone>().ToList();
-					var dependentBones = BoneUtils.FindBoneDescendats(currentBone, bones).ToList();
-					dependentBones.Insert(0, currentBone);
-					UntieWidgetsFromBones.Perform(dependentBones, doc.Container.Nodes.OfType<Widget>());
-					foreach (var bone in dependentBones) {
-						UnlinkFolderItem.Perform(doc.Container, bone);
-						doc.Container.AsWidget.BoneArray[bone.Index] = default;
-					}
-					doc.History.DoTransaction(() => {
-						foreach (var mesh in doc.Container.Nodes.OfType<Lime.Animesh>()) {
-							mesh.OnBoneArrayChanged?.Invoke();
-						}
-					});
-				} else if (Row.GetFolderItem(row) is IFolderItem item) {
-					UnlinkFolderItem.Perform(doc.Container, item);
+				if (newFocused != null) {
+					SelectRow.Perform(newFocused);
 				}
+			});
+
+			Row FindFocusedAfterUnlink(Row item)
+			{
+				var i = item.Parent.Rows.IndexOf(item);
+				if (i > 0) {
+					return item.Parent.Rows[i - 1];
+				}
+				if (i < item.Parent.Rows.Count - 1) {
+					return item.Parent.Rows[i + 1];
+				}
+				return item.Parent.GetNode() == Document.Current.Container ? null : item.Parent;
 			}
 		}
 	}

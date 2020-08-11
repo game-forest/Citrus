@@ -32,8 +32,12 @@ namespace Tangerine.Core
 			}
 		}
 
-		public bool Locked { get { return track.GetTangerineFlag(TangerineFlags.Locked); } set { track.SetTangerineFlag(TangerineFlags.Locked, value); } }
-
+		public bool Locked
+		{ 
+			get => track.GetTangerineFlag(TangerineFlags.Locked);
+			set => track.SetTangerineFlag(TangerineFlags.Locked, value);
+		}
+		
 		public AnimationTrackEditorState(AnimationTrack track)
 		{
 			this.track = track;

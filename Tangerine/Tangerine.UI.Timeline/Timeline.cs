@@ -27,21 +27,45 @@ namespace Tangerine.UI.Timeline
 		public readonly WaveformCache WaveformCache;
 		public readonly DropFilesGesture DropFilesGesture;
 
-		private Vector2 offset;
+		private float offsetX;
 		public Vector2 Offset
 		{
-			get { return offset; }
+			get => new Vector2(offsetX, Roll.ScrollView.ScrollPosition);
 			set
 			{
 				if (value != Offset) {
-					offset = value;
-					OffsetChanged?.Invoke(value);
+					offsetX = value.X;
+					Roll.ScrollView.ScrollPosition = value.Y;
 				}
 			}
 		}
 
-		public float OffsetX { get { return Offset.X; } set { Offset = new Vector2(value, Offset.Y); } }
-		public float OffsetY { get { return Offset.Y; } set { Offset = new Vector2(Offset.X, value); } }
+		private int columnCount;
+
+		public int ColumnCount
+		{
+			get
+			{
+				if (columnCount == 0) {
+					columnCount = CalcColumnCount();
+				}
+				var maxVisibleColumn = ((OffsetX + Ruler.RootWidget.Width) / TimelineMetrics.ColWidth).Ceiling();
+				var result = Math.Max(columnCount + 1, maxVisibleColumn);
+				return result;
+			}
+		}
+
+		public void ClampAndSetOffset(Vector2 offset)
+		{
+			var maxOffset = new Vector2(
+				float.MaxValue, 
+				Math.Max(0, Roll.ScrollView.Content.Height - Roll.RootWidget.Height)
+			);
+			Offset = Vector2.Clamp(offset, Vector2.Zero, maxOffset);
+		}
+
+		public float OffsetX { get => offsetX; set => Offset = new Vector2(value, Offset.Y); }
+		public float OffsetY { get => Offset.Y; set => Offset = new Vector2(offsetX, value); }
 
 		public int CurrentColumn => Document.Current.AnimationFrame;
 
@@ -57,11 +81,9 @@ namespace Tangerine.UI.Timeline
 				}
 			}
 		}
-
-		public int ColumnCount { get; set; }
+		
 		public readonly ComponentCollection<Component> Globals = new ComponentCollection<Component>();
 
-		public event Action<Vector2> OffsetChanged;
 		/// <summary>
 		/// Called before Attach code execution.
 		/// </summary>
@@ -80,16 +102,7 @@ namespace Tangerine.UI.Timeline
 		public event Action Detached;
 
 		public static IEnumerable<Type> GetOperationProcessorTypes() => new[] {
-			typeof(EnsureRowVisibleIfSelected),
 			typeof(EnsureCurrentColumnVisibleIfContainerChanged),
-			typeof(ColumnCountUpdater),
-			typeof(RowViewsUpdater),
-			typeof(RollWidgetsUpdater),
-			typeof(OverviewWidgetsUpdater),
-			typeof(GridWidgetsUpdater),
-			typeof(ImageCombinerLinkIndicationProcessor),
-			typeof(BoneLinkIndicationProcessor),
-			typeof(SplineGearLinkIndicationProcessor),
 		};
 
 		public Timeline(Panel panel)
@@ -109,6 +122,8 @@ namespace Tangerine.UI.Timeline
 			RootWidget.AddChangeWatcher(() => Document.Current.Container, container => {
 				Offset = container.Components.GetOrAdd<TimelineOffset>().Offset;
 			});
+			Document.Current.SceneTreeBuilder.SceneItemCreated += SceneItemDecorator.Decorate;
+			DecorateSceneTree(Document.Current.SceneTree);
 			RootWidget.AddChangeWatcher(() => Offset, (value) => {
 				var offset = Document.Current.Container.Components.Get<TimelineOffset>();
 				if (offset != null) {
@@ -117,7 +132,16 @@ namespace Tangerine.UI.Timeline
 			});
 			RootWidget.Gestures.Add(DropFilesGesture = new DropFilesGesture());
 			CreateFilesDropHandlers();
+			Document.Current.History.DocumentChanged += () => columnCount = 0;
 			OnCreate?.Invoke(this);
+		}
+
+		private void DecorateSceneTree(Row sceneTree)
+		{
+			SceneItemDecorator.Decorate(sceneTree);
+			foreach (var i in sceneTree.Rows) {
+				DecorateSceneTree(i);
+			}
 		}
 
 		private void CreateFilesDropHandlers()
@@ -191,7 +215,6 @@ namespace Tangerine.UI.Timeline
 				new AnimationStretchProcessor(),
 				new OverviewScrollProcessor(),
 				new MouseWheelProcessor(this),
-				new RollMouseScrollProcessor(),
 				new SelectAndDragKeyframesProcessor(),
 				new CompoundAnimations.CreateAnimationTrackWeightRampProcessor(),
 				new CompoundAnimations.SelectAndDragAnimationClipsProcessor(0),
@@ -199,14 +222,30 @@ namespace Tangerine.UI.Timeline
 				new HasKeyframeRespondentProcessor(),
 				new DragKeyframesRespondentProcessor(),
 				new GridMouseScrollProcessor(),
-				new SelectAndDragRowsProcessor(),
 				new RulerbarMouseScrollProcessor(),
-				new ClampScrollPosProcessor(),
 				new GridContextMenuProcessor(),
 				new CompoundAnimations.GridContextMenuProcessor()
 			);
 			RootWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(ShowCurveEditorTask());
 			RootWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(PanelTitleUpdater());
+		}
+		
+		private int CalcColumnCount()
+		{
+			const int ExtraFramesCount = 100;
+			int maxColumn = 0;
+			foreach (var item in Document.Current.Rows) {
+				if (item.TryGetNode(out var node)) {
+					maxColumn = Math.Max(maxColumn, node.Animators.GetOverallDuration());
+				}
+			}
+			var markers = Document.Current.Animation.Markers;
+			if (markers.Count > 0) {
+				int maxMarkerColumn = Math.Max(maxColumn, markers[markers.Count - 1].Frame);
+				maxColumn = Math.Max(maxMarkerColumn, maxColumn);
+			}
+			maxColumn += ExtraFramesCount;
+			return maxColumn;
 		}
 
 		void UpdateTitle()

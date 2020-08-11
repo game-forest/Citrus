@@ -85,7 +85,6 @@
     <Compile Include="Panels\AttachmentPanel.cs" />
     <Compile Include="Panels\BackupHistoryPanel.cs" />
     <Compile Include="Panels\HierarchyPanel.cs" />
-    <Compile Include="Panels\TreeView.cs" />
     <Compile Include="TangerineApp.cs" />
     <Compile Include="TangerineMenu.cs" />
     <Compile Include="TangerineSingleInstanceKeeper.cs" />

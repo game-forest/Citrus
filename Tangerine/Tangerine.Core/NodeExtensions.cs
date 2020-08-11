@@ -17,24 +17,12 @@ namespace Tangerine.Core
 
 		public static int CollectionIndex(this Node node)
 		{
+			if (node == null || node.Parent == null) {
+				return -1;
+			}
 			return node.Parent.Nodes.IndexOf(node);
 		}
-
-		public static Folder RootFolder(this Node node)
-		{
-			return EditorState(node).RootFolder;
-		}
-
-		public static void SyncFolderDescriptorsAndNodes(this Node node)
-		{
-			EditorState(node).RootFolder.SyncDescriptorsAndNodes(node);
-		}
-
-		public static bool IsCopyPasteAllowed(this Node node)
-		{
-			return NodeCompositionValidator.IsCopyPasteAllowed(node.GetType());
-		}
-
+		
 		public static string GetRelativePath(this Node node)
 		{
 			var root = node.GetRoot();

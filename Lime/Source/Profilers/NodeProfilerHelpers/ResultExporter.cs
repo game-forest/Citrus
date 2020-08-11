@@ -65,9 +65,6 @@ namespace Lime.Source.Profilers.NodeProfilerHelpers
 			foreach (var animation in node.Animations) {
 				animation.Frame = 0;
 			}
-			if (node.Folders != null && node.Folders.Count == 0) {
-				node.Folders = null;
-			}
 		}
 
 		private static void RenameBonesInMesh3D(Node node)

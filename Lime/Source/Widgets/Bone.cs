@@ -246,6 +246,22 @@ namespace Lime
 
 	public static class BoneUtils
 	{
+		public static int GenerateNewBoneIndex(Node hostNode)
+		{
+			for (int i = 1;; i++) {
+				var used = false;
+				foreach (var n in hostNode.Nodes) {
+					if (n is Bone b && b.Index == i) {
+						used = true;
+						break;
+					}
+				}
+				if (!used) {
+					return i;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Reorder bones with topological sort to maintain correct update
 		/// order of transformations

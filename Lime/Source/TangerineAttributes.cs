@@ -86,7 +86,7 @@ namespace Lime
 		}
 	}
 
-	public sealed class TangerineForbidCopyPasteAttribute : Attribute
+	public sealed class TangerineLockChildrenNodeList : Attribute
 	{ }
 
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]

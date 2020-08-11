@@ -630,8 +630,7 @@ namespace Tangerine.UI
 					p.Process(i.Presentation);
 				}
 			}
-
-
+			
 			void BuildRecursively(TreeViewItem item)
 			{
 				var skipRoot = !options.ShowRoot && item == RootItem;

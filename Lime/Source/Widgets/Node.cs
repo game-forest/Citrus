@@ -39,8 +39,6 @@ namespace Lime
 		Hidden = 1,
 		Locked = 2,
 		Shown = 4,
-		PropertiesExpanded = 8,
-		ChildrenExpanded = 16,
 		HiddenOnExposition = 32,
 		IgnoreMarkers = 64,
 		DisplayContent = 128,
@@ -58,7 +56,7 @@ namespace Lime
 	/// </summary>
 	[YuzuDontGenerateDeserializer]
 	[DebuggerTypeProxy(typeof(NodeDebugView))]
-	public abstract class Node : IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable
+	public abstract class Node : IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable
 	{
 		[Flags]
 		protected internal enum DirtyFlags
@@ -506,7 +504,8 @@ namespace Lime
 		/// </summary>
 		[TangerineIgnore]
 		[YuzuMember]
-		public List<Folder.Descriptor> Folders { get; set; }
+		[YuzuSerializeIf(nameof(ShouldSerializeFolders))]
+		public FolderList Folders { get; private set; }
 
 		/// <summary>
 		/// Name of last started marker of default animation. Is set to null by default.
@@ -559,6 +558,7 @@ namespace Lime
 			Components = new NodeComponentCollection(this);
 			Animators = new AnimatorCollection(this);
 			Nodes = new NodeList(this);
+			Folders = new FolderList(this);
 			Presenter = DefaultPresenter.Instance;
 			RenderChainBuilder = this;
 			++CreatedCount;
@@ -579,10 +579,9 @@ namespace Lime
 
 		public virtual bool IsNotDecorated() => true;
 
-		public bool ShouldSerializeNodes()
-		{
-			return IsNotDecorated() && Nodes.Count > 0;
-		}
+		public bool ShouldSerializeNodes() => IsNotDecorated() && Nodes.Count > 0;
+
+		public bool ShouldSerializeFolders() => Folders.Count > 0;
 
 		/// <summary>
 		/// Disposes the node and all of it components, animations, tasks, etc...

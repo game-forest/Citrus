@@ -13,25 +13,27 @@ namespace Tangerine.UI.Timeline
 	{
 		public static void Bind()
 		{
-			Action enter = () => {
-				var node = Document.Current.SelectedNodes().FirstOrDefault();
-				if (node != null) {
+			void Enter()
+			{
+				Node node = null;
+				if (Document.Current.RecentlySelectedSceneItem()?.TryGetNode(out node) ?? false) {
 					EnterNode.Perform(node);
 				}
-			};
-			ConnectCommand(TimelineCommands.EnterNode, enter, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.EnterNodeAlias, enter, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.EnterNodeMouse, enter, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.Expand, Expand, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.ExpandRecursively, ExpandRecursively, Document.HasCurrent);
+			}
+
+			ConnectCommand(TimelineCommands.EnterNode, Enter, Document.HasCurrent);
+			ConnectCommand(TimelineCommands.EnterNodeAlias, Enter, Document.HasCurrent);
+			ConnectCommand(TimelineCommands.EnterNodeMouse, Enter, Document.HasCurrent);
+			ConnectCommand(TimelineCommands.Expand, ExpandOrCollapse, Document.HasCurrent);
+			ConnectCommand(TimelineCommands.ExpandRecursively, ExpandOrCollapseRecursively, Document.HasCurrent);
 			ConnectCommand(TimelineCommands.RenameRow, RenameCurrentRow);
 			ConnectCommand(TimelineCommands.ExitNode, LeaveNode.Perform);
 			ConnectCommand(TimelineCommands.ExitNodeAlias, LeaveNode.Perform);
 			ConnectCommand(TimelineCommands.ExitNodeMouse, LeaveNode.Perform);
-			ConnectCommand(TimelineCommands.ScrollUp, () => SelectRow(-1, false));
-			ConnectCommand(TimelineCommands.ScrollDown, () => SelectRow(1, false));
-			ConnectCommand(TimelineCommands.SelectNodeUp, () => SelectRow(-1, true));
-			ConnectCommand(TimelineCommands.SelectNodeDown, () => SelectRow(1, true));
+			ConnectCommand(TimelineCommands.ScrollUp, () => Timeline.Instance.Roll.TreeView.SelectPreviousItem());
+			ConnectCommand(TimelineCommands.ScrollDown, () => Timeline.Instance.Roll.TreeView.SelectNextItem());
+			ConnectCommand(TimelineCommands.SelectNodeUp, () => Timeline.Instance.Roll.TreeView.SelectRangePreviousItem());
+			ConnectCommand(TimelineCommands.SelectNodeDown, () => Timeline.Instance.Roll.TreeView.SelectRangeNextItem());
 			ConnectCommand(TimelineCommands.ScrollLeft, () => AdvanceCurrentColumn(-1));
 			ConnectCommand(TimelineCommands.ScrollRight, () => AdvanceCurrentColumn(1));
 			ConnectCommand(TimelineCommands.FastScrollLeft, () => AdvanceCurrentColumn(-10));
@@ -80,125 +82,40 @@ namespace Tangerine.UI.Timeline
 			CommandHandlerList.Global.Connect(command, new DocumentDelegateCommandHandler(action, enableChecker));
 		}
 
-		private static void Expand()
+		private static void ExpandOrCollapse()
 		{
-			InternalExpand(recursive: false);
+			var focusedItem = Document.Current.RecentlySelectedSceneItem();
+			if (focusedItem != null) {
+				Document.Current.History.DoTransaction(() => {
+					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+					SetProperty.Perform(focusedItem, nameof(Row.Expanded), !focusedItem.Expanded, false);
+					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
+				});
+			}
 		}
 
-		private static void ExpandRecursively()
+		private static void ExpandOrCollapseRecursively()
 		{
-			InternalExpand(recursive: true);
-		}
-
-		private static void InternalExpand(bool recursive = false)
-		{
-			void ExpandOrCollapseRow(Row row, object component, string property, bool expanded, int level)
+			var focusedItem = Document.Current.RecentlySelectedSceneItem();
+			if (focusedItem != null) {
+				Document.Current.History.DoTransaction(() => {
+					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+					ExpandOrCollapseHelper(Document.Current.RecentlySelectedSceneItem(), !focusedItem.Expanded);
+					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
+				});
+			}
+			
+			void ExpandOrCollapseHelper(Row sceneItem, bool expand)
 			{
-				if (!recursive) {
-					SetProperty.Perform(component, property, expanded, isChangingDocument: false);
-				} else if (expanded) {
-					SetProperty.Perform(component, property, expanded, isChangingDocument: false);
-					foreach (var child in row.Rows.ToList()) {
-						SetExpanded(child, expanded, level);
-					}
-				} else {
-					foreach (var child in row.Rows.ToList()) {
-						SetExpanded(child, expanded, level);
-					}
-					SetProperty.Perform(component, property, expanded, isChangingDocument: false);
+				if (sceneItem.Expanded != expand) {
+					SetProperty.Perform(sceneItem, nameof(Row.Expanded), expand, false);
 				}
-			}
-
-			var processedRows = new HashSet<Row>();
-			void SetExpanded(Row row, bool expanded = false, int level = 0)
-			{
-				if (processedRows.Contains(row)) {
-					return;
+				foreach (var i in sceneItem.Rows) {
+					ExpandOrCollapseHelper(i, expand);	
 				}
-
-				processedRows.Add(row);
-				foreach (var component in row.Components) {
-					switch (component) {
-						case NodeRow nodeRow:
-							ExpandOrCollapseRow(row, nodeRow, nameof(NodeRow.Expanded), expanded, level + 1);
-							if (nodeRow.Expanded && row.Rows.Count > 0) {
-								Timeline.Instance.EnsureRowChildsVisible(row);
-							}
-							break;
-
-						case BoneRow boneRow:
-							if (boneRow.HaveChildren) {
-								ExpandOrCollapseRow(row, boneRow, nameof(BoneRow.ChildrenExpanded), expanded, level + 1);
-								if (boneRow.ChildrenExpanded) {
-									Timeline.Instance.EnsureRowChildsVisible(row);
-								}
-							} else if (row.Parent.Parent != null) {
-								SetExpanded(row.Parent, expanded, level);
-								if (level == 0) {
-									Core.Operations.SelectRow.Perform(row, select: false);
-									Core.Operations.SelectRow.Perform(row.Parent, select: true);
-								}
-							}
-							return;
-
-						case FolderRow folderRow:
-							var folder = folderRow.Folder;
-							if (folder.Items.Count > 0) {
-								ExpandOrCollapseRow(row, folder, nameof(Folder.Expanded), expanded, level + 1);
-								if (folder.Expanded) {
-									Timeline.Instance.EnsureRowChildsVisible(row);
-								}
-							}
-							return;
-
-						case PropertyRow propertyRow:
-							SetExpanded(row.Parent, expanded, level);
-							if (level == 0) {
-								Core.Operations.SelectRow.Perform(row, select: false);
-								Core.Operations.SelectRow.Perform(row.Parent, select: true);
-							}
-							return;
-					}
-				}
-			}
-
-			var topMostRows = new HashSet<Row>(Document.Current.SelectedRows());
-			foreach (var row in Document.Current.SelectedRows()) {
-				for (var p = row.Parent; p != null; p = p.Parent) {
-					if (topMostRows.Contains(p)) {
-						topMostRows.Remove(row);
-						break;
-					}
-				}
-			}
-
-			ClearRowSelection.Perform();
-			foreach (var row in topMostRows) {
-				Core.Operations.SelectRow.Perform(row);
-				SetExpanded(row, expanded: !IsRowExpanded(row));
 			}
 		}
-
-		private static bool IsRowExpanded(Row row)
-		{
-			foreach (var component in row.Components) {
-				switch (component) {
-					case NodeRow nodeRow:
-						return nodeRow.Expanded;
-
-					case BoneRow boneRow:
-						return boneRow.ChildrenExpanded;
-
-					case FolderRow folderRow:
-						return folderRow.Folder.Expanded;
-
-					case PropertyRow propertyRow:
-						return true;
-				}
-			}
-			return false;
-		}
-
+	
 		private static void RenameCurrentRow()
 		{
 			var doc = Document.Current;
@@ -208,30 +125,7 @@ namespace Tangerine.UI.Timeline
 			var row = doc.SelectedRows().First();
 			row.Components.Get<RowView>().RollRow.Rename();
 		}
-
-		private static void SelectRow(int advance, bool multiselection)
-		{
-			var doc = Document.Current;
-			if (doc.Rows.Count == 0) {
-				return;
-			}
-			if (!doc.SelectedRows().Any()) {
-				Core.Operations.SelectRow.Perform(doc.Rows[0]);
-				return;
-			}
-			var lastSelectedRow = doc.SelectedRows().OrderByDescending(i => i.SelectCounter).First();
-			var nextRow = doc.Rows[Mathf.Clamp(lastSelectedRow.Index + advance, 0, doc.Rows.Count - 1)];
-			if (nextRow != lastSelectedRow) {
-				if (!multiselection) {
-					Core.Operations.ClearRowSelection.Perform();
-				}
-				if (nextRow.Selected) {
-					Core.Operations.SelectRow.Perform(lastSelectedRow, false);
-				}
-				Core.Operations.SelectRow.Perform(nextRow);
-			}
-		}
-
+		
 		private static void RemoveKeyframes()
 		{
 			foreach (var row in Document.Current.Rows.ToList()) {

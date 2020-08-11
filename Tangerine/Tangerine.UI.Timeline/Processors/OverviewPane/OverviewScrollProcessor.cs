@@ -17,8 +17,7 @@ namespace Tangerine.UI.Timeline
 				if (input.WasMouseReleased(1) || input.WasKeyPressed(Key.Mouse0DoubleClick)) {
 					var pos = timeline.Overview.ContentWidget.LocalMousePosition();
 					var offset = pos - timeline.Grid.Size / 2;
-					var maxScrollPos = Vector2.Max(Vector2.Zero, timeline.Grid.ContentSize - timeline.Grid.Size);
-					timeline.Offset = Vector2.Clamp(offset, Vector2.Zero, maxScrollPos);
+					timeline.ClampAndSetOffset(offset);
 					Document.Current.History.DoTransaction(() => {
 						var col = (input.MousePosition.X / (TimelineMetrics.ColWidth * timeline.Overview.ContentWidget.Scale.X)).Round();
 						SetCurrentColumn.Perform(col);
@@ -30,8 +29,7 @@ namespace Tangerine.UI.Timeline
 					while (input.IsMousePressed()) {
 						var mouseDelta = input.MousePosition - originalMousePosition;
 						var scrollDelta = Vector2.Round(mouseDelta / timeline.Overview.ContentWidget.Scale);
-						var maxScrollPos = Vector2.Max(Vector2.Zero, timeline.Grid.ContentSize - timeline.Grid.Size);
-						timeline.Offset = Vector2.Clamp(scrollPos + scrollDelta, Vector2.Zero, maxScrollPos);
+						timeline.ClampAndSetOffset(scrollPos + scrollDelta);
 						yield return null;
 					}
 				}

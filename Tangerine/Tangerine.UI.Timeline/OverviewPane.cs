@@ -33,7 +33,34 @@ namespace Tangerine.UI.Timeline
 				},
 				SizeChanged = RefreshContentScale
 			};
+			RootWidget.Updated += _ => {
+				RefreshItemWidths();
+			};
 			new SceneViewThumbnail(this);
+			RootWidget.AddChangeWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
+		}
+		
+		private void Rebuild()
+		{
+			var content = ContentWidget;
+			content.Nodes.Clear();
+			foreach (var item in Document.Current.Rows) {
+				var gridItem = item.Components.Get<Components.RowView>().GridRow;
+				var widget = gridItem.OverviewWidget;
+				if (!gridItem.OverviewWidgetAwakeBehavior.IsAwoken) {
+					gridItem.OverviewWidgetAwakeBehavior.Update(0);
+				}
+				content.AddNode(widget);
+			}
+			RefreshItemWidths();
+		}
+
+		private void RefreshItemWidths()
+		{
+			foreach (var item in Document.Current.Rows) {
+				var gridItem = item.Components.Get<Components.RowView>().GridRow;
+				gridItem.OverviewWidget.MinWidth = Timeline.Instance.ColumnCount * TimelineMetrics.ColWidth;
+			}
 		}
 
 		void RefreshContentScale()

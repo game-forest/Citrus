@@ -76,10 +76,6 @@
     <Compile Include="Components\GridNodeView.cs" />
     <Compile Include="Components\GridPropertyView.cs" />
     <Compile Include="Components\HasKeyframeRequest.cs" />
-    <Compile Include="Components\RollAnimationTrackView.cs" />
-    <Compile Include="Components\RollBoneView.cs" />
-    <Compile Include="Components\RollFolderView.cs" />
-    <Compile Include="Components\RollNodeView.cs" />
     <Compile Include="Components\RollPropertyView.cs" />
     <Compile Include="Components\RowView.cs" />
     <Compile Include="Curve.cs" />
@@ -90,7 +86,6 @@
     <Compile Include="MarkerPropertiesDialog.cs" />
     <Compile Include="Operations\CenterTimelineOnCurrentColumn.cs" />
     <Compile Include="Operations\ClearGridSelection.cs" />
-    <Compile Include="Operations\ColumnCountUpdater.cs" />
     <Compile Include="Operations\CompoundAnimations\AddAnimationClip.cs" />
     <Compile Include="Operations\CompoundAnimations\AnimationClipToolbox.cs" />
     <Compile Include="Operations\CompoundAnimations\DeleteSelectedAnimationClips.cs" />
@@ -100,27 +95,20 @@
     <Compile Include="Operations\DeselectGridSpan.cs" />
     <Compile Include="Operations\DragKeyframes.cs" />
     <Compile Include="Operations\EnsureCurrentColumnVisibleIfContainerChanged.cs" />
-    <Compile Include="Operations\EnsureRowVisibleIfSelected.cs" />
-    <Compile Include="Operations\GridWidgetsUpdater.cs" />
     <Compile Include="Operations\MoveNodes.cs" />
     <Compile Include="Operations\NumericMoveDialog.cs" />
     <Compile Include="Operations\NumericScaleDialog.cs" />
-    <Compile Include="Operations\OverviewWidgetsUpdater.cs" />
     <Compile Include="Operations\ReverseKeyframes.cs" />
-    <Compile Include="Operations\RollWidgetsUpdater.cs" />
-    <Compile Include="Operations\RowViewsUpdater.cs" />
     <Compile Include="Operations\SelectGridSpan.cs" />
     <Compile Include="Operations\SetCurrentColumn.cs" />
     <Compile Include="Operations\ShiftGridSelection.cs" />
     <Compile Include="Operations\ToggleKeyframes.cs" />
     <Compile Include="OverviewPane.cs" />
-    <Compile Include="Processors\BoneLinkIndicationProcessor.cs" />
     <Compile Include="Processors\CurveEditor\PanProcessor.cs" />
     <Compile Include="Processors\CurveEditor\SelectAndDragKeysProcessor.cs" />
     <Compile Include="Processors\CurveEditor\SelectCurveKey.cs" />
     <Compile Include="Processors\CurveEditor\VerticalZoomProcessor.cs" />
     <Compile Include="Processors\GridPane\AnimationStretchProcessor.cs" />
-    <Compile Include="Processors\GridPane\ClampScrollPosProcessor.cs" />
     <Compile Include="Processors\GridPane\CompoundAnimations\CreateAnimationTrackWeightRampProcessor.cs" />
     <Compile Include="Processors\GridPane\CompoundAnimations\GridContextMenuProcessor.cs" />
     <Compile Include="Processors\GridPane\CompoundAnimations\SelectAndDragAnimationClipsProcessor.cs" />
@@ -129,25 +117,29 @@
     <Compile Include="Processors\GridPane\GridMouseScrollProcessor.cs" />
     <Compile Include="Processors\GridPane\HasKeyframeRespondentProcessor.cs" />
     <Compile Include="Processors\GridPane\SelectAndDragKeyframesProcessor.cs" />
-    <Compile Include="Processors\ImageCombinerLinkIndicationProcessor.cs" />
     <Compile Include="Processors\MouseWheelProcessor.cs" />
     <Compile Include="Processors\OverviewPane\OverviewScrollProcessor.cs" />
-    <Compile Include="Processors\RollPane\RollMouseScrollProcessor.cs" />
-    <Compile Include="Processors\RollPane\SelectAndDragRowsProcessor.cs" />
     <Compile Include="Processors\Rulerbar\RulerbarMouseScrollProcessor.cs" />
     <Compile Include="Processors\SlowMotionProcessor.cs" />
-    <Compile Include="Processors\SplineGearLinkIndicationProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RollPane.cs" />
+    <Compile Include="SceneItemDecorator.cs" />
     <Compile Include="Rulerbar.cs" />
     <Compile Include="Timeline.cs" />
     <Compile Include="TimelineUserPreferences.cs" />
     <Compile Include="Toolbar.cs" />
+    <Compile Include="TreeViewSceneItem.cs" />
+    <Compile Include="TreeViewNodeLinkIndication.cs" />
+    <Compile Include="TreeViewPresentation.cs" />
     <Compile Include="Utils\KeyframeFigure.cs" />
     <Compile Include="Utils\TimelineMetrics.cs" />
     <Compile Include="SceneViewThumbnail.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Orange\Orange.Mac.csproj">
+      <Project>{4b2bdd5a-2aae-46ae-aa1a-8c9308baa50d}</Project>
+      <Name>Orange.Mac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Mac.csproj">
       <Project>{05FB6476-C29B-49A7-918C-A52CAF73FCA7}</Project>
       <Name>Tangerine.Core.Mac</Name>

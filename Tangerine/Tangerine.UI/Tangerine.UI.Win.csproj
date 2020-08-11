@@ -122,6 +122,7 @@
     <Compile Include="ToolbarModel.cs" />
     <Compile Include="ToolbarView.cs" />
     <Compile Include="Tooltip\TooltipProcessor.cs" />
+    <Compile Include="TreeView.cs" />
     <Compile Include="Utils\Colors.cs" />
     <Compile Include="Utils\KeyframePalette.cs" />
     <Compile Include="Utils\Metrics.cs" />
