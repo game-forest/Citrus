@@ -158,6 +158,8 @@ namespace Tangerine.UI
 			FilterApplied?.Invoke();
 		}
 
+		public void MarkFilterAsDirty() => isFilterDirty = true;
+
 		public void SetBreadcrumbsNavigation(params string[] breadcrumbs) => SetBreadcrumbsNavigation((IEnumerable<string>)breadcrumbs);
 
 		public void SetBreadcrumbsNavigation(IEnumerable<string> breadcrumbs)
@@ -237,11 +239,15 @@ namespace Tangerine.UI
 			FilterText = string.Empty;
 		}
 
-		private void ClearItems()
+		public void ClearItems(bool disposeItems = true)
 		{
 			DeselectItem();
 			foreach (var item in items) {
-				item.Widget.UnlinkAndDispose();
+				if (disposeItems) {
+					item.Widget.UnlinkAndDispose();
+				} else {
+					item.Widget.Unlink();
+				}
 			}
 			items.Clear();
 			filteredItems.Clear();

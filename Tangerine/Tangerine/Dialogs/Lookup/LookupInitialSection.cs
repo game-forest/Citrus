@@ -32,7 +32,7 @@ namespace Tangerine
 			}
 		}
 
-		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, List<LookupItem> items) =>
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) =>
 			!string.IsNullOrEmpty(text) ? base.ApplyLookupFilter(text, items) : emptyItems;
 	}
 }

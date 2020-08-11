@@ -79,13 +79,17 @@ namespace Tangerine
 			if (stack.Count == 0) {
 				return;
 			}
-			stack.Pop();
+			var section = stack.Pop();
+			section.Dropped();
 			SetupSection(stack.Count > 0 ? stack.Peek() : null);
 		}
 
 		public void Drop()
 		{
-			stack.Clear();
+			while (stack.Count > 0) {
+				var section = stack.Pop();
+				section.Dropped();
+			}
 			SetupSection(null);
 		}
 

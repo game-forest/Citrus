@@ -25,6 +25,8 @@ namespace Tangerine
 
 		public abstract void FillLookup(LookupWidget lookupWidget);
 
+		public virtual void Dropped() { }
+
 		protected bool RequireProjectOrAddAlertItem(LookupWidget lookupWidget, string alertText)
 		{
 			if (Project.Current != null) {
@@ -61,7 +63,7 @@ namespace Tangerine
 
 		protected virtual void ApplyingLookupFilter(LookupWidget lookupWidget, string text) { }
 
-		protected virtual IEnumerable<LookupItem> ApplyLookupFilter(string text, List<LookupItem> items)
+		protected virtual IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items)
 		{
 			var itemsTemp = new List<(LookupItem item, int HeaderDistance, int NameDistance)>();
 			if (!string.IsNullOrEmpty(text)) {

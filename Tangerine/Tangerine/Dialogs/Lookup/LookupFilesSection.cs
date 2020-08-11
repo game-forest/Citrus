@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.UI;
+using Console = System.Console;
 
 namespace Tangerine
 {
@@ -25,6 +27,10 @@ namespace Tangerine
 			};
 		}
 
+		private IReadOnlyList<LookupItem> mutableItemList = new List<LookupItem>(0);
+		private CancellationTokenSource fillingLookupCancellationSource;
+		private CancellationTokenSource applyingFilterCancellationSource;
+
 		public override string Breadcrumb { get; } = "Search File";
 		public override string Prefix { get; } = $"{PrefixConst} ";
 		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for file in the current project";
@@ -36,8 +42,30 @@ namespace Tangerine
 			if (!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To File function")) {
 				return;
 			}
+			FillingLookupCancel();
+			FillLookupAsync(lookupWidget);
+		}
 
+		private async void FillLookupAsync(LookupWidget lookupWidget)
+		{
+			mutableItemList = new List<LookupItem>(0);
+			fillingLookupCancellationSource = new CancellationTokenSource();
+			try {
+				mutableItemList = await System.Threading.Tasks.Task.Run(() => GetLookupItems(lookupWidget), fillingLookupCancellationSource.Token);
+				lookupWidget.MarkFilterAsDirty();
+				fillingLookupCancellationSource = null;
+			} catch (OperationCanceledException) {
+				// Suppress
+			} catch (System.Exception exception) {
+				Console.WriteLine(exception);
+				fillingLookupCancellationSource = null;
+			}
+		}
+
+		private List<LookupItem> GetLookupItems(LookupWidget lookupWidget)
+		{
 			var assetsDirectory = Project.Current.AssetsDirectory;
+			var items = new List<LookupItem>();
 
 			void GetFilesRecursively(string directory)
 			{
@@ -47,8 +75,8 @@ namespace Tangerine
 					var assetType = Path.GetExtension(relativePath).ToLower();
 					var assetPath =
 						string.IsNullOrEmpty(assetType) ?
-						relativePath :
-						relativePath.Substring(0, relativePath.Length - assetType.Length);
+							relativePath :
+							relativePath.Substring(0, relativePath.Length - assetType.Length);
 					var fileName = Path.GetFileName(assetPath);
 					Action action;
 					switch (assetType) {
@@ -80,17 +108,82 @@ namespace Tangerine
 						default:
 							continue;
 					}
-					var item = new LookupDialogItem(lookupWidget, fileName + assetType, assetPath, action) {
+					var item = new LookupDialogItem(lookupWidget, fileName + assetType, assetPath + assetType, action) {
 						IconTexture = fileTypesIcons[assetType].AsTexture,
 					};
-					lookupWidget.AddItem(item);
+					items.Add(item);
 				}
 				foreach (var d in Directory.GetDirectories(directory)) {
 					GetFilesRecursively(d);
 				}
 			}
 			GetFilesRecursively(assetsDirectory);
+			return items;
 		}
+
+		public override void Dropped()
+		{
+			FillingLookupCancel();
+			ApplyingLookupCancel();
+			mutableItemList = new List<LookupItem>(0);
+		}
+
+		private void FillingLookupCancel()
+		{
+			fillingLookupCancellationSource?.Cancel();
+			fillingLookupCancellationSource = null;
+		}
+
+		protected override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
+		{
+			ApplyingLookupCancel();
+			ApplyingLookupFilterAsync(lookupWidget, text);
+		}
+
+		private async void ApplyingLookupFilterAsync(LookupWidget lookupWidget, string text)
+		{
+			const int FilteredItemsLimit = 100;
+			var filteredItems = new List<LookupItem>();
+			var filterEnumarable = base.ApplyLookupFilter(text, mutableItemList);
+			var success = false;
+			applyingFilterCancellationSource = new CancellationTokenSource();
+			try {
+				await System.Threading.Tasks.Task.Run(
+					() => {
+						foreach (var item in filterEnumarable) {
+							filteredItems.Add(item);
+							if (filteredItems.Count >= FilteredItemsLimit) {
+								break;
+							}
+						}
+					},
+					applyingFilterCancellationSource.Token
+				);
+				applyingFilterCancellationSource = null;
+				success = true;
+			} catch (OperationCanceledException) {
+				// Suppress
+			} catch (System.Exception exception) {
+				Console.WriteLine(exception);
+				applyingFilterCancellationSource = null;
+			}
+			if (success) {
+				lookupWidget.ClearItems(disposeItems: false);
+				foreach (var item in filteredItems) {
+					lookupWidget.AddItem(item);
+				}
+				lookupWidget.SelectItem(index: 0);
+				lookupWidget.ScrollView.ScrollPosition = 0;
+			}
+		}
+
+		private void ApplyingLookupCancel()
+		{
+			applyingFilterCancellationSource?.Cancel();
+			applyingFilterCancellationSource = null;
+		}
+
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) => items;
 	}
 
 	public class LookupSceneMenuSection : LookupSection

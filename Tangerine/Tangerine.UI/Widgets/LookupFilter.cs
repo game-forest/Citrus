@@ -6,14 +6,14 @@ namespace Tangerine.UI
 	public interface ILookupFilter
 	{
 		void Applying(LookupWidget lookupWidget, string text);
-		IEnumerable<LookupItem> Apply(string text, List<LookupItem> items);
+		IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items);
 		void Applied(LookupWidget lookupWidget);
 	}
 
 	public class DelegateLookupFilter : ILookupFilter
 	{
 		public delegate void ApplyingDelegate(LookupWidget lookupWidget, string text);
-		public delegate IEnumerable<LookupItem> ApplyDelegate(string text, List<LookupItem> items);
+		public delegate IEnumerable<LookupItem> ApplyDelegate(string text, IReadOnlyList<LookupItem> items);
 		public delegate void AppliedDelegate(LookupWidget lookupWidget);
 
 		private readonly ApplyingDelegate applying;
@@ -34,7 +34,7 @@ namespace Tangerine.UI
 
 		public virtual void Applying(LookupWidget lookupWidget, string text) => applying?.Invoke(lookupWidget, text);
 
-		public IEnumerable<LookupItem> Apply(string text, List<LookupItem> items) => apply?.Invoke(text, items);
+		public IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items) => apply?.Invoke(text, items);
 
 		public virtual void Applied(LookupWidget lookupWidget) => applied?.Invoke(lookupWidget);
 	}
@@ -47,7 +47,7 @@ namespace Tangerine.UI
 
 		public virtual void Applying(LookupWidget lookupWidget, string text) { }
 
-		public virtual IEnumerable<LookupItem> Apply(string text, List<LookupItem> items)
+		public virtual IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items)
 		{
 			var itemsTemp = new List<(LookupItem item, int Distance)>();
 			if (!string.IsNullOrEmpty(text)) {
