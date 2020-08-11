@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -31,6 +34,9 @@ namespace Lime
 				Batches.Add(typedLastBatch);
 				lastBatch = typedLastBatch;
 			}
+#if PROFILER
+			typedLastBatch.OwnersInfo.ProcessNode(RenderObjectOwnerInfo.CurrentNode);
+#endif // PROFILER
 			return typedLastBatch;
 		}
 

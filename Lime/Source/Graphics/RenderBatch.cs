@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -34,6 +37,10 @@ namespace Lime
 		public int StartIndex { get; set; }
 		public int LastIndex { get; set; }
 		public Mesh<TVertex> Mesh { get; set; }
+
+#if PROFILER
+		public RenderBatchOwnersInfo OwnersInfo;
+#endif // PROFILER
 
 		private void Clear()
 		{
@@ -72,6 +79,9 @@ namespace Lime
 				batch.ownsMesh = true;
 				batch.Mesh = AcquireMesh();
 			}
+#if PROFILER
+			batch.OwnersInfo.Initialize();
+#endif // PROFILER
 			return batch;
 		}
 
