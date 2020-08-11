@@ -21,7 +21,7 @@ namespace Tangerine.Panels
 		{
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
-			
+
 			ThemedScrollView scrollView;
 
 			contentWidget = new Frame {
@@ -81,7 +81,7 @@ namespace Tangerine.Panels
 					i => LinkSceneItem.CanLink(GetSceneItem(args.Parent), i));
 			}
 		}
-		
+
 		private bool IsExternalSceneItem(Row item)
 		{
 			for (var i = item; i != null; i = i.Parent) {
@@ -117,7 +117,7 @@ namespace Tangerine.Panels
 				}
 			});
 		}
-		
+
 		private int TranslateTreeViewToSceneTreeIndex(TreeViewItem parent, int index)
 		{
 			if (parent.Items.Count == 0) {
@@ -135,7 +135,7 @@ namespace Tangerine.Panels
 			CopySceneItemsToStream.Perform(topSceneItems, stream);
 			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 		}
-			
+
 		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args)
 		{
 			TreeView_OnCopy(sender, args);
@@ -155,7 +155,7 @@ namespace Tangerine.Panels
 				}
 			});
 		}
-		
+
 		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args)
 		{
 			if (IsExternalSceneItem(GetSceneItem(args.Parent))) {
@@ -180,14 +180,14 @@ namespace Tangerine.Panels
 		}
 
 		private static Row GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
-		
+
 		private void TreeView_OnItemActivate(object sender, TreeView.ActivateItemEventArgs args)
 		{
 			if (GetSceneItem(args.Item).TryGetNode(out var node)) {
 				NavigateToNode(node);
 			}
 		}
-		
+
 		private void NavigateToNode(Node node)
 		{
 			var path = new Stack<int>();
@@ -249,15 +249,15 @@ namespace Tangerine.Panels
 					}
 				}
 				if (
-					currentItem.Items.Count > 0 || filter.Length == 0 || 
-					sceneTree.Id.Contains(filter, StringComparison.OrdinalIgnoreCase)
+					currentItem.Items.Count > 0 || filter.Length == 0 ||
+					sceneTree.Id.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0
 				) {
 					return currentItem;
 				}
 				return null;
 			}
 		}
-		
+
 		public void Attach()
 		{
 			panelWidget.PushNode(contentWidget);
@@ -267,12 +267,12 @@ namespace Tangerine.Panels
 		{
 			contentWidget.Unlink();
 		}
-		
+
 		[NodeComponentDontSerialize]
 		public class TreeViewComponent : Component
 		{
 			private TreeViewItem TreeViewItem { get; set; }
-			
+
 			public bool Selected
 			{
 				get => SelectionOrder > 0;
@@ -283,11 +283,11 @@ namespace Tangerine.Panels
 					}
 				}
 			}
-			
+
 			private static int selectionCounter = 1;
-			
+
 			public int SelectionOrder { get; private set; }
-			
+
 			public bool Expanded { get; set; }
 
 			public static TreeViewItem GetTreeViewItem(Row item)
@@ -338,7 +338,7 @@ namespace Tangerine.Panels
 			}
 
 			public override bool CanExpand() => Items.Count > 0;
-			
+
 			public override string Label
 			{
 				get => SceneItem.Id;
