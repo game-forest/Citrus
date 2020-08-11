@@ -4,6 +4,9 @@ using System.Linq;
 using System.IO;
 using Lime;
 using Tangerine.Core.Components;
+#if PROFILER
+using Lime.Profiler;
+#endif // PROFILER
 
 namespace Tangerine.Core
 {
@@ -530,6 +533,9 @@ namespace Tangerine.Core
 			if (Current != doc) {
 				DetachViews();
 				Current = doc;
+#if PROFILER
+				SceneProfilingInfo.NodeManager = doc?.Manager;
+#endif // PROFILER
 				doc?.AttachViews();
 				if (doc != null) {
 					ProjectUserPreferences.Instance.CurrentDocument = doc.Path;
