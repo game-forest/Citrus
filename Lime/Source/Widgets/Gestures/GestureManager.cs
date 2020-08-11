@@ -117,8 +117,15 @@ namespace Lime
 						}
 						yield return g;
 					}
+					if (node.Components.Contains<DisableAncestralGesturesComponent>()) {
+						yield break;
+					}
 				}
 			}
 		}
+	}
+
+	public class DisableAncestralGesturesComponent : NodeComponent
+	{
 	}
 }
