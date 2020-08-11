@@ -1,6 +1,9 @@
 using System;
 using System.IO;
 using Lime.Graphics.Platform;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -333,6 +336,12 @@ namespace Lime
 		public static void SetShaderProgram(ShaderProgram program)
 		{
 			shaderProgram = program;
+#if PROFILER
+			if (program != null && OverdrawMaterialsScope.IsInside) {
+				Context.SetBlendState(program.OverdrawBehavior.Blending);
+				shaderProgram = program.OverdrawBehavior.Program;
+			}
+#endif // PROFILER
 			Context.SetShaderProgram(shaderProgram?.GetPlatformProgram());
 		}
 
