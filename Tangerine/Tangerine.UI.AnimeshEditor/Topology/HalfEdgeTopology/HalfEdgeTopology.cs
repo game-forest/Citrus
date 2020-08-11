@@ -531,7 +531,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				InnerBoundary.Add(c.Origin);
 				c = NextBorderEdge(c);
 			} while (c != start);
-			BoundingBox = Rectangle.Empty;
 			foreach (var vertex in Vertices) {
 				BoundingBox = BoundingBox.IncludingPoint(vertex.Pos);
 			}
@@ -542,11 +541,15 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					usedBoundingFigureVertices[bfvi] = true;
 				}
 			}
+			SaveHitTestParameters();
+			EdgeHitTestDistance = VertexHitTestRadius = 0f;
 			for (int i = 1; i < usedBoundingFigureVertices.Length; i++) {
 				if (!usedBoundingFigureVertices[i]) {
-					AddVertex(-i);
+					var wasAdded = AddVertex(-i);
+					System.Diagnostics.Debug.Assert(wasAdded);
 				}
 			}
+			RestoreHitTestParameters();
 			ToConvexHull();
 		}
 
@@ -1027,20 +1030,25 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				new Animesh.SkinnedVertex { Pos = new Vector2(rect.AX, rect.BY), },
 				new Animesh.SkinnedVertex { Pos = rect.B, },
 			};
+			SaveHitTestParameters();
+			EdgeHitTestDistance = VertexHitTestRadius = 0f;
 			if (BoundingFigureVertices.Count > 0) {
 				for (int i = 1; i < BoundingFigureVertices.Count; i++) {
 					if (BoundingFigureVertices[i].Pos != newVertices[i].Pos) {
-						var result = LocateClosestTriangle(BoundingFigureVertices[i].Pos, out var edge);
-						System.Diagnostics.Debug.Assert(result == LocationResult.SameVertex);
-						if (edge.Origin < 0) {
+						if (
+							LocateClosestTriangle(BoundingFigureVertices[i].Pos, out var edge) == LocationResult.SameVertex &&
+							edge.Origin < 0
+						) {
 							InnerRemoveVertex(edge.Origin);
 						}
 						BoundingFigureVertices[i] = newVertices[i];
-						AddVertex(-i);
+						var wasAdded = AddVertex(-i);
+						System.Diagnostics.Debug.Assert(wasAdded);
 						ToConvexHull();
 					}
 				}
 			}
+			RestoreHitTestParameters();
 			BoundingFigureVertices.Clear();
 			for (int i = 0; i < 5; i++) {
 				BoundingFigureVertices.Add(newVertices[i]);
