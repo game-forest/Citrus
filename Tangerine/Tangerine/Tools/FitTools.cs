@@ -133,9 +133,33 @@ namespace Tangerine
 			var frame = sv.Frame;
 			if (Utils.CalcHullAndPivot(Core.Document.Current.SelectedNodes().Editable(), out var hull, out _)) {
 				var aabb = hull.ToAABB();
-				scene.Position = -aabb.Center * scene.Scale + new Vector2(frame.Width / 2, frame.Height / 2);
+				var sceneViewBottomOffset = SceneView.ShowNodeDecorationsPanelButton.Size.Y;
+				// The Vector2(9) is extra offset to make rect markers visible.
+				var sceneViewInnerSize = scene.Size -
+					new Vector2(RulersWidget.RulerHeight) -
+					new Vector2(9) - new Vector2(0, sceneViewBottomOffset);
+				var targetScale = sceneViewInnerSize / aabb.Size;
+				targetScale = new Vector2(Mathf.Clamp(
+					value: Mathf.Min(targetScale.X, targetScale.Y),
+					min: ZoomWidget.zoomTable.First(),
+					max: ZoomWidget.zoomTable.Last()));
+				var offset = new Vector2(
+					RulersWidget.RulerHeight / 2,
+					(RulersWidget.RulerHeight - sceneViewBottomOffset) / 2);
+				var targetPosition = offset + GetPosition(aabb, targetScale, frame);
+				bool positionNotChanged = Vector2.Distance(targetPosition, scene.Position) < 0.1f / scene.Scale.X;
+				bool scaleNotChanged = Vector2.Distance(targetScale, scene.Scale) < 0.001f * scene.Scale.X;
+				if (positionNotChanged && scaleNotChanged) {
+					// Add indent 10%
+					targetScale *= 0.8f;
+					targetPosition = offset + GetPosition(aabb, targetScale, frame);
+				}
+				scene.Position = targetPosition;
+				scene.Scale = targetScale;
 			}
-
 		}
+
+		private static Vector2 GetPosition(Rectangle aabb, Vector2 targetScale, Widget frame) =>
+			-aabb.Center * targetScale + new Vector2(frame.Width / 2, frame.Height / 2);
 	}
 }
