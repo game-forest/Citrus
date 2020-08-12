@@ -15,11 +15,20 @@ namespace Tangerine.UI.Timeline
 		{
 			var g = Timeline.Instance.Globals;
 			while (true) {
-				var r = g.Get<DragKeyframesRequest>();
-				if (r != null) {
+				var rq = g.Get<DragKeyframesRequest>();
+				if (rq != null) {
 					Document.Current.History.DoTransaction(() => {
-						Operations.DragKeyframes.Perform(r.Offset, r.RemoveOriginals);
-						Operations.ShiftGridSelection.Perform(r.Offset);
+						Operations.DragKeyframes.Perform(rq.Offset, rq.RemoveOriginals);
+						Operations.ShiftGridSelection.Perform(rq.Offset);
+						if (rq.Offset.Y != 0) {
+							var selected = Document.Current.SelectedRows().Where(r => r.Selected).Select(r => r.Index).ToDictionary(x => x);
+							ClearRowSelection.Perform();
+							foreach (var row in Document.Current.Rows) {
+								if (selected.ContainsKey(row.Index - rq.Offset.Y)) {
+									SelectRow.Perform(row, select: true);
+								}
+							}
+						}
 						g.Remove<DragKeyframesRequest>();
 					});
 				}
