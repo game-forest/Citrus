@@ -143,6 +143,7 @@ namespace Tangerine.Core.Operations
 				return false;
 			}
 			var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+			container.LoadExternalScenes();
 			foreach (var a in container.Animators) {
 				a.AnimationId = Document.Current.AnimationId;
 			}
@@ -158,7 +159,6 @@ namespace Tangerine.Core.Operations
 					if (widgetOffset.HasValue && node is Widget widget) {
 						widget.Position += widgetOffset.Value;
 					}
-					node.LoadExternalScenes();
 				}
 			}
 			if (container.Animations.TryFind("_", out var animation)) {
@@ -230,7 +230,7 @@ namespace Tangerine.Core.Operations
 				return CanLink(parent, node);
 			}
 			if (sceneItem.TryGetFolder(out var folder)) {
-				return CanLink(parent, folder) && 
+				return CanLink(parent, folder) &&
 				       EnumerateClosestDescendantNodes(sceneItem).All(n => CanLink(parent, n));
 			}
 			if (sceneItem.TryGetAnimationTrack(out var track)) {
@@ -238,7 +238,7 @@ namespace Tangerine.Core.Operations
 			}
 			throw new InvalidOperationException();
 		}
-		
+
 		public static bool CanLink(Row parent, IAnimator animator)
 		{
 			if (parent.GetAnimator() != null) {
@@ -251,7 +251,7 @@ namespace Tangerine.Core.Operations
 				return false;
 			}
 			if (parent.Parent == null) {
-				// Can't drag the animator into the root item. 
+				// Can't drag the animator into the root item.
 				return false;
 			}
 			if (node.Animators.Any(a => a.TargetPropertyPath == animator.TargetPropertyPath)) {
@@ -269,7 +269,7 @@ namespace Tangerine.Core.Operations
 			}
 			return true;
 		}
-		
+
 		public static bool CanLink(Row parent, Node node)
 		{
 			if (parent.GetAnimator() != null) {
@@ -314,7 +314,7 @@ namespace Tangerine.Core.Operations
 				}
 			}
 		}
-		
+
 		public static Row Perform(Row parent, int index, Folder.Descriptor folder)
 		{
 			if (!CanLink(parent, folder)) {
@@ -329,12 +329,12 @@ namespace Tangerine.Core.Operations
 
 			var ownerNodeItem = SceneTreeUtils.GetOwnerNodeSceneItem(parent);
 			var ownerNode = ownerNodeItem.GetNode();
-			
-			var nodeIndex = 
+
+			var nodeIndex =
 				ownerNodeItem.TraversePreoder(skipRoot: true).TakeWhile(i => i != folderItem)
 				.LastOrDefault(i => i.TryGetNode(out var n) && n.Parent == ownerNode)
 				?.GetNode().CollectionIndex() + 1 ?? 0;
-			
+
 			SetProperty.Perform(folderItem.GetFolder(), nameof(Folder.Descriptor.Index), nodeIndex);
 			SetProperty.Perform(folderItem.GetFolder(), nameof(Folder.Descriptor.ItemCount), 0);
 
@@ -342,7 +342,7 @@ namespace Tangerine.Core.Operations
 				ownerNodeItem.TraversePreoder(skipRoot: true).TakeWhile(i => i != folderItem)
 					.LastOrDefault(i => i.TryGetFolder(out var f) && f.Owner == ownerNode)
 					?.GetFolder().CollectionIndex() + 1 ?? 0;
-			
+
 			InsertIntoList<FolderList, Folder.Descriptor>.Perform(ownerNode.Folders, folderIndex, folderItem.GetFolder());
 
 			if (parent.TryGetFolder(out var parentFolder)) {
@@ -374,11 +374,11 @@ namespace Tangerine.Core.Operations
 
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, nodeItem);
 
-			var nodeIndex = 
+			var nodeIndex =
 				ownerNodeItem.TraversePreoder(skipRoot: true).TakeWhile(i => i != nodeItem)
 				.LastOrDefault(i => i.TryGetNode(out var n) && n.Parent == ownerNode)
 				?.GetNode().CollectionIndex() + 1 ?? 0;
-			
+
 			InsertIntoList<NodeList, Node>.Perform(ownerNode.Nodes, nodeIndex, nodeItem.GetNode());
 #if DEBUG
 			if (nodeItem.GetNode() is Bone bone2) {
@@ -426,7 +426,7 @@ namespace Tangerine.Core.Operations
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, animatorItem);
 			return animatorItem;
 		}
-		
+
 		public static Row Perform(Row parent, int index, AnimationTrack track)
 		{
 			if (!CanLink(parent, track)) {
@@ -439,7 +439,7 @@ namespace Tangerine.Core.Operations
 			return trackItem;
 		}
 	}
-	
+
 	public static class SceneTreeUtils
 	{
 		public static IEnumerable<Row> EnumerateTopSceneItems(IEnumerable<Row> items)
@@ -455,7 +455,7 @@ namespace Tangerine.Core.Operations
 		{
 			return EnumerateTopSceneItems(Document.Current.SelectedRows());
 		}
-		
+
 		public static IEnumerable<Row> TraversePreoder(this Row root, bool skipRoot)
 		{
 			var stack = new Stack<Row>();
@@ -469,8 +469,8 @@ namespace Tangerine.Core.Operations
 					stack.Push(item.Rows[i]);
 				}
 			}
-		}	
-		
+		}
+
 		public static void GetSceneItemLinkLocation(
 			out Row parent, out int index,
 			bool aboveFocused = true,
@@ -482,7 +482,7 @@ namespace Tangerine.Core.Operations
 				index = 0;
 				return;
 			}
-			parent = focusedItem.Parent;	
+			parent = focusedItem.Parent;
 			index = parent.Rows.IndexOf(focusedItem);
 			if (!aboveFocused) {
 				index++;
@@ -498,7 +498,7 @@ namespace Tangerine.Core.Operations
 
 		public static Row GetOwnerNodeSceneItem(Row item)
 		{
-			Node ownerNode = null; 
+			Node ownerNode = null;
 			if (item.GetNode() is Bone bone) {
 				ownerNode = bone.Parent;
 			} else if (item.TryGetNode(out var node)) {
