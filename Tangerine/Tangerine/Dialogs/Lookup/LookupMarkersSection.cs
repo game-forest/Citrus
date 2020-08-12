@@ -53,7 +53,8 @@ namespace Tangerine
 					IconTexture = markerActionsIcons[m.Action].AsTexture,
 				};
 				if (string.IsNullOrEmpty(m.Id)) {
-					item.HeaderSimpleText.Text = "<No Name>";
+					item.Header.Enabled = false;
+					item.HeaderRichText.Text = "[No Name]";
 				}
 				lookupWidget.AddItem(item);
 			}

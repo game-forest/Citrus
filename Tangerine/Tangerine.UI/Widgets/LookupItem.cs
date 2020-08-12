@@ -5,25 +5,46 @@ namespace Tangerine.UI
 {
 	public class LookupItem
 	{
+		protected const string HighlightedTextStyleId = "b";
+
 		public readonly Widget Widget;
-		public readonly HighlightedText Name;
-		public readonly ThemedSimpleText NameSimpleText;
+		public readonly RichTextHighlightComponent Name;
+		public readonly RichText NameRichText;
 		public readonly Action Action;
 
 		public bool IsSelected { get; set; }
 
 		public LookupItem(LookupWidget owner, string text, Action action)
 		{
-			Name = new HighlightedText(text);
 			Action = action;
 
 			Widget = new Frame {
 				Nodes = {
-					(NameSimpleText = new ThemedSimpleText {
+					(NameRichText = new RichText {
 						Text = text,
-						ForceUncutText = false,
 						Padding = new Thickness(left: 5.0f),
 						MinHeight = 18.0f,
+						Localizable = false,
+						Color = Color4.White,
+						HAlignment = HAlignment.Left,
+						VAlignment = VAlignment.Top,
+						OverflowMode = TextOverflowMode.Ellipsis,
+						TrimWhitespaces = true,
+						Nodes = {
+							new TextStyle {
+								Size = Theme.Metrics.TextHeight,
+								TextColor = Theme.Colors.GrayText,
+							},
+							new TextStyle {
+								Id = HighlightedTextStyleId,
+								Size = Theme.Metrics.TextHeight,
+								TextColor = Theme.Colors.BlackText,
+								Bold = true,
+							},
+						},
+						Components = {
+							(Name = new RichTextHighlightComponent(text, HighlightedTextStyleId))
+						}
 					})
 				},
 				Layout = new HBoxLayout(),
@@ -31,23 +52,8 @@ namespace Tangerine.UI
 				HitTestTarget = true,
 				Padding = new Thickness(horizontal: 0, vertical: 2),
 			};
-			NameSimpleText.CompoundPresenter.Add(new SimpleTextHighlightPresenter(Name));
 			Widget.CompoundPresenter.Add(new ItemPresenter(this));
 			Widget.Tasks.Add(Theme.MouseHoverInvalidationTask(Widget));
-		}
-
-		public class HighlightedText : ITextHighlightDataSource
-		{
-			public string Text { get; set; }
-			public int[] HighlightSymbolsIndices { get; set; }
-			public Color4 HighlightColor => Theme.Colors.TextSelection;
-
-			public HighlightedText() { }
-
-			public HighlightedText(string text)
-			{
-				Text = text;
-			}
 		}
 
 		private class ItemPresenter : IPresenter
@@ -68,7 +74,7 @@ namespace Tangerine.UI
 						var ro = RenderObjectPool<RenderObject>.Acquire();
 						ro.CaptureRenderState(widget);
 						ro.Size = widget.Size;
-						ro.SelectedColor = Theme.Colors.SelectedBackground;
+						ro.SelectedColor = Theme.Colors.WhiteBackground;
 						ro.HoveredColor = Theme.Colors.SelectedBorder;
 						ro.IsSelected = item.IsSelected;
 						ro.IsHovered = isMouseOverThisOrDescendant;

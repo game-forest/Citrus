@@ -13,8 +13,8 @@ namespace Tangerine
 			Margin = new Thickness(horizontal: 3, vertical: 0),
 		};
 
-		public readonly HighlightedText Header;
-		public readonly ThemedSimpleText HeaderSimpleText;
+		public readonly RichTextHighlightComponent Header;
+		public readonly RichText HeaderRichText;
 
 		public ITexture IconTexture
 		{
@@ -29,7 +29,6 @@ namespace Tangerine
 		public LookupDialogItem(LookupWidget owner, string headerText, string text, Action action) : base(owner, text, action)
 		{
 			Widget.Layout = new VBoxLayout();
-			Header = new HighlightedText { Text = headerText };
 
 			const float IconSize = 16;
 			const float IconRightPadding = 5;
@@ -46,19 +45,37 @@ namespace Tangerine
 						MinMaxSize = new Vector2(IconSize + IconRightPadding, IconSize),
 						Visible = false,
 					}),
-					(HeaderSimpleText = new ThemedSimpleText {
-						Text = Header.Text,
-						FontHeight = Theme.Metrics.TextHeight * 1.25f,
-						ForceUncutText = false,
+					(HeaderRichText = new RichText {
+						Text = headerText,
 						Padding = new Thickness(bottom: 5),
 						MinHeight = 23f,
+						Localizable = false,
+						Color = Color4.White,
+						HAlignment = HAlignment.Left,
+						VAlignment = VAlignment.Top,
+						OverflowMode = TextOverflowMode.Ellipsis,
+						TrimWhitespaces = true,
+						Nodes = {
+							new TextStyle {
+								Size = Theme.Metrics.TextHeight * 1.25f,
+								TextColor = Theme.Colors.GrayText,
+							},
+							new TextStyle {
+								Id = HighlightedTextStyleId,
+								Size = Theme.Metrics.TextHeight * 1.25f,
+								TextColor = Theme.Colors.BlackText,
+								Bold = true,
+							},
+						},
+						Components = {
+							(Header = new RichTextHighlightComponent(headerText, HighlightedTextStyleId))
+						}
 					}),
 				}
 			});
-			HeaderSimpleText.CompoundPresenter.Add(new SimpleTextHighlightPresenter(Header));
 
-			if (string.IsNullOrEmpty(NameSimpleText.Text)) {
-				NameSimpleText.Visible = false;
+			if (string.IsNullOrEmpty(NameRichText.Text)) {
+				NameRichText.Visible = false;
 			}
 		}
 

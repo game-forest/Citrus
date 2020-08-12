@@ -54,6 +54,7 @@
     <Compile Include="PropertyEditors\SliderPropertyEditor.cs" />
     <Compile Include="Tooltip\Tooltip.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
+    <Compile Include="Utils\RichTextHighlightComponent.cs" />
     <Compile Include="Utils\SimpleTextHighlightPresenter.cs" />
     <Compile Include="Widgets\LookupDataSource.cs" />
     <Compile Include="Widgets\LookupFilter.cs" />
