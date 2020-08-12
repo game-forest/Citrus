@@ -807,7 +807,10 @@ namespace Tangerine.UI.AnimeshEditor
 						BlendWeights = new Mesh3D.BlendWeights { Weight0 = 1f, },
 					};
 					UpdateHitTestMetrics();
-					Topology.AddVertex(vertex);
+					var index = Topology.AddVertex(vertex);
+					if (index < 0) {
+						yield break;
+					}
 					if (animator != null) {
 						keyframes = new List<IKeyframe>();
 						foreach (var key in animator.Keys.ToList()) {
