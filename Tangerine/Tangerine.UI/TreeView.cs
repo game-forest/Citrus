@@ -11,9 +11,9 @@ namespace Tangerine.UI
 	{
 		private static int selectionCounter = 1;
 		private TreeView treeView;
-		
+
 		public virtual string Label { get; set; }
-		
+
 		public virtual bool Selected
 		{
 			get => SelectionOrder > 0;
@@ -38,17 +38,17 @@ namespace Tangerine.UI
 			get => treeView;
 			internal set => PropagateTreeView(value);
 		}
-		
+
 		public TreeViewItem Parent { get; internal set; }
 		public TreeViewItemList Items { get; }
-		
+
 		public void Unlink() => Parent.Items.Remove(this);
-		
+
 		public TreeViewItem()
 		{
 			Items = new TreeViewItemList(this);
 		}
-		
+
 		private void PropagateTreeView(TreeView treeView)
 		{
 			if (this.treeView != treeView) {
@@ -71,7 +71,7 @@ namespace Tangerine.UI
 		public List<TreeViewItem>.Enumerator GetEnumerator() => list.GetEnumerator();
 
 		public TreeViewItemList(TreeViewItem parent) => this.parent = parent;
-		
+
 		public void Add(TreeViewItem item) => Insert(Count, item);
 
 		public void Clear()
@@ -94,10 +94,10 @@ namespace Tangerine.UI
 			RemoveAt(i);
 			return true;
 		}
-		
+
 		public int Count => list.Count;
 		public bool IsReadOnly => false;
-		
+
 		public int IndexOf(TreeViewItem item) => list.IndexOf(item);
 
 		public void Insert(int index, TreeViewItem item)
@@ -119,7 +119,7 @@ namespace Tangerine.UI
 			item.TreeView = null;
 			parent.TreeView?.ScheduleRefresh();
 		}
-		
+
 		public TreeViewItem this[int index]
 		{
 			get => list[index];
@@ -144,13 +144,13 @@ namespace Tangerine.UI
 	{
 		void Process(ITreeViewItemPresentation presentation);
 	}
-	
+
 	public class TreeViewOptions
 	{
 		public bool HandleCommands { get; set; } = true;
 		public bool ShowRoot { get; set; } = true;
 	}
-	
+
 	public class TreeView
 	{
 		public class DragEventArgs : EventArgs
@@ -165,18 +165,18 @@ namespace Tangerine.UI
 		{
 			public IEnumerable<TreeViewItem> Items;
 		}
-		
+
 		public class PasteEventArgs : EventArgs
 		{
 			public TreeViewItem Parent;
 			public int Index;
 		}
-		
+
 		public class ActivateItemEventArgs : EventArgs
 		{
 			public TreeViewItem Item;
 		}
-		
+
 		private static class Cmds
 		{
 			public static readonly ICommand Activate = new Command(Key.Enter);
@@ -207,7 +207,7 @@ namespace Tangerine.UI
 		public event EventHandler<PasteEventArgs> OnPaste;
 
 		public float ScrollVelocity = 300;
-		
+
 		public TreeViewItem RootItem
 		{
 			get => rootItem;
@@ -224,7 +224,7 @@ namespace Tangerine.UI
 				ScheduleRefresh();
 			}
 		}
-		
+
 		public TreeView(
 			ThemedScrollView scrollView,
 			ITreeViewPresentation presentation,
@@ -262,7 +262,7 @@ namespace Tangerine.UI
 			dg.Began += () => {
 				dragRecognized = false;
 				itemSelectedAtDragBegin = false;
-				var itemUnderMouse = GetItemUnderMouse(); 
+				var itemUnderMouse = GetItemUnderMouse();
 				if (itemUnderMouse == null) {
 					return;
 				}
@@ -296,10 +296,10 @@ namespace Tangerine.UI
 					if (!parent.Expanded) {
 						parent.Expanded = true;
 					}
-					OnDragEnd?.Invoke(this, 
+					OnDragEnd?.Invoke(this,
 						new DragEventArgs {
 							Items = items.Where(i => i.Selected),
-							Parent = parent, 
+							Parent = parent,
 							Index = childIndex
 						});
 				}
@@ -330,7 +330,7 @@ namespace Tangerine.UI
 		/// </summary>
 		public void RaiseActivated(TreeViewItem item) => OnItemActivate?.Invoke(
 			this, new ActivateItemEventArgs { Item = item });
-		
+
 		private IEnumerator<object> ScrollOnDragTask(DragGesture dg)
 		{
 			TreeViewItem previousItem = null;
@@ -362,7 +362,7 @@ namespace Tangerine.UI
 					}
 				}
 				if (
-					index == 0 && t < 0.5f || 
+					index == 0 && t < 0.5f ||
 					index == items.Count - 1 && t > 0.5f ||
 					t >= 0 && t < 1
 				) {
@@ -384,7 +384,7 @@ namespace Tangerine.UI
 			}
 			return false;
 		}
-		
+
 		public void SelectItem(TreeViewItem item, bool select = true, bool clearSelection = true)
 		{
 			if (clearSelection) {
@@ -410,7 +410,7 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		
+
 		private void SelectRange(TreeViewItem item)
 		{
 			if (rangeSelectionFirstItem == null || !items.Contains(rangeSelectionFirstItem)) {
@@ -443,7 +443,7 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		
+
 		public void SelectRangeNextItem()
 		{
 			var focused = GetRecentlySelected();
@@ -467,7 +467,7 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		
+
 		public void SelectRangePreviousItem()
 		{
 			var focused = GetRecentlySelected();
@@ -479,7 +479,7 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		
+
 		public void ToggleItem()
 		{
 			var focused = GetRecentlySelected();
@@ -490,7 +490,7 @@ namespace Tangerine.UI
 				focused.Expanded = !focused.Expanded;
 			}
 		}
-		
+
 		public void ExpandOrSelectNextItem()
 		{
 			var focused = GetRecentlySelected();
@@ -502,7 +502,7 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		
+
 		public void CollapseOrSelectParentItem()
 		{
 			var focused = GetRecentlySelected();
@@ -580,7 +580,7 @@ namespace Tangerine.UI
 		{
 			((WindowWidget)scrollView.Manager.RootNodes[0]).Window.Invalidate();
 		}
-		
+
 		private TreeViewItem GetItemUnderMouse()
 		{
 			var p = scrollView.Content.LocalMousePosition().Y;
@@ -594,7 +594,7 @@ namespace Tangerine.UI
 			}
 			return null;
 		}
-		
+
 		private IEnumerator<object> SyncTask()
 		{
 			while (true) {
@@ -630,7 +630,7 @@ namespace Tangerine.UI
 					p.Process(i.Presentation);
 				}
 			}
-			
+
 			void BuildRecursively(TreeViewItem item)
 			{
 				var skipRoot = !options.ShowRoot && item == RootItem;

@@ -51,7 +51,7 @@ namespace Tangerine.Panels
 				() => Document.Current?.SceneTreeVersion ?? 0,_ => RebuildTreeView());
 			RebuildTreeView();
 			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
-				if (treeView.RootItem.Items.Count > 0) {
+				if (treeView.RootItem?.Items.Count > 0) {
 					w.PrepareRendererState();
 					Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition,
 						Theme.Colors.WhiteBackground);
@@ -250,7 +250,7 @@ namespace Tangerine.Panels
 				}
 				if (
 					currentItem.Items.Count > 0 || filter.Length == 0 ||
-					sceneTree.Id.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0
+					sceneTree.Id?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0
 				) {
 					return currentItem;
 				}
