@@ -62,13 +62,12 @@ namespace Tangerine.UI.SceneView
 		private static IEnumerator<object> CreateLineTask(Widget widget, RulerOrientation lineRulerOrientation = RulerOrientation.Horizontal)
 		{
 			while (true) {
-				var rect = new Rectangle(Vector2.Zero, widget.Size);
-				if (rect.Contains(widget.LocalMousePosition()) && !Document.Current.PreviewScene) {
-					if (widget.Input.WasMousePressed()) {
-						sv.Components.Add(new CreateLineRequestComponent {
-							Orientation = lineRulerOrientation,
-						});
-					}
+				if (widget.Input.WasMousePressed() && !Document.Current.PreviewScene) {
+					var rect = new Rectangle(Vector2.Zero, widget.Size);
+					sv.Components.Add(new CreateLineRequestComponent {
+						Orientation = lineRulerOrientation,
+						IsHovered = () => rect.Contains(widget.LocalMousePosition())
+					});
 				}
 				yield return null;
 			}
@@ -276,5 +275,6 @@ namespace Tangerine.UI.SceneView
 	public class CreateLineRequestComponent : Component
 	{
 		public RulerOrientation Orientation { get; set; }
+		public Func<bool> IsHovered { get; set; }
 	}
 }
