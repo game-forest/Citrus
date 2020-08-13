@@ -74,6 +74,7 @@ namespace Tangerine.UI
 		{
 			if (Text != text) {
 				textWidget.Text = text;
+				window.Invalidate();
 			}
 			Show();
 			UpdatePosition(position);
