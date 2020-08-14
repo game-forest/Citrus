@@ -221,19 +221,19 @@ namespace Tangerine.Core.Operations
 
 	public static class LinkSceneItem
 	{
-		public static bool CanLink(Row parent, Row sceneItem)
+		public static bool CanLink(Row parent, Row item)
 		{
-			if (sceneItem.TryGetAnimator(out var animator)) {
+			if (item.TryGetAnimator(out var animator)) {
 				return CanLink(parent, animator);
 			}
-			if (sceneItem.TryGetNode(out var node)) {
+			if (item.TryGetNode(out var node)) {
 				return CanLink(parent, node);
 			}
-			if (sceneItem.TryGetFolder(out var folder)) {
+			if (item.TryGetFolder(out var folder)) {
 				return CanLink(parent, folder) &&
-				       EnumerateClosestDescendantNodes(sceneItem).All(n => CanLink(parent, n));
+				       EnumerateClosestDescendantNodes(item).All(n => CanLink(parent, n));
 			}
-			if (sceneItem.TryGetAnimationTrack(out var track)) {
+			if (item.TryGetAnimationTrack(out var track)) {
 				return CanLink(parent, track);
 			}
 			throw new InvalidOperationException();
