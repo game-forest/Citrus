@@ -320,8 +320,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					) {
 						return true;
 					}
-					var belongsToTriangulation = location != LocationResult.OutsideTriangulation &&
-						IsPointInsideInnerTriangulation(position);
+					var belongsToTriangulation = IsPointInsideInnerTriangulation(Centroid(edge));
 					var start = edge;
 					do {
 						var twinBelongsToTriangulation = belongsToTriangulation ||
