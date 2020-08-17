@@ -1065,7 +1065,7 @@ namespace Tangerine.Core.Operations
 							v.SkinningWeights = sw;
 							SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
 						}
-						animesh.Invalidate();
+						InvalidateAnimesh.Perform(animesh);
 					}
 					if (animesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator)) {
 						foreach (var key in animator.Keys.ToList()) {
@@ -1215,7 +1215,7 @@ namespace Tangerine.Core.Operations
 							v.SkinningWeights = vertex.SkinningWeights;
 							SetIndexedProperty.Perform(animesh.TransientVertices, "Item", i, v);
 						}
-						animesh.Invalidate();
+						InvalidateAnimesh.Perform(animesh);
 					}
 					if (animesh.Animators.TryFind(nameof(Animesh.TransientVertices), out var animator)) {
 						foreach (var key in animator.Keys.ToList()) {
@@ -1326,6 +1326,25 @@ namespace Tangerine.Core.Operations
 				v.SkinningWeights = sw;
 				mesh.TransientVertices[index] = v;
 			}
+		}
+	}
+
+	public class InvalidateAnimesh : Operation
+	{
+		public override bool IsChangingDocument => false;
+		private readonly Animesh animesh;
+
+		private InvalidateAnimesh(Animesh animesh)
+		{
+			this.animesh = animesh;
+		}
+
+		public static void Perform(Animesh animesh) => DocumentHistory.Current.Perform(new InvalidateAnimesh(animesh));
+
+		public class Processor : OperationProcessor<InvalidateAnimesh>
+		{
+			protected override void InternalRedo(InvalidateAnimesh op) => op.animesh.Invalidate();
+			protected override void InternalUndo(InvalidateAnimesh op) => op.animesh.Invalidate();
 		}
 	}
 
