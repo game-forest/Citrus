@@ -64,6 +64,8 @@ namespace Lime
 		private IndexBuffer ibo = null;
 		private Vector2 leftUpperCorner = Vector2.Zero;
 		private Vector2 rightBottomCorner = Vector2.One;
+		private readonly Dictionary<byte, byte> remappedBoneIndices = new Dictionary<byte, byte>();
+		private const int MaxBones = 50;
 
 		[YuzuMember]
 		public override ITexture Texture { get; set; }
@@ -158,9 +160,28 @@ namespace Lime
 					vboData[k++] = v;
 				}
 #endif // TANGERINE
+				remappedBoneIndices.Clear();
+				remappedBoneIndices.Add(0, 0);
+				byte boneIndex = 1;
 				foreach (var vertex in Vertices) {
 					var v = vertex;
 					Texture?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
+					if (v.BlendIndices.Index0 != 0 && !remappedBoneIndices.ContainsKey(v.BlendIndices.Index0)) {
+						remappedBoneIndices.Add(v.BlendIndices.Index0, boneIndex++);
+					}
+					if (v.BlendIndices.Index1 != 0 && !remappedBoneIndices.ContainsKey(v.BlendIndices.Index1)) {
+						remappedBoneIndices.Add(v.BlendIndices.Index1, boneIndex++);
+					}
+					if (v.BlendIndices.Index2 != 0 && !remappedBoneIndices.ContainsKey(v.BlendIndices.Index2)) {
+						remappedBoneIndices.Add(v.BlendIndices.Index2, boneIndex++);
+					}
+					if (v.BlendIndices.Index3 != 0 && !remappedBoneIndices.ContainsKey(v.BlendIndices.Index3)) {
+						remappedBoneIndices.Add(v.BlendIndices.Index3, boneIndex++);
+					}
+					v.BlendIndices.Index0 = remappedBoneIndices[v.BlendIndices.Index0];
+					v.BlendIndices.Index1 = remappedBoneIndices[v.BlendIndices.Index1];
+					v.BlendIndices.Index2 = remappedBoneIndices[v.BlendIndices.Index2];
+					v.BlendIndices.Index3 = remappedBoneIndices[v.BlendIndices.Index3];
 					vboData[k++] = v;
 				}
 				if (animatorWasFound) {
@@ -169,6 +190,10 @@ namespace Lime
 						foreach (var vertex in vertices) {
 							var v = vertex;
 							Texture?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
+							v.BlendIndices.Index0 = remappedBoneIndices[v.BlendIndices.Index0];
+							v.BlendIndices.Index1 = remappedBoneIndices[v.BlendIndices.Index1];
+							v.BlendIndices.Index2 = remappedBoneIndices[v.BlendIndices.Index2];
+							v.BlendIndices.Index3 = remappedBoneIndices[v.BlendIndices.Index3];
 							vboData[k++] = v;
 						}
 					}
@@ -217,19 +242,15 @@ namespace Lime
 				var rkt = endPoseFrame * AnimationUtils.SecondsPerFrame;
 				ro.BlendFactor = (float)((time - lkt) / (rkt - lkt));
 			}
-			ro.BoneTransforms = new Matrix44[50];
-			for (var i = 0; i < ro.BoneTransforms.Length; ++i) {
-				ro.BoneTransforms[i] = Matrix44.Identity;
-			}
+			ro.BoneTransforms = new Matrix44[MaxBones];
 			foreach (var vertex in Vertices) {
-				// Assuming that parent can't have more than 50 bones.
-				ro.BoneTransforms[vertex.BlendIndices.Index0] =
+				ro.BoneTransforms[remappedBoneIndices[vertex.BlendIndices.Index0]] =
 					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index0].RelativeTransform;
-				ro.BoneTransforms[vertex.BlendIndices.Index1] =
+				ro.BoneTransforms[remappedBoneIndices[vertex.BlendIndices.Index1]] =
 					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index1].RelativeTransform;
-				ro.BoneTransforms[vertex.BlendIndices.Index2] =
+				ro.BoneTransforms[remappedBoneIndices[vertex.BlendIndices.Index2]] =
 					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index2].RelativeTransform;
-				ro.BoneTransforms[vertex.BlendIndices.Index3] =
+				ro.BoneTransforms[remappedBoneIndices[vertex.BlendIndices.Index3]] =
 					(Matrix44)ParentWidget.BoneArray[vertex.BlendIndices.Index3].RelativeTransform;
 			}
 			ro.BoneTransforms[0] = Matrix44.Identity;
@@ -271,7 +292,7 @@ namespace Lime
 			static RenderObject()
 			{
 				var shaders = new Shader[] {
-					new VertexShader(@"
+					new VertexShader($@"
 						#ifdef GL_ES
 						precision highp float;
 						#endif
@@ -291,11 +312,11 @@ namespace Lime
 						uniform float u_BlendFactor;
 						uniform mat4 u_MVP;
 						uniform mat4 u_LocalToParentTransform;
-						uniform mat4 u_Bones[50];
+						uniform mat4 u_Bones[{MaxBones}];
 						uniform vec4 u_WidgetColor;
 
 						void main()
-						{
+						{{
 							color = u_WidgetColor * ((1.0 - u_BlendFactor) * in_Color1 + u_BlendFactor * in_Color2);
 							texCoords = (1.0 - u_BlendFactor) * in_UV1 + u_BlendFactor * in_UV2;
 							vec4 position = u_LocalToParentTransform * ((1.0 - u_BlendFactor) * in_Pos1 + u_BlendFactor * in_Pos2);
@@ -306,7 +327,7 @@ namespace Lime
 								u_Bones[int(in_BlendIndices.w)] * in_BlendWeights.w;
 							position = skinTransform * position;
 							gl_Position = u_MVP * position;
-						}
+						}}
 					"),
 					new FragmentShader(@"
 						varying lowp vec4 color;
