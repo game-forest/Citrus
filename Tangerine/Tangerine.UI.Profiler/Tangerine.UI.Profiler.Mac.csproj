@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E8C8ED3-63C2-407F-B626-CD9867E16353}</ProjectGuid>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Tangerine.UI.Profiler</RootNamespace>
+    <AssemblyName>Tangerine.UI.Profiler</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <HttpClientHandler>
+    </HttpClientHandler>
+    <LinkMode>
+    </LinkMode>
+    <XamMacArch>
+    </XamMacArch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <HttpClientHandler>
+    </HttpClientHandler>
+    <LinkMode>
+    </LinkMode>
+    <XamMacArch>
+    </XamMacArch>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lime\Lime.Mac.csproj">
+      <Project>{DC16EEBF-404D-4610-B87A-15B57464D707}</Project>
+      <Name>Lime.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yuzu\Yuzu.Mac.csproj">
+      <Project>{5f16d8e4-a0f1-4341-83a0-3897fc44ebb8}</Project>
+      <Name>Yuzu.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Mac.csproj">
+      <Project>{05FB6476-C29B-49A7-918C-A52CAF73FCA7}</Project>
+      <Name>Tangerine.Core.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Mac.csproj">
+      <Project>{E62BA18F-4E1A-466A-8299-67AD567F17E5}</Project>
+      <Name>Tangerine.UI.Mac</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+</Project>
