@@ -102,14 +102,13 @@ namespace Tangerine.UI.Timeline
 				length = newPos - boundaries.Left - 1;
 			}
 			int oldLength = boundaries.Right - boundaries.Left - 1;
-			for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
-				if (!(Document.Current.Rows[i].Components.Get<NodeRow>()?.Node is IAnimationHost animable)) {
-					continue;
-				}
-				foreach (var animator in animable.Animators.ToList()) {
-					if (animator.AnimationId != Document.Current.AnimationId) {
+			var processed = new HashSet<IAnimator>();
+			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
+				foreach (var animator in animable.Animators) {
+					if (animator.AnimationId != Document.Current.AnimationId || processed.Contains(animator) || !savedKeyframes.ContainsKey(animator)) {
 						continue;
 					}
+					processed.Add(animator);
 					IEnumerable<IKeyframe> saved = savedKeyframes[animator];
 					if (
 						side == DragSide.Left && length < oldLength ||
@@ -131,12 +130,12 @@ namespace Tangerine.UI.Timeline
 						var newKey = key.Clone();
 						newKey.Frame = newFrame;
 						SetAnimableProperty.Perform(
-							animable, animator.TargetPropertyPath, newKey.Value,
+							animable.Host, animator.TargetPropertyPath, newKey.Value,
 							createAnimatorIfNeeded: true,
 							createInitialKeyframeForNewAnimator: false,
 							newKey.Frame
 						);
-						SetKeyframe.Perform(animable, animator.TargetPropertyPath, Document.Current.AnimationId, newKey);
+						SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.AnimationId, newKey);
 					}
 				}
 			}
@@ -166,11 +165,11 @@ namespace Tangerine.UI.Timeline
 			savedMarkerPositions.Clear();
 			savedMarkers.Clear();
 			var length = boundaries.Right - boundaries.Left - 1;
-			for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
-				if (!(Document.Current.Rows[i].Components.Get<NodeRow>()?.Node is IAnimationHost animable)) {
-					continue;
-				}
+			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
 				foreach (var animator in animable.Animators) {
+					if (animator.AnimationId != Document.Current.AnimationId) {
+						continue;
+					}
 					savedKeyframes.Add(animator, new List<IKeyframe>());
 					var keys = animator.Keys.Where(k =>
 						boundaries.Left <= k.Frame &&

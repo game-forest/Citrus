@@ -70,15 +70,14 @@ namespace Tangerine.UI.Timeline
 		private void ScaleKeyframes()
 		{
 			if (GridSelection.GetSelectionBoundaries(out var boundaries) && Scale > Mathf.ZeroTolerance) {
+				var processed = new HashSet<IAnimator>();
 				var saved = new List<IKeyframe>();
-				for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
-					if (!(Document.Current.Rows[i].Components.Get<NodeRow>()?.Node is IAnimationHost animable)) {
-						continue;
-					}
-					foreach (var animator in animable.Animators.ToList()) {
-						if (animator.AnimationId != Document.Current.AnimationId) {
+				foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
+					foreach (var animator in animable.Animators) {
+						if (animator.AnimationId != Document.Current.AnimationId || processed.Contains(animator)) {
 							continue;
 						}
+						processed.Add(animator);
 						saved.Clear();
 						IEnumerable<IKeyframe> keys = animator.ReadonlyKeys.Where(k =>
 							k.Frame >= boundaries.Left && k.Frame < boundaries.Right
@@ -101,12 +100,12 @@ namespace Tangerine.UI.Timeline
 							var newKey = key.Clone();
 							newKey.Frame = newFrame;
 							SetAnimableProperty.Perform(
-								animable, animator.TargetPropertyPath, newKey.Value,
+								animable.Host, animator.TargetPropertyPath, newKey.Value,
 								createAnimatorIfNeeded: true,
 								createInitialKeyframeForNewAnimator: false,
 								newKey.Frame
 							);
-							SetKeyframe.Perform(animable, animator.TargetPropertyPath, Document.Current.AnimationId, newKey);
+							SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.AnimationId, newKey);
 						}
 					}
 				}
