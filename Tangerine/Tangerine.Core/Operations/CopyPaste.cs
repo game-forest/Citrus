@@ -39,7 +39,13 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(Vector2? mousePosition = null)
 		{
-			SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var index);
+			Row parent;
+			int index;
+			if (Document.Current.Animation.IsCompound) {
+				GetAnimationTrackLinkLocation(out parent, out index);
+			} else {
+				SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index);
+			}
 			var data = Clipboard.Text;
 			if (!string.IsNullOrEmpty(data)) {
 				var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
@@ -51,6 +57,13 @@ namespace Tangerine.Core.Operations
 					}
 				});
 			}
+		}
+
+		private static void GetAnimationTrackLinkLocation(out Row parent, out int index)
+		{
+			var focusedItem = Document.Current.RecentlySelectedSceneItem();
+			parent = Document.Current.AnimationTree;
+			index = focusedItem == null ? 0 : Document.Current.AnimationTree.Rows.IndexOf(focusedItem);
 		}
 	}
 
