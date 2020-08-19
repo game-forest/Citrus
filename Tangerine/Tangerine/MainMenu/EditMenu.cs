@@ -323,23 +323,6 @@ namespace Tangerine
 		}
 	}
 
-	public class GroupContentsToMorphableMeshes : DocumentCommandHandler
-	{
-		public override void ExecuteTransaction()
-		{
-			//var nodes = Document.Current?.SelectedNodes().Editable().ToList();
-			//var container = Document.Current.Container;
-			//Core.Operations.ClearRowSelection.Perform();
-			//foreach (var node in nodes) {
-			//	var clone = node.Clone();
-			//	var loc = container.RootFolder().Find(node);
-			//	Core.Operations.UnlinkFolderItem.Perform(container, node);
-			//	Core.Operations.InsertFolderItem.Perform(container, loc, clone);
-			//	new MorphableMeshBuilder().BuildNodeContents(clone, MorphableMeshBuilder.Options.None);
-			//	Core.Operations.SelectNode.Perform(clone);
-			//}
-		}
-	}
 
 	public class ExportScene : DocumentCommandHandler
 	{

@@ -85,7 +85,6 @@ namespace Tangerine.UI
 		public static readonly ICommand Quit = new Command("Quit", new Shortcut(Modifiers.Alt, Key.F4));
 #endif
 		public static readonly ICommand DefaultLayout = new Command("Default Layout");
-		public static readonly ICommand GroupContentsToMorphableMeshes = new Command("Group Contents to Morphable Meshes", new Shortcut(Modifiers.Command | Modifiers.Control, Key.M));
 		public static readonly ICommand ExportScene = new Command("Export Scene...");
 		public static readonly ICommand InlineExternalScene = new Command("Inline external scene");
 		public static readonly ICommand UpsampleAnimationTwice = new Command("Upsample Animation Twice");
