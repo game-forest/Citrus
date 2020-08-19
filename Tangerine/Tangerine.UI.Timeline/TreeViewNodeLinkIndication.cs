@@ -162,7 +162,7 @@ namespace Tangerine.UI.Timeline
 				}
 			}
 		}
-		
+
 		private class SplineGearLinkIndicatorButton : LinkIndicatorButton
 		{
 			public SplineGearLinkIndicatorButton() : base(NodeIconPool.GetTexture(typeof(SplineGear)))
@@ -171,7 +171,7 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 	}
-	
+
 	public class SplineGear3DLinkIndicationProcessor : ITreeViewItemPresentationProcessor
 	{
 		public void Process(ITreeViewItemPresentation presentation)
@@ -197,7 +197,7 @@ namespace Tangerine.UI.Timeline
 				}
 			}
 		}
-		
+
 		private class SplineGear3DLinkIndicatorButton : LinkIndicatorButton
 		{
 			public SplineGear3DLinkIndicatorButton() : base(NodeIconPool.GetTexture(typeof(SplineGear)))
@@ -207,4 +207,3 @@ namespace Tangerine.UI.Timeline
 		}
 	}
 }
-	
