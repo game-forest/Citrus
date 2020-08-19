@@ -1,5 +1,6 @@
 using Lime;
 using Tangerine.UI;
+using Tangerine.UI.Docking;
 
 namespace Tangerine
 {
@@ -7,12 +8,22 @@ namespace Tangerine
 	{
 		public LookupDialog()
 		{
-			var display = CommonWindow.Current.Display;
+			Vector2? displayCenter = null;
+			try {
+				var display = CommonWindow.Current.Display;
+				displayCenter = display.Position + display.Size / 2;
+			} catch (System.ObjectDisposedException) {
+				// Suppress
+			}
 			var window = new Window(new WindowOptions {
 				Title = "Go To Anything",
 				Style = WindowStyle.Borderless,
 			});
-			window.DecoratedPosition = display.Position + display.Size / 2 - window.DecoratedSize / 2f;
+			if (!displayCenter.HasValue) {
+				var display = DockManager.Instance.MainWindowWidget.Window.Display;
+				displayCenter = display.Position + display.Size / 2;
+			}
+			window.DecoratedPosition = displayCenter.Value - window.DecoratedSize / 2f;
 
 			LookupWidget lookupWidget;
 			var windowWidget = new ThemedInvalidableWindowWidget(window) {
