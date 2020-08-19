@@ -266,7 +266,13 @@ namespace Tangerine.Core
 		private Document()
 		{
 			Manager = ManagerFactory?.Invoke() ?? CreateDefaultManager();
-			SceneTreeBuilder = new SceneTreeBuilder(GetSceneItemForObject);
+			SceneTreeBuilder = new SceneTreeBuilder(o => {
+				var item = GetSceneItemForObject(o);
+				if (item.Parent != null || item.Rows.Count > 0) {
+					throw new InvalidOperationException("Attempt to allocate a SceneItem built into hierarchy");
+				}
+				return item;
+			});
 		}
 
 		public Document(DocumentFormat format = DocumentFormat.Tan, Type rootType = null) : this()
