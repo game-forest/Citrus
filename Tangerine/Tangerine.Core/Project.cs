@@ -23,6 +23,7 @@ namespace Tangerine.Core
 		private readonly List<Type> registeredNodeTypes = new List<Type>();
 		private readonly List<Type> registeredComponentTypes = new List<Type>();
 
+		public readonly AssetsDatabase AssetsDatabase;
 		public FileSystemWatcher FileSystemWatcher { get; private set; }
 
 		public static readonly Project Null = new Project();
@@ -83,6 +84,7 @@ namespace Tangerine.Core
 			Opening?.Invoke(CitprojPath);
 			Preferences = new ProjectPreferences();
 			Preferences.Initialize();
+			AssetsDatabase = new AssetsDatabase();
 			FileSystemWatcher = new FileSystemWatcher(AssetsDirectory, includeSubdirectories: true);
 			if (File.Exists(UserprefsPath)) {
 				try {
@@ -111,8 +113,14 @@ namespace Tangerine.Core
 			}
 			SetLocale(Locale);
 			FileSystemWatcher.Changed += HandleFileSystemWatcherEvent;
-			FileSystemWatcher.Created += HandleFileSystemWatcherEvent;
-			FileSystemWatcher.Deleted += HandleFileSystemWatcherEvent;
+			FileSystemWatcher.Created += s => {
+				HandleFileSystemWatcherEvent(s);
+				AssetsDatabase.RescanAsync();
+			};
+			FileSystemWatcher.Deleted += s => {
+				HandleFileSystemWatcherEvent(s);
+				AssetsDatabase.RescanAsync();
+			};
 			FileSystemWatcher.Renamed += (previousPath, path) => {
 				// simulating rename as pairs of deleted / created events
 				HandleFileSystemWatcherEvent(path);
@@ -125,6 +133,7 @@ namespace Tangerine.Core
 						HandleFileSystemWatcherEvent(Path.Combine(path, f.Path));
 					}
 				}
+				AssetsDatabase.RescanAsync();
 			};
 			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
 				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {

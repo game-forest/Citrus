@@ -64,62 +64,46 @@ namespace Tangerine
 
 		private List<LookupItem> GetLookupItems(LookupWidget lookupWidget)
 		{
-			var assetsDirectory = Project.Current.AssetsDirectory;
 			var items = new List<LookupItem>();
-
-			void GetFilesRecursively(string directory)
-			{
-				foreach (var filePath in Directory.GetFiles(directory)) {
-					var relativePath = filePath.Substring(assetsDirectory.Length + 1);
-					relativePath = AssetPath.CorrectSlashes(relativePath);
-					var assetType = Path.GetExtension(relativePath).ToLower();
-					var assetPath =
-						string.IsNullOrEmpty(assetType) ?
-							relativePath :
-							relativePath.Substring(0, relativePath.Length - assetType.Length);
-					var fileName = Path.GetFileName(assetPath);
-					Action action;
-					switch (assetType) {
-						case ".tan":
-						case ".t3d":
-						case ".fbx":
-							action = () => Sections.Push(new LookupSceneMenuSection(Sections, assetPath, assetType));
-							break;
-						case ".png":
-							action = () => Sections.Push(new LookupImageMenuSection(Sections, assetPath, assetType));
-							break;
-						case ".ogg":
-							action = () => {
-								Document.Current.History.DoTransaction(() => {
-									var node = Core.Operations.CreateNode.Perform(typeof(Audio));
-									var sample = new SerializableSample(assetPath);
-									SetProperty.Perform(node, nameof(Audio.Sample), sample);
-									SetProperty.Perform(node, nameof(Node.Id), fileName);
-									SetProperty.Perform(node, nameof(Audio.Volume), 1);
-									var key = new Keyframe<AudioAction> {
-										Frame = Document.Current.AnimationFrame,
-										Value = AudioAction.Play
-									};
-									SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.AnimationId, key);
-								});
-								Sections.Drop();
-							};
-							break;
-						default:
-							continue;
-					}
-					items.Add(new LookupDialogItem(
-						fileName + assetType,
-						assetPath + assetType,
-						fileTypesIcons[assetType].AsTexture,
-						action
-					));
+			foreach (var (_, asset) in Project.Current.AssetsDatabase) {
+				var fileName = Path.GetFileName(asset.Path);
+				Action action;
+				switch (asset.Type) {
+					case ".tan":
+					case ".t3d":
+					case ".fbx":
+						action = () => Sections.Push(new LookupSceneMenuSection(Sections, asset.Path, asset.Type));
+						break;
+					case ".png":
+						action = () => Sections.Push(new LookupImageMenuSection(Sections, asset.Path, asset.Type));
+						break;
+					case ".ogg":
+						action = () => {
+							Document.Current.History.DoTransaction(() => {
+								var node = Core.Operations.CreateNode.Perform(typeof(Audio));
+								var sample = new SerializableSample(asset.Path);
+								SetProperty.Perform(node, nameof(Audio.Sample), sample);
+								SetProperty.Perform(node, nameof(Node.Id), fileName);
+								SetProperty.Perform(node, nameof(Audio.Volume), 1);
+								var key = new Keyframe<AudioAction> {
+									Frame = Document.Current.AnimationFrame,
+									Value = AudioAction.Play
+								};
+								SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.AnimationId, key);
+							});
+							Sections.Drop();
+						};
+						break;
+					default:
+						continue;
 				}
-				foreach (var d in Directory.GetDirectories(directory)) {
-					GetFilesRecursively(d);
-				}
+				items.Add(new LookupDialogItem(
+					fileName + asset.Type,
+					asset.Path + asset.Type,
+					fileTypesIcons[asset.Type].AsTexture,
+					action
+				));
 			}
-			GetFilesRecursively(assetsDirectory);
 			return items;
 		}
 

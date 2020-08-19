@@ -45,6 +45,7 @@
     <Compile Include="AnimationPositioner.cs" />
     <Compile Include="AnimationTrackEditorState.cs" />
     <Compile Include="AnimatorEditorState.cs" />
+    <Compile Include="AssetsDatabase.cs" />
     <Compile Include="AutosaveProcessor.cs" />
     <Compile Include="BackupManager.cs" />
     <Compile Include="ClassAttributes.cs" />
