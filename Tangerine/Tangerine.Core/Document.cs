@@ -34,7 +34,7 @@ namespace Tangerine.Core
 			DiscardChanges
 		}
 
-		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}"; 
+		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}";
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
 		private readonly Dictionary<object, Row> sceneItemCache = new Dictionary<object, Row>();
 		private readonly Dictionary<Node, Animation> selectedAnimationPerContainer = new Dictionary<Node, Animation>();
@@ -90,7 +90,7 @@ namespace Tangerine.Core
 		/// Gets the root node for the current document.
 		/// </summary>
 		public Node RootNode { get; private set; }
-		
+
 		public ISceneViewThumbnailProvider SceneViewThumbnailProvider { get; set; }
 
 		private Node container;
@@ -151,7 +151,7 @@ namespace Tangerine.Core
 						i.Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
 							if (
-								!animator.IsZombie && animator.AnimationId == animation.Id && 
+								!animator.IsZombie && animator.AnimationId == animation.Id &&
 								(animator.Owner as Node)?.Parent == Container
 							) {
 								sceneTree.Expandable = true;
@@ -185,11 +185,11 @@ namespace Tangerine.Core
 		/// The root of the scene hierarchy.
 		/// </summary>
 		public Row SceneTree { get; private set; }
-		
+
 		public Row AnimationTree { get; private set; }
-		
+
 		public SceneTreeBuilder SceneTreeBuilder { get; }
-		
+
 		/// <summary>
 		/// The list of views (timeline, inspector, ...)
 		/// </summary>
@@ -235,7 +235,7 @@ namespace Tangerine.Core
 				}
 			}
 		}
-		
+
 		private Animation selectedAnimation;
 
 		public string AnimationId => Animation.Id;
@@ -324,15 +324,15 @@ namespace Tangerine.Core
 		}
 
 		private int sceneTreeVersion;
-		
+
 		public int SceneTreeVersion => sceneTreeVersion;
 
 		public void BumpSceneTreeVersion()
 		{
 			sceneTreeVersion++;
-			cachedVisibleSceneItems.Clear();	
+			cachedVisibleSceneItems.Clear();
 		}
-		
+
 		public void RefreshSceneTree()
 		{
 			if (SceneTree != null) {
@@ -341,7 +341,7 @@ namespace Tangerine.Core
 			SceneTree = SceneTreeBuilder.BuildSceneTreeForNode(RootNode);
 			BumpSceneTreeVersion();
 		}
-		
+
 		private void RefreshAnimationTree()
 		{
 			if (AnimationTree != null) {
@@ -350,7 +350,7 @@ namespace Tangerine.Core
 			AnimationTree = SceneTreeBuilder.BuildTreeForAnimation(Animation);
 			BumpSceneTreeVersion();
 		}
-		
+
 		private static void DisintegrateTree(Row tree)
 		{
 			foreach (var child in tree.Rows) {
@@ -685,7 +685,7 @@ namespace Tangerine.Core
 				}
 			}
 		}
-		
+
 		public Row RecentlySelectedSceneItem()
 		{
 			int c = 0;

@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +10,12 @@ namespace Tangerine.Core
 	{
 		private readonly Func<object, Row> sceneItemFactory;
 		public event Action<Row> SceneItemCreated;
-	
+
 		public SceneTreeBuilder(Func<object, Row> sceneItemFactory = null)
 		{
 			this.sceneItemFactory = sceneItemFactory ?? (o => new Row());
 		}
-		
+
 		public Row BuildSceneTreeForNode(Node node)
 		{
 			var item = GetNodeSceneItem(node);
@@ -26,7 +25,7 @@ namespace Tangerine.Core
 			BuildFolderTree(item, int.MaxValue, node, ref folderIndex, ref nodeIndex);
 			return item;
 		}
-		
+
 		void BuildFolderTree(Row parent, int itemCount, Node node, ref int folderIndex, ref int nodeIndex)
 		{
 			Dictionary<int, Row> boneToSceneItem = null;
