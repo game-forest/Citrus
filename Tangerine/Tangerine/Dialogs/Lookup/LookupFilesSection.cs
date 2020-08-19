@@ -32,8 +32,8 @@ namespace Tangerine
 		private CancellationTokenSource applyingFilterCancellationSource;
 
 		public override string Breadcrumb { get; } = "Search File";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for file in the current project";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for file in the current project";
 
 		public LookupFilesSection(LookupSections sections) : base(sections) { }
 

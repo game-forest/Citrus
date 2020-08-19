@@ -65,8 +65,8 @@ namespace Tangerine
 		private const string PrefixConst = "m";
 
 		public override string Breadcrumb { get; } = "Search Marker";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for marker in current animation";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for marker in current animation";
 
 		public LookupAnimationMarkersSection(LookupSections sections) : base(sections) { }
 
@@ -101,8 +101,8 @@ namespace Tangerine
 		private const string PrefixConst = "md";
 
 		public override string Breadcrumb { get; } = "Search Marker in Document";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for marker in current document";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for marker in current document";
 
 		public LookupDocumentMarkersSection(LookupSections sections) : base(sections) { }
 

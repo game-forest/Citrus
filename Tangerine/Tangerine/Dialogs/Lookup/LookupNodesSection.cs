@@ -11,8 +11,8 @@ namespace Tangerine
 		private const string PrefixConst = "n";
 
 		public override string Breadcrumb { get; } = "Search Node";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for node in the current document";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for node in the current document";
 
 		public LookupNodesSection(LookupSections sections) : base(sections) { }
 

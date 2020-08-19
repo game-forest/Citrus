@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Tangerine.UI;
 
@@ -25,7 +26,7 @@ namespace Tangerine
 				return;
 			}
 			foreach (var section in Sections.List) {
-				if (!string.IsNullOrEmpty(section.Prefix) && text.StartsWith(section.Prefix)) {
+				if (!string.IsNullOrEmpty(section.Prefix) && text.StartsWith(section.Prefix, StringComparison.InvariantCultureIgnoreCase)) {
 					Sections.DropAndPush(section);
 					return;
 				}

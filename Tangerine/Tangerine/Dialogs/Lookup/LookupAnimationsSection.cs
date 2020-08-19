@@ -43,8 +43,8 @@ namespace Tangerine
 		private const string PrefixConst = "a";
 
 		public override string Breadcrumb { get; } = "Search Animation";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for animation in current node";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for animation in current node";
 
 		public LookupNodeAnimationsSection(LookupSections sections) : base(sections) { }
 
@@ -67,8 +67,8 @@ namespace Tangerine
 		private const string PrefixConst = "ad";
 
 		public override string Breadcrumb { get; } = "Search Animation in Document";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for animation in current document";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for animation in current document";
 
 		public LookupDocumentAnimationsSection(LookupSections sections) : base(sections) { }
 

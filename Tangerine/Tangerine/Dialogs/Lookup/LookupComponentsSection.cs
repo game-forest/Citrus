@@ -9,8 +9,8 @@ namespace Tangerine
 		private const string PrefixConst = "c";
 
 		public override string Breadcrumb { get; } = "Search Component";
-		public override string Prefix { get; } = $"{PrefixConst} ";
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for components in current document";
+		public override string Prefix { get; } = $"{PrefixConst}:";
+		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for components in current document";
 
 		public LookupComponentsSection(LookupSections sections) : base(sections) { }
 
