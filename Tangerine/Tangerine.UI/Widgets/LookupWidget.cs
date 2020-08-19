@@ -188,10 +188,12 @@ namespace Tangerine.UI
 			}
 		}
 
-		public void AddItem(string text, Action action) => AddItem(new LookupItem(this, text, action));
+		public void AddItem(string text, Action action) => AddItem(new LookupItem(text, action));
 
 		public void AddItem(LookupItem item)
 		{
+			item.Owner = this;
+			item.CreateVisuals();
 			items.Add(item);
 			filteredItems.Add(item);
 			ScrollView.Content.AddNode(item.Widget);
@@ -264,6 +266,7 @@ namespace Tangerine.UI
 		{
 			DeselectItem();
 			foreach (var item in items) {
+				item.Owner = null;
 				if (disposeItems) {
 					item.Widget.UnlinkAndDispose();
 				} else {

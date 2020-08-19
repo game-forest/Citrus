@@ -16,7 +16,6 @@ namespace Tangerine
 				var aClosed = animation;
 				navigateToNode &= animation.OwnerNode != Document.Current.Container;
 				lookupWidget.AddItem(new LookupDialogItem(
-					lookupWidget,
 					animation.IsLegacy ? "[Legacy]" : animation.Id,
 					$"Node: {animation.OwnerNode}",
 					() => {

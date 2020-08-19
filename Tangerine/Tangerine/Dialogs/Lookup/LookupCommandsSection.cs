@@ -32,7 +32,6 @@ namespace Tangerine
 					} else if (isPresenterTitle && menuItem is Command command) {
 						var action = (Action)command.Issue;
 						lookupWidget.AddItem(new LookupDialogItem(
-							lookupWidget,
 							text,
 							null,
 							command.Shortcut,

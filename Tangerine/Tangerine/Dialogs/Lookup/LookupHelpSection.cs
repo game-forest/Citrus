@@ -22,7 +22,7 @@ namespace Tangerine
 					} else {
 						action = () => { };
 					}
-					lookupWidget.AddItem(new LookupDialogItem(lookupWidget, section.HelpText, null, action));
+					lookupWidget.AddItem(new LookupDialogItem(section.HelpText, null, action));
 				}
 			}
 		}

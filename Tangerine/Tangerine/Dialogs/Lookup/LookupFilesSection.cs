@@ -108,10 +108,12 @@ namespace Tangerine
 						default:
 							continue;
 					}
-					var item = new LookupDialogItem(lookupWidget, fileName + assetType, assetPath + assetType, action) {
-						IconTexture = fileTypesIcons[assetType].AsTexture,
-					};
-					items.Add(item);
+					items.Add(new LookupDialogItem(
+						fileName + assetType,
+						assetPath + assetType,
+						fileTypesIcons[assetType].AsTexture,
+						action
+					));
 				}
 				foreach (var d in Directory.GetDirectories(directory)) {
 					GetFilesRecursively(d);
@@ -204,7 +206,6 @@ namespace Tangerine
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
 			lookupWidget.AddItem(new LookupDialogItem(
-				lookupWidget,
 				"Open in New Tab",
 				null,
 				() => {
@@ -213,7 +214,6 @@ namespace Tangerine
 				}
 			));
 			lookupWidget.AddItem(new LookupDialogItem(
-				lookupWidget,
 				"Add As External Scene",
 				null,
 				() => {
@@ -274,7 +274,6 @@ namespace Tangerine
 				}
 				var imageTypeClosed = imageType;
 				lookupWidget.AddItem(new LookupDialogItem(
-					lookupWidget,
 					$"Create {imageType.Name}",
 					null,
 					() => {

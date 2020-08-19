@@ -6,47 +6,66 @@ namespace Tangerine
 {
 	public class LookupDialogItem : LookupItem
 	{
-		private readonly Widget headerWidget;
-		private readonly Image iconImage;
-		private readonly ShortcutPresenter shortcutPresenter = new ShortcutPresenter {
+		private static readonly ShortcutPresenter shortcutPresenter = new ShortcutPresenter {
 			Color = Theme.Colors.WhiteBackground,
 			Margin = new Thickness(horizontal: 3, vertical: 0),
 		};
 
-		public readonly RichTextHighlightComponent Header;
-		public readonly RichText HeaderRichText;
+		private readonly ITexture iconTexture;
+		private readonly Shortcut shortcut;
+		private Widget headerWidget;
 
-		public ITexture IconTexture
+		public readonly RichTextHighlightComponent Header;
+		public RichText HeaderRichText { get; private set; }
+
+		public LookupDialogItem(string headerText, string text, Action action) : base(text, action)
 		{
-			get => iconImage.Texture;
-			set
-			{
-				iconImage.Texture = value;
-				iconImage.Visible = iconImage.Texture != null;
-			}
+			Header = new RichTextHighlightComponent(headerText, HighlightedTextStyleId);
 		}
 
-		public LookupDialogItem(LookupWidget owner, string headerText, string text, Action action) : base(owner, text, action)
+		public LookupDialogItem(string headerText, string text, Shortcut shortcut, Action action) : this(headerText, text, action)
 		{
-			Widget.Layout = new VBoxLayout();
+			this.shortcut = shortcut;
+		}
+
+		public LookupDialogItem(string headerText, string text, ITexture iconTexture, Action action) : this(headerText, text, action)
+		{
+			this.iconTexture = iconTexture;
+		}
+
+		public LookupDialogItem(string headerText, string text, Shortcut shortcut, ITexture iconTexture, Action action) : this(headerText, text, action)
+		{
+			this.shortcut = shortcut;
+			this.iconTexture = iconTexture;
+		}
+
+		public override void CreateVisuals()
+		{
+			if (Widget != null) {
+				return;
+			}
+
+			base.CreateVisuals();
 
 			const float IconSize = 16;
 			const float IconRightPadding = 5;
+			Widget.Layout = new VBoxLayout();
 			Widget.Nodes.Push(headerWidget = new Widget {
 				Layout = new HBoxLayout(),
 				Padding = new Thickness(left: 5),
 				Nodes = {
-					(iconImage = new Image {
+					new Image {
 						LayoutCell = new LayoutCell {
 							Stretch = Vector2.Zero,
 							Alignment = new Alignment { X = HAlignment.Center, Y = VAlignment.Center }
 						},
 						Padding = new Thickness(right: IconRightPadding),
 						MinMaxSize = new Vector2(IconSize + IconRightPadding, IconSize),
-						Visible = false,
-					}),
+						Texture = iconTexture,
+						Visible = iconTexture != null,
+					},
 					(HeaderRichText = new RichText {
-						Text = headerText,
+						Text = Header.Text,
 						Padding = new Thickness(bottom: 5),
 						MinHeight = 23f,
 						Localizable = false,
@@ -67,9 +86,7 @@ namespace Tangerine
 								Bold = true,
 							},
 						},
-						Components = {
-							(Header = new RichTextHighlightComponent(headerText, HighlightedTextStyleId))
-						}
+						Components = { Header },
 					}),
 				}
 			});
@@ -77,10 +94,7 @@ namespace Tangerine
 			if (string.IsNullOrEmpty(NameRichText.Text)) {
 				NameRichText.Visible = false;
 			}
-		}
 
-		public LookupDialogItem(LookupWidget owner, string headerText, string text, Shortcut shortcut, Action action) : this(owner, headerText, text, action)
-		{
 			if (shortcut.Main != Key.Unknown) {
 				const float Spacing = 9;
 				var widget = new Widget {

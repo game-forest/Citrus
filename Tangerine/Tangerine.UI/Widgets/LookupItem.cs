@@ -7,21 +7,30 @@ namespace Tangerine.UI
 	{
 		protected const string HighlightedTextStyleId = "b";
 
-		public readonly Widget Widget;
-		public readonly RichTextHighlightComponent Name;
-		public readonly RichText NameRichText;
-		public readonly Action Action;
+		internal LookupWidget Owner { get; set; }
 
+		public readonly RichTextHighlightComponent Name;
+		public readonly Action Action;
+		public Widget Widget { get; private set; }
+		public RichText NameRichText { get; private set; }
 		public bool IsSelected { get; set; }
 
-		public LookupItem(LookupWidget owner, string text, Action action)
+		public LookupItem(string text, Action action)
 		{
+			Name = new RichTextHighlightComponent(text, HighlightedTextStyleId);
 			Action = action;
+		}
+
+		public virtual void CreateVisuals()
+		{
+			if (Widget != null) {
+				return;
+			}
 
 			Widget = new Frame {
 				Nodes = {
 					(NameRichText = new RichText {
-						Text = text,
+						Text = Name.Text,
 						Padding = new Thickness(left: 5.0f),
 						MinHeight = 18.0f,
 						Localizable = false,
@@ -42,13 +51,11 @@ namespace Tangerine.UI
 								Bold = true,
 							},
 						},
-						Components = {
-							(Name = new RichTextHighlightComponent(text, HighlightedTextStyleId))
-						}
-					})
+						Components = { Name },
+					}),
 				},
 				Layout = new HBoxLayout(),
-				Clicked = () => owner.Submit(this),
+				Clicked = () => Owner.Submit(this),
 				HitTestTarget = true,
 				Padding = new Thickness(horizontal: 0, vertical: 2),
 			};

@@ -33,7 +33,6 @@ namespace Tangerine
 			for (var frame = 0; frame <= lastFrameIndex; frame++) {
 				var frameClosed = frame;
 				lookupWidget.AddItem(new LookupDialogItem(
-					lookupWidget,
 					frame.ToString(),
 					description,
 					() => {
@@ -54,7 +53,6 @@ namespace Tangerine
 				return true;
 			}
 			lookupWidget.AddItem(new LookupDialogItem(
-				lookupWidget,
 				alertText,
 				null,
 				Sections.Drop

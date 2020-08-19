@@ -30,7 +30,6 @@ namespace Tangerine
 					}
 					var nodeClosed = node;
 					lookupWidget.AddItem(new LookupDialogItem(
-						lookupWidget,
 						component.GetType().Name,
 						$"Node: {node}",
 						() => {

@@ -27,9 +27,9 @@ namespace Tangerine
 			foreach (var m in animation.Markers) {
 				var mClosed = m;
 				var item = new LookupDialogItem(
-					lookupWidget,
 					m.Id,
 					$"{m.Action} Marker at Frame: {m.Frame}; Animation: {(animation.IsLegacy ? "[Legacy]" : animation.Id)}; Node: {animation.OwnerNode}",
+					markerActionsIcons[m.Action].AsTexture,
 					() => {
 						var a = animation;
 						if (navigateToNode) {
@@ -49,12 +49,11 @@ namespace Tangerine
 						});
 						Sections.Drop();
 					}
-				) {
-					IconTexture = markerActionsIcons[m.Action].AsTexture,
-				};
+				);
 				if (string.IsNullOrEmpty(m.Id)) {
+					item.CreateVisuals();
 					item.Header.Enabled = false;
-					item.HeaderRichText.Text = "[No Name]";
+					item.HeaderRichText.Text = RichText.Escape("<No Name>");
 				}
 				lookupWidget.AddItem(item);
 			}
@@ -89,7 +88,6 @@ namespace Tangerine
 				return true;
 			}
 			lookupWidget.AddItem(new LookupDialogItem(
-				lookupWidget,
 				alertText,
 				null,
 				Sections.Drop

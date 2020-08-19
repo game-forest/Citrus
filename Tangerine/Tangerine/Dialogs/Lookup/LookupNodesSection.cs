@@ -27,19 +27,21 @@ namespace Tangerine
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
 				var nodeClosed = node;
 				var nodeType = node.GetType();
-				lookupWidget.AddItem(
-					new LookupDialogItem(
-						lookupWidget,
-						string.IsNullOrEmpty(node.Id) ? "<No Name>": node.Id,
-						$"Type: {nodeType.Name}; {(node.Parent != null ? $"Parent: {node.Parent}" : "Root node")}",
-						() => {
-							NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
-							Sections.Drop();
-						}
-					) {
-						IconTexture = NodeIconPool.GetIcon(nodeType).AsTexture
+				var item = new LookupDialogItem(
+					node.Id,
+					$"Type: {nodeType.Name}; {(node.Parent != null ? $"Parent: {node.Parent}" : "Root node")}",
+					NodeIconPool.GetIcon(nodeType).AsTexture,
+					() => {
+						NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
+						Sections.Drop();
 					}
 				);
+				if (string.IsNullOrEmpty(node.Id)) {
+					item.CreateVisuals();
+					item.Header.Enabled = false;
+					item.HeaderRichText.Text = RichText.Escape("<Empty Id>");
+				}
+				lookupWidget.AddItem(item);
 			}
 		}
 

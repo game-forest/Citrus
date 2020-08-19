@@ -33,7 +33,6 @@ namespace Tangerine
 				return true;
 			}
 			lookupWidget.AddItem(new LookupDialogItem(
-				lookupWidget,
 				alertText,
 				null,
 				() => {
@@ -50,7 +49,6 @@ namespace Tangerine
 				return true;
 			}
 			lookupWidget.AddItem(new LookupDialogItem(
-				lookupWidget,
 				alertText,
 				null,
 				() => {
