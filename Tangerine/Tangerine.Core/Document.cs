@@ -788,7 +788,7 @@ namespace Tangerine.Core
 				}
 				SelectedAnimation = null;
 			} finally {
-				RefreshSceneTree();
+				BumpSceneTreeVersion();
 			}
 		}
 
