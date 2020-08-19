@@ -331,7 +331,7 @@ namespace Tangerine.Panels
 						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 						SetProperty.Perform(
 							SceneItem.Components.Get<TreeViewComponent>(),
-							nameof(TreeViewComponent.Expanded), value);
+							nameof(TreeViewComponent.Expanded), value, false);
 						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 					});
 				}
