@@ -41,6 +41,8 @@ namespace Tangerine.UI
 
 	public class LookupFuzzyFilter : ILookupFilter
 	{
+		private static readonly char[] slashes = { '\\', '/' };
+
 		public static LookupFuzzyFilter Instance = new LookupFuzzyFilter();
 
 		private LookupFuzzyFilter() { }
@@ -90,10 +92,7 @@ namespace Tangerine.UI
 					break;
 				}
 				var ip = i;
-				var lci = text.IndexOf(char.ToLowerInvariant(c), i + 1);
-				var uci = text.IndexOf(char.ToUpperInvariant(c), i + 1);
-				i = lci != -1 && uci != -1 ? Math.Min(lci, uci) :
-					lci == -1 ? uci : lci;
+				i = IndexOf(c, i + 1);
 				if (i == -1) {
 					break;
 				}
@@ -103,6 +102,21 @@ namespace Tangerine.UI
 				}
 			}
 			return matches.Count == pattern.Length;
+
+			int IndexOf(char @char, int startIndex)
+			{
+				if (@char == '\\' || @char == '/') {
+					return text.IndexOfAny(slashes, startIndex);
+				}
+				if (!char.IsLetter(@char)) {
+					return text.IndexOf(@char, startIndex);
+				}
+				var lci = text.IndexOf(char.ToLowerInvariant(@char), startIndex);
+				var uci = text.IndexOf(char.ToUpperInvariant(@char), startIndex);
+				return
+					lci != -1 && uci != -1 ? Math.Min(lci, uci) :
+					lci == -1 ? uci : lci;
+			}
 		}
 	}
 }
