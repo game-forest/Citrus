@@ -152,19 +152,16 @@ namespace Tangerine.UI
 		}
 	}
 
-	public class TransactionalGradientControlWidget : Widget
+	public class GradientControlWidget : Widget
 	{
-		private readonly ITransactionalHistory history;
-		private readonly Widget gradientPaneContainer;
-		private readonly Widget createPointsPane;
-		private readonly Image gradientPane;
-		private readonly GradientComponent gradientComponent;
-		private GradientControlPointWidget selectedControlPointWidget;
+		protected readonly Widget gradientPaneContainer;
+		protected readonly Widget createPointsPane;
+		protected readonly Image gradientPane;
+		protected readonly GradientComponent gradientComponent;
+		protected GradientControlPointWidget selectedControlPointWidget;
 		public GradientControlPoint SelectedControlPoint { get; private set; }
 
-
-
-		private ColorGradient gradient;
+		protected ColorGradient gradient;
 
 		public ColorGradient Gradient
 		{
@@ -207,9 +204,8 @@ namespace Tangerine.UI
 			return chessTexture;
 		}
 
-		public TransactionalGradientControlWidget(ITransactionalHistory history)
+		public GradientControlWidget()
 		{
-			this.history = history;
 			gradientPane = new Image {
 				PostPresenter = new WidgetBoundsPresenter(Color4.Black),
 			};
@@ -261,22 +257,29 @@ namespace Tangerine.UI
 			}
 		}
 
-		private void AddPoint(GradientControlPoint point)
+		protected void InvokePointCreated(GradientControlPoint point) => ControlPointCreated?.Invoke(point, 0);
+
+		protected virtual void AddPoint(GradientControlPoint point)
 		{
-			using (history.BeginTransaction()) {
-				Core.Operations.InsertIntoList.Perform(gradient, 0, point);
-				ControlPointCreated?.Invoke(point, 0);
-				history.CommitTransaction();
-			}
+			gradient.Insert(0, point);
+			InvokePointCreated(point);
 		}
 
-		private void RemovePoint(GradientControlPoint controlPoint, int idx)
+		protected void InvokeRemovePoint(int idx) => ControlPointRemoved?.Invoke(idx);
+
+		protected virtual void RemovePoint(GradientControlPoint controlPoint, int idx)
 		{
-			using (history.BeginTransaction()) {
-				Core.Operations.RemoveFromList.Perform(gradient, gradient.IndexOf(controlPoint));
-				ControlPointRemoved?.Invoke(idx);
-				history.CommitTransaction();
-			};
+			gradient.RemoveAt(gradient.IndexOf(controlPoint));
+			InvokeRemovePoint(idx);
+		}
+
+		protected void InvokePointPositionChanged(float position, int index) =>
+			ControlPointPositionChanged?.Invoke(position, index);
+
+		protected virtual void SetPointPosition(GradientControlPoint point, float position)
+		{
+			point.Position = position;
+			InvokePointPositionChanged(position, Gradient.IndexOf(point));
 		}
 
 		private void InitializePoints(Widget container)
@@ -319,8 +322,7 @@ namespace Tangerine.UI
 						var mousePos = LocalMousePosition();
 						var delta = (mousePos - prevPos) / Size;
 						var newPosition = Mathf.Clamp(point.Position + delta.X, 0, 1);
-						Core.Operations.SetProperty.Perform(point, nameof(GradientControlPoint.Position), newPosition);
-						ControlPointPositionChanged?.Invoke(newPosition, Gradient.IndexOf(point));
+						SetPointPosition(point, newPosition);
 						var x = Mathf.Clamp(mousePos.X, 0, Size.X);
 						prevPos = new Vector2(x, mousePos.Y);
 						yield return null;
@@ -346,6 +348,37 @@ namespace Tangerine.UI
 			selectedControlPointWidget = w;
 			w.Color = Color4.Black;
 			SelectionChanged?.Invoke(SelectedControlPoint);
+		}
+	}
+
+	public class TransactionalGradientControlWidget : GradientControlWidget
+	{
+		private readonly ITransactionalHistory history;
+
+		public TransactionalGradientControlWidget(ITransactionalHistory history) => this.history = history;
+
+		protected override void AddPoint(GradientControlPoint point)
+		{
+			using (history.BeginTransaction()) {
+				Core.Operations.InsertIntoList.Perform(gradient, 0, point);
+				InvokePointCreated(point);
+				history.CommitTransaction();
+			}
+		}
+
+		protected override void RemovePoint(GradientControlPoint controlPoint, int idx)
+		{
+			using (history.BeginTransaction()) {
+				Core.Operations.RemoveFromList.Perform(gradient, gradient.IndexOf(controlPoint));
+				InvokeRemovePoint(idx);
+				history.CommitTransaction();
+			};
+		}
+
+		protected override void SetPointPosition(GradientControlPoint point, float position)
+		{
+			Core.Operations.SetProperty.Perform(point, nameof(GradientControlPoint.Position), position);
+			InvokePointPositionChanged(position, Gradient.IndexOf(point));
 		}
 	}
 
