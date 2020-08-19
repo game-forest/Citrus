@@ -639,6 +639,9 @@ namespace Tangerine.Core.Operations
 			if (!nodeType.IsSubclassOf(typeof(Node))) {
 				throw new InvalidOperationException();
 			}
+			if (Document.Current.Animation.IsCompound) {
+				throw new InvalidOperationException("Can't create a node while animation editor is active.");
+			}
 			var hostNode = SceneTreeUtils.GetOwnerNodeSceneItem(parent).GetNode();
 			var ctr = nodeType.GetConstructor(Type.EmptyTypes);
 			var node = (Node)ctr.Invoke(new object[] { });
