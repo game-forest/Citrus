@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Lime;
 
 namespace Lime
 {
@@ -144,10 +143,10 @@ namespace Lime
 			RefreshFirstChild();
 			node.PropagateDirtyFlags();
 			Node.InvalidateNodeReferenceCache();
-			owner.Manager?.RegisterNode(node, owner);
 #if TANGERINE
 			Version++;
 #endif // TANGERINE
+			owner.Manager?.RegisterNode(node, owner);
 		}
 
 		private void RuntimeChecksBeforeInsertion(Node node)
@@ -168,9 +167,6 @@ namespace Lime
 			int index = IndexOf(node);
 			if (index >= 0) {
 				RemoveAt(index);
-#if TANGERINE
-				Version++;
-#endif // TANGERINE
 				return true;
 			}
 			return false;
@@ -181,30 +177,25 @@ namespace Lime
 			if (list == null) {
 				return;
 			}
+			var nodesToRemove = new List<Node>();
 			int index = list.Count - 1;
 			while (index >= 0) {
 				var node = list[index];
 				if (predicate(node)) {
-					RemoveAt(index);
+					nodesToRemove.Add(node);
 				}
 				index--;
+			}
+			foreach (var node in nodesToRemove) {
+				Remove(node);
 			}
 		}
 
 		public void Clear()
 		{
-			if (list == null) {
-				return;
+			while (Count > 0) {
+				RemoveAt(Count - 1);
 			}
-			Node.InvalidateNodeReferenceCache();
-			foreach (var node in list) {
-				CleanupNode(node);
-			}
-			list = null;
-			RefreshFirstChild();
-#if TANGERINE
-			Version++;
-#endif // TANGERINE
 		}
 
 		/// <summary>
@@ -226,7 +217,6 @@ namespace Lime
 			node.Parent = null;
 			node.NextSibling = null;
 			node.PropagateDirtyFlags();
-			owner.Manager?.UnregisterNode(node, owner);
 		}
 
 		public void RemoveRange(int index, int count)
@@ -234,18 +224,13 @@ namespace Lime
 			if (list == null || index + count > list.Count) {
 				throw new IndexOutOfRangeException();
 			}
-			for (int i = index; i < index + count; i++) {
-				CleanupNode(list[i]);
+			var nodesToRemove = new List<Node>();
+			for (var i = 0; i < count; i++) {
+				nodesToRemove.Add(list[index + i]);
 			}
-			list.RemoveRange(index, count);
-			if (index > 0 && count > 0) {
-				list[index - 1].NextSibling = index < Count ? list[index] : null;
+			foreach (var node in nodesToRemove) {
+				Remove(node);
 			}
-			RefreshFirstChild();
-			Node.InvalidateNodeReferenceCache();
-#if TANGERINE
-			Version++;
-#endif // TANGERINE
 		}
 
 		public void RemoveAt(int index)
@@ -253,7 +238,8 @@ namespace Lime
 			if (list == null) {
 				throw new IndexOutOfRangeException();
 			}
-			CleanupNode(list[index]);
+			var node = list[index];
+			CleanupNode(node);
 			list.RemoveAt(index);
 			if (index > 0) {
 				list[index - 1].NextSibling = index < Count ? list[index] : null;
@@ -266,6 +252,7 @@ namespace Lime
 #if TANGERINE
 			Version++;
 #endif // TANGERINE
+			owner.Manager?.UnregisterNode(node, owner);
 		}
 
 		public Node this[int index]
@@ -279,9 +266,13 @@ namespace Lime
 			}
 			set
 			{
+				if (list == null) {
+					throw new IndexOutOfRangeException();
+				}
 				RuntimeChecksBeforeInsertion(value);
 				CreateListIfNeeded();
-				CleanupNode(list[index]);
+				var oldNode = list[index];
+				CleanupNode(oldNode);
 				list[index] = value;
 				value.Parent = owner;
 				if (index > 0) {
@@ -293,10 +284,11 @@ namespace Lime
 				RefreshFirstChild();
 				value.PropagateDirtyFlags();
 				Node.InvalidateNodeReferenceCache();
-				owner.Manager?.RegisterNode(value, owner);
 #if TANGERINE
 				Version++;
 #endif // TANGERINE
+				owner.Manager?.UnregisterNode(oldNode, owner);
+				owner.Manager?.RegisterNode(value, owner);
 			}
 		}
 
