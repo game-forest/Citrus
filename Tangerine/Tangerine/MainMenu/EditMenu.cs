@@ -40,7 +40,7 @@ namespace Tangerine
 			try {
 				var firstItem = Document.Current.GetSceneItemForObject(selectedNodes[0]);
 				group = (Frame)Core.Operations.CreateNode.Perform(
-					firstItem.Parent, 
+					firstItem.Parent,
 					firstItem.Parent.Rows.IndexOf(firstItem),
 					typeof(Frame));
 			} catch (InvalidOperationException e) {
@@ -76,14 +76,18 @@ namespace Tangerine
 				}
 			}
 			SetKeyframes(nodeKeyframesDict);
-			foreach (var n in selectedNodes) {
-				if (n.Parent != null) {
-					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(n));
+			foreach (var node in selectedNodes) {
+				if (node.Parent != null) {
+					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(node));
 				}
 			}
 			int i = 0;
 			foreach (var node in selectedNodes) {
-				LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group), i++, node);
+				if (node.Parent != null) {
+					continue;
+				}
+				LinkSceneItem.Perform(
+					Document.Current.GetSceneItemForObject(group), i++, Document.Current.GetSceneItemForObject(node));
 				if (node is Widget) {
 					TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => v - aabb.A);
 				}
@@ -209,7 +213,7 @@ namespace Tangerine
 					}
 				}
 			}
-			ApplyAnimationAtFrame(null, curFrame, boneChain);
+			ApplyAnimationAtFrame(DefaultAnimationId, curFrame, boneChain);
 			return data;
 		}
 
@@ -269,15 +273,13 @@ namespace Tangerine
 				UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
 			}
 			foreach (var group in groups) {
-				var flipXFactor = group.Scale.X < 0 ? -1 : 1;
-				var flipYFactor = group.Scale.Y < 0 ? -1 : 1;
-				var flipVector = Vector2.Right + Vector2.Down * flipXFactor * flipYFactor;
-				var groupRootBones = new List<Bone>();
-				var groupNodes = group.Nodes.ToList().Where(GroupNodes.IsValidNode).ToList();
+				var groupItems = Document.Current.GetSceneItemForObject(group).Rows.Where(
+					i => i.TryGetNode(out var n) && GroupNodes.IsValidNode(n)).ToList();
 				var localToParentTransform = group.CalcLocalToParentTransform();
-				foreach (var node in groupNodes) {
-					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(node));
-					LinkSceneItem.Perform(containerItem, index++, node);
+				foreach (var i in groupItems) {
+					UnlinkSceneItem.Perform(i);
+					LinkSceneItem.Perform(containerItem, index++, i);
+					var node = i.GetNode();
 					SelectNode.Perform(node);
 					if (node is Widget) {
 						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => localToParentTransform * v);
@@ -285,19 +287,12 @@ namespace Tangerine
 						GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Widget.Rotation),
 							v => v * Mathf.Sign(group.Scale.X * group.Scale.Y) + group.Rotation);
 						GroupNodes.TransformPropertyAndKeyframes<Color4>(node, nameof(Widget.Color), v => group.Color * v);
-					} else if (node is Bone) {
-						var root = BoneUtils.FindBoneRoot((Bone) node, groupNodes);
-						if (!groupRootBones.Contains(root)) {
-							GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.Position), v => localToParentTransform * v);
-							GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Bone.Rotation),
-								v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
-							groupRootBones.Add(root);
-						} else if (flipVector != Vector2.One) {
-							GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.Position), v => v * flipVector);
-							GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Bone.Rotation), v => -v);
-						}
-						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.RefPosition), v => localToParentTransform * v);
-						GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Bone.RefRotation),
+					} else if (node is Bone bone) {
+						GroupNodes.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.Position), v => localToParentTransform * v);
+						GroupNodes.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.Rotation),
+							v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
+						GroupNodes.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.RefPosition), v => localToParentTransform * v);
+						GroupNodes.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.RefRotation),
 							v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
 					}
 				}
@@ -322,7 +317,6 @@ namespace Tangerine
 			TimelineColumnRemove.Perform(UI.Timeline.Timeline.Instance.CurrentColumn);
 		}
 	}
-
 
 	public class ExportScene : DocumentCommandHandler
 	{
