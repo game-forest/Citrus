@@ -48,7 +48,7 @@ namespace Tangerine.UI
 			isRichTextDirty = false;
 			var richText = (RichText)Owner;
 			if (highlightSymbolsIndices == null || highlightSymbolsIndices.Length == 0) {
-				richText.Text = text;
+				richText.Text = RichText.Escape(text);
 				return;
 			}
 
@@ -96,15 +96,24 @@ namespace Tangerine.UI
 					sb.Append('<');
 					sb.Append(highlightTextStyle);
 					sb.Append('>');
-					sb.Append(text[i]);
+					AppendEscapedChar(text[i]);
 					sb.Append("</");
 					sb.Append(highlightTextStyle);
 					sb.Append('>');
 				} else {
-					sb.Append(text[i]);
+					AppendEscapedChar(text[i]);
 				}
 			}
 			richText.Text = sb.ToString();
+
+			void AppendEscapedChar(char @char)
+			{
+				switch (@char) {
+					case '<': sb.Append("&lt;"); break;
+					case '>': sb.Append("&gt;"); break;
+					default: sb.Append(@char); break;
+				}
+			}
 		}
 	}
 }
