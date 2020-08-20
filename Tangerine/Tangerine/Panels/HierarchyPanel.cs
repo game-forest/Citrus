@@ -359,6 +359,9 @@ namespace Tangerine.Panels
 
 			public override bool CanRename()
 			{
+				if (SceneItem.TryGetAnimator(out _)) {
+					return false;
+				}
 				if (SceneItem.TryGetNode(out var n1) && n1.EditorState().Locked) {
 					return false;
 				}
