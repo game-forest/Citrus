@@ -599,7 +599,7 @@ namespace Tangerine.UI
 
 		private void Invalidate()
 		{
-			((WindowWidget)scrollView.Manager.RootNodes[0]).Window.Invalidate();
+			((WindowWidget)scrollView.Manager?.RootNodes[0])?.Window?.Invalidate();
 		}
 
 		private TreeViewItem GetItemUnderMouse()
