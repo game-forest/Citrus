@@ -79,6 +79,10 @@ namespace Tangerine
 						break;
 					case ".ogg":
 						action = () => {
+							if (Document.Current == null) {
+								AlertDialog.Show($"Open any document to add an audio");
+								return;
+							}
 							Document.Current.History.DoTransaction(() => {
 								var node = Core.Operations.CreateNode.Perform(typeof(Audio));
 								var sample = new SerializableSample(asset.Path);
@@ -197,35 +201,37 @@ namespace Tangerine
 					Sections.Drop();
 				}
 			));
-			lookupWidget.AddItem(new LookupDialogItem(
-				"Add As External Scene",
-				null,
-				() => {
-					if (Utils.AssertCurrentDocument(assetPath, assetType)) {
-						var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
-						if (NodeCompositionValidator.Validate(Document.Current.Container.GetType(), scene.GetType())) {
-							Document.Current.History.DoTransaction(() => {
-								var node = Core.Operations.CreateNode.Perform(scene.GetType());
-								SetProperty.Perform(node, nameof(Widget.ContentsPath), assetPath);
-								SetProperty.Perform(node, nameof(Widget.Id), Path.GetFileNameWithoutExtension(assetPath));
-								if (node is IPropertyLocker propertyLocker) {
-									var id = propertyLocker.IsPropertyLocked("Id", true) ? scene.Id : Path.GetFileName(assetPath);
-									SetProperty.Perform(node, nameof(Node.Id), id);
-								}
-								if (scene is Widget widget) {
-									SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
-									SetProperty.Perform(node, nameof(Widget.Size), widget.Size);
-								}
-								node.LoadExternalScenes();
-								SelectNode.Perform(node);
-							});
-						} else {
-							AlertDialog.Show($"Can't put {scene.GetType()} into {Document.Current.Container.GetType()}");
+			if (Document.Current != null) {
+				lookupWidget.AddItem(new LookupDialogItem(
+					"Add As External Scene",
+					null,
+					() => {
+						if (Utils.AssertCurrentDocument(assetPath, assetType)) {
+							var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
+							if (NodeCompositionValidator.Validate(Document.Current.Container.GetType(), scene.GetType())) {
+								Document.Current.History.DoTransaction(() => {
+									var node = Core.Operations.CreateNode.Perform(scene.GetType());
+									SetProperty.Perform(node, nameof(Widget.ContentsPath), assetPath);
+									SetProperty.Perform(node, nameof(Widget.Id), Path.GetFileNameWithoutExtension(assetPath));
+									if (node is IPropertyLocker propertyLocker) {
+										var id = propertyLocker.IsPropertyLocked("Id", true) ? scene.Id : Path.GetFileName(assetPath);
+										SetProperty.Perform(node, nameof(Node.Id), id);
+									}
+									if (scene is Widget widget) {
+										SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
+										SetProperty.Perform(node, nameof(Widget.Size), widget.Size);
+									}
+									node.LoadExternalScenes();
+									SelectNode.Perform(node);
+								});
+							} else {
+								AlertDialog.Show($"Can't put {scene.GetType()} into {Document.Current.Container.GetType()}");
+							}
 						}
+						Sections.Drop();
 					}
-					Sections.Drop();
-				}
-			));
+				));
+			}
 		}
 	}
 
@@ -252,6 +258,9 @@ namespace Tangerine
 
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
+			if (!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to add a image")) {
+				return;
+			}
 			foreach (var imageType in imageTypes) {
 				if (!NodeCompositionValidator.Validate(Document.Current.Container.GetType(), imageType)) {
 					continue;
