@@ -101,6 +101,7 @@
     <Compile Include="VersionedCollection.cs" />
     <Compile Include="WidgetExtensions.cs" />
     <Compile Include="AnimationPositioner.cs" />
+    <Compile Include="Operations\ContentsPathProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lime\Lime.Win.csproj">

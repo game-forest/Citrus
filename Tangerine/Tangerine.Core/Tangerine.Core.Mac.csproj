@@ -67,6 +67,7 @@
     <Compile Include="ISceneView.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
     <Compile Include="NodeExtensions.cs" />
+    <Compile Include="Operations\ContentsPathProcessor.cs" />
     <Compile Include="Operations\RemoveKeyframeRange.cs" />
     <Compile Include="Operations\RenameAnimationProcessor.cs" />
     <Compile Include="Operations\RulerAction.cs" />

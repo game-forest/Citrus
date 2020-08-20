@@ -292,6 +292,7 @@ namespace Tangerine
 				typeof(Core.Operations.SetComponent.Processor),
 				typeof(Core.Operations.DeleteComponent.Processor),
 				typeof(Core.Operations.DistortionMeshProcessor),
+				typeof(Core.Operations.ContentsPathProcessor),
 				typeof(UI.SceneView.ResolutionPreviewOperation.Processor),
 				typeof(UI.Timeline.Operations.SelectGridSpan.Processor),
 				typeof(UI.Timeline.Operations.DeselectGridSpan.Processor),
