@@ -58,7 +58,7 @@ namespace Tangerine.UI.Timeline
 		public void ClampAndSetOffset(Vector2 offset)
 		{
 			var maxOffset = new Vector2(
-				float.MaxValue, 
+				float.MaxValue,
 				Math.Max(0, Roll.ScrollView.Content.Height - Roll.RootWidget.Height)
 			);
 			Offset = Vector2.Clamp(offset, Vector2.Zero, maxOffset);
@@ -81,7 +81,7 @@ namespace Tangerine.UI.Timeline
 				}
 			}
 		}
-		
+
 		public readonly ComponentCollection<Component> Globals = new ComponentCollection<Component>();
 
 		/// <summary>
@@ -229,7 +229,7 @@ namespace Tangerine.UI.Timeline
 			RootWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(ShowCurveEditorTask());
 			RootWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(PanelTitleUpdater());
 		}
-		
+
 		private int CalcColumnCount()
 		{
 			const int ExtraFramesCount = 100;
@@ -292,41 +292,6 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		public void EnsureRowVisible(Row row)
-		{
-			var gw = row.RollWidget();
-			if (gw == null) {
-				return;
-			}
-			if (gw.Bottom() > Offset.Y + Roll.RootWidget.Height) {
-				OffsetY = gw.Bottom() - Roll.RootWidget.Height;
-			}
-			if (gw.Top() < Offset.Y) {
-				OffsetY = Math.Max(0, gw.Y);
-			}
-		}
-
-		public void EnsureRowChildsVisible(Row row)
-		{
-			var first = row.RollWidget();
-			var lastRow = row.Rows.Last();
-			while (lastRow.Rows.Count > 0) {
-				lastRow = lastRow.Rows.Last();
-			}
-			var last = lastRow.RollWidget();
-			float bottom = last.Bottom();
-			float top = first.Top();
-			float d = bottom - top;
-			float height = Roll.RootWidget.Height;
-			if (d > height) {
-				OffsetY = top;
-			} else if (bottom > OffsetY + height) {
-				OffsetY += bottom - OffsetY - height;
-			} else if (top < OffsetY) {
-				OffsetY = top;
-			}
-		}
-
 		public void GetVisibleColumnRange(out int min, out int max)
 		{
 			min = Math.Max(0, (Offset.X / TimelineMetrics.ColWidth).Round() - 1);
@@ -338,17 +303,10 @@ namespace Tangerine.UI.Timeline
 			var pos = col * TimelineMetrics.ColWidth - Offset.X;
 			return pos >= 0 && pos < Ruler.RootWidget.Width;
 		}
-
-		public bool IsRowVisible(int row)
-		{
-			var pos = Document.Current.Rows[row].RollWidget().Top() - Offset.Y;
-			return pos >= 0 && pos < Roll.RootWidget.Height;
-		}
 	}
 
 	public static class RowExtensions
 	{
 		public static Widget GridWidget(this Row row) => row.Components.Get<RowView>()?.GridRow.GridWidget;
-		public static Widget RollWidget(this Row row) => row.Components.Get<RowView>()?.RollRow.Widget;
 	}
 }

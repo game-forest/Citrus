@@ -104,28 +104,28 @@ namespace Tangerine.UI.Timeline
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
-			
+
 			void ExpandOrCollapseHelper(Row sceneItem, bool expand)
 			{
 				if (sceneItem.Expanded != expand) {
 					SetProperty.Perform(sceneItem, nameof(Row.Expanded), expand, false);
 				}
 				foreach (var i in sceneItem.Rows) {
-					ExpandOrCollapseHelper(i, expand);	
+					ExpandOrCollapseHelper(i, expand);
 				}
 			}
 		}
-	
+
 		private static void RenameCurrentRow()
 		{
 			var doc = Document.Current;
 			if (doc.SelectedRows().Count() != 1) {
 				return;
 			}
-			var row = doc.SelectedRows().First();
-			row.Components.Get<RowView>().RollRow.Rename();
+			var item = doc.SelectedRows().First();
+			TreeViewComponent.GetTreeViewItem(item).Presentation.Rename();
 		}
-		
+
 		private static void RemoveKeyframes()
 		{
 			foreach (var row in Document.Current.Rows.ToList()) {
