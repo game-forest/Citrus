@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
 using Tangerine.UI;
@@ -19,46 +20,31 @@ namespace Tangerine
 		{
 			if (
 				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Animation Frame function") ||
-				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Animation Frame function") ||
-				!RequireNonEmptyTimelineOrAddAlertItem(
-					lookupWidget,
-					"Select any node with keyframes to use Go To Animation Frame function",
-					out var lastFrameIndex
-				)
+				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Animation Frame function")
 			) {
 				return;
 			}
 			var animation = Document.Current.Animation;
 			var description = $"Animation:{(animation.IsLegacy ? "[Legacy]" : animation.Id)}; Node: {animation.OwnerNode}";
-			for (var frame = 0; frame <= lastFrameIndex; frame++) {
-				var frameClosed = frame;
-				lookupWidget.AddItem(new LookupDialogItem(
-					frame.ToString(),
-					description,
-					() => {
-						Document.Current.History.DoTransaction(() => {
-							SetCurrentColumn.Perform(frameClosed, animation);
-							CenterTimelineOnCurrentColumn.Perform();
-						});
-						Sections.Drop();
+			var lastFrameIndex = GetLastAnimationFrame();
+			lookupWidget.AddItem(new LookupDialogItem(
+				$"Type the frame number to go to a particular frame on timeline{(lastFrameIndex > 0 ? $" (last animation frame is {lastFrameIndex})" : null)}",
+				description,
+				() => {
+					if (!int.TryParse(lookupWidget.FilterText, out var frame) || frame < 0) {
+						AlertDialog.Show($"Can not parse \"{lookupWidget.FilterText}\" into frame index");
+						return;
 					}
-				));
-			}
+					Document.Current.History.DoTransaction(() => {
+						SetCurrentColumn.Perform(frame, animation);
+						CenterTimelineOnCurrentColumn.Perform();
+					});
+					Sections.Drop();
+				}
+			));
 		}
 
-		private bool RequireNonEmptyTimelineOrAddAlertItem(LookupWidget lookupWidget, string alertText, out int lastFrameIndex)
-		{
-			lastFrameIndex = GetLastAnimationFrame();
-			if (lastFrameIndex > 0) {
-				return true;
-			}
-			lookupWidget.AddItem(new LookupDialogItem(
-				alertText,
-				null,
-				Sections.Drop
-			));
-			return false;
-		}
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) => items;
 
 		private static int GetLastAnimationFrame()
 		{
