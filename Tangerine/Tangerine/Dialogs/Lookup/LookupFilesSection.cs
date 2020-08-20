@@ -128,7 +128,7 @@ namespace Tangerine
 
 		private async void ApplyingLookupFilterAsync(LookupWidget lookupWidget, string text)
 		{
-			const int FilteredItemsLimit = 100;
+			var filteredItemsLimit = CoreUserPreferences.Instance.LookupItemsLimit >= 1 ? CoreUserPreferences.Instance.LookupItemsLimit : 30;
 			var filteredItems = new List<LookupItem>();
 			var filterEnumarable = base.ApplyLookupFilter(text, mutableItemList);
 			var success = false;
@@ -138,7 +138,7 @@ namespace Tangerine
 					() => {
 						foreach (var item in filterEnumarable) {
 							filteredItems.Add(item);
-							if (filteredItems.Count >= FilteredItemsLimit) {
+							if (filteredItems.Count >= filteredItemsLimit) {
 								break;
 							}
 						}
