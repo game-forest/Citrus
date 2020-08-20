@@ -42,12 +42,12 @@ namespace Tangerine.UI.Timeline
 					: Theme.Colors.BlackText;
 			}
 		}
-		
+
 		private static bool IsGrayedLabel(Node node) =>
 			node is Widget w && (!w.Visible || w.Color.A == 0) ||
 			node is Frame frame && frame.ClipChildren == ClipMethod.NoRender;
 	}
-	
+
 	public class TreeViewItemPresentation : ITreeViewItemPresentation
 	{
 		public readonly Widget ExpandButtonContainer;
@@ -59,7 +59,7 @@ namespace Tangerine.UI.Timeline
 		public readonly bool Minimalistic;
 
 		public Widget Widget { get; }
-		
+
 		public TreeViewItemPresentation(TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
 		{
 			Item = item;
@@ -74,9 +74,9 @@ namespace Tangerine.UI.Timeline
 				Presenter = new SyncDelegatePresenter<Widget>(w => {
 					w.PrepareRendererState();
 					Renderer.DrawRect(
-						Vector2.Zero, w.Size, 
-						Item.Selected ? 
-							(Widget.Focused != null && w.SameOrDescendantOf(Widget.Focused) ? 
+						Vector2.Zero, w.Size,
+						Item.Selected ?
+							(Widget.Focused != null && w.SameOrDescendantOf(Widget.Focused) ?
 								Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground)
 							: Theme.Colors.WhiteBackground
 					);
@@ -113,7 +113,7 @@ namespace Tangerine.UI.Timeline
 			Widget.Nodes.Add(Spacer.HSpacer(3));
 			Widget.Nodes.Add(Label);
 		}
-		
+
 		private void HighlightLabel(string searchString)
 		{
 			if (string.IsNullOrEmpty(searchString)) {
@@ -139,7 +139,7 @@ namespace Tangerine.UI.Timeline
 		{
 			var label = new ThemedSimpleText {
 				HitTestTarget = true,
-				ForceUncutText = false, // We want ellipsed text if the panel is too narrow.  
+				ForceUncutText = false, // We want ellipsed text if the panel is too narrow.
 				VAlignment = VAlignment.Center,
 				OverflowMode = TextOverflowMode.Ellipsis,
 				LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
@@ -149,12 +149,12 @@ namespace Tangerine.UI.Timeline
 				if (Item.CanRename() && label.LocalMousePosition().X < labelExtent.X) {
 					Rename();
 				} else {
-					item.TreeView.RaiseActivated(item);
+					item.TreeView.RaiseActivated(item, TreeView.ActivateMethod.Mouse);
 				}
 			}));
 			return label;
 		}
-		
+
 		public void Rename()
 		{
 			((WindowWidget) Label.GetRoot()).Window.Activate();
@@ -188,7 +188,7 @@ namespace Tangerine.UI.Timeline
 			container.Unlink();
 			label.Visible = true;
 		}
-		
+
 		private ToolbarButton CreateExpandButton()
 		{
 			var button = new ToolbarButton { Highlightable = false };
@@ -209,7 +209,7 @@ namespace Tangerine.UI.Timeline
 				Widget.Nodes.Add(CreateLockButton());
 			}
 		}
-		
+
 		private ToolbarButton CreateEyeButton()
 		{
 			var button = new ToolbarButton {
@@ -232,7 +232,7 @@ namespace Tangerine.UI.Timeline
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}
-		
+
 		private ToolbarButton CreateLockButton()
 		{
 			var button = new ToolbarButton {
@@ -248,7 +248,7 @@ namespace Tangerine.UI.Timeline
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}
-		
+
 		IEnumerable<Node> InnerNodes(Row item)
 		{
 			foreach (var i in item.Rows) {
@@ -309,7 +309,7 @@ namespace Tangerine.UI.Timeline
 				}
 			}));
 		}
-		
+
 		private void ShowContextMenu()
 		{
 			if (!SceneItem.Selected) {
@@ -352,7 +352,7 @@ namespace Tangerine.UI.Timeline
 			}
 			menu.Popup();
 		}
-		
+
 		private ICommand CreateSetColorMarkCommand(string title, int index)
 		{
 			return new Command(title,
@@ -375,7 +375,7 @@ namespace Tangerine.UI.Timeline
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}
-		
+
 		private ToolbarButton CreateEyeButton()
 		{
 			var button = new ToolbarButton { Highlightable = false };
@@ -406,7 +406,7 @@ namespace Tangerine.UI.Timeline
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}
-		
+
 		private ToolbarButton CreateLockButton()
 		{
 			var button = new ToolbarButton { Highlightable = false };
@@ -492,12 +492,12 @@ namespace Tangerine.UI.Timeline
 
 	public class AnimationTrackTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public AnimationTrackTreeViewItemPresentation(TreeViewItem item, Row sceneItem, 
+		public AnimationTrackTreeViewItemPresentation(TreeViewItem item, Row sceneItem,
 			TreeViewItemPresentationOptions options)
 			: base(item, sceneItem, options)
 		{
 		}
-		
+
 		public static void AddAnimationTrack(int index = -1)
 		{
 			if (index < 0) {
@@ -505,7 +505,7 @@ namespace Tangerine.UI.Timeline
 			}
 			Document.Current.History.DoTransaction(() => {
 				var track = new AnimationTrack { Id = GenerateTrackId() };
-				var item = LinkSceneItem.Perform(Document.Current.AnimationTree, index, track);	
+				var item = LinkSceneItem.Perform(Document.Current.AnimationTree, index, track);
 				ClearRowSelection.Perform();
 				SelectRow.Perform(item);
 			});
@@ -525,7 +525,7 @@ namespace Tangerine.UI.Timeline
 	public class TreeViewPresentation : ITreeViewPresentation
 	{
 		public const float IndentWidth = 20;
-		
+
 		private readonly TreeViewItemPresentationOptions options;
 		private readonly List<ITreeViewItemPresentationProcessor> processors;
 
@@ -543,7 +543,7 @@ namespace Tangerine.UI.Timeline
 			AddProcessor(new SplineGearLinkIndicationProcessor());
 			AddProcessor(new SplineGear3DLinkIndicationProcessor());
 		}
-		
+
 		private void AddProcessor(ITreeViewItemPresentationProcessor processor) => processors.Add(processor);
 
 		public ITreeViewItemPresentation CreateItemPresentation(TreeViewItem item)
@@ -567,7 +567,7 @@ namespace Tangerine.UI.Timeline
 			var y = CalcDragCursorY(parent, childIndex);
 			Renderer.DrawRect(x, y - 0.5f, scrollWidget.Width, y + 1.5f, Theme.Colors.SeparatorDragColor);
 		}
-		
+
 		private float CalcDragCursorY(TreeViewItem parent, int childIndex)
 		{
 			if (childIndex == 0) {
@@ -584,7 +584,7 @@ namespace Tangerine.UI.Timeline
 				return i.Presentation.Widget.Bottom();
 			}
 		}
-		
+
 		public static int CalcIndent(TreeViewItem item)
 		{
 			int indent = 0;

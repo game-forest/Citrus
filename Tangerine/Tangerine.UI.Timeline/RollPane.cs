@@ -35,6 +35,11 @@ namespace Tangerine.UI.Timeline
 				ScrollView, presentation,
 				new TreeViewOptions { HandleCommands = false, ShowRoot = false }
 			);
+			TreeView.OnItemActivate += (sender, args) => {
+				if (GetSceneItem(args.Item).TryGetNode(out var node)) {
+					EnterNode.Perform(node);
+				}
+			};
 			TreeView.OnDragBegin += TreeView_OnDragBegin;
 			TreeView.OnDragEnd += TreeView_OnDragEnd;
 			((VBoxLayout) ScrollView.Content.Layout).Spacing = TimelineMetrics.RowSpacing;
@@ -47,7 +52,7 @@ namespace Tangerine.UI.Timeline
 			RootWidget.AddChangeWatcher(() => Document.Current.SceneTreeVersion, _ => RebuildTreeView());
 			RebuildTreeView();
 		}
-		
+
 		private void TreeView_OnDragBegin(object sender, TreeView.DragEventArgs args)
 		{
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(args.Items.Select(GetSceneItem)).ToList();
@@ -69,7 +74,7 @@ namespace Tangerine.UI.Timeline
 			Document.Current.History.DoTransaction(() => {
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in topSceneItems) {
-					if (item.Parent == parentSceneItem && index > parentSceneItem.Rows.IndexOf(item)) { 
+					if (item.Parent == parentSceneItem && index > parentSceneItem.Rows.IndexOf(item)) {
 						index--;
 					}
 					UnlinkSceneItem.Perform(item);
@@ -115,7 +120,7 @@ namespace Tangerine.UI.Timeline
 				var item = TreeViewComponent.GetTreeViewItem(i);
 				parent.Items.Add(item);
 			}
-			
+
 			void DestroyTree(TreeViewItem tree)
 			{
 				foreach (var node in tree.Items) {

@@ -13,17 +13,9 @@ namespace Tangerine.UI.Timeline
 	{
 		public static void Bind()
 		{
-			void Enter()
-			{
-				Node node = null;
-				if (Document.Current.RecentlySelectedSceneItem()?.TryGetNode(out node) ?? false) {
-					EnterNode.Perform(node);
-				}
-			}
-
-			ConnectCommand(TimelineCommands.EnterNode, Enter, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.EnterNodeAlias, Enter, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.EnterNodeMouse, Enter, Document.HasCurrent);
+			ConnectCommand(TimelineCommands.EnterNode, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
+			ConnectCommand(TimelineCommands.EnterNodeAlias, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
+			ConnectCommand(TimelineCommands.EnterNodeMouse, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
 			ConnectCommand(TimelineCommands.Expand, ExpandOrCollapse, Document.HasCurrent);
 			ConnectCommand(TimelineCommands.ExpandRecursively, ExpandOrCollapseRecursively, Document.HasCurrent);
 			ConnectCommand(TimelineCommands.RenameRow, RenameCurrentRow);

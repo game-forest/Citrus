@@ -172,9 +172,16 @@ namespace Tangerine.UI
 			public int Index;
 		}
 
+		public enum ActivateMethod
+		{
+			Mouse,
+			Keyboard
+		}
+
 		public class ActivateItemEventArgs : EventArgs
 		{
 			public TreeViewItem Item;
+			public ActivateMethod Method;
 		}
 
 		private static class Cmds
@@ -247,7 +254,7 @@ namespace Tangerine.UI
 				var item = GetItemUnderMouse();
 				if (item != null) {
 					SelectItem(item);
-					RaiseActivated(item);
+					RaiseActivated(item, ActivateMethod.Mouse);
 				}
 			}));
 			var dg = new DragGesture(0, DragDirection.Vertical);
@@ -328,8 +335,8 @@ namespace Tangerine.UI
 		/// <summary>
 		/// Invokes OnItemActivated. Maybe used by ITreeViewItemPresentation.
 		/// </summary>
-		public void RaiseActivated(TreeViewItem item) => OnItemActivate?.Invoke(
-			this, new ActivateItemEventArgs { Item = item });
+		public void RaiseActivated(TreeViewItem item, ActivateMethod method) => OnItemActivate?.Invoke(
+			this, new ActivateItemEventArgs { Item = item, Method = method });
 
 		private IEnumerator<object> ScrollOnDragTask(DragGesture dg)
 		{
@@ -383,6 +390,17 @@ namespace Tangerine.UI
 				index++;
 			}
 			return false;
+		}
+
+		public void ActivateItem()
+		{
+			var focused = GetRecentlySelected();
+			if (focused != null) {
+				if (!focused.Selected) {
+					SelectItem(focused);
+				}
+				RaiseActivated(focused, ActivateMethod.Keyboard);
+			}
 		}
 
 		public void SelectItem(TreeViewItem item, bool select = true, bool clearSelection = true)
@@ -547,6 +565,9 @@ namespace Tangerine.UI
 							Index = focused.Parent.Items.IndexOf(focused)
 						});
 					}
+				}
+				if (Cmds.Activate.Consume()) {
+					ActivateItem();
 				}
 				if (Cmds.SelectNext.Consume()) {
 					SelectNextItem();

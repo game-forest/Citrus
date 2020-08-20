@@ -184,11 +184,11 @@ namespace Tangerine.Panels
 		private void TreeView_OnItemActivate(object sender, TreeView.ActivateItemEventArgs args)
 		{
 			if (GetSceneItem(args.Item).TryGetNode(out var node)) {
-				NavigateToNode(node);
+				NavigateToNode(node, args.Method == TreeView.ActivateMethod.Keyboard);
 			}
 		}
 
-		private void NavigateToNode(Node node)
+		private void NavigateToNode(Node node, bool enterInto)
 		{
 			var path = new Stack<int>();
 			var sceneRoot = node;
@@ -212,13 +212,20 @@ namespace Tangerine.Panels
 					node = node.Nodes[i];
 				}
 			}
-			Document.Current.History.DoTransaction(() => {
-				if (node.Parent == null) {
-					EnterNode.Perform(Document.Current.RootNode, selectFirstNode: true);
-				} else if (EnterNode.Perform(node.Parent, selectFirstNode: false)) {
-					SelectNode.Perform(node);
-				}
-			});
+			if (enterInto) {
+				Document.Current.History.DoTransaction(() => {
+					EnterNode.Perform(node, selectFirstNode: true);
+					TreeViewComponent.GetTreeViewItem(Document.Current.GetSceneItemForObject(node)).Expanded = true;
+				});
+			} else {
+				Document.Current.History.DoTransaction(() => {
+					if (node.Parent == null) {
+						EnterNode.Perform(Document.Current.RootNode, selectFirstNode: true);
+					} else if (EnterNode.Perform(node.Parent, selectFirstNode: false)) {
+						SelectNode.Perform(node);
+					}
+				});
+			}
 		}
 
 		private void RebuildTreeView()
