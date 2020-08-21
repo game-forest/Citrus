@@ -294,13 +294,14 @@ namespace Lime
 
 		private static void RunScheduledActions(float delta)
 		{
+			Action tmp = null;
 			lock (scheduledActionsSync) {
 				if (scheduledActions != null) {
-					var tmp = scheduledActions;
+					tmp = scheduledActions;
 					scheduledActions = null;
-					tmp();
 				}
 			}
+			tmp?.Invoke();
 		}
 
 		/// <summary>
