@@ -195,6 +195,7 @@ namespace Tangerine.UI.Timeline
 			button.Clicked += () => {
 				Item.Expanded = !Item.Expanded;
 			};
+			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}
 	}
