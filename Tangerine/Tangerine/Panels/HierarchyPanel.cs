@@ -236,6 +236,9 @@ namespace Tangerine.Panels
 			var filter = searchStringEditor.Text;
 			if (Document.Current != null) {
 				treeView.RootItem = CreateTree(Document.Current.SceneTree);
+				if (filter.Length > 0 && treeView.RootItem != null) {
+					ExpandTree(treeView.RootItem);
+				}
 			}
 
 			void DestroyTree(TreeViewItem tree)
@@ -244,6 +247,19 @@ namespace Tangerine.Panels
 					DestroyTree(node);
 				}
 				tree.Items.Clear();
+			}
+
+			void ExpandTree(TreeViewItem tree)
+			{
+				if (tree.Items.Count == 0) {
+					return;
+				}
+				if (!tree.Expanded) {
+					tree.Expanded = true;
+				}
+				foreach (var i in tree.Items) {
+					ExpandTree(i);
+				}
 			}
 
 			TreeViewItem CreateTree(Row sceneTree)
