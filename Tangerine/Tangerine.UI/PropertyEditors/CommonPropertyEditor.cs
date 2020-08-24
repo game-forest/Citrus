@@ -83,24 +83,7 @@ namespace Tangerine.UI
 			if (message.IsNullOrWhiteSpace() || validationResult == ValidationResult.Ok) {
 				return;
 			}
-			WarningsContainer.AddNode(new Widget {
-				Layout = new HBoxLayout(),
-				Nodes = {
-					new Image(IconPool.GetTexture($"Inspector.{validationResult.ToString()}")) {
-						MinMaxSize = new Vector2(16, 16),
-						LayoutCell = new LayoutCell(Alignment.LeftCenter)
-					},
-					new ThemedSimpleText {
-						Text = message,
-						VAlignment = VAlignment.Center,
-						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-						ForceUncutText = false,
-						Padding = new Thickness(left: 5.0f),
-						HitTestTarget = true,
-						TabTravesable = new TabTraversable()
-					}
-				}
-			});
+			WarningsContainer.AddNode(CommonPropertyEditor.CreateWarning(message, validationResult));
 		}
 
 		private void ClearWarnings()
@@ -398,6 +381,31 @@ namespace Tangerine.UI
 					AddWarning(message, result);
 				}
 			}
+		}
+	}
+
+	public static class CommonPropertyEditor
+	{
+		public static Widget CreateWarning(string message, ValidationResult validationResult)
+		{
+			return new Widget {
+				Layout = new HBoxLayout(),
+				Nodes = {
+					new Image(IconPool.GetTexture($"Inspector.{validationResult.ToString()}")) {
+						MinMaxSize = new Vector2(16, 16),
+						LayoutCell = new LayoutCell(Alignment.LeftCenter)
+					},
+					new ThemedSimpleText {
+						Text = message,
+						VAlignment = VAlignment.Center,
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
+						ForceUncutText = false,
+						Padding = new Thickness(left: 5.0f),
+						HitTestTarget = true,
+						TabTravesable = new TabTraversable()
+					}
+				}
+			};
 		}
 	}
 }
