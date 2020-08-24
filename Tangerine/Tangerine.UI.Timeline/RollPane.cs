@@ -37,7 +37,7 @@ namespace Tangerine.UI.Timeline
 			);
 			TreeView.OnItemActivate += (sender, args) => {
 				if (GetSceneItem(args.Item).TryGetNode(out var node)) {
-					EnterNode.Perform(node);
+					Document.Current.History.DoTransaction(() => EnterNode.Perform(node));
 				}
 			};
 			TreeView.OnDragBegin += TreeView_OnDragBegin;
