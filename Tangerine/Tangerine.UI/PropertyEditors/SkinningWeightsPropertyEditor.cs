@@ -26,22 +26,22 @@ namespace Tangerine.UI
 				indexEditors[i].Step = 1;
 				weightsSliders[i] = new ThemedAreaSlider(range: new Vector2(0, 1), labelFormat: "0.00000");
 				var wrapper = new Widget {
-					Padding = new Thickness { Left = 20 },
 					Layout = new HBoxLayout(),
 					LayoutCell = new LayoutCell { StretchY = 0 }
 				};
 				var propertyLabel = new ThemedSimpleText {
 					Text = $"Bone { char.ConvertFromUtf32(65 + i) }",
 					VAlignment = VAlignment.Center,
-					LayoutCell = new LayoutCell(Alignment.LeftCenter, 0),
+					Padding = new Thickness { Left = 20 },
+					LayoutCell = new LayoutCell { StretchX = 1.0f },
 					ForceUncutText = false,
-					MinWidth = 140,
 					OverflowMode = TextOverflowMode.Minify,
 					HitTestTarget = false
 				};
 				wrapper.AddNode(propertyLabel);
 				wrapper.AddNode(new Widget {
-					Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 },
+					Layout = new HBoxLayout { Spacing = 4 },
+					LayoutCell = new LayoutCell { StretchX = 2.0f },
 					Nodes = {
 						indexEditors[i] ,
 						weightsSliders[i]
