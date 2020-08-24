@@ -125,6 +125,7 @@
     <Compile Include="Utils\Spacer.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="WidgetFactoryComponent.cs" />
+    <Compile Include="Widgets\ThemedAreaSlider.cs" />
     <Compile Include="Widgets\ThemedButtons.cs" />
   </ItemGroup>
   <ItemGroup>
