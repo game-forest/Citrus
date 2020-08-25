@@ -117,6 +117,7 @@ namespace Tangerine.UI
 			slider.AddChangeLateWatcher(Editor.IsFocused, focused => {
 				if (!focused) {
 					TryDetectNewValue();
+					Editor.Editor.DisplayWidget.Tasks.Update(0);
 				}
 			});
 			Editor.Submitted += (text) => TryDetectNewValue();
