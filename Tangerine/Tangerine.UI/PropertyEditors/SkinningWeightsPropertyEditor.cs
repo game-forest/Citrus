@@ -58,44 +58,46 @@ namespace Tangerine.UI
 			CheckWarnings();
 		}
 
-		private void SetLink(int idx, IDataflowProvider<CoalescedValue<int>> indexProvider, IDataflowProvider<CoalescedValue<float>> weightProvider)
+		private void SetLink(int index, IDataflowProvider<CoalescedValue<int>> indexProvider, IDataflowProvider<CoalescedValue<float>> weightProvider)
 		{
 			var currentIndexValue = indexProvider.GetValue();
 			var currentWeightValue = weightProvider.GetValue();
-			indexEditors[idx].Submitted += text => SetIndexValue(idx, indexEditors[idx], currentIndexValue);
-			weightsSliders[idx].Changed += () => SetWeightValue(idx, weightsSliders[idx]);
-			weightsSliders[idx].Value = currentWeightValue.IsDefined ? currentWeightValue.Value : 0;
-			indexEditors[idx].AddChangeLateWatcher(indexProvider,
-				v => indexEditors[idx].Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
-			weightsSliders[idx].AddChangeLateWatcher(weightProvider,
+			var indexEditor = indexEditors[index];
+			var weightEditor = weightsSliders[index];
+			indexEditor.Submitted += text => SetIndexValue(index, indexEditor, currentIndexValue);
+			weightEditor.Changed += () => SetWeightValue(index, weightEditor);
+			weightEditor.Value = currentWeightValue.IsDefined ? currentWeightValue.Value : 0;
+			indexEditor.AddChangeLateWatcher(indexProvider,
+				v => indexEditor.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
+			weightEditor.AddChangeLateWatcher(weightProvider,
 				v => {
-					weightsSliders[idx].Value = v.IsDefined ? v.Value : 0;
+					weightEditor.Value = v.IsDefined ? v.Value : 0;
 					if (!v.IsDefined) {
-						weightsSliders[idx].LabelText = ManyValuesText;
+						weightEditor.LabelText = ManyValuesText;
 					}
 				});
-			weightsSliders[idx].DragStarted += () => {
+			weightEditor.DragStarted += () => {
 				EditorParams.History?.BeginTransaction();
-				previousValue = weightsSliders[idx].Value;
+				previousValue = weightEditor.Value;
 			};
-			weightsSliders[idx].DragEnded += () => {
-				if (weightsSliders[idx].Value != previousValue || (EditorParams.Objects.Skip(1).Any() && SameValues())) {
+			weightEditor.DragEnded += () => {
+				if (weightEditor.Value != previousValue || (EditorParams.Objects.Skip(1).Any() && SameValues())) {
 					EditorParams.History?.CommitTransaction();
 				}
 				EditorParams.History?.EndTransaction();
 			};
-			ManageManyValuesOnFocusChange(indexEditors[idx], indexProvider);
-			ManageManyValuesOnFocusChange(weightsSliders[idx].Editor, weightProvider);
+			ManageManyValuesOnFocusChange(indexEditor, indexProvider);
+			ManageManyValuesOnFocusChange(weightEditor.Editor, weightProvider);
 		}
 
-		private void SetIndexValue(int idx, CommonEditBox editor, CoalescedValue<int> prevValue)
+		private void SetIndexValue(int index, CommonEditBox editor, CoalescedValue<int> prevValue)
 		{
 			if (float.TryParse(editor.Text, out float newValue)) {
 				DoTransaction(() => {
 					SetProperty<SkinningWeights>((current) => {
-						current[idx] = new BoneWeight {
+						current[index] = new BoneWeight {
 							Index = (int)newValue,
-							Weight = current[idx].Weight
+							Weight = current[index].Weight
 						};
 						CheckWarnings();
 						return current;
@@ -106,13 +108,13 @@ namespace Tangerine.UI
 			}
 		}
 
-		private void SetWeightValue(int idx, ThemedAreaSlider slider)
+		private void SetWeightValue(int index, ThemedAreaSlider slider)
 		{
 			DoTransaction(() => {
 				SetProperty<SkinningWeights>((current) => {
 					CheckWarnings();
-					current[idx] = new BoneWeight {
-						Index = current[idx].Index,
+					current[index] = new BoneWeight {
+						Index = current[index].Index,
 						Weight = slider.Value
 					};
 					return current;
