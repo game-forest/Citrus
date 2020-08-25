@@ -429,12 +429,27 @@ namespace Tangerine.Core
 				}
 				History.ProcessingOperation += DocumentProcessingOperation;
 				History.DocumentChanged += Document_Changed;
+				// Protect us from legacy scenes where bones order isn't determined.
+				SortBones(RootNode);
 				RefreshSceneTree();
 			} catch (System.Exception e) {
 				throw new System.InvalidOperationException($"Can't open '{Path}': {e.Message}");
 			}
 			Loaded = true;
 			OnLocaleChanged();
+
+			void SortBones(Node node)
+			{
+				node.Nodes.Sort((x, y) => {
+					if (x is Bone bone1 && y is Bone bone2) {
+						return bone1.Index.CompareTo(bone2.Index);
+					}
+					return 0;
+				});
+				foreach (var n in node.Nodes) {
+					SortBones(n);
+				}
+			}
 		}
 
 		private void Document_Changed()
