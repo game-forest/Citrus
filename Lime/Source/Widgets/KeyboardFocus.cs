@@ -23,6 +23,7 @@ namespace Lime
 
 		public readonly Widget Widget;
 		public bool FocusOnMousePress { get; set; }
+		public Direction LastDirection { get; private set; }
 
 		public KeyboardFocusScope(Widget widget)
 		{
@@ -54,31 +55,34 @@ namespace Lime
 			}
 			foreach (var key in FocusNext) {
 				if (Widget.Input.ConsumeKeyRepeat(key)) {
-					AdvanceFocus(1);
+					AdvanceFocus(Direction.Forward);
 					return;
 				}
 			}
 			foreach (var key in FocusPrevious) {
 				if (Widget.Input.ConsumeKeyRepeat(key)) {
-					AdvanceFocus(-1);
+					AdvanceFocus(Direction.Backward);
 					return;
 				}
 			}
 		}
 
-		private void AdvanceFocus(int direction)
+		public void AdvanceFocus(Direction direction)
 		{
+			LastDirection = direction;
 			if (!CanRegainFocus()) {
 				var focused = GetFirstFocusable() ?? Widget;
 				Widget.SetFocus(focused);
+				lastFocused = focused;
 			} else if (Widget.Focused == Widget) {
 				lastFocused.SetFocus();
 			} else {
 				var traversables = GetTabTraversables(Widget).ToList();
 				if (traversables.Count > 0) {
 					var i = traversables.IndexOf(lastFocused);
-					i = (i < 0) ? 0 : Mathf.Wrap(i + direction, 0, traversables.Count - 1);
+					i = (i < 0) ? 0 : Mathf.Wrap(i + (int)direction, 0, traversables.Count - 1);
 					traversables[i].SetFocus();
+					lastFocused = Widget.Focused;
 				}
 			}
 		}
@@ -100,6 +104,12 @@ namespace Lime
 			} else {
 				Widget.SetFocus();
 			}
+		}
+
+		public enum Direction : int
+		{
+			Forward = 1,
+			Backward = -1
 		}
 	}
 }

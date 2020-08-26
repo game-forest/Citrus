@@ -8,72 +8,98 @@ namespace Tangerine.UI
 	public class SkinningWeightsPropertyEditor : ExpandablePropertyEditor<SkinningWeights>
 	{
 		private readonly NumericEditBox[] indexEditors;
-		private readonly NumericEditBox[] weigthsEditors;
+		private readonly ThemedAreaSlider[] weightsSliders;
+		private readonly Widget customWarningsContainer;
+
+		private float previousValue;
+
 		public SkinningWeightsPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
 			editorParams.DefaultValueGetter = () => new SkinningWeights();
 			indexEditors = new NumericEditBox[4];
-			weigthsEditors = new NumericEditBox[4];
+			weightsSliders = new ThemedAreaSlider[4];
 			foreach (var o in editorParams.Objects) {
 				var prop = new Property<SkinningWeights>(o, editorParams.PropertyName).Value;
 			}
 			for (var i = 0; i <= 3; i++) {
 				indexEditors[i] = editorParams.NumericEditBoxFactory();
 				indexEditors[i].Step = 1;
-				weigthsEditors[i] = editorParams.NumericEditBoxFactory();
+				weightsSliders[i] = new ThemedAreaSlider(range: new Vector2(0, 1), labelFormat: "0.00000");
 				var wrapper = new Widget {
-					Padding = new Thickness { Left = 20 },
 					Layout = new HBoxLayout(),
 					LayoutCell = new LayoutCell { StretchY = 0 }
 				};
 				var propertyLabel = new ThemedSimpleText {
 					Text = $"Bone { char.ConvertFromUtf32(65 + i) }",
 					VAlignment = VAlignment.Center,
-					LayoutCell = new LayoutCell(Alignment.LeftCenter, 0),
+					Padding = new Thickness { Left = 20 },
+					LayoutCell = new LayoutCell { StretchX = 1.0f },
 					ForceUncutText = false,
-					MinWidth = 140,
 					OverflowMode = TextOverflowMode.Minify,
-					HitTestTarget = true,
-					TabTravesable = new TabTraversable(),
+					HitTestTarget = false
 				};
 				wrapper.AddNode(propertyLabel);
 				wrapper.AddNode(new Widget {
-					Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 },
+					Layout = new HBoxLayout { Spacing = 4 },
+					LayoutCell = new LayoutCell { StretchX = 2.0f },
 					Nodes = {
 						indexEditors[i] ,
-						weigthsEditors[i]
+						weightsSliders[i]
 					}
 				});
 				ExpandableContent.AddNode(wrapper);
+				customWarningsContainer = new Widget {
+					Layout = new VBoxLayout()
+				};
+				ContainerWidget.AddNode(customWarningsContainer);
 				var j = i;
 				SetLink(i, CoalescedPropertyComponentValue(sw => sw[j].Index), CoalescedPropertyComponentValue(sw => sw[j].Weight));
 			}
+			CheckWarnings();
 		}
 
-		private void SetLink(int idx, IDataflowProvider<CoalescedValue<int>> indexProvider, IDataflowProvider<CoalescedValue<float>> weightProvider)
+		private void SetLink(int index, IDataflowProvider<CoalescedValue<int>> indexProvider, IDataflowProvider<CoalescedValue<float>> weightProvider)
 		{
 			var currentIndexValue = indexProvider.GetValue();
 			var currentWeightValue = weightProvider.GetValue();
-			indexEditors[idx].Submitted += text => SetIndexValue(EditorParams, idx, indexEditors[idx], currentIndexValue);
-			weigthsEditors[idx].Submitted += text => SetWeightValue(EditorParams, idx, weigthsEditors[idx], currentWeightValue);
-			indexEditors[idx].AddChangeLateWatcher(indexProvider,
-				v => indexEditors[idx].Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
-			weigthsEditors[idx].AddChangeLateWatcher(weightProvider,
-				v => weigthsEditors[idx].Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			ManageManyValuesOnFocusChange(indexEditors[idx], indexProvider);
-			ManageManyValuesOnFocusChange(weigthsEditors[idx], weightProvider);
+			var indexEditor = indexEditors[index];
+			var weightEditor = weightsSliders[index];
+			indexEditor.Submitted += text => SetIndexValue(index, indexEditor, currentIndexValue);
+			weightEditor.Changed += () => SetWeightValue(index, weightEditor);
+			weightEditor.Value = currentWeightValue.IsDefined ? currentWeightValue.Value : 0;
+			indexEditor.AddChangeLateWatcher(indexProvider,
+				v => indexEditor.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
+			weightEditor.AddChangeLateWatcher(weightProvider,
+				v => {
+					weightEditor.Value = v.IsDefined ? v.Value : 0;
+					if (!v.IsDefined) {
+						weightEditor.LabelText = ManyValuesText;
+					}
+				});
+			weightEditor.DragStarted += () => {
+				EditorParams.History?.BeginTransaction();
+				previousValue = weightEditor.Value;
+			};
+			weightEditor.DragEnded += () => {
+				if (weightEditor.Value != previousValue || (EditorParams.Objects.Skip(1).Any() && SameValues())) {
+					EditorParams.History?.CommitTransaction();
+				}
+				EditorParams.History?.EndTransaction();
+			};
+			ManageManyValuesOnFocusChange(indexEditor, indexProvider);
+			ManageManyValuesOnFocusChange(weightEditor.Editor, weightProvider);
 		}
 
-		private void SetIndexValue(IPropertyEditorParams editorParams, int idx, CommonEditBox editor, CoalescedValue<int> prevValue)
+		private void SetIndexValue(int index, CommonEditBox editor, CoalescedValue<int> prevValue)
 		{
-			float newValue;
-			if (float.TryParse(editor.Text, out newValue)) {
+			if (float.TryParse(editor.Text, out float newValue)) {
 				DoTransaction(() => {
 					SetProperty<SkinningWeights>((current) => {
-						current[idx] = new BoneWeight {
+						current[index] = new BoneWeight {
 							Index = (int)newValue,
-							Weight = current[idx].Weight
+							Weight = current[index].Weight
 						};
+						CheckWarnings();
 						return current;
 					});
 				});
@@ -82,21 +108,36 @@ namespace Tangerine.UI
 			}
 		}
 
-		private void SetWeightValue(IPropertyEditorParams editorParams, int idx, CommonEditBox editor, CoalescedValue<float> prevWeight)
+		private void SetWeightValue(int index, ThemedAreaSlider slider)
 		{
-			float newValue;
-			if (float.TryParse(editor.Text, out newValue)) {
-				DoTransaction(() => {
-					SetProperty<SkinningWeights>((current) => {
-						current[idx] = new BoneWeight {
-							Index = current[idx].Index,
-							Weight = newValue
-						};
-						return current;
-					});
+			DoTransaction(() => {
+				SetProperty<SkinningWeights>((current) => {
+					CheckWarnings();
+					current[index] = new BoneWeight {
+						Index = current[index].Index,
+						Weight = slider.Value
+					};
+					return current;
 				});
+			});
+		}
+
+		private void CheckWarnings()
+		{
+			bool IsBoneWeightValid(float weight) => weight == Mathf.Clamp(weight, 0, 1);
+			bool isOutOfRange = false;
+			foreach (var slider in weightsSliders) {
+				isOutOfRange |= !IsBoneWeightValid(slider.Value);
+			}
+			if (isOutOfRange) {
+				if (customWarningsContainer.Nodes.Count == 0) {
+					customWarningsContainer.AddNode(
+						CommonPropertyEditor.CreateWarning(
+							message: "Bone weight should be in the range [0, 1].",
+							validationResult: ValidationResult.Warning));
+				}
 			} else {
-				editor.Text = prevWeight.IsDefined ? prevWeight.Value.ToString("0.###") : ManyValuesText;
+				customWarningsContainer.Nodes.Clear();
 			}
 		}
 	}
