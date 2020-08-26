@@ -124,13 +124,17 @@ namespace Tangerine.UI
 			Updating += (delta) => {
 				if (IsFocused()) {
 					var focusScope = KeyboardFocusScope.GetEnclosingScope(this);
-					if (focusScope.LastDirection == KeyboardFocusScope.Direction.Forward) {
-						Editor.SetFocus();
+					if (focusScope == null) {
+						Debug.Write("Error in ThemedAreaSlider: focusScope == null.");
 					} else {
-						if (Editor.Visible) {
-							focusScope.AdvanceFocus(KeyboardFocusScope.Direction.Backward);
-						} else {
+						if (focusScope.LastDirection == KeyboardFocusScope.Direction.Forward) {
 							Editor.SetFocus();
+						} else {
+							if (Editor.Visible) {
+								focusScope.AdvanceFocus(KeyboardFocusScope.Direction.Backward);
+							} else {
+								Editor.SetFocus();
+							}
 						}
 					}
 				}
