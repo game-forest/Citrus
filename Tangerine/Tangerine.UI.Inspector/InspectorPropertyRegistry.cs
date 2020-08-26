@@ -45,7 +45,16 @@ namespace Tangerine.UI.Inspector
 			AddEditor(c => c.PropertyName == "Text", c => new TextPropertyEditor(c));
 			AddEditor(c => c.PropertyName == "Id", c => new NodeIdPropertyEditor(c));
 			AddEditor(typeof(string), c => new StringPropertyEditor(c));
-			AddEditor(typeof(float), c => new FloatPropertyEditor(c));
+			AddEditor(typeof(float), c => {
+				if (Attribute.IsDefined(c.PropertyInfo, typeof(TangerineValidRangeAttribute))) {
+					var type = typeof(TangerineValidRangeAttribute);
+					var attribute = (TangerineValidRangeAttribute)Attribute.GetCustomAttribute(c.PropertyInfo, type);
+					var range = new Vector2((float)attribute.Minimum, (float)attribute.Maximum);
+					return new SliderPropertyEditor(range, c);
+				} else {
+					return new FloatPropertyEditor(c);
+				}
+			});
 			AddEditor(typeof(double), c => new DoublePropertyEditor(c));
 			AddEditor(typeof(bool), c => new BooleanPropertyEditor(c));
 			AddEditor(typeof(int), c => new IntPropertyEditor(c));
