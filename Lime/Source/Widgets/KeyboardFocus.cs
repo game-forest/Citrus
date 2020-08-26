@@ -67,7 +67,7 @@ namespace Lime
 			}
 		}
 
-		public void AdvanceFocus(Direction direction, uint count = 1)
+		public void AdvanceFocus(Direction direction)
 		{
 			LastDirection = direction;
 			if (!CanRegainFocus()) {
@@ -80,7 +80,7 @@ namespace Lime
 				var traversables = GetTabTraversables(Widget).ToList();
 				if (traversables.Count > 0) {
 					var i = traversables.IndexOf(lastFocused);
-					i = (i < 0) ? 0 : Mathf.Wrap(i + (int)direction * (int)count, 0, traversables.Count - 1);
+					i = (i < 0) ? 0 : Mathf.Wrap(i + (int)direction, 0, traversables.Count - 1);
 					traversables[i].SetFocus();
 					lastFocused = Widget.Focused;
 				}
