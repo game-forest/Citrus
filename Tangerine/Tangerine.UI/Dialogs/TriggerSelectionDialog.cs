@@ -104,8 +104,9 @@ namespace Tangerine.UI
 				};
 				var groupLabel = new ThemedSimpleText {
 					Text = key,
+					VAlignment = VAlignment.Center,
 					LayoutCell = new LayoutCell(Alignment.Center),
-					ForceUncutText = true,
+					ForceUncutText = false,
 					HitTestTarget = true
 				};
 				var header = new Widget {
@@ -114,8 +115,7 @@ namespace Tangerine.UI
 					Padding = new Thickness(4),
 					Nodes = {
 						expandButton,
-						groupLabel,
-						new Widget()
+						groupLabel
 					}
 				};
 				var wrapper = new Frame {
@@ -165,10 +165,10 @@ namespace Tangerine.UI
 					new ThemedSimpleText {
 						Text = trigger,
 						LayoutCell = new LayoutCell(Alignment.Center),
-						ForceUncutText = true
+						Anchors = Anchors.LeftRight,
+						ForceUncutText = false
 					},
 					Spacer.HSpacer(5),
-					new Widget(),
 					checkBox
 				},
 				HitTestTarget = true
