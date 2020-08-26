@@ -562,28 +562,32 @@ namespace Tangerine.UI.Timeline
 			return new TreeViewItemPresentation(item, sceneItem, options);
 		}
 
-		public void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex)
+		public void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex, bool dragInto)
 		{
-			var x = (CalcIndent(parent) + 2) * IndentWidth;
-			var y = CalcDragCursorY(parent, childIndex);
-			Renderer.DrawRect(x, y - 0.5f, scrollWidget.Width, y + 1.5f, Theme.Colors.SeparatorDragColor);
+			if (dragInto) {
+				var x = (CalcIndent(parent) + 1) * IndentWidth;
+				var y = parent.Presentation.Widget.Top();
+				Renderer.DrawRectOutline(x, y - 0.5f, scrollWidget.Width, y + TimelineMetrics.DefaultRowHeight + 0.5f, Theme.Colors.SeparatorDragColor, 2);
+			} else {
+				var x = (CalcIndent(parent) + 2) * IndentWidth;
+				var y = CalcDragCursorY(parent, childIndex);
+				Renderer.DrawRect(x, y - 0.5f, scrollWidget.Width, y + 1.5f, Theme.Colors.SeparatorDragColor);
+			}
 		}
 
-		private float CalcDragCursorY(TreeViewItem parent, int childIndex)
+		private static float CalcDragCursorY(TreeViewItem parent, int childIndex)
 		{
 			if (childIndex == 0) {
 				if (parent.Parent == null) {
-					// Special check since parent could be invisible
 					return 0;
 				}
 				return parent.Presentation.Widget.Bottom();
-			} else {
-				var i = parent.Items[childIndex - 1];
-				while (i.Expanded && i.Items.Count > 0) {
-					i = i.Items.Last();
-				}
-				return i.Presentation.Widget.Bottom();
 			}
+			var i = parent.Items[childIndex - 1];
+			while (i.Expanded && i.Items.Count > 0) {
+				i = i.Items.Last();
+			}
+			return i.Presentation.Widget.Bottom();
 		}
 
 		public static int CalcIndent(TreeViewItem item)

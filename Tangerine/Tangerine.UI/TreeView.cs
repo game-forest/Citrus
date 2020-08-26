@@ -31,7 +31,7 @@ namespace Tangerine.UI
 		public virtual bool CanExpand() => true;
 		public virtual bool CanRename() => false;
 		public ITreeViewItemPresentation Presentation { get; internal set; }
-		internal int Index { get; set; }
+		public int Index { get; internal set; }
 
 		public TreeView TreeView
 		{
@@ -131,7 +131,7 @@ namespace Tangerine.UI
 	{
 		ITreeViewItemPresentation CreateItemPresentation(TreeViewItem item);
 		IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
-		void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex);
+		void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex, bool dragInto);
 	}
 
 	public interface ITreeViewItemPresentation
@@ -260,8 +260,8 @@ namespace Tangerine.UI
 			var dg = new DragGesture(0, DragDirection.Vertical);
 			var dragCursorPresenter = new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
-				if (TryCalcDragDestination(out var parent, out var childIndex)) {
-					presentation.RenderDragCursor(w, parent, childIndex);
+				if (TryCalcDragDestination(out var parent, out var childIndex, out var dragInto)) {
+					presentation.RenderDragCursor(w, parent, childIndex, dragInto);
 				}
 			});
 			var itemSelectedAtDragBegin = false;
@@ -299,7 +299,7 @@ namespace Tangerine.UI
 					return;
 				}
 				scrollContent.CompoundPostPresenter.Remove(dragCursorPresenter);
-				if (TryCalcDragDestination(out var parent, out var childIndex)) {
+				if (TryCalcDragDestination(out var parent, out var childIndex, out _)) {
 					if (!parent.Expanded) {
 						parent.Expanded = true;
 					}
@@ -351,43 +351,60 @@ namespace Tangerine.UI
 			}
 		}
 
-		private bool TryCalcDragDestination(out TreeViewItem parent, out int childIndex)
+		private bool TryCalcDragDestination(out TreeViewItem parent, out int childIndex, out bool dragInto)
 		{
 			var p = scrollView.Content.LocalMousePosition().Y;
-			parent = rootItem;
+			parent = null;
 			childIndex = 0;
-			int index = 0;
+			dragInto = false;
+			var selectedItems = items.Where(i => i.Selected);
 			foreach (var item in items) {
 				var t = (p - item.Presentation.Widget.Y) / item.Presentation.Widget.Height;
-				if (t > 0.5f && t < 1) {
-					var a = new DragEventArgs { Items = items.Where(i => i.Selected), Parent = item };
+				if (t > 0.25f && t < 0.75f) {
+					var a = new DragEventArgs { Items = selectedItems, Parent = item };
 					OnDragBegin?.Invoke(this, a);
 					if (!a.CancelDrag) {
 						parent = item;
-						childIndex = 0;
+						childIndex = item.Items.Count;
+						dragInto = true;
+						return true;
+					}
+				}
+				// Special case: drag into root item on the last position.
+				if (item == items.Last() && t > 0.5f) {
+					parent = RootItem;
+					childIndex = RootItem.Items.Count;
+					var a = new DragEventArgs { Items = selectedItems, Parent = parent };
+					OnDragBegin?.Invoke(this, a);
+					if (!a.CancelDrag) {
 						return true;
 					}
 				}
 				if (
-					index == 0 && t < 0.5f ||
-					index == items.Count - 1 && t > 0.5f ||
-					t >= 0 && t < 1
+				 	item == items.First() && t < 0.5f ||
+				 	t >= 0 && t < 1
 				) {
-					parent = item.Parent;
+					if (t > 0.5f) {
+						if (item.Expanded && item.Items.Count > 0) {
+							parent = item;
+							childIndex = 0;
+						} else {
+							parent = item.Parent;
+							childIndex = parent.Items.IndexOf(item) + 1;
+						}
+					} else {
+						parent = item.Parent;
+						childIndex = parent.Items.IndexOf(item);
+					}
 					if (parent == null) {
 						return false;
 					}
-					var a = new DragEventArgs { Items = items.Where(i => i.Selected), Parent = parent };
+					var a = new DragEventArgs { Items = selectedItems, Parent = parent };
 					OnDragBegin?.Invoke(this, a);
 					if (!a.CancelDrag) {
-						childIndex = parent.Items.IndexOf(item);
-						if (t > 0.5f) {
-							childIndex++;
-						}
 						return true;
 					}
 				}
-				index++;
 			}
 			return false;
 		}
