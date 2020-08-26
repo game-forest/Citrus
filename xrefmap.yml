@@ -31877,6 +31877,37 @@ references:
   isSpec: "True"
   fullName: Lime.KeyboardFocusScope.KeyboardFocusScope
   nameWithType: KeyboardFocusScope.KeyboardFocusScope
+- uid: Lime.KeyboardFocusScope.AdvanceFocus(Lime.KeyboardFocusScope.Direction)
+  name: AdvanceFocus(KeyboardFocusScope.Direction)
+  href: api/Lime.KeyboardFocusScope.html#Lime_KeyboardFocusScope_AdvanceFocus_Lime_KeyboardFocusScope_Direction_
+  commentId: M:Lime.KeyboardFocusScope.AdvanceFocus(Lime.KeyboardFocusScope.Direction)
+  fullName: Lime.KeyboardFocusScope.AdvanceFocus(Lime.KeyboardFocusScope.Direction)
+  nameWithType: KeyboardFocusScope.AdvanceFocus(KeyboardFocusScope.Direction)
+- uid: Lime.KeyboardFocusScope.AdvanceFocus*
+  name: AdvanceFocus
+  href: api/Lime.KeyboardFocusScope.html#Lime_KeyboardFocusScope_AdvanceFocus_
+  commentId: Overload:Lime.KeyboardFocusScope.AdvanceFocus
+  isSpec: "True"
+  fullName: Lime.KeyboardFocusScope.AdvanceFocus
+  nameWithType: KeyboardFocusScope.AdvanceFocus
+- uid: Lime.KeyboardFocusScope.Direction
+  name: KeyboardFocusScope.Direction
+  href: api/Lime.KeyboardFocusScope.Direction.html
+  commentId: T:Lime.KeyboardFocusScope.Direction
+  fullName: Lime.KeyboardFocusScope.Direction
+  nameWithType: KeyboardFocusScope.Direction
+- uid: Lime.KeyboardFocusScope.Direction.Backward
+  name: Backward
+  href: api/Lime.KeyboardFocusScope.Direction.html#Lime_KeyboardFocusScope_Direction_Backward
+  commentId: F:Lime.KeyboardFocusScope.Direction.Backward
+  fullName: Lime.KeyboardFocusScope.Direction.Backward
+  nameWithType: KeyboardFocusScope.Direction.Backward
+- uid: Lime.KeyboardFocusScope.Direction.Forward
+  name: Forward
+  href: api/Lime.KeyboardFocusScope.Direction.html#Lime_KeyboardFocusScope_Direction_Forward
+  commentId: F:Lime.KeyboardFocusScope.Direction.Forward
+  fullName: Lime.KeyboardFocusScope.Direction.Forward
+  nameWithType: KeyboardFocusScope.Direction.Forward
 - uid: Lime.KeyboardFocusScope.FocusNext
   name: FocusNext
   href: api/Lime.KeyboardFocusScope.html#Lime_KeyboardFocusScope_FocusNext
@@ -31928,6 +31959,19 @@ references:
   isSpec: "True"
   fullName: Lime.KeyboardFocusScope.GetFirstFocusable
   nameWithType: KeyboardFocusScope.GetFirstFocusable
+- uid: Lime.KeyboardFocusScope.LastDirection
+  name: LastDirection
+  href: api/Lime.KeyboardFocusScope.html#Lime_KeyboardFocusScope_LastDirection
+  commentId: P:Lime.KeyboardFocusScope.LastDirection
+  fullName: Lime.KeyboardFocusScope.LastDirection
+  nameWithType: KeyboardFocusScope.LastDirection
+- uid: Lime.KeyboardFocusScope.LastDirection*
+  name: LastDirection
+  href: api/Lime.KeyboardFocusScope.html#Lime_KeyboardFocusScope_LastDirection_
+  commentId: Overload:Lime.KeyboardFocusScope.LastDirection
+  isSpec: "True"
+  fullName: Lime.KeyboardFocusScope.LastDirection
+  nameWithType: KeyboardFocusScope.LastDirection
 - uid: Lime.KeyboardFocusScope.SetDefaultFocus
   name: SetDefaultFocus()
   href: api/Lime.KeyboardFocusScope.html#Lime_KeyboardFocusScope_SetDefaultFocus
