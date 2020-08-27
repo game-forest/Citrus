@@ -51,7 +51,11 @@ namespace Tangerine
 			mutableItemList = new List<LookupItem>(0);
 			fillingLookupCancellationSource = new CancellationTokenSource();
 			try {
-				mutableItemList = await System.Threading.Tasks.Task.Run(() => GetLookupItems(lookupWidget), fillingLookupCancellationSource.Token);
+				var cancellationToken = fillingLookupCancellationSource.Token;
+				mutableItemList = await System.Threading.Tasks.Task.Run(
+					() => GetLookupItems(lookupWidget, cancellationToken),
+					cancellationToken
+				);
 				lookupWidget.MarkFilterAsDirty();
 				fillingLookupCancellationSource = null;
 			} catch (OperationCanceledException) {
@@ -62,10 +66,11 @@ namespace Tangerine
 			}
 		}
 
-		private List<LookupItem> GetLookupItems(LookupWidget lookupWidget)
+		private List<LookupItem> GetLookupItems(LookupWidget lookupWidget, CancellationToken cancellationToken)
 		{
 			var items = new List<LookupItem>();
 			foreach (var (_, asset) in Project.Current.AssetsDatabase) {
+				cancellationToken.ThrowIfCancellationRequested();
 				var fileName = Path.GetFileName(asset.Path);
 				Action action;
 				switch (asset.Type) {
@@ -134,20 +139,22 @@ namespace Tangerine
 		{
 			var filteredItemsLimit = CoreUserPreferences.Instance.LookupItemsLimit >= 1 ? CoreUserPreferences.Instance.LookupItemsLimit : 30;
 			var filteredItems = new List<LookupItem>();
-			var filterEnumarable = base.ApplyLookupFilter(text, mutableItemList);
 			var success = false;
 			applyingFilterCancellationSource = new CancellationTokenSource();
 			try {
+				var cancellationToken = applyingFilterCancellationSource.Token;
+				var filterEnumerable = ApplyLookupFilter(text, mutableItemList, cancellationToken);
 				await System.Threading.Tasks.Task.Run(
 					() => {
-						foreach (var item in filterEnumarable) {
+						foreach (var item in filterEnumerable) {
+							cancellationToken.ThrowIfCancellationRequested();
 							filteredItems.Add(item);
 							if (filteredItems.Count >= filteredItemsLimit) {
 								break;
 							}
 						}
 					},
-					applyingFilterCancellationSource.Token
+					cancellationToken
 				);
 				applyingFilterCancellationSource = null;
 				success = true;

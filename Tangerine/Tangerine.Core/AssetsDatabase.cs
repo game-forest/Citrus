@@ -13,7 +13,7 @@ namespace Tangerine.Core
 
 		public AssetsDatabase()
 		{
-			items = GetAssetsDictionary();
+			items = GetAssetsDictionary(CancellationToken.None);
 		}
 
 		public async void RescanAsync()
@@ -21,7 +21,8 @@ namespace Tangerine.Core
 			scanningCancellationSource?.Cancel();
 			scanningCancellationSource = new CancellationTokenSource();
 			try {
-				items = await System.Threading.Tasks.Task.Run(GetAssetsDictionary, scanningCancellationSource.Token);
+				var cancellationToken = scanningCancellationSource.Token;
+				items = await System.Threading.Tasks.Task.Run(() => GetAssetsDictionary(cancellationToken), cancellationToken);
 				scanningCancellationSource = null;
 			} catch (OperationCanceledException) {
 				// Suppress
@@ -31,22 +32,24 @@ namespace Tangerine.Core
 			}
 		}
 
-		private static SortedList<string, Entry> GetAssetsDictionary()
+		private static SortedList<string, Entry> GetAssetsDictionary(CancellationToken cancellationToken)
 		{
 			var assetsDirectory = Project.Current.AssetsDirectory;
 			var assets = new SortedList<string, Entry>();
 			GetFilesRecursively(assetsDirectory);
+			return assets;
 
 			void GetFilesRecursively(string directory)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
 				foreach (var filePath in Directory.GetFiles(directory)) {
+					cancellationToken.ThrowIfCancellationRequested();
 					assets.Add(filePath, new Entry(assetsDirectory, filePath));
 				}
 				foreach (var d in Directory.GetDirectories(directory)) {
 					GetFilesRecursively(d);
 				}
 			}
-			return assets;
 		}
 
 		public IEnumerator<KeyValuePair<string, Entry>> GetEnumerator() => items.GetEnumerator();
