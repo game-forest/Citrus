@@ -22,6 +22,7 @@ namespace Tangerine.Core
 		private readonly HashSet<string> modifiedAssets = new HashSet<string>();
 		private readonly List<Type> registeredNodeTypes = new List<Type>();
 		private readonly List<Type> registeredComponentTypes = new List<Type>();
+		private readonly object aggregateAssetsDatabaseModificationsTaskTag = new object();
 
 		public readonly AssetsDatabase AssetsDatabase;
 		public FileSystemWatcher FileSystemWatcher { get; private set; }
@@ -115,11 +116,13 @@ namespace Tangerine.Core
 			FileSystemWatcher.Changed += HandleFileSystemWatcherEvent;
 			FileSystemWatcher.Created += s => {
 				HandleFileSystemWatcherEvent(s);
-				AssetsDatabase.RescanAsync();
+				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
+				Tasks.Add(AggregateAssetsDatabaseModificationsTask, aggregateAssetsDatabaseModificationsTaskTag);
 			};
 			FileSystemWatcher.Deleted += s => {
 				HandleFileSystemWatcherEvent(s);
-				AssetsDatabase.RescanAsync();
+				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
+				Tasks.Add(AggregateAssetsDatabaseModificationsTask, aggregateAssetsDatabaseModificationsTaskTag);
 			};
 			FileSystemWatcher.Renamed += (previousPath, path) => {
 				// simulating rename as pairs of deleted / created events
@@ -133,7 +136,8 @@ namespace Tangerine.Core
 						HandleFileSystemWatcherEvent(Path.Combine(path, f.Path));
 					}
 				}
-				AssetsDatabase.RescanAsync();
+				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
+				Tasks.Add(AggregateAssetsDatabaseModificationsTask, aggregateAssetsDatabaseModificationsTaskTag);
 			};
 			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
 				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
@@ -476,6 +480,14 @@ namespace Tangerine.Core
 			yield return AggregationWaitTime;
 			yield return Task.WaitWhile(() => Application.Windows.All(window => !window.Active));
 			ReloadModifiedDocuments();
+		}
+
+		private IEnumerator<object> AggregateAssetsDatabaseModificationsTask()
+		{
+			const float AggregationWaitTime = 0.25f;
+			yield return AggregationWaitTime;
+			yield return Task.WaitWhile(() => Application.Windows.All(window => !window.Active));
+			AssetsDatabase.RescanAsync();
 		}
 
 		private void UpdateTextureParams()
