@@ -95,12 +95,13 @@ namespace Tangerine.UI
 			if (float.TryParse(editor.Text, out float newValue)) {
 				DoTransaction(() => {
 					SetProperty<SkinningWeights>((current) => {
-						current[index] = new BoneWeight {
+						var clone = current.Clone();
+						clone[index] = new BoneWeight {
 							Index = (int)newValue,
 							Weight = current[index].Weight
 						};
 						CheckWarnings();
-						return current;
+						return clone;
 					});
 				});
 			} else {
@@ -113,11 +114,12 @@ namespace Tangerine.UI
 			DoTransaction(() => {
 				SetProperty<SkinningWeights>((current) => {
 					CheckWarnings();
-					current[index] = new BoneWeight {
+					var clone = current.Clone();
+					clone[index] = new BoneWeight {
 						Index = current[index].Index,
 						Weight = slider.Value
 					};
-					return current;
+					return clone;
 				});
 			});
 		}
