@@ -15,6 +15,14 @@ namespace Tangerine
 		public readonly LookupInitialSection Initial;
 		public readonly LookupHelpSection Help;
 		public readonly LookupCommandsSection Commands;
+		public readonly LookupFilesSection Files;
+		public readonly LookupNodesSection Nodes;
+		public readonly LookupAnimationMarkersSection AnimationMarkers;
+		public readonly LookupDocumentMarkersSection DocumentMarkers;
+		public readonly LookupAnimationFramesSection AnimationFrames;
+		public readonly LookupNodeAnimationsSection NodeAnimations;
+		public readonly LookupDocumentAnimationsSection DocumentAnimations;
+		public readonly LookupComponentsSection Components;
 		public readonly LookupSection[] List;
 		public readonly FuzzyStringSearch FuzzyStringSearch = new FuzzyStringSearch();
 
@@ -29,20 +37,34 @@ namespace Tangerine
 				Initial = new LookupInitialSection(this),
 				Help = new LookupHelpSection(this),
 				Commands = new LookupCommandsSection(this),
-				new LookupFilesSection(this),
-				new LookupNodesSection(this),
-				new LookupAnimationMarkersSection(this), 
-				new LookupDocumentMarkersSection(this),
-				new LookupAnimationFramesSection(this),
-				new LookupNodeAnimationsSection(this),
-				new LookupDocumentAnimationsSection(this),
-				new LookupComponentsSection(this),
+				Files = new LookupFilesSection(this),
+				Nodes = new LookupNodesSection(this),
+				AnimationMarkers = new LookupAnimationMarkersSection(this),
+				DocumentMarkers = new LookupDocumentMarkersSection(this),
+				AnimationFrames = new LookupAnimationFramesSection(this),
+				NodeAnimations = new LookupNodeAnimationsSection(this),
+				DocumentAnimations = new LookupDocumentAnimationsSection(this),
+				Components = new LookupComponentsSection(this),
 			};
 		}
 
-		public void Initialize()
+		public void Initialize(SectionType? sectionType = null)
 		{
-			if (recentlySubmittedData == null) {
+			if (sectionType.HasValue) {
+				switch (sectionType) {
+					case SectionType.Commands: Push(Commands); break;
+					case SectionType.Files: Push(Files); break;
+					case SectionType.Nodes: Push(Nodes); break;
+					case SectionType.AnimationMarkers: Push(AnimationMarkers); break;
+					case SectionType.DocumentMarkers: Push(DocumentMarkers); break;
+					case SectionType.AnimationFrames: Push(AnimationFrames); break;
+					case SectionType.NodeAnimations: Push(NodeAnimations); break;
+					case SectionType.DocumentAnimations: Push(DocumentAnimations); break;
+					case SectionType.Components: Push(Components); break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(sectionType), sectionType, null);
+				}
+			} else if (recentlySubmittedData == null) {
 				Push(Initial);
 			} else {
 				Push(recentlySubmittedData.GetSection(this));
@@ -58,9 +80,8 @@ namespace Tangerine
 					lookupWidget.FilterApplied -= SelectRecentlyItem;
 				}
 				lookupWidget.FilterApplied += SelectRecentlyItem;
-
-				recentlySubmittedData = null;
 			}
+			recentlySubmittedData = null;
 		}
 
 		public void Push(LookupSection section)
@@ -132,7 +153,7 @@ namespace Tangerine
 			public LookupSection GetSection(LookupSections sections)
 			{
 				switch (SectionType) {
-					case SectionType.Command: return sections.Commands;
+					case SectionType.Commands: return sections.Commands;
 					default: throw new ArgumentOutOfRangeException();
 				}
 			}
@@ -140,7 +161,15 @@ namespace Tangerine
 
 		public enum SectionType
 		{
-			Command,
+			Commands,
+			Files,
+			Nodes,
+			AnimationMarkers,
+			DocumentMarkers,
+			AnimationFrames,
+			NodeAnimations,
+			DocumentAnimations,
+			Components,
 		}
 	}
 }

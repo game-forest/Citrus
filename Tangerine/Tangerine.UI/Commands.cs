@@ -69,6 +69,15 @@ namespace Tangerine.UI
 		public static readonly ICommand RecentProjects = new Command("Recent Projects", new Menu());
 		public static readonly ICommand PreferencesDialog = new Command("Preferences...", new Shortcut(Modifiers.Command, Key.P));
 		public static readonly ICommand OpenLookupDialog = new Command("Open Lookup Dialog", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.P));
+		public static readonly ICommand LookupCommands = new Command("Lookup Commands");
+		public static readonly ICommand LookupFiles = new Command("Lookup Files");
+		public static readonly ICommand LookupNodes = new Command("Lookup Nodes");
+		public static readonly ICommand LookupAnimationMarkers = new Command("Lookup Animation's Markers");
+		public static readonly ICommand LookupDocumentMarkers = new Command("Lookup Document's Markers");
+		public static readonly ICommand LookupAnimationFrames = new Command("Lookup Animation's Frames");
+		public static readonly ICommand LookupNodeAnimations = new Command("Lookup Node's Animations");
+		public static readonly ICommand LookupDocumentAnimations = new Command("Lookup Document's Animations");
+		public static readonly ICommand LookupComponents = new Command("Lookup Components");
 		public static readonly ICommand Close = new Command("Close");
 		public static readonly ICommand CloseAll = new Command("Close All");
 		public static readonly ICommand CloseAllButCurrent = new Command("Close All but Current");

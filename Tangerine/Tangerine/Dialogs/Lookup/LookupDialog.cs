@@ -6,7 +6,7 @@ namespace Tangerine
 {
 	public class LookupDialog
 	{
-		public LookupDialog()
+		public LookupDialog(LookupSections.SectionType? sectionType = null)
 		{
 			Vector2? displayCenter = null;
 			try {
@@ -65,7 +65,7 @@ namespace Tangerine
 			lookupWidget.Submitted += LookupSubmitted;
 			lookupWidget.Canceled += LookupCanceled;
 			windowWidget.FocusScope.SetDefaultFocus();
-			sections.Initialize();
+			sections.Initialize(sectionType);
 
 			// TODO: Adaptive window height. Fix problem with "window.Resized += deviceRotated => UpdateAndResize(0);" at DefaultWindowWidget class.
 			//var layoutProcessor = windowWidget.Manager.Processors.OfType<LayoutProcessor>().First();

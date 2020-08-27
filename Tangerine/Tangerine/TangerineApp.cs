@@ -614,6 +614,15 @@ namespace Tangerine
 			h.Connect(GenericCommands.Quit, Application.Exit);
 			h.Connect(GenericCommands.PreferencesDialog, () => new PreferencesDialog());
 			h.Connect(GenericCommands.OpenLookupDialog, () => new LookupDialog());
+			h.Connect(GenericCommands.LookupCommands, () => new LookupDialog(LookupSections.SectionType.Commands));
+			h.Connect(GenericCommands.LookupFiles, () => new LookupDialog(LookupSections.SectionType.Files));
+			h.Connect(GenericCommands.LookupNodes, () => new LookupDialog(LookupSections.SectionType.Nodes));
+			h.Connect(GenericCommands.LookupAnimationMarkers, () => new LookupDialog(LookupSections.SectionType.AnimationMarkers));
+			h.Connect(GenericCommands.LookupDocumentMarkers, () => new LookupDialog(LookupSections.SectionType.DocumentMarkers));
+			h.Connect(GenericCommands.LookupAnimationFrames, () => new LookupDialog(LookupSections.SectionType.AnimationFrames));
+			h.Connect(GenericCommands.LookupNodeAnimations, () => new LookupDialog(LookupSections.SectionType.NodeAnimations));
+			h.Connect(GenericCommands.LookupDocumentAnimations, () => new LookupDialog(LookupSections.SectionType.DocumentAnimations));
+			h.Connect(GenericCommands.LookupComponents, () => new LookupDialog(LookupSections.SectionType.Components));
 			h.Connect(GenericCommands.Group, new GroupNodes());
 			h.Connect(GenericCommands.Ungroup, new UngroupNodes());
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
