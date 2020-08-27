@@ -96,6 +96,7 @@ namespace Lime
 				if (layoutManager != value) {
 					layoutManager = value;
 					PropagateDirtyFlags(DirtyFlags.LayoutManager);
+					InvalidateConstraintsAndArrangementForSelfAndDescendants();
 				}
 			}
 		}
@@ -957,11 +958,16 @@ namespace Lime
 				LayoutManager = null;
 			} else if (LayoutManager != null) {
 				InvalidateParentConstraintsAndArrangement();
-				Layout.InvalidateConstraintsAndArrangement();
-				foreach (var n in Descendants) {
-					var w = n as Widget;
-					w?.Layout.InvalidateConstraintsAndArrangement();
-				}
+				InvalidateConstraintsAndArrangementForSelfAndDescendants();
+			}
+		}
+
+		private void InvalidateConstraintsAndArrangementForSelfAndDescendants()
+		{
+			Layout.InvalidateConstraintsAndArrangement();
+			foreach (var n in Descendants) {
+				var w = n as Widget;
+				w?.Layout.InvalidateConstraintsAndArrangement();
 			}
 		}
 
