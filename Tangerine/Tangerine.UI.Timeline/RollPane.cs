@@ -69,8 +69,6 @@ namespace Tangerine.UI.Timeline
 		{
 			var parentSceneItem = GetSceneItem(args.Parent);
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(args.Items.Select(GetSceneItem)).ToList();
-			var stream = new MemoryStream();
-			CopySceneItemsToStream.Perform(topSceneItems, stream);
 			Document.Current.History.DoTransaction(() => {
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in topSceneItems) {
@@ -79,16 +77,9 @@ namespace Tangerine.UI.Timeline
 					}
 					UnlinkSceneItem.Perform(item);
 				}
-				stream.Seek(0, SeekOrigin.Begin);
-				PasteSceneItemsFromStream.Perform(stream, parentSceneItem, index, null, out var pastedItems);
-				RebuildTreeView();
-				TreeView.RefreshPresentation();
-				TreeView.ClearSelection();
-				ScrollView.LayoutManager.Layout();
-				foreach (var item in pastedItems.Select(TreeViewComponent.GetTreeViewItem)) {
-					if (item.Parent != null) {
-						TreeView.SelectItem(item, true, false);
-					}
+				foreach (var item in topSceneItems) {
+					LinkSceneItem.Perform(parentSceneItem, index, item);
+					index = parentSceneItem.Rows.IndexOf(item) + 1;
 				}
 			});
 		}
