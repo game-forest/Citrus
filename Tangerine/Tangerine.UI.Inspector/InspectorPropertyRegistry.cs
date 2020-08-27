@@ -49,8 +49,13 @@ namespace Tangerine.UI.Inspector
 				if (Attribute.IsDefined(c.PropertyInfo, typeof(TangerineValidRangeAttribute))) {
 					var type = typeof(TangerineValidRangeAttribute);
 					var attribute = (TangerineValidRangeAttribute)Attribute.GetCustomAttribute(c.PropertyInfo, type);
-					float min = (float)attribute.Minimum, max = (float)attribute.Maximum;
-					if (!float.IsInfinity(min) && !float.IsInfinity(max)) {
+					float min = (float)attribute.Minimum;
+					float max = (float)attribute.Maximum;
+					bool noInfinity = !float.IsInfinity(min) && !float.IsInfinity(max);
+					bool noMinMaxValue =
+						min != float.MinValue && min != float.MaxValue &&
+						max != float.MinValue && max != float.MaxValue;
+					if (noInfinity && noMinMaxValue) {
 						return new SliderPropertyEditor(range: new Vector2(min, max), c);
 					}
 				}
