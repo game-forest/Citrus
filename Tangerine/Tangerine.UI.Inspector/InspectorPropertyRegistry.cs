@@ -49,11 +49,12 @@ namespace Tangerine.UI.Inspector
 				if (Attribute.IsDefined(c.PropertyInfo, typeof(TangerineValidRangeAttribute))) {
 					var type = typeof(TangerineValidRangeAttribute);
 					var attribute = (TangerineValidRangeAttribute)Attribute.GetCustomAttribute(c.PropertyInfo, type);
-					var range = new Vector2((float)attribute.Minimum, (float)attribute.Maximum);
-					return new SliderPropertyEditor(range, c);
-				} else {
-					return new FloatPropertyEditor(c);
+					float min = (float)attribute.Minimum, max = (float)attribute.Maximum;
+					if (!float.IsInfinity(min) && !float.IsInfinity(max)) {
+						return new SliderPropertyEditor(range: new Vector2(min, max), c);
+					}
 				}
+				return new FloatPropertyEditor(c);
 			});
 			AddEditor(typeof(double), c => new DoublePropertyEditor(c));
 			AddEditor(typeof(bool), c => new BooleanPropertyEditor(c));
