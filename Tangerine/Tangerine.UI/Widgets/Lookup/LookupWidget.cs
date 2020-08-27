@@ -11,7 +11,7 @@ namespace Tangerine.UI
 		private readonly List<LookupItem> filteredItems = new List<LookupItem>();
 		private int selectedIndex = -1;
 		private ILookupDataSource dataSource;
-		private ILookupFilter filter = LookupFuzzyFilter.Instance;
+		private ILookupFilter filter = new LookupFuzzyFilter();
 		private bool isFilterDirty;
 		private string previousFilterText;
 

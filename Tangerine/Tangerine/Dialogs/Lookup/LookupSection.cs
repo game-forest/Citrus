@@ -63,16 +63,34 @@ namespace Tangerine
 
 		protected virtual IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items)
 		{
-			var itemsTemp = new List<(LookupItem item, int HeaderDistance, int NameDistance)>();
+			var itemsTemp = new List<(LookupItem item, int HeaderDistance, int HeaderGapsCount, int NameDistance, int NameGapsCount)>();
 			if (!string.IsNullOrEmpty(text)) {
 				var headerMatches = new List<int>(text.Length);
 				var nameMatches = new List<int>(text.Length);
 				foreach (var lookupItem in items) {
 					var item = (LookupDialogItem)lookupItem;
-					var doesHeaderMatchFuzzySearch = LookupFuzzyFilter.DoesTextMatchFuzzySearch(item.Header.Text, text, headerMatches, out var headerDistance);
-					var doesNameMatchFuzzySearch = LookupFuzzyFilter.DoesTextMatchFuzzySearch(item.Name.Text, text, nameMatches, out var nameDistance);
+					var doesHeaderMatchFuzzySearch = Sections.FuzzyStringSearch.DoesTextMatch(
+						item.Header.Text,
+						text,
+						headerMatches,
+						out var headerDistance,
+						out var headerGapsCount
+					);
+					var doesNameMatchFuzzySearch = Sections.FuzzyStringSearch.DoesTextMatch(
+						item.Name.Text,
+						text,
+						nameMatches,
+						out var nameDistance,
+						out var nameGapsCount
+					);
 					if (doesHeaderMatchFuzzySearch || doesNameMatchFuzzySearch) {
-						itemsTemp.Add((item, doesHeaderMatchFuzzySearch ? headerDistance : int.MaxValue, doesNameMatchFuzzySearch ? nameDistance : int.MaxValue));
+						itemsTemp.Add((
+							item,
+							doesHeaderMatchFuzzySearch ? headerDistance : int.MaxValue,
+							doesHeaderMatchFuzzySearch ? headerGapsCount : int.MaxValue,
+							doesNameMatchFuzzySearch ? nameDistance : int.MaxValue,
+							doesNameMatchFuzzySearch ? nameGapsCount : int.MaxValue
+						));
 						item.Header.HighlightSymbolsIndices = doesHeaderMatchFuzzySearch ? headerMatches.ToArray() : null;
 						item.Name.HighlightSymbolsIndices = doesNameMatchFuzzySearch ? nameMatches.ToArray() : null;
 					} else {
@@ -83,10 +101,18 @@ namespace Tangerine
 					nameMatches.Clear();
 				}
 				itemsTemp.Sort((lhs, rhs) => {
-					var headerCompare = lhs.HeaderDistance.CompareTo(rhs.HeaderDistance);
-					return headerCompare != 0 ? headerCompare : lhs.NameDistance.CompareTo(rhs.NameDistance);
+					var result = lhs.HeaderGapsCount.CompareTo(rhs.HeaderGapsCount);
+					if (result != 0) {
+						return result;
+					}
+					result = lhs.HeaderDistance.CompareTo(rhs.HeaderDistance);
+					if (result != 0) {
+						return result;
+					}
+					result = lhs.NameGapsCount.CompareTo(rhs.NameGapsCount);
+					return result != 0 ? result : lhs.NameDistance.CompareTo(rhs.NameDistance);
 				});
-				foreach (var (item, _, _) in itemsTemp) {
+				foreach (var (item, _, _, _, _) in itemsTemp) {
 					yield return item;
 				}
 			} else {

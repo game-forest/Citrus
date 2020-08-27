@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Tangerine.UI
@@ -41,30 +40,29 @@ namespace Tangerine.UI
 
 	public class LookupFuzzyFilter : ILookupFilter
 	{
-		private static readonly char[] slashes = { '\\', '/' };
-
-		public static LookupFuzzyFilter Instance = new LookupFuzzyFilter();
-
-		private LookupFuzzyFilter() { }
+		private readonly FuzzyStringSearch fuzzyStringSearch = new FuzzyStringSearch();
 
 		public virtual void Applying(LookupWidget lookupWidget, string text) { }
 
 		public virtual IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items)
 		{
-			var itemsTemp = new List<(LookupItem item, int Distance)>();
+			var itemsTemp = new List<(LookupItem item, int Distance, int GapsCount)>();
 			if (!string.IsNullOrEmpty(text)) {
 				var matches = new List<int>(text.Length);
 				foreach (var item in items) {
-					if (DoesTextMatchFuzzySearch(item.Name.Text, text, matches, out var distance)) {
-						itemsTemp.Add((item, distance));
+					if (fuzzyStringSearch.DoesTextMatch(item.Name.Text, text, matches, out var distance, out var gapsCount)) {
+						itemsTemp.Add((item, distance, gapsCount));
 						item.Name.HighlightSymbolsIndices = matches.ToArray();
 					} else {
 						item.Name.HighlightSymbolsIndices = null;
 					}
 					matches.Clear();
 				}
-				itemsTemp.Sort((a, b) => a.Distance.CompareTo(b.Distance));
-				foreach (var (item, _) in itemsTemp) {
+				itemsTemp.Sort((lhs, rhs) => {
+					var result = lhs.GapsCount.CompareTo(rhs.GapsCount);
+					return result != 0 ? result : lhs.Distance.CompareTo(rhs.Distance);
+				});
+				foreach (var (item, _, _) in itemsTemp) {
 					yield return item;
 				}
 			} else {
@@ -76,47 +74,5 @@ namespace Tangerine.UI
 		}
 
 		public virtual void Applied(LookupWidget lookupWidget) { }
-
-		public static bool DoesTextMatchFuzzySearch(string text, string pattern, ICollection<int> matches, out int value)
-		{
-			var i = -1;
-			value = 0;
-			if (string.IsNullOrEmpty(text)) {
-				return string.IsNullOrEmpty(pattern);
-			}
-			if (string.IsNullOrEmpty(pattern)) {
-				return true;
-			}
-			foreach (var c in pattern) {
-				if (i == text.Length - 1) {
-					break;
-				}
-				var ip = i;
-				i = IndexOf(c, i + 1);
-				if (i == -1) {
-					break;
-				}
-				matches.Add(i);
-				if (ip != -1) {
-					value += (i - ip) * (i - ip);
-				}
-			}
-			return matches.Count == pattern.Length;
-
-			int IndexOf(char @char, int startIndex)
-			{
-				if (@char == '\\' || @char == '/') {
-					return text.IndexOfAny(slashes, startIndex);
-				}
-				if (!char.IsLetter(@char)) {
-					return text.IndexOf(@char, startIndex);
-				}
-				var lci = text.IndexOf(char.ToLowerInvariant(@char), startIndex);
-				var uci = text.IndexOf(char.ToUpperInvariant(@char), startIndex);
-				return
-					lci != -1 && uci != -1 ? Math.Min(lci, uci) :
-					lci == -1 ? uci : lci;
-			}
-		}
 	}
 }

@@ -16,6 +16,7 @@ namespace Tangerine
 		public readonly LookupHelpSection Help;
 		public readonly LookupCommandsSection Commands;
 		public readonly LookupSection[] List;
+		public readonly FuzzyStringSearch FuzzyStringSearch = new FuzzyStringSearch();
 
 		public int StackCount => stack.Count;
 

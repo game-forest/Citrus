@@ -85,10 +85,11 @@
     <Compile Include="Tooltip\TooltipProcessor.cs" />
     <Compile Include="Utils\RichTextHighlightComponent.cs" />
     <Compile Include="Utils\SimpleTextHighlightPresenter.cs" />
-    <Compile Include="Widgets\LookupDataSource.cs" />
-    <Compile Include="Widgets\LookupFilter.cs" />
-    <Compile Include="Widgets\LookupItem.cs" />
-    <Compile Include="Widgets\LookupWidget.cs" />
+    <Compile Include="Widgets\Lookup\FuzzyStringSearch.cs" />
+    <Compile Include="Widgets\Lookup\LookupDataSource.cs" />
+    <Compile Include="Widgets\Lookup\LookupFilter.cs" />
+    <Compile Include="Widgets\Lookup\LookupItem.cs" />
+    <Compile Include="Widgets\Lookup\LookupWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPicker.Mac.cs" />
