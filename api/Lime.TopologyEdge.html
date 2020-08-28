@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class BoneUtils
+    <title>Struct TopologyEdge
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class BoneUtils
+    <meta name="title" content="Struct TopologyEdge
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.48.0.0">
     
@@ -78,25 +78,25 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.BoneUtils">
+            <article class="content wrap" id="_content" data-uid="Lime.TopologyEdge">
   
   
-  <h1 id="Lime_BoneUtils" data-uid="Lime.BoneUtils" class="text-break">Class BoneUtils
+  <h1 id="Lime_TopologyEdge" data-uid="Lime.TopologyEdge" class="text-break">Struct TopologyEdge
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">BoneUtils</span></div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Lime.TopologyEdge.html">TopologyEdge</a>&gt;</div>
+    <div><a class="xref" href="Lime.ITopologyPrimitive.html">ITopologyPrimitive</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <span class="xref">System.Object.ToString()</span>
+      <span class="xref">System.ValueType.Equals(System.Object)</span>
     </div>
     <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
+      <span class="xref">System.ValueType.ToString()</span>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
@@ -105,32 +105,26 @@
       <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
     </div>
     <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
       <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_BoneUtils_syntax">Syntax</h5>
+  <h5 id="Lime_TopologyEdge_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class BoneUtils</code></pre>
+    <pre><code class="lang-csharp hljs">public struct TopologyEdge : IEquatable&lt;TopologyEdge&gt;, ITopologyPrimitive</code></pre>
   </div>
-  <h3 id="methods">Methods
+  <h3 id="constructors">Constructors
   </h3>
   
   
-  <a id="Lime_BoneUtils_CalcSkinningWeight_" data-uid="Lime.BoneUtils.CalcSkinningWeight*"></a>
-  <h4 id="Lime_BoneUtils_CalcSkinningWeight_Lime_SkinningWeights_Lime_Vector2_System_Collections_Generic_List_Lime_Bone__" data-uid="Lime.BoneUtils.CalcSkinningWeight(Lime.SkinningWeights,Lime.Vector2,System.Collections.Generic.List{Lime.Bone})">CalcSkinningWeight(SkinningWeights, Vector2, List&lt;Bone&gt;)</h4>
+  <a id="Lime_TopologyEdge__ctor_" data-uid="Lime.TopologyEdge.#ctor*"></a>
+  <h4 id="Lime_TopologyEdge__ctor_System_UInt16_System_UInt16_" data-uid="Lime.TopologyEdge.#ctor(System.UInt16,System.UInt16)">TopologyEdge(UInt16, UInt16)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static SkinningWeights CalcSkinningWeight(SkinningWeights oldSkinningWeights, Vector2 position, List&lt;Bone&gt; bones)</code></pre>
+    <pre><code class="lang-csharp hljs">public TopologyEdge(ushort index0, ushort index1)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -143,23 +137,30 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.SkinningWeights.html">SkinningWeights</a></td>
-        <td><span class="parametername">oldSkinningWeights</span></td>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">index0</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
-        <td><span class="parametername">position</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Bone.html">Bone</a>&gt;</td>
-        <td><span class="parametername">bones</span></td>
+        <td><span class="xref">System.UInt16</span></td>
+        <td><span class="parametername">index1</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="returns">Returns</h5>
+  <h3 id="fields">Fields
+  </h3>
+  
+  
+  <h4 id="Lime_TopologyEdge_Index0" data-uid="Lime.TopologyEdge.Index0">Index0</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuMember(&quot;0&quot;)]
+public ushort Index0</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -169,20 +170,72 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.SkinningWeights.html">SkinningWeights</a></td>
+        <td><span class="xref">System.UInt16</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   
   
-  <a id="Lime_BoneUtils_CheckConsistency_" data-uid="Lime.BoneUtils.CheckConsistency*"></a>
-  <h4 id="Lime_BoneUtils_CheckConsistency_System_Collections_Generic_IEnumerable_Lime_Bone__Lime_Widget___" data-uid="Lime.BoneUtils.CheckConsistency(System.Collections.Generic.IEnumerable{Lime.Bone},Lime.Widget[])">CheckConsistency(IEnumerable&lt;Bone&gt;, Widget[])</h4>
+  <h4 id="Lime_TopologyEdge_Index1" data-uid="Lime.TopologyEdge.Index1">Index1</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool CheckConsistency(IEnumerable&lt;Bone&gt; bones, params Widget[] widgets)</code></pre>
+    <pre><code class="lang-csharp hljs">[YuzuMember(&quot;1&quot;)]
+public ushort Index1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="Lime_TopologyEdge_Count_" data-uid="Lime.TopologyEdge.Count*"></a>
+  <h4 id="Lime_TopologyEdge_Count" data-uid="Lime.TopologyEdge.Count">Count</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_TopologyEdge_Item_" data-uid="Lime.TopologyEdge.Item*"></a>
+  <h4 id="Lime_TopologyEdge_Item_System_Int32_" data-uid="Lime.TopologyEdge.Item(System.Int32)">Item[Int32]</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort this[int index] { get; }</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -194,152 +247,6 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Bone.html">Bone</a>&gt;</td>
-        <td><span class="parametername">bones</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Widget.html">Widget</a>[]</td>
-        <td><span class="parametername">widgets</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_BoneUtils_FindBoneDescendats_" data-uid="Lime.BoneUtils.FindBoneDescendats*"></a>
-  <h4 id="Lime_BoneUtils_FindBoneDescendats_Lime_Bone_System_Collections_Generic_IEnumerable_Lime_Bone__" data-uid="Lime.BoneUtils.FindBoneDescendats(Lime.Bone,System.Collections.Generic.IEnumerable{Lime.Bone})">FindBoneDescendats(Bone, IEnumerable&lt;Bone&gt;)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;Bone&gt; FindBoneDescendats(Bone root, IEnumerable&lt;Bone&gt; bones)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Bone.html">Bone</a></td>
-        <td><span class="parametername">root</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Bone.html">Bone</a>&gt;</td>
-        <td><span class="parametername">bones</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Bone.html">Bone</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_BoneUtils_FindBoneRoot_" data-uid="Lime.BoneUtils.FindBoneRoot*"></a>
-  <h4 id="Lime_BoneUtils_FindBoneRoot_Lime_Bone_System_Collections_Generic_IEnumerable_Lime_Node__" data-uid="Lime.BoneUtils.FindBoneRoot(Lime.Bone,System.Collections.Generic.IEnumerable{Lime.Node})">FindBoneRoot(Bone, IEnumerable&lt;Node&gt;)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Bone FindBoneRoot(Bone bone, IEnumerable&lt;Node&gt; nodes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Bone.html">Bone</a></td>
-        <td><span class="parametername">bone</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Node.html">Node</a>&gt;</td>
-        <td><span class="parametername">nodes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.Bone.html">Bone</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_BoneUtils_GetBone_" data-uid="Lime.BoneUtils.GetBone*"></a>
-  <h4 id="Lime_BoneUtils_GetBone_System_Collections_Generic_IEnumerable_Lime_Node__System_Int32_" data-uid="Lime.BoneUtils.GetBone(System.Collections.Generic.IEnumerable{Lime.Node},System.Int32)">GetBone(IEnumerable&lt;Node&gt;, Int32)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Bone GetBone(this IEnumerable&lt;Node&gt; nodes, int index)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Node.html">Node</a>&gt;</td>
-        <td><span class="parametername">nodes</span></td>
-        <td></td>
-      </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
@@ -347,7 +254,7 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="returns">Returns</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -357,22 +264,22 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.Bone.html">Bone</a></td>
+        <td><span class="xref">System.UInt16</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+  </h3>
   
   
-  <a id="Lime_BoneUtils_SortBones_" data-uid="Lime.BoneUtils.SortBones*"></a>
-  <h4 id="Lime_BoneUtils_SortBones_System_Collections_Generic_IEnumerable_Lime_Bone__System_Boolean_" data-uid="Lime.BoneUtils.SortBones(System.Collections.Generic.IEnumerable{Lime.Bone},System.Boolean)">SortBones(IEnumerable&lt;Bone&gt;, Boolean)</h4>
-  <div class="markdown level1 summary"><p>Reorder bones with topological sort to maintain correct update
-order of transformations</p>
-</div>
+  <a id="Lime_TopologyEdge_Equals_" data-uid="Lime.TopologyEdge.Equals*"></a>
+  <h4 id="Lime_TopologyEdge_Equals_Lime_TopologyEdge_" data-uid="Lime.TopologyEdge.Equals(Lime.TopologyEdge)">Equals(TopologyEdge)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static List&lt;Bone&gt; SortBones(IEnumerable&lt;Bone&gt; bonesCollection, bool reverseOrder = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Equals(TopologyEdge other)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -385,13 +292,8 @@ order of transformations</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Bone.html">Bone</a>&gt;</td>
-        <td><span class="parametername">bonesCollection</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">reverseOrder</span></td>
+        <td><a class="xref" href="Lime.TopologyEdge.html">TopologyEdge</a></td>
+        <td><span class="parametername">other</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -406,11 +308,45 @@ order of transformations</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Bone.html">Bone</a>&gt;</td>
+        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="Lime_TopologyEdge_GetHashCode_" data-uid="Lime.TopologyEdge.GetHashCode*"></a>
+  <h4 id="Lime_TopologyEdge_GetHashCode" data-uid="Lime.TopologyEdge.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.ValueType.GetHashCode()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  </div>
+  <div>
+      <a class="xref" href="Lime.ITopologyPrimitive.html">ITopologyPrimitive</a>
+  </div>
 </article>
           </div>
           

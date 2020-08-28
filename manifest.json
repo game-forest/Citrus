@@ -378,7 +378,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animator-1.html",
-          "hash": "XztnsSENHcmFgx26SEMiDg=="
+          "hash": "tb88o+EPXSp2Uvaa1XlTSg=="
         }
       },
       "is_incremental": false,
@@ -439,6 +439,30 @@
         ".html": {
           "relative_path": "api/Lime.AnimatorRegistry.html",
           "hash": "AyXGBQTgAYRRVQIiKrUx6A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Animesh.SkinnedVertex.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Animesh.SkinnedVertex.html",
+          "hash": "Wp6xiPe3NHNj0EvWAGrcNQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Animesh.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Animesh.html",
+          "hash": "+htkj4NKaFq7AbrrFOCGKA=="
         }
       },
       "is_incremental": false,
@@ -966,7 +990,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.BoneUtils.html",
-          "hash": "XwYJ6Rsvbygv9jyEtvC2IA=="
+          "hash": "U/MYLQiU+No0WKGuU8yXqQ=="
         }
       },
       "is_incremental": false,
@@ -3542,6 +3566,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.ITopology.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.ITopology.html",
+          "hash": "Ss73KpLrVlopr4Ou1gJw1A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.ITopologyPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.ITopologyPrimitive.html",
+          "hash": "R/Hpnz2zlNlp+DwtXoAClw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.IUpdatableNode.yml",
       "output": {
         ".html": {
@@ -4374,7 +4422,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Mesh3D.BlendIndices.html",
-          "hash": "3YO7VE36peOPPAqoNevPSQ=="
+          "hash": "4wsgMw8jOqj6uNl9tk4MPQ=="
         }
       },
       "is_incremental": false,
@@ -4386,7 +4434,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Mesh3D.BlendWeights.html",
-          "hash": "bA38M1TXwQpKfYqY7kQ7Sg=="
+          "hash": "StYSMCn30zQWKwWFz0UmWw=="
         }
       },
       "is_incremental": false,
@@ -6558,7 +6606,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SignedDistanceFieldComponent.html",
-          "hash": "hDNNY82pYleY3nVyKK2Rxg=="
+          "hash": "gMHLC3AtbNsqpdi7pH/E1w=="
         }
       },
       "is_incremental": false,
@@ -6590,6 +6638,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.SkinnedVertexListAnimator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.SkinnedVertexListAnimator.html",
+          "hash": "N4JfhkuMheBGR/awaXatcg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.SkinningMode.yml",
       "output": {
         ".html": {
@@ -6606,7 +6666,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SkinningWeights.html",
-          "hash": "Gwa8h4Z8FtkuDQdh7+olhQ=="
+          "hash": "j1XmP/I+ekHC8obrDi/9mg=="
         }
       },
       "is_incremental": false,
@@ -7286,6 +7346,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineReadOnlyPropertiesAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineReadOnlyPropertiesAttribute.html",
+          "hash": "t+fqgKQPEEsdKLV4blNNWg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineRegisterComponentAttribute.yml",
       "output": {
         ".html": {
@@ -7662,7 +7734,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Theme.ColorTheme.html",
-          "hash": "bmOYWxSdPEO5eQR9oIDsiA=="
+          "hash": "Ln/I/Iwa4ZgBkaUnrgSe5Q=="
         }
       },
       "is_incremental": false,
@@ -7698,7 +7770,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Theme.Metrics.html",
-          "hash": "ocOA2INSupwvmJX9gydTwA=="
+          "hash": "6k11aD5ddYEaUK0gBiq4Cw=="
         }
       },
       "is_incremental": false,
@@ -8083,6 +8155,78 @@
         ".html": {
           "relative_path": "api/Lime.Toolbox.html",
           "hash": "d9JszUuEOIPAVuVzkgVodg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TopologyEdge.EdgeInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TopologyEdge.EdgeInfo.html",
+          "hash": "PC1aoEIkKIxoGQzMwcW9SA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TopologyEdge.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TopologyEdge.html",
+          "hash": "z0v6WGWSrQH+xzGq2ZkvAA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TopologyFace.FaceInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TopologyFace.FaceInfo.html",
+          "hash": "bNHhbkq0S0TIWs+Z51egEQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TopologyFace.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TopologyFace.html",
+          "hash": "1WVPpyRlpgbxsNpM8qNfoA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TopologyHitTestResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TopologyHitTestResult.html",
+          "hash": "iwq+LuOS1PVjGdmz5f133Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TopologyVertex.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TopologyVertex.html",
+          "hash": "h0zcWMjZSNCTm3tinDzmUA=="
         }
       },
       "is_incremental": false,
@@ -8766,7 +8910,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Widget.html",
-          "hash": "BkjqH8+DwmHBQ3/LvGf46Q=="
+          "hash": "+s9NIv/DVyPoS/RC7isiQQ=="
         }
       },
       "is_incremental": false,
@@ -9042,7 +9186,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "5muWz4LmkuIZjcCygVWs8g=="
+          "hash": "FJJyq+6OtFPbYekvGF9F+w=="
         }
       },
       "is_incremental": false,
@@ -9054,7 +9198,7 @@
       "output": {
         ".html": {
           "relative_path": "api/YuzuGenerated.LimeCloner.html",
-          "hash": "IHyyYMzkwfHYJIIBZu2l6A=="
+          "hash": "30XLL5v4zuAEHp5yiY2jKA=="
         }
       },
       "is_incremental": false,
@@ -9090,7 +9234,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "k5HQdAVN1JemVKZWifu1Pg=="
+          "hash": "lW9tz8EzvQFlEp4LSczudw=="
         }
       },
       "is_incremental": false,
@@ -11143,10 +11287,17 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 756,
+          "total_file_count": 768,
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
@@ -11158,13 +11309,6 @@
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
           "skipped_file_count": 0

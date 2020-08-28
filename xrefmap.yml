@@ -4957,6 +4957,178 @@ references:
   isSpec: "True"
   fullName: Lime.AnimatorRegistry.Instance
   nameWithType: AnimatorRegistry.Instance
+- uid: Lime.Animesh
+  name: Animesh
+  href: api/Lime.Animesh.html
+  commentId: T:Lime.Animesh
+  fullName: Lime.Animesh
+  nameWithType: Animesh
+- uid: Lime.Animesh.#ctor
+  name: Animesh()
+  href: api/Lime.Animesh.html#Lime_Animesh__ctor
+  commentId: M:Lime.Animesh.#ctor
+  fullName: Lime.Animesh.Animesh()
+  nameWithType: Animesh.Animesh()
+- uid: Lime.Animesh.#ctor*
+  name: Animesh
+  href: api/Lime.Animesh.html#Lime_Animesh__ctor_
+  commentId: Overload:Lime.Animesh.#ctor
+  isSpec: "True"
+  fullName: Lime.Animesh.Animesh
+  nameWithType: Animesh.Animesh
+- uid: Lime.Animesh.AddToRenderChain(Lime.RenderChain)
+  name: AddToRenderChain(RenderChain)
+  href: api/Lime.Animesh.html#Lime_Animesh_AddToRenderChain_Lime_RenderChain_
+  commentId: M:Lime.Animesh.AddToRenderChain(Lime.RenderChain)
+  fullName: Lime.Animesh.AddToRenderChain(Lime.RenderChain)
+  nameWithType: Animesh.AddToRenderChain(RenderChain)
+- uid: Lime.Animesh.AddToRenderChain*
+  name: AddToRenderChain
+  href: api/Lime.Animesh.html#Lime_Animesh_AddToRenderChain_
+  commentId: Overload:Lime.Animesh.AddToRenderChain
+  isSpec: "True"
+  fullName: Lime.Animesh.AddToRenderChain
+  nameWithType: Animesh.AddToRenderChain
+- uid: Lime.Animesh.ConstrainedEdges
+  name: ConstrainedEdges
+  href: api/Lime.Animesh.html#Lime_Animesh_ConstrainedEdges
+  commentId: P:Lime.Animesh.ConstrainedEdges
+  fullName: Lime.Animesh.ConstrainedEdges
+  nameWithType: Animesh.ConstrainedEdges
+- uid: Lime.Animesh.ConstrainedEdges*
+  name: ConstrainedEdges
+  href: api/Lime.Animesh.html#Lime_Animesh_ConstrainedEdges_
+  commentId: Overload:Lime.Animesh.ConstrainedEdges
+  isSpec: "True"
+  fullName: Lime.Animesh.ConstrainedEdges
+  nameWithType: Animesh.ConstrainedEdges
+- uid: Lime.Animesh.Faces
+  name: Faces
+  href: api/Lime.Animesh.html#Lime_Animesh_Faces
+  commentId: P:Lime.Animesh.Faces
+  fullName: Lime.Animesh.Faces
+  nameWithType: Animesh.Faces
+- uid: Lime.Animesh.Faces*
+  name: Faces
+  href: api/Lime.Animesh.html#Lime_Animesh_Faces_
+  commentId: Overload:Lime.Animesh.Faces
+  isSpec: "True"
+  fullName: Lime.Animesh.Faces
+  nameWithType: Animesh.Faces
+- uid: Lime.Animesh.GetRenderObject
+  name: GetRenderObject()
+  href: api/Lime.Animesh.html#Lime_Animesh_GetRenderObject
+  commentId: M:Lime.Animesh.GetRenderObject
+  fullName: Lime.Animesh.GetRenderObject()
+  nameWithType: Animesh.GetRenderObject()
+- uid: Lime.Animesh.GetRenderObject*
+  name: GetRenderObject
+  href: api/Lime.Animesh.html#Lime_Animesh_GetRenderObject_
+  commentId: Overload:Lime.Animesh.GetRenderObject
+  isSpec: "True"
+  fullName: Lime.Animesh.GetRenderObject
+  nameWithType: Animesh.GetRenderObject
+- uid: Lime.Animesh.Invalidate
+  name: Invalidate()
+  href: api/Lime.Animesh.html#Lime_Animesh_Invalidate
+  commentId: M:Lime.Animesh.Invalidate
+  fullName: Lime.Animesh.Invalidate()
+  nameWithType: Animesh.Invalidate()
+- uid: Lime.Animesh.Invalidate*
+  name: Invalidate
+  href: api/Lime.Animesh.html#Lime_Animesh_Invalidate_
+  commentId: Overload:Lime.Animesh.Invalidate
+  isSpec: "True"
+  fullName: Lime.Animesh.Invalidate
+  nameWithType: Animesh.Invalidate
+- uid: Lime.Animesh.SkinnedVertex
+  name: Animesh.SkinnedVertex
+  href: api/Lime.Animesh.SkinnedVertex.html
+  commentId: T:Lime.Animesh.SkinnedVertex
+  fullName: Lime.Animesh.SkinnedVertex
+  nameWithType: Animesh.SkinnedVertex
+- uid: Lime.Animesh.SkinnedVertex.BlendIndices
+  name: BlendIndices
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_BlendIndices
+  commentId: F:Lime.Animesh.SkinnedVertex.BlendIndices
+  fullName: Lime.Animesh.SkinnedVertex.BlendIndices
+  nameWithType: Animesh.SkinnedVertex.BlendIndices
+- uid: Lime.Animesh.SkinnedVertex.BlendWeights
+  name: BlendWeights
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_BlendWeights
+  commentId: F:Lime.Animesh.SkinnedVertex.BlendWeights
+  fullName: Lime.Animesh.SkinnedVertex.BlendWeights
+  nameWithType: Animesh.SkinnedVertex.BlendWeights
+- uid: Lime.Animesh.SkinnedVertex.Color
+  name: Color
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_Color
+  commentId: F:Lime.Animesh.SkinnedVertex.Color
+  fullName: Lime.Animesh.SkinnedVertex.Color
+  nameWithType: Animesh.SkinnedVertex.Color
+- uid: Lime.Animesh.SkinnedVertex.Pos
+  name: Pos
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_Pos
+  commentId: P:Lime.Animesh.SkinnedVertex.Pos
+  fullName: Lime.Animesh.SkinnedVertex.Pos
+  nameWithType: Animesh.SkinnedVertex.Pos
+- uid: Lime.Animesh.SkinnedVertex.Pos*
+  name: Pos
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_Pos_
+  commentId: Overload:Lime.Animesh.SkinnedVertex.Pos
+  isSpec: "True"
+  fullName: Lime.Animesh.SkinnedVertex.Pos
+  nameWithType: Animesh.SkinnedVertex.Pos
+- uid: Lime.Animesh.SkinnedVertex.Pos4
+  name: Pos4
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_Pos4
+  commentId: F:Lime.Animesh.SkinnedVertex.Pos4
+  fullName: Lime.Animesh.SkinnedVertex.Pos4
+  nameWithType: Animesh.SkinnedVertex.Pos4
+- uid: Lime.Animesh.SkinnedVertex.UV1
+  name: UV1
+  href: api/Lime.Animesh.SkinnedVertex.html#Lime_Animesh_SkinnedVertex_UV1
+  commentId: F:Lime.Animesh.SkinnedVertex.UV1
+  fullName: Lime.Animesh.SkinnedVertex.UV1
+  nameWithType: Animesh.SkinnedVertex.UV1
+- uid: Lime.Animesh.Texture
+  name: Texture
+  href: api/Lime.Animesh.html#Lime_Animesh_Texture
+  commentId: P:Lime.Animesh.Texture
+  fullName: Lime.Animesh.Texture
+  nameWithType: Animesh.Texture
+- uid: Lime.Animesh.Texture*
+  name: Texture
+  href: api/Lime.Animesh.html#Lime_Animesh_Texture_
+  commentId: Overload:Lime.Animesh.Texture
+  isSpec: "True"
+  fullName: Lime.Animesh.Texture
+  nameWithType: Animesh.Texture
+- uid: Lime.Animesh.TransientVertices
+  name: TransientVertices
+  href: api/Lime.Animesh.html#Lime_Animesh_TransientVertices
+  commentId: P:Lime.Animesh.TransientVertices
+  fullName: Lime.Animesh.TransientVertices
+  nameWithType: Animesh.TransientVertices
+- uid: Lime.Animesh.TransientVertices*
+  name: TransientVertices
+  href: api/Lime.Animesh.html#Lime_Animesh_TransientVertices_
+  commentId: Overload:Lime.Animesh.TransientVertices
+  isSpec: "True"
+  fullName: Lime.Animesh.TransientVertices
+  nameWithType: Animesh.TransientVertices
+- uid: Lime.Animesh.Vertices
+  name: Vertices
+  href: api/Lime.Animesh.html#Lime_Animesh_Vertices
+  commentId: P:Lime.Animesh.Vertices
+  fullName: Lime.Animesh.Vertices
+  nameWithType: Animesh.Vertices
+- uid: Lime.Animesh.Vertices*
+  name: Vertices
+  href: api/Lime.Animesh.html#Lime_Animesh_Vertices_
+  commentId: Overload:Lime.Animesh.Vertices
+  isSpec: "True"
+  fullName: Lime.Animesh.Vertices
+  nameWithType: Animesh.Vertices
 - uid: Lime.Application
   name: Application
   href: api/Lime.Application.html
@@ -9123,6 +9295,38 @@ references:
   commentId: T:Lime.BoneUtils
   fullName: Lime.BoneUtils
   nameWithType: BoneUtils
+- uid: Lime.BoneUtils.CalcSkinningWeight(Lime.SkinningWeights,Lime.Vector2,System.Collections.Generic.List{Lime.Bone})
+  name: CalcSkinningWeight(SkinningWeights, Vector2, List<Bone>)
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_CalcSkinningWeight_Lime_SkinningWeights_Lime_Vector2_System_Collections_Generic_List_Lime_Bone__
+  commentId: M:Lime.BoneUtils.CalcSkinningWeight(Lime.SkinningWeights,Lime.Vector2,System.Collections.Generic.List{Lime.Bone})
+  name.vb: CalcSkinningWeight(SkinningWeights, Vector2, List(Of Bone))
+  fullName: Lime.BoneUtils.CalcSkinningWeight(Lime.SkinningWeights, Lime.Vector2, System.Collections.Generic.List<Lime.Bone>)
+  fullName.vb: Lime.BoneUtils.CalcSkinningWeight(Lime.SkinningWeights, Lime.Vector2, System.Collections.Generic.List(Of Lime.Bone))
+  nameWithType: BoneUtils.CalcSkinningWeight(SkinningWeights, Vector2, List<Bone>)
+  nameWithType.vb: BoneUtils.CalcSkinningWeight(SkinningWeights, Vector2, List(Of Bone))
+- uid: Lime.BoneUtils.CalcSkinningWeight*
+  name: CalcSkinningWeight
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_CalcSkinningWeight_
+  commentId: Overload:Lime.BoneUtils.CalcSkinningWeight
+  isSpec: "True"
+  fullName: Lime.BoneUtils.CalcSkinningWeight
+  nameWithType: BoneUtils.CalcSkinningWeight
+- uid: Lime.BoneUtils.CheckConsistency(System.Collections.Generic.IEnumerable{Lime.Bone},Lime.Widget[])
+  name: CheckConsistency(IEnumerable<Bone>, Widget[])
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_CheckConsistency_System_Collections_Generic_IEnumerable_Lime_Bone__Lime_Widget___
+  commentId: M:Lime.BoneUtils.CheckConsistency(System.Collections.Generic.IEnumerable{Lime.Bone},Lime.Widget[])
+  name.vb: CheckConsistency(IEnumerable(Of Bone), Widget())
+  fullName: Lime.BoneUtils.CheckConsistency(System.Collections.Generic.IEnumerable<Lime.Bone>, Lime.Widget[])
+  fullName.vb: Lime.BoneUtils.CheckConsistency(System.Collections.Generic.IEnumerable(Of Lime.Bone), Lime.Widget())
+  nameWithType: BoneUtils.CheckConsistency(IEnumerable<Bone>, Widget[])
+  nameWithType.vb: BoneUtils.CheckConsistency(IEnumerable(Of Bone), Widget())
+- uid: Lime.BoneUtils.CheckConsistency*
+  name: CheckConsistency
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_CheckConsistency_
+  commentId: Overload:Lime.BoneUtils.CheckConsistency
+  isSpec: "True"
+  fullName: Lime.BoneUtils.CheckConsistency
+  nameWithType: BoneUtils.CheckConsistency
 - uid: Lime.BoneUtils.FindBoneDescendats(Lime.Bone,System.Collections.Generic.IEnumerable{Lime.Bone})
   name: FindBoneDescendats(Bone, IEnumerable<Bone>)
   href: api/Lime.BoneUtils.html#Lime_BoneUtils_FindBoneDescendats_Lime_Bone_System_Collections_Generic_IEnumerable_Lime_Bone__
@@ -30065,6 +30269,244 @@ references:
   isSpec: "True"
   fullName: Lime.ITexture.TransformUVCoordinatesToAtlasSpace
   nameWithType: ITexture.TransformUVCoordinatesToAtlasSpace
+- uid: Lime.ITopology
+  name: ITopology
+  href: api/Lime.ITopology.html
+  commentId: T:Lime.ITopology
+  fullName: Lime.ITopology
+  nameWithType: ITopology
+- uid: Lime.ITopology.AddVertex(Lime.Animesh.SkinnedVertex)
+  name: AddVertex(Animesh.SkinnedVertex)
+  href: api/Lime.ITopology.html#Lime_ITopology_AddVertex_Lime_Animesh_SkinnedVertex_
+  commentId: M:Lime.ITopology.AddVertex(Lime.Animesh.SkinnedVertex)
+  fullName: Lime.ITopology.AddVertex(Lime.Animesh.SkinnedVertex)
+  nameWithType: ITopology.AddVertex(Animesh.SkinnedVertex)
+- uid: Lime.ITopology.AddVertex*
+  name: AddVertex
+  href: api/Lime.ITopology.html#Lime_ITopology_AddVertex_
+  commentId: Overload:Lime.ITopology.AddVertex
+  isSpec: "True"
+  fullName: Lime.ITopology.AddVertex
+  nameWithType: ITopology.AddVertex
+- uid: Lime.ITopology.ConstrainedEdges
+  name: ConstrainedEdges
+  href: api/Lime.ITopology.html#Lime_ITopology_ConstrainedEdges
+  commentId: P:Lime.ITopology.ConstrainedEdges
+  fullName: Lime.ITopology.ConstrainedEdges
+  nameWithType: ITopology.ConstrainedEdges
+- uid: Lime.ITopology.ConstrainedEdges*
+  name: ConstrainedEdges
+  href: api/Lime.ITopology.html#Lime_ITopology_ConstrainedEdges_
+  commentId: Overload:Lime.ITopology.ConstrainedEdges
+  isSpec: "True"
+  fullName: Lime.ITopology.ConstrainedEdges
+  nameWithType: ITopology.ConstrainedEdges
+- uid: Lime.ITopology.ConstructFrom(System.Collections.Generic.List{Lime.Animesh.SkinnedVertex},System.Collections.Generic.List{Lime.TopologyEdge},System.Collections.Generic.List{Lime.TopologyFace})
+  name: ConstructFrom(List<Animesh.SkinnedVertex>, List<TopologyEdge>, List<TopologyFace>)
+  href: api/Lime.ITopology.html#Lime_ITopology_ConstructFrom_System_Collections_Generic_List_Lime_Animesh_SkinnedVertex__System_Collections_Generic_List_Lime_TopologyEdge__System_Collections_Generic_List_Lime_TopologyFace__
+  commentId: M:Lime.ITopology.ConstructFrom(System.Collections.Generic.List{Lime.Animesh.SkinnedVertex},System.Collections.Generic.List{Lime.TopologyEdge},System.Collections.Generic.List{Lime.TopologyFace})
+  name.vb: ConstructFrom(List(Of Animesh.SkinnedVertex), List(Of TopologyEdge), List(Of TopologyFace))
+  fullName: Lime.ITopology.ConstructFrom(System.Collections.Generic.List<Lime.Animesh.SkinnedVertex>, System.Collections.Generic.List<Lime.TopologyEdge>, System.Collections.Generic.List<Lime.TopologyFace>)
+  fullName.vb: Lime.ITopology.ConstructFrom(System.Collections.Generic.List(Of Lime.Animesh.SkinnedVertex), System.Collections.Generic.List(Of Lime.TopologyEdge), System.Collections.Generic.List(Of Lime.TopologyFace))
+  nameWithType: ITopology.ConstructFrom(List<Animesh.SkinnedVertex>, List<TopologyEdge>, List<TopologyFace>)
+  nameWithType.vb: ITopology.ConstructFrom(List(Of Animesh.SkinnedVertex), List(Of TopologyEdge), List(Of TopologyFace))
+- uid: Lime.ITopology.ConstructFrom*
+  name: ConstructFrom
+  href: api/Lime.ITopology.html#Lime_ITopology_ConstructFrom_
+  commentId: Overload:Lime.ITopology.ConstructFrom
+  isSpec: "True"
+  fullName: Lime.ITopology.ConstructFrom
+  nameWithType: ITopology.ConstructFrom
+- uid: Lime.ITopology.EdgeHitTestDistance
+  name: EdgeHitTestDistance
+  href: api/Lime.ITopology.html#Lime_ITopology_EdgeHitTestDistance
+  commentId: P:Lime.ITopology.EdgeHitTestDistance
+  fullName: Lime.ITopology.EdgeHitTestDistance
+  nameWithType: ITopology.EdgeHitTestDistance
+- uid: Lime.ITopology.EdgeHitTestDistance*
+  name: EdgeHitTestDistance
+  href: api/Lime.ITopology.html#Lime_ITopology_EdgeHitTestDistance_
+  commentId: Overload:Lime.ITopology.EdgeHitTestDistance
+  isSpec: "True"
+  fullName: Lime.ITopology.EdgeHitTestDistance
+  nameWithType: ITopology.EdgeHitTestDistance
+- uid: Lime.ITopology.Faces
+  name: Faces
+  href: api/Lime.ITopology.html#Lime_ITopology_Faces
+  commentId: P:Lime.ITopology.Faces
+  fullName: Lime.ITopology.Faces
+  nameWithType: ITopology.Faces
+- uid: Lime.ITopology.Faces*
+  name: Faces
+  href: api/Lime.ITopology.html#Lime_ITopology_Faces_
+  commentId: Overload:Lime.ITopology.Faces
+  isSpec: "True"
+  fullName: Lime.ITopology.Faces
+  nameWithType: ITopology.Faces
+- uid: Lime.ITopology.FacesWithInfo
+  name: FacesWithInfo
+  href: api/Lime.ITopology.html#Lime_ITopology_FacesWithInfo
+  commentId: P:Lime.ITopology.FacesWithInfo
+  fullName: Lime.ITopology.FacesWithInfo
+  nameWithType: ITopology.FacesWithInfo
+- uid: Lime.ITopology.FacesWithInfo*
+  name: FacesWithInfo
+  href: api/Lime.ITopology.html#Lime_ITopology_FacesWithInfo_
+  commentId: Overload:Lime.ITopology.FacesWithInfo
+  isSpec: "True"
+  fullName: Lime.ITopology.FacesWithInfo
+  nameWithType: ITopology.FacesWithInfo
+- uid: Lime.ITopology.HitTest(Lime.Vector2,System.Single,System.Single,Lime.TopologyHitTestResult@)
+  name: HitTest(Vector2, Single, Single, out TopologyHitTestResult)
+  href: api/Lime.ITopology.html#Lime_ITopology_HitTest_Lime_Vector2_System_Single_System_Single_Lime_TopologyHitTestResult__
+  commentId: M:Lime.ITopology.HitTest(Lime.Vector2,System.Single,System.Single,Lime.TopologyHitTestResult@)
+  name.vb: HitTest(Vector2, Single, Single, ByRef TopologyHitTestResult)
+  fullName: Lime.ITopology.HitTest(Lime.Vector2, System.Single, System.Single, out Lime.TopologyHitTestResult)
+  fullName.vb: Lime.ITopology.HitTest(Lime.Vector2, System.Single, System.Single, ByRef Lime.TopologyHitTestResult)
+  nameWithType: ITopology.HitTest(Vector2, Single, Single, out TopologyHitTestResult)
+  nameWithType.vb: ITopology.HitTest(Vector2, Single, Single, ByRef TopologyHitTestResult)
+- uid: Lime.ITopology.HitTest*
+  name: HitTest
+  href: api/Lime.ITopology.html#Lime_ITopology_HitTest_
+  commentId: Overload:Lime.ITopology.HitTest
+  isSpec: "True"
+  fullName: Lime.ITopology.HitTest
+  nameWithType: ITopology.HitTest
+- uid: Lime.ITopology.InsertConstrainedEdge(System.Int32,System.Int32)
+  name: InsertConstrainedEdge(Int32, Int32)
+  href: api/Lime.ITopology.html#Lime_ITopology_InsertConstrainedEdge_System_Int32_System_Int32_
+  commentId: M:Lime.ITopology.InsertConstrainedEdge(System.Int32,System.Int32)
+  fullName: Lime.ITopology.InsertConstrainedEdge(System.Int32, System.Int32)
+  nameWithType: ITopology.InsertConstrainedEdge(Int32, Int32)
+- uid: Lime.ITopology.InsertConstrainedEdge*
+  name: InsertConstrainedEdge
+  href: api/Lime.ITopology.html#Lime_ITopology_InsertConstrainedEdge_
+  commentId: Overload:Lime.ITopology.InsertConstrainedEdge
+  isSpec: "True"
+  fullName: Lime.ITopology.InsertConstrainedEdge
+  nameWithType: ITopology.InsertConstrainedEdge
+- uid: Lime.ITopology.OnTopologyChanged
+  name: OnTopologyChanged
+  href: api/Lime.ITopology.html#Lime_ITopology_OnTopologyChanged
+  commentId: E:Lime.ITopology.OnTopologyChanged
+  fullName: Lime.ITopology.OnTopologyChanged
+  nameWithType: ITopology.OnTopologyChanged
+- uid: Lime.ITopology.RemoveConstrainedEdge(System.Int32,System.Int32)
+  name: RemoveConstrainedEdge(Int32, Int32)
+  href: api/Lime.ITopology.html#Lime_ITopology_RemoveConstrainedEdge_System_Int32_System_Int32_
+  commentId: M:Lime.ITopology.RemoveConstrainedEdge(System.Int32,System.Int32)
+  fullName: Lime.ITopology.RemoveConstrainedEdge(System.Int32, System.Int32)
+  nameWithType: ITopology.RemoveConstrainedEdge(Int32, Int32)
+- uid: Lime.ITopology.RemoveConstrainedEdge*
+  name: RemoveConstrainedEdge
+  href: api/Lime.ITopology.html#Lime_ITopology_RemoveConstrainedEdge_
+  commentId: Overload:Lime.ITopology.RemoveConstrainedEdge
+  isSpec: "True"
+  fullName: Lime.ITopology.RemoveConstrainedEdge
+  nameWithType: ITopology.RemoveConstrainedEdge
+- uid: Lime.ITopology.RemoveVertex(System.Int32)
+  name: RemoveVertex(Int32)
+  href: api/Lime.ITopology.html#Lime_ITopology_RemoveVertex_System_Int32_
+  commentId: M:Lime.ITopology.RemoveVertex(System.Int32)
+  fullName: Lime.ITopology.RemoveVertex(System.Int32)
+  nameWithType: ITopology.RemoveVertex(Int32)
+- uid: Lime.ITopology.RemoveVertex*
+  name: RemoveVertex
+  href: api/Lime.ITopology.html#Lime_ITopology_RemoveVertex_
+  commentId: Overload:Lime.ITopology.RemoveVertex
+  isSpec: "True"
+  fullName: Lime.ITopology.RemoveVertex
+  nameWithType: ITopology.RemoveVertex
+- uid: Lime.ITopology.Scale(Lime.Vector2)
+  name: Scale(Vector2)
+  href: api/Lime.ITopology.html#Lime_ITopology_Scale_Lime_Vector2_
+  commentId: M:Lime.ITopology.Scale(Lime.Vector2)
+  fullName: Lime.ITopology.Scale(Lime.Vector2)
+  nameWithType: ITopology.Scale(Vector2)
+- uid: Lime.ITopology.Scale*
+  name: Scale
+  href: api/Lime.ITopology.html#Lime_ITopology_Scale_
+  commentId: Overload:Lime.ITopology.Scale
+  isSpec: "True"
+  fullName: Lime.ITopology.Scale
+  nameWithType: ITopology.Scale
+- uid: Lime.ITopology.TranslateVertex(System.Int32,Lime.Vector2,Lime.Vector2,System.Collections.Generic.List{System.Int32}@)
+  name: TranslateVertex(Int32, Vector2, Vector2, out List<Int32>)
+  href: api/Lime.ITopology.html#Lime_ITopology_TranslateVertex_System_Int32_Lime_Vector2_Lime_Vector2_System_Collections_Generic_List_System_Int32___
+  commentId: M:Lime.ITopology.TranslateVertex(System.Int32,Lime.Vector2,Lime.Vector2,System.Collections.Generic.List{System.Int32}@)
+  name.vb: TranslateVertex(Int32, Vector2, Vector2, ByRef List(Of Int32))
+  fullName: Lime.ITopology.TranslateVertex(System.Int32, Lime.Vector2, Lime.Vector2, out System.Collections.Generic.List<System.Int32>)
+  fullName.vb: Lime.ITopology.TranslateVertex(System.Int32, Lime.Vector2, Lime.Vector2, ByRef System.Collections.Generic.List(Of System.Int32))
+  nameWithType: ITopology.TranslateVertex(Int32, Vector2, Vector2, out List<Int32>)
+  nameWithType.vb: ITopology.TranslateVertex(Int32, Vector2, Vector2, ByRef List(Of Int32))
+- uid: Lime.ITopology.TranslateVertex*
+  name: TranslateVertex
+  href: api/Lime.ITopology.html#Lime_ITopology_TranslateVertex_
+  commentId: Overload:Lime.ITopology.TranslateVertex
+  isSpec: "True"
+  fullName: Lime.ITopology.TranslateVertex
+  nameWithType: ITopology.TranslateVertex
+- uid: Lime.ITopology.VertexHitTestRadius
+  name: VertexHitTestRadius
+  href: api/Lime.ITopology.html#Lime_ITopology_VertexHitTestRadius
+  commentId: P:Lime.ITopology.VertexHitTestRadius
+  fullName: Lime.ITopology.VertexHitTestRadius
+  nameWithType: ITopology.VertexHitTestRadius
+- uid: Lime.ITopology.VertexHitTestRadius*
+  name: VertexHitTestRadius
+  href: api/Lime.ITopology.html#Lime_ITopology_VertexHitTestRadius_
+  commentId: Overload:Lime.ITopology.VertexHitTestRadius
+  isSpec: "True"
+  fullName: Lime.ITopology.VertexHitTestRadius
+  nameWithType: ITopology.VertexHitTestRadius
+- uid: Lime.ITopology.Vertices
+  name: Vertices
+  href: api/Lime.ITopology.html#Lime_ITopology_Vertices
+  commentId: P:Lime.ITopology.Vertices
+  fullName: Lime.ITopology.Vertices
+  nameWithType: ITopology.Vertices
+- uid: Lime.ITopology.Vertices*
+  name: Vertices
+  href: api/Lime.ITopology.html#Lime_ITopology_Vertices_
+  commentId: Overload:Lime.ITopology.Vertices
+  isSpec: "True"
+  fullName: Lime.ITopology.Vertices
+  nameWithType: ITopology.Vertices
+- uid: Lime.ITopologyPrimitive
+  name: ITopologyPrimitive
+  href: api/Lime.ITopologyPrimitive.html
+  commentId: T:Lime.ITopologyPrimitive
+  fullName: Lime.ITopologyPrimitive
+  nameWithType: ITopologyPrimitive
+- uid: Lime.ITopologyPrimitive.Count
+  name: Count
+  href: api/Lime.ITopologyPrimitive.html#Lime_ITopologyPrimitive_Count
+  commentId: P:Lime.ITopologyPrimitive.Count
+  fullName: Lime.ITopologyPrimitive.Count
+  nameWithType: ITopologyPrimitive.Count
+- uid: Lime.ITopologyPrimitive.Count*
+  name: Count
+  href: api/Lime.ITopologyPrimitive.html#Lime_ITopologyPrimitive_Count_
+  commentId: Overload:Lime.ITopologyPrimitive.Count
+  isSpec: "True"
+  fullName: Lime.ITopologyPrimitive.Count
+  nameWithType: ITopologyPrimitive.Count
+- uid: Lime.ITopologyPrimitive.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.ITopologyPrimitive.html#Lime_ITopologyPrimitive_Item_System_Int32_
+  commentId: P:Lime.ITopologyPrimitive.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.ITopologyPrimitive.Item[System.Int32]
+  fullName.vb: Lime.ITopologyPrimitive.Item(System.Int32)
+  nameWithType: ITopologyPrimitive.Item[Int32]
+  nameWithType.vb: ITopologyPrimitive.Item(Int32)
+- uid: Lime.ITopologyPrimitive.Item*
+  name: Item
+  href: api/Lime.ITopologyPrimitive.html#Lime_ITopologyPrimitive_Item_
+  commentId: Overload:Lime.ITopologyPrimitive.Item
+  isSpec: "True"
+  fullName: Lime.ITopologyPrimitive.Item
+  nameWithType: ITopologyPrimitive.Item
 - uid: Lime.IUpdatableNode
   name: IUpdatableNode
   href: api/Lime.IUpdatableNode.html
@@ -38018,6 +38460,19 @@ references:
   isSpec: "True"
   fullName: Lime.Mesh3D.BlendIndices.Index3
   nameWithType: Mesh3D.BlendIndices.Index3
+- uid: Lime.Mesh3D.BlendIndices.ToArray
+  name: ToArray()
+  href: api/Lime.Mesh3D.BlendIndices.html#Lime_Mesh3D_BlendIndices_ToArray
+  commentId: M:Lime.Mesh3D.BlendIndices.ToArray
+  fullName: Lime.Mesh3D.BlendIndices.ToArray()
+  nameWithType: Mesh3D.BlendIndices.ToArray()
+- uid: Lime.Mesh3D.BlendIndices.ToArray*
+  name: ToArray
+  href: api/Lime.Mesh3D.BlendIndices.html#Lime_Mesh3D_BlendIndices_ToArray_
+  commentId: Overload:Lime.Mesh3D.BlendIndices.ToArray
+  isSpec: "True"
+  fullName: Lime.Mesh3D.BlendIndices.ToArray
+  nameWithType: Mesh3D.BlendIndices.ToArray
 - uid: Lime.Mesh3D.BlendWeights
   name: Mesh3D.BlendWeights
   href: api/Lime.Mesh3D.BlendWeights.html
@@ -38050,6 +38505,19 @@ references:
   isSpec: "True"
   fullName: Lime.Mesh3D.BlendWeights.GetHashCode
   nameWithType: Mesh3D.BlendWeights.GetHashCode
+- uid: Lime.Mesh3D.BlendWeights.ToArray
+  name: ToArray()
+  href: api/Lime.Mesh3D.BlendWeights.html#Lime_Mesh3D_BlendWeights_ToArray
+  commentId: M:Lime.Mesh3D.BlendWeights.ToArray
+  fullName: Lime.Mesh3D.BlendWeights.ToArray()
+  nameWithType: Mesh3D.BlendWeights.ToArray()
+- uid: Lime.Mesh3D.BlendWeights.ToArray*
+  name: ToArray
+  href: api/Lime.Mesh3D.BlendWeights.html#Lime_Mesh3D_BlendWeights_ToArray_
+  commentId: Overload:Lime.Mesh3D.BlendWeights.ToArray
+  isSpec: "True"
+  fullName: Lime.Mesh3D.BlendWeights.ToArray
+  nameWithType: Mesh3D.BlendWeights.ToArray
 - uid: Lime.Mesh3D.BlendWeights.Weight0
   name: Weight0
   href: api/Lime.Mesh3D.BlendWeights.html#Lime_Mesh3D_BlendWeights_Weight0
@@ -58330,6 +58798,25 @@ references:
   commentId: F:Lime.Size.Zero
   fullName: Lime.Size.Zero
   nameWithType: Size.Zero
+- uid: Lime.SkinnedVertexListAnimator
+  name: SkinnedVertexListAnimator
+  href: api/Lime.SkinnedVertexListAnimator.html
+  commentId: T:Lime.SkinnedVertexListAnimator
+  fullName: Lime.SkinnedVertexListAnimator
+  nameWithType: SkinnedVertexListAnimator
+- uid: Lime.SkinnedVertexListAnimator.InterpolateLinear(System.Single)
+  name: InterpolateLinear(Single)
+  href: api/Lime.SkinnedVertexListAnimator.html#Lime_SkinnedVertexListAnimator_InterpolateLinear_System_Single_
+  commentId: M:Lime.SkinnedVertexListAnimator.InterpolateLinear(System.Single)
+  fullName: Lime.SkinnedVertexListAnimator.InterpolateLinear(System.Single)
+  nameWithType: SkinnedVertexListAnimator.InterpolateLinear(Single)
+- uid: Lime.SkinnedVertexListAnimator.InterpolateLinear*
+  name: InterpolateLinear
+  href: api/Lime.SkinnedVertexListAnimator.html#Lime_SkinnedVertexListAnimator_InterpolateLinear_
+  commentId: Overload:Lime.SkinnedVertexListAnimator.InterpolateLinear
+  isSpec: "True"
+  fullName: Lime.SkinnedVertexListAnimator.InterpolateLinear
+  nameWithType: SkinnedVertexListAnimator.InterpolateLinear
 - uid: Lime.SkinningMode
   name: SkinningMode
   href: api/Lime.SkinningMode.html
@@ -58426,6 +58913,22 @@ references:
   isSpec: "True"
   fullName: Lime.SkinningWeights.Item
   nameWithType: SkinningWeights.Item
+- uid: Lime.SkinningWeights.Release(System.Int32[])
+  name: Release(Int32[])
+  href: api/Lime.SkinningWeights.html#Lime_SkinningWeights_Release_System_Int32___
+  commentId: M:Lime.SkinningWeights.Release(System.Int32[])
+  name.vb: Release(Int32())
+  fullName: Lime.SkinningWeights.Release(System.Int32[])
+  fullName.vb: Lime.SkinningWeights.Release(System.Int32())
+  nameWithType: SkinningWeights.Release(Int32[])
+  nameWithType.vb: SkinningWeights.Release(Int32())
+- uid: Lime.SkinningWeights.Release*
+  name: Release
+  href: api/Lime.SkinningWeights.html#Lime_SkinningWeights_Release_
+  commentId: Overload:Lime.SkinningWeights.Release
+  isSpec: "True"
+  fullName: Lime.SkinningWeights.Release
+  nameWithType: SkinningWeights.Release
 - uid: Lime.Slider
   name: Slider
   href: api/Lime.Slider.html
@@ -61668,6 +62171,41 @@ references:
   commentId: T:Lime.TangerineReadOnlyAttribute
   fullName: Lime.TangerineReadOnlyAttribute
   nameWithType: TangerineReadOnlyAttribute
+- uid: Lime.TangerineReadOnlyPropertiesAttribute
+  name: TangerineReadOnlyPropertiesAttribute
+  href: api/Lime.TangerineReadOnlyPropertiesAttribute.html
+  commentId: T:Lime.TangerineReadOnlyPropertiesAttribute
+  fullName: Lime.TangerineReadOnlyPropertiesAttribute
+  nameWithType: TangerineReadOnlyPropertiesAttribute
+- uid: Lime.TangerineReadOnlyPropertiesAttribute.#ctor(System.String[])
+  name: TangerineReadOnlyPropertiesAttribute(String[])
+  href: api/Lime.TangerineReadOnlyPropertiesAttribute.html#Lime_TangerineReadOnlyPropertiesAttribute__ctor_System_String___
+  commentId: M:Lime.TangerineReadOnlyPropertiesAttribute.#ctor(System.String[])
+  name.vb: TangerineReadOnlyPropertiesAttribute(String())
+  fullName: Lime.TangerineReadOnlyPropertiesAttribute.TangerineReadOnlyPropertiesAttribute(System.String[])
+  fullName.vb: Lime.TangerineReadOnlyPropertiesAttribute.TangerineReadOnlyPropertiesAttribute(System.String())
+  nameWithType: TangerineReadOnlyPropertiesAttribute.TangerineReadOnlyPropertiesAttribute(String[])
+  nameWithType.vb: TangerineReadOnlyPropertiesAttribute.TangerineReadOnlyPropertiesAttribute(String())
+- uid: Lime.TangerineReadOnlyPropertiesAttribute.#ctor*
+  name: TangerineReadOnlyPropertiesAttribute
+  href: api/Lime.TangerineReadOnlyPropertiesAttribute.html#Lime_TangerineReadOnlyPropertiesAttribute__ctor_
+  commentId: Overload:Lime.TangerineReadOnlyPropertiesAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineReadOnlyPropertiesAttribute.TangerineReadOnlyPropertiesAttribute
+  nameWithType: TangerineReadOnlyPropertiesAttribute.TangerineReadOnlyPropertiesAttribute
+- uid: Lime.TangerineReadOnlyPropertiesAttribute.Contains(System.String)
+  name: Contains(String)
+  href: api/Lime.TangerineReadOnlyPropertiesAttribute.html#Lime_TangerineReadOnlyPropertiesAttribute_Contains_System_String_
+  commentId: M:Lime.TangerineReadOnlyPropertiesAttribute.Contains(System.String)
+  fullName: Lime.TangerineReadOnlyPropertiesAttribute.Contains(System.String)
+  nameWithType: TangerineReadOnlyPropertiesAttribute.Contains(String)
+- uid: Lime.TangerineReadOnlyPropertiesAttribute.Contains*
+  name: Contains
+  href: api/Lime.TangerineReadOnlyPropertiesAttribute.html#Lime_TangerineReadOnlyPropertiesAttribute_Contains_
+  commentId: Overload:Lime.TangerineReadOnlyPropertiesAttribute.Contains
+  isSpec: "True"
+  fullName: Lime.TangerineReadOnlyPropertiesAttribute.Contains
+  nameWithType: TangerineReadOnlyPropertiesAttribute.Contains
 - uid: Lime.TangerineRegisterComponentAttribute
   name: TangerineRegisterComponentAttribute
   href: api/Lime.TangerineRegisterComponentAttribute.html
@@ -63784,6 +64322,149 @@ references:
   commentId: T:Lime.Theme.ColorTheme
   fullName: Lime.Theme.ColorTheme
   nameWithType: Theme.ColorTheme
+- uid: Lime.Theme.ColorTheme.AnimeshAnimatedVertexColor
+  name: AnimeshAnimatedVertexColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshAnimatedVertexColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshAnimatedVertexColor
+  fullName: Lime.Theme.ColorTheme.AnimeshAnimatedVertexColor
+  nameWithType: Theme.ColorTheme.AnimeshAnimatedVertexColor
+- uid: Lime.Theme.ColorTheme.AnimeshAnimatedVertexColor*
+  name: AnimeshAnimatedVertexColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshAnimatedVertexColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshAnimatedVertexColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshAnimatedVertexColor
+  nameWithType: Theme.ColorTheme.AnimeshAnimatedVertexColor
+- uid: Lime.Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+  name: AnimeshFixedEdgeBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFixedEdgeBackgroundColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+  fullName: Lime.Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor*
+  name: AnimeshFixedEdgeBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFixedEdgeBackgroundColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshFixedEdgeBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshFixedEdgeColor
+  name: AnimeshFixedEdgeColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFixedEdgeColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshFixedEdgeColor
+  fullName: Lime.Theme.ColorTheme.AnimeshFixedEdgeColor
+  nameWithType: Theme.ColorTheme.AnimeshFixedEdgeColor
+- uid: Lime.Theme.ColorTheme.AnimeshFixedEdgeColor*
+  name: AnimeshFixedEdgeColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFixedEdgeColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshFixedEdgeColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshFixedEdgeColor
+  nameWithType: Theme.ColorTheme.AnimeshFixedEdgeColor
+- uid: Lime.Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+  name: AnimeshFramingEdgeBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFramingEdgeBackgroundColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+  fullName: Lime.Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor*
+  name: AnimeshFramingEdgeBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFramingEdgeBackgroundColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshFramingEdgeBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshFramingEdgeColor
+  name: AnimeshFramingEdgeColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFramingEdgeColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshFramingEdgeColor
+  fullName: Lime.Theme.ColorTheme.AnimeshFramingEdgeColor
+  nameWithType: Theme.ColorTheme.AnimeshFramingEdgeColor
+- uid: Lime.Theme.ColorTheme.AnimeshFramingEdgeColor*
+  name: AnimeshFramingEdgeColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshFramingEdgeColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshFramingEdgeColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshFramingEdgeColor
+  nameWithType: Theme.ColorTheme.AnimeshFramingEdgeColor
+- uid: Lime.Theme.ColorTheme.AnimeshHoverColor
+  name: AnimeshHoverColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshHoverColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshHoverColor
+  fullName: Lime.Theme.ColorTheme.AnimeshHoverColor
+  nameWithType: Theme.ColorTheme.AnimeshHoverColor
+- uid: Lime.Theme.ColorTheme.AnimeshHoverColor*
+  name: AnimeshHoverColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshHoverColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshHoverColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshHoverColor
+  nameWithType: Theme.ColorTheme.AnimeshHoverColor
+- uid: Lime.Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+  name: AnimeshInnerEdgeBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshInnerEdgeBackgroundColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+  fullName: Lime.Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor*
+  name: AnimeshInnerEdgeBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshInnerEdgeBackgroundColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshInnerEdgeBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshInnerEdgeColor
+  name: AnimeshInnerEdgeColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshInnerEdgeColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshInnerEdgeColor
+  fullName: Lime.Theme.ColorTheme.AnimeshInnerEdgeColor
+  nameWithType: Theme.ColorTheme.AnimeshInnerEdgeColor
+- uid: Lime.Theme.ColorTheme.AnimeshInnerEdgeColor*
+  name: AnimeshInnerEdgeColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshInnerEdgeColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshInnerEdgeColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshInnerEdgeColor
+  nameWithType: Theme.ColorTheme.AnimeshInnerEdgeColor
+- uid: Lime.Theme.ColorTheme.AnimeshRemovalColor
+  name: AnimeshRemovalColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshRemovalColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshRemovalColor
+  fullName: Lime.Theme.ColorTheme.AnimeshRemovalColor
+  nameWithType: Theme.ColorTheme.AnimeshRemovalColor
+- uid: Lime.Theme.ColorTheme.AnimeshRemovalColor*
+  name: AnimeshRemovalColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshRemovalColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshRemovalColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshRemovalColor
+  nameWithType: Theme.ColorTheme.AnimeshRemovalColor
+- uid: Lime.Theme.ColorTheme.AnimeshVertexBackgroundColor
+  name: AnimeshVertexBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshVertexBackgroundColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshVertexBackgroundColor
+  fullName: Lime.Theme.ColorTheme.AnimeshVertexBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshVertexBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshVertexBackgroundColor*
+  name: AnimeshVertexBackgroundColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshVertexBackgroundColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshVertexBackgroundColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshVertexBackgroundColor
+  nameWithType: Theme.ColorTheme.AnimeshVertexBackgroundColor
+- uid: Lime.Theme.ColorTheme.AnimeshVertexColor
+  name: AnimeshVertexColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshVertexColor
+  commentId: P:Lime.Theme.ColorTheme.AnimeshVertexColor
+  fullName: Lime.Theme.ColorTheme.AnimeshVertexColor
+  nameWithType: Theme.ColorTheme.AnimeshVertexColor
+- uid: Lime.Theme.ColorTheme.AnimeshVertexColor*
+  name: AnimeshVertexColor
+  href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_AnimeshVertexColor_
+  commentId: Overload:Lime.Theme.ColorTheme.AnimeshVertexColor
+  isSpec: "True"
+  fullName: Lime.Theme.ColorTheme.AnimeshVertexColor
+  nameWithType: Theme.ColorTheme.AnimeshVertexColor
 - uid: Lime.Theme.ColorTheme.BlackText
   name: BlackText
   href: api/Lime.Theme.ColorTheme.html#Lime_Theme_ColorTheme_BlackText
@@ -64507,6 +65188,42 @@ references:
   commentId: T:Lime.Theme.Metrics
   fullName: Lime.Theme.Metrics
   nameWithType: Theme.Metrics
+- uid: Lime.Theme.Metrics.AnimeshBackgroundEdgeThickness
+  name: AnimeshBackgroundEdgeThickness
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_AnimeshBackgroundEdgeThickness
+  commentId: F:Lime.Theme.Metrics.AnimeshBackgroundEdgeThickness
+  fullName: Lime.Theme.Metrics.AnimeshBackgroundEdgeThickness
+  nameWithType: Theme.Metrics.AnimeshBackgroundEdgeThickness
+- uid: Lime.Theme.Metrics.AnimeshBackgroundVertexRadius
+  name: AnimeshBackgroundVertexRadius
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_AnimeshBackgroundVertexRadius
+  commentId: F:Lime.Theme.Metrics.AnimeshBackgroundVertexRadius
+  fullName: Lime.Theme.Metrics.AnimeshBackgroundVertexRadius
+  nameWithType: Theme.Metrics.AnimeshBackgroundVertexRadius
+- uid: Lime.Theme.Metrics.AnimeshEdgeHitTestRadius
+  name: AnimeshEdgeHitTestRadius
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_AnimeshEdgeHitTestRadius
+  commentId: F:Lime.Theme.Metrics.AnimeshEdgeHitTestRadius
+  fullName: Lime.Theme.Metrics.AnimeshEdgeHitTestRadius
+  nameWithType: Theme.Metrics.AnimeshEdgeHitTestRadius
+- uid: Lime.Theme.Metrics.AnimeshEdgeThickness
+  name: AnimeshEdgeThickness
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_AnimeshEdgeThickness
+  commentId: F:Lime.Theme.Metrics.AnimeshEdgeThickness
+  fullName: Lime.Theme.Metrics.AnimeshEdgeThickness
+  nameWithType: Theme.Metrics.AnimeshEdgeThickness
+- uid: Lime.Theme.Metrics.AnimeshVertexHitTestRadius
+  name: AnimeshVertexHitTestRadius
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_AnimeshVertexHitTestRadius
+  commentId: F:Lime.Theme.Metrics.AnimeshVertexHitTestRadius
+  fullName: Lime.Theme.Metrics.AnimeshVertexHitTestRadius
+  nameWithType: Theme.Metrics.AnimeshVertexHitTestRadius
+- uid: Lime.Theme.Metrics.AnimeshVertexRadius
+  name: AnimeshVertexRadius
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_AnimeshVertexRadius
+  commentId: F:Lime.Theme.Metrics.AnimeshVertexRadius
+  fullName: Lime.Theme.Metrics.AnimeshVertexRadius
+  nameWithType: Theme.Metrics.AnimeshVertexRadius
 - uid: Lime.Theme.Metrics.CheckBoxSize
   name: CheckBoxSize
   href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_CheckBoxSize
@@ -66173,6 +66890,332 @@ references:
   isSpec: "True"
   fullName: Lime.ToolTipForm.ShowWithoutActivation
   nameWithType: ToolTipForm.ShowWithoutActivation
+- uid: Lime.TopologyEdge
+  name: TopologyEdge
+  href: api/Lime.TopologyEdge.html
+  commentId: T:Lime.TopologyEdge
+  fullName: Lime.TopologyEdge
+  nameWithType: TopologyEdge
+- uid: Lime.TopologyEdge.#ctor(System.UInt16,System.UInt16)
+  name: TopologyEdge(UInt16, UInt16)
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge__ctor_System_UInt16_System_UInt16_
+  commentId: M:Lime.TopologyEdge.#ctor(System.UInt16,System.UInt16)
+  fullName: Lime.TopologyEdge.TopologyEdge(System.UInt16, System.UInt16)
+  nameWithType: TopologyEdge.TopologyEdge(UInt16, UInt16)
+- uid: Lime.TopologyEdge.#ctor*
+  name: TopologyEdge
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge__ctor_
+  commentId: Overload:Lime.TopologyEdge.#ctor
+  isSpec: "True"
+  fullName: Lime.TopologyEdge.TopologyEdge
+  nameWithType: TopologyEdge.TopologyEdge
+- uid: Lime.TopologyEdge.Count
+  name: Count
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Count
+  commentId: P:Lime.TopologyEdge.Count
+  fullName: Lime.TopologyEdge.Count
+  nameWithType: TopologyEdge.Count
+- uid: Lime.TopologyEdge.Count*
+  name: Count
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Count_
+  commentId: Overload:Lime.TopologyEdge.Count
+  isSpec: "True"
+  fullName: Lime.TopologyEdge.Count
+  nameWithType: TopologyEdge.Count
+- uid: Lime.TopologyEdge.EdgeInfo
+  name: TopologyEdge.EdgeInfo
+  href: api/Lime.TopologyEdge.EdgeInfo.html
+  commentId: T:Lime.TopologyEdge.EdgeInfo
+  fullName: Lime.TopologyEdge.EdgeInfo
+  nameWithType: TopologyEdge.EdgeInfo
+- uid: Lime.TopologyEdge.EdgeInfo.IsConstrained
+  name: IsConstrained
+  href: api/Lime.TopologyEdge.EdgeInfo.html#Lime_TopologyEdge_EdgeInfo_IsConstrained
+  commentId: F:Lime.TopologyEdge.EdgeInfo.IsConstrained
+  fullName: Lime.TopologyEdge.EdgeInfo.IsConstrained
+  nameWithType: TopologyEdge.EdgeInfo.IsConstrained
+- uid: Lime.TopologyEdge.EdgeInfo.IsFraming
+  name: IsFraming
+  href: api/Lime.TopologyEdge.EdgeInfo.html#Lime_TopologyEdge_EdgeInfo_IsFraming
+  commentId: F:Lime.TopologyEdge.EdgeInfo.IsFraming
+  fullName: Lime.TopologyEdge.EdgeInfo.IsFraming
+  nameWithType: TopologyEdge.EdgeInfo.IsFraming
+- uid: Lime.TopologyEdge.Equals(Lime.TopologyEdge)
+  name: Equals(TopologyEdge)
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Equals_Lime_TopologyEdge_
+  commentId: M:Lime.TopologyEdge.Equals(Lime.TopologyEdge)
+  fullName: Lime.TopologyEdge.Equals(Lime.TopologyEdge)
+  nameWithType: TopologyEdge.Equals(TopologyEdge)
+- uid: Lime.TopologyEdge.Equals*
+  name: Equals
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Equals_
+  commentId: Overload:Lime.TopologyEdge.Equals
+  isSpec: "True"
+  fullName: Lime.TopologyEdge.Equals
+  nameWithType: TopologyEdge.Equals
+- uid: Lime.TopologyEdge.GetHashCode
+  name: GetHashCode()
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_GetHashCode
+  commentId: M:Lime.TopologyEdge.GetHashCode
+  fullName: Lime.TopologyEdge.GetHashCode()
+  nameWithType: TopologyEdge.GetHashCode()
+- uid: Lime.TopologyEdge.GetHashCode*
+  name: GetHashCode
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_GetHashCode_
+  commentId: Overload:Lime.TopologyEdge.GetHashCode
+  isSpec: "True"
+  fullName: Lime.TopologyEdge.GetHashCode
+  nameWithType: TopologyEdge.GetHashCode
+- uid: Lime.TopologyEdge.Index0
+  name: Index0
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Index0
+  commentId: F:Lime.TopologyEdge.Index0
+  fullName: Lime.TopologyEdge.Index0
+  nameWithType: TopologyEdge.Index0
+- uid: Lime.TopologyEdge.Index1
+  name: Index1
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Index1
+  commentId: F:Lime.TopologyEdge.Index1
+  fullName: Lime.TopologyEdge.Index1
+  nameWithType: TopologyEdge.Index1
+- uid: Lime.TopologyEdge.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Item_System_Int32_
+  commentId: P:Lime.TopologyEdge.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.TopologyEdge.Item[System.Int32]
+  fullName.vb: Lime.TopologyEdge.Item(System.Int32)
+  nameWithType: TopologyEdge.Item[Int32]
+  nameWithType.vb: TopologyEdge.Item(Int32)
+- uid: Lime.TopologyEdge.Item*
+  name: Item
+  href: api/Lime.TopologyEdge.html#Lime_TopologyEdge_Item_
+  commentId: Overload:Lime.TopologyEdge.Item
+  isSpec: "True"
+  fullName: Lime.TopologyEdge.Item
+  nameWithType: TopologyEdge.Item
+- uid: Lime.TopologyFace
+  name: TopologyFace
+  href: api/Lime.TopologyFace.html
+  commentId: T:Lime.TopologyFace
+  fullName: Lime.TopologyFace
+  nameWithType: TopologyFace
+- uid: Lime.TopologyFace.#ctor(System.UInt16,System.UInt16,System.UInt16)
+  name: TopologyFace(UInt16, UInt16, UInt16)
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace__ctor_System_UInt16_System_UInt16_System_UInt16_
+  commentId: M:Lime.TopologyFace.#ctor(System.UInt16,System.UInt16,System.UInt16)
+  fullName: Lime.TopologyFace.TopologyFace(System.UInt16, System.UInt16, System.UInt16)
+  nameWithType: TopologyFace.TopologyFace(UInt16, UInt16, UInt16)
+- uid: Lime.TopologyFace.#ctor*
+  name: TopologyFace
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace__ctor_
+  commentId: Overload:Lime.TopologyFace.#ctor
+  isSpec: "True"
+  fullName: Lime.TopologyFace.TopologyFace
+  nameWithType: TopologyFace.TopologyFace
+- uid: Lime.TopologyFace.Count
+  name: Count
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Count
+  commentId: P:Lime.TopologyFace.Count
+  fullName: Lime.TopologyFace.Count
+  nameWithType: TopologyFace.Count
+- uid: Lime.TopologyFace.Count*
+  name: Count
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Count_
+  commentId: Overload:Lime.TopologyFace.Count
+  isSpec: "True"
+  fullName: Lime.TopologyFace.Count
+  nameWithType: TopologyFace.Count
+- uid: Lime.TopologyFace.Equals(Lime.TopologyFace)
+  name: Equals(TopologyFace)
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Equals_Lime_TopologyFace_
+  commentId: M:Lime.TopologyFace.Equals(Lime.TopologyFace)
+  fullName: Lime.TopologyFace.Equals(Lime.TopologyFace)
+  nameWithType: TopologyFace.Equals(TopologyFace)
+- uid: Lime.TopologyFace.Equals*
+  name: Equals
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Equals_
+  commentId: Overload:Lime.TopologyFace.Equals
+  isSpec: "True"
+  fullName: Lime.TopologyFace.Equals
+  nameWithType: TopologyFace.Equals
+- uid: Lime.TopologyFace.FaceInfo
+  name: TopologyFace.FaceInfo
+  href: api/Lime.TopologyFace.FaceInfo.html
+  commentId: T:Lime.TopologyFace.FaceInfo
+  fullName: Lime.TopologyFace.FaceInfo
+  nameWithType: TopologyFace.FaceInfo
+- uid: Lime.TopologyFace.FaceInfo.IsConstrained0
+  name: IsConstrained0
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_IsConstrained0
+  commentId: F:Lime.TopologyFace.FaceInfo.IsConstrained0
+  fullName: Lime.TopologyFace.FaceInfo.IsConstrained0
+  nameWithType: TopologyFace.FaceInfo.IsConstrained0
+- uid: Lime.TopologyFace.FaceInfo.IsConstrained1
+  name: IsConstrained1
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_IsConstrained1
+  commentId: F:Lime.TopologyFace.FaceInfo.IsConstrained1
+  fullName: Lime.TopologyFace.FaceInfo.IsConstrained1
+  nameWithType: TopologyFace.FaceInfo.IsConstrained1
+- uid: Lime.TopologyFace.FaceInfo.IsConstrained2
+  name: IsConstrained2
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_IsConstrained2
+  commentId: F:Lime.TopologyFace.FaceInfo.IsConstrained2
+  fullName: Lime.TopologyFace.FaceInfo.IsConstrained2
+  nameWithType: TopologyFace.FaceInfo.IsConstrained2
+- uid: Lime.TopologyFace.FaceInfo.IsFraming0
+  name: IsFraming0
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_IsFraming0
+  commentId: F:Lime.TopologyFace.FaceInfo.IsFraming0
+  fullName: Lime.TopologyFace.FaceInfo.IsFraming0
+  nameWithType: TopologyFace.FaceInfo.IsFraming0
+- uid: Lime.TopologyFace.FaceInfo.IsFraming1
+  name: IsFraming1
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_IsFraming1
+  commentId: F:Lime.TopologyFace.FaceInfo.IsFraming1
+  fullName: Lime.TopologyFace.FaceInfo.IsFraming1
+  nameWithType: TopologyFace.FaceInfo.IsFraming1
+- uid: Lime.TopologyFace.FaceInfo.IsFraming2
+  name: IsFraming2
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_IsFraming2
+  commentId: F:Lime.TopologyFace.FaceInfo.IsFraming2
+  fullName: Lime.TopologyFace.FaceInfo.IsFraming2
+  nameWithType: TopologyFace.FaceInfo.IsFraming2
+- uid: Lime.TopologyFace.FaceInfo.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_Item_System_Int32_
+  commentId: P:Lime.TopologyFace.FaceInfo.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.TopologyFace.FaceInfo.Item[System.Int32]
+  fullName.vb: Lime.TopologyFace.FaceInfo.Item(System.Int32)
+  nameWithType: TopologyFace.FaceInfo.Item[Int32]
+  nameWithType.vb: TopologyFace.FaceInfo.Item(Int32)
+- uid: Lime.TopologyFace.FaceInfo.Item*
+  name: Item
+  href: api/Lime.TopologyFace.FaceInfo.html#Lime_TopologyFace_FaceInfo_Item_
+  commentId: Overload:Lime.TopologyFace.FaceInfo.Item
+  isSpec: "True"
+  fullName: Lime.TopologyFace.FaceInfo.Item
+  nameWithType: TopologyFace.FaceInfo.Item
+- uid: Lime.TopologyFace.GetHashCode
+  name: GetHashCode()
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_GetHashCode
+  commentId: M:Lime.TopologyFace.GetHashCode
+  fullName: Lime.TopologyFace.GetHashCode()
+  nameWithType: TopologyFace.GetHashCode()
+- uid: Lime.TopologyFace.GetHashCode*
+  name: GetHashCode
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_GetHashCode_
+  commentId: Overload:Lime.TopologyFace.GetHashCode
+  isSpec: "True"
+  fullName: Lime.TopologyFace.GetHashCode
+  nameWithType: TopologyFace.GetHashCode
+- uid: Lime.TopologyFace.Index0
+  name: Index0
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Index0
+  commentId: F:Lime.TopologyFace.Index0
+  fullName: Lime.TopologyFace.Index0
+  nameWithType: TopologyFace.Index0
+- uid: Lime.TopologyFace.Index1
+  name: Index1
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Index1
+  commentId: F:Lime.TopologyFace.Index1
+  fullName: Lime.TopologyFace.Index1
+  nameWithType: TopologyFace.Index1
+- uid: Lime.TopologyFace.Index2
+  name: Index2
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Index2
+  commentId: F:Lime.TopologyFace.Index2
+  fullName: Lime.TopologyFace.Index2
+  nameWithType: TopologyFace.Index2
+- uid: Lime.TopologyFace.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Item_System_Int32_
+  commentId: P:Lime.TopologyFace.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.TopologyFace.Item[System.Int32]
+  fullName.vb: Lime.TopologyFace.Item(System.Int32)
+  nameWithType: TopologyFace.Item[Int32]
+  nameWithType.vb: TopologyFace.Item(Int32)
+- uid: Lime.TopologyFace.Item*
+  name: Item
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_Item_
+  commentId: Overload:Lime.TopologyFace.Item
+  isSpec: "True"
+  fullName: Lime.TopologyFace.Item
+  nameWithType: TopologyFace.Item
+- uid: Lime.TopologyFace.ToString
+  name: ToString()
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_ToString
+  commentId: M:Lime.TopologyFace.ToString
+  fullName: Lime.TopologyFace.ToString()
+  nameWithType: TopologyFace.ToString()
+- uid: Lime.TopologyFace.ToString*
+  name: ToString
+  href: api/Lime.TopologyFace.html#Lime_TopologyFace_ToString_
+  commentId: Overload:Lime.TopologyFace.ToString
+  isSpec: "True"
+  fullName: Lime.TopologyFace.ToString
+  nameWithType: TopologyFace.ToString
+- uid: Lime.TopologyHitTestResult
+  name: TopologyHitTestResult
+  href: api/Lime.TopologyHitTestResult.html
+  commentId: T:Lime.TopologyHitTestResult
+  fullName: Lime.TopologyHitTestResult
+  nameWithType: TopologyHitTestResult
+- uid: Lime.TopologyHitTestResult.Info
+  name: Info
+  href: api/Lime.TopologyHitTestResult.html#Lime_TopologyHitTestResult_Info
+  commentId: F:Lime.TopologyHitTestResult.Info
+  fullName: Lime.TopologyHitTestResult.Info
+  nameWithType: TopologyHitTestResult.Info
+- uid: Lime.TopologyHitTestResult.Target
+  name: Target
+  href: api/Lime.TopologyHitTestResult.html#Lime_TopologyHitTestResult_Target
+  commentId: F:Lime.TopologyHitTestResult.Target
+  fullName: Lime.TopologyHitTestResult.Target
+  nameWithType: TopologyHitTestResult.Target
+- uid: Lime.TopologyVertex
+  name: TopologyVertex
+  href: api/Lime.TopologyVertex.html
+  commentId: T:Lime.TopologyVertex
+  fullName: Lime.TopologyVertex
+  nameWithType: TopologyVertex
+- uid: Lime.TopologyVertex.Count
+  name: Count
+  href: api/Lime.TopologyVertex.html#Lime_TopologyVertex_Count
+  commentId: P:Lime.TopologyVertex.Count
+  fullName: Lime.TopologyVertex.Count
+  nameWithType: TopologyVertex.Count
+- uid: Lime.TopologyVertex.Count*
+  name: Count
+  href: api/Lime.TopologyVertex.html#Lime_TopologyVertex_Count_
+  commentId: Overload:Lime.TopologyVertex.Count
+  isSpec: "True"
+  fullName: Lime.TopologyVertex.Count
+  nameWithType: TopologyVertex.Count
+- uid: Lime.TopologyVertex.Index
+  name: Index
+  href: api/Lime.TopologyVertex.html#Lime_TopologyVertex_Index
+  commentId: F:Lime.TopologyVertex.Index
+  fullName: Lime.TopologyVertex.Index
+  nameWithType: TopologyVertex.Index
+- uid: Lime.TopologyVertex.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.TopologyVertex.html#Lime_TopologyVertex_Item_System_Int32_
+  commentId: P:Lime.TopologyVertex.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.TopologyVertex.Item[System.Int32]
+  fullName.vb: Lime.TopologyVertex.Item(System.Int32)
+  nameWithType: TopologyVertex.Item[Int32]
+  nameWithType.vb: TopologyVertex.Item(Int32)
+- uid: Lime.TopologyVertex.Item*
+  name: Item
+  href: api/Lime.TopologyVertex.html#Lime_TopologyVertex_Item_
+  commentId: Overload:Lime.TopologyVertex.Item
+  isSpec: "True"
+  fullName: Lime.TopologyVertex.Item
+  nameWithType: TopologyVertex.Item
 - uid: Lime.Transform2
   name: Transform2
   href: api/Lime.Transform2.html
@@ -75310,6 +76353,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_LayoutDirection
   nameWithType: LimeCloner.Clone_Lime__Animator_LayoutDirection
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__Animator_List_Animesh__SkinnedVertex(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animator_List_Animesh__SkinnedVertex_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex*
+  name: Clone_Lime__Animator_List_Animesh__SkinnedVertex
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animator_List_Animesh__SkinnedVertex_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex
+  nameWithType: LimeCloner.Clone_Lime__Animator_List_Animesh__SkinnedVertex
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__Animator_Matrix44(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__Animator_Matrix44(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animator_Matrix44_Yuzu_Clone_Cloner_System_Object_
@@ -75596,6 +76652,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_Vector3
   nameWithType: LimeCloner.Clone_Lime__Animator_Vector3
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Animesh(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__Animesh(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animesh_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__Animesh(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animesh(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__Animesh(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Animesh*
+  name: Clone_Lime__Animesh
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animesh_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__Animesh
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animesh
+  nameWithType: LimeCloner.Clone_Lime__Animesh
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__Audio(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__Audio(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Audio_Yuzu_Clone_Cloner_System_Object_
@@ -76168,6 +77237,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_LayoutDirection
   nameWithType: LimeCloner.Clone_Lime__Keyframe_LayoutDirection
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__Keyframe_List_Animesh__SkinnedVertex(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Keyframe_List_Animesh__SkinnedVertex_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex*
+  name: Clone_Lime__Keyframe_List_Animesh__SkinnedVertex
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Keyframe_List_Animesh__SkinnedVertex_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex
+  nameWithType: LimeCloner.Clone_Lime__Keyframe_List_Animesh__SkinnedVertex
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_Matrix44(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__Keyframe_Matrix44(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Keyframe_Matrix44_Yuzu_Clone_Cloner_System_Object_
@@ -77039,6 +78121,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__SimpleText
   nameWithType: LimeCloner.Clone_Lime__SimpleText
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__SkinnedVertexListAnimator(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__SkinnedVertexListAnimator(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__SkinnedVertexListAnimator_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__SkinnedVertexListAnimator(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__SkinnedVertexListAnimator(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__SkinnedVertexListAnimator(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__SkinnedVertexListAnimator*
+  name: Clone_Lime__SkinnedVertexListAnimator
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__SkinnedVertexListAnimator_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__SkinnedVertexListAnimator
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__SkinnedVertexListAnimator
+  nameWithType: LimeCloner.Clone_Lime__SkinnedVertexListAnimator
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__SkinningWeights(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__SkinningWeights(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__SkinningWeights_Yuzu_Clone_Cloner_System_Object_
