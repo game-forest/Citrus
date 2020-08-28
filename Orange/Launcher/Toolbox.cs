@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -21,7 +21,7 @@ namespace Orange
 			return Path.GetDirectoryName (assemblyPath);
 		}
 
-		public static string CalcCitrusDirectory ()
+		public static string FindCitrusDirectory ()
 		{
 			var path = Uri.UnescapeDataString ((new Uri (Assembly.GetExecutingAssembly ().CodeBase)).AbsolutePath);
 			while (!File.Exists (Path.Combine (path, CitrusVersion.Filename))) {

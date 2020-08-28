@@ -60,7 +60,7 @@ namespace Tangerine.UI
 								new ToolbarButton(commandInfo.Title);
 						button.Clicked += () => CommandQueue.Instance.Add((Command)command);
 						button.Updating += _ => {
-							button.Texture = command.Icon.AsTexture;
+							button.Texture = command.Icon?.AsTexture;
 							button.Checked = command.Checked;
 							button.Enabled = command.Enabled;
 							button.Tooltip = button.Text = command.Text;

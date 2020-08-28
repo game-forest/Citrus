@@ -7,8 +7,8 @@ using Tangerine.UI.Timeline.Components;
 
 namespace Tangerine.UI.Timeline
 {
-    public class BoneLinkIndicationProcessor : SymmetricOperationProcessor
-    {
+	public class BoneLinkIndicationProcessor : SymmetricOperationProcessor
+	{
 		private class BoneLinkIndicatorButton : LinkIndicatorButton
 		{
 			public BoneLinkIndicatorButton() : base(NodeIconPool.GetTexture(typeof(Bone)), clickable: true)
@@ -17,39 +17,44 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-	    private Node container;
+		private Node container;
 
-        public override void Process(IOperation op)
-        {
-	        if (!op.IsChangingDocument && container == Document.Current.Container) {
-		        return;
-	        }
-	        container = Document.Current.Container;
+		public override void Process(IOperation op)
+		{
+			if (!op.IsChangingDocument && container == Document.Current.Container) {
+				return;
+			}
+			container = Document.Current.Container;
 			var links = new Dictionary<Bone, HashSet<RollNodeView>>();
-            foreach (var row in Document.Current.Rows)
-            {
-	            if (!(row.Components.Get<RowView>()?.RollRow is RollNodeView view)) {
-		            continue;
-	            }
-	            view.LinkIndicatorButtonContainer.DisableIndication<BoneLinkIndicatorButton>();
-	            var node = view.NodeData?.Node;
-	            switch (node) {
-		            case Widget widget:
-			            var nodes = widget.Parent.Nodes;
-			            AddLinks(links, widget.SkinningWeights, view, nodes);
-			            if (widget is DistortionMesh mesh) {
-				            foreach (var index in GetLinkedBoneIndexes(mesh)) {
-					            AddLink(links, index, view, nodes);
-				            }
-			            }
-			            break;
-		            case DistortionMeshPoint point:
-			            AddLinks(links, point.SkinningWeights, view, point.Parent.Parent.Nodes);
-			            break;
-	            }
-            }
-            foreach (var row in Document.Current.Rows)
-            {
+			foreach (var row in Document.Current.Rows)
+			{
+				if (!(row.Components.Get<RowView>()?.RollRow is RollNodeView view)) {
+					continue;
+				}
+				view.LinkIndicatorButtonContainer.DisableIndication<BoneLinkIndicatorButton>();
+				var node = view.NodeData?.Node;
+				switch (node) {
+					case Widget widget:
+						var nodes = widget.Parent.Nodes;
+						AddLinks(links, widget.SkinningWeights, view, nodes);
+						if (widget is DistortionMesh mesh) {
+							foreach (var index in GetLinkedBoneIndexes(mesh)) {
+								AddLink(links, index, view, nodes);
+							}
+						}
+						if (widget is Animesh animesh) {
+							foreach (var index in GetLinkedBoneIndexes(animesh)) {
+								AddLink(links, index, view, nodes);
+							}
+						}
+						break;
+					case DistortionMeshPoint point:
+						AddLinks(links, point.SkinningWeights, view, point.Parent.Parent.Nodes);
+						break;
+				}
+			}
+			foreach (var row in Document.Current.Rows)
+			{
 				if (
 					row.Components.Get<RowView>()?.RollRow is RollNodeView view &&
 					view.NodeData?.Node is Bone bone
@@ -70,8 +75,8 @@ namespace Tangerine.UI.Timeline
 						view.LinkIndicatorButtonContainer.DisableIndication<BoneLinkIndicatorButton>();
 					}
 				}
-            }
-        }
+			}
+		}
 
 		internal static IEnumerable<int> GetLinkedBoneIndexes(DistortionMesh mesh)
 		{
@@ -90,6 +95,24 @@ namespace Tangerine.UI.Timeline
 				}
 				if (point.SkinningWeights.Bone3.Index != 0) {
 					yield return point.SkinningWeights.Bone3.Index;
+				}
+			}
+		}
+
+		private static IEnumerable<int> GetLinkedBoneIndexes(Animesh animesh)
+		{
+			foreach (var vertex in animesh.Vertices) {
+				if (vertex.BlendIndices.Index0 != 0) {
+					yield return vertex.BlendIndices.Index0;
+				}
+				if (vertex.BlendIndices.Index1 != 0) {
+					yield return vertex.BlendIndices.Index1;
+				}
+				if (vertex.BlendIndices.Index2 != 0) {
+					yield return vertex.BlendIndices.Index2;
+				}
+				if (vertex.BlendIndices.Index3 != 0) {
+					yield return vertex.BlendIndices.Index3;
 				}
 			}
 		}
@@ -122,5 +145,5 @@ namespace Tangerine.UI.Timeline
 				view.LinkIndicatorButtonContainer.EnableIndication<BoneLinkIndicatorButton>().AddLinkedNode(bone);
 			}
 		}
-    }
+	}
 }

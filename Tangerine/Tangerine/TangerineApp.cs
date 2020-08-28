@@ -10,6 +10,8 @@ using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.MainMenu;
 using Tangerine.UI;
+using Tangerine.UI.AnimeshEditor;
+using Tangerine.UI.AnimeshEditor.Operations;
 using Tangerine.UI.SceneView;
 using Tangerine.UI.Docking;
 using Tangerine.UI.Timeline;
@@ -265,6 +267,8 @@ namespace Tangerine
 
 			Document.NodeDecorators.AddFor<ParticleEmitter>(n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter()));
 			DocumentHistory.AddOperationProcessorTypes(new[] {
+				typeof(AnimeshModification.Animate.Processor),
+				typeof(AnimeshModification.Slice.Processor),
 				typeof(Core.Operations.TimelineHorizontalShift.Processor),
 				typeof(Core.Operations.TimelineColumnRemove.Processor),
 				typeof(Core.Operations.RemoveKeyframeRange.Processor),
@@ -305,6 +309,7 @@ namespace Tangerine
 				typeof(Core.Operations.ReplaceContents.Processor),
 				typeof(Core.Operations.DeleteRuler.Processor),
 				typeof(Core.Operations.CreateRuler.Processor),
+				typeof(InvalidateAnimesh.Processor)
 			});
 			DocumentHistory.AddOperationProcessorTypes(UI.Timeline.Timeline.GetOperationProcessorTypes());
 
@@ -662,6 +667,11 @@ namespace Tangerine
 			h.Connect(Tools.FlipX, new FlipX());
 			h.Connect(Tools.FlipY, new FlipY());
 			h.Connect(Tools.CenterView, new CenterView());
+			h.Connect(Tools.AnimeshAnimate, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Animation));
+			h.Connect(Tools.AnimeshModify, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Modification));
+			h.Connect(Tools.AnimeshCreate, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Creation));
+			h.Connect(Tools.AnimeshRemove, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Removal));
+			h.Connect(Tools.AnimeshTransform, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Transformation));
 			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard, IsCopyPasteAllowedForSelection);
 			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform, IsCopyPasteAllowedForSelection));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));

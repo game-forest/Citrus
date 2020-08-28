@@ -1,27 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Lime;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.UI.AnimeshEditor;
 using Tangerine.UI.SceneView.Presenters;
 
 namespace Tangerine.UI.SceneView
 {
-	public class SceneView : IDocumentView
+	public class SceneView : IDocumentView, ISceneView
 	{
 		private Vector2 mousePositionOnFilesDrop;
 
 		// Given panel.
-		public readonly Widget Panel;
+		public Widget Panel { get; }
 		// Widget which is a direct child of the panel.
-		public readonly Widget Frame;
+		public Widget Frame { get; }
 		// Widget having the same size as panel, used for intercepting mouse events above the canvas.
-		public readonly Widget InputArea;
+		public Widget InputArea { get; }
 		public WidgetInput Input => InputArea.Input;
 		// Container for the document root node.
-		public readonly Widget Scene;
+		public Widget Scene { get; }
 		public readonly DropFilesGesture DropFilesGesture;
 		public static readonly RulersWidget RulersWidget = new RulersWidget();
 		public static readonly ZoomWidget ZoomWidget = new ZoomWidget();
@@ -31,6 +33,7 @@ namespace Tangerine.UI.SceneView
 			MinMaxSize = new Vector2(24),
 			LayoutCell = new LayoutCell(new Alignment { X = HAlignment.Left, Y = VAlignment.Bottom } )
 		};
+		public static readonly AnimeshContextualPanel AnimeshPanel = new AnimeshContextualPanel();
 		public static Action<SceneView> OnCreate;
 
 		/// <summary>
@@ -237,6 +240,7 @@ namespace Tangerine.UI.SceneView
 		{
 			Instance = this;
 			Document.Current.SceneViewThumbnailProvider = new SceneViewThumbnailProvider(Document.Current, Frame);
+			Panel.AddNode(AnimeshPanel.RootNode);
 			Panel.AddNode(ShowNodeDecorationsPanelButton);
 			Panel.AddNode(ZoomWidget);
 			Panel.AddNode(RulersWidget);
@@ -246,6 +250,7 @@ namespace Tangerine.UI.SceneView
 		public void Detach()
 		{
 			Instance = null;
+			AnimeshPanel.RootNode.Unlink();
 			Frame.Unlink();
 			ShowNodeDecorationsPanelButton.Unlink();
 			RulersWidget.Unlink();
@@ -291,6 +296,7 @@ namespace Tangerine.UI.SceneView
 				new DragSplinePoint3DProcessor(),
 				new DragAnimationPathPointProcessor(),
 				new DragWidgetsProcessor(),
+				new AnimeshProcessor(this),
 				new ResizeWidgetsProcessor(),
 				new RescalePointObjectSelectionProcessor(),
 				new RotatePointObjectSelectionProcessor(),
@@ -302,7 +308,8 @@ namespace Tangerine.UI.SceneView
 				new ShiftClickProcessor(),
 				new PreviewAnimationProcessor(),
 				new ResolutionPreviewProcessor(),
-				new FrameProgressionProcessor()
+				new FrameProgressionProcessor(),
+				new AnimeshContextualPanelProcessor(AnimeshPanel)
 			);
 		}
 
@@ -323,6 +330,7 @@ namespace Tangerine.UI.SceneView
 			new NineGridLinePresenter(this);
 			new Animation2DPathPresenter(this);
 			new WavePivotPresenter(this);
+			new AnimeshPresenter(this);
 		}
 
 		public void CreateNode(Type nodeType, ICommand command)

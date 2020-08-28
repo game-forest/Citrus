@@ -58,6 +58,49 @@ namespace Lime
 			}
 		}
 
+		public SkinningWeights Release(params int[] boneIndices)
+		{
+			if (boneIndices.Length == 0) {
+				Bone0 = new BoneWeight();
+				Bone1 = new BoneWeight();
+				Bone2 = new BoneWeight();
+				Bone3 = new BoneWeight();
+				return this;
+			}
+
+			var weightToDistribute = 0.0f;
+			foreach (var boneIndex in boneIndices) {
+				if (boneIndex <= 0) {
+					continue;
+				}
+				for (var j = 0; j < 4; ++j) {
+					var sw = this[j];
+					if (sw.Index == boneIndex) {
+						weightToDistribute += sw.Weight;
+						sw.Weight = sw.Index = 0;
+						this[j] = sw;
+					}
+				}
+			}
+			var effectiveCount = 0;
+			for (var i = 0; i < 4; ++i) {
+				if (this[i].Index > 0) {
+					++effectiveCount;
+				}
+			}
+			if (effectiveCount > 0 && weightToDistribute > Mathf.ZeroTolerance) {
+				weightToDistribute /= effectiveCount;
+				for (var i = 0; i < 4; ++i) {
+					var sw = this[i];
+					if (sw.Index > 0) {
+						sw.Weight += weightToDistribute;
+						this[i] = sw;
+					}
+				}
+			}
+			return this;
+		}
+
 		public SkinningWeights Clone()
 		{
 			return new SkinningWeights {
@@ -292,6 +335,57 @@ namespace Lime
 				bone = root;
 			}
 			return bone;
+		}
+
+		public static bool CheckConsistency(IEnumerable<Bone> bones, params Widget[] widgets)
+		{
+			var container = bones.First().Parent.AsWidget;
+			foreach (var bone in bones) {
+				if (bone.Parent == null || bone.Parent != container) {
+					return false;
+				}
+			}
+
+			foreach (var widget in widgets) {
+				if (widget.Parent == null || widget.Parent != container) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public static SkinningWeights CalcSkinningWeight(SkinningWeights oldSkinningWeights, Vector2 position, List<Bone> bones)
+		{
+			var skinningWeights = new SkinningWeights();
+			var i = 0;
+			var overallWeight = 0f;
+			while (oldSkinningWeights[i].Index != 0) {
+				skinningWeights[i] = oldSkinningWeights[i];
+				overallWeight += skinningWeights[i].Weight;
+				i++;
+			}
+			var j = 0;
+			while (j < bones.Count && i < 4) {
+				var weight = bones[j].CalcWeightForPoint(position);
+				if (Mathf.Abs(weight) > Mathf.ZeroTolerance) {
+					skinningWeights[i] = new BoneWeight {
+						Weight = weight,
+						Index = bones[j].Index
+					};
+					overallWeight += skinningWeights[i].Weight;
+					i++;
+				}
+				j++;
+			}
+			if (overallWeight != 0) {
+				for (i = 0; i < 4; i++) {
+					var bw = skinningWeights[i];
+					bw.Weight /= overallWeight;
+					skinningWeights[i] = bw;
+				}
+			}
+			return skinningWeights;
 		}
 	}
 

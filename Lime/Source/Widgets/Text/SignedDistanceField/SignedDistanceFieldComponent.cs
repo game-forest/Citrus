@@ -152,7 +152,7 @@ namespace Lime
 	[AllowedComponentOwnerTypes(typeof(SimpleText), typeof(TextStyle))]
 	public class SignedDistanceFieldComponent : NodeComponent
 	{
-		private const string GroupFont = "01. Face";
+		private const string GroupFont = "01. TopologyFace";
 		private const string GroupOutline = "02. Outline";
 		private const string GroupGradient = "03. Gradient";
 		private const string GroupShadow = "04. Shadows";

@@ -4,6 +4,7 @@ using System.Linq;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.UI.AnimeshEditor;
 using Tangerine.UI.SceneView.WidgetTransforms;
 
 namespace Tangerine.UI.SceneView
@@ -19,10 +20,12 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				Quadrangle hull;
-				Vector2 pivot;
-				IEnumerable<Widget> widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
-				if (Utils.CalcHullAndPivot(widgets, out hull, out pivot)) {
+				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>()
+					.Where(w => !w.IsPropertyReadOnly(nameof(Widget.Rotation)));
+				if (AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
+					widgets = widgets.Where(w => !(w is Animesh));
+				}
+				if (Utils.CalcHullAndPivot(widgets, out var hull, out var pivot)) {
 					for (int i = 0; i < 4; i++) {
 						if (sv.HitTestControlPoint(hull[i])) {
 							Utils.ChangeCursorIfDefault(Cursors.Rotate);

@@ -6,12 +6,6 @@ using System.Text;
 
 namespace Lime
 {
-	public struct FileInfo
-	{
-		public string Path;
-		public DateTime LastWriteTime;
-	}
-
 	[Flags]
 	public enum AssetAttributes
 	{

@@ -19,6 +19,12 @@ namespace Lime
 			public static readonly Vector2 MinTabSize = new Vector2(25, 24);
 			public static readonly Vector2 CloseButtonSize = new Vector2(16, 16);
 			public static readonly Thickness ControlsPadding = new Thickness(2);
+			public static readonly float AnimeshVertexRadius = 4.0f;
+			public static readonly float AnimeshBackgroundVertexRadius = 1.4f * AnimeshVertexRadius;
+			public static readonly float AnimeshEdgeThickness = 2.0f;
+			public static readonly float AnimeshBackgroundEdgeThickness = 2.0f * AnimeshEdgeThickness;
+			public static readonly float AnimeshVertexHitTestRadius = 4.0f * AnimeshVertexRadius;
+			public static readonly float AnimeshEdgeHitTestRadius = 2.0f * AnimeshVertexRadius;
 		}
 
 		// to set all colors to the value of default one, making them more noticeable
@@ -131,6 +137,28 @@ namespace Lime
 			public Color4 RedText { get; set; }
 			[YuzuOptional]
 			public Color4 WarningBackground { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshVertexColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshVertexBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshAnimatedVertexColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshFramingEdgeColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshFramingEdgeBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshFixedEdgeColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshFixedEdgeBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshInnerEdgeColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshInnerEdgeBackgroundColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshHoverColor { get; set; }
+			[YuzuOptional]
+			public Color4 AnimeshRemovalColor { get; set; }
 
 			public static ColorTheme CreateDarkTheme()
 			{
@@ -183,6 +211,17 @@ namespace Lime
 					ZebraColor1 = grayBackground.Lighten(0.2f),
 					ZebraColor2 = grayBackground.Lighten(0.3f),
 					WarningBackground = new Color4(255, 194, 26),
+					AnimeshVertexColor = new Color4(255, 107, 129),
+					AnimeshVertexBackgroundColor = new Color4(255, 71, 87).Darken(0.8f),
+					AnimeshAnimatedVertexColor = new Color4(1, 1, 1, 1),
+					AnimeshFramingEdgeColor = new Color4(123, 237, 159),
+					AnimeshFramingEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					AnimeshFixedEdgeColor = new Color4(236, 204, 104),
+					AnimeshFixedEdgeBackgroundColor = new Color4(255, 165, 2).Darken(0.8f),
+					AnimeshInnerEdgeColor = new Color4(123, 237, 159),
+					AnimeshInnerEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					AnimeshHoverColor = Color4.White,
+					AnimeshRemovalColor = Color4.Red.Lighten(0.2f),
 				};
 
 			}
@@ -237,6 +276,17 @@ namespace Lime
 					ZebraColor1 = Color4.White,
 					ZebraColor2 = Color4.White.Darken(0.1f),
 					WarningBackground = new Color4(255, 194, 26),
+					AnimeshVertexColor = new Color4(255, 107, 129),
+					AnimeshVertexBackgroundColor = new Color4(255, 71, 87).Darken(0.8f),
+					AnimeshAnimatedVertexColor = new Color4(1, 1, 1, 1),
+					AnimeshFramingEdgeColor = new Color4(123, 237, 159),
+					AnimeshFramingEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					AnimeshFixedEdgeColor = new Color4(236, 204, 104),
+					AnimeshFixedEdgeBackgroundColor = new Color4(255, 165, 2).Darken(0.8f),
+					AnimeshInnerEdgeColor = new Color4(123, 237, 159),
+					AnimeshInnerEdgeBackgroundColor = new Color4(46, 213, 115).Darken(0.8f),
+					AnimeshHoverColor = Color4.White,
+					AnimeshRemovalColor = Color4.Red.Lighten(0.2f),
 				};
 			}
 

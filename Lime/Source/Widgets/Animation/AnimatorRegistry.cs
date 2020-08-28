@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SkinnedVertex = Lime.Animesh.SkinnedVertex;
 
 namespace Lime
 {
@@ -79,6 +80,7 @@ namespace Lime
 			Add(typeof(HAlignment), new AnimatorFactory<HAlignment>());
 			Add(typeof(VAlignment), new AnimatorFactory<VAlignment>());
 			Add(typeof(Alignment), new AnimatorFactory<Alignment>());
+			Add(typeof(List<SkinnedVertex>), new SkinnedVertexListAnimatorFactory());
 		}
 
 		public bool Contains(Type propertyType) => propertyType.IsEnum || map.ContainsKey(propertyType);
@@ -194,6 +196,12 @@ namespace Lime
 			public IEasedAnimator CreateEasedAnimator() => (IEasedAnimator)easedAnimatorFactory();
 			public IChainedAnimator CreateChainedAnimator() => (IChainedAnimator)chainedAnimatorFactory();
 			public IBlendedAnimator CreateBlendedAnimator() => (IBlendedAnimator)blendedAnimatorFactory();
+		}
+
+		private class SkinnedVertexListAnimatorFactory : AnimatorFactory<SkinnedVertexListAnimator>
+		{
+			public override IAnimator CreateAnimator() => new SkinnedVertexListAnimator();
+			public override IBlendedAnimator CreateBlendedAnimator() => new SkinnedVertexListBlendedAnimator();
 		}
 	}
 }

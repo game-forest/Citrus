@@ -27,6 +27,25 @@ namespace Lime
 	public sealed class TangerineReadOnlyAttribute : Attribute
 	{ }
 
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+	public sealed class TangerineReadOnlyPropertiesAttribute : Attribute
+	{
+		private readonly string[] propertyNames;
+
+		public bool Contains(string propertyName)
+		{
+			foreach (var name in propertyNames) {
+				if (propertyName == name) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public TangerineReadOnlyPropertiesAttribute(params string[] propertyNames) =>
+			this.propertyNames = propertyNames.ToArray();
+	}
+
 	public sealed class TangerineKeyframeColorAttribute : Attribute
 	{
 		public int ColorIndex;

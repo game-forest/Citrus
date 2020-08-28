@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SkinnedVertex = Lime.Animesh.SkinnedVertex;
 
 namespace Lime
 {
@@ -165,6 +166,23 @@ namespace Lime
 				Mathf.Lerp(blendFactor, value1.Median, value2.Median),
 				Mathf.Lerp(blendFactor, value1.Dispersion, value2.Dispersion)
 			);
+		}
+	}
+
+	internal class SkinnedVertexListBlendedAnimator : BlendedAnimator<List<SkinnedVertex>>
+	{
+		protected override void Blend(ref List<SkinnedVertex> value1, List<SkinnedVertex> value2, float blendFactor)
+		{
+			for (var i = 0; i < value1.Count; ++i) {
+				var pos = Mathf.Lerp(blendFactor, value1[i].Pos, value2[i].Pos);
+				var uv1 = Mathf.Lerp(blendFactor, value1[i].UV1, value2[i].UV1);
+				var A = Mathf.Lerp(blendFactor, value1[i].Color.A, value2[i].Color.A);
+				var R = Mathf.Lerp(blendFactor, value1[i].Color.R, value2[i].Color.R);
+				var G = Mathf.Lerp(blendFactor, value1[i].Color.G, value2[i].Color.G);
+				var B = Mathf.Lerp(blendFactor, value1[i].Color.B, value2[i].Color.B);
+				var color = new Color4((byte)R, (byte)G, (byte)B, (byte)A);
+				value1[i] = new SkinnedVertex() { Pos = pos, UV1 = uv1, Color = color };
+			}
 		}
 	}
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Net;
 using Lime;
 using Tangerine.Core;
+using Tangerine.UI.AnimeshEditor;
 
 namespace Tangerine.UI.SceneView
 {
@@ -39,6 +41,12 @@ namespace Tangerine.UI.SceneView
 			// Render rectangles.
 			var locked = widgets.Any(w => w.GetTangerineFlag(TangerineFlags.Locked));
 			var color = locked ? ColorTheme.Current.SceneView.LockedWidgetBorder : ColorTheme.Current.SceneView.Selection;
+			if (
+				widgets.Count == 1 && widgets[0] is Animesh &&
+				AnimeshTools.State != AnimeshTools.ModificationState.Transformation
+			) {
+				return;
+			}
 			for (int i = 0; i < 4; i++) {
 				var a = hull[i];
 				var b = hull[(i + 1) % 4];
@@ -58,6 +66,9 @@ namespace Tangerine.UI.SceneView
 			// Render border and icon for widgets.
 			var iconSize = new Vector2(16, 16);
 			foreach (var widget in widgets) {
+				if (widget is Animesh && AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
+					continue;
+				}
 				var t = NodeIconPool.GetTexture(widget.GetType());
 				var h = widget.CalcHull().Transform(sceneView.CalcTransitionFromSceneSpace(canvas));
 				for (int i = 0; i < 4; i++) {

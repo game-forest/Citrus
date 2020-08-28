@@ -120,7 +120,7 @@ namespace Launcher
 #endif // WIN
 		private static string OrangeDirectory { get { return Path.Combine(citrusDirectory, "Orange"); } }
 
-		private static readonly string citrusDirectory = Toolbox.CalcCitrusDirectory();
+		private static readonly string citrusDirectory = Toolbox.FindCitrusDirectory();
 
 		[STAThread]
 		public static int Main(string[] args)
@@ -162,7 +162,7 @@ namespace Launcher
 					Console.WriteLine($"Build version: {buildNumberOption.ParsedValue}");
 
 					CitrusVersion citrusVersion = null;
-					var citrusDirectory = Toolbox.CalcCitrusDirectory();
+					var citrusDirectory = Toolbox.FindCitrusDirectory();
 
 					var bundlePath = winBundlePath.ParsedValue;
 					using (var zipFile = ZipFile.Open(Path.Combine(citrusDirectory, bundlePath), ZipArchiveMode.Read)) {

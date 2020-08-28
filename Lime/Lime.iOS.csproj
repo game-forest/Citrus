@@ -135,6 +135,7 @@
     <Compile Include="Source\AssetBundle\AssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundleToolbox.cs" />
     <Compile Include="Source\AssetBundle\CustomSetAssetBundle.cs" />
+    <Compile Include="Source\AssetBundle\FileInfo.cs" />
     <Compile Include="Source\AssetBundle\PackedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\UnpackedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
@@ -327,6 +328,9 @@
     <Compile Include="Source\Widgets\Animation\IAnimable.cs" />
     <Compile Include="Source\Widgets\Animation\Keyframe.cs" />
     <Compile Include="Source\Widgets\Animation\TypedKeyframeList.cs" />
+    <Compile Include="Source\Widgets\Animesh\Animesh.cs" />
+    <Compile Include="Source\Widgets\Animesh\ITopology.cs" />
+    <Compile Include="Source\Widgets\Animesh\ITopologyPrimitive.cs" />
     <Compile Include="Source\Widgets\Audio.cs" />
     <Compile Include="Source\Widgets\BehaviorComponent.cs" />
     <Compile Include="Source\Widgets\Bone.cs" />

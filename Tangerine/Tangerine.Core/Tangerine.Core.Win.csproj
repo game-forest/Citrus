@@ -60,6 +60,7 @@
     <Compile Include="GridSelection.cs" />
     <Compile Include="GridSpanList.cs" />
     <Compile Include="IDataflow.cs" />
+    <Compile Include="ISceneView.cs" />
     <Compile Include="ITaskProvider.cs" />
     <Compile Include="KeyHandler.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
@@ -68,15 +69,15 @@
     <Compile Include="NodeExtensions.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Operations\ClearRowSelection.cs" />
+    <Compile Include="Operations\NodeTypeConvert.cs" />
+    <Compile Include="Operations\RemoveKeyframeRange.cs" />
+    <Compile Include="Operations\RenameAnimationProcessor.cs" />
+    <Compile Include="Operations\ReplaceContents.cs" />
     <Compile Include="Operations\CopyPaste.cs" />
     <Compile Include="Operations\DistortionMeshProcessor.cs" />
     <Compile Include="Operations\DummyOperation.cs" />
     <Compile Include="Operations\EnterLeaveNode.cs" />
     <Compile Include="Operations\Modification.cs" />
-    <Compile Include="Operations\NodeTypeConvert.cs" />
-    <Compile Include="Operations\RemoveKeyframeRange.cs" />
-    <Compile Include="Operations\RenameAnimationProcessor.cs" />
-    <Compile Include="Operations\ReplaceContents.cs" />
     <Compile Include="Operations\RulerAction.cs" />
     <Compile Include="Operations\SelectRow.cs" />
     <Compile Include="Operations\SelectRowRange.cs" />
@@ -112,7 +113,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
       <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu</Name>
+      <Name>Yuzu.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

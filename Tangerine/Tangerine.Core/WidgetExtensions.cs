@@ -113,5 +113,9 @@ namespace Tangerine.Core
 		public static float Right(this Widget widget) => widget.X + widget.Width;
 		public static float Top(this Widget widget) => widget.Y;
 		public static float Bottom(this Widget widget) => widget.Y + widget.Height;
+
+		public static bool IsPropertyReadOnly(this Widget widget, string property) =>
+			PropertyAttributes<TangerineReadOnlyAttribute>.Get(widget.GetType(), property) != null ||
+			(ClassAttributes<TangerineReadOnlyPropertiesAttribute>.Get(widget.GetType())?.Contains(property) ?? false);
 	}
 }

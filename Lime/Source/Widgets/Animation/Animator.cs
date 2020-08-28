@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Yuzu;
+using SkinnedVertex = Lime.Animesh.SkinnedVertex;
 
 namespace Lime
 {
@@ -521,6 +522,28 @@ namespace Lime
 				Mathf.CatmullRomSpline(t, Value1.Median, Value2.Median, Value3.Median, Value4.Median),
 				Mathf.CatmullRomSpline(t, Value1.Dispersion, Value2.Dispersion, Value3.Dispersion, Value4.Dispersion)
 			);
+		}
+	}
+
+	public class SkinnedVertexListAnimator : Animator<List<SkinnedVertex>>
+	{
+		protected override List<SkinnedVertex> InterpolateLinear(float t)
+		{
+#if TANGERINE
+			var r = new List<SkinnedVertex>();
+			for (var i = 0; i < Math.Min(Value2.Count, Value3.Count); ++i) {
+				r.Add(new SkinnedVertex {
+					Pos = Mathf.Lerp(t, Value2[i].Pos, Value3[i].Pos),
+					UV1 = Mathf.Lerp(t, Value2[i].UV1, Value3[i].UV1),
+					Color = Color4.Lerp(t, Value2[i].Color, Value3[i].Color),
+					BlendIndices = Value2[i].BlendIndices,
+					BlendWeights = Value2[i].BlendWeights
+				});
+			}
+			return r;
+#else
+			return Value2;
+#endif
 		}
 	}
 }

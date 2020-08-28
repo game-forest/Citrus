@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
+using Tangerine.UI.AnimeshEditor;
 
 namespace Tangerine.UI.SceneView
 {
@@ -16,6 +17,7 @@ namespace Tangerine.UI.SceneView
 			Probers.Add(new WidgetProber());
 			Probers.Add(new PointObjectProber());
 			Probers.Add(new SplinePoint3DProber());
+			Probers.Add(new AnimeshProber());
 		}
 
 		public IEnumerator<object> Task()
@@ -196,6 +198,41 @@ namespace Tangerine.UI.SceneView
 				var viewport = spline.Viewport;
 				var viewportToScene = viewport.LocalToWorldTransform;
 				return (Vector2)viewport.WorldToViewportPoint(splinePoint.Position * spline.GlobalTransform) * viewportToScene;
+			}
+		}
+
+		public class AnimeshProber : Prober<Lime.Animesh>
+		{
+			protected override bool ProbeInternal(Lime.Animesh mesh, Vector2 point)
+			{
+				if (!mesh.GloballyVisible) {
+					return false;
+				}
+				return mesh.Controller(SceneView.Instance).HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
+			}
+
+			protected override bool ProbeInternal(Lime.Animesh mesh, Rectangle rectangle)
+			{
+				if (!mesh.GloballyVisible) {
+					return false;
+				}
+				var points = new[] { rectangle.A, new Vector2(rectangle.BX, rectangle.AY), rectangle.B, new Vector2(rectangle.AX, rectangle.BY) };
+				for (var i = 0; i < points.Length; ++i) {
+					foreach (var face in mesh.Faces.ToArray()) {
+						for (var j = 0; j < 3; ++j) {
+							var v0 = mesh.Controller(SceneView.Instance).Vertices[face[j]].Pos * mesh.LocalToWorldTransform;
+							var v1 = mesh.Controller(SceneView.Instance).Vertices[face[(j + 1) % 3]].Pos * mesh.LocalToWorldTransform;
+							if (
+								rectangle.Contains(v0) || rectangle.Contains(v1) ||
+								(points[(i + 1) % points.Length] - points[i]).Length >= 1f &&
+								AnimeshUtils.LineLineIntersection(points[i], points[(i + 1) % points.Length], v0, v1, out var p)
+							) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
 			}
 		}
 	}

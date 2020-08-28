@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangerine.UI.RemoteScriptin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangerine.Common.Win", "Tangerine.Common\Tangerine.Common.Win.csproj", "{259C5E1F-1507-4131-8B4E-DD3C51F7462A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangerine.UI.AnimeshEditor.Win", "Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Win.csproj", "{32771586-53BF-4212-930D-BFDEAC20B3DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,14 @@ Global
 		{259C5E1F-1507-4131-8B4E-DD3C51F7462A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{259C5E1F-1507-4131-8B4E-DD3C51F7462A}.Release|x86.ActiveCfg = Release|Any CPU
 		{259C5E1F-1507-4131-8B4E-DD3C51F7462A}.Release|x86.Build.0 = Release|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{32771586-53BF-4212-930D-BFDEAC20B3DA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
