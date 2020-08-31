@@ -879,7 +879,8 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Bone> bones, IEnumerable<Widget> widgets)
 		{
-			var sortedBones = BoneUtils.SortBones(bones);
+			var sortedBones = bones.ToList();
+			BoneUtils.SortBones(sortedBones);
 			if (!widgets.Any() || !sortedBones.Any()) {
 				return;
 			}

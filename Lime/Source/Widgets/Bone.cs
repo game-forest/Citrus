@@ -258,61 +258,47 @@ namespace Lime
 
 		/// <summary>
 		/// Reorder bones with topological sort to maintain correct update
-		/// order of transformations
+		/// order of transformations.
 		/// </summary>
-		public static List<Bone> SortBones(IEnumerable<Bone> bonesCollection, bool reverseOrder = false)
+		public static void SortBones(IList<Bone> bones)
 		{
-			var bones = new Dictionary<int, Bone>();
-			int maxIndex = 0;
-			foreach (var bone in bonesCollection) {
-				if (bones.ContainsKey(bone.Index)) {
-					throw new InvalidOperationException("more than one bone with same index");
-				}
-				bones[bone.Index] = bone;
-				if (bone.Index > maxIndex) {
-					maxIndex = bone.Index;
-				}
-			}
-			var visited = new Dictionary<int, bool>();
-			var g = new Dictionary<int, SortedSet<int>>();
-			foreach (var kv in bones) {
-				var b = kv.Value;
-				(g.ContainsKey(b.BaseIndex) ? g[b.BaseIndex] : g[b.BaseIndex] = new SortedSet<int>()).Add(b.Index);
-				if (!g.ContainsKey(b.Index))
-					g[b.Index] = new SortedSet<int>();
-				visited.Add(b.Index, false);
-				if (!visited.ContainsKey(b.BaseIndex))
-					visited.Add(b.BaseIndex, false);
-			}
-			var orderedIndices = new List<int>();
-			Action<int> visit = null;
-			visit = (index) => {
-				visited[index] = true;
-				foreach (var i in g[index]) {
-					if (visited[i]) {
-						throw new InvalidOperationException("found cycle in bones parent child relations");
+			SortBones<Bone>(bones);
+		}
+
+		/// <summary>
+		/// Reorder bones within mixed list of nodes with topological sort to maintain correct update
+		/// order of transformations.
+		/// </summary>
+		public static void SortBones(IList<Node> nodes)
+		{
+			SortBones<Node>(nodes);
+		}
+
+		private static void SortBones<T>(IList<T> nodes) where T: Node
+		{
+			bool done;
+			do {
+				done = true;
+				for (int i = 0; i < nodes.Count; i++) {
+					if (nodes[i] is Bone bone && bone.BaseIndex > 0) {
+						for (int j = 0; j < nodes.Count - 1; j++) {
+							int k = i - 1 - j;
+							if (k < 0) {
+								k += nodes.Count;
+							}
+							if (nodes[k] is Bone baseBone && baseBone.Index == bone.BaseIndex) {
+								if (k > i) {
+									nodes.RemoveAt(i);
+									nodes.Insert(k, bone as T);
+									i--;
+									done = false;
+								}
+								break;
+							}
+						}
 					}
-					visit(i);
 				}
-				orderedIndices.Add(index);
-			};
-			foreach (var kv in g) {
-				if (!visited[kv.Key]) {
-					visit(kv.Key);
-				}
-			}
-			if (reverseOrder) {
-				orderedIndices.Reverse();
-			}
-			var res = new List<Bone>();
-			foreach (var i in orderedIndices) {
-				// holes in indices and zero index (implicit bone with Identity transformation)
-				if (!bones.ContainsKey(i)) {
-					continue;
-				}
-				res.Insert(0, bones[i]);
-			}
-			return res;
+			} while (!done);
 		}
 
 		public static IEnumerable<Bone> FindBoneDescendats(Bone root, IEnumerable<Bone> bones)

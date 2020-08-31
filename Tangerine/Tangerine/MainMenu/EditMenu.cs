@@ -56,7 +56,9 @@ namespace Tangerine
 			UntieWidgetsFromBones.Perform(selectedBones, container.Nodes.Except(selectedNodes).OfType<Widget>());
 			var nodeKeyframesDict = new Dictionary<Node, BoneAnimationData>();
 			var localRoots = new List<Bone>();
-			foreach (var bone in BoneUtils.SortBones(container.Nodes.OfType<Bone>())) {
+			var sortedBones = container.Nodes.OfType<Bone>().ToList();
+			BoneUtils.SortBones(sortedBones);
+			foreach (var bone in sortedBones) {
 				Bone localRoot;
 				var delta = Vector2.Zero;
 				var isSelectedBone = selectedBones.Contains(bone);
