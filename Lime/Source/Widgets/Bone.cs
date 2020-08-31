@@ -248,15 +248,9 @@ namespace Lime
 	{
 		public static int GenerateNewBoneIndex(Node hostNode)
 		{
-			for (int i = 1;; i++) {
-				var used = false;
-				foreach (var n in hostNode.Nodes) {
-					if (n is Bone b && b.Index == i) {
-						used = true;
-						break;
-					}
-				}
-				if (!used) {
+			var bones = hostNode.Nodes.OfType<Bone>().ToList();
+			for (var i = 1;; i++) {
+				if (bones.All(b => b.Index != i)) {
 					return i;
 				}
 			}
