@@ -440,15 +440,10 @@ namespace Tangerine.Core
 
 			void SortBones(Node node)
 			{
-				node.Nodes.Sort((x, y) => {
-					if (x is Bone bone1 && y is Bone bone2) {
-						return bone1.Index.CompareTo(bone2.Index);
-					}
-					return 0;
-				});
 				foreach (var n in node.Nodes) {
 					SortBones(n);
 				}
+				BoneUtils.SortBones(node.Nodes);
 			}
 		}
 
