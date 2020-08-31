@@ -7,7 +7,6 @@ using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.UI;
 using Tangerine.UI.Timeline;
-using Yuzu;
 
 namespace Tangerine.Panels
 {
@@ -260,6 +259,9 @@ namespace Tangerine.Panels
 			{
 				var currentItem = TreeViewComponent.GetTreeViewItem(sceneTree);
 				foreach (var i in sceneTree.Rows) {
+					if (i.GetAnimator() != null) {
+						continue;
+					}
 					var child = CreateTree(i);
 					if (child != null) {
 						currentItem.Items.Add(child);
