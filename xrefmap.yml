@@ -39005,12 +39005,12 @@ references:
   commentId: T:Lime.Model3D
   fullName: Lime.Model3D
   nameWithType: Model3D
-- uid: Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence,System.Boolean)
-  name: LoadExternalScenes(InternalPersistence, Boolean)
-  href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes_Lime_InternalPersistence_System_Boolean_
-  commentId: M:Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence,System.Boolean)
-  fullName: Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence, System.Boolean)
-  nameWithType: Model3D.LoadExternalScenes(InternalPersistence, Boolean)
+- uid: Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence)
+  name: LoadExternalScenes(InternalPersistence)
+  href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes_Lime_InternalPersistence_
+  commentId: M:Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence)
+  fullName: Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence)
+  nameWithType: Model3D.LoadExternalScenes(InternalPersistence)
 - uid: Lime.Model3D.LoadExternalScenes*
   name: LoadExternalScenes
   href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes_
@@ -41871,12 +41871,12 @@ references:
   fullName: Lime.Node.Lime.IAnimationHost.OnAnimatorCollectionChanged
   nameWithType: Node.IAnimationHost.OnAnimatorCollectionChanged
   nameWithType.vb: Node.Lime.IAnimationHost.OnAnimatorCollectionChanged
-- uid: Lime.Node.LoadExternalScenes(Lime.InternalPersistence,System.Boolean)
-  name: LoadExternalScenes(InternalPersistence, Boolean)
-  href: api/Lime.Node.html#Lime_Node_LoadExternalScenes_Lime_InternalPersistence_System_Boolean_
-  commentId: M:Lime.Node.LoadExternalScenes(Lime.InternalPersistence,System.Boolean)
-  fullName: Lime.Node.LoadExternalScenes(Lime.InternalPersistence, System.Boolean)
-  nameWithType: Node.LoadExternalScenes(InternalPersistence, Boolean)
+- uid: Lime.Node.LoadExternalScenes(Lime.InternalPersistence)
+  name: LoadExternalScenes(InternalPersistence)
+  href: api/Lime.Node.html#Lime_Node_LoadExternalScenes_Lime_InternalPersistence_
+  commentId: M:Lime.Node.LoadExternalScenes(Lime.InternalPersistence)
+  fullName: Lime.Node.LoadExternalScenes(Lime.InternalPersistence)
+  nameWithType: Node.LoadExternalScenes(InternalPersistence)
 - uid: Lime.Node.LoadExternalScenes*
   name: LoadExternalScenes
   href: api/Lime.Node.html#Lime_Node_LoadExternalScenes_
