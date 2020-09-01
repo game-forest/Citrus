@@ -79,9 +79,13 @@ namespace Tangerine.UI.RemoteScripting
 			private static readonly object scrollToEndTaskTag = new object();
 			private readonly ICommand commandCopy = new Command("Copy");
 			private readonly ICommand commandClear = new Command("Clear");
+			private readonly int maxRowsCount;
+			private readonly int removeRowsCount;
 
 			public TextView(int maxRowsCount = 500, int removeRowsCount = 250)
 			{
+				this.maxRowsCount = maxRowsCount;
+				this.removeRowsCount = removeRowsCount;
 				TrimWhitespaces = false;
 				var menu = new Menu {
 					commandCopy,
@@ -103,11 +107,6 @@ namespace Tangerine.UI.RemoteScripting
 						commandClear.Consume();
 						Clear();
 					}
-					var i = Content.Nodes.Count;
-					// numbers choosen by guess
-					if (i >= maxRowsCount) {
-						Content.Nodes.RemoveRange(0, removeRowsCount);
-					}
 				};
 			}
 
@@ -115,6 +114,9 @@ namespace Tangerine.UI.RemoteScripting
 			{
 				var isScrolledToEnd = Mathf.Abs(Behaviour.ScrollPosition - Behaviour.MaxScrollPosition) < Mathf.ZeroTolerance;
 				Append($"{text}\n");
+				if (Content.Nodes.Count >= maxRowsCount) {
+					Content.Nodes.RemoveRange(0, removeRowsCount);
+				}
 				if (isScrolledToEnd || Behaviour.Content.LateTasks.AnyTagged(scrollToEndTaskTag)) {
 					Behaviour.Content.LateTasks.StopByTag(scrollToEndTaskTag);
 					IEnumerator<object> ScrollToEnd()
