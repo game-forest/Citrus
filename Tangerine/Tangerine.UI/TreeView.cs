@@ -655,13 +655,28 @@ namespace Tangerine.UI
 			}
 		}
 
+		private int currentItemsHashCode;
+
 		public void RefreshPresentation()
 		{
 			items.Clear();
-			scrollView.Content.Nodes.Clear();
 			int index = 0;
 			if (RootItem != null) {
 				BuildRecursively(RootItem);
+			}
+			var itemsHashCode = 17;
+			foreach (var i in items) {
+				unchecked {
+					itemsHashCode = itemsHashCode * 23 + i.GetHashCode();
+				}
+			}
+			// Optimization: avoid layout invalidation if the visible items haven't been changed.
+			if (itemsHashCode != currentItemsHashCode) {
+				currentItemsHashCode = itemsHashCode;
+				scrollView.Content.Nodes.Clear();
+				foreach (var i in items) {
+					scrollView.Content.AddNode(i.Presentation.Widget);
+				}
 			}
 			foreach (var p in presentation.Processors) {
 				foreach (var i in items) {
@@ -676,7 +691,6 @@ namespace Tangerine.UI
 					items.Add(item);
 					item.Index = index++;
 					item.Presentation = item.Presentation ?? presentation.CreateItemPresentation(item);
-					scrollView.Content.AddNode(item.Presentation.Widget);
 				}
 				if (skipRoot || item.Expanded) {
 					foreach (var i in item.Items) {
