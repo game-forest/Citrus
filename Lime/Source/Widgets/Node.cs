@@ -1228,12 +1228,15 @@ namespace Lime
 				}
 				instance.Components.Add(new AssetBundlePathComponent(fullPath));
 				if (!ignoreExternals) {
-					instance.LoadExternalScenes(persistence, !external);
+					instance.LoadExternalScenes(persistence);
 				}
 			} finally {
 				scenesBeingLoaded.Value.Remove(fullPath);
 			}
 			SceneLoaded?.Value?.Invoke(path, instance, external);
+			if (!ignoreExternals && !external) {
+				instance.NotifyOnBuilt();
+			}
 			return instance;
 		}
 
@@ -1257,20 +1260,16 @@ namespace Lime
 		{
 		}
 
-		public virtual void LoadExternalScenes(InternalPersistence persistence = null, bool isExternalRoot = true)
+		public virtual void LoadExternalScenes(InternalPersistence persistence = null)
 		{
 			persistence = persistence ?? InternalPersistence.Instance;
 			if (string.IsNullOrEmpty(ContentsPath)) {
 				foreach (var child in Nodes) {
-					child.LoadExternalScenes(persistence, false);
+					child.LoadExternalScenes(persistence);
 				}
 			} else if (ResolveScenePath(ContentsPath) != null) {
 				var content = CreateFromAssetBundleHelper(ContentsPath, null, persistence, external: true);
 				ReplaceContent(content);
-			}
-
-			if (isExternalRoot) {
-				NotifyOnBuilt();
 			}
 		}
 
