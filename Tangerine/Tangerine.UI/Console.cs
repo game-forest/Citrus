@@ -78,7 +78,7 @@ namespace Tangerine.UI
 					textView.Append(logBeforeProjectOpenedString);
 					File.WriteAllText(LogFilePath, logBeforeProjectOpenedString);
 				}
-				file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write));
+				file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write, FileShare.Read));
 			}
 
 			private void ProjectClosing()
