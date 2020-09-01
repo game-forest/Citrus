@@ -144,12 +144,13 @@ namespace Tangerine.UI
 
 		private IEnumerator<object> ManageTextViewTask()
 		{
-			var menu = new Menu() {
-				new Command("View in External Editor", () => {
+			Command viewInExternalEditorCommand;
+			var menu = new Menu {
+				(viewInExternalEditorCommand = new Command("View in External Editor", () => {
 					if (textWriter.LogFilePath != null) {
 						System.Diagnostics.Process.Start(textWriter.LogFilePath);
 					}
-				}),
+				})),
 				Command.MenuSeparator,
 				new Command("Clear", () => {
 					textView.Clear();
@@ -166,6 +167,7 @@ namespace Tangerine.UI
 				new ClickGesture(1, () => {
 					textView.SetFocus();
 					Window.Current.Activate();
+					viewInExternalEditorCommand.Enabled = textWriter.LogFilePath != null;
 					menu.Popup();
 				})
 			);
