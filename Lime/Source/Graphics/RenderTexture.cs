@@ -118,18 +118,30 @@ namespace Lime
 			return false;
 		}
 
+		public int PixelsCount => size.Width * size.Height;
+
 		/// <summary>
 		/// Copies all pixels from texture.
 		/// </summary>
-		/// <returns></returns>
-		public Color4[] GetPixels()
+		public unsafe Color4[] GetPixels()
 		{
-			unsafe {
-				var pixels = new Color4[size.Width * size.Height];
-				fixed (Color4* pixelsPtr = pixels) {
-					GetPlatformTexture().ReadPixels(Format.R8G8B8A8_UNorm, 0, 0, size.Width, size.Height, new IntPtr(pixelsPtr));
-				}
-				return pixels;
+			var pixels = new Color4[PixelsCount];
+			fixed (Color4* pixelsPtr = pixels) {
+				GetPlatformTexture().ReadPixels(Format.R8G8B8A8_UNorm, 0, 0, size.Width, size.Height, new IntPtr(pixelsPtr));
+			}
+			return pixels;
+		}
+
+		/// <summary>
+		/// Copies all pixels from texture.
+		/// </summary>
+		public unsafe void GetPixels(Color4[] destinationArray)
+		{
+			if (destinationArray.Length < PixelsCount) {
+				throw new InvalidOperationException();
+			}
+			fixed (Color4* pixelsPtr = destinationArray) {
+				GetPlatformTexture().ReadPixels(Format.R8G8B8A8_UNorm, 0, 0, size.Width, size.Height, new IntPtr(pixelsPtr));
 			}
 		}
 	}
