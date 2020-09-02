@@ -274,6 +274,8 @@ namespace Lime
 			SortBones<Node>(nodes);
 		}
 
+		// This method utilizes a simple sort: O(n) complexity if bones are in the correct order,
+		// O(n^2) in the worst case. This fits to our needs, since bones are already sorted in almost all cases.
 		private static void SortBones<T>(IList<T> nodes) where T: Node
 		{
 			bool done;
