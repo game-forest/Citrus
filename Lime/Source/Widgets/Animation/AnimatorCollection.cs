@@ -137,6 +137,7 @@ namespace Lime
 				return false;
 			}
 			if (list?.Remove(item) == true) {
+				item.Unbind();
 				item.Owner = null;
 #if TANGERINE
 				Version++;
