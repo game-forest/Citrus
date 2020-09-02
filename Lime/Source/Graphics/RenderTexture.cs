@@ -123,6 +123,11 @@ namespace Lime
 		/// <summary>
 		/// Copies all pixels from texture.
 		/// </summary>
+		/// <remarks>
+		/// This is a very expensive method.
+		/// It requires waiting for all previous render commands to complete.
+		/// All previous render commands include commands from all previous frames.
+		/// </remarks>
 		public unsafe Color4[] GetPixels()
 		{
 			var pixels = new Color4[PixelsCount];
@@ -135,6 +140,11 @@ namespace Lime
 		/// <summary>
 		/// Copies all pixels from texture.
 		/// </summary>
+		/// <remarks>
+		/// This is a very expensive method.
+		/// It requires waiting for all previous render commands to complete.
+		/// All previous render commands include commands from all previous frames.
+		/// </remarks>
 		public unsafe void GetPixels(Color4[] destinationArray)
 		{
 			if (destinationArray.Length < PixelsCount) {
