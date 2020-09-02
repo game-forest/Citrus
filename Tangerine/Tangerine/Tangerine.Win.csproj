@@ -132,6 +132,10 @@
       <Project>{d6b543cb-0223-4210-bb0f-7d8250760895}</Project>
       <Name>Tangerine.UI.Inspector.Win</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tangerine.UI.Profiler\Tangerine.UI.Profiler.Win.csproj">
+      <Project>{8e8c8ed3-63c2-407f-b626-cd9867e16353}</Project>
+      <Name>Tangerine.UI.Profiler.Win</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Win.csproj">
       <Project>{a60e48a9-2220-4e9d-9b22-3fb1c3ddbf43}</Project>
       <Name>Tangerine.UI.RemoteScripting.Win</Name>
