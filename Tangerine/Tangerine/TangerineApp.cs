@@ -302,7 +302,6 @@ namespace Tangerine
 				typeof(UI.Timeline.Operations.SelectCurveKey.Processor),
 				typeof(TriggersValidatorOnSetProperty),
 				typeof(TriggersValidatorOnSetKeyframe),
-				typeof(UpdateNodesAndApplyAnimatorsProcessor),
 				typeof(Core.Operations.ReplaceContents.Processor),
 				typeof(Core.Operations.DeleteRuler.Processor),
 				typeof(Core.Operations.CreateRuler.Processor),
@@ -482,16 +481,6 @@ namespace Tangerine
 		{
 			AppUserPreferences.Instance.LimeColorTheme = Theme.Colors = limeTheme.Clone();
 			AppUserPreferences.Instance.ColorTheme = ColorTheme.Current = theme.Clone();
-		}
-
-		class UpdateNodesAndApplyAnimatorsProcessor : SymmetricOperationProcessor
-		{
-			public override void Process(IOperation op)
-			{
-				var doc = Document.Current;
-				doc.Animation.Frame = doc.Animation.Frame;
-				doc.RootNode.Update(0);
-			}
 		}
 
 		public void RefreshCreateNodeCommands()

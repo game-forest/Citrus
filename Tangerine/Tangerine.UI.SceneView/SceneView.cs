@@ -165,6 +165,13 @@ namespace Tangerine.UI.SceneView
 		[NodeComponentDontSerialize]
 		private class SceneBehavior : BehaviorComponent
 		{
+			private bool documentChanged;
+
+			public SceneBehavior()
+			{
+				Document.Current.History.DocumentChanged += () => documentChanged = true;
+			}
+
 			protected override void Update(float delta)
 			{
 				if (!Document.Current.PreviewAnimation) {
@@ -173,6 +180,11 @@ namespace Tangerine.UI.SceneView
 					delta *= 0.1f;
 				}
 				Document.Current.Manager.Update(delta);
+				if (documentChanged) {
+					documentChanged = false;
+					Document.Current.Animation.Frame = Document.Current.Animation.Frame;
+					Document.Current.RootNode.Update(0);
+				}
 			}
 		}
 
