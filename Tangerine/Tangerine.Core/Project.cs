@@ -52,6 +52,7 @@ namespace Tangerine.Core
 		public static event Action<Document> DocumentSaving;
 		public static event Action<Document> DocumentSaved;
 		public static event Action<string> Opening;
+		public static event Action Closing;
 
 		private Project() { }
 
@@ -157,6 +158,7 @@ namespace Tangerine.Core
 			if (Current == Null) {
 				return true;
 			}
+			Closing?.Invoke();
 			if (PluginLoader.CurrentPlugin != null) {
 				foreach(var action in PluginLoader.CurrentPlugin.TangerineProjectClosing) {
 					action?.Invoke();

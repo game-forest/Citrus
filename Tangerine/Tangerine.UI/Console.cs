@@ -23,22 +23,13 @@ namespace Tangerine.UI
 			public string LogFilePath { get; private set; }
 			public TextWriter SystemOut;
 
+			public override Encoding Encoding { get; }
+
 			public TextViewWriter(ThemedTextView textView)
 			{
 				this.textView = textView;
-				Project.Opening += path => {
-					var logDir = Path.GetDirectoryName(path);
-					if (!Directory.Exists(logDir)) {
-						Directory.CreateDirectory(logDir);
-					}
-					LogFilePath = Path.Combine(logDir, "TangerineLog.txt");
-					if (file != null) {
-						file.Close();
-					}
-					File.WriteAllText(LogFilePath, logBeforeProjectOpened.ToString());
-					file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write));
-					logBeforeProjectOpened.Clear();
-				};
+				Project.Opening += ProjectOpening;
+				Project.Closing += ProjectClosing;
 			}
 
 			public override void WriteLine(string value)
@@ -55,7 +46,6 @@ namespace Tangerine.UI
 
 			public void ProcessPendingMessages()
 			{
-
 				if (messageQueue.Count > 0) {
 					while (messageQueue.TryDequeue(out string message)) {
 #if DEBUG
@@ -63,18 +53,51 @@ namespace Tangerine.UI
 #endif // DEBUG
 						SystemOut?.Write(message);
 						var fileMessage = $"[{DateTime.Now.ToLongTimeString()}] {message}";
-						if (LogFilePath != null) {
+						if (file != null) {
 							file.Write(fileMessage);
 						} else {
 							logBeforeProjectOpened.Append(fileMessage);
 						}
 						textView.Append(message);
 					}
+					file?.Flush();
 					Application.InvokeOnNextUpdate(textView.ScrollToEnd);
 				}
 			}
 
-			public override Encoding Encoding { get; }
+			private void ProjectOpening(string projectFilePath)
+			{
+				var logDir = Path.GetDirectoryName(projectFilePath);
+				if (!Directory.Exists(logDir)) {
+					Directory.CreateDirectory(logDir);
+				}
+				LogFilePath = Path.Combine(logDir, "TangerineLog.txt");
+				if (logBeforeProjectOpened.Length > 0) {
+					var logBeforeProjectOpenedString = logBeforeProjectOpened.ToString();
+					logBeforeProjectOpened.Clear();
+					textView.Append(logBeforeProjectOpenedString);
+					File.WriteAllText(LogFilePath, logBeforeProjectOpenedString);
+				}
+				file = new StreamWriter(File.Open(LogFilePath, FileMode.Append, FileAccess.Write, FileShare.Read));
+			}
+
+			private void ProjectClosing()
+			{
+				LogFilePath = null;
+				logBeforeProjectOpened.Clear();
+				file?.Close();
+				file = null;
+			}
+
+			protected override void Dispose(bool disposing)
+			{
+				Project.Opening -= ProjectOpening;
+				Project.Closing -= ProjectClosing;
+				file?.Close();
+				file = null;
+
+				base.Dispose(disposing);
+			}
 		}
 
 		public static Console Instance { get; private set; }
@@ -121,12 +144,13 @@ namespace Tangerine.UI
 
 		private IEnumerator<object> ManageTextViewTask()
 		{
-			var menu = new Menu() {
-				new Command("View in External Editor", () => {
+			Command viewInExternalEditorCommand;
+			var menu = new Menu {
+				(viewInExternalEditorCommand = new Command("View in External Editor", () => {
 					if (textWriter.LogFilePath != null) {
 						System.Diagnostics.Process.Start(textWriter.LogFilePath);
 					}
-				}),
+				})),
 				Command.MenuSeparator,
 				new Command("Clear", () => {
 					textView.Clear();
@@ -143,6 +167,7 @@ namespace Tangerine.UI
 				new ClickGesture(1, () => {
 					textView.SetFocus();
 					Window.Current.Activate();
+					viewInExternalEditorCommand.Enabled = textWriter.LogFilePath != null;
 					menu.Popup();
 				})
 			);
