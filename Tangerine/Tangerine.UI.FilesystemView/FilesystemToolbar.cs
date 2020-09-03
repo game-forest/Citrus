@@ -52,6 +52,7 @@ namespace Tangerine.UI.FilesystemView
 					Layout = new VBoxLayout(),
 					Nodes = {
 						new Widget {
+							Id = "ToolbarButtonsContainer",
 							Layout = new HBoxLayout(){
 								Spacing = 2
 							},
