@@ -27,10 +27,12 @@ namespace Lime
 
 		public event Action<float> UpdateFrame;
 		public event Action RenderFrame;
+		private Func<bool> isViewAppeared;
 
-		public GLGameView(CGRect frame) : base(frame)
+		public GLGameView(CGRect frame, Func<bool> isViewAppeared) : base(frame)
 		{
 			stopwatch = new System.Diagnostics.Stopwatch();
+			this.isViewAppeared = isViewAppeared;
 		}
 
 		[Export("layerClass")]
@@ -156,7 +158,9 @@ namespace Lime
 			var bounds = Bounds;
 			if ((float)bounds.Width != ClientSize.X || (float)bounds.Height != ClientSize.Y) {
 				ClientSize = new Vector2((float)Layer.Bounds.Size.Width, (float)Layer.Bounds.Size.Height);
-			    SetupContextAndFramebuffer();
+				if (isViewAppeared()) {
+					SetupContextAndFramebuffer();
+				}
 			}
 		}
 
