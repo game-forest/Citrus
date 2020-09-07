@@ -16,12 +16,13 @@ namespace Tangerine.Panels
 		private readonly Frame contentWidget;
 		private readonly TreeView treeView;
 		private readonly EditBox searchStringEditor;
+		private readonly Func<bool> isSearchActiveGetter;
 
 		public HierarchyPanel(Widget panelWidget)
 		{
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
-
+			isSearchActiveGetter = () => searchStringEditor.Text.Length > 0;
 			ThemedScrollView scrollView;
 
 			contentWidget = new Frame {
@@ -57,7 +58,12 @@ namespace Tangerine.Panels
 						Theme.Colors.WhiteBackground);
 				}
 			}));
-			searchStringEditor.AddChangeWatcher(() => searchStringEditor.Text, _ => RebuildTreeView());
+			searchStringEditor.AddChangeWatcher(() => searchStringEditor.Text, filter => {
+				RebuildTreeView();
+				if (filter.Length > 0 && treeView.RootItem != null) {
+					ExpandTree(treeView.RootItem);
+				}
+			});
 		}
 
 		private void TreeView_OnDragBegin(object sender, TreeView.DragEventArgs args)
@@ -165,11 +171,18 @@ namespace Tangerine.Panels
 					treeView.RefreshPresentation();
 					treeView.ClearSelection();
 					contentWidget.LayoutManager.Layout();
-					foreach (var item in pastedItems.Select(TreeViewComponent.GetTreeViewItem)) {
+					foreach (var item in pastedItems.Select(GetTreeViewItem)) {
 						treeView.SelectItem(item, true, false);
 					}
 				});
 			}
+		}
+
+		private TreeViewItem GetTreeViewItem(Row item)
+		{
+			var c = item.Components.GetOrAdd<TreeViewComponent>();
+			c.TreeViewItem = c.TreeViewItem ?? new TreeViewSceneItem(item, isSearchActiveGetter);
+			return c.TreeViewItem;
 		}
 
 		private static Row GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
@@ -208,7 +221,7 @@ namespace Tangerine.Panels
 			if (enterInto) {
 				Document.Current.History.DoTransaction(() => {
 					EnterNode.Perform(node, selectFirstNode: true);
-					TreeViewComponent.GetTreeViewItem(Document.Current.GetSceneItemForObject(node)).Expanded = true;
+					GetTreeViewItem(Document.Current.GetSceneItemForObject(node)).Expanded = true;
 				});
 			} else {
 				Document.Current.History.DoTransaction(() => {
@@ -221,6 +234,19 @@ namespace Tangerine.Panels
 			}
 		}
 
+		private static void ExpandTree(TreeViewItem tree)
+		{
+			if (tree.Items.Count == 0) {
+				return;
+			}
+			if (!tree.Expanded) {
+				tree.Expanded = true;
+			}
+			foreach (var i in tree.Items) {
+				ExpandTree(i);
+			}
+		}
+
 		private void RebuildTreeView()
 		{
 			if (treeView.RootItem != null) {
@@ -229,9 +255,6 @@ namespace Tangerine.Panels
 			var filter = searchStringEditor.Text;
 			if (Document.Current != null) {
 				treeView.RootItem = CreateTree(Document.Current.SceneTree);
-				if (filter.Length > 0 && treeView.RootItem != null) {
-					ExpandTree(treeView.RootItem);
-				}
 			}
 
 			void DestroyTree(TreeViewItem tree)
@@ -242,22 +265,9 @@ namespace Tangerine.Panels
 				tree.Items.Clear();
 			}
 
-			void ExpandTree(TreeViewItem tree)
-			{
-				if (tree.Items.Count == 0) {
-					return;
-				}
-				if (!tree.Expanded) {
-					tree.Expanded = true;
-				}
-				foreach (var i in tree.Items) {
-					ExpandTree(i);
-				}
-			}
-
 			TreeViewItem CreateTree(Row sceneTree)
 			{
-				var currentItem = TreeViewComponent.GetTreeViewItem(sceneTree);
+				var currentItem = GetTreeViewItem(sceneTree);
 				foreach (var i in sceneTree.Rows) {
 					if (i.GetAnimator() != null) {
 						continue;
@@ -290,7 +300,7 @@ namespace Tangerine.Panels
 		[NodeComponentDontSerialize]
 		public class TreeViewComponent : Component
 		{
-			private TreeViewItem TreeViewItem { get; set; }
+			public TreeViewItem TreeViewItem { get; set; }
 
 			public bool Selected
 			{
@@ -307,23 +317,19 @@ namespace Tangerine.Panels
 
 			public int SelectionOrder { get; private set; }
 
-			public bool Expanded { get; set; }
-
-			public static TreeViewItem GetTreeViewItem(Row item)
-			{
-				var c = item.Components.GetOrAdd<TreeViewComponent>();
-				c.TreeViewItem = c.TreeViewItem ?? new TreeViewSceneItem(item);
-				return c.TreeViewItem;
-			}
+			public bool ExpandedIfSearchInactive { get; set; }
+			public bool ExpandedIfSearchActive { get; set; }
 		}
 
 		private class TreeViewSceneItem : TreeViewItem, ISceneItemHolder
 		{
 			public Row SceneItem { get; }
+			public Func<bool> IsSearchActiveGetter { get; }
 
-			public TreeViewSceneItem(Row sceneItem)
+			public TreeViewSceneItem(Row sceneItem, Func<bool> isSearchActiveGetter)
 			{
 				SceneItem = sceneItem;
+				IsSearchActiveGetter = isSearchActiveGetter;
 			}
 
 			public override bool Selected
@@ -343,14 +349,21 @@ namespace Tangerine.Panels
 
 			public override bool Expanded
 			{
-				get => SceneItem.Components.Get<TreeViewComponent>().Expanded;
+				get
+				{
+					var c = SceneItem.Components.Get<TreeViewComponent>();
+					return IsSearchActiveGetter() ? c.ExpandedIfSearchActive : c.ExpandedIfSearchInactive;
+				}
+
 				set
 				{
 					Document.Current.History.DoTransaction(() => {
 						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+						var propertyName = IsSearchActiveGetter()
+							? nameof(TreeViewComponent.ExpandedIfSearchActive)
+							: nameof(TreeViewComponent.ExpandedIfSearchInactive);
 						SetProperty.Perform(
-							SceneItem.Components.Get<TreeViewComponent>(),
-							nameof(TreeViewComponent.Expanded), value, false);
+							SceneItem.Components.Get<TreeViewComponent>(), propertyName, value, false);
 						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 					});
 				}
