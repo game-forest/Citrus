@@ -39,6 +39,9 @@ namespace Lime
 		Hidden = 1,
 		Locked = 2,
 		Shown = 4,
+		// Don't use following two flags in order not to break compatibility
+		Unused1 = 8,
+		Unused2 = 16,
 		HiddenOnExposition = 32,
 		IgnoreMarkers = 64,
 		DisplayContent = 128,
