@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Lime;
@@ -109,7 +110,12 @@ namespace Tangerine.UI.RemoteScripting
 			BuildAssemblyAsync();
 		}
 
-		public void Log(string text) => assemblyBuilderLog.AppendLine(text);
+		public void Log(string text)
+		{
+			if (text != null) {
+				assemblyBuilderLog.AppendLine(!string.IsNullOrWhiteSpace(text) ? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {text}" : text);
+			}
+		}
 
 		private void SetStatusAndLog(string message)
 		{

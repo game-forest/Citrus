@@ -38,6 +38,9 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public string Locale { get; set; } = DefaultLocale;
 
+		[YuzuOptional]
+		public string RemoteDevicesLogFolder { get; set; }
+
 		public const int MaxRecentDocuments = 5;
 
 		public static ProjectUserPreferences Instance => Project.Current.UserPreferences;
