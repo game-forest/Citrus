@@ -507,7 +507,6 @@ namespace Lime
 		/// </summary>
 		[TangerineIgnore]
 		[YuzuMember]
-		[YuzuSerializeIf(nameof(ShouldSerializeFolders))]
 		public FolderList Folders { get; private set; }
 
 		/// <summary>
@@ -561,7 +560,9 @@ namespace Lime
 			Components = new NodeComponentCollection(this);
 			Animators = new AnimatorCollection(this);
 			Nodes = new NodeList(this);
+#if TANGERINE
 			Folders = new FolderList(this);
+#endif
 			Presenter = DefaultPresenter.Instance;
 			RenderChainBuilder = this;
 			++CreatedCount;
@@ -583,8 +584,6 @@ namespace Lime
 		public virtual bool IsNotDecorated() => true;
 
 		public bool ShouldSerializeNodes() => IsNotDecorated() && Nodes.Count > 0;
-
-		public bool ShouldSerializeFolders() => Folders.Count > 0;
 
 		/// <summary>
 		/// Disposes the node and all of it components, animations, tasks, etc...

@@ -741,12 +741,10 @@ namespace YuzuGenerated
 			result.Exclusive = s.Exclusive;
 			result.FadeInTime = s.FadeInTime;
 			result.FadeTime = s.FadeTime;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Group = s.Group;
 			result.Id = s.Id;
@@ -869,12 +867,10 @@ namespace YuzuGenerated
 			result.ContentsPath = s.ContentsPath;
 			result.EffectiveRadius = s.EffectiveRadius;
 			result.FadeoutZone = s.FadeoutZone;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.IKStopper = s.IKStopper;
 			result.Id = s.Id;
@@ -954,12 +950,10 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.Enabled = s.Enabled;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -1019,12 +1013,10 @@ namespace YuzuGenerated
 			result.ContentsPath = s.ContentsPath;
 			result.FarClipPlane = s.FarClipPlane;
 			result.FieldOfView = s.FieldOfView;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
@@ -1244,12 +1236,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -1308,12 +1298,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -1361,12 +1349,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -1465,12 +1451,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -1625,12 +1609,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -1692,12 +1674,10 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.Enabled = s.Enabled;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -2383,12 +2363,10 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.CullMode = s.CullMode;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
@@ -2459,12 +2437,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
@@ -2635,12 +2611,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -2703,12 +2677,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -2768,12 +2740,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
@@ -2912,12 +2882,10 @@ namespace YuzuGenerated
 			result.ContentsPath = s.ContentsPath;
 			result.Direction = s.Direction;
 			result.EmissionType = s.EmissionType;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.GravityAmount = s.GravityAmount;
@@ -2997,12 +2965,10 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.FirstFrame = s.FirstFrame;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.GravityAmount = s.GravityAmount;
 			result.Id = s.Id;
@@ -3062,12 +3028,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -3127,12 +3091,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -3184,12 +3146,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -3246,12 +3206,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -3387,12 +3345,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HAlignment = s.HAlignment;
@@ -3634,12 +3590,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Font = Clone_Lime__SerializableFont(cl, s.Font);
 			result.FontHeight = s.FontHeight;
@@ -3744,12 +3698,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -3814,12 +3766,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -3876,12 +3826,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
@@ -3932,12 +3880,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -3984,12 +3930,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			result.NodeRef = (global::Lime.NodeReference<global::Lime.Node3D>)cl.DeepObject(s.NodeRef);
@@ -4036,12 +3980,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			if (s.ShouldSerializeNodes()) {
@@ -4090,12 +4032,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Id = s.Id;
 			result.Interpolation = s.Interpolation;
@@ -4207,12 +4147,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Font = Clone_Lime__SerializableFont(cl, s.Font);
 			result.GradientMapIndex = s.GradientMapIndex;
@@ -4303,12 +4241,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -4484,12 +4420,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -4555,12 +4489,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.Frame = s.Frame;
 			result.FreezeInvisible = s.FreezeInvisible;
@@ -4674,12 +4606,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
@@ -4735,12 +4665,10 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp7 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp7 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
