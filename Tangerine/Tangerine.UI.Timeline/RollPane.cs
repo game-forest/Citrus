@@ -35,7 +35,7 @@ namespace Tangerine.UI.Timeline
 				ScrollView, presentation,
 				new TreeViewOptions { HandleCommands = false, ShowRoot = false }
 			);
-			TreeView.OnItemActivate += (sender, args) => {
+			TreeView.OnActivateItem += (sender, args) => {
 				if (GetSceneItem(args.Item).TryGetNode(out var node)) {
 					Document.Current.History.DoTransaction(() => EnterNode.Perform(node));
 				}

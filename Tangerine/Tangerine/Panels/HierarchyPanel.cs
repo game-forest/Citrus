@@ -43,7 +43,7 @@ namespace Tangerine.Panels
 			treeView = new TreeView(scrollView, presentation, new TreeViewOptions { ShowRoot = false });
 			treeView.OnDragBegin += TreeView_OnDragBegin;
 			treeView.OnDragEnd += TreeView_OnDragEnd;
-			treeView.OnItemActivate += TreeView_OnItemActivate;
+			treeView.OnActivateItem += TreeViewOnActivateItem;
 			treeView.OnCopy += TreeView_OnCopy;
 			treeView.OnCut += TreeView_OnCut;
 			treeView.OnDelete += TreeView_OnDelete;

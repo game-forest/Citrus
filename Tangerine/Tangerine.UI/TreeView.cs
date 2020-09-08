@@ -184,7 +184,7 @@ namespace Tangerine.UI
 			public ActivationMethod Method;
 		}
 
-		private static class Cmds
+		private static class Commands
 		{
 			public static readonly ICommand Activate = new Command(Key.Enter);
 			public static readonly ICommand SelectPrevious = new Command(Key.Up);
@@ -205,7 +205,7 @@ namespace Tangerine.UI
 		private bool refreshScheduled;
 		private TreeViewOptions options;
 
-		public event EventHandler<ActivateItemEventArgs> OnItemActivate;
+		public event EventHandler<ActivateItemEventArgs> OnActivateItem;
 		public event EventHandler<DragEventArgs> OnDragBegin;
 		public event EventHandler<DragEventArgs> OnDragEnd;
 		public event EventHandler<CopyEventArgs> OnCopy;
@@ -213,7 +213,7 @@ namespace Tangerine.UI
 		public event EventHandler<CopyEventArgs> OnDelete;
 		public event EventHandler<PasteEventArgs> OnPaste;
 
-		public float ScrollVelocity = 300;
+		public float ScrollSpeed = 300;
 
 		public TreeViewItem RootItem
 		{
@@ -243,7 +243,7 @@ namespace Tangerine.UI
 #else // WIN
 			var toggleSelectionModificator = Key.Control;
 #endif
-			scrollView.Behaviour.ScrollToItemVelocity = ScrollVelocity;
+			scrollView.Behaviour.ScrollToItemVelocity = ScrollSpeed;
 			this.scrollView = scrollView;
 			this.presentation = presentation;
 			items = new List<TreeViewItem>();
@@ -583,31 +583,31 @@ namespace Tangerine.UI
 						});
 					}
 				}
-				if (Cmds.Activate.Consume()) {
+				if (Commands.Activate.Consume()) {
 					ActivateItem();
 				}
-				if (Cmds.SelectNext.Consume()) {
+				if (Commands.SelectNext.Consume()) {
 					SelectNextItem();
 				}
-				if (Cmds.SelectRangeNext.Consume()) {
+				if (Commands.SelectRangeNext.Consume()) {
 					SelectRangeNextItem();
 				}
-				if (Cmds.SelectPrevious.Consume()) {
+				if (Commands.SelectPrevious.Consume()) {
 					SelectPreviousItem();
  				}
-				if (Cmds.SelectRangePrevious.Consume()) {
+				if (Commands.SelectRangePrevious.Consume()) {
 					SelectRangePreviousItem();
 				}
-				if (Cmds.ExpandOrSelectNext.Consume()) {
+				if (Commands.ExpandOrSelectNext.Consume()) {
 					ExpandOrSelectNextItem();
 				}
-				if (Cmds.CollapseOrSelectParent.Consume()) {
+				if (Commands.CollapseOrSelectParent.Consume()) {
 					CollapseOrSelectParentItem();
 				}
-				if (Cmds.Toggle.Consume()) {
+				if (Commands.Toggle.Consume()) {
 					ToggleItem();
 				}
-				if (Cmds.Rename.Consume()) {
+				if (Commands.Rename.Consume()) {
 					RenameItem();
 				}
 				yield return null;
