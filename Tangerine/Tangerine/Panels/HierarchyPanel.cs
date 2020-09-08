@@ -58,12 +58,29 @@ namespace Tangerine.Panels
 						Theme.Colors.WhiteBackground);
 				}
 			}));
-			searchStringEditor.AddChangeWatcher(() => searchStringEditor.Text, filter => {
-				RebuildTreeView();
-				if (filter.Length > 0 && treeView.RootItem != null) {
-					ExpandTree(treeView.RootItem);
+			searchStringEditor.Tasks.Add(SearchStringDebounceTask());
+		}
+
+		private IEnumerator<object> SearchStringDebounceTask()
+		{
+			string previousSearchText = null;
+			var lastChangeAt = DateTime.Now;
+			var needRefresh = false;
+			while (true) {
+				yield return null;
+				if (searchStringEditor.Text != previousSearchText) {
+					previousSearchText = searchStringEditor.Text;
+					lastChangeAt = DateTime.Now;
+					needRefresh = true;
 				}
-			});
+				if (needRefresh && DateTime.Now - lastChangeAt > TimeSpan.FromSeconds(0.25f)) {
+					needRefresh = false;
+					RebuildTreeView();
+					if (searchStringEditor.Text.Length > 0 && treeView.RootItem != null) {
+						ExpandTree(treeView.RootItem);
+					}
+				}
+			}
 		}
 
 		private void TreeView_OnDragBegin(object sender, TreeView.DragEventArgs args)
