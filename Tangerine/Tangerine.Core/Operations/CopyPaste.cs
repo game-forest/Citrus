@@ -62,8 +62,8 @@ namespace Tangerine.Core.Operations
 		private static void GetAnimationTrackLinkLocation(out Row parent, out int index)
 		{
 			var focusedItem = Document.Current.RecentlySelectedSceneItem();
-			parent = Document.Current.AnimationTree;
-			index = focusedItem == null ? 0 : Document.Current.AnimationTree.Rows.IndexOf(focusedItem);
+			parent = Document.Current.CompoundAnimationTree;
+			index = focusedItem == null ? 0 : Document.Current.CompoundAnimationTree.Rows.IndexOf(focusedItem);
 		}
 	}
 

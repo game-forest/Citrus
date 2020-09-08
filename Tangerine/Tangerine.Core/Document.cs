@@ -119,14 +119,15 @@ namespace Tangerine.Core
 
 		/// <summary>
 		/// The list of rows, currently displayed on the timeline.
+		/// TODO: Rename to VisibleSceneItems
 		/// </summary>
-		public List<Row> Rows // TODO: Rename to VisibleSceneItems
+		public List<Row> Rows
 		{
 			get
 			{
 				if (cachedVisibleSceneItems.Count == 0) {
 					if (Animation.IsCompound) {
-						TraverseAnimationTree(AnimationTree);
+						TraverseAnimationTree(CompoundAnimationTree);
 					} else {
 						TraverseSceneTree(GetSceneItemForObject(Container), true);
 					}
@@ -186,7 +187,7 @@ namespace Tangerine.Core
 		/// </summary>
 		public Row SceneTree { get; private set; }
 
-		public Row AnimationTree { get; private set; }
+		public Row CompoundAnimationTree { get; private set; }
 
 		public SceneTreeBuilder SceneTreeBuilder { get; }
 
@@ -231,7 +232,7 @@ namespace Tangerine.Core
 			{
 				if (selectedAnimation != value) {
 					selectedAnimation = value;
-					RefreshAnimationTree();
+					RefreshCompoundAnimationTree();
 				}
 			}
 		}
@@ -302,7 +303,7 @@ namespace Tangerine.Core
 			History.ProcessingOperation += DocumentProcessingOperation;
 			History.DocumentChanged += Document_Changed;
 			RefreshSceneTree();
-			RefreshAnimationTree();
+			RefreshCompoundAnimationTree();
 		}
 
 		public Document(string path, bool delayLoad = false) : this()
@@ -342,12 +343,12 @@ namespace Tangerine.Core
 			BumpSceneTreeVersion();
 		}
 
-		private void RefreshAnimationTree()
+		private void RefreshCompoundAnimationTree()
 		{
-			if (AnimationTree != null) {
-				DisintegrateTree(AnimationTree);
+			if (CompoundAnimationTree != null) {
+				DisintegrateTree(CompoundAnimationTree);
 			}
-			AnimationTree = SceneTreeBuilder.BuildTreeForAnimation(Animation);
+			CompoundAnimationTree = SceneTreeBuilder.BuildTreeForCompoundAnimation(Animation);
 			BumpSceneTreeVersion();
 		}
 

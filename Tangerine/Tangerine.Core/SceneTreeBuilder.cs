@@ -104,7 +104,7 @@ namespace Tangerine.Core
 			return i;
 		}
 
-		public Row BuildTreeForAnimation(Animation animation)
+		public Row BuildTreeForCompoundAnimation(Animation animation)
 		{
 			var tree = GetAnimationItem(animation);
 			foreach (var track in animation.Tracks) {
