@@ -12,7 +12,7 @@ namespace Lime
 		private readonly List<Folder.Descriptor> items = new List<Folder.Descriptor>();
 
 		public FolderList(Node owner) => this.owner = owner;
-		
+
 		IEnumerator<Folder.Descriptor> IEnumerable<Folder.Descriptor>.GetEnumerator() => items.GetEnumerator();
 
 		IEnumerator IEnumerable.GetEnumerator() => items.GetEnumerator();
@@ -42,9 +42,9 @@ namespace Lime
 		}
 
 		public int Count => items.Count;
-		
+
 		public bool IsReadOnly => false;
-		
+
 		public int IndexOf(Folder.Descriptor item) => items.IndexOf(item);
 
 		public void Insert(int index, Folder.Descriptor item)
@@ -75,16 +75,22 @@ namespace Lime
 		public class Descriptor
 		{
 			public Node Owner { get; internal set; }
-			
+
 			[YuzuMember]
 			public string Id { get; set; }
-			
+
+			/// <summary>
+			/// TODO: Remove Expanded property when migrations are ready.
+			/// </summary>
+			[YuzuMember]
+			public bool Expanded { get; set; }
+
 			[YuzuMember]
 			public int Index { get; set; }
 
 			[YuzuMember]
 			public int ItemCount { get; set; }
-			
+
 			public void Unlink() => Owner?.Folders.Remove(this);
 		}
 	}
