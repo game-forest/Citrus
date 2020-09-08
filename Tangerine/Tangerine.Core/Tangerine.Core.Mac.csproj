@@ -102,7 +102,6 @@
     <Compile Include="Operations\EnterLeaveNode.cs" />
     <Compile Include="Operations\Modification.cs" />
     <Compile Include="Operations\NodeTypeConvert.cs" />
-    <Compile Include="Operations\ReplaceContents.cs" />
     <Compile Include="Operations\SelectRow.cs" />
     <Compile Include="Operations\SelectRowRange.cs" />
     <Compile Include="Operations\TimelineColumnRemove.cs" />

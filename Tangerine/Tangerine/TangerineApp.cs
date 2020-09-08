@@ -302,7 +302,6 @@ namespace Tangerine
 				typeof(UI.Timeline.Operations.SelectCurveKey.Processor),
 				typeof(TriggersValidatorOnSetProperty),
 				typeof(TriggersValidatorOnSetKeyframe),
-				typeof(Core.Operations.ReplaceContents.Processor),
 				typeof(Core.Operations.DeleteRuler.Processor),
 				typeof(Core.Operations.CreateRuler.Processor),
 				typeof(InvalidateAnimesh.Processor)

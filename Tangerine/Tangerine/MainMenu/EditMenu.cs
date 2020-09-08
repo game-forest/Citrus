@@ -325,7 +325,7 @@ namespace Tangerine
 		public override void ExecuteTransaction()
 		{
 			var nodes = Document.Current?.SelectedNodes().Editable().ToList();
-			if (nodes.Count != 1) {
+				if (nodes.Count != 1) {
 				AlertDialog.Show("Please, select a single node");
 				return;
 			}
@@ -430,7 +430,7 @@ namespace Tangerine
 			foreach (var row in rows) {
 				if (row.Components.Get<NodeRow>()?.Node is Frame frame) {
 					if (frame.DefaultAnimation.Markers.Count > 0) {
-						AlertDialog.Show("Cannot convert widget with existing markers");
+						AlertDialog.Show("It is not possible to convert a widget with existing markers");
 						return;
 					}
 				} else {
