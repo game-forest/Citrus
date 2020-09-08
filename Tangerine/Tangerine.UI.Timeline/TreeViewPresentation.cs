@@ -149,7 +149,7 @@ namespace Tangerine.UI.Timeline
 				if (Item.CanRename() && label.LocalMousePosition().X < labelExtent.X) {
 					Rename();
 				} else {
-					item.TreeView.RaiseActivated(item, TreeView.ActivateMethod.Mouse);
+					item.TreeView.RaiseActivated(item, TreeView.ActivationMethod.Mouse);
 				}
 			}));
 			return label;
@@ -506,7 +506,7 @@ namespace Tangerine.UI.Timeline
 			}
 			Document.Current.History.DoTransaction(() => {
 				var track = new AnimationTrack { Id = GenerateTrackId() };
-				var item = LinkSceneItem.Perform(Document.Current.AnimationTree, index, track);
+				var item = LinkSceneItem.Perform(Document.Current.CompoundAnimationTree, index, track);
 				ClearRowSelection.Perform();
 				SelectRow.Perform(item);
 			});

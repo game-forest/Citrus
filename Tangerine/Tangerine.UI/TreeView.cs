@@ -172,7 +172,7 @@ namespace Tangerine.UI
 			public int Index;
 		}
 
-		public enum ActivateMethod
+		public enum ActivationMethod
 		{
 			Mouse,
 			Keyboard
@@ -181,7 +181,7 @@ namespace Tangerine.UI
 		public class ActivateItemEventArgs : EventArgs
 		{
 			public TreeViewItem Item;
-			public ActivateMethod Method;
+			public ActivationMethod Method;
 		}
 
 		private static class Cmds
@@ -254,7 +254,7 @@ namespace Tangerine.UI
 				var item = GetItemUnderMouse();
 				if (item != null) {
 					SelectItem(item);
-					RaiseActivated(item, ActivateMethod.Mouse);
+					RaiseActivated(item, ActivationMethod.Mouse);
 				}
 			}));
 			var dg = new DragGesture(0, DragDirection.Vertical);
@@ -335,7 +335,7 @@ namespace Tangerine.UI
 		/// <summary>
 		/// Invokes OnItemActivated. Maybe used by ITreeViewItemPresentation.
 		/// </summary>
-		public void RaiseActivated(TreeViewItem item, ActivateMethod method) => OnItemActivate?.Invoke(
+		public void RaiseActivated(TreeViewItem item, ActivationMethod method) => OnActivateItem?.Invoke(
 			this, new ActivateItemEventArgs { Item = item, Method = method });
 
 		private IEnumerator<object> ScrollOnDragTask(DragGesture dg)
@@ -416,7 +416,7 @@ namespace Tangerine.UI
 				if (!focused.Selected) {
 					SelectItem(focused);
 				}
-				RaiseActivated(focused, ActivateMethod.Keyboard);
+				RaiseActivated(focused, ActivationMethod.Keyboard);
 			}
 		}
 

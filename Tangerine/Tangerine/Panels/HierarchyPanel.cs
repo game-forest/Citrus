@@ -204,10 +204,10 @@ namespace Tangerine.Panels
 
 		private static Row GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
 
-		private void TreeView_OnItemActivate(object sender, TreeView.ActivateItemEventArgs args)
+		private void TreeViewOnActivateItem(object sender, TreeView.ActivateItemEventArgs args)
 		{
 			if (GetSceneItem(args.Item).TryGetNode(out var node)) {
-				NavigateToNode(node, args.Method == TreeView.ActivateMethod.Keyboard);
+				NavigateToNode(node, args.Method == TreeView.ActivationMethod.Keyboard);
 			}
 		}
 
