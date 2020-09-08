@@ -16,10 +16,6 @@ namespace Tangerine.Core
 		{
 			Animator = animator;
 			var propertyType = animator.Owner.GetType().GetProperty(animator.TargetPropertyPath)?.PropertyType;
-			if (propertyType == null) {
-				// It can happen if the given type isn't found in a plugin assembly.
-				return;
-			}
 			if (propertyType == typeof(Vector2)) {
 				Curves.Add(new CurveEditorState("X"));
 				Curves.Add(new CurveEditorState("Y"));
