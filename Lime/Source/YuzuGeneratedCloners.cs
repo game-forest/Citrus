@@ -659,12 +659,10 @@ namespace YuzuGenerated
 				foreach (var tmp8 in s.Faces)
 					result.Faces.Add(tmp8);
 			}
-			if (s.ShouldSerializeFolders()) {
-				if (s.Folders != null && result.Folders != null) {
-					var tmp10 = cl.GetCloner<global::Lime.Folder.Descriptor>();
-					foreach (var tmp9 in s.Folders)
-						result.Folders.Add((global::Lime.Folder.Descriptor)tmp10(tmp9));
-				}
+			if (s.Folders != null && result.Folders != null) {
+				var tmp10 = cl.GetCloner<global::Lime.Folder.Descriptor>();
+				foreach (var tmp9 in s.Folders)
+					result.Folders.Add((global::Lime.Folder.Descriptor)tmp10(tmp9));
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.HitTestMethod = s.HitTestMethod;
