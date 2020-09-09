@@ -521,7 +521,6 @@ namespace Tangerine.UI.AnimeshEditor
 
 		protected void RecalcVertexBoneTies()
 		{
-			List<IKeyframe> keyframes = null;
 			Mesh.Animators.TryFind(
 				nameof(Mesh.TransientVertices),
 				out var animator
@@ -533,7 +532,7 @@ namespace Tangerine.UI.AnimeshEditor
 				ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
 				Keyframes = animator?.Keys.ToList()
 			};
-			keyframes = animator?.Keys.ToList();
+			var keyframes = animator?.Keys.ToList();
 			var missingBones = new HashSet<byte>();
 			var vertexBoneMap = new List<HashSet<int>>();
 			for (var i = 0; i < Vertices.Count; ++i) {
