@@ -147,6 +147,10 @@
       <Project>{05FB6476-C29B-49A7-918C-A52CAF73FCA7}</Project>
       <Name>Tangerine.Core.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Mac.csproj">
+      <Project>{2b838a5f-68c3-4df3-bf58-149ef1b9c70f}</Project>
+      <Name>Tangerine.UI.AnimeshEditor.Mac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Mac.csproj">
       <Project>{f93da48e-2a86-4dc4-a392-102b1e567b3a}</Project>
       <Name>Tangerine.UI.RemoteScripting.Mac</Name>
@@ -182,10 +186,6 @@
     <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Mac.csproj">
       <Project>{17DCD218-2ED0-4E5E-B0F1-50970A5287AB}</Project>
       <Name>Tangerine.Common.Mac</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Mac.csproj">
-      <Project>{2B838A5F-68C3-4DF3-BF58-149EF1B9C70F}</Project>
-      <Name>Tangerine.UI.AnimeshEditor.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
