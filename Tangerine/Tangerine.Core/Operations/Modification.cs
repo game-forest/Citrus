@@ -1101,7 +1101,8 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Bone> bones, Lime.Animesh mesh, params int[] indices)
 		{
-			var sortedBones = BoneUtils.SortBones(bones);
+			var sortedBones = bones.ToList();
+			BoneUtils.SortBones(sortedBones);
 			if (!sortedBones.Any()) {
 				return;
 			}
@@ -1147,7 +1148,8 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Bone> bones, Lime.Animesh mesh, params int[] indices)
 		{
-			var sortedBones = BoneUtils.SortBones(bones);
+			var sortedBones = bones.ToList();
+			BoneUtils.SortBones(sortedBones);
 			if (!sortedBones.Any()) {
 				return;
 			}
