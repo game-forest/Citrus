@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Lime;
@@ -22,6 +23,12 @@ namespace Tangerine.UI.RemoteScripting
 		private ThemedScrollView testsScrollView;
 		private Widget deviceWidgetPlaceholder;
 		private volatile int selectedDeviceIndex = -1;
+
+		private static string RemoteDevicesLogFolder
+		{
+			get => ProjectUserPreferences.Instance.RemoteDevicesLogFolder;
+			set => ProjectUserPreferences.Instance.RemoteDevicesLogFolder = value;
+		}
 
 		public Device SelectedDevice => selectedDeviceIndex >= 0 ? devices[selectedDeviceIndex] : null;
 
@@ -57,13 +64,13 @@ namespace Tangerine.UI.RemoteScripting
 			devicesScrollView.CompoundPresenter.Add(new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder));
 			testsScrollView.Content.Layout = new VBoxLayout{ Spacing = 2f };
 			testsScrollView.CompoundPresenter.Add(new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder));
+
+			if (!Directory.Exists(RemoteDevicesLogFolder)) {
+				RemoteDevicesLogFolder = null;
+			}
 			RefreshUI();
-			Content.AddChangeWatcher(
-				() => CompiledAssembly.Instance,
-				_ => {
-					RefreshUI();
-				}
-			);
+			Content.AddChangeWatcher(() => CompiledAssembly.Instance, _ => RefreshUI());
+			Content.AddChangeWatcher(() => RemoteDevicesLogFolder, _ => RefreshUI());
 
 			void SelectDeviceBasedOnMousePosition()
 			{
@@ -98,9 +105,14 @@ namespace Tangerine.UI.RemoteScripting
 
 			ToolbarButton startHostButton;
 			ToolbarButton stopHostButton;
+			ToolbarButton logFolderButton =
+				string.IsNullOrEmpty(RemoteDevicesLogFolder) ?
+				new ToolbarButton("Set Log Folder...") { Clicked = SetLogFolder } :
+				new ToolbarButton("Stop Logging") { Clicked = () => SetLogFolder(folderPath: null) };
 			mainToolbar.Content.Nodes.AddRange(
 				startHostButton = new ToolbarButton("Start Host") { Clicked = StartHost },
-				stopHostButton = new ToolbarButton("Stop Host") { Clicked = StopHost }
+				stopHostButton = new ToolbarButton("Stop Host") { Clicked = StopHost },
+				logFolderButton
 			);
 			var assembly = CompiledAssembly.Instance;
 			if (assembly != null) {
@@ -118,13 +130,17 @@ namespace Tangerine.UI.RemoteScripting
 					);
 				}
 			}
+			UpdateHostButtons();
 			mainToolbar.AddChangeWatcher(
 				() => isHostRunning,
-				_ => {
-					startHostButton.Enabled = !isHostRunning;
-					stopHostButton.Enabled = isHostRunning;
-				}
+				_ => UpdateHostButtons()
 			);
+
+			void UpdateHostButtons()
+			{
+				startHostButton.Enabled = !isHostRunning;
+				stopHostButton.Enabled = isHostRunning;
+			}
 		}
 
 		private void RefreshDevicesView()
@@ -157,14 +173,16 @@ namespace Tangerine.UI.RemoteScripting
 
 		private void RegisterDevice(HostClient client)
 		{
-			var device = new Device(client) {
-				Updated = RefreshDevicesView
-			};
+			var device = new Device(client);
 			devices.Add(device);
 			RefreshDevicesView();
 			if (devices.Count == 1) {
 				SelectDevice(0);
 			}
+			device.Updated += () => {
+				SetLogFolder(device, RemoteDevicesLogFolder);
+				RefreshDevicesView();
+			};
 		}
 
 		private bool TryGetActiveDevice(out Device device)
@@ -273,6 +291,34 @@ namespace Tangerine.UI.RemoteScripting
 
 		public override void OnDispose() => StopHost();
 
+		private void SetLogFolder()
+		{
+			var dialog = new FileDialog {
+				AllowedFileTypes = new[] { "" },
+				Mode = FileDialogMode.SelectFolder
+			};
+			if (dialog.RunModal()) {
+				SetLogFolder(dialog.FileName);
+			}
+		}
+
+		private void SetLogFolder(string folderPath)
+		{
+			RemoteDevicesLogFolder = folderPath;
+			foreach (var device in devices) {
+				SetLogFolder(device, folderPath);
+			}
+		}
+
+		private static void SetLogFolder(Device device, string folderPath)
+		{
+			if (!string.IsNullOrEmpty(folderPath) && device.WasInitialized && !device.WasDisconnected) {
+				device.ApplicationOutput.SetOutputFolder(folderPath, device.Name);
+			} else {
+				device.ApplicationOutput.DropOutputFolder();
+			}
+		}
+
 		public class Device
 		{
 			public readonly HostClient Client;
@@ -282,6 +328,7 @@ namespace Tangerine.UI.RemoteScripting
 			public Action Updated;
 
 			public string Name { get; private set; }
+			public bool WasInitialized { get; private set; }
 			public bool WasDisconnected { get; private set; }
 
 			public Device(HostClient client)
@@ -362,17 +409,23 @@ namespace Tangerine.UI.RemoteScripting
 			private void SetName(NetworkDeviceName message)
 			{
 				Name = message.Name;
+				WasInitialized = true;
 				Updated?.Invoke();
 			}
 
-			private void AppendApplicationOutput(string message)
-			{
-				ApplicationOutput.Append(message);
-			}
+			private void AppendApplicationOutput(string message) => ApplicationOutput.Append(message);
 
 			public class ApplicationOutputPage : RemoteScriptingWidgets.TabbedWidgetPage
 			{
+				private static readonly char[] invalidFilenameChars;
+
 				private RemoteScriptingWidgets.TextView textView;
+
+				static ApplicationOutputPage()
+				{
+					invalidFilenameChars = Path.GetInvalidFileNameChars();
+					Array.Sort(invalidFilenameChars);
+				}
 
 				public override void Initialize()
 				{
@@ -380,12 +433,36 @@ namespace Tangerine.UI.RemoteScripting
 					Content = new Widget {
 						Layout = new VBoxLayout(),
 						Nodes = {
-							(textView = new RemoteScriptingWidgets.TextView(maxRowsCount: 1500))
+							(textView = new RemoteScriptingWidgets.TextView(maxRowCount: 1500))
 						}
 					};
 				}
 
-				public void Append(string text) => textView.AppendLine(text);
+				public void Append(string text)
+				{
+					if (text != null) {
+						textView.AppendLine(!string.IsNullOrWhiteSpace(text) ? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {text}" : text);
+					}
+				}
+
+				public void SetOutputFolder(string folder, string deviceName)
+				{
+					var fileName = ToValidFilename($"{DateTime.Now:yyyy.MM.dd H-mm-ss} {deviceName}.txt");
+					textView.FilePath = !string.IsNullOrEmpty(folder) ? Path.Combine(folder, fileName) : null;
+					
+					string ToValidFilename(string input)
+					{
+						var result = new StringBuilder(input.Length);
+						foreach (var @char in input) {
+							if (Array.BinarySearch(invalidFilenameChars, @char) < 0) {
+								result.Append(@char);
+							}
+						}
+						return result.ToString();
+					}
+				}
+
+				public void DropOutputFolder() => textView.CloseFile();
 			}
 		}
 	}

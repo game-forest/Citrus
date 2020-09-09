@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
@@ -77,13 +78,44 @@ namespace Tangerine.UI.RemoteScripting
 		public class TextView : ThemedTextView
 		{
 			private static readonly object scrollToEndTaskTag = new object();
+			private readonly ICommand viewInExternalEditorCommand = new Command("View in External Editor");
 			private readonly ICommand commandCopy = new Command("Copy");
 			private readonly ICommand commandClear = new Command("Clear");
+			private readonly int maxRowCount;
+			private readonly int removeRowCount;
 
-			public TextView(int maxRowsCount = 500, int removeRowsCount = 250)
+			private string filePath;
+			private StreamWriter file;
+			private int fileBufferSize;
+
+			public string FilePath
 			{
+				get => filePath;
+				set
+				{
+					CloseFile();
+					filePath = value;
+					try {
+						file =
+							!string.IsNullOrEmpty(filePath) ?
+							new StreamWriter(File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read)) :
+							null;
+					} catch (System.Exception exception) {
+						System.Console.WriteLine(exception);
+						CloseFile();
+						filePath = null;
+					}
+				}
+			}
+
+			public TextView(int maxRowCount = 500, int removeRowCount = 250)
+			{
+				this.maxRowCount = maxRowCount;
+				this.removeRowCount = removeRowCount;
 				TrimWhitespaces = false;
 				var menu = new Menu {
+					viewInExternalEditorCommand,
+					Command.MenuSeparator,
 					commandCopy,
 					commandClear
 				};
@@ -93,7 +125,23 @@ namespace Tangerine.UI.RemoteScripting
 						Window.Current.Activate();
 					}
 					if (Input.WasKeyPressed(Key.Mouse1)) {
+						viewInExternalEditorCommand.Enabled = !string.IsNullOrEmpty(FilePath);
 						menu.Popup();
+					}
+					if (viewInExternalEditorCommand.WasIssued()) {
+						viewInExternalEditorCommand.Consume();
+						if (file != null && fileBufferSize > 0) {
+							try {
+								file.Flush();
+								fileBufferSize = 0;
+							} catch (System.Exception exception) {
+								System.Console.WriteLine(exception);
+								CloseFile();
+							}
+						}
+						if (!string.IsNullOrEmpty(FilePath)) {
+							System.Diagnostics.Process.Start(FilePath);
+						}
 					}
 					if (commandCopy.WasIssued()) {
 						commandCopy.Consume();
@@ -103,18 +151,36 @@ namespace Tangerine.UI.RemoteScripting
 						commandClear.Consume();
 						Clear();
 					}
-					var i = Content.Nodes.Count;
-					// numbers choosen by guess
-					if (i >= maxRowsCount) {
-						Content.Nodes.RemoveRange(0, removeRowsCount);
-					}
 				};
 			}
 
 			public void AppendLine(string text)
 			{
+				if (text == null) {
+					return;
+				}
 				var isScrolledToEnd = Mathf.Abs(Behaviour.ScrollPosition - Behaviour.MaxScrollPosition) < Mathf.ZeroTolerance;
-				Append($"{text}\n");
+				if (text.Length == 0 || text[text.Length - 1] != '\n') {
+					text += '\n';
+				}
+				Append(text);
+				if (file != null) {
+					try {
+						file.Write(text);
+						fileBufferSize += text.Length;
+						const int FileBufferSizeLimit = 2048;
+						if (fileBufferSize >= FileBufferSizeLimit) {
+							file.Flush();
+							fileBufferSize = 0;
+						}
+					} catch (System.Exception exception) {
+						System.Console.WriteLine(exception);
+						CloseFile();
+					}
+				}
+				if (Content.Nodes.Count >= maxRowCount) {
+					Content.Nodes.RemoveRange(0, removeRowCount);
+				}
 				if (isScrolledToEnd || Behaviour.Content.LateTasks.AnyTagged(scrollToEndTaskTag)) {
 					Behaviour.Content.LateTasks.StopByTag(scrollToEndTaskTag);
 					IEnumerator<object> ScrollToEnd()
@@ -124,6 +190,17 @@ namespace Tangerine.UI.RemoteScripting
 					}
 					Behaviour.Content.LateTasks.Add(ScrollToEnd, scrollToEndTaskTag);
 				}
+			}
+
+			public void CloseFile()
+			{
+				try {
+					file?.Close();
+				} catch (Exception exception) {
+					System.Console.WriteLine(exception);
+				}
+				fileBufferSize = 0;
+				file = null;
 			}
 		}
 	}
