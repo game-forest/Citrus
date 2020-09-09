@@ -433,7 +433,7 @@ namespace Tangerine.UI.RemoteScripting
 					Content = new Widget {
 						Layout = new VBoxLayout(),
 						Nodes = {
-							(textView = new RemoteScriptingWidgets.TextView(maxRowsCount: 1500))
+							(textView = new RemoteScriptingWidgets.TextView(maxRowCount: 1500))
 						}
 					};
 				}

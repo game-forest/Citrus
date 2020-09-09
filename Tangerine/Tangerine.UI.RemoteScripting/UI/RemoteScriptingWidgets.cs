@@ -81,8 +81,8 @@ namespace Tangerine.UI.RemoteScripting
 			private readonly ICommand viewInExternalEditorCommand = new Command("View in External Editor");
 			private readonly ICommand commandCopy = new Command("Copy");
 			private readonly ICommand commandClear = new Command("Clear");
-			private readonly int maxRowsCount;
-			private readonly int removeRowsCount;
+			private readonly int maxRowCount;
+			private readonly int removeRowCount;
 
 			private string filePath;
 			private StreamWriter file;
@@ -108,10 +108,10 @@ namespace Tangerine.UI.RemoteScripting
 				}
 			}
 
-			public TextView(int maxRowsCount = 500, int removeRowsCount = 250)
+			public TextView(int maxRowCount = 500, int removeRowCount = 250)
 			{
-				this.maxRowsCount = maxRowsCount;
-				this.removeRowsCount = removeRowsCount;
+				this.maxRowCount = maxRowCount;
+				this.removeRowCount = removeRowCount;
 				TrimWhitespaces = false;
 				var menu = new Menu {
 					viewInExternalEditorCommand,
@@ -178,8 +178,8 @@ namespace Tangerine.UI.RemoteScripting
 						CloseFile();
 					}
 				}
-				if (Content.Nodes.Count >= maxRowsCount) {
-					Content.Nodes.RemoveRange(0, removeRowsCount);
+				if (Content.Nodes.Count >= maxRowCount) {
+					Content.Nodes.RemoveRange(0, removeRowCount);
 				}
 				if (isScrolledToEnd || Behaviour.Content.LateTasks.AnyTagged(scrollToEndTaskTag)) {
 					Behaviour.Content.LateTasks.StopByTag(scrollToEndTaskTag);
