@@ -4324,7 +4324,7 @@ namespace YuzuGenerated
 			result.Angle = s.Angle;
 			result.Blending = s.Blending;
 			result.Pivot = s.Pivot;
-			result.RadiusFactor = s.RadiusFactor;
+			result.Radius = s.Radius;
 			result.OnAfterDeserialization();
 			return result;
 		}
@@ -4339,7 +4339,7 @@ namespace YuzuGenerated
 			result.Angle = s.Angle;
 			result.Blending = s.Blending;
 			result.Pivot = s.Pivot;
-			result.RadiusFactor = s.RadiusFactor;
+			result.Radius = s.Radius;
 			result.UV0 = s.UV0;
 			result.UV1 = s.UV1;
 			return result;
