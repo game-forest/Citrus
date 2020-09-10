@@ -9,6 +9,9 @@ namespace Tangerine.Core.Operations
 {
 	public static class UnlinkSceneItem
 	{
+		public delegate void NodeUnlinkDelegate(Node node, Node previousParent);
+		public static event NodeUnlinkDelegate NodeUnlinked;
+
 		public static void Perform(Row item)
 		{
 			if (!CanUnlink(item)) {
@@ -49,6 +52,7 @@ namespace Tangerine.Core.Operations
 				if (node is Bone bone) {
 					SetProperty.Perform(bone, nameof(Bone.BaseIndex), 0);
 				}
+				NodeUnlinked?.Invoke(node, owner);
 			} else if (item.TryGetFolder(out var folder)) {
 				var owner = folder.Owner;
 				var parent = item.Parent;

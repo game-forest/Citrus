@@ -39,11 +39,14 @@ namespace Tangerine.UI.AnimeshEditor
 
 		private readonly ISceneView sv;
 
-		public AnimeshController() { }
-
 		public AnimeshController(ISceneView sv)
 		{
 			this.sv = sv;
+			UnlinkSceneItem.NodeUnlinked += (node, previousParent) => {
+				if (node is Bone && previousParent == Mesh.Parent) {
+					RecalcVertexBoneTies();
+				}
+			};
 		}
 
 		protected override void OnOwnerChanged(Node oldOwner)
@@ -82,7 +85,6 @@ namespace Tangerine.UI.AnimeshEditor
 				} else {
 					mesh.Faces.AddRange(Topology.Faces);
 				}
-				mesh.OnBoneArrayChanged = RecalcVertexBoneTies;
 				mesh.AddChangeWatcher(() => mesh.Texture, texture => UpdateMeshVerticesOnTextureChange(mesh));
 				Mesh = mesh;
 				Topology.OnTopologyChanged += UpdateMeshFaces;
