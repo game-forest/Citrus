@@ -28,10 +28,11 @@ namespace Lime
 		}
 
 		[YuzuMember]
-		public float RadiusFactor
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
+		public float Radius
 		{
-			get => CustomMaterial.RadiusFactor;
-			set => CustomMaterial.RadiusFactor = value;
+			get => CustomMaterial.Radius;
+			set => CustomMaterial.Radius = value;
 		}
 
 		protected override void OnOwnerChanged(Node oldOwner)
