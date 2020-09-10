@@ -91,12 +91,28 @@ namespace Tangerine.UI.Timeline
 					if (mesh.Nodes.Any(n => IsBoneBound(bone, ((DistortionMeshPoint) n).SkinningWeights))) {
 						yield return mesh;
 					}
+				} else if (node is Animesh animesh) {
+					foreach (var v in animesh.Vertices) {
+						if (IsBoneBound(bone, v.BlendIndices)) {
+							yield return animesh;
+							break;
+						}
+					}
 				} else if (node is Widget widget) {
 					if (IsBoneBound(bone, widget.SkinningWeights)) {
 						yield return node;
 					}
 				}
 			}
+		}
+
+		private bool IsBoneBound(Bone bone, in Mesh3D.BlendIndices indices)
+		{
+			return
+				indices.Index0 == bone.Index ||
+				indices.Index1 == bone.Index ||
+				indices.Index2 == bone.Index ||
+				indices.Index3 == bone.Index;
 		}
 
 		private bool IsBoneBound(Bone bone, SkinningWeights sw)
@@ -113,6 +129,17 @@ namespace Tangerine.UI.Timeline
 					if (n is Bone bone) {
 						foreach (var p in mesh.Nodes) {
 							if (IsBoneBound(bone, ((DistortionMeshPoint) p).SkinningWeights)) {
+								yield return bone;
+								break;
+							}
+						}
+					}
+				}
+			} else if (node is Animesh animesh) {
+				foreach (var n in node.Parent.Nodes) {
+					if (n is Bone bone) {
+						foreach (var v in animesh.Vertices) {
+							if (IsBoneBound(bone, v.BlendIndices)) {
 								yield return bone;
 								break;
 							}
