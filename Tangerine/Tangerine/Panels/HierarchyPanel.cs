@@ -186,7 +186,7 @@ namespace Tangerine.Panels
 					PasteSceneItemsFromStream.Perform(stream, GetSceneItem(args.Parent), index, null,
 						out var pastedItems);
 					RebuildTreeView();
-					treeView.RefreshPresentation();
+					treeView.Refresh();
 					treeView.ClearSelection();
 					contentWidget.LayoutManager.Layout();
 					foreach (var item in pastedItems.Select(GetTreeViewItem)) {
@@ -274,7 +274,7 @@ namespace Tangerine.Panels
 			if (Document.Current != null) {
 				treeView.RootItem = CreateTree(Document.Current.SceneTree);
 			}
-			treeView.RefreshPresentation();
+			treeView.Refresh();
 
 			void DestroyTree(TreeViewItem tree)
 			{

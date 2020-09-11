@@ -112,7 +112,7 @@ namespace Tangerine.UI.Timeline
 				var item = TreeViewComponent.GetTreeViewItem(i);
 				parent.Items.Add(item);
 			}
-			TreeView.RefreshPresentation();
+			TreeView.Refresh();
 			WidgetContext.Current.Root.LayoutManager.Layout();
 
 			void DestroyTree(TreeViewItem tree)

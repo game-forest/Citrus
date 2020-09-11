@@ -619,7 +619,7 @@ namespace Tangerine.UI
 
 		private int currentItemsHashCode;
 
-		public void RefreshPresentation()
+		public void Refresh()
 		{
 			items.Clear();
 			int index = 0;
