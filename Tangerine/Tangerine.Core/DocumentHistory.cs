@@ -90,7 +90,9 @@ namespace Tangerine.Core
 			if (currentIndex != index) {
 				operations.RemoveRange(currentIndex, GetTransactionEndIndex() - currentIndex);
 				for (; currentIndex > index; currentIndex--) {
-					Processors.Invert(operations[currentIndex - 1]);
+					var operation = operations[currentIndex - 1];
+					ProcessingOperation?.Invoke(operation);
+					Processors.Invert(operation);
 				}
 			}
 		}
