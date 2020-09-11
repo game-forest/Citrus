@@ -37,9 +37,9 @@ namespace Tangerine.UI.Timeline
 				RefreshItemWidths();
 			};
 			new SceneViewThumbnail(this);
-			RootWidget.AddChangeWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
+			RootWidget.AddChangeLateWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
 		}
-		
+
 		private void Rebuild()
 		{
 			var content = ContentWidget;

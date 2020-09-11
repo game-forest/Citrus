@@ -49,9 +49,9 @@ namespace Tangerine.UI.Timeline
 			DropFilesGesture.Recognized += new GridPaneFilesDropHandler().Handle;
 			RootWidget.Gestures.Add(DropFilesGesture);
 			OnCreate?.Invoke(this);
-			RootWidget.AddChangeWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
+			RootWidget.AddChangeLateWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
 		}
-		
+
 		private void Rebuild()
 		{
 			var content = ContentWidget;
@@ -76,7 +76,7 @@ namespace Tangerine.UI.Timeline
 				gridItem.GridWidget.MinWidth = Timeline.Instance.ColumnCount * TimelineMetrics.ColWidth;
 			}
 		}
-		
+
 		private void RenderBackgroundAndGrid(Node node)
 		{
 			RootWidget.PrepareRendererState();

@@ -49,7 +49,7 @@ namespace Tangerine.UI.Timeline
 				Presenter = new SyncDelegatePresenter<Node>(RenderBackground)
 			};
 			RootWidget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
-			RootWidget.AddChangeWatcher(() => Document.Current.SceneTreeVersion, _ => RebuildTreeView());
+			RootWidget.AddChangeLateWatcher(() => Document.Current.SceneTreeVersion, _ => RebuildTreeView());
 			RebuildTreeView();
 		}
 
