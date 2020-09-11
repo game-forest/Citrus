@@ -35,6 +35,7 @@ namespace Tangerine.Panels
 				}
 			};
 			var presentation = new TreeViewPresentation(
+				treeView,
 				new TreeViewItemPresentationOptions {
 					Minimalistic = true,
 					SearchStringGetter = () => searchStringEditor.Text
@@ -273,6 +274,7 @@ namespace Tangerine.Panels
 			if (Document.Current != null) {
 				treeView.RootItem = CreateTree(Document.Current.SceneTree);
 			}
+			treeView.RefreshPresentation();
 
 			void DestroyTree(TreeViewItem tree)
 			{

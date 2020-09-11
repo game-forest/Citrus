@@ -10,7 +10,6 @@ namespace Tangerine.UI
 	public class TreeViewItem
 	{
 		private static int selectionCounter = 1;
-		private TreeView treeView;
 
 		public virtual string Label { get; set; }
 
@@ -32,13 +31,6 @@ namespace Tangerine.UI
 		public virtual bool CanRename() => false;
 		public ITreeViewItemPresentation Presentation { get; internal set; }
 		public int Index { get; internal set; }
-
-		public TreeView TreeView
-		{
-			get => treeView;
-			internal set => PropagateTreeView(value);
-		}
-
 		public TreeViewItem Parent { get; internal set; }
 		public TreeViewItemList Items { get; }
 
@@ -47,16 +39,6 @@ namespace Tangerine.UI
 		public TreeViewItem()
 		{
 			Items = new TreeViewItemList(this);
-		}
-
-		private void PropagateTreeView(TreeView treeView)
-		{
-			if (this.treeView != treeView) {
-				this.treeView = treeView;
-				foreach (var i in Items) {
-					i.PropagateTreeView(treeView);
-				}
-			}
 		}
 	}
 
@@ -107,8 +89,6 @@ namespace Tangerine.UI
 			}
 			list.Insert(index, item);
 			item.Parent = parent;
-			item.TreeView = parent.TreeView;
-			parent.TreeView?.ScheduleRefresh();
 		}
 
 		public void RemoveAt(int index)
@@ -116,8 +96,6 @@ namespace Tangerine.UI
 			var item = list[index];
 			list.RemoveAt(index);
 			item.Parent = null;
-			item.TreeView = null;
-			parent.TreeView?.ScheduleRefresh();
 		}
 
 		public TreeViewItem this[int index]
@@ -225,10 +203,6 @@ namespace Tangerine.UI
 					rootItem = null;
 				}
 				rootItem = value;
-				if (rootItem != null) {
-					rootItem.TreeView = this;
-				}
-				ScheduleRefresh();
 			}
 		}
 
@@ -313,7 +287,6 @@ namespace Tangerine.UI
 			};
 			scrollContent.Gestures.Add(dg);
 			scrollContent.Layout = new VBoxLayout();
-			scrollContent.Tasks.Add(SyncTask());
 			if (options.HandleCommands) {
 				scrollContent.Tasks.Add(HandleCommands);
 			}
@@ -633,17 +606,6 @@ namespace Tangerine.UI
 			return null;
 		}
 
-		private IEnumerator<object> SyncTask()
-		{
-			while (true) {
-				if (refreshScheduled) {
-					refreshScheduled = false;
-					RefreshPresentation();
-				}
-				yield return null;
-			}
-		}
-
 		private void ScrollToItem(TreeViewItem item, bool instantly)
 		{
 			var itemTop = item.Presentation.Widget.Y;
@@ -699,7 +661,5 @@ namespace Tangerine.UI
 				}
 			}
 		}
-
-		public void ScheduleRefresh() => refreshScheduled = true;
 	}
 }

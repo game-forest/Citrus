@@ -57,11 +57,13 @@ namespace Tangerine.UI.Timeline
 		public readonly TreeViewItem Item;
 		public readonly Row SceneItem;
 		public readonly bool Minimalistic;
+		public readonly TreeView TreeView;
 
 		public Widget Widget { get; }
 
-		public TreeViewItemPresentation(TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
+		public TreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
 		{
+			TreeView = treeView;
 			Item = item;
 			SceneItem = sceneItem;
 			Minimalistic = options.Minimalistic;
@@ -149,7 +151,7 @@ namespace Tangerine.UI.Timeline
 				if (Item.CanRename() && label.LocalMousePosition().X < labelExtent.X) {
 					Rename();
 				} else {
-					item.TreeView.RaiseActivated(item, TreeView.ActivationMethod.Mouse);
+					TreeView.RaiseActivated(item, TreeView.ActivationMethod.Mouse);
 				}
 			}));
 			return label;
@@ -202,8 +204,8 @@ namespace Tangerine.UI.Timeline
 
 	public class FolderTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public FolderTreeViewItemPresentation(TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
-			: base(item, sceneItem, options)
+		public FolderTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
+			: base(treeView, item, sceneItem, options)
 		{
 			if (!options.Minimalistic) {
 				Widget.Nodes.Add(CreateEyeButton());
@@ -280,8 +282,8 @@ namespace Tangerine.UI.Timeline
 			ColorTheme.Current.TimelineRoll.GrayMark,
 		};
 
-		public NodeTreeViewItemPresentation(TreeViewItem item, Row sceneItem, Node node, TreeViewItemPresentationOptions options)
-			: base(item, sceneItem, options)
+		public NodeTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem, Node node, TreeViewItemPresentationOptions options)
+			: base(treeView, item, sceneItem, options)
 		{
 			Node = node;
 			if (!options.Minimalistic) {
@@ -493,9 +495,9 @@ namespace Tangerine.UI.Timeline
 
 	public class AnimationTrackTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public AnimationTrackTreeViewItemPresentation(TreeViewItem item, Row sceneItem,
+		public AnimationTrackTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem,
 			TreeViewItemPresentationOptions options)
-			: base(item, sceneItem, options)
+			: base(treeView, item, sceneItem, options)
 		{
 		}
 
@@ -527,13 +529,15 @@ namespace Tangerine.UI.Timeline
 	{
 		public const float IndentWidth = 20;
 
+		private readonly TreeView treeView;
 		private readonly TreeViewItemPresentationOptions options;
 		private readonly List<ITreeViewItemPresentationProcessor> processors;
 
 		public IEnumerable<ITreeViewItemPresentationProcessor> Processors => processors;
 
-		public TreeViewPresentation(TreeViewItemPresentationOptions options)
+		public TreeViewPresentation(TreeView treeView, TreeViewItemPresentationOptions options)
 		{
+			this.treeView = treeView;
 			this.options = options;
 			processors = new List<ITreeViewItemPresentationProcessor>();
 			AddProcessor(new TreeViewItemPresentationProcessor());
@@ -551,15 +555,15 @@ namespace Tangerine.UI.Timeline
 		{
 			var sceneItem = ((ISceneItemHolder)item).SceneItem;
 			if (sceneItem.TryGetNode(out var node)) {
-				return new NodeTreeViewItemPresentation(item, sceneItem, node, options);
+				return new NodeTreeViewItemPresentation(treeView, item, sceneItem, node, options);
 			}
 			if (sceneItem.TryGetFolder(out _)) {
-				return new FolderTreeViewItemPresentation(item, sceneItem, options);
+				return new FolderTreeViewItemPresentation(treeView, item, sceneItem, options);
 			}
 			if (sceneItem.TryGetAnimationTrack(out _)) {
-				return new AnimationTrackTreeViewItemPresentation(item, sceneItem, options);
+				return new AnimationTrackTreeViewItemPresentation(treeView, item, sceneItem, options);
 			}
-			return new TreeViewItemPresentation(item, sceneItem, options);
+			return new TreeViewItemPresentation(treeView, item, sceneItem, options);
 		}
 
 		public void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex, bool dragInto)
