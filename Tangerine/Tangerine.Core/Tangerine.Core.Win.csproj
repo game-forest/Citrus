@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,6 +42,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationPositioner.cs" />
     <Compile Include="AnimationTrackEditorState.cs" />
     <Compile Include="AnimatorEditorState.cs" />
     <Compile Include="AutosaveProcessor.cs" />
@@ -69,10 +70,7 @@
     <Compile Include="NodeExtensions.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Operations\ClearRowSelection.cs" />
-    <Compile Include="Operations\NodeTypeConvert.cs" />
-    <Compile Include="Operations\RemoveKeyframeRange.cs" />
-    <Compile Include="Operations\RenameAnimationProcessor.cs" />
-    <Compile Include="Operations\ReplaceContents.cs" />
+    <Compile Include="Operations\ContentsPathProcessor.cs" />
     <Compile Include="Operations\CopyPaste.cs" />
     <Compile Include="Operations\DistortionMeshProcessor.cs" />
     <Compile Include="Operations\DummyOperation.cs" />
@@ -103,8 +101,6 @@
     <Compile Include="UserPreferences.cs" />
     <Compile Include="VersionedCollection.cs" />
     <Compile Include="WidgetExtensions.cs" />
-    <Compile Include="AnimationPositioner.cs" />
-    <Compile Include="Operations\ContentsPathProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
