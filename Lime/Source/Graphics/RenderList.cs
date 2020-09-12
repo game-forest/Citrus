@@ -35,7 +35,7 @@ namespace Lime
 				lastBatch = typedLastBatch;
 			}
 #if PROFILER
-			typedLastBatch.OwnersInfo.ProcessNode(RenderObjectOwnerInfo.CurrentNode);
+			typedLastBatch.ProfilingInfo.ProcessNode(RenderObjectOwnerInfo.CurrentNode);
 #endif // PROFILER
 			return typedLastBatch;
 		}
