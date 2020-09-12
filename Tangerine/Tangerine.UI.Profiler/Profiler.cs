@@ -24,6 +24,7 @@ namespace Tangerine.UI
 				}
 			};
 			panel.ContentWidget.AddNode(RootWidget);
+			RootWidget.AddNode(new OverdrawController());
 		}
 	}
 }
