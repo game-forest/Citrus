@@ -543,6 +543,7 @@
     <Compile Include="Source\Widgets\NodeManagerRootCollection.cs" />
     <Compile Include="Source\Widgets\NodeProcessor.cs" />
     <Compile Include="Source\Widgets\NodeReference.cs" />
+    <Compile Include="Source\Widgets\OverdrawForegroundComponent.cs" />
     <Compile Include="Source\Widgets\ParticleEmitter.cs" />
     <Compile Include="Source\Widgets\ParticleModifier.cs" />
     <Compile Include="Source\Widgets\ParticlesMagnet.cs" />
