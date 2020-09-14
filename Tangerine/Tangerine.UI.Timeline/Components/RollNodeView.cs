@@ -55,7 +55,7 @@ namespace Tangerine.UI.Timeline.Components
 				Layout = new HBoxLayout(),
 				LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
 			};
-			nodeIcon = new Image(NodeIconPool.GetTexture(nodeData.Node.GetType())) {
+			nodeIcon = new Image(NodeIconPool.GetTexture(nodeData.Node)) {
 				HitTestTarget = true,
 				MinMaxSize = new Vector2(21, 16),
 				Padding = new Thickness { Left = 5 }
@@ -130,6 +130,16 @@ namespace Tangerine.UI.Timeline.Components
 				});
 			}));
 			widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+			nodeIcon.AddChangeLateWatcher(CalcComponentsHashCode, _ => nodeIcon.Texture = NodeIconPool.GetTexture(nodeData.Node));
+
+			int CalcComponentsHashCode()
+			{
+				var result = 0;
+				foreach (var component in nodeData.Node.Components) {
+					result ^= component.GetHashCode();
+				}
+				return result;
+			}
 		}
 
 		public Widget Widget => widget;

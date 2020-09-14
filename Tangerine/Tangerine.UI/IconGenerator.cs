@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Lime;
 
 namespace Tangerine.UI
@@ -42,7 +43,7 @@ namespace Tangerine.UI
 		};
 
 		private static readonly IFont font;
-		private static readonly Dictionary<Type, RenderTexture> map = new Dictionary<Type, RenderTexture>();
+		private static readonly Dictionary<Type, ITexture> map = new Dictionary<Type, ITexture>();
 
 		static IconTextureGenerator()
 		{
@@ -56,19 +57,49 @@ namespace Tangerine.UI
 				return texture;
 			}
 
-			map[type] = texture = new RenderTexture(IconSize, IconSize);
-			var typeName = type.Name;
-			foreach (var ignoringSuffix in ignoringTypeNameSuffixes) {
-				if (typeName.EndsWith(ignoringSuffix, StringComparison.InvariantCultureIgnoreCase)) {
-					typeName = typeName.Substring(0, typeName.Length - ignoringSuffix.Length);
+			var attribute = type.GetCustomAttribute<TangerineCustomIconAttribute>();
+			if (attribute is TangerineBase64IconAttribute base64IconAttribute && !string.IsNullOrEmpty(base64IconAttribute.Base64)) {
+				texture = CreateIconTexture(base64IconAttribute.Base64);
+			} else {
+				var iconGenerationAttribute = attribute as TangerineIconGenerationAttribute;
+				string iconAbbreviation;
+				if (iconGenerationAttribute?.Abbreviation != null) {
+					iconAbbreviation = iconGenerationAttribute.Abbreviation;
+				} else {
+					var typeName = type.Name;
+					foreach (var ignoringSuffix in ignoringTypeNameSuffixes) {
+						if (typeName.EndsWith(ignoringSuffix, StringComparison.InvariantCultureIgnoreCase)) {
+							typeName = typeName.Substring(0, typeName.Length - ignoringSuffix.Length);
+						}
+					}
+					var typeAbbreviation = typeName
+						.Where(@char => char.IsUpper(@char) || char.IsNumber(@char))
+						.Aggregate(string.Empty, (s, @char) => s + @char);
+					iconAbbreviation = typeAbbreviation.Length > 0 ? typeAbbreviation : typeName;
+					iconAbbreviation = iconAbbreviation.Substring(0, Math.Min(IconTextMaxLength, iconAbbreviation.Length)).ToUpperInvariant();
 				}
+				var (commonColor, secondaryColor) = colors[Math.Abs(type.Name.GetHashCode()) % colors.Count];
+				if (iconGenerationAttribute?.CommonColor != null) {
+					commonColor = iconGenerationAttribute.CommonColor.Value;
+				}
+				if (iconGenerationAttribute?.SecondaryColor != null) {
+					secondaryColor = iconGenerationAttribute.SecondaryColor.Value;
+				}
+				texture = CreateIconTexture(iconAbbreviation, commonColor, secondaryColor);
 			}
-			var abbreviation = typeName
-				.Where(@char => char.IsUpper(@char) || char.IsNumber(@char))
-				.Aggregate(string.Empty, (s, @char) => s + @char);
-			var iconText = abbreviation.Length > 0 ? abbreviation : typeName;
-			iconText = iconText.Substring(0, Math.Min(IconTextMaxLength, iconText.Length)).ToUpperInvariant();
-			var (commonColor, secondaryColor) = colors[Math.Abs(typeName.GetHashCode()) % colors.Count];
+			return map[type] = texture;
+		}
+
+		private static Texture2D CreateIconTexture(string base64)
+		{
+			var texture = new Texture2D();
+			texture.LoadImage(Convert.FromBase64String(base64));
+			return texture;
+		}
+
+		private static RenderTexture CreateIconTexture(string iconAbbreviation, Color4 commonColor, Color4 secondaryColor)
+		{
+			var texture = new RenderTexture(IconSize, IconSize);
 			Render(() => {
 				Renderer.PushState(
 					RenderState.World |
@@ -94,12 +125,14 @@ namespace Tangerine.UI
 					Renderer.DrawRect(Vector2.One * 1, Vector2.One * IconSize, secondaryColor);
 					Renderer.DrawRectOutline(Vector2.One * 1, Vector2.One * IconSize, commonColor, BorderSize);
 
-					var hBorderOffset = Vector2.Right * (IconSize * 0.0625f + BorderSize * 2);
-					var textScale = CalcBestTextScale(iconText, FontHeight, Vector2.One * IconSize - hBorderOffset);
-					var fontHeight = FontHeight * textScale;
-					var textSize = font.MeasureTextLine(iconText, fontHeight, letterSpacing: 0);
-					var textPosition = (Vector2.One * IconSize - textSize) * 0.5f;
-					Renderer.DrawTextLine(font, textPosition, iconText, fontHeight, commonColor, letterSpacing: 0);
+					if (!string.IsNullOrWhiteSpace(iconAbbreviation)) {
+						var hBorderOffset = Vector2.Right * (IconSize * 0.0625f + BorderSize * 2);
+						var textScale = CalcBestTextScale(iconAbbreviation, FontHeight, Vector2.One * IconSize - hBorderOffset);
+						var fontHeight = FontHeight * textScale;
+						var textSize = font.MeasureTextLine(iconAbbreviation, fontHeight, letterSpacing: 0);
+						var textPosition = (Vector2.One * IconSize - textSize) * 0.5f;
+						Renderer.DrawTextLine(font, textPosition, iconAbbreviation, fontHeight, commonColor, letterSpacing: 0);
+					}
 				} finally {
 					texture.RestoreRenderTarget();
 					Renderer.PopState();

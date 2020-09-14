@@ -349,4 +349,55 @@ namespace Lime
 			Tooltip = tooltip;
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public abstract class TangerineCustomIconAttribute : Attribute
+	{
+		public int Priority { get; }
+
+		protected TangerineCustomIconAttribute(int priority)
+		{
+			Priority = priority;
+		}
+	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public sealed class TangerineBase64IconAttribute : TangerineCustomIconAttribute
+	{
+		public string Base64 { get; }
+
+		///<param name="base64">Base64 encoded PNG image.</param>
+		public TangerineBase64IconAttribute(string base64, int priority = 0) : base(priority)
+		{
+			Base64 = base64;
+		}
+	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public sealed class TangerineIconGenerationAttribute : TangerineCustomIconAttribute
+	{
+		public string Abbreviation { get; }
+		public Color4? CommonColor { get; }
+		public Color4? SecondaryColor { get; }
+
+		public TangerineIconGenerationAttribute(int priority = 0) : base(priority) { }
+
+		public TangerineIconGenerationAttribute(string abbreviation, int priority = 0) : base(priority)
+		{
+			Abbreviation = abbreviation;
+		}
+
+		public TangerineIconGenerationAttribute(string commonColor, string secondaryColor, int priority = 0) : base(priority)
+		{
+			CommonColor = Color4.Parse(commonColor);
+			SecondaryColor = Color4.Parse(secondaryColor);
+		}
+
+		public TangerineIconGenerationAttribute(string abbreviation, string commonColor, string secondaryColor, int priority = 0) : base(priority)
+		{
+			Abbreviation = abbreviation;
+			CommonColor = Color4.Parse(commonColor);
+			SecondaryColor = Color4.Parse(secondaryColor);
+		}
+	}
 }
