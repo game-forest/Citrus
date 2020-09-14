@@ -158,6 +158,8 @@ namespace Lime
 			var bounds = Bounds;
 			if ((float)bounds.Width != ClientSize.X || (float)bounds.Height != ClientSize.Y) {
 				ClientSize = new Vector2((float)Layer.Bounds.Size.Width, (float)Layer.Bounds.Size.Height);
+				//after updating xamarin on 13.18+, LayoutSubviews became executing before view becomes appeared,
+				//so postpone OpenGL setup to avoid freeze on iOS 9
 				if (isViewAppeared()) {
 					SetupContextAndFramebuffer();
 				}
