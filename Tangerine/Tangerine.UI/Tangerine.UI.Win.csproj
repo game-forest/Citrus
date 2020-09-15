@@ -47,6 +47,7 @@
     <None Include="packages.config" />
     <Compile Include="ColorPicker.Mac.cs" />
     <Compile Include="IconGenerator.cs" />
+    <Compile Include="ComponentIconPool.cs" />
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
     <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
     <Compile Include="PropertyEditors\SBytePropertyEditor.cs" />
