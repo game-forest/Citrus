@@ -120,8 +120,8 @@ namespace Lime
 				Command.ResetConsumedCommands();
 				CommandQueue.Instance.IssueCommands();
 				try {
-					Updating?.Invoke(delta);
 					CommandHandlerList.Global.ProcessCommands();
+					Updating?.Invoke(delta);
 				} finally {
 					Application.MainMenu?.Refresh();
 				}
