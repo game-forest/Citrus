@@ -270,9 +270,6 @@ namespace Lime
 			} else {
 				NativeItem = new ToolStripMenuItem();
 				NativeItem.Click += (s, e) => CommandQueue.Instance.Add((Command)Command);
-				if (command.Icon != null) {
-					NativeItem.Image = (System.Drawing.Image)command.Icon.AsNativeIcon;
-				}
 			}
 			Refresh();
 		}
@@ -295,6 +292,9 @@ namespace Lime
 			commandVersion = Command.Version;
 			NativeItem.Visible = Command.Visible;
 			NativeItem.Text = Command.Text;
+			if (Command.Icon != null) {
+				NativeItem.Image = (System.Drawing.Image)Command.Icon.AsNativeIcon;
+			}
 			var mi = NativeItem as ToolStripMenuItem;
 			if (mi == null)
 				return;
