@@ -67,7 +67,13 @@ namespace Tangerine
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
 
 			foreach (var type in Project.Current.RegisteredNodeTypes) {
-				var cmd = new Command("Create " + type.Name) { Icon = NodeIconPool.GetIcon(type) };
+				var cmd = new Command("Create " + type.Name);
+				if (NodeIconPool.TryGetIcon(type, out var icon)) {
+					cmd.Icon = icon;
+				} else {
+					cmd.Icon = NodeIconPool.DefaultIcon;
+					NodeIconPool.GenerateIcon(type, newIcon => cmd.Icon = newIcon);
+				}
 				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true);
 				CommandHandlerList.Global.Connect(cmd, new CreateNode(type, cmd));
 				if (type.Namespace == "Lime") {
@@ -212,7 +218,13 @@ namespace Tangerine
 			};
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
 			foreach (var t in Project.GetNodesTypesOrdered("Lime")) {
-				var cmd = new Command(t.Name) { Icon = NodeIconPool.GetIcon(t) };
+				var cmd = new Command(t.Name);
+				if (NodeIconPool.TryGetIcon(t, out var icon)) {
+					cmd.Icon = icon;
+				} else {
+					cmd.Icon = NodeIconPool.DefaultIcon;
+					NodeIconPool.GenerateIcon(t, newIcon => cmd.Icon = newIcon);
+				}
 				CommandHandlerList.Global.Connect(cmd, new CreateNode(t, cmd));
 				create.Add(cmd);
 				CreateNodeCommands.Add(cmd);

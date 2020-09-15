@@ -43,7 +43,10 @@ namespace Tangerine.UI
 		};
 
 		private static readonly IFont font;
-		private static readonly Dictionary<Type, ITexture> map = new Dictionary<Type, ITexture>();
+		private static readonly Dictionary<Type, (ITexture Texture, Bitmap Bitmap)> map = new Dictionary<Type, (ITexture Texture, Bitmap Bitmap)>();
+
+		private delegate void TextureRenderedDelegate(ITexture texture);
+		public delegate void BitmapCreatedDelegate(Bitmap bitmap);
 
 		static IconTextureGenerator()
 		{
@@ -51,15 +54,25 @@ namespace Tangerine.UI
 			font = new DynamicFont(fontResource.GetResourceBytes());
 		}
 
-		public static ITexture GetTexture(Type type)
+		public static ITexture GetTexture(Type type, BitmapCreatedDelegate bitmapCreated = null)
 		{
-			if (map.TryGetValue(type, out var texture)) {
-				return texture;
+			if (map.TryGetValue(type, out var icon)) {
+				bitmapCreated?.Invoke(icon.Bitmap);
+				return icon.Texture;
 			}
 
+			ITexture texture;
 			var attribute = type.GetCustomAttribute<TangerineCustomIconAttribute>();
 			if (attribute is TangerineBase64IconAttribute base64IconAttribute && !string.IsNullOrEmpty(base64IconAttribute.Base64)) {
-				texture = CreateIconTexture(base64IconAttribute.Base64);
+				var texture2D = new Texture2D();
+				texture = texture2D;
+				Bitmap bitmap;
+				using (var stream = new System.IO.MemoryStream(Convert.FromBase64String(base64IconAttribute.Base64))) {
+					bitmap = new Bitmap(stream);
+				}
+				texture2D.LoadImage(bitmap);
+				map[type] = (texture, bitmap);
+				bitmapCreated?.Invoke(bitmap);
 			} else {
 				var iconGenerationAttribute = attribute as TangerineIconGenerationAttribute;
 				string iconAbbreviation;
@@ -85,19 +98,16 @@ namespace Tangerine.UI
 				if (iconGenerationAttribute?.SecondaryColor != null) {
 					secondaryColor = iconGenerationAttribute.SecondaryColor.Value;
 				}
-				texture = CreateIconTexture(iconAbbreviation, commonColor, secondaryColor);
+				texture = CreateIconTexture(iconAbbreviation, commonColor, secondaryColor, t => {
+					var bitmap = new Bitmap(t.GetPixels(), t.ImageSize.Width, t.ImageSize.Height);
+					map[type] = (t, bitmap);
+					bitmapCreated?.Invoke(bitmap);
+				});
 			}
-			return map[type] = texture;
-		}
-
-		private static Texture2D CreateIconTexture(string base64)
-		{
-			var texture = new Texture2D();
-			texture.LoadImage(Convert.FromBase64String(base64));
 			return texture;
 		}
 
-		private static RenderTexture CreateIconTexture(string iconAbbreviation, Color4 commonColor, Color4 secondaryColor)
+		private static RenderTexture CreateIconTexture(string iconAbbreviation, Color4 commonColor, Color4 secondaryColor, TextureRenderedDelegate textureRendered)
 		{
 			var texture = new RenderTexture(IconSize, IconSize);
 			Render(() => {
@@ -136,6 +146,7 @@ namespace Tangerine.UI
 				} finally {
 					texture.RestoreRenderTarget();
 					Renderer.PopState();
+					Application.InvokeOnNextUpdate(() => textureRendered(texture));
 				}
 			});
 			return texture;
@@ -164,7 +175,7 @@ namespace Tangerine.UI
 		private static void Render(Action render)
 		{
 			var cp = WidgetContext.Current.Root.CompoundPresenter;
-			cp.Add(new SingleUsePresenter(cp, render));
+			cp.Push(new SingleUsePresenter(cp, render));
 			Window.Current.Invalidate();
 		}
 

@@ -8,6 +8,8 @@ namespace Tangerine.UI
 	{
 		private static readonly Dictionary<string, Icon> icons = new Dictionary<string, Icon>();
 
+		public static ITexture GetTexture(string id, string defaultId = null) => GetIcon(id, defaultId).AsTexture;
+
 		public static Icon GetIcon(string id, string defaultId = null)
 		{
 			if (!icons.TryGetValue(id, out var icon)) {
@@ -16,24 +18,41 @@ namespace Tangerine.UI
 			return icon;
 		}
 
-		public static ITexture GetTexture(string id, string defaultId = null) => GetIcon(id, defaultId).AsTexture;
+		public static bool TryGetIcon(string id, out Icon icon)
+		{
+			if (icons.TryGetValue(id, out icon)) {
+				return true;
+			}
+			if (TryCreateIcon(id, out icon)) {
+				icons[id] = icon;
+				return true;
+			}
+			return false;
+		}
 
 		private static Icon CreateIcon(string id, string defaultId = null)
 		{
-			while (true) {
-				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-					try {
-						var png = new ThemedIconResource(id, assembly.GetName().Name).GetResourceStream();
-						if (png != null) {
-							return new Icon(new Bitmap(png));
-						}
-					} catch (System.Exception) {
-					}
-				}
-				id = defaultId ?? throw new ArgumentException($"Icon '{id}' doesn't exist");
-				defaultId = null;
+			if (TryCreateIcon(id, out var icon) || !string.IsNullOrEmpty(defaultId) && TryCreateIcon(defaultId, out icon)) {
+				return icon;
 			}
+			throw new ArgumentException($"Icon '{id}' doesn't exist");
+		}
+
+		private static bool TryCreateIcon(string id, out Icon icon)
+		{
+			icon = null;
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+				try {
+					var png = new ThemedIconResource(id, assembly.GetName().Name).GetResourceStream();
+					if (png != null) {
+						icon = new Icon(new Bitmap(png));
+						return true;
+					}
+				} catch (System.Exception) {
+					// suppress
+				}
+			}
+			return false;
 		}
 	}
 }
-
