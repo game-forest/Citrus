@@ -146,7 +146,7 @@ namespace Tangerine.UI.Timeline.Operations
 		public static void Perform()
 		{
 			Document.Current.History.DoTransaction(() => {
-				foreach (var row in Document.Current.SelectedRows()) {
+				foreach (var row in Document.Current.SelectedRows().ToList()) {
 					var spans = row.Components.Get<GridSpanListComponent>()?.Spans;
 					if (spans == null) {
 						continue;
