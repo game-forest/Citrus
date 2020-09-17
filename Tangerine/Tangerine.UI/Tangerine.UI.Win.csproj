@@ -46,6 +46,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Compile Include="ColorPicker.Mac.cs" />
+    <Compile Include="IconGenerator.cs" />
+    <Compile Include="ComponentIconPool.cs" />
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
     <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
     <Compile Include="PropertyEditors\SBytePropertyEditor.cs" />
@@ -130,6 +132,10 @@
     <Compile Include="Widgets\ThemedButtons.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj">
+      <Project>{FE8512BC-7A55-425C-8BC1-AD4D9785CF12}</Project>
+      <Name>DynamicFont.Win</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
       <Project>{fc2de6c9-641a-4230-8d29-ea4035cd8708}</Project>
       <Name>Lime.Win</Name>

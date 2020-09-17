@@ -69,7 +69,7 @@ namespace Tangerine.UI.SceneView
 				if (widget is Animesh && AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
 					continue;
 				}
-				var t = NodeIconPool.GetTexture(widget.GetType());
+				var t = NodeIconPool.GetTexture(widget);
 				var h = widget.CalcHull().Transform(sceneView.CalcTransitionFromSceneSpace(canvas));
 				for (int i = 0; i < 4; i++) {
 					var a = h[i];

@@ -221,7 +221,7 @@ namespace Tangerine.UI.Inspector
 					if (totalObjectCount > 1) {
 						text += $" ({objectsCount}/{totalObjectCount})";
 					}
-					var label = CreateCategoryLabel(text, ColorTheme.Current.Inspector.CategoryLabelBackground);
+					var label = CreateCategoryLabel(text, NodeIconPool.GetTexture(type), ColorTheme.Current.Inspector.CategoryLabelBackground);
 					if (label != null) {
 						widget.AddNode(label);
 					}
@@ -468,7 +468,7 @@ namespace Tangerine.UI.Inspector
 			Core.Operations.SetAnimableProperty.Perform(obj, propertyName, value, CoreUserPreferences.Instance.AutoKeyframes);
 		}
 
-		private Widget CreateCategoryLabel(string text, Color4 color)
+		private Widget CreateCategoryLabel(string text, ITexture iconTexture, Color4 color)
 		{
 			if (string.IsNullOrEmpty(text)) {
 				return null;
@@ -478,6 +478,10 @@ namespace Tangerine.UI.Inspector
 				Layout = new HBoxLayout(),
 				MinHeight = Theme.Metrics.DefaultButtonSize.Y,
 				Nodes = {
+					new Image(iconTexture) {
+						MinMaxSize = new Vector2(21, 19),
+						Padding = new Thickness { LeftTop = new Vector2(5, 3) },
+					},
 					new ThemedSimpleText {
 						Text = text,
 						Padding = new Thickness(4, 0),
@@ -497,7 +501,7 @@ namespace Tangerine.UI.Inspector
 			if (totalObjectCount > 1) {
 				text += $"({componentsCount}/{totalObjectCount})";
 			}
-			var label = CreateCategoryLabel(text, ColorTheme.Current.Inspector.ComponentHeaderLabelBackground);
+			var label = CreateCategoryLabel(text, ComponentIconPool.GetTexture(type), ColorTheme.Current.Inspector.ComponentHeaderLabelBackground);
 			label.Padding += new Thickness { Right = 10 };
 			label.Nodes.Add(new ToolbarButton(IconPool.GetTexture("Inspector.Options")) {
 				LayoutCell = new LayoutCell(Alignment.Center),
