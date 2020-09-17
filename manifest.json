@@ -7130,6 +7130,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineBase64IconAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineBase64IconAttribute.html",
+          "hash": "A9fAJZNZqqRM0IJoYKN4FA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineCustomIconAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineCustomIconAttribute.html",
+          "hash": "rMy46Q1Ahba5QGMR4Qf2XA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineDefaultCharsetAttribute.yml",
       "output": {
         ".html": {
@@ -7207,6 +7231,18 @@
         ".html": {
           "relative_path": "api/Lime.TangerineGroupAttribute.html",
           "hash": "xwoEaCKqxh3/o5XkyoruNg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineIconGenerationAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineIconGenerationAttribute.html",
+          "hash": "nUbccKI4xQ/X0g4/mmmI5w=="
         }
       },
       "is_incremental": false,
@@ -9186,7 +9222,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "FJJyq+6OtFPbYekvGF9F+w=="
+          "hash": "6MZTBAHMAouXTcA3wIN9Dg=="
         }
       },
       "is_incremental": false,
@@ -9234,7 +9270,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "lW9tz8EzvQFlEp4LSczudw=="
+          "hash": "WWyJzxJDVgRuJMEQZnwByA=="
         }
       },
       "is_incremental": false,
@@ -11287,13 +11323,6 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -11304,13 +11333,20 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 768,
+          "total_file_count": 771,
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 71,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
           "skipped_file_count": 0
         }
       }

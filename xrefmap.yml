@@ -61634,6 +61634,70 @@ references:
   commentId: F:Lime.TangerineAllowedParentTypes.Types
   fullName: Lime.TangerineAllowedParentTypes.Types
   nameWithType: TangerineAllowedParentTypes.Types
+- uid: Lime.TangerineBase64IconAttribute
+  name: TangerineBase64IconAttribute
+  href: api/Lime.TangerineBase64IconAttribute.html
+  commentId: T:Lime.TangerineBase64IconAttribute
+  fullName: Lime.TangerineBase64IconAttribute
+  nameWithType: TangerineBase64IconAttribute
+- uid: Lime.TangerineBase64IconAttribute.#ctor(System.String,System.Int32)
+  name: TangerineBase64IconAttribute(String, Int32)
+  href: api/Lime.TangerineBase64IconAttribute.html#Lime_TangerineBase64IconAttribute__ctor_System_String_System_Int32_
+  commentId: M:Lime.TangerineBase64IconAttribute.#ctor(System.String,System.Int32)
+  fullName: Lime.TangerineBase64IconAttribute.TangerineBase64IconAttribute(System.String, System.Int32)
+  nameWithType: TangerineBase64IconAttribute.TangerineBase64IconAttribute(String, Int32)
+- uid: Lime.TangerineBase64IconAttribute.#ctor*
+  name: TangerineBase64IconAttribute
+  href: api/Lime.TangerineBase64IconAttribute.html#Lime_TangerineBase64IconAttribute__ctor_
+  commentId: Overload:Lime.TangerineBase64IconAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineBase64IconAttribute.TangerineBase64IconAttribute
+  nameWithType: TangerineBase64IconAttribute.TangerineBase64IconAttribute
+- uid: Lime.TangerineBase64IconAttribute.Base64
+  name: Base64
+  href: api/Lime.TangerineBase64IconAttribute.html#Lime_TangerineBase64IconAttribute_Base64
+  commentId: P:Lime.TangerineBase64IconAttribute.Base64
+  fullName: Lime.TangerineBase64IconAttribute.Base64
+  nameWithType: TangerineBase64IconAttribute.Base64
+- uid: Lime.TangerineBase64IconAttribute.Base64*
+  name: Base64
+  href: api/Lime.TangerineBase64IconAttribute.html#Lime_TangerineBase64IconAttribute_Base64_
+  commentId: Overload:Lime.TangerineBase64IconAttribute.Base64
+  isSpec: "True"
+  fullName: Lime.TangerineBase64IconAttribute.Base64
+  nameWithType: TangerineBase64IconAttribute.Base64
+- uid: Lime.TangerineCustomIconAttribute
+  name: TangerineCustomIconAttribute
+  href: api/Lime.TangerineCustomIconAttribute.html
+  commentId: T:Lime.TangerineCustomIconAttribute
+  fullName: Lime.TangerineCustomIconAttribute
+  nameWithType: TangerineCustomIconAttribute
+- uid: Lime.TangerineCustomIconAttribute.#ctor(System.Int32)
+  name: TangerineCustomIconAttribute(Int32)
+  href: api/Lime.TangerineCustomIconAttribute.html#Lime_TangerineCustomIconAttribute__ctor_System_Int32_
+  commentId: M:Lime.TangerineCustomIconAttribute.#ctor(System.Int32)
+  fullName: Lime.TangerineCustomIconAttribute.TangerineCustomIconAttribute(System.Int32)
+  nameWithType: TangerineCustomIconAttribute.TangerineCustomIconAttribute(Int32)
+- uid: Lime.TangerineCustomIconAttribute.#ctor*
+  name: TangerineCustomIconAttribute
+  href: api/Lime.TangerineCustomIconAttribute.html#Lime_TangerineCustomIconAttribute__ctor_
+  commentId: Overload:Lime.TangerineCustomIconAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineCustomIconAttribute.TangerineCustomIconAttribute
+  nameWithType: TangerineCustomIconAttribute.TangerineCustomIconAttribute
+- uid: Lime.TangerineCustomIconAttribute.Priority
+  name: Priority
+  href: api/Lime.TangerineCustomIconAttribute.html#Lime_TangerineCustomIconAttribute_Priority
+  commentId: P:Lime.TangerineCustomIconAttribute.Priority
+  fullName: Lime.TangerineCustomIconAttribute.Priority
+  nameWithType: TangerineCustomIconAttribute.Priority
+- uid: Lime.TangerineCustomIconAttribute.Priority*
+  name: Priority
+  href: api/Lime.TangerineCustomIconAttribute.html#Lime_TangerineCustomIconAttribute_Priority_
+  commentId: Overload:Lime.TangerineCustomIconAttribute.Priority
+  isSpec: "True"
+  fullName: Lime.TangerineCustomIconAttribute.Priority
+  nameWithType: TangerineCustomIconAttribute.Priority
 - uid: Lime.TangerineDefaultCharsetAttribute
   name: TangerineDefaultCharsetAttribute
   href: api/Lime.TangerineDefaultCharsetAttribute.html
@@ -61903,6 +61967,82 @@ references:
   commentId: F:Lime.TangerineGroupAttribute.Name
   fullName: Lime.TangerineGroupAttribute.Name
   nameWithType: TangerineGroupAttribute.Name
+- uid: Lime.TangerineIconGenerationAttribute
+  name: TangerineIconGenerationAttribute
+  href: api/Lime.TangerineIconGenerationAttribute.html
+  commentId: T:Lime.TangerineIconGenerationAttribute
+  fullName: Lime.TangerineIconGenerationAttribute
+  nameWithType: TangerineIconGenerationAttribute
+- uid: Lime.TangerineIconGenerationAttribute.#ctor(System.Int32)
+  name: TangerineIconGenerationAttribute(Int32)
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute__ctor_System_Int32_
+  commentId: M:Lime.TangerineIconGenerationAttribute.#ctor(System.Int32)
+  fullName: Lime.TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(System.Int32)
+  nameWithType: TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(Int32)
+- uid: Lime.TangerineIconGenerationAttribute.#ctor(System.String,System.Int32)
+  name: TangerineIconGenerationAttribute(String, Int32)
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute__ctor_System_String_System_Int32_
+  commentId: M:Lime.TangerineIconGenerationAttribute.#ctor(System.String,System.Int32)
+  fullName: Lime.TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(System.String, System.Int32)
+  nameWithType: TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(String, Int32)
+- uid: Lime.TangerineIconGenerationAttribute.#ctor(System.String,System.String,System.Int32)
+  name: TangerineIconGenerationAttribute(String, String, Int32)
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute__ctor_System_String_System_String_System_Int32_
+  commentId: M:Lime.TangerineIconGenerationAttribute.#ctor(System.String,System.String,System.Int32)
+  fullName: Lime.TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(System.String, System.String, System.Int32)
+  nameWithType: TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(String, String, Int32)
+- uid: Lime.TangerineIconGenerationAttribute.#ctor(System.String,System.String,System.String,System.Int32)
+  name: TangerineIconGenerationAttribute(String, String, String, Int32)
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute__ctor_System_String_System_String_System_String_System_Int32_
+  commentId: M:Lime.TangerineIconGenerationAttribute.#ctor(System.String,System.String,System.String,System.Int32)
+  fullName: Lime.TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(System.String, System.String, System.String, System.Int32)
+  nameWithType: TangerineIconGenerationAttribute.TangerineIconGenerationAttribute(String, String, String, Int32)
+- uid: Lime.TangerineIconGenerationAttribute.#ctor*
+  name: TangerineIconGenerationAttribute
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute__ctor_
+  commentId: Overload:Lime.TangerineIconGenerationAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineIconGenerationAttribute.TangerineIconGenerationAttribute
+  nameWithType: TangerineIconGenerationAttribute.TangerineIconGenerationAttribute
+- uid: Lime.TangerineIconGenerationAttribute.Abbreviation
+  name: Abbreviation
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute_Abbreviation
+  commentId: P:Lime.TangerineIconGenerationAttribute.Abbreviation
+  fullName: Lime.TangerineIconGenerationAttribute.Abbreviation
+  nameWithType: TangerineIconGenerationAttribute.Abbreviation
+- uid: Lime.TangerineIconGenerationAttribute.Abbreviation*
+  name: Abbreviation
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute_Abbreviation_
+  commentId: Overload:Lime.TangerineIconGenerationAttribute.Abbreviation
+  isSpec: "True"
+  fullName: Lime.TangerineIconGenerationAttribute.Abbreviation
+  nameWithType: TangerineIconGenerationAttribute.Abbreviation
+- uid: Lime.TangerineIconGenerationAttribute.CommonColor
+  name: CommonColor
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute_CommonColor
+  commentId: P:Lime.TangerineIconGenerationAttribute.CommonColor
+  fullName: Lime.TangerineIconGenerationAttribute.CommonColor
+  nameWithType: TangerineIconGenerationAttribute.CommonColor
+- uid: Lime.TangerineIconGenerationAttribute.CommonColor*
+  name: CommonColor
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute_CommonColor_
+  commentId: Overload:Lime.TangerineIconGenerationAttribute.CommonColor
+  isSpec: "True"
+  fullName: Lime.TangerineIconGenerationAttribute.CommonColor
+  nameWithType: TangerineIconGenerationAttribute.CommonColor
+- uid: Lime.TangerineIconGenerationAttribute.SecondaryColor
+  name: SecondaryColor
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute_SecondaryColor
+  commentId: P:Lime.TangerineIconGenerationAttribute.SecondaryColor
+  fullName: Lime.TangerineIconGenerationAttribute.SecondaryColor
+  nameWithType: TangerineIconGenerationAttribute.SecondaryColor
+- uid: Lime.TangerineIconGenerationAttribute.SecondaryColor*
+  name: SecondaryColor
+  href: api/Lime.TangerineIconGenerationAttribute.html#Lime_TangerineIconGenerationAttribute_SecondaryColor_
+  commentId: Overload:Lime.TangerineIconGenerationAttribute.SecondaryColor
+  isSpec: "True"
+  fullName: Lime.TangerineIconGenerationAttribute.SecondaryColor
+  nameWithType: TangerineIconGenerationAttribute.SecondaryColor
 - uid: Lime.TangerineIgnoreAttribute
   name: TangerineIgnoreAttribute
   href: api/Lime.TangerineIgnoreAttribute.html
