@@ -9314,6 +9314,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/citrus_project/tangerine_font_configuration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/citrus_project/tangerine_font_configuration.html",
+          "hash": "3S0OLS2eQ9mPXI+n0goOpw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/intro.md",
       "output": {
         ".html": {
@@ -9390,7 +9402,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "fhlVNZLT/EYoOkydUYXnog=="
+          "hash": "9XfelmFkDRvVBTnx9thMrQ=="
         }
       },
       "is_incremental": false,
@@ -11330,23 +11342,23 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 771,
-          "skipped_file_count": 0
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 71,
-          "skipped_file_count": 0
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 72,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 771,
           "skipped_file_count": 0
         }
       }

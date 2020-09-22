@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Tangerine font configuration | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Tangerine font configuration | Citrus Engine ">
+    <meta name="generator" content="docfx 2.48.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="tangerine-font-configuration">Tangerine font configuration</h1>
+
+<p>Tangerine Font Configuration (tftconf) is an asset describing how to create Tangerine Font asset (tft).</p>
+<p>The format is JSON:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Height</code></td>
+<td>float</td>
+<td>Font's point size that will be used to generate the font's texture.</td>
+</tr>
+<tr>
+<td><code>Padding</code></td>
+<td>int</td>
+<td>Characters in the font texture need some padding between them so they can be rendered separately. This padding is specified in pixels.Padding also creates room for the SDF gradient. The larger the padding, the smoother the transition, which allows for higher-quality rendering and larger effects, like thicker outlines.</td>
+</tr>
+<tr>
+<td><code>CharSets</code></td>
+<td><a href="#charset">CharSet</a></td>
+<td>That's the main part of configuration file that describes what font files and symbols should be used for Tangerine Font creation.</td>
+</tr>
+<tr>
+<td><code>ExcludeChars</code></td>
+<td>string</td>
+<td>Characters that will be ignored during the font generation step.</td>
+</tr>
+<tr>
+<td><code>IsSdf</code></td>
+<td>bool</td>
+<td>If it's <code>true</code> Signed Distance Font (SDF) will be generated otherwise simple bitmap font.</td>
+</tr>
+<tr>
+<td><code>SdfScale</code></td>
+<td>float</td>
+<td>When using an SFD font, a higher resolution results in finer gradients, which produces higher quality text. That's why it's a common way to sample characters at high resolution to create good gradients and then downscale. For example you can generated 8k textures with bigger font size and then downscale them to 4k with <code>SdfScale = 0.5f</code>.</td>
+</tr>
+<tr>
+<td><code>TextureSize</code></td>
+<td><a href="#vector2">Vector2</a></td>
+<td>Size for each texture <strong>before</strong> downscale.</td>
+</tr>
+<tr>
+<td><code>CustomKerningPairs</code></td>
+<td><a href="#CustomKerningPairs">CustomKerningPairs</a></td>
+<td>Kerning pairs are used to adjust the spacing between specific character pairs, to produce a more visually pleasing result. Note that many fonts do not have kerning pairs or may not satisfy your needs so you can simply add your own pairs or override ones taken from the font file.</td>
+</tr>
+<tr>
+<td><code>Margin</code></td>
+<td>float</td>
+<td><strong>Obsolete</strong>. Expands AC width. Was used for workarounds.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="charset"><code>CharSet</code></h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Chars</code></td>
+<td>string</td>
+<td>A list of characters to be used for font generation. Can be <code>null</code> or empty (see <code>ExtractFromDictionaries</code>).</td>
+</tr>
+<tr>
+<td><code>Font</code></td>
+<td>string</td>
+<td>Path (relative to asset directory) to font file from which glyphs will be taken. See <a href="#Supported-formats">supported font formats</a>.</td>
+</tr>
+<tr>
+<td><code>ExtractFromDictionaries</code></td>
+<td>string</td>
+<td>A comma separated set of localizations (e.g. &quot;EN,RU,CN&quot;). If it's null or empty existing Chars are used, otherwise Chars are extracted from localization dictionaries (e.g. &quot;Dictionary.RU.txt&quot; or &quot;Dictionary.txt&quot; for EN).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vector2"><code>Vector2</code></h2>
+<p>array of two numbers (YuzuCompact).</p>
+<pre><code class="lang-json">[12, 34]
+</code></pre>
+<h2 id="customkerningpairs"><code>CustomKerningPairs</code></h2>
+<p>It's a dictionary with character key and array of <a href="#KerningPair">KerningPair</a> values. Each kerning pair in array represents kerning amount that should be applied if character follows array's key of the dictionary. For example this:</p>
+<pre><code class="lang-json">CustomKerningPairs: { 'A': [['V', -2]] }
+</code></pre>
+<p>means that position of <code>V</code> should be decreased by 2 if it follows <code>A</code>.</p>
+<h2 id="kerningpair"><code>KerningPair</code></h2>
+<p>Array of two elements: char and float (YuzuCompact).</p>
+<pre><code class="lang-json">['V', -3]
+</code></pre>
+<h2 id="supported-formats">Supported formats</h2>
+<p>Supported font formats are those that are supported by FreeType:</p>
+<ul>
+<li>TrueType files (.ttf) and collections (.ttc)</li>
+<li>Type 1 font files both in ASCII (.pfa) or binary (.pfb) format</li>
+<li>Type 1 Multiple Master fonts</li>
+<li>Type 1 CID-keyed fonts</li>
+<li>OpenType/CFF (.otf) font</li>
+<li>CFF/Type 2 fonts</li>
+<li>Adobe CEF fonts (.cef), used to embed fonts in SVG documents with the Adobe SVG viewer plugin</li>
+<li>Windows FNT/FON bitmap fonts</li>
+<li>Apple's TrueType GX fonts are supported as normal TTFs (the advanced tables are ignored)</li>
+</ul>
+<h1 id="how-to-generate-font">How to generate font</h1>
+<ul>
+<li>Place a font file inside <code>Fonts</code> directory (e.g. Digits.ttf)</li>
+<li>Place a configuration file inside <code>Fonts</code> directory. Example of .tftconf to generate SDF font with digits only:</li>
+</ul>
+<pre><code class="lang-json">{
+    &quot;CharSets&quot;:[
+		{
+			&quot;Chars&quot;:&quot;0123456789&quot;,
+			&quot;Font&quot;:&quot;Fonts/Digits.ttf&quot;
+		}
+	],
+	&quot;Height&quot;:170,
+	&quot;IsSdf&quot;:true,
+    &quot;SdfScale&quot;: 0.25,
+	&quot;Padding&quot;:36,
+	&quot;TextureSize&quot;:[4096,4096]
+}
+</code></pre>
+<ul>
+<li>Run <code>Invalidate Fonts</code> action via Orange or Tangerine (Orange -&gt; Invalidate Fonts)</li>
+<li>You'll be notified after engine finishes font generation. You should be able to see <code>Digits.ttf</code> and <code>Digit.png</code> files in <code>Fonts</code> directory</li>
+<li>Unfortunately you have to restart Tangerine for changes to take place :(</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            GameForest 2020
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
