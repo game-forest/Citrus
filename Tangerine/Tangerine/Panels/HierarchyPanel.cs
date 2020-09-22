@@ -35,7 +35,6 @@ namespace Tangerine.Panels
 				}
 			};
 			var presentation = new TreeViewPresentation(
-				treeView,
 				new TreeViewItemPresentationOptions {
 					Minimalistic = true,
 					SearchStringGetter = () => searchStringEditor.Text

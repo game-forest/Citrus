@@ -531,27 +531,24 @@ namespace Tangerine.UI.Timeline
 
 		private readonly TreeView treeView;
 		private readonly TreeViewItemPresentationOptions options;
-		private readonly List<ITreeViewItemPresentationProcessor> processors;
 
-		public IEnumerable<ITreeViewItemPresentationProcessor> Processors => processors;
+		public IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
 
-		public TreeViewPresentation(TreeView treeView, TreeViewItemPresentationOptions options)
+		public TreeViewPresentation(TreeViewItemPresentationOptions options)
 		{
-			this.treeView = treeView;
 			this.options = options;
-			processors = new List<ITreeViewItemPresentationProcessor>();
-			AddProcessor(new TreeViewItemPresentationProcessor());
-			AddProcessor(new NodeTreeViewItemLabelProcessor());
-			AddProcessor(new LinkIndicationCleanerProcessor());
-			AddProcessor(new ImageCombinerLinkIndicationProcessor());
-			AddProcessor(new BoneLinkIndicationProcessor());
-			AddProcessor(new SplineGearLinkIndicationProcessor());
-			AddProcessor(new SplineGear3DLinkIndicationProcessor());
+			Processors = new List<ITreeViewItemPresentationProcessor> {
+				new TreeViewItemPresentationProcessor(),
+				new NodeTreeViewItemLabelProcessor(),
+				new LinkIndicationCleanerProcessor(),
+				new ImageCombinerLinkIndicationProcessor(),
+				new BoneLinkIndicationProcessor(),
+				new SplineGearLinkIndicationProcessor(),
+				new SplineGear3DLinkIndicationProcessor()
+			};
 		}
 
-		private void AddProcessor(ITreeViewItemPresentationProcessor processor) => processors.Add(processor);
-
-		public ITreeViewItemPresentation CreateItemPresentation(TreeViewItem item)
+		public ITreeViewItemPresentation CreateItemPresentation(TreeView treeView, TreeViewItem item)
 		{
 			var sceneItem = ((ISceneItemHolder)item).SceneItem;
 			if (sceneItem.TryGetNode(out var node)) {

@@ -27,7 +27,6 @@ namespace Tangerine.UI.Timeline
 				Presenter = new SyncDelegatePresenter<Node>(RenderBackground)
 			};
 			var presentation = new TreeViewPresentation(
-				TreeView,
 				new TreeViewItemPresentationOptions {
 					SearchStringGetter = () => string.Empty
 				}

@@ -107,7 +107,7 @@ namespace Tangerine.UI
 
 	public interface ITreeViewPresentation
 	{
-		ITreeViewItemPresentation CreateItemPresentation(TreeViewItem item);
+		ITreeViewItemPresentation CreateItemPresentation(TreeView treeView, TreeViewItem item);
 		IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
 		void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex, bool dragInto);
 	}
@@ -652,7 +652,7 @@ namespace Tangerine.UI
 				if (!skipRoot) {
 					items.Add(item);
 					item.Index = index++;
-					item.Presentation = item.Presentation ?? presentation.CreateItemPresentation(item);
+					item.Presentation = item.Presentation ?? presentation.CreateItemPresentation(this, item);
 				}
 				if (skipRoot || item.Expanded) {
 					foreach (var i in item.Items) {
