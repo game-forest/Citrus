@@ -93,9 +93,13 @@ namespace Tangerine.UI.Timeline
 			};
 			nodeIcon.AddChangeLateWatcher(
 				() => {
+					var node = sceneItem.GetNode();
+					if (node == null) {
+						return 0;
+					}
 					var result = 17;
 					unchecked {
-						foreach (var component in sceneItem.GetNode().Components) {
+						foreach (var component in node.Components) {
 							result = result * 23 + component.GetHashCode();
 						}
 					}
