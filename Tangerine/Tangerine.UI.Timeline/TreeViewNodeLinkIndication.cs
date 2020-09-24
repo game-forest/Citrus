@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
+using System.Text;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline
@@ -59,17 +60,27 @@ namespace Tangerine.UI.Timeline
 
 	public class BoneLinkIndicationProcessor : ITreeViewItemPresentationProcessor
 	{
+		private readonly StringBuilder labelBuilder = new StringBuilder();
+
 		public void Process(ITreeViewItemPresentation presentation)
 		{
+			labelBuilder.Clear();
 			if (presentation is NodeTreeViewItemPresentation p) {
 				if (!p.Minimalistic) {
 					if (p.Node is Bone bone) {
 						var nodes = GetLinkedNodes(bone).ToList();
 						if (nodes.Count > 0) {
+							labelBuilder.Append(p.Label.Text);
+							labelBuilder.Append(" : ");
 							var b = p.LinkIndicatorButtonContainer.GetOrAdd<BoneLinkIndicatorButton>();
 							foreach (var ln in nodes) {
 								b.AddLinkedNode(ln);
+								if (ln != nodes[0]) {
+									labelBuilder.Append(", ");
+								}
+								labelBuilder.Append(ln.Id);
 							}
+							p.Label.Text = labelBuilder.ToString();
 						}
 					} else {
 						var bones = GetLinkedBones(p.Node).ToList();
