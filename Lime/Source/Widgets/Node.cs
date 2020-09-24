@@ -560,9 +560,7 @@ namespace Lime
 			Components = new NodeComponentCollection(this);
 			Animators = new AnimatorCollection(this);
 			Nodes = new NodeList(this);
-#if TANGERINE
 			Folders = new FolderList(this);
-#endif
 			Presenter = DefaultPresenter.Instance;
 			RenderChainBuilder = this;
 			++CreatedCount;
