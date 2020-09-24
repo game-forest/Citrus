@@ -36,7 +36,7 @@ namespace Tangerine.UI.Docking
 				Icon = new System.Drawing.Icon(new EmbeddedResource(AppIconPath, "Tangerine").GetResourceStream()),
 #endif // WIN
 			});
-#if !MAC || !DEBUG // JetBrains Rider doesn't stop on exceptions if the handler is set.			
+#if !MAC || !DEBUG // JetBrains Rider doesn't stop on exceptions if the handler is set.
 			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
 #endif
 			SetDropHandler(window);

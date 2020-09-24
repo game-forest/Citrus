@@ -18,7 +18,7 @@ namespace Lime
 		public Vector2 UV1T2;
 		public Vector2 Position;
 		public Vector2 Size;
-		
+
 		public interface IMaterialProvider
 		{
 			IMaterial GetMaterial(int tag);
@@ -50,12 +50,12 @@ namespace Lime
 			public static readonly DefaultMaterialProvider Instance = new DefaultMaterialProvider();
 
 			private IMaterial material;
-			
+
 			public void Init(Blending blending, ShaderId shader)
 			{
 				material = WidgetMaterial.GetInstance(blending, shader, 1);
 			}
-			
+
 			public IMaterial GetMaterial(int tag)
 			{
 				return material;
@@ -63,7 +63,7 @@ namespace Lime
 
 			public Sprite ProcessSprite(Sprite s) => s;
 		}
-		
+
 		public class LcdFontMaterialProvider : IMaterialProvider
 		{
 			public static readonly LcdFontMaterialProvider Instance = new LcdFontMaterialProvider();
@@ -120,7 +120,7 @@ namespace Lime
 
 			private LcdFontMaterial()
 			{ }
-			
+
 			public void Apply(int pass)
 			{
 				if (pass == 0) {
@@ -141,7 +141,7 @@ namespace Lime
 					PlatformRenderer.SetShaderProgram(shaderProgramPass2);
 				}
 			}
-			
+
 			public void Invalidate() { }
 		}
 	}
@@ -217,7 +217,7 @@ namespace Lime
 					sprites.Add(provider.ProcessSprite(s));
 				}
 			}
-			
+
 			private Sprite GetNextSprite()
 			{
 				if (Index >= buffer.Length) {
@@ -283,12 +283,12 @@ namespace Lime
 				Tag = tag,
 			});
 		}
-		
+
 		public void Clear()
 		{
 			items.Clear();
 		}
-		
+
 		private static List<Sprite> sprites = new List<Sprite>();
 
 		public void Render(Color4 color, Blending blending, ShaderId shader)

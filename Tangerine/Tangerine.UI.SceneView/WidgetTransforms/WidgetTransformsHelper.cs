@@ -261,7 +261,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		private static Transform2d ToTransform2Double(this Matrix32d matrix, double preferedRotationDeg,
 			Vector2d originalScale)
 		{
-			// Calculate the required signs of the scale axes, excluding rotation from the deformation matrix.   
+			// Calculate the required signs of the scale axes, excluding rotation from the deformation matrix.
 			Matrix32d matrixWithoutRotation = matrix * Matrix32d.Rotation(-preferedRotationDeg * Math.PI / 180.0);
 			int directionClock = Math.Sign(Vector2d.CrossProduct(matrixWithoutRotation.U, matrixWithoutRotation.V));
 
@@ -286,7 +286,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				rotation = useMatrixU.Atan2Deg;
 			} else {
 				// Calculate the correct rotation, for deformed not-perpendicular UV axes.
-				// Naive realisation as atg(U.X/V.X) or atg(V.Y/U.Y). 
+				// Naive realisation as atg(U.X/V.X) or atg(V.Y/U.Y).
 				// To keep an original widget rotation.
 				if (Math.Abs(useMatrixU.X) + Math.Abs(useMatrixV.X) > Math.Abs(useMatrixU.Y) + Math.Abs(useMatrixV.Y)) {
 					if (originalScaleAbs.X > originalScaleAbs.Y) {

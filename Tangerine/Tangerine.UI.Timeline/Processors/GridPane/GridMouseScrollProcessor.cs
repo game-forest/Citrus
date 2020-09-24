@@ -5,7 +5,7 @@ using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline
-{	
+{
 	class GridMouseScrollProcessor : Core.ITaskProvider
 	{
 		Timeline timeline => Timeline.Instance;
@@ -42,5 +42,5 @@ namespace Tangerine.UI.Timeline
 				yield return null;
 			}
 		}
-	}	
+	}
 }

@@ -1,4 +1,4 @@
-﻿using Lime;
+using Lime;
 
 namespace Tangerine.UI.SceneView
 {
@@ -23,7 +23,7 @@ namespace Tangerine.UI.SceneView
 		public void Rotate(float rotation)
 		{
 			rotation = Mathf.Wrap180(rotation);
-			
+
 			float rotationDelta = Mathf.Wrap180(rotation - rotationPrevious);
 			rotationPrevious = rotation;
 
@@ -31,5 +31,5 @@ namespace Tangerine.UI.SceneView
 		}
 
 	}
-	
+
 }

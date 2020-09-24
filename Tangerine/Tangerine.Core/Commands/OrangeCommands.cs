@@ -56,7 +56,7 @@ namespace Tangerine.Core.Commands
 					AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
 				}
 			}
-			
+
 			var result = default(T);
 			try {
 				if (isExecuting) {

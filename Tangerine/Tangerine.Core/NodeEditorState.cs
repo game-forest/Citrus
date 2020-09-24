@@ -48,7 +48,7 @@ namespace Tangerine.Core
 				node.SetTangerineFlag(TangerineFlags.ColorBit3, ((value >>= 1) & 1) == 1);
 			}
 		}
-		
+
 		public NodeEditorState(Node node)
 		{
 			this.node = node;

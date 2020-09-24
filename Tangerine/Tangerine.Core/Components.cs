@@ -40,7 +40,7 @@ namespace Tangerine.Core.Components
 	{
 		public Bone Bone { get; set; }
 	}
-	
+
 	public sealed class AnimationRow : Component
 	{
 		public Animation Animation { get; set; }
@@ -50,7 +50,7 @@ namespace Tangerine.Core.Components
 	{
 		public AnimationTrack Track { get; set; }
 	}
-	
+
 	[MutuallyExclusiveDerivedComponents]
 	public abstract class CommonRowData : Component
 	{
@@ -71,18 +71,18 @@ namespace Tangerine.Core.Components
 	public sealed class CommonFolderRowData : CommonRowData
 	{
 		public Folder.Descriptor Folder { get; set; }
-		
+
 		public override string Id
 		{
 			get => Folder.Id;
 			set => Folder.Id = value;
 		}
 	}
-	
+
 	public sealed class CommonPropertyRowData : CommonRowData
 	{
 		public IAnimator Animator { get; set; }
-		
+
 		public override string Id
 		{
 			get => Animator.TargetPropertyPath;
@@ -93,7 +93,7 @@ namespace Tangerine.Core.Components
 	public class CommonAnimationRowData : CommonRowData
 	{
 		public Animation Animation { get; set; }
-		
+
 		public override string Id { get; set; }
 	}
 

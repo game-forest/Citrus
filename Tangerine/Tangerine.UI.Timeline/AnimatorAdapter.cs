@@ -1,4 +1,4 @@
-﻿using Lime;
+using Lime;
 
 namespace Tangerine.UI.Timeline
 {
@@ -15,7 +15,7 @@ namespace Tangerine.UI.Timeline
 		public string GetComponentName(int component) => null;
 
 		public float GetComponentValue(IAnimator animator, double time, int component)
-		{	 
+		{
 			return ((NumericAnimator)animator).CalcValue(time);
 		}
 	}
@@ -27,7 +27,7 @@ namespace Tangerine.UI.Timeline
 		public string GetComponentName(int component) => names[component];
 
 		public float GetComponentValue(IAnimator animator, double time, int component)
-		{	
+		{
 			return ((Vector2Animator)animator).CalcValue(time)[component];
 		}
 	}

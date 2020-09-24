@@ -30,7 +30,7 @@ namespace Tangerine.UI.Timeline
 		{
 			linkedNodes.Add(node);
 		}
-		
+
 		private static class LinkIndicationContextMenu
         {
             public static void Create(List<Node> nodes)
@@ -50,16 +50,16 @@ namespace Tangerine.UI.Timeline
                 	menu.Popup();
                 }
             }
-    
+
             private class ShowLinkedNodes : CommandHandler
             {
                 private readonly Node[] nodes;
-    
+
                 public ShowLinkedNodes(params Node[] nodes)
                 {
                 	this.nodes = nodes;
                 }
-    
+
                 public override void Execute()
                 {
                 	Document.Current.History.DoTransaction(() => {

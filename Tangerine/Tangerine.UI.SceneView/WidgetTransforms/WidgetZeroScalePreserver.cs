@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Lime;
 
 namespace Tangerine.UI.SceneView.WidgetTransforms

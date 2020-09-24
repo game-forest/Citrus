@@ -91,7 +91,7 @@ namespace Tangerine.UI.Timeline
 							}
 						}
 					}
- 				}
+				}
 			}
 		}
 

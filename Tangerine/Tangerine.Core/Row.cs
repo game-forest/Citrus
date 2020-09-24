@@ -13,7 +13,7 @@ namespace Tangerine.Core
 			get => Components.Get<CommonRowData>().Id;
 			set => Components.Get<CommonRowData>().Id = value;
 		}
-		
+
 		public bool Expandable { get; set; }
 
 		public bool Expanded { get; set; }
@@ -30,12 +30,12 @@ namespace Tangerine.Core
 		}
 
 		private static int selectionCounter = 1;
-		
+
 		public int SelectionOrder { get; private set; }
-		
+
 		public int Index { get; set; }
 		public Row Parent { get; internal set; }
-		
+
 		public readonly RowList Rows;
 		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
 
@@ -45,7 +45,7 @@ namespace Tangerine.Core
 		}
 
 		public void Unlink() => Parent?.Rows.Remove(this);
-		
+
 		public bool DescendantOf(Row row)
 		{
 			for (var r = Parent; r != null; r = r.Parent) {
@@ -59,7 +59,7 @@ namespace Tangerine.Core
 		{
 			return row == this || DescendantOf(row);
 		}
-		
+
 		public Folder.Descriptor GetFolder() => Components.Get<FolderRow>()?.Folder;
 
 		public bool TryGetFolder(out Folder.Descriptor folder)
@@ -83,17 +83,17 @@ namespace Tangerine.Core
 			node = GetNode();
 			return node != null;
 		}
-		
+
 		public Animation GetAnimation() => Components.Get<AnimationRow>()?.Animation;
-		
+
 		public bool TryGetAnimation(out Animation animation)
 		{
 			animation = GetAnimation();
 			return animation != null;
 		}
-		
+
 		public AnimationTrack GetAnimationTrack() => Components.Get<AnimationTrackRow>()?.Track;
-		
+
 		public bool TryGetAnimationTrack(out AnimationTrack track)
 		{
 			track = GetAnimationTrack();
@@ -113,7 +113,7 @@ namespace Tangerine.Core
 			}
 		}
 	}
-	
+
 	public class RowList : IList<Row>
 	{
 		private readonly Row owner;
@@ -125,7 +125,7 @@ namespace Tangerine.Core
 		public List<Row>.Enumerator GetEnumerator() => list.GetEnumerator();
 
 		public RowList(Row owner) => this.owner = owner;
-		
+
 		public void Add(Row item) => Insert(Count, item);
 
 		public void Clear()
@@ -148,10 +148,10 @@ namespace Tangerine.Core
 			RemoveAt(i);
 			return true;
 		}
-		
+
 		public int Count => list.Count;
 		public bool IsReadOnly => false;
-		
+
 		public int IndexOf(Row item) => list.IndexOf(item);
 
 		public void Insert(int index, Row item)
@@ -169,7 +169,7 @@ namespace Tangerine.Core
 			item.Parent = null;
 			list.RemoveAt(index);
 		}
-		
+
 		public Row this[int index]
 		{
 			get => list[index];

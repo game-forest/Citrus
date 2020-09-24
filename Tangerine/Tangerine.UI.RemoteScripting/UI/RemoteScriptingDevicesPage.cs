@@ -449,7 +449,7 @@ namespace Tangerine.UI.RemoteScripting
 				{
 					var fileName = ToValidFilename($"{DateTime.Now:yyyy.MM.dd H-mm-ss} {deviceName}.txt");
 					textView.FilePath = !string.IsNullOrEmpty(folder) ? Path.Combine(folder, fileName) : null;
-					
+
 					string ToValidFilename(string input)
 					{
 						var result = new StringBuilder(input.Length);

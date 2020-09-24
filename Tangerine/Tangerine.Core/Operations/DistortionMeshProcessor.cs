@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Lime;
 
@@ -8,7 +8,7 @@ namespace Tangerine.Core.Operations
 	{
 		public void Do(IOperation op)
 		{
-			var mesh = 
+			var mesh =
 				(op as InsertIntoList<NodeList, Node>)?.Element as DistortionMesh ??
 				(op as SetProperty)?.Obj as DistortionMesh;
 			if (mesh != null)

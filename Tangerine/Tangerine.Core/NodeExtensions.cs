@@ -22,7 +22,7 @@ namespace Tangerine.Core
 			}
 			return node.Parent.Nodes.IndexOf(node);
 		}
-		
+
 		public static string GetRelativePath(this Node node)
 		{
 			var root = node.GetRoot();

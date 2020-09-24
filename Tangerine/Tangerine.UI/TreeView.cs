@@ -354,8 +354,8 @@ namespace Tangerine.UI
 					}
 				}
 				if (
-				 	item == items.First() && t < 0.5f ||
-				 	t >= 0 && t < 1
+					item == items.First() && t < 0.5f ||
+					t >= 0 && t < 1
 				) {
 					if (t > 0.5f) {
 						if (item.Expanded && item.Items.Count > 0) {
@@ -567,7 +567,7 @@ namespace Tangerine.UI
 				}
 				if (Commands.SelectPrevious.Consume()) {
 					SelectPreviousItem();
- 				}
+				}
 				if (Commands.SelectRangePrevious.Consume()) {
 					SelectRangePreviousItem();
 				}

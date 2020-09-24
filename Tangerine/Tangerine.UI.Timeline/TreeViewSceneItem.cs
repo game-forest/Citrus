@@ -9,7 +9,7 @@ namespace Tangerine.UI.Timeline
 	public class TreeViewComponent : Component
 	{
 		private TreeViewItem TreeViewItem { get; set; }
-			
+
 		public static TreeViewItem GetTreeViewItem(Row item)
 		{
 			var c = item.Components.GetOrAdd<TreeViewComponent>();

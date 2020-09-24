@@ -24,5 +24,5 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				T = Translation
 			};
 		}
-	}	
+	}
 }

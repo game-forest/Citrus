@@ -54,8 +54,8 @@ namespace Tangerine.UI.SceneView
 					var initialPosition = sv.MousePosition * worldToLocal;
 					var pos = Vector2.Zero;
 					if (
-						baseBoneIndex == 0 && 
-						container.Width.Abs() > Mathf.ZeroTolerance && 
+						baseBoneIndex == 0 &&
+						container.Width.Abs() > Mathf.ZeroTolerance &&
 						container.Height.Abs() > Mathf.ZeroTolerance
 					) {
 						pos = initialPosition;
@@ -82,7 +82,7 @@ namespace Tangerine.UI.SceneView
 						using (Document.Current.History.BeginTransaction()) {
 							while (sv.Input.IsMousePressed()) {
 								Document.Current.History.RollbackTransaction();
-	
+
 								var direction = (sv.MousePosition * worldToLocal - initialPosition).Snap(Vector2.Zero);
 								var angle = direction.Atan2Deg;
 								if (baseBoneIndex != 0) {
@@ -98,7 +98,7 @@ namespace Tangerine.UI.SceneView
 						// do not create zero bone
 						if (bone != null && bone.Length == 0) {
 							Document.Current.History.RollbackTransaction();
-							// must set length to zero to execute "break;" later 
+							// must set length to zero to execute "break;" later
 							bone.Length = 0;
 						}
 						Document.Current.History.CommitTransaction();
