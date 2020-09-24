@@ -13,17 +13,17 @@ namespace Tangerine
 	public class LookupFilesSection : LookupSection
 	{
 		private const string PrefixConst = "f";
-		private static readonly Dictionary<string, Icon> fileTypesIcons;
+		private static readonly Dictionary<string, ITexture> fileTypeTextures;
 
 		static LookupFilesSection()
 		{
-			var sceneIcon = IconPool.GetIcon("Lookup.SceneFileIcon");
-			fileTypesIcons = new Dictionary<string, Icon> {
+			var sceneIcon = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
+			fileTypeTextures = new Dictionary<string, ITexture> {
 				{ ".tan", sceneIcon },
 				{ ".t3d", sceneIcon },
-				{ ".fbx", NodeIconPool.GetIcon(typeof(Model3D)) },
-				{ ".png", NodeIconPool.GetIcon(typeof(Image)) },
-				{ ".ogg", NodeIconPool.GetIcon(typeof(Audio)) },
+				{ ".fbx", NodeIconPool.GetTexture(typeof(Model3D)) },
+				{ ".png", NodeIconPool.GetTexture(typeof(Image)) },
+				{ ".ogg", NodeIconPool.GetTexture(typeof(Audio)) },
 			};
 		}
 
@@ -109,7 +109,7 @@ namespace Tangerine
 				items.Add(new LookupDialogItem(
 					fileName + asset.Type,
 					asset.Path + asset.Type,
-					fileTypesIcons[asset.Type].AsTexture,
+					fileTypeTextures[asset.Type],
 					action
 				));
 			}

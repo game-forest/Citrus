@@ -30,7 +30,7 @@ namespace Tangerine
 				var item = new LookupDialogItem(
 					node.Id,
 					$"Type: {nodeType.Name}; {(node.Parent != null ? $"Parent: {node.Parent}" : "Root node")}",
-					NodeIconPool.GetIcon(nodeType).AsTexture,
+					NodeIconPool.GetTexture(nodeType),
 					() => {
 						NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
 						Sections.Drop();
@@ -76,7 +76,7 @@ namespace Tangerine
 			if (externalScene == Document.Current.RootNode || externalScene == Document.Current.RootNodeUnwrapped) {
 				externalScene = null;
 			}
-			
+
 			if (externalScene != null) {
 				var currentScenePath = Document.Current.Path;
 				Document externalSceneDocument;
