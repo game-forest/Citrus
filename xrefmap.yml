@@ -9359,6 +9359,19 @@ references:
   isSpec: "True"
   fullName: Lime.BoneUtils.FindBoneRoot
   nameWithType: BoneUtils.FindBoneRoot
+- uid: Lime.BoneUtils.GenerateNewBoneIndex(Lime.Node)
+  name: GenerateNewBoneIndex(Node)
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_GenerateNewBoneIndex_Lime_Node_
+  commentId: M:Lime.BoneUtils.GenerateNewBoneIndex(Lime.Node)
+  fullName: Lime.BoneUtils.GenerateNewBoneIndex(Lime.Node)
+  nameWithType: BoneUtils.GenerateNewBoneIndex(Node)
+- uid: Lime.BoneUtils.GenerateNewBoneIndex*
+  name: GenerateNewBoneIndex
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_GenerateNewBoneIndex_
+  commentId: Overload:Lime.BoneUtils.GenerateNewBoneIndex
+  isSpec: "True"
+  fullName: Lime.BoneUtils.GenerateNewBoneIndex
+  nameWithType: BoneUtils.GenerateNewBoneIndex
 - uid: Lime.BoneUtils.GetBone(System.Collections.Generic.IEnumerable{Lime.Node},System.Int32)
   name: GetBone(IEnumerable<Node>, Int32)
   href: api/Lime.BoneUtils.html#Lime_BoneUtils_GetBone_System_Collections_Generic_IEnumerable_Lime_Node__System_Int32_
@@ -9375,15 +9388,24 @@ references:
   isSpec: "True"
   fullName: Lime.BoneUtils.GetBone
   nameWithType: BoneUtils.GetBone
-- uid: Lime.BoneUtils.SortBones(System.Collections.Generic.IEnumerable{Lime.Bone},System.Boolean)
-  name: SortBones(IEnumerable<Bone>, Boolean)
-  href: api/Lime.BoneUtils.html#Lime_BoneUtils_SortBones_System_Collections_Generic_IEnumerable_Lime_Bone__System_Boolean_
-  commentId: M:Lime.BoneUtils.SortBones(System.Collections.Generic.IEnumerable{Lime.Bone},System.Boolean)
-  name.vb: SortBones(IEnumerable(Of Bone), Boolean)
-  fullName: Lime.BoneUtils.SortBones(System.Collections.Generic.IEnumerable<Lime.Bone>, System.Boolean)
-  fullName.vb: Lime.BoneUtils.SortBones(System.Collections.Generic.IEnumerable(Of Lime.Bone), System.Boolean)
-  nameWithType: BoneUtils.SortBones(IEnumerable<Bone>, Boolean)
-  nameWithType.vb: BoneUtils.SortBones(IEnumerable(Of Bone), Boolean)
+- uid: Lime.BoneUtils.SortBones(System.Collections.Generic.IList{Lime.Bone})
+  name: SortBones(IList<Bone>)
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_SortBones_System_Collections_Generic_IList_Lime_Bone__
+  commentId: M:Lime.BoneUtils.SortBones(System.Collections.Generic.IList{Lime.Bone})
+  name.vb: SortBones(IList(Of Bone))
+  fullName: Lime.BoneUtils.SortBones(System.Collections.Generic.IList<Lime.Bone>)
+  fullName.vb: Lime.BoneUtils.SortBones(System.Collections.Generic.IList(Of Lime.Bone))
+  nameWithType: BoneUtils.SortBones(IList<Bone>)
+  nameWithType.vb: BoneUtils.SortBones(IList(Of Bone))
+- uid: Lime.BoneUtils.SortBones(System.Collections.Generic.IList{Lime.Node})
+  name: SortBones(IList<Node>)
+  href: api/Lime.BoneUtils.html#Lime_BoneUtils_SortBones_System_Collections_Generic_IList_Lime_Node__
+  commentId: M:Lime.BoneUtils.SortBones(System.Collections.Generic.IList{Lime.Node})
+  name.vb: SortBones(IList(Of Node))
+  fullName: Lime.BoneUtils.SortBones(System.Collections.Generic.IList<Lime.Node>)
+  fullName.vb: Lime.BoneUtils.SortBones(System.Collections.Generic.IList(Of Lime.Node))
+  nameWithType: BoneUtils.SortBones(IList<Node>)
+  nameWithType.vb: BoneUtils.SortBones(IList(Of Node))
 - uid: Lime.BoneUtils.SortBones*
   name: SortBones
   href: api/Lime.BoneUtils.html#Lime_BoneUtils_SortBones_
@@ -12756,6 +12778,51 @@ references:
   commentId: F:Lime.CommandLineArgs.SimulateSlowExternalStorage
   fullName: Lime.CommandLineArgs.SimulateSlowExternalStorage
   nameWithType: CommandLineArgs.SimulateSlowExternalStorage
+- uid: Lime.CommandProcessor
+  name: CommandProcessor
+  href: api/Lime.CommandProcessor.html
+  commentId: T:Lime.CommandProcessor
+  fullName: Lime.CommandProcessor
+  nameWithType: CommandProcessor
+- uid: Lime.CommandProcessor.Start
+  name: Start()
+  href: api/Lime.CommandProcessor.html#Lime_CommandProcessor_Start
+  commentId: M:Lime.CommandProcessor.Start
+  fullName: Lime.CommandProcessor.Start()
+  nameWithType: CommandProcessor.Start()
+- uid: Lime.CommandProcessor.Start*
+  name: Start
+  href: api/Lime.CommandProcessor.html#Lime_CommandProcessor_Start_
+  commentId: Overload:Lime.CommandProcessor.Start
+  isSpec: "True"
+  fullName: Lime.CommandProcessor.Start
+  nameWithType: CommandProcessor.Start
+- uid: Lime.CommandProcessor.Stop(Lime.NodeManager)
+  name: Stop(NodeManager)
+  href: api/Lime.CommandProcessor.html#Lime_CommandProcessor_Stop_Lime_NodeManager_
+  commentId: M:Lime.CommandProcessor.Stop(Lime.NodeManager)
+  fullName: Lime.CommandProcessor.Stop(Lime.NodeManager)
+  nameWithType: CommandProcessor.Stop(NodeManager)
+- uid: Lime.CommandProcessor.Stop*
+  name: Stop
+  href: api/Lime.CommandProcessor.html#Lime_CommandProcessor_Stop_
+  commentId: Overload:Lime.CommandProcessor.Stop
+  isSpec: "True"
+  fullName: Lime.CommandProcessor.Stop
+  nameWithType: CommandProcessor.Stop
+- uid: Lime.CommandProcessor.Update(System.Single)
+  name: Update(Single)
+  href: api/Lime.CommandProcessor.html#Lime_CommandProcessor_Update_System_Single_
+  commentId: M:Lime.CommandProcessor.Update(System.Single)
+  fullName: Lime.CommandProcessor.Update(System.Single)
+  nameWithType: CommandProcessor.Update(Single)
+- uid: Lime.CommandProcessor.Update*
+  name: Update
+  href: api/Lime.CommandProcessor.html#Lime_CommandProcessor_Update_
+  commentId: Overload:Lime.CommandProcessor.Update
+  isSpec: "True"
+  fullName: Lime.CommandProcessor.Update
+  nameWithType: CommandProcessor.Update
 - uid: Lime.CommandQueue
   name: CommandQueue
   href: api/Lime.CommandQueue.html
@@ -14220,6 +14287,24 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).System.Collections.IEnumerable.GetEnumerator
   nameWithType: ComponentCollection<TComponent>.IEnumerable.GetEnumerator
   nameWithType.vb: ComponentCollection(Of TComponent).System.Collections.IEnumerable.GetEnumerator
+- uid: Lime.ComponentCollection`1.TryGet*
+  name: TryGet
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_TryGet_
+  commentId: Overload:Lime.ComponentCollection`1.TryGet
+  isSpec: "True"
+  fullName: Lime.ComponentCollection<TComponent>.TryGet
+  fullName.vb: Lime.ComponentCollection(Of TComponent).TryGet
+  nameWithType: ComponentCollection<TComponent>.TryGet
+  nameWithType.vb: ComponentCollection(Of TComponent).TryGet
+- uid: Lime.ComponentCollection`1.TryGet``1(``0@)
+  name: TryGet<T>(out T)
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_TryGet__1___0__
+  commentId: M:Lime.ComponentCollection`1.TryGet``1(``0@)
+  name.vb: TryGet(Of T)(ByRef T)
+  fullName: Lime.ComponentCollection<TComponent>.TryGet<T>(out T)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).TryGet(Of T)(ByRef T)
+  nameWithType: ComponentCollection<TComponent>.TryGet<T>(out T)
+  nameWithType.vb: ComponentCollection(Of TComponent).TryGet(Of T)(ByRef T)
 - uid: Lime.CompoundFont
   name: CompoundFont
   href: api/Lime.CompoundFont.html
@@ -16069,6 +16154,12 @@ references:
   isSpec: "True"
   fullName: Lime.DeviceOrientationExtensions.IsPortrait
   nameWithType: DeviceOrientationExtensions.IsPortrait
+- uid: Lime.DisableAncestralGesturesComponent
+  name: DisableAncestralGesturesComponent
+  href: api/Lime.DisableAncestralGesturesComponent.html
+  commentId: T:Lime.DisableAncestralGesturesComponent
+  fullName: Lime.DisableAncestralGesturesComponent
+  nameWithType: DisableAncestralGesturesComponent
 - uid: Lime.DissolveComponent
   name: DissolveComponent
   href: api/Lime.DissolveComponent.html
@@ -19139,32 +19230,6 @@ references:
   commentId: T:Lime.Folder
   fullName: Lime.Folder
   nameWithType: Folder
-- uid: Lime.Folder.BuildTree(Lime.IFolderContext)
-  name: BuildTree(IFolderContext)
-  href: api/Lime.Folder.html#Lime_Folder_BuildTree_Lime_IFolderContext_
-  commentId: M:Lime.Folder.BuildTree(Lime.IFolderContext)
-  fullName: Lime.Folder.BuildTree(Lime.IFolderContext)
-  nameWithType: Folder.BuildTree(IFolderContext)
-- uid: Lime.Folder.BuildTree*
-  name: BuildTree
-  href: api/Lime.Folder.html#Lime_Folder_BuildTree_
-  commentId: Overload:Lime.Folder.BuildTree
-  isSpec: "True"
-  fullName: Lime.Folder.BuildTree
-  nameWithType: Folder.BuildTree
-- uid: Lime.Folder.Contains(Lime.IFolderItem)
-  name: Contains(IFolderItem)
-  href: api/Lime.Folder.html#Lime_Folder_Contains_Lime_IFolderItem_
-  commentId: M:Lime.Folder.Contains(Lime.IFolderItem)
-  fullName: Lime.Folder.Contains(Lime.IFolderItem)
-  nameWithType: Folder.Contains(IFolderItem)
-- uid: Lime.Folder.Contains*
-  name: Contains
-  href: api/Lime.Folder.html#Lime_Folder_Contains_
-  commentId: Overload:Lime.Folder.Contains
-  isSpec: "True"
-  fullName: Lime.Folder.Contains
-  nameWithType: Folder.Contains
 - uid: Lime.Folder.Descriptor
   name: Folder.Descriptor
   href: api/Lime.Folder.Descriptor.html
@@ -19223,108 +19288,247 @@ references:
   isSpec: "True"
   fullName: Lime.Folder.Descriptor.ItemCount
   nameWithType: Folder.Descriptor.ItemCount
-- uid: Lime.Folder.Expanded
-  name: Expanded
-  href: api/Lime.Folder.html#Lime_Folder_Expanded
-  commentId: P:Lime.Folder.Expanded
-  fullName: Lime.Folder.Expanded
-  nameWithType: Folder.Expanded
-- uid: Lime.Folder.Expanded*
-  name: Expanded
-  href: api/Lime.Folder.html#Lime_Folder_Expanded_
-  commentId: Overload:Lime.Folder.Expanded
+- uid: Lime.Folder.Descriptor.Owner
+  name: Owner
+  href: api/Lime.Folder.Descriptor.html#Lime_Folder_Descriptor_Owner
+  commentId: P:Lime.Folder.Descriptor.Owner
+  fullName: Lime.Folder.Descriptor.Owner
+  nameWithType: Folder.Descriptor.Owner
+- uid: Lime.Folder.Descriptor.Owner*
+  name: Owner
+  href: api/Lime.Folder.Descriptor.html#Lime_Folder_Descriptor_Owner_
+  commentId: Overload:Lime.Folder.Descriptor.Owner
   isSpec: "True"
-  fullName: Lime.Folder.Expanded
-  nameWithType: Folder.Expanded
-- uid: Lime.Folder.Find(Lime.IFolderItem)
-  name: Find(IFolderItem)
-  href: api/Lime.Folder.html#Lime_Folder_Find_Lime_IFolderItem_
-  commentId: M:Lime.Folder.Find(Lime.IFolderItem)
-  fullName: Lime.Folder.Find(Lime.IFolderItem)
-  nameWithType: Folder.Find(IFolderItem)
-- uid: Lime.Folder.Find*
-  name: Find
-  href: api/Lime.Folder.html#Lime_Folder_Find_
-  commentId: Overload:Lime.Folder.Find
+  fullName: Lime.Folder.Descriptor.Owner
+  nameWithType: Folder.Descriptor.Owner
+- uid: Lime.Folder.Descriptor.Unlink
+  name: Unlink()
+  href: api/Lime.Folder.Descriptor.html#Lime_Folder_Descriptor_Unlink
+  commentId: M:Lime.Folder.Descriptor.Unlink
+  fullName: Lime.Folder.Descriptor.Unlink()
+  nameWithType: Folder.Descriptor.Unlink()
+- uid: Lime.Folder.Descriptor.Unlink*
+  name: Unlink
+  href: api/Lime.Folder.Descriptor.html#Lime_Folder_Descriptor_Unlink_
+  commentId: Overload:Lime.Folder.Descriptor.Unlink
   isSpec: "True"
-  fullName: Lime.Folder.Find
-  nameWithType: Folder.Find
-- uid: Lime.Folder.Id
-  name: Id
-  href: api/Lime.Folder.html#Lime_Folder_Id
-  commentId: P:Lime.Folder.Id
-  fullName: Lime.Folder.Id
-  nameWithType: Folder.Id
-- uid: Lime.Folder.Id*
-  name: Id
-  href: api/Lime.Folder.html#Lime_Folder_Id_
-  commentId: Overload:Lime.Folder.Id
+  fullName: Lime.Folder.Descriptor.Unlink
+  nameWithType: Folder.Descriptor.Unlink
+- uid: Lime.FolderList
+  name: FolderList
+  href: api/Lime.FolderList.html
+  commentId: T:Lime.FolderList
+  fullName: Lime.FolderList
+  nameWithType: FolderList
+- uid: Lime.FolderList.#ctor(Lime.Node)
+  name: FolderList(Node)
+  href: api/Lime.FolderList.html#Lime_FolderList__ctor_Lime_Node_
+  commentId: M:Lime.FolderList.#ctor(Lime.Node)
+  fullName: Lime.FolderList.FolderList(Lime.Node)
+  nameWithType: FolderList.FolderList(Node)
+- uid: Lime.FolderList.#ctor*
+  name: FolderList
+  href: api/Lime.FolderList.html#Lime_FolderList__ctor_
+  commentId: Overload:Lime.FolderList.#ctor
   isSpec: "True"
-  fullName: Lime.Folder.Id
-  nameWithType: Folder.Id
-- uid: Lime.Folder.Items
-  name: Items
-  href: api/Lime.Folder.html#Lime_Folder_Items
-  commentId: F:Lime.Folder.Items
-  fullName: Lime.Folder.Items
-  nameWithType: Folder.Items
-- uid: Lime.Folder.SyncDescriptorsAndNodes(Lime.IFolderContext)
-  name: SyncDescriptorsAndNodes(IFolderContext)
-  href: api/Lime.Folder.html#Lime_Folder_SyncDescriptorsAndNodes_Lime_IFolderContext_
-  commentId: M:Lime.Folder.SyncDescriptorsAndNodes(Lime.IFolderContext)
-  fullName: Lime.Folder.SyncDescriptorsAndNodes(Lime.IFolderContext)
-  nameWithType: Folder.SyncDescriptorsAndNodes(IFolderContext)
-- uid: Lime.Folder.SyncDescriptorsAndNodes*
-  name: SyncDescriptorsAndNodes
-  href: api/Lime.Folder.html#Lime_Folder_SyncDescriptorsAndNodes_
-  commentId: Overload:Lime.Folder.SyncDescriptorsAndNodes
+  fullName: Lime.FolderList.FolderList
+  nameWithType: FolderList.FolderList
+- uid: Lime.FolderList.Add(Lime.Folder.Descriptor)
+  name: Add(Folder.Descriptor)
+  href: api/Lime.FolderList.html#Lime_FolderList_Add_Lime_Folder_Descriptor_
+  commentId: M:Lime.FolderList.Add(Lime.Folder.Descriptor)
+  fullName: Lime.FolderList.Add(Lime.Folder.Descriptor)
+  nameWithType: FolderList.Add(Folder.Descriptor)
+- uid: Lime.FolderList.Add*
+  name: Add
+  href: api/Lime.FolderList.html#Lime_FolderList_Add_
+  commentId: Overload:Lime.FolderList.Add
   isSpec: "True"
-  fullName: Lime.Folder.SyncDescriptorsAndNodes
-  nameWithType: Folder.SyncDescriptorsAndNodes
-- uid: Lime.FolderItemLocation
-  name: FolderItemLocation
-  href: api/Lime.FolderItemLocation.html
-  commentId: T:Lime.FolderItemLocation
-  fullName: Lime.FolderItemLocation
-  nameWithType: FolderItemLocation
-- uid: Lime.FolderItemLocation.#ctor(Lime.Folder,System.Int32)
-  name: FolderItemLocation(Folder, Int32)
-  href: api/Lime.FolderItemLocation.html#Lime_FolderItemLocation__ctor_Lime_Folder_System_Int32_
-  commentId: M:Lime.FolderItemLocation.#ctor(Lime.Folder,System.Int32)
-  fullName: Lime.FolderItemLocation.FolderItemLocation(Lime.Folder, System.Int32)
-  nameWithType: FolderItemLocation.FolderItemLocation(Folder, Int32)
-- uid: Lime.FolderItemLocation.#ctor*
-  name: FolderItemLocation
-  href: api/Lime.FolderItemLocation.html#Lime_FolderItemLocation__ctor_
-  commentId: Overload:Lime.FolderItemLocation.#ctor
+  fullName: Lime.FolderList.Add
+  nameWithType: FolderList.Add
+- uid: Lime.FolderList.Clear
+  name: Clear()
+  href: api/Lime.FolderList.html#Lime_FolderList_Clear
+  commentId: M:Lime.FolderList.Clear
+  fullName: Lime.FolderList.Clear()
+  nameWithType: FolderList.Clear()
+- uid: Lime.FolderList.Clear*
+  name: Clear
+  href: api/Lime.FolderList.html#Lime_FolderList_Clear_
+  commentId: Overload:Lime.FolderList.Clear
   isSpec: "True"
-  fullName: Lime.FolderItemLocation.FolderItemLocation
-  nameWithType: FolderItemLocation.FolderItemLocation
-- uid: Lime.FolderItemLocation.Folder
-  name: Folder
-  href: api/Lime.FolderItemLocation.html#Lime_FolderItemLocation_Folder
-  commentId: F:Lime.FolderItemLocation.Folder
-  fullName: Lime.FolderItemLocation.Folder
-  nameWithType: FolderItemLocation.Folder
-- uid: Lime.FolderItemLocation.Index
-  name: Index
-  href: api/Lime.FolderItemLocation.html#Lime_FolderItemLocation_Index
-  commentId: F:Lime.FolderItemLocation.Index
-  fullName: Lime.FolderItemLocation.Index
-  nameWithType: FolderItemLocation.Index
-- uid: Lime.FolderItemLocation.op_Addition(Lime.FolderItemLocation,System.Int32)
-  name: Addition(FolderItemLocation, Int32)
-  href: api/Lime.FolderItemLocation.html#Lime_FolderItemLocation_op_Addition_Lime_FolderItemLocation_System_Int32_
-  commentId: M:Lime.FolderItemLocation.op_Addition(Lime.FolderItemLocation,System.Int32)
-  fullName: Lime.FolderItemLocation.Addition(Lime.FolderItemLocation, System.Int32)
-  nameWithType: FolderItemLocation.Addition(FolderItemLocation, Int32)
-- uid: Lime.FolderItemLocation.op_Addition*
-  name: Addition
-  href: api/Lime.FolderItemLocation.html#Lime_FolderItemLocation_op_Addition_
-  commentId: Overload:Lime.FolderItemLocation.op_Addition
+  fullName: Lime.FolderList.Clear
+  nameWithType: FolderList.Clear
+- uid: Lime.FolderList.Contains(Lime.Folder.Descriptor)
+  name: Contains(Folder.Descriptor)
+  href: api/Lime.FolderList.html#Lime_FolderList_Contains_Lime_Folder_Descriptor_
+  commentId: M:Lime.FolderList.Contains(Lime.Folder.Descriptor)
+  fullName: Lime.FolderList.Contains(Lime.Folder.Descriptor)
+  nameWithType: FolderList.Contains(Folder.Descriptor)
+- uid: Lime.FolderList.Contains*
+  name: Contains
+  href: api/Lime.FolderList.html#Lime_FolderList_Contains_
+  commentId: Overload:Lime.FolderList.Contains
   isSpec: "True"
-  fullName: Lime.FolderItemLocation.Addition
-  nameWithType: FolderItemLocation.Addition
+  fullName: Lime.FolderList.Contains
+  nameWithType: FolderList.Contains
+- uid: Lime.FolderList.CopyTo(Lime.Folder.Descriptor[],System.Int32)
+  name: CopyTo(Folder.Descriptor[], Int32)
+  href: api/Lime.FolderList.html#Lime_FolderList_CopyTo_Lime_Folder_Descriptor___System_Int32_
+  commentId: M:Lime.FolderList.CopyTo(Lime.Folder.Descriptor[],System.Int32)
+  name.vb: CopyTo(Folder.Descriptor(), Int32)
+  fullName: Lime.FolderList.CopyTo(Lime.Folder.Descriptor[], System.Int32)
+  fullName.vb: Lime.FolderList.CopyTo(Lime.Folder.Descriptor(), System.Int32)
+  nameWithType: FolderList.CopyTo(Folder.Descriptor[], Int32)
+  nameWithType.vb: FolderList.CopyTo(Folder.Descriptor(), Int32)
+- uid: Lime.FolderList.CopyTo*
+  name: CopyTo
+  href: api/Lime.FolderList.html#Lime_FolderList_CopyTo_
+  commentId: Overload:Lime.FolderList.CopyTo
+  isSpec: "True"
+  fullName: Lime.FolderList.CopyTo
+  nameWithType: FolderList.CopyTo
+- uid: Lime.FolderList.Count
+  name: Count
+  href: api/Lime.FolderList.html#Lime_FolderList_Count
+  commentId: P:Lime.FolderList.Count
+  fullName: Lime.FolderList.Count
+  nameWithType: FolderList.Count
+- uid: Lime.FolderList.Count*
+  name: Count
+  href: api/Lime.FolderList.html#Lime_FolderList_Count_
+  commentId: Overload:Lime.FolderList.Count
+  isSpec: "True"
+  fullName: Lime.FolderList.Count
+  nameWithType: FolderList.Count
+- uid: Lime.FolderList.GetEnumerator
+  name: GetEnumerator()
+  href: api/Lime.FolderList.html#Lime_FolderList_GetEnumerator
+  commentId: M:Lime.FolderList.GetEnumerator
+  fullName: Lime.FolderList.GetEnumerator()
+  nameWithType: FolderList.GetEnumerator()
+- uid: Lime.FolderList.GetEnumerator*
+  name: GetEnumerator
+  href: api/Lime.FolderList.html#Lime_FolderList_GetEnumerator_
+  commentId: Overload:Lime.FolderList.GetEnumerator
+  isSpec: "True"
+  fullName: Lime.FolderList.GetEnumerator
+  nameWithType: FolderList.GetEnumerator
+- uid: Lime.FolderList.IndexOf(Lime.Folder.Descriptor)
+  name: IndexOf(Folder.Descriptor)
+  href: api/Lime.FolderList.html#Lime_FolderList_IndexOf_Lime_Folder_Descriptor_
+  commentId: M:Lime.FolderList.IndexOf(Lime.Folder.Descriptor)
+  fullName: Lime.FolderList.IndexOf(Lime.Folder.Descriptor)
+  nameWithType: FolderList.IndexOf(Folder.Descriptor)
+- uid: Lime.FolderList.IndexOf*
+  name: IndexOf
+  href: api/Lime.FolderList.html#Lime_FolderList_IndexOf_
+  commentId: Overload:Lime.FolderList.IndexOf
+  isSpec: "True"
+  fullName: Lime.FolderList.IndexOf
+  nameWithType: FolderList.IndexOf
+- uid: Lime.FolderList.Insert(System.Int32,Lime.Folder.Descriptor)
+  name: Insert(Int32, Folder.Descriptor)
+  href: api/Lime.FolderList.html#Lime_FolderList_Insert_System_Int32_Lime_Folder_Descriptor_
+  commentId: M:Lime.FolderList.Insert(System.Int32,Lime.Folder.Descriptor)
+  fullName: Lime.FolderList.Insert(System.Int32, Lime.Folder.Descriptor)
+  nameWithType: FolderList.Insert(Int32, Folder.Descriptor)
+- uid: Lime.FolderList.Insert*
+  name: Insert
+  href: api/Lime.FolderList.html#Lime_FolderList_Insert_
+  commentId: Overload:Lime.FolderList.Insert
+  isSpec: "True"
+  fullName: Lime.FolderList.Insert
+  nameWithType: FolderList.Insert
+- uid: Lime.FolderList.IsReadOnly
+  name: IsReadOnly
+  href: api/Lime.FolderList.html#Lime_FolderList_IsReadOnly
+  commentId: P:Lime.FolderList.IsReadOnly
+  fullName: Lime.FolderList.IsReadOnly
+  nameWithType: FolderList.IsReadOnly
+- uid: Lime.FolderList.IsReadOnly*
+  name: IsReadOnly
+  href: api/Lime.FolderList.html#Lime_FolderList_IsReadOnly_
+  commentId: Overload:Lime.FolderList.IsReadOnly
+  isSpec: "True"
+  fullName: Lime.FolderList.IsReadOnly
+  nameWithType: FolderList.IsReadOnly
+- uid: Lime.FolderList.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.FolderList.html#Lime_FolderList_Item_System_Int32_
+  commentId: P:Lime.FolderList.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.FolderList.Item[System.Int32]
+  fullName.vb: Lime.FolderList.Item(System.Int32)
+  nameWithType: FolderList.Item[Int32]
+  nameWithType.vb: FolderList.Item(Int32)
+- uid: Lime.FolderList.Item*
+  name: Item
+  href: api/Lime.FolderList.html#Lime_FolderList_Item_
+  commentId: Overload:Lime.FolderList.Item
+  isSpec: "True"
+  fullName: Lime.FolderList.Item
+  nameWithType: FolderList.Item
+- uid: Lime.FolderList.Remove(Lime.Folder.Descriptor)
+  name: Remove(Folder.Descriptor)
+  href: api/Lime.FolderList.html#Lime_FolderList_Remove_Lime_Folder_Descriptor_
+  commentId: M:Lime.FolderList.Remove(Lime.Folder.Descriptor)
+  fullName: Lime.FolderList.Remove(Lime.Folder.Descriptor)
+  nameWithType: FolderList.Remove(Folder.Descriptor)
+- uid: Lime.FolderList.Remove*
+  name: Remove
+  href: api/Lime.FolderList.html#Lime_FolderList_Remove_
+  commentId: Overload:Lime.FolderList.Remove
+  isSpec: "True"
+  fullName: Lime.FolderList.Remove
+  nameWithType: FolderList.Remove
+- uid: Lime.FolderList.RemoveAt(System.Int32)
+  name: RemoveAt(Int32)
+  href: api/Lime.FolderList.html#Lime_FolderList_RemoveAt_System_Int32_
+  commentId: M:Lime.FolderList.RemoveAt(System.Int32)
+  fullName: Lime.FolderList.RemoveAt(System.Int32)
+  nameWithType: FolderList.RemoveAt(Int32)
+- uid: Lime.FolderList.RemoveAt*
+  name: RemoveAt
+  href: api/Lime.FolderList.html#Lime_FolderList_RemoveAt_
+  commentId: Overload:Lime.FolderList.RemoveAt
+  isSpec: "True"
+  fullName: Lime.FolderList.RemoveAt
+  nameWithType: FolderList.RemoveAt
+- uid: Lime.FolderList.System#Collections#Generic#IEnumerable{Lime#Folder#Descriptor}#GetEnumerator
+  name: IEnumerable<Folder.Descriptor>.GetEnumerator()
+  href: api/Lime.FolderList.html#Lime_FolderList_System_Collections_Generic_IEnumerable_Lime_Folder_Descriptor__GetEnumerator
+  commentId: M:Lime.FolderList.System#Collections#Generic#IEnumerable{Lime#Folder#Descriptor}#GetEnumerator
+  name.vb: System.Collections.Generic.IEnumerable<Lime.Folder.Descriptor>.GetEnumerator()
+  fullName: Lime.FolderList.System.Collections.Generic.IEnumerable<Lime.Folder.Descriptor>.GetEnumerator()
+  nameWithType: FolderList.IEnumerable<Folder.Descriptor>.GetEnumerator()
+  nameWithType.vb: FolderList.System.Collections.Generic.IEnumerable<Lime.Folder.Descriptor>.GetEnumerator()
+- uid: Lime.FolderList.System#Collections#Generic#IEnumerable{Lime#Folder#Descriptor}#GetEnumerator*
+  name: IEnumerable<Folder.Descriptor>.GetEnumerator
+  href: api/Lime.FolderList.html#Lime_FolderList_System_Collections_Generic_IEnumerable_Lime_Folder_Descriptor__GetEnumerator_
+  commentId: Overload:Lime.FolderList.System#Collections#Generic#IEnumerable{Lime#Folder#Descriptor}#GetEnumerator
+  isSpec: "True"
+  name.vb: System.Collections.Generic.IEnumerable<Lime.Folder.Descriptor>.GetEnumerator
+  fullName: Lime.FolderList.System.Collections.Generic.IEnumerable<Lime.Folder.Descriptor>.GetEnumerator
+  nameWithType: FolderList.IEnumerable<Folder.Descriptor>.GetEnumerator
+  nameWithType.vb: FolderList.System.Collections.Generic.IEnumerable<Lime.Folder.Descriptor>.GetEnumerator
+- uid: Lime.FolderList.System#Collections#IEnumerable#GetEnumerator
+  name: IEnumerable.GetEnumerator()
+  href: api/Lime.FolderList.html#Lime_FolderList_System_Collections_IEnumerable_GetEnumerator
+  commentId: M:Lime.FolderList.System#Collections#IEnumerable#GetEnumerator
+  name.vb: System.Collections.IEnumerable.GetEnumerator()
+  fullName: Lime.FolderList.System.Collections.IEnumerable.GetEnumerator()
+  nameWithType: FolderList.IEnumerable.GetEnumerator()
+  nameWithType.vb: FolderList.System.Collections.IEnumerable.GetEnumerator()
+- uid: Lime.FolderList.System#Collections#IEnumerable#GetEnumerator*
+  name: IEnumerable.GetEnumerator
+  href: api/Lime.FolderList.html#Lime_FolderList_System_Collections_IEnumerable_GetEnumerator_
+  commentId: Overload:Lime.FolderList.System#Collections#IEnumerable#GetEnumerator
+  isSpec: "True"
+  name.vb: System.Collections.IEnumerable.GetEnumerator
+  fullName: Lime.FolderList.System.Collections.IEnumerable.GetEnumerator
+  nameWithType: FolderList.IEnumerable.GetEnumerator
+  nameWithType.vb: FolderList.System.Collections.IEnumerable.GetEnumerator
 - uid: Lime.Font
   name: Font
   href: api/Lime.Font.html
@@ -25423,44 +25627,6 @@ references:
   commentId: E:Lime.IFileSystemWatcher.Renamed
   fullName: Lime.IFileSystemWatcher.Renamed
   nameWithType: IFileSystemWatcher.Renamed
-- uid: Lime.IFolderContext
-  name: IFolderContext
-  href: api/Lime.IFolderContext.html
-  commentId: T:Lime.IFolderContext
-  fullName: Lime.IFolderContext
-  nameWithType: IFolderContext
-- uid: Lime.IFolderContext.Folders
-  name: Folders
-  href: api/Lime.IFolderContext.html#Lime_IFolderContext_Folders
-  commentId: P:Lime.IFolderContext.Folders
-  fullName: Lime.IFolderContext.Folders
-  nameWithType: IFolderContext.Folders
-- uid: Lime.IFolderContext.Folders*
-  name: Folders
-  href: api/Lime.IFolderContext.html#Lime_IFolderContext_Folders_
-  commentId: Overload:Lime.IFolderContext.Folders
-  isSpec: "True"
-  fullName: Lime.IFolderContext.Folders
-  nameWithType: IFolderContext.Folders
-- uid: Lime.IFolderContext.Nodes
-  name: Nodes
-  href: api/Lime.IFolderContext.html#Lime_IFolderContext_Nodes
-  commentId: P:Lime.IFolderContext.Nodes
-  fullName: Lime.IFolderContext.Nodes
-  nameWithType: IFolderContext.Nodes
-- uid: Lime.IFolderContext.Nodes*
-  name: Nodes
-  href: api/Lime.IFolderContext.html#Lime_IFolderContext_Nodes_
-  commentId: Overload:Lime.IFolderContext.Nodes
-  isSpec: "True"
-  fullName: Lime.IFolderContext.Nodes
-  nameWithType: IFolderContext.Nodes
-- uid: Lime.IFolderItem
-  name: IFolderItem
-  href: api/Lime.IFolderItem.html
-  commentId: T:Lime.IFolderItem
-  fullName: Lime.IFolderItem
-  nameWithType: IFolderItem
 - uid: Lime.IFont
   name: IFont
   href: api/Lime.IFont.html
@@ -61852,12 +62018,6 @@ references:
   commentId: T:Lime.TangerineFlags
   fullName: Lime.TangerineFlags
   nameWithType: TangerineFlags
-- uid: Lime.TangerineFlags.ChildrenExpanded
-  name: ChildrenExpanded
-  href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_ChildrenExpanded
-  commentId: F:Lime.TangerineFlags.ChildrenExpanded
-  fullName: Lime.TangerineFlags.ChildrenExpanded
-  nameWithType: TangerineFlags.ChildrenExpanded
 - uid: Lime.TangerineFlags.ColorBit1
   name: ColorBit1
   href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_ColorBit1
@@ -61912,12 +62072,6 @@ references:
   commentId: F:Lime.TangerineFlags.None
   fullName: Lime.TangerineFlags.None
   nameWithType: TangerineFlags.None
-- uid: Lime.TangerineFlags.PropertiesExpanded
-  name: PropertiesExpanded
-  href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_PropertiesExpanded
-  commentId: F:Lime.TangerineFlags.PropertiesExpanded
-  fullName: Lime.TangerineFlags.PropertiesExpanded
-  nameWithType: TangerineFlags.PropertiesExpanded
 - uid: Lime.TangerineFlags.SceneNode
   name: SceneNode
   href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_SceneNode
@@ -61936,12 +62090,18 @@ references:
   commentId: F:Lime.TangerineFlags.Shown
   fullName: Lime.TangerineFlags.Shown
   nameWithType: TangerineFlags.Shown
-- uid: Lime.TangerineForbidCopyPasteAttribute
-  name: TangerineForbidCopyPasteAttribute
-  href: api/Lime.TangerineForbidCopyPasteAttribute.html
-  commentId: T:Lime.TangerineForbidCopyPasteAttribute
-  fullName: Lime.TangerineForbidCopyPasteAttribute
-  nameWithType: TangerineForbidCopyPasteAttribute
+- uid: Lime.TangerineFlags.Unused1
+  name: Unused1
+  href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_Unused1
+  commentId: F:Lime.TangerineFlags.Unused1
+  fullName: Lime.TangerineFlags.Unused1
+  nameWithType: TangerineFlags.Unused1
+- uid: Lime.TangerineFlags.Unused2
+  name: Unused2
+  href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_Unused2
+  commentId: F:Lime.TangerineFlags.Unused2
+  fullName: Lime.TangerineFlags.Unused2
+  nameWithType: TangerineFlags.Unused2
 - uid: Lime.TangerineGroupAttribute
   name: TangerineGroupAttribute
   href: api/Lime.TangerineGroupAttribute.html
@@ -62146,6 +62306,12 @@ references:
   commentId: F:Lime.TangerineKeyframeInterpolationAttribute.KeyframeInterpolations
   fullName: Lime.TangerineKeyframeInterpolationAttribute.KeyframeInterpolations
   nameWithType: TangerineKeyframeInterpolationAttribute.KeyframeInterpolations
+- uid: Lime.TangerineLockChildrenNodeList
+  name: TangerineLockChildrenNodeList
+  href: api/Lime.TangerineLockChildrenNodeList.html
+  commentId: T:Lime.TangerineLockChildrenNodeList
+  fullName: Lime.TangerineLockChildrenNodeList
+  nameWithType: TangerineLockChildrenNodeList
 - uid: Lime.TangerineNodeBuilderAttribute
   name: TangerineNodeBuilderAttribute
   href: api/Lime.TangerineNodeBuilderAttribute.html

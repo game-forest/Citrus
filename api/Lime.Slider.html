@@ -97,8 +97,6 @@
     <h5>Implements</h5>
     <div><span class="xref">System.IDisposable</span></div>
     <div><a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a></div>
-    <div><a class="xref" href="Lime.IFolderItem.html">IFolderItem</a></div>
-    <div><a class="xref" href="Lime.IFolderContext.html">IFolderContext</a></div>
     <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
     <div><span class="xref">System.ICloneable</span></div>
@@ -776,7 +774,7 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[TangerineAllowedChildrenTypes(new Type[]{typeof(Node)})]
 [TangerineVisualHintGroup(&quot;/All/Nodes/Containers&quot;, null)]
-public class Slider : Widget, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable, IUpdatableNode</code></pre>
+public class Slider : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable, IUpdatableNode</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -1061,12 +1059,6 @@ public float Value { get; set; }</code></pre>
   </div>
   <div>
       <a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IFolderItem.html">IFolderItem</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IFolderContext.html">IFolderContext</a>
   </div>
   <div>
       <a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a>

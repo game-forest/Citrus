@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface IFolderContext
+    <title>Class CommandProcessor
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface IFolderContext
+    <meta name="title" content="Class CommandProcessor
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.48.0.0">
     
@@ -78,71 +78,124 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.IFolderContext">
+            <article class="content wrap" id="_content" data-uid="Lime.CommandProcessor">
   
   
-  <h1 id="Lime_IFolderContext" data-uid="Lime.IFolderContext" class="text-break">Interface IFolderContext
+  <h1 id="Lime_CommandProcessor" data-uid="Lime.CommandProcessor" class="text-break">Class CommandProcessor
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lime.NodeProcessor.html">NodeProcessor</a></div>
+    <div class="level2"><span class="xref">CommandProcessor</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lime.NodeProcessor.html#Lime_NodeProcessor_Manager">NodeProcessor.Manager</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_IFolderContext_syntax">Syntax</h5>
+  <h5 id="Lime_CommandProcessor_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IFolderContext</code></pre>
+    <pre><code class="lang-csharp hljs">public class CommandProcessor : NodeProcessor</code></pre>
   </div>
-  <h3 id="properties">Properties
+  <h3 id="methods">Methods
   </h3>
   
   
-  <a id="Lime_IFolderContext_Folders_" data-uid="Lime.IFolderContext.Folders*"></a>
-  <h4 id="Lime_IFolderContext_Folders" data-uid="Lime.IFolderContext.Folders">Folders</h4>
+  <a id="Lime_CommandProcessor_Start_" data-uid="Lime.CommandProcessor.Start*"></a>
+  <h4 id="Lime_CommandProcessor_Start" data-uid="Lime.CommandProcessor.Start">Start()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">List&lt;Folder.Descriptor&gt; Folders { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Start()</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.NodeProcessor.html#Lime_NodeProcessor_Start">NodeProcessor.Start()</a></div>
+  
+  
+  <a id="Lime_CommandProcessor_Stop_" data-uid="Lime.CommandProcessor.Stop*"></a>
+  <h4 id="Lime_CommandProcessor_Stop_Lime_NodeManager_" data-uid="Lime.CommandProcessor.Stop(Lime.NodeManager)">Stop(NodeManager)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Stop(NodeManager manager)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Folder.Descriptor.html">Folder.Descriptor</a>&gt;</td>
+        <td><a class="xref" href="Lime.NodeManager.html">NodeManager</a></td>
+        <td><span class="parametername">manager</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.NodeProcessor.html#Lime_NodeProcessor_Stop_Lime_NodeManager_">NodeProcessor.Stop(NodeManager)</a></div>
   
   
-  <a id="Lime_IFolderContext_Nodes_" data-uid="Lime.IFolderContext.Nodes*"></a>
-  <h4 id="Lime_IFolderContext_Nodes" data-uid="Lime.IFolderContext.Nodes">Nodes</h4>
+  <a id="Lime_CommandProcessor_Update_" data-uid="Lime.CommandProcessor.Update*"></a>
+  <h4 id="Lime_CommandProcessor_Update_System_Single_" data-uid="Lime.CommandProcessor.Update(System.Single)">Update(Single)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">NodeList Nodes { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override void Update(float delta)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.NodeList.html">NodeList</a></td>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">delta</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.NodeProcessor.html#Lime_NodeProcessor_Update_System_Single_">NodeProcessor.Update(Single)</a></div>
 </article>
           </div>
           

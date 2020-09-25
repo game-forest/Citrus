@@ -106,8 +106,6 @@
     <h5>Implements</h5>
     <div><span class="xref">System.IDisposable</span></div>
     <div><a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a></div>
-    <div><a class="xref" href="Lime.IFolderItem.html">IFolderItem</a></div>
-    <div><a class="xref" href="Lime.IFolderContext.html">IFolderContext</a></div>
     <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
     <div><span class="xref">System.ICloneable</span></div>
@@ -137,7 +135,7 @@
   <h6><strong>Assembly</strong>: Lime.dll</h6>
   <h5 id="Lime_Node_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class Node : IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Node : IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -790,7 +788,7 @@ Use it for fast iteration through nodes collection in a performance-critical cod
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
-public List&lt;Folder.Descriptor&gt; Folders { get; set; }</code></pre>
+public FolderList Folders { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -802,7 +800,7 @@ public List&lt;Folder.Descriptor&gt; Folders { get; set; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Folder.Descriptor.html">Folder.Descriptor</a>&gt;</td>
+        <td><a class="xref" href="Lime.FolderList.html">FolderList</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -3481,12 +3479,6 @@ The correct usage is to call RunAnimation first and then apply any required Anim
   </div>
   <div>
       <a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IFolderItem.html">IFolderItem</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IFolderContext.html">IFolderContext</a>
   </div>
   <div>
       <a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a>

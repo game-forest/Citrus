@@ -123,8 +123,6 @@
     <h5>Implements</h5>
     <div><span class="xref">System.IDisposable</span></div>
     <div><a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a></div>
-    <div><a class="xref" href="Lime.IFolderItem.html">IFolderItem</a></div>
-    <div><a class="xref" href="Lime.IFolderContext.html">IFolderContext</a></div>
     <div><a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a></div>
     <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
     <div><span class="xref">System.ICloneable</span></div>
@@ -464,7 +462,7 @@
   <h5 id="Lime_Widget_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[TangerineVisualHintGroup(&quot;/All/Nodes/Containers&quot;, null)]
-public class Widget : Node, IDisposable, IAnimationHost, IFolderItem, IFolderContext, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
+public class Widget : Node, IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -3505,12 +3503,6 @@ This method doesn't take in account if one of the widget's ancestors overlaps th
   </div>
   <div>
       <a class="xref" href="Lime.IAnimationHost.html">IAnimationHost</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IFolderItem.html">IFolderItem</a>
-  </div>
-  <div>
-      <a class="xref" href="Lime.IFolderContext.html">IFolderContext</a>
   </div>
   <div>
       <a class="xref" href="Lime.IRenderChainBuilder.html">IRenderChainBuilder</a>
