@@ -1,45 +1,15 @@
 using System;
-using Lime;
-
 using System.Linq;
+using Lime;
 using Tangerine.Core.Components;
 
 namespace Tangerine.Core.Operations
 {
-	public class SelectRow : Operation
+	public static class SelectRow
 	{
-		public readonly Row Row;
-		public readonly bool Select;
-
-		public override bool IsChangingDocument => false;
-
-		private static int selectCounter = 1;
-
-		public static void Perform(Row row, bool select = true)
+		public static void Perform(Row sceneItem, bool select = true)
 		{
-			DocumentHistory.Current.Perform(new SelectRow(row, select));
-		}
-
-		private SelectRow(Row row, bool select)
-		{
-			Select = select;
-			Row = row;
-		}
-
-		public class Processor : OperationProcessor<SelectRow>
-		{
-			class Backup { public int selectCounter; }
-
-			protected override void InternalRedo(SelectRow op)
-			{
-				op.Save(new Backup { selectCounter = op.Row.SelectCounter });
-				op.Row.SelectCounter = op.Select ? selectCounter++ : 0;
-			}
-
-			protected override void InternalUndo(SelectRow op)
-			{
-				op.Row.SelectCounter = op.Restore<Backup>().selectCounter;
-			}
+			SetProperty.Perform(sceneItem, nameof(Row.Selected), select, false);
 		}
 	}
 
@@ -47,28 +17,20 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(Node node, bool select = true)
 		{
-			if (node.Parent != Document.Current.Container) {
-				throw new InvalidOperationException();
-			}
+			var sceneItem = Document.Current.GetSceneItemForObject(node);
 			if (select) {
-				if (node is Bone && (node as Bone).Index != 0) {
-					var bone = Document.Current.Container.Nodes.GetBone(((Bone)node).BaseIndex);
-					while (bone != null) {
-						SetProperty.Perform(bone.EditorState(), nameof(NodeEditorState.ChildrenExpanded), true);
-						bone = Document.Current.Container.Nodes.GetBone(bone.BaseIndex);
+				for (var i = sceneItem.Parent; i != null; i = i.Parent) {
+					if (i.TryGetNode(out var n) && n == Document.Current.Container) {
+						break;
 					}
-				}
-				var rootFolder = Document.Current.Container.EditorState().RootFolder;
-				var folder = rootFolder.Find(node).Folder;
-				while (folder != null) {
-					if (!folder.Expanded) {
-						SetProperty.Perform(folder, nameof(Folder.Expanded), true);
+					if (!i.Expanded) {
+						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
+						SetProperty.Perform(i, nameof(sceneItem.Expanded), true, false);
+						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					}
-					folder = rootFolder.Find(folder).Folder;
 				}
 			}
-			var row = Document.Current.GetRowForObject(node);
-			SelectRow.Perform(row, select);
+			SelectRow.Perform(sceneItem, select);
 		}
 	}
 }

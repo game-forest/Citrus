@@ -1,4 +1,4 @@
-﻿using Lime;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline.Operations

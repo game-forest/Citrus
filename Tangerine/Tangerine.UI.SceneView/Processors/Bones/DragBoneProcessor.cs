@@ -3,6 +3,7 @@ using Lime;
 using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.SceneView
 {
@@ -83,8 +84,16 @@ namespace Tangerine.UI.SceneView
 					var boneEntry = bone.Parent.AsWidget.BoneArray[bone.Index];
 					float boneAngle = (boneEntry.Tip - boneEntry.Joint).Atan2Deg;
 					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Rotation), index == 0 ? boneAngle : boneAngle - parentAngle, CoreUserPreferences.Instance.AutoKeyframes);
-					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.BaseIndex), index, CoreUserPreferences.Instance.AutoKeyframes);
-					Core.Operations.SortBonesInChain.Perform(bone);
+					var boneSceneItem = Document.Current.GetSceneItemForObject(bone);
+					UnlinkSceneItem.Perform(boneSceneItem);
+					Row baseItem;
+					if (index != 0) {
+						baseItem = Document.Current.GetSceneItemForObject(
+							BoneUtils.GetBone(Document.Current.Container.Nodes, index));
+					} else {
+						baseItem = Document.Current.GetSceneItemForObject(Document.Current.Container);
+					}
+					LinkSceneItem.Perform(baseItem, 0, boneSceneItem);
 				}
 				SceneView.Instance.Components.Remove<CreateBoneHelper>();
 				sv.Input.ConsumeKey(Key.Mouse0);

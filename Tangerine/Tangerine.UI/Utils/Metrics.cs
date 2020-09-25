@@ -1,4 +1,4 @@
-﻿namespace Tangerine.UI
+namespace Tangerine.UI
 {
 	public static class Metrics
 	{

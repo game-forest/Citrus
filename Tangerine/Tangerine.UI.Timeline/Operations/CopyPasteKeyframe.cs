@@ -146,12 +146,12 @@ namespace Tangerine.UI.Timeline.Operations
 		public static void Perform()
 		{
 			Document.Current.History.DoTransaction(() => {
-				foreach (var row in Document.Current.SelectedRows()) {
+				foreach (var row in Document.Current.SelectedRows().ToList()) {
 					var spans = row.Components.Get<GridSpanListComponent>()?.Spans;
 					if (spans == null) {
 						continue;
 					}
-					var node = row.Components.Get<NodeRow>()?.Node;
+					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<PropertyRow>()?.Node;
 					if (node.EditorState().Locked) {
 						continue;
 					}

@@ -27,19 +27,22 @@ namespace Tangerine
 			var aabb = hull.ToAABB();
 			var container = Document.Current.Container;
 			foreach (var row in Document.Current.SelectedRows()) {
-				if (row.Components.Contains<BoneRow>()) {
-					var boneRow = row.Components.Get<BoneRow>();
-					if (!boneRow.ChildrenExpanded) {
-						selectedNodes.AddRange(BoneUtils.FindBoneDescendats(boneRow.Bone, container.Nodes.OfType<Bone>()));
+				var br = row.Components.Get<BoneRow>();
+				if (br != null) {
+					if (!row.Expanded) {
+						selectedNodes.AddRange(BoneUtils.FindBoneDescendats(br.Bone, container.Nodes.OfType<Bone>()));
 					}
 				}
 			}
 			var selectedBones = selectedNodes.OfType<Bone>().ToList();
 
-			var loc = container.RootFolder().Find(selectedNodes[0]);
 			Frame group;
 			try {
-				group = (Frame)Core.Operations.CreateNode.Perform(container, loc, typeof(Frame));
+				var firstItem = Document.Current.GetSceneItemForObject(selectedNodes[0]);
+				group = (Frame)Core.Operations.CreateNode.Perform(
+					firstItem.Parent,
+					firstItem.Parent.Rows.IndexOf(firstItem),
+					typeof(Frame));
 			} catch (InvalidOperationException e) {
 				AlertDialog.Show(e.Message);
 				return;
@@ -53,7 +56,9 @@ namespace Tangerine
 			UntieWidgetsFromBones.Perform(selectedBones, container.Nodes.Except(selectedNodes).OfType<Widget>());
 			var nodeKeyframesDict = new Dictionary<Node, BoneAnimationData>();
 			var localRoots = new List<Bone>();
-			foreach (var bone in BoneUtils.SortBones(container.Nodes.OfType<Bone>())) {
+			var sortedBones = container.Nodes.OfType<Bone>().ToList();
+			BoneUtils.SortBones(sortedBones);
+			foreach (var bone in sortedBones) {
 				Bone localRoot;
 				var delta = Vector2.Zero;
 				var isSelectedBone = selectedBones.Contains(bone);
@@ -73,12 +78,18 @@ namespace Tangerine
 				}
 			}
 			SetKeyframes(nodeKeyframesDict);
-			foreach (var n in selectedNodes) {
-				UnlinkFolderItem.Perform(container, n);
+			foreach (var node in selectedNodes) {
+				if (node.Parent != null) {
+					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(node));
+				}
 			}
 			int i = 0;
 			foreach (var node in selectedNodes) {
-				InsertFolderItem.Perform(group, new FolderItemLocation(group.RootFolder(), i++), node);
+				if (node.Parent != null) {
+					continue;
+				}
+				LinkSceneItem.Perform(
+					Document.Current.GetSceneItemForObject(group), i++, Document.Current.GetSceneItemForObject(node));
 				if (node is Widget) {
 					TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => v - aabb.A);
 				}
@@ -204,7 +215,7 @@ namespace Tangerine
 					}
 				}
 			}
-			ApplyAnimationAtFrame(null, curFrame, boneChain);
+			ApplyAnimationAtFrame(DefaultAnimationId, curFrame, boneChain);
 			return data;
 		}
 
@@ -250,49 +261,40 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			var groups = Document.Current?.SelectedNodes().OfType<Frame>().ToList();
-			if (groups?.Count == 0) {
+			var groups = SceneTreeUtils.EnumerateSelectedTopSceneItems()
+				.Select(i => i.GetNode()).OfType<Frame>().ToList();
+			if (groups.Count == 0) {
 				return;
 			}
 			var container = (Widget)Document.Current.Container;
-			var p = container.RootFolder().Find(groups[0]);
 			ClearRowSelection.Perform();
 			UntieWidgetsFromBones.Perform(Document.Current.Container.Nodes.OfType<Bone>(), groups);
+			var containerItem = Document.Current.GetSceneItemForObject(container);
+			int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(groups[0]));
 			foreach (var group in groups) {
-				UnlinkFolderItem.Perform(container, group);
+				UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
 			}
-
 			foreach (var group in groups) {
-				var flipXFactor = group.Scale.X < 0 ? -1 : 1;
-				var flipYFactor = group.Scale.Y < 0 ? -1 : 1;
-				var flipVector = Vector2.Right + Vector2.Down * flipXFactor * flipYFactor;
-				var groupRootBones = new List<Bone>();
-				var groupNodes = group.Nodes.ToList().Where(GroupNodes.IsValidNode).ToList();
+				var groupItems = Document.Current.GetSceneItemForObject(group).Rows.Where(
+					i => i.TryGetNode(out var n) && GroupNodes.IsValidNode(n)).ToList();
 				var localToParentTransform = group.CalcLocalToParentTransform();
-				foreach (var node in groupNodes) {
-					UnlinkFolderItem.Perform(group, node);
-					InsertFolderItem.Perform(container, p, node);
+				foreach (var i in groupItems) {
+					UnlinkSceneItem.Perform(i);
+					LinkSceneItem.Perform(containerItem, index++, i);
+					var node = i.GetNode();
 					SelectNode.Perform(node);
-					p.Index++;
 					if (node is Widget) {
 						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => localToParentTransform * v);
 						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Scale), v => v * group.Scale);
 						GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Widget.Rotation),
 							v => v * Mathf.Sign(group.Scale.X * group.Scale.Y) + group.Rotation);
 						GroupNodes.TransformPropertyAndKeyframes<Color4>(node, nameof(Widget.Color), v => group.Color * v);
-					} else if (node is Bone) {
-						var root = BoneUtils.FindBoneRoot((Bone) node, groupNodes);
-						if (!groupRootBones.Contains(root)) {
-							GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.Position), v => localToParentTransform * v);
-							GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Bone.Rotation),
-								v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
-							groupRootBones.Add(root);
-						} else if (flipVector != Vector2.One) {
-							GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.Position), v => v * flipVector);
-							GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Bone.Rotation), v => -v);
-						}
-						GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.RefPosition), v => localToParentTransform * v);
-						GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Bone.RefRotation),
+					} else if (node is Bone bone) {
+						GroupNodes.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.Position), v => localToParentTransform * v);
+						GroupNodes.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.Rotation),
+							v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
+						GroupNodes.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.RefPosition), v => localToParentTransform * v);
+						GroupNodes.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.RefRotation),
 							v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
 					}
 				}
@@ -318,30 +320,12 @@ namespace Tangerine
 		}
 	}
 
-	public class GroupContentsToMorphableMeshes : DocumentCommandHandler
-	{
-		public override void ExecuteTransaction()
-		{
-			//var nodes = Document.Current?.SelectedNodes().Editable().ToList();
-			//var container = Document.Current.Container;
-			//Core.Operations.ClearRowSelection.Perform();
-			//foreach (var node in nodes) {
-			//	var clone = node.Clone();
-			//	var loc = container.RootFolder().Find(node);
-			//	Core.Operations.UnlinkFolderItem.Perform(container, node);
-			//	Core.Operations.InsertFolderItem.Perform(container, loc, clone);
-			//	new MorphableMeshBuilder().BuildNodeContents(clone, MorphableMeshBuilder.Options.None);
-			//	Core.Operations.SelectNode.Perform(clone);
-			//}
-		}
-	}
-
 	public class ExportScene : DocumentCommandHandler
 	{
 		public override void ExecuteTransaction()
 		{
 			var nodes = Document.Current?.SelectedNodes().Editable().ToList();
-			if (nodes.Count != 1) {
+				if (nodes.Count != 1) {
 				AlertDialog.Show("Please, select a single node");
 				return;
 			}
@@ -404,9 +388,11 @@ namespace Tangerine
 			var node = nodes[0];
 			var clone = node.Clone();
 			clone.ContentsPath = null;
-			var location = Document.Current.Container.RootFolder().Find(node);
-			UnlinkFolderItem.Perform(Document.Current.Container, node);
-			InsertFolderItem.Perform(Document.Current.Container, location, clone);
+			var nodeItem = Document.Current.GetSceneItemForObject(node);
+			var parentItem = nodeItem.Parent;
+			var index = parentItem.Rows.IndexOf(nodeItem);
+			UnlinkSceneItem.Perform(nodeItem);
+			LinkSceneItem.Perform(parentItem, index, clone);
 		}
 	}
 
@@ -444,7 +430,7 @@ namespace Tangerine
 			foreach (var row in rows) {
 				if (row.Components.Get<NodeRow>()?.Node is Frame frame) {
 					if (frame.DefaultAnimation.Markers.Count > 0) {
-						AlertDialog.Show("Cannot convert widget with existing markers");
+						AlertDialog.Show("It is not possible to convert a widget with existing markers");
 						return;
 					}
 				} else {

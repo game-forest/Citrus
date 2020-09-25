@@ -166,7 +166,6 @@ namespace Tangerine
 					Command.MenuSeparator,
 					SceneViewCommands.TieWidgetsWithBones,
 					SceneViewCommands.UntieWidgetsFromBones,
-					GenericCommands.GroupContentsToMorphableMeshes,
 					GenericCommands.ExportScene,
 					GenericCommands.UpsampleAnimationTwice,
 					GenericCommands.ConvertToButton,

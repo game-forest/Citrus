@@ -246,11 +246,12 @@ namespace Tangerine.Panels
 			{
 				Document.Current.History.DoTransaction(() => {
 					var animation = new Animation { Id = GenerateAnimationId("NewAnimation"), IsCompound = compound };
-					Core.Operations.InsertIntoList.Perform(node.Animations, node.Animations.Count, animation);
+					InsertIntoList.Perform(node.Animations, node.Animations.Count, animation);
 					SelectAnimation(GetAnimations().IndexOf(animation));
 					if (compound) {
 						var track = new AnimationTrack { Id = "Track1" };
-						Core.Operations.InsertIntoList<AnimationTrackList, AnimationTrack>.Perform(animation.Tracks, 0, track);
+						var item = LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(animation), 0, track);
+						SelectRow.Perform(item);
 					}
 				});
 				// Schedule animation rename on the next update, since the widgets are not built yet

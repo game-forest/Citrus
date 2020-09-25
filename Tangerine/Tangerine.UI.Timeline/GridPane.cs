@@ -22,7 +22,6 @@ namespace Tangerine.UI.Timeline
 		public GridPane(Timeline timeline)
 		{
 			this.timeline = timeline;
-			timeline.OffsetChanged += value => ContentWidget.Position = -value;
 			RootWidget = new Frame {
 				Id = nameof(GridPane),
 				Layout = new StackLayout { HorizontallySizeable = true, VerticallySizeable = true },
@@ -36,6 +35,10 @@ namespace Tangerine.UI.Timeline
 				Presenter = new SyncDelegatePresenter<Node>(RenderBackgroundAndGrid),
 				PostPresenter = new SyncDelegatePresenter<Widget>(w => OnPostRender(w))
 			};
+			RootWidget.Updated += _ => {
+				RefreshItemWidths();
+				ContentWidget.Position = -timeline.Offset;
+			};
 			RootWidget.AddNode(ContentWidget);
 			RootWidget.AddChangeWatcher(() => RootWidget.Size,
 				// Some document operation processors (e.g. ColumnCountUpdater) require up-to-date timeline dimensions.
@@ -46,6 +49,32 @@ namespace Tangerine.UI.Timeline
 			DropFilesGesture.Recognized += new GridPaneFilesDropHandler().Handle;
 			RootWidget.Gestures.Add(DropFilesGesture);
 			OnCreate?.Invoke(this);
+			RootWidget.AddChangeLateWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
+		}
+
+		private void Rebuild()
+		{
+			var content = ContentWidget;
+			content.Nodes.Clear();
+			foreach (var item in Document.Current.Rows) {
+				var gridItem = item.Components.Get<Components.RowView>().GridRow;
+				var widget = gridItem.GridWidget;
+				if (!gridItem.GridWidgetAwakeBehavior.IsAwoken) {
+					gridItem.GridWidgetAwakeBehavior.Update(0);
+				}
+				content.AddNode(widget);
+			}
+			RefreshItemWidths();
+			// Layout widgets in order to have valid row positions and sizes, which are used for rows visibility determination.
+			WidgetContext.Current.Root.LayoutManager.Layout();
+		}
+
+		private void RefreshItemWidths()
+		{
+			foreach (var item in Document.Current.Rows) {
+				var gridItem = item.Components.Get<Components.RowView>().GridRow;
+				gridItem.GridWidget.MinWidth = Timeline.Instance.ColumnCount * TimelineMetrics.ColWidth;
+			}
 		}
 
 		private void RenderBackgroundAndGrid(Node node)

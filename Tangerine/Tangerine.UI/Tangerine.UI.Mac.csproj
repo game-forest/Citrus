@@ -67,6 +67,7 @@
     <None Include="packages.config" />
     <Compile Include="ColorPicker.Win.cs" />
     <Compile Include="ComponentIconPool.cs" />
+    <Compile Include="TreeView.cs" />
     <Compile Include="Dialogs\TriggerSelectionDialog.cs" />
     <Compile Include="EmbeddedResources\ThemedIconResource.cs" />
     <Compile Include="IconGenerator.cs" />

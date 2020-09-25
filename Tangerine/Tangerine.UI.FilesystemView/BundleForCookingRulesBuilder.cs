@@ -62,7 +62,7 @@ namespace Tangerine.UI.FilesystemView
 			var cookingRulesPath = Path.Combine(FullName, CookingRulesBuilder.CookingRulesFilename);
 			if (File.Exists(cookingRulesPath)) {
 				fileInfo = new FileInfo {
-					Path = ProcessPath(cookingRulesPath), 
+					Path = ProcessPath(cookingRulesPath),
 					LastWriteTime = File.GetLastWriteTime(cookingRulesPath)
 				};
 				return true;

@@ -659,8 +659,7 @@ namespace YuzuGenerated
 				foreach (var tmp8 in s.Faces)
 					result.Faces.Add(tmp8);
 			}
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp10 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp9 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp10(tmp9));
@@ -740,8 +739,7 @@ namespace YuzuGenerated
 			result.Exclusive = s.Exclusive;
 			result.FadeInTime = s.FadeInTime;
 			result.FadeTime = s.FadeTime;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -867,8 +865,7 @@ namespace YuzuGenerated
 			result.ContentsPath = s.ContentsPath;
 			result.EffectiveRadius = s.EffectiveRadius;
 			result.FadeoutZone = s.FadeoutZone;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -951,8 +948,7 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.Enabled = s.Enabled;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1015,8 +1011,7 @@ namespace YuzuGenerated
 			result.ContentsPath = s.ContentsPath;
 			result.FarClipPlane = s.FarClipPlane;
 			result.FieldOfView = s.FieldOfView;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1239,8 +1234,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1302,8 +1296,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1354,8 +1347,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1457,8 +1449,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1616,8 +1607,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -1682,8 +1672,7 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.Enabled = s.Enabled;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2372,8 +2361,7 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.CullMode = s.CullMode;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2447,8 +2435,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2622,8 +2609,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2689,8 +2675,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2753,8 +2738,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2896,8 +2880,7 @@ namespace YuzuGenerated
 			result.ContentsPath = s.ContentsPath;
 			result.Direction = s.Direction;
 			result.EmissionType = s.EmissionType;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -2980,8 +2963,7 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.FirstFrame = s.FirstFrame;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3044,8 +3026,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3108,8 +3089,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3164,8 +3144,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3225,8 +3204,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3365,8 +3343,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3611,8 +3588,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3720,8 +3696,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3789,8 +3764,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3850,8 +3824,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3905,8 +3878,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -3956,8 +3928,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4007,8 +3978,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4060,8 +4030,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4176,8 +4145,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4271,8 +4239,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4451,8 +4418,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4521,8 +4487,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4639,8 +4604,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));
@@ -4699,8 +4663,7 @@ namespace YuzuGenerated
 				}
 			}
 			result.ContentsPath = s.ContentsPath;
-			if (s.Folders != null) {
-				result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
+			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();
 				foreach (var tmp7 in s.Folders)
 					result.Folders.Add((global::Lime.Folder.Descriptor)tmp8(tmp7));

@@ -1,4 +1,4 @@
-﻿#if MAC
+#if MAC
 using System;
 using Lime;
 
@@ -8,7 +8,7 @@ namespace Tangerine.UI
 	{
 		public static Color4 PickAtCursor()
 		{
-            return Color4.Black;
+			return Color4.Black;
 		}
 	}
 }

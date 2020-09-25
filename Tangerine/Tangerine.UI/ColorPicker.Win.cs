@@ -1,4 +1,4 @@
-﻿#if WIN
+#if WIN
 using System;
 using System.Runtime.InteropServices;
 using Lime;

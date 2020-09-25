@@ -18,7 +18,7 @@ namespace Tangerine.UI.SceneView
 				if (sv.Input.IsKeyPressed(Key.Space) && sv.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(Cursors.DragHandOpen);
 				}
-				
+
 				if (sv.Input.WasMousePressed(0) && CommonWindow.Current.Input.IsKeyPressed(Key.Space) || sv.Input.WasMousePressed(2)) {
 					var initialMouse = sv.Input.MousePosition;
 					var initialPosition = sv.Scene.Position;

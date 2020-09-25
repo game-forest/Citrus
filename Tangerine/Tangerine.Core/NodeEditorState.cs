@@ -32,9 +32,6 @@ namespace Tangerine.Core
 			}
 		}
 		public bool Locked { get { return node.GetTangerineFlag(TangerineFlags.Locked); } set { node.SetTangerineFlag(TangerineFlags.Locked, value); } }
-		public bool PropertiesExpanded { get { return node.GetTangerineFlag(TangerineFlags.PropertiesExpanded); } set { node.SetTangerineFlag(TangerineFlags.PropertiesExpanded, value); } }
-		public bool ChildrenExpanded { get { return node.GetTangerineFlag(TangerineFlags.ChildrenExpanded); } set { node.SetTangerineFlag(TangerineFlags.ChildrenExpanded, value); } }
-
 		public int ColorIndex
 		{
 			get
@@ -51,9 +48,6 @@ namespace Tangerine.Core
 				node.SetTangerineFlag(TangerineFlags.ColorBit3, ((value >>= 1) & 1) == 1);
 			}
 		}
-
-		Folder rootFolder;
-		public Folder RootFolder => rootFolder ?? (rootFolder = Folder.BuildTree(node));
 
 		public NodeEditorState(Node node)
 		{

@@ -27,7 +27,7 @@ namespace Tangerine.Core
 		public bool CanRedo() => !IsTransactionActive && currentIndex < operations.Count;
 		public bool IsDocumentModified { get; private set; }
 		public bool IsTransactionActive => transactionStartIndices.Count > 0;
-		public event Action<IOperation> PerformingOperation;
+		public event Action<IOperation> ProcessingOperation;
 		public event Action DocumentChanged;
 
 		public static void AddOperationProcessorTypes(IEnumerable<Type> types)
@@ -90,7 +90,9 @@ namespace Tangerine.Core
 			if (currentIndex != index) {
 				operations.RemoveRange(currentIndex, GetTransactionEndIndex() - currentIndex);
 				for (; currentIndex > index; currentIndex--) {
-					Processors.Invert(operations[currentIndex - 1]);
+					var operation = operations[currentIndex - 1];
+					ProcessingOperation?.Invoke(operation);
+					Processors.Invert(operation);
 				}
 			}
 		}
@@ -98,7 +100,6 @@ namespace Tangerine.Core
 		public void Perform(IOperation operation)
 		{
 			AssertTransaction();
-			PerformingOperation?.Invoke(operation);
 			operation.TransactionId = transactionId;
 			if (saveIndex > currentIndex) {
 				saveIndex = -1;
@@ -115,6 +116,7 @@ namespace Tangerine.Core
 				operations.Insert(currentIndex, operation);
 				currentIndex++;
 			}
+			ProcessingOperation?.Invoke(operation);
 			Processors.Do(operation);
 		}
 
@@ -135,7 +137,9 @@ namespace Tangerine.Core
 			while (currentIndex > 0 && !documentChanged) {
 				documentChanged |= AnyChangingOperationWithinRange(s, currentIndex);
 				for (; currentIndex > s; currentIndex--) {
-					Processors.Invert(operations[currentIndex - 1]);
+					var operation = operations[currentIndex - 1];
+					ProcessingOperation?.Invoke(operation);
+					Processors.Invert(operation);
 				}
 				s = GetTransactionStartIndex();
 			}
@@ -156,7 +160,9 @@ namespace Tangerine.Core
 				}
 				documentChanged |= b;
 				for (; currentIndex < e; currentIndex++) {
-					Processors.Invert(operations[currentIndex]);
+					var operation = operations[currentIndex];
+					ProcessingOperation?.Invoke(operation);
+					Processors.Invert(operation);
 				}
 				e = GetTransactionEndIndex();
 			}

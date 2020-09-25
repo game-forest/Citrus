@@ -1,46 +1,179 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core.Components;
 
 namespace Tangerine.Core
 {
-	public struct RowLocation
+	public class Row
 	{
-		public Row ParentRow;
-		public int Index;
-
-		public RowLocation(Row parentRow, int index)
+		public string Id
 		{
-			ParentRow = parentRow;
-			Index = index;
+			get => Components.Get<CommonRowData>().Id;
+			set => Components.Get<CommonRowData>().Id = value;
+		}
+
+		public bool Expandable { get; set; }
+
+		public bool Expanded { get; set; }
+
+		public bool Selected
+		{
+			get => SelectionOrder > 0;
+			set
+			{
+				if (Selected != value) {
+					SelectionOrder = value ? selectionCounter++ : 0;
+				}
+			}
+		}
+
+		private static int selectionCounter = 1;
+
+		public int SelectionOrder { get; private set; }
+
+		public int Index { get; set; }
+		public Row Parent { get; internal set; }
+
+		public readonly RowList Rows;
+		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
+
+		public Row()
+		{
+			Rows = new RowList(this);
+		}
+
+		public void Unlink() => Parent?.Rows.Remove(this);
+
+		public bool DescendantOf(Row row)
+		{
+			for (var r = Parent; r != null; r = r.Parent) {
+				if (r == row)
+					return true;
+			}
+			return false;
+		}
+
+		public bool SameOrDescendantOf(Row row)
+		{
+			return row == this || DescendantOf(row);
+		}
+
+		public Folder.Descriptor GetFolder() => Components.Get<FolderRow>()?.Folder;
+
+		public bool TryGetFolder(out Folder.Descriptor folder)
+		{
+			folder = GetFolder();
+			return folder != null;
+		}
+
+		public IAnimator GetAnimator() => Components.Get<PropertyRow>()?.Animator;
+
+		public bool TryGetAnimator(out IAnimator animator)
+		{
+			animator = GetAnimator();
+			return animator != null;
+		}
+
+		public Node GetNode() => Components.Get<NodeRow>()?.Node;
+
+		public bool TryGetNode(out Node node)
+		{
+			node = GetNode();
+			return node != null;
+		}
+
+		public Animation GetAnimation() => Components.Get<AnimationRow>()?.Animation;
+
+		public bool TryGetAnimation(out Animation animation)
+		{
+			animation = GetAnimation();
+			return animation != null;
+		}
+
+		public AnimationTrack GetAnimationTrack() => Components.Get<AnimationTrackRow>()?.Track;
+
+		public bool TryGetAnimationTrack(out AnimationTrack track)
+		{
+			track = GetAnimationTrack();
+			return track != null;
+		}
+
+		public IEnumerable<Row> SelfAndDescendants()
+		{
+			var s = new Stack<Row>();
+			s.Push(this);
+			while (s.Count != 0) {
+				var i = s.Pop();
+				yield return i;
+				foreach (var c in i.Rows) {
+					s.Push(c);
+				}
+			}
 		}
 	}
 
-	public class Row
+	public class RowList : IList<Row>
 	{
-		public int Index { get; set; }
-		public bool Selected => SelectCounter != 0;
-		public int SelectCounter { get; set; }
-		public bool CanHaveChildren { get; set; }
-		public Row Parent { get; set; }
-		public readonly List<Row> Rows = new List<Row>();
-		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
+		private readonly Row owner;
+		private readonly List<Row> list = new List<Row>();
+		IEnumerator<Row> IEnumerable<Row>.GetEnumerator() => list.GetEnumerator();
 
-		public bool IsCopyPasteAllowed()
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+		public List<Row>.Enumerator GetEnumerator() => list.GetEnumerator();
+
+		public RowList(Row owner) => this.owner = owner;
+
+		public void Add(Row item) => Insert(Count, item);
+
+		public void Clear()
 		{
-			return Components.Get<NodeRow>()?.Node?.IsCopyPasteAllowed() ?? true;
+			while (Count > 0) {
+				RemoveAt(Count - 1);
+			}
 		}
 
-		public static FolderItemLocation GetFolderItemLocation(Row r)
+		public bool Contains(Row item) => list.Contains(item);
+
+		public void CopyTo(Row[] array, int arrayIndex) => list.CopyTo(array, arrayIndex);
+
+		public bool Remove(Row item)
 		{
-			var fi = GetFolderItem(r);
-			return fi == null ? new FolderItemLocation(null, -1) : Document.Current.Container.RootFolder().Find(fi);
+			var i = IndexOf(item);
+			if (i < 0) {
+				return false;
+			}
+			RemoveAt(i);
+			return true;
 		}
 
-		public static IFolderItem GetFolderItem(Row r)
+		public int Count => list.Count;
+		public bool IsReadOnly => false;
+
+		public int IndexOf(Row item) => list.IndexOf(item);
+
+		public void Insert(int index, Row item)
 		{
-			return (r.Components.Get<NodeRow>()?.Node as IFolderItem) ?? r.Components.Get<FolderRow>()?.Folder;
+			if (item.Parent != null) {
+				throw new InvalidOperationException();
+			}
+			item.Parent = owner;
+			list.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			var item = list[index];
+			item.Parent = null;
+			list.RemoveAt(index);
+		}
+
+		public Row this[int index]
+		{
+			get => list[index];
+			set => throw new System.NotSupportedException();
 		}
 	}
 }

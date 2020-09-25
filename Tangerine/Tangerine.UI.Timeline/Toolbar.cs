@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 using Tangerine.UI;
 
 namespace Tangerine.UI.Timeline
@@ -14,7 +15,7 @@ namespace Tangerine.UI.Timeline
 		public Toolbar()
 		{
 			RootWidget = new Widget {
-				Padding = new Thickness(2, 0),
+				Padding = new Thickness(2, 10, 0, 0),
 				MinMaxHeight = Metrics.ToolbarHeight,
 				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
@@ -78,10 +79,14 @@ namespace Tangerine.UI.Timeline
 		{
 			var button = new ToolbarButton(IconPool.GetTexture("Tools.NewFolder")) { Tooltip = "Create folder" };
 			button.AddTransactionClickHandler(() => {
-				var folder = new Folder { Id = "Folder" };
-				Core.Operations.InsertFolderItem.Perform(folder);
-				Core.Operations.ClearRowSelection.Perform();
-				Core.Operations.SelectRow.Perform(Document.Current.GetRowForObject(folder));
+				var folder = new Folder.Descriptor { Id = "Folder" };
+				SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var i);
+				if (!LinkSceneItem.CanLink(parent, folder)) {
+					return;
+				}
+				LinkSceneItem.Perform(parent, i, folder);
+				ClearRowSelection.Perform();
+				SelectRow.Perform(parent.Rows[i]);
 			});
 			button.Components.Add(new DocumentationComponent("CreateFolder"));
 			button.AddChangeWatcher(() => Document.Current.Animation.IsCompound, v => button.Visible = !v);

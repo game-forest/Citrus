@@ -4,10 +4,36 @@ using System.Linq;
 using System.Collections.Generic;
 using Lime;
 using System.Reflection;
-using Tangerine.Core.Components;
 
 namespace Tangerine.Core.Operations
 {
+	public class DelegateOperation : Operation
+	{
+		private bool isChangingDocument;
+		public override bool IsChangingDocument => isChangingDocument;
+		public readonly Action Redo;
+		public readonly Action Undo;
+
+		public static void Perform(Action redo, Action undo, bool isChangingDocument)
+		{
+			DocumentHistory.Current.Perform(new DelegateOperation(redo, undo, isChangingDocument));
+		}
+
+		private DelegateOperation(Action redo, Action undo, bool isChangingDocument)
+		{
+			this.Redo = redo;
+			this.Undo = undo;
+			this.isChangingDocument = isChangingDocument;
+		}
+
+		public class Processor : OperationProcessor<DelegateOperation>
+		{
+			protected override void InternalRedo(DelegateOperation op) => op.Redo?.Invoke();
+
+			protected override void InternalUndo(DelegateOperation op) => op.Undo?.Invoke();
+		}
+	}
+
 	public class SetProperty : Operation
 	{
 		public readonly object Obj;
@@ -244,6 +270,7 @@ namespace Tangerine.Core.Operations
 				op.Animator.Keys.Remove(kf);
 				if (op.Animator.Keys.Count == 0) {
 					op.AnimationHost.Animators.Remove(op.Animator);
+					Document.Current.RefreshSceneTree();
 				} else {
 					op.Animator.ResetCache();
 				}
@@ -256,6 +283,7 @@ namespace Tangerine.Core.Operations
 			{
 				if (op.Animator.Owner == null) {
 					op.AnimationHost.Animators.Add(op.Animator);
+					Document.Current.RefreshSceneTree();
 				}
 				op.Animator.Keys.AddOrdered(op.Restore<Backup>().Keyframe);
 				op.Animator.ResetCache();
@@ -334,10 +362,14 @@ namespace Tangerine.Core.Operations
 						Keyframe = animator.Keys.GetByFrame(op.Keyframe.Frame),
 						ValueWhenNoAnimator = !animatorExists ? value : null,
 					});
+					if (!animatorExists) {
+						Document.Current.RefreshSceneTree();
+					}
 				} else {
 					animator = backup.Animator;
 					if (!backup.AnimatorExists) {
 						op.AnimationHost.Animators.Add(animator);
+						Document.Current.RefreshSceneTree();
 					}
 				}
 
@@ -361,6 +393,7 @@ namespace Tangerine.Core.Operations
 				}
 				if (!b.AnimatorExists || b.Animator.Keys.Count == 0) {
 					op.AnimationHost.Animators.Remove(b.Animator);
+					Document.Current.RefreshSceneTree();
 					var (propertyData, animable, index) = AnimationUtils.GetPropertyByPath(op.AnimationHost, op.PropertyPath);
 					if (index == -1) {
 						propertyData.Info.SetValue(animable, b.ValueWhenNoAnimator);
@@ -593,89 +626,35 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class InsertFolderItem : Operation
-	{
-		public readonly Node Container;
-		public readonly FolderItemLocation Location;
-		public readonly IFolderItem Item;
-
-		public override bool IsChangingDocument => true;
-
-		public static void Perform(IFolderItem item, bool aboveSelected = true)
-		{
-			Perform(Document.Current.Container, GetNewFolderItemLocation(aboveSelected), item);
-		}
-
-		public static void Perform(Node container, FolderItemLocation location, IFolderItem item)
-		{
-			if (item is Node && !NodeCompositionValidator.Validate(container.GetType(), item.GetType())) {
-				throw new InvalidOperationException($"Can't put {item.GetType()} into {container.GetType()}");
-			}
-			DocumentHistory.Current.Perform(new InsertFolderItem(container, location, item));
-		}
-
-		internal static FolderItemLocation GetNewFolderItemLocation(bool aboveSelected)
-		{
-			var doc = Document.Current;
-			var rootFolder = doc.Container.RootFolder();
-			if (aboveSelected) {
-				var fi = doc.SelectedFolderItems().FirstOrDefault();
-				return fi != null ? rootFolder.Find(fi) : new FolderItemLocation(rootFolder, 0);
-			} else {
-				var fi = doc.SelectedFolderItems().LastOrDefault();
-				return fi != null ? rootFolder.Find(fi) + 1 : new FolderItemLocation(rootFolder, rootFolder.Items.Count);
-			}
-		}
-
-		private InsertFolderItem(Node container, FolderItemLocation location, IFolderItem item)
-		{
-			Container = container;
-			Location = location;
-			Item = item;
-		}
-
-		public class Processor : OperationProcessor<InsertFolderItem>
-		{
-			protected override void InternalRedo(InsertFolderItem op)
-			{
-				op.Location.Folder.Items.Insert(op.Location.Index, op.Item);
-				op.Container.SyncFolderDescriptorsAndNodes();
-			}
-
-			protected override void InternalUndo(InsertFolderItem op)
-			{
-				op.Location.Folder.Items.Remove(op.Item);
-				op.Container.SyncFolderDescriptorsAndNodes();
-			}
-		}
-	}
-
 	public static class CreateNode
 	{
 		public static Node Perform(Type nodeType, bool aboveSelected = true)
 		{
-			return Perform(Document.Current.Container, InsertFolderItem.GetNewFolderItemLocation(aboveSelected), nodeType);
+			SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var index, aboveSelected);
+			return Perform(parent, index, nodeType);
 		}
 
-		public static Node Perform(Type nodeType, FolderItemLocation location)
-		{
-			return Perform(Document.Current.Container, location, nodeType);
-		}
-
-		public static Node Perform(Node container, FolderItemLocation location, Type nodeType)
+		public static Node Perform(Row parent, int index, Type nodeType)
 		{
 			if (!nodeType.IsSubclassOf(typeof(Node))) {
 				throw new InvalidOperationException();
 			}
+			if (Document.Current.Animation.IsCompound) {
+				throw new InvalidOperationException("Can't create a node while animation editor is active.");
+			}
+			var hostNode = SceneTreeUtils.GetOwnerNodeSceneItem(parent).GetNode();
 			var ctr = nodeType.GetConstructor(Type.EmptyTypes);
 			var node = (Node)ctr.Invoke(new object[] { });
+			if (!LinkSceneItem.CanLink(parent, node)) {
+				throw new InvalidOperationException($"Can't add {nodeType} to '{parent.Id}'");
+			}
 			var attrs = ClassAttributes<TangerineNodeBuilderAttribute>.Get(nodeType);
 			if (attrs?.MethodName != null) {
 				var builder = nodeType.GetMethod(attrs.MethodName, BindingFlags.NonPublic | BindingFlags.Instance);
 				builder.Invoke(node, new object[] { });
 			}
-			node.Id = GenerateNodeId(container, nodeType);
-			InsertFolderItem.Perform(container, location, node);
+			node.Id = GenerateNodeId(hostNode, nodeType);
+			LinkSceneItem.Perform(parent, index, node);
 			ClearRowSelection.Perform();
 			SelectNode.Perform(node);
 			Document.Current.Decorate(node);
@@ -691,49 +670,6 @@ namespace Tangerine.Core.Operations
 				c++;
 			}
 			return id;
-		}
-	}
-
-	public class UnlinkFolderItem : Operation
-	{
-		public readonly Node Container;
-		public readonly IFolderItem Item;
-
-		public override bool IsChangingDocument => true;
-
-		public static void Perform(Node container, IFolderItem item)
-		{
-			DocumentHistory.Current.Perform(new UnlinkFolderItem(container, item));
-		}
-
-		private UnlinkFolderItem(Node container, IFolderItem item)
-		{
-			Container = container;
-			Item = item;
-		}
-
-		public class Processor : OperationProcessor<UnlinkFolderItem>
-		{
-			class Backup
-			{
-				public Node Container;
-				public FolderItemLocation Location;
-			}
-
-			protected override void InternalRedo(UnlinkFolderItem op)
-			{
-				var loc = op.Container.RootFolder().Find(op.Item);
-				op.Save(new Backup { Container = op.Container, Location = loc });
-				loc.Folder.Items.Remove(op.Item);
-				op.Container.SyncFolderDescriptorsAndNodes();
-			}
-
-			protected override void InternalUndo(UnlinkFolderItem op)
-			{
-				var b = op.Restore<Backup>();
-				b.Location.Folder.Items.Insert(b.Location.Index, op.Item);
-				b.Container.SyncFolderDescriptorsAndNodes();
-			}
 		}
 	}
 
@@ -894,103 +830,6 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class MoveNodes : Operation
-	{
-		public FolderItemLocation Location { get; }
-		public FolderItemLocation PrevLocation { get; }
-		public Node Container { get; }
-		public IFolderItem Item { get; }
-		public override bool IsChangingDocument => true;
-		private static FolderItemLocation GetParentFolder(IFolderItem item) => Document.Current.Container.RootFolder().Find(item);
-
-		private MoveNodes(Node container, FolderItemLocation location, FolderItemLocation prevLocation, IFolderItem item)
-		{
-			Container = container;
-			Location = location;
-			Item = item;
-			PrevLocation = prevLocation;
-		}
-
-		public static void Perform(IEnumerable<IFolderItem> items, FolderItemLocation targetFolder)
-		{
-			foreach (var item in items) {
-				Perform(item, targetFolder);
-			}
-		}
-
-		public static void Perform(IFolderItem item, FolderItemLocation targetFolder)
-		{
-			DocumentHistory.Current.Perform(
-				new MoveNodes(
-					Document.Current.Container,
-					targetFolder,
-					GetParentFolder(item),
-					item));
-		}
-
-		public static void Perform(RowLocation newLocation)
-		{
-			var i = newLocation.Index;
-			var nodes = Document.Current.SelectedNodes().ToList();
-			var targetFolder = newLocation.ParentRow.Components.Get<FolderRow>()?.Folder;
-			if (targetFolder == null) {
-				throw new Lime.Exception("Cant put nodes in a non folder row");
-			}
-			foreach (var node in nodes) {
-				DocumentHistory.Current.Perform(
-					new MoveNodes(
-						Document.Current.Container,
-						new FolderItemLocation(targetFolder, i++),
-						GetParentFolder(node),
-						node));
-			}
-		}
-
-		public class Processor : OperationProcessor<MoveNodes>
-		{
-			protected override void InternalRedo(MoveNodes op)
-			{
-
-				if (op.PrevLocation.Folder == op.Location.Folder) {
-					var oldIndex = op.PrevLocation.Folder.Items.IndexOf(op.Item);
-					var index = op.Location.Index;
-					op.PrevLocation.Folder.Items.Remove(op.Item);
-					if (op.Location.Index > oldIndex) index--;
-					var idx = op.PrevLocation.Folder.Items.IndexOf(op.Item);
-					op.Location.Folder.Items.Insert(index, op.Item);
-				} else {
-					op.PrevLocation.Folder.Items.Remove(op.Item);
-					op.Location.Folder.Items.Insert(op.Location.Index, op.Item);
-				}
-				op.Container.SyncFolderDescriptorsAndNodes();
-			}
-
-			protected override void InternalUndo(MoveNodes op)
-			{
-				op.Location.Folder.Items.Remove(op.Item);
-				op.PrevLocation.Folder.Items.Insert(op.PrevLocation.Index, op.Item);
-				op.Container.SyncFolderDescriptorsAndNodes();
-			}
-		}
-	}
-
-	public static class SortBonesInChain
-	{
-		public static void Perform(Bone boneInChain)
-		{
-			var bones = Document.Current.Container.Nodes.OfType<Bone>();
-			var rootParent = bones.GetBone(boneInChain.BaseIndex);
-			while (rootParent != null && rootParent.BaseIndex != 0) {
-				rootParent = bones.GetBone(rootParent.BaseIndex);
-			}
-			var tree = BoneUtils.SortBones(BoneUtils.FindBoneDescendats(rootParent ?? boneInChain, bones));
-			var loc = Document.Current.Container.RootFolder().Find(rootParent ?? boneInChain);
-			foreach (var child in tree) {
-				MoveNodes.Perform(child, new FolderItemLocation(loc.Folder, ++loc.Index));
-			}
-		}
-	}
-
 	public class SetComponent : Operation
 	{
 		private readonly Node node;
@@ -1040,12 +879,13 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Bone> bones, IEnumerable<Widget> widgets)
 		{
-			var sortedBones = BoneUtils.SortBones(bones);
+			var sortedBones = bones.ToList();
+			BoneUtils.SortBones(sortedBones);
 			if (!widgets.Any() || !sortedBones.Any()) {
 				return;
 			}
 			if (!CheckConsistency(bones, widgets)) throw new InvalidOperationException("Not all bones and widgets have the same parent");
-			foreach (var widget in widgets) {
+			foreach (var widget in widgets.ToList()) {
 				if (widget is DistortionMesh) {
 					foreach (PointObject point in widget.Nodes) {
 						UntieBonesFromNode(point, nameof(PointObject.SkinningWeights), sortedBones);
@@ -1186,7 +1026,9 @@ namespace Tangerine.Core.Operations
 			if (!widgets.Any() || !bones.Any()) {
 				return;
 			}
-			if (!BoneUtils.CheckConsistency(bones, widgets.ToArray())) throw new InvalidOperationException("Not all bones and widgets have the same parent");
+			if (!BoneUtils.CheckConsistency(bones, widgets.ToArray())) {
+				throw new InvalidOperationException("Not all bones and widgets have the same parent");
+			}
 			foreach (var widget in widgets) {
 				if (widget is DistortionMesh mesh) {
 					foreach (PointObject point in mesh.Nodes) {
@@ -1236,7 +1078,7 @@ namespace Tangerine.Core.Operations
 						BoneUtils.CalcSkinningWeight(widget.SkinningWeights, widget.Position, boneList));
 				}
 			}
-			foreach (var bone in bones) {
+			foreach (var bone in bones.ToList()) {
 				var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
 				SetAnimableProperty.Perform(bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes);
 				SetAnimableProperty.Perform(bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes);
@@ -1259,7 +1101,8 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Bone> bones, Lime.Animesh mesh, params int[] indices)
 		{
-			var sortedBones = BoneUtils.SortBones(bones);
+			var sortedBones = bones.ToList();
+			BoneUtils.SortBones(sortedBones);
 			if (!sortedBones.Any()) {
 				return;
 			}
@@ -1305,7 +1148,8 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Bone> bones, Lime.Animesh mesh, params int[] indices)
 		{
-			var sortedBones = BoneUtils.SortBones(bones);
+			var sortedBones = bones.ToList();
+			BoneUtils.SortBones(sortedBones);
 			if (!sortedBones.Any()) {
 				return;
 			}

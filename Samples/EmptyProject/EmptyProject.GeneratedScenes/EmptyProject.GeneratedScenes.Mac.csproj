@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ParsedWidget.cs" />
+    <Compile Include="Scenes\Common\CheckGroup.cs" />
     <Compile Include="Scenes\Main\AlertDialog.cs" />
     <Compile Include="Scenes\Main\BtnOk.cs" />
     <Compile Include="Scenes\Main\BtnOptions.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Scenes\Main\MainMenu.cs" />
     <Compile Include="Scenes\Main\Options.cs" />
     <Compile Include="Scenes\Main\Splash.cs" />
-    <Compile Include="Scenes\Common\CheckGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Lime\Lime.Mac.csproj">

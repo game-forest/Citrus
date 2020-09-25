@@ -10,17 +10,27 @@ namespace Tangerine.Core.Operations
 {
 	public static class NodeTypeConvert
 	{
-		public static Node Perform(Row sourceRow, Type destType, Type commonParent, ICollection<string> excludedProperties)
+		public static Node Perform(Row sceneItem, Type destType, Type commonParent, ICollection<string> excludedProperties)
 		{
-			var node = sourceRow.Components.Get<NodeRow>()?.Node;
+			var node = sceneItem.Components.Get<NodeRow>()?.Node;
+			DelegateOperation.Perform(null,() => Document.Current.RefreshSceneTree(), false);
 			Validate(node, destType, commonParent);
-			var item = Row.GetFolderItem(sourceRow);
-			var index = sourceRow.Parent.Rows.IndexOf(sourceRow);
-			var location = Row.GetFolderItemLocation(sourceRow.Parent.Rows[index]);
-			var result = CreateNode.Perform(destType, location);
+			var result = CreateNode.Perform(sceneItem.Parent, sceneItem.Parent.Rows.IndexOf(sceneItem), destType);
 			CopyProperties(node, result, excludedProperties);
-			ReplaceContents.Perform(node, result);
-			UnlinkFolderItem.Perform(Document.Current.Container, item);
+			var assetBundlePathComponent = node.Components.Get<Node.AssetBundlePathComponent>();
+			if (assetBundlePathComponent != null) {
+				result.Components.Add(Cloner.Clone(assetBundlePathComponent));
+			} else {
+				int j = 0;
+				foreach (var i in sceneItem.Rows.ToList()) {
+					if (i.TryGetNode(out _) || i.TryGetFolder(out _)) {
+						UnlinkSceneItem.Perform(i);
+						LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(result), j++, i);
+					}
+				}
+			}
+			UnlinkSceneItem.Perform(sceneItem);
+			DelegateOperation.Perform(() => Document.Current.RefreshSceneTree(), null, false);
 			return result;
 		}
 

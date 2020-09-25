@@ -35,7 +35,7 @@ namespace Tangerine
 			using (Document.Current.History.BeginTransaction()) {
 				SetProperty.Perform(Document.Current.RootNode, nameof(Widget.Size), resolution.Size);
 				SetMarker(Document.Current.RootNode, resolution.MarkerId);
-				Document.Current.History.CommitTransaction();	
+				Document.Current.History.CommitTransaction();
 			}
 		}
 	}

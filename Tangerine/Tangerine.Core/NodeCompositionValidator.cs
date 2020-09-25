@@ -55,10 +55,5 @@ namespace Tangerine.Core
 			}
 			return true;
 		}
-
-		public static bool IsCopyPasteAllowed(Type type)
-		{
-			return type.GetCustomAttribute<TangerineForbidCopyPasteAttribute>(false) == null;
-		}
 	}
 }

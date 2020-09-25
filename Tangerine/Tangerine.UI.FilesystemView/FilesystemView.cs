@@ -223,7 +223,7 @@ namespace Tangerine.UI.FilesystemView
 			scrollView.Content.Layout = new FlowLayout(LayoutDirection.TopToBottom) { Spacing = 1.0f };
 			scrollView.Content.Padding = new Thickness(5.0f);
 			scrollView.Content.CompoundPostPresenter.Insert(0, new SyncDelegatePresenter<Widget>(RenderFilesWidgetRectSelection));
-			scrollView.Updated += ScrollViewUpdated;
+			scrollView.Updating += ScrollViewUpdating;
 			scrollView.Content.Presenter = new SyncDelegatePresenter<Widget>((w) => {
 				w.PrepareRendererState();
 				var wp = w.ParentWidget;
@@ -382,7 +382,7 @@ namespace Tangerine.UI.FilesystemView
 		private float typeNavigationTimeout = 0.0f;
 		private string typeNavigationPrefix = string.Empty;
 
-		private void ScrollViewUpdated(float dt)
+		private void ScrollViewUpdating(float dt)
 		{
 			ProcessInputOverFSItem();
 			ProcessDragState(dt);
@@ -419,7 +419,7 @@ namespace Tangerine.UI.FilesystemView
 
 				scrollView.Content.Padding = new Thickness(5.0f);
 				scrollView.Content.CompoundPostPresenter.Insert(0, new SyncDelegatePresenter<Widget>(RenderFilesWidgetRectSelection));
-				scrollView.Updated += ScrollViewUpdated;
+				scrollView.Updated += ScrollViewUpdating;
 				scrollView.Content.Presenter = new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
 					var wp = w.ParentWidget;

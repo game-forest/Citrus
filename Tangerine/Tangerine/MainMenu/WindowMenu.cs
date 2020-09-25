@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Lime;
 using Tangerine.Core;
 using Tangerine.UI;
@@ -9,7 +9,7 @@ namespace Tangerine
 	{
 		public override bool GetEnabled()
 		{
-			// Prevent from unintentional execute by Ctrl+Tab while exposition. 
+			// Prevent from unintentional execute by Ctrl+Tab while exposition.
 			return !Document.Current.ExpositionMode;
 		}
 
@@ -23,7 +23,7 @@ namespace Tangerine
 	{
 		public override bool GetEnabled()
 		{
-			// Prevent from unintentional execute by Ctrl+Tab while exposition. 
+			// Prevent from unintentional execute by Ctrl+Tab while exposition.
 			return !Document.Current.ExpositionMode;
 		}
 

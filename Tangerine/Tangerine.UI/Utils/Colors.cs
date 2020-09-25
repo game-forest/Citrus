@@ -262,13 +262,7 @@ namespace Tangerine.UI
 		public class HierarchyColors : Theme.DefaultColors
 		{
 			[YuzuOptional]
-			public Color4 SelectionColor { get; set; }
-			[YuzuOptional]
-			public Color4 GrayedSelectionColor { get; set; }
-			[YuzuOptional]
 			public Color4 MatchColor { get; set; }
-			[YuzuOptional]
-			public Color4 JointColor { get; set; }
 		}
 
 		[YuzuOptional]
@@ -443,10 +437,7 @@ namespace Tangerine.UI
 				Border = new Color4(32, 32, 32),
 			};
 			var hierarchy = new HierarchyColors {
-				SelectionColor = toolbar.ButtonHighlightBackground,
-				GrayedSelectionColor = toolbar.ButtonHighlightBackground.Darken(0.3f),
 				MatchColor = Color4.Yellow.Darken(0.5f).Transparentify(0.6f),
-				JointColor = Color4.Gray,
 			};
 			return new ColorTheme {
 				IsDark = true,
@@ -597,10 +588,7 @@ namespace Tangerine.UI
 				Border = new Color4(32, 32, 32),
 			};
 			var hierarchy = new HierarchyColors {
-				SelectionColor = toolbar.ButtonHighlightBackground,
-				GrayedSelectionColor = toolbar.ButtonHighlightBackground.Darken(0.3f),
 				MatchColor = Color4.Yellow.Transparentify(0.6f),
-				JointColor = Color4.Gray,
 			};
 			return new ColorTheme {
 				IsDark = false,

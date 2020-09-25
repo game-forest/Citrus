@@ -67,10 +67,13 @@
     <Compile Include="ISceneView.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
     <Compile Include="NodeExtensions.cs" />
+    <Compile Include="Operations\ContentsPathProcessor.cs" />
     <Compile Include="Operations\RemoveKeyframeRange.cs" />
     <Compile Include="Operations\RenameAnimationProcessor.cs" />
     <Compile Include="Operations\RulerAction.cs" />
+    <Compile Include="Operations\SceneTree.cs" />
     <Compile Include="PropertyValidator.cs" />
+    <Compile Include="SceneTreeBuilder.cs" />
     <Compile Include="SceneCache.cs" />
     <Compile Include="SyncPresenters.cs" />
   </ItemGroup>
@@ -99,10 +102,8 @@
     <Compile Include="Operations\EnterLeaveNode.cs" />
     <Compile Include="Operations\Modification.cs" />
     <Compile Include="Operations\NodeTypeConvert.cs" />
-    <Compile Include="Operations\ReplaceContents.cs" />
     <Compile Include="Operations\SelectRow.cs" />
     <Compile Include="Operations\SelectRowRange.cs" />
-    <Compile Include="Operations\SyncFolderDescriptorsProcessor.cs" />
     <Compile Include="Operations\TimelineColumnRemove.cs" />
     <Compile Include="Operations\TimelineHorizontalShift.cs" />
     <Compile Include="Project.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="PropertyAttributes.cs" />
     <Compile Include="ResolutionPreview.cs" />
     <Compile Include="Row.cs" />
-    <Compile Include="RowsSynchronizer.cs" />
     <Compile Include="Ruler.cs" />
     <Compile Include="TriggersValidation.cs" />
     <Compile Include="UserPreferences.cs" />

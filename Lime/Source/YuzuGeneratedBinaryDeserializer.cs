@@ -1784,10 +1784,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (10 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp12 = d.Reader.ReadInt32();
 				if (tmp12 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp12 >= 0) {
 						var tmp13 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp13);
@@ -2014,10 +2012,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -2294,10 +2290,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -2506,10 +2500,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -2683,10 +2675,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -3164,10 +3154,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -3336,10 +3324,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (6 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -3451,10 +3437,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (5 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -3692,10 +3676,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -4078,10 +4060,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -4259,10 +4239,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -5378,10 +5356,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp9 = d.Reader.ReadInt32();
 				if (tmp9 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp9 >= 0) {
 						var tmp10 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp10);
@@ -5604,10 +5580,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (6 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -6144,10 +6118,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -6325,10 +6297,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -6523,10 +6493,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (6 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -6909,10 +6877,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (13 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -7166,10 +7132,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -7320,10 +7284,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -7502,10 +7464,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (5 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -7620,10 +7580,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -7781,10 +7739,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (5 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -8340,10 +8296,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -8967,10 +8921,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -9258,10 +9210,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -9446,10 +9396,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -9610,10 +9558,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -9741,10 +9687,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (6 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -9840,10 +9784,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (5 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -9939,10 +9881,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (5 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -10050,10 +9990,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (5 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -10319,10 +10257,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (7 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp7 = d.Reader.ReadInt32();
 				if (tmp7 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp7 >= 0) {
 						var tmp8 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp8);
@@ -10588,10 +10524,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -11016,10 +10950,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -11208,10 +11140,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -11568,10 +11498,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (8 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);
@@ -11728,10 +11656,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (6 == fd.OurIndex) {
-				result.Folders = (global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>)null;
 				var tmp8 = d.Reader.ReadInt32();
 				if (tmp8 >= 0) {
-					result.Folders = new global::System.Collections.Generic.List<global::Lime.Folder.Descriptor>();
 					while (--tmp8 >= 0) {
 						var tmp9 = (global::Lime.Folder.Descriptor)dg.ReadObject<global::Lime.Folder.Descriptor>();
 						result.Folders.Add(tmp9);

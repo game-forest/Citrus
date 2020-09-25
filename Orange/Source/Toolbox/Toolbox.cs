@@ -157,15 +157,13 @@ namespace Orange
 			foreach (var n in clone.SelfAndDescendants) {
 				CleanNode(n);
 			}
+			
 			void CleanNode(Node n)
 			{
 				n.SetTangerineFlag(~TangerineFlags.SerializableMask, false);
 				n.RemoveAnimatorsForExternalAnimations();
 				foreach (var animation in n.Animations) {
 					animation.Frame = 0;
-				}
-				if (n.Folders != null && n.Folders.Count == 0) {
-					n.Folders = null;
 				}
 				foreach (var a in n.Animators.ToList()) {
 					if (a.ReadonlyKeys.Count == 0 || a.IsZombie) {

@@ -39,6 +39,7 @@ namespace Lime
 			var services = new ServiceRegistry();
 			services.Add(new BehaviorSystem());
 			services.Add(layoutManager);
+			services.Add(CommandHandlerList.Global);
 			services.Add(widgetContext);
 
 			var manager = new NodeManager(services);
@@ -47,6 +48,9 @@ namespace Lime
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(PreEarlyUpdateStage)));
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(EarlyUpdateStage)));
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(PostEarlyUpdateStage)));
+			// All context specific commands (e.g. EditBox Copy/Paste) should be processed and consumed before this processor.
+			// This processor is intended to process application wide commands registered in CommandHandlerList.Global
+			manager.Processors.Add(new CommandProcessor());
 			manager.Processors.Add(new AnimationProcessor());
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(AfterAnimationStage)));
 			manager.Processors.Add(new LayoutProcessor());

@@ -88,7 +88,6 @@ namespace Lime
 		public List<SkinnedVertex> TransientVertices { get; set; }
 
 #if TANGERINE
-		public Action OnBoneArrayChanged;
 		public bool TangerineAnimationModeEnabled;
 #endif
 

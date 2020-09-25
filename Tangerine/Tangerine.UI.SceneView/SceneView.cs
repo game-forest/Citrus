@@ -51,8 +51,7 @@ namespace Tangerine.UI.SceneView
 			ConnectCommand(SceneViewCommands.ResolutionChanger, new ResolutionChangerHandler());
 			ConnectCommand(SceneViewCommands.ResolutionReverceChanger, new ResolutionChangerHandler(isReverse: true));
 			ConnectCommand(SceneViewCommands.ResolutionOrientation, new ResolutionOrientationHandler());
-			ConnectCommand(SceneViewCommands.Duplicate, DuplicateNodes,
-				() => Document.Current?.TopLevelSelectedRows().Any(row => row.IsCopyPasteAllowed()) ?? false);
+			ConnectCommand(SceneViewCommands.Duplicate, DuplicateNodes);
 			ConnectCommand(SceneViewCommands.TieWidgetsWithBones, TieWidgetsWithBones);
 			ConnectCommand(SceneViewCommands.UntieWidgetsFromBones, UntieWidgetsFromBones);
 		}
@@ -166,6 +165,13 @@ namespace Tangerine.UI.SceneView
 		[NodeComponentDontSerialize]
 		private class SceneBehavior : BehaviorComponent
 		{
+			private bool documentChanged;
+
+			public SceneBehavior()
+			{
+				Document.Current.History.DocumentChanged += () => documentChanged = true;
+			}
+
 			protected override void Update(float delta)
 			{
 				if (!Document.Current.PreviewAnimation) {
@@ -174,6 +180,11 @@ namespace Tangerine.UI.SceneView
 					delta *= 0.1f;
 				}
 				Document.Current.Manager.Update(delta);
+				if (documentChanged) {
+					documentChanged = false;
+					Document.Current.Animation.Frame = Document.Current.Animation.Frame;
+					Document.Current.RootNode.Update(0);
+				}
 			}
 		}
 

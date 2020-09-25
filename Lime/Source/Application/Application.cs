@@ -343,10 +343,12 @@ namespace Lime
 				System.Windows.Forms.Application.Exit();
 			};
 #endif // WIN
+#if !MAC || !DEBUG // JetBrains Rider doesn't stop on exceptions if the handler is set.			
 			// Any other unhandled exceptions
 			AppDomain.CurrentDomain.UnhandledException += (sender, e) => {
 				handler(e.ExceptionObject);
 			};
+#endif
 		}
 
 		/// <summary>

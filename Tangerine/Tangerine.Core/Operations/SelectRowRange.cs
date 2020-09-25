@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Tangerine.Core;
 
 namespace Tangerine.Core.Operations

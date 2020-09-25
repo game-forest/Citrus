@@ -495,7 +495,7 @@ namespace Tangerine.UI.FilesystemView
 				MinMaxSize = new Vector2(11, 6),
 				Texture = IconPool.GetTexture("Filesystem.PathSeparatorCollapsed")
 			});
-			
+
 			Expanded = false;
 		}
 

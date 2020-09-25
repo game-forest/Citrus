@@ -36,7 +36,6 @@ namespace Tangerine.Core.Operations
 		private static void ChangeContainer(Node container, bool selectFirstNode)
 		{
 			ClearRowSelection.Perform();
-			var prevContainer = Document.Current.Container;
 			DocumentHistory.Current.Perform(new SetContainer(container));
 			if (selectFirstNode && container.Nodes.Count > 0) {
 				SelectNode.Perform(container.Nodes[0]);
