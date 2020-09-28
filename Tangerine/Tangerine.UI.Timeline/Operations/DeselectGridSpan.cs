@@ -6,7 +6,7 @@ using Tangerine.Core.Components;
 
 namespace Tangerine.UI.Timeline.Operations
 {
-	public class DeselectGridSpan : Operation
+	public sealed class DeselectGridSpan : Operation
 	{
 		public readonly GridSpan Span;
 		public readonly int Row;
@@ -24,7 +24,7 @@ namespace Tangerine.UI.Timeline.Operations
 			Span = new GridSpan(a, b);
 		}
 
-		public class Processor : OperationProcessor<DeselectGridSpan>
+		public sealed class Processor : OperationProcessor<DeselectGridSpan>
 		{
 			protected override void InternalRedo(DeselectGridSpan op)
 			{

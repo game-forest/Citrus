@@ -151,7 +151,7 @@ namespace Lime
 		public class Manifest
 		{
 			public const string FileName = ".Manifest";
-			
+
 			[YuzuMember]
 			public int? BaseBundleVersion { get; set; }
 
@@ -176,7 +176,7 @@ namespace Lime
 					DateTime.MinValue, AssetAttributes.None, null);
 			}
 		}
-		
+
 		private readonly Stack<Stream> streamPool = new Stack<Stream>();
 		const int Signature = 0x13AF;
 		private int indexOffset;
@@ -348,7 +348,7 @@ namespace Lime
 				streamPool.Pop().Dispose();
 			}
 		}
-		
+
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
 			var stream = (AssetStream)OpenFileRaw(path, mode);
@@ -445,7 +445,7 @@ namespace Lime
 		}
 
 		public override void ImportFileRaw(
-			string path, Stream stream, int reserve, string sourceExtension, 
+			string path, Stream stream, int reserve, string sourceExtension,
 			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
 		{
 			OnWrite?.Invoke();
@@ -630,7 +630,7 @@ namespace Lime
 			}
 			throw new Exception("Asset '{0}' doesn't exist", path);
 		}
-		
+
 		public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
 
 		public override string FromSystemPath(string systemPath) => throw new NotSupportedException();

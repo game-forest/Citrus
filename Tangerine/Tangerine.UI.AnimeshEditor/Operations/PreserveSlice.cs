@@ -4,7 +4,7 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 {
 	public static partial class AnimeshModification
 	{
-		public class Slice : Operation
+		public sealed class Slice : Operation
 		{
 			public override bool IsChangingDocument => true;
 
@@ -30,7 +30,7 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter, skipFirstSync));
 			}
 
-			public class Processor : OperationProcessor<Slice>
+			public sealed class Processor : OperationProcessor<Slice>
 			{
 				private void Do(Lime.Animesh mesh, AnimeshSlice slice, bool skipSync)
 				{

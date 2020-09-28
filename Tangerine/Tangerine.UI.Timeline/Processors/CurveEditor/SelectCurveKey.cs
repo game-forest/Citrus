@@ -3,7 +3,7 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline.Operations
 {
-	public class SelectCurveKey : Operation
+	public sealed class SelectCurveKey : Operation
 	{
 		public readonly Curve Curve;
 		public readonly IKeyframe Key;
@@ -23,7 +23,7 @@ namespace Tangerine.UI.Timeline.Operations
 			Select = select;
 		}
 
-		public class Processor : OperationProcessor<SelectCurveKey>
+		public sealed class Processor : OperationProcessor<SelectCurveKey>
 		{
 			protected override void InternalRedo(SelectCurveKey op)
 			{

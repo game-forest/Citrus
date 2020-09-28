@@ -180,8 +180,7 @@ namespace Tangerine.UI
 		private readonly List<TreeViewItem> items;
 		private TreeViewItem rootItem;
 		private TreeViewItem rangeSelectionFirstItem;
-		private bool refreshScheduled;
-		private TreeViewOptions options;
+		private readonly TreeViewOptions options;
 
 		public event EventHandler<ActivateItemEventArgs> OnActivateItem;
 		public event EventHandler<DragEventArgs> OnDragBegin;

@@ -533,7 +533,6 @@ namespace Tangerine.UI.Timeline
 	{
 		public const float IndentWidth = 20;
 
-		private readonly TreeView treeView;
 		private readonly TreeViewItemPresentationOptions options;
 
 		public IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }

@@ -114,7 +114,7 @@ namespace Tangerine.UI.SceneView
 		}
 	}
 
-	public class ResolutionPreviewOperation : Operation
+	public sealed class ResolutionPreviewOperation : Operation
 	{
 		private static bool ResolutionPreviewMode
 		{
@@ -155,7 +155,7 @@ namespace Tangerine.UI.SceneView
 			this.requiredSave = requiredSave;
 		}
 
-		public class Processor : OperationProcessor<ResolutionPreviewOperation>
+		public sealed class Processor : OperationProcessor<ResolutionPreviewOperation>
 		{
 			protected override void InternalRedo(ResolutionPreviewOperation op) => ApplyResolutionPreset(op.resolutionPreview, op.requiredSave);
 			protected override void InternalUndo(ResolutionPreviewOperation op) => ApplyResolutionPreset(DisabledResolutionPreview, requiredSave: false);

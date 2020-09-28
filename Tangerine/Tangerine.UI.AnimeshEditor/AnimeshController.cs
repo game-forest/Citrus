@@ -521,7 +521,7 @@ namespace Tangerine.UI.AnimeshEditor
 			}
 		}
 
-		protected void RecalcVertexBoneTies()
+		private void RecalcVertexBoneTies()
 		{
 			Mesh.Animators.TryFind(
 				nameof(Mesh.TransientVertices),

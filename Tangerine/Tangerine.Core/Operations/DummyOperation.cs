@@ -2,7 +2,7 @@ using System;
 
 namespace Tangerine.Core.Operations
 {
-	public class Dummy : Operation
+	public sealed class Dummy : Operation
 	{
 		public override bool IsChangingDocument => false;
 

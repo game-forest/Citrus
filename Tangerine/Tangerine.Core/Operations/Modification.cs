@@ -7,9 +7,9 @@ using System.Reflection;
 
 namespace Tangerine.Core.Operations
 {
-	public class DelegateOperation : Operation
+	public sealed class DelegateOperation : Operation
 	{
-		private bool isChangingDocument;
+		private readonly bool isChangingDocument;
 		public override bool IsChangingDocument => isChangingDocument;
 		public readonly Action Redo;
 		public readonly Action Undo;
@@ -26,7 +26,7 @@ namespace Tangerine.Core.Operations
 			this.isChangingDocument = isChangingDocument;
 		}
 
-		public class Processor : OperationProcessor<DelegateOperation>
+		public sealed class Processor : OperationProcessor<DelegateOperation>
 		{
 			protected override void InternalRedo(DelegateOperation op) => op.Redo?.Invoke();
 
@@ -39,7 +39,6 @@ namespace Tangerine.Core.Operations
 		public readonly object Obj;
 		public readonly object Value;
 		public readonly PropertyInfo Property;
-		public readonly Type Type;
 		public override bool IsChangingDocument { get; }
 
 		public static void Perform(object obj, string propertyName, object value, bool isChangingDocument = true)
@@ -47,30 +46,15 @@ namespace Tangerine.Core.Operations
 			DocumentHistory.Current.Perform(new SetProperty(obj, propertyName, value, isChangingDocument));
 		}
 
-		public static void Perform(Type type, object obj, string propertyName, object value, bool isChangingDocument = true)
-		{
-			DocumentHistory.Current.Perform(new SetProperty(type, obj, propertyName, value, isChangingDocument));
-		}
-
 		protected SetProperty(object obj, string propertyName, object value, bool isChangingDocument)
 		{
-			Type = obj.GetType();
 			Obj = obj;
 			Value = value;
-			Property = Type.GetProperty(propertyName);
+			Property = obj.GetType().GetProperty(propertyName);
 			IsChangingDocument = isChangingDocument;
 		}
 
-		protected SetProperty(Type type, object obj, string propertyName, object value, bool isChangingDocument)
-		{
-			Type = type;
-			Obj = obj;
-			Value = value;
-			Property = Type.GetProperty(propertyName);
-			IsChangingDocument = isChangingDocument;
-		}
-
-		public class Processor : OperationProcessor<SetProperty>
+		public sealed class Processor : OperationProcessor<SetProperty>
 		{
 			private class Backup { public object Value; }
 
@@ -90,7 +74,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class SetIndexedProperty : Operation
+	public sealed class SetIndexedProperty : Operation
 	{
 		public readonly object Obj;
 		public readonly object Value;
@@ -109,7 +93,7 @@ namespace Tangerine.Core.Operations
 			DocumentHistory.Current.Perform(new SetIndexedProperty(type, obj, propertyName, indexProvider, value, isChangingDocument));
 		}
 
-		protected SetIndexedProperty(object obj, string propertyName, int index, object value, bool isChangingDocument)
+		private SetIndexedProperty(object obj, string propertyName, int index, object value, bool isChangingDocument)
 		{
 			Type = obj.GetType();
 			Obj = obj;
@@ -119,7 +103,7 @@ namespace Tangerine.Core.Operations
 			IsChangingDocument = isChangingDocument;
 		}
 
-		protected SetIndexedProperty(Type type, object obj, string propertyName, int index, object value, bool isChangingDocument)
+		private SetIndexedProperty(Type type, object obj, string propertyName, int index, object value, bool isChangingDocument)
 		{
 			Type = type;
 			Obj = obj;
@@ -129,7 +113,7 @@ namespace Tangerine.Core.Operations
 			IsChangingDocument = isChangingDocument;
 		}
 
-		public class Processor : OperationProcessor<SetIndexedProperty>
+		public sealed class Processor : OperationProcessor<SetIndexedProperty>
 		{
 			private class Backup { public object Value; }
 
@@ -239,7 +223,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class RemoveKeyframe : Operation
+	public sealed class RemoveKeyframe : Operation
 	{
 		public readonly int Frame;
 		public readonly IAnimator Animator;
@@ -259,7 +243,7 @@ namespace Tangerine.Core.Operations
 			AnimationHost = Animator.Owner;
 		}
 
-		public class Processor : OperationProcessor<RemoveKeyframe>
+		public sealed class Processor : OperationProcessor<RemoveKeyframe>
 		{
 			class Backup { public IKeyframe Keyframe; }
 
@@ -294,7 +278,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class SetKeyframe : Operation
+	public sealed class SetKeyframe : Operation
 	{
 		public readonly IAnimationHost AnimationHost;
 		public readonly string PropertyPath;
@@ -335,7 +319,7 @@ namespace Tangerine.Core.Operations
 			AnimationId = animationId;
 		}
 
-		public class Processor : OperationProcessor<SetKeyframe>
+		public sealed class Processor : OperationProcessor<SetKeyframe>
 		{
 			class Backup
 			{
@@ -409,7 +393,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class InsertIntoList : Operation
+	public sealed class InsertIntoList : Operation
 	{
 		public readonly IList List;
 		public readonly int Index;
@@ -417,7 +401,7 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		protected InsertIntoList(IList list, int index, object element)
+		private InsertIntoList(IList list, int index, object element)
 		{
 			List = list;
 			Index = index;
@@ -426,14 +410,14 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(IList list, int index, object element) => DocumentHistory.Current.Perform(new InsertIntoList(list, index, element));
 
-		public class Processor : OperationProcessor<InsertIntoList>
+		public sealed class Processor : OperationProcessor<InsertIntoList>
 		{
 			protected override void InternalRedo(InsertIntoList op) => op.List.Insert(op.Index, op.Element);
 			protected override void InternalUndo(InsertIntoList op) => op.List.RemoveAt(op.Index);
 		}
 	}
 
-	public class RemoveFromList : Operation
+	public sealed class RemoveFromList : Operation
 	{
 		public readonly IList List;
 		public readonly int Index;
@@ -441,7 +425,7 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		protected RemoveFromList(IList list, int index)
+		private RemoveFromList(IList list, int index)
 		{
 			List = list;
 			Index = index;
@@ -449,7 +433,7 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(IList list, int index) => DocumentHistory.Current.Perform(new RemoveFromList(list, index));
 
-		public class Processor : OperationProcessor<RemoveFromList>
+		public sealed class Processor : OperationProcessor<RemoveFromList>
 		{
 			protected override void InternalRedo(RemoveFromList op)
 			{
@@ -461,7 +445,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class InsertIntoList<TList, TElement> : Operation where TList : IList<TElement>
+	public sealed class InsertIntoList<TList, TElement> : Operation where TList : IList<TElement>
 	{
 		public readonly TList List;
 		public readonly int Index;
@@ -469,7 +453,7 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		protected InsertIntoList(TList list, int index, TElement element)
+		private InsertIntoList(TList list, int index, TElement element)
 		{
 			List = list;
 			Index = index;
@@ -478,14 +462,14 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(TList list, int index, TElement element) => DocumentHistory.Current.Perform(new InsertIntoList<TList, TElement>(list, index, element));
 
-		public class Processor : OperationProcessor<InsertIntoList<TList, TElement>>
+		public sealed class Processor : OperationProcessor<InsertIntoList<TList, TElement>>
 		{
 			protected override void InternalRedo(InsertIntoList<TList, TElement> op) => op.List.Insert(op.Index, op.Element);
 			protected override void InternalUndo(InsertIntoList<TList, TElement> op) => op.List.RemoveAt(op.Index);
 		}
 	}
 
-	public class RemoveFromList<TList, TElement> : Operation where TList : IList<TElement>
+	public sealed class RemoveFromList<TList, TElement> : Operation where TList : IList<TElement>
 	{
 		public readonly TList List;
 		public readonly int Index;
@@ -493,7 +477,7 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		protected RemoveFromList(TList list, int index)
+		private RemoveFromList(TList list, int index)
 		{
 			List = list;
 			Index = index;
@@ -503,7 +487,7 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(TList list, int index) => DocumentHistory.Current.Perform(new RemoveFromList<TList, TElement>(list, index));
 
-		public class Processor : OperationProcessor<RemoveFromList<TList, TElement>>
+		public sealed class Processor : OperationProcessor<RemoveFromList<TList, TElement>>
 		{
 			protected override void InternalRedo(RemoveFromList<TList, TElement> op)
 			{
@@ -515,7 +499,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class AddIntoCollection<TCollection, TElement> : Operation where TCollection : ICollection<TElement>
+	public sealed class AddIntoCollection<TCollection, TElement> : Operation where TCollection : ICollection<TElement>
 	{
 		public readonly TCollection Collection;
 		public readonly TElement Element;
@@ -531,14 +515,14 @@ namespace Tangerine.Core.Operations
 		public static void Perform(TCollection collection, TElement element) =>
 			DocumentHistory.Current.Perform(new AddIntoCollection<TCollection, TElement>(collection, element));
 
-		public class Processor : OperationProcessor<AddIntoCollection<TCollection, TElement>>
+		public sealed class Processor : OperationProcessor<AddIntoCollection<TCollection, TElement>>
 		{
 			protected override void InternalRedo(AddIntoCollection<TCollection, TElement> op) => op.Collection.Add(op.Element);
 			protected override void InternalUndo(AddIntoCollection<TCollection, TElement> op) => op.Collection.Remove(op.Element);
 		}
 	}
 
-	public class RemoveFromCollection<TCollection, TElement> : Operation where TCollection : ICollection<TElement>
+	public sealed class RemoveFromCollection<TCollection, TElement> : Operation where TCollection : ICollection<TElement>
 	{
 		public readonly TCollection Collection;
 		public readonly TElement Element;
@@ -554,14 +538,14 @@ namespace Tangerine.Core.Operations
 		public static void Perform(TCollection collection, TElement element) =>
 			DocumentHistory.Current.Perform(new RemoveFromCollection<TCollection, TElement>(collection, element));
 
-		public class Processor : OperationProcessor<RemoveFromCollection<TCollection, TElement>>
+		public sealed class Processor : OperationProcessor<RemoveFromCollection<TCollection, TElement>>
 		{
 			protected override void InternalRedo(RemoveFromCollection<TCollection, TElement> op) => op.Collection.Remove(op.Element);
 			protected override void InternalUndo(RemoveFromCollection<TCollection, TElement> op) => op.Collection.Add(op.Element);
 		}
 	}
 
-	public class InsertIntoDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
+	public sealed class InsertIntoDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
 	{
 		public readonly TDictionary Dictionary;
 		public readonly TKey Key;
@@ -571,7 +555,7 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		protected InsertIntoDictionary(TDictionary dictionary, TKey key, TValue value)
+		private InsertIntoDictionary(TDictionary dictionary, TKey key, TValue value)
 		{
 			Dictionary = dictionary;
 			Key = key;
@@ -582,7 +566,7 @@ namespace Tangerine.Core.Operations
 		public static void Perform(TDictionary dictionary, TKey key, TValue value) =>
 			DocumentHistory.Current.Perform(new InsertIntoDictionary<TDictionary, TKey, TValue>(dictionary, key, value));
 
-		public class Processor : OperationProcessor<InsertIntoDictionary<TDictionary, TKey, TValue>>
+		public sealed class Processor : OperationProcessor<InsertIntoDictionary<TDictionary, TKey, TValue>>
 		{
 			protected override void InternalRedo(InsertIntoDictionary<TDictionary, TKey, TValue> op) =>
 				op.Dictionary[op.Key] = op.Value;
@@ -598,7 +582,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class RemoveFromDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
+	public sealed class RemoveFromDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
 	{
 		public readonly TDictionary Dictionary;
 		public readonly TKey Key;
@@ -606,7 +590,7 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		protected RemoveFromDictionary(TDictionary dictionary, TKey key)
+		private RemoveFromDictionary(TDictionary dictionary, TKey key)
 		{
 			Dictionary = dictionary;
 			Key = key;
@@ -616,7 +600,7 @@ namespace Tangerine.Core.Operations
 		public static void Perform(TDictionary dictionary, TKey key) =>
 			DocumentHistory.Current.Perform(new RemoveFromDictionary<TDictionary, TKey, TValue>(dictionary, key));
 
-		public class Processor : OperationProcessor<RemoveFromDictionary<TDictionary, TKey, TValue>>
+		public sealed class Processor : OperationProcessor<RemoveFromDictionary<TDictionary, TKey, TValue>>
 		{
 			protected override void InternalRedo(RemoveFromDictionary<TDictionary, TKey, TValue> op) =>
 				op.Dictionary.Remove(op.Key);
@@ -673,7 +657,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class SetMarker : Operation
+	public sealed class SetMarker : Operation
 	{
 		private readonly Marker marker;
 		private readonly bool removeDependencies;
@@ -714,7 +698,7 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public class Processor : OperationProcessor<SetMarker>
+		public sealed class Processor : OperationProcessor<SetMarker>
 		{
 			private class Backup
 			{
@@ -758,7 +742,7 @@ namespace Tangerine.Core.Operations
 
 	}
 
-	public class DeleteMarker : Operation
+	public sealed class DeleteMarker : Operation
 	{
 		private readonly Marker marker;
 		private readonly bool removeDependencies;
@@ -784,7 +768,7 @@ namespace Tangerine.Core.Operations
 			this.removeDependencies = removeDependencies;
 		}
 
-		public class Processor : OperationProcessor<DeleteMarker>
+		public sealed class Processor : OperationProcessor<DeleteMarker>
 		{
 			private class Backup
 			{
@@ -830,7 +814,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class SetComponent : Operation
+	public sealed class SetComponent : Operation
 	{
 		private readonly Node node;
 		private readonly NodeComponent component;
@@ -845,7 +829,7 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(Node node, NodeComponent component) => DocumentHistory.Current.Perform(new SetComponent(node, component));
 
-		public class Processor : OperationProcessor<SetComponent>
+		public sealed class Processor : OperationProcessor<SetComponent>
 		{
 			protected override void InternalRedo(SetComponent op) => op.node.Components.Add(op.component);
 			protected override void InternalUndo(SetComponent op) => op.node.Components.Remove(op.component);
@@ -853,7 +837,7 @@ namespace Tangerine.Core.Operations
 
 	}
 
-	public class DeleteComponent : Operation
+	public sealed class DeleteComponent : Operation
 	{
 		private readonly Node node;
 		private readonly NodeComponent component;
@@ -868,7 +852,7 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(Node node, NodeComponent component) => DocumentHistory.Current.Perform(new DeleteComponent(node, component));
 
-		public class Processor : OperationProcessor<DeleteComponent>
+		public sealed class Processor : OperationProcessor<DeleteComponent>
 		{
 			protected override void InternalRedo(DeleteComponent op) => op.node.Components.Remove(op.component);
 			protected override void InternalUndo(DeleteComponent op) => op.node.Components.Add(op.component);
@@ -1173,7 +1157,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class InvalidateAnimesh : Operation
+	public sealed class InvalidateAnimesh : Operation
 	{
 		public override bool IsChangingDocument => false;
 		private readonly Animesh animesh;
@@ -1185,7 +1169,7 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(Animesh animesh) => DocumentHistory.Current.Perform(new InvalidateAnimesh(animesh));
 
-		public class Processor : OperationProcessor<InvalidateAnimesh>
+		public sealed class Processor : OperationProcessor<InvalidateAnimesh>
 		{
 			protected override void InternalRedo(InvalidateAnimesh op) => op.animesh.Invalidate();
 			protected override void InternalUndo(InvalidateAnimesh op) => op.animesh.Invalidate();

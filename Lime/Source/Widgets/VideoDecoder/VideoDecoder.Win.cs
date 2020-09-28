@@ -160,7 +160,7 @@ namespace Lime
 				}
 				state = State.Started;
 				bool queueTaskCompleted = false;
-				
+
 				var queueTask = System.Threading.Tasks.Task.Run(() => {
 					try {
 						var audioIsEnded = false;

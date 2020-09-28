@@ -4,7 +4,7 @@ using Lime;
 
 namespace Tangerine.Core.Operations
 {
-	public class DistortionMeshProcessor : IOperationProcessor
+	public sealed class DistortionMeshProcessor : IOperationProcessor
 	{
 		public void Do(IOperation op)
 		{

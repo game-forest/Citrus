@@ -394,9 +394,9 @@ namespace Tangerine.Panels
 				get => SceneItem.Id;
 				set
 				{
-					Document.Current.History.DoTransaction(() => {
-						SetProperty.Perform(SceneItem, nameof(Node.Id), value);
-					});
+					if (SceneItem.Id != value) {
+						SceneItem.Id = value;
+					}
 				}
 			}
 

@@ -7,7 +7,7 @@ using Tangerine.Core.Components;
 
 namespace Tangerine.UI.Timeline.Operations
 {
-	public class ClearGridSelection : Operation
+	public sealed class ClearGridSelection : Operation
 	{
 		public override bool IsChangingDocument => false;
 
@@ -18,7 +18,7 @@ namespace Tangerine.UI.Timeline.Operations
 
 		private ClearGridSelection() {}
 
-		public class Processor : OperationProcessor<ClearGridSelection>
+		public sealed class Processor : OperationProcessor<ClearGridSelection>
 		{
 			class Backup { public List<Core.Components.GridSpanList> Spans; }
 
