@@ -5,7 +5,7 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline
 {
-	public class EnsureCurrentColumnVisibleIfContainerChanged : OperationProcessor<Core.Operations.ISetContainer>
+	public sealed class EnsureCurrentColumnVisibleIfContainerChanged : OperationProcessor<Core.Operations.ISetContainer>
 	{
 		protected override void InternalDo(Core.Operations.ISetContainer op)
 		{

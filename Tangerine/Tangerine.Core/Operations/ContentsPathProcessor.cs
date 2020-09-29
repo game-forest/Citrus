@@ -2,7 +2,7 @@ using Lime;
 
 namespace Tangerine.Core.Operations
 {
-	public class ContentsPathProcessor : IOperationProcessor
+	public sealed class ContentsPathProcessor : IOperationProcessor
 	{
 		public void Do(IOperation op)
 		{

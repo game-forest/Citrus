@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Tangerine.Core.Operations
 {
-	public class RemoveKeyframeRange : Operation
+	public sealed class RemoveKeyframeRange : Operation
 	{
 		public override bool IsChangingDocument => true;
 
-		private IAnimator animator;
-		private int start;
-		private int end;
-		private IAnimationHost owner;
+		private readonly IAnimator animator;
+		private readonly int start;
+		private readonly int end;
+		private readonly IAnimationHost owner;
 
 		private RemoveKeyframeRange(IAnimator animator, int start, int end)
 		{
@@ -25,7 +25,7 @@ namespace Tangerine.Core.Operations
 			Document.Current.History.Perform(new RemoveKeyframeRange(animator, start, end));
 		}
 
-		public class Processor : OperationProcessor<RemoveKeyframeRange>
+		public sealed class Processor : OperationProcessor<RemoveKeyframeRange>
 		{
 			private class Backup
 			{

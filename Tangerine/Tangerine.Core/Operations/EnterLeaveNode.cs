@@ -7,7 +7,7 @@ namespace Tangerine.Core.Operations
 
 	public static class EnterNode
 	{
-		private class SetContainer : SetProperty, ISetContainer
+		private sealed class SetContainer : SetProperty, ISetContainer
 		{
 			public SetContainer(Node value) : base(Document.Current, nameof(Document.Container), value, false) { }
 		}

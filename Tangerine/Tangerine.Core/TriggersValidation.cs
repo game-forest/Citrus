@@ -5,7 +5,7 @@ using Tangerine.Core.Operations;
 
 namespace Tangerine.Core
 {
-	public class TriggersValidatorOnSetProperty : TriggersValidatorProcessor<SetProperty>
+	public sealed class TriggersValidatorOnSetProperty : TriggersValidatorProcessor<SetProperty>
 	{
 		protected override void InternalRedo(SetProperty op)
 		{
@@ -21,7 +21,7 @@ namespace Tangerine.Core
 
 	}
 
-	public class TriggersValidatorOnSetKeyframe : TriggersValidatorProcessor<SetKeyframe>
+	public sealed class TriggersValidatorOnSetKeyframe : TriggersValidatorProcessor<SetKeyframe>
 	{
 
 		private class Backup

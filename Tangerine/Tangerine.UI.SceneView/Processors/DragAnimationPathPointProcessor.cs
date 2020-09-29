@@ -67,8 +67,7 @@ namespace Tangerine.UI.SceneView
 					var curMousePos = sv.MousePosition * transform;
 					var diff = curMousePos - initMousePos;
 					animator.ResetCache();
-					Core.Operations.SetProperty.Perform(
-						typeof(IKeyframe), key, nameof(IKeyframe.Value), (Vector2)key.Value + diff);
+					Core.Operations.SetProperty.Perform(key, nameof(IKeyframe.Value), (Vector2)key.Value + diff);
 					yield return null;
 				}
 				sv.Input.ConsumeKey(Key.Mouse0);

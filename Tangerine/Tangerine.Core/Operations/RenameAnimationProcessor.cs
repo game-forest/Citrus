@@ -7,7 +7,7 @@ using Lime;
 
 namespace Tangerine.Core.Operations
 {
-	public class RenameAnimationProcessor : OperationProcessor<SetProperty>
+	public sealed class RenameAnimationProcessor : OperationProcessor<SetProperty>
 	{
 		protected override void InternalDo(SetProperty op)
 		{

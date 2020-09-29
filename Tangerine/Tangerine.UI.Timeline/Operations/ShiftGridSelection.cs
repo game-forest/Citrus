@@ -7,7 +7,7 @@ using Tangerine.Core.Components;
 
 namespace Tangerine.UI.Timeline.Operations
 {
-	public class ShiftGridSelection : Operation
+	public sealed class ShiftGridSelection : Operation
 	{
 		public override bool IsChangingDocument => false;
 
@@ -23,7 +23,7 @@ namespace Tangerine.UI.Timeline.Operations
 			Offset = offset;
 		}
 
-		public class Processor : OperationProcessor<ShiftGridSelection>
+		public sealed class Processor : OperationProcessor<ShiftGridSelection>
 		{
 			class Backup { public List<Core.Components.GridSpanList> Spans; }
 

@@ -3,11 +3,11 @@ using Lime;
 
 namespace Tangerine.Core.Operations
 {
-	public class TimelineHorizontalShift : Operation
+	public sealed class TimelineHorizontalShift : Operation
 	{
 		public override bool IsChangingDocument => true;
 
-		private int column;
+		private readonly int column;
 		private int delta;
 
 		private TimelineHorizontalShift(int column, int delta)
@@ -21,7 +21,7 @@ namespace Tangerine.Core.Operations
 			Document.Current.History.Perform(new TimelineHorizontalShift(column, delta));
 		}
 
-		public class Processor : OperationProcessor<TimelineHorizontalShift>
+		public sealed class Processor : OperationProcessor<TimelineHorizontalShift>
 		{
 			protected override void InternalRedo(TimelineHorizontalShift op)
 			{

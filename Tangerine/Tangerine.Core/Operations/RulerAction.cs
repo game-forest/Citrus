@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tangerine.Core.Operations
 {
-	public class DeleteRuler : Operation
+	public sealed class DeleteRuler : Operation
 	{
 		private readonly Ruler ruler;
 		private readonly RulerLine rulerLine;
@@ -18,13 +18,13 @@ namespace Tangerine.Core.Operations
 			DocumentHistory.Current.Perform(new DeleteRuler(ruler, rulerLine));
 		}
 
-		protected DeleteRuler(Ruler ruler, RulerLine rulerLine)
+		private DeleteRuler(Ruler ruler, RulerLine rulerLine)
 		{
 			this.ruler = ruler;
 			this.rulerLine = rulerLine;
 		}
 
-		public class Processor : OperationProcessor<DeleteRuler>
+		public sealed class Processor : OperationProcessor<DeleteRuler>
 		{
 
 			protected override void InternalRedo(DeleteRuler op)
@@ -40,7 +40,7 @@ namespace Tangerine.Core.Operations
 
 	}
 
-	public class CreateRuler : Operation
+	public sealed class CreateRuler : Operation
 	{
 		private readonly Ruler ruler;
 		private readonly RulerLine rulerLine;
@@ -52,13 +52,13 @@ namespace Tangerine.Core.Operations
 			DocumentHistory.Current.Perform(new CreateRuler(ruler, rulerLine));
 		}
 
-		protected CreateRuler(Ruler ruler, RulerLine rulerLine)
+		private CreateRuler(Ruler ruler, RulerLine rulerLine)
 		{
 			this.ruler = ruler;
 			this.rulerLine = rulerLine;
 		}
 
-		public class Processor : OperationProcessor<CreateRuler>
+		public sealed class Processor : OperationProcessor<CreateRuler>
 		{
 
 			protected override void InternalRedo(CreateRuler op)

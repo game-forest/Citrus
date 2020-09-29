@@ -4,7 +4,7 @@ using Lime;
 
 namespace Tangerine.Core.Operations
 {
-	public class TimelineColumnRemove : Operation
+	public sealed class TimelineColumnRemove : Operation
 	{
 		public override bool IsChangingDocument => true;
 
@@ -22,7 +22,7 @@ namespace Tangerine.Core.Operations
 			Document.Current.History.Perform(new TimelineColumnRemove(column));
 		}
 
-		public class Processor : OperationProcessor<TimelineColumnRemove>
+		public sealed class Processor : OperationProcessor<TimelineColumnRemove>
 		{
 			protected override void InternalRedo(TimelineColumnRemove op)
 			{

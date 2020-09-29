@@ -3,14 +3,14 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline.Operations
 {
-	public class SetCurrentColumn : Operation
+	public sealed class SetCurrentColumn : Operation
 	{
 		private static bool isScrollingFrozen;
 		// Evgenii Polikutin: needed for RulerbarMouseScrollProcessor to avoid extra operations
 		public static bool IsFrozen;
 
-		protected int Column;
-		protected Animation Animation;
+		private readonly int Column;
+		private readonly Animation Animation;
 
 		public override bool IsChangingDocument => false;
 
@@ -43,7 +43,7 @@ namespace Tangerine.UI.Timeline.Operations
 			Animation = animation;
 		}
 
-		public class Processor : OperationProcessor<SetCurrentColumn>
+		public sealed class Processor : OperationProcessor<SetCurrentColumn>
 		{
 			class Backup { public int Column; }
 

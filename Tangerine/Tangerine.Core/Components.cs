@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Lime;
 
 using System.Linq;
+using Tangerine.Core.Operations;
 
 namespace Tangerine.Core.Components
 {
@@ -64,7 +65,9 @@ namespace Tangerine.Core.Components
 		public override string Id
 		{
 			get => Node.Id;
-			set => Node.Id = value;
+			set => Document.Current.History.DoTransaction(
+				() => SetProperty.Perform(Node, nameof(Node.Id), value)
+			);
 		}
 	}
 
@@ -75,7 +78,9 @@ namespace Tangerine.Core.Components
 		public override string Id
 		{
 			get => Folder.Id;
-			set => Folder.Id = value;
+			set => Document.Current.History.DoTransaction(
+				() => SetProperty.Perform(Folder, nameof(Lime.Folder.Descriptor.Id), value)
+			);
 		}
 	}
 
@@ -104,7 +109,9 @@ namespace Tangerine.Core.Components
 		public override string Id
 		{
 			get => Track.Id;
-			set => Track.Id = value;
+			set => Document.Current.History.DoTransaction(
+				() => SetProperty.Perform(Track, nameof(AnimationTrack.Id), value)
+			);
 		}
 	}
 
