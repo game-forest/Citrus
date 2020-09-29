@@ -30,6 +30,23 @@
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\iOS\Debug</OutputPath>
+    <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;DEBUG;iOS;OPENGL;OPENAL;PROFILER</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchTlsProvider>Default</MtouchTlsProvider>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>
     </DebugType>
@@ -39,6 +56,21 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;iOS;OPENGL;OPENAL</DefineConstants>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <DebugSymbols>false</DebugSymbols>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchTlsProvider>Default</MtouchTlsProvider>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU' ">
+    <DebugType>
+    </DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iOS\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;iOS;OPENGL;OPENAL;PROFILER</DefineConstants>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DebugSymbols>false</DebugSymbols>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>

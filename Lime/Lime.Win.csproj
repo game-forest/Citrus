@@ -32,6 +32,22 @@
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Profiler|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;WIN;OPENGL;OPENAL;ANGLE;DEBUG;PROFILER</DefineConstants>
+    <DebugType>full</DebugType>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <DefineConstants>WIN;OPENGL;OPENAL</DefineConstants>
@@ -44,7 +60,32 @@
     <LangVersion>7.3</LangVersion>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Profiler|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <DefineConstants>WIN;OPENGL;OPENAL;PROFILER</DefineConstants>
+    <DebugType>full</DebugType>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;PROFILER</DefineConstants>
@@ -58,6 +99,18 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>WIN;OPENGL;OPENAL</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>WIN;OPENGL;OPENAL;PROFILER</DefineConstants>
@@ -100,6 +153,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Tangerine|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug.Tangerine\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;TANGERINE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Tangerine.Profiler|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug.Tangerine\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;TANGERINE;PROFILER</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -121,6 +186,17 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Tangerine|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release.Tangerine\</OutputPath>
+    <DefineConstants>WIN;OPENGL;OPENAL;TANGERINE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Tangerine.Profiler|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Release.Tangerine\</OutputPath>
     <DefineConstants>WIN;OPENGL;OPENAL;TANGERINE;PROFILER</DefineConstants>
