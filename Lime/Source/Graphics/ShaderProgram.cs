@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Lime.Graphics.Platform;
 #if PROFILER
 using Lime.Profiler.Graphics;
@@ -10,6 +11,8 @@ namespace Lime
 {
 	public class ShaderProgram
 	{
+		public static readonly ShaderProgram Empty = new ShaderProgram();
+
 		public class AttribLocation
 		{
 			public string Name;
@@ -32,15 +35,17 @@ namespace Lime
 		private Uniform[] uniforms;
 
 #if PROFILER
-		public OverdrawBehavior OverdrawBehavior { get; }
+		public ShaderProgram OverdrawProgram { get; }
 #endif // PROFILER
+
+		private ShaderProgram() { }
 
 		public ShaderProgram(
 			IEnumerable<Shader>         shaders,
 			IEnumerable<AttribLocation> attribLocations,
 			IEnumerable<Sampler>        samplers
 #if PROFILER
-			, OverdrawBehavior          overdrawBehavior = null
+			, ShaderProgram             overdrawShaderProgram = null
 #endif // PROFILER
 			)
 		{
@@ -48,11 +53,11 @@ namespace Lime
 			this.attribLocations = attribLocations.ToArray();
 			this.samplers = samplers.ToArray();
 #if PROFILER
-			OverdrawBehavior CreateDefaultOverdrawBehavior() {
-				var program = new OverdrawShaderProgram(shaders, attribLocations, samplers);
-				return new OverdrawBehavior(program, OverdrawBehavior.DefaultBlending);
+			ShaderProgram CreateDefaultOverdrawProgram() {
+				var overdrawShaders = shaders.Select(s => new OverdrawShader(s.Stage, s.Source));
+				return new ShaderProgram(overdrawShaders, attribLocations, samplers, overdrawShaderProgram: Empty);
 			}
-			OverdrawBehavior = overdrawBehavior ?? CreateDefaultOverdrawBehavior();
+			OverdrawProgram = overdrawShaderProgram ?? CreateDefaultOverdrawProgram();
 #endif // PROFILER
 		}
 
@@ -205,6 +210,37 @@ namespace Lime
 					throw new NotSupportedException($"name: {name}, type: {type.ToString()}");
 			}
 		}
+
+#if PROFILER
+		private class OverdrawShader : Shader
+		{
+			public OverdrawShader(ShaderStageMask stage, string source) :
+				base(stage, ReplaceShader(stage, source)) { }
+
+			private static string ReplaceShader(ShaderStageMask stage, string source)
+			{
+				if (stage != ShaderStageMask.Fragment) {
+					return source;
+				}
+				var match = Regex.Match(source, @"void\s+main\s*[^{]*");
+				if (!match.Success) {
+					throw new InvalidOperationException();
+				}
+				int bodyLocation = match.Index + match.Length;
+				int curlyBracesCount = 0;
+				for (int i = bodyLocation; i < source.Length; i++) {
+					curlyBracesCount += source[i] == '{' ? 1 : 0;
+					curlyBracesCount -= source[i] == '}' ? 1 : 0;
+					if (curlyBracesCount == 0) {
+						return source.Substring(0, bodyLocation + 1) +
+							   $"gl_FragColor = vec4({OverdrawShaderProgram.Step},0,0,1);" +
+							   source.Substring(i);
+					}
+				}
+				throw new InvalidOperationException();
+			}
+		}
+#endif // PROFILER
 	}
 
 	internal struct Uniform

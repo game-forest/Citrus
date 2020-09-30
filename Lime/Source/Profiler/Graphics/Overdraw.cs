@@ -1,9 +1,6 @@
 #if PROFILER
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using ShaderStageMask = Lime.Graphics.Platform.ShaderStageMask;
 
 namespace Lime.Profiler.Graphics
 {
@@ -75,37 +72,6 @@ namespace Lime.Profiler.Graphics
 	}
 
 	/// <summary>
-	/// Defines a ShaderProgram and BlendState for overdraw mode.
-	/// </summary>
-	public class OverdrawBehavior
-	{
-		public static readonly OverdrawBehavior Empty;
-		public static readonly BlendState DefaultBlending;
-
-		static OverdrawBehavior()
-		{
-			Empty = new OverdrawBehavior();
-			DefaultBlending = new BlendState {
-				Enable    = true,
-				BlendFunc = BlendFunc.Add,
-				SrcBlend  = Blend.One,
-				DstBlend  = Blend.One
-			};
-		}
-
-		public BlendState Blending { get; }
-		public ShaderProgram Program { get; }
-
-		private OverdrawBehavior() { }
-
-		public OverdrawBehavior(ShaderProgram program, BlendState blending)
-		{
-			Program = program;
-			Blending = blending;
-		}
-	}
-
-	/// <summary>
 	/// Forces the Renderer to use the Overdraw version of the materials.
 	/// </summary>
 	public static class OverdrawMaterialsScope
@@ -121,7 +87,7 @@ namespace Lime.Profiler.Graphics
 		public static void Leave() => --scopesCounter;
 	}
 
-	public class OverdrawShaderProgram : ShaderProgram
+	public static class OverdrawShaderProgram
 	{
 		/// <summary>
 		/// Since the recording and storage of information about overdraw is carried out
@@ -134,45 +100,16 @@ namespace Lime.Profiler.Graphics
 		/// </summary>
 		public static readonly float Step = 1f / StatesCount;
 
-		/// <summary>
-		/// Creates an overdraw ShaderProgram for the given shaders.
-		/// </summary>
-		public OverdrawShaderProgram(
-			IEnumerable<Shader>          shaders,
-			IEnumerable<AttribLocation>  attribLocations,
-			IEnumerable<Sampler>         samplers)
-		: base(ReplaceShaders(shaders), attribLocations, samplers, OverdrawBehavior.Empty) { }
+		public static readonly BlendState DefaultBlending;
 
-		private static IEnumerable<Shader> ReplaceShaders(IEnumerable<Shader> shaders) =>
-			shaders.Select((s) => (Shader)new ShaderReplacer(s.Stage, s.Source));
-
-		private class ShaderReplacer : Shader
+		static OverdrawShaderProgram()
 		{
-			public ShaderReplacer(ShaderStageMask stage, string source) :
-				base(stage, ReplaceShader(stage, source)) { }
-
-			private static string ReplaceShader(ShaderStageMask stage, string source)
-			{
-				if (stage != ShaderStageMask.Fragment) {
-					return source;
-				}
-				var match = Regex.Match(source, @"void\s+main\s*[^{]*");
-				if (!match.Success) {
-					throw new InvalidOperationException();
-				}
-				int bodyLocation = match.Index + match.Length;
-				int curlyBracesCount = 0;
-				for (int i = bodyLocation; i < source.Length; i++) {
-					curlyBracesCount += source[i] == '{' ? 1 : 0;
-					curlyBracesCount -= source[i] == '}' ? 1 : 0;
-					if (curlyBracesCount == 0) {
-						return source.Substring(0, bodyLocation + 1) +
-							   $"gl_FragColor = vec4({Step},0,0,1);" +
-							   source.Substring(i);
-					}
-				}
-				throw new InvalidOperationException();
-			}
+			DefaultBlending = new BlendState {
+				Enable = true,
+				BlendFunc = BlendFunc.Add,
+				SrcBlend = Blend.One,
+				DstBlend = Blend.One
+			};
 		}
 	}
 
@@ -379,7 +316,7 @@ namespace Lime.Profiler.Graphics
 					CreateShaders(),
 					ShaderPrograms.Attributes.GetLocations(),
 					ShaderPrograms.GetSamplers(),
-					OverdrawBehavior.Empty)
+					ShaderProgram.Empty)
 				{ }
 
 				private static Shader[] CreateShaders()
