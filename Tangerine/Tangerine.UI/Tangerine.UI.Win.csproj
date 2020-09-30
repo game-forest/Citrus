@@ -55,7 +55,6 @@
     <Compile Include="Tooltip\Tooltip.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
     <Compile Include="Utils\RichTextHighlightComponent.cs" />
-    <Compile Include="Utils\SimpleTextHighlightPresenter.cs" />
     <Compile Include="Widgets\Lookup\FuzzyStringSearch.cs" />
     <Compile Include="Widgets\Lookup\LookupDataSource.cs" />
     <Compile Include="Widgets\Lookup\LookupFilter.cs" />
