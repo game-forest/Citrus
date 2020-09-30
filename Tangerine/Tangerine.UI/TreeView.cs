@@ -533,7 +533,7 @@ namespace Tangerine.UI
 		private IEnumerator<object> HandleCommands()
 		{
 			while (true) {
-				if (!Widget.Focused?.SameOrDescendantOf(scrollView) ?? true) {
+				if (!scrollView.Content.IsFocused()) {
 					yield return null;
 					continue;
 				}
