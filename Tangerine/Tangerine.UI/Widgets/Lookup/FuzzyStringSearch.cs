@@ -10,10 +10,10 @@ namespace Tangerine.UI
 	{
 		private readonly ThreadLocal<Data> threadLocalData = new ThreadLocal<Data>(() => new Data());
 
-		public bool DoesTextMatch(string text, string pattern, ICollection<int> matches, out int distance, out int gapsCount)
+		public bool DoesTextMatch(string text, string pattern, ICollection<int> matches, out int distance, out int gapCount)
 		{
 			distance = 0;
-			gapsCount = 0;
+			gapCount = 0;
 			if (string.IsNullOrEmpty(text)) {
 				return string.IsNullOrEmpty(pattern);
 			}
@@ -26,7 +26,7 @@ namespace Tangerine.UI
 			var patternMatching = 0;
 			for (var ti = 0; ti < text.Length; ti++) {
 				for (var pi = 0; pi < pattern.Length && pi <= patternMatching; pi++) {
-					if (!IsCharsEquals(pattern[pi], text[ti])) {
+					if (!AreCharsEquals(pattern[pi], text[ti])) {
 						continue;
 					}
 					if (pi == 0) {
@@ -74,27 +74,27 @@ namespace Tangerine.UI
 				return false;
 			}
 			var matchIndex = -1;
-			var minGapsCount = int.MaxValue;
+			var minGapCount = int.MaxValue;
 			var minDistance = int.MaxValue;
 			for (var i = 0; i < data.Count; i++) {
 				if (
 					data.Lengths[i] == pattern.Length &&
-					(minGapsCount > data.Gaps[i] || minGapsCount == data.Gaps[i] && minDistance > data.Distances[i])
+					(minGapCount > data.Gaps[i] || minGapCount == data.Gaps[i] && minDistance > data.Distances[i])
 				) {
 					matchIndex = i;
-					minGapsCount = data.Gaps[i];
+					minGapCount = data.Gaps[i];
 					minDistance = data.Distances[i];
 				}
 			}
 			distance = minDistance;
-			gapsCount = minGapsCount;
+			gapCount = minGapCount;
 			for (var pi = 0; pi < pattern.Length; pi++) {
 				matches.Add(data.Matches[matchIndex, pi]);
 			}
 			return true;
 		}
 
-		private static bool IsCharsEquals(char lhs, char rhs)
+		private static bool AreCharsEquals(char lhs, char rhs)
 		{
 			if (lhs == '\\' || lhs == '/') {
 				return rhs == '\\' || rhs == '/';
@@ -171,6 +171,8 @@ namespace Tangerine.UI
 					}
 					while (current < min) {
 						current *= 2;
+						// Maximum object size allowed in the GC Heap at 2GB, even on the 64-bit version of the runtime
+						// https://docs.microsoft.com/en-us/archive/blogs/joshwil/bigarrayt-getting-around-the-2gb-array-size-limit
 						if (current > 2146435071) {
 							return 2146435071;
 						}

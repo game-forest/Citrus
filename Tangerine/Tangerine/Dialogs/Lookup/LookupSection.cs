@@ -68,7 +68,7 @@ namespace Tangerine
 
 		protected IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items, CancellationToken cancellationToken)
 		{
-			var itemsTemp = new List<(LookupDialogItem Item, int HeaderDistance, int HeaderGapsCount, int NameDistance, int NameGapsCount)>();
+			var itemsTemp = new List<(LookupDialogItem Item, int HeaderDistance, int HeaderGapCount, int NameDistance, int NameGapCount)>();
 			var itemsHighlights = new List<(LookupDialogItem Item, int[] HeaderHighlightSymbolsIndices, int[] NameHighlightSymbolsIndices)>(items.Count);
 			if (!string.IsNullOrEmpty(text)) {
 				var headerMatches = new List<int>(text.Length);
@@ -81,22 +81,22 @@ namespace Tangerine
 						text,
 						headerMatches,
 						out var headerDistance,
-						out var headerGapsCount
+						out var headerGapCount
 					);
 					var doesNameMatchFuzzySearch = Sections.FuzzyStringSearch.DoesTextMatch(
 						item.Name.Text,
 						text,
 						nameMatches,
 						out var nameDistance,
-						out var nameGapsCount
+						out var nameGapCount
 					);
 					if (doesHeaderMatchFuzzySearch || doesNameMatchFuzzySearch) {
 						itemsTemp.Add((
 							item,
 							doesHeaderMatchFuzzySearch ? headerDistance : int.MaxValue,
-							doesHeaderMatchFuzzySearch ? headerGapsCount : int.MaxValue,
+							doesHeaderMatchFuzzySearch ? headerGapCount : int.MaxValue,
 							doesNameMatchFuzzySearch ? nameDistance : int.MaxValue,
-							doesNameMatchFuzzySearch ? nameGapsCount : int.MaxValue
+							doesNameMatchFuzzySearch ? nameGapCount : int.MaxValue
 						));
 						itemsHighlights.Add((
 							item,
@@ -110,7 +110,7 @@ namespace Tangerine
 					nameMatches.Clear();
 				}
 				itemsTemp.Sort((lhs, rhs) => {
-					var result = lhs.HeaderGapsCount.CompareTo(rhs.HeaderGapsCount);
+					var result = lhs.HeaderGapCount.CompareTo(rhs.HeaderGapCount);
 					if (result != 0) {
 						return result;
 					}
@@ -118,7 +118,7 @@ namespace Tangerine
 					if (result != 0) {
 						return result;
 					}
-					result = lhs.NameGapsCount.CompareTo(rhs.NameGapsCount);
+					result = lhs.NameGapCount.CompareTo(rhs.NameGapCount);
 					return result != 0 ? result : lhs.NameDistance.CompareTo(rhs.NameDistance);
 				});
 				foreach (var (item, headerHighlightSymbolsIndices, nameHighlightSymbolsIndices) in itemsHighlights) {

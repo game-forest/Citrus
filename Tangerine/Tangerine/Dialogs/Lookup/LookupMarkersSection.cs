@@ -40,7 +40,7 @@ namespace Tangerine
 							a = node.Animations[animation.OwnerNode.Animations.IndexOf(animation)];
 						}
 						var document = Document.Current;
-						Document.Current.History.DoTransaction(() => {
+						document.History.DoTransaction(() => {
 							if (navigateToNode) {
 								SetProperty.Perform(document, nameof(Document.SelectedAnimation), a, isChangingDocument: false);
 							}

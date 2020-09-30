@@ -69,7 +69,7 @@ namespace Tangerine
 		private List<LookupItem> GetLookupItems(LookupWidget lookupWidget, CancellationToken cancellationToken)
 		{
 			var items = new List<LookupItem>();
-			foreach (var (_, asset) in Project.Current.AssetsDatabase) {
+			foreach (var (_, asset) in Project.Current.AssetDatabase) {
 				cancellationToken.ThrowIfCancellationRequested();
 				var fileName = Path.GetFileName(asset.Path);
 				Action action;

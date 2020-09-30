@@ -46,12 +46,12 @@ namespace Tangerine.UI
 
 		public virtual IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items)
 		{
-			var itemsTemp = new List<(LookupItem item, int Distance, int GapsCount)>();
+			var itemsTemp = new List<(LookupItem item, int Distance, int GapCount)>();
 			if (!string.IsNullOrEmpty(text)) {
 				var matches = new List<int>(text.Length);
 				foreach (var item in items) {
-					if (fuzzyStringSearch.DoesTextMatch(item.Name.Text, text, matches, out var distance, out var gapsCount)) {
-						itemsTemp.Add((item, distance, gapsCount));
+					if (fuzzyStringSearch.DoesTextMatch(item.Name.Text, text, matches, out var distance, out var gapCount)) {
+						itemsTemp.Add((item, distance, gapCount));
 						item.Name.HighlightSymbolsIndices = matches.ToArray();
 					} else {
 						item.Name.HighlightSymbolsIndices = null;
@@ -59,7 +59,7 @@ namespace Tangerine.UI
 					matches.Clear();
 				}
 				itemsTemp.Sort((lhs, rhs) => {
-					var result = lhs.GapsCount.CompareTo(rhs.GapsCount);
+					var result = lhs.GapCount.CompareTo(rhs.GapCount);
 					return result != 0 ? result : lhs.Distance.CompareTo(rhs.Distance);
 				});
 				foreach (var (item, _, _) in itemsTemp) {

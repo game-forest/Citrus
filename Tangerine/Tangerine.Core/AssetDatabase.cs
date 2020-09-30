@@ -6,12 +6,12 @@ using System.Threading;
 
 namespace Tangerine.Core
 {
-	public class AssetsDatabase : IEnumerable<KeyValuePair<string, AssetsDatabase.Entry>>
+	public class AssetDatabase : IEnumerable<KeyValuePair<string, AssetDatabase.Entry>>
 	{
 		private IReadOnlyDictionary<string, Entry> items;
 		private CancellationTokenSource scanningCancellationSource;
 
-		public AssetsDatabase()
+		public AssetDatabase()
 		{
 			items = GetAssetsDictionary(CancellationToken.None);
 		}
