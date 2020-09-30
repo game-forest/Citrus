@@ -30,7 +30,7 @@ namespace Tangerine
 				var item = new LookupDialogItem(
 					node.Id,
 					$"Type: {nodeType.Name}; {(node.Parent != null ? $"Parent: {node.Parent}" : "Root node")}",
-					NodeIconPool.GetTexture(nodeType),
+					NodeIconPool.GetTexture(node),
 					() => {
 						NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
 						Sections.Drop();
