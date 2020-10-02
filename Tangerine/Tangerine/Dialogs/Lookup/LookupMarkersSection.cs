@@ -33,11 +33,12 @@ namespace Tangerine
 					() => {
 						var a = animation;
 						if (navigateToNode) {
+							var animationIndex = animation.OwnerNode.Animations.IndexOf(animation);
 							var node = LookupNodesSection.NavigateToDocumentNode(animation.OwnerNode, asContainer: true);
 							if (node == null) {
 								return;
 							}
-							a = node.Animations[animation.OwnerNode.Animations.IndexOf(animation)];
+							a = node.Animations[animationIndex];
 						}
 						var document = Document.Current;
 						document.History.DoTransaction(() => {
