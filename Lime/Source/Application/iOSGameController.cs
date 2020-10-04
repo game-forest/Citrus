@@ -36,7 +36,7 @@ namespace Lime
 				}
 				View = new MetalGameView(UIScreen.MainScreen.Bounds);
 			} else {
-				View = new GLGameView(UIScreen.MainScreen.Bounds);
+				View = new GLGameView(UIScreen.MainScreen.Bounds, () => IsViewAppeared);
 			}
 			View.MultipleTouchEnabled = true;
 			((IGameView)View).UpdateFrame += (delta) => ProcessTextInput();
