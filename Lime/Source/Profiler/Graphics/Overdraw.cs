@@ -48,8 +48,8 @@ namespace Lime.Profiler.Graphics
 		/// </summary>
 		public static event Action<float, int> MetricCreated;
 
-		public static void InvokeMetricCreated(float avgOverdraw, int pixelsCount) =>
-			MetricCreated?.Invoke(avgOverdraw, pixelsCount);
+		public static void InvokeMetricCreated(float averageOverdraw, int pixelCount) =>
+			MetricCreated?.Invoke(averageOverdraw, pixelCount);
 
 		public static void UpdateStarted()
 		{

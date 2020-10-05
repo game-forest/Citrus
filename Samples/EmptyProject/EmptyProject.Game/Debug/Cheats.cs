@@ -104,8 +104,27 @@ namespace EmptyProject.Debug
 			debugSection.Item("Toggle overdraw visualization", () => {
 				Lime.Profiler.Graphics.Overdraw.Enabled = !Lime.Profiler.Graphics.Overdraw.Enabled;
 			});
+			debugSection.Item("Toggle overdraw metric", () => {
+				var value = Lime.Profiler.Graphics.Overdraw.MetricRequired = !Lime.Profiler.Graphics.Overdraw.MetricRequired;
+				if (value) {
+					Lime.Profiler.Graphics.Overdraw.MetricCreated += Overdraw_MetricCreated;
+				} else {
+					Lime.Profiler.Graphics.Overdraw.MetricCreated -= Overdraw_MetricCreated;
+				}
+			});
 #endif // PROFILER
 		}
+
+#if PROFILER
+		private static void Overdraw_MetricCreated(float averageOverdraw, int pixelCount)
+		{
+			overdrawPixelCount = pixelCount;
+			overdrawAverageOverdraw = averageOverdraw;
+		}
+
+		private static int overdrawPixelCount = 0;
+		private static float overdrawAverageOverdraw = 0;
+#endif // PROFILER
 
 		public static void AddDebugInfo(string info)
 		{
@@ -114,8 +133,7 @@ namespace EmptyProject.Debug
 
 		public static void RenderDebugInfo()
 		{
-			if (!IsDebugInfoVisible)
-			{
+			if (!IsDebugInfoVisible) {
 				return;
 			}
 
@@ -128,11 +146,17 @@ namespace EmptyProject.Debug
 			float x = 5;
 			float y = 0;
 
-			var fields = new[] {
+			var fields = new List<string> {
 				$"FPS: {The.Window.FPS}",
 				$"Window Size: {The.Window.ClientSize}",
 				$"World Size: {The.World.Size}",
 			};
+#if PROFILER
+			if (Lime.Profiler.Graphics.Overdraw.MetricRequired) {
+				fields.Add($"Overdraw pixel count: {overdrawPixelCount}");
+				fields.Add($"Overdraw average: {overdrawAverageOverdraw}");
+			}
+#endif // PROFILER
 
 			var text = string.Join("\n", fields.Concat(debugInfoStrings));
 
