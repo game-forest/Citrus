@@ -176,7 +176,8 @@ namespace Tangerine.UI.SceneView
 				{
 					Renderer.PushState(RenderState.All);
 					// Hack: use the current state of Transform2 since it may be configured for generating SceneViewThumbnail.
-					Renderer.Transform2 = LocalToWorldTransform * Renderer.Transform2;
+					var sceneTransform2 = LocalToWorldTransform * Renderer.Transform2;
+					Renderer.Transform2 = sceneTransform2;
 #if PROFILER
 					RenderTargetsQueue renderTargetsQueue = null;
 					RenderTexture renderTexture = null;
@@ -221,7 +222,7 @@ namespace Tangerine.UI.SceneView
 					if (Overdraw.EnabledAtRenderThread) {
 						OverdrawInterpreter.DrawResults(renderTexture, Frame.Transform, Frame.Size);
 						Renderer.PushState(RenderState.Transform2);
-						Renderer.Transform2 = LocalToWorldTransform * Renderer.Transform2;
+						Renderer.Transform2 = sceneTransform2;
 						OverdrawForeground.Render();
 						Renderer.PopState();
 					}
