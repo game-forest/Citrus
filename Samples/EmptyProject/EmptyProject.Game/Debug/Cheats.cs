@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using EmptyProject.Application;
 using Lime;
@@ -70,6 +70,7 @@ namespace EmptyProject.Debug
 			}
 
 			var menu = new RainbowDash.Menu(The.World, Layers.CheatsMenu);
+			menu.Root.Components.Add(new OverdrawForegroundComponent());
 			var section = menu.Section();
 
 			InitialFill(menu);
@@ -99,6 +100,11 @@ namespace EmptyProject.Debug
 				The.AppData.EnableSplashScreen = false;
 				The.AppData.Save();
 			}, () => The.AppData.EnableSplashScreen);
+#if PROFILER
+			debugSection.Item("Toggle overdraw visualization", () => {
+				Lime.Profiler.Graphics.Overdraw.Enabled = !Lime.Profiler.Graphics.Overdraw.Enabled;
+			});
+#endif // PROFILER
 		}
 
 		public static void AddDebugInfo(string info)
@@ -125,11 +131,11 @@ namespace EmptyProject.Debug
 			var fields = new[] {
 				$"FPS: {The.Window.FPS}",
 				$"Window Size: {The.Window.ClientSize}",
-				$"World Size: {The.World.Size}"
+				$"World Size: {The.World.Size}",
 			};
 
 			var text = string.Join("\n", fields.Concat(debugInfoStrings));
-			
+
 			Renderer.DrawTextLine(font, new Vector2(x + 1, y + 1), text, height, new Color4(0, 0, 0), 0); // shadow
 			Renderer.DrawTextLine(font, new Vector2(x, y), text, height, new Color4(255, 255, 255), 0);
 
