@@ -2,19 +2,19 @@
 
 With Overdraw mode you can determine the number of fragment shader calls for each pixel on the screen.
 
-![car_overdraw_image](/images/car_overdraw_image.png)
+![car_overdraw_image](../../images/car_overdraw_image.png)
 
 ⚠ If objects are rendered to an intermediate buffer, and then this buffer is drawn to the main framebuffer, the Overdraw metric will be equal to 1 for the whole intermediate buffer. You can observe this effect at least for post-processing.
 
 ## Getting started
 
-#### Tangerine
+### Tangerine
 
 You can enable this mode with command `Toggle Overdraw Mode` in Tangerine.
 
 You can set custom overdraw colors with gradient editor on Profiler pane in Tangerine.
 
-#### Code
+### Code
 
 Use property `Overdraw.Enabled` in namespace `Lime.Profiler.Graphics` to enable overdraw visualization mode. It's disabled by default.
 
@@ -28,7 +28,7 @@ To enable overdraw support in the engine, define `PROFILER` symbol at following 
 - Tangerine.UI.Profiler <span style="color:gray">(only if you want to use overdraw in the scene editor)</span>
 - Tangerine.UI.SceneView <span style="color:gray">(only if you want to use overdraw in the scene editor)</span>
 
-#### The easiest way to do it:
+### The easiest way to do it:
 
 - For Tangerine use SOLUTION configuration `Release.Profiler` or `Debug.Profiler`
 - For game use Lime PROJECT configuration `Release.Profiler` or `Debug.Profiler`
@@ -90,4 +90,14 @@ The vertex shader never changes. Also, every draw call of scene objects will use
 In the second phase, we apply a gradient to this render texture to make the individual overdraw states more distinguishable. There can be 256 overdraw states in total. And next, we draw the results on top of the scene.
 
 In the final third phase, we draw object subtrees that have `OverdrawForegroundComponent` at their root. For this, objects are added to a separate RenderChain. Objects are also added to the original scene RenderChain, but in this chain they will not be rendered! This is done for the hit test to work.
+
+## Overdraw metrics
+
+You can also get an average number of redraws for all game (scene) pixels for a frame. Nodes with `OverdrawForegroundComponent` will not affect this metric.
+
+For it you need to set `true` for`Overdraw.MetricRequired` and subscribe to `Overdraw.MetricCreated` event.
+
+⚠ `Overdraw.MetricCreated(float avgOverdraw, int pixelsCount)` will be invoked from render thread.
+
+⚠ Obtaining the metric is a very expensive operation. To higher your screen resolution, to worse the performance.
 
