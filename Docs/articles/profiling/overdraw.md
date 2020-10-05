@@ -2,7 +2,7 @@
 
 With Overdraw mode you can determine the number of fragment shader calls for each pixel on the screen.
 
-![car_overdraw_image](..\images\car_overdraw_image.png)
+![car_overdraw_image](/images/car_overdraw_image.png)
 
 ⚠ If objects are rendered to an intermediate buffer, and then this buffer is drawn to the main framebuffer, the Overdraw metric will be equal to 1 for the whole intermediate buffer. You can observe this effect at least for post-processing.
 
@@ -16,7 +16,7 @@ You can set custom overdraw colors with gradient editor on Profiler pane in Tang
 
 #### Code
 
-Use property `Overdraw.Enabled` in namespace `Lime.Profiler.Graphics` to enable overdraw visualization mode.
+Use property `Overdraw.Enabled` in namespace `Lime.Profiler.Graphics` to enable overdraw visualization mode. It's disabled by default.
 
 Use `Gradient` property in `OverdrawInterpreter` class in namespace `Lime.Profiler.Graphics` to configure colors.
 
@@ -24,7 +24,7 @@ Use `Gradient` property in `OverdrawInterpreter` class in namespace `Lime.Profil
 
 To enable overdraw support in the engine, define `PROFILER` symbol at following projects:
 
-- Lime 
+- Lime
 - Tangerine.UI.Profiler <span style="color:gray">(only if you want to use overdraw in the scene editor)</span>
 - Tangerine.UI.SceneView <span style="color:gray">(only if you want to use overdraw in the scene editor)</span>
 

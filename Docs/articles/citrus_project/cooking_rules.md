@@ -1,4 +1,4 @@
-# Cooking Rules
+# Cooking rules
 
 Asset cooking options are set and propagated using cooking rules files. Cooking rules files could be named in two ways:
 1. `#CookingRules.txt`

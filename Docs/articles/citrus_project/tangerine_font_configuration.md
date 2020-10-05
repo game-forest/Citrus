@@ -13,7 +13,7 @@ Property | Type | Description
 `IsSdf`|bool|If it's `true` Signed Distance Font (SDF) will be generated otherwise simple bitmap font.
 `SdfScale`|float|When using an SFD font, a higher resolution results in finer gradients, which produces higher quality text. That's why it's a common way to sample characters at high resolution to create good gradients and then downscale. For example you can generated 8k textures with bigger font size and then downscale them to 4k with `SdfScale = 0.5f`.
 `TextureSize` |[Vector2](#vector2)|Size for each texture **before** downscale.
-`CustomKerningPairs`|[CustomKerningPairs](#CustomKerningPairs)|Kerning pairs are used to adjust the spacing between specific character pairs, to produce a more visually pleasing result. Note that many fonts do not have kerning pairs or may not satisfy your needs so you can simply add your own pairs or override ones taken from the font file.
+`CustomKerningPairs`|[CustomKerningPairs](#customkerningpairs)|Kerning pairs are used to adjust the spacing between specific character pairs, to produce a more visually pleasing result. Note that many fonts do not have kerning pairs or may not satisfy your needs so you can simply add your own pairs or override ones taken from the font file.
 `Margin`|float|**Obsolete**. Expands AC width. Was used for workarounds.
 
 ## `CharSet`
@@ -21,7 +21,7 @@ Property | Type | Description
 Property | Type | Description
 ---------|------|------------
 `Chars`|string|A list of characters to be used for font generation. Can be `null` or empty (see `ExtractFromDictionaries`).
-`Font`|string|Path (relative to asset directory) to font file from which glyphs will be taken. See [supported font formats](#Supported-formats).
+`Font`|string|Path (relative to asset directory) to font file from which glyphs will be taken. See [supported font formats](#supported-formats).
 `ExtractFromDictionaries`|string|A comma separated set of localizations (e.g. "EN,RU,CN"). If it's null or empty existing Chars are used, otherwise Chars are extracted from localization dictionaries (e.g. "Dictionary.RU.txt" or "Dictionary.txt" for EN).
 
 ## `Vector2`
@@ -33,7 +33,7 @@ array of two numbers (YuzuCompact).
 ```
 ## `CustomKerningPairs`
 
-It's a dictionary with character key and array of [KerningPair](#KerningPair) values. Each kerning pair in array represents kerning amount that should be applied if character follows array's key of the dictionary. For example this:
+It's a dictionary with character key and array of [KerningPair](#kerningpair) values. Each kerning pair in array represents kerning amount that should be applied if character follows array's key of the dictionary. For example this:
 
 ```json
 CustomKerningPairs: { 'A': [['V', -2]] }

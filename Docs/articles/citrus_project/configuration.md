@@ -1,10 +1,10 @@
-# Citrus Project Configuration
+# Citrus project configuration
 
-Citrus project configuration is provided via a JSON (currently Newtonsoft.Json parseable) file with extension `.citproj`. 
+Citrus project configuration is provided via a JSON (currently Newtonsoft.Json parseable) file with extension `.citproj`.
 
 `ProjectDirectory` is considered to be a directory where project configuration file is located. Whenever it is stated that path is relative, implied it's relative to `ProjectDirectory` unless stated otherwise.
 
-## Root Level
+## Root level
 
 Property                          | Type                                      | Description
 ----------------------------------|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------
