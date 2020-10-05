@@ -95,9 +95,9 @@ In the final third phase, we draw object subtrees that have `OverdrawForegroundC
 
 You can also get an average number of redraws for all game (scene) pixels for a frame. Nodes with `OverdrawForegroundComponent` will not affect this metric.
 
-For it you need to set `true` for`Overdraw.MetricRequired` and subscribe to `Overdraw.MetricCreated` event.
+Set `Overdraw.MetricRequired` to `true` and subscribe to `Overdraw.MetricCreated` event.
 
-⚠ `Overdraw.MetricCreated(float avgOverdraw, int pixelsCount)` will be invoked from render thread.
+⚠ `Overdraw.MetricCreated(float averageOverdraw, int pixelCount)` will be invoked from render thread.
 
-⚠ Obtaining the metric is a very expensive operation. To higher your screen resolution, to worse the performance.
+⚠ Obtaining the metric is a very expensive operation. The higher your screen resolution, the worse the performance.
 

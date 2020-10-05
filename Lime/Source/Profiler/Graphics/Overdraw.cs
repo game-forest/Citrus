@@ -29,7 +29,6 @@ namespace Lime.Profiler.Graphics
 		/// </summary>
 		/// <remarks>
 		/// Obtaining a metric is a very expensive operation.
-		/// Turn off to increase performance.
 		/// </remarks>
 		public static bool MetricRequired { get; set; }
 
