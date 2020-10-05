@@ -9,15 +9,10 @@ namespace Lime.Profiler.Graphics
 	/// </summary>
 	public static class Overdraw
 	{
-		private static bool overdrawRequired = true;
-
 		/// <summary>
 		/// Use to enable or disable overdraw mode.
 		/// </summary>
-		public static bool Enabled
-		{
-			set => overdrawRequired = value;
-		}
+		public static bool Enabled { get; set; }
 
 		/// <summary>
 		/// Use to determine if overdraw is enabled on the update thread.
@@ -29,7 +24,7 @@ namespace Lime.Profiler.Graphics
 		/// </summary>
 		public static bool EnabledAtRenderThread { get; private set; }
 
-		public static void UpdateStarted() => EnabledAtUpdateThread = overdrawRequired;
+		public static void UpdateStarted() => EnabledAtUpdateThread = Enabled;
 
 		/// <summary>
 		/// Occurs after update and before render. The previous render is guaranteed to be completed.
