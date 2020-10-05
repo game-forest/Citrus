@@ -24,12 +24,48 @@ namespace Lime.Profiler.Graphics
 		/// </summary>
 		public static bool EnabledAtRenderThread { get; private set; }
 
-		public static void UpdateStarted() => EnabledAtUpdateThread = Enabled;
+		/// <summary>
+		/// Use to enable or disable overdraw metric.
+		/// </summary>
+		/// <remarks>
+		/// Obtaining a metric is a very expensive operation.
+		/// Turn off to increase performance.
+		/// </remarks>
+		public static bool MetricRequired { get; set; }
+
+		/// <summary>
+		/// Use to determine if overdraw metric required is enabled on the update thread.
+		/// </summary>
+		public static bool MetricRequiredAtUpdateThread { get; private set; }
+
+		/// <summary>
+		/// Use to determine if overdraw metric required is enabled on the render thread.
+		/// </summary>
+		public static bool MetricRequiredAtRenderThread { get; private set; }
+
+		/// <summary>
+		/// Invoked when the metric is generated for the next frame.
+		/// Params: avg overdraw, pixels count.
+		/// </summary>
+		public static event Action<float, int> MetricCreated;
+
+		public static void InvokeMetricCreated(float avgOverdraw, int pixelsCount) =>
+			MetricCreated?.Invoke(avgOverdraw, pixelsCount);
+
+		public static void UpdateStarted()
+		{
+			EnabledAtUpdateThread = Enabled;
+			MetricRequiredAtUpdateThread = MetricRequired;
+		}
 
 		/// <summary>
 		/// Occurs after update and before render. The previous render is guaranteed to be completed.
 		/// </summary>
-		public static void Sync() => EnabledAtRenderThread = EnabledAtUpdateThread;
+		public static void Sync()
+		{
+			EnabledAtRenderThread = EnabledAtUpdateThread;
+			MetricRequiredAtRenderThread = MetricRequiredAtUpdateThread;
+		}
 	}
 
 	public static class OverdrawForeground
@@ -191,12 +227,13 @@ namespace Lime.Profiler.Graphics
 		/// </summary>
 		public static float GetAverageOverdraw(Color4[] pixelsBuffer, int pixelsCount)
 		{
-			int requiredPixelsCount = pixelsCount;
 			float counter = 0;
-			for (int i = 0; i < requiredPixelsCount; i++) {
-				counter += pixelsBuffer[i].R;
+			unchecked {
+				for (int i = 0; i < pixelsCount; ++i) {
+					counter += pixelsBuffer[i].R;
+				}
 			}
-			return counter / requiredPixelsCount;
+			return counter / pixelsCount;
 		}
 
 		/// <summary>

@@ -24,6 +24,7 @@ namespace Lime
 
 #if !TANGERINE && PROFILER
 		private readonly RenderTargetsQueue renderTargetsManager;
+		private Color4[] overdrawPixels;
 
 		private Action overdrawBegin;
 		private Action overdrawEnd;
@@ -35,7 +36,10 @@ namespace Lime
 		public WindowWidget(IWindow window)
 		{
 #if !TANGERINE && PROFILER
-			renderTargetsManager = new RenderTargetsQueue();
+			if (window == Application.MainWindow) {
+				renderTargetsManager = new RenderTargetsQueue();
+				overdrawPixels = new Color4[1920 * 1080];
+			}
 #endif // !TANGERINE && PROFILER
 			WidgetContext = new WidgetContext(this);
 			LayoutManager = new LayoutManager();
@@ -168,6 +172,13 @@ namespace Lime
 			if (Overdraw.EnabledAtRenderThread && Window == Application.MainWindow) {
 				OverdrawMaterialsScope.Leave();
 				renderTexture.RestoreRenderTarget();
+				if (Overdraw.MetricRequiredAtRenderThread) {
+					OverdrawInterpreter.EnsureEnoughBufferSize(renderTexture, ref overdrawPixels);
+					renderTexture.GetPixels(overdrawPixels);
+					int pixelsCount = renderTexture.PixelsCount;
+					float avgOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelsCount);
+					Overdraw.InvokeMetricCreated(avgOverdraw, pixelsCount);
+				}
 				renderTargetsManager.Free(renderTexture);
 				Renderer.PushState(RenderState.Projection);
 				var windowSize = (Size)Window.ClientSize;
