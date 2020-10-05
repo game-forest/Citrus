@@ -17,7 +17,7 @@ namespace Tangerine.UI
 
 		public OverdrawController()
 		{
-			int overdrawColorsCount = OverdrawShaderProgram.StatesCount;
+			int overdrawColorCount = OverdrawShaderProgram.StateCount;
 			Layout = new VBoxLayout();
 			gradientControlWidget = new GradientControlWidget() {
 				Anchors = Anchors.LeftRight,
@@ -64,7 +64,7 @@ namespace Tangerine.UI
 			gradientControlWidget.SelectionChanged += (point) => {
 				currentPoint = point;
 				colorInput.Text = point.Color.ToString(Color4.StringPresentation.Dec);
-				positionInput.Text = ((int)(point.Position * (overdrawColorsCount - 1))).ToString();
+				positionInput.Text = ((int)(point.Position * (overdrawColorCount - 1))).ToString();
 			};
 			gradientControlWidget.ControlPointPositionChanged += (f,i) =>
 				OverdrawInterpreter.Gradient = gradientControlWidget.Gradient;
@@ -72,11 +72,11 @@ namespace Tangerine.UI
 			positionInput.Submitted += (text) => {
 				if (currentPoint != null) {
 					if (int.TryParse(text, out int value)) {
-						int clampedValue = Mathf.Clamp(value, 0, overdrawColorsCount - 1);
+						int clampedValue = Mathf.Clamp(value, 0, overdrawColorCount - 1);
 						if (value != clampedValue) {
 							positionInput.Text = clampedValue.ToString();
 						}
-						currentPoint.Position = clampedValue / (float)(overdrawColorsCount - 1);
+						currentPoint.Position = clampedValue / (float)(overdrawColorCount - 1);
 						OverdrawInterpreter.Gradient = gradientControlWidget.Gradient;
 					} else {
 						positionInput.Text = "Must be integer!";

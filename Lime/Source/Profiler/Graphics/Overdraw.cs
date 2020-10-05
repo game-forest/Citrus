@@ -44,7 +44,7 @@ namespace Lime.Profiler.Graphics
 
 		/// <summary>
 		/// Invoked when the metric is generated for the next frame.
-		/// Params: avg overdraw, pixels count.
+		/// Params: average overdraw, pixels count.
 		/// </summary>
 		public static event Action<float, int> MetricCreated;
 
@@ -104,17 +104,17 @@ namespace Lime.Profiler.Graphics
 	/// <summary>
 	/// Forces the Renderer to use the Overdraw version of the materials.
 	/// </summary>
-	public static class OverdrawMaterialsScope
+	public static class OverdrawMaterialScope
 	{
-		private static int scopesCounter = 0;
+		private static int scopeCount = 0;
 
 		/// <summary>
-		/// Indicates whether we are inside the OverdrawMaterialsScope or not.
+		/// Indicates whether we are inside the OverdrawMaterialScope or not.
 		/// </summary>
-		public static bool IsInside => scopesCounter > 0;
+		public static bool IsInside => scopeCount > 0;
 
-		public static void Enter() => ++scopesCounter;
-		public static void Leave() => --scopesCounter;
+		public static void Enter() => ++scopeCount;
+		public static void Leave() => --scopeCount;
 	}
 
 	public static class OverdrawShaderProgram
@@ -123,12 +123,12 @@ namespace Lime.Profiler.Graphics
 		/// Since the recording and storage of information about overdraw is carried out
 		/// using the red channel of the rendering target, 256 states are available to us.
 		/// </summary>
-		public const int StatesCount = 256;
+		public const int StateCount = 256;
 
 		/// <summary>
 		/// These 256 states are represented in the range from 0 to 1.
 		/// </summary>
-		public static readonly float Step = 1f / StatesCount;
+		public static readonly float Step = 1f / StateCount;
 
 		public static readonly BlendState DefaultBlending;
 
@@ -143,7 +143,7 @@ namespace Lime.Profiler.Graphics
 		}
 	}
 
-	public class RenderTargetsQueue
+	public class RenderTargetQueue
 	{
 		private readonly Queue<RenderTexture> freeTargets = new Queue<RenderTexture>();
 
@@ -201,10 +201,10 @@ namespace Lime.Profiler.Graphics
 			set {
 				gradient = value;
 				if (gradientRasterizationTarget == null) {
-					gradientRasterizationTarget = new Color4[OverdrawShaderProgram.StatesCount];
+					gradientRasterizationTarget = new Color4[OverdrawShaderProgram.StateCount];
 				}
 				gradient.Rasterize(ref gradientRasterizationTarget);
-				gradientTexture.LoadImage(gradientRasterizationTarget, OverdrawShaderProgram.StatesCount, 1);
+				gradientTexture.LoadImage(gradientRasterizationTarget, OverdrawShaderProgram.StateCount, 1);
 			}
 		}
 
@@ -215,7 +215,7 @@ namespace Lime.Profiler.Graphics
 		/// <param name="buffer">The buffer to be resized.</param>
 		public static void EnsureEnoughBufferSize(RenderTexture rawResults, ref Color4[] buffer)
 		{
-			int requiredPixelsCount = rawResults.PixelsCount;
+			int requiredPixelsCount = rawResults.PixelCount;
 			if (buffer.Length < requiredPixelsCount) {
 				Array.Resize(ref buffer, requiredPixelsCount);
 			}
@@ -256,20 +256,21 @@ namespace Lime.Profiler.Graphics
 
 		private static ColorGradient GetDefaultGradient()
 		{
-			int statesCount = OverdrawShaderProgram.StatesCount;
-			var gradient = new ColorGradient();
-			gradient.Add(new GradientControlPoint(new Color4(0, 0, 0, 255), 0f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(0, 0, 102, 255), 1f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(0, 76, 255, 255), 2f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(0, 178, 102, 255), 3f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(0, 255, 0, 255), 4f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(204, 204, 0, 255), 5f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(255, 76, 0, 255), 8f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(178, 0, 0, 255), 11f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(127, 0, 127, 255), 16f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(178, 76, 178, 255), 23f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(255, 229, 229, 255), 28f / statesCount));
-			gradient.Add(new GradientControlPoint(new Color4(255, 255, 255, 255), 38f / statesCount));
+			int statesCount = OverdrawShaderProgram.StateCount;
+			var gradient = new ColorGradient {
+				new GradientControlPoint(new Color4(0, 0, 0, 255), 0f / statesCount),
+				new GradientControlPoint(new Color4(0, 0, 102, 255), 1f / statesCount),
+				new GradientControlPoint(new Color4(0, 76, 255, 255), 2f / statesCount),
+				new GradientControlPoint(new Color4(0, 178, 102, 255), 3f / statesCount),
+				new GradientControlPoint(new Color4(0, 255, 0, 255), 4f / statesCount),
+				new GradientControlPoint(new Color4(204, 204, 0, 255), 5f / statesCount),
+				new GradientControlPoint(new Color4(255, 76, 0, 255), 8f / statesCount),
+				new GradientControlPoint(new Color4(178, 0, 0, 255), 11f / statesCount),
+				new GradientControlPoint(new Color4(127, 0, 127, 255), 16f / statesCount),
+				new GradientControlPoint(new Color4(178, 76, 178, 255), 23f / statesCount),
+				new GradientControlPoint(new Color4(255, 229, 229, 255), 28f / statesCount),
+				new GradientControlPoint(new Color4(255, 255, 255, 255), 38f / statesCount)
+			};
 			return gradient;
 		}
 

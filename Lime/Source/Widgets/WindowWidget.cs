@@ -23,7 +23,7 @@ namespace Lime
 		protected readonly RenderChain renderChain;
 
 #if !TANGERINE && PROFILER
-		private readonly RenderTargetsQueue renderTargetsManager;
+		private readonly RenderTargetQueue renderTargetManager;
 		private Color4[] overdrawPixels;
 
 		private Action overdrawBegin;
@@ -37,7 +37,7 @@ namespace Lime
 		{
 #if !TANGERINE && PROFILER
 			if (window == Application.MainWindow) {
-				renderTargetsManager = new RenderTargetsQueue();
+				renderTargetManager = new RenderTargetQueue();
 				overdrawPixels = new Color4[1920 * 1080];
 			}
 #endif // !TANGERINE && PROFILER
@@ -161,25 +161,25 @@ namespace Lime
 #if !TANGERINE && PROFILER
 			RenderTexture renderTexture = null;
 			if (Overdraw.EnabledAtRenderThread && Window == Application.MainWindow) {
-				renderTexture = renderTargetsManager.Acquire((Size)GetViewport().Size);
+				renderTexture = renderTargetManager.Acquire((Size)GetViewport().Size);
 				renderTexture.SetAsRenderTarget();
 				Renderer.Clear(Color4.Zero);
-				OverdrawMaterialsScope.Enter();
+				OverdrawMaterialScope.Enter();
 			}
 #endif // !TANGERINE && PROFILER
 			Render(renderObjectList2);
 #if !TANGERINE && PROFILER
 			if (Overdraw.EnabledAtRenderThread && Window == Application.MainWindow) {
-				OverdrawMaterialsScope.Leave();
+				OverdrawMaterialScope.Leave();
 				renderTexture.RestoreRenderTarget();
 				if (Overdraw.MetricRequiredAtRenderThread) {
 					OverdrawInterpreter.EnsureEnoughBufferSize(renderTexture, ref overdrawPixels);
 					renderTexture.GetPixels(overdrawPixels);
-					int pixelsCount = renderTexture.PixelsCount;
-					float avgOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelsCount);
-					Overdraw.InvokeMetricCreated(avgOverdraw, pixelsCount);
+					int pixelCount = renderTexture.PixelCount;
+					float averageOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelCount);
+					Overdraw.InvokeMetricCreated(averageOverdraw, pixelCount);
 				}
-				renderTargetsManager.Free(renderTexture);
+				renderTargetManager.Free(renderTexture);
 				Renderer.PushState(RenderState.Projection);
 				var windowSize = (Size)Window.ClientSize;
 				Renderer.SetOrthogonalProjection(0, 0, windowSize.Width, windowSize.Height);

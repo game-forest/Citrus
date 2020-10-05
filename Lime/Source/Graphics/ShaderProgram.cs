@@ -41,11 +41,11 @@ namespace Lime
 		private ShaderProgram() { }
 
 		public ShaderProgram(
-			IEnumerable<Shader>         shaders,
+			IEnumerable<Shader> shaders,
 			IEnumerable<AttribLocation> attribLocations,
-			IEnumerable<Sampler>        samplers
+			IEnumerable<Sampler> samplers
 #if PROFILER
-			, ShaderProgram             overdrawShaderProgram = null
+			, ShaderProgram overdrawShaderProgram = null
 #endif // PROFILER
 			)
 		{
@@ -227,11 +227,11 @@ namespace Lime
 					throw new InvalidOperationException();
 				}
 				int bodyLocation = match.Index + match.Length;
-				int curlyBracesCount = 0;
+				int curlyBraceCount = 0;
 				for (int i = bodyLocation; i < source.Length; i++) {
-					curlyBracesCount += source[i] == '{' ? 1 : 0;
-					curlyBracesCount -= source[i] == '}' ? 1 : 0;
-					if (curlyBracesCount == 0) {
+					curlyBraceCount += source[i] == '{' ? 1 : 0;
+					curlyBraceCount -= source[i] == '}' ? 1 : 0;
+					if (curlyBraceCount == 0) {
 						return source.Substring(0, bodyLocation + 1) +
 							   $"gl_FragColor = vec4({OverdrawShaderProgram.Step},0,0,1);" +
 							   source.Substring(i);

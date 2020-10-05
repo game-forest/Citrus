@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Lime.Profiler.Graphics
 {
 	/// <summary>
-	/// Used to pass profiling information to rendering depth.
+	/// Used to pass profiling information to the depths of render system.
 	/// </summary>
 	public struct RenderObjectOwnerInfo
 	{

@@ -56,11 +56,11 @@ namespace Lime
 			foreach (var ro in objects) {
 #if PROFILER
 				RenderObjectOwnerInfo.PushState(ro.OwnerInfo);
-				if (!OverdrawMaterialsScope.IsInside || !ro.OwnerInfo.Node.IsOverdrawForeground) {
+				if (!OverdrawMaterialScope.IsInside || !ro.OwnerInfo.Node.IsOverdrawForeground) {
 #endif // PROFILER
-				ro.Render();
+					ro.Render();
 #if PROFILER
-				} // if (!OverdrawMaterialsScope.IsInside || !ro.OwnerInfo.Node.IsOverdrawForeground) ...
+				}
 				RenderObjectOwnerInfo.PopState();
 #endif // PROFILER
 			}

@@ -337,7 +337,7 @@ namespace Lime
 		{
 			shaderProgram = program;
 #if PROFILER
-			if (program != null && OverdrawMaterialsScope.IsInside) {
+			if (program != null && OverdrawMaterialScope.IsInside) {
 				shaderProgram = program.OverdrawProgram;
 			}
 #endif // PROFILER
@@ -366,7 +366,7 @@ namespace Lime
 		public static void SetBlendState(BlendState value)
 		{
 #if PROFILER
-			if (OverdrawMaterialsScope.IsInside) {
+			if (OverdrawMaterialScope.IsInside) {
 				value = OverdrawShaderProgram.DefaultBlending;
 			}
 #endif // PROFILER

@@ -118,7 +118,7 @@ namespace Lime
 			return false;
 		}
 
-		public int PixelsCount => size.Width * size.Height;
+		public int PixelCount => size.Width * size.Height;
 
 		/// <summary>
 		/// Copies all pixels from texture.
@@ -130,7 +130,7 @@ namespace Lime
 		/// </remarks>
 		public unsafe Color4[] GetPixels()
 		{
-			var pixels = new Color4[PixelsCount];
+			var pixels = new Color4[PixelCount];
 			fixed (Color4* pixelsPtr = pixels) {
 				GetPlatformTexture().ReadPixels(Format.R8G8B8A8_UNorm, 0, 0, size.Width, size.Height, new IntPtr(pixelsPtr));
 			}
@@ -147,7 +147,7 @@ namespace Lime
 		/// </remarks>
 		public unsafe void GetPixels(Color4[] destinationArray)
 		{
-			if (destinationArray.Length < PixelsCount) {
+			if (destinationArray.Length < PixelCount) {
 				throw new InvalidOperationException();
 			}
 			fixed (Color4* pixelsPtr = destinationArray) {

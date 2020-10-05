@@ -60,8 +60,8 @@ namespace Lime
 		public void Render()
 		{
 #if PROFILER
-			if (ProfilingInfo.IsInsideOverdrawMaterialsScope) {
-				OverdrawMaterialsScope.Enter();
+			if (ProfilingInfo.IsInsideOverdrawMaterialScope) {
+				OverdrawMaterialScope.Enter();
 			}
 #endif // PROFILER
 			PlatformRenderer.SetTexture(0, Texture1);
@@ -71,8 +71,8 @@ namespace Lime
 				Mesh.DrawIndexed(StartIndex, LastIndex - StartIndex);
 			}
 #if PROFILER
-			if (ProfilingInfo.IsInsideOverdrawMaterialsScope) {
-				OverdrawMaterialsScope.Leave();
+			if (ProfilingInfo.IsInsideOverdrawMaterialScope) {
+				OverdrawMaterialScope.Leave();
 			}
 #endif // PROFILER
 		}

@@ -57,7 +57,7 @@ namespace Tangerine.UI.SceneView
 			ConnectCommand(SceneViewCommands.Duplicate, DuplicateNodes);
 			ConnectCommand(SceneViewCommands.TieWidgetsWithBones, TieWidgetsWithBones);
 			ConnectCommand(SceneViewCommands.UntieWidgetsFromBones, UntieWidgetsFromBones);
-			ConnectCommand(SceneViewCommands.ToggleOverdrawMod, ToggleOverdrawMod);
+			ConnectCommand(SceneViewCommands.ToggleOverdrawMode, ToggleOverdrawMode);
 		}
 
 		private static void ConnectCommand(ICommand command, DocumentCommandHandler handler)
@@ -86,7 +86,7 @@ namespace Tangerine.UI.SceneView
 			return Scene.LocalToWorldTransform * targetSpace.LocalToWorldTransform.CalcInversed();
 		}
 
-		private static void ToggleOverdrawMod()
+		private static void ToggleOverdrawMode()
 		{
 #if PROFILER
 			Overdraw.Enabled = !Overdraw.EnabledAtUpdateThread;
@@ -161,8 +161,8 @@ namespace Tangerine.UI.SceneView
 			private class RenderObject : Lime.RenderObject
 			{
 #if PROFILER
-				private static readonly RenderTargetsQueue mainRenderTargetsManager = new RenderTargetsQueue();
-				private static readonly RenderTargetsQueue thumbnailRenderTargetsManager = new RenderTargetsQueue();
+				private static readonly RenderTargetQueue mainRenderTargetManager = new RenderTargetQueue();
+				private static readonly RenderTargetQueue thumbnailRenderTargetManager = new RenderTargetQueue();
 				private static Color4[] overdrawPixels = new Color4[1920 * 1080];
 
 				public bool IsThumbnailOwner;
@@ -179,7 +179,7 @@ namespace Tangerine.UI.SceneView
 					var sceneTransform2 = LocalToWorldTransform * Renderer.Transform2;
 					Renderer.Transform2 = sceneTransform2;
 #if PROFILER
-					RenderTargetsQueue renderTargetsQueue = null;
+					RenderTargetQueue renderTargetQueue = null;
 					RenderTexture renderTexture = null;
 					if (Overdraw.EnabledAtRenderThread) {
 						Renderer.PushState(
@@ -189,8 +189,8 @@ namespace Tangerine.UI.SceneView
 							RenderState.Transform1 |
 							RenderState.Transform2);
 						var viewportSize = (Size)((Vector2)Frame.Size * Window.Current.PixelScale);
-						renderTargetsQueue = IsThumbnailOwner ? thumbnailRenderTargetsManager : mainRenderTargetsManager;
-						renderTexture = renderTargetsQueue.Acquire(viewportSize);
+						renderTargetQueue = IsThumbnailOwner ? thumbnailRenderTargetManager : mainRenderTargetManager;
+						renderTexture = renderTargetQueue.Acquire(viewportSize);
 						renderTexture.SetAsRenderTarget();
 						Renderer.ScissorState = ScissorState.ScissorDisabled;
 						Renderer.Viewport = new Viewport(0, 0, viewportSize.Width, viewportSize.Height);
@@ -198,22 +198,22 @@ namespace Tangerine.UI.SceneView
 						Renderer.Transform1 = Matrix32.Identity;
 						Renderer.Transform2 = LocalToWorldTransform * Frame.Transform.CalcInversed();
 						Renderer.Clear(Color4.Zero);
-						OverdrawMaterialsScope.Enter();
+						OverdrawMaterialScope.Enter();
 					}
 #endif // PROFILER
 					SceneObjects.Render();
 #if PROFILER
 					if (Overdraw.EnabledAtRenderThread) {
-						OverdrawMaterialsScope.Leave();
+						OverdrawMaterialScope.Leave();
 						renderTexture.RestoreRenderTarget();
 						if (Overdraw.MetricRequiredAtRenderThread && !IsThumbnailOwner) {
 							OverdrawInterpreter.EnsureEnoughBufferSize(renderTexture, ref overdrawPixels);
 							renderTexture.GetPixels(overdrawPixels);
-							int pixelsCount = renderTexture.PixelsCount;
-							float avgOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelsCount);
-							Overdraw.InvokeMetricCreated(avgOverdraw, pixelsCount);
+							int pixelCount = renderTexture.PixelCount;
+							float averageOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelCount);
+							Overdraw.InvokeMetricCreated(averageOverdraw, pixelCount);
 						}
-						renderTargetsQueue.Free(renderTexture);
+						renderTargetQueue.Free(renderTexture);
 						Renderer.PopState();
 					}
 #endif // PROFILER

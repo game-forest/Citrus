@@ -11,12 +11,12 @@ namespace Lime
 	public class OverdrawForegroundComponent : OverdrawForegroundBehavior { }
 
 	/// <summary>
-	/// If Overdraw mod enabled, add owner to overdraw foreground RenderChain and
-	/// disables rendering of a subtree (include owner) of child objects in the main render list.
+	/// If Overdraw mode is enabled, adds owner to overdraw foreground RenderChain and
+	/// disables rendering of a subtree (including owner) of child objects in the main render list.
 	/// </summary>
 	/// <remarks>
 	/// If turning on overdraw mode does not turn off rendering of a subtree in the main render list,
-	/// you are probably faced with a special case where RenderObject's are created bypass presenters.
+	/// you are probably faced with a special case where RenderObjects are created bypassing presenters.
 	/// As one possible solution, you can manually initialize <see cref="RenderObject.OwnerInfo"/>:
 	///     #if PROFILER
 	///			renderObject.OwnerInfo.Initialize(Node);
@@ -25,7 +25,7 @@ namespace Lime
 	public class OverdrawForegroundBehavior : NodeBehavior
 	{
 #if PROFILER
-		private bool isEventsConnectAvoked;
+		private bool isEventConnectAwake;
 		private NodeManager cachedNodeManager;
 
 		private event HierarchyChangedEventHandler hierarchyChangedEvent;
@@ -33,11 +33,11 @@ namespace Lime
 		protected override void OnRegister()
 		{
 			base.OnRegister();
-			if (isEventsConnectAvoked) {
+			if (isEventConnectAwake) {
 				return;
 			}
 			ReconnectEvents();
-			isEventsConnectAvoked = true;
+			isEventConnectAwake = true;
 		}
 
 		private void UnsubscribeEvents(Node node)
@@ -49,7 +49,7 @@ namespace Lime
 					node.RenderChainBuilder = proxy.OriginalRenderChainBuilder;
 				}
 			}
-			isEventsConnectAvoked = false;
+			isEventConnectAwake = false;
 		}
 
 		private void ReconnectEvents()
