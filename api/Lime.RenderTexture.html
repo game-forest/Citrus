@@ -334,6 +334,31 @@
   </table>
   
   
+  <a id="Lime_RenderTexture_PixelCount_" data-uid="Lime.RenderTexture.PixelCount*"></a>
+  <h4 id="Lime_RenderTexture_PixelCount" data-uid="Lime.RenderTexture.PixelCount">PixelCount</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int PixelCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="Lime_RenderTexture_SurfaceSize_" data-uid="Lime.RenderTexture.SurfaceSize*"></a>
   <h4 id="Lime_RenderTexture_SurfaceSize" data-uid="Lime.RenderTexture.SurfaceSize">SurfaceSize</h4>
   <div class="markdown level1 summary"></div>
@@ -432,6 +457,44 @@
       </tr>
     </tbody>
   </table>
+  <h5 id="Lime_RenderTexture_GetPixels_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is a very expensive method.
+It requires waiting for all previous render commands to complete.
+All previous render commands include commands from all previous frames.</p>
+</div>
+  
+  
+  <a id="Lime_RenderTexture_GetPixels_" data-uid="Lime.RenderTexture.GetPixels*"></a>
+  <h4 id="Lime_RenderTexture_GetPixels_Lime_Color4___" data-uid="Lime.RenderTexture.GetPixels(Lime.Color4[])">GetPixels(Color4[])</h4>
+  <div class="markdown level1 summary"><p>Copies all pixels from texture.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void GetPixels(Color4[] destinationArray)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Color4.html">Color4</a>[]</td>
+        <td><span class="parametername">destinationArray</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lime_RenderTexture_GetPixels_Lime_Color4____remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is a very expensive method.
+It requires waiting for all previous render commands to complete.
+All previous render commands include commands from all previous frames.</p>
+</div>
   
   
   <a id="Lime_RenderTexture_GetPlatformTexture_" data-uid="Lime.RenderTexture.GetPlatformTexture*"></a>

@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Overdraw | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Overdraw | Citrus Engine ">
+    <meta name="generator" content="docfx 2.48.0.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="overdraw">Overdraw</h1>
+
+<p>With Overdraw mode you can determine the number of fragment shader calls for each pixel on the screen.</p>
+<p><img src="/images/car_overdraw_image.png" alt="car_overdraw_image"></p>
+<p>⚠ If objects are rendered to an intermediate buffer, and then this buffer is drawn to the main framebuffer, the Overdraw metric will be equal to 1 for the whole intermediate buffer. You can observe this effect at least for post-processing.</p>
+<h2 id="getting-started">Getting started</h2>
+<h3 id="tangerine">Tangerine</h3>
+<p>The Overdraw mode is configured through the profiler pane.</p>
+<p><img src="/images/overdraw_panel.png" alt="overdraw_panel"></p>
+<p>You can enable this mode with Profiler pane or you can use scene command <code>Toggle Overdraw Mode</code>.</p>
+<p>You can set custom overdraw colors with gradient editor on Profiler pane.</p>
+<h3 id="code">Code</h3>
+<p>Use property <code>Overdraw.Enabled</code> in namespace <code>Lime.Profiler.Graphics</code> to enable overdraw visualization mode. It's disabled by default. To find out whether the Overdraw mode is currently enabled, use the <code>Overdraw.EnabledAtUpdateThread</code> and <code>Overdraw.EnabledAtRenderThread</code> for update and render threads respectively.</p>
+<p>Use <code>Gradient</code> property in <code>OverdrawInterpreter</code> class in namespace <code>Lime.Profiler.Graphics</code> to configure colors.</p>
+<h2 id="project-level-overdraw-support">Project level overdraw support</h2>
+<p>To enable overdraw support in the engine, define <code>PROFILER</code> symbol at following projects:</p>
+<ul>
+<li>Lime</li>
+<li>Tangerine.UI.Profiler <span style="color:gray">(only if you want to use overdraw in the scene editor)</span></li>
+<li>Tangerine.UI.SceneView <span style="color:gray">(only if you want to use overdraw in the scene editor)</span></li>
+</ul>
+<h3 id="the-easiest-way-to-do-it">The easiest way to do it:</h3>
+<ul>
+<li>For Tangerine Overdraw mode is enabled by default. So you don't have to do anything</li>
+<li>For game use Lime project configuration <code>Release.Profiler</code> or <code>Debug.Profiler</code></li>
+</ul>
+<p>⚠ The profiler code inside Lime is enclosed in define guard. This is done to exclude a negative impact on the size of the executable files of the game. So if you are writing code that depends on the profiler code, you must surround it with define guard and you must also set <code>PROFILER</code> symbol in the properties of these projects.</p>
+<pre><code class="lang-c#">// define guard
+#if PROFILER
+// place your code here
+#endif // PROFILER
+</code></pre>
+<h2 id="overdraw-foreground-ui">Overdraw foreground UI</h2>
+<p>To draw the interface on top of the overdraw, you need to add <code>OverdrawForegroundComponent</code> to a Widget.</p>
+<p>If overdraw mode is disabled, <code>OverdrawForegroundComponent</code> has no effect on rendering.</p>
+<p>If overdraw mode is enabled, objects are drawn with their original materials after all objects in the scene.</p>
+<p>⚠ Objects do not change their transform, hierarchy position location. Only rendering order is changed. That means clickability of the widgets is being preserved.</p>
+<p>⚠  <code>OverdrawForegroundComponent</code> affects all child nodes.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>Scene rendering in overdraw mode is divided into three phases:</p>
+<ul>
+<li>Rendering the scene to a render texture</li>
+<li>Interpret results with a given gradient</li>
+<li>Draw objects with <code>OverdrawForegroundComponent</code></li>
+</ul>
+<p>In the first phase, we</p>
+<ul>
+<li>redirect the rendering of all objects to a render texture.</li>
+<li>replace object shaders and blending.</li>
+</ul>
+<p>Overdraw shaders are created by replacing the body of the <code>main</code> function of the original fragment shaders:</p>
+<pre><code class="lang-glsl">// Original fragment shader
+void main() {
+    // shader code ...
+    gl_FragColor = // shader code ...
+    // shader code ...
+}
+</code></pre>
+<pre><code class="lang-glsl">// Overdraw fragment shader
+void main() {
+    gl_FragColor = vec4(1 / 256, 0, 0, 1);
+}
+</code></pre>
+<p>The vertex shader never changes. Also, every draw call of scene objects will use additive blending. As a result, we will get a render texture filled with shades of red.</p>
+<p>In the second phase, we apply a gradient to this render texture to make the individual overdraw states more distinguishable. There can be 256 overdraw states in total. And next, we draw the results on top of the scene.</p>
+<p>In the final third phase, we draw object subtrees that have <code>OverdrawForegroundComponent</code> at their root. For this, objects are added to a separate RenderChain. Objects are also added to the original scene RenderChain, but in this chain they will not be rendered! This is done for the hit test to work.</p>
+<h2 id="overdraw-metrics">Overdraw metrics</h2>
+<p>You can also get an average number of redraws for all game (scene) pixels for a frame. Nodes with <code>OverdrawForegroundComponent</code> will not affect this metric.</p>
+<p>Set <code>Overdraw.MetricRequired</code> to <code>true</code> and subscribe to <code>Overdraw.MetricCreated</code> event.</p>
+<p>⚠ <code>Overdraw.MetricCreated(float averageOverdraw, int pixelCount)</code> will be invoked from render thread.</p>
+<p>⚠ Obtaining the metric is a very expensive operation. The higher your screen resolution, the worse the performance.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            GameForest 2020
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

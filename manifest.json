@@ -78,7 +78,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AlphaIntensityMaterial.AlphaIntensityShaderProgram.html",
-          "hash": "qpJtnEte5UlGesqI8PchfA=="
+          "hash": "vWumSXaYKr7b28Lkz4VzmQ=="
         }
       },
       "is_incremental": false,
@@ -894,7 +894,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.BloomShaderProgram.html",
-          "hash": "LGmhhYaplU97lrX0v4rc7w=="
+          "hash": "KOWWaIl7+gDbu6hPvdzoqA=="
         }
       },
       "is_incremental": false,
@@ -930,7 +930,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.BlurShaderProgram.html",
-          "hash": "pFes1pNbC6/7CmV4QE+TJQ=="
+          "hash": "/z7blm52k1a0+TwWOlqOHg=="
         }
       },
       "is_incremental": false,
@@ -1362,7 +1362,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ColorCorrectionShaderProgram.html",
-          "hash": "V5Z5Kh+cR5Mbv/LoNUWcSw=="
+          "hash": "oPxZOgW2Z6RfH9xIUbbhgw=="
         }
       },
       "is_incremental": false,
@@ -1962,7 +1962,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DissolveMaterial.DissolveMaterialShaderProgram.html",
-          "hash": "y1OZXvQOroXAZWEW74Davg=="
+          "hash": "Ne1GOI3CiuBslC2V/xf7YQ=="
         }
       },
       "is_incremental": false,
@@ -2022,7 +2022,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DistortionShaderProgram.html",
-          "hash": "FjmWCvqImNhOfRKxaOpm3A=="
+          "hash": "TC77w9CVboMSh0mEVWD4Xw=="
         }
       },
       "is_incremental": false,
@@ -2286,7 +2286,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.FXAAShaderProgram.html",
-          "hash": "j19Lx4SRo3pxC5sPLSP0SQ=="
+          "hash": "d6/Fc4uDvdk54vf2mDUcsw=="
         }
       },
       "is_incremental": false,
@@ -2514,7 +2514,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.FragmentShader.html",
-          "hash": "mem4dQUfURsOP+f/B2kwjA=="
+          "hash": "LhAww3oCKfHgYnMbZD962A=="
         }
       },
       "is_incremental": false,
@@ -2670,7 +2670,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.GradientShaderProgram.html",
-          "hash": "qBxarow3QEXQfGPsxErs+A=="
+          "hash": "/fRIDhKTGbVmDtwLfk56cA=="
         }
       },
       "is_incremental": false,
@@ -3630,7 +3630,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IWindow.html",
-          "hash": "fXTzIOrqiFYklSJzo1wDpw=="
+          "hash": "vmmPMSyv0M5BMQXopyQ3aQ=="
         }
       },
       "is_incremental": false,
@@ -4926,7 +4926,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeBehavior.html",
-          "hash": "p+43gQOVm9q85+79JvU/2Q=="
+          "hash": "1ZaRk7FH7EiyycSAWBo/wA=="
         }
       },
       "is_incremental": false,
@@ -5130,7 +5130,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NoiseShaderProgram.html",
-          "hash": "yJLZGDSqbje1T/l+pnG1vQ=="
+          "hash": "hUqBdvqPXLEBbBTkJdfr8w=="
         }
       },
       "is_incremental": false,
@@ -5239,6 +5239,30 @@
         ".html": {
           "relative_path": "api/Lime.OpacityMask.html",
           "hash": "zZe7ikgoMRlXGqVllIBA9A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.OverdrawForegroundBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.OverdrawForegroundBehavior.html",
+          "hash": "iDH3LzwDFpRwQtJp4JsHLw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.OverdrawForegroundComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.OverdrawForegroundComponent.html",
+          "hash": "3aqsOFtTEmnOc5jlaqoFLg=="
         }
       },
       "is_incremental": false,
@@ -6006,7 +6030,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.RenderTexture.html",
-          "hash": "wI86HqxIGLGZsg9h6lv4+w=="
+          "hash": "gObQ71B/ptjwCMi65G5mWQ=="
         }
       },
       "is_incremental": false,
@@ -6270,7 +6294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Shader.html",
-          "hash": "Cz39oH9RPDjcm9uyRahcTw=="
+          "hash": "u+yrzJq7Ulx0rhN70t+g0g=="
         }
       },
       "is_incremental": false,
@@ -6354,7 +6378,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ShaderProgram.html",
-          "hash": "X5t/7FVEgBmhmNkbrPZTTA=="
+          "hash": "IMM+EVewIkSByFBV3BGrsw=="
         }
       },
       "is_incremental": false,
@@ -6378,7 +6402,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ShaderPrograms.ColorfulTextShaderProgram.html",
-          "hash": "duz0xsIs73X6tlg1YNpPQQ=="
+          "hash": "Ec519jrRYZnhRKwMBlLSdA=="
         }
       },
       "is_incremental": false,
@@ -6390,7 +6414,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ShaderPrograms.DashedLineShaderProgram.html",
-          "hash": "jzErVjCrVxK80BPxoi2G6w=="
+          "hash": "vLMS7AFEI1duONSRkgyFdA=="
         }
       },
       "is_incremental": false,
@@ -6438,7 +6462,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SharpenShaderProgram.html",
-          "hash": "oILy/xJmWibWjosRbMINig=="
+          "hash": "3SuiIFPvvQX7fNLUnzKGaw=="
         }
       },
       "is_incremental": false,
@@ -6486,7 +6510,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SignedDistanceField.SDFInnerShadowShaderProgram.html",
-          "hash": "8C4QojlEL8T5m+RSb/v7KA=="
+          "hash": "QwqbPorImSncS3CEcPPPBA=="
         }
       },
       "is_incremental": false,
@@ -6522,7 +6546,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SignedDistanceField.SDFShaderProgram.html",
-          "hash": "1Zx27Osleq6zh64IrMZ8Lw=="
+          "hash": "9ceo2yEJW+m/27geivJa6A=="
         }
       },
       "is_incremental": false,
@@ -6558,7 +6582,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SignedDistanceField.SDFShadowShaderProgram.html",
-          "hash": "vNY4o2CuC5vN5xxBRmXsIw=="
+          "hash": "0UeQFS0JxzI7ndZpULP1Jg=="
         }
       },
       "is_incremental": false,
@@ -8310,7 +8334,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TwistMaterial.TwistShaderProgram.html",
-          "hash": "N3JO/sr9fl6INaDtwUy3LA=="
+          "hash": "pMCY14zU/k9EIH47LNas2g=="
         }
       },
       "is_incremental": false,
@@ -8718,7 +8742,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.VertexShader.html",
-          "hash": "jHfz8xQXkl5d0AAv2FsUvg=="
+          "hash": "d4GTsAOKad5w8Lbe7dA1sw=="
         }
       },
       "is_incremental": false,
@@ -8838,7 +8862,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.VignetteShaderProgram.html",
-          "hash": "VJJ9Gz+Rvsgr8XnENkEXEg=="
+          "hash": "P+d3yAk9Vmo0sm/rFrQjOg=="
         }
       },
       "is_incremental": false,
@@ -8910,7 +8934,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WaveShaderProgram.html",
-          "hash": "rFoe8u+s/0UYx1aYq3FMDA=="
+          "hash": "9VjQzrugUxwQ18nIrhZ4jQ=="
         }
       },
       "is_incremental": false,
@@ -9222,7 +9246,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "W9hP7my7v5lLzmw7QgSLiQ=="
+          "hash": "TaWF76oKYnGf786BNdwKEw=="
         }
       },
       "is_incremental": false,
@@ -9270,7 +9294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "zq3V6u88aUPc3236IEkIAg=="
+          "hash": "nNJQ9Hm2C4eG0gyZpuBgDg=="
         }
       },
       "is_incremental": false,
@@ -9282,7 +9306,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/configuration.html",
-          "hash": "W2akSseguBwxseYXqe6V0Q=="
+          "hash": "MzwLvcx2KAEKbKjxhVUTOQ=="
         }
       },
       "is_incremental": false,
@@ -9294,7 +9318,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/cooking_rules.html",
-          "hash": "e1yqgzXV9kmrpII3JtSBcg=="
+          "hash": "8ZER9NztrC6d3okR0u9OlQ=="
         }
       },
       "is_incremental": false,
@@ -9306,7 +9330,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/directory_structure.html",
-          "hash": "V001iZlU/cPh4KiS2DOguQ=="
+          "hash": "qaWxk56HQXEa+PpIv3ef6w=="
         }
       },
       "is_incremental": false,
@@ -9318,7 +9342,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/tangerine_font_configuration.html",
-          "hash": "3S0OLS2eQ9mPXI+n0goOpw=="
+          "hash": "bmToqv30ZtBQLC9aJc1yUQ=="
         }
       },
       "is_incremental": false,
@@ -9386,6 +9410,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/profiling/overdraw.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/profiling/overdraw.html",
+          "hash": "PaAzFauRJS7Zl9GiqAflWw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/specifications/coding_conventions.md",
       "output": {
         ".html": {
@@ -9402,7 +9438,18 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "9XfelmFkDRvVBTnx9thMrQ=="
+          "hash": "BMmJgYisVgny6ZlboUrSHw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/car_overdraw_image.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/car_overdraw_image.png"
         }
       },
       "is_incremental": false,
@@ -9425,6 +9472,17 @@
       "output": {
         "resource": {
           "relative_path": "images/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/overdraw_panel.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/overdraw_panel.png"
         }
       },
       "is_incremental": false,
@@ -11317,7 +11375,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "2kq0GjfNo0LX3nj85/Bffg=="
+          "hash": "A8Z23tAPhxiPBBkbjGWAAw=="
         }
       },
       "is_incremental": false,
@@ -11335,23 +11393,23 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
-        "TocDocumentProcessor": {
+        "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 0,
+          "total_file_count": 773,
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 72,
+          "total_file_count": 73,
           "skipped_file_count": 0
         },
-        "ManagedReferenceDocumentProcessor": {
+        "TocDocumentProcessor": {
           "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 771,
+          "total_file_count": 0,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

@@ -127,7 +127,7 @@
 </tr>
 <tr>
 <td><code>CustomKerningPairs</code></td>
-<td><a href="#CustomKerningPairs">CustomKerningPairs</a></td>
+<td><a href="#customkerningpairs">CustomKerningPairs</a></td>
 <td>Kerning pairs are used to adjust the spacing between specific character pairs, to produce a more visually pleasing result. Note that many fonts do not have kerning pairs or may not satisfy your needs so you can simply add your own pairs or override ones taken from the font file.</td>
 </tr>
 <tr>
@@ -155,7 +155,7 @@
 <tr>
 <td><code>Font</code></td>
 <td>string</td>
-<td>Path (relative to asset directory) to font file from which glyphs will be taken. See <a href="#Supported-formats">supported font formats</a>.</td>
+<td>Path (relative to asset directory) to font file from which glyphs will be taken. See <a href="#supported-formats">supported font formats</a>.</td>
 </tr>
 <tr>
 <td><code>ExtractFromDictionaries</code></td>
@@ -169,7 +169,7 @@
 <pre><code class="lang-json">[12, 34]
 </code></pre>
 <h2 id="customkerningpairs"><code>CustomKerningPairs</code></h2>
-<p>It's a dictionary with character key and array of <a href="#KerningPair">KerningPair</a> values. Each kerning pair in array represents kerning amount that should be applied if character follows array's key of the dictionary. For example this:</p>
+<p>It's a dictionary with character key and array of <a href="#kerningpair">KerningPair</a> values. Each kerning pair in array represents kerning amount that should be applied if character follows array's key of the dictionary. For example this:</p>
 <pre><code class="lang-json">CustomKerningPairs: { 'A': [['V', -2]] }
 </code></pre>
 <p>means that position of <code>V</code> should be decreased by 2 if it follows <code>A</code>.</p>

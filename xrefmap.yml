@@ -46178,6 +46178,18 @@ references:
   isSpec: "True"
   fullName: Lime.OpacityMask.Width
   nameWithType: OpacityMask.Width
+- uid: Lime.OverdrawForegroundBehavior
+  name: OverdrawForegroundBehavior
+  href: api/Lime.OverdrawForegroundBehavior.html
+  commentId: T:Lime.OverdrawForegroundBehavior
+  fullName: Lime.OverdrawForegroundBehavior
+  nameWithType: OverdrawForegroundBehavior
+- uid: Lime.OverdrawForegroundComponent
+  name: OverdrawForegroundComponent
+  href: api/Lime.OverdrawForegroundComponent.html
+  commentId: T:Lime.OverdrawForegroundComponent
+  fullName: Lime.OverdrawForegroundComponent
+  nameWithType: OverdrawForegroundComponent
 - uid: Lime.PackedAssetBundle
   name: PackedAssetBundle
   href: api/Lime.PackedAssetBundle.html
@@ -54430,6 +54442,15 @@ references:
   commentId: M:Lime.RenderTexture.GetPixels
   fullName: Lime.RenderTexture.GetPixels()
   nameWithType: RenderTexture.GetPixels()
+- uid: Lime.RenderTexture.GetPixels(Lime.Color4[])
+  name: GetPixels(Color4[])
+  href: api/Lime.RenderTexture.html#Lime_RenderTexture_GetPixels_Lime_Color4___
+  commentId: M:Lime.RenderTexture.GetPixels(Lime.Color4[])
+  name.vb: GetPixels(Color4())
+  fullName: Lime.RenderTexture.GetPixels(Lime.Color4[])
+  fullName.vb: Lime.RenderTexture.GetPixels(Lime.Color4())
+  nameWithType: RenderTexture.GetPixels(Color4[])
+  nameWithType.vb: RenderTexture.GetPixels(Color4())
 - uid: Lime.RenderTexture.GetPixels*
   name: GetPixels
   href: api/Lime.RenderTexture.html#Lime_RenderTexture_GetPixels_
@@ -54506,6 +54527,19 @@ references:
   fullName: Lime.RenderTexture.Lime.ITexture.GetPlatformTexture
   nameWithType: RenderTexture.ITexture.GetPlatformTexture
   nameWithType.vb: RenderTexture.Lime.ITexture.GetPlatformTexture
+- uid: Lime.RenderTexture.PixelCount
+  name: PixelCount
+  href: api/Lime.RenderTexture.html#Lime_RenderTexture_PixelCount
+  commentId: P:Lime.RenderTexture.PixelCount
+  fullName: Lime.RenderTexture.PixelCount
+  nameWithType: RenderTexture.PixelCount
+- uid: Lime.RenderTexture.PixelCount*
+  name: PixelCount
+  href: api/Lime.RenderTexture.html#Lime_RenderTexture_PixelCount_
+  commentId: Overload:Lime.RenderTexture.PixelCount
+  isSpec: "True"
+  fullName: Lime.RenderTexture.PixelCount
+  nameWithType: RenderTexture.PixelCount
 - uid: Lime.RenderTexture.RestoreRenderTarget
   name: RestoreRenderTarget()
   href: api/Lime.RenderTexture.html#Lime_RenderTexture_RestoreRenderTarget
@@ -56347,6 +56381,32 @@ references:
   isSpec: "True"
   fullName: Lime.Shader.Finalize
   nameWithType: Shader.Finalize
+- uid: Lime.Shader.Source
+  name: Source
+  href: api/Lime.Shader.html#Lime_Shader_Source
+  commentId: P:Lime.Shader.Source
+  fullName: Lime.Shader.Source
+  nameWithType: Shader.Source
+- uid: Lime.Shader.Source*
+  name: Source
+  href: api/Lime.Shader.html#Lime_Shader_Source_
+  commentId: Overload:Lime.Shader.Source
+  isSpec: "True"
+  fullName: Lime.Shader.Source
+  nameWithType: Shader.Source
+- uid: Lime.Shader.Stage
+  name: Stage
+  href: api/Lime.Shader.html#Lime_Shader_Stage
+  commentId: P:Lime.Shader.Stage
+  fullName: Lime.Shader.Stage
+  nameWithType: Shader.Stage
+- uid: Lime.Shader.Stage*
+  name: Stage
+  href: api/Lime.Shader.html#Lime_Shader_Stage_
+  commentId: Overload:Lime.Shader.Stage
+  isSpec: "True"
+  fullName: Lime.Shader.Stage
+  nameWithType: Shader.Stage
 - uid: Lime.ShaderId
   name: ShaderId
   href: api/Lime.ShaderId.html
@@ -56528,6 +56588,12 @@ references:
   isSpec: "True"
   fullName: Lime.ShaderProgram.Dispose
   nameWithType: ShaderProgram.Dispose
+- uid: Lime.ShaderProgram.Empty
+  name: Empty
+  href: api/Lime.ShaderProgram.html#Lime_ShaderProgram_Empty
+  commentId: F:Lime.ShaderProgram.Empty
+  fullName: Lime.ShaderProgram.Empty
+  nameWithType: ShaderProgram.Empty
 - uid: Lime.ShaderProgram.Finalize
   name: Finalize()
   href: api/Lime.ShaderProgram.html#Lime_ShaderProgram_Finalize
