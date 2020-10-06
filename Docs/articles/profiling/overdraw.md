@@ -2,7 +2,7 @@
 
 With Overdraw mode you can determine the number of fragment shader calls for each pixel on the screen.
 
-![car_overdraw_image](/images/car_overdraw_image.png)
+![car_overdraw_image](images/car_overdraw_image.png)
 
 ⚠ If objects are rendered to an intermediate buffer, and then this buffer is drawn to the main framebuffer, the Overdraw metric will be equal to 1 for the whole intermediate buffer. You can observe this effect at least for post-processing.
 
@@ -12,7 +12,7 @@ With Overdraw mode you can determine the number of fragment shader calls for eac
 
 The Overdraw mode is configured through the profiler pane.
 
-![overdraw_panel](/images/overdraw_panel.png)
+![overdraw_panel](images/overdraw_panel.png)
 
 You can enable this mode with Profiler pane or you can use scene command `Toggle Overdraw Mode`.
 
