@@ -138,8 +138,10 @@ namespace Tangerine.UI
 				colorInput.Text = point.Color.ToString(Color4.StringPresentation.Dec);
 				positionInput.Text = ((int)(point.Position * (overdrawColorCount - 1))).ToString();
 			};
-			gradientControlWidget.ControlPointPositionChanged += (f,i) =>
-				OverdrawInterpreter.Gradient = gradientControlWidget.Gradient;
+			void UpdateGradient() => OverdrawInterpreter.Gradient = gradientControlWidget.Gradient;
+			gradientControlWidget.ControlPointCreated += (f, i) => UpdateGradient();
+			gradientControlWidget.ControlPointRemoved += (i) => UpdateGradient();
+			gradientControlWidget.ControlPointPositionChanged += (f,i) => UpdateGradient();
 			positionInput.Step = 1;
 			positionInput.Submitted += (text) => {
 				if (currentPoint != null) {
