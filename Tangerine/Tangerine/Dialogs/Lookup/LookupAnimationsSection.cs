@@ -14,18 +14,21 @@ namespace Tangerine
 		{
 			foreach (var animation in animations) {
 				var aClosed = animation;
-				navigateToNode &= animation.OwnerNode != Document.Current.Container;
+				var navigateToNodeClosed = navigateToNode && animation.OwnerNode != Document.Current.Container;
 				lookupWidget.AddItem(new LookupDialogItem(
 					animation.IsLegacy ? "[Legacy]" : animation.Id,
 					$"Node: {animation.OwnerNode}",
 					() => {
 						var a = aClosed;
-						if (navigateToNode) {
-							var n = LookupNodesSection.NavigateToDocumentNode(aClosed.OwnerNode, asContainer: true);
-							if (n == null) {
+						if (navigateToNodeClosed) {
+							Node node;
+							try {
+								node = NavigateToNode.Perform(aClosed.OwnerNode, enterInto: true);
+							} catch (System.Exception exception) {
+								AlertDialog.Show(exception.Message);
 								return;
 							}
-							a = n.Animations[aClosed.OwnerNode.Animations.IndexOf(aClosed)];
+							a = node.Animations[aClosed.OwnerNode.Animations.IndexOf(aClosed)];
 						}
 						var document = Document.Current;
 						Document.Current.History.DoTransaction(() => {

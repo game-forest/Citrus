@@ -34,8 +34,11 @@ namespace Tangerine
 						var a = animation;
 						if (navigateToNode) {
 							var animationIndex = animation.OwnerNode.Animations.IndexOf(animation);
-							var node = LookupNodesSection.NavigateToDocumentNode(animation.OwnerNode, asContainer: true);
-							if (node == null) {
+							Node node;
+							try {
+								node = NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: true);
+							} catch (System.Exception exception) {
+								AlertDialog.Show(exception.Message);
 								return;
 							}
 							a = node.Animations[animationIndex];
@@ -80,7 +83,7 @@ namespace Tangerine
 			) {
 				return;
 			}
-			FillLookupByAnimationMarkers(lookupWidget, Document.Current.Animation);
+			FillLookupByAnimationMarkers(lookupWidget, Document.Current.Animation, navigateToNode: false);
 		}
 
 		private bool RequireAnimationWithMarkersOrAddAlertItem(LookupWidget lookupWidget, string alertText)

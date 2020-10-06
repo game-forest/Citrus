@@ -1,5 +1,6 @@
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 using Tangerine.UI;
 
 namespace Tangerine
@@ -33,7 +34,11 @@ namespace Tangerine
 						component.GetType().Name,
 						$"Node: {node}",
 						() => {
-							LookupNodesSection.NavigateToDocumentNode(nodeClosed, canToogleInspectRootNode: true);
+							try {
+								NavigateToNode.Perform(nodeClosed, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
+							} catch (System.Exception exception) {
+								AlertDialog.Show(exception.Message);
+							}
 							Sections.Drop();
 						}
 					));
