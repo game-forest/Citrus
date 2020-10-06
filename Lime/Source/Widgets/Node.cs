@@ -8,6 +8,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+#if PROFILER
+using Lime.Profiler;
+#endif // PROFILER
 using Yuzu;
 
 namespace Lime
@@ -60,6 +63,9 @@ namespace Lime
 	[YuzuDontGenerateDeserializer]
 	[DebuggerTypeProxy(typeof(NodeDebugView))]
 	public abstract class Node : IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable
+#if PROFILER
+		, IProfileableObject
+#endif // PROFILER
 	{
 		[Flags]
 		protected internal enum DirtyFlags
@@ -550,6 +556,16 @@ namespace Lime
 
 		public static int CreatedCount = 0;
 		public static int FinalizedCount = 0;
+
+#if PROFILER
+#if TANGERINE
+		bool IProfileableObject.IsPartOfScene => SceneProfilingInfo.NodeManager == Manager;
+#else // TANGERINE
+		bool IProfileableObject.IsPartOfScene => true;
+#endif // TANGERINE
+		[YuzuExclude]
+		public bool IsOverdrawForeground { get; set; }
+#endif // PROFILER
 
 		/// <summary>
 		/// Initializes a new instance of node.

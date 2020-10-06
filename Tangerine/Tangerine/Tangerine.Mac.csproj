@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>__MACOS__;__UNIFIED__;DEBUG;MAC</DefineConstants>
+    <DefineConstants>__MACOS__;__UNIFIED__;DEBUG;MAC;PROFILER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -48,7 +48,7 @@
     </DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>__MACOS__;__UNIFIED__;MAC</DefineConstants>
+    <DefineConstants>__MACOS__;__UNIFIED__;MAC;PROFILER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -154,6 +154,10 @@
     <ProjectReference Include="..\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Mac.csproj">
       <Project>{f93da48e-2a86-4dc4-a392-102b1e567b3a}</Project>
       <Name>Tangerine.UI.RemoteScripting.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tangerine.UI.Profiler\Tangerine.UI.Profiler.Mac.csproj">
+      <Project>{8e8c8ed3-63c2-407f-b626-cd9867e16353}</Project>
+      <Name>Tangerine.UI.Profiler.Mac</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Mac.csproj">
       <Project>{E62BA18F-4E1A-466A-8299-67AD567F17E5}</Project>

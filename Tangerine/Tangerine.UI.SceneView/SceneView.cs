@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Lime;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
@@ -54,6 +57,7 @@ namespace Tangerine.UI.SceneView
 			ConnectCommand(SceneViewCommands.Duplicate, DuplicateNodes);
 			ConnectCommand(SceneViewCommands.TieWidgetsWithBones, TieWidgetsWithBones);
 			ConnectCommand(SceneViewCommands.UntieWidgetsFromBones, UntieWidgetsFromBones);
+			ConnectCommand(SceneViewCommands.ToggleOverdrawMode, ToggleOverdrawMode);
 		}
 
 		private static void ConnectCommand(ICommand command, DocumentCommandHandler handler)
@@ -82,6 +86,14 @@ namespace Tangerine.UI.SceneView
 			return Scene.LocalToWorldTransform * targetSpace.LocalToWorldTransform.CalcInversed();
 		}
 
+		private static void ToggleOverdrawMode()
+		{
+#if PROFILER
+			Overdraw.Enabled = !Overdraw.EnabledAtUpdateThread;
+#endif // PROFILER
+			Window.Current.Invalidate();
+		}
+
 		private static void TieWidgetsWithBones()
 		{
 			try {
@@ -101,7 +113,7 @@ namespace Tangerine.UI.SceneView
 			Core.Operations.UntieWidgetsFromBones.Perform(bones, widgets);
 		}
 
-		class ScenePresenter : IPresenter
+		private class ScenePresenter : IPresenter
 		{
 			private RenderChain renderChain = new RenderChain();
 			private Node content;
@@ -121,6 +133,13 @@ namespace Tangerine.UI.SceneView
 				} finally {
 					renderChain.Clear();
 				}
+#if PROFILER
+				ro.IsThumbnailOwner = SceneViewThumbnailProvider.IsGettingRenderObjects;
+				ro.Frame = new RenderObject.FrameInfo {
+					Transform = node.Parent.AsWidget.LocalToWorldTransform,
+					Size = (Size)node.Parent.AsWidget.Size
+				};
+#endif // PROFILER
 				ro.LocalToWorldTransform = w.LocalToWorldTransform;
 				return ro;
 			}
@@ -139,8 +158,17 @@ namespace Tangerine.UI.SceneView
 				}
 			}
 
-			class RenderObject : Lime.RenderObject
+			private class RenderObject : Lime.RenderObject
 			{
+#if PROFILER
+				private static readonly RenderTargetQueue mainRenderTargetManager = new RenderTargetQueue();
+				private static readonly RenderTargetQueue thumbnailRenderTargetManager = new RenderTargetQueue();
+				private static Color4[] overdrawPixels = new Color4[1920 * 1080];
+
+				public bool IsThumbnailOwner;
+				public FrameInfo Frame;
+#endif // PROFILER
+
 				public Matrix32 LocalToWorldTransform;
 				public RenderObjectList SceneObjects = new RenderObjectList();
 
@@ -148,15 +176,72 @@ namespace Tangerine.UI.SceneView
 				{
 					Renderer.PushState(RenderState.All);
 					// Hack: use the current state of Transform2 since it may be configured for generating SceneViewThumbnail.
-					Renderer.Transform2 = LocalToWorldTransform * Renderer.Transform2;
+					var sceneTransform2 = LocalToWorldTransform * Renderer.Transform2;
+					Renderer.Transform2 = sceneTransform2;
+#if PROFILER
+					RenderTargetQueue renderTargetQueue = null;
+					RenderTexture renderTexture = null;
+					if (Overdraw.EnabledAtRenderThread) {
+						Renderer.PushState(
+							RenderState.ScissorState |
+							RenderState.Viewport |
+							RenderState.Projection |
+							RenderState.Transform1 |
+							RenderState.Transform2);
+						var viewportSize = (Size)((Vector2)Frame.Size * Window.Current.PixelScale);
+						renderTargetQueue = IsThumbnailOwner ? thumbnailRenderTargetManager : mainRenderTargetManager;
+						renderTexture = renderTargetQueue.Acquire(viewportSize);
+						renderTexture.SetAsRenderTarget();
+						Renderer.ScissorState = ScissorState.ScissorDisabled;
+						Renderer.Viewport = new Viewport(0, 0, viewportSize.Width, viewportSize.Height);
+						Renderer.SetOrthogonalProjection(0, 0, Frame.Size.Width, Frame.Size.Height);
+						Renderer.Transform1 = Matrix32.Identity;
+						Renderer.Transform2 = LocalToWorldTransform * Frame.Transform.CalcInversed();
+						Renderer.Clear(Color4.Zero);
+						OverdrawMaterialScope.Enter();
+					}
+#endif // PROFILER
 					SceneObjects.Render();
+#if PROFILER
+					if (Overdraw.EnabledAtRenderThread) {
+						OverdrawMaterialScope.Leave();
+						renderTexture.RestoreRenderTarget();
+						if (Overdraw.MetricRequiredAtRenderThread && !IsThumbnailOwner) {
+							OverdrawInterpreter.EnsureEnoughBufferSize(renderTexture, ref overdrawPixels);
+							renderTexture.GetPixels(overdrawPixels);
+							int pixelCount = renderTexture.PixelCount;
+							float averageOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelCount);
+							Overdraw.InvokeMetricCreated(averageOverdraw, pixelCount);
+						}
+						renderTargetQueue.Free(renderTexture);
+						Renderer.PopState();
+					}
+#endif // PROFILER
 					Renderer.PopState();
+#if PROFILER
+					if (Overdraw.EnabledAtRenderThread) {
+						OverdrawInterpreter.DrawResults(renderTexture, Frame.Transform, Frame.Size);
+						Renderer.PushState(RenderState.Transform2);
+						Renderer.Transform2 = sceneTransform2;
+						OverdrawForeground.Render();
+						Renderer.PopState();
+					}
+#endif // PROFILER
 				}
 
 				protected override void OnRelease()
 				{
 					SceneObjects.Clear();
 					base.OnRelease();
+				}
+
+				/// <summary>
+				/// Describes <see cref="SceneView.Frame"/> positioning.
+				/// </summary>
+				public struct FrameInfo
+				{
+					public Matrix32 Transform;
+					public Size Size;
 				}
 			}
 		}
@@ -396,6 +481,13 @@ namespace Tangerine.UI.SceneView
 		private readonly Widget sceneViewFrame;
 		private RenderTexture texture;
 
+#if PROFILER
+		/// <summary>
+		/// Hack: use the static field to determine when SceneView.RenderObject belongs to SceneViewThumbnail.
+		/// </summary>
+		internal static bool IsGettingRenderObjects { get; private set; }
+#endif // PROFILER
+
 		public SceneViewThumbnailProvider(Document document, Widget sceneViewFrame)
 		{
 			this.document = document;
@@ -418,7 +510,13 @@ namespace Tangerine.UI.SceneView
 			ap.SetAnimationFrame(document.Animation, frame, stopAnimations: true);
 			sceneViewFrame.RenderChainBuilder?.AddToRenderChain(renderChain);
 			renderList.Clear();
+#if PROFILER
+			IsGettingRenderObjects = true;
+#endif // PROFILER
 			renderChain.GetRenderObjects(renderList);
+#if PROFILER
+			IsGettingRenderObjects = false;
+#endif // PROFILER
 			ap.SetAnimationTime(document.Animation, savedTime, stopAnimations: true);
 			Document.Current.Animation.IsRunning = savedIsRunning;
 			Window.Current.InvokeOnRendering(() => RenderThumbnail(callback));

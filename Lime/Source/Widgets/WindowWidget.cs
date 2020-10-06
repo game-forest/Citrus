@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -19,11 +22,25 @@ namespace Lime
 		private Widget lastFocused;
 		protected readonly RenderChain renderChain;
 
+#if !TANGERINE && PROFILER
+		private readonly RenderTargetQueue renderTargetManager;
+		private Color4[] overdrawPixels;
+
+		private Action overdrawBegin;
+		private Action overdrawEnd;
+#endif // !TANGERINE && PROFILER
+
 		public IWindow Window { get; private set; }
 		public WidgetContext WidgetContext { get; private set; }
 
 		public WindowWidget(IWindow window)
 		{
+#if !TANGERINE && PROFILER
+			if (window == Application.MainWindow) {
+				renderTargetManager = new RenderTargetQueue();
+				overdrawPixels = new Color4[1920 * 1080];
+			}
+#endif // !TANGERINE && PROFILER
 			WidgetContext = new WidgetContext(this);
 			LayoutManager = new LayoutManager();
 			CreateManager(LayoutManager, WidgetContext).RootNodes.Add(this);
@@ -70,16 +87,33 @@ namespace Lime
 		{
 			assetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
 			Toolbox.Swap(ref renderObjectList1, ref renderObjectList2);
+#if PROFILER
+			if (Window == Application.MainWindow) {
+				Overdraw.Sync();
+				OverdrawForeground.Sync();
+			}
+#endif // PROFILER
 		}
 
 		public void PrepareToRender()
 		{
 			renderObjectList1.Clear();
 			renderChain.GetRenderObjects(renderObjectList1);
+#if PROFILER
+			if (Window == Application.MainWindow) {
+				OverdrawForeground.GetRenderObjects();
+			}
+#endif // PROFILER
 		}
 
 		public virtual void Update(float delta)
 		{
+#if PROFILER
+			if (Window == Application.MainWindow) {
+				Overdraw.UpdateStarted();
+			}
+#endif // PROFILER
+
 			if (ContinuousRendering()) {
 				Window.Invalidate();
 			}
@@ -124,7 +158,36 @@ namespace Lime
 			if (assetBundle != null) {
 				AssetBundle.SetCurrent(assetBundle, resetTexturePool: false);
 			}
+#if !TANGERINE && PROFILER
+			RenderTexture renderTexture = null;
+			if (Overdraw.EnabledAtRenderThread && Window == Application.MainWindow) {
+				renderTexture = renderTargetManager.Acquire((Size)GetViewport().Size);
+				renderTexture.SetAsRenderTarget();
+				Renderer.Clear(Color4.Zero);
+				OverdrawMaterialScope.Enter();
+			}
+#endif // !TANGERINE && PROFILER
 			Render(renderObjectList2);
+#if !TANGERINE && PROFILER
+			if (Overdraw.EnabledAtRenderThread && Window == Application.MainWindow) {
+				OverdrawMaterialScope.Leave();
+				renderTexture.RestoreRenderTarget();
+				if (Overdraw.MetricRequiredAtRenderThread) {
+					OverdrawInterpreter.EnsureEnoughBufferSize(renderTexture, ref overdrawPixels);
+					renderTexture.GetPixels(overdrawPixels);
+					int pixelCount = renderTexture.PixelCount;
+					float averageOverdraw = OverdrawInterpreter.GetAverageOverdraw(overdrawPixels, pixelCount);
+					Overdraw.InvokeMetricCreated(averageOverdraw, pixelCount);
+				}
+				renderTargetManager.Free(renderTexture);
+				Renderer.PushState(RenderState.Projection);
+				var windowSize = (Size)Window.ClientSize;
+				Renderer.SetOrthogonalProjection(0, 0, windowSize.Width, windowSize.Height);
+				OverdrawInterpreter.DrawResults(renderTexture, Matrix32.Identity, windowSize);
+				Renderer.PopState();
+				OverdrawForeground.Render();
+			}
+#endif // !TANGERINE && PROFILER
 		}
 
 		private bool IsAnyCaptureKeyPressed()

@@ -129,6 +129,7 @@ namespace Tangerine.UI
 		public static readonly ICommand ManageRulers = new Command("Manage Rulers");
 		public static readonly ICommand GeneratePreview = new Command("Generate Preview");
 		public static readonly ICommand PasteAtOldPosition = new Command("Paste at Old Position", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.V));
+		public static readonly ICommand ToggleOverdrawMode = new Command("Toggle Overdraw Mode");
 	}
 
 	public static class Tools

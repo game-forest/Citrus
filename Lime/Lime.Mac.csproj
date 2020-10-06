@@ -36,6 +36,27 @@
     <AOTMode>None</AOTMode>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Mac\Debug</OutputPath>
+    <DefineConstants>DEBUG;OPENGL;OPENAL;MAC;PROFILER</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <UseRefCounting>false</UseRefCounting>
+    <Profiling>true</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
+    <AOTMode>None</AOTMode>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>True</Optimize>
@@ -57,12 +78,33 @@
     <AOTMode>None</AOTMode>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Mac\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <DebugSymbols>True</DebugSymbols>
+    <DefineConstants>MAC;OPENGL;OPENAL;PROFILER</DefineConstants>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <UseRefCounting>false</UseRefCounting>
+    <Profiling>false</Profiling>
+    <HttpClientHandler>HttpClientHandler</HttpClientHandler>
+    <AOTMode>None</AOTMode>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Tangerine|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Source\bin\Debug.Tangerine</OutputPath>
-    <DefineConstants>__UNIFIED__;__MACOS__;DEBUG;OPENGL;OPENAL;MAC;TANGERINE</DefineConstants>
+    <DefineConstants>__UNIFIED__;__MACOS__;DEBUG;OPENGL;OPENAL;MAC;TANGERINE;PROFILER</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <UseSGen>false</UseSGen>
@@ -79,7 +121,7 @@
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Source\bin\Release.Tangerine</OutputPath>
-    <DefineConstants>__UNIFIED__;__MACOS__;MAC;OPENGL;OPENAL;TANGERINE</DefineConstants>
+    <DefineConstants>__UNIFIED__;__MACOS__;MAC;OPENGL;OPENAL;TANGERINE;PROFILER</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <UseSGen>false</UseSGen>
@@ -295,6 +337,11 @@
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageData.cs" />
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageSummary.cs" />
     <Compile Include="Source\Profilers\TasksProfiler.cs" />
+    <Compile Include="Source\Profiler\Graphics\Overdraw.cs" />
+    <Compile Include="Source\Profiler\Graphics\RenderBatchProfilingInfo.cs" />
+    <Compile Include="Source\Profiler\Graphics\RenderObjectOwnerInfo.cs" />
+    <Compile Include="Source\Profiler\IProfileableObject.cs" />
+    <Compile Include="Source\Profiler\SceneProfilingInfo.cs" />
     <Compile Include="Source\ReferenceEqualityComparer.cs" />
     <Compile Include="Source\ServiceProviderExtensions.cs" />
     <Compile Include="Source\ServiceRegistry.cs" />
@@ -436,6 +483,7 @@
     <Compile Include="Source\Widgets\NodeManagerRootCollection.cs" />
     <Compile Include="Source\Widgets\NodeProcessor.cs" />
     <Compile Include="Source\Widgets\NodeReference.cs" />
+    <Compile Include="Source\Widgets\OverdrawForegroundComponent.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSetupProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSystem.cs" />

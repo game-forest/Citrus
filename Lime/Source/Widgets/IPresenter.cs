@@ -46,6 +46,9 @@ namespace Lime
 			for (var i = Count - 1; i >= 0; i--) {
 				var obj = this[i].GetRenderObject(node);
 				if (obj != null) {
+#if PROFILER
+					obj.OwnerInfo.Initialize(node);
+#endif // PROFILER
 					ro.Objects.Add(obj);
 				}
 			}

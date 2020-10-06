@@ -112,6 +112,7 @@ namespace Tangerine
 			var animationsPanel = new Panel("Animations");
 			var filesystemPanel = new Panel("Filesystem");
 			var consolePanel = new Panel("Console");
+			var profilerPanel = new Panel("Profiler");
 			var backupHistoryPanel = new Panel("Backups");
 			var documentPanel = new Panel(DockManager.DocumentAreaId, undockable: false);
 			documentPanel.PanelWidget = documentPanel.ContentWidget;
@@ -120,6 +121,7 @@ namespace Tangerine
 			var remoteScriptingPanel = new Panel("Remote Scripting");
 			var dockManager = DockManager.Instance;
 			new UI.Console(consolePanel);
+			new UI.Profiler(profilerPanel);
 			var root = dockManager.Model.WindowPlacements.First();
 			var placement = new LinearPlacement(LinearPlacementDirection.Horizontal);
 			dockManager.AddPanel(timelinePanel, root, DockSite.Top, 0.3f);
@@ -133,6 +135,7 @@ namespace Tangerine
 				{ searchPanel.Id, new Command(searchPanel.Title) },
 				{ filesystemPanel.Id, new Command(filesystemPanel.Title) },
 				{ consolePanel.Id, new Command(consolePanel.Title) },
+				{ profilerPanel.Id, new Command(profilerPanel.Title) },
 				{ backupHistoryPanel.Id, new Command(backupHistoryPanel.Title) },
 				{ visualHintsPanel.Id, new Command(visualHintsPanel.Title) },
 				{ attachmentPanel.Id, new Command(attachmentPanel.Title) },
@@ -148,6 +151,7 @@ namespace Tangerine
 			dockManager.AddPanel(animationsPanel, filesystemPlacement, DockSite.Fill);
 			dockManager.AddPanel(backupHistoryPanel, filesystemPlacement, DockSite.Fill);
 			dockManager.AddPanel(consolePanel, filesystemPlacement, DockSite.Bottom, 0.3f);
+			dockManager.AddPanel(profilerPanel, filesystemPlacement, DockSite.Bottom, 0.3f);
 			dockManager.AddPanel(visualHintsPanel, placement, DockSite.Right, 0.3f).Hidden = true;
 			dockManager.AddPanel(attachmentPanel, placement, DockSite.Bottom, 0.3f).Hidden = true;
 			dockManager.AddPanel(remoteScriptingPanel, placement, DockSite.Right, 0.3f).Hidden = true;

@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Lime.Graphics.Platform;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
 	public class ShaderProgram
 	{
+		public static readonly ShaderProgram Empty = new ShaderProgram();
+
 		public class AttribLocation
 		{
 			public string Name;
@@ -28,11 +34,31 @@ namespace Lime
 		private BoundShaderParam[] boundParams;
 		private Uniform[] uniforms;
 
-		public ShaderProgram(IEnumerable<Shader> shaders, IEnumerable<AttribLocation> attribLocations, IEnumerable<Sampler> samplers)
+#if PROFILER
+		public ShaderProgram OverdrawProgram { get; }
+#endif // PROFILER
+
+		private ShaderProgram() { }
+
+		public ShaderProgram(
+			IEnumerable<Shader> shaders,
+			IEnumerable<AttribLocation> attribLocations,
+			IEnumerable<Sampler> samplers
+#if PROFILER
+			, ShaderProgram overdrawShaderProgram = null
+#endif // PROFILER
+			)
 		{
 			this.shaders = shaders.ToArray();
 			this.attribLocations = attribLocations.ToArray();
 			this.samplers = samplers.ToArray();
+#if PROFILER
+			ShaderProgram CreateDefaultOverdrawProgram() {
+				var overdrawShaders = shaders.Select(s => new OverdrawShader(s.Stage, s.Source));
+				return new ShaderProgram(overdrawShaders, attribLocations, samplers, overdrawShaderProgram: Empty);
+			}
+			OverdrawProgram = overdrawShaderProgram ?? CreateDefaultOverdrawProgram();
+#endif // PROFILER
 		}
 
 		~ShaderProgram()
@@ -184,6 +210,37 @@ namespace Lime
 					throw new NotSupportedException($"name: {name}, type: {type.ToString()}");
 			}
 		}
+
+#if PROFILER
+		private class OverdrawShader : Shader
+		{
+			public OverdrawShader(ShaderStageMask stage, string source) :
+				base(stage, ReplaceShader(stage, source)) { }
+
+			private static string ReplaceShader(ShaderStageMask stage, string source)
+			{
+				if (stage != ShaderStageMask.Fragment) {
+					return source;
+				}
+				var match = Regex.Match(source, @"void\s+main\s*[^{]*");
+				if (!match.Success) {
+					throw new InvalidOperationException();
+				}
+				int bodyLocation = match.Index + match.Length;
+				int curlyBraceCount = 0;
+				for (int i = bodyLocation; i < source.Length; i++) {
+					curlyBraceCount += source[i] == '{' ? 1 : 0;
+					curlyBraceCount -= source[i] == '}' ? 1 : 0;
+					if (curlyBraceCount == 0) {
+						return source.Substring(0, bodyLocation + 1) +
+							   $"gl_FragColor = vec4({OverdrawShaderProgram.Step},0,0,1);" +
+							   source.Substring(i);
+					}
+				}
+				throw new InvalidOperationException();
+			}
+		}
+#endif // PROFILER
 	}
 
 	internal struct Uniform

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
@@ -35,6 +38,10 @@ namespace Lime
 		public int LastIndex { get; set; }
 		public Mesh<TVertex> Mesh { get; set; }
 
+#if PROFILER
+		public RenderBatchProfilingInfo ProfilingInfo;
+#endif // PROFILER
+
 		private void Clear()
 		{
 			Texture1 = null;
@@ -52,12 +59,22 @@ namespace Lime
 
 		public void Render()
 		{
+#if PROFILER
+			if (ProfilingInfo.IsInsideOverdrawMaterialScope) {
+				OverdrawMaterialScope.Enter();
+			}
+#endif // PROFILER
 			PlatformRenderer.SetTexture(0, Texture1);
 			PlatformRenderer.SetTexture(1, Texture2);
 			for (int i = 0; i < Material.PassCount; i++) {
 				Material.Apply(i);
 				Mesh.DrawIndexed(StartIndex, LastIndex - StartIndex);
 			}
+#if PROFILER
+			if (ProfilingInfo.IsInsideOverdrawMaterialScope) {
+				OverdrawMaterialScope.Leave();
+			}
+#endif // PROFILER
 		}
 
 		public static RenderBatch<TVertex> Acquire(RenderBatch<TVertex> origin)
@@ -72,6 +89,9 @@ namespace Lime
 				batch.ownsMesh = true;
 				batch.Mesh = AcquireMesh();
 			}
+#if PROFILER
+			batch.ProfilingInfo.Initialize();
+#endif // PROFILER
 			return batch;
 		}
 

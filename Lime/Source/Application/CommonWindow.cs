@@ -121,6 +121,7 @@ namespace Lime
 				CommandQueue.Instance.IssueCommands();
 				try {
 					Updating?.Invoke(delta);
+					CommandHandlerList.Global.ProcessCommands();
 				} finally {
 					Application.MainMenu?.Refresh();
 				}

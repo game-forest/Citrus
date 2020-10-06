@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangerine.UI.RemoteScriptin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangerine.UI.AnimeshEditor.Mac", "Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Mac.csproj", "{2B838A5F-68C3-4DF3-BF58-149EF1B9C70F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tangerine.UI.Profiler.Mac", "Tangerine.UI.Profiler\Tangerine.UI.Profiler.Mac.csproj", "{8E8C8ED3-63C2-407F-B626-CD9867E16353}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,6 +193,14 @@ Global
 		{2B838A5F-68C3-4DF3-BF58-149EF1B9C70F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B838A5F-68C3-4DF3-BF58-149EF1B9C70F}.Release|x86.ActiveCfg = Release|Any CPU
 		{2B838A5F-68C3-4DF3-BF58-149EF1B9C70F}.Release|x86.Build.0 = Release|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Debug|x86.Build.0 = Debug|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E8C8ED3-63C2-407F-B626-CD9867E16353}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

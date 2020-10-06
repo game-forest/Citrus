@@ -1,4 +1,4 @@
-# Citrus Project Directory Structure
+# Citrus project directory structure
 
 - `./<ProjectName>.citproj` [project configuration](configuration.md)
 - `./Data/` default assets directory

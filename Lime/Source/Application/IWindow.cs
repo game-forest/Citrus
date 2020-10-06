@@ -238,7 +238,7 @@ namespace Lime
 		event Action Rendering;
 
 		/// <summary>
-		/// Occurs before update and render. One can use this event to perform thread unsafe operations with the window.
+		/// Occurs after update and before render. One can use this event to perform thread unsafe operations with the window.
 		/// </summary>
 		event Action Sync;
 

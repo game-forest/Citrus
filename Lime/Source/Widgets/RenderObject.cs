@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+#if PROFILER
+using Lime.Profiler.Graphics;
+#endif // PROFILER
 
 namespace Lime
 {
 	public abstract class RenderObject
 	{
 		internal bool Free = true;
+
+#if PROFILER
+		public RenderObjectOwnerInfo OwnerInfo;
+#endif // PROFILER
 
 		public abstract void Render();
 
@@ -47,7 +54,15 @@ namespace Lime
 		public void Render()
 		{
 			foreach (var ro in objects) {
-				ro.Render();
+#if PROFILER
+				RenderObjectOwnerInfo.PushState(ro.OwnerInfo);
+				if (!OverdrawMaterialScope.IsInside || !ro.OwnerInfo.Node.IsOverdrawForeground) {
+#endif // PROFILER
+					ro.Render();
+#if PROFILER
+				}
+				RenderObjectOwnerInfo.PopState();
+#endif // PROFILER
 			}
 		}
 
@@ -93,6 +108,9 @@ namespace Lime
 					index = 0;
 				if (item.Free) {
 					item.Free = false;
+#if PROFILER
+					item.OwnerInfo.Reset();
+#endif // PROFILER
 					return item;
 				}
 			}
@@ -102,6 +120,9 @@ namespace Lime
 				items[i] = new T();
 			}
 			items[index].Free = false;
+#if PROFILER
+			items[index].OwnerInfo.Reset();
+#endif // PROFILER
 			return items[index];
 		}
 	}
