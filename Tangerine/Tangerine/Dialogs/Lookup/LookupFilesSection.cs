@@ -88,18 +88,7 @@ namespace Tangerine
 								AlertDialog.Show($"Open any document to add an audio");
 								return;
 							}
-							Document.Current.History.DoTransaction(() => {
-								var node = Core.Operations.CreateNode.Perform(typeof(Audio));
-								var sample = new SerializableSample(asset.Path);
-								SetProperty.Perform(node, nameof(Audio.Sample), sample);
-								SetProperty.Perform(node, nameof(Node.Id), fileName);
-								SetProperty.Perform(node, nameof(Audio.Volume), 1);
-								var key = new Keyframe<AudioAction> {
-									Frame = Document.Current.AnimationFrame,
-									Value = AudioAction.Play
-								};
-								SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.AnimationId, key);
-							});
+							CreateAudioFromAsset.Perform(asset.Path);
 							Sections.Drop();
 						};
 						break;
@@ -213,27 +202,12 @@ namespace Tangerine
 					"Add As External Scene",
 					null,
 					() => {
-						if (Utils.AssertCurrentDocument(assetPath, assetType)) {
-							var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
-							if (NodeCompositionValidator.Validate(Document.Current.Container.GetType(), scene.GetType())) {
-								Document.Current.History.DoTransaction(() => {
-									var node = Core.Operations.CreateNode.Perform(scene.GetType());
-									SetProperty.Perform(node, nameof(Widget.ContentsPath), assetPath);
-									SetProperty.Perform(node, nameof(Widget.Id), Path.GetFileNameWithoutExtension(assetPath));
-									if (node is IPropertyLocker propertyLocker) {
-										var id = propertyLocker.IsPropertyLocked("Id", true) ? scene.Id : Path.GetFileName(assetPath);
-										SetProperty.Perform(node, nameof(Node.Id), id);
-									}
-									if (scene is Widget widget) {
-										SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
-										SetProperty.Perform(node, nameof(Widget.Size), widget.Size);
-									}
-									node.LoadExternalScenes();
-									SelectNode.Perform(node);
-								});
-							} else {
-								AlertDialog.Show($"Can't put {scene.GetType()} into {Document.Current.Container.GetType()}");
+						try {
+							if (Utils.AssertCurrentDocument(assetPath, assetType)) {
+								CreateNodeFromAsset.Perform(assetPath);
 							}
+						} catch (System.Exception exception) {
+							AlertDialog.Show(exception.Message);
 						}
 						Sections.Drop();
 					}
@@ -277,22 +251,7 @@ namespace Tangerine
 					$"Create {imageType.Name}",
 					null,
 					() => {
-						Document.Current.History.DoTransaction(() => {
-							var node = Core.Operations.CreateNode.Perform(imageTypeClosed);
-							var texture = new SerializableTexture(assetPath);
-							var nodeSize = (Vector2)texture.ImageSize;
-							var nodeId = Path.GetFileNameWithoutExtension(assetPath);
-							if (node is Widget) {
-								SetProperty.Perform(node, nameof(Widget.Texture), texture);
-								SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
-								SetProperty.Perform(node, nameof(Widget.Size), nodeSize);
-								SetProperty.Perform(node, nameof(Widget.Id), nodeId);
-							} else if (node is ParticleModifier) {
-								SetProperty.Perform(node, nameof(ParticleModifier.Texture), texture);
-								SetProperty.Perform(node, nameof(ParticleModifier.Size), nodeSize);
-								SetProperty.Perform(node, nameof(ParticleModifier.Id), nodeId);
-							}
-						});
+						CreateTexturedWidgetFromAsset.Perform(assetPath, imageTypeClosed);
 						Sections.Drop();
 					}
 				));

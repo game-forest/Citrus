@@ -69,25 +69,15 @@ namespace Tangerine.Common.FilesDropHandlers
 			var menu = new Menu {
 				new Command("Open in New Tab", () => assets.ForEach(asset => Project.Current.OpenDocument(asset.assetPath))),
 				new Command("Add As External Scene", () => Document.Current.History.DoTransaction(() => {
-					var nodes = new List<Node>(assets.Count);
 					foreach (var (assetPath, _) in assets) {
-						var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
-						var node = CreateNode.Perform(scene.GetType());
-						SetProperty.Perform(node, nameof(Widget.ContentsPath), assetPath);
-						SetProperty.Perform(node, nameof(Widget.Id), Path.GetFileNameWithoutExtension(assetPath));
-						if (node is IPropertyLocker propertyLocker) {
-							var id = propertyLocker.IsPropertyLocked("Id", true) ? scene.Id : Path.GetFileName(assetPath);
-							SetProperty.Perform(node, nameof(Node.Id), id);
+						try {
+							var node = CreateNodeFromAsset.Perform(assetPath);
+							postProcessNode?.Invoke(node);
+						} catch (System.Exception exception) {
+							AlertDialog.Show(exception.Message);
+							break;
 						}
-						if (scene is Widget widget) {
-							SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
-							SetProperty.Perform(node, nameof(Widget.Size), widget.Size);
-						}
-						postProcessNode?.Invoke(node);
-						node.LoadExternalScenes();
-						nodes.Add(node);
 					}
-					nodes.ForEach(n => SelectNode.Perform(n));
 				})),
 				new Command("Cancel")
 			};

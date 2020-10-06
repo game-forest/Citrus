@@ -62,60 +62,25 @@ namespace Tangerine.Common.FilesDropHandlers
 		private void CreateSpriteAnimatedImage(List<string> files)
 		{
 			onBeforeDrop?.Invoke();
-			using (Document.Current.History.BeginTransaction()) {
-				var node = CreateNode.Perform(typeof(Image));
-				SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
-				SetProperty.Perform(node, nameof(Widget.Id), "Temp");
-				postProcessNode?.Invoke(node);
-				var i = 0;
-				ITexture first = null;
-				foreach (var file in files) {
-					if (!Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out var assetType)) {
-						continue;
-					}
-					var text = new SerializableTexture(assetPath);
-					first = first ?? text;
-					SetKeyframe.Perform(node, nameof(Widget.Texture), Document.Current.AnimationId,
-						new Keyframe<ITexture> {
-							Value = text,
-							Frame = i++,
-							Function = KeyFunction.Steep,
-					});
+			var assetPaths = new List<string>();
+			foreach (var file in files) {
+				if (Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out _)) {
+					assetPaths.Add(assetPath);
 				}
-				SetProperty.Perform(node, nameof(Widget.Size), (Vector2)first.ImageSize);
-				Document.Current.History.CommitTransaction();
 			}
-
+			var node = CreateAnimationSequenceImageFromAssets.Perform(assetPaths);
+			postProcessNode?.Invoke(node);
 		}
 
 		private void CreateImageTypeInstance(Type type, List<string> files)
 		{
 			onBeforeDrop?.Invoke();
 			using (Document.Current.History.BeginTransaction()) {
-				var nodes = new List<Node>(files.Count);
 				foreach (var file in files) {
-					if (!Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out var assetType)) {
-						continue;
+					if (Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out _)) {
+						var node = CreateTexturedWidgetFromAsset.Perform(assetPath, type);
+						postProcessNode?.Invoke(node);
 					}
-					var node = CreateNode.Perform(type);
-					nodes.Add(node);
-					var texture = new SerializableTexture(assetPath);
-					var nodeSize = (Vector2)texture.ImageSize;
-					var nodeId = Path.GetFileNameWithoutExtension(assetPath);
-					if (node is Widget) {
-						SetProperty.Perform(node, nameof(Widget.Texture), texture);
-						SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
-						SetProperty.Perform(node, nameof(Widget.Size), nodeSize);
-						SetProperty.Perform(node, nameof(Widget.Id), nodeId);
-					} else if (node is ParticleModifier) {
-						SetProperty.Perform(node, nameof(ParticleModifier.Texture), texture);
-						SetProperty.Perform(node, nameof(ParticleModifier.Size), nodeSize);
-						SetProperty.Perform(node, nameof(ParticleModifier.Id), nodeId);
-					}
-					postProcessNode?.Invoke(node);
-				}
-				foreach (var node in nodes) {
-					SelectNode.Perform(node);
 				}
 				Document.Current.History.CommitTransaction();
 			}
