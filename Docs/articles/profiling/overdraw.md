@@ -2,7 +2,7 @@
 
 With Overdraw mode you can determine the number of fragment shader calls for each pixel on the screen.
 
-![car_overdraw_image](../../images/car_overdraw_image.png)
+![car_overdraw_image](/images/car_overdraw_image.png)
 
 ⚠ If objects are rendered to an intermediate buffer, and then this buffer is drawn to the main framebuffer, the Overdraw metric will be equal to 1 for the whole intermediate buffer. You can observe this effect at least for post-processing.
 
@@ -10,13 +10,17 @@ With Overdraw mode you can determine the number of fragment shader calls for eac
 
 ### Tangerine
 
-You can enable this mode with command `Toggle Overdraw Mode` in Tangerine.
+The Overdraw mode is configured through the profiler pane.
 
-You can set custom overdraw colors with gradient editor on Profiler pane in Tangerine.
+![overdraw_panel](/images/overdraw_panel.png)
+
+You can enable this mode with Profiler pane or you can use scene command `Toggle Overdraw Mode`.
+
+You can set custom overdraw colors with gradient editor on Profiler pane.
 
 ### Code
 
-Use property `Overdraw.Enabled` in namespace `Lime.Profiler.Graphics` to enable overdraw visualization mode. It's disabled by default.
+Use property `Overdraw.Enabled` in namespace `Lime.Profiler.Graphics` to enable overdraw visualization mode. It's disabled by default. To find out whether the Overdraw mode is currently enabled, use the `Overdraw.EnabledAtUpdateThread` and `Overdraw.EnabledAtRenderThread` for update and render threads respectively.
 
 Use `Gradient` property in `OverdrawInterpreter` class in namespace `Lime.Profiler.Graphics` to configure colors.
 
@@ -30,8 +34,8 @@ To enable overdraw support in the engine, define `PROFILER` symbol at following 
 
 ### The easiest way to do it:
 
-- For Tangerine use SOLUTION configuration `Release.Profiler` or `Debug.Profiler`
-- For game use Lime PROJECT configuration `Release.Profiler` or `Debug.Profiler`
+- For Tangerine Overdraw mode is enabled by default. So you don't have to do anything
+- For game use Lime project configuration `Release.Profiler` or `Debug.Profiler`
 
 ⚠ The profiler code inside Lime is enclosed in define guard. This is done to exclude a negative impact on the size of the executable files of the game. So if you are writing code that depends on the profiler code, you must surround it with define guard and you must also set `PROFILER` symbol in the properties of these projects.
 
