@@ -724,7 +724,7 @@ namespace Lime
 				if (!string.IsNullOrEmpty(p.Tag)) {
 					r += $" ({p.Tag})";
 				}
-				var bundlePath = Components.Get<Node.AssetBundlePathComponent>();
+				var bundlePath = p.Components.Get<Node.AssetBundlePathComponent>();
 				if (bundlePath != null) {
 					r += $" ({bundlePath})";
 				}
