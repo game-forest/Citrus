@@ -13,10 +13,15 @@ namespace Tangerine.UI
 		private readonly ThemedEditBox colorInput;
 
 		private GradientControlPoint currentPoint;
-
+		private ColorGradient defaultGradientClone;
+		private ColorGradient greenRedWhiteGradientClone;
+		private ColorGradient greenYellowRedGradientClone;
 
 		public OverdrawController()
 		{
+			defaultGradientClone = GetDefaultPreset();
+			greenRedWhiteGradientClone = GetGreenRedWhitePreset();
+			greenYellowRedGradientClone = GetGreenYellowRedPreset();
 			int overdrawColorCount = OverdrawShaderProgram.StateCount;
 			Layout = new VBoxLayout();
 			gradientControlWidget = new GradientControlWidget() {
@@ -30,39 +35,106 @@ namespace Tangerine.UI
 				widget.MaxWidth = 100000;
 				return widget;
 			}
-			AddNode(new Widget {
-				Layout = new HBoxLayout { Spacing = 4 },
-				Padding = new Thickness(8, 8, 8, 0),
+			var gradientGroup = new Widget {
+				Layout = new VBoxLayout(),
+				Presenter = new WidgetFlatFillPresenter(Theme.Colors.ControlBorder),
 				Nodes = {
-					UnclampWidgetSize(new ThemedButton("Default Preset") {
-						Clicked = () => SetPalette(GetDefaultPreset()) }),
-					UnclampWidgetSize(new ThemedButton("Green-Red-White Preset") {
-						Clicked = () => SetPalette(GetGreenRedWhitePreset()) }),
-					UnclampWidgetSize(new ThemedButton("Green-Yellow-Red Preset") {
-						Clicked = () => SetPalette(GetGreenYellowRedPreset()) })
+					new Widget {
+						Layout = new VBoxLayout { Spacing = 4 },
+						Padding = new Thickness(16),
+						Nodes = {
+							new ThemedSimpleText("Current gradient control point"),
+							new Widget {
+								Layout = new HBoxLayout(),
+								Nodes = {
+									UnclampWidgetSize(new ThemedButton("Overdraw [0-255]") { Enabled = false }),
+									UnclampWidgetSize(positionInput = new ThemedNumericEditBox()),
+								}
+							},
+							new Widget {
+								Layout = new HBoxLayout(),
+								Nodes = {
+									UnclampWidgetSize(new ThemedButton("Color") { Enabled = false }),
+									UnclampWidgetSize(colorInput = new ThemedEditBox())
+								}
+							}
+						}
+					}
 				}
-			});
+			};
+			var presetsGroup = new Widget {
+				Layout = new VBoxLayout(),
+				Presenter = new WidgetFlatFillPresenter(Theme.Colors.ControlBorder),
+				Nodes = {
+					new Widget {
+						Layout = new VBoxLayout { Spacing = 4 },
+						Padding = new Thickness(16),
+						Nodes = {
+							new ThemedSimpleText("Gradient presets"),
+							new Widget {
+								Layout = new HBoxLayout { Spacing = 4 },
+								Nodes = {
+									UnclampWidgetSize(new ThemedButton("Default") {
+										Clicked = () => SetPalette(defaultGradientClone) }),
+									new ThemedButton("Reset") {
+										Clicked = () => SetPalette(defaultGradientClone = GetDefaultPreset())
+									}
+								}
+							},
+							new Widget {
+								Layout = new HBoxLayout { Spacing = 4 },
+								Nodes = {
+									UnclampWidgetSize(new ThemedButton("Green-Red-White") {
+										Clicked = () => SetPalette(greenRedWhiteGradientClone) }),
+									new ThemedButton("Reset") {
+										Clicked = () => SetPalette(greenRedWhiteGradientClone = GetGreenRedWhitePreset())
+									}
+								}
+							},
+							new Widget {
+								Layout = new HBoxLayout { Spacing = 4 },
+								Nodes = {
+									UnclampWidgetSize(new ThemedButton("Green-Yellow-Red") {
+										Clicked = () => SetPalette(greenYellowRedGradientClone) }),
+									new ThemedButton("Reset") {
+										Clicked = () => SetPalette(greenYellowRedGradientClone = GetGreenYellowRedPreset())
+									}
+								}
+							}
+						}
+					}
+				}
+			};
 			AddNode(gradientControlWidget);
 			colorPickerPanel = new ColorPickerPanel();
+			var toggleOverdrawButton = UnclampWidgetSize(new ThemedButton());
+			toggleOverdrawButton.Clicked = () => Overdraw.Enabled = !Overdraw.Enabled;
+			toggleOverdrawButton.Updating = (d) => toggleOverdrawButton.Text =
+				(Overdraw.EnabledAtUpdateThread ? "Disable Overdraw Mode" : "Enable Overdraw Mode");
 			AddNode(new Widget {
 				Layout = new HBoxLayout { Spacing = 4 },
 				Padding = new Thickness(8),
 				Nodes = {
-					UnclampWidgetSize(new ThemedButton("Overdraw [0-255]") { Enabled = false }),
-					UnclampWidgetSize(positionInput = new ThemedNumericEditBox()),
-					UnclampWidgetSize(new ThemedButton("Color") { Enabled = false }),
-					UnclampWidgetSize(colorInput = new ThemedEditBox()),
-					UnclampWidgetSize(new ThemedButton("ColorPicker") { Clicked = () =>
-						colorPickerPanel.Widget.Visible = !colorPickerPanel.Widget.Visible })
+					new Widget {
+						Layout = new VBoxLayout { Spacing = 8 },
+						Nodes = {
+							gradientGroup,
+							presetsGroup,
+							toggleOverdrawButton,
+						}
+					},
+					colorPickerPanel.Widget
 				}
 			});
 			void NoPointSelected()
 			{
 				positionInput.Text = "No point selected!";
 				colorInput.Text = "No point selected!";
+				colorPickerPanel.Color = Color4.Gray;
 			}
 			gradientControlWidget.SelectionChanged += (point) => {
 				currentPoint = point;
+				colorPickerPanel.Color = point.Color;
 				colorInput.Text = point.Color.ToString(Color4.StringPresentation.Dec);
 				positionInput.Text = ((int)(point.Position * (overdrawColorCount - 1))).ToString();
 			};
@@ -107,7 +179,6 @@ namespace Tangerine.UI
 					NoPointSelected();
 				}
 			};
-			AddNode(colorPickerPanel.Widget);
 			AddNode(new Widget());
 			SetPalette(GetDefaultPreset());
 		}
@@ -119,7 +190,7 @@ namespace Tangerine.UI
 			OverdrawInterpreter.Gradient = gradient;
 		}
 
-		private static ColorGradient GetDefaultPreset() => OverdrawInterpreter.DefaultGradient;
+		private static ColorGradient GetDefaultPreset() => OverdrawInterpreter.DefaultGradient.Clone();
 
 		private static ColorGradient GetGreenRedWhitePreset()
 		{
