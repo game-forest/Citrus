@@ -25,7 +25,9 @@ namespace Tangerine.UI
 			};
 			panel.ContentWidget.AddNode(RootWidget);
 #if PROFILER
-			RootWidget.AddNode(new OverdrawController());
+			var tabs = new ThemedTabbedWidget();
+			tabs.AddTab("Overdraw", new OverdrawController(), isActive: true);
+			RootWidget.AddNode(tabs);
 #endif // PROFILER
 		}
 	}
