@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>__MACOS__;__UNIFIED__;DEBUG;MAC</DefineConstants>
+    <DefineConstants>__MACOS__;__UNIFIED__;DEBUG;MAC;PROFILER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -48,7 +48,7 @@
     </DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>__MACOS__;__UNIFIED__;MAC</DefineConstants>
+    <DefineConstants>__MACOS__;__UNIFIED__;MAC;PROFILER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
