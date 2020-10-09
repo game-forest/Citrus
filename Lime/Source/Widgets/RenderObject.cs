@@ -56,7 +56,7 @@ namespace Lime
 			foreach (var ro in objects) {
 #if PROFILER
 				RenderObjectOwnerInfo.PushState(ro.OwnerInfo);
-				if (!OverdrawMaterialScope.IsInside || !ro.OwnerInfo.Node.IsOverdrawForeground) {
+				if (!OverdrawMaterialScope.IsInside || !RenderObjectOwnerInfo.CurrentNode.IsOverdrawForeground) {
 #endif // PROFILER
 					ro.Render();
 #if PROFILER

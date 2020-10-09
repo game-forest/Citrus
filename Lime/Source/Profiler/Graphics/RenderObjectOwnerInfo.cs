@@ -15,7 +15,7 @@ namespace Lime.Profiler.Graphics
 		static RenderObjectOwnerInfo()
 		{
 			descriptions = new Stack<RenderObjectOwnerInfo>();
-			descriptions.Push(new RenderObjectOwnerInfo { Node = null });
+			descriptions.Push(new RenderObjectOwnerInfo { Node = new EmptyProfileableObject() });
 		}
 
 		public IProfileableObject Node { get; private set; }
@@ -46,6 +46,12 @@ namespace Lime.Profiler.Graphics
 		{
 			descriptions.Pop();
 			CurrentNode = descriptions.Peek().Node;
+		}
+
+		private class EmptyProfileableObject : IProfileableObject
+		{
+			public bool IsPartOfScene => false;
+			public bool IsOverdrawForeground => false;
 		}
 	}
 }
