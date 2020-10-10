@@ -79,18 +79,18 @@
             <article class="content wrap" id="_content" data-uid="">
 
 <p>1.) Открыть файл *.citproj проекта и прописать в нём информацию, необходимую для сбора ресурсов XCode-проекта.
-Блок информации	выглядит следующим образом (на примере проекта MM6):</p>
+Блок информации	выглядит следующим образом (на примере проекта Game):</p>
 <pre><code>XCodeProject: {
 	DoSvnUpdate: false,
 	DoSvnCommit: false,
-	Resources: '*.dll *.exe *.png MM6 Data.iOS .monotouch-32 .monotouch-64',
-	DataFolder: 'MM6_XCode_Project_Data',
+	Resources: '*.dll *.exe *.png Game Data.iOS .monotouch-32 .monotouch-64',
+	DataFolder: 'Game_XCode_Project_Data',
 	Version: '6.55'
 }
 
 Следует обратить особое внимание на поля &quot;Resources&quot; и &quot;DataFolder&quot;. В поле &quot;Resources&quot; указываются
 через пробел маски файлов и папок, которые на следующем шаге будут автоматически скопированы в папку
-проекта XCode. В примере, приведённом выше, маску &quot;MM6&quot; нужно заменить на соответствующую названию
+проекта XCode. В примере, приведённом выше, маску &quot;Game&quot; нужно заменить на соответствующую названию
 проекта. Все остальные маски нужно оставить как есть, при необходимости можно добавить другие маски в
 целях копирования в XCode-проект других файлов.
 
