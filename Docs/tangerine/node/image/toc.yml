@@ -1,8 +1,0 @@
-- name: DistortionMesh
-  href: distortion_mesh.md
-- name: Image
-  href: image.md
-- name: NineGrid
-  href: nine_grid.md
-- name: TiledImage
-  href: tiled_image.md
