@@ -1,3 +1,6 @@
 [submodule "Yuzu"]
 	path = Yuzu
 	url = ../Yuzu.git
+[submodule "Docs"]
+	path = Docs
+	url = ../citrus-documentation.git
