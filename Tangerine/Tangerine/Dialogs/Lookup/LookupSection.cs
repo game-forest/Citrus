@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using Tangerine.Core;
@@ -118,8 +117,15 @@ namespace Tangerine
 					if (result != 0) {
 						return result;
 					}
+					if (lhs.HeaderGapCount != int.MaxValue && lhs.HeaderDistance != int.MaxValue) {
+						return lhs.Item.Header.Text.Length.CompareTo(rhs.Item.Header.Text.Length);
+					}
 					result = lhs.NameGapCount.CompareTo(rhs.NameGapCount);
-					return result != 0 ? result : lhs.NameDistance.CompareTo(rhs.NameDistance);
+					if (result != 0) {
+						return result;
+					}
+					result = lhs.NameDistance.CompareTo(rhs.NameDistance);
+					return result != 0 ? result : lhs.Item.Name.Text.Length.CompareTo(rhs.Item.Name.Text.Length);
 				});
 				foreach (var (item, headerHighlightSymbolsIndices, nameHighlightSymbolsIndices) in itemsHighlights) {
 					item.Header.HighlightSymbolsIndices = headerHighlightSymbolsIndices;

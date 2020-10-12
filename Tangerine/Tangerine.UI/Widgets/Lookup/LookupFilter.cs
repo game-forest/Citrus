@@ -60,7 +60,11 @@ namespace Tangerine.UI
 				}
 				itemsTemp.Sort((lhs, rhs) => {
 					var result = lhs.GapCount.CompareTo(rhs.GapCount);
-					return result != 0 ? result : lhs.Distance.CompareTo(rhs.Distance);
+					if (result != 0) {
+						return result;
+					}
+					result = lhs.Distance.CompareTo(rhs.Distance);
+					return result != 0 ? result : lhs.item.Name.Text.Length.CompareTo(rhs.item.Name.Text.Length);
 				});
 				foreach (var (item, _, _) in itemsTemp) {
 					yield return item;
