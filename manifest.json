@@ -9410,6 +9410,106 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/animations_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/animations_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/commands_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/commands_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/components_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/components_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/files_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/files_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/frames_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/frames_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/help_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/help_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/markers_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/markers_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/productivity_tools/lookup/content/nodes_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/productivity_tools/lookup/content/nodes_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/productivity_tools/lookup/lookup.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/productivity_tools/lookup/lookup.html",
+          "hash": "CHac8y72+GWUq1xXhYjcHg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "articles/profiling/images/car_overdraw_image.png",
       "output": {
         "resource": {
@@ -9460,7 +9560,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "BMmJgYisVgny6ZlboUrSHw=="
+          "hash": "oSsD/4djr+J3F+0L4icGgQ=="
         }
       },
       "is_incremental": false,
@@ -11393,10 +11493,11 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
-        "ConceptualDocumentProcessor": {
+        "ResourceDocumentProcessor": {
           "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 73,
+          "total_file_count": 0,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
@@ -11405,11 +11506,10 @@
           "total_file_count": 773,
           "skipped_file_count": 0
         },
-        "ResourceDocumentProcessor": {
+        "ConceptualDocumentProcessor": {
           "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 0,
+          "total_file_count": 74,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
