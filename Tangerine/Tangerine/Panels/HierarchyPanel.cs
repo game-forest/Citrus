@@ -207,47 +207,13 @@ namespace Tangerine.Panels
 		private void TreeViewOnActivateItem(object sender, TreeView.ActivateItemEventArgs args)
 		{
 			if (GetSceneItem(args.Item).TryGetNode(out var node)) {
-				NavigateToNode(node, args.Method == TreeView.ActivationMethod.Keyboard);
-			}
-		}
-
-		private void NavigateToNode(Node node, bool enterInto)
-		{
-			var path = new Stack<int>();
-			var sceneRoot = node;
-			while (sceneRoot != Document.Current.RootNode && string.IsNullOrEmpty(sceneRoot.ContentsPath)) {
-				path.Push(sceneRoot.Parent.Nodes.IndexOf(sceneRoot));
-				sceneRoot = sceneRoot.Parent;
-			}
-			var currentScenePath = Document.Current.Path;
-			if (sceneRoot != Document.Current.RootNode) {
-				Document externalSceneDocument;
-				try {
-					externalSceneDocument = Project.Current.OpenDocument(sceneRoot.ContentsPath);
-				} catch (System.Exception e) {
-					AlertDialog.Show(e.Message);
-					return;
+				var enterIntoNode = args.Method == TreeView.ActivationMethod.Keyboard;
+				node = NavigateToNode.Perform(node, enterIntoNode);
+				if (enterIntoNode) {
+					Document.Current.History.DoTransaction(() => {
+						GetTreeViewItem(Document.Current.GetSceneItemForObject(node)).Expanded = true;
+					});
 				}
-				externalSceneDocument.SceneNavigatedFrom = currentScenePath;
-				var rootNode = externalSceneDocument.RootNode;
-				node = rootNode is Viewport3D ? rootNode.FirstChild : rootNode;
-				foreach (int i in path) {
-					node = node.Nodes[i];
-				}
-			}
-			if (enterInto) {
-				Document.Current.History.DoTransaction(() => {
-					EnterNode.Perform(node, selectFirstNode: true);
-					GetTreeViewItem(Document.Current.GetSceneItemForObject(node)).Expanded = true;
-				});
-			} else {
-				Document.Current.History.DoTransaction(() => {
-					if (node.Parent == null) {
-						EnterNode.Perform(Document.Current.RootNode, selectFirstNode: true);
-					} else if (EnterNode.Perform(node.Parent, selectFirstNode: false)) {
-						SelectNode.Perform(node);
-					}
-				});
 			}
 		}
 

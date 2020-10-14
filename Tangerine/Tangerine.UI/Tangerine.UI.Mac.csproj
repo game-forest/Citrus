@@ -83,6 +83,12 @@
     <Compile Include="Tooltip\Tooltip.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
     <Compile Include="Tooltip\TooltipProcessor.cs" />
+    <Compile Include="Utils\RichTextHighlightComponent.cs" />
+    <Compile Include="Widgets\Lookup\FuzzyStringSearch.cs" />
+    <Compile Include="Widgets\Lookup\LookupDataSource.cs" />
+    <Compile Include="Widgets\Lookup\LookupFilter.cs" />
+    <Compile Include="Widgets\Lookup\LookupItem.cs" />
+    <Compile Include="Widgets\Lookup\LookupWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorPicker.Mac.cs" />

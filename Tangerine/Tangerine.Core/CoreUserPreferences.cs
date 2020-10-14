@@ -45,6 +45,9 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public Dictionary<string, bool> InspectorExpandableEditorsState { get; set; }
 
+		[YuzuOptional]
+		public int LookupItemsLimit { get; set; }
+
 		public CoreUserPreferences()
 		{
 			ResetToDefaults();
@@ -58,6 +61,7 @@ namespace Tangerine.Core
 			ShowSceneThumbnail = true;
 			ShowSplinesGlobally = false;
 			InspectorExpandableEditorsState = new Dictionary<string, bool>();
+			LookupItemsLimit = 30;
 		}
 
 		public static CoreUserPreferences Instance => UserPreferences.Instance.Get<CoreUserPreferences>();

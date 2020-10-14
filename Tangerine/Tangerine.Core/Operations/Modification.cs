@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using Lime;
 using System.Reflection;
 
@@ -607,6 +608,120 @@ namespace Tangerine.Core.Operations
 
 			protected override void InternalUndo(RemoveFromDictionary<TDictionary, TKey, TValue> op) =>
 				op.Dictionary.Add(op.Key, op.Value);
+		}
+	}
+
+	public static class CreateNodeFromAsset
+	{
+		public static Node Perform(string assetPath)
+		{
+			var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
+			if (!NodeCompositionValidator.Validate(Document.Current.Container.GetType(), scene.GetType())) {
+				throw new System.Exception($"Can't put {scene.GetType()} into {Document.Current.Container.GetType()}");
+			}
+
+			Node node;
+			using (Document.Current.History.BeginTransaction()) {
+				node = CreateNode.Perform(scene.GetType());
+				SetProperty.Perform(node, nameof(Widget.ContentsPath), assetPath);
+				SetProperty.Perform(node, nameof(Widget.Id), Path.GetFileNameWithoutExtension(assetPath));
+				if (node is IPropertyLocker propertyLocker) {
+					var id = propertyLocker.IsPropertyLocked("Id", true) ? scene.Id : Path.GetFileName(assetPath);
+					SetProperty.Perform(node, nameof(Node.Id), id);
+				}
+				if (scene is Widget widget) {
+					SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
+					SetProperty.Perform(node, nameof(Widget.Size), widget.Size);
+				}
+				node.LoadExternalScenes();
+				SelectNode.Perform(node);
+				Document.Current.History.CommitTransaction();
+			}
+			return node;
+		}
+	}
+
+	public static class CreateTexturedWidgetFromAsset
+	{
+		public static Node Perform(string assetPath, Type imageType)
+		{
+			Node node;
+			using (Document.Current.History.BeginTransaction()) {
+				node = CreateNode.Perform(imageType);
+				var texture = new SerializableTexture(assetPath);
+				var nodeSize = (Vector2)texture.ImageSize;
+				var nodeId = Path.GetFileNameWithoutExtension(assetPath);
+				if (node is Widget) {
+					SetProperty.Perform(node, nameof(Widget.Texture), texture);
+					SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
+					SetProperty.Perform(node, nameof(Widget.Size), nodeSize);
+					SetProperty.Perform(node, nameof(Widget.Id), nodeId);
+				} else if (node is ParticleModifier) {
+					SetProperty.Perform(node, nameof(ParticleModifier.Texture), texture);
+					SetProperty.Perform(node, nameof(ParticleModifier.Size), nodeSize);
+					SetProperty.Perform(node, nameof(ParticleModifier.Id), nodeId);
+				}
+				SelectNode.Perform(node);
+				Document.Current.History.CommitTransaction();
+			}
+			return node;
+		}
+	}
+
+	public static class CreateAnimationSequenceImageFromAssets
+	{
+		public static Node Perform(IReadOnlyCollection<string> assetPaths)
+		{
+			Node node;
+			using (Document.Current.History.BeginTransaction()) {
+				node = CreateNode.Perform(typeof(Image));
+				SetProperty.Perform(node, nameof(Widget.Pivot), Vector2.Half);
+				SetProperty.Perform(node, nameof(Widget.Id), "Temp");
+				if (assetPaths.Count > 0) {
+					var i = 0;
+					ITexture first = null;
+					foreach (var assetPath in assetPaths) {
+						var texture = new SerializableTexture(assetPath);
+						first = first ?? texture;
+						SetKeyframe.Perform(
+							node,
+							nameof(Widget.Texture),
+							Document.Current.AnimationId,
+							new Keyframe<ITexture> {
+								Value = texture,
+								Frame = i++,
+								Function = KeyFunction.Steep,
+							}
+						);
+					}
+					SetProperty.Perform(node, nameof(Widget.Size), (Vector2)first.ImageSize);
+				}
+				Document.Current.History.CommitTransaction();
+			}
+			return node;
+		}
+	}
+
+	public static class CreateAudioFromAsset
+	{
+		public static Node Perform(string assetPath)
+		{
+			Node node;
+			using (Document.Current.History.BeginTransaction()) {
+				node = CreateNode.Perform(typeof(Audio));
+				var sample = new SerializableSample(assetPath);
+				SetProperty.Perform(node, nameof(Audio.Sample), sample);
+				SetProperty.Perform(node, nameof(Node.Id), Path.GetFileNameWithoutExtension(assetPath));
+				SetProperty.Perform(node, nameof(Audio.Volume), 1);
+				var key = new Keyframe<AudioAction> {
+					Frame = Document.Current.AnimationFrame,
+					Value = AudioAction.Play
+				};
+				SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.AnimationId, key);
+				SelectNode.Perform(node);
+				Document.Current.History.CommitTransaction();
+			}
+			return node;
 		}
 	}
 

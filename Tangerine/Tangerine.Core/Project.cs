@@ -22,7 +22,9 @@ namespace Tangerine.Core
 		private readonly HashSet<string> modifiedAssets = new HashSet<string>();
 		private readonly List<Type> registeredNodeTypes = new List<Type>();
 		private readonly List<Type> registeredComponentTypes = new List<Type>();
+		private readonly object aggregateAssetsDatabaseModificationsTaskTag = new object();
 
+		public readonly AssetDatabase AssetDatabase;
 		public FileSystemWatcher FileSystemWatcher { get; private set; }
 
 		public static readonly Project Null = new Project();
@@ -83,6 +85,7 @@ namespace Tangerine.Core
 			Opening?.Invoke(CitprojPath);
 			Preferences = new ProjectPreferences();
 			Preferences.Initialize();
+			AssetDatabase = new AssetDatabase();
 			FileSystemWatcher = new FileSystemWatcher(AssetsDirectory, includeSubdirectories: true);
 			if (File.Exists(UserprefsPath)) {
 				try {
@@ -111,8 +114,16 @@ namespace Tangerine.Core
 			}
 			SetLocale(Locale);
 			FileSystemWatcher.Changed += HandleFileSystemWatcherEvent;
-			FileSystemWatcher.Created += HandleFileSystemWatcherEvent;
-			FileSystemWatcher.Deleted += HandleFileSystemWatcherEvent;
+			FileSystemWatcher.Created += s => {
+				HandleFileSystemWatcherEvent(s);
+				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
+				Tasks.Add(AggregateAssetDatabaseModificationsTask, aggregateAssetsDatabaseModificationsTaskTag);
+			};
+			FileSystemWatcher.Deleted += s => {
+				HandleFileSystemWatcherEvent(s);
+				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
+				Tasks.Add(AggregateAssetDatabaseModificationsTask, aggregateAssetsDatabaseModificationsTaskTag);
+			};
 			FileSystemWatcher.Renamed += (previousPath, path) => {
 				// simulating rename as pairs of deleted / created events
 				HandleFileSystemWatcherEvent(path);
@@ -125,6 +136,8 @@ namespace Tangerine.Core
 						HandleFileSystemWatcherEvent(Path.Combine(path, f.Path));
 					}
 				}
+				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
+				Tasks.Add(AggregateAssetDatabaseModificationsTask, aggregateAssetsDatabaseModificationsTaskTag);
 			};
 			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
 				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
@@ -463,10 +476,18 @@ namespace Tangerine.Core
 
 		private IEnumerator<object> AggregateModifiedAssetsTask()
 		{
-			const float AggregationWaitTime = 0.5f;
-			yield return AggregationWaitTime;
+			const float WaitTime = 0.5f;
+			yield return WaitTime;
 			yield return Task.WaitWhile(() => Application.Windows.All(window => !window.Active));
 			ReloadModifiedDocuments();
+		}
+
+		private IEnumerator<object> AggregateAssetDatabaseModificationsTask()
+		{
+			const float WaitTime = 0.25f;
+			yield return WaitTime;
+			yield return Task.WaitWhile(() => Application.Windows.All(window => !window.Active));
+			AssetDatabase.RescanAsync();
 		}
 
 		private void UpdateTextureParams()
