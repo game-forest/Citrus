@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
@@ -5,7 +6,7 @@ using Tangerine.UI;
 
 namespace Tangerine
 {
-	public class LookupNodesSection : LookupSection
+	public class LookupNodesSection : LookupSectionLimited
 	{
 		private const string PrefixConst = "n";
 
@@ -23,6 +24,7 @@ namespace Tangerine
 			) {
 				return;
 			}
+			var items = new List<LookupItem>(0);
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
 				var nodeClosed = node;
 				var nodeType = node.GetType();
@@ -44,8 +46,10 @@ namespace Tangerine
 					item.Header.Enabled = false;
 					item.HeaderRichText.Text = RichText.Escape("<Empty Id>");
 				}
-				lookupWidget.AddItem(item);
+				items.Add(item);
 			}
+			MutableItemList = items;
+			Active = true;
 		}
 	}
 }

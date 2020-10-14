@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Lime;
 using Tangerine.Core;
 using Tangerine.UI;
 
@@ -145,5 +147,37 @@ namespace Tangerine
 		}
 
 		protected void AppliedLookupFilter(LookupWidget lookupwidget) { }
+	}
+
+	public abstract class LookupSectionLimited : LookupSection
+	{
+		protected IReadOnlyList<LookupItem> MutableItemList { get; set; } = new List<LookupItem>(0);
+		protected bool Active { get; set; }
+
+		protected LookupSectionLimited(LookupSections sections) : base(sections) { }
+
+		public override void Dropped()
+		{
+			MutableItemList = new List<LookupItem>(0);
+			Active = false;
+		}
+
+		protected override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
+		{
+			var filteredItemsLimit = CoreUserPreferences.Instance.LookupItemsLimit >= 1 ? CoreUserPreferences.Instance.LookupItemsLimit : 30;
+			var filteredItems = base.ApplyLookupFilter(text, MutableItemList).Take(filteredItemsLimit).ToList();
+			lookupWidget.ClearItems(disposeItems: false);
+
+			// Adding nodes after LayoutProcessor.Update() cause flickering 
+			Application.InvokeOnNextUpdate(() => {
+				if (Active) {
+					lookupWidget.AddRange(filteredItems);
+					lookupWidget.SelectItem(index: 0);
+					lookupWidget.ScrollView.ScrollPosition = 0;
+				}
+			});
+		}
+
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) => items;
 	}
 }

@@ -6,16 +6,14 @@ using Tangerine.UI;
 
 namespace Tangerine
 {
-	public abstract class LookupAnimationsSection : LookupSection
+	public static class LookupAnimationsSection
 	{
-		protected LookupAnimationsSection(LookupSections sections) : base(sections) { }
-
-		protected void FillLookupByAnimations(LookupWidget lookupWidget, IEnumerable<Animation> animations, bool navigateToNode = false)
+		public static void FillLookupByAnimations(LookupSections sections, List<LookupItem> items, IEnumerable<Animation> animations, bool navigateToNode = false)
 		{
 			foreach (var animation in animations) {
 				var aClosed = animation;
 				var navigateToNodeClosed = navigateToNode && animation.OwnerNode != Document.Current.Container;
-				lookupWidget.AddItem(new LookupDialogItem(
+				items.Add(new LookupDialogItem(
 					animation.IsLegacy ? "[Legacy]" : animation.Id,
 					$"Node: {animation.OwnerNode}",
 					() => {
@@ -34,14 +32,14 @@ namespace Tangerine
 						Document.Current.History.DoTransaction(() => {
 							SetProperty.Perform(document, nameof(Document.SelectedAnimation), a, isChangingDocument: false);
 						});
-						Sections.Drop();
+						sections.Drop();
 					}
 				));
 			}
 		}
 	}
 
-	public class LookupNodeAnimationsSection : LookupAnimationsSection
+	public class LookupNodeAnimationsSection : LookupSection
 	{
 		private const string PrefixConst = "a";
 
@@ -61,11 +59,14 @@ namespace Tangerine
 			}
 			var animations = new List<Animation>();
 			Document.Current.GetAnimations(animations);
-			FillLookupByAnimations(lookupWidget, animations);
+
+			var items = new List<LookupItem>(0);
+			LookupAnimationsSection.FillLookupByAnimations(Sections, items, animations);
+			lookupWidget.AddRange(items);
 		}
 	}
 
-	public class LookupDocumentAnimationsSection : LookupAnimationsSection
+	public class LookupDocumentAnimationsSection : LookupSectionLimited
 	{
 		private const string PrefixConst = "ad";
 
@@ -83,9 +84,12 @@ namespace Tangerine
 			) {
 				return;
 			}
+			var items = new List<LookupItem>(0);
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
-				FillLookupByAnimations(lookupWidget, node.Animations, navigateToNode: true);
+				LookupAnimationsSection.FillLookupByAnimations(Sections, items, node.Animations, navigateToNode: true);
 			}
+			MutableItemList = items;
+			Active = true;
 		}
 	}
 }

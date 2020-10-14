@@ -155,9 +155,7 @@ namespace Tangerine
 			}
 			if (success) {
 				lookupWidget.ClearItems(disposeItems: false);
-				foreach (var item in filteredItems) {
-					lookupWidget.AddItem(item);
-				}
+				lookupWidget.AddRange(filteredItems);
 				lookupWidget.SelectItem(index: 0);
 				lookupWidget.ScrollView.ScrollPosition = 0;
 			}

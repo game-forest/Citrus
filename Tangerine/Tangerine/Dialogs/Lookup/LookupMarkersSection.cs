@@ -7,7 +7,7 @@ using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine
 {
-	public abstract class LookupMarkersSection : LookupSection
+	public static class LookupMarkersSection
 	{
 		private static readonly Dictionary<MarkerAction, Icon> markerActionsIcons;
 
@@ -20,9 +20,7 @@ namespace Tangerine
 			};
 		}
 
-		protected LookupMarkersSection(LookupSections sections) : base(sections) { }
-
-		protected void FillLookupByAnimationMarkers(LookupWidget lookupWidget, Animation animation, bool navigateToNode = true)
+		public static void FillLookupItemsListByAnimationMarkers(LookupSections sections, List<LookupItem> items, Animation animation, bool navigateToNode = true)
 		{
 			foreach (var m in animation.Markers) {
 				var mClosed = m;
@@ -51,7 +49,7 @@ namespace Tangerine
 							SetCurrentColumn.Perform(mClosed.Frame, a);
 							CenterTimelineOnCurrentColumn.Perform();
 						});
-						Sections.Drop();
+						sections.Drop();
 					}
 				);
 				if (string.IsNullOrEmpty(m.Id)) {
@@ -59,12 +57,12 @@ namespace Tangerine
 					item.Header.Enabled = false;
 					item.HeaderRichText.Text = RichText.Escape("<No Name>");
 				}
-				lookupWidget.AddItem(item);
+				items.Add(item);
 			}
 		}
 	}
 
-	public class LookupAnimationMarkersSection : LookupMarkersSection
+	public class LookupAnimationMarkersSection : LookupSection
 	{
 		private const string PrefixConst = "m";
 
@@ -83,7 +81,9 @@ namespace Tangerine
 			) {
 				return;
 			}
-			FillLookupByAnimationMarkers(lookupWidget, Document.Current.Animation, navigateToNode: false);
+			var items = new List<LookupItem>(0);
+			LookupMarkersSection.FillLookupItemsListByAnimationMarkers(Sections, items, Document.Current.Animation, navigateToNode: false);
+			lookupWidget.AddRange(items);
 		}
 
 		private bool RequireAnimationWithMarkersOrAddAlertItem(LookupWidget lookupWidget, string alertText)
@@ -100,7 +100,7 @@ namespace Tangerine
 		}
 	}
 
-	public class LookupDocumentMarkersSection : LookupMarkersSection
+	public class LookupDocumentMarkersSection : LookupSectionLimited
 	{
 		private const string PrefixConst = "md";
 
@@ -118,11 +118,14 @@ namespace Tangerine
 			) {
 				return;
 			}
+			var items = new List<LookupItem>(0);
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
 				foreach (var animation in node.Animations) {
-					FillLookupByAnimationMarkers(lookupWidget, animation, navigateToNode: node != Document.Current.Container);
+					LookupMarkersSection.FillLookupItemsListByAnimationMarkers(Sections, items, animation, navigateToNode: node != Document.Current.Container);
 				}
 			}
+			MutableItemList = items;
+			Active = true;
 		}
 	}
 }

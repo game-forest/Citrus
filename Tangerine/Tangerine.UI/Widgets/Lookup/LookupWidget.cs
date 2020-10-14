@@ -188,6 +188,13 @@ namespace Tangerine.UI
 			}
 		}
 
+		public void AddRange(IEnumerable<LookupItem> collection)
+		{
+			foreach (var item in collection) {
+				AddItem(item);
+			}
+		}
+
 		public void AddItem(string text, Action action) => AddItem(new LookupItem(text, action));
 
 		public void AddItem(LookupItem item)
