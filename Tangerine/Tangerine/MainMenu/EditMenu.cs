@@ -440,17 +440,12 @@ namespace Tangerine
 			}
 			foreach (var row in rows) {
 				try {
-					var button = Core.Operations.NodeTypeConvert.Perform(row, typeof(Button), typeof(Widget), new HashSet<string> {
+					NodeTypeConvert.Perform(row, typeof(Button), typeof(Widget), new HashSet<string> {
 						nameof(Node.Parent),
 						nameof(Node.Nodes),
 						nameof(Node.Animations),
 						nameof(Node.Animators)
 					});
-					int[] markerFrames = { 0, 10, 20, 30, 40 };
-					string[] makerIds = { "Normal", "Focus", "Press", "Release", "Disable" };
-					for (var i = 0; i < 5; i++) {
-						button.DefaultAnimation.Markers.Add(new Marker(makerIds[i], markerFrames[i], MarkerAction.Stop));
-					}
 				} catch (InvalidOperationException e) {
 					AlertDialog.Show(e.Message);
 					Document.Current.History.RollbackTransaction();
