@@ -33,8 +33,16 @@ dotnet_naming_symbols.interface_i_prefix.applicable_kinds = interface
 dotnet_naming_symbols.interface_i_prefix.applicable_accessibilities = *
 dotnet_naming_style.interface_i_prefix_style.required_prefix = I
 
-indent_style = tab
+// New line preferences
+csharp_new_line_before_catch = false
+csharp_new_line_before_else = false
+csharp_new_line_before_finally = false
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_open_brace = accessors,types,methods,properties
+csharp_new_line_between_query_expression_clauses = true
+
+indent_style = tab
 end_of_line = lf
 tab_width = 4
 charset = utf-8
