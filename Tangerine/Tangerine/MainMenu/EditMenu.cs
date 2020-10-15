@@ -66,7 +66,7 @@ namespace Tangerine
 		public override void ExecuteTransaction()
 		{
 			var nodes = Document.Current?.SelectedNodes().Editable().ToList();
-				if (nodes.Count != 1) {
+			if (nodes.Count != 1) {
 				AlertDialog.Show("Please, select a single node");
 				return;
 			}
@@ -166,7 +166,8 @@ namespace Tangerine
 
 	public class ConvertToButton : DocumentCommandHandler
 	{
-		public override void ExecuteTransaction() {
+		public override void ExecuteTransaction()
+		{
 			var rows = Document.Current.SelectedRows().ToList();
 			foreach (var row in rows) {
 				if (row.Components.Get<NodeRow>()?.Node is Frame frame) {

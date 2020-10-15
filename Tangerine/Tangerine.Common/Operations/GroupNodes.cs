@@ -67,8 +67,7 @@ namespace Tangerine.Common.Operations
 					if (isSelectedBone) {
 						localRoot = BoneUtils.FindBoneRoot(bone, nodes);
 						delta = -aabb.A;
-					}
-					else {
+					} else {
 						localRoot = BoneUtils.FindBoneRoot(bone, bonesExceptSelected);
 					}
 					if (!localRoots.Contains(localRoot)) {

@@ -47,8 +47,7 @@ namespace Tangerine.Common.Operations
 							GroupNodes.TransformPropertyAndKeyframes<float>(node, nameof(Widget.Rotation),
 								v => v * Mathf.Sign(group.Scale.X * group.Scale.Y) + group.Rotation);
 							GroupNodes.TransformPropertyAndKeyframes<Color4>(node, nameof(Widget.Color), v => group.Color * v);
-						}
-						else if (node is Bone bone) {
+						} else if (node is Bone bone) {
 							GroupNodes.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.Position), v => localToParentTransform * v);
 							GroupNodes.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.Rotation),
 								v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
