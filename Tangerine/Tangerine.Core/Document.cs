@@ -235,6 +235,9 @@ namespace Tangerine.Core
 			{
 				if (selectedAnimation != value) {
 					selectedAnimation = value;
+					if (selectedAnimation != null) {
+						animationPositioner.SetAnimationTime(selectedAnimation, value.Time, true);
+					}
 					RefreshCompoundAnimationTree();
 				}
 			}
