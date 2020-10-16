@@ -1341,14 +1341,23 @@ namespace Tangerine.Core.Operations
 					} else {
 						SetAnimableProperty.Perform(root, nameof(Bone.Rotation), (flipY ? 180 : 0) - root.Rotation);
 						SetAnimableProperty.Perform(root, nameof(Bone.Length), -root.Length);
-						var bones = BoneUtils.FindBoneDescendats(root,
-							Document.Current.Container.Nodes.OfType<Bone>());
+						var bones = FindBoneDescendats(root, Document.Current.Container.Nodes.OfType<Bone>());
 						foreach (var childBone in bones) {
 							SetAnimableProperty.Perform(childBone, nameof(Bone.Rotation), -childBone.Rotation);
 							SetAnimableProperty.Perform(childBone, nameof(Bone.Length), -childBone.Length);
 						}
 					}
 					roots.Add(root);
+				}
+			}
+		}
+
+		private static IEnumerable<Bone> FindBoneDescendats(Bone root, IEnumerable<Bone> bones)
+		{
+			foreach (var bone in bones.Where(b => b.BaseIndex == root.Index)) {
+				yield return bone;
+				foreach (var b in FindBoneDescendats(bone, bones)) {
+					yield return b;
 				}
 			}
 		}

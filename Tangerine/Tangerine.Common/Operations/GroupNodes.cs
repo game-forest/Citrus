@@ -13,43 +13,31 @@ namespace Tangerine.Common.Operations
 	{
 		private const string DefaultAnimationId = "<DefaultAnimationId>";
 
-		public static Node Perform(List<Node> nodes)
+		public static Node Perform(IEnumerable<Node> nodes)
 		{
-			var history = Core.Document.Current.History;
+			return Perform(nodes.Select(n => Document.Current.GetSceneItemForObject(n)));
+		}
+
+		public static Node Perform(IEnumerable<Row> sceneItems)
+		{
+			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(sceneItems).ToList();
+			var nodes = EnumerateNodes(topSceneItems).ToList();
+			var history = Document.Current.History;
 			using (history.BeginTransaction()) {
-				if (!nodes.Any()) {
-					throw new InvalidOperationException("Can't group empty node list.");
-				}
-				var container = nodes[0].Parent;
-				foreach (var node in nodes) {
-					if (node.Parent != container) {
-						throw new InvalidOperationException("When grouping all nodes must belong to a single parent.");
-					}
-				}
-				if (!Utils.CalcHullAndPivot(nodes, out var hull, out _)) {
-					throw new InvalidOperationException("Can't calc hull and pivot when grouping nodes.");
-				}
-				hull = hull.Transform(container.AsWidget.LocalToWorldTransform.CalcInversed());
-				var aabb = hull.ToAABB();
-				var containerSceneTree = Document.Current.GetSceneItemForObject(container);
+				var containerSceneTree = SceneTreeUtils.GetOwnerNodeSceneItem(topSceneItems[0].Parent);
+				var container = containerSceneTree.GetNode();
 				if (containerSceneTree.Parent == null && containerSceneTree.Rows.Count == 0) {
 					Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
 				}
-				foreach (var sceneItem in containerSceneTree.Rows.Where(si => si.TryGetNode(out var n) && nodes.Contains(n))) {
-					var br = sceneItem.Components.Get<BoneRow>();
-					if (br != null) {
-						if (!sceneItem.Expanded) {
-							nodes.AddRange(BoneUtils.FindBoneDescendats(br.Bone, container.Nodes.OfType<Bone>()));
-						}
-					}
+				if (topSceneItems.Any(i => SceneTreeUtils.GetOwnerNodeSceneItem(i.Parent).GetNode() != container)) {
+					throw new InvalidOperationException("When grouping all nodes must belong to a single parent.");
 				}
+				if (Utils.CalcHullAndPivot(nodes, out var hull, out _)) {
+					hull = hull.Transform(container.AsWidget.LocalToWorldTransform.CalcInversed());
+				}
+				var aabb = hull.ToAABB();
 				var selectedBones = nodes.OfType<Bone>().ToList();
-				var firstItem = Document.Current.GetSceneItemForObject(nodes[0]);
-				var group = (Frame)Core.Operations.CreateNode.Perform(
-					firstItem.Parent,
-					firstItem.Parent.Rows.IndexOf(firstItem),
-					typeof(Frame));
-				group.Id = nodes[0].Id + "Group";
+				var group = CreateGroupFrame(topSceneItems[0]);
 				group.Pivot = Vector2.Half;
 				group.Position = aabb.Center;
 				group.Size = aabb.Size;
@@ -80,18 +68,14 @@ namespace Tangerine.Common.Operations
 					}
 				}
 				SetKeyframes(nodeKeyframesDict);
-				foreach (var node in nodes) {
-					if (node.Parent != null) {
-						UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(node));
-					}
+				foreach (var item in topSceneItems) {
+					UnlinkSceneItem.Perform(item);
 				}
-				int i = 0;
+				int index = 0;
+				foreach (var item in topSceneItems) {
+					LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group), index++, item);
+				}
 				foreach (var node in nodes) {
-					if (node.Parent != null) {
-						continue;
-					}
-					LinkSceneItem.Perform(
-						Document.Current.GetSceneItemForObject(group), i++, Document.Current.GetSceneItemForObject(node));
 					if (node is Widget) {
 						TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => v - aabb.A);
 					}
@@ -103,7 +87,40 @@ namespace Tangerine.Common.Operations
 				history.CommitTransaction();
 				return group;
 			}
+		}
 
+		private static Frame CreateGroupFrame(Row item)
+		{
+			var i = item;
+			while (i.Parent.TryGetNode(out var node) && node is Bone) {
+				i = i.Parent;
+			}
+			var group = (Frame)CreateNode.Perform(
+				i.Parent,
+				i.Parent.Rows.IndexOf(i),
+				typeof(Frame));
+			group.Id = item.Id + "Group";
+			return group;
+		}
+
+		private static IEnumerable<Node> EnumerateNodes(IEnumerable<Row> items)
+		{
+			foreach (var i in items) {
+				if (i.TryGetNode(out var node)) {
+					if (node is Bone) {
+						yield return node;
+						foreach (var n in EnumerateNodes(i.Rows)) {
+							yield return n;
+						}
+					} else {
+						yield return node;
+					}
+				} else if (i.TryGetFolder(out _)) {
+					foreach (var n in EnumerateNodes(i.Rows)) {
+						yield return n;
+					}
+				}
+			}
 		}
 
 		private static void SetKeyframes(Dictionary<Node, BoneAnimationData> keyframeDictionary)

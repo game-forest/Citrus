@@ -14,16 +14,12 @@ namespace Tangerine
 {
 	public class GroupNodes : DocumentCommandHandler
 	{
-
 		public override void ExecuteTransaction()
 		{
-			var selectedNodes = Document.Current.SelectedNodes().Where(Common.Operations.GroupNodes.IsValidNode).ToList();
-			var group = Common.Operations.GroupNodes.Perform(selectedNodes);
+			var group = Common.Operations.GroupNodes.Perform(Document.Current.SelectedRows());
 			ClearRowSelection.Perform();
 			SelectNode.Perform(group);
 		}
-
-		public override bool GetEnabled() => Document.Current.SelectedNodes().Any(Common.Operations.GroupNodes.IsValidNode);
 	}
 
 	public class UngroupNodes : DocumentCommandHandler
