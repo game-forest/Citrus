@@ -33,14 +33,15 @@ namespace Tangerine.Common.Operations
 				}
 				List<Node> result = new List<Node>();
 				foreach (var group in groups) {
-					var groupItems = Document.Current.GetSceneItemForObject(group).Rows.Where(
-						i => i.TryGetNode(out var n) && GroupNodes.IsValidNode(n)).ToList();
+					var groupItems = Document.Current.GetSceneItemForObject(group).Rows.ToList();
 					var localToParentTransform = group.CalcLocalToParentTransform();
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);
 						LinkSceneItem.Perform(containerItem, index++, i);
 						var node = i.GetNode();
-						result.Add(node);
+						if (node != null) {
+							result.Add(node);
+						}
 						if (node is Widget) {
 							GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => localToParentTransform * v);
 							GroupNodes.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Scale), v => v * group.Scale);
