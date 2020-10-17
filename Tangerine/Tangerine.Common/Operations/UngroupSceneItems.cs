@@ -24,9 +24,6 @@ namespace Tangerine.Common.Operations
 				}
 				UntieWidgetsFromBones.Perform(container.Nodes.OfType<Bone>(), groups);
 				var containerItem = Document.Current.GetSceneItemForObject(container);
-				if (containerItem.Parent == null && containerItem.Rows.Count == 0) {
-					containerItem = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-				}
 				int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(groups.First()));
 				foreach (var group in groups) {
 					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
