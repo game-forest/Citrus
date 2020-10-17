@@ -9,14 +9,9 @@ using Tangerine.UI;
 
 namespace Tangerine.Common.Operations
 {
-	public static class GroupNodes
+	public static class GroupSceneItems
 	{
 		private const string DefaultAnimationId = "<DefaultAnimationId>";
-
-		public static Node Perform(IEnumerable<Node> nodes)
-		{
-			return Perform(nodes.Select(n => Document.Current.GetSceneItemForObject(n)));
-		}
 
 		public static Node Perform(IEnumerable<Row> sceneItems)
 		{

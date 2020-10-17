@@ -16,7 +16,7 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			var group = Common.Operations.GroupNodes.Perform(Document.Current.SelectedRows());
+			var group = Common.Operations.GroupSceneItems.Perform(Document.Current.SelectedRows());
 			if (group != null) {
 				ClearRowSelection.Perform();
 				SelectNode.Perform(group);
@@ -34,9 +34,9 @@ namespace Tangerine
 				return;
 			}
 			ClearRowSelection.Perform();
-			var nodes = Common.Operations.UngroupNodes.Perform(groups);
-			foreach (var node in nodes) {
-				SelectNode.Perform(node);
+			var items = Common.Operations.UngroupSceneItems.Perform(groups);
+			foreach (var i in items) {
+				SelectRow.Perform(i, true);
 			}
 		}
 
