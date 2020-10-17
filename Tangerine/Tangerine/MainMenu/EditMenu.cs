@@ -17,8 +17,10 @@ namespace Tangerine
 		public override void ExecuteTransaction()
 		{
 			var group = Common.Operations.GroupNodes.Perform(Document.Current.SelectedRows());
-			ClearRowSelection.Perform();
-			SelectNode.Perform(group);
+			if (group != null) {
+				ClearRowSelection.Perform();
+				SelectNode.Perform(group);
+			}
 		}
 	}
 

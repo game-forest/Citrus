@@ -20,6 +20,9 @@ namespace Tangerine.Common.Operations
 
 		public static Node Perform(IEnumerable<Row> sceneItems)
 		{
+			if (!sceneItems.Any()) {
+				return null;
+			}
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(sceneItems).ToList();
 			var nodes = EnumerateNodes(topSceneItems).ToList();
 			var history = Document.Current.History;
