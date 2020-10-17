@@ -29,9 +29,6 @@ namespace Tangerine.Common.Operations
 			using (history.BeginTransaction()) {
 				var containerSceneTree = SceneTreeUtils.GetOwnerNodeSceneItem(topSceneItems[0].Parent);
 				var container = containerSceneTree.GetNode();
-				if (containerSceneTree.Parent == null && containerSceneTree.Rows.Count == 0) {
-					Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-				}
 				if (topSceneItems.Any(i => SceneTreeUtils.GetOwnerNodeSceneItem(i.Parent).GetNode() != container)) {
 					throw new InvalidOperationException("When grouping all nodes must belong to a single parent.");
 				}
