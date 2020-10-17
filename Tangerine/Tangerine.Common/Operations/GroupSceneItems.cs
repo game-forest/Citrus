@@ -13,10 +13,11 @@ namespace Tangerine.Common.Operations
 	{
 		private const string DefaultAnimationId = "<DefaultAnimationId>";
 
+		/// <exception cref="InvalidOperationException">Thrown when sceneItems contains no elements.</exception>
 		public static Node Perform(IEnumerable<Row> sceneItems)
 		{
 			if (!sceneItems.Any()) {
-				return null;
+				throw new InvalidOperationException();
 			}
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(sceneItems).ToList();
 			var nodes = EnumerateNodes(topSceneItems).ToList();
