@@ -824,9 +824,12 @@ namespace Tangerine.Core
 			}
 		}
 
-		public static void SetCurrentFrameToNode(Animation animation, int frameIndex, bool stopAnimations = true)
+		public void SetCurrentAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
 			Current.animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
+			// Bump scene tree version, since some animated properties may affect
+			// the presentation of nodes on the timeline (e.g. a node label is grayed if Visible == false)
+			BumpSceneTreeVersion();
 		}
 
 		public void TogglePreviewAnimation()
@@ -837,7 +840,7 @@ namespace Tangerine.Core
 				Animation.IsRunning = false;
 				StopAnimationRecursive(PreviewAnimationContainer);
 				if (!CoreUserPreferences.Instance.StopAnimationOnCurrentFrame) {
-					SetCurrentFrameToNode(Animation, PreviewAnimationBegin);
+					SetCurrentAnimationFrame(Animation, PreviewAnimationBegin);
 				}
 				AudioSystem.StopAll();
 				ForceAnimationUpdate();
@@ -849,7 +852,7 @@ namespace Tangerine.Core
 					}
 				}
 				int savedAnimationFrame = AnimationFrame;
-				SetCurrentFrameToNode(Animation, AnimationFrame, stopAnimations: false);
+				SetCurrentAnimationFrame(Animation, AnimationFrame, stopAnimations: false);
 				PreviewScene = true;
 				PreviewAnimation = true;
 				Animation.IsRunning = PreviewAnimation;
@@ -885,7 +888,7 @@ namespace Tangerine.Core
 
 		public void ForceAnimationUpdate()
 		{
-			SetCurrentFrameToNode(Current.Animation, Current.AnimationFrame);
+			SetCurrentAnimationFrame(Current.Animation, Current.AnimationFrame);
 		}
 	}
 }
