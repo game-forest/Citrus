@@ -35,8 +35,14 @@ namespace Tangerine.Common.Operations
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);
 						LinkSceneItem.Perform(containerItem, index++, i);
-						var node = i.GetNode();
 						result.Add(i);
+					}
+					var flipXFactor = group.Scale.X < 0 ? -1 : 1;
+					var flipYFactor = group.Scale.Y < 0 ? -1 : 1;
+					var flipVector = Vector2.Right + Vector2.Down * flipXFactor * flipYFactor;
+					var groupRootBones = new List<Bone>();
+					var groupNodes = GroupSceneItems.EnumerateNodes(groupItems).Where(GroupSceneItems.IsValidNode).ToList();
+					foreach (var node in GroupSceneItems.EnumerateNodes(groupItems)) {
 						if (node is Widget) {
 							GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Position), v => localToParentTransform * v);
 							GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(node, nameof(Widget.Scale), v => v * group.Scale);
@@ -44,11 +50,18 @@ namespace Tangerine.Common.Operations
 								v => v * Mathf.Sign(group.Scale.X * group.Scale.Y) + group.Rotation);
 							GroupSceneItems.TransformPropertyAndKeyframes<Color4>(node, nameof(Widget.Color), v => group.Color * v);
 						} else if (node is Bone bone) {
-							GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.Position), v => localToParentTransform * v);
-							GroupSceneItems.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.Rotation),
-								v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
-							GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(bone, nameof(Bone.RefPosition), v => localToParentTransform * v);
-							GroupSceneItems.TransformPropertyAndKeyframes<float>(bone, nameof(Bone.RefRotation),
+							var root = BoneUtils.FindBoneRoot((Bone)node, groupNodes);
+							if (!groupRootBones.Contains(root)) {
+								GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.Position), v => localToParentTransform * v);
+								GroupSceneItems.TransformPropertyAndKeyframes<float>(node, nameof(Bone.Rotation),
+									v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
+								groupRootBones.Add(root);
+							} else if (flipVector != Vector2.One) {
+								GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.Position), v => v * flipVector);
+								GroupSceneItems.TransformPropertyAndKeyframes<float>(node, nameof(Bone.Rotation), v => -v);
+							}
+							GroupSceneItems.TransformPropertyAndKeyframes<Vector2>(node, nameof(Bone.RefPosition), v => localToParentTransform * v);
+							GroupSceneItems.TransformPropertyAndKeyframes<float>(node, nameof(Bone.RefRotation),
 								v => (Matrix32.Rotation(v * Mathf.DegToRad) * localToParentTransform).ToTransform2().Rotation);
 						}
 					}
