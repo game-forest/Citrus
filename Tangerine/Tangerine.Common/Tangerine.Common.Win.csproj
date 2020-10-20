@@ -65,6 +65,8 @@
     <Compile Include="FilesDropHandlers\AudiosDropHandler.cs" />
     <Compile Include="FilesDropHandlers\ImagesDropHandler.cs" />
     <Compile Include="FilesDropHandlers\ScenesDropHandler.cs" />
+    <Compile Include="Operations\GroupSceneItems.cs" />
+    <Compile Include="Operations\UngroupSceneItems.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

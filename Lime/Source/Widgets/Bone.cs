@@ -303,16 +303,6 @@ namespace Lime
 			} while (!done);
 		}
 
-		public static IEnumerable<Bone> FindBoneDescendats(Bone root, IEnumerable<Bone> bones)
-		{
-			foreach (var bone in bones.Where(b => b.BaseIndex == root.Index)) {
-				yield return bone;
-				foreach (var b in FindBoneDescendats(bone, bones)) {
-					yield return b;
-				}
-			}
-		}
-
 		public static Bone GetBone(this IEnumerable<Node> nodes, int index)
 		{
 			foreach (var node in nodes) {
