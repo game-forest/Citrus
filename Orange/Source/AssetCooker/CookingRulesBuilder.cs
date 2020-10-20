@@ -81,6 +81,7 @@ namespace Orange
 		[TargetPlatforms]
 		TextureFilter MagFilter { get; }
 		int AtlasItemPadding { get; }
+		int MaxAtlasSize { get; }
 	}
 
 	public class ParticularCookingRules : ICookingRules
@@ -144,6 +145,9 @@ namespace Orange
 
 		[YuzuMember]
 		public int AtlasItemPadding { get; set; } = 1;
+
+		[YuzuMember]
+		public int MaxAtlasSize { get; set; } = 2048;
 
 		private static System.Security.Cryptography.SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
 		// using json format for SHA1 since binary one includes all fields definitions header anyway.
@@ -217,6 +221,7 @@ namespace Orange
 				ModelCompression = ModelCompression.Deflate,
 				FieldOverrides = new HashSet<Meta.Item>(),
 				AtlasItemPadding = 1,
+				MaxAtlasSize = 2048,
 			});
 			return defaultRules[platform];
 		}
@@ -266,6 +271,7 @@ namespace Orange
 		public TextureFilter MagFilter => EffectiveRules.MagFilter;
 		public string CustomRule => EffectiveRules.CustomRule;
 		public int AtlasItemPadding => EffectiveRules.AtlasItemPadding;
+		public int MaxAtlasSize => EffectiveRules.MaxAtlasSize;
 
 		public byte[] SHA1 => EffectiveRules.SHA1;
 
@@ -715,6 +721,9 @@ namespace Orange
 					break;
 				case "AtlasItemPadding":
 					rules.AtlasItemPadding = int.Parse(words[1]);
+					break;
+				case "MaxAtlasSize":
+					rules.MaxAtlasSize = int.Parse(words[1]);
 					break;
 				default:
 					throw new Lime.Exception("Unknown attribute {0}", words[0]);

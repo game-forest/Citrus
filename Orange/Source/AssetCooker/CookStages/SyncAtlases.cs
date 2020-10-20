@@ -87,9 +87,7 @@ namespace Orange
 				}
 			}
 			var pluginItems = new Dictionary<string, List<TextureTools.AtlasItem>>();
-			var items = new Dictionary<AtlasOptimization, List<TextureTools.AtlasItem>>();
-			items[AtlasOptimization.Memory] = new List<TextureTools.AtlasItem>();
-			items[AtlasOptimization.DrawCalls] = new List<TextureTools.AtlasItem>();
+			var items = new Dictionary<(AtlasOptimization AtlasOptimization, int MaxAtlasSize), List<TextureTools.AtlasItem>>();
 			foreach (var fileInfo in AssetBundle.Current.EnumerateFileInfos(null, textureExtension)) {
 				var cookingRules = AssetCooker.CookingRulesMap[fileInfo.Path];
 				if (cookingRules.TextureAtlas == atlasChain) {
@@ -109,7 +107,7 @@ namespace Orange
 							TextureTools.DownscaleTextureInfo(AssetCooker.Platform, bitmapInfo, srcTexturePath, item.CookingRules);
 						}
 						// Ensure that no image exceeded maxAtlasSize limit
-						TextureTools.DownscaleTextureToFitAtlas(bitmapInfo, srcTexturePath);
+						TextureTools.DownscaleTextureToFitAtlas(bitmapInfo, srcTexturePath, item.CookingRules.MaxAtlasSize);
 						item.BitmapInfo = bitmapInfo;
 					}
 					var k = cookingRules.AtlasPacker;
@@ -119,15 +117,18 @@ namespace Orange
 							pluginItems.Add(k, l = new List<TextureTools.AtlasItem>());
 						}
 						l.Add(item);
-					}
-					else {
-						items[cookingRules.AtlasOptimization].Add(item);
+					} else {
+						var key = (cookingRules.AtlasOptimization, cookingRules.MaxAtlasSize);
+						if (!items.TryGetValue(key, out var list)) {
+							items.Add(key, list = new List<TextureTools.AtlasItem>());
+						}
+						list.Add(item);
 					}
 				}
 			}
 			var initialAtlasId = 0;
-			foreach (var kv in items) {
-				if (kv.Value.Any()) {
+			foreach (var ((atlasOptimization, maxAtlasSize), atlasItems) in items) {
+				if (atlasItems.Any()) {
 					if (AssetCooker.Platform == TargetPlatform.iOS) {
 						Predicate<PVRFormat> isRequireSquare = (format) => {
 							return
@@ -135,12 +136,12 @@ namespace Orange
 								format == PVRFormat.PVRTC4 ||
 								format == PVRFormat.PVRTC4_Forced;
 						};
-						var square = kv.Value.Where(item => isRequireSquare(item.CookingRules.PVRFormat)).ToList();
-						var nonSquare = kv.Value.Where(item => !isRequireSquare(item.CookingRules.PVRFormat)).ToList();
-						initialAtlasId = PackItemsToAtlas(atlasChain, square, kv.Key, initialAtlasId, true);
-						initialAtlasId = PackItemsToAtlas(atlasChain, nonSquare, kv.Key, initialAtlasId, false);
+						var square = atlasItems.Where(item => isRequireSquare(item.CookingRules.PVRFormat)).ToList();
+						var nonSquare = atlasItems.Where(item => !isRequireSquare(item.CookingRules.PVRFormat)).ToList();
+						initialAtlasId = PackItemsToAtlas(atlasChain, square, atlasOptimization, maxAtlasSize, initialAtlasId, true);
+						initialAtlasId = PackItemsToAtlas(atlasChain, nonSquare, atlasOptimization, maxAtlasSize, initialAtlasId, false);
 					} else {
-						initialAtlasId = PackItemsToAtlas(atlasChain, kv.Value, kv.Key, initialAtlasId, false);
+						initialAtlasId = PackItemsToAtlas(atlasChain, atlasItems, atlasOptimization, maxAtlasSize, initialAtlasId, false);
 					}
 				}
 			}
@@ -154,7 +155,7 @@ namespace Orange
 		}
 
 		private int PackItemsToAtlas(string atlasChain, List<TextureTools.AtlasItem> items,
-			AtlasOptimization atlasOptimization, int initialAtlasId, bool squareAtlas)
+			AtlasOptimization atlasOptimization, int maxAtlasSize, int initialAtlasId, bool squareAtlas)
 		{
 			// Sort images in descending size order
 			items.Sort((x, y) => {
@@ -176,10 +177,9 @@ namespace Orange
 				var maxTextureSize = items.Max(item => Math.Max(item.BitmapInfo.Height, item.BitmapInfo.Width));
 				var minAtlasSize = Math.Max(64, TextureTools.CalcUpperPowerOfTwo(maxTextureSize));
 
-				foreach (var size in EnumerateAtlasSizes(squareAtlas: squareAtlas, minSize: minAtlasSize)) {
-					double packRate;
+				foreach (var size in EnumerateAtlasSizes(squareAtlas: squareAtlas, minSize: minAtlasSize, maxSize: maxAtlasSize)) {
 					var prevAllocated = items.Where(i => i.Allocated).ToList();
-					PackItemsToAtlas(items, size, out packRate);
+					PackItemsToAtlas(items, size, out double packRate);
 					switch (atlasOptimization) {
 						case AtlasOptimization.Memory:
 							if (packRate * 0.95f > bestPackRate) {
@@ -275,6 +275,9 @@ namespace Orange
 			if (item1.CookingRules.MipMaps != item2.CookingRules.MipMaps) {
 				return false;
 			}
+			if (item1.CookingRules.MaxAtlasSize != item2.CookingRules.MaxAtlasSize) {
+				return false;
+			}
 			if (items.Count > 0) {
 				if (item1.CookingRules.WrapMode != TextureWrapMode.Clamp || item2.CookingRules.WrapMode != TextureWrapMode.Clamp) {
 					return false;
@@ -322,20 +325,19 @@ namespace Orange
 			}
 		}
 
-		private IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize)
+		private IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize, int maxSize)
 		{
 			if (squareAtlas) {
-				for (var i = minSize; i <= TextureTools.GetMaxAtlasSize().Width; i *= 2) {
+				for (var i = minSize; i <= maxSize; i *= 2) {
 					yield return new Size(i, i);
 				}
-			}
-			else {
-				for (var i = minSize; i <= TextureTools.GetMaxAtlasSize().Width / 2; i *= 2) {
+			} else {
+				for (var i = minSize; i <= maxSize / 2; i *= 2) {
 					yield return new Size(i, i);
 					yield return new Size(i * 2, i);
 					yield return new Size(i, i * 2);
 				}
-				yield return TextureTools.GetMaxAtlasSize();
+				yield return new Size(maxSize, maxSize);
 			}
 		}
 
