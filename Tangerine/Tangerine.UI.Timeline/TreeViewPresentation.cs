@@ -215,6 +215,26 @@ namespace Tangerine.UI.Timeline
 				Widget.Nodes.Add(CreateEyeButton());
 				Widget.Nodes.Add(CreateLockButton());
 			}
+			Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+		}
+
+		private void ShowContextMenu()
+		{
+			if (!SceneItem.Selected) {
+				Document.Current.History.DoTransaction(() => {
+					ClearRowSelection.Perform();
+					SelectRow.Perform(SceneItem);
+				});
+			}
+			var menu = new Menu {
+				Command.Cut,
+				Command.Copy,
+				Command.Paste,
+				Command.Delete,
+				Command.MenuSeparator,
+				new Command("Rename", Rename),
+			};
+			menu.Popup();
 		}
 
 		private ToolbarButton CreateEyeButton()
