@@ -158,7 +158,9 @@ namespace Tangerine.Core.Operations
 			// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
 			var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
 			mousePosition *= Document.Current.Container.AsWidget?.LocalToWorldTransform.CalcInversed();
-			var widgetOffset = mousePosition - container.Nodes.OfType<Widget>().FirstOrDefault()?.Position;
+			var widgetOffset =
+				mousePosition - container.Nodes.OfType<Widget>().FirstOrDefault()?.Position ??
+				mousePosition - container.Nodes.OfType<Bone>().FirstOrDefault()?.Position;
 			foreach (var i in itemsToPaste.Rows.ToList()) {
 				UnlinkSceneItem.Perform(i);
 				LinkSceneItem.Perform(parent, index, i);
@@ -166,8 +168,13 @@ namespace Tangerine.Core.Operations
 				pastedItems.Add(i);
 				if (i.TryGetNode(out var node)) {
 					Document.Current.Decorate(node);
-					if (widgetOffset.HasValue && node is Widget widget) {
-						widget.Position += widgetOffset.Value;
+					if (widgetOffset.HasValue) {
+						if (node is Widget widget) {
+							widget.Position += widgetOffset.Value;
+						} else if (node is Bone bone) {
+							bone.RefPosition += widgetOffset.Value;
+							bone.Position += widgetOffset.Value;
+						}
 					}
 				}
 			}
