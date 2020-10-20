@@ -99,7 +99,7 @@ namespace Tangerine.Common.Operations
 			return group;
 		}
 
-		private static IEnumerable<Node> EnumerateNodes(IEnumerable<Row> items)
+		public static IEnumerable<Node> EnumerateNodes(IEnumerable<Row> items)
 		{
 			foreach (var i in items) {
 				if (i.TryGetNode(out var node)) {
