@@ -9327,22 +9327,6 @@ references:
   isSpec: "True"
   fullName: Lime.BoneUtils.CheckConsistency
   nameWithType: BoneUtils.CheckConsistency
-- uid: Lime.BoneUtils.FindBoneDescendats(Lime.Bone,System.Collections.Generic.IEnumerable{Lime.Bone})
-  name: FindBoneDescendats(Bone, IEnumerable<Bone>)
-  href: api/Lime.BoneUtils.html#Lime_BoneUtils_FindBoneDescendats_Lime_Bone_System_Collections_Generic_IEnumerable_Lime_Bone__
-  commentId: M:Lime.BoneUtils.FindBoneDescendats(Lime.Bone,System.Collections.Generic.IEnumerable{Lime.Bone})
-  name.vb: FindBoneDescendats(Bone, IEnumerable(Of Bone))
-  fullName: Lime.BoneUtils.FindBoneDescendats(Lime.Bone, System.Collections.Generic.IEnumerable<Lime.Bone>)
-  fullName.vb: Lime.BoneUtils.FindBoneDescendats(Lime.Bone, System.Collections.Generic.IEnumerable(Of Lime.Bone))
-  nameWithType: BoneUtils.FindBoneDescendats(Bone, IEnumerable<Bone>)
-  nameWithType.vb: BoneUtils.FindBoneDescendats(Bone, IEnumerable(Of Bone))
-- uid: Lime.BoneUtils.FindBoneDescendats*
-  name: FindBoneDescendats
-  href: api/Lime.BoneUtils.html#Lime_BoneUtils_FindBoneDescendats_
-  commentId: Overload:Lime.BoneUtils.FindBoneDescendats
-  isSpec: "True"
-  fullName: Lime.BoneUtils.FindBoneDescendats
-  nameWithType: BoneUtils.FindBoneDescendats
 - uid: Lime.BoneUtils.FindBoneRoot(Lime.Bone,System.Collections.Generic.IEnumerable{Lime.Node})
   name: FindBoneRoot(Bone, IEnumerable<Node>)
   href: api/Lime.BoneUtils.html#Lime_BoneUtils_FindBoneRoot_Lime_Bone_System_Collections_Generic_IEnumerable_Lime_Node__
