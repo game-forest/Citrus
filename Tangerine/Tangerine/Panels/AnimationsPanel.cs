@@ -65,7 +65,7 @@ namespace Tangerine.Panels
 			scrollView.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			scrollView.Gestures.Add(mouseDownGesture);
 			scrollView.Gestures.Add(new DoubleClickGesture(0, RenameAnimation));
-			scrollView.LateTasks.Add(ProcessCommandsTask);
+			scrollView.Tasks.Add(ProcessCommandsTask);
 			scrollView.AddChangeWatcher(CalcAnimationsHashCode, _ => Refresh());
 		}
 
