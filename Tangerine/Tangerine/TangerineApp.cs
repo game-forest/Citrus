@@ -753,11 +753,21 @@ namespace Tangerine
 		static void Paste(bool pasteAtMouse = true)
 		{
 			try {
-				Core.Operations.Paste.Perform(
+				Core.Operations.Paste.Perform(out var pastedItems);
+				if (
 					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() && pasteAtMouse &&
-					!CoreUserPreferences.Instance.DontPasteAtMouse ?
-					new Vector2?(SceneView.Instance.Scene.LocalMousePosition()) : null
-				);
+				    !CoreUserPreferences.Instance.DontPasteAtMouse
+				) {
+					var mousePosition =
+						SceneView.Instance.Scene.LocalMousePosition() *
+						Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+					var widgets = pastedItems.Select(i => i.GetNode()).OfType<Widget>().ToList();
+					if (widgets.Count > 0) {
+						Utils.CalcHullAndPivot(widgets, out _, out var pivot);
+						pivot *= Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+						DragWidgetsProcessor.DragWidgets(widgets, mousePosition, pivot);
+					}
+				}
 			} catch (InvalidOperationException e) {
 				Document.Current.History.RollbackTransaction();
 				AlertDialog.Show(e.Message);

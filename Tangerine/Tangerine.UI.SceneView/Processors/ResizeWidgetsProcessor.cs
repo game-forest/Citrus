@@ -129,7 +129,6 @@ namespace Tangerine.UI.SceneView
 			Vector2 curMousePos, Vector2 prevMousePos, bool proportional, bool convertScaleToSize)
 		{
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
-				SceneView.Scene,
 				widgets, pivotPoint, hullInFirstWidgetSpace, curMousePos, prevMousePos,
 				convertScaleToSize,
 				(originalVectorInObbSpace, deformedVectorInObbSpace) => {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Lime;
 
@@ -37,7 +38,7 @@ namespace Tangerine.Core.Operations
 	{
 		public static event Action Pasted;
 
-		public static void Perform(Vector2? mousePosition = null)
+		public static void Perform(out List<Row> pastedItems)
 		{
 			Row parent;
 			int index;
@@ -47,16 +48,18 @@ namespace Tangerine.Core.Operations
 				SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index);
 			}
 			var data = Clipboard.Text;
+			var result = new List<Row>();
 			if (!string.IsNullOrEmpty(data)) {
 				var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 				Document.Current.History.DoTransaction(() => {
 					ClearRowSelection.Perform();
-					PasteSceneItemsFromStream.Perform(stream, parent, index, mousePosition, out var pastedItems);
-					foreach (var i in pastedItems) {
+					PasteSceneItemsFromStream.Perform(stream, parent, index, out result);
+					foreach (var i in result) {
 						SelectRow.Perform(i);
 					}
 				});
 			}
+			pastedItems = result;
 		}
 
 		private static void GetAnimationTrackLinkLocation(out Row parent, out int index)

@@ -17,7 +17,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		public delegate Transform2d CalculateTransformationDelegate(Vector2d originalVectorInObbSpace,
 			Vector2d deformedVectorInObbSpace);
 
-		public static void ApplyTransformationToWidgetsGroupObb(Widget sceneWidget, IList<Widget> widgetsInParentSpace,
+		public static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
 			Vector2? overridePivotInSceneSpace, bool obbInFirstWidgetSpace,
 			Vector2 currentMousePosInSceneSpace, Vector2 previousMousePosSceneSpace,
 			bool convertScaleToSize, CalculateTransformationDelegate onCalculateTransformation)
