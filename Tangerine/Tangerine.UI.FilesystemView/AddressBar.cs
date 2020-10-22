@@ -132,6 +132,7 @@ namespace Tangerine.UI.FilesystemView
 		{
 			Nodes.Add(editor = new ThemedEditBox());
 			editor.LayoutCell = new LayoutCell(Alignment.LeftCenter);
+			bool isPreviousFocused = false;
 			editor.Updating += (float delta) => {
 				if (editor.Input.WasKeyPressed(Key.Enter)) {
 					var adjustedText = AdjustPath(editor.Text);
@@ -141,6 +142,10 @@ namespace Tangerine.UI.FilesystemView
 						editor.Text = filesystemModel.CurrentPath;
 					}
 				}
+				if (editor.IsFocused() && !isPreviousFocused) {
+					editor.Editor.SelectAll();
+				}
+				isPreviousFocused = editor.IsFocused();
 			};
 		}
 
