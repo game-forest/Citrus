@@ -203,7 +203,7 @@ Use Fade In Time and Fade Out Time for transitions.")]
 	public class AudioRandomizerComponent : NodeBehavior
 	{
 		[YuzuMember]
-		public List<SerializableSample> Samples { get; private set; } = new List<SerializableSample>();
+		public AnimableList<SerializableSample> Samples { get; private set; }
 
 		[YuzuMember]
 		public NumericRange Pitch { get; set; } = new NumericRange(1, 0);
@@ -211,9 +211,15 @@ Use Fade In Time and Fade Out Time for transitions.")]
 		[YuzuMember]
 		public NumericRange Volume { get; set; } = new NumericRange(1, 0);
 
+		public AudioRandomizerComponent()
+		{
+			Samples = new AnimableList<SerializableSample> { Owner = this };
+		}
+
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
+			Samples.Owner = this;
 		}
 
 		public override void OnTrigger(string property, object value, double animationTimeCorrection = 0)
