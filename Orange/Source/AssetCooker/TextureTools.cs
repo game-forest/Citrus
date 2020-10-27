@@ -149,7 +149,7 @@ namespace Orange
 			}
 			newWidth = Math.Min(width, maxWidth);
 			newHeight = Math.Min(height, maxHeight);
-			Console.WriteLine($"WARNING: '{path}' downscaled to {newWidth}x{newHeight}");
+			Console.WriteLine($"WARNING: '{path}' downscaled: {width}x{height} => {newWidth}x{newHeight} to fit atlas.");
 			return true;
 		}
 
@@ -170,7 +170,7 @@ namespace Orange
 			if (height > scaleThreshold) {
 				newHeight = Math.Min((height * ratio).Round(), MaxSize);
 			}
-			Console.WriteLine("{0} downscaled to {1}x{2}", path, newWidth, newHeight);
+			Console.WriteLine("{0} downscaled: {1}x{2} => {3}x{4}, scale factor: {5}", path, width, height, newWidth, newHeight, rules.TextureScaleFactor);
 		}
 
 		private static bool ShouldDownscaleHelper(TargetPlatform platform, int width, int height, CookingRules rules)
