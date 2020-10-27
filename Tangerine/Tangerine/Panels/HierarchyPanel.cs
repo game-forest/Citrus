@@ -182,7 +182,7 @@ namespace Tangerine.Panels
 				Document.Current.History.DoTransaction(() => {
 					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 					var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
-					PasteSceneItemsFromStream.Perform(stream, GetSceneItem(args.Parent), index, null,
+					PasteSceneItemsFromStream.Perform(stream, GetSceneItem(args.Parent), index,
 						out var pastedItems);
 					RebuildTreeView();
 					treeView.Refresh();

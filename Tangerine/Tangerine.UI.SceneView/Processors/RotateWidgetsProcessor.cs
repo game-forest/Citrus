@@ -65,7 +65,6 @@ namespace Tangerine.UI.SceneView
 			bool snapped, List<Tuple<Widget, AccumulativeRotationHelper>> accumulativeRotationHelpers)
 		{
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
-				sv.Scene,
 				widgets,
 				widgets.Count <= 1 ? (Vector2?) null : pivotPoint, widgets.Count <= 1,
 				curMousePos, prevMousePos,

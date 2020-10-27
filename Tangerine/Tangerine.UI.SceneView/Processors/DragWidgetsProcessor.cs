@@ -122,8 +122,6 @@ namespace Tangerine.UI.SceneView
 			using (Document.Current.History.BeginTransaction()) {
 				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
 				var dragDirection = DragDirection.Any;
-				Utils.CalcHullAndPivot(widgets, out _, out var pivot);
-				pivot = pivot * Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
@@ -147,45 +145,54 @@ namespace Tangerine.UI.SceneView
 					} else {
 						dragDirection = DragDirection.Any;
 					}
-
-					var mouseDelta = curMousePos - initialMousePos;
-					mouseDelta = mouseDelta.Snap(Vector2.Zero);
-
-					var requiredSnap = SceneViewCommands.SnapWidgetPivotToRuler.Checked || SceneViewCommands.SnapWidgetBorderToRuler.Checked;
-					if (mouseDelta != Vector2.Zero && requiredSnap) {
-						var rulers = GetRulers();
-						foreach (var widget in widgets) {
-							var points = new List<Vector2>();
-							if (SceneViewCommands.SnapWidgetPivotToRuler.Checked) {
-								points.Add(widget.GlobalPivotPosition);
-							}
-							if (SceneViewCommands.SnapWidgetBorderToRuler.Checked) {
-								points.AddRange(widget.CalcHull());
-							}
-							foreach (var point in points) {
-								var pointMoved = point + mouseDelta;
-								var pointSnapped = SnapPointToRulers(pointMoved, rulers);
-								mouseDelta += pointSnapped - pointMoved;
-							}
-						}
-					}
-
-					Transform2d OnCalculateTransformation(Vector2d originalVectorInObbSpace, Vector2d deformedVectorInObbSpace) =>
-						new Transform2d((deformedVectorInObbSpace - originalVectorInObbSpace).Snap(Vector2d.Zero), Vector2d.One, 0);
-					WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
-						SceneView.Scene,
-						widgets,
-						widgets.Count <= 1 ? (Vector2?)null : pivot,
-						widgets.Count <= 1, initialMousePos + mouseDelta,
-						initialMousePos,
-						false,
-						OnCalculateTransformation
-					);
+					DragWidgets(widgets, curMousePos, initialMousePos);
 					yield return null;
 				}
 				Document.Current.History.CommitTransaction();
 				SceneView.Input.ConsumeKey(Key.Mouse0);
 			}
+		}
+
+		public static void DragWidgets(List<Widget> widgets, Vector2 curMousePos, Vector2 initialMousePos)
+		{
+			var mouseDelta = curMousePos - initialMousePos;
+
+			Utils.CalcHullAndPivot(widgets, out _, out var pivot);
+			pivot *= Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+
+			mouseDelta = mouseDelta.Snap(Vector2.Zero);
+
+			var requiredSnap = SceneViewCommands.SnapWidgetPivotToRuler.Checked ||
+			                   SceneViewCommands.SnapWidgetBorderToRuler.Checked;
+			if (mouseDelta != Vector2.Zero && requiredSnap) {
+				var rulers = GetRulers();
+				foreach (var widget in widgets) {
+					var points = new List<Vector2>();
+					if (SceneViewCommands.SnapWidgetPivotToRuler.Checked) {
+						points.Add(widget.GlobalPivotPosition);
+					}
+					if (SceneViewCommands.SnapWidgetBorderToRuler.Checked) {
+						points.AddRange(widget.CalcHull());
+					}
+					foreach (var point in points) {
+						var pointMoved = point + mouseDelta;
+						var pointSnapped = SnapPointToRulers(pointMoved, rulers);
+						mouseDelta += pointSnapped - pointMoved;
+					}
+				}
+			}
+
+			Transform2d OnCalculateTransformation(Vector2d originalVectorInObbSpace, Vector2d deformedVectorInObbSpace) =>
+				new Transform2d((deformedVectorInObbSpace - originalVectorInObbSpace).Snap(Vector2d.Zero), Vector2d.One, 0);
+
+			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
+				widgets,
+				widgets.Count <= 1 ? (Vector2?) null : pivot,
+				widgets.Count <= 1, initialMousePos + mouseDelta,
+				initialMousePos,
+				false,
+				OnCalculateTransformation
+			);
 		}
 
 		private static List<Ruler> GetRulers()

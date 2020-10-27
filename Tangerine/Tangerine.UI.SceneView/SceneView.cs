@@ -75,7 +75,7 @@ namespace Tangerine.UI.SceneView
 			var text = Clipboard.Text;
 			try {
 				Copy.CopyToClipboard();
-				Paste.Perform();
+				Paste.Perform(out _);
 			} finally {
 				Clipboard.Text = text;
 			}

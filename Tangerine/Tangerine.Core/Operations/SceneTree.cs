@@ -144,7 +144,7 @@ namespace Tangerine.Core.Operations
 
 	public static class PasteSceneItemsFromStream
 	{
-		public static bool Perform(MemoryStream stream, Row parent, int index, Vector2? mousePosition, out List<Row> pastedItems)
+		public static bool Perform(MemoryStream stream, Row parent, int index, out List<Row> pastedItems)
 		{
 			pastedItems = new List<Row>();
 			if (!CanPaste(stream, parent)) {
@@ -157,8 +157,6 @@ namespace Tangerine.Core.Operations
 			}
 			// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
 			var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-			mousePosition *= Document.Current.Container.AsWidget?.LocalToWorldTransform.CalcInversed();
-			var widgetOffset = mousePosition - container.Nodes.OfType<Widget>().FirstOrDefault()?.Position;
 			foreach (var i in itemsToPaste.Rows.ToList()) {
 				UnlinkSceneItem.Perform(i);
 				LinkSceneItem.Perform(parent, index, i);
@@ -166,9 +164,6 @@ namespace Tangerine.Core.Operations
 				pastedItems.Add(i);
 				if (i.TryGetNode(out var node)) {
 					Document.Current.Decorate(node);
-					if (widgetOffset.HasValue && node is Widget widget) {
-						widget.Position += widgetOffset.Value;
-					}
 				}
 			}
 			if (container.Animations.TryFind("_", out var animation)) {
