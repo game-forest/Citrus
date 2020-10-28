@@ -568,20 +568,18 @@ namespace Tangerine
 
 		public static void LoadFont()
 		{
-			var defaultFonts = new List<IFont>();
-			var fontResourcePaths = new string[] {
-				"Tangerine.Resources.SegoeUI.ttf",
-				"Tangerine.Resources.NotoSansCJKtc-Regular.ttf",
-			};
-			foreach (var resource in fontResourcePaths) {
-				try {
-					defaultFonts.Add(new DynamicFont(new Tangerine.UI.EmbeddedResource(resource, "Tangerine").GetResourceBytes()));
-				} catch (SystemException e) {
-					System.Console.WriteLine($"Couldn't load font {resource}: {e}");
-				}
+			var asianFont = LoadFont("Tangerine.Resources.NotoSansCJKtc-Regular.ttf");
+			FontPool.Instance.AddFont(FontPool.DefaultFontName,
+				new CompoundFont(LoadFont("Tangerine.Resources.SegoeUI.ttf"), asianFont));
+			FontPool.Instance.AddFont(FontPool.DefaultBoldFontName,
+				new CompoundFont(LoadFont("Tangerine.Resources.SegoeUI-Bold.ttf"),
+					// Use the same asian font for the bold one,
+					// since we don't need asian bold for now and it is too heavy.
+					asianFont));
+			IFont LoadFont(string resource)
+			{
+				return new DynamicFont(new UI.EmbeddedResource(resource, "Tangerine").GetResourceBytes());
 			}
-			var compoundFont = new CompoundFont(defaultFonts);
-			FontPool.Instance.AddFont(FontPool.DefaultFontName, compoundFont);
 		}
 
 		void RegisterGlobalCommands()

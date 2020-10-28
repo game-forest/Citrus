@@ -93,6 +93,7 @@ namespace Lime
 	{
 		public const string DefaultFontDirectory = "Fonts/";
 		public const string DefaultFontName = "Default";
+		public const string DefaultBoldFontName = "Bold";
 		private static readonly string[] defaultFontExtensions = new string[] { ".fnt", ".tft" };
 		public IFont Null = new Font();
 		private Dictionary<string, IFont> fonts = new Dictionary<string, IFont>();
