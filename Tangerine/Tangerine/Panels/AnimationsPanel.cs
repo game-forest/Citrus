@@ -756,7 +756,9 @@ namespace Tangerine.Panels
 						editBox.RevokeFocus();
 					}
 				}
-				DoRename(item, editBox.Text);
+				if (item.Label != editBox.Text) {
+					DoRename(item, editBox.Text);
+				}
 				container.Unlink();
 				label.Visible = true;
 			}
