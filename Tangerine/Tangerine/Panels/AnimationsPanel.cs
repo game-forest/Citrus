@@ -1,109 +1,815 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.UI;
+using Tangerine.UI.Timeline;
+using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.Panels
 {
-	public class AnimationsPanel : IDocumentView
+	interface IAnimationsController
 	{
-		private const string legacyAnimationId = "[Legacy]";
+		TreeViewItem GetNodeTreeViewItem(Row sceneItem);
+		TreeViewItem GetAnimationTreeViewItem(Row sceneItem);
+		TreeViewItem GetMarkerTreeViewItem(Row sceneItem);
+		void ClearSelection();
+	}
+
+	public class AnimationsPanel : IDocumentView, IAnimationsController
+	{
 		private readonly Widget panelWidget;
-		private readonly Frame rootWidget;
-		private readonly ThemedScrollView scrollView;
-		private readonly float rowHeight = Theme.Metrics.DefaultEditBoxSize.Y;
-
-		public static AnimationsPanel Instance { get; private set; }
-
-		static class Commands
-		{
-			public static readonly ICommand Up = new Command(Key.Up);
-			public static readonly ICommand Down = new Command(Key.Down);
-			public static readonly ICommand Delete = Command.Delete;
-		}
+		private readonly Frame contentWidget;
+		private readonly TreeView treeView;
+		private readonly EditBox searchStringEditor;
+		private readonly Func<bool> isSearchActiveGetter;
 
 		public AnimationsPanel(Widget panelWidget)
 		{
-			Instance = this;
 			this.panelWidget = panelWidget;
-			scrollView = new ThemedScrollView { TabTravesable = new TabTraversable() };
-			this.rootWidget = new Frame {
-				Id = "AnimationsPanel",
-				Padding = new Thickness(4),
-				Layout = new VBoxLayout { Spacing = 4 },
-				Nodes = { scrollView }
+			panelWidget.TabTravesable = new TabTraversable();
+			isSearchActiveGetter = () => searchStringEditor.Text.Length > 0;
+			ThemedScrollView scrollView;
+			contentWidget = new Frame {
+				Id = nameof(AnimationsPanel),
+				Padding = new Thickness(5),
+				Layout = new VBoxLayout { Spacing = 5 },
+				Nodes = {
+					(searchStringEditor = new ThemedEditBox()),
+					(scrollView = new ThemedScrollView())
+				}
 			};
-			scrollView.Content.CompoundPresenter.Insert(0, new SyncDelegatePresenter<Widget>(w => {
-				w.PrepareRendererState();
-				var selectedIndex = GetSelectedAnimationIndex();
-				Renderer.DrawRect(
-					0, rowHeight * selectedIndex,
-					w.Width, rowHeight * (selectedIndex + 1),
-					scrollView.IsFocused() ? Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground);
+			var presentation = new TreeViewPresentation(
+				this,
+				new TreeViewItemPresentationOptions {
+					Minimalistic = true,
+					SearchStringGetter = () => searchStringEditor.Text
+				}
+			);
+			treeView = new TreeView(scrollView, presentation, new TreeViewOptions { ShowRoot = false });
+			treeView.OnDragBegin += TreeView_OnDragBegin;
+			treeView.OnDragEnd += TreeView_OnDragEnd;
+			treeView.OnCopy += TreeView_OnCopy;
+			treeView.OnCut += TreeView_OnCut;
+			treeView.OnDelete += TreeView_OnDelete;
+			treeView.OnPaste += TreeView_OnPaste;
+			contentWidget.AddChangeWatcher(() => Document.Current?.SceneTreeVersion ?? 0, _ => RebuildTreeView());
+			contentWidget.AddChangeWatcher(() => Document.Current.Container, _ => RebuildTreeView());
+			RebuildTreeView();
+			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
+				if (treeView.RootItem?.Items.Count > 0) {
+					w.PrepareRendererState();
+					Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition,
+						Theme.Colors.WhiteBackground);
+				}
 			}));
-			var dragGesture = new DragGesture(0);
-			dragGesture.Recognized += () => {
-				var index = (scrollView.Content.LocalMousePosition().Y / rowHeight).Floor();
-				if (index >= 0 && index < GetAnimations().Count) {
-					var animation = GetAnimations()[index];
-					if (!animation.IsLegacy && animation != Document.Current.Animation) {
-						// Dirty hack: using a file drag&drop mechanics for dropping animation clips on the timeline grid.
-						var encodedAnimationId = Convert.ToBase64String(Encoding.UTF8.GetBytes(animation.Id));
-						// DragFiles in Winforms blocks execution, call it on the next update
-						Application.InvokeOnNextUpdate(() => {
-							Window.Current.DragFiles(new[] { encodedAnimationId });
+			searchStringEditor.Tasks.Add(SearchStringDebounceTask());
+		}
+
+		private IEnumerator<object> SearchStringDebounceTask()
+		{
+			string previousSearchText = null;
+			var lastChangeAt = DateTime.Now;
+			var needRefresh = false;
+			while (true) {
+				yield return null;
+				if (searchStringEditor.Text != previousSearchText) {
+					previousSearchText = searchStringEditor.Text;
+					lastChangeAt = DateTime.Now;
+					needRefresh = true;
+				}
+				if (needRefresh && DateTime.Now - lastChangeAt > TimeSpan.FromSeconds(0.25f)) {
+					needRefresh = false;
+					RebuildTreeView();
+					if (searchStringEditor.Text.Length > 0 && treeView.RootItem != null) {
+						ExpandTree(treeView.RootItem);
+					}
+				}
+			}
+		}
+
+		private void TreeView_OnDragBegin(object sender, TreeView.DragEventArgs args)
+		{
+			args.CancelDrag = !(args.Parent is NodeTreeViewItem) || !args.Items.All(i => i is AnimationTreeViewItem);
+		}
+
+		private void TreeView_OnDragEnd(object sender, TreeView.DragEventArgs args)
+		{
+			if (!(args.Parent is NodeTreeViewItem parentItem)) {
+				return;
+			}
+			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
+				Where(i => !i.Animation.IsLegacy).ToList();
+			Document.Current.History.DoTransaction(() => {
+				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
+				foreach (var item in animationItems) {
+					var itemIndex = parentItem.SceneItem.Rows.IndexOf(item.SceneItem);
+					if (item.Parent == parentItem && index > itemIndex) {
+						index--;
+					}
+					UnlinkSceneItem.Perform(item.SceneItem);
+				}
+				foreach (var item in animationItems) {
+					LinkSceneItem.Perform(parentItem.SceneItem, index++, item.SceneItem);
+				}
+			});
+		}
+
+		private int TranslateTreeViewToSceneTreeIndex(TreeViewItem parent, int index)
+		{
+			if (parent.Items.Count == 0) {
+				return 0;
+			}
+			var i = index >= parent.Items.Count ? 1 : 0;
+			var item = ((CommonTreeViewItem)parent.Items[index - i]).SceneItem;
+			return ((CommonTreeViewItem)parent).SceneItem.Rows.IndexOf(item) + i;
+		}
+
+		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
+		{
+			var stream = new MemoryStream();
+			var container = new Frame();
+			var animations = args.Items.OfType<AnimationTreeViewItem>().
+				Select(i => i.Animation).
+				Where(a => !a.IsLegacy);
+			foreach (var animation in animations) {
+				container.Animations.Add(Cloner.Clone(animation));
+			}
+			TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+		}
+
+		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args)
+		{
+			TreeView_OnCopy(sender, args);
+			TreeView_OnDelete(sender, args);
+		}
+
+		private void TreeView_OnDelete(object sender, TreeView.CopyEventArgs args)
+		{
+			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
+				Where(a => !a.Animation.IsLegacy).ToList();
+			if (animationItems.Count == 0) {
+				return;
+			}
+			Document.Current.History.DoTransaction(() => {
+				ClearSelection();
+				TreeViewItem newSelected = null;
+				foreach (var item in animationItems) {
+					var parent = item.Parent;
+					if ((newSelected == null || newSelected == item) && parent.Items.Count > 1) {
+						var index = parent.Items.IndexOf(item);
+						index = index > 0 ? index - 1 : index + 1;
+						newSelected = parent.Items[index];
+						newSelected.Selected = true;
+					}
+					if (item.SceneItem.TryGetAnimation(out var animation)) {
+						DeleteAnimators(animation.Id, animation.OwnerNode);
+					}
+					UnlinkSceneItem.Perform(item.SceneItem);
+					RebuildTreeView();
+				}
+				if (newSelected == null) {
+					NavigateToAnimation.Perform(Document.Current.Container.DefaultAnimation);
+				}
+			});
+
+			void DeleteAnimators(string animationId, Node node)
+			{
+				foreach (var child in node.Nodes) {
+					foreach (var animator in child.Animators.ToList()) {
+						if (animator.AnimationId == animationId) {
+							RemoveFromCollection<AnimatorCollection, IAnimator>.Perform(child.Animators, animator);
+						}
+					}
+					if (child.ContentsPath != null) {
+						continue;
+					}
+					if (child.Animations.Any(i => i.Id == animationId)) {
+						continue;
+					}
+					DeleteAnimators(animationId, child);
+				}
+			}
+		}
+
+		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args)
+		{
+			var data = Clipboard.Text;
+			if (!string.IsNullOrEmpty(data)) {
+				Document.Current.History.DoTransaction(() => {
+					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
+					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+					if (args.Parent is CommonTreeViewItem parent && parent.SceneItem.GetNode() != null) {
+						RebuildTreeView();
+						ClearSelection();
+						var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
+						foreach (var animation in container.Animations.ToList()) {
+							container.Animations.Remove(animation);
+							if (
+								parent.SceneItem.TryGetNode(out var node) &&
+								node.Animations.Any(i => i.Id == animation.Id)
+							) {
+								animation.Id += " - Copy";
+							}
+							var animationSceneItem = LinkSceneItem.Perform(
+								parent.SceneItem, index++, animation);
+							GetAnimationTreeViewItem(animationSceneItem).Selected = true;
+						}
+					}
+				});
+			}
+		}
+
+		private static void ExpandTree(TreeViewItem tree)
+		{
+			if (tree.Items.Count == 0) {
+				return;
+			}
+			if (!tree.Expanded) {
+				tree.Expanded = true;
+			}
+			foreach (var i in tree.Items) {
+				ExpandTree(i);
+			}
+		}
+
+		private readonly List<TreeViewItem> nodeItems = new List<TreeViewItem>();
+
+		private void RebuildTreeView()
+		{
+			if (treeView.RootItem != null) {
+				DestroyTree(treeView.RootItem);
+			}
+
+			nodeItems.Clear();
+			var filter = searchStringEditor.Text;
+			TraverseSceneTree(Document.Current.SceneTree);
+
+			void TraverseSceneTree(Row sceneTree)
+			{
+				if (sceneTree.TryGetNode(out var node) && node.NeedSerializeAnimations() || node == Document.Current.Container) {
+					var nodeItem = GetNodeTreeViewItem(sceneTree);
+					foreach (var animationSceneItem in sceneTree.Rows) {
+						if (!animationSceneItem.TryGetAnimation(out var animation)) {
+							// Do not use LINQ trying to reduce GC pressure
+							continue;
+						}
+						var animationItem = GetAnimationTreeViewItem(animationSceneItem);
+						foreach (var markerSceneItem in animationSceneItem.Rows) {
+							if (markerSceneItem.TryGetMarker(out var marker) && Filter(marker.Id)) {
+								animationItem.Items.Add(GetMarkerTreeViewItem(markerSceneItem));
+							}
+						}
+						if (animationItem.Items.Count > 0 || Filter(animationItem.Label)) {
+							nodeItem.Items.Add(animationItem);
+						}
+					}
+					if (nodeItem.Items.Count > 0 || node == Document.Current.Container) {
+						nodeItems.Add(nodeItem);
+					}
+				}
+				foreach (var child in sceneTree.Rows) {
+					TraverseSceneTree(child);
+				}
+			}
+
+			bool Filter(string text)
+			{
+				return filter.Length == 0 || text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
+			}
+
+			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
+			nodeItems.Sort((a, b) => a.Label.CompareTo(b.Label));
+			foreach (var item in nodeItems) {
+				treeView.RootItem.Items.Add(item);
+			}
+			treeView.Refresh();
+
+			void DestroyTree(TreeViewItem tree)
+			{
+				foreach (var node in tree.Items) {
+					DestroyTree(node);
+				}
+				tree.Items.Clear();
+			}
+		}
+
+		public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
+		{
+			var c = sceneItem.Components.Get<TreeViewComponent>();
+			if (c == null) {
+				c = new TreeViewComponent();
+				c.ExpandedIfSearchActive = true;
+				c.ExpandedIfSearchInactive = true;
+				sceneItem.Components.Add(c);
+			}
+			c.TreeViewItem = c.TreeViewItem ?? new NodeTreeViewItem(sceneItem, c, sceneItem.GetNode(), isSearchActiveGetter);
+			return c.TreeViewItem;
+		}
+
+		public TreeViewItem GetAnimationTreeViewItem(Row sceneItem)
+		{
+			var c = sceneItem.Components.GetOrAdd<TreeViewComponent>();
+			c.TreeViewItem = c.TreeViewItem ?? new AnimationTreeViewItem(sceneItem, c, sceneItem.GetAnimation(), isSearchActiveGetter);
+			return c.TreeViewItem;
+		}
+
+		public TreeViewItem GetMarkerTreeViewItem(Row sceneItem)
+		{
+			var c = sceneItem.Components.GetOrAdd<TreeViewComponent>();
+			c.TreeViewItem = c.TreeViewItem ?? new MarkerTreeViewItem(sceneItem, c, sceneItem.GetMarker(), isSearchActiveGetter);
+			return c.TreeViewItem;
+		}
+
+		public void ClearSelection()
+		{
+			treeView.ClearSelection();
+		}
+
+		public void Attach()
+		{
+			panelWidget.PushNode(contentWidget);
+		}
+
+		public void Detach()
+		{
+			contentWidget.Unlink();
+		}
+
+		private class TreeViewComponent : Component
+		{
+			public TreeViewItem TreeViewItem { get; set; }
+
+			public bool Selected
+			{
+				get => SelectionOrder > 0;
+				set
+				{
+					if (Selected != value) {
+						SelectionOrder = value ? selectionCounter++ : 0;
+					}
+				}
+			}
+
+			private static int selectionCounter = 1;
+
+			public int SelectionOrder { get; private set; }
+
+			public bool ExpandedIfSearchInactive { get; set; }
+			public bool ExpandedIfSearchActive { get; set; }
+		}
+
+		private class CommonTreeViewItem : TreeViewItem
+		{
+			private readonly Func<bool> isSearchActiveGetter;
+			private readonly TreeViewComponent treeViewComponent;
+
+			public Row SceneItem { get; }
+
+			protected CommonTreeViewItem(Row sceneItem, TreeViewComponent treeViewComponent, Func<bool> isSearchActiveGetter)
+			{
+				this.SceneItem = sceneItem;
+				this.treeViewComponent = treeViewComponent;
+				this.isSearchActiveGetter = isSearchActiveGetter;
+			}
+
+			public override bool CanExpand() => Items.Count > 0;
+
+			public override bool Selected
+			{
+				get => treeViewComponent.Selected;
+				set
+				{
+					if (Selected != value) {
+						Document.Current.History.DoTransaction(() => {
+							SetProperty.Perform(
+								treeViewComponent,
+								nameof(treeViewComponent.Selected), value, false);
 						});
 					}
 				}
-			};
-			var mouseDownGesture = new ClickGesture(0);
-			mouseDownGesture.Recognized += SelectAnimationBasedOnMousePosition;
-			scrollView.Gestures.Add(dragGesture);
-			scrollView.Gestures.Add(new ClickGesture(1, ShowContextMenu));
-			scrollView.Gestures.Add(mouseDownGesture);
-			scrollView.Gestures.Add(new DoubleClickGesture(0, RenameAnimation));
-			scrollView.Tasks.Add(ProcessCommandsTask);
-			scrollView.AddChangeWatcher(CalcAnimationsHashCode, _ => Refresh());
+			}
+
+			public override int SelectionOrder => treeViewComponent.SelectionOrder;
+
+			public override bool Expanded
+			{
+				get
+				{
+					var c = treeViewComponent;
+					return isSearchActiveGetter() ? c.ExpandedIfSearchActive : c.ExpandedIfSearchInactive;
+				}
+
+				set
+				{
+					if (Expanded != value) {
+						Document.Current.History.DoTransaction(() => {
+							DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+							var propertyName = isSearchActiveGetter()
+								? nameof(treeViewComponent.ExpandedIfSearchActive)
+								: nameof(treeViewComponent.ExpandedIfSearchInactive);
+							SetProperty.Perform(
+								treeViewComponent, propertyName, value, false);
+							DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
+						});
+					}
+				}
+			}
 		}
 
-		private void RenameAnimation()
+		private interface INodeTreeViewItem
 		{
-			var index = GetSelectedAnimationIndex();
-			var animation = GetAnimations()[index];
-			var item = (Widget)scrollView.Content.Nodes[index];
-			var label = item["Label"];
-			label.Visible = false;
-			var editor = new ThemedEditBox();
-			label.Parent.Nodes.Insert(label.CollectionIndex(), editor);
-			editor.Text = animation.Id;
-			editor.SetFocus();
-			editor.AddChangeWatcher(() => editor.IsFocused(), focused => {
-				if (!focused) {
-					var newId = editor.Text.Trim();
-					if (!animation.Owner.Animations.Any(a => a.Id == newId)) {
-						RenameAnimationHelper(newId);
-					}
-					editor.Unlink();
-					label.Visible = true;
-				}
-			});
-			editor.Submitted += s => {
-				RenameAnimationHelper(s.Trim());
-				editor.Unlink();
-				label.Visible = true;
-			};
+			Node Node { get; }
+		}
 
-			void RenameAnimationHelper(string newId)
+		private class NodeTreeViewItem : CommonTreeViewItem, INodeTreeViewItem
+		{
+			public Node Node { get; }
+
+			public NodeTreeViewItem(Row sceneItem, TreeViewComponent component, Node node, Func<bool> isSearchActiveGetter)
+				: base(sceneItem, component, isSearchActiveGetter)
 			{
+				Node = node;
+			}
+
+			public override string Label
+			{
+				get => GetNodeLabel(Node);
+				set { }
+			}
+
+			private static string GetNodeLabel(Node node)
+			{
+				string r = null;
+				for (var p = node; p.Parent != null; p = p.Parent) {
+					var i = string.IsNullOrEmpty(p.Id) ? p.GetType().Name : p.Id;
+					if (!string.IsNullOrEmpty(p.Tag)) {
+						i += $" ({p.Tag})";
+					}
+					var bundlePath = node.Components.Get<Node.AssetBundlePathComponent>();
+					if (bundlePath != null) {
+						i += $" ({bundlePath})";
+					}
+					r = r == null ? i : $"{i}/{r}";
+				}
+				if (node == Document.Current.RootNode) {
+					r += " [Scene Root]";
+				}
+				return r;
+			}
+
+			public override bool CanRename() => false;
+
+			public override ITexture Icon
+			{
+				get => NodeIconPool.GetTexture(Node);
+				set => throw new NotSupportedException();
+			}
+		}
+
+		private class AnimationTreeViewItem : CommonTreeViewItem
+		{
+			public Animation Animation { get; }
+
+			public override bool Selected
+			{
+				get => base.Selected;
+				set
+				{
+					base.Selected = value;
+					Window.Current.Invalidate();
+					if (value) {
+						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(Animation));
+					}
+				}
+			}
+
+			public AnimationTreeViewItem(
+				Row sceneItem, TreeViewComponent component, Animation animation, Func<bool> isSearchActiveGetter)
+				: base(sceneItem, component, isSearchActiveGetter)
+			{
+				Animation = animation;
+			}
+
+			public override string Label
+			{
+				get => Animation.IsLegacy ? "Legacy" : Animation.Id;
+				set
+				{
+					Document.Current.History.DoTransaction(() => {
+						SetProperty.Perform(Animation, nameof(Animation.Id), value);
+					});
+				}
+			}
+
+			public override bool CanRename() => !Animation.IsLegacy && Animation.Id != Animation.ZeroPoseId;
+
+			public override ITexture Icon
+			{
+				get => IconPool.GetTexture(
+					Animation.Id == Animation.ZeroPoseId ? "AnimationsPanel.ZeroPose" :
+					(Animation.IsCompound ? "AnimationsPanel.CompoundAnimation" : "AnimationsPanel.Animation"));
+				set => throw new NotSupportedException();
+			}
+		}
+
+		private class MarkerTreeViewItem : CommonTreeViewItem
+		{
+			public Marker Marker { get; }
+
+			public override bool Selected
+			{
+				get => base.Selected;
+				set
+				{
+					base.Selected = value;
+					Window.Current.Invalidate();
+					if (value) {
+						Document.Current.History.DoTransaction(() => {
+							NavigateToAnimation.Perform(Marker.Owner);
+							SetCurrentColumn.Perform(Marker.Frame);
+						});
+					}
+				}
+			}
+
+			public MarkerTreeViewItem(Row sceneItem, TreeViewComponent component, Marker marker, Func<bool> isSearchActiveGetter)
+				: base(sceneItem, component, isSearchActiveGetter)
+			{
+				Marker = marker;
+			}
+
+			public override string Label
+			{
+				get => Marker.Id;
+				set
+				{
+					Document.Current.History.DoTransaction(() => {
+						SetProperty.Perform(Marker, nameof(Marker.Id), value);
+					});
+				}
+			}
+
+			public override bool CanRename() => true;
+
+			public override ITexture Icon
+			{
+				get => IconPool.GetTexture(
+					Marker.Action == MarkerAction.Jump ? "Lookup.MarkerJumpAction" :
+						(Marker.Action == MarkerAction.Play ? "Lookup.MarkerPlayAction" : "Lookup.MarkerStopAction"));
+				set => throw new NotSupportedException();
+			}
+		}
+
+		private class TreeViewPresentation : ITreeViewPresentation
+		{
+			public const float IndentWidth = 20;
+
+			private readonly TreeViewItemPresentationOptions options;
+			private IAnimationsController controller;
+
+			public IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
+
+			public TreeViewPresentation(IAnimationsController controller, TreeViewItemPresentationOptions options)
+			{
+				this.controller = controller;
+				this.options = options;
+				Processors = new List<ITreeViewItemPresentationProcessor> {
+					new CommonTreeViewItemPresentationProcessor(),
+					new AnimationTreeViewItemPresentationProcessor(),
+				};
+			}
+
+			public ITreeViewItemPresentation CreateItemPresentation(TreeView treeView, TreeViewItem item)
+			{
+				switch (item){
+					case AnimationTreeViewItem _:
+						return new AnimationTreeViewItemPresentation(treeView, item, options, controller);
+					case MarkerTreeViewItem _:
+						return new MarkerTreeViewItemPresentation(treeView, item, options);
+					case NodeTreeViewItem _:
+						return new NodeTreeViewItemPresentation(treeView, item, options, controller);
+					default:
+						throw new InvalidOperationException();
+				}
+			}
+
+			public void RenderDragCursor(Widget scrollWidget, TreeViewItem parent, int childIndex, bool dragInto)
+			{
+				if (dragInto) {
+					var x = (CalcIndent(parent) + 1) * IndentWidth;
+					var y = parent.Presentation.Widget.Top();
+					Renderer.DrawRectOutline(x, y - 0.5f, scrollWidget.Width, y + TimelineMetrics.DefaultRowHeight + 0.5f, Theme.Colors.SeparatorDragColor, 2);
+				} else {
+					var x = (CalcIndent(parent) + 2) * IndentWidth;
+					var y = CalcDragCursorY(parent, childIndex);
+					Renderer.DrawRect(x, y - 0.5f, scrollWidget.Width, y + 1.5f, Theme.Colors.SeparatorDragColor);
+				}
+			}
+
+			private static float CalcDragCursorY(TreeViewItem parent, int childIndex)
+			{
+				if (childIndex == 0) {
+					if (parent.Parent == null) {
+						return 0;
+					}
+					return parent.Presentation.Widget.Bottom();
+				}
+				var i = parent.Items[childIndex - 1];
+				while (i.Expanded && i.Items.Count > 0) {
+					i = i.Items.Last();
+				}
+				return i.Presentation.Widget.Bottom();
+			}
+
+			public static int CalcIndent(TreeViewItem item)
+			{
+				int indent = 0;
+				for (var p = item; p.Parent != null; p = p.Parent) {
+					indent++;
+				}
+				return indent - 1;
+			}
+		}
+
+		private class CommonTreeViewItemPresentation
+		{
+			private readonly Widget ExpandButtonContainer;
+			public readonly TreeViewItem Item;
+			public readonly ToolbarButton ExpandButton;
+			public readonly SimpleText Label;
+			public readonly Widget IndentationSpacer;
+			public Widget Widget { get; }
+
+			public CommonTreeViewItemPresentation(
+				TreeView treeView, TreeViewItem item, TreeViewItemPresentationOptions options)
+			{
+				Item = item;
+				Widget = new Widget {
+					MinMaxHeight = TimelineMetrics.DefaultRowHeight,
+					Layout = new HBoxLayout {
+						DefaultCell = new DefaultLayoutCell { VerticalAlignment = VAlignment.Center }
+					},
+					Padding = new Thickness { Right = 10 },	// Add padding for the scrollbar.
+					Presenter = new SyncDelegatePresenter<Widget>(w => {
+						w.PrepareRendererState();
+						Renderer.DrawRect(
+							Vector2.Zero, w.Size,
+							Item.Selected ?
+								(Widget.Focused != null && w.SameOrDescendantOf(Widget.Focused) ?
+									Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground)
+								: Theme.Colors.WhiteBackground
+						);
+						HighlightLabel(Widget, Label, options.SearchStringGetter());
+					})
+				};
+				Label = CreateLabel(treeView, Item);
+				ExpandButton = CreateExpandButton(Item);
+				var icon = new Image(Item.Icon) {
+					HitTestTarget = true,
+					MinMaxSize = new Vector2(16),
+				};
+				IndentationSpacer = new Widget();
+				Widget.Nodes.Add(IndentationSpacer);
+				ExpandButtonContainer = new Widget {
+					MinMaxSize = Theme.Metrics.DefaultToolbarButtonSize,
+					Nodes = { ExpandButton }
+				};
+				Widget.Nodes.Add(ExpandButtonContainer);
+				Widget.Nodes.Add(Spacer.HSpacer(3));
+				Widget.Nodes.Add(icon);
+				Widget.Nodes.Add(Spacer.HSpacer(3));
+				Widget.Nodes.Add(Label);
+			}
+
+			private void HighlightLabel(Widget widget, SimpleText label, string searchString)
+			{
+				if (string.IsNullOrEmpty(searchString)) {
+					return;
+				}
+				int index;
+				int previousIndex = 0;
+				var pos = label.CalcPositionInSpaceOf(widget);
+				while ((index = label.Text.IndexOf(searchString, previousIndex, StringComparison.OrdinalIgnoreCase)) >= 0) {
+					var skipSize = label.Font.MeasureTextLine(
+						label.Text, label.FontHeight, previousIndex, index - previousIndex, label.LetterSpacing);
+					var searchStringSize = label.Font.MeasureTextLine(
+						label.Text, label.FontHeight, index, searchString.Length, label.LetterSpacing);
+					pos.X += skipSize.X;
+					Renderer.DrawRect(pos.X, 0, pos.X + searchStringSize.X, widget.Height,
+						ColorTheme.Current.Hierarchy.MatchColor);
+					pos.X += searchStringSize.X;
+					previousIndex = index + searchString.Length;
+				}
+			}
+
+			private SimpleText CreateLabel(TreeView treeView, TreeViewItem item)
+			{
+				var label = new ThemedSimpleText {
+					HitTestTarget = true,
+					ForceUncutText = false, // We want ellipsed text if the panel is too narrow.
+					VAlignment = VAlignment.Center,
+					OverflowMode = TextOverflowMode.Ellipsis,
+					LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
+				};
+				label.Gestures.Add(new DoubleClickGesture(() => {
+					var labelExtent = label.MeasureUncutText();
+					if (item.CanRename() && label.LocalMousePosition().X < labelExtent.X) {
+						Rename();
+					} else {
+						treeView.RaiseActivated(item, TreeView.ActivationMethod.Mouse);
+					}
+				}));
+				return label;
+			}
+
+			public void Rename()
+			{
+				((WindowWidget) Label.GetRoot()).Window.Activate();
+				Label.Visible = false;
+				var idx = Label.Parent.Nodes.IndexOf(Label);
+				var editBoxContainer = new Widget {
+					Layout = new HBoxLayout(),
+					LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue)
+				};
+				Label.Parent.Nodes.Insert(idx, editBoxContainer);
+				var editBox = new ThemedEditBox {
+					LayoutCell = new LayoutCell(Alignment.Center),
+					Text = Item.Label
+				};
+				editBoxContainer.AddNode(editBox);
+				editBox.Tasks.Add(EditObjectIdTask(editBoxContainer, editBox, Label, Item));
+			}
+
+			private IEnumerator<object> EditObjectIdTask(Widget container, EditBox editBox, SimpleText label, TreeViewItem item)
+			{
+				// Skip one update since tabbedWidget gets the focus in the first place.
+				yield return null;
+				editBox.SetFocus();
+				while (editBox.IsFocused()) {
+					yield return null;
+					if (!item.Selected) {
+						editBox.RevokeFocus();
+					}
+				}
+				DoRename(item, editBox.Text);
+				container.Unlink();
+				label.Visible = true;
+			}
+
+			protected virtual void DoRename(TreeViewItem item, string newLabel)
+			{
+				item.Label = newLabel;
+			}
+
+			private ToolbarButton CreateExpandButton(TreeViewItem item)
+			{
+				var button = new ToolbarButton { Highlightable = false };
+				button.Clicked += () => {
+					item.Expanded = !item.Expanded;
+				};
+				button.Components.Add(new DisableAncestralGesturesComponent());
+				return button;
+			}
+		}
+
+		private class AnimationTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
+		{
+			private readonly IAnimationsController controller;
+
+			public AnimationTreeViewItemPresentation(
+				TreeView treeView, TreeViewItem item,
+				TreeViewItemPresentationOptions options,
+				IAnimationsController controller)
+				: base(treeView, item, options)
+			{
+				this.controller = controller;
+				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+			}
+
+			private void ShowContextMenu()
+			{
+				if (!Item.Selected) {
+					controller.ClearSelection();
+					Item.Selected = true;
+				}
+				var menu = new Menu();
+				menu.Add(Command.Cut);
+				menu.Add(Command.Copy);
+				menu.Add(Command.Paste);
+				menu.Add(Command.Delete);
+				menu.Popup();
+			}
+
+			protected override void DoRename(TreeViewItem item, string newId)
+			{
+				var animation = ((AnimationTreeViewItem)item).Animation;
 				string error = null;
-				if (animation.IsLegacy) {
-					error = "Can't rename legacy animation";
-				} else if (animation.Id == Animation.ZeroPoseId) {
-					error = "Can't rename zero pose animation";
-				} else if (newId.IsNullOrWhiteSpace() || newId == Animation.ZeroPoseId) {
+				if (newId.IsNullOrWhiteSpace() || newId == Animation.ZeroPoseId) {
 					error = "Invalid animation id";
 				} else if (TangerineDefaultCharsetAttribute.IsValid(newId, out var message) != ValidationResult.Ok) {
 					error = message;
@@ -111,17 +817,17 @@ namespace Tangerine.Panels
 					error = $"An animation '{newId}' already exists";
 				}
 				if (error != null) {
-					UI.AlertDialog.Show(error, "Ok");
+					AlertDialog.Show(error, "Ok");
 					return;
 				}
 				Document.Current.History.DoTransaction(() => {
 					var oldId = animation.Id;
-					Core.Operations.SetProperty.Perform(animation, nameof(Animation.Id), newId);
+					SetProperty.Perform(animation, nameof(animation.Id), newId);
 					foreach (var a in animation.Owner.Animations) {
 						foreach (var track in a.Tracks) {
 							foreach (var animator in track.Animators) {
 								if (animator.AnimationId == oldId) {
-									Core.Operations.SetProperty.Perform(animator, nameof(IAnimator.AnimationId), newId);
+									SetProperty.Perform(animator, nameof(IAnimator.AnimationId), newId);
 								}
 							}
 						}
@@ -133,7 +839,7 @@ namespace Tangerine.Panels
 						foreach (var child in node.Nodes) {
 							foreach (var animator in child.Animators) {
 								if (animator.AnimationId == oldId) {
-									Core.Operations.SetProperty.Perform(animator, nameof(IAnimator.AnimationId), newId);
+									SetProperty.Perform(animator, nameof(IAnimator.AnimationId), newId);
 								}
 							}
 							if (child.ContentsPath != null) {
@@ -149,297 +855,142 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private void DuplicateAnimation()
+		private class NodeTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
-			var index = GetSelectedAnimationIndex();
-			var sourceAnimation = GetAnimations()[index];
-			var owner = sourceAnimation.Owner;
+			private readonly IAnimationsController controller;
 
-			Document.Current.History.DoTransaction(() => {
-				var animation = Cloner.Clone(sourceAnimation);
-				animation.Id = GenerateAnimationId(sourceAnimation.Id + "Copy");
-				foreach (var track in animation.Tracks) {
-					foreach (var animator in track.Animators) {
-						animator.AnimationId = animation.Id;
-					}
-				}
-				Core.Operations.InsertIntoList.Perform(owner.Animations, owner.Animations.Count, animation);
-				SelectAnimation(GetAnimations().IndexOf(animation));
-				DuplicateAnimators(animation.OwnerNode);
+			public NodeTreeViewItemPresentation(TreeView treeView, TreeViewItem item,
+				TreeViewItemPresentationOptions options,
+				IAnimationsController controller)
+				: base(treeView, item, options)
+			{
+				this.controller = controller;
+				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+			}
 
-				void DuplicateAnimators(Node node)
+			private void ShowContextMenu()
+			{
+				controller.ClearSelection();
+				Item.Selected = true;
+				var menu = new Menu();
+				var node = ((INodeTreeViewItem)Item).Node;
+				menu.Add(new Command("Add", () => AddAnimation( false)));
+				menu.Add(new Command("Add Compound", () => AddAnimation(true)));
+				menu.Add(new Command("Add ZeroPose", AddZeroPoseAnimation) {
+					Enabled = !node.Animations.TryFind(Animation.ZeroPoseId, out _)
+				});
+				menu.Popup();
+
+				void AddAnimation(bool compound)
 				{
-					foreach (var child in node.Nodes) {
-						foreach (var animator in child.Animators.ToList()) {
-							if (animator.AnimationId == sourceAnimation.Id) {
-								var clone = Cloner.Clone(animator);
-								clone.AnimationId = animation.Id;
-								Core.Operations.AddIntoCollection<AnimatorCollection, IAnimator>.Perform(child.Animators, clone);
-							}
+					Document.Current.History.DoTransaction(() => {
+						var animation = new Animation
+							{ Id = GenerateAnimationId(node, "NewAnimation"), IsCompound = compound };
+						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
+						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, 0, animation);
+						controller.ClearSelection();
+						controller.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
+						controller.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
+						if (compound) {
+							var track = new AnimationTrack { Id = "Track1" };
+							var animationTrackSceneItem = LinkSceneItem.Perform(animationSceneItem, 0,
+								track);
+							SelectRow.Perform(animationTrackSceneItem);
 						}
-						if (child.ContentsPath != null) {
-							continue;
-						}
-						if (child.Animations.Any(i => i.Id == sourceAnimation.Id)) {
-							continue;
-						}
-						DuplicateAnimators(child);
-					}
+					});
 				}
-			});
-			// Schedule animation rename on the next update, since the widgets are not built yet
-			panelWidget.Tasks.Add(DelayedRenameAnimation());
 
-			IEnumerator<object> DelayedRenameAnimation()
-			{
-				yield return null;
-				RenameAnimation();
-			}
-		}
-
-		private string GenerateAnimationId(string prefix)
-		{
-			for (int i = 1; ; i++) {
-				var id = prefix + (i > 1 ? i.ToString() : "");
-				if (!GetAnimations().Any(a => a.Id == id)) {
-					return id;
-				}
-			}
-			throw new System.Exception();
-		}
-
-		private void SelectAnimationBasedOnMousePosition()
-		{
-			scrollView.SetFocus();
-			var index = (scrollView.Content.LocalMousePosition().Y / rowHeight).Floor();
-			if (index < GetAnimations().Count) {
-				SelectAnimation(index);
-			}
-		}
-
-		private void ShowContextMenu()
-		{
-			SelectAnimationBasedOnMousePosition();
-			var menu = new Menu();
-			var rootNode = Document.Current.RootNode;
-			menu.Add(new Command("Add", () => AddAnimation(rootNode, false)));
-			menu.Add(new Command("Add Compound", () => AddAnimation(rootNode, true)));
-			menu.Add(new Command("Add ZeroPose", () => AddZeroPoseAnimation(rootNode)) {
-				Enabled = !rootNode.Animations.TryFind(Animation.ZeroPoseId, out _)
-			});
-			var path = GetNodePath(Document.Current.Container);
-			if (!string.IsNullOrEmpty(path)) {
-				var container = Document.Current.Container;
-				menu.Add(new Command($"Add To '{path}'", () => AddAnimation(container, false)));
-				menu.Add(new Command($"Add Compound To '{path}'", () => AddAnimation(container, true)));
-				menu.Add(new Command($"Add ZeroPose To '{path}'", () => AddZeroPoseAnimation(container)) {
-					Enabled = !container.Animations.TryFind(Animation.ZeroPoseId, out _)
-				});
-			}
-			menu.Add(Command.MenuSeparator);
-			menu.Add(new Command("Rename", RenameAnimation));
-			menu.Add(new Command("Duplicate", DuplicateAnimation));
-			menu.Add(Command.Delete);
-			menu.Popup();
-
-			void AddAnimation(Node node, bool compound)
-			{
-				Document.Current.History.DoTransaction(() => {
-					var animation = new Animation { Id = GenerateAnimationId("NewAnimation"), IsCompound = compound };
-					InsertIntoList.Perform(node.Animations, node.Animations.Count, animation);
-					SelectAnimation(GetAnimations().IndexOf(animation));
-					if (compound) {
-						var track = new AnimationTrack { Id = "Track1" };
-						var item = LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(animation), 0, track);
-						SelectRow.Perform(item);
-					}
-				});
-				// Schedule animation rename on the next update, since the widgets are not built yet
-				panelWidget.Tasks.Add(DelayedRenameAnimation());
-			}
-
-			void AddZeroPoseAnimation(Node node)
-			{
-				Document.Current.History.DoTransaction(() => {
-					var animation = new Animation { Id = Animation.ZeroPoseId };
-					InsertIntoList.Perform(node.Animations, node.Animations.Count, animation);
-					foreach (var a in node.Descendants.SelectMany(n => n.Animators).ToList()) {
-						var (propertyData, animable, index) =
-							AnimationUtils.GetPropertyByPath(a.Owner, a.TargetPropertyPath);
-						var zeroPoseKey = Keyframe.CreateForType(propertyData.Info.PropertyType);
-						zeroPoseKey.Value = index == -1
-							? propertyData.Info.GetValue(animable)
-							: propertyData.Info.GetValue(animable, new object[]{index});
-						zeroPoseKey.Function = KeyFunction.Steep;
-						SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, Animation.ZeroPoseId, zeroPoseKey);
-					}
-					SelectAnimation(GetAnimations().IndexOf(animation));
-				});
-			}
-
-			IEnumerator<object> DelayedRenameAnimation()
-			{
-				yield return null;
-				RenameAnimation();
-			}
-		}
-
-		private void Delete()
-		{
-			Document.Current.History.DoTransaction(() => {
-				var index = GetSelectedAnimationIndex();
-				if (index > 0) {
-					SelectAnimation(index - 1);
-				} else if (index + 1 < GetAnimations().Count) {
-					SelectAnimation(index + 1);
-				}
-				var animation = GetAnimations()[index];
-				DeleteAnimators(animation.OwnerNode);
-				Core.Operations.RemoveFromList.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
-
-				void DeleteAnimators(Node node)
+				void AddZeroPoseAnimation()
 				{
-					foreach (var child in node.Nodes) {
-						foreach (var animator in child.Animators.ToList()) {
-							if (animator.AnimationId == animation.Id) {
-								Core.Operations.RemoveFromCollection<AnimatorCollection, IAnimator>.Perform(child.Animators, animator);
-							}
+					Document.Current.History.DoTransaction(() => {
+						var animation = new Animation { Id = Animation.ZeroPoseId };
+						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
+						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, 0, animation);
+						controller.ClearSelection();
+						controller.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
+						controller.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
+						foreach (var a in node.Descendants.SelectMany(n => n.Animators).ToList()) {
+							var (propertyData, animable, index) =
+								AnimationUtils.GetPropertyByPath(a.Owner, a.TargetPropertyPath);
+							var zeroPoseKey = Keyframe.CreateForType(propertyData.Info.PropertyType);
+							zeroPoseKey.Value = index == -1
+								? propertyData.Info.GetValue(animable)
+								: propertyData.Info.GetValue(animable, new object[] { index });
+							zeroPoseKey.Function = KeyFunction.Steep;
+							SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, Animation.ZeroPoseId, zeroPoseKey);
 						}
-						if (child.ContentsPath != null) {
-							continue;
-						}
-						if (child.Animations.Any(i => i.Id == animation.Id)) {
-							continue;
-						}
-						DeleteAnimators(child);
-					}
+					});
 				}
-			});
-		}
-
-		private static string GetNodePath(Node node)
-		{
-			var t = "";
-			for (var n = node; n != Document.Current.RootNode; n = n.Parent) {
-				var id = string.IsNullOrEmpty(n.Id) ? "?" : n.Id;
-				t = id + ((t != "") ? ": " + t : t);
 			}
-			return t;
-		}
 
-		private int GetSelectedAnimationIndex() => GetAnimations().IndexOf(Document.Current.Animation);
-
-		private List<Animation> animationsStorage = new List<Animation>();
-		private List<Animation> GetAnimations()
-		{
-			animationsStorage.Clear();
-			Document.Current.GetAnimations(animationsStorage);
-			return animationsStorage;
-		}
-
-		private long CalcAnimationsHashCode()
-		{
-			var h = new Hasher();
-			h.Begin();
-			foreach (var a in GetAnimations()) {
-				h.Write(a.Id ?? string.Empty);
-				h.Write(a.Owner.GetHashCode());
-				h.Write(a.IsCompound);
-				h.Write(a.IsLegacy);
-			}
-			return h.End();
-		}
-
-		IEnumerator<object> ProcessCommandsTask()
-		{
-			while (true) {
-				yield return null;
-				if (!scrollView.IsFocused()) {
-					continue;
-				}
-				if (Commands.Down.Consume()) {
-					SelectAnimation(GetSelectedAnimationIndex() + 1);
-				}
-				if (Commands.Up.Consume()) {
-					scrollView.SetFocus();
-					SelectAnimation(GetSelectedAnimationIndex() - 1);
-				}
-				if (!Commands.Delete.IsConsumed()) {
-					Command.Delete.Enabled = !Document.Current.Animation.IsLegacy;
-					if (Commands.Delete.Consume()) {
-						Delete();
+			private static string GenerateAnimationId(Node node, string prefix)
+			{
+				var animations = GetAnimations(node);
+				for (int i = 1; ; i++) {
+					var id = prefix + (i > 1 ? i.ToString() : "");
+					if (animations.All(a => a.Id != id)) {
+						return id;
 					}
 				}
 			}
-		}
 
-		private void SelectAnimation(int index)
-		{
-			var a = GetAnimations();
-			index = index.Clamp(0, a.Count - 1);
-			EnsureRowVisible(index);
-			Window.Current.Invalidate();
-			var document = Document.Current;
-			document.History.DoTransaction(() => {
-				SetProperty.Perform(document, nameof(Document.SelectedAnimation), a[index], isChangingDocument: false);
-			});
-		}
-
-		private void EnsureRowVisible(int row)
-		{
-			while ((row + 1) * rowHeight > scrollView.ScrollPosition + scrollView.Height) {
-				scrollView.ScrollPosition++;
-			}
-			while (row * rowHeight < scrollView.ScrollPosition) {
-				scrollView.ScrollPosition--;
-			}
-		}
-
-		private void Refresh()
-		{
-			int index = GetSelectedAnimationIndex();
-			var content = scrollView.Content;
-			content.Nodes.Clear();
-			var animations = GetAnimations();
-			content.Layout = new TableLayout {
-				ColumnCount = 1,
-				ColumnSpacing = 8,
-				RowCount = animations.Count,
-				ColumnDefaults = new List<DefaultLayoutCell> { new DefaultLayoutCell { StretchY = 0 } }
-			};
-			foreach (var a in animations) {
-				var label = a.IsLegacy ? legacyAnimationId : a.Id;
-				if (a.IsCompound) {
-					label += " [Compound]";
-				}
-				var path = GetNodePath(a.OwnerNode);
-				if (!a.IsLegacy && !string.IsNullOrEmpty(path)) {
-					label += " (" + path + ')';
-				}
-				var item = new Widget {
-					MinHeight = rowHeight,
-					Padding = new Thickness(2, 10, 0, 0),
-					Layout = new HBoxLayout(),
-					Nodes = {
-						new ThemedSimpleText(label) {
-							Id = "Label", LayoutCell = new LayoutCell { VerticalAlignment = VAlignment.Center }
-						},
+			private static List<Animation> GetAnimations(Node node)
+			{
+				var usedAnimations = new HashSet<string>();
+				var animations = new List<Animation>();
+				var ancestor = node;
+				while (true) {
+					foreach (var a in ancestor.Animations) {
+						if (!a.IsLegacy && usedAnimations.Add(a.Id)) {
+							animations.Add(a);
+						}
 					}
-				};
-				content.Nodes.Add(item);
+					if (ancestor == Document.Current.RootNode) {
+						return animations;
+					}
+					ancestor = ancestor.Parent;
+				}
 			}
-			SelectAnimation(index);
 		}
 
-		public void Attach()
+		private class MarkerTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
-			panelWidget.PushNode(rootWidget);
-			Refresh();
+			public MarkerTreeViewItemPresentation(TreeView treeView, TreeViewItem item, TreeViewItemPresentationOptions options)
+				: base(treeView, item, options)
+			{
+			}
 		}
 
-		public void Detach()
+		private class CommonTreeViewItemPresentationProcessor : ITreeViewItemPresentationProcessor
 		{
-			rootWidget.Unlink();
+			public void Process(ITreeViewItemPresentation presentation)
+			{
+				if (presentation is CommonTreeViewItemPresentation p) {
+					p.ExpandButton.Texture = p.Item.Expanded
+						? IconPool.GetTexture("Timeline.Expanded")
+						: IconPool.GetTexture("Timeline.Collapsed");
+					p.ExpandButton.Visible = p.Item.Items.Count > 0;
+					p.IndentationSpacer.MinMaxWidth =
+						TreeViewPresentation.CalcIndent(p.Item) * TreeViewPresentation.IndentWidth;
+					p.Label.Text = p.Item.Label;
+				}
+			}
+		}
+
+		private class AnimationTreeViewItemPresentationProcessor : ITreeViewItemPresentationProcessor
+		{
+			public void Process(ITreeViewItemPresentation presentation)
+			{
+				if (presentation is AnimationTreeViewItemPresentation p && p.Item is AnimationTreeViewItem ai) {
+					var isBold = p.Label.Font.Name == FontPool.DefaultBoldFontName;
+					var isCurrentAnimation = ai.Animation == Document.Current.Animation;
+					if (isCurrentAnimation && !isBold) {
+						p.Label.Font = new SerializableFont(FontPool.DefaultBoldFontName);
+					} else if (!isCurrentAnimation && isBold) {
+						p.Label.Font = new SerializableFont(FontPool.DefaultFontName);
+					}
+				}
+			}
 		}
 	}
 }
