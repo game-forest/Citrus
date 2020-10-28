@@ -421,7 +421,7 @@ namespace Tangerine.UI
 		private void SelectRange(TreeViewItem item)
 		{
 			if (rangeSelectionFirstItem == null || !items.Contains(rangeSelectionFirstItem)) {
-				rangeSelectionFirstItem = GetRecentlySelected();
+				rangeSelectionFirstItem = GetRecentlySelected() ?? item;
 			}
 			foreach (var i in items.Where(i => i.Selected)) {
 				i.Selected = false;
