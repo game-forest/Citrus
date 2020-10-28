@@ -119,6 +119,8 @@ rule_name: one of
     'WrapMode'
     'MinFilter'
     'MagFilter'
+    'AtlasItemPadding'
+    'MaxAtlasSize'
 </code></pre>
 <p>e.g.:</p>
 <pre><code>Rule1(Target1) Value
@@ -147,7 +149,9 @@ Rule10 Value
 'CustomRule'
 'WrapMode'
 'MinFilter'
-'MagFilter'</p>
+'MagFilter'
+'AtlasItemPadding'
+'MaxAtlasSize'</p>
 <table>
 <thead>
 <tr>
@@ -321,6 +325,16 @@ Rule10 Value
 <td></td>
 <td><code>Nearest</code></td>
 <td></td>
+</tr>
+<tr>
+<td><code>AtlasItemPadding</code></td>
+<td>int</td>
+<td>Pixel border width around atlas item. Default value is <code>1</code>. e.g. when it's <code>1</code> there'll be at least <code>2</code> pixels between items.</td>
+</tr>
+<tr>
+<td><code>MaxAtlasSize</code></td>
+<td>int</td>
+<td>Max size of texture atlas. Default value is <code>2048</code>.</td>
 </tr>
 </tbody>
 </table>
