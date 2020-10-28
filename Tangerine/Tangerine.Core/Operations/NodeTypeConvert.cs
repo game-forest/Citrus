@@ -13,7 +13,7 @@ namespace Tangerine.Core.Operations
 		public static Node Perform(Row sceneItem, Type destType, Type commonParent, ICollection<string> excludedProperties)
 		{
 			var node = sceneItem.Components.Get<NodeRow>()?.Node;
-			DelegateOperation.Perform(null,() => Document.Current.RefreshSceneTree(), false);
+			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
 			Validate(node, destType, commonParent);
 			var result = CreateNode.Perform(sceneItem.Parent, sceneItem.Parent.Rows.IndexOf(sceneItem), destType);
 			CopyProperties(node, result, excludedProperties);
@@ -30,7 +30,7 @@ namespace Tangerine.Core.Operations
 				}
 			}
 			UnlinkSceneItem.Perform(sceneItem);
-			DelegateOperation.Perform(() => Document.Current.RefreshSceneTree(), null, false);
+			DelegateOperation.Perform(Document.Current.RefreshSceneTree, null, false);
 			return result;
 		}
 
