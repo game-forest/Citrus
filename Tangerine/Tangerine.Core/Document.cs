@@ -40,7 +40,6 @@ namespace Tangerine.Core
 		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}";
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
 		private readonly Dictionary<object, Row> sceneItemCache = new Dictionary<object, Row>();
-		private readonly Dictionary<Node, Animation> selectedAnimationPerContainer = new Dictionary<Node, Animation>();
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly IAnimationPositioner animationPositioner = new AnimationPositioner();
 		private static uint untitledCounter;
@@ -97,22 +96,10 @@ namespace Tangerine.Core
 
 		public ISceneViewThumbnailProvider SceneViewThumbnailProvider { get; set; }
 
-		private Node container;
-
 		/// <summary>
 		/// Gets or sets the current container widget.
 		/// </summary>
-		public Node Container
-		{
-			get => container;
-			set {
-				if (container != value) {
-					var oldContainer = container;
-					container = value;
-					OnContainerChanged(oldContainer);
-				}
-			}
-		}
+		public Node Container { get; set; }
 
 		public NodeManager Manager { get; }
 
@@ -131,7 +118,7 @@ namespace Tangerine.Core
 			{
 				if (cachedVisibleSceneItems.Count == 0) {
 					if (Animation.IsCompound) {
-						TraverseAnimationTree(CompoundAnimationTree);
+						TraverseAnimationTree(GetSceneItemForObject(Animation));
 					} else {
 						TraverseSceneTree(GetSceneItemForObject(Container), true);
 					}
@@ -148,7 +135,7 @@ namespace Tangerine.Core
 
 				void TraverseSceneTree(Row sceneTree, bool addNodes)
 				{
-					var animation = Animation;
+					var currentAnimation = Animation;
 					sceneTree.Expandable = false;
 					sceneTree.HasAnimators = false;
 					var containerSceneItem = GetSceneItemForObject(Container);
@@ -157,7 +144,7 @@ namespace Tangerine.Core
 						i.Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
 							if (
-								!animator.IsZombie && animator.AnimationId == animation.Id &&
+								!animator.IsZombie && animator.AnimationId == currentAnimation.Id &&
 								(animator.Owner as Node)?.Parent == Container
 							) {
 								sceneTree.HasAnimators = true;
@@ -174,6 +161,7 @@ namespace Tangerine.Core
 									TraverseSceneTree(i, node is Bone || i.GetFolder() != null);
 								}
 							}
+						} else if (i.TryGetAnimation(out _)) {
 						} else {
 							sceneTree.Expandable = true;
 							if (expanded) {
@@ -192,8 +180,6 @@ namespace Tangerine.Core
 		/// The root of the scene hierarchy.
 		/// </summary>
 		public Row SceneTree { get; private set; }
-
-		public Row CompoundAnimationTree { get; private set; }
 
 		public SceneTreeBuilder SceneTreeBuilder { get; }
 
@@ -229,24 +215,22 @@ namespace Tangerine.Core
 		public ResolutionPreview ResolutionPreview { get; set; } = new ResolutionPreview();
 		public bool InspectRootNode { get; set; }
 
-		public Animation Animation => SelectedAnimation ?? Container.DefaultAnimation;
-
-		public Animation SelectedAnimation
+		public Animation Animation
 		{
-			get => selectedAnimation;
+			get => animation;
 			set
 			{
-				if (selectedAnimation != value) {
-					selectedAnimation = value;
-					if (selectedAnimation != null) {
-						animationPositioner.SetAnimationTime(selectedAnimation, value.Time, true);
+				if (animation != value) {
+					animation = value;
+					if (animation != null) {
+						animationPositioner.SetAnimationTime(animation, value.Time, true);
 					}
-					RefreshCompoundAnimationTree();
+					BumpSceneTreeVersion();
 				}
 			}
 		}
 
-		private Animation selectedAnimation;
+		private Animation animation;
 
 		public string AnimationId => Animation.Id;
 
@@ -309,9 +293,9 @@ namespace Tangerine.Core
 			}
 			Decorate(RootNode);
 			Container = RootNode;
+			Animation = Container.DefaultAnimation;
 			History.ProcessingOperation += DocumentProcessingOperation;
 			RefreshSceneTree();
-			RefreshCompoundAnimationTree();
 		}
 
 		public Document(string path, bool delayLoad = false) : this()
@@ -351,59 +335,12 @@ namespace Tangerine.Core
 			BumpSceneTreeVersion();
 		}
 
-		private void RefreshCompoundAnimationTree()
-		{
-			if (CompoundAnimationTree != null) {
-				DisintegrateTree(CompoundAnimationTree);
-			}
-			CompoundAnimationTree = SceneTreeBuilder.BuildTreeForCompoundAnimation(Animation);
-			BumpSceneTreeVersion();
-		}
-
 		private static void DisintegrateTree(Row tree)
 		{
 			foreach (var child in tree.Rows) {
 				DisintegrateTree(child);
 			}
 			tree.Rows.Clear();
-		}
-
-		public void GetAnimations(List<Animation> animations)
-		{
-			GetAnimationsHelper(animations);
-			animations.Sort(AnimationsComparer.Instance);
-			animations.Insert(0, Container.DefaultAnimation);
-		}
-
-		private readonly HashSet<string> usedAnimations = new HashSet<string>();
-
-		private void GetAnimationsHelper(List<Animation> animations)
-		{
-			var ancestor = Container;
-			lock (usedAnimations) {
-				usedAnimations.Clear();
-				while (true) {
-					foreach (var a in ancestor.Animations) {
-						if (!a.IsLegacy && usedAnimations.Add(a.Id)) {
-							animations.Add(a);
-						}
-					}
-					if (ancestor == RootNode) {
-						return;
-					}
-					ancestor = ancestor.Parent;
-				}
-			}
-		}
-
-		class AnimationsComparer : IComparer<Animation>
-		{
-			public static readonly AnimationsComparer Instance = new AnimationsComparer();
-
-			public int Compare(Animation x, Animation y)
-			{
-				return x.Id.CompareTo(y.Id);
-			}
 		}
 
 		private void Load() => Load(new HashSet<string>());
@@ -432,6 +369,7 @@ namespace Tangerine.Core
 				}
 				Decorate(RootNode);
 				Container = RootNode;
+				Animation = Container.DefaultAnimation;
 				if (Format == DocumentFormat.Tan) {
 					if (preloadedSceneStream != null) {
 						preloadedSceneStream.Seek(0, SeekOrigin.Begin);
@@ -814,14 +752,14 @@ namespace Tangerine.Core
 
 		public IEnumerable<Row> TopLevelSelectedRows()
 		{
-			foreach (var row in Rows) {
-				if (row.Selected) {
-					var discardRow = false;
-					for (var p = row.Parent; p != null; p = p.Parent) {
-						discardRow |= p.Selected;
+			foreach (var item in Rows) {
+				if (item.Selected) {
+					var discardItem = false;
+					for (var p = item.Parent; p != null; p = p.Parent) {
+						discardItem |= p.Selected;
 					}
-					if (!discardRow) {
-						yield return row;
+					if (!discardItem) {
+						yield return item;
 					}
 				}
 			}
@@ -855,32 +793,6 @@ namespace Tangerine.Core
 			}
 			foreach (var text in RootNode.Descendants.OfType<IText>()) {
 				text.Invalidate();
-			}
-		}
-
-		private void OnContainerChanged(Node oldContainer)
-		{
-			try {
-				if (oldContainer != null) {
-					selectedAnimationPerContainer[oldContainer] = SelectedAnimation;
-				}
-				var animations = new List<Animation>();
-				GetAnimations(animations);
-				if (Animation.IsLegacy) {
-					SelectedAnimation = null;
-					return;
-				}
-				if (animations.Contains(Animation)) {
-					return;
-				}
-				if (selectedAnimationPerContainer.TryGetValue(Container, out var animation) &&
-				    animations.Contains(animation)) {
-					SelectedAnimation = animation;
-					return;
-				}
-				SelectedAnimation = null;
-			} finally {
-				BumpSceneTreeVersion();
 			}
 		}
 
@@ -956,7 +868,6 @@ namespace Tangerine.Core
 				}
 			}
 		}
-
 
 		public void ForceAnimationUpdate()
 		{

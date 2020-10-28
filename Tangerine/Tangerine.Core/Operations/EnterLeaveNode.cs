@@ -113,6 +113,9 @@ namespace Tangerine.Core.Operations
 		{
 			ClearRowSelection.Perform();
 			DocumentHistory.Current.Perform(new SetContainer(container));
+			if (Document.Current.Animation.IsLegacy) {
+				SetProperty.Perform(Document.Current, nameof(Document.Animation), container.DefaultAnimation, false);
+			}
 			if (selectFirstNode && container.Nodes.Count > 0) {
 				SelectNode.Perform(container.Nodes[0]);
 			}
@@ -145,6 +148,20 @@ namespace Tangerine.Core.Operations
 		{
 			var doc = Document.Current;
 			return doc.Container != doc.RootNode || doc.SceneNavigatedFrom != null;
+		}
+	}
+
+	public static class NavigateToAnimation
+	{
+		public static void Perform(Animation animation)
+		{
+			if (
+				animation.IsLegacy && Document.Current.Container != animation.OwnerNode ||
+				!animation.IsLegacy && Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
+			) {
+				NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false);
+			}
+			SetProperty.Perform(Document.Current, nameof(Document.Animation), animation, isChangingDocument: false);
 		}
 	}
 }

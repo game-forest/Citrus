@@ -11,6 +11,7 @@ namespace Lime
 		public readonly static int ZeroPoseIdComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(ZeroPoseId);
 #if TANGERINE
 		public static Func<Animation, bool> EasingEnabledChecker;
+		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
 #endif
 		private string id;
 		private bool isRunning;

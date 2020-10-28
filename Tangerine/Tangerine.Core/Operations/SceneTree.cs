@@ -63,8 +63,12 @@ namespace Tangerine.Core.Operations
 			} else if (item.TryGetAnimator(out var animator)) {
 				var owner = (Node)animator.Owner;
 				RemoveFromCollection<AnimatorCollection, IAnimator>.Perform(owner.Animators, animator);
+			} else if (item.TryGetAnimation(out var animation)) {
+				RemoveFromList<AnimationCollection, Animation>.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
 			} else if (item.TryGetAnimationTrack(out var track)) {
 				RemoveFromList<AnimationTrackList, AnimationTrack>.Perform(track.Owner.Tracks, track.Owner.Tracks.IndexOf(track));
+			} else {
+				throw new InvalidOperationException();
 			}
 		}
 
@@ -230,6 +234,9 @@ namespace Tangerine.Core.Operations
 				return CanLink(parent, folder) &&
 				       EnumerateClosestDescendantNodes(item).All(n => CanLink(parent, n));
 			}
+			if (item.TryGetAnimation(out var animation)) {
+				return CanLink(parent, animation);
+			}
 			if (item.TryGetAnimationTrack(out var track)) {
 				return CanLink(parent, track);
 			}
@@ -283,6 +290,11 @@ namespace Tangerine.Core.Operations
 			return NodeCompositionValidator.Validate(parentNode.GetType(), node.GetType());
 		}
 
+		public static bool CanLink(Row parent, Animation animation)
+		{
+			return parent.GetNode() != null;
+		}
+
 		public static bool CanLink(Row parent, AnimationTrack track)
 		{
 			return parent.GetAnimation() != null;
@@ -321,21 +333,28 @@ namespace Tangerine.Core.Operations
 
 		public static Row Perform(Row parent, int index, Folder.Descriptor folder)
 		{
-			var item = Document.Current.SceneTreeBuilder.GetFolderSceneItem(folder);
+			var item = Document.Current.SceneTreeBuilder.BuildFolderSceneItem(folder);
 			Perform(parent, index, item);
 			return item;
 		}
 
 		private static Row Perform(Row parent, IAnimator animator)
 		{
-			var item = Document.Current.SceneTreeBuilder.GetAnimatorSceneItem(animator);
+			var item = Document.Current.SceneTreeBuilder.BuildAnimatorSceneItem(animator);
 			Perform(parent, 0, item);
+			return item;
+		}
+
+		public static Row Perform(Row parent, int index, Animation animation)
+		{
+			var item = Document.Current.SceneTreeBuilder.BuildAnimationSceneItem(animation);
+			Perform(parent, index, item);
 			return item;
 		}
 
 		public static Row Perform(Row parent, int index, AnimationTrack track)
 		{
-			var item = Document.Current.SceneTreeBuilder.GetAnimationTrackItem(track);
+			var item = Document.Current.SceneTreeBuilder.BuildAnimationTrackSceneItem(track);
 			Perform(parent, index, item);
 			return item;
 		}
@@ -362,6 +381,8 @@ namespace Tangerine.Core.Operations
 				}
 			} else if (item.TryGetAnimator(out _)) {
 				LinkAnimatorItem(parent, index, item);
+			} else if (item.TryGetAnimation(out _)) {
+				LinkAnimationItem(parent, index, item);
 			} else if (item.TryGetAnimationTrack(out _)) {
 				LinkAnimationTrackItem(parent, index, item);
 			} else {
@@ -476,6 +497,17 @@ namespace Tangerine.Core.Operations
 			AddIntoCollection<AnimatorCollection, IAnimator>.Perform(node.Animators, animatorItem.GetAnimator());
 			index = node.Animators.ToList().IndexOf(animatorItem.GetAnimator());
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, animatorItem);
+		}
+
+		private static void LinkAnimationItem(Row parent, int index, Row item)
+		{
+			if (!CanLink(parent, item)) {
+				throw new InvalidOperationException();
+			}
+			var animation = item.GetAnimation();
+			var node = parent.GetNode();
+			InsertIntoList<AnimationCollection, Animation>.Perform(node.Animations, index, animation);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
 		}
 
 		private static void LinkAnimationTrackItem(Row parent, int index, Row item)

@@ -47,6 +47,11 @@ namespace Tangerine.Core.Components
 		public Animation Animation { get; set; }
 	}
 
+	public sealed class MarkerRow : Component
+	{
+		public Marker Marker { get; set; }
+	}
+
 	public sealed class AnimationTrackRow : Component
 	{
 		public AnimationTrack Track { get; set; }
@@ -100,6 +105,19 @@ namespace Tangerine.Core.Components
 		public Animation Animation { get; set; }
 
 		public override string Id { get; set; }
+	}
+
+	public sealed class CommonMarkerRowData : CommonRowData
+	{
+		public Marker Marker { get; set; }
+
+		public override string Id
+		{
+			get => Marker.Id;
+			set => Document.Current.History.DoTransaction(
+				() => SetProperty.Perform(Marker, nameof(Marker.Id), value)
+			);
+		}
 	}
 
 	public sealed class CommonAnimationTrackRowData : CommonRowData

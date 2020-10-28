@@ -573,7 +573,9 @@ namespace Tangerine.UI.Timeline
 			}
 			Document.Current.History.DoTransaction(() => {
 				var track = new AnimationTrack { Id = GenerateTrackId() };
-				var item = LinkSceneItem.Perform(Document.Current.CompoundAnimationTree, index, track);
+				var item = LinkSceneItem.Perform(
+					Document.Current.GetSceneItemForObject(Document.Current.Animation),
+					index, track);
 				ClearRowSelection.Perform();
 				SelectRow.Perform(item);
 			});

@@ -42,11 +42,7 @@ namespace Tangerine.Core.Operations
 		{
 			Row parent;
 			int index;
-			if (Document.Current.Animation.IsCompound) {
-				GetAnimationTrackLinkLocation(out parent, out index);
-			} else {
-				SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index);
-			}
+			SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index);
 			var data = Clipboard.Text;
 			var result = new List<Row>();
 			if (!string.IsNullOrEmpty(data)) {
@@ -60,13 +56,6 @@ namespace Tangerine.Core.Operations
 				});
 			}
 			pastedItems = result;
-		}
-
-		private static void GetAnimationTrackLinkLocation(out Row parent, out int index)
-		{
-			var focusedItem = Document.Current.RecentlySelectedSceneItem();
-			parent = Document.Current.CompoundAnimationTree;
-			index = focusedItem == null ? 0 : Document.Current.CompoundAnimationTree.Rows.IndexOf(focusedItem);
 		}
 	}
 

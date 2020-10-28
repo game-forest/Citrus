@@ -96,6 +96,14 @@ namespace Tangerine.Core
 			return animation != null;
 		}
 
+		public Marker GetMarker() => Components.Get<MarkerRow>()?.Marker;
+
+		public bool TryGetMarker(out Marker marker)
+		{
+			marker = GetMarker();
+			return marker != null;
+		}
+
 		public AnimationTrack GetAnimationTrack() => Components.Get<AnimationTrackRow>()?.Track;
 
 		public bool TryGetAnimationTrack(out AnimationTrack track)

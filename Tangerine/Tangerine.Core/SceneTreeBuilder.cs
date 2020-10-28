@@ -21,6 +21,7 @@ namespace Tangerine.Core
 			var item = GetNodeSceneItem(node);
 			int folderIndex = 0;
 			int nodeIndex = 0;
+			AddSceneItemsForAnimations(item, node);
 			AddSceneItemsForAnimatedProperties(item, node);
 			BuildFolderTree(item, int.MaxValue, node, ref folderIndex, ref nodeIndex);
 			return item;
@@ -52,7 +53,7 @@ namespace Tangerine.Core
 					}
 				} else if (folder != null) {
 					folderIndex++;
-					var folderSceneItem = GetFolderSceneItem(folder);
+					var folderSceneItem = BuildFolderSceneItem(folder);
 					if (folderSceneItem.Parent != null) {
 						folderSceneItem.Unlink();
 					}
@@ -64,7 +65,7 @@ namespace Tangerine.Core
 			}
 		}
 
-		public Row GetFolderSceneItem(Folder.Descriptor folder)
+		public Row BuildFolderSceneItem(Folder.Descriptor folder)
 		{
 			var i = sceneItemFactory(folder);
 			i.Components.GetOrAdd<FolderRow>().Folder = folder;
@@ -85,15 +86,26 @@ namespace Tangerine.Core
 			return i;
 		}
 
+		private void AddSceneItemsForAnimations(Row parent, Node node)
+		{
+			var animationComponent = node.Components.Get<AnimationComponent>();
+			if (animationComponent != null && animationComponent.Animations.Count > 0) {
+				foreach (var animation in animationComponent.Animations) {
+					var animationItem = BuildAnimationSceneItem(animation);
+					parent.Rows.Add(animationItem);
+				}
+			}
+		}
+
 		private void AddSceneItemsForAnimatedProperties(Row parent, Node node)
 		{
 			foreach (var animator in node.Animators) {
-				var animatorItem = GetAnimatorSceneItem(animator);
+				var animatorItem = BuildAnimatorSceneItem(animator);
 				parent.Rows.Add(animatorItem);
 			}
 		}
 
-		public Row GetAnimatorSceneItem(IAnimator animator)
+		public Row BuildAnimatorSceneItem(IAnimator animator)
 		{
 			var i = sceneItemFactory(animator);
 			i.Components.GetOrAdd<CommonPropertyRowData>().Animator = animator;
@@ -104,25 +116,31 @@ namespace Tangerine.Core
 			return i;
 		}
 
-		public Row BuildTreeForCompoundAnimation(Animation animation)
-		{
-			var tree = GetAnimationItem(animation);
-			foreach (var track in animation.Tracks) {
-				tree.Rows.Add(GetAnimationTrackItem(track));
-			}
-			return tree;
-		}
-
-		private Row GetAnimationItem(Animation animation)
+		public Row BuildAnimationSceneItem(Animation animation)
 		{
 			var i = sceneItemFactory(animation);
 			i.Components.GetOrAdd<AnimationRow>().Animation = animation;
 			i.Components.GetOrAdd<CommonAnimationRowData>().Animation = animation;
+			foreach (var marker in animation.Markers) {
+				i.Rows.Add(BuildMarkerSceneItem(marker));
+			}
+			foreach (var track in animation.Tracks) {
+				i.Rows.Add(BuildAnimationTrackSceneItem(track));
+			}
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}
 
-		public Row GetAnimationTrackItem(AnimationTrack track)
+		public Row BuildMarkerSceneItem(Marker marker)
+		{
+			var i = sceneItemFactory(marker);
+			i.Components.GetOrAdd<MarkerRow>().Marker = marker;
+			i.Components.GetOrAdd<CommonMarkerRowData>().Marker = marker;
+			SceneItemCreated?.Invoke(i);
+			return i;
+		}
+
+		public Row BuildAnimationTrackSceneItem(AnimationTrack track)
 		{
 			var i = sceneItemFactory(track);
 			i.Components.GetOrAdd<AnimationTrackRow>().Track = track;

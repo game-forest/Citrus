@@ -754,6 +754,8 @@ namespace Tangerine.Core.Operations
 				builder.Invoke(node, new object[] { });
 			}
 			node.Id = GenerateNodeId(hostNode, nodeType);
+			// Make sure the default animation is created.
+			var _ = node.DefaultAnimation;
 			LinkSceneItem.Perform(parent, index, node);
 			ClearRowSelection.Perform();
 			SelectNode.Perform(node);
@@ -840,6 +842,7 @@ namespace Tangerine.Core.Operations
 						op.marker.JumpTo = "";
 					}
 				}
+				Document.Current.RefreshSceneTree();
 			}
 
 			protected override void InternalUndo(SetMarker op)
@@ -853,6 +856,7 @@ namespace Tangerine.Core.Operations
 				if (op.removeDependencies) {
 					op.marker.JumpTo = b.SavedJumpTo;
 				}
+				Document.Current.RefreshSceneTree();
 			}
 		}
 
@@ -912,6 +916,7 @@ namespace Tangerine.Core.Operations
 					}
 					op.Save(new Backup(removedJumpToMarkers));
 				}
+				Document.Current.RefreshSceneTree();
 			}
 
 			protected override void InternalUndo(DeleteMarker op)
@@ -925,6 +930,7 @@ namespace Tangerine.Core.Operations
 						marker.JumpTo = op.marker.Id;
 					}
 				}
+				Document.Current.RefreshSceneTree();
 			}
 
 		}
