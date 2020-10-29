@@ -88,10 +88,24 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">SerializableSample</span></div>
+    <div class="level1"><a class="xref" href="Lime.Animable.html">Animable</a></div>
+    <div class="level2"><span class="xref">SerializableSample</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lime.IAnimable.html">IAnimable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lime.Animable.html#Lime_Animable_Owner">Animable.Owner</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Animable.html#Lime_Animable_OnOwnerChanged_Lime_IAnimable_">Animable.OnOwnerChanged(IAnimable)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Animable.html#Lime_Animable_Clone">Animable.Clone()</a>
+    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -118,7 +132,7 @@
   <h6><strong>Assembly</strong>: Lime.dll</h6>
   <h5 id="Lime_SerializableSample_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SerializableSample</code></pre>
+    <pre><code class="lang-csharp hljs">public class SerializableSample : Animable, IAnimable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -302,6 +316,17 @@ public string SerializationPath { get; set; }</code></pre>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lime.IAnimable.html">IAnimable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_GetAnimationHost_Lime_IAnimable_">IAnimableExtensions.GetAnimationHost(IAnimable)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.IAnimableExtensions.html#Lime_IAnimableExtensions_UnbindAnimators_Lime_IAnimable_">IAnimableExtensions.UnbindAnimators(IAnimable)</a>
+  </div>
 </article>
           </div>
           

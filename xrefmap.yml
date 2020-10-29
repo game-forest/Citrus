@@ -7023,6 +7023,19 @@ references:
   commentId: T:Lime.AudioRandomizerComponent
   fullName: Lime.AudioRandomizerComponent
   nameWithType: AudioRandomizerComponent
+- uid: Lime.AudioRandomizerComponent.#ctor
+  name: AudioRandomizerComponent()
+  href: api/Lime.AudioRandomizerComponent.html#Lime_AudioRandomizerComponent__ctor
+  commentId: M:Lime.AudioRandomizerComponent.#ctor
+  fullName: Lime.AudioRandomizerComponent.AudioRandomizerComponent()
+  nameWithType: AudioRandomizerComponent.AudioRandomizerComponent()
+- uid: Lime.AudioRandomizerComponent.#ctor*
+  name: AudioRandomizerComponent
+  href: api/Lime.AudioRandomizerComponent.html#Lime_AudioRandomizerComponent__ctor_
+  commentId: Overload:Lime.AudioRandomizerComponent.#ctor
+  isSpec: "True"
+  fullName: Lime.AudioRandomizerComponent.AudioRandomizerComponent
+  nameWithType: AudioRandomizerComponent.AudioRandomizerComponent
 - uid: Lime.AudioRandomizerComponent.OnOwnerChanged(Lime.Node)
   name: OnOwnerChanged(Node)
   href: api/Lime.AudioRandomizerComponent.html#Lime_AudioRandomizerComponent_OnOwnerChanged_Lime_Node_
