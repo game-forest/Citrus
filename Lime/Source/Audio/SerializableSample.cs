@@ -2,7 +2,7 @@ using Yuzu;
 
 namespace Lime
 {
-	public class SerializableSample
+	public class SerializableSample : Animable
 	{
 		public string Path;
 
