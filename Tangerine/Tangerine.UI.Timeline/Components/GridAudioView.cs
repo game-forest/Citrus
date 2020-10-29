@@ -26,7 +26,7 @@ namespace Tangerine.UI.Timeline.Components
 			foreach (var key in actionAnimator.ReadonlyKeys) {
 				if (key.Value == AudioAction.Play) {
 					var sample = GetSampleAtFrame(key.Frame);
-					if (sample == null) {
+					if (sample == null || sample.Path == null) {
 						continue;
 					}
 					var waveform = Timeline.Instance.WaveformCache.GetWaveform(sample.Path);
