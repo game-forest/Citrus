@@ -15,16 +15,29 @@ namespace Tangerine.UI
 		private static float offsetCoefficient = 1f;
 #endif
 
+		private static Node NodeUnderMouse
+		{
+			get
+			{
+				if (Application.WindowUnderMouse == null) {
+					return null;
+				}
+				using (Application.WindowUnderMouse.Context.Activate().Scoped()) {
+					return WidgetContext.Current.NodeUnderMouse;
+				}
+			}
+		}
+
 		public IEnumerator<object> Task()
 		{
 			while (true) {
 				yield return null;
-				var node = WidgetContext.Current.NodeUnderMouse;
+				var node = NodeUnderMouse;
 				var component = node?.Components.Get<TooltipComponent>();
 				if (string.IsNullOrEmpty(component?.GetText?.Invoke())) {
 					continue;
 				}
-				bool isNodeChanged() => node != WidgetContext.Current.NodeUnderMouse;
+				bool isNodeChanged() => node != NodeUnderMouse;
 				yield return tooltip.Delay(component.ShowDelay, isNodeChanged);
 				if (!isNodeChanged()) {
 					if (tooltip.IsVisible) {
