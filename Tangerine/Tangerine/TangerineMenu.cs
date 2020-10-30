@@ -102,6 +102,8 @@ namespace Tangerine
 			}
 			customNodes.Enabled = customNodes.Menu.Count > 0;
 			GenericCommands.NewTanWithCustomRoot.Enabled = GenericCommands.NewTanWithCustomRoot.Menu.Count > 0;
+			HotkeyRegistry.CurrentProjectName = Project.Current == null ?
+				null : System.IO.Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
 			TangerineApp.Instance?.RefreshCreateNodeCommands();
 		}
 
