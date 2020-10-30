@@ -6,7 +6,7 @@
     <ProjectGuid>{72E2DDBB-C320-4356-89EC-BDED6036D29B}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Lime.Android</RootNamespace>
+    <RootNamespace>Lime</RootNamespace>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
@@ -178,6 +178,7 @@
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\Environment.cs" />
     <Compile Include="Source\Exception.cs" />
+    <Compile Include="Source\FriendAssemblies.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />

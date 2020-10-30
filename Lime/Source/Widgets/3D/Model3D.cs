@@ -23,14 +23,13 @@ namespace Lime
 			}
 		}
 
-		public override void LoadExternalScenes(InternalPersistence persistence = null)
+		public override void LoadExternalScenes()
 		{
-			base.LoadExternalScenes(persistence);
-			persistence = persistence ?? InternalPersistence.Instance;
+			base.LoadExternalScenes();
 			if (ContentsPath != null) {
 				var attachmentPath = System.IO.Path.ChangeExtension(ContentsPath, ".Attachment.txt");
 				if (AssetBundle.Current.FileExists(attachmentPath)) {
-					var attachment = persistence.ReadObjectFromBundle<Model3DAttachmentParser.ModelAttachmentFormat>(AssetBundle.Current, attachmentPath);
+					var attachment = InternalPersistence.Instance.ReadObjectFromBundle<Model3DAttachmentParser.ModelAttachmentFormat>(AssetBundle.Current, attachmentPath);
 					if (string.IsNullOrEmpty(attachment.EntryTrigger)) {
 						return;
 					}

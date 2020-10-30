@@ -1198,26 +1198,99 @@ namespace Lime
 			return clone;
 		}
 
-		public static T CreateFromAssetBundle<T>(string path, T instance = null, InternalPersistence persistence = null, bool ignoreExternals = false) where T : Node
+		/// <summary>
+		/// Saves node to a file.
+		/// </summary>
+		/// <param name="path">Path to the file.</param>
+		/// <param name="format"><see cref="Persistence.Format"/></param>
+		public void Save(string path, Persistence.Format format)
 		{
-			persistence = persistence ?? InternalPersistence.Instance;
-			return (T) CreateFromAssetBundleHelper(path, instance, persistence, external: false, ignoreExternals: ignoreExternals);
+			InternalPersistence.Instance.WriteObjectToFile(path, this, format);
 		}
 
-		public static Node CreateFromAssetBundle(string path, Node instance = null, InternalPersistence persistence = null, bool ignoreExternals = false)
+		/// <summary>
+		/// Saves node to a stream.
+		/// </summary>
+		/// <param name="path">Path to the file. Required for correct asset path shrink or expand for relative assets.</param>
+		/// <param name="stream">The stream.</param>
+		/// <param name="format"><see cref="Persistence.Format"/></param>
+		public void Save(string path, Stream stream, Persistence.Format format)
 		{
-			persistence = persistence ?? InternalPersistence.Instance;
-			return CreateFromAssetBundleHelper(path, instance, persistence, external: false, ignoreExternals: ignoreExternals);
+			InternalPersistence.Instance.WriteObject(path, stream, this, format);
 		}
 
-		public static Node CreateFromStream(string path, Node instance = null, InternalPersistence persistence = null, Stream stream = null, bool ignoreExternals = false)
-		{
-			persistence = persistence ?? InternalPersistence.Instance;
-			return CreateFromAssetBundleHelper(path, instance, persistence, stream, external: false, ignoreExternals);
+		/// <summary>
+		/// Loads node by given <paramref name="path"/> under <see cref="AssetBundle.Current"/>
+		/// </summary>
+		/// <typeparam name="T">Expected concrete type of Node.</typeparam>
+		/// <param name="path">Path in asset bundle.</param>
+		/// <param name="instance">Existing instance of node. If set to <code>null</code> new instance is created.</param>
+		/// <param name="ignoreExternals">Do not load prefabs.</param>
+		/// <returns>Instance of Node loaded from given path.</returns>
+		public static T Load<T>(
+			string path,
+			T instance = null,
+			bool ignoreExternals = false
+		) where T : Node {
+			return (T)LoadHelper(
+				path: path,
+				instance: instance,
+				external: false,
+				ignoreExternals: ignoreExternals
+			);
 		}
 
-		private static Node CreateFromAssetBundleHelper(string path, Node instance = null, InternalPersistence persistence = null, Stream stream = null, bool external = false, bool ignoreExternals = false)
-		{
+		/// <summary>
+		/// Loads node by given <paramref name="path"/> under <see cref="AssetBundle.Current"/>
+		/// </summary>
+		/// <param name="path">Path in asset bundle.</param>
+		/// <param name="instance">Existing instance of node. If set to <code>null</code> new instance is created.</param>
+		/// <param name="ignoreExternals">Do not load prefabs.</param>
+		/// <returns>Instance of Node loaded from given path.</returns>
+		public static Node Load(
+			string path,
+			Node instance = null,
+			bool ignoreExternals = false
+		) {
+			return LoadHelper(
+				path: path,
+				instance: instance,
+				external: false,
+				ignoreExternals: ignoreExternals
+			);
+		}
+
+		/// <summary>
+		/// Loads node from given <paramref name="stream"/> under <see cref="AssetBundle.Current"/>
+		/// </summary>
+		/// <typeparam name="T">Expected concrete type of Node.</typeparam>
+		/// <param name="stream">Stream with serialized Node.</param>
+		/// <param name="path">Path in asset bundle.</param>
+		/// <param name="instance">Existing instance of node. If set to <code>null</code> new instance is created.</param>
+		/// <param name="ignoreExternals">Do not load prefabs.</param>
+		/// <returns>Instance of Node loaded from given path.</returns>
+		public static Node Load(
+			Stream stream,
+			string path,
+			Node instance = null,
+			bool ignoreExternals = false
+		) {
+			return LoadHelper(
+				path: path,
+				instance: instance,
+				stream: stream,
+				external: false,
+				ignoreExternals: ignoreExternals
+			);
+		}
+
+		private static Node LoadHelper(
+			string path,
+			Node instance = null,
+			Stream stream = null,
+			bool external = false,
+			bool ignoreExternals = false
+		) {
 			if (SceneLoading?.Value?.Invoke(path, ref instance, external, ignoreExternals) ?? false) {
 				if (!external) {
 					instance.NotifyOnBuilt();
@@ -1235,15 +1308,15 @@ namespace Lime
 			scenesBeingLoaded.Value.Add(fullPath);
 			try {
 				if (stream != null) {
-					instance = persistence.ReadObject<Node>(fullPath, stream, instance);
+					instance = InternalPersistence.Instance.ReadObject<Node>(fullPath, stream, instance);
 				} else {
 					using (stream = AssetBundle.Current.OpenFileLocalized(fullPath)) {
-						instance = persistence.ReadObject<Node>(fullPath, stream, instance);
+						instance = InternalPersistence.Instance.ReadObject<Node>(fullPath, stream, instance);
 					}
 				}
 				instance.Components.Add(new AssetBundlePathComponent(fullPath));
 				if (!ignoreExternals) {
-					instance.LoadExternalScenes(persistence);
+					instance.LoadExternalScenes();
 				}
 			} finally {
 				scenesBeingLoaded.Value.Remove(fullPath);
@@ -1275,15 +1348,14 @@ namespace Lime
 		{
 		}
 
-		public virtual void LoadExternalScenes(InternalPersistence persistence = null)
+		public virtual void LoadExternalScenes()
 		{
-			persistence = persistence ?? InternalPersistence.Instance;
 			if (string.IsNullOrEmpty(ContentsPath)) {
 				foreach (var child in Nodes) {
-					child.LoadExternalScenes(persistence);
+					child.LoadExternalScenes();
 				}
 			} else if (ResolveScenePath(ContentsPath) != null) {
-				var content = CreateFromAssetBundleHelper(ContentsPath, null, persistence, external: true);
+				var content = LoadHelper(ContentsPath, null, external: true);
 				ReplaceContent(content);
 			}
 		}

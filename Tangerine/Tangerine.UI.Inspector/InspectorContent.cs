@@ -423,7 +423,7 @@ namespace Tangerine.UI.Inspector
 								var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(Clipboard.Text));
 								NodeComponent component;
 								try {
-									component = TangerinePersistence.Instance.ReadObject<NodeComponent>(Document.Current.Path, stream);
+									component = InternalPersistence.Instance.ReadObject<NodeComponent>(Document.Current.Path, stream);
 								} catch {
 									new AlertDialog("Clipboard does not contain a component.", "Ok").Show();
 									return;
@@ -510,7 +510,7 @@ namespace Tangerine.UI.Inspector
 					if (componentsCount == 1) {
 						menu.Add(new Command("Copy to clipboard", () => {
 							var stream = new System.IO.MemoryStream();
-							TangerinePersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
+							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
 							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 						}));
 					}

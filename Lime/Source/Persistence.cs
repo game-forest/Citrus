@@ -51,25 +51,24 @@ namespace Lime
 		public Persistence(CommonOptions yuzuCommonOptions, JsonSerializeOptions yuzuJsonOptions) : this()
 		{
 			YuzuCommonOptions = yuzuCommonOptions;
-			YuzuJsonOptions = yuzuJsonOptions ?? defaultYuzuJsonOptions;
+			YuzuJsonOptions = yuzuJsonOptions ?? YuzuJsonOptions;
 		}
 
-		public readonly CommonOptions YuzuCommonOptions = DefaultYuzuCommonOptions;
-		public readonly JsonSerializeOptions YuzuJsonOptions = defaultYuzuJsonOptions;
+		public readonly CommonOptions YuzuCommonOptions = NewDefaultYuzuCommonOptions();
+		public readonly Yuzu.Json.JsonSerializeOptions YuzuJsonOptions = NewDefaultYuzuJsonOptions();
 
-		// TODO: this should be private; it's public though so KGD team can override AllowUnknownFields = true
-		// it's possible to make it private back when we'll have migrations
-		public static CommonOptions DefaultYuzuCommonOptions = new CommonOptions {
-			TagMode = TagMode.Aliases,
+		// used internally to get same defaults as persistence and slightly modify (e.g. for migrations or schema generation)
+		internal static CommonOptions NewDefaultYuzuCommonOptions() => new CommonOptions {
 			AllowEmptyTypes = true,
 			CheckForEmptyCollections = true,
+#if TANGERINE || DEBUG
+			ReportErrorPosition = true,
+#endif // TANGERINE || DEBUG
 		};
 
-		private static readonly JsonSerializeOptions defaultYuzuJsonOptions = new JsonSerializeOptions {
-			ArrayLengthPrefix = false,
-			Indent = "\t",
-			FieldSeparator = "\n",
-			SaveRootClass = true,
+		// used internally to get same defaults as persistence and slightly modify (e.g. for migrations or schema generation)
+		internal static Yuzu.Json.JsonSerializeOptions NewDefaultYuzuJsonOptions() => new Yuzu.Json.JsonSerializeOptions {
+			SaveClass = Yuzu.Json.JsonSaveClass.UnknownOrRoot | Yuzu.Json.JsonSaveClass.UnknownPrimitive,
 			Unordered = true,
 			MaxOnelineFields = 8,
 			BOM = true,

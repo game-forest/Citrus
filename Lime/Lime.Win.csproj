@@ -319,6 +319,7 @@
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\Environment.cs" />
     <Compile Include="Source\Exception.cs" />
+    <Compile Include="Source\FriendAssemblies.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />

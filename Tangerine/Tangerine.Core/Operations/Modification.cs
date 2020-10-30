@@ -615,7 +615,7 @@ namespace Tangerine.Core.Operations
 	{
 		public static Node Perform(string assetPath)
 		{
-			var scene = Node.CreateFromAssetBundle(assetPath, persistence: TangerinePersistence.Instance);
+			var scene = Node.Load(assetPath);
 			if (!NodeCompositionValidator.Validate(Document.Current.Container.GetType(), scene.GetType())) {
 				throw new System.Exception($"Can't put {scene.GetType()} into {Document.Current.Container.GetType()}");
 			}

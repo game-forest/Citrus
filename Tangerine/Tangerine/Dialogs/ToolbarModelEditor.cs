@@ -526,7 +526,7 @@ namespace Tangerine.Dialogs
 				MinMaxHeight = 10;
 			}
 
-			protected override Lime.RenderObject GetRenderObject()
+			protected internal override Lime.RenderObject GetRenderObject()
 			{
 				var ro = RenderObjectPool<RenderObject>.Acquire();
 				ro.CaptureRenderState(this);
@@ -632,7 +632,7 @@ namespace Tangerine.Dialogs
 					Gestures.Add(new DoubleClickGesture(() => DoubleClicked?.Invoke()));
 				}
 
-				protected override Lime.RenderObject GetRenderObject()
+				protected internal override Lime.RenderObject GetRenderObject()
 				{
 					if (parent.SelectedItem != this) {
 						return null;

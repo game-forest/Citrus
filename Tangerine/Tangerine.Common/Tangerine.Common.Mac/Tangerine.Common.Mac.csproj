@@ -6,8 +6,8 @@
     <ProjectGuid>{17DCD218-2ED0-4E5E-B0F1-50970A5287AB}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Tangerine.Common.Mac</RootNamespace>
-    <AssemblyName>Tangerine.Common.Mac</AssemblyName>
+    <RootNamespace>Tangerine.Common</RootNamespace>
+    <AssemblyName>Tangerine.Common</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>

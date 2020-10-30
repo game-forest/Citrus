@@ -56,10 +56,10 @@ namespace Lime
 			this.Position = position;
 		}
 
-		[Obsolete("Use Node.CreateFromAssetBundle instead", false)]
+		[Obsolete("Use Node.Load instead", false)]
 		public Frame(string path) : this()
 		{
-			CreateFromAssetBundle(path, this);
+			Load(path, this);
 		}
 
 		private void SetRenderTarget(RenderTarget value)

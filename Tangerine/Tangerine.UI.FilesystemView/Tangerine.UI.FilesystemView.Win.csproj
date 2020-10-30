@@ -7,8 +7,8 @@
     <ProjectGuid>{74F91BD5-9E43-40FD-B8EA-B9819D1CA926}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tangerine.UI.Filesystem.Win</RootNamespace>
-    <AssemblyName>Tangerine.UI.Filesystem.Win</AssemblyName>
+    <RootNamespace>Tangerine.UI.Filesystem</RootNamespace>
+    <AssemblyName>Tangerine.UI.Filesystem</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

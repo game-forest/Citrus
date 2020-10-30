@@ -18,7 +18,7 @@ namespace Orange
 			AssetBundle.Current = new TangerineAssetBundle(The.Workspace.AssetsDirectory);
 			int removedAnimatorsCount = 0;
 			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".tan")) {
-				var node = Node.CreateFromAssetBundle(
+				var node = Node.Load(
 					path: Path.ChangeExtension(file, null),
 					ignoreExternals: true
 				);

@@ -408,9 +408,9 @@ namespace Tangerine.Core
 		{
 			try {
 				if (preloadedSceneStream != null) {
-					RootNodeUnwrapped = Node.CreateFromStream(Path + $".{GetFileExtension(Format)}", persistence: TangerinePersistence.Instance, stream: preloadedSceneStream);
+					RootNodeUnwrapped = Node.Load(preloadedSceneStream, Path + $".{GetFileExtension(Format)}");
 				} else {
-					RootNodeUnwrapped = Node.CreateFromAssetBundle(Path, persistence: TangerinePersistence.Instance);
+					RootNodeUnwrapped = Node.Load(Path);
 				}
 				if (Format == DocumentFormat.Fbx) {
 					Path = string.Format(untitledPathFormat, untitledCounter++);
@@ -572,7 +572,7 @@ namespace Tangerine.Core
 
 		public void RefreshExternalScenes()
 		{
-			RootNode.LoadExternalScenes(TangerinePersistence.Instance);
+			RootNode.LoadExternalScenes();
 			// restore animation state in reloaded external scenes by applying all animations at their current frame
 			var s = new Stack<Node>(new [] { RootNode });
 			while (s.Count != 0) {
@@ -671,7 +671,7 @@ namespace Tangerine.Core
 			var ms = new MemoryStream();
 			// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().
 			using (node = CreateCloneForSerialization(node)) {
-				TangerinePersistence.Instance.WriteObject(assetPath, ms, node, Persistence.Format.Json);
+				InternalPersistence.Instance.WriteObject(assetPath, ms, node, Persistence.Format.Json);
 			}
 			var fileModeForHiddenFile = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
 			using (var fs = new FileStream(filePath, fileModeForHiddenFile)) {
