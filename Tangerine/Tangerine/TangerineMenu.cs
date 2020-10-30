@@ -66,7 +66,11 @@ namespace Tangerine
 			GenericCommands.NewTanWithCustomRoot.Menu.Clear();
 			create.Clear();
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
-			foreach (var type in Project.Current.RegisteredNodeTypes) {
+			var registeredNodeTypes =
+				Project.Current == Project.Null
+				? Project.GetNodesTypesOrdered("Lime")
+				: Project.Current.RegisteredNodeTypes;
+			foreach (var type in registeredNodeTypes) {
 				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 				var cmd = new Command("Create " + type.Name);
 				cmd.TooltipText = tooltipText;
