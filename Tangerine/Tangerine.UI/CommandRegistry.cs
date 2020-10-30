@@ -26,6 +26,11 @@ namespace Tangerine.UI
 		public string Title { get; }
 		public Shortcut Shortcut { get; set; }
 
+		/// <summary>
+		/// True if the command is common to all projects.
+		/// </summary>
+		public bool IsCommon { get; set; } = false;
+
 		public CommandInfo(ICommand command, CommandCategoryInfo categoryInfo, string id)
 		{
 			Command = command;
@@ -45,13 +50,15 @@ namespace Tangerine.UI
 
 		public static readonly CommandCategoryInfo AllCommands = new CommandCategoryInfo("All");
 
-		public static void Register(ICommand command, string categoryId, string commandId, bool @override = false)
+		/// <param name="isCommon">True if the command is common to all projects.</param>
+		public static void Register(ICommand command, string categoryId, string commandId, bool @override = false, bool isCommon = false)
 		{
 			if (!categories.ContainsKey(categoryId)) {
 				categories.Add(categoryId, new CommandCategoryInfo(categoryId));
 			}
 			var categoryInfo = categories[categoryId];
 			var commandInfo = new CommandInfo(command, categoryInfo, commandId);
+			commandInfo.IsCommon = isCommon;
 			if (AllCommands.Commands.ContainsKey(commandId)) {
 				if (!@override) {
 					throw new ArgumentException($"Command with id:'{commandId}' has already been registered. Use @override=true to override previous command", nameof(commandId));

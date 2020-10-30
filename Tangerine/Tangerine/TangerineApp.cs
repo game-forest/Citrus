@@ -495,8 +495,8 @@ namespace Tangerine
 			RegisterCommands(typeof(Tools));
 			RegisterCommands(typeof(OrangeCommands));
 			RegisterCommands(typeof(FilesystemCommands));
-			CommandRegistry.Register(Command.Undo, "GenericCommands", "Undo");
-			CommandRegistry.Register(Command.Redo, "GenericCommands", "Redo");
+			CommandRegistry.Register(Command.Undo, "GenericCommands", "Undo", @override: false, isCommon: true);
+			CommandRegistry.Register(Command.Redo, "GenericCommands", "Redo", @override: false, isCommon: true);
 		}
 
 		private void RegisterCommands(Type type)
@@ -506,7 +506,7 @@ namespace Tangerine
 				if (!(fieldType == typeof(ICommand) || fieldType.IsSubclassOf(typeof(ICommand)))) {
 					continue;
 				}
-				CommandRegistry.Register((ICommand)field.GetValue(null), type.Name, field.Name);
+				CommandRegistry.Register((ICommand)field.GetValue(null), type.Name, field.Name, @override: false, isCommon: true);
 			}
 		}
 

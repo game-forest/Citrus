@@ -70,6 +70,7 @@ namespace Tangerine
 				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 				var cmd = new Command("Create " + type.Name);
 				cmd.TooltipText = tooltipText;
+				bool isCustomType = type.Namespace != "Lime";
 				if (NodeIconPool.TryGetIcon(type, out var icon)) {
 					cmd.Icon = icon;
 				} else {
@@ -83,14 +84,14 @@ namespace Tangerine
 						cmd.Text = "Create " + cmd.Text;
 					}
 				} else {
-					if (type.Namespace == "Lime") {
+					if (!isCustomType) {
 						create.Add(cmd);
 					} else {
 						customNodes.Menu.Add(cmd);
 					}
 				}
 				CreateNodeCommands.Add(cmd);
-				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true);
+				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true, !isCustomType);
 				CommandHandlerList.Global.Connect(cmd, new CreateNode(type, cmd));
 				if (IsNodeTypeCanBeRoot(type)) {
 					var newFileCmd = new Command(type.Name);
