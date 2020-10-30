@@ -462,7 +462,7 @@ namespace Tangerine
 			return null;
 		}
 
-		void SetupMainWindowTitle(WindowWidget windowWidget)
+		private void SetupMainWindowTitle(WindowWidget windowWidget)
 		{
 			var title = "Tangerine";
 			if (Project.Current != Project.Null) {
@@ -472,7 +472,7 @@ namespace Tangerine
 			windowWidget.Window.Title = title;
 		}
 
-		void SetColorTheme(ColorTheme theme, Theme.ColorTheme limeTheme)
+		private void SetColorTheme(ColorTheme theme, Theme.ColorTheme limeTheme)
 		{
 			AppUserPreferences.Instance.LimeColorTheme = Theme.Colors = limeTheme.Clone();
 			AppUserPreferences.Instance.ColorTheme = ColorTheme.Current = theme.Clone();
@@ -499,7 +499,7 @@ namespace Tangerine
 			CommandRegistry.Register(Command.Redo, "GenericCommands", "Redo");
 		}
 
-		void RegisterCommands(Type type)
+		private void RegisterCommands(Type type)
 		{
 			foreach (var field in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)) {
 				var fieldType = field.FieldType;
@@ -704,7 +704,7 @@ namespace Tangerine
 			Directory.CreateDirectory(dir);
 			HotkeyRegistry.InitDefaultShortcuts();
 			var defaultProfile = HotkeyRegistry.CreateProfile(HotkeyRegistry.DefaultProfileName);
-			if (File.Exists(defaultProfile.Filepath)) {
+			if (File.Exists(defaultProfile.FilePath)) {
 				defaultProfile.Load();
 			}
 			else {
