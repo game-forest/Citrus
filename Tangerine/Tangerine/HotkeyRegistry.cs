@@ -243,7 +243,19 @@ namespace Tangerine
 
 		public void Delete()
 		{
-			File.Delete(FilePath);
+			string filePath = FilePath;
+			File.Delete(filePath);
+			string directoryPath = Path.Combine(HotkeyRegistry.ProfilesDirectory, ProjectDependent);
+			if (Directory.Exists(directoryPath)) {
+				var directories = Directory.GetDirectories(directoryPath, "*", SearchOption.TopDirectoryOnly);
+				string fileName = Path.GetFileNameWithoutExtension(filePath);
+				foreach (string projectPath in directories) {
+					string profilePath = Path.Combine(projectPath, fileName);
+					if (File.Exists(profilePath)) {
+						File.Delete(profilePath);
+					}
+				}
+			}
 			HotkeyRegistry.Profiles.Remove(this);
 		}
 
