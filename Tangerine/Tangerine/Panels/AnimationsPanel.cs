@@ -11,65 +11,57 @@ using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.Panels
 {
-	interface IAnimationsController
-	{
-		TreeViewItem GetNodeTreeViewItem(Row sceneItem);
-		TreeViewItem GetAnimationTreeViewItem(Row sceneItem);
-		TreeViewItem GetMarkerTreeViewItem(Row sceneItem);
-		void ClearSelection();
-	}
-
-	public class AnimationsPanel : IDocumentView, IAnimationsController
+	public class AnimationsPanel : IDocumentView
 	{
 		private readonly Widget panelWidget;
 		private readonly Frame contentWidget;
-		private readonly TreeView treeView;
 		private readonly EditBox searchStringEditor;
-		private readonly Func<bool> isSearchActiveGetter;
 
 		public AnimationsPanel(Widget panelWidget)
 		{
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
-			isSearchActiveGetter = () => searchStringEditor.Text.Length > 0;
-			ThemedScrollView scrollView;
+			ThemedScrollView scrollView1, scrollView2;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
 				Padding = new Thickness(5),
 				Layout = new VBoxLayout { Spacing = 5 },
 				Nodes = {
-					(searchStringEditor = new ThemedEditBox()),
-					(scrollView = new ThemedScrollView())
+					new ThemedVSplitter {
+						Stretches = Splitter.GetStretchesList(TimelineUserPreferences.Instance.AnimationsPanelVSplitterStretches, 1, 0.3f),
+						Nodes = {
+							(scrollView1 = new ThemedScrollView()),
+							new Frame {
+								Layout = new VBoxLayout { Spacing = 5 },
+								Padding = new Thickness { Top = 4 },
+								Nodes = {
+									(searchStringEditor = new ThemedEditBox()),
+									(scrollView2 = new ThemedScrollView()),
+								}
+							}
+						}
+					}
 				}
 			};
-			var presentation = new TreeViewPresentation(
-				this,
+			var itemProvider1 = new TreeViewItemProvider {
+				IsSearchActiveGetter = () => false,
+				ItemStateProvider = sceneItem => sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State1
+			};
+			var itemProvider2 = new TreeViewItemProvider {
+				IsSearchActiveGetter = () => searchStringEditor.Text.Length > 0,
+				ItemStateProvider = sceneItem => sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State2
+			};
+			var treeView1 = CreateTreeView(scrollView1, itemProvider1,
+				new TreeViewItemPresentationOptions { Minimalistic = true }, TreeViewMode.CurrentContainer);
+			var treeView2 = CreateTreeView(scrollView2, itemProvider2,
 				new TreeViewItemPresentationOptions {
 					Minimalistic = true,
 					SearchStringGetter = () => searchStringEditor.Text
-				}
-			);
-			treeView = new TreeView(scrollView, presentation, new TreeViewOptions { ShowRoot = false });
-			treeView.OnDragBegin += TreeView_OnDragBegin;
-			treeView.OnDragEnd += TreeView_OnDragEnd;
-			treeView.OnCopy += TreeView_OnCopy;
-			treeView.OnCut += TreeView_OnCut;
-			treeView.OnDelete += TreeView_OnDelete;
-			treeView.OnPaste += TreeView_OnPaste;
-			contentWidget.AddChangeWatcher(() => Document.Current?.SceneTreeVersion ?? 0, _ => RebuildTreeView());
-			contentWidget.AddChangeWatcher(() => Document.Current.Container, _ => RebuildTreeView());
-			RebuildTreeView();
-			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
-				if (treeView.RootItem?.Items.Count > 0) {
-					w.PrepareRendererState();
-					Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition,
-						Theme.Colors.WhiteBackground);
-				}
-			}));
-			searchStringEditor.Tasks.Add(SearchStringDebounceTask());
+				}, TreeViewMode.Hierarchy);
+			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView2, itemProvider2, TreeViewMode.Hierarchy));
 		}
 
-		private IEnumerator<object> SearchStringDebounceTask()
+		private IEnumerator<object> SearchStringDebounceTask(TreeView treeView, TreeViewItemProvider provider, TreeViewMode mode)
 		{
 			string previousSearchText = null;
 			var lastChangeAt = DateTime.Now;
@@ -83,12 +75,81 @@ namespace Tangerine.Panels
 				}
 				if (needRefresh && DateTime.Now - lastChangeAt > TimeSpan.FromSeconds(0.25f)) {
 					needRefresh = false;
-					RebuildTreeView();
+					RebuildTreeView(treeView, provider, mode);
 					if (searchStringEditor.Text.Length > 0 && treeView.RootItem != null) {
 						ExpandTree(treeView.RootItem);
 					}
 				}
 			}
+		}
+
+		class TreeViewItemStateComponent : Component
+		{
+			public readonly TreeViewItemState State1 = new TreeViewItemState { ExpandedIfSearchInactive = true };
+			public readonly TreeViewItemState State2 = new TreeViewItemState();
+		}
+
+		public class TreeViewItemProvider
+		{
+			public Func<Row, TreeViewItemState> ItemStateProvider;
+			public Func<bool> IsSearchActiveGetter;
+
+			public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
+			{
+				var s = ItemStateProvider(sceneItem);
+				s.TreeViewItem = s.TreeViewItem ?? new NodeTreeViewItem(
+					sceneItem, s, sceneItem.GetNode(), IsSearchActiveGetter);
+				return s.TreeViewItem;
+			}
+
+			public TreeViewItem GetAnimationTreeViewItem(Row sceneItem)
+			{
+				var s = ItemStateProvider(sceneItem);
+				s.TreeViewItem = s.TreeViewItem ?? new AnimationTreeViewItem(
+					sceneItem, s, sceneItem.GetAnimation(), IsSearchActiveGetter);
+				return s.TreeViewItem;
+			}
+
+			public TreeViewItem GetMarkerTreeViewItem(Row sceneItem)
+			{
+				var s = ItemStateProvider(sceneItem);
+				s.TreeViewItem = s.TreeViewItem ?? new MarkerTreeViewItem(
+					sceneItem, s, sceneItem.GetMarker(), IsSearchActiveGetter);
+				return s.TreeViewItem;
+			}
+		}
+
+		enum TreeViewMode
+		{
+			Hierarchy,
+			CurrentContainer
+		}
+
+		private TreeView CreateTreeView(
+			ThemedScrollView scrollView, TreeViewItemProvider provider,
+			TreeViewItemPresentationOptions presentationOptions, TreeViewMode mode)
+		{
+			var presentation = new TreeViewPresentation(provider, presentationOptions);
+			var treeView = new TreeView(scrollView, presentation, new TreeViewOptions{ ShowRoot = false });
+			treeView.OnDragBegin += TreeView_OnDragBegin;
+			treeView.OnDragEnd += TreeView_OnDragEnd;
+			treeView.OnCopy += TreeView_OnCopy;
+			treeView.OnCut += (s, e) => TreeView_OnCut(s, e, provider, mode);
+			treeView.OnDelete += (s, e) => TreeView_OnDelete(s, e, provider, mode);
+			treeView.OnPaste += (s, e) => TreeView_OnPaste(s, e, provider, mode);
+			contentWidget.AddChangeWatcher(() => Document.Current?.SceneTreeVersion ?? 0,
+				_ => RebuildTreeView(treeView, provider, mode));
+			contentWidget.AddChangeWatcher(() => Document.Current.Container,
+				_ => RebuildTreeView(treeView, provider, mode));
+			RebuildTreeView(treeView, provider, mode);
+			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
+				if (treeView.RootItem?.Items.Count > 0){
+					w.PrepareRendererState();
+					Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition,
+						Theme.Colors.WhiteBackground);
+				}
+			}));
+			return treeView;
 		}
 
 		private void TreeView_OnDragBegin(object sender, TreeView.DragEventArgs args)
@@ -142,13 +203,13 @@ namespace Tangerine.Panels
 			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 		}
 
-		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args)
+		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider, TreeViewMode mode)
 		{
 			TreeView_OnCopy(sender, args);
-			TreeView_OnDelete(sender, args);
+			TreeView_OnDelete(sender, args, provider, mode);
 		}
 
-		private void TreeView_OnDelete(object sender, TreeView.CopyEventArgs args)
+		private void TreeView_OnDelete(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider, TreeViewMode mode)
 		{
 			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
 				Where(a => !a.Animation.IsLegacy).ToList();
@@ -156,7 +217,7 @@ namespace Tangerine.Panels
 				return;
 			}
 			Document.Current.History.DoTransaction(() => {
-				ClearSelection();
+				((TreeView)sender).ClearSelection();
 				TreeViewItem newSelected = null;
 				foreach (var item in animationItems) {
 					var parent = item.Parent;
@@ -170,7 +231,7 @@ namespace Tangerine.Panels
 						DeleteAnimators(animation.Id, animation.OwnerNode);
 					}
 					UnlinkSceneItem.Perform(item.SceneItem);
-					RebuildTreeView();
+					RebuildTreeView((TreeView)sender, provider, mode);
 				}
 				if (newSelected == null) {
 					NavigateToAnimation.Perform(Document.Current.Container.DefaultAnimation);
@@ -196,7 +257,7 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args)
+		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args, TreeViewItemProvider provider, TreeViewMode mode)
 		{
 			var data = Clipboard.Text;
 			if (!string.IsNullOrEmpty(data)) {
@@ -204,8 +265,8 @@ namespace Tangerine.Panels
 					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
 					if (args.Parent is CommonTreeViewItem parent && parent.SceneItem.GetNode() != null) {
-						RebuildTreeView();
-						ClearSelection();
+						RebuildTreeView((TreeView)sender, provider, mode);
+						((TreeView)sender).ClearSelection();
 						var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 						foreach (var animation in container.Animations.ToList()) {
 							container.Animations.Remove(animation);
@@ -217,7 +278,7 @@ namespace Tangerine.Panels
 							}
 							var animationSceneItem = LinkSceneItem.Perform(
 								parent.SceneItem, index++, animation);
-							GetAnimationTreeViewItem(animationSceneItem).Selected = true;
+							provider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 						}
 					}
 				});
@@ -239,7 +300,7 @@ namespace Tangerine.Panels
 
 		private readonly List<TreeViewItem> nodeItems = new List<TreeViewItem>();
 
-		private void RebuildTreeView()
+		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider, TreeViewMode mode)
 		{
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
@@ -247,39 +308,47 @@ namespace Tangerine.Panels
 
 			nodeItems.Clear();
 			var filter = searchStringEditor.Text;
-			TraverseSceneTree(Document.Current.SceneTree);
+			TraverseSceneTree(mode == TreeViewMode.Hierarchy
+				? Document.Current.SceneTree
+				: Document.Current.GetSceneItemForObject(Document.Current.Container));
 
 			void TraverseSceneTree(Row sceneTree)
 			{
-				if (sceneTree.TryGetNode(out var node) && node.NeedSerializeAnimations() || node == Document.Current.Container) {
-					var nodeItem = GetNodeTreeViewItem(sceneTree);
+				if (
+					sceneTree.TryGetNode(out var node) &&
+					(mode == TreeViewMode.CurrentContainer || node.NeedSerializeAnimations())
+				) {
+					var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
 					foreach (var animationSceneItem in sceneTree.Rows) {
 						if (!animationSceneItem.TryGetAnimation(out var animation)) {
 							// Do not use LINQ trying to reduce GC pressure
 							continue;
 						}
-						var animationItem = GetAnimationTreeViewItem(animationSceneItem);
+						var animationItem = provider.GetAnimationTreeViewItem(animationSceneItem);
 						foreach (var markerSceneItem in animationSceneItem.Rows) {
 							if (markerSceneItem.TryGetMarker(out var marker) && Filter(marker.Id)) {
-								animationItem.Items.Add(GetMarkerTreeViewItem(markerSceneItem));
+								animationItem.Items.Add(provider.GetMarkerTreeViewItem(markerSceneItem));
 							}
 						}
 						if (animationItem.Items.Count > 0 || Filter(animationItem.Label)) {
 							nodeItem.Items.Add(animationItem);
 						}
 					}
-					if (nodeItem.Items.Count > 0 || node == Document.Current.Container) {
+					if (nodeItem.Items.Count > 0 || mode == TreeViewMode.CurrentContainer) {
 						nodeItems.Add(nodeItem);
 					}
 				}
-				foreach (var child in sceneTree.Rows) {
-					TraverseSceneTree(child);
+				if (mode == TreeViewMode.Hierarchy) {
+					foreach (var child in sceneTree.Rows) {
+						TraverseSceneTree(child);
+					}
 				}
 			}
 
 			bool Filter(string text)
 			{
-				return filter.Length == 0 || text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
+				return mode == TreeViewMode.CurrentContainer ||
+					filter.Length == 0 || text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
 			}
 
 			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
@@ -298,38 +367,6 @@ namespace Tangerine.Panels
 			}
 		}
 
-		public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
-		{
-			var c = sceneItem.Components.Get<TreeViewComponent>();
-			if (c == null) {
-				c = new TreeViewComponent();
-				c.ExpandedIfSearchActive = true;
-				c.ExpandedIfSearchInactive = true;
-				sceneItem.Components.Add(c);
-			}
-			c.TreeViewItem = c.TreeViewItem ?? new NodeTreeViewItem(sceneItem, c, sceneItem.GetNode(), isSearchActiveGetter);
-			return c.TreeViewItem;
-		}
-
-		public TreeViewItem GetAnimationTreeViewItem(Row sceneItem)
-		{
-			var c = sceneItem.Components.GetOrAdd<TreeViewComponent>();
-			c.TreeViewItem = c.TreeViewItem ?? new AnimationTreeViewItem(sceneItem, c, sceneItem.GetAnimation(), isSearchActiveGetter);
-			return c.TreeViewItem;
-		}
-
-		public TreeViewItem GetMarkerTreeViewItem(Row sceneItem)
-		{
-			var c = sceneItem.Components.GetOrAdd<TreeViewComponent>();
-			c.TreeViewItem = c.TreeViewItem ?? new MarkerTreeViewItem(sceneItem, c, sceneItem.GetMarker(), isSearchActiveGetter);
-			return c.TreeViewItem;
-		}
-
-		public void ClearSelection()
-		{
-			treeView.ClearSelection();
-		}
-
 		public void Attach()
 		{
 			panelWidget.PushNode(contentWidget);
@@ -340,7 +377,7 @@ namespace Tangerine.Panels
 			contentWidget.Unlink();
 		}
 
-		private class TreeViewComponent : Component
+		public class TreeViewItemState
 		{
 			public TreeViewItem TreeViewItem { get; set; }
 
@@ -366,14 +403,14 @@ namespace Tangerine.Panels
 		private class CommonTreeViewItem : TreeViewItem
 		{
 			private readonly Func<bool> isSearchActiveGetter;
-			private readonly TreeViewComponent treeViewComponent;
+			private readonly TreeViewItemState itemState;
 
 			public Row SceneItem { get; }
 
-			protected CommonTreeViewItem(Row sceneItem, TreeViewComponent treeViewComponent, Func<bool> isSearchActiveGetter)
+			protected CommonTreeViewItem(Row sceneItem, TreeViewItemState itemState, Func<bool> isSearchActiveGetter)
 			{
 				this.SceneItem = sceneItem;
-				this.treeViewComponent = treeViewComponent;
+				this.itemState = itemState;
 				this.isSearchActiveGetter = isSearchActiveGetter;
 			}
 
@@ -381,27 +418,27 @@ namespace Tangerine.Panels
 
 			public override bool Selected
 			{
-				get => treeViewComponent.Selected;
+				get => itemState.Selected;
 				set
 				{
 					if (Selected != value) {
 						Document.Current.History.DoTransaction(() => {
 							SetProperty.Perform(
-								treeViewComponent,
-								nameof(treeViewComponent.Selected), value, false);
+								itemState,
+								nameof(itemState.Selected), value, false);
 						});
 					}
 				}
 			}
 
-			public override int SelectionOrder => treeViewComponent.SelectionOrder;
+			public override int SelectionOrder => itemState.SelectionOrder;
 
 			public override bool Expanded
 			{
 				get
 				{
-					var c = treeViewComponent;
-					return isSearchActiveGetter() ? c.ExpandedIfSearchActive : c.ExpandedIfSearchInactive;
+					var s = itemState;
+					return isSearchActiveGetter() ? s.ExpandedIfSearchActive : s.ExpandedIfSearchInactive;
 				}
 
 				set
@@ -410,10 +447,10 @@ namespace Tangerine.Panels
 						Document.Current.History.DoTransaction(() => {
 							DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 							var propertyName = isSearchActiveGetter()
-								? nameof(treeViewComponent.ExpandedIfSearchActive)
-								: nameof(treeViewComponent.ExpandedIfSearchInactive);
+								? nameof(itemState.ExpandedIfSearchActive)
+								: nameof(itemState.ExpandedIfSearchInactive);
 							SetProperty.Perform(
-								treeViewComponent, propertyName, value, false);
+								itemState, propertyName, value, false);
 							DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 						});
 					}
@@ -430,8 +467,8 @@ namespace Tangerine.Panels
 		{
 			public Node Node { get; }
 
-			public NodeTreeViewItem(Row sceneItem, TreeViewComponent component, Node node, Func<bool> isSearchActiveGetter)
-				: base(sceneItem, component, isSearchActiveGetter)
+			public NodeTreeViewItem(Row sceneItem, TreeViewItemState itemState, Node node, Func<bool> isSearchActiveGetter)
+				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Node = node;
 			}
@@ -489,8 +526,8 @@ namespace Tangerine.Panels
 			}
 
 			public AnimationTreeViewItem(
-				Row sceneItem, TreeViewComponent component, Animation animation, Func<bool> isSearchActiveGetter)
-				: base(sceneItem, component, isSearchActiveGetter)
+				Row sceneItem, TreeViewItemState itemState, Animation animation, Func<bool> isSearchActiveGetter)
+				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Animation = animation;
 			}
@@ -537,8 +574,8 @@ namespace Tangerine.Panels
 				}
 			}
 
-			public MarkerTreeViewItem(Row sceneItem, TreeViewComponent component, Marker marker, Func<bool> isSearchActiveGetter)
-				: base(sceneItem, component, isSearchActiveGetter)
+			public MarkerTreeViewItem(Row sceneItem, TreeViewItemState itemState, Marker marker, Func<bool> isSearchActiveGetter)
+				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Marker = marker;
 			}
@@ -570,13 +607,13 @@ namespace Tangerine.Panels
 			public const float IndentWidth = 20;
 
 			private readonly TreeViewItemPresentationOptions options;
-			private IAnimationsController controller;
+			private TreeViewItemProvider itemProvider;
 
 			public IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
 
-			public TreeViewPresentation(IAnimationsController controller, TreeViewItemPresentationOptions options)
+			public TreeViewPresentation(TreeViewItemProvider itemProvider, TreeViewItemPresentationOptions options)
 			{
-				this.controller = controller;
+				this.itemProvider = itemProvider;
 				this.options = options;
 				Processors = new List<ITreeViewItemPresentationProcessor> {
 					new CommonTreeViewItemPresentationProcessor(),
@@ -588,11 +625,11 @@ namespace Tangerine.Panels
 			{
 				switch (item){
 					case AnimationTreeViewItem _:
-						return new AnimationTreeViewItemPresentation(treeView, item, options, controller);
+						return new AnimationTreeViewItemPresentation(treeView, item, options, itemProvider);
 					case MarkerTreeViewItem _:
 						return new MarkerTreeViewItemPresentation(treeView, item, options);
 					case NodeTreeViewItem _:
-						return new NodeTreeViewItemPresentation(treeView, item, options, controller);
+						return new NodeTreeViewItemPresentation(treeView, item, options, itemProvider);
 					default:
 						throw new InvalidOperationException();
 				}
@@ -643,11 +680,13 @@ namespace Tangerine.Panels
 			public readonly ToolbarButton ExpandButton;
 			public readonly SimpleText Label;
 			public readonly Widget IndentationSpacer;
+			public readonly TreeView TreeView;
 			public Widget Widget { get; }
 
 			public CommonTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item, TreeViewItemPresentationOptions options)
 			{
+				TreeView = treeView;
 				Item = item;
 				Widget = new Widget {
 					MinMaxHeight = TimelineMetrics.DefaultRowHeight,
@@ -664,7 +703,7 @@ namespace Tangerine.Panels
 									Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground)
 								: Theme.Colors.WhiteBackground
 						);
-						HighlightLabel(Widget, Label, options.SearchStringGetter());
+						HighlightLabel(Widget, Label, options.SearchStringGetter?.Invoke());
 					})
 				};
 				Label = CreateLabel(treeView, Item);
@@ -781,29 +820,25 @@ namespace Tangerine.Panels
 
 		private class AnimationTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
-			private readonly IAnimationsController controller;
+			private readonly TreeViewItemProvider itemProvider;
 
 			public AnimationTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item,
 				TreeViewItemPresentationOptions options,
-				IAnimationsController controller)
+				TreeViewItemProvider itemProvider)
 				: base(treeView, item, options)
 			{
-				this.controller = controller;
+				this.itemProvider = itemProvider;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			}
 
 			private void ShowContextMenu()
 			{
 				if (!Item.Selected) {
-					controller.ClearSelection();
+					TreeView.ClearSelection();
 					Item.Selected = true;
 				}
-				var menu = new Menu();
-				menu.Add(Command.Cut);
-				menu.Add(Command.Copy);
-				menu.Add(Command.Paste);
-				menu.Add(Command.Delete);
+				var menu = new Menu { Command.Cut, Command.Copy, Command.Paste, Command.Delete };
 				menu.Popup();
 			}
 
@@ -859,20 +894,20 @@ namespace Tangerine.Panels
 
 		private class NodeTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
-			private readonly IAnimationsController controller;
+			private readonly TreeViewItemProvider itemProvider;
 
 			public NodeTreeViewItemPresentation(TreeView treeView, TreeViewItem item,
 				TreeViewItemPresentationOptions options,
-				IAnimationsController controller)
+				TreeViewItemProvider itemProvider)
 				: base(treeView, item, options)
 			{
-				this.controller = controller;
+				this.itemProvider = itemProvider;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			}
 
 			private void ShowContextMenu()
 			{
-				controller.ClearSelection();
+				TreeView.ClearSelection();
 				Item.Selected = true;
 				var menu = new Menu();
 				var node = ((INodeTreeViewItem)Item).Node;
@@ -890,9 +925,9 @@ namespace Tangerine.Panels
 							{ Id = GenerateAnimationId(node, "NewAnimation"), IsCompound = compound };
 						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
 						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, 0, animation);
-						controller.ClearSelection();
-						controller.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
-						controller.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
+						TreeView.ClearSelection();
+						itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
+						itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 						if (compound) {
 							var track = new AnimationTrack { Id = "Track1" };
 							var animationTrackSceneItem = LinkSceneItem.Perform(animationSceneItem, 0,
@@ -908,9 +943,9 @@ namespace Tangerine.Panels
 						var animation = new Animation { Id = Animation.ZeroPoseId };
 						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
 						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, 0, animation);
-						controller.ClearSelection();
-						controller.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
-						controller.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
+						TreeView.ClearSelection();
+						itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
+						itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 						foreach (var a in node.Descendants.SelectMany(n => n.Animators).ToList()) {
 							var (propertyData, animable, index) =
 								AnimationUtils.GetPropertyByPath(a.Owner, a.TargetPropertyPath);
