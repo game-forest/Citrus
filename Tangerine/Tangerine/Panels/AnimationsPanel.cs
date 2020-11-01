@@ -569,6 +569,7 @@ namespace Tangerine.Panels
 						Document.Current.History.DoTransaction(() => {
 							NavigateToAnimation.Perform(Marker.Owner);
 							SetCurrentColumn.Perform(Marker.Frame);
+							CenterTimelineOnCurrentColumn.Perform();
 						});
 					}
 				}
