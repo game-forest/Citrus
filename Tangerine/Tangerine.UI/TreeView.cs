@@ -127,6 +127,12 @@ namespace Tangerine.UI
 	{
 		public bool HandleCommands { get; set; } = true;
 		public bool ShowRoot { get; set; } = true;
+
+		/// <summary>
+		/// Specifies whether a TreeViewItem will be activated immediately after clicking on it.
+		/// Otherwise it will be activated on double click or pressing enter key.
+		/// </summary>
+		public bool ActivateOnSelect { get; set; }
 	}
 
 	public class TreeView
@@ -223,13 +229,15 @@ namespace Tangerine.UI
 			var scrollContent = scrollView.Content;
 			scrollContent.HitTestTarget = true;
 			scrollContent.FocusScope = new KeyboardFocusScope(scrollContent);
-			scrollContent.Gestures.Add(new DoubleClickGesture(() => {
-				var item = GetItemUnderMouse();
-				if (item != null) {
-					SelectItem(item);
-					RaiseActivated(item, ActivationMethod.Mouse);
-				}
-			}));
+			if (!options.ActivateOnSelect) {
+				scrollContent.Gestures.Add(new DoubleClickGesture(() => {
+					var item = GetItemUnderMouse();
+					if (item != null) {
+						SelectItem(item, activateIfNeeded: false);
+						RaiseActivated(item, ActivationMethod.Mouse);
+					}
+				}));
+			}
 			var dg = new DragGesture(0, DragDirection.Vertical);
 			var dragCursorPresenter = new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
@@ -248,7 +256,7 @@ namespace Tangerine.UI
 				}
 				if (scrollContent.Input.IsKeyPressed(toggleSelectionModificator)) {
 					itemSelectedAtDragBegin = true;
-					SelectItem(itemUnderMouse, !itemUnderMouse.Selected, false);
+					SelectItem(itemUnderMouse, !itemUnderMouse.Selected, false, activateIfNeeded: false);
 				} else if (scrollContent.Input.IsKeyPressed(Key.Shift)) {
 					itemSelectedAtDragBegin = true;
 					SelectRange(itemUnderMouse);
@@ -386,19 +394,23 @@ namespace Tangerine.UI
 			var focused = GetRecentlySelected();
 			if (focused != null) {
 				if (!focused.Selected) {
-					SelectItem(focused);
+					SelectItem(focused, activateIfNeeded: false);
 				}
 				RaiseActivated(focused, ActivationMethod.Keyboard);
 			}
 		}
 
-		public void SelectItem(TreeViewItem item, bool select = true, bool clearSelection = true)
+		public void SelectItem(TreeViewItem item,
+			bool select = true, bool clearSelection = true, bool activateIfNeeded = true)
 		{
 			if (clearSelection) {
 				ClearSelection();
 			}
 			rangeSelectionFirstItem = null;
 			item.Selected = select;
+			if (options.ActivateOnSelect && activateIfNeeded) {
+				ActivateItem();
+			}
 			ScrollToItem(item, instantly: true);
 			Invalidate();
 		}
@@ -492,7 +504,7 @@ namespace Tangerine.UI
 			var focused = GetRecentlySelected();
 			if (focused != null) {
 				if (!focused.Selected) {
-					SelectItem(focused);
+					SelectItem(focused, activateIfNeeded: false);
 				}
 				focused.Expanded = !focused.Expanded;
 			}
@@ -555,7 +567,7 @@ namespace Tangerine.UI
 						});
 					}
 				}
-				if (Commands.Activate.Consume()) {
+				if (!options.ActivateOnSelect && Commands.Activate.Consume()) {
 					ActivateItem();
 				}
 				if (Commands.SelectNext.Consume()) {

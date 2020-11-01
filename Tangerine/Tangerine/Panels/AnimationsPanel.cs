@@ -130,13 +130,28 @@ namespace Tangerine.Panels
 			TreeViewItemPresentationOptions presentationOptions, TreeViewMode mode)
 		{
 			var presentation = new TreeViewPresentation(provider, presentationOptions);
-			var treeView = new TreeView(scrollView, presentation, new TreeViewOptions{ ShowRoot = false });
+			var treeView = new TreeView(scrollView, presentation,
+				new TreeViewOptions { ShowRoot = false, ActivateOnSelect = true });
 			treeView.OnDragBegin += TreeView_OnDragBegin;
 			treeView.OnDragEnd += TreeView_OnDragEnd;
 			treeView.OnCopy += TreeView_OnCopy;
 			treeView.OnCut += (s, e) => TreeView_OnCut(s, e, provider, mode);
 			treeView.OnDelete += (s, e) => TreeView_OnDelete(s, e, provider, mode);
 			treeView.OnPaste += (s, e) => TreeView_OnPaste(s, e, provider, mode);
+			treeView.OnActivateItem += (s, e) => {
+				switch (e.Item) {
+					case AnimationTreeViewItem ai:
+						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(ai.Animation));
+						break;
+					case MarkerTreeViewItem mi:
+						Document.Current.History.DoTransaction(() => {
+							NavigateToAnimation.Perform(mi.Marker.Owner);
+							SetCurrentColumn.Perform(mi.Marker.Frame);
+							CenterTimelineOnCurrentColumn.Perform();
+						});
+						break;
+				}
+			};
 			contentWidget.AddChangeWatcher(() => Document.Current?.SceneTreeVersion ?? 0,
 				_ => RebuildTreeView(treeView, provider, mode));
 			contentWidget.AddChangeWatcher(() => Document.Current.Container,
@@ -512,19 +527,6 @@ namespace Tangerine.Panels
 		{
 			public Animation Animation { get; }
 
-			public override bool Selected
-			{
-				get => base.Selected;
-				set
-				{
-					base.Selected = value;
-					Window.Current.Invalidate();
-					if (value) {
-						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(Animation));
-					}
-				}
-			}
-
 			public AnimationTreeViewItem(
 				Row sceneItem, TreeViewItemState itemState, Animation animation, Func<bool> isSearchActiveGetter)
 				: base(sceneItem, itemState, isSearchActiveGetter)
@@ -557,23 +559,6 @@ namespace Tangerine.Panels
 		private class MarkerTreeViewItem : CommonTreeViewItem
 		{
 			public Marker Marker { get; }
-
-			public override bool Selected
-			{
-				get => base.Selected;
-				set
-				{
-					base.Selected = value;
-					Window.Current.Invalidate();
-					if (value) {
-						Document.Current.History.DoTransaction(() => {
-							NavigateToAnimation.Perform(Marker.Owner);
-							SetCurrentColumn.Perform(Marker.Frame);
-							CenterTimelineOnCurrentColumn.Perform();
-						});
-					}
-				}
-			}
 
 			public MarkerTreeViewItem(Row sceneItem, TreeViewItemState itemState, Marker marker, Func<bool> isSearchActiveGetter)
 				: base(sceneItem, itemState, isSearchActiveGetter)
