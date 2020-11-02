@@ -617,7 +617,7 @@ namespace Tangerine.UI
 			return null;
 		}
 
-		private void ScrollToItem(TreeViewItem item, bool instantly)
+		public void ScrollToItem(TreeViewItem item, bool instantly)
 		{
 			var itemTop = item.Presentation.Widget.Y;
 			var itemBottom = item.Presentation.Widget.Y + item.Presentation.Widget.Height;

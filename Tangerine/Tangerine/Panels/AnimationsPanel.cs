@@ -152,18 +152,38 @@ namespace Tangerine.Panels
 						break;
 				}
 			};
-			contentWidget.AddChangeWatcher(() => Document.Current?.SceneTreeVersion ?? 0,
-				_ => RebuildTreeView(treeView, provider, mode));
-			contentWidget.AddChangeWatcher(() => Document.Current.Container,
-				_ => RebuildTreeView(treeView, provider, mode));
-			RebuildTreeView(treeView, provider, mode);
 			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
-				if (treeView.RootItem?.Items.Count > 0){
+				if (treeView.RootItem?.Items.Count > 0) {
 					w.PrepareRendererState();
 					Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition,
 						Theme.Colors.WhiteBackground);
 				}
 			}));
+			contentWidget.AddChangeWatcher(
+				() => (
+					Document.Current?.SceneTreeVersion ?? 0,
+					Document.Current?.Container),
+				_ => RebuildTreeView(treeView, provider, mode));
+			// Expand current animation container on animation change
+			TreeViewItem currentAnimationContainerItem = null;
+			var currentAnimationContainerItemExpanded = false;
+			contentWidget.AddChangeWatcher(
+				() => Document.Current?.Animation,
+				_ => {
+					if (currentAnimationContainerItem?.Parent != null) {
+						currentAnimationContainerItem.Expanded = currentAnimationContainerItemExpanded;
+					}
+					var i = Document.Current.GetSceneItemForObject(Document.Current.Animation);
+					var animationItem = provider.GetAnimationTreeViewItem(i);
+					currentAnimationContainerItem = animationItem.Parent;
+					if (currentAnimationContainerItem != null) {
+						currentAnimationContainerItemExpanded = currentAnimationContainerItem.Expanded;
+						currentAnimationContainerItem.Expanded = true;
+					}
+					treeView.Refresh();
+					treeView.ScrollToItem(animationItem, true);
+				});
+			RebuildTreeView(treeView, provider, mode);
 			return treeView;
 		}
 
@@ -410,7 +430,6 @@ namespace Tangerine.Panels
 			private static int selectionCounter = 1;
 
 			public int SelectionOrder { get; private set; }
-
 			public bool ExpandedIfSearchInactive { get; set; }
 			public bool ExpandedIfSearchActive { get; set; }
 		}
