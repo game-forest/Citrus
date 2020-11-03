@@ -62,14 +62,17 @@ namespace Tangerine.Common.FilesDropHandlers
 		private void CreateSpriteAnimatedImage(List<string> files)
 		{
 			onBeforeDrop?.Invoke();
-			var assetPaths = new List<string>();
-			foreach (var file in files) {
-				if (Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out _)) {
-					assetPaths.Add(assetPath);
+			using (Document.Current.History.BeginTransaction()) {
+				var assetPaths = new List<string>();
+				foreach (var file in files) {
+					if (Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out _)) {
+						assetPaths.Add(assetPath);
+					}
 				}
+				var node = CreateAnimationSequenceImageFromAssets.Perform(assetPaths);
+				postProcessNode?.Invoke(node);
+				Document.Current.History.CommitTransaction();
 			}
-			var node = CreateAnimationSequenceImageFromAssets.Perform(assetPaths);
-			postProcessNode?.Invoke(node);
 		}
 
 		private void CreateImageTypeInstance(Type type, List<string> files)

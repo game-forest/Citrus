@@ -694,6 +694,7 @@ namespace Tangerine.Core.Operations
 							}
 						);
 					}
+					SetProperty.Perform(node, nameof(Widget.Texture), first);
 					SetProperty.Perform(node, nameof(Widget.Size), (Vector2)first.ImageSize);
 				}
 				Document.Current.History.CommitTransaction();
