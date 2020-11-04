@@ -108,7 +108,9 @@ namespace Lime
 		{
 			if (exclusiveChannels.Contains(channel)) {
 				if (newState == AudioChannelState.Stopped || newState == AudioChannelState.Paused) {
-					OnExclusiveChannelStoppedOrPaused(channel);
+					if (previousState != AudioChannelState.Initial) {
+						OnExclusiveChannelStoppedOrPaused(channel);
+					}
 				} else if (newState == AudioChannelState.Playing) {
 					OnExclusiveChannelPlayed(channel);
 				}
