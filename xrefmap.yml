@@ -28219,101 +28219,6 @@ references:
   isSpec: "True"
   fullName: Lime.IntAnimator.InterpolateSplined
   nameWithType: IntAnimator.InterpolateSplined
-- uid: Lime.InternalPersistence
-  name: InternalPersistence
-  href: api/Lime.InternalPersistence.html
-  commentId: T:Lime.InternalPersistence
-  fullName: Lime.InternalPersistence
-  nameWithType: InternalPersistence
-- uid: Lime.InternalPersistence.#ctor
-  name: InternalPersistence()
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence__ctor
-  commentId: M:Lime.InternalPersistence.#ctor
-  fullName: Lime.InternalPersistence.InternalPersistence()
-  nameWithType: InternalPersistence.InternalPersistence()
-- uid: Lime.InternalPersistence.#ctor(Yuzu.CommonOptions,Yuzu.Json.JsonSerializeOptions)
-  name: InternalPersistence(CommonOptions, JsonSerializeOptions)
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence__ctor_Yuzu_CommonOptions_Yuzu_Json_JsonSerializeOptions_
-  commentId: M:Lime.InternalPersistence.#ctor(Yuzu.CommonOptions,Yuzu.Json.JsonSerializeOptions)
-  fullName: Lime.InternalPersistence.InternalPersistence(Yuzu.CommonOptions, Yuzu.Json.JsonSerializeOptions)
-  nameWithType: InternalPersistence.InternalPersistence(CommonOptions, JsonSerializeOptions)
-- uid: Lime.InternalPersistence.#ctor*
-  name: InternalPersistence
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence__ctor_
-  commentId: Overload:Lime.InternalPersistence.#ctor
-  isSpec: "True"
-  fullName: Lime.InternalPersistence.InternalPersistence
-  nameWithType: InternalPersistence.InternalPersistence
-- uid: Lime.InternalPersistence.Instance
-  name: Instance
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_Instance
-  commentId: P:Lime.InternalPersistence.Instance
-  fullName: Lime.InternalPersistence.Instance
-  nameWithType: InternalPersistence.Instance
-- uid: Lime.InternalPersistence.Instance*
-  name: Instance
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_Instance_
-  commentId: Overload:Lime.InternalPersistence.Instance
-  isSpec: "True"
-  fullName: Lime.InternalPersistence.Instance
-  nameWithType: InternalPersistence.Instance
-- uid: Lime.InternalPersistence.ReadObject*
-  name: ReadObject
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_ReadObject_
-  commentId: Overload:Lime.InternalPersistence.ReadObject
-  isSpec: "True"
-  fullName: Lime.InternalPersistence.ReadObject
-  nameWithType: InternalPersistence.ReadObject
-- uid: Lime.InternalPersistence.ReadObject``1(System.String,System.IO.Stream,System.Object)
-  name: ReadObject<T>(String, Stream, Object)
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_ReadObject__1_System_String_System_IO_Stream_System_Object_
-  commentId: M:Lime.InternalPersistence.ReadObject``1(System.String,System.IO.Stream,System.Object)
-  name.vb: ReadObject(Of T)(String, Stream, Object)
-  fullName: Lime.InternalPersistence.ReadObject<T>(System.String, System.IO.Stream, System.Object)
-  fullName.vb: Lime.InternalPersistence.ReadObject(Of T)(System.String, System.IO.Stream, System.Object)
-  nameWithType: InternalPersistence.ReadObject<T>(String, Stream, Object)
-  nameWithType.vb: InternalPersistence.ReadObject(Of T)(String, Stream, Object)
-- uid: Lime.InternalPersistence.ReadObjectFromBundle*
-  name: ReadObjectFromBundle
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_ReadObjectFromBundle_
-  commentId: Overload:Lime.InternalPersistence.ReadObjectFromBundle
-  isSpec: "True"
-  fullName: Lime.InternalPersistence.ReadObjectFromBundle
-  nameWithType: InternalPersistence.ReadObjectFromBundle
-- uid: Lime.InternalPersistence.ReadObjectFromBundle``1(Lime.AssetBundle,System.String,System.Object)
-  name: ReadObjectFromBundle<T>(AssetBundle, String, Object)
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_ReadObjectFromBundle__1_Lime_AssetBundle_System_String_System_Object_
-  commentId: M:Lime.InternalPersistence.ReadObjectFromBundle``1(Lime.AssetBundle,System.String,System.Object)
-  name.vb: ReadObjectFromBundle(Of T)(AssetBundle, String, Object)
-  fullName: Lime.InternalPersistence.ReadObjectFromBundle<T>(Lime.AssetBundle, System.String, System.Object)
-  fullName.vb: Lime.InternalPersistence.ReadObjectFromBundle(Of T)(Lime.AssetBundle, System.String, System.Object)
-  nameWithType: InternalPersistence.ReadObjectFromBundle<T>(AssetBundle, String, Object)
-  nameWithType.vb: InternalPersistence.ReadObjectFromBundle(Of T)(AssetBundle, String, Object)
-- uid: Lime.InternalPersistence.WriteObject*
-  name: WriteObject
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_WriteObject_
-  commentId: Overload:Lime.InternalPersistence.WriteObject
-  isSpec: "True"
-  fullName: Lime.InternalPersistence.WriteObject
-  nameWithType: InternalPersistence.WriteObject
-- uid: Lime.InternalPersistence.WriteObject``1(System.String,System.IO.Stream,``0,Lime.Persistence.Format)
-  name: WriteObject<T>(String, Stream, T, Persistence.Format)
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_WriteObject__1_System_String_System_IO_Stream___0_Lime_Persistence_Format_
-  commentId: M:Lime.InternalPersistence.WriteObject``1(System.String,System.IO.Stream,``0,Lime.Persistence.Format)
-  name.vb: WriteObject(Of T)(String, Stream, T, Persistence.Format)
-  fullName: Lime.InternalPersistence.WriteObject<T>(System.String, System.IO.Stream, T, Lime.Persistence.Format)
-  fullName.vb: Lime.InternalPersistence.WriteObject(Of T)(System.String, System.IO.Stream, T, Lime.Persistence.Format)
-  nameWithType: InternalPersistence.WriteObject<T>(String, Stream, T, Persistence.Format)
-  nameWithType.vb: InternalPersistence.WriteObject(Of T)(String, Stream, T, Persistence.Format)
-- uid: Lime.InternalPersistence.WriteObject``1(System.String,System.IO.Stream,``0,Yuzu.AbstractSerializer)
-  name: WriteObject<T>(String, Stream, T, AbstractSerializer)
-  href: api/Lime.InternalPersistence.html#Lime_InternalPersistence_WriteObject__1_System_String_System_IO_Stream___0_Yuzu_AbstractSerializer_
-  commentId: M:Lime.InternalPersistence.WriteObject``1(System.String,System.IO.Stream,``0,Yuzu.AbstractSerializer)
-  name.vb: WriteObject(Of T)(String, Stream, T, AbstractSerializer)
-  fullName: Lime.InternalPersistence.WriteObject<T>(System.String, System.IO.Stream, T, Yuzu.AbstractSerializer)
-  fullName.vb: Lime.InternalPersistence.WriteObject(Of T)(System.String, System.IO.Stream, T, Yuzu.AbstractSerializer)
-  nameWithType: InternalPersistence.WriteObject<T>(String, Stream, T, AbstractSerializer)
-  nameWithType.vb: InternalPersistence.WriteObject(Of T)(String, Stream, T, AbstractSerializer)
 - uid: Lime.IntRectangle
   name: IntRectangle
   href: api/Lime.IntRectangle.html
@@ -39168,12 +39073,12 @@ references:
   commentId: T:Lime.Model3D
   fullName: Lime.Model3D
   nameWithType: Model3D
-- uid: Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence)
-  name: LoadExternalScenes(InternalPersistence)
-  href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes_Lime_InternalPersistence_
-  commentId: M:Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence)
-  fullName: Lime.Model3D.LoadExternalScenes(Lime.InternalPersistence)
-  nameWithType: Model3D.LoadExternalScenes(InternalPersistence)
+- uid: Lime.Model3D.LoadExternalScenes
+  name: LoadExternalScenes()
+  href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes
+  commentId: M:Lime.Model3D.LoadExternalScenes
+  fullName: Lime.Model3D.LoadExternalScenes()
+  nameWithType: Model3D.LoadExternalScenes()
 - uid: Lime.Model3D.LoadExternalScenes*
   name: LoadExternalScenes
   href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes_
@@ -41478,41 +41383,6 @@ references:
   commentId: F:Lime.Node.CreatedCount
   fullName: Lime.Node.CreatedCount
   nameWithType: Node.CreatedCount
-- uid: Lime.Node.CreateFromAssetBundle(System.String,Lime.Node,Lime.InternalPersistence,System.Boolean)
-  name: CreateFromAssetBundle(String, Node, InternalPersistence, Boolean)
-  href: api/Lime.Node.html#Lime_Node_CreateFromAssetBundle_System_String_Lime_Node_Lime_InternalPersistence_System_Boolean_
-  commentId: M:Lime.Node.CreateFromAssetBundle(System.String,Lime.Node,Lime.InternalPersistence,System.Boolean)
-  fullName: Lime.Node.CreateFromAssetBundle(System.String, Lime.Node, Lime.InternalPersistence, System.Boolean)
-  nameWithType: Node.CreateFromAssetBundle(String, Node, InternalPersistence, Boolean)
-- uid: Lime.Node.CreateFromAssetBundle*
-  name: CreateFromAssetBundle
-  href: api/Lime.Node.html#Lime_Node_CreateFromAssetBundle_
-  commentId: Overload:Lime.Node.CreateFromAssetBundle
-  isSpec: "True"
-  fullName: Lime.Node.CreateFromAssetBundle
-  nameWithType: Node.CreateFromAssetBundle
-- uid: Lime.Node.CreateFromAssetBundle``1(System.String,``0,Lime.InternalPersistence,System.Boolean)
-  name: CreateFromAssetBundle<T>(String, T, InternalPersistence, Boolean)
-  href: api/Lime.Node.html#Lime_Node_CreateFromAssetBundle__1_System_String___0_Lime_InternalPersistence_System_Boolean_
-  commentId: M:Lime.Node.CreateFromAssetBundle``1(System.String,``0,Lime.InternalPersistence,System.Boolean)
-  name.vb: CreateFromAssetBundle(Of T)(String, T, InternalPersistence, Boolean)
-  fullName: Lime.Node.CreateFromAssetBundle<T>(System.String, T, Lime.InternalPersistence, System.Boolean)
-  fullName.vb: Lime.Node.CreateFromAssetBundle(Of T)(System.String, T, Lime.InternalPersistence, System.Boolean)
-  nameWithType: Node.CreateFromAssetBundle<T>(String, T, InternalPersistence, Boolean)
-  nameWithType.vb: Node.CreateFromAssetBundle(Of T)(String, T, InternalPersistence, Boolean)
-- uid: Lime.Node.CreateFromStream(System.String,Lime.Node,Lime.InternalPersistence,System.IO.Stream,System.Boolean)
-  name: CreateFromStream(String, Node, InternalPersistence, Stream, Boolean)
-  href: api/Lime.Node.html#Lime_Node_CreateFromStream_System_String_Lime_Node_Lime_InternalPersistence_System_IO_Stream_System_Boolean_
-  commentId: M:Lime.Node.CreateFromStream(System.String,Lime.Node,Lime.InternalPersistence,System.IO.Stream,System.Boolean)
-  fullName: Lime.Node.CreateFromStream(System.String, Lime.Node, Lime.InternalPersistence, System.IO.Stream, System.Boolean)
-  nameWithType: Node.CreateFromStream(String, Node, InternalPersistence, Stream, Boolean)
-- uid: Lime.Node.CreateFromStream*
-  name: CreateFromStream
-  href: api/Lime.Node.html#Lime_Node_CreateFromStream_
-  commentId: Overload:Lime.Node.CreateFromStream
-  isSpec: "True"
-  fullName: Lime.Node.CreateFromStream
-  nameWithType: Node.CreateFromStream
 - uid: Lime.Node.CurrentAnimation
   name: CurrentAnimation
   href: api/Lime.Node.html#Lime_Node_CurrentAnimation
@@ -42034,12 +41904,40 @@ references:
   fullName: Lime.Node.Lime.IAnimationHost.OnAnimatorCollectionChanged
   nameWithType: Node.IAnimationHost.OnAnimatorCollectionChanged
   nameWithType.vb: Node.Lime.IAnimationHost.OnAnimatorCollectionChanged
-- uid: Lime.Node.LoadExternalScenes(Lime.InternalPersistence)
-  name: LoadExternalScenes(InternalPersistence)
-  href: api/Lime.Node.html#Lime_Node_LoadExternalScenes_Lime_InternalPersistence_
-  commentId: M:Lime.Node.LoadExternalScenes(Lime.InternalPersistence)
-  fullName: Lime.Node.LoadExternalScenes(Lime.InternalPersistence)
-  nameWithType: Node.LoadExternalScenes(InternalPersistence)
+- uid: Lime.Node.Load(System.IO.Stream,System.String,Lime.Node,System.Boolean)
+  name: Load(Stream, String, Node, Boolean)
+  href: api/Lime.Node.html#Lime_Node_Load_System_IO_Stream_System_String_Lime_Node_System_Boolean_
+  commentId: M:Lime.Node.Load(System.IO.Stream,System.String,Lime.Node,System.Boolean)
+  fullName: Lime.Node.Load(System.IO.Stream, System.String, Lime.Node, System.Boolean)
+  nameWithType: Node.Load(Stream, String, Node, Boolean)
+- uid: Lime.Node.Load(System.String,Lime.Node,System.Boolean)
+  name: Load(String, Node, Boolean)
+  href: api/Lime.Node.html#Lime_Node_Load_System_String_Lime_Node_System_Boolean_
+  commentId: M:Lime.Node.Load(System.String,Lime.Node,System.Boolean)
+  fullName: Lime.Node.Load(System.String, Lime.Node, System.Boolean)
+  nameWithType: Node.Load(String, Node, Boolean)
+- uid: Lime.Node.Load*
+  name: Load
+  href: api/Lime.Node.html#Lime_Node_Load_
+  commentId: Overload:Lime.Node.Load
+  isSpec: "True"
+  fullName: Lime.Node.Load
+  nameWithType: Node.Load
+- uid: Lime.Node.Load``1(System.String,``0,System.Boolean)
+  name: Load<T>(String, T, Boolean)
+  href: api/Lime.Node.html#Lime_Node_Load__1_System_String___0_System_Boolean_
+  commentId: M:Lime.Node.Load``1(System.String,``0,System.Boolean)
+  name.vb: Load(Of T)(String, T, Boolean)
+  fullName: Lime.Node.Load<T>(System.String, T, System.Boolean)
+  fullName.vb: Lime.Node.Load(Of T)(System.String, T, System.Boolean)
+  nameWithType: Node.Load<T>(String, T, Boolean)
+  nameWithType.vb: Node.Load(Of T)(String, T, Boolean)
+- uid: Lime.Node.LoadExternalScenes
+  name: LoadExternalScenes()
+  href: api/Lime.Node.html#Lime_Node_LoadExternalScenes
+  commentId: M:Lime.Node.LoadExternalScenes
+  fullName: Lime.Node.LoadExternalScenes()
+  nameWithType: Node.LoadExternalScenes()
 - uid: Lime.Node.LoadExternalScenes*
   name: LoadExternalScenes
   href: api/Lime.Node.html#Lime_Node_LoadExternalScenes_
@@ -42401,6 +42299,25 @@ references:
   isSpec: "True"
   fullName: Lime.Node.SameOrDescendantOf
   nameWithType: Node.SameOrDescendantOf
+- uid: Lime.Node.Save(System.String,Lime.Persistence.Format)
+  name: Save(String, Persistence.Format)
+  href: api/Lime.Node.html#Lime_Node_Save_System_String_Lime_Persistence_Format_
+  commentId: M:Lime.Node.Save(System.String,Lime.Persistence.Format)
+  fullName: Lime.Node.Save(System.String, Lime.Persistence.Format)
+  nameWithType: Node.Save(String, Persistence.Format)
+- uid: Lime.Node.Save(System.String,System.IO.Stream,Lime.Persistence.Format)
+  name: Save(String, Stream, Persistence.Format)
+  href: api/Lime.Node.html#Lime_Node_Save_System_String_System_IO_Stream_Lime_Persistence_Format_
+  commentId: M:Lime.Node.Save(System.String,System.IO.Stream,Lime.Persistence.Format)
+  fullName: Lime.Node.Save(System.String, System.IO.Stream, Lime.Persistence.Format)
+  nameWithType: Node.Save(String, Stream, Persistence.Format)
+- uid: Lime.Node.Save*
+  name: Save
+  href: api/Lime.Node.html#Lime_Node_Save_
+  commentId: Overload:Lime.Node.Save
+  isSpec: "True"
+  fullName: Lime.Node.Save
+  nameWithType: Node.Save
 - uid: Lime.Node.SceneLoaded
   name: SceneLoaded
   href: api/Lime.Node.html#Lime_Node_SceneLoaded
@@ -47810,12 +47727,6 @@ references:
   commentId: F:Lime.Persistence.ClonerFactory
   fullName: Lime.Persistence.ClonerFactory
   nameWithType: Persistence.ClonerFactory
-- uid: Lime.Persistence.DefaultYuzuCommonOptions
-  name: DefaultYuzuCommonOptions
-  href: api/Lime.Persistence.html#Lime_Persistence_DefaultYuzuCommonOptions
-  commentId: F:Lime.Persistence.DefaultYuzuCommonOptions
-  fullName: Lime.Persistence.DefaultYuzuCommonOptions
-  nameWithType: Persistence.DefaultYuzuCommonOptions
 - uid: Lime.Persistence.DeserializerBuilder
   name: Persistence.DeserializerBuilder
   href: api/Lime.Persistence.DeserializerBuilder.html
