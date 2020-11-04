@@ -101,7 +101,7 @@ namespace Tangerine.Core.Operations
 					animation.Tracks.Add(Cloner.Clone(t));
 				}
 			}
-			TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
 		}
 
 		private static void CloneFolder(Frame container, Row item, int indexDelta)
@@ -150,7 +150,7 @@ namespace Tangerine.Core.Operations
 			if (!CanPaste(stream, parent)) {
 				return false;
 			}
-			var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
 			container.LoadExternalScenes();
 			foreach (var a in container.Animators) {
 				a.AnimationId = Document.Current.AnimationId;
@@ -178,7 +178,7 @@ namespace Tangerine.Core.Operations
 
 		public static bool CanPaste(MemoryStream stream, Row parent)
 		{
-			var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
 			foreach (var a in container.Animators) {
 				a.AnimationId = Document.Current.AnimationId;
 			}

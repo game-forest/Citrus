@@ -141,7 +141,7 @@ namespace Kumquat
 			}
 			var sceneToFrameTree = new List<Tuple<string, ParsedFramesTree>>();
 			foreach (var scenePath in scenesForProcessing) {
-				var scene = Node.CreateFromAssetBundle(Path.ChangeExtension(scenePath, null));
+				var scene = Node.Load(Path.ChangeExtension(scenePath, null));
 				var bundleName = sceneToBundleMap[scenePath];
 				var bundleSourcePath = $"{scenesPath}/{bundleName}";
 				if (!Directory.Exists(bundleSourcePath)) {
@@ -190,7 +190,7 @@ namespace Kumquat
 				}
 			}
 			foreach (var scene in reprocessScenes) {
-				GenerateParsedFramesTree(scene, Node.CreateFromAssetBundle(scene));
+				GenerateParsedFramesTree(scene, Node.Load(scene));
 			}
 			GenerateCommonParts(scenesPath);
 			UpdateCommonPartsCache();

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -300,6 +300,7 @@
     <Compile Include="Source\AssetBundle\FileInfo.cs" />
     <Compile Include="Source\AssetBundle\PackedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\UnpackedAssetBundle.cs" />
+    <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
     <Compile Include="Source\Audio\AudioSystem.cs" />
     <Compile Include="Source\Audio\IAudioChannel.cs" />
     <Compile Include="Source\Audio\OpenAL\ALMOB\OpenAL.cs" />
@@ -314,11 +315,11 @@
     <Compile Include="Source\Audio\SerializableSample.cs" />
     <Compile Include="Source\Audio\Sound.cs" />
     <Compile Include="Source\BucketQueue.cs" />
-    <Compile Include="Source\Cloner.cs" />
     <Compile Include="Source\ComponentCollection.cs" />
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\Environment.cs" />
     <Compile Include="Source\Exception.cs" />
+    <Compile Include="Source\FriendAssemblies.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />
@@ -407,7 +408,6 @@
     <Compile Include="Source\Input\Key.cs" />
     <Compile Include="Source\Input\Shortcut.cs" />
     <Compile Include="Source\Input\SoftKeyboard.cs" />
-    <Compile Include="Source\InternalPersistence.cs" />
     <Compile Include="Source\Localization\Localization.cs" />
     <Compile Include="Source\Localization\LocalizationDictionary.cs" />
     <Compile Include="Source\Localization\LocalizationDictionaryTextSerializer.cs" />
@@ -420,7 +420,9 @@
     <Compile Include="Source\Optimizations\RenderOptimizer.cs" />
     <Compile Include="Source\Optimizations\RenderOptimizerHelpers.cs" />
     <Compile Include="Source\Optimizations\ViewProjector.cs" />
-    <Compile Include="Source\Persistence.cs" />
+    <Compile Include="Source\Persistence\Cloner.cs" />
+    <Compile Include="Source\Persistence\InternalPersistence.cs" />
+    <Compile Include="Source\Persistence\Persistence.cs" />
     <Compile Include="Source\Profilers\NodeProfiler.cs" />
     <Compile Include="Source\Profilers\NodeProfilerHelpers\ResultExporter.cs" />
     <Compile Include="Source\Profilers\NodeProfilerHelpers\UsageData.cs" />
@@ -494,6 +496,7 @@
     <Compile Include="Source\Widgets\Animation\IAnimable.cs" />
     <Compile Include="Source\Widgets\Animation\Keyframe.cs" />
     <Compile Include="Source\Widgets\Animation\TypedKeyframeList.cs" />
+    <Compile Include="Source\Widgets\Animesh\Animesh.cs" />
     <Compile Include="Source\Widgets\Animesh\ITopology.cs" />
     <Compile Include="Source\Widgets\Animesh\ITopologyPrimitive.cs" />
     <Compile Include="Source\Widgets\Audio.cs" />
@@ -601,7 +604,6 @@
     <Compile Include="Source\Widgets\ParticleModifier.cs" />
     <Compile Include="Source\Widgets\ParticlesMagnet.cs" />
     <Compile Include="Source\Widgets\PointObject.cs" />
-    <Compile Include="Source\Widgets\Animesh\Animesh.cs" />
     <Compile Include="Source\Widgets\Polyline.cs" />
     <Compile Include="Source\Widgets\Processors\AnimationProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\BehaviorSetupProcessor.cs" />
@@ -672,7 +674,6 @@
     <Compile Include="Source\Widgets\WindowWidget.cs" />
     <Compile Include="Source\YuzuGeneratedBinaryDeserializer.cs" />
     <Compile Include="Source\YuzuGeneratedCloners.cs" />
-    <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\3rdParty\OpenAL\OpenAL32.dll">

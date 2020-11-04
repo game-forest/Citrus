@@ -37,7 +37,7 @@ namespace Tangerine.Core
 
 		public void Add(IConsumer consumer) => consumers.Add(consumer);
 
-		protected override void Update(float delta)
+		protected internal override void Update(float delta)
 		{
 			foreach (var i in consumers) {
 				i.Consume();

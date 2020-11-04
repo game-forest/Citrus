@@ -6,8 +6,8 @@
     <ProjectGuid>{8799EA66-04E0-4075-95FE-BF0EC1BC88A1}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Tangerine.UI.FilesystemView.Mac</RootNamespace>
-    <AssemblyName>Tangerine.UI.FilesystemView.Mac</AssemblyName>
+    <RootNamespace>Tangerine.UI.FilesystemView</RootNamespace>
+    <AssemblyName>Tangerine.UI.FilesystemView</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>

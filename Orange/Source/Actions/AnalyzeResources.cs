@@ -58,7 +58,7 @@ namespace Orange
 			}
 			var savedAssetBundle = AssetBundle.Current;
 			try {
-				var aggregateBundle = 
+				var aggregateBundle =
 					new AggregateAssetBundle(
 					bundles.Select(
 						i => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, i))).ToArray());
@@ -74,7 +74,7 @@ namespace Orange
 				var usedImages = new HashSet<string>();
 				var usedSounds = new HashSet<string>();
 				foreach (var srcPath in AssetBundle.Current.EnumerateFiles(null, ".tan")) {
-					using (var scene = (Frame)Node.CreateFromAssetBundle(srcPath)) {
+					using (var scene = (Frame)Node.Load(srcPath)) {
 						foreach (var j in scene.Descendants) {
 							var checkTexture = new Action<SerializableTexture>((Lime.SerializableTexture t) => {
 								if (t == null) {

@@ -6,8 +6,8 @@ namespace Tangerine.Core
 {
 	public class TangerinePersistence
 	{
-		public static Lime.InternalPersistence Instance => threadLocalInstance.Value;
-		private static readonly ThreadLocal<Lime.InternalPersistence> threadLocalInstance = new ThreadLocal<Lime.InternalPersistence>(() => new Lime.InternalPersistence(
+		public static Lime.Persistence Instance => threadLocalInstance.Value;
+		private static readonly ThreadLocal<Lime.Persistence> threadLocalInstance = new ThreadLocal<Lime.Persistence>(() => new Lime.Persistence(
 			new CommonOptions {
 				TagMode = TagMode.Aliases,
 				AllowEmptyTypes = true,

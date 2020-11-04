@@ -13,7 +13,7 @@ using Yuzu.Json;
 
 namespace Lime
 {
-	public class InternalPersistence : Persistence
+	internal class InternalPersistence : Persistence
 	{
 		internal static InternalPersistence Current => stackOfCurrent.Value.Count > 0 ? stackOfCurrent.Value.Peek() : null;
 		private static void PushCurrent(InternalPersistence persistence) => stackOfCurrent.Value.Push(persistence);

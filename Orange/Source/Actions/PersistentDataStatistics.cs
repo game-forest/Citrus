@@ -404,7 +404,7 @@ namespace Orange
 							}
 							continue;
 						}
-						var node = Node.CreateFromAssetBundle(Path.ChangeExtension(f, null), ignoreExternals: true);
+						var node = Node.Load(Path.ChangeExtension(f, null), ignoreExternals: true);
 						foreach (var n in node.SelfAndDescendants) {
 							process(n);
 						}
@@ -435,7 +435,7 @@ namespace Orange
 							continue;
 						}
 						var r = this[f];
-						var node = Node.CreateFromAssetBundle(Path.ChangeExtension(f, null), ignoreExternals: true);
+						var node = Node.Load(Path.ChangeExtension(f, null), ignoreExternals: true);
 						var nestings = new List<int>();
 						var childrenCounts = new List<int> { 1 };
 						foreach (var n in node.SelfAndDescendants) {
@@ -510,7 +510,7 @@ namespace Orange
 					foreach (var f in AssetBundle.Current.EnumerateFiles(null, extension)) {
 						currentStatistics = this[f];
 						sw.Restart();
-						var node = Node.CreateFromAssetBundle(Path.ChangeExtension(f, null), ignoreExternals: ignoreExternals);
+						var node = Node.Load(Path.ChangeExtension(f, null), ignoreExternals: ignoreExternals);
 						sw.Stop();
 						foreach (var n in node.SelfAndDescendants) {
 							foreach (var a in n.Animations) {

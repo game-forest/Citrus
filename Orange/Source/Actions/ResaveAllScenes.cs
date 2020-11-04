@@ -18,21 +18,26 @@ namespace Orange
 			AssetBundle.Current = new TangerineAssetBundle(The.Workspace.AssetsDirectory);
 			int removedAnimatorsCount = 0;
 			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".tan")) {
-				var node = Node.CreateFromAssetBundle(
-					path: Path.ChangeExtension(file, null),
-					ignoreExternals: true
-				);
-				removedAnimatorsCount += node.RemoveDanglingAnimators();
-				InternalPersistence.Instance.WriteObjectToBundle(
-					bundle: AssetBundle.Current,
-					path: file,
-					instance: node,
-					format: Persistence.Format.Json,
-					sourceExtension: "tan",
-					time: File.GetLastWriteTime(file),
-					attributes: AssetAttributes.None,
-					cookingRulesSHA1: null
-				);
+				try {
+					var node = Node.Load(
+						path: Path.ChangeExtension(file, null),
+						ignoreExternals: true
+					);
+					removedAnimatorsCount += node.RemoveDanglingAnimators();
+					InternalPersistence.Instance.WriteObjectToBundle(
+						bundle: AssetBundle.Current,
+						path: file,
+						instance: node,
+						format: Persistence.Format.Json,
+						sourceExtension: "tan",
+						time: File.GetLastWriteTime(file),
+						attributes: AssetAttributes.None,
+						cookingRulesSHA1: null
+					);
+				} catch (System.Exception e) {
+					Console.WriteLine($"An exception was caught when trying to resave: {file}");
+					throw;
+				}
 			}
 			if (removedAnimatorsCount != 0) {
 				var message = removedAnimatorsCount == 1 ?

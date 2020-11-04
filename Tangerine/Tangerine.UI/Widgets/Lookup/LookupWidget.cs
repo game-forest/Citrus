@@ -290,7 +290,7 @@ namespace Tangerine.UI
 		{
 			public event Action Updating;
 
-			protected override void Update(float delta) => Updating?.Invoke();
+			protected internal override void Update(float delta) => Updating?.Invoke();
 		}
 
 		private static class Commands

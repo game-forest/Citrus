@@ -40,7 +40,7 @@ namespace Tangerine.UI
 			this.highlightTextStyle = highlightTextStyle;
 		}
 
-		protected override void Update(float delta)
+		protected internal override void Update(float delta)
 		{
 			if (!Enabled || !isRichTextDirty) {
 				return;

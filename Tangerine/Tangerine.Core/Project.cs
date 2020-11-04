@@ -142,7 +142,7 @@ namespace Tangerine.Core
 			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
 				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
 					Current.Overlays.Add(Path.GetFileNameWithoutExtension(file),
-						(Widget)Node.CreateFromAssetBundle(Path.ChangeExtension(file, null), null, TangerinePersistence.Instance));
+						Node.Load<Widget>(Path.ChangeExtension(file, null), null));
 				}
 			}
 			registeredNodeTypes.AddRange(GetNodesTypesOrdered("Lime"));
@@ -510,7 +510,7 @@ namespace Tangerine.Core
 						// и мешает работать.
 						if (File.Exists(textureParamsPath)) {
 							try {
-								var existingParams = TangerinePersistence.Instance.ReadObjectFromFile<TextureParams>(textureParamsPath);
+								var existingParams = InternalPersistence.Instance.ReadObjectFromFile<TextureParams>(textureParamsPath);
 								if (existingParams.Equals(textureParams)) {
 									continue;
 								}
@@ -519,7 +519,7 @@ namespace Tangerine.Core
 								// этот костыль ещё и валил Танжерин по хз какому поводу.
 							}
 						}
-						TangerinePersistence.Instance.WriteObjectToFile(textureParamsPath, textureParams, Persistence.Format.Json);
+						InternalPersistence.Instance.WriteObjectToFile(textureParamsPath, textureParams, Persistence.Format.Json);
 					} else if (File.Exists(textureParamsPath)) {
 						File.Delete(textureParamsPath);
 					}

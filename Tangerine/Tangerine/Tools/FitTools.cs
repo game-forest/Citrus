@@ -14,7 +14,7 @@ namespace Tangerine
 				if (node is Frame) {
 					var frame = node as Frame;
 					if (!string.IsNullOrEmpty(frame.ContentsPath)) {
-						var extNode = Node.CreateFromAssetBundle(frame.ContentsPath, persistence: TangerinePersistence.Instance);
+						var extNode = Node.Load(frame.ContentsPath);
 						if (extNode is Widget) {
 							Core.Operations.SetAnimableProperty.Perform(node, nameof(Widget.Size), ((Widget)extNode).Size);
 						}

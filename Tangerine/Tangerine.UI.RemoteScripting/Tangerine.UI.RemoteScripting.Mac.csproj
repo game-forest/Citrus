@@ -6,8 +6,8 @@
     <ProjectGuid>{F93DA48E-2A86-4DC4-A392-102B1E567B3A}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Tangerine.UI.RemoteScripting.Mac</RootNamespace>
-    <AssemblyName>Tangerine.UI.RemoteScripting.Mac</AssemblyName>
+    <RootNamespace>Tangerine.UI.RemoteScripting</RootNamespace>
+    <AssemblyName>Tangerine.UI.RemoteScripting</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
