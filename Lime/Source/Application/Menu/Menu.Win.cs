@@ -269,6 +269,7 @@ namespace Lime
 				NativeItem = new ToolStripSeparator();
 			} else {
 				NativeItem = new ToolStripMenuItem();
+				NativeItem.ToolTipText = command.TooltipText;
 				NativeItem.Click += (s, e) => CommandQueue.Instance.Add((Command)Command);
 			}
 			Refresh();

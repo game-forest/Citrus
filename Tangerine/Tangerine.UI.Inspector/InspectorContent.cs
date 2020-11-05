@@ -68,7 +68,14 @@ namespace Tangerine.UI.Inspector
 							nodesWithComponent.Add(n);
 						}
 					}
-					PopulateContentForType(t, components, nodesWithComponent, !Document.Current.InspectRootNode, widget, SerializeMutuallyExclusiveComponentGroupBaseType(t)).ToList();
+					PopulateContentForType(
+						type: t,
+						objects: components,
+						rootObjects: nodesWithComponent,
+						animableByPath: !Document.Current.InspectRootNode,
+						widget: widget,
+						propertyPath: SerializeMutuallyExclusiveComponentGroupBaseType(t)
+					).ToList();
 				}
 				AddComponentsMenu(nodes, widget);
 			}
@@ -104,8 +111,13 @@ namespace Tangerine.UI.Inspector
 			return $"[{Yuzu.Util.TypeSerializer.Serialize(t)}]";
 		}
 
-		private IEnumerable<IPropertyEditor> BuildForObjectsHelper(IEnumerable<object> objects, IEnumerable<object> rootObjects = null, bool animableByPath = true, Widget widget = null, string propertyPath = "")
-		{
+		private IEnumerable<IPropertyEditor> BuildForObjectsHelper(
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects = null,
+			bool animableByPath = true,
+			Widget widget = null,
+			string propertyPath = ""
+		) {
 			if (widget == null) {
 				widget = this.widget;
 			}
@@ -114,7 +126,14 @@ namespace Tangerine.UI.Inspector
 			}
 			foreach (var t in GetTypes(objects)) {
 				var o = objects.Where(i => t.IsInstanceOfType(i)).ToList();
-				foreach (var e in PopulateContentForType(t, o, rootObjects ?? o, !Document.Current.InspectRootNode && animableByPath && objects.Any(_ => _ is IAnimable), widget, propertyPath)) {
+				foreach (var e in PopulateContentForType(
+					type: t,
+					objects: o,
+					rootObjects: rootObjects ?? o,
+					animableByPath: !Document.Current.InspectRootNode && animableByPath && objects.Any(_ => _ is IAnimable),
+					widget: widget,
+					propertyPath: propertyPath
+				)) {
 					yield return e;
 				}
 			}
@@ -191,8 +210,14 @@ namespace Tangerine.UI.Inspector
 			return true;
 		}
 
-		private IEnumerable<IPropertyEditor> PopulateContentForType(Type type, IEnumerable<object> objects, IEnumerable<object> rootObjects, bool animableByPath, Widget widget, string propertyPath)
-		{
+		private IEnumerable<IPropertyEditor> PopulateContentForType(
+			Type type,
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			bool animableByPath,
+			Widget widget,
+			string propertyPath
+		) {
 			var categoryLabelAdded = false;
 			var editorParams = new Dictionary<string, List<PropertyEditorParams>>();
 			bool isSubclassOfNode = type.IsSubclassOf(typeof(Node));
@@ -214,6 +239,7 @@ namespace Tangerine.UI.Inspector
 				}
 				if (isSubclassOfNode && !categoryLabelAdded) {
 					categoryLabelAdded = true;
+					string tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 					var text = type.Name;
 					if (text == "Node" && !objects.Skip(1).Any()) {
 						text += $" of type '{objects.First().GetType().Name}'";
@@ -221,7 +247,12 @@ namespace Tangerine.UI.Inspector
 					if (totalObjectCount > 1) {
 						text += $" ({objectsCount}/{totalObjectCount})";
 					}
-					var label = CreateCategoryLabel(text, NodeIconPool.GetTexture(type), ColorTheme.Current.Inspector.CategoryLabelBackground);
+					var label = CreateCategoryLabel(
+						text: text,
+						iconTexture: NodeIconPool.GetTexture(type),
+						color: ColorTheme.Current.Inspector.CategoryLabelBackground,
+						tooltipText: tooltipText
+					);
 					if (label != null) {
 						widget.AddNode(label);
 					}
@@ -264,8 +295,13 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		private IEnumerable<IPropertyEditor> PopulatePropertyEditors(Type type, IEnumerable<object> objects, IEnumerable<object> rootObjects, Widget widget, Dictionary<string, List<PropertyEditorParams>> editorParams)
-		{
+		private IEnumerable<IPropertyEditor> PopulatePropertyEditors(
+			Type type,
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			Widget widget,
+			Dictionary<string, List<PropertyEditorParams>> editorParams
+		) {
 			foreach (var header in editorParams.Keys.OrderBy((s) => s)) {
 				AddGroupHeader(header, widget);
 				foreach (var param in editorParams[header]) {
@@ -314,35 +350,58 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		private IPropertyEditor PopulateEditorsForDictionaryType(IEnumerable<object> objects, IEnumerable<object> rootObjects, PropertyEditorParams param, Type iDictionaryInterface)
-		{
+		private IPropertyEditor PopulateEditorsForDictionaryType(
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			PropertyEditorParams param,
+			Type iDictionaryInterface
+		) {
 			var dictionaryGenericArgument = iDictionaryInterface.GetGenericArguments().ToArray();
 			var genericArguments = new[] { param.PropertyInfo.PropertyType, dictionaryGenericArgument[1], };
 
 			IEnumerable<IPropertyEditor> OnAdd(Type type, PropertyEditorParams p, Widget w, object list)
 			{
-				return PopulatePropertyEditors(type, new[] { list }, rootObjects, w, new Dictionary<string, List<PropertyEditorParams>> { { "", new List<PropertyEditorParams> { p } } });
+				return PopulatePropertyEditors(
+					type: type,
+					objects: new[] { list },
+					rootObjects: rootObjects,
+					widget: w,
+					editorParams: new Dictionary<string, List<PropertyEditorParams>> { { "", new List<PropertyEditorParams> { p } } }
+				);
 			}
 
 			var specializedEditorType = typeof(DictionaryPropertyEditor<,>).MakeGenericType(genericArguments);
-			var editor = Activator.CreateInstance(specializedEditorType, param, (Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>>) OnAdd);
+			var editor = Activator.CreateInstance(
+				specializedEditorType,
+				param,
+				(Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>>) OnAdd
+			);
 			return (IPropertyEditor)editor;
 		}
 
-		private IPropertyEditor PopulateEditorsForListType(IEnumerable<object> objects, IEnumerable<object> rootObjects, PropertyEditorParams param, Type iListInterface)
-		{
+		private IPropertyEditor PopulateEditorsForListType(
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			PropertyEditorParams param,
+			Type iListInterface
+		) {
 			var listGenericArgument = iListInterface.GetGenericArguments().First();
 			Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd = (p, w, list) => {
 				return PopulatePropertyEditors(param.PropertyInfo.PropertyType, new[] {list}, rootObjects, w,
 					new Dictionary<string, List<PropertyEditorParams>> {{"", new List<PropertyEditorParams> {p}}});
 			};
-			var specializedICollectionPropertyEditorType = typeof(ListPropertyEditor<,>).MakeGenericType(param.PropertyInfo.PropertyType, listGenericArgument);
+			var specializedICollectionPropertyEditorType =
+				typeof(ListPropertyEditor<,>)
+				.MakeGenericType(param.PropertyInfo.PropertyType, listGenericArgument);
 			var editor = Activator.CreateInstance(specializedICollectionPropertyEditorType, param, onAdd) as IPropertyEditor;
 			return editor;
 		}
 
-		private IPropertyEditor PopulateEditorsForInstanceType(IEnumerable<object> objects, IEnumerable<object> rootObjects, PropertyEditorParams param)
-		{
+		private IPropertyEditor PopulateEditorsForInstanceType(
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			PropertyEditorParams param
+		) {
 			var instanceEditors = new List<IPropertyEditor>();
 			var onValueChanged = new Action<Widget>((w) => {
 				w.Nodes.Clear();
@@ -415,7 +474,10 @@ namespace Tangerine.UI.Inspector
 						Clicked = () => {
 							var menu = new Menu();
 							foreach (var type in types) {
-								ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes));
+								var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+								ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes)) {
+									TooltipText = tooltipText
+								};
 								menu.Add(command);
 							}
 							menu.Insert(0, Command.MenuSeparator);
@@ -468,7 +530,7 @@ namespace Tangerine.UI.Inspector
 			Core.Operations.SetAnimableProperty.Perform(obj, propertyName, value, CoreUserPreferences.Instance.AutoKeyframes);
 		}
 
-		private Widget CreateCategoryLabel(string text, ITexture iconTexture, Color4 color)
+		private Widget CreateCategoryLabel(string text, ITexture iconTexture, Color4 color, string tooltipText)
 		{
 			if (string.IsNullOrEmpty(text)) {
 				return null;
@@ -477,6 +539,7 @@ namespace Tangerine.UI.Inspector
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				Layout = new HBoxLayout(),
 				MinHeight = Theme.Metrics.DefaultButtonSize.Y,
+				HitTestTarget = tooltipText != null,
 				Nodes = {
 					new Image(iconTexture) {
 						MinMaxSize = new Vector2(21, 19),
@@ -491,6 +554,9 @@ namespace Tangerine.UI.Inspector
 				}
 			};
 			label.CompoundPresenter.Add(new WidgetFlatFillPresenter(color));
+			if (tooltipText != null) {
+				label.Components.Add(new TooltipComponent(() => tooltipText));
+			}
 			return label;
 		}
 
@@ -501,7 +567,8 @@ namespace Tangerine.UI.Inspector
 			if (totalObjectCount > 1) {
 				text += $"({componentsCount}/{totalObjectCount})";
 			}
-			var label = CreateCategoryLabel(text, ComponentIconPool.GetTexture(type), ColorTheme.Current.Inspector.ComponentHeaderLabelBackground);
+			string tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+			var label = CreateCategoryLabel(text, ComponentIconPool.GetTexture(type), ColorTheme.Current.Inspector.ComponentHeaderLabelBackground, tooltipText);
 			label.Padding += new Thickness { Right = 10 };
 			label.Nodes.Add(new ToolbarButton(IconPool.GetTexture("Inspector.Options")) {
 				LayoutCell = new LayoutCell(Alignment.Center),

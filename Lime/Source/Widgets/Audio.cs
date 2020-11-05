@@ -104,7 +104,7 @@ namespace Lime
 		/// </summary>
 		[YuzuMember]
 		[TangerineStaticProperty]
-		[TangerinePropertyTooltip(@"Mute all audio channels within same audio group when this audio is playing.
+		[TangerineTooltip(@"Mute all audio channels within same audio group when this audio is playing.
 Multiple exclusive audio mute and unmute each other in stack order.
 Use Fade In Time and Fade Out Time for transitions.")]
 		public bool Exclusive { get; set; }

@@ -107,7 +107,9 @@ namespace Lime
 			int j = 0;
 			ICommand selectedCommand = null;
 			foreach (var i in Items) {
-				var command = new Command(i.Text);
+				var command = new Command(i.Text) {
+					TooltipText = i.TooltipText
+				};
 				if (j == Index) {
 					selectedCommand = command;
 				}
@@ -154,6 +156,7 @@ namespace Lime
 		{
 			public string Text;
 			public object Value;
+			public string TooltipText;
 
 			public Item(string text)
 			{
@@ -165,6 +168,13 @@ namespace Lime
 			{
 				Text = text;
 				Value = value;
+			}
+
+			public Item(string text, object value, string tooltipText)
+			{
+				Text = text;
+				Value = value;
+				TooltipText = tooltipText;
 			}
 		}
 

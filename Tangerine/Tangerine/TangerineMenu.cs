@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Lime;
 using Orange;
 using Tangerine.Core;
@@ -67,7 +68,9 @@ namespace Tangerine
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
 
 			foreach (var type in Project.Current.RegisteredNodeTypes) {
+				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 				var cmd = new Command("Create " + type.Name);
+				cmd.TooltipText = tooltipText;
 				if (NodeIconPool.TryGetIcon(type, out var icon)) {
 					cmd.Icon = icon;
 				} else {
