@@ -70,6 +70,9 @@ namespace Tangerine.Core.Operations
 
 		private static bool CanUnlink(Row item)
 		{
+			// TODO: temporarily ignore TangerineLockChildrenNodeListAttribute
+			// because with it DistortionMeshProcessor.RestorePointsIfNeeded is unable to rebuild points
+			return true;
 			if (item.TryGetNode(out var node)) {
 				if (ClassAttributes<TangerineLockChildrenNodeList>.Get(node.Parent.GetType()) != null) {
 					return false;
