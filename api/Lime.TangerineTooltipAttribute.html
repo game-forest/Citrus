@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TangerinePropertyTooltipAttribute
+    <title>Class TangerineTooltipAttribute
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TangerinePropertyTooltipAttribute
+    <meta name="title" content="Class TangerineTooltipAttribute
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.56.3.0">
     
@@ -78,10 +78,10 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.TangerinePropertyTooltipAttribute">
+            <article class="content wrap" id="_content" data-uid="Lime.TangerineTooltipAttribute">
   
   
-  <h1 id="Lime_TangerinePropertyTooltipAttribute" data-uid="Lime.TangerinePropertyTooltipAttribute" class="text-break">Class TangerinePropertyTooltipAttribute
+  <h1 id="Lime_TangerineTooltipAttribute" data-uid="Lime.TangerineTooltipAttribute" class="text-break">Class TangerineTooltipAttribute
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
@@ -89,7 +89,7 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">System.Attribute</span></div>
-    <div class="level2"><span class="xref">TangerinePropertyTooltipAttribute</span></div>
+    <div class="level2"><span class="xref">TangerineTooltipAttribute</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -238,21 +238,22 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_TangerinePropertyTooltipAttribute_syntax">Syntax</h5>
+  <h5 id="Lime_TangerineTooltipAttribute_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class TangerinePropertyTooltipAttribute : Attribute, _Attribute</code></pre>
+    <pre><code class="lang-csharp hljs">[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Module | AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum | AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Interface | AttributeTargets.Parameter | AttributeTargets.Delegate | AttributeTargets.ReturnValue | AttributeTargets.GenericParameter | AttributeTargets.All, AllowMultiple = false, Inherited = false)]
+public sealed class TangerineTooltipAttribute : Attribute, _Attribute</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   
   
-  <a id="Lime_TangerinePropertyTooltipAttribute__ctor_" data-uid="Lime.TangerinePropertyTooltipAttribute.#ctor*"></a>
-  <h4 id="Lime_TangerinePropertyTooltipAttribute__ctor_System_String_" data-uid="Lime.TangerinePropertyTooltipAttribute.#ctor(System.String)">TangerinePropertyTooltipAttribute(String)</h4>
+  <a id="Lime_TangerineTooltipAttribute__ctor_" data-uid="Lime.TangerineTooltipAttribute.#ctor*"></a>
+  <h4 id="Lime_TangerineTooltipAttribute__ctor_System_String_" data-uid="Lime.TangerineTooltipAttribute.#ctor(System.String)">TangerineTooltipAttribute(String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TangerinePropertyTooltipAttribute(string tooltip)</code></pre>
+    <pre><code class="lang-csharp hljs">public TangerineTooltipAttribute(string text)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -266,7 +267,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">tooltip</span></td>
+        <td><span class="parametername">text</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -275,12 +276,12 @@
   </h3>
   
   
-  <h4 id="Lime_TangerinePropertyTooltipAttribute_Tooltip" data-uid="Lime.TangerinePropertyTooltipAttribute.Tooltip">Tooltip</h4>
+  <h4 id="Lime_TangerineTooltipAttribute_Text" data-uid="Lime.TangerineTooltipAttribute.Text">Text</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly string Tooltip</code></pre>
+    <pre><code class="lang-csharp hljs">public readonly string Text</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">

@@ -12545,6 +12545,19 @@ references:
   isSpec: "True"
   fullName: Lime.Command.Text
   nameWithType: Command.Text
+- uid: Lime.Command.TooltipText
+  name: TooltipText
+  href: api/Lime.Command.html#Lime_Command_TooltipText
+  commentId: P:Lime.Command.TooltipText
+  fullName: Lime.Command.TooltipText
+  nameWithType: Command.TooltipText
+- uid: Lime.Command.TooltipText*
+  name: TooltipText
+  href: api/Lime.Command.html#Lime_Command_TooltipText_
+  commentId: Overload:Lime.Command.TooltipText
+  isSpec: "True"
+  fullName: Lime.Command.TooltipText
+  nameWithType: Command.TooltipText
 - uid: Lime.Command.Undo
   name: Undo
   href: api/Lime.Command.html#Lime_Command_Undo
@@ -12938,6 +12951,12 @@ references:
   commentId: M:Lime.CommonDropDownList.Item.#ctor(System.String,System.Object)
   fullName: Lime.CommonDropDownList.Item.Item(System.String, System.Object)
   nameWithType: CommonDropDownList.Item.Item(String, Object)
+- uid: Lime.CommonDropDownList.Item.#ctor(System.String,System.Object,System.String)
+  name: Item(String, Object, String)
+  href: api/Lime.CommonDropDownList.Item.html#Lime_CommonDropDownList_Item__ctor_System_String_System_Object_System_String_
+  commentId: M:Lime.CommonDropDownList.Item.#ctor(System.String,System.Object,System.String)
+  fullName: Lime.CommonDropDownList.Item.Item(System.String, System.Object, System.String)
+  nameWithType: CommonDropDownList.Item.Item(String, Object, String)
 - uid: Lime.CommonDropDownList.Item.#ctor*
   name: Item
   href: api/Lime.CommonDropDownList.Item.html#Lime_CommonDropDownList_Item__ctor_
@@ -12951,6 +12970,12 @@ references:
   commentId: F:Lime.CommonDropDownList.Item.Text
   fullName: Lime.CommonDropDownList.Item.Text
   nameWithType: CommonDropDownList.Item.Text
+- uid: Lime.CommonDropDownList.Item.TooltipText
+  name: TooltipText
+  href: api/Lime.CommonDropDownList.Item.html#Lime_CommonDropDownList_Item_TooltipText
+  commentId: F:Lime.CommonDropDownList.Item.TooltipText
+  fullName: Lime.CommonDropDownList.Item.TooltipText
+  nameWithType: CommonDropDownList.Item.TooltipText
 - uid: Lime.CommonDropDownList.Item.Value
   name: Value
   href: api/Lime.CommonDropDownList.Item.html#Lime_CommonDropDownList_Item_Value
@@ -25032,6 +25057,19 @@ references:
   isSpec: "True"
   fullName: Lime.ICommand.Text
   nameWithType: ICommand.Text
+- uid: Lime.ICommand.TooltipText
+  name: TooltipText
+  href: api/Lime.ICommand.html#Lime_ICommand_TooltipText
+  commentId: P:Lime.ICommand.TooltipText
+  fullName: Lime.ICommand.TooltipText
+  nameWithType: ICommand.TooltipText
+- uid: Lime.ICommand.TooltipText*
+  name: TooltipText
+  href: api/Lime.ICommand.html#Lime_ICommand_TooltipText_
+  commentId: Overload:Lime.ICommand.TooltipText
+  isSpec: "True"
+  fullName: Lime.ICommand.TooltipText
+  nameWithType: ICommand.TooltipText
 - uid: Lime.ICommand.UserData
   name: UserData
   href: api/Lime.ICommand.html#Lime_ICommand_UserData
@@ -62420,31 +62458,6 @@ references:
   isSpec: "True"
   fullName: Lime.TangerinePropertyDefaultValueAttribute.GetValue
   nameWithType: TangerinePropertyDefaultValueAttribute.GetValue
-- uid: Lime.TangerinePropertyTooltipAttribute
-  name: TangerinePropertyTooltipAttribute
-  href: api/Lime.TangerinePropertyTooltipAttribute.html
-  commentId: T:Lime.TangerinePropertyTooltipAttribute
-  fullName: Lime.TangerinePropertyTooltipAttribute
-  nameWithType: TangerinePropertyTooltipAttribute
-- uid: Lime.TangerinePropertyTooltipAttribute.#ctor(System.String)
-  name: TangerinePropertyTooltipAttribute(String)
-  href: api/Lime.TangerinePropertyTooltipAttribute.html#Lime_TangerinePropertyTooltipAttribute__ctor_System_String_
-  commentId: M:Lime.TangerinePropertyTooltipAttribute.#ctor(System.String)
-  fullName: Lime.TangerinePropertyTooltipAttribute.TangerinePropertyTooltipAttribute(System.String)
-  nameWithType: TangerinePropertyTooltipAttribute.TangerinePropertyTooltipAttribute(String)
-- uid: Lime.TangerinePropertyTooltipAttribute.#ctor*
-  name: TangerinePropertyTooltipAttribute
-  href: api/Lime.TangerinePropertyTooltipAttribute.html#Lime_TangerinePropertyTooltipAttribute__ctor_
-  commentId: Overload:Lime.TangerinePropertyTooltipAttribute.#ctor
-  isSpec: "True"
-  fullName: Lime.TangerinePropertyTooltipAttribute.TangerinePropertyTooltipAttribute
-  nameWithType: TangerinePropertyTooltipAttribute.TangerinePropertyTooltipAttribute
-- uid: Lime.TangerinePropertyTooltipAttribute.Tooltip
-  name: Tooltip
-  href: api/Lime.TangerinePropertyTooltipAttribute.html#Lime_TangerinePropertyTooltipAttribute_Tooltip
-  commentId: F:Lime.TangerinePropertyTooltipAttribute.Tooltip
-  fullName: Lime.TangerinePropertyTooltipAttribute.Tooltip
-  nameWithType: TangerinePropertyTooltipAttribute.Tooltip
 - uid: Lime.TangerineReadOnlyAttribute
   name: TangerineReadOnlyAttribute
   href: api/Lime.TangerineReadOnlyAttribute.html
@@ -62538,6 +62551,31 @@ references:
   isSpec: "True"
   fullName: Lime.TangerineTileImageTextureAttribute.IsValid
   nameWithType: TangerineTileImageTextureAttribute.IsValid
+- uid: Lime.TangerineTooltipAttribute
+  name: TangerineTooltipAttribute
+  href: api/Lime.TangerineTooltipAttribute.html
+  commentId: T:Lime.TangerineTooltipAttribute
+  fullName: Lime.TangerineTooltipAttribute
+  nameWithType: TangerineTooltipAttribute
+- uid: Lime.TangerineTooltipAttribute.#ctor(System.String)
+  name: TangerineTooltipAttribute(String)
+  href: api/Lime.TangerineTooltipAttribute.html#Lime_TangerineTooltipAttribute__ctor_System_String_
+  commentId: M:Lime.TangerineTooltipAttribute.#ctor(System.String)
+  fullName: Lime.TangerineTooltipAttribute.TangerineTooltipAttribute(System.String)
+  nameWithType: TangerineTooltipAttribute.TangerineTooltipAttribute(String)
+- uid: Lime.TangerineTooltipAttribute.#ctor*
+  name: TangerineTooltipAttribute
+  href: api/Lime.TangerineTooltipAttribute.html#Lime_TangerineTooltipAttribute__ctor_
+  commentId: Overload:Lime.TangerineTooltipAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineTooltipAttribute.TangerineTooltipAttribute
+  nameWithType: TangerineTooltipAttribute.TangerineTooltipAttribute
+- uid: Lime.TangerineTooltipAttribute.Text
+  name: Text
+  href: api/Lime.TangerineTooltipAttribute.html#Lime_TangerineTooltipAttribute_Text
+  commentId: F:Lime.TangerineTooltipAttribute.Text
+  fullName: Lime.TangerineTooltipAttribute.Text
+  nameWithType: TangerineTooltipAttribute.Text
 - uid: Lime.TangerineValidationAttribute
   name: TangerineValidationAttribute
   href: api/Lime.TangerineValidationAttribute.html
