@@ -1,4 +1,4 @@
-﻿#if MAC
+#if MAC
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace Lime
 			var evt = NSApplication.SharedApplication.CurrentEvent;
 			NSMenu.PopUpContextMenu(NativeMenu, evt, CommonWindow.Current.NSGameView);
 		}
-		
+
 		public void Popup(IWindow window, Vector2 position, float minimumWidth, ICommand command)
 		{
 			UpdateAndRenderAllWindows();
@@ -90,7 +90,7 @@ namespace Lime
 				NativeMenu.PopUpMenu(item, new CoreGraphics.CGPoint(position.X, window.ClientSize.Y - position.Y), window.NSGameView);
 			}
 		}
-		
+
 		private void UpdateAndRenderAllWindows()
 		{
 			foreach (var w in Application.Windows) {
@@ -113,6 +113,7 @@ namespace Lime
 					separator = true;
 				} else {
 					NativeMenuItem = new NSMenuItem();
+					// TODO: setup tooltip here from command.TooltipText if possible
 					Command.Issued += () => {
 						NativeMenuItem.State = Command.Checked ? NSCellStateValue.On : NSCellStateValue.Off;
 					};

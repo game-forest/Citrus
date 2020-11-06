@@ -15,6 +15,11 @@ namespace Lime
 		string Text { get; set; }
 
 		/// <summary>
+		/// Tooltip.
+		/// </summary>
+		string TooltipText { get; set; }
+
+		/// <summary>
 		/// Gets or sets the command's primary shortcut key.
 		/// </summary>
 		Shortcut Shortcut { get; set; }
@@ -109,6 +114,7 @@ namespace Lime
 		private bool enabled = true;
 		private bool @checked = false;
 		private bool visible = true;
+		private string tooltipText;
 		private Icon icon;
 
 		public int Version { get; private set; } = 1;
@@ -120,6 +126,18 @@ namespace Lime
 			{
 				if (text != value) {
 					text = value;
+					Version++;
+				}
+			}
+		}
+
+		public string TooltipText
+		{
+			get => tooltipText;
+			set
+			{
+				if (tooltipText != value) {
+					tooltipText = value;
 					Version++;
 				}
 			}

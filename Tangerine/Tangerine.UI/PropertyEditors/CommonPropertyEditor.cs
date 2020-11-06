@@ -58,7 +58,7 @@ namespace Tangerine.UI
 					}
 				};
 				PropertyLabel.Tasks.Add(ManageLabelTask());
-				var tooltip = PropertyAttributes<TangerinePropertyTooltipAttribute>.Get(editorParams.PropertyInfo)?.Tooltip ?? PropertyLabel.Text;
+				var tooltip = PropertyAttributes<TangerineTooltipAttribute>.Get(editorParams.PropertyInfo)?.Text ?? PropertyLabel.Text;
 				PropertyLabel.Components.Add(new TooltipComponent(() => tooltip));
 				PropertyContainerWidget.AddNode(LabelContainer);
 				EditorContainer = new Widget {

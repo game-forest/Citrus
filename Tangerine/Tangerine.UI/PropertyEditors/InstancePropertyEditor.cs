@@ -21,7 +21,8 @@ namespace Tangerine.UI
 				Selector.Items.Add(new CommonDropDownList.Item(propertyType.Name, propertyType));
 			}
 			foreach (var t in DerivedTypesCache.GetDerivedTypesFor(propertyType)) {
-				Selector.Items.Add(new CommonDropDownList.Item(t.Name, t));
+				var tooltipText = t.GetCustomAttribute<TangerineTooltipAttribute>()?.Text ?? null;
+				Selector.Items.Add(new CommonDropDownList.Item(t.Name, t, tooltipText));
 			}
 			EditorContainer.AddChangeLateWatcher(CoalescedPropertyValue(
 				comparator: (t1, t2) => t1 == null && t2 == null || t1 != null && t2 != null && t1.GetType() == t2.GetType()),

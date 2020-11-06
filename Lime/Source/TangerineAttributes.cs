@@ -340,13 +340,14 @@ namespace Lime
 		}
 	}
 
-	public sealed class TangerinePropertyTooltipAttribute : Attribute
+	[AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = false)]
+	public sealed class TangerineTooltipAttribute : Attribute
 	{
-		public readonly string Tooltip;
+		public readonly string Text;
 
-		public TangerinePropertyTooltipAttribute(string tooltip)
+		public TangerineTooltipAttribute(string text)
 		{
-			Tooltip = tooltip;
+			Text = text;
 		}
 	}
 
