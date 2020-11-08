@@ -326,6 +326,32 @@ namespace Lime
 #endif // TANGERINE
 		}
 
+		public void Swap(int index1, int index2)
+		{
+			if (list == null) {
+				throw new IndexOutOfRangeException();
+			}
+			if (index1 == index2) {
+				return;
+			}
+			(list[index1], list[index2]) = (list[index2], list[index1]);
+			list[index1].NextSibling = index1 + 1 < Count ? list[index1 + 1] : null;
+			list[index2].NextSibling = index2 + 1 < Count ? list[index2 + 1] : null;
+			if (index1 > 0) {
+				list[index1 - 1].NextSibling = list[index1];
+			}
+			if (index2 > 0) {
+				list[index2 - 1].NextSibling = list[index2];
+			}
+ 			RefreshFirstChild();
+ 			Node.InvalidateNodeReferenceCache();
+ 			owner.AsWidget?.Layout.InvalidateConstraintsAndArrangement();
+#if TANGERINE
+ 			Version++;
+#endif // TANGERINE
+		}
+
+
 		private void RefreshFirstChild()
 		{
 			owner.FirstChild = (list == null || list.Count == 0) ? null : list[0];
