@@ -71,12 +71,6 @@ namespace Lime.Tests.Source.Widgets
 		}
 
 		[TestMethod]
-		public void UpdateTest()
-		{
-			Assert.Fail();
-		}
-
-		[TestMethod]
 		public void RaiseUpdatingTest()
 		{
 			const float ExpectedDelta = 0.1f;
@@ -116,12 +110,6 @@ namespace Lime.Tests.Source.Widgets
 		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void StaticScaleTest()
-		{
-			Assert.Fail();
-		}
-
-		[TestMethod]
-		public void AddToRenderChainTest()
 		{
 			Assert.Fail();
 		}

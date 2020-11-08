@@ -66,10 +66,10 @@ namespace Lime.Tests.Source.Widgets
 		public void TryRunAnimationWithMarkerAndIdTest()
 		{
 			var animation = new Animation() { Id = "Animation" };
-			root.DefaultAnimation.Markers.Add(new Marker(MarkerName, 0, MarkerAction.Play));
+			animation.Markers.Add(new Marker(MarkerName, 0, MarkerAction.Play));
 			root.Animations.Add(animation);
 			Assert.IsTrue(root.TryRunAnimation(MarkerName, AnimationName));
-			Assert.AreEqual(MarkerName, root.CurrentAnimation);
+			Assert.AreEqual(MarkerName, animation.RunningMarkerId);
 			root.Animations.Remove(animation);
 			CollectionAssert.DoesNotContain(root.Animations.ToArray(), animation);
 		}
@@ -136,8 +136,8 @@ namespace Lime.Tests.Source.Widgets
 			root.Id = "";
 			child1.Tag = "Special";
 			Assert.AreEqual("TestNode", root.ToString());
-			Assert.AreEqual("'Child1'(Special) in TestNode", child1.ToString());
-			Assert.AreEqual("'Grandchild' in 'Child1'(Special) in TestNode", grandChild.ToString());
+			Assert.AreEqual("'Child1' (Special) in TestNode", child1.ToString());
+			Assert.AreEqual("'Grandchild' in 'Child1' (Special) in TestNode", grandChild.ToString());
 		}
 
 		[TestMethod]
@@ -165,11 +165,11 @@ namespace Lime.Tests.Source.Widgets
 				node.DefaultAnimation.Markers.Add(new Marker("Start", 0, MarkerAction.Play));
 				node.RunAnimation("Start");
 			}
-			const float FrameDelta = (float)AnimationUtils.SecondsPerFrame / 1000;
+			const float FrameDelta = (float)AnimationUtils.SecondsPerFrame;
 			var animationFrames = nodes.Select(node => node.AnimationFrame);
 			for (var i = 0; i < 10; i++) {
 				root.Update(FrameDelta);
-				Assert.IsTrue(animationFrames.All((f) => i == f));
+				Assert.IsTrue(animationFrames.All((f) => i + 1 == f));
 			}
 		}
 
