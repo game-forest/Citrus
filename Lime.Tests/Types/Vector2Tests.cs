@@ -155,6 +155,11 @@ namespace Lime.Tests.Source.Types
 		{
 			Assert.AreEqual(Vector2.Zero.ToString(CultureInfo.InvariantCulture), "0, 0");
 			Assert.AreEqual(Vector2.Half.ToString(CultureInfo.InvariantCulture), "0.5, 0.5");
+			Assert.AreEqual("0,5, 0,5", Vector2.Half.ToString(CultureInfo.CreateSpecificCulture("ru-RU")));
+			var savedCulture = CultureInfo.CurrentCulture;
+			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
+			Assert.AreEqual("0.5, 0.5", Vector2.Half.ToString());
+			CultureInfo.CurrentCulture = savedCulture;
 			Assert.AreEqual(Vector2.One.ToString(CultureInfo.InvariantCulture), "1, 1");
 		}
 

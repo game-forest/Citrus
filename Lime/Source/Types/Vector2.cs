@@ -426,7 +426,7 @@ namespace Lime
 		/// </summary>
 		public override string ToString()
 		{
-			return string.Format("{0}, {1}", X, Y);
+			return FormattableString.Invariant($"{X}, {Y}");
 		}
 
 		/// <summary>
@@ -435,7 +435,8 @@ namespace Lime
 		/// </summary>
 		public string ToString(IFormatProvider format)
 		{
-			return string.Format(format, "{0}, {1}", X, Y);
+			FormattableString r = $"{X}, {Y}";
+			return r.ToString(format);
 		}
 
 		/// <summary>

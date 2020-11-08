@@ -72,6 +72,12 @@ namespace Lime.Tests.Source.Types
 		{
 			Assert.AreEqual("0, 0, 0", Vector3.Zero.ToString(CultureInfo.InvariantCulture));
 			Assert.AreEqual("0.5, 0.5, 0.5", Vector3.Half.ToString(CultureInfo.InvariantCulture));
+			Assert.AreEqual("0,5, 0,5, 0,5", Vector3.Half.ToString(CultureInfo.CreateSpecificCulture("ru-RU")));
+			var savedCulture = CultureInfo.CurrentCulture;
+			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
+			Assert.AreEqual("0.5, 0.5, 0.5", Vector3.Half.ToString());
+			CultureInfo.CurrentCulture = savedCulture;
+			Assert.AreEqual("0.5, 0.5, 0.5", Vector3.Half.ToString(CultureInfo.InvariantCulture));
 			Assert.AreEqual("1, 1, 1", Vector3.One.ToString(CultureInfo.InvariantCulture));
 		}
 	}

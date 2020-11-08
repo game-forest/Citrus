@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Globalization;
 
 namespace Lime.Tests.Source.Types
 {
@@ -115,6 +116,10 @@ namespace Lime.Tests.Source.Types
 		{
 			Assert.AreEqual("0, 0, 0, 0", Rectangle.Empty.ToString());
 			Assert.AreEqual("0.5, 0.5, 0.5, 0.5", new Rectangle(0.5f, 0.5f, 0.5f, 0.5f).ToString());
+			var savedCulture = CultureInfo.CurrentCulture;
+			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
+			Assert.AreEqual("0.5, 0.5, 0.5, 0.5", new Rectangle(0.5f, 0.5f, 0.5f, 0.5f).ToString());
+			CultureInfo.CurrentCulture = savedCulture;
 			Assert.AreEqual("0, 0, 1, 1", new Rectangle(Vector2.Zero, Vector2.One).ToString());
 		}
 

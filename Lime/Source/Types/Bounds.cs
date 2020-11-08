@@ -124,7 +124,7 @@ namespace Lime
 
 		public override string ToString()
 		{
-			return $"{A.X}, {A.Y}, {A.Z}, {B.X}, {B.Y}, {B.Z}";
+			return FormattableString.Invariant($"{A.X}, {A.Y}, {A.Z}, {B.X}, {B.Y}, {B.Z}");
 		}
 
 		public override int GetHashCode()

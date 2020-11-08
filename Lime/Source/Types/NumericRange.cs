@@ -57,7 +57,7 @@ namespace Lime
 
 		public override string ToString()
 		{
-			return string.Format("{0}, {1}", Median, Dispersion);
+			return FormattableString.Invariant($"{Median}, {Dispersion}");
 		}
 
 		public override int GetHashCode()

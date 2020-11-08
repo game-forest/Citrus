@@ -220,7 +220,7 @@ namespace Lime
 		/// Returns the string representation of this <see cref="Rectangle"/> in the format:
 		/// "A.X, A.Y, B.X, B.Y".
 		/// </summary>
-		public override string ToString() => $"{AX}, {AY}, {BX}, {BY}";
+		public override string ToString() => FormattableString.Invariant($"{AX}, {AY}, {BX}, {BY}");
 
 		public override int GetHashCode()
 		{

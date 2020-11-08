@@ -297,7 +297,7 @@ namespace Lime
 
 		public override string ToString()
 		{
-			return string.Format("U: {0}; V: {1}; T: {2}", U, V, T);
+			return FormattableString.Invariant($"U: {U}; V: {V}; T: {T}");
 		}
 
 		public override int GetHashCode()

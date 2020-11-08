@@ -272,7 +272,7 @@ namespace Lime
 		/// </summary>
 		public override string ToString()
 		{
-			return string.Format("{0}, {1}, {2}", X, Y, Z);
+			return FormattableString.Invariant($"{X}, {Y}, {Z}");
 		}
 
 		/// <summary>
@@ -281,7 +281,8 @@ namespace Lime
 		/// </summary>
 		public string ToString(IFormatProvider format)
 		{
-			return string.Format(format, "{0}, {1}, {2}", X, Y, Z);
+			FormattableString r = $"{X}, {Y}, {Z}";
+			return r.ToString(format);
 		}
 
 		public override int GetHashCode()
