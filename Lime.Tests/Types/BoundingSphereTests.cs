@@ -1,82 +1,82 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Lime.Tests.Source.Types
 {
-	[TestFixture]
+	[TestClass]
 	public class BoundingSphereTests
 	{
 		private static BoundingSphere unitSphere = new BoundingSphere(Vector3.Zero, 1);
 
-		[Test]
+		[TestMethod]
 		public void EqualsTest()
-		{	
-			Assert.That(unitSphere.Equals(unitSphere));
-			Assert.That(unitSphere.Equals((object)unitSphere));
-			Assert.That(unitSphere == unitSphere);
-			Assert.That(unitSphere != new BoundingSphere(Vector3.Zero, 0));
-			Assert.That(unitSphere.GetHashCode(), Is.EqualTo(unitSphere.GetHashCode()));
+		{
+			Assert.IsTrue(unitSphere.Equals(unitSphere));
+			Assert.IsTrue(unitSphere.Equals((object)unitSphere));
+			Assert.IsTrue(unitSphere == unitSphere);
+			Assert.IsTrue(unitSphere != new BoundingSphere(Vector3.Zero, 0));
+			Assert.AreEqual(unitSphere.GetHashCode(), unitSphere.GetHashCode());
 		}
 
-		[Test]
+		[TestMethod]
 		public void ContainsBoundingSphereTest()
 		{
 			var disjoiningSphere = new BoundingSphere(new Vector3(3), 1);
-			Assert.That(unitSphere.Contains(ref disjoiningSphere), Is.EqualTo(ContainmentType.Disjoint));
+			Assert.AreEqual(ContainmentType.Disjoint, unitSphere.Contains(ref disjoiningSphere));
 			var containingSphere = new BoundingSphere(Vector3.Zero, 0.5f);
-			Assert.That(unitSphere.Contains(ref containingSphere), Is.EqualTo(ContainmentType.Contains));
+			Assert.AreEqual(ContainmentType.Contains, unitSphere.Contains(ref containingSphere));
 			var intersectingSphere = new BoundingSphere(Vector3.One, 1);
-			Assert.That(unitSphere.Contains(ref intersectingSphere), Is.EqualTo(ContainmentType.Intersects));
+			Assert.AreEqual(ContainmentType.Intersects, unitSphere.Contains(ref intersectingSphere));
 		}
 
-		[Test]
+		[TestMethod]
 		public void ContainsVectorTest()
 		{
 			var disjoiningVector = new Vector3(3);
-			Assert.That(unitSphere.Contains(ref disjoiningVector), Is.EqualTo(ContainmentType.Disjoint));
+			Assert.AreEqual(ContainmentType.Disjoint, unitSphere.Contains(ref disjoiningVector));
 			var containingVector = Vector3.Zero;
-			Assert.That(unitSphere.Contains(ref containingVector), Is.EqualTo(ContainmentType.Contains));
+			Assert.AreEqual(ContainmentType.Contains, unitSphere.Contains(ref containingVector));
 			var intersectingVector = new Vector3(1, 0, 0);
-			Assert.That(unitSphere.Contains(ref intersectingVector), Is.EqualTo(ContainmentType.Intersects));
+			Assert.AreEqual(ContainmentType.Intersects, unitSphere.Contains(ref intersectingVector));
 		}
 
-		[Test]
+		[TestMethod]
 		public void CreateFromPointsTest()
 		{
-			Assert.Catch<ArgumentNullException>(() => BoundingSphere.CreateFromPoints(null));
+			Assert.ThrowsException<ArgumentNullException>(() => BoundingSphere.CreateFromPoints(null));
 			var actualPoints = new List<Vector3> ();
-			Assert.Catch<ArgumentException>(() => BoundingSphere.CreateFromPoints(actualPoints));
+			Assert.ThrowsException<ArgumentException>(() => BoundingSphere.CreateFromPoints(actualPoints));
 			actualPoints = new List<Vector3> { Vector3.Zero };
 			var actual = BoundingSphere.CreateFromPoints(actualPoints);
-			Assert.That(actual, Is.EqualTo(new BoundingSphere(Vector3.Zero, 0)));
+			Assert.That.AreEqual(new BoundingSphere(Vector3.Zero, 0), actual);
 			actualPoints = new List<Vector3> {
 				new Vector3(1, 0, 0),
 				new Vector3(-1, 0, 0),
 			};
 			actual = BoundingSphere.CreateFromPoints(actualPoints);
-            Assert.That(actual, Is.EqualTo(unitSphere));
+			Assert.That.AreEqual(unitSphere, actual);
 			actualPoints = new List<Vector3> {
 				new Vector3(0, 1, 0),
 				new Vector3(0, -1, 0),
 			};
 			actual = BoundingSphere.CreateFromPoints(actualPoints);
-			Assert.That(actual, Is.EqualTo(unitSphere));
+			Assert.That.AreEqual(unitSphere, actual);
 			actualPoints = new List<Vector3> {
 				new Vector3(0, 0, 1),
 				new Vector3(0, 0, -1)
 			};
 			actual = BoundingSphere.CreateFromPoints(actualPoints);
-			Assert.That(actual, Is.EqualTo(unitSphere));
+			Assert.That.AreEqual(unitSphere, actual);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TransformTest()
 		{
 			// TODO: Add more tests
 			var actual = unitSphere.Transform(Matrix44.CreateTranslation(Vector3.One));
 			var expected = new BoundingSphere(Vector3.One, 1);
-			Assert.That(actual, Is.EqualTo(expected));
+			Assert.That.AreEqual(expected, actual);
 		}
 	}
 }

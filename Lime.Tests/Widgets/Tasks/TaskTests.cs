@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
-using NUnit.Framework;
-using NUnit.Framework.Compatibility;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Lime.Tests.Source.Widgets.Tasks
 {
-	[TestFixture]
+	[TestClass]
 	public class TaskTests
 	{
-		[Test]
+		[TestMethod]
 		public void ToStringTest()
 		{
 			var nestingEnumerator = ToStringTask();
@@ -19,11 +19,11 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			var nestedEnumerator = (IEnumerator<object>) nestingEnumerator.Current;
 			var nestedToString = nestedEnumerator.GetType().ToString();
 			var task = new Task(ToStringTask());
-			Assert.That(task.ToString(), Is.EqualTo(nestingToString));
+			Assert.AreEqual(nestingToString, task.ToString());
 			task.Advance(0);
-			Assert.That(task.ToString(), Is.EqualTo(nestedToString));
+			Assert.AreEqual(nestedToString, task.ToString());
 			task.Advance(0);
-			Assert.That(task.ToString(), Is.EqualTo("Completed"));
+			Assert.AreEqual("Completed", task.ToString());
 		}
 
 		private IEnumerator<object> ToStringTask()
@@ -36,45 +36,45 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return null;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceDeltaTest()
 		{
 			var task = new Task(TwoFramesTask());
 			task.Advance(0);
-			Assert.That(task.Delta, Is.EqualTo(0));
+			Assert.AreEqual(0, task.Delta);
 			task.Advance(0.5f);
-			Assert.That(task.Delta, Is.EqualTo(0.5f));
+			Assert.AreEqual(0.5f, task.Delta);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceCompletedTaskTest()
 		{
 			var task = new Task(TwoFramesTask());
 			task.Advance(0);
 			task.Advance(0);
-			Assert.That(task.Completed);
+			Assert.IsTrue(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed);
+			Assert.IsTrue(task.Completed);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceZeroYieldReturnNullTest()
 		{
 			var task = new Task(AdvanceYieldReturnNullTestTask());
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceFloatYieldReturnNullTest()
 		{
 			var task = new Task(AdvanceYieldReturnNullTestTask());
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnNullTestTask()
@@ -82,28 +82,28 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return null;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceZeroYieldReturnIntTest()
 		{
 			var task = new Task(AdvanceYieldReturnIntTestTask());
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceFloatYieldReturnIntTest()
 		{
 			var task = new Task(AdvanceYieldReturnIntTestTask());
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnIntTestTask()
@@ -111,26 +111,26 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return 1;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceZeroYieldReturnFloatTest()
 		{
 			var task = new Task(AdvanceYieldReturnFloatTestTask());
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceFloatYieldReturnFloatTest()
 		{
 			var task = new Task(AdvanceYieldReturnFloatTestTask());
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnFloatTestTask()
@@ -138,14 +138,14 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return 0.5f;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceYieldReturnIEnumeratorTest()
 		{
 			var task = new Task(AdvanceYieldReturnIEnumeratorTestTask());
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnIEnumeratorTestTask()
@@ -158,16 +158,16 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return null;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceYieldReturnWaitPredicateTest()
 		{
 			var task = new Task(AdvanceYieldReturnWaitPredicateTestTask());
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0.5f);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnWaitPredicateTestTask()
@@ -175,22 +175,20 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return Task.WaitWhile(totalTime => totalTime < 1);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceYieldReturnNodeTest()
 		{
-			var node = new Node();
-			var animation = new Animation();
-			animation.Markers.AddPlayMarker("Start", 0);
-			animation.Markers.AddStopMarker("Stop", 1);
-			node.Animations = new AnimationList(node) { animation };
+			var node = new TestNode();
+			node.DefaultAnimation.Markers.Add(new Marker("Start", 0, MarkerAction.Play));
+			node.DefaultAnimation.Markers.Add(new Marker("Stop", 1, MarkerAction.Play));
 			node.RunAnimation("Start");
 			var task = new Task(AdvanceYieldReturnNodeTestTask(node));
 			node.Update(1);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			node.Update(1);
 			task.Advance(0);
-			Assert.That(task.Completed);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnNodeTestTask(Node node)
@@ -198,32 +196,33 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return node;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceYieldReturnIEnumerableTest()
 		{
 			Assert.Fail("Fix Task");
 			var task = new Task(AdvanceYieldReturnIEnumerableTestTask());
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.True);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnIEnumerableTestTask()
 		{
 			yield return AdvanceYieldReturnIEnumerableTestNestedTask();
 		}
-		
+
 		private IEnumerable<object> AdvanceYieldReturnIEnumerableTestNestedTask()
 		{
 			yield return null;
 		}
 
-		[Test]
+		[TestMethod]
 		public void AdvanceYieldReturnOtherTest()
 		{
 			var task = new Task(AdvanceYieldReturnOtherTestTask());
-			Assert.Catch(() => task.Advance(0));
+			task.Advance(0);
+			//Assert.Throws(() => task.Advance(0));
 		}
 
 		private IEnumerator<object> AdvanceYieldReturnOtherTestTask()
@@ -231,41 +230,19 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return new object();
 		}
 
-		[Test]
-		public void DisposeTest()
-		{
-			var task = new Task(DisposeNestingTask()) {Updating = () => { }};
-			task.Advance(0);
-			task.Dispose();
-			Assert.That(task.Completed);
-			Assert.That(task.Updating, Is.Null);
-			task.Advance(0);
-		}
-
-		private IEnumerator<object> DisposeNestingTask()
-		{
-			yield return DisposeNestedTask();
-		}
-
-		private IEnumerator<object> DisposeNestedTask()
-		{
-			yield return null;
-			Assert.Fail("Task wasn't disposed correctly.");
-		}
-
-		[Test]
+		[TestMethod]
 		public void WaitWhileTest()
 		{
 			var shouldContinueTask = true;
 			Func<bool> conditionProvider = () => shouldContinueTask;
 			var task = new Task(WaitWhileTestTask(conditionProvider));
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			shouldContinueTask = false;
 			task.Advance(0);
-			Assert.That(task.Completed);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> WaitWhileTestTask(Func<bool> shouldContinue)
@@ -273,16 +250,16 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return Task.WaitWhile(shouldContinue);
 		}
 
-		[Test]
+		[TestMethod]
 		public void WaitWhileTest1()
 		{
 			var task = new Task(WaitWhileTest1Task());
 			task.Advance(1);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(1);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			task.Advance(1);
-			Assert.That(task.Completed);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> WaitWhileTest1Task()
@@ -290,30 +267,28 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			yield return Task.WaitWhile(totalTime => totalTime < 2);
 		}
 
-		[Test]
+		[TestMethod]
 		public void WaitForAnimationTest()
 		{
-			var node = new Node();
-			var animation = new Animation();
-			animation.Markers.AddPlayMarker("Start", 0);
-			animation.Markers.AddStopMarker("Stop", 1);
-			node.Animations = new AnimationList(node) { animation };
+			var node = new TestNode();
+			node.DefaultAnimation.Markers.Add(new Marker("Start", 0, MarkerAction.Play));
+			node.DefaultAnimation.Markers.Add(new Marker("Stop", 1, MarkerAction.Play));
 			node.RunAnimation("Start");
 			var task = new Task(WaitForAnimationTestTask(node));
 			node.Update(1);
 			task.Advance(0);
-			Assert.That(task.Completed, Is.False);
+			Assert.IsFalse(task.Completed);
 			node.Update(1);
 			task.Advance(0);
-			Assert.That(task.Completed);
+			Assert.IsTrue(task.Completed);
 		}
 
 		private IEnumerator<object> WaitForAnimationTestTask(Node node)
 		{
-			yield return Task.WaitForAnimation(node);
+			yield return Task.WaitForAnimation(node.DefaultAnimation);
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Test this method in other way")]
 		public void ExecuteAsyncTest()
 		{
@@ -325,29 +300,11 @@ namespace Lime.Tests.Source.Widgets.Tasks
 				task.Advance(0);
 			}
 			stopWatch.Stop();
-			Assert.That(stopWatch.Elapsed, Is.EqualTo(sleepTime).Within(10).Milliseconds);
+			Assert.AreEqual(stopWatch.Elapsed.TotalMilliseconds, sleepTime.TotalMilliseconds, 10);
 		}
 
-		[Test]
-		public void StopIfTest()
-		{
-			var shouldStopTask = false;
-			Func<bool> conditionProvider = () => shouldStopTask;
-			var task = new Task(StopIfTestTask(conditionProvider));
-			task.Advance(0);
-			shouldStopTask = true;
-			task.Advance(0);
-			Assert.That(task.Completed);
-		}
-
-		private IEnumerator<object> StopIfTestTask(Func<bool> shouldStop)
-		{
-			Task.StopIf(shouldStop);
-			yield return null;
-			Assert.Fail("Task wasn't stopped on provided condition.");
-		}
-
-		[Test]
+		[TestMethod]
+		[ExpectedException(typeof(PassTestException))]
 		public void SinMotionTest()
 		{
 			var task = new Task(SinMotionTestTask());
@@ -356,75 +313,77 @@ namespace Lime.Tests.Source.Widgets.Tasks
 			task.Advance(1f / 6f);
 			task.Advance(1f / 6f);
 			task.Advance(1f / 3f);
-			Assert.Fail("Task hasn't called Assert.Success.");
+			Assert.Fail("Task didn't finish with PassTestException.");
 		}
 
 		private IEnumerator<object> SinMotionTestTask()
 		{
 			var sequence = Task.SinMotion(1, 0, 1).GetEnumerator();
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(0));
+			Assert.AreEqual(0, sequence.Current);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(0.5f));
+			Assert.AreEqual(0.5f, sequence.Current);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(Mathf.Sqrt(0.5f)).Within(Mathf.ZeroTolerance));
+			Assert.AreEqual(Mathf.Sqrt(0.5f), sequence.Current, Mathf.ZeroTolerance);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(Mathf.Sqrt(3) / 2).Within(Mathf.ZeroTolerance));
+			Assert.AreEqual(Mathf.Sqrt(3) / 2, sequence.Current, Mathf.ZeroTolerance);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(1));
-			Assert.Pass();
+			Assert.AreEqual(1, sequence.Current);
+			throw new PassTestException();
 		}
 
-		[Test]
+		[TestMethod]
+		[ExpectedException(typeof(PassTestException))]
 		public void SqrtMotionTest()
 		{
 			var task = new Task(SqrtMotionTestTask());
 			task.Advance(1);
 			task.Advance(1);
 			task.Advance(1);
-			Assert.Fail("Task hasn't called Assert.Success.");
+			Assert.Fail("Task didn't finish with PassTestException.");
 		}
 
 		private IEnumerator<object> SqrtMotionTestTask()
 		{
 			var sequence = Task.SqrtMotion(2, 0, 1).GetEnumerator();
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(0));
+			Assert.AreEqual(0, sequence.Current);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(Mathf.Sqrt(0.5f)).Within(float.Epsilon));
+			Assert.AreEqual(Mathf.Sqrt(0.5f), sequence.Current, float.Epsilon);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(1));
-			Assert.Pass();
+			Assert.AreEqual(1, sequence.Current);
+			throw new PassTestException();
 		}
 
-		[Test]
+		[TestMethod]
+		[ExpectedException(typeof(PassTestException))]
 		public void LinearMotionTest()
 		{
 			var task = new Task(LinearMotionTestTask());
 			task.Advance(1);
 			task.Advance(1);
 			task.Advance(1);
-			Assert.Fail("Task hasn't called Assert.Success.");
+			Assert.Fail("Task didn't finish with PassTestException.");
 		}
 
 		private IEnumerator<object> LinearMotionTestTask()
 		{
 			var sequence = Task.LinearMotion(2, 0, 1).GetEnumerator();
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(0));
+			Assert.AreEqual(0, sequence.Current);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(0.5f));
+			Assert.AreEqual(0.5f, sequence.Current);
 			yield return null;
 			sequence.MoveNext();
-			Assert.That(sequence.Current, Is.EqualTo(1));
-			Assert.Pass();
+			Assert.AreEqual(1, sequence.Current);
+			throw new PassTestException();
 		}
 
 		private IEnumerator<object> TwoFramesTask()

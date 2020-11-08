@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Lime.Tests.Source.Widgets
 {
-	[TestFixture]
+	[TestClass]
 	public class WidgetTests
 	{
 		private Widget root;
@@ -13,7 +13,7 @@ namespace Lime.Tests.Source.Widgets
 		private Widget child2;
 		private Widget grandChild;
 
-		[SetUp]
+		[TestInitialize]
 		public void TestSetUp()
 		{
 			root = new Widget { Id = "Root" };
@@ -25,14 +25,14 @@ namespace Lime.Tests.Source.Widgets
 			child1.AddNode(grandChild);
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void WasClickedTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		public void DisposeTest()
 		{
 			var widgets = new List<Widget> {root, child1, child2, grandChild};
@@ -42,41 +42,41 @@ namespace Lime.Tests.Source.Widgets
 			}
 			root.Dispose();
 			foreach (var widget in widgets) {
-				Assert.That(widget.Tasks, Is.Empty);
-				Assert.That(widget.LateTasks, Is.Empty);
+				Assert.AreEqual(0, widget.Tasks.Count);
+				Assert.AreEqual(0, widget.LateTasks.Count);
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void RefreshLayoutTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		public void CalcContentSizeTest()
 		{
 			root.Size = Vector2.Half;
-			Assert.That(root.CalcContentSize(), Is.EqualTo(Vector2.Half));
+			Assert.That.AreEqual(Vector2.Half, root.CalcContentSize());
 			root.Size = Vector2.One;
-			Assert.That(root.CalcContentSize(), Is.EqualTo(Vector2.One));
+			Assert.That.AreEqual(Vector2.One, root.CalcContentSize());
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Need to implement reliable way to check cloned objects.")]
 		public void DeepCloneFastTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		public void UpdateTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		public void RaiseUpdatingTest()
 		{
 			const float ExpectedDelta = 0.1f;
@@ -87,11 +87,11 @@ namespace Lime.Tests.Source.Widgets
 				actualDelta = delta;
 			};
 			root.RaiseUpdating(ExpectedDelta);
-			Assert.That(updatingRaised);
-			Assert.That(actualDelta, Is.EqualTo(ExpectedDelta));
+			Assert.IsTrue(updatingRaised);
+			Assert.AreEqual(ExpectedDelta, actualDelta);
 		}
 
-		[Test]
+		[TestMethod]
 		public void RaiseUpdatedTest()
 		{
 			const float ExpectedDelta = 0.1f;
@@ -102,45 +102,45 @@ namespace Lime.Tests.Source.Widgets
 				actualDelta = delta;
 			};
 			root.RaiseUpdated(ExpectedDelta);
-			Assert.That(updatedRaised);
-			Assert.That(actualDelta, Is.EqualTo(ExpectedDelta));
+			Assert.IsTrue(updatedRaised);
+			Assert.AreEqual(ExpectedDelta, actualDelta);
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void CalcLocalToParentTransformTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void StaticScaleTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		public void AddToRenderChainTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void IsMouseOverTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void HitTestTest()
 		{
 			Assert.Fail();
 		}
 
-		[Test]
+		[TestMethod]
 		[Ignore("Wait until development on this function stops.")]
 		public void GetEffectiveLayerTest()
 		{

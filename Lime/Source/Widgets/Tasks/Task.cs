@@ -85,7 +85,7 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Exits from all IEnumerators, sets Updating to null.
+		/// Exits from all IEnumerators.
 		/// </summary>
 		public void Dispose()
 		{
