@@ -135,9 +135,9 @@ namespace Lime.Tests.Source.Widgets
 		{
 			root.Id = "";
 			child1.Tag = "Special";
-			Assert.AreEqual("Node, \"\", [Node]", root.ToString());
-			Assert.AreEqual("Node, \"Child1\", [Node]/Child1 (Special)", child1.ToString());
-			Assert.AreEqual("Node, \"Grandchild\", [Node]/Child1 (Special)/Grandchild", grandChild.ToString());
+			Assert.AreEqual("TestNode", root.ToString());
+			Assert.AreEqual("'Child1'(Special) in TestNode", child1.ToString());
+			Assert.AreEqual("'Grandchild' in 'Child1'(Special) in TestNode", grandChild.ToString());
 		}
 
 		[TestMethod]

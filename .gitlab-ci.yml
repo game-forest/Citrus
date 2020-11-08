@@ -2,6 +2,16 @@ variables:
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
 
+windows_test:
+  stage: test
+  tags:
+  - win
+  script:
+  - chcp 65001
+  - Orange\Toolchain.Win\nuget.exe restore Lime.Tests\Lime.Tests.sln
+  - '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" Lime.Tests\Lime.Tests.sln'
+  - dotnet test Lime.Tests/bin/Debug/Lime.Tests.dll
+
 windows_build:
   stage: build
   tags:
