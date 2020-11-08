@@ -504,7 +504,7 @@ namespace Lime
 
 		public bool NeedSerializeAnimations()
 		{
-			var c = Components.Get<AnimationComponent>();
+			var c = Components.AnimationComponent;
 			return c != null && (c.Animations.Count > 1 || (c.Animations.Count == 1 && (!c.Animations[0].IsLegacy || c.Animations[0].Markers.Count > 0)));
 		}
 
