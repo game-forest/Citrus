@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Lime;
 
-namespace Lime.Tests.Source.Types
+namespace Citrus.Tests.Types
 {
 	[TestClass]
 	public class BoundingSphereTests

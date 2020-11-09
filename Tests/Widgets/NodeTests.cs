@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Lime;
 
-namespace Lime.Tests.Source.Widgets
+namespace Citrus.Tests.Widgets
 {
 	[TestClass]
 	public class NodeTests

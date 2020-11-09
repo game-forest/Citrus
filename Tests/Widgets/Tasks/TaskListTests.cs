@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Lime;
 
-namespace Lime.Tests.Source.Widgets.Tasks
+namespace Citrus.Tests.Widgets.Tasks
 {
 	[TestClass]
 	public class TaskListTests
