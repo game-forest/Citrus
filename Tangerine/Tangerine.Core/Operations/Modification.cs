@@ -754,12 +754,10 @@ namespace Tangerine.Core.Operations
 				builder.Invoke(node, new object[] { });
 			}
 			node.Id = GenerateNodeId(hostNode, nodeType);
-			// Make sure the default animation is created.
-			var _ = node.DefaultAnimation;
+			Document.Decorate(node);
 			LinkSceneItem.Perform(parent, index, node);
 			ClearRowSelection.Perform();
 			SelectNode.Perform(node);
-			Document.Decorate(node);
 			return node;
 		}
 

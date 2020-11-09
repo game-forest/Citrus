@@ -778,6 +778,10 @@ namespace Tangerine.Core
 
 		public static void Decorate(Node node)
 		{
+			// Make sure the legacy animation is exists.
+			if (NodeCompositionValidator.CanHaveChildren(node.GetType())) {
+				var _ = node.DefaultAnimation;
+			}
 			foreach (var decorator in NodeDecorators) {
 				decorator(node);
 			}
