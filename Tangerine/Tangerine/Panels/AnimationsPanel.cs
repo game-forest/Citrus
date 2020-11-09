@@ -361,6 +361,7 @@ namespace Tangerine.Panels
 					(mode == TreeViewMode.CurrentContainer || node.NeedSerializeAnimations() || node == Document.Current.Container)
 				) {
 					var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
+					var nodeSatisfyFilter = Filter(nodeItem.Label);
 					foreach (var animationSceneItem in sceneTree.Rows) {
 						if (animationSceneItem.GetAnimation() == null) {
 							// Do not use LINQ trying to reduce GC pressure
@@ -372,7 +373,7 @@ namespace Tangerine.Panels
 								animationItem.Items.Add(provider.GetMarkerTreeViewItem(markerSceneItem));
 							}
 						}
-						if (animationItem.Items.Count > 0 || Filter(animationItem.Label)) {
+						if (animationItem.Items.Count > 0 || nodeSatisfyFilter || Filter(animationItem.Label)) {
 							nodeItem.Items.Add(animationItem);
 						}
 					}
