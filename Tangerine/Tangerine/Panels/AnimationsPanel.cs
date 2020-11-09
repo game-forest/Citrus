@@ -169,8 +169,14 @@ namespace Tangerine.Panels
 			TreeViewItem currentAnimationContainerItem = null;
 			var currentAnimationContainerItemExpanded = false;
 			contentWidget.AddChangeWatcher(
-				() => Document.Current?.Animation,
+				() => (Document.Current?.Animation, presentationOptions.SearchStringGetter?.Invoke()),
 				_ => {
+					if (
+						mode == TreeViewMode.CurrentContainer &&
+						!Document.Current.Container.Animations.Contains(Document.Current.Animation)
+					) {
+						return;
+					}
 					if (currentAnimationContainerItem?.Parent != null) {
 						currentAnimationContainerItem.Expanded = currentAnimationContainerItemExpanded;
 					}
