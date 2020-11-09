@@ -811,9 +811,6 @@ namespace Tangerine.Core
 		public void SetCurrentAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
 			animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
-			// Bump scene tree version, since some animated properties may affect
-			// the presentation of nodes on the timeline (e.g. a node label is grayed if Visible == false)
-			BumpSceneTreeVersion();
 		}
 
 		public void TogglePreviewAnimation()
