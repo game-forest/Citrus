@@ -647,6 +647,7 @@ namespace Tangerine.UI
 			// Remove widgets which are not in the list anymore.
 			for (var i = previousItems.Count - 1; i >= 0; i--) {
 				if (previousItems[i].Index == -1) {
+					previousItems[i].Selected = false;
 					var j = previousItems.Count - 1;
 					// Swap current element with the last one.
 					if (i < j) {
