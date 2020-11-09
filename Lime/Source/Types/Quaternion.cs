@@ -961,7 +961,7 @@ namespace Lime
 		/// <returns>A <see cref="String"/> representation of this <see cref="Quaternion"/>.</returns>
 		public override string ToString()
 		{
-			return "{X:" + X + " Y:" + Y + " Z:" + Z + " W:" + W + "}";
+			return FormattableString.Invariant($"{{X:{X} Y:{Y} Z:{Z} W:{W}}}");
 		}
 
 		/// <summary>

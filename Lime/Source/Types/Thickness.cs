@@ -1,3 +1,4 @@
+using System;
 using Yuzu;
 
 namespace Lime
@@ -76,7 +77,7 @@ namespace Lime
 
 		public override string ToString()
 		{
-			return string.Format("{0}, {1}, {2}, {3}", Left, Top, Right, Bottom);
+			return FormattableString.Invariant($"{Left}, {Top}, {Right}, {Bottom}");
 		}
 	}
 #pragma warning restore CS0660, CS0661
