@@ -88,7 +88,7 @@ namespace Tangerine.Core
 
 		private void AddSceneItemsForAnimations(Row parent, Node node)
 		{
-			var animationComponent = node.Components.Get<AnimationComponent>();
+			var animationComponent = node.Components.AnimationComponent;
 			if (animationComponent != null && animationComponent.Animations.Count > 0) {
 				foreach (var animation in animationComponent.Animations) {
 					var animationItem = BuildAnimationSceneItem(animation);

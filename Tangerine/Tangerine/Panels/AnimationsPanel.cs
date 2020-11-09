@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
@@ -351,11 +352,11 @@ namespace Tangerine.Panels
 			{
 				if (
 					sceneTree.TryGetNode(out var node) &&
-					(mode == TreeViewMode.CurrentContainer || node.NeedSerializeAnimations())
+					(mode == TreeViewMode.CurrentContainer || node.NeedSerializeAnimations() || node == Document.Current.Container)
 				) {
 					var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
 					foreach (var animationSceneItem in sceneTree.Rows) {
-						if (!animationSceneItem.TryGetAnimation(out var animation)) {
+						if (animationSceneItem.GetAnimation() == null) {
 							// Do not use LINQ trying to reduce GC pressure
 							continue;
 						}
@@ -370,6 +371,7 @@ namespace Tangerine.Panels
 						}
 					}
 					if (nodeItem.Items.Count > 0 || mode == TreeViewMode.CurrentContainer) {
+						((NodeTreeViewItem)nodeItem).RefreshLabel();
 						nodeItems.Add(nodeItem);
 					}
 				}
@@ -387,7 +389,8 @@ namespace Tangerine.Panels
 			}
 
 			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
-			nodeItems.Sort((a, b) => a.Label.CompareTo(b.Label));
+			nodeItems.Sort((a, b) =>
+				string.Compare(a.Label, b.Label, StringComparison.Ordinal));
 			foreach (var item in nodeItems) {
 				treeView.RootItem.Items.Add(item);
 			}
@@ -509,28 +512,48 @@ namespace Tangerine.Panels
 
 			public override string Label
 			{
-				get => GetNodeLabel(Node);
+				get => label;
 				set { }
 			}
 
-			private static string GetNodeLabel(Node node)
+			private static readonly StringBuilder stringBuilder = new StringBuilder(128);
+
+			private string label;
+
+			public void RefreshLabel()
 			{
-				string r = null;
-				for (var p = node; p.Parent != null; p = p.Parent) {
-					var i = string.IsNullOrEmpty(p.Id) ? p.GetType().Name : p.Id;
-					if (!string.IsNullOrEmpty(p.Tag)) {
-						i += $" ({p.Tag})";
+				stringBuilder.Clear();
+				label = null;
+				BuildLabelForNode(Node);
+				if (Node == Document.Current.RootNode) {
+					stringBuilder.Append(" [Scene Root]");
+				}
+				label = stringBuilder.ToString();
+
+				void BuildLabelForNode(Node node)
+				{
+					if (node.Parent != null) {
+						BuildLabelForNode(node.Parent);
 					}
-					var bundlePath = node.Components.Get<Node.AssetBundlePathComponent>();
+					var id = string.IsNullOrEmpty(node.Id) ? node.GetType().Name : node.Id;
+					if (!string.IsNullOrEmpty(node.Tag)) {
+						stringBuilder.Append(' ');
+						stringBuilder.Append('(');
+						stringBuilder.Append(node.Tag);
+						stringBuilder.Append(')');
+					}
+					var bundlePath = Node.Components.Get<Node.AssetBundlePathComponent>();
 					if (bundlePath != null) {
-						i += $" ({bundlePath})";
+						stringBuilder.Append(' ');
+						stringBuilder.Append('(');
+						stringBuilder.Append(bundlePath);
+						stringBuilder.Append(')');
 					}
-					r = r == null ? i : $"{i}/{r}";
+					if (stringBuilder.Length > 0) {
+						stringBuilder.Append('/');
+					}
+					stringBuilder.Append(id);
 				}
-				if (node == Document.Current.RootNode) {
-					r += " [Scene Root]";
-				}
-				return r;
 			}
 
 			public override bool CanRename() => false;
