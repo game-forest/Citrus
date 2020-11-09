@@ -8,9 +8,9 @@ windows_test:
   - win
   script:
   - chcp 65001
-  - Orange\Toolchain.Win\nuget.exe restore Lime.Tests\Lime.Tests.sln
-  - '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" Lime.Tests\Lime.Tests.sln'
-  - dotnet test Lime.Tests/bin/Debug/Lime.Tests.dll
+  - Orange\Toolchain.Win\nuget.exe restore Tests\Tests.sln
+  - '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" Tests\Tests.sln'
+  - dotnet test Tests/bin/Debug/Citrus.Tests.dll
 
 windows_build:
   stage: build

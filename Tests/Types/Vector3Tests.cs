@@ -1,7 +1,8 @@
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Lime;
 
-namespace Lime.Tests.Source.Types
+namespace Citrus.Tests.Types
 {
 	[TestClass]
 	public class Vector3Tests

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Lime;
 
-namespace Lime.Tests
+namespace Citrus.Tests
 {
 	internal class TestNode : Node
 	{

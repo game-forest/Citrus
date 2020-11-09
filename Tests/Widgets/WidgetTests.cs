@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Lime;
 
-namespace Lime.Tests.Source.Widgets
+namespace Citrus.Tests.Widgets
 {
 	[TestClass]
 	public class WidgetTests
