@@ -260,14 +260,16 @@ namespace Tangerine.Panels
 			}
 			Document.Current.History.DoTransaction(() => {
 				((TreeView)sender).ClearSelection();
-				TreeViewItem newSelected = null;
+				AnimationTreeViewItem newSelected = null;
 				foreach (var item in animationItems) {
 					var parent = item.Parent;
 					if ((newSelected == null || newSelected == item) && parent.Items.Count > 1) {
 						var index = parent.Items.IndexOf(item);
 						index = index > 0 ? index - 1 : index + 1;
-						newSelected = parent.Items[index];
+						newSelected = (AnimationTreeViewItem)parent.Items[index];
 						newSelected.Selected = true;
+						Document.Current.History.DoTransaction(() =>
+							NavigateToAnimation.Perform(newSelected.Animation));
 					}
 					if (item.SceneItem.TryGetAnimation(out var animation)) {
 						DeleteAnimators(animation.Id, animation.OwnerNode);
