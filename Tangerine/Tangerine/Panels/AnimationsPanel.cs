@@ -52,8 +52,9 @@ namespace Tangerine.Panels
 				IsSearchActiveGetter = () => searchStringEditor.Text.Length > 0,
 				ItemStateProvider = sceneItem => sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State2
 			};
-			var treeView1 = CreateTreeView(scrollView1, itemProvider1,
-				new TreeViewItemPresentationOptions { Minimalistic = true }, TreeViewMode.CurrentContainer);
+			CreateTreeView(scrollView1, itemProvider1,
+				new TreeViewItemPresentationOptions { Minimalistic = true },
+				TreeViewMode.CurrentContainer);
 			var treeView2 = CreateTreeView(scrollView2, itemProvider2,
 				new TreeViewItemPresentationOptions {
 					Minimalistic = true,
@@ -62,7 +63,8 @@ namespace Tangerine.Panels
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView2, itemProvider2, TreeViewMode.Hierarchy));
 		}
 
-		private IEnumerator<object> SearchStringDebounceTask(TreeView treeView, TreeViewItemProvider provider, TreeViewMode mode)
+		private IEnumerator<object> SearchStringDebounceTask(TreeView treeView,
+			TreeViewItemProvider provider, TreeViewMode mode)
 		{
 			string previousSearchText = null;
 			var lastChangeAt = DateTime.Now;
@@ -80,6 +82,7 @@ namespace Tangerine.Panels
 					if (searchStringEditor.Text.Length > 0 && treeView.RootItem != null) {
 						ExpandTree(treeView.RootItem);
 					}
+					ScrollToCurrentAnimation(treeView, provider, mode);
 				}
 			}
 		}
@@ -166,32 +169,29 @@ namespace Tangerine.Panels
 					Document.Current?.Container),
 				_ => RebuildTreeView(treeView, provider, mode));
 			// Expand current animation container on animation change
-			TreeViewItem currentAnimationContainerItem = null;
-			var currentAnimationContainerItemExpanded = false;
 			contentWidget.AddChangeWatcher(
-				() => (Document.Current?.Animation, presentationOptions.SearchStringGetter?.Invoke()),
-				_ => {
-					if (
-						mode == TreeViewMode.CurrentContainer &&
-						!Document.Current.Container.Animations.Contains(Document.Current.Animation)
-					) {
-						return;
-					}
-					if (currentAnimationContainerItem?.Parent != null) {
-						currentAnimationContainerItem.Expanded = currentAnimationContainerItemExpanded;
-					}
-					var i = Document.Current.GetSceneItemForObject(Document.Current.Animation);
-					var animationItem = provider.GetAnimationTreeViewItem(i);
-					currentAnimationContainerItem = animationItem.Parent;
-					if (currentAnimationContainerItem != null) {
-						currentAnimationContainerItemExpanded = currentAnimationContainerItem.Expanded;
-						currentAnimationContainerItem.Expanded = true;
-					}
-					treeView.Refresh();
-					treeView.ScrollToItem(animationItem, true);
-				});
+				() => Document.Current?.Animation,
+				_ => ScrollToCurrentAnimation(treeView, provider, mode));
 			RebuildTreeView(treeView, provider, mode);
 			return treeView;
+		}
+
+		private void ScrollToCurrentAnimation(TreeView treeView, TreeViewItemProvider provider, TreeViewMode mode)
+		{
+			if (
+				mode == TreeViewMode.CurrentContainer &&
+				!Document.Current.Container.Animations.Contains(Document.Current.Animation)
+			) {
+				return;
+			}
+			var sceneItem = Document.Current.GetSceneItemForObject(Document.Current.Animation);
+			var treeViewItem = provider.GetAnimationTreeViewItem(sceneItem);
+			if (treeViewItem.Parent != null) {
+				treeViewItem.Parent.Expanded = true;
+				treeView.Refresh();
+				contentWidget.LayoutManager.Layout();
+				treeView.ScrollToItem(treeViewItem, true);
+			}
 		}
 
 		private void TreeView_OnDragBegin(object sender, TreeView.DragEventArgs args)
@@ -658,7 +658,7 @@ namespace Tangerine.Panels
 
 			public ITreeViewItemPresentation CreateItemPresentation(TreeView treeView, TreeViewItem item)
 			{
-				switch (item){
+				switch (item) {
 					case AnimationTreeViewItem _:
 						return new AnimationTreeViewItemPresentation(treeView, item, options, itemProvider);
 					case MarkerTreeViewItem _:
