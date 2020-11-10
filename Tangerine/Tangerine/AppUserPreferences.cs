@@ -58,7 +58,7 @@ namespace Tangerine
 			AutosaveDelay = 600;
 		}
 
-		public static AppUserPreferences Instance => Core.UserPreferences.Instance.Get<AppUserPreferences>();
+		public static AppUserPreferences Instance => Core.UserPreferences.Instance.GetOrAdd<AppUserPreferences>();
 
 		public static ToolbarModel DefaultToolbarModel()
 		{

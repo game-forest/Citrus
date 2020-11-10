@@ -39,14 +39,7 @@ namespace Tangerine
 			Widget.EnableViewCulling = false;
 			WidgetInput.AcceptMouseBeyondWidgetByDefault = false;
 
-			if (!UserPreferences.Initialize()) {
-				UserPreferences.Instance.Clear();
-				UserPreferences.Instance.Add(new AppUserPreferences());
-				UserPreferences.Instance.Add(new UI.SceneView.SceneUserPreferences());
-				UserPreferences.Instance.Add(new UI.Timeline.TimelineUserPreferences());
-				UserPreferences.Instance.Add(new UI.FilesystemView.FilesystemUserPreferences());
-				UserPreferences.Instance.Add(new CoreUserPreferences());
-			}
+			UserPreferences.Initialize();
 #if WIN
 			TangerineSingleInstanceKeeper.Initialize(args);
 			TangerineSingleInstanceKeeper.AnotherInstanceArgsRecieved += OpenDocumentsFromArgs;
