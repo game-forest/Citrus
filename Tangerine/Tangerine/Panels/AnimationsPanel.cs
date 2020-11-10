@@ -539,7 +539,7 @@ namespace Tangerine.Panels
 
 				void BuildLabelForNode(Node node)
 				{
-					if (node.Parent != null) {
+					if (node.Parent?.Parent != null) {
 						BuildLabelForNode(node.Parent);
 					}
 					var id = string.IsNullOrEmpty(node.Id) ? node.GetType().Name : node.Id;
