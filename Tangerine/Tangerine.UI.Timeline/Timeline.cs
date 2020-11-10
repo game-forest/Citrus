@@ -132,6 +132,7 @@ namespace Tangerine.UI.Timeline
 			});
 			RootWidget.Gestures.Add(DropFilesGesture = new DropFilesGesture());
 			CreateFilesDropHandlers();
+			RootWidget.AddChangeWatcher(() => Document.Current?.Animation, _ => columnCount = 0);
 			Document.Current.History.DocumentChanged += () => columnCount = 0;
 			OnCreate?.Invoke(this);
 		}
