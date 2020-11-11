@@ -159,9 +159,14 @@ namespace Tangerine.Core.Operations
 				animation.IsLegacy && Document.Current.Container != animation.OwnerNode ||
 				!animation.IsLegacy && Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
 			) {
-				NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false);
+				var node = NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false);
+				// Remap animation in case of external scene.
+				animation = node.Animations.Find(animation.Id);
 			}
-			SetProperty.Perform(Document.Current, nameof(Document.Animation), animation, isChangingDocument: false);
+			// Wrap into transaction, as the document could be changed in case of an external scene.
+			Document.Current.History.DoTransaction(() => {
+				SetProperty.Perform(Document.Current, nameof(Document.Animation), animation, isChangingDocument: false);
+			});
 		}
 	}
 }

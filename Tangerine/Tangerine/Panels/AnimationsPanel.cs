@@ -150,8 +150,11 @@ namespace Tangerine.Panels
 					case MarkerTreeViewItem mi:
 						Document.Current.History.DoTransaction(() => {
 							NavigateToAnimation.Perform(mi.Marker.Owner);
-							SetCurrentColumn.Perform(mi.Marker.Frame);
-							CenterTimelineOnCurrentColumn.Perform();
+							// Wrap into transaction, as the document could be changed in case of an external scene.
+							Document.Current.History.DoTransaction(() => {
+								SetCurrentColumn.Perform(mi.Marker.Frame);
+								CenterTimelineOnCurrentColumn.Perform();
+							});
 						});
 						break;
 				}
