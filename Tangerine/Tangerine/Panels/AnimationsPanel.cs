@@ -554,14 +554,12 @@ namespace Tangerine.Panels
 						stringBuilder.Append(node.Tag);
 						stringBuilder.Append(')');
 					}
-					if (Node != Document.Current.RootNode) {
-						var bundlePath = Node.Components.Get<Node.AssetBundlePathComponent>();
-						if (bundlePath != null) {
-							stringBuilder.Append(' ');
-							stringBuilder.Append('(');
-							stringBuilder.Append(bundlePath);
-							stringBuilder.Append(')');
-						}
+					var contentsPath = Node.ContentsPath;
+					if (contentsPath != null) {
+						stringBuilder.Append(' ');
+						stringBuilder.Append('(');
+						stringBuilder.Append(contentsPath);
+						stringBuilder.Append(')');
 					}
 					if (stringBuilder.Length > 0) {
 						stringBuilder.Append('/');
