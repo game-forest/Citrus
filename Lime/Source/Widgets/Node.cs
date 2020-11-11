@@ -505,7 +505,27 @@ namespace Lime
 		public bool NeedSerializeAnimations()
 		{
 			var c = Components.AnimationComponent;
-			return c != null && (c.Animations.Count > 1 || (c.Animations.Count == 1 && (!c.Animations[0].IsLegacy || c.Animations[0].Markers.Count > 0)));
+			if (c == null) {
+				return false;
+			}
+			if (c.Animations.Count != 1) {
+				return c.Animations.Count > 1;
+			}
+			if (!c.Animations[0].IsLegacy) {
+				return true;
+			}
+			// Check is there any marker or keyframe for legacy animation.
+			if (c.Animations[0].Markers.Count > 0) {
+				return true;
+			}
+			for (var n = FirstChild; n != null; n = n.NextSibling) {
+				foreach (var a in n.Animators) {
+					if (a.AnimationId == null && !a.IsZombie && a.ReadonlyKeys.Count > 0) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		/// <summary>
