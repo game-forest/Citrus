@@ -386,7 +386,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			var bestFit = ulong.MaxValue;
 			for (var node = freeList.First; node != null; node = node.Next) {
 				var currentOffset = GraphicsUtility.AlignUp(node.Value.Offset, alignment);
-				if (currentOffset + size < node.Value.Offset + node.Value.Size) {
+				if (currentOffset + size <= node.Value.Offset + node.Value.Size) {
 					var fit = node.Value.Size - size;
 					if (fit < bestFit) {
 						bestNode = node;
