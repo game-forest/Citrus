@@ -96,10 +96,22 @@ namespace Tangerine.Core
 
 		public ISceneViewThumbnailProvider SceneViewThumbnailProvider { get; set; }
 
+		private Node container;
+
 		/// <summary>
 		/// Gets or sets the current container widget.
 		/// </summary>
-		public Node Container { get; set; }
+		public Node Container
+		{
+			get => container;
+			set
+			{
+				if (container != value) {
+					container = value;
+					BumpSceneTreeVersion();
+				}
+			}
+		}
 
 		public NodeManager Manager { get; }
 
