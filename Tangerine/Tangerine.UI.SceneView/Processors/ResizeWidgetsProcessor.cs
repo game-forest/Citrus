@@ -81,9 +81,9 @@ namespace Tangerine.UI.SceneView
 					var toBeTransformed = widgets.Where(w => isChangingScale ?
 						!w.IsPropertyReadOnly(nameof(Widget.Scale)) : !w.IsPropertyReadOnly(nameof(Widget.Size))).ToList();
 					var isFreezeAllowed = !isChangingScale && toBeTransformed.Count == 1;
-					var areChildrenFreezed = SceneView.Input.IsKeyPressed(Key.Z) && isFreezeAllowed;
-					var isPivotFreezed = SceneView.Input.IsKeyPressed(Key.X) && isFreezeAllowed;
-					if (areChildrenFreezed) {
+					var areChildrenFrozen = SceneView.Input.IsKeyPressed(Key.Z) && isFreezeAllowed;
+					var isPivotFrozen = SceneView.Input.IsKeyPressed(Key.X) && isFreezeAllowed;
+					if (areChildrenFrozen) {
 						transform = toBeTransformed[0].CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
 					}
 					var pivotPoint =
@@ -100,11 +100,11 @@ namespace Tangerine.UI.SceneView
 						proportional,
 						!isChangingScale
 					);
-					if (areChildrenFreezed) {
+					if (areChildrenFrozen) {
 						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(toBeTransformed[0]);
 						RestoreChildrenPositions(toBeTransformed[0], transform);
 					}
-					if (isPivotFreezed) {
+					if (isPivotFrozen) {
 						RestorePivot(toBeTransformed[0], pivot, startPositionForPivotRestore.Value);
 					}
 					yield return null;
