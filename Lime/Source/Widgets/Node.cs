@@ -1350,13 +1350,83 @@ namespace Lime
 
 		public virtual void LoadExternalScenes()
 		{
+			var externalScenes = new Dictionary<string, ExternalScene>();
+			LoadExternalScenes(externalScenes, new List<ExternalScene>());
+			if (externalScenes.Count > 0) {
+				InsertExternalScenes(externalScenes);
+			}
+		}
+
+		private void LoadExternalScenes(Dictionary<string, ExternalScene> externalScenes, List<ExternalScene> parentScenes)
+		{
 			if (string.IsNullOrEmpty(ContentsPath)) {
 				foreach (var child in Nodes) {
-					child.LoadExternalScenes();
+					child.LoadExternalScenes(externalScenes, parentScenes);
 				}
 			} else if (ResolveScenePath(ContentsPath) != null) {
-				var content = LoadHelper(ContentsPath, null, external: true);
+				if (!externalScenes.TryGetValue(ContentsPath, out var externalScene)) {
+					var node = LoadHelper(ContentsPath, null, external: true, ignoreExternals: true);
+					externalScenes.Add(ContentsPath, externalScene = new ExternalScene(node));
+					foreach (var parentScene in parentScenes) {
+						IncrementDictionaryValue(parentScene.NestedSceneReferences, ContentsPath);
+					}
+					parentScenes.Add(externalScene);
+					foreach (var child in node.Nodes) {
+						child.LoadExternalScenes(externalScenes, parentScenes);
+					}
+					parentScenes.RemoveAt(parentScenes.Count - 1);
+				} else {
+					externalScene.ReferenceCount++;
+					foreach (var (nestedSceneContentsPath, nestedSceneReferences) in externalScene.NestedSceneReferences) {
+						externalScenes[nestedSceneContentsPath].ReferenceCount += nestedSceneReferences;
+					}
+					foreach (var parentScene in parentScenes) {
+						IncrementDictionaryValue(parentScene.NestedSceneReferences, ContentsPath);
+						foreach (var (nestedSceneContentsPath, nestedSceneReferences) in externalScene.NestedSceneReferences) {
+							IncrementDictionaryValue(parentScene.NestedSceneReferences, nestedSceneContentsPath, nestedSceneReferences);
+						}
+					}
+				}
+			}
+
+			void IncrementDictionaryValue<T>(Dictionary<T, int> dictionary, T key, int addendum = 1)
+			{
+				dictionary.TryGetValue(key, out var value);
+				dictionary[key] = value + addendum;
+			}
+		}
+
+		private void InsertExternalScenes(Dictionary<string, ExternalScene> externalScenes)
+		{
+			if (string.IsNullOrEmpty(ContentsPath)) {
+				foreach (var child in Nodes) {
+					child.InsertExternalScenes(externalScenes);
+				}
+			} else if (ResolveScenePath(ContentsPath) != null) {
+				if (!externalScenes.TryGetValue(ContentsPath, out var externalScene)) {
+					throw new InvalidOperationException();
+				}
+				var isLast = --externalScene.ReferenceCount <= 0;
+				var content = isLast ? externalScene.Node : InternalPersistence.Instance.Clone(externalScene.Node);
+				if (isLast) {
+					externalScenes.Remove(ContentsPath);
+				}
+				foreach (var child in content.Nodes) {
+					child.InsertExternalScenes(externalScenes);
+				}
 				ReplaceContent(content);
+			}
+		}
+
+		private class ExternalScene
+		{
+			public Node Node { get; }
+			public int ReferenceCount { get; set; } = 1;
+			public Dictionary<string, int> NestedSceneReferences { get; } = new Dictionary<string, int>();
+
+			public ExternalScene(Node node)
+			{
+				Node = node;
 			}
 		}
 
