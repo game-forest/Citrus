@@ -70,6 +70,8 @@ namespace Tangerine.UI.SceneView
 			using (Document.Current.History.BeginTransaction()) {
 				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
 				var mouseStartPos = SceneView.MousePosition;
+				var startPositionForPivotRestore = widgets.FirstOrDefault(
+					w => !w.IsPropertyReadOnly(nameof(Widget.Size)))?.Position;
 				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Matrix32 transform = Matrix32.Identity;
@@ -78,10 +80,9 @@ namespace Tangerine.UI.SceneView
 					var isChangingScale = SceneView.Input.IsKeyPressed(Key.Control);
 					var toBeTransformed = widgets.Where(w => isChangingScale ?
 						!w.IsPropertyReadOnly(nameof(Widget.Scale)) : !w.IsPropertyReadOnly(nameof(Widget.Size))).ToList();
-					var areChildrenFreezed =
-						SceneView.Input.IsKeyPressed(Key.Z) &&
-						!isChangingScale &&
-						toBeTransformed.Count == 1;
+					var isFreezeAllowed = !isChangingScale && toBeTransformed.Count == 1;
+					var areChildrenFreezed = SceneView.Input.IsKeyPressed(Key.Z) && isFreezeAllowed;
+					var isPivotFreezed = SceneView.Input.IsKeyPressed(Key.X) && isFreezeAllowed;
 					if (areChildrenFreezed) {
 						transform = toBeTransformed[0].CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
 					}
@@ -103,10 +104,36 @@ namespace Tangerine.UI.SceneView
 						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(toBeTransformed[0]);
 						RestoreChildrenPositions(toBeTransformed[0], transform);
 					}
+					if (isPivotFreezed) {
+						RestorePivot(toBeTransformed[0], pivot, startPositionForPivotRestore.Value);
+					}
 					yield return null;
 				}
 				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
+			}
+		}
+
+		private static void RestorePivot(Widget widget, Vector2 globalPivot, Vector2 startPosition)
+		{
+			var newPivot = widget.LocalToWorldTransform.CalcInversed().TransformVector(globalPivot) / widget.Size;
+			SetProperty.Perform(widget, nameof(Widget.Pivot), newPivot);
+			if (widget.Animators.TryFind(nameof(Widget.Pivot), out var pivotAnimator)) {
+				var newKey = pivotAnimator.ReadonlyKeys.GetByFrame(Document.Current.AnimationFrame);
+				if (newKey != null) {
+					newKey = newKey.Clone();
+					newKey.Value = newPivot;
+					SetKeyframe.Perform(pivotAnimator, newKey);
+				}
+			}
+			SetProperty.Perform(widget, nameof(Widget.Position), startPosition);
+			if (widget.Animators.TryFind(nameof(Widget.Position), out var positionAnimator)) {
+				var newKey = positionAnimator.ReadonlyKeys.GetByFrame(Document.Current.AnimationFrame);
+				if (newKey != null) {
+					newKey = newKey.Clone();
+					newKey.Value = startPosition;
+					SetKeyframe.Perform(positionAnimator, newKey);
+				}
 			}
 		}
 
