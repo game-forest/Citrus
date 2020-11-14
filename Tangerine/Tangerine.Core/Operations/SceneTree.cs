@@ -165,15 +165,6 @@ namespace Tangerine.Core.Operations
 				LinkSceneItem.Perform(parent, index, i);
 				index = parent.Rows.IndexOf(i) + 1;
 				pastedItems.Add(i);
-				void DecorateNodes(Row item) {
-					if (item.TryGetNode(out var node)) {
-						Document.Current.Decorate(node);
-					} else if (item.TryGetFolder(out _)) {
-						foreach (var row in item.Rows) {
-							DecorateNodes(row);
-						}
-					}
-				}
 				DecorateNodes(i);
 			}
 			if (container.Animations.TryFind("_", out var animation)) {
@@ -184,6 +175,17 @@ namespace Tangerine.Core.Operations
 				}
 			}
 			return true;
+		}
+
+		private static void DecorateNodes(Row item)
+		{
+			if (item.TryGetNode(out var node)) {
+				Document.Current.Decorate(node);
+			} else if (item.TryGetFolder(out _)) {
+				foreach (var i in item.Rows) {
+					DecorateNodes(i);
+				}
+			}
 		}
 
 		public static bool CanPaste(MemoryStream stream, Row parent)
