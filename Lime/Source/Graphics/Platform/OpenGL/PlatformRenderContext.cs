@@ -97,7 +97,7 @@ namespace Lime.Graphics.Platform.OpenGL
 			indexBufferDirty = true;
 			texturesDirtyMask = ~0;
 			vertexInputLayoutDirty = true;
-			vertexBuffersDirtyMask = 0;
+			vertexBuffersDirtyMask = ~0;
 			enabledVertexAttribMask = 0;
 			BindState(true);
 			BindClearValues(true, ClearOptions.All, Color4.Black, 1, 0);
