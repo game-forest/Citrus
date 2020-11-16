@@ -536,6 +536,32 @@ namespace Tangerine.UI
 			}
 		}
 
+		public void ExpandAll()
+		{
+			ExpandAllRecursive(rootItem);
+
+			void ExpandAllRecursive(TreeViewItem item)
+			{
+				item.Expanded = true;
+				foreach (var i in item.Items) {
+					ExpandAllRecursive(i);
+				}
+			}
+		}
+
+		public void CollapseAll()
+		{
+			CollapseAllRecursive(rootItem);
+
+			void CollapseAllRecursive(TreeViewItem item)
+			{
+				item.Expanded = false;
+				foreach (var i in item.Items) {
+					CollapseAllRecursive(i);
+				}
+			}
+		}
+
 		public void RenameItem()
 		{
 			var focused = GetRecentlySelected();

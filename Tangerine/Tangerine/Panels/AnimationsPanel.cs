@@ -23,6 +23,7 @@ namespace Tangerine.Panels
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
 			ThemedScrollView scrollView1, scrollView2;
+			ToolbarButton expandAll, collapseAll;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
 				Padding = new Thickness(5),
@@ -31,15 +32,31 @@ namespace Tangerine.Panels
 					new ThemedVSplitter {
 						Stretches = Splitter.GetStretchesList(TimelineUserPreferences.Instance.AnimationsPanelVSplitterStretches, 1, 0.3f),
 						Nodes = {
-							(scrollView1 = new ThemedScrollView()),
 							new Frame {
 								Layout = new VBoxLayout { Spacing = 5 },
 								Padding = new Thickness { Top = 4 },
 								Nodes = {
-									(searchStringEditor = new ThemedEditBox()),
+									new Widget {
+										Padding = new Thickness(2, 10, 0, 0),
+										MinMaxHeight = Metrics.ToolbarHeight,
+										Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
+										Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
+										Nodes = {
+											(expandAll = new ToolbarButton {
+												Texture = IconPool.GetTexture("AnimationsPanel.ExpandAll"),
+												Tooltip = "Expand All",
+											}),
+											(collapseAll = new ToolbarButton {
+												Texture = IconPool.GetTexture("AnimationsPanel.CollapseAll"),
+												Tooltip = "Collapse All",
+											}),
+											(searchStringEditor = new ThemedEditBox()),
+										}
+									},
 									(scrollView2 = new ThemedScrollView()),
 								}
-							}
+							},
+							(scrollView1 = new ThemedScrollView())
 						}
 					}
 				}
@@ -61,6 +78,8 @@ namespace Tangerine.Panels
 					SearchStringGetter = () => searchStringEditor.Text
 				}, TreeViewMode.Hierarchy);
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView2, itemProvider2, TreeViewMode.Hierarchy));
+			expandAll.Clicked = treeView2.ExpandAll;
+			collapseAll.Clicked = treeView2.CollapseAll;
 		}
 
 		private IEnumerator<object> SearchStringDebounceTask(TreeView treeView,
