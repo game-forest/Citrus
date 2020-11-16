@@ -624,7 +624,8 @@ namespace Tangerine.Panels
 			{
 				get => IconPool.GetTexture(
 					Animation.Id == Animation.ZeroPoseId ? "AnimationsPanel.ZeroPose" :
-					(Animation.IsCompound ? "AnimationsPanel.CompoundAnimation" : "AnimationsPanel.Animation"));
+					Animation.IsLegacy ? "AnimationsPanel.LegacyAnimation" :
+					Animation.IsCompound ? "AnimationsPanel.CompoundAnimation" : "AnimationsPanel.Animation");
 				set => throw new NotSupportedException();
 			}
 		}
