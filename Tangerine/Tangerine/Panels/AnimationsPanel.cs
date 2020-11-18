@@ -758,10 +758,8 @@ namespace Tangerine.Panels
 						w.PrepareRendererState();
 						Renderer.DrawRect(
 							Vector2.Zero, w.Size,
-							Item.Selected ?
-								(Widget.Focused != null && w.SameOrDescendantOf(Widget.Focused) ?
-									Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground)
-								: Theme.Colors.WhiteBackground
+							Item.Selected ? Widget.Focused == w.Parent ? Theme.Colors.SelectedBackground :
+							Theme.Colors.SelectedInactiveBackground : Theme.Colors.WhiteBackground
 						);
 						HighlightLabel(Widget, Label, options.SearchStringGetter?.Invoke());
 					})
