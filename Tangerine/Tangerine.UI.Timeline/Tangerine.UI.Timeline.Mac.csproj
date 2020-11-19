@@ -102,6 +102,7 @@
     <Compile Include="Operations\SetCurrentColumn.cs" />
     <Compile Include="Operations\ShiftGridSelection.cs" />
     <Compile Include="Operations\ToggleKeyframes.cs" />
+    <Compile Include="Operations\EnsureRowVisibleIfSelected.cs" />
     <Compile Include="OverviewPane.cs" />
     <Compile Include="Processors\CurveEditor\PanProcessor.cs" />
     <Compile Include="Processors\CurveEditor\SelectAndDragKeysProcessor.cs" />
