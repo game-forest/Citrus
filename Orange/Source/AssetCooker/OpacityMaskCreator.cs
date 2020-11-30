@@ -33,7 +33,7 @@ namespace Orange
 
 		private static void WriteMask(AssetBundle assetBundle, string maskPath, Bitmap bitmap)
 		{
-			byte[] mask = CreateMaskHelper(bitmap);
+			var mask = CreateMaskHelper(bitmap);
 			using (var stream = new MemoryStream()) {
 				using (var writer = new BinaryWriter(stream)) {
 					writer.Write((uint) bitmap.Width);
@@ -41,7 +41,7 @@ namespace Orange
 					writer.Write(mask, 0, mask.Length);
 					writer.Flush();
 					stream.Seek(0, SeekOrigin.Begin);
-					assetBundle.ImportFile(maskPath, stream, 0, "", File.GetLastWriteTime(maskPath), AssetAttributes.Zipped, null);
+					assetBundle.ImportFile(maskPath, stream, 0, "", default, AssetAttributes.Zipped);
 				}
 			}
 		}

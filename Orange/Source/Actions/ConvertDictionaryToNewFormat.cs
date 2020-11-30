@@ -55,16 +55,16 @@ namespace Orange.Source.Actions
 			var sourceFiles = new FileEnumerator(The.Workspace.ProjectDirectory);
 			using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 				var files = sourceFiles.Enumerate(".cs");
-				foreach (var fileInfo in files) {
-					Console.WriteLine("* " + fileInfo.Path);
-					ProcessSourceFile(fileInfo.Path);
+				foreach (var file in files) {
+					Console.WriteLine("* " + file);
+					ProcessSourceFile(file);
 				}
 			}
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 				var files = AssetBundle.Current.EnumerateFiles(null, ".tan");
-				foreach (var fileInfo in files) {
-					Console.WriteLine("* " + fileInfo);
-					ProcessSourceFile(fileInfo);
+				foreach (var file in files) {
+					Console.WriteLine("* " + file);
+					ProcessSourceFile(file);
 				}
 			}
 		}

@@ -15,28 +15,24 @@ namespace Lime
 
 		public override void DeleteFile(string path) => Bundle.DeleteFile(path);
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null) => Bundle.EnumerateFileInfos(path, extension);
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null) => Bundle.EnumerateFiles(path, extension);
 
 		public override bool FileExists(string path) => Bundle.FileExists(path);
 
-		public override byte[] GetCookingRulesSHA1(string path) => Bundle.GetCookingRulesSHA1(path);
-
-		public override DateTime GetFileLastWriteTime(string path) => Bundle.GetFileLastWriteTime(path);
+		public override SHA1 GetSourceSHA1(string path) => Bundle.GetSourceSHA1(path);
 
 		public override string GetSourceExtension(string path) => Bundle.GetSourceExtension(path);
 
-		public override void SetFileLastWriteTime(string path, DateTime time) => Bundle.SetFileLastWriteTime(path, time);
-
 		public override int GetFileSize(string path) => Bundle.GetFileSize(path);
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes)
 		{
-			Bundle.ImportFile(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+			Bundle.ImportFile(path, stream, reserve, sourceExtension, sourceSHA1, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes)
 		{
-			Bundle.ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+			Bundle.ImportFileRaw(path, stream, reserve, sourceExtension, sourceSHA1, attributes);
 		}
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open) => Bundle.OpenFile(path, mode);

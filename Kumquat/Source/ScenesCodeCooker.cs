@@ -15,6 +15,10 @@ namespace Kumquat
 		public string Bundle;
 
 		[YuzuMember]
+		public SHA1 SourceSHA1;
+
+		[Obsolete("Not used anymore")]
+		[YuzuMember]
 		public DateTime DateModified;
 
 		[YuzuMember]
@@ -225,7 +229,7 @@ namespace Kumquat
 				}
 				codeCookerCache.SceneFiles.Add(key, new SceneRecord {
 					Bundle = sceneToBundleMap[key],
-					DateModified = AssetBundle.Current.GetFileLastWriteTime(key).ToUniversalTime(),
+					SourceSHA1 = AssetBundle.Current.GetSourceSHA1(key),
 					ReferringScenes = kv.Value.Select(path => externalSceneToOriginalScenePath[Path.ChangeExtension(path, null)]).ToList()
 				});
 			}

@@ -1,17 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using Yuzu;
 
 namespace Lime
 {
 	public class UnpackedAssetBundle : AssetBundle
 	{
+		public struct FileInfo
+		{
+			[YuzuMember]
+			public SHA1 SHA1;
+
+			[YuzuMember]
+			public DateTime DateModified;
+		}
+
 		public readonly string BaseDirectory;
 		private IFileSystemWatcher watcher;
-		private bool assetsCached;
-		private List<FileInfo> cachedAssets;
+		private bool indexValid;
+		private SortedDictionary<string, FileInfo> index;
+
+		private const string IndexFile = ".index";
 
 		public UnpackedAssetBundle(string baseDirectory)
 		{
@@ -19,14 +29,28 @@ namespace Lime
 			// concatenate current directory if path is not rooted.
 			BaseDirectory = NormalizeDirectoryPath(Path.GetFullPath(baseDirectory));
 			watcher = new FileSystemWatcher(BaseDirectory, includeSubdirectories: true);
-			watcher.Changed += _ => assetsCached = false;
-			watcher.Created += _ => assetsCached = false;
-			watcher.Deleted += _ => assetsCached = false;
-			watcher.Renamed += (_, __) => assetsCached = false;
+			watcher.Changed += _ => indexValid = false;
+			watcher.Created += _ => indexValid = false;
+			watcher.Deleted += _ => indexValid = false;
+			watcher.Renamed += (_, __) => indexValid = false;
+			var indexPath = Path.Combine(BaseDirectory, IndexFile);
+			index = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);
+			if (File.Exists(indexPath)) {
+				try {
+					using (var fs = File.OpenRead(indexPath)) {
+						InternalPersistence.Instance.ReadObject<SortedDictionary<string, FileInfo>>(
+							indexPath, fs, index);
+					}
+				} catch (System.Exception) {
+					// ignored
+				}
+			}
 		}
 
 		public override void Dispose()
 		{
+			var indexPath = Path.Combine(BaseDirectory, IndexFile);
+			InternalPersistence.Instance.WriteObjectToFile(indexPath, index, Persistence.Format.Binary);
 			watcher?.Dispose();
 			watcher = null;
 			base.Dispose();
@@ -45,30 +69,27 @@ namespace Lime
 				FileShare.Read);
 		}
 
-		public override DateTime GetFileLastWriteTime(string path)
-		{
-			return File.GetLastWriteTime(ToSystemPath(path));
-		}
-
-		public override void SetFileLastWriteTime(string path, DateTime time)
-		{
-			assetsCached = false;
-			File.SetLastWriteTime(ToSystemPath(path), time);
-		}
-
 		public override int GetFileSize(string path)
 		{
 			return (int)(new System.IO.FileInfo(ToSystemPath(path)).Length);
 		}
 
-		public override byte[] GetCookingRulesSHA1(string path)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override string GetSourceExtension(string path)
 		{
 			throw new NotSupportedException();
+		}
+
+		public override SHA1 GetSourceSHA1(string path)
+		{
+			ValidateIndex();
+			if (!index.TryGetValue(path, out var i) || i.SHA1 == default) {
+				i = new FileInfo {
+					DateModified = File.GetLastWriteTimeUtc(ToSystemPath(path)),
+					SHA1 = SHA1.Compute(File.ReadAllBytes(ToSystemPath(path)))
+				};
+				index[path] = i;
+			}
+			return i.SHA1;
 		}
 
 		public override void DeleteFile(string path)
@@ -82,18 +103,18 @@ namespace Lime
 		}
 
 		public override void ImportFile(
-			string path, Stream stream, int reserve, string sourceExtension, DateTime time,
-			AssetAttributes attributes, byte[] cookingRulesSHA1)
+			string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1,
+			AssetAttributes attributes)
 		{
 			if ((attributes & (AssetAttributes.Zipped | AssetAttributes.ZippedDeflate)) != 0) {
 				throw new NotSupportedException();
 			}
-			ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+			ImportFileRaw(path, stream, reserve, sourceExtension, sourceSHA1, attributes);
 		}
 
 		public override void ImportFileRaw(
-			string path, Stream stream, int reserve, string sourceExtension, DateTime time,
-			AssetAttributes attributes, byte[] cookingRulesSHA1)
+			string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1,
+			AssetAttributes attributes)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			var bytes = new byte[stream.Length];
@@ -103,36 +124,46 @@ namespace Lime
 			File.WriteAllBytes(Path.Combine(BaseDirectory, path), bytes);
 		}
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 		{
 			if (extension != null && !extension.StartsWith(".")) {
 				throw new InvalidOperationException();
 			}
-			if (!assetsCached) {
-				assetsCached = true;
-				cachedAssets = cachedAssets ?? new List<FileInfo>();
-				cachedAssets.Clear();
-				var dirInfo = new DirectoryInfo(BaseDirectory);
-				foreach (var fileInfo in dirInfo.GetFiles("*", SearchOption.AllDirectories)) {
-					var file = fileInfo.FullName;
-					file = file.Substring(dirInfo.FullName.Length).Replace('\\', '/');
-					cachedAssets.Add(new FileInfo { Path = file, LastWriteTime = fileInfo.LastWriteTime });
-				}
-				// According to documentation the file order is not guaranteed.
-				cachedAssets.Sort((a, b) => string.Compare(a.Path, b.Path, StringComparison.Ordinal));
-			}
+			ValidateIndex();
 			if (path != null) {
 				path = NormalizeDirectoryPath(path);
 			}
-			foreach (var asset in cachedAssets) {
-				if (path != null && !asset.Path.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+			foreach (var asset in index.Keys) {
+				if (path != null && !asset.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}
-				if (extension != null && !asset.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+				if (extension != null && !asset.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}
 				yield return asset;
 			}
+		}
+
+		private void ValidateIndex()
+		{
+			if (indexValid) {
+				return;
+			}
+			var oldIndex = index;
+			index = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);;
+			var di = new DirectoryInfo(BaseDirectory);
+			foreach (var fi in di.GetFiles("*", SearchOption.AllDirectories)) {
+				var path = fi.FullName.Substring(di.FullName.Length).Replace('\\', '/');
+				if (oldIndex.TryGetValue(path, out var item)) {
+					index[path] = new FileInfo {
+						DateModified = fi.LastWriteTimeUtc,
+						SHA1 = item.DateModified < fi.LastWriteTimeUtc ? item.SHA1 : default
+					};
+				} else {
+					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, SHA1 = default };
+				}
+			}
+			indexValid = true;
 		}
 
 		private static string NormalizeDirectoryPath(string path)

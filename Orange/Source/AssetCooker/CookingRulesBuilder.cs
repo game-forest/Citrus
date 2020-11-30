@@ -149,14 +149,11 @@ namespace Orange
 		[YuzuMember]
 		public int MaxAtlasSize { get; set; } = 2048;
 
-		private static System.Security.Cryptography.SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
 		// using json format for SHA1 since binary one includes all fields definitions header anyway.
 		// so adding a field with binary triggers rebuild of all bundles
 		private static JsonSerializer yjs = new JsonSerializer();
 
-		public byte[] SHA1 => sha1.ComputeHash(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
-
-		public DateTime LastChangeTime;
+		public SHA1 SHA1 => SHA1.Compute(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
 
 		public HashSet<Meta.Item> FieldOverrides;
 
@@ -212,7 +209,6 @@ namespace Orange
 				TextureScaleFactor = 1.0f,
 				PVRFormat = platform == TargetPlatform.Android ? PVRFormat.ETC2 : PVRFormat.PVRTC4,
 				DDSFormat = DDSFormat.DXTi,
-				LastChangeTime = new DateTime(0),
 				Bundles = new[] { CookingRulesBuilder.MainBundleName },
 				Ignore = false,
 				Only = false,
@@ -273,7 +269,7 @@ namespace Orange
 		public int AtlasItemPadding => EffectiveRules.AtlasItemPadding;
 		public int MaxAtlasSize => EffectiveRules.MaxAtlasSize;
 
-		public byte[] SHA1 => EffectiveRules.SHA1;
+		public SHA1 SHA1 => EffectiveRules.SHA1;
 
 		public bool Ignore
 		{
@@ -445,8 +441,7 @@ namespace Orange
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
 			rulesStack.Push(rootRules);
-			foreach (var fileInfo in bundle.EnumerateFileInfos(path)) {
-				var filePath = fileInfo.Path;
+			foreach (var filePath in bundle.EnumerateFiles(path)) {
 				while (!filePath.StartsWith(pathStack.Peek())) {
 					rulesStack.Pop();
 					pathStack.Pop();
@@ -485,13 +480,6 @@ namespace Orange
 						var ignoreRules = rules.InheritClone();
 						ignoreRules.Ignore = true;
 						map[rulesFile] = ignoreRules;
-					}
-					if (rules.CommonRules.LastChangeTime > fileInfo.LastWriteTime) {
-						try {
-							bundle.SetFileLastWriteTime(filePath, rules.CommonRules.LastChangeTime);
-						} catch (UnauthorizedAccessException) {
-							// In case this is a folder
-						}
 					}
 					map[filePath] = rules;
 				}
@@ -577,7 +565,6 @@ namespace Orange
 			var rules = basicRules.InheritClone();
 			var currentRules = rules.CommonRules;
 			try {
-				rules.CommonRules.LastChangeTime = File.GetLastWriteTime(path);
 				using (var s = bundle.OpenFile(path)) {
 					TextReader r = new StreamReader(s);
 					string line;

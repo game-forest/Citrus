@@ -20,9 +20,9 @@ namespace Orange
 
 		public void Action()
 		{
-			var textures = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
-			foreach (var fileInfo in AssetCooker.InputBundle.EnumerateFileInfos(null, textureExtension)) {
-				textures[fileInfo.Path] = fileInfo.LastWriteTime;
+			var textureHashes = new Dictionary<string, SHA1>(StringComparer.OrdinalIgnoreCase);
+			foreach (var file in AssetCooker.InputBundle.EnumerateFiles(null, textureExtension)) {
+				textureHashes[file] = AssetCooker.InputBundle.GetSourceSHA1(file);
 			}
 			var atlasChainsToRebuild = new HashSet<string>();
 			// Figure out atlas chains to rebuild
@@ -32,20 +32,17 @@ namespace Orange
 
 				// If atlas part has been outdated we should rebuild full atlas chain
 				var srcTexturePath = Path.ChangeExtension(atlasPartPath, textureExtension);
-				var bundleSHA1 = AssetCooker.OutputBundle.GetCookingRulesSHA1(atlasPartPath);
-				if (bundleSHA1 == null) {
-					throw new InvalidOperationException("CookingRules SHA1 for atlas part shouldn't be null");
-				}
 				if (
-					!textures.ContainsKey(srcTexturePath) ||
-					AssetCooker.OutputBundle.GetFileLastWriteTime(atlasPartPath) != textures[srcTexturePath] ||
-					(!AssetCooker.CookingRulesMap[srcTexturePath].SHA1.SequenceEqual(bundleSHA1))
+					!textureHashes.ContainsKey(srcTexturePath) /* .png has been deleted */ ||
+					// Check whether png or cooking rules have been modified.
+					AssetCooker.OutputBundle.GetSourceSHA1(atlasPartPath) !=
+						SHA1.Compute(textureHashes[srcTexturePath], AssetCooker.CookingRulesMap[srcTexturePath].SHA1)
 				) {
 					srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, srcTexturePath);
 					var part = InternalPersistence.Instance.ReadObjectFromBundle<TextureAtlasElement.Params>(AssetCooker.OutputBundle, atlasPartPath);
 					var atlasChain = Path.GetFileNameWithoutExtension(part.AtlasPath);
 					atlasChainsToRebuild.Add(atlasChain);
-					if (!textures.ContainsKey(srcTexturePath)) {
+					if (!textureHashes.ContainsKey(srcTexturePath)) {
 						AssetCooker.DeleteFileFromBundle(atlasPartPath);
 					} else {
 						srcTexturePath = Path.ChangeExtension(atlasPartPath, textureExtension);
@@ -59,11 +56,11 @@ namespace Orange
 				}
 			}
 			// Find which new textures must be added to the atlas chain
-			foreach (var t in textures) {
+			foreach (var t in textureHashes) {
 				var atlasPartPath = Path.ChangeExtension(t.Key, atlasPartExtension);
 				var cookingRules = AssetCooker.CookingRulesMap[t.Key];
-				var atlasNeedRebuld = cookingRules.TextureAtlas != null && !AssetCooker.OutputBundle.FileExists(atlasPartPath);
-				if (atlasNeedRebuld) {
+				var atlasNeedRebuild = cookingRules.TextureAtlas != null && !AssetCooker.OutputBundle.FileExists(atlasPartPath);
+				if (atlasNeedRebuild) {
 					atlasChainsToRebuild.Add(cookingRules.TextureAtlas);
 				} else {
 					UserInterface.Instance.IncreaseProgressBar();
@@ -88,15 +85,15 @@ namespace Orange
 			}
 			var pluginItems = new Dictionary<string, List<TextureTools.AtlasItem>>();
 			var items = new Dictionary<(AtlasOptimization AtlasOptimization, int MaxAtlasSize), List<TextureTools.AtlasItem>>();
-			foreach (var fileInfo in AssetBundle.Current.EnumerateFileInfos(null, textureExtension)) {
-				var cookingRules = AssetCooker.CookingRulesMap[fileInfo.Path];
+			foreach (var file in AssetBundle.Current.EnumerateFiles(null, textureExtension)) {
+				var cookingRules = AssetCooker.CookingRulesMap[file];
 				if (cookingRules.TextureAtlas == atlasChain) {
 					var item = new TextureTools.AtlasItem {
-						Path = Path.ChangeExtension(fileInfo.Path, atlasPartExtension),
+						Path = Path.ChangeExtension(file, atlasPartExtension),
 						CookingRules = cookingRules,
-						SourceExtension = Path.GetExtension(fileInfo.Path)
+						SourceExtension = Path.GetExtension(file)
 					};
-					var bitmapInfo = TextureTools.BitmapInfo.FromFile(AssetCooker.InputBundle, fileInfo.Path);
+					var bitmapInfo = TextureTools.BitmapInfo.FromFile(AssetCooker.InputBundle, file);
 					if (bitmapInfo == null) {
 						using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(AssetCooker.Platform, item)) {
 							item.BitmapInfo = TextureTools.BitmapInfo.FromBitmap(bitmap);
@@ -310,7 +307,7 @@ namespace Orange
 				};
 				var srcPath = Path.ChangeExtension(item.Path, item.SourceExtension);
 				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, item.Path, atlasPart, Persistence.Format.Binary,
-					item.SourceExtension, AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, item.CookingRules.SHA1);
+					item.SourceExtension, SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), item.CookingRules.SHA1), AssetAttributes.None);
 				// Delete non-atlased texture since now its useless
 				var texturePath = Path.ChangeExtension(item.Path, AssetCooker.GetPlatformTextureExtension());
 				if (AssetCooker.OutputBundle.FileExists(texturePath)) {
@@ -321,7 +318,7 @@ namespace Orange
 			Console.WriteLine("+ " + atlasPath);
 			var firstItem = items.First(i => i.Allocated);
 			using (var atlas = new Bitmap(atlasPixels, size.Width, size.Height)) {
-				AssetCooker.ImportTexture(atlasPath, atlas, firstItem.CookingRules, AssetCooker.InputBundle.GetFileLastWriteTime(atlasPath), CookingRulesSHA1: null);
+				AssetCooker.ImportTexture(atlasPath, atlas, firstItem.CookingRules, default);
 			}
 		}
 

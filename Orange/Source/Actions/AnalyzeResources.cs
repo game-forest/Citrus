@@ -63,8 +63,8 @@ namespace Orange
 					bundles.Select(
 						i => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, i))).ToArray());
 				AssetBundle.Current = new CustomSetAssetBundle(aggregateBundle,
-					aggregateBundle.EnumerateFileInfos().Where(i => {
-						if (cookingRulesMap.TryGetValue(i.Path, out CookingRules rules)) {
+					aggregateBundle.EnumerateFiles().Where(i => {
+						if (cookingRulesMap.TryGetValue(i, out CookingRules rules)) {
 							if (rules.Ignore) {
 								return false;
 							}

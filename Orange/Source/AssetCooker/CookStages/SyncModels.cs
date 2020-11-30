@@ -58,11 +58,11 @@ namespace Orange
 			}
 			ExportModelMeshes(model, externalMeshPath, assetAttributes, cookingRules.SHA1);
 			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
-				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
+				SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), cookingRules.SHA1), assetAttributes);
 			return true;
 		}
 
-		private void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
+		private void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, SHA1 cookingRulesSHA1)
 		{
 			foreach (var animation in model.Animations) {
 				if (animation.IsLegacy) {
@@ -73,7 +73,9 @@ namespace Orange
 				var path = pathWithoutExt + ".ant";
 				var data = animation.GetData();
 				animation.ContentsPath = pathWithoutExt;
-				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".ant", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
+				InternalPersistence.Instance.WriteObjectToBundle(
+					AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".ant",
+					SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(path), cookingRulesSHA1), assetAttributes);
 				Console.WriteLine("+ " + path);
 			}
 		}

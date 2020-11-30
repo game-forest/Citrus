@@ -40,7 +40,7 @@ namespace Orange
 					) {
 						allScenes.Add(scenePath);
 						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
-						var dateModified = File.GetLastWriteTime(scenePath).ToUniversalTime();
+						var sourceSHA1 = SHA1.Compute(SHA1.Compute(File.ReadAllBytes(scenePath)), assetToCookingRules[scenePath].SHA1);
 						if (!cache.SceneFiles.ContainsKey(scenePath)) {
 							modifiedScenes.Add(scenePath);
 							scenesToCook.Add(scenePath);
@@ -50,11 +50,11 @@ namespace Orange
 							}
 							cache.SceneFiles.Add(scenePath, new SceneRecord {
 								Bundle = bundles.First(),
-								DateModified = dateModified
+								SourceSHA1 = sourceSHA1
 							});
 						} else {
 							var cacheRecord = cache.SceneFiles[kv.Key];
-							if (dateModified > cacheRecord.DateModified) {
+							if (sourceSHA1 != cacheRecord.SourceSHA1) {
 								var queue = new Queue<string>();
 								if (!visitedScenes.Contains(scenePath)) {
 									queue.Enqueue(scenePath);
@@ -74,7 +74,7 @@ namespace Orange
 										}
 									}
 								}
-								cache.SceneFiles[scenePath].DateModified = dateModified;
+								cache.SceneFiles[scenePath].SourceSHA1 = sourceSHA1;
 								modifiedScenes.Add(scenePath);
 							}
 						}

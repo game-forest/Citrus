@@ -48,7 +48,7 @@ namespace Lime
 					if (
 						currentBundle.GetAttributes(file) == patch.GetAttributes(file) &&
 						currentBundle.GetSourceExtension(file) == patch.GetSourceExtension(file) &&
-						AreByteArraysEqual(currentBundle.GetCookingRulesSHA1(file), patch.GetCookingRulesSHA1(file)) &&
+						currentBundle.GetSourceSHA1(file) == patch.GetSourceSHA1(file) &&
 						AreFilesEqual(file, patch, currentBundle)
 					) {
 						fileModified = false;
@@ -77,9 +77,8 @@ namespace Lime
 				destinationBundle.ImportFileRaw(
 					file, stream, 0,
 					sourceBundle.GetSourceExtension(file),
-					sourceBundle.GetFileLastWriteTime(file),
-					sourceBundle.GetAttributes(file),
-					sourceBundle.GetCookingRulesSHA1(file));
+					sourceBundle.GetSourceSHA1(file),
+					sourceBundle.GetAttributes(file));
 			}
 		}
 

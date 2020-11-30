@@ -79,44 +79,33 @@ namespace Lime
 			}
 		}
 
-		public abstract DateTime GetFileLastWriteTime(string path);
-		public abstract void SetFileLastWriteTime(string path, DateTime time);
-		public abstract byte[] GetCookingRulesSHA1(string path);
 		public abstract int GetFileSize(string path);
 
 		public abstract void DeleteFile(string path);
 		public abstract bool FileExists(string path);
-		
-		/// <summary>
-		/// Enumerates all file infos by given path and having the given extension.
-		/// </summary>
-		public abstract IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null);
 
 		public abstract void ImportFile(
 			string path, Stream stream, int reserve,
-			string sourceExtension, DateTime time, AssetAttributes attributes,
-			byte[] cookingRulesSHA1);
+			string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes);
 
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
 		public abstract void ImportFileRaw(
-			string path, Stream stream, int reserve, 
-			string sourceExtension, DateTime time, AssetAttributes attributes,
-			byte[] cookingRulesSHA1);
-		
+			string path, Stream stream, int reserve,
+			string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes);
+
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
 		/// </summary>
-		public IEnumerable<string> EnumerateFiles(string path = null, string extension = null) => EnumerateFileInfos(path, extension).Select(i => i.Path);
+		public abstract IEnumerable<string> EnumerateFiles(string path = null, string extension = null);
 
 		public void ImportFile(
-			string srcPath, string dstPath, int reserve, 
-			string sourceExtension, AssetAttributes attributes, 
-			DateTime time, byte[] cookingRulesSHA1)
+			string srcPath, string dstPath, int reserve,
+			string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes)
 		{
 			using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				ImportFile(dstPath, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+				ImportFile(dstPath, stream, reserve, sourceExtension, sourceSHA1, attributes);
 			}
 		}
 
@@ -153,6 +142,8 @@ namespace Lime
 		}
 
 		public abstract string GetSourceExtension(string path);
+
+		public abstract SHA1 GetSourceSHA1(string path);
 
 		public virtual void SetAttributes(string path, AssetAttributes attributes)
 		{

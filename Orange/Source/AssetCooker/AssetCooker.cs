@@ -5,9 +5,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
 using Lime;
-using Orange.FbxImporter;
-using Debug = Lime.Debug;
-using FileInfo = Lime.FileInfo;
 
 namespace Orange
 {
@@ -118,7 +115,7 @@ namespace Orange
 			try {
 				UserInterface.Instance.SetupProgressBar(CalculateOperationCount(bundles));
 				BeginCookBundles?.Invoke();
-				var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFileInfos(), bundles);
+				var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), bundles);
 				for (int i = 0; i < bundles.Count; i++) {
 					var extraTimer = StartBenchmark();
 					CookBundle(bundles[i], assetsGroupedByBundles[i], bundleBackups);
@@ -151,7 +148,7 @@ namespace Orange
 		private int CalculateOperationCount(List<string> bundles)
 		{
 			var assetCount = 0;
-			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFileInfos(), bundles);
+			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), bundles);
 			for (int i = 0; i < bundles.Count; i++) {
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(
@@ -169,7 +166,7 @@ namespace Orange
 			return assetCount;
 		}
 
-		private void CookBundle(string bundleName, List<FileInfo> assets, List<string> bundleBackups)
+		private void CookBundle(string bundleName, List<string> assets, List<string> bundleBackups)
 		{
 			OutputBundle = CreateOutputBundle(bundleName, bundleBackups);
 			try {
@@ -209,17 +206,17 @@ namespace Orange
 			}
 		}
 
-		List<FileInfo>[] GetAssetsGroupedByBundles(IEnumerable<FileInfo> fileInfos, List<string> bundles)
+		List<string>[] GetAssetsGroupedByBundles(IEnumerable<string> files, List<string> bundles)
 		{
 			string[] emptyBundleNamesArray = {};
 			string[] mainBundleNameArray = { CookingRulesBuilder.MainBundleName };
 
-			var assets = Enumerable.Range(0, bundles.Count).Select(i => new List<FileInfo>()).ToArray();
-			foreach (var fi in fileInfos) {
-				foreach (var bundleName in GetAssetBundleNames(fi.Path)) {
+			var assets = Enumerable.Range(0, bundles.Count).Select(i => new List<string>()).ToArray();
+			foreach (var file in files) {
+				foreach (var bundleName in GetAssetBundleNames(file)) {
 					var i = bundles.IndexOf(bundleName);
 					if (i != -1) {
-						assets[i].Add(fi);
+						assets[i].Add(file);
 					}
 				}
 			}
@@ -246,7 +243,13 @@ namespace Orange
 				Lime.Debug.Write("Failed to create directory: {0} {1}", Path.GetDirectoryName(bundlePath));
 				throw;
 			}
-			var bundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
+			PackedAssetBundle bundle;
+			try {
+				bundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
+			} catch (InvalidBundleVersionException) {
+				File.Delete(bundlePath);
+				bundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
+			}
 			bundle.OnWrite += () => {
 				var backupPath = bundlePath + ".bak";
 				if (bundleBackups.Contains(backupPath) || !File.Exists(bundlePath)) {
@@ -315,7 +318,7 @@ namespace Orange
 				rules.WrapMode == TextureParams.Default.WrapModeU;
 		}
 
-		public void ImportTexture(string path, Bitmap texture, ICookingRules rules, DateTime time, byte[] CookingRulesSHA1)
+		public void ImportTexture(string path, Bitmap texture, ICookingRules rules, SHA1 sourceSHA1)
 		{
 			var textureParamsPath = Path.ChangeExtension(path, ".texture");
 			var textureParams = new TextureParams {
@@ -332,8 +335,9 @@ namespace Orange
 					isNeedToRewriteTexParams = !oldTexParams.Equals(textureParams);
 				}
 				if (isNeedToRewriteTexParams) {
-					InternalPersistence.Instance.WriteObjectToBundle(OutputBundle, textureParamsPath, textureParams, Persistence.Format.Binary, ".texture",
-						InputBundle.GetFileLastWriteTime(textureParamsPath), AssetAttributes.None, null);
+					InternalPersistence.Instance.WriteObjectToBundle(
+						OutputBundle, textureParamsPath, textureParams, Persistence.Format.Binary,
+						".texture", sourceSHA1, AssetAttributes.None);
 				}
 			} else {
 				if (OutputBundle.FileExists(textureParamsPath)) {
@@ -353,17 +357,18 @@ namespace Orange
 				//case TargetPlatform.iOS:
 					var f = rules.PVRFormat;
 					if (f == PVRFormat.ARGB8 || f == PVRFormat.RGB565 || f == PVRFormat.RGBA4) {
-						TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, CookingRulesSHA1, time);
+						TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, sourceSHA1);
 					} else {
-						TextureConverter.RunEtcTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, CookingRulesSHA1, time);
+						TextureConverter.RunEtcTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, sourceSHA1
+						);
 					}
 					break;
 				case TargetPlatform.iOS:
-					TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, CookingRulesSHA1, time);
+					TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, sourceSHA1);
 					break;
 				case TargetPlatform.Win:
 				case TargetPlatform.Mac:
-					TextureConverter.RunNVCompress(texture, OutputBundle, path, attributes, rules.DDSFormat, rules.MipMaps, CookingRulesSHA1, time);
+					TextureConverter.RunNVCompress(texture, OutputBundle, path, attributes, rules.DDSFormat, rules.MipMaps, sourceSHA1);
 					break;
 				default:
 					throw new Lime.Exception();
@@ -463,18 +468,16 @@ namespace Orange
 			}
 		}
 
-		public int GetUpdateOperationCount(string fileExtension) => InputBundle.EnumerateFileInfos(null, fileExtension).Count();
+		public int GetUpdateOperationCount(string fileExtension) => InputBundle.EnumerateFiles(null, fileExtension).Count();
 
 		public void SyncUpdated(string fileExtension, string bundleAssetExtension, Converter converter, Func<string, string, bool> extraOutOfDateChecker = null)
 		{
-			foreach (var fileInfo in InputBundle.EnumerateFileInfos(null, fileExtension)) {
+			foreach (var srcPath in InputBundle.EnumerateFiles(null, fileExtension)) {
 				UserInterface.Instance.IncreaseProgressBar();
-				var srcPath = fileInfo.Path;
 				var dstPath = Path.ChangeExtension(srcPath, bundleAssetExtension);
 				var bundled = OutputBundle.FileExists(dstPath);
 				var srcRules = CookingRulesMap[srcPath];
-				var needUpdate = !bundled || fileInfo.LastWriteTime != OutputBundle.GetFileLastWriteTime(dstPath);
-				needUpdate = needUpdate || !srcRules.SHA1.SequenceEqual(OutputBundle.GetCookingRulesSHA1(dstPath));
+				var needUpdate = !bundled || SHA1.Compute(InputBundle.GetSourceSHA1(srcPath), srcRules.SHA1) != OutputBundle.GetSourceSHA1(dstPath);
 				needUpdate = needUpdate || (extraOutOfDateChecker?.Invoke(srcPath, dstPath) ?? false);
 				if (needUpdate) {
 					if (converter != null) {
@@ -496,8 +499,7 @@ namespace Orange
 						Console.WriteLine((bundled ? "* " : "+ ") + dstPath);
 						using (var stream = InputBundle.OpenFile(srcPath)) {
 							OutputBundle.ImportFile(dstPath, stream, 0, fileExtension,
-								InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None,
-								CookingRulesMap[srcPath].SHA1);
+								SHA1.Compute(InputBundle.GetSourceSHA1(srcPath), srcRules.SHA1), AssetAttributes.None);
 						}
 					}
 				}

@@ -28,40 +28,48 @@ namespace Tangerine.Core
 
 		public bool IsActual()
 		{
-			using (var cacheBundle = OpenCacheBundle(AssetBundleFlags.Writable)) {
-				if (!cacheBundle.FileExists(VersionFile)) {
-					return false;
-				}
-				try {
-					using (var stream = cacheBundle.OpenFile(VersionFile)) {
-						var cacheMeta = TangerinePersistence.Instance.ReadObject<CacheMeta>(VersionFile, stream);
-						if (!cacheMeta.IsActual) {
-							return false;
-						}
+			try {
+				using (var cacheBundle = OpenCacheBundle(AssetBundleFlags.Writable)) {
+					if (!cacheBundle.FileExists(VersionFile)) {
+						return false;
 					}
-				} catch {
-					return false;
+					try {
+						using (var stream = cacheBundle.OpenFile(VersionFile)) {
+							var cacheMeta = TangerinePersistence.Instance.ReadObject<CacheMeta>(VersionFile, stream);
+							if (!cacheMeta.IsActual) {
+								return false;
+							}
+						}
+					} catch {
+						return false;
+					}
 				}
+				return true;
+			} catch (InvalidBundleVersionException) {
+				return false;
 			}
-			return true;
 		}
 
 		public void CleanupBundle()
 		{
-			using (var cacheBundle = OpenCacheBundle(AssetBundleFlags.Writable)) {
-				foreach (var path in cacheBundle.EnumerateFiles().ToList()) {
-					cacheBundle.DeleteFile(path);
+			try {
+				using (var cacheBundle = OpenCacheBundle(AssetBundleFlags.Writable)) {
+					foreach (var path in cacheBundle.EnumerateFiles().ToList()) {
+						cacheBundle.DeleteFile(path);
+					}
+					InternalPersistence.Instance.WriteObjectToBundle(
+						bundle: cacheBundle,
+						path: VersionFile,
+						instance: new CacheMeta(),
+						format: Persistence.Format.Binary,
+						sourceExtension: string.Empty,
+						default,
+						attributes: AssetAttributes.None
+					);
 				}
-				InternalPersistence.Instance.WriteObjectToBundle(
-					bundle: cacheBundle,
-					path: VersionFile,
-					instance: new CacheMeta(),
-					format: Persistence.Format.Binary,
-					sourceExtension: string.Empty,
-					time: DateTime.Now,
-					attributes: AssetAttributes.None,
-					cookingRulesSHA1: new byte[0]
-				);
+			} catch (InvalidBundleVersionException) {
+				File.Delete(The.Workspace.GetTangerineCacheBundlePath());
+				CleanupBundle();
 			}
 		}
 
@@ -113,13 +121,13 @@ namespace Tangerine.Core
 				var fbxExists = base.FileExists(fbxPath);
 				var fbxCached = cacheBundle.FileExists(path);
 				var fbxUpToDate = fbxCached == fbxExists &&
-					(!fbxExists || cacheBundle.GetFileLastWriteTime(path) >= base.GetFileLastWriteTime(fbxPath));
+					(!fbxExists || cacheBundle.GetSourceSHA1(path) != base.GetSourceSHA1(fbxPath));
 
 				var attachmentPath = Path.ChangeExtension(path, Model3DAttachment.FileExtension);
 				var attachmentExists = base.FileExists(attachmentPath);
 				var attachmentCached = cacheBundle.FileExists(attachmentPath);
 				var attachmentUpToDate = attachmentCached == attachmentExists &&
-					(!attachmentExists || cacheBundle.GetFileLastWriteTime(attachmentPath) >= base.GetFileLastWriteTime(attachmentPath));
+					(!attachmentExists || cacheBundle.GetSourceSHA1(attachmentPath) != base.GetSourceSHA1(attachmentPath));
 				var fbxImportOptions = new FbxImportOptions {
 					Path = fbxPath,
 					Target = target,
@@ -129,7 +137,7 @@ namespace Tangerine.Core
 				var attachmentMetaPath = Path.ChangeExtension(path, Model3DAttachmentMeta.FileExtension);
 				var attachmentMetaCached = cacheBundle.FileExists(attachmentMetaPath);
 				var attachmentMetaUpToDate = attachmentMetaCached &&
-					cacheBundle.GetFileLastWriteTime(attachmentMetaPath) >= base.GetFileLastWriteTime(fbxPath);
+					cacheBundle.GetSourceSHA1(attachmentMetaPath) != base.GetSourceSHA1(fbxPath);
 				if (!attachmentMetaUpToDate && fbxExists) {
 					using (var fbxImporter = new FbxModelImporter(fbxImportOptions)) {
 						model = fbxImporter.LoadModel();
@@ -150,8 +158,8 @@ namespace Tangerine.Core
 							cacheBundle,
 							attachmentMetaPath,
 							meta, Persistence.Format.Binary, Model3DAttachmentMeta.FileExtension,
-							base.GetFileLastWriteTime(fbxPath),
-							AssetAttributes.None, new byte[0]);
+							base.GetSourceSHA1(fbxPath),
+							AssetAttributes.None);
 					}
 				}
 
@@ -194,13 +202,13 @@ namespace Tangerine.Core
 						var animationPath = animationPathWithoutExt + ".ant";
 						animation.ContentsPath = animationPathWithoutExt;
 						InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary, ".ant",
-							base.GetFileLastWriteTime(fbxPath), AssetAttributes.None, new byte[0]);
+							base.GetSourceSHA1(fbxPath), AssetAttributes.None);
 						foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 							animator.Owner.Animators.Remove(animator);
 						}
 					}
 					InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, path, model, Persistence.Format.Binary, ".t3d",
-						base.GetFileLastWriteTime(fbxPath), AssetAttributes.None, new byte[0]);
+						base.GetSourceSHA1(fbxPath), AssetAttributes.None);
 
 				} else if (fbxCached) {
 					cacheBundle.DeleteFile(path);
@@ -212,8 +220,8 @@ namespace Tangerine.Core
 						cacheBundle,
 						attachmentPath,
 						Model3DAttachmentParser.ConvertToModelAttachmentFormat(attachment), Persistence.Format.Binary, ".txt",
-						base.GetFileLastWriteTime(attachmentPath),
-						AssetAttributes.None, new byte[0]);
+						base.GetSourceSHA1(attachmentPath),
+						AssetAttributes.None);
 				} else if (attachmentCached) {
 					cacheBundle.DeleteFile(attachmentPath);
 				}

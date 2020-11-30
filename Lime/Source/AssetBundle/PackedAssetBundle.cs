@@ -8,15 +8,19 @@ using Yuzu;
 
 namespace Lime
 {
+	public class InvalidBundleVersionException : Exception
+	{
+		public InvalidBundleVersionException(string message) : base(message) { }
+	}
+
 	struct AssetDescriptor
 	{
-		public DateTime ModificationTime;
-		public byte[] CookingRulesSHA1;
 		public int Offset;
 		public int Length;
 		public int AllocatedSize;
 		public AssetAttributes Attributes;
 		public string SourceExtension;
+		public SHA1 SourceSHA1;
 	}
 
 	public static class AssetPath
@@ -173,7 +177,7 @@ namespace Lime
 			{
 				InternalPersistence.Instance.WriteObjectToBundle(
 					bundle, FileName, this, Persistence.Format.Binary, FileName,
-					DateTime.MinValue, AssetAttributes.None, null);
+					default, AssetAttributes.None);
 			}
 		}
 
@@ -381,19 +385,9 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		public override DateTime GetFileLastWriteTime(string path)
+		public override SHA1 GetSourceSHA1(string path)
 		{
-			return GetDescriptor(path).ModificationTime;
-		}
-
-		public override void SetFileLastWriteTime(string path, DateTime time)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override byte[] GetCookingRulesSHA1(string path)
-		{
-			return GetDescriptor(path).CookingRulesSHA1;
+			return GetDescriptor(path).SourceSHA1;
 		}
 
 		public override int GetFileSize(string path)
@@ -436,17 +430,17 @@ namespace Lime
 
 		public override void ImportFile(
 			string path, Stream stream, int reserve, string sourceExtension,
-			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+			SHA1 sourceSHA1, AssetAttributes attributes)
 		{
 			if ((attributes & AssetAttributes.Zipped) != 0) {
 				stream = CompressAssetStream(stream, attributes);
 			}
-			ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+			ImportFileRaw(path, stream, reserve, sourceExtension, sourceSHA1, attributes);
 		}
 
 		public override void ImportFileRaw(
 			string path, Stream stream, int reserve, string sourceExtension,
-			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+			SHA1 sourceSHA1, AssetAttributes attributes)
 		{
 			OnWrite?.Invoke();
 			AssetDescriptor d;
@@ -455,10 +449,9 @@ namespace Lime
 				(d.AllocatedSize <= stream.Length + reserve);
 			if (reuseExistingDescriptor) {
 				d.Length = (int)stream.Length;
-				d.ModificationTime = time;
-				d.CookingRulesSHA1 = cookingRulesSHA1;
 				d.Attributes = attributes;
 				d.SourceExtension = sourceExtension;
+				d.SourceSHA1 = sourceSHA1;
 				index[AssetPath.CorrectSlashes(path)] = d;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);
@@ -472,13 +465,12 @@ namespace Lime
 					DeleteFile(path);
 				}
 				d = new AssetDescriptor();
-				d.ModificationTime = time;
-				d.CookingRulesSHA1 = cookingRulesSHA1;
 				d.Length = (int)stream.Length;
 				d.Offset = indexOffset;
 				d.AllocatedSize = d.Length + reserve;
 				d.Attributes = attributes;
 				d.SourceExtension = sourceExtension;
+				d.SourceSHA1 = sourceSHA1;
 				index[AssetPath.CorrectSlashes(path)] = d;
 				indexOffset += d.AllocatedSize;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
@@ -526,9 +518,10 @@ namespace Lime
 			}
 			reader.ReadInt32(); // CheckSum
 			var version = reader.ReadInt32();
-			if (version != Lime.Version.GetBundleFormatVersion()) {
-				throw new Exception(string.Format("The bundle format has been changed. Please update Citrus and rebuild game.\n" +
-					"Bundle format version: {0}, but expected: {1}", version, Lime.Version.GetBundleFormatVersion()));
+			if (version != Version.GetBundleFormatVersion()) {
+				throw new InvalidBundleVersionException(
+					$"The bundle format has been changed. Please update Citrus and rebuild game.\n" +
+				            $"Bundle format version: {version}, but expected: {Version.GetBundleFormatVersion()}");
 			}
 			indexOffset = reader.ReadInt32();
 			stream.Seek(indexOffset, SeekOrigin.Begin);
@@ -537,16 +530,14 @@ namespace Lime
 			for (int i = 0; i < numDescriptors; i++) {
 				var desc = new AssetDescriptor();
 				string name = reader.ReadString();
-				desc.ModificationTime = DateTime.FromBinary(reader.ReadInt64());
-				ushort sha1Length = reader.ReadUInt16();
-				if (sha1Length != 0) {
-					desc.CookingRulesSHA1 = reader.ReadBytes(sha1Length);
-				}
 				desc.Offset = reader.ReadInt32();
 				desc.Length = reader.ReadInt32();
 				desc.AllocatedSize = reader.ReadInt32();
 				desc.Attributes = (AssetAttributes)reader.ReadInt32();
 				desc.SourceExtension = reader.ReadString();
+				desc.SourceSHA1.A = reader.ReadUInt64();
+				desc.SourceSHA1.B = reader.ReadUInt64();
+				desc.SourceSHA1.C = reader.ReadUInt32();
 				index.Add(name, desc);
 			}
 		}
@@ -563,35 +554,29 @@ namespace Lime
 			writer.Write(numDescriptors);
 			foreach (KeyValuePair <string, AssetDescriptor> p in index) {
 				writer.Write(p.Key);
-				writer.Write((Int64)p.Value.ModificationTime.ToBinary());
-				if (p.Value.CookingRulesSHA1 != null && p.Value.CookingRulesSHA1.Length > ushort.MaxValue) {
-					throw new InvalidOperationException("Invalid Cooking Rules hash in asset descriptor. Must be 20 byte long SHA1");
-				}
-				ushort sha1Length = (ushort)(p.Value.CookingRulesSHA1?.Length ?? 0);
-				writer.Write(sha1Length);
-				if (sha1Length != 0) {
-					writer.Write(p.Value.CookingRulesSHA1);
-				}
 				writer.Write(p.Value.Offset);
 				writer.Write(p.Value.Length);
 				writer.Write(p.Value.AllocatedSize);
 				writer.Write((int)p.Value.Attributes);
 				writer.Write(p.Value.SourceExtension);
+				writer.Write(p.Value.SourceSHA1.A);
+				writer.Write(p.Value.SourceSHA1.B);
+				writer.Write(p.Value.SourceSHA1.C);
 			}
 			writer.Flush();
 		}
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 		{
 			if (extension != null && !extension.StartsWith(".")) {
 				throw new InvalidOperationException();
 			}
-			foreach (var file in index) {
-				if (path == null || file.Key.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
-					if (extension != null && !file.Key.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+			foreach (var file in index.Keys) {
+				if (path == null || file.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+					if (extension != null && !file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
 						continue;
 					}
-					yield return new FileInfo { Path = file.Key, LastWriteTime = file.Value.ModificationTime };
+					yield return file;
 				}
 			}
 		}
@@ -655,9 +640,8 @@ namespace Lime
 					ImportFileRaw(
 						file, stream, 0,
 						patchBundle.GetSourceExtension(file),
-						patchBundle.GetFileLastWriteTime(file),
-						patchBundle.GetAttributes(file),
-						patchBundle.GetCookingRulesSHA1(file)
+						patchBundle.GetSourceSHA1(file),
+						patchBundle.GetAttributes(file)
 					);
 				}
 			}

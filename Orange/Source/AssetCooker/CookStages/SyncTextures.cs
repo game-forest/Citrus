@@ -35,7 +35,7 @@ namespace Orange
 					bitmap = scaledBitmap;
 				}
 				AssetCooker.ImportTexture(dstPath, bitmap, rules,
-					AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), rules.SHA1);
+					SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), rules.SHA1));
 				bitmap.Dispose();
 			}
 			return true;

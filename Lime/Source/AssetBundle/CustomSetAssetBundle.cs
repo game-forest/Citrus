@@ -6,28 +6,28 @@ using System.Linq;
 namespace Lime
 {
 	/// <summary>
-	/// Asset bundle which substitutes enumeration results with the given list of files. 
+	/// Asset bundle which substitutes enumeration results with the given list of files.
 	/// </summary>
 	public class CustomSetAssetBundle : WrappedAssetBundle
 	{
-		private readonly List<FileInfo> fileInfos;
+		private readonly List<string> files;
 
-		public CustomSetAssetBundle(AssetBundle bundle, IEnumerable<FileInfo> fileInfos)
+		public CustomSetAssetBundle(AssetBundle bundle, IEnumerable<string> files)
 			: base (bundle)
 		{
-			this.fileInfos = fileInfos.ToList();
+			this.files = files.ToList();
 		}
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 		{
-			foreach (var fi in fileInfos) {
-				if (path != null && !fi.Path.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+			foreach (var file in files) {
+				if (path != null && !file.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}
-				if (extension != null && !fi.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+				if (extension != null && !file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
 					continue;
 				}
-				yield return fi;
+				yield return file;
 			}
 		}
 	}

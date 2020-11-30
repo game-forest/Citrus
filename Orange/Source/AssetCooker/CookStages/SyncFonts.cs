@@ -21,7 +21,7 @@ namespace Orange
 		{
 			var font = InternalPersistence.Instance.ReadObjectFromBundle<Font>(AssetCooker.InputBundle, srcPath);
 			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, font, Persistence.Format.Binary, fontExtension,
-				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
+				SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1), AssetAttributes.None);
 			return true;
 		}
 	}
