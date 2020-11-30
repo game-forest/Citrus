@@ -87,7 +87,7 @@ namespace Lime
 		}
 
 		public TComponent Get(Type type) => Get(Component.GetKeyForType(type));
-		
+
 		public T Get<T>() where T : TComponent => Get(ComponentKeyResolver<T>.Key) as T;
 
 		public bool TryGet<T>(out T result) where T : TComponent

@@ -26,6 +26,6 @@ namespace Tangerine.UI.FilesystemView
 			}
 		}
 
-		public static FilesystemUserPreferences Instance => Core.UserPreferences.Instance.Get<FilesystemUserPreferences>();
+		public static FilesystemUserPreferences Instance => Core.UserPreferences.Instance.GetOrAdd<FilesystemUserPreferences>();
 	}
 }

@@ -10,29 +10,27 @@ namespace Tangerine.Core
 	{
 		public static UserPreferences Instance { get; private set; }
 
-		public static bool Initialize()
+		public static void Initialize()
 		{
 			if (Instance != null) {
 				throw new InvalidOperationException();
 			}
 			Instance = new UserPreferences();
-			return Instance.Load();
+			Instance.Load();
 		}
 
-		public bool Load()
+		public void Load()
 		{
 			var path = GetPath();
-			if (System.IO.File.Exists(path)) {
-				try {
-					Clear();
-					TangerinePersistence.Instance.ReadObjectFromFile<UserPreferences>(path, this);
-					return true;
-				} catch (System.Exception e) {
-					Debug.Write($"Failed to load the user preferences ({path}): {e}");
-					return false;
-				}
-			} else {
-				return false;
+			if (!System.IO.File.Exists(path)) {
+				return;
+			}
+			try {
+				Clear();
+				TangerinePersistence.Instance.ReadObjectFromFile<UserPreferences>(path, this);
+			} catch (System.Exception e) {
+				Clear();
+				Debug.Write($"Failed to load the user preferences ({path}): {e}");
 			}
 		}
 

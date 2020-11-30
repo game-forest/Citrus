@@ -61,6 +61,6 @@ namespace Tangerine.UI.SceneView
 			VisualHintsRegistry = new VisualHintsRegistry();
 		}
 
-		public static SceneUserPreferences Instance => Core.UserPreferences.Instance.Get<SceneUserPreferences>();
+		public static SceneUserPreferences Instance => Core.UserPreferences.Instance.GetOrAdd<SceneUserPreferences>();
 	}
 }

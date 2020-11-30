@@ -64,6 +64,6 @@ namespace Tangerine.Core
 			LookupItemsLimit = 30;
 		}
 
-		public static CoreUserPreferences Instance => UserPreferences.Instance.Get<CoreUserPreferences>();
+		public static CoreUserPreferences Instance => UserPreferences.Instance.GetOrAdd<CoreUserPreferences>();
 	}
 }
