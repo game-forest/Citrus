@@ -103,6 +103,7 @@ namespace Tangerine.UI.Timeline
 
 		public static IEnumerable<Type> GetOperationProcessorTypes() => new[] {
 			typeof(EnsureCurrentColumnVisibleIfContainerChanged),
+			typeof(EnsureRowVisibleIfSelected)
 		};
 
 		public Timeline(Panel panel)
@@ -303,6 +304,20 @@ namespace Tangerine.UI.Timeline
 		{
 			var pos = col * TimelineMetrics.ColWidth - Offset.X;
 			return pos >= 0 && pos < Ruler.RootWidget.Width;
+		}
+
+		public void EnsureRowVisible(Row row)
+		{
+			var gw = row.GridWidget();
+			if (gw == null) {
+				return;
+			}
+			if (gw.Bottom() > Offset.Y + Roll.RootWidget.Height) {
+				OffsetY = gw.Bottom() - Roll.RootWidget.Height;
+			}
+			if (gw.Top() < Offset.Y) {
+				OffsetY = Math.Max(0, gw.Y);
+			}
 		}
 	}
 

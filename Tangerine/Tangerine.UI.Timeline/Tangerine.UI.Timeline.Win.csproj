@@ -68,6 +68,7 @@
     <Compile Include="Operations\CopyPasteKeyframe.cs" />
     <Compile Include="Operations\DragKeyframes.cs" />
     <Compile Include="Operations\EnsureCurrentColumnVisibleIfContainerChanged.cs" />
+    <Compile Include="Operations\EnsureRowVisibleIfSelected.cs" />
     <Compile Include="Operations\ToggleKeyframes.cs" />
     <Compile Include="Operations\MoveNodes.cs" />
     <Compile Include="Operations\NumericMoveDialog.cs" />

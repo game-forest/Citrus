@@ -13,7 +13,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public class SelectNode
+	public static class SelectNode
 	{
 		public static void Perform(Node node, bool select = true)
 		{
