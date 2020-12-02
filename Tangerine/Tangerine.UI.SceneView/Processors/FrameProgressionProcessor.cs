@@ -18,7 +18,8 @@ namespace Tangerine.UI.SceneView.Presenters
 		public void RenderWidgetsFrameProgression(Widget widget)
 		{
 			hasher.Begin();
-			sceneView.Frame.PrepareRendererState();
+			widget.PrepareRendererState();
+			Renderer.Transform1 = Matrix32.Identity;
 			int savedAnimationFrame = Document.Current.AnimationFrame;
 			if (!(widget is IAnimationHost host)) {
 				return;
@@ -37,17 +38,12 @@ namespace Tangerine.UI.SceneView.Presenters
 			if (max == min) {
 				return;
 			}
-			hasher.Write(widget.Position);
-			hasher.Write(widget.Rotation);
-			hasher.Write(widget.Scale);
-			hasher.Write(widget.Pivot);
-			hasher.Write(widget.Size);
-			hasher.Write((Document.Current.AnimationId ?? "").GetHashCode());
-			hasher.Write(SceneView.Instance.Scene.Scale);
-			hasher.Write(SceneView.Instance.Scene.Position);
+			hasher.Write(widget.LocalToWorldTransform);
+			hasher.Write(Document.Current.Animation.GetHashCode());
+			hasher.Write(SceneView.Instance.Scene.LocalToWorldTransform);
 			var hash = hasher.End();
 			if (cache.TryGetValue(widget, out var cacheEntry) && hash == cacheEntry.HashCode) {
-				DrawHulls(cacheEntry.Hulls, min, max);
+				DrawHulls(cacheEntry.Hulls, min, max, sceneView.Scene.Scale.X);
 				return;
 			}
 			var hulls = cacheEntry.Hulls ?? new List<Quadrangle>();
@@ -58,7 +54,7 @@ namespace Tangerine.UI.SceneView.Presenters
 						animator.Apply(AnimationUtils.FramesToSeconds(i));
 					}
 				}
-				hulls.Add(widget.CalcHull().Transform(sceneView.CalcTransitionFromSceneSpace(sceneView.Frame)));
+				hulls.Add(widget.CalcHull());
 			}
 			cache[widget] = (Hulls: hulls, HashCode: hash);
 			foreach (var animator in host.Animators) {
@@ -66,10 +62,10 @@ namespace Tangerine.UI.SceneView.Presenters
 					animator.Apply(AnimationUtils.FramesToSeconds(savedAnimationFrame));
 				}
 			}
-			DrawHulls(hulls, min, max);
+			DrawHulls(hulls, min, max, sceneView.Scene.Scale.X);
 		}
 
-		private static void DrawHulls(List<Quadrangle> hulls, int min, int max)
+		private static void DrawHulls(List<Quadrangle> hulls, int min, int max, float scale)
 		{
 			for (int i = 0; i < hulls.Count; i++) {
 				var hull = hulls[i];
@@ -81,7 +77,7 @@ namespace Tangerine.UI.SceneView.Presenters
 				for (int j = 0; j < 4; j++) {
 					var a = hull[j];
 					var b = hull[(j + 1) % 4];
-					Renderer.DrawLine(a, b, color);
+					Renderer.DrawLine(a, b, color, 1f / scale);
 				}
 			}
 		}
