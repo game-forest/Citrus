@@ -14,7 +14,7 @@ namespace Lime
 #endif
 		private string id;
 		private bool isRunning;
-		private bool animatorsArePropagated;
+		private AnimationData externalAnimationData;
 		private bool? hasEasings;
 		private bool applyZeroPose = true;
 		internal BucketQueueNode<Animation> QueueNode;
@@ -232,11 +232,11 @@ namespace Lime
 
 		public void Load()
 		{
-			if (animatorsArePropagated || string.IsNullOrEmpty(ContentsPath) || OwnerNode == null) {
+			if (externalAnimationData != null || string.IsNullOrEmpty(ContentsPath) || OwnerNode == null) {
 				return;
 			}
-			var d = AnimationData.Load(ContentsPath);
-			foreach (var animator in d.Animators) {
+			externalAnimationData = AnimationData.Load(ContentsPath);
+			foreach (var animator in externalAnimationData.Animators) {
 				var clone = Cloner.Clone(animator);
 				var (host, index) = AnimationUtils.GetPropertyHost(OwnerNode, clone.TargetPropertyPath);
 				if (host == null) {
@@ -245,7 +245,6 @@ namespace Lime
 				clone.TargetPropertyPath = clone.TargetPropertyPath.Substring(index);
 				host.Animators.Add(clone);
 			}
-			animatorsArePropagated = true;
 		}
 
 		public AnimationData GetData()
@@ -284,6 +283,9 @@ namespace Lime
 
 		public class AnimationData
 		{
+			private static readonly WeakReferencePool<string, AnimationData> weakReferencePool =
+				new WeakReferencePool<string, AnimationData>(path => InternalPersistence.Instance.ReadObject<AnimationData>(path));
+
 			public delegate bool LoadingDelegate(string path, ref AnimationData instance);
 			public delegate void LoadedDelegate(string path, AnimationData instance);
 			public static ThreadLocal<LoadingDelegate> Loading;
@@ -301,7 +303,7 @@ namespace Lime
 					Loaded?.Value?.Invoke(path, instance);
 					return instance;
 				}
-				instance = InternalPersistence.Instance.ReadObject<AnimationData>(path);
+				instance = weakReferencePool.GetItem(path);
 				Loaded?.Value?.Invoke(path, instance);
 				return instance;
 			}
