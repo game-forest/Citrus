@@ -8,6 +8,7 @@ namespace Orange
 {
 	class SyncAtlases : ICookingStage
 	{
+		private const int MaxAtlasChainLength = 1000;
 		private readonly string atlasPartExtension = ".atlasPart";
 		private readonly AssetCooker assetCooker;
 
@@ -118,7 +119,7 @@ namespace Orange
 
 			var atlasId = initialAtlasId;
 			while (items.Count > 0) {
-				if (atlasId >= AssetCooker.MaxAtlasChainLength) {
+				if (atlasId >= MaxAtlasChainLength) {
 					throw new Lime.Exception($"Too many textures in the atlas chain {cookingUnit}");
 				}
 				var bestSize = new Size(0, 0);
@@ -249,7 +250,7 @@ namespace Orange
 
 		private void CopyAllocatedItemsToAtlas(List<TextureTools.AtlasItem> items, string atlasChain, int atlasId, Size size, SHA256 cookingUnitHash)
 		{
-			var atlasPath = assetCooker.GetAtlasPath(atlasChain, atlasId);
+			var atlasPath = GetAtlasPath(atlasChain, atlasId);
 			var atlasPixels = new Color4[size.Width * size.Height];
 			foreach (var item in items.Where(i => i.Allocated)) {
 				var atlasRect = item.AtlasRect;
@@ -266,7 +267,29 @@ namespace Orange
 			}
 			var firstItem = items.First(i => i.Allocated);
 			using (var atlas = new Bitmap(atlasPixels, size.Width, size.Height)) {
-				assetCooker.ImportTexture(atlasPath, atlas, firstItem.CookingRules, cookingUnitHash);
+				SyncTextures.ImportTexture(assetCooker, atlasPath, atlas, firstItem.CookingRules, cookingUnitHash);
+			}
+		}
+
+		private string GetAtlasPath(string atlasChain, int index)
+		{
+			// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
+			var postfix = assetCooker.BundleBeingCookedName != CookingRulesBuilder.MainBundleName
+				? (assetCooker.BundleBeingCookedName ?? "") : "";
+			var path = AssetPath.Combine(
+				"Atlases" + postfix,
+				atlasChain + '.' + index.ToString("000") + GetPlatformTextureExtension());
+			return path;
+		}
+
+		private string GetPlatformTextureExtension()
+		{
+			switch (assetCooker.Target.Platform) {
+				case TargetPlatform.iOS:
+				case TargetPlatform.Android:
+					return ".pvr";
+				default:
+					return ".dds";
 			}
 		}
 

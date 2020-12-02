@@ -17,9 +17,7 @@ namespace Orange
 		public static Dictionary<string, CookingRules> CookingRulesMap;
 		public static HashSet<string> ModelsToRebuild = new HashSet<string>();
 
-		private static string atlasesPostfix = string.Empty;
-
-		public const int MaxAtlasChainLength = 1000;
+		public string BundleBeingCookedName { get; set; }
 
 		public static event Action BeginCookBundles;
 		public static event Action EndCookBundles;
@@ -63,17 +61,6 @@ namespace Orange
 				}
 			}
 			return bundles.ToList();
-		}
-
-		public string GetPlatformTextureExtension()
-		{
-			switch (Target.Platform) {
-				case TargetPlatform.iOS:
-				case TargetPlatform.Android:
-					return ".pvr";
-				default:
-					return ".dds";
-			}
 		}
 
 		public bool Cook(List<string> bundles, out string errorMessage)
@@ -163,8 +150,7 @@ namespace Orange
 				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(new CustomSetAssetBundle(InputBundle, assets), resetTexturePool: false);
-				// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
-				atlasesPostfix = bundleName != CookingRulesBuilder.MainBundleName ? bundleName : "";
+				BundleBeingCookedName = bundleName;
 				try {
 					var unitsToCookHashes = new HashSet<SHA256>();
 					foreach (var stage in CookStages) {
@@ -204,7 +190,7 @@ namespace Orange
 				} finally {
 					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
 					ModelsToRebuild.Clear();
-					atlasesPostfix = "";
+					BundleBeingCookedName = null;
 				}
 			}
 		}
@@ -295,13 +281,6 @@ namespace Orange
 			AddStage(new SyncRawAssets(this, ".raw"));
 			AddStage(new SyncRawAssets(this, ".bin"));
 			AddStage(new SyncModels(this));
-		}
-
-		public string GetAtlasPath(string atlasChain, int index)
-		{
-			var path = AssetPath.Combine(
-				"Atlases" + atlasesPostfix, atlasChain + '.' + index.ToString("000") + GetPlatformTextureExtension());
-			return path;
 		}
 
 		public static bool AreTextureParamsDefault(ICookingRules rules)
