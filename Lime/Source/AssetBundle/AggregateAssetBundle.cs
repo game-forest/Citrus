@@ -73,13 +73,28 @@ namespace Lime
 			}
 		}
 
-		public override SHA1 GetSourceSHA1(string path)
+		public override SHA256 GetHash(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetSourceSHA1(path);
+						return bundle.GetHash(path);
+					}
+				}
+			} finally {
+				sync.ExitReadLock();
+			}
+			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
+		}
+
+		public override SHA256 GetCookingUnitHash(string path)
+		{
+			sync.EnterReadLock();
+			try {
+				foreach (var bundle in bundles) {
+					if (bundle.FileExists(path)) {
+						return bundle.GetCookingUnitHash(path);
 					}
 				}
 			} finally {
@@ -95,21 +110,6 @@ namespace Lime
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
 						return bundle.GetFileSize(path);
-					}
-				}
-			} finally {
-				sync.ExitReadLock();
-			}
-			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
-		}
-
-		public override string GetSourceExtension(string path)
-		{
-			sync.EnterReadLock();
-			try {
-				foreach (var bundle in bundles) {
-					if (bundle.FileExists(path)) {
-						return bundle.GetSourceExtension(path);
 					}
 				}
 			} finally {
@@ -138,14 +138,12 @@ namespace Lime
 			return false;
 		}
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1,
-			AssetAttributes attributes = AssetAttributes.None)
+		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1,
-			AssetAttributes attributes = AssetAttributes.None)
+		public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}

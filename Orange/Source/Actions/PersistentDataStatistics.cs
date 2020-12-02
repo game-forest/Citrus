@@ -674,9 +674,9 @@ namespace Orange
 
 			public override int GetFileSize(string path) => (int)files[path].Length;
 
-			public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes) => throw new NotSupportedException();
+			public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotSupportedException();
 
-			public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes) => throw new NotImplementedException();
+			public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotImplementedException();
 
 			public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)
 			{
@@ -687,9 +687,9 @@ namespace Orange
 
 			public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open) => OpenFile(path, fileMode);
 
-			public override string GetSourceExtension(string path) => throw new NotImplementedException();
+			public override SHA256 GetHash(string path) => throw new NotImplementedException();
 
-			public override SHA1 GetSourceSHA1(string path) => throw new NotImplementedException();
+			public override SHA256 GetCookingUnitHash(string path) => throw new NotImplementedException();
 		}
 	}
 }

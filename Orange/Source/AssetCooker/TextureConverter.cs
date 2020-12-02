@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using Lime;
-using SHA1 = Lime.SHA1;
+using SHA256 = Lime.SHA256;
 
 namespace Orange
 {
 	public static class TextureConverter
 	{
-		public static void RunEtcTool(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, bool mipMaps, bool highQualityCompression, SHA1 sourceSHA1)
+		public static void RunEtcTool(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, bool mipMaps, bool highQualityCompression, SHA256 cookingUnitHash)
 		{
 			var hasAlpha = bitmap.HasAlpha;
 			var bledBitmap = hasAlpha ? TextureConverterUtils.BleedAlpha(bitmap) : null;
@@ -20,7 +20,7 @@ namespace Orange
 			var hashString = GetTextureHashString(bledBitmap ?? bitmap, ".etc", args);
 			var cachePath = AssetCache.Instance.Load(hashString);
 			if (cachePath != null) {
-				bundle.ImportFile(cachePath, path, 0, "",  sourceSHA1, attributes);
+				bundle.ImportFile(cachePath, path, cookingUnitHash, attributes);
 				return;
 			}
 			var ktxPath = Toolbox.GetTempFilePathWithExtension(".ktx");
@@ -31,7 +31,7 @@ namespace Orange
 				if (Process.Start(etcTool, args.Format(pngPath, 8, ktxPath)) != 0) {
 					throw new Lime.Exception($"ETCTool error\nCommand line: {etcTool} {args}\"");
 				}
-				bundle.ImportFile(ktxPath, path, 0, "", sourceSHA1, attributes);
+				bundle.ImportFile(ktxPath, path, cookingUnitHash, attributes);
 				AssetCache.Instance.Save(ktxPath, hashString);
 			} finally {
 				bledBitmap?.Dispose();
@@ -41,7 +41,7 @@ namespace Orange
 		}
 
 		public static void RunPVRTexTool(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, bool mipMaps, bool highQualityCompression,
-			PVRFormat pvrFormat, SHA1 sourceSHA1)
+			PVRFormat pvrFormat, SHA256 cookingUnitHash)
 		{
 			int width = bitmap.Width;
 			int height = bitmap.Height;
@@ -99,7 +99,7 @@ namespace Orange
 			var hashString = GetTextureHashString(bledBitmap ?? bitmap, ".pvr", args.ToString());
 			var cachePath = AssetCache.Instance.Load(hashString);
 			if (cachePath != null) {
-				bundle.ImportFile(cachePath, path, 0, "", sourceSHA1, attributes);
+				bundle.ImportFile(cachePath, path, cookingUnitHash, attributes);
 				return;
 			}
 			var pvrPath = Toolbox.GetTempFilePathWithExtension(".pvr");
@@ -118,7 +118,7 @@ namespace Orange
 				if (Process.Start(pvrTexTool, args.ToString()) != 0) {
 					throw new Lime.Exception($"PVRTextTool error\nCommand line: {pvrTexTool} {args}\"");
 				}
-				bundle.ImportFile(pvrPath, path, 0, "", sourceSHA1, attributes);
+				bundle.ImportFile(pvrPath, path, cookingUnitHash, attributes);
 				AssetCache.Instance.Save(pvrPath, hashString);
 			} finally {
 				DeletePossibleLockedFile(tgaPath);
@@ -126,7 +126,7 @@ namespace Orange
 			}
 		}
 
-		public static void RunNVCompress(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, DDSFormat format, bool mipMaps, SHA1 sourceSHA1)
+		public static void RunNVCompress(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, DDSFormat format, bool mipMaps, SHA256 cookingUnitHash)
 		{
 			bool compressed = format == DDSFormat.DXTi;
 			Bitmap bledBitmap = null;
@@ -150,7 +150,7 @@ namespace Orange
 			var hashString = GetTextureHashString(bledBitmap ?? bitmap, ".dds", args);
 			var cachePath = AssetCache.Instance.Load(hashString);
 			if (cachePath != null) {
-				bundle.ImportFile(cachePath, path, 0, "", sourceSHA1, attributes);
+				bundle.ImportFile(cachePath, path, cookingUnitHash, attributes);
 				return;
 			}
 			var ddsPath = Toolbox.GetTempFilePathWithExtension(".dds");
@@ -166,7 +166,7 @@ namespace Orange
 				if (Process.Start(nvcompress, args.Format(mipsFlag, compressionMethod, srcPath, dstPath), options: Process.Options.RedirectErrors) != 0) {
 					throw new Lime.Exception($"NVCompress error\nCommand line: {nvcompress} {args}\"");
 				}
-				bundle.ImportFile(ddsPath, path, 0, "", sourceSHA1, attributes);
+				bundle.ImportFile(ddsPath, path, cookingUnitHash, attributes);
 				AssetCache.Instance.Save(ddsPath, hashString);
 			} finally {
 				DeletePossibleLockedFile(ddsPath);
@@ -226,7 +226,7 @@ namespace Orange
 			return toolPath;
 		}
 
-		private static readonly SHA256 sha256 = SHA256.Create();
+		private static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 		private static string GetTextureHashString(Bitmap bitmap, string extension, string commandLineArgs)
 		{
 			using (var stream = new MemoryStream()) {

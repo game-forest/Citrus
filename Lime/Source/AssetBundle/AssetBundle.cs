@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Lime
@@ -84,16 +83,12 @@ namespace Lime
 		public abstract void DeleteFile(string path);
 		public abstract bool FileExists(string path);
 
-		public abstract void ImportFile(
-			string path, Stream stream, int reserve,
-			string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes);
+		public abstract void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
-		public abstract void ImportFileRaw(
-			string path, Stream stream, int reserve,
-			string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes);
+		public abstract void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
@@ -101,11 +96,10 @@ namespace Lime
 		public abstract IEnumerable<string> EnumerateFiles(string path = null, string extension = null);
 
 		public void ImportFile(
-			string srcPath, string dstPath, int reserve,
-			string sourceExtension, SHA1 sourceSHA1, AssetAttributes attributes)
+			string srcPath, string dstPath, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				ImportFile(dstPath, stream, reserve, sourceExtension, sourceSHA1, attributes);
+				ImportFile(dstPath, stream, cookingUnitHash, attributes);
 			}
 		}
 
@@ -136,17 +130,16 @@ namespace Lime
 			return FileExists(localizedParth) ? localizedParth : path;
 		}
 
-		public virtual AssetAttributes GetAttributes(string path)
-		{
-			return AssetAttributes.None;
-		}
+		public virtual AssetAttributes GetAttributes(string path) => AssetAttributes.None;
 
-		public abstract string GetSourceExtension(string path);
+		/// <summary>
+		/// Returns SHA256 that was passed to the ImportFile or ImportFileRaw methods.
+		/// </summary>
+		public abstract SHA256 GetCookingUnitHash(string path);
 
-		public abstract SHA1 GetSourceSHA1(string path);
-
-		public virtual void SetAttributes(string path, AssetAttributes attributes)
-		{
-		}
+		/// <summary>
+		/// Returns SHA256 based on the file path and contents.
+		/// </summary>
+		public abstract SHA256 GetHash(string path);
 	}
 }

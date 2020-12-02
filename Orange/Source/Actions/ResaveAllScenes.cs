@@ -29,7 +29,6 @@ namespace Orange
 						path: file,
 						instance: node,
 						format: Persistence.Format.Json,
-						sourceExtension: "tan",
 						default,
 						attributes: AssetAttributes.None
 					);

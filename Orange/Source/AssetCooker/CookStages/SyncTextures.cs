@@ -1,44 +1,41 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Orange
 {
-	class SyncTextures : AssetCookerCookStage, ICookStage
+	class SyncTextures : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return originalTextureExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return PlatformTextureExtension; } }
-
 		private readonly string originalTextureExtension = ".png";
+		private readonly AssetCooker assetCooker;
 
-		public SyncTextures(AssetCooker assetCooker) : base(assetCooker) { }
-
-		private string PlatformTextureExtension => AssetCooker.GetPlatformTextureExtension();
-
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(originalTextureExtension);
-
-		public void Action() => AssetCooker.SyncUpdated(originalTextureExtension, PlatformTextureExtension, Converter);
-
-		private bool Converter(string srcPath, string dstPath)
+		public SyncTextures(AssetCooker assetCooker)
 		{
-			var rules = AssetCooker.CookingRulesMap[Path.ChangeExtension(dstPath, originalTextureExtension)];
-			if (rules.TextureAtlas != null) {
-				// No need to cache this texture since it is a part of texture atlas.
-				return false;
-			}
-			using (var stream = AssetCooker.InputBundle.OpenFile(srcPath)) {
+			this.assetCooker = assetCooker;
+		}
+
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			return assetCooker.InputBundle.EnumerateFiles(null, originalTextureExtension)
+				.Where(i => AssetCooker.CookingRulesMap[i].TextureAtlas == null)
+				.Select(i =>
+					(i, SHA256.Compute(assetCooker.InputBundle.GetHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+		}
+
+		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		{
+			var rules = AssetCooker.CookingRulesMap[cookingUnit];
+			using (var stream = assetCooker.InputBundle.OpenFile(cookingUnit)) {
 				var bitmap = new Bitmap(stream);
-				if (TextureTools.ShouldDownscale(AssetCooker.Platform, bitmap, rules)) {
-					var scaledBitmap = TextureTools.DownscaleTexture(AssetCooker.Platform, bitmap, srcPath, rules);
+				if (TextureTools.ShouldDownscale(assetCooker.Platform, bitmap, rules)) {
+					var scaledBitmap = TextureTools.DownscaleTexture(assetCooker.Platform, bitmap, cookingUnit, rules);
 					bitmap.Dispose();
 					bitmap = scaledBitmap;
 				}
-				AssetCooker.ImportTexture(dstPath, bitmap, rules,
-					SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), rules.SHA1));
+				assetCooker.ImportTexture(cookingUnit, bitmap, rules, cookingUnitHash);
 				bitmap.Dispose();
 			}
-			return true;
 		}
 	}
 }

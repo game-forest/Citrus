@@ -15,7 +15,7 @@ namespace Kumquat
 		public string Bundle;
 
 		[YuzuMember]
-		public SHA1 SourceSHA1;
+		public SHA256 CookingUnitHash;
 
 		[Obsolete("Not used anymore")]
 		[YuzuMember]
@@ -229,7 +229,7 @@ namespace Kumquat
 				}
 				codeCookerCache.SceneFiles.Add(key, new SceneRecord {
 					Bundle = sceneToBundleMap[key],
-					SourceSHA1 = AssetBundle.Current.GetSourceSHA1(key),
+					CookingUnitHash = AssetBundle.Current.GetCookingUnitHash(key),
 					ReferringScenes = kv.Value.Select(path => externalSceneToOriginalScenePath[Path.ChangeExtension(path, null)]).ToList()
 				});
 			}

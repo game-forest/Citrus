@@ -8,16 +8,16 @@ namespace Orange
 	{
 		const byte OpacityTheshold = 12;
 
-		public static void CreateMask(AssetBundle assetBundle, string srcPath, string maskPath)
+		public static void CreateMask(AssetBundle assetBundle, string srcPath, string maskPath, SHA256 cookingUnitHash)
 		{
 			using (var stream = File.OpenRead(srcPath)) {
 				using (var bitmap = new Bitmap(stream)) {
-					CreateMask(assetBundle, bitmap, maskPath);
+					CreateMask(assetBundle, bitmap, maskPath, cookingUnitHash);
 				}
 			}
 		}
 
-		public static void CreateMask(AssetBundle assetBundle, Bitmap bitmap, string maskPath)
+		public static void CreateMask(AssetBundle assetBundle, Bitmap bitmap, string maskPath, SHA256 cookingUnitHash)
 		{
 			if (!bitmap.HasAlpha) {
 				return;
@@ -27,11 +27,11 @@ namespace Orange
 			using (var scaledBitmap = bitmap.Rescale(newWidth, newHeight)) {
 				bool bundled = assetBundle.FileExists(maskPath);
 				Console.WriteLine((bundled ? "* " : "+ ") + maskPath);
-				WriteMask(assetBundle, maskPath, scaledBitmap);
+				WriteMask(assetBundle, maskPath, scaledBitmap, cookingUnitHash);
 			}
 		}
 
-		private static void WriteMask(AssetBundle assetBundle, string maskPath, Bitmap bitmap)
+		private static void WriteMask(AssetBundle assetBundle, string maskPath, Bitmap bitmap, SHA256 cookingUnitHash)
 		{
 			var mask = CreateMaskHelper(bitmap);
 			using (var stream = new MemoryStream()) {
@@ -41,7 +41,7 @@ namespace Orange
 					writer.Write(mask, 0, mask.Length);
 					writer.Flush();
 					stream.Seek(0, SeekOrigin.Begin);
-					assetBundle.ImportFile(maskPath, stream, 0, "", default, AssetAttributes.Zipped);
+					assetBundle.ImportFile(maskPath, stream, cookingUnitHash, AssetAttributes.Zipped);
 				}
 			}
 		}

@@ -1,48 +1,49 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Orange
 {
-	class SyncSounds : AssetCookerCookStage, ICookStage
+	class SyncSounds : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return oggExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return soundExtension; } }
+		private readonly AssetCooker assetCooker;
 
-		private readonly string oggExtension = ".ogg";
-		private readonly string soundExtension = ".sound";
-
-		public SyncSounds(AssetCooker assetCooker) : base(assetCooker) { }
-
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(oggExtension);
-
-		public void Action() => AssetCooker.SyncUpdated(oggExtension, soundExtension, Converter);
-
-		private bool Converter(string srcPath, string dstPath)
+		public SyncSounds(AssetCooker assetCooker)
 		{
-			using (var stream = AssetCooker.InputBundle.OpenFile(srcPath)) {
+			this.assetCooker = assetCooker;
+		}
+
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			return assetCooker.InputBundle.EnumerateFiles(null, ".ogg")
+				.Select(i =>
+					(i, SHA256.Compute(assetCooker.InputBundle.GetHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+		}
+
+		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		{
+			using (var stream = assetCooker.InputBundle.OpenFile(cookingUnit)) {
 				// All sounds below 100kb size (can be changed with cooking rules) are converted
 				// from OGG to Wav/Adpcm
-				var rules = AssetCooker.CookingRulesMap[srcPath];
+				var rules = AssetCooker.CookingRulesMap[cookingUnit];
 				if (stream.Length > rules.ADPCMLimit * 1024) {
-					AssetCooker.OutputBundle.ImportFile(dstPath, stream, 0, oggExtension,
-						SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1),
-						AssetAttributes.None);
-				}
-				else {
+					assetCooker.OutputBundle.ImportFile(
+						Path.ChangeExtension(cookingUnit, ".sound"), stream,
+						cookingUnitHash, AssetAttributes.None);
+				} else {
 					Console.WriteLine("Converting sound to ADPCM/IMA4 format...");
 					using (var input = new OggDecoder(stream)) {
 						using (var output = new MemoryStream()) {
 							WaveIMA4Converter.Encode(input, output);
 							output.Seek(0, SeekOrigin.Begin);
-							AssetCooker.OutputBundle.ImportFile(dstPath, output, 0, oggExtension,
-								SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1),
-								AssetAttributes.None);
+							assetCooker.OutputBundle.ImportFile(
+								Path.ChangeExtension(cookingUnit, ".sound"), output,
+								cookingUnitHash, AssetAttributes.None);
 						}
 					}
 				}
-				return true;
 			}
 		}
 	}

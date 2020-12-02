@@ -40,7 +40,9 @@ namespace Orange
 					) {
 						allScenes.Add(scenePath);
 						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
-						var sourceSHA1 = SHA1.Compute(SHA1.Compute(File.ReadAllBytes(scenePath)), assetToCookingRules[scenePath].SHA1);
+						var sourceHash = SHA256.Compute(
+							SHA256.Compute(SHA256.Compute(scenePath), SHA256.Compute(File.ReadAllBytes(scenePath))),
+							assetToCookingRules[scenePath].Hash);
 						if (!cache.SceneFiles.ContainsKey(scenePath)) {
 							modifiedScenes.Add(scenePath);
 							scenesToCook.Add(scenePath);
@@ -50,11 +52,11 @@ namespace Orange
 							}
 							cache.SceneFiles.Add(scenePath, new SceneRecord {
 								Bundle = bundles.First(),
-								SourceSHA1 = sourceSHA1
+								CookingUnitHash = sourceHash
 							});
 						} else {
 							var cacheRecord = cache.SceneFiles[kv.Key];
-							if (sourceSHA1 != cacheRecord.SourceSHA1) {
+							if (sourceHash != cacheRecord.CookingUnitHash) {
 								var queue = new Queue<string>();
 								if (!visitedScenes.Contains(scenePath)) {
 									queue.Enqueue(scenePath);
@@ -74,7 +76,7 @@ namespace Orange
 										}
 									}
 								}
-								cache.SceneFiles[scenePath].SourceSHA1 = sourceSHA1;
+								cache.SceneFiles[scenePath].CookingUnitHash = sourceHash;
 								modifiedScenes.Add(scenePath);
 							}
 						}

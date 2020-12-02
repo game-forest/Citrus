@@ -3,16 +3,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
-using System.Globalization;
 using Lime;
 
 namespace Orange
 {
 	public class AssetCooker
 	{
-		public List<ICookStage> CookStages { get; } = new List<ICookStage>();
-
-		public delegate bool Converter(string srcPath, string dstPath);
+		public List<ICookingStage> CookStages { get; } = new List<ICookingStage>();
 
 		public AssetBundle InputBundle => AssetBundle.Current;
 		public AssetBundle OutputBundle { get; private set; }
@@ -45,33 +42,14 @@ namespace Orange
 			}
 		}
 
-		public void AddStage(ICookStage stage)
+		public void AddStage(ICookingStage stage)
 		{
 			CookStages.Add(stage);
 		}
 
-		public void RemoveStage(ICookStage stage)
+		public void RemoveStage(ICookingStage stage)
 		{
 			CookStages.Remove(stage);
-		}
-
-		public static string GetOriginalAssetExtension(string path)
-		{
-			var ext = Path.GetExtension(path).ToLower(CultureInfo.InvariantCulture);
-			switch (ext) {
-			case ".dds":
-			case ".pvr":
-			case ".atlasPart":
-			case ".mask":
-			case ".jpg":
-				return ".png";
-			case ".sound":
-				return ".ogg";
-			case ".t3d":
-				return ".fbx";
-			default:
-				return ext;
-			}
 		}
 
 		// TODO: Shouldn't be part of asset cooker
@@ -156,7 +134,7 @@ namespace Orange
 					resetTexturePool: false);
 				OutputBundle = CreateOutputBundle(bundles[i], bundleBackups: null);
 				try {
-					assetCount += CookStages.Sum(stage => stage.GetOperationCount());
+					assetCount += CookStages.Sum(stage => stage.EnumerateCookingUnits().Count());
 				} finally {
 					OutputBundle.Dispose();
 					OutputBundle = null;
@@ -188,9 +166,34 @@ namespace Orange
 				// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
 				atlasesPostfix = bundleName != CookingRulesBuilder.MainBundleName ? bundleName : "";
 				try {
+					var unitsToCookHashes = new HashSet<SHA256>();
+					foreach (var stage in CookStages) {
+						foreach (var (cookUnit, hash) in stage.EnumerateCookingUnits()) {
+							CheckCookCancelation();
+							unitsToCookHashes.Add(hash);
+						}
+					}
+					// Delete outdated assets from the OutputBundle
+					foreach (var file in OutputBundle.EnumerateFiles().ToList()) {
+						CheckCookCancelation();
+						if (!unitsToCookHashes.Contains(OutputBundle.GetCookingUnitHash(file))) {
+							OutputBundle.DeleteFile(file);
+						}
+					}
+					// Cook missing assets to the OutputBundle
+					var cookedUnitsHashes = new HashSet<SHA256>();
+					foreach (var file in OutputBundle.EnumerateFiles()) {
+						cookedUnitsHashes.Add(OutputBundle.GetCookingUnitHash(file));
+					}
 					foreach (var stage in CookStages) {
 						CheckCookCancelation();
-						stage.Action();
+						foreach (var (cookUnit, hash) in stage.EnumerateCookingUnits()) {
+							if (!cookedUnitsHashes.Contains(hash)) {
+								Console.WriteLine($"+ {cookUnit}");
+								stage.Cook(cookUnit, hash);
+							}
+							UserInterface.Instance.IncreaseProgressBar();
+						}
 					}
 					// Warn about non-power of two textures
 					foreach (var path in OutputBundle.EnumerateFiles()) {
@@ -268,9 +271,7 @@ namespace Orange
 		public AssetCooker(Target target)
 		{
 			this.Target = target;
-			AddStage(new RemoveDeprecatedModels(this));
 			AddStage(new SyncAtlases(this));
-			AddStage(new SyncDeleted(this));
 			AddStage(new SyncRawAssets(this, ".json", AssetAttributes.ZippedDeflate));
 			AddStage(new SyncRawAssets(this, ".cfg", AssetAttributes.ZippedDeflate));
 			AddStage(new SyncTxtAssets(this));
@@ -282,8 +283,6 @@ namespace Orange
 				}
 			}
 			AddStage(new SyncTextures(this));
-			AddStage(new DeleteOrphanedMasks(this));
-			AddStage(new DeleteOrphanedTextureParams(this));
 			AddStage(new SyncFonts(this));
 			AddStage(new SyncCompoundFonts(this));
 			AddStage(new SyncRawAssets(this, ".ttf"));
@@ -296,12 +295,6 @@ namespace Orange
 			AddStage(new SyncRawAssets(this, ".raw"));
 			AddStage(new SyncRawAssets(this, ".bin"));
 			AddStage(new SyncModels(this));
-		}
-
-		public void DeleteFileFromBundle(string path)
-		{
-			Console.WriteLine("- " + path);
-			OutputBundle.DeleteFile(path);
 		}
 
 		public string GetAtlasPath(string atlasChain, int index)
@@ -318,7 +311,7 @@ namespace Orange
 				rules.WrapMode == TextureParams.Default.WrapModeU;
 		}
 
-		public void ImportTexture(string path, Bitmap texture, ICookingRules rules, SHA1 sourceSHA1)
+		public void ImportTexture(string path, Bitmap texture, ICookingRules rules, SHA256 cookingUnitHash)
 		{
 			var textureParamsPath = Path.ChangeExtension(path, ".texture");
 			var textureParams = new TextureParams {
@@ -326,27 +319,14 @@ namespace Orange
 				MinFilter = rules.MinFilter,
 				MagFilter = rules.MagFilter,
 			};
-
 			if (!AreTextureParamsDefault(rules)) {
 				TextureTools.UpscaleTextureIfNeeded(ref texture, rules, false);
-				var isNeedToRewriteTexParams = true;
-				if (OutputBundle.FileExists(textureParamsPath)) {
-					var oldTexParams = InternalPersistence.Instance.ReadObjectFromBundle<TextureParams>(OutputBundle, textureParamsPath);
-					isNeedToRewriteTexParams = !oldTexParams.Equals(textureParams);
-				}
-				if (isNeedToRewriteTexParams) {
-					InternalPersistence.Instance.WriteObjectToBundle(
-						OutputBundle, textureParamsPath, textureParams, Persistence.Format.Binary,
-						".texture", sourceSHA1, AssetAttributes.None);
-				}
-			} else {
-				if (OutputBundle.FileExists(textureParamsPath)) {
-					DeleteFileFromBundle(textureParamsPath);
-				}
+				InternalPersistence.Instance.WriteObjectToBundle(
+					OutputBundle, textureParamsPath, textureParams, Persistence.Format.Binary, cookingUnitHash, AssetAttributes.None);
 			}
 			if (rules.GenerateOpacityMask) {
 				var maskPath = Path.ChangeExtension(path, ".mask");
-				OpacityMaskCreator.CreateMask(OutputBundle, texture, maskPath);
+				OpacityMaskCreator.CreateMask(OutputBundle, texture, maskPath, cookingUnitHash);
 			}
 			var attributes = AssetAttributes.ZippedDeflate;
 			if (!TextureConverterUtils.IsPowerOf2(texture.Width) || !TextureConverterUtils.IsPowerOf2(texture.Height)) {
@@ -357,30 +337,20 @@ namespace Orange
 				//case TargetPlatform.iOS:
 					var f = rules.PVRFormat;
 					if (f == PVRFormat.ARGB8 || f == PVRFormat.RGB565 || f == PVRFormat.RGBA4) {
-						TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, sourceSHA1);
+						TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, cookingUnitHash);
 					} else {
-						TextureConverter.RunEtcTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, sourceSHA1
-						);
+						TextureConverter.RunEtcTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, cookingUnitHash);
 					}
 					break;
 				case TargetPlatform.iOS:
-					TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, sourceSHA1);
+					TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, cookingUnitHash);
 					break;
 				case TargetPlatform.Win:
 				case TargetPlatform.Mac:
-					TextureConverter.RunNVCompress(texture, OutputBundle, path, attributes, rules.DDSFormat, rules.MipMaps, sourceSHA1);
+					TextureConverter.RunNVCompress(texture, OutputBundle, path, attributes, rules.DDSFormat, rules.MipMaps, cookingUnitHash);
 					break;
 				default:
 					throw new Lime.Exception();
-			}
-		}
-
-		public void DeleteModelExternalAnimations(string pathPrefix)
-		{
-			foreach (var path in OutputBundle.EnumerateFiles().ToList()) {
-				if (path.EndsWith(".ant") && path.StartsWith(pathPrefix)) {
-					DeleteFileFromBundle(path);
-				}
 			}
 		}
 
@@ -465,44 +435,6 @@ namespace Orange
 				w.WriteLine(LogText);
 				w.WriteLine();
 				w.WriteLine();
-			}
-		}
-
-		public int GetUpdateOperationCount(string fileExtension) => InputBundle.EnumerateFiles(null, fileExtension).Count();
-
-		public void SyncUpdated(string fileExtension, string bundleAssetExtension, Converter converter, Func<string, string, bool> extraOutOfDateChecker = null)
-		{
-			foreach (var srcPath in InputBundle.EnumerateFiles(null, fileExtension)) {
-				UserInterface.Instance.IncreaseProgressBar();
-				var dstPath = Path.ChangeExtension(srcPath, bundleAssetExtension);
-				var bundled = OutputBundle.FileExists(dstPath);
-				var srcRules = CookingRulesMap[srcPath];
-				var needUpdate = !bundled || SHA1.Compute(InputBundle.GetSourceSHA1(srcPath), srcRules.SHA1) != OutputBundle.GetSourceSHA1(dstPath);
-				needUpdate = needUpdate || (extraOutOfDateChecker?.Invoke(srcPath, dstPath) ?? false);
-				if (needUpdate) {
-					if (converter != null) {
-						try {
-							if (converter(srcPath, dstPath)) {
-								Console.WriteLine((bundled ? "* " : "+ ") + dstPath);
-								CookingRules rules = null;
-								if (!string.IsNullOrEmpty(dstPath)) {
-									CookingRulesMap.TryGetValue(dstPath, out rules);
-								}
-								PluginLoader.AfterAssetUpdated(OutputBundle, rules, dstPath);
-							}
-						} catch (System.Exception e) {
-							Console.WriteLine(
-								"An exception was caught while processing '{0}': {1}\n", srcPath, e.Message);
-							throw;
-						}
-					} else {
-						Console.WriteLine((bundled ? "* " : "+ ") + dstPath);
-						using (var stream = InputBundle.OpenFile(srcPath)) {
-							OutputBundle.ImportFile(dstPath, stream, 0, fileExtension,
-								SHA1.Compute(InputBundle.GetSourceSHA1(srcPath), srcRules.SHA1), AssetAttributes.None);
-						}
-					}
-				}
 			}
 		}
 	}

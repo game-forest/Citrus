@@ -10,7 +10,7 @@ namespace Lime
 		public struct FileInfo
 		{
 			[YuzuMember]
-			public SHA1 SHA1;
+			public SHA256 Hash;
 
 			[YuzuMember]
 			public DateTime DateModified;
@@ -74,22 +74,22 @@ namespace Lime
 			return (int)(new System.IO.FileInfo(ToSystemPath(path)).Length);
 		}
 
-		public override string GetSourceExtension(string path)
-		{
-			throw new NotSupportedException();
-		}
+		public override SHA256 GetCookingUnitHash(string path) => throw new NotSupportedException();
 
-		public override SHA1 GetSourceSHA1(string path)
+		public override SHA256 GetHash(string path)
 		{
 			ValidateIndex();
-			if (!index.TryGetValue(path, out var i) || i.SHA1 == default) {
+			if (!index.TryGetValue(path, out var i) || i.Hash == default) {
 				i = new FileInfo {
 					DateModified = File.GetLastWriteTimeUtc(ToSystemPath(path)),
-					SHA1 = SHA1.Compute(File.ReadAllBytes(ToSystemPath(path)))
+					Hash = SHA256.Compute(
+						SHA256.Compute(path),
+						SHA256.Compute(File.ReadAllBytes(ToSystemPath(path)))
+					)
 				};
 				index[path] = i;
 			}
-			return i.SHA1;
+			return i.Hash;
 		}
 
 		public override void DeleteFile(string path)
@@ -102,19 +102,15 @@ namespace Lime
 			return File.Exists(ToSystemPath(path));
 		}
 
-		public override void ImportFile(
-			string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1,
-			AssetAttributes attributes)
+		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			if ((attributes & (AssetAttributes.Zipped | AssetAttributes.ZippedDeflate)) != 0) {
 				throw new NotSupportedException();
 			}
-			ImportFileRaw(path, stream, reserve, sourceExtension, sourceSHA1, attributes);
+			ImportFileRaw(path, stream, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(
-			string path, Stream stream, int reserve, string sourceExtension, SHA1 sourceSHA1,
-			AssetAttributes attributes)
+		public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			var bytes = new byte[stream.Length];
@@ -157,10 +153,10 @@ namespace Lime
 				if (oldIndex.TryGetValue(path, out var item)) {
 					index[path] = new FileInfo {
 						DateModified = fi.LastWriteTimeUtc,
-						SHA1 = item.DateModified < fi.LastWriteTimeUtc ? item.SHA1 : default
+						Hash = item.DateModified < fi.LastWriteTimeUtc ? item.Hash : default
 					};
 				} else {
-					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, SHA1 = default };
+					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, Hash = default };
 				}
 			}
 			indexValid = true;

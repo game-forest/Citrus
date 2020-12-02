@@ -1,28 +1,31 @@
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Orange
 {
-	class SyncScenes : AssetCookerCookStage, ICookStage
+	class SyncScenes : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return sceneExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return sceneExtension; } }
+		private readonly AssetCooker assetCooker;
 
-		private readonly string sceneExtension = ".tan";
-
-		public SyncScenes(AssetCooker assetCooker) : base(assetCooker) { }
-
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(sceneExtension);
-
-		public void Action() => AssetCooker.SyncUpdated(sceneExtension, sceneExtension, Converter);
-
-		private bool Converter(string srcPath, string dstPath)
+		public SyncScenes(AssetCooker assetCooker)
 		{
-			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(AssetCooker.InputBundle, srcPath);
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, node, Persistence.Format.Binary, sceneExtension,
-				SHA1.Compute(AssetCooker.InputBundle.GetSourceSHA1(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1), AssetAttributes.None);
-			return true;
+			this.assetCooker = assetCooker;
+		}
+
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			return assetCooker.InputBundle.EnumerateFiles(null, ".tan")
+				.Select(i =>
+					(i, SHA256.Compute(assetCooker.InputBundle.GetHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+		}
+
+		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		{
+			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(assetCooker.InputBundle, cookingUnit);
+			InternalPersistence.Instance.WriteObjectToBundle(
+				assetCooker.OutputBundle, cookingUnit, node, Persistence.Format.Binary,
+				cookingUnitHash, AssetAttributes.None);
 		}
 	}
 }

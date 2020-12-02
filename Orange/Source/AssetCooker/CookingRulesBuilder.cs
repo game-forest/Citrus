@@ -153,7 +153,7 @@ namespace Orange
 		// so adding a field with binary triggers rebuild of all bundles
 		private static JsonSerializer yjs = new JsonSerializer();
 
-		public SHA1 SHA1 => SHA1.Compute(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
+		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
 
 		public HashSet<Meta.Item> FieldOverrides;
 
@@ -269,7 +269,7 @@ namespace Orange
 		public int AtlasItemPadding => EffectiveRules.AtlasItemPadding;
 		public int MaxAtlasSize => EffectiveRules.MaxAtlasSize;
 
-		public SHA1 SHA1 => EffectiveRules.SHA1;
+		public SHA256 Hash => EffectiveRules.Hash;
 
 		public bool Ignore
 		{

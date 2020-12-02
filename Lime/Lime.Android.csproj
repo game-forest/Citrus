@@ -155,7 +155,6 @@
     <Compile Include="Source\AssetBundle\AssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundleToolbox.cs" />
     <Compile Include="Source\AssetBundle\CustomSetAssetBundle.cs" />
-    <Compile Include="Source\AssetBundle\FileInfo.cs" />
     <Compile Include="Source\AssetBundle\PackedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\UnpackedAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\WrappedAssetBundle.cs" />
@@ -304,13 +303,13 @@
     <Compile Include="Source\Types\IntVector2.cs" />
     <Compile Include="Source\Types\Matrix32.cs" />
     <Compile Include="Source\Types\Matrix44.cs" />
-    <Compile Include="Source\Types\MonoMac\CG.cs" />
     <Compile Include="Source\Types\NumericRange.cs" />
     <Compile Include="Source\Types\Plane.cs" />
     <Compile Include="Source\Types\Quadrangle.cs" />
     <Compile Include="Source\Types\Quaternion.cs" />
     <Compile Include="Source\Types\Ray.cs" />
     <Compile Include="Source\Types\Rectangle.cs" />
+    <Compile Include="Source\Types\SHA256.cs" />
     <Compile Include="Source\Types\Size.cs" />
     <Compile Include="Source\Types\Thickness.cs" />
     <Compile Include="Source\Types\Transform2.cs" />
