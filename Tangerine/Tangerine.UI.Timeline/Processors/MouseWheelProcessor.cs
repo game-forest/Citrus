@@ -13,11 +13,9 @@ namespace Tangerine.UI.Timeline
 
 		public IEnumerator<object> Task()
 		{
-			var rollHandler = HandleScroll(timeline.Roll.RootWidget.Input);
 			var gridHandler = HandleScroll(timeline.Grid.RootWidget.Input);
 			var overviewHandler = HandleScroll(timeline.Overview.RootWidget.Input);
 			while (true) {
-				rollHandler.MoveNext();
 				gridHandler.MoveNext();
 				overviewHandler.MoveNext();
 				HandleCellsMagnification(timeline.Grid.RootWidget.Input);
@@ -33,7 +31,8 @@ namespace Tangerine.UI.Timeline
 			while (true) {
 				var scrollDelta = GetWheelDelta(input);
 				if (scrollDelta != 0 && !input.IsKeyPressed(Key.Alt)) {
-					timeline.OffsetY += scrollDelta * TimelineMetrics.DefaultRowHeight;
+					timeline.ClampAndSetOffset(
+						timeline.Offset + new Vector2(0, 1) * scrollDelta * TimelineMetrics.DefaultRowHeight);
 				}
 				if (input.IsKeyPressed(Key.Mouse2)) {
 					var delta = input.MousePosition - prevPosition;
