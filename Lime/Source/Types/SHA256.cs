@@ -38,6 +38,19 @@ namespace Lime
 			return result;
 		}
 
+		public static unsafe SHA256 Compute<T>(T[] source, int start, int length) where T: struct
+		{
+			var result = new SHA256();
+			if (!sha256.Value.TryComputeHash(
+				MemoryMarshal.Cast<T, byte>(new ReadOnlySpan<T>(source, start, length)),
+				new Span<byte>((byte*)&result, sizeof(SHA256)),
+				out var written) || written != sizeof(SHA256))
+			{
+				throw new InvalidOperationException();
+			}
+			return result;
+		}
+
 		public static unsafe SHA256 Compute<T>(params T[] source) where T: struct
 		{
 			var result = new SHA256();

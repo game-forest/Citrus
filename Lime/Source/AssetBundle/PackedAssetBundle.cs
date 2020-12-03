@@ -1,6 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using Lzma;
@@ -19,6 +20,7 @@ namespace Lime
 		public int Length;
 		public int AllocatedSize;
 		public AssetAttributes Attributes;
+		public SHA256 Hash;
 		public SHA256 CookingUnitHash;
 	}
 
@@ -383,7 +385,7 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		public override SHA256 GetHash(string path) => throw new NotImplementedException();
+		public override SHA256 GetHash(string path) => GetDescriptor(path).Hash;
 
 		public override SHA256 GetCookingUnitHash(string path) => GetDescriptor(path).CookingUnitHash;
 
@@ -405,13 +407,24 @@ namespace Lime
 
 		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			if ((attributes & AssetAttributes.Zipped) != 0) {
-				stream = CompressAssetStream(stream, attributes);
+			var length = (int)stream.Length;
+			var buffer = ArrayPool<byte>.Shared.Rent(length);
+			try {
+				if (stream.Read(buffer, 0, length) != length) {
+					throw new IOException();
+				}
+				var hash = SHA256.Compute(SHA256.Compute(path), SHA256.Compute(buffer, 0, length));
+				stream = new MemoryStream(buffer, 0, length);
+				if ((attributes & AssetAttributes.Zipped) != 0) {
+					stream = CompressAssetStream(stream, attributes);
+				}
+				ImportFileRaw(path, stream, hash, cookingUnitHash, attributes);
+			} finally {
+				ArrayPool<byte>.Shared.Return(buffer);
 			}
-			ImportFileRaw(path, stream, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			OnWrite?.Invoke();
 			AssetDescriptor d;
@@ -421,6 +434,7 @@ namespace Lime
 			if (reuseExistingDescriptor) {
 				d.Length = (int)stream.Length;
 				d.Attributes = attributes;
+				d.Hash = hash;
 				d.CookingUnitHash = cookingUnitHash;
 				index[AssetPath.CorrectSlashes(path)] = d;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
@@ -439,6 +453,7 @@ namespace Lime
 				d.Offset = indexOffset;
 				d.AllocatedSize = d.Length;
 				d.Attributes = attributes;
+				d.Hash = hash;
 				d.CookingUnitHash = cookingUnitHash;
 				index[AssetPath.CorrectSlashes(path)] = d;
 				indexOffset += d.AllocatedSize;
@@ -501,6 +516,10 @@ namespace Lime
 				desc.Length = reader.ReadInt32();
 				desc.AllocatedSize = reader.ReadInt32();
 				desc.Attributes = (AssetAttributes)reader.ReadInt32();
+				desc.Hash.A = reader.ReadUInt64();
+				desc.Hash.B = reader.ReadUInt64();
+				desc.Hash.C = reader.ReadUInt64();
+				desc.Hash.D = reader.ReadUInt64();
 				desc.CookingUnitHash.A = reader.ReadUInt64();
 				desc.CookingUnitHash.B = reader.ReadUInt64();
 				desc.CookingUnitHash.C = reader.ReadUInt64();
@@ -525,6 +544,10 @@ namespace Lime
 				writer.Write(p.Value.Length);
 				writer.Write(p.Value.AllocatedSize);
 				writer.Write((int)p.Value.Attributes);
+				writer.Write(p.Value.Hash.A);
+				writer.Write(p.Value.Hash.B);
+				writer.Write(p.Value.Hash.C);
+				writer.Write(p.Value.Hash.D);
 				writer.Write(p.Value.CookingUnitHash.A);
 				writer.Write(p.Value.CookingUnitHash.B);
 				writer.Write(p.Value.CookingUnitHash.C);
@@ -606,6 +629,7 @@ namespace Lime
 				using (var stream = patchBundle.OpenFileRaw(file)) {
 					ImportFileRaw(
 						file, stream,
+						patchBundle.GetHash(file),
 						patchBundle.GetCookingUnitHash(file),
 						patchBundle.GetAttributes(file)
 					);

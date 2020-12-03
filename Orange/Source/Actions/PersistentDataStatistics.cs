@@ -676,7 +676,7 @@ namespace Orange
 
 			public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotSupportedException();
 
-			public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotImplementedException();
+			public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotImplementedException();
 
 			public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)
 			{

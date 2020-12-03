@@ -85,6 +85,9 @@ namespace Orange
 					var extraTimer = StartBenchmark();
 					CookBundle(bundles[i], assetsGroupedByBundles[i], bundleBackups);
 					StopBenchmark(extraTimer, $"{bundles[i]} cooked: ");
+					if (UserInterface.Instance.ShouldUnpackBundles()) {
+						UnpackBundle(bundles[i]);
+					}
 				}
 				var extraBundles = bundles.ToList();
 				extraBundles.Remove(CookingRulesBuilder.MainBundleName);
@@ -108,6 +111,58 @@ namespace Orange
 			}
 			errorMessage = null;
 			return true;
+		}
+
+		private void UnpackBundle(string bundleName)
+		{
+			var destinationPath = The.Workspace.GetBundlePath(Target.Platform, bundleName) + ".Unpacked";
+			if (!Directory.Exists(destinationPath)) {
+				Directory.CreateDirectory(destinationPath);
+			}
+			using (var source = CreateOutputBundle(bundleName, null))
+			using (var destination = new UnpackedAssetBundle(destinationPath)) {
+				foreach (var file in destination.EnumerateFiles()) {
+					if (!source.FileExists(file)) {
+						try {
+							destination.DeleteFile(file);
+						} catch {
+							// Do nothing.
+						}
+					}
+				}
+				foreach (var file in source.EnumerateFiles()) {
+					var exists = destination.FileExists(file);
+					if (!exists || destination.GetHash(file) != source.GetHash(file)) {
+						try {
+							if (exists) {
+								destination.DeleteFile(file);
+							}
+							destination.ImportFile(
+								file, new MemoryStream(source.ReadFile(file)),
+								source.GetCookingUnitHash(file), source.GetAttributes(file));
+						} catch {
+							// Do nothing.
+						}
+					}
+				}
+				try {
+					DeleteEmptyDirectories(destination.BaseDirectory);
+				} catch {
+					// Do nothing.
+				}
+			}
+
+			void DeleteEmptyDirectories(string baseDirectory)
+			{
+				foreach (var directory in Directory.GetDirectories(baseDirectory)) {
+					DeleteEmptyDirectories(directory);
+					if (Directory.GetFiles(directory).Length == 0 &&
+					    Directory.GetDirectories(directory).Length == 0)
+					{
+						Directory.Delete(directory, false);
+					}
+				}
+			}
 		}
 
 		private int CalculateOperationCount(List<string> bundles)
@@ -232,14 +287,14 @@ namespace Orange
 				Lime.Debug.Write("Failed to create directory: {0} {1}", Path.GetDirectoryName(bundlePath));
 				throw;
 			}
-			PackedAssetBundle bundle;
+			PackedAssetBundle packedBundle;
 			try {
-				bundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
+				packedBundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
 			} catch (InvalidBundleVersionException) {
 				File.Delete(bundlePath);
-				bundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
+				packedBundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
 			}
-			bundle.OnWrite += () => {
+			packedBundle.OnWrite += () => {
 				var backupPath = bundlePath + ".bak";
 				if (bundleBackups.Contains(backupPath) || !File.Exists(bundlePath)) {
 					return;
@@ -251,7 +306,7 @@ namespace Orange
 				}
 				bundleBackups.Add(backupPath);
 			};
-			return bundle;
+			return packedBundle;
 		}
 
 		public AssetCooker(Target target)

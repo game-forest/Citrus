@@ -18,6 +18,7 @@ namespace Orange
 		private BundlePickerWidget bundlePickerWidget;
 		private FileChooser projectPicker;
 		private TargetPicker targetPicker;
+		private CheckBox unpackBundles;
 		private PluginPanel pluginPanel;
 		private ThemedTextView textView;
 		private TextWriter textWriter;
@@ -134,7 +135,7 @@ namespace Orange
 			var header = new Widget {
 				Layout = new TableLayout {
 					ColumnCount = 2,
-					RowCount = 2,
+					RowCount = 3,
 					RowSpacing = 6,
 					ColumnSpacing = 6,
 					RowDefaults = new List<DefaultLayoutCell> {
@@ -143,7 +144,7 @@ namespace Orange
 					},
 					ColumnDefaults = new List<DefaultLayoutCell> {
 						new DefaultLayoutCell { StretchX = 0 },
-						new DefaultLayoutCell(),
+						new DefaultLayoutCell { VerticalAlignment = VAlignment.Center },
 					}
 				},
 				LayoutCell = new LayoutCell { StretchY = 0 }
@@ -151,6 +152,7 @@ namespace Orange
 			AddPicker(header, "Target", targetPicker = new TargetPicker());
 			AddPicker(header, "Citrus Project", projectPicker = CreateProjectPicker());
 			targetPicker.Changed += OnActionOrTargetChanged;
+			AddPicker(header, "Unpack Bundles", unpackBundles = new ThemedCheckBox());
 			return header;
 		}
 
@@ -293,22 +295,17 @@ namespace Orange
 
 		private IEnumerator<object> ExecuteTask(Func<string> action)
 		{
-			var task = OrangeActionsHelper.ExecuteOrangeAction(
-				action, () => {
-					The.Workspace.Save();
-					EnableControls(false);
-					textView.Clear();
-				}, () => {
-					EnableControls(true);
-					if (textView.ScrollPosition == textView.MaxScrollPosition) {
-						The.UI.ScrollLogToEnd();
-					}
-				},
-				true
-			);
-			while (!task.IsCompleted && !task.IsCanceled && !task.IsFaulted) {
-				yield return null;
-			}
+			yield return OrangeActionsHelper.ExecuteOrangeAction(action, () => {
+				The.Workspace.Save();
+				EnableControls(false);
+				textView.Clear();
+			}, () => {
+				EnableControls(true);
+				if (textView.ScrollPosition == textView.MaxScrollPosition) {
+					The.UI.ScrollLogToEnd();
+				}
+			},
+			Task.ExecuteAsync);
 		}
 
 		private void EnableControls(bool value)
@@ -427,6 +424,8 @@ namespace Orange
 		{
 			return The.MenuController.Items.Find(i => i.Label == actionPicker.Text);
 		}
+
+		public override bool ShouldUnpackBundles() => unpackBundles.Checked;
 
 		public override Target GetActiveTarget()
 		{

@@ -86,8 +86,8 @@ namespace Orange
 		{
 			Console.WriteLine($"Orange.CLI [citrus_project]" +
 			                  $" --target:[Win|Mac|ios|android|uc]" +
+			                  $" --unpack_bundles" +
 			                  $" --command:command" +
-			                  $" [--autoupdate]" +
 			                  $" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
 			);
 			var commands = The.MenuController.GetVisibleAndSortedItems();
@@ -140,6 +140,11 @@ namespace Orange
 		public override MenuItem GetActiveAction()
 		{
 			return The.MenuController.Items.Find(i => i.Label == selectedActionName);
+		}
+
+		public override bool ShouldUnpackBundles()
+		{
+			return Toolbox.GetCommandLineFlag("--unpack_bundles");
 		}
 
 		public override Target GetActiveTarget()

@@ -74,7 +74,9 @@ namespace Lime
 		{
 			using (var stream = sourceBundle.OpenFileRaw(file)) {
 				destinationBundle.ImportFileRaw(
-					file, stream, sourceBundle.GetCookingUnitHash(file),
+					file, stream,
+					sourceBundle.GetHash(file),
+					sourceBundle.GetCookingUnitHash(file),
 					sourceBundle.GetAttributes(file));
 			}
 		}

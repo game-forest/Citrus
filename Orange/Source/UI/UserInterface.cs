@@ -30,6 +30,8 @@ namespace Orange
 
 		public abstract void ShowError(string message);
 
+		public abstract bool ShouldUnpackBundles();
+
 		public abstract Target GetActiveTarget();
 
 		public abstract MenuItem GetActiveAction();

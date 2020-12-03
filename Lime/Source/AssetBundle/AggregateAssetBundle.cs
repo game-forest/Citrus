@@ -143,7 +143,7 @@ namespace Lime
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
+		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}

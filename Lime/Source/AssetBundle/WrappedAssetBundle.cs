@@ -30,9 +30,9 @@ namespace Lime
 			Bundle.ImportFile(path, stream, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			Bundle.ImportFileRaw(path, stream, cookingUnitHash, attributes);
+			Bundle.ImportFileRaw(path, stream, hash, cookingUnitHash, attributes);
 		}
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open) => Bundle.OpenFile(path, mode);

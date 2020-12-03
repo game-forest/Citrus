@@ -88,7 +88,7 @@ namespace Lime
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
-		public abstract void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
+		public abstract void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.

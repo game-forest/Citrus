@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using Yuzu;
@@ -104,20 +105,24 @@ namespace Lime
 
 		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			if ((attributes & (AssetAttributes.Zipped | AssetAttributes.ZippedDeflate)) != 0) {
-				throw new NotSupportedException();
-			}
-			ImportFileRaw(path, stream, cookingUnitHash, attributes);
+			ImportFileRaw(path, stream, default, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
-			var bytes = new byte[stream.Length];
-			stream.Read(bytes, 0, bytes.Length);
-			var dir = Path.Combine(BaseDirectory, Path.GetDirectoryName(path));
-			Directory.CreateDirectory(dir);
-			File.WriteAllBytes(Path.Combine(BaseDirectory, path), bytes);
+			var length = (int)stream.Length;
+			var buffer = ArrayPool<byte>.Shared.Rent(length);
+			try {
+				stream.Read(buffer, 0, length);
+				var systemPath = ToSystemPath(path);
+				Directory.CreateDirectory(Path.GetDirectoryName(systemPath));
+				using (var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read)) {
+					fs.Write(buffer, 0, length);
+				}
+			} finally {
+				ArrayPool<byte>.Shared.Return(buffer);
+			}
 		}
 
 		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
@@ -150,6 +155,9 @@ namespace Lime
 			var di = new DirectoryInfo(BaseDirectory);
 			foreach (var fi in di.GetFiles("*", SearchOption.AllDirectories)) {
 				var path = fi.FullName.Substring(di.FullName.Length).Replace('\\', '/');
+				if (path == IndexFile) {
+					continue;
+				}
 				if (oldIndex.TryGetValue(path, out var item)) {
 					index[path] = new FileInfo {
 						DateModified = fi.LastWriteTimeUtc,
