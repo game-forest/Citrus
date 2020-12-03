@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Lime;
 using System.Collections.Generic;
+using System.Linq;
 using Orange.FbxImporter;
 
 namespace Orange
@@ -51,6 +52,11 @@ namespace Orange
 			AssetCooker.DeleteModelExternalAnimations(animationPathPrefix);
 			ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
 			model.RemoveAnimatorsForExternalAnimations();
+			var externalMeshPath = AssetCooker.GetModelExternalMeshPath(dstPath);
+			if (AssetCooker.OutputBundle.FileExists(externalMeshPath)) {
+				AssetCooker.DeleteFileFromBundle(externalMeshPath);
+			}
+			ExportModelMeshes(model, externalMeshPath, assetAttributes, cookingRules.SHA1);
 			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
 				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
 			return true;
@@ -68,6 +74,23 @@ namespace Orange
 				var data = animation.GetData();
 				animation.ContentsPath = pathWithoutExt;
 				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".ant", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
+				Console.WriteLine("+ " + path);
+			}
+		}
+
+		private void ExportModelMeshes(Model3D model, string path, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
+		{
+			var data = new Model3D.MeshData();
+			var submeshes = model.Descendants
+				.OfType<Mesh3D>()
+				.SelectMany(m => m.Submeshes);
+			foreach (var sm in submeshes) {
+				data.Meshes.Add(sm.Mesh);
+				sm.Mesh = null;
+			}
+			if (data.Meshes.Count > 0) {
+				model.MeshContentPath = Path.ChangeExtension(path, null);
+				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".msh", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
 				Console.WriteLine("+ " + path);
 			}
 		}

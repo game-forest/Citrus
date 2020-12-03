@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Yuzu;
 
 namespace Lime
@@ -7,9 +9,24 @@ namespace Lime
 	[TangerineVisualHintGroup("/All/Nodes/3D")]
 	public class Model3D : Node3D
 	{
+		private MeshData externalMeshData;
+
+		[YuzuMember]
+		public string MeshContentPath { get; set; }
+
 		[YuzuAfterDeserialization]
 		public void OnAfterDeserialization()
 		{
+			if (MeshContentPath != null && externalMeshData == null) {
+				externalMeshData = MeshData.Load(MeshContentPath);
+				var submeshes = Descendants
+					.OfType<Mesh3D>()
+					.SelectMany(m => m.Submeshes);
+				var i = 0;
+				foreach (var sm in submeshes) {
+					sm.Mesh = externalMeshData.Meshes[i++];
+				}
+			}
 			RebuildSkeleton();
 			LoadEntryTrigger();
 		}
@@ -67,6 +84,17 @@ namespace Lime
 					blender.Enabled = enabledBlending;
 				}
 			}
+		}
+
+		public class MeshData
+		{
+			private static readonly WeakReferencePool<string, MeshData> weakReferencePool =
+				new WeakReferencePool<string, MeshData>(path => InternalPersistence.Instance.ReadObject<MeshData>(path));
+
+			[YuzuMember]
+			public List<Mesh<Mesh3D.Vertex>> Meshes { get; private set; } = new List<Mesh<Mesh3D.Vertex>>();
+
+			public static MeshData Load(string path) => weakReferencePool.GetItem(path + ".msh");
 		}
 	}
 }

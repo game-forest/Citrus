@@ -2391,6 +2391,20 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		protected static global::Lime.Model3D.MeshData Clone_Lime__Model3D__MeshData(Cloner cl, object src)
+		{
+			if (src == null) return null;
+			if (src.GetType() != typeof(global::Lime.Model3D.MeshData))
+				return (global::Lime.Model3D.MeshData)cl.DeepObject(src);
+			var s = (global::Lime.Model3D.MeshData)src;
+			var result = new global::Lime.Model3D.MeshData();
+			if (s.Meshes != null && result.Meshes != null) {
+				foreach (var tmp1 in s.Meshes)
+					result.Meshes.Add(Clone_Lime__Mesh_Mesh3D__Vertex(cl, tmp1));
+			}
+			return result;
+		}
+
 		protected static global::Lime.Model3DAttachmentParser.MeshOptionFormat Clone_Lime__Model3DAttachmentParser__MeshOptionFormat(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -2442,6 +2456,7 @@ namespace YuzuGenerated
 			}
 			result.FreezeInvisible = s.FreezeInvisible;
 			result.Id = s.Id;
+			result.MeshContentPath = s.MeshContentPath;
 			if (s.ShouldSerializeNodes()) {
 				if (s.Nodes != null && result.Nodes != null) {
 					var tmp10 = cl.GetCloner<global::Lime.Node>();
@@ -4831,6 +4846,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.Matrix44Animator)] = Clone_Lime__Matrix44Animator;
 			clonerCache[typeof(global::Lime.Mesh<global::Lime.Mesh3D.Vertex>)] = Clone_Lime__Mesh_Mesh3D__Vertex;
 			clonerCache[typeof(global::Lime.Mesh3D)] = Clone_Lime__Mesh3D;
+			clonerCache[typeof(global::Lime.Model3D.MeshData)] = Clone_Lime__Model3D__MeshData;
 			clonerCache[typeof(global::Lime.Model3DAttachmentParser.MeshOptionFormat)] = Clone_Lime__Model3DAttachmentParser__MeshOptionFormat;
 			clonerCache[typeof(global::Lime.Model3D)] = Clone_Lime__Model3D;
 			clonerCache[typeof(global::Lime.Model3DAttachmentParser.ModelAnimationFormat)] = Clone_Lime__Model3DAttachmentParser__ModelAnimationFormat;

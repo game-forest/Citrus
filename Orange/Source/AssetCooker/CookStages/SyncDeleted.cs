@@ -20,7 +20,7 @@ namespace Orange
 			}
 		}
 
-		private readonly string[] toDeleteExtensions = { ".atlasPart", ".mask", ".texture", ".ant" };
+		private readonly string[] toDeleteExtensions = { ".atlasPart", ".mask", ".texture", ".ant", ".msh" };
 		private readonly string modelTanExtension = ".t3d";
 
 		public SyncDeleted(AssetCooker assetCooker) : base(assetCooker) { }
@@ -62,6 +62,10 @@ namespace Orange
 				if (!assetFiles.Contains(assetPath)) {
 					if (path.EndsWith(modelTanExtension, StringComparison.OrdinalIgnoreCase)) {
 						AssetCooker.DeleteModelExternalAnimations(AssetCooker.GetModelAnimationPathPrefix(path));
+						var externalMeshPath = AssetCooker.GetModelExternalMeshPath(path);
+						if (AssetCooker.OutputBundle.FileExists(externalMeshPath)) {
+							AssetCooker.DeleteFileFromBundle(externalMeshPath);
+						}
 					}
 					var modelAttachmentExtIndex = path.LastIndexOf(Model3DAttachment.FileExtension);
 					if (modelAttachmentExtIndex >= 0) {
