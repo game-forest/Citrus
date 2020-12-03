@@ -4,15 +4,18 @@ namespace Orange
 {
 	static partial class CookGameAssets
 	{
-		[Export(nameof(OrangePlugin.MenuItems))]
+		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
 		[ExportMetadata("Label", "Cook Game Assets")]
 		[ExportMetadata("Priority", 4)]
 		[ExportMetadata("ApplicableToBundleSubset", true)]
-		public static void CookGameAssetsAction()
+		public static string CookGameAssetsAction()
 		{
 			var target = The.UI.GetActiveTarget();
 
-			AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles());
+			if (!AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles(), out string errorMessage)) {
+				return errorMessage;
+			}
+			return null;
 		}
 	}
 }

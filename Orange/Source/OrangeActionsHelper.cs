@@ -7,13 +7,19 @@ namespace Orange.Source
 {
 	public static class OrangeActionsHelper
 	{
-		public static void ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd,
+		public static bool ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd,
 			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
 		{
 			IEnumerator<object> enumerator = ExecuteOrangeAction(action, onBegin, onEnd, onCreateOrNotAsynchTask);
 			while (enumerator.MoveNext()) {
+				if (enumerator.Current is bool flag) {
+					if (!flag) {
+						return false;
+					}
+				}
 				Thread.Yield();
 			}
+			return true;
 		}
 
 		public static IEnumerator<object> ExecuteOrangeAction(Func<string> action, Action onBegin, Action onEnd,
@@ -22,6 +28,7 @@ namespace Orange.Source
 			var startTime = DateTime.Now;
 			onBegin();
 			var executionResult = "Build Failed! Unknown Error.";
+			bool hasError = false;
 			try {
 				executionResult = "Done.";
 				Action mainAction = () => {
@@ -37,6 +44,7 @@ namespace Orange.Source
 							if (errorDetails.Length > 0) {
 								Console.WriteLine(errorDetails);
 							}
+							hasError = true;
 							executionResult = "Build Failed!";
 						}
 					} finally {
@@ -55,6 +63,9 @@ namespace Orange.Source
 				Console.WriteLine(executionResult);
 				Console.WriteLine(@"Elapsed time {0:hh\:mm\:ss}", DateTime.Now - startTime);
 				onEnd();
+			}
+			if (hasError) {
+				yield return false;
 			}
 		}
 

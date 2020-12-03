@@ -19,7 +19,9 @@ namespace Orange
 
 			if (The.UI.AskConfirmation("Are you sure you want to rebuild the game?")) {
 				CleanupGame(target);
-				AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles());
+				if (!AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles(), out string errorMessage)) {
+					return errorMessage;
+				}
 				if (!BuildGame(target)) {
 					return "Can not BuildGame";
 				}

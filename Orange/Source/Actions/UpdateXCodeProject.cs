@@ -19,10 +19,12 @@ namespace Orange
 				UserInterface.Instance.ExitWithErrorIfPossible();
 				return "Error updating XCode project: active target must target iOS platform.";
 			}
-			AssetCooker.CookForTarget(
+			if (!AssetCooker.CookForTarget(
 				target,
-				new List<string> { CookingRulesBuilder.MainBundleName }
-			);
+				new List<string> {CookingRulesBuilder.MainBundleName}, out string errorMessage
+			)) {
+				return errorMessage;
+			}
 			var solutionPath = The.Workspace.GetDefaultProjectSolutionPath(TargetPlatform.iOS);
 			var builder = new SolutionBuilder(new Target("UpdateXCodeProject", solutionPath, false, TargetPlatform.iOS, BuildConfiguration.Release));
 			var output = new StringBuilder();
