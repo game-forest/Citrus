@@ -463,6 +463,7 @@
     <Compile Include="Source\Types\Vector3.cs" />
     <Compile Include="Source\Types\Vector4.cs" />
     <Compile Include="Source\Version.cs" />
+    <Compile Include="Source\WeakReferencePool.cs" />
     <Compile Include="Source\Widgets\3D\Camera3D.cs" />
     <Compile Include="Source\Widgets\3D\CommonMaterial.cs" />
     <Compile Include="Source\Widgets\3D\CommonMaterialProgram.cs" />
