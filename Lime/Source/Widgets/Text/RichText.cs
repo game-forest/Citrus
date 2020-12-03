@@ -177,7 +177,6 @@ namespace Lime
 			EnsureSpriteLists();
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			ro.CaptureRenderState(this);
-			ro.Objects = new RenderObjectList();
 			var scale = Mathf.Sqrt(Math.Max(LocalToWorldTransform.U.SqrLength, LocalToWorldTransform.V.SqrLength));
 			for (int i = 0; i < renderer.Styles.Count; i++) {
 				var style = renderer.Styles[i];
@@ -382,7 +381,7 @@ namespace Lime
 
 		internal class RenderObject : WidgetRenderObject
 		{
-			public RenderObjectList Objects;
+			public RenderObjectList Objects = new RenderObjectList();
 
 			public override void Render()
 			{
@@ -400,9 +399,7 @@ namespace Lime
 
 			protected override void OnRelease()
 			{
-				foreach (var ro in Objects) {
-					ro.Release();
-				}
+				Objects.Clear();
 			}
 		}
 

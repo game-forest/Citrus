@@ -45,6 +45,7 @@ namespace Lime
 			size.Width = width;
 			size.Height = height;
 			uvRect = new Rectangle(0, 0, 1, 1);
+			MemoryUsed = GraphicsUtility.CalculateImageDataSize(format, width, height);
 		}
 
 		public Size ImageSize {

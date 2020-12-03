@@ -203,6 +203,7 @@ namespace Lime
 		private void ManageFocusOnWindowActivation()
 		{
 			if (Window.Active) {
+				lastFocused = null;
 				if (Widget.Focused != null && Widget.Focused.SameOrDescendantOf(this)) {
 					lastFocused = Widget.Focused;
 				}

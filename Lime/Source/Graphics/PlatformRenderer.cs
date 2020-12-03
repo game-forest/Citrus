@@ -428,6 +428,9 @@ namespace Lime
 			SetVertexInputLayout(null);
 			SetRenderTarget(null);
 			Array.Clear(shaderParamsArray, 0, shaderParamsArray.Length);
+			Array.Clear(vertexBuffers, 0, vertexBuffers.Length);
+			Array.Clear(textures, 0, textures.Length);
+			indexBuffer = null;
 			shaderParamsArrayCount = 0;
 		}
 

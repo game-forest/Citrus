@@ -395,6 +395,9 @@ namespace Lime
 			if (streaming && (Sound?.StopChecker?.Invoke() ?? false)) {
 				Stop(0.1f);
 			}
+			if (Sound != null && State == AudioChannelState.Stopped) {
+				Sound.StopChecker = null;
+			}
 		}
 
 		private void FadeFinished()

@@ -258,7 +258,7 @@ namespace Lime
 		/// </summary>
 		private float particlesToSpawn;
 		public List<Particle> particles = new List<Particle>();
-		private static readonly List<Particle> particlePool = new List<Particle>();
+		private static readonly Stack<Particle> particlePool = new Stack<Particle>();
 		private static readonly object particlePoolSync = new object();
 		private List<EmitterShapePoint> emitterShapePoints = new List<EmitterShapePoint>();
 		private List<Vector2> cachedShapePoints = new List<Vector2>();
@@ -359,8 +359,7 @@ namespace Lime
 				if (particlePool.Count == 0) {
 					result = new Particle();
 				} else {
-					result = particlePool.Last();
-					particlePool.RemoveAt(particlePool.Count - 1);
+					result = particlePool.Pop();
 				}
 				particles.Add(result);
 				return result;
@@ -375,7 +374,9 @@ namespace Lime
 		{
 			lock (particlePoolSync) {
 				while (particleCount > 0) {
-					particlePool.Add(particles.Last());
+					var p = particles[particles.Count - 1];
+					p.Modifier = null;
+					particlePool.Push(p);
 					particles.RemoveAt(particles.Count - 1);
 					particleCount--;
 				}
