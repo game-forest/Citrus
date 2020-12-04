@@ -4,6 +4,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Lzma;
 using Yuzu;
 
@@ -14,6 +15,7 @@ namespace Lime
 		public InvalidBundleVersionException(string message) : base(message) { }
 	}
 
+	[StructLayout(LayoutKind.Sequential)]
 	struct AssetDescriptor
 	{
 		public int Offset;
@@ -39,14 +41,14 @@ namespace Lime
 	{
 		readonly PackedAssetBundle bundle;
 		internal AssetDescriptor descriptor;
-		int position;
-		Stream stream;
+		private int position;
+		private Stream stream;
 
 		public AssetStream(PackedAssetBundle bundle, string path)
 		{
 			this.bundle = bundle;
 			if (!bundle.index.TryGetValue(AssetPath.CorrectSlashes(path), out descriptor)) {
-				throw new Exception("Can't open asset: {0}", path);
+				throw new Exception($"Can't open asset: {path}");
 			}
 			stream = bundle.AllocStream();
 			Seek(0, SeekOrigin.Begin);
@@ -59,19 +61,11 @@ namespace Lime
 		public override long Length => descriptor.Length;
 
 		public override long Position {
-			get {
-				return position;
-			}
-			set {
-				Seek(value, SeekOrigin.Begin);
-			}
+			get => position;
+			set => Seek(value, SeekOrigin.Begin);
 		}
 
-		public override bool CanSeek {
-			get {
-				return true;
-			}
-		}
+		public override bool CanSeek => true;
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
@@ -105,17 +99,17 @@ namespace Lime
 
 		public override void Flush()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public override void SetLength(long value)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		#region IDisposable Support
@@ -187,12 +181,11 @@ namespace Lime
 		private readonly BinaryReader reader;
 		private readonly BinaryWriter writer;
 		private readonly Stream stream;
-		private AssetBundleFlags flags;
 		internal Dictionary <string, AssetDescriptor> index = new Dictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
 		private readonly List<AssetDescriptor> trash = new List<AssetDescriptor>();
 		private readonly System.Reflection.Assembly resourcesAssembly;
 		private bool wasModified { get; set; }
-		public string Path { get; private set; }
+		public string Path { get; }
 		public event Action OnWrite;
 
 		public PackedAssetBundle(string resourceId, string assemblyName)
@@ -201,7 +194,7 @@ namespace Lime
 			resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
 				SingleOrDefault(a => a.GetName().Name == assemblyName);
 			if (resourcesAssembly == null) {
-				throw new Lime.Exception("Assembly '{0}' doesn't exist", assemblyName);
+				throw new Lime.Exception($"Assembly {assemblyName} doesn't exist");
 			}
 			stream = AllocStream();
 			reader = new BinaryReader(stream);
@@ -211,7 +204,6 @@ namespace Lime
 		public PackedAssetBundle(string path, AssetBundleFlags flags = Lime.AssetBundleFlags.None)
 		{
 			this.Path = path;
-			this.flags = flags;
 			if ((flags & AssetBundleFlags.Writable) != 0) {
 				stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 				reader = new BinaryReader(stream);
@@ -307,8 +299,7 @@ namespace Lime
 				// return early to avoid modifying Date Modified of bundle file with stream.SetLength
 				return;
 			}
-			trash.Sort((x, y) => {
-				return x.Offset - y.Offset; });
+			trash.Sort((x, y) => x.Offset - y.Offset);
 			int moveDelta = 0;
 			var indexKeys = new string[index.Keys.Count];
 			index.Keys.CopyTo(indexKeys, 0);
@@ -486,7 +477,7 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		private void ReadIndexTable()
+		private unsafe void ReadIndexTable()
 		{
 			if (stream.Length == 0) {
 				indexOffset = sizeof(int) * 4;
@@ -510,25 +501,14 @@ namespace Lime
 			int numDescriptors = reader.ReadInt32();
 			index.Clear();
 			for (int i = 0; i < numDescriptors; i++) {
-				var desc = new AssetDescriptor();
-				string name = reader.ReadString();
-				desc.Offset = reader.ReadInt32();
-				desc.Length = reader.ReadInt32();
-				desc.AllocatedSize = reader.ReadInt32();
-				desc.Attributes = (AssetAttributes)reader.ReadInt32();
-				desc.Hash.A = reader.ReadUInt64();
-				desc.Hash.B = reader.ReadUInt64();
-				desc.Hash.C = reader.ReadUInt64();
-				desc.Hash.D = reader.ReadUInt64();
-				desc.CookingUnitHash.A = reader.ReadUInt64();
-				desc.CookingUnitHash.B = reader.ReadUInt64();
-				desc.CookingUnitHash.C = reader.ReadUInt64();
-				desc.CookingUnitHash.D = reader.ReadUInt64();
-				index.Add(name, desc);
+				var name = reader.ReadString();
+				var descriptor = new AssetDescriptor();
+				stream.Read(new Span<byte>((byte*)&descriptor, sizeof(AssetDescriptor)));
+				index[name] = descriptor;
 			}
 		}
 
-		private void WriteIndexTable()
+		private unsafe void WriteIndexTable()
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			writer.Write(Signature);
@@ -538,20 +518,9 @@ namespace Lime
 			stream.Seek(indexOffset, SeekOrigin.Begin);
 			int numDescriptors = index.Count;
 			writer.Write(numDescriptors);
-			foreach (KeyValuePair <string, AssetDescriptor> p in index) {
-				writer.Write(p.Key);
-				writer.Write(p.Value.Offset);
-				writer.Write(p.Value.Length);
-				writer.Write(p.Value.AllocatedSize);
-				writer.Write((int)p.Value.Attributes);
-				writer.Write(p.Value.Hash.A);
-				writer.Write(p.Value.Hash.B);
-				writer.Write(p.Value.Hash.C);
-				writer.Write(p.Value.Hash.D);
-				writer.Write(p.Value.CookingUnitHash.A);
-				writer.Write(p.Value.CookingUnitHash.B);
-				writer.Write(p.Value.CookingUnitHash.C);
-				writer.Write(p.Value.CookingUnitHash.D);
+			foreach (var (path, descriptor) in index) {
+				writer.Write(path);
+				stream.Write(new ReadOnlySpan<byte>((byte*)&descriptor, sizeof(AssetDescriptor)));
 			}
 			writer.Flush();
 		}
