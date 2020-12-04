@@ -39111,19 +39111,6 @@ references:
   commentId: T:Lime.Model3D
   fullName: Lime.Model3D
   nameWithType: Model3D
-- uid: Lime.Model3D.LoadExternalScenes
-  name: LoadExternalScenes()
-  href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes
-  commentId: M:Lime.Model3D.LoadExternalScenes
-  fullName: Lime.Model3D.LoadExternalScenes()
-  nameWithType: Model3D.LoadExternalScenes()
-- uid: Lime.Model3D.LoadExternalScenes*
-  name: LoadExternalScenes
-  href: api/Lime.Model3D.html#Lime_Model3D_LoadExternalScenes_
-  commentId: Overload:Lime.Model3D.LoadExternalScenes
-  isSpec: "True"
-  fullName: Lime.Model3D.LoadExternalScenes
-  nameWithType: Model3D.LoadExternalScenes
 - uid: Lime.Model3D.OnAfterDeserialization
   name: OnAfterDeserialization()
   href: api/Lime.Model3D.html#Lime_Model3D_OnAfterDeserialization
