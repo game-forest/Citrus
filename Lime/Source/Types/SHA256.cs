@@ -7,7 +7,7 @@ using Yuzu;
 namespace Lime
 {
 	[YuzuCompact]
-	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 20)]
+	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 32)]
 	public struct SHA256
 	{
 		[YuzuMember("0")]
