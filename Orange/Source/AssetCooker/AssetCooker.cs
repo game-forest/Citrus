@@ -76,17 +76,17 @@ namespace Orange
 			);
 			PluginLoader.BeforeBundlesCooking();
 			var requiredCookCode = !The.Workspace.ProjectJson.GetValue<bool>("SkipCodeCooking");
-			var bundleBackups = new List<string>();
 			try {
-				UserInterface.Instance.SetupProgressBar(CalculateOperationCount(bundles));
+				GetBundlesToCook(bundles, out var bundlesToCook, out var cookingUnitCount);
+				UserInterface.Instance.SetupProgressBar(cookingUnitCount);
 				BeginCookBundles?.Invoke();
-				var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), bundles);
-				for (int i = 0; i < bundles.Count; i++) {
+				var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), bundlesToCook);
+				for (int i = 0; i < bundlesToCook.Count; i++) {
 					var extraTimer = StartBenchmark();
-					CookBundle(bundles[i], assetsGroupedByBundles[i], bundleBackups);
-					StopBenchmark(extraTimer, $"{bundles[i]} cooked: ");
+					CookBundle(bundlesToCook[i], assetsGroupedByBundles[i]);
+					StopBenchmark(extraTimer, $"{bundlesToCook[i]} cooked: ");
 					if (UserInterface.Instance.ShouldUnpackBundles()) {
-						UnpackBundle(bundles[i]);
+						UnpackBundle(bundlesToCook[i]);
 					}
 				}
 				var extraBundles = bundles.ToList();
@@ -100,12 +100,9 @@ namespace Orange
 				PrintBenchmark();
 			} catch (System.Exception e) {
 				Console.WriteLine(e.Message);
-				RestoreBackups(bundleBackups);
 				errorMessage = e.Message;
-				return false;
 			} finally {
 				cookCanceled = false;
-				RemoveBackups(bundleBackups);
 				EndCookBundles?.Invoke();
 				UserInterface.Instance.StopProgressBar();
 			}
@@ -119,7 +116,7 @@ namespace Orange
 			if (!Directory.Exists(destinationPath)) {
 				Directory.CreateDirectory(destinationPath);
 			}
-			using (var source = CreateOutputBundle(bundleName, null))
+			using (var source = CreateOutputBundle(bundleName))
 			using (var destination = new UnpackedAssetBundle(destinationPath)) {
 				foreach (var file in destination.EnumerateFiles()) {
 					if (!source.FileExists(file)) {
@@ -165,44 +162,71 @@ namespace Orange
 			}
 		}
 
-		private int CalculateOperationCount(List<string> bundles)
+		private void GetBundlesToCook(List<string> allBundles, out List<string> bundlesToCook, out int cookingUnitCount)
 		{
-			var assetCount = 0;
-			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), bundles);
-			for (int i = 0; i < bundles.Count; i++) {
+			cookingUnitCount = 0;
+			bundlesToCook = new List<string>();
+			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), allBundles);
+			for (int i = 0; i < allBundles.Count; i++) {
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(
 					new CustomSetAssetBundle(InputBundle, assetsGroupedByBundles[i]),
 					resetTexturePool: false);
-				OutputBundle = CreateOutputBundle(bundles[i], bundleBackups: null);
+				OutputBundle = CreateOutputBundle(allBundles[i]);
 				try {
-					assetCount += CookStages.Sum(stage => stage.EnumerateCookingUnits().Count());
+					var unitsToCookHashes = new SortedSet<SHA256>();
+					var cookedUnitsHashes = new SortedSet<SHA256>();
+					foreach (var stage in CookStages) {
+						foreach (var (_, hash) in stage.EnumerateCookingUnits()) {
+							unitsToCookHashes.Add(hash);
+						}
+					}
+					foreach (var path in OutputBundle.EnumerateFiles()) {
+						cookedUnitsHashes.Add(OutputBundle.GetCookingUnitHash(path));
+					}
+					if (!unitsToCookHashes.SetEquals(cookedUnitsHashes)) {
+						bundlesToCook.Add(allBundles[i]);
+						cookingUnitCount += unitsToCookHashes.Count;
+					}
 				} finally {
 					OutputBundle.Dispose();
 					OutputBundle = null;
 					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
 				}
 			}
-			return assetCount;
 		}
 
-		private void CookBundle(string bundleName, List<string> assets, List<string> bundleBackups)
+		private void CookBundle(string bundleName, List<string> assets)
 		{
-			OutputBundle = CreateOutputBundle(bundleName, bundleBackups);
+			using (var packedBundle = CreateOutputBundle(bundleName)) {
+				OutputBundle = MemoryAssetBundle.ReadFromBundle(packedBundle);
+			}
 			try {
+				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
 				CookBundleHelper();
 				// Open the bundle again in order to make some plugin post-processing (e.g. generate code from scene assets)
 				using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 					PluginLoader.AfterAssetsCooked(bundleName);
+				}
+				DeleteBundle();
+				using (var packedBundle = CreateOutputBundle(bundleName)) {
+					((MemoryAssetBundle) OutputBundle).WriteToBundle(packedBundle);
 				}
 			} finally {
 				OutputBundle.Dispose();
 				OutputBundle = null;
 			}
 
+			void DeleteBundle()
+			{
+				var bundlePath = The.Workspace.GetBundlePath(Target.Platform, bundleName);
+				if (File.Exists(bundlePath)) {
+					File.Delete(bundlePath);
+				}
+			}
+
 			void CookBundleHelper()
 			{
-				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(new CustomSetAssetBundle(InputBundle, assets), resetTexturePool: false);
 				BundleBeingCookedName = bundleName;
@@ -228,10 +252,10 @@ namespace Orange
 					}
 					foreach (var stage in CookStages) {
 						CheckCookCancelation();
-						foreach (var (cookUnit, hash) in stage.EnumerateCookingUnits()) {
+						foreach (var (cookingUnit, hash) in stage.EnumerateCookingUnits()) {
 							if (!cookedUnitsHashes.Contains(hash)) {
-								Console.WriteLine($"+ {cookUnit}");
-								stage.Cook(cookUnit, hash);
+								Console.WriteLine($"+ {cookingUnit}");
+								stage.Cook(cookingUnit, hash);
 							}
 							UserInterface.Instance.IncreaseProgressBar();
 						}
@@ -277,7 +301,7 @@ namespace Orange
 			}
 		}
 
-		private AssetBundle CreateOutputBundle(string bundleName, List<string> bundleBackups)
+		private AssetBundle CreateOutputBundle(string bundleName)
 		{
 			var bundlePath = The.Workspace.GetBundlePath(Target.Platform, bundleName);
 			// Create directory for bundle if it placed in subdirectory
@@ -294,18 +318,6 @@ namespace Orange
 				File.Delete(bundlePath);
 				packedBundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
 			}
-			packedBundle.OnWrite += () => {
-				var backupPath = bundlePath + ".bak";
-				if (bundleBackups.Contains(backupPath) || !File.Exists(bundlePath)) {
-					return;
-				}
-				try {
-					File.Copy(bundlePath, backupPath, overwrite: true);
-				} catch (System.Exception e) {
-					Console.WriteLine(e);
-				}
-				bundleBackups.Add(backupPath);
-			};
 			return packedBundle;
 		}
 
@@ -407,35 +419,6 @@ namespace Orange
 		{
 			if (cookCanceled) {
 				throw new OperationCanceledException("------------- Cooking canceled -------------");
-			}
-		}
-
-		private void RemoveBackups(List<string> bundleBackups)
-		{
-			foreach (var path in bundleBackups) {
-				try {
-					if (File.Exists(path)) {
-						File.Delete(path);
-					}
-				} catch (System.Exception e) {
-					Console.WriteLine($"Failed to delete a bundle backup: {path} {e}");
-				}
-			}
-		}
-
-		private void RestoreBackups(List<string> bundleBackups)
-		{
-			foreach (var backupPath in bundleBackups) {
-				// Remove ".bak" extension.
-				var bundlePath = Path.ChangeExtension(backupPath, null);
-				try {
-					if (File.Exists(bundlePath)) {
-						File.Delete(bundlePath);
-					}
-					File.Move(backupPath, bundlePath);
-				} catch (System.Exception e) {
-					Console.WriteLine(e);
-				}
 			}
 		}
 

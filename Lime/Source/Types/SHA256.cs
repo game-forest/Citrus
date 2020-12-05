@@ -8,7 +8,7 @@ namespace Lime
 {
 	[YuzuCompact]
 	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 32)]
-	public struct SHA256
+	public struct SHA256 : IEquatable<SHA256>, IComparable<SHA256>
 	{
 		[YuzuMember("0")]
 		public ulong A;
@@ -72,6 +72,35 @@ namespace Lime
 		public static bool operator !=(SHA256 lhs, SHA256 rhs)
 		{
 			return !(lhs == rhs);
+		}
+
+		public bool Equals(SHA256 other)
+		{
+			return A == other.A && B == other.B && C == other.C && D == other.D;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is SHA256 other && Equals(other);
+		}
+
+		public int CompareTo(SHA256 other)
+		{
+			if (A != other.A) {
+				return A.CompareTo(other.A);
+			}
+			if (B != other.B) {
+				return B.CompareTo(other.B);
+			}
+			if (C != other.C) {
+				return C.CompareTo(other.C);
+			}
+			return D.CompareTo(other.D);
+		}
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(A, B, C, D);
 		}
 	}
 }

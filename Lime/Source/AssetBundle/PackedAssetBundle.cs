@@ -15,7 +15,7 @@ namespace Lime
 		public InvalidBundleVersionException(string message) : base(message) { }
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	struct AssetDescriptor
 	{
 		public int Offset;
@@ -175,18 +175,18 @@ namespace Lime
 			}
 		}
 
+		private const int Signature = 0x13AF;
+
 		private readonly Stack<Stream> streamPool = new Stack<Stream>();
-		const int Signature = 0x13AF;
 		private int indexOffset;
 		private readonly BinaryReader reader;
 		private readonly BinaryWriter writer;
 		private readonly Stream stream;
-		internal Dictionary <string, AssetDescriptor> index = new Dictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
+		internal readonly SortedDictionary<string, AssetDescriptor> index = new SortedDictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
 		private readonly List<AssetDescriptor> trash = new List<AssetDescriptor>();
 		private readonly System.Reflection.Assembly resourcesAssembly;
 		private bool wasModified { get; set; }
 		public string Path { get; }
-		public event Action OnWrite;
 
 		public PackedAssetBundle(string resourceId, string assemblyName)
 		{
@@ -307,7 +307,7 @@ namespace Lime
 				moveDelta += trash[i].AllocatedSize;
 				int blockBegin = trash[i].Offset + trash[i].AllocatedSize;
 				int blockEnd = (i < trash.Count - 1) ? trash[i + 1].Offset : indexOffset;
-				MoveBlock (blockBegin, blockEnd - blockBegin, -moveDelta);
+				MoveBlock(blockBegin, blockEnd - blockBegin, -moveDelta);
 				foreach (var k in indexKeys) {
 					var d = index[k];
 					if (d.Offset >= blockBegin && d.Offset < blockEnd) {
@@ -384,7 +384,6 @@ namespace Lime
 
 		public override void DeleteFile(string path)
 		{
-			OnWrite?.Invoke();
 			path = AssetPath.CorrectSlashes(path);
 			var desc = GetDescriptor(path);
 			index.Remove(path);
@@ -417,7 +416,6 @@ namespace Lime
 
 		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			OnWrite?.Invoke();
 			AssetDescriptor d;
 			bool reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
 				(d.AllocatedSize >= stream.Length) &&
@@ -455,14 +453,14 @@ namespace Lime
 			wasModified = true;
 		}
 
-		private static Stream CompressAssetStream(Stream stream, AssetAttributes attributes)
+		internal static Stream CompressAssetStream(Stream stream, AssetAttributes attributes)
 		{
-			MemoryStream memStream = new MemoryStream();
-			using (var compressionStream = CreateCompressionStream(memStream, attributes)) {
+			var memoryStream = new MemoryStream((int)stream.Length);
+			using (var compressionStream = CreateCompressionStream(memoryStream, attributes)) {
 				stream.CopyTo(compressionStream);
 			}
-			memStream.Seek(0, SeekOrigin.Begin);
-			stream = memStream;
+			memoryStream.Seek(0, SeekOrigin.Begin);
+			stream = memoryStream;
 			return stream;
 		}
 
@@ -568,11 +566,10 @@ namespace Lime
 
 		private AssetDescriptor GetDescriptor(string path)
 		{
-			AssetDescriptor desc;
-			if (index.TryGetValue(AssetPath.CorrectSlashes(path), out desc)) {
-				return desc;
+			if (index.TryGetValue(AssetPath.CorrectSlashes(path), out var descriptor)) {
+				return descriptor;
 			}
-			throw new Exception("Asset '{0}' doesn't exist", path);
+			throw new Exception($"Asset '{path}' doesn't exist");
 		}
 
 		public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
