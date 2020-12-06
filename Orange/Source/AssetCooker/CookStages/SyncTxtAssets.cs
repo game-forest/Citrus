@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
@@ -16,6 +17,7 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, ".txt")
+				.Where(i => !i.EndsWith(Model3DAttachment.FileExtension, StringComparison.Ordinal))
 				.Select(i =>
 					(i, SHA256.Compute(assetCooker.InputBundle.GetHash(i), AssetCooker.CookingRulesMap[i].Hash)));
 		}

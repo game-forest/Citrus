@@ -15,7 +15,6 @@ namespace Orange
 		public AssetBundle OutputBundle { get; private set; }
 
 		public static Dictionary<string, CookingRules> CookingRulesMap;
-		public static HashSet<string> ModelsToRebuild = new HashSet<string>();
 
 		public string BundleBeingCookedName { get; set; }
 
@@ -85,8 +84,10 @@ namespace Orange
 					var extraTimer = StartBenchmark();
 					CookBundle(bundlesToCook[i], assetsGroupedByBundles[i]);
 					StopBenchmark(extraTimer, $"{bundlesToCook[i]} cooked: ");
-					if (UserInterface.Instance.ShouldUnpackBundles()) {
-						UnpackBundle(bundlesToCook[i]);
+				}
+				if (UserInterface.Instance.ShouldUnpackBundles()) {
+					foreach (var bundle in bundles) {
+						UnpackBundle(bundle);
 					}
 				}
 				var extraBundles = bundles.ToList();
@@ -268,7 +269,6 @@ namespace Orange
 					}
 				} finally {
 					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
-					ModelsToRebuild.Clear();
 					BundleBeingCookedName = null;
 				}
 			}
@@ -402,7 +402,7 @@ namespace Orange
 
 		public static string GetModelAnimationPathPrefix(string modelPath)
 		{
-			return Toolbox.ToUnixSlashes(Path.GetDirectoryName(modelPath) + "/" + Path.GetFileNameWithoutExtension(modelPath) + "@");
+			return Toolbox.ToUnixSlashes(Path.Combine(Path.GetDirectoryName(modelPath), Path.GetFileNameWithoutExtension(modelPath) + "@"));
 		}
 
 		public static string GetModelExternalMeshPath(string modelPath)

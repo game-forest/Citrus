@@ -18,9 +18,15 @@ namespace Orange
 
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
-			return assetCooker.InputBundle.EnumerateFiles(null, ".fbx")
-				.Select(i =>
-					(i, SHA256.Compute(assetCooker.InputBundle.GetHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+			foreach (var fbx in assetCooker.InputBundle.EnumerateFiles(null, ".fbx")) {
+				var hash = SHA256.Compute(assetCooker.InputBundle.GetHash(fbx), AssetCooker.CookingRulesMap[fbx].Hash);
+				var attachment = System.IO.Path.ChangeExtension(fbx, Model3DAttachment.FileExtension);
+				if (assetCooker.InputBundle.FileExists(attachment)) {
+					hash = SHA256.Compute(hash, SHA256.Compute(
+						assetCooker.InputBundle.GetHash(attachment), AssetCooker.CookingRulesMap[attachment].Hash));
+				}
+				yield return (fbx, hash);
+			}
 		}
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
@@ -73,7 +79,6 @@ namespace Orange
 				InternalPersistence.Instance.WriteObjectToBundle(
 					assetCooker.OutputBundle, path, data, Persistence.Format.Binary,
 					cookingUnitHash, assetAttributes);
-				Console.WriteLine("+ " + path);
 			}
 		}
 
