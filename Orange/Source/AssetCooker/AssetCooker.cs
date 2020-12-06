@@ -130,14 +130,14 @@ namespace Orange
 				}
 				foreach (var file in source.EnumerateFiles()) {
 					var exists = destination.FileExists(file);
-					if (!exists || destination.GetHash(file) != source.GetHash(file)) {
+					if (!exists || destination.GetFileHash(file) != source.GetFileHash(file)) {
 						try {
 							if (exists) {
 								destination.DeleteFile(file);
 							}
 							destination.ImportFile(
 								file, new MemoryStream(source.ReadFile(file)),
-								source.GetCookingUnitHash(file), source.GetAttributes(file));
+								source.GetFileCookingUnitHash(file), source.GetFileAttributes(file));
 						} catch {
 							// Do nothing.
 						}
@@ -183,7 +183,7 @@ namespace Orange
 						}
 					}
 					foreach (var path in OutputBundle.EnumerateFiles()) {
-						cookedUnitsHashes.Add(OutputBundle.GetCookingUnitHash(path));
+						cookedUnitsHashes.Add(OutputBundle.GetFileCookingUnitHash(path));
 					}
 					if (!unitsToCookHashes.SetEquals(cookedUnitsHashes)) {
 						bundlesToCook.Add(allBundles[i]);
@@ -242,14 +242,14 @@ namespace Orange
 					// Delete outdated assets from the OutputBundle
 					foreach (var file in OutputBundle.EnumerateFiles().ToList()) {
 						CheckCookCancelation();
-						if (!unitsToCookHashes.Contains(OutputBundle.GetCookingUnitHash(file))) {
+						if (!unitsToCookHashes.Contains(OutputBundle.GetFileCookingUnitHash(file))) {
 							OutputBundle.DeleteFile(file);
 						}
 					}
 					// Cook missing assets to the OutputBundle
 					var cookedUnitsHashes = new HashSet<SHA256>();
 					foreach (var file in OutputBundle.EnumerateFiles()) {
-						cookedUnitsHashes.Add(OutputBundle.GetCookingUnitHash(file));
+						cookedUnitsHashes.Add(OutputBundle.GetFileCookingUnitHash(file));
 					}
 					foreach (var stage in CookStages) {
 						CheckCookCancelation();
@@ -263,7 +263,7 @@ namespace Orange
 					}
 					// Warn about non-power of two textures
 					foreach (var path in OutputBundle.EnumerateFiles()) {
-						if ((OutputBundle.GetAttributes(path) & AssetAttributes.NonPowerOf2Texture) != 0) {
+						if ((OutputBundle.GetFileAttributes(path) & AssetAttributes.NonPowerOf2Texture) != 0) {
 							Console.WriteLine("Warning: non-power of two texture: {0}", path);
 						}
 					}

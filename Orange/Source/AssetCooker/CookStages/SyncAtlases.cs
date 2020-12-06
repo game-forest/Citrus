@@ -27,7 +27,7 @@ namespace Orange
 					continue;
 				}
 				var textureHash = SHA256.Compute(
-					assetCooker.InputBundle.GetHash(texturePath),
+					assetCooker.InputBundle.GetFileHash(texturePath),
 					textureCookingRules.Hash);
 				atlasToHash[atlas] = atlasToHash.TryGetValue(atlas, out var atlasHash) ?
 					SHA256.Compute(atlasHash, textureHash) : textureHash;

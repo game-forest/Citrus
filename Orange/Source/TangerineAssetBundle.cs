@@ -120,13 +120,13 @@ namespace Tangerine.Core
 				var fbxExists = base.FileExists(fbxPath);
 				var fbxCached = cacheBundle.FileExists(path);
 				var fbxUpToDate = fbxCached == fbxExists &&
-					(!fbxExists || cacheBundle.GetCookingUnitHash(path) != base.GetCookingUnitHash(fbxPath));
+					(!fbxExists || cacheBundle.GetFileCookingUnitHash(path) != base.GetFileCookingUnitHash(fbxPath));
 
 				var attachmentPath = Path.ChangeExtension(path, Model3DAttachment.FileExtension);
 				var attachmentExists = base.FileExists(attachmentPath);
 				var attachmentCached = cacheBundle.FileExists(attachmentPath);
 				var attachmentUpToDate = attachmentCached == attachmentExists &&
-					(!attachmentExists || cacheBundle.GetCookingUnitHash(attachmentPath) != base.GetCookingUnitHash(attachmentPath));
+					(!attachmentExists || cacheBundle.GetFileCookingUnitHash(attachmentPath) != base.GetFileCookingUnitHash(attachmentPath));
 				var fbxImportOptions = new FbxImportOptions {
 					Path = fbxPath,
 					Target = target,
@@ -136,7 +136,7 @@ namespace Tangerine.Core
 				var attachmentMetaPath = Path.ChangeExtension(path, Model3DAttachmentMeta.FileExtension);
 				var attachmentMetaCached = cacheBundle.FileExists(attachmentMetaPath);
 				var attachmentMetaUpToDate = attachmentMetaCached &&
-					cacheBundle.GetCookingUnitHash(attachmentMetaPath) != base.GetCookingUnitHash(fbxPath);
+					cacheBundle.GetFileCookingUnitHash(attachmentMetaPath) != base.GetFileCookingUnitHash(fbxPath);
 				if (!attachmentMetaUpToDate && fbxExists) {
 					using (var fbxImporter = new FbxModelImporter(fbxImportOptions)) {
 						model = fbxImporter.LoadModel();
@@ -157,7 +157,7 @@ namespace Tangerine.Core
 							cacheBundle,
 							attachmentMetaPath,
 							meta, Persistence.Format.Binary,
-							base.GetCookingUnitHash(fbxPath),
+							base.GetFileCookingUnitHash(fbxPath),
 							AssetAttributes.None);
 					}
 				}
@@ -201,13 +201,13 @@ namespace Tangerine.Core
 						var animationPath = animationPathWithoutExt + ".ant";
 						animation.ContentsPath = animationPathWithoutExt;
 						InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary,
-							base.GetCookingUnitHash(fbxPath), AssetAttributes.None);
+							base.GetFileCookingUnitHash(fbxPath), AssetAttributes.None);
 						foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 							animator.Owner.Animators.Remove(animator);
 						}
 					}
 					InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, path, model, Persistence.Format.Binary,
-						base.GetCookingUnitHash(fbxPath), AssetAttributes.None);
+						base.GetFileCookingUnitHash(fbxPath), AssetAttributes.None);
 
 				} else if (fbxCached) {
 					cacheBundle.DeleteFile(path);
@@ -219,7 +219,7 @@ namespace Tangerine.Core
 						cacheBundle,
 						attachmentPath,
 						Model3DAttachmentParser.ConvertToModelAttachmentFormat(attachment), Persistence.Format.Binary,
-						base.GetCookingUnitHash(attachmentPath),
+						base.GetFileCookingUnitHash(attachmentPath),
 						AssetAttributes.None);
 				} else if (attachmentCached) {
 					cacheBundle.DeleteFile(attachmentPath);

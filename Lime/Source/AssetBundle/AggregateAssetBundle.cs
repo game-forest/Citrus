@@ -73,13 +73,13 @@ namespace Lime
 			}
 		}
 
-		public override SHA256 GetHash(string path)
+		public override SHA256 GetFileHash(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetHash(path);
+						return bundle.GetFileHash(path);
 					}
 				}
 			} finally {
@@ -88,13 +88,13 @@ namespace Lime
 			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
 		}
 
-		public override SHA256 GetCookingUnitHash(string path)
+		public override SHA256 GetFileCookingUnitHash(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetCookingUnitHash(path);
+						return bundle.GetFileCookingUnitHash(path);
 					}
 				}
 			} finally {
@@ -110,6 +110,21 @@ namespace Lime
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
 						return bundle.GetFileSize(path);
+					}
+				}
+			} finally {
+				sync.ExitReadLock();
+			}
+			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
+		}
+
+		public override int GetFileUnpackedSize(string path)
+		{
+			sync.EnterReadLock();
+			try {
+				foreach (var bundle in bundles) {
+					if (bundle.FileExists(path)) {
+						return bundle.GetFileUnpackedSize(path);
 					}
 				}
 			} finally {
@@ -143,7 +158,7 @@ namespace Lime
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
+		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}

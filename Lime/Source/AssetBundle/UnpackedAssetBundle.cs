@@ -72,12 +72,14 @@ namespace Lime
 
 		public override int GetFileSize(string path)
 		{
-			return (int)(new System.IO.FileInfo(ToSystemPath(path)).Length);
+			return (int)new System.IO.FileInfo(ToSystemPath(path)).Length;
 		}
 
-		public override SHA256 GetCookingUnitHash(string path) => throw new NotSupportedException();
+		public override int GetFileUnpackedSize(string path) => throw new NotSupportedException();
 
-		public override SHA256 GetHash(string path)
+		public override SHA256 GetFileCookingUnitHash(string path) => throw new NotSupportedException();
+
+		public override SHA256 GetFileHash(string path)
 		{
 			ValidateIndex();
 			if (!index.TryGetValue(path, out var i) || i.Hash == default) {
@@ -105,10 +107,10 @@ namespace Lime
 
 		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			ImportFileRaw(path, stream, default, cookingUnitHash, attributes);
+			ImportFileRaw(path, stream, 0, default, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			var length = (int)stream.Length;

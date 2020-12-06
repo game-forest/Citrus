@@ -8,9 +8,10 @@ namespace Orange
 {
 	public class MemoryAssetBundle : AssetBundle
 	{
-		struct Asset
+		private struct Asset
 		{
-			public int Length;
+			public int Size;
+			public int UnpackedSize;
 			public AssetAttributes Attributes;
 			public SHA256 Hash;
 			public SHA256 CookingUnitHash;
@@ -23,18 +24,20 @@ namespace Orange
 		{
 			var result = new MemoryAssetBundle();
 			foreach (var path in source.EnumerateFiles()) {
-				int length = source.GetFileSize(path);
-				var buffer = ArrayPool<byte>.Shared.Rent(length);
+				int size = source.GetFileSize(path);
+				int unpackedSize = source.GetFileUnpackedSize(path);
+				var buffer = ArrayPool<byte>.Shared.Rent(size);
 				using (var stream = source.OpenFileRaw(path)) {
-					if (stream.Read(buffer, 0, length) != length) {
+					if (stream.Read(buffer, 0, size) != size) {
 						throw new IOException();
 					}
 				}
 				result.assets[path] = new Asset {
-					Length = length,
-					Attributes = source.GetAttributes(path),
-					Hash = source.GetHash(path),
-					CookingUnitHash = source.GetCookingUnitHash(path),
+					Size = size,
+					UnpackedSize = unpackedSize,
+					Attributes = source.GetFileAttributes(path),
+					Hash = source.GetFileHash(path),
+					CookingUnitHash = source.GetFileCookingUnitHash(path),
 					Data = buffer
 				};
 			}
@@ -45,8 +48,8 @@ namespace Orange
 		{
 			foreach (var (path, asset) in assets) {
 				destination.ImportFileRaw(path,
-					new MemoryStream(asset.Data, 0, asset.Length),
-					asset.Hash, asset.CookingUnitHash, asset.Attributes);
+					new MemoryStream(asset.Data, 0, asset.Size),
+					asset.UnpackedSize, asset.Hash, asset.CookingUnitHash, asset.Attributes);
 			}
 		}
 
@@ -68,7 +71,9 @@ namespace Orange
 			throw new System.NotImplementedException();
 		}
 
-		public override int GetFileSize(string path) => assets[path].Length;
+		public override int GetFileSize(string path) => assets[path].Size;
+
+		public override int GetFileUnpackedSize(string path) => assets[path].UnpackedSize;
 
 		public override void DeleteFile(string path)
 		{
@@ -91,13 +96,13 @@ namespace Orange
 				if ((attributes & AssetAttributes.Zipped) != 0) {
 					stream = PackedAssetBundle.CompressAssetStream(stream, attributes);
 				}
-				ImportFileRaw(path, stream, hash, cookingUnitHash, attributes);
+				ImportFileRaw(path, stream, length, hash, cookingUnitHash, attributes);
 			} finally {
 				ArrayPool<byte>.Shared.Return(buffer);
 			}
 		}
-		
-		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+
+		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
@@ -105,7 +110,8 @@ namespace Orange
 				throw new IOException();
 			}
 			assets[path] = new Asset {
-				Length = length,
+				Size = length,
+				UnpackedSize = unpackedSize,
 				Attributes = attributes,
 				Hash = hash,
 				CookingUnitHash = cookingUnitHash,
@@ -132,8 +138,8 @@ namespace Orange
 
 		public override string FromSystemPath(string systemPath) => throw new System.NotSupportedException();
 
-		public override SHA256 GetCookingUnitHash(string path) => assets[path].CookingUnitHash;
+		public override SHA256 GetFileCookingUnitHash(string path) => assets[path].CookingUnitHash;
 
-		public override SHA256 GetHash(string path) => assets[path].Hash;
+		public override SHA256 GetFileHash(string path) => assets[path].Hash;
 	}
 }

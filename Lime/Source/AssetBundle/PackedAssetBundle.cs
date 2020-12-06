@@ -19,8 +19,9 @@ namespace Lime
 	struct AssetDescriptor
 	{
 		public int Offset;
-		public int Length;
+		public int Size;
 		public int AllocatedSize;
+		public int UnpackedSize;
 		public AssetAttributes Attributes;
 		public SHA256 Hash;
 		public SHA256 CookingUnitHash;
@@ -58,7 +59,7 @@ namespace Lime
 
 		public override bool CanWrite => false;
 
-		public override long Length => descriptor.Length;
+		public override long Length => descriptor.Size;
 
 		public override long Position {
 			get => position;
@@ -70,7 +71,7 @@ namespace Lime
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			ThrowIfDisposed();
-			count = Math.Min(count, descriptor.Length - position);
+			count = Math.Min(count, descriptor.Size - position);
 			if (count > 0) {
 				count = stream.Read(buffer, offset, count);
 				if (count < 0)
@@ -90,9 +91,9 @@ namespace Lime
 			} else if (origin == SeekOrigin.Current) {
 				position += (int)offset;
 			} else {
-				position = descriptor.Length - (int)offset;
+				position = descriptor.Size - (int)offset;
 			}
-			position = Math.Max(0, Math.Min(position, descriptor.Length));
+			position = Math.Max(0, Math.Min(position, descriptor.Size));
 			stream.Seek(position + descriptor.Offset, SeekOrigin.Begin);
 			return position;
 		}
@@ -360,7 +361,7 @@ namespace Lime
 			}
 			var stream = new AssetStream(this, path);
 			if (CommandLineArgs.SimulateSlowExternalStorage) {
-				ExternalStorageLagsSimulator.SimulateReadDelay(path, stream.descriptor.Length);
+				ExternalStorageLagsSimulator.SimulateReadDelay(path, stream.descriptor.Size);
 			}
 			return stream;
 		}
@@ -376,11 +377,13 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		public override SHA256 GetHash(string path) => GetDescriptor(path).Hash;
+		public override SHA256 GetFileHash(string path) => GetDescriptor(path).Hash;
 
-		public override SHA256 GetCookingUnitHash(string path) => GetDescriptor(path).CookingUnitHash;
+		public override SHA256 GetFileCookingUnitHash(string path) => GetDescriptor(path).CookingUnitHash;
 
-		public override int GetFileSize(string path) => GetDescriptor(path).Length;
+		public override int GetFileSize(string path) => GetDescriptor(path).Size;
+
+		public override int GetFileUnpackedSize(string path) => GetDescriptor(path).UnpackedSize;
 
 		public override void DeleteFile(string path)
 		{
@@ -393,7 +396,7 @@ namespace Lime
 
 		public override bool FileExists(string path) => index.ContainsKey(AssetPath.CorrectSlashes(path));
 
-		public override AssetAttributes GetAttributes(string path) => GetDescriptor(path).Attributes;
+		public override AssetAttributes GetFileAttributes(string path) => GetDescriptor(path).Attributes;
 
 		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
@@ -408,39 +411,45 @@ namespace Lime
 				if ((attributes & AssetAttributes.Zipped) != 0) {
 					stream = CompressAssetStream(stream, attributes);
 				}
-				ImportFileRaw(path, stream, hash, cookingUnitHash, attributes);
+				ImportFileRaw(path, stream, length, hash, cookingUnitHash, attributes);
 			} finally {
 				ArrayPool<byte>.Shared.Return(buffer);
 			}
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			AssetDescriptor d;
-			bool reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
+			var reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
 				(d.AllocatedSize >= stream.Length) &&
 				(d.AllocatedSize <= stream.Length);
 			if (reuseExistingDescriptor) {
-				d.Length = (int)stream.Length;
+				d.Size = (int)stream.Length;
 				d.Attributes = attributes;
 				d.Hash = hash;
 				d.CookingUnitHash = cookingUnitHash;
+				d.UnpackedSize = unpackedSize;
 				index[AssetPath.CorrectSlashes(path)] = d;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);
 				var reserve = d.AllocatedSize - (int)stream.Length;
 				if (reserve > 0) {
-					byte[] zeroBytes = new byte[reserve];
-					this.stream.Write(zeroBytes, 0, zeroBytes.Length);
+					var zeroBytes = ArrayPool<byte>.Shared.Rent(reserve);
+					try {
+						this.stream.Write(zeroBytes, 0, reserve);
+					} finally {
+						ArrayPool<byte>.Shared.Return(zeroBytes);
+					}
 				}
 			} else {
 				if (FileExists(path)) {
 					DeleteFile(path);
 				}
 				d = new AssetDescriptor();
-				d.Length = (int)stream.Length;
+				d.Size = (int)stream.Length;
 				d.Offset = indexOffset;
-				d.AllocatedSize = d.Length;
+				d.AllocatedSize = d.Size;
+				d.UnpackedSize = unpackedSize;
 				d.Attributes = attributes;
 				d.Hash = hash;
 				d.CookingUnitHash = cookingUnitHash;
@@ -595,9 +604,10 @@ namespace Lime
 				using (var stream = patchBundle.OpenFileRaw(file)) {
 					ImportFileRaw(
 						file, stream,
-						patchBundle.GetHash(file),
-						patchBundle.GetCookingUnitHash(file),
-						patchBundle.GetAttributes(file)
+						patchBundle.GetFileUnpackedSize(file),
+						patchBundle.GetFileHash(file),
+						patchBundle.GetFileCookingUnitHash(file),
+						patchBundle.GetFileAttributes(file)
 					);
 				}
 			}

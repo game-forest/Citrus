@@ -19,11 +19,11 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			foreach (var fbx in assetCooker.InputBundle.EnumerateFiles(null, ".fbx")) {
-				var hash = SHA256.Compute(assetCooker.InputBundle.GetHash(fbx), AssetCooker.CookingRulesMap[fbx].Hash);
+				var hash = SHA256.Compute(assetCooker.InputBundle.GetFileHash(fbx), AssetCooker.CookingRulesMap[fbx].Hash);
 				var attachment = System.IO.Path.ChangeExtension(fbx, Model3DAttachment.FileExtension);
 				if (assetCooker.InputBundle.FileExists(attachment)) {
 					hash = SHA256.Compute(hash, SHA256.Compute(
-						assetCooker.InputBundle.GetHash(attachment), AssetCooker.CookingRulesMap[attachment].Hash));
+						assetCooker.InputBundle.GetFileHash(attachment), AssetCooker.CookingRulesMap[attachment].Hash));
 				}
 				yield return (fbx, hash);
 			}

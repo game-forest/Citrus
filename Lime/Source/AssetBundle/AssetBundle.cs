@@ -29,10 +29,7 @@ namespace Lime
 				}
 				return current;
 			}
-			set
-			{
-				SetCurrent(value, resetTexturePool: true);
-			}
+			set => SetCurrent(value, resetTexturePool: true);
 		}
 
 		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool)
@@ -78,9 +75,8 @@ namespace Lime
 			}
 		}
 
-		public abstract int GetFileSize(string path);
-
 		public abstract void DeleteFile(string path);
+
 		public abstract bool FileExists(string path);
 
 		public abstract void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
@@ -88,7 +84,7 @@ namespace Lime
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
-		public abstract void ImportFileRaw(string path, Stream stream, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
+		public abstract void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
@@ -121,8 +117,9 @@ namespace Lime
 
 		public string GetLocalizedPath(string path)
 		{
-			if (string.IsNullOrEmpty(Application.CurrentLanguage))
+			if (string.IsNullOrEmpty(Application.CurrentLanguage)) {
 				return path;
+			}
 			string language = Application.CurrentLanguage;
 			string extension = Path.GetExtension(path);
 			string pathWithoutExtension = Path.ChangeExtension(path, null);
@@ -130,16 +127,20 @@ namespace Lime
 			return FileExists(localizedParth) ? localizedParth : path;
 		}
 
-		public virtual AssetAttributes GetAttributes(string path) => AssetAttributes.None;
+		public abstract int GetFileSize(string path);
+
+		public abstract int GetFileUnpackedSize(string path);
+
+		public virtual AssetAttributes GetFileAttributes(string path) => AssetAttributes.None;
 
 		/// <summary>
 		/// Returns SHA256 that was passed to the ImportFile or ImportFileRaw methods.
 		/// </summary>
-		public abstract SHA256 GetCookingUnitHash(string path);
+		public abstract SHA256 GetFileCookingUnitHash(string path);
 
 		/// <summary>
 		/// Returns SHA256 based on the file path and contents.
 		/// </summary>
-		public abstract SHA256 GetHash(string path);
+		public abstract SHA256 GetFileHash(string path);
 	}
 }

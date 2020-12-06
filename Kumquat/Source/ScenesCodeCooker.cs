@@ -229,7 +229,7 @@ namespace Kumquat
 				}
 				codeCookerCache.SceneFiles.Add(key, new SceneRecord {
 					Bundle = sceneToBundleMap[key],
-					CookingUnitHash = AssetBundle.Current.GetCookingUnitHash(key),
+					CookingUnitHash = AssetBundle.Current.GetFileCookingUnitHash(key),
 					ReferringScenes = kv.Value.Select(path => externalSceneToOriginalScenePath[Path.ChangeExtension(path, null)]).ToList()
 				});
 			}
