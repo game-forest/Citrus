@@ -161,7 +161,7 @@ namespace Lime
 				if (oldIndex.TryGetValue(path, out var item)) {
 					index[path] = new FileInfo {
 						DateModified = fi.LastWriteTimeUtc,
-						Hash = item.DateModified < fi.LastWriteTimeUtc ? item.Hash : default
+						Hash = fi.LastWriteTimeUtc == item.DateModified ? item.Hash : default
 					};
 				} else {
 					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, Hash = default };
