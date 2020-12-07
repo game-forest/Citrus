@@ -4,4 +4,4 @@
 
 [issuetracker "Citrus"]
   regex = "CIT-(\\d+)"
-  url = "https://jira.game-forest.com:2000/CIT-$1"
+  url = "https://jira.game-forest.com:2000/browse/CIT-$1"
