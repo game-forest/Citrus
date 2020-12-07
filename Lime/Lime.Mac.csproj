@@ -657,7 +657,4 @@
       <Name>ShaderCompilerBinding.Mac</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Source\packages.config" />
-  </ItemGroup>
 </Project>

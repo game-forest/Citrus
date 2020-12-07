@@ -53,9 +53,6 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Markdig, Version=0.15.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)packages\Markdig.0.15.1\lib\net40\Markdig.dll</HintPath>
-    </Reference>
     <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)packages\CommonMark.NET.0.15.1\lib\net45\CommonMark.dll</HintPath>
     </Reference>
@@ -64,7 +61,6 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <Compile Include="ColorPicker.Win.cs" />
     <Compile Include="ComponentIconPool.cs" />
     <Compile Include="TreeView.cs" />
@@ -179,5 +175,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SearchPanel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Markdig">
+      <Version>0.15.1</Version>
+    </PackageReference>
   </ItemGroup>
 </Project>
