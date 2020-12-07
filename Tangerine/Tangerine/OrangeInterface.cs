@@ -74,6 +74,8 @@ namespace Tangerine
 		public override void CreatePluginUI(IPluginUIBuilder builder) { }
 		public override void DestroyPluginUI() { }
 
+		public override bool ShouldUnpackBundles() => false;
+
 		public override void OnWorkspaceOpened()
 		{
 			PlatformPicker.Reload();

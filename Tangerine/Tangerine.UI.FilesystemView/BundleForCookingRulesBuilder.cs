@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Lime;
 using Orange;
-using FileInfo = Lime.FileInfo;
 
 namespace Tangerine.UI.FilesystemView
 {
@@ -27,7 +25,7 @@ namespace Tangerine.UI.FilesystemView
 		/// for each folder in target directory also enumerates folder/#CookingRules.txt if present
 		/// so it can be applied to this folder
 		/// </summary>
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 		{
 			var dirInfoRoot = new DirectoryInfo(rootDirectory);
 			var dirInfoTarget = new DirectoryInfo(targetDirectory);
@@ -40,9 +38,9 @@ namespace Tangerine.UI.FilesystemView
 			}
 			trunc.Reverse();
 			foreach (var di2 in trunc) {
-				yield return new Lime.FileInfo { Path = ProcessPath(di2.FullName), LastWriteTime = di2.LastWriteTime };
-				if (TryGetCookingRulesForDirectory(di2.FullName, out var fi)) {
-					yield return fi;
+				yield return ProcessPath(di2.FullName);
+				if (TryGetCookingRulesForDirectory(di2.FullName, out var p)) {
+					yield return p;
 				}
 			}
 			foreach (var fi in dirInfoTarget.GetFileSystemInfos("*", SearchOption.TopDirectoryOnly)) {
@@ -50,24 +48,21 @@ namespace Tangerine.UI.FilesystemView
 				if (file.EndsWith(CookingRulesBuilder.CookingRulesFilename)) {
 					continue;
 				}
-				yield return new FileInfo { Path = ProcessPath(file), LastWriteTime = fi.LastWriteTime };
-				if (fi.Attributes == FileAttributes.Directory && TryGetCookingRulesForDirectory(fi.FullName, out var fi2)) {
-					yield return fi2;
+				yield return ProcessPath(file);
+				if (fi.Attributes == FileAttributes.Directory && TryGetCookingRulesForDirectory(fi.FullName, out var p)) {
+					yield return p;
 				}
 			}
 		}
 
-		private bool TryGetCookingRulesForDirectory(string FullName, out FileInfo fileInfo)
+		private bool TryGetCookingRulesForDirectory(string FullName, out string path)
 		{
 			var cookingRulesPath = Path.Combine(FullName, CookingRulesBuilder.CookingRulesFilename);
 			if (File.Exists(cookingRulesPath)) {
-				fileInfo = new FileInfo {
-					Path = ProcessPath(cookingRulesPath),
-					LastWriteTime = File.GetLastWriteTime(cookingRulesPath)
-				};
+				path = ProcessPath(cookingRulesPath);
 				return true;
 			}
-			fileInfo = default;
+			path = default;
 			return false;
 		}
 

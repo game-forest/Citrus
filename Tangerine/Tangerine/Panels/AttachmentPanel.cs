@@ -53,8 +53,8 @@ namespace Tangerine
 		{
 			public Model3DAttachment Attachment;
 			public Model3DAttachmentMeta Meta;
-			public DateTime LastMetaWriteTime = DateTime.MinValue;
-			public DateTime LastAttachmentWriteTime = DateTime.MinValue;
+			public SHA256 MetaHash;
+			public SHA256 AttachmentHash;
 			public DocumentHistory History = new DocumentHistory();
 		}
 
@@ -210,37 +210,35 @@ namespace Tangerine
 			model3DContentsPath = source.ContentsPath;
 			var shouldInvalidateMeta = false;
 			var shouldInvalidateAttachment = false;
-			var lastMetaWriteTime = DateTime.MinValue;
-			var lastAttachmentWriteTime = DateTime.MinValue;
+			SHA256 metaHash;
+			SHA256 attachmentHash;
 			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
-				lastMetaWriteTime =
-					cacheBundle.GetFileLastWriteTime(Path.ChangeExtension(model3DContentsPath,
-						Model3DAttachmentMeta.FileExtension));
+				metaHash = cacheBundle.GetFileHash(Path.ChangeExtension(model3DContentsPath, Model3DAttachmentMeta.FileExtension));
 			}
 
 			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
 				var path = Path.ChangeExtension(model3DContentsPath, Model3DAttachment.FileExtension);
 				if (cacheBundle.FileExists(path)) {
-					lastAttachmentWriteTime = cacheBundle.GetFileLastWriteTime(path);
+					attachmentHash = cacheBundle.GetFileHash(path);
 				} else {
-					lastAttachmentWriteTime = DateTime.Now;
+					attachmentHash = default;
 				}
 			}
 
 			if (!documents.TryGetValue(model3DContentsPath, out var doc)) {
 				documents.Add(model3DContentsPath, doc = new AttachmentDocument());
-				doc.LastMetaWriteTime = lastMetaWriteTime;
-				doc.LastAttachmentWriteTime = lastAttachmentWriteTime;
+				doc.MetaHash = metaHash;
+				doc.AttachmentHash = attachmentHash;
 				shouldInvalidateMeta = true;
 				shouldInvalidateAttachment = true;
 			} else {
-				if (lastMetaWriteTime > doc.LastMetaWriteTime) {
+				if (metaHash != doc.MetaHash) {
 					shouldInvalidateMeta = true;
-					documents[model3DContentsPath].LastMetaWriteTime = lastMetaWriteTime;
+					documents[model3DContentsPath].MetaHash = metaHash;
 				}
-				if (lastAttachmentWriteTime > doc.LastAttachmentWriteTime) {
+				if (attachmentHash != doc.AttachmentHash) {
 					shouldInvalidateAttachment = true;
-					documents[model3DContentsPath].LastAttachmentWriteTime = lastAttachmentWriteTime;
+					documents[model3DContentsPath].AttachmentHash = attachmentHash;
 				}
 			}
 
