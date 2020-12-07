@@ -19,6 +19,11 @@ namespace Lime
 
 			[YuzuMember]
 			public IntRectangle AtlasRect;
+
+			public void Load(string path)
+			{
+				InternalPersistence.Instance.ReadObject<Params>(path, this);
+			}
 		}
 
 		private ITexture atlasTexture;
