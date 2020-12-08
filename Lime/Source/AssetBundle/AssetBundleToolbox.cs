@@ -126,7 +126,7 @@ namespace Lime
 				}
 			}
 		}
-		
+
 #if iOS
 		const string stdlib = "libc";
 #else

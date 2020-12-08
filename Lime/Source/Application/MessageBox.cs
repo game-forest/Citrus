@@ -1,4 +1,4 @@
-﻿#if WIN
+#if WIN
 using System.Drawing;
 using System.Windows.Forms;
 using SD = System.Drawing;
@@ -16,8 +16,9 @@ namespace Lime
 			AutoSize = true;
 			MaximizeBox = false;
 
-			var menuItem = new WinForms.MenuItem(
-				"Копировать", (s, e) => Clipboard.Text = text, WinForms.Shortcut.CtrlC);
+			var menuItem = new WinForms.ToolStripMenuItem(
+				"Копировать", null, (s, e) => Clipboard.Text = text, WinForms.Keys.Control | WinForms.Keys.C);
+			//  WinForms.Shortcut.CtrlC
 
 			var textLabel = new Label {
 				BackColor = Color.White,
@@ -26,9 +27,9 @@ namespace Lime
 				Padding = new Padding(16),
 				Dock = DockStyle.Fill,
 				Size = new SD.Size(Width, 220),
-				ContextMenu = new ContextMenu(),
+				ContextMenuStrip = new ContextMenuStrip(),
 			};
-			textLabel.ContextMenu.MenuItems.Add(menuItem);
+			textLabel.ContextMenuStrip.Items.Add(menuItem);
 
 			var okButton = new WinForms.Button {
 				Text = "OK",
