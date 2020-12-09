@@ -1,147 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DefineConstants>WIN</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Tangerine.UI.Timeline</RootNamespace>
     <AssemblyName>Tangerine.UI.Timeline</AssemblyName>
-    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
-    <ProjectGuid>{DB168347-08CC-40FC-B612-5A33A6877863}</ProjectGuid>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <EnableCodeSigning>false</EnableCodeSigning>
-    <CreatePackage>false</CreatePackage>
-    <EnablePackageSigning>false</EnablePackageSigning>
-    <IncludeMonoRuntime>false</IncludeMonoRuntime>
-    <UseSGen>false</UseSGen>
-    <Profiling>true</Profiling>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <EnableCodeSigning>false</EnableCodeSigning>
-    <CreatePackage>false</CreatePackage>
-    <EnablePackageSigning>false</EnablePackageSigning>
-    <IncludeMonoRuntime>false</IncludeMonoRuntime>
-    <UseSGen>false</UseSGen>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Components\GridFolderView.cs" />
-    <Compile Include="Components\GridKeyframesRenderer.cs" />
-    <Compile Include="Components\GridNodeView.cs" />
-    <Compile Include="Components\GridAnimationTrackView.cs" />
-    <Compile Include="Components\GridPropertyView.cs" />
-    <Compile Include="GridPaneFilesDropHandler.cs" />
-    <Compile Include="Operations\CompoundAnimations\AnimationClipToolbox.cs" />
-    <Compile Include="Operations\CompoundAnimations\DeleteSelectedAnimationClips.cs" />
-    <Compile Include="Operations\CompoundAnimations\DragAnimationClips.cs" />
-    <Compile Include="Operations\CompoundAnimations\SplitAnimationClip.cs" />
-    <Compile Include="Operations\CompoundAnimations\AddAnimationClip.cs" />
-    <Compile Include="CurveEditorPane.cs" />
-    <Compile Include="Operations\CenterTimelineOnCurrentColumn.cs" />
-    <Compile Include="Operations\ClearGridSelection.cs" />
-    <Compile Include="Operations\CopyPasteKeyframe.cs" />
-    <Compile Include="Operations\DragKeyframes.cs" />
-    <Compile Include="Operations\EnsureCurrentColumnVisibleIfContainerChanged.cs" />
-    <Compile Include="Operations\EnsureRowVisibleIfSelected.cs" />
-    <Compile Include="Operations\ToggleKeyframes.cs" />
-    <Compile Include="Operations\MoveNodes.cs" />
-    <Compile Include="Operations\NumericMoveDialog.cs" />
-    <Compile Include="Operations\NumericScaleDialog.cs" />
-    <Compile Include="Operations\ReverseKeyframes.cs" />
-    <Compile Include="Operations\SelectGridSpan.cs" />
-    <Compile Include="Operations\SetCurrentColumn.cs" />
-    <Compile Include="Operations\ShiftGridSelection.cs" />
-    <Compile Include="Processors\GridPane\AnimationStretchProcessor.cs" />
-    <Compile Include="Processors\GridPane\CompoundAnimations\CreateAnimationTrackWeightRampProcessor.cs" />
-    <Compile Include="Processors\GridPane\CompoundAnimations\GridContextMenuProcessor.cs" />
-    <Compile Include="Processors\GridPane\GridContextMenuProcessor.cs" />
-    <Compile Include="Processors\GridPane\SelectAndDragKeyframesProcessor.cs" />
-    <Compile Include="Processors\SlowMotionProcessor.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Processors\GridPane\DragKeyframesRespondentProcessor.cs" />
-    <Compile Include="Processors\GridPane\GridMouseScrollProcessor.cs" />
-    <Compile Include="Processors\GridPane\HasKeyframeRespondentProcessor.cs" />
-    <Compile Include="Processors\GridPane\CompoundAnimations\SelectAndDragAnimationClipsProcessor.cs" />
-    <Compile Include="Processors\OverviewPane\OverviewScrollProcessor.cs" />
-    <Compile Include="Processors\MouseWheelProcessor.cs" />
-    <Compile Include="GridPane.cs" />
-    <Compile Include="OverviewPane.cs" />
-    <Compile Include="RollPane.cs" />
-    <Compile Include="Rulerbar.cs" />
-    <Compile Include="LinkIndicatorButton.cs" />
-    <Compile Include="SceneItemDecorator.cs" />
-    <Compile Include="SceneViewThumbnail.cs" />
-    <Compile Include="Timeline.cs" />
-    <Compile Include="Toolbar.cs" />
-    <Compile Include="Components\DragKeyframesRequest.cs" />
-    <Compile Include="Components\HasKeyframeRequest.cs" />
-    <Compile Include="MarkerPropertiesDialog.cs" />
-    <Compile Include="Processors\Rulerbar\RulerbarMouseScrollProcessor.cs" />
-    <Compile Include="CommandBindings.cs" />
-    <Compile Include="Components\RowView.cs" />
-    <Compile Include="TimelineUserPreferences.cs" />
-    <Compile Include="TreeViewNodeLinkIndication.cs" />
-    <Compile Include="TreeViewPresentation.cs" />
-    <Compile Include="TreeViewSceneItem.cs" />
-    <Compile Include="Utils\KeyframeFigure.cs" />
-    <Compile Include="Utils\TimelineMetrics.cs" />
-    <Compile Include="Operations\DeselectGridSpan.cs" />
-    <Compile Include="Components\GridAudioView.cs" />
-    <Compile Include="AnimatorAdapter.cs" />
-    <Compile Include="Curve.cs" />
-    <Compile Include="Processors\CurveEditor\PanProcessor.cs" />
-    <Compile Include="Processors\CurveEditor\SelectAndDragKeysProcessor.cs" />
-    <Compile Include="Processors\CurveEditor\SelectCurveKey.cs" />
-    <Compile Include="Processors\CurveEditor\VerticalZoomProcessor.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
-      <Project>{fc2de6c9-641a-4230-8d29-ea4035cd8708}</Project>
-      <Name>Lime.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj">
-      <Project>{259c5e1f-1507-4131-8b4e-dd3c51f7462a}</Project>
-      <Name>Tangerine.Common.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj">
-      <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
-      <Name>Tangerine.Core.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj">
-      <Project>{e62ba18f-4e1a-466a-8299-67ad567f17e5}</Project>
-      <Name>Tangerine.UI.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
-      <Project>{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}</Project>
-      <Name>Yuzu.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

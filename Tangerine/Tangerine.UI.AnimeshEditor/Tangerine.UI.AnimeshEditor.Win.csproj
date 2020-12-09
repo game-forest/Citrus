@@ -1,83 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{32771586-53BF-4212-930D-BFDEAC20B3DA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DefineConstants>WIN</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Tangerine.UI.AnimeshEditor</RootNamespace>
     <AssemblyName>Tangerine.UI.AnimeshEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AnimeshContextualPanel.cs" />
-    <Compile Include="AnimeshContextualPanelProcessor.cs" />
-    <Compile Include="AnimeshController.cs" />
-    <Compile Include="AnimeshPresenter.cs" />
-    <Compile Include="AnimeshProcessor.cs" />
-    <Compile Include="AnimeshTools.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Topology\ExactArithmetic.cs" />
-    <Compile Include="Topology\GeometricPredicates.cs" />
-    <Compile Include="Operations\Animate.cs" />
-    <Compile Include="Operations\PreserveSlice.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />
-    <Compile Include="Topology\HalfEdgeTopology\HalfEdgeTopology.Triangulator.cs" />
-    <Compile Include="AnimeshUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
-      <Project>{FC2DE6C9-641A-4230-8D29-EA4035CD8708}</Project>
-      <Name>Lime.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
-      <Project>{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}</Project>
-      <Name>Yuzu.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj">
-      <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
-      <Name>Tangerine.Core.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj">
-      <Project>{e62ba18f-4e1a-466a-8299-67ad567f17e5}</Project>
-      <Name>Tangerine.UI.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

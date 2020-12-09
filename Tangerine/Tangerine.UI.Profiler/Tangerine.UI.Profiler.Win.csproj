@@ -1,62 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8E8C8ED3-63C2-407F-B626-CD9867E16353}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DefineConstants>WIN</DefineConstants>
     <RootNamespace>Tangerine.UI.Profiler</RootNamespace>
     <AssemblyName>Tangerine.UI.Profiler</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;PROFILER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>PROFILER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="OverdrawController.cs" />
-    <Compile Include="Profiler.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
-      <Project>{fc2de6c9-641a-4230-8d29-ea4035cd8708}</Project>
-      <Name>Lime.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
-      <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj">
-      <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
-      <Name>Tangerine.Core.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj">
-      <Project>{e62ba18f-4e1a-466a-8299-67ad567f17e5}</Project>
-      <Name>Tangerine.UI.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

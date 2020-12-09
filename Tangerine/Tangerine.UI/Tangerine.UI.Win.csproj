@@ -1,161 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{E62BA18F-4E1A-466A-8299-67AD567F17E5}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DefineConstants>WIN</DefineConstants>
     <RootNamespace>Tangerine.UI</RootNamespace>
     <AssemblyName>Tangerine.UI</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;WIN</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DefineConstants>WIN</DefineConstants>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\Orange\Orange.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ColorPicker.Mac.cs" />
-    <Compile Include="ComponentIconPool.cs" />
-    <Compile Include="IconGenerator.cs" />
-    <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\SBytePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\SliderPropertyEditor.cs" />
-    <Compile Include="Tooltip\Tooltip.cs" />
-    <Compile Include="Tooltip\TooltipComponent.cs" />
-    <Compile Include="Utils\RichTextHighlightComponent.cs" />
-    <Compile Include="Widgets\Lookup\FuzzyStringSearch.cs" />
-    <Compile Include="Widgets\Lookup\LookupDataSource.cs" />
-    <Compile Include="Widgets\Lookup\LookupFilter.cs" />
-    <Compile Include="Widgets\Lookup\LookupItem.cs" />
-    <Compile Include="Widgets\Lookup\LookupWidget.cs" />
-    <Compile Include="Widgets\ThemedAreaSlider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ColorPicker.Win.cs" />
-    <Compile Include="ColorPickerPanel.cs" />
-    <Compile Include="CommandRegistry.cs" />
-    <Compile Include="Commands.cs" />
-    <Compile Include="Console.cs" />
-    <Compile Include="Cursors.cs" />
-    <Compile Include="Dialogs\AlertDialog.cs" />
-    <Compile Include="Dialogs\TriggerSelectionDialog.cs" />
-    <Compile Include="Docking\DockHierarchy.cs" />
-    <Compile Include="Docking\DockManager.cs" />
-    <Compile Include="Docking\DragBehaviours.cs" />
-    <Compile Include="Documentation\CrosslinkExtension.cs" />
-    <Compile Include="Documentation\Documentation.cs" />
-    <Compile Include="Documentation\DocumentationComponent.cs" />
-    <Compile Include="Documentation\HelpModeGestureManager.cs" />
-    <Compile Include="DocumentCommandHandler.cs" />
-    <Compile Include="EmbeddedResources\EmbeddedResource.cs" />
-    <Compile Include="EmbeddedResources\ThemedIconResource.cs" />
-    <Compile Include="IconPool.cs" />
-    <Compile Include="NodeIconPool.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyEditors\AlignmentPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\AnchorsPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\AudioSamplePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\BlendingPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\BooleanPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\Color4PropertyEditor.cs" />
-    <Compile Include="PropertyEditors\ColorGradientPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\CommonPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\ContentsPathPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\CustomFilePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\DoublePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\DropDownListPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\EnumPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\ExpandablePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\FilePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\FloatPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\FolderPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\FontPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\InstancePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\IntPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\IPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\IPropertyEditorParams.cs" />
-    <Compile Include="PropertyEditors\ListPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\NodeIdPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\NodeReferencePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\NumericRangePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\PropertyEditorParams.cs" />
-    <Compile Include="PropertyEditors\QuaternionPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\RenderTargetPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\RenderTexturePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\ShortcutPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\SkinningWeightsPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\StringPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\TextPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\TexturePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\ThicknessPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\TriggerPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\Vector2PropertyEditor.cs" />
-    <Compile Include="PropertyEditors\Vector3PropertyEditor.cs" />
-    <Compile Include="TabbedWidget.cs" />
-    <Compile Include="TextEditorWindow.cs" />
-    <Compile Include="ToolbarButton.cs" />
-    <Compile Include="ToolbarModel.cs" />
-    <Compile Include="ToolbarView.cs" />
-    <Compile Include="Tooltip\TooltipProcessor.cs" />
-    <Compile Include="TreeView.cs" />
-    <Compile Include="Utils\Colors.cs" />
-    <Compile Include="Utils\KeyframePalette.cs" />
-    <Compile Include="Utils\Metrics.cs" />
-    <Compile Include="Utils\Spacer.cs" />
-    <Compile Include="Utils\Utils.cs" />
-    <Compile Include="WidgetFactoryComponent.cs" />
-    <Compile Include="Widgets\ThemedButtons.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj">
-      <Project>{FE8512BC-7A55-425C-8BC1-AD4D9785CF12}</Project>
-      <Name>DynamicFont.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
-      <Project>{fc2de6c9-641a-4230-8d29-ea4035cd8708}</Project>
-      <Name>Lime.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
-      <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj">
-      <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
-      <Name>Tangerine.Core.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Markdig">
       <Version>0.15.1</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

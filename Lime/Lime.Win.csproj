@@ -1,136 +1,84 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net5.0-windows</TargetFramework>
-		<UseWindowsForms>true</UseWindowsForms>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<RootNamespace>Lime</RootNamespace>
-		<AssemblyName>Lime</AssemblyName>
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>Lime</RootNamespace>
+    <AssemblyName>Lime</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>WIN;OPENGL;OPENAL;ANGLE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Extensions\**" />
-	  <EmbeddedResource Remove="Extensions\**" />
-	  <None Remove="Extensions\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Lemon\Lemon.Win.csproj" />
-		<ProjectReference Include="..\Yuzu\Yuzu.Win.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.WindowsAPICodePack.Core">
-			<Version>1.1.0</Version>
-		</PackageReference>
-		<PackageReference Include="Microsoft.WindowsAPICodePack.Shell">
-			<Version>1.1.0</Version>
-		</PackageReference>
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="Lzma, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\3rdParty\Lzma\bin\Release\Lzma.dll</HintPath>
-		</Reference>
-		<Reference Include="MFDecoder, Version=1.0.6621.19204, Culture=neutral, processorArchitecture=x86">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>..\3rdParty\MFDecoder\MFDecoder.dll</HintPath>
-		</Reference>
-		<Reference Include="OpenTK.GLControl">
-			<HintPath>..\3rdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
-		</Reference>
-		<Reference Include="ShaderCompilerBinding.Win">
-			<HintPath>..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Win.dll</HintPath>
-		</Reference>
-		<Reference Include="SharpVulkan">
-			<HintPath>..\3rdParty\SharpVulkan\SharpVulkan.dll</HintPath>
-		</Reference>
-		<Reference Include="System" />
-		<Reference Include="System.Core" />
-		<Reference Include="System.Drawing" />
-		<Reference Include="System.Windows.Forms" />
-		<Reference Include="System.Xml.Linq" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Xml" />
-		<Reference Include="OpenTK">
-			<HintPath>..\3rdParty\OpenTK\OpenTK.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="..\3rdParty\OpenAL\OpenAL32.dll">
-			<Link>OpenAL32.dll</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="..\3rdParty\OpenAL\wrap_oal.dll">
-			<Link>wrap_oal.dll</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="..\3rdParty\OpenTK\Dependencies_x86\d3dcompiler_47.dll">
-			<Link>d3dcompiler_47.dll</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="..\3rdParty\OpenTK\Dependencies_x86\libEGL.dll">
-			<Link>libEGL.dll</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="..\3rdParty\OpenTK\Dependencies_x86\libGLESv2.dll">
-			<Link>libGLESv2.dll</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="..\3rdParty\ShaderCompilerBinding\ShaderCompiler.dll">
-			<Link>ShaderCompiler.dll</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-</Project>
-<!--<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;WIN;OPENGL;OPENAL;ANGLE;DEBUG</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Profiler|x86'">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;WIN;OPENGL;OPENAL;ANGLE;DEBUG;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <DefineConstants>WIN;OPENGL;OPENAL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Profiler|x86'">
-    <DefineConstants>WIN;OPENGL;OPENAL;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <DefineConstants>WIN;OPENGL;OPENAL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU'">
-    <DefineConstants>WIN;OPENGL;OPENAL;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Profile|x86'">
-    <OutputPath>bin\x86\Profile\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;PROFILE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Tangerine|x86'">
-    <OutputPath>bin\x86\Debug.Tangerine\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;TANGERINE;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Tangerine|AnyCPU'">
-    <OutputPath>bin\Debug.Tangerine\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN;OPENGL;OPENAL;ANGLE;TANGERINE;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Tangerine|x86'">
-    <OutputPath>bin\x86\Release.Tangerine\</OutputPath>
-    <DefineConstants>WIN;OPENGL;OPENAL;TANGERINE;PROFILER</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Tangerine|AnyCPU'">
-    <OutputPath>bin\Release.Tangerine\</OutputPath>
-    <DefineConstants>WIN;OPENGL;OPENAL;TANGERINE;PROFILER</DefineConstants>
+    <Configurations>Debug;Release;Tangerine.Release;Tangerine.Debug</Configurations>
   </PropertyGroup>
 
-</Project>-->
+<PropertyGroup Condition="$(Configuration.StartsWith('Tangerine'))">
+  <DefineConstants>WIN;OPENGL;OPENAL;ANGLE;TANGERINE</DefineConstants>
+</PropertyGroup>
+
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tangerine.Debug|AnyCPU'">
+  <PlatformTarget>x86</PlatformTarget>
+</PropertyGroup>
+<!-- <DefineConstants>WIN;OPENGL;OPENAL;ANGLE</DefineConstants> -->
+  <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lemon\Lemon.Win.csproj" />
+    <ProjectReference Include="..\Yuzu\Yuzu.Win.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Lzma, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Lzma\bin\Release\Lzma.dll</HintPath>
+    </Reference>
+    <Reference Include="MFDecoder, Version=1.0.6621.19204, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\MFDecoder\MFDecoder.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\3rdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="ShaderCompilerBinding.Win">
+      <HintPath>..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpVulkan">
+      <HintPath>..\3rdParty\SharpVulkan\SharpVulkan.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\3rdParty\OpenTK\OpenTK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\3rdParty\OpenAL\OpenAL32.dll">
+      <Link>OpenAL32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\3rdParty\OpenAL\wrap_oal.dll">
+      <Link>wrap_oal.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\3rdParty\OpenTK\Dependencies_x86\d3dcompiler_47.dll">
+      <Link>d3dcompiler_47.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\3rdParty\OpenTK\Dependencies_x86\libEGL.dll">
+      <Link>libEGL.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\3rdParty\OpenTK\Dependencies_x86\libGLESv2.dll">
+      <Link>libGLESv2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\3rdParty\ShaderCompilerBinding\ShaderCompiler.dll">
+      <Link>ShaderCompiler.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
+

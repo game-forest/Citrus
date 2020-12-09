@@ -2,7 +2,7 @@
 using System.Text;
 using System.Linq;
 using WinForms = System.Windows.Forms;
-using Microsoft.WindowsAPICodePack.Dialogs;
+//using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Lime
 {
@@ -93,12 +93,12 @@ namespace Lime
 
 		private bool ShowFolderBrowserDialog()
 		{
-			using (var folderBrowserDialog = new CommonOpenFileDialog()) {
-				folderBrowserDialog.IsFolderPicker = true;
+			using (var folderBrowserDialog = new WinForms.OpenFileDialog()) {//CommonOpenFileDialog()) {
+				//folderBrowserDialog.IsFolderPicker = true;
 				if (InitialDirectory != null) {
 					folderBrowserDialog.InitialDirectory = InitialDirectory;
 				}
-				if (folderBrowserDialog.ShowDialog() == CommonFileDialogResult.Ok) {
+				if (folderBrowserDialog.ShowDialog() == WinForms.DialogResult.OK) {//CommonFileDialogResult.Ok) {
 					FileName = folderBrowserDialog.FileName;
 					FileNames = new[] { FileName };
 					return true;
