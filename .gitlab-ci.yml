@@ -16,6 +16,11 @@ windows_build:
   - win
   script:
   - chcp 65001
+  - powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -useb 'https://dot.net/v1/dotnet-install.ps1'))) -Channel release/5.0.1xx"
+  - $env:Path = "$env:LocalAppData\Microsoft\dotnet\;$env:Path"
+  - $env:Path
+  - Get-Command dotnet
+  - dotnet build -c:Release .\Orange\Orange.Win.sln
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Orange\Orange.Win.sln'
   - 'Orange\bin\Win\Release\Orange.CLI.exe --command:"Generate Lime Deserializers And Cloners"'
   - 'git status -s > ..\changes.txt'

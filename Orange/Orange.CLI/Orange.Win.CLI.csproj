@@ -22,7 +22,11 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Message Text="Generating Deserializers." Importance="high" />
-    <Exec Command="$(OutputPath)\Orange.CLI.exe --command:&quot;Generate Lime Deserializers And Cloners&quot;
+    <Exec Command="echo %PATH%" ConsoleToMsBuild="True">
+      <Output TaskParameter="ConsoleOutput" PropertyName="SystemPath" />
+    </Exec>
+    <Message Text="$(SystemPath)" Importance="high" />
+    <Exec Command="(set PATH=$&quot;(SystemPath)&quot;) &amp; $(OutputPath)\Orange.CLI.exe --command:&quot;Generate Lime Deserializers And Cloners&quot;
 set errno=0" LogStandardErrorAsError="True" ContinueOnError="False" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
