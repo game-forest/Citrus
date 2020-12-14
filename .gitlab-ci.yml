@@ -8,8 +8,6 @@ windows_test:
   - win
   script:
   - chcp 65001
-  - Orange\Toolchain.Win\nuget.exe restore Tests\Tests.sln
-  - '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" Tests\Tests.sln'
   - dotnet test Tests/bin/Debug/Citrus.Tests.dll
 
 windows_build:
@@ -18,13 +16,11 @@ windows_build:
   - win
   script:
   - chcp 65001
-  - 'Orange\Toolchain.Win\nuget.exe restore Orange\Orange.Win.sln'
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Orange\Orange.Win.sln'
   - 'Orange\bin\Win\Release\Orange.CLI.exe --command:"Generate Lime Deserializers And Cloners"'
   - 'git status -s > ..\changes.txt'
   - 'cat .\..\changes.txt'
   - 'if ((Get-Item "..\changes.txt").length -ne 0) {exit 1} else {"Orange build OK"}'
-  - 'Orange\Toolchain.Win\nuget.exe restore Tangerine\Tangerine.Win.sln'
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Tangerine\Tangerine.Win.sln'
   - echo "Tangerine build OK"
   - '.\Orange\bin\Win\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Win --command:"Build"'
