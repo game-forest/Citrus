@@ -10,7 +10,7 @@
     <None Remove="*\**" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lemon.dll">
+    <Content Include="LemonNative.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

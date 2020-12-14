@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lime.Win", "..\..\Lime.Win.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemon.Win", "..\..\..\Lemon\Lemon.Win.csproj", "{538E41E4-725C-4521-BCF3-A5591A1A3AFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuzu.Win", "..\..\..\Yuzu\Yuzu.Win.csproj", "{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuzu", "..\..\..\Yuzu\Yuzu.csproj", "{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

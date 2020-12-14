@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangerine.UI.Timeline.Win",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lime.Win", "..\Lime\Lime.Win.csproj", "{FC2DE6C9-641A-4230-8D29-EA4035CD8708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuzu.Win", "..\Yuzu\Yuzu.Win.csproj", "{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuzu", "..\Yuzu\Yuzu.csproj", "{DDD2DFE9-CED2-4CEA-ADF0-5A6865865A46}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tangerine.UI.SceneView.Win", "Tangerine.UI.SceneView\Tangerine.UI.SceneView.Win.csproj", "{80486551-A659-42B0-AADA-165C54E9B0AF}"
 EndProject

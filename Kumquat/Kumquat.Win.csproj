@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>WIN</DefineConstants>
     <RootNamespace>Kumquat</RootNamespace>
     <AssemblyName>Kumquat</AssemblyName>
@@ -10,11 +9,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lime\Lime.Win.csproj" />
-    <ProjectReference Include="..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\Yuzu\Yuzu.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\ParsedWidget.cs" />
+    <Compile Remove="Templates\ParsedWidget.cs" />
   </ItemGroup>
 
   <ItemGroup>

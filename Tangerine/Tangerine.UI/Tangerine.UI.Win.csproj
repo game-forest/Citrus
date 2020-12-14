@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
     <ProjectReference Include="..\..\Orange\Orange.Win.csproj" />
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.csproj" />
     <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
   </ItemGroup>

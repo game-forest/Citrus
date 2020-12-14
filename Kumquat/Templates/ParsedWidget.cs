@@ -1,6 +1,6 @@
 ﻿using Lime;
 
-namespace UrbanDrop
+namespace <%PROJECT_NAME%>.Scenes
 {
 	public class ParsedWidget
 	{

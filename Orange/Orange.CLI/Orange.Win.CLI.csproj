@@ -1,103 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{459FF536-CCBA-4A0A-AA24-09D41E2FAF54}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Orange.Win.CLI</RootNamespace>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>Orange.CLI</RootNamespace>
     <AssemblyName>Orange.CLI</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\bin\Win\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;ORANGE_CLI;WIN</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\bin\Win\Release\</OutputPath>
-    <DefineConstants>TRACE;ORANGE_CLI;WIN</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
+    <Configurations>Debug;Release</Configurations>
+    <OutputType>Exe</OutputType>
     <ApplicationIcon>..\Orange.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\Win\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN;ORANGE_CLI</DefineConstants>
-    <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\bin\Win\Release\</OutputPath>
-    <DefineConstants>TRACE;WIN;ORANGE_CLI</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\Orange.ico" />
-    <None Include="..\app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Actions\BuildGame.cs" />
-    <Compile Include="Main.CLI.cs" />
-    <Compile Include="UI\ConsoleUI.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Orange.Win.csproj">
-      <Project>{6f0c1a51-492a-4e6e-b302-e212d441ebf3}</Project>
-      <Name>Orange.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>..\..\..\..\Orange\bin\Win\Release\Orange.CLI.exe --command:"Generate Lime Deserializers And Cloners"
-set errno=0</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Message Text="[PreBuild] Configuration: $(Configuration.ToUpperInvariant())" Importance="high" />
+    <Message Text="[PreBuild] Defines: $(DefineConstants)" Importance="high" />
+    <Message Text="[PreBuild] OS: $(OS)" Importance="high" />
   </Target>
-  <Target Name="AfterBuild">
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Message Text="Generating Deserializers." Importance="high" />
+    <Exec Command="$(OutputPath)\Orange.CLI.exe --command:&quot;Generate Lime Deserializers And Cloners&quot;
+set errno=0" LogStandardErrorAsError="True" ContinueOnError="False" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
-  -->
+
+  <ItemGroup>
+    <Content Include="Orange.ico" />
+    <EmbeddedResource Include="Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Assets.xcassets\**" />
+    <EmbeddedResource Remove="Assets.xcassets\**" />
+    <None Remove="Assets.xcassets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="CopyToolchain.targets" />
+    <None Remove="Info.plist" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj" />
+    <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\Orange.Win.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -23,7 +23,7 @@ namespace Kumquat
 
 	public class CodeCookerCache
 	{
-		private const string CurrentVersion = "1.1";
+		private const string CurrentVersion = "1.2";
 
 		[YuzuRequired]
 		public string Version = CurrentVersion;
@@ -294,7 +294,7 @@ namespace Kumquat
 			File.WriteAllText($@"{path}/{projectName}.GeneratedScenes.Win.csproj", projectWin.Replace("<%PROJECT_NAME%>", projectName));
 			File.WriteAllText($@"{path}/{projectName}.GeneratedScenes.Android.csproj", projectAndroid.Replace("<%PROJECT_NAME%>", projectName));
 			File.WriteAllText($@"{path}/{projectName}.GeneratedScenes.iOS.csproj", projectiOS.Replace("<%PROJECT_NAME%>", projectName));
-			File.WriteAllText($@"{path}/ParsedWidget.cs", parsedWidgetSourceCode);
+			File.WriteAllText($@"{path}/ParsedWidget.cs", parsedWidgetSourceCode.Replace("<%PROJECT_NAME%>", projectName));
 		}
 
 		static Type GetCommonBaseClass(IReadOnlyList<string> typeNames)
@@ -570,7 +570,7 @@ namespace Kumquat
 						ParsedNode parsedNode = null;
 						if (!string.IsNullOrEmpty(n.Id) && n.Id.StartsWith("@")) {
 							parsedNode = new ParsedNode(
-								n, n.Id.Substring(1),
+								n, n.Id[1..],
 								!string.IsNullOrEmpty(current.node.ContentsPath) || current.isInExternalScene
 							);
 							parsedFramesTree.ParsedNodes.Add(parsedNode);
@@ -595,8 +595,6 @@ namespace Kumquat
 			return $"{projectName}.Scenes{bundlePart}";
 		}
 
-		#region GetCodeTemplate
-
 		private static UnmanagedMemoryStream GetResourceStream(string resName)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
@@ -612,12 +610,9 @@ namespace Kumquat
 		private static string GetEmbeddedResource(string templateName)
 		{
 			var file = GetResourceStream(templateName);
-			using (var reader = new StreamReader(file)) {
-				var result = reader.ReadToEnd();
-				return result;
-			}
+			using var reader = new StreamReader(file);
+			var result = reader.ReadToEnd();
+			return result;
 		}
-
-		#endregion
 	}
 }

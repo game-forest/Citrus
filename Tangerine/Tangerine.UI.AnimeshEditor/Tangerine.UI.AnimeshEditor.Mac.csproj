@@ -72,7 +72,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Operations\Animate.cs" />
     <Compile Include="Operations\PreserveSlice.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Topology\ExactArithmetic.cs" />
     <Compile Include="Topology\GeometricPredicates.cs" />
     <Compile Include="Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />

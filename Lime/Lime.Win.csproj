@@ -7,18 +7,21 @@
     <RootNamespace>Lime</RootNamespace>
     <AssemblyName>Lime</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>WIN;OPENGL;OPENAL;ANGLE</DefineConstants>
-    <Configurations>Debug;Release;Tangerine.Release;Tangerine.Debug</Configurations>
+    <Configurations>Debug;Release;Tangerine.Release;Tangerine.Debug;Profiler.Release;Profiler.Debug</Configurations>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;OPENGL;OPENAL;ANGLE;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
   </PropertyGroup>
 
-<PropertyGroup Condition="$(Configuration.StartsWith('Tangerine'))">
-  <DefineConstants>WIN;OPENGL;OPENAL;ANGLE;TANGERINE</DefineConstants>
-</PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.StartsWith('Tangerine'))">
+    <DefineConstants>$(DefineConstants)PROFILER;</DefineConstants>
+  </PropertyGroup>
 
-<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tangerine.Debug|AnyCPU'">
-  <PlatformTarget>x86</PlatformTarget>
-</PropertyGroup>
-<!-- <DefineConstants>WIN;OPENGL;OPENAL;ANGLE</DefineConstants> -->
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Message Text="[PreBuild] Configuration: $(Configuration.ToUpperInvariant())" Importance="high" />
+    <Message Text="[PreBuild] Defines: $(DefineConstants)" Importance="high" />
+    <Message Text="[PreBuild] OS: $(OS)" Importance="high" />
+  </Target>
+
   <ItemGroup>
     <Compile Remove="Extensions\**" />
     <EmbeddedResource Remove="Extensions\**" />
@@ -27,7 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lemon\Lemon.Win.csproj" />
-    <ProjectReference Include="..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\Yuzu\Yuzu.csproj" />
   </ItemGroup>
 
   <ItemGroup>

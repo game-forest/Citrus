@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
     <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
     <ProjectReference Include="..\..\Orange\Orange.Win.csproj" />
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.csproj" />
     <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj" />
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
     <ProjectReference Include="..\Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Win.csproj" />

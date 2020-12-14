@@ -365,10 +365,10 @@ namespace Launcher
 				string solutionPath = OrangeSolutionPath;
 				string executablePath = OrangeExecutablePath;
 				if (optionBuildProjectPath.HasValue()) {
-					solutionPath = Path.Combine(Environment.CurrentDirectory, optionBuildProjectPath.ParsedValue);
+					solutionPath = Path.Combine(citrusDirectory, optionBuildProjectPath.ParsedValue);
 				}
 				if (optionExecutablePath.HasValue()) {
-					executablePath = Path.Combine(Environment.CurrentDirectory, optionExecutablePath.ParsedValue);
+					executablePath = Path.Combine(citrusDirectory, optionExecutablePath.ParsedValue);
 				}
 				orangeBuilder = new Builder(citrusDirectory) {
 					NeedRunExecutable = !optionJustBuild.HasValue(),

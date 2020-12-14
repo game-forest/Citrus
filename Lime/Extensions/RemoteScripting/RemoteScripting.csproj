@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\..\..\Yuzu\Yuzu.csproj" />
     <ProjectReference Include="..\..\Lime.Win.csproj" />
   </ItemGroup>
 

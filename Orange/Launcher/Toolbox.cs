@@ -23,11 +23,11 @@ namespace Orange
 
 		public static string FindCitrusDirectory ()
 		{
-			var path = Uri.UnescapeDataString ((new Uri (Assembly.GetExecutingAssembly ().CodeBase)).AbsolutePath);
+			var path = Uri.UnescapeDataString (new Uri (Assembly.GetExecutingAssembly ().Location).AbsolutePath);
 			while (!File.Exists (Path.Combine (path, CitrusVersion.Filename))) {
 				path = Path.GetDirectoryName (path);
 				if (string.IsNullOrEmpty (path)) {
-					throw new InvalidOperationException ("Can't find Orange directory.");
+					throw new InvalidOperationException ("Can't find Citrus directory.");
 				}
 			}
 			return path;

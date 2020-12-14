@@ -14,7 +14,7 @@
     <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj" />
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
     <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.csproj" />
   </ItemGroup>
 
 </Project>
