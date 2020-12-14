@@ -21,7 +21,8 @@ namespace Orange
 		public static int Start(string app, string args, string workingDirectory = null,
 			Options options = Options.RedirectOutput | Options.RedirectErrors, StringBuilder output = null)
 		{
-			Console.WriteLine($"{workingDirectory}{app} {args}");
+			Console.WriteLine($"Working directory: '{workingDirectory}'");
+			Console.WriteLine($"Starting '{app} {args}'");
 			if (output == null) {
 				output = new StringBuilder();
 			}

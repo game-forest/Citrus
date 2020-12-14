@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <DefineConstants>WIN</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Tangerine.UI.AnimeshEditor</RootNamespace>
     <AssemblyName>Tangerine.UI.AnimeshEditor</AssemblyName>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

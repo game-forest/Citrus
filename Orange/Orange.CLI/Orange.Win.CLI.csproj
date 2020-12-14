@@ -9,7 +9,7 @@
     <ApplicationIcon>..\Orange.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\bin\Win\$(Configuration)\</OutputPath>
     <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
     <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
   </PropertyGroup>

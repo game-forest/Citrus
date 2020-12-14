@@ -2,7 +2,7 @@
   "profiles": {
     "Launcher.Win": {
       "commandName": "Project",
-      "commandLineArgs": "-b Orange\\Orange.Win.sln -r Orange\\Orange\\bin\\Release\\Orange.exe"
+      "commandLineArgs": "-b Orange\\Orange.Win.sln -r Orange\\bin\\Release\\Orange.GUI.exe"
     }
   }
 }

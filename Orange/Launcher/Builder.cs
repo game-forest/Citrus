@@ -28,6 +28,7 @@ namespace Launcher
 
 		private void RunExecutable()
 		{
+			Console.WriteLine($"Starting '{ExecutablePath}'.");
 			var process = new Process {
 				StartInfo = {
 					FileName = ExecutablePath,
@@ -64,7 +65,7 @@ namespace Launcher
 					BuildAndRun();
 				} catch (Exception e) {
 					Console.WriteLine(e.Message);
-					SetFailedBuildStatus("");
+					SetFailedBuildStatus(e.Message);
 				}
 			});
 			task.Start();
@@ -115,16 +116,12 @@ namespace Launcher
 
 		private bool Build(string solutionPath)
 		{
-			return Orange.Process.Start(BuilderPath, "msbuild " + solutionPath) == 0;
-		}
-
-		private void Builder_OnDataReceived(object sender, DataReceivedEventArgs args)
-		{
-			lock (this) {
-				if (args.Data != null) {
-					Console.WriteLine(args.Data);
-				}
+			var exitCode = Orange.Process.Start(BuilderPath, "build -c Release " + solutionPath);
+			if (exitCode == 0) {
+				return true;
 			}
+			SetFailedBuildStatus($"Process exited with code {exitCode}");
+			return false;
 		}
 
 		private bool AreRequirementsMet()

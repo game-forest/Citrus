@@ -3,9 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <DefineConstants>WIN</DefineConstants>
     <RootNamespace>Tangerine.UI.SceneView</RootNamespace>
     <AssemblyName>Tangerine.UI.SceneView</AssemblyName>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;PROFILER;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <DefineConstants>WIN;PROFILER</DefineConstants>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Tangerine</RootNamespace>
     <AssemblyName>Tangerine</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>x86</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;PROFILER;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj" />
     <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
@@ -30,8 +30,10 @@
     <ProjectReference Include="..\Tangerine.UI.Timeline\Tangerine.UI.Timeline.Win.csproj" />
     <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="icon.ico" />
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
+
 </Project>
