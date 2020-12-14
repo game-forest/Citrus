@@ -30,6 +30,13 @@ namespace Lime
 				return;
 			}
 			var attachmentPath = System.IO.Path.ChangeExtension(ContentsPath, ".Attachment.txt");
+			// This code used to be executed in LoadExternalScenes when serialization path stack
+			// contains only empty string. Now it's executed during serialization. ContentsPath property
+			// actually returns ShrinkPath(contentsPath) which is rooted when current serialization directory
+			// (top of path stack) is not sub-directory of contents path. Rooted paths aren't acceptable by
+			// asset bundle that's why we temporarily call ExpandPath manually in order to 'disroot' contents
+			// path. In the near future we'll migrate to absolute paths only model.
+			attachmentPath = InternalPersistence.Current?.ExpandPath(attachmentPath) ?? attachmentPath;
 			if (AssetBundle.Current.FileExists(attachmentPath)) {
 				var attachment = InternalPersistence.Instance.ReadObjectFromBundle<Model3DAttachmentParser.ModelAttachmentFormat>(AssetBundle.Current, attachmentPath);
 				if (string.IsNullOrEmpty(attachment.EntryTrigger)) {
