@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EmptyProject.Dialogs
@@ -18,7 +18,7 @@ namespace EmptyProject.Dialogs
 		public void Open<T>(T dialog) where T : Dialog
 		{
 			dialog.Attach(The.World);
-			ActiveDialogs.Add(dialog);
+			ActiveDialogs.Insert(0, dialog);
 		}
 
 		public void Remove<T>(T dialog) where T : Dialog

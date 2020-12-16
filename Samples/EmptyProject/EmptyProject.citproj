@@ -1,4 +1,17 @@
 {
 	"Name": "EmptyProject",
 	"CitrusDirectory": "../../",
+	RemoteScripting: {
+		ScriptsPath: "EmptyProject.Scripts/",
+		ScriptsAssemblyName: "Scripts.dll",
+		ReferencesPath: "EmptyProject.Win/bin/Release/",
+		References: [
+			"Lime.dll",
+			"Yuzu.dll",
+			"RemoteScripting.dll",
+			"EmptyProject.exe"
+		],
+		EntryPointsClass: "EmptyProject.Scripts.EntryPoints",
+		RemoteStoragePath: "StorageForRemoteScripting/"
+	},
 }

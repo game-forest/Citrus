@@ -16,6 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Application\DisplayInfo.Desktop.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Application\DisplayInfo.Mobile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Application\SoundManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Autotests\Coroutine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Autotests\RemoteScripting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug\Cheats.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug\RainbowDash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\AlertDialog.cs" />

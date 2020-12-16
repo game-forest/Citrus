@@ -1,3 +1,4 @@
+using System;
 using EmptyProject.Debug;
 using EmptyProject.Dialogs;
 using Lime;
@@ -38,6 +39,15 @@ namespace EmptyProject.Application
 		}
 
 		public WindowWidget World { get; private set; }
+		public bool TimeAccelerationMode { get; set; }
+
+		public delegate void CalculatingWorldUpdatingParametersDelegate(ref float delta, ref int iterationsCount, ref bool isTimeQuantized);
+		public CalculatingWorldUpdatingParametersDelegate CalculatingWorldUpdatingParameters;
+
+		public delegate void CustomWorldUpdatingDelegate(float delta, int iterationsCount, bool isTimeQuantized, Action<float, bool> updateFrameAction);
+		public CustomWorldUpdatingDelegate CustomWorldUpdating;
+
+		private bool requiredToWaitForWindowRendering;
 
 		private AssetBundle CreateAssetBundle()
 		{
@@ -100,7 +110,7 @@ namespace EmptyProject.Application
 		{
 			Cheats.ProcessCheatKeys();
 			var speedMultiplier = 1.0f;
-			if (Cheats.IsKeyPressed(Key.Shift) || Cheats.IsTripleTouch()) {
+			if (TimeAccelerationMode || Cheats.IsKeyPressed(Key.Shift) || Cheats.IsTripleTouch()) {
 				speedMultiplier = 10.0f;
 			}
 			if (Cheats.IsKeyPressed(Key.Tilde)) {
@@ -108,8 +118,56 @@ namespace EmptyProject.Application
 			}
 
 			delta *= speedMultiplier;
-			The.World.Update(delta);
+			UpdateWorld(delta * speedMultiplier);
 			The.World.PrepareToRender();
+		}
+
+		private void UpdateWorld(float delta)
+		{
+			var isTimeQuantized = false;
+			var iterationsCount = 1;
+
+			CalculatingWorldUpdatingParameters?.Invoke(ref delta, ref iterationsCount, ref isTimeQuantized);
+			if (CustomWorldUpdating != null) {
+				CustomWorldUpdating.Invoke(delta, iterationsCount, isTimeQuantized, UpdateFrame);
+			} else {
+				if (iterationsCount == 1) {
+					var validDelta = Mathf.Clamp(delta, 0, Lime.Application.MaxDelta);
+					iterationsCount = (int)(delta / validDelta);
+					var remainDelta = delta - validDelta * iterationsCount;
+					for (var i = 0; i < iterationsCount; i++) {
+						UpdateFrame(validDelta, requiredInputSimulation: i + 1 < iterationsCount || remainDelta > 0);
+						if (requiredToWaitForWindowRendering) {
+							break;
+						}
+					}
+					if (remainDelta > 0 && !isTimeQuantized) {
+						UpdateFrame(remainDelta);
+					}
+				} else {
+					for (var i = 0; i < iterationsCount; i++) {
+						UpdateFrame(delta, requiredInputSimulation: i + 1 < iterationsCount);
+						if (requiredToWaitForWindowRendering) {
+							break;
+						}
+					}
+				}
+			}
+			requiredToWaitForWindowRendering = false;
+		}
+
+		private void UpdateFrame(float delta, bool requiredInputSimulation = false)
+		{
+			Cheats.ProcessCheatKeys();
+			The.World.Update(delta);
+			if (requiredInputSimulation && !requiredToWaitForWindowRendering) {
+				Lime.Application.Input.Simulator.OnBetweenFrames(delta);
+			}
+		}
+
+		public void WaitForRenderingOnNextFrame()
+		{
+			requiredToWaitForWindowRendering = true;
 		}
 
 		private void OnResize(bool isDeviceRotated)

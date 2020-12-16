@@ -248,15 +248,17 @@ namespace RainbowDash
 			return instance == null ? new List<string>() : instance.cheatButtons.Keys.ToList();
 		}
 
-		public static void Cheat(string id)
+		public static bool Cheat(string id)
 		{
 			if (instance == null) {
-				return;
+				return false;
 			}
 
 			foreach (var kv in instance.cheatButtons.Where(kv => kv.Key.StartsWith(id))) {
 				kv.Value.Clicked();
+				return true;
 			}
+			return false;
 		}
 
 		public Menu(Widget container, int layer)

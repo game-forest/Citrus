@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using EmptyProject.Application;
 using Lime;
@@ -11,8 +11,8 @@ namespace EmptyProject.Dialogs
 		private const string DialogTag = "Dialog";
 
 		protected ParsedNode Scene { get; }
-		protected Widget Root => (Widget) Scene.Node;
 		protected TaskList Tasks { get; } = new TaskList();
+		public Widget Root => (Widget)Scene.Node;
 		public DialogState State { get; protected set; }
 
 		protected Dialog(ParsedNode scene)
