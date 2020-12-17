@@ -45,8 +45,6 @@ namespace Orange
 			}
 			p.StartInfo.StandardOutputEncoding = System.Text.Encoding.Default;
 			p.StartInfo.StandardErrorEncoding = System.Text.Encoding.Default;
-			p.StartInfo.EnvironmentVariables.Clear();
-			p.StartInfo.EnvironmentVariables.Add("PATH", "/bin:/usr/bin");
 #endif
 			p.StartInfo.RedirectStandardOutput = true;
 			p.StartInfo.RedirectStandardError = true;

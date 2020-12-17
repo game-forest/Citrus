@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>Orange</string>
+	<string>Launcher</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.gameforest.orange</string>
 	<key>CFBundleShortVersionString</key>
@@ -28,5 +28,14 @@
 	<string>MainMenu</string>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
+	<key>CFBundleDisplayName</key>
+	<string>Launcher</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.developer-tools</string>
+	<key>LSEnvironment</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands</string>
+	</dict>
 </dict>
 </plist>

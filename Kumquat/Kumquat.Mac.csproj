@@ -29,12 +29,11 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -50,12 +49,11 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -73,10 +71,9 @@
     <EmbeddedResource Include="Templates\GeneratedScenes.Win.csproj.kumquat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Templates\ParsedWidget.cs">
+    <EmbeddedResource Include="Templates\ParsedWidget.cs.kumquat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <Compile Include="Templates\ParsedWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\CodeFormatter.cs" />

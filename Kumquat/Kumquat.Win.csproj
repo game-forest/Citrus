@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Templates\ParsedWidget.cs" />
     <Compile Remove="Templates\ParsedWidget.cs" />
   </ItemGroup>
 

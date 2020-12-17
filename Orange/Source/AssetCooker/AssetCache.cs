@@ -7,7 +7,7 @@ namespace Orange
 {
 	/// <summary>
 	/// Used to handle all operations with cache. Able to store data in local and remote cache and to load data from storage.
-	/// This class is not thread safe.
+	/// This class is not thread safe.	
 	/// </summary>
 	public class AssetCache
 	{
@@ -251,9 +251,9 @@ namespace Orange
 					if (ExistsRemote(hashString)) {
 						return true;
 					}
-					bool successful = ftpClient.UploadFile(GetLocalPath(hashString), GetRemotePath(hashString),
-						FtpExists.Overwrite, true);
-					if (!successful) {
+					FtpStatus status = ftpClient.UploadFile(GetLocalPath(hashString), GetRemotePath(hashString),
+						FtpRemoteExists.Overwrite, true);
+					if (status != FtpStatus.Success) {
 						ftpClient.Disconnect();
 						HandleRemoteCacheFailure(hashString, "Upload failed");
 						return false;
@@ -283,8 +283,8 @@ namespace Orange
 					if (ExistsLocal(hashString)) {
 						return true;
 					}
-					bool successful = ftpClient.DownloadFile(tempFilePath, GetRemotePath(hashString));
-					if (!successful) {
+					FtpStatus status = ftpClient.DownloadFile(tempFilePath, GetRemotePath(hashString));
+					if (status != FtpStatus.Success) {
 						ftpClient.Disconnect();
 						HandleRemoteCacheFailure(hashString, "Download failed");
 						return false;

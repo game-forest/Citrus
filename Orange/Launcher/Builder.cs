@@ -18,9 +18,9 @@ namespace Launcher
 		public string ExecutableArgs;
 
 		public event Action<string> OnBuildStatusChange;
-		public event Action OnBuildFail;
 		public event Action OnBuildSuccess;
 
+		public event Action OnBuildFail;
 		public Builder(string citrusDirectory)
 		{
 			this.citrusDirectory = citrusDirectory;
@@ -40,7 +40,9 @@ namespace Launcher
 
 		private void RestoreNuget()
 		{
-			Orange.Nuget.Restore(SolutionPath, BuilderPath);
+			if (Orange.Nuget.Restore (SolutionPath, BuilderPath) != 0) {
+				throw new Exception ("Unable to restore nugets!");
+			}
 		}
 
 		private void SynchronizeAllProjects()
@@ -116,7 +118,7 @@ namespace Launcher
 
 		private bool Build(string solutionPath)
 		{
-			var exitCode = Orange.Process.Start(BuilderPath, "build -c Release " + solutionPath);
+			var exitCode = Orange.Process.Start(BuilderPath, "-t:Build -p:Configuration=Release " + solutionPath);
 			if (exitCode == 0) {
 				return true;
 			}
@@ -164,28 +166,9 @@ namespace Launcher
 		}
 
 #if WIN
-		private static string BuilderPath
-		{
-			get {
-				return "dotnet";
-			}
-		}
+		private static string BuilderPath => "dotnet";
 #elif MAC
-		private string BuilderPath
-		{
-			get
-			{
-				var mdtool = "/Applications/Xamarin Studio.app/Contents/MacOS/mdtool";
-				var vstool = "/Applications/Visual Studio.app/Contents/MacOS/vstool";
-				if (File.Exists (vstool)) {
-					return vstool;
-				}
-				if (File.Exists (vstool)) {
-					return mdtool;
-				}
-				return null;
-			}
-		}
+		private string BuilderPath => "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild";
 #endif // WIN
 	}
 }

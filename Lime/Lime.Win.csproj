@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\Resource.designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Lemon\Lemon.Win.csproj" />
     <ProjectReference Include="..\Yuzu\Yuzu.csproj" />
   </ItemGroup>
@@ -81,6 +85,10 @@
       <Link>ShaderCompiler.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

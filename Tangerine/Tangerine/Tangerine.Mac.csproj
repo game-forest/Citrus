@@ -41,7 +41,7 @@
     <EnableCodeSigning>false</EnableCodeSigning>
     <AOTMode>None</AOTMode>
     <EnableSGenConc>true</EnableSGenConc>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>
@@ -64,7 +64,10 @@
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <XamMacArch>x86_64</XamMacArch>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>      
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -202,6 +205,10 @@
     <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Mac.csproj">
       <Project>{17DCD218-2ED0-4E5E-B0F1-50970A5287AB}</Project>
       <Name>Tangerine.Common.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Kumquat\Kumquat.Mac.csproj">
+      <Project>{56D2F029-2E73-4CF9-80C7-6175A9DBCFFE}</Project>
+      <Name>Kumquat.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

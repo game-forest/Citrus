@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;__UNIFIED__; __MACOS__; MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile></DocumentationFile>
     <ConsolePause>false</ConsolePause>
     <Profiling>false</Profiling>
     <UseRefCounting>false</UseRefCounting>
@@ -32,7 +33,9 @@
     <EnablePackageSigning>false</EnablePackageSigning>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LinkMode>None</LinkMode>
+    <WarningsNotAsErrors></WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -45,12 +48,16 @@
     <UseSGen>false</UseSGen>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <CreatePackage>false</CreatePackage>
-    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>__UNIFIED__; __MACOS__; MAC</DefineConstants>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LinkMode>None</LinkMode>
+    <LinkMode>None</LinkMode>
+    <WarningsNotAsErrors></WarningsNotAsErrors>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.SubpixelText|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -63,7 +70,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <UseSGen>false</UseSGen>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.SubpixelText|AnyCPU'">
     <OutputPath>bin\Release.SubpixelText\</OutputPath>
@@ -76,7 +86,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <UseSGen>false</UseSGen>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
+    <RunWithWarnings>true</RunWithWarnings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -88,7 +101,6 @@
     <Compile Include="CharCache.cs" />
     <Compile Include="DynamicFont.cs" />
     <Compile Include="FontRenderer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharpFont\AutoHinterScript.cs" />
     <Compile Include="SharpFont\BBox.cs" />
     <Compile Include="SharpFont\BitmapGlyph.cs" />
@@ -318,5 +330,8 @@
       <Link>libfreetype-6.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

@@ -11,8 +11,8 @@
     <RootNamespace>Orange.GUI</RootNamespace>
     <AssemblyName>Orange.GUI</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,13 +32,14 @@
     <Profiling>true</Profiling>
     <PlatformTarget>x86</PlatformTarget>
     <HttpClientHandler></HttpClientHandler>
-    <LinkMode></LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>x86_64</XamMacArch>
-    <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+    <I18n>west</I18n>
     <I18n>west</I18n>
     <EnableSGenConc>true</EnableSGenConc>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <CodeSignProvision></CodeSignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType></DebugType>
@@ -60,7 +61,9 @@
     <I18n>west</I18n>
     <MonoBundlingExtraArgs>--registrar:dynamic</MonoBundlingExtraArgs>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <UseHardenedRuntime>false</UseHardenedRuntime>
+    <RunWithWarnings>true</RunWithWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +81,9 @@
     <LinkMode>None</LinkMode>
     <XamMacArch></XamMacArch>
     <AOTMode>None</AOTMode>
+    <IntermediateOutputPath></IntermediateOutputPath>
+    <CodeSignProvision></CodeSignProvision>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -90,6 +96,11 @@
     <LinkMode>None</LinkMode>
     <XamMacArch></XamMacArch>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>    
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -46,7 +46,6 @@ namespace Orange
 		{
 #if WIN
 			return Process.Start("dotnet", args);
-			return Process.Start(nugetPath, args);
 #elif MAC
 			return Process.Start(monoPath, $"{nugetPath} {args}");
 #endif

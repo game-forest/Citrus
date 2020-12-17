@@ -28,7 +28,8 @@
     <MtouchProfiling>true</MtouchProfiling>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>9.0</LangVersion>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -45,7 +46,8 @@
     <MtouchProfiling>true</MtouchProfiling>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>9.0</LangVersion>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>
@@ -60,7 +62,8 @@
     <DebugSymbols>false</DebugSymbols>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>9.0</LangVersion>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU' ">
     <DebugType>
@@ -75,7 +78,8 @@
     <DebugSymbols>false</DebugSymbols>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>9.0</LangVersion>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

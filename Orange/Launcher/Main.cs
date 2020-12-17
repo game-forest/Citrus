@@ -305,7 +305,7 @@ namespace Launcher
 #endif // WIN
 					CitrusVersion citrusVersion = null;
 					using (var stream = File.Open(Path.Combine(citrusDirectory, Orange.CitrusVersion.Filename), FileMode.Open)) {
-						citrusVersion = CitrusVersion.Load(stream);
+						citrusVersion =	 CitrusVersion.Load(stream);
 						citrusVersion.IsStandalone = true;
 						citrusVersion.BuildNumber = buildNumberOption.ParsedValue;
 						// TODO: fill in checksums for each file?
