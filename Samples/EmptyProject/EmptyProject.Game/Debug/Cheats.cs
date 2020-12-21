@@ -63,10 +63,10 @@ namespace EmptyProject.Debug
 			return Enabled && Input.IsTouching(0) && Input.IsTouching(1) && Input.IsTouching(2);
 		}
 
-		public static void ShowMenu()
+		public static RainbowDash.Menu ShowMenu()
 		{
 			if (currentMenu != null) {
-				return;
+				return currentMenu;
 			}
 
 			var menu = new RainbowDash.Menu(The.World, Layers.CheatsMenu);
@@ -81,6 +81,7 @@ namespace EmptyProject.Debug
 			menu.Hidden += () => {
 				currentMenu = null;
 			};
+			return menu;
 		}
 
 		private static void InitialFill(RainbowDash.Menu menu)
@@ -113,6 +114,7 @@ namespace EmptyProject.Debug
 				}
 			});
 #endif // PROFILER
+			RemoteScripting.FillDebugMenuItems(menu);
 		}
 
 #if PROFILER

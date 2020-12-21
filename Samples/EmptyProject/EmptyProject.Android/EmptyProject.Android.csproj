@@ -74,6 +74,9 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RemoteScripting">
+      <HintPath>..\..\..\Lime\Extensions\RemoteScripting\RemoteScripting.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
     <Reference Include="System.Core" />

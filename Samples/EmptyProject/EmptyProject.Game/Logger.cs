@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace EmptyProject
 {
@@ -11,7 +11,8 @@ namespace EmptyProject
 			Info    = 2,
 			Warning = 3,
 			Error   = 4,
-			Fatal   = 5
+			Fatal   = 5,
+			Script  = 6,
 		}
 
 		public static readonly Logger Instance;
@@ -69,6 +70,11 @@ namespace EmptyProject
 		{
 			var exp = exception?.Message ?? "null exception";
 			Write(Level.Fatal, "{0} :: {1}", message, exp);
+		}
+
+		public void Script(string message, params object[] param)
+		{
+			Write(Level.Script, message, param);
 		}
 
 		#endregion
