@@ -51,6 +51,7 @@ namespace Tangerine.Core
 		public DateTime LastWriteTime { get; private set; }
 		public bool Loaded { get; private set; } = true;
 		public bool SlowMotion { get; set; }
+		public bool ShowAnimators { get; set; }
 
 		public static event Action<Document> AttachingViews;
 		public static event Action<Document, string> ShowingWarning;
@@ -149,6 +150,7 @@ namespace Tangerine.Core
 				{
 					var animation = Animation;
 					sceneTree.Expandable = false;
+					sceneTree.HasAnimators = false;
 					var containerSceneItem = GetSceneItemForObject(Container);
 					var expanded = sceneTree.Expanded || sceneTree == containerSceneItem;
 					foreach (var i in sceneTree.Rows) {
@@ -158,8 +160,9 @@ namespace Tangerine.Core
 								!animator.IsZombie && animator.AnimationId == animation.Id &&
 								(animator.Owner as Node)?.Parent == Container
 							) {
-								sceneTree.Expandable = true;
-								if (expanded) {
+								sceneTree.HasAnimators = true;
+								sceneTree.Expandable |= (ShowAnimators || sceneTree.ShowAnimators);
+								if (sceneTree.Expanded && (ShowAnimators || sceneTree.ShowAnimators)) {
 									cachedVisibleSceneItems.Add(i);
 								}
 							}

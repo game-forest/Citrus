@@ -312,12 +312,14 @@ namespace Tangerine.UI.Timeline
 			Node = node;
 			if (!options.Minimalistic) {
 				var enterButton = NodeCompositionValidator.CanHaveChildren(node.GetType()) ? CreateEnterButton() : null;
+				var showAnimatorsButton = CreateShowAnimatorsButton();
 				var eyeButton = CreateEyeButton();
 				var lockButton = CreateLockButton();
 				var lockAnimationButton = CreateLockAnimationButton();
 				LinkIndicatorButtonContainer = new LinkIndicatorButtonContainer();
 				Widget.Nodes.Add(LinkIndicatorButtonContainer.Container);
 				Widget.Nodes.Add((Widget) enterButton ?? Spacer.HSpacer(Theme.Metrics.DefaultToolbarButtonSize.X));
+				Widget.Nodes.Add(showAnimatorsButton);
 				Widget.Nodes.Add(lockAnimationButton);
 				Widget.Nodes.Add(eyeButton);
 				Widget.Nodes.Add(lockButton);
@@ -399,6 +401,42 @@ namespace Tangerine.UI.Timeline
 				Highlightable = false
 			};
 			button.AddTransactionClickHandler(() => EnterNode.Perform(Node));
+			button.Components.Add(new DisableAncestralGesturesComponent());
+			return button;
+		}
+
+		private ToolbarButton CreateShowAnimatorsButton()
+		{
+			var button = new ToolbarButton {
+				Highlightable = false,
+				Texture = IconPool.GetTexture("Timeline.Animator")
+			};
+			button.AddChangeWatcher(
+				() => (SceneItem.HasAnimators, Document.Current.ShowAnimators),
+				i => button.Enabled = SceneItem.HasAnimators && !Document.Current.ShowAnimators
+			);
+			button.AddChangeWatcher(
+				() => (SceneItem.ShowAnimators, Document.Current.ShowAnimators),
+				i => button.Checked = SceneItem.ShowAnimators || Document.Current.ShowAnimators
+			);
+			button.AddTransactionClickHandler(
+				() => {
+					var nodes = Document.Current.SelectedRows()
+						.Select(i => i.GetNode())
+						.Where(i => i != null).ToList();
+					var showAnimators = !SceneItem.ShowAnimators;
+					if (!nodes.Contains(Node)) {
+						nodes.Clear();
+						nodes.Add(Node);
+					}
+					foreach (var n in nodes) {
+						SetProperty.Perform(SceneItem, nameof(Row.ShowAnimators), showAnimators);
+						if (showAnimators) {
+							SetProperty.Perform(SceneItem, nameof(Row.Expanded), true);
+						}
+					}
+				}
+			);
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}

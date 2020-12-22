@@ -31,6 +31,7 @@ namespace Tangerine.UI.Timeline
 					CreateAnimationIndicator(),
 					new Widget(),
 					CreateExitButton(),
+					CreateShowAnimatorsButton(),
 					CreateLockAnimationButton(),
 					CreateEyeButton(),
 					CreateLockButton(),
@@ -90,6 +91,17 @@ namespace Tangerine.UI.Timeline
 			});
 			button.Components.Add(new DocumentationComponent("CreateFolder"));
 			button.AddChangeWatcher(() => Document.Current.Animation.IsCompound, v => button.Visible = !v);
+			return button;
+		}
+
+		ToolbarButton CreateShowAnimatorsButton()
+		{
+			var button = new ToolbarButton(IconPool.GetTexture("Timeline.Animator")) { Tooltip = "Show Animators" };
+			button.AddTransactionClickHandler(() => {
+				SetProperty.Perform(Document.Current, nameof(Document.ShowAnimators), !Document.Current.ShowAnimators);
+			});
+			button.AddChangeWatcher(() => Document.Current.ShowAnimators, v => button.Checked = v);
+			button.Components.Add(new DocumentationComponent("ShowAnimators"));
 			return button;
 		}
 

@@ -18,6 +18,10 @@ namespace Tangerine.Core
 
 		public bool Expanded { get; set; }
 
+		public bool ShowAnimators { get; set; }
+
+		public bool HasAnimators { get; set; }
+
 		public bool Selected
 		{
 			get => SelectionOrder > 0;
