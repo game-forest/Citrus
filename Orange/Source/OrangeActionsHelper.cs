@@ -1,29 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
+using System.Threading.Tasks;
 using Lime;
+using Tangerine.Core;
 
 namespace Orange.Source
 {
 	public static class OrangeActionsHelper
 	{
-		public static bool ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd,
-			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
+		public static bool ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd)
 		{
-			IEnumerator<object> enumerator = ExecuteOrangeAction(action, onBegin, onEnd, onCreateOrNotAsynchTask);
-			while (enumerator.MoveNext()) {
-				if (enumerator.Current is bool flag) {
-					if (!flag) {
-						return false;
-					}
-				}
-				Thread.Yield();
-			}
-			return true;
+			var task = ExecuteOrangeAction(action, onBegin, onEnd, false);
+			task.Wait();
+			return task.Result;
 		}
 
-		public static IEnumerator<object> ExecuteOrangeAction(Func<string> action, Action onBegin, Action onEnd,
-			Func<Action, IEnumerator<object>> onCreateOrNotAsynchTask)
+		public static async Task<bool> ExecuteOrangeAction(
+			Func<string> action, Action onBegin, Action onEnd, bool background
+		)
 		{
 			var startTime = DateTime.Now;
 			onBegin();
@@ -31,11 +24,13 @@ namespace Orange.Source
 			bool hasError = false;
 			try {
 				executionResult = "Done.";
-				Action mainAction = () => {
+
+				void MainAction()
+				{
 					var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
 					AssetBundle bundle = null;
 					if (Workspace.Instance.AssetsDirectory != null) {
-						bundle = new Tangerine.Core.TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
+						bundle = new TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
 						AssetBundle.SetCurrent(bundle, resetTexturePool: false);
 					}
 					try {
@@ -53,20 +48,19 @@ namespace Orange.Source
 							AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
 						}
 					}
-				};
-				if (onCreateOrNotAsynchTask != null) {
-					yield return onCreateOrNotAsynchTask(mainAction);
+				}
+
+				if (background) {
+					await System.Threading.Tasks.Task.Run(MainAction);
 				} else {
-					mainAction();
+					MainAction();
 				}
 			} finally {
 				Console.WriteLine(executionResult);
 				Console.WriteLine(@"Elapsed time {0:hh\:mm\:ss}", DateTime.Now - startTime);
 				onEnd();
 			}
-			if (hasError) {
-				yield return false;
-			}
+			return !hasError;
 		}
 
 		private static string SafeExecuteWithErrorDetails(Func<string> action)

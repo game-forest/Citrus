@@ -74,7 +74,7 @@ namespace Orange
 			}
 
 			if (!OrangeActionsHelper.ExecuteOrangeActionInstantly(
-				commandObj.Action, () => { }, () => { }, null
+				commandObj.Action, () => { }, () => { }
 			)) {
 				throw new TerminateException(1);
 			}
