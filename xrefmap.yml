@@ -39111,6 +39111,51 @@ references:
   commentId: T:Lime.Model3D
   fullName: Lime.Model3D
   nameWithType: Model3D
+- uid: Lime.Model3D.MeshContentPath
+  name: MeshContentPath
+  href: api/Lime.Model3D.html#Lime_Model3D_MeshContentPath
+  commentId: P:Lime.Model3D.MeshContentPath
+  fullName: Lime.Model3D.MeshContentPath
+  nameWithType: Model3D.MeshContentPath
+- uid: Lime.Model3D.MeshContentPath*
+  name: MeshContentPath
+  href: api/Lime.Model3D.html#Lime_Model3D_MeshContentPath_
+  commentId: Overload:Lime.Model3D.MeshContentPath
+  isSpec: "True"
+  fullName: Lime.Model3D.MeshContentPath
+  nameWithType: Model3D.MeshContentPath
+- uid: Lime.Model3D.MeshData
+  name: Model3D.MeshData
+  href: api/Lime.Model3D.MeshData.html
+  commentId: T:Lime.Model3D.MeshData
+  fullName: Lime.Model3D.MeshData
+  nameWithType: Model3D.MeshData
+- uid: Lime.Model3D.MeshData.Load(System.String)
+  name: Load(String)
+  href: api/Lime.Model3D.MeshData.html#Lime_Model3D_MeshData_Load_System_String_
+  commentId: M:Lime.Model3D.MeshData.Load(System.String)
+  fullName: Lime.Model3D.MeshData.Load(System.String)
+  nameWithType: Model3D.MeshData.Load(String)
+- uid: Lime.Model3D.MeshData.Load*
+  name: Load
+  href: api/Lime.Model3D.MeshData.html#Lime_Model3D_MeshData_Load_
+  commentId: Overload:Lime.Model3D.MeshData.Load
+  isSpec: "True"
+  fullName: Lime.Model3D.MeshData.Load
+  nameWithType: Model3D.MeshData.Load
+- uid: Lime.Model3D.MeshData.Meshes
+  name: Meshes
+  href: api/Lime.Model3D.MeshData.html#Lime_Model3D_MeshData_Meshes
+  commentId: P:Lime.Model3D.MeshData.Meshes
+  fullName: Lime.Model3D.MeshData.Meshes
+  nameWithType: Model3D.MeshData.Meshes
+- uid: Lime.Model3D.MeshData.Meshes*
+  name: Meshes
+  href: api/Lime.Model3D.MeshData.html#Lime_Model3D_MeshData_Meshes_
+  commentId: Overload:Lime.Model3D.MeshData.Meshes
+  isSpec: "True"
+  fullName: Lime.Model3D.MeshData.Meshes
+  nameWithType: Model3D.MeshData.Meshes
 - uid: Lime.Model3D.OnAfterDeserialization
   name: OnAfterDeserialization()
   href: api/Lime.Model3D.html#Lime_Model3D_OnAfterDeserialization
@@ -72275,6 +72320,68 @@ references:
   commentId: F:Lime.WaveType.Sinusoidal
   fullName: Lime.WaveType.Sinusoidal
   nameWithType: WaveType.Sinusoidal
+- uid: Lime.WeakReferencePool`2
+  name: WeakReferencePool<TKey, TValue>
+  href: api/Lime.WeakReferencePool-2.html
+  commentId: T:Lime.WeakReferencePool`2
+  name.vb: WeakReferencePool(Of TKey, TValue)
+  fullName: Lime.WeakReferencePool<TKey, TValue>
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue)
+  nameWithType: WeakReferencePool<TKey, TValue>
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue)
+- uid: Lime.WeakReferencePool`2.#ctor(Lime.WeakReferencePool{`0,`1}.CreateItemDelegate)
+  name: WeakReferencePool(WeakReferencePool<TKey, TValue>.CreateItemDelegate)
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2__ctor_Lime_WeakReferencePool__0__1__CreateItemDelegate_
+  commentId: M:Lime.WeakReferencePool`2.#ctor(Lime.WeakReferencePool{`0,`1}.CreateItemDelegate)
+  name.vb: WeakReferencePool(WeakReferencePool(Of TKey, TValue).CreateItemDelegate)
+  fullName: Lime.WeakReferencePool<TKey, TValue>.WeakReferencePool(Lime.WeakReferencePool<TKey, TValue>.CreateItemDelegate)
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).WeakReferencePool(Lime.WeakReferencePool(Of TKey, TValue).CreateItemDelegate)
+  nameWithType: WeakReferencePool<TKey, TValue>.WeakReferencePool(WeakReferencePool<TKey, TValue>.CreateItemDelegate)
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).WeakReferencePool(WeakReferencePool(Of TKey, TValue).CreateItemDelegate)
+- uid: Lime.WeakReferencePool`2.#ctor(Lime.WeakReferencePool{`0,`1}.CreateItemDelegate,System.Collections.Generic.IEqualityComparer{`0},System.Boolean)
+  name: WeakReferencePool(WeakReferencePool<TKey, TValue>.CreateItemDelegate, IEqualityComparer<TKey>, Boolean)
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2__ctor_Lime_WeakReferencePool__0__1__CreateItemDelegate_System_Collections_Generic_IEqualityComparer__0__System_Boolean_
+  commentId: M:Lime.WeakReferencePool`2.#ctor(Lime.WeakReferencePool{`0,`1}.CreateItemDelegate,System.Collections.Generic.IEqualityComparer{`0},System.Boolean)
+  name.vb: WeakReferencePool(WeakReferencePool(Of TKey, TValue).CreateItemDelegate, IEqualityComparer(Of TKey), Boolean)
+  fullName: Lime.WeakReferencePool<TKey, TValue>.WeakReferencePool(Lime.WeakReferencePool<TKey, TValue>.CreateItemDelegate, System.Collections.Generic.IEqualityComparer<TKey>, System.Boolean)
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).WeakReferencePool(Lime.WeakReferencePool(Of TKey, TValue).CreateItemDelegate, System.Collections.Generic.IEqualityComparer(Of TKey), System.Boolean)
+  nameWithType: WeakReferencePool<TKey, TValue>.WeakReferencePool(WeakReferencePool<TKey, TValue>.CreateItemDelegate, IEqualityComparer<TKey>, Boolean)
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).WeakReferencePool(WeakReferencePool(Of TKey, TValue).CreateItemDelegate, IEqualityComparer(Of TKey), Boolean)
+- uid: Lime.WeakReferencePool`2.#ctor*
+  name: WeakReferencePool
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2__ctor_
+  commentId: Overload:Lime.WeakReferencePool`2.#ctor
+  isSpec: "True"
+  fullName: Lime.WeakReferencePool<TKey, TValue>.WeakReferencePool
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).WeakReferencePool
+  nameWithType: WeakReferencePool<TKey, TValue>.WeakReferencePool
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).WeakReferencePool
+- uid: Lime.WeakReferencePool`2.CreateItemDelegate
+  name: WeakReferencePool<TKey, TValue>.CreateItemDelegate
+  href: api/Lime.WeakReferencePool-2.CreateItemDelegate.html
+  commentId: T:Lime.WeakReferencePool`2.CreateItemDelegate
+  name.vb: WeakReferencePool(Of TKey, TValue).CreateItemDelegate
+  fullName: Lime.WeakReferencePool<TKey, TValue>.CreateItemDelegate
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).CreateItemDelegate
+  nameWithType: WeakReferencePool<TKey, TValue>.CreateItemDelegate
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).CreateItemDelegate
+- uid: Lime.WeakReferencePool`2.GetItem(`0)
+  name: GetItem(TKey)
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2_GetItem__0_
+  commentId: M:Lime.WeakReferencePool`2.GetItem(`0)
+  fullName: Lime.WeakReferencePool<TKey, TValue>.GetItem(TKey)
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).GetItem(TKey)
+  nameWithType: WeakReferencePool<TKey, TValue>.GetItem(TKey)
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).GetItem(TKey)
+- uid: Lime.WeakReferencePool`2.GetItem*
+  name: GetItem
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2_GetItem_
+  commentId: Overload:Lime.WeakReferencePool`2.GetItem
+  isSpec: "True"
+  fullName: Lime.WeakReferencePool<TKey, TValue>.GetItem
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).GetItem
+  nameWithType: WeakReferencePool<TKey, TValue>.GetItem
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).GetItem
 - uid: Lime.WebBrowser
   name: WebBrowser
   href: api/Lime.WebBrowser.html
@@ -77958,6 +78065,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Model3D
   nameWithType: LimeCloner.Clone_Lime__Model3D
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Model3D__MeshData(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__Model3D__MeshData(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Model3D__MeshData_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__Model3D__MeshData(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Model3D__MeshData(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__Model3D__MeshData(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__Model3D__MeshData*
+  name: Clone_Lime__Model3D__MeshData
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Model3D__MeshData_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__Model3D__MeshData
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Model3D__MeshData
+  nameWithType: LimeCloner.Clone_Lime__Model3D__MeshData
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__Model3DAttachment__MaterialRemap(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__Model3DAttachment__MaterialRemap(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Model3DAttachment__MaterialRemap_Yuzu_Clone_Cloner_System_Object_

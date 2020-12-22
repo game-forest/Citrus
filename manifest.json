@@ -4490,11 +4490,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Model3D.MeshData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Model3D.MeshData.html",
+          "hash": "Byoa9oAkkfQMYuc50gJNSg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.Model3D.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.Model3D.html",
-          "hash": "UXgrfsX40Vil7HrCYw19ag=="
+          "hash": "PjMp++MFEV+mGX64olW6Dg=="
         }
       },
       "is_incremental": false,
@@ -8942,6 +8954,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.WeakReferencePool-2.CreateItemDelegate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.WeakReferencePool-2.CreateItemDelegate.html",
+          "hash": "yHh0mBSHiYhs3vJYhZiUAg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.WeakReferencePool-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.WeakReferencePool-2.html",
+          "hash": "gu491vVRVruy0nPjbmM0ng=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.WebBrowser.yml",
       "output": {
         ".html": {
@@ -9234,7 +9270,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "4TDg6WKHZjKNhvaZVVQdiA=="
+          "hash": "bv0OQOgRhVLJQCrBRLugWw=="
         }
       },
       "is_incremental": false,
@@ -9246,7 +9282,7 @@
       "output": {
         ".html": {
           "relative_path": "api/YuzuGenerated.LimeCloner.html",
-          "hash": "14h/E8FILXoG87BMdkmsGg=="
+          "hash": "e40t1o/EKfixcI/AbeQ84g=="
         }
       },
       "is_incremental": false,
@@ -9282,7 +9318,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "y5bYILx5mpYjiugSg1867g=="
+          "hash": "Ep8vB4OJFuesV+PHHimR5A=="
         }
       },
       "is_incremental": false,
@@ -11490,7 +11526,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 772,
+          "total_file_count": 775,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
