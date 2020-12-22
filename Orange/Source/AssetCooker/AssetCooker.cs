@@ -368,8 +368,7 @@ namespace Orange
 		{
 			foreach (var path in OutputBundle.EnumerateFiles().ToList()) {
 				if (path.EndsWith(".ant") && path.StartsWith(pathPrefix)) {
-					OutputBundle.DeleteFile(path);
-					Console.WriteLine("- " + path);
+					DeleteFileFromBundle(path);
 				}
 			}
 		}
@@ -377,6 +376,11 @@ namespace Orange
 		public static string GetModelAnimationPathPrefix(string modelPath)
 		{
 			return Toolbox.ToUnixSlashes(Path.GetDirectoryName(modelPath) + "/" + Path.GetFileNameWithoutExtension(modelPath) + "@");
+		}
+
+		public static string GetModelExternalMeshPath(string modelPath)
+		{
+			return Toolbox.ToUnixSlashes(Path.GetDirectoryName(modelPath) + "/" + Path.GetFileNameWithoutExtension(modelPath)) + ".msh";
 		}
 
 		public static void CancelCook()

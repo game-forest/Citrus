@@ -5599,6 +5599,11 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (9 == fd.OurIndex) {
+				result.MeshContentPath = d.Reader.ReadString();
+				if (result.MeshContentPath == "" && d.Reader.ReadBoolean()) result.MeshContentPath = null;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (10 == fd.OurIndex) {
 				var tmp10 = d.Reader.ReadInt32();
 				if (tmp10 >= 0) {
 					while (--tmp10 >= 0) {
@@ -5608,11 +5613,11 @@ namespace YuzuGenerated
 				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (10 == fd.OurIndex) {
+			if (11 == fd.OurIndex) {
 				result.Opaque = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (11 == fd.OurIndex) {
+			if (12 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector3));
 				var tmp12 = new global::Lime.Vector3();
 				tmp12.X = d.Reader.ReadSingle();
@@ -5621,7 +5626,7 @@ namespace YuzuGenerated
 				result.Position = tmp12;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (12 == fd.OurIndex) {
+			if (13 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Quaternion));
 				var tmp13 = new global::Lime.Quaternion();
 				tmp13.X = d.Reader.ReadSingle();
@@ -5631,7 +5636,7 @@ namespace YuzuGenerated
 				result.Rotation = tmp13;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (13 == fd.OurIndex) {
+			if (14 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector3));
 				var tmp14 = new global::Lime.Vector3();
 				tmp14.X = d.Reader.ReadSingle();
@@ -5640,16 +5645,16 @@ namespace YuzuGenerated
 				result.Scale = tmp14;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (14 == fd.OurIndex) {
+			if (15 == fd.OurIndex) {
 				result.Tag = d.Reader.ReadString();
 				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (15 == fd.OurIndex) {
+			if (16 == fd.OurIndex) {
 				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (16 == fd.OurIndex) {
+			if (17 == fd.OurIndex) {
 				result.Visible = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
@@ -5661,6 +5666,32 @@ namespace YuzuGenerated
 		{
 			var result = new global::Lime.Model3D();
 			Read_Lime__Model3D(d, def, result);
+			return result;
+		}
+
+		private static void Read_Lime__Model3D__MeshData(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.Model3D.MeshData)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				var tmp1 = d.Reader.ReadInt32();
+				if (tmp1 >= 0) {
+					while (--tmp1 >= 0) {
+						var tmp2 = (global::Lime.Mesh<global::Lime.Mesh3D.Vertex>)dg.ReadObject<global::Lime.Mesh<global::Lime.Mesh3D.Vertex>>();
+						result.Meshes.Add(tmp2);
+					}
+				}
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__Model3D__MeshData(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.Model3D.MeshData();
+			Read_Lime__Model3D__MeshData(d, def, result);
 			return result;
 		}
 
@@ -11861,6 +11892,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.Mesh<global::Lime.Mesh3D.Vertex>)] = Read_Lime__Mesh_Mesh3D__Vertex;
 			readCache[typeof(global::Lime.Mesh3D)] = Read_Lime__Mesh3D;
 			readCache[typeof(global::Lime.Model3D)] = Read_Lime__Model3D;
+			readCache[typeof(global::Lime.Model3D.MeshData)] = Read_Lime__Model3D__MeshData;
 			readCache[typeof(global::Lime.Model3DAttachment.MaterialRemap)] = Read_Lime__Model3DAttachment__MaterialRemap;
 			readCache[typeof(global::Lime.Model3DAttachmentParser.MeshOptionFormat)] = Read_Lime__Model3DAttachmentParser__MeshOptionFormat;
 			readCache[typeof(global::Lime.Model3DAttachmentParser.ModelAnimationFormat)] = Read_Lime__Model3DAttachmentParser__ModelAnimationFormat;
@@ -12069,6 +12101,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.Mesh3D.BlendWeights)] = Make_Lime__Mesh3D__BlendWeights;
 			makeCache[typeof(global::Lime.Mesh3D.Vertex)] = Make_Lime__Mesh3D__Vertex;
 			makeCache[typeof(global::Lime.Model3D)] = Make_Lime__Model3D;
+			makeCache[typeof(global::Lime.Model3D.MeshData)] = Make_Lime__Model3D__MeshData;
 			makeCache[typeof(global::Lime.Model3DAttachment.MaterialRemap)] = Make_Lime__Model3DAttachment__MaterialRemap;
 			makeCache[typeof(global::Lime.Model3DAttachmentParser.MeshOptionFormat)] = Make_Lime__Model3DAttachmentParser__MeshOptionFormat;
 			makeCache[typeof(global::Lime.Model3DAttachmentParser.ModelAnimationFormat)] = Make_Lime__Model3DAttachmentParser__ModelAnimationFormat;
