@@ -89,6 +89,9 @@ namespace Tangerine.UI.Timeline
 				if (SceneItem.TryGetFolder(out _)) {
 					return IconPool.GetTexture("Tools.NewFolder");
 				}
+				if (SceneItem.TryGetAnimator(out _)) {
+					return IconPool.GetTexture("Timeline.Animator");
+				}
 				return IconPool.GetTexture("Nodes.Unknown");
 			}
 			set => throw new NotSupportedException();

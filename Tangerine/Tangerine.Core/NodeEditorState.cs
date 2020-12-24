@@ -31,7 +31,13 @@ namespace Tangerine.Core
 				node.SetTangerineFlag(TangerineFlags.Hidden, value == NodeVisibility.Hidden);
 			}
 		}
-		public bool Locked { get { return node.GetTangerineFlag(TangerineFlags.Locked); } set { node.SetTangerineFlag(TangerineFlags.Locked, value); } }
+
+		public bool Locked
+		{
+			get => node.GetTangerineFlag(TangerineFlags.Locked);
+			set => node.SetTangerineFlag(TangerineFlags.Locked, value);
+		}
+
 		public int ColorIndex
 		{
 			get
