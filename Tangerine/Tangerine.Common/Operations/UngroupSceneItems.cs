@@ -34,7 +34,9 @@ namespace Tangerine.Common.Operations
 					var localToParentTransform = group.CalcLocalToParentTransform();
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);
-						LinkSceneItem.Perform(containerItem, index++, i);
+						if (LinkSceneItem.CanLink(containerItem, i)) {
+							LinkSceneItem.Perform(containerItem, index++, i);
+						}
 						result.Add(i);
 					}
 					var flipXFactor = group.Scale.X < 0 ? -1 : 1;
