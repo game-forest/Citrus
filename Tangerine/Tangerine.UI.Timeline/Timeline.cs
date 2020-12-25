@@ -308,15 +308,15 @@ namespace Tangerine.UI.Timeline
 
 		public void EnsureRowVisible(Row row)
 		{
-			var gw = row.GridWidget();
-			if (gw == null) {
-				return;
+			// Make sure any Row.Index is in order.
+			_ = Document.Current.Rows;
+			var top = row.Index * TimelineMetrics.DefaultRowHeight;
+			var bottom = top + TimelineMetrics.DefaultRowHeight;
+			if (bottom > Offset.Y + Roll.RootWidget.Height) {
+				OffsetY = bottom - Roll.RootWidget.Height;
 			}
-			if (gw.Bottom() > Offset.Y + Roll.RootWidget.Height) {
-				OffsetY = gw.Bottom() - Roll.RootWidget.Height;
-			}
-			if (gw.Top() < Offset.Y) {
-				OffsetY = Math.Max(0, gw.Y);
+			if (top < Offset.Y) {
+				OffsetY = Math.Max(0, top);
 			}
 		}
 	}
