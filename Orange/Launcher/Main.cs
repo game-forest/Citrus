@@ -6,6 +6,7 @@ using System.Linq;
 using Octokit;
 using Orange;
 using FileMode = System.IO.FileMode;
+using System.Runtime.CompilerServices;
 #if WIN
 using System.Runtime.InteropServices;
 #elif MAC
@@ -111,7 +112,6 @@ namespace Launcher
 #elif MAC
 			Path.Combine(OrangeDirectory, "Orange.Mac.sln");
 #endif // WIN
-
 		private static string OrangeExecutablePath =>
 #if WIN
 			Path.Combine(OrangeDirectory, @"bin\Win\Release\Orange.GUI.exe");
@@ -120,12 +120,14 @@ namespace Launcher
 #endif // WIN
 		private static string OrangeDirectory { get { return Path.Combine(citrusDirectory, "Orange"); } }
 
-		private static readonly string citrusDirectory = Toolbox.FindCitrusDirectory();
-
+		private static string citrusDirectory;
+#if WIN
 		[STAThread]
+#endif
 		public static int Main(string[] args)
 		{
 			var originalArgs = args;
+			citrusDirectory = Toolbox.FindCitrusDirectory();
 #if MAC
 			args = args.Where(s => !s.StartsWith("-psn")).ToArray();
 			// Workaround see LauncherConsole.

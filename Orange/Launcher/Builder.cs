@@ -48,11 +48,13 @@ namespace Launcher
 		private void SynchronizeAllProjects()
 		{
 			var csprojSyncList = Path.Combine(citrusDirectory, "Orange", "Launcher", "csproj_sync_list.txt");
-			using var stream = File.OpenRead(csprojSyncList);
-			using var reader = new StreamReader(stream);
-			string line = null;
-			while ((line = reader.ReadLine()) != null) {
-				Sync(line);
+			using (var stream = File.OpenRead(csprojSyncList)) {
+				using (var reader = new StreamReader(stream)) {
+					string line = null;
+					while ((line = reader.ReadLine ()) != null) {
+						Sync (line);
+					}
+				}
 			}
 
 			void Sync(string csprojPath) => Orange.CsprojSynchronization.SynchronizeProject(citrusDirectory + "/" + csprojPath);
