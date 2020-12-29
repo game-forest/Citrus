@@ -8,7 +8,7 @@ windows_test:
   - win
   script:
   - chcp 65001
-  - dotnet test Tests/bin/Debug/Citrus.Tests.dll
+  - dotnet test Tests/Tests.sln
 
 windows_build:
   stage: build
