@@ -93,13 +93,12 @@ namespace Lime
 
 		private bool ShowFolderBrowserDialog()
 		{
-			using (var folderBrowserDialog = new WinForms.OpenFileDialog()) {//CommonOpenFileDialog()) {
-				//folderBrowserDialog.IsFolderPicker = true;
+			using (var folderBrowserDialog = new WinForms.FolderBrowserDialog()) {
 				if (InitialDirectory != null) {
-					folderBrowserDialog.InitialDirectory = InitialDirectory;
+					folderBrowserDialog.SelectedPath = InitialDirectory;
 				}
-				if (folderBrowserDialog.ShowDialog() == WinForms.DialogResult.OK) {//CommonFileDialogResult.Ok) {
-					FileName = folderBrowserDialog.FileName;
+				if (folderBrowserDialog.ShowDialog() == WinForms.DialogResult.OK) {
+					FileName = folderBrowserDialog.SelectedPath;
 					FileNames = new[] { FileName };
 					return true;
 				}
