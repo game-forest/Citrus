@@ -133,7 +133,8 @@
     <AOTMode>None</AOTMode>
     <LangVersion>8.0</LangVersion>
     <EnableSGenConc>false</EnableSGenConc>
-    <WarningsNotAsErrors></WarningsNotAsErrors>
+    <WarningsNotAsErrors>
+    </WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>True</Optimize>
@@ -178,6 +179,7 @@
     <PackageReference Include="FluentFTP">
       <Version>33.0.3</Version>
     </PackageReference>
+    <Compile Include="Source\Builder\Dotnet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

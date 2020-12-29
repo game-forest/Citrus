@@ -19,7 +19,8 @@ namespace Orange
 		{
 			this.target = target;
 #if WIN
-			buildSystem = new MSBuild(target);
+			buildSystem = target.Platform == TargetPlatform.Win ?
+				new Dotnet(target) : new MSBuild(target);
 #elif MAC
 			buildSystem = new MDTool(target);
 #else
