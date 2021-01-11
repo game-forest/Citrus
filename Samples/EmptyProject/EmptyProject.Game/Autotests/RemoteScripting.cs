@@ -203,6 +203,15 @@ namespace EmptyProject
 			}
 		}
 
+		public static void SendRemoteFile(string path, byte[] bytes)
+		{
+			var remoteFile = new RemoteFile {
+				Path = path,
+				Bytes = bytes,
+			};
+			instance.client.SendMessage(new NetworkRemoteFile(remoteFile));
+		}
+
 		private static void Disconnect()
 		{
 			if (instance != null) {
