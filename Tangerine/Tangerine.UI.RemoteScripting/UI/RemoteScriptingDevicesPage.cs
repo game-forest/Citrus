@@ -400,6 +400,29 @@ namespace Tangerine.UI.RemoteScripting
 								AppendApplicationOutput($"Can not send requested file: \"{fileRequest.Data.Path}\". File not found!");
 							}
 							break;
+						case NetworkMessageType.RemoteFile: {
+							var remoteFile = ((NetworkRemoteFile)message).Data;
+							if (remoteFile.Bytes == null) {
+								AppendApplicationOutput($"Remote file \"{remoteFile.Path}\" is empty.");
+							} else {
+								async void SaveFileAsync()
+								{
+									var filePath = Path.Combine(ProjectPreferences.Instance.RemoteStoragePath, remoteFile.Path);
+									try {
+										var directory = Path.GetDirectoryName(filePath);
+										Directory.CreateDirectory(directory);
+										using (var fileStream = File.OpenWrite(filePath)) {
+											await fileStream.WriteAsync(remoteFile.Bytes, 0, remoteFile.Bytes.Length);
+										}
+										AppendApplicationOutput($"Remote file \"{remoteFile.Path}\" was recieved.");
+									} catch (System.Exception exception) {
+										AppendApplicationOutput($"Unhandled extention while saving remote file \"{remoteFile.Path}\".\n{exception}");
+									}
+								}
+								SaveFileAsync();
+							}
+							break;
+						}
 						default:
 							throw new NotSupportedException($"Unknown message type: {message.MessageType}");
 					}
