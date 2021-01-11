@@ -13,7 +13,6 @@ namespace Orange
 	public static class NewProject
 	{
 		private static string newCitrusDirectory;
-		private static string targetDirectory;
 		private static string newProjectCitprojPath;
 
 		[Export(nameof(OrangePlugin.MenuItems))]
@@ -33,11 +32,10 @@ namespace Orange
 			Application.InvokeOnMainThread(() => {
 				var citrusPath = Toolbox.FindCitrusDirectory();
 				var dlg = new FileDialog {
-					AllowedFileTypes = new string[] { "" },
+					AllowedFileTypes = new [] { "" },
 					Mode = FileDialogMode.SelectFolder
 				};
 				if (dlg.RunModal()) {
-					targetDirectory = dlg.FileName;
 					newCitrusDirectory = Path.Combine(dlg.FileName, "Citrus");
 					var projectName = Path.GetFileName(dlg.FileName);
 					if (char.IsDigit(projectName[0])) {
@@ -50,7 +48,7 @@ namespace Orange
 					}
 					var newProjectApplicationName = String.Join(" ", Regex.Split(projectName, @"(?<!^)(?=[A-Z])"));
 					Console.WriteLine($"New project name is \"{projectName}\"");
-					HashSet<string> textfileExtensions = new HashSet<string> { ".cs", ".xml", ".csproj", ".sln", ".citproj", ".projitems", ".shproj", ".txt", ".plist", ".strings", ".gitignore", };
+					var textfileExtensions = new HashSet<string> { ".cs", ".xml", ".csproj", ".sln", ".citproj", ".projitems", ".shproj", ".txt", ".plist", ".strings", ".gitignore", };
 					using (var dc = new DirectoryChanger($"{citrusPath}/Samples/EmptyProject/")) {
 						var fe = new FileEnumerator(".");
 						foreach (var f in fe.Enumerate()) {
@@ -85,11 +83,8 @@ namespace Orange
 					Git.Exec(targetDirectory, "commit -m\"Initial commit.\"");
 #endif // WIN
 				}
-
 			});
-			if (projectOpened != null) {
-				projectOpened?.Invoke(newProjectCitprojPath);
-			}
+			projectOpened?.Invoke(newProjectCitprojPath);
 		}
 	}
 }
