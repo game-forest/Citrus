@@ -13,6 +13,7 @@ namespace Orange
 	public static class NewProject
 	{
 		private static string newCitrusDirectory;
+		private static string targetDirectory;
 		private static string newProjectCitprojPath;
 
 		[Export(nameof(OrangePlugin.MenuItems))]
@@ -36,6 +37,7 @@ namespace Orange
 					Mode = FileDialogMode.SelectFolder
 				};
 				if (dlg.RunModal()) {
+					targetDirectory = dlg.FileName;
 					newCitrusDirectory = Path.Combine(dlg.FileName, "Citrus");
 					var projectName = Path.GetFileName(dlg.FileName);
 					if (char.IsDigit(projectName[0])) {
