@@ -134,7 +134,7 @@ namespace Orange
 				return Process.Start(GetMacAppName(), string.Empty);
 			} else {
 				var args = "--sdkroot=/Applications/Xcode.app" + ' ' + "--installdev=" + GetIOSAppName();
-				int exitCode = Process.Start("/Developer/MonoTouch/usr/bin/mtouch", args);
+				int exitCode = Process.Start("/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch", args);
 				if (exitCode != 0) {
 					return exitCode;
 				}

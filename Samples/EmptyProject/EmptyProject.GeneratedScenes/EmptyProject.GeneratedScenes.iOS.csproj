@@ -29,7 +29,7 @@
     <IOSDebuggerPort>
     </IOSDebuggerPort>
     <CrashReportingDelay>-1</CrashReportingDelay>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
@@ -44,7 +44,7 @@
     <DefineConstants>iOS;NET40</DefineConstants>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
