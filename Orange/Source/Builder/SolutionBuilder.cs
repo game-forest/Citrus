@@ -214,8 +214,8 @@ namespace Orange
 				androidSdk = Path.Combine(appData, "Android", "android-sdk");
 				executable = Path.Combine(androidSdk, "platform-tools", "adb.exe");
 #elif MAC
-				// TODO: Find defualt sdk path on OSX and assign executable
-				androidSdk = "";
+				androidSdk = $"/Users/{Environment.UserName}/Library/Developer/Xamarin/android-sdk-macosx/";
+				executable = Path.Combine(androidSdk, "platform-tools", "adb");
 #endif
 			}
 
