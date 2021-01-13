@@ -270,9 +270,10 @@ namespace Tangerine.UI.SceneView
 				{
 					if (node is PointObject pointObject) {
 						var parent = pointObject.Parent.AsWidget;
-						var pos = pointObject.CalcPositionInSpaceOf(parent) * parent.LocalToWorldTransform;
+						var transform = parent.LocalToWorldTransform;
+						var position = pointObject.TransformedPosition;
 						var offset = new Vector2(PointObjectsPresenter.CornerOffset);
-						return new Rectangle(pos - offset, pos + offset);
+						return new Rectangle((position - offset) * transform, (position + offset) * transform);
 					}
 					if (node is Widget widget) {
 						var transform = widget.LocalToWorldTransform;
