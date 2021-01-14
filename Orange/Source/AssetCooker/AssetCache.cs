@@ -7,7 +7,7 @@ namespace Orange
 {
 	/// <summary>
 	/// Used to handle all operations with cache. Able to store data in local and remote cache and to load data from storage.
-	/// This class is not thread safe.	
+	/// This class is not thread safe.
 	/// </summary>
 	public class AssetCache
 	{
@@ -57,7 +57,21 @@ namespace Orange
 		/// <summary>
 		/// Asset cache mode used for current operation
 		/// </summary>
-		public AssetCacheMode Mode { get; private set; }
+		public AssetCacheMode Mode
+		{
+			get
+			{
+				if (Toolbox.GetCommandLineFlag("--disable-asset-cache")) {
+					Console.WriteLine("Asset cache disabled by command line flag '--disable-asset-cache'");
+					return AssetCacheMode.None;
+				} else {
+					return mode;
+				}
+			}
+			private set => mode = value;
+		}
+
+		private AssetCacheMode mode;
 
 		private bool IsLocalEnabled => (Mode & AssetCacheMode.Local) != 0;
 		private bool IsRemoteEnabled => (Mode & AssetCacheMode.Remote) != 0;
