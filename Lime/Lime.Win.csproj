@@ -10,6 +10,7 @@
     <Configurations>Debug;Release;Tangerine.Release;Tangerine.Debug;Profiler.Release;Profiler.Debug</Configurations>
     <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
     <DefineConstants>$(DefineConstants)WIN;OPENGL;OPENAL;ANGLE;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(Configuration.StartsWith('Tangerine'))">

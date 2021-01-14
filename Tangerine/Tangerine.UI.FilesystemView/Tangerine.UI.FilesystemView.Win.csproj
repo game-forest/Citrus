@@ -8,6 +8,7 @@
     <AssemblyName>Tangerine.UI.Filesystem</AssemblyName>
     <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
     <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>EmptyProject.Scenes</RootNamespace>
     <AssemblyName>EmptyProject.GeneratedScenes</AssemblyName>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

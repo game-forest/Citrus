@@ -5,6 +5,7 @@
     <DefineConstants>WIN</DefineConstants>
     <RootNamespace>Kumquat</RootNamespace>
     <AssemblyName>Kumquat</AssemblyName>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

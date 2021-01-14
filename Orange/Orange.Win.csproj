@@ -7,6 +7,7 @@
     <RootNamespace>Orange</RootNamespace>
     <AssemblyName>Orange</AssemblyName>
     <Configurations>Debug;Release;Tangerine.Debug;Tangerine.Release</Configurations>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@
     <RootNamespace>DynamicFont</RootNamespace>
     <AssemblyName>DynamicFont</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

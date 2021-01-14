@@ -4,6 +4,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <RootNamespace>RemoteScripting</RootNamespace>
     <AssemblyName>RemoteScripting</AssemblyName>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

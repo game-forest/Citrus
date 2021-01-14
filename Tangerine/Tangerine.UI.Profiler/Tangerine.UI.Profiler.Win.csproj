@@ -7,6 +7,7 @@
     <AssemblyName>Tangerine.UI.Profiler</AssemblyName>
     <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
     <DefineConstants>$(DefineConstants)WIN;PROFILER;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

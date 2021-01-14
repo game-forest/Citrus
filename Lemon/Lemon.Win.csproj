@@ -3,6 +3,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Lemon</RootNamespace>
     <AssemblyName>Lemon</AssemblyName>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="*\**" />
