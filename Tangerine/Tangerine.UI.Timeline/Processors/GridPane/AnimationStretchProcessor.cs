@@ -84,7 +84,11 @@ namespace Tangerine.UI.Timeline
 					for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
 						SelectGridSpan.Perform(i, boundaries.Left, boundaries.Right);
 					}
-					SetCurrentColumn.Perform(boundaries.Right);
+					if (side == DragSide.Left) {
+						SetCurrentColumn.Perform(boundaries.Left);
+					} else {
+						SetCurrentColumn.Perform(boundaries.Right);
+					}
 					last = current;
 					yield return null;
 				}
