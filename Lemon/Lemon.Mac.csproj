@@ -62,7 +62,7 @@
     <Compile Include="Api.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Library\bin\Mac\Release\libLemon.dylib">
+    <NativeReference Include="Library\bin\Mac\Release\libLemonNative.dylib">
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>

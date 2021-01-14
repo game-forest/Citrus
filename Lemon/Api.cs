@@ -11,7 +11,7 @@ namespace Lemon
 #if iOS
 		const string Dll = "__Internal";
 #else
-		const string Dll = "Lemon";
+		const string Dll = "LemonNative";
 #endif
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]

@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>Lemon</RootNamespace>
-    <AssemblyName>Lemon_iOS</AssemblyName>
+    <AssemblyName>Lemon</AssemblyName>
     <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -45,11 +45,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
   <ItemGroup>
-    <ObjcBindingNativeLibrary Include="ios\libLemonUniversal.a" />
+    <ObjcBindingNativeLibrary Include="ios\libLemonNativeUniversal.a" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ios\libLemonUniversal.linkwith.cs">
-      <DependentUpon>ios\libLemonUniversal.a</DependentUpon>
+    <Compile Include="ios\libLemonNativeUniversal.linkwith.cs">
+      <DependentUpon>ios\libLemonNativeUniversal.a</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
