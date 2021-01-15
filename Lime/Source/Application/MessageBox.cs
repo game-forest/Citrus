@@ -6,7 +6,8 @@ using WinForms = System.Windows.Forms;
 
 namespace Lime
 {
-	[System.ComponentModel.DesignerCategory("")] //Disable designer
+	//Disable designer
+	[System.ComponentModel.DesignerCategory("")]
 	internal class MessageBoxForm : Form
 	{
 		public MessageBoxForm(string title, string text)
@@ -17,8 +18,11 @@ namespace Lime
 			MaximizeBox = false;
 
 			var menuItem = new WinForms.ToolStripMenuItem(
-				"Копировать", null, (s, e) => Clipboard.Text = text, WinForms.Keys.Control | WinForms.Keys.C);
-			//  WinForms.Shortcut.CtrlC
+				text: "Copy",
+				image: null,
+				onClick: (s, e) => Clipboard.Text = text,
+				shortcutKeys: WinForms.Keys.Control | WinForms.Keys.C
+			);
 
 			var textLabel = new Label {
 				BackColor = Color.White,
