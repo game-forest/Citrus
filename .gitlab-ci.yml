@@ -30,6 +30,8 @@ windows_build:
   - echo "Tangerine build OK"
   - '.\Orange\bin\Win\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Win --command:"Build" --disable-asset-cache'
   - echo "Empty project Win - OK"
+  - '.\Orange\bin\Win\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache'
+  - echo "Empty project Android - OK"
   - dotnet build -c:Release .\Orange\Launcher\Launcher.Win.Sln
   - echo "Launcher - OK"
 
