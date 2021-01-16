@@ -552,7 +552,8 @@ namespace Tangerine.Core
 		{
 			var dependencyPaths = RootNodeUnwrapped.Descendants
 				.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
-				.Select(i => i.ContentsPath).ToHashSet();
+				.Select(i => i.ContentsPath)
+				.Distinct();
 			// Get this document and its opened dependencies.
 			var documents = Project.Current.Documents.Where(
 				i => i == this || dependencyPaths.Contains(i.Path)).ToList();
@@ -588,12 +589,13 @@ namespace Tangerine.Core
 			foreach (var m in documents) {
 				var dependencies = m.RootNodeUnwrapped.Descendants
 					.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
-					.Select(i => i.ContentsPath).ToHashSet();
+					.Select(i => i.ContentsPath)
+					.Distinct();
 				foreach (var d in documents.Where(i => dependencies.Contains(i.Path))) {
 					dependencyGraph.Add((m, d));
 				}
 			}
-			return TopologicalSort(documents.ToHashSet(), dependencyGraph, out sortedDocuments);
+			return TopologicalSort(new HashSet<Document>(documents), dependencyGraph, out sortedDocuments);
 		}
 
 		/// <summary>
@@ -602,10 +604,10 @@ namespace Tangerine.Core
 		/// </summary>
 		private static bool TopologicalSort<T>(HashSet<T> nodes, HashSet<(T, T)> edges, out List<T> sortedNodes)
 		{
-			edges = edges.ToHashSet();
+			edges = new HashSet<(T, T)>(edges);
 			sortedNodes = new List<T>();
 			// Set of all nodes with no incoming edges
-			nodes = nodes.Where(n => edges.All(e => !e.Item2.Equals(n))).ToHashSet();
+			nodes = new HashSet<T>(nodes.Where(n => edges.All(e => !e.Item2.Equals(n))));
 			while (nodes.Any()) {
 				var n = nodes.First();
 				nodes.Remove(n);
