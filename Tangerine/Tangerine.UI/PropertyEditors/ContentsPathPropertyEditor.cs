@@ -31,7 +31,12 @@ namespace Tangerine.UI
 			if (IsValid(path)) {
 				DoTransaction(() => {
 					SetProperty(path);
-					Project.Current.SceneCache.CheckCyclicDependencies(path);
+					try {
+						Document.Current.RefreshExternalScenes();
+					} catch (System.Exception e) {
+						AlertDialog.Show(e.Message);
+						EditorParams.History.RollbackTransaction();
+					}
 				});
 			} else {
 				var value = CoalescedPropertyValue().GetValue();

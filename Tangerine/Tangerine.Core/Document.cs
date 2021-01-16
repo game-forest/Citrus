@@ -44,6 +44,7 @@ namespace Tangerine.Core
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly IAnimationPositioner animationPositioner = new AnimationPositioner();
 		private static uint untitledCounter;
+		private DateTime dependenciesRefreshTimestamp = DateTime.MinValue;
 
 		public static readonly string[] AllowedFileTypes = { "tan", "t3d", "fbx" };
 		public delegate bool PathSelectorDelegate(out string path);
@@ -310,7 +311,6 @@ namespace Tangerine.Core
 			Decorate(RootNode);
 			Container = RootNode;
 			History.ProcessingOperation += DocumentProcessingOperation;
-			History.DocumentChanged += Document_Changed;
 			RefreshSceneTree();
 			RefreshCompoundAnimationTree();
 		}
@@ -438,9 +438,12 @@ namespace Tangerine.Core
 					}
 				}
 				History.ProcessingOperation += DocumentProcessingOperation;
-				History.DocumentChanged += Document_Changed;
 				// Protect us from legacy scenes where bones order isn't determined.
 				SortBones(RootNode);
+				// Initialize timestamp to prevent external scenes from reloading from the hdd.
+				dependenciesRefreshTimestamp = DateTime.Now;
+				// Take the external scenes from the currently opened documents.
+				RefreshExternalScenes();
 				RefreshSceneTree();
 			} catch (System.Exception e) {
 				throw new System.InvalidOperationException($"Can't open '{Path}': {e.Message}");
@@ -455,11 +458,6 @@ namespace Tangerine.Core
 				}
 				BoneUtils.SortBones(node.Nodes);
 			}
-		}
-
-		private void Document_Changed()
-		{
-			Project.Current.SceneCache.InvalidateEntryFromOpenedDocumentChanged(Path, () => RootNodeUnwrapped);
 		}
 
 		private void DocumentProcessingOperation(IOperation operation)
@@ -531,8 +529,8 @@ namespace Tangerine.Core
 
 		public static void SetCurrent(Document doc)
 		{
-			if (!(doc?.Loaded ?? true)) {
-				if (Project.Current.GetFullPath(doc.Path, out string fullPath) || doc.preloadedSceneStream != null) {
+			if (doc != null && !doc.Loaded) {
+				if (Project.Current.GetFullPath(doc.Path, out _) || doc.preloadedSceneStream != null) {
 					doc.Load();
 				}
 			}
@@ -547,6 +545,115 @@ namespace Tangerine.Core
 					ProjectUserPreferences.Instance.CurrentDocument = doc.Path;
 				}
 				Current?.ForceAnimationUpdate();
+			}
+		}
+
+		public void RefreshExternalScenes()
+		{
+			var dependencyPaths = RootNodeUnwrapped.Descendants
+				.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
+				.Select(i => i.ContentsPath).ToHashSet();
+			// Get this document and its opened dependencies.
+			var documents = Project.Current.Documents.Where(
+				i => i == this || dependencyPaths.Contains(i.Path)).ToList();
+			// Add modified dependencies from hdd.
+			foreach (var scenePath in dependencyPaths.Except(documents.Select(i => i.Path))) {
+				var scenePathInBundle = Node.ResolveScenePath(scenePath);
+				if (
+					AssetBundle.Current.FileExists(scenePathInBundle) &&
+					AssetBundle.Current.GetFileLastWriteTime(scenePathInBundle) > dependenciesRefreshTimestamp
+				) {
+					documents.Add(new Document(scenePath));
+				}
+			}
+			// Remove not loaded documents (these documents aren't changed for sure!)
+			documents = documents.Where(i => i.Loaded).ToList();
+			if (documents.Count > 0) {
+				// Sort documents and check for cyclic dependencies.
+				if (!TrySortDocumentsInDependencyOrder(documents, out var sortedDocuments)) {
+					throw new CyclicDependencyException("Cyclic scenes dependency was detected");
+				}
+				// Integrate dependencies into the current document.
+				foreach (var d in sortedDocuments.Except(new[] { this })) {
+					ReplaceExternalContentWith(d);
+				}
+				RefreshSceneTree();
+			}
+			dependenciesRefreshTimestamp = DateTime.Now;
+		}
+
+		private static bool TrySortDocumentsInDependencyOrder(IEnumerable<Document> documents, out List<Document> sortedDocuments)
+		{
+			var dependencyGraph = new HashSet<(Document, Document)>();
+			foreach (var m in documents) {
+				var dependencies = m.RootNodeUnwrapped.Descendants
+					.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
+					.Select(i => i.ContentsPath).ToHashSet();
+				foreach (var d in documents.Where(i => dependencies.Contains(i.Path))) {
+					dependencyGraph.Add((m, d));
+				}
+			}
+			return TopologicalSort(documents.ToHashSet(), dependencyGraph, out sortedDocuments);
+		}
+
+		/// <summary>
+		/// Topological Sorting (Kahn's algorithm)
+		/// Source: https://gist.github.com/Sup3rc4l1fr4g1l1571c3xp14l1d0c10u5/3341dba6a53d7171fe3397d13d00ee3f
+		/// </summary>
+		private static bool TopologicalSort<T>(HashSet<T> nodes, HashSet<(T, T)> edges, out List<T> sortedNodes)
+		{
+			edges = edges.ToHashSet();
+			sortedNodes = new List<T>();
+			// Set of all nodes with no incoming edges
+			nodes = nodes.Where(n => edges.All(e => !e.Item2.Equals(n))).ToHashSet();
+			while (nodes.Any()) {
+				var n = nodes.First();
+				nodes.Remove(n);
+				sortedNodes.Add(n);
+				// For each node m with an edge e from n to m do
+				foreach (var e in edges.Where(e => e.Item1.Equals(n)).ToList()) {
+					var m = e.Item2;
+					edges.Remove(e);
+					if (edges.All(me => !me.Item2.Equals(m))) {
+						nodes.Add(m);
+					}
+				}
+			}
+			return edges.Count == 0;
+		}
+
+		private void ReplaceExternalContentWith(Document document)
+		{
+			foreach (var node in RootNode.Descendants) {
+				if (node.ContentsPath == document.Path) {
+					var clone = document.RootNode.Clone();
+					node.ReplaceContent(clone);
+					foreach (var c in node.Descendants) {
+						Decorate(c);
+					}
+					RestoreAnimationStates(document.RootNode, clone);
+				}
+			}
+		}
+
+		private static void RestoreAnimationStates(Node original, Node clone)
+		{
+			var clonedNodes = new Stack<Node>(new [] { clone });
+			var originalNodes = new Stack<Node>(new [] { original });
+			while (clonedNodes.Count != 0) {
+				var c = clonedNodes.Pop();
+				var o = originalNodes.Pop();
+				int i = 0;
+				foreach (var a in c.Animations) {
+					a.Time = o.Animations[i++].Time;
+				}
+				i = 0;
+				foreach (var n in c.Nodes) {
+					if (string.IsNullOrEmpty(o.ContentsPath)) {
+						clonedNodes.Push(n);
+						originalNodes.Push(o.Nodes[i++]);
+					}
+				}
 			}
 		}
 
@@ -573,27 +680,6 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void RefreshExternalScenes()
-		{
-			RootNode.LoadExternalScenes();
-			// restore animation state in reloaded external scenes by applying all animations at their current frame
-			var s = new Stack<Node>(new [] { RootNode });
-			while (s.Count != 0) {
-				var n = s.Pop();
-				foreach (var animation in n.Animations) {
-					Current.animationPositioner.SetAnimationFrame(animation, animation.Frame, true);
-				}
-				foreach (var c in n.Nodes) {
-					// don't go into prefab, since it's animation state is completely
-					// driven by animations of the scene, prefab's been instantiated into
-					if (!string.IsNullOrEmpty(c.ContentsPath)) {
-						s.Push(c);
-					}
-				}
-			}
-			RefreshSceneTree();
-		}
-
 		private static void DetachViews()
 		{
 			if (Current == null) {
@@ -609,21 +695,27 @@ namespace Tangerine.Core
 			ShowingWarning?.Invoke(this, message);
 		}
 
-		public bool Close()
+		public bool Close(bool force)
 		{
-			if (!IsModified) {
-				return true;
-			}
-			if (CloseConfirmation != null) {
-				var r = CloseConfirmation(this);
-				if (r == CloseAction.Cancel) {
-					return false;
-				}
-				if (r == CloseAction.SaveChanges) {
+			if (!force && IsModified) {
+				if (CloseConfirmation != null) {
+					switch (CloseConfirmation(this)) {
+						case CloseAction.Cancel:
+							return false;
+						case CloseAction.SaveChanges:
+							Save();
+							break;
+					}
+				} else {
 					Save();
 				}
-			} else {
-				Save();
+			}
+			if (IsModified) {
+				// Propagate the document unmodified content to the currently opened documents.
+				Load();
+				foreach (var d in Project.Current.Documents) {
+					d.RefreshExternalScenes();
+				}
 			}
 			return true;
 		}
@@ -829,7 +921,7 @@ namespace Tangerine.Core
 
 		public void SetCurrentAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
-			Current.animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
+			animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
 			// Bump scene tree version, since some animated properties may affect
 			// the presentation of nodes on the timeline (e.g. a node label is grayed if Visible == false)
 			BumpSceneTreeVersion();
