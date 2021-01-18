@@ -396,8 +396,11 @@ namespace Tangerine.Core.Operations
 			if (!CanLink(parent, folder)) {
 				throw new InvalidOperationException();
 			}
-			while (index < parent.Rows.Count && parent.Rows[index].GetAnimator() != null) {
-				// Animators should go first.
+			while (
+				index < parent.Rows.Count &&
+				(parent.Rows[index].GetAnimator() != null || parent.Rows[index].GetAnimation() != null)
+			) {
+				// Animations and animators should go first.
 				index++;
 			}
 			if (addToSceneTree) {
@@ -432,8 +435,11 @@ namespace Tangerine.Core.Operations
 			if (!CanLink(parent, node)) {
 				throw new InvalidOperationException();
 			}
-			while (index < parent.Rows.Count && parent.Rows[index].GetAnimator() != null) {
-				// Animators should go first.
+			while (
+				index < parent.Rows.Count &&
+				(parent.Rows[index].GetAnimator() != null || parent.Rows[index].GetAnimation() != null)
+			) {
+				// Animations and animators should go first.
 				index++;
 			}
 			var ownerNodeItem = SceneTreeUtils.GetOwnerNodeSceneItem(parent);
@@ -496,6 +502,10 @@ namespace Tangerine.Core.Operations
 			var node = parent.GetNode();
 			AddIntoCollection<AnimatorCollection, IAnimator>.Perform(node.Animators, animatorItem.GetAnimator());
 			index = node.Animators.ToList().IndexOf(animatorItem.GetAnimator());
+			while (index < parent.Rows.Count && parent.Rows[index].GetAnimation() != null) {
+				// Animations should go first.
+				index++;
+			}
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, animatorItem);
 		}
 

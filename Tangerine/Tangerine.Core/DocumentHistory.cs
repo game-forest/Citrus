@@ -267,8 +267,7 @@ namespace Tangerine.Core
 			private static IEnumerable<IOperationProcessor> EnumerateProcessors(IOperation operation)
 			{
 				var operationType = operation.GetType();
-				if (operationTypeToProcessorList.TryGetValue(operationType, out List<IOperationProcessor> cachedProcessorList)
-				) {
+				if (operationTypeToProcessorList.TryGetValue(operationType, out List<IOperationProcessor> cachedProcessorList)) {
 					foreach (var processor in cachedProcessorList) {
 						yield return processor;
 					}
