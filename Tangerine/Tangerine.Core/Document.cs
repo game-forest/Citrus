@@ -560,10 +560,7 @@ namespace Tangerine.Core
 			// Add modified dependencies from hdd.
 			foreach (var scenePath in dependencyPaths.Except(documents.Select(i => i.Path))) {
 				var scenePathInBundle = Node.ResolveScenePath(scenePath);
-				if (
-					AssetBundle.Current.FileExists(scenePathInBundle) &&
-					AssetBundle.Current.GetFileLastWriteTime(scenePathInBundle) > dependenciesRefreshTimestamp
-				) {
+				if (scenePathInBundle != null && AssetBundle.Current.GetFileLastWriteTime(scenePathInBundle) > dependenciesRefreshTimestamp) {
 					documents.Add(new Document(scenePath));
 				}
 			}
