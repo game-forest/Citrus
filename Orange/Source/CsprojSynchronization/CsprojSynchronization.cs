@@ -41,15 +41,9 @@ namespace Orange
 			if (doc.HasChildNodes) {
 				// Skip net core projects.
 				var child = doc.ChildNodes[0];
-				if (child.Attributes != null) {
-					foreach (XmlAttribute a in child.Attributes) {
-						if (string.Equals(a.Name.Trim(), "sdk", StringComparison.OrdinalIgnoreCase) &&
-							string.Equals(a.Value.Trim(), "Microsoft.NET.Sdk", StringComparison.OrdinalIgnoreCase)
-						) {
-							Console.WriteLine($"Warning: skipping netcore project sync: '{projectFileName}'");
-							return;
-						}
-					}
+				if (child.NodeType != XmlNodeType.XmlDeclaration) {
+					Console.WriteLine($"Warning: skipping SDK style project sync: '{projectFileName}'");
+					return;
 				}
 			}
 			using (new DirectoryChanger(Path.GetDirectoryName(projectFileName))) {
