@@ -188,26 +188,31 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static bool CanPaste(MemoryStream stream, Row parent)
+		private static bool CanPaste(MemoryStream stream, Row parent)
 		{
-			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
-			foreach (var a in container.Animators) {
-				a.AnimationId = Document.Current.AnimationId;
-			}
-			// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-			var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
-			foreach (var i in rowTree.Rows) {
-				if (!LinkSceneItem.CanLink(parent, i)) {
+			try {
+				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
+				foreach (var a in container.Animators) {
+					a.AnimationId = Document.Current.AnimationId;
+				}
+				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
+				var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
+				foreach (var i in rowTree.Rows) {
+					if (!LinkSceneItem.CanLink(parent, i)) {
+						return false;
+					}
+				}
+				if (parent.TryGetNode(out var node) &&
+				    ClassAttributes<TangerineLockChildrenNodeList>.Get(node.GetType()) != null) {
 					return false;
 				}
-			}
-			if (parent.TryGetNode(out var node) && ClassAttributes<TangerineLockChildrenNodeList>.Get(node.GetType()) != null) {
+				if (container.DefaultAnimation.Tracks.Count > 0 && parent.GetAnimation() == null) {
+					return false;
+				}
+				return true;
+			} catch {
 				return false;
 			}
-			if (container.DefaultAnimation.Tracks.Count > 0 && parent.GetAnimation() == null) {
-				return false;
-			}
-			return true;
 		}
 	}
 
