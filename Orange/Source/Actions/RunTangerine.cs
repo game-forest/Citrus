@@ -16,8 +16,6 @@ namespace Orange
 			var projectDirectory = Path.Combine(Toolbox.FindCitrusDirectory(), projectName);
 #if WIN
 			var solutionPath = Path.Combine(projectDirectory, projectName + ".Win.sln");
-			MSBuild.TryGetMSBuildPath(out var msbuildPath);
-			Nuget.Restore(solutionPath, msbuildPath);
 			var solutionBuilder = new SolutionBuilder(new Target("Tangerine.Win", solutionPath, false, TargetPlatform.Win, BuildConfiguration.Release));
 #elif MAC
 			var solutionPath = Path.Combine(projectDirectory, projectName + ".Win.sln");

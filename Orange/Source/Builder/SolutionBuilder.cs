@@ -61,9 +61,12 @@ namespace Orange
 		{
 			Console.WriteLine("------------- Building Application -------------");
 			SynchronizeAll();
-			var nugetResult = Nuget.Restore(projectDirectory);
-			if (nugetResult != 0) {
-				Console.WriteLine("NuGet exited with code: {0}", nugetResult);
+			// `dotnet build` handles nuget restore by itself.
+			if (!(buildSystem is Dotnet)) {
+				var nugetResult = Nuget.Restore(projectDirectory);
+				if (nugetResult != 0) {
+					Console.WriteLine("NuGet exited with code: {0}", nugetResult);
+				}
 			}
 			return (buildSystem.Execute(BuildAction.Build, output) == 0);
 		}

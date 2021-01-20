@@ -37,15 +37,15 @@ namespace Orange
 			// MSBuildVersion is a workaround because msbuild 16 doesn't work with any version of nuget.
 			command += builderPath == null ? "" : $"-MSBuildVersion 15";
 #else
-			//command += builderPath == null ? "" : $"-MSBuildPath \"{Path.GetDirectoryName(builderPath)}\"";
+			command += builderPath == null ? "" : $"-MSBuildPath \"{Path.GetDirectoryName(builderPath)}\"";
 #endif
 			return Start(command);
 		}
 
-		public static int Start(string args)
+		private static int Start(string args)
 		{
 #if WIN
-			return Process.Start("dotnet", args);
+			return Process.Start(nugetPath, args);
 #elif MAC
 			return Process.Start(monoPath, $"{nugetPath} {args}");
 #endif

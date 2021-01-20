@@ -18,9 +18,9 @@ namespace Launcher
 		public string ExecutableArgs;
 
 		public event Action<string> OnBuildStatusChange;
+		public event Action OnBuildFail;
 		public event Action OnBuildSuccess;
 
-		public event Action OnBuildFail;
 		public Builder(string citrusDirectory)
 		{
 			this.citrusDirectory = citrusDirectory;
@@ -40,8 +40,8 @@ namespace Launcher
 
 		private void RestoreNuget()
 		{
-			if (Orange.Nuget.Restore (SolutionPath, BuilderPath) != 0) {
-				throw new Exception ("Unable to restore nugets!");
+			if (Orange.Nuget.Restore(SolutionPath, BuilderPath) != 0) {
+				throw new Exception("Unable to restore nugets!");
 			}
 		}
 
@@ -51,8 +51,8 @@ namespace Launcher
 			using (var stream = File.OpenRead(csprojSyncList)) {
 				using (var reader = new StreamReader(stream)) {
 					string line = null;
-					while ((line = reader.ReadLine ()) != null) {
-						Sync (line);
+					while ((line = reader.ReadLine()) != null) {
+						Sync(line);
 					}
 				}
 			}
@@ -64,7 +64,12 @@ namespace Launcher
 		{
 			var task = new Task(() => {
 				try {
+					if (!AreRequirementsMet()) {
+						return;
+					}
+#if MAC
 					RestoreNuget();
+#endif // MAC
 					SynchronizeAllProjects();
 					BuildAndRun();
 				} catch (Exception e) {
@@ -81,7 +86,7 @@ namespace Launcher
 			Environment.CurrentDirectory = Path.GetDirectoryName(SolutionPath);
 			ClearObjFolder(citrusDirectory);
 			OnBuildStatusChange?.Invoke("Building");
-			if (AreRequirementsMet() && Build(SolutionPath)) {
+			if (Build(SolutionPath)) {
 				ClearObjFolder(citrusDirectory);
 				if (NeedRunExecutable) {
 					RunExecutable();
@@ -120,7 +125,11 @@ namespace Launcher
 
 		private bool Build(string solutionPath)
 		{
+#if MAC
 			var exitCode = Orange.Process.Start(BuilderPath, "-t:Build -p:Configuration=Release " + solutionPath);
+#elif WIN
+			var exitCode = Orange.Process.Start(BuilderPath, $"build {solutionPath} -c:Release");
+#endif // MAC
 			if (exitCode == 0) {
 				return true;
 			}
@@ -131,15 +140,30 @@ namespace Launcher
 		private bool AreRequirementsMet()
 		{
 #if WIN
-			if (BuilderPath != null) {
+			if (Orange.Process.Start("where", BuilderPath) == 0) {
 				return true;
 			}
-			Process.Start(@"https://visualstudio.microsoft.com/ru/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16");
+
+			var csprojSyncList = Path.Combine(citrusDirectory, "Orange", "Launcher", "download_prerequisite_installer_urls.txt");
+			using (var stream = File.OpenRead(csprojSyncList)) {
+				using var reader = new StreamReader(stream);
+				string line = null;
+				while ((line = reader.ReadLine()) != null) {
+					OpenUrl(line);
+				}
+			}
+
 			SetFailedBuildStatus("Please install Microsoft Build Tools 2019");
 			return false;
 #else
 			return true;
 #endif // WIN
+		}
+
+		private void OpenUrl(string url)
+		{
+			// https://github.com/dotnet/corefx/issues/10361
+			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 		}
 
 		private void DecorateBuildProcess(Process process, string solutionPath)

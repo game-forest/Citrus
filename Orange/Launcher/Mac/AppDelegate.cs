@@ -14,8 +14,6 @@ namespace Launcher
 
 		public override void DidFinishLaunching(NSNotification notification)
 		{
-			var rootdi = new System.IO.DirectoryInfo ("/");
-			System.Console.WriteLine(rootdi.GetDirectories());
 			mainWindowController = new MainWindowController();
 			Builder.OnBuildSuccess += () => InvokeOnMainThread(() => NSApplication.SharedApplication.Terminate(this));
 			Builder.OnBuildStatusChange += mainWindowController.SetBuildStatus;
@@ -26,7 +24,7 @@ namespace Launcher
 			Builder.Start();
 		}
 
-		public override void WillTerminate(NSNotification notification)	
+		public override void WillTerminate(NSNotification notification)
 		{
 			// Insert code here to tear down your application
 		}
