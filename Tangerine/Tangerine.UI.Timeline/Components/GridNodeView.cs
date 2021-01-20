@@ -7,6 +7,7 @@ namespace Tangerine.UI.Timeline.Components
 	public class GridNodeView : IGridRowView
 	{
 		private readonly Node node;
+		private Hasher hasher = new Hasher();
 
 		public Widget GridWidget { get; }
 		public Widget OverviewWidget { get; }
@@ -31,12 +32,12 @@ namespace Tangerine.UI.Timeline.Components
 		}
 
 		private GridKeyframesRenderer keyframesRenderer = new GridKeyframesRenderer();
-		private int animatorsVersion = -1;
+		private long animatorsVersion = -1;
 		private string animationId;
 
 		protected virtual void Render(Widget widget)
 		{
-			int v = CalcAnimatorsTotalVersion();
+			long v = CalculateAnimatorsTotalVersion();
 			if (animatorsVersion != v || animationId != Document.Current.AnimationId) {
 				animatorsVersion = v;
 				animationId = Document.Current.AnimationId;
@@ -46,13 +47,14 @@ namespace Tangerine.UI.Timeline.Components
 			keyframesRenderer.RenderCells(widget);
 		}
 
-		private int CalcAnimatorsTotalVersion()
+		private long CalculateAnimatorsTotalVersion()
 		{
-			int result = node.Animators.Version;
+			hasher.Begin();
+			hasher.Write(node.Animators.Version);
 			foreach (var a in node.Animators) {
-				result = unchecked(result + a.Version);
+				hasher.Write(a.Version);
 			}
-			return result;
+			return hasher.End();
 		}
 	}
 }
