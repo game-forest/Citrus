@@ -159,6 +159,9 @@ namespace Tangerine.Core.Operations
 			}
 			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
 			container.LoadExternalScenes();
+			foreach (var n in container.Nodes) {
+				Document.Current.Decorate(n);
+			}
 			foreach (var a in container.Animators) {
 				a.AnimationId = Document.Current.AnimationId;
 			}
