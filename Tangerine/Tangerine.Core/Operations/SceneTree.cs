@@ -246,7 +246,7 @@ namespace Tangerine.Core.Operations
 			throw new InvalidOperationException();
 		}
 
-		public static bool CanLink(Row parent, IAnimator animator)
+		private static bool CanLink(Row parent, IAnimator animator)
 		{
 			if (parent.GetAnimator() != null) {
 				// Can't add anything to an animator.
@@ -293,12 +293,12 @@ namespace Tangerine.Core.Operations
 			return NodeCompositionValidator.Validate(parentNode.GetType(), node.GetType());
 		}
 
-		public static bool CanLink(Row parent, Animation animation)
+		private static bool CanLink(Row parent, Animation animation)
 		{
-			return parent.GetNode() != null;
+			return parent.TryGetNode(out var node) && node.Animations.All(i => i.Id != animation.Id);
 		}
 
-		public static bool CanLink(Row parent, AnimationTrack track)
+		private static bool CanLink(Row parent, AnimationTrack track)
 		{
 			return parent.GetAnimation() != null;
 		}

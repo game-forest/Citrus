@@ -229,6 +229,10 @@ namespace Tangerine.Panels
 			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
 				Where(i => !i.Animation.IsLegacy).ToList();
 			Document.Current.History.DoTransaction(() => {
+				if (!animationItems.All(i => LinkSceneItem.CanLink(parentItem.SceneItem, i.SceneItem))) {
+					AlertDialog.Show("Can't drag the animation. Probably an animation with the same id already exists", "Ok");
+					return;
+				}
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in animationItems) {
 					var itemIndex = parentItem.SceneItem.Rows.IndexOf(item.SceneItem);
