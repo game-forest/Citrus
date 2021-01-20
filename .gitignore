@@ -63,3 +63,5 @@ Lemon/Library/Android/libs/
 TangerineLog.txt
 
 Samples/EmptyProject/TangerineLog.txt
+
+**/Resources/Resource.designer.cs
