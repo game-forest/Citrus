@@ -336,11 +336,14 @@ namespace Tangerine.Panels
 						var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 						foreach (var animation in container.Animations.ToList()) {
 							container.Animations.Remove(animation);
-							if (
+							var baseAnimationId = animation.Id;
+							var counter = 1;
+							while (
 								parent.SceneItem.TryGetNode(out var node) &&
 								node.Animations.Any(i => i.Id == animation.Id)
 							) {
-								animation.Id += " - Copy";
+								animation.Id = baseAnimationId + " - Copy" + (counter == 1 ? "" : counter.ToString());
+								counter++;
 							}
 							var animationSceneItem = LinkSceneItem.Perform(
 								parent.SceneItem, index++, animation);
