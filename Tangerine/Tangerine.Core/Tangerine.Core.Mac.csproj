@@ -75,7 +75,6 @@
     <Compile Include="Operations\SceneTree.cs" />
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="SceneTreeBuilder.cs" />
-    <Compile Include="SceneCache.cs" />
     <Compile Include="SyncPresenters.cs" />
   </ItemGroup>
   <ItemGroup>

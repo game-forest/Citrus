@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Lime;
 using Orange;
 using Exception = System.Exception;
@@ -15,8 +14,6 @@ namespace Tangerine.Core
 	{
 		readonly VersionedCollection<Document> documents = new VersionedCollection<Document>();
 		public IReadOnlyVersionedCollection<Document> Documents => documents;
-
-		public SceneCache SceneCache = new SceneCache();
 
 		private readonly object aggregateModifiedAssetsTaskTag = new object();
 		private readonly HashSet<string> modifiedAssets = new HashSet<string>();
@@ -181,7 +178,7 @@ namespace Tangerine.Core
 			foreach (var d in modifiedDocuments) {
 				// Call Document.Close() instead of CloseDocument, since latter invokes Document.SetCurrent() and forces document loading.
 				// All this stuff for the sake of performance.
-				if (!d.Close()) {
+				if (!d.Close(false)) {
 					return false;
 				}
 			}
@@ -310,9 +307,7 @@ namespace Tangerine.Core
 		{
 			int currentIndex = documents.IndexOf(Document.Current);
 			string systemPath;
-			if (force || doc.Close()) {
-				SceneCache.InvalidateEntryFromOpenedDocumentChanged(doc.Path, null);
-				SceneCache.Clear(doc.Path);
+			if (doc.Close(force)) {
 				documents.Remove(doc);
 				if (GetFullPath(AutosaveProcessor.GetTemporaryFilePath(doc.Path), out systemPath)) {
 					File.Delete(systemPath);
@@ -408,33 +403,18 @@ namespace Tangerine.Core
 
 		public void ReloadModifiedDocuments()
 		{
-			HandleMissingDocuments(Documents.Where(d => !GetFullPath(d.Path, out string fullPath)));
+			HandleMissingDocuments(Documents.Where(d => !GetFullPath(d.Path, out _)));
 			foreach (var doc in Documents.ToList()) {
 				if (!File.Exists(doc.FullPath)) {
-
-				} else if (modifiedAssets.Contains(doc.Path) && doc.LastWriteTime != File.GetLastWriteTime(doc.FullPath)) {
+					continue;
+				}
+				if (modifiedAssets.Contains(doc.Path) && doc.LastWriteTime != File.GetLastWriteTime(doc.FullPath)) {
 					if (DocumentReloadConfirmation(doc)) {
 						ReloadDocument(doc);
 					}
-				} else if (doc.Loaded) {
-					var requiredToRefreshExternalScenes = false;
-					foreach (var descendant in doc.RootNodeUnwrapped.Descendants) {
-						if (string.IsNullOrEmpty(descendant.ContentsPath)) {
-							continue;
-						}
-						foreach (var modifiedAsset in modifiedAssets) {
-							if (descendant.ContentsPath == modifiedAsset) {
-								requiredToRefreshExternalScenes = true;
-								break;
-							}
-						}
-						if (requiredToRefreshExternalScenes) {
-							doc.RefreshExternalScenes();
-							break;
-						}
-					}
 				}
 			}
+			Document.Current?.RefreshExternalScenes();
 			modifiedAssets.Clear();
 			Window.Current.Invalidate();
 		}
@@ -469,7 +449,6 @@ namespace Tangerine.Core
 			}
 			localPath = AssetPath.CorrectSlashes(localPath);
 			modifiedAssets.Add(localPath);
-			Current.SceneCache.InvalidateEntryFromFilesystem(localPath);
 			Tasks.StopByTag(aggregateModifiedAssetsTaskTag);
 			Tasks.Add(AggregateModifiedAssetsTask, aggregateModifiedAssetsTaskTag);
 		}

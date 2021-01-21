@@ -95,7 +95,6 @@
     <Compile Include="ResolutionPreview.cs" />
     <Compile Include="Row.cs" />
     <Compile Include="Ruler.cs" />
-    <Compile Include="SceneCache.cs" />
     <Compile Include="SceneTreeBuilder.cs" />
     <Compile Include="SyncPresenters.cs" />
     <Compile Include="TriggersValidation.cs" />
