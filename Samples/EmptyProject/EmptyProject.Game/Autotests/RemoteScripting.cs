@@ -142,15 +142,15 @@ namespace EmptyProject
 #elif iOS
 			var deviceName = UIDevice.CurrentDevice.Name;
 #elif ANDROID
-			var manufacturer = Android.OS.Build.Manufacturer;
-			var model = Android.OS.Build.Model;
+			var manufacturer = global::Android.OS.Build.Manufacturer;
+			var model = global::Android.OS.Build.Model;
 			var isModelIncludeManufacturer = model.ToLowerInvariant().StartsWith(manufacturer.ToLowerInvariant(), StringComparison.InvariantCulture);
 			var deviceName = isModelIncludeManufacturer ? model : $"{manufacturer} {model}";
 #else
 			var deviceName = "Undefined";
 #endif
 #if iOS || ANDROID
-			deviceName += $" ({The.Application.GetVersion()})";
+			deviceName += $" ({The.App.GetVersion()})";
 #endif
 			return deviceName;
 		}
