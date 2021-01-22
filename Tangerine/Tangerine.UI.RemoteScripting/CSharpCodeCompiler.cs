@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -28,7 +29,7 @@ namespace Tangerine.UI.RemoteScripting
 			"System.Threading.Tasks"
 		);
 
-		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp7_3);
+		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp8);
 		public IEnumerable<string> ProjectReferences { get; set; } = DefaultProjectReferences;
 		public IEnumerable<string> Namespaces { get; set; } = DefaultNamespaces;
 		public OutputKind OutputKind { get; set; } = OutputKind.DynamicallyLinkedLibrary;
@@ -62,12 +63,23 @@ namespace Tangerine.UI.RemoteScripting
 				var syntaxTree = SyntaxFactory.ParseSyntaxTree(source, ParseOptions, csFile, System.Text.Encoding.UTF8);
 				syntaxTrees.Add(syntaxTree);
 			}
-			var references = ProjectReferences.Select(referencePath => MetadataReference.CreateFromFile(referencePath));
+
+			var references = new List<MetadataReference>
+			{
+				MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+			};
+
+			Assembly.GetEntryAssembly().GetReferencedAssemblies()
+				.ToList()
+				.ForEach(a => references.Add(MetadataReference.CreateFromFile(Assembly.Load(a).Location)));
+
+			var allReferences = references.Concat(ProjectReferences.Select(referencePath => MetadataReference.CreateFromFile(referencePath)));
+
 			var compilationOptions = new CSharpCompilationOptions(OutputKind)
 				.WithOverflowChecks(true)
 				.WithOptimizationLevel(OptimizationLevel)
 				.WithUsings(Namespaces);
-			var compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, references, compilationOptions);
+			var compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, allReferences, compilationOptions);
 			return compilation.Emit(stream, streamForPdb);
 		}
 

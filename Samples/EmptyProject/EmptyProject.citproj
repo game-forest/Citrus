@@ -9,7 +9,7 @@
 			"Lime.dll",
 			"Yuzu.dll",
 			"RemoteScripting.dll",
-			"EmptyProject.exe"
+			"EmptyProject.dll"
 		],
 		EntryPointsClass: "EmptyProject.Scripts.EntryPoints",
 		RemoteStoragePath: "StorageForRemoteScripting/"
