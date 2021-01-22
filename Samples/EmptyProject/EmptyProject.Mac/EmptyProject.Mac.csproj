@@ -118,6 +118,14 @@
       <Project>{B5F74505-80BB-4373-B194-219D743C1FA0}</Project>
       <Name>DynamicFont.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\3rdParty\MoltenVK\MoltenVK.csproj">
+      <Project>{25A88ABB-AC39-41AD-92EF-DD91341863C8}</Project>
+      <Name>MoltenVK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Mac.csproj">
+      <Project>{94911E6A-53F9-4B86-9ADE-E3B510C810B9}</Project>
+      <Name>ShaderCompilerBinding.Mac</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Data.Mac">

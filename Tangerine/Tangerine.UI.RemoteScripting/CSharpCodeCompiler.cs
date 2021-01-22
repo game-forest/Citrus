@@ -12,7 +12,7 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class CSharpCodeCompiler
 	{
-		private static readonly string netFrameworkPath = $"{Path.GetDirectoryName(typeof(string).Assembly.Location)}\\";
+		private static readonly string netFrameworkPath = $"{Path.GetDirectoryName(typeof(string).Assembly.Location)}/";
 		public static readonly ImmutableArray<string> DefaultProjectReferences = ImmutableArray.Create(
 			$"{netFrameworkPath}mscorlib.dll",
 			$"{netFrameworkPath}System.dll",
