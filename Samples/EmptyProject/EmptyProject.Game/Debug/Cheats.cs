@@ -16,10 +16,8 @@ namespace EmptyProject.Debug
 
 		static Cheats()
 		{
-#if DEBUG
 			Enabled = true;
 			IsDebugInfoVisible = true;
-#endif
 		}
 
 		public static void ProcessCheatKeys()
