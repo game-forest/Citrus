@@ -44,7 +44,6 @@ namespace Tangerine.Core
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly IAnimationPositioner animationPositioner = new AnimationPositioner();
 		private static uint untitledCounter;
-		private DateTime dependenciesRefreshTimestamp = DateTime.MinValue;
 
 		public static readonly string[] AllowedFileTypes = { "tan", "t3d", "fbx" };
 		public delegate bool PathSelectorDelegate(out string path);
@@ -407,13 +406,17 @@ namespace Tangerine.Core
 			}
 		}
 
-		private void Load()
+		private void Load() => Load(new HashSet<string>());
+
+		private void Load(HashSet<string> documentsBeingLoaded)
 		{
 			try {
+				// Load the scene without externals since they will be loaded further in RefreshExternalScenes().
 				if (preloadedSceneStream != null) {
-					RootNodeUnwrapped = Node.Load(preloadedSceneStream, Path + $".{GetFileExtension(Format)}");
+					RootNodeUnwrapped = Node.Load(preloadedSceneStream,
+						Path + $".{GetFileExtension(Format)}", ignoreExternals: true);
 				} else {
-					RootNodeUnwrapped = Node.Load(Path);
+					RootNodeUnwrapped = Node.Load(Path, ignoreExternals: true);
 				}
 				if (Format == DocumentFormat.Fbx) {
 					Path = string.Format(untitledPathFormat, untitledCounter++);
@@ -440,10 +443,8 @@ namespace Tangerine.Core
 				History.ProcessingOperation += DocumentProcessingOperation;
 				// Protect us from legacy scenes where bones order isn't determined.
 				SortBones(RootNode);
-				// Initialize timestamp to prevent external scenes from reloading from the hdd.
-				dependenciesRefreshTimestamp = DateTime.Now;
 				// Take the external scenes from the currently opened documents.
-				RefreshExternalScenes();
+				RefreshExternalScenes(documentsBeingLoaded);
 				RefreshSceneTree();
 			} catch (System.Exception e) {
 				throw new System.InvalidOperationException($"Can't open '{Path}': {e.Message}");
@@ -548,93 +549,69 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void RefreshExternalScenes()
+		private static readonly Dictionary<string, Document> documentCache = new Dictionary<string, Document>();
+		private static readonly Dictionary<string, DateTime> documentTimeStamps = new Dictionary<string, DateTime>();
+
+		public void RefreshExternalScenes() => RefreshExternalScenes(new HashSet<string>());
+
+		private void RefreshExternalScenes(HashSet<string> documentsBeingLoaded)
 		{
-			if (!Loaded) {
+			if (documentsBeingLoaded.Contains(Path)) {
+				throw new CyclicDependencyException($"Cyclic scenes dependency was detected: {Path}");
+			}
+			documentsBeingLoaded.Add(Path);
+			try {
+				RefreshExternalContentHelper(RootNodeUnwrapped, documentsBeingLoaded);
+				RefreshSceneTree();
+			} finally {
+				documentsBeingLoaded.Remove(Path);
+			}
+		}
+
+		private static void RefreshExternalContentHelper(Node rootNode, HashSet<string> documentsBeingLoaded)
+		{
+			CleanupExternalContent(rootNode);
+			var nodesWithContentsPath = rootNode.SelfAndDescendants
+				.Where(i => !string.IsNullOrEmpty(i.ContentsPath)).ToList();
+			foreach (var node in nodesWithContentsPath) {
+				var document = Project.Current.Documents.FirstOrDefault(i => i.Path == node.ContentsPath);
+				if (document != null) {
+					if (!document.Loaded) {
+						document.Load(documentsBeingLoaded);
+					}
+				} else {
+					var assetPath = Node.ResolveScenePath(node.ContentsPath);
+					if (assetPath != null) {
+						var writeTime = AssetBundle.Current.GetFileLastWriteTime(assetPath);
+						if (
+							!documentCache.TryGetValue(node.ContentsPath, out document) ||
+							writeTime != documentTimeStamps[node.ContentsPath]
+						) {
+							documentCache[node.ContentsPath] = document = new Document(node.ContentsPath);
+							documentTimeStamps[node.ContentsPath] = writeTime;
+						}
+					}
+				}
+				if (document != null) {
+					document.RefreshExternalScenes(documentsBeingLoaded);
+					var clone = document.RootNodeUnwrapped.Clone();
+					RestoreAnimationStates(document.RootNodeUnwrapped, clone);
+					node.ReplaceContent(clone);
+					foreach (var n in node.Descendants.ToList()) {
+						Decorate(n);
+					}
+				}
+			}
+		}
+
+		private static void CleanupExternalContent(Node node)
+		{
+			if (!string.IsNullOrEmpty(node.ContentsPath)) {
+				node.ReplaceContent(new Frame());
 				return;
 			}
-			var dependencyPaths = RootNodeUnwrapped.Descendants
-				.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
-				.Select(i => i.ContentsPath)
-				.Distinct();
-			// Get this document and its opened dependencies.
-			var documents = Project.Current.Documents.Where(
-				i => i == this || dependencyPaths.Contains(i.Path)).ToList();
-			// Add modified dependencies from hdd.
-			foreach (var scenePath in dependencyPaths.Except(documents.Select(i => i.Path))) {
-				var scenePathInBundle = Node.ResolveScenePath(scenePath);
-				if (scenePathInBundle != null && AssetBundle.Current.GetFileLastWriteTime(scenePathInBundle) > dependenciesRefreshTimestamp) {
-					documents.Add(new Document(scenePath));
-				}
-			}
-			// Remove not loaded documents (these documents aren't changed for sure!)
-			documents = documents.Where(i => i.Loaded).ToList();
-			if (documents.Count > 0) {
-				// Sort documents and check for cyclic dependencies.
-				if (!TrySortDocumentsInDependencyOrder(documents, out var sortedDocuments)) {
-					throw new CyclicDependencyException("Cyclic scenes dependency was detected");
-				}
-				// Integrate dependencies into the current document.
-				foreach (var d in sortedDocuments.Except(new[] { this })) {
-					ReplaceExternalContentWith(d);
-				}
-				RefreshSceneTree();
-			}
-			dependenciesRefreshTimestamp = DateTime.Now;
-		}
-
-		private static bool TrySortDocumentsInDependencyOrder(IEnumerable<Document> documents, out List<Document> sortedDocuments)
-		{
-			var dependencyGraph = new HashSet<(Document, Document)>();
-			foreach (var m in documents) {
-				var dependencies = m.RootNodeUnwrapped.Descendants
-					.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
-					.Select(i => i.ContentsPath)
-					.Distinct();
-				foreach (var d in documents.Where(i => dependencies.Contains(i.Path))) {
-					dependencyGraph.Add((m, d));
-				}
-			}
-			return TopologicalSort(new HashSet<Document>(documents), dependencyGraph, out sortedDocuments);
-		}
-
-		/// <summary>
-		/// Topological Sorting (Kahn's algorithm)
-		/// Source: https://gist.github.com/Sup3rc4l1fr4g1l1571c3xp14l1d0c10u5/3341dba6a53d7171fe3397d13d00ee3f
-		/// </summary>
-		private static bool TopologicalSort<T>(HashSet<T> nodes, HashSet<(T, T)> edges, out List<T> sortedNodes)
-		{
-			edges = new HashSet<(T, T)>(edges);
-			sortedNodes = new List<T>();
-			// Set of all nodes with no incoming edges
-			nodes = new HashSet<T>(nodes.Where(n => edges.All(e => !e.Item2.Equals(n))));
-			while (nodes.Any()) {
-				var n = nodes.First();
-				nodes.Remove(n);
-				sortedNodes.Add(n);
-				// For each node m with an edge e from n to m do
-				foreach (var e in edges.Where(e => e.Item1.Equals(n)).ToList()) {
-					var m = e.Item2;
-					edges.Remove(e);
-					if (edges.All(me => !me.Item2.Equals(m))) {
-						nodes.Add(m);
-					}
-				}
-			}
-			return edges.Count == 0;
-		}
-
-		private void ReplaceExternalContentWith(Document document)
-		{
-			foreach (var node in RootNode.Descendants) {
-				if (node.ContentsPath == document.Path) {
-					var clone = document.RootNode.Clone();
-					node.ReplaceContent(clone);
-					foreach (var c in node.Descendants) {
-						Decorate(c);
-					}
-					RestoreAnimationStates(document.RootNode, clone);
-				}
+			foreach (var n in node.Nodes) {
+				CleanupExternalContent(n);
 			}
 		}
 
@@ -712,13 +689,8 @@ namespace Tangerine.Core
 					Save();
 				}
 			}
-			if (IsModified) {
-				// Propagate the document unmodified content to the currently opened documents.
-				Load();
-				foreach (var d in Project.Current.Documents) {
-					d.RefreshExternalScenes();
-				}
-			}
+			documentCache.Remove(Path);
+			documentTimeStamps.Remove(Path);
 			return true;
 		}
 
@@ -863,7 +835,7 @@ namespace Tangerine.Core
 
 		public static bool HasCurrent() => Current != null;
 
-		public void Decorate(Node node)
+		public static void Decorate(Node node)
 		{
 			foreach (var decorator in NodeDecorators) {
 				decorator(node);

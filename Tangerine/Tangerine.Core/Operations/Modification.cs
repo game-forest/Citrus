@@ -757,7 +757,7 @@ namespace Tangerine.Core.Operations
 			LinkSceneItem.Perform(parent, index, node);
 			ClearRowSelection.Perform();
 			SelectNode.Perform(node);
-			Document.Current.Decorate(node);
+			Document.Decorate(node);
 			return node;
 		}
 

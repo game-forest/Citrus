@@ -322,6 +322,8 @@ namespace Tangerine.Core
 						Document.SetCurrent(null);
 						ProjectUserPreferences.Instance.CurrentDocument = null;
 					}
+				} else {
+					Document.Current.RefreshExternalScenes();
 				}
 				return true;
 			}
@@ -404,7 +406,7 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void ReloadModifiedDocuments()
+		private void ReloadModifiedDocuments()
 		{
 			HandleMissingDocuments(Documents.Where(d => !GetFullPath(d.Path, out _)));
 			foreach (var doc in Documents.ToList()) {

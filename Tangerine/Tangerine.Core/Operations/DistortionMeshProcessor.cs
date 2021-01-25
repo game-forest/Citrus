@@ -35,7 +35,7 @@ namespace Tangerine.Core.Operations
 						Position = pos
 					};
 					LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(mesh), mesh.Nodes.Count, point);
-					Document.Current.Decorate(point);
+					Document.Decorate(point);
 				}
 			}
 		}
