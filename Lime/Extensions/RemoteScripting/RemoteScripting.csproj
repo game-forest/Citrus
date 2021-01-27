@@ -5,6 +5,7 @@
     <RootNamespace>RemoteScripting</RootNamespace>
     <AssemblyName>RemoteScripting</AssemblyName>
     <LangVersion>8.0</LangVersion>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +14,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)RemoteScripting.dll" "$(SolutionDir)RemoteScripting.dll" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)RemoteScripting.dll" "$(SolutionDir)RemoteScripting.net5.dll" /y</PostBuildEvent>
   </PropertyGroup>
 
 </Project>
