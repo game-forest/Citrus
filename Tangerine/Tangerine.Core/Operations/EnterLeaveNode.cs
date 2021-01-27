@@ -157,7 +157,7 @@ namespace Tangerine.Core.Operations
 		{
 			if (
 				animation.IsLegacy && Document.Current.Container != animation.OwnerNode ||
-				!animation.IsLegacy && Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
+				!animation.IsLegacy && !Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
 			) {
 				var node = NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false);
 				// Remap animation in case of external scene.
