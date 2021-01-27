@@ -550,6 +550,9 @@ namespace Tangerine.Core
 
 		public void RefreshExternalScenes()
 		{
+			if (!Loaded) {
+				return;
+			}
 			var dependencyPaths = RootNodeUnwrapped.Descendants
 				.Where(i => !string.IsNullOrEmpty(i.ContentsPath))
 				.Select(i => i.ContentsPath)
