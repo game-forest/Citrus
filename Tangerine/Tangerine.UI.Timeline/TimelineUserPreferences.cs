@@ -20,9 +20,6 @@ namespace Tangerine.UI.Timeline
 		public List<float> TimelineHSplitterStretches;
 
 		[YuzuOptional]
-		public List<float> AnimationsPanelVSplitterStretches;
-
-		[YuzuOptional]
 		public bool AnimationStretchMode;
 
 		[YuzuOptional]
@@ -39,7 +36,6 @@ namespace Tangerine.UI.Timeline
 			EditCurves = true;
 			TimelineVSplitterStretches = new List<float>();
 			TimelineHSplitterStretches = new List<float>();
-			AnimationsPanelVSplitterStretches = new List<float>();
 		}
 
 		private static TimelineUserPreferences instance;

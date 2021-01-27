@@ -17,73 +17,71 @@ namespace Tangerine.Panels
 		private readonly Widget panelWidget;
 		private readonly Frame contentWidget;
 		private readonly EditBox searchStringEditor;
+		private TreeViewMode mode;
 
 		public AnimationsPanel(Widget panelWidget)
 		{
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
-			ThemedScrollView scrollView1, scrollView2;
-			ToolbarButton expandAll, collapseAll;
+			ThemedScrollView scrollView;
+			ToolbarButton expandAll, collapseAll, showAll;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
 				Padding = new Thickness(5),
 				Layout = new VBoxLayout { Spacing = 5 },
 				Nodes = {
-					new ThemedVSplitter {
-						Stretches = Splitter.GetStretchesList(TimelineUserPreferences.Instance.AnimationsPanelVSplitterStretches, 1, 0.3f),
+					new Frame {
+						Layout = new VBoxLayout { Spacing = 5 },
+						Padding = new Thickness { Top = 4 },
 						Nodes = {
-							new Frame {
-								Layout = new VBoxLayout { Spacing = 5 },
-								Padding = new Thickness { Top = 4 },
+							new Widget {
+								Padding = new Thickness(2, 10, 0, 0),
+								MinMaxHeight = Metrics.ToolbarHeight,
+								Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
+								Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
 								Nodes = {
-									new Widget {
-										Padding = new Thickness(2, 10, 0, 0),
-										MinMaxHeight = Metrics.ToolbarHeight,
-										Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
-										Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
-										Nodes = {
-											(expandAll = new ToolbarButton {
-												Texture = IconPool.GetTexture("AnimationsPanel.ExpandAll"),
-												Tooltip = "Expand All",
-											}),
-											(collapseAll = new ToolbarButton {
-												Texture = IconPool.GetTexture("AnimationsPanel.CollapseAll"),
-												Tooltip = "Collapse All",
-											}),
-											(searchStringEditor = new ThemedEditBox()),
-										}
-									},
-									(scrollView2 = new ThemedScrollView()),
+									(expandAll = new ToolbarButton {
+										Texture = IconPool.GetTexture("AnimationsPanel.ExpandAll"),
+										Tooltip = "Expand All",
+									}),
+									(collapseAll = new ToolbarButton {
+										Texture = IconPool.GetTexture("AnimationsPanel.CollapseAll"),
+										Tooltip = "Collapse All",
+									}),
+									(showAll = new ToolbarButton {
+										Texture = IconPool.GetTexture("AnimationsPanel.ShowAll"),
+										Tooltip = "Show All",
+									}),
+									(searchStringEditor = new ThemedEditBox()),
 								}
 							},
-							(scrollView1 = new ThemedScrollView())
+							(scrollView = new ThemedScrollView()),
 						}
 					}
 				}
 			};
-			var itemProvider1 = new TreeViewItemProvider {
-				IsSearchActiveGetter = () => false,
-				ItemStateProvider = sceneItem => sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State1
-			};
-			var itemProvider2 = new TreeViewItemProvider {
+			var itemProvider = new TreeViewItemProvider {
 				IsSearchActiveGetter = () => searchStringEditor.Text.Length > 0,
-				ItemStateProvider = sceneItem => sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State2
+				ItemStateProvider = sceneItem =>
+					mode == TreeViewMode.CurrentBranch
+						? sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State1
+						: sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State2,
+				ModeGetter = () => mode
 			};
-			CreateTreeView(scrollView1, itemProvider1,
-				new TreeViewItemPresentationOptions { Minimalistic = true },
-				TreeViewMode.CurrentContainer);
-			var treeView2 = CreateTreeView(scrollView2, itemProvider2,
-				new TreeViewItemPresentationOptions {
-					Minimalistic = true,
-					SearchStringGetter = () => searchStringEditor.Text
-				}, TreeViewMode.Hierarchy);
-			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView2, itemProvider2, TreeViewMode.Hierarchy));
-			expandAll.Clicked = treeView2.ExpandAll;
-			collapseAll.Clicked = treeView2.CollapseAll;
+			var treeView = CreateTreeView(scrollView, itemProvider,
+				new TreeViewItemPresentationOptions { Minimalistic = true, SearchStringGetter = () => searchStringEditor.Text });
+			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView, itemProvider));
+			expandAll.Clicked = treeView.ExpandAll;
+			collapseAll.Clicked = treeView.CollapseAll;
+			showAll.Clicked = () => {
+				mode = mode == TreeViewMode.CurrentBranch ? TreeViewMode.AllHierarchy : TreeViewMode.CurrentBranch;
+				RebuildTreeView(treeView, itemProvider);
+			};
+			showAll.AddChangeWatcher(() => mode, _ => showAll.Checked = mode == TreeViewMode.AllHierarchy);
 		}
 
 		private IEnumerator<object> SearchStringDebounceTask(TreeView treeView,
-			TreeViewItemProvider provider, TreeViewMode mode)
+			TreeViewItemProvider provider)
 		{
 			string previousSearchText = null;
 			var lastChangeAt = DateTime.Now;
@@ -97,11 +95,11 @@ namespace Tangerine.Panels
 				}
 				if (needRefresh && DateTime.Now - lastChangeAt > TimeSpan.FromSeconds(0.25f)) {
 					needRefresh = false;
-					RebuildTreeView(treeView, provider, mode);
+					RebuildTreeView(treeView, provider);
 					if (searchStringEditor.Text.Length > 0 && treeView.RootItem != null) {
 						ExpandTree(treeView.RootItem);
 					}
-					ScrollToCurrentAnimation(treeView, provider, mode);
+					ScrollToCurrentAnimation(treeView, provider);
 				}
 			}
 		}
@@ -112,10 +110,11 @@ namespace Tangerine.Panels
 			public readonly TreeViewItemState State2 = new TreeViewItemState();
 		}
 
-		public class TreeViewItemProvider
+		private class TreeViewItemProvider
 		{
 			public Func<Row, TreeViewItemState> ItemStateProvider;
 			public Func<bool> IsSearchActiveGetter;
+			public Func<TreeViewMode> ModeGetter;
 
 			public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
 			{
@@ -144,25 +143,27 @@ namespace Tangerine.Panels
 
 		enum TreeViewMode
 		{
-			Hierarchy,
-			CurrentContainer
+			AllHierarchy,
+			CurrentBranch
 		}
 
 		private TreeView CreateTreeView(
 			ThemedScrollView scrollView, TreeViewItemProvider provider,
-			TreeViewItemPresentationOptions presentationOptions, TreeViewMode mode)
+			TreeViewItemPresentationOptions presentationOptions)
 		{
 			var presentation = new TreeViewPresentation(provider, presentationOptions);
-			var treeView = new TreeView(scrollView, presentation,
-				new TreeViewOptions { ShowRoot = false, ActivateOnSelect = true });
+			var treeView = new TreeView(scrollView, presentation, new TreeViewOptions { ShowRoot = false });
 			treeView.OnDragBegin += TreeView_OnDragBegin;
 			treeView.OnDragEnd += TreeView_OnDragEnd;
 			treeView.OnCopy += TreeView_OnCopy;
-			treeView.OnCut += (s, e) => TreeView_OnCut(s, e, provider, mode);
-			treeView.OnDelete += (s, e) => TreeView_OnDelete(s, e, provider, mode);
-			treeView.OnPaste += (s, e) => TreeView_OnPaste(s, e, provider, mode);
+			treeView.OnCut += (s, e) => TreeView_OnCut(s, e, provider);
+			treeView.OnDelete += (s, e) => TreeView_OnDelete(s, e, provider);
+			treeView.OnPaste += (s, e) => TreeView_OnPaste(s, e, provider);
 			treeView.OnActivateItem += (s, e) => {
 				switch (e.Item) {
+					case NodeTreeViewItem ni:
+						Document.Current.History.DoTransaction(() => NavigateToNode.Perform(ni.Node, true));
+						break;
 					case AnimationTreeViewItem ai:
 						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(ai.Animation));
 						break;
@@ -189,23 +190,17 @@ namespace Tangerine.Panels
 				() => (
 					Document.Current?.SceneTreeVersion ?? 0,
 					Document.Current?.Container),
-				_ => RebuildTreeView(treeView, provider, mode));
+				_ => RebuildTreeView(treeView, provider));
 			// Expand current animation container on animation change
 			contentWidget.AddChangeWatcher(
 				() => Document.Current?.Animation,
-				_ => ScrollToCurrentAnimation(treeView, provider, mode));
-			RebuildTreeView(treeView, provider, mode);
+				_ => ScrollToCurrentAnimation(treeView, provider));
+			RebuildTreeView(treeView, provider);
 			return treeView;
 		}
 
-		private void ScrollToCurrentAnimation(TreeView treeView, TreeViewItemProvider provider, TreeViewMode mode)
+		private void ScrollToCurrentAnimation(TreeView treeView, TreeViewItemProvider provider)
 		{
-			if (
-				mode == TreeViewMode.CurrentContainer &&
-				!Document.Current.Container.Animations.Contains(Document.Current.Animation)
-			) {
-				return;
-			}
 			var sceneItem = Document.Current.GetSceneItemForObject(Document.Current.Animation);
 			var treeViewItem = provider.GetAnimationTreeViewItem(sceneItem);
 			if (treeViewItem.Parent != null) {
@@ -229,10 +224,6 @@ namespace Tangerine.Panels
 			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
 				Where(i => !i.Animation.IsLegacy).ToList();
 			Document.Current.History.DoTransaction(() => {
-				if (!animationItems.All(i => LinkSceneItem.CanLink(parentItem.SceneItem, i.SceneItem))) {
-					AlertDialog.Show("Can't drag the animation. Probably an animation with the same id already exists", "Ok");
-					return;
-				}
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in animationItems) {
 					var itemIndex = parentItem.SceneItem.Rows.IndexOf(item.SceneItem);
@@ -240,6 +231,11 @@ namespace Tangerine.Panels
 						index--;
 					}
 					UnlinkSceneItem.Perform(item.SceneItem);
+				}
+				if (!animationItems.All(i => LinkSceneItem.CanLink(parentItem.SceneItem, i.SceneItem))) {
+					AlertDialog.Show("Can't drag the animation. Probably an animation with the same id already exists", "Ok");
+					Document.Current.History.RollbackTransaction();
+					return;
 				}
 				foreach (var item in animationItems) {
 					LinkSceneItem.Perform(parentItem.SceneItem, index++, item.SceneItem);
@@ -271,13 +267,13 @@ namespace Tangerine.Panels
 			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 		}
 
-		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider, TreeViewMode mode)
+		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider)
 		{
 			TreeView_OnCopy(sender, args);
-			TreeView_OnDelete(sender, args, provider, mode);
+			TreeView_OnDelete(sender, args, provider);
 		}
 
-		private void TreeView_OnDelete(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider, TreeViewMode mode)
+		private void TreeView_OnDelete(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider)
 		{
 			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
 				Where(a => !a.Animation.IsLegacy).ToList();
@@ -301,7 +297,7 @@ namespace Tangerine.Panels
 						DeleteAnimators(animation.Id, animation.OwnerNode);
 					}
 					UnlinkSceneItem.Perform(item.SceneItem);
-					RebuildTreeView((TreeView)sender, provider, mode);
+					RebuildTreeView((TreeView)sender, provider);
 				}
 				if (newSelected == null) {
 					NavigateToAnimation.Perform(Document.Current.Container.DefaultAnimation);
@@ -327,7 +323,7 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args, TreeViewItemProvider provider, TreeViewMode mode)
+		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args, TreeViewItemProvider provider)
 		{
 			var data = Clipboard.Text;
 			if (!string.IsNullOrEmpty(data)) {
@@ -335,7 +331,7 @@ namespace Tangerine.Panels
 					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
 					if (args.Parent is CommonTreeViewItem parent && parent.SceneItem.GetNode() != null) {
-						RebuildTreeView((TreeView)sender, provider, mode);
+						RebuildTreeView((TreeView)sender, provider);
 						((TreeView)sender).ClearSelection();
 						var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 						foreach (var animation in container.Animations.ToList()) {
@@ -373,7 +369,7 @@ namespace Tangerine.Panels
 
 		private readonly List<TreeViewItem> nodeItems = new List<TreeViewItem>();
 
-		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider, TreeViewMode mode)
+		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider)
 		{
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
@@ -381,54 +377,69 @@ namespace Tangerine.Panels
 
 			nodeItems.Clear();
 			var filter = searchStringEditor.Text;
-			TraverseSceneTree(mode == TreeViewMode.Hierarchy
-				? Document.Current.SceneTree
-				: Document.Current.GetSceneItemForObject(Document.Current.Container));
+			if (mode == TreeViewMode.CurrentBranch) {
+				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(Document.Current.Container));
+			} else {
+				TraverseSceneTree(Document.Current.GetSceneItemForObject(Document.Current.RootNode));
+			}
+
+			void TraverseSceneTreeForCurrentBranch(Row sceneTree)
+			{
+				// Skip folders
+				while (!sceneTree.TryGetNode(out _)) {
+					sceneTree = sceneTree.Parent;
+				}
+				TraverseNodeChildren(sceneTree);
+				if (sceneTree.Parent != null) {
+					TraverseSceneTreeForCurrentBranch(sceneTree.Parent);
+				}
+			}
 
 			void TraverseSceneTree(Row sceneTree)
 			{
-				if (
-					sceneTree.TryGetNode(out var node) &&
-					(mode == TreeViewMode.CurrentContainer || node.NeedSerializeAnimations() || node == Document.Current.Container)
-				) {
-					var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
-					var nodeSatisfyFilter = Filter(nodeItem.Label);
-					foreach (var animationSceneItem in sceneTree.Rows) {
-						if (animationSceneItem.GetAnimation() == null) {
-							// Do not use LINQ trying to reduce GC pressure
-							continue;
-						}
-						var animationItem = provider.GetAnimationTreeViewItem(animationSceneItem);
-						foreach (var markerSceneItem in animationSceneItem.Rows) {
-							if (markerSceneItem.TryGetMarker(out var marker) && Filter(marker.Id)) {
-								animationItem.Items.Add(provider.GetMarkerTreeViewItem(markerSceneItem));
-							}
-						}
-						if (animationItem.Items.Count > 0 || nodeSatisfyFilter || Filter(animationItem.Label)) {
-							nodeItem.Items.Add(animationItem);
+				if (sceneTree.TryGetNode(out var node) && node.NeedSerializeAnimations()) {
+					TraverseNodeChildren(sceneTree);
+				}
+				foreach (var child in sceneTree.Rows) {
+					TraverseSceneTree(child);
+				}
+			}
+
+			void TraverseNodeChildren(Row sceneTree)
+			{
+				var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
+				var nodeSatisfyFilter = Filter(nodeItem.Label);
+				foreach (var animationSceneItem in sceneTree.Rows) {
+					if (animationSceneItem.GetAnimation() == null) {
+						// Do not use LINQ trying to reduce GC pressure
+						continue;
+					}
+					var animationItem = provider.GetAnimationTreeViewItem(animationSceneItem);
+					foreach (var markerSceneItem in animationSceneItem.Rows) {
+						if (markerSceneItem.TryGetMarker(out var marker) && Filter(marker.Id)) {
+							animationItem.Items.Add(provider.GetMarkerTreeViewItem(markerSceneItem));
 						}
 					}
-					if (nodeItem.Items.Count > 0 || mode == TreeViewMode.CurrentContainer) {
-						((NodeTreeViewItem)nodeItem).RefreshLabel();
-						nodeItems.Add(nodeItem);
+					if (animationItem.Items.Count > 0 || nodeSatisfyFilter || Filter(animationItem.Label)) {
+						nodeItem.Items.Add(animationItem);
 					}
 				}
-				if (mode == TreeViewMode.Hierarchy) {
-					foreach (var child in sceneTree.Rows) {
-						TraverseSceneTree(child);
-					}
+				if (nodeItem.Items.Count > 0) {
+					((NodeTreeViewItem) nodeItem).RefreshLabel();
+					nodeItems.Add(nodeItem);
 				}
 			}
 
 			bool Filter(string text)
 			{
-				return mode == TreeViewMode.CurrentContainer ||
-					filter.Length == 0 || text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
+				return filter.Length == 0 || text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
 			}
 
 			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
-			nodeItems.Sort((a, b) =>
-				string.Compare(a.Label, b.Label, StringComparison.Ordinal));
+			if (mode == TreeViewMode.AllHierarchy) {
+				nodeItems.Sort((a, b) =>
+					string.Compare(a.Label, b.Label, StringComparison.Ordinal));
+			}
 			foreach (var item in nodeItems) {
 				treeView.RootItem.Items.Add(item);
 			}
@@ -562,9 +573,8 @@ namespace Tangerine.Panels
 			{
 				stringBuilder.Clear();
 				label = null;
-				BuildLabelForNode(Node);
-				if (Node == Document.Current.RootNode) {
-					stringBuilder.Append(" [Scene Root]");
+				if (Node != Document.Current.RootNode) {
+					BuildLabelForNode(Node);
 				}
 				label = stringBuilder.ToString();
 
@@ -766,7 +776,7 @@ namespace Tangerine.Panels
 						Renderer.DrawRect(
 							Vector2.Zero, w.Size,
 							Item.Selected ? Widget.Focused == w.Parent ? Theme.Colors.SelectedBackground :
-							Theme.Colors.SelectedInactiveBackground : Theme.Colors.WhiteBackground
+							Color4.Transparent : Theme.Colors.WhiteBackground
 						);
 						HighlightLabel(Widget, Label, options.SearchStringGetter?.Invoke());
 					})
