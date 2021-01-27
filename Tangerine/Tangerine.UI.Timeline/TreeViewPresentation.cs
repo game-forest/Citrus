@@ -163,6 +163,9 @@ namespace Tangerine.UI.Timeline
 
 		public void Rename()
 		{
+			if (!Label.Visible) {
+				return;
+			}
 			((WindowWidget) Label.GetRoot()).Window.Activate();
 			Label.Visible = false;
 			var idx = Label.Parent.Nodes.IndexOf(Label);
