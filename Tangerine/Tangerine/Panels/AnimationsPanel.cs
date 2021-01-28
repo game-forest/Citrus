@@ -372,9 +372,6 @@ namespace Tangerine.Panels
 
 		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider)
 		{
-			var sw = new Stopwatch();
-			sw.Start();
-
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
 			}
@@ -456,9 +453,6 @@ namespace Tangerine.Panels
 				}
 				tree.Items.Clear();
 			}
-
-			sw.Stop();
-			Lime.Debug.Write(sw.ElapsedMilliseconds);
 		}
 
 		public void Attach()
