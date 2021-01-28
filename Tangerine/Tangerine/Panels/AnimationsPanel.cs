@@ -222,8 +222,7 @@ namespace Tangerine.Panels
 			if (!(args.Parent is NodeTreeViewItem parentItem)) {
 				return;
 			}
-			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
-				Where(i => !i.Animation.IsLegacy).ToList();
+			var animationItems = args.Items.OfType<AnimationTreeViewItem>().ToList();
 			Document.Current.History.DoTransaction(() => {
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in animationItems) {
