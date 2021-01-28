@@ -144,8 +144,8 @@ namespace Tangerine.Panels
 
 		enum TreeViewMode
 		{
-			AllHierarchy,
-			CurrentBranch
+			CurrentBranch,
+			AllHierarchy
 		}
 
 		private TreeView CreateTreeView(
