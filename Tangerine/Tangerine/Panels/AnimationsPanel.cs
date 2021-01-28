@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,13 +17,13 @@ namespace Tangerine.Panels
 		private readonly Widget panelWidget;
 		private readonly Frame contentWidget;
 		private readonly EditBox searchStringEditor;
+		private readonly ThemedScrollView scrollView;
 		private TreeViewMode mode;
 
 		public AnimationsPanel(Widget panelWidget)
 		{
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
-			ThemedScrollView scrollView;
 			ToolbarButton expandAll, collapseAll, showAll;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
@@ -67,7 +66,6 @@ namespace Tangerine.Panels
 					mode == TreeViewMode.CurrentBranch
 						? sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State1
 						: sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State2,
-				ModeGetter = () => mode
 			};
 			var treeView = CreateTreeView(scrollView, itemProvider,
 				new TreeViewItemPresentationOptions { Minimalistic = true, SearchStringGetter = () => searchStringEditor.Text });
@@ -115,7 +113,6 @@ namespace Tangerine.Panels
 		{
 			public Func<Row, TreeViewItemState> ItemStateProvider;
 			public Func<bool> IsSearchActiveGetter;
-			public Func<TreeViewMode> ModeGetter;
 
 			public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
 			{
@@ -192,10 +189,10 @@ namespace Tangerine.Panels
 					Document.Current?.SceneTreeVersion ?? 0,
 					Document.Current?.Container),
 				_ => RebuildTreeView(treeView, provider));
-			// Expand current animation container on animation change
-			contentWidget.AddChangeWatcher(
-				() => Document.Current?.Animation,
-				_ => ScrollToCurrentAnimation(treeView, provider));
+			// // Expand current animation container on animation change
+			// contentWidget.AddChangeWatcher(
+			// 	() => Document.Current?.Animation,
+			// 	_ => ScrollToCurrentAnimation(treeView, provider));
 			RebuildTreeView(treeView, provider);
 			return treeView;
 		}
@@ -377,10 +374,29 @@ namespace Tangerine.Panels
 
 			nodeItems.Clear();
 			var filter = searchStringEditor.Text;
+			var initialTreeViewHeight = scrollView.Content.Height;
 			if (mode == TreeViewMode.CurrentBranch) {
 				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(Document.Current.Container));
 			} else {
 				TraverseSceneTree(Document.Current.GetSceneItemForObject(Document.Current.RootNode));
+			}
+
+			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
+			if (mode == TreeViewMode.AllHierarchy) {
+				nodeItems.Sort((a, b) =>
+					string.Compare(a.Label, b.Label, StringComparison.Ordinal));
+			}
+			foreach (var item in nodeItems) {
+				treeView.RootItem.Items.Add(item);
+			}
+			treeView.Refresh();
+
+			if (mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
+				scrollView.LayoutManager.Layout();
+				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
+				var savedScrollPosition = scrollView.Behaviour.ScrollPosition;
+				scrollView.Behaviour.ScrollPosition += treeViewHeightDelta;
+				scrollView.Behaviour.ScrollTo(savedScrollPosition);
 			}
 
 			void TraverseSceneTreeForCurrentBranch(Row sceneTree)
@@ -434,16 +450,6 @@ namespace Tangerine.Panels
 			{
 				return filter.Length == 0 || text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
 			}
-
-			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
-			if (mode == TreeViewMode.AllHierarchy) {
-				nodeItems.Sort((a, b) =>
-					string.Compare(a.Label, b.Label, StringComparison.Ordinal));
-			}
-			foreach (var item in nodeItems) {
-				treeView.RootItem.Items.Add(item);
-			}
-			treeView.Refresh();
 
 			void DestroyTree(TreeViewItem tree)
 			{
