@@ -556,6 +556,9 @@ namespace Tangerine.Core
 
 		private void RefreshExternalScenes(HashSet<string> documentsBeingLoaded)
 		{
+			if (!Loaded) {
+				return;
+			}
 			if (documentsBeingLoaded.Contains(Path)) {
 				throw new CyclicDependencyException($"Cyclic scenes dependency was detected: {Path}");
 			}
