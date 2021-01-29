@@ -66,10 +66,15 @@ namespace Tangerine.Panels
 			};
 			var itemProvider = new TreeViewItemProvider {
 				IsSearchActiveGetter = () => searchStringEditor.Text.Length > 0,
-				ItemStateProvider = sceneItem =>
-					mode == TreeViewMode.CurrentBranch
-						? sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State1
-						: sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>().State2,
+				ItemStateProvider = sceneItem => {
+					var c = sceneItem.Components.GetOrAdd<TreeViewItemStateComponent>();
+					return mode == TreeViewMode.AllHierarchy
+						? c.StateForAllHierarchy ?? (c.StateForAllHierarchy = new TreeViewItemState())
+						: c.StateForCurrentBranch ?? (c.StateForCurrentBranch = new TreeViewItemState {
+							ExpandedIfSearchActive = sceneItem.GetNode() != null,
+							ExpandedIfSearchInactive = sceneItem.GetNode() != null,
+						});
+				}
 			};
 			var treeView = CreateTreeView(scrollView, itemProvider,
 				new TreeViewItemPresentationOptions { Minimalistic = true, SearchStringGetter = () => searchStringEditor.Text });
@@ -103,15 +108,14 @@ namespace Tangerine.Panels
 					if (searchStringEditor.Text.Length > 0 && treeView.RootItem != null) {
 						ExpandTree(treeView.RootItem);
 					}
-					ScrollToCurrentAnimation(treeView, provider);
 				}
 			}
 		}
 
 		class TreeViewItemStateComponent : Component
 		{
-			public readonly TreeViewItemState State1 = new TreeViewItemState { ExpandedIfSearchInactive = true };
-			public readonly TreeViewItemState State2 = new TreeViewItemState();
+			public TreeViewItemState StateForCurrentBranch;
+			public TreeViewItemState StateForAllHierarchy;
 		}
 
 		private class TreeViewItemProvider
@@ -369,6 +373,7 @@ namespace Tangerine.Panels
 		}
 
 		private readonly List<TreeViewItem> nodeItems = new List<TreeViewItem>();
+		private Node previousContainer;
 
 		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider)
 		{
@@ -395,8 +400,10 @@ namespace Tangerine.Panels
 			}
 			treeView.Refresh();
 
+			var animated = previousContainer != Document.Current.Container;
+			previousContainer = Document.Current.Container;
 			// Animated (dis)appearance of list header.
-			if (mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
+			if (animated && mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
 				scrollView.LayoutManager.Layout();
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
 				var savedScrollPosition = scrollView.Behaviour.ScrollPosition;
@@ -419,7 +426,10 @@ namespace Tangerine.Panels
 
 			void TraverseSceneTree(Row sceneTree)
 			{
-				if (sceneTree.TryGetNode(out var node) && node.NeedSerializeAnimations()) {
+				if (
+					sceneTree.TryGetNode(out var node) &&
+					(node.NeedSerializeAnimations() || Document.Current?.Animation.OwnerNode == node)
+				) {
 					TraverseNodeChildren(sceneTree);
 				}
 				foreach (var child in sceneTree.Rows) {
