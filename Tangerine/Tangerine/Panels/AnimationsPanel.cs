@@ -24,7 +24,7 @@ namespace Tangerine.Panels
 		{
 			this.panelWidget = panelWidget;
 			panelWidget.TabTravesable = new TabTraversable();
-			ToolbarButton expandAll, collapseAll, showAll;
+			ToolbarButton expandAll, collapseAll, showAll, showCurrent;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
 				Padding = new Thickness(5),
@@ -52,6 +52,10 @@ namespace Tangerine.Panels
 										Texture = IconPool.GetTexture("AnimationsPanel.ShowAll"),
 										Tooltip = "Show All",
 									}),
+									(showCurrent = new ToolbarButton {
+										Texture = IconPool.GetTexture("AnimationsPanel.ShowCurrent"),
+										Tooltip = "Show Current Animation",
+									}),
 									(searchStringEditor = new ThemedEditBox()),
 								}
 							},
@@ -72,6 +76,7 @@ namespace Tangerine.Panels
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView, itemProvider));
 			expandAll.Clicked = treeView.ExpandAll;
 			collapseAll.Clicked = treeView.CollapseAll;
+			showCurrent.AddTransactionClickHandler(() => ScrollToCurrentAnimation(treeView, itemProvider));
 			showAll.Clicked = () => {
 				mode = mode == TreeViewMode.CurrentBranch ? TreeViewMode.AllHierarchy : TreeViewMode.CurrentBranch;
 				RebuildTreeView(treeView, itemProvider);
@@ -189,10 +194,6 @@ namespace Tangerine.Panels
 					Document.Current?.SceneTreeVersion ?? 0,
 					Document.Current?.Container),
 				_ => RebuildTreeView(treeView, provider));
-			// // Expand current animation container on animation change
-			// contentWidget.AddChangeWatcher(
-			// 	() => Document.Current?.Animation,
-			// 	_ => ScrollToCurrentAnimation(treeView, provider));
 			RebuildTreeView(treeView, provider);
 			return treeView;
 		}
@@ -206,6 +207,9 @@ namespace Tangerine.Panels
 				treeView.Refresh();
 				contentWidget.LayoutManager.Layout();
 				treeView.ScrollToItem(treeViewItem, true);
+				treeView.ClearSelection();
+				provider.GetAnimationTreeViewItem(sceneItem).Selected = true;
+				scrollView.Content.SetFocus();
 			}
 		}
 
@@ -391,11 +395,13 @@ namespace Tangerine.Panels
 			}
 			treeView.Refresh();
 
+			// Animated (dis)appearance of list header.
 			if (mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
 				scrollView.LayoutManager.Layout();
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
 				var savedScrollPosition = scrollView.Behaviour.ScrollPosition;
 				scrollView.Behaviour.ScrollPosition += treeViewHeightDelta;
+				scrollView.Behaviour.ScrollToItemVelocity = Math.Abs(treeViewHeightDelta * 5);
 				scrollView.Behaviour.ScrollTo(savedScrollPosition);
 			}
 
