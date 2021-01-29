@@ -247,23 +247,18 @@ namespace Tangerine.UI
 					presentation.RenderDragCursor(w, parent, childIndex, dragInto);
 				}
 			});
-			var itemSelectedAtDragBegin = false;
 			var dragRecognized = false;
 			dg.Began += () => {
 				dragRecognized = false;
-				itemSelectedAtDragBegin = false;
 				var itemUnderMouse = GetItemUnderMouse();
 				if (itemUnderMouse == null) {
 					return;
 				}
 				if (scrollContent.Input.IsKeyPressed(toggleSelectionModificator)) {
-					itemSelectedAtDragBegin = true;
 					SelectItem(itemUnderMouse, !itemUnderMouse.Selected, false, activateIfNeeded: false);
 				} else if (scrollContent.Input.IsKeyPressed(Key.Shift)) {
-					itemSelectedAtDragBegin = true;
 					SelectRange(itemUnderMouse);
 				} else if (!itemUnderMouse.Selected) {
-					itemSelectedAtDragBegin = true;
 					SelectItem(itemUnderMouse);
 				}
 			};
@@ -274,11 +269,6 @@ namespace Tangerine.UI
 			};
 			dg.Ended += () => {
 				if (!dragRecognized) {
-					// Drag wasn't recognized -- treat it as a click.
-					var itemUnderMouse = GetItemUnderMouse();
-					if (itemUnderMouse != null && !itemSelectedAtDragBegin) {
-						SelectItem(itemUnderMouse);
-					}
 					return;
 				}
 				scrollContent.CompoundPostPresenter.Remove(dragCursorPresenter);
