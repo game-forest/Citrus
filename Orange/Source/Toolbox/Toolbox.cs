@@ -157,7 +157,7 @@ namespace Orange
 			foreach (var n in clone.SelfAndDescendants) {
 				CleanNode(n);
 			}
-			
+
 			void CleanNode(Node n)
 			{
 				n.SetTangerineFlag(~TangerineFlags.SerializableMask, false);

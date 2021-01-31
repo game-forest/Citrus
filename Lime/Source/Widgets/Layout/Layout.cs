@@ -206,6 +206,7 @@ namespace Lime
 		{ }
 	}
 
+	[TangerineMenuPath("Layout/Layout Constraints")]
 	[TangerineRegisterComponent]
 	[AllowedComponentOwnerTypes(typeof(Widget))]
 	[MutuallyExclusiveDerivedComponents]

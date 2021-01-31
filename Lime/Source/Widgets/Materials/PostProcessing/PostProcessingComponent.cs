@@ -3,6 +3,7 @@ using Yuzu;
 namespace Lime
 {
 	// TODO: Attribute to exclude components with custom presenters and/or custom render chain builders
+	[TangerineMenuPath("Effects/Post Processing")]
 	[TangerineRegisterComponent]
 	[AllowedComponentOwnerTypes(typeof(Widget))]
 	public class PostProcessingComponent : NodeBehavior

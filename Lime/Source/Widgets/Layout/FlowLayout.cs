@@ -6,6 +6,7 @@ using Yuzu;
 namespace Lime
 {
 	[YuzuDontGenerateDeserializer]
+	[TangerineMenuPath("Layout/Flow Layout")]
 	[TangerineRegisterComponent]
 	public class FlowLayout : Layout, ILayout
 	{

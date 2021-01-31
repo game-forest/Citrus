@@ -151,6 +151,24 @@ namespace Tangerine.Core
 					registeredComponentTypes.Add(type);
 				}
 			}
+			// Sort types once depending on grouping and lexicographically.
+			sortTypes(registeredNodeTypes);
+			sortTypes(registeredComponentTypes);
+			void sortTypes(List<Type> types)
+			{
+				types.Sort((a, b) => {
+					string aPath = a.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+					string bPath = b.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+					int r = (aPath == null).CompareTo(bPath == null);
+					if (r != 0) {
+						return r;
+					} else if (aPath == null) {
+						return a.Name.CompareTo(b.Name);
+					} else {
+						return aPath.CompareTo(bPath);
+					}
+				 });
+			}
 			if (PluginLoader.CurrentPlugin != null) {
 				foreach(var action in PluginLoader.CurrentPlugin.TangerineProjectOpened) {
 					action?.Invoke();

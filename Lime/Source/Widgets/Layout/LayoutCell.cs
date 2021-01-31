@@ -132,6 +132,7 @@ namespace Lime
 	}
 
 	[AllowedComponentOwnerTypes(typeof(Widget))]
+	[TangerineMenuPath("Layout/Layout Cell")]
 	[TangerineRegisterComponent]
 	public class LayoutCell : NodeComponent, ILayoutCell
 	{

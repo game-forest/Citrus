@@ -401,4 +401,19 @@ namespace Lime
 			SecondaryColor = Color4.Parse(secondaryColor);
 		}
 	}
+
+
+	/// <summary>
+	/// '/' Separated path to either component or node create command in menu.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	public sealed class TangerineMenuPathAttribute : Attribute
+	{
+		public string Path;
+		public TangerineMenuPathAttribute(string path)
+		{
+			Path = path;
+		}
+	}
+
 }

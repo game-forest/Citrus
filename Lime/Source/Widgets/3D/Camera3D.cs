@@ -3,6 +3,7 @@ using Yuzu;
 namespace Lime
 {
 	[TangerineRegisterNode(Order = 21)]
+	[TangerineMenuPath("3D/Camera 3D")]
 	[TangerineVisualHintGroup("/All/Nodes/3D")]
 	public class Camera3D : Node3D
 	{

@@ -3,6 +3,7 @@ namespace Lime
 {
 	[TangerineRegisterNode(CanBeRoot = true, Order = 24)]
 	[TangerineNodeBuilder("BuildForTangerine")]
+	[TangerineMenuPath("3D/Widget Adapter 3D")]
 	[TangerineVisualHintGroup("/All/Nodes/3D")]
 	public class WidgetAdapter3D : Node3D
 	{

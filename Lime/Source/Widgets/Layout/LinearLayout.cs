@@ -17,6 +17,7 @@ namespace Lime
 		{ }
 	}
 
+	[TangerineMenuPath("Layout/Linear Layout")]
 	[TangerineRegisterComponent]
 	public class LinearLayout : Layout, ILayout
 	{

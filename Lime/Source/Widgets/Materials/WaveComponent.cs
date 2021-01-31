@@ -8,6 +8,7 @@ namespace Lime
 	/// <summary>
 	/// WaveComponent applies the wave deformation to its owner.
 	/// </summary>
+	[TangerineMenuPath("Effects/Wave")]
 	[TangerineRegisterComponent]
 	public class WaveComponent : MaterialComponent<WaveMaterial>
 	{
