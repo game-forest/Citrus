@@ -73,7 +73,11 @@ namespace Orange
 				return;
 			}
 
-			OrangeActionsHelper.ExecuteOrangeActionInstantly(commandObj.Action, () => { }, () => { }, null);
+			var task = OrangeActionsHelper.ExecuteOrangeAction(commandObj.Action, null, null, false);
+			task.Wait();
+			if (!task.Result) {
+				throw new TerminateException(1);
+			}
 		}
 
 		private static void WriteHelpAndExit()

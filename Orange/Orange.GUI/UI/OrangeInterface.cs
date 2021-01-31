@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Lime;
 using Orange.Source;
 
@@ -276,18 +277,22 @@ namespace Orange
 
 		private IEnumerator<object> ExecuteTask(Func<string> action)
 		{
-			yield return OrangeActionsHelper.ExecuteOrangeAction(action, () => {
-				The.Workspace.Save();
-				EnableControls(false);
-				textView.Clear();
-			}, () => {
-				EnableControls(true);
-				if (textView.ScrollPosition == textView.MaxScrollPosition) {
-					The.UI.ScrollLogToEnd();
-				}
-			},
-				Task.ExecuteAsync
+			var task = OrangeActionsHelper.ExecuteOrangeAction(
+				action, () => {
+					The.Workspace.Save();
+					EnableControls(false);
+					textView.Clear();
+				}, () => {
+					EnableControls(true);
+					if (textView.ScrollPosition == textView.MaxScrollPosition) {
+						The.UI.ScrollLogToEnd();
+					}
+				},
+				true
 			);
+			while (!task.IsCompleted && !task.IsCanceled && !task.IsFaulted) {
+				yield return null;
+			}
 		}
 
 		private void EnableControls(bool value)

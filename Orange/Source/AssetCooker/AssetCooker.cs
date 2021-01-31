@@ -35,14 +35,16 @@ namespace Orange
 		public readonly Target Target;
 		public TargetPlatform Platform => Target.Platform;
 
-		public static void CookForTarget(Target target, List<string> bundles = null)
+		public static bool CookForTarget(Target target, List<string> bundles, out string errorMessage)
 		{
 			var assetCooker = new AssetCooker(target);
 			var skipCooking = The.Workspace.ProjectJson.GetValue<bool>("SkipAssetsCooking");
 			if (!skipCooking) {
-				assetCooker.Cook(bundles ?? assetCooker.GetListOfAllBundles());
+				return assetCooker.Cook(bundles ?? assetCooker.GetListOfAllBundles(), out errorMessage);
 			} else {
 				Console.WriteLine("-------------  Skip Assets Cooking -------------");
+				errorMessage = null;
+				return true;
 			}
 		}
 
@@ -99,7 +101,7 @@ namespace Orange
 			}
 		}
 
-		public void Cook(List<string> bundles)
+		public bool Cook(List<string> bundles, out string errorMessage)
 		{
 			AssetCache.Instance.Initialize();
 			CookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
@@ -134,12 +136,16 @@ namespace Orange
 			} catch (System.Exception e) {
 				Console.WriteLine(e.Message);
 				RestoreBackups(bundleBackups);
+				errorMessage = e.Message;
+				return false;
 			} finally {
 				cookCanceled = false;
 				RemoveBackups(bundleBackups);
 				EndCookBundles?.Invoke();
 				UserInterface.Instance.StopProgressBar();
 			}
+			errorMessage = null;
+			return true;
 		}
 
 		private int CalculateOperationCount(List<string> bundles)

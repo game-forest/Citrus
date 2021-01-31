@@ -15,7 +15,9 @@ namespace Orange
 
 		public static string BuildAndRun(Target target)
 		{
-			AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles());
+			if (!AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles(), out string errorMessage)) {
+				return errorMessage;
+			}
 			if (!BuildGame(target)) {
 				return "Can not BuildGame";
 			}
