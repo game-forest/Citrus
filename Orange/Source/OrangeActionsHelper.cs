@@ -7,19 +7,12 @@ namespace Orange.Source
 {
 	public static class OrangeActionsHelper
 	{
-		public static bool ExecuteOrangeActionInstantly(Func<string> action, Action onBegin, Action onEnd)
-		{
-			var task = ExecuteOrangeAction(action, onBegin, onEnd, false);
-			task.Wait();
-			return task.Result;
-		}
-
 		public static async Task<bool> ExecuteOrangeAction(
 			Func<string> action, Action onBegin, Action onEnd, bool background
 		)
 		{
 			var startTime = DateTime.Now;
-			onBegin();
+			onBegin?.Invoke();
 			var executionResult = "Build Failed! Unknown Error.";
 			bool hasError = false;
 			try {
@@ -58,7 +51,7 @@ namespace Orange.Source
 			} finally {
 				Console.WriteLine(executionResult);
 				Console.WriteLine(@"Elapsed time {0:hh\:mm\:ss}", DateTime.Now - startTime);
-				onEnd();
+				onEnd?.Invoke();
 			}
 			return !hasError;
 		}
