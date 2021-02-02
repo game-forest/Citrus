@@ -2,6 +2,7 @@ using Yuzu;
 
 namespace Lime
 {
+	[TangerineMenuPath("Effects/HSL")]
 	[TangerineRegisterComponent]
 	public class HSLComponent : MaterialComponent<ColorCorrectionMaterial>
 	{

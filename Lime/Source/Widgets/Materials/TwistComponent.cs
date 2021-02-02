@@ -3,6 +3,7 @@ using Yuzu;
 
 namespace Lime
 {
+	[TangerineMenuPath("Effects/Twist")]
 	[TangerineRegisterComponent]
 	public class TwistComponent : MaterialComponent<TwistMaterial>
 	{

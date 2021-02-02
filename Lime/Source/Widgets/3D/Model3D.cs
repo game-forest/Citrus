@@ -6,6 +6,7 @@ using Yuzu;
 namespace Lime
 {
 	[TangerineRegisterNode(CanBeRoot = true, Order = 22)]
+	[TangerineMenuPath("3D/Model 3D")]
 	[TangerineVisualHintGroup("/All/Nodes/3D")]
 	public class Model3D : Node3D
 	{

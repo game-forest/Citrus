@@ -401,4 +401,22 @@ namespace Lime
 			SecondaryColor = Color4.Parse(secondaryColor);
 		}
 	}
+
+
+	/// <summary>
+	/// '/' Separated path to either component or node create command in menu.
+	/// If path ends with '/' the command Text will be taken as is and last part of
+	/// path will be treated as last nested menu for the command. Otherwise last part of the path
+	/// will be assigned to command.Text. <see cref="Tangerine.Core.MenuExtensions.InsertCommandAlongPath" />
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	public sealed class TangerineMenuPathAttribute : Attribute
+	{
+		public string Path;
+		public TangerineMenuPathAttribute(string path)
+		{
+			Path = path;
+		}
+	}
+
 }

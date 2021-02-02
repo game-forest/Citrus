@@ -10,6 +10,7 @@ namespace Lime
 
 	[TangerineRegisterNode(Order = 25)]
 	[TangerineAllowedChildrenTypes(typeof(SplinePoint3D))]
+	[TangerineMenuPath("3D/Spline 3D")]
 	[TangerineVisualHintGroup("/All/Nodes/Splines")]
 	public class Spline3D : Node3D
 	{
@@ -130,6 +131,7 @@ namespace Lime
 	}
 
 	[TangerineRegisterNode(Order = 26)]
+	[TangerineMenuPath("3D/Spline Point 3D")]
 	[TangerineAllowedParentTypes(typeof(Spline3D))]
 	public class SplinePoint3D : Node
 	{

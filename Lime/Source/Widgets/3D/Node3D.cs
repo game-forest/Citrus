@@ -6,6 +6,7 @@ namespace Lime
 	[TangerineRegisterNode(CanBeRoot = true, Order = 23)]
 	[TangerineAllowedParentTypes(typeof(Node3D), typeof(Viewport3D))]
 	[TangerineAllowedChildrenTypes(typeof(Node))]
+	[TangerineMenuPath("3D/Node 3D")]
 	[TangerineVisualHintGroup("/All/Nodes/Containers")]
 	public class Node3D : Node
 	{

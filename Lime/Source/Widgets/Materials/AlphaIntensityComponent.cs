@@ -2,6 +2,7 @@ using Yuzu;
 
 namespace Lime
 {
+	[TangerineMenuPath("Effects/Alpha Intensity")]
 	[TangerineRegisterComponent]
 	public class AlphaIntensityComponent : MaterialComponent<AlphaIntensityMaterial>
 	{

@@ -66,7 +66,6 @@ namespace Tangerine
 			GenericCommands.NewTanWithCustomRoot.Menu.Clear();
 			create.Clear();
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
-
 			foreach (var type in Project.Current.RegisteredNodeTypes) {
 				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 				var cmd = new Command("Create " + type.Name);
@@ -77,14 +76,20 @@ namespace Tangerine
 					cmd.Icon = NodeIconPool.DefaultIcon;
 					NodeIconPool.GenerateIcon(type, newIcon => cmd.Icon = newIcon);
 				}
+				var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+				if (menuPath != null) {
+					create.InsertCommandAlongPath(cmd, menuPath);
+					cmd.Text = "Create " + cmd.Text;
+				} else {
+					if (type.Namespace == "Lime") {
+						create.Add(cmd);
+					} else {
+						customNodes.Menu.Add(cmd);
+					}
+				}
+				CreateNodeCommands.Add(cmd);
 				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true);
 				CommandHandlerList.Global.Connect(cmd, new CreateNode(type, cmd));
-				if (type.Namespace == "Lime") {
-					create.Add(cmd);
-					CreateNodeCommands.Add(cmd);
-				} else {
-					customNodes.Menu.Add(cmd);
-				}
 				if (IsNodeTypeCanBeRoot(type)) {
 					var newFileCmd = new Command(type.Name);
 					var format = typeof(Node3D).IsAssignableFrom(type) ? DocumentFormat.T3D : DocumentFormat.Tan;

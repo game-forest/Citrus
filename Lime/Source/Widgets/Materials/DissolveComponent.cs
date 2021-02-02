@@ -2,6 +2,7 @@ using Yuzu;
 
 namespace Lime
 {
+	[TangerineMenuPath("Effects/Dissolve")]
 	[TangerineRegisterComponent]
 	public class DissolveComponent : MaterialComponent<DissolveMaterial>
 	{

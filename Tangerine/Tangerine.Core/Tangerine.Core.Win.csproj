@@ -65,6 +65,7 @@
     <Compile Include="ISceneView.cs" />
     <Compile Include="ITaskProvider.cs" />
     <Compile Include="KeyHandler.cs" />
+    <Compile Include="MenuExtensions.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
     <Compile Include="NodeCompositionValidator.cs" />
     <Compile Include="NodeEditorState.cs" />

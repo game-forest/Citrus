@@ -3,6 +3,7 @@ using Yuzu;
 namespace Lime
 {
 	[TangerineRegisterNode(Order = 27)]
+	[TangerineMenuPath("3D/Spline Gear 3D")]
 	[TangerineAllowedParentTypes(typeof(Node3D), typeof(Viewport3D))]
 	public class SplineGear3D : Node, IUpdatableNode
 	{

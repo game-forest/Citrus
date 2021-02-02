@@ -463,8 +463,6 @@ namespace Tangerine.UI.Inspector
 					types.Add(type);
 				}
 			}
-			types.Sort((a, b) => a.Name.CompareTo(b.Name));
-
 			var label = new Widget {
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				Layout = new HBoxLayout(),
@@ -472,13 +470,18 @@ namespace Tangerine.UI.Inspector
 				Nodes = {
 					new ThemedAddButton {
 						Clicked = () => {
-							var menu = new Menu();
+							IMenu menu = new Menu();
 							foreach (var type in types) {
 								var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+								var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
 								ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes)) {
 									TooltipText = tooltipText
 								};
-								menu.Add(command);
+								if (menuPath != null) {
+									menu.InsertCommandAlongPath(command, menuPath);
+								} else {
+									menu.Add(command);
+								}
 							}
 							menu.Insert(0, Command.MenuSeparator);
 							menu.Insert(0, new Command("Paste from clipboard", () => {

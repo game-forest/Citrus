@@ -2,6 +2,7 @@ using Yuzu;
 
 namespace Lime
 {
+	[TangerineMenuPath("Effects/Gradient")]
 	[TangerineRegisterComponent]
 	public class GradientComponent : MaterialComponent<GradientMaterial>
 	{

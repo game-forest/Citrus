@@ -5,6 +5,7 @@ using Yuzu;
 
 namespace Lime
 {
+	[TangerineMenuPath("Layout/Stack Layout")]
 	[TangerineRegisterComponent]
 	public class StackLayout : Layout, ILayout
 	{
