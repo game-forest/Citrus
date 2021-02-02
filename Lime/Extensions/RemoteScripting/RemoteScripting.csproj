@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="RemoteScripting.csproj.DotSettings" />
+    <None Remove="RemoteScripting.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Yuzu\Yuzu.csproj" />
     <ProjectReference Include="..\..\Lime.Win.csproj" />
   </ItemGroup>
