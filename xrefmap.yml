@@ -62356,6 +62356,31 @@ references:
   commentId: T:Lime.TangerineLockChildrenNodeList
   fullName: Lime.TangerineLockChildrenNodeList
   nameWithType: TangerineLockChildrenNodeList
+- uid: Lime.TangerineMenuPathAttribute
+  name: TangerineMenuPathAttribute
+  href: api/Lime.TangerineMenuPathAttribute.html
+  commentId: T:Lime.TangerineMenuPathAttribute
+  fullName: Lime.TangerineMenuPathAttribute
+  nameWithType: TangerineMenuPathAttribute
+- uid: Lime.TangerineMenuPathAttribute.#ctor(System.String)
+  name: TangerineMenuPathAttribute(String)
+  href: api/Lime.TangerineMenuPathAttribute.html#Lime_TangerineMenuPathAttribute__ctor_System_String_
+  commentId: M:Lime.TangerineMenuPathAttribute.#ctor(System.String)
+  fullName: Lime.TangerineMenuPathAttribute.TangerineMenuPathAttribute(System.String)
+  nameWithType: TangerineMenuPathAttribute.TangerineMenuPathAttribute(String)
+- uid: Lime.TangerineMenuPathAttribute.#ctor*
+  name: TangerineMenuPathAttribute
+  href: api/Lime.TangerineMenuPathAttribute.html#Lime_TangerineMenuPathAttribute__ctor_
+  commentId: Overload:Lime.TangerineMenuPathAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineMenuPathAttribute.TangerineMenuPathAttribute
+  nameWithType: TangerineMenuPathAttribute.TangerineMenuPathAttribute
+- uid: Lime.TangerineMenuPathAttribute.Path
+  name: Path
+  href: api/Lime.TangerineMenuPathAttribute.html#Lime_TangerineMenuPathAttribute_Path
+  commentId: F:Lime.TangerineMenuPathAttribute.Path
+  fullName: Lime.TangerineMenuPathAttribute.Path
+  nameWithType: TangerineMenuPathAttribute.Path
 - uid: Lime.TangerineNodeBuilderAttribute
   name: TangerineNodeBuilderAttribute
   href: api/Lime.TangerineNodeBuilderAttribute.html

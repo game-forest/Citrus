@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AlphaIntensityComponent.html",
-          "hash": "DD9/Pn2gbJv+zDVb1jjTxg=="
+          "hash": "D4rv4ysxC7qZrSdmXGz7zg=="
         }
       },
       "is_incremental": false,
@@ -1098,7 +1098,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Camera3D.html",
-          "hash": "5z6XDYAZByD8yGao7P/BvA=="
+          "hash": "CQERHqhbaxiwCISEjEtOnQ=="
         }
       },
       "is_incremental": false,
@@ -1950,7 +1950,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DissolveComponent.html",
-          "hash": "r79Jwu9mqZzd+Gmh+UJugA=="
+          "hash": "oxxWQJ7hpMFzO8x0MKjbSA=="
         }
       },
       "is_incremental": false,
@@ -2358,7 +2358,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.FlowLayout.html",
-          "hash": "nIfFHhrbDXDx0X1KH7j8jQ=="
+          "hash": "bS0R3ejP9XCIaYbaS8x4ew=="
         }
       },
       "is_incremental": false,
@@ -2622,7 +2622,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.GradientComponent.html",
-          "hash": "ioUD9YRimo1S/K0hoZ078Q=="
+          "hash": "pueGFwBFa/AdZsTs9ZPXRg=="
         }
       },
       "is_incremental": false,
@@ -2970,7 +2970,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.HSLComponent.html",
-          "hash": "tTIe2Ipo2/Q8JFYM0xDgUw=="
+          "hash": "t9EEfB8d02vIYxCWJeAKqg=="
         }
       },
       "is_incremental": false,
@@ -3978,7 +3978,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.LayoutCell.html",
-          "hash": "oFrhQ8BQhHK9PDGrHF6QZg=="
+          "hash": "qwRxyGtpqQIXfpu/FlTg9A=="
         }
       },
       "is_incremental": false,
@@ -3990,7 +3990,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.LayoutConstraints.html",
-          "hash": "HQryicXYB74YyYV5emoS8Q=="
+          "hash": "vDIGuseb3dljzpaSjd+oZg=="
         }
       },
       "is_incremental": false,
@@ -4098,7 +4098,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.LinearLayout.html",
-          "hash": "zpCyPgXcxM+Muto2QKkhbg=="
+          "hash": "0i8bK9VpKZGlEO6IRrz6lw=="
         }
       },
       "is_incremental": false,
@@ -4506,7 +4506,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Model3D.html",
-          "hash": "PjMp++MFEV+mGX64olW6Dg=="
+          "hash": "zvLGOyEYVOSQ/ljoRv49CQ=="
         }
       },
       "is_incremental": false,
@@ -4914,7 +4914,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Node3D.html",
-          "hash": "eFSHgi1Zr7bzj1i7MAph+g=="
+          "hash": "ygbPXs6OkTCrrXrn3Ke23Q=="
         }
       },
       "is_incremental": false,
@@ -5538,7 +5538,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PostProcessingComponent.html",
-          "hash": "cHkhgP/ugNsuHq524phh1w=="
+          "hash": "ptxDIClJNN/PFD7Y42z8LA=="
         }
       },
       "is_incremental": false,
@@ -6774,7 +6774,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Spline3D.html",
-          "hash": "LHJef/OB3kzOll2lsw4V2Q=="
+          "hash": "SSI2tdWGceSEJ39S9jsaXw=="
         }
       },
       "is_incremental": false,
@@ -6798,7 +6798,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplineGear3D.html",
-          "hash": "efBOx8ykJmUS8ANlRmbHSQ=="
+          "hash": "vd0Km21fuTa8s/CmNGJOag=="
         }
       },
       "is_incremental": false,
@@ -6834,7 +6834,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplinePoint3D.html",
-          "hash": "t0LvZIA5NydmOrXYNdmsdw=="
+          "hash": "k/DKQGOc8HxtldxO33AZAg=="
         }
       },
       "is_incremental": false,
@@ -6990,7 +6990,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.StackLayout.html",
-          "hash": "Hx3KgVR0uPPk6S47CWCmxw=="
+          "hash": "LRcedqF/7892w4P8dlUCBg=="
         }
       },
       "is_incremental": false,
@@ -7122,7 +7122,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TableLayout.html",
-          "hash": "cHgH7pTsQAtLoQttHBLgww=="
+          "hash": "KKrHmu0SGs3FLMLbyEyQ8w=="
         }
       },
       "is_incremental": false,
@@ -7327,6 +7327,18 @@
         ".html": {
           "relative_path": "api/Lime.TangerineLockChildrenNodeList.html",
           "hash": "PWlAlKynU5YCfvwSa6eMfw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineMenuPathAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineMenuPathAttribute.html",
+          "hash": "mAFOIeR7auzjojZzvbnbeA=="
         }
       },
       "is_incremental": false,
@@ -8322,7 +8334,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TwistComponent.html",
-          "hash": "N2+TzkFt+QjpDJKc29pSqQ=="
+          "hash": "plDND3r8rBSEhpzTjhdrXA=="
         }
       },
       "is_incremental": false,
@@ -8838,7 +8850,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Viewport3D.html",
-          "hash": "e1nEVMjXxD3o9rJqtVV1yQ=="
+          "hash": "zE8qIQcpGHRJuDhNIFfCpA=="
         }
       },
       "is_incremental": false,
@@ -8898,7 +8910,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WaveComponent.html",
-          "hash": "NGPo8D60wdQFniKmE3/Lxw=="
+          "hash": "Hup6IuGEIFnJfRTF6A7sNw=="
         }
       },
       "is_incremental": false,
@@ -9006,7 +9018,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WidgetAdapter3D.html",
-          "hash": "m2Rum7Ot6uFbx4olpmpGKw=="
+          "hash": "d/dZY8RAsk4RP8rNg9qwTw=="
         }
       },
       "is_incremental": false,
@@ -9270,7 +9282,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "bv0OQOgRhVLJQCrBRLugWw=="
+          "hash": "h1eqRA+QxGUtQDVJHhAzuQ=="
         }
       },
       "is_incremental": false,
@@ -9318,7 +9330,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "Ep8vB4OJFuesV+PHHimR5A=="
+          "hash": "RxAwMOCHhMek1affRm61kg=="
         }
       },
       "is_incremental": false,
@@ -11526,7 +11538,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 775,
+          "total_file_count": 776,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
