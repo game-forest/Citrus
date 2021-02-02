@@ -216,6 +216,9 @@ namespace Orange
 				var appData = Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%");
 				androidSdk = Path.Combine(appData, "Android", "android-sdk");
 				executable = Path.Combine(androidSdk, "platform-tools", "adb.exe");
+				if (!File.Exists(executable)) {
+					executable = "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe";
+				}
 #elif MAC
 				androidSdk = $"/Users/{Environment.UserName}/Library/Developer/Xamarin/android-sdk-macosx/";
 				executable = Path.Combine(androidSdk, "platform-tools", "adb");
