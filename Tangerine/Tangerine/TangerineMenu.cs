@@ -79,7 +79,9 @@ namespace Tangerine
 				var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
 				if (menuPath != null) {
 					create.InsertCommandAlongPath(cmd, menuPath);
-					cmd.Text = "Create " + cmd.Text;
+					if (!menuPath.EndsWith("/")) {
+						cmd.Text = "Create " + cmd.Text;
+					}
 				} else {
 					if (type.Namespace == "Lime") {
 						create.Add(cmd);

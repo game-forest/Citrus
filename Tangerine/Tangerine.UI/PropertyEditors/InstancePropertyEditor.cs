@@ -9,45 +9,65 @@ namespace Tangerine.UI
 {
 	public class InstancePropertyEditor<T> : ExpandablePropertyEditor<T>
 	{
-		public DropDownList Selector { get; }
-
 		public InstancePropertyEditor(IPropertyEditorParams editorParams, Action<Widget> onValueChanged) : base(editorParams)
 		{
-			Selector = editorParams.DropDownListFactory();
-			Selector.LayoutCell = new LayoutCell(Alignment.Center);
+			var selectImplementationButton = new ThemedButton {
+				LayoutCell = new LayoutCell(Alignment.Center),
+				MaxSize = Vector2.PositiveInfinity,
+				MinSize = Vector2.Zero,
+			};
 			var propertyType = typeof(T);
 			var meta = Yuzu.Metadata.Meta.Get(editorParams.Type, InternalPersistence.Instance.YuzuCommonOptions);
-			if (!propertyType.IsInterface && !propertyType.IsAbstract) {
-				Selector.Items.Add(new CommonDropDownList.Item(propertyType.Name, propertyType));
-			}
-			foreach (var t in DerivedTypesCache.GetDerivedTypesFor(propertyType)) {
-				var tooltipText = t.GetCustomAttribute<TangerineTooltipAttribute>()?.Text ?? null;
-				Selector.Items.Add(new CommonDropDownList.Item(t.Name, t, tooltipText));
-			}
-			EditorContainer.AddChangeLateWatcher(CoalescedPropertyValue(
-				comparator: (t1, t2) => t1 == null && t2 == null || t1 != null && t2 != null && t1.GetType() == t2.GetType()),
-			v => {
-					onValueChanged?.Invoke(ExpandableContent);
-					if (v.IsDefined) {
-						Selector.Value = v.Value?.GetType();
+			selectImplementationButton.Clicked = () => {
+				IMenu menu = new Menu();
+				foreach (var type in GetPossibleTypes(propertyType)) {
+					var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+					var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+					ICommand command = new Command(
+						type.Name,
+						() => SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null)
+					) {
+						TooltipText = tooltipText
+					};
+					if (menuPath != null) {
+						menu.InsertCommandAlongPath(command, menuPath);
 					} else {
-						Selector.Text = ManyValuesText;
+						menu.Add(command);
 					}
 				}
-			);
-			Selector.Changed += a => {
-				if (a.ChangedByUser) {
-					var type = (Type)Selector.Items[a.Index].Value;
-					SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null);
-				}
+				menu.Popup();
 			};
+			EditorContainer.AddChangeLateWatcher(
+				CoalescedPropertyValue(
+					comparator: (t1, t2) =>
+						   t1 == null
+						&& t2 == null
+						|| t1 != null
+						&& t2 != null
+						&& t1.GetType() == t2.GetType()
+				),
+				v => {
+					onValueChanged?.Invoke(ExpandableContent);
+					string tooltipText;
+					if (v.IsDefined) {
+						var type = v.Value?.GetType();
+						selectImplementationButton.Text = type?.Name ?? "<not set>";
+						tooltipText = type?.GetCustomAttribute<TangerineTooltipAttribute>()?.Text ?? null;
+					} else {
+						selectImplementationButton.Text = ManyValuesText;
+						tooltipText = "Multiple distinct values are selected.";
+					}
+					var ttc = selectImplementationButton.Components.GetOrAdd<TooltipComponent>();
+					ttc.GetText = () => tooltipText;
+				}
+			);
 			var propertyMetaItem = meta.Items.FirstOrDefault(i => i.Name == editorParams.PropertyName);
 			var defaultValue = propertyMetaItem?.GetValue(meta.Default);
 			var resetToDefaultButton = new ToolbarButton(IconPool.GetTexture("Tools.Revert")) {
 				Clicked = () => SetProperty(Cloner.Clone(defaultValue))
 			};
-			if (Selector.Items.Count == 1) {
-				var t = Selector.Items[0].Value as Type;
+			if (!GetPossibleTypes(propertyType).Skip(1).Any()) {
+				var t = GetPossibleTypes(propertyType).First();
 				var b = new ToolbarButton("Create") {
 					TabTravesable = new TabTraversable(),
 					LayoutCell = new LayoutCell(Alignment.LeftCenter),
@@ -73,7 +93,7 @@ namespace Tangerine.UI
 				EditorContainer.AddNode(Spacer.HStretch());
 				onValueChanged?.Invoke(ExpandableContent);
 			} else {
-				EditorContainer.Nodes.Insert(0, Selector);
+				EditorContainer.Nodes.Insert(0, selectImplementationButton);
 			}
 			EditorContainer.AddNode(resetToDefaultButton);
 			EditorContainer.AddChangeLateWatcher(CoalescedPropertyValue(), v => {
@@ -81,39 +101,42 @@ namespace Tangerine.UI
 			});
 		}
 
-		private static class DerivedTypesCache
+		private static readonly Dictionary<Type, List<Type>> cache = new Dictionary<Type, List<Type>>();
+
+		static InstancePropertyEditor()
 		{
-			private static readonly Dictionary<Type, HashSet<Type>> cache = new Dictionary<Type, HashSet<Type>>();
+			Project.Opening += _ => cache.Clear();
+		}
 
-			static DerivedTypesCache()
-			{
-				Project.Opening += _ => cache.Clear();
-			}
-
-			public static IEnumerable<Type> GetDerivedTypesFor(Type propertyType)
-			{
-				if (!cache.TryGetValue(propertyType, out HashSet<Type> derivedTypes)) {
-					cache.Add(propertyType, derivedTypes = new HashSet<Type>());
-					foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-						try {
-							var types = assembly
-								.GetTypes()
-								.Where(t =>
-									!t.IsInterface &&
-									!t.IsAbstract &&
-									t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null &&
-									t != propertyType &&
-									propertyType.IsAssignableFrom(t)).ToList();
-								foreach (var type in types) {
-									derivedTypes.Add(type);
-								}
-						} catch (ReflectionTypeLoadException e) {
-							Debug.Write($"Failed to enumerate types in '{assembly.FullName}'");
+		public static IEnumerable<Type> GetPossibleTypes(Type propertyType)
+		{
+			if (!cache.TryGetValue(propertyType, out List<Type> derivedTypes)) {
+				HashSet<Type> typesHash = new HashSet<Type>();
+				cache.Add(propertyType, derivedTypes = new List<Type>());
+				if (!propertyType.IsInterface && !propertyType.IsAbstract) {
+					typesHash.Add(propertyType);
+				}
+				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+					try {
+						var types = assembly
+							.GetTypes()
+							.Where(t =>
+								!t.IsInterface &&
+								!t.IsAbstract &&
+								t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null &&
+								t != propertyType &&
+								propertyType.IsAssignableFrom(t)).ToList();
+						foreach (var type in types) {
+							typesHash.Add(type);
 						}
+					} catch (ReflectionTypeLoadException e) {
+						Debug.Write($"Failed to enumerate types in '{assembly.FullName}'");
 					}
 				}
-				return derivedTypes;
+				derivedTypes.AddRange(typesHash);
+				MenuExtensions.SortTypesByMenuPath(derivedTypes);
 			}
+			return derivedTypes;
 		}
 	}
 }
