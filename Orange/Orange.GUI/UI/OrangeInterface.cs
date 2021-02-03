@@ -412,6 +412,11 @@ namespace Orange
 			return platformPicker.SelectedTarget;
 		}
 
+		public override void SetActiveTarget(Target target)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override EnvironmentType GetEnvironmentType()
 		{
 			return EnvironmentType.Orange;

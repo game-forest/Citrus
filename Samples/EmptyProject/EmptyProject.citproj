@@ -1,17 +1,35 @@
 {
 	"Name": "EmptyProject",
 	"CitrusDirectory": "../../",
+	"Targets": [
+		{
+			BaseTarget: "Android",
+			CleanBeforeBuild: false,
+			Name: "RemoteScriptingProject",
+			Configuration: "Debug",
+			Project: "EmptyProject.Android/EmptyProject.Android.sln"
+		},
+	],
 	RemoteScripting: {
-		ScriptsPath: "EmptyProject.Scripts/",
-		ScriptsAssemblyName: "Scripts.dll",
-		ReferencesPath: "EmptyProject.Win/bin/Release/",
-		References: [
-			"Lime.dll",
-			"Yuzu.dll",
-			"RemoteScripting.dll",
-			"EmptyProject.dll"
-		],
-		EntryPointsClass: "EmptyProject.Scripts.EntryPoints",
-		RemoteStoragePath: "StorageForRemoteScripting/"
+		"Scripts": {
+			ScriptsPath: "EmptyProject.Scripts/",
+			ScriptsAssemblyName: "Scripts.dll",
+			BuildTarget: "RemoteScriptingProject",
+			FrameworkReferencesPath: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/MonoAndroid/v1.0/",
+			ProjectReferencesPath: "EmptyProject.Android/bin/Debug/",
+			ProjectReferences: [
+				"Lime.dll",
+				"Yuzu.dll",
+				"RemoteScripting.dll",
+				"EmptyProject.dll"
+			],
+			FrameworkReferences: [
+				"mscorlib.dll",
+				"System.dll",
+				"System.Core.dll"
+			],
+			EntryPointsClass: "EmptyProject.Scripts.EntryPoints",
+			RemoteStoragePath: "StorageForRemoteScripting/"
+		}
 	},
 }

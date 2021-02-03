@@ -12,12 +12,6 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class CSharpCodeCompiler
 	{
-		private static readonly string netFrameworkPath = $"{Path.GetDirectoryName(typeof(string).Assembly.Location)}/";
-		public static readonly ImmutableArray<string> DefaultProjectReferences = ImmutableArray.Create(
-			$"{netFrameworkPath}mscorlib.dll",
-			$"{netFrameworkPath}System.dll",
-			$"{netFrameworkPath}System.Core.dll"
-		);
 		public static readonly ImmutableArray<string> DefaultNamespaces = ImmutableArray.Create(
 			"System",
 			"System.IO",
@@ -30,7 +24,7 @@ namespace Tangerine.UI.RemoteScripting
 		);
 
 		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp8);
-		public IEnumerable<string> ProjectReferences { get; set; } = DefaultProjectReferences;
+		public IEnumerable<string> ProjectReferences { get; set; }
 		public IEnumerable<string> Namespaces { get; set; } = DefaultNamespaces;
 		public OutputKind OutputKind { get; set; } = OutputKind.DynamicallyLinkedLibrary;
 		public OptimizationLevel OptimizationLevel { get; set; } = OptimizationLevel.Debug;
@@ -63,23 +57,12 @@ namespace Tangerine.UI.RemoteScripting
 				var syntaxTree = SyntaxFactory.ParseSyntaxTree(source, ParseOptions, csFile, System.Text.Encoding.UTF8);
 				syntaxTrees.Add(syntaxTree);
 			}
-
-			var references = new List<MetadataReference>
-			{
-				MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-			};
-
-			Assembly.GetEntryAssembly().GetReferencedAssemblies()
-				.ToList()
-				.ForEach(a => references.Add(MetadataReference.CreateFromFile(Assembly.Load(a).Location)));
-
-			var allReferences = references.Concat(ProjectReferences.Select(referencePath => MetadataReference.CreateFromFile(referencePath)));
-
+			var references = ProjectReferences.Select(referencePath => MetadataReference.CreateFromFile(referencePath));
 			var compilationOptions = new CSharpCompilationOptions(OutputKind)
 				.WithOverflowChecks(true)
 				.WithOptimizationLevel(OptimizationLevel)
 				.WithUsings(Namespaces);
-			var compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, allReferences, compilationOptions);
+			var compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, references, compilationOptions);
 			return compilation.Emit(stream, streamForPdb);
 		}
 

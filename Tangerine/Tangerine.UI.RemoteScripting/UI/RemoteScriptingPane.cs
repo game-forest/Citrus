@@ -12,6 +12,7 @@ namespace Tangerine.UI.RemoteScripting
 		private Widget rootWidget;
 		private RemoteScriptingWidgets.TabbedWidget tabbedWidget;
 		private RemoteScriptingStatusBar statusBar;
+		public ProjectPreferences.RemoteScriptingConfiguration SelectedRemoteScriptingConfiguration;
 
 		public RemoteScriptingPane(Panel panel)
 		{

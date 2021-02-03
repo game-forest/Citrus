@@ -27,7 +27,7 @@ namespace Orange
 #else
 			AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
 #endif
-			CreateMenuItems(); 
+			CreateMenuItems();
 			OpenWorkspace();
 			RunCommand(Toolbox.GetCommandLineArg("--command"));
 		}
@@ -52,7 +52,7 @@ namespace Orange
 				System.Environment.Exit(te.Code);
 			}
 		}
-		
+
 		void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
 		{
 			if (e.Exception is TerminateException te) {
@@ -151,6 +151,11 @@ namespace Orange
 			}
 			var validTargetsText = string.Join(", ", The.Workspace.Targets.Select(t => $"\"{t.Name}\""));
 			throw new System.ArgumentException($"target with name \"{specifiedTarget}\" not found. Valid targets are: {validTargetsText}", "--target");
+		}
+
+		public override void SetActiveTarget(Target target)
+		{
+			throw new NotImplementedException();
 		}
 
 		public override EnvironmentType GetEnvironmentType()

@@ -6,9 +6,9 @@
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{6AC2E264-44BC-4508-B819-CA4B0CBA764B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EmptyProject.Mac</RootNamespace>
+    <RootNamespace>EmptyProject</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
-    <AssemblyName>EmptyProject.Mac</AssemblyName>
+    <AssemblyName>EmptyProject</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
   </PropertyGroup>

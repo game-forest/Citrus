@@ -32,24 +32,33 @@ namespace Tangerine.UI.RemoteScripting
 					(assemblyBuilderLog = new RemoteScriptingWidgets.TextView())
 				}
 			};
-			toolbar.Content.Nodes.AddRange(
-				buildAssemblyButton = new ToolbarButton("Build Assembly") { Clicked = () => BuildAssembly(requiredBuildGame: false) },
-				buildGameAndAssemblyButton = new ToolbarButton("Build Game and Assembly") { Clicked = () => BuildAssembly() }
-			);
-
-			var preferences = ProjectPreferences.Instance;
-			var arePreferencesCorrect =
-				!string.IsNullOrEmpty(preferences.ScriptsPath) &&
-				!string.IsNullOrEmpty(preferences.ScriptsAssemblyName) &&
-				!string.IsNullOrEmpty(preferences.RemoteStoragePath);
-			if (!arePreferencesCorrect) {
-				buildAssemblyButton.Enabled = false;
-				buildGameAndAssemblyButton.Enabled = false;
-				SetStatusAndLog("Preferences is invalid.");
+			var configurationDropDownList = new ThemedDropDownList();
+			foreach (var p in ProjectPreferences.Instance.RemoteScriptingConfigurations) {
+				configurationDropDownList.Items.Add(new CommonDropDownList.Item(p.Key, p.Value));
 			}
+			var configuration = RemoteScriptingPane.Instance.SelectedRemoteScriptingConfiguration;
+			configurationDropDownList.Changed += (eventArgs) => {
+				configuration = RemoteScriptingPane.Instance.SelectedRemoteScriptingConfiguration
+					= (ProjectPreferences.RemoteScriptingConfiguration)eventArgs.Value;
+				var preferences = ProjectPreferences.Instance;
+				var arePreferencesCorrect =
+					!string.IsNullOrEmpty(configuration.ScriptsPath) &&
+					!string.IsNullOrEmpty(configuration.ScriptsAssemblyName) &&
+					!string.IsNullOrEmpty(configuration.RemoteStoragePath);
+				if (!arePreferencesCorrect) {
+					buildAssemblyButton.Enabled = false;
+					buildGameAndAssemblyButton.Enabled = false;
+					SetStatusAndLog("Preferences are invalid.");
+				}
+			};
+			toolbar.Content.Nodes.AddRange(
+				buildAssemblyButton = new ToolbarButton("Build Assembly") { Clicked = () => BuildAssembly(configuration, requiredBuildGame: false) },
+				buildGameAndAssemblyButton = new ToolbarButton("Build Game and Assembly") { Clicked = () => BuildAssembly(configuration) },
+				configurationDropDownList
+			);
 		}
 
-		private void BuildAssembly(bool requiredBuildGame = true)
+		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true)
 		{
 			async void BuildAssemblyAsync()
 			{
@@ -59,18 +68,22 @@ namespace Tangerine.UI.RemoteScripting
 				try {
 					if (requiredBuildGame) {
 						SetStatusAndLog("Building game...");
+						var target = Orange.The.Workspace.Targets.Where(t => t.Name == configuration.BuildTarget).First();
+						var previousTarget = Orange.UserInterface.Instance.GetActiveTarget();
+						Orange.UserInterface.Instance.SetActiveTarget(target);
 						await OrangeBuildCommand.ExecuteAsync();
+						Orange.UserInterface.Instance.SetActiveTarget(previousTarget);
 						Log("Done.");
 					}
 
 					SetStatusAndLog("Building assembly...");
-					var preferences = ProjectPreferences.Instance;
+
 					var compiler = new CSharpCodeCompiler {
-						ProjectReferences = CSharpCodeCompiler.DefaultProjectReferences.Concat(preferences.ScriptsReferences)
+						ProjectReferences = configuration.FrameworkReferences.Concat(configuration.ProjectReferences)
 					};
-					var csFiles = Directory.EnumerateFiles(preferences.ScriptsPath, "*.cs", SearchOption.AllDirectories);
-					SetStatusAndLog($"Compile code in {preferences.ScriptsPath} to assembly {preferences.ScriptsAssemblyName}..");
-					var result = await compiler.CompileAssemblyToRawBytesAsync(preferences.ScriptsAssemblyName, csFiles);
+					var csFiles = Directory.EnumerateFiles(configuration.ScriptsPath, "*.cs", SearchOption.AllDirectories);
+					SetStatusAndLog($"Compile code in {configuration.ScriptsPath} to assembly {configuration.ScriptsAssemblyName}..");
+					var result = await compiler.CompileAssemblyToRawBytesAsync(configuration.ScriptsAssemblyName, csFiles);
 					foreach (var diagnostic in result.Diagnostics) {
 						Log(diagnostic.ToString());
 					}
@@ -78,7 +91,7 @@ namespace Tangerine.UI.RemoteScripting
 					if (result.Success) {
 						Log($"Assembly length in bytes: {result.AssemblyRawBytes.Length}");
 						try {
-							var portableAssembly = new PortableAssembly(result.AssemblyRawBytes, result.PdbRawBytes, preferences.EntryPointsClass);
+							var portableAssembly = new PortableAssembly(result.AssemblyRawBytes, result.PdbRawBytes, configuration.EntryPointsClass);
 							var compiledAssembly = new CompiledAssembly {
 								RawBytes = result.AssemblyRawBytes,
 								PdbRawBytes = result.PdbRawBytes,

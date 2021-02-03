@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Tangerine.Core
 {
+	// TODO: Merge with what Orange reads from project preferences file when refactoring Orange
 	public class ProjectPreferences
 	{
 		public static ProjectPreferences Instance => Project.Current.Preferences;
@@ -14,12 +17,49 @@ namespace Tangerine.Core
 		public ResolutionPreset DefaultResolution { get; private set; }
 		public bool IsLandscapeDefault { get; private set; }
 
-		private readonly List<string> scriptReferences = new List<string>();
-		public string ScriptsPath { get; private set; }
-		public string ScriptsAssemblyName { get; private set; }
-		public IReadOnlyList<string> ScriptsReferences => scriptReferences;
-		public string EntryPointsClass { get; private set; }
-		public string RemoteStoragePath { get; private set; }
+		public Dictionary<string, RemoteScriptingConfiguration> RemoteScriptingConfigurations =
+			new Dictionary<string, RemoteScriptingConfiguration>();
+
+		public class RemoteScriptingConfiguration
+		{
+			private readonly List<string> projectReferences = new List<string>();
+			private readonly List<string> frameworkReferences = new List<string>();
+			public readonly string ScriptsPath;
+			public readonly string ScriptsAssemblyName;
+			public readonly string EntryPointsClass;
+			public readonly string RemoteStoragePath;
+			public readonly string BuildTarget;
+			public IReadOnlyList<string> FrameworkReferences => frameworkReferences;
+			public IReadOnlyList<string> ProjectReferences => projectReferences;
+
+			private static List<string> defaultFrameworkReferences = new List<string> {
+				@"mscorlib.dll",
+				@"System.dll",
+				@"System.Core.dll"
+			};
+
+			public RemoteScriptingConfiguration(dynamic json)
+			{
+				var projectDirectory = Orange.The.Workspace.ProjectDirectory;
+				ScriptsPath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.ScriptsPath));
+				ScriptsAssemblyName = (string)json.ScriptsAssemblyName;
+				var projectReferencesPath = Path.Combine(projectDirectory, (string)json.ProjectReferencesPath);
+				var frameworkReferencesPath = Path.Combine(projectDirectory, (string)json.FrameworkReferencesPath);
+				var references = new List<string>();
+				foreach (string reference in json.FrameworkReferences) {
+					references.Add(reference);
+				}
+				foreach (string reference in defaultFrameworkReferences.Concat(references).Distinct()) {
+					frameworkReferences.Add(AssetPath.CorrectSlashes(Path.Combine(frameworkReferencesPath, reference)));
+				}
+				foreach (string reference in json.ProjectReferences) {
+					projectReferences.Add(AssetPath.CorrectSlashes(Path.Combine(projectReferencesPath, reference)));
+				}
+				EntryPointsClass = (string)json.EntryPointsClass;
+				RemoteStoragePath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.RemoteStoragePath));
+				BuildTarget = (string)json.BuildTarget;
+			}
+		}
 
 		public void Initialize()
 		{
@@ -81,15 +121,12 @@ namespace Tangerine.Core
 		{
 			try {
 				var projectJson = Orange.The.Workspace.ProjectJson.AsDynamic;
-				var projectDirectory = Orange.The.Workspace.ProjectDirectory;
-				ScriptsPath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)projectJson.RemoteScripting.ScriptsPath));
-				ScriptsAssemblyName = (string)projectJson.RemoteScripting.ScriptsAssemblyName;
-				var scriptsReferencesPath = Path.Combine(projectDirectory, (string)projectJson.RemoteScripting.ReferencesPath);
-				foreach (string reference in projectJson.RemoteScripting.References) {
-					scriptReferences.Add(AssetPath.CorrectSlashes(Path.Combine(scriptsReferencesPath, reference)));
+
+				var remoteScriptingSection = projectJson.RemoteScripting;
+				foreach (var kv in remoteScriptingSection) {
+					var configuration = new RemoteScriptingConfiguration(kv.Value);
+					RemoteScriptingConfigurations.Add(kv.Name, configuration); // configurationName
 				}
-				EntryPointsClass = (string)projectJson.RemoteScripting.EntryPointsClass;
-				RemoteStoragePath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)projectJson.RemoteScripting.RemoteStoragePath));
 				Console.WriteLine("Remote scripting preferences was successfully loaded.");
 			} catch {
 				InitializeDefaultRemoteScriptingPreferences();
@@ -98,11 +135,7 @@ namespace Tangerine.Core
 
 		private void InitializeDefaultRemoteScriptingPreferences()
 		{
-			ScriptsPath = null;
-			ScriptsAssemblyName = null;
-			scriptReferences.Clear();
-			EntryPointsClass = null;
-			RemoteStoragePath = null;
+			RemoteScriptingConfigurations.Clear();
 		}
 	}
 }
