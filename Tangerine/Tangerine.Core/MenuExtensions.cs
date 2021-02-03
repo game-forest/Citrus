@@ -1,6 +1,8 @@
 using Lime;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Tangerine.Core
 {
@@ -29,6 +31,27 @@ namespace Tangerine.Core
 				command.Text = parts[parts.Length - 1];
 			}
 			nextMenu.Add(command);
+		}
+
+		public static void SortTypesByMenuPath(List<Type> types)
+		{
+			types.Sort((a, b) => {
+				string aPath = a.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path ?? a.Name;
+				string bPath = b.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path ?? b.Name;
+				int aRank = aPath.Count(c => c == '/');
+				int bRank = bPath.Count(c => c == '/');
+				int r = (bRank).CompareTo(aRank);
+				if (r == 0) {
+					if (aPath.EndsWith("/")) {
+						aPath += a.Name;
+					}
+					if (bPath.EndsWith("/")) {
+						bPath += b.Name;
+					}
+					r = aPath.CompareTo(bPath);
+				}
+				return r;
+			});
 		}
 	}
 }
