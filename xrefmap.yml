@@ -67128,6 +67128,19 @@ references:
   fullName.vb: Lime.Toolbox.Deconstruct(Of T1, T2)(System.Collections.Generic.KeyValuePair(Of T1, T2), ByRef T1, ByRef T2)
   nameWithType: Toolbox.Deconstruct<T1, T2>(KeyValuePair<T1, T2>, out T1, out T2)
   nameWithType.vb: Toolbox.Deconstruct(Of T1, T2)(KeyValuePair(Of T1, T2), ByRef T1, ByRef T2)
+- uid: Lime.Toolbox.IsMouseWheelSupported
+  name: IsMouseWheelSupported()
+  href: api/Lime.Toolbox.html#Lime_Toolbox_IsMouseWheelSupported
+  commentId: M:Lime.Toolbox.IsMouseWheelSupported
+  fullName: Lime.Toolbox.IsMouseWheelSupported()
+  nameWithType: Toolbox.IsMouseWheelSupported()
+- uid: Lime.Toolbox.IsMouseWheelSupported*
+  name: IsMouseWheelSupported
+  href: api/Lime.Toolbox.html#Lime_Toolbox_IsMouseWheelSupported_
+  commentId: Overload:Lime.Toolbox.IsMouseWheelSupported
+  isSpec: "True"
+  fullName: Lime.Toolbox.IsMouseWheelSupported
+  nameWithType: Toolbox.IsMouseWheelSupported
 - uid: Lime.Toolbox.IsNullOrWhiteSpace(System.String)
   name: IsNullOrWhiteSpace(String)
   href: api/Lime.Toolbox.html#Lime_Toolbox_IsNullOrWhiteSpace_System_String_
