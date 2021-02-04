@@ -38,20 +38,25 @@ namespace Lime
 			{
 				if (e.KeyCode == Keycode.Del && e.Action != KeyEventActions.Up) {
 					textInput += '\b';
+					return true;
 				} else if (keyCode == Keycode.Unknown) {
 					textInput += e.Characters;
+					return true;
 				} else if (e.IsPrintingKey && e.Action != KeyEventActions.Up) {
 					textInput += (char) e.UnicodeChar;
+					return true;
 				} else if (e.KeyCode == Keycode.Space && e.Action != KeyEventActions.Up) {
 					textInput += ' ';
+					return true;
 				} else if (e.Action != KeyEventActions.Multiple) {
 					var key = TranslateKeycode(keyCode);
 					if (key != Key.Unknown) {
 						var state = e.Action != KeyEventActions.Up;
 						input.SetKeyState(key, state);
+						return true;
 					}
 				}
-				return true;
+				return false;
 			}
 
 			private static Key TranslateKeycode(Keycode key)
@@ -77,6 +82,15 @@ namespace Lime
 						return Key.Home;
 					case Keycode.MoveEnd:
 						return Key.End;
+					case Keycode.ShiftLeft:
+					case Keycode.ShiftRight:
+						return Key.Shift;
+					case Keycode.AltLeft:
+					case Keycode.AltRight:
+						return Key.Alt;
+					case Keycode.CtrlLeft:
+					case Keycode.CtrlRight:
+						return Key.Control;
 					// TODO: add all alpha-numeric keys
 					default:
 						return Key.Unknown;
@@ -147,9 +161,12 @@ namespace Lime
 			return baseInputConnection;
 		}
 
+		public override bool OnKeyDown(Keycode keyCode, KeyEvent e) => keyboardHandler.OnKey(this, keyCode, e);
+		public override bool OnKeyUp(Keycode keyCode, KeyEvent e) => keyboardHandler.OnKey(this, keyCode, e);
+
 		public override bool OnKeyPreIme(Keycode keyCode, KeyEvent e)
 		{
-			if (keyCode == Keycode.Back && e.Action == KeyEventActions.Up) {
+			if ((keyCode == Keycode.Escape || keyCode == Keycode.Back) && e.Action == KeyEventActions.Up) {
 				input.SetKeyState(Key.DismissSoftKeyboard, true);
 				input.SetKeyState(Key.DismissSoftKeyboard, false);
 				return false;
@@ -200,7 +217,20 @@ namespace Lime
 
 		private int[] pointerIds = new int[Input.MaxTouches];
 
-		public override bool OnTouchEvent(Android.Views.MotionEvent e)
+		public override bool OnGenericMotionEvent(MotionEvent e)
+		{
+			switch (e.ActionMasked) {
+			case MotionEventActions.HoverMove:
+				HandleHoverMoveAction(e);
+				break;
+			case MotionEventActions.Scroll:
+				HandleScrollAction(e);
+				break;
+			}
+			return base.OnGenericMotionEvent(e);
+		}
+
+		public override bool OnTouchEvent(MotionEvent e)
 		{
 			switch (e.ActionMasked) {
 			case MotionEventActions.Down:
@@ -277,6 +307,19 @@ namespace Lime
 			}
 			var key = (Key)((int)Key.Touch0 + touchIndex);
 			input.SetKeyState(key, false);
+		}
+
+		void HandleHoverMoveAction(MotionEvent e)
+		{
+			if (e.PointerCount == 1) {
+				input.DesktopMousePosition = new Vector2(e.GetX(), e.GetY());
+			}
+		}
+
+		void HandleScrollAction(MotionEvent e)
+		{
+			var value = e.GetAxisValue(Axis.Vscroll) * Application.ScreenDPI;
+			input.SetWheelScrollAmount(value.Y);
 		}
 
 		public void ProcessTextInput()

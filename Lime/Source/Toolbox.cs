@@ -91,6 +91,17 @@ namespace Lime
 		{
 			enumerator.Reset();
 		}
+
+		public static bool IsMouseWheelSupported()
+		{
+#if MAC || WIN || GAMEROOM || PC
+			return true;
+#endif
+#if ANDROID
+			return ActivityDelegate.Instance.Activity.PackageManager.HasSystemFeature("org.chromium.arc.device_management");
+#endif
+			return false;
+		}
 	}
 
 	public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>

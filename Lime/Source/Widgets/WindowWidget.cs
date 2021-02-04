@@ -221,7 +221,10 @@ namespace Lime
 		private Node LookForNodeUnderMouse(RenderChain renderChain)
 		{
 #if iOS || ANDROID
-			if (!Window.Input.IsTouching(0) && !Window.Input.WasTouchEnded(0)) {
+			if (
+				!Toolbox.IsMouseWheelSupported() &&
+				!Window.Input.IsTouching(0) && !Window.Input.WasTouchEnded(0)
+			) {
 				return null;
 			}
 #endif
