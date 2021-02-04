@@ -3212,7 +3212,7 @@
   "api/Lime.TextureAtlasElement.Params.html": {
     "href": "api/Lime.TextureAtlasElement.Params.html",
     "title": "Struct TextureAtlasElement.Params | Citrus Engine",
-    "keywords": "Struct TextureAtlasElement.Params Inherited Members System.ValueType.Equals(System.Object) System.ValueType.GetHashCode() System.ValueType.ToString() System.Object.Equals(System.Object, System.Object) System.Object.ReferenceEquals(System.Object, System.Object) System.Object.GetType() Namespace : Lime Assembly : Lime.dll Syntax public struct Params Fields AtlasRect Declaration [YuzuMember] public IntRectangle AtlasRect Field Value Type Description IntRectangle Properties AtlasPath Declaration [YuzuMember] public string AtlasPath { get; set; } Property Value Type Description System.String"
+    "keywords": "Struct TextureAtlasElement.Params Inherited Members System.ValueType.Equals(System.Object) System.ValueType.GetHashCode() System.ValueType.ToString() System.Object.Equals(System.Object, System.Object) System.Object.ReferenceEquals(System.Object, System.Object) System.Object.GetType() Namespace : Lime Assembly : Lime.dll Syntax public struct Params Fields AtlasRect Declaration [YuzuMember] public IntRectangle AtlasRect Field Value Type Description IntRectangle Properties AtlasPath Declaration [YuzuMember] public string AtlasPath { get; set; } Property Value Type Description System.String Methods Load(String) Declaration public void Load(string path) Parameters Type Name Description System.String path"
   },
   "api/Lime.TextureBlending.html": {
     "href": "api/Lime.TextureBlending.html",

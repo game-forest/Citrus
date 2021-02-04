@@ -64316,6 +64316,19 @@ references:
   commentId: F:Lime.TextureAtlasElement.Params.AtlasRect
   fullName: Lime.TextureAtlasElement.Params.AtlasRect
   nameWithType: TextureAtlasElement.Params.AtlasRect
+- uid: Lime.TextureAtlasElement.Params.Load(System.String)
+  name: Load(String)
+  href: api/Lime.TextureAtlasElement.Params.html#Lime_TextureAtlasElement_Params_Load_System_String_
+  commentId: M:Lime.TextureAtlasElement.Params.Load(System.String)
+  fullName: Lime.TextureAtlasElement.Params.Load(System.String)
+  nameWithType: TextureAtlasElement.Params.Load(String)
+- uid: Lime.TextureAtlasElement.Params.Load*
+  name: Load
+  href: api/Lime.TextureAtlasElement.Params.html#Lime_TextureAtlasElement_Params_Load_
+  commentId: Overload:Lime.TextureAtlasElement.Params.Load
+  isSpec: "True"
+  fullName: Lime.TextureAtlasElement.Params.Load
+  nameWithType: TextureAtlasElement.Params.Load
 - uid: Lime.TextureAtlasElement.RestoreRenderTarget
   name: RestoreRenderTarget()
   href: api/Lime.TextureAtlasElement.html#Lime_TextureAtlasElement_RestoreRenderTarget
