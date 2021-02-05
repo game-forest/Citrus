@@ -271,15 +271,13 @@ namespace Lime
 
 		void HandleMoveActions(Android.Views.MotionEvent e)
 		{
-			var pc = new Android.Views.MotionEvent.PointerCoords();
 			for (int i = 0; i < e.PointerCount; i++) {
 				int id = e.GetPointerId(i);
 				int touchIndex = Array.IndexOf(pointerIds, id);
 				if (touchIndex < 0) {
 					continue;
 				}
-				e.GetPointerCoords(i, pc);
-				var position = new Vector2(pc.X, pc.Y);
+				var position = new Vector2(e.GetX(i), e.GetY(i));
 				input.SetDesktopTouchPosition(touchIndex, position);
 				if (touchIndex == 0) {
 					input.DesktopMousePosition = position;
