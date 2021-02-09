@@ -9,10 +9,10 @@ namespace Tangerine.UI.Inspector
 		private readonly object obj;
 		private readonly string propertyPath;
 
-		private int animatorCollectionVersion = int.MinValue;
+		private int effectiveAnimatorsVersion = int.MinValue;
 		private int animatorVersion = int.MinValue;
 		private int animationFrame = int.MinValue;
-		private string animationId;
+		private Animation animation;
 		private IAnimator animator;
 
 		public IKeyframe Value { get; private set; }
@@ -23,8 +23,6 @@ namespace Tangerine.UI.Inspector
 			this.obj = obj;
 			this.propertyPath = propertyPath;
 		}
-
-		public void Dispose() { }
 
 		public static IDataflowProvider<R> GetProvider<R>(IPropertyEditorParams context, Func<IKeyframe, R> selector)
 		{
@@ -45,12 +43,12 @@ namespace Tangerine.UI.Inspector
 			if ((GotValue |= Document.Current.AnimationFrame != animationFrame)) {
 				animationFrame = Document.Current.AnimationFrame;
 			}
-			if ((GotValue |= Document.Current.AnimationId != animationId)) {
-				animationId = Document.Current.AnimationId;
-				animatorCollectionVersion = int.MinValue;
+			if ((GotValue |= Document.Current.Animation != animation)) {
+				animation = Document.Current.Animation;
+				effectiveAnimatorsVersion = int.MinValue;
 			}
-			if ((GotValue |= animatorCollectionVersion != animationHost.Animators.Version)) {
-				animatorCollectionVersion = animationHost.Animators.Version;
+			if ((GotValue |= effectiveAnimatorsVersion != animation.EffectiveAnimatorsVersion)) {
+				effectiveAnimatorsVersion = animation.EffectiveAnimatorsVersion;
 				animator = FindAnimator();
 			}
 			if ((GotValue |= animator != null && animator.ReadonlyKeys.Version != animatorVersion)) {
@@ -64,7 +62,16 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		private IAnimator FindAnimator() => (obj as IAnimationHost).Animators.TryFind(propertyPath, out IAnimator animator, Document.Current.AnimationId) ? animator : null;
+		private IAnimator FindAnimator()
+		{
+			var pathComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(propertyPath);
+			foreach (var i in animation.ValidatedEffectiveAnimators) {
+				if (i.Animable == obj && i.TargetPropertyPathComparisonCode == pathComparisonCode && i is IAnimator a) {
+					return a;
+				}
+			}
+			return null;
+		}
 
 		private IKeyframe FindKeyframe() => FindAnimator()?.ReadonlyKeys.GetByFrame(Document.Current.AnimationFrame);
 	}

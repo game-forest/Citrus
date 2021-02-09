@@ -139,7 +139,7 @@ namespace Tangerine.UI.Timeline
 							createInitialKeyframeForNewAnimator: false,
 							newKey.Frame
 						);
-						SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.AnimationId, newKey);
+						SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
 					}
 				}
 			}

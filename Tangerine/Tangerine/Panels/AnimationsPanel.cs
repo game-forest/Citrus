@@ -385,7 +385,10 @@ namespace Tangerine.Panels
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
 			if (mode == TreeViewMode.CurrentBranch) {
-				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(Document.Current.Container));
+				var node = Document.Current.Animation.OwnerNode.SameOrDescendantOf(Document.Current.Container)
+					? Document.Current.Animation.OwnerNode
+					: Document.Current.Container;
+				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(node));
 			} else {
 				TraverseSceneTree(Document.Current.GetSceneItemForObject(Document.Current.RootNode));
 			}
@@ -724,7 +727,7 @@ namespace Tangerine.Panels
 			{
 				switch (item) {
 					case AnimationTreeViewItem _:
-						return new AnimationTreeViewItemPresentation(treeView, item, options, itemProvider);
+						return new AnimationTreeViewItemPresentation(treeView, item, options);
 					case MarkerTreeViewItem _:
 						return new MarkerTreeViewItemPresentation(treeView, item, options);
 					case NodeTreeViewItem _:
@@ -917,15 +920,11 @@ namespace Tangerine.Panels
 
 		private class AnimationTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
-			private readonly TreeViewItemProvider itemProvider;
-
 			public AnimationTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item,
-				TreeViewItemPresentationOptions options,
-				TreeViewItemProvider itemProvider)
+				TreeViewItemPresentationOptions options)
 				: base(treeView, item, options)
 			{
-				this.itemProvider = itemProvider;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			}
 
@@ -1051,7 +1050,7 @@ namespace Tangerine.Panels
 								? propertyData.Info.GetValue(animable)
 								: propertyData.Info.GetValue(animable, new object[] { index });
 							zeroPoseKey.Function = KeyFunction.Steep;
-							SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, Animation.ZeroPoseId, zeroPoseKey);
+							SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, animation, zeroPoseKey);
 						}
 					});
 				}

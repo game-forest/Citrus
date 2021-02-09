@@ -153,7 +153,7 @@ namespace Tangerine
 			documentPanel.ContentWidget.Nodes.Add(dockManager.DocumentArea);
 			dockManager.ImportState(AppUserPreferences.Instance.DockState);
 			Document.ShowingWarning += (doc, message) => {
-				AlertDialog.Show($"{doc.Path} : {message}");
+				AlertDialog.Show(message);
 			};
 			Core.Operations.Paste.Pasted += () => {
 				int removedAnimatorsCount = 0;

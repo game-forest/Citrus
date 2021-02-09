@@ -271,6 +271,13 @@ namespace Tangerine.Core
 
 		private Document()
 		{
+			History.ExceptionHandler += e => {
+				if (e is Operations.AttemptToSetKeyFrameOutOfAnimationScopeException) {
+					ShowWarning("Attempt to set keframe out of the animation scope");
+					return true;
+				};
+				return false;
+			};
 			Manager = ManagerFactory?.Invoke() ?? CreateDefaultManager();
 			SceneTreeBuilder = new SceneTreeBuilder(o => {
 				var item = GetSceneItemForObject(o);

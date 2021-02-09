@@ -49,7 +49,7 @@ namespace Tangerine.UI.Timeline
 								Value = new SerializableTexture(assetPath),
 								Function = KeyFunction.Steep,
 							};
-							SetKeyframe.Perform(widget, nameof(Widget.Texture), Document.Current.AnimationId, key);
+							SetKeyframe.Perform(widget, nameof(Widget.Texture), Document.Current.Animation, key);
 							animateTextureCellOffset++;
 							break;
 						}
@@ -63,7 +63,7 @@ namespace Tangerine.UI.Timeline
 								Frame = cellUnderMouseOnFilesDrop.X,
 								Value = AudioAction.Play
 							};
-							SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.AnimationId, key);
+							SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.Animation, key);
 							break;
 						}
 					}

@@ -85,7 +85,7 @@ namespace Tangerine.Core
 					}
 				}
 			}
-			foreach (var abstractAnimator in animation.EffectiveTriggerableAnimators) {
+			foreach (var abstractAnimator in animation.ValidatedEffectiveTriggerableAnimators) {
 				if (abstractAnimator is IAnimator animator) {
 					foreach (var k in animator.ReadonlyKeys) {
 						if (k.Frame >= animationFrame) {

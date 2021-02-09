@@ -22,6 +22,7 @@ namespace Tangerine.Core
 		private int currentIndex;
 
 		public static DocumentHistory Current { get; private set; }
+		public event Func<System.Exception, bool> ExceptionHandler;
 
 		public bool CanUndo() => !IsTransactionActive && currentIndex > 0;
 		public bool CanRedo() => !IsTransactionActive && currentIndex < operations.Count;
@@ -63,9 +64,12 @@ namespace Tangerine.Core
 
 		public void DoTransaction(Action block)
 		{
-			using (BeginTransaction()) {
-				block();
-				CommitTransaction();
+			try {
+				using (BeginTransaction()) {
+					block();
+					CommitTransaction();
+				}
+			} catch (System.Exception e) when (ExceptionHandler(e)) {
 			}
 		}
 

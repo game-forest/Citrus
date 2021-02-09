@@ -38,7 +38,7 @@ namespace Tangerine.UI.Timeline.Operations
 						}
 						foreach (var key in saved) {
 							SetProperty.Perform(key, nameof(IKeyframe.Frame), Boundaries.Value.Left + Boundaries.Value.Right - key.Frame - 1);
-							SetKeyframe.Perform(animable, animator.TargetPropertyPath, animator.AnimationId, key);
+							SetKeyframe.Perform(animable, animator.TargetPropertyPath, Document.Current.Animation, key);
 						}
 					}
 				}

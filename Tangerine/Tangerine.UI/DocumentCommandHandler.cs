@@ -11,13 +11,9 @@ namespace Tangerine.UI
 			command.Checked = Core.Document.Current != null && GetChecked();
 		}
 
-		sealed public override void Execute()
+		public sealed override void Execute()
 		{
-			var history = Core.Document.Current.History;
-			using (history.BeginTransaction()) {
-				ExecuteTransaction();
-				history.CommitTransaction();
-			}
+			Core.Document.Current.History.DoTransaction(ExecuteTransaction);
 		}
 
 		public abstract void ExecuteTransaction();

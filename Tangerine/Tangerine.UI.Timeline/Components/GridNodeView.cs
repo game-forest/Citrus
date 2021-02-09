@@ -33,16 +33,16 @@ namespace Tangerine.UI.Timeline.Components
 
 		private GridKeyframesRenderer keyframesRenderer = new GridKeyframesRenderer();
 		private long animatorsVersion = -1;
-		private string animationId;
+		private Animation animation;
 
 		protected virtual void Render(Widget widget)
 		{
 			long v = CalculateAnimatorsTotalVersion();
-			if (animatorsVersion != v || animationId != Document.Current.AnimationId) {
+			if (animatorsVersion != v || animation != Document.Current.Animation) {
 				animatorsVersion = v;
-				animationId = Document.Current.AnimationId;
+				animation = Document.Current.Animation;
 				keyframesRenderer.ClearCells();
-				keyframesRenderer.GenerateCells(node.Animators, Document.Current.AnimationId);
+				keyframesRenderer.GenerateCells(node, animation);
 			}
 			keyframesRenderer.RenderCells(widget);
 		}

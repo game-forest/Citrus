@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Yuzu;
 
@@ -23,12 +24,50 @@ namespace Lime
 		public Marker MarkerAhead;
 		public Action Stopped;
 		public Action AssuredStopped;
+		public int EffectiveAnimatorsVersion;
 		public string RunningMarkerId { get; set; }
+
+		/// <summary>
+		/// Cached list of all animators used by this animation.
+		/// This cache may be in invalid state, in the user code use <see cref="ValidatedEffectiveAnimators"/>.
+		/// </summary>
+		public List<IAbstractAnimator> EffectiveAnimators;
+
+		/// <summary>
+		/// Cached list of only triggerable animators used by this animation.
+		/// This cache may be in invalid state, in the user code use <see cref="ValidatedEffectiveTriggerableAnimators"/>.
+		/// </summary>
+		public List<IAbstractAnimator> EffectiveTriggerableAnimators;
 		public AnimationBezierEasingCalculator BezierEasingCalculator { get; private set; }
 		public AnimationEngine AnimationEngine = DefaultAnimationEngine.Instance;
-		public List<IAbstractAnimator> EffectiveAnimators;
-		public List<IAbstractAnimator> EffectiveTriggerableAnimators;
-		internal int EffectiveAnimatorsVersion;
+
+		/// <summary>
+		/// Cached list of all animators used by this animation.
+		/// </summary>
+		public List<IAbstractAnimator> ValidatedEffectiveAnimators
+		{
+			get
+			{
+				if (!AnimationEngine.AreEffectiveAnimatorsValid(this)) {
+					AnimationEngine.BuildEffectiveAnimators(this);
+				}
+				return EffectiveAnimators;
+			}
+		}
+
+		/// <summary>
+		/// Cached list of only triggerable animators used by this animation.
+		/// </summary>
+		public List<IAbstractAnimator> ValidatedEffectiveTriggerableAnimators
+		{
+			get
+			{
+				if (!AnimationEngine.AreEffectiveAnimatorsValid(this)) {
+					AnimationEngine.BuildEffectiveAnimators(this);
+				}
+				return EffectiveTriggerableAnimators;
+			}
+		}
 
 		[YuzuMember]
 		public bool IsCompound { get; set; }
@@ -135,35 +174,6 @@ namespace Lime
 			}
 		}
 
-		public void FindAnimators(List<IAnimator> animators)
-		{
-			if (OwnerNode != null) {
-				foreach (var node in OwnerNode.Nodes) {
-					FindAnimators(node, animators);
-				}
-			}
-		}
-
-		private void FindAnimators(Node node, List<IAnimator> animators)
-		{
-			foreach (var animator in node.Animators) {
-				if (animator.AnimationId == Id) {
-					animators.Add(animator);
-				}
-			}
-			if (IsLegacy) {
-				return;
-			}
-			foreach (var animation in node.Animations) {
-				if (animation.Id == Id) {
-					return;
-				}
-			}
-			foreach (var child in node.Nodes) {
-				FindAnimators(child, animators);
-			}
-		}
-
 		public void Run(string markerId = null)
 		{
 			if (!TryRun(markerId)) {
@@ -216,11 +226,8 @@ namespace Lime
 
 		public int CalcDurationInFrames()
 		{
-			if (!AnimationEngine.AreEffectiveAnimatorsValid(this)) {
-				AnimationEngine.BuildEffectiveAnimators(this);
-			}
 			var durationInFrames = 0;
-			foreach (var a in EffectiveAnimators) {
+			foreach (var a in ValidatedEffectiveAnimators) {
 				durationInFrames = Math.Max(durationInFrames, a.Duration);
 			}
 			if (Markers.Count > 0) {
@@ -251,9 +258,7 @@ namespace Lime
 		public AnimationData GetData()
 		{
 			var d = new AnimationData();
-			var animators = new List<IAnimator>();
-			FindAnimators(animators);
-			foreach (var animator in animators) {
+			foreach (var animator in ValidatedEffectiveAnimators.OfType<IAnimator>()) {
 				var node = (Node)animator.Owner;
 				var propertyPath = $"{node.Id}/{animator.TargetPropertyPath}";
 				while (node.Parent != OwnerNode) {

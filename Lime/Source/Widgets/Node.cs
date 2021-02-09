@@ -1179,9 +1179,7 @@ namespace Lime
 		{
 			foreach (var animation in Animations) {
 				if (!string.IsNullOrEmpty(animation.ContentsPath)) {
-					var animators = new List<IAnimator>();
-					animation.FindAnimators(animators);
-					foreach (var animator in animators) {
+					foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 						animator.Owner.Animators.Remove(animator);
 					}
 				}

@@ -128,10 +128,10 @@ namespace Tangerine.Common.Operations
 					SetProperty.Perform(pair.Key, nameof(Bone.Position), pair.Value.CurrentPosition);
 					SetProperty.Perform(pair.Key, nameof(Bone.Rotation), pair.Value.CurrentRotation);
 					foreach (var keyframe in pair.Value.PositionKeyframes) {
-						SetKeyframe.Perform(pair.Key, nameof(Bone.Position), Document.Current.AnimationId, keyframe.Value);
+						SetKeyframe.Perform(pair.Key, nameof(Bone.Position), Document.Current.Animation, keyframe.Value);
 					}
 					foreach (var keyframe in pair.Value.RotationKeyframes) {
-						SetKeyframe.Perform(pair.Key, nameof(Bone.Rotation), Document.Current.AnimationId, keyframe.Value);
+						SetKeyframe.Perform(pair.Key, nameof(Bone.Rotation), Document.Current.Animation, keyframe.Value);
 					}
 					SetAnimableProperty.Perform(pair.Key, nameof(Bone.BaseIndex), 0);
 				}
@@ -142,12 +142,12 @@ namespace Tangerine.Common.Operations
 		{
 			var value = new Property<T>(node, propertyId).Value;
 			SetProperty.Perform(node, propertyId, transformer(value));
-			foreach (var animation in node.Animators) {
-				if (animation.TargetPropertyPath == propertyId) {
-					foreach (var keyframe in animation.Keys.ToList()) {
+			foreach (var animator in node.Animators) {
+				if (animator.TargetPropertyPath == propertyId) {
+					foreach (var keyframe in animator.Keys.ToList()) {
 						var newKeyframe = keyframe.Clone();
 						newKeyframe.Value = transformer((T)newKeyframe.Value);
-						SetKeyframe.Perform(node, animation.TargetPropertyPath, animation.AnimationId, newKeyframe);
+						SetKeyframe.Perform(node, animator.TargetPropertyPath, Document.Current.Animation, newKeyframe);
 					}
 				}
 			}

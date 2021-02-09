@@ -156,7 +156,7 @@ namespace Tangerine.UI.Inspector
 						.ToList();
 					foreach (var keyframe in keyframeClones) {
 						keyframe.Function = value;
-						Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.AnimationId, keyframe);
+						Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.Animation, keyframe);
 					}
 				}
 			}
@@ -182,7 +182,7 @@ namespace Tangerine.UI.Inspector
 					var keyFunction = animator?.Keys.LastOrDefault(k => k.Frame <= currentFrame)?.Function ??
 						CoreUserPreferences.Instance.DefaultKeyFunction;
 					IKeyframe keyframe = Keyframe.CreateForType(editorParams.PropertyInfo.PropertyType, currentFrame, propValue, keyFunction);
-					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.AnimationId, keyframe);
+					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.Animation, keyframe);
 				}
 			}
 		}

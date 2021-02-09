@@ -36,10 +36,16 @@ namespace Tangerine.UI.Timeline.Components
 			cells.Clear();
 		}
 
-		public void GenerateCells(AnimatorCollection animators, string animationId)
+		private readonly HashSet<IAbstractAnimator> effectiveAnimatorsHashSet = new HashSet<IAbstractAnimator>();
+
+		public void GenerateCells(Node node, Animation animation)
 		{
-			foreach (var animator in animators) {
-				if (animator.IsZombie || animator.AnimationId != animationId) {
+			effectiveAnimatorsHashSet.Clear();
+			foreach (var animator in animation.ValidatedEffectiveAnimators) {
+				effectiveAnimatorsHashSet.Add(animator);
+			}
+			foreach (var animator in node.Animators) {
+				if (!effectiveAnimatorsHashSet.Contains(animator)) {
 					continue;
 				}
 				for (var j = 0; j < animator.ReadonlyKeys.Count; j++) {
