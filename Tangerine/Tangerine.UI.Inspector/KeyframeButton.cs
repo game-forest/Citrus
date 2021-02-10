@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Components;
 
 namespace Tangerine.UI.Inspector
 {
@@ -147,9 +148,16 @@ namespace Tangerine.UI.Inspector
 		{
 			foreach (var animable in editorParams.RootObjects.OfType<IAnimationHost>()) {
 				if (animable.Animators.TryFind(editorParams.PropertyPath, out var animator, Document.Current.AnimationId)) {
-					var keyframe = animator.ReadonlyKeys.FirstOrDefault(i => i.Frame == Document.Current.AnimationFrame).Clone();
-					keyframe.Function = value;
-					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.AnimationId, keyframe);
+					var spans = GetAnimableSpans(animable, animator);
+					var keyframeClones = animator
+						.ReadonlyKeys
+						.Where(i => spans.Any(j => j.Contains(i.Frame)))
+						.Select(k => k.Clone())
+						.ToList();
+					foreach (var keyframe in keyframeClones) {
+						keyframe.Function = value;
+						Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.AnimationId, keyframe);
+					}
 				}
 			}
 		}
@@ -177,6 +185,24 @@ namespace Tangerine.UI.Inspector
 					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.AnimationId, keyframe);
 				}
 			}
+		}
+
+		private static GridSpanList GetAnimableSpans(IAnimationHost animable, IAnimator animator)
+		{
+			var rows = Document.Current
+				.SelectedRows()
+				.Where(r => animable == r.Components.Get<NodeRow>()?.Node || animator != null && r.Components.Get<PropertyRow>()?.Animator == animator)
+				.ToList();
+			var spans = new GridSpanList {
+				new GridSpan(Document.Current.AnimationFrame, Document.Current.AnimationFrame + 1)
+			};
+			foreach (var row in rows) {
+				var rowSpans = row.Components.Get<GridSpanListComponent>()?.Spans;
+				if (rowSpans != null && rowSpans.Count > 0) {
+					spans.AddRange(rowSpans);
+				}
+			}
+			return spans.GetNonOverlappedSpans();
 		}
 	}
 }
