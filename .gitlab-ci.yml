@@ -15,22 +15,18 @@ windows_build:
   tags:
   - win
   script:
+  - $ErrorActionPreference = "Stop";
   - chcp 65001
-  - powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -useb 'https://dot.net/v1/dotnet-install.ps1'))) -Channel release/5.0.1xx"
-  - $env:Path = "$env:LocalAppData\Microsoft\dotnet\;$env:Path"
-  - $env:Path
-  - Get-Command dotnet
-  - dotnet build -c:Release .\Orange\Orange.Win.sln
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Orange\Orange.Win.sln'
-  - 'Orange\bin\Win\Release\Orange.CLI.exe --command:"Generate Lime Deserializers And Cloners"'
+  - '.\Orange\Orange.CLI\bin\Release\Orange.CLI.exe --command:"Generate Lime Deserializers And Cloners"'
   - 'git status -s > ..\changes.txt'
   - 'cat .\..\changes.txt'
   - 'if ((Get-Item "..\changes.txt").length -ne 0) {exit 1} else {"Orange build OK"}'
   - 'Orange\Launcher\bin\Win\Release\Launcher.exe -c -j -b .\Tangerine\Tangerine.Win.sln'
   - echo "Tangerine build OK"
-  - '.\Orange\bin\Win\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Win --command:"Build" --disable-asset-cache'
+  - '.\Orange\Orange.CLI\bin\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Win --command:"Build" --disable-asset-cache'
   - echo "Empty project Win - OK"
-  - '.\Orange\bin\Win\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache'
+  - '.\Orange\Orange.CLI\bin\Release\Orange.CLI.exe .\Samples\EmptyProject\EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache'
   - echo "Empty project Android - OK"
   - dotnet build -c:Release .\Orange\Launcher\Launcher.Win.Sln
   - echo "Launcher - OK"
@@ -42,17 +38,17 @@ osx_build:
   script:
   - CITRUS_PATH="$(pwd)"
   - './Orange/Launcher/bin/Mac/Release/Launcher.app/Contents/MacOS/Launcher -c -j -b $CITRUS_PATH/Orange/Orange.Mac.sln'
-  - 'Orange/bin/Mac/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI --command:"Generate Lime Deserializers And Cloners"'
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI --command:"Generate Lime Deserializers And Cloners"'
   - 'git status -s > ../changes.txt'
   - 'cat ./../changes.txt'
   - if [ -s ./../changes.txt ]; then exit 1; else echo "Orange build OK"; fi
   - './Orange/Launcher/bin/Mac/Release/Launcher.app/Contents/MacOS/Launcher -c -j -b $CITRUS_PATH/Tangerine/Tangerine.Mac.sln'
   - echo "Tangerine build OK"
-  - './Orange/bin/Mac/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Samples/EmptyProject/EmptyProject.citproj --target:Mac --command:"Build" --disable-asset-cache'
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Samples/EmptyProject/EmptyProject.citproj --target:Mac --command:"Build" --disable-asset-cache'
   - echo "Empty project Mac - OK"
-  - './Orange/bin/Mac/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Samples/EmptyProject/EmptyProject.citproj --target:iOS --command:"Build" --disable-asset-cache'
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Samples/EmptyProject/EmptyProject.citproj --target:iOS --command:"Build" --disable-asset-cache'
   - echo "Empty project Android - OK"
-  - './Orange/bin/Mac/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Samples/EmptyProject/EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache'
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Samples/EmptyProject/EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache'
   - echo "Empty project iOS - OK"
   - nuget restore ./Orange/Launcher/Launcher.Mac.sln
   - msbuild ./Orange/Launcher/Launcher.Mac.sln -property:Configuration=Release
