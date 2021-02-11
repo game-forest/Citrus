@@ -106,13 +106,6 @@ namespace Orange
 		private const string OrangeAndTangerineField = "OrangeAndTangerine";
 		private const string OrangeField = "Orange";
 		private const string TangerineField = "Tangerine";
-#if DEBUG
-		private const string pluginConfiguration = BuildConfiguration.Debug;
-#else
-		private const string pluginConfiguration = BuildConfiguration.Release;
-#endif
-		private const string configurationSubstituteToken = "$(CONFIGURATION)";
-		private const string hostApplicationSubstituteToken = "$(HOST_APPLICATION)";
 
 		static PluginLoader()
 		{
@@ -135,7 +128,7 @@ namespace Orange
 				}
 			}
 			foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
-				if (Path.GetFileNameWithoutExtension(ResolveAssemblyPath(path)) == assemblyName) {
+				if (Path.GetFileNameWithoutExtension(Toolbox.ReplaceCitrusProjectSubstituteTokens(path)) == assemblyName) {
 					return TryLoadAssembly(path);
 				}
 			}
@@ -167,6 +160,7 @@ namespace Orange
 		{
 			CurrentPlugin?.Finalize?.Invoke();
 			The.UI.DestroyPluginUI();
+			BuildTargets();
 			CurrentPlugin = new OrangePlugin();
 			resolvedAssemblies.Clear();
 			ResetPlugins();
@@ -194,13 +188,34 @@ namespace Orange
 			The.MenuController.CreateAssemblyMenuItems();
 		}
 
+		private static void BuildTargets()
+		{
+			string buildTargetsSuffix = "BuildTargets";
+			var targetNames = EnumeratePluginAssemblySubfieldElements(OrangeAndTangerineField + buildTargetsSuffix)
+#if TANGERINE
+				.Concat(EnumeratePluginAssemblySubfieldElements(TangerineField + buildTargetsSuffix));
+#else // TANGERINE
+				.Concat(EnumeratePluginAssemblySubfieldElements(OrangeField + buildTargetsSuffix));
+#endif  // TANGERINE
+
+			foreach (var target in The.Workspace.Targets.Join(targetNames, t => t.Name, tn => tn, (t, tn) => t)) {
+				var builder = new SolutionBuilder(target);
+				if (target.CleanBeforeBuild == true) {
+					builder.Clean();
+				}
+				if (!builder.Build()) {
+					UserInterface.Instance.ExitWithErrorIfPossible();
+				}
+			}
+		}
+
 		public static IEnumerable<Assembly> EnumerateOrangeAndTangerinePluginAssemblies() =>
-			EnumeratePluginAssemblyPaths(OrangeAndTangerineField)
+			EnumeratePluginAssemblySubfieldElements(OrangeAndTangerineField)
 			.Select(TryLoadAssembly);
 
-		private static IEnumerable<string> EnumeratePluginAssemblyPaths(string projectToken)
+		private static IEnumerable<string> EnumeratePluginAssemblySubfieldElements(string subfieldName)
 		{
-			var array = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{projectToken}");
+			var array = The.Workspace.ProjectJson.GetArray<string>($"{PluginsField}/{subfieldName}");
 			if (array == null) {
 				yield break;
 			}
@@ -211,23 +226,23 @@ namespace Orange
 
 		private static IEnumerable<string> EnumerateCurrentApplicationPluginAssemblyPaths()
 		{
-			var paths = EnumeratePluginAssemblyPaths(OrangeAndTangerineField);
+			var paths = EnumeratePluginAssemblySubfieldElements(OrangeAndTangerineField);
 #if TANGERINE
 			paths = paths.Concat(EnumeratePluginAssemblyPaths(TangerineField));
 #else
-			paths = paths.Concat(EnumeratePluginAssemblyPaths(OrangeField));
+			paths = paths.Concat(EnumeratePluginAssemblySubfieldElements(OrangeField));
 #endif
 			return paths;
 		}
 
 		private static Assembly TryLoadAssembly(string assemblyPath)
 		{
-			if (!assemblyPath.Contains(configurationSubstituteToken)) {
+			if (!assemblyPath.Contains(Toolbox.ConfigurationSubstituteToken)) {
 				Console.WriteLine(
-					$"Warning: Using '{configurationSubstituteToken}' instead of 'Debug' or 'Release' in dll path" +
-					$" is strictly recommended ('{configurationSubstituteToken}' line not found in {assemblyPath}");
+					$"Warning: Using '{Toolbox.ConfigurationSubstituteToken}' instead of 'Debug' or 'Release' in dll path" +
+					$" is strictly recommended ('{Toolbox.ConfigurationSubstituteToken}' line not found in {assemblyPath}");
 			}
-			var absPath = Path.Combine(The.Workspace.ProjectDirectory, ResolveAssemblyPath(assemblyPath));
+			var absPath = Path.Combine(The.Workspace.ProjectDirectory, Toolbox.ReplaceCitrusProjectSubstituteTokens(assemblyPath));
 			if (!File.Exists(absPath)) {
 				throw new FileNotFoundException("File not found on attempt to import PluginAssemblies: " + absPath);
 			}
@@ -256,22 +271,6 @@ namespace Orange
 			resolvedAssemblies[assembly.GetName().Name] = assembly;
 			ProcessPluginInitializeActions();
 			return assembly;
-		}
-
-		/// <summary>
-		/// Resolves assembly path substituting engine defined tokens.
-		/// </summary>
-		/// <param name="assemblyPath">Assembly path with tokens.</param>
-		/// <returns></returns>
-		public static string ResolveAssemblyPath(string assemblyPath)
-		{
-			assemblyPath = assemblyPath.Replace(configurationSubstituteToken, pluginConfiguration);
-#if TANGERINE
-			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Tangerine");
-#else
-			assemblyPath = assemblyPath.Replace(hostApplicationSubstituteToken, "Orange");
-#endif
-			return assemblyPath;
 		}
 
 		private static void ProcessPluginInitializeActions()
