@@ -2,6 +2,6 @@
 IFS=$'\n' && for file in `git diff --cached --name-only | grep ".png\$"`
 do
   if [ -f "$file" ]; then
-    Citrus/Orange/Toolchain.Win/PngOptimizerCL.exe --KeepPixels "$file" && git add "$file"
+    $(CITRUS_DIRECTORY)/Orange/Toolchain.Win/PngOptimizerCL.exe --KeepPixels "$file" && git add "$file"
   fi
 done
