@@ -3,33 +3,204 @@
 	"CitrusDirectory": "../../",
 	"Targets": [
 		{
-			BaseTarget: "Android",
-			CleanBeforeBuild: false,
-			Name: "RemoteScriptingProject",
-			Configuration: "Debug",
-			Project: "EmptyProject.Android/EmptyProject.Android.sln"
+			"BaseTarget": "Android",
+			"CleanBeforeBuild": false,
+			"Name": "RemoteScriptingProject",
+			"Configuration": "Debug",
+			"Hidden": true,
+			"Project": "EmptyProject.Android/EmptyProject.Android.sln"
 		},
+		{
+			"BaseTarget": "$(PLATFORM)",
+			"Name": "OrangePlugin",
+			"CleanBeforeBuild": false,
+			"Configuration": "$(CONFIGURATION)",
+			"Hidden": true,
+			"Project": "OrangePlugin/OrangePlugin.Lib.$(PLATFORM).sln"
+		}
 	],
-	RemoteScripting: {
+	"PluginAssemblies": {
+		"OrangeAndTangerineBuildTargets": ["OrangePlugin"],
+		"OrangeBuildTargets": [],
+		"TangerineBuildTargets": [],
+		"OrangeAndTangerine": [
+			"OrangePlugin/bin/$(CONFIGURATION)/$(PLATFORM)/OrangePlugin.dll",
+		],
+		"Orange": [],
+		"Tangerine": []
+	},
+	"RemoteScripting": {
 		"Scripts": {
-			ScriptsPath: "EmptyProject.Scripts/",
-			ScriptsAssemblyName: "Scripts.dll",
-			BuildTarget: "RemoteScriptingProject",
-			FrameworkReferencesPath: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/MonoAndroid/v1.0/",
-			ProjectReferencesPath: "EmptyProject.Android/bin/Debug/",
-			ProjectReferences: [
+			"ScriptsPath": "EmptyProject.Scripts/",
+			"ScriptsAssemblyName": "Scripts.dll",
+			"BuildTarget": "RemoteScriptingProject",
+			"FrameworkReferencesPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/MonoAndroid/v1.0/",
+			"ProjectReferencesPath": "EmptyProject.Android/bin/Debug/",
+			"ProjectReferences": [
 				"Lime.dll",
 				"Yuzu.dll",
 				"RemoteScripting.dll",
 				"EmptyProject.dll"
 			],
-			FrameworkReferences: [
+			"FrameworkReferences": [
 				"mscorlib.dll",
 				"System.dll",
 				"System.Core.dll"
 			],
-			EntryPointsClass: "EmptyProject.Scripts.EntryPoints",
-			RemoteStoragePath: "StorageForRemoteScripting/"
+			"EntryPointsClass": "EmptyProject.Scripts.EntryPoints",
+			"RemoteStoragePath": "StorageForRemoteScripting/"
 		}
+	},
+	"ResolutionSettings": {
+		"IsLandscapeDefault": false,
+		"Resolutions": [
+			{
+				"Name": "4:3 (iPad)",
+				"Width": 1024,
+				"Height": 768,
+				"ResolutionMarkers": [ "Tablet", "4x3",  "Normal", "Default" ]
+			},
+			{
+				"Name": "16:9",
+				"Width": 960,
+				"Height": 540,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "16:10",
+				"Width": 960,
+				"Height": 600,
+				"ResolutionMarkers": [ "16x10", "Default" ]
+			},
+			{
+				"Name": "Android 4.0.3 devices",
+				"Width": 800,
+				"Height": 480,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "Nexus 9",
+				"Width": 1024,
+				"Height": 720,
+				"ResolutionMarkers": [ "4x3", "Default" ]
+			},
+			{
+				"Name": "iPhone X",
+				"Width": 1664,
+				"Height": 768,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "iPhone 5(rough), 6, 7, 8",
+				"Width": 1336,
+				"Height": 768,
+				"ResolutionMarkers": [ "Normal", "Default" ]
+			},
+			{
+				"Name": "iPhone 4",
+				"Width": 1152,
+				"Height": 768,
+				"ResolutionMarkers": [ "4x3", "Normal", "Default" ]
+			},
+			{
+				"Name": "iPhone 4S",
+				"Width": 960,
+				"Height": 640,
+				"ResolutionMarkers": [ "iPhone4S", "4x3", "Default" ]
+			},
+			{
+				"Name": "iPad Pro 11",
+				"Width": 1194,
+				"Height": 834,
+				"ResolutionMarkers": [ "4x3", "Default" ]
+			},
+			{
+				"Name": "iPad Pro 12.9",
+				"Width": 1092,
+				"Height": 819,
+				"ResolutionMarkers": [ "4x3", "Default" ]
+			},
+			{
+				"Name": "Galaxy S8",
+				"Width": 1578,
+				"Height": 768,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "LG G6",
+				"Width": 1536,
+				"Height": 768,
+				"ResolutionMarkers": [ "Normal", "Default" ]
+			},
+			{
+				"Name": "Xperia Z4 Tablet",
+				"Width": 1280,
+				"Height": 800,
+				"ResolutionMarkers": [ "16x10", "Tablet", "Normal", "Default" ]
+			},
+			{
+				"Name": "Amazon 5 gen",
+				"Width": 1024,
+				"Height": 600,
+				"ResolutionMarkers": [ "Normal", "Default" ]
+			},
+			{
+				"Name": "iPhone XR",
+				"Width": 1662,
+				"Height": 768,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "Sony Xperia 1",
+				"Width": 3840,
+				"Height": 1644,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "Galaxy Fold",
+				"Width": 2152,
+				"Height": 1536,
+				"ResolutionMarkers": [ "Tablet", "4x3", "Normal", "Default" ]
+			}
+		],
+		"Markers": [
+			{
+				"Name": "Default",
+				"LandscapeMarker": "@Landscape",
+				"PortraitMarker": "@Portrait"
+			},
+			{
+				"Name": "Normal",
+				"PortraitMarker": "@Normal"
+			},
+			{
+				"Name": "Tablet",
+				"PortraitMarker": "@Tablet"
+			},
+			{
+				"Name": "Notch",
+				"PortraitMarker": "@Notch"
+			},
+			{
+				"Name": "4x3",
+				"LandscapeMarker": "@iPadLandscape",
+				"PortraitMarker": "@iPadPortrait"
+			},
+			{
+				"Name": "iPhoneX",
+				"LandscapeMarker": "@iPhoneXLandscape",
+				"PortraitMarker": "@iPhoneXPortrait"
+			},
+			{
+				"Name": "iPhone4S",
+				"LandscapeMarker": "@iPhone4SLandscape",
+				"PortraitMarker": "@iPhone4SPortrait"
+			},
+			{
+				"Name": "16x10",
+				"LandscapeMarker": "@16x10Landscape",
+				"PortraitMarker": "@16x10Portrait"
+			}
+		]
 	},
 }
