@@ -228,7 +228,7 @@ namespace Orange
 		{
 			var paths = EnumeratePluginAssemblySubfieldElements(OrangeAndTangerineField);
 #if TANGERINE
-			paths = paths.Concat(EnumeratePluginAssemblyPaths(TangerineField));
+			paths = paths.Concat(EnumeratePluginAssemblySubfieldElements(TangerineField));
 #else
 			paths = paths.Concat(EnumeratePluginAssemblySubfieldElements(OrangeField));
 #endif
