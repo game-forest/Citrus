@@ -182,7 +182,8 @@ namespace Orange
 					projectPath: GetDefaultProjectSolutionPath(platform),
 					cleanBeforeBuild: false,
 					platform: platform,
-					configuration: BuildConfiguration.Release
+					configuration: BuildConfiguration.Release,
+					hidden: false
 				));
 			}
 		}
@@ -253,13 +254,18 @@ namespace Orange
 						}
 					}
 				}
+				bool? hidden = null;
+				if (target.ContainsKey("Hidden")) {
+					hidden = (bool)target["Hidden"];
+				}
 				Target newTarget = null;
 				Targets.Add(newTarget = new Target(
 					targetName,
 					projectPath,
 					cleanBeforeBuild,
 					null,
-					configuration
+					configuration,
+					hidden
 				));
 				if (target.TryGetValue("BaseTarget", out object baseTargetName)) {
 					targetToBaseTarget[newTarget] = baseTargetName as string;
