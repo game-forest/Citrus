@@ -709,7 +709,10 @@ namespace Orange
 						Layout = new LinearLayout(LayoutDirection.LeftToRight),
 						Nodes = {
 							(openButton = new ThemedButton($"{projectName}\n at \"{projectPathBound}\"") {
-								Clicked = () => The.Workspace.Load(projectPathBound),
+								// Uses InvokeOnNextUpdate because Workspace.Load will remove StartPage (clear window widget nodes)
+								// which leads to incorrect behavior update order. E.g. if plugin side panel will be enabled by plugin
+								// it will crash 50% of times.
+								Clicked = () => Application.InvokeOnNextUpdate(() => The.Workspace.Load(projectPathBound)),
 							}),
 							new ThemedButton("X") {
 								Clicked = () => {
