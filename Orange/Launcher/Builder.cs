@@ -48,16 +48,9 @@ namespace Launcher
 		private void SynchronizeAllProjects()
 		{
 			var csprojSyncList = Path.Combine(citrusDirectory, "Orange", "Launcher", "csproj_sync_list.txt");
-			using (var stream = File.OpenRead(csprojSyncList)) {
-				using (var reader = new StreamReader(stream)) {
-					string line = null;
-					while ((line = reader.ReadLine()) != null) {
-						Sync(line);
-					}
-				}
+			foreach (var line in File.ReadLines(csprojSyncList)) {
+				Orange.CsprojSynchronization.SynchronizeProject(citrusDirectory + "/" + line);
 			}
-
-			void Sync(string csprojPath) => Orange.CsprojSynchronization.SynchronizeProject(citrusDirectory + "/" + csprojPath);
 		}
 
 		public Task Start()
@@ -144,13 +137,9 @@ namespace Launcher
 				return true;
 			}
 
-			var csprojSyncList = Path.Combine(citrusDirectory, "Orange", "Launcher", "download_prerequisite_installer_urls.txt");
-			using (var stream = File.OpenRead(csprojSyncList)) {
-				using var reader = new StreamReader(stream);
-				string line = null;
-				while ((line = reader.ReadLine()) != null) {
-					OpenUrl(line);
-				}
+			var buildRequirementsUrlsFile = Path.Combine(citrusDirectory, "Orange", "Launcher", "download_prerequisite_installer_urls.txt");
+			foreach (var line in File.ReadLines(buildRequirementsUrlsFile)) {
+				OpenUrl(line);
 			}
 
 			SetFailedBuildStatus("Please install Microsoft Build Tools 2019");

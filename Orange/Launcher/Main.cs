@@ -108,19 +108,18 @@ namespace Launcher
 
 		private static string OrangeSolutionPath =>
 #if WIN
-			Path.Combine(OrangeDirectory, "Orange.Win.sln");
+			Path.Combine(citrusDirectory, "Orange", "Orange.Win.sln");
 #elif MAC
-			Path.Combine(OrangeDirectory, "Orange.Mac.sln");
+			Path.Combine(citrusDirectory, "Orange", "Orange.Mac.sln");
 #endif // WIN
-		private static string OrangeExecutablePath =>
-#if WIN
-			Path.Combine(OrangeDirectory, @"bin\Win\Release\Orange.GUI.exe");
-#elif MAC
-			Path.Combine(OrangeDirectory, @"bin/Mac/Release/Orange.GUI.app/Contents/MacOS/Orange.GUI");
-#endif // WIN
-		private static string OrangeDirectory { get { return Path.Combine(citrusDirectory, "Orange"); } }
-
+		private static string OrangeExecutablePath;
 		private static string citrusDirectory;
+		private static string platformSuffix =
+#if WIN
+			"win";
+#elif MAC
+			"mac";
+#endif // WIN
 #if WIN
 		[STAThread]
 #endif
@@ -128,6 +127,8 @@ namespace Launcher
 		{
 			var originalArgs = args;
 			citrusDirectory = Toolbox.FindCitrusDirectory();
+			var orangeExecutablePathFile = Path.Combine(citrusDirectory, "Orange", "Launcher", $"orange_executable.{platformSuffix}.txt");
+			OrangeExecutablePath = Path.Combine(citrusDirectory, File.ReadLines(orangeExecutablePathFile).First());
 #if MAC
 			args = args.Where(s => !s.StartsWith("-psn")).ToArray();
 			// Workaround see LauncherConsole.
@@ -223,12 +224,6 @@ namespace Launcher
 #if MAC
 					NSApplication.Init();
 #endif // MAC
-					var platformSuffix =
-#if WIN
-						"win";
-#elif MAC
-						"mac";
-#endif // WIN
 					orangeBuilder = new Builder(citrusDirectory) {
 						NeedRunExecutable = false,
 						SolutionPath = OrangeSolutionPath,
