@@ -3,9 +3,9 @@ using Lime;
 
 namespace Orange
 {
-	public class PlatformPicker : ThemedDropDownList
+	public class TargetPicker : ThemedDropDownList
 	{
-		public PlatformPicker()
+		public TargetPicker()
 		{
 			Reload();
 		}
@@ -16,6 +16,9 @@ namespace Orange
 			Index = -1;
 			Items.Clear();
 			foreach (var target in The.Workspace.Targets) {
+				if (target.Hidden) {
+					continue;
+				}
 				Items.Add(new Item(target.Name, target));
 			}
 			if (savedIndex >= 0 && savedIndex < Items.Count) {

@@ -17,7 +17,7 @@ namespace Orange
 		private Widget mainVBox;
 		private BundlePickerWidget bundlePickerWidget;
 		private FileChooser projectPicker;
-		private PlatformPicker platformPicker;
+		private TargetPicker targetPicker;
 		private PluginPanel pluginPanel;
 		private ThemedTextView textView;
 		private TextWriter textWriter;
@@ -148,7 +148,7 @@ namespace Orange
 				},
 				LayoutCell = new LayoutCell { StretchY = 0 }
 			};
-			AddPicker(header, "Target platform", platformPicker = new PlatformPicker());
+			AddPicker(header, "Target", targetPicker = new TargetPicker());
 			AddPicker(header, "Citrus Project", projectPicker = CreateProjectPicker());
 			return header;
 		}
@@ -325,7 +325,7 @@ namespace Orange
 		{
 			windowWidget.Nodes.Clear();
 			windowWidget.Nodes.Add(mainInterfaceWidget);
-			platformPicker.Reload();
+			targetPicker.Reload();
 			AssetCooker.BeginCookBundles += () => abortButton.Enabled = true;
 			AssetCooker.EndCookBundles += () => abortButton.Enabled = false;
 		}
@@ -409,7 +409,7 @@ namespace Orange
 
 		public override Target GetActiveTarget()
 		{
-			return platformPicker.SelectedTarget;
+			return targetPicker.SelectedTarget;
 		}
 
 		public override void SetActiveTarget(Target target)
@@ -449,7 +449,7 @@ namespace Orange
 		public override void SaveToWorkspaceConfig(ref WorkspaceConfig config, ProjectConfig projectConfig)
 		{
 			if (projectConfig != null) {
-				projectConfig.ActiveTargetIndex = platformPicker.Index;
+				projectConfig.ActiveTargetIndex = targetPicker.Index;
 				projectConfig.BundlePickerVisible = bundlePickerWidget.Visible;
 			}
 			if (window.State != WindowState.Minimized) {
@@ -480,10 +480,10 @@ namespace Orange
 			}
 			if (projectConfig != null) {
 				var newIndex = projectConfig.ActiveTargetIndex;
-				if (newIndex < 0 || newIndex >= platformPicker.Items.Count) {
+				if (newIndex < 0 || newIndex >= targetPicker.Items.Count) {
 					newIndex = 0;
 				}
-				platformPicker.Index = newIndex;
+				targetPicker.Index = newIndex;
 				UpdateCacheModeCheckboxes(projectConfig.AssetCacheMode);
 				UpdateBundlePicker(projectConfig.BundlePickerVisible);
 			} else {

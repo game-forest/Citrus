@@ -108,6 +108,15 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main.GUI.cs" />
+    <Compile Include="OrangeApp.cs" />
+    <Compile Include="UI\AlertDialog.cs" />
+    <Compile Include="UI\FileChooser.cs" />
+    <Compile Include="UI\OrangeInterface.cs" />
+    <Compile Include="UI\PluginUIBuidler.cs" />
+    <Compile Include="UI\TargetPicker.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-128.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-128%402x.png" />
@@ -124,15 +133,6 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="CopyToolchain.targets" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Main.GUI.cs" />
-    <Compile Include="UI\AlertDialog.cs" />
-    <Compile Include="UI\FileChooser.cs" />
-    <Compile Include="UI\OrangeInterface.cs" />
-    <Compile Include="UI\PlatformPicker.cs" />
-    <Compile Include="UI\PluginUIBuidler.cs" />
-    <Compile Include="OrangeApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Mac.csproj">
