@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
 
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
@@ -11,6 +11,12 @@
     <OutputPath>bin\$(Configuration)\Win\</OutputPath>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Lime\Lime.Win.csproj">
