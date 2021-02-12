@@ -150,6 +150,7 @@
     <Compile Include="Source\Application\Window.Win.cs" />
     <Compile Include="Source\Application\WindowInput.cs" />
     <Compile Include="Source\Application\WindowOptions.cs" />
+    <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\AssetBundle\AggregateAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundleToolbox.cs" />
@@ -176,7 +177,6 @@
     <Compile Include="Source\EnumExtensions.cs" />
     <Compile Include="Source\Environment.cs" />
     <Compile Include="Source\Exception.cs" />
-    <Compile Include="Source\FriendAssemblies.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />
