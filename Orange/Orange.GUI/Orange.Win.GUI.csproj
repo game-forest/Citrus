@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
     <RootNamespace>Orange.GUI</RootNamespace>
     <AssemblyName>Orange.GUI</AssemblyName>
     <Configurations>Release;Debug</Configurations>
