@@ -284,6 +284,7 @@
     <Compile Include="TftConfig.cs" />
     <Compile Include="SdfConverter.cs" />
     <Compile Include="FontGenerator.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lime.Mac.csproj">
