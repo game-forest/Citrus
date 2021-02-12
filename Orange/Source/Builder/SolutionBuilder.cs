@@ -57,10 +57,12 @@ namespace Orange
 			}
 		}
 
-		public bool Build(StringBuilder output = null)
+		public bool Build(bool synchronizeProjects = true, StringBuilder output = null)
 		{
 			Console.WriteLine("------------- Building Application -------------");
-			SynchronizeAll();
+			if (synchronizeProjects) {
+				SynchronizeAll();
+			}
 			// `dotnet build` handles nuget restore by itself.
 			if (!(buildSystem is Dotnet)) {
 				var nugetResult = Nuget.Restore(projectDirectory);

@@ -18,21 +18,27 @@ namespace Orange
 			All = 7
 		}
 
-		public static int Start(string app, string args, string workingDirectory = null,
-			Options options = Options.RedirectOutput | Options.RedirectErrors, StringBuilder output = null)
-		{
-			Console.WriteLine($"Working directory: '{workingDirectory}'");
-			Console.WriteLine($"Starting '{app} {args}'");
+		public static int Start(
+			string executablePath,
+			string arguments,
+			string workingDirectory = null,
+			Options options = Options.RedirectOutput | Options.RedirectErrors,
+			StringBuilder output = null
+		) {
+			if (!string.IsNullOrEmpty(workingDirectory)) {
+				Console.WriteLine($"Working directory: '{workingDirectory}'");
+			}
+			Console.WriteLine($"Starting '{executablePath} {arguments}'");
 			if (output == null) {
 				output = new StringBuilder();
 			}
 			var p = new System.Diagnostics.Process();
-			p.StartInfo.FileName = app;
-			p.StartInfo.Arguments = args;
+			p.StartInfo.FileName = executablePath;
+			p.StartInfo.Arguments = arguments;
 			p.StartInfo.UseShellExecute = false;
 #if WIN
 			p.StartInfo.CreateNoWindow = true;
-			p.StartInfo.WorkingDirectory = workingDirectory ?? Path.GetDirectoryName(app);
+			p.StartInfo.WorkingDirectory = workingDirectory ?? Path.GetDirectoryName(executablePath);
 			int cp = System.Text.Encoding.Default.CodePage;
 			if ((options & Options.AllowCP1251) == 0 && cp == 1251) {
 				cp = 866;

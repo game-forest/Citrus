@@ -203,7 +203,7 @@ namespace Orange
 				if (target.CleanBeforeBuild == true) {
 					builder.Clean();
 				}
-				if (!builder.Build()) {
+				if (!builder.Build(synchronizeProjects: false)) {
 					UserInterface.Instance.ExitWithErrorIfPossible();
 				}
 			}
@@ -242,34 +242,35 @@ namespace Orange
 					$"Warning: Using '{Toolbox.ConfigurationSubstituteToken}' instead of 'Debug' or 'Release' in dll path" +
 					$" is strictly recommended ('{Toolbox.ConfigurationSubstituteToken}' line not found in {assemblyPath}");
 			}
-			var absPath = Path.Combine(The.Workspace.ProjectDirectory, Toolbox.ReplaceCitrusProjectSubstituteTokens(assemblyPath));
-			if (!File.Exists(absPath)) {
-				throw new FileNotFoundException("File not found on attempt to import PluginAssemblies: " + absPath);
+			assemblyPath = Path.Combine(The.Workspace.ProjectDirectory, Toolbox.ReplaceCitrusProjectSubstituteTokens(assemblyPath));
+			if (!File.Exists(assemblyPath)) {
+				throw new FileNotFoundException("File not found on attempt to import PluginAssemblies: " + assemblyPath);
 			}
 			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-			if (!TryFindDomainAssembliesByPath(domainAssemblies, absPath, out var assembly)) {
-				var assemblyName = AssemblyName.GetAssemblyName(absPath);
+			if (!TryFindDomainAssembliesByPath(domainAssemblies, assemblyPath, out var assembly)) {
+				var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
 				TryFindDomainAssembliesByName(domainAssemblies, assemblyName.Name, out assembly);
 			}
 			try {
 				if (assembly == null) {
-					assembly = LoadAssembly(absPath);
+					assembly = LoadAssembly(assemblyPath);
 				}
 				if (!resolvedAssemblies.ContainsKey(assembly.GetName().Name)) {
 					catalog.Catalogs.Add(new AssemblyCatalog(assembly));
 				}
 			} catch (ReflectionTypeLoadException e) {
-				var msg = "Failed to import OrangePluginAssemblies: " + absPath;
+				var msg = "Failed to import OrangePluginAssemblies: " + assemblyPath;
 				foreach (var loaderException in e.LoaderExceptions) {
 					msg += $"\n{loaderException}";
 				}
 				throw new System.Exception(msg);
 			} catch (System.Exception e) {
-				var msg = $"Unhandled exception while importing OrangePluginAssemblies: {absPath}\n{e}";
+				var msg = $"Unhandled exception while importing OrangePluginAssemblies: {assemblyPath}\n{e}";
 				throw new System.Exception(msg);
 			}
 			resolvedAssemblies[assembly.GetName().Name] = assembly;
 			ProcessPluginInitializeActions();
+			Console.WriteLine($"Citrus plugin '{assemblyPath}' loaded.");
 			return assembly;
 		}
 
