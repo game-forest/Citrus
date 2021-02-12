@@ -7,7 +7,7 @@ using Orange;
 using Lime;
 using System.IO;
 
-namespace OrangePlugin
+namespace CitrusPlugin
 {
 	public class ConfigWindow
 	{

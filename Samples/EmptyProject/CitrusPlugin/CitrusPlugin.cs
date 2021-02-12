@@ -6,12 +6,15 @@ using Orange;
 using Lime;
 using System.ComponentModel.Composition;
 
-namespace OrangePlugin
+namespace CitrusPlugin
 {
-	public static class OrangePlugin
+	public static class CitrusPlugin
 	{
 		private static ConfigWindow Window;
 
+		/// <summary>
+		/// Installs pre-commit git hook which will run PngOptimizerCL.exe for every .png file in the project.
+		/// </summary>
 		private static void InstallHooks()
 		{
 			var gitRootPath = The.Workspace.ProjectDirectory;

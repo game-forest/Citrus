@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.808.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrangePlugin.Mac", "OrangePlugin.Mac.csproj", "{572720C1-120A-4227-9D24-F4A4479B64DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitrusPlugin.Mac", "CitrusPlugin.Mac.csproj", "{572720C1-120A-4227-9D24-F4A4479B64DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orange.Mac", "..\..\..\Orange\Orange.Mac.csproj", "{4B2BDD5A-2AAE-46AE-AA1A-8C9308BAA50D}"
 EndProject

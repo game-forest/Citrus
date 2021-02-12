@@ -12,19 +12,19 @@
 		},
 		{
 			"BaseTarget": "$(PLATFORM)",
-			"Name": "OrangePlugin",
+			"Name": "CitrusPlugin",
 			"CleanBeforeBuild": false,
-			"Configuration": "$(CONFIGURATION)",
+			"Configuration": "$(HOST_APPLICATION).$(CONFIGURATION)",
 			"Hidden": true,
-			"Project": "OrangePlugin/OrangePlugin.Lib.$(PLATFORM).sln"
+			"Project": "CitrusPlugin/CitrusPlugin.$(PLATFORM).sln"
 		}
 	],
 	"PluginAssemblies": {
-		"OrangeAndTangerineBuildTargets": ["OrangePlugin"],
+		"OrangeAndTangerineBuildTargets": ["CitrusPlugin"],
 		"OrangeBuildTargets": [],
 		"TangerineBuildTargets": [],
 		"OrangeAndTangerine": [
-			"OrangePlugin/bin/$(CONFIGURATION)/$(PLATFORM)/OrangePlugin.dll",
+			"CitrusPlugin/bin/$(HOST_APPLICATION).$(CONFIGURATION)/CitrusPlugin.dll",
 		],
 		"Orange": [],
 		"Tangerine": []

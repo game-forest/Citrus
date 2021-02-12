@@ -3,12 +3,15 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>OrangePlugin</RootNamespace>
-    <AssemblyName>OrangePlugin</AssemblyName>
+    <RootNamespace>CitrusPlugin</RootNamespace>
+    <AssemblyName>CitrusPlugin</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\$(Configuration)\Win\</OutputPath>
+    <Configurations>Debug;Release;Tangerine.Debug;Tangerine.Release;Orange.Debug;Orange.Release</Configurations>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;OPENGL;OPENAL;ANGLE;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
