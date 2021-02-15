@@ -56,6 +56,9 @@ namespace Tangerine.UI.RemoteScripting
 				buildGameAndAssemblyButton = new ToolbarButton("Build Game and Assembly") { Clicked = () => BuildAssembly(configuration) },
 				configurationDropDownList
 			);
+			if (configurationDropDownList.Items.Any()) {
+				configurationDropDownList.Index = 0;
+			}
 		}
 
 		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true)
