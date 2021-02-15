@@ -127,6 +127,9 @@
       <span class="xref">System.Windows.Forms.Form.Close()</span>
     </div>
     <div>
+      <span class="xref">System.Windows.Forms.Form.CreateAccessibilityInstance()</span>
+    </div>
+    <div>
       <span class="xref">System.Windows.Forms.Form.CreateControlsInstance()</span>
     </div>
     <div>
@@ -406,9 +409,6 @@
       <span class="xref">System.Windows.Forms.Form.MainMenuStrip</span>
     </div>
     <div>
-      <span class="xref">System.Windows.Forms.Form.Menu</span>
-    </div>
-    <div>
       <span class="xref">System.Windows.Forms.Form.MinimumSize</span>
     </div>
     <div>
@@ -419,9 +419,6 @@
     </div>
     <div>
       <span class="xref">System.Windows.Forms.Form.MdiParent</span>
-    </div>
-    <div>
-      <span class="xref">System.Windows.Forms.Form.MergedMenu</span>
     </div>
     <div>
       <span class="xref">System.Windows.Forms.Form.MinimizeBox</span>
@@ -685,9 +682,6 @@
       <span class="xref">System.Windows.Forms.Control.Contains(System.Windows.Forms.Control)</span>
     </div>
     <div>
-      <span class="xref">System.Windows.Forms.Control.CreateAccessibilityInstance()</span>
-    </div>
-    <div>
       <span class="xref">System.Windows.Forms.Control.CreateGraphics()</span>
     </div>
     <div>
@@ -793,6 +787,9 @@
       <span class="xref">System.Windows.Forms.Control.LogicalToDeviceUnits(System.Int32)</span>
     </div>
     <div>
+      <span class="xref">System.Windows.Forms.Control.LogicalToDeviceUnits(System.Drawing.Size)</span>
+    </div>
+    <div>
       <span class="xref">System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(System.Drawing.Bitmap)</span>
     </div>
     <div>
@@ -812,9 +809,6 @@
     </div>
     <div>
       <span class="xref">System.Windows.Forms.Control.OnCausesValidationChanged(System.EventArgs)</span>
-    </div>
-    <div>
-      <span class="xref">System.Windows.Forms.Control.OnContextMenuChanged(System.EventArgs)</span>
     </div>
     <div>
       <span class="xref">System.Windows.Forms.Control.OnContextMenuStripChanged(System.EventArgs)</span>
@@ -1204,9 +1198,6 @@
       <span class="xref">System.Windows.Forms.Control.ContainsFocus</span>
     </div>
     <div>
-      <span class="xref">System.Windows.Forms.Control.ContextMenu</span>
-    </div>
-    <div>
       <span class="xref">System.Windows.Forms.Control.ContextMenuStrip</span>
     </div>
     <div>
@@ -1411,9 +1402,6 @@
       <span class="xref">System.Windows.Forms.Control.ClientSizeChanged</span>
     </div>
     <div>
-      <span class="xref">System.Windows.Forms.Control.ContextMenuChanged</span>
-    </div>
-    <div>
       <span class="xref">System.Windows.Forms.Control.ContextMenuStripChanged</span>
     </div>
     <div>
@@ -1606,19 +1594,16 @@
       <span class="xref">System.ComponentModel.Component.GetService(System.Type)</span>
     </div>
     <div>
-      <span class="xref">System.ComponentModel.Component.Events</span>
-    </div>
-    <div>
       <span class="xref">System.ComponentModel.Component.Container</span>
     </div>
     <div>
       <span class="xref">System.ComponentModel.Component.DesignMode</span>
     </div>
     <div>
-      <span class="xref">System.ComponentModel.Component.Disposed</span>
+      <span class="xref">System.ComponentModel.Component.Events</span>
     </div>
     <div>
-      <span class="xref">System.MarshalByRefObject.MemberwiseClone(System.Boolean)</span>
+      <span class="xref">System.ComponentModel.Component.Disposed</span>
     </div>
     <div>
       <span class="xref">System.MarshalByRefObject.GetLifetimeService()</span>
@@ -1627,16 +1612,13 @@
       <span class="xref">System.MarshalByRefObject.InitializeLifetimeService()</span>
     </div>
     <div>
-      <span class="xref">System.MarshalByRefObject.CreateObjRef(System.Type)</span>
+      <span class="xref">System.MarshalByRefObject.MemberwiseClone(System.Boolean)</span>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
     </div>
     <div>
       <span class="xref">System.Object.GetHashCode()</span>
@@ -1647,12 +1629,15 @@
     <div>
       <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
   <h5 id="Lime_ToolTipForm_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ToolTipForm : Form, IDropTarget, ISynchronizeInvoke, IWin32Window, IBindableComponent, IArrangedElement, IComponent, IDisposable, IContainerControl</code></pre>
+    <pre><code class="lang-csharp hljs">public class ToolTipForm : Form, Interop.Ole32.IOleControl, Interop.Ole32.IOleObject, Interop.Ole32.IOleInPlaceObject, Interop.Ole32.IOleInPlaceActiveObject, Interop.Ole32.IOleWindow, Interop.Ole32.IViewObject, Interop.Ole32.IViewObject2, Interop.Ole32.IPersist, Interop.Ole32.IPersistStreamInit, Interop.Oleaut32.IPersistPropertyBag, Interop.Ole32.IPersistStorage, Interop.Ole32.IQuickActivate, ISupportOleDropSource, IDropTarget, ISynchronizeInvoke, IWin32Window, IBindableComponent, IKeyboardToolTip, IHandle, IArrangedElement, IComponent, IDisposable, IContainerControl</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>

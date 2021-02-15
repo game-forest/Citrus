@@ -178,7 +178,7 @@
 </tr>
 <tr>
 <td><code>RemoteScripting</code></td>
-<td><a href="#remotescripting">RemoteScripting</a></td>
+<td>Dictionary&lt;string, <a href="#remotescripting">RemoteScripting</a>&gt;</td>
 <td>TODO</td>
 </tr>
 <tr>
@@ -193,7 +193,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="target">Target</h2>
+<h2 id="target"><code>Target</code></h2>
 <p>Default target names are <code>iOS</code>, <code>Android</code>, <code>Win</code>, <code>Mac</code>.</p>
 <table>
 <thead>
@@ -229,9 +229,17 @@
 <td>string</td>
 <td>name of target to inherit.</td>
 </tr>
+<tr>
+<td><code>Hidden</code></td>
+<td>bool</td>
+<td>Hides target from menu.</td>
+</tr>
 </tbody>
 </table>
-<p>If any property but <code>Name</code> and <code>BaseTarget</code> is not specified or set to null it will be inherited from specified <code>BaseTarget</code>.</p>
+<ul>
+<li>If any property but <code>Name</code> and <code>BaseTarget</code> is not specified or set to null it will be inherited from specified <code>BaseTarget</code>.</li>
+<li><code>Project</code>, <code>Configuration</code> and <code>BaseTarget</code> properties may contain <a href="#substitute-tokens">Substitute tokens</a>.</li>
+</ul>
 <h2 id="xcodeproject"><code>XCodeProject</code></h2>
 <table>
 <thead>
@@ -294,26 +302,39 @@
 <tr>
 <td><code>OrangeAndTangerine</code></td>
 <td>List&lt;string&gt;</td>
-<td>list of relative paths to assemblies to be loaded by both Tangerine and Orange</td>
+<td>paths to assemblies to be loaded by Tangerine and Orange</td>
 </tr>
 <tr>
 <td><code>Orange</code></td>
 <td>List&lt;string&gt;</td>
-<td>list of relative paths to assemblies to be loaded by Orange only</td>
+<td>paths to assemblies to be loaded by Orange only</td>
 </tr>
 <tr>
 <td><code>Tangerine</code></td>
 <td>List&lt;string&gt;</td>
-<td>list of relative paths to assemblies to be loaded by Tangerine only</td>
+<td>paths to assemblies to be loaded by Tangerine only</td>
+</tr>
+<tr>
+<td><code>OrangeAndTangerineBuildTargets</code></td>
+<td>List&lt;string&gt;</td>
+<td>list of <a href="#target">Target</a> to build when opening project with Tangerine and Orange</td>
+</tr>
+<tr>
+<td><code>OrangeBuildTargets</code></td>
+<td>List&lt;string&gt;</td>
+<td>list of <a href="#target">Target</a> to build when opening project with Orange</td>
+</tr>
+<tr>
+<td><code>TangerineBuildTargets</code></td>
+<td>List&lt;string&gt;</td>
+<td>list of <a href="#target">Target</a> to build when opening project with Tangerine</td>
 </tr>
 </tbody>
 </table>
-<p>Assembly path may contain substitution tokens:</p>
 <ul>
-<li><code>$(CONFIGURATION)</code> Either replaced by <code>Debug</code> or <code>Release</code></li>
-<li><code>$(HOST_APPLICATION)</code> replaced by either <code>Tangerine</code> or <code>Orange</code></li>
+<li>Assembly paths may contain <a href="#substitute-tokens">Substitute tokens</a>.</li>
+<li>Assembly paths are relative to project directory.</li>
 </ul>
-<p>paths are relative to project directory</p>
 <h2 id="resolutionsettings"><code>ResolutionSettings</code></h2>
 <table>
 <thead>
@@ -341,7 +362,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="resolution">Resolution</h3>
+<h3 id="resolution"><code>Resolution</code></h3>
 <table>
 <thead>
 <tr>
@@ -373,7 +394,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="marker">Marker</h3>
+<h3 id="marker"><code>Marker</code></h3>
 <table>
 <thead>
 <tr>
@@ -421,13 +442,28 @@
 <td>TODO</td>
 </tr>
 <tr>
-<td><code>ReferencesPath</code></td>
+<td><code>BuildTarget</code></td>
 <td>string</td>
 <td>TODO</td>
 </tr>
 <tr>
-<td><code>References</code></td>
+<td><code>FrameworkReferencesPath</code></td>
+<td>string</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><code>ProjectReferencesPath</code></td>
+<td>string</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><code>ProjectReferences</code></td>
 <td>List&lt;string&gt;</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><code>FrameworkReferences</code></td>
+<td>string</td>
 <td>TODO</td>
 </tr>
 <tr>
@@ -442,6 +478,12 @@
 </tr>
 </tbody>
 </table>
+<h2 id="substitute-tokens">Substitute tokens</h2>
+<ul>
+<li><code>$(PLATFORM)</code> =&gt; <code>Win</code> or <code>Mac</code></li>
+<li><code>$(CONFIGURATION)</code> =&gt; <code>Debug</code> or <code>Release</code></li>
+<li><code>$(HOST_APPLICATION)</code> =&gt; <code>Orange</code> or <code>Tangerine</code></li>
+</ul>
 </article>
           </div>
           

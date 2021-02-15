@@ -94,12 +94,28 @@
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><span class="xref">System.IAsyncDisposable</span></div>
     <div><span class="xref">System.IDisposable</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
       <span class="xref">System.IO.Stream.Null</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.BeginRead(System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.BeginWrite(System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.Close()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.CopyTo(System.IO.Stream)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.CopyTo(System.IO.Stream, System.Int32)</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.CopyToAsync(System.IO.Stream)</span>
@@ -111,16 +127,22 @@
       <span class="xref">System.IO.Stream.CopyToAsync(System.IO.Stream, System.Int32, System.Threading.CancellationToken)</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.CopyTo(System.IO.Stream)</span>
+      <span class="xref">System.IO.Stream.CopyToAsync(System.IO.Stream, System.Threading.CancellationToken)</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.CopyTo(System.IO.Stream, System.Int32)</span>
-    </div>
-    <div>
-      <span class="xref">System.IO.Stream.Close()</span>
+      <span class="xref">System.IO.Stream.CreateWaitHandle()</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.Dispose()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.DisposeAsync()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.EndRead(System.IAsyncResult)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.EndWrite(System.IAsyncResult)</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.FlushAsync()</span>
@@ -129,13 +151,10 @@
       <span class="xref">System.IO.Stream.FlushAsync(System.Threading.CancellationToken)</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.CreateWaitHandle()</span>
+      <span class="xref">System.IO.Stream.ObjectInvariant()</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.BeginRead(System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.IO.Stream.EndRead(System.IAsyncResult)</span>
+      <span class="xref">System.IO.Stream.Read(System.Span&lt;System.Byte&gt;)</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.ReadAsync(System.Byte[], System.Int32, System.Int32)</span>
@@ -144,10 +163,16 @@
       <span class="xref">System.IO.Stream.ReadAsync(System.Byte[], System.Int32, System.Int32, System.Threading.CancellationToken)</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.BeginWrite(System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object)</span>
+      <span class="xref">System.IO.Stream.ReadAsync(System.Memory&lt;System.Byte&gt;, System.Threading.CancellationToken)</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.EndWrite(System.IAsyncResult)</span>
+      <span class="xref">System.IO.Stream.ReadByte()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.Synchronized(System.IO.Stream)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.Stream.Write(System.ReadOnlySpan&lt;System.Byte&gt;)</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.WriteAsync(System.Byte[], System.Int32, System.Int32)</span>
@@ -156,16 +181,10 @@
       <span class="xref">System.IO.Stream.WriteAsync(System.Byte[], System.Int32, System.Int32, System.Threading.CancellationToken)</span>
     </div>
     <div>
-      <span class="xref">System.IO.Stream.ReadByte()</span>
+      <span class="xref">System.IO.Stream.WriteAsync(System.ReadOnlyMemory&lt;System.Byte&gt;, System.Threading.CancellationToken)</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.WriteByte(System.Byte)</span>
-    </div>
-    <div>
-      <span class="xref">System.IO.Stream.Synchronized(System.IO.Stream)</span>
-    </div>
-    <div>
-      <span class="xref">System.IO.Stream.ObjectInvariant()</span>
     </div>
     <div>
       <span class="xref">System.IO.Stream.CanTimeout</span>
@@ -177,28 +196,19 @@
       <span class="xref">System.IO.Stream.WriteTimeout</span>
     </div>
     <div>
-      <span class="xref">System.MarshalByRefObject.MemberwiseClone(System.Boolean)</span>
-    </div>
-    <div>
       <span class="xref">System.MarshalByRefObject.GetLifetimeService()</span>
     </div>
     <div>
       <span class="xref">System.MarshalByRefObject.InitializeLifetimeService()</span>
     </div>
     <div>
-      <span class="xref">System.MarshalByRefObject.CreateObjRef(System.Type)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
+      <span class="xref">System.MarshalByRefObject.MemberwiseClone(System.Boolean)</span>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
     </div>
     <div>
       <span class="xref">System.Object.GetHashCode()</span>
@@ -209,12 +219,18 @@
     <div>
       <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
   <h5 id="Lime_AssetStream_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class AssetStream : Stream, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class AssetStream : Stream, IAsyncDisposable, IDisposable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -602,6 +618,9 @@
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">System.IO.Stream.Write(System.Byte[], System.Int32, System.Int32)</span></div>
   <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IAsyncDisposable</span>
+  </div>
   <div>
       <span class="xref">System.IDisposable</span>
   </div>
