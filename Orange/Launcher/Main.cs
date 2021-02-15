@@ -6,6 +6,7 @@ using System.Linq;
 using Octokit;
 using Orange;
 using FileMode = System.IO.FileMode;
+using System.Runtime.CompilerServices;
 #if WIN
 using System.Runtime.InteropServices;
 #elif MAC
@@ -107,25 +108,27 @@ namespace Launcher
 
 		private static string OrangeSolutionPath =>
 #if WIN
-			Path.Combine(OrangeDirectory, "Orange.Win.sln");
+			Path.Combine(citrusDirectory, "Orange", "Orange.Win.sln");
 #elif MAC
-			Path.Combine(OrangeDirectory, "Orange.Mac.sln");
+			Path.Combine(citrusDirectory, "Orange", "Orange.Mac.sln");
 #endif // WIN
-
-		private static string OrangeExecutablePath =>
+		private static string OrangeExecutablePath;
+		private static string citrusDirectory;
+		private static string platformSuffix =
 #if WIN
-			Path.Combine(OrangeDirectory, @"bin\Win\Release\Orange.GUI.exe");
+			"win";
 #elif MAC
-			Path.Combine(OrangeDirectory, @"bin/Mac/Release/Orange.GUI.app/Contents/MacOS/Orange.GUI");
+			"mac";
 #endif // WIN
-		private static string OrangeDirectory { get { return Path.Combine(citrusDirectory, "Orange"); } }
-
-		private static readonly string citrusDirectory = Toolbox.FindCitrusDirectory();
-
+#if WIN
 		[STAThread]
+#endif
 		public static int Main(string[] args)
 		{
 			var originalArgs = args;
+			citrusDirectory = Toolbox.FindCitrusDirectory();
+			var orangeExecutablePathFile = Path.Combine(citrusDirectory, "Orange", "Launcher", $"orange_executable.{platformSuffix}.txt");
+			OrangeExecutablePath = Path.Combine(citrusDirectory, File.ReadLines(orangeExecutablePathFile).First());
 #if MAC
 			args = args.Where(s => !s.StartsWith("-psn")).ToArray();
 			// Workaround see LauncherConsole.
@@ -221,12 +224,6 @@ namespace Launcher
 #if MAC
 					NSApplication.Init();
 #endif // MAC
-					var platformSuffix =
-#if WIN
-						"win";
-#elif MAC
-						"mac";
-#endif // WIN
 					orangeBuilder = new Builder(citrusDirectory) {
 						NeedRunExecutable = false,
 						SolutionPath = OrangeSolutionPath,
@@ -305,7 +302,7 @@ namespace Launcher
 #endif // WIN
 					CitrusVersion citrusVersion = null;
 					using (var stream = File.Open(Path.Combine(citrusDirectory, Orange.CitrusVersion.Filename), FileMode.Open)) {
-						citrusVersion = CitrusVersion.Load(stream);
+						citrusVersion =	 CitrusVersion.Load(stream);
 						citrusVersion.IsStandalone = true;
 						citrusVersion.BuildNumber = buildNumberOption.ParsedValue;
 						// TODO: fill in checksums for each file?
@@ -365,10 +362,10 @@ namespace Launcher
 				string solutionPath = OrangeSolutionPath;
 				string executablePath = OrangeExecutablePath;
 				if (optionBuildProjectPath.HasValue()) {
-					solutionPath = Path.Combine(Environment.CurrentDirectory, optionBuildProjectPath.ParsedValue);
+					solutionPath = Path.Combine(citrusDirectory, optionBuildProjectPath.ParsedValue);
 				}
 				if (optionExecutablePath.HasValue()) {
-					executablePath = Path.Combine(Environment.CurrentDirectory, optionExecutablePath.ParsedValue);
+					executablePath = Path.Combine(citrusDirectory, optionExecutablePath.ParsedValue);
 				}
 				orangeBuilder = new Builder(citrusDirectory) {
 					NeedRunExecutable = !optionJustBuild.HasValue(),

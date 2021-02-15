@@ -19,7 +19,8 @@ namespace Orange
 		{
 			this.target = target;
 #if WIN
-			buildSystem = new MSBuild(target);
+			buildSystem = target.Platform == TargetPlatform.Win ?
+				(BuildSystem)new Dotnet(target) : new MSBuild(target);
 #elif MAC
 			buildSystem = new MDTool(target);
 #else
@@ -56,13 +57,18 @@ namespace Orange
 			}
 		}
 
-		public bool Build(StringBuilder output = null)
+		public bool Build(bool synchronizeProjects = true, StringBuilder output = null)
 		{
 			Console.WriteLine("------------- Building Application -------------");
-			SynchronizeAll();
-			var nugetResult = Nuget.Restore(projectDirectory);
-			if (nugetResult != 0) {
-				Console.WriteLine("NuGet exited with code: {0}", nugetResult);
+			if (synchronizeProjects) {
+				SynchronizeAll();
+			}
+			// `dotnet build` handles nuget restore by itself.
+			if (!(buildSystem is Dotnet)) {
+				var nugetResult = Nuget.Restore(projectDirectory);
+				if (nugetResult != 0) {
+					Console.WriteLine("NuGet exited with code: {0}", nugetResult);
+				}
 			}
 			return (buildSystem.Execute(BuildAction.Build, output) == 0);
 		}
@@ -133,7 +139,7 @@ namespace Orange
 				return Process.Start(GetMacAppName(), string.Empty);
 			} else {
 				var args = "--sdkroot=/Applications/Xcode.app" + ' ' + "--installdev=" + GetIOSAppName();
-				int exitCode = Process.Start("/Developer/MonoTouch/usr/bin/mtouch", args);
+				int exitCode = Process.Start("/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch", args);
 				if (exitCode != 0) {
 					return exitCode;
 				}
@@ -212,9 +218,12 @@ namespace Orange
 				var appData = Environment.ExpandEnvironmentVariables("%LOCALAPPDATA%");
 				androidSdk = Path.Combine(appData, "Android", "android-sdk");
 				executable = Path.Combine(androidSdk, "platform-tools", "adb.exe");
+				if (!File.Exists(executable)) {
+					executable = "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe";
+				}
 #elif MAC
-				// TODO: Find defualt sdk path on OSX and assign executable
-				androidSdk = "";
+				androidSdk = $"/Users/{Environment.UserName}/Library/Developer/Xamarin/android-sdk-macosx/";
+				executable = Path.Combine(androidSdk, "platform-tools", "adb");
 #endif
 			}
 

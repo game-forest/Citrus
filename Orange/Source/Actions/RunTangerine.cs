@@ -16,14 +16,26 @@ namespace Orange
 			var projectDirectory = Path.Combine(Toolbox.FindCitrusDirectory(), projectName);
 #if WIN
 			var solutionPath = Path.Combine(projectDirectory, projectName + ".Win.sln");
-			MSBuild.TryGetMSBuildPath(out var msbuildPath);
-			Nuget.Restore(solutionPath, msbuildPath);
-			var solutionBuilder = new SolutionBuilder(new Target("Tangerine.Win", solutionPath, false, TargetPlatform.Win, BuildConfiguration.Release));
+			var solutionBuilder = new SolutionBuilder(new Target(
+				name: "Tangerine.Win",
+				projectPath: solutionPath,
+				cleanBeforeBuild: false,
+				platform: TargetPlatform.Win,
+				configuration: BuildConfiguration.Release,
+				hidden: true
+			));
 #elif MAC
 			var solutionPath = Path.Combine(projectDirectory, projectName + ".Win.sln");
 			Nuget.Restore(solutionPath);
 			// "Release" configuration requires code signing, use debug for a while.
-			var solutionBuilder = new SolutionBuilder(new Target("Tangerine.Mac", solutionPath, false, TargetPlatform.Mac, BuildConfiguration.Debug));
+			var solutionBuilder = new SolutionBuilder(new Target(
+				name: "Tangerine.Mac",
+				projectPath: solutionPath,
+				cleanBeforeBuild: false,
+				platform: TargetPlatform.Mac,
+				configuration: BuildConfiguration.Debug,
+				hidden: true
+			));
 #endif
 			if (!solutionBuilder.Build()) {
 				return "Build system has returned error";

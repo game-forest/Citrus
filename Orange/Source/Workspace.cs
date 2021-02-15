@@ -182,7 +182,8 @@ namespace Orange
 					projectPath: GetDefaultProjectSolutionPath(platform),
 					cleanBeforeBuild: false,
 					platform: platform,
-					configuration: BuildConfiguration.Release
+					configuration: BuildConfiguration.Release,
+					hidden: false
 				));
 			}
 		}
@@ -243,6 +244,9 @@ namespace Orange
 				string configuration = null;
 				if (target.TryGetValue("Configuration", out object configurationValue)) {
 					configuration = configurationValue as string;
+					if (configuration != null) {
+						configuration = Toolbox.ReplaceCitrusProjectSubstituteTokens(configuration);
+					}
 				}
 				string projectPath = null;
 				if (target.TryGetValue("Project", out object projectPathValue)) {
@@ -251,7 +255,12 @@ namespace Orange
 						if (!System.IO.Path.IsPathRooted(projectPath)) {
 							projectPath = System.IO.Path.Combine(ProjectDirectory, projectPath);
 						}
+						projectPath = Toolbox.ReplaceCitrusProjectSubstituteTokens(projectPath);
 					}
+				}
+				bool? hidden = null;
+				if (target.ContainsKey("Hidden")) {
+					hidden = (bool)target["Hidden"];
 				}
 				Target newTarget = null;
 				Targets.Add(newTarget = new Target(
@@ -259,9 +268,11 @@ namespace Orange
 					projectPath,
 					cleanBeforeBuild,
 					null,
-					configuration
+					configuration,
+					hidden
 				));
 				if (target.TryGetValue("BaseTarget", out object baseTargetName)) {
+					baseTargetName = Toolbox.ReplaceCitrusProjectSubstituteTokens(baseTargetName as string);
 					targetToBaseTarget[newTarget] = baseTargetName as string;
 				}
 			}

@@ -198,5 +198,39 @@ namespace Orange
 			}
 			return clone;
 		}
+
+		public const string ConfigurationSubstituteToken = "$(CONFIGURATION)";
+
+		/// <summary>
+		/// Substitutes engine defined tokens with values.
+		/// Tokens are:
+		/// "$(CONFIGURATION)" => "Debug"|"Release"
+		/// "$(HOST_APPLICATION)" => "Orange"|"Tangerine"
+		/// "$(PLATFORM)" => "Win"|"Mac"
+		/// </summary>
+		/// <param name="string">Assembly path with tokens.</param>
+		/// <returns></returns>
+		public static string ReplaceCitrusProjectSubstituteTokens(string @string)
+		{
+			return @string
+				.Replace(ConfigurationSubstituteToken,
+#if DEBUG
+					BuildConfiguration.Debug)
+#else
+					BuildConfiguration.Release)
+#endif
+				.Replace("$(PLATFORM)",
+#if WIN
+					"Win")
+#elif MAC
+					"Mac")
+#endif // WIN
+				.Replace("$(HOST_APPLICATION)",
+#if TANGERINE
+					"Tangerine");
+#else
+					"Orange");
+#endif
+		}
 	}
 }

@@ -3,49 +3,59 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+#if WIN
+using System.Runtime.InteropServices;
+#endif // WIN
 
 namespace Orange
 {
 	public static class Process
 	{
+#if WIN
+		[DllImport("kernel32.dll")]
+		static extern uint GetOEMCP();
+#endif // WIN
+
 		[Flags]
 		public enum Options
 		{
 			None = 0,
 			RedirectOutput = 1,
 			RedirectErrors = 2,
-			AllowCP1251 = 4,
-			All = 7
+			All = 3
 		}
 
-		public static int Start(string app, string args, string workingDirectory = null,
-			Options options = Options.RedirectOutput | Options.RedirectErrors, StringBuilder output = null)
-		{
+		public static int Start(
+			string executablePath,
+			string arguments,
+			string workingDirectory = null,
+			Options options = Options.RedirectOutput | Options.RedirectErrors,
+			StringBuilder output = null
+		) {
+			if (!string.IsNullOrEmpty(workingDirectory)) {
+				Console.WriteLine($"Working directory: '{workingDirectory}'");
+			}
+			Console.WriteLine($"Starting '{executablePath} {arguments}'");
 			if (output == null) {
 				output = new StringBuilder();
 			}
 			var p = new System.Diagnostics.Process();
-			p.StartInfo.FileName = app;
-			p.StartInfo.Arguments = args;
+			p.StartInfo.FileName = executablePath;
+			p.StartInfo.Arguments = arguments;
 			p.StartInfo.UseShellExecute = false;
+			var encoding = System.Text.Encoding.Default;
 #if WIN
 			p.StartInfo.CreateNoWindow = true;
-			p.StartInfo.WorkingDirectory = workingDirectory ?? Path.GetDirectoryName(app);
-			int cp = System.Text.Encoding.Default.CodePage;
-			if ((options & Options.AllowCP1251) == 0 && cp == 1251) {
-				cp = 866;
-			}
-			p.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(cp);
-			p.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(cp);
-#else
+			p.StartInfo.WorkingDirectory = workingDirectory ?? Path.GetDirectoryName(executablePath);
+			int cp = (int)GetOEMCP();
+			encoding = CodePagesEncodingProvider.Instance.GetEncoding(cp) ?? encoding;
+#else // WIN
 			if (workingDirectory != null) {
 				p.StartInfo.WorkingDirectory = workingDirectory;
 			}
-			p.StartInfo.StandardOutputEncoding = System.Text.Encoding.Default;
-			p.StartInfo.StandardErrorEncoding = System.Text.Encoding.Default;
-			p.StartInfo.EnvironmentVariables.Clear();
-			p.StartInfo.EnvironmentVariables.Add("PATH", "/bin:/usr/bin");
-#endif
+#endif // WIN
+			p.StartInfo.StandardOutputEncoding = encoding;
+			p.StartInfo.StandardErrorEncoding = encoding;
 			p.StartInfo.RedirectStandardOutput = true;
 			p.StartInfo.RedirectStandardError = true;
 			var logger = new System.Text.StringBuilder();

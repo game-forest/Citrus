@@ -6,9 +6,9 @@
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{6AC2E264-44BC-4508-B819-CA4B0CBA764B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EmptyProject.Mac</RootNamespace>
+    <RootNamespace>EmptyProject</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
-    <AssemblyName>EmptyProject.Mac</AssemblyName>
+    <AssemblyName>EmptyProject</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <CreatePackage>false</CreatePackage>
     <Profiling>false</Profiling>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -45,11 +45,11 @@
     <IncludeMonoRuntime>true</IncludeMonoRuntime>
     <CreatePackage>true</CreatePackage>
     <CodeSigningKey>Developer ID Application</CodeSigningKey>
-    <EnableCodeSigning>true</EnableCodeSigning>
+    <EnableCodeSigning>false</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
     <Profiling>false</Profiling>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU'">
     <OutputPath>bin\Release.Profiler\</OutputPath>
@@ -57,9 +57,12 @@
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <UseSGen>false</UseSGen>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -68,9 +71,12 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <UseSGen>false</UseSGen>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RemoteScripting">
@@ -112,6 +118,14 @@
       <Project>{B5F74505-80BB-4373-B194-219D743C1FA0}</Project>
       <Name>DynamicFont.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\3rdParty\MoltenVK\MoltenVK.csproj">
+      <Project>{25A88ABB-AC39-41AD-92EF-DD91341863C8}</Project>
+      <Name>MoltenVK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Mac.csproj">
+      <Project>{94911E6A-53F9-4B86-9ADE-E3B510C810B9}</Project>
+      <Name>ShaderCompilerBinding.Mac</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\Data.Mac">
@@ -120,6 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="..\..\..\3rdParty\FreeType\libfreetype6.dylib">
+      <Kind>Dynamic</Kind>
+      <SmartLink>False</SmartLink>
+    </NativeReference>
+    <NativeReference Include="..\..\..\Lemon\Library\bin\Mac\Release\libLemonNative.dylib">
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>

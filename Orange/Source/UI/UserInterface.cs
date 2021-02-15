@@ -32,6 +32,8 @@ namespace Orange
 
 		public abstract Target GetActiveTarget();
 
+		public abstract void SetActiveTarget(Target target);
+
 		public abstract EnvironmentType GetEnvironmentType();
 
 		public abstract void StopProgressBar();

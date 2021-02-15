@@ -38,7 +38,7 @@
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Optimize>True</Optimize>
@@ -60,7 +60,7 @@
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Tangerine|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -84,7 +84,7 @@
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Tangerine|x86' ">
     <DebugType>full</DebugType>
@@ -108,7 +108,7 @@
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -131,7 +131,10 @@
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <EnableSGenConc>false</EnableSGenConc>
+    <WarningsNotAsErrors>
+    </WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>True</Optimize>
@@ -152,9 +155,10 @@
     <TlsProvider>Default</TlsProvider>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="netstandard" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -166,13 +170,16 @@
     <Reference Include="Xamarin.Mac" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="Octokit">
-      <HintPath>$(SolutionDir)packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentFTP, Version=23.1.0.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)packages\FluentFTP.23.1.0\lib\net45\FluentFTP.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Octokit">
+      <Version>0.48.0</Version>
+    </PackageReference>
+    <PackageReference Include="FluentFTP">
+      <Version>33.0.3</Version>
+    </PackageReference>
+    <Compile Include="Source\Builder\Dotnet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -195,9 +202,7 @@
     <Compile Include="Source\Actions\RunTangerine.cs" />
     <Compile Include="Source\Actions\SynchronizeDocumentation.cs" />
     <Compile Include="Source\Actions\UpdateDictionaryTxt.cs" />
-    <Compile Include="Source\Actions\UpdateXCodeProject.cs" />
     <Compile Include="Source\Actions\UploadCacheToServer.cs" />
-    <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\AssetCooker\AssetCache.cs" />
     <Compile Include="Source\AssetCooker\AssetCooker.cs" />
     <Compile Include="Source\AssetCooker\AssetsUnpacker.cs" />
@@ -283,7 +288,6 @@
     <None Include="Orange.Win.v12.suo">
       <Visible>False</Visible>
     </None>
-    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lemon\Lemon.Mac.csproj">

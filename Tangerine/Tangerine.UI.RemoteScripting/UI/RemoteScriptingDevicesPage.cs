@@ -374,7 +374,7 @@ namespace Tangerine.UI.RemoteScripting
 						case NetworkMessageType.RemoteFileRequest:
 							var fileRequest = (NetworkRemoteFileRequest)message;
 							AppendApplicationOutput($"Remote file request: \"{fileRequest.Data.Path}\"");
-							var absFilePath = Path.Combine(ProjectPreferences.Instance.RemoteStoragePath, fileRequest.Data.Path);
+							var absFilePath = Path.Combine(RemoteScriptingPane.Instance.SelectedRemoteScriptingConfiguration.RemoteStoragePath, fileRequest.Data.Path);
 							if (File.Exists(absFilePath)) {
 								async void SendFileAsync()
 								{
@@ -407,7 +407,7 @@ namespace Tangerine.UI.RemoteScripting
 							} else {
 								async void SaveFileAsync()
 								{
-									var filePath = Path.Combine(ProjectPreferences.Instance.RemoteStoragePath, remoteFile.Path);
+									var filePath = Path.Combine(RemoteScriptingPane.Instance.SelectedRemoteScriptingConfiguration.RemoteStoragePath, remoteFile.Path);
 									try {
 										var directory = Path.GetDirectoryName(filePath);
 										Directory.CreateDirectory(directory);

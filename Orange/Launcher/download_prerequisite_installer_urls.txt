@@ -1,0 +1,4 @@
+https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16
+https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-5.0.102-windows-x64-installer
+https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-5.0.2-windows-x64-installer
+https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-5.0.2-windows-x86-installer

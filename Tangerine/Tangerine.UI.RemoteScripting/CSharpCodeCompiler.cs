@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,12 +12,6 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class CSharpCodeCompiler
 	{
-		private static readonly string netFrameworkPath = $"{Path.GetDirectoryName(typeof(string).Assembly.Location)}\\";
-		public static readonly ImmutableArray<string> DefaultProjectReferences = ImmutableArray.Create(
-			$"{netFrameworkPath}mscorlib.dll",
-			$"{netFrameworkPath}System.dll",
-			$"{netFrameworkPath}System.Core.dll"
-		);
 		public static readonly ImmutableArray<string> DefaultNamespaces = ImmutableArray.Create(
 			"System",
 			"System.IO",
@@ -28,8 +23,8 @@ namespace Tangerine.UI.RemoteScripting
 			"System.Threading.Tasks"
 		);
 
-		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp7_3);
-		public IEnumerable<string> ProjectReferences { get; set; } = DefaultProjectReferences;
+		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp8);
+		public IEnumerable<string> ProjectReferences { get; set; }
 		public IEnumerable<string> Namespaces { get; set; } = DefaultNamespaces;
 		public OutputKind OutputKind { get; set; } = OutputKind.DynamicallyLinkedLibrary;
 		public OptimizationLevel OptimizationLevel { get; set; } = OptimizationLevel.Debug;

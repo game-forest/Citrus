@@ -1,4 +1,4 @@
-﻿#if WIN
+#if WIN
 using System.Drawing;
 using System.Windows.Forms;
 using SD = System.Drawing;
@@ -6,7 +6,8 @@ using WinForms = System.Windows.Forms;
 
 namespace Lime
 {
-	[System.ComponentModel.DesignerCategory("")] //Disable designer
+	//Disable designer
+	[System.ComponentModel.DesignerCategory("")]
 	internal class MessageBoxForm : Form
 	{
 		public MessageBoxForm(string title, string text)
@@ -16,8 +17,12 @@ namespace Lime
 			AutoSize = true;
 			MaximizeBox = false;
 
-			var menuItem = new WinForms.MenuItem(
-				"Копировать", (s, e) => Clipboard.Text = text, WinForms.Shortcut.CtrlC);
+			var menuItem = new WinForms.ToolStripMenuItem(
+				text: "Copy",
+				image: null,
+				onClick: (s, e) => Clipboard.Text = text,
+				shortcutKeys: WinForms.Keys.Control | WinForms.Keys.C
+			);
 
 			var textLabel = new Label {
 				BackColor = Color.White,
@@ -26,9 +31,9 @@ namespace Lime
 				Padding = new Padding(16),
 				Dock = DockStyle.Fill,
 				Size = new SD.Size(Width, 220),
-				ContextMenu = new ContextMenu(),
+				ContextMenuStrip = new ContextMenuStrip(),
 			};
-			textLabel.ContextMenu.MenuItems.Add(menuItem);
+			textLabel.ContextMenuStrip.Items.Add(menuItem);
 
 			var okButton = new WinForms.Button {
 				Text = "OK",

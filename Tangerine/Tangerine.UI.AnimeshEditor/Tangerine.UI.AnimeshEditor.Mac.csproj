@@ -27,13 +27,13 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <HybridAOT>false</HybridAOT>
     <AOTMode>None</AOTMode>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -49,12 +49,12 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -72,7 +72,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Operations\Animate.cs" />
     <Compile Include="Operations\PreserveSlice.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Topology\ExactArithmetic.cs" />
     <Compile Include="Topology\GeometricPredicates.cs" />
     <Compile Include="Topology\HalfEdgeTopology\HalfEdgeTopology.cs" />

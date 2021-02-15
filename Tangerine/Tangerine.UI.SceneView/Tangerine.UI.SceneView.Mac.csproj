@@ -29,12 +29,11 @@
     </HttpClientHandler>
     <TlsProvider>
     </TlsProvider>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -51,12 +50,11 @@
     </HttpClientHandler>
     <TlsProvider>
     </TlsProvider>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -116,7 +114,6 @@
     <Compile Include="Processors\RulerProcessor.cs" />
     <Compile Include="Processors\ShiftClickProcessor.cs" />
     <Compile Include="Processors\ShiftTimelineProcessor.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolutionHandlers.cs" />
     <Compile Include="SceneUserPreferences.cs" />
     <Compile Include="SceneView.cs" />

@@ -30,6 +30,7 @@ bld/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+*.DotSettings
 .idea
 
 # Local history add-in
@@ -63,3 +64,5 @@ Lemon/Library/Android/libs/
 TangerineLog.txt
 
 Samples/EmptyProject/TangerineLog.txt
+
+**/Resources/Resource.designer.cs

@@ -191,5 +191,7 @@ namespace EmptyProject.Application
 			The.Window.Input.MousePositionTransform = Matrix32.Scaling(The.World.Width / windowSize.X,
 				The.World.Height / windowSize.Y);
 		}
+
+		public string GetVersion() => "1.0";
 	}
 }

@@ -34,7 +34,8 @@
     <Profiling>true</Profiling>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Profiler|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -55,7 +56,8 @@
     <Profiling>true</Profiling>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -76,7 +78,8 @@
     <Profiling>false</Profiling>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Profiler|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -97,7 +100,8 @@
     <Profiling>false</Profiling>
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug.Tangerine|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -113,8 +117,11 @@
     <XamMacArch>
     </XamMacArch>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <NoStdLib>false</NoStdLib>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.Tangerine|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -130,8 +137,9 @@
     <XamMacArch>
     </XamMacArch>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -140,16 +148,9 @@
     <Reference Include="Lzma">
       <HintPath>..\3rdParty\Lzma\bin\Release\Lzma.dll</HintPath>
     </Reference>
-    <Reference Include="TreeLibInterface">
-      <HintPath>..\Tangerine\packages\TreeLibInterface.1.1.1\lib\TreeLibInterface.dll</HintPath>
-    </Reference>
-    <Reference Include="TreeLib">
-      <HintPath>..\Tangerine\packages\TreeLib.1.1.1\lib\TreeLib.dll</HintPath>
-    </Reference>
     <Reference Include="OpenTK" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Application\AndroidAccelerometerListener.cs" />
     <Compile Include="Source\Application\AndroidActivityDelegate.cs" />
     <Compile Include="Source\Application\AndroidGameView.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="Source\Application\Window.Win.cs" />
     <Compile Include="Source\Application\WindowInput.cs" />
     <Compile Include="Source\Application\WindowOptions.cs" />
+    <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\AssetBundle\AggregateAssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundle.cs" />
     <Compile Include="Source\AssetBundle\AssetBundleToolbox.cs" />
@@ -236,7 +238,6 @@
     <Compile Include="Source\BucketQueue.cs" />
     <Compile Include="Source\ComponentCollection.cs" />
     <Compile Include="Source\EnumExtensions.cs" />
-    <Compile Include="Source\FriendAssemblies.cs" />
     <Compile Include="Source\GeometryUtils.cs" />
     <Compile Include="Source\Graphics\Bitmap.Android.cs" />
     <Compile Include="Source\Graphics\Bitmap.Apple.cs" />
@@ -648,16 +649,13 @@
       <Project>{5F16D8E4-A0F1-4341-83A0-3897FC44EBB8}</Project>
       <Name>Yuzu.Mac</Name>
     </ProjectReference>
-    <ProjectReference Include="..\3rdParty\MoltenVK\MoltenVK.csproj">
-      <Project>{25A88ABB-AC39-41AD-92EF-DD91341863C8}</Project>
-      <Name>MoltenVK</Name>
-    </ProjectReference>
     <ProjectReference Include="..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Mac.csproj">
       <Project>{94911E6A-53F9-4B86-9ADE-E3B510C810B9}</Project>
       <Name>ShaderCompilerBinding.Mac</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Source\packages.config" />
+    <ProjectReference Include="..\3rdParty\MoltenVK\MoltenVK.csproj">
+      <Project>{25A88ABB-AC39-41AD-92EF-DD91341863C8}</Project>
+      <Name>MoltenVK</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -28,6 +28,7 @@ namespace Launcher
 
 		private void RunExecutable()
 		{
+			Console.WriteLine($"Starting '{ExecutablePath}'.");
 			var process = new Process {
 				StartInfo = {
 					FileName = ExecutablePath,
@@ -39,57 +40,34 @@ namespace Launcher
 
 		private void RestoreNuget()
 		{
-			Orange.Nuget.Restore(SolutionPath, builderPath);
+			if (Orange.Nuget.Restore(SolutionPath, BuilderPath) != 0) {
+				throw new Exception("Unable to restore nugets!");
+			}
 		}
 
 		private void SynchronizeAllProjects()
 		{
-			void Sync(string csprojPath) =>	Orange.CsprojSynchronization.SynchronizeProject(citrusDirectory + "/" + csprojPath);
-			Sync("Yuzu/Yuzu.Win.csproj");
-			Sync("Yuzu/Yuzu.Mac.csproj");
-			Sync("Yuzu/Yuzu.iOS.csproj");
-			Sync("Yuzu/Yuzu.Android.csproj");
-			Sync("Lime/Lime.Win.csproj");
-			Sync("Lime/Lime.Mac.csproj");
-			Sync("Lime/Lime.iOS.csproj");
-			Sync("Lime/Lime.Android.csproj");
-			Sync("Lime/Lime.MonoMac.csproj");
-			Sync("Kumquat/Kumquat.Win.csproj");
-			Sync("Kumquat/Kumquat.Mac.csproj");
-			Sync("Orange/Orange.Win.csproj");
-			Sync("Orange/Orange.Mac.csproj");
-			Sync("Orange/Orange.CLI/Orange.Win.CLI.csproj");
-			Sync("Orange/Orange.CLI/Orange.Mac.CLI.csproj");
-			Sync("Orange/Orange.GUI/Orange.Win.GUI.csproj");
-			Sync("Orange/Orange.GUI/Orange.Mac.GUI.csproj");
-			Sync("Tangerine/Tangerine.Core/Tangerine.Core.Win.csproj");
-			Sync("Tangerine/Tangerine.Core/Tangerine.Core.Mac.csproj");
-			Sync("Tangerine/Tangerine.UI/Tangerine.UI.Win.csproj");
-			Sync("Tangerine/Tangerine.UI/Tangerine.UI.Mac.csproj");
-			Sync("Tangerine/Tangerine.UI.FilesystemView/Tangerine.UI.FilesystemView.Win.csproj");
-			Sync("Tangerine/Tangerine.UI.FilesystemView/Tangerine.UI.FilesystemView.Mac.csproj");
-			Sync("Tangerine/Tangerine.UI.Inspector/Tangerine.UI.Inspector.Win.csproj");
-			Sync("Tangerine/Tangerine.UI.Inspector/Tangerine.UI.Inspector.Mac.csproj");
-			Sync("Tangerine/Tangerine.UI.SceneView/Tangerine.UI.SceneView.Win.csproj");
-			Sync("Tangerine/Tangerine.UI.SceneView/Tangerine.UI.SceneView.Mac.csproj");
-			Sync("Tangerine/Tangerine.UI.Timeline/Tangerine.UI.Timeline.Win.csproj");
-			Sync("Tangerine/Tangerine.UI.Timeline/Tangerine.UI.Timeline.Mac.csproj");
-			Sync("Tangerine/Tangerine/Tangerine.Win.csproj");
-			Sync("Tangerine/Tangerine/Tangerine.Mac.csproj");
-			Sync("Tangerine/Tangerine.UI.AnimeshEditor/Tangerine.UI.AnimeshEditor.Win.csproj");
-			Sync("Tangerine/Tangerine.UI.AnimeshEditor/Tangerine.UI.AnimeshEditor.Mac.csproj");
+			var csprojSyncList = Path.Combine(citrusDirectory, "Orange", "Launcher", "csproj_sync_list.txt");
+			foreach (var line in File.ReadLines(csprojSyncList)) {
+				Orange.CsprojSynchronization.SynchronizeProject(citrusDirectory + "/" + line);
+			}
 		}
 
 		public Task Start()
 		{
 			var task = new Task(() => {
 				try {
+					if (!AreRequirementsMet()) {
+						return;
+					}
+#if MAC
 					RestoreNuget();
+#endif // MAC
 					SynchronizeAllProjects();
 					BuildAndRun();
 				} catch (Exception e) {
 					Console.WriteLine(e.Message);
-					SetFailedBuildStatus("");
+					SetFailedBuildStatus(e.Message);
 				}
 			});
 			task.Start();
@@ -101,7 +79,7 @@ namespace Launcher
 			Environment.CurrentDirectory = Path.GetDirectoryName(SolutionPath);
 			ClearObjFolder(citrusDirectory);
 			OnBuildStatusChange?.Invoke("Building");
-			if (AreRequirementsMet() && Build(SolutionPath)) {
+			if (Build(SolutionPath)) {
 				ClearObjFolder(citrusDirectory);
 				if (NeedRunExecutable) {
 					RunExecutable();
@@ -140,52 +118,41 @@ namespace Launcher
 
 		private bool Build(string solutionPath)
 		{
-			var process = new Process {
-				StartInfo = {
-					FileName = builderPath,
-					UseShellExecute = false,
-					CreateNoWindow = true,
-					RedirectStandardOutput = true,
-					RedirectStandardError = true,
-				}
-			};
-			process.OutputDataReceived += Builder_OnDataReceived;
-			process.ErrorDataReceived += Builder_OnDataReceived;
-			DecorateBuildProcess(process, solutionPath);
-			process.Start();
-			process.BeginOutputReadLine();
-			process.BeginErrorReadLine();
-			while (!process.HasExited) {
-				process.WaitForExit(50);
+#if MAC
+			var exitCode = Orange.Process.Start(BuilderPath, "-t:Build -p:Configuration=Release " + solutionPath);
+#elif WIN
+			var exitCode = Orange.Process.Start(BuilderPath, $"build {solutionPath} -c:Release");
+#endif // MAC
+			if (exitCode == 0) {
+				return true;
 			}
-			bool result = process.ExitCode == 0;
-			if (!result) {
-				SetFailedBuildStatus($"Process exited with code {process.ExitCode}");
-			}
-			return result;
-		}
-
-		private void Builder_OnDataReceived(object sender, DataReceivedEventArgs args)
-		{
-			lock (this) {
-				if (args.Data != null) {
-					Console.WriteLine(args.Data);
-				}
-			}
+			SetFailedBuildStatus($"Process exited with code {exitCode}");
+			return false;
 		}
 
 		private bool AreRequirementsMet()
 		{
 #if WIN
-			if (builderPath != null) {
+			if (Orange.Process.Start("where", BuilderPath) == 0) {
 				return true;
 			}
-			Process.Start(@"https://visualstudio.microsoft.com/ru/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16");
+
+			var buildRequirementsUrlsFile = Path.Combine(citrusDirectory, "Orange", "Launcher", "download_prerequisite_installer_urls.txt");
+			foreach (var line in File.ReadLines(buildRequirementsUrlsFile)) {
+				OpenUrl(line);
+			}
+
 			SetFailedBuildStatus("Please install Microsoft Build Tools 2019");
 			return false;
 #else
 			return true;
 #endif // WIN
+		}
+
+		private void OpenUrl(string url)
+		{
+			// https://github.com/dotnet/corefx/issues/10361
+			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 		}
 
 		private void DecorateBuildProcess(Process process, string solutionPath)
@@ -214,57 +181,9 @@ namespace Launcher
 		}
 
 #if WIN
-		private string builderPath
-		{
-			get {
-				var msBuild16Path = Path.Combine(@"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\", "MSBuild.exe");
-				if (File.Exists(msBuild16Path)) {
-					return msBuild16Path;
-				}
-
-				msBuild16Path = Path.Combine(@"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\", "MSBuild.exe");
-				if (File.Exists(msBuild16Path)) {
-					return msBuild16Path;
-				}
-
-				var visualStudioRegistryPath = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7");
-				if (visualStudioRegistryPath != null) {
-					var vsPath = visualStudioRegistryPath.GetValue("15.0", string.Empty) as string;
-					var vsBuild15Path = Path.Combine(vsPath, "MSBuild", "15.0", "Bin", "MSBuild.exe");
-					if (File.Exists(vsBuild15Path)) {
-						return vsBuild15Path;
-					}
-				}
-
-				var msBuild15Path = Path.Combine(@"C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\", "MSBuild.exe");
-				if (File.Exists(msBuild15Path)) {
-					return msBuild15Path;
-				}
-
-				var msBuild14Path = Path.Combine(@"C:\Program Files (x86)\MSBuild\14.0\Bin\", "MSBuild.exe");
-				if (File.Exists(msBuild14Path)) {
-					return msBuild14Path;
-				}
-
-				return null;
-			}
-		}
+		private static string BuilderPath => "dotnet";
 #elif MAC
-		private string builderPath
-		{
-			get
-			{
-				var mdtool = "/Applications/Xamarin Studio.app/Contents/MacOS/mdtool";
-				var vstool = "/Applications/Visual Studio.app/Contents/MacOS/vstool";
-				if (File.Exists (vstool)) {
-					return vstool;
-				}
-				if (File.Exists (vstool)) {
-					return mdtool;
-				}
-				return null;
-			}
-		}
+		private string BuilderPath => "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild";
 #endif // WIN
-}
+	}
 }

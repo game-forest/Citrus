@@ -6,9 +6,9 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{304BC36A-88DE-41EA-B596-E07505A14FD2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EmptyProject.iOS</RootNamespace>
+    <RootNamespace>EmptyProject</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>EmptyProject.iOS</AssemblyName>
+    <AssemblyName>EmptyProject</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,7 +73,7 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
     <LangVersion>8.0</LangVersion>
-    <DelaySign>false</DelaySign>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RemoteScripting">

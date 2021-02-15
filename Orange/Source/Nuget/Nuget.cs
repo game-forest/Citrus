@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Lime;
 
@@ -39,10 +39,10 @@ namespace Orange
 #else
 			command += builderPath == null ? "" : $"-MSBuildPath \"{Path.GetDirectoryName(builderPath)}\"";
 #endif
-			return Start (command);
+			return Start(command);
 		}
-		 
-		public static int Start(string args)
+
+		private static int Start(string args)
 		{
 #if WIN
 			return Process.Start(nugetPath, args);

@@ -1,183 +1,40 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3E49F498-47E1-4D67-9F13-EACA50FFF4AE}</ProjectGuid>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tangerine</RootNamespace>
     <AssemblyName>Tangerine</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN;PROFILER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;WIN;PROFILER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup>
+    <PlatformTarget>x86</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;PROFILER;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj" />
+    <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\Orange\Orange.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.csproj" />
+    <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.FilesystemView\Tangerine.UI.FilesystemView.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.Inspector\Tangerine.UI.Inspector.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.Profiler\Tangerine.UI.Profiler.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.SceneView\Tangerine.UI.SceneView.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI.Timeline\Tangerine.UI.Timeline.Win.csproj" />
+    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AlignPreferences.cs" />
-    <Compile Include="AppUserPreferences.cs" />
-    <Compile Include="CommandHandlers.cs" />
-    <Compile Include="Dialogs\ColorThemeEditor.cs" />
-    <Compile Include="Dialogs\Lookup\LookupAnimationFramesSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupAnimationsSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupCommandsSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupComponentsSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupDialogItem.cs" />
-    <Compile Include="Dialogs\Lookup\LookupFilesSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupHelpSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupInitialSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupMarkersSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupNodesSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupSection.cs" />
-    <Compile Include="Dialogs\Lookup\LookupSections.cs" />
-    <Compile Include="Dialogs\HotkeyEditor.cs" />
-    <Compile Include="Dialogs\Lookup\LookupDialog.cs" />
-    <Compile Include="Dialogs\ManageRulersDialog.cs" />
-    <Compile Include="Dialogs\OrangePluginOptionsDialog.cs" />
-    <Compile Include="Dialogs\PreferencesDialog.cs" />
-    <Compile Include="Dialogs\RenderToPngSequenceDialog.cs" />
-    <Compile Include="Dialogs\SaveRulerDialog.cs" />
-    <Compile Include="Dialogs\ToolbarModelEditor.cs" />
-    <Compile Include="DisplayResolutions.cs" />
-    <Compile Include="DocumentTabContextMenu.cs" />
-    <Compile Include="ExceptionHandling.cs" />
-    <Compile Include="HotkeyRegistry.cs" />
-    <Compile Include="Main.Mac.cs" />
-    <Compile Include="Main.Win.cs" />
-    <Compile Include="MainMenu\CreateMenu.cs" />
-    <Compile Include="MainMenu\EditMenu.cs" />
-    <Compile Include="MainMenu\FileMenu.cs" />
-    <Compile Include="MainMenu\GitMenu.cs" />
-    <Compile Include="MainMenu\OrangeMenu.cs" />
-    <Compile Include="MainMenu\SystemMenu.cs" />
-    <Compile Include="MainMenu\ToolsMenu.cs" />
-    <Compile Include="MainMenu\ViewMenu.cs" />
-    <Compile Include="MainMenu\WindowMenu.cs" />
-    <Compile Include="OrangeInterface.cs" />
-    <Compile Include="Panels\AnimationsPanel.cs" />
-    <Compile Include="Panels\AttachmentPanel.cs" />
-    <Compile Include="Panels\BackupHistoryPanel.cs" />
-    <Compile Include="Panels\HierarchyPanel.cs" />
-    <Compile Include="TangerineApp.cs" />
-    <Compile Include="TangerineMenu.cs" />
-    <Compile Include="TangerineSingleInstanceKeeper.cs" />
-    <Compile Include="Tools\AlignTools.cs" />
-    <Compile Include="Tools\FitTools.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lemon\Lemon.Win.csproj">
-      <Project>{538e41e4-725c-4521-bcf3-a5591a1a3afd}</Project>
-      <Name>Lemon.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj">
-      <Project>{fe8512bc-7a55-425c-8bc1-ad4d9785cf12}</Project>
-      <Name>DynamicFont.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
-      <Project>{fc2de6c9-641a-4230-8d29-ea4035cd8708}</Project>
-      <Name>Lime.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Orange\Orange.Win.csproj">
-      <Project>{6f0c1a51-492a-4e6e-b302-e212d441ebf3}</Project>
-      <Name>Orange.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
-      <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Win.csproj">
-      <Project>{259c5e1f-1507-4131-8b4e-dd3c51f7462a}</Project>
-      <Name>Tangerine.Common.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Win.csproj">
-      <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
-      <Name>Tangerine.Core.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.AnimeshEditor\Tangerine.UI.AnimeshEditor.Win.csproj">
-      <Project>{32771586-53BF-4212-930D-BFDEAC20B3DA}</Project>
-      <Name>Tangerine.UI.AnimeshEditor.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.FilesystemView\Tangerine.UI.FilesystemView.Win.csproj">
-      <Project>{74f91bd5-9e43-40fd-b8ea-b9819d1ca926}</Project>
-      <Name>Tangerine.UI.FilesystemView.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.Inspector\Tangerine.UI.Inspector.Win.csproj">
-      <Project>{d6b543cb-0223-4210-bb0f-7d8250760895}</Project>
-      <Name>Tangerine.UI.Inspector.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.Profiler\Tangerine.UI.Profiler.Win.csproj">
-      <Project>{8e8c8ed3-63c2-407f-b626-cd9867e16353}</Project>
-      <Name>Tangerine.UI.Profiler.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Win.csproj">
-      <Project>{a60e48a9-2220-4e9d-9b22-3fb1c3ddbf43}</Project>
-      <Name>Tangerine.UI.RemoteScripting.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.SceneView\Tangerine.UI.SceneView.Win.csproj">
-      <Project>{80486551-a659-42b0-aada-165c54e9b0af}</Project>
-      <Name>Tangerine.UI.SceneView.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI.Timeline\Tangerine.UI.Timeline.Win.csproj">
-      <Project>{db168347-08cc-40fc-b612-5a33a6877863}</Project>
-      <Name>Tangerine.UI.Timeline.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj">
-      <Project>{e62ba18f-4e1a-466a-8299-67ad567f17e5}</Project>
-      <Name>Tangerine.UI.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="icon.ico" />
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+
 </Project>

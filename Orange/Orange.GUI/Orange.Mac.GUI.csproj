@@ -11,14 +11,14 @@
     <RootNamespace>Orange.GUI</RootNamespace>
     <AssemblyName>Orange.GUI</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Mac\Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>__MACOS__;__UNIFIED__;DEBUG;MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,18 +32,19 @@
     <Profiling>true</Profiling>
     <PlatformTarget>x86</PlatformTarget>
     <HttpClientHandler></HttpClientHandler>
-    <LinkMode></LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>x86_64</XamMacArch>
-    <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+    <I18n>west</I18n>
     <I18n>west</I18n>
     <EnableSGenConc>true</EnableSGenConc>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <CodeSignProvision></CodeSignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType></DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Mac\Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <DefineConstants>__MACOS__;__UNIFIED__;MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -60,13 +61,15 @@
     <I18n>west</I18n>
     <MonoBundlingExtraArgs>--registrar:dynamic</MonoBundlingExtraArgs>
     <AOTMode>None</AOTMode>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <UseHardenedRuntime>false</UseHardenedRuntime>
+    <RunWithWarnings>true</RunWithWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Mac\Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>__MACOS__;__UNIFIED__;DEBUG;MAC</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <EnableCodeSigning>false</EnableCodeSigning>
@@ -78,10 +81,13 @@
     <LinkMode>None</LinkMode>
     <XamMacArch></XamMacArch>
     <AOTMode>None</AOTMode>
+    <IntermediateOutputPath></IntermediateOutputPath>
+    <CodeSignProvision></CodeSignProvision>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Mac\Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <DefineConstants>__MACOS__;__UNIFIED__;MAC</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
@@ -90,11 +96,25 @@
     <LinkMode>None</LinkMode>
     <XamMacArch></XamMacArch>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.GUI.cs" />
+    <Compile Include="OrangeApp.cs" />
+    <Compile Include="UI\AlertDialog.cs" />
+    <Compile Include="UI\FileChooser.cs" />
+    <Compile Include="UI\OrangeInterface.cs" />
+    <Compile Include="UI\PluginUIBuidler.cs" />
+    <Compile Include="UI\TargetPicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -115,15 +135,6 @@
     <None Include="CopyToolchain.targets" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.GUI.cs" />
-    <Compile Include="UI\AlertDialog.cs" />
-    <Compile Include="UI\FileChooser.cs" />
-    <Compile Include="UI\OrangeInterface.cs" />
-    <Compile Include="UI\PlatformPicker.cs" />
-    <Compile Include="UI\PluginUIBuidler.cs" />
-    <Compile Include="OrangeApp.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Mac.csproj">
       <Project>{BB697671-700C-455D-B8EE-66A6B122B949}</Project>
       <Name>Lemon.Mac</Name>
@@ -140,12 +151,16 @@
       <Project>{B5F74505-80BB-4373-B194-219D743C1FA0}</Project>
       <Name>DynamicFont.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\3rdParty\MoltenVK\MoltenVK.csproj">
+      <Project>{25A88ABB-AC39-41AD-92EF-DD91341863C8}</Project>
+      <Name>MoltenVK</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\..\Lemon\Library\bin\Mac\Release\libLemon.dylib">
+    <NativeReference Include="..\..\Lemon\Library\bin\Mac\Release\libLemonNative.dylib">
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>

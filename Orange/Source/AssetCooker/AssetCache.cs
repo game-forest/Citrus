@@ -57,7 +57,21 @@ namespace Orange
 		/// <summary>
 		/// Asset cache mode used for current operation
 		/// </summary>
-		public AssetCacheMode Mode { get; private set; }
+		public AssetCacheMode Mode
+		{
+			get
+			{
+				if (Toolbox.GetCommandLineFlag("--disable-asset-cache")) {
+					Console.WriteLine("Asset cache disabled by command line flag '--disable-asset-cache'");
+					return AssetCacheMode.None;
+				} else {
+					return mode;
+				}
+			}
+			private set => mode = value;
+		}
+
+		private AssetCacheMode mode;
 
 		private bool IsLocalEnabled => (Mode & AssetCacheMode.Local) != 0;
 		private bool IsRemoteEnabled => (Mode & AssetCacheMode.Remote) != 0;
@@ -251,9 +265,9 @@ namespace Orange
 					if (ExistsRemote(hashString)) {
 						return true;
 					}
-					bool successful = ftpClient.UploadFile(GetLocalPath(hashString), GetRemotePath(hashString),
-						FtpExists.Overwrite, true);
-					if (!successful) {
+					FtpStatus status = ftpClient.UploadFile(GetLocalPath(hashString), GetRemotePath(hashString),
+						FtpRemoteExists.Overwrite, true);
+					if (status != FtpStatus.Success) {
 						ftpClient.Disconnect();
 						HandleRemoteCacheFailure(hashString, "Upload failed");
 						return false;
@@ -283,8 +297,8 @@ namespace Orange
 					if (ExistsLocal(hashString)) {
 						return true;
 					}
-					bool successful = ftpClient.DownloadFile(tempFilePath, GetRemotePath(hashString));
-					if (!successful) {
+					FtpStatus status = ftpClient.DownloadFile(tempFilePath, GetRemotePath(hashString));
+					if (status != FtpStatus.Success) {
 						ftpClient.Disconnect();
 						HandleRemoteCacheFailure(hashString, "Download failed");
 						return false;

@@ -214,7 +214,7 @@ namespace Orange
 			string[] emptyBundleNamesArray = {};
 			string[] mainBundleNameArray = { CookingRulesBuilder.MainBundleName };
 
-			var assets = Enumerable.Range(0, bundles.Count).Select(i => new List<FileInfo>()).ToArray(); 
+			var assets = Enumerable.Range(0, bundles.Count).Select(i => new List<FileInfo>()).ToArray();
 			foreach (var fi in fileInfos) {
 				foreach (var bundleName in GetAssetBundleNames(fi.Path)) {
 					var i = bundles.IndexOf(bundleName);
@@ -224,7 +224,7 @@ namespace Orange
 				}
 			}
 			return assets;
-			
+
 			string[] GetAssetBundleNames(string path)
 			{
 				if (CookingRulesMap.TryGetValue(path, out var rules)) {
@@ -261,7 +261,7 @@ namespace Orange
 			};
 			return bundle;
 		}
-		
+
 		public AssetCooker(Target target)
 		{
 			this.Target = target;

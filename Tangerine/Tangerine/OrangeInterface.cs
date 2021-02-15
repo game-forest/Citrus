@@ -50,6 +50,11 @@ namespace Tangerine
 			return PlatformPicker.SelectedTarget;
 		}
 
+		public override void SetActiveTarget(Target target)
+		{
+			PlatformPicker.Index = PlatformPicker.Items.IndexOf(PlatformPicker.Items.Where(i => (i.Value as Target == target)).First());
+		}
+
 		public override EnvironmentType GetEnvironmentType()
 		{
 			return EnvironmentType.Tangerine;

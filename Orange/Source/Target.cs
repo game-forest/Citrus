@@ -20,7 +20,7 @@ namespace Orange
 		public string Configuration => configuration ?? BaseTarget.Configuration;
 
 		/// <summary>
-		/// Flags if clean step should be performed before build step.
+		/// If true clean step will be performed before build step.
 		/// </summary>
 		public bool CleanBeforeBuild => cleanBeforeBuild ?? BaseTarget.CleanBeforeBuild;
 
@@ -36,18 +36,31 @@ namespace Orange
 		/// </summary>
 		public Target BaseTarget;
 
+		/// <summary>
+		/// If true will be hidden in UI.
+		/// </summary>
+		public bool Hidden => hidden ?? BaseTarget.Hidden;
+
 		private readonly string projectPath;
 		private readonly string configuration;
 		private readonly bool? cleanBeforeBuild;
 		private readonly TargetPlatform? platform;
+		private readonly bool? hidden;
 
-		public Target(string name, string projectPath, bool? cleanBeforeBuild, TargetPlatform? platform, string configuration)
-		{
+		public Target(
+			string name,
+			string projectPath,
+			bool? cleanBeforeBuild,
+			TargetPlatform? platform,
+			string configuration,
+			bool? hidden
+		) {
 			Name = name;
 			this.cleanBeforeBuild = cleanBeforeBuild;
 			this.platform = platform;
 			this.projectPath = projectPath;
 			this.configuration = configuration;
+			this.hidden = hidden;
 		}
 	}
 }

@@ -1,128 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{05FB6476-C29B-49A7-918C-A52CAF73FCA7}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Tangerine.Core</RootNamespace>
     <AssemblyName>Tangerine.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;PROFILER;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;WIN</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DefineConstants>WIN</DefineConstants>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\Orange\Orange.Win.csproj" />
+    <ProjectReference Include="..\..\Yuzu\Yuzu.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AnimationPositioner.cs" />
-    <Compile Include="AnimationTrackEditorState.cs" />
-    <Compile Include="AnimatorEditorState.cs" />
-    <Compile Include="AssetDatabase.cs" />
-    <Compile Include="AutosaveProcessor.cs" />
-    <Compile Include="BackupManager.cs" />
-    <Compile Include="ClassAttributes.cs" />
-    <Compile Include="Commands\OrangeCommands.cs" />
-    <Compile Include="Components.cs" />
-    <Compile Include="Consumer.cs" />
-    <Compile Include="CoreUserPreferences.cs" />
-    <Compile Include="DescendantsSkippingNamesakeAnimationOwnersEnumerable.cs" />
-    <Compile Include="Document.cs" />
-    <Compile Include="DocumentHistory.cs" />
-    <Compile Include="DocumentPreview.cs" />
-    <Compile Include="ExpressionParser\ExpressionParser.cs" />
-    <Compile Include="ExpressionParser\Tokenizer.cs" />
-    <Compile Include="GridSelection.cs" />
-    <Compile Include="GridSpanList.cs" />
-    <Compile Include="IDataflow.cs" />
-    <Compile Include="ISceneView.cs" />
-    <Compile Include="ITaskProvider.cs" />
-    <Compile Include="KeyHandler.cs" />
-    <Compile Include="MenuExtensions.cs" />
-    <Compile Include="NodeChangeWatcherExtensions.cs" />
-    <Compile Include="NodeCompositionValidator.cs" />
-    <Compile Include="NodeEditorState.cs" />
-    <Compile Include="NodeExtensions.cs" />
-    <Compile Include="Operation.cs" />
-    <Compile Include="Operations\ClearRowSelection.cs" />
-    <Compile Include="Operations\ContentsPathProcessor.cs" />
-    <Compile Include="Operations\CopyPaste.cs" />
-    <Compile Include="Operations\DistortionMeshProcessor.cs" />
-    <Compile Include="Operations\DummyOperation.cs" />
-    <Compile Include="Operations\EnterLeaveNode.cs" />
-    <Compile Include="Operations\Modification.cs" />
-    <Compile Include="Operations\NodeTypeConvert.cs" />
-    <Compile Include="Operations\RemoveKeyframeRange.cs" />
-    <Compile Include="Operations\RenameAnimationProcessor.cs" />
-    <Compile Include="Operations\RulerAction.cs" />
-    <Compile Include="Operations\SceneTree.cs" />
-    <Compile Include="Operations\SelectRow.cs" />
-    <Compile Include="Operations\SelectRowRange.cs" />
-    <Compile Include="Operations\TimelineColumnRemove.cs" />
-    <Compile Include="Operations\TimelineHorizontalShift.cs" />
-    <Compile Include="Project.cs" />
-    <Compile Include="ProjectPreferences.cs" />
-    <Compile Include="ProjectUserPreferences.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyAttributes.cs" />
-    <Compile Include="PropertyValidator.cs" />
-    <Compile Include="ResolutionPreview.cs" />
-    <Compile Include="Row.cs" />
-    <Compile Include="Ruler.cs" />
-    <Compile Include="SceneTreeBuilder.cs" />
-    <Compile Include="SyncPresenters.cs" />
-    <Compile Include="TriggersValidation.cs" />
-    <Compile Include="UserPreferences.cs" />
-    <Compile Include="VersionedCollection.cs" />
-    <Compile Include="WidgetExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lime\Lime.Win.csproj">
-      <Project>{fc2de6c9-641a-4230-8d29-ea4035cd8708}</Project>
-      <Name>Lime.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Orange\Orange.Win.csproj">
-      <Project>{6f0c1a51-492a-4e6e-b302-e212d441ebf3}</Project>
-      <Name>Orange.Win</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Yuzu\Yuzu.Win.csproj">
-      <Project>{ddd2dfe9-ced2-4cea-adf0-5a6865865a46}</Project>
-      <Name>Yuzu.Win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
