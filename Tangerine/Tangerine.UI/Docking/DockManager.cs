@@ -319,6 +319,9 @@ namespace Tangerine.UI.Docking
 		{
 			var panel = Model.Panels.First(pan => pan.Id == placement.Id);
 			var widget = panel.ContentWidget;
+			// Invoke Layout() before changing the LayoutManager, otherwise the layout may be stuck forever
+			// in the previous LayoutManager measure queue.
+			widget.LayoutManager?.Layout();
 			widget.Unlink();
 			if (Model.FindPanelPlacement(panel.Id).Hidden) {
 				return;
