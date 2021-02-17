@@ -16,7 +16,10 @@ namespace Lime
 
 		public readonly static TexturePool Instance = new TexturePool();
 
+		public delegate void TextureCreatingDelegate(string path);
 		public delegate void TextureCreatedDelegate(string path, ITexture texture);
+
+		public event TextureCreatingDelegate TextureCreating;
 		public event TextureCreatedDelegate TextureCreated;
 
 		private TexturePool() {}
@@ -82,6 +85,7 @@ namespace Lime
 						return texture;
 					}
 				}
+				TextureCreating?.Invoke(path);
 				texture = CreateTexture(path);
 				textures[path] = new WeakReference(texture);
 				TextureCreated?.Invoke(path, texture);
