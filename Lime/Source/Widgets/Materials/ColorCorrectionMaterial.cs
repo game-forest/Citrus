@@ -66,15 +66,18 @@ namespace Lime
 		private const string VertexShader = @"
 			attribute vec4 inPos;
 			attribute vec2 inTexCoords1;
+			attribute vec4 inColor;
 
 			uniform mat4 matProjection;
 
+			varying lowp vec4 vertexColor;
 			varying lowp vec2 texCoords1;
 
 			void main()
 			{
 				gl_Position = matProjection * inPos;
 				texCoords1 = inTexCoords1;
+				vertexColor = inColor;
 			}";
 
 		private const string FragmentShaderUniformBrightnessContrast = @"
@@ -135,6 +138,7 @@ namespace Lime
 				return vec3(h, s, l);
 			}";
 		private const string FragmentShaderPart1 = @"
+			varying lowp vec4 vertexColor;
 			void main()
 			{
 				lowp vec4 color = texture2D(tex1, texCoords1);";
@@ -147,7 +151,7 @@ namespace Lime
 				hsl.yz *= inHsl.yz;
 				color.rgb = HslToRgb(hsl);";
 		private const string FragmentShaderPart2 = @"
-				gl_FragColor = color;
+				gl_FragColor = color * vertexColor;
 			}";
 		private const string FragmentShaderPart2Opaque = @"
 				gl_FragColor = vec4(color.rgb, 1.0);
