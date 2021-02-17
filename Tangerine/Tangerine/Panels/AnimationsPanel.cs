@@ -385,10 +385,7 @@ namespace Tangerine.Panels
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
 			if (mode == TreeViewMode.CurrentBranch) {
-				var node = Document.Current.Animation.OwnerNode.SameOrDescendantOf(Document.Current.Container)
-					? Document.Current.Animation.OwnerNode
-					: Document.Current.Container;
-				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(node));
+				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(Document.Current.Container));
 			} else {
 				TraverseSceneTree(Document.Current.GetSceneItemForObject(Document.Current.RootNode));
 			}
