@@ -204,6 +204,12 @@ namespace Tangerine.Panels
 
 		private void ScrollToCurrentAnimation(TreeView treeView, TreeViewItemProvider provider)
 		{
+			if (
+				mode == TreeViewMode.CurrentBranch &&
+				!SetKeyframe.CheckAnimationScope(Document.Current.Animation, Document.Current.Container)
+			) {
+				NavigateToAnimation.Perform(Document.Current.Animation);
+			}
 			var sceneItem = Document.Current.GetSceneItemForObject(Document.Current.Animation);
 			var treeViewItem = provider.GetAnimationTreeViewItem(sceneItem);
 			if (treeViewItem.Parent != null) {
