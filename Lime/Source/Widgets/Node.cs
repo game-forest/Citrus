@@ -1146,6 +1146,12 @@ namespace Lime
 		{
 			var getter = prop.GetGetMethod();
 			var texture = getter.Invoke(this, new object[]{}) as ITexture;
+
+			if (texture is SerializableTexture serializableTexture &&
+				serializableTexture.SerializationPath.StartsWith("#")) {
+				return;
+			}
+
 			texture?.GetPlatformTexture();
 		}
 
