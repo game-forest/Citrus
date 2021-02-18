@@ -62,7 +62,7 @@ namespace Orange
 			return bundles.ToList();
 		}
 
-		public bool Cook(List<string> bundles, out string errorMessage)
+		private bool Cook(List<string> bundles, out string errorMessage)
 		{
 			AssetCache.Instance.Initialize();
 			CookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
@@ -348,66 +348,6 @@ namespace Orange
 			AddStage(new SyncRawAssets(this, ".raw"));
 			AddStage(new SyncRawAssets(this, ".bin"));
 			AddStage(new SyncModels(this));
-		}
-
-		public static bool AreTextureParamsDefault(ICookingRules rules)
-		{
-			return rules.MinFilter == TextureParams.Default.MinFilter &&
-				rules.MagFilter == TextureParams.Default.MagFilter &&
-				rules.WrapMode == TextureParams.Default.WrapModeU;
-		}
-
-		public void ImportTexture(string path, Bitmap texture, ICookingRules rules, SHA256 cookingUnitHash)
-		{
-			var textureParamsPath = Path.ChangeExtension(path, ".texture");
-			var textureParams = new TextureParams {
-				WrapMode = rules.WrapMode,
-				MinFilter = rules.MinFilter,
-				MagFilter = rules.MagFilter,
-			};
-			if (!AreTextureParamsDefault(rules)) {
-				TextureTools.UpscaleTextureIfNeeded(ref texture, rules, false);
-				InternalPersistence.Instance.WriteObjectToBundle(
-					OutputBundle, textureParamsPath, textureParams, Persistence.Format.Binary, cookingUnitHash, AssetAttributes.None);
-			}
-			if (rules.GenerateOpacityMask) {
-				var maskPath = Path.ChangeExtension(path, ".mask");
-				OpacityMaskCreator.CreateMask(OutputBundle, texture, maskPath, cookingUnitHash);
-			}
-			var attributes = AssetAttributes.ZippedDeflate;
-			if (!TextureConverterUtils.IsPowerOf2(texture.Width) || !TextureConverterUtils.IsPowerOf2(texture.Height)) {
-				attributes |= AssetAttributes.NonPowerOf2Texture;
-			}
-			switch (Target.Platform) {
-				case TargetPlatform.Android:
-				//case TargetPlatform.iOS:
-					var f = rules.PVRFormat;
-					if (f == PVRFormat.ARGB8 || f == PVRFormat.RGB565 || f == PVRFormat.RGBA4) {
-						TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, cookingUnitHash);
-					} else {
-						TextureConverter.RunEtcTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, cookingUnitHash);
-					}
-					break;
-				case TargetPlatform.iOS:
-					TextureConverter.RunPVRTexTool(texture, OutputBundle, path, attributes, rules.MipMaps, rules.HighQualityCompression, rules.PVRFormat, cookingUnitHash);
-					break;
-				case TargetPlatform.Win:
-				case TargetPlatform.Mac:
-					TextureConverter.RunNVCompress(texture, OutputBundle, path, attributes, rules.DDSFormat, rules.MipMaps, cookingUnitHash);
-					break;
-				default:
-					throw new Lime.Exception();
-			}
-		}
-
-		public static string GetModelAnimationPathPrefix(string modelPath)
-		{
-			return Toolbox.ToUnixSlashes(Path.Combine(Path.GetDirectoryName(modelPath), Path.GetFileNameWithoutExtension(modelPath) + "@"));
-		}
-
-		public static string GetModelExternalMeshPath(string modelPath)
-		{
-			return Toolbox.ToUnixSlashes(Path.GetDirectoryName(modelPath) + "/" + Path.GetFileNameWithoutExtension(modelPath)) + ".msh";
 		}
 
 		public static void CancelCook()

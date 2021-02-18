@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Lime;
 using Orange.FbxImporter;
@@ -56,17 +57,26 @@ namespace Orange
 				default:
 					throw new ArgumentOutOfRangeException($"Unknown compression: {compression}");
 			}
-			var animationPathPrefix = AssetCooker.GetModelAnimationPathPrefix(cookingUnit);
-			ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingUnitHash);
+			ExportModelAnimations(model, cookingUnit, assetAttributes, cookingUnitHash);
 			model.RemoveAnimatorsForExternalAnimations();
-			var externalMeshPath = AssetCooker.GetModelExternalMeshPath(cookingUnit);
-			ExportModelMeshes(model, externalMeshPath, assetAttributes, cookingUnitHash);
+			ExportModelMeshData(model, cookingUnit, assetAttributes, cookingUnitHash);
 			InternalPersistence.Instance.WriteObjectToBundle(
 				assetCooker.OutputBundle, cookingUnit, model, Persistence.Format.Binary, cookingUnitHash, assetAttributes);
 		}
 
-		private void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
+		private static string GetModelAnimationPathPrefix(string modelPath)
 		{
+			return Toolbox.ToUnixSlashes(Path.ChangeExtension(modelPath, null) + "@");
+		}
+
+		private static string GetModelExternalMeshPath(string modelPath)
+		{
+			return Toolbox.ToUnixSlashes(Path.ChangeExtension(modelPath, null) + ".msh");
+		}
+
+		private void ExportModelAnimations(Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
+		{
+			var pathPrefix = GetModelAnimationPathPrefix(cookingUnit);
 			foreach (var animation in model.Animations) {
 				if (animation.IsLegacy) {
 					continue;
@@ -82,8 +92,9 @@ namespace Orange
 			}
 		}
 
-		private void ExportModelMeshes(Model3D model, string path, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
+		private void ExportModelMeshData(Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
 		{
+			var path = GetModelExternalMeshPath(cookingUnit);
 			var data = new Model3D.MeshData();
 			var submeshes = model.Descendants
 				.OfType<Mesh3D>()
@@ -93,10 +104,9 @@ namespace Orange
 				sm.Mesh = null;
 			}
 			if (data.Meshes.Count > 0) {
-				model.MeshContentPath = System.IO.Path.ChangeExtension(path, null);
+				model.MeshContentPath = Path.ChangeExtension(path, null);
 				InternalPersistence.Instance.WriteObjectToBundle(
 					assetCooker.OutputBundle, path, data, Persistence.Format.Binary, cookingUnitHash, assetAttributes);
-				Console.WriteLine("+ " + path);
 			}
 		}
 	}
