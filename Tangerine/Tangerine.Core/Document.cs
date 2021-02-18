@@ -513,7 +513,7 @@ namespace Tangerine.Core
 		}
 
 		private static readonly Dictionary<string, Document> documentCache = new Dictionary<string, Document>();
-		private static readonly Dictionary<string, DateTime> documentTimeStamps = new Dictionary<string, DateTime>();
+		private static readonly Dictionary<string, SHA256> documentHashes = new Dictionary<string, SHA256>();
 
 		public void RefreshExternalScenes() => RefreshExternalScenes(new HashSet<string>());
 
@@ -551,22 +551,19 @@ namespace Tangerine.Core
 				} else {
 					var assetPath = Node.ResolveScenePath(node.ContentsPath);
 					if (assetPath != null) {
-						var writeTime = AssetBundle.Current.GetFileLastWriteTime(assetPath);
+						var hash = AssetBundle.Current.GetFileHash(assetPath);
 						if (assetPath.EndsWith(".t3d")) {
 							var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
-							if (
-								AssetBundle.Current.FileExists(attachmentPath) &&
-								AssetBundle.Current.GetFileLastWriteTime(attachmentPath) > writeTime
-							) {
-								writeTime = AssetBundle.Current.GetFileLastWriteTime(attachmentPath);
+							if (AssetBundle.Current.FileExists(attachmentPath)) {
+								hash = SHA256.Compute(hash, AssetBundle.Current.GetFileHash(attachmentPath));
 							}
 						}
 						if (
 							!documentCache.TryGetValue(node.ContentsPath, out document) ||
-							writeTime != documentTimeStamps[node.ContentsPath]
+							hash != documentHashes[node.ContentsPath]
 						) {
 							documentCache[node.ContentsPath] = document = new Document(node.ContentsPath);
-							documentTimeStamps[node.ContentsPath] = writeTime;
+							documentHashes[node.ContentsPath] = hash;
 						}
 					}
 				}
