@@ -79,14 +79,22 @@ namespace Tangerine.Panels
 			var treeView = CreateTreeView(scrollView, itemProvider,
 				new TreeViewItemPresentationOptions { Minimalistic = true, SearchStringGetter = () => searchStringEditor.Text });
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView, itemProvider));
-			expandAll.Clicked = treeView.ExpandAll;
-			collapseAll.Clicked = treeView.CollapseAll;
+			expandAll.Clicked = () => ExpandAll(treeView.RootItem, true);
+			collapseAll.Clicked = () => ExpandAll(treeView.RootItem, false);
 			showCurrent.AddTransactionClickHandler(() => ScrollToCurrentAnimation(treeView, itemProvider));
 			showAll.Clicked = () => {
 				mode = mode == TreeViewMode.CurrentBranch ? TreeViewMode.AllHierarchy : TreeViewMode.CurrentBranch;
 				RebuildTreeView(treeView, itemProvider);
 			};
 			showAll.AddChangeWatcher(() => mode, _ => showAll.Checked = mode == TreeViewMode.AllHierarchy);
+		}
+
+		private void ExpandAll(TreeViewItem item, bool expand)
+		{
+			item.Expanded = expand;
+			foreach (var i in item.Items) {
+				i.Expanded = expand;
+			}
 		}
 
 		private IEnumerator<object> SearchStringDebounceTask(TreeView treeView,
