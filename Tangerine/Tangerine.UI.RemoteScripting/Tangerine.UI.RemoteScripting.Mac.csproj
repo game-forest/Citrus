@@ -87,6 +87,7 @@
     <Compile Include="UI\RemoteScriptingWidgets.cs" />
     <Compile Include="CompiledAssembly.cs" />
     <Compile Include="CSharpCodeCompiler.cs" />
+    <Compile Include="CSharpAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">

@@ -31,7 +31,7 @@
 	},
 	"RemoteScripting": {
 		"Scripts": {
-			"ScriptsPath": "EmptyProject.Scripts/",
+			"ScriptsProjectPath": "EmptyProject.Scripts/EmptyProject.Scripts.csproj",
 			"ScriptsAssemblyName": "Scripts.dll",
 			"BuildTarget": "RemoteScriptingProject",
 			"FrameworkReferencesPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/MonoAndroid/v1.0/",
