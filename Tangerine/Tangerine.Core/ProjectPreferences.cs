@@ -23,7 +23,7 @@ namespace Tangerine.Core
 		{
 			private readonly List<string> projectReferences = new List<string>();
 			private readonly List<string> frameworkReferences = new List<string>();
-			public readonly string ScriptsPath;
+			public readonly string ScriptsProjectPath;
 			public readonly string ScriptsAssemblyName;
 			public readonly string EntryPointsClass;
 			public readonly string RemoteStoragePath;
@@ -31,7 +31,7 @@ namespace Tangerine.Core
 			public IReadOnlyList<string> FrameworkReferences => frameworkReferences;
 			public IReadOnlyList<string> ProjectReferences => projectReferences;
 
-			private static List<string> defaultFrameworkReferences = new List<string> {
+			private static readonly List<string> defaultFrameworkReferences = new List<string> {
 				@"mscorlib.dll",
 				@"System.dll",
 				@"System.Core.dll"
@@ -40,7 +40,7 @@ namespace Tangerine.Core
 			public RemoteScriptingConfiguration(dynamic json)
 			{
 				var projectDirectory = Orange.The.Workspace.ProjectDirectory;
-				ScriptsPath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.ScriptsPath));
+				ScriptsProjectPath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.ScriptsProjectPath));
 				ScriptsAssemblyName = (string)json.ScriptsAssemblyName;
 				var projectReferencesPath = Path.Combine(projectDirectory, (string)json.ProjectReferencesPath);
 				var frameworkReferencesPath = Path.Combine(projectDirectory, (string)json.FrameworkReferencesPath);

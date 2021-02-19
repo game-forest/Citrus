@@ -42,7 +42,7 @@ namespace Tangerine.UI.RemoteScripting
 					= (ProjectPreferences.RemoteScriptingConfiguration)eventArgs.Value;
 				var preferences = ProjectPreferences.Instance;
 				var arePreferencesCorrect =
-					!string.IsNullOrEmpty(configuration.ScriptsPath) &&
+					!string.IsNullOrEmpty(configuration.ScriptsProjectPath) &&
 					!string.IsNullOrEmpty(configuration.ScriptsAssemblyName) &&
 					!string.IsNullOrEmpty(configuration.RemoteStoragePath);
 				if (!arePreferencesCorrect) {
@@ -80,12 +80,13 @@ namespace Tangerine.UI.RemoteScripting
 					}
 
 					SetStatusAndLog("Building assembly...");
+					var csAnalyzer = new CSharpAnalyzer(configuration.ScriptsProjectPath);
+					var csFiles = csAnalyzer.GetCompileItems().ToList();
 
+					SetStatusAndLog($"Compile code in {configuration.ScriptsProjectPath} to assembly {configuration.ScriptsAssemblyName}..");
 					var compiler = new CSharpCodeCompiler {
 						ProjectReferences = configuration.FrameworkReferences.Concat(configuration.ProjectReferences)
 					};
-					var csFiles = Directory.EnumerateFiles(configuration.ScriptsPath, "*.cs", SearchOption.AllDirectories);
-					SetStatusAndLog($"Compile code in {configuration.ScriptsPath} to assembly {configuration.ScriptsAssemblyName}..");
 					var result = await compiler.CompileAssemblyToRawBytesAsync(configuration.ScriptsAssemblyName, csFiles);
 					foreach (var diagnostic in result.Diagnostics) {
 						Log(diagnostic.ToString());
@@ -117,6 +118,7 @@ namespace Tangerine.UI.RemoteScripting
 					Log(string.Empty);
 				} catch (System.Exception e) {
 					System.Console.WriteLine(e);
+					Log(e.ToString());
 				} finally {
 					buildAssemblyButton.Enabled = true;
 					buildGameAndAssemblyButton.Enabled = true;
