@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using Lime;
 using RemoteScripting;
@@ -40,7 +39,6 @@ namespace Tangerine.UI.RemoteScripting
 			configurationDropDownList.Changed += (eventArgs) => {
 				configuration = RemoteScriptingPane.Instance.SelectedRemoteScriptingConfiguration
 					= (ProjectPreferences.RemoteScriptingConfiguration)eventArgs.Value;
-				var preferences = ProjectPreferences.Instance;
 				var arePreferencesCorrect =
 					!string.IsNullOrEmpty(configuration.ScriptsProjectPath) &&
 					!string.IsNullOrEmpty(configuration.ScriptsAssemblyName) &&
@@ -61,6 +59,7 @@ namespace Tangerine.UI.RemoteScripting
 			}
 		}
 
+#if WIN
 		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true)
 		{
 			async void BuildAssemblyAsync()
@@ -71,7 +70,7 @@ namespace Tangerine.UI.RemoteScripting
 				try {
 					if (requiredBuildGame) {
 						SetStatusAndLog("Building game...");
-						var target = Orange.The.Workspace.Targets.Where(t => t.Name == configuration.BuildTarget).First();
+						var target = Orange.The.Workspace.Targets.First(t => t.Name == configuration.BuildTarget);
 						var previousTarget = Orange.UserInterface.Instance.GetActiveTarget();
 						Orange.UserInterface.Instance.SetActiveTarget(target);
 						await OrangeBuildCommand.ExecuteAsync();
@@ -127,6 +126,10 @@ namespace Tangerine.UI.RemoteScripting
 
 			BuildAssemblyAsync();
 		}
+#else
+		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true) =>
+			Log($"Building assembly is not supported on {Application.Platform}");
+#endif // WIN
 
 		public void Log(string text)
 		{

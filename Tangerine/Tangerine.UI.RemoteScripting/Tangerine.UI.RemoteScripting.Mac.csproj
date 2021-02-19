@@ -90,7 +90,6 @@
     <Compile Include="CSharpAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Buildalyzer" Version="3.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
       <Version>2.6.2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
