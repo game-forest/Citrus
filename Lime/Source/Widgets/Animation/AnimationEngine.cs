@@ -189,6 +189,12 @@ namespace Lime
 			} else {
 				BuildEffectiveAnimatorsForSimpleAnimation(animation);
 			}
+#if TANGERINE
+			(animation.EffectiveAnimatorsSet ?? (animation.EffectiveAnimatorsSet = new HashSet<IAbstractAnimator>())).Clear();
+			foreach (var animator in animation.EffectiveAnimators) {
+				animation.EffectiveAnimatorsSet.Add(animator);
+			}
+#endif
 		}
 
 		private static void BuildEffectiveAnimatorsForCompoundAnimation(Animation animation)

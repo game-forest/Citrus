@@ -33,6 +33,21 @@ namespace Lime
 		/// </summary>
 		public List<IAbstractAnimator> EffectiveAnimators;
 
+#if TANGERINE
+		public HashSet<IAbstractAnimator> EffectiveAnimatorsSet;
+
+		public HashSet<IAbstractAnimator> ValidatedEffectiveAnimatorsSet
+		{
+			get
+			{
+				if (!AnimationEngine.AreEffectiveAnimatorsValid(this)) {
+					AnimationEngine.BuildEffectiveAnimators(this);
+				}
+				return EffectiveAnimatorsSet;
+			}
+		}
+#endif
+
 		/// <summary>
 		/// Cached list of only triggerable animators used by this animation.
 		/// This cache may be in invalid state, in the user code use <see cref="ValidatedEffectiveTriggerableAnimators"/>.
@@ -40,6 +55,7 @@ namespace Lime
 		public List<IAbstractAnimator> EffectiveTriggerableAnimators;
 		public AnimationBezierEasingCalculator BezierEasingCalculator { get; private set; }
 		public AnimationEngine AnimationEngine = DefaultAnimationEngine.Instance;
+		private AnimationComponent owner;
 
 		/// <summary>
 		/// Cached list of all animators used by this animation.
@@ -133,7 +149,15 @@ namespace Lime
 			set { Time = AnimationUtils.FramesToSeconds(value); }
 		}
 
-		public AnimationComponent Owner { get; internal set; }
+		public AnimationComponent Owner
+		{
+			get => owner;
+			internal set
+			{
+				owner = value;
+				InvalidateCache();
+			}
+		}
 
 		public Node OwnerNode => Owner?.Owner;
 

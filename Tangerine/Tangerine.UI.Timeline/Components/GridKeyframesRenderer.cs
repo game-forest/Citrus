@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lime;
 using Tangerine.Core;
 
@@ -36,16 +33,11 @@ namespace Tangerine.UI.Timeline.Components
 			cells.Clear();
 		}
 
-		private readonly HashSet<IAbstractAnimator> effectiveAnimatorsHashSet = new HashSet<IAbstractAnimator>();
-
 		public void GenerateCells(Node node, Animation animation)
 		{
-			effectiveAnimatorsHashSet.Clear();
-			foreach (var animator in animation.ValidatedEffectiveAnimators) {
-				effectiveAnimatorsHashSet.Add(animator);
-			}
+			var effectiveAnimatorsSet = animation.ValidatedEffectiveAnimatorsSet;
 			foreach (var animator in node.Animators) {
-				if (!effectiveAnimatorsHashSet.Contains(animator)) {
+				if (!effectiveAnimatorsSet.Contains(animator)) {
 					continue;
 				}
 				for (var j = 0; j < animator.ReadonlyKeys.Count; j++) {
