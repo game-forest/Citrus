@@ -833,6 +833,8 @@ namespace Orange
 			private ThemedSimpleText textFieldA;
 			private ThemedSimpleText textFieldB;
 
+			private float Progress => MaxPosition == 0 ? 0 : (float)CurrentPosition / MaxPosition;
+
 			public ProgressBarField()
 			{
 				Layout = new HBoxLayout { Spacing = 6 };
@@ -842,7 +844,7 @@ namespace Orange
 				var rect = new Widget();
 				rect.CompoundPresenter.Add(new WidgetFlatFillPresenter(Lime.Theme.Colors.SelectedBorder));
 				rect.Tasks.AddLoop(() => {
-					rect.Size = new Vector2(bar.Width * Mathf.Clamp((float)CurrentPosition / MaxPosition, 0, 1), bar.ContentHeight);
+					rect.Size = new Vector2(bar.Width * Progress, bar.ContentHeight);
 				});
 				bar.AddNode(rect);
 
@@ -866,7 +868,7 @@ namespace Orange
 			{
 				CurrentPosition += amount;
 				Application.InvokeOnMainThread(() => {
-					textFieldA.Text = (int)((float)CurrentPosition / MaxPosition * 100) + "%";
+					textFieldA.Text = (int)(Progress * 100) + "%";
 					textFieldB.Text = CurrentPosition + " / " + MaxPosition;
 				});
 			}
