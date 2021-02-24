@@ -17,10 +17,6 @@ namespace Kumquat
 		[YuzuMember]
 		public SHA256 CookingUnitHash;
 
-		[Obsolete("Not used anymore")]
-		[YuzuMember]
-		public DateTime DateModified;
-
 		[YuzuMember]
 		public List<string> ReferringScenes = new List<string>();
 	}
