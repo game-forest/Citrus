@@ -69,7 +69,7 @@ namespace Lime
 
 		public static bool operator ==(SHA256 lhs, SHA256 rhs)
 		{
-			return lhs.A == rhs.A && lhs.B == rhs.B && lhs.C == rhs.C;
+			return lhs.A == rhs.A && lhs.B == rhs.B && lhs.C == rhs.C && lhs.D == rhs.D;
 		}
 
 		public static bool operator !=(SHA256 lhs, SHA256 rhs) => !(lhs == rhs);
