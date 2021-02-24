@@ -148,7 +148,7 @@ namespace Lime
 		/// </summary>
 		public class Manifest
 		{
-			public const string FileName = ".Manifest";
+			public const string FileName = ".manifest";
 
 			[YuzuMember]
 			public int? BaseBundleVersion { get; set; }
