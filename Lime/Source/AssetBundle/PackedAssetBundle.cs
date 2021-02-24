@@ -184,9 +184,9 @@ namespace Lime
 
 		private readonly Stack<Stream> streamPool = new Stack<Stream>();
 		private int indexOffset;
-		private readonly BinaryReader reader;
-		private readonly BinaryWriter writer;
-		private readonly Stream stream;
+		private BinaryReader reader;
+		private BinaryWriter writer;
+		private Stream stream;
 		internal readonly SortedDictionary<string, AssetDescriptor> index
 			= new SortedDictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
 		private readonly List<AssetDescriptor> trash = new List<AssetDescriptor>();
@@ -196,29 +196,39 @@ namespace Lime
 
 		public PackedAssetBundle(string resourceId, string assemblyName)
 		{
-			this.Path = resourceId;
-			resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
-				SingleOrDefault(a => a.GetName().Name == assemblyName);
-			if (resourcesAssembly == null) {
-				throw new Lime.Exception($"Assembly {assemblyName} doesn't exist");
+			try {
+				this.Path = resourceId;
+				resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
+					SingleOrDefault(a => a.GetName().Name == assemblyName);
+				if (resourcesAssembly == null) {
+					throw new Lime.Exception($"Assembly {assemblyName} doesn't exist");
+				}
+				stream = AllocStream();
+				reader = new BinaryReader(stream);
+				ReadIndexTable();
+			} catch {
+				Dispose();
+				throw;
 			}
-			stream = AllocStream();
-			reader = new BinaryReader(stream);
-			ReadIndexTable();
 		}
 
 		public PackedAssetBundle(string path, AssetBundleFlags flags = Lime.AssetBundleFlags.None)
 		{
-			this.Path = path;
-			if ((flags & AssetBundleFlags.Writable) != 0) {
-				stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-				reader = new BinaryReader(stream);
-				writer = new BinaryWriter(stream);
-			} else {
-				stream = AllocStream();
-				reader = new BinaryReader(stream);
+			try {
+				this.Path = path;
+				if ((flags & AssetBundleFlags.Writable) != 0) {
+					stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+					reader = new BinaryReader(stream);
+					writer = new BinaryWriter(stream);
+				} else {
+					stream = AllocStream();
+					reader = new BinaryReader(stream);
+				}
+				ReadIndexTable();
+			} catch {
+				Dispose();
+				throw;
 			}
-			ReadIndexTable();
 		}
 
 		public static int CalcBundleChecksum(string bundlePath)
@@ -337,12 +347,15 @@ namespace Lime
 					RefreshBundleChecksum(Path);
 				}
 				writer.Close();
+				writer = null;
 			}
 			if (reader != null) {
 				reader.Close();
+				reader = null;
 			}
 			if (stream != null) {
 				stream.Close();
+				stream = null;
 			}
 			index.Clear();
 			while (streamPool.Count > 0) {
@@ -525,7 +538,7 @@ namespace Lime
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			writer.Write(Signature);
-			// Checksum. Will be updated on Dispose with RefreshBundleCheckSum.
+			// Checksum. Will be updated on Dispose with RefreshBundleChecksum.
 			writer.Write(0);
 			writer.Write(Lime.Version.GetBundleFormatVersion());
 			writer.Write(indexOffset);
