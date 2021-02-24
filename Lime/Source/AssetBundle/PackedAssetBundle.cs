@@ -424,7 +424,7 @@ namespace Lime
 				if (stream.Read(buffer, 0, length) != length) {
 					throw new IOException();
 				}
-				var hash = SHA256.Compute(SHA256.Compute(path), SHA256.Compute(buffer, 0, length));
+				var hash = SHA256.Compute(SHA256.Compute(AssetPath.CorrectSlashes(path)), SHA256.Compute(buffer, 0, length));
 				stream = new MemoryStream(buffer, 0, length);
 				if ((attributes & AssetAttributes.Zipped) != 0) {
 					stream = CompressAssetStream(stream, attributes);

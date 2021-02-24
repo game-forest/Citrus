@@ -86,7 +86,7 @@ namespace Lime
 				i = new FileInfo {
 					DateModified = File.GetLastWriteTimeUtc(ToSystemPath(path)),
 					Hash = SHA256.Compute(
-						SHA256.Compute(path),
+						SHA256.Compute(AssetPath.CorrectSlashes(path)),
 						SHA256.Compute(File.ReadAllBytes(ToSystemPath(path)))
 					)
 				};

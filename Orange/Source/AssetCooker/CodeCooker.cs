@@ -41,8 +41,10 @@ namespace Orange
 						allScenes.Add(scenePath);
 						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
 						var sourceHash = SHA256.Compute(
-							SHA256.Compute(SHA256.Compute(scenePath), SHA256.Compute(File.ReadAllBytes(scenePath))),
-							assetToCookingRules[scenePath].Hash);
+							SHA256.Compute(SHA256.Compute(AssetPath.CorrectSlashes(scenePath)),
+							SHA256.Compute(File.ReadAllBytes(scenePath))),
+							assetToCookingRules[scenePath].Hash
+						);
 						if (!cache.SceneFiles.ContainsKey(scenePath)) {
 							modifiedScenes.Add(scenePath);
 							scenesToCook.Add(scenePath);
