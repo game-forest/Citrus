@@ -8,10 +8,9 @@ namespace Lime
 	{
 		public readonly AssetBundle Bundle;
 
-		public WrappedAssetBundle(AssetBundle bundle)
-		{
-			this.Bundle = bundle;
-		}
+		public WrappedAssetBundle(AssetBundle bundle) => this.Bundle = bundle;
+
+		public override void Dispose() => Bundle.Dispose();
 
 		public override void DeleteFile(string path) => Bundle.DeleteFile(path);
 
