@@ -202,8 +202,9 @@ namespace Orange
 
 		private void CookBundle(string bundleName, List<string> assets)
 		{
+			MemoryAssetBundle memoryBundle;
 			using (var packedBundle = CreateOutputBundle(bundleName)) {
-				OutputBundle = MemoryAssetBundle.ReadFromBundle(packedBundle);
+				OutputBundle = new VerboseAssetBundle(memoryBundle = MemoryAssetBundle.ReadFromBundle(packedBundle));
 			}
 			try {
 				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
@@ -213,9 +214,8 @@ namespace Orange
 					PluginLoader.AfterAssetsCooked(bundleName);
 				}
 				DeleteBundle();
-				using (var packedBundle = CreateOutputBundle(bundleName)) {
-					((MemoryAssetBundle) OutputBundle).WriteToBundle(packedBundle);
-				}
+				using var packedBundle = CreateOutputBundle(bundleName);
+				memoryBundle.WriteToBundle(packedBundle);
 			} finally {
 				OutputBundle.Dispose();
 				OutputBundle = null;
@@ -258,7 +258,6 @@ namespace Orange
 						CheckCookCancelation();
 						foreach (var (cookingUnit, hash) in stage.EnumerateCookingUnits()) {
 							if (!cookedUnitsHashes.Contains(hash)) {
-								Console.WriteLine($"+ {cookingUnit}");
 								stage.Cook(cookingUnit, hash);
 							}
 							UserInterface.Instance.IncreaseProgressBar();
@@ -273,6 +272,40 @@ namespace Orange
 				} finally {
 					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
 					BundleBeingCookedName = null;
+				}
+			}
+		}
+
+		private class VerboseAssetBundle : WrappedAssetBundle
+		{
+			private Dictionary<string, SHA256> deletedFiles = new Dictionary<string, SHA256>();
+			public VerboseAssetBundle(AssetBundle bundle) : base(bundle)
+			{ }
+
+			public override void DeleteFile(string path)
+			{
+				deletedFiles.Add(path, GetFileHash(path));
+				base.DeleteFile(path);
+			}
+
+			public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+			{
+				base.ImportFile(path, stream, cookingUnitHash, attributes);
+				if (deletedFiles.TryGetValue(path, out var hash)) {
+					if (hash != GetFileHash(path)) {
+						Console.WriteLine("* " + path);
+					}
+					deletedFiles.Remove(path);
+				} else {
+					Console.WriteLine("+ " + path);
+				}
+			}
+
+			public override void Dispose()
+			{
+				base.Dispose();
+				foreach (var (path, _) in deletedFiles) {
+					Console.WriteLine("- " + path);
 				}
 			}
 		}
