@@ -1,4 +1,4 @@
-﻿#if WIN
+#if WIN
 using System;
 using System.ComponentModel.Composition;
 
@@ -26,13 +26,13 @@ namespace Orange
 			ulong totalLengthAfter = 0;
 			ulong totalLengthBefore = 0;
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				foreach (var fi in Lime.AssetBundle.Current.EnumerateFileInfos(null, ".png")) {
-					ulong lengthBefore = (ulong)(new System.IO.FileInfo(fi.Path)).Length;
+				foreach (var path in Lime.AssetBundle.Current.EnumerateFiles(null, ".png")) {
+					ulong lengthBefore = (ulong)(new System.IO.FileInfo(path)).Length;
 					totalLengthBefore += lengthBefore;
-					TextureConverter.OptimizePNG(fi.Path);
-					ulong lengthAfter = (ulong)(new System.IO.FileInfo(fi.Path)).Length;
+					TextureConverter.OptimizePNG(path);
+					ulong lengthAfter = (ulong)(new System.IO.FileInfo(path)).Length;
 					totalLengthAfter += lengthAfter;
-					Console.WriteLine($"{fi.Path} : {f(lengthBefore)} => {f(lengthAfter)}, diff: {f(lengthBefore - lengthAfter)}");
+					Console.WriteLine($"{path} : {f(lengthBefore)} => {f(lengthAfter)}, diff: {f(lengthBefore - lengthAfter)}");
 				}
 			}
 			Console.WriteLine($"Totals: {f(totalLengthBefore)} => {f(totalLengthAfter)}, diff: {f(totalLengthBefore - totalLengthAfter)}");
