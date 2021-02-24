@@ -85,7 +85,7 @@ namespace Orange
 			}
 			try {
 				// Don't return early even if there's nothing modified since there may be stuff to delete
-				// Also, don't bother with loading ony usedBundles for now, just load all of them
+				// Also, don't bother with loading only usedBundles for now, just load all of them
 				AssetBundle.SetCurrent(new AggregateAssetBundle(cookingBundles.Select(bundleName => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName))).ToArray()), false);
 				new ScenesCodeCooker(
 					The.Workspace.ProjectDirectory,

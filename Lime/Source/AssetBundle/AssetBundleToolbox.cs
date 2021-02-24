@@ -67,7 +67,7 @@ namespace Lime
 				}
 			}
 			currentManifest.BaseBundleVersion = baseBundleVersion;
-			currentManifest.Write(currentBundlePatch);
+			currentManifest.Save(currentBundlePatch);
 		}
 
 		private static void ImportAsset(string file, AssetBundle sourceBundle, AssetBundle destinationBundle)

@@ -9,7 +9,7 @@ namespace Lime
 	public class AggregateAssetBundle : AssetBundle
 	{
 		private readonly List<AssetBundle> bundles = new List<AssetBundle>();
-		private ReaderWriterLockSlim sync = new ReaderWriterLockSlim();
+		private readonly ReaderWriterLockSlim sync = new ReaderWriterLockSlim();
 
 		public AggregateAssetBundle(params AssetBundle[] bundles)
 		{

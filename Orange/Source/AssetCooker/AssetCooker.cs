@@ -136,8 +136,11 @@ namespace Orange
 								destination.DeleteFile(file);
 							}
 							destination.ImportFile(
-								file, new MemoryStream(source.ReadFile(file)),
-								source.GetFileCookingUnitHash(file), source.GetFileAttributes(file));
+								file,
+								new MemoryStream(source.ReadFile(file)),
+								source.GetFileCookingUnitHash(file),
+								source.GetFileAttributes(file)
+							);
 						} catch {
 							// Do nothing.
 						}
@@ -150,7 +153,7 @@ namespace Orange
 				}
 			}
 
-			void DeleteEmptyDirectories(string baseDirectory)
+			static void DeleteEmptyDirectories(string baseDirectory)
 			{
 				foreach (var directory in Directory.GetDirectories(baseDirectory)) {
 					DeleteEmptyDirectories(directory);
@@ -311,7 +314,7 @@ namespace Orange
 				Lime.Debug.Write("Failed to create directory: {0} {1}", Path.GetDirectoryName(bundlePath));
 				throw;
 			}
-			PackedAssetBundle packedBundle;
+			AssetBundle packedBundle;
 			try {
 				packedBundle = new PackedAssetBundle(bundlePath, AssetBundleFlags.Writable);
 			} catch (InvalidBundleVersionException) {
@@ -388,11 +391,10 @@ namespace Orange
 			if (!The.Workspace.BenchmarkEnabled) {
 				return;
 			}
-			using (var w = File.AppendText(Path.Combine(The.Workspace.ProjectDirectory, "cache.log"))) {
-				w.WriteLine(LogText);
-				w.WriteLine();
-				w.WriteLine();
-			}
+			using var w = File.AppendText(Path.Combine(The.Workspace.ProjectDirectory, "cache.log"));
+			w.WriteLine(LogText);
+			w.WriteLine();
+			w.WriteLine();
 		}
 	}
 }

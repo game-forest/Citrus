@@ -244,7 +244,7 @@ namespace Orange
 
 		public override void IncreaseProgressBar(int amount = 1)
 		{
-			progressBarField.Progress(amount);
+			progressBarField.Advance(amount);
 		}
 
 		private void UpdateBundlePicker(bool value)
@@ -862,7 +862,7 @@ namespace Orange
 				HideAndClear();
 			}
 
-			public void Progress(int amount = 1)
+			public void Advance(int amount = 1)
 			{
 				CurrentPosition += amount;
 				Application.InvokeOnMainThread(() => {
@@ -875,7 +875,7 @@ namespace Orange
 			{
 				CurrentPosition = 0;
 				MaxPosition = maxPosition;
-				Progress(0);
+				Advance(0);
 				Visible = true;
 			}
 

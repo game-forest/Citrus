@@ -10,7 +10,7 @@ using Yuzu;
 
 namespace Lime
 {
-	public class InvalidBundleVersionException : Exception
+	public class InvalidBundleVersionException : Lime.Exception
 	{
 		public InvalidBundleVersionException(string message) : base(message) { }
 	}
@@ -113,7 +113,6 @@ namespace Lime
 			throw new NotSupportedException();
 		}
 
-		#region IDisposable Support
 		private bool disposedValue;
 
 		protected override void Dispose(bool disposing)
@@ -133,7 +132,6 @@ namespace Lime
 				throw new ObjectDisposedException(GetType().Name);
 			}
 		}
-		#endregion
 	}
 
 	[Flags]
@@ -169,10 +167,16 @@ namespace Lime
 				return new Manifest();
 			}
 
-			public void Write(AssetBundle bundle)
+			public void Save(AssetBundle bundle)
 			{
 				InternalPersistence.Instance.WriteObjectToBundle(
-					bundle, FileName, this, Persistence.Format.Binary, default, AssetAttributes.None);
+					bundle: bundle,
+					path: FileName,
+					instance: this,
+					format: Persistence.Format.Binary,
+					cookingUnitHash: default,
+					attributes: AssetAttributes.None
+				);
 			}
 		}
 
@@ -183,10 +187,11 @@ namespace Lime
 		private readonly BinaryReader reader;
 		private readonly BinaryWriter writer;
 		private readonly Stream stream;
-		internal readonly SortedDictionary<string, AssetDescriptor> index = new SortedDictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
+		internal readonly SortedDictionary<string, AssetDescriptor> index
+			= new SortedDictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
 		private readonly List<AssetDescriptor> trash = new List<AssetDescriptor>();
 		private readonly System.Reflection.Assembly resourcesAssembly;
-		private bool wasModified { get; set; }
+		private bool WasModified { get; set; }
 		public string Path { get; }
 
 		public PackedAssetBundle(string resourceId, string assemblyName)
@@ -216,7 +221,7 @@ namespace Lime
 			ReadIndexTable();
 		}
 
-		public static int CalcBundleCheckSum(string bundlePath)
+		public static int CalcBundleChecksum(string bundlePath)
 		{
 			// "Modified FNV with good avalanche behavior and uniform distribution with larger hash sizes."
 			// see http://papa.bretmulvey.com/post/124027987928/hash-functions for algo
@@ -259,20 +264,20 @@ namespace Lime
 				var reader = new BinaryReader(stream);
 				// Bundle signature
 				reader.ReadInt32();
-				int storedCheckSum = reader.ReadInt32();
-				int actualCheckSum = CalcBundleCheckSum(bundlePath);
-				return storedCheckSum != actualCheckSum;
+				int storedChecksum = reader.ReadInt32();
+				int actualChecksum = CalcBundleChecksum(bundlePath);
+				return storedChecksum != actualChecksum;
 			}
 		}
 
-		public static void RefreshBundleCheckSum(string bundlePath)
+		public static void RefreshBundleChecksum(string bundlePath)
 		{
-			int checkSum = CalcBundleCheckSum(bundlePath);
+			int checksum = CalcBundleChecksum(bundlePath);
 			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite)) {
 				if (stream.Length > 8) {
 					using (var writer = new BinaryWriter(stream)) {
 						writer.Seek(4, SeekOrigin.Begin);
-						writer.Write(checkSum);
+						writer.Write(checksum);
 					}
 				}
 			}
@@ -326,10 +331,10 @@ namespace Lime
 		{
 			base.Dispose();
 			if (writer != null) {
-				if (wasModified) {
+				if (WasModified) {
 					CleanupBundle();
 					WriteIndexTable();
-					RefreshBundleCheckSum(Path);
+					RefreshBundleChecksum(Path);
 				}
 				writer.Close();
 			}
@@ -391,7 +396,7 @@ namespace Lime
 			var desc = GetDescriptor(path);
 			index.Remove(path);
 			trash.Add(desc);
-			wasModified = true;
+			WasModified = true;
 		}
 
 		public override bool FileExists(string path) => index.ContainsKey(AssetPath.CorrectSlashes(path));
@@ -419,8 +424,8 @@ namespace Lime
 
 		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			AssetDescriptor d;
-			var reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
+			var reuseExistingDescriptor =
+				index.TryGetValue(AssetPath.CorrectSlashes(path), out AssetDescriptor d) &&
 				(d.AllocatedSize >= stream.Length) &&
 				(d.AllocatedSize <= stream.Length);
 			if (reuseExistingDescriptor) {
@@ -459,7 +464,7 @@ namespace Lime
 				stream.CopyTo(this.stream);
 				this.stream.Flush();
 			}
-			wasModified = true;
+			WasModified = true;
 		}
 
 		internal static Stream CompressAssetStream(Stream stream, AssetAttributes attributes)
@@ -496,7 +501,8 @@ namespace Lime
 			if (signature != Signature) {
 				throw new Exception($"The asset bundle at \"{Path}\" has been corrupted");
 			}
-			reader.ReadInt32(); // CheckSum
+			// Checksum. Use IsBundleCorrupted to validate.
+			reader.ReadInt32();
 			var version = reader.ReadInt32();
 			if (version != Version.GetBundleFormatVersion()) {
 				throw new InvalidBundleVersionException(
@@ -519,6 +525,7 @@ namespace Lime
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			writer.Write(Signature);
+			// Checksum. Will be updated on Dispose with RefreshBundleCheckSum.
 			writer.Write(0);
 			writer.Write(Lime.Version.GetBundleFormatVersion());
 			writer.Write(indexOffset);
@@ -619,7 +626,7 @@ namespace Lime
 					}
 				}
 			}
-			manifest.Write(this);
+			manifest.Save(this);
 		}
 	}
 }

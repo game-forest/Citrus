@@ -61,7 +61,13 @@ namespace Orange
 			model.RemoveAnimatorsForExternalAnimations();
 			ExportModelMeshData(model, cookingUnit, assetAttributes, cookingUnitHash);
 			InternalPersistence.Instance.WriteObjectToBundle(
-				assetCooker.OutputBundle, cookingUnit, model, Persistence.Format.Binary, cookingUnitHash, assetAttributes);
+				bundle: assetCooker.OutputBundle,
+				path: cookingUnit,
+				instance: model,
+				format: Persistence.Format.Binary,
+				cookingUnitHash: cookingUnitHash,
+				attributes: assetAttributes
+			);
 		}
 
 		private static string GetModelAnimationPathPrefix(string modelPath)
