@@ -439,8 +439,7 @@ namespace Lime
 		{
 			var reuseExistingDescriptor =
 				index.TryGetValue(AssetPath.CorrectSlashes(path), out AssetDescriptor d) &&
-				(d.AllocatedSize >= stream.Length) &&
-				(d.AllocatedSize <= stream.Length);
+				d.AllocatedSize == stream.Length;
 			if (reuseExistingDescriptor) {
 				d.Size = (int)stream.Length;
 				d.Attributes = attributes;
@@ -450,15 +449,6 @@ namespace Lime
 				index[AssetPath.CorrectSlashes(path)] = d;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);
-				var reserve = d.AllocatedSize - (int)stream.Length;
-				if (reserve > 0) {
-					var zeroBytes = ArrayPool<byte>.Shared.Rent(reserve);
-					try {
-						this.stream.Write(zeroBytes, 0, reserve);
-					} finally {
-						ArrayPool<byte>.Shared.Return(zeroBytes);
-					}
-				}
 			} else {
 				if (FileExists(path)) {
 					DeleteFile(path);
