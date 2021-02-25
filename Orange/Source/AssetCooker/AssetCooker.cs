@@ -102,6 +102,7 @@ namespace Orange
 			} catch (System.Exception e) {
 				Console.WriteLine(e.Message);
 				errorMessage = e.Message;
+				return false;
 			} finally {
 				cookCanceled = false;
 				EndCookBundles?.Invoke();
