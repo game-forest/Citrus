@@ -18,7 +18,7 @@ namespace Lime
 		}
 
 		private const float MinimumSoftness = 0f;
-		private const float MaximumSoftness = 45f;
+		private const float MaximumSoftness = 100f;
 		private const float MinimumDilate = -40f;
 		private const float MaximumDilate = 40f;
 
