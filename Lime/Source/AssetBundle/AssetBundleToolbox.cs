@@ -48,7 +48,8 @@ namespace Lime
 						// TODO: think if checking hash only is enough.
 						// Attributes are produced from cooking rules which are part of cooking unit hash.
 						currentBundle.GetFileAttributes(file) == patch.GetFileAttributes(file) &&
-						currentBundle.GetFileCookingUnitHash(file) == patch.GetFileCookingUnitHash(file)
+						currentBundle.GetFileCookingUnitHash(file) == patch.GetFileCookingUnitHash(file) &&
+						currentBundle.GetFileHash(file) == patch.GetFileHash(file)
 					) {
 						fileModified = false;
 					}
