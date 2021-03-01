@@ -614,9 +614,12 @@ namespace Orange
 						if (line == "") {
 							continue;
 						}
-						var words = line.Split(' ');
+						var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 						if (words.Length < 2) {
 							throw new Lime.Exception("Invalid rule format");
+						}
+						foreach (ref var word in words.AsSpan()) {
+							word = word.Trim();
 						}
 						// target-specific cooking rules
 						if (words[0].EndsWith(")")) {
