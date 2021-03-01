@@ -44,12 +44,13 @@ namespace Lime
 			index = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);
 			if (File.Exists(indexPath)) {
 				try {
-					using (var fs = File.OpenRead(indexPath)) {
+					lock (syncAccessIndex) {
+						using var fs = File.OpenRead(indexPath);
 						InternalPersistence.Instance.ReadObject<SortedDictionary<string, FileInfo>>(
 							indexPath, fs, index);
 					}
-				} catch (System.Exception) {
-					// ignored
+				} catch {
+					index.Clear();
 				}
 			}
 		}
@@ -57,11 +58,15 @@ namespace Lime
 		public override void Dispose()
 		{
 			var indexPath = Path.Combine(BaseDirectory, IndexFile);
-			InternalPersistence.Instance.WriteObjectToFile(indexPath, index, Persistence.Format.Binary);
 			watcher?.Dispose();
 			watcher = null;
+			lock (syncAccessIndex) {
+				InternalPersistence.Instance.WriteObjectToFile(indexPath, index, Persistence.Format.Binary);
+			}
 			base.Dispose();
 		}
+
+		private static object syncAccessIndex = new object();
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
@@ -122,12 +127,13 @@ namespace Lime
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
 			try {
-				stream.Read(buffer, 0, length);
+				if (stream.Read(buffer, 0, length) != length) {
+					throw new IOException();
+				}
 				var systemPath = ToSystemPath(path);
 				Directory.CreateDirectory(Path.GetDirectoryName(systemPath));
-				using (var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read)) {
-					fs.Write(buffer, 0, length);
-				}
+				using var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+				fs.Write(buffer, 0, length);
 			} finally {
 				ArrayPool<byte>.Shared.Return(buffer);
 			}
