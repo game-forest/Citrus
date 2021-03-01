@@ -30,10 +30,16 @@ namespace Lime
 			// concatenate current directory if path is not rooted.
 			BaseDirectory = NormalizeDirectoryPath(Path.GetFullPath(baseDirectory));
 			watcher = new FileSystemWatcher(BaseDirectory, includeSubdirectories: true);
-			watcher.Changed += _ => indexValid = false;
-			watcher.Created += _ => indexValid = false;
-			watcher.Deleted += _ => indexValid = false;
-			watcher.Renamed += (_, __) => indexValid = false;
+			watcher.Changed += p => OnChanged(p);
+			watcher.Created += p => OnChanged(p);
+			watcher.Deleted += p => OnChanged(p);
+			watcher.Renamed += (_, p) => OnChanged(p);
+			void OnChanged(string p)
+			{
+				if (!Path.GetFileName(p)?.Equals(IndexFile, StringComparison.Ordinal) ?? false) {
+					indexValid = false;
+				}
+			}
 			var indexPath = Path.Combine(BaseDirectory, IndexFile);
 			index = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);
 			if (File.Exists(indexPath)) {
@@ -153,7 +159,7 @@ namespace Lime
 				return;
 			}
 			var oldIndex = index;
-			index = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);;
+			index = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);
 			var di = new DirectoryInfo(BaseDirectory);
 			foreach (var fi in di.GetFiles("*", SearchOption.AllDirectories)) {
 				var path = fi.FullName.Substring(di.FullName.Length).Replace('\\', '/');
