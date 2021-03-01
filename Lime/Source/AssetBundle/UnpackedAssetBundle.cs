@@ -22,7 +22,7 @@ namespace Lime
 		private bool indexValid;
 		private SortedDictionary<string, FileInfo> index;
 
-		private const string IndexFile = ".index";
+		internal const string IndexFile = ".index";
 
 		public UnpackedAssetBundle(string baseDirectory)
 		{

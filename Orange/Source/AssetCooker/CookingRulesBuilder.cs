@@ -429,13 +429,53 @@ namespace Orange
 	{
 		public const string CookingRulesFilename = "#CookingRules.txt";
 		public const string DirectoryNameToken = "${DirectoryName}";
+		private static readonly Dictionary<string, CacheRecord> cache =
+			new Dictionary<string, CacheRecord>();
+
+		private class CacheRecord
+		{
+			public bool Dirty;
+			public Dictionary<string, CookingRules> Map =
+				new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
+			private readonly IFileSystemWatcher watcher;
+			public CacheRecord(string path)
+			{
+				watcher = new Lime.FileSystemWatcher(path, includeSubdirectories: true);
+				watcher.Changed += p => OnChanged(p);
+				watcher.Created += p => OnChanged(p);
+				watcher.Deleted += p => OnChanged(p);
+				watcher.Renamed += (_, p) => OnChanged(p);
+				void OnChanged(string p)
+				{
+					if (!Path.GetFileName(p)?.Equals(UnpackedAssetBundle.IndexFile, StringComparison.Ordinal) ?? false) {
+						Dirty = true;
+					}
+				}
+			}
+		}
 
 		// pass target as null to build cooking rules disregarding targets
 		public static Dictionary<string, CookingRules> Build(AssetBundle bundle, Target target, string path = null)
 		{
+			CacheRecord cacheRecord = null;
+			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
+				var bundlePath = unpackedBundle.BaseDirectory;
+				if (!cache.TryGetValue(bundlePath, out cacheRecord)) {
+					cache.Add(bundlePath, cacheRecord = new CacheRecord(bundlePath));
+				} else {
+					if (!cacheRecord.Dirty) {
+						return cacheRecord.Map;
+					} else {
+						cacheRecord.Map.Clear();
+						cacheRecord.Dirty = false;
+					}
+				}
+			}
+			Console.WriteLine("Building Cooking Rules.");
+			var sw = System.Diagnostics.Stopwatch.StartNew();
 			var pathStack = new Stack<string>();
 			var rulesStack = new Stack<CookingRules>();
-			var map = new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
+			var map = cacheRecord?.Map ?? new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
 			pathStack.Push("");
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
@@ -483,6 +523,8 @@ namespace Orange
 					map[filePath] = rules;
 				}
 			}
+			sw.Stop();
+			System.Console.WriteLine($"Done building cooking rules ({sw.ElapsedMilliseconds}ms).");
 			return map;
 		}
 
