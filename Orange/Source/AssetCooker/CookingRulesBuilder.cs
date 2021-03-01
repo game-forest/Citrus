@@ -209,7 +209,7 @@ namespace Orange
 				TextureScaleFactor = 1.0f,
 				PVRFormat = platform == TargetPlatform.Android ? PVRFormat.ETC2 : PVRFormat.PVRTC4,
 				DDSFormat = DDSFormat.DXTi,
-				Bundles = new[] { CookingRulesBuilder.MainBundleName },
+				Bundles = new[] { "Data" },
 				Ignore = false,
 				Only = false,
 				ADPCMLimit = 100,
@@ -427,7 +427,6 @@ namespace Orange
 
 	public class CookingRulesBuilder
 	{
-		public const string MainBundleName = "Main";
 		public const string CookingRulesFilename = "#CookingRules.txt";
 		public const string DirectoryNameToken = "${DirectoryName}";
 
@@ -668,10 +667,7 @@ namespace Orange
 					rules.DDSFormat = ParseDDSFormat(words[1]);
 					break;
 				case "Bundles":
-					rules.Bundles = new string[words.Count - 1];
-					for (var i = 0; i < rules.Bundles.Length; i++) {
-						rules.Bundles[i] = ParseBundle(words[i + 1]);
-					}
+					rules.Bundles = words.Skip(1).ToArray();
 					break;
 				case "Ignore":
 					rules.Ignore = ParseBool(words[1]);
@@ -747,15 +743,6 @@ namespace Orange
 				return TextureWrapMode.MirroredRepeat;
 			default:
 				throw new Lime.Exception("Error parsing AtlasOptimization. Must be one of: Memory, DrawCalls");
-			}
-		}
-
-		private static string ParseBundle(string word)
-		{
-			if (word.ToLowerInvariant() == "<default>" || word.ToLowerInvariant() == "data") {
-				return MainBundleName;
-			} else {
-				return word;
 			}
 		}
 	}

@@ -91,7 +91,6 @@ namespace Orange
 					}
 				}
 				var extraBundles = bundles.ToList();
-				extraBundles.Remove(CookingRulesBuilder.MainBundleName);
 				extraBundles.Reverse();
 				PluginLoader.AfterBundlesCooked(extraBundles);
 				if (requiredCookCode) {
@@ -311,10 +310,9 @@ namespace Orange
 			}
 		}
 
-		List<string>[] GetAssetsGroupedByBundles(IEnumerable<string> files, List<string> bundles)
+		private List<string>[] GetAssetsGroupedByBundles(IEnumerable<string> files, List<string> bundles)
 		{
-			string[] emptyBundleNamesArray = {};
-			string[] mainBundleNameArray = { CookingRulesBuilder.MainBundleName };
+			string[] emptyBundleNamesArray = Array.Empty<string>();
 
 			var assets = Enumerable.Range(0, bundles.Count).Select(i => new List<string>()).ToArray();
 			foreach (var file in files) {
@@ -332,8 +330,7 @@ namespace Orange
 				if (CookingRulesMap.TryGetValue(path, out var rules)) {
 					return rules.Ignore ? emptyBundleNamesArray : rules.Bundles;
 				} else {
-					// There are no cooking rules for text files, consider them as part of the main bundle.
-					return mainBundleNameArray;
+					throw new InvalidOperationException();
 				}
 			}
 		}

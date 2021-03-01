@@ -93,7 +93,6 @@ namespace Orange
 					The.Workspace.ProjectDirectory,
 					The.Workspace.GeneratedScenesPath,
 					The.Workspace.ProjectName,
-					CookingRulesBuilder.MainBundleName,
 					sceneToBundleMap,
 					scenesToCook,
 					allScenes,

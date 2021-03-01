@@ -43,6 +43,8 @@ namespace Orange
 		public bool BenchmarkEnabled;
 		public bool BundlePickerVisible;
 
+		private string bundlesOutputDirectory;
+
 		public Workspace()
 		{
 			Targets = new List<Target>();
@@ -213,6 +215,8 @@ namespace Orange
 				throw new Lime.Exception("Assets directory \"{0}\" doesn't exist", AssetsDirectory);
 			}
 
+			bundlesOutputDirectory = Path.Combine(ProjectDirectory, ProjectJson.GetValue("BundlesOutputDirectory", "Bundles"));
+
 			UnresolvedAssembliesDirectory = Path.Combine(ProjectDirectory,
 				ProjectJson.GetValue("UnresolvedAssembliesDirectory", $"{ProjectName}.OrangePlugin/bin/$(CONFIGURATION)/"));
 
@@ -328,23 +332,15 @@ namespace Orange
 #endif
 		}
 
-		public void SaveCurrentProject()
-		{
-			ProjectJson.RewriteOrigin();
-		}
-
-		public string GetMainBundlePath(TargetPlatform platform)
-		{
-			return Path.ChangeExtension(AssetsDirectory, platform.ToString());
-		}
+		public void SaveCurrentProject() => ProjectJson.RewriteOrigin();
 
 		public string GetBundlePath(TargetPlatform platform, string bundleName)
 		{
-			if (bundleName == CookingRulesBuilder.MainBundleName) {
-				return GetMainBundlePath(platform);
-			} else {
-				return Path.Combine(Path.GetDirectoryName(AssetsDirectory), bundleName + GetPlatformSuffix(platform));
-			}
+			return Path.Combine(
+				Path.GetDirectoryName(AssetsDirectory),
+				bundlesOutputDirectory,
+				bundleName + GetPlatformSuffix(platform)
+			);
 		}
 
 		private static TargetPlatform GetPlaformByName(string name)

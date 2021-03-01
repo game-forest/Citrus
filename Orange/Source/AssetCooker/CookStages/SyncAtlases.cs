@@ -274,10 +274,9 @@ namespace Orange
 		private string GetAtlasPath(string atlasChain, int index)
 		{
 			// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
-			var postfix = assetCooker.BundleBeingCookedName != CookingRulesBuilder.MainBundleName
-				? (assetCooker.BundleBeingCookedName ?? "") : "";
+			var postfix = assetCooker.BundleBeingCookedName ?? "";
 			var path = AssetPath.Combine(
-				"Atlases" + postfix,
+				"Atlases_" + postfix,
 				atlasChain + '.' + index.ToString("000") + GetPlatformTextureExtension());
 			return path;
 		}

@@ -66,7 +66,6 @@ namespace Kumquat
 			string directory,
 			string generatedScenesPath,
 			string projectName,
-			string mainBundleName,
 			Dictionary<string, string> sceneToBundleMap,
 			List<string> scenesForProcessing,
 			List<string> allScenes,
@@ -77,7 +76,6 @@ namespace Kumquat
 			this.directory = directory;
 			this.generatedScenesPath = generatedScenesPath;
 			this.projectName = projectName;
-			this.mainBundleName = mainBundleName;
 			this.sceneToBundleMap = sceneToBundleMap;
 			this.scenesForProcessing = scenesForProcessing;
 			this.allScenes = allScenes;

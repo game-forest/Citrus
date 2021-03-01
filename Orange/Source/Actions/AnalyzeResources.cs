@@ -32,7 +32,6 @@ namespace Orange
 			var suspiciousTexturesReport = new List<string>();
 			var bundles = new HashSet<string>();
 			var cookingRulesMap = CookingRulesBuilder.Build(AssetBundle.Current, target);
-			AssetBundle.Current = new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, CookingRulesBuilder.MainBundleName));
 			foreach (var i in cookingRulesMap) {
 				if (i.Key.EndsWith(".png", StringComparison.OrdinalIgnoreCase)) {
 					if (i.Value.TextureAtlas == null && i.Value.PVRFormat != PVRFormat.PVRTC4 && i.Value.PVRFormat != PVRFormat.PVRTC4_Forced) {
@@ -40,10 +39,7 @@ namespace Orange
 							i.Key, i.Value.PVRFormat));
 					}
 					if (i.Value.PVRFormat != PVRFormat.PVRTC4 && i.Value.PVRFormat != PVRFormat.PVRTC4_Forced && i.Value.PVRFormat != PVRFormat.PVRTC2) {
-						int w;
-						int h;
-						bool hasAlpha;
-						TextureConverterUtils.GetPngFileInfo(AssetBundle.Current, i.Key, out w, out h, out hasAlpha);
+						TextureConverterUtils.GetPngFileInfo(AssetBundle.Current, i.Key, out int w, out int h, out bool hasAlpha);
 						if (w >= 1024 || h >= 1024) {
 							suspiciousTexturesReport.Add(string.Format("{3}: {0}, {1}, {2}, {4}, atlas: {5}",
 								w, h, hasAlpha, i.Key, i.Value.PVRFormat, i.Value.TextureAtlas));
@@ -51,9 +47,7 @@ namespace Orange
 					}
 				}
 				foreach (var bundle in i.Value.Bundles) {
-					if (bundle != CookingRulesBuilder.MainBundleName) {
-						bundles.Add(bundle);
-					}
+					bundles.Add(bundle);
 				}
 			}
 			var savedAssetBundle = AssetBundle.Current;
