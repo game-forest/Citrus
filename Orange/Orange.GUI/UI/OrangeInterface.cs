@@ -766,7 +766,7 @@ namespace Orange
 							}),
 							new ThemedButton("X") {
 								Clicked = () => {
-									The.Workspace.RemoveRecentProject(projectPathBound);
+									Workspace.RemoveRecentProject(projectPathBound);
 									root.Nodes.Remove(f);
 								},
 							}

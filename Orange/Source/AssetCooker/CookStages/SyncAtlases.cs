@@ -292,7 +292,7 @@ namespace Orange
 			}
 		}
 
-		private IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize, int maxSize)
+		private static IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize, int maxSize)
 		{
 			if (squareAtlas) {
 				for (var i = minSize; i <= maxSize; i *= 2) {
@@ -308,7 +308,7 @@ namespace Orange
 			}
 		}
 
-		private void CopyPixels(Bitmap source, Color4[] dstPixels, int dstX, int dstY, int dstWidth, int dstHeight)
+		private static void CopyPixels(Bitmap source, Color4[] dstPixels, int dstX, int dstY, int dstWidth, int dstHeight)
 		{
 			if (source.Width > dstWidth - dstX || source.Height > dstHeight - dstY) {
 				throw new Lime.Exception(

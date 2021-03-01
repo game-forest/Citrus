@@ -50,7 +50,7 @@ namespace Orange
 			Targets = new List<Target>();
 		}
 
-		public string GetPlatformSuffix(TargetPlatform platform)
+		public static string GetPlatformSuffix(TargetPlatform platform)
 		{
 			return "." + platform.ToString();
 		}
@@ -352,7 +352,7 @@ namespace Orange
 			}
 		}
 
-		public void RemoveRecentProject(string projectPath)
+		public static void RemoveRecentProject(string projectPath)
 		{
 			var config = WorkspaceConfig.Load();
 			config.RemoveRecentProject(projectPath);

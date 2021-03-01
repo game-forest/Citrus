@@ -45,7 +45,7 @@ namespace Orange
 				CsprojSynchronization.SynchronizeProject(limeProj);
 				using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 					var dirInfo = new System.IO.DirectoryInfo(The.Workspace.ProjectDirectory);
-					foreach (var file in fileEnumerator.Enumerate(The.Workspace.GetPlatformSuffix(target.Platform) + ".csproj")) {
+					foreach (var file in fileEnumerator.Enumerate(Workspace.GetPlatformSuffix(target.Platform) + ".csproj")) {
 						CsprojSynchronization.SynchronizeProject(file);
 					};
 					if (target.ProjectPath != null && target.ProjectPath.EndsWith(".csproj")) {
