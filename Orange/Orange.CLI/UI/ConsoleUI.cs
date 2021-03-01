@@ -84,11 +84,13 @@ namespace Orange
 
 		private static void WriteHelpAndExit()
 		{
-			Console.WriteLine($"Orange.CLI [citrus_project]" +
-			                  $" --target:[Win|Mac|ios|android|uc]" +
-			                  $" --unpack_bundles" +
-			                  $" --command:command" +
-			                  $" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
+			Console.WriteLine(
+				$"Orange.CLI [citrus_project]" +
+				$" --target:[Win|Mac|ios|android|uc]" +
+				$" --unpack_bundles" +
+				$" --command:command" +
+				$" --bundles:[<bundle>|<bundle1>,<bundle2>,..,<bundlen>]" +
+				$" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
 			);
 			var commands = The.MenuController.GetVisibleAndSortedItems();
 			if (commands.Count > 0) {
@@ -130,6 +132,14 @@ namespace Orange
 				return true;
 			}
 			return false;
+		}
+
+		public override List<string> GetSelectedBundles()
+		{
+			return Toolbox.GetCommandLineArg("--bundles")
+				?.Split(',')
+				.Select(s => s.Trim())
+				.ToList();
 		}
 
 		public override void ShowError(string message)

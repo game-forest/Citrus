@@ -9,10 +9,11 @@ namespace Orange
 		[ExportMetadata("Label", "Build")]
 		[ExportMetadata("Priority", 1)]
 		[ExportMetadata("UsesTargetBundles", true)]
+		[ExportMetadata("ApplicableToBundleSubset", true)]
 		public static string BuildGameAction()
 		{
 			var target = The.UI.GetActiveTarget();
-			var bundles = target.Bundles.Any() ? target.Bundles.ToList() : null;
+			var bundles = The.UI.GetSelectedBundles().Concat(target.Bundles).Distinct().ToList();
 			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 				return errorMessage;
 			}

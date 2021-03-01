@@ -190,7 +190,6 @@
     <Compile Include="Source\Actions\BuildGameAndRun.cs" />
     <Compile Include="Source\Actions\ConvertDictionaryToNewFormat.cs" />
     <Compile Include="Source\Actions\CookGameAssets.cs" />
-    <Compile Include="Source\Actions\CookMainBundle.cs" />
     <Compile Include="Source\Actions\DeleteUnpackedBundles.cs" />
     <Compile Include="Source\Actions\GenerateDeserializers.cs" />
     <Compile Include="Source\Actions\InvalidateFonts.cs" />
