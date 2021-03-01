@@ -261,6 +261,7 @@ namespace Orange
 					foreach (var stage in CookStages) {
 						CheckCookCancelation();
 						foreach (var (cookingUnit, hash) in stage.EnumerateCookingUnits()) {
+							CheckCookCancelation();
 							if (!cookedUnitsHashes.Contains(hash)) {
 								stage.Cook(cookingUnit, hash);
 							}
