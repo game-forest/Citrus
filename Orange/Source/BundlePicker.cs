@@ -31,7 +31,7 @@ namespace Orange
 			}
 			Enabled = false;
 
-			allBundles = new AssetCooker(The.UI.GetActiveTarget()).GetListOfAllBundles();
+			allBundles = Toolbox.GetListOfAllBundles(The.UI.GetActiveTarget());
 			foreach (var bundle in allBundles) {
 				bundleSelectionStates.Add(bundle, true);
 			}
@@ -44,7 +44,7 @@ namespace Orange
 		public List<string> Refresh()
 		{
 			var changed = new List<string>();
-			allBundles = new AssetCooker(The.UI.GetActiveTarget()).GetListOfAllBundles();
+			allBundles = Toolbox.GetListOfAllBundles(The.UI.GetActiveTarget());
 
 			// Remove no longer existing bundles
 			foreach (var bundle in bundleSelectionStates.Keys.ToArray()) {

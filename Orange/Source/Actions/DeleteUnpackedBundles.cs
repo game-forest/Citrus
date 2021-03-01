@@ -16,7 +16,7 @@ namespace Orange
 		private static void DeleteBundles(Target target, List<string> bundles = null)
 		{
 			if (bundles == null) {
-				bundles = new AssetCooker(target).GetListOfAllBundles();
+				bundles = Toolbox.GetListOfAllBundles(target);
 			}
 			The.UI.SetupProgressBar(bundles.Count);
 			foreach (var bundleName in bundles) {

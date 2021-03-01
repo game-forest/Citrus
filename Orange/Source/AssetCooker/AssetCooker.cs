@@ -31,7 +31,14 @@ namespace Orange
 			var assetCooker = new AssetCooker(target);
 			var skipCooking = The.Workspace.ProjectJson.GetValue<bool>("SkipAssetsCooking");
 			if (!skipCooking) {
-				return assetCooker.Cook(bundles ?? assetCooker.GetListOfAllBundles(), out errorMessage);
+				return assetCooker.Cook(
+					bundles ??
+					Toolbox.GetListOfAllBundles(
+						target,
+						assetCooker.InputBundle,
+						assetCooker.CookingRulesMap)
+					, out errorMessage
+				);
 			} else {
 				Console.WriteLine("-------------  Skip Assets Cooking -------------");
 				errorMessage = null;
@@ -47,19 +54,6 @@ namespace Orange
 		public void RemoveStage(ICookingStage stage)
 		{
 			CookStages.Remove(stage);
-		}
-
-		// TODO: Shouldn't be part of asset cooker
-		public List<string> GetListOfAllBundles()
-		{
-			var cookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
-			var bundles = new HashSet<string>();
-			foreach (var dictionaryItem in cookingRulesMap) {
-				foreach (var bundle in dictionaryItem.Value.Bundles) {
-					bundles.Add(bundle);
-				}
-			}
-			return bundles.ToList();
 		}
 
 		private bool Cook(List<string> bundles, out string errorMessage)

@@ -179,8 +179,7 @@ namespace Orange
 				var savedAnimationDataLoaded = Animation.AnimationData.Loaded;
 
 				var target = The.UI.GetActiveTarget();
-				var ac = new AssetCooker(target);
-				var bundles = ac.GetListOfAllBundles();
+				var bundles = Toolbox.GetListOfAllBundles(target);
 
 				statisticsForPath.Clear();
 				foreach (var ext in extensions) {

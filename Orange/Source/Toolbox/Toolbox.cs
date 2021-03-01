@@ -236,5 +236,21 @@ namespace Orange
 					"Orange");
 #endif
 		}
+
+		public static List<string> GetListOfAllBundles(
+			Target target,
+			AssetBundle InputBundle = null,
+			Dictionary<string, CookingRules> cookungRules = null
+		) {
+			InputBundle ??= AssetBundle.Current;
+			cookungRules ??= CookingRulesBuilder.Build(InputBundle, target);
+			var bundles = new HashSet<string>();
+			foreach (var (_, rules) in cookungRules) {
+				foreach (var bundle in rules.Bundles) {
+					bundles.Add(bundle);
+				}
+			}
+			return bundles.ToList();
+		}
 	}
 }
