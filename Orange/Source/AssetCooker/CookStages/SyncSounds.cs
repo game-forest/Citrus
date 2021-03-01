@@ -19,7 +19,7 @@ namespace Orange
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, ".ogg")
 				.Select(i =>
-					(i, SHA256.Compute(assetCooker.InputBundle.GetFileHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+					(i, SHA256.Compute(assetCooker.InputBundle.GetFileHash(i), assetCooker.CookingRulesMap[i].Hash)));
 		}
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
@@ -27,7 +27,7 @@ namespace Orange
 			using (var stream = assetCooker.InputBundle.OpenFile(cookingUnit)) {
 				// All sounds below 100kb size (can be changed with cooking rules) are converted
 				// from OGG to Wav/Adpcm
-				var rules = AssetCooker.CookingRulesMap[cookingUnit];
+				var rules = assetCooker.CookingRulesMap[cookingUnit];
 				if (stream.Length > rules.ADPCMLimit * 1024) {
 					assetCooker.OutputBundle.ImportFile(
 						Path.ChangeExtension(cookingUnit, ".sound"), stream,

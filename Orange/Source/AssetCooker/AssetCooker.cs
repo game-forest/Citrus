@@ -14,7 +14,7 @@ namespace Orange
 		public AssetBundle InputBundle => AssetBundle.Current;
 		public AssetBundle OutputBundle { get; private set; }
 
-		public static Dictionary<string, CookingRules> CookingRulesMap;
+		private Dictionary<string, CookingRules> cookingRulesMap;
 
 		public string BundleBeingCookedName { get; set; }
 
@@ -25,6 +25,17 @@ namespace Orange
 
 		public readonly Target Target;
 		public TargetPlatform Platform => Target.Platform;
+
+		public Dictionary<string, CookingRules> CookingRulesMap
+		{
+			get
+			{
+				if (cookingRulesMap == null) {
+					cookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
+				}
+				return cookingRulesMap;
+			}
+		}
 
 		public static bool CookForTarget(Target target, List<string> bundles, out string errorMessage)
 		{
@@ -59,7 +70,6 @@ namespace Orange
 		private bool Cook(List<string> bundles, out string errorMessage)
 		{
 			AssetCache.Instance.Initialize();
-			CookingRulesMap = CookingRulesBuilder.Build(InputBundle, Target);
 			LogText = "";
 			var allTimer = StartBenchmark(
 				$"Asset cooking. Asset cache mode: {AssetCache.Instance.Mode}. Active platform: {Target.Platform}" +

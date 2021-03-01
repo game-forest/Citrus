@@ -20,11 +20,11 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			foreach (var fbx in assetCooker.InputBundle.EnumerateFiles(null, ".fbx")) {
-				var hash = SHA256.Compute(assetCooker.InputBundle.GetFileHash(fbx), AssetCooker.CookingRulesMap[fbx].Hash);
+				var hash = SHA256.Compute(assetCooker.InputBundle.GetFileHash(fbx), assetCooker.CookingRulesMap[fbx].Hash);
 				var attachment = System.IO.Path.ChangeExtension(fbx, Model3DAttachment.FileExtension);
 				if (assetCooker.InputBundle.FileExists(attachment)) {
 					hash = SHA256.Compute(hash, SHA256.Compute(
-						assetCooker.InputBundle.GetFileHash(attachment), AssetCooker.CookingRulesMap[attachment].Hash));
+						assetCooker.InputBundle.GetFileHash(attachment), assetCooker.CookingRulesMap[attachment].Hash));
 				}
 				yield return (fbx, hash);
 			}
@@ -32,13 +32,13 @@ namespace Orange
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
 		{
-			var cookingRules = AssetCooker.CookingRulesMap[cookingUnit];
+			var cookingRules = assetCooker.CookingRulesMap[cookingUnit];
 			var compression = cookingRules.ModelCompression;
 			Model3D model;
 			var options = new FbxImportOptions {
 				Path = cookingUnit,
 				Target = assetCooker.Target,
-				CookingRulesMap = AssetCooker.CookingRulesMap
+				CookingRulesMap = assetCooker.CookingRulesMap
 			};
 			using (var fbxImporter = new FbxModelImporter(options)) {
 				model = fbxImporter.LoadModel();

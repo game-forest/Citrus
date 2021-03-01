@@ -19,14 +19,14 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, originalTextureExtension)
-				.Where(i => AssetCooker.CookingRulesMap[i].TextureAtlas == null)
+				.Where(i => assetCooker.CookingRulesMap[i].TextureAtlas == null)
 				.Select(i =>
-					(i, SHA256.Compute(assetCooker.InputBundle.GetFileHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+					(i, SHA256.Compute(assetCooker.InputBundle.GetFileHash(i), assetCooker.CookingRulesMap[i].Hash)));
 		}
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
 		{
-			var rules = AssetCooker.CookingRulesMap[cookingUnit];
+			var rules = assetCooker.CookingRulesMap[cookingUnit];
 			using (var stream = assetCooker.InputBundle.OpenFile(cookingUnit)) {
 				var bitmap = new Bitmap(stream);
 				if (TextureTools.ShouldDownscale(assetCooker.Platform, bitmap, rules)) {

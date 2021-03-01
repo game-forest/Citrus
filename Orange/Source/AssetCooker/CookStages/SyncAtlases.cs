@@ -21,7 +21,7 @@ namespace Orange
 		{
 			var atlasToHash = new Dictionary<string, SHA256>();
 			foreach (var texturePath in assetCooker.InputBundle.EnumerateFiles(null, ".png")) {
-				var textureCookingRules = AssetCooker.CookingRulesMap[texturePath];
+				var textureCookingRules = assetCooker.CookingRulesMap[texturePath];
 				var atlas = textureCookingRules.TextureAtlas;
 				if (atlas == null) {
 					continue;
@@ -42,7 +42,7 @@ namespace Orange
 			var pluginItems = new Dictionary<string, List<TextureTools.AtlasItem>>();
 			var items = new Dictionary<(AtlasOptimization AtlasOptimization, int MaxAtlasSize), List<TextureTools.AtlasItem>>();
 			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".png")) {
-				var cookingRules = AssetCooker.CookingRulesMap[file];
+				var cookingRules = assetCooker.CookingRulesMap[file];
 				if (cookingRules.TextureAtlas == cookingUnit) {
 					var item = new TextureTools.AtlasItem {
 						Path = Path.ChangeExtension(file, atlasPartExtension),

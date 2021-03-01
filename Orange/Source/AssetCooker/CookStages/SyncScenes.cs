@@ -17,7 +17,7 @@ namespace Orange
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, ".tan")
 				.Select(i =>
-					(i, SHA256.Compute(assetCooker.InputBundle.GetFileHash(i), AssetCooker.CookingRulesMap[i].Hash)));
+					(i, SHA256.Compute(assetCooker.InputBundle.GetFileHash(i), assetCooker.CookingRulesMap[i].Hash)));
 		}
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
