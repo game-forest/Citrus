@@ -1,6 +1,6 @@
-﻿namespace EmptyProject.Dialogs
+namespace EmptyProject.Dialogs
 {
-	public class SplashScreen : Dialog<Scenes.Splash>
+	public class SplashScreen : Dialog<Scenes.Data.Splash>
 	{
 		public SplashScreen()
 		{

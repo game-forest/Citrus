@@ -2,7 +2,7 @@ using Lime;
 
 namespace EmptyProject.Dialogs
 {
-	public class GameScreen : Dialog<Scenes.GameScreen>
+	public class GameScreen : Dialog<Scenes.Data.GameScreen>
 	{
 		public GameScreen()
 		{

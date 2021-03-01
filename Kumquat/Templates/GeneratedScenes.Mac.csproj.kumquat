@@ -6,8 +6,8 @@
     <ProjectGuid>{1EE9C6F3-E8D7-4FF8-9420-2B4C9CF9B66D}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>EmptyProject.Scenes</RootNamespace>
-    <AssemblyName>EmptyProject.GeneratedScenes</AssemblyName>
+    <RootNamespace><%PROJECT_NAME%>.Scenes</RootNamespace>
+    <AssemblyName><%PROJECT_NAME%>.GeneratedScenes</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>

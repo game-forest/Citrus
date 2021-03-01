@@ -27,6 +27,7 @@
     <EmbeddedResource Include="Templates\GeneratedScenes.Android.csproj.kumquat" />
     <EmbeddedResource Include="Templates\GeneratedScenes.iOS.csproj.kumquat" />
     <EmbeddedResource Include="Templates\GeneratedScenes.Win.csproj.kumquat" />
+    <EmbeddedResource Include="Templates\GeneratedScenes.Mac.csproj.kumquat" />
   </ItemGroup>
 
 </Project>

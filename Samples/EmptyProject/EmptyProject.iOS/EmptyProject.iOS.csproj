@@ -138,7 +138,7 @@
     <BundleResource Include="Resources\Default%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Data.iOS">
+    <Content Include="..\Bundles\Data.iOS">
       <Link>Data.iOS</Link>
     </Content>
   </ItemGroup>
