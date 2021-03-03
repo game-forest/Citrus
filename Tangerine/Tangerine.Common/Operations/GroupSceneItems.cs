@@ -2,7 +2,6 @@ using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 using Tangerine.Core;
 using Tangerine.UI;
@@ -121,19 +120,19 @@ namespace Tangerine.Common.Operations
 
 		private static void SetKeyframes(Dictionary<Node, BoneAnimationData> keyframeDictionary)
 		{
-			foreach (var pair in keyframeDictionary) {
-				if (pair.Value.NoParentKeyframes) {
-					TransformPropertyAndKeyframes(pair.Key, nameof(Bone.Position), pair.Value.PositionTransformer);
+			foreach (var (node, animationData) in keyframeDictionary) {
+				if (animationData.NoParentKeyframes) {
+					TransformPropertyAndKeyframes(node, nameof(Bone.Position), animationData.PositionTransformer);
 				} else {
-					SetProperty.Perform(pair.Key, nameof(Bone.Position), pair.Value.CurrentPosition);
-					SetProperty.Perform(pair.Key, nameof(Bone.Rotation), pair.Value.CurrentRotation);
-					foreach (var keyframe in pair.Value.PositionKeyframes) {
-						SetKeyframe.Perform(pair.Key, nameof(Bone.Position), Document.Current.Animation, keyframe.Value);
+					SetProperty.Perform(node, nameof(Bone.Position), animationData.CurrentPosition);
+					SetProperty.Perform(node, nameof(Bone.Rotation), animationData.CurrentRotation);
+					foreach (var keyframe in animationData.PositionKeyframes) {
+						SetKeyframe.Perform(node, nameof(Bone.Position), Document.Current.Animation, keyframe.Value);
 					}
-					foreach (var keyframe in pair.Value.RotationKeyframes) {
-						SetKeyframe.Perform(pair.Key, nameof(Bone.Rotation), Document.Current.Animation, keyframe.Value);
+					foreach (var keyframe in animationData.RotationKeyframes) {
+						SetKeyframe.Perform(node, nameof(Bone.Rotation), Document.Current.Animation, keyframe.Value);
 					}
-					SetAnimableProperty.Perform(pair.Key, nameof(Bone.BaseIndex), 0);
+					SetAnimableProperty.Perform(node, nameof(Bone.BaseIndex), 0);
 				}
 			}
 		}
@@ -147,9 +146,23 @@ namespace Tangerine.Common.Operations
 					foreach (var keyframe in animator.Keys.ToList()) {
 						var newKeyframe = keyframe.Clone();
 						newKeyframe.Value = transformer((T)newKeyframe.Value);
-						SetKeyframe.Perform(node, animator.TargetPropertyPath, Document.Current.Animation, newKeyframe);
+						SetKeyframe.Perform(
+							node,
+							animator.TargetPropertyPath,
+							FindAnimationById(node, animator.AnimationId),
+							newKeyframe);
 					}
 				}
+			}
+		}
+
+		private static Animation FindAnimationById(Node node, string animationId)
+		{
+			while (true) {
+				if (node.Animations.TryFind(animationId, out var a)) {
+					return a;
+				}
+				node = node.Parent;
 			}
 		}
 

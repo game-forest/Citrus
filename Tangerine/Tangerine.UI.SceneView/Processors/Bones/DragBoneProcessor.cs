@@ -21,7 +21,7 @@ namespace Tangerine.UI.SceneView
 				var bone = Document.Current.SelectedNodes().Editable().OfType<Bone>().FirstOrDefault();
 				if (bone != null) {
 					var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
-					var t = Document.Current.Container.AsWidget.LocalToWorldTransform;
+					var t = bone.Parent.AsWidget.LocalToWorldTransform;
 					if (sv.HitTestControlPoint(t * entry.Joint, 20)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
@@ -42,7 +42,7 @@ namespace Tangerine.UI.SceneView
 		{
 			using (Document.Current.History.BeginTransaction()) {
 				var iniMousePos = sv.MousePosition;
-				var transform = Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+				var transform = bone.Parent.AsWidget.LocalToWorldTransform.CalcInversed();
 				var transformInversed = transform.CalcInversed();
 				int index = 0;
 				var dragDelta = Vector2.Zero;
@@ -51,9 +51,9 @@ namespace Tangerine.UI.SceneView
 
 					var snapEnabled = sv.Input.IsKeyPressed(Key.Alt);
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var items = Document.Current.Container.AsWidget.BoneArray.items;
+					var items = bone.Parent.AsWidget.BoneArray.items;
 					index = 0;
-					SceneView.Instance.Components.GetOrAdd<CreateBoneHelper>().HitTip = default(Vector2);
+					SceneView.Instance.Components.GetOrAdd<CreateBoneHelper>().HitTip = null;
 					if (items != null && snapEnabled) {
 						for (var i = 0; i < items.Length; i++) {
 							if (sv.HitTestControlPoint(transformInversed * items[i].Tip)) {
@@ -63,7 +63,7 @@ namespace Tangerine.UI.SceneView
 						}
 						if (bone.Index != index) {
 							SceneView.Instance.Components.GetOrAdd<CreateBoneHelper>().HitTip =
-							index != 0 ? items[index].Tip : default(Vector2);
+							index != 0 ? (Vector2?)(transform * items[index].Tip) : null;
 						}
 					}
 					var b = bone.Parent.AsWidget.BoneArray[bone.BaseIndex];
@@ -89,9 +89,9 @@ namespace Tangerine.UI.SceneView
 					Row baseItem;
 					if (index != 0) {
 						baseItem = Document.Current.GetSceneItemForObject(
-							BoneUtils.GetBone(Document.Current.Container.Nodes, index));
+							BoneUtils.GetBone(bone.Parent.Nodes, index));
 					} else {
-						baseItem = Document.Current.GetSceneItemForObject(Document.Current.Container);
+						baseItem = Document.Current.GetSceneItemForObject(bone.Parent);
 					}
 					LinkSceneItem.Perform(baseItem, 0, boneSceneItem);
 				}
@@ -106,7 +106,7 @@ namespace Tangerine.UI.SceneView
 		{
 			using (Document.Current.History.BeginTransaction()) {
 				var iniMousePos = sv.MousePosition;
-				var transform = Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+				var transform = bone.Parent.AsWidget.LocalToWorldTransform.CalcInversed();
 
 				var accumulativeRotationsHelpersByBones = new Dictionary<Bone, AccumulativeRotationHelper>();
 

@@ -26,12 +26,14 @@ namespace Tangerine.UI.SceneView
 			}
 			canvas.PrepareRendererState();
 			if (VisualHintsRegistry.Instance.FindHint(typeof(Bone)).Enabled) {
-				var notSelected = Document.Current.Container.Nodes.Visible().OfType<Bone>().Except(Document.Current.SelectedNodes().OfType<Bone>());
+				var notSelected =
+					Document.Current.CurrentNodes().Where(IsVisibleNode).OfType<Bone>().
+					Except(Document.Current.SelectedNodes().OfType<Bone>());
 				foreach (var bone in notSelected) {
 					DrawBones(bone, canvas, selected: false);
 				}
 			}
-			foreach (var bone in Document.Current.SelectedNodes().Visible().OfType<Bone>()) {
+			foreach (var bone in Document.Current.SelectedNodes().Where(IsVisibleNode).OfType<Bone>()) {
 				DrawBones(bone, canvas, selected: true);
 			}
 		}
@@ -99,7 +101,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		public static void DrawCapsule(Vector2 a, Vector2 b, Vector2 n, Matrix32 t, int numSegments, Color4 color, float thickness = 1)
+		private static void DrawCapsule(Vector2 a, Vector2 b, Vector2 n, Matrix32 t, int numSegments, Color4 color, float thickness = 1)
 		{
 			Renderer.DrawLine((a + n) * t, (b + n) * t, color, thickness);
 			Renderer.DrawLine((a - n) * t, (b - n) * t, color, thickness);
@@ -111,18 +113,7 @@ namespace Tangerine.UI.SceneView
 				Renderer.DrawLine((-v1 + b) * t, (-v2 + b) * t, color, thickness);
 			}
 		}
-	}
 
-
-	public static class NodeExtensions
-	{
-		public static IEnumerable<Node> Visible(this IEnumerable<Node> nodes)
-		{
-			foreach (var node in nodes) {
-				if (node.EditorState().Visibility == NodeVisibility.Shown || node.EditorState().Visibility == NodeVisibility.Default) {
-					yield return node;
-				}
-			}
-		}
+		private static bool IsVisibleNode(Node node) => node.EditorState().Visibility != NodeVisibility.Hidden;
 	}
 }

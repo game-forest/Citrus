@@ -29,11 +29,18 @@ namespace Tangerine.UI.SceneView
 			command.Checked = true;
 			while (true) {
 				Bone bone = null;
-				var transform = Document.Current.Container.AsWidget.LocalToWorldTransform;
+				if (!SceneTreeUtils.GetSceneItemLinkLocation(
+					out var containerSceneItem, out _, aboveFocused: true,
+					raiseThroughHierarchyPredicate: i => !i.TryGetNode(out var n))
+				) {
+					throw new InvalidOperationException();
+				}
+				var container = (Widget)containerSceneItem.GetNode();
+				var transform = container.LocalToWorldTransform;
 				if (sv.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
-				var items = Document.Current.Container.AsWidget.BoneArray.items;
+				var items = container.BoneArray.items;
 				var baseBoneIndex = 0;
 				if (items != null) {
 					for (var i = 1; i < items.Length; i++) {
@@ -43,13 +50,12 @@ namespace Tangerine.UI.SceneView
 						}
 					}
 					SceneView.Instance.Components.GetOrAdd<CreateBoneHelper>().HitTip =
-						baseBoneIndex != 0 ? items[baseBoneIndex].Tip : default(Vector2);
+						baseBoneIndex != 0 ? (Vector2?)(transform * items[baseBoneIndex].Tip) : null;
 				}
 
 				Window.Current.Invalidate();
 				CreateNodeRequestComponent.Consume<Node>(sv.Components);
 				if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
-					var container = (Widget)Document.Current.Container;
 					var worldToLocal = container.LocalToWorldTransform.CalcInversed();
 					var initialPosition = sv.MousePosition * worldToLocal;
 					var pos = Vector2.Zero;
@@ -68,9 +74,12 @@ namespace Tangerine.UI.SceneView
 								var baseBoneItem = Document.Current.GetSceneItemForObject(baseBone);
 								bone = (Bone)CreateNode.Perform(baseBoneItem, 0, typeof(Bone));
 							} else {
-								SceneTreeUtils.GetSceneItemLinkLocation(
-									out var parent, out var index,
-									raiseThroughHierarchyPredicate: i => i.GetNode() is Bone);
+								if (!SceneTreeUtils.GetSceneItemLinkLocation(
+									out var parent, out var index, true,
+									raiseThroughHierarchyPredicate: i => i.GetNode() is Bone)
+								) {
+									throw new InvalidOperationException();
+								}
 								bone = (Bone)CreateNode.Perform(parent, index, typeof(Bone));
 							}
 						} catch (InvalidOperationException e) {
@@ -121,6 +130,6 @@ namespace Tangerine.UI.SceneView
 
 	internal class CreateBoneHelper : NodeComponent
 	{
-		public Vector2 HitTip { get; set; }
+		public Vector2? HitTip { get; set; }
 	}
 }

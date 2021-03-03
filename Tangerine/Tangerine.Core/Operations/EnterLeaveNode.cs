@@ -139,8 +139,20 @@ namespace Tangerine.Core.Operations
 			} else {
 				var container = doc.Container;
 				SetProperty.Perform(container, nameof(Node.TangerineFlags), container.TangerineFlags & ~TangerineFlags.DisplayContent, isChangingDocument: false);
-				EnterNode.Perform(container.Parent, false);
-				SelectNode.Perform(container, true);
+				var node = container;
+				container = container.Parent;
+				if (!doc.Animation.IsLegacy) {
+					while (true) {
+						var sceneItem = Document.Current.GetSceneItemForObject(container);
+						if (sceneItem.TryGetNode(out var n) &&
+						    (!sceneItem.Expanded || n.Animations.Contains(doc.Animation))) {
+							break;
+						}
+						container = container.Parent;
+					}
+				}
+				EnterNode.Perform(container, false);
+				SelectNode.Perform(node, true);
 			}
 		}
 

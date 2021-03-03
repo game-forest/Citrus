@@ -170,7 +170,9 @@ namespace Tangerine.Core
 								sceneTree.Expandable = true;
 								if (expanded) {
 									cachedVisibleSceneItems.Add(i);
-									TraverseSceneTree(i, node is Bone || i.GetFolder() != null);
+									TraverseSceneTree(i,
+										(node is Bone || i.GetFolder() != null || !Animation.IsLegacy)
+										&& (!i.TryGetNode(out var n) || string.IsNullOrEmpty(n.ContentsPath)));
 								}
 							}
 						} else if (i.TryGetAnimation(out _)) {
@@ -765,6 +767,15 @@ namespace Tangerine.Core
 				if (pr != null && pr.Node != prevNode) {
 					yield return pr.Node;
 					prevNode = pr.Node;
+				}
+			}
+		}
+
+		public IEnumerable<Node> CurrentNodes()
+		{
+			foreach (var item in Rows) {
+				if (item.TryGetNode(out var n)) {
+					yield return n;
 				}
 			}
 		}

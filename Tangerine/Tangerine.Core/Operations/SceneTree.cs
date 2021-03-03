@@ -566,10 +566,7 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static void GetSceneItemLinkLocation(
-			out Row parent, out int index,
-			bool aboveFocused = true,
-			Func<Row, bool> raiseThroughHierarchyPredicate = null)
+		public static void GetSceneItemLinkLocation(out Row parent, out int index, bool aboveFocused = true)
 		{
 			var focusedItem = Document.Current.RecentlySelectedSceneItem();
 			if (focusedItem == null) {
@@ -582,13 +579,26 @@ namespace Tangerine.Core.Operations
 			if (!aboveFocused) {
 				index++;
 			}
-			while (raiseThroughHierarchyPredicate?.Invoke(parent) ?? false) {
+		}
+
+		public static bool GetSceneItemLinkLocation(
+			out Row parent,
+			out int index,
+			bool aboveFocused,
+			Func<Row, bool> raiseThroughHierarchyPredicate)
+		{
+			GetSceneItemLinkLocation(out parent, out index, aboveFocused);
+			while (raiseThroughHierarchyPredicate.Invoke(parent)) {
+				if (parent.Parent == null) {
+					return false;
+				}
 				index = parent.Parent.Rows.IndexOf(parent);
 				if (!aboveFocused) {
 					index++;
 				}
 				parent = parent.Parent;
 			}
+			return true;
 		}
 
 		public static Row GetOwnerNodeSceneItem(Row item)

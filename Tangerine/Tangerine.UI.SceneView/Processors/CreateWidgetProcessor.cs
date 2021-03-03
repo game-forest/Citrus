@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 using Yuzu;
 
 namespace Tangerine.UI.SceneView
@@ -36,7 +37,14 @@ namespace Tangerine.UI.SceneView
 				if (sv.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
-				var container = Document.Current.Container as Widget;
+				if (
+					!SceneTreeUtils.GetSceneItemLinkLocation(
+						out var containerSceneItem, out _, aboveFocused: true,
+						raiseThroughHierarchyPredicate: i => !i.TryGetNode(out var n))
+				) {
+					throw new InvalidOperationException();
+				}
+				var container = (Widget)containerSceneItem.GetNode();
 				CreateNodeRequestComponent.Consume<Node>(sv.Components);
 				if (sv.Input.WasMousePressed() && container != null) {
 					sv.Input.ConsumeKey(Key.Mouse0);

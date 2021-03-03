@@ -21,20 +21,17 @@ namespace Tangerine.UI.SceneView
 
 		void Render(Widget canvas)
 		{
-			var ctr = Document.Current.Container as Widget;
-			if (ctr != null) {
-				var t = ctr.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(canvas);
-				if (!Document.Current.PreviewScene) {
-					var helper = SceneView.Instance.Components.Get<CreateBoneHelper>();
-					if (helper != null && helper.HitTip != default(Vector2)) {
-						var hull = new Rectangle(helper.HitTip * t, helper.HitTip * t)
-							.ExpandedBy(new Thickness(RectSize))
-							.ToQuadrangle();
-						for (int i = 0; i < 4; i++) {
-							var a = hull[i];
-							var b = hull[(i + 1) % 4];
-							Renderer.DrawLine(a, b, Color4.Green);
-						}
+			if (!Document.Current.PreviewScene) {
+				var helper = SceneView.Instance.Components.Get<CreateBoneHelper>();
+				if (helper != null && helper.HitTip != null) {
+					var t = sv.CalcTransitionFromSceneSpace(canvas);
+					var hull = new Rectangle(helper.HitTip.Value * t, helper.HitTip.Value * t)
+						.ExpandedBy(new Thickness(RectSize))
+						.ToQuadrangle();
+					for (int i = 0; i < 4; i++) {
+						var a = hull[i];
+						var b = hull[(i + 1) % 4];
+						Renderer.DrawLine(a, b, Color4.Green);
 					}
 				}
 			}
