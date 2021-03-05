@@ -25,18 +25,33 @@ namespace Lime
 		private static readonly ThreadLocal<System.Security.Cryptography.SHA256> sha256
 			= new ThreadLocal<System.Security.Cryptography.SHA256>(System.Security.Cryptography.SHA256.Create);
 
+		private static readonly ThreadLocal<UTF8Encoding> utf8 = new ThreadLocal<UTF8Encoding>(() => new UTF8Encoding());
+
 		public static unsafe SHA256 Compute(string source)
 		{
-			var result = new SHA256();
-			if (!sha256.Value.TryComputeHash(
-					MemoryMarshal.Cast<char, byte>(source.AsSpan()),
-					new Span<byte>((byte*)&result, sizeof(SHA256)),
-					out var written) ||
-				written != sizeof(SHA256)
-			) {
-				throw new InvalidOperationException();
+			const int MaxStackSize = 256;
+			var bufferSize = utf8.Value.GetByteCount(source);
+			byte[] rentedFromPool = null;
+			var buffer =
+				bufferSize > MaxStackSize
+					? new Span<byte>(rentedFromPool = ArrayPool<byte>.Shared.Rent(bufferSize), 0, bufferSize)
+					: stackalloc byte[bufferSize];
+			try {
+				utf8.Value.GetBytes(source.AsSpan(), buffer);
+				var result = new SHA256();
+				if (
+					!sha256.Value.TryComputeHash(
+						buffer, new Span<byte>((byte*) &result, sizeof(SHA256)), out var written) ||
+				    written != sizeof(SHA256)
+				) {
+					throw new InvalidOperationException();
+				}
+				return result;
+			} finally {
+				if (rentedFromPool != null) {
+					ArrayPool<byte>.Shared.Return(rentedFromPool);
+				}
 			}
-			return result;
 		}
 
 		public static unsafe SHA256 Compute<T>(T[] source, int start, int length) where T: struct
