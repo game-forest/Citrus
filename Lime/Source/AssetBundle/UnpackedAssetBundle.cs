@@ -11,7 +11,7 @@ namespace Lime
 		public struct FileInfo
 		{
 			[YuzuMember]
-			public SHA256 Hash;
+			public SHA256 ContentsHash;
 
 			[YuzuMember]
 			public DateTime DateModified;
@@ -90,20 +90,17 @@ namespace Lime
 
 		public override SHA256 GetFileCookingUnitHash(string path) => throw new NotSupportedException();
 
-		public override SHA256 GetFileHash(string path)
+		public override SHA256 GetFileContentsHash(string path)
 		{
 			ValidateIndex();
-			if (!index.TryGetValue(path, out var i) || i.Hash == default) {
+			if (!index.TryGetValue(path, out var i) || i.ContentsHash == default) {
 				i = new FileInfo {
 					DateModified = File.GetLastWriteTimeUtc(ToSystemPath(path)),
-					Hash = SHA256.Compute(
-						SHA256.Compute(AssetPath.CorrectSlashes(path)),
-						SHA256.Compute(File.ReadAllBytes(ToSystemPath(path)))
-					)
+					ContentsHash = SHA256.Compute(File.ReadAllBytes(ToSystemPath(path)))
 				};
 				index[path] = i;
 			}
-			return i.Hash;
+			return i.ContentsHash;
 		}
 
 		public override void DeleteFile(string path)
@@ -175,10 +172,10 @@ namespace Lime
 				if (oldIndex.TryGetValue(path, out var item)) {
 					index[path] = new FileInfo {
 						DateModified = fi.LastWriteTimeUtc,
-						Hash = fi.LastWriteTimeUtc == item.DateModified ? item.Hash : default
+						ContentsHash = fi.LastWriteTimeUtc == item.DateModified ? item.ContentsHash : default
 					};
 				} else {
-					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, Hash = default };
+					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, ContentsHash = default };
 				}
 			}
 			indexValid = true;

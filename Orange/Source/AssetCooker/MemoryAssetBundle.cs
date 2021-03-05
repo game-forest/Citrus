@@ -36,7 +36,7 @@ namespace Orange
 					Size = size,
 					UnpackedSize = unpackedSize,
 					Attributes = source.GetFileAttributes(path),
-					Hash = source.GetFileHash(path),
+					Hash = source.GetFileContentsHash(path),
 					CookingUnitHash = source.GetFileCookingUnitHash(path),
 					Data = buffer
 				};
@@ -140,6 +140,6 @@ namespace Orange
 
 		public override SHA256 GetFileCookingUnitHash(string path) => assets[path].CookingUnitHash;
 
-		public override SHA256 GetFileHash(string path) => assets[path].Hash;
+		public override SHA256 GetFileContentsHash(string path) => assets[path].Hash;
 	}
 }

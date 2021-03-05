@@ -688,7 +688,7 @@ namespace Orange
 
 			public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open) => OpenFile(path, fileMode);
 
-			public override SHA256 GetFileHash(string path) => throw new NotImplementedException();
+			public override SHA256 GetFileContentsHash(string path) => throw new NotImplementedException();
 
 			public override SHA256 GetFileCookingUnitHash(string path) => throw new NotImplementedException();
 		}

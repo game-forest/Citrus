@@ -23,7 +23,7 @@ namespace Lime
 		public int AllocatedSize;
 		public int UnpackedSize;
 		public AssetAttributes Attributes;
-		public SHA256 Hash;
+		public SHA256 ContentsHash;
 		public SHA256 CookingUnitHash;
 	}
 
@@ -395,7 +395,7 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		public override SHA256 GetFileHash(string path) => GetDescriptor(path).Hash;
+		public override SHA256 GetFileContentsHash(string path) => GetDescriptor(path).ContentsHash;
 
 		public override SHA256 GetFileCookingUnitHash(string path) => GetDescriptor(path).CookingUnitHash;
 
@@ -424,7 +424,7 @@ namespace Lime
 				if (stream.Read(buffer, 0, length) != length) {
 					throw new IOException();
 				}
-				var hash = SHA256.Compute(SHA256.Compute(AssetPath.CorrectSlashes(path)), SHA256.Compute(buffer, 0, length));
+				var hash = SHA256.Compute(buffer, 0, length);
 				stream = new MemoryStream(buffer, 0, length);
 				if ((attributes & AssetAttributes.Zipped) != 0) {
 					stream = CompressAssetStream(stream, attributes);
@@ -443,7 +443,7 @@ namespace Lime
 			if (reuseExistingDescriptor) {
 				d.Size = (int)stream.Length;
 				d.Attributes = attributes;
-				d.Hash = hash;
+				d.ContentsHash = hash;
 				d.CookingUnitHash = cookingUnitHash;
 				d.UnpackedSize = unpackedSize;
 				index[AssetPath.CorrectSlashes(path)] = d;
@@ -459,7 +459,7 @@ namespace Lime
 				d.AllocatedSize = d.Size;
 				d.UnpackedSize = unpackedSize;
 				d.Attributes = attributes;
-				d.Hash = hash;
+				d.ContentsHash = hash;
 				d.CookingUnitHash = cookingUnitHash;
 				index[AssetPath.CorrectSlashes(path)] = d;
 				indexOffset += d.AllocatedSize;
@@ -615,7 +615,7 @@ namespace Lime
 					ImportFileRaw(
 						file, stream,
 						patchBundle.GetFileUnpackedSize(file),
-						patchBundle.GetFileHash(file),
+						patchBundle.GetFileContentsHash(file),
 						patchBundle.GetFileCookingUnitHash(file),
 						patchBundle.GetFileAttributes(file)
 					);

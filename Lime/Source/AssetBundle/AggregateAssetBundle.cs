@@ -73,13 +73,13 @@ namespace Lime
 			}
 		}
 
-		public override SHA256 GetFileHash(string path)
+		public override SHA256 GetFileContentsHash(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetFileHash(path);
+						return bundle.GetFileContentsHash(path);
 					}
 				}
 			} finally {

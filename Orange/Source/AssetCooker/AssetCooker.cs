@@ -134,7 +134,7 @@ namespace Orange
 				}
 				foreach (var file in source.EnumerateFiles()) {
 					var exists = destination.FileExists(file);
-					if (!exists || destination.GetFileHash(file) != source.GetFileHash(file)) {
+					if (!exists || destination.GetFileContentsHash(file) != source.GetFileContentsHash(file)) {
 						try {
 							if (exists) {
 								destination.DeleteFile(file);
@@ -289,7 +289,7 @@ namespace Orange
 
 			public override void DeleteFile(string path)
 			{
-				deletedFiles.Add(path, GetFileHash(path));
+				deletedFiles.Add(path, GetFileContentsHash(path));
 				base.DeleteFile(path);
 			}
 
@@ -297,7 +297,7 @@ namespace Orange
 			{
 				base.ImportFile(path, stream, cookingUnitHash, attributes);
 				if (deletedFiles.TryGetValue(path, out var hash)) {
-					if (hash != GetFileHash(path)) {
+					if (hash != GetFileContentsHash(path)) {
 						Console.WriteLine("* " + path);
 					}
 					deletedFiles.Remove(path);

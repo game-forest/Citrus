@@ -18,7 +18,7 @@ namespace Lime
 
 		public override bool FileExists(string path) => Bundle.FileExists(path);
 
-		public override SHA256 GetFileHash(string path) => Bundle.GetFileHash(path);
+		public override SHA256 GetFileContentsHash(string path) => Bundle.GetFileContentsHash(path);
 
 		public override SHA256 GetFileCookingUnitHash(string path) => Bundle.GetFileCookingUnitHash(path);
 

@@ -49,7 +49,7 @@ namespace Lime
 						// Attributes are produced from cooking rules which are part of cooking unit hash.
 						currentBundle.GetFileAttributes(file) == patch.GetFileAttributes(file) &&
 						currentBundle.GetFileCookingUnitHash(file) == patch.GetFileCookingUnitHash(file) &&
-						currentBundle.GetFileHash(file) == patch.GetFileHash(file)
+						currentBundle.GetFileContentsHash(file) == patch.GetFileContentsHash(file)
 					) {
 						fileModified = false;
 					}
@@ -78,7 +78,7 @@ namespace Lime
 				path: file,
 				stream: stream,
 				unpackedSize: sourceBundle.GetFileUnpackedSize(file),
-				hash: sourceBundle.GetFileHash(file),
+				hash: sourceBundle.GetFileContentsHash(file),
 				cookingUnitHash: sourceBundle.GetFileCookingUnitHash(file),
 				attributes: sourceBundle.GetFileAttributes(file)
 			);

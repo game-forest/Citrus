@@ -213,13 +213,13 @@ namespace Tangerine
 			SHA256 metaHash;
 			SHA256 attachmentHash;
 			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
-				metaHash = cacheBundle.GetFileHash(Path.ChangeExtension(model3DContentsPath, Model3DAttachmentMeta.FileExtension));
+				metaHash = cacheBundle.GetFileContentsHash(Path.ChangeExtension(model3DContentsPath, Model3DAttachmentMeta.FileExtension));
 			}
 
 			using (var cacheBundle = new PackedAssetBundle(Project.Current.GetTangerineCacheBundlePath())) {
 				var path = Path.ChangeExtension(model3DContentsPath, Model3DAttachment.FileExtension);
 				if (cacheBundle.FileExists(path)) {
-					attachmentHash = cacheBundle.GetFileHash(path);
+					attachmentHash = cacheBundle.GetFileContentsHash(path);
 				} else {
 					attachmentHash = default;
 				}
