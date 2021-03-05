@@ -54,7 +54,7 @@ namespace Lime
 			}
 		}
 
-		public static unsafe SHA256 Compute<T>(T[] source, int start, int length) where T: struct
+		public static unsafe SHA256 Compute<T>(T[] source, int start, int length) where T: unmanaged
 		{
 			var result = new SHA256();
 			if (!sha256.Value.TryComputeHash(
@@ -68,7 +68,7 @@ namespace Lime
 			return result;
 		}
 
-		public static unsafe SHA256 Compute<T>(params T[] source) where T: struct
+		public static unsafe SHA256 Compute<T>(params T[] source) where T: unmanaged
 		{
 			var result = new SHA256();
 			if (!sha256.Value.TryComputeHash(
