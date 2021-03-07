@@ -26,7 +26,11 @@ namespace Lime
 		private static readonly ThreadLocal<System.Security.Cryptography.SHA256> sha256
 			= new ThreadLocal<System.Security.Cryptography.SHA256>(System.Security.Cryptography.SHA256.Create);
 
-		private static readonly ThreadLocal<UTF8Encoding> utf8 = new ThreadLocal<UTF8Encoding>(() => new UTF8Encoding());
+		private static readonly ThreadLocal<UTF8Encoding> utf8 =
+			new ThreadLocal<UTF8Encoding>(() => new UTF8Encoding(
+				encoderShouldEmitUTF8Identifier: false,
+				throwOnInvalidBytes: true
+			));
 
 		public static unsafe SHA256 Compute(string source)
 		{
@@ -42,8 +46,8 @@ namespace Lime
 				var result = new SHA256();
 				if (
 					!sha256.Value.TryComputeHash(
-						buffer, new Span<byte>((byte*) &result, sizeof(SHA256)), out var written) ||
-				    written != sizeof(SHA256)
+						buffer, new Span<byte>((byte*) &result, sizeof(SHA256)), out var written
+					) || written != sizeof(SHA256)
 				) {
 					throw new InvalidOperationException();
 				}
@@ -61,8 +65,8 @@ namespace Lime
 			if (!sha256.Value.TryComputeHash(
 					MemoryMarshal.Cast<T, byte>(new ReadOnlySpan<T>(source, start, length)),
 					new Span<byte>((byte*)&result, sizeof(SHA256)),
-					out var written) ||
-				written != sizeof(SHA256)
+					out var written
+				) || written != sizeof(SHA256)
 			) {
 				throw new InvalidOperationException();
 			}
@@ -75,8 +79,8 @@ namespace Lime
 			if (!sha256.Value.TryComputeHash(
 					MemoryMarshal.Cast<T, byte>(new ReadOnlySpan<T>(source)),
 					new Span<byte>((byte*)&result, sizeof(SHA256)),
-					out var written) ||
-				written != sizeof(SHA256)
+					out var written
+				) || written != sizeof(SHA256)
 			) {
 				throw new InvalidOperationException();
 			}
