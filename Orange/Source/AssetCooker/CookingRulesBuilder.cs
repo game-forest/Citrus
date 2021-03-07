@@ -8,6 +8,7 @@ using Lime;
 using Yuzu;
 using Yuzu.Json;
 using Yuzu.Metadata;
+using System.Threading;
 
 namespace Orange
 {
@@ -149,17 +150,21 @@ namespace Orange
 		[YuzuMember]
 		public int MaxAtlasSize { get; set; } = 2048;
 
-		// using json format for SHA1 since binary one includes all fields definitions header anyway.
-		// so adding a field with binary triggers rebuild of all bundles
-		private static JsonSerializer yjs = new JsonSerializer();
+		// Json is used instead of binary because binary format includes
+		// a definition of CookingRules class serializable fields. Which
+		// means adding a field to cooking rules class will change binary
+		// representation of already existing cooking rules. Consequently
+		// cooking rules hash will also change and all bundles for all
+		// projects will require rebuild.
+		private static readonly ThreadLocal<JsonSerializer> yjs = new ThreadLocal<JsonSerializer>(() => new JsonSerializer());
 
-		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
+		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.Value.ToString(this)));
 
 		public HashSet<Meta.Item> FieldOverrides;
 
 		public ParticularCookingRules Parent;
 
-		private static readonly Meta meta = Meta.Get(typeof (ParticularCookingRules), new CommonOptions());
+		private static readonly Meta meta = Meta.Get(typeof(ParticularCookingRules), new CommonOptions());
 
 		private static readonly Dictionary<string, Meta.Item> fieldNameToYuzuMetaItemCache =
 			new Dictionary<string, Meta.Item>();
@@ -173,7 +178,7 @@ namespace Orange
 				fieldNameToYuzuMetaItemCache.Add(item.Name, item);
 			}
 			// initializing all fields here, so any changes to yuzu default values won't affect us here
-			yjs.JsonOptions = new JsonSerializeOptions {
+			yjs.Value.JsonOptions = new JsonSerializeOptions {
 				ArrayLengthPrefix = false,
 				ClassTag = "class",
 				DateFormat = "O",
@@ -436,7 +441,7 @@ namespace Orange
 		{
 			public bool Dirty;
 			public Dictionary<string, CookingRules> Map =
-				new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
+				new Dictionary<string, CookingRules>(StringComparer.Ordinal);
 			private readonly IFileSystemWatcher watcher;
 			public CacheRecord(string path)
 			{
@@ -475,7 +480,7 @@ namespace Orange
 			var sw = System.Diagnostics.Stopwatch.StartNew();
 			var pathStack = new Stack<string>();
 			var rulesStack = new Stack<CookingRules>();
-			var map = cacheRecord?.Map ?? new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
+			var map = cacheRecord?.Map ?? new Dictionary<string, CookingRules>(StringComparer.Ordinal);
 			pathStack.Push("");
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
@@ -504,7 +509,7 @@ namespace Orange
 						}
 					}
 				} else  {
-					if (filePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) {
+					if (filePath.EndsWith(".txt", StringComparison.Ordinal)) {
 						var filename = filePath.Remove(filePath.Length - 4);
 						if (bundle.FileExists(filename)) {
 							continue;
