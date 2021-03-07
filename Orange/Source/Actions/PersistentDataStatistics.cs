@@ -281,6 +281,9 @@ namespace Orange
 			{
 				t.Filename = suffixFilter + " total:";
 				var filteredRecords = statisticsForPath.Where(i => i.Key.EndsWith(suffixFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+				if (!filteredRecords.Any()) {
+					return;
+				}
 				foreach (var (k, r) in filteredRecords) {
 					t.AnimatorCount += r.AnimatorCount;
 					t.ExternalAnimationsSize += r.ExternalAnimationsSize;
