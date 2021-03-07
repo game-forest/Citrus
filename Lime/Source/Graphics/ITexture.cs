@@ -41,18 +41,12 @@ namespace Lime
 
 		public TextureWrapMode WrapMode
 		{
-			set
-			{
-				WrapModeU = WrapModeV = value;
-			}
+			set => WrapModeU = WrapModeV = value;
 		}
 
 		public TextureFilter MinMagFilter
 		{
-			set
-			{
-				MinFilter = MagFilter = value;
-			}
+			set => MinFilter = MagFilter = value;
 		}
 
 		public static TextureParams Default = new TextureParams();
@@ -93,10 +87,7 @@ namespace Lime
 	{
 		public static int TotalMemoryUsed { get; private set; }
 
-		public static int TotalMemoryUsedMb
-		{
-			get { return TotalMemoryUsed / (1024 * 1024); }
-		}
+		public static int TotalMemoryUsedMb => TotalMemoryUsed / (1024 * 1024);
 
 		public bool IsDisposed { get; private set; }
 
@@ -104,7 +95,7 @@ namespace Lime
 
 		public int MemoryUsed
 		{
-			get { return memoryUsed; }
+			get => memoryUsed;
 			protected set
 			{
 				TotalMemoryUsed += value - memoryUsed;

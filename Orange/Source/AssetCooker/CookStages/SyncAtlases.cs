@@ -19,7 +19,7 @@ namespace Orange
 
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
-			var atlasToHash = new Dictionary<string, SHA256>();
+			var atlasToHash = new Dictionary<string, SHA256>(StringComparer.Ordinal);
 			foreach (var texturePath in assetCooker.InputBundle.EnumerateFiles(null, ".png")) {
 				var textureCookingRules = assetCooker.CookingRulesMap[texturePath];
 				var atlas = textureCookingRules.TextureAtlas;
@@ -28,7 +28,8 @@ namespace Orange
 				}
 				var textureHash = SHA256.Compute(
 					assetCooker.InputBundle.GetFilePathAndContentsHash(texturePath),
-					textureCookingRules.Hash);
+					textureCookingRules.Hash
+				);
 				atlasToHash[atlas] = atlasToHash.TryGetValue(atlas, out var atlasHash) ?
 					SHA256.Compute(atlasHash, textureHash) : textureHash;
 			}
@@ -266,9 +267,8 @@ namespace Orange
 					cookingUnitHash, AssetAttributes.None);
 			}
 			var firstItem = items.First(i => i.Allocated);
-			using (var atlas = new Bitmap(atlasPixels, size.Width, size.Height)) {
-				SyncTextures.ImportTexture(assetCooker, atlasPath, atlas, firstItem.CookingRules, cookingUnitHash);
-			}
+			using var atlas = new Bitmap(atlasPixels, size.Width, size.Height);
+			SyncTextures.ImportTexture(assetCooker, atlasPath, atlas, firstItem.CookingRules, cookingUnitHash);
 		}
 
 		private string GetAtlasPath(string atlasChain, int index)

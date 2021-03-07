@@ -514,8 +514,8 @@ namespace Tangerine.Core
 		private static bool AreTextureParamsDefault(ICookingRules rules)
 		{
 			return rules.MinFilter == TextureParams.Default.MinFilter &&
-			       rules.MagFilter == TextureParams.Default.MagFilter &&
-			       rules.WrapMode == TextureParams.Default.WrapModeU;
+				rules.MagFilter == TextureParams.Default.MagFilter &&
+				rules.WrapMode == TextureParams.Default.WrapModeU;
 		}
 
 		public static void RaiseDocumentSaving(Document document)

@@ -167,10 +167,9 @@ namespace Orange
 			}
 			var codeCookerCachePath = GetCodeCachePath();
 			Directory.CreateDirectory(Path.GetDirectoryName(codeCookerCachePath));
-			using (FileStream stream = new FileStream(codeCookerCachePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
-				var js = new Yuzu.Json.JsonSerializer();
-				js.ToStream(codeCookerCache, stream);
-			}
+			using FileStream stream = new FileStream(codeCookerCachePath, FileMode.Create, FileAccess.Write, FileShare.None);
+			var js = new Yuzu.Json.JsonSerializer();
+			js.ToStream(codeCookerCache, stream);
 		}
 
 		private static CodeCookerCache InvalidateCache(string scenesPath)

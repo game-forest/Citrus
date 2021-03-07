@@ -18,15 +18,23 @@ namespace Orange
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, ".txt")
 				.Where(i => !i.EndsWith(Model3DAttachment.FileExtension, StringComparison.Ordinal))
-				.Select(i =>
-					(i, SHA256.Compute(assetCooker.InputBundle.GetFilePathAndContentsHash(i), assetCooker.CookingRulesMap[i].Hash)));
+				.Select(i => {
+					var hash = SHA256.Compute(
+						assetCooker.InputBundle.GetFilePathAndContentsHash(i),
+						assetCooker.CookingRulesMap[i].Hash
+					);
+					return (i, hash);
+				});
 		}
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
 		{
 			assetCooker.OutputBundle.ImportFile(
-				assetCooker.InputBundle.ToSystemPath(cookingUnit), cookingUnit,
-				cookingUnitHash, AssetAttributes.Zipped);
+				srcPath: assetCooker.InputBundle.ToSystemPath(cookingUnit),
+				dstPath: cookingUnit,
+				cookingUnitHash: cookingUnitHash,
+				attributes: AssetAttributes.Zipped
+			);
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Lime
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct AssetDescriptor
+	internal struct AssetDescriptor
 	{
 		public int Offset;
 		public int Size;
@@ -51,7 +51,7 @@ namespace Lime
 			if (!bundle.index.TryGetValue(AssetPath.CorrectSlashes(path), out descriptor)) {
 				throw new Exception($"Can't open asset: {path}");
 			}
-			stream = bundle.AllocStream();
+			stream = bundle.AllocateStream();
 			Seek(0, SeekOrigin.Begin);
 		}
 
@@ -61,7 +61,8 @@ namespace Lime
 
 		public override long Length => descriptor.Size;
 
-		public override long Position {
+		public override long Position
+		{
 			get => position;
 			set => Seek(value, SeekOrigin.Begin);
 		}
@@ -98,20 +99,9 @@ namespace Lime
 			return position;
 		}
 
-		public override void Flush()
-		{
-			throw new NotSupportedException();
-		}
-
-		public override void SetLength(long value)
-		{
-			throw new NotSupportedException();
-		}
-
-		public override void Write(byte[] buffer, int offset, int count)
-		{
-			throw new NotSupportedException();
-		}
+		public override void Flush() => throw new NotSupportedException();
+		public override void SetLength(long value) => throw new NotSupportedException();
+		public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
 
 		private bool disposedValue;
 
@@ -203,7 +193,7 @@ namespace Lime
 				if (resourcesAssembly == null) {
 					throw new Lime.Exception($"Assembly {assemblyName} doesn't exist");
 				}
-				stream = AllocStream();
+				stream = AllocateStream();
 				reader = new BinaryReader(stream);
 				ReadIndexTable();
 			} catch {
@@ -221,7 +211,7 @@ namespace Lime
 					reader = new BinaryReader(stream);
 					writer = new BinaryWriter(stream);
 				} else {
-					stream = AllocStream();
+					stream = AllocateStream();
 					reader = new BinaryReader(stream);
 				}
 				ReadIndexTable();
@@ -234,62 +224,57 @@ namespace Lime
 		public static int CalcBundleChecksum(string bundlePath)
 		{
 			// "Modified FNV with good avalanche behavior and uniform distribution with larger hash sizes."
-			// see http://papa.bretmulvey.com/post/124027987928/hash-functions for algo
-			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				var data = new byte[16 * 1024];
-				int size = stream.Read(data, 0, data.Length);
-				if (size < 8) {
-					return 0;
-				}
-				data[4] = 0;
-				data[5] = 0;
-				data[6] = 0;
-				data[7] = 0;
-				unchecked {
-					const int p = 16777619;
-					int hash = (int)2166136261;
-					while (size > 0) {
-						for (int i = 0; i < size; i++) {
-							hash = (hash ^ data[i]) * p;
-						}
-						size = stream.Read(data, 0, data.Length);
+			// See http://papa.bretmulvey.com/post/124027987928/hash-functions for algorithm.
+			using var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			var data = new byte[16 * 1024];
+			int size = stream.Read(data, 0, data.Length);
+			if (size < 8) {
+				return 0;
+			}
+			data[4] = 0;
+			data[5] = 0;
+			data[6] = 0;
+			data[7] = 0;
+			unchecked {
+				const int p = 16777619;
+				int hash = (int)2166136261;
+				while (size > 0) {
+					for (int i = 0; i < size; i++) {
+						hash = (hash ^ data[i]) * p;
 					}
-					// are these actually needed?
-					hash += hash << 13;
-					hash ^= hash >> 7;
-					hash += hash << 3;
-					hash ^= hash >> 17;
-					hash += hash << 5;
-					return hash;
+					size = stream.Read(data, 0, data.Length);
 				}
+				hash += hash << 13;
+				hash ^= hash >> 7;
+				hash += hash << 3;
+				hash ^= hash >> 17;
+				hash += hash << 5;
+				return hash;
 			}
 		}
 
 		public static bool IsBundleCorrupted(string bundlePath)
 		{
-			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				if (stream.Length < 8) {
-					return true;
-				}
-				var reader = new BinaryReader(stream);
-				// Bundle signature
-				reader.ReadInt32();
-				int storedChecksum = reader.ReadInt32();
-				int actualChecksum = CalcBundleChecksum(bundlePath);
-				return storedChecksum != actualChecksum;
+			using var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			if (stream.Length < 8) {
+				return true;
 			}
+			var reader = new BinaryReader(stream);
+			// Bundle signature
+			reader.ReadInt32();
+			int storedChecksum = reader.ReadInt32();
+			int actualChecksum = CalcBundleChecksum(bundlePath);
+			return storedChecksum != actualChecksum;
 		}
 
 		public static void RefreshBundleChecksum(string bundlePath)
 		{
 			int checksum = CalcBundleChecksum(bundlePath);
-			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite)) {
-				if (stream.Length > 8) {
-					using (var writer = new BinaryWriter(stream)) {
-						writer.Seek(4, SeekOrigin.Begin);
-						writer.Write(checksum);
-					}
-				}
+			using var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+			if (stream.Length > 8) {
+				using var writer = new BinaryWriter(stream);
+				writer.Seek(4, SeekOrigin.Begin);
+				writer.Write(checksum);
 			}
 		}
 
@@ -557,7 +542,7 @@ namespace Lime
 			}
 		}
 
-		internal Stream AllocStream()
+		internal Stream AllocateStream()
 		{
 			lock (streamPool) {
 				if (streamPool.Count > 0) {
@@ -611,15 +596,15 @@ namespace Lime
 				if (FileExists(file)) {
 					DeleteFile(file);
 				}
-				using (var stream = patchBundle.OpenFileRaw(file)) {
-					ImportFileRaw(
-						file, stream,
-						patchBundle.GetFileUnpackedSize(file),
-						patchBundle.GetFileContentsHash(file),
-						patchBundle.GetFileCookingUnitHash(file),
-						patchBundle.GetFileAttributes(file)
-					);
-				}
+				using var stream = patchBundle.OpenFileRaw(file);
+				ImportFileRaw(
+					file,
+					stream,
+					patchBundle.GetFileUnpackedSize(file),
+					patchBundle.GetFileContentsHash(file),
+					patchBundle.GetFileCookingUnitHash(file),
+					patchBundle.GetFileAttributes(file)
+				);
 			}
 			foreach (var file in patchManifest.DeletedAssets) {
 				if (FileExists(file)) {

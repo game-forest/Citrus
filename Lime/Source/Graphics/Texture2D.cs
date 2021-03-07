@@ -139,15 +139,13 @@ namespace Lime
 		{
 			IsStubTexture = false;
 
-			using (var stream = new MemoryStream(data)) {
-				LoadImage(stream);
-			}
+			using var stream = new MemoryStream(data);
+			LoadImage(stream);
 		}
 
 		public void LoadImage(Stream stream)
 		{
 			IsStubTexture = false;
-
 			LoadImageHelper(stream);
 		}
 

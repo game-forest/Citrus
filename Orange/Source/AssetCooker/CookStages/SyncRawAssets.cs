@@ -20,14 +20,23 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, extension)
-				.Select(i =>
-					(i, SHA256.Compute(assetCooker.InputBundle.GetFilePathAndContentsHash(i), assetCooker.CookingRulesMap[i].Hash)));
+				.Select(i => {
+					var hash = SHA256.Compute(
+						assetCooker.InputBundle.GetFilePathAndContentsHash(i),
+						assetCooker.CookingRulesMap[i].Hash
+					);
+					return (i, hash);
+				});
 		}
 
 		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
 		{
 			assetCooker.OutputBundle.ImportFile(
-				assetCooker.InputBundle.ToSystemPath(cookingUnit), cookingUnit, cookingUnitHash, attributes);
+				srcPath: assetCooker.InputBundle.ToSystemPath(cookingUnit),
+				dstPath: cookingUnit,
+				cookingUnitHash: cookingUnitHash,
+				attributes: attributes
+			);
 		}
 	}
 }

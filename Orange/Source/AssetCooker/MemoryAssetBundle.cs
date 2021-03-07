@@ -49,7 +49,11 @@ namespace Orange
 			foreach (var (path, asset) in assets) {
 				destination.ImportFileRaw(path,
 					new MemoryStream(asset.Data, 0, asset.Size),
-					asset.UnpackedSize, asset.Hash, asset.CookingUnitHash, asset.Attributes);
+					asset.UnpackedSize,
+					asset.Hash,
+					asset.CookingUnitHash,
+					asset.Attributes
+				);
 			}
 		}
 

@@ -229,15 +229,14 @@ namespace Orange
 		private static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 		private static string GetTextureHashString(Bitmap bitmap, string extension, string commandLineArgs)
 		{
-			using (var stream = new MemoryStream()) {
-				bitmap.SaveTo(stream);
-				var extensionBytes = Encoding.UTF8.GetBytes(extension);
-				stream.Write(extensionBytes, 0, extensionBytes.Length);
-				var commandLineArgsBytes = Encoding.UTF8.GetBytes(commandLineArgs);
-				stream.Write(commandLineArgsBytes, 0, commandLineArgsBytes.Length);
-				stream.Position = 0;
-				return BitConverter.ToString(sha256.ComputeHash(stream)).Replace("-", string.Empty).ToLower();
-			}
+			using var stream = new MemoryStream();
+			bitmap.SaveTo(stream);
+			var extensionBytes = Encoding.UTF8.GetBytes(extension);
+			stream.Write(extensionBytes, 0, extensionBytes.Length);
+			var commandLineArgsBytes = Encoding.UTF8.GetBytes(commandLineArgs);
+			stream.Write(commandLineArgsBytes, 0, commandLineArgsBytes.Length);
+			stream.Position = 0;
+			return BitConverter.ToString(sha256.ComputeHash(stream)).Replace("-", string.Empty).ToLower();
 		}
 	}
 }

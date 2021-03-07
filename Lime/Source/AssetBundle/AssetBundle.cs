@@ -60,19 +60,20 @@ namespace Lime
 
 		public byte[] ReadFile(string path)
 		{
-			using (var stream = OpenFile(path, FileMode.Open)) {
-				using (var memoryStream = new MemoryStream()) {
-					stream.CopyTo(memoryStream);
-					return memoryStream.ToArray();
-				}
-			}
+			using var stream = OpenFile(path, FileMode.Open);
+			using var memoryStream = new MemoryStream();
+			stream.CopyTo(memoryStream);
+			return memoryStream.ToArray();
 		}
 
 		public string ReadAllText(string path, Encoding encoding)
 		{
-			using (var streamReader = new StreamReader(OpenFile(path), encoding, detectEncodingFromByteOrderMarks: true)) {
-				return streamReader.ReadToEnd();
-			}
+			using var streamReader = new StreamReader(
+				stream: OpenFile(path),
+				encoding: encoding,
+				detectEncodingFromByteOrderMarks: true
+			);
+			return streamReader.ReadToEnd();
 		}
 
 		public abstract void DeleteFile(string path);
@@ -94,9 +95,8 @@ namespace Lime
 		public void ImportFile(
 			string srcPath, string dstPath, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				ImportFile(dstPath, stream, cookingUnitHash, attributes);
-			}
+			using var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			ImportFile(dstPath, stream, cookingUnitHash, attributes);
 		}
 
 		/// <summary>
