@@ -252,5 +252,17 @@ namespace Orange
 			}
 			return bundles.ToList();
 		}
+
+		/// <summary>
+		/// Returns SHA256 based on the file path and contents.
+		/// </summary>
+		public static SHA256 ComputeCookingUnitHash(this AssetBundle bundle, string path, CookingRules cookingRules)
+		{
+			return SHA256.Compute(
+				SHA256.Compute(AssetPath.CorrectSlashes(path)),
+				bundle.GetFileContentsHash(path),
+				cookingRules.Hash
+			);
+		}
 	}
 }

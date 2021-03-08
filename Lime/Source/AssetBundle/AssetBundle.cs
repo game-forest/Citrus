@@ -142,13 +142,5 @@ namespace Lime
 		/// Returns SHA256 based on the file contents.
 		/// </summary>
 		public abstract SHA256 GetFileContentsHash(string path);
-
-		/// <summary>
-		/// Returns SHA256 based on the file path and contents.
-		/// </summary>
-		public SHA256 GetFilePathAndContentsHash(string path)
-		{
-			return SHA256.Compute(SHA256.Compute(AssetPath.CorrectSlashes(path)), GetFileContentsHash(path));
-		}
 	}
 }

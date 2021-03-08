@@ -40,10 +40,8 @@ namespace Orange
 					) {
 						allScenes.Add(scenePath);
 						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
-						var sourceHash = SHA256.Compute(
-							SHA256.Compute(SHA256.Compute(AssetPath.CorrectSlashes(scenePath)),
-							SHA256.Compute(File.ReadAllBytes(scenePath))),
-							assetToCookingRules[scenePath].Hash
+						var sourceHash = AssetBundle.Current.ComputeCookingUnitHash(
+							scenePath, assetToCookingRules[scenePath]
 						);
 						if (!cache.SceneFiles.ContainsKey(scenePath)) {
 							modifiedScenes.Add(scenePath);
@@ -88,7 +86,11 @@ namespace Orange
 			try {
 				// Don't return early even if there's nothing modified since there may be stuff to delete
 				// Also, don't bother with loading only usedBundles for now, just load all of them
-				AssetBundle.SetCurrent(new AggregateAssetBundle(cookingBundles.Select(bundleName => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName))).ToArray()), false);
+				var allBundles = cookingBundles
+					.Select(bundleName => new PackedAssetBundle(
+						The.Workspace.GetBundlePath(target.Platform, bundleName)
+					)).ToArray();
+				AssetBundle.SetCurrent(new AggregateAssetBundle(allBundles), false);
 				new ScenesCodeCooker(
 					The.Workspace.ProjectDirectory,
 					The.Workspace.GeneratedScenesPath,

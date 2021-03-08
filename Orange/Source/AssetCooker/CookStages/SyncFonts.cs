@@ -17,9 +17,8 @@ namespace Orange
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, ".tft")
 				.Select(i => {
-					var hash = SHA256.Compute(
-						assetCooker.InputBundle.GetFilePathAndContentsHash(i),
-						assetCooker.CookingRulesMap[i].Hash
+					var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
+						i, assetCooker.CookingRulesMap[i]
 					);
 					return (i, hash);
 				});

@@ -21,9 +21,8 @@ namespace Orange
 			return assetCooker.InputBundle.EnumerateFiles(null, originalTextureExtension)
 				.Where(i => assetCooker.CookingRulesMap[i].TextureAtlas == null)
 				.Select(i => {
-					var hash = SHA256.Compute(
-						assetCooker.InputBundle.GetFilePathAndContentsHash(i),
-						assetCooker.CookingRulesMap[i].Hash
+					var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
+						i, assetCooker.CookingRulesMap[i]
 					);
 					return (i, hash);
 				});
