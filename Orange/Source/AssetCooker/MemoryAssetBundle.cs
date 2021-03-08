@@ -59,8 +59,8 @@ namespace Orange
 
 		public override void Dispose()
 		{
-			foreach (var (path, asset) in assets) {
-				ArrayPool<byte>.Shared.Return(assets[path].Data);
+			foreach (var (_, asset) in assets) {
+				ArrayPool<byte>.Shared.Return(asset.Data);
 			}
 			assets.Clear();
 		}
