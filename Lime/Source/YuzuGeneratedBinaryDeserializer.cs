@@ -10711,25 +10711,31 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		private static object Make_Lime__UnpackedAssetBundle__FileInfo(BinaryDeserializer d, ReaderClassDef def)
+		private static void Read_Lime__UnpackedAssetBundle__FileInfo(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
-			var result = new global::Lime.UnpackedAssetBundle.FileInfo();
+			var result = (global::Lime.UnpackedAssetBundle.FileInfo)obj;
 			var dg = (LimeDeserializer)d;
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
 			if (1 == fd.OurIndex) {
-				result.DateModified = DateTime.FromBinary(d.Reader.ReadInt64());
+				dg.EnsureClassDef(typeof(global::Lime.SHA256));
+				result.ContentsHash.A = d.Reader.ReadUInt64();
+				result.ContentsHash.B = d.Reader.ReadUInt64();
+				result.ContentsHash.C = d.Reader.ReadUInt64();
+				result.ContentsHash.D = d.Reader.ReadUInt64();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (2 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.SHA256));
-				result.Hash.A = d.Reader.ReadUInt64();
-				result.Hash.B = d.Reader.ReadUInt64();
-				result.Hash.C = d.Reader.ReadUInt64();
-				result.Hash.D = d.Reader.ReadUInt64();
+				result.DateModified = DateTime.FromBinary(d.Reader.ReadInt64());
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__UnpackedAssetBundle__FileInfo(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.UnpackedAssetBundle.FileInfo();
+			Read_Lime__UnpackedAssetBundle__FileInfo(d, def, result);
 			return result;
 		}
 
@@ -11896,6 +11902,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.TiledImage)] = Read_Lime__TiledImage;
 			readCache[typeof(global::Lime.TwistComponent)] = Read_Lime__TwistComponent;
 			readCache[typeof(global::Lime.TwistMaterial)] = Read_Lime__TwistMaterial;
+			readCache[typeof(global::Lime.UnpackedAssetBundle.FileInfo)] = Read_Lime__UnpackedAssetBundle__FileInfo;
 			readCache[typeof(global::Lime.VBoxLayout)] = Read_Lime__VBoxLayout;
 			readCache[typeof(global::Lime.Vector2Animator)] = Read_Lime__Vector2Animator;
 			readCache[typeof(global::Lime.Vector3Animator)] = Read_Lime__Vector3Animator;
