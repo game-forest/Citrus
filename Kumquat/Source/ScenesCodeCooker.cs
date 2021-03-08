@@ -126,7 +126,7 @@ namespace Kumquat
 
 		public void Start()
 		{
-			Console.WriteLine("Generating scenes code for {0} scenes...", scenesForProcessing.Count);
+			Console.WriteLine("Generating scene code for {0} scenes...", scenesForProcessing.Count);
 			var path = $"{directory}/{projectName}.{generatedScenesPath}";
 			if (!Directory.Exists(path)) {
 				GenerateProjectFiles(path);
@@ -173,6 +173,7 @@ namespace Kumquat
 				code = code.Replace("<%NAMESPACE%>", GetBundleNamespace(bundleName));
 				code = new CodeFormatter(code).FormattedCode;
 				File.WriteAllText(generatedCodePath, code);
+				Console.WriteLine("+ " + generatedCodePath);
 			}
 			UpdateCache();
 			// Collect not loaded scenes which are also contains common parts affected by actually modified and referred to them scenes
@@ -260,16 +261,14 @@ namespace Kumquat
 				var bundleName = codeCookerCache.SceneFiles[scenePath].Bundle;
 				var bundleSourcePath = $"{scenesPath}/{bundleName}";
 				var filename = Path.GetFileNameWithoutExtension(scenePath);
-				string name;
-				string baseClassName;
-				ParseCommonName(filename, out name, out baseClassName);
+				ParseCommonName(filename, out string name, out string baseClassName);
 				File.Delete($"{bundleSourcePath}/{name}.cs");
 				codeCookerCache.SceneFiles.Remove(scenePath);
 				var commonPartsToRemove = new List<string>();
 				foreach (var kv in codeCookerCache.CommonPartToReferredScenes) {
 					if (kv.Value.Contains(scenePath)) {
 						kv.Value.Remove(scenePath);
-						if (kv.Value.Count() == 0) {
+						if (kv.Value.Count == 0) {
 							commonPartsToRemove.Add(kv.Key);
 						}
 					}
@@ -311,27 +310,24 @@ namespace Kumquat
 				tested = temp[0];
 				checkPass = true;
 				for (var i = 1; i < temp.Length; i++) {
-					if (tested == temp[i])
+					if (tested == temp[i]) {
 						continue;
-					else {
-						if (tested == temp[i].BaseType) {
-							temp[i] = temp[i].BaseType;
-							continue;
+					}
+					if (tested == temp[i].BaseType) {
+						temp[i] = temp[i].BaseType;
+						continue;
+					} else if (tested.BaseType != null && tested.BaseType == temp[i]) {
+						for (var j = 0; j <= i - 1; j++) {
+							temp[j] = temp[j].BaseType;
 						}
-						else if (tested.BaseType != null && tested.BaseType == temp[i]) {
-							for (var j = 0; j <= i - 1; j++) {
-								temp[j] = temp[j].BaseType;
-							}
-							checkPass = false;
-							break;
+						checkPass = false;
+						break;
+					} else {
+						for (var j = 0; j <= i; j++) {
+							temp[j] = temp[j].BaseType;
 						}
-						else {
-							for (var j = 0; j <= i; j++) {
-								temp[j] = temp[j].BaseType;
-							}
-							checkPass = false;
-							break;
-						}
+						checkPass = false;
+						break;
 					}
 				}
 			}
@@ -360,9 +356,8 @@ namespace Kumquat
 					}
 				}
 			};
-			var codeHeader = $"using Lime;\n namespace {(GetBundleNamespace(mainBundleName))}.Common\n{{\n" +
-			                 $"<%GEN%>\n" +
-			                 $"}}\n";
+			var codeHeader = $"using Lime;\n" +
+				$"namespace {(GetBundleNamespace(mainBundleName))}.Common\n{{\n<%GEN%>\n}}\n";
 			var commonDirectory = $"{scenesPath}/Common";
 			RetryUntilSuccessCreateDirectory(commonDirectory);
 			foreach (var kv in commonParts) {
@@ -463,8 +458,7 @@ namespace Kumquat
 			var bundleName = string.Empty;
 			var scenePath = AssetPath.CorrectSlashes(node.ContentsPath);
 			foreach (var sceneExtension in scenesExtensions) {
-				string sceneBundle;
-				if (!sceneToBundleMap.TryGetValue(scenePath + sceneExtension, out sceneBundle)) {
+				if (!sceneToBundleMap.TryGetValue(scenePath + sceneExtension, out string sceneBundle)) {
 					continue;
 				}
 
@@ -492,10 +486,8 @@ namespace Kumquat
 
 		private ParsedFramesTree GenerateParsedFramesTree(string scenePath, Node frame)
 		{
-			string baseClassName;
-			string name;
 			var filename = Path.GetFileNameWithoutExtension(scenePath);
-			ParseCommonName(filename, out name, out baseClassName);
+			ParseCommonName(filename, out string name, out string baseClassName);
 			var parsedFramesTree = GenerateParsedFramesTreeHelper(frame, name, baseClassName, false);
 			parsedFramesTree.ScenePath = scenePath;
 			return parsedFramesTree;
@@ -525,9 +517,11 @@ namespace Kumquat
 			};
 			if (parsedFramesTree.ParsedNode.IsExternalScene) {
 				AddReferringSceneSafe(parsedFramesTree.ParsedNode.ContentsPath, currentCookingScene);
-				string externalName;
-				string externalBaseName;
-				ParseCommonName(Path.GetFileNameWithoutExtension(parsedFramesTree.ParsedNode.ContentsPath), out externalName, out externalBaseName);
+				ParseCommonName(
+					source: Path.GetFileNameWithoutExtension(parsedFramesTree.ParsedNode.ContentsPath),
+					name: out string externalName,
+					commonName: out string externalBaseName
+				);
 				parsedFramesTree.ClassName = externalName;
 				parsedFramesTree.BaseClassName = externalBaseName;
 			}
@@ -557,10 +551,8 @@ namespace Kumquat
 
 				foreach (var n in current.node.Nodes) {
 					if (!string.IsNullOrEmpty(n.Id) && n.Id.StartsWith(">")) {
-						string nextName;
-						string nextBaseName;
 						ParsedFramesTree innerClass;
-						if (ParseCommonName(n.Id.Substring(1), out nextName, out nextBaseName)) {
+						if (ParseCommonName(n.Id[1..], out string nextName, out string nextBaseName)) {
 							innerClass = GenerateParsedFramesTreeHelper(n, nextName, nextBaseName, current.isInExternalScene);
 						} else {
 							innerClass = GenerateParsedFramesTreeHelper(n, nextName, null, current.isInExternalScene);
