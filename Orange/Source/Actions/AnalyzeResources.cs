@@ -224,5 +224,70 @@ namespace Orange
 				AssetBundle.Current = savedAssetBundle;
 			}
 		}
+
+		[Export(nameof(OrangePlugin.MenuItems))]
+		[ExportMetadata("Label", "Show Duplicate Assets in Assets Directory")]
+		//[ExportMetadata("Priority", 4)]
+		public static void ShowDuplicateAssetsInAssetsDirectory()
+		{
+			PrintDuplicates(AssetBundle.Current);
+		}
+
+		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
+		[ExportMetadata("Label", "Show Duplicate Assets in Bundles")]
+		//[ExportMetadata("Priority", 4)]
+		[ExportMetadata("ApplicableToBundleSubset", true)]
+		public static string ShowDuplicateAssetsInBundles()
+		{
+			var target = The.UI.GetActiveTarget();
+			var bundles = The.UI.GetSelectedBundles();
+			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
+				return errorMessage;
+			}
+			foreach (var bundle in bundles) {
+				Console.WriteLine("Bundle: " + bundle);
+				PrintDuplicates(new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundle)));
+			}
+			return null;
+		}
+
+		private static void PrintDuplicates(AssetBundle bundle)
+		{
+			var files = new Dictionary<SHA256, string>();
+			var duplicates = new Dictionary<SHA256, List<string>>();
+			foreach (var file in bundle.EnumerateFiles().ToList()) {
+				var hash = bundle.GetFileContentsHash(file);
+				if (files.TryGetValue(hash, out var firstFile)) {
+					if (duplicates.TryGetValue(hash, out var list)) {
+						list.Add(file);
+					} else {
+						duplicates.Add(hash, list = new List<string> { firstFile, file });
+					}
+				} else {
+					files.Add(hash, file);
+				}
+			}
+			if (duplicates.Any()) {
+				var results = duplicates.Select(kv => kv).ToList();
+				results.Sort((a, b) => {
+					var aSize = bundle.GetFileSize(a.Value.First()) * (a.Value.Count - 1);
+					var bSize = bundle.GetFileSize(b.Value.First()) * (b.Value.Count - 1);
+					return aSize.CompareTo(bSize);
+				});
+				ulong totalOverhead = 0;
+				Console.WriteLine("Files with same contents hash:");
+				foreach (var (k, l) in results) {
+					Console.WriteLine("> " + k);
+					var overhead = bundle.GetFileSize(l.First()) * (l.Count - 1);
+					totalOverhead += (ulong)overhead;
+					Console.WriteLine($"(with size overhead of {overhead} bytes)");
+					foreach (var f in l) {
+						Console.WriteLine("  " + f);
+					}
+				}
+				Console.WriteLine($"Total size overhead of duplicates: {totalOverhead}");
+			}
+		}
+
 	}
 }
