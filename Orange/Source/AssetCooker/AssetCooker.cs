@@ -89,9 +89,12 @@ namespace Orange
 					CookBundle(bundlesToCook[i], assetsGroupedByBundles[i]);
 					StopBenchmark(extraTimer, $"{bundlesToCook[i]} cooked: ");
 				}
+				UserInterface.Instance.SetupProgressBar(bundles.Count);
 				if (UserInterface.Instance.ShouldUnpackBundles()) {
 					foreach (var bundle in bundles) {
+						Console.WriteLine($"Unpacking bundle '{bundle}'.");
 						UnpackBundle(bundle);
+						UserInterface.Instance.IncreaseProgressBar();
 					}
 				}
 				var extraBundles = bundles.ToList();
@@ -122,13 +125,13 @@ namespace Orange
 				Directory.CreateDirectory(destinationPath);
 			}
 			using (var source = CreateOutputBundle(bundleName))
-			using (var destination = new UnpackedAssetBundle(destinationPath)) {
+			using (var destination = new VerboseAssetBundle(new UnpackedAssetBundle(destinationPath))) {
 				foreach (var file in destination.EnumerateFiles()) {
 					if (!source.FileExists(file)) {
 						try {
 							destination.DeleteFile(file);
-						} catch {
-							// Do nothing.
+						} catch (System.Exception e) {
+							Console.WriteLine($"Error: caught an exception when deleting file '{file}': {e}");
 						}
 					}
 				}
@@ -145,15 +148,15 @@ namespace Orange
 								source.GetFileCookingUnitHash(file),
 								source.GetFileAttributes(file)
 							);
-						} catch {
-							// Do nothing.
+						} catch (System.Exception e) {
+							Console.WriteLine($"Error: caught an exception when unpacking bundle '{bundleName}', file '{file}': {e}");
 						}
 					}
 				}
 				try {
-					DeleteEmptyDirectories(destination.BaseDirectory);
-				} catch {
-					// Do nothing.
+					DeleteEmptyDirectories(destinationPath);
+				} catch (System.Exception e) {
+					Console.WriteLine($"Error: caught an exception when deleting empty directories at '{destinationPath}': '{e}'.");
 				}
 			}
 
@@ -172,14 +175,17 @@ namespace Orange
 
 		private void GetBundlesToCook(List<string> allBundles, out List<string> bundlesToCook, out int cookingUnitCount)
 		{
+			UserInterface.Instance.SetupProgressBar(allBundles.Count);
 			cookingUnitCount = 0;
 			bundlesToCook = new List<string>();
 			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), allBundles);
 			for (int i = 0; i < allBundles.Count; i++) {
+				Console.WriteLine($"Computing modified cooking unit count for bundle '{allBundles[i]}', ({i + 1}/{allBundles.Count})");
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(
 					new CustomSetAssetBundle(InputBundle, assetsGroupedByBundles[i]),
-					resetTexturePool: false);
+					resetTexturePool: false
+				);
 				OutputBundle = CreateOutputBundle(allBundles[i]);
 				try {
 					var unitsToCookHashes = new SortedSet<SHA256>();
@@ -194,13 +200,14 @@ namespace Orange
 					}
 					if (!unitsToCookHashes.SetEquals(cookedUnitsHashes)) {
 						bundlesToCook.Add(allBundles[i]);
-						cookingUnitCount += unitsToCookHashes.Count;
+						cookingUnitCount += unitsToCookHashes.Except(cookedUnitsHashes).Count();
 					}
 				} finally {
 					OutputBundle.Dispose();
 					OutputBundle = null;
 					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
 				}
+				UserInterface.Instance.IncreaseProgressBar();
 			}
 		}
 
@@ -264,8 +271,8 @@ namespace Orange
 							CheckCookCancelation();
 							if (!cookedUnitsHashes.Contains(hash)) {
 								stage.Cook(cookingUnit, hash);
+								UserInterface.Instance.IncreaseProgressBar();
 							}
-							UserInterface.Instance.IncreaseProgressBar();
 						}
 					}
 					// Warn about non-power of two textures
@@ -283,7 +290,7 @@ namespace Orange
 
 		private class VerboseAssetBundle : WrappedAssetBundle
 		{
-			private Dictionary<string, SHA256> deletedFiles = new Dictionary<string, SHA256>();
+			private readonly Dictionary<string, SHA256> deletedFiles = new Dictionary<string, SHA256>();
 			public VerboseAssetBundle(AssetBundle bundle) : base(bundle)
 			{ }
 
@@ -299,6 +306,8 @@ namespace Orange
 				if (deletedFiles.TryGetValue(path, out var hash)) {
 					if (hash != GetFileContentsHash(path)) {
 						Console.WriteLine("* " + path);
+					} else {
+						Console.WriteLine("= " + path);
 					}
 					deletedFiles.Remove(path);
 				} else {
