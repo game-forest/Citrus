@@ -116,5 +116,16 @@ namespace Lime
 		}
 
 		public override int GetHashCode() => HashCode.Combine(A, B, C, D);
+
+		public override string ToString()
+		{
+			var SHA256Span = MemoryMarshal.CreateSpan(ref this, 1);
+			var byteSpan = MemoryMarshal.Cast<SHA256, byte>(SHA256Span);
+			StringBuilder hexString = new StringBuilder(byteSpan.Length * 2);
+			foreach (byte b in byteSpan) {
+				hexString.AppendFormat("{0:x2}", b);
+			}
+			return hexString.ToString();
+		}
 	}
 }
