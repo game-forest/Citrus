@@ -255,7 +255,7 @@ namespace Orange
 		{
 			var files = new Dictionary<SHA256, string>();
 			var duplicates = new Dictionary<SHA256, List<string>>();
-			foreach (var file in bundle.EnumerateFiles().ToList()) {
+			foreach (var file in bundle.EnumerateFiles()) {
 				var hash = bundle.GetFileContentsHash(file);
 				if (files.TryGetValue(hash, out var firstFile)) {
 					if (duplicates.TryGetValue(hash, out var list)) {

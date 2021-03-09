@@ -53,7 +53,7 @@ namespace Tangerine.Core
 		{
 			try {
 				using var cacheBundle = OpenCacheBundle(AssetBundleFlags.Writable);
-				foreach (var path in cacheBundle.EnumerateFiles().ToList()) {
+				foreach (var path in cacheBundle.EnumerateFiles()) {
 					cacheBundle.DeleteFile(path);
 				}
 				InternalPersistence.Instance.WriteObjectToBundle(
@@ -164,7 +164,7 @@ namespace Tangerine.Core
 			}
 
 			var animationPathPrefix = Orange.Toolbox.ToUnixSlashes(Path.GetDirectoryName(path) + "/" + Path.GetFileNameWithoutExtension(path) + "@");
-			foreach (var assetPath in cacheBundle.EnumerateFiles().ToList()) {
+			foreach (var assetPath in cacheBundle.EnumerateFiles()) {
 				if (assetPath.EndsWith(".ant") && assetPath.StartsWith(animationPathPrefix)) {
 					cacheBundle.DeleteFile(assetPath);
 				}

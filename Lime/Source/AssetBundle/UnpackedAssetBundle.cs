@@ -8,7 +8,7 @@ namespace Lime
 {
 	public class UnpackedAssetBundle : AssetBundle
 	{
-		public struct FileInfo
+		public class FileInfo
 		{
 			[YuzuMember]
 			public SHA256 ContentsHash;
@@ -95,12 +95,15 @@ namespace Lime
 		public override SHA256 GetFileContentsHash(string path)
 		{
 			ValidateIndex();
-			if (!index.TryGetValue(path, out var i) || i.ContentsHash == default) {
+			if (!index.TryGetValue(path, out var i)) {
 				i = new FileInfo {
 					DateModified = File.GetLastWriteTimeUtc(ToSystemPath(path)),
-					ContentsHash = SHA256.Compute(File.ReadAllBytes(ToSystemPath(path)))
+					ContentsHash = default
 				};
 				index[path] = i;
+			}
+			if (i.ContentsHash == default) {
+				i.ContentsHash = SHA256.Compute(File.ReadAllBytes(ToSystemPath(path)));
 			}
 			return i.ContentsHash;
 		}
@@ -172,13 +175,15 @@ namespace Lime
 					continue;
 				}
 				if (oldIndex.TryGetValue(path, out var item)) {
-					index[path] = new FileInfo {
-						DateModified = fi.LastWriteTimeUtc,
-						ContentsHash = fi.LastWriteTimeUtc == item.DateModified ? item.ContentsHash : default
-					};
+					var lastWriteTime = fi.LastWriteTimeUtc;
+					if (lastWriteTime != item.DateModified) {
+						item.ContentsHash = default;
+						item.DateModified = lastWriteTime;
+					}
 				} else {
-					index[path] = new FileInfo { DateModified = fi.LastWriteTimeUtc, ContentsHash = default };
+					item = new FileInfo { DateModified = fi.LastWriteTimeUtc, ContentsHash = default };
 				}
+				index[path] = item;
 			}
 			indexValid = true;
 		}
