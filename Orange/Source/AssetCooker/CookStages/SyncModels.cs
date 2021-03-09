@@ -25,8 +25,12 @@ namespace Orange
 				);
 				var attachment = System.IO.Path.ChangeExtension(fbx, Model3DAttachment.FileExtension);
 				if (assetCooker.InputBundle.FileExists(attachment)) {
-					hash = assetCooker.InputBundle.ComputeCookingUnitHash(
-						attachment, assetCooker.CookingRulesMap[attachment]
+					hash = SHA256.Compute(
+						hash,
+						assetCooker.InputBundle.ComputeCookingUnitHash(
+							attachment,
+							assetCooker.CookingRulesMap[attachment]
+						)
 					);
 				}
 				yield return (fbx, hash);
