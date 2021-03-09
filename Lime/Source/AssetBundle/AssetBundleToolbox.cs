@@ -75,7 +75,7 @@ namespace Lime
 		{
 			using var stream = sourceBundle.OpenFileRaw(file);
 			destinationBundle.ImportFileRaw(
-				path: file,
+				destinationPath: file,
 				stream: stream,
 				unpackedSize: sourceBundle.GetFileUnpackedSize(file),
 				hash: sourceBundle.GetFileContentsHash(file),

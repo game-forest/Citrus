@@ -26,14 +26,14 @@ namespace Lime
 
 		public override int GetFileUnpackedSize(string path) => Bundle.GetFileUnpackedSize(path);
 
-		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			Bundle.ImportFile(path, stream, cookingUnitHash, attributes);
+			Bundle.ImportFile(destinationPath, stream, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			Bundle.ImportFileRaw(path, stream, unpackedSize, hash, cookingUnitHash, attributes);
+			Bundle.ImportFileRaw(destinationPath, stream, unpackedSize, hash, cookingUnitHash, attributes);
 		}
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open) => Bundle.OpenFile(path, mode);

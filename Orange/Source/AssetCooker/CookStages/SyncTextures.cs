@@ -28,17 +28,17 @@ namespace Orange
 				});
 		}
 
-		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		public void Cook(string imagePath, SHA256 cookingUnitHash)
 		{
-			var rules = assetCooker.CookingRulesMap[cookingUnit];
-			using var stream = assetCooker.InputBundle.OpenFile(cookingUnit);
+			var rules = assetCooker.CookingRulesMap[imagePath];
+			using var stream = assetCooker.InputBundle.OpenFile(imagePath);
 			var bitmap = new Bitmap(stream);
 			if (TextureTools.ShouldDownscale(assetCooker.Platform, bitmap, rules)) {
-				var scaledBitmap = TextureTools.DownscaleTexture(assetCooker.Platform, bitmap, cookingUnit, rules);
+				var scaledBitmap = TextureTools.DownscaleTexture(assetCooker.Platform, bitmap, imagePath, rules);
 				bitmap.Dispose();
 				bitmap = scaledBitmap;
 			}
-			ImportTexture(assetCooker, cookingUnit, bitmap, rules, cookingUnitHash);
+			ImportTexture(assetCooker, imagePath, bitmap, rules, cookingUnitHash);
 			bitmap.Dispose();
 		}
 

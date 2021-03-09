@@ -24,12 +24,12 @@ namespace Orange
 				});
 		}
 
-		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		public void Cook(string scenePath, SHA256 cookingUnitHash)
 		{
-			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(assetCooker.InputBundle, cookingUnit);
+			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(assetCooker.InputBundle, scenePath);
 			InternalPersistence.Instance.WriteObjectToBundle(
 				bundle: assetCooker.OutputBundle,
-				path: cookingUnit,
+				path: scenePath,
 				instance: node,
 				format: Persistence.Format.Binary,
 				cookingUnitHash: cookingUnitHash,

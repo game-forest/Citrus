@@ -66,7 +66,7 @@ namespace Lime
 			base.Dispose();
 		}
 
-		private static object syncAccessIndex = new object();
+		private static readonly object syncAccessIndex = new object();
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
 		{
@@ -76,9 +76,11 @@ namespace Lime
 		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open)
 		{
 			return new FileStream(
-				ToSystemPath(path), mode,
+				ToSystemPath(path),
+				mode,
 				mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
-				FileShare.Read);
+				FileShare.Read
+			);
 		}
 
 		public override int GetFileSize(string path)
@@ -113,12 +115,12 @@ namespace Lime
 			return File.Exists(ToSystemPath(path));
 		}
 
-		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			ImportFileRaw(path, stream, 0, default, cookingUnitHash, attributes);
+			ImportFileRaw(destinationPath, stream, 0, default, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			var length = (int)stream.Length;
@@ -127,7 +129,7 @@ namespace Lime
 				if (stream.Read(buffer, 0, length) != length) {
 					throw new IOException();
 				}
-				var systemPath = ToSystemPath(path);
+				var systemPath = ToSystemPath(destinationPath);
 				Directory.CreateDirectory(Path.GetDirectoryName(systemPath));
 				using var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read);
 				fs.Write(buffer, 0, length);

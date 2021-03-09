@@ -24,12 +24,13 @@ namespace Orange
 				});
 		}
 
-		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		public void Cook(string fontPath, SHA256 cookingUnitHash)
 		{
-			var font = InternalPersistence.Instance.ReadObjectFromBundle<SerializableCompoundFont>(assetCooker.InputBundle, cookingUnit);
+			var font = InternalPersistence.Instance
+				.ReadObjectFromBundle<SerializableCompoundFont>(assetCooker.InputBundle, fontPath);
 			InternalPersistence.Instance.WriteObjectToBundle(
 				bundle: assetCooker.OutputBundle,
-				path: cookingUnit,
+				path: fontPath,
 				instance: font,
 				format: Persistence.Format.Binary,
 				cookingUnitHash: cookingUnitHash,

@@ -33,13 +33,13 @@ namespace Orange
 			}
 		}
 
-		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		public void Cook(string fbxPath, SHA256 cookingUnitHash)
 		{
-			var cookingRules = assetCooker.CookingRulesMap[cookingUnit];
+			var cookingRules = assetCooker.CookingRulesMap[fbxPath];
 			var compression = cookingRules.ModelCompression;
 			Model3D model;
 			var options = new FbxImportOptions {
-				Path = cookingUnit,
+				Path = fbxPath,
 				Target = assetCooker.Target,
 				CookingRulesMap = assetCooker.CookingRulesMap
 			};
@@ -60,12 +60,12 @@ namespace Orange
 				default:
 					throw new ArgumentOutOfRangeException($"Unknown compression: {compression}");
 			}
-			ExportModelAnimations(model, cookingUnit, assetAttributes, cookingUnitHash);
+			ExportModelAnimations(model, fbxPath, assetAttributes, cookingUnitHash);
 			model.RemoveAnimatorsForExternalAnimations();
-			ExportModelMeshData(model, cookingUnit, assetAttributes, cookingUnitHash);
+			ExportModelMeshData(model, fbxPath, assetAttributes, cookingUnitHash);
 			InternalPersistence.Instance.WriteObjectToBundle(
 				bundle: assetCooker.OutputBundle,
-				path: cookingUnit,
+				path: fbxPath,
 				instance: model,
 				format: Persistence.Format.Binary,
 				cookingUnitHash: cookingUnitHash,

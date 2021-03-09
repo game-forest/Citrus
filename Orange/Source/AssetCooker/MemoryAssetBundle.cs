@@ -47,7 +47,8 @@ namespace Orange
 		public void WriteToBundle(AssetBundle destination)
 		{
 			foreach (var (path, asset) in assets) {
-				destination.ImportFileRaw(path,
+				destination.ImportFileRaw(
+					path,
 					new MemoryStream(asset.Data, 0, asset.Size),
 					asset.UnpackedSize,
 					asset.Hash,
@@ -87,7 +88,7 @@ namespace Orange
 
 		public override bool FileExists(string path) => assets.ContainsKey(path);
 
-		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
@@ -100,20 +101,20 @@ namespace Orange
 				if ((attributes & AssetAttributes.Zipped) != 0) {
 					stream = PackedAssetBundle.CompressAssetStream(stream, attributes);
 				}
-				ImportFileRaw(path, stream, length, hash, cookingUnitHash, attributes);
+				ImportFileRaw(destinationPath, stream, length, hash, cookingUnitHash, attributes);
 			} finally {
 				ArrayPool<byte>.Shared.Return(buffer);
 			}
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
 			if (stream.Read(buffer, 0, length) != length) {
 				throw new IOException();
 			}
-			assets[path] = new Asset {
+			assets[destinationPath] = new Asset {
 				Size = length,
 				UnpackedSize = unpackedSize,
 				Attributes = attributes,

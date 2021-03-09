@@ -401,7 +401,7 @@ namespace Lime
 
 		public override AssetAttributes GetFileAttributes(string path) => GetDescriptor(path).Attributes;
 
-		public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
@@ -414,16 +414,16 @@ namespace Lime
 				if ((attributes & AssetAttributes.Zipped) != 0) {
 					stream = CompressAssetStream(stream, attributes);
 				}
-				ImportFileRaw(path, stream, length, hash, cookingUnitHash, attributes);
+				ImportFileRaw(destinationPath, stream, length, hash, cookingUnitHash, attributes);
 			} finally {
 				ArrayPool<byte>.Shared.Return(buffer);
 			}
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
 			var reuseExistingDescriptor =
-				index.TryGetValue(AssetPath.CorrectSlashes(path), out AssetDescriptor d) &&
+				index.TryGetValue(AssetPath.CorrectSlashes(destinationPath), out AssetDescriptor d) &&
 				d.AllocatedSize == stream.Length;
 			if (reuseExistingDescriptor) {
 				d.Size = (int)stream.Length;
@@ -431,12 +431,12 @@ namespace Lime
 				d.ContentsHash = hash;
 				d.CookingUnitHash = cookingUnitHash;
 				d.UnpackedSize = unpackedSize;
-				index[AssetPath.CorrectSlashes(path)] = d;
+				index[AssetPath.CorrectSlashes(destinationPath)] = d;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);
 			} else {
-				if (FileExists(path)) {
-					DeleteFile(path);
+				if (FileExists(destinationPath)) {
+					DeleteFile(destinationPath);
 				}
 				d = new AssetDescriptor();
 				d.Size = (int)stream.Length;
@@ -446,7 +446,7 @@ namespace Lime
 				d.Attributes = attributes;
 				d.ContentsHash = hash;
 				d.CookingUnitHash = cookingUnitHash;
-				index[AssetPath.CorrectSlashes(path)] = d;
+				index[AssetPath.CorrectSlashes(destinationPath)] = d;
 				indexOffset += d.AllocatedSize;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);

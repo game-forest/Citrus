@@ -26,11 +26,11 @@ namespace Orange
 				});
 		}
 
-		public void Cook(string cookingUnit, SHA256 cookingUnitHash)
+		public void Cook(string txtPath, SHA256 cookingUnitHash)
 		{
 			assetCooker.OutputBundle.ImportFile(
-				srcPath: assetCooker.InputBundle.ToSystemPath(cookingUnit),
-				dstPath: cookingUnit,
+				sourcePath: assetCooker.InputBundle.ToSystemPath(txtPath),
+				destinationPath: txtPath,
 				cookingUnitHash: cookingUnitHash,
 				attributes: AssetAttributes.Zipped
 			);

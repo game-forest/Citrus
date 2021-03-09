@@ -80,12 +80,12 @@ namespace Lime
 
 		public abstract bool FileExists(string path);
 
-		public abstract void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
+		public abstract void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
-		public abstract void ImportFileRaw(string path, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
+		public abstract void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
@@ -93,10 +93,10 @@ namespace Lime
 		public abstract IEnumerable<string> EnumerateFiles(string path = null, string extension = null);
 
 		public void ImportFile(
-			string srcPath, string dstPath, SHA256 cookingUnitHash, AssetAttributes attributes)
+			string sourcePath, string destinationPath, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			using var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-			ImportFile(dstPath, stream, cookingUnitHash, attributes);
+			using var stream = new FileStream(sourcePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			ImportFile(destinationPath, stream, cookingUnitHash, attributes);
 		}
 
 		/// <summary>
