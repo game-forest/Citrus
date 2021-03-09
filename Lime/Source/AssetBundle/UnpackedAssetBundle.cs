@@ -125,20 +125,10 @@ namespace Lime
 
 		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			stream.Seek(0, SeekOrigin.Begin);
-			var length = (int)stream.Length;
-			var buffer = ArrayPool<byte>.Shared.Rent(length);
-			try {
-				if (stream.Read(buffer, 0, length) != length) {
-					throw new IOException();
-				}
-				var systemPath = ToSystemPath(destinationPath);
-				Directory.CreateDirectory(Path.GetDirectoryName(systemPath));
-				using var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read);
-				fs.Write(buffer, 0, length);
-			} finally {
-				ArrayPool<byte>.Shared.Return(buffer);
-			}
+			var systemPath = ToSystemPath(destinationPath);
+			Directory.CreateDirectory(Path.GetDirectoryName(systemPath));
+			using var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+			stream.CopyTo(fs);
 		}
 
 		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)

@@ -142,9 +142,10 @@ namespace Orange
 							if (exists) {
 								destination.DeleteFile(file);
 							}
+							using var sourceStream = source.OpenFile(file);
 							destination.ImportFile(
 								file,
-								new MemoryStream(source.ReadFile(file)),
+								sourceStream,
 								source.GetFileCookingUnitHash(file),
 								source.GetFileAttributes(file)
 							);
