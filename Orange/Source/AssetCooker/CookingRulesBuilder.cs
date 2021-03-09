@@ -485,7 +485,9 @@ namespace Orange
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
 			rulesStack.Push(rootRules);
-			foreach (var filePath in bundle.EnumerateFiles(path)) {
+			var files = bundle.EnumerateFiles(path).ToList();
+			files.Sort();
+			foreach (var filePath in files) {
 				while (!filePath.StartsWith(pathStack.Peek())) {
 					rulesStack.Pop();
 					pathStack.Pop();

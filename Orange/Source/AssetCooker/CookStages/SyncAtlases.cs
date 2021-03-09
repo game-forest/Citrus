@@ -20,7 +20,9 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			var atlasToHash = new Dictionary<string, SHA256>(StringComparer.Ordinal);
-			foreach (var texturePath in assetCooker.InputBundle.EnumerateFiles(null, ".png")) {
+			var files = assetCooker.InputBundle.EnumerateFiles(null, ".png").ToList();
+			files.Sort();
+			foreach (var texturePath in files) {
 				var textureCookingRules = assetCooker.CookingRulesMap[texturePath];
 				var atlas = textureCookingRules.TextureAtlas;
 				if (atlas == null) {

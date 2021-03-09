@@ -89,6 +89,7 @@ namespace Lime
 
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
+		/// Order is specific to implementation.
 		/// </summary>
 		public abstract IEnumerable<string> EnumerateFiles(string path = null, string extension = null);
 
