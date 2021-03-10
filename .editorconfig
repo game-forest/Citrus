@@ -52,3 +52,6 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 csharp_indent_switch_labels = true
 csharp_indent_case_contents = true
+
+// install: https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines
+guidelines = 100 1px dotted black, 120 10px solid 30FF004C
