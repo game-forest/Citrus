@@ -89,8 +89,12 @@ namespace Tangerine.Core.Operations
 			if (!NodeCompositionValidator.CanHaveChildren(container.GetType())) {
 				return false;
 			}
-			if (!string.IsNullOrEmpty(container.ContentsPath) && Project.Current.DocumentExists(container.ContentsPath)) {
-				OpenExternalScene(container.ContentsPath);
+			if (!string.IsNullOrEmpty(container.ContentsPath)) {
+				if (Project.Current.DocumentExists(container.ContentsPath)) {
+					OpenExternalScene(container.ContentsPath);
+				} else {
+					return false;
+				}
 			} else {
 				ChangeContainer(container, selectFirstNode);
 				SetProperty.Perform(container, nameof(Node.TangerineFlags), container.TangerineFlags | TangerineFlags.DisplayContent, isChangingDocument: false);

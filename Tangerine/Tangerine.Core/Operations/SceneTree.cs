@@ -180,7 +180,7 @@ namespace Tangerine.Core.Operations
 		private static void DecorateNodes(Row item)
 		{
 			if (item.TryGetNode(out var node)) {
-				Document.Current.Decorate(node);
+				Document.Decorate(node);
 			} else if (item.TryGetFolder(out _)) {
 				foreach (var i in item.Rows) {
 					DecorateNodes(i);

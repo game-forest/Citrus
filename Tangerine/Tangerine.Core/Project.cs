@@ -309,10 +309,9 @@ namespace Tangerine.Core
 		public bool CloseDocument(Document doc, bool force = false)
 		{
 			int currentIndex = documents.IndexOf(Document.Current);
-			string systemPath;
 			if (doc.Close(force)) {
 				documents.Remove(doc);
-				if (GetFullPath(AutosaveProcessor.GetTemporaryFilePath(doc.Path), out systemPath)) {
+				if (GetFullPath(AutosaveProcessor.GetTemporaryFilePath(doc.Path), out var systemPath)) {
 					File.Delete(systemPath);
 				}
 				if (doc == Document.Current) {
@@ -322,6 +321,8 @@ namespace Tangerine.Core
 						Document.SetCurrent(null);
 						ProjectUserPreferences.Instance.CurrentDocument = null;
 					}
+				} else {
+					Document.Current?.RefreshExternalScenes();
 				}
 				return true;
 			}
@@ -404,7 +405,7 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void ReloadModifiedDocuments()
+		private void ReloadModifiedDocuments()
 		{
 			HandleMissingDocuments(Documents.Where(d => !GetFullPath(d.Path, out _)));
 			foreach (var doc in Documents.ToList()) {
