@@ -551,11 +551,11 @@ namespace Tangerine.Core
 				} else {
 					var assetPath = Node.ResolveScenePath(node.ContentsPath);
 					if (assetPath != null) {
-						var hash = AssetBundle.Current.GetFileHash(assetPath);
+						var hash = AssetBundle.Current.GetFileContentsHash(assetPath);
 						if (assetPath.EndsWith(".t3d")) {
 							var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
 							if (AssetBundle.Current.FileExists(attachmentPath)) {
-								hash = SHA256.Compute(hash, AssetBundle.Current.GetFileHash(attachmentPath));
+								hash = SHA256.Compute(hash, AssetBundle.Current.GetFileContentsHash(attachmentPath));
 							}
 						}
 						if (
@@ -639,7 +639,7 @@ namespace Tangerine.Core
 				}
 			}
 			documentCache.Remove(Path);
-			documentTimeStamps.Remove(Path);
+			documentHashes.Remove(Path);
 			return true;
 		}
 
