@@ -39,7 +39,7 @@ namespace Tangerine.UI.Docking
 #if !MAC || !DEBUG // JetBrains Rider doesn't stop on exceptions if the handler is set.
 			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
 #endif
-			SetDropHandler(window);
+			window.AllowDropFiles = true;
 			MainWindowWidget = new ThemedInvalidableWindowWidget(window) {
 				Id = "MainWindow",
 				Layout = new VBoxLayout(),
@@ -112,12 +112,6 @@ namespace Tangerine.UI.Docking
 			}
 		}
 
-		private void SetDropHandler(IWindow window)
-		{
-			window.AllowDropFiles = true;
-
-		}
-
 		public PanelPlacement AddPanel(Panel panel, Placement targetPlacement, DockSite site, float stretch = 0.25f)
 		{
 			return Model.AddPanel(panel, targetPlacement, site, stretch);
@@ -186,7 +180,8 @@ namespace Tangerine.UI.Docking
 			}
 		}
 
-		public IEnumerable<PanelPlacement> GetDescendantPanelPlacements() {
+		private IEnumerable<PanelPlacement> GetDescendantPanelPlacements()
+		{
 			foreach (var windowPlacement in Model.WindowPlacements) {
 				foreach (var panelPlacement in windowPlacement.GetPanelPlacements()) {
 					yield return panelPlacement;
@@ -319,6 +314,9 @@ namespace Tangerine.UI.Docking
 		{
 			var panel = Model.Panels.First(pan => pan.Id == placement.Id);
 			var widget = panel.ContentWidget;
+			// Invoke Layout() before changing the LayoutManager, otherwise the layout may be stuck forever
+			// in the previous LayoutManager measure queue.
+			widget.LayoutManager?.Layout();
 			widget.Unlink();
 			if (Model.FindPanelPlacement(panel.Id).Hidden) {
 				return;
@@ -450,7 +448,7 @@ namespace Tangerine.UI.Docking
 				Type = WindowType.Tool,
 			});
 			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
-			SetDropHandler(window);
+			window.AllowDropFiles = true;
 			window.Closing += reason => {
 				if (reason == CloseReason.MainWindowClosing) {
 					return true;
@@ -691,7 +689,7 @@ namespace Tangerine.UI.Docking
 			}
 		}
 
-		public class DockingException : Lime.Exception
+		private class DockingException : Lime.Exception
 		{
 			public DockingException(string message) : base(message) { }
 		}
