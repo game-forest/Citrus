@@ -152,6 +152,8 @@ namespace Lime.Graphics.Platform.Vulkan
 #elif iOS
 			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_MVK_ios_surface"));
 			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_IMG_format_pvrtc"));
+#elif ANDROID
+			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_KHR_android_surface"));
 #endif
 			if (validation) {
 				enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_EXT_debug_report"));

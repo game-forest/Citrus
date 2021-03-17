@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -21,6 +21,9 @@ namespace EmptyProject.Android
 					new Lime.ApplicationOptions
 					{
 						DecodeAudioInSeparateThread = false,
+						RenderingBackend = Lime.ActivityDelegate.Instance.IsVulkanSupported()
+							? Lime.RenderingBackend.Vulkan
+							: Lime.RenderingBackend.ES20
 					}
 				);
 				EmptyProject.Application.Application.Initialize();

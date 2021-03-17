@@ -119,7 +119,7 @@ namespace Lime.Graphics.Platform.Vulkan
 		[DllImport(LibraryName, EntryPoint = "GetActiveAttribName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr GetActiveAttribNameInternal(IntPtr programHandle, int index);
 
-		private static string GetActiveAttribName(IntPtr programHandle, int index)
+		public static string GetActiveAttribName(IntPtr programHandle, int index)
 		{
 			return Marshal.PtrToStringAnsi(GetActiveAttribNameInternal(programHandle, index));
 		}

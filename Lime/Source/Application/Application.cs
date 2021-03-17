@@ -260,6 +260,9 @@ namespace Lime
 			EnableParticleLimiter = options.EnableParticleLimiter;
 			RenderingBackend = options.RenderingBackend;
 			MainThread = Thread.CurrentThread;
+#if ANDROID
+			ActivityDelegate.Instance.GameView.InitializeRenderContext();
+#endif // ADNROID
 			// Use '.' as decimal separator.
 			var culture = System.Globalization.CultureInfo.InvariantCulture;
 			System.Threading.Thread.CurrentThread.CurrentCulture = culture;
