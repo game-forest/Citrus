@@ -38,8 +38,19 @@ namespace Orange
 				bitmap.Dispose();
 				bitmap = scaledBitmap;
 			}
-			ImportTexture(assetCooker, imagePath, bitmap, rules, cookingUnitHash);
+			var assetPath = Path.ChangeExtension(imagePath, GetPlatformTextureExtension(assetCooker.Platform));
+			ImportTexture(assetCooker, assetPath, bitmap, rules, cookingUnitHash);
 			bitmap.Dispose();
+		}
+		public static string GetPlatformTextureExtension(TargetPlatform platform)
+		{
+			switch (platform) {
+				case TargetPlatform.iOS:
+				case TargetPlatform.Android:
+					return ".pvr";
+				default:
+					return ".dds";
+			}
 		}
 
 		public static void ImportTexture(AssetCooker assetCooker, string path, Bitmap texture, ICookingRules rules, SHA256 cookingUnitHash)

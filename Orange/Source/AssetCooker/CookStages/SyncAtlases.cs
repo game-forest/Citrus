@@ -347,20 +347,9 @@ namespace Orange
 			var postfix = assetCooker.BundleBeingCookedName ?? "";
 			var path = AssetPath.Combine(
 				"Atlases_" + postfix,
-				atlasName + '.' + index.ToString("000") + GetPlatformTextureExtension()
+				atlasName + '.' + index.ToString("000") + SyncTextures.GetPlatformTextureExtension(assetCooker.Platform)
 			);
 			return path;
-		}
-
-		private string GetPlatformTextureExtension()
-		{
-			switch (assetCooker.Target.Platform) {
-				case TargetPlatform.iOS:
-				case TargetPlatform.Android:
-					return ".pvr";
-				default:
-					return ".dds";
-			}
 		}
 
 		private static IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize, int maxSize)
