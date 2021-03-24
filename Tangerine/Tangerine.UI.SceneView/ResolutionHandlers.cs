@@ -128,7 +128,8 @@ namespace Tangerine.UI.SceneView
 				document.ResolutionPreview = new ResolutionPreview {
 					Enabled = value,
 					Preset = document.ResolutionPreview.Preset,
-					IsPortrait = document.ResolutionPreview.IsPortrait
+					IsPortrait = document.ResolutionPreview.IsPortrait,
+					OriginalRootSize = document.ResolutionPreview.OriginalRootSize,
 				};
 			}
 		}
@@ -146,8 +147,16 @@ namespace Tangerine.UI.SceneView
 
 		private static void DocumentOnSaving(Document document) => Perform(DisabledResolutionPreview, requiredSave: false);
 
-		public static void Perform(ResolutionPreview resolutionPreview, bool requiredSave = true) =>
+		public static void Perform(ResolutionPreview resolutionPreview, bool requiredSave = true)
+		{
+			if (resolutionPreview.Enabled && Document.Current.RootNode is Widget rootNode) {
+				resolutionPreview.OriginalRootSize =
+					!Document.Current.ResolutionPreview.Enabled ?
+					rootNode.Size :
+					Document.Current.ResolutionPreview.OriginalRootSize;
+			}
 			DocumentHistory.Current.Perform(new ResolutionPreviewOperation(resolutionPreview, requiredSave));
+		}
 
 		public ResolutionPreviewOperation(ResolutionPreview resolutionPreview, bool requiredSave)
 		{
@@ -168,6 +177,10 @@ namespace Tangerine.UI.SceneView
 				ResolutionPreviewMode = resolutionPreview.Enabled;
 				if (requiredSave) {
 					Document.Current.ResolutionPreview = resolutionPreview;
+				}
+				if (!resolutionPreview.Enabled) {
+					rootNode.Size = Document.Current.ResolutionPreview.OriginalRootSize;
+					return;
 				}
 
 				var defaultResolution = ProjectPreferences.Instance.DefaultResolution;

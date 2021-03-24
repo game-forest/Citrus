@@ -9,6 +9,7 @@ namespace Tangerine.Core
 		public bool Enabled;
 		public ResolutionPreset Preset;
 		public bool IsPortrait;
+		public Vector2 OriginalRootSize;
 	}
 
 	public class ResolutionPreset
