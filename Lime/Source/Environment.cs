@@ -26,7 +26,8 @@ namespace Lime
 				ActivityDelegate.Instance.Activity.StartActivity(intent);
 			}
 #else
-			System.Diagnostics.Process.Start(url);
+			// https://github.com/dotnet/corefx/issues/10361
+			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
 #endif
 		}
 
