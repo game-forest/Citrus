@@ -99,6 +99,16 @@ namespace EmptyProject.Debug
 				The.AppData.EnableSplashScreen = false;
 				The.AppData.Save();
 			}, () => The.AppData.EnableSplashScreen);
+			debugSection.Item("Toggle Particle Limit", () => {
+				var provider = WidgetContext.Current.Root.Manager.ServiceProvider;
+				if (provider.TryGetService<ParticleLimiter>(out var service)) {
+					if (service.ParticleCountLimit == -1) {
+						service.ParticleCountLimit = 100;
+					} else {
+						service.ParticleCountLimit = -1;
+					}
+				}
+			});
 #if PROFILER
 			debugSection.Item("Toggle overdraw visualization", () => {
 				Lime.Profiler.Graphics.Overdraw.Enabled = !Lime.Profiler.Graphics.Overdraw.Enabled;
@@ -151,6 +161,12 @@ namespace EmptyProject.Debug
 				$"Window Size: {The.Window.ClientSize}",
 				$"World Size: {The.World.Size}",
 			};
+
+			var provider = WidgetContext.Current.Root.Manager.ServiceProvider;
+			if (provider.TryGetService<ParticleLimiter>(out var service)) {
+				fields.Add($"Particle Count: {service.ParticleCount}");
+			}
+
 #if PROFILER
 			if (Lime.Profiler.Graphics.Overdraw.MetricRequired) {
 				fields.Add($"Overdraw pixel count: {overdrawPixelCount}");

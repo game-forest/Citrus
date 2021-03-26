@@ -5,7 +5,7 @@ namespace Lime
 {
 	public class ServiceRegistry : IServiceProvider
 	{
-		private Dictionary<Type, object> services = new Dictionary<Type, object>();
+		private readonly Dictionary<Type, object> services = new Dictionary<Type, object>();
 
 		public void Add<T>(T service) where T : class
 		{

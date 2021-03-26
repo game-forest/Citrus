@@ -60,7 +60,7 @@ namespace Lime
 		[TangerineKeyframeColor(14)]
 		public bool LoopedAnimation { get; set; }
 
-		ITexture texture = new SerializableTexture();
+		private ITexture texture = new SerializableTexture();
 
 		[YuzuMember]
 		[TangerineKeyframeColor(27)]
@@ -84,7 +84,7 @@ namespace Lime
 			LoopedAnimation = true;
 		}
 
-		bool ChangeTextureFrameIndex(ref string path, int frame)
+		private static bool ChangeTextureFrameIndex(ref string path, int frame)
 		{
 			if (frame < 0 || frame > 99)
 				return false;
@@ -104,7 +104,7 @@ namespace Lime
 			return false;
 		}
 
-		List<SerializableTexture> textures;
+		private List<SerializableTexture> textures;
 
 		public ITexture GetTexture(int index)
 		{

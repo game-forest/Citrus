@@ -886,7 +886,9 @@ namespace Lime
 				Application.Input.Simulator.OnProcessingPendingInputEvents();
 			}
 			RaiseUpdating(delta);
-			AudioSystem.Update();
+			if (this == Application.MainWindow) {
+				AudioSystem.Update();
+			}
 			if (active || Input.IsSimulationRunning) {
 				Input.CopyKeysState();
 				Input.TextInput = null;

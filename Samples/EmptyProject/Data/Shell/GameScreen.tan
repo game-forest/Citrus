@@ -7,6 +7,336 @@
 			"class":"Lime.Frame, Lime",
 			"Color":[4294967295],
 			"Id":"Scene1",
+			"Nodes":[
+				{
+					"class":"Lime.Frame, Lime",
+					"Color":[4294967295],
+					"Id":"ParticleEmitterGroup",
+					"Nodes":[
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":5,
+							"Pivot":[0.5,0.5],
+							"Position":[908.0001,86.66678],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":10,
+							"Pivot":[0.5,0.5],
+							"Position":[734.6669,86.66672],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":25,
+							"Pivot":[0.5,0.5],
+							"Position":[528,81.333405],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Pivot":[0.5,0.5],
+							"Position":[85.33334,86.66672],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":50,
+							"Pivot":[0.5,0.5],
+							"Position":[299.99997,81.33334],
+							"Size":[170.66669,162.66669]
+						}
+					],
+					"Pivot":[0.5,0.5],
+					"Position":[511.99988,374.00003],
+					"Size":[993.3334,168.00012]
+				},
+				{
+					"class":"Lime.Frame, Lime",
+					"Color":[4294967295],
+					"Id":"ParticleEmitterGroup",
+					"Nodes":[
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":50,
+							"Pivot":[0.5,0.5],
+							"Position":[908.0001,86.66678],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Pivot":[0.5,0.5],
+							"Position":[734.6669,86.66672],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":250,
+							"Pivot":[0.5,0.5],
+							"Position":[528,81.333405],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":1E3,
+							"Pivot":[0.5,0.5],
+							"Position":[85.33334,86.66672],
+							"Size":[170.66669,162.66669]
+						},
+						{
+							"class":"Lime.ParticleEmitter, Lime",
+							"Color":[4294967295],
+							"Id":"ParticleEmitter",
+							"Nodes":[
+								{
+									"class":"Lime.ParticleModifier, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Color4Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[16777215]],
+												[30,0,[4294967295]],
+												[60,0,[16777215]]
+											],
+											"TargetProperty":"Color"
+										}
+									],
+									"Color":[16777215],
+									"Id":"ParticleModifier",
+									"Size":[10,10],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime"
+									}
+								}
+							],
+							"Number":500,
+							"Pivot":[0.5,0.5],
+							"Position":[299.99997,81.33334],
+							"Size":[170.66669,162.66669]
+						}
+					],
+					"Pivot":[0.5,0.5],
+					"Position":[518.6666,204.66672],
+					"Size":[993.3334,168.00012]
+				}
+			],
 			"Pivot":[0.5,0.5],
 			"Position":[512,384],
 			"Size":[1024,768]
@@ -26,6 +356,17 @@
 			"Size":[378,50],
 			"Text":"Game Screen",
 			"VAlignment":1
+		},
+		{
+			"class":"Lime.Button, Lime",
+			"Anchors":6,
+			"Color":[4294967295],
+			"ContentsPath":"Buttons/BtnXRed",
+			"Id":"@BtnDo",
+			"Pivot":[0.5,0.5],
+			"Position":[837.33167,465.33246],
+			"Scale":[0.5,0.5],
+			"Size":[256,256]
 		},
 		{
 			"class":"Lime.Button, Lime",

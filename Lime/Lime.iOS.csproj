@@ -487,6 +487,9 @@
     <Compile Include="Source\Widgets\Processors\CommandProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\GestureProcessor.cs" />
     <Compile Include="Source\Widgets\Processors\LayoutProcessor.cs" />
+    <Compile Include="Source\Widgets\Processors\ParticleLimiter.cs" />
+    <Compile Include="Source\Widgets\Processors\ParticleLimitPostLateUpdateProcessor.cs" />
+    <Compile Include="Source\Widgets\Processors\ParticleLimitPreLateUpdateProcessor.cs" />
     <Compile Include="Source\Widgets\RenderChain.cs" />
     <Compile Include="Source\Widgets\RendererWrapper.cs" />
     <Compile Include="Source\Widgets\RenderObject.cs" />

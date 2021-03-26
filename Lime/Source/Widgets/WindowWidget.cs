@@ -58,6 +58,9 @@ namespace Lime
 			services.Add(layoutManager);
 			services.Add(CommandHandlerList.Global);
 			services.Add(widgetContext);
+			if (Application.EnableParticleLimiter) {
+				services.Add(new ParticleLimiter());
+			}
 
 			var manager = new NodeManager(services);
 			manager.Processors.Add(new GestureProcessor());
@@ -72,9 +75,15 @@ namespace Lime
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(AfterAnimationStage)));
 			manager.Processors.Add(new LayoutProcessor());
 			manager.Processors.Add(new BoundingRectProcessor());
+			if (Application.EnableParticleLimiter) {
+				manager.Processors.Add(new ParticleLimitPreLateUpdateProcessor());
+			}
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(PreLateUpdateStage)));
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(LateUpdateStage)));
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(PostLateUpdateStage)));
+			if (Application.EnableParticleLimiter) {
+				manager.Processors.Add(new ParticleLimitPostLateUpdateProcessor());
+			}
 			return manager;
 		}
 

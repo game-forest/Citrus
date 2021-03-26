@@ -252,6 +252,7 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(3)]
 		public NumericRange RandomMotionRotation { get; set; }
+
 		private bool firstUpdate = true;
 		/// <summary>
 		/// Number of particles to generate on Update. Used to make particle count FPS independent.
@@ -301,6 +302,12 @@ namespace Lime
 			TimeShift = 0;
 			ImmortalParticles = false;
 			Components.Add(new UpdatableNodeBehavior());
+		}
+
+		public override void Dispose()
+		{
+			base.Dispose();
+			DeleteAllParticles();
 		}
 
 		public void ClearParticles()
@@ -374,7 +381,7 @@ namespace Lime
 		{
 			lock (particlePoolSync) {
 				while (particleCount > 0) {
-					var p = particles[particles.Count - 1];
+					var p = particles[^1];
 					p.Modifier = null;
 					particlePool.Push(p);
 					particles.RemoveAt(particles.Count - 1);
@@ -400,6 +407,15 @@ namespace Lime
 				particlesToSpawn += Number * delta;
 			}
 			var currentBoundingRect = new Rectangle();
+
+			if (
+				Application.EnableParticleLimiter &&
+				GloballyVisible &&
+				Manager != null &&
+				Manager.ServiceProvider.TryGetService<ParticleLimiter>(out var particleLimiter)
+			) {
+				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
+			}
 			while (particlesToSpawn >= 1f) {
 				Particle particle = AllocParticle();
 				if (GloballyEnabled && Nodes.Count > 0 && InitializeParticle(particle)) {
@@ -601,6 +617,14 @@ namespace Lime
 
 		public virtual void OnUpdate(float delta)
 		{
+			if (
+				Application.EnableParticleLimiter &&
+				GloballyVisible &&
+				Manager != null &&
+				Manager.ServiceProvider.TryGetService<ParticleLimiter>(out var particleLimiter)
+			) {
+				particleLimiter.AddParticleCount(particles.Count);
+			}
 			if (firstUpdate) {
 				firstUpdate = false;
 				const float ModellingStep = 0.04f;
@@ -885,7 +909,7 @@ namespace Lime
 			v3y = axuy + 0.5f * tvy + tty;
 			v4x = v2x + v3x - v1x;
 			v4y = v2y + v3y - v1y;
-			// Update given bounding rect.
+			// Update given bounding rectangle.
 			if (boundingRect.AX == boundingRect.BX && boundingRect.AY == boundingRect.BY) {
 				boundingRect = new Rectangle(v1x, v1y, v1x, v1y);
 			}
@@ -904,20 +928,6 @@ namespace Lime
 			if (v4y < boundingRect.AY) boundingRect.AY = v4y;
 			if (v4y > boundingRect.BY) boundingRect.BY = v4y;
 			return true;
-		}
-
-		private void RenderParticle(Particle p, Matrix32 matrix, Color4 color)
-		{
-			if (p.ColorCurrent.A <= 0) {
-				return;
-			}
-			float angle = p.Angle;
-			if (AlongPathOrientation) {
-				angle += p.FullDirection;
-			}
-			ITexture texture = p.Modifier.GetTexture((int)p.TextureIndex - 1);
-			Renderer.Transform1 = p.Transform * matrix;
-			Renderer.DrawSprite(texture, p.ColorCurrent * color, -Vector2.Half, Vector2.One, Vector2.Zero, Vector2.One);
 		}
 
 		public override void AddToRenderChain(RenderChain chain)
@@ -979,7 +989,7 @@ namespace Lime
 			return new Vector2(zoom * aspectRatio, zoom / Math.Max(0.0001f, aspectRatio));
 		}
 
-		// Decompose 2d scale into 1d scale and aspect ratio
+		// Decompose 2d scale into 1d scale and aspect ratio.
 		public static void DecomposeScale(Vector2 scale, out float aspectRatio, out float zoom)
 		{
 			if (scale.Y == 0.0f) {
@@ -1021,7 +1031,6 @@ namespace Lime
 			);
 		}
 
-		// ReSharper disable once UnusedMember.Local
 		private void BuildForTangerine()
 		{
 			var defaultModifier = new ParticleModifier() {
