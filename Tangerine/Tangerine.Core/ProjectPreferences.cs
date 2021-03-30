@@ -19,6 +19,8 @@ namespace Tangerine.Core
 		public Dictionary<string, RemoteScriptingConfiguration> RemoteScriptingConfigurations =
 			new Dictionary<string, RemoteScriptingConfiguration>();
 
+		public RemoteScriptingConfiguration RemoteScriptingCurrentConfiguration;
+
 		public class RemoteScriptingConfiguration
 		{
 			private readonly List<string> projectReferences = new List<string>();
@@ -125,6 +127,7 @@ namespace Tangerine.Core
 				foreach (var kv in remoteScriptingSection) {
 					var configuration = new RemoteScriptingConfiguration(kv.Value);
 					RemoteScriptingConfigurations.Add(kv.Name, configuration); // configurationName
+					RemoteScriptingCurrentConfiguration ??= configuration;
 				}
 				Console.WriteLine("Remote scripting preferences was successfully loaded.");
 			} catch {
@@ -135,6 +138,7 @@ namespace Tangerine.Core
 		private void InitializeDefaultRemoteScriptingPreferences()
 		{
 			RemoteScriptingConfigurations.Clear();
+			RemoteScriptingCurrentConfiguration = null;
 		}
 	}
 }
