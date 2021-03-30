@@ -80,6 +80,9 @@ namespace Lime.Graphics.Platform.Vulkan
 			if (type == null) {
 				throw new InvalidOperationException();
 			}
+			if (requirements.Size > type.BlockSize) {
+				requiresDedicated = prefersDedicated = true;
+			}
 			if (prefersDedicated) {
 				var memory = TryAllocateDeviceMemory(type, requirements.Size, dedicatedAllocateInfo);
 				if (memory != null) {
@@ -89,7 +92,7 @@ namespace Lime.Graphics.Platform.Vulkan
 					throw new OutOfMemoryException();
 				}
 			}
-			return AllocateFromBlock(type, requirements.Size, requirements.Alignment, linear);
+			return AllocateFromPool(type, requirements.Size, requirements.Alignment, linear);
 		}
 
 		private DeviceMemory TryAllocateDeviceMemory(MemoryType type, ulong size, SharpVulkan.Ext.MemoryDedicatedAllocateInfo* dedicatedAllocateInfo)
@@ -128,17 +131,13 @@ namespace Lime.Graphics.Platform.Vulkan
 			return PreferPersistentMapping && (type.PropertyFlags & SharpVulkan.MemoryPropertyFlags.HostVisible) != 0;
 		}
 
-		private MemoryAlloc AllocateFromBlock(MemoryType type, ulong size, ulong alignment, bool linear)
+		private MemoryAlloc AllocateFromPool(MemoryType type, ulong size, ulong alignment, bool linear)
 		{
-			if (type.BlockSize < size) {
-				throw new OutOfMemoryException();
-			}
 			alignment = GraphicsUtility.CombineAlignment(alignment, type.MinAlignment);
 			var pool = linear ? memoryPoolsLinear[type.Index] : memoryPoolsNonLinear[type.Index];
 			foreach (var block in pool) {
-				var blockNode = block.TryAllocate(size, alignment);
-				if (blockNode != null) {
-					return new MemoryAlloc(this, block, blockNode);
+				if (block.TryAllocate(size, alignment, out var offset)) {
+					return new MemoryAlloc(this, block, offset, size);
 				}
 			}
 			var newBlockMemory = TryAllocateDeviceMemory(type, type.BlockSize, null);
@@ -146,12 +145,8 @@ namespace Lime.Graphics.Platform.Vulkan
 				throw new OutOfMemoryException();
 			}
 			var newBlock = new MemoryBlock(newBlockMemory);
-			var newBlockNode = newBlock.TryAllocate(size, alignment);
-			if (newBlockNode == null) {
-				throw new OutOfMemoryException();
-			}
 			pool.Add(newBlock);
-			return new MemoryAlloc(this, newBlock, newBlockNode);
+			return new MemoryAlloc(this, newBlock, newBlock.Allocate(size, alignment), size);
 		}
 
 		public void Free(MemoryAlloc alloc)
@@ -164,7 +159,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			}
 			var block = alloc.MemoryBlock;
 			if (block != null) {
-				block.Free(alloc.MemoryBlockNode);
+				block.Free(alloc.Offset, alloc.Size);
 			} else {
 				FreeDeviceMemory(alloc.Memory);
 			}
@@ -364,385 +359,90 @@ namespace Lime.Graphics.Platform.Vulkan
 
 	internal class MemoryBlock
 	{
-		private Node treeRoot;
-		private Node first;
-		private Node last;
+		private LinkedList<FreeSlice> freeList = new LinkedList<FreeSlice>();
 
 		public readonly DeviceMemory Memory;
 
 		public MemoryBlock(DeviceMemory memory)
 		{
 			Memory = memory;
-			first = last = new Node {
+			freeList.AddLast(new FreeSlice {
 				Offset = 0,
 				Size = memory.Size
-			};
-			TreeInsert(first);
+			});
 		}
 
-		public Node TryAllocate(ulong size, ulong alignment)
+		public ulong Allocate(ulong size, ulong alignment)
 		{
-			var free = TreeSearch(size + alignment - 1);
-			if (free == null) {
-				return null;
+			if (!TryAllocate(size, alignment, out var offset)) {
+				throw new System.Exception("Couldn't allocate device memory from block");
 			}
-			TreeRemove(free);
-			var offset = GraphicsUtility.AlignUp(free.Offset, alignment);
-			if (offset > free.Offset) {
-				var frag = new Node {
-					Offset = free.Offset,
-					Size = offset - free.Offset
-				};
-				TreeInsert(frag);
-				ListInsertBefore(free, frag);
-			}
-			if (offset + size < free.Offset + free.Size) {
-				var frag = new Node {
-					Offset = offset + size,
-					Size = free.Offset + free.Size - offset - size
-				};
-				TreeInsert(frag);
-				ListInsertAfter(free, frag);
-			}
-			free.Offset = offset;
-			free.Size = size;
-			return free;
+			return offset;
 		}
 
-		public void Free(Node node)
+		public bool TryAllocate(ulong size, ulong alignment, out ulong offset)
 		{
-			var freeOffset = node.Offset;
-			var freeSize = node.Size;
-			if (node.Prev != null && IsFree(node.Prev)) {
-				freeOffset = node.Prev.Offset;
-				freeSize += node.Prev.Size;
-				TreeRemove(node.Prev);
-				ListRemove(node.Prev);
-			}
-			if (node.Next != null && IsFree(node.Next)) {
-				freeSize += node.Next.Size;
-				TreeRemove(node.Next);
-				ListRemove(node.Next);
-			}
-			node.Offset = freeOffset;
-			node.Size = freeSize;
-			TreeInsert(node);
-		}
-
-		private bool IsFree(Node node)
-		{
-			return node.Parent != null || node == treeRoot;
-		}
-
-		private void ListInsertBefore(Node beforeNode, Node node)
-		{
-			node.Next = beforeNode;
-			node.Prev = beforeNode.Prev;
-			if (node.Prev != null) {
-				node.Prev.Next = node;
-			} else {
-				first = node;
-			}
-			beforeNode.Prev = node;
-		}
-
-		private void ListInsertAfter(Node afterNode, Node node)
-		{
-			node.Prev = afterNode;
-			node.Next = afterNode.Next;
-			if (node.Next != null) {
-				node.Next.Prev = node;
-			} else {
-				last = node;
-			}
-			afterNode.Next = node;
-		}
-
-		private void ListRemove(Node node)
-		{
-			if (node.Prev != null) {
-				node.Prev.Next = node.Next;
-			} else {
-				first = node.Next;
-			}
-			if (node.Next != null) {
-				node.Next.Prev = node.Prev;
-			} else {
-				last = node.Prev;
-			}
-			node.Prev = null;
-			node.Next = null;
-		}
-
-		private Node TreeSearch(ulong size)
-		{
-			return TreeSearch(treeRoot, size);
-		}
-
-		private Node TreeSearch(Node node, ulong size)
-		{
-			if (node == null) {
-				return null;
-			}
-			var cmp = size.CompareTo(node.Size);
-			if (cmp == 0) {
-				return node;
-			}
-			if (cmp > 0) {
-				return TreeSearch(node.Right, size);
-			}
-			return TreeSearch(node.Left, size) ?? node;
-		}
-
-		private void TreeInsert(Node node)
-		{
-			Node parent = null;
-			var current = treeRoot;
-			var order = 0;
-			while (current != null) {
-				order = node.Size.CompareTo(current.Size);
-				if (order == 0) {
-					order = node.Offset.CompareTo(current.Offset);
-				}
-				parent = current;
-				if (order < 0) {
-					current = current.Left;
-				} else if (order > 0) {
-					current = current.Right;
-				} else {
-					throw new InvalidOperationException();
-				}
-			}
-			node.Parent = parent;
-			node.Left = null;
-			node.Right = null;
-			node.Color = NodeColor.Red;
-			if (parent != null) {
-				if (order < 0) {
-					parent.Left = node;
-				} else {
-					parent.Right = node;
-				}
-			} else {
-				treeRoot = node;
-			}
-			TreeInsertFixup(node);
-		}
-
-		private void TreeInsertFixup(Node node)
-		{
-			while (node.Parent != null && node.Parent.Color == NodeColor.Red) {
-				if (node.Parent == node.Parent.Parent.Left) {
-					var uncle = node.Parent.Parent.Right;
-					if (uncle != null && uncle.Color == NodeColor.Red) {
-						node.Parent.Color = NodeColor.Black;
-						uncle.Color = NodeColor.Black;
-						node.Parent.Parent.Color = NodeColor.Red;
-						node = node.Parent.Parent;
-					} else {
-						if (node == node.Parent.Right) {
-							node = node.Parent;
-							TreeRotateLeft(node);
+			LinkedListNode<FreeSlice> bestNode = null;
+			var bestFit = ulong.MaxValue;
+			for (var node = freeList.First; node != null; node = node.Next) {
+				var currentOffset = GraphicsUtility.AlignUp(node.Value.Offset, alignment);
+				if (currentOffset + size <= node.Value.Offset + node.Value.Size) {
+					var fit = node.Value.Size - size;
+					if (fit < bestFit) {
+						bestNode = node;
+						bestFit = fit;
+						if (fit == 0) {
+							break;
 						}
-						node.Parent.Color = NodeColor.Black;
-						node.Parent.Parent.Color = NodeColor.Red;
-						TreeRotateRight(node.Parent.Parent);
-					}
-				} else {
-					var uncle = node.Parent.Parent.Left;
-					if (uncle != null && uncle.Color == NodeColor.Red) {
-						node.Parent.Color = NodeColor.Black;
-						uncle.Color = NodeColor.Black;
-						node.Parent.Parent.Color = NodeColor.Red;
-						node = node.Parent.Parent;
-					} else {
-						if (node == node.Parent.Left) {
-							node = node.Parent;
-							TreeRotateRight(node);
-						}
-						node.Parent.Color = NodeColor.Black;
-						node.Parent.Parent.Color = NodeColor.Red;
-						TreeRotateLeft(node.Parent.Parent);
 					}
 				}
 			}
-			treeRoot.Color = NodeColor.Black;
+			if (bestNode != null) {
+				offset = GraphicsUtility.AlignUp(bestNode.Value.Offset, alignment);
+				if (offset > bestNode.Value.Offset) {
+					freeList.AddLast(new FreeSlice {
+						Offset = bestNode.Value.Offset,
+						Size = offset - bestNode.Value.Offset
+					});
+				}
+				if (offset + size < bestNode.Value.Offset + bestNode.Value.Size) {
+					freeList.AddLast(new FreeSlice {
+						Offset = offset + size,
+						Size = bestNode.Value.Offset + bestNode.Value.Size - offset - size
+					});
+				}
+				freeList.Remove(bestNode);
+				return true;
+			}
+			offset = default;
+			return false;
 		}
 
-		private void TreeRemove(Node node)
+		public void Free(ulong offset, ulong size)
 		{
-			var removeNode = node;
-			if (node.Left != null && node.Right != null) {
-				removeNode = node.Right;
-				while (removeNode.Left != null) {
-					removeNode = removeNode.Left;
+			var node = freeList.First;
+			while (node != null) {
+				var next = node.Next;
+				if (node.Value.Offset == offset + size) {
+					size += node.Value.Size;
+					freeList.Remove(node);
+				} else if (node.Value.Offset + node.Value.Size == offset) {
+					offset = node.Value.Offset;
+					size += node.Value.Size;
+					freeList.Remove(node);
 				}
+				node = next;
 			}
-			var removeNodeChild = removeNode.Left != null ? removeNode.Left : removeNode.Right;
-			if (removeNode.Parent != null) {
-				if (removeNode.Parent.Left == removeNode) {
-					removeNode.Parent.Left = removeNodeChild;
-				} else {
-					removeNode.Parent.Right = removeNodeChild;
-				}
-			} else {
-				treeRoot = removeNodeChild;
-			}
-			if (removeNodeChild != null) {
-				removeNodeChild.Parent = removeNode.Parent;
-			}
-			if (removeNode.Color == NodeColor.Black) {
-				TreeRemoveFixup(removeNodeChild, removeNode.Parent);
-			}
-			if (removeNode != node) {
-				removeNode.Color = node.Color;
-				removeNode.Left = node.Left;
-				if (removeNode.Left != null) {
-					removeNode.Left.Parent = removeNode;
-				}
-				removeNode.Right = node.Right;
-				if (removeNode.Right != null) {
-					removeNode.Right.Parent = removeNode;
-				}
-				removeNode.Parent = node.Parent;
-				if (node.Parent != null) {
-					if (node.Parent.Left == node) {
-						node.Parent.Left = removeNode;
-					} else {
-						node.Parent.Right = removeNode;
-					}
-				} else {
-					treeRoot = removeNode;
-				}
-			}
-			node.Parent = null;
-			node.Left = null;
-			node.Right = null;
+			freeList.AddLast(new FreeSlice {
+				Offset = offset,
+				Size = size
+			});
 		}
 
-		private void TreeRemoveFixup(Node node, Node parent)
+		private struct FreeSlice
 		{
-			while (parent != null && IsNullOrBlack(node)) {
-				if (node == parent.Left) {
-					var sibling = parent.Right;
-					if (sibling.Color == NodeColor.Red) {
-						sibling.Color = NodeColor.Black;
-						parent.Color = NodeColor.Red;
-						TreeRotateLeft(parent);
-						sibling = parent.Right;
-					}
-					if (IsNullOrBlack(sibling.Left) && IsNullOrBlack(sibling.Right)) {
-						sibling.Color = NodeColor.Red;
-						node = parent;
-						parent = parent.Parent;
-					} else {
-						if (IsNullOrBlack(sibling.Right)) {
-							sibling.Left.Color = NodeColor.Black;
-							sibling.Color = NodeColor.Red;
-							TreeRotateRight(sibling);
-							sibling = parent.Right;
-						}
-						sibling.Color = parent.Color;
-						parent.Color = NodeColor.Black;
-						sibling.Right.Color = NodeColor.Black;
-						TreeRotateLeft(parent);
-						break;
-					}
-				} else {
-					var sibling = parent.Left;
-					if (sibling.Color == NodeColor.Red) {
-						sibling.Color = NodeColor.Black;
-						parent.Color = NodeColor.Red;
-						TreeRotateRight(parent);
-						sibling = parent.Left;
-					}
-					if (IsNullOrBlack(sibling.Right) && IsNullOrBlack(sibling.Left)) {
-						sibling.Color = NodeColor.Red;
-						node = parent;
-						parent = parent.Parent;
-					} else {
-						if (IsNullOrBlack(sibling.Left)) {
-							sibling.Right.Color = NodeColor.Black;
-							sibling.Color = NodeColor.Red;
-							TreeRotateLeft(sibling);
-							sibling = parent.Left;
-						}
-						sibling.Color = parent.Color;
-						parent.Color = NodeColor.Black;
-						sibling.Left.Color = NodeColor.Black;
-						TreeRotateRight(parent);
-						break;
-					}
-				}
-			}
-			if (node != null) {
-				node.Color = NodeColor.Black;
-			}
-		}
-
-		private void TreeRotateLeft(Node node)
-		{
-			var x = node.Right;
-			node.Right = x.Left;
-			if (node.Right != null) {
-				node.Right.Parent = node;
-			}
-			if (node.Parent != null) {
-				if (node == node.Parent.Left) {
-					node.Parent.Left = x;
-				} else {
-					node.Parent.Right = x;
-				}
-			} else {
-				treeRoot = x;
-			}
-			x.Parent = node.Parent;
-			x.Left = node;
-			node.Parent = x;
-		}
-
-		private void TreeRotateRight(Node node)
-		{
-			var x = node.Left;
-			node.Left = x.Right;
-			if (node.Left != null) {
-				node.Left.Parent = node;
-			}
-			if (node.Parent != null) {
-				if (node == node.Parent.Right) {
-					node.Parent.Right = x;
-				} else {
-					node.Parent.Left = x;
-				}
-			} else {
-				treeRoot = x;
-			}
-			x.Parent = node.Parent;
-			x.Right = node;
-			node.Parent = x;
-		}
-
-		private static bool IsNullOrBlack(Node node)
-		{
-			return node == null || node.Color == NodeColor.Black;
-		}
-
-		public class Node
-		{
-			public Node Left;
-			public Node Right;
-			public Node Parent;
-			public Node Prev;
-			public Node Next;
-			public NodeColor Color;
 			public ulong Offset;
 			public ulong Size;
-		}
-
-		public enum NodeColor
-		{
-			Red,
-			Black
 		}
 	}
 
@@ -750,7 +450,6 @@ namespace Lime.Graphics.Platform.Vulkan
 	{
 		public MemoryAllocator Allocator;
 		public MemoryBlock MemoryBlock;
-		public MemoryBlock.Node MemoryBlockNode;
 		public DeviceMemory Memory;
 		public ulong Offset;
 		public ulong Size;
@@ -762,14 +461,13 @@ namespace Lime.Graphics.Platform.Vulkan
 			Size = memory.Size;
 		}
 
-		public MemoryAlloc(MemoryAllocator allocator, MemoryBlock memoryBlock, MemoryBlock.Node memoryBlockNode)
+		public MemoryAlloc(MemoryAllocator allocator, MemoryBlock memoryBlock, ulong offset, ulong size)
 		{
 			Allocator = allocator;
 			MemoryBlock = memoryBlock;
-			MemoryBlockNode = memoryBlockNode;
 			Memory = memoryBlock.Memory;
-			Offset = memoryBlockNode.Offset;
-			Size = memoryBlockNode.Size;
+			Offset = offset;
+			Size = size;
 		}
 	}
 
