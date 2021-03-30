@@ -4,6 +4,7 @@ using Lime;
 using RemoteScripting;
 using Tangerine.Core;
 using Tangerine.Core.Commands;
+using Task = System.Threading.Tasks.Task;
 
 namespace Tangerine.UI.RemoteScripting
 {
@@ -15,10 +16,8 @@ namespace Tangerine.UI.RemoteScripting
 			set => ProjectPreferences.Instance.RemoteScriptingCurrentConfiguration = value;
 		}
 
-		private readonly ToolbarButton buildAssemblyButton;
-		private readonly ToolbarButton buildGameAndAssemblyButton;
-		private readonly ThemedDropDownList configurationDropDownList;
 		private readonly LimitedTextView textView;
+		private bool isBuildingInProgress;
 
 		public AssemblyBuilder(Toolbar toolbar)
 		{
@@ -30,53 +29,73 @@ namespace Tangerine.UI.RemoteScripting
 				}
 			};
 
-			toolbar.Content.Nodes.AddRange(
-				buildAssemblyButton = new ToolbarButton("Build Assembly") { Clicked = () => BuildAssembly(Configuration, requiredBuildGame: false) },
-				buildGameAndAssemblyButton = new ToolbarButton("Build Game and Assembly") { Clicked = () => BuildAssembly(Configuration) }
-			);
-
-			configurationDropDownList = new ThemedDropDownList {
+			var configurationDropDownList = new ThemedDropDownList {
 				MaxWidth = 200f
 			};
 			foreach (var (configurationName, configuration) in ProjectPreferences.Instance.RemoteScriptingConfigurations) {
 				configurationDropDownList.Items.Add(new CommonDropDownList.Item(configurationName, configuration));
 			}
-			toolbar.Content.AddNode(configurationDropDownList);
 			configurationDropDownList.Changed += args => {
 				Configuration = (ProjectPreferences.RemoteScriptingConfiguration)args.Value;
-				var arePreferencesCorrect =
-					!string.IsNullOrEmpty(Configuration?.ScriptsProjectPath) &&
-					!string.IsNullOrEmpty(Configuration?.ScriptsAssemblyName) &&
-					!string.IsNullOrEmpty(Configuration?.RemoteStoragePath);
-				buildAssemblyButton.Enabled = arePreferencesCorrect;
-				buildGameAndAssemblyButton.Enabled = arePreferencesCorrect;
-				if (!arePreferencesCorrect) {
+				if (Configuration == null || !Configuration.IsValid) {
 					Log("Please, select a valid remote scripting configuration!");
 				}
 			};
+			toolbar.AddSeparator(rightOffset: 1);
+			toolbar.Content.Nodes.AddRange(
+				new ThemedSimpleText("Configuration:") {
+					Padding = new Thickness(horizontal: 3, vertical: 2),
+					ForceUncutText = true,
+				},
+				configurationDropDownList
+			);
+			toolbar.AddSeparator(leftOffset: 3, rightOffset: 1);
 			if (configurationDropDownList.Items.Any()) {
 				configurationDropDownList.Index = 0;
 			}
 
-			Log("Please, compile the assembly.");
+			ICommand buildAssemlyCommand;
+			ICommand buildGameAndAssemlyCommand;
+			var buildButton = toolbar.AddMenuButton(
+				"Build",
+				new Menu {
+					(buildAssemlyCommand = new Command("Build Assembly")),
+					(buildGameAndAssemlyCommand = new Command("Build Game and Assembly")),
+				}
+			);
+			buildAssemlyCommand.Issued += () => BuildAssembly(Configuration, requiredBuildGame: false);
+			buildGameAndAssemlyCommand.Issued += () => BuildAssembly(Configuration);
+			buildButton.AddChangeWatcher(
+				() => !isBuildingInProgress && Configuration != null && Configuration.IsValid,
+				enabled => buildButton.Enabled = enabled
+			);
+
+			Log("Please, build the assembly.");
+			Log(string.Empty);
 		}
 
 #if WIN
 		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true)
 		{
-			if (configuration == null) {
+			if (isBuildingInProgress) {
+				return;
+			}
+			if (configuration == null || !configuration.IsValid) {
 				Log("Please, select a valid remote scripting configuration!");
+				Log(string.Empty);
 				return;
 			}
 			BuildAssemblyAsync();
 
 			async void BuildAssemblyAsync()
 			{
-				buildAssemblyButton.Enabled = false;
-				buildGameAndAssemblyButton.Enabled = false;
-				configurationDropDownList.Enabled = false;
-
 				try {
+					const int DelayBetweenOperations = 1000 / 20;
+					isBuildingInProgress = true;
+					CompiledAssembly.Instance = null;
+
+					await Task.Delay(DelayBetweenOperations);
+
 					if (requiredBuildGame) {
 						Log("Building game...");
 						var target = Orange.The.Workspace.Targets.First(t => t.Name == configuration.BuildTarget);
@@ -85,11 +104,13 @@ namespace Tangerine.UI.RemoteScripting
 						await OrangeBuildCommand.ExecuteAsync();
 						Orange.UserInterface.Instance.SetActiveTarget(previousTarget);
 						Log("Done.");
+						await Task.Delay(DelayBetweenOperations);
 					}
 
 					Log("Building assembly...");
 					var csAnalyzer = new CSharpAnalyzer(configuration.ScriptsProjectPath);
 					var csFiles = csAnalyzer.GetCompileItems().ToList();
+					await Task.Delay(DelayBetweenOperations);
 
 					Log($"Compile code in {configuration.ScriptsProjectPath} to assembly {configuration.ScriptsAssemblyName}..");
 					var compiler = new CSharpCodeCompiler {
@@ -115,7 +136,9 @@ namespace Tangerine.UI.RemoteScripting
 							Log(exception.ToString());
 							Log("Can't load assembly due to type load exceptions:");
 							foreach (var loaderException in exception.LoaderExceptions) {
-								Log(loaderException.ToString());
+								if (loaderException != null) {
+									Log(loaderException.ToString());
+								}
 							}
 						} catch (System.Exception exception) {
 							Log("Can't load assembly due to unknown exception:");
@@ -128,9 +151,7 @@ namespace Tangerine.UI.RemoteScripting
 					System.Console.WriteLine(e);
 					Log(e.ToString());
 				} finally {
-					buildAssemblyButton.Enabled = true;
-					buildGameAndAssemblyButton.Enabled = true;
-					configurationDropDownList.Enabled = true;
+					isBuildingInProgress = false;
 				}
 			}
 		}

@@ -39,6 +39,11 @@ namespace Tangerine.Core
 				@"System.Core.dll"
 			};
 
+			public bool IsValid =>
+				!string.IsNullOrEmpty(ScriptsProjectPath) &&
+				!string.IsNullOrEmpty(ScriptsAssemblyName) &&
+				!string.IsNullOrEmpty(RemoteStoragePath);
+
 			public RemoteScriptingConfiguration(dynamic json)
 			{
 				var projectDirectory = Orange.The.Workspace.ProjectDirectory;

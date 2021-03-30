@@ -37,5 +37,30 @@ namespace Tangerine.UI.RemoteScripting
 			Content.Nodes.Add(button);
 			return button;
 		}
+
+		public ToolbarButton AddMenuButton(string title, Menu menu, Action menuShowing = null)
+		{
+			var button = new ToolbarButton(title);
+			button.Clicked += () => {
+				Application.InvokeOnNextUpdate(() => {
+					menuShowing?.Invoke();
+					var aabb = button.CalcAABBInWindowSpace();
+					var position = new Vector2(aabb.AX, aabb.BY);
+					menu.Popup(Window.Current, position, 0, null);
+				});
+			};
+			Content.Nodes.Add(button);
+			return button;
+		}
+
+		public void AddSeparator(float leftOffset = 0, float rightOffset = 0)
+		{
+			Content.Nodes.Add(new Widget {
+				MinMaxWidth = 1 + leftOffset + rightOffset,
+				MinMaxHeight = Metrics.ToolbarHeight - Padding.Top - Padding.Bottom,
+				Padding = new Thickness(leftOffset, rightOffset, top: 3),
+				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Separator),
+			});
+		}
 	}
 }

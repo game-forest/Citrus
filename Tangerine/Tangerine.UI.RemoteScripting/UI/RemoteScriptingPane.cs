@@ -9,11 +9,13 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class RemoteScriptingPane
 	{
-		private static string LogsDirectory
+		private static string DeviceLogsDirectory
 		{
 			get => ProjectUserPreferences.Instance.RemoteDevicesLogFolder;
 			set => ProjectUserPreferences.Instance.RemoteDevicesLogFolder = value;
 		}
+
+		private static bool IsSavingDeviceLogs => !string.IsNullOrEmpty(DeviceLogsDirectory);
 
 		private readonly Panel panel;
 		private readonly Dictionary<HostClient, RemoteDevice> devices = new Dictionary<HostClient, RemoteDevice>();
@@ -35,8 +37,8 @@ namespace Tangerine.UI.RemoteScripting
 
 		private void InitializeWidgets()
 		{
-			if (LogsDirectory != null && !Directory.Exists(LogsDirectory)) {
-				LogsDirectory = null;
+			if (DeviceLogsDirectory != null && !Directory.Exists(DeviceLogsDirectory)) {
+				DeviceLogsDirectory = null;
 			}
 
 			Toolbar toolbar;
@@ -92,11 +94,16 @@ namespace Tangerine.UI.RemoteScripting
 			var hostButton = toolbar.AddButton("Start Host", HostButtonHandler);
 			hostButton.AddChangeWatcher(() => host.IsRunning, v => hostButton.Text = v ? "Stop Host" : "Start Host");
 			rootWidget.Updating += _ => UpdateDevices();
-			var logDirectoryButton = toolbar.AddButton("Set Log Directory...", LogDirectoryButtonHandler);
-			logDirectoryButton.AddChangeWatcher(
-				() => LogsDirectory,
-				v => logDirectoryButton.Text = string.IsNullOrEmpty(LogsDirectory) ? "Set Log Directory..." : "Stop Logging"
+
+			ICommand savingDeviceLogsCommand;
+			toolbar.AddMenuButton(
+				"Options",
+				new Menu {
+					(savingDeviceLogsCommand = new Command("Saving remote device logs")),
+				},
+				() => savingDeviceLogsCommand.Checked = IsSavingDeviceLogs
 			);
+			savingDeviceLogsCommand.Issued += SavingDeviceLogsCommandHandler;
 
 			explorableItems.AddItem(new AssemblyBuilder(toolbar));
 
@@ -142,32 +149,28 @@ namespace Tangerine.UI.RemoteScripting
 			}
 		}
 
-		private void LogDirectoryButtonHandler()
+		private void SavingDeviceLogsCommandHandler()
 		{
-			if (!string.IsNullOrEmpty(LogsDirectory)) {
-				SetLogDirectory(null);
-				return;
-			}
-			var dialog = new FileDialog {
-				AllowedFileTypes = new[] { "" },
-				Mode = FileDialogMode.SelectFolder
-			};
-			if (dialog.RunModal()) {
-				SetLogDirectory(dialog.FileName);
+			string directory = null;
+			if (!IsSavingDeviceLogs) {
+				var dialog = new FileDialog {
+					AllowedFileTypes = new[] { "" },
+					Mode = FileDialogMode.SelectFolder
+				};
+				if (dialog.RunModal()) {
+					directory = dialog.FileName;
+				}
 			}
 
-			void SetLogDirectory(string logDirectory)
-			{
-				LogsDirectory = logDirectory;
-				foreach (var (_, device) in devices) {
-					ResetDeviceLogDirectory(device);
-				}
+			DeviceLogsDirectory = directory;
+			foreach (var (_, device) in devices) {
+				ResetDeviceLogDirectory(device);
 			}
 		}
 
 		private static void ResetDeviceLogDirectory(RemoteDevice device)
 		{
-			device.SetOutputDirectory(device.WasInitialized && !device.WasDisconnected ? LogsDirectory : null);
+			device.SetOutputDirectory(device.WasInitialized && !device.WasDisconnected ? DeviceLogsDirectory : null);
 		}
 	}
 }
