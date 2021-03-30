@@ -160,7 +160,9 @@ namespace Orange
 		{
 			CurrentPlugin?.Finalize?.Invoke();
 			The.UI.DestroyPluginUI();
-			BuildTargets();
+			if (!Toolbox.GetCommandLineFlag("--disable-build-plugin-targets")) {
+				BuildTargets();
+			}
 			CurrentPlugin = new OrangePlugin();
 			resolvedAssemblies.Clear();
 			ResetPlugins();

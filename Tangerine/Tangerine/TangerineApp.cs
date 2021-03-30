@@ -227,8 +227,7 @@ namespace Tangerine
 						}
 						return;
 					}
-				}
-				else if (projectFilePath == null) {
+				} else if (projectFilePath == null) {
 					AlertDialog.Show("Can't open a document outside the project directory");
 				}
 			};
@@ -443,7 +442,7 @@ namespace Tangerine
 			foreach (var arg in args) {
 				if (Path.GetExtension(arg) == ".citproj") {
 					FileOpenProject.Execute(arg);
-				} else {
+				} else if (!arg.StartsWith('-')) {
 					Project.Current.OpenDocument(arg, pathIsAbsolute: true);
 				}
 			}
