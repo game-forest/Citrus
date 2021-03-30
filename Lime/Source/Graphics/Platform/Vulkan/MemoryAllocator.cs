@@ -135,9 +135,16 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			alignment = GraphicsUtility.CombineAlignment(alignment, type.MinAlignment);
 			var pool = linear ? memoryPoolsLinear[type.Index] : memoryPoolsNonLinear[type.Index];
-			foreach (var block in pool) {
-				if (block.TryAllocate(size, alignment, out var offset)) {
-					return new MemoryAlloc(this, block, offset, size);
+			for (int i = 0; i < 2; i++) {
+				foreach (var block in pool) {
+					if (block.TryAllocate(size, alignment, out var offset)) {
+						return new MemoryAlloc(this, block, offset, size);
+					}
+				}
+				if (i == 0) {
+					// In case we failed to sub-allocate memory block from the pool: wait for GPU,
+					// run scheduled deallocations and try sub-allocation one more time.
+					Context.Finish();
 				}
 			}
 			var newBlockMemory = TryAllocateDeviceMemory(type, type.BlockSize, null);
