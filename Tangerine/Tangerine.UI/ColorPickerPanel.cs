@@ -275,9 +275,9 @@ namespace Tangerine.UI
 			{
 				Widget = new ThemedSlider { RangeMin = 0, RangeMax = 1 };
 				Widget.Changed += () => {
-					color.Value = new ColorHSVA(color.Value.H, color.Value.S, color.Value.V, 1 - Widget.Value);
+					color.Value = new ColorHSVA(color.Value.H, color.Value.S, color.Value.V, Widget.Value);
 				};
-				Widget.Updating += delta => Widget.Value = 1 - color.Value.A;
+				Widget.Updating += delta => Widget.Value = color.Value.A;
 				var presenter = new BackgroundPresenter(color);
 				Widget.CompoundPresenter.Insert(0, presenter);
 			}
