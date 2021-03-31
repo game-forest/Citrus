@@ -11,9 +11,9 @@ namespace Tangerine.UI.RemoteScripting
 	{
 		private static readonly char[] invalidFilenameChars;
 
-		private readonly HostClient client;
 		private readonly LimitedTextView textView;
 
+		public HostClient Client { get; }
 		public bool WasInitialized { get; private set; }
 		public bool WasDisconnected { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Tangerine.UI.RemoteScripting
 
 		public RemoteDevice(HostClient client)
 		{
-			this.client = client;
+			Client = client;
 			Name = Guid.NewGuid().ToString().Substring(0, 18);
 			UpdateVisual();
 
@@ -39,6 +39,7 @@ namespace Tangerine.UI.RemoteScripting
 
 		public void Disconnect()
 		{
+			Client.Close();
 			WasDisconnected = true;
 			UpdateVisual();
 		}
@@ -51,7 +52,7 @@ namespace Tangerine.UI.RemoteScripting
 				ClassName = className,
 				MethodName = methodName
 			};
-			client.SendMessage(new NetworkRemoteProcedureCall(remoteProcedureCall));
+			Client.SendMessage(new NetworkRemoteProcedureCall(remoteProcedureCall));
 		}
 
 		public void SetOutputDirectory(string directory)
@@ -78,7 +79,7 @@ namespace Tangerine.UI.RemoteScripting
 
 		public void ProcessMessages()
 		{
-			while (client.TryReceiveMessage(out var message)) {
+			while (Client.TryReceiveMessage(out var message)) {
 				switch (message.MessageType) {
 					case NetworkMessageType.DeviceName:
 						var networkDeviceName = (NetworkDeviceName)message;
@@ -106,7 +107,7 @@ namespace Tangerine.UI.RemoteScripting
 							Path = fileRequest.Data.Path,
 							Bytes = null
 						};
-						client.SendMessage(new NetworkRemoteFile(remoteFile));
+						Client.SendMessage(new NetworkRemoteFile(remoteFile));
 						Log(
 							string.IsNullOrEmpty(remoteStoragePath) ?
 							"Can not send requested file: Please, setup remote storage path in project configuration file!" :
@@ -143,7 +144,7 @@ namespace Tangerine.UI.RemoteScripting
 					Path = requestPath,
 					Bytes = bytes
 				};
-				client.SendMessage(new NetworkRemoteFile(remoteFile));
+				Client.SendMessage(new NetworkRemoteFile(remoteFile));
 				Log($"Requested file \"{requestPath}\" was sended.");
 			}
 

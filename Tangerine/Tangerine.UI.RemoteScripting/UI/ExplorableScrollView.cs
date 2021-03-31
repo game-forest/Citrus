@@ -1,17 +1,18 @@
+using System.Collections;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.RemoteScripting
 {
-	public class ExplorableScrollView : ThemedScrollView
+	public class ExplorableScrollView : ThemedScrollView, IEnumerable<ExplorableItem>
 	{
 		private readonly float rowHeight = Theme.Metrics.DefaultEditBoxSize.Y;
 		private readonly List<ExplorableItem> items = new List<ExplorableItem>();
 		private int selectedIndex = -1;
 
 		public Widget ExploringWidget { get; set; }
-		public ExplorableItem SelectedItem => selectedIndex >= 0 ? items[selectedIndex] : null;
+		public ExplorableItem SelectedItem => selectedIndex >= 0 && selectedIndex < items.Count ? items[selectedIndex] : null;
 
 		public ExplorableScrollView()
 		{
@@ -35,8 +36,7 @@ namespace Tangerine.UI.RemoteScripting
 			void SelectItemBasedOnMousePosition()
 			{
 				SetFocus();
-				var index = (Content.LocalMousePosition().Y / rowHeight).Floor();
-				if (index < items.Count) {
+				if (TryGetItemIndexUnderMouse(out var index)) {
 					SelectItem(index);
 				}
 			}
@@ -81,6 +81,19 @@ namespace Tangerine.UI.RemoteScripting
 			}
 		}
 
+		public void RemoveItem(ExplorableItem item)
+		{
+			var index = items.IndexOf(item);
+			var selectedItem = SelectedItem;
+			if (index >= 0) {
+				ExploringWidget.Nodes.Clear();
+				Content.Nodes.RemoveAt(index);
+				items.RemoveAt(index);
+				SelectItem(items.IndexOf(selectedItem));
+				Window.Current.Invalidate();
+			}
+		}
+
 		public void SelectItem(ExplorableItem item)
 		{
 			var index = items.IndexOf(item);
@@ -112,5 +125,24 @@ namespace Tangerine.UI.RemoteScripting
 				}
 			}
 		}
+
+		public bool TryGetItemUnderMouse(out ExplorableItem item)
+		{
+			var found = TryGetItemIndexUnderMouse(out var index);
+			item = found ? items[index] : null;
+			return found;
+		}
+
+		private bool TryGetItemIndexUnderMouse(out int index)
+		{
+			index = (Content.LocalMousePosition().Y / rowHeight).Floor();
+			return index < items.Count;
+		}
+
+		public List<ExplorableItem>.Enumerator GetEnumerator() => items.GetEnumerator();
+
+		IEnumerator<ExplorableItem> IEnumerable<ExplorableItem>.GetEnumerator() => items.GetEnumerator();
+
+		IEnumerator IEnumerable.GetEnumerator() => items.GetEnumerator();
 	}
 }

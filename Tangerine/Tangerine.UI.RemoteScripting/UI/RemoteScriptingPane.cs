@@ -90,10 +90,7 @@ namespace Tangerine.UI.RemoteScripting
 			host.ClientConnected += client => devices.Add(client, new RemoteDevice(client));
 			host.ClientDisconnected += client => {
 				if (devices.TryGetValue(client, out var device)) {
-					device.ProcessMessages();
-					device.Disconnect();
-					devices.Remove(client);
-					ResetDeviceLogDirectory(device);
+					DisconnectDevice(device);
 				}
 			};
 
@@ -126,18 +123,33 @@ namespace Tangerine.UI.RemoteScripting
 			);
 			explorableItems.AddItem(assemblyBuilder);
 
+			ICommand disconnectCommand;
+			ICommand clearCommand;
+			var menu = new Menu {
+				(disconnectCommand = new Command("Disconnect Device")),
+				Command.MenuSeparator,
+				(clearCommand = new Command("Clear Disconnected Devices"))
+			};
+			explorableItems.Updating += _ => {
+				if (explorableItems.Input.WasKeyPressed(Key.Mouse1)) {
+					explorableItems.TryGetItemUnderMouse(out var hoveredItem);
+					var hoveredDevice = hoveredItem as RemoteDevice;
+					if (hoveredDevice != null) {
+						explorableItems.SelectItem(hoveredDevice);
+					}
+					disconnectCommand.Enabled = hoveredDevice != null && !hoveredDevice.WasDisconnected;
+					menu.Popup();
+				}
+			};
+			disconnectCommand.Issued += DeviceDisconnectCommandHandler;
+			clearCommand.Issued += ClearDisconnectedDevicesCommandHandler;
+
 			rpcScrollView.AddChangeWatcher(() => TryGetActiveDevice(out _), value => rpcScrollView.ItemsEnabled = value);
 			rpcScrollView.RemoteProcedureCalled += (assembly, entryPoint) => {
 				if (TryGetActiveDevice(out var device)) {
 					device.RemoteProcedureCall(assembly.RawBytes, assembly.PdbRawBytes, entryPoint.ClassName, entryPoint.MethodName);
 				}
 			};
-
-			bool TryGetActiveDevice(out RemoteDevice device)
-			{
-				device = explorableItems.SelectedItem as RemoteDevice;
-				return device != null && device.WasInitialized && !device.WasDisconnected;
-			}
 		}
 
 		private void CleanUp()
@@ -184,6 +196,40 @@ namespace Tangerine.UI.RemoteScripting
 			DeviceLogsDirectory = directory;
 			foreach (var (_, device) in devices) {
 				ResetDeviceLogDirectory(device);
+			}
+		}
+
+		private void DeviceDisconnectCommandHandler()
+		{
+			if (TryGetActiveDevice(out var device)) {
+				DisconnectDevice(device);
+			}
+		}
+
+		private bool TryGetActiveDevice(out RemoteDevice device)
+		{
+			device = explorableItems.SelectedItem as RemoteDevice;
+			return device != null && device.WasInitialized && !device.WasDisconnected;
+		}
+
+		private void DisconnectDevice(RemoteDevice device)
+		{
+			device.ProcessMessages();
+			device.Disconnect();
+			devices.Remove(device.Client);
+			ResetDeviceLogDirectory(device);
+		}
+
+		private void ClearDisconnectedDevicesCommandHandler()
+		{
+			var devicesToRemove = new List<RemoteDevice>();
+			foreach (var item in explorableItems) {
+				if (item is RemoteDevice device && device.WasDisconnected) {
+					devicesToRemove.Add(device);
+				}
+			}
+			foreach (var device in devicesToRemove) {
+				explorableItems.RemoveItem(device);
 			}
 		}
 
