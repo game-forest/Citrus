@@ -49,6 +49,10 @@ namespace Lime
 	{
 		public bool DecodeAudioInSeparateThread = false;
 		public int NumChannels = 24;
+		/// <summary>
+		/// Set to true to use ParticleLimiter service.
+		/// </summary>
+		public bool EnableParticleLimiter = false;
 #if iOS
 		public RenderingBackend RenderingBackend =
 			MetalGameView.IsMetalSupported() ? RenderingBackend.Vulkan : RenderingBackend.ES20;
@@ -109,6 +113,8 @@ namespace Lime
 				isInputAccelerationListening = value;
 			}
 		}
+
+		internal static bool EnableParticleLimiter = false;
 
 		private static DeviceOrientation supportedDeviceOrientations = DeviceOrientation.All;
 		/// <summary>
@@ -249,7 +255,8 @@ namespace Lime
 			NSApplication.SharedApplication.WillTerminate += (sender, e) => DoExited();
 			NSApplication.SharedApplication.ApplicationShouldHandleReopen = (sender, hasVisibleWindows) => hasVisibleWindows;
 #endif // MAC
-			options = options ?? new ApplicationOptions();
+			options ??= new ApplicationOptions();
+			EnableParticleLimiter = options.EnableParticleLimiter;
 			RenderingBackend = options.RenderingBackend;
 			MainThread = Thread.CurrentThread;
 			// Use '.' as decimal separator.
