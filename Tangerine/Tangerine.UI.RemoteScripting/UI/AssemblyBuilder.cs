@@ -21,6 +21,7 @@ namespace Tangerine.UI.RemoteScripting
 		private readonly LimitedTextView textView;
 		private bool isBuildingInProgress;
 		private IconState iconState = IconDefaultState.Instance;
+		private bool isAssemblyRequireGameBuild = true;
 		private bool autoRebuildAssembly;
 		private bool autoRebuildAssemblyAllowed;
 		private FileSystemWatcher fileSystemWatcher;
@@ -126,6 +127,28 @@ namespace Tangerine.UI.RemoteScripting
 				Log(string.Empty);
 				return;
 			}
+
+			if (isAssemblyRequireGameBuild && !requiredBuildGame) {
+				var buttons = new[] {
+					"Assembly",
+					"Game and Assembly",
+					"Cancel"
+				};
+				var result = AlertDialog.Show(
+					"You are trying to build assembly for the first time.\n" +
+					"Assembly may require game binaries and it strongly recommended to build the game before building the scripts assembly.\n" +
+					"Please select the most relevant option.",
+					buttons
+				);
+				if (result == 2) {
+					return;
+				}
+				if (result == 1) {
+					requiredBuildGame = true;
+				}
+			}
+			isAssemblyRequireGameBuild = false;
+
 			BuildAssemblyAsync();
 
 			async void BuildAssemblyAsync()
