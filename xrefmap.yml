@@ -5534,6 +5534,12 @@ references:
   commentId: F:Lime.ApplicationOptions.DecodeAudioInSeparateThread
   fullName: Lime.ApplicationOptions.DecodeAudioInSeparateThread
   nameWithType: ApplicationOptions.DecodeAudioInSeparateThread
+- uid: Lime.ApplicationOptions.EnableParticleLimiter
+  name: EnableParticleLimiter
+  href: api/Lime.ApplicationOptions.html#Lime_ApplicationOptions_EnableParticleLimiter
+  commentId: F:Lime.ApplicationOptions.EnableParticleLimiter
+  fullName: Lime.ApplicationOptions.EnableParticleLimiter
+  nameWithType: ApplicationOptions.EnableParticleLimiter
 - uid: Lime.ApplicationOptions.NumChannels
   name: NumChannels
   href: api/Lime.ApplicationOptions.html#Lime_ApplicationOptions_NumChannels
@@ -46732,6 +46738,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.Direction
   nameWithType: ParticleEmitter.Direction
+- uid: Lime.ParticleEmitter.Dispose
+  name: Dispose()
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Dispose
+  commentId: M:Lime.ParticleEmitter.Dispose
+  fullName: Lime.ParticleEmitter.Dispose()
+  nameWithType: ParticleEmitter.Dispose()
+- uid: Lime.ParticleEmitter.Dispose*
+  name: Dispose
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Dispose_
+  commentId: Overload:Lime.ParticleEmitter.Dispose
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.Dispose
+  nameWithType: ParticleEmitter.Dispose
 - uid: Lime.ParticleEmitter.DrawCustomShape(Lime.Color4,Lime.Color4,Lime.Matrix32)
   name: DrawCustomShape(Color4, Color4, Matrix32)
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_DrawCustomShape_Lime_Color4_Lime_Color4_Lime_Matrix32_
@@ -47290,6 +47309,38 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.Zoom
   nameWithType: ParticleEmitter.Zoom
+- uid: Lime.ParticleLimiter
+  name: ParticleLimiter
+  href: api/Lime.ParticleLimiter.html
+  commentId: T:Lime.ParticleLimiter
+  fullName: Lime.ParticleLimiter
+  nameWithType: ParticleLimiter
+- uid: Lime.ParticleLimiter.ParticleCount
+  name: ParticleCount
+  href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter_ParticleCount
+  commentId: P:Lime.ParticleLimiter.ParticleCount
+  fullName: Lime.ParticleLimiter.ParticleCount
+  nameWithType: ParticleLimiter.ParticleCount
+- uid: Lime.ParticleLimiter.ParticleCount*
+  name: ParticleCount
+  href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter_ParticleCount_
+  commentId: Overload:Lime.ParticleLimiter.ParticleCount
+  isSpec: "True"
+  fullName: Lime.ParticleLimiter.ParticleCount
+  nameWithType: ParticleLimiter.ParticleCount
+- uid: Lime.ParticleLimiter.ParticleCountLimit
+  name: ParticleCountLimit
+  href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter_ParticleCountLimit
+  commentId: P:Lime.ParticleLimiter.ParticleCountLimit
+  fullName: Lime.ParticleLimiter.ParticleCountLimit
+  nameWithType: ParticleLimiter.ParticleCountLimit
+- uid: Lime.ParticleLimiter.ParticleCountLimit*
+  name: ParticleCountLimit
+  href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter_ParticleCountLimit_
+  commentId: Overload:Lime.ParticleLimiter.ParticleCountLimit
+  isSpec: "True"
+  fullName: Lime.ParticleLimiter.ParticleCountLimit
+  nameWithType: ParticleLimiter.ParticleCountLimit
 - uid: Lime.ParticleModifier
   name: ParticleModifier
   href: api/Lime.ParticleModifier.html
@@ -56251,6 +56302,22 @@ references:
   fullName.vb: Lime.ServiceProviderExtensions.RequireService(Of T)(System.IServiceProvider)
   nameWithType: ServiceProviderExtensions.RequireService<T>(IServiceProvider)
   nameWithType.vb: ServiceProviderExtensions.RequireService(Of T)(IServiceProvider)
+- uid: Lime.ServiceProviderExtensions.TryGetService*
+  name: TryGetService
+  href: api/Lime.ServiceProviderExtensions.html#Lime_ServiceProviderExtensions_TryGetService_
+  commentId: Overload:Lime.ServiceProviderExtensions.TryGetService
+  isSpec: "True"
+  fullName: Lime.ServiceProviderExtensions.TryGetService
+  nameWithType: ServiceProviderExtensions.TryGetService
+- uid: Lime.ServiceProviderExtensions.TryGetService``1(System.IServiceProvider,``0@)
+  name: TryGetService<T>(IServiceProvider, out T)
+  href: api/Lime.ServiceProviderExtensions.html#Lime_ServiceProviderExtensions_TryGetService__1_System_IServiceProvider___0__
+  commentId: M:Lime.ServiceProviderExtensions.TryGetService``1(System.IServiceProvider,``0@)
+  name.vb: TryGetService(Of T)(IServiceProvider, ByRef T)
+  fullName: Lime.ServiceProviderExtensions.TryGetService<T>(System.IServiceProvider, out T)
+  fullName.vb: Lime.ServiceProviderExtensions.TryGetService(Of T)(System.IServiceProvider, ByRef T)
+  nameWithType: ServiceProviderExtensions.TryGetService<T>(IServiceProvider, out T)
+  nameWithType.vb: ServiceProviderExtensions.TryGetService(Of T)(IServiceProvider, ByRef T)
 - uid: Lime.ServiceRegistry
   name: ServiceRegistry
   href: api/Lime.ServiceRegistry.html

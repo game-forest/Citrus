@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class ServiceProviderExtensions
+    <title>Class ParticleLimiter
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class ServiceProviderExtensions
+    <meta name="title" content="Class ParticleLimiter
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.56.3.0">
     
@@ -78,17 +78,17 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.ServiceProviderExtensions">
+            <article class="content wrap" id="_content" data-uid="Lime.ParticleLimiter">
   
   
-  <h1 id="Lime_ServiceProviderExtensions" data-uid="Lime.ServiceProviderExtensions" class="text-break">Class ServiceProviderExtensions
+  <h1 id="Lime_ParticleLimiter" data-uid="Lime.ParticleLimiter" class="text-break">Class ParticleLimiter
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">ServiceProviderExtensions</span></div>
+    <div class="level1"><span class="xref">ParticleLimiter</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -116,41 +116,26 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_ServiceProviderExtensions_syntax">Syntax</h5>
+  <h5 id="Lime_ParticleLimiter_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class ServiceProviderExtensions</code></pre>
+    <pre><code class="lang-csharp hljs">public class ParticleLimiter</code></pre>
   </div>
-  <h3 id="methods">Methods
+  <h3 id="properties">Properties
   </h3>
   
   
-  <a id="Lime_ServiceProviderExtensions_GetService_" data-uid="Lime.ServiceProviderExtensions.GetService*"></a>
-  <h4 id="Lime_ServiceProviderExtensions_GetService__1_System_IServiceProvider_" data-uid="Lime.ServiceProviderExtensions.GetService``1(System.IServiceProvider)">GetService&lt;T&gt;(IServiceProvider)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Lime_ParticleLimiter_ParticleCount_" data-uid="Lime.ParticleLimiter.ParticleCount*"></a>
+  <h4 id="Lime_ParticleLimiter_ParticleCount" data-uid="Lime.ParticleLimiter.ParticleCount">ParticleCount</h4>
+  <div class="markdown level1 summary"><p>Total number of visible particles per given NodeManager.
+Calculated during LateUpdateStage.
+Provides previous frame value during PreLate, Late, PostLate update stages.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static T GetService&lt;T&gt;(this IServiceProvider provider)
-    where T : class</code></pre>
+    <pre><code class="lang-csharp hljs">public int ParticleCount { get; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IServiceProvider</span></td>
-        <td><span class="parametername">provider</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -160,55 +145,24 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
+        <td><span class="xref">System.Int32</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   
   
-  <a id="Lime_ServiceProviderExtensions_RequireService_" data-uid="Lime.ServiceProviderExtensions.RequireService*"></a>
-  <h4 id="Lime_ServiceProviderExtensions_RequireService__1_System_IServiceProvider_" data-uid="Lime.ServiceProviderExtensions.RequireService``1(System.IServiceProvider)">RequireService&lt;T&gt;(IServiceProvider)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="Lime_ParticleLimiter_ParticleCountLimit_" data-uid="Lime.ParticleLimiter.ParticleCountLimit*"></a>
+  <h4 id="Lime_ParticleLimiter_ParticleCountLimit" data-uid="Lime.ParticleLimiter.ParticleCountLimit">ParticleCountLimit</h4>
+  <div class="markdown level1 summary"><p>Maximum number of visible particles. Use -1 for unlimited.
+Can be changed during any stage.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static T RequireService&lt;T&gt;(this IServiceProvider provider)
-    where T : class</code></pre>
+    <pre><code class="lang-csharp hljs">public int ParticleCountLimit { get; set; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IServiceProvider</span></td>
-        <td><span class="parametername">provider</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -218,85 +172,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_ServiceProviderExtensions_TryGetService_" data-uid="Lime.ServiceProviderExtensions.TryGetService*"></a>
-  <h4 id="Lime_ServiceProviderExtensions_TryGetService__1_System_IServiceProvider___0__" data-uid="Lime.ServiceProviderExtensions.TryGetService``1(System.IServiceProvider,``0@)">TryGetService&lt;T&gt;(IServiceProvider, out T)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool TryGetService&lt;T&gt;(this IServiceProvider provider, out T service)
-    where T : class</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IServiceProvider</span></td>
-        <td><span class="parametername">provider</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">service</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
+        <td><span class="xref">System.Int32</span></td>
         <td></td>
       </tr>
     </tbody>

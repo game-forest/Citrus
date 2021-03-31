@@ -486,7 +486,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ApplicationOptions.html",
-          "hash": "7w82qQjobQlaMpb0iCmJug=="
+          "hash": "Xf1+4NFdutTqSJS/5BWpjw=="
         }
       },
       "is_incremental": false,
@@ -5310,7 +5310,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleEmitter.html",
-          "hash": "viWRUFwznCOraOhMR02Uuw=="
+          "hash": "FyvuCJbfWLX5XCPqlpE9ng=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.ParticleLimiter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.ParticleLimiter.html",
+          "hash": "gjwQoAg3m/z4jk7D8rXLVg=="
         }
       },
       "is_incremental": false,
@@ -6270,7 +6282,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ServiceProviderExtensions.html",
-          "hash": "G2E+b31k4eqY0X7fdJBNBw=="
+          "hash": "TD1XS8GHSKmYLq6aFN48Ug=="
         }
       },
       "is_incremental": false,
@@ -6282,7 +6294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ServiceRegistry.html",
-          "hash": "LNyaVzZMnT53Aj70SX8FvA=="
+          "hash": "W7lD8VgWwjbDit9y+O90NA=="
         }
       },
       "is_incremental": false,
@@ -9294,7 +9306,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "D3r33qm8Ng95fNzCrW2YmQ=="
+          "hash": "kOgnfdZa3u5eyjm8itTyXw=="
         }
       },
       "is_incremental": false,
@@ -9342,7 +9354,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "/aoytUWeDie4p6P6nvQOtw=="
+          "hash": "nEzjV1Q+b6Rgq2iHLY85Bw=="
         }
       },
       "is_incremental": false,
@@ -11550,7 +11562,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 777,
+          "total_file_count": 778,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
