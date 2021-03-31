@@ -23,9 +23,14 @@ namespace Tangerine.UI.RemoteScripting
 				Renderer.DrawRect(
 					1, rowHeight * selectedIndex + 1,
 					w.Width - 1, rowHeight * (selectedIndex + 1),
-					IsFocused() ? Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground
+					Theme.Colors.SelectedBackground
 				);
 			}));
+			Updating += delta => {
+				foreach (var item in items) {
+					item.OnUpdate(delta);
+				}
+			};
 
 			void SelectItemBasedOnMousePosition()
 			{
@@ -39,12 +44,17 @@ namespace Tangerine.UI.RemoteScripting
 
 		public void AddItem(ExplorableItem item)
 		{
+			Image icon;
 			ThemedSimpleText simpleText;
 			var widget = new Widget {
 				MinMaxHeight = rowHeight,
-				Padding = new Thickness(4, 10, 3, 0),
-				Layout = new HBoxLayout(),
+				Padding = new Thickness(left: 4, right: 10, top: 3),
+				Layout = new HBoxLayout { Spacing = 4 },
 				Nodes = {
+					(icon = new Image {
+						Padding = new Thickness(top: 1),
+						MinMaxSize = new Vector2(16),
+					}),
 					(simpleText = new ThemedSimpleText(item.Name) {
 						Id = "Label",
 						LayoutCell = new LayoutCell { VerticalAlignment = VAlignment.Center },
@@ -53,11 +63,29 @@ namespace Tangerine.UI.RemoteScripting
 				}
 			};
 			Content.Nodes.Add(widget);
-			item.NameUpdated += name => simpleText.Text = name;
 			items.Add(item);
+
+			item.NameUpdated += () => simpleText.Text = item.Name;
+			item.IconUpdated += SetupIcon;
+			SetupIcon();
 
 			if (items.Count == 1) {
 				SelectItem(0);
+			}
+
+			void SetupIcon()
+			{
+				icon.Visible = item.IconTexture != null || item.IconPresenter != null;
+				icon.Texture = item.IconTexture;
+				icon.Presenter = item.IconPresenter ?? DefaultPresenter.Instance;
+			}
+		}
+
+		public void SelectItem(ExplorableItem item)
+		{
+			var index = items.IndexOf(item);
+			if (index >= 0) {
+				SelectItem(index);
 			}
 		}
 

@@ -265,6 +265,18 @@ namespace Tangerine.UI
 			public Color4 MatchColor { get; set; }
 		}
 
+		public class RemoteScriptingColors : Theme.DefaultColors
+		{
+			[YuzuOptional]
+			public Color4 AssemblyDefaultIcon { get; set; }
+
+			[YuzuOptional]
+			public Color4 AssemblyBuildSucceededIcon { get; set; }
+
+			[YuzuOptional]
+			public Color4 AssemblyBuildFailedIcon { get; set; }
+		}
+
 		[YuzuOptional]
 		public bool IsDark { get; set; }
 		[YuzuOptional]
@@ -289,6 +301,8 @@ namespace Tangerine.UI
 		public KeyboardColors Keyboard { get; set; }
 		[YuzuOptional]
 		public HierarchyColors Hierarchy { get; set; }
+		[YuzuOptional]
+		public RemoteScriptingColors RemoteScripting { get; set; }
 
 		public ColorTheme Clone()
 		{
@@ -439,6 +453,11 @@ namespace Tangerine.UI
 			var hierarchy = new HierarchyColors {
 				MatchColor = Color4.Yellow.Darken(0.5f).Transparentify(0.6f),
 			};
+			var remoteScripting = new RemoteScriptingColors {
+				AssemblyDefaultIcon = new Color4(204, 204, 204),
+				AssemblyBuildSucceededIcon = new Color4(0, 163, 0),
+				AssemblyBuildFailedIcon = new Color4(163, 0, 0),
+			};
 			return new ColorTheme {
 				IsDark = true,
 				Toolbar = toolbar,
@@ -452,6 +471,7 @@ namespace Tangerine.UI
 				Inspector = inspector,
 				Keyboard = keyboard,
 				Hierarchy = hierarchy,
+				RemoteScripting = remoteScripting,
 			};
 		}
 
@@ -590,6 +610,11 @@ namespace Tangerine.UI
 			var hierarchy = new HierarchyColors {
 				MatchColor = Color4.Yellow.Transparentify(0.6f),
 			};
+			var remoteScripting = new RemoteScriptingColors {
+				AssemblyDefaultIcon = Color4.Black.Lighten(0.7f),
+				AssemblyBuildSucceededIcon = new Color4(0, 220, 0),
+				AssemblyBuildFailedIcon = Color4.Red,
+			};
 			return new ColorTheme {
 				IsDark = false,
 				Toolbar = toolbar,
@@ -603,6 +628,7 @@ namespace Tangerine.UI
 				Inspector = inspector,
 				Keyboard = keyboard,
 				Hierarchy = hierarchy,
+				RemoteScripting = remoteScripting,
 			};
 		}
 	}

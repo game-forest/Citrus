@@ -12,13 +12,14 @@ namespace Tangerine.UI.RemoteScripting
 		public delegate void RemoteProcedureCalledDelegate(CompiledAssembly assembly, PortableEntryPoint entryPoint);
 		public RemoteProcedureCalledDelegate RemoteProcedureCalled;
 
+		public CompiledAssembly Assembly { get; set; }
 		public bool ItemsEnabled { get; set; }
 
 		public RemoteProcedureCallScrollView()
 		{
-			Rebuild(CompiledAssembly.Instance);
+			Rebuild(null);
 			this.AddChangeWatcher(() => ItemsEnabled, SetItemsEnabled);
-			this.AddChangeWatcher(() => CompiledAssembly.Instance, Rebuild);
+			this.AddChangeWatcher(() => Assembly, Rebuild);
 
 			void SetItemsEnabled(bool value)
 			{

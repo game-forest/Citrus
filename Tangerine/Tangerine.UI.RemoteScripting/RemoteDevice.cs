@@ -13,7 +13,6 @@ namespace Tangerine.UI.RemoteScripting
 
 		private readonly HostClient client;
 		private readonly LimitedTextView textView;
-		private string id;
 
 		public bool WasInitialized { get; private set; }
 		public bool WasDisconnected { get; private set; }
@@ -27,8 +26,8 @@ namespace Tangerine.UI.RemoteScripting
 		public RemoteDevice(HostClient client)
 		{
 			this.client = client;
-			id = Guid.NewGuid().ToString().Substring(0, 18);
-			UpdateName();
+			Name = Guid.NewGuid().ToString().Substring(0, 18);
+			UpdateVisual();
 
 			Content = new Widget {
 				Layout = new VBoxLayout(),
@@ -41,7 +40,7 @@ namespace Tangerine.UI.RemoteScripting
 		public void Disconnect()
 		{
 			WasDisconnected = true;
-			UpdateName();
+			UpdateVisual();
 		}
 
 		public void RemoteProcedureCall(byte[] assemblyRawBytes, byte[] pdbRawBytes, string className, string methodName)
@@ -83,9 +82,9 @@ namespace Tangerine.UI.RemoteScripting
 				switch (message.MessageType) {
 					case NetworkMessageType.DeviceName:
 						var networkDeviceName = (NetworkDeviceName)message;
-						id = networkDeviceName.Name;
+						Name = networkDeviceName.Name;
 						WasInitialized = true;
-						UpdateName();
+						UpdateVisual();
 						break;
 					case NetworkMessageType.Text:
 						var networkText = (NetworkText)message;
@@ -163,7 +162,14 @@ namespace Tangerine.UI.RemoteScripting
 			}
 		}
 
-		private void UpdateName() => Name = id + (WasDisconnected ? " (disconnected)" : "");
+		private void UpdateVisual()
+		{
+			IconTexture = IconPool.GetTexture(
+				!WasDisconnected ?
+				"RemoteScripting.DeviceConnected" :
+				"RemoteScripting.DeviceDisconnected"
+			);
+		}
 
 		private void Log(string message)
 		{

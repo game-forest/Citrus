@@ -105,7 +105,10 @@ namespace Tangerine.UI.RemoteScripting
 			);
 			savingDeviceLogsCommand.Issued += SavingDeviceLogsCommandHandler;
 
-			explorableItems.AddItem(new AssemblyBuilder(toolbar));
+			var assemblyBuilder = new AssemblyBuilder(toolbar);
+			assemblyBuilder.AssemblyBuilt += assembly => rpcScrollView.Assembly = assembly;
+			assemblyBuilder.AssemblyBuildFailed += () => explorableItems.SelectItem(assemblyBuilder);
+			explorableItems.AddItem(assemblyBuilder);
 
 			rpcScrollView.AddChangeWatcher(() => TryGetActiveDevice(out _), value => rpcScrollView.ItemsEnabled = value);
 			rpcScrollView.RemoteProcedureCalled += (assembly, entryPoint) => {

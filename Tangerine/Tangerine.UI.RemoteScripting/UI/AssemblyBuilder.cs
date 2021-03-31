@@ -18,16 +18,24 @@ namespace Tangerine.UI.RemoteScripting
 
 		private readonly LimitedTextView textView;
 		private bool isBuildingInProgress;
+		private IconState iconState = IconDefaultState.Instance;
+
+		public delegate void AssemblyBuiltDelegate(CompiledAssembly assembly);
+		public event AssemblyBuiltDelegate AssemblyBuilt;
+
+		public event Action AssemblyBuildFailed;
 
 		public AssemblyBuilder(Toolbar toolbar)
 		{
 			Name = "Assembly";
+			IconPresenter = new SyncDelegatePresenter<Widget>(IconRender);
 			Content = new Widget {
 				Layout = new VBoxLayout(),
 				Nodes = {
 					(textView = new LimitedTextView(maxRowCount: 1500))
 				}
 			};
+			Updating += UpdateIconState;
 
 			var configurationDropDownList = new ThemedDropDownList {
 				MaxWidth = 200f
@@ -92,8 +100,8 @@ namespace Tangerine.UI.RemoteScripting
 				try {
 					const int DelayBetweenOperations = 1000 / 20;
 					isBuildingInProgress = true;
-					CompiledAssembly.Instance = null;
-
+					TransitIconStateTo(new IconBuildingState());
+					AssemblyBuilt?.Invoke(null);
 					await Task.Delay(DelayBetweenOperations);
 
 					if (requiredBuildGame) {
@@ -130,7 +138,7 @@ namespace Tangerine.UI.RemoteScripting
 								PdbRawBytes = result.PdbRawBytes,
 								PortableAssembly = portableAssembly
 							};
-							CompiledAssembly.Instance = compiledAssembly;
+							AssemblyBuilt?.Invoke(compiledAssembly);
 							success = true;
 						} catch (System.Reflection.ReflectionTypeLoadException exception) {
 							Log(exception.ToString());
@@ -145,6 +153,10 @@ namespace Tangerine.UI.RemoteScripting
 							Log(exception.ToString());
 						}
 					}
+					if (!success) {
+						AssemblyBuildFailed?.Invoke();
+					}
+					TransitIconStateTo(success ? (IconState)IconBuildSucceededState.Instance : IconBuildFailedState.Instance);
 					Log(success ? "Assembly was build." : "Assembly wasn't build due to errors in the code.");
 					Log(string.Empty);
 				} catch (System.Exception e) {
@@ -164,6 +176,154 @@ namespace Tangerine.UI.RemoteScripting
 		{
 			if (message != null) {
 				textView.AppendLine(!string.IsNullOrWhiteSpace(message) ? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {message}" : message);
+			}
+		}
+
+		private void IconRender(Widget widget)
+		{
+			widget.PrepareRendererState();
+			var cornerWidth = widget.Width * 0.375f;
+			var cornerHeight = widget.Height * 0.125f;
+			DrawCorner(Vector2.One, 1, 1, iconState.TopLeftColor);
+			DrawCorner(new Vector2(widget.Width - 1, 1), -1, 1, iconState.TopRightColor);
+			DrawCorner(widget.Size - Vector2.One, -1, -1, iconState.BottomRightColor);
+			DrawCorner(new Vector2(1, widget.Height - 1), 1, -1, iconState.BottomLeftColor);
+
+			void DrawCorner(Vector2 position, int h, int v, Color4 color)
+			{
+				Renderer.DrawRect(position, position + new Vector2(cornerWidth * h, cornerHeight * v), color);
+				Renderer.DrawRect(position, position + new Vector2(cornerHeight * h, cornerWidth * v), color);
+			}
+		}
+
+		private void TransitIconStateTo(IconState destinationIconState)
+		{
+			iconState = new IconTransitionState(iconState, destinationIconState);
+		}
+
+		private void UpdateIconState(float delta)
+		{
+			delta = Mathf.Min(delta, 1f / 30);
+			iconState.Update(delta);
+			if (iconState.IsDynamic) {
+				Window.Current.Invalidate();
+			}
+			if (iconState is IconTransitionState { IsFinished: true } iconTransitionState) {
+				iconState = iconTransitionState.DestinationState;
+			}
+		}
+
+		private class IconState
+		{
+			public bool IsDynamic { get; protected set; }
+			public Color4 TopLeftColor { get; protected set; }
+			public Color4 TopRightColor { get; protected set; }
+			public Color4 BottomRightColor { get; protected set; }
+			public Color4 BottomLeftColor { get; protected set; }
+
+			protected IconState() { }
+
+			protected IconState(Color4 commonColor)
+			{
+				TopLeftColor = TopRightColor = BottomRightColor = BottomLeftColor = commonColor;
+			}
+
+			public virtual void Update(float delta) { }
+		}
+
+		private class IconDefaultState : IconState
+		{
+			public static IconDefaultState Instance { get; } = new IconDefaultState();
+
+			private IconDefaultState() : base(ColorTheme.Current.RemoteScripting.AssemblyDefaultIcon) { }
+		}
+
+		private class IconBuildingState : IconState
+		{
+			private const float Period = 1.5f;
+
+			private float time;
+
+			public IconBuildingState()
+			{
+				IsDynamic = true;
+				UpdateColors(0);
+			}
+
+			public override void Update(float delta)
+			{
+				time = (time + delta) % Period;
+				UpdateColors(time / Period);
+			}
+
+			private void UpdateColors(float progress)
+			{
+				var defaultColor = ColorTheme.Current.RemoteScripting.AssemblyDefaultIcon;
+				var buildingColor = ColorTheme.Current.RemoteScripting.AssemblyBuildSucceededIcon;
+				var p = GetCornerProgress(progress, 0);
+				TopLeftColor = Color4.Lerp(p, defaultColor, buildingColor);
+				p = GetCornerProgress(progress, 0.25f);
+				TopRightColor = Color4.Lerp(p, defaultColor, buildingColor);
+				p = GetCornerProgress(progress, 0.5f);
+				BottomRightColor = Color4.Lerp(p, defaultColor, buildingColor);
+				p = GetCornerProgress(progress, 0.75f);
+				BottomLeftColor = Color4.Lerp(p, defaultColor, buildingColor);
+
+				static float GetCornerProgress(float overallProgress, float cornerProgressPoint)
+				{
+					var v = Mathf.Min(Mathf.Abs(overallProgress - cornerProgressPoint), Mathf.Abs(overallProgress - cornerProgressPoint - 1));
+					var p = 1 - Mathf.Clamp(v * 4, 0, 1);
+					return Mathf.Sin(p * Mathf.HalfPi);
+				}
+			}
+		}
+
+		private class IconBuildFailedState : IconState
+		{
+			public static IconBuildFailedState Instance { get; } = new IconBuildFailedState();
+
+			private IconBuildFailedState() : base(ColorTheme.Current.RemoteScripting.AssemblyBuildFailedIcon) { }
+		}
+
+		private class IconBuildSucceededState : IconState
+		{
+			public static IconBuildSucceededState Instance { get; } = new IconBuildSucceededState();
+
+			private IconBuildSucceededState() : base(ColorTheme.Current.RemoteScripting.AssemblyBuildSucceededIcon) { }
+		}
+
+		private class IconTransitionState : IconState
+		{
+			private const float Duration = 0.25f;
+
+			private readonly IconState sourceState;
+			private float time;
+
+			public IconState DestinationState { get; }
+			public bool IsFinished => time >= Duration;
+
+			public IconTransitionState(IconState sourceState, IconState destinationState)
+			{
+				IsDynamic = true;
+				this.sourceState = sourceState;
+				DestinationState = destinationState;
+				UpdateColors(0);
+			}
+
+			public override void Update(float delta)
+			{
+				sourceState.Update(delta);
+				DestinationState.Update(delta);
+				time = Mathf.Clamp(time + delta, 0, Duration);
+				UpdateColors(time / Duration);
+			}
+
+			private void UpdateColors(float progress)
+			{
+				TopLeftColor = Color4.Lerp(progress, sourceState.TopLeftColor, DestinationState.TopLeftColor);
+				TopRightColor = Color4.Lerp(progress, sourceState.TopRightColor, DestinationState.TopRightColor);
+				BottomRightColor = Color4.Lerp(progress, sourceState.BottomRightColor, DestinationState.BottomRightColor);
+				BottomLeftColor = Color4.Lerp(progress, sourceState.BottomLeftColor, DestinationState.BottomLeftColor);
 			}
 		}
 	}
