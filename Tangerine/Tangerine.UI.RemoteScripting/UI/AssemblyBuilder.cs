@@ -1,9 +1,11 @@
 using System;
+using System.IO;
 using System.Linq;
 using Lime;
 using RemoteScripting;
 using Tangerine.Core;
 using Tangerine.Core.Commands;
+using FileSystemWatcher = Lime.FileSystemWatcher;
 using Task = System.Threading.Tasks.Task;
 
 namespace Tangerine.UI.RemoteScripting
@@ -19,6 +21,35 @@ namespace Tangerine.UI.RemoteScripting
 		private readonly LimitedTextView textView;
 		private bool isBuildingInProgress;
 		private IconState iconState = IconDefaultState.Instance;
+		private bool autoRebuildAssembly;
+		private bool autoRebuildAssemblyAllowed;
+		private FileSystemWatcher fileSystemWatcher;
+		private float? timeSinceAssemblyWasModified;
+
+		private float? TimeSinceAssemblyWasModified
+		{
+			get => timeSinceAssemblyWasModified;
+			set
+			{
+				var wasNameChanged =
+					timeSinceAssemblyWasModified.HasValue && !value.HasValue ||
+					!timeSinceAssemblyWasModified.HasValue && value.HasValue;
+				timeSinceAssemblyWasModified = value;
+				if (wasNameChanged) {
+					NameChanged();
+				}
+			}
+		}
+
+		public bool AutoRebuildAssembly
+		{
+			get => autoRebuildAssembly;
+			set
+			{
+				autoRebuildAssembly = value;
+				AutoRebuildAssemblyChanged();
+			}
+		}
 
 		public delegate void AssemblyBuiltDelegate(CompiledAssembly assembly);
 		public event AssemblyBuiltDelegate AssemblyBuilt;
@@ -27,7 +58,6 @@ namespace Tangerine.UI.RemoteScripting
 
 		public AssemblyBuilder(Toolbar toolbar)
 		{
-			Name = "Assembly";
 			IconPresenter = new SyncDelegatePresenter<Widget>(IconRender);
 			Content = new Widget {
 				Layout = new VBoxLayout(),
@@ -36,6 +66,8 @@ namespace Tangerine.UI.RemoteScripting
 				}
 			};
 			Updating += UpdateIconState;
+			Updating += AutoRebuildAssemblyMonitoring;
+			NameChanged();
 
 			var configurationDropDownList = new ThemedDropDownList {
 				MaxWidth = 200f
@@ -45,6 +77,7 @@ namespace Tangerine.UI.RemoteScripting
 			}
 			configurationDropDownList.Changed += args => {
 				Configuration = (ProjectPreferences.RemoteScriptingConfiguration)args.Value;
+				ConfigurationChanged();
 				if (Configuration == null || !Configuration.IsValid) {
 					Log("Please, select a valid remote scripting configuration!");
 				}
@@ -100,6 +133,7 @@ namespace Tangerine.UI.RemoteScripting
 				try {
 					const int DelayBetweenOperations = 1000 / 20;
 					isBuildingInProgress = true;
+					autoRebuildAssemblyAllowed = true;
 					TransitIconStateTo(new IconBuildingState());
 					AssemblyBuilt?.Invoke(null);
 					await Task.Delay(DelayBetweenOperations);
@@ -153,6 +187,7 @@ namespace Tangerine.UI.RemoteScripting
 							Log(exception.ToString());
 						}
 					}
+					TimeSinceAssemblyWasModified = null;
 					if (!success) {
 						AssemblyBuildFailed?.Invoke();
 					}
@@ -171,6 +206,64 @@ namespace Tangerine.UI.RemoteScripting
 		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true) =>
 			Log($"Building assembly is not supported on {Application.Platform}");
 #endif // WIN
+
+		private void NameChanged()
+		{
+			Name = TimeSinceAssemblyWasModified.HasValue ? "Assembly*" : "Assembly";
+		}
+
+		private void AutoRebuildAssemblyChanged()
+		{
+			autoRebuildAssemblyAllowed = false;
+		}
+
+		private void ConfigurationChanged()
+		{
+			TimeSinceAssemblyWasModified = 0;
+			fileSystemWatcher?.Dispose();
+			fileSystemWatcher = null;
+			if (Configuration == null || !Configuration.IsValid) {
+				return;
+			}
+			var directory = Path.GetDirectoryName(Configuration.ScriptsProjectPath);
+			if (string.IsNullOrEmpty(directory)) {
+				return;
+			}
+			fileSystemWatcher = new FileSystemWatcher(directory, includeSubdirectories: true);
+			fileSystemWatcher.Changed += HandleFileSystemWatcherEvent;
+			fileSystemWatcher.Created += HandleFileSystemWatcherEvent;
+			fileSystemWatcher.Deleted += HandleFileSystemWatcherEvent;
+			fileSystemWatcher.Renamed += (previousPath, newPath) => {
+				// simulating rename as pairs of deleted / created events
+				HandleFileSystemWatcherEvent(previousPath);
+				HandleFileSystemWatcherEvent(newPath);
+			};
+
+			void HandleFileSystemWatcherEvent(string path)
+			{
+				var extension = Path.GetExtension(path);
+				if (extension == ".csproj" || extension == ".cs") {
+					TimeSinceAssemblyWasModified = 0;
+				}
+			}
+		}
+
+		private void AutoRebuildAssemblyMonitoring(float delta)
+		{
+			const float ModificationsAggregationDuration = 0.5f;
+			if (TimeSinceAssemblyWasModified.HasValue) {
+				TimeSinceAssemblyWasModified += delta;
+			}
+			if (
+				AutoRebuildAssembly &&
+				autoRebuildAssemblyAllowed &&
+				!isBuildingInProgress &&
+				TimeSinceAssemblyWasModified > ModificationsAggregationDuration &&
+				Application.Windows.Any(window => window.Active)
+			) {
+				BuildAssembly(Configuration, requiredBuildGame: false);
+			}
+		}
 
 		private void Log(string message)
 		{

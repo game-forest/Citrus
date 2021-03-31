@@ -9,6 +9,12 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class RemoteScriptingPane
 	{
+		private static bool AutoRebuildAssembly
+		{
+			get => ProjectUserPreferences.Instance.RemoteScriptingAutoRebuildAssembly;
+			set => ProjectUserPreferences.Instance.RemoteScriptingAutoRebuildAssembly = value;
+		}
+
 		private static string DeviceLogsDirectory
 		{
 			get => ProjectUserPreferences.Instance.RemoteDevicesLogFolder;
@@ -95,19 +101,29 @@ namespace Tangerine.UI.RemoteScripting
 			hostButton.AddChangeWatcher(() => host.IsRunning, v => hostButton.Text = v ? "Stop Host" : "Start Host");
 			rootWidget.Updating += _ => UpdateDevices();
 
+			ICommand autoRebuildAssemblyCommand;
 			ICommand savingDeviceLogsCommand;
 			toolbar.AddMenuButton(
 				"Options",
 				new Menu {
-					(savingDeviceLogsCommand = new Command("Saving remote device logs")),
+					(autoRebuildAssemblyCommand = new Command("Automatically Rebuild Assembly")),
+					(savingDeviceLogsCommand = new Command("Saving Remote Device Logs")),
 				},
-				() => savingDeviceLogsCommand.Checked = IsSavingDeviceLogs
+				() => {
+					autoRebuildAssemblyCommand.Checked = AutoRebuildAssembly;
+					savingDeviceLogsCommand.Checked = IsSavingDeviceLogs;
+				}
 			);
+			autoRebuildAssemblyCommand.Issued += () => AutoRebuildAssembly = !AutoRebuildAssembly;
 			savingDeviceLogsCommand.Issued += SavingDeviceLogsCommandHandler;
 
 			var assemblyBuilder = new AssemblyBuilder(toolbar);
 			assemblyBuilder.AssemblyBuilt += assembly => rpcScrollView.Assembly = assembly;
 			assemblyBuilder.AssemblyBuildFailed += () => explorableItems.SelectItem(assemblyBuilder);
+			rootWidget.AddChangeWatcher(
+				() => AutoRebuildAssembly,
+				autoRebuildAssembly => assemblyBuilder.AutoRebuildAssembly = autoRebuildAssembly
+			);
 			explorableItems.AddItem(assemblyBuilder);
 
 			rpcScrollView.AddChangeWatcher(() => TryGetActiveDevice(out _), value => rpcScrollView.ItemsEnabled = value);
