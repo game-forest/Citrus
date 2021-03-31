@@ -53,7 +53,6 @@ namespace Lime
 			Add(typeof(Color4), new Color4AnimatorFactory());
 			Add(typeof(string), new AnimatorFactory<string>());
 			Add(typeof(int), new IntAnimatorFactory());
-			Add(typeof(sbyte), new SByteAnimatorFactory());
 			Add(typeof(bool), new AnimatorFactory<bool>());
 			Add(typeof(NumericRange), new NumericRangeAnimatorFactory());
 			Add(typeof(Blending), new AnimatorFactory<Blending>());
@@ -150,12 +149,6 @@ namespace Lime
 		{
 			public override IAnimator CreateAnimator() => new IntAnimator();
 			public override IBlendedAnimator CreateBlendedAnimator() => new IntBlendedAnimator();
-		}
-
-		private class SByteAnimatorFactory : AnimatorFactory<sbyte>
-		{
-			public override IAnimator CreateAnimator() => new SByteAnimator();
-			public override IBlendedAnimator CreateBlendedAnimator() => new SByteBlendedAnimator();
 		}
 
 		private class NumericRangeAnimatorFactory : AnimatorFactory<NumericRange>

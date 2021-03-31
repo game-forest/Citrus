@@ -577,19 +577,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		protected static global::Lime.Animator<sbyte> Clone_Lime__Animator_SByte(Cloner cl, object src)
-		{
-			if (src == null) return null;
-			if (src.GetType() != typeof(global::Lime.Animator<sbyte>))
-				return (global::Lime.Animator<sbyte>)cl.DeepObject(src);
-			var s = (global::Lime.Animator<sbyte>)src;
-			var result = new global::Lime.Animator<sbyte>();
-			result.AnimationId = s.AnimationId;
-			result.ReadonlyKeys = s.ReadonlyKeys;
-			result.TargetPropertyPath = s.TargetPropertyPath;
-			return result;
-		}
-
 		protected static global::Lime.Animator<float> Clone_Lime__Animator_Single(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -2148,19 +2135,6 @@ namespace YuzuGenerated
 			return result;
 		}
 
-		protected static global::Lime.Keyframe<sbyte> Clone_Lime__Keyframe_SByte(Cloner cl, object src)
-		{
-			if (src == null) return null;
-			if (src.GetType() != typeof(global::Lime.Keyframe<sbyte>))
-				return (global::Lime.Keyframe<sbyte>)cl.DeepObject(src);
-			var s = (global::Lime.Keyframe<sbyte>)src;
-			var result = new global::Lime.Keyframe<sbyte>();
-			result.Frame = s.Frame;
-			result.PackedParams = s.PackedParams;
-			result.Value = s.Value;
-			return result;
-		}
-
 		protected static global::Lime.Keyframe<float> Clone_Lime__Keyframe_Single(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -3390,19 +3364,6 @@ namespace YuzuGenerated
 			result.Visible = s.Visible;
 			result.WordSplitAllowed = s.WordSplitAllowed;
 			s.OnAfterSerialization();
-			return result;
-		}
-
-		protected static global::Lime.SByteAnimator Clone_Lime__SByteAnimator(Cloner cl, object src)
-		{
-			if (src == null) return null;
-			if (src.GetType() != typeof(global::Lime.SByteAnimator))
-				return (global::Lime.SByteAnimator)cl.DeepObject(src);
-			var s = (global::Lime.SByteAnimator)src;
-			var result = new global::Lime.SByteAnimator();
-			result.AnimationId = s.AnimationId;
-			result.ReadonlyKeys = s.ReadonlyKeys;
-			result.TargetPropertyPath = s.TargetPropertyPath;
 			return result;
 		}
 
@@ -4747,7 +4708,6 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.Animator<bool>)] = Clone_Lime__Animator_Boolean;
 			clonerCache[typeof(global::Lime.Animator<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Clone_Lime__Animator_List_Animesh__SkinnedVertex;
 			clonerCache[typeof(global::Lime.Animator<int>)] = Clone_Lime__Animator_Int32;
-			clonerCache[typeof(global::Lime.Animator<sbyte>)] = Clone_Lime__Animator_SByte;
 			clonerCache[typeof(global::Lime.Animator<float>)] = Clone_Lime__Animator_Single;
 			clonerCache[typeof(global::Lime.Animator<string>)] = Clone_Lime__Animator_String;
 			clonerCache[typeof(global::Lime.Animesh)] = Clone_Lime__Animesh;
@@ -4831,7 +4791,6 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.Keyframe<bool>)] = Clone_Lime__Keyframe_Boolean;
 			clonerCache[typeof(global::Lime.Keyframe<global::System.Collections.Generic.List<global::Lime.Animesh.SkinnedVertex>>)] = Clone_Lime__Keyframe_List_Animesh__SkinnedVertex;
 			clonerCache[typeof(global::Lime.Keyframe<int>)] = Clone_Lime__Keyframe_Int32;
-			clonerCache[typeof(global::Lime.Keyframe<sbyte>)] = Clone_Lime__Keyframe_SByte;
 			clonerCache[typeof(global::Lime.Keyframe<float>)] = Clone_Lime__Keyframe_Single;
 			clonerCache[typeof(global::Lime.Keyframe<string>)] = Clone_Lime__Keyframe_String;
 			clonerCache[typeof(global::Lime.LayoutCell)] = Clone_Lime__LayoutCell;
@@ -4877,7 +4836,6 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.Ray)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.Rectangle)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.RichText)] = Clone_Lime__RichText;
-			clonerCache[typeof(global::Lime.SByteAnimator)] = Clone_Lime__SByteAnimator;
 			clonerCache[typeof(global::Lime.SignedDistanceField.SDFInnerShadowMaterial)] = Clone_Lime_SignedDistanceField__SDFInnerShadowMaterial;
 			clonerCache[typeof(global::Lime.SignedDistanceField.SDFShadowMaterial)] = Clone_Lime_SignedDistanceField__SDFShadowMaterial;
 			clonerCache[typeof(global::Lime.SerializableCompoundFont)] = Clone_Lime__SerializableCompoundFont;
