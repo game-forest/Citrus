@@ -7,10 +7,7 @@ namespace EmptyProject.Win
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			Lime.Application.Initialize(new Lime.ApplicationOptions {
-				RenderingBackend = Lime.RenderingBackend.Vulkan,
-				EnableParticleLimiter = true
-			});
+			Lime.Application.Initialize(new Lime.ApplicationOptions());
 			EmptyProject.Application.Application.Initialize();
 			Lime.Application.Run();
 		}

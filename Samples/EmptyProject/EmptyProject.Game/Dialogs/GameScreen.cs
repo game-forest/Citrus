@@ -8,21 +8,6 @@ namespace EmptyProject.Dialogs
 		{
 			SoundManager.PlayMusic("Ingame");
 			Scene._BtnExit.It.Clicked = ReturnToMenu;
-			Scene._BtnDo.It.Clicked = Do;
-		}
-
-
-		Node node = null;
-
-		private void Do()
-		{
-			if (node != null) {
-				Scene.It.Nodes.Insert(0, node);
-				node = null;
-			} else {
-				node = Scene.It["Scene1"];
-				node.Unlink();
-			}
 		}
 
 		protected override void Update(float delta)
