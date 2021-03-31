@@ -55038,38 +55038,6 @@ references:
   commentId: T:Lime.SafeAreaInsetsChangedDelegate
   fullName: Lime.SafeAreaInsetsChangedDelegate
   nameWithType: SafeAreaInsetsChangedDelegate
-- uid: Lime.SByteAnimator
-  name: SByteAnimator
-  href: api/Lime.SByteAnimator.html
-  commentId: T:Lime.SByteAnimator
-  fullName: Lime.SByteAnimator
-  nameWithType: SByteAnimator
-- uid: Lime.SByteAnimator.InterpolateLinear(System.Single)
-  name: InterpolateLinear(Single)
-  href: api/Lime.SByteAnimator.html#Lime_SByteAnimator_InterpolateLinear_System_Single_
-  commentId: M:Lime.SByteAnimator.InterpolateLinear(System.Single)
-  fullName: Lime.SByteAnimator.InterpolateLinear(System.Single)
-  nameWithType: SByteAnimator.InterpolateLinear(Single)
-- uid: Lime.SByteAnimator.InterpolateLinear*
-  name: InterpolateLinear
-  href: api/Lime.SByteAnimator.html#Lime_SByteAnimator_InterpolateLinear_
-  commentId: Overload:Lime.SByteAnimator.InterpolateLinear
-  isSpec: "True"
-  fullName: Lime.SByteAnimator.InterpolateLinear
-  nameWithType: SByteAnimator.InterpolateLinear
-- uid: Lime.SByteAnimator.InterpolateSplined(System.Single)
-  name: InterpolateSplined(Single)
-  href: api/Lime.SByteAnimator.html#Lime_SByteAnimator_InterpolateSplined_System_Single_
-  commentId: M:Lime.SByteAnimator.InterpolateSplined(System.Single)
-  fullName: Lime.SByteAnimator.InterpolateSplined(System.Single)
-  nameWithType: SByteAnimator.InterpolateSplined(Single)
-- uid: Lime.SByteAnimator.InterpolateSplined*
-  name: InterpolateSplined
-  href: api/Lime.SByteAnimator.html#Lime_SByteAnimator_InterpolateSplined_
-  commentId: Overload:Lime.SByteAnimator.InterpolateSplined
-  isSpec: "True"
-  fullName: Lime.SByteAnimator.InterpolateSplined
-  nameWithType: SByteAnimator.InterpolateSplined
 - uid: Lime.ScissorState
   name: ScissorState
   href: api/Lime.ScissorState.html
@@ -77051,19 +77019,6 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_RenderTarget
   nameWithType: LimeCloner.Clone_Lime__Animator_RenderTarget
-- uid: YuzuGenerated.LimeCloner.Clone_Lime__Animator_SByte(Yuzu.Clone.Cloner,System.Object)
-  name: Clone_Lime__Animator_SByte(Cloner, Object)
-  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animator_SByte_Yuzu_Clone_Cloner_System_Object_
-  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__Animator_SByte(Yuzu.Clone.Cloner,System.Object)
-  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_SByte(Yuzu.Clone.Cloner, System.Object)
-  nameWithType: LimeCloner.Clone_Lime__Animator_SByte(Cloner, Object)
-- uid: YuzuGenerated.LimeCloner.Clone_Lime__Animator_SByte*
-  name: Clone_Lime__Animator_SByte
-  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animator_SByte_
-  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__Animator_SByte
-  isSpec: "True"
-  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Animator_SByte
-  nameWithType: LimeCloner.Clone_Lime__Animator_SByte
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__Animator_SerializableFont(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__Animator_SerializableFont(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Animator_SerializableFont_Yuzu_Clone_Cloner_System_Object_
@@ -77935,19 +77890,6 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_RenderTarget
   nameWithType: LimeCloner.Clone_Lime__Keyframe_RenderTarget
-- uid: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SByte(Yuzu.Clone.Cloner,System.Object)
-  name: Clone_Lime__Keyframe_SByte(Cloner, Object)
-  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Keyframe_SByte_Yuzu_Clone_Cloner_System_Object_
-  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SByte(Yuzu.Clone.Cloner,System.Object)
-  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SByte(Yuzu.Clone.Cloner, System.Object)
-  nameWithType: LimeCloner.Clone_Lime__Keyframe_SByte(Cloner, Object)
-- uid: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SByte*
-  name: Clone_Lime__Keyframe_SByte
-  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Keyframe_SByte_
-  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SByte
-  isSpec: "True"
-  fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SByte
-  nameWithType: LimeCloner.Clone_Lime__Keyframe_SByte
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_SerializableFont(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__Keyframe_SerializableFont(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__Keyframe_SerializableFont_Yuzu_Clone_Cloner_System_Object_
@@ -78559,19 +78501,6 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__RichText
   nameWithType: LimeCloner.Clone_Lime__RichText
-- uid: YuzuGenerated.LimeCloner.Clone_Lime__SByteAnimator(Yuzu.Clone.Cloner,System.Object)
-  name: Clone_Lime__SByteAnimator(Cloner, Object)
-  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__SByteAnimator_Yuzu_Clone_Cloner_System_Object_
-  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__SByteAnimator(Yuzu.Clone.Cloner,System.Object)
-  fullName: YuzuGenerated.LimeCloner.Clone_Lime__SByteAnimator(Yuzu.Clone.Cloner, System.Object)
-  nameWithType: LimeCloner.Clone_Lime__SByteAnimator(Cloner, Object)
-- uid: YuzuGenerated.LimeCloner.Clone_Lime__SByteAnimator*
-  name: Clone_Lime__SByteAnimator
-  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__SByteAnimator_
-  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__SByteAnimator
-  isSpec: "True"
-  fullName: YuzuGenerated.LimeCloner.Clone_Lime__SByteAnimator
-  nameWithType: LimeCloner.Clone_Lime__SByteAnimator
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__SerializableCompoundFont(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__SerializableCompoundFont(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__SerializableCompoundFont_Yuzu_Clone_Cloner_System_Object_

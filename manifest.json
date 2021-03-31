@@ -378,7 +378,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animator-1.html",
-          "hash": "T8h7V0ovUC6Wb8vk6cBF0Q=="
+          "hash": "nBr/vkn9AZR01VSbFFU0FQ=="
         }
       },
       "is_incremental": false,
@@ -6110,18 +6110,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.SByteAnimator.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.SByteAnimator.html",
-          "hash": "vcKgPUT7wuwDeqpFFlZWaA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.SafeAreaInsetsChangedDelegate.yml",
       "output": {
         ".html": {
@@ -9306,7 +9294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "kOgnfdZa3u5eyjm8itTyXw=="
+          "hash": "qU6kKOD5d7jRtV/5Lqo6pg=="
         }
       },
       "is_incremental": false,
@@ -9318,7 +9306,7 @@
       "output": {
         ".html": {
           "relative_path": "api/YuzuGenerated.LimeCloner.html",
-          "hash": "+P6F188FqB37HOGPmHLZRw=="
+          "hash": "bsxIC9sM5/JnNKXR43GYBg=="
         }
       },
       "is_incremental": false,
@@ -9354,7 +9342,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "nEzjV1Q+b6Rgq2iHLY85Bw=="
+          "hash": "do5OfNKbCI8c3HGLSIyU6g=="
         }
       },
       "is_incremental": false,
@@ -11562,7 +11550,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 778,
+          "total_file_count": 777,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
