@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <DefineConstants>WIN</DefineConstants>
     <RootNamespace>Orange</RootNamespace>
     <AssemblyName>Orange</AssemblyName>
     <Configurations>Debug;Release;Tangerine.Debug;Tangerine.Release</Configurations>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
