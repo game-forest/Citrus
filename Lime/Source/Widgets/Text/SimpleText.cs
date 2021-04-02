@@ -12,6 +12,7 @@ namespace Lime
 		private SpriteList spriteList;
 		private SerializableFont font;
 		private string text;
+		private string[] localizeArguments;
 		private Rectangle extent;
 		private float fontHeight;
 		private float spacing;
@@ -82,7 +83,15 @@ namespace Lime
 			get
 			{
 				if (displayText != null) return displayText;
-				displayText = Localizable ? Text.Localize() : Text;
+				if (Localizable) {
+					if (localizeArguments != null) {
+						displayText = Text.Localize(localizeArguments);
+					} else {
+						displayText = Text.Localize();
+					}
+				} else {
+					displayText = Text;
+				}
 				GlobalTextProcessor?.Invoke(ref displayText, this);
 				textProcessor?.Invoke(ref displayText, this);
 				return displayText;
@@ -529,6 +538,12 @@ namespace Lime
 		{
 			PrepareSpriteListAndExtent();
 			return spriteList.GetCharPair(point, out pair);
+		}
+
+		public void SetLocalizeArguments(params string[] args)
+		{
+			localizeArguments = args;
+			Invalidate();
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace Lime
 	{
 		private TextParser parser = new TextParser();
 		private string text;
+		private string[] localizeArguments;
 		private HAlignment hAlignment;
 		private VAlignment vAlignment;
 		private TextOverflowMode overflowMode;
@@ -45,7 +46,15 @@ namespace Lime
 			get
 			{
 				if (displayText == null && Text != null) {
-					displayText = Localizable ? Text.Localize() : Text;
+					if (Localizable) {
+						if (localizeArguments != null) {
+							displayText = Text.Localize(localizeArguments);
+						} else {
+							displayText = Text.Localize();
+						}
+					} else {
+						displayText = Text;
+					}
 					GlobalTextProcessor?.Invoke(ref displayText, this);
 					textProcessor?.Invoke(ref displayText, this);
 				}
@@ -363,6 +372,12 @@ namespace Lime
 			}
 			pair = null;
 			return false;
+		}
+
+		public void SetLocalizeArguments(params string[] args)
+		{
+			localizeArguments = args;
+			Invalidate();
 		}
 
 		public int MaxDisplayCharacters {
