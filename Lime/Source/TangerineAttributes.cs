@@ -419,4 +419,10 @@ namespace Lime
 		}
 	}
 
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public class TangerineCreateButtonAttribute : Attribute
+	{
+		public string Name;
+	}
+	
 }

@@ -293,6 +293,37 @@ namespace Tangerine.UI.Inspector
 				propertyEditor.Enabled = Enabled;
 				yield return propertyEditor;
 			}
+
+			var methodBindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
+			foreach (var method in type.GetMethods(methodBindingFlags)) {
+				if (!Attribute.IsDefined(method, typeof(TangerineCreateButtonAttribute))) {
+					continue;
+				}
+				if (0 != method.GetParameters().Length || method.IsStatic) {
+					throw new NotSupportedException(
+						$"TangerineCreateButtonAttribute Method {method.Name} " + 
+						"only non-static methods with no arguments are supported!");
+				}
+				var attributeType = typeof(TangerineCreateButtonAttribute);
+				var attribute = Attribute.GetCustomAttribute(method, attributeType);
+				var typedAttribute = (TangerineCreateButtonAttribute)attribute;
+				widget.AddNode(new Widget {
+					Layout = new HBoxLayout(),
+					Anchors = Anchors.LeftRight,
+					Padding = new Thickness(4, 14, 2, 2),
+					Nodes = {
+						new ThemedButton(typedAttribute.Name ?? method.Name) {
+							Anchors = Anchors.LeftRight,
+							MaxWidth = 10000,
+							Clicked = () => {
+								foreach (var component in objects) {
+									method.Invoke(component, null);
+								}
+							}
+						}
+					}
+				});
+			}
 		}
 
 		private IEnumerable<IPropertyEditor> PopulatePropertyEditors(
