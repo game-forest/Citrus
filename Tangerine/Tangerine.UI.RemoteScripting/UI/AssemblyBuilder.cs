@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Lime;
 using RemoteScripting;
 using Tangerine.Core;
@@ -173,7 +174,7 @@ namespace Tangerine.UI.RemoteScripting
 					}
 
 					Log("Building assembly...");
-					var csAnalyzer = new CSharpAnalyzer(configuration.ScriptsProjectPath);
+					var csAnalyzer = await CSharpAnalyzer.CreateAsync(configuration.ScriptsProjectPath);
 					var csFiles = csAnalyzer.GetCompileItems().ToList();
 					await Task.Delay(DelayBetweenOperations);
 
@@ -189,7 +190,9 @@ namespace Tangerine.UI.RemoteScripting
 					if (result.Success) {
 						Log($"Assembly length in bytes: {result.AssemblyRawBytes.Length}");
 						try {
-							var portableAssembly = new PortableAssembly(result.AssemblyRawBytes, result.PdbRawBytes, configuration.EntryPointsClass);
+							var portableAssembly = await Task<PortableAssembly>.Factory.StartNew(() =>
+								new PortableAssembly(result.AssemblyRawBytes, result.PdbRawBytes, configuration.EntryPointsClass)
+							);
 							var compiledAssembly = new CompiledAssembly {
 								RawBytes = result.AssemblyRawBytes,
 								PdbRawBytes = result.PdbRawBytes,

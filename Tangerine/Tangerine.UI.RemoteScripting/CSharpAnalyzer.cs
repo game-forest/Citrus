@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Buildalyzer;
 using Lime;
 
@@ -29,6 +30,11 @@ namespace Tangerine.UI.RemoteScripting
 			foreach (var item in items) {
 				yield return AssetPath.CorrectSlashes(Path.Combine(directory, item.ItemSpec));
 			}
+		}
+
+		public static async Task<CSharpAnalyzer> CreateAsync(string projectFilePath)
+		{
+			return await Task<CSharpAnalyzer>.Factory.StartNew(() => new CSharpAnalyzer(projectFilePath));
 		}
 	}
 }
