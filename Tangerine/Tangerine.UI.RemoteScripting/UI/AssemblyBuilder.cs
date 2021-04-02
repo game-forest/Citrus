@@ -154,6 +154,7 @@ namespace Tangerine.UI.RemoteScripting
 
 			async void BuildAssemblyAsync()
 			{
+				var success = false;
 				try {
 					const int DelayBetweenOperations = 1000 / 20;
 					isBuildingInProgress = true;
@@ -186,7 +187,6 @@ namespace Tangerine.UI.RemoteScripting
 					foreach (var diagnostic in result.Diagnostics) {
 						Log(diagnostic.ToString());
 					}
-					var success = false;
 					if (result.Success) {
 						Log($"Assembly length in bytes: {result.AssemblyRawBytes.Length}");
 						try {
@@ -213,18 +213,19 @@ namespace Tangerine.UI.RemoteScripting
 							Log(exception.ToString());
 						}
 					}
-					TimeSinceAssemblyWasModified = null;
-					if (!success) {
-						AssemblyBuildFailed?.Invoke();
-					}
-					TransitIconStateTo(success ? (IconState)IconBuildSucceededState.Instance : IconBuildFailedState.Instance);
-					Log(success ? "Assembly was build." : "Assembly wasn't build due to errors in the code.");
-					Log(string.Empty);
 				} catch (System.Exception e) {
 					System.Console.WriteLine(e);
 					Log(e.ToString());
 				} finally {
 					isBuildingInProgress = false;
+					TimeSinceAssemblyWasModified = null;
+					if (!success) {
+						autoRebuildAssemblyAllowed = false;
+						AssemblyBuildFailed?.Invoke();
+					}
+					TransitIconStateTo(success ? (IconState)IconBuildSucceededState.Instance : IconBuildFailedState.Instance);
+					Log(success ? "Assembly was build." : "Assembly wasn't build due to errors in the code.");
+					Log(string.Empty);
 				}
 			}
 		}
