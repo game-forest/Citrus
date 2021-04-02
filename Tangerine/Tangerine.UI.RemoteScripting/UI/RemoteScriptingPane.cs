@@ -9,6 +9,12 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class RemoteScriptingPane
 	{
+		private static bool AutoStartUpHosting
+		{
+			get => ProjectUserPreferences.Instance.RemoteScriptingAutoStartHosting;
+			set => ProjectUserPreferences.Instance.RemoteScriptingAutoStartHosting = value;
+		}
+
 		private static bool AutoRebuildAssembly
 		{
 			get => ProjectUserPreferences.Instance.RemoteScriptingAutoRebuildAssembly;
@@ -98,19 +104,23 @@ namespace Tangerine.UI.RemoteScripting
 			hostButton.AddChangeWatcher(() => host.IsRunning, v => hostButton.Text = v ? "Stop Host" : "Start Host");
 			rootWidget.Updating += _ => UpdateDevices();
 
+			ICommand autoStartHostingCommand;
 			ICommand autoRebuildAssemblyCommand;
 			ICommand savingDeviceLogsCommand;
 			toolbar.AddMenuButton(
 				"Options",
 				new Menu {
+					(autoStartHostingCommand = new Command("Automatically Start up Hosting")),
 					(autoRebuildAssemblyCommand = new Command("Automatically Rebuild Assembly")),
 					(savingDeviceLogsCommand = new Command("Saving Remote Device Logs")),
 				},
 				() => {
+					autoStartHostingCommand.Checked = AutoStartUpHosting;
 					autoRebuildAssemblyCommand.Checked = AutoRebuildAssembly;
 					savingDeviceLogsCommand.Checked = IsSavingDeviceLogs;
 				}
 			);
+			autoStartHostingCommand.Issued += () => AutoStartUpHosting = !AutoStartUpHosting;
 			autoRebuildAssemblyCommand.Issued += () => AutoRebuildAssembly = !AutoRebuildAssembly;
 			savingDeviceLogsCommand.Issued += SavingDeviceLogsCommandHandler;
 
@@ -150,6 +160,10 @@ namespace Tangerine.UI.RemoteScripting
 					device.RemoteProcedureCall(assembly.RawBytes, assembly.PdbRawBytes, entryPoint.ClassName, entryPoint.MethodName);
 				}
 			};
+
+			if (AutoStartUpHosting) {
+				host.Start();
+			}
 		}
 
 		private void CleanUp()

@@ -42,6 +42,9 @@ namespace Tangerine.Core
 		public string RemoteDevicesLogFolder { get; set; }
 
 		[YuzuOptional]
+		public bool RemoteScriptingAutoStartHosting { get; set; }
+
+		[YuzuOptional]
 		public bool RemoteScriptingAutoRebuildAssembly { get; set; }
 
 		public const int MaxRecentDocuments = 5;
