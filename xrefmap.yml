@@ -61911,6 +61911,18 @@ references:
   isSpec: "True"
   fullName: Lime.TangerineBase64IconAttribute.Base64
   nameWithType: TangerineBase64IconAttribute.Base64
+- uid: Lime.TangerineCreateButtonAttribute
+  name: TangerineCreateButtonAttribute
+  href: api/Lime.TangerineCreateButtonAttribute.html
+  commentId: T:Lime.TangerineCreateButtonAttribute
+  fullName: Lime.TangerineCreateButtonAttribute
+  nameWithType: TangerineCreateButtonAttribute
+- uid: Lime.TangerineCreateButtonAttribute.Name
+  name: Name
+  href: api/Lime.TangerineCreateButtonAttribute.html#Lime_TangerineCreateButtonAttribute_Name
+  commentId: F:Lime.TangerineCreateButtonAttribute.Name
+  fullName: Lime.TangerineCreateButtonAttribute.Name
+  nameWithType: TangerineCreateButtonAttribute.Name
 - uid: Lime.TangerineCustomIconAttribute
   name: TangerineCustomIconAttribute
   href: api/Lime.TangerineCustomIconAttribute.html

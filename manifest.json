@@ -7166,6 +7166,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineCreateButtonAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineCreateButtonAttribute.html",
+          "hash": "G8kLddOXFlY2LkLqGKLjPA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineCustomIconAttribute.yml",
       "output": {
         ".html": {
@@ -9294,7 +9306,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "qU6kKOD5d7jRtV/5Lqo6pg=="
+          "hash": "6foYZZv/RfX/vXaTFTTeUw=="
         }
       },
       "is_incremental": false,
@@ -9342,7 +9354,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "do5OfNKbCI8c3HGLSIyU6g=="
+          "hash": "R4WuchoZlqLCvYKQYC33eQ=="
         }
       },
       "is_incremental": false,
@@ -11550,7 +11562,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 777,
+          "total_file_count": 778,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
