@@ -191,7 +191,7 @@ namespace Tangerine.UI.RemoteScripting
 						Log($"Assembly length in bytes: {result.AssemblyRawBytes.Length}");
 						try {
 							var portableAssembly = await Task<PortableAssembly>.Factory.StartNew(() =>
-								new PortableAssembly(result.AssemblyRawBytes, result.PdbRawBytes, configuration.EntryPointsClass)
+								new PortableAssembly(result.AssemblyRawBytes, result.PdbRawBytes)
 							);
 							var compiledAssembly = new CompiledAssembly {
 								RawBytes = result.AssemblyRawBytes,

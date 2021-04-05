@@ -27,7 +27,6 @@ namespace Tangerine.Core
 			private readonly List<string> frameworkReferences = new List<string>();
 			public readonly string ScriptsProjectPath;
 			public readonly string ScriptsAssemblyName;
-			public readonly string EntryPointsClass;
 			public readonly string RemoteStoragePath;
 			public readonly string BuildTarget;
 			public IReadOnlyList<string> FrameworkReferences => frameworkReferences;
@@ -61,7 +60,6 @@ namespace Tangerine.Core
 				foreach (string reference in json.ProjectReferences) {
 					projectReferences.Add(AssetPath.CorrectSlashes(Path.Combine(projectReferencesPath, reference)));
 				}
-				EntryPointsClass = (string)json.EntryPointsClass;
 				RemoteStoragePath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.RemoteStoragePath));
 				BuildTarget = (string)json.BuildTarget;
 			}

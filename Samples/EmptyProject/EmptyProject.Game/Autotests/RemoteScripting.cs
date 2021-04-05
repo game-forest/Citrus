@@ -17,7 +17,6 @@ namespace EmptyProject
 	{
 		private const int RenderChainLayer = RenderChain.LayerCount - 1;
 		private const string ScenePath = "Shell/RemoteScripting";
-		private const string EntryPointsClassName = "EmptyProject.Scripts.EntryPoints";
 
 		private enum StatusMessage
 		{
@@ -162,7 +161,7 @@ namespace EmptyProject
 					case NetworkMessageType.RemoteProcedureCall:
 						var remoteProcedureCall = ((NetworkRemoteProcedureCall)message).Data;
 						try {
-							var portableAssembly = new PortableAssembly(remoteProcedureCall.AssemblyRawBytes, remoteProcedureCall.PdbRawBytes, EntryPointsClassName);
+							var portableAssembly = new PortableAssembly(remoteProcedureCall.AssemblyRawBytes, remoteProcedureCall.PdbRawBytes);
 							portableAssembly.EntryPoints
 								.First(p => p.ClassName == remoteProcedureCall.ClassName && p.MethodName == remoteProcedureCall.MethodName)
 								.Info

@@ -47,7 +47,6 @@
 				"System.dll",
 				"System.Core.dll"
 			],
-			"EntryPointsClass": "EmptyProject.Scripts.EntryPoints",
 			"RemoteStoragePath": "StorageForRemoteScripting/"
 		}
 	},
