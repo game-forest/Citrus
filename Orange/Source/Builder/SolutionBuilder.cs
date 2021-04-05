@@ -65,7 +65,7 @@ namespace Orange
 			}
 			// `dotnet build` handles nuget restore by itself.
 			if (!(buildSystem is Dotnet)) {
-				var nugetResult = Nuget.Restore(projectDirectory);
+				var nugetResult = Nuget.Restore(target.ProjectPath);
 				if (nugetResult != 0) {
 					Console.WriteLine("NuGet exited with code: {0}", nugetResult);
 				}

@@ -30,9 +30,9 @@ namespace Orange
 #endif
 		}
 
-		public static int Restore(string projectDirectory, string builderPath = null)
+		public static int Restore(string projectPath, string builderPath = null)
 		{
-			var command = $"restore \"{projectDirectory}\" ";
+			var command = $"restore \"{projectPath}\" ";
 #if MAC
 			// MSBuildVersion is a workaround because msbuild 16 doesn't work with any version of nuget.
 			command += builderPath == null ? "" : $"-MSBuildVersion 15";
