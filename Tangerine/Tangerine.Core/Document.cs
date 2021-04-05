@@ -407,6 +407,7 @@ namespace Tangerine.Core
 				SortBones(RootNode);
 				// Take the external scenes from the currently opened documents.
 				RefreshExternalScenes(documentsBeingLoaded);
+				RootNode.NotifyOnBuilt();
 				RefreshSceneTree();
 			} catch (System.Exception e) {
 				throw new System.InvalidOperationException($"Can't open '{Path}': {e.Message}");
@@ -559,7 +560,7 @@ namespace Tangerine.Core
 				}
 				if (document != null) {
 					document.RefreshExternalScenes(documentsBeingLoaded);
-					var clone = document.RootNodeUnwrapped.Clone();
+					var clone = InternalPersistence.Instance.Clone(document.RootNodeUnwrapped);
 					RestoreAnimationStates(document.RootNodeUnwrapped, clone);
 					node.ReplaceContent(clone);
 					foreach (var n in node.Descendants.ToList()) {
@@ -572,7 +573,7 @@ namespace Tangerine.Core
 		private static void CleanupExternalContent(Node node)
 		{
 			if (!string.IsNullOrEmpty(node.ContentsPath)) {
-				node.ReplaceContent(new Frame());
+				node.ReplaceContent((Node)Activator.CreateInstance(node.GetType()));
 				return;
 			}
 			foreach (var n in node.Nodes) {
