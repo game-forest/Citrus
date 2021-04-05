@@ -3546,7 +3546,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IText.html",
-          "hash": "nV3pvK2wuwBIF5xPFMbGJw=="
+          "hash": "xUkVf7atVJ4+Zzu5vrb65A=="
         }
       },
       "is_incremental": false,
@@ -6102,7 +6102,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.RichText.html",
-          "hash": "yqFGtUR9lJZS3M1nLEYjSg=="
+          "hash": "3GTPYU70AqpZQ1R6G05ycg=="
         }
       },
       "is_incremental": false,
@@ -6642,7 +6642,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SimpleText.html",
-          "hash": "mh++xym3Df3f4VIY3luTvg=="
+          "hash": "rpCi4/N2020aR4AEgYkndQ=="
         }
       },
       "is_incremental": false,
@@ -8082,7 +8082,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedSimpleText.html",
-          "hash": "XgRLRzkI6uU4fxq9vrZvxA=="
+          "hash": "893eIsn6vTAEl28HWTPaeQ=="
         }
       },
       "is_incremental": false,

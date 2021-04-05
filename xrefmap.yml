@@ -30087,6 +30087,22 @@ references:
   isSpec: "True"
   fullName: Lime.IText.OverflowMode
   nameWithType: IText.OverflowMode
+- uid: Lime.IText.SetLocalizeArguments(System.String[])
+  name: SetLocalizeArguments(String[])
+  href: api/Lime.IText.html#Lime_IText_SetLocalizeArguments_System_String___
+  commentId: M:Lime.IText.SetLocalizeArguments(System.String[])
+  name.vb: SetLocalizeArguments(String())
+  fullName: Lime.IText.SetLocalizeArguments(System.String[])
+  fullName.vb: Lime.IText.SetLocalizeArguments(System.String())
+  nameWithType: IText.SetLocalizeArguments(String[])
+  nameWithType.vb: IText.SetLocalizeArguments(String())
+- uid: Lime.IText.SetLocalizeArguments*
+  name: SetLocalizeArguments
+  href: api/Lime.IText.html#Lime_IText_SetLocalizeArguments_
+  commentId: Overload:Lime.IText.SetLocalizeArguments
+  isSpec: "True"
+  fullName: Lime.IText.SetLocalizeArguments
+  nameWithType: IText.SetLocalizeArguments
 - uid: Lime.IText.Submit
   name: Submit()
   href: api/Lime.IText.html#Lime_IText_Submit
@@ -54955,6 +54971,22 @@ references:
   isSpec: "True"
   fullName: Lime.RichText.RemoveUnusedStyles
   nameWithType: RichText.RemoveUnusedStyles
+- uid: Lime.RichText.SetLocalizeArguments(System.String[])
+  name: SetLocalizeArguments(String[])
+  href: api/Lime.RichText.html#Lime_RichText_SetLocalizeArguments_System_String___
+  commentId: M:Lime.RichText.SetLocalizeArguments(System.String[])
+  name.vb: SetLocalizeArguments(String())
+  fullName: Lime.RichText.SetLocalizeArguments(System.String[])
+  fullName.vb: Lime.RichText.SetLocalizeArguments(System.String())
+  nameWithType: RichText.SetLocalizeArguments(String[])
+  nameWithType.vb: RichText.SetLocalizeArguments(String())
+- uid: Lime.RichText.SetLocalizeArguments*
+  name: SetLocalizeArguments
+  href: api/Lime.RichText.html#Lime_RichText_SetLocalizeArguments_
+  commentId: Overload:Lime.RichText.SetLocalizeArguments
+  isSpec: "True"
+  fullName: Lime.RichText.SetLocalizeArguments
+  nameWithType: RichText.SetLocalizeArguments
 - uid: Lime.RichText.StaticScale(System.Single,System.Boolean)
   name: StaticScale(Single, Boolean)
   href: api/Lime.RichText.html#Lime_RichText_StaticScale_System_Single_System_Boolean_
@@ -58804,6 +58836,22 @@ references:
   isSpec: "True"
   fullName: Lime.SimpleText.RenderMode
   nameWithType: SimpleText.RenderMode
+- uid: Lime.SimpleText.SetLocalizeArguments(System.String[])
+  name: SetLocalizeArguments(String[])
+  href: api/Lime.SimpleText.html#Lime_SimpleText_SetLocalizeArguments_System_String___
+  commentId: M:Lime.SimpleText.SetLocalizeArguments(System.String[])
+  name.vb: SetLocalizeArguments(String())
+  fullName: Lime.SimpleText.SetLocalizeArguments(System.String[])
+  fullName.vb: Lime.SimpleText.SetLocalizeArguments(System.String())
+  nameWithType: SimpleText.SetLocalizeArguments(String[])
+  nameWithType.vb: SimpleText.SetLocalizeArguments(String())
+- uid: Lime.SimpleText.SetLocalizeArguments*
+  name: SetLocalizeArguments
+  href: api/Lime.SimpleText.html#Lime_SimpleText_SetLocalizeArguments_
+  commentId: Overload:Lime.SimpleText.SetLocalizeArguments
+  isSpec: "True"
+  fullName: Lime.SimpleText.SetLocalizeArguments
+  nameWithType: SimpleText.SetLocalizeArguments
 - uid: Lime.SimpleText.Spacing
   name: Spacing
   href: api/Lime.SimpleText.html#Lime_SimpleText_Spacing
