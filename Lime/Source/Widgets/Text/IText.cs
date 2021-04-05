@@ -96,5 +96,9 @@ namespace Lime
 		bool WordSplitAllowed { get; set; }
 		bool TrimWhitespaces { get; set; }
 		bool GetCharPair(Vector2 point, out Tuple<SpriteList.CharDef, SpriteList.CharDef> pair);
+		/// <summary>
+		/// Arguments that will be passed into Text.Localize(...)
+		/// </summary>
+		void SetLocalizeArguments(params string[] args);
 	}
 }
