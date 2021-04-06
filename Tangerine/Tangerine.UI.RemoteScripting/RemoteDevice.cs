@@ -138,7 +138,7 @@ namespace Tangerine.UI.RemoteScripting
 				byte[] bytes;
 				await using (var fileStream = File.Open(filePath, FileMode.Open)) {
 					bytes = new byte[fileStream.Length];
-					await fileStream.ReadAsync(bytes.AsMemory(0, (int)fileStream.Length));
+					await fileStream.ReadAsync(bytes, 0, (int)fileStream.Length);
 				}
 				var remoteFile = new RemoteFile {
 					Path = requestPath,
@@ -154,7 +154,7 @@ namespace Tangerine.UI.RemoteScripting
 					var directory = Path.GetDirectoryName(filePath);
 					Directory.CreateDirectory(directory!);
 					await using (var fileStream = File.OpenWrite(filePath)) {
-						await fileStream.WriteAsync(remoteFile.Bytes.AsMemory(0, remoteFile.Bytes.Length));
+						await fileStream.WriteAsync(remoteFile.Bytes, 0, remoteFile.Bytes.Length);
 					}
 					Log($"Remote file \"{remoteFile.Path}\" was recieved.");
 				} catch (System.Exception exception) {
