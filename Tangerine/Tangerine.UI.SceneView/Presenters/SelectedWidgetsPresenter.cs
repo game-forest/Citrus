@@ -28,7 +28,7 @@ namespace Tangerine.UI.SceneView
 			}
 
 			canvas.PrepareRendererState();
-			var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
+			var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>().ToList();
 			if (widgets.Count == 0) {
 				return;
 			}

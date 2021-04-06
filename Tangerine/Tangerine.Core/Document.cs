@@ -750,7 +750,7 @@ namespace Tangerine.Core
 			return result;
 		}
 
-		public IEnumerable<Node> SelectedNodes()
+		private IEnumerable<Node> SelectedNodes(bool onlyTopLevel)
 		{
 			if (InspectRootNode) {
 				yield return RootNode;
@@ -758,19 +758,36 @@ namespace Tangerine.Core
 			}
 			Node prevNode = null;
 			foreach (var item in Rows.Where(i => i.Selected).ToList()) {
+				Node node = null;
 				var nr = item.Components.Get<NodeRow>();
 				if (nr != null) {
-					yield return nr.Node;
+					node = nr.Node;
 					prevNode = nr.Node;
 				}
 				var pr = item.Components.Get<PropertyRow>();
 				if (pr != null && pr.Node != prevNode) {
-					yield return pr.Node;
+					node = pr.Node;
 					prevNode = pr.Node;
+				}
+				if (node != null) {
+					if (onlyTopLevel) {
+						for (var i = item.Parent; i != null; i = i.Parent) {
+							if (i.Selected && i.Components.Contains<NodeRow>()) {
+								node = null;
+								break;
+							}
+						}
+					}
+					if (node != null) {
+						yield return node;
+					}
 				}
 			}
 		}
 
+		public IEnumerable<Node> SelectedNodes() => SelectedNodes(onlyTopLevel: false);
+		public IEnumerable<Node> TopLevelSelectedNodes() => SelectedNodes(onlyTopLevel: true);
+		
 		public IEnumerable<Node> CurrentNodes()
 		{
 			foreach (var item in Rows) {

@@ -36,7 +36,7 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>();
 				if (AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
 					widgets = widgets.Where(w => !(w is Animesh));
 				}
@@ -68,7 +68,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>();
 				var mouseStartPos = SceneView.MousePosition;
 				var startPositionForPivotRestore = widgets.FirstOrDefault(
 					w => !w.IsPropertyReadOnly(nameof(Widget.Size)))?.Position;
