@@ -140,8 +140,11 @@ namespace Tangerine.Core
 				void TraverseAnimationTree(Row animationTree)
 				{
 					foreach (var i in animationTree.Rows) {
-						cachedVisibleSceneItems.Add(i);
-						TraverseAnimationTree(i);
+						if (i.TryGetAnimationTrack(out _)) {
+							i.Index = cachedVisibleSceneItems.Count;
+							cachedVisibleSceneItems.Add(i);
+							TraverseAnimationTree(i);
+						}
 					}
 				}
 
