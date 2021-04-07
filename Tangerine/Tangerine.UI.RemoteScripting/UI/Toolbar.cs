@@ -42,11 +42,12 @@ namespace Tangerine.UI.RemoteScripting
 		{
 			var button = new ToolbarButton(title);
 			button.Clicked += () => {
+				var window = Window.Current;
 				Application.InvokeOnNextUpdate(() => {
 					menuShowing?.Invoke();
 					var aabb = button.CalcAABBInWindowSpace();
 					var position = new Vector2(aabb.AX, aabb.BY);
-					menu.Popup(Window.Current, position, 0, null);
+					menu.Popup(window, position, 0, null);
 				});
 			};
 			Content.Nodes.Add(button);
