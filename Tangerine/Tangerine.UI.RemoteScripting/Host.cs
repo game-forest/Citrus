@@ -32,10 +32,10 @@ namespace Tangerine.UI.RemoteScripting
 			{
 				IsRunning = true;
 				RemoteScriptingHost host = null;
+				var clients = new HashSet<HostClient>();
 				try {
 					host = new RemoteScriptingHost(cancellationTokenSource);
 					host.Start();
-					var clients = new HashSet<HostClient>();
 					var clientsToRemove = new List<HostClient>();
 					while (!cancellationToken.IsCancellationRequested) {
 						foreach (var client in host.Clients) {
@@ -68,6 +68,9 @@ namespace Tangerine.UI.RemoteScripting
 					System.Console.WriteLine(exception);
 				} finally {
 					host?.Stop();
+					foreach (var client in clients) {
+						ClientDisconnected?.Invoke(client);
+					}
 					IsRunning = false;
 					cancellationTokenSource = null;
 				}
