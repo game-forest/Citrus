@@ -330,6 +330,8 @@ namespace Tangerine
 			pane.Content.Padding = contentPadding;
 			editors.AddRange(new IPropertyEditor[] {
 				new BooleanPropertyEditor(
+					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ExperimentalTimelineHierarchy),  displayName: "Experimental: timeline hierarchy")),
+				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),  displayName: "Reload modified files")),
 				new Vector2PropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, Tangerine.AppUserPreferences.Instance, propertyName: nameof(Tangerine.AppUserPreferences.DefaultSceneDimensions),  displayName: "Default scene dimensions")),
@@ -351,6 +353,8 @@ namespace Tangerine
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.SwapMouseButtonsForKeyframeSwitch), displayName: "Swap mouse buttons for keyframe switch")),
 				new IntPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LookupItemsLimit),  displayName: "Limit the number of lookup items")),
+				new BooleanPropertyEditor(
+					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),  displayName: "Reload modified files")),
 			});
 			var boneWidthPropertyEditor =
 				new FloatPropertyEditor(

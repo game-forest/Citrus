@@ -48,6 +48,9 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public int LookupItemsLimit { get; set; }
 
+		[YuzuOptional]
+		public bool ExperimentalTimelineHierarchy { get; set; }
+
 		public CoreUserPreferences()
 		{
 			ResetToDefaults();

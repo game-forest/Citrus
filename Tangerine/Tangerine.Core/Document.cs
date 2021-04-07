@@ -172,9 +172,12 @@ namespace Tangerine.Core
 							if (addNodes) {
 								sceneTree.Expandable = true;
 								if (expanded) {
+									var hierarchyMode =
+										!Animation.IsLegacy &&
+									    CoreUserPreferences.Instance.ExperimentalTimelineHierarchy;
 									cachedVisibleSceneItems.Add(i);
 									TraverseSceneTree(i,
-										(node is Bone || i.GetFolder() != null || !Animation.IsLegacy)
+										(node is Bone || i.GetFolder() != null || hierarchyMode)
 										&& (!i.TryGetNode(out var n) || string.IsNullOrEmpty(n.ContentsPath)));
 								}
 							}
@@ -790,7 +793,7 @@ namespace Tangerine.Core
 
 		public IEnumerable<Node> SelectedNodes() => SelectedNodes(onlyTopLevel: false);
 		public IEnumerable<Node> TopLevelSelectedNodes() => SelectedNodes(onlyTopLevel: true);
-		
+
 		public IEnumerable<Node> CurrentNodes()
 		{
 			foreach (var item in Rows) {
