@@ -35,7 +35,8 @@ namespace Tangerine.UI.SceneView
 				) {
 					throw new InvalidOperationException();
 				}
-				var container = (Widget)containerSceneItem.GetNode();
+				var containerNode = containerSceneItem.GetNode();
+				var container = (Widget)(containerNode is Bone ? containerNode.Parent : containerNode);
 				var transform = container.LocalToWorldTransform;
 				if (sv.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
