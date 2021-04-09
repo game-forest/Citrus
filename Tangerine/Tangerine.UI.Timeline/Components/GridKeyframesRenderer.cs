@@ -75,6 +75,16 @@ namespace Tangerine.UI.Timeline.Components
 		public void RenderCells(Widget widget)
 		{
 			widget.PrepareRendererState();
+			if (cells.Count > 0) {
+				int animatedRange = 0;
+				foreach (var frame in cells.Keys) {
+					animatedRange = Math.Max(animatedRange, frame);
+				}
+				Renderer.DrawRect(
+					0, 0,
+					(animatedRange + 1) * TimelineMetrics.ColWidth, widget.Height,
+					ColorTheme.Current.TimelineGrid.AnimatedRangeBackground);
+			}
 			foreach (var kv in cells) {
 				int column = kv.Key;
 				var cell = kv.Value;
