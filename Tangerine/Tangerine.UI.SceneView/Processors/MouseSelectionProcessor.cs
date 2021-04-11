@@ -86,7 +86,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var ctrlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
 			var currentSelection = Document.Current.SelectedNodes();
-			var newSelection = Document.Current.CurrentNodes().Editable().Where(n =>
+			var newSelection = Document.Current.ContainerChildNodes().Editable().Where(n =>
 				ctrlPressed ? Probe(n, rect) ^ originalSelection.Contains(n) : Probe(n, rect));
 			if (!newSelection.SequenceEqual(currentSelection)) {
 				Core.Operations.ClearRowSelection.Perform();

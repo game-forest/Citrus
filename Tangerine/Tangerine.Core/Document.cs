@@ -794,14 +794,7 @@ namespace Tangerine.Core
 		public IEnumerable<Node> SelectedNodes() => SelectedNodes(onlyTopLevel: false);
 		public IEnumerable<Node> TopLevelSelectedNodes() => SelectedNodes(onlyTopLevel: true);
 
-		public IEnumerable<Node> CurrentNodes()
-		{
-			foreach (var item in Rows) {
-				if (item.TryGetNode(out var n)) {
-					yield return n;
-				}
-			}
-		}
+		public IEnumerable<Node> ContainerChildNodes() => Container.Nodes;
 
 		public IEnumerable<Row> TopLevelSelectedRows()
 		{
