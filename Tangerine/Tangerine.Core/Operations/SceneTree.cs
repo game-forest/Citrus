@@ -202,6 +202,10 @@ namespace Tangerine.Core.Operations
 				foreach (var a in container.Animators) {
 					a.AnimationId = Document.Current.AnimationId;
 				}
+				if (container.Animations.Count > 0) {
+					// Use animations panel to paste animations.
+					return false;
+				}
 				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
 				var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
 				foreach (var i in rowTree.Rows) {
