@@ -43,9 +43,6 @@ namespace Tangerine.UI.Timeline
 			RootWidget.AddChangeWatcher(() => RootWidget.Size,
 				// Some document operation processors (e.g. ColumnCountUpdater) require up-to-date timeline dimensions.
 				_ => Core.Operations.Dummy.Perform(Document.Current.History));
-			OnPostRender += _ => RenderVerticalLines();
-			OnPostRender += _ => RenderHorizontalLines();
-			OnPostRender += _ => RenderMarkerRulers();
 			OnPostRender += RenderSelection;
 			OnPostRender += RenderCursor;
 			DropFilesGesture = new DropFilesGesture();
@@ -89,6 +86,9 @@ namespace Tangerine.UI.Timeline
 				Renderer.DrawRect(Vector2.Zero, ContentWidget.Size, Theme.Colors.WhiteBackground);
 				RenderSelectedRowsBackground();
 			}
+			RenderVerticalLines();
+			RenderHorizontalLines();
+			RenderMarkerRulers();
 		}
 
 		private void RenderSelectedRowsBackground()
@@ -103,8 +103,8 @@ namespace Tangerine.UI.Timeline
 
 		private void RenderVerticalLines()
 		{
-			var a = new Vector2(0.0f, 0.0f);
-			var b = new Vector2(0.0f, ContentWidget.Height - 1.0f);
+			var a = new Vector2(0, 1);
+			var b = new Vector2(0, Document.Current.Rows.Count * (TimelineMetrics.DefaultRowHeight + 1) + 1);
 			timeline.GetVisibleColumnRange(out var minColumn, out var maxColumn);
 			var offset = Document.Current.Animation.IsCompound ? 0.5f : 0;
 			for (int columnIndex = minColumn; columnIndex <= maxColumn; columnIndex++) {
@@ -115,11 +115,11 @@ namespace Tangerine.UI.Timeline
 
 		private void RenderHorizontalLines()
 		{
-			var a = new Vector2(0.0f, -0.5f);
-			var b = new Vector2(ContentWidget.Width, -0.5f);
+			var a = new Vector2(0.0f, 0.5f);
+			var b = new Vector2(ContentWidget.Width, 0.5f);
 			Renderer.DrawLine(a, b, ColorTheme.Current.TimelineGrid.Lines);
 			foreach (var row in Document.Current.Rows) {
-				a.Y = b.Y = -0.5f + row.GridWidget().Bottom();
+				a.Y = b.Y = 0.5f + row.GridWidget().Bottom();
 				Renderer.DrawLine(a, b, ColorTheme.Current.TimelineGrid.Lines);
 			}
 		}
@@ -219,7 +219,6 @@ namespace Tangerine.UI.Timeline
 						}
 					}
 				}
-				topSpans = spans.GetEnumerator();
 			}
 		}
 

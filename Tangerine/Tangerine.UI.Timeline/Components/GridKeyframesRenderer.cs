@@ -22,7 +22,7 @@ namespace Tangerine.UI.Timeline.Components
 		}
 
 		private static readonly Stack<Cell> cellPool = new Stack<Cell>();
-		private readonly Dictionary<int, Cell> cells = new Dictionary<int, Cell>();
+		private readonly SortedDictionary<int, Cell> cells = new SortedDictionary<int, Cell>();
 
 		public void ClearCells()
 		{
@@ -72,22 +72,35 @@ namespace Tangerine.UI.Timeline.Components
 			}
 		}
 
+		private readonly Texture2D animatedRangeTexture = new Texture2D();
+
 		public void RenderCells(Widget widget)
 		{
 			widget.PrepareRendererState();
 			if (cells.Count > 0) {
-				int animatedRange = 0;
-				foreach (var frame in cells.Keys) {
-					animatedRange = Math.Max(animatedRange, frame);
+				var cellWidth = TimelineMetrics.ColWidth.Round();
+				if (animatedRangeTexture.ImageSize.Width != cellWidth) {
+					var p = new Color4[cellWidth];
+					for (int i = 0; i < cellWidth; i++) {
+						p[i] = i >= 2 && i <= cellWidth - 2 ?
+							ColorTheme.Current.TimelineGrid.AnimatedRangeBackground : Color4.Transparent;
+					}
+					animatedRangeTexture.TextureParams = new TextureParams { WrapModeU = TextureWrapMode.Repeat };
+					animatedRangeTexture.LoadImage(p, cellWidth, 1);
 				}
-				Renderer.DrawRect(
-					0, 0,
-					(animatedRange + 1) * TimelineMetrics.ColWidth, widget.Height,
-					ColorTheme.Current.TimelineGrid.AnimatedRangeBackground);
+				int previousFrame = -1;
+				foreach (var frame in cells.Keys) {
+					Renderer.DrawSprite(
+						animatedRangeTexture,
+						Color4.White,
+						new Vector2((previousFrame + 1) * TimelineMetrics.ColWidth, 0.5f * widget.Height - 0.5f),
+						new Vector2(TimelineMetrics.ColWidth * (frame - previousFrame - 1), 1),
+						Vector2.Zero,
+						new Vector2(frame - previousFrame - 1, 1));
+					previousFrame = frame;
+				}
 			}
-			foreach (var kv in cells) {
-				int column = kv.Key;
-				var cell = kv.Value;
+			foreach (var (column, cell) in cells) {
 				var a = new Vector2(column * TimelineMetrics.ColWidth + 1, 0);
 				var stripHeight = widget.Height / cell.StripCount;
 				if (cell.StripCount <= 2) {
