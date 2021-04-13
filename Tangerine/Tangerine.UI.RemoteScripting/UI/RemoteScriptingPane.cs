@@ -9,7 +9,7 @@ namespace Tangerine.UI.RemoteScripting
 {
 	public class RemoteScriptingPane
 	{
-		private static bool AutoStartUpHosting
+		private static bool AutoStartHosting
 		{
 			get => ProjectUserPreferences.Instance.RemoteScriptingAutoStartHosting;
 			set => ProjectUserPreferences.Instance.RemoteScriptingAutoStartHosting = value;
@@ -106,23 +106,23 @@ namespace Tangerine.UI.RemoteScripting
 
 			ICommand autoStartHostingCommand;
 			ICommand autoRebuildAssemblyCommand;
-			ICommand savingDeviceLogsCommand;
+			ICommand saveDeviceLogsCommand;
 			toolbar.AddMenuButton(
 				"Options",
 				new Menu {
-					(autoStartHostingCommand = new Command("Automatically Start up Hosting")),
-					(autoRebuildAssemblyCommand = new Command("Automatically Rebuild Assembly")),
-					(savingDeviceLogsCommand = new Command("Saving Remote Device Logs")),
+					(autoStartHostingCommand = new Command("Start Hosting Automatically")),
+					(autoRebuildAssemblyCommand = new Command("Rebuild Assembly Automatically")),
+					(saveDeviceLogsCommand = new Command("Save Remote Device Logs")),
 				},
 				() => {
-					autoStartHostingCommand.Checked = AutoStartUpHosting;
+					autoStartHostingCommand.Checked = AutoStartHosting;
 					autoRebuildAssemblyCommand.Checked = AutoRebuildAssembly;
-					savingDeviceLogsCommand.Checked = IsSavingDeviceLogs;
+					saveDeviceLogsCommand.Checked = IsSavingDeviceLogs;
 				}
 			);
-			autoStartHostingCommand.Issued += () => AutoStartUpHosting = !AutoStartUpHosting;
+			autoStartHostingCommand.Issued += () => AutoStartHosting = !AutoStartHosting;
 			autoRebuildAssemblyCommand.Issued += () => AutoRebuildAssembly = !AutoRebuildAssembly;
-			savingDeviceLogsCommand.Issued += SavingDeviceLogsCommandHandler;
+			saveDeviceLogsCommand.Issued += SaveDeviceLogsCommandHandler;
 
 			var assemblyBuilder = new AssemblyBuilder(toolbar);
 			assemblyBuilder.AssemblyBuilt += assembly => rpcScrollView.Assembly = assembly;
@@ -161,7 +161,7 @@ namespace Tangerine.UI.RemoteScripting
 				}
 			};
 
-			if (AutoStartUpHosting) {
+			if (AutoStartHosting) {
 				host.Start();
 			}
 		}
@@ -194,7 +194,7 @@ namespace Tangerine.UI.RemoteScripting
 			}
 		}
 
-		private void SavingDeviceLogsCommandHandler()
+		private void SaveDeviceLogsCommandHandler()
 		{
 			string directory = null;
 			if (!IsSavingDeviceLogs) {

@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UI\AssemblyBuilder.cs" />
+    <Compile Include="UI\AssemblyBuilderIcon.cs" />
     <Compile Include="UI\ExplorableItem.cs" />
     <Compile Include="UI\ExplorableScrollView.cs" />
     <Compile Include="UI\LimitedTextView.cs" />
