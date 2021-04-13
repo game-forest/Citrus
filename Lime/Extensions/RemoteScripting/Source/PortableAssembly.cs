@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -11,19 +12,41 @@ namespace RemoteScripting
 
 		public IReadOnlyList<PortableEntryPoint> EntryPoints => entryPoints;
 
-		public PortableAssembly(byte[] assemblyRawBytes, byte[] pdbRawBytes, string entryPointsClassName)
+		public PortableAssembly(byte[] assemblyRawBytes, byte[] pdbRawBytes)
 		{
 			var assembly = Assembly.Load(assemblyRawBytes, pdbRawBytes);
-			var type = assembly.GetType(entryPointsClassName);
-			foreach (var methodInfo in type.GetMethods(BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Public)) {
-				var entryPointAttribute = methodInfo.GetCustomAttributes(true)
-					.OfType<PortableEntryPointAttribute>()
-					.FirstOrDefault();
-				if (entryPointAttribute != null && methodInfo.GetParameters().Length == 0) {
-					var entryPoint = new PortableEntryPoint(type.FullName, methodInfo.Name, methodInfo, entryPointAttribute.Summary) {
-						Order = entryPointAttribute.Order
-					};
-					entryPoints.Add(entryPoint);
+			IEnumerable<Type> loadableTypes;
+			try {
+				loadableTypes = assembly.GetTypes();
+			} catch (ReflectionTypeLoadException e) {
+				loadableTypes = e.Types.Where(t => t != null);
+			}
+			foreach (var type in loadableTypes) {
+				MethodInfo[] loadableMethodsInfo;
+				try {
+					loadableMethodsInfo = type.GetMethods(BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Public);
+				} catch (ReflectionTypeLoadException) {
+					continue;
+				}
+				foreach (var methodInfo in loadableMethodsInfo) {
+					PortableEntryPointAttribute entryPointAttribute;
+					ParameterInfo[] loadableParametersInfo;
+					try {
+						entryPointAttribute = methodInfo.GetCustomAttributes(true)
+							.OfType<PortableEntryPointAttribute>()
+							.FirstOrDefault();
+						loadableParametersInfo = methodInfo.GetParameters();
+					} catch (ReflectionTypeLoadException) {
+						continue;
+					} catch (FileNotFoundException) {
+						continue;
+					}
+					if (entryPointAttribute != null && loadableParametersInfo.Length == 0) {
+						var entryPoint = new PortableEntryPoint(type.FullName, methodInfo.Name, methodInfo, entryPointAttribute.Summary) {
+							Order = entryPointAttribute.Order
+						};
+						entryPoints.Add(entryPoint);
+					}
 				}
 			}
 			entryPoints.Sort((lhs, rhs) => lhs.Order.CompareTo(rhs.Order));

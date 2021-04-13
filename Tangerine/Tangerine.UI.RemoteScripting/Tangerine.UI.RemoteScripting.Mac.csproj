@@ -80,14 +80,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\RemoteScriptingAssemblyPage.cs" />
-    <Compile Include="UI\RemoteScriptingDevicesPage.cs" />
+    <Compile Include="UI\AssemblyBuilder.cs" />
+    <Compile Include="UI\AssemblyBuilderIcon.cs" />
+    <Compile Include="UI\ExplorableItem.cs" />
+    <Compile Include="UI\ExplorableScrollView.cs" />
+    <Compile Include="UI\LimitedTextView.cs" />
+    <Compile Include="UI\RemoteProcedureCallScrollView.cs" />
     <Compile Include="UI\RemoteScriptingPane.cs" />
-    <Compile Include="UI\RemoteScriptingStatusBar.cs" />
-    <Compile Include="UI\RemoteScriptingWidgets.cs" />
+    <Compile Include="UI\Toolbar.cs" />
     <Compile Include="CompiledAssembly.cs" />
-    <Compile Include="CSharpCodeCompiler.cs" />
     <Compile Include="CSharpAnalyzer.cs" />
+    <Compile Include="CSharpCodeCompiler.cs" />
+    <Compile Include="Host.cs" />
+    <Compile Include="RemoteDevice.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">

@@ -19,13 +19,14 @@ namespace Tangerine.Core
 		public Dictionary<string, RemoteScriptingConfiguration> RemoteScriptingConfigurations =
 			new Dictionary<string, RemoteScriptingConfiguration>();
 
+		public RemoteScriptingConfiguration RemoteScriptingCurrentConfiguration;
+
 		public class RemoteScriptingConfiguration
 		{
 			private readonly List<string> projectReferences = new List<string>();
 			private readonly List<string> frameworkReferences = new List<string>();
 			public readonly string ScriptsProjectPath;
 			public readonly string ScriptsAssemblyName;
-			public readonly string EntryPointsClass;
 			public readonly string RemoteStoragePath;
 			public readonly string BuildTarget;
 			public IReadOnlyList<string> FrameworkReferences => frameworkReferences;
@@ -36,6 +37,11 @@ namespace Tangerine.Core
 				@"System.dll",
 				@"System.Core.dll"
 			};
+
+			public bool IsValid =>
+				!string.IsNullOrEmpty(ScriptsProjectPath) &&
+				!string.IsNullOrEmpty(ScriptsAssemblyName) &&
+				!string.IsNullOrEmpty(RemoteStoragePath);
 
 			public RemoteScriptingConfiguration(dynamic json)
 			{
@@ -54,7 +60,6 @@ namespace Tangerine.Core
 				foreach (string reference in json.ProjectReferences) {
 					projectReferences.Add(AssetPath.CorrectSlashes(Path.Combine(projectReferencesPath, reference)));
 				}
-				EntryPointsClass = (string)json.EntryPointsClass;
 				RemoteStoragePath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.RemoteStoragePath));
 				BuildTarget = (string)json.BuildTarget;
 			}
@@ -125,6 +130,7 @@ namespace Tangerine.Core
 				foreach (var kv in remoteScriptingSection) {
 					var configuration = new RemoteScriptingConfiguration(kv.Value);
 					RemoteScriptingConfigurations.Add(kv.Name, configuration); // configurationName
+					RemoteScriptingCurrentConfiguration ??= configuration;
 				}
 				Console.WriteLine("Remote scripting preferences was successfully loaded.");
 			} catch {
@@ -135,6 +141,7 @@ namespace Tangerine.Core
 		private void InitializeDefaultRemoteScriptingPreferences()
 		{
 			RemoteScriptingConfigurations.Clear();
+			RemoteScriptingCurrentConfiguration = null;
 		}
 	}
 }
