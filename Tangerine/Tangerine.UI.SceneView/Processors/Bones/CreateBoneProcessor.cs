@@ -31,12 +31,11 @@ namespace Tangerine.UI.SceneView
 				Bone bone = null;
 				if (!SceneTreeUtils.GetSceneItemLinkLocation(
 					out var containerSceneItem, out _, aboveFocused: true,
-					raiseThroughHierarchyPredicate: i => !i.TryGetNode(out var n))
+					raiseThroughHierarchyPredicate: i => !LinkSceneItem.CanLink(i, new Bone()))
 				) {
 					throw new InvalidOperationException();
 				}
-				var containerNode = containerSceneItem.GetNode();
-				var container = (Widget)(containerNode is Bone ? containerNode.Parent : containerNode);
+				var container = (Widget)SceneTreeUtils.GetOwnerNodeSceneItem(containerSceneItem).GetNode();
 				var transform = container.LocalToWorldTransform;
 				if (sv.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
