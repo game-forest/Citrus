@@ -88,6 +88,8 @@ namespace Tangerine.Core.Operations
 
 	public static class CopySceneItemsToStream
 	{
+		public static readonly string AnimationTracksContainerAnimationId = "b3598b8c-acde-43be-b1a0-61721cfce355";
+
 		public static void Perform(IEnumerable<Row> items, MemoryStream stream)
 		{
 			var container = new Frame();
@@ -101,8 +103,8 @@ namespace Tangerine.Core.Operations
 				} else if (item.TryGetAnimator(out var a)) {
 					container.Animators.Add(Cloner.Clone(a));
 				} else if (item.TryGetAnimationTrack(out var t)) {
-					if (!container.Animations.TryFind("_", out var animation)) {
-						animation = new Animation { IsCompound = true, Id = "_" };
+					if (!container.Animations.TryFind(AnimationTracksContainerAnimationId, out var animation)) {
+						animation = new Animation { IsCompound = true, Id = AnimationTracksContainerAnimationId };
 						container.Animations.Add(animation);
 					}
 					animation.Tracks.Add(Cloner.Clone(t));
@@ -165,20 +167,21 @@ namespace Tangerine.Core.Operations
 			foreach (var a in container.Animators) {
 				a.AnimationId = Document.Current.AnimationId;
 			}
-			// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-			var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-			foreach (var i in itemsToPaste.Rows.ToList()) {
-				UnlinkSceneItem.Perform(i);
-				LinkSceneItem.Perform(parent, index, i);
-				index = parent.Rows.IndexOf(i) + 1;
-				pastedItems.Add(i);
-				DecorateNodes(i);
-			}
-			if (container.Animations.TryFind("_", out var animation)) {
+			if (container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out var animation)) {
 				foreach (var track in animation.Tracks.ToList()) {
 					animation.Tracks.Remove(track);
 					LinkSceneItem.Perform(parent, index++, track);
 					pastedItems.Add(Document.Current.GetSceneItemForObject(track));
+				}
+			} else {
+				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
+				var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
+				foreach (var i in itemsToPaste.Rows.ToList()) {
+					UnlinkSceneItem.Perform(i);
+					LinkSceneItem.Perform(parent, index, i);
+					index = parent.Rows.IndexOf(i) + 1;
+					pastedItems.Add(i);
+					DecorateNodes(i);
 				}
 			}
 			return true;
@@ -201,6 +204,10 @@ namespace Tangerine.Core.Operations
 				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
 				foreach (var a in container.Animators) {
 					a.AnimationId = Document.Current.AnimationId;
+				}
+				if (parent.TryGetAnimation(out _)) {
+					// Allow inserting animation tracks into the compound animation.
+					return container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out _);
 				}
 				if (container.Animations.Count > 0) {
 					// Use animations panel to paste animations.

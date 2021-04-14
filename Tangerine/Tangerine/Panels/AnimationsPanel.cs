@@ -354,6 +354,9 @@ namespace Tangerine.Panels
 						((TreeView)sender).ClearSelection();
 						var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 						foreach (var animation in container.Animations.ToList()) {
+							if (animation.Id == CopySceneItemsToStream.AnimationTracksContainerAnimationId) {
+								continue;
+							}
 							container.Animations.Remove(animation);
 							var baseAnimationId = animation.Id;
 							var counter = 1;
