@@ -290,8 +290,7 @@ namespace Tangerine.Core.Operations
 
 		public static bool CanLink(Row parent, Node node)
 		{
-			if (parent.GetAnimator() != null) {
-				// Can't add anything to an animator.
+			if (!parent.TryGetNode(out _) && !parent.TryGetFolder(out _)) {
 				return false;
 			}
 			var parentNode = parent.TryGetFolder(out var f) ? f.Owner : parent.GetNode();
