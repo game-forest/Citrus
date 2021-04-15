@@ -1498,28 +1498,18 @@ references:
   commentId: F:Lime.Animation.EffectiveAnimators
   fullName: Lime.Animation.EffectiveAnimators
   nameWithType: Animation.EffectiveAnimators
+- uid: Lime.Animation.EffectiveAnimatorsVersion
+  name: EffectiveAnimatorsVersion
+  href: api/Lime.Animation.html#Lime_Animation_EffectiveAnimatorsVersion
+  commentId: F:Lime.Animation.EffectiveAnimatorsVersion
+  fullName: Lime.Animation.EffectiveAnimatorsVersion
+  nameWithType: Animation.EffectiveAnimatorsVersion
 - uid: Lime.Animation.EffectiveTriggerableAnimators
   name: EffectiveTriggerableAnimators
   href: api/Lime.Animation.html#Lime_Animation_EffectiveTriggerableAnimators
   commentId: F:Lime.Animation.EffectiveTriggerableAnimators
   fullName: Lime.Animation.EffectiveTriggerableAnimators
   nameWithType: Animation.EffectiveTriggerableAnimators
-- uid: Lime.Animation.FindAnimators(System.Collections.Generic.List{Lime.IAnimator})
-  name: FindAnimators(List<IAnimator>)
-  href: api/Lime.Animation.html#Lime_Animation_FindAnimators_System_Collections_Generic_List_Lime_IAnimator__
-  commentId: M:Lime.Animation.FindAnimators(System.Collections.Generic.List{Lime.IAnimator})
-  name.vb: FindAnimators(List(Of IAnimator))
-  fullName: Lime.Animation.FindAnimators(System.Collections.Generic.List<Lime.IAnimator>)
-  fullName.vb: Lime.Animation.FindAnimators(System.Collections.Generic.List(Of Lime.IAnimator))
-  nameWithType: Animation.FindAnimators(List<IAnimator>)
-  nameWithType.vb: Animation.FindAnimators(List(Of IAnimator))
-- uid: Lime.Animation.FindAnimators*
-  name: FindAnimators
-  href: api/Lime.Animation.html#Lime_Animation_FindAnimators_
-  commentId: Overload:Lime.Animation.FindAnimators
-  isSpec: "True"
-  fullName: Lime.Animation.FindAnimators
-  nameWithType: Animation.FindAnimators
 - uid: Lime.Animation.FixAntPath(System.String)
   name: FixAntPath(String)
   href: api/Lime.Animation.html#Lime_Animation_FixAntPath_System_String_
@@ -1779,6 +1769,32 @@ references:
   isSpec: "True"
   fullName: Lime.Animation.TryRun
   nameWithType: Animation.TryRun
+- uid: Lime.Animation.ValidatedEffectiveAnimators
+  name: ValidatedEffectiveAnimators
+  href: api/Lime.Animation.html#Lime_Animation_ValidatedEffectiveAnimators
+  commentId: P:Lime.Animation.ValidatedEffectiveAnimators
+  fullName: Lime.Animation.ValidatedEffectiveAnimators
+  nameWithType: Animation.ValidatedEffectiveAnimators
+- uid: Lime.Animation.ValidatedEffectiveAnimators*
+  name: ValidatedEffectiveAnimators
+  href: api/Lime.Animation.html#Lime_Animation_ValidatedEffectiveAnimators_
+  commentId: Overload:Lime.Animation.ValidatedEffectiveAnimators
+  isSpec: "True"
+  fullName: Lime.Animation.ValidatedEffectiveAnimators
+  nameWithType: Animation.ValidatedEffectiveAnimators
+- uid: Lime.Animation.ValidatedEffectiveTriggerableAnimators
+  name: ValidatedEffectiveTriggerableAnimators
+  href: api/Lime.Animation.html#Lime_Animation_ValidatedEffectiveTriggerableAnimators
+  commentId: P:Lime.Animation.ValidatedEffectiveTriggerableAnimators
+  fullName: Lime.Animation.ValidatedEffectiveTriggerableAnimators
+  nameWithType: Animation.ValidatedEffectiveTriggerableAnimators
+- uid: Lime.Animation.ValidatedEffectiveTriggerableAnimators*
+  name: ValidatedEffectiveTriggerableAnimators
+  href: api/Lime.Animation.html#Lime_Animation_ValidatedEffectiveTriggerableAnimators_
+  commentId: Overload:Lime.Animation.ValidatedEffectiveTriggerableAnimators
+  isSpec: "True"
+  fullName: Lime.Animation.ValidatedEffectiveTriggerableAnimators
+  nameWithType: Animation.ValidatedEffectiveTriggerableAnimators
 - uid: Lime.Animation.ZeroPoseId
   name: ZeroPoseId
   href: api/Lime.Animation.html#Lime_Animation_ZeroPoseId
@@ -20054,6 +20070,12 @@ references:
   isSpec: "True"
   fullName: Lime.FontPool.ClearCache
   nameWithType: FontPool.ClearCache
+- uid: Lime.FontPool.DefaultBoldFontName
+  name: DefaultBoldFontName
+  href: api/Lime.FontPool.html#Lime_FontPool_DefaultBoldFontName
+  commentId: F:Lime.FontPool.DefaultBoldFontName
+  fullName: Lime.FontPool.DefaultBoldFontName
+  nameWithType: FontPool.DefaultBoldFontName
 - uid: Lime.FontPool.DefaultFont
   name: DefaultFont
   href: api/Lime.FontPool.html#Lime_FontPool_DefaultFont
@@ -20130,7 +20152,14 @@ references:
 - uid: Lime.FontPool.Null
   name: "Null"
   href: api/Lime.FontPool.html#Lime_FontPool_Null
-  commentId: F:Lime.FontPool.Null
+  commentId: P:Lime.FontPool.Null
+  fullName: Lime.FontPool.Null
+  nameWithType: FontPool.Null
+- uid: Lime.FontPool.Null*
+  name: "Null"
+  href: api/Lime.FontPool.html#Lime_FontPool_Null_
+  commentId: Overload:Lime.FontPool.Null
+  isSpec: "True"
   fullName: Lime.FontPool.Null
   nameWithType: FontPool.Null
 - uid: Lime.FontPool.TryGetOrUpdateBundleFontPath(System.String,System.String@,System.String[])
@@ -44011,6 +44040,19 @@ references:
   isSpec: "True"
   fullName: Lime.NodeList.Sort
   nameWithType: NodeList.Sort
+- uid: Lime.NodeList.Swap(System.Int32,System.Int32)
+  name: Swap(Int32, Int32)
+  href: api/Lime.NodeList.html#Lime_NodeList_Swap_System_Int32_System_Int32_
+  commentId: M:Lime.NodeList.Swap(System.Int32,System.Int32)
+  fullName: Lime.NodeList.Swap(System.Int32, System.Int32)
+  nameWithType: NodeList.Swap(Int32, Int32)
+- uid: Lime.NodeList.Swap*
+  name: Swap
+  href: api/Lime.NodeList.html#Lime_NodeList_Swap_
+  commentId: Overload:Lime.NodeList.Swap
+  isSpec: "True"
+  fullName: Lime.NodeList.Swap
+  nameWithType: NodeList.Swap
 - uid: Lime.NodeList.System#Collections#Generic#IEnumerable{Lime#Node}#GetEnumerator
   name: IEnumerable<Node>.GetEnumerator()
   href: api/Lime.NodeList.html#Lime_NodeList_System_Collections_Generic_IEnumerable_Lime_Node__GetEnumerator

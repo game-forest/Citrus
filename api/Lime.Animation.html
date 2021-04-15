@@ -185,7 +185,9 @@
   
   
   <h4 id="Lime_Animation_EffectiveAnimators" data-uid="Lime.Animation.EffectiveAnimators">EffectiveAnimators</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Cached list of all animators used by this animation.
+This cache may be in invalid state, in the user code use <a class="xref" href="Lime.Animation.html#Lime_Animation_ValidatedEffectiveAnimators">ValidatedEffectiveAnimators</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -208,8 +210,34 @@
   </table>
   
   
-  <h4 id="Lime_Animation_EffectiveTriggerableAnimators" data-uid="Lime.Animation.EffectiveTriggerableAnimators">EffectiveTriggerableAnimators</h4>
+  <h4 id="Lime_Animation_EffectiveAnimatorsVersion" data-uid="Lime.Animation.EffectiveAnimatorsVersion">EffectiveAnimatorsVersion</h4>
   <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int EffectiveAnimatorsVersion</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_Animation_EffectiveTriggerableAnimators" data-uid="Lime.Animation.EffectiveTriggerableAnimators">EffectiveTriggerableAnimators</h4>
+  <div class="markdown level1 summary"><p>Cached list of only triggerable animators used by this animation.
+This cache may be in invalid state, in the user code use <a class="xref" href="Lime.Animation.html#Lime_Animation_ValidatedEffectiveTriggerableAnimators">ValidatedEffectiveTriggerableAnimators</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -710,6 +738,58 @@ public AnimationTrackList Tracks { get; }</code></pre>
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="Lime_Animation_ValidatedEffectiveAnimators_" data-uid="Lime.Animation.ValidatedEffectiveAnimators*"></a>
+  <h4 id="Lime_Animation_ValidatedEffectiveAnimators" data-uid="Lime.Animation.ValidatedEffectiveAnimators">ValidatedEffectiveAnimators</h4>
+  <div class="markdown level1 summary"><p>Cached list of all animators used by this animation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;IAbstractAnimator&gt; ValidatedEffectiveAnimators { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.IAbstractAnimator.html">IAbstractAnimator</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Animation_ValidatedEffectiveTriggerableAnimators_" data-uid="Lime.Animation.ValidatedEffectiveTriggerableAnimators*"></a>
+  <h4 id="Lime_Animation_ValidatedEffectiveTriggerableAnimators" data-uid="Lime.Animation.ValidatedEffectiveTriggerableAnimators">ValidatedEffectiveTriggerableAnimators</h4>
+  <div class="markdown level1 summary"><p>Cached list of only triggerable animators used by this animation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;IAbstractAnimator&gt; ValidatedEffectiveTriggerableAnimators { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.IAbstractAnimator.html">IAbstractAnimator</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   
@@ -795,33 +875,6 @@ public AnimationTrackList Tracks { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Animation_FindAnimators_" data-uid="Lime.Animation.FindAnimators*"></a>
-  <h4 id="Lime_Animation_FindAnimators_System_Collections_Generic_List_Lime_IAnimator__" data-uid="Lime.Animation.FindAnimators(System.Collections.Generic.List{Lime.IAnimator})">FindAnimators(List&lt;IAnimator&gt;)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void FindAnimators(List&lt;IAnimator&gt; animators)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.IAnimator.html">IAnimator</a>&gt;</td>
-        <td><span class="parametername">animators</span></td>
         <td></td>
       </tr>
     </tbody>

@@ -198,7 +198,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animation.html",
-          "hash": "R1TtXzXB/ajnl5XFbqyycw=="
+          "hash": "YL4/1w9NYcY8MWfKSJ1mkA=="
         }
       },
       "is_incremental": false,
@@ -2466,7 +2466,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.FontPool.html",
-          "hash": "85rE7nZZ8jFdtZQ5p+q43w=="
+          "hash": "etbuq0DouxuzzDD0dgjc9g=="
         }
       },
       "is_incremental": false,
@@ -5022,7 +5022,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeList.html",
-          "hash": "W02BQBcdPhAGl+RFCIF4iA=="
+          "hash": "kXcqIGr4+zAeb2ow004woQ=="
         }
       },
       "is_incremental": false,
