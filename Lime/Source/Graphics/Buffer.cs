@@ -6,14 +6,16 @@ namespace Lime
 	public unsafe class Buffer : IDisposable
 	{
 		private IPlatformBuffer platformBuffer;
-		private BufferType bufferType;
 
+		public BufferType Type { get; private set; }
+		public int Size { get; private set; }
 		public bool Dynamic { get; private set; }
 		public bool IsDisposed { get; private set; }
 
-		protected Buffer(BufferType bufferType, bool dynamic)
+		public Buffer(BufferType type, int size, bool dynamic)
 		{
-			this.bufferType = bufferType;
+			Type = type;
+			Size = size;
 			Dynamic = dynamic;
 		}
 
@@ -24,36 +26,22 @@ namespace Lime
 
 		internal IPlatformBuffer GetPlatformBuffer()
 		{
+			if (platformBuffer == null) {
+				platformBuffer = PlatformRenderer.Context.CreateBuffer(Type, Size, Dynamic);
+			}
 			return platformBuffer;
 		}
 
-		private void EnsurePlatformBuffer(int size)
+		public void SetData(int offset, IntPtr data, int size, BufferSetDataMode mode)
 		{
-			if (platformBuffer == null || platformBuffer.Size != size) {
-				if (platformBuffer != null) {
-					platformBuffer.Dispose();
-				}
-				platformBuffer = PlatformRenderer.Context.CreateBuffer(bufferType, size, Dynamic);
-				Rebind();
-			}
+			GetPlatformBuffer().SetData(offset, data, size, mode);
 		}
 
-		private void Rebind()
+		public void SetData<T>(int offset, T[] data, int startIndex, int count, BufferSetDataMode mode) where T : unmanaged
 		{
-			switch (bufferType) {
-				case BufferType.Vertex:
-					PlatformRenderer.RebindVertexBuffer(this);
-					break;
-				case BufferType.Index:
-					PlatformRenderer.RebindIndexBuffer(this);
-					break;
+			fixed (T* pData = data) {
+				SetData(offset, new IntPtr(pData) + startIndex * sizeof(T), count * sizeof(T), mode);
 			}
-		}
-
-		public void SetData<T>(T[] data, int elementCount) where T : unmanaged
-		{
-			EnsurePlatformBuffer(sizeof(T) * elementCount);
-			platformBuffer.SetData(0, data, 0, elementCount, Dynamic ? BufferSetDataMode.Discard : BufferSetDataMode.Default);
 		}
 
 		public void Dispose()
@@ -73,5 +61,17 @@ namespace Lime
 				platformBuffer = null;
 			}
 		}
+	}
+
+	public enum BufferType
+	{
+		Vertex,
+		Index
+	}
+
+	public enum BufferSetDataMode
+	{
+		Default,
+		Discard
 	}
 }

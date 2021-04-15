@@ -11,18 +11,6 @@ namespace Lime.Graphics.Platform
 		void SetData(int offset, IntPtr data, int size, BufferSetDataMode mode);
 	}
 
-	public enum BufferType
-	{
-		Vertex,
-		Index
-	}
-
-	public enum BufferSetDataMode
-	{
-		Default,
-		Discard
-	}
-
 	public static unsafe class PlatformBufferExtensions
 	{
 		public static void SetData<T>(

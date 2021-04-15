@@ -266,11 +266,6 @@ namespace Lime
 	public static class PlatformRenderer
 	{
 		private static ITexture[] textures;
-		private static VertexBuffer[] vertexBuffers;
-		private static int[] vertexOffsets;
-		private static IndexBuffer indexBuffer;
-		private static int indexOffset;
-		private static IndexFormat indexFormat;
 		private static ShaderProgram shaderProgram;
 		private static ShaderParams[] shaderParamsArray = new ShaderParams[0];
 		private static int shaderParamsArrayCount;
@@ -292,8 +287,6 @@ namespace Lime
 		{
 			Context = context;
 			textures = new ITexture[Context.MaxTextureSlots];
-			vertexBuffers = new VertexBuffer[Context.MaxVertexBufferSlots];
-			vertexOffsets = new int[Context.MaxVertexBufferSlots];
 		}
 
 		public static void BeginFrame()
@@ -318,19 +311,14 @@ namespace Lime
 			Context.SetVertexInputLayout(layout?.GetPlatformLayout());
 		}
 
-		public static void SetVertexBuffer(int slot, VertexBuffer buffer, int offset)
+		public static void SetVertexBuffer(int slot, Buffer buffer, int offset)
 		{
 			Context.SetVertexBuffer(slot, buffer?.GetPlatformBuffer(), offset);
-			vertexBuffers[slot] = buffer;
-			vertexOffsets[slot] = offset;
 		}
 
-		public static void SetIndexBuffer(IndexBuffer buffer, int offset, IndexFormat format)
+		public static void SetIndexBuffer(Buffer buffer, int offset, IndexFormat format)
 		{
 			Context.SetIndexBuffer(buffer?.GetPlatformBuffer(), offset, format);
-			indexBuffer = buffer;
-			indexOffset = offset;
-			indexFormat = format;
 		}
 
 		public static void SetShaderProgram(ShaderProgram program)
@@ -428,26 +416,8 @@ namespace Lime
 			SetVertexInputLayout(null);
 			SetRenderTarget(null);
 			Array.Clear(shaderParamsArray, 0, shaderParamsArray.Length);
-			Array.Clear(vertexBuffers, 0, vertexBuffers.Length);
 			Array.Clear(textures, 0, textures.Length);
-			indexBuffer = null;
 			shaderParamsArrayCount = 0;
-		}
-
-		internal static void RebindIndexBuffer(Buffer buffer)
-		{
-			if (indexBuffer == buffer) {
-				Context.SetIndexBuffer(buffer?.GetPlatformBuffer(), indexOffset, indexFormat);
-			}
-		}
-
-		internal static void RebindVertexBuffer(Buffer buffer)
-		{
-			for (var slot = 0; slot < vertexBuffers.Length; slot++) {
-				if (vertexBuffers[slot] == buffer) {
-					Context.SetVertexBuffer(slot, buffer?.GetPlatformBuffer(), vertexOffsets[slot]);
-				}
-			}
 		}
 
 		internal static void RebindTexture(ITexture texture)

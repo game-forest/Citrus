@@ -8,7 +8,7 @@ namespace Lime
 	[TangerineRegisterNode(Order = 32)]
 	[TangerineVisualHintGroup("/All/Nodes/Images", "Animesh")]
 	[TangerineReadOnlyProperties(nameof(Widget.Size))]
-	public class Animesh : Widget
+	public unsafe class Animesh : Widget
 	{
 		[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 68)]
 		public struct SkinnedVertex
@@ -60,8 +60,8 @@ namespace Lime
 		}
 
 		private bool invalidate = true;
-		private VertexBuffer vbo = null;
-		private IndexBuffer ibo = null;
+		private Buffer vbo = null;
+		private Buffer ibo = null;
 		private Vector2 leftUpperCorner = Vector2.Zero;
 		private Vector2 rightBottomCorner = Vector2.One;
 		private readonly Dictionary<byte, byte> remappedBoneIndices = new Dictionary<byte, byte>();
@@ -119,8 +119,6 @@ namespace Lime
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			IAnimator animator;
 			if (invalidate) {
-				vbo = new VertexBuffer(false);
-				ibo = new IndexBuffer(false);
 				leftUpperCorner = Vector2.Zero;
 				rightBottomCorner = Vector2.One;
 				Texture?.TransformUVCoordinatesToAtlasSpace(ref leftUpperCorner);
@@ -133,7 +131,6 @@ namespace Lime
 					iboData[triangleIndex + 1] = face.Index1;
 					iboData[triangleIndex + 2] = face.Index2;
 				}
-				ibo.SetData(iboData, iboData.Length);
 				// We put the vertices into the buffer like this:
 				// {[VerticesWithNoBones,] Vertices, keyframe1, keyframe2, ..., keyframeN}
 				// Vertices with no bone indices present only in tangerine for
@@ -197,7 +194,10 @@ namespace Lime
 						}
 					}
 				}
-				vbo.SetData(vboData, vboDataLength);
+				vbo = new Buffer(BufferType.Vertex, vboData.Length * sizeof(SkinnedVertex), false);
+				ibo = new Buffer(BufferType.Index, iboData.Length * sizeof(ushort), false);
+				vbo.SetData(0, vboData, 0, vboDataLength, BufferSetDataMode.Default);
+				ibo.SetData(0, iboData, 0, iboData.Length, BufferSetDataMode.Default);
 				invalidate = false;
 			}
 			var frame = Parent?.DefaultAnimation.Frame ?? 0;
@@ -279,8 +279,8 @@ namespace Lime
 			public Matrix32 ParentToLocalTransform;
 			public int OriginPoseVboOffset;
 			public int EndPoseVboOffset;
-			public VertexBuffer Vbo;
-			public IndexBuffer Ibo;
+			public Buffer Vbo;
+			public Buffer Ibo;
 			public Vector2 LeftUpperCorner;
 			public Vector2 RightBottomCorner;
 			public Color4 WidgetColor;

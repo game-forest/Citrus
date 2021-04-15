@@ -1,11 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Yuzu;
 
 namespace Lime
 {
+	internal static class MeshBufferPools
+	{
+		public static readonly BufferPool Vertex = new BufferPool(BufferType.Vertex, true, 64 * 1024);
+		public static readonly BufferPool Index = new BufferPool(BufferType.Index, true, 64 * 1024);
+	}
+
 	[YuzuSpecializeWith(typeof(Lime.Mesh3D.Vertex))]
 	public unsafe partial class Mesh<T> : IMesh, IDisposable where T : unmanaged
 	{
@@ -24,21 +31,30 @@ namespace Lime
 		[YuzuMember]
 		public PrimitiveTopology Topology = PrimitiveTopology.TriangleList;
 
+		public int VertexCount = -1;
+		public int IndexCount = -1;
+
 		public MeshDirtyFlags DirtyFlags = MeshDirtyFlags.All;
 
 		private VertexInputLayout inputLayout;
-		private VertexBuffer vertexBuffer;
-		private IndexBuffer indexBuffer;
+		private Buffer vertexBuffer;
+		private Buffer indexBuffer;
 
 		public void Dispose()
 		{
 			if (!disposed) {
 				if (vertexBuffer != null) {
-					vertexBuffer.Dispose();
+					var vertexBufferCopy = vertexBuffer;
+					Window.Current.InvokeOnRendering(() => {
+						MeshBufferPools.Vertex.ReleaseBuffer(vertexBufferCopy);
+					});
 					vertexBuffer = null;
 				}
 				if (indexBuffer != null) {
-					indexBuffer.Dispose();
+					var indexBufferCopy = indexBuffer;
+					Window.Current.InvokeOnRendering(() => {
+						MeshBufferPools.Index.ReleaseBuffer(indexBufferCopy);
+					});
 					indexBuffer = null;
 				}
 				disposed = true;
@@ -73,20 +89,38 @@ namespace Lime
 			PlatformRenderer.SetIndexBuffer(indexBuffer, 0, IndexFormat.Index16Bits);
 		}
 
+		public int GetEffectiveVertexCount()
+		{
+			return VertexCount >= 0 ? VertexCount : Vertices?.Length ?? 0;
+		}
+
+		public int GetEffectiveIndexCount()
+		{
+			return IndexCount >= 0 ? IndexCount : Indices?.Length ?? 0;
+		}
+
 		private void UpdateBuffers()
 		{
 			if ((DirtyFlags & MeshDirtyFlags.Vertices) != 0) {
-				if (vertexBuffer == null) {
-					vertexBuffer = new VertexBuffer(true);
+				var vertexCount = GetEffectiveVertexCount();
+				if (vertexBuffer == null || vertexBuffer.Size != vertexCount * sizeof(T)) {
+					if (vertexBuffer != null) {
+						MeshBufferPools.Vertex.ReleaseBuffer(vertexBuffer);
+					}
+					vertexBuffer = MeshBufferPools.Vertex.AcquireBuffer(vertexCount * sizeof(T));
 				}
-				vertexBuffer.SetData(Vertices, Vertices?.Length ?? 0);
+				vertexBuffer.SetData(0, Vertices, 0, vertexCount, BufferSetDataMode.Discard);
 				DirtyFlags &= ~MeshDirtyFlags.Vertices;
 			}
 			if ((DirtyFlags & MeshDirtyFlags.Indices) != 0) {
-				if (indexBuffer == null) {
-					indexBuffer = new IndexBuffer(true);
+				var indexCount = GetEffectiveIndexCount();
+				if (indexBuffer == null || indexBuffer.Size != indexCount * sizeof(ushort)) {
+					if (indexBuffer != null) {
+						MeshBufferPools.Index.ReleaseBuffer(indexBuffer);
+					}
+					indexBuffer = MeshBufferPools.Index.AcquireBuffer(indexCount * sizeof(ushort));
 				}
-				indexBuffer.SetData(Indices, Indices?.Length ?? 0);
+				indexBuffer.SetData(0, Indices, 0, indexCount, BufferSetDataMode.Discard);
 				DirtyFlags &= ~MeshDirtyFlags.Indices;
 			}
 		}
@@ -179,6 +213,72 @@ namespace Lime
 		{
 			public Format Format;
 			public int Offset;
+		}
+	}
+
+	internal class BufferPool : IDisposable
+	{
+		private BufferType bufferType;
+		private bool dynamic;
+		private Stack<Buffer>[] pools;
+
+		public BufferPool(BufferType bufferType, bool dynamic, int maxSize)
+		{
+			this.bufferType = bufferType;
+			this.dynamic = dynamic;
+			pools = new Stack<Buffer>[GetSizeClass(maxSize) + 1];
+			for (var i = 0; i < pools.Length; i++) {
+				pools[i] = new Stack<Buffer>();
+			}
+		}
+
+		public void Dispose()
+		{
+			foreach (var p in pools) {
+				while (p.Count > 0) {
+					p.Pop().Dispose();
+				}
+			}
+		}
+
+		public Buffer AcquireBuffer(int size)
+		{
+			System.Diagnostics.Debug.Assert(size > 0);
+			var sizeClass = GetSizeClass(size);
+			if (sizeClass >= pools.Length) {
+				return new Buffer(bufferType, size, dynamic);
+			}
+			if (pools[sizeClass].Count > 0) {
+				return pools[sizeClass].Pop();
+			}
+			return new Buffer(bufferType, GetMaxSize(sizeClass), dynamic);
+		}
+
+		public void ReleaseBuffer(Buffer buffer)
+		{
+			if (buffer.Type != bufferType || buffer.Dynamic != dynamic) {
+				throw new ArgumentException(nameof(buffer));
+			}
+			var sizeClass = GetSizeClass(buffer.Size);
+			if (sizeClass < pools.Length) {
+				if (buffer.Size != GetMaxSize(sizeClass)) {
+					throw new ArgumentException(nameof(buffer));
+				}
+				pools[sizeClass].Push(buffer);
+			} else {
+				buffer.Dispose();
+			}
+		}
+
+		private static int GetSizeClass(int size)
+		{
+			System.Diagnostics.Debug.Assert(size > 0);
+			return 32 - BitOperations.LeadingZeroCount(((uint)size - 1) >> 4);
+		}
+
+		private static int GetMaxSize(int sizeClass)
+		{
+			return 16 << sizeClass;
 		}
 	}
 }
