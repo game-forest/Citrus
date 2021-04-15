@@ -23,10 +23,8 @@ namespace Tangerine.UI.Timeline.Operations
 						continue;
 					}
 					var property = row.Components.Get<PropertyRow>()?.Animator.TargetPropertyPath;
-					foreach (var a in node.Animators.ToList()) {
-						if (a.AnimationId != Document.Current.AnimationId) {
-							continue;
-						}
+					var animators = Document.Current.Animation.ValidatedEffectiveAnimators.Intersect(node.Animators).OfType<IAnimator>().ToList();
+					foreach (var a in animators) {
 						if (property != null && a.TargetPropertyPath != property) {
 							continue;
 						}
@@ -54,9 +52,9 @@ namespace Tangerine.UI.Timeline.Operations
 								// The same logic is used to create keyframes as everywhere, but extended by setting
 								// all parameters from a particular keyframe. Yes, this creates some overhead.
 								operations.Add(() => SetAnimableProperty.Perform(destNode, a.TargetPropertyPath, k1.Value, true, false, k1.Frame));
-								operations.Add(() => SetKeyframe.Perform(destNode, a.TargetPropertyPath, Document.Current.AnimationId, k1));
+								operations.Add(() => SetKeyframe.Perform(destNode, a.TargetPropertyPath, Document.Current.Animation, k1));
 							}
-							// Order is importent. RemoveKeyframe must be after SetKeyframe,
+							// Order is important. RemoveKeyframe must be after SetKeyframe,
 							// to prevent animator clean up if all keys were removed.
 							if (removeOriginals) {
 								operations.Add(() => RemoveKeyframe.Perform(a, k.Frame));

@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lime;
 using Tangerine.Core;
 
@@ -25,7 +22,7 @@ namespace Tangerine.UI.Timeline.Components
 		}
 
 		private static readonly Stack<Cell> cellPool = new Stack<Cell>();
-		private readonly Dictionary<int, Cell> cells = new Dictionary<int, Cell>();
+		private readonly SortedDictionary<int, Cell> cells = new SortedDictionary<int, Cell>();
 
 		public void ClearCells()
 		{
@@ -36,10 +33,11 @@ namespace Tangerine.UI.Timeline.Components
 			cells.Clear();
 		}
 
-		public void GenerateCells(AnimatorCollection animators, string animationId)
+		public void GenerateCells(Node node, Animation animation)
 		{
-			foreach (var animator in animators) {
-				if (animator.IsZombie || animator.AnimationId != animationId) {
+			var effectiveAnimatorsSet = animation.ValidatedEffectiveAnimatorsSet;
+			foreach (var animator in node.Animators) {
+				if (!effectiveAnimatorsSet.Contains(animator)) {
 					continue;
 				}
 				for (var j = 0; j < animator.ReadonlyKeys.Count; j++) {
@@ -74,12 +72,35 @@ namespace Tangerine.UI.Timeline.Components
 			}
 		}
 
+		private readonly Texture2D animatedRangeTexture = new Texture2D();
+
 		public void RenderCells(Widget widget)
 		{
 			widget.PrepareRendererState();
-			foreach (var kv in cells) {
-				int column = kv.Key;
-				var cell = kv.Value;
+			if (cells.Count > 0) {
+				var cellWidth = TimelineMetrics.ColWidth.Round();
+				if (animatedRangeTexture.ImageSize.Width != cellWidth) {
+					var p = new Color4[cellWidth];
+					for (int i = 0; i < cellWidth; i++) {
+						p[i] = i >= 2 && i <= cellWidth - 2 ?
+							ColorTheme.Current.TimelineGrid.AnimatedRangeBackground : Color4.Transparent;
+					}
+					animatedRangeTexture.TextureParams = new TextureParams { WrapModeU = TextureWrapMode.Repeat };
+					animatedRangeTexture.LoadImage(p, cellWidth, 1);
+				}
+				int previousFrame = -1;
+				foreach (var frame in cells.Keys) {
+					Renderer.DrawSprite(
+						animatedRangeTexture,
+						Color4.White,
+						new Vector2((previousFrame + 1) * TimelineMetrics.ColWidth, 0.5f * widget.Height - 0.5f),
+						new Vector2(TimelineMetrics.ColWidth * (frame - previousFrame - 1), 1),
+						Vector2.Zero,
+						new Vector2(frame - previousFrame - 1, 1));
+					previousFrame = frame;
+				}
+			}
+			foreach (var (column, cell) in cells) {
 				var a = new Vector2(column * TimelineMetrics.ColWidth + 1, 0);
 				var stripHeight = widget.Height / cell.StripCount;
 				if (cell.StripCount <= 2) {

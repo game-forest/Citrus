@@ -36,7 +36,7 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>();
 				if (Utils.CalcHullAndPivot(widgets, out _, out var pivot) && SceneView.HitTestControlPoint(pivot)) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
@@ -82,7 +82,7 @@ namespace Tangerine.UI.SceneView
 			if (Document.Current.Container is Widget containerWidget) {
 				var transform = containerWidget.LocalToWorldTransform.CalcInversed();
 				var dragDelta = transform * delta - transform * Vector2.Zero;
-				foreach (var widget in Document.Current.SelectedNodes().Editable().OfType<Widget>()) {
+				foreach (var widget in Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>()) {
 					SetAnimableProperty.Perform(widget, nameof(Widget.Position), widget.Position + dragDelta, CoreUserPreferences.Instance.AutoKeyframes);
 				}
 			}
@@ -90,7 +90,7 @@ namespace Tangerine.UI.SceneView
 
 		private static void DragNodes3D(Vector2 delta)
 		{
-			foreach (var node3D in Document.Current.SelectedNodes().Editable().OfType<Node3D>()) {
+			foreach (var node3D in Document.Current.TopLevelSelectedNodes().Editable().OfType<Node3D>()) {
 				SetAnimableProperty.Perform(node3D, nameof(Widget.Position), node3D.Position + (Vector3)delta / 100, CoreUserPreferences.Instance.AutoKeyframes);
 			}
 		}
@@ -120,7 +120,7 @@ namespace Tangerine.UI.SceneView
 				Document.Current.History.DoTransaction(SceneView.DuplicateSelectedNodes);
 			}
 			using (Document.Current.History.BeginTransaction()) {
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>().ToList();
 				var dragDirection = DragDirection.Any;
 				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();

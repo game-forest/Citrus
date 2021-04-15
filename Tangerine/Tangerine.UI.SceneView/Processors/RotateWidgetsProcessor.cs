@@ -20,7 +20,7 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>()
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>()
 					.Where(w => !w.IsPropertyReadOnly(nameof(Widget.Rotation)));
 				if (AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
 					widgets = widgets.Where(w => !(w is Animesh));
@@ -42,7 +42,7 @@ namespace Tangerine.UI.SceneView
 		private IEnumerator<object> Rotate(Vector2 pivot)
 		{
 			using (Document.Current.History.BeginTransaction()) {
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>().ToList();
 				var mouseStartPos = sv.MousePosition;
 
 				List<Tuple<Widget, AccumulativeRotationHelper>> accumulateRotationHelpers =

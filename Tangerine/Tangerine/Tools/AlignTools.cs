@@ -160,18 +160,18 @@ namespace Tangerine
 				aabb.Right / container.Width, aabb.Bottom / container.Height);
 		}
 
-		protected virtual void ToSelection()
+		protected void ToSelection()
 		{
-			var container = (Widget)Core.Document.Current.Container;
-			if (container == null) {
-				return;
-			}
-			var nodes = Core.Document.Current.SelectedNodes();
-			if (Utils.CalcHullAndPivot(nodes, out var hull, out _)) {
-				hull = hull.Transform(container.LocalToWorldTransform.CalcInversed());
-				var aabb = hull.ToAABB();
-				HandleWidgets(container, nodes, aabb);
-				HandlePointObjects(container, nodes, NormalizedAABB(aabb, container));
+			foreach (var nodes in Core.Document.Current.SelectedNodes().GroupBy(i => i.Parent)) {
+				if (
+					nodes.First().Parent is Widget container &&
+					Utils.CalcHullAndPivot(nodes, out var hull, out _)
+				) {
+					hull = hull.Transform(container.LocalToWorldTransform.CalcInversed());
+					var aabb = hull.ToAABB();
+					HandleWidgets(container, nodes, aabb);
+					HandlePointObjects(container, nodes, NormalizedAABB(aabb, container));
+				}
 			}
 		}
 
@@ -221,16 +221,16 @@ namespace Tangerine
 	{
 		protected override void ToParent()
 		{
-			var container = (Widget)Core.Document.Current.Container;
-			if (container == null) {
-				return;
-			}
-			var nodes = Core.Document.Current.SelectedNodes();
-			if (Utils.CalcHullAndPivot(nodes, out var hull, out _)) {
-				hull = hull.Transform(container.LocalToWorldTransform.CalcInversed());
-				var aabb = hull.ToAABB();
-				HandleWidgets(container, nodes, aabb);
-				HandlePointObjects(container, nodes, NormalizedAABB(aabb, container));
+			foreach (var nodes in Core.Document.Current.SelectedNodes().GroupBy(i => i.Parent)) {
+				if (
+					nodes.First().Parent is Widget container &&
+					Utils.CalcHullAndPivot(nodes, out var hull, out _)
+				) {
+					hull = hull.Transform(container.LocalToWorldTransform.CalcInversed());
+					var aabb = hull.ToAABB();
+					HandleWidgets(container, nodes, aabb);
+					HandlePointObjects(container, nodes, NormalizedAABB(aabb, container));
+				}
 			}
 		}
 

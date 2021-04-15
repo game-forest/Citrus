@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 using Yuzu;
 
 namespace Tangerine.UI.SceneView
@@ -36,7 +37,15 @@ namespace Tangerine.UI.SceneView
 				if (sv.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
-				var container = Document.Current.Container as Widget;
+				if (
+					!SceneTreeUtils.GetSceneItemLinkLocation(
+						out var containerSceneItem, out var linkLocation, aboveFocused: true,
+						raiseThroughHierarchyPredicate: i =>
+							!LinkSceneItem.CanLink(i, (Node)Activator.CreateInstance(nodeTypeActive)))
+				) {
+					throw new InvalidOperationException();
+				}
+				var container = (Widget)SceneTreeUtils.GetOwnerNodeSceneItem(containerSceneItem).GetNode();
 				CreateNodeRequestComponent.Consume<Node>(sv.Components);
 				if (sv.Input.WasMousePressed() && container != null) {
 					sv.Input.ConsumeKey(Key.Mouse0);
@@ -57,10 +66,10 @@ namespace Tangerine.UI.SceneView
 						sv.Frame.CompoundPostPresenter.Remove(presenter);
 						try {
 							rect.Normalize();
-							var widget = (Widget)Core.Operations.CreateNode.Perform(nodeTypeActive);
-							Core.Operations.SetProperty.Perform(widget, nameof(Widget.Size), rect.B - rect.A);
-							Core.Operations.SetProperty.Perform(widget, nameof(Widget.Position), rect.A + widget.Size * 0.5f);
-							Core.Operations.SetProperty.Perform(widget, nameof(Widget.Pivot), Vector2.Half);
+							var widget = (Widget)CreateNode.Perform(containerSceneItem, linkLocation, nodeTypeActive);
+							SetProperty.Perform(widget, nameof(Widget.Size), rect.B - rect.A);
+							SetProperty.Perform(widget, nameof(Widget.Position), rect.A + widget.Size * 0.5f);
+							SetProperty.Perform(widget, nameof(Widget.Pivot), Vector2.Half);
 						} catch (InvalidOperationException e) {
 							AlertDialog.Show(e.Message);
 						}

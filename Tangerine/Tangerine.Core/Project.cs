@@ -77,6 +77,7 @@ namespace Tangerine.Core
 				}
 			}
 			The.Workspace.Open(citprojPath);
+			FontPool.Instance.Clear(preserveDefaultFonts: true);
 			UpdateTextureParams();
 
 			Opening?.Invoke(CitprojPath);

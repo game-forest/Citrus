@@ -18,6 +18,7 @@ namespace Tangerine.UI.Timeline
 				var rq = g.Get<DragKeyframesRequest>();
 				if (rq != null) {
 					Document.Current.History.DoTransaction(() => {
+						g.Remove<DragKeyframesRequest>();
 						Operations.DragKeyframes.Perform(rq.Offset, rq.RemoveOriginals);
 						Operations.ShiftGridSelection.Perform(rq.Offset);
 						if (rq.Offset.Y != 0) {
@@ -29,7 +30,6 @@ namespace Tangerine.UI.Timeline
 								}
 							}
 						}
-						g.Remove<DragKeyframesRequest>();
 					});
 				}
 				yield return null;

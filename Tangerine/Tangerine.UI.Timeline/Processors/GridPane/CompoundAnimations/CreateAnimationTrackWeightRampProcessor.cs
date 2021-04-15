@@ -78,7 +78,7 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 					Core.Operations.RemoveKeyframe.Perform(weightAnimator, currFrame);
 				} else {
 					var k = new Keyframe<float>(currFrame, AnimationTrack.MaxWeight, KeyFunction.Steep);
-					Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation.Id, k);
+					Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation, k);
 				}
 			}
 		}
@@ -93,9 +93,9 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 				}
 			}
 			var k1 = new Keyframe<float>(initFrame, 0f, initFrame < currFrame ? KeyFunction.Linear : KeyFunction.Steep);
-			Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation.Id, k1);
+			Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation, k1);
 			var k2 = new Keyframe<float>(currFrame, AnimationTrack.MaxWeight, initFrame < currFrame ? KeyFunction.Steep : KeyFunction.Linear);
-			Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation.Id, k2);
+			Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation, k2);
 		}
 	}
 }

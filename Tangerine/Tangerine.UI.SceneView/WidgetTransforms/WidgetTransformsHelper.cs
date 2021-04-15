@@ -38,7 +38,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				convertScaleToSize, onCalculateTransformation);
 		}
 
-		public static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
+		private static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
 			Vector2d? overridePivotInParentSpace, bool obbInFirstWidgetSpace,
 			Vector2d currentMousePosInParentSpace, Vector2d previousMousePosInParentSpace,
 			bool convertScaleToSize, CalculateTransformationDelegate onCalculateTransformation)
@@ -95,7 +95,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				convertScaleToSize, onCalculateTransformation);
 		}
 
-		public static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
+		private static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
 			Matrix32d obbInParentSpace, Vector2d currentMousePosInParentSpace, Vector2d previousMousePosInParentSpace,
 			bool convertScaleToSize, CalculateTransformationDelegate onCalculateTransformation)
 		{
@@ -117,7 +117,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			);
 		}
 
-		public static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
+		private static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
 			Matrix32d obbInParentSpace, Transform2d obbTransformation, bool convertScaleToSize)
 		{
 			Matrix32d originalObbToParentSpace = obbInParentSpace;

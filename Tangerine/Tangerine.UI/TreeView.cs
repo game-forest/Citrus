@@ -127,6 +127,12 @@ namespace Tangerine.UI
 	{
 		public bool HandleCommands { get; set; } = true;
 		public bool ShowRoot { get; set; } = true;
+
+		/// <summary>
+		/// Specifies whether a TreeViewItem will be activated immediately after clicking on it.
+		/// Otherwise it will be activated on double click or pressing enter key.
+		/// </summary>
+		public bool ActivateOnSelect { get; set; }
 	}
 
 	public class TreeView
@@ -177,7 +183,8 @@ namespace Tangerine.UI
 
 		private readonly ITreeViewPresentation presentation;
 		private readonly ThemedScrollView scrollView;
-		private readonly List<TreeViewItem> items;
+		private List<TreeViewItem> currentItems;
+		private List<TreeViewItem> previousItems;
 		private TreeViewItem rootItem;
 		private TreeViewItem rangeSelectionFirstItem;
 		private readonly TreeViewOptions options;
@@ -219,17 +226,20 @@ namespace Tangerine.UI
 			scrollView.Behaviour.ScrollToItemVelocity = ScrollSpeed;
 			this.scrollView = scrollView;
 			this.presentation = presentation;
-			items = new List<TreeViewItem>();
+			currentItems = new List<TreeViewItem>();
+			previousItems = new List<TreeViewItem>();
 			var scrollContent = scrollView.Content;
 			scrollContent.HitTestTarget = true;
 			scrollContent.FocusScope = new KeyboardFocusScope(scrollContent);
-			scrollContent.Gestures.Add(new DoubleClickGesture(() => {
-				var item = GetItemUnderMouse();
-				if (item != null) {
-					SelectItem(item);
-					RaiseActivated(item, ActivationMethod.Mouse);
-				}
-			}));
+			if (!options.ActivateOnSelect) {
+				scrollContent.Gestures.Add(new DoubleClickGesture(() => {
+					var item = GetItemUnderMouse();
+					if (item != null) {
+						SelectItem(item, activateIfNeeded: false);
+						RaiseActivated(item, ActivationMethod.Mouse);
+					}
+				}));
+			}
 			var dg = new DragGesture(0, DragDirection.Vertical);
 			var dragCursorPresenter = new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
@@ -237,23 +247,18 @@ namespace Tangerine.UI
 					presentation.RenderDragCursor(w, parent, childIndex, dragInto);
 				}
 			});
-			var itemSelectedAtDragBegin = false;
 			var dragRecognized = false;
 			dg.Began += () => {
 				dragRecognized = false;
-				itemSelectedAtDragBegin = false;
 				var itemUnderMouse = GetItemUnderMouse();
 				if (itemUnderMouse == null) {
 					return;
 				}
 				if (scrollContent.Input.IsKeyPressed(toggleSelectionModificator)) {
-					itemSelectedAtDragBegin = true;
-					SelectItem(itemUnderMouse, !itemUnderMouse.Selected, false);
+					SelectItem(itemUnderMouse, !itemUnderMouse.Selected, false, activateIfNeeded: false);
 				} else if (scrollContent.Input.IsKeyPressed(Key.Shift)) {
-					itemSelectedAtDragBegin = true;
 					SelectRange(itemUnderMouse);
 				} else if (!itemUnderMouse.Selected) {
-					itemSelectedAtDragBegin = true;
 					SelectItem(itemUnderMouse);
 				}
 			};
@@ -264,11 +269,6 @@ namespace Tangerine.UI
 			};
 			dg.Ended += () => {
 				if (!dragRecognized) {
-					// Drag wasn't recognized -- treat it as a click.
-					var itemUnderMouse = GetItemUnderMouse();
-					if (itemUnderMouse != null && !itemSelectedAtDragBegin) {
-						SelectItem(itemUnderMouse);
-					}
 					return;
 				}
 				scrollContent.CompoundPostPresenter.Remove(dragCursorPresenter);
@@ -278,7 +278,7 @@ namespace Tangerine.UI
 					}
 					OnDragEnd?.Invoke(this,
 						new DragEventArgs {
-							Items = items.Where(i => i.Selected),
+							Items = currentItems.Where(i => i.Selected),
 							Parent = parent,
 							Index = childIndex
 						});
@@ -295,7 +295,7 @@ namespace Tangerine.UI
 		{
 			TreeViewItem result = null;
 			int maxOrder = 0;
-			foreach (var i in items) {
+			foreach (var i in currentItems) {
 				if (i.SelectionOrder > maxOrder) {
 					maxOrder = i.SelectionOrder;
 					result = i;
@@ -329,8 +329,8 @@ namespace Tangerine.UI
 			parent = null;
 			childIndex = 0;
 			dragInto = false;
-			var selectedItems = items.Where(i => i.Selected);
-			foreach (var item in items) {
+			var selectedItems = currentItems.Where(i => i.Selected);
+			foreach (var item in currentItems) {
 				var t = (p - item.Presentation.Widget.Y) / item.Presentation.Widget.Height;
 				if (t > 0.25f && t < 0.75f) {
 					var a = new DragEventArgs { Items = selectedItems, Parent = item };
@@ -343,7 +343,7 @@ namespace Tangerine.UI
 					}
 				}
 				// Special case: drag into root item on the last position.
-				if (item == items.Last() && t > 0.5f) {
+				if (item == currentItems.Last() && t > 0.5f) {
 					parent = RootItem;
 					childIndex = RootItem.Items.Count;
 					var a = new DragEventArgs { Items = selectedItems, Parent = parent };
@@ -353,7 +353,7 @@ namespace Tangerine.UI
 					}
 				}
 				if (
-					item == items.First() && t < 0.5f ||
+					item == currentItems.First() && t < 0.5f ||
 					t >= 0 && t < 1
 				) {
 					if (t > 0.5f) {
@@ -386,19 +386,23 @@ namespace Tangerine.UI
 			var focused = GetRecentlySelected();
 			if (focused != null) {
 				if (!focused.Selected) {
-					SelectItem(focused);
+					SelectItem(focused, activateIfNeeded: false);
 				}
 				RaiseActivated(focused, ActivationMethod.Keyboard);
 			}
 		}
 
-		public void SelectItem(TreeViewItem item, bool select = true, bool clearSelection = true)
+		public void SelectItem(TreeViewItem item,
+			bool select = true, bool clearSelection = true, bool activateIfNeeded = true)
 		{
 			if (clearSelection) {
 				ClearSelection();
 			}
 			rangeSelectionFirstItem = null;
 			item.Selected = select;
+			if (options.ActivateOnSelect && activateIfNeeded) {
+				ActivateItem();
+			}
 			ScrollToItem(item, instantly: true);
 			Invalidate();
 		}
@@ -420,19 +424,19 @@ namespace Tangerine.UI
 
 		private void SelectRange(TreeViewItem item)
 		{
-			if (rangeSelectionFirstItem == null || !items.Contains(rangeSelectionFirstItem)) {
-				rangeSelectionFirstItem = GetRecentlySelected();
+			if (rangeSelectionFirstItem == null || !currentItems.Contains(rangeSelectionFirstItem)) {
+				rangeSelectionFirstItem = GetRecentlySelected() ?? item;
 			}
-			foreach (var i in items.Where(i => i.Selected)) {
+			foreach (var i in currentItems.Where(i => i.Selected)) {
 				i.Selected = false;
 			}
 			if (item.Index > rangeSelectionFirstItem.Index) {
 				for (int i = rangeSelectionFirstItem.Index; i <= item.Index; i++) {
-					items[i].Selected = true;
+					currentItems[i].Selected = true;
 				}
 			} else {
 				for (int i = rangeSelectionFirstItem.Index; i >= item.Index; i--) {
-					items[i].Selected = true;
+					currentItems[i].Selected = true;
 				}
 			}
 			ScrollToItem(item, instantly: true);
@@ -445,8 +449,8 @@ namespace Tangerine.UI
 			if (focused != null) {
 				if (!focused.Selected) {
 					SelectItem(focused);
-				} else if (focused.Index < items.Count - 1) {
-					SelectItem(items[focused.Index + 1]);
+				} else if (focused.Index < currentItems.Count - 1) {
+					SelectItem(currentItems[focused.Index + 1]);
 				}
 			}
 		}
@@ -457,8 +461,8 @@ namespace Tangerine.UI
 			if (focused != null) {
 				if (!focused.Selected) {
 					SelectItem(focused);
-				} else if (focused.Index < items.Count - 1) {
-					SelectRange(items[focused.Index + 1]);
+				} else if (focused.Index < currentItems.Count - 1) {
+					SelectRange(currentItems[focused.Index + 1]);
 				}
 			}
 		}
@@ -470,7 +474,7 @@ namespace Tangerine.UI
 				if (!focused.Selected) {
 					SelectItem(focused);
 				} else if (focused.Index > 0) {
-					SelectItem(items[focused.Index - 1]);
+					SelectItem(currentItems[focused.Index - 1]);
 				}
 			}
 		}
@@ -482,7 +486,7 @@ namespace Tangerine.UI
 				if (!focused.Selected) {
 					SelectRange(focused);
 				} else if (focused.Index > 0) {
-					SelectRange(items[focused.Index - 1]);
+					SelectRange(currentItems[focused.Index - 1]);
 				}
 			}
 		}
@@ -492,7 +496,7 @@ namespace Tangerine.UI
 			var focused = GetRecentlySelected();
 			if (focused != null) {
 				if (!focused.Selected) {
-					SelectItem(focused);
+					SelectItem(focused, activateIfNeeded: false);
 				}
 				focused.Expanded = !focused.Expanded;
 			}
@@ -504,8 +508,8 @@ namespace Tangerine.UI
 			if (focused != null) {
 				if (!focused.Expanded) {
 					ToggleItem();
-				} else if (focused.Index < items.Count - 1) {
-					SelectItem(items[focused.Index + 1]);
+				} else if (focused.Index < currentItems.Count - 1) {
+					SelectItem(currentItems[focused.Index + 1]);
 				}
 			}
 		}
@@ -518,6 +522,32 @@ namespace Tangerine.UI
 					ToggleItem();
 				} else if (focused.Parent != RootItem) {
 					SelectItem(focused.Parent);
+				}
+			}
+		}
+
+		public void ExpandAll()
+		{
+			ExpandAllRecursive(rootItem);
+
+			void ExpandAllRecursive(TreeViewItem item)
+			{
+				item.Expanded = true;
+				foreach (var i in item.Items) {
+					ExpandAllRecursive(i);
+				}
+			}
+		}
+
+		public void CollapseAll()
+		{
+			CollapseAllRecursive(rootItem);
+
+			void CollapseAllRecursive(TreeViewItem item)
+			{
+				item.Expanded = false;
+				foreach (var i in item.Items) {
+					CollapseAllRecursive(i);
 				}
 			}
 		}
@@ -538,13 +568,13 @@ namespace Tangerine.UI
 					continue;
 				}
 				if (Command.Copy.Consume()) {
-					OnCopy?.Invoke(this, new CopyEventArgs { Items = items.Where(i => i.Selected) });
+					OnCopy?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
 				}
 				if (Command.Cut.Consume()) {
-					OnCut?.Invoke(this, new CopyEventArgs { Items = items.Where(i => i.Selected) });
+					OnCut?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
 				}
 				if (Command.Delete.Consume()) {
-					OnDelete?.Invoke(this, new CopyEventArgs { Items = items.Where(i => i.Selected) });
+					OnDelete?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
 				}
 				if (Command.Paste.Consume()) {
 					var focused = GetRecentlySelected();
@@ -555,7 +585,7 @@ namespace Tangerine.UI
 						});
 					}
 				}
-				if (Commands.Activate.Consume()) {
+				if (!options.ActivateOnSelect && Commands.Activate.Consume()) {
 					ActivateItem();
 				}
 				if (Commands.SelectNext.Consume()) {
@@ -598,14 +628,14 @@ namespace Tangerine.UI
 			foreach (var n in scrollView.Content.Nodes) {
 				var w = (Widget)n;
 				if (w.Y < p && p <= w.Y + w.Height) {
-					return items[i];
+					return currentItems[i];
 				}
 				i++;
 			}
 			return null;
 		}
 
-		private void ScrollToItem(TreeViewItem item, bool instantly)
+		public void ScrollToItem(TreeViewItem item, bool instantly)
 		{
 			var itemTop = item.Presentation.Widget.Y;
 			var itemBottom = item.Presentation.Widget.Y + item.Presentation.Widget.Height;
@@ -616,31 +646,63 @@ namespace Tangerine.UI
 			}
 		}
 
-		private int currentItemsHashCode;
+		private readonly List<int> indexToItem = new List<int>();
+		private readonly List<int> itemToIndex = new List<int>();
 
 		public void Refresh()
 		{
-			items.Clear();
+			(currentItems, previousItems) = (previousItems, currentItems);
+			currentItems.Clear();
+			foreach (var i in previousItems) {
+				i.Index = -1;
+			}
 			int index = 0;
 			if (RootItem != null) {
 				BuildRecursively(RootItem);
 			}
-			var itemsHashCode = 17;
-			foreach (var i in items) {
-				unchecked {
-					itemsHashCode = itemsHashCode * 23 + i.GetHashCode();
+			// Remove widgets which are not in the list anymore.
+			for (var i = previousItems.Count - 1; i >= 0; i--) {
+				if (previousItems[i].Index == -1) {
+					previousItems[i].Selected = false;
+					var j = previousItems.Count - 1;
+					// Swap current element with the last one.
+					if (i < j) {
+						scrollView.Content.Nodes.Swap(i, j);
+						(previousItems[i], previousItems[j]) = (previousItems[j], previousItems[i]);
+					}
+					// Remove the last element.
+					scrollView.Content.Nodes.RemoveAt(j);
+					previousItems.RemoveAt(j);
 				}
 			}
-			// Optimization: avoid layout invalidation if the visible items haven't been changed.
-			if (itemsHashCode != currentItemsHashCode) {
-				currentItemsHashCode = itemsHashCode;
-				scrollView.Content.Nodes.Clear();
-				foreach (var i in items) {
-					scrollView.Content.AddNode(i.Presentation.Widget);
+			// Add new widgets at the end of the list.
+			foreach (var i in currentItems) {
+				if (i.Presentation.Widget.Parent == null) {
+					scrollView.Content.Nodes.Add(i.Presentation.Widget);
+					previousItems.Add(i);
 				}
 			}
+			// Reorder widgets.
+			indexToItem.Clear();
+			itemToIndex.Clear();
+			for (int i = 0; i < previousItems.Count; i++) {
+				indexToItem.Add(i);
+				itemToIndex.Add(i);
+			}
+			for (int i = 0; i < indexToItem.Count; i++) {
+				var t = itemToIndex[i];
+				var d = previousItems[i].Index;
+				if (d != t) {
+					scrollView.Content.Nodes.Swap(d, t);
+					var a = indexToItem[t];
+					var b = indexToItem[d];
+					(indexToItem[d], indexToItem[t]) = (a, b);
+					(itemToIndex[a], itemToIndex[b]) = (itemToIndex[b], itemToIndex[a]);
+				}
+			}
+			// Update presentation.
 			foreach (var p in presentation.Processors) {
-				foreach (var i in items) {
+				foreach (var i in currentItems) {
 					p.Process(i.Presentation);
 				}
 			}
@@ -649,7 +711,7 @@ namespace Tangerine.UI
 			{
 				var skipRoot = !options.ShowRoot && item == RootItem;
 				if (!skipRoot) {
-					items.Add(item);
+					currentItems.Add(item);
 					item.Index = index++;
 					item.Presentation = item.Presentation ?? presentation.CreateItemPresentation(this, item);
 				}

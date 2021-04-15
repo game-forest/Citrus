@@ -105,7 +105,7 @@ namespace Tangerine
 							foreach (var keyframe in animator.ReadonlyKeys.ToList()) {
 								var k = keyframe.Clone();
 								k.Value = (Vector2)k.Value - aabb.A;
-								Core.Operations.SetKeyframe.Perform(animator, k);
+								Core.Operations.SetKeyframe.Perform(animator, Document.Current.Animation, k);
 							}
 						}
 						if (n is Widget w) {

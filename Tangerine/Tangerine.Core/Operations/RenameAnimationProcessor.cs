@@ -12,9 +12,7 @@ namespace Tangerine.Core.Operations
 		protected override void InternalDo(SetProperty op)
 		{
 			if (op.Obj is Animation animation && op.Property.Name == nameof(Animation.Id)) {
-				var animators = new List<IAnimator>();
-				animation.FindAnimators(animators);
-				foreach (var a in animators) {
+				foreach (var a in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 					SetProperty.Perform(a, nameof(IAnimator.AnimationId), op.Value);
 				}
 			}

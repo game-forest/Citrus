@@ -248,6 +248,7 @@ namespace Lime
 		{
 			// System.Environment.SetEnvironmentVariable("METAL_DEVICE_WRAPPER_TYPE", "1");
 #if MAC
+			NSApplication.IgnoreMissingAssembliesDuringRegistration = true;
 			NSApplication.Init();
 			NSApplication.SharedApplication.ApplicationShouldTerminate += (sender) => {
 				return DoExiting() ? NSApplicationTerminateReply.Now : NSApplicationTerminateReply.Cancel;

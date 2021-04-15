@@ -44,7 +44,7 @@ namespace Tangerine
 						var document = Document.Current;
 						document.History.DoTransaction(() => {
 							if (navigateToNode) {
-								SetProperty.Perform(document, nameof(Document.SelectedAnimation), a, isChangingDocument: false);
+								SetProperty.Perform(document, nameof(Document.Animation), a, isChangingDocument: false);
 							}
 							SetCurrentColumn.Perform(mClosed.Frame, a);
 							CenterTimelineOnCurrentColumn.Perform();

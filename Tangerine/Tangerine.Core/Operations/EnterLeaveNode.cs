@@ -113,6 +113,9 @@ namespace Tangerine.Core.Operations
 		{
 			ClearRowSelection.Perform();
 			DocumentHistory.Current.Perform(new SetContainer(container));
+			if (Document.Current.Animation.IsLegacy) {
+				SetProperty.Perform(Document.Current, nameof(Document.Animation), container.DefaultAnimation, false);
+			}
 			if (selectFirstNode && container.Nodes.Count > 0) {
 				SelectNode.Perform(container.Nodes[0]);
 			}
@@ -136,8 +139,9 @@ namespace Tangerine.Core.Operations
 			} else {
 				var container = doc.Container;
 				SetProperty.Perform(container, nameof(Node.TangerineFlags), container.TangerineFlags & ~TangerineFlags.DisplayContent, isChangingDocument: false);
+				var node = container;
 				EnterNode.Perform(container.Parent, false);
-				SelectNode.Perform(container, true);
+				SelectNode.Perform(node, true);
 			}
 		}
 
@@ -145,6 +149,25 @@ namespace Tangerine.Core.Operations
 		{
 			var doc = Document.Current;
 			return doc.Container != doc.RootNode || doc.SceneNavigatedFrom != null;
+		}
+	}
+
+	public static class NavigateToAnimation
+	{
+		public static void Perform(Animation animation)
+		{
+			if (
+				animation.IsLegacy && Document.Current.Container != animation.OwnerNode ||
+				!animation.IsLegacy && !Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
+			) {
+				var node = NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false);
+				// Remap animation in case of external scene.
+				animation = node.Animations.Find(animation.Id);
+			}
+			// Wrap into transaction, as the document could be changed in case of an external scene.
+			Document.Current.History.DoTransaction(() => {
+				SetProperty.Perform(Document.Current, nameof(Document.Animation), animation, isChangingDocument: false);
+			});
 		}
 	}
 }

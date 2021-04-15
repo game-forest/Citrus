@@ -93,7 +93,7 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 
 		private static void DeselectAllClips()
 		{
-			foreach (var row in Document.Current.Rows) {
+			foreach (var row in Document.Current.Rows.ToList()) {
 				var track = row.Components.Get<AnimationTrackRow>().Track;
 				foreach (var c in track.Clips) {
 					Core.Operations.SetProperty.Perform(c, nameof(AnimationClip.IsSelected), false);

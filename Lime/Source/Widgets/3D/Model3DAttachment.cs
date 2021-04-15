@@ -499,8 +499,7 @@ namespace Lime
 			}
 
 			foreach (var animation in model.Animations.Except(newAnimations).ToList()) {
-				var srcAnimators = new List<IAnimator>();
-				animation.FindAnimators(srcAnimators);
+				var srcAnimators = animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList();
 				if (animationsToReduce.Keys.Contains(animation.Id)) {
 					srcAnimators.ForEach(a => ReduceKeys(a, animationsToReduce[animation.Id].Item1, animationsToReduce[animation.Id].Item2));
 					foreach (var animator in srcAnimators.Where(a => a.Keys.Count == 0)) {

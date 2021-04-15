@@ -135,7 +135,7 @@ namespace Tangerine.UI.Timeline.Operations
 					}
 					var keyframe = key.Keyframe.Clone();
 					keyframe.Frame = colIndex;
-					SetKeyframe.Perform(animationHost, key.Property, Document.Current.AnimationId, keyframe);
+					SetKeyframe.Perform(animationHost, key.Property, Document.Current.Animation, keyframe);
 				}
 			});
 		}

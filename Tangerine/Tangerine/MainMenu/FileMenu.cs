@@ -19,7 +19,6 @@ namespace Tangerine
 		public static bool Execute(string fileName)
 		{
 			if (fileName != default && Project.Current.Close() && fileName.Length > 0) {
-				FontPool.Instance.Clear(preserveDefaultFont: true);
 				new Project(fileName);
 				AddRecentProject(fileName);
 				return true;
@@ -45,7 +44,6 @@ namespace Tangerine
 		public override void Execute()
 		{
 			try {
-				FontPool.Instance.Clear(preserveDefaultFont: true);
 				Orange.NewProject.NewProjectAction(FileOpenProject.Execute);
 			} catch (System.Exception e) {
 				AlertDialog.Show(e.Message);

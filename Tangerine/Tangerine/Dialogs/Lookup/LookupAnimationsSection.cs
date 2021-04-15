@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
@@ -30,7 +31,7 @@ namespace Tangerine
 						}
 						var document = Document.Current;
 						Document.Current.History.DoTransaction(() => {
-							SetProperty.Perform(document, nameof(Document.SelectedAnimation), a, isChangingDocument: false);
+							SetProperty.Perform(document, nameof(Document.Animation), a, isChangingDocument: false);
 						});
 						sections.Drop();
 					}
@@ -57,12 +58,49 @@ namespace Tangerine
 			) {
 				return;
 			}
-			var animations = new List<Animation>();
-			Document.Current.GetAnimations(animations);
-
+			var animations = GetAnimations();
 			var items = new List<LookupItem>(0);
 			LookupAnimationsSection.FillLookupByAnimations(Sections, items, animations);
 			lookupWidget.AddRange(items);
+		}
+
+		private List<Animation> GetAnimations()
+		{
+			var animations = new List<Animation>();
+			GetAnimationsHelper(animations);
+			animations.Sort(AnimationsComparer.Instance);
+			animations.Insert(0, Document.Current.Container.DefaultAnimation);
+			return animations;
+		}
+
+		private void GetAnimationsHelper(List<Animation> animations)
+		{
+			var usedAnimations = new HashSet<string>();
+			var ancestor = Document.Current.Container;
+			lock (usedAnimations) {
+				usedAnimations.Clear();
+				while (true) {
+					foreach (var a in ancestor.Animations) {
+						if (!a.IsLegacy && usedAnimations.Add(a.Id)) {
+							animations.Add(a);
+						}
+					}
+					if (ancestor == Document.Current.RootNode) {
+						return;
+					}
+					ancestor = ancestor.Parent;
+				}
+			}
+		}
+
+		class AnimationsComparer : IComparer<Animation>
+		{
+			public static readonly AnimationsComparer Instance = new AnimationsComparer();
+
+			public int Compare(Animation x, Animation y)
+			{
+				return x.Id.CompareTo(y.Id);
+			}
 		}
 	}
 

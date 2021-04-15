@@ -51,7 +51,7 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 				foreach (var k in keys) {
 					var key = k.Clone();
 					key.Frame += offset.X;
-					SetKeyframe.Perform(destTrack, nameof(AnimationTrack.Weight), Document.Current.AnimationId, key);
+					SetKeyframe.Perform(destTrack, nameof(AnimationTrack.Weight), Document.Current.Animation, key);
 				}
 			}
 		}

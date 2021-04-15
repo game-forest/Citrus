@@ -7,7 +7,6 @@ namespace Tangerine.UI.Timeline.Components
 	public class GridNodeView : IGridRowView
 	{
 		private readonly Node node;
-		private Hasher hasher = new Hasher();
 
 		public Widget GridWidget { get; }
 		public Widget OverviewWidget { get; }
@@ -31,30 +30,33 @@ namespace Tangerine.UI.Timeline.Components
 			OverviewWidget.Components.Add(new AwakeBehavior());
 		}
 
-		private GridKeyframesRenderer keyframesRenderer = new GridKeyframesRenderer();
-		private long animatorsVersion = -1;
-		private string animationId;
+		private readonly GridKeyframesRenderer keyframesRenderer = new GridKeyframesRenderer();
+		private int effectiveAnimatorsVersionHashCode;
 
 		protected virtual void Render(Widget widget)
 		{
-			long v = CalculateAnimatorsTotalVersion();
-			if (animatorsVersion != v || animationId != Document.Current.AnimationId) {
-				animatorsVersion = v;
-				animationId = Document.Current.AnimationId;
+			var hc = CalculateEffectiveAnimatorsVersionHashCode();
+			if (effectiveAnimatorsVersionHashCode != hc) {
+				effectiveAnimatorsVersionHashCode = hc;
 				keyframesRenderer.ClearCells();
-				keyframesRenderer.GenerateCells(node.Animators, Document.Current.AnimationId);
+				keyframesRenderer.GenerateCells(node, Document.Current.Animation);
 			}
 			keyframesRenderer.RenderCells(widget);
 		}
 
-		private long CalculateAnimatorsTotalVersion()
+		private int CalculateEffectiveAnimatorsVersionHashCode()
 		{
-			hasher.Begin();
-			hasher.Write(node.Animators.Version);
-			foreach (var a in node.Animators) {
-				hasher.Write(a.Version);
+			var hashCode = 1568519108;
+			unchecked {
+				var effectiveAnimatorsSet = Document.Current.Animation.ValidatedEffectiveAnimatorsSet;
+				foreach (var animator in node.Animators) {
+					if (effectiveAnimatorsSet.Contains(animator)) {
+						hashCode = hashCode * -1521134295 + animator.GetHashCode();
+						hashCode = hashCode * -1521134295 + animator.Version;
+					}
+				}
 			}
-			return hasher.End();
+			return hashCode;
 		}
 	}
 }

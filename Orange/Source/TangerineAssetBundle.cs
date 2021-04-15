@@ -195,9 +195,7 @@ namespace Tangerine.Core
 						animation.ContentsPath = animationPathWithoutExt;
 						InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary, ".ant",
 							base.GetFileLastWriteTime(fbxPath), AssetAttributes.None, new byte[0]);
-						var animators = new List<IAnimator>();
-						animation.FindAnimators(animators);
-						foreach (var animator in animators) {
+						foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 							animator.Owner.Animators.Remove(animator);
 						}
 					}

@@ -77,10 +77,8 @@ namespace Tangerine.UI.Timeline
 					w.PrepareRendererState();
 					Renderer.DrawRect(
 						Vector2.Zero, w.Size,
-						Item.Selected ?
-							(Widget.Focused != null && w.SameOrDescendantOf(Widget.Focused) ?
-								Theme.Colors.SelectedBackground : Theme.Colors.SelectedInactiveBackground)
-							: Theme.Colors.WhiteBackground
+						Item.Selected ? Widget.Focused == w.Parent ? Theme.Colors.SelectedBackground :
+							Theme.Colors.SelectedInactiveBackground : Theme.Colors.WhiteBackground
 					);
 					HighlightLabel(options.SearchStringGetter());
 				})
@@ -573,7 +571,9 @@ namespace Tangerine.UI.Timeline
 			}
 			Document.Current.History.DoTransaction(() => {
 				var track = new AnimationTrack { Id = GenerateTrackId() };
-				var item = LinkSceneItem.Perform(Document.Current.CompoundAnimationTree, index, track);
+				var item = LinkSceneItem.Perform(
+					Document.Current.GetSceneItemForObject(Document.Current.Animation),
+					index, track);
 				ClearRowSelection.Perform();
 				SelectRow.Perform(item);
 			});

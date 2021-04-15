@@ -36,7 +36,7 @@ namespace Tangerine.UI.SceneView
 					yield return null;
 					continue;
 				}
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>();
 				if (AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
 					widgets = widgets.Where(w => !(w is Animesh));
 				}
@@ -68,7 +68,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
-				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
+				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>();
 				var mouseStartPos = SceneView.MousePosition;
 				var startPositionForPivotRestore = widgets.FirstOrDefault(
 					w => !w.IsPropertyReadOnly(nameof(Widget.Size)))?.Position;
@@ -123,7 +123,7 @@ namespace Tangerine.UI.SceneView
 				if (newKey != null) {
 					newKey = newKey.Clone();
 					newKey.Value = newPivot;
-					SetKeyframe.Perform(pivotAnimator, newKey);
+					SetKeyframe.Perform(pivotAnimator, Document.Current.Animation, newKey);
 				}
 			}
 			SetProperty.Perform(widget, nameof(Widget.Position), startPosition);
@@ -132,7 +132,7 @@ namespace Tangerine.UI.SceneView
 				if (newKey != null) {
 					newKey = newKey.Clone();
 					newKey.Value = startPosition;
-					SetKeyframe.Perform(positionAnimator, newKey);
+					SetKeyframe.Perform(positionAnimator, Document.Current.Animation, newKey);
 				}
 			}
 		}
@@ -146,7 +146,7 @@ namespace Tangerine.UI.SceneView
 					foreach (var key in animator.ReadonlyKeys.ToList()) {
 						var newKey = key.Clone();
 						newKey.Value = transform.TransformVector((Vector2)key.Value);
-						SetKeyframe.Perform(animator, newKey);
+						SetKeyframe.Perform(animator, Document.Current.Animation, newKey);
 					}
 				}
 			}

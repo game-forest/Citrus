@@ -158,7 +158,7 @@ namespace Tangerine.UI.SceneView
 
 			static IEnumerable<Widget> GetWidgets()
 			{
-				return Document.Current.Container.Nodes.OfType<Widget>().Where(n => !n.GetTangerineFlag(TangerineFlags.Hidden));
+				return Document.Current.ContainerChildNodes().OfType<Widget>().Where(n => !n.GetTangerineFlag(TangerineFlags.Hidden));
 			}
 
 			class Item

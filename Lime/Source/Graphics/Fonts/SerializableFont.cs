@@ -34,7 +34,7 @@ namespace Lime
 				return font.About;
 			}
 		}
-		
+
 		public float Spacing {
 			get
 			{
@@ -93,16 +93,17 @@ namespace Lime
 	{
 		public const string DefaultFontDirectory = "Fonts/";
 		public const string DefaultFontName = "Default";
-		private static readonly string[] defaultFontExtensions = new string[] { ".fnt", ".tft" };
-		public IFont Null = new Font();
-		private Dictionary<string, IFont> fonts = new Dictionary<string, IFont>();
+		public const string DefaultBoldFontName = "Bold";
+		private static readonly string[] defaultFontExtensions = { ".fnt", ".tft" };
+		private string[] defaultFonts = { DefaultFontName, DefaultBoldFontName };
+		public IFont Null { get; } = new Font();
+		private readonly Dictionary<string, IFont> fonts = new Dictionary<string, IFont>();
 
-		static readonly FontPool instance = new FontPool();
-		public static FontPool Instance { get { return instance; } }
+		public static FontPool Instance { get; } = new FontPool();
 
 		public Func<string, string> FontNameChanger;
 
-		public IFont DefaultFont { get { return this[null]; } }
+		public IFont DefaultFont => this[null];
 
 		public void AddFont(string name, IFont font)
 		{
@@ -136,18 +137,14 @@ namespace Lime
 			}
 		}
 
-		public void Clear(bool preserveDefaultFont = false)
+		public void Clear(bool preserveDefaultFonts = false)
 		{
-			var defaultFont = this[DefaultFontName];
-			foreach (var font in fonts.Values) {
-				if (font == defaultFont && preserveDefaultFont) {
+			foreach (var name in fonts.Keys.ToList()) {
+				if (defaultFonts.Contains(name) && preserveDefaultFonts) {
 					continue;
 				}
-				font.Dispose();
-			}
-			fonts.Clear();
-			if (preserveDefaultFont) {
-				fonts.Add(DefaultFontName, defaultFont);
+				fonts[name].Dispose();
+				fonts.Remove(name);
 			}
 		}
 

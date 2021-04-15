@@ -253,7 +253,7 @@ namespace Tangerine.Panels
 			{
 				var currentItem = GetTreeViewItem(sceneTree);
 				foreach (var i in sceneTree.Rows) {
-					if (i.GetAnimator() != null) {
+					if (i.GetAnimator() != null || i.GetAnimation() != null) {
 						continue;
 					}
 					var child = CreateTree(i);

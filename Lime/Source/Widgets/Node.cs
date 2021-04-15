@@ -504,8 +504,28 @@ namespace Lime
 
 		public bool NeedSerializeAnimations()
 		{
-			var c = Components.Get<AnimationComponent>();
-			return c != null && (c.Animations.Count > 1 || (c.Animations.Count == 1 && (!c.Animations[0].IsLegacy || c.Animations[0].Markers.Count > 0)));
+			var c = Components.AnimationComponent;
+			if (c == null) {
+				return false;
+			}
+			if (c.Animations.Count != 1) {
+				return c.Animations.Count > 1;
+			}
+			if (!c.Animations[0].IsLegacy) {
+				return true;
+			}
+			// Check is there any marker or keyframe for legacy animation.
+			if (c.Animations[0].Markers.Count > 0) {
+				return true;
+			}
+			for (var n = FirstChild; n != null; n = n.NextSibling) {
+				foreach (var a in n.Animators) {
+					if (a.AnimationId == null && !a.IsZombie && a.ReadonlyKeys.Count > 0) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -1159,9 +1179,7 @@ namespace Lime
 		{
 			foreach (var animation in Animations) {
 				if (!string.IsNullOrEmpty(animation.ContentsPath)) {
-					var animators = new List<IAnimator>();
-					animation.FindAnimators(animators);
-					foreach (var animator in animators) {
+					foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 						animator.Owner.Animators.Remove(animator);
 					}
 				}

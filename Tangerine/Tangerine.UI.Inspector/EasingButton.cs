@@ -102,7 +102,7 @@ namespace Tangerine.UI.Inspector
 				if (animable.Animators.TryFind(editorParams.PropertyPath, out var animator, Document.Current.AnimationId)) {
 					var keyframe = animator.ReadonlyKeys.FirstOrDefault(i => i.Frame == Document.Current.AnimationFrame).Clone();
 					processor(keyframe);
-					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.AnimationId, keyframe);
+					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.Animation, keyframe);
 				}
 			}
 		}

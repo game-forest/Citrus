@@ -17,6 +17,10 @@ namespace Lime
 
 		public Animation Owner { get; internal set; }
 
+	#if TANGERINE
+		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
+	#endif
+
 		[YuzuMember]
 		public string Id { get; set; }
 
@@ -32,7 +36,7 @@ namespace Lime
 			}
 		}
 
-		public double Time { get { return AnimationUtils.FramesToSeconds(Frame); } }
+		public double Time => AnimationUtils.FramesToSeconds(Frame);
 
 		[YuzuMember]
 		public MarkerAction Action { get; set; }
