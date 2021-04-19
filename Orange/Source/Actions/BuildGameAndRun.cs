@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.ComponentModel.Composition;
 
 namespace Orange
@@ -11,11 +12,13 @@ namespace Orange
 		[ExportMetadata("Label", "Build and Run")]
 		[ExportMetadata("Priority", 0)]
 		[ExportMetadata("ApplicableToBundleSubset", true)]
+		[ExportMetadata("UsesTargetBundles", true)]
 		public static string BuildAndRunAction() => BuildAndRun(The.UI.GetActiveTarget());
 
 		public static string BuildAndRun(Target target)
 		{
-			if (!AssetCooker.CookForTarget(target, The.UI.GetSelectedBundles(), out string errorMessage)) {
+			var bundles = The.UI.GetSelectedBundles().Concat(target.Bundles).Distinct().ToList();
+			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 				return errorMessage;
 			}
 			if (!BuildGame(target)) {

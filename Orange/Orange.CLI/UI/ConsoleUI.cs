@@ -19,6 +19,8 @@ namespace Orange
 
 	public class ConsoleUI : UserInterface
 	{
+		private static string selectedActionName;
+
 		public override void Initialize()
 		{
 			base.Initialize();
@@ -72,7 +74,7 @@ namespace Orange
 				WriteHelpAndExit();
 				return;
 			}
-
+			selectedActionName = command;
 			var task = OrangeActionsHelper.ExecuteOrangeAction(commandObj.Action, null, null, false);
 			task.Wait();
 			if (!task.Result) {
@@ -102,6 +104,7 @@ namespace Orange
 		{
 			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			The.MenuController.CreateAssemblyMenuItems();
+			selectedActionName = The.MenuController.GetVisibleAndSortedItems().FirstOrDefault()?.Label;
 		}
 
 		public override bool AskConfirmation(string text)
@@ -132,6 +135,11 @@ namespace Orange
 		public override void ShowError(string message)
 		{
 			Console.WriteLine(message);
+		}
+
+		public override MenuItem GetActiveAction()
+		{
+			return The.MenuController.Items.Find(i => i.Label == selectedActionName);
 		}
 
 		public override Target GetActiveTarget()

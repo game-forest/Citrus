@@ -150,6 +150,7 @@ namespace Orange
 			};
 			AddPicker(header, "Target", targetPicker = new TargetPicker());
 			AddPicker(header, "Citrus Project", projectPicker = CreateProjectPicker());
+			targetPicker.Changed += OnActionOrTargetChanged;
 			return header;
 		}
 
@@ -212,7 +213,7 @@ namespace Orange
 				actionPicker.Items.Add(new CommonDropDownList.Item(menuItem.Label, menuItem.Action));
 			}
 			actionPicker.Index = 0;
-			actionPicker.Changed += OnActionChanged;
+			actionPicker.Changed += OnActionOrTargetChanged;
 			footerSection.AddNode(actionPicker);
 
 			goButton = new ThemedButton("Go");
@@ -255,18 +256,33 @@ namespace Orange
 			bundlePicker.Enabled = value;
 		}
 
-		private void OnActionChanged(CommonDropDownList.ChangedEventArgs args)
+		private void OnActionOrTargetChanged(CommonDropDownList.ChangedEventArgs args)
 		{
-			var menuItem = The.MenuController.Items.Find(item => item.Label == actionPicker.Text);
-			if (menuItem.ApplicableToBundleSubset) {
+			var target = GetActiveTarget();
+			var action = GetActiveAction();
+			if (action == null || target == null) {
+				return;
+			}
+			if (action.ApplicableToBundleSubset) {
 				EnableChildren(bundlePickerWidget, true);
 				bundlePicker.Enabled = true;
 				bundlePickerWidget.SetInfoText(false);
 			} else {
-				bundlePickerWidget.SelectAll();
+				bundlePickerWidget.SetSelectionForAll(!action.UsesTargetBundles || !target.Bundles.Any());
 				EnableChildren(bundlePickerWidget, false);
 				bundlePicker.Enabled = false;
 				bundlePickerWidget.SetInfoText(true);
+			}
+			bundlePickerWidget.ClearBundleLocks();
+			if (action.UsesTargetBundles) {
+				foreach (var bundle in target.Bundles) {
+					bundlePickerWidget.SetBundleLock(bundle, true);
+				}
+				if (action.ApplicableToBundleSubset) {
+					foreach (var bundle in target.Bundles) {
+						bundlePickerWidget.SetBundleSelection(bundle, true);
+					}
+				}
 			}
 		}
 
@@ -383,7 +399,7 @@ namespace Orange
 				letterUsedCount[insertionPoints[0].Key]++;
 				actionsCommand.Menu.Add(new Command(labelWithAmpersand, () => { Execute(menuItem.Action); }));
 			}
-			OnActionChanged(null);
+			OnActionOrTargetChanged(null);
 		}
 
 		public override bool AskConfirmation(string text)
@@ -407,9 +423,14 @@ namespace Orange
 			Application.InvokeOnMainThread(() => AlertDialog.Show(message));
 		}
 
+		public override MenuItem GetActiveAction()
+		{
+			return The.MenuController.Items.Find(i => i.Label == actionPicker.Text);
+		}
+
 		public override Target GetActiveTarget()
 		{
-			return targetPicker.SelectedTarget;
+			return targetPicker.SelectedTarget ?? The.Workspace.Targets.FirstOrDefault();
 		}
 
 		public override void SetActiveTarget(Target target)
@@ -540,7 +561,7 @@ namespace Orange
 				filter = new ThemedEditBox();
 				filter.Tasks.Add(FilterBundlesTask);
 
-				infoText = new ThemedSimpleText("Selected action uses all bundles.") {
+				infoText = new ThemedSimpleText("Selected action sets bundles by itself.") {
 					Color = Theme.Colors.BlackText,
 					MinMaxHeight = Theme.Metrics.DefaultEditBoxSize.Y,
 					Visible = false,
@@ -571,7 +592,7 @@ namespace Orange
 				if (scrollView.Content.Nodes.Count > 0) {
 					scrollView.Content.Nodes.Clear();
 				}
-				foreach (var bundle in The.UI.GetSelectedBundles()) {
+				foreach (var bundle in bundlePicker.GetListOfBundles(refresh: true)) {
 					AddBundleToList(bundle);
 				}
 			}
@@ -589,8 +610,8 @@ namespace Orange
 							HitTestTarget = true,
 							Clicked = () => {
 								if (checkboxes[bundle].GloballyEnabled) {
-									checkboxes[bundle].Toggle();
-									bundlePicker.SetBundleSelection(bundle, checkboxes[bundle].Checked);
+									checkboxes[bundle].Checked =
+										bundlePicker.SetBundleSelection(bundle, !checkboxes[bundle].Checked);
 								}
 							}
 						}
@@ -602,7 +623,7 @@ namespace Orange
 			}
 
 			/// <summary>
-			/// Sets info text params
+			/// Sets info text params.
 			/// </summary>
 			public void SetInfoText(bool visibility, string text = null)
 			{
@@ -613,18 +634,44 @@ namespace Orange
 			}
 
 			/// <summary>
-			/// Marks all bundles as selected
+			/// Marks all bundles as selected / deselected.
 			/// </summary>
-			public void SelectAll()
+			public void SetSelectionForAll(bool state)
 			{
 				foreach (var bundle in checkboxes.Keys) {
-					checkboxes[bundle].Checked = true;
-					bundlePicker.SetBundleSelection(bundle, true);
+					SetBundleSelection(bundle, state);
 				}
 			}
 
 			/// <summary>
-			/// Updates bundle list
+			/// Sets bundle state.
+			/// </summary>
+			public void SetBundleSelection(string bundle, bool state)
+			{
+				checkboxes[bundle].Checked = bundlePicker.SetBundleSelection(bundle, state);
+			}
+
+			/// <summary>
+			/// Unlocks bundle's checkboxes.
+			/// </summary>
+			public void ClearBundleLocks()
+			{
+				foreach (var bundle in lines.Keys) {
+					SetBundleLock(bundle, false);
+				}
+			}
+
+			/// <summary>
+			/// Locks / unlocks bundle's checkbox.
+			/// </summary>
+			public void SetBundleLock(string bundle, bool state)
+			{
+				lines[bundle].Enabled = !state;
+				checkboxes[bundle].Enabled = !state;
+			}
+
+			/// <summary>
+			/// Updates bundle list.
 			/// </summary>
 			public void Refresh()
 			{
@@ -648,8 +695,7 @@ namespace Orange
 					}
 				}
 				foreach (var bundle in checkboxes.Keys) {
-					checkboxes[bundle].Checked = !deselect;
-					bundlePicker.SetBundleSelection(bundle, !deselect);
+					SetBundleSelection(bundle, !deselect);
 				}
 			}
 

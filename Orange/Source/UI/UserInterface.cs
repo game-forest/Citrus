@@ -32,6 +32,8 @@ namespace Orange
 
 		public abstract Target GetActiveTarget();
 
+		public abstract MenuItem GetActiveAction();
+
 		public abstract void SetActiveTarget(Target target);
 
 		public abstract EnvironmentType GetEnvironmentType();

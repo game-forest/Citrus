@@ -10,15 +10,16 @@ namespace Orange
 		public Func<string> Action;
 		public int Priority;
 		public bool ApplicableToBundleSubset;
+		public bool UsesTargetBundles;
 
-		public MenuItem(Func<string> action, string label, int priority, bool applicableToBundleSubset)
+		public MenuItem(Func<string> action, string label, int priority, bool applicableToBundleSubset, bool usesTargetBundles)
 		{
 			Label = label;
 			Action = action;
 			Priority = priority;
 			ApplicableToBundleSubset = applicableToBundleSubset;
+			UsesTargetBundles = usesTargetBundles;
 		}
-
 	}
 
 	public class MenuController
@@ -46,7 +47,8 @@ namespace Orange
 						return null;
 					}, menuItem.Metadata.Label,
 					menuItem.Metadata.Priority,
-					menuItem.Metadata.ApplicableToBundleSubset)
+					menuItem.Metadata.ApplicableToBundleSubset,
+					menuItem.Metadata.UsesTargetBundles)
 				);
 			}
 			foreach (var menuItem in PluginLoader.CurrentPlugin?.MenuItemsWithErrorDetails) {
@@ -54,11 +56,11 @@ namespace Orange
 					menuItem.Value,
 					menuItem.Metadata.Label,
 					menuItem.Metadata.Priority,
-					menuItem.Metadata.ApplicableToBundleSubset)
+					menuItem.Metadata.ApplicableToBundleSubset,
+					menuItem.Metadata.UsesTargetBundles)
 				);
 			}
 			The.UI.RefreshMenu();
 		}
-
 	}
 }
