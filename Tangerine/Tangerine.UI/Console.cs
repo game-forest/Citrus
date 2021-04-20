@@ -148,7 +148,7 @@ namespace Tangerine.UI
 			var menu = new Menu {
 				(viewInExternalEditorCommand = new Command("View in External Editor", () => {
 					if (textWriter.LogFilePath != null) {
-						System.Diagnostics.Process.Start(textWriter.LogFilePath);
+						Lime.Environment.ShellExecute(textWriter.LogFilePath);
 					}
 				})),
 				Command.MenuSeparator,
