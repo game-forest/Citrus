@@ -196,7 +196,7 @@ namespace Lime
 				}
 				vbo = new Buffer(BufferType.Vertex, vboData.Length * sizeof(SkinnedVertex), false);
 				ibo = new Buffer(BufferType.Index, iboData.Length * sizeof(ushort), false);
-				vbo.SetData(0, vboData, 0, vboDataLength, BufferSetDataMode.Default);
+				vbo.SetData(0, vboData, 0, vboData.Length, BufferSetDataMode.Default);
 				ibo.SetData(0, iboData, 0, iboData.Length, BufferSetDataMode.Default);
 				invalidate = false;
 			}
