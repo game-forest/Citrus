@@ -34,6 +34,9 @@ namespace Lime
 				Batches.Add(typedLastBatch);
 				lastBatch = typedLastBatch;
 			}
+			var mesh = typedLastBatch.Mesh;
+			mesh.VertexCount += vertexCount;
+			mesh.IndexCount += indexCount;
 #if PROFILER
 			typedLastBatch.ProfilingInfo.ProcessNode(RenderObjectOwnerInfo.CurrentNode);
 #endif // PROFILER

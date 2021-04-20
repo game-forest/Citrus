@@ -209,7 +209,6 @@
     <Compile Include="Source\Graphics\GraphicsUtility.cs" />
     <Compile Include="Source\Graphics\Icon.cs" />
     <Compile Include="Source\Graphics\IMesh.cs" />
-    <Compile Include="Source\Graphics\IndexBuffer.cs" />
     <Compile Include="Source\Graphics\IRenderer.cs" />
     <Compile Include="Source\Graphics\ITexture.cs" />
     <Compile Include="Source\Graphics\Mesh.cs" />
@@ -272,7 +271,6 @@
     <Compile Include="Source\Graphics\TextureAtlasElement.cs" />
     <Compile Include="Source\Graphics\TexturePool.cs" />
     <Compile Include="Source\Graphics\VectorShape.cs" />
-    <Compile Include="Source\Graphics\VertexBuffer.cs" />
     <Compile Include="Source\Graphics\VertexInputLayout.cs" />
     <Compile Include="Source\Hasher.cs" />
     <Compile Include="Source\Input\Command.cs" />

@@ -103,8 +103,11 @@ namespace Lime
 
 		private static Mesh<TVertex> AcquireMesh()
 		{
-			if (meshPool.Count == 0) {
-				var mesh = new Mesh<TVertex> {
+			Mesh<TVertex> mesh;
+			if (meshPool.Count > 0) {
+				mesh = meshPool.Pop();
+			} else {
+				mesh = new Mesh<TVertex> {
 					Vertices = new TVertex[RenderBatchLimits.MaxVertices],
 					Indices = new ushort[RenderBatchLimits.MaxIndices],
 					AttributeLocations = new int[] {
@@ -114,9 +117,10 @@ namespace Lime
 						ShaderPrograms.Attributes.UV2
 					}
 				};
-				return mesh;
 			}
-			return meshPool.Pop();
+			mesh.VertexCount = 0;
+			mesh.IndexCount = 0;
+			return mesh;
 		}
 
 		private static void ReleaseMesh(Mesh<TVertex> item)
