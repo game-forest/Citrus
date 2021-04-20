@@ -98,7 +98,9 @@ namespace Lime.Graphics.Platform.Vulkan
 				OldLayout = SharpVulkan.ImageLayout.Undefined,
 				NewLayout = SharpVulkan.ImageLayout.ShaderReadOnlyOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.None,
+				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.ShaderRead,
+				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color)
 			};
 			context.EndRenderPass();
@@ -150,7 +152,9 @@ namespace Lime.Graphics.Platform.Vulkan
 					OldLayout = SharpVulkan.ImageLayout.ShaderReadOnlyOptimal,
 					NewLayout = SharpVulkan.ImageLayout.TransferDestinationOptimal,
 					SourceAccessMask = SharpVulkan.AccessFlags.ShaderRead,
+					SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 					DestinationAccessMask = SharpVulkan.AccessFlags.TransferWrite,
+					DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 					SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
 				};
 				context.CommandBuffer.PipelineBarrier(
@@ -173,7 +177,9 @@ namespace Lime.Graphics.Platform.Vulkan
 					OldLayout = SharpVulkan.ImageLayout.TransferDestinationOptimal,
 					NewLayout = SharpVulkan.ImageLayout.ShaderReadOnlyOptimal,
 					SourceAccessMask = SharpVulkan.AccessFlags.TransferWrite,
+					SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 					DestinationAccessMask = SharpVulkan.AccessFlags.ShaderRead,
+					DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 					SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
 				};
 				context.CommandBuffer.PipelineBarrier(
@@ -203,7 +209,9 @@ namespace Lime.Graphics.Platform.Vulkan
 				OldLayout = SharpVulkan.ImageLayout.ShaderReadOnlyOptimal,
 				NewLayout = SharpVulkan.ImageLayout.TransferSourceOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.ShaderRead,
+				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.TransferRead,
+				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
 			};
 			context.CommandBuffer.PipelineBarrier(
@@ -226,7 +234,9 @@ namespace Lime.Graphics.Platform.Vulkan
 				OldLayout = SharpVulkan.ImageLayout.TransferSourceOptimal,
 				NewLayout = SharpVulkan.ImageLayout.ShaderReadOnlyOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.TransferRead,
+				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.ShaderRead,
+				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
 			};
 			context.CommandBuffer.PipelineBarrier(
