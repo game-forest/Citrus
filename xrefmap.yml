@@ -10272,12 +10272,12 @@ references:
   commentId: T:Lime.Buffer
   fullName: Lime.Buffer
   nameWithType: Buffer
-- uid: Lime.Buffer.#ctor(Lime.Graphics.Platform.BufferType,System.Boolean)
-  name: Buffer(BufferType, Boolean)
-  href: api/Lime.Buffer.html#Lime_Buffer__ctor_Lime_Graphics_Platform_BufferType_System_Boolean_
-  commentId: M:Lime.Buffer.#ctor(Lime.Graphics.Platform.BufferType,System.Boolean)
-  fullName: Lime.Buffer.Buffer(Lime.Graphics.Platform.BufferType, System.Boolean)
-  nameWithType: Buffer.Buffer(BufferType, Boolean)
+- uid: Lime.Buffer.#ctor(Lime.BufferType,System.Int32,System.Boolean)
+  name: Buffer(BufferType, Int32, Boolean)
+  href: api/Lime.Buffer.html#Lime_Buffer__ctor_Lime_BufferType_System_Int32_System_Boolean_
+  commentId: M:Lime.Buffer.#ctor(Lime.BufferType,System.Int32,System.Boolean)
+  fullName: Lime.Buffer.Buffer(Lime.BufferType, System.Int32, System.Boolean)
+  nameWithType: Buffer.Buffer(BufferType, Int32, Boolean)
 - uid: Lime.Buffer.#ctor*
   name: Buffer
   href: api/Lime.Buffer.html#Lime_Buffer__ctor_
@@ -10337,6 +10337,12 @@ references:
   isSpec: "True"
   fullName: Lime.Buffer.IsDisposed
   nameWithType: Buffer.IsDisposed
+- uid: Lime.Buffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.BufferSetDataMode)
+  name: SetData(Int32, IntPtr, Int32, BufferSetDataMode)
+  href: api/Lime.Buffer.html#Lime_Buffer_SetData_System_Int32_System_IntPtr_System_Int32_Lime_BufferSetDataMode_
+  commentId: M:Lime.Buffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.BufferSetDataMode)
+  fullName: Lime.Buffer.SetData(System.Int32, System.IntPtr, System.Int32, Lime.BufferSetDataMode)
+  nameWithType: Buffer.SetData(Int32, IntPtr, Int32, BufferSetDataMode)
 - uid: Lime.Buffer.SetData*
   name: SetData
   href: api/Lime.Buffer.html#Lime_Buffer_SetData_
@@ -10344,15 +10350,77 @@ references:
   isSpec: "True"
   fullName: Lime.Buffer.SetData
   nameWithType: Buffer.SetData
-- uid: Lime.Buffer.SetData``1(``0[],System.Int32)
-  name: SetData<T>(T[], Int32)
-  href: api/Lime.Buffer.html#Lime_Buffer_SetData__1___0___System_Int32_
-  commentId: M:Lime.Buffer.SetData``1(``0[],System.Int32)
-  name.vb: SetData(Of T)(T(), Int32)
-  fullName: Lime.Buffer.SetData<T>(T[], System.Int32)
-  fullName.vb: Lime.Buffer.SetData(Of T)(T(), System.Int32)
-  nameWithType: Buffer.SetData<T>(T[], Int32)
-  nameWithType.vb: Buffer.SetData(Of T)(T(), Int32)
+- uid: Lime.Buffer.SetData``1(System.Int32,``0[],System.Int32,System.Int32,Lime.BufferSetDataMode)
+  name: SetData<T>(Int32, T[], Int32, Int32, BufferSetDataMode)
+  href: api/Lime.Buffer.html#Lime_Buffer_SetData__1_System_Int32___0___System_Int32_System_Int32_Lime_BufferSetDataMode_
+  commentId: M:Lime.Buffer.SetData``1(System.Int32,``0[],System.Int32,System.Int32,Lime.BufferSetDataMode)
+  name.vb: SetData(Of T)(Int32, T(), Int32, Int32, BufferSetDataMode)
+  fullName: Lime.Buffer.SetData<T>(System.Int32, T[], System.Int32, System.Int32, Lime.BufferSetDataMode)
+  fullName.vb: Lime.Buffer.SetData(Of T)(System.Int32, T(), System.Int32, System.Int32, Lime.BufferSetDataMode)
+  nameWithType: Buffer.SetData<T>(Int32, T[], Int32, Int32, BufferSetDataMode)
+  nameWithType.vb: Buffer.SetData(Of T)(Int32, T(), Int32, Int32, BufferSetDataMode)
+- uid: Lime.Buffer.Size
+  name: Size
+  href: api/Lime.Buffer.html#Lime_Buffer_Size
+  commentId: P:Lime.Buffer.Size
+  fullName: Lime.Buffer.Size
+  nameWithType: Buffer.Size
+- uid: Lime.Buffer.Size*
+  name: Size
+  href: api/Lime.Buffer.html#Lime_Buffer_Size_
+  commentId: Overload:Lime.Buffer.Size
+  isSpec: "True"
+  fullName: Lime.Buffer.Size
+  nameWithType: Buffer.Size
+- uid: Lime.Buffer.Type
+  name: Type
+  href: api/Lime.Buffer.html#Lime_Buffer_Type
+  commentId: P:Lime.Buffer.Type
+  fullName: Lime.Buffer.Type
+  nameWithType: Buffer.Type
+- uid: Lime.Buffer.Type*
+  name: Type
+  href: api/Lime.Buffer.html#Lime_Buffer_Type_
+  commentId: Overload:Lime.Buffer.Type
+  isSpec: "True"
+  fullName: Lime.Buffer.Type
+  nameWithType: Buffer.Type
+- uid: Lime.BufferSetDataMode
+  name: BufferSetDataMode
+  href: api/Lime.BufferSetDataMode.html
+  commentId: T:Lime.BufferSetDataMode
+  fullName: Lime.BufferSetDataMode
+  nameWithType: BufferSetDataMode
+- uid: Lime.BufferSetDataMode.Default
+  name: Default
+  href: api/Lime.BufferSetDataMode.html#Lime_BufferSetDataMode_Default
+  commentId: F:Lime.BufferSetDataMode.Default
+  fullName: Lime.BufferSetDataMode.Default
+  nameWithType: BufferSetDataMode.Default
+- uid: Lime.BufferSetDataMode.Discard
+  name: Discard
+  href: api/Lime.BufferSetDataMode.html#Lime_BufferSetDataMode_Discard
+  commentId: F:Lime.BufferSetDataMode.Discard
+  fullName: Lime.BufferSetDataMode.Discard
+  nameWithType: BufferSetDataMode.Discard
+- uid: Lime.BufferType
+  name: BufferType
+  href: api/Lime.BufferType.html
+  commentId: T:Lime.BufferType
+  fullName: Lime.BufferType
+  nameWithType: BufferType
+- uid: Lime.BufferType.Index
+  name: Index
+  href: api/Lime.BufferType.html#Lime_BufferType_Index
+  commentId: F:Lime.BufferType.Index
+  fullName: Lime.BufferType.Index
+  nameWithType: BufferType.Index
+- uid: Lime.BufferType.Vertex
+  name: Vertex
+  href: api/Lime.BufferType.html#Lime_BufferType_Vertex
+  commentId: F:Lime.BufferType.Vertex
+  fullName: Lime.BufferType.Vertex
+  nameWithType: BufferType.Vertex
 - uid: Lime.Button
   name: Button
   href: api/Lime.Button.html
@@ -21836,42 +21904,6 @@ references:
   commentId: N:Lime.Graphics.Platform
   fullName: Lime.Graphics.Platform
   nameWithType: Lime.Graphics.Platform
-- uid: Lime.Graphics.Platform.BufferSetDataMode
-  name: BufferSetDataMode
-  href: api/Lime.Graphics.Platform.BufferSetDataMode.html
-  commentId: T:Lime.Graphics.Platform.BufferSetDataMode
-  fullName: Lime.Graphics.Platform.BufferSetDataMode
-  nameWithType: BufferSetDataMode
-- uid: Lime.Graphics.Platform.BufferSetDataMode.Default
-  name: Default
-  href: api/Lime.Graphics.Platform.BufferSetDataMode.html#Lime_Graphics_Platform_BufferSetDataMode_Default
-  commentId: F:Lime.Graphics.Platform.BufferSetDataMode.Default
-  fullName: Lime.Graphics.Platform.BufferSetDataMode.Default
-  nameWithType: BufferSetDataMode.Default
-- uid: Lime.Graphics.Platform.BufferSetDataMode.Discard
-  name: Discard
-  href: api/Lime.Graphics.Platform.BufferSetDataMode.html#Lime_Graphics_Platform_BufferSetDataMode_Discard
-  commentId: F:Lime.Graphics.Platform.BufferSetDataMode.Discard
-  fullName: Lime.Graphics.Platform.BufferSetDataMode.Discard
-  nameWithType: BufferSetDataMode.Discard
-- uid: Lime.Graphics.Platform.BufferType
-  name: BufferType
-  href: api/Lime.Graphics.Platform.BufferType.html
-  commentId: T:Lime.Graphics.Platform.BufferType
-  fullName: Lime.Graphics.Platform.BufferType
-  nameWithType: BufferType
-- uid: Lime.Graphics.Platform.BufferType.Index
-  name: Index
-  href: api/Lime.Graphics.Platform.BufferType.html#Lime_Graphics_Platform_BufferType_Index
-  commentId: F:Lime.Graphics.Platform.BufferType.Index
-  fullName: Lime.Graphics.Platform.BufferType.Index
-  nameWithType: BufferType.Index
-- uid: Lime.Graphics.Platform.BufferType.Vertex
-  name: Vertex
-  href: api/Lime.Graphics.Platform.BufferType.html#Lime_Graphics_Platform_BufferType_Vertex
-  commentId: F:Lime.Graphics.Platform.BufferType.Vertex
-  fullName: Lime.Graphics.Platform.BufferType.Vertex
-  nameWithType: BufferType.Vertex
 - uid: Lime.Graphics.Platform.IPlatformBuffer
   name: IPlatformBuffer
   href: api/Lime.Graphics.Platform.IPlatformBuffer.html
@@ -21904,11 +21936,11 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.IPlatformBuffer.Dynamic
   nameWithType: IPlatformBuffer.Dynamic
-- uid: Lime.Graphics.Platform.IPlatformBuffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.Graphics.Platform.BufferSetDataMode)
+- uid: Lime.Graphics.Platform.IPlatformBuffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.BufferSetDataMode)
   name: SetData(Int32, IntPtr, Int32, BufferSetDataMode)
-  href: api/Lime.Graphics.Platform.IPlatformBuffer.html#Lime_Graphics_Platform_IPlatformBuffer_SetData_System_Int32_System_IntPtr_System_Int32_Lime_Graphics_Platform_BufferSetDataMode_
-  commentId: M:Lime.Graphics.Platform.IPlatformBuffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.Graphics.Platform.BufferSetDataMode)
-  fullName: Lime.Graphics.Platform.IPlatformBuffer.SetData(System.Int32, System.IntPtr, System.Int32, Lime.Graphics.Platform.BufferSetDataMode)
+  href: api/Lime.Graphics.Platform.IPlatformBuffer.html#Lime_Graphics_Platform_IPlatformBuffer_SetData_System_Int32_System_IntPtr_System_Int32_Lime_BufferSetDataMode_
+  commentId: M:Lime.Graphics.Platform.IPlatformBuffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.BufferSetDataMode)
+  fullName: Lime.Graphics.Platform.IPlatformBuffer.SetData(System.Int32, System.IntPtr, System.Int32, Lime.BufferSetDataMode)
   nameWithType: IPlatformBuffer.SetData(Int32, IntPtr, Int32, BufferSetDataMode)
 - uid: Lime.Graphics.Platform.IPlatformBuffer.SetData*
   name: SetData
@@ -22141,11 +22173,11 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.Clear
   nameWithType: PlatformRenderContext.Clear
-- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer(Lime.Graphics.Platform.BufferType,System.Int32,System.Boolean)
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer(Lime.BufferType,System.Int32,System.Boolean)
   name: CreateBuffer(BufferType, Int32, Boolean)
-  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_CreateBuffer_Lime_Graphics_Platform_BufferType_System_Int32_System_Boolean_
-  commentId: M:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer(Lime.Graphics.Platform.BufferType,System.Int32,System.Boolean)
-  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer(Lime.Graphics.Platform.BufferType, System.Int32, System.Boolean)
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_CreateBuffer_Lime_BufferType_System_Int32_System_Boolean_
+  commentId: M:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer(Lime.BufferType,System.Int32,System.Boolean)
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer(Lime.BufferType, System.Int32, System.Boolean)
   nameWithType: PlatformRenderContext.CreateBuffer(BufferType, Int32, Boolean)
 - uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.CreateBuffer*
   name: CreateBuffer
@@ -22605,31 +22637,31 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData
   nameWithType: PlatformBufferExtensions.SetData
-- uid: Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0@,Lime.Graphics.Platform.BufferSetDataMode)
+- uid: Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0@,Lime.BufferSetDataMode)
   name: SetData<T>(IPlatformBuffer, Int32, ref T, BufferSetDataMode)
-  href: api/Lime.Graphics.Platform.PlatformBufferExtensions.html#Lime_Graphics_Platform_PlatformBufferExtensions_SetData__1_Lime_Graphics_Platform_IPlatformBuffer_System_Int32___0__Lime_Graphics_Platform_BufferSetDataMode_
-  commentId: M:Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0@,Lime.Graphics.Platform.BufferSetDataMode)
+  href: api/Lime.Graphics.Platform.PlatformBufferExtensions.html#Lime_Graphics_Platform_PlatformBufferExtensions_SetData__1_Lime_Graphics_Platform_IPlatformBuffer_System_Int32___0__Lime_BufferSetDataMode_
+  commentId: M:Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0@,Lime.BufferSetDataMode)
   name.vb: SetData(Of T)(IPlatformBuffer, Int32, ByRef T, BufferSetDataMode)
-  fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, ref T, Lime.Graphics.Platform.BufferSetDataMode)
-  fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, ByRef T, Lime.Graphics.Platform.BufferSetDataMode)
+  fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, ref T, Lime.BufferSetDataMode)
+  fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, ByRef T, Lime.BufferSetDataMode)
   nameWithType: PlatformBufferExtensions.SetData<T>(IPlatformBuffer, Int32, ref T, BufferSetDataMode)
   nameWithType.vb: PlatformBufferExtensions.SetData(Of T)(IPlatformBuffer, Int32, ByRef T, BufferSetDataMode)
-- uid: Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],Lime.Graphics.Platform.BufferSetDataMode)
+- uid: Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],Lime.BufferSetDataMode)
   name: SetData<T>(IPlatformBuffer, Int32, T[], BufferSetDataMode)
-  href: api/Lime.Graphics.Platform.PlatformBufferExtensions.html#Lime_Graphics_Platform_PlatformBufferExtensions_SetData__1_Lime_Graphics_Platform_IPlatformBuffer_System_Int32___0___Lime_Graphics_Platform_BufferSetDataMode_
-  commentId: M:Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],Lime.Graphics.Platform.BufferSetDataMode)
+  href: api/Lime.Graphics.Platform.PlatformBufferExtensions.html#Lime_Graphics_Platform_PlatformBufferExtensions_SetData__1_Lime_Graphics_Platform_IPlatformBuffer_System_Int32___0___Lime_BufferSetDataMode_
+  commentId: M:Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],Lime.BufferSetDataMode)
   name.vb: SetData(Of T)(IPlatformBuffer, Int32, T(), BufferSetDataMode)
-  fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T[], Lime.Graphics.Platform.BufferSetDataMode)
-  fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T(), Lime.Graphics.Platform.BufferSetDataMode)
+  fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T[], Lime.BufferSetDataMode)
+  fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T(), Lime.BufferSetDataMode)
   nameWithType: PlatformBufferExtensions.SetData<T>(IPlatformBuffer, Int32, T[], BufferSetDataMode)
   nameWithType.vb: PlatformBufferExtensions.SetData(Of T)(IPlatformBuffer, Int32, T(), BufferSetDataMode)
-- uid: Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],System.Int32,System.Int32,Lime.Graphics.Platform.BufferSetDataMode)
+- uid: Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],System.Int32,System.Int32,Lime.BufferSetDataMode)
   name: SetData<T>(IPlatformBuffer, Int32, T[], Int32, Int32, BufferSetDataMode)
-  href: api/Lime.Graphics.Platform.PlatformBufferExtensions.html#Lime_Graphics_Platform_PlatformBufferExtensions_SetData__1_Lime_Graphics_Platform_IPlatformBuffer_System_Int32___0___System_Int32_System_Int32_Lime_Graphics_Platform_BufferSetDataMode_
-  commentId: M:Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],System.Int32,System.Int32,Lime.Graphics.Platform.BufferSetDataMode)
+  href: api/Lime.Graphics.Platform.PlatformBufferExtensions.html#Lime_Graphics_Platform_PlatformBufferExtensions_SetData__1_Lime_Graphics_Platform_IPlatformBuffer_System_Int32___0___System_Int32_System_Int32_Lime_BufferSetDataMode_
+  commentId: M:Lime.Graphics.Platform.PlatformBufferExtensions.SetData``1(Lime.Graphics.Platform.IPlatformBuffer,System.Int32,``0[],System.Int32,System.Int32,Lime.BufferSetDataMode)
   name.vb: SetData(Of T)(IPlatformBuffer, Int32, T(), Int32, Int32, BufferSetDataMode)
-  fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T[], System.Int32, System.Int32, Lime.Graphics.Platform.BufferSetDataMode)
-  fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T(), System.Int32, System.Int32, Lime.Graphics.Platform.BufferSetDataMode)
+  fullName: Lime.Graphics.Platform.PlatformBufferExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T[], System.Int32, System.Int32, Lime.BufferSetDataMode)
+  fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T(), System.Int32, System.Int32, Lime.BufferSetDataMode)
   nameWithType: PlatformBufferExtensions.SetData<T>(IPlatformBuffer, Int32, T[], Int32, Int32, BufferSetDataMode)
   nameWithType.vb: PlatformBufferExtensions.SetData(Of T)(IPlatformBuffer, Int32, T(), Int32, Int32, BufferSetDataMode)
 - uid: Lime.Graphics.Platform.PlatformTexture2DExtensions
@@ -22987,11 +23019,11 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.Clear
   nameWithType: PlatformRenderContext.Clear
-- uid: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer(Lime.Graphics.Platform.BufferType,System.Int32,System.Boolean)
+- uid: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer(Lime.BufferType,System.Int32,System.Boolean)
   name: CreateBuffer(BufferType, Int32, Boolean)
-  href: api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html#Lime_Graphics_Platform_Vulkan_PlatformRenderContext_CreateBuffer_Lime_Graphics_Platform_BufferType_System_Int32_System_Boolean_
-  commentId: M:Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer(Lime.Graphics.Platform.BufferType,System.Int32,System.Boolean)
-  fullName: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer(Lime.Graphics.Platform.BufferType, System.Int32, System.Boolean)
+  href: api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html#Lime_Graphics_Platform_Vulkan_PlatformRenderContext_CreateBuffer_Lime_BufferType_System_Int32_System_Boolean_
+  commentId: M:Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer(Lime.BufferType,System.Int32,System.Boolean)
+  fullName: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer(Lime.BufferType, System.Int32, System.Boolean)
   nameWithType: PlatformRenderContext.CreateBuffer(BufferType, Int32, Boolean)
 - uid: Lime.Graphics.Platform.Vulkan.PlatformRenderContext.CreateBuffer*
   name: CreateBuffer
@@ -27670,25 +27702,6 @@ references:
   isSpec: "True"
   fullName: Lime.ImmediateRendererWrapper.World
   nameWithType: ImmediateRendererWrapper.World
-- uid: Lime.IndexBuffer
-  name: IndexBuffer
-  href: api/Lime.IndexBuffer.html
-  commentId: T:Lime.IndexBuffer
-  fullName: Lime.IndexBuffer
-  nameWithType: IndexBuffer
-- uid: Lime.IndexBuffer.#ctor(System.Boolean)
-  name: IndexBuffer(Boolean)
-  href: api/Lime.IndexBuffer.html#Lime_IndexBuffer__ctor_System_Boolean_
-  commentId: M:Lime.IndexBuffer.#ctor(System.Boolean)
-  fullName: Lime.IndexBuffer.IndexBuffer(System.Boolean)
-  nameWithType: IndexBuffer.IndexBuffer(Boolean)
-- uid: Lime.IndexBuffer.#ctor*
-  name: IndexBuffer
-  href: api/Lime.IndexBuffer.html#Lime_IndexBuffer__ctor_
-  commentId: Overload:Lime.IndexBuffer.#ctor
-  isSpec: "True"
-  fullName: Lime.IndexBuffer.IndexBuffer
-  nameWithType: IndexBuffer.IndexBuffer
 - uid: Lime.IndexedProperty
   name: IndexedProperty
   href: api/Lime.IndexedProperty.html
@@ -38454,6 +38467,48 @@ references:
   fullName.vb: Lime.Mesh(Of T).DrawIndexed
   nameWithType: Mesh<T>.DrawIndexed
   nameWithType.vb: Mesh(Of T).DrawIndexed
+- uid: Lime.Mesh`1.GetEffectiveIndexCount
+  name: GetEffectiveIndexCount()
+  href: api/Lime.Mesh-1.html#Lime_Mesh_1_GetEffectiveIndexCount
+  commentId: M:Lime.Mesh`1.GetEffectiveIndexCount
+  fullName: Lime.Mesh<T>.GetEffectiveIndexCount()
+  fullName.vb: Lime.Mesh(Of T).GetEffectiveIndexCount()
+  nameWithType: Mesh<T>.GetEffectiveIndexCount()
+  nameWithType.vb: Mesh(Of T).GetEffectiveIndexCount()
+- uid: Lime.Mesh`1.GetEffectiveIndexCount*
+  name: GetEffectiveIndexCount
+  href: api/Lime.Mesh-1.html#Lime_Mesh_1_GetEffectiveIndexCount_
+  commentId: Overload:Lime.Mesh`1.GetEffectiveIndexCount
+  isSpec: "True"
+  fullName: Lime.Mesh<T>.GetEffectiveIndexCount
+  fullName.vb: Lime.Mesh(Of T).GetEffectiveIndexCount
+  nameWithType: Mesh<T>.GetEffectiveIndexCount
+  nameWithType.vb: Mesh(Of T).GetEffectiveIndexCount
+- uid: Lime.Mesh`1.GetEffectiveVertexCount
+  name: GetEffectiveVertexCount()
+  href: api/Lime.Mesh-1.html#Lime_Mesh_1_GetEffectiveVertexCount
+  commentId: M:Lime.Mesh`1.GetEffectiveVertexCount
+  fullName: Lime.Mesh<T>.GetEffectiveVertexCount()
+  fullName.vb: Lime.Mesh(Of T).GetEffectiveVertexCount()
+  nameWithType: Mesh<T>.GetEffectiveVertexCount()
+  nameWithType.vb: Mesh(Of T).GetEffectiveVertexCount()
+- uid: Lime.Mesh`1.GetEffectiveVertexCount*
+  name: GetEffectiveVertexCount
+  href: api/Lime.Mesh-1.html#Lime_Mesh_1_GetEffectiveVertexCount_
+  commentId: Overload:Lime.Mesh`1.GetEffectiveVertexCount
+  isSpec: "True"
+  fullName: Lime.Mesh<T>.GetEffectiveVertexCount
+  fullName.vb: Lime.Mesh(Of T).GetEffectiveVertexCount
+  nameWithType: Mesh<T>.GetEffectiveVertexCount
+  nameWithType.vb: Mesh(Of T).GetEffectiveVertexCount
+- uid: Lime.Mesh`1.IndexCount
+  name: IndexCount
+  href: api/Lime.Mesh-1.html#Lime_Mesh_1_IndexCount
+  commentId: F:Lime.Mesh`1.IndexCount
+  fullName: Lime.Mesh<T>.IndexCount
+  fullName.vb: Lime.Mesh(Of T).IndexCount
+  nameWithType: Mesh<T>.IndexCount
+  nameWithType.vb: Mesh(Of T).IndexCount
 - uid: Lime.Mesh`1.Indices
   name: Indices
   href: api/Lime.Mesh-1.html#Lime_Mesh_1_Indices
@@ -38506,6 +38561,14 @@ references:
   fullName.vb: Lime.Mesh(Of T).Topology
   nameWithType: Mesh<T>.Topology
   nameWithType.vb: Mesh(Of T).Topology
+- uid: Lime.Mesh`1.VertexCount
+  name: VertexCount
+  href: api/Lime.Mesh-1.html#Lime_Mesh_1_VertexCount
+  commentId: F:Lime.Mesh`1.VertexCount
+  fullName: Lime.Mesh<T>.VertexCount
+  fullName.vb: Lime.Mesh(Of T).VertexCount
+  nameWithType: Mesh<T>.VertexCount
+  nameWithType.vb: Mesh(Of T).VertexCount
 - uid: Lime.Mesh`1.Vertices
   name: Vertices
   href: api/Lime.Mesh-1.html#Lime_Mesh_1_Vertices
@@ -48616,12 +48679,12 @@ references:
   isSpec: "True"
   fullName: Lime.PlatformRenderer.SetFrontFace
   nameWithType: PlatformRenderer.SetFrontFace
-- uid: Lime.PlatformRenderer.SetIndexBuffer(Lime.IndexBuffer,System.Int32,Lime.IndexFormat)
-  name: SetIndexBuffer(IndexBuffer, Int32, IndexFormat)
-  href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_SetIndexBuffer_Lime_IndexBuffer_System_Int32_Lime_IndexFormat_
-  commentId: M:Lime.PlatformRenderer.SetIndexBuffer(Lime.IndexBuffer,System.Int32,Lime.IndexFormat)
-  fullName: Lime.PlatformRenderer.SetIndexBuffer(Lime.IndexBuffer, System.Int32, Lime.IndexFormat)
-  nameWithType: PlatformRenderer.SetIndexBuffer(IndexBuffer, Int32, IndexFormat)
+- uid: Lime.PlatformRenderer.SetIndexBuffer(Lime.Buffer,System.Int32,Lime.IndexFormat)
+  name: SetIndexBuffer(Buffer, Int32, IndexFormat)
+  href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_SetIndexBuffer_Lime_Buffer_System_Int32_Lime_IndexFormat_
+  commentId: M:Lime.PlatformRenderer.SetIndexBuffer(Lime.Buffer,System.Int32,Lime.IndexFormat)
+  fullName: Lime.PlatformRenderer.SetIndexBuffer(Lime.Buffer, System.Int32, Lime.IndexFormat)
+  nameWithType: PlatformRenderer.SetIndexBuffer(Buffer, Int32, IndexFormat)
 - uid: Lime.PlatformRenderer.SetIndexBuffer*
   name: SetIndexBuffer
   href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_SetIndexBuffer_
@@ -48735,12 +48798,12 @@ references:
   isSpec: "True"
   fullName: Lime.PlatformRenderer.SetTextureLegacy
   nameWithType: PlatformRenderer.SetTextureLegacy
-- uid: Lime.PlatformRenderer.SetVertexBuffer(System.Int32,Lime.VertexBuffer,System.Int32)
-  name: SetVertexBuffer(Int32, VertexBuffer, Int32)
-  href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_SetVertexBuffer_System_Int32_Lime_VertexBuffer_System_Int32_
-  commentId: M:Lime.PlatformRenderer.SetVertexBuffer(System.Int32,Lime.VertexBuffer,System.Int32)
-  fullName: Lime.PlatformRenderer.SetVertexBuffer(System.Int32, Lime.VertexBuffer, System.Int32)
-  nameWithType: PlatformRenderer.SetVertexBuffer(Int32, VertexBuffer, Int32)
+- uid: Lime.PlatformRenderer.SetVertexBuffer(System.Int32,Lime.Buffer,System.Int32)
+  name: SetVertexBuffer(Int32, Buffer, Int32)
+  href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_SetVertexBuffer_System_Int32_Lime_Buffer_System_Int32_
+  commentId: M:Lime.PlatformRenderer.SetVertexBuffer(System.Int32,Lime.Buffer,System.Int32)
+  fullName: Lime.PlatformRenderer.SetVertexBuffer(System.Int32, Lime.Buffer, System.Int32)
+  nameWithType: PlatformRenderer.SetVertexBuffer(Int32, Buffer, Int32)
 - uid: Lime.PlatformRenderer.SetVertexBuffer*
   name: SetVertexBuffer
   href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_SetVertexBuffer_
@@ -70760,25 +70823,6 @@ references:
   commentId: F:Lime.Vertex.UV2
   fullName: Lime.Vertex.UV2
   nameWithType: Vertex.UV2
-- uid: Lime.VertexBuffer
-  name: VertexBuffer
-  href: api/Lime.VertexBuffer.html
-  commentId: T:Lime.VertexBuffer
-  fullName: Lime.VertexBuffer
-  nameWithType: VertexBuffer
-- uid: Lime.VertexBuffer.#ctor(System.Boolean)
-  name: VertexBuffer(Boolean)
-  href: api/Lime.VertexBuffer.html#Lime_VertexBuffer__ctor_System_Boolean_
-  commentId: M:Lime.VertexBuffer.#ctor(System.Boolean)
-  fullName: Lime.VertexBuffer.VertexBuffer(System.Boolean)
-  nameWithType: VertexBuffer.VertexBuffer(Boolean)
-- uid: Lime.VertexBuffer.#ctor*
-  name: VertexBuffer
-  href: api/Lime.VertexBuffer.html#Lime_VertexBuffer__ctor_
-  commentId: Overload:Lime.VertexBuffer.#ctor
-  isSpec: "True"
-  fullName: Lime.VertexBuffer.VertexBuffer
-  nameWithType: VertexBuffer.VertexBuffer
 - uid: Lime.VertexInputLayout
   name: VertexInputLayout
   href: api/Lime.VertexInputLayout.html

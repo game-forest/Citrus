@@ -1062,7 +1062,31 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Buffer.html",
-          "hash": "JHhztutD6Cx1qztJlcoPpA=="
+          "hash": "fPKKT1ZE+rE6QarJifahgQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.BufferSetDataMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.BufferSetDataMode.html",
+          "hash": "o402Lzy46uC6MHieXJVxsA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.BufferType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.BufferType.html",
+          "hash": "YMDLaTRPHkX89wyVYxPvlw=="
         }
       },
       "is_incremental": false,
@@ -2678,35 +2702,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.Graphics.Platform.BufferSetDataMode.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.Graphics.Platform.BufferSetDataMode.html",
-          "hash": "uc2s+YQeDBLgUQfCVZKiGQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.Graphics.Platform.BufferType.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.Graphics.Platform.BufferType.html",
-          "hash": "KfFMFCCM8v3SODpNrSfVSQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.Graphics.Platform.IPlatformBuffer.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.IPlatformBuffer.html",
-          "hash": "dctZNpza5w+paV6/lGhucw=="
+          "hash": "WW4X9Lvz8hWY+argJhk7EQ=="
         }
       },
       "is_incremental": false,
@@ -2778,7 +2778,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html",
-          "hash": "87wpj1aNeDqTo63V7DrGyA=="
+          "hash": "BTsCKtH1gK+JJUCLkc93fg=="
         }
       },
       "is_incremental": false,
@@ -2802,7 +2802,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.PlatformBufferExtensions.html",
-          "hash": "genNBMXgEZrlzB/emefI/w=="
+          "hash": "zJA9cq6kW0t5uD6FJbPOxg=="
         }
       },
       "is_incremental": false,
@@ -2874,7 +2874,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.Vulkan.PlatformRenderContext.html",
-          "hash": "XT0Y1zxJ+NYzQQxgeO4t9Q=="
+          "hash": "gw9gNsRE6vMp7D8w8raahw=="
         }
       },
       "is_incremental": false,
@@ -2910,7 +2910,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.html",
-          "hash": "ArY2JHq0xMoAuD95UvRniA=="
+          "hash": "DYeY5HkHOEaa1TYy/jPKlQ=="
         }
       },
       "is_incremental": false,
@@ -3710,18 +3710,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.IndexBuffer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.IndexBuffer.html",
-          "hash": "gz2Mi9PSHssUumO5U7g0Tg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.IndexFormat.yml",
       "output": {
         ".html": {
@@ -4398,7 +4386,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Mesh-1.html",
-          "hash": "OaibF4YHzRHS3h5z/gujmw=="
+          "hash": "hy4GggckFV9yxUvlmI+QHw=="
         }
       },
       "is_incremental": false,
@@ -5454,7 +5442,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PlatformRenderer.html",
-          "hash": "QGTb7Hqi/zPPrrlzOJCEtw=="
+          "hash": "fQl9yRWUcboW+wFTEegpTg=="
         }
       },
       "is_incremental": false,
@@ -8714,18 +8702,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.VertexBuffer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.VertexBuffer.html",
-          "hash": "90y4sJ+sWuFXBYWVoiXuzA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.VertexInputLayout.yml",
       "output": {
         ".html": {
@@ -9306,7 +9282,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "6foYZZv/RfX/vXaTFTTeUw=="
+          "hash": "jbSZtD1NdNjJRj/O16G1/Q=="
         }
       },
       "is_incremental": false,
@@ -9354,7 +9330,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "R4WuchoZlqLCvYKQYC33eQ=="
+          "hash": "yMpK4ixewEHQdYf8I1JdZA=="
         }
       },
       "is_incremental": false,
@@ -11562,7 +11538,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 778,
+          "total_file_count": 776,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

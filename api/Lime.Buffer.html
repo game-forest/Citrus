@@ -89,8 +89,6 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">Buffer</span></div>
-      <div class="level2"><a class="xref" href="Lime.IndexBuffer.html">IndexBuffer</a></div>
-      <div class="level2"><a class="xref" href="Lime.VertexBuffer.html">VertexBuffer</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -131,12 +129,12 @@
   
   
   <a id="Lime_Buffer__ctor_" data-uid="Lime.Buffer.#ctor*"></a>
-  <h4 id="Lime_Buffer__ctor_Lime_Graphics_Platform_BufferType_System_Boolean_" data-uid="Lime.Buffer.#ctor(Lime.Graphics.Platform.BufferType,System.Boolean)">Buffer(BufferType, Boolean)</h4>
+  <h4 id="Lime_Buffer__ctor_Lime_BufferType_System_Int32_System_Boolean_" data-uid="Lime.Buffer.#ctor(Lime.BufferType,System.Int32,System.Boolean)">Buffer(BufferType, Int32, Boolean)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Buffer(BufferType bufferType, bool dynamic)</code></pre>
+    <pre><code class="lang-csharp hljs">public Buffer(BufferType type, int size, bool dynamic)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -149,8 +147,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.Graphics.Platform.BufferType.html">BufferType</a></td>
-        <td><span class="parametername">bufferType</span></td>
+        <td><a class="xref" href="Lime.BufferType.html">BufferType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
         <td></td>
       </tr>
       <tr>
@@ -212,6 +215,56 @@
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="Lime_Buffer_Size_" data-uid="Lime.Buffer.Size*"></a>
+  <h4 id="Lime_Buffer_Size" data-uid="Lime.Buffer.Size">Size</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Size { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Buffer_Type_" data-uid="Lime.Buffer.Type*"></a>
+  <h4 id="Lime_Buffer_Type" data-uid="Lime.Buffer.Type">Type</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BufferType Type { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.BufferType.html">BufferType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   
@@ -237,12 +290,54 @@
   
   
   <a id="Lime_Buffer_SetData_" data-uid="Lime.Buffer.SetData*"></a>
-  <h4 id="Lime_Buffer_SetData__1___0___System_Int32_" data-uid="Lime.Buffer.SetData``1(``0[],System.Int32)">SetData&lt;T&gt;(T[], Int32)</h4>
+  <h4 id="Lime_Buffer_SetData_System_Int32_System_IntPtr_System_Int32_Lime_BufferSetDataMode_" data-uid="Lime.Buffer.SetData(System.Int32,System.IntPtr,System.Int32,Lime.BufferSetDataMode)">SetData(Int32, IntPtr, Int32, BufferSetDataMode)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void SetData&lt;T&gt;(T[] data, int elementCount)
+    <pre><code class="lang-csharp hljs">public void SetData(int offset, IntPtr data, int size, BufferSetDataMode mode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IntPtr</span></td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.BufferSetDataMode.html">BufferSetDataMode</a></td>
+        <td><span class="parametername">mode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Buffer_SetData_" data-uid="Lime.Buffer.SetData*"></a>
+  <h4 id="Lime_Buffer_SetData__1_System_Int32___0___System_Int32_System_Int32_Lime_BufferSetDataMode_" data-uid="Lime.Buffer.SetData``1(System.Int32,``0[],System.Int32,System.Int32,Lime.BufferSetDataMode)">SetData&lt;T&gt;(Int32, T[], Int32, Int32, BufferSetDataMode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetData&lt;T&gt;(int offset, T[] data, int startIndex, int count, BufferSetDataMode mode)
     where T : struct</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -256,13 +351,28 @@
     </thead>
     <tbody>
       <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
         <td>T[]</td>
         <td><span class="parametername">data</span></td>
         <td></td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">elementCount</span></td>
+        <td><span class="parametername">startIndex</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.BufferSetDataMode.html">BufferSetDataMode</a></td>
+        <td><span class="parametername">mode</span></td>
         <td></td>
       </tr>
     </tbody>
