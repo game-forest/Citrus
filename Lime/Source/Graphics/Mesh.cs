@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Yuzu;
+using System.Runtime.CompilerServices;
 
 namespace Lime
 {
@@ -270,12 +271,35 @@ namespace Lime
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static int GetSizeClass(int size)
 		{
 			System.Diagnostics.Debug.Assert(size > 0);
-			return 32 - BitOperations.LeadingZeroCount(((uint)size - 1) >> 4);
+			// TODO: Use BitOperations.LeadingZeroCount when .net6 is available:
+			// return 32 - BitOperations.LeadingZeroCount(((uint)size - 1) >> 4);
+			return Log2SoftwareFallback(((uint)size - 1) >> 4) + 1;
 		}
 
+		// https://stackoverflow.com/questions/10439242/count-leading-zeroes-in-an-int32/10439333#10439333
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int Log2SoftwareFallback(uint x)
+		{
+			x |= x >> 1;
+			x |= x >> 2;
+			x |= x >> 4;
+			x |= x >> 8;
+			x |= x >> 16;
+			// Count the ones: http://aggregate.org/MAGIC/#Population%20Count%20(Ones%20Count)
+			x -= x >> 1 & 0x55555555;
+			x = (x >> 2 & 0x33333333) + (x & 0x33333333);
+			x = (x >> 4) + x & 0x0f0f0f0f;
+			x += x >> 8;
+			x += x >> 16;
+			//subtract # of 1s from 32
+			return (int)((x & 0x0000003f) - 1);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static int GetMaxSize(int sizeClass)
 		{
 			return 16 << sizeClass;
