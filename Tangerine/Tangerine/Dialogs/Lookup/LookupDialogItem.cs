@@ -13,6 +13,7 @@ namespace Tangerine
 
 		private readonly ITexture iconTexture;
 		private readonly Shortcut shortcut;
+		private readonly string label;
 		private Widget headerWidget;
 
 		public readonly RichTextHighlightComponent Header;
@@ -23,6 +24,11 @@ namespace Tangerine
 			Header = new RichTextHighlightComponent(headerText, HighlightedTextStyleId);
 		}
 
+		public LookupDialogItem(string headerText, string text, string label, Action action) : this(headerText, text, action)
+		{
+			this.label = label;
+		}
+		
 		public LookupDialogItem(string headerText, string text, Shortcut shortcut, Action action) : this(headerText, text, action)
 		{
 			this.shortcut = shortcut;
@@ -95,7 +101,7 @@ namespace Tangerine
 				NameRichText.Visible = false;
 			}
 
-			if (shortcut.Main != Key.Unknown) {
+			if (!string.IsNullOrEmpty(label) || shortcut.Main != Key.Unknown) {
 				const float Spacing = 9;
 				var widget = new Widget {
 					LayoutCell = new LayoutCell {
@@ -108,8 +114,8 @@ namespace Tangerine
 				};
 				var width = 0f;
 				headerWidget.AddNode(widget);
-
-				void AddKey(string name)
+				
+				void AddLabel(string name)
 				{
 					var simpleText = new ThemedSimpleText {
 						Text = name,
@@ -122,17 +128,20 @@ namespace Tangerine
 					simpleText.CompoundPresenter.Add(shortcutPresenter);
 					widget.AddNode(simpleText);
 				}
-
-				if (shortcut.Modifiers.HasFlag(Modifiers.Alt)) AddKey("Alt");
-				if (shortcut.Modifiers.HasFlag(Modifiers.Shift)) AddKey("Shift");
-				if (shortcut.Modifiers.HasFlag(Modifiers.Control)) AddKey("Ctrl");
+				if (!string.IsNullOrEmpty(label)) {
+					AddLabel(label);
+				}
+				if (shortcut.Main != Key.Unknown) {
+					if (shortcut.Modifiers.HasFlag(Modifiers.Alt)) AddLabel("Alt");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Shift)) AddLabel("Shift");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Control)) AddLabel("Ctrl");
 #if MAC
-				if (shortcut.Modifiers.HasFlag(Modifiers.Command)) AddKey("Cmd");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Command)) AddKey("Cmd");
 #else
-				if (shortcut.Modifiers.HasFlag(Modifiers.Win)) AddKey("Win");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Win)) AddLabel("Win");
 #endif
-				AddKey(shortcut.Main.ToString());
-
+					AddLabel(shortcut.Main.ToString());
+				}
 				widget.MinMaxWidth = width + Spacing * (widget.Nodes.Count - 1);
 			}
 		}
