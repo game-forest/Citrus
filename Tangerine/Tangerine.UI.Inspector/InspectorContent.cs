@@ -25,6 +25,8 @@ namespace Tangerine.UI.Inspector
 
 		public event Action<IMenu> CreatedAddComponentsMenu;
 		
+		public static event Action CreateLookupForAddComponent;
+
 		private bool enabled = true;
 		public bool Enabled
 		{
