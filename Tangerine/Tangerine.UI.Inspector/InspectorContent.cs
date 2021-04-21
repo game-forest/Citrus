@@ -23,6 +23,8 @@ namespace Tangerine.UI.Inspector
 		public Widget Footer { get; set; }
 		public readonly IReadOnlyList<IPropertyEditor> ReadonlyEditors;
 
+		public event Action<IMenu> CreatedAddComponentsMenu;
+		
 		private bool enabled = true;
 		public bool Enabled
 		{
