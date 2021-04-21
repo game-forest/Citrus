@@ -69,12 +69,7 @@ namespace Tangerine.UI.RemoteScripting
 						}
 					}
 					if (!string.IsNullOrEmpty(FilePath)) {
-						var process = new System.Diagnostics.Process {
-							StartInfo = new System.Diagnostics.ProcessStartInfo(FilePath) {
-								UseShellExecute = true
-							}
-						};
-						process.Start();
+						Environment.ShellExecute(FilePath);
 					}
 				}
 				if (commandCopy.WasIssued()) {

@@ -14,7 +14,10 @@ namespace Lime
 {
 	public static class Environment
 	{
-		public static void OpenBrowser(string url)
+		[Obsolete("Use OpenUrl() instead")]
+		public static void OpenBrowser(string url) { }
+
+		public static void OpenUrl(string url)
 		{
 #if iOS
 			var nsUrl = new Foundation.NSUrl(url);
@@ -26,10 +29,17 @@ namespace Lime
 				ActivityDelegate.Instance.Activity.StartActivity(intent);
 			}
 #else
-			// https://github.com/dotnet/corefx/issues/10361
-			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+			ShellExecute(url);
 #endif
 		}
+
+#if WIN || MAC
+		public static void ShellExecute(string url)
+		{
+			// https://github.com/dotnet/corefx/issues/10361
+			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+		}
+#endif
 
 		/// <summary>
 		/// Opens the system file manager and selects a file or folder

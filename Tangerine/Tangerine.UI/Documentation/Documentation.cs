@@ -124,7 +124,7 @@ namespace Tangerine.UI
 			// Remove at your own risk
 			new Thread(() => {
 				Thread.CurrentThread.IsBackground = true;
-				Lime.Environment.OpenBrowser(pageName);
+				Lime.Environment.OpenUrl(pageName);
 			}).Start();
 		}
 	}
