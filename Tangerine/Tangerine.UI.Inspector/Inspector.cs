@@ -40,8 +40,8 @@ namespace Tangerine.UI.Inspector
 			CommandHandlerList.Global.Connect(InspectorCommands.InspectEasing, new InspectEasingCommandHandler());
 			CommandHandlerList.Global.Connect(InspectorCommands.CopyAssetPath, new CopyAssetPathCommandHandler());
 		}
-
-		class InspectEasingCommandHandler : CommandHandler
+		
+		private class InspectEasingCommandHandler : CommandHandler
 		{
 			public override void RefreshCommand(ICommand command)
 			{
@@ -54,7 +54,7 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		class CopyAssetPathCommandHandler : CommandHandler
+		private class CopyAssetPathCommandHandler : CommandHandler
 		{
 			public override void Execute()
 			{
