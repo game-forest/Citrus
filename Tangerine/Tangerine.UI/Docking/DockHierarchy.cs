@@ -538,9 +538,13 @@ namespace Tangerine.UI.Docking
 		[YuzuOptional]
 		public PlacementList<PanelPlacement> Placements { get; }
 
+		[YuzuOptional]
+		public int ActiveTabIndex { get; set; }
+
 		public TabBarPlacement()
 		{
 			Placements = new PlacementList<PanelPlacement>(this);
+			ActiveTabIndex = 0;
 		}
 
 		public override IEnumerable<PanelPlacement> GetPanelPlacements() => Placements;
@@ -585,7 +589,7 @@ namespace Tangerine.UI.Docking
 
 		public override Placement Clone()
 		{
-			var clone = new TabBarPlacement();
+			var clone = new TabBarPlacement { ActiveTabIndex = ActiveTabIndex };
 			foreach (var placement in Placements) {
 				clone.Placements.Add((PanelPlacement)placement.Clone());
 			}

@@ -45,9 +45,12 @@ namespace Tangerine.UI
 		public int ActiveTabIndex
 		{
 			get => activeTabIndex;
-			set {
-				activeTabIndex = value;
-				ActivateTab(value);
+			set
+			{
+				if (activeTabIndex != (value = value.Clamp(0, TabBar.Nodes.Count - 1))) {
+					activeTabIndex = value;
+					ActivateTab(value);
+				}
 			}
 		}
 
