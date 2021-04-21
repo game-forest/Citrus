@@ -45,6 +45,11 @@ namespace Tangerine
 			Application.InvokeOnMainThread(() => AlertDialog.Show(message));
 		}
 
+		public override Orange.MenuItem GetActiveAction()
+		{
+			return Orange.MenuController.Instance.Items.Find(i => i.UsesTargetBundles);
+		}
+
 		public override Target GetActiveTarget()
 		{
 			return PlatformPicker.SelectedTarget;
@@ -118,7 +123,7 @@ namespace Tangerine
 			}
 		}
 
-		public Target SelectedTarget => (Target)Items[Index].Value;
+		public Target SelectedTarget => Items.ElementAtOrDefault(Index)?.Value as Target;
 	}
 
 	public class OrangePluginUIBuilder : IPluginUIBuilder

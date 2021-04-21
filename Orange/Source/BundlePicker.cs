@@ -13,7 +13,8 @@ namespace Orange
 		private List<string> allBundles;
 
 		/// <summary>
-		/// When enabled, user can select which bundles to use in actions. When disabled, actions will use all bundles.
+		/// When enabled, user can select which bundles to use in actions.
+		/// When disabled, actions will use all / required bundles.
 		/// </summary>
 		public bool Enabled;
 
@@ -65,7 +66,22 @@ namespace Orange
 		}
 
 		/// <summary>
-		/// Returns list of all bundles if not enabled; Returns list of selected bundles otherwise.
+		/// Returns list of all bundles.
+		/// </summary>
+		/// <param name="refresh">Set to 'true' if you want receive always up-to-date list.
+		/// Careful it's a heavy operation and may impact performance significantly.</param>
+		public List<string> GetListOfBundles(bool refresh = false)
+		{
+			if (allBundles == null) {
+				Setup();
+			} else if (refresh) {
+				Refresh();
+			}
+			return allBundles;
+		}
+
+		/// <summary>
+		/// Returns list of all / required bundles if not enabled; Returns list of selected bundles otherwise.
 		/// </summary>
 		public List<string> GetSelectedBundles()
 		{
@@ -74,19 +90,26 @@ namespace Orange
 			}
 			if (!Enabled) {
 				Refresh();
-				return allBundles;
+				return The.UI.GetActiveAction().UsesTargetBundles && The.UI.GetActiveTarget().Bundles.Any()
+					? The.UI.GetActiveTarget().Bundles.ToList()
+					: allBundles;
 			}
 			return bundleSelectionStates.Where(x => x.Value).ToDictionary(x => x.Key, x => x.Value).Keys.ToList();
 		}
 
 		/// <summary>
-		/// Sets bundle state
+		/// Sets bundle state.
 		/// </summary>
 		/// <param name="bundle">Path to bundle, relative to current project folder</param>
-		/// <param name="state">'true' if bundle should be selected, 'false' otherwise</param>
-		public void SetBundleSelection(string bundle, bool state)
+		/// <param name="state">'true' if bundle should be selected, 'false' otherwise.
+		/// It would be ignored and always stays 'true' if both current <see cref="Orange.Target"/> requires 'bundle'
+		/// to be built and current <see cref="Orange.Actions"/> has 'UsesTargetBundles' set to 'true'. </param>
+		public bool SetBundleSelection(string bundle, bool state)
 		{
-			bundleSelectionStates[bundle] = state;
+			return bundleSelectionStates[bundle] =
+				state ||
+				The.UI.GetActiveAction().UsesTargetBundles &&
+				The.UI.GetActiveTarget().Bundles.Contains(bundle);
 		}
 	}
 }

@@ -28,6 +28,9 @@ namespace Orange
 
 		[DefaultValue(false)]
 		bool ApplicableToBundleSubset { get; }
+
+		[DefaultValue(false)]
+		bool UsesTargetBundles { get; }
 	}
 
 	public class OrangePlugin

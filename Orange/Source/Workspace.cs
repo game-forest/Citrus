@@ -84,8 +84,6 @@ namespace Orange
 
 		public static readonly Workspace Instance = new Workspace();
 
-		public JObject JObject { get; private set; }
-
 		public void Load(string projectFilePath = null)
 		{
 			// heuristic behavior: always try to go up and search for a citproj file
@@ -241,6 +239,10 @@ namespace Orange
 				if (Targets.Where(t => t.Name == targetName).Any()) {
 					throw new System.InvalidOperationException($"Target {targetName} already exists.");
 				}
+				string[] bundles = null;
+				if (target.ContainsKey("Bundles")) {
+					bundles = (target["Bundles"] as JArray)?.ToObject<string[]>();
+				}
 				string configuration = null;
 				if (target.TryGetValue("Configuration", out object configurationValue)) {
 					configuration = configurationValue as string;
@@ -264,12 +266,13 @@ namespace Orange
 				}
 				Target newTarget = null;
 				Targets.Add(newTarget = new Target(
-					targetName,
-					projectPath,
-					cleanBeforeBuild,
-					null,
-					configuration,
-					hidden
+					name: targetName,
+					projectPath: projectPath,
+					cleanBeforeBuild: cleanBeforeBuild,
+					platform: null,
+					configuration: configuration,
+					bundles: bundles,
+					hidden: hidden
 				));
 				if (target.TryGetValue("BaseTarget", out object baseTargetName)) {
 					baseTargetName = Toolbox.ReplaceCitrusProjectSubstituteTokens(baseTargetName as string);

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.ComponentModel.Composition;
 
 namespace Orange
@@ -7,11 +8,12 @@ namespace Orange
 		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
 		[ExportMetadata("Label", "Build")]
 		[ExportMetadata("Priority", 1)]
+		[ExportMetadata("UsesTargetBundles", true)]
 		public static string BuildGameAction()
 		{
 			var target = The.UI.GetActiveTarget();
-
-			if (!AssetCooker.CookForTarget(target, null, out string errorMessage)) {
+			var bundles = target.Bundles.Any() ? target.Bundles.ToList() : null;
+			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 				return errorMessage;
 			}
 			return BuildGame(target) ? null : "Can not BuildGame";

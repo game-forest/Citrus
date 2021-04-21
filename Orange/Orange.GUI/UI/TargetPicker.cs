@@ -28,6 +28,6 @@ namespace Orange
 			}
 		}
 
-		public Target SelectedTarget => (Target)Items[Index].Value;
+		public Target SelectedTarget => Items.ElementAtOrDefault(Index)?.Value as Target;
 	}
 }

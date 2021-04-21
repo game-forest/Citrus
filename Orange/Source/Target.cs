@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Collections.Generic;
+
 namespace Orange
 {
 	public class Target
@@ -30,6 +33,11 @@ namespace Orange
 		public TargetPlatform Platform => platform ?? BaseTarget.Platform;
 
 		/// <summary>
+		/// Target specific required bundles.
+		/// </summary>
+		public IEnumerable<string> Bundles => bundles.Any() || BaseTarget == null ? bundles : BaseTarget.Bundles;
+
+		/// <summary>
 		/// If any property but name is initialized to null, then it's redirected to corresponding property of base target.
 		/// Also affects application of cooking rules. Cooking rules applied to the base target are also applied to this target.
 		/// CookingRules related to derived target take priority.
@@ -46,6 +54,7 @@ namespace Orange
 		private readonly bool? cleanBeforeBuild;
 		private readonly TargetPlatform? platform;
 		private readonly bool? hidden;
+		private readonly IEnumerable<string> bundles;
 
 		public Target(
 			string name,
@@ -53,9 +62,11 @@ namespace Orange
 			bool? cleanBeforeBuild,
 			TargetPlatform? platform,
 			string configuration,
-			bool? hidden
+			bool? hidden,
+			string[] bundles = null
 		) {
 			Name = name;
+			this.bundles = bundles ?? Enumerable.Empty<string>();
 			this.cleanBeforeBuild = cleanBeforeBuild;
 			this.platform = platform;
 			this.projectPath = projectPath;
