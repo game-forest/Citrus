@@ -18748,6 +18748,32 @@ references:
   isSpec: "True"
   fullName: Lime.Environment.OpenBrowser
   nameWithType: Environment.OpenBrowser
+- uid: Lime.Environment.OpenUrl(System.String)
+  name: OpenUrl(String)
+  href: api/Lime.Environment.html#Lime_Environment_OpenUrl_System_String_
+  commentId: M:Lime.Environment.OpenUrl(System.String)
+  fullName: Lime.Environment.OpenUrl(System.String)
+  nameWithType: Environment.OpenUrl(String)
+- uid: Lime.Environment.OpenUrl*
+  name: OpenUrl
+  href: api/Lime.Environment.html#Lime_Environment_OpenUrl_
+  commentId: Overload:Lime.Environment.OpenUrl
+  isSpec: "True"
+  fullName: Lime.Environment.OpenUrl
+  nameWithType: Environment.OpenUrl
+- uid: Lime.Environment.ShellExecute(System.String)
+  name: ShellExecute(String)
+  href: api/Lime.Environment.html#Lime_Environment_ShellExecute_System_String_
+  commentId: M:Lime.Environment.ShellExecute(System.String)
+  fullName: Lime.Environment.ShellExecute(System.String)
+  nameWithType: Environment.ShellExecute(String)
+- uid: Lime.Environment.ShellExecute*
+  name: ShellExecute
+  href: api/Lime.Environment.html#Lime_Environment_ShellExecute_
+  commentId: Overload:Lime.Environment.ShellExecute
+  isSpec: "True"
+  fullName: Lime.Environment.ShellExecute
+  nameWithType: Environment.ShellExecute
 - uid: Lime.Environment.ShowInFileManager(System.String)
   name: ShowInFileManager(String)
   href: api/Lime.Environment.html#Lime_Environment_ShowInFileManager_System_String_
