@@ -136,7 +136,7 @@ namespace Tangerine
 					if (shortcut.Modifiers.HasFlag(Modifiers.Shift)) AddLabel("Shift");
 					if (shortcut.Modifiers.HasFlag(Modifiers.Control)) AddLabel("Ctrl");
 #if MAC
-					if (shortcut.Modifiers.HasFlag(Modifiers.Command)) AddKey("Cmd");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Command)) AddLabel("Cmd");
 #else
 					if (shortcut.Modifiers.HasFlag(Modifiers.Win)) AddLabel("Win");
 #endif
