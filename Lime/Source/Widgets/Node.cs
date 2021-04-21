@@ -189,6 +189,14 @@ namespace Lime
 					}
 					var oldParent = parent;
 					parent = value;
+					if (oldParent != null) {
+						oldParent.PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					}
+					if (parent != null && DirtyMask.HasFlag(DirtyFlags.ParentBoundingRect)) { 
+						parent.PropagateDirtyFlags(DirtyFlags.ParentBoundingRect);
+					} else {
+						PropagateDirtyFlags(DirtyFlags.ParentBoundingRect);
+					}
 					PropagateDirtyFlags();
 					for (var n = Parent; n != null; n = n.Parent) {
 						n.DescendantAnimatorsVersion++;
@@ -632,6 +640,24 @@ namespace Lime
 			}
 			Nodes.Clear();
 			Animators.Dispose();
+		}
+
+		protected internal void PropagateParentDirtyFlags(DirtyFlags mask)
+		{
+			if ((DirtyMask & mask) == mask)
+				return;
+			Window.Current?.Invalidate();
+			PropagateParentDirtyFlagsHelper(mask);
+		}
+
+		private void PropagateParentDirtyFlagsHelper(DirtyFlags mask)
+		{
+			DirtyMask |= mask;
+			for (var p = Parent; p != null; p = p.Parent) {
+				if ((p.DirtyMask & mask) != mask) {
+					p.PropagateParentDirtyFlagsHelper(mask);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1645,8 +1671,10 @@ namespace Lime
 
 		public virtual void UpdateBoundingRect()
 		{
-			for (var n = FirstChild; n != null; n = n.NextSibling) {
-				n.UpdateBoundingRect();
+			if (CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
+				for (var n = FirstChild; n != null; n = n.NextSibling) {
+					n.UpdateBoundingRect();
+				}
 			}
 		}
 

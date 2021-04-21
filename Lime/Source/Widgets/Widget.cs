@@ -232,7 +232,8 @@ namespace Lime
 				System.Diagnostics.Debug.Assert(IsNumber(value.Y));
 				if (position.X != value.X || position.Y != value.Y) {
 					position = value;
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -249,7 +250,8 @@ namespace Lime
 				System.Diagnostics.Debug.Assert(IsNumber(value));
 				if (position.X != value) {
 					position.X = value;
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -266,7 +268,8 @@ namespace Lime
 				System.Diagnostics.Debug.Assert(IsNumber(value));
 				if (position.Y != value) {
 					position.Y = value;
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -283,7 +286,8 @@ namespace Lime
 				System.Diagnostics.Debug.Assert(IsNumber(value.Y));
 				if (scale.X != value.X || scale.Y != value.Y) {
 					scale = value;
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -310,7 +314,8 @@ namespace Lime
 #else
 					direction = Vector2.CosSinRough(Mathf.DegToRad * value);
 #endif // TANGERINE
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -399,7 +404,8 @@ namespace Lime
 				System.Diagnostics.Debug.Assert(IsNumber(value.Y));
 				if (pivot.X != value.X || pivot.Y != value.Y) {
 					pivot = value;
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -545,6 +551,7 @@ namespace Lime
 			{
 				if (visible != value) {
 					visible = value;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					PropagateDirtyFlags(DirtyFlags.Visible | DirtyFlags.Frozen);
 					InvalidateParentConstraintsAndArrangement();
 					Manager?.FilterNode(this);
@@ -725,6 +732,7 @@ namespace Lime
 
 		private void RecalcGloballyVisible()
 		{
+			var oldVisible = globallyVisible;
 			globallyVisible = Visible && (color.A != 0 || RenderTransparentWidgets);
 			if (!IsRenderedToTexture() && Parent != null) {
 				if (Parent.AsWidget != null) {
@@ -738,6 +746,9 @@ namespace Lime
 			globallyVisible |= GetTangerineFlag(TangerineFlags.Shown | TangerineFlags.DisplayContent);
 			globallyVisible &= !GetTangerineFlag(TangerineFlags.HiddenOnExposition);
 #endif // TANGERINE
+			if (oldVisible != globallyVisible) {
+				PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+			}
 		}
 
 		[YuzuMember]
@@ -1067,7 +1078,7 @@ namespace Lime
 			if (boundingRect.BX < newBounds.BX) { boundingRect.BX = newBounds.BX; t = true; }
 			if (boundingRect.BY < newBounds.BY) { boundingRect.BY = newBounds.BY; t = true; }
 			if (t) {
-				ExpandParentBoundingRect();
+				PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 			}
 		}
 
@@ -1079,7 +1090,7 @@ namespace Lime
 			if (boundingRect.BX < point.X) { boundingRect.BX = point.X; t = true; }
 			if (boundingRect.BY < point.Y) { boundingRect.BY = point.Y; t = true; }
 			if (t) {
-				ExpandParentBoundingRect();
+				PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 			}
 		}
 
@@ -1115,7 +1126,6 @@ namespace Lime
 			if (v4.Y > r.BY) { r.BY = v4.Y; t = true; }
 			if (t) {
 				ParentWidget.boundingRect = r;
-				ParentWidget.ExpandParentBoundingRect();
 			}
 		}
 
@@ -1437,14 +1447,13 @@ namespace Lime
 
 		public override void UpdateBoundingRect()
 		{
-			if (GloballyVisible) {
+			if (GloballyVisible && CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
 				for (var n = FirstChild; n != null; n = n.NextSibling) {
 					n.UpdateBoundingRect();
 				}
-			}
-			if (CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
 				ExpandParentBoundingRect();
 			}
+			//}
 		}
 
 		protected override void RecalcGloballyFrozen()

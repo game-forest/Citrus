@@ -212,7 +212,8 @@ namespace Lime
 				Parent.AsWidget.BoneArray[Index] = e;
 				Parent.PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				for (var child = Parent.FirstChild; child != null; child = child.NextSibling) {
-					child.DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					child.DirtyMask |= DirtyFlags.LocalTransform;
+					child.PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 				}
 			}
 		}

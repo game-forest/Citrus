@@ -20,7 +20,8 @@ namespace Lime
 			set
 			{
 				if (offset != value) {
-					DirtyMask |= DirtyFlags.LocalTransform | DirtyFlags.ParentBoundingRect;
+					DirtyMask |= DirtyFlags.LocalTransform;
+					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 					offset = value;
 				}
 			}
