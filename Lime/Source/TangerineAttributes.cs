@@ -259,7 +259,15 @@ namespace Lime
 		{
 			var min = (IComparable)Minimum;
 			var max = (IComparable)Maximum;
-			message = min.CompareTo(value) <= 0 && max.CompareTo(value) >= 0 ? null : $"Value should be in range [{Minimum}, {Maximum}].";
+			message = (value is Vector2 v)
+				? min.CompareTo(v.X) > 0 || max.CompareTo(v.X) < 0
+					? $"Value X should be in range [{Minimum}, {Maximum}]."
+					: min.CompareTo(v.Y) > 0 || max.CompareTo(v.Y) < 0
+						? $"Value Y should be in range [{Minimum}, {Maximum}]."
+						: null
+				: min.CompareTo(value) > 0 || max.CompareTo(value) < 0
+					? $"Value should be in range [{Minimum}, {Maximum}]."
+					: null;
 			return message == null ? ValidationResult.Ok : WarningLevel;
 		}
 	}
