@@ -135,6 +135,7 @@ namespace Tangerine.UI
 		public static readonly ICommand SnapWidgetPivotToRuler = new Command("Snap Widget Pivot to Ruler");
 		public static readonly ICommand SnapWidgetBorderToRuler = new Command("Snap Widget to Ruler");
 		public static readonly ICommand SnapRulerLinesToWidgets = new Command("Snap Ruler Lines to Widgets");
+		public static readonly ICommand CreateRulerGrid = new Command("Create Ruler Grid");
 		public static readonly ICommand ManageRulers = new Command("Manage Rulers");
 		public static readonly ICommand GeneratePreview = new Command("Generate Preview");
 		public static readonly ICommand PasteAtOldPosition = new Command("Paste at Old Position", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.V));
@@ -156,7 +157,7 @@ namespace Tangerine.UI
 		public static readonly ICommand DistributeHorizontally = new Command("Distribute Horizontally") { Icon = IconPool.GetIcon("Tools.DistributeCentersHorizontally") };
 		public static readonly ICommand DistributeRight = new Command("Distribute Right") { Icon = IconPool.GetIcon("Tools.DistributeRight") };
 		public static readonly ICommand DistributeTop = new Command("Distribute Top") { Icon = IconPool.GetIcon("Tools.DistributeTop") };
-		public static readonly ICommand DistributeVertically = new Command("Distribute Verticaly") { Icon = IconPool.GetIcon("Tools.DistributeCentersVertically") };
+		public static readonly ICommand DistributeVertically = new Command("Distribute Vertically") { Icon = IconPool.GetIcon("Tools.DistributeCentersVertically") };
 		public static readonly ICommand DistributeBottom = new Command("Distribute Bottom") { Icon = IconPool.GetIcon("Tools.DistributeBottom") };
 		public static readonly ICommand AlignTo = new Command("Align to Selection") { Icon = IconPool.GetIcon("Tools.Selection") };
 		public static readonly ICommand RestoreOriginalSize = new Command("Restore Original Size") { Icon = IconPool.GetIcon("Tools.RestoreOriginalSize") };

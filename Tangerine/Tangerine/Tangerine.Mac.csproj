@@ -89,6 +89,7 @@
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-32%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-512.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-512%402x.png" />
+    <Compile Include="Dialogs\CreateRulerGridDialog.cs" />
     <Compile Include="Dialogs\Lookup\LookupAnimationFramesSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupAnimationsSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupCommandsSection.cs" />

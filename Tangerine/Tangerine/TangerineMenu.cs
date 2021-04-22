@@ -335,6 +335,7 @@ namespace Tangerine
 			rulerMenu.Add(SceneViewCommands.ClearActiveRuler);
 			rulerMenu.Add(SceneViewCommands.SaveCurrentRuler);
 			rulerMenu.Add(SceneViewCommands.ManageRulers);
+			rulerMenu.Add(SceneViewCommands.CreateRulerGrid);
 			rulerMenu.Add(Command.MenuSeparator);
 			foreach (var ruler in ProjectUserPreferences.Instance.DefaultRulers) {
 				rulerMenu.Add(ruler.Components.Get<CommandComponent>().Command);
