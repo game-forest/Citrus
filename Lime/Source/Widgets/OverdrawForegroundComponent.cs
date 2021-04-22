@@ -86,7 +86,9 @@ namespace Lime
 		protected override void OnOwnerChanged(Node oldOwner)
 		{
 			base.OnOwnerChanged(oldOwner);
-			UnsubscribeEvents(oldOwner);
+			if (oldOwner != null) {
+				UnsubscribeEvents(oldOwner);
+			}
 		}
 
 		protected internal override void Stop(Node owner)
