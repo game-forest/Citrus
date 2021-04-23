@@ -21,7 +21,7 @@ namespace Lime
 			{
 				if (offset != value) {
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					PropagateParentBoundsChanged();
 					offset = value;
 				}
 			}
@@ -32,11 +32,14 @@ namespace Lime
 			Color = Color4.White;
 		}
 
-		public override void UpdateBoundingRect()
+		public override void UpdateAncestorBoundingRect(Widget ancestor)
 		{
-			if (CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
-				var p = Parent.AsWidget;
-				p.BoundingRect = p.BoundingRect.IncludingPoint(TransformedPosition);
+			var p = Parent.AsWidget;
+			if (p == ancestor) {
+				p.ExpandBoundingRect(TransformedPosition, propogate: false);
+			} else {
+				var pos = CalcPositionInSpaceOf(ancestor);
+				ancestor.ExpandBoundingRect(pos, propogate: false);
 			}
 		}
 	}

@@ -211,9 +211,9 @@ namespace Lime
 					e.RelativeTransform = Matrix32.Identity;
 				Parent.AsWidget.BoneArray[Index] = e;
 				Parent.PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
+				Parent.PropagateParentBoundsChanged();
 				for (var child = Parent.FirstChild; child != null; child = child.NextSibling) {
 					child.DirtyMask |= DirtyFlags.LocalTransform;
-					child.PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
 				}
 			}
 		}

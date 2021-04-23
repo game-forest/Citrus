@@ -211,9 +211,9 @@ namespace Lime
 			set { MinHeight = MaxHeight = value; }
 		}
 
-#endregion
+		#endregion
 
-#region Transformation properties
+		#region Transformation properties
 		/// <summary>
 		/// Parent-relative position.
 		/// </summary>
@@ -233,7 +233,9 @@ namespace Lime
 				if (position.X != value.X || position.Y != value.Y) {
 					position = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -251,7 +253,9 @@ namespace Lime
 				if (position.X != value) {
 					position.X = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -269,7 +273,9 @@ namespace Lime
 				if (position.Y != value) {
 					position.Y = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -287,7 +293,9 @@ namespace Lime
 				if (scale.X != value.X || scale.Y != value.Y) {
 					scale = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -315,7 +323,9 @@ namespace Lime
 					direction = Vector2.CosSinRough(Mathf.DegToRad * value);
 #endif // TANGERINE
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -333,10 +343,14 @@ namespace Lime
 				if (value.X != size.X || value.Y != size.Y) {
 					var sizeDelta = value - size;
 					size = value;
-					if (boundingRect.BX < value.X) boundingRect.BX = value.X;
-					if (boundingRect.BY < value.Y) boundingRect.BY = value.Y;
-					if (boundingRect.AX > value.X) boundingRect.AX = value.X;
-					if (boundingRect.AY > value.Y) boundingRect.AY = value.Y;
+					var t = false;
+					if (boundingRect.BX < value.X) { boundingRect.BX = value.X; t = true; }
+					if (boundingRect.BY < value.Y) { boundingRect.BY = value.Y; t = true; }
+					if (boundingRect.AX > value.X) { boundingRect.AX = value.X; t = true; }
+					if (boundingRect.AY > value.Y) { boundingRect.AY = value.Y; t = true; }
+					if (t && Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					OnSizeChanged(sizeDelta);
 					DirtyMask |= DirtyFlags.LocalTransform;
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
@@ -357,10 +371,14 @@ namespace Lime
 			{
 				size = value;
 				DirtyMask |= DirtyFlags.LocalTransform;
-				if (boundingRect.BX < value.X) boundingRect.BX = value.X;
-				if (boundingRect.BY < value.Y) boundingRect.BY = value.Y;
-				if (boundingRect.AX > value.X) boundingRect.AX = value.X;
-				if (boundingRect.AY > value.Y) boundingRect.AY = value.Y;
+				var t = false;
+				if (boundingRect.BX < value.X) { boundingRect.BX = value.X; t = true; }
+				if (boundingRect.BY < value.Y) { boundingRect.BY = value.Y; t = true; }
+				if (boundingRect.AX > value.X) { boundingRect.AX = value.X; t = true; }
+				if (boundingRect.AY > value.Y) { boundingRect.AY = value.Y; t = true; }
+				if (t && Visible) {
+					Parent?.PropagateParentBoundsChanged();
+				}
 			}
 		}
 
@@ -371,7 +389,6 @@ namespace Lime
 			{
 				if (size.X != value) {
 					Size = new Vector2(value, Height);
-					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
 		}
@@ -383,7 +400,6 @@ namespace Lime
 			{
 				if (size.Y != value) {
 					Size = new Vector2(Width, value);
-					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
 		}
@@ -405,7 +421,9 @@ namespace Lime
 				if (pivot.X != value.X || pivot.Y != value.Y) {
 					pivot = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (Visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -453,9 +471,9 @@ namespace Lime
 		/// Parent-relative position of center of this widget.
 		/// </summary>
 		public Vector2 Center => Position + (Vector2.Half - Pivot) * Size;
-#endregion
+		#endregion
 
-#region Misc properties
+		#region Misc properties
 		public Widget ParentWidget => Parent?.AsWidget;
 		public TabTraversable TabTravesable { get; set; }
 		public KeyboardFocusScope FocusScope { get; set; }
@@ -551,7 +569,9 @@ namespace Lime
 			{
 				if (visible != value) {
 					visible = value;
-					PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (visible) {
+						Parent?.PropagateParentBoundsChanged();
+					}
 					PropagateDirtyFlags(DirtyFlags.Visible | DirtyFlags.Frozen);
 					InvalidateParentConstraintsAndArrangement();
 					Manager?.FilterNode(this);
@@ -746,9 +766,6 @@ namespace Lime
 			globallyVisible |= GetTangerineFlag(TangerineFlags.Shown | TangerineFlags.DisplayContent);
 			globallyVisible &= !GetTangerineFlag(TangerineFlags.HiddenOnExposition);
 #endif // TANGERINE
-			if (oldVisible != globallyVisible) {
-				PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
-			}
 		}
 
 		[YuzuMember]
@@ -769,8 +786,17 @@ namespace Lime
 		// Temporary property for changing bounding rectangle in game code
 		public Rectangle BoundingRect
 		{
-			get => boundingRect;
-			set => boundingRect = value;
+			get
+			{
+				if (CleanDirtyFlags(DirtyFlags.BoundingRect)) {
+					RecalcBoundingRect();
+				}
+				return boundingRect;
+			}
+			set
+			{
+				boundingRect = value;
+			}
 		}
 
 		/// <summary>
@@ -792,17 +818,19 @@ namespace Lime
 			var tvy = localToWorldTransform.VY;
 			var ttx = localToWorldTransform.TX;
 			var tty = localToWorldTransform.TY;
-			var axux = boundingRect.AX * tux;
-			var axuy = boundingRect.AX * tuy;
-			var ayvx = boundingRect.AY * tvx + ttx;
-			var ayvy = boundingRect.AY * tvy + tty;
+
+			var bounds = BoundingRect;
+			var axux = bounds.AX * tux;
+			var axuy = bounds.AX * tuy;
+			var ayvx = bounds.AY * tvx + ttx;
+			var ayvy = bounds.AY * tvy + tty;
 			float v1x, v1y, v2x, v2y, v3x, v3y, v4x, v4y;
 			v1x = axux + ayvx;
 			v1y = axuy + ayvy;
-			v2x = boundingRect.BX * tux + ayvx;
-			v2y = boundingRect.BX * tuy + ayvy;
-			v3x = axux + boundingRect.BY * tvx + ttx;
-			v3y = axuy + boundingRect.BY * tvy + tty;
+			v2x = bounds.BX * tux + ayvx;
+			v2y = bounds.BX * tuy + ayvy;
+			v3x = axux + bounds.BY * tvx + ttx;
+			v3y = axuy + bounds.BY * tvy + tty;
 			v4x = v2x + v3x - v1x;
 			v4y = v2y + v3y - v1y;
 			// Now build an aabb.
@@ -822,7 +850,7 @@ namespace Lime
 			return r;
 		}
 
-#endregion
+		#endregion
 
 		public Widget()
 		{
@@ -1070,63 +1098,64 @@ namespace Lime
 			localToParentTransform.TY = -(centerX * u.Y) - centerY * v.Y + translation.Y;
 		}
 
-		internal void ExpandBoundingRect(Rectangle newBounds)
+		internal void ExpandBoundingRect(Rectangle newBounds, bool propogate = true)
 		{
 			var t = false;
 			if (boundingRect.AX > newBounds.AX) { boundingRect.AX = newBounds.AX; t = true; }
 			if (boundingRect.AY > newBounds.AY) { boundingRect.AY = newBounds.AY; t = true; }
 			if (boundingRect.BX < newBounds.BX) { boundingRect.BX = newBounds.BX; t = true; }
 			if (boundingRect.BY < newBounds.BY) { boundingRect.BY = newBounds.BY; t = true; }
-			if (t) {
-				PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+			if (propogate && t && Visible) {
+				Parent?.PropagateParentBoundsChanged();
 			}
 		}
 
-		internal void ExpandBoundingRect(Vector2 point)
+		internal void ExpandBoundingRect(Vector2 point, bool propogate = true)
 		{
 			var t = false;
 			if (boundingRect.AX > point.X) { boundingRect.AX = point.X; t = true; }
 			if (boundingRect.AY > point.Y) { boundingRect.AY = point.Y; t = true; }
 			if (boundingRect.BX < point.X) { boundingRect.BX = point.X; t = true; }
 			if (boundingRect.BY < point.Y) { boundingRect.BY = point.Y; t = true; }
-			if (t) {
-				PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
+			if (propogate && t && Visible) {
+				Parent?.PropagateParentBoundsChanged();
 			}
 		}
 
-		public void ExpandParentBoundingRect()
+		private void ExpandAncestorBoundingRect(Widget ancestor)
 		{
-			if (ParentWidget == null) {
-				return;
+			Matrix32 transition;
+			if (ancestor == Parent) {
+				if (CleanDirtyFlags(DirtyFlags.LocalTransform)) {
+					RecalcLocalToParentTransform();
+				}
+				transition = localToParentTransform;
+			} else {
+				transition = CalcTransitionToSpaceOf(ancestor);
 			}
-			if (CleanDirtyFlags(DirtyFlags.LocalTransform)) {
-				RecalcLocalToParentTransform();
-			}
-			var v1 = localToParentTransform.TransformVector(boundingRect.AX, boundingRect.AY);
-			var v2 = localToParentTransform.TransformVector(boundingRect.BX, boundingRect.AY);
-			var v3 = localToParentTransform.TransformVector(boundingRect.AX, boundingRect.BY);
+
+			var ownBounds = BoundingRect;
+			var v1 = transition.TransformVector(ownBounds.AX, ownBounds.AY);
+			var v2 = transition.TransformVector(ownBounds.BX, ownBounds.AY);
+			var v3 = transition.TransformVector(ownBounds.AX, ownBounds.BY);
 			var v4 = v2 + v3 - v1;
-			var r = ParentWidget.boundingRect;
-			var t = false;
-			if (v1.X < r.AX) { r.AX = v1.X; t = true; }
-			if (v1.X > r.BX) { r.BX = v1.X; t = true; }
-			if (v1.Y < r.AY) { r.AY = v1.Y; t = true; }
-			if (v1.Y > r.BY) { r.BY = v1.Y; t = true; }
-			if (v2.X < r.AX) { r.AX = v2.X; t = true; }
-			if (v2.X > r.BX) { r.BX = v2.X; t = true; }
-			if (v2.Y < r.AY) { r.AY = v2.Y; t = true; }
-			if (v2.Y > r.BY) { r.BY = v2.Y; t = true; }
-			if (v3.X < r.AX) { r.AX = v3.X; t = true; }
-			if (v3.X > r.BX) { r.BX = v3.X; t = true; }
-			if (v3.Y < r.AY) { r.AY = v3.Y; t = true; }
-			if (v3.Y > r.BY) { r.BY = v3.Y; t = true; }
-			if (v4.X < r.AX) { r.AX = v4.X; t = true; }
-			if (v4.X > r.BX) { r.BX = v4.X; t = true; }
-			if (v4.Y < r.AY) { r.AY = v4.Y; t = true; }
-			if (v4.Y > r.BY) { r.BY = v4.Y; t = true; }
-			if (t) {
-				ParentWidget.boundingRect = r;
-			}
+			ref var r = ref ancestor.boundingRect;
+			if (v1.X < r.AX) { r.AX = v1.X; }
+			if (v1.X > r.BX) { r.BX = v1.X; }
+			if (v1.Y < r.AY) { r.AY = v1.Y; }
+			if (v1.Y > r.BY) { r.BY = v1.Y; }
+			if (v2.X < r.AX) { r.AX = v2.X; }
+			if (v2.X > r.BX) { r.BX = v2.X; }
+			if (v2.Y < r.AY) { r.AY = v2.Y; }
+			if (v2.Y > r.BY) { r.BY = v2.Y; }
+			if (v3.X < r.AX) { r.AX = v3.X; }
+			if (v3.X > r.BX) { r.BX = v3.X; }
+			if (v3.Y < r.AY) { r.AY = v3.Y; }
+			if (v3.Y > r.BY) { r.BY = v3.Y; }
+			if (v4.X < r.AX) { r.AX = v4.X; }
+			if (v4.X > r.BX) { r.BX = v4.X; }
+			if (v4.Y < r.AY) { r.AY = v4.Y; }
+			if (v4.Y > r.BY) { r.BY = v4.Y; }
 		}
 
 		/// <summary>
@@ -1445,15 +1474,18 @@ namespace Lime
 			Anchors = Anchors.LeftRightTopBottom;
 		}
 
-		public override void UpdateBoundingRect()
+		public override void UpdateAncestorBoundingRect(Widget ancestor)
 		{
-			if (GloballyVisible && CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
-				for (var n = FirstChild; n != null; n = n.NextSibling) {
-					n.UpdateBoundingRect();
-				}
-				ExpandParentBoundingRect();
+			if (Visible) {
+				ExpandAncestorBoundingRect(ancestor);
 			}
-			//}
+		}
+
+		public void RecalcBoundingRect()
+		{
+			for (var n = FirstChild; n != null; n = n.NextSibling) {
+				n.UpdateAncestorBoundingRect(this);
+			}
 		}
 
 		protected override void RecalcGloballyFrozen()

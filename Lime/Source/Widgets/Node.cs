@@ -79,7 +79,7 @@ namespace Lime
 			LocalTransform = 1 << 5,
 			GlobalTransform = 1 << 6,
 			GlobalTransformInverse = 1 << 7,
-			ParentBoundingRect = 1 << 8,
+			BoundingRect = 1 << 8,
 			Enabled = 1 << 9,
 			EffectiveAnimationSpeed = 1 << 10,
 			Frozen = 1 << 11,
@@ -189,13 +189,8 @@ namespace Lime
 					}
 					var oldParent = parent;
 					parent = value;
-					if (oldParent != null) {
-						oldParent.PropagateParentDirtyFlags(DirtyFlags.ParentBoundingRect);
-					}
-					if (parent != null && DirtyMask.HasFlag(DirtyFlags.ParentBoundingRect)) { 
-						parent.PropagateDirtyFlags(DirtyFlags.ParentBoundingRect);
-					} else {
-						PropagateDirtyFlags(DirtyFlags.ParentBoundingRect);
+					if (parent != null) { 
+						PropagateParentBoundsChanged();
 					}
 					PropagateDirtyFlags();
 					for (var n = Parent; n != null; n = n.Parent) {
@@ -642,20 +637,29 @@ namespace Lime
 			Animators.Dispose();
 		}
 
-		protected internal void PropagateParentDirtyFlags(DirtyFlags mask)
+		protected internal void PropagateParentBoundsChanged()
 		{
-			if ((DirtyMask & mask) == mask)
+			if ((DirtyMask & DirtyFlags.BoundingRect) == DirtyFlags.BoundingRect) {
 				return;
+			}
+			DirtyMask |= DirtyFlags.BoundingRect;
+			if (AsWidget != null && !AsWidget.Visible) {
+				return;
+			}
+
 			Window.Current?.Invalidate();
-			PropagateParentDirtyFlagsHelper(mask);
+			PropagateParentBoundsChangedHelper();
 		}
 
-		private void PropagateParentDirtyFlagsHelper(DirtyFlags mask)
+		private void PropagateParentBoundsChangedHelper()
 		{
-			DirtyMask |= mask;
 			for (var p = Parent; p != null; p = p.Parent) {
-				if ((p.DirtyMask & mask) != mask) {
-					p.PropagateParentDirtyFlagsHelper(mask);
+				if ((p.DirtyMask & DirtyFlags.BoundingRect) == DirtyFlags.BoundingRect) {
+					return;
+				}
+				p.DirtyMask |= DirtyFlags.BoundingRect;
+				if (p.AsWidget != null && !AsWidget.Visible) {
+					return;
 				}
 			}
 		}
@@ -1669,12 +1673,10 @@ namespace Lime
 			}
 		}
 
-		public virtual void UpdateBoundingRect()
+		public virtual void UpdateAncestorBoundingRect(Widget ancestor)
 		{
-			if (CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
-				for (var n = FirstChild; n != null; n = n.NextSibling) {
-					n.UpdateBoundingRect();
-				}
+			for (var n = FirstChild; n != null; n = n.NextSibling) {
+				n.UpdateAncestorBoundingRect(ancestor);
 			}
 		}
 
