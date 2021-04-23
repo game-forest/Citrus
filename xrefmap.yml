@@ -1839,6 +1839,19 @@ references:
   isSpec: "True"
   fullName: Lime.AnimationBlender.BlendDuration
   nameWithType: AnimationBlender.BlendDuration
+- uid: Lime.AnimationBlender.ClearBlendings
+  name: ClearBlendings()
+  href: api/Lime.AnimationBlender.html#Lime_AnimationBlender_ClearBlendings
+  commentId: M:Lime.AnimationBlender.ClearBlendings
+  fullName: Lime.AnimationBlender.ClearBlendings()
+  nameWithType: AnimationBlender.ClearBlendings()
+- uid: Lime.AnimationBlender.ClearBlendings*
+  name: ClearBlendings
+  href: api/Lime.AnimationBlender.html#Lime_AnimationBlender_ClearBlendings_
+  commentId: Overload:Lime.AnimationBlender.ClearBlendings
+  isSpec: "True"
+  fullName: Lime.AnimationBlender.ClearBlendings
+  nameWithType: AnimationBlender.ClearBlendings
 - uid: Lime.AnimationBlender.Enabled
   name: Enabled
   href: api/Lime.AnimationBlender.html#Lime_AnimationBlender_Enabled
