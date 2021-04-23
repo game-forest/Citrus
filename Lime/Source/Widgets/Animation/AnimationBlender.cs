@@ -110,6 +110,11 @@ namespace Lime
 			}
 		}
 
+		public void ClearBlendings()
+		{
+			blendings.Clear();
+		}
+
 		private class BlendingProcess
 		{
 			private readonly double duration;
