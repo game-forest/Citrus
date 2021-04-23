@@ -237,7 +237,7 @@ namespace Tangerine.UI.FilesystemView
 			}
 			if (freeWidth < RequiredFreeSpace) {
 				float spaceLack = -(freeWidth - RequiredFreeSpace);
-				float СalculateWidth(PathBarButton button, float subtractionWidth) =>
+				float CalculateWidth(PathBarButton button, float subtractionWidth) =>
 					button.FolderButton.TargetWidth - subtractionWidth;
 				void SetWidth(PathBarButton button, float width) =>
 					button.FolderButton.MinMaxWidth = width;
@@ -246,12 +246,12 @@ namespace Tangerine.UI.FilesystemView
 					float widthTwo = TargetWidth(buttons[1]);
 					float factorOne = widthOne / (widthOne + widthTwo);
 					float factorTwo = widthTwo / (widthOne + widthTwo);
-					widthTwo = СalculateWidth(buttons[1], spaceLack * factorTwo);
-					widthOne = СalculateWidth(buttons[0], spaceLack * factorOne + (Math.Max(40, widthTwo) - widthTwo));
+					widthTwo = CalculateWidth(buttons[1], spaceLack * factorTwo);
+					widthOne = CalculateWidth(buttons[0], spaceLack * factorOne + (Math.Max(40, widthTwo) - widthTwo));
 					SetWidth(buttons[0], Math.Max(40, widthOne));
 					SetWidth(buttons[1], Math.Max(40, widthTwo));
 				} else {
-					SetWidth(buttons[0], Math.Max(40, СalculateWidth(buttons[0], spaceLack)));
+					SetWidth(buttons[0], Math.Max(40, CalculateWidth(buttons[0], spaceLack)));
 				}
 			}
 		}

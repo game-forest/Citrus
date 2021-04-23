@@ -27,12 +27,12 @@ namespace Tangerine
 				LayoutCell = new LayoutCell { StretchY = float.MaxValue },
 				Layout = new StackLayout(),
 			};
-			ThemedScrollView сontainer;
+			ThemedScrollView container;
 			rootWidget = new ThemedInvalidableWindowWidget(window) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
 				Nodes = {
-					(сontainer = new ThemedScrollView {
+					(container = new ThemedScrollView {
 						Padding = new Thickness { Right = 10 },
 					}),
 					new Widget {
@@ -46,11 +46,11 @@ namespace Tangerine
 					}
 				}
 			};
-			сontainer.Content.Layout = new VBoxLayout { Spacing = 4 };
+			container.Content.Layout = new VBoxLayout { Spacing = 4 };
 
 			foreach (var pluginCheckBox in pluginPanel.CheckBoxes) {
 				var checkBoxWidget = new PluginCheckBoxWidget(pluginCheckBox);
-				сontainer.Content.AddNode(checkBoxWidget);
+				container.Content.AddNode(checkBoxWidget);
 			}
 
 			runButton.Clicked += () => {
