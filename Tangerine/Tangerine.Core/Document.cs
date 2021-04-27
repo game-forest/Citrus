@@ -572,6 +572,8 @@ namespace Tangerine.Core
 					foreach (var n in node.Descendants.ToList()) {
 						Decorate(n);
 					}
+					// Clear the cache to prevent memory leaks.
+					sceneItemCache.Clear();
 				}
 				processedNodes.Add(node);
 			}
