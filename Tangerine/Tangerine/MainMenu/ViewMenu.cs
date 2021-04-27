@@ -83,6 +83,11 @@ namespace Tangerine
 		}
 	}
 
+	public class CreateRulerGrid : DocumentCommandHandler
+	{
+		public override void ExecuteTransaction() => new CreateRulerGridDialog();
+	}
+
 	public class LocalizationMenuFactory
 	{
 		public static void Rebuild(Menu menu)
