@@ -72,9 +72,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				context.Release(depthStencilMemory);
 				context.Release(renderPass);
 				context.Release(swapchain);
-				var fenceValue = context.NextFenceValue;
-				context.Flush();
-				context.WaitForFence(fenceValue);
+				context.Finish();
 				swapchain = SharpVulkan.Swapchain.Null;
 			}
 		}
@@ -364,12 +362,14 @@ namespace Lime.Graphics.Platform.Vulkan
 			return semaphore;
 		}
 
-		internal void Present()
+		internal void Present(SharpVulkan.Semaphore waitSemaphore)
 		{
 			var swapchainCopy = swapchain;
 			var backbufferIndexCopy = backbufferIndex;
 			var presentInfo = new SharpVulkan.PresentInfo {
 				StructureType = SharpVulkan.StructureType.PresentInfo,
+				WaitSemaphoreCount = waitSemaphore != SharpVulkan.Semaphore.Null ? 1U : 0U,
+				WaitSemaphores = new IntPtr(&waitSemaphore),
 				SwapchainCount = 1,
 				Swapchains = new IntPtr(&swapchainCopy),
 				ImageIndices = new IntPtr(&backbufferIndexCopy)

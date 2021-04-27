@@ -606,11 +606,13 @@ namespace Lime
 
 		public static void Clear(ClearOptions options, Color4 color)
 		{
+			Flush();
 			PlatformRenderer.Clear(options, color);
 		}
 
 		public static void Clear(ClearOptions options, Color4 color, float depth, byte stencil)
 		{
+			Flush();
 			PlatformRenderer.Clear(options, color, depth, stencil);
 		}
 

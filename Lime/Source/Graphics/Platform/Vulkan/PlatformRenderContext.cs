@@ -22,6 +22,7 @@ namespace Lime.Graphics.Platform.Vulkan
 		private SharpVulkan.CommandPool commandPool;
 		private SharpVulkan.CommandBuffer commandBuffer;
 		private SharpVulkan.PhysicalDeviceLimits physicalDeviceLimits;
+		private SharpVulkan.Semaphore renderCompletedSemaphore;
 		private Queue<SubmitInfo> submitInfos = new Queue<SubmitInfo>();
 		private Stack<SharpVulkan.CommandBuffer> freeCommandBuffers = new Stack<SharpVulkan.CommandBuffer>();
 		private Stack<SharpVulkan.Fence> freeFences = new Stack<SharpVulkan.Fence>();
@@ -292,6 +293,10 @@ namespace Lime.Graphics.Platform.Vulkan
 			}
 			VKExt.LoadDeviceEntryPoints(device);
 			queue = device.GetQueue(queueFamilyIndex, 0);
+			var renderCompletedSemaphoreCreateInfo = new SharpVulkan.SemaphoreCreateInfo {
+				StructureType = SharpVulkan.StructureType.SemaphoreCreateInfo
+			};
+			renderCompletedSemaphore = device.CreateSemaphore(ref renderCompletedSemaphoreCreateInfo);
 		}
 
 		private void CreateCommandPool()
@@ -379,8 +384,8 @@ namespace Lime.Graphics.Platform.Vulkan
 			commandBuffer.PipelineBarrier(
 				SharpVulkan.PipelineStageFlags.ColorAttachmentOutput, SharpVulkan.PipelineStageFlags.BottomOfPipe,
 				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &memoryBarrier);
-			Flush();
-			swapchain.Present();
+			Flush(renderCompletedSemaphore);
+			swapchain.Present(renderCompletedSemaphore);
 			swapchain = null;
 		}
 
@@ -1061,28 +1066,31 @@ namespace Lime.Graphics.Platform.Vulkan
 			scheduler.Perform();
 		}
 
-		public void Flush()
+		public void Flush() => Flush(SharpVulkan.Semaphore.Null);
+
+		private void Flush(SharpVulkan.Semaphore signalSemaphore)
 		{
 			scheduler.Perform();
-			var fence = SharpVulkan.Fence.Null;
 			if (commandBuffer != SharpVulkan.CommandBuffer.Null) {
 				EndRenderPass();
 				commandBuffer.End();
 				descriptorAllocator.DiscardPool();
-				var commandBufferCopy = commandBuffer;
-				var waitSemaphore = swapchain?.ReleaseAcquirementSemaphore() ?? SharpVulkan.Semaphore.Null;
-				var waitDstStageMask = SharpVulkan.PipelineStageFlags.AllCommands;
-				var vkSubmitInfo = new SharpVulkan.SubmitInfo {
-					StructureType = SharpVulkan.StructureType.SubmitInfo,
-					CommandBufferCount = 1,
-					CommandBuffers = new IntPtr(&commandBufferCopy),
-					WaitSemaphoreCount = waitSemaphore != SharpVulkan.Semaphore.Null ? 1U : 0U,
-					WaitSemaphores = new IntPtr(&waitSemaphore),
-					WaitDstStageMask = new IntPtr(&waitDstStageMask)
-				};
-				fence = AcquireFence();
-				queue.Submit(1, &vkSubmitInfo, fence);
 			}
+			var commandBufferCopy = commandBuffer;
+			var waitSemaphore = swapchain?.ReleaseAcquirementSemaphore() ?? SharpVulkan.Semaphore.Null;
+			var waitDstStageMask = SharpVulkan.PipelineStageFlags.AllCommands;
+			var vkSubmitInfo = new SharpVulkan.SubmitInfo {
+				StructureType = SharpVulkan.StructureType.SubmitInfo,
+				CommandBufferCount = commandBufferCopy != SharpVulkan.CommandBuffer.Null ? 1U : 0U,
+				CommandBuffers = new IntPtr(&commandBufferCopy),
+				WaitSemaphoreCount = waitSemaphore != SharpVulkan.Semaphore.Null ? 1U : 0U,
+				WaitSemaphores = new IntPtr(&waitSemaphore),
+				WaitDstStageMask = new IntPtr(&waitDstStageMask),
+				SignalSemaphoreCount = signalSemaphore != SharpVulkan.Semaphore.Null ? 1U : 0U,
+				SignalSemaphores = new IntPtr(&signalSemaphore)
+			};
+			var fence = AcquireFence();
+			queue.Submit(1, &vkSubmitInfo, fence);
 			submitInfos.Enqueue(new SubmitInfo {
 				CommandBuffer = commandBuffer,
 				Fence = fence,
@@ -1200,13 +1208,13 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			while (submitInfos.Count > 0) {
 				var si = submitInfos.Peek();
-				if (si.Fence != SharpVulkan.Fence.Null) {
-					if (device.GetFenceStatus(si.Fence) != SharpVulkan.Result.Success) {
-						break;
-					}
-					freeCommandBuffers.Push(si.CommandBuffer);
-					freeFences.Push(si.Fence);
+				if (device.GetFenceStatus(si.Fence) != SharpVulkan.Result.Success) {
+					break;
 				}
+				if (si.CommandBuffer != SharpVulkan.CommandBuffer.Null) {
+					freeCommandBuffers.Push(si.CommandBuffer);
+				}
+				freeFences.Push(si.Fence);
 				lastCompletedFenceValue = si.FenceValue;
 				submitInfos.Dequeue();
 			}
