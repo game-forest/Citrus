@@ -57,7 +57,7 @@ namespace Tangerine.UI.Timeline
 			var content = ContentWidget;
 			content.Nodes.Clear();
 			foreach (var item in Document.Current.Rows) {
-				var gridItem = item.Components.Get<Components.RowView>().GridRow;
+				var gridItem = item.Components.Get<Components.RowView>().GridRowView;
 				var widget = gridItem.GridWidget;
 				if (!gridItem.GridWidgetAwakeBehavior.IsAwoken) {
 					gridItem.GridWidgetAwakeBehavior.Update(0);
@@ -72,7 +72,7 @@ namespace Tangerine.UI.Timeline
 		private void RefreshItemWidths()
 		{
 			foreach (var item in Document.Current.Rows) {
-				var gridItem = item.Components.Get<Components.RowView>().GridRow;
+				var gridItem = item.Components.Get<Components.RowView>().GridRowView;
 				gridItem.GridWidget.MinWidth = Timeline.Instance.ColumnCount * TimelineMetrics.ColWidth;
 			}
 		}

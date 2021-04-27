@@ -323,6 +323,6 @@ namespace Tangerine.UI.Timeline
 
 	public static class RowExtensions
 	{
-		public static Widget GridWidget(this Row row) => row.Components.Get<RowView>()?.GridRow.GridWidget;
+		public static Widget GridWidget(this Row row) => row.Components.Get<RowView>()?.GridRowView.GridWidget;
 	}
 }
