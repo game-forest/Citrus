@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using Lime;
 using Tangerine.Core.Components;
+using System.Runtime.CompilerServices;
 #if PROFILER
 using Lime.Profiler;
 #endif // PROFILER
@@ -39,7 +40,7 @@ namespace Tangerine.Core
 
 		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}";
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
-		private readonly Dictionary<object, Row> sceneItemCache = new Dictionary<object, Row>();
+		private readonly ConditionalWeakTable<object, Row> sceneItemCache = new ConditionalWeakTable<object, Row>();
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly IAnimationPositioner animationPositioner = new AnimationPositioner();
 		private static uint untitledCounter;
@@ -572,8 +573,6 @@ namespace Tangerine.Core
 					foreach (var n in node.Descendants.ToList()) {
 						Decorate(n);
 					}
-					// Clear the cache to prevent memory leaks.
-					sceneItemCache.Clear();
 				}
 				processedNodes.Add(node);
 			}
