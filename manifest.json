@@ -9122,11 +9122,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Window.NativeMessage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Window.NativeMessage.html",
+          "hash": "vajKU/vimDpxTaM958EJ7A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.Window.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.Window.html",
-          "hash": "X/bc0oFl6DSxnqITTCEtnw=="
+          "hash": "0wk7in7MKzQDYPgx7xOvyg=="
         }
       },
       "is_incremental": false,
@@ -9282,7 +9294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "jbSZtD1NdNjJRj/O16G1/Q=="
+          "hash": "0lYJZ37fiJN23TjeVe9yFA=="
         }
       },
       "is_incremental": false,
@@ -9330,7 +9342,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "yMpK4ixewEHQdYf8I1JdZA=="
+          "hash": "Ozq92Q4RZtTG/ya7kIQLxg=="
         }
       },
       "is_incremental": false,
@@ -11538,7 +11550,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 776,
+          "total_file_count": 777,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

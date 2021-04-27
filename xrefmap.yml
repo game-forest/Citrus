@@ -75554,6 +75554,63 @@ references:
   isSpec: "True"
   fullName: Lime.Window.MinimumDecoratedSize
   nameWithType: Window.MinimumDecoratedSize
+- uid: Lime.Window.NativeMessage
+  name: Window.NativeMessage
+  href: api/Lime.Window.NativeMessage.html
+  commentId: T:Lime.Window.NativeMessage
+  fullName: Lime.Window.NativeMessage
+  nameWithType: Window.NativeMessage
+- uid: Lime.Window.NativeMessage.Handle
+  name: Handle
+  href: api/Lime.Window.NativeMessage.html#Lime_Window_NativeMessage_Handle
+  commentId: F:Lime.Window.NativeMessage.Handle
+  fullName: Lime.Window.NativeMessage.Handle
+  nameWithType: Window.NativeMessage.Handle
+- uid: Lime.Window.NativeMessage.Location
+  name: Location
+  href: api/Lime.Window.NativeMessage.html#Lime_Window_NativeMessage_Location
+  commentId: F:Lime.Window.NativeMessage.Location
+  fullName: Lime.Window.NativeMessage.Location
+  nameWithType: Window.NativeMessage.Location
+- uid: Lime.Window.NativeMessage.LParameter
+  name: LParameter
+  href: api/Lime.Window.NativeMessage.html#Lime_Window_NativeMessage_LParameter
+  commentId: F:Lime.Window.NativeMessage.LParameter
+  fullName: Lime.Window.NativeMessage.LParameter
+  nameWithType: Window.NativeMessage.LParameter
+- uid: Lime.Window.NativeMessage.Message
+  name: Message
+  href: api/Lime.Window.NativeMessage.html#Lime_Window_NativeMessage_Message
+  commentId: F:Lime.Window.NativeMessage.Message
+  fullName: Lime.Window.NativeMessage.Message
+  nameWithType: Window.NativeMessage.Message
+- uid: Lime.Window.NativeMessage.Time
+  name: Time
+  href: api/Lime.Window.NativeMessage.html#Lime_Window_NativeMessage_Time
+  commentId: F:Lime.Window.NativeMessage.Time
+  fullName: Lime.Window.NativeMessage.Time
+  nameWithType: Window.NativeMessage.Time
+- uid: Lime.Window.NativeMessage.WParameter
+  name: WParameter
+  href: api/Lime.Window.NativeMessage.html#Lime_Window_NativeMessage_WParameter
+  commentId: F:Lime.Window.NativeMessage.WParameter
+  fullName: Lime.Window.NativeMessage.WParameter
+  nameWithType: Window.NativeMessage.WParameter
+- uid: Lime.Window.PeekMessage(Lime.Window.NativeMessage@,System.IntPtr,System.UInt32,System.UInt32,System.UInt32)
+  name: PeekMessage(out Window.NativeMessage, IntPtr, UInt32, UInt32, UInt32)
+  href: api/Lime.Window.html#Lime_Window_PeekMessage_Lime_Window_NativeMessage__System_IntPtr_System_UInt32_System_UInt32_System_UInt32_
+  commentId: M:Lime.Window.PeekMessage(Lime.Window.NativeMessage@,System.IntPtr,System.UInt32,System.UInt32,System.UInt32)
+  name.vb: PeekMessage(ByRef Window.NativeMessage, IntPtr, UInt32, UInt32, UInt32)
+  fullName: Lime.Window.PeekMessage(out Lime.Window.NativeMessage, System.IntPtr, System.UInt32, System.UInt32, System.UInt32)
+  fullName.vb: Lime.Window.PeekMessage(ByRef Lime.Window.NativeMessage, System.IntPtr, System.UInt32, System.UInt32, System.UInt32)
+  nameWithType: Window.PeekMessage(out Window.NativeMessage, IntPtr, UInt32, UInt32, UInt32)
+  nameWithType.vb: Window.PeekMessage(ByRef Window.NativeMessage, IntPtr, UInt32, UInt32, UInt32)
+- uid: Lime.Window.PeekMessage*
+  name: PeekMessage
+  href: api/Lime.Window.html#Lime_Window_PeekMessage_
+  commentId: Overload:Lime.Window.PeekMessage
+  fullName: Lime.Window.PeekMessage
+  nameWithType: Window.PeekMessage
 - uid: Lime.Window.PixelScale
   name: PixelScale
   href: api/Lime.Window.html#Lime_Window_PixelScale
