@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using WinFormsCloseReason = System.Windows.Forms.CloseReason;
@@ -529,7 +530,7 @@ namespace Lime
 			} else {
 				vSync = options.VSync;
 				renderControl.VSync = vSync;
-				System.Windows.Forms.Application.Idle += OnTick;
+				System.Windows.Forms.Application.Idle += OnBecomeIdle;
 			}
 
 			form.Controls.Add(renderControl);
@@ -639,7 +640,7 @@ namespace Lime
 				System.Windows.Forms.Application.Exit();
 			}
 			if (timer == null) {
-				System.Windows.Forms.Application.Idle -= OnTick;
+				System.Windows.Forms.Application.Idle -= OnBecomeIdle;
 			} else {
 				timer.Dispose();
 			}
@@ -789,6 +790,32 @@ namespace Lime
 		{
 			Update();
 		}
+
+		private void OnBecomeIdle(object sender, EventArgs e)
+		{
+			do {
+				Update();
+			} while (IsApplicationIdle() && renderingState != RenderingState.Updated);
+		}
+
+		private bool IsApplicationIdle()
+		{
+			return PeekMessage(out NativeMessage result, Form.Handle, (uint)0, (uint)0, (uint)0) == 0;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct NativeMessage
+		{
+			public IntPtr Handle;
+			public uint Message;
+			public IntPtr WParameter;
+			public IntPtr LParameter;
+			public uint Time;
+			public Point Location;
+		}
+
+		[DllImport("user32.dll")]
+		public static extern int PeekMessage(out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove);
 
 		private void OnKeyDown(object sender, KeyEventArgs e)
 		{
