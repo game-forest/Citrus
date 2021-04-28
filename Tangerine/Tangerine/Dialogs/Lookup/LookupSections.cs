@@ -84,6 +84,12 @@ namespace Tangerine
 			recentlySubmittedData = null;
 		}
 
+		public void Initialize(LookupSection section)
+		{
+			Push(section);
+			recentlySubmittedData = null;
+		}
+		
 		public void Push(LookupSection section)
 		{
 			stack.Push(section);

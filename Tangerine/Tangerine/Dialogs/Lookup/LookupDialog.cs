@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Lime;
 using Tangerine.UI;
 using Tangerine.UI.Docking;
@@ -6,7 +9,7 @@ namespace Tangerine
 {
 	public class LookupDialog
 	{
-		public LookupDialog(LookupSections.SectionType? sectionType = null)
+		private LookupDialog(out LookupSections sections)
 		{
 			Vector2? displayCenter = null;
 			try {
@@ -41,8 +44,7 @@ namespace Tangerine
 					lookupWidget.Cancel();
 				}
 			});
-			var sections = new LookupSections(lookupWidget);
-
+			var sectionsCopy = sections = new LookupSections(lookupWidget);
 			void CloseWindow()
 			{
 				window.Close();
@@ -51,21 +53,38 @@ namespace Tangerine
 
 			void LookupSubmitted()
 			{
-				if (sections.StackCount == 0) {
+				if (sectionsCopy.StackCount == 0) {
 					CloseWindow();
 				}
 			}
 
 			void LookupCanceled()
 			{
-				sections.Drop();
+				sectionsCopy.Drop();
 				CloseWindow();
 			}
 
 			lookupWidget.Submitted += LookupSubmitted;
 			lookupWidget.Canceled += LookupCanceled;
 			windowWidget.FocusScope.SetDefaultFocus();
+		}
+		
+		public LookupDialog(LookupSections.SectionType? sectionType = null) : this(out var sections)
+		{
 			sections.Initialize(sectionType);
+		}
+
+		public LookupDialog(Func<LookupSections, IEnumerable<LookupSection>> getSections) : this(out var sections)
+		{
+			var startSections = getSections(sections);
+			if (!startSections.Any()) {
+				sections.Initialize();
+				return;
+			}
+			sections.Initialize(startSections.First());
+			foreach (var section in startSections.Skip(1)) {
+				sections.Push(section);
+			}
 		}
 	}
 }

@@ -179,7 +179,8 @@ namespace Tangerine
 					GenericCommands.ExportScene,
 					GenericCommands.UpsampleAnimationTwice,
 					GenericCommands.ConvertToButton,
-					SceneViewCommands.GeneratePreview
+					SceneViewCommands.GeneratePreview,
+					SceneViewCommands.AddComponentToSelection
 				}),
 				new Command("Create", (create = new Menu())),
 				new Command("Tools", new Menu {

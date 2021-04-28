@@ -40,8 +40,8 @@ namespace Tangerine.UI.Inspector
 			CommandHandlerList.Global.Connect(InspectorCommands.InspectEasing, new InspectEasingCommandHandler());
 			CommandHandlerList.Global.Connect(InspectorCommands.CopyAssetPath, new CopyAssetPathCommandHandler());
 		}
-
-		class InspectEasingCommandHandler : CommandHandler
+		
+		private class InspectEasingCommandHandler : CommandHandler
 		{
 			public override void RefreshCommand(ICommand command)
 			{
@@ -54,7 +54,7 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		class CopyAssetPathCommandHandler : CommandHandler
+		private class CopyAssetPathCommandHandler : CommandHandler
 		{
 			public override void Execute()
 			{
@@ -69,6 +69,7 @@ namespace Tangerine.UI.Inspector
 			Instance = this;
 			PanelWidget.PushNode(RootWidget);
 			content.LoadExpandedStates();
+			content.CreatedAddComponentsMenu += CreatedAddComponentsMenu;
 			Rebuild();
 		}
 
@@ -77,6 +78,16 @@ namespace Tangerine.UI.Inspector
 			Instance = null;
 			content.SaveExpandedStates();
 			RootWidget.Unlink();
+			content.CreatedAddComponentsMenu -= CreatedAddComponentsMenu;
+		}
+
+		private void CreatedAddComponentsMenu(IMenu menu)
+		{
+			if (menu != null) {
+				SceneViewCommands.AddComponentToSelection.Menu = menu;
+			} else {
+				SceneViewCommands.AddComponentToSelection.Menu.Clear();
+			}
 		}
 
 		public Inspector(Widget panelWidget)
@@ -193,6 +204,7 @@ namespace Tangerine.UI.Inspector
 
 		private void Rebuild()
 		{
+			SceneViewCommands.AddComponentToSelection.Menu?.Clear();
 			if (Document.Current.Animation.IsCompound) {
 				content.BuildForObjects(GetSelectedAnimationTracksAndClips().ToList());
 			} else if (Document.Current.InspectRootNode) {

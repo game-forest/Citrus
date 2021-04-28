@@ -23,6 +23,10 @@ namespace Tangerine.UI.Inspector
 		public Widget Footer { get; set; }
 		public readonly IReadOnlyList<IPropertyEditor> ReadonlyEditors;
 
+		public event Action<IMenu> CreatedAddComponentsMenu;
+		
+		public static event Action CreateLookupForAddComponent;
+
 		private bool enabled = true;
 		public bool Enabled
 		{
@@ -477,70 +481,106 @@ namespace Tangerine.UI.Inspector
 			}
 			return types;
 		}
-
+		
 		private void AddComponentsMenu(IReadOnlyList<Node> nodes, Widget widget)
 		{
 			if (nodes.Any(n => !string.IsNullOrEmpty(n.ContentsPath))) {
+				CreatedAddComponentsMenu?.Invoke(null);
 				return;
 			}
-
 			var nodesTypes = nodes.Select(n => n.GetType()).ToList();
-			var types = new List<Type>();
+			var componentTypes = new List<Type>();
 			foreach (var type in Project.Current.RegisteredComponentTypes) {
 				if (
 					!nodes.All(n => n.Components.Contains(type)) &&
 					nodesTypes.All(t => NodeCompositionValidator.ValidateComponentType(t, type))
-				) {
-					types.Add(type);
+					) {
+					componentTypes.Add(type);
 				}
 			}
+			IMenu CreateAddComponentsMenu(bool validateClipboard)
+			{
+				IMenu menu = new Menu();
+				foreach (var type in componentTypes) {
+					var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+					var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+					ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes)) {
+						TooltipText = tooltipText
+					};
+					if (menuPath != null) {
+						menu.InsertCommandAlongPath(command, menuPath);
+					} else {
+						menu.Add(command);
+					}
+				}
+				menu.Insert(0, Command.MenuSeparator);
+				NodeComponent CreateComponentFromClipboard() {
+					var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(Clipboard.Text));
+					try {
+						return InternalPersistence.Instance.ReadObject<NodeComponent>(Document.Current.Path, stream);
+					} catch {
+						return null;
+					}
+				}
+				var pasteFromClipboardCommand = new Command("Paste from clipboard", () => {
+					var component = CreateComponentFromClipboard();
+					if (component == null) {
+						new AlertDialog("Clipboard does not contain a component.", "Ok").Show();
+						return;
+					}
+					var type = component.GetType();
+					if (!componentTypes.Contains(type)) {
+						new AlertDialog($"Component of type {type} can't be added", "Ok").Show();
+						return;
+					}
+					using (Document.Current.History.BeginTransaction()) {
+						foreach (var node in nodes) {
+							if (!node.Components.Contains(type)) {
+								SetComponent.Perform(node, Cloner.Clone(component));
+							}
+						}
+						Document.Current.History.CommitTransaction();
+					}
+				});
+				if (validateClipboard) {
+					var component = CreateComponentFromClipboard();
+					if (component == null) {
+						pasteFromClipboardCommand.Enabled = false;
+					} else if (!componentTypes.Contains(component.GetType())) {
+						pasteFromClipboardCommand.Enabled = false;
+					} else if (nodes.All(n => n.Components.Contains(component.GetType()))) {
+						pasteFromClipboardCommand.Enabled = false;
+					}
+				}
+				menu.Insert(0, pasteFromClipboardCommand);
+				return menu;
+			}
+			var menu = CreateAddComponentsMenu(validateClipboard: false);
+			CreatedAddComponentsMenu?.Invoke(menu);
 			var label = new Widget {
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				Layout = new HBoxLayout(),
 				MinHeight = Theme.Metrics.DefaultButtonSize.Y,
 				Nodes = {
 					new ThemedAddButton {
+						Clicked = () => CreateAddComponentsMenu(validateClipboard: true).Popup(),
+						Enabled = componentTypes.Count > 0
+					},
+					new IconRedChannelToColorButton("Universal.ZoomIn", 20 * Vector2.One, Thickness.Zero) {
+						DefaultColor = ColorTheme.Current.IsDark ?
+							Color4.White.Darken(0.3f) : Color4.Black.Lighten(0.3f),
+						HoverColor = ColorTheme.Current.IsDark ?
+							Color4.White : Color4.Black,
 						Clicked = () => {
-							IMenu menu = new Menu();
-							foreach (var type in types) {
-								var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
-								var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
-								ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes)) {
-									TooltipText = tooltipText
-								};
-								if (menuPath != null) {
-									menu.InsertCommandAlongPath(command, menuPath);
-								} else {
-									menu.Add(command);
-								}
+							if (CreateLookupForAddComponent == null) {
+								var typeHandle = AppDomain.CurrentDomain.GetAssemblies()
+									.First(a => string.Equals(a.GetName().Name, "Tangerine"))
+									.GetType("Tangerine.LookupAddComponentSection").TypeHandle;
+								System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeHandle);
 							}
-							menu.Insert(0, Command.MenuSeparator);
-							menu.Insert(0, new Command("Paste from clipboard", () => {
-								var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(Clipboard.Text));
-								NodeComponent component;
-								try {
-									component = InternalPersistence.Instance.ReadObject<NodeComponent>(Document.Current.Path, stream);
-								} catch {
-									new AlertDialog("Clipboard does not contain a component.", "Ok").Show();
-									return;
-								}
-								var type = component.GetType();
-								if (!types.Contains(type)) {
-									new AlertDialog($"Component of type {type} can't be added", "Ok").Show();
-									return;
-								}
-								using (Document.Current.History.BeginTransaction()) {
-									foreach (var node in nodes) {
-										if (!node.Components.Contains(type)) {
-											SetComponent.Perform(node, Cloner.Clone(component));
-										}
-									}
-									Document.Current.History.CommitTransaction();
-								}
-							}));
-							menu.Popup();
+							CreateLookupForAddComponent.Invoke();
 						},
-						Enabled = types.Count > 0
+						Enabled = componentTypes.Count > 0
 					},
 					new ThemedSimpleText {
 						Text = "Add Component",
