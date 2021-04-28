@@ -5707,12 +5707,6 @@ references:
   isSpec: "True"
   fullName: Lime.AssetBundle.Current
   nameWithType: AssetBundle.Current
-- uid: Lime.AssetBundle.CurrentLanguage
-  name: CurrentLanguage
-  href: api/Lime.AssetBundle.html#Lime_AssetBundle_CurrentLanguage
-  commentId: F:Lime.AssetBundle.CurrentLanguage
-  fullName: Lime.AssetBundle.CurrentLanguage
-  nameWithType: AssetBundle.CurrentLanguage
 - uid: Lime.AssetBundle.DeleteFile(System.String)
   name: DeleteFile(String)
   href: api/Lime.AssetBundle.html#Lime_AssetBundle_DeleteFile_System_String_
