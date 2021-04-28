@@ -25,6 +25,7 @@ namespace Tangerine.Core
 		{
 			private readonly List<string> projectReferences = new List<string>();
 			private readonly List<string> frameworkReferences = new List<string>();
+			private readonly string defaultFrameworkPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
 			public readonly string ScriptsProjectPath;
 			public readonly string ScriptsAssemblyName;
 			public readonly string RemoteStoragePath;
@@ -49,7 +50,10 @@ namespace Tangerine.Core
 				ScriptsProjectPath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.ScriptsProjectPath));
 				ScriptsAssemblyName = (string)json.ScriptsAssemblyName;
 				var projectReferencesPath = Path.Combine(projectDirectory, (string)json.ProjectReferencesPath);
-				var frameworkReferencesPath = Path.Combine(projectDirectory, (string)json.FrameworkReferencesPath);
+				var frameworkReferencesPath = Path.Combine(
+						projectDirectory,
+						(string)(json.FrameworkReferencesPath ?? defaultFrameworkPath)
+					);
 				var references = new List<string>();
 				foreach (string reference in json.FrameworkReferences) {
 					references.Add(reference);

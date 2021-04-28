@@ -43,8 +43,12 @@ namespace Orange.Source
 		{
 			AddArgument("/verbosity:minimal");
 			if (target.Platform == TargetPlatform.Android) {
-				AddArgument("/t:PackageForAndroid");
-				AddArgument("/t:SignAndroidPackage");
+				if (target.ProjectPath.EndsWith(".sln")) {
+					AddArgument("/p:AndroidBuildApplicationPackage=true");
+				} else {
+					AddArgument("/t:PackageForAndroid");
+					AddArgument("/t:SignAndroidPackage");
+				}
 			}
 		}
 
