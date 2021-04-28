@@ -403,7 +403,11 @@ namespace Tangerine.UI.Docking
 				CreateDragBehaviour(panelPlacement, tab, panel.ContentWidget);
 				panel.PanelWidget = rootWidget;
 			}
-			tabbedWidget.ActiveTabIndex = 0;
+			tabbedWidget.ActiveTabIndex = placement.ActiveTabIndex;
+			tabbedWidget.AddChangeWatcher(
+				() => tabbedWidget.ActiveTabIndex,
+				index => placement.ActiveTabIndex = index
+			);
 			container.Nodes.Add(rootWidget);
 			container.Stretches.Add(stretch);
 		}
