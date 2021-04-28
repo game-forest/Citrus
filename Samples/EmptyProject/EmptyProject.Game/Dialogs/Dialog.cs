@@ -120,7 +120,7 @@ namespace EmptyProject.Dialogs
 
 		private void ApplyLocalization()
 		{
-			var animationName = string.IsNullOrEmpty(AssetBundle.CurrentLanguage) ? "@EN" : ("@" + AssetBundle.CurrentLanguage);
+			var animationName = string.IsNullOrEmpty(Lime.Application.CurrentLanguage) ? "@EN" : ("@" + Lime.Application.CurrentLanguage);
 			foreach (var node in Root.Descendants) {
 				if (!node.TryRunAnimation(animationName)) {
 					node.TryRunAnimation("@other");

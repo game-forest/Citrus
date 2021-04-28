@@ -173,7 +173,7 @@ namespace Lime
 				return value.ToString();
 			}
 
-			switch (AssetBundle.CurrentLanguage) {
+			switch (Application.CurrentLanguage) {
 				case null:
 				case "":
 				case "EN":

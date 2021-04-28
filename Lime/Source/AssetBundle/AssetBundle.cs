@@ -55,16 +55,13 @@ namespace Lime
 			}
 		}
 
-		[Obsolete("Field is deprecated, please use CurrentLanguage in Application class instead.")]
-		public static string CurrentLanguage;
-
 		public abstract Stream OpenFile(string path, FileMode fileMode = FileMode.Open);
 
 		/// <summary>
 		/// Returns file data as it stored in the asset bundle, e.g. compressed.
 		/// </summary>
 		public abstract Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open);
-		
+
 		public byte[] ReadFile(string path)
 		{
 			using (var stream = OpenFile(path, FileMode.Open)) {
@@ -141,12 +138,12 @@ namespace Lime
 
 		public string GetLocalizedPath(string path)
 		{
-			if (string.IsNullOrEmpty(Application.CurrentLanguage) && string.IsNullOrEmpty(CurrentLanguage))
+			if (string.IsNullOrEmpty(Application.CurrentLanguage))
 				return path;
-			string lang = string.IsNullOrEmpty(Application.CurrentLanguage) ? CurrentLanguage : Application.CurrentLanguage;
+			string language = Application.CurrentLanguage;
 			string extension = Path.GetExtension(path);
 			string pathWithoutExtension = Path.ChangeExtension(path, null);
-			string localizedParth = pathWithoutExtension + "." + lang + extension;
+			string localizedParth = pathWithoutExtension + "." + language + extension;
 			return FileExists(localizedParth) ? localizedParth : path;
 		}
 
