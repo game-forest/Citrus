@@ -144,12 +144,6 @@ namespace Lime
 			foreach (var a in animation.EffectiveTriggerableAnimators) {
 				a.ExecuteTriggersInRange(previousTime, currentTime, executeTriggersAtCurrentTime);
 			}
-#if TANGERINE
-			foreach (var track in animation.Tracks) {
-				// To edit the track weight in the inspector, it must be animated
-				track.Animators.Apply(animation.Time, animation.Id);
-			}
-#endif
 		}
 
 		public override bool AreEffectiveAnimatorsValid(Animation animation)
@@ -166,9 +160,8 @@ namespace Lime
 								return false;
 							}
 						} else if (
-							(clipAnimation.IdComparisonCode != clip.AnimationIdComparisonCode) ||
-							(clipAnimation.Owner != animation.Owner) ||
-							(clipAnimation != null && !AreEffectiveAnimatorsValid(clipAnimation))
+							clipAnimation.IdComparisonCode != clip.AnimationIdComparisonCode ||
+							clipAnimation.Owner != animation.Owner || !AreEffectiveAnimatorsValid(clipAnimation)
 						) {
 							return false;
 						}
@@ -201,6 +194,15 @@ namespace Lime
 		{
 			(animation.EffectiveAnimators ?? (animation.EffectiveAnimators = new List<IAbstractAnimator>())).Clear();
 			(animation.EffectiveTriggerableAnimators ?? (animation.EffectiveTriggerableAnimators = new List<IAbstractAnimator>())).Clear();
+#if TANGERINE
+			// Necessary to edit track weights in the inspector.
+			animation.EffectiveAnimatorsVersion++;
+			foreach (var track in animation.Tracks) {
+				foreach (var animator in track.Animators) {
+					animation.EffectiveAnimators.Add(animator);
+				}
+			}
+#endif
 			var animationBindings = new Dictionary<AnimatorBinding, (IAbstractAnimator Animator, AnimationTrack Track)>();
 			var trackBindings = new Dictionary<AnimatorBinding, IChainedAnimator>();
 			foreach (var track in animation.Tracks) {

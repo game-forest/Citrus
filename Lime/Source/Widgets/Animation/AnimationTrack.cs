@@ -36,7 +36,17 @@ namespace Lime
 		public AnimatorCollection Animators { get; private set; }
 
 		IAnimable IAnimable.Owner { get => null; set => throw new NotSupportedException(); }
-		void IAnimationHost.OnAnimatorCollectionChanged() { }
+
+		void IAnimationHost.OnAnimatorCollectionChanged()
+		{
+#if TANGERINE
+			// Necessary to edit weights in the inspector.
+			if (Owner != null) {
+				Owner.EffectiveAnimators = null;
+			}
+#endif
+		}
+
 		Component IAnimationHost.GetComponent(Type type) => throw new NotSupportedException();
 
 		[TangerineIgnore]
