@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using Lime;
 using Tangerine.Core.Components;
+using System.Runtime.CompilerServices;
 #if PROFILER
 using Lime.Profiler;
 #endif // PROFILER
@@ -39,7 +40,7 @@ namespace Tangerine.Core
 
 		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}";
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
-		private readonly Dictionary<object, Row> sceneItemCache = new Dictionary<object, Row>();
+		private readonly ConditionalWeakTable<object, Row> sceneItemCache = new ConditionalWeakTable<object, Row>();
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly IAnimationPositioner animationPositioner = new AnimationPositioner();
 		private static uint untitledCounter;
@@ -407,6 +408,7 @@ namespace Tangerine.Core
 				SortBones(RootNode);
 				// Take the external scenes from the currently opened documents.
 				RefreshExternalScenes(documentsBeingLoaded);
+				RootNode.NotifyOnBuilt();
 				RefreshSceneTree();
 			} catch (System.Exception e) {
 				throw new System.InvalidOperationException($"Can't open '{Path}': {e.Message}");
@@ -507,7 +509,6 @@ namespace Tangerine.Core
 				if (doc != null) {
 					ProjectUserPreferences.Instance.CurrentDocument = doc.Path;
 				}
-				Current?.ForceAnimationUpdate();
 			}
 		}
 
@@ -526,18 +527,21 @@ namespace Tangerine.Core
 			}
 			documentsBeingLoaded.Add(Path);
 			try {
-				RefreshExternalContentHelper(RootNodeUnwrapped, documentsBeingLoaded);
+				RefreshExternalContentHelper(documentsBeingLoaded);
 				RefreshSceneTree();
 			} finally {
 				documentsBeingLoaded.Remove(Path);
 			}
 		}
 
-		private static void RefreshExternalContentHelper(Node rootNode, HashSet<string> documentsBeingLoaded)
+		private void RefreshExternalContentHelper(HashSet<string> documentsBeingLoaded)
 		{
-			CleanupExternalContent(rootNode);
-			var nodesWithContentsPath = rootNode.SelfAndDescendants
-				.Where(i => !string.IsNullOrEmpty(i.ContentsPath)).ToList();
+			var nodesWithContentsPath = RootNodeUnwrapped.SelfAndDescendants
+				.Where(
+					i => !string.IsNullOrEmpty(i.ContentsPath) &&
+					i.Ancestors.All(i => string.IsNullOrEmpty(i.ContentsPath) // Only the top-level external scenes.
+				)).ToList();
+			var processedNodes = new List<Node>();
 			foreach (var node in nodesWithContentsPath) {
 				var document = Project.Current.Documents.FirstOrDefault(i => i.Path == node.ContentsPath);
 				if (document != null) {
@@ -548,6 +552,15 @@ namespace Tangerine.Core
 					var assetPath = Node.ResolveScenePath(node.ContentsPath);
 					if (assetPath != null) {
 						var writeTime = AssetBundle.Current.GetFileLastWriteTime(assetPath);
+						if (assetPath.EndsWith(".t3d")) {
+							var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
+							if (
+								AssetBundle.Current.FileExists(attachmentPath) &&
+								AssetBundle.Current.GetFileLastWriteTime(attachmentPath) > writeTime
+							) {
+								writeTime = AssetBundle.Current.GetFileLastWriteTime(attachmentPath);
+							}
+						}
 						if (
 							!documentCache.TryGetValue(node.ContentsPath, out document) ||
 							writeTime != documentTimeStamps[node.ContentsPath]
@@ -557,50 +570,24 @@ namespace Tangerine.Core
 						}
 					}
 				}
-				if (document != null) {
-					document.RefreshExternalScenes(documentsBeingLoaded);
-					var clone = document.RootNodeUnwrapped.Clone();
-					RestoreAnimationStates(document.RootNodeUnwrapped, clone);
+				if (document == null) {
+					node.ReplaceContent((Node)Activator.CreateInstance(node.GetType()));
+				} else {
+					// optimization: don't refresh external scenes twice.
+					if (!processedNodes.Any(i => i.ContentsPath == document.Path)) {
+						document.RefreshExternalScenes(documentsBeingLoaded);
+					}
+					var clone = InternalPersistence.Instance.Clone(document.RootNodeUnwrapped);
 					node.ReplaceContent(clone);
 					foreach (var n in node.Descendants.ToList()) {
 						Decorate(n);
 					}
 				}
+				processedNodes.Add(node);
 			}
+			// Force animation update to synchronize reloaded external scenes.
+			ForceAnimationUpdate();
 		}
-
-		private static void CleanupExternalContent(Node node)
-		{
-			if (!string.IsNullOrEmpty(node.ContentsPath)) {
-				node.ReplaceContent(new Frame());
-				return;
-			}
-			foreach (var n in node.Nodes) {
-				CleanupExternalContent(n);
-			}
-		}
-
-		private static void RestoreAnimationStates(Node original, Node clone)
-		{
-			var clonedNodes = new Stack<Node>(new [] { clone });
-			var originalNodes = new Stack<Node>(new [] { original });
-			while (clonedNodes.Count != 0) {
-				var c = clonedNodes.Pop();
-				var o = originalNodes.Pop();
-				int i = 0;
-				foreach (var a in c.Animations) {
-					a.Time = o.Animations[i++].Time;
-				}
-				i = 0;
-				foreach (var n in c.Nodes) {
-					if (string.IsNullOrEmpty(o.ContentsPath)) {
-						clonedNodes.Push(n);
-						originalNodes.Push(o.Nodes[i++]);
-					}
-				}
-			}
-		}
-
 		private void AttachViews()
 		{
 			RefreshExternalScenes();
@@ -855,7 +842,7 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void SetCurrentAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
+		public void SetAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
 			animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
 		}
@@ -868,7 +855,7 @@ namespace Tangerine.Core
 				Animation.IsRunning = false;
 				StopAnimationRecursive(PreviewAnimationContainer);
 				if (!CoreUserPreferences.Instance.StopAnimationOnCurrentFrame) {
-					SetCurrentAnimationFrame(Animation, PreviewAnimationBegin);
+					SetAnimationFrame(Animation, PreviewAnimationBegin);
 				}
 				AudioSystem.StopAll();
 				ForceAnimationUpdate();
@@ -880,7 +867,7 @@ namespace Tangerine.Core
 					}
 				}
 				int savedAnimationFrame = AnimationFrame;
-				SetCurrentAnimationFrame(Animation, AnimationFrame, stopAnimations: false);
+				SetAnimationFrame(Animation, AnimationFrame, stopAnimations: false);
 				PreviewScene = true;
 				PreviewAnimation = true;
 				Animation.IsRunning = PreviewAnimation;
@@ -913,9 +900,6 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void ForceAnimationUpdate()
-		{
-			SetCurrentAnimationFrame(Current.Animation, Current.AnimationFrame);
-		}
+		public void ForceAnimationUpdate() => SetAnimationFrame(Animation, AnimationFrame);
 	}
 }
