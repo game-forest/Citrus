@@ -552,6 +552,15 @@ namespace Tangerine.Core
 					var assetPath = Node.ResolveScenePath(node.ContentsPath);
 					if (assetPath != null) {
 						var writeTime = AssetBundle.Current.GetFileLastWriteTime(assetPath);
+						if (assetPath.EndsWith(".t3d")) {
+							var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
+							if (
+								AssetBundle.Current.FileExists(attachmentPath) &&
+								AssetBundle.Current.GetFileLastWriteTime(attachmentPath) > writeTime
+							) {
+								writeTime = AssetBundle.Current.GetFileLastWriteTime(attachmentPath);
+							}
+						}
 						if (
 							!documentCache.TryGetValue(node.ContentsPath, out document) ||
 							writeTime != documentTimeStamps[node.ContentsPath]
