@@ -17,3 +17,4 @@ Tangerine/Tangerine.UI.SceneView/Tangerine.UI.SceneView.Mac.csproj
 Tangerine/Tangerine.UI.Timeline/Tangerine.UI.Timeline.Mac.csproj
 Tangerine/Tangerine/Tangerine.Mac.csproj
 Tangerine/Tangerine.UI.AnimeshEditor/Tangerine.UI.AnimeshEditor.Mac.csproj
+Tangerine/Tangerine.Common/Tangerine.Common.Mac.csproj

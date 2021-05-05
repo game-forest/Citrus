@@ -70,6 +70,7 @@
       <Project>{05FB6476-C29B-49A7-918C-A52CAF73FCA7}</Project>
       <Name>Tangerine.Core.Mac</Name>
     </ProjectReference>
+    <Compile Include="FilesDropHandlers\Models3DDropHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FilesDropHandlers\AudiosDropHandler.cs" />

@@ -739,6 +739,22 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
+	public static class CreateModel3DFromAsset
+	{
+		public static Node Perform(string assetPath)
+		{
+			Node node;
+			using (Document.Current.History.BeginTransaction()) {
+				node = CreateNode.Perform(typeof(Model3D));
+				SetProperty.Perform(node, nameof(Node.Id), nameof(Model3D));
+				SetProperty.Perform(node, nameof(Node.ContentsPath), assetPath);
+				SelectNode.Perform(node);
+				Document.Current.History.CommitTransaction();
+			}
+			return node;
+		}
+	}
+
 	public static class CreateNode
 	{
 		public static Node Perform(Type nodeType, bool aboveSelected = true)
