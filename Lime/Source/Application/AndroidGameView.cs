@@ -337,7 +337,6 @@ namespace Lime
 
 		void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
 		{
-			renderContext?.OnSurfaceChanged(holder, format, width, height);
 			// We don't use Display's rotation to determine orientation because it shows rotation
 			// from "natural" orientation. On some devices 0 degrees may refer to portrait and on some devices
 			// 0 degrees may refer to landscape.
@@ -354,6 +353,7 @@ namespace Lime
 			var deviceRotated = Application.CurrentDeviceOrientation != orientation;
 			Application.CurrentDeviceOrientation = orientation;
 			Resize?.Invoke(this, new ResizeEventArgs { DeviceRotated = deviceRotated });
+			renderContext?.OnSurfaceChanged(holder, format, width, height);
 		}
 
 		void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
