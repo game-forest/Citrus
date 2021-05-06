@@ -52,55 +52,34 @@ namespace Tangerine.UI
 				return;
 			}
 
-			// TODO: Use this code for generation formatted rich text after fixing bug with bold style
-			//var tagLength = 5 + highlightTextStyle.Length * 2;
-			//var blocksCount = 0;
-			//var lastIndex = int.MinValue;
-			//foreach (var i in highlightSymbolsIndices) {
-			//	if (lastIndex + 1 != i) {
-			//		blocksCount++;
-			//	}
-			//	lastIndex = i;
-			//}
-			//var sb = new StringBuilder(text.Length + tagLength * blocksCount);
-			//var isInTag = false;
-			//var hIndex = 0;
-			//for (var i = 0; i < text.Length || isInTag; i++) {
-			//	if (hIndex < highlightSymbolsIndices.Length && highlightSymbolsIndices[hIndex] == i) {
-			//		hIndex++;
-			//		if (!isInTag) {
-			//			isInTag = true;
-			//			sb.Append('<');
-			//			sb.Append(highlightTextStyle);
-			//			sb.Append('>');
-			//		}
-			//	} else if (isInTag) {
-			//		isInTag = false;
-			//		sb.Append("</");
-			//		sb.Append(highlightTextStyle);
-			//		sb.Append('>');
-			//	}
-			//	if (i < text.Length) {
-			//		sb.Append(text[i]);
-			//	}
-			//}
-			//richText.Text = sb.ToString();
-
 			var tagLength = 5 + highlightTextStyle.Length * 2;
-			var blocksCount = highlightSymbolsIndices.Length;
+			var blocksCount = 0;
+			var lastIndex = int.MinValue;
+			foreach (var i in highlightSymbolsIndices) {
+				if (lastIndex + 1 != i) {
+					blocksCount++;
+				}
+				lastIndex = i;
+			}
 			var sb = new StringBuilder(text.Length + tagLength * blocksCount);
+			var isInTag = false;
 			var hIndex = 0;
-			for (var i = 0; i < text.Length; i++) {
+			for (var i = 0; i < text.Length || isInTag; i++) {
 				if (hIndex < highlightSymbolsIndices.Length && highlightSymbolsIndices[hIndex] == i) {
 					hIndex++;
-					sb.Append('<');
-					sb.Append(highlightTextStyle);
-					sb.Append('>');
-					AppendEscapedChar(text[i]);
+					if (!isInTag) {
+						isInTag = true;
+						sb.Append('<');
+						sb.Append(highlightTextStyle);
+						sb.Append('>');
+					}
+				} else if (isInTag) {
+					isInTag = false;
 					sb.Append("</");
 					sb.Append(highlightTextStyle);
 					sb.Append('>');
-				} else {
+				}
+				if (i < text.Length) {
 					AppendEscapedChar(text[i]);
 				}
 			}
