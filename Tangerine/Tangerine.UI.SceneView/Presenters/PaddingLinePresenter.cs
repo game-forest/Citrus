@@ -90,7 +90,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var a = matrix.TransformVector(A);
 			var b = matrix.TransformVector(B);
-			Renderer.DrawLine(a, b, Color4.Yellow, 2);
+			Renderer.DrawLine(a, b, ColorTheme.Current.SceneView.PaddingEditorBorder, 2);
 
 			var label = propertyNames[index].ToString()[0].ToString();
 			var fontHeight = 20;
@@ -102,12 +102,12 @@ namespace Tangerine.UI.SceneView
 			Center = matrix.TransformVector(Center);
 			var lt = new Vector2(Center.X - 2, Center.Y);
 			var rb = new Vector2(Center.X + fontHeight / 2 + 1, Center.Y + fontHeight);
-			Renderer.DrawRect(lt, rb, Color4.Yellow);
+			Renderer.DrawRect(lt, rb, ColorTheme.Current.SceneView.PaddingEditorBorder);
 			Renderer.DrawTextLine(
 				Center,
 				label,
 				fontHeight,
-				Color4.Blue,
+				ColorTheme.Current.SceneView.PaddingEditorText,
 				0
 			);
 		}
