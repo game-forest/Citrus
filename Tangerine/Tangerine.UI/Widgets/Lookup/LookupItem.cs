@@ -5,7 +5,7 @@ namespace Tangerine.UI
 {
 	public class LookupItem
 	{
-		protected const string HighlightedTextStyleId = "b";
+		protected const string HighlightedTextStyleId = "bs";
 
 		internal LookupWidget Owner { get; set; }
 
@@ -48,7 +48,7 @@ namespace Tangerine.UI
 								Id = HighlightedTextStyleId,
 								Size = Theme.Metrics.TextHeight,
 								TextColor = Theme.Colors.BlackText,
-								Bold = true,
+								Font = new SerializableFont(FontPool.DefaultBoldFontName),
 							},
 						},
 						Components = { Name },

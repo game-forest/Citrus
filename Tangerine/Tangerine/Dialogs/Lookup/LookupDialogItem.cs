@@ -28,7 +28,7 @@ namespace Tangerine
 		{
 			this.label = label;
 		}
-		
+
 		public LookupDialogItem(string headerText, string text, Shortcut shortcut, Action action) : this(headerText, text, action)
 		{
 			this.shortcut = shortcut;
@@ -89,7 +89,7 @@ namespace Tangerine
 								Id = HighlightedTextStyleId,
 								Size = Theme.Metrics.TextHeight * 1.25f,
 								TextColor = Theme.Colors.BlackText,
-								Bold = true,
+								Font = new SerializableFont(FontPool.DefaultBoldFontName),
 							},
 						},
 						Components = { Header },
@@ -114,7 +114,7 @@ namespace Tangerine
 				};
 				var width = 0f;
 				headerWidget.AddNode(widget);
-				
+
 				void AddLabel(string name)
 				{
 					var simpleText = new ThemedSimpleText {
