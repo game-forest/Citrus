@@ -211,9 +211,9 @@ namespace Lime
 			set { MinHeight = MaxHeight = value; }
 		}
 
-		#endregion
+#endregion
 
-		#region Transformation properties
+#region Transformation properties
 		/// <summary>
 		/// Parent-relative position.
 		/// </summary>
@@ -233,9 +233,7 @@ namespace Lime
 				if (position.X != value.X || position.Y != value.Y) {
 					position = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					if (Visible) {
-						Parent?.PropagateParentBoundsChanged();
-					}
+					PropagateParentBoundsChanged();
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -253,9 +251,7 @@ namespace Lime
 				if (position.X != value) {
 					position.X = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					if (Visible) {
-						Parent?.PropagateParentBoundsChanged();
-					}
+					PropagateParentBoundsChanged();
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -273,9 +269,7 @@ namespace Lime
 				if (position.Y != value) {
 					position.Y = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					if (Visible) {
-						Parent?.PropagateParentBoundsChanged();
-					}
+					PropagateParentBoundsChanged();
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -293,9 +287,7 @@ namespace Lime
 				if (scale.X != value.X || scale.Y != value.Y) {
 					scale = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					if (Visible) {
-						Parent?.PropagateParentBoundsChanged();
-					}
+					PropagateParentBoundsChanged();
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -323,9 +315,7 @@ namespace Lime
 					direction = Vector2.CosSinRough(Mathf.DegToRad * value);
 #endif // TANGERINE
 					DirtyMask |= DirtyFlags.LocalTransform;
-					if (Visible) {
-						Parent?.PropagateParentBoundsChanged();
-					}
+					PropagateParentBoundsChanged();
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -348,8 +338,8 @@ namespace Lime
 					if (boundingRect.BY < value.Y) { boundingRect.BY = value.Y; t = true; }
 					if (boundingRect.AX > value.X) { boundingRect.AX = value.X; t = true; }
 					if (boundingRect.AY > value.Y) { boundingRect.AY = value.Y; t = true; }
-					if (t && Visible) {
-						Parent?.PropagateParentBoundsChanged();
+					if (t) {
+						PropagateParentBoundsChanged();
 					}
 					OnSizeChanged(sizeDelta);
 					DirtyMask |= DirtyFlags.LocalTransform;
@@ -376,8 +366,8 @@ namespace Lime
 				if (boundingRect.BY < value.Y) { boundingRect.BY = value.Y; t = true; }
 				if (boundingRect.AX > value.X) { boundingRect.AX = value.X; t = true; }
 				if (boundingRect.AY > value.Y) { boundingRect.AY = value.Y; t = true; }
-				if (t && Visible) {
-					Parent?.PropagateParentBoundsChanged();
+				if (t) {
+					PropagateParentBoundsChanged();
 				}
 			}
 		}
@@ -421,9 +411,7 @@ namespace Lime
 				if (pivot.X != value.X || pivot.Y != value.Y) {
 					pivot = value;
 					DirtyMask |= DirtyFlags.LocalTransform;
-					if (Visible) {
-						Parent?.PropagateParentBoundsChanged();
-					}
+					PropagateParentBoundsChanged();
 					PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				}
 			}
@@ -471,9 +459,9 @@ namespace Lime
 		/// Parent-relative position of center of this widget.
 		/// </summary>
 		public Vector2 Center => Position + (Vector2.Half - Pivot) * Size;
-		#endregion
+#endregion
 
-		#region Misc properties
+#region Misc properties
 		public Widget ParentWidget => Parent?.AsWidget;
 		public TabTraversable TabTravesable { get; set; }
 		public KeyboardFocusScope FocusScope { get; set; }
@@ -569,8 +557,8 @@ namespace Lime
 			{
 				if (visible != value) {
 					visible = value;
-					if (visible) {
-						Parent?.PropagateParentBoundsChanged();
+					if (visible && DirtyMask.HasFlag(DirtyFlags.ParentBoundingRect)) {
+						PropagateParentBoundsChanged();
 					}
 					PropagateDirtyFlags(DirtyFlags.Visible | DirtyFlags.Frozen);
 					InvalidateParentConstraintsAndArrangement();
@@ -752,7 +740,6 @@ namespace Lime
 
 		private void RecalcGloballyVisible()
 		{
-			var oldVisible = globallyVisible;
 			globallyVisible = Visible && (color.A != 0 || RenderTransparentWidgets);
 			if (!IsRenderedToTexture() && Parent != null) {
 				if (Parent.AsWidget != null) {
@@ -850,7 +837,7 @@ namespace Lime
 			return r;
 		}
 
-		#endregion
+#endregion
 
 		public Widget()
 		{
@@ -1098,27 +1085,27 @@ namespace Lime
 			localToParentTransform.TY = -(centerX * u.Y) - centerY * v.Y + translation.Y;
 		}
 
-		internal void ExpandBoundingRect(Rectangle newBounds, bool propogate = true)
+		internal void ExpandBoundingRect(Rectangle newBounds, bool propagate = true)
 		{
 			var t = false;
 			if (boundingRect.AX > newBounds.AX) { boundingRect.AX = newBounds.AX; t = true; }
 			if (boundingRect.AY > newBounds.AY) { boundingRect.AY = newBounds.AY; t = true; }
 			if (boundingRect.BX < newBounds.BX) { boundingRect.BX = newBounds.BX; t = true; }
 			if (boundingRect.BY < newBounds.BY) { boundingRect.BY = newBounds.BY; t = true; }
-			if (propogate && t && Visible) {
-				Parent?.PropagateParentBoundsChanged();
+			if (propagate && t) {
+				PropagateParentBoundsChanged();
 			}
 		}
 
-		internal void ExpandBoundingRect(Vector2 point, bool propogate = true)
+		internal void ExpandBoundingRect(Vector2 point, bool propagate = true)
 		{
 			var t = false;
 			if (boundingRect.AX > point.X) { boundingRect.AX = point.X; t = true; }
 			if (boundingRect.AY > point.Y) { boundingRect.AY = point.Y; t = true; }
 			if (boundingRect.BX < point.X) { boundingRect.BX = point.X; t = true; }
 			if (boundingRect.BY < point.Y) { boundingRect.BY = point.Y; t = true; }
-			if (propogate && t && Visible) {
-				Parent?.PropagateParentBoundsChanged();
+			if (propagate && t) {
+				PropagateParentBoundsChanged();
 			}
 		}
 
@@ -1476,7 +1463,7 @@ namespace Lime
 
 		public override void UpdateAncestorBoundingRect(Widget ancestor)
 		{
-			if (Visible) {
+			if (Visible && CleanDirtyFlags(DirtyFlags.ParentBoundingRect)) {
 				ExpandAncestorBoundingRect(ancestor);
 			}
 		}

@@ -84,6 +84,7 @@ namespace Lime
 			EffectiveAnimationSpeed = 1 << 10,
 			Frozen = 1 << 11,
 			Material = 1 << 12,
+			ParentBoundingRect = 1 << 13,
 			All = ~None
 		}
 
@@ -189,7 +190,7 @@ namespace Lime
 					}
 					var oldParent = parent;
 					parent = value;
-					if (parent != null) { 
+					if (parent != null) {
 						PropagateParentBoundsChanged();
 					}
 					PropagateDirtyFlags();
@@ -639,10 +640,10 @@ namespace Lime
 
 		protected internal void PropagateParentBoundsChanged()
 		{
-			if ((DirtyMask & DirtyFlags.BoundingRect) == DirtyFlags.BoundingRect) {
+			if ((DirtyMask & DirtyFlags.ParentBoundingRect) == DirtyFlags.ParentBoundingRect) {
 				return;
 			}
-			DirtyMask |= DirtyFlags.BoundingRect;
+			DirtyMask |= DirtyFlags.ParentBoundingRect;
 			if (AsWidget != null && !AsWidget.Visible) {
 				return;
 			}
@@ -654,10 +655,11 @@ namespace Lime
 		private void PropagateParentBoundsChangedHelper()
 		{
 			for (var p = Parent; p != null; p = p.Parent) {
-				if ((p.DirtyMask & DirtyFlags.BoundingRect) == DirtyFlags.BoundingRect) {
+				var flags = DirtyFlags.ParentBoundingRect | DirtyFlags.BoundingRect;
+				if ((p.DirtyMask & flags) == flags) {
 					return;
 				}
-				p.DirtyMask |= DirtyFlags.BoundingRect;
+				p.DirtyMask |= flags;
 				if (p.AsWidget != null && !AsWidget.Visible) {
 					return;
 				}

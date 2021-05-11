@@ -36,10 +36,10 @@ namespace Lime
 		{
 			var p = Parent.AsWidget;
 			if (p == ancestor) {
-				p.ExpandBoundingRect(TransformedPosition, propogate: false);
+				p.ExpandBoundingRect(TransformedPosition, propagate: false);
 			} else {
 				var pos = CalcPositionInSpaceOf(ancestor);
-				ancestor.ExpandBoundingRect(pos, propogate: false);
+				ancestor.ExpandBoundingRect(pos, propagate: false);
 			}
 		}
 	}
