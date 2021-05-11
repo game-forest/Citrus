@@ -43,10 +43,8 @@ namespace Lime
 		public ShaderProgram(
 			IEnumerable<Shader> shaders,
 			IEnumerable<AttribLocation> attribLocations,
-			IEnumerable<Sampler> samplers
-#if PROFILER
-			, ShaderProgram overdrawShaderProgram = null
-#endif // PROFILER
+			IEnumerable<Sampler> samplers,
+			ShaderProgram overdrawShaderProgram = null
 			)
 		{
 			this.shaders = shaders.ToArray();
