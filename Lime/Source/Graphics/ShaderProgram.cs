@@ -45,8 +45,7 @@ namespace Lime
 			IEnumerable<AttribLocation> attribLocations,
 			IEnumerable<Sampler> samplers,
 			ShaderProgram overdrawShaderProgram = null
-			)
-		{
+		) {
 			this.shaders = shaders.ToArray();
 			this.attribLocations = attribLocations.ToArray();
 			this.samplers = samplers.ToArray();
