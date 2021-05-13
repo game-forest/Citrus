@@ -56724,15 +56724,15 @@ references:
   commentId: T:Lime.ShaderProgram
   fullName: Lime.ShaderProgram
   nameWithType: ShaderProgram
-- uid: Lime.ShaderProgram.#ctor(System.Collections.Generic.IEnumerable{Lime.Shader},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.AttribLocation},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.Sampler})
-  name: ShaderProgram(IEnumerable<Shader>, IEnumerable<ShaderProgram.AttribLocation>, IEnumerable<ShaderProgram.Sampler>)
-  href: api/Lime.ShaderProgram.html#Lime_ShaderProgram__ctor_System_Collections_Generic_IEnumerable_Lime_Shader__System_Collections_Generic_IEnumerable_Lime_ShaderProgram_AttribLocation__System_Collections_Generic_IEnumerable_Lime_ShaderProgram_Sampler__
-  commentId: M:Lime.ShaderProgram.#ctor(System.Collections.Generic.IEnumerable{Lime.Shader},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.AttribLocation},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.Sampler})
-  name.vb: ShaderProgram(IEnumerable(Of Shader), IEnumerable(Of ShaderProgram.AttribLocation), IEnumerable(Of ShaderProgram.Sampler))
-  fullName: Lime.ShaderProgram.ShaderProgram(System.Collections.Generic.IEnumerable<Lime.Shader>, System.Collections.Generic.IEnumerable<Lime.ShaderProgram.AttribLocation>, System.Collections.Generic.IEnumerable<Lime.ShaderProgram.Sampler>)
-  fullName.vb: Lime.ShaderProgram.ShaderProgram(System.Collections.Generic.IEnumerable(Of Lime.Shader), System.Collections.Generic.IEnumerable(Of Lime.ShaderProgram.AttribLocation), System.Collections.Generic.IEnumerable(Of Lime.ShaderProgram.Sampler))
-  nameWithType: ShaderProgram.ShaderProgram(IEnumerable<Shader>, IEnumerable<ShaderProgram.AttribLocation>, IEnumerable<ShaderProgram.Sampler>)
-  nameWithType.vb: ShaderProgram.ShaderProgram(IEnumerable(Of Shader), IEnumerable(Of ShaderProgram.AttribLocation), IEnumerable(Of ShaderProgram.Sampler))
+- uid: Lime.ShaderProgram.#ctor(System.Collections.Generic.IEnumerable{Lime.Shader},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.AttribLocation},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.Sampler},Lime.ShaderProgram)
+  name: ShaderProgram(IEnumerable<Shader>, IEnumerable<ShaderProgram.AttribLocation>, IEnumerable<ShaderProgram.Sampler>, ShaderProgram)
+  href: api/Lime.ShaderProgram.html#Lime_ShaderProgram__ctor_System_Collections_Generic_IEnumerable_Lime_Shader__System_Collections_Generic_IEnumerable_Lime_ShaderProgram_AttribLocation__System_Collections_Generic_IEnumerable_Lime_ShaderProgram_Sampler__Lime_ShaderProgram_
+  commentId: M:Lime.ShaderProgram.#ctor(System.Collections.Generic.IEnumerable{Lime.Shader},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.AttribLocation},System.Collections.Generic.IEnumerable{Lime.ShaderProgram.Sampler},Lime.ShaderProgram)
+  name.vb: ShaderProgram(IEnumerable(Of Shader), IEnumerable(Of ShaderProgram.AttribLocation), IEnumerable(Of ShaderProgram.Sampler), ShaderProgram)
+  fullName: Lime.ShaderProgram.ShaderProgram(System.Collections.Generic.IEnumerable<Lime.Shader>, System.Collections.Generic.IEnumerable<Lime.ShaderProgram.AttribLocation>, System.Collections.Generic.IEnumerable<Lime.ShaderProgram.Sampler>, Lime.ShaderProgram)
+  fullName.vb: Lime.ShaderProgram.ShaderProgram(System.Collections.Generic.IEnumerable(Of Lime.Shader), System.Collections.Generic.IEnumerable(Of Lime.ShaderProgram.AttribLocation), System.Collections.Generic.IEnumerable(Of Lime.ShaderProgram.Sampler), Lime.ShaderProgram)
+  nameWithType: ShaderProgram.ShaderProgram(IEnumerable<Shader>, IEnumerable<ShaderProgram.AttribLocation>, IEnumerable<ShaderProgram.Sampler>, ShaderProgram)
+  nameWithType.vb: ShaderProgram.ShaderProgram(IEnumerable(Of Shader), IEnumerable(Of ShaderProgram.AttribLocation), IEnumerable(Of ShaderProgram.Sampler), ShaderProgram)
 - uid: Lime.ShaderProgram.#ctor*
   name: ShaderProgram
   href: api/Lime.ShaderProgram.html#Lime_ShaderProgram__ctor_
