@@ -255,7 +255,7 @@ namespace Orange
 						}
 					}
 					// Delete outdated assets from the OutputBundle
-					foreach (var file in OutputBundle.EnumerateFiles()) {
+					foreach (var file in OutputBundle.EnumerateFiles().ToList()) {
 						CheckCookCancelation();
 						if (!unitsToCookHashes.Contains(OutputBundle.GetFileCookingUnitHash(file))) {
 							OutputBundle.DeleteFile(file);
