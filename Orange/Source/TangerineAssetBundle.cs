@@ -93,6 +93,17 @@ namespace Tangerine.Core
 			return base.OpenFile(path, mode);
 		}
 
+		public override SHA256 GetFileContentsHash(string path)
+		{
+			if (path.EndsWith(".t3d")) {
+				CheckFbx(path);
+				using var cacheBundle = OpenCacheBundle();
+				return cacheBundle.GetFileContentsHash(path);
+			} else {
+				return base.GetFileContentsHash(path);
+			}
+		}
+
 		private Stream OpenFbx(string path)
 		{
 			CheckFbx(path);
@@ -113,16 +124,17 @@ namespace Tangerine.Core
 			Model3DAttachment attachment = null;
 			Model3D model = null;
 			var fbxPath = Path.ChangeExtension(path, "fbx");
+			var cookingUnitHash = GetCookingUnitHash(fbxPath);
 			var fbxExists = base.FileExists(fbxPath);
 			var fbxCached = cacheBundle.FileExists(path);
 			var fbxUpToDate = fbxCached == fbxExists &&
-				(!fbxExists || cacheBundle.GetFileCookingUnitHash(path) != base.GetFileCookingUnitHash(fbxPath));
+				(!fbxExists || cacheBundle.GetFileCookingUnitHash(path) == cookingUnitHash);
 
 			var attachmentPath = Path.ChangeExtension(path, Model3DAttachment.FileExtension);
 			var attachmentExists = base.FileExists(attachmentPath);
 			var attachmentCached = cacheBundle.FileExists(attachmentPath);
 			var attachmentUpToDate = attachmentCached == attachmentExists &&
-				(!attachmentExists || cacheBundle.GetFileCookingUnitHash(attachmentPath) != base.GetFileCookingUnitHash(attachmentPath));
+				(!attachmentExists || cacheBundle.GetFileCookingUnitHash(attachmentPath) == cookingUnitHash);
 			var fbxImportOptions = new FbxImportOptions {
 				Path = fbxPath,
 				Target = target,
@@ -132,7 +144,7 @@ namespace Tangerine.Core
 			var attachmentMetaPath = Path.ChangeExtension(path, Model3DAttachmentMeta.FileExtension);
 			var attachmentMetaCached = cacheBundle.FileExists(attachmentMetaPath);
 			var attachmentMetaUpToDate = attachmentMetaCached &&
-				cacheBundle.GetFileCookingUnitHash(attachmentMetaPath) != base.GetFileCookingUnitHash(fbxPath);
+				cacheBundle.GetFileCookingUnitHash(attachmentMetaPath) == cookingUnitHash;
 			if (!attachmentMetaUpToDate && fbxExists) {
 				using var fbxImporter = new FbxModelImporter(fbxImportOptions);
 				model = fbxImporter.LoadModel();
@@ -154,7 +166,7 @@ namespace Tangerine.Core
 					path: attachmentMetaPath,
 					instance: meta,
 					format: Persistence.Format.Binary,
-					cookingUnitHash: base.GetFileCookingUnitHash(fbxPath),
+					cookingUnitHash: cookingUnitHash,
 					attributes: AssetAttributes.None
 				);
 			}
@@ -163,8 +175,9 @@ namespace Tangerine.Core
 				return;
 			}
 
-			var animationPathPrefix = Orange.Toolbox.ToUnixSlashes(Path.GetDirectoryName(path) + "/" + Path.GetFileNameWithoutExtension(path) + "@");
-			foreach (var assetPath in cacheBundle.EnumerateFiles()) {
+			var animationPathPrefix = Orange.Toolbox.ToUnixSlashes(
+				Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path) + "@"));
+			foreach (var assetPath in cacheBundle.EnumerateFiles().ToList()) {
 				if (assetPath.EndsWith(".ant") && assetPath.StartsWith(animationPathPrefix)) {
 					cacheBundle.DeleteFile(assetPath);
 				}
@@ -197,13 +210,13 @@ namespace Tangerine.Core
 					var animationPath = animationPathWithoutExt + ".ant";
 					animation.ContentsPath = animationPathWithoutExt;
 					InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary,
-						base.GetFileCookingUnitHash(fbxPath), AssetAttributes.None);
+						cookingUnitHash, AssetAttributes.None);
 					foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 						animator.Owner.Animators.Remove(animator);
 					}
 				}
 				InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, path, model, Persistence.Format.Binary,
-					base.GetFileCookingUnitHash(fbxPath), AssetAttributes.None);
+					cookingUnitHash, AssetAttributes.None);
 
 			} else if (fbxCached) {
 				cacheBundle.DeleteFile(path);
@@ -215,11 +228,21 @@ namespace Tangerine.Core
 					cacheBundle,
 					attachmentPath,
 					Model3DAttachmentParser.ConvertToModelAttachmentFormat(attachment), Persistence.Format.Binary,
-					base.GetFileCookingUnitHash(attachmentPath),
+					cookingUnitHash,
 					AssetAttributes.None);
 			} else if (attachmentCached) {
 				cacheBundle.DeleteFile(attachmentPath);
 			}
+		}
+
+		private SHA256 GetCookingUnitHash(string fbxPath)
+		{
+			var hash = base.GetFileContentsHash(fbxPath);
+			var attachmentPath = Path.ChangeExtension(fbxPath, Model3DAttachment.FileExtension);
+			if (FileExists(attachmentPath)) {
+				hash = SHA256.Compute(hash, base.GetFileContentsHash(attachmentPath));
+			}
+			return hash;
 		}
 
 		public override bool FileExists(string path)
