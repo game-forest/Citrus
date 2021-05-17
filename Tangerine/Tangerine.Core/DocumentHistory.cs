@@ -36,6 +36,30 @@ namespace Tangerine.Core
 			Processors.OperationProcessorTypes.AddRange(types);
 		}
 
+
+		/// <summary>
+		/// Inserts <paramref name="processorType"/> before <paramref name="beforeProcessorType"/>
+		/// which must already be present in the list of processor types.
+		/// The order of processor types in this list determines order of processing an operation by processors.
+		/// </summary>
+		/// <param name="beforeProcessorType">Type of processor before which to insert.</param>
+		/// <param name="processorType">Type of processor to insert.</param>
+		/// <exception cref="System.InvalidOperationException">Thrown when <paramref name="beforeProcessorType"/>
+		/// is not present in processor type list or when <paramref name="processorType"/> already exists.</exception>
+		public static void InsertProcessor(Type beforeProcessorType, Type processorType)
+		{
+			var index = Processors.OperationProcessorTypes.IndexOf(beforeProcessorType);
+			if (index == -1) {
+				throw new InvalidOperationException($"Error inserting {processorType.FullName} before " +
+					$"{beforeProcessorType.FullName} because the latter doesn't exist.");
+			}
+			if (Processors.OperationProcessorTypes.IndexOf(processorType) != -1) {
+				throw new InvalidOperationException($"Error inserting {processorType.FullName} " +
+					$"because it's already exists");
+			}
+			Processors.OperationProcessorTypes.Insert(index, processorType);
+		}
+
 		public IDisposable BeginTransaction()
 		{
 			if (transactionStartIndices.Count == 0) {
@@ -299,7 +323,14 @@ namespace Tangerine.Core
 								operationTypeOfProcessor.IsGenericType &&
 								operationTypeOfProcessor.GetGenericTypeDefinition().IsAssignableFrom(operationType.GetGenericTypeDefinition())
 							) {
-								var specializedGenericProcessor = processorType.MakeGenericType(operationGenericArguments);
+								if (!processorType.IsGenericTypeDefinition) {
+									if (!operationTypeOfProcessor.IsAssignableFrom(operationType)) {
+										continue;
+									}
+								}
+								var specializedGenericProcessor = processorType.IsGenericTypeDefinition
+									? processorType.MakeGenericType(operationGenericArguments)
+									: processorType;
 								var p = GetProcessor(specializedGenericProcessor);
 								cachedProcessorList.Add(p);
 								yield return p;
