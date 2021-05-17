@@ -45,7 +45,7 @@ namespace Orange
 		public abstract void IncreaseProgressBar(int amount = 1);
 
 		/// <summary>
-		/// Reloads bundle list in BundlePicker and recreates its UI if neccessary
+		/// Reloads bundle list in BundlePicker and recreates its UI if necessary
 		/// </summary>
 		public virtual void ReloadBundlePicker() => bundlePicker.Setup();
 

@@ -19,7 +19,7 @@ namespace Orange
 			var target = The.UI.GetActiveTarget();
 			if (The.UI.AskConfirmation("Are you sure you want to rebuild the game?")) {
 				CleanupGame(target);
-				var bundles = The.UI.GetSelectedBundles().Concat(target.Bundles).Distinct().ToList();
+				var bundles = The.UI.GetSelectedBundles();
 				if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 					return errorMessage;
 				}

@@ -94,7 +94,7 @@ namespace Orange
 					? The.UI.GetActiveTarget().Bundles.ToList()
 					: allBundles;
 			}
-			return bundleSelectionStates.Where(x => x.Value).ToDictionary(x => x.Key, x => x.Value).Keys.ToList();
+			return bundleSelectionStates.Where(x => x.Value).Select(x => x.Key).ToList();
 		}
 
 		/// <summary>

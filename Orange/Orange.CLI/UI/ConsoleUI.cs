@@ -136,10 +136,17 @@ namespace Orange
 
 		public override List<string> GetSelectedBundles()
 		{
-			return Toolbox.GetCommandLineArg("--bundles")
+			var cliBundles = Toolbox.GetCommandLineArg("--bundles")
 				?.Split(',')
 				.Select(s => s.Trim())
 				.ToList();
+			if (cliBundles != null) {
+				return cliBundles;
+			}
+			if (The.UI.GetActiveAction().UsesTargetBundles && The.UI.GetActiveTarget().Bundles.Any()) {
+				return The.UI.GetActiveTarget().Bundles.ToList();
+			}
+			return Toolbox.GetListOfAllBundles(The.UI.GetActiveTarget());
 		}
 
 		public override void ShowError(string message)

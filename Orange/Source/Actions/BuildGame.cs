@@ -13,7 +13,7 @@ namespace Orange
 		public static string BuildGameAction()
 		{
 			var target = The.UI.GetActiveTarget();
-			var bundles = The.UI.GetSelectedBundles().Concat(target.Bundles).Distinct().ToList();
+			var bundles = The.UI.GetSelectedBundles();
 			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 				return errorMessage;
 			}
