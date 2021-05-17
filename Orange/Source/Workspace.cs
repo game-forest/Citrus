@@ -142,6 +142,19 @@ namespace Orange
 				The.UI.ClearLog();
 				ProjectFilePath = projectFilePath;
 				ReadProject(projectFilePath);
+				if (Toolbox.GetCommandLineFlag("--delete-tancache")) {
+					var path = The.Workspace.GetTangerineCacheBundlePath();
+					try {
+						FileAttributes a = File.GetAttributes(path);
+						if (a.HasFlag(FileAttributes.Directory)) {
+							Directory.Delete(path, true);
+						} else {
+							File.Delete(path);
+						}
+					} catch (System.Exception e) {
+						Console.Write($"Failed to delete tangerine cache bundle '{e}', at '{path}'.");
+					}
+				}
 				var tangerineAssetBundle = new Tangerine.Core.TangerineAssetBundle(AssetsDirectory);
 				if (!tangerineAssetBundle.IsActual()) {
 					tangerineAssetBundle.CleanupBundle();
