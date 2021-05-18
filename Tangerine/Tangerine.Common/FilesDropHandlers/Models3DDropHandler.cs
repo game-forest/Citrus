@@ -39,6 +39,12 @@ namespace Tangerine.Common.FilesDropHandlers
 				foreach (var file in files.Where(f => Path.GetExtension(f) == ".fbx").ToList()) {
 					files.Remove(file);
 					if (Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out _)) {
+						if (!NodeCompositionValidator.Validate(Document.Current.Container.GetType(), typeof(Model3D))) {
+							var viewport = CreateNode.Perform(typeof(Viewport3D));
+							SetProperty.Perform(viewport, nameof(Node.Id), nameof(Viewport3D));
+							postProcessNode?.Invoke(viewport);
+							EnterNode.Perform(viewport);
+						}
 						var node = CreateModel3DFromAsset.Perform(assetPath);
 						postProcessNode?.Invoke(node);
 					}
