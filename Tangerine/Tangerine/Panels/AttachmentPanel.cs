@@ -581,7 +581,7 @@ namespace Tangerine
 			}
 			if (!attachmentCached) {
 				attachment = new Model3DAttachment { ScaleFactor = 1 };
-				foreach (var a in source.Animations) {
+				foreach (var a in source.Animations.Where(a => !a.IsLegacy)) {
 					attachment.Animations.Add(new Model3DAttachment.Animation {
 						Id = a.Id,
 						SourceAnimationId = a.Id,
