@@ -53,7 +53,7 @@ namespace Tangerine.Core
 		{
 			try {
 				using var cacheBundle = OpenCacheBundle(AssetBundleFlags.Writable);
-				foreach (var path in cacheBundle.EnumerateFiles()) {
+				foreach (var path in cacheBundle.EnumerateFiles().ToList()) {
 					cacheBundle.DeleteFile(path);
 				}
 				InternalPersistence.Instance.WriteObjectToBundle(
