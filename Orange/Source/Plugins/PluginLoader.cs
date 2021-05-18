@@ -131,8 +131,17 @@ namespace Orange
 				}
 			}
 			foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
-				if (Path.GetFileNameWithoutExtension(Toolbox.ReplaceCitrusProjectSubstituteTokens(path)) == assemblyName) {
+				var expanded = Toolbox.ReplaceCitrusProjectSubstituteTokens(path);
+				if (Path.GetFileNameWithoutExtension(expanded) == assemblyName) {
 					return TryLoadAssembly(path);
+				}
+				var possiblePath = Path.Combine(Path.GetDirectoryName(expanded), assemblyName + ".dll");
+				var absolutePossiblePath = Path.Combine(The.Workspace.ProjectDirectory, possiblePath);
+				if (File.Exists(absolutePossiblePath)) {
+					// This code is needed to avoid warning.
+					var pluginName = Path.GetFileName(expanded);
+					var assemblyPath = path.Substring(0, path.Length - pluginName.Length) + assemblyName + ".dll";
+					return TryLoadAssembly(assemblyPath);
 				}
 			}
 			return null;
@@ -432,7 +441,15 @@ namespace Orange
 
 		private static Assembly LoadAssembly(string path)
 		{
-			return Assembly.LoadFrom(path);
+			var bytes = File.ReadAllBytes(path);
+			byte[] pdbBytes = null;
+#if DEBUG
+			var pdbPath = Path.ChangeExtension(path, ".pdb");
+			if (File.Exists(pdbPath)) {
+				pdbBytes = File.ReadAllBytes(pdbPath);
+			}
+#endif
+			return Assembly.Load(bytes, pdbBytes);
 		}
 	}
 }
