@@ -298,8 +298,16 @@ namespace Lime
 				var sample = currentVideoSample;
 				var pinnedArray = GCHandle.Alloc(sample.Data, GCHandleType.Pinned);
 				var pointer = pinnedArray.AddrOfPinnedObject();
-				lumaTexture.LoadImage(pointer, width, height, Format.R8_UNorm);
 
+				var lumaSize = GraphicsUtility.CalculateImageDataSize(Format.R8_UNorm, width, height);
+				var chromaSize = GraphicsUtility.CalculateImageDataSize(Format.R8G8_UNorm, width / 2, height / 2);
+				var imageSize = chromaSize + lumaSize;
+				if (imageSize != sample.Data.Length) {
+					throw new InvalidDataException($"Sample buffer size {sample.Data.Length} " +
+						$"is not equal to luma {lumaSize} and chroma {chromaSize} size sum {imageSize}");
+				}
+
+				lumaTexture.LoadImage(pointer, width, height, Format.R8_UNorm);
 				chromaTexture.LoadImage(pointer + width * height, width / 2, height / 2, Format.R8G8_UNorm);
 				pinnedArray.Free();
 

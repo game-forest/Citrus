@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Lime
 {
@@ -60,6 +61,14 @@ namespace Lime
 			var wBlocks = (width + blockWidth - 1) / blockWidth;
 			var hBlocks = (height + blockHeight - 1) / blockHeight;
 			return wBlocks * hBlocks * format.GetSize();
+		}
+
+		public static void EnsureTextureDataSizeValid(Format format, int width, int height, int dataSize)
+		{
+			var imageSize = GraphicsUtility.CalculateImageDataSize(format, width, height);
+			if (imageSize != dataSize) {
+				throw new InvalidDataException($"Texture data size {dataSize} is not equal to calculated size {imageSize}");
+			}
 		}
 
 		public static void CalculateMipLevelSize(int level, int width, int height, out int levelWidth, out int levelHeight)

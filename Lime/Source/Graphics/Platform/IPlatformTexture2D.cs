@@ -13,7 +13,7 @@ namespace Lime.Graphics.Platform
 		void SetTextureParams(TextureParams textureParams);
 	}
 
-	public unsafe static class PlatformTexture2DExtensions
+	internal unsafe static class PlatformTexture2DExtensions
 	{
 		public static void SetData<T>(
 			this IPlatformTexture2D texture, int level, T data) where T : unmanaged

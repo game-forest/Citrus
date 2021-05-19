@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using Lime.Graphics.Platform;
 
 namespace Lime
@@ -85,7 +86,11 @@ namespace Lime
 				}
 
 				using (stream) {
-					LoadImageHelper(stream);
+					try {
+						LoadImageHelper(stream);
+					} catch (System.Exception e) {
+						throw new InvalidDataException($"Failed to load texture from path {tryPath}:\n{e}");
+					}
 				}
 
 				LoadTextureParams(path);
@@ -216,13 +221,15 @@ namespace Lime
 			SurfaceSize = ImageSize;
 			uvRect = new Rectangle(0, 0, 1, 1);
 
+			var format = Format.R8G8B8A8_UNorm;
+			GraphicsUtility.EnsureTextureDataSizeValid(format, width, height, pixels.Length * Marshal.SizeOf(new Color4()));
 			Window.Current.InvokeOnRendering(() => {
-				EnsurePlatformTexture(Format.R8G8B8A8_UNorm, width, height, false);
+				EnsurePlatformTexture(format, width, height, false);
 				platformTexture.SetData(0, pixels);
 			});
 		}
 
-		public void LoadImage(IntPtr pixels, int width, int height)
+		internal void LoadImage(IntPtr pixels, int width, int height)
 		{
 			LoadImage(pixels, width, height, Format.R8G8B8A8_UNorm);
 		}
@@ -248,6 +255,7 @@ namespace Lime
 		{
 			IsStubTexture = false;
 
+			GraphicsUtility.EnsureTextureDataSizeValid(platformTexture.Format, width, height, pixels.Length * Marshal.SizeOf(new Color4()));
 			Window.Current.InvokeOnRendering(() => {
 				platformTexture.SetData(0, x, y, width, height, pixels);
 			});
@@ -336,7 +344,11 @@ namespace Lime
 		private byte[] ReadTextureData(BinaryReader reader, int length)
 		{
 			MemoryUsed += length;
-			return reader.ReadBytes(length);
+			var result = reader.ReadBytes(length);
+			if (result.Length != length) {
+				throw new InvalidOperationException($"Read texture data length {result.Length} was not equal to requested length {length}");
+			}
+			return result;
 		}
 
 		public virtual Color4[] GetPixels()
