@@ -250,6 +250,13 @@ namespace Lime
 		Index16Bits
 	}
 
+	public struct GLInfo
+	{
+		public bool ESProfile;
+		public int MajorVersion;
+		public int MinorVersion;
+	}
+
 	public static class IndexFormatExtensions
 	{
 		public static int GetSize(this IndexFormat format)
@@ -287,6 +294,20 @@ namespace Lime
 		{
 			Context = context;
 			textures = new ITexture[Context.MaxTextureSlots];
+		}
+
+		public static bool TryGetGLInfo(out GLInfo info)
+		{
+			if (Context is Lime.Graphics.Platform.OpenGL.PlatformRenderContext glContext) {
+				info = new GLInfo {
+					ESProfile = glContext.ESProfile,
+					MajorVersion = glContext.GLMajorVersion,
+					MinorVersion = glContext.GLMinorVersion
+				};
+				return true;
+			}
+			info = default;
+			return false;
 		}
 
 		public static void BeginFrame()
