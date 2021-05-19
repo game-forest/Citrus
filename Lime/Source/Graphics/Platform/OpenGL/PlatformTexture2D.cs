@@ -69,7 +69,7 @@ namespace Lime.Graphics.Platform.OpenGL
 			Context.InvalidateTextureBinding(0);
 		}
 
-		public void SetData(int level, int x, int y, int width, int height, IntPtr data)
+		void IPlatformTexture2D.SetData(int level, int x, int y, int width, int height, IntPtr data)
 		{
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GLHelper.CheckGLErrors();

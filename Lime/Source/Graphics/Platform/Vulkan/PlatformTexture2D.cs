@@ -119,7 +119,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			}
 		}
 
-		public void SetData(int level, int x, int y, int width, int height, IntPtr data)
+		void IPlatformTexture2D.SetData(int level, int x, int y, int width, int height, IntPtr data)
 		{
 			var dataSize = GraphicsUtility.CalculateImageDataSize(Format, width, height);
 			if (IsPvrtc1Format(Format)) {
