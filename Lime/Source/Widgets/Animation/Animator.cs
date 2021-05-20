@@ -44,6 +44,7 @@ namespace Lime
 		void ResetCache();
 #if TANGERINE
 		int Version { get; }
+		void IncreaseVersion();
 #endif // TANGERINE
 	}
 
@@ -109,7 +110,8 @@ namespace Lime
 
 #if TANGERINE
 		private int version;
-		public int Version { get => version + ReadonlyKeys.Version; }
+		public int Version => version + ReadonlyKeys.Version;
+		public void IncreaseVersion() => version++;
 #endif // TANGERINE
 
 		private string targetPropertyPath;

@@ -631,7 +631,6 @@ namespace Tangerine.UI.AnimeshEditor
 					Mesh.Invalidate();
 					yield return null;
 				}
-				Mesh.Animators.Invalidate();
 				AnimeshModification.Animate.Perform();
 				Document.Current.History.CommitTransaction();
 			}

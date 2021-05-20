@@ -85,10 +85,8 @@ namespace Tangerine.UI.Timeline
 			if (delta > 0) {
 				TimelineHorizontalShift.Perform(timeline.CurrentColumn, delta);
 			} else if (delta < 0) {
-				foreach (var node in Document.Current.Container.Nodes) {
-					foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId).ToList()) {
-						RemoveKeyframeRange.Perform(animator, destColumn, timeline.CurrentColumn - 1);
-					}
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
+					RemoveKeyframeRange.Perform(animator, destColumn, timeline.CurrentColumn - 1);
 				}
 				foreach (var marker in Document.Current.Animation.Markers.Where(m => m.Frame >= destColumn && m.Frame < timeline.CurrentColumn).ToList()) {
 					DeleteMarker.Perform(marker, removeDependencies: false);
