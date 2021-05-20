@@ -13,9 +13,6 @@ namespace Lime
 		private IAnimationHost owner;
 		private List<IAnimator> list;
 		public int Count => list?.Count ?? 0;
-#if TANGERINE
-		public int Version { get; private set; }
-#endif // TANGERINE
 
 		public AnimatorCollection(IAnimationHost owner)
 		{
@@ -39,9 +36,6 @@ namespace Lime
 			CreateListIfNeeded();
 			list.Add(item);
 			owner.OnAnimatorCollectionChanged();
-#if TANGERINE
-			Version++;
-#endif // TANGERINE
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -67,9 +61,6 @@ namespace Lime
 				}
 				list = null;
 			}
-#if TANGERINE
-			Version++;
-#endif // TANGERINE
 			owner.OnAnimatorCollectionChanged();
 		}
 
@@ -109,9 +100,6 @@ namespace Lime
 				animator.TargetPropertyPath = propertyPath;
 				animator.AnimationId = animationId;
 				Add(animator);
-#if TANGERINE
-				Version++;
-#endif // TANGERINE
 				owner.OnAnimatorCollectionChanged();
 				return animator;
 			}
@@ -139,9 +127,6 @@ namespace Lime
 			if (list?.Remove(item) == true) {
 				item.Unbind();
 				item.Owner = null;
-#if TANGERINE
-				Version++;
-#endif // TANGERINE
 				owner.OnAnimatorCollectionChanged();
 				return true;
 			}
@@ -180,13 +165,6 @@ namespace Lime
 					a.ExecuteTrigger(frame, animationTimeCorrection);
 				}
 			}
-		}
-
-		public void Invalidate()
-		{
-#if TANGERINE
-			Version++;
-#endif // TANGERINE
 		}
 
 		IEnumerator<IAnimator> IEnumerable<IAnimator>.GetEnumerator()
