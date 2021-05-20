@@ -15,9 +15,10 @@ namespace Tangerine.UI
 			}
 			if (IconPool.TryGetIcon($"Components.{type}", out var icon)) {
 				map[type] = texture = icon.AsTexture;
-				return texture;
+			} else {
+				map[type] = texture = IconTextureGenerator.GetTexture(type);
 			}
-			return IconTextureGenerator.GetTexture(type);
+			return texture;
 		}
 	}
 }
