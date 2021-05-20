@@ -14,8 +14,18 @@ namespace Tangerine.UI
 
 		public static Icon DefaultIcon { get; } = IconPool.GetIcon("Nodes.Unknown");
 
+		[NodeComponentDontSerialize]
+		public class CachedNodeIconTextureComponent : NodeComponent
+		{
+			public ITexture Texture;
+		}
+
 		public static ITexture GetTexture(Node node)
 		{
+			var c = node.Components.GetOrAdd<CachedNodeIconTextureComponent>();
+			if (c.Texture != null) {
+				return c.Texture;
+			}
 			var isNodeType = true;
 			var type = node.GetType();
 			var attribute = type.GetCustomAttribute<TangerineCustomIconAttribute>();
@@ -28,7 +38,8 @@ namespace Tangerine.UI
 					attribute = componentAttribute;
 				}
 			}
-			return isNodeType ? GetTexture(type) : ComponentIconPool.GetTexture(type);
+			var t = isNodeType ? GetTexture(type) : ComponentIconPool.GetTexture(type);
+			return c.Texture = t;
 		}
 
 		public static ITexture GetTexture(Type type)

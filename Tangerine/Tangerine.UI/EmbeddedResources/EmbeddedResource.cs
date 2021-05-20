@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -15,10 +16,14 @@ namespace Tangerine.UI
 			AssemblyName = assemblyName;
 		}
 
+		private static List<(string Name, Assembly Assembly)> assemblies = null;
+
 		protected Assembly GetAssembly()
 		{
-			var resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
-				SingleOrDefault(a => a.GetName().Name == AssemblyName);
+			if (assemblies == null) {
+				assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => (a.GetName().Name, a)).ToList();
+			}
+			var resourcesAssembly = assemblies.SingleOrDefault(e => e.Name == AssemblyName).Assembly;
 			if (resourcesAssembly == null) {
 				throw new Lime.Exception("Assembly '{0}' doesn't exist", AssemblyName);
 			}
