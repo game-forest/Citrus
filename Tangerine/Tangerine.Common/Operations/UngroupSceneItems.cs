@@ -16,14 +16,13 @@ namespace Tangerine.Common.Operations
 				if (!groups.Any()) {
 					throw new InvalidOperationException("Can't ungroup empty node list.");
 				}
-				var container = groups.First().Parent;
+				var containerItem = Document.Current.GetSceneItemForObject(groups.First()).Parent;
 				foreach (var node in groups) {
-					if (node.Parent != container) {
+					if (Document.Current.GetSceneItemForObject(node).Parent != containerItem) {
 						throw new InvalidOperationException("When grouping all nodes must belong to a single parent.");
 					}
 				}
-				UntieWidgetsFromBones.Perform(container.Nodes.OfType<Bone>(), groups);
-				var containerItem = Document.Current.GetSceneItemForObject(container);
+				UntieWidgetsFromBones.Perform(groups.First().Parent.Nodes.OfType<Bone>(), groups);
 				int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(groups.First()));
 				foreach (var group in groups) {
 					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
