@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Lime;
 using Tangerine.Core;
+using System.Linq;
 
 namespace Tangerine.UI
 {
@@ -61,14 +62,19 @@ namespace Tangerine.UI
 					ttc.GetText = () => tooltipText;
 				}
 			);
-			var propertyMetaItem = meta.Items.FirstOrDefault(i => i.Name == editorParams.PropertyName);
-			var defaultValue = propertyMetaItem?.GetValue(meta.Default);
+			object defaultValue = null;
+			if (IsContainerType(editorParams.Type)) {
+				defaultValue = Activator.CreateInstance(propertyType);
+			} else {
+				var propertyMetaItem = meta.Items.FirstOrDefault(i => i.Name == editorParams.PropertyName);
+				defaultValue = propertyMetaItem?.GetValue(meta.Default);
+			}
 			var resetToDefaultButton = new ToolbarButton(IconPool.GetTexture("Tools.Revert")) {
 				Clicked = () => SetProperty(Cloner.Clone(defaultValue))
 			};
 			if (!GetPossibleTypes(propertyType).Skip(1).Any()) {
 				var t = GetPossibleTypes(propertyType).First();
-				var b = new ToolbarButton("Create") {
+				var createButton = new ToolbarButton("Create") {
 					TabTravesable = new TabTraversable(),
 					LayoutCell = new LayoutCell(Alignment.LeftCenter),
 					Padding = new Thickness(left: 5.0f),
@@ -76,20 +82,20 @@ namespace Tangerine.UI
 					MinWidth = 0,
 					MaxWidth = float.PositiveInfinity
 				};
-				b.Clicked = () => {
-					b.Visible = false;
+				createButton.Clicked = () => {
+					createButton.Visible = false;
 					SetProperty<object>(_ => t != null ? Activator.CreateInstance(t) : null);
 					onValueChanged?.Invoke(ExpandableContent);
 					Expanded = true;
 				};
 				var value = CoalescedPropertyValue().GetValue();
-				b.Visible = Equals(value.Value, defaultValue);
+				createButton.Visible = Equals(value.Value, defaultValue);
 				resetToDefaultButton.Clicked = () => {
-					b.Visible = true;
-					SetProperty(defaultValue);
+					SetProperty(Cloner.Clone(defaultValue));
+					createButton.Visible = Equals(CoalescedPropertyValue().GetValue().Value, defaultValue);
 					onValueChanged?.Invoke(ExpandableContent);
 				};
-				EditorContainer.AddNode(b);
+				EditorContainer.AddNode(createButton);
 				EditorContainer.AddNode(Spacer.HStretch());
 				onValueChanged?.Invoke(ExpandableContent);
 			} else {
@@ -107,6 +113,26 @@ namespace Tangerine.UI
 		{
 			Project.Opening += _ => cache.Clear();
 		}
+
+		public static bool IsContainerType(Type type)
+		{
+			// This function was constructed as a result of combinating multiple Yuzu.Util methods.
+			try {
+				return
+					type.IsArray ||
+					yuzuContainerNames.Contains(type.Name) ||
+					yuzuContainerNames.Any(name => type.GetInterface(name) != null);
+			} catch (AmbiguousMatchException) {
+				return false;
+			}
+		}
+
+		private static readonly HashSet<string> yuzuContainerNames = new HashSet<string> {
+			"ICollection",
+			"ICollection`1",
+			"IEnumerable`1",
+			"IDictionary`2",
+		};
 
 		public static IEnumerable<Type> GetPossibleTypes(Type propertyType)
 		{
