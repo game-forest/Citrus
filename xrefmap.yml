@@ -4502,19 +4502,6 @@ references:
   isSpec: "True"
   fullName: Lime.AnimatorCollection.GetOverallDuration
   nameWithType: AnimatorCollection.GetOverallDuration
-- uid: Lime.AnimatorCollection.Invalidate
-  name: Invalidate()
-  href: api/Lime.AnimatorCollection.html#Lime_AnimatorCollection_Invalidate
-  commentId: M:Lime.AnimatorCollection.Invalidate
-  fullName: Lime.AnimatorCollection.Invalidate()
-  nameWithType: AnimatorCollection.Invalidate()
-- uid: Lime.AnimatorCollection.Invalidate*
-  name: Invalidate
-  href: api/Lime.AnimatorCollection.html#Lime_AnimatorCollection_Invalidate_
-  commentId: Overload:Lime.AnimatorCollection.Invalidate
-  isSpec: "True"
-  fullName: Lime.AnimatorCollection.Invalidate
-  nameWithType: AnimatorCollection.Invalidate
 - uid: Lime.AnimatorCollection.InvokeTriggers(System.Int32,System.String,System.Double)
   name: InvokeTriggers(Int32, String, Double)
   href: api/Lime.AnimatorCollection.html#Lime_AnimatorCollection_InvokeTriggers_System_Int32_System_String_System_Double_
