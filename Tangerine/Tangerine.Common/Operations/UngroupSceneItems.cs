@@ -24,10 +24,11 @@ namespace Tangerine.Common.Operations
 					);
 				}
 				foreach (var group in groups) {
-					var containerItem = Document.Current.GetSceneItemForObject(group).Parent;
-					int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(group));
-					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
-					var groupItems = Document.Current.GetSceneItemForObject(group).Rows.ToList();
+					var itemForGroup = Document.Current.GetSceneItemForObject(group);
+					var containerItem = itemForGroup.Parent;
+					int index = containerItem.Rows.IndexOf(itemForGroup);
+					UnlinkSceneItem.Perform(itemForGroup);
+					var groupItems = itemForGroup.Rows.ToList();
 					var localToParentTransform = group.CalcLocalToParentTransform();
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);
