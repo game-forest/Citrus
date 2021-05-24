@@ -16,19 +16,17 @@ namespace Tangerine.Common.Operations
 				if (!groups.Any()) {
 					throw new InvalidOperationException("Can't ungroup empty node list.");
 				}
-				var containerItem = Document.Current.GetSceneItemForObject(groups.First()).Parent;
-				foreach (var node in groups) {
-					if (Document.Current.GetSceneItemForObject(node).Parent != containerItem) {
-						throw new InvalidOperationException("When grouping all nodes must belong to a single parent.");
-					}
-				}
-				UntieWidgetsFromBones.Perform(groups.First().Parent.Nodes.OfType<Bone>(), groups);
-				int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(groups.First()));
-				foreach (var group in groups) {
-					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
-				}
 				var result = new List<Row>();
 				foreach (var group in groups) {
+					UntieWidgetsFromBones.Perform(
+						group.Parent.Nodes.OfType<Bone>(),
+						groups.Where(i => i.Parent == group.Parent)
+					);
+				}
+				foreach (var group in groups) {
+					var containerItem = Document.Current.GetSceneItemForObject(group).Parent;
+					int index = containerItem.Rows.IndexOf(Document.Current.GetSceneItemForObject(group));
+					UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group));
 					var groupItems = Document.Current.GetSceneItemForObject(group).Rows.ToList();
 					var localToParentTransform = group.CalcLocalToParentTransform();
 					foreach (var i in groupItems) {

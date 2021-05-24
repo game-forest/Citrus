@@ -29,7 +29,7 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			var groups = SceneTreeUtils.EnumerateSelectedTopSceneItems()
+			var groups = Document.Current.SelectedRows()
 				.Select(i => i.GetNode()).OfType<Frame>().ToList();
 			if (groups.Count == 0) {
 				return;
