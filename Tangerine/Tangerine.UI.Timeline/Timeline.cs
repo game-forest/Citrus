@@ -151,6 +151,7 @@ namespace Tangerine.UI.Timeline
 			DropFilesGesture.Recognized += new ImagesDropHandler().Handle;
 			DropFilesGesture.Recognized += new AudiosDropHandler().Handle;
 			DropFilesGesture.Recognized += new ScenesDropHandler().Handle;
+			DropFilesGesture.Recognized += new Models3DDropHandler().Handle;
 		}
 
 

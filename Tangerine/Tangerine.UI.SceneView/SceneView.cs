@@ -299,6 +299,7 @@ namespace Tangerine.UI.SceneView
 			DropFilesGesture.Recognized += new ImagesDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 			DropFilesGesture.Recognized += new AudiosDropHandler().Handle;
 			DropFilesGesture.Recognized += new ScenesDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
+			DropFilesGesture.Recognized += new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 		}
 
 		private void CenterDocumentRoot(Node node)
