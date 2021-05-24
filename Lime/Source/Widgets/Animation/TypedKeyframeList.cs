@@ -25,8 +25,7 @@ namespace Lime
 		}
 
 #if TANGERINE
-		public int Version { get; set; }
-		internal void IncreaseVersion() => Version++;
+		public int Version { get; private set; }
 #endif // TANGERINE
 
 		public void Add(int frame, T value, KeyFunction function = KeyFunction.Linear)
@@ -91,7 +90,7 @@ namespace Lime
 		public void Add(Keyframe<T> item)
 		{
 #if TANGERINE
-			IncreaseVersion();
+			Version++;
 #endif // TANGERINE
 			items.Add(item);
 		}
@@ -113,7 +112,7 @@ namespace Lime
 		{
 			items.Clear();
 #if TANGERINE
-			IncreaseVersion();
+			Version++;
 #endif // TANGERINE
 		}
 
@@ -132,7 +131,7 @@ namespace Lime
 		public bool Remove(Keyframe<T> item)
 		{
 #if TANGERINE
-			IncreaseVersion();
+			Version++;
 #endif // TANGERINE
 			if (items.Remove(item)) {
 				return true;
@@ -148,7 +147,7 @@ namespace Lime
 		public void Insert(int index, Keyframe<T> item)
 		{
 #if TANGERINE
-			IncreaseVersion();
+			Version++;
 #endif // TANGERINE
 			items.Insert(index, item);
 		}
@@ -156,7 +155,7 @@ namespace Lime
 		public void RemoveAt(int index)
 		{
 #if TANGERINE
-			IncreaseVersion();
+			Version++;
 #endif // TANGERINE
 			items.RemoveAt(index);
 		}

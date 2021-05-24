@@ -9,7 +9,7 @@ namespace Tangerine.Core.Operations
 		public override bool IsChangingDocument => true;
 
 		private readonly int column;
-		private Dictionary<Node, int> keyRemoveAt = new Dictionary<Node, int>();
+		private readonly Dictionary<IAnimator, int> keyRemoveAt = new Dictionary<IAnimator, int>();
 		private int markerRemoveAt = -1;
 
 		private TimelineColumnRemove(int column)
@@ -27,17 +27,7 @@ namespace Tangerine.Core.Operations
 			protected override void InternalRedo(TimelineColumnRemove op)
 			{
 				op.keyRemoveAt.Clear();
-				if (Document.Current.Animation.IsLegacy) {
-					foreach (var node in Document.Current.Container.Nodes) {
-						RemoveTimelineColumn(op, node);
-					}
-				} else {
-					var owner = Document.Current.Animation.OwnerNode;
-					var animationId = Document.Current.AnimationId;
-					foreach (var descendant in owner.DescendantsSkippingNamesakeAnimationOwners(animationId)) {
-						RemoveTimelineColumn(op, descendant);
-					}
-				}
+				RemoveTimelineColumn(op);
 				var markers = Document.Current.Animation.Markers;
 				if (markers.Count == 0) {
 					return;
@@ -63,29 +53,14 @@ namespace Tangerine.Core.Operations
 
 			protected override void InternalUndo(TimelineColumnRemove op)
 			{
-				if (Document.Current.Animation.IsLegacy) {
-					foreach (var node in Document.Current.Container.Nodes) {
-						ProcessNode(node);
-					}
-				} else {
-					var owner = Document.Current.Animation.OwnerNode;
-					var animationId = Document.Current.AnimationId;
-					foreach (var descendant in owner.DescendantsSkippingNamesakeAnimationOwners(animationId)) {
-						ProcessNode(descendant);
-					}
-				}
-
-				void ProcessNode(Node node)
-				{
-					foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId)) {
-						foreach (var k in animator.ReadonlyKeys.Reverse()) {
-							if (k.Frame >= op.keyRemoveAt[node]) {
-								k.Frame += 1;
-							}
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+					foreach (var k in animator.ReadonlyKeys.Reverse()) {
+						if (k.Frame >= op.keyRemoveAt[animator]) {
+							k.Frame += 1;
 						}
-						animator.ResetCache();
 					}
-					node.Animators.Invalidate();
+					animator.ResetCache();
+					animator.IncreaseVersion();
 				}
 				foreach (var m in Document.Current.Animation.Markers.Reverse()) {
 					if (m.Frame >= op.markerRemoveAt) {
@@ -94,34 +69,28 @@ namespace Tangerine.Core.Operations
 				}
 			}
 
-			private void RemoveTimelineColumn(TimelineColumnRemove op, Node node)
+			private void RemoveTimelineColumn(TimelineColumnRemove op)
 			{
-				if (node.Animators.Count == 0) {
-					return;
-				}
-				if (!op.keyRemoveAt.ContainsKey(node)) {
-					var occupied = new HashSet<int>();
-					foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId)) {
-						foreach (var k in animator.ReadonlyKeys) {
-							occupied.Add(k.Frame);
-						}
+				var occupied = new HashSet<int>();
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+					occupied.Clear();
+					foreach (var k in animator.ReadonlyKeys) {
+						occupied.Add(k.Frame);
 					}
 					for (var i = op.column; ; ++i) {
 						if (!occupied.Contains(i)) {
-							op.keyRemoveAt[node] = i;
+							op.keyRemoveAt[animator] = i;
 							break;
 						}
 					}
-				}
-				foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId)) {
 					foreach (var k in animator.ReadonlyKeys) {
-						if (k.Frame != 0 && k.Frame >= op.keyRemoveAt[node]) {
+						if (k.Frame != 0 && k.Frame >= op.keyRemoveAt[animator]) {
 							k.Frame -= 1;
 						}
 					}
 					animator.ResetCache();
+					animator.IncreaseVersion();
 				}
-				node.Animators.Invalidate();
 			}
 		}
 	}

@@ -33,8 +33,5 @@ namespace Tangerine.Core
 					(root == node ? bundlePath : $"{bundlePath} [{node.ToString()}]") :
 					$"{nodePath} [{node.ToString()}]";
 		}
-
-		public static IEnumerable<Node> DescendantsSkippingNamesakeAnimationOwners(this Node node, string animationId) =>
-			new DescendantsSkippingNamesakeAnimationOwnersEnumerable(node, animationId);
 	}
 }

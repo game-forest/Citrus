@@ -56,8 +56,8 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 						foreach (var key in slice.Keyframes) {
 							animator.Keys.AddOrdered(key);
 							animator.ResetCache();
+							animator.IncreaseVersion();
 						}
-						mesh.Animators.Invalidate();
 					} else {
 						mesh.TransientVertices.Clear();
 						foreach (var v in slice.Vertices) {

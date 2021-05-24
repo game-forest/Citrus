@@ -25,30 +25,15 @@ namespace Tangerine.Core.Operations
 		{
 			protected override void InternalRedo(TimelineHorizontalShift op)
 			{
-				if (Document.Current.Animation.IsLegacy) {
-					foreach (var node in Document.Current.Container.Nodes) {
-						Shift(node);
-					}
-				} else {
-					var owner = Document.Current.Animation.OwnerNode;
-					var animationId = Document.Current.AnimationId;
-					foreach (var descendant in owner.DescendantsSkippingNamesakeAnimationOwners(animationId)) {
-						Shift(descendant);
-					}
-				}
-
-				void Shift(Node node)
-				{
-					foreach (var animator in node.Animators.Where(i => i.AnimationId == Document.Current.AnimationId)) {
-						var keys = op.delta > 0 ? animator.ReadonlyKeys.Reverse() : animator.ReadonlyKeys;
-						foreach (var k in keys) {
-							if (k.Frame >= op.column) {
-								k.Frame += op.delta;
-							}
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+					var keys = op.delta > 0 ? animator.Keys.Reverse() : animator.Keys;
+					foreach (var k in keys) {
+						if (k.Frame >= op.column) {
+							k.Frame += op.delta;
 						}
-						animator.ResetCache();
 					}
-					node.Animators.Invalidate();
+					animator.ResetCache();
+					animator.IncreaseVersion();
 				}
 				var markers = op.delta > 0 ? Document.Current.Animation.Markers.Reverse() : Document.Current.Animation.Markers;
 				foreach (var m in markers) {

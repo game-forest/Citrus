@@ -64,7 +64,6 @@
     <Compile Include="AssetDatabase.cs" />
     <Compile Include="Commands\OrangeCommands.cs" />
     <Compile Include="Consumer.cs" />
-    <Compile Include="DescendantsSkippingNamesakeAnimationOwnersEnumerable.cs" />
     <Compile Include="GridSelection.cs" />
     <Compile Include="GridSpanList.cs" />
     <Compile Include="ISceneView.cs" />
