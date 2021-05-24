@@ -201,8 +201,10 @@ namespace Lime
 				Value = v + dragInitialDelta * (1 - (offset - dragInitialOffset) / (1 - dragInitialOffset));
 			} else if (offset < dragInitialOffset && dragInitialOffset > 0) {
 				Value = v + dragInitialDelta * (1 - (dragInitialOffset - offset) / dragInitialOffset);
-			} else {
+			} else if (offset > 0) {
 				Value = v + dragInitialDelta;
+			} else {
+				Value = v;
 			}
 			if (Step > 0) {
 				Value = (float)Math.Round(Value / Step) * Step;
