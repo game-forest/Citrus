@@ -220,11 +220,14 @@ namespace Lime
 		{
 			var hit = false;
 			distance = float.MaxValue;
-			ray = ray.Transform(GlobalTransformInverse);
 			foreach (var submesh in Submeshes) {
 				var vertices = submesh.Mesh.Vertices;
-				for (int i = 0; i <= vertices.Length - 3; i += 3) {
-					var d = ray.IntersectsTriangle(vertices[i].Pos, vertices[i + 1].Pos, vertices[i + 2].Pos);
+				var indices = submesh.Mesh.Indices;
+				for (int i = 0; i <= indices.Length - 3; i += 3) {
+					var v1 = GlobalTransform.TransformVector(vertices[indices[i]].Pos);
+					var v2 = GlobalTransform.TransformVector(vertices[indices[i + 1]].Pos);
+					var v3 = GlobalTransform.TransformVector(vertices[indices[i + 2]].Pos);
+					var d = ray.IntersectsTriangle(v1, v2, v3);
 					if (d != null && d.Value < distance) {
 						distance = d.Value;
 						hit = true;
