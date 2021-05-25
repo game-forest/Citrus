@@ -84,7 +84,12 @@ namespace Lime
 
 		private Task scrollingTask;
 
-		public ScrollView(Frame frame, ScrollDirection scrollDirection = ScrollDirection.Vertical, bool processChildrenFirst = false)
+		public ScrollView(
+			Frame frame,
+			ScrollDirection scrollDirection = ScrollDirection.Vertical,
+			bool processChildrenFirst = false,
+			ScrollViewContentWidget overriddenContent = null
+		)
 		{
 			ScrollDirection = scrollDirection;
 			RejectOrtogonalSwipes = true;
@@ -94,7 +99,17 @@ namespace Lime
 			Frame.HitTestTarget = true;
 			Frame.ClipChildren = ClipMethod.ScissorTest;
 			CanScroll = true;
-			Content = CreateContentWidget();
+			if (overriddenContent != null) {
+				if (overriddenContent.Parent == null || overriddenContent.Parent != Frame) {
+					throw new ArgumentException($"'overriddenContent' must be inside 'frame': {frame}");
+				}
+
+				Content = overriddenContent;
+			} else {
+				Content = CreateContentWidget();
+				Content.PushToNode(Frame);
+			}
+
 			Content.ScrollDirection = ScrollDirection;
 			if (ScrollDirection == ScrollDirection.Vertical) {
 				Content.Width = Frame.Width;
@@ -103,7 +118,7 @@ namespace Lime
 				Content.Width = 0;
 				Content.Height = Frame.Height;
 			}
-			Content.PushToNode(Frame);
+
 			if (processChildrenFirst) {
 				Content.LateTasks.Add(MainTask());
 			} else {
@@ -350,7 +365,7 @@ namespace Lime
 		}
 
 		[YuzuDontGenerateDeserializer]
-		public class ScrollViewContentWidget : Widget
+		public class ScrollViewContentWidget : Frame
 		{
 			public bool ReverseOrderRendering;
 			public ScrollDirection ScrollDirection;
