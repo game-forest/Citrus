@@ -31,7 +31,7 @@ namespace Tangerine.UI.SceneView
 			foreach (var node in Document.Current.SelectedNodes()) {
 				if (node is Widget widget) {
 					foreach (var line in PaddingLine.GetLines(widget)) {
-						line.Render(widget.LocalToWorldTransform * transition);
+						line.Render(canvas, widget.LocalToWorldTransform * transition);
 					}
 				}
 			}
@@ -56,6 +56,8 @@ namespace Tangerine.UI.SceneView
 		public Vector2 Center { get; set; }
 
 		private readonly int index;
+
+		private static readonly Vector2 rectScale = new Vector2(2, 0);
 
 		private static readonly Vector2[] directions = {
 			new Vector2(1, 0),
@@ -86,36 +88,40 @@ namespace Tangerine.UI.SceneView
 			B = AB.Item2;
 		}
 
-		public void Render(Matrix32 matrix)
+		public void Render(Widget canvas, Matrix32 matrix)
 		{
 			var a = matrix.TransformVector(A);
 			var b = matrix.TransformVector(B);
 			Renderer.DrawLine(a, b, ColorTheme.Current.SceneView.PaddingEditorBorder, 2);
 
+			Center = matrix.TransformVector((A + B) / 2);
 			var label = propertyNames[index].ToString()[0].ToString();
 			var fontHeight = 20;
-			if (index % 2 == 0) {
-				Center = new Vector2(A.X, (A.Y + B.Y) / 2);
-			} else {
-				Center = new Vector2((A.X + B.X) / 2, A.Y);
-			}
-			Center = matrix.TransformVector(Center);
-			var lt = new Vector2(Center.X - 2, Center.Y);
-			var rb = new Vector2(Center.X + fontHeight / 2 + 1, Center.Y + fontHeight);
+			var lt = new Vector2(-1, -1);
+			var rb = new Vector2(1, 1);
+			var angle = Owner.LocalToWorldTransform.U.Atan2Rad;
+			var scale = new Vector2(fontHeight * 0.25f, fontHeight * 0.5f);
+			var rectMatrix = Matrix32.Transformation(directions[index], scale + rectScale, angle, Center);
+			var textMatrix = Matrix32.Transformation(Vector2.Zero, Vector2.One, angle, Center);
+			Renderer.PushState(RenderState.Transform1);
+			Renderer.Transform1 = rectMatrix * canvas.LocalToWorldTransform;
 			Renderer.DrawRect(lt, rb, ColorTheme.Current.SceneView.PaddingEditorBorder);
+			Renderer.PushState(RenderState.Transform1);
+			Renderer.Transform1 = textMatrix * canvas.LocalToWorldTransform;
 			Renderer.DrawTextLine(
-				Center,
+				(directions[(index + 2) % 4] - Vector2.One) * scale,
 				label,
 				fontHeight,
 				ColorTheme.Current.SceneView.PaddingEditorText,
 				0
 			);
+			Renderer.PopState();
+			Renderer.PopState();
 		}
 
 		public Vector2 GetDirection()
 		{
-			var matrix = Owner.CalcLocalToParentTransform();
-			return (matrix * directions[index] - matrix * Vector2.Zero).Normalized;
+			return directions[index];
 		}
 
 		public static IEnumerable<PaddingLine> GetLines(Widget widget)

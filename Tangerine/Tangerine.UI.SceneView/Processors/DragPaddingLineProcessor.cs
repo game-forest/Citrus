@@ -42,19 +42,19 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		private IEnumerator<object> Drag(PaddingLine paddingLine)
+		private static IEnumerator<object> Drag(PaddingLine paddingLine)
 		{
-			var transform = sv.Scene.CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
-			var initMousePos = sv.MousePosition * transform;
+			var initMousePos = sv.MousePosition;
 			var dir = paddingLine.GetDirection();
 			var widget = paddingLine.Owner;
 			var name = paddingLine.PropertyName;
+			var rotation = Matrix32.Rotation(-widget.LocalToWorldTransform.U.Atan2Rad);
 			using (Document.Current.History.BeginTransaction()) {
 				while (sv.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var curMousePos = sv.MousePosition * transform;
-					var diff = Vector2.DotProduct((curMousePos - initMousePos) / widget.Scale, dir);
+					var curMousePos = sv.MousePosition;
+					var diff = Vector2.DotProduct(rotation * (curMousePos - initMousePos) / widget.Scale, dir);
 					if (Mathf.Abs(diff) > Mathf.ZeroTolerance) {
 						var padding = widget.Padding;
 						switch (name) {
