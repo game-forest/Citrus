@@ -530,7 +530,7 @@ namespace Lime
 			} else {
 				vSync = options.VSync;
 				renderControl.VSync = vSync;
-				System.Windows.Forms.Application.Idle += OnBecomeIdle;
+				WindowIdleUpdater.UpdateOnIdleWindows.Add(this);
 			}
 
 			form.Controls.Add(renderControl);
@@ -640,7 +640,7 @@ namespace Lime
 				System.Windows.Forms.Application.Exit();
 			}
 			if (timer == null) {
-				System.Windows.Forms.Application.Idle -= OnBecomeIdle;
+				WindowIdleUpdater.UpdateOnIdleWindows.Remove(this);
 			} else {
 				timer.Dispose();
 			}
@@ -786,36 +786,16 @@ namespace Lime
 			Application.Input.SetDesktopTouchPosition(0, Application.Input.DesktopMousePosition);
 		}
 
+		internal bool OnIdleUpdate()
+		{
+			var wasUpdated = Update();
+			return wasUpdated && renderingState != RenderingState.Updated;
+		}
+
 		private void OnTick(object sender, EventArgs e)
 		{
 			Update();
 		}
-
-		private void OnBecomeIdle(object sender, EventArgs e)
-		{
-			do {
-				Update();
-			} while (IsApplicationIdle() && renderingState != RenderingState.Updated);
-		}
-
-		private bool IsApplicationIdle()
-		{
-			return PeekMessage(out NativeMessage result, Form.Handle, (uint)0, (uint)0, (uint)0) == 0;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		public struct NativeMessage
-		{
-			public IntPtr Handle;
-			public uint Message;
-			public IntPtr WParameter;
-			public IntPtr LParameter;
-			public uint Time;
-			public Point Location;
-		}
-
-		[DllImport("user32.dll")]
-		public static extern int PeekMessage(out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove);
 
 		private void OnKeyDown(object sender, KeyEventArgs e)
 		{
@@ -890,12 +870,12 @@ namespace Lime
 			}
 		}
 
-		private void Update()
+		private bool Update()
 		{
 			var wasInvalidated = isInvalidated;
 			isInvalidated = false;
 			if (!form.Visible || !form.CanFocus || !renderControl.IsHandleCreated) {
-				return;
+				return false;
 			}
 			UnclampedDelta = (float)stopwatch.Elapsed.TotalSeconds;
 			float delta = Mathf.Clamp(UnclampedDelta, 0, Application.MaxDelta);
@@ -940,6 +920,7 @@ namespace Lime
 					renderReady.Set();
 				}
 			}
+			return true;
 		}
 
 		private static Key TranslateKey(Keys key)
@@ -1212,6 +1193,46 @@ namespace Lime
 		{
 			var dragObject = new DataObject(DataFormats.FileDrop, filenames);
 			form.DoDragDrop(dragObject, DragDropEffects.All);
+		}
+
+		private static class WindowIdleUpdater
+		{
+			public static List<Window> UpdateOnIdleWindows = new List<Window>();
+
+			static WindowIdleUpdater()
+			{
+				System.Windows.Forms.Application.Idle += OnBecomeIdle;
+			}
+
+			private static void OnBecomeIdle(object sender, EventArgs e)
+			{
+				var restartLoop = false;
+				do {
+					restartLoop = false;
+					foreach (var window in UpdateOnIdleWindows) {
+						restartLoop |= window.OnIdleUpdate();
+					}
+				} while (IsApplicationIdle() && restartLoop);
+			}
+
+			private static bool IsApplicationIdle()
+			{
+				return PeekMessage(out NativeMessage result, (IntPtr)0, (uint)0, (uint)0, (uint)0) == 0;
+			}
+
+			[StructLayout(LayoutKind.Sequential)]
+			public struct NativeMessage
+			{
+				public IntPtr Handle;
+				public uint Message;
+				public IntPtr WParameter;
+				public IntPtr LParameter;
+				public uint Time;
+				public Point Location;
+			}
+
+			[DllImport("user32.dll")]
+			private static extern int PeekMessage(out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove);
 		}
 	}
 
