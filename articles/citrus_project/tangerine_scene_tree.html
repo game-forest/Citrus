@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Frame | Citrus Engine </title>
+    <title>Tangerine scene tree | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Frame | Citrus Engine ">
+    <meta name="title" content="Tangerine scene tree | Citrus Engine ">
     <meta name="generator" content="docfx 2.56.3.0">
     
     <link rel="shortcut icon" href="../../images/favicon.ico">
@@ -77,22 +77,34 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="frame">Frame</h1>
+<h1 id="tangerine-scene-tree">Tangerine scene tree</h1>
 
-<p>Frame (группа)  - используется как контейнер для других виджетов.</p>
-<p>Свойства <strong>Frame</strong>:</p>
-<ul>
-<li>Является <a href="widget.html">виджетом</a></li>
-<li><strong>ClipChildren</strong> - как поступать с контентом за пределами фрейма (обрезать/игнорировать)</li>
-</ul>
-<p>Допустимые значения:
-- <strong>None</strong> doesn't clip children
-- <strong>ScissorTest</strong> clips by frame rectangle, doesn't support rotation but faster
-- <strong>StensilTest</strong> clips by frame rectangle, supports rotation but slower
-- <strong>NoRender</strong> skips children rendering.</p>
-<ul>
-<li><strong>RenderTarget</strong> - рендерит фрейм в текстуру, согласно выбранному размеру. Затем эту текстуру можно использовать в полях <em>Texture</em></li>
-</ul>
+<h2 id="what-is-a-scene-tree-and-why-do-we-need-one">What is a scene tree and why do we need one?</h2>
+<p>A scene tree is an object tree of class SceneItem, which is a hierarchy parallel to the node tree. But unlike the node hierarchy, it takes into account the placement of nodes within folders, the hierarchical organization of bones, etc. This significantly simplifies visualization of the scene structure, as well as its editing, hiding the whole mechanism of index recalculation for folders and bones behind the scene tree API. Visually, the scene tree can be seen as a timeline element, on the animations panel and on the scene hierarchy panel.</p>
+<p>The reference to the root of the tree is in the document: Document.Current.SceneTree. The node of the tree is an object of the SceneItem class (currently Row, will be renamed to SceneItem in the future).</p>
+<h2 id="how-to-modify-the-scene-tree">How to modify the scene tree</h2>
+<ol>
+<li><p>In order to properly add nodes, folders, animations, etc., you must use the <code>LinkSceneItem.Perform()</code> method.</p>
+<p>You can never add nodes directly to a NodeList collection. This is because within itself a node has an additional folder hierarchy that is not directly created to the NodeList. And if you add a node to the NodeList using <code>AddIntoCollection.Perform()</code> the folder structure will be broken.</p>
+</li>
+<li><p>To build a scene tree for a new node (just created or cloned) execute the following code:</p>
+<pre><code class="lang-csharp">var sceneItem = Document.Current.SceneTreeBuilder.BuildForNode(node); 
+</code></pre>
+<p>Then you can add it to the document's scene tree like this:</p>
+<pre><code class="lang-csharp">LinkSceneItem.Perform(Document.Current.SceneItem, 0, sceneItem);
+</code></pre>
+<p>But as said in the previous paragraph, there is an overload <code>LinkSceneItem.Perform()</code> which takes a Node and internally calls <code>BuildForNode()</code>.</p>
+</li>
+<li><p>To translate a node, animation, property into an existing SceneItem you need to use the <code>Document.Current.GetSceneItemForObject()</code> method.</p>
+</li>
+<li><p>Bones are also added to nodes and parent bones using <code>LinkSceneItem.Perform()</code>. If the parent SceneItem is also a bone, the index passed to this method is the index of the binding of the bone to the parent bone.</p>
+</li>
+<li><p>If the current SceneItem refers to a node, its children (the <code>SceneItem.Items</code> collection) are arranged in the following order: animations, animated properties, child nodes. Accordingly, if the parent node has 1 animation and 2 animated properties, then calling</p>
+<pre><code class="lang-csharp">LinkSceneItem.Perform(parentNodeItem, 0, childNodeItem);
+</code></pre>
+<p>will insert the childNodeItem not at the zero position, but at the third position in the parentNodeItem.Items list.</p>
+</li>
+</ol>
 </article>
           </div>
           
