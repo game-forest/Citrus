@@ -21,13 +21,22 @@ namespace Tangerine.UI.SceneView
 				}
 				var nodes = Document.Current.SelectedNodes().Editable();
 				var mousePosition = sv.MousePosition;
+				float zoom = sv.Scene.Scale.X;
 				foreach (var node in nodes) {
 					if (node is Widget widget) {
 						var matrix = widget.LocalToWorldTransform;
 						foreach (var line in PaddingLine.GetLines(widget)) {
 							var a = matrix.TransformVector(line.A);
 							var b = matrix.TransformVector(line.B);
-							if (Utils.LineHitTest(mousePosition, a, b) && paddingVisualHint.Enabled) {
+							var c = matrix.TransformVector((line.A + line.B) / 2);
+							var r = widget.LocalToWorldTransform.U.Atan2Rad;
+							var s = new Vector2(line.FontHeight * 0.25f + 2, line.FontHeight * 0.5f) / zoom;
+							var rectMatrix = Matrix32.Transformation(line.GetDirection(), s, r, c);
+							var quad = new Rectangle(-1, -1, 1, 1).ToQuadrangle().Transform(rectMatrix);
+							if (
+								(Utils.LineHitTest(mousePosition, a, b, 10f / zoom) || quad.Contains(mousePosition)) &&
+								paddingVisualHint.Enabled
+							) {
 								Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 								if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
 									yield return Drag(line);

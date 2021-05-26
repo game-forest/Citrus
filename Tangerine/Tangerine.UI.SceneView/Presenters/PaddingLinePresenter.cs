@@ -54,10 +54,12 @@ namespace Tangerine.UI.SceneView
 		public Vector2 A { get; set; }
 		public Vector2 B { get; set; }
 		public Vector2 Center { get; set; }
+		public int FontHeight { get; private set; } = 20;
 
 		private readonly int index;
 
 		private static readonly Vector2 rectScale = new Vector2(2, 0);
+		private static readonly Rectangle rect = new Rectangle(-1, -1, 1, 1);
 
 		private static readonly Vector2[] directions = {
 			new Vector2(1, 0),
@@ -96,22 +98,19 @@ namespace Tangerine.UI.SceneView
 
 			Center = matrix.TransformVector((A + B) / 2);
 			var label = propertyNames[index].ToString()[0].ToString();
-			var fontHeight = 20;
-			var lt = new Vector2(-1, -1);
-			var rb = new Vector2(1, 1);
 			var angle = Owner.LocalToWorldTransform.U.Atan2Rad;
-			var scale = new Vector2(fontHeight * 0.25f, fontHeight * 0.5f);
+			var scale = new Vector2(FontHeight * 0.25f, FontHeight * 0.5f);
 			var rectMatrix = Matrix32.Transformation(directions[index], scale + rectScale, angle, Center);
 			var textMatrix = Matrix32.Transformation(Vector2.Zero, Vector2.One, angle, Center);
 			Renderer.PushState(RenderState.Transform1);
 			Renderer.Transform1 = rectMatrix * canvas.LocalToWorldTransform;
-			Renderer.DrawRect(lt, rb, ColorTheme.Current.SceneView.PaddingEditorBorder);
+			Renderer.DrawRect(rect.A, rect.B, ColorTheme.Current.SceneView.PaddingEditorBorder);
 			Renderer.PushState(RenderState.Transform1);
 			Renderer.Transform1 = textMatrix * canvas.LocalToWorldTransform;
 			Renderer.DrawTextLine(
 				(directions[(index + 2) % 4] - Vector2.One) * scale,
 				label,
-				fontHeight,
+				FontHeight,
 				ColorTheme.Current.SceneView.PaddingEditorText,
 				0
 			);
