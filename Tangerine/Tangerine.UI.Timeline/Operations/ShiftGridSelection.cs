@@ -58,7 +58,7 @@ namespace Tangerine.UI.Timeline.Operations
 				op.Save(b);
 				if (op.Offset.Y != 0) {
 					foreach (var row in Document.Current.Rows) {
-						var i = row.Index - op.Offset.Y;
+						var i = row.GetTimelineItemState().Index - op.Offset.Y;
 						row.Components.Remove<GridSpanListComponent>();
 						row.Components.Add(i >= 0 && i < Document.Current.Rows.Count ? new GridSpanListComponent(b.Spans[i]) : new GridSpanListComponent());
 					}
@@ -70,7 +70,7 @@ namespace Tangerine.UI.Timeline.Operations
 				var b = op.Restore<Backup>();
 				foreach (var row in Document.Current.Rows) {
 					row.Components.Remove<GridSpanListComponent>();
-					row.Components.Add(new GridSpanListComponent(b.Spans[row.Index]));
+					row.Components.Add(new GridSpanListComponent(b.Spans[row.GetTimelineItemState().Index]));
 				}
 			}
 		}

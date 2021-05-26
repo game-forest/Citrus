@@ -17,13 +17,13 @@ namespace Tangerine.UI.Timeline
 					bool enabled = Document.Current.Rows.Count > 0;
 					if (enabled) {
 						var cell = Timeline.Instance.Grid.CellUnderMouse();
-						var row = Document.Current.Rows[cell.Y];
-						var spans = row.Components.Get<Core.Components.GridSpanListComponent>()?.Spans;
-						if (!row.Selected || !spans.Any(i => i.Contains(cell.X))) {
+						var i = Document.Current.Rows[cell.Y];
+						var spans = i.Components.Get<Core.Components.GridSpanListComponent>()?.Spans;
+						if (!i.GetTimelineItemState().Selected || !spans.Any(i => i.Contains(cell.X))) {
 							Document.Current.History.DoTransaction(() => {
 								Core.Operations.ClearRowSelection.Perform();
 								Operations.ClearGridSelection.Perform();
-								Core.Operations.SelectRow.Perform(row);
+								Core.Operations.SelectRow.Perform(i);
 								Operations.SelectGridSpan.Perform(cell.Y, cell.X, cell.X + 1);
 							});
 						}

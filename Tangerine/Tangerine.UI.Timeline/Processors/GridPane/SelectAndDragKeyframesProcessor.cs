@@ -81,15 +81,15 @@ namespace Tangerine.UI.Timeline
 
 		private static void SelectKeyframes(IntRectangle bounds)
 		{
-			foreach (var row in Document.Current.Rows) {
+			foreach (var i in Document.Current.Rows) {
 				if (
-					row.Index >= bounds.A.Y && row.Index <= bounds.B.Y &&
-					row.Components.Get<NodeRow>() is NodeRow nodeRow
+					i.GetTimelineItemState().Index >= bounds.A.Y && i.GetTimelineItemState().Index <= bounds.B.Y &&
+					i.Components.Get<NodeRow>() is NodeRow nodeRow
 				) {
 					foreach (var animator in nodeRow.Node.Animators) {
 						foreach (var key in animator.ReadonlyKeys) {
 							if (key.Frame >= bounds.A.X && key.Frame <= bounds.B.X) {
-								Operations.SelectGridSpan.Perform(row.Index, key.Frame, key.Frame + 1);
+								Operations.SelectGridSpan.Perform(i.GetTimelineItemState().Index, key.Frame, key.Frame + 1);
 							}
 						}
 					}
@@ -189,7 +189,10 @@ namespace Tangerine.UI.Timeline
 			var selectedRows = Document.Current.SelectedRows();
 			if (!input.IsKeyPressed(Key.Control)) {
 				foreach (var row in selectedRows) {
-					if (row.Index < selectionRectangle.A.Y || selectionRectangle.B.Y <= row.Index) {
+					if (
+						row.GetTimelineItemState().Index < selectionRectangle.A.Y ||
+						selectionRectangle.B.Y <= row.GetTimelineItemState().Index
+					) {
 						Core.Operations.ClearRowSelection.Perform();
 						break;
 					}

@@ -22,10 +22,13 @@ namespace Tangerine.UI.Timeline
 						Operations.DragKeyframes.Perform(rq.Offset, rq.RemoveOriginals);
 						Operations.ShiftGridSelection.Perform(rq.Offset);
 						if (rq.Offset.Y != 0) {
-							var selected = Document.Current.SelectedRows().Where(r => r.Selected).Select(r => r.Index).ToDictionary(x => x);
+							var selected =
+								Document.Current.SelectedRows().
+								Where(r => r.GetTimelineItemState().Selected).
+								Select(r => r.GetTimelineItemState().Index).ToDictionary(x => x);
 							ClearRowSelection.Perform();
 							foreach (var row in Document.Current.Rows) {
-								if (selected.ContainsKey(row.Index - rq.Offset.Y)) {
+								if (selected.ContainsKey(row.GetTimelineItemState().Index - rq.Offset.Y)) {
 									SelectRow.Perform(row, select: true);
 								}
 							}

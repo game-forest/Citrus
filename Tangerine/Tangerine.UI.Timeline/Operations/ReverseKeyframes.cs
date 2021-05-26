@@ -55,7 +55,7 @@ namespace Tangerine.UI.Timeline.Operations
 			var span = SingleSpan(
 				rows[0].Components.Get<GridSpanListComponent>()
 				?.Spans.GetNonOverlappedSpans());
-			var index = rows[0].Index;
+			var index = rows[0].GetTimelineItemState().Index;
 			if (span == null) {
 				return null;
 			}
@@ -67,7 +67,7 @@ namespace Tangerine.UI.Timeline.Operations
 					newSpan == null ||
 					span?.A != newSpan?.A ||
 					span?.B != newSpan?.B ||
-					++index != rows[i].Index
+					++index != rows[i].GetTimelineItemState().Index
 				) {
 					return null;
 				}
@@ -76,7 +76,7 @@ namespace Tangerine.UI.Timeline.Operations
 			return new Boundaries {
 				Left = span.Value.A,
 				Right = span.Value.B,
-				Top = rows[0].Index,
+				Top = rows[0].GetTimelineItemState().Index,
 				Bottom = index
 			};
 		}
@@ -108,7 +108,7 @@ namespace Tangerine.UI.Timeline.Operations
 				Left = 0,
 				Right = right,
 				Top = 0,
-				Bottom = Document.Current.Rows.Last().Index
+				Bottom = Document.Current.Rows.Last().GetTimelineItemState().Index
 			};
 		}
 	}

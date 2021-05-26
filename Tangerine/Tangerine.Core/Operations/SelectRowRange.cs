@@ -5,14 +5,16 @@ namespace Tangerine.Core.Operations
 {
 	public static class SelectRowRange
 	{
-		public static void Perform(Row startRow, Row endRow)
+		public static void Perform(Row startItem, Row endItem)
 		{
-			if (endRow.Index >= startRow.Index) {
-				for (int i = startRow.Index; i <= endRow.Index; i++) {
+			var startItemState = startItem.GetTimelineItemState();
+			var endItemState = endItem.GetTimelineItemState();
+			if (endItemState.Index >= startItemState.Index) {
+				for (int i = startItemState.Index; i <= endItemState.Index; i++) {
 					SelectRow.Perform(Document.Current.Rows[i]);
 				}
 			} else {
-				for (int i = startRow.Index; i >= endRow.Index; i--) {
+				for (int i = startItemState.Index; i >= endItemState.Index; i--) {
 					SelectRow.Perform(Document.Current.Rows[i]);
 				}
 			}

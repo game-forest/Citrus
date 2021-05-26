@@ -62,7 +62,7 @@ namespace Tangerine.UI.Timeline
 				if (row.Components.Get<NodeRow>() is NodeRow nodeRow) {
 					foreach (var animator in nodeRow.Node.Animators) {
 						foreach (var key in animator.ReadonlyKeys) {
-							Operations.SelectGridSpan.Perform(row.Index, key.Frame, key.Frame + 1);
+							Operations.SelectGridSpan.Perform(row.GetTimelineItemState().Index, key.Frame, key.Frame + 1);
 						}
 					}
 				}
@@ -80,7 +80,12 @@ namespace Tangerine.UI.Timeline
 			if (focusedItem != null) {
 				Document.Current.History.DoTransaction(() => {
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
-					SetProperty.Perform(focusedItem, nameof(Row.Expanded), !focusedItem.Expanded, false);
+					SetProperty.Perform(
+						focusedItem.GetTimelineItemState(),
+						nameof(TimelineItemStateComponent.Expanded),
+						!focusedItem.GetTimelineItemState().Expanded,
+						isChangingDocument: false
+					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
@@ -92,15 +97,23 @@ namespace Tangerine.UI.Timeline
 			if (focusedItem != null) {
 				Document.Current.History.DoTransaction(() => {
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
-					ExpandOrCollapseHelper(Document.Current.RecentlySelectedSceneItem(), !focusedItem.Expanded);
+					ExpandOrCollapseHelper(
+						Document.Current.RecentlySelectedSceneItem(),
+						!focusedItem.GetTimelineItemState().Expanded
+					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
 
 			void ExpandOrCollapseHelper(Row sceneItem, bool expand)
 			{
-				if (sceneItem.Expanded != expand) {
-					SetProperty.Perform(sceneItem, nameof(Row.Expanded), expand, false);
+				if (sceneItem.GetTimelineItemState().Expanded != expand) {
+					SetProperty.Perform(
+						sceneItem.GetTimelineItemState(),
+						nameof(TimelineItemStateComponent.Expanded),
+						expand,
+						isChangingDocument: false
+					);
 				}
 				foreach (var i in sceneItem.Rows) {
 					ExpandOrCollapseHelper(i, expand);

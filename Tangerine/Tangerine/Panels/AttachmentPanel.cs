@@ -113,7 +113,7 @@ namespace Tangerine
 				var rows = Document.Current.Rows;
 				Model3D model3d = null;
 				foreach (var r in rows) {
-					if (r.Selected) {
+					if (r.GetTimelineItemState().Selected) {
 						var nr = r.Components.Get<Core.Components.NodeRow>();
 						if (nr != null && nr.Node is Model3D m3d) {
 							if (model3d != null) {
@@ -182,7 +182,7 @@ namespace Tangerine
 				}
 			} else {
 				foreach (var row in Document.Current.Rows) {
-					if (row.Selected) {
+					if (row.GetTimelineItemState().Selected) {
 						r ^= row.GetHashCode();
 						var node = row.Components.Get<Core.Components.NodeRow>()?.Node;
 						if (node != null) {

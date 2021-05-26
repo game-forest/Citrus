@@ -40,7 +40,7 @@ namespace Tangerine.UI.Inspector
 			CommandHandlerList.Global.Connect(InspectorCommands.InspectEasing, new InspectEasingCommandHandler());
 			CommandHandlerList.Global.Connect(InspectorCommands.CopyAssetPath, new CopyAssetPathCommandHandler());
 		}
-		
+
 		private class InspectEasingCommandHandler : CommandHandler
 		{
 			public override void RefreshCommand(ICommand command)
@@ -143,9 +143,9 @@ namespace Tangerine.UI.Inspector
 			while (true) {
 				if (!Document.Current.InspectRootNode) {
 					var enabled = true;
-					foreach (var row in Document.Current.Rows) {
-						if (row.Selected) {
-							var node = row.Components.Get<NodeRow>()?.Node;
+					foreach (var i in Document.Current.Rows) {
+						if (i.GetTimelineItemState().Selected) {
+							var node = i.Components.Get<NodeRow>()?.Node;
 							enabled &= !node?.GetTangerineFlag(TangerineFlags.Locked) ?? true;
 						}
 					}
@@ -172,10 +172,10 @@ namespace Tangerine.UI.Inspector
 					r ^= component.GetHashCode();
 				}
 			} else {
-				foreach (var row in Document.Current.Rows) {
-					if (row.Selected) {
-						r ^= row.GetHashCode();
-						var node = row.Components.Get<NodeRow>()?.Node;
+				foreach (var i in Document.Current.Rows) {
+					if (i.GetTimelineItemState().Selected) {
+						r ^= i.GetHashCode();
+						var node = i.Components.Get<NodeRow>()?.Node;
 						if (node != null) {
 							foreach (var component in node.Components) {
 								if (ClassAttributes<NodeComponentDontSerializeAttribute>.Get(component.GetType()) != null) {

@@ -9,7 +9,7 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(Row sceneItem, bool select = true)
 		{
-			SetProperty.Perform(sceneItem, nameof(Row.Selected), select, false);
+			SetProperty.Perform(sceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.Selected), select, false);
 		}
 	}
 
@@ -23,9 +23,9 @@ namespace Tangerine.Core.Operations
 					if (i.TryGetNode(out var n) && n == Document.Current.Container) {
 						break;
 					}
-					if (!i.Expanded) {
+					if (!i.GetTimelineItemState().Expanded) {
 						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
-						SetProperty.Perform(i, nameof(sceneItem.Expanded), true, false);
+						SetProperty.Perform(i.GetTimelineItemState(), nameof(TimelineItemStateComponent.Expanded), true, false);
 						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					}
 				}

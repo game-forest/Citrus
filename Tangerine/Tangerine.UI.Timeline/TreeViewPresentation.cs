@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.Timeline
@@ -221,7 +222,7 @@ namespace Tangerine.UI.Timeline
 
 		private void ShowContextMenu()
 		{
-			if (!SceneItem.Selected) {
+			if (!SceneItem.GetTimelineItemState().Selected) {
 				Document.Current.History.DoTransaction(() => {
 					ClearRowSelection.Perform();
 					SelectRow.Perform(SceneItem);
@@ -342,7 +343,7 @@ namespace Tangerine.UI.Timeline
 
 		private void ShowContextMenu()
 		{
-			if (!SceneItem.Selected) {
+			if (!SceneItem.GetTimelineItemState().Selected) {
 				Document.Current.History.DoTransaction(() => {
 					ClearRowSelection.Perform();
 					SelectRow.Perform(SceneItem);
@@ -413,27 +414,27 @@ namespace Tangerine.UI.Timeline
 				Texture = IconPool.GetTexture("Timeline.Animator")
 			};
 			button.AddChangeWatcher(
-				() => (SceneItem.HasAnimators, Document.Current.ShowAnimators),
-				i => button.Enabled = SceneItem.HasAnimators && !Document.Current.ShowAnimators
+				() => (SceneItem.GetTimelineItemState().HasAnimators, Document.Current.ShowAnimators),
+				i => button.Enabled = SceneItem.GetTimelineItemState().HasAnimators && !Document.Current.ShowAnimators
 			);
 			button.AddChangeWatcher(
-				() => (SceneItem.ShowAnimators, Document.Current.ShowAnimators),
-				i => button.Checked = SceneItem.ShowAnimators || Document.Current.ShowAnimators
+				() => (SceneItem.GetTimelineItemState().ShowAnimators, Document.Current.ShowAnimators),
+				i => button.Checked = SceneItem.GetTimelineItemState().ShowAnimators || Document.Current.ShowAnimators
 			);
 			button.AddTransactionClickHandler(
 				() => {
 					var nodes = Document.Current.SelectedRows()
 						.Select(i => i.GetNode())
 						.Where(i => i != null).ToList();
-					var showAnimators = !SceneItem.ShowAnimators;
+					var showAnimators = !SceneItem.GetTimelineItemState().ShowAnimators;
 					if (!nodes.Contains(Node)) {
 						nodes.Clear();
 						nodes.Add(Node);
 					}
 					foreach (var n in nodes) {
-						SetProperty.Perform(SceneItem, nameof(Row.ShowAnimators), showAnimators);
+						SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.ShowAnimators), showAnimators);
 						if (showAnimators) {
-							SetProperty.Perform(SceneItem, nameof(Row.Expanded), true);
+							SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.Expanded), true);
 						}
 					}
 				}

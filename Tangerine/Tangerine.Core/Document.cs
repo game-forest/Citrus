@@ -142,7 +142,7 @@ namespace Tangerine.Core
 				{
 					foreach (var i in animationTree.Rows) {
 						if (i.TryGetAnimationTrack(out _)) {
-							i.Index = cachedVisibleSceneItems.Count;
+							i.GetTimelineItemState().Index = cachedVisibleSceneItems.Count;
 							cachedVisibleSceneItems.Add(i);
 							TraverseAnimationTree(i);
 						}
@@ -152,23 +152,24 @@ namespace Tangerine.Core
 				void TraverseSceneTree(Row sceneTree, bool addNodes)
 				{
 					var currentAnimation = Animation;
-					sceneTree.Expandable = false;
-					sceneTree.HasAnimators = false;
+					var timelineItemState = sceneTree.GetTimelineItemState();
+					timelineItemState.Expandable = false;
+					timelineItemState.HasAnimators = false;
 					var containerSceneItem = GetSceneItemForObject(Container);
-					var expanded = sceneTree.Expanded || sceneTree == containerSceneItem;
+					var expanded = timelineItemState.Expanded || sceneTree == containerSceneItem;
 					foreach (var i in sceneTree.Rows) {
-						i.Index = cachedVisibleSceneItems.Count;
+						i.GetTimelineItemState().Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
 							if (!animator.IsZombie && currentAnimation.ValidatedEffectiveAnimatorsSet.Contains(animator)) {
-								sceneTree.HasAnimators = true;
-								sceneTree.Expandable |= (ShowAnimators || sceneTree.ShowAnimators);
-								if (sceneTree.Expanded && (ShowAnimators || sceneTree.ShowAnimators)) {
+								timelineItemState.HasAnimators = true;
+								timelineItemState.Expandable |= (ShowAnimators || timelineItemState.ShowAnimators);
+								if (timelineItemState.Expanded && (ShowAnimators || timelineItemState.ShowAnimators)) {
 									cachedVisibleSceneItems.Add(i);
 								}
 							}
 						} else if (i.TryGetNode(out var node) || i.GetFolder() != null) {
 							if (addNodes) {
-								sceneTree.Expandable = true;
+								timelineItemState.Expandable = true;
 								if (expanded) {
 									var hierarchyMode =
 										!Animation.IsLegacy &&
@@ -181,7 +182,7 @@ namespace Tangerine.Core
 							}
 						} else if (i.TryGetAnimation(out _)) {
 						} else {
-							sceneTree.Expandable = true;
+							timelineItemState.Expandable = true;
 							if (expanded) {
 								cachedVisibleSceneItems.Add(i);
 								TraverseSceneTree(i, addNodes);
@@ -600,7 +601,7 @@ namespace Tangerine.Core
 
 		private void SelectFirstRowIfNoneSelected()
 		{
-			if (!SceneTree.SelfAndDescendants().Any(i => i.Selected)) {
+			if (!SceneTree.SelfAndDescendants().Any(i => i.GetTimelineItemState().Selected)) {
 				using (History.BeginTransaction()) {
 					Operations.Dummy.Perform(Current.History);
 					if (Rows.Count > 0) {
@@ -720,9 +721,9 @@ namespace Tangerine.Core
 
 		public IEnumerable<Row> SelectedRows()
 		{
-			foreach (var row in Rows) {
-				if (row.Selected) {
-					yield return row;
+			foreach (var i in Rows) {
+				if (i.GetTimelineItemState().Selected) {
+					yield return i;
 				}
 			}
 		}
@@ -732,8 +733,9 @@ namespace Tangerine.Core
 			int c = 0;
 			Row result = null;
 			foreach (var i in Rows) {
-				if (i.SelectionOrder > c) {
-					c = i.SelectionOrder;
+				var order = i.GetTimelineItemState().SelectionOrder;
+				if (order > c) {
+					c = order;
 					result = i;
 				}
 			}
@@ -747,7 +749,7 @@ namespace Tangerine.Core
 				yield break;
 			}
 			Node prevNode = null;
-			foreach (var item in Rows.Where(i => i.Selected).ToList()) {
+			foreach (var item in Rows.Where(i => i.GetTimelineItemState().Selected).ToList()) {
 				Node node = null;
 				var nr = item.Components.Get<NodeRow>();
 				if (nr != null) {
@@ -762,7 +764,7 @@ namespace Tangerine.Core
 				if (node != null) {
 					if (onlyTopLevel) {
 						for (var i = item.Parent; i != null; i = i.Parent) {
-							if (i.Selected && i.Components.Contains<NodeRow>()) {
+							if (i.GetTimelineItemState().Selected && i.Components.Contains<NodeRow>()) {
 								node = null;
 								break;
 							}
@@ -783,10 +785,10 @@ namespace Tangerine.Core
 		public IEnumerable<Row> TopLevelSelectedRows()
 		{
 			foreach (var item in Rows) {
-				if (item.Selected) {
+				if (item.GetTimelineItemState().Selected) {
 					var discardItem = false;
 					for (var p = item.Parent; p != null; p = p.Parent) {
-						discardItem |= p.Selected;
+						discardItem |= p.GetTimelineItemState().Selected;
 					}
 					if (!discardItem) {
 						yield return item;
