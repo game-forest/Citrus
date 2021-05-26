@@ -101,6 +101,7 @@
     <div><span class="xref">System.ICloneable</span></div>
     <div><a class="xref" href="Lime.ITangerinePreviewAnimationListener.html">ITangerinePreviewAnimationListener</a></div>
     <div><a class="xref" href="Lime.IUpdatableNode.html">IUpdatableNode</a></div>
+    <div><a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -769,7 +770,7 @@
     <pre><code class="lang-csharp hljs">[TangerineNodeBuilder(&quot;BuildForTangerine&quot;)]
 [TangerineAllowedChildrenTypes(new Type[]{typeof(ParticleModifier), typeof(EmitterShapePoint)})]
 [TangerineVisualHintGroup(&quot;/All/Nodes/Particles&quot;, null)]
-public class ParticleEmitter : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable, ITangerinePreviewAnimationListener, IUpdatableNode</code></pre>
+public class ParticleEmitter : Widget, IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable, ITangerinePreviewAnimationListener, IUpdatableNode, IMaterialComponentOwner</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -915,6 +916,31 @@ public NumericRange AspectRatio { get; set; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="Lime.NumericRange.html">NumericRange</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ParticleEmitter_DefaultMaterial_" data-uid="Lime.ParticleEmitter.DefaultMaterial*"></a>
+  <h4 id="Lime_ParticleEmitter_DefaultMaterial" data-uid="Lime.ParticleEmitter.DefaultMaterial">DefaultMaterial</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IMaterial DefaultMaterial { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -1136,6 +1162,31 @@ public NumericRange MagnetAmount { get; set; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="Lime.NumericRange.html">NumericRange</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ParticleEmitter_Material_" data-uid="Lime.ParticleEmitter.Material*"></a>
+  <h4 id="Lime_ParticleEmitter_Material" data-uid="Lime.ParticleEmitter.Material">Material</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IMaterial Material { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IMaterial.html">IMaterial</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -1438,6 +1489,56 @@ public float TimeShift { get; set; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ParticleEmitter_UV0_" data-uid="Lime.ParticleEmitter.UV0*"></a>
+  <h4 id="Lime_ParticleEmitter_UV0" data-uid="Lime.ParticleEmitter.UV0">UV0</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector2 UV0 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ParticleEmitter_UV1_" data-uid="Lime.ParticleEmitter.UV1*"></a>
+  <h4 id="Lime_ParticleEmitter_UV1" data-uid="Lime.ParticleEmitter.UV1">UV1</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector2 UV1 { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Vector2.html">Vector2</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -1870,6 +1971,9 @@ public NumericRange Zoom { get; set; }</code></pre>
   </div>
   <div>
       <a class="xref" href="Lime.IUpdatableNode.html">IUpdatableNode</a>
+  </div>
+  <div>
+      <a class="xref" href="Lime.IMaterialComponentOwner.html">IMaterialComponentOwner</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>

@@ -46853,6 +46853,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.DecomposeScale
   nameWithType: ParticleEmitter.DecomposeScale
+- uid: Lime.ParticleEmitter.DefaultMaterial
+  name: DefaultMaterial
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_DefaultMaterial
+  commentId: P:Lime.ParticleEmitter.DefaultMaterial
+  fullName: Lime.ParticleEmitter.DefaultMaterial
+  nameWithType: ParticleEmitter.DefaultMaterial
+- uid: Lime.ParticleEmitter.DefaultMaterial*
+  name: DefaultMaterial
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_DefaultMaterial_
+  commentId: Overload:Lime.ParticleEmitter.DefaultMaterial
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.DefaultMaterial
+  nameWithType: ParticleEmitter.DefaultMaterial
 - uid: Lime.ParticleEmitter.DeleteAllParticles
   name: DeleteAllParticles()
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_DeleteAllParticles
@@ -47032,6 +47045,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.MagnetAmount
   nameWithType: ParticleEmitter.MagnetAmount
+- uid: Lime.ParticleEmitter.Material
+  name: Material
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Material
+  commentId: P:Lime.ParticleEmitter.Material
+  fullName: Lime.ParticleEmitter.Material
+  nameWithType: ParticleEmitter.Material
+- uid: Lime.ParticleEmitter.Material*
+  name: Material
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Material_
+  commentId: Overload:Lime.ParticleEmitter.Material
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.Material
+  nameWithType: ParticleEmitter.Material
 - uid: Lime.ParticleEmitter.Number
   name: Number
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Number
@@ -47398,6 +47424,32 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.TimeShift
   nameWithType: ParticleEmitter.TimeShift
+- uid: Lime.ParticleEmitter.UV0
+  name: UV0
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_UV0
+  commentId: P:Lime.ParticleEmitter.UV0
+  fullName: Lime.ParticleEmitter.UV0
+  nameWithType: ParticleEmitter.UV0
+- uid: Lime.ParticleEmitter.UV0*
+  name: UV0
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_UV0_
+  commentId: Overload:Lime.ParticleEmitter.UV0
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.UV0
+  nameWithType: ParticleEmitter.UV0
+- uid: Lime.ParticleEmitter.UV1
+  name: UV1
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_UV1
+  commentId: P:Lime.ParticleEmitter.UV1
+  fullName: Lime.ParticleEmitter.UV1
+  nameWithType: ParticleEmitter.UV1
+- uid: Lime.ParticleEmitter.UV1*
+  name: UV1
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_UV1_
+  commentId: Overload:Lime.ParticleEmitter.UV1
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.UV1
+  nameWithType: ParticleEmitter.UV1
 - uid: Lime.ParticleEmitter.Velocity
   name: Velocity
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Velocity
