@@ -66,7 +66,7 @@ namespace Tangerine.UI.Inspector
 		{
 			var pathComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(propertyPath);
 			foreach (var i in animation.ValidatedEffectiveAnimators) {
-				if (i.Animable == obj && i.TargetPropertyPathComparisonCode == pathComparisonCode && i is IAnimator a) {
+				if (i.TargetPropertyPathComparisonCode == pathComparisonCode && i.Animable.GetAnimationHost() == obj && i is IAnimator a) {
 					return a;
 				}
 			}
