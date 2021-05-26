@@ -59,7 +59,7 @@ namespace Lime
 	[TangerineNodeBuilder("BuildForTangerine")]
 	[TangerineAllowedChildrenTypes(typeof(ParticleModifier), typeof(EmitterShapePoint))]
 	[TangerineVisualHintGroup("/All/Nodes/Particles")]
-	public partial class ParticleEmitter : Widget, ITangerinePreviewAnimationListener, IUpdatableNode
+	public partial class ParticleEmitter : Widget, ITangerinePreviewAnimationListener, IUpdatableNode, IMaterialComponentOwner
 	{
 		internal static System.Random Rng = new System.Random();
 
@@ -128,6 +128,8 @@ namespace Lime
 			// The final particle's transform
 			public Matrix32 Transform;
 		};
+
+		private IMaterial defaultMaterial;
 
 		/// <summary>
 		/// Particles are generated once and live forever.
@@ -252,6 +254,24 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(3)]
 		public NumericRange RandomMotionRotation { get; set; }
+
+
+		public IMaterial DefaultMaterial
+		{
+			get
+			{
+				if (defaultMaterial == null || CleanDirtyFlags(DirtyFlags.Material)) {
+					defaultMaterial = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1);
+				}
+				return defaultMaterial;
+			}
+		}
+
+		public IMaterial Material { get; set; }
+
+		public Vector2 UV0 => Vector2.Zero;
+
+		public Vector2 UV1 => Vector2.One;
 
 		private bool firstUpdate = true;
 		/// <summary>
@@ -954,8 +974,7 @@ namespace Lime
 				ro.Matrix = Matrix32.Identity;
 				ro.Color = Color4.White;
 			}
-			ro.Blending = GlobalBlending;
-			ro.Shader = GlobalShader;
+			ro.Material = Material ?? DefaultMaterial;
 			foreach (var p in particles) {
 				if (p.ColorCurrent.A <= 0) {
 					continue;
@@ -1050,17 +1069,25 @@ namespace Lime
 		{
 			public Matrix32 Matrix;
 			public Color4 Color;
-			public Blending Blending;
-			public ShaderId Shader;
+			public IMaterial Material;
 			public List<ParticleRenderData> Particles = new List<ParticleRenderData>();
 
 			public override void Render()
 			{
-				Renderer.Blending = Blending;
-				Renderer.Shader = Shader;
 				foreach (var p in Particles) {
 					Renderer.Transform1 = p.Transform * Matrix;
-					Renderer.DrawSprite(p.Texture, p.Color * Color, -Vector2.Half, Vector2.One, Vector2.Zero, Vector2.One);
+					Renderer.DrawSprite(
+						texture1: p.Texture,
+						texture2: null,
+						material: Material,
+						color: p.Color * Color,
+						position: -Vector2.Half,
+						size: Vector2.One,
+						uv0t1: Vector2.Zero,
+						uv1t1: Vector2.One,
+						uv0t2: Vector2.Zero,
+						uv1t2: Vector2.One
+					);
 				}
 			}
 

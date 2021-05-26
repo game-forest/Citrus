@@ -55,8 +55,8 @@ namespace Lime
 		{
 			var uv0 = owner.UV0;
 			var uv1 = owner.UV1;
-			owner.Texture.TransformUVCoordinatesToAtlasSpace(ref uv0);
-			owner.Texture.TransformUVCoordinatesToAtlasSpace(ref uv1);
+			owner.Texture?.TransformUVCoordinatesToAtlasSpace(ref uv0);
+			owner.Texture?.TransformUVCoordinatesToAtlasSpace(ref uv1);
 			CustomMaterial.UV0 = uv0;
 			CustomMaterial.UV1 = uv1;
 		}
