@@ -7,6 +7,35 @@ using Tangerine.Core.Operations;
 
 namespace Tangerine.Core.Components
 {
+	[NodeComponentDontSerialize]
+	public class TimelineItemStateComponent : Component
+	{
+		public bool Expandable { get; set; }
+
+		public bool Expanded { get; set; }
+
+		public bool ShowAnimators { get; set; }
+
+		public bool HasAnimators { get; set; }
+
+		public bool Selected
+		{
+			get => SelectionOrder > 0;
+			set
+			{
+				if (Selected != value) {
+					SelectionOrder = value ? selectionCounter++ : 0;
+				}
+			}
+		}
+
+		private static int selectionCounter = 1;
+
+		public int SelectionOrder { get; private set; }
+
+		public int Index { get; set; }
+	}
+
 	public sealed class CurveRow : Component
 	{
 		public Node Node { get; }

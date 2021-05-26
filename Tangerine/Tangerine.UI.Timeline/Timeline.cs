@@ -311,7 +311,7 @@ namespace Tangerine.UI.Timeline
 		{
 			// Make sure any Row.Index is in order.
 			_ = Document.Current.Rows;
-			var top = row.Index * TimelineMetrics.DefaultRowHeight;
+			var top = row.GetTimelineItemState().Index * TimelineMetrics.DefaultRowHeight;
 			var bottom = top + TimelineMetrics.DefaultRowHeight;
 			if (bottom > Offset.Y + Roll.RootWidget.Height) {
 				OffsetY = bottom - Roll.RootWidget.Height;

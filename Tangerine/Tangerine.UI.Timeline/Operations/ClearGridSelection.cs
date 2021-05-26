@@ -35,7 +35,7 @@ namespace Tangerine.UI.Timeline.Operations
 				var s = op.Restore<Backup>().Spans;
 				foreach (var row in Document.Current.Rows) {
 					row.Components.Remove<GridSpanListComponent>();
-					row.Components.Add(new GridSpanListComponent(s[row.Index]));
+					row.Components.Add(new GridSpanListComponent(s[row.GetTimelineItemState().Index]));
 				}
 			}
 		}

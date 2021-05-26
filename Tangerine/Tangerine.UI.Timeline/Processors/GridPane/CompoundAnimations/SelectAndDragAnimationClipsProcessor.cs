@@ -75,15 +75,15 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 
 			void RenderSelectedClips(Widget widget)
 			{
-				foreach (var row in Document.Current.Rows) {
-					var track = row.Components.Get<AnimationTrackRow>()?.Track;
+				foreach (var i in Document.Current.Rows) {
+					var track = i.Components.Get<AnimationTrackRow>()?.Track;
 					if (track?.EditorState().Locked != false) {
 						continue;
 					}
 					widget.PrepareRendererState();
 					foreach (var clip in track.Clips.Where(i => i.IsSelected)) {
-						var a = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + row.Index, offset.X + clip.BeginFrame);
-						var b = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + row.Index + 1, offset.X + clip.EndFrame);
+						var a = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineItemState().Index, offset.X + clip.BeginFrame);
+						var b = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineItemState().Index + 1, offset.X + clip.EndFrame);
 						Renderer.DrawRect(a, b, ColorTheme.Current.TimelineGrid.AnimationClip);
 						Renderer.DrawRectOutline(a, b, ColorTheme.Current.TimelineGrid.AnimationClipBorder);
 					}

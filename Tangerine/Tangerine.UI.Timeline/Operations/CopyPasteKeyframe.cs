@@ -25,7 +25,7 @@ namespace Tangerine.UI.Timeline.Operations
 		{
 			var list = new List<AnimationHostKeyBinding>();
 
-			int startRow = Document.Current.TopLevelSelectedRows().First().Index;
+			int startRow = Document.Current.TopLevelSelectedRows().First().GetTimelineItemState().Index;
 			var spans = Document.Current.Rows[startRow].Components.Get<GridSpanListComponent>()?.Spans;
 			if (spans == null || !spans.Any()) {
 				return list;
@@ -94,7 +94,7 @@ namespace Tangerine.UI.Timeline.Operations
 			if (keys == null || !Document.Current.TopLevelSelectedRows().Any()) {
 				return;
 			}
-			int startRow = Document.Current.TopLevelSelectedRows().First().Index;
+			int startRow = Document.Current.TopLevelSelectedRows().First().GetTimelineItemState().Index;
 			var spans = Document.Current.Rows[startRow].Components.Get<GridSpanListComponent>()?.Spans;
 			if (spans == null || !spans.Any()) {
 				return;

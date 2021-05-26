@@ -1,6 +1,7 @@
 using System;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.Timeline
@@ -34,26 +35,26 @@ namespace Tangerine.UI.Timeline
 
 		public override bool Selected
 		{
-			get => SceneItem.Selected;
+			get => SceneItem.GetTimelineItemState().Selected;
 			set { Document.Current.History.DoTransaction(() => SelectRow.Perform(SceneItem, value)); }
 		}
 
-		public override int SelectionOrder => SceneItem.SelectionOrder;
+		public override int SelectionOrder => SceneItem.GetTimelineItemState().SelectionOrder;
 
 		public override bool Expanded
 		{
-			get => SceneItem.Expanded;
+			get => SceneItem.GetTimelineItemState().Expanded;
 			set
 			{
 				Document.Current.History.DoTransaction(() => {
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
-					SetProperty.Perform(SceneItem, nameof(Row.Expanded), value, false);
+					SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.Expanded), value, false);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
 		}
 
-		public override bool CanExpand() => SceneItem.Expandable;
+		public override bool CanExpand() => SceneItem.GetTimelineItemState().Expandable;
 
 		public override string Label
 		{

@@ -36,7 +36,7 @@ namespace Tangerine.Core
 			var span = SingleSpan(
 				rows[0].Components.Get<GridSpanListComponent>()
 				?.Spans.GetNonOverlappedSpans());
-			var index = rows[0].Index;
+			var index = rows[0].GetTimelineItemState().Index;
 			if (span == null) {
 				return false;
 			}
@@ -48,7 +48,7 @@ namespace Tangerine.Core
 					newSpan == null ||
 					span?.A != newSpan?.A ||
 					span?.B != newSpan?.B ||
-					++index != rows[i].Index
+					++index != rows[i].GetTimelineItemState().Index
 				) {
 					return false;
 				}
@@ -57,7 +57,7 @@ namespace Tangerine.Core
 			result = new IntRectangle {
 				Left = Math.Max(span.Value.A, 0),
 				Right = span.Value.B,
-				Top = rows[0].Index,
+				Top = rows[0].GetTimelineItemState().Index,
 				Bottom = index
 			};
 			return true;

@@ -39,7 +39,7 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 					}
 				}
 				int numRows = Document.Current.Rows.Count;
-				var destRow = Document.Current.Rows[(row.Index + offset.Y).Clamp(0, numRows - 1)];
+				var destRow = Document.Current.Rows[(row.GetTimelineItemState().Index + offset.Y).Clamp(0, numRows - 1)];
 				var destTrack = destRow.Components.Get<AnimationTrackRow>()?.Track;
 				foreach (var clip in clips) {
 					var newClip = clip.Clone();

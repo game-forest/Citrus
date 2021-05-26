@@ -14,30 +14,6 @@ namespace Tangerine.Core
 			set => Components.Get<CommonRowData>().Id = value;
 		}
 
-		public bool Expandable { get; set; }
-
-		public bool Expanded { get; set; }
-
-		public bool ShowAnimators { get; set; }
-
-		public bool HasAnimators { get; set; }
-
-		public bool Selected
-		{
-			get => SelectionOrder > 0;
-			set
-			{
-				if (Selected != value) {
-					SelectionOrder = value ? selectionCounter++ : 0;
-				}
-			}
-		}
-
-		private static int selectionCounter = 1;
-
-		public int SelectionOrder { get; private set; }
-
-		public int Index { get; set; }
 		public Row Parent { get; internal set; }
 
 		public readonly RowList Rows;
@@ -63,6 +39,8 @@ namespace Tangerine.Core
 		{
 			return row == this || DescendantOf(row);
 		}
+
+		public TimelineItemStateComponent GetTimelineItemState() => Components.GetOrAdd<TimelineItemStateComponent>();
 
 		public Folder.Descriptor GetFolder() => Components.Get<FolderRow>()?.Folder;
 

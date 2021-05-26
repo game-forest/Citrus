@@ -37,7 +37,7 @@ namespace Tangerine.UI.Timeline.Operations
 								continue;
 							}
 							processedKeys.Add(k);
-							var destRow = row.Index + offset.Y;
+							var destRow = row.GetTimelineItemState().Index + offset.Y;
 							if (!CheckRowRange(destRow)) {
 								continue;
 							}

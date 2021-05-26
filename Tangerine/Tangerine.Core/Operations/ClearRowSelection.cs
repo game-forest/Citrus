@@ -13,7 +13,7 @@ namespace Tangerine.Core.Operations
 			var rows = Document.Current.Rows.ToList();
 			// Use temporary row list to avoid 'Collection was modified' exception
 			foreach (var row in rows) {
-				if (row.Selected) {
+				if (row.GetTimelineItemState().Selected) {
 					SelectRow.Perform(row, false);
 				}
 			}

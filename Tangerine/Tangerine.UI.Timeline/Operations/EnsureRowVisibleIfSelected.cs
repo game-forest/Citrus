@@ -1,4 +1,6 @@
+using System.Linq;
 using Tangerine.Core;
+using Tangerine.Core.Components;
 
 namespace Tangerine.UI.Timeline
 {
@@ -9,9 +11,10 @@ namespace Tangerine.UI.Timeline
 			// To allow click on EnterButton when row is partly visible.
 			if (Timeline.Instance.RootWidget.Input.IsMousePressed())
 				return;
-			if (op.Obj is Row sceneItem && op.Property.Name == nameof(Row.Selected) && (bool)op.Value) {
+			if (op.Obj is TimelineItemStateComponent s && op.Property.Name == nameof(TimelineItemStateComponent.Selected) && (bool)op.Value) {
 				var timeline = Timeline.Instance;
-				timeline.EnsureRowVisible(sceneItem);
+				var item = Document.Current.Rows.FirstOrDefault(i => i.GetTimelineItemState() == s);
+				timeline.EnsureRowVisible(item);
 			}
 		}
 
