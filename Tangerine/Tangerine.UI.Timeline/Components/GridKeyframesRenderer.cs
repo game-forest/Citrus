@@ -37,7 +37,7 @@ namespace Tangerine.UI.Timeline.Components
 		{
 			var effectiveAnimatorsSet = animation.ValidatedEffectiveAnimatorsSet;
 			foreach (var animator in node.Animators) {
-				if (!effectiveAnimatorsSet.Contains(animator)) {
+				if (!effectiveAnimatorsSet.Contains(animator) || animator.IsZombie) {
 					continue;
 				}
 				for (var j = 0; j < animator.ReadonlyKeys.Count; j++) {
