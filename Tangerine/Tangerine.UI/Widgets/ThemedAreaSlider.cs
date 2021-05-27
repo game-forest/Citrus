@@ -107,20 +107,13 @@ namespace Tangerine.UI
 				Value = slider.Value;
 				Changed?.Invoke();
 			};
-			void TryDetectNewValue()
-			{
-				if (float.TryParse(Editor.Text, out float value) && value != Value) {
+			Editor.FreezeInvisible = false;
+			Editor.Submitted += (text) => {
+				if (float.TryParse(Editor.Text, out float value)) {
 					Value = value;
 					Changed?.Invoke();
 				}
-			}
-			slider.AddChangeLateWatcher(Editor.IsFocused, focused => {
-				if (!focused) {
-					TryDetectNewValue();
-					Editor.Editor.DisplayWidget.Tasks.Update(0);
-				}
-			});
-			Editor.Submitted += (text) => TryDetectNewValue();
+			};
 			Updating += (delta) => {
 				if (IsFocused()) {
 					var focusScope = KeyboardFocusScope.GetEnclosingScope(this);
