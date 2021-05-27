@@ -156,7 +156,12 @@ namespace Orange
 		// representation of already existing cooking rules. Consequently
 		// cooking rules hash will also change and all bundles for all
 		// projects will require rebuild.
-		private static readonly ThreadLocal<JsonSerializer> yjs = new ThreadLocal<JsonSerializer>(() => new JsonSerializer());
+		private static readonly ThreadLocal<JsonSerializer> yjs =
+			new ThreadLocal<JsonSerializer>(() => new JsonSerializer() {
+				JsonOptions = jsonSerializeOptions,
+			});
+
+		public override string ToString() => yjs.Value.ToString(this);
 
 		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.Value.ToString(this)));
 
@@ -172,27 +177,27 @@ namespace Orange
 		private static readonly Dictionary<TargetPlatform, ParticularCookingRules> defaultRules =
 			new Dictionary<TargetPlatform, ParticularCookingRules>();
 
+		private static JsonSerializeOptions jsonSerializeOptions = new JsonSerializeOptions {
+			ArrayLengthPrefix = false,
+			ClassTag = "class",
+			DateFormat = "O",
+			TimeSpanFormat = "c",
+			DecimalAsString = false,
+			EnumAsString = false,
+			FieldSeparator = "",
+			IgnoreCompact = false,
+			Indent = "",
+			Int64AsString = false,
+			MaxOnelineFields = 0,
+			SaveClass = JsonSaveClass.None,
+			Unordered = false,
+		};
+
 		static ParticularCookingRules()
 		{
 			foreach (var item in meta.Items) {
 				fieldNameToYuzuMetaItemCache.Add(item.Name, item);
 			}
-			// initializing all fields here, so any changes to yuzu default values won't affect us here
-			yjs.Value.JsonOptions = new JsonSerializeOptions {
-				ArrayLengthPrefix = false,
-				ClassTag = "class",
-				DateFormat = "O",
-				TimeSpanFormat = "c",
-				DecimalAsString = false,
-				EnumAsString = false,
-				FieldSeparator = "",
-				IgnoreCompact = false,
-				Indent = "",
-				Int64AsString = false,
-				MaxOnelineFields = 0,
-				SaveRootClass = false,
-				Unordered = false,
-			};
 		}
 
 		public void Override(string fieldName)
