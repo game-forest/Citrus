@@ -115,24 +115,29 @@ namespace Tangerine.UI
 				}
 			};
 			Updating += (delta) => {
+				void EditorSetFocus()
+				{
+					Editor.SetFocus();
+					Editor.Text = Value.ToString();
+				}
 				if (IsFocused()) {
 					var focusScope = KeyboardFocusScope.GetEnclosingScope(this);
 					if (focusScope == null) {
 						Debug.Write("Error in ThemedAreaSlider: focusScope == null.");
 					} else {
 						if (focusScope.LastDirection == KeyboardFocusScope.Direction.Forward) {
-							Editor.SetFocus();
+							EditorSetFocus();
 						} else {
 							if (Editor.Visible) {
 								focusScope.AdvanceFocus(KeyboardFocusScope.Direction.Backward);
 							} else {
-								Editor.SetFocus();
+								EditorSetFocus();
 							}
 						}
 					}
 				}
 				if (rightClickGesture.WasRecognized()) {
-					Editor.SetFocus();
+					EditorSetFocus();
 				}
 				Label.Visible = !(Editor.Visible = Editor.IsFocused());
 			};
