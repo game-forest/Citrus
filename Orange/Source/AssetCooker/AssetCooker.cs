@@ -225,12 +225,20 @@ namespace Orange
 				using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 					PluginLoader.AfterAssetsCooked(bundleName);
 				}
-				DeleteBundle();
-				using var packedBundle = CreateOutputBundle(bundleName);
-				memoryBundle.WriteToBundle(packedBundle);
+				CommitToDisk();
+			} catch (OperationCanceledException e) {
+				CommitToDisk();
+				throw;
 			} finally {
 				OutputBundle.Dispose();
 				OutputBundle = null;
+			}
+
+			void CommitToDisk()
+			{
+				DeleteBundle();
+				using var packedBundle = CreateOutputBundle(bundleName);
+				memoryBundle.WriteToBundle(packedBundle);
 			}
 
 			void DeleteBundle()
