@@ -69,7 +69,7 @@ namespace Orange
 			ExportModelMeshData(model, fbxPath, assetAttributes, cookingUnitHash);
 			InternalPersistence.Instance.WriteObjectToBundle(
 				bundle: assetCooker.OutputBundle,
-				path: fbxPath,
+				path: Path.ChangeExtension(fbxPath, ".t3d"),
 				instance: model,
 				format: Persistence.Format.Binary,
 				cookingUnitHash: cookingUnitHash,
