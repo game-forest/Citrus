@@ -14,7 +14,9 @@ namespace Tangerine.UI.Timeline
 			if (op.Obj is TimelineItemStateComponent s && op.Property.Name == nameof(TimelineItemStateComponent.Selected) && (bool)op.Value) {
 				var timeline = Timeline.Instance;
 				var item = Document.Current.Rows.FirstOrDefault(i => i.GetTimelineItemState() == s);
-				timeline.EnsureRowVisible(item);
+				if (item != null) {
+					timeline.EnsureRowVisible(item);
+				}
 			}
 		}
 
