@@ -74,6 +74,7 @@
     <Compile Include="Presenters\FrameBorderPresenter.cs" />
     <Compile Include="Presenters\InspectRootNodePresenter.cs" />
     <Compile Include="Presenters\NineGridLinePresenter.cs" />
+    <Compile Include="Presenters\PaddingLinePresenter.cs" />
     <Compile Include="Presenters\ParticleEmitterPresenter.cs" />
     <Compile Include="Presenters\PointObjectsPresenter.cs" />
     <Compile Include="Presenters\SelectedWidgetsPresenter.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Processors\CreateWidgetProcessor.cs" />
     <Compile Include="Processors\DragAnimationPathPointProcessor.cs" />
     <Compile Include="Processors\DragNineGridLineProcessor.cs" />
+    <Compile Include="Processors\DragPaddingLineProcessor.cs" />
     <Compile Include="Processors\DragPivotProcessor.cs" />
     <Compile Include="Processors\DragPointObjectsProcessor.cs" />
     <Compile Include="Processors\DragSplineTangentsProcessor.cs" />

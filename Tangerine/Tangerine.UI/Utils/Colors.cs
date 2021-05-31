@@ -42,6 +42,10 @@ namespace Tangerine.UI
 			[YuzuOptional]
 			public Color4 LockedWidgetBorder { get; set; }
 			[YuzuOptional]
+			public Color4 PaddingEditorBorder { get; set; }
+			[YuzuOptional]
+			public Color4 PaddingEditorText { get; set; }
+			[YuzuOptional]
 			public Color4 ExposedItemInactiveBorder { get; set; }
 			[YuzuOptional]
 			public Color4 ExposedItemActiveBorder { get; set; }
@@ -342,6 +346,8 @@ namespace Tangerine.UI
 				Selection = Color4.Green,
 				SelectedWidgetPivotOutline = Color4.Red,
 				LockedWidgetBorder = Color4.FromFloats(0, 1, 1),
+				PaddingEditorBorder = Color4.Yellow,
+				PaddingEditorText = Color4.Blue,
 				ExposedItemInactiveBorder = Color4.Gray,
 				ExposedItemActiveBorder = Color4.White,
 				ExposedItemSelectedBorder = Color4.Green,
@@ -498,6 +504,8 @@ namespace Tangerine.UI
 				Selection = Color4.Green,
 				SelectedWidgetPivotOutline = Color4.Red,
 				LockedWidgetBorder = Color4.FromFloats(0, 1, 1),
+				PaddingEditorBorder = Color4.Yellow,
+				PaddingEditorText = Color4.Blue,
 				ExposedItemInactiveBorder = Color4.Gray,
 				ExposedItemActiveBorder = Color4.White,
 				ExposedItemSelectedBorder = Color4.Green,

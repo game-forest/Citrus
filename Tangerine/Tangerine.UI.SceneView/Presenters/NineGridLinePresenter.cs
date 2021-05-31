@@ -105,30 +105,13 @@ namespace Tangerine.UI.SceneView
 			var sv = SceneView.Instance;
 			var matrix = Owner.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(canvas);
 			CalcGeometry(matrix, out var a, out var b);
-			var length = (a - b).Length;
-			return
-				DistanceFromPointToLine(a, b, point, out var linePoint) <= radius &&
-				(a - linePoint).Length <= length &&
-				(b - linePoint).Length <= length;
+			return Utils.LineHitTest(point, a, b, radius);
 		}
 
 		public Vector2 GetDirection()
 		{
 			var matrix = Owner.CalcLocalToParentTransform();
 			return (matrix * directions[index] - matrix * Vector2.Zero).Normalized;
-		}
-
-		private static float DistanceFromPointToLine(Vector2 a, Vector2 b, Vector2 p, out Vector2 point)
-		{
-			var i = a.Y - b.Y;
-			var j = b.X - a.X;
-			var k = b.Y * a.X - a.Y * b.X;
-			point = new Vector2 {
-				X = j * (j * p.X - i * p.Y) - i * k,
-				Y = i * (-j * p.X + i * p.Y) - j * k
-			};
-			point /= i * i + j * j;
-			return Mathf.Abs(p.X * i + p.Y * j + k) / Mathf.Sqrt(i * i + j * j);
 		}
 
 		public static IEnumerable<NineGridLine> GetForNineGrid(NineGrid nineGrid)

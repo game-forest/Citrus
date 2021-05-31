@@ -400,6 +400,7 @@ namespace Tangerine.UI.SceneView
 				new RotateWidgetsProcessor(),
 				new RulerProcessor(),
 				new DragNineGridLineProcessor(),
+				new DragPaddingLineProcessor(),
 				new ShiftTimelineProcessor(),
 				new MouseSelectionProcessor(),
 				new ShiftClickProcessor(),
@@ -425,6 +426,7 @@ namespace Tangerine.UI.SceneView
 			new FrameBorderPresenter(this);
 			new InspectRootNodePresenter(this);
 			new NineGridLinePresenter(this);
+			new PaddingLinePresenter(this);
 			new Animation2DPathPresenter(this);
 			new WavePivotPresenter(this);
 			new AnimeshPresenter(this);

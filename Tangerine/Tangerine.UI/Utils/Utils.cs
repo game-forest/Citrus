@@ -140,5 +140,30 @@ namespace Tangerine.UI
 				yield return assetPath;
 			}
 		}
+
+		public static bool LineHitTest(Vector2 point, Vector2 a, Vector2 b, float radius = 10)
+		{
+			var length = (b - a).Length;
+			return
+				DistanceFromPointToLine(a, b, point, out var linePoint) <= radius &&
+				(a - linePoint).Length <= length &&
+				(b - linePoint).Length <= length;
+		}
+
+		public static float DistanceFromPointToLine(Vector2 a, Vector2 b, Vector2 p, out Vector2 point)
+		{
+			var i = a.Y - b.Y;
+			var j = b.X - a.X;
+			var k = b.Y * a.X - a.Y * b.X;
+			point = new Vector2 {
+				X = j * (j * p.X - i * p.Y) - i * k,
+				Y = i * (-j * p.X + i * p.Y) - j * k
+			};
+			if (Vector2.Distance(new Vector2(i, j), Vector2.Zero) <= Mathf.ZeroTolerance) {
+				return Vector2.Distance(a, p);
+			}
+			point /= i * i + j * j;
+			return Mathf.Abs(p.X * i + p.Y * j + k) / Mathf.Sqrt(i * i + j * j);
+		}
 	}
 }
