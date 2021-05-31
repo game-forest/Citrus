@@ -337,14 +337,11 @@ namespace Orange
 
 		public void Save()
 		{
-			using (
-				var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create)) {
-				using (var sw = new StreamWriter(fs)) {
-					SaveCookingRules(sw, CommonRules, null);
-					foreach (var kv in TargetRules) {
-						SaveCookingRules(sw, kv.Value, kv.Key);
-					}
-				}
+			using var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create);
+			using var sw = new StreamWriter(fs);
+			SaveCookingRules(sw, CommonRules, null);
+			foreach (var kv in TargetRules) {
+				SaveCookingRules(sw, kv.Value, kv.Key);
 			}
 		}
 

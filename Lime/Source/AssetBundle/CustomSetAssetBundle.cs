@@ -40,7 +40,10 @@ namespace Lime
 
 		public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)
 		{
-			if (!FileExists(path)) {
+			bool create = fileMode == FileMode.CreateNew ||
+				fileMode == FileMode.OpenOrCreate ||
+				fileMode == FileMode.Create;
+			if (!FileExists(path) && !create) {
 				throw new FileNotFoundException(null, path);
 			}
 			return base.OpenFile(path, fileMode);
