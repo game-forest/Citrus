@@ -48,9 +48,9 @@ namespace Orange
 				FixedSize = false,
 				Title = "Orange",
 #if WIN
-			Icon = new System.Drawing.Icon(new EmbeddedResource("Orange.GUI.Resources.Orange.ico", "Orange.GUI").GetResourceStream()),
+				Icon = new System.Drawing.Icon(new EmbeddedResource("Orange.GUI.Orange.ico", "Orange.GUI").GetResourceStream()),
 #endif // WIN
-		});
+			});
 			window.Closed += The.Workspace.Save;
 			windowWidget = new ThemedInvalidableWindowWidget(window) {
 				Id = "MainWindow",

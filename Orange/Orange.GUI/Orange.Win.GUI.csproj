@@ -22,7 +22,7 @@
   </Target>
 
   <ItemGroup>
-    <Content Include="Orange.ico" />
+    <EmbeddedResource Include="..\Orange.ico" />
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
 
