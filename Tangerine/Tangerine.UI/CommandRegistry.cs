@@ -27,9 +27,9 @@ namespace Tangerine.UI
 		public Shortcut Shortcut { get; set; }
 
 		/// <summary>
-		/// True if the command is common to all projects.
+		/// True if the command is not Tangerine built-in.
 		/// </summary>
-		public bool IsCommon { get; set; } = false;
+		public bool IsProjectSpecific { get; set; } = true;
 
 		public CommandInfo(ICommand command, CommandCategoryInfo categoryInfo, string id)
 		{
@@ -46,22 +46,30 @@ namespace Tangerine.UI
 
 	public static class CommandRegistry
 	{
-		private static readonly Dictionary<string, CommandCategoryInfo> categories = new Dictionary<string, CommandCategoryInfo>();
+		private static readonly Dictionary<string, CommandCategoryInfo> categories
+			= new Dictionary<string, CommandCategoryInfo>();
 
 		public static readonly CommandCategoryInfo AllCommands = new CommandCategoryInfo("All");
 
-		/// <param name="isCommon">True if the command is common to all projects.</param>
-		public static void Register(ICommand command, string categoryId, string commandId, bool @override = false, bool isCommon = false)
-		{
+		/// <param name="isProjectSpecific">True if the command is not tangerine built-in.</param>
+		public static void Register(
+			ICommand command,
+			string categoryId,
+			string commandId,
+			bool @override = false,
+			bool isProjectSpecific = true
+		) {
 			if (!categories.ContainsKey(categoryId)) {
 				categories.Add(categoryId, new CommandCategoryInfo(categoryId));
 			}
 			var categoryInfo = categories[categoryId];
-			var commandInfo = new CommandInfo(command, categoryInfo, commandId);
-			commandInfo.IsCommon = isCommon;
+			var commandInfo = new CommandInfo(command, categoryInfo, commandId) {
+				IsProjectSpecific = isProjectSpecific
+			};
 			if (AllCommands.Commands.ContainsKey(commandId)) {
 				if (!@override) {
-					throw new ArgumentException($"Command with id:'{commandId}' has already been registered. Use @override=true to override previous command", nameof(commandId));
+					throw new ArgumentException($"Command with id:'{commandId}' has already been registered. " +
+						$"Use @override=true to override previous command", nameof(commandId));
 				}
 				if (categoryInfo.Commands.ContainsKey(commandId)) {
 					categoryInfo.Commands[commandId] = commandInfo;
@@ -75,8 +83,11 @@ namespace Tangerine.UI
 			AllCommands.Commands.Add(commandId, commandInfo);
 		}
 
-		public static bool TryGetCommandInfo(CommandCategoryInfo categoryInfo, string commandId, out CommandInfo commandInfo)
-		{
+		public static bool TryGetCommandInfo(
+			CommandCategoryInfo categoryInfo,
+			string commandId,
+			out CommandInfo commandInfo
+		) {
 			return categoryInfo.Commands.TryGetValue(commandId, out commandInfo);
 		}
 

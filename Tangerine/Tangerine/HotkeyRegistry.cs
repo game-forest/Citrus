@@ -19,21 +19,18 @@ namespace Tangerine
 
 	public static class HotkeyRegistry
 	{
-		private static List<ShortcutBinding> defaults = new List<ShortcutBinding>();
+		private static readonly List<ShortcutBinding> defaults = new List<ShortcutBinding>();
 
 		private static HotkeyProfile currentProfile;
 		public static HotkeyProfile CurrentProfile {
 			get { return currentProfile; }
 			set {
-				if (value == null) {
-					throw new ArgumentNullException();
-				}
 				if (currentProfile != null) {
 					foreach (var command in currentProfile.Commands) {
 						command.Command.Shortcut = new Shortcut();
 					}
 				}
-				currentProfile = value;
+				currentProfile = value ?? throw new ArgumentNullException(nameof(value));
 				foreach (var command in currentProfile.Commands) {
 					command.Command.Shortcut = command.Shortcut;
 				}
@@ -126,7 +123,7 @@ namespace Tangerine
 				foreach (var commandInfo in categoryInfo.Commands.Values) {
 					var newCommandInfo = new CommandInfo(commandInfo.Command, newCategoryInfo, commandInfo.Id) {
 						Shortcut = commandInfo.Command.Shortcut,
-						IsCommon = commandInfo.IsCommon
+						IsProjectSpecific = commandInfo.IsProjectSpecific
 					};
 					newCategoryInfo.Commands.Add(newCommandInfo.Id, newCommandInfo);
 				}
@@ -171,8 +168,7 @@ namespace Tangerine
 						if (info != null) {
 							try {
 								info.Shortcut = new Shortcut(binding.Value);
-							}
-							catch (System.Exception) {
+							} catch (System.Exception) {
 								Debug.Write($"Unknown shortcut: {binding.Value}");
 							}
 						} else {
@@ -202,14 +198,14 @@ namespace Tangerine
 				var projectBindings = new Dictionary<string, string>();
 				foreach (var info in category.Commands.Values) {
 					var shortcut = info.Shortcut.ToString();
-					var bindings = (info.IsCommon || !isProjectLoaded) ? commonBindings : projectBindings;
+					var bindings = (!info.IsProjectSpecific || !isProjectLoaded) ? commonBindings : projectBindings;
 					bindings.Add(info.Id, shortcut == "Unknown" ? null : shortcut);
 				}
 				commonData.Add(category.Id, commonBindings);
 				projectData.Add(category.Id, projectBindings);
 			}
 			if (!IsNativePath(filePath)) {
-				// Copying all project-dependent parts of this profile. 
+				// Copying all project-dependent parts of this profile.
 				string fileName = Path.GetFileNameWithoutExtension(filePath);
 				if (File.Exists(filePath)) {
 					filePath = Path.GetDirectoryName(filePath);
@@ -279,9 +275,9 @@ namespace Tangerine
 			{
 				try {
 					return UnsafeLoadCategories(filePath);
-				} catch (IOException exception) {
+				} catch (IOException) {
 					if (nestingLevel == FileAccessAttemptsCount) {
-						throw exception;
+						throw;
 					} else {
 						Thread.Sleep(AccessFailWaitDuration);
 						return TryLoadCategories(nestingLevel + 1);
@@ -301,9 +297,9 @@ namespace Tangerine
 			{
 				try {
 					UnsafeSaveCategories();
-				} catch (IOException exception) {
+				} catch (IOException) {
 					if (nestingLevel == FileAccessAttemptsCount) {
-						throw exception;
+						throw;
 					} else {
 						Thread.Sleep(AccessFailWaitDuration);
 						TrySaveCategories(nestingLevel + 1);
@@ -319,11 +315,11 @@ namespace Tangerine
 			{
 				try {
 					File.Copy(sourceFileName, destFileName, overwrite);
-				} catch (IOException exception) {
+				} catch (IOException) {
 					// Since there can be several Tangerines open, it is
 					// possible that we will not be able to access the file.
 					if (nestingLevel == FileAccessAttemptsCount) {
-						throw exception;
+						throw;
 					} else {
 						Thread.Sleep(AccessFailWaitDuration);
 						TryCopyFile(nestingLevel + 1);

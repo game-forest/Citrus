@@ -24,9 +24,8 @@ namespace Tangerine
 		private static ICommand customNodes;
 		private static IMenu create;
 		private static Menu localizationMenu;
-		private static Menu layoutMenu;
 		private static Menu orangeMenu;
-		private static List<ICommand> orangeCommands = new List<ICommand>();
+		private static readonly List<ICommand> orangeCommands = new List<ICommand>();
 		private static ICommand orangeMenuCommand;
 
 		static TangerineMenu()
@@ -72,9 +71,10 @@ namespace Tangerine
 				: Project.Current.RegisteredNodeTypes;
 			foreach (var type in registeredNodeTypes) {
 				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
-				var cmd = new Command("Create " + type.Name);
-				cmd.TooltipText = tooltipText;
-				bool isCustomType = type.Namespace != "Lime";
+				var cmd = new Command("Create " + type.Name) {
+					TooltipText = tooltipText
+				};
+				bool isProjectSpecificType = type.Namespace != "Lime";
 				if (NodeIconPool.TryGetIcon(type, out var icon)) {
 					cmd.Icon = icon;
 				} else {
@@ -88,14 +88,14 @@ namespace Tangerine
 						cmd.Text = "Create " + cmd.Text;
 					}
 				} else {
-					if (!isCustomType) {
-						create.Add(cmd);
-					} else {
+					if (isProjectSpecificType) {
 						customNodes.Menu.Add(cmd);
+					} else {
+						create.Add(cmd);
 					}
 				}
 				CreateNodeCommands.Add(cmd);
-				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true, !isCustomType);
+				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true, isProjectSpecificType);
 				CommandHandlerList.Global.Connect(cmd, new CreateNode(type, cmd));
 				if (IsNodeTypeCanBeRoot(type)) {
 					var newFileCmd = new Command(type.Name);
@@ -106,8 +106,9 @@ namespace Tangerine
 			}
 			customNodes.Enabled = customNodes.Menu.Count > 0;
 			GenericCommands.NewTanWithCustomRoot.Enabled = GenericCommands.NewTanWithCustomRoot.Menu.Count > 0;
-			HotkeyRegistry.CurrentProjectName = Project.Current == null ?
-				null : System.IO.Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
+			HotkeyRegistry.CurrentProjectName = Project.Current == null
+				? null
+				: System.IO.Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
 			TangerineApp.Instance?.RefreshCreateNodeCommands();
 		}
 
@@ -194,7 +195,7 @@ namespace Tangerine
 					ToolsCommands.RenderToPngSequence,
 				}),
 				new Command("View", (viewMenu = new Menu {
-					new Command("Layouts", (layoutMenu = new Menu {
+					new Command("Layouts", (new Menu {
 						GenericCommands.SaveLayout,
 						GenericCommands.LoadLayout,
 						GenericCommands.DefaultLayout,
@@ -281,27 +282,60 @@ namespace Tangerine
 			var buildAndRun = orangeMenuItems.First(item => item.Label == BuildAndRunLabel);
 			var build = orangeMenuItems.First(item => item.Label == BuildLabel);
 			var cookGameAssets = orangeMenuItems.First(item => item.Label == CookGameAssetsLabel);
-			AddOrangeCommand(OrangeCommands.Run, new OrangeCommand(() => buildAndRun.Action()) { Executing = OnOrangeCommandExecuting });
-			AddOrangeCommand(OrangeCommands.Build, OrangeBuildCommand.Instance = new OrangeBuildCommand(build.Action) { Executing = OnOrangeCommandExecuting });
+			AddOrangeCommand(
+				OrangeCommands.Run,
+				new OrangeCommand(() => buildAndRun.Action()) { Executing = OnOrangeCommandExecuting }
+			);
+			AddOrangeCommand(
+				OrangeCommands.Build,
+				OrangeBuildCommand.Instance = new OrangeBuildCommand(build.Action) {
+					Executing = OnOrangeCommandExecuting
+				}
+			);
 			AddOrangeCommand(OrangeCommands.RunConfig, new OrangePluginOptionsCommand());
-			AddOrangeCommand(OrangeCommands.CookGameAssets, new OrangeCommand(() => cookGameAssets.Action()) { Executing = OnOrangeCommandExecuting });
+			AddOrangeCommand(
+				OrangeCommands.CookGameAssets,
+				new OrangeCommand(() => cookGameAssets.Action()) { Executing = OnOrangeCommandExecuting }
+			);
 			foreach (var menuItem in orangeMenuItems) {
 				if (blacklist.Contains(menuItem.Label)) {
 					continue;
 				}
-				AddOrangeCommand(new Command(menuItem.Label), new OrangeCommand(() => menuItem.Action()) { Executing = OnOrangeCommandExecuting });
+				AddOrangeCommand(
+					new Command(menuItem.Label),
+					new OrangeCommand(() => menuItem.Action()) { Executing = OnOrangeCommandExecuting }
+				);
 			}
 
 			// TODO Duplicates code from Orange.GUI.OrangeInterface.cs. Both should be presented at one file
 			var orangeInterfaceInstance = (OrangeInterface) Orange.UserInterface.Instance;
-			var updateAction = new Action<AssetCacheMode>(mode => orangeInterfaceInstance.UpdateCacheModeCheckboxes(mode));
-			orangeInterfaceInstance.CacheLocalAndRemote = new Command("Local &and remote", () => updateAction(Orange.AssetCacheMode.Local | Orange.AssetCacheMode.Remote));
-			orangeInterfaceInstance.CacheRemote = new Command("&Remote", () => updateAction(Orange.AssetCacheMode.Remote));
-			orangeInterfaceInstance.CacheLocal = new Command("&Local", () => updateAction(Orange.AssetCacheMode.Local));
-			orangeInterfaceInstance.CacheNone = new Command("&None", () => updateAction(Orange.AssetCacheMode.None));
+			var updateAction = new Action<AssetCacheMode>(
+				mode => orangeInterfaceInstance.UpdateCacheModeCheckboxes(mode)
+			);
+			orangeInterfaceInstance.CacheLocalAndRemote = new Command(
+				text: "Local &and remote",
+				execute: () => updateAction(Orange.AssetCacheMode.Local | Orange.AssetCacheMode.Remote)
+			);
+			orangeInterfaceInstance.CacheRemote = new Command(
+				text: "&Remote",
+				execute: () => updateAction(Orange.AssetCacheMode.Remote)
+			);
+			orangeInterfaceInstance.CacheLocal = new Command(
+				text: "&Local",
+				execute: () => updateAction(Orange.AssetCacheMode.Local)
+			);
+			orangeInterfaceInstance.CacheNone = new Command(
+				text: "&None",
+				execute: () => updateAction(Orange.AssetCacheMode.None)
+			);
 
 			var uploadCacheToServerCommand = new Command("&Upload cache to server");
-			CommandHandlerList.Global.Connect(uploadCacheToServerCommand, new OrangeCommand(UploadCacheToServer.UploadCacheToServerAction) { Executing = OnOrangeCommandExecuting });
+			CommandHandlerList.Global.Connect(
+				uploadCacheToServerCommand,
+				new OrangeCommand(UploadCacheToServer.UploadCacheToServerAction) {
+					Executing = OnOrangeCommandExecuting
+				}
+			);
 
 			orangeMenu.Add(new Command("Cache", new Menu {
 				new Command("&Actions", new Menu {
@@ -356,8 +390,10 @@ namespace Tangerine
 			}
 		}
 
-		public static void OnRulersCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
+		public static void OnRulersCollectionChanged(
+			object sender,
+			System.Collections.Specialized.NotifyCollectionChangedEventArgs e
+		) {
 			// Invoke handler at the next update to avoid collection changed exceptions while
 			// command handler iterates the commands list.
 			UpdateHandler handler = null;
@@ -439,7 +475,7 @@ namespace Tangerine
 					System.IO.Path.GetDirectoryName(i));
 				menu.Add(new Command(name, () =>  {
 					if (Project.Current.Close()) {
-						new Project(i);
+						_ = new Project(i);
 						FileOpenProject.AddRecentProject(i);
 					}
 				}));
@@ -452,7 +488,10 @@ namespace Tangerine
 		{
 			private readonly string overlayName;
 
-			public override bool GetChecked() => ProjectUserPreferences.Instance.DisplayedOverlays.Contains(overlayName);
+			public override bool GetChecked()
+			{
+				return ProjectUserPreferences.Instance.DisplayedOverlays.Contains(overlayName);
+			}
 
 			public OverlayToggleCommandHandler(string overlayName) => this.overlayName = overlayName;
 
