@@ -58,13 +58,15 @@ namespace Lime
 			for (int level = 0; level < numberOfMipmapLevels; level++) {
 				var levelCopy = level;
 				var dataLength = reader.ReadInt32();
-				var data = ReadTextureData(reader, dataLength);
 				GraphicsUtility.CalculateMipLevelSize(levelCopy, pixelWidth, pixelHeight, out var levelWidth, out var levelHeight);
+				GraphicsUtility.EnsureTextureDataSizeValid(format, levelWidth, levelHeight, dataLength);
+				var data = ReadTextureData(reader, dataLength);
 				MemoryUsed = 0;
 				deferredCommands += () => {
 					var formatFeatures = PlatformRenderer.Context.GetFormatFeatures(format);
 					if (etcFormat && (formatFeatures & FormatFeatures.Sample) == 0) {
-						var rgba8Data = Marshal.AllocHGlobal(levelWidth * levelHeight * 4);
+						var rgba8DataSize = levelWidth * levelHeight * 4;
+						var rgba8Data = Marshal.AllocHGlobal(rgba8DataSize);
 						try {
 							Etc2Decoder.Decode(data, rgba8Data, levelWidth, levelHeight, format);
 							EnsurePlatformTexture(Format.R8G8B8A8_UNorm, pixelWidth, pixelHeight, numberOfMipmapLevels > 1);

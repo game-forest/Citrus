@@ -219,10 +219,12 @@ namespace Lime
 
 						// Sometimes Width can be smaller then length of a row due to byte alignment.
 						if (pb.BytesPerRow > pb.Width * 4) {
-							var tempBuffer = AlignmentPixelBuffer(pb);
+							var tempBuffer = AlignmentPixelBuffer(pb, out var dataSize);
+							GraphicsUtility.EnsureTextureDataSizeValid(Format.B8G8R8A8_UNorm, Width, Height, dataSize);
 							texture.LoadImage(tempBuffer, Width, Height, Format.B8G8R8A8_UNorm);
 							Marshal.FreeHGlobal(tempBuffer);
 						} else {
+							GraphicsUtility.EnsureTextureDataSizeValid(Format.B8G8R8A8_UNorm, Width, Height, (int)pb.DataSize);
 							texture.LoadImage(pb.BaseAddress, Width, Height, Format.B8G8R8A8_UNorm);
 						}
 						pb.Unlock(CVPixelBufferLock.None);
@@ -231,7 +233,7 @@ namespace Lime
 			}
 		}
 
-		private IntPtr AlignmentPixelBuffer(CVPixelBuffer pb) {
+		private IntPtr AlignmentPixelBuffer(CVPixelBuffer pb, out int pixelDataSize) {
 			var addr = pb.BaseAddress;
 			var pixels = new byte[Height * Width * 4];
 			var rowLength = Width * 4;
@@ -248,6 +250,7 @@ namespace Lime
 					pBytes += pb.BytesPerRow - rowLength;
 				}
 			}
+			pixelDataSize = pixels.Length;
 			var temp = Marshal.AllocHGlobal(pixels.Length);
 			Marshal.Copy(pixels, 0, temp, pixels.Length);
 			return temp;

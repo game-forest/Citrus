@@ -9,11 +9,11 @@ namespace Lime.Graphics.Platform
 		int Height { get; }
 		int LevelCount { get; }
 
-		void SetData(int level, int x, int y, int width, int height, IntPtr data);
+		internal void SetData(int level, int x, int y, int width, int height, IntPtr data);
 		void SetTextureParams(TextureParams textureParams);
 	}
 
-	public unsafe static class PlatformTexture2DExtensions
+	internal unsafe static class PlatformTexture2DExtensions
 	{
 		public static void SetData<T>(
 			this IPlatformTexture2D texture, int level, T data) where T : unmanaged
