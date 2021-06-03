@@ -58,8 +58,6 @@ namespace Lime.Graphics.Platform.Vulkan
 		private void DestroySwapchain()
 		{
 			if (swapchain != SharpVulkan.Swapchain.Null) {
-				context.WaitForFence(swapchainDestroyFenceValue);
-				swapchainDestroyFenceValue = context.NextFenceValue;
 				foreach (var i in framebuffers) {
 					context.Release(i);
 				}
@@ -74,7 +72,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				context.Release(depthStencilMemory);
 				context.Release(renderPass);
 				context.Release(swapchain);
-				context.Flush();
+				context.Finish();
 				swapchain = SharpVulkan.Swapchain.Null;
 			}
 		}
@@ -119,7 +117,12 @@ namespace Lime.Graphics.Platform.Vulkan
 				View = windowHandle
 			};
 			surface = context.Instance.CreateIOSSurface(ref createInfo);
-
+#elif ANDROID
+			var createInfo = new SharpVulkan.AndroidSurfaceCreateInfo {
+				StructureType = SharpVulkan.StructureType.AndroidSurfaceCreateInfo,
+				Window = windowHandle,
+			};
+			surface = context.Instance.CreateAndroidSurface(ref createInfo);
 #endif
 			if (!context.PhysicalDevice.GetSurfaceSupport(context.QueueFamilyIndex, surface)) {
 				throw new NotSupportedException();
@@ -128,6 +131,7 @@ namespace Lime.Graphics.Platform.Vulkan
 
 		private void CreateSwapchain()
 		{
+			DestroySwapchain();	
 			var surfaceFormats = context.PhysicalDevice.GetSurfaceFormats(surface);
 			if (surfaceFormats.Length == 1 && surfaceFormats[0].Format == SharpVulkan.Format.Undefined) {
 				backbufferFormat = SharpVulkan.Format.B8G8R8A8UNorm;
@@ -150,10 +154,13 @@ namespace Lime.Graphics.Platform.Vulkan
 			if ((surfaceCapabilities.SupportedTransforms & preTransform) == 0) {
 				throw new NotSupportedException();
 			}
-			var compositeAlpha = SharpVulkan.CompositeAlphaFlags.Opaque;
-			if ((surfaceCapabilities.SupportedCompositeAlpha & compositeAlpha) == 0) {
-				throw new NotSupportedException();
-			}
+			var compositeAlphaModes = new[] {
+				SharpVulkan.CompositeAlphaFlags.Opaque,
+				SharpVulkan.CompositeAlphaFlags.PreMultiplied,
+				SharpVulkan.CompositeAlphaFlags.PostMultiplied,
+				SharpVulkan.CompositeAlphaFlags.Inherit
+			};
+			var compositeAlpha = compositeAlphaModes.First(i => (surfaceCapabilities.SupportedCompositeAlpha & i) != 0);
 			var backbufferUsage = SharpVulkan.ImageUsageFlags.ColorAttachment;
 			if ((surfaceCapabilities.SupportedUsageFlags & backbufferUsage) == 0) {
 				throw new NotSupportedException();
@@ -167,8 +174,6 @@ namespace Lime.Graphics.Platform.Vulkan
 					presentMode = SharpVulkan.PresentMode.Mailbox;
 				}
 			}
-			var oldSwapchain = swapchain;
-			DestroySwapchain();
 			var createInfo = new SharpVulkan.SwapchainCreateInfo {
 				StructureType = SharpVulkan.StructureType.SwapchainCreateInfo,
 				Surface = surface,
@@ -183,7 +188,6 @@ namespace Lime.Graphics.Platform.Vulkan
 				ImageSharingMode = SharpVulkan.SharingMode.Exclusive,
 				MinImageCount = desiredBufferCount,
 				Clipped = true,
-				OldSwapchain = oldSwapchain
 			};
 			swapchain = context.Device.CreateSwapchain(ref createInfo);
 			CreateBackbuffers();
@@ -261,7 +265,9 @@ namespace Lime.Graphics.Platform.Vulkan
 				OldLayout = SharpVulkan.ImageLayout.Undefined,
 				NewLayout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.None,
+				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.DepthStencilAttachmentRead | SharpVulkan.AccessFlags.DepthStencilAttachmentWrite,
+				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(
 					SharpVulkan.ImageAspectFlags.Depth |
 					SharpVulkan.ImageAspectFlags.Stencil)
@@ -356,12 +362,14 @@ namespace Lime.Graphics.Platform.Vulkan
 			return semaphore;
 		}
 
-		internal void Present()
+		internal void Present(SharpVulkan.Semaphore waitSemaphore)
 		{
 			var swapchainCopy = swapchain;
 			var backbufferIndexCopy = backbufferIndex;
 			var presentInfo = new SharpVulkan.PresentInfo {
 				StructureType = SharpVulkan.StructureType.PresentInfo,
+				WaitSemaphoreCount = waitSemaphore != SharpVulkan.Semaphore.Null ? 1U : 0U,
+				WaitSemaphores = new IntPtr(&waitSemaphore),
 				SwapchainCount = 1,
 				Swapchains = new IntPtr(&swapchainCopy),
 				ImageIndices = new IntPtr(&backbufferIndexCopy)

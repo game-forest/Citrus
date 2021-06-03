@@ -84,7 +84,9 @@ namespace Lime.Graphics.Platform.Vulkan
 				OldLayout = SharpVulkan.ImageLayout.Undefined,
 				NewLayout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.None,
+				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.DepthStencilAttachmentRead | SharpVulkan.AccessFlags.DepthStencilAttachmentWrite,
+				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(
 					SharpVulkan.ImageAspectFlags.Depth |
 					SharpVulkan.ImageAspectFlags.Stencil)

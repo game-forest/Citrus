@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Android.Content.PM;
 using Android.Graphics;
@@ -98,20 +99,13 @@ namespace Lime
 			}
 		}
 
-		private static Lime.Graphics.Platform.OpenGL.PlatformRenderContext platformRenderContext;
-
 		private readonly IWindowManager windowManager;
 
 		private KeyboardHandler keyboardHandler;
 		private Input input;
 		private AndroidSoftKeyboard androidSoftKeyboard;
 		private ISurfaceHolder holder;
-
-		private IEGL10 egl;
-		private EGLDisplay eglDisplay;
-		private EGLConfig eglConfig;
-		private EGLContext eglContext;
-		private EGLSurface eglSurface;
+		private RenderContext renderContext;
 
 		public System.Drawing.Size Size { get; private set; }
 		public event Action<object, EventArgs> Resize;
@@ -131,8 +125,6 @@ namespace Lime
 			keyboardHandler = new KeyboardHandler(input);
 			SetOnKeyListener(keyboardHandler);
 
-			egl = EGLContext.EGL.JavaCast<IEGL10>();
-
 			holder = Holder;
 			holder.AddCallback(this);
 			holder.SetType(SurfaceType.Gpu);
@@ -140,11 +132,27 @@ namespace Lime
 			windowManager = context.GetSystemService(Android.Content.Context.WindowService).JavaCast<IWindowManager>();
 		}
 
+		internal void InitializeRenderContext()
+		{
+			if (renderContext != null) {
+				throw new InvalidOperationException();
+			}
+			switch (Application.RenderingBackend) {
+				case RenderingBackend.Vulkan:
+					renderContext = new VulkanRenderContext();
+					break;
+				case RenderingBackend.ES20:
+					renderContext = new OpenGLRenderContext();
+					break;
+				default:
+					throw new NotSupportedException();
+			}
+		}
+
 		protected override void Dispose(bool disposing)
 		{
-			DestroyEglSurface();
-			DestroyEglContext();
-			DestroyEglDisplay();
+			renderContext?.Dispose();
+			renderContext = null;
 			base.Dispose(disposing);
 		}
 
@@ -199,7 +207,7 @@ namespace Lime
 			}
 		}
 
-		internal bool IsSurfaceCreated => eglSurface != null;
+		internal bool IsSurfaceCreated => renderContext?.IsSurfaceCreated ?? false;
 
 		public override bool OnCheckIsTextEditor()
 		{
@@ -345,254 +353,26 @@ namespace Lime
 			var deviceRotated = Application.CurrentDeviceOrientation != orientation;
 			Application.CurrentDeviceOrientation = orientation;
 			Resize?.Invoke(this, new ResizeEventArgs { DeviceRotated = deviceRotated });
+			renderContext?.OnSurfaceChanged(holder, format, width, height);
 		}
 
 		void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
 		{
 			SurfaceCreating?.Invoke();
-			CreateEglSurface();
+			renderContext?.OnSurfaceCreated(holder);
 		}
 
 		void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
 		{
 			SurfaceDestroing?.Invoke();
-			DestroyEglSurface();
+			renderContext?.OnSurfaceDestroyed(holder);
 		}
 
-		public void MakeCurrent()
-		{
-			EglMakeCurrent();
-			if (platformRenderContext == null) {
-				platformRenderContext = new Graphics.Platform.OpenGL.PlatformRenderContext();
-				PlatformRenderer.Initialize(platformRenderContext);
-			}
-			platformRenderContext.Begin(0);
-		}
+		public void MakeCurrent() => renderContext.MakeCurrent();
 
-		private void EglMakeCurrent()
-		{
-			if (EglTryMakeCurrent()) return;
-			var error = egl.EglGetError();
-			if (error == EGL11.EglBadSurface || error == EGL11.EglContextLost) {
-				OnEglContextLost();
-			}
-		}
+		public void SwapBuffers() => renderContext.SwapBuffers();
 
-		private bool EglTryMakeCurrent()
-		{
-			EnsureEglContextCreated();
-			return egl.EglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
-		}
-
-		public void UnbindContext()
-		{
-			EglUnbindContext();
-		}
-
-		private void EglUnbindContext()
-		{
-			if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext)) {
-				throw new System.Exception($"Could not unbind EGL context, error {GetEglErrorString()}");
-			}
-		}
-
-		public void SwapBuffers()
-		{
-			platformRenderContext.End();
-			EglSwapBuffers();
-		}
-		private void EglSwapBuffers()
-		{
-			if (!egl.EglSwapBuffers(eglDisplay, eglSurface)) {
-				var error = egl.EglGetError();
-				if (error == EGL11.EglBadSurface || error == EGL11.EglContextLost) {
-					OnEglContextLost();
-				} else {
-					throw new System.Exception($"Could not swap buffers, error {GetEglErrorString(error)}");
-				}
-			}
-		}
-
-		private void OnEglContextLost()
-		{
-			Logger.Write("EGL context lost");
-			DestroyEglContext();
-			CreateEglContext();
-			if (!EglTryMakeCurrent()) {
-				throw new System.Exception($"Could not make current EGL context, error {GetEglErrorString(egl.EglGetError())}");
-			}
-			PlatformRenderer.RaiseContextLost();
-		}
-
-		private void EnsureEglDisplayCreated()
-		{
-			if (eglDisplay == null) CreateEglDisplay();
-		}
-
-		private void CreateEglDisplay()
-		{
-			var display = egl.EglGetDisplay(EGL10.EglDefaultDisplay);
-			if (display == null || display == EGL10.EglNoDisplay) {
-				throw new System.Exception($"Could not get EGL display, error {GetEglErrorString()}");
-			}
-			var version = new int[2];
-			if (!egl.EglInitialize(display, version)) {
-				throw new System.Exception($"Could not initialize EGL display, error {GetEglErrorString()}");
-			}
-			var attribLists = new[] {
-				BuildEglConfigAttribs(red: 8, green: 8, blue: 8, alpha: 8, depth: 24, stencil: 8),
-				BuildEglConfigAttribs(red: 8, green: 8, blue: 8, alpha: 8, depth: 16, stencil: 8),
-				BuildEglConfigAttribs(red: 4, green: 4, blue: 4, alpha: 4, depth: 24, stencil: 8),
-				BuildEglConfigAttribs(red: 4, green: 4, blue: 4, alpha: 4, depth: 16, stencil: 8)
-			};
-			var numConfigs = new int[1];
-			if (!egl.EglGetConfigs(display, null, 0, numConfigs)) {
-				throw new System.Exception($"Could not get EGL config count, error {GetEglErrorString()}");
-			}
-			var configs = new EGLConfig[numConfigs[0]];
-			var configFound = false;
-			foreach (var attribs in attribLists) {
-				configFound = egl.EglChooseConfig(display, attribs, configs, 1, numConfigs) && numConfigs[0] > 0;
-				if (configFound) break;
-			}
-			if (!configFound) {
-				throw new System.Exception($"Could not choose EGL config, error {GetEglErrorString()}");
-			}
-			eglDisplay = display;
-			eglConfig = configs[0];
-		}
-
-		private void DestroyEglDisplay()
-		{
-			if (eglDisplay != null) {
-				if (!egl.EglTerminate(eglDisplay)) {
-					throw new System.Exception($"Could not terminate EGL display, error {GetEglErrorString()}");
-				}
-				eglDisplay = null;
-			}
-		}
-
-		private void EnsureEglContextCreated()
-		{
-			if (eglContext == null) CreateEglContext();
-		}
-
-		private void CreateEglContext()
-		{
-			EnsureEglDisplayCreated();
-			const int EglContextClientVersion = 0x3098;
-			var context = egl.EglCreateContext(eglDisplay, eglConfig, EGL10.EglNoContext, new[] { EglContextClientVersion, 2, EGL10.EglNone });
-			if (context == null || context == EGL10.EglNoContext) {
-				throw new System.Exception($"Could not create EGL context, error {GetEglErrorString()}");
-			}
-			eglContext = context;
-		}
-
-		private void DestroyEglContext()
-		{
-			if (eglContext != null) {
-				if (!egl.EglDestroyContext(eglDisplay, eglContext)) {
-					throw new System.Exception($"Could not destroy EGL context, error {GetEglErrorString()}");
-				}
-				eglContext = null;
-			}
-		}
-
-		private void CreateEglSurface()
-		{
-			EnsureEglDisplayCreated();
-			var surface = egl.EglCreateWindowSurface(eglDisplay, eglConfig, (Java.Lang.Object)Holder, null);
-			if (surface == null || surface == EGL10.EglNoSurface) {
-				throw new System.Exception($"Could not create EGL surface, error {GetEglErrorString()}");
-			}
-			eglSurface = surface;
-		}
-
-		private void DestroyEglSurface()
-		{
-			if (eglSurface != null) {
-				if (!egl.EglDestroySurface(eglDisplay, eglSurface)) {
-					throw new System.Exception($"Could not destroy EGL surface, error {GetEglErrorString()}");
-				}
-				eglSurface = null;
-			}
-		}
-
-		private static int[] BuildEglConfigAttribs(int red = 0, int green = 0, int blue = 0, int alpha = 0, int depth = 0, int stencil = 0)
-		{
-			var attribs = new List<int>();
-			if (red != 0) {
-				attribs.Add(EGL10.EglRedSize);
-				attribs.Add(red);
-			}
-			if (green != 0) {
-				attribs.Add(EGL10.EglGreenSize);
-				attribs.Add(green);
-			}
-			if (blue != 0) {
-				attribs.Add(EGL10.EglBlueSize);
-				attribs.Add(blue);
-			}
-			if (alpha != 0) {
-				attribs.Add(EGL10.EglAlphaSize);
-				attribs.Add(alpha);
-			}
-			if (depth != 0) {
-				attribs.Add(EGL10.EglDepthSize);
-				attribs.Add(depth);
-			}
-			if (stencil != 0) {
-				attribs.Add(EGL10.EglStencilSize);
-				attribs.Add(stencil);
-			}
-			attribs.Add(EGL10.EglRenderableType);
-			attribs.Add(4);
-			attribs.Add(EGL10.EglNone);
-			return attribs.ToArray();
-		}
-
-		private string GetEglErrorString()
-		{
-			return GetEglErrorString(egl.EglGetError());
-		}
-
-		private static string GetEglErrorString(int error)
-		{
-			switch (error) {
-				case EGL11.EglSuccess:
-					return "Success";
-				case EGL11.EglNotInitialized:
-					return "Not Initialized";
-				case EGL11.EglBadAccess:
-					return "Bad Access";
-				case EGL11.EglBadAlloc:
-					return "Bad Allocation";
-				case EGL11.EglBadAttribute:
-					return "Bad Attribute";
-				case EGL11.EglBadConfig:
-					return "Bad Config";
-				case EGL11.EglBadContext:
-					return "Bad Context";
-				case EGL11.EglBadCurrentSurface:
-					return "Bad Current Surface";
-				case EGL11.EglBadDisplay:
-					return "Bad Display";
-				case EGL11.EglBadMatch:
-					return "Bad Match";
-				case EGL11.EglBadNativePixmap:
-					return "Bad Native Pixmap";
-				case EGL11.EglBadNativeWindow:
-					return "Bad Native Window";
-				case EGL11.EglBadParameter:
-					return "Bad Parameter";
-				case EGL11.EglBadSurface:
-					return "Bad Surface";
-				case EGL11.EglContextLost:
-					return "Context Lost";
-				default:
-					return "Unknown Error";
-			}
-		}
+		public void UnbindContext() => renderContext.Unbind();
 
 		/// <summary>
 		/// Classes to help fix problem with DEL key event not triggered on some devices
@@ -624,6 +404,383 @@ namespace Lime
 					return base.DeleteSurroundingText(leftLength, rightLength);
 				}
 			}
+		}
+
+		private abstract class RenderContext : IDisposable
+		{
+			public abstract bool IsSurfaceCreated { get; }
+			public abstract void Dispose();
+			public abstract void MakeCurrent();
+			public abstract void SwapBuffers();
+			public abstract void Unbind();
+			public abstract void OnSurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height);
+			public abstract void OnSurfaceCreated(ISurfaceHolder holder);
+			public abstract void OnSurfaceDestroyed(ISurfaceHolder holder);
+		}
+
+		private class OpenGLRenderContext : RenderContext
+		{
+			private static Lime.Graphics.Platform.OpenGL.PlatformRenderContext platformRenderContext;
+
+			private IEGL10 egl;
+			private EGLDisplay eglDisplay;
+			private EGLConfig eglConfig;
+			private EGLContext eglContext;
+			private EGLSurface eglSurface;
+
+			public override bool IsSurfaceCreated => eglSurface != null;
+
+			public OpenGLRenderContext()
+			{
+				egl = EGLContext.EGL.JavaCast<IEGL10>();
+			}
+
+			public override void Dispose()
+			{
+				DestroyEglSurface();
+				DestroyEglContext();
+				DestroyEglDisplay();
+			}
+
+			public override void MakeCurrent()
+			{
+				EglMakeCurrent();
+				if (platformRenderContext == null) {
+					platformRenderContext = new Graphics.Platform.OpenGL.PlatformRenderContext();
+					PlatformRenderer.Initialize(platformRenderContext);
+				}
+				platformRenderContext.Begin(0);
+			}
+
+			private void EglMakeCurrent()
+			{
+				if (EglTryMakeCurrent()) return;
+				var error = egl.EglGetError();
+				if (error == EGL11.EglBadSurface || error == EGL11.EglContextLost) {
+					OnEglContextLost();
+				}
+			}
+
+			private bool EglTryMakeCurrent()
+			{
+				EnsureEglContextCreated();
+				return egl.EglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
+			}
+
+			private void EnsureEglContextCreated()
+			{
+				if (eglContext == null) CreateEglContext();
+			}
+
+			private void CreateEglContext()
+			{
+				EnsureEglDisplayCreated();
+				const int EglContextClientVersion = 0x3098;
+				var context = egl.EglCreateContext(eglDisplay, eglConfig, EGL10.EglNoContext, new[] { EglContextClientVersion, 2, EGL10.EglNone });
+				if (context == null || context == EGL10.EglNoContext) {
+					throw new System.Exception($"Could not create EGL context, error {GetEglErrorString()}");
+				}
+				eglContext = context;
+			}
+
+			private void EnsureEglDisplayCreated()
+			{
+				if (eglDisplay == null) CreateEglDisplay();
+			}
+
+			private void CreateEglDisplay()
+			{
+				var display = egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+				if (display == null || display == EGL10.EglNoDisplay) {
+					throw new System.Exception($"Could not get EGL display, error {GetEglErrorString()}");
+				}
+				var version = new int[2];
+				if (!egl.EglInitialize(display, version)) {
+					throw new System.Exception($"Could not initialize EGL display, error {GetEglErrorString()}");
+				}
+				var attribLists = new[] {
+					BuildEglConfigAttribs(red: 8, green: 8, blue: 8, alpha: 8, depth: 24, stencil: 8),
+					BuildEglConfigAttribs(red: 8, green: 8, blue: 8, alpha: 8, depth: 16, stencil: 8),
+					BuildEglConfigAttribs(red: 4, green: 4, blue: 4, alpha: 4, depth: 24, stencil: 8),
+					BuildEglConfigAttribs(red: 4, green: 4, blue: 4, alpha: 4, depth: 16, stencil: 8)
+				};
+				var numConfigs = new int[1];
+				if (!egl.EglGetConfigs(display, null, 0, numConfigs)) {
+					throw new System.Exception($"Could not get EGL config count, error {GetEglErrorString()}");
+				}
+				var configs = new EGLConfig[numConfigs[0]];
+				var configFound = false;
+				foreach (var attribs in attribLists) {
+					configFound = egl.EglChooseConfig(display, attribs, configs, 1, numConfigs) && numConfigs[0] > 0;
+					if (configFound) break;
+				}
+				if (!configFound) {
+					throw new System.Exception($"Could not choose EGL config, error {GetEglErrorString()}");
+				}
+				eglDisplay = display;
+				eglConfig = configs[0];
+			}
+
+			private static int[] BuildEglConfigAttribs(int red = 0, int green = 0, int blue = 0, int alpha = 0, int depth = 0, int stencil = 0)
+			{
+				var attribs = new List<int>();
+				if (red != 0) {
+					attribs.Add(EGL10.EglRedSize);
+					attribs.Add(red);
+				}
+				if (green != 0) {
+					attribs.Add(EGL10.EglGreenSize);
+					attribs.Add(green);
+				}
+				if (blue != 0) {
+					attribs.Add(EGL10.EglBlueSize);
+					attribs.Add(blue);
+				}
+				if (alpha != 0) {
+					attribs.Add(EGL10.EglAlphaSize);
+					attribs.Add(alpha);
+				}
+				if (depth != 0) {
+					attribs.Add(EGL10.EglDepthSize);
+					attribs.Add(depth);
+				}
+				if (stencil != 0) {
+					attribs.Add(EGL10.EglStencilSize);
+					attribs.Add(stencil);
+				}
+				attribs.Add(EGL10.EglRenderableType);
+				attribs.Add(4);
+				attribs.Add(EGL10.EglNone);
+				return attribs.ToArray();
+			}
+
+			private string GetEglErrorString()
+			{
+				return GetEglErrorString(egl.EglGetError());
+			}
+
+			private static string GetEglErrorString(int error)
+			{
+				switch (error) {
+					case EGL11.EglSuccess:
+						return "Success";
+					case EGL11.EglNotInitialized:
+						return "Not Initialized";
+					case EGL11.EglBadAccess:
+						return "Bad Access";
+					case EGL11.EglBadAlloc:
+						return "Bad Allocation";
+					case EGL11.EglBadAttribute:
+						return "Bad Attribute";
+					case EGL11.EglBadConfig:
+						return "Bad Config";
+					case EGL11.EglBadContext:
+						return "Bad Context";
+					case EGL11.EglBadCurrentSurface:
+						return "Bad Current Surface";
+					case EGL11.EglBadDisplay:
+						return "Bad Display";
+					case EGL11.EglBadMatch:
+						return "Bad Match";
+					case EGL11.EglBadNativePixmap:
+						return "Bad Native Pixmap";
+					case EGL11.EglBadNativeWindow:
+						return "Bad Native Window";
+					case EGL11.EglBadParameter:
+						return "Bad Parameter";
+					case EGL11.EglBadSurface:
+						return "Bad Surface";
+					case EGL11.EglContextLost:
+						return "Context Lost";
+					default:
+						return "Unknown Error";
+				}
+			}
+
+			public override void SwapBuffers()
+			{
+				platformRenderContext.End();
+				EglSwapBuffers();
+			}
+
+			private void EglSwapBuffers()
+			{
+				if (!egl.EglSwapBuffers(eglDisplay, eglSurface)) {
+					var error = egl.EglGetError();
+					if (error == EGL11.EglBadSurface || error == EGL11.EglContextLost) {
+						OnEglContextLost();
+					} else {
+						throw new System.Exception($"Could not swap buffers, error {GetEglErrorString(error)}");
+					}
+				}
+			}
+
+			private void CreateEglSurface(ISurfaceHolder holder)
+			{
+				EnsureEglDisplayCreated();
+				var surface = egl.EglCreateWindowSurface(eglDisplay, eglConfig, (Java.Lang.Object)holder, null);
+				if (surface == null || surface == EGL10.EglNoSurface) {
+					throw new System.Exception($"Could not create EGL surface, error {GetEglErrorString()}");
+				}
+				eglSurface = surface;
+			}
+
+			private void DestroyEglSurface()
+			{
+				if (eglSurface != null) {
+					if (!egl.EglDestroySurface(eglDisplay, eglSurface)) {
+						throw new System.Exception($"Could not destroy EGL surface, error {GetEglErrorString()}");
+					}
+					eglSurface = null;
+				}
+			}
+
+			private void OnEglContextLost()
+			{
+				Logger.Write("EGL context lost");
+				DestroyEglContext();
+				CreateEglContext();
+				if (!EglTryMakeCurrent()) {
+					throw new System.Exception($"Could not make current EGL context, error {GetEglErrorString(egl.EglGetError())}");
+				}
+				PlatformRenderer.RaiseContextLost();
+			}
+
+			private void DestroyEglDisplay()
+			{
+				if (eglDisplay != null) {
+					if (!egl.EglTerminate(eglDisplay)) {
+						throw new System.Exception($"Could not terminate EGL display, error {GetEglErrorString()}");
+					}
+					eglDisplay = null;
+				}
+			}
+
+			private void DestroyEglContext()
+			{
+				if (eglContext != null) {
+					if (!egl.EglDestroyContext(eglDisplay, eglContext)) {
+						throw new System.Exception($"Could not destroy EGL context, error {GetEglErrorString()}");
+					}
+					eglContext = null;
+				}
+			}
+
+			public override void Unbind()
+			{
+				if (!egl.EglMakeCurrent(eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext)) {
+					throw new System.Exception($"Could not unbind EGL context, error {GetEglErrorString()}");
+				}
+			}
+
+			public override void OnSurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height) { }
+
+			public override void OnSurfaceCreated(ISurfaceHolder holder)
+			{
+				CreateEglSurface(holder);
+			}
+
+			public override void OnSurfaceDestroyed(ISurfaceHolder holder)
+			{
+				DestroyEglSurface();
+			}
+		}
+
+		private class VulkanRenderContext : RenderContext
+		{
+			private static Lime.Graphics.Platform.Vulkan.PlatformRenderContext platformRenderContext;
+			private Lime.Graphics.Platform.Vulkan.Swapchain swapchain;
+
+			private IntPtr aNativeWindow;
+
+			public override bool IsSurfaceCreated => aNativeWindow != IntPtr.Zero;
+
+			public VulkanRenderContext()
+			{
+			}
+
+			public override void Dispose()
+			{
+				DestroySwapchain();
+				ReleaseNativeWindow();
+			}
+
+			public override void MakeCurrent()
+			{
+				platformRenderContext.Begin(swapchain);
+			}
+
+			public override void SwapBuffers()
+			{
+				platformRenderContext.Present();
+			}
+
+			public override void Unbind()
+			{
+			}
+
+			public override void OnSurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
+			{
+				UpdateSwapchain(holder);
+			}
+
+			public override void OnSurfaceCreated(ISurfaceHolder holder)
+			{
+				AcquireNativeWindow(holder);
+				if (platformRenderContext == null) {
+					platformRenderContext = new Graphics.Platform.Vulkan.PlatformRenderContext();
+					PlatformRenderer.Initialize(platformRenderContext);
+				}
+				UpdateSwapchain(holder);
+			}
+
+			public override void OnSurfaceDestroyed(ISurfaceHolder holder)
+			{
+				DestroySwapchain();
+				ReleaseNativeWindow();
+			}
+
+			private void AcquireNativeWindow(ISurfaceHolder holder)
+			{
+				if (aNativeWindow != IntPtr.Zero) {
+					ANativeWindow_release(aNativeWindow);
+				}
+				aNativeWindow = ANativeWindow_fromSurface(Java.Interop.JniEnvironment.EnvironmentPointer, holder.Surface.Handle);
+			}
+
+			private void ReleaseNativeWindow()
+			{
+				if (aNativeWindow != IntPtr.Zero) {
+					ANativeWindow_release(aNativeWindow);
+					aNativeWindow = IntPtr.Zero;
+				}
+			}
+
+			private void UpdateSwapchain(ISurfaceHolder holder)
+			{
+				var surfaceFrame = holder.SurfaceFrame;
+				var w = surfaceFrame.Width();
+				var h = surfaceFrame.Height();
+				if (swapchain == null) {
+					swapchain = new Graphics.Platform.Vulkan.Swapchain(platformRenderContext, aNativeWindow, w, h);
+				} else {
+					swapchain.Resize(w, h);
+				}
+			}
+
+			private void DestroySwapchain()
+			{
+				swapchain?.Dispose();
+				swapchain = null;
+			}
+
+			const string AndroidRuntimeLibrary = "android";
+
+			[DllImport(AndroidRuntimeLibrary)]
+			internal static unsafe extern IntPtr ANativeWindow_fromSurface(IntPtr jniEnv, IntPtr handle);
+
+			[DllImport(AndroidRuntimeLibrary)]
+			internal static unsafe extern void ANativeWindow_release(IntPtr window);
 		}
 	}
 

@@ -126,6 +126,7 @@ namespace Lime
 				RaiseActivated();
 			};
 			ActivityDelegate.Instance.GameView.Resize += (sender, e) => {
+				WaitForRendering();
 				RaiseResized(((ResizeEventArgs)e).DeviceRotated);
 			};
 			ActivityDelegate.Instance.GameView.SurfaceCreating += () => requestForRedraw = true;

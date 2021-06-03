@@ -55,6 +55,14 @@ namespace Lime
 
 		public event RequestPermissionsResultHandler RequestPermissionsResult;
 
+		public bool IsVulkanSupported() => IsVulkanSupported(1, 0);
+
+		public bool IsVulkanSupported(int major, int minor)
+		{
+			var version = (major << 22) | (minor) << 12;
+			return Activity.PackageManager.HasSystemFeature(PackageManager.FeatureVulkanHardwareVersion, version);
+		}
+
 		public void OnCreate(Activity activity, Bundle bundle)
 		{
 			Debug.Write("Activity.OnCreate");
