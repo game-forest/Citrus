@@ -22097,19 +22097,6 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.IPlatformTexture2D.LevelCount
   nameWithType: IPlatformTexture2D.LevelCount
-- uid: Lime.Graphics.Platform.IPlatformTexture2D.SetData(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.IntPtr)
-  name: SetData(Int32, Int32, Int32, Int32, Int32, IntPtr)
-  href: api/Lime.Graphics.Platform.IPlatformTexture2D.html#Lime_Graphics_Platform_IPlatformTexture2D_SetData_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32_System_IntPtr_
-  commentId: M:Lime.Graphics.Platform.IPlatformTexture2D.SetData(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.IntPtr)
-  fullName: Lime.Graphics.Platform.IPlatformTexture2D.SetData(System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, System.IntPtr)
-  nameWithType: IPlatformTexture2D.SetData(Int32, Int32, Int32, Int32, Int32, IntPtr)
-- uid: Lime.Graphics.Platform.IPlatformTexture2D.SetData*
-  name: SetData
-  href: api/Lime.Graphics.Platform.IPlatformTexture2D.html#Lime_Graphics_Platform_IPlatformTexture2D_SetData_
-  commentId: Overload:Lime.Graphics.Platform.IPlatformTexture2D.SetData
-  isSpec: "True"
-  fullName: Lime.Graphics.Platform.IPlatformTexture2D.SetData
-  nameWithType: IPlatformTexture2D.SetData
 - uid: Lime.Graphics.Platform.IPlatformTexture2D.SetTextureParams(Lime.TextureParams)
   name: SetTextureParams(TextureParams)
   href: api/Lime.Graphics.Platform.IPlatformTexture2D.html#Lime_Graphics_Platform_IPlatformTexture2D_SetTextureParams_Lime_TextureParams_
@@ -22684,97 +22671,6 @@ references:
   fullName.vb: Lime.Graphics.Platform.PlatformBufferExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformBuffer, System.Int32, T(), System.Int32, System.Int32, Lime.BufferSetDataMode)
   nameWithType: PlatformBufferExtensions.SetData<T>(IPlatformBuffer, Int32, T[], Int32, Int32, BufferSetDataMode)
   nameWithType.vb: PlatformBufferExtensions.SetData(Of T)(IPlatformBuffer, Int32, T(), Int32, Int32, BufferSetDataMode)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions
-  name: PlatformTexture2DExtensions
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html
-  commentId: T:Lime.Graphics.Platform.PlatformTexture2DExtensions
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions
-  nameWithType: PlatformTexture2DExtensions
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.IntPtr)
-  name: SetData(IPlatformTexture2D, Int32, IntPtr)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32_System_IntPtr_
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.IntPtr)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.IntPtr)
-  nameWithType: PlatformTexture2DExtensions.SetData(IPlatformTexture2D, Int32, IntPtr)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData*
-  name: SetData
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData_
-  commentId: Overload:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData
-  isSpec: "True"
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData
-  nameWithType: PlatformTexture2DExtensions.SetData
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0)
-  name: SetData<T>(IPlatformTexture2D, Int32, T)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32___0_
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0)
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, T)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, T)
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, T)
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, T)
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, T)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0@)
-  name: SetData<T>(IPlatformTexture2D, Int32, ref T)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32___0__
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0@)
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, ByRef T)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, ref T)
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, ByRef T)
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, ref T)
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, ByRef T)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0[])
-  name: SetData<T>(IPlatformTexture2D, Int32, T[])
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32___0___
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0[])
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, T())
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, T[])
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, T())
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, T[])
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, T())
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0[],System.Int32)
-  name: SetData<T>(IPlatformTexture2D, Int32, T[], Int32)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32___0___System_Int32_
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,``0[],System.Int32)
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, T(), Int32)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, T[], System.Int32)
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, T(), System.Int32)
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, T[], Int32)
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, T(), Int32)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0)
-  name: SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32___0_
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0)
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, T)
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, T)
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T)
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0@)
-  name: SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, ref T)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32___0__
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0@)
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, ByRef T)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, ref T)
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, ByRef T)
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, ref T)
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, ByRef T)
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[])
-  name: SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T[])
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32___0___
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[])
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T())
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, T[])
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, T())
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T[])
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T())
-- uid: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[],System.Int32)
-  name: SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T[], Int32)
-  href: api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html#Lime_Graphics_Platform_PlatformTexture2DExtensions_SetData__1_Lime_Graphics_Platform_IPlatformTexture2D_System_Int32_System_Int32_System_Int32_System_Int32_System_Int32___0___System_Int32_
-  commentId: M:Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData``1(Lime.Graphics.Platform.IPlatformTexture2D,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[],System.Int32)
-  name.vb: SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T(), Int32)
-  fullName: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData<T>(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, T[], System.Int32)
-  fullName.vb: Lime.Graphics.Platform.PlatformTexture2DExtensions.SetData(Of T)(Lime.Graphics.Platform.IPlatformTexture2D, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, T(), System.Int32)
-  nameWithType: PlatformTexture2DExtensions.SetData<T>(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T[], Int32)
-  nameWithType.vb: PlatformTexture2DExtensions.SetData(Of T)(IPlatformTexture2D, Int32, Int32, Int32, Int32, Int32, T(), Int32)
 - uid: Lime.Graphics.Platform.ShaderStageMask
   name: ShaderStageMask
   href: api/Lime.Graphics.Platform.ShaderStageMask.html
@@ -23745,6 +23641,19 @@ references:
   isSpec: "True"
   fullName: Lime.GraphicsUtility.CopyMemory
   nameWithType: GraphicsUtility.CopyMemory
+- uid: Lime.GraphicsUtility.EnsureTextureDataSizeValid(Lime.Format,System.Int32,System.Int32,System.Int32)
+  name: EnsureTextureDataSizeValid(Format, Int32, Int32, Int32)
+  href: api/Lime.GraphicsUtility.html#Lime_GraphicsUtility_EnsureTextureDataSizeValid_Lime_Format_System_Int32_System_Int32_System_Int32_
+  commentId: M:Lime.GraphicsUtility.EnsureTextureDataSizeValid(Lime.Format,System.Int32,System.Int32,System.Int32)
+  fullName: Lime.GraphicsUtility.EnsureTextureDataSizeValid(Lime.Format, System.Int32, System.Int32, System.Int32)
+  nameWithType: GraphicsUtility.EnsureTextureDataSizeValid(Format, Int32, Int32, Int32)
+- uid: Lime.GraphicsUtility.EnsureTextureDataSizeValid*
+  name: EnsureTextureDataSizeValid
+  href: api/Lime.GraphicsUtility.html#Lime_GraphicsUtility_EnsureTextureDataSizeValid_
+  commentId: Overload:Lime.GraphicsUtility.EnsureTextureDataSizeValid
+  isSpec: "True"
+  fullName: Lime.GraphicsUtility.EnsureTextureDataSizeValid
+  nameWithType: GraphicsUtility.EnsureTextureDataSizeValid
 - uid: Lime.GraphicsUtility.FillMemory(System.IntPtr,System.Int32,System.Int32)
   name: FillMemory(IntPtr, Int32, Int32)
   href: api/Lime.GraphicsUtility.html#Lime_GraphicsUtility_FillMemory_System_IntPtr_System_Int32_System_Int32_
@@ -64299,12 +64208,6 @@ references:
   fullName.vb: Lime.Texture2D.LoadImage(System.Byte())
   nameWithType: Texture2D.LoadImage(Byte[])
   nameWithType.vb: Texture2D.LoadImage(Byte())
-- uid: Lime.Texture2D.LoadImage(System.IntPtr,System.Int32,System.Int32)
-  name: LoadImage(IntPtr, Int32, Int32)
-  href: api/Lime.Texture2D.html#Lime_Texture2D_LoadImage_System_IntPtr_System_Int32_System_Int32_
-  commentId: M:Lime.Texture2D.LoadImage(System.IntPtr,System.Int32,System.Int32)
-  fullName: Lime.Texture2D.LoadImage(System.IntPtr, System.Int32, System.Int32)
-  nameWithType: Texture2D.LoadImage(IntPtr, Int32, Int32)
 - uid: Lime.Texture2D.LoadImage(System.IO.Stream)
   name: LoadImage(Stream)
   href: api/Lime.Texture2D.html#Lime_Texture2D_LoadImage_System_IO_Stream_

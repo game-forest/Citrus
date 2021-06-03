@@ -2718,7 +2718,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.IPlatformRenderTexture2D.html",
-          "hash": "5GOQJ9BUG1G+/QJVxGi/dQ=="
+          "hash": "SQ5qYywFOdYnFdpH9ejgjA=="
         }
       },
       "is_incremental": false,
@@ -2754,7 +2754,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.IPlatformTexture2D.html",
-          "hash": "sa3LfOoVDvQNn/5l5GsyKQ=="
+          "hash": "3BVeoykzbU8l4YTp78CF+g=="
         }
       },
       "is_incremental": false,
@@ -2803,18 +2803,6 @@
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.PlatformBufferExtensions.html",
           "hash": "zJA9cq6kW0t5uD6FJbPOxg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.Graphics.Platform.PlatformTexture2DExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.Graphics.Platform.PlatformTexture2DExtensions.html",
-          "hash": "xjpaNILyZk04ET+RFzG44w=="
         }
       },
       "is_incremental": false,
@@ -2910,7 +2898,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.html",
-          "hash": "DYeY5HkHOEaa1TYy/jPKlQ=="
+          "hash": "qijlEO0JtGCjldh6wnWFDA=="
         }
       },
       "is_incremental": false,
@@ -2934,7 +2922,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.GraphicsUtility.html",
-          "hash": "teUZAYF/guN4GpdP16X0jg=="
+          "hash": "jYoSD9Kfh+5mX9wQnRVOFg=="
         }
       },
       "is_incremental": false,
@@ -4782,7 +4770,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.MovieTexture.html",
-          "hash": "OyOYBPeAXfVDC8MbTOZa3Q=="
+          "hash": "bYCecDfcFLtkNMTgBmGBTQ=="
         }
       },
       "is_incremental": false,
@@ -7686,7 +7674,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Texture2D.html",
-          "hash": "nfFW1ngn4W6SC7asfJmYmQ=="
+          "hash": "tNc2zhbrqGiL74qbWJ4yVw=="
         }
       },
       "is_incremental": false,
@@ -9330,7 +9318,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "yMpK4ixewEHQdYf8I1JdZA=="
+          "hash": "XLVsu07OazviDNBLV0H8Zw=="
         }
       },
       "is_incremental": false,
@@ -11550,7 +11538,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 776,
+          "total_file_count": 775,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
