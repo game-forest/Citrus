@@ -25,6 +25,7 @@
 		"TangerineBuildTargets": [],
 		"OrangeAndTangerine": [
 			"CitrusPlugin/bin/$(HOST_APPLICATION).$(CONFIGURATION)/CitrusPlugin.dll",
+			"EmptyProject.Types/bin/$(HOST_APPLICATION).$(CONFIGURATION)/EmptyProject.Types.dll"
 		],
 		"Orange": [],
 		"Tangerine": []
