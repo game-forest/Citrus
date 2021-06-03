@@ -2537,7 +2537,7 @@ Forces reloading of textures if they are null.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void PropagateDirtyFlags(Node.DirtyFlags mask = Node.DirtyFlags.Visible | Node.DirtyFlags.Color | Node.DirtyFlags.Shader | Node.DirtyFlags.Blending | Node.DirtyFlags.LayoutManager | Node.DirtyFlags.LocalTransform | Node.DirtyFlags.GlobalTransform | Node.DirtyFlags.GlobalTransformInverse | Node.DirtyFlags.ParentBoundingRect | Node.DirtyFlags.Enabled | Node.DirtyFlags.EffectiveAnimationSpeed | Node.DirtyFlags.Frozen | Node.DirtyFlags.Material | Node.DirtyFlags.All)</code></pre>
+    <pre><code class="lang-csharp hljs">protected void PropagateDirtyFlags(Node.DirtyFlags mask = Node.DirtyFlags.Visible | Node.DirtyFlags.Color | Node.DirtyFlags.Shader | Node.DirtyFlags.Blending | Node.DirtyFlags.LayoutManager | Node.DirtyFlags.LocalTransform | Node.DirtyFlags.GlobalTransform | Node.DirtyFlags.GlobalTransformInverse | Node.DirtyFlags.BoundingRect | Node.DirtyFlags.Enabled | Node.DirtyFlags.EffectiveAnimationSpeed | Node.DirtyFlags.Frozen | Node.DirtyFlags.Material | Node.DirtyFlags.ParentBoundingRect | Node.DirtyFlags.All)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -2556,6 +2556,16 @@ Forces reloading of textures if they are null.</p>
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="Lime_Node_PropagateParentBoundsChanged_" data-uid="Lime.Node.PropagateParentBoundsChanged*"></a>
+  <h4 id="Lime_Node_PropagateParentBoundsChanged" data-uid="Lime.Node.PropagateParentBoundsChanged">PropagateParentBoundsChanged()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void PropagateParentBoundsChanged()</code></pre>
+  </div>
   
   
   <a id="Lime_Node_PushNode_" data-uid="Lime.Node.PushNode*"></a>
@@ -3368,14 +3378,31 @@ Returns false if sought-for animation or marker doesn't exist.</p>
   </div>
   
   
-  <a id="Lime_Node_UpdateBoundingRect_" data-uid="Lime.Node.UpdateBoundingRect*"></a>
-  <h4 id="Lime_Node_UpdateBoundingRect" data-uid="Lime.Node.UpdateBoundingRect">UpdateBoundingRect()</h4>
+  <a id="Lime_Node_UpdateAncestorBoundingRect_" data-uid="Lime.Node.UpdateAncestorBoundingRect*"></a>
+  <h4 id="Lime_Node_UpdateAncestorBoundingRect_Lime_Widget_" data-uid="Lime.Node.UpdateAncestorBoundingRect(Lime.Widget)">UpdateAncestorBoundingRect(Widget)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void UpdateBoundingRect()</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void UpdateAncestorBoundingRect(Widget ancestor)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
+        <td><span class="parametername">ancestor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="events">Events
   </h3>
   

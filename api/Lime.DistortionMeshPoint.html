@@ -295,6 +295,9 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_Dispose">Node.Dispose()</a>
     </div>
     <div>
+      <a class="xref" href="Lime.Node.html#Lime_Node_PropagateParentBoundsChanged">Node.PropagateParentBoundsChanged()</a>
+    </div>
+    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_PropagateDirtyFlags_Lime_Node_DirtyFlags_">Node.PropagateDirtyFlags(Node.DirtyFlags)</a>
     </div>
     <div>
@@ -580,16 +583,33 @@ public Vector2 UV { get; set; }</code></pre>
   </h3>
   
   
-  <a id="Lime_DistortionMeshPoint_UpdateBoundingRect_" data-uid="Lime.DistortionMeshPoint.UpdateBoundingRect*"></a>
-  <h4 id="Lime_DistortionMeshPoint_UpdateBoundingRect" data-uid="Lime.DistortionMeshPoint.UpdateBoundingRect">UpdateBoundingRect()</h4>
+  <a id="Lime_DistortionMeshPoint_UpdateAncestorBoundingRect_" data-uid="Lime.DistortionMeshPoint.UpdateAncestorBoundingRect*"></a>
+  <h4 id="Lime_DistortionMeshPoint_UpdateAncestorBoundingRect_Lime_Widget_" data-uid="Lime.DistortionMeshPoint.UpdateAncestorBoundingRect(Lime.Widget)">UpdateAncestorBoundingRect(Widget)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void UpdateBoundingRect()</code></pre>
+    <pre><code class="lang-csharp hljs">public override void UpdateAncestorBoundingRect(Widget ancestor)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
+        <td><span class="parametername">ancestor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_UpdateBoundingRect">Node.UpdateBoundingRect()</a></div>
+  <div><a class="xref" href="Lime.Node.html#Lime_Node_UpdateAncestorBoundingRect_Lime_Widget_">Node.UpdateAncestorBoundingRect(Widget)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <span class="xref">System.IDisposable</span>

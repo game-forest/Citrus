@@ -291,6 +291,9 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_ShouldSerializeNodes">Node.ShouldSerializeNodes()</a>
     </div>
     <div>
+      <a class="xref" href="Lime.Node.html#Lime_Node_PropagateParentBoundsChanged">Node.PropagateParentBoundsChanged()</a>
+    </div>
+    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_PropagateDirtyFlags_Lime_Node_DirtyFlags_">Node.PropagateDirtyFlags(Node.DirtyFlags)</a>
     </div>
     <div>
@@ -2864,16 +2867,6 @@ public bool Visible { get; set; }</code></pre>
   <div><a class="xref" href="Lime.Node.html#Lime_Node_Dispose">Node.Dispose()</a></div>
   
   
-  <a id="Lime_Widget_ExpandParentBoundingRect_" data-uid="Lime.Widget.ExpandParentBoundingRect*"></a>
-  <h4 id="Lime_Widget_ExpandParentBoundingRect" data-uid="Lime.Widget.ExpandParentBoundingRect">ExpandParentBoundingRect()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void ExpandParentBoundingRect()</code></pre>
-  </div>
-  
-  
   <a id="Lime_Widget_ExpandToContainerWithAnchors_" data-uid="Lime.Widget.ExpandToContainerWithAnchors*"></a>
   <h4 id="Lime_Widget_ExpandToContainerWithAnchors" data-uid="Lime.Widget.ExpandToContainerWithAnchors">ExpandToContainerWithAnchors()</h4>
   <div class="markdown level1 summary"></div>
@@ -3348,6 +3341,16 @@ This method doesn't take in account if one of the widget's ancestors overlaps th
   </table>
   
   
+  <a id="Lime_Widget_RecalcBoundingRect_" data-uid="Lime.Widget.RecalcBoundingRect*"></a>
+  <h4 id="Lime_Widget_RecalcBoundingRect" data-uid="Lime.Widget.RecalcBoundingRect">RecalcBoundingRect()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RecalcBoundingRect()</code></pre>
+  </div>
+  
+  
   <a id="Lime_Widget_RecalcGloballyFrozen_" data-uid="Lime.Widget.RecalcGloballyFrozen*"></a>
   <h4 id="Lime_Widget_RecalcGloballyFrozen" data-uid="Lime.Widget.RecalcGloballyFrozen">RecalcGloballyFrozen()</h4>
   <div class="markdown level1 summary"></div>
@@ -3467,16 +3470,33 @@ This method doesn't take in account if one of the widget's ancestors overlaps th
   </table>
   
   
-  <a id="Lime_Widget_UpdateBoundingRect_" data-uid="Lime.Widget.UpdateBoundingRect*"></a>
-  <h4 id="Lime_Widget_UpdateBoundingRect" data-uid="Lime.Widget.UpdateBoundingRect">UpdateBoundingRect()</h4>
+  <a id="Lime_Widget_UpdateAncestorBoundingRect_" data-uid="Lime.Widget.UpdateAncestorBoundingRect*"></a>
+  <h4 id="Lime_Widget_UpdateAncestorBoundingRect_Lime_Widget_" data-uid="Lime.Widget.UpdateAncestorBoundingRect(Lime.Widget)">UpdateAncestorBoundingRect(Widget)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void UpdateBoundingRect()</code></pre>
+    <pre><code class="lang-csharp hljs">public override void UpdateAncestorBoundingRect(Widget ancestor)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
+        <td><span class="parametername">ancestor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.Node.html#Lime_Node_UpdateBoundingRect">Node.UpdateBoundingRect()</a></div>
+  <div><a class="xref" href="Lime.Node.html#Lime_Node_UpdateAncestorBoundingRect_Lime_Widget_">Node.UpdateAncestorBoundingRect(Widget)</a></div>
   
   
   <a id="Lime_Widget_WasClicked_" data-uid="Lime.Widget.WasClicked*"></a>

@@ -9444,25 +9444,6 @@ references:
   commentId: F:Lime.BoneWeight.Weight
   fullName: Lime.BoneWeight.Weight
   nameWithType: BoneWeight.Weight
-- uid: Lime.BoundingRectProcessor
-  name: BoundingRectProcessor
-  href: api/Lime.BoundingRectProcessor.html
-  commentId: T:Lime.BoundingRectProcessor
-  fullName: Lime.BoundingRectProcessor
-  nameWithType: BoundingRectProcessor
-- uid: Lime.BoundingRectProcessor.Update(System.Single)
-  name: Update(Single)
-  href: api/Lime.BoundingRectProcessor.html#Lime_BoundingRectProcessor_Update_System_Single_
-  commentId: M:Lime.BoundingRectProcessor.Update(System.Single)
-  fullName: Lime.BoundingRectProcessor.Update(System.Single)
-  nameWithType: BoundingRectProcessor.Update(Single)
-- uid: Lime.BoundingRectProcessor.Update*
-  name: Update
-  href: api/Lime.BoundingRectProcessor.html#Lime_BoundingRectProcessor_Update_
-  commentId: Overload:Lime.BoundingRectProcessor.Update
-  isSpec: "True"
-  fullName: Lime.BoundingRectProcessor.Update
-  nameWithType: BoundingRectProcessor.Update
 - uid: Lime.BoundingSphere
   name: BoundingSphere
   href: api/Lime.BoundingSphere.html
@@ -16841,19 +16822,19 @@ references:
   isSpec: "True"
   fullName: Lime.DistortionMeshPoint.Offset
   nameWithType: DistortionMeshPoint.Offset
-- uid: Lime.DistortionMeshPoint.UpdateBoundingRect
-  name: UpdateBoundingRect()
-  href: api/Lime.DistortionMeshPoint.html#Lime_DistortionMeshPoint_UpdateBoundingRect
-  commentId: M:Lime.DistortionMeshPoint.UpdateBoundingRect
-  fullName: Lime.DistortionMeshPoint.UpdateBoundingRect()
-  nameWithType: DistortionMeshPoint.UpdateBoundingRect()
-- uid: Lime.DistortionMeshPoint.UpdateBoundingRect*
-  name: UpdateBoundingRect
-  href: api/Lime.DistortionMeshPoint.html#Lime_DistortionMeshPoint_UpdateBoundingRect_
-  commentId: Overload:Lime.DistortionMeshPoint.UpdateBoundingRect
+- uid: Lime.DistortionMeshPoint.UpdateAncestorBoundingRect(Lime.Widget)
+  name: UpdateAncestorBoundingRect(Widget)
+  href: api/Lime.DistortionMeshPoint.html#Lime_DistortionMeshPoint_UpdateAncestorBoundingRect_Lime_Widget_
+  commentId: M:Lime.DistortionMeshPoint.UpdateAncestorBoundingRect(Lime.Widget)
+  fullName: Lime.DistortionMeshPoint.UpdateAncestorBoundingRect(Lime.Widget)
+  nameWithType: DistortionMeshPoint.UpdateAncestorBoundingRect(Widget)
+- uid: Lime.DistortionMeshPoint.UpdateAncestorBoundingRect*
+  name: UpdateAncestorBoundingRect
+  href: api/Lime.DistortionMeshPoint.html#Lime_DistortionMeshPoint_UpdateAncestorBoundingRect_
+  commentId: Overload:Lime.DistortionMeshPoint.UpdateAncestorBoundingRect
   isSpec: "True"
-  fullName: Lime.DistortionMeshPoint.UpdateBoundingRect
-  nameWithType: DistortionMeshPoint.UpdateBoundingRect
+  fullName: Lime.DistortionMeshPoint.UpdateAncestorBoundingRect
+  nameWithType: DistortionMeshPoint.UpdateAncestorBoundingRect
 - uid: Lime.DistortionMeshPoint.UV
   name: UV
   href: api/Lime.DistortionMeshPoint.html#Lime_DistortionMeshPoint_UV
@@ -41566,6 +41547,12 @@ references:
   commentId: F:Lime.Node.DirtyFlags.Blending
   fullName: Lime.Node.DirtyFlags.Blending
   nameWithType: Node.DirtyFlags.Blending
+- uid: Lime.Node.DirtyFlags.BoundingRect
+  name: BoundingRect
+  href: api/Lime.Node.DirtyFlags.html#Lime_Node_DirtyFlags_BoundingRect
+  commentId: F:Lime.Node.DirtyFlags.BoundingRect
+  fullName: Lime.Node.DirtyFlags.BoundingRect
+  nameWithType: Node.DirtyFlags.BoundingRect
 - uid: Lime.Node.DirtyFlags.Color
   name: Color
   href: api/Lime.Node.DirtyFlags.html#Lime_Node_DirtyFlags_Color
@@ -42295,6 +42282,19 @@ references:
   isSpec: "True"
   fullName: Lime.Node.PropagateDirtyFlags
   nameWithType: Node.PropagateDirtyFlags
+- uid: Lime.Node.PropagateParentBoundsChanged
+  name: PropagateParentBoundsChanged()
+  href: api/Lime.Node.html#Lime_Node_PropagateParentBoundsChanged
+  commentId: M:Lime.Node.PropagateParentBoundsChanged
+  fullName: Lime.Node.PropagateParentBoundsChanged()
+  nameWithType: Node.PropagateParentBoundsChanged()
+- uid: Lime.Node.PropagateParentBoundsChanged*
+  name: PropagateParentBoundsChanged
+  href: api/Lime.Node.html#Lime_Node_PropagateParentBoundsChanged_
+  commentId: Overload:Lime.Node.PropagateParentBoundsChanged
+  isSpec: "True"
+  fullName: Lime.Node.PropagateParentBoundsChanged
+  nameWithType: Node.PropagateParentBoundsChanged
 - uid: Lime.Node.PushNode(Lime.Node)
   name: PushNode(Node)
   href: api/Lime.Node.html#Lime_Node_PushNode_Lime_Node_
@@ -42688,19 +42688,19 @@ references:
   isSpec: "True"
   fullName: Lime.Node.UnlinkAndDispose
   nameWithType: Node.UnlinkAndDispose
-- uid: Lime.Node.UpdateBoundingRect
-  name: UpdateBoundingRect()
-  href: api/Lime.Node.html#Lime_Node_UpdateBoundingRect
-  commentId: M:Lime.Node.UpdateBoundingRect
-  fullName: Lime.Node.UpdateBoundingRect()
-  nameWithType: Node.UpdateBoundingRect()
-- uid: Lime.Node.UpdateBoundingRect*
-  name: UpdateBoundingRect
-  href: api/Lime.Node.html#Lime_Node_UpdateBoundingRect_
-  commentId: Overload:Lime.Node.UpdateBoundingRect
+- uid: Lime.Node.UpdateAncestorBoundingRect(Lime.Widget)
+  name: UpdateAncestorBoundingRect(Widget)
+  href: api/Lime.Node.html#Lime_Node_UpdateAncestorBoundingRect_Lime_Widget_
+  commentId: M:Lime.Node.UpdateAncestorBoundingRect(Lime.Widget)
+  fullName: Lime.Node.UpdateAncestorBoundingRect(Lime.Widget)
+  nameWithType: Node.UpdateAncestorBoundingRect(Widget)
+- uid: Lime.Node.UpdateAncestorBoundingRect*
+  name: UpdateAncestorBoundingRect
+  href: api/Lime.Node.html#Lime_Node_UpdateAncestorBoundingRect_
+  commentId: Overload:Lime.Node.UpdateAncestorBoundingRect
   isSpec: "True"
-  fullName: Lime.Node.UpdateBoundingRect
-  nameWithType: Node.UpdateBoundingRect
+  fullName: Lime.Node.UpdateAncestorBoundingRect
+  nameWithType: Node.UpdateAncestorBoundingRect
 - uid: Lime.Node.Updated
   name: Updated
   href: api/Lime.Node.html#Lime_Node_Updated
@@ -73098,19 +73098,6 @@ references:
   commentId: F:Lime.Widget.EnableViewCulling
   fullName: Lime.Widget.EnableViewCulling
   nameWithType: Widget.EnableViewCulling
-- uid: Lime.Widget.ExpandParentBoundingRect
-  name: ExpandParentBoundingRect()
-  href: api/Lime.Widget.html#Lime_Widget_ExpandParentBoundingRect
-  commentId: M:Lime.Widget.ExpandParentBoundingRect
-  fullName: Lime.Widget.ExpandParentBoundingRect()
-  nameWithType: Widget.ExpandParentBoundingRect()
-- uid: Lime.Widget.ExpandParentBoundingRect*
-  name: ExpandParentBoundingRect
-  href: api/Lime.Widget.html#Lime_Widget_ExpandParentBoundingRect_
-  commentId: Overload:Lime.Widget.ExpandParentBoundingRect
-  isSpec: "True"
-  fullName: Lime.Widget.ExpandParentBoundingRect
-  nameWithType: Widget.ExpandParentBoundingRect
 - uid: Lime.Widget.ExpandToContainerWithAnchors
   name: ExpandToContainerWithAnchors()
   href: api/Lime.Widget.html#Lime_Widget_ExpandToContainerWithAnchors
@@ -73831,6 +73818,19 @@ references:
   isSpec: "True"
   fullName: Lime.Widget.RaiseUpdating
   nameWithType: Widget.RaiseUpdating
+- uid: Lime.Widget.RecalcBoundingRect
+  name: RecalcBoundingRect()
+  href: api/Lime.Widget.html#Lime_Widget_RecalcBoundingRect
+  commentId: M:Lime.Widget.RecalcBoundingRect
+  fullName: Lime.Widget.RecalcBoundingRect()
+  nameWithType: Widget.RecalcBoundingRect()
+- uid: Lime.Widget.RecalcBoundingRect*
+  name: RecalcBoundingRect
+  href: api/Lime.Widget.html#Lime_Widget_RecalcBoundingRect_
+  commentId: Overload:Lime.Widget.RecalcBoundingRect
+  isSpec: "True"
+  fullName: Lime.Widget.RecalcBoundingRect
+  nameWithType: Widget.RecalcBoundingRect
 - uid: Lime.Widget.RecalcGloballyFrozen
   name: RecalcGloballyFrozen()
   href: api/Lime.Widget.html#Lime_Widget_RecalcGloballyFrozen
@@ -74032,19 +74032,19 @@ references:
   isSpec: "True"
   fullName: Lime.Widget.ToLocalMousePosition
   nameWithType: Widget.ToLocalMousePosition
-- uid: Lime.Widget.UpdateBoundingRect
-  name: UpdateBoundingRect()
-  href: api/Lime.Widget.html#Lime_Widget_UpdateBoundingRect
-  commentId: M:Lime.Widget.UpdateBoundingRect
-  fullName: Lime.Widget.UpdateBoundingRect()
-  nameWithType: Widget.UpdateBoundingRect()
-- uid: Lime.Widget.UpdateBoundingRect*
-  name: UpdateBoundingRect
-  href: api/Lime.Widget.html#Lime_Widget_UpdateBoundingRect_
-  commentId: Overload:Lime.Widget.UpdateBoundingRect
+- uid: Lime.Widget.UpdateAncestorBoundingRect(Lime.Widget)
+  name: UpdateAncestorBoundingRect(Widget)
+  href: api/Lime.Widget.html#Lime_Widget_UpdateAncestorBoundingRect_Lime_Widget_
+  commentId: M:Lime.Widget.UpdateAncestorBoundingRect(Lime.Widget)
+  fullName: Lime.Widget.UpdateAncestorBoundingRect(Lime.Widget)
+  nameWithType: Widget.UpdateAncestorBoundingRect(Widget)
+- uid: Lime.Widget.UpdateAncestorBoundingRect*
+  name: UpdateAncestorBoundingRect
+  href: api/Lime.Widget.html#Lime_Widget_UpdateAncestorBoundingRect_
+  commentId: Overload:Lime.Widget.UpdateAncestorBoundingRect
   isSpec: "True"
-  fullName: Lime.Widget.UpdateBoundingRect
-  nameWithType: Widget.UpdateBoundingRect
+  fullName: Lime.Widget.UpdateAncestorBoundingRect
+  nameWithType: Widget.UpdateAncestorBoundingRect
 - uid: Lime.Widget.Visible
   name: Visible
   href: api/Lime.Widget.html#Lime_Widget_Visible

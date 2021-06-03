@@ -462,7 +462,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animesh.html",
-          "hash": "mPWTSVSo2kkU4YX1axAm+g=="
+          "hash": "tN9JgLDuJXSvSaVCP8qD5g=="
         }
       },
       "is_incremental": false,
@@ -582,7 +582,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Audio.html",
-          "hash": "MmaqRQuiUXcIxNwhOuWADg=="
+          "hash": "KBtMNDKyCgZ6lTPGD6hX1g=="
         }
       },
       "is_incremental": false,
@@ -942,7 +942,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Bone.html",
-          "hash": "G5KV0z3rnoVmFIcnEAFKWA=="
+          "hash": "rDr1kAmS0UdFu2MYMROBSA=="
         }
       },
       "is_incremental": false,
@@ -1003,18 +1003,6 @@
         ".html": {
           "relative_path": "api/Lime.BoneWeight.html",
           "hash": "YKLqlU60u8tekrH60KIPgQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.BoundingRectProcessor.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.BoundingRectProcessor.html",
-          "hash": "ewvBxXOtVZm6qvhEJfO3lA=="
         }
       },
       "is_incremental": false,
@@ -1098,7 +1086,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Button.html",
-          "hash": "GvHjWWhNNml8HbsXoqEh4g=="
+          "hash": "oZL3mOv1a5jHK8ZbGievEg=="
         }
       },
       "is_incremental": false,
@@ -1122,7 +1110,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Camera3D.html",
-          "hash": "WIISP7pdvkzSEiOKour3PQ=="
+          "hash": "7heZZNG+qlHPLyDykbHkjA=="
         }
       },
       "is_incremental": false,
@@ -1218,7 +1206,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.CheckBox.html",
-          "hash": "xjBo+K8zAm7P9CQfb3tXOg=="
+          "hash": "q3H12cTWhfudMnf6UsemwA=="
         }
       },
       "is_incremental": false,
@@ -1446,7 +1434,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ComboBox.html",
-          "hash": "w4SGuz8N3e9hhbT5NfijJA=="
+          "hash": "jPjDyt2O+uMYPZ1eyR8Ptg=="
         }
       },
       "is_incremental": false,
@@ -1554,7 +1542,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.CommonDropDownList.html",
-          "hash": "BQzW9p/MzW3mC+258dn3Hg=="
+          "hash": "BQc+LX3EtZVbFxZPadGsoA=="
         }
       },
       "is_incremental": false,
@@ -1566,7 +1554,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.CommonEditBox.html",
-          "hash": "WDqmrOGmioHh7bRKd+DkRQ=="
+          "hash": "FGomocSUCewb0xrfNRHZ8Q=="
         }
       },
       "is_incremental": false,
@@ -1866,7 +1854,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DefaultWindowWidget.html",
-          "hash": "SzNWJrXgPSuR7Bghy7Ac9A=="
+          "hash": "XnggDpGYh7mBbRDgt8Eezw=="
         }
       },
       "is_incremental": false,
@@ -2022,7 +2010,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DistortionMesh.html",
-          "hash": "zaLz0WEbXQ+X3OWu1SvLzg=="
+          "hash": "FQ3m1Xg/dEowEJfZbehB9Q=="
         }
       },
       "is_incremental": false,
@@ -2034,7 +2022,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DistortionMeshPoint.html",
-          "hash": "jEKEhiV2zSPGdMVQ3rVymg=="
+          "hash": "ieY0SvV4YKFoCjdRXYjeBA=="
         }
       },
       "is_incremental": false,
@@ -2118,7 +2106,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.DropDownList.html",
-          "hash": "XBsEGL2jj0DqC6rqNQVeUQ=="
+          "hash": "wsBMBVtH1mChSzq51s8cTA=="
         }
       },
       "is_incremental": false,
@@ -2166,7 +2154,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.EditBox.html",
-          "hash": "ut8/lEn3Ek98+nx9hpOIiw=="
+          "hash": "UJs/zmwul6Kqnl4c5QmVgA=="
         }
       },
       "is_incremental": false,
@@ -2250,7 +2238,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.EmitterShapePoint.html",
-          "hash": "VbvnAADPdr1WKRg41jwNFg=="
+          "hash": "cgZ55S6EeFP4HoFijtaVXg=="
         }
       },
       "is_incremental": false,
@@ -2286,7 +2274,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ExpandableListItem.html",
-          "hash": "kfh5FixlIpfJN/T7UpmNDA=="
+          "hash": "WHMxn7XcZxCj06HtYGykug=="
         }
       },
       "is_incremental": false,
@@ -2550,7 +2538,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Frame.html",
-          "hash": "BQCQYi4jgLmTGDG4uUn0hg=="
+          "hash": "2jDGN3ef016g+89cwweDVA=="
         }
       },
       "is_incremental": false,
@@ -2970,7 +2958,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.HSplitter.html",
-          "hash": "/pDEApNx+7LBU3ZU+5ftXA=="
+          "hash": "FVzS8GdPt3kP/ROJ9e+Zag=="
         }
       },
       "is_incremental": false,
@@ -3654,7 +3642,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Image.html",
-          "hash": "cs5jY1q0Jx2CXz7r9sS7uA=="
+          "hash": "0rLU63kFmnRId5m+SbpozA=="
         }
       },
       "is_incremental": false,
@@ -3666,7 +3654,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ImageCombiner.html",
-          "hash": "FKBAjecvxDj9TYKLCcLqug=="
+          "hash": "GHqkIM/txWUOGf0PY5JfvQ=="
         }
       },
       "is_incremental": false,
@@ -3810,7 +3798,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.InvalidableWindowWidget.html",
-          "hash": "NtsD4XFvaoc3b3ONRpBExw=="
+          "hash": "d5Hye2YSkL1aRnw7UKffLg=="
         }
       },
       "is_incremental": false,
@@ -4422,7 +4410,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Mesh3D.html",
-          "hash": "6FQbD8z22q8pBmCe7reRhw=="
+          "hash": "Xzg73Ou+kFlLdwC4SWX/8Q=="
         }
       },
       "is_incremental": false,
@@ -4482,7 +4470,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Model3D.html",
-          "hash": "VgDFP7bGWiBH9RpOLCV4dg=="
+          "hash": "ZGv9UYbp0iJs2e+iwqq/Iw=="
         }
       },
       "is_incremental": false,
@@ -4746,7 +4734,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Movie.html",
-          "hash": "OBoczeA+4T9zI7kOv5s9Tw=="
+          "hash": "CV9BS6g9Eni/APSkSHshKg=="
         }
       },
       "is_incremental": false,
@@ -4818,7 +4806,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NineGrid.html",
-          "hash": "GynAAowNXxLCKlQjMZNC0w=="
+          "hash": "2HCtJ96HrZoIEEZxFEoxSw=="
         }
       },
       "is_incremental": false,
@@ -4842,7 +4830,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Node.DirtyFlags.html",
-          "hash": "AVdHs9ahFv2K8ZS0+vgg6w=="
+          "hash": "Fya5y+XLri76d/4uBPhQkQ=="
         }
       },
       "is_incremental": false,
@@ -4878,7 +4866,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Node.html",
-          "hash": "YdcuVzZsTiG9JEWvkstwXw=="
+          "hash": "OUcR8JQGBtlJAJuZj9xLkw=="
         }
       },
       "is_incremental": false,
@@ -4890,7 +4878,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Node3D.html",
-          "hash": "AglyPjxV3Hc6heH29w4L6A=="
+          "hash": "yDiSgM27mGQxcIWza0PStw=="
         }
       },
       "is_incremental": false,
@@ -5070,7 +5058,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeProcessor.html",
-          "hash": "JUv/KHUzzxS93Tdg/hm1Eg=="
+          "hash": "A4Qar3DEqY0cvQJl+9bofA=="
         }
       },
       "is_incremental": false,
@@ -5142,7 +5130,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NumericEditBox.html",
-          "hash": "yUjduJnr4laWVgK285X3fw=="
+          "hash": "yf4htmAceTSOoNF6mPOdiw=="
         }
       },
       "is_incremental": false,
@@ -5286,7 +5274,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleEmitter.html",
-          "hash": "8gfBuuZinjRtk3z0HJojlQ=="
+          "hash": "v8SRFY6MKcU2/AMQxVjuyQ=="
         }
       },
       "is_incremental": false,
@@ -5310,7 +5298,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleModifier.html",
-          "hash": "R0/xaUfXHhmnolTt06uKyA=="
+          "hash": "RVi1ulNGkN+5hjafOcPTcw=="
         }
       },
       "is_incremental": false,
@@ -5334,7 +5322,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticlesMagnet.html",
-          "hash": "iTWMEpw823OHSr6cj5KS6A=="
+          "hash": "7lYqIMW+ePcRuM4QXPBkZQ=="
         }
       },
       "is_incremental": false,
@@ -5466,7 +5454,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PointObject.html",
-          "hash": "YvMU5Q1+mrbtXIJBkhXZoQ=="
+          "hash": "IVEnx0LK108tCDWqTP7l8A=="
         }
       },
       "is_incremental": false,
@@ -5478,7 +5466,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Polyline.html",
-          "hash": "qVo84L/9fgabddodHMVk1g=="
+          "hash": "UpGxaF7+/XdP0Wvv+stdvA=="
         }
       },
       "is_incremental": false,
@@ -5490,7 +5478,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PolylinePoint.html",
-          "hash": "rfcBJI4DmsS3SzGdxuf43g=="
+          "hash": "T9PO2/6CbEzh4Fr/ZoSQqQ=="
         }
       },
       "is_incremental": false,
@@ -6078,7 +6066,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.RichText.html",
-          "hash": "3GTPYU70AqpZQ1R6G05ycg=="
+          "hash": "t5pHsOK3nCTc1SKMk3aceA=="
         }
       },
       "is_incremental": false,
@@ -6138,7 +6126,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ScrollView.ScrollViewContentWidget.html",
-          "hash": "oZf7aJnQ/SaaeD+UgaIw+w=="
+          "hash": "r39wpCA4/4gYzkBYx+JfqA=="
         }
       },
       "is_incremental": false,
@@ -6618,7 +6606,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SimpleText.html",
-          "hash": "rpCi4/N2020aR4AEgYkndQ=="
+          "hash": "BxM7OzvD6MKRdZx4Q9MClw=="
         }
       },
       "is_incremental": false,
@@ -6678,7 +6666,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Slider.html",
-          "hash": "ksjAR/PubwWCE4XP1DaJHA=="
+          "hash": "jKh7MObuFzyi57GkTFG3Xg=="
         }
       },
       "is_incremental": false,
@@ -6738,7 +6726,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Spline.html",
-          "hash": "D+7lQ4yUCXGHk9OJntoMpw=="
+          "hash": "mWcnyQwjqft+Fem7Cw3PDA=="
         }
       },
       "is_incremental": false,
@@ -6750,7 +6738,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Spline3D.html",
-          "hash": "ItyTJSSRFebL/VQvjCvu1Q=="
+          "hash": "DrckNRMaVjoMK40z/gtbrw=="
         }
       },
       "is_incremental": false,
@@ -6762,7 +6750,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplineGear.html",
-          "hash": "u6UlZY7/2aCBAV3Y18obIQ=="
+          "hash": "vXPFqKUPUZj86v/PumnDZA=="
         }
       },
       "is_incremental": false,
@@ -6774,7 +6762,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplineGear3D.html",
-          "hash": "vo2ECKc2fvgUVmZQWcAzVQ=="
+          "hash": "MvqG9WUwyBgWsvuV6J3ddw=="
         }
       },
       "is_incremental": false,
@@ -6798,7 +6786,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplinePoint.html",
-          "hash": "tNgfP77jTiELQcM1EIJYWw=="
+          "hash": "zE7VN5P1hfrYjzR0bq3POQ=="
         }
       },
       "is_incremental": false,
@@ -6810,7 +6798,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SplinePoint3D.html",
-          "hash": "13wpXBo2f4AdFL2x3vKBug=="
+          "hash": "aEujNE5ly6k3d/5i+0jGJw=="
         }
       },
       "is_incremental": false,
@@ -6846,7 +6834,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Splitter.html",
-          "hash": "Xk/TFFI16ibgAyNULMykJg=="
+          "hash": "eegr2p3u8/7mUjR/UuIZOg=="
         }
       },
       "is_incremental": false,
@@ -7050,7 +7038,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Tab.html",
-          "hash": "obrdcdKRx4phBeUMCwiuRQ=="
+          "hash": "scFSiTw9c2jhtqG3DoabQA=="
         }
       },
       "is_incremental": false,
@@ -7074,7 +7062,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TabBar.html",
-          "hash": "NwvLQYOEoKCMuSKg4AsfNw=="
+          "hash": "+OjS7mei43yl8K/HGl3Z5g=="
         }
       },
       "is_incremental": false,
@@ -7650,7 +7638,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TextStyle.html",
-          "hash": "/RtAdCK3aIUZU2nEUGb+gg=="
+          "hash": "g6T1xusceYJiHoDrwBqkzQ=="
         }
       },
       "is_incremental": false,
@@ -7890,7 +7878,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedButton.html",
-          "hash": "ChPYV0N8g3qMUL80wj4bgw=="
+          "hash": "UmbQKdLEiF7KQ27fyIHCfg=="
         }
       },
       "is_incremental": false,
@@ -7902,7 +7890,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedCheckBox.html",
-          "hash": "DpjOqtnSyC5ynKFiWTquVw=="
+          "hash": "T9Wr2RdqqEuLXXo4fStZZw=="
         }
       },
       "is_incremental": false,
@@ -7914,7 +7902,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedComboBox.html",
-          "hash": "EGTQRnzz5udsX3mHQNe/gA=="
+          "hash": "z/s5xQGu7ke4SE3a+6E6hA=="
         }
       },
       "is_incremental": false,
@@ -7926,7 +7914,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedDefaultWindowWidget.html",
-          "hash": "qghpqk0msrE4fj5U4CDAhA=="
+          "hash": "xKpwM0lDQ4HIyznunDSojQ=="
         }
       },
       "is_incremental": false,
@@ -7938,7 +7926,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedDropDownList.html",
-          "hash": "mcirbnnlyXdN/vaWIpUMiQ=="
+          "hash": "vF/yq16BKKyUHzefRrOOnw=="
         }
       },
       "is_incremental": false,
@@ -7950,7 +7938,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedEditBox.html",
-          "hash": "D4Ti2jWhvsI+1ahHUC3A/Q=="
+          "hash": "6zjm+YHYIg8+9tjOoSoKeg=="
         }
       },
       "is_incremental": false,
@@ -7962,7 +7950,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedFileChooserButton.html",
-          "hash": "/YzLYxvpOUpC77BCJzCi5A=="
+          "hash": "gn9EduIMFR6YBIkgnOZ/eA=="
         }
       },
       "is_incremental": false,
@@ -7974,7 +7962,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedFrame.html",
-          "hash": "XMuUcVw9YhLVxQh+KL2Mkw=="
+          "hash": "+jjP9VJP/OaNA2j1pMaSfA=="
         }
       },
       "is_incremental": false,
@@ -7998,7 +7986,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedHSplitter.html",
-          "hash": "ZSxh4xBNdjr6ThejkV3Hag=="
+          "hash": "vB7ttC7iDiij3uA53jzngw=="
         }
       },
       "is_incremental": false,
@@ -8010,7 +7998,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedInvalidableWindowWidget.html",
-          "hash": "pW0EMCu8nVI0gkQVNZIA0Q=="
+          "hash": "tqu80wVI29hJCpW9ugdURg=="
         }
       },
       "is_incremental": false,
@@ -8022,7 +8010,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedNumericEditBox.html",
-          "hash": "vBEnWCoh+Ma+5YYAojbpNA=="
+          "hash": "dLfT5GXj+l3ooQrtCki9Jg=="
         }
       },
       "is_incremental": false,
@@ -8046,7 +8034,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedScrollView.html",
-          "hash": "BfbzplmzFNxF4bjBF0ljhw=="
+          "hash": "rrvoM+RdEurGYmiKLypspQ=="
         }
       },
       "is_incremental": false,
@@ -8058,7 +8046,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedSimpleText.html",
-          "hash": "893eIsn6vTAEl28HWTPaeQ=="
+          "hash": "5uC7q0G6sbrXe+tzRLj/RQ=="
         }
       },
       "is_incremental": false,
@@ -8070,7 +8058,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedSlider.html",
-          "hash": "fXiE/VCcrgXjowq/iFvXMg=="
+          "hash": "pgtvPK9syjV5vtrrCVZ2vA=="
         }
       },
       "is_incremental": false,
@@ -8082,7 +8070,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedTab.html",
-          "hash": "Db+2AeL29+GtayK5SqH5dg=="
+          "hash": "HT3vCqWWpjdRRAcCanL4lQ=="
         }
       },
       "is_incremental": false,
@@ -8094,7 +8082,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedTabBar.html",
-          "hash": "hj8mdF7WOZ7U5FsVDk3RbQ=="
+          "hash": "iWnk5yeVdovNAyu/6e2BAQ=="
         }
       },
       "is_incremental": false,
@@ -8106,7 +8094,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedTabCloseButton.html",
-          "hash": "jVSKxqxK3VP7/eO/Z27cmQ=="
+          "hash": "d/XmHb/R2F2Ux1NDo6j7fQ=="
         }
       },
       "is_incremental": false,
@@ -8130,7 +8118,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedTextView.html",
-          "hash": "eUh+UvLiTjQjUcskJVgpjA=="
+          "hash": "Y0WZRZCCBsqDo1f+vmFqyg=="
         }
       },
       "is_incremental": false,
@@ -8142,7 +8130,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedVSplitter.html",
-          "hash": "9S/MORk6JwpwCkGIOdoezQ=="
+          "hash": "7Um8aDQK392OoygyRrwj7A=="
         }
       },
       "is_incremental": false,
@@ -8178,7 +8166,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TiledImage.html",
-          "hash": "q2nz0Bgd0w4bDQpQrM3aEw=="
+          "hash": "6Lv91sxwHFa3KHkvxdB/pw=="
         }
       },
       "is_incremental": false,
@@ -8538,7 +8526,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.VSplitter.html",
-          "hash": "c0r1MNUKIXFsaQ9m8xfVWA=="
+          "hash": "TIGm79iN0EUtVfsqnWtFXw=="
         }
       },
       "is_incremental": false,
@@ -8802,7 +8790,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.VideoPlayer.html",
-          "hash": "FEeHlSprVrtjxjbxm7Crhg=="
+          "hash": "IUY736xuxSaJBh4iVY594w=="
         }
       },
       "is_incremental": false,
@@ -8838,7 +8826,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Viewport3D.html",
-          "hash": "tmmj2EuGkHbEllUWUgNeQw=="
+          "hash": "YwkrKqi+YKkwUkVBnjdNZQ=="
         }
       },
       "is_incremental": false,
@@ -8982,7 +8970,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WebBrowser.html",
-          "hash": "R4OtPJhrMCe1GXiNgL4k4g=="
+          "hash": "8rUaIGvXAaXMRKDf+ehdPA=="
         }
       },
       "is_incremental": false,
@@ -8994,7 +8982,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Widget.html",
-          "hash": "Gfr8gwAmtQTkVxm5/WW4MA=="
+          "hash": "zsxLV/Euq957ghEBfDphcg=="
         }
       },
       "is_incremental": false,
@@ -9006,7 +8994,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WidgetAdapter3D.html",
-          "hash": "SplJfJGoyOLxjo2kn+v34Q=="
+          "hash": "ieSC+IldsjYXdfsCv95PSQ=="
         }
       },
       "is_incremental": false,
@@ -9198,7 +9186,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WindowWidget.html",
-          "hash": "AtxtSToRGooe+zb4um9BNQ=="
+          "hash": "aoGMXZVs5Qtu5Nm1ce1JQw=="
         }
       },
       "is_incremental": false,
@@ -9270,7 +9258,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "jbSZtD1NdNjJRj/O16G1/Q=="
+          "hash": "dyregdaJqjNIEdQzAg9dvw=="
         }
       },
       "is_incremental": false,
@@ -9318,7 +9306,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "XLVsu07OazviDNBLV0H8Zw=="
+          "hash": "ZmKsnxke/SM7DPFtN33TvQ=="
         }
       },
       "is_incremental": false,
@@ -11538,7 +11526,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 775,
+          "total_file_count": 774,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
