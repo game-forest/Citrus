@@ -74,7 +74,6 @@ namespace Lime
 			manager.Processors.Add(new AnimationProcessor());
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(AfterAnimationStage)));
 			manager.Processors.Add(new LayoutProcessor());
-			manager.Processors.Add(new BoundingRectProcessor());
 			if (Application.EnableParticleLimiter) {
 				manager.Processors.Add(new ParticleLimitPreLateUpdateProcessor());
 			}
