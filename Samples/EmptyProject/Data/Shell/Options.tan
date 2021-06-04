@@ -57,7 +57,7 @@
 				{
 					"class":"Lime.Button, Lime",
 					"Color":[4294967295],
-					"ContentsPath":"Buttons/BtnOk",
+					"ContentsPath":"Externals/BtnOk",
 					"Id":"@BtnOk",
 					"Pivot":[0.5,0.5],
 					"Position":[555,531],
@@ -80,32 +80,6 @@
 					"Text":"Options",
 					"TextColor":[4278254590],
 					"VAlignment":1
-				},
-				{
-					"class":"Lime.Image, Lime",
-					"Color":[3114114461],
-					"Id":"Line01",
-					"Pivot":[0.5,1],
-					"Position":[390,206],
-					"Scale":[0.59184,0.59184],
-					"Size":[794.5608,8],
-					"Texture":{
-						"class":"Lime.SerializableTexture, Lime",
-						"SerializationPath":"Windows/Line02"
-					}
-				},
-				{
-					"class":"Lime.Image, Lime",
-					"Color":[4283427256],
-					"Id":"BarSm",
-					"Pivot":[0.5,0.5],
-					"Position":[389,169],
-					"Scale":[0.96947,1],
-					"Size":[485.21146,60],
-					"Texture":{
-						"class":"Lime.SerializableTexture, Lime",
-						"SerializationPath":"Windows/BarSm"
-					}
 				},
 				{
 					"class":"Lime.Frame, Lime",
@@ -857,10 +831,11 @@
 				},
 				{
 					"class":"Lime.Image, Lime",
-					"Color":[4294967295],
+					"Color":[4286085257],
 					"Id":"WinSmall",
 					"Pivot":[0.5,0.5],
 					"Position":[389,371],
+					"Shader":3,
 					"Size":[512,512],
 					"Texture":{
 						"class":"Lime.SerializableTexture, Lime",

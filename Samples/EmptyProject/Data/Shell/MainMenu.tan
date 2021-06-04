@@ -10,15 +10,15 @@
 				},
 				{
 					"Action":1,
-					"Frame":10
+					"Frame":5
 				},
 				{
-					"Frame":20,
+					"Frame":10,
 					"Id":"Show"
 				},
 				{
 					"Action":1,
-					"Frame":30
+					"Frame":14
 				}
 			]
 		}
@@ -33,9 +33,10 @@
 					"class":"Lime.Color4Animator, Lime",
 					"ReadonlyKeys":[
 						[0,0,[4294967295]],
+						[1,0,[16777215]],
+						[5,0,[16777215]],
 						[10,0,[16777215]],
-						[20,0,[16777215]],
-						[30,0,[4294967295]]
+						[11,0,[4294967295]]
 					],
 					"TargetProperty":"Color"
 				},
@@ -43,9 +44,9 @@
 					"class":"Lime.Vector2Animator, Lime",
 					"ReadonlyKeys":[
 						[0,0,[1,1]],
+						[5,0,[1.15,1.15]],
 						[10,0,[1.15,1.15]],
-						[20,0,[1.15,1.15]],
-						[30,0,[1,1]]
+						[14,0,[1,1]]
 					],
 					"TargetProperty":"Scale"
 				}
@@ -54,81 +55,190 @@
 			"Id":"Dialog",
 			"Nodes":[
 				{
-					"class":"Lime.Button, Lime",
-					"Color":[4294967295],
-					"ContentsPath":"Buttons/BtnOptions",
-					"Id":"@BtnOptions",
-					"Pivot":[0.5,0.5],
-					"Position":[689,471],
-					"Scale":[0.8,0.8],
-					"Size":[256,256]
-				},
-				{
 					"class":"Lime.SimpleText, Lime",
 					"Color":[4294967295],
+					"Components":[
+						{
+							"class":"Lime.SignedDistanceFieldComponent, Lime",
+							"Dilate":2,
+							"Gradient":[
+								{
+									"Color":[4294967295]
+								},
+								{
+									"Color":[4278190080],
+									"Position":1
+								}
+							]
+						}
+					],
 					"Font":{
-						"Name":"Default"
+						"Name":"Arial"
 					},
 					"FontHeight":60,
 					"HAlignment":1,
-					"Id":"Text1",
-					"Pivot":[0.5,0.5],
-					"Position":[515.0001,194.33331],
-					"Size":[640,63],
+					"Id":"Title",
+					"Pivot":[0.5,1],
+					"Position":[515.0001,127.83331],
+					"Size":[700,64],
 					"Text":"Main Menu",
+					"TextColor":[4283519313],
 					"VAlignment":1
 				},
 				{
 					"class":"Lime.Button, Lime",
 					"Color":[4294967295],
-					"ContentsPath":"Buttons/BtnPlay",
+					"ContentsPath":"Externals/BtnPlay",
 					"Id":"@BtnPlay",
 					"Pivot":[0.5,0.5],
-					"Position":[373,383],
-					"Size":[256,256]
+					"Position":[512,384],
+					"Scale":[1.4,1.4],
+					"Size":[128,128]
+				},
+				{
+					"class":"Lime.Button, Lime",
+					"Color":[4294967295],
+					"ContentsPath":"Externals/BtnOptions",
+					"Id":"@BtnOptions",
+					"Pivot":[0.5,0.5],
+					"Position":[779.03687,560.03674],
+					"Size":[128,128]
 				},
 				{
 					"class":"Lime.Image, Lime",
-					"Color":[4294967295],
+					"Color":[4283519313],
 					"Id":"MiddGreen",
 					"Pivot":[0.5,0.5],
 					"Position":[512,384],
+					"Shader":3,
 					"Size":[714,512],
 					"Texture":{
+						"class":"Lime.SerializableTexture, Lime"
+					}
+				},
+				{
+					"class":"Lime.Image, Lime",
+					"Color":[4278190080],
+					"Id":"BoxBlurred",
+					"Pivot":[0.5,0.5],
+					"Position":[514,406.32602],
+					"Size":[775.1674,580.78564],
+					"Texture":{
 						"class":"Lime.SerializableTexture, Lime",
-						"SerializationPath":"Windows/MiddGreen"
+						"SerializationPath":"/Stuff/BoxBlurred"
 					}
 				}
 			],
 			"Pivot":[0.5,0.5],
-			"Position":[512,369],
+			"Position":[683,384],
 			"Size":[1024,768]
 		},
 		{
 			"class":"Lime.Image, Lime",
-			"Anchors":48,
+			"Anchors":11,
+			"Animators":[
+				{
+					"class":"Lime.Color4Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[939524096]],
+						[5,0,[0]],
+						[10,0,[0]],
+						[11,0,[939524096]]
+					],
+					"TargetProperty":"Color"
+				}
+			],
+			"Color":[939524096],
+			"Id":"LineGradient",
+			"Pivot":[0.5,1],
+			"Position":[683,773],
+			"Size":[1366,560.38214],
+			"TangerineFlags":4,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Stuff/LineGradient"
+			},
+			"UV1":[1,0.5]
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Anchors":10,
 			"Animators":[
 				{
 					"class":"Lime.Color4Animator, Lime",
 					"ReadonlyKeys":[
 						[0,0,[4294967295]],
+						[5,0,[16777215]],
 						[10,0,[16777215]],
-						[20,0,[16777215]],
-						[30,0,[4294967295]]
+						[11,0,[4294967295]]
 					],
 					"TargetProperty":"Color"
 				}
 			],
 			"Color":[4294967295],
-			"Id":"Shade",
+			"Id":"Logos",
+			"Nodes":[
+				{
+					"class":"Lime.Image, Lime",
+					"Color":[3170893823],
+					"Id":"CitrusLogo",
+					"Pivot":[0.5,-3.5762787E-7],
+					"Position":[162.297,30.917858],
+					"Scale":[0.8,0.8],
+					"Size":[220,295.0412],
+					"TangerineFlags":4,
+					"Texture":{
+						"class":"Lime.SerializableTexture, Lime",
+						"SerializationPath":"Splash/CitrusLogo"
+					},
+					"UV1":[1,0.9]
+				},
+				{
+					"class":"Lime.Image, Lime",
+					"Color":[3154951428],
+					"Id":"GameForest",
+					"Pivot":[0.5,0.5],
+					"Position":[562.04565,148.93439],
+					"Scale":[0.8,0.8],
+					"Size":[612,256],
+					"TangerineFlags":4,
+					"Texture":{
+						"class":"Lime.SerializableTexture, Lime",
+						"SerializationPath":"Splash/GameForest"
+					}
+				}
+			],
+			"Pivot":[1,1],
+			"Position":[1366,768],
+			"Scale":[0.3,0.3],
+			"Size":[920,350]
+		},
+		{
+			"class":"Lime.TiledImage, Lime",
+			"Anchors":15,
+			"Animators":[
+				{
+					"class":"Lime.Color4Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[4294967295]],
+						[5,0,[16777215]],
+						[10,0,[16777215]],
+						[11,0,[4294967295]]
+					],
+					"TargetProperty":"Color"
+				}
+			],
+			"Color":[4294967295],
+			"Id":"Bg",
 			"Pivot":[0.5,0.5],
-			"Position":[512,384],
-			"Size":[1366,1366],
+			"Position":[683,384],
+			"Size":[1366,768],
 			"Texture":{
 				"class":"Lime.SerializableTexture, Lime",
-				"SerializationPath":"Windows/PatternedBG"
-			}
+				"SerializationPath":"Ui/Bg"
+			},
+			"TileSize":[332,512]
 		}
 	],
-	"Size":[1024,768]
+	"Size":[1366,768]
 }

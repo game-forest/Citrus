@@ -1,0 +1,13 @@
+{
+	"class":"Lime.TftConfig, DynamicFont",
+	"CharSets":[
+		{
+			"Chars":"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!\"#$%&ˆ‘’“”´˜`'„()–—*+-÷~,.…/:;<>=?@[]\\^_¯{}|€‚ƒ‹›•§«»©®™¨°¿ÀÁÂÃÄÅĀÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåāæçèéêëìíîïðñòóôõöøùúûüýþÿšœžŸŒŽğıİəŞ²Š¡¢£¤¥₽µ¶ºª АБВГДЕЁЖЗИЙКЛМНОПРСТУФХШЩЧЦЪЬЫЭЮЯабвгдеёжзийклмнопрстуфхшщчцъьыэюя",
+			"Font":"Fonts/Arial.ttf"
+		}
+	],
+	"Height":170,
+	"IsSdf":true,
+	"Padding":36,
+	"TextureSize":[4096,4096]
+}

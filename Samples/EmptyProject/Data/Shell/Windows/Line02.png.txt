@@ -1,2 +1,0 @@
-TextureAtlas Windows_ARGB8
-PVRFormat ARGB8

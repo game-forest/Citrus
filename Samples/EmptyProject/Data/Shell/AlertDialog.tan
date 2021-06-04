@@ -79,7 +79,7 @@
 				{
 					"class":"Lime.Button, Lime",
 					"Color":[4294967295],
-					"ContentsPath":"Buttons/BtnOk",
+					"ContentsPath":"Externals/BtnOk",
 					"Id":"@BtnOk",
 					"Pivot":[0.5,0.5],
 					"Position":[456,325],

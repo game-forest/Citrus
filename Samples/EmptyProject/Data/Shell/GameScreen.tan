@@ -15,14 +15,28 @@
 			"class":"Lime.SimpleText, Lime",
 			"Anchors":20,
 			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"Lime.SignedDistanceFieldComponent, Lime",
+					"Gradient":[
+						{
+							"Color":[4294967295]
+						},
+						{
+							"Color":[4278190080],
+							"Position":1
+						}
+					]
+				}
+			],
 			"Font":{
-				"Name":"Default"
+				"Name":"Arial"
 			},
 			"FontHeight":45,
 			"HAlignment":1,
 			"Id":"Text1",
 			"Pivot":[0.5,0.5],
-			"Position":[512,65.50003],
+			"Position":[683,65.50003],
 			"Size":[378,50],
 			"Text":"Game Screen",
 			"VAlignment":1
@@ -31,26 +45,41 @@
 			"class":"Lime.Button, Lime",
 			"Anchors":6,
 			"Color":[4294967295],
-			"ContentsPath":"Buttons/BtnXRed",
+			"ContentsPath":"Externals/BtnX",
 			"Id":"@BtnExit",
 			"Pivot":[0.5,0.5],
-			"Position":[946,80],
-			"Scale":[0.5,0.5],
-			"Size":[256,256]
+			"Position":[1288,80],
+			"Size":[128,128]
 		},
 		{
 			"class":"Lime.Image, Lime",
-			"Anchors":48,
-			"Color":[4294967295],
-			"Id":"bg",
-			"Pivot":[0.5,0.5],
-			"Position":[512,384],
-			"Size":[1366,1366],
+			"Anchors":11,
+			"Color":[939524096],
+			"Id":"LineGradient",
+			"Pivot":[0.5,1],
+			"Position":[683,773],
+			"Size":[1366,560.38214],
+			"TangerineFlags":4,
 			"Texture":{
 				"class":"Lime.SerializableTexture, Lime",
-				"SerializationPath":"Windows/PatternedBG"
-			}
+				"SerializationPath":"/Stuff/LineGradient"
+			},
+			"UV1":[1,0.5]
+		},
+		{
+			"class":"Lime.TiledImage, Lime",
+			"Anchors":15,
+			"Color":[4294967295],
+			"Id":"Bg",
+			"Pivot":[0.5,0.5],
+			"Position":[683,384],
+			"Size":[1366,768],
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"Ui/Bg"
+			},
+			"TileSize":[332,512]
 		}
 	],
-	"Size":[1024,768]
+	"Size":[1366,768]
 }
