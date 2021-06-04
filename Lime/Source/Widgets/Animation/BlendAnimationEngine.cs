@@ -37,9 +37,6 @@ namespace Lime
 
 		protected override void ProcessMarker(Animation animation, Marker marker, double previousTime, double currentTime)
 		{
-			if ((animation.OwnerNode.TangerineFlags & TangerineFlags.IgnoreMarkers) != 0) {
-				return;
-			}
 			var blender = animation.OwnerNode.Components.Get<AnimationBlender>();
 			if (blender == null || marker.Action != MarkerAction.Jump) {
 				base.ProcessMarker(animation, marker, previousTime, currentTime);

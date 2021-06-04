@@ -46,7 +46,6 @@ namespace Lime
 		Unused1 = 8,
 		Unused2 = 16,
 		HiddenOnExposition = 32,
-		IgnoreMarkers = 64,
 		DisplayContent = 128,
 		ColorBit1 = 256,
 		ColorBit2 = 512,
