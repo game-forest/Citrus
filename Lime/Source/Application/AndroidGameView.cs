@@ -337,6 +337,8 @@ namespace Lime
 
 		void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
 		{
+			var surfaceRect = holder.SurfaceFrame;
+			Size = new System.Drawing.Size(surfaceRect.Right - surfaceRect.Left, surfaceRect.Bottom - surfaceRect.Top);
 			// We don't use Display's rotation to determine orientation because it shows rotation
 			// from "natural" orientation. On some devices 0 degrees may refer to portrait and on some devices
 			// 0 degrees may refer to landscape.
@@ -348,7 +350,6 @@ namespace Lime
 				// So we prefer to use Display's Real Size which seems always follow restricted orientation.
 				windowManager.DefaultDisplay.GetRealSize(realSize);
 				orientation = realSize.X < realSize.Y ? DeviceOrientation.Portrait : DeviceOrientation.LandscapeLeft;
-				Size = new System.Drawing.Size(realSize.X, realSize.Y);
 			}
 			var deviceRotated = Application.CurrentDeviceOrientation != orientation;
 			Application.CurrentDeviceOrientation = orientation;
