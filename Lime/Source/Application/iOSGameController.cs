@@ -177,17 +177,22 @@ namespace Lime
 
 		internal static void ResetDeviceOrientation(DeviceOrientation supportedOrientation)
 		{
+			var currentOrientation = Application.CurrentDeviceOrientation;
 			switch (supportedOrientation) {
 				case DeviceOrientation.AllLandscapes:
 				case DeviceOrientation.LandscapeLeft:
-					SetDeviceOrientation(UIInterfaceOrientation.LandscapeLeft);
+					if (!supportedOrientation.HasFlag(currentOrientation)) {
+						SetDeviceOrientation(UIInterfaceOrientation.LandscapeLeft);
+					}
 					break;
 				case DeviceOrientation.LandscapeRight:
 					SetDeviceOrientation(UIInterfaceOrientation.LandscapeRight);
 					break;
 				case DeviceOrientation.AllPortraits:
 				case DeviceOrientation.Portrait:
-					SetDeviceOrientation(UIInterfaceOrientation.Portrait);
+					if (!supportedOrientation.HasFlag(currentOrientation)) {
+						SetDeviceOrientation(UIInterfaceOrientation.Portrait);
+					}
 					break;
 				case DeviceOrientation.PortraitUpsideDown:
 					SetDeviceOrientation(UIInterfaceOrientation.PortraitUpsideDown);
