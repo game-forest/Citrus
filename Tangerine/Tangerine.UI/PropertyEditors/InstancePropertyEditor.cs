@@ -63,7 +63,7 @@ namespace Tangerine.UI
 				}
 			);
 			object defaultValue = null;
-			if (IsContainerType(editorParams.Type)) {
+			if (!propertyType.IsInterface && !propertyType.IsAbstract && IsContainerType(editorParams.Type)) {
 				defaultValue = Activator.CreateInstance(propertyType);
 			} else {
 				var propertyMetaItem = meta.Items.FirstOrDefault(i => i.Name == editorParams.PropertyName);
