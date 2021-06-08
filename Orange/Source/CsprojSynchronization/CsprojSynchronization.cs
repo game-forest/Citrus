@@ -46,18 +46,21 @@ namespace Orange
 					return;
 				}
 			}
+			if (HasWildcardInCompileItem(doc)) {
+				Console.WriteLine($"Warning: skipping project sync because there are wildcard " +
+					$"includes: '{projectFileName}'");
+				return;
+			}
 			using (new DirectoryChanger(Path.GetDirectoryName(projectFileName))) {
 				ExcludeMissingItems(doc, ref changed);
 				IncludeNewItems(doc, ref changed);
 			}
 			SortCompileElementsAndRemoveDuplicates(doc, ref changed);
 			if (changed) {
-				// disble BOM
-				using (var writer = new XmlTextWriter(projectFileName, new UTF8Encoding(false)))
-				{
-					writer.Formatting = Formatting.Indented;
-					doc.Save(writer);
-				}
+				// disable BOM
+				using var writer = new XmlTextWriter(projectFileName, new UTF8Encoding(false));
+				writer.Formatting = Formatting.Indented;
+				doc.Save(writer);
 			}
 			Console.WriteLine($"Synchronized project: {projectFileName}");
 		}
@@ -94,8 +97,7 @@ namespace Orange
 		{
 			var itemGroups = doc["Project"].EnumerateElements("ItemGroup");
 			foreach (var group in itemGroups) {
-				foreach (var item in group.EnumerateElements("Compile")) {
-					var itemPath = item.Attributes["Include"].Value;
+				foreach (var itemPath in EnumerateCompileIncludePaths(group)) {
 					if (itemPath.ToLower() == path.ToLower()) {
 						return true;
 					}
@@ -104,20 +106,54 @@ namespace Orange
 			return false;
 		}
 
+		private static bool HasWildcardInCompileItem(XmlDocument doc)
+		{
+			var itemGroups = doc["Project"].EnumerateElements("ItemGroup");
+			foreach (var group in itemGroups) {
+				foreach (var itemPath in EnumerateCompileIncludePaths(group)) {
+					if (itemPath.Contains('*')) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private static IEnumerable<string> EnumerateCompileIncludePaths(XmlNode node)
+		{
+			foreach (var item in node.EnumerateElements("Compile")) {
+				var includeAttribute = item.Attributes["Include"];
+				if (includeAttribute == null) {
+					continue;
+				}
+				yield return includeAttribute.Value;
+			}
+		}
+
 		private static bool SortCompileElementsAndRemoveDuplicates(XmlDocument doc, ref bool changed)
 		{
 			var itemGroups = doc["Project"].EnumerateElements("ItemGroup");
 			foreach (var group in itemGroups) {
 				var compileElements = group.EnumerateElements("Compile")
-					.OrderBy(e => e.Attributes["Include"].Value, StringComparer.OrdinalIgnoreCase).ToList();
+					.OrderBy(
+						keySelector: e => (e.Attributes["Include"] ?? e.Attributes["Remove"]).Value,
+						comparer: StringComparer.OrdinalIgnoreCase)
+					.ToList();
 				XmlNode previousElement = null;
 				var duplicates = new List<XmlNode>();
 				foreach (var e in compileElements) {
 					if (previousElement != null) {
-						if (previousElement.Attributes["Include"].Value.Equals(
-							e.Attributes["Include"].Value,
-							StringComparison.CurrentCultureIgnoreCase)
-						) {
+						var includeValue = e.Attributes["Include"]?.Value;
+						var removeValue = e.Attributes["Remove"]?.Value;
+						var previousIncludeValue = previousElement.Attributes["Include"]?.Value;
+						var previousRemoveValue = previousElement.Attributes["Remove"]?.Value;
+						bool sameInclude = includeValue != null && includeValue.Equals(
+							previousIncludeValue, StringComparison.CurrentCultureIgnoreCase
+						);
+						bool sameRemove = removeValue != null && removeValue.Equals(
+							previousRemoveValue, StringComparison.CurrentCultureIgnoreCase
+						);
+						if (sameInclude || sameRemove) {
 							changed = true;
 							duplicates.Add(e);
 						}
@@ -148,7 +184,14 @@ namespace Orange
 		private static void ExcludeMissingItemsFromGroup(XmlNode group, ref bool changed)
 		{
 			foreach (var item in group.EnumerateElements("Compile")) {
-				var path = item.Attributes["Include"].Value;
+				var includeAttribute = item.Attributes["Include"];
+				if (includeAttribute == null) {
+					continue;
+				}
+				var path = includeAttribute.Value;
+				if (path.Contains('*')) {
+					continue;
+				}
 				if (!File.Exists(ToUnixSlashes(path)) || IsPathIgnored(path)) {
 					group.RemoveChild(item);
 					changed = true;

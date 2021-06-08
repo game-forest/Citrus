@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyProject.GeneratedScene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyProject.Scripts", "..\EmptyProject.Scripts\EmptyProject.Scripts.csproj", "{915713C0-953C-4863-B541-60597EA781D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyProject.Types", "..\EmptyProject.Types\EmptyProject.Types.Win.csproj", "{BC533734-E7B5-4131-9C39-6F1047A4FE38}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\EmptyProject.Game\EmptyProject.Game.projitems*{87884330-1a04-4008-9d2f-05585f4c7e05}*SharedItemsImports = 5
@@ -85,6 +87,14 @@ Global
 		{915713C0-953C-4863-B541-60597EA781D8}.Profiler.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{915713C0-953C-4863-B541-60597EA781D8}.Profiler.Release|Any CPU.Build.0 = Release|Any CPU
 		{915713C0-953C-4863-B541-60597EA781D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Profiler.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Profiler.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Profiler.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Profiler.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC533734-E7B5-4131-9C39-6F1047A4FE38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

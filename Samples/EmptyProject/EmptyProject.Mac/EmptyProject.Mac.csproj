@@ -87,6 +87,9 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
@@ -94,9 +97,6 @@
   </ItemGroup>
   <Import Project="..\EmptyProject.Game\EmptyProject.Game.projitems" Label="Shared" Condition="Exists('..\EmptyProject.Game\EmptyProject.Game.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
-  <ItemGroup>
-    <Compile Include="Application.cs" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Lime\Lime.Mac.csproj">
       <Project>{DC16EEBF-404D-4610-B87A-15B57464D707}</Project>
