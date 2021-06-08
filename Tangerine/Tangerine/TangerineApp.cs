@@ -82,7 +82,8 @@ namespace Tangerine
 			LoadFont();
 
 			DockManager.Initialize(new Vector2(1024, 768));
-			DockManager.Instance.DocumentAreaDropFilesGesture.Recognized += new ScenesDropHandler { ShouldCreateContextMenu = false }.Handle;
+			DockManager.Instance.DocumentAreaDropFilesGesture.Recognized +=
+				new ScenesDropHandler { ShouldCreateContextMenu = false }.Handle;
 			TangerineMenu.Create();
 			var mainWidget = DockManager.Instance.MainWindowWidget;
 			mainWidget.Window.AllowDropFiles = true;
@@ -90,7 +91,10 @@ namespace Tangerine
 				SetupMainWindowTitle(mainWidget);
 				TangerineMenu.RebuildCreateImportedTypeMenu();
 			});
-			mainWidget.AddChangeWatcher(() => Document.Current?.Container, _ => Document.Current?.ForceAnimationUpdate());
+			mainWidget.AddChangeWatcher(
+				() => Document.Current?.Container,
+				_ => Document.Current?.ForceAnimationUpdate()
+			);
 			Application.Exiting += () => Project.Current.Close();
 			Application.Exited += () => {
 				AppUserPreferences.Instance.DockState = DockManager.Instance.ExportState();
@@ -113,8 +117,8 @@ namespace Tangerine
 			var attachmentPanel = new Panel("Model3D Attachment");
 			var remoteScriptingPanel = new Panel("Remote Scripting");
 			var dockManager = DockManager.Instance;
-			new UI.Console(consolePanel);
-			new UI.Profiler(profilerPanel);
+			_ = new UI.Console(consolePanel);
+			_ = new UI.Profiler(profilerPanel);
 			var root = dockManager.Model.WindowPlacements.First();
 			var placement = new LinearPlacement(LinearPlacementDirection.Horizontal);
 			dockManager.AddPanel(timelinePanel, root, DockSite.Top, 0.3f);
@@ -172,13 +176,18 @@ namespace Tangerine
 				}
 			};
 			Document.CloseConfirmation += doc => {
-				var alert = new AlertDialog($"Save the changes to document '{doc.Path}' before closing?", "Yes", "No", "Cancel");
-				switch (alert.Show()) {
-					case 0: return Document.CloseAction.SaveChanges;
-					case 1: return Document.CloseAction.DiscardChanges;
-					case -1:
-					default: return Document.CloseAction.Cancel;
-				}
+				string text = $"Save the changes to document '{doc.Path}' before closing?";
+				var alert = new AlertDialog(
+					text,
+					"Yes",
+					"No",
+					"Cancel"
+				);
+				return alert.Show() switch {
+					0 => Document.CloseAction.SaveChanges,
+					1 => Document.CloseAction.DiscardChanges,
+					_ => Document.CloseAction.Cancel,
+				};
 			};
 			mainWidget.Tasks.Add(HandleMissingDocumentsTask);
 			Project.HandleMissingDocuments += missingDocuments => {
@@ -188,7 +197,8 @@ namespace Tangerine
 			};
 			Project.DocumentReloadConfirmation += doc => {
 				if (doc.IsModified) {
-					var modifiedAlert = new AlertDialog($"{doc.Path}\n\nThis file has been modified by another program and has unsaved changes.\nDo you want to reload it from disk? ", "Yes", "No");
+					var modifiedAlert = new AlertDialog($"{doc.Path}\n\nThis file has been modified by another " +
+						$"program and has unsaved changes.\nDo you want to reload it from disk? ", "Yes", "No");
 					var res = modifiedAlert.Show();
 					if (res == 1 || res == -1) {
 						doc.History.ExternalModification();
@@ -199,7 +209,8 @@ namespace Tangerine
 				if (CoreUserPreferences.Instance.ReloadModifiedFiles) {
 					return true;
 				}
-				var alert = new AlertDialog($"{doc.Path}\n\nThis file has been modified by another program.\nDo you want to reload it from disk? ", "Yes, always", "Yes", "No");
+				var alert = new AlertDialog($"{doc.Path}\n\nThis file has been modified by another program.\n" +
+					$"Do you want to reload it from disk? ", "Yes, always", "Yes", "No");
 				var r = alert.Show();
 				if (r == 0) {
 					CoreUserPreferences.Instance.ReloadModifiedFiles = true;
@@ -213,14 +224,15 @@ namespace Tangerine
 			};
 
 			Project.TempFileLoadConfirmation += path => {
-				var alert = new AlertDialog($"Do you want to load autosaved version of '{path}'?", "Yes", "No");
+				var alert = new AlertDialog($"Do you want to load auto-saved version of '{path}'?", "Yes", "No");
 				return alert.Show() == 0;
 			};
 
 			Project.OpenFileOutsideProjectAttempt += (string filePath) => {
 				var projectFilePath = SearhForCitproj(filePath);
 				if (projectFilePath != null && Project.Current.CitprojPath != projectFilePath) {
-					var alert = new AlertDialog($"You're trying to open a document outside the project directory. Change the current project to '{Path.GetFileName(projectFilePath)}'?", "Yes", "No");
+					var alert = new AlertDialog($"You're trying to open a document outside the project directory. " +
+						$"Change the current project to '{Path.GetFileName(projectFilePath)}'?", "Yes", "No");
 					if (alert.Show() == 0) {
 						if (FileOpenProject.Execute(projectFilePath)) {
 							Project.Current.OpenDocument(filePath, true);
@@ -237,9 +249,15 @@ namespace Tangerine
 				new TooltipProcessor()
 			);
 			BackupManager.Instance.Activate(Project.Tasks);
-			Document.NodeDecorators.AddFor<Spline>(n => n.CompoundPostPresenter.Add(new UI.SceneView.SplinePresenter()));
-			Document.NodeDecorators.AddFor<Viewport3D>(n => n.CompoundPostPresenter.Add(new UI.SceneView.Spline3DPresenter()));
-			Document.NodeDecorators.AddFor<Viewport3D>(n => n.CompoundPostPresenter.Add(new UI.SceneView.Animation3DPathPresenter()));
+			Document.NodeDecorators.AddFor<Spline>(
+				n => n.CompoundPostPresenter.Add(new UI.SceneView.SplinePresenter())
+			);
+			Document.NodeDecorators.AddFor<Viewport3D>(
+				n => n.CompoundPostPresenter.Add(new UI.SceneView.Spline3DPresenter())
+			);
+			Document.NodeDecorators.AddFor<Viewport3D>(
+				n => n.CompoundPostPresenter.Add(new UI.SceneView.Animation3DPathPresenter())
+			);
 			Document.NodeDecorators.AddFor<Widget>(n => {
 				if (n.AsWidget.SkinningWeights == null) {
 					n.AsWidget.SkinningWeights = new SkinningWeights();
@@ -262,7 +280,9 @@ namespace Tangerine
 			Document.NodeDecorators.AddFor<Node>(n => n.SetTangerineFlag(TangerineFlags.SceneNode, true));
 			dockManager.UnhandledExceptionOccurred += ExceptionHandling.Handle;
 
-			Document.NodeDecorators.AddFor<ParticleEmitter>(n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter()));
+			Document.NodeDecorators.AddFor<ParticleEmitter>(
+				n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter())
+			);
 			DocumentHistory.AddOperationProcessorTypes(new[] {
 				typeof(AnimeshModification.Animate.Processor),
 				typeof(AnimeshModification.Slice.Processor),
@@ -319,36 +339,48 @@ namespace Tangerine
 						new Panels.HierarchyPanel(searchPanel.ContentWidget),
 						new Panels.BackupHistoryPanel(backupHistoryPanel.ContentWidget),
 						new Panels.AnimationsPanel(animationsPanel.ContentWidget),
-						// Use VisualHintsPanel sigleton because we need preserve its state between documents.
+						// Use VisualHintsPanel singleton because we need preserve its state between documents.
 						VisualHintsPanel.Instance ?? VisualHintsPanel.Initialize(visualHintsPanel),
 						new AttachmentPanel(attachmentPanel),
-				});
-					UI.SceneView.SceneView.ShowNodeDecorationsPanelButton.Clicked = () => dockManager.TogglePanel(visualHintsPanel);
+					});
+					UI.SceneView.SceneView.ShowNodeDecorationsPanelButton.Clicked
+						= () => dockManager.TogglePanel(visualHintsPanel);
 				}
 			};
 			LoadProject();
 			OpenDocumentsFromArgs(args);
-			WidgetContext.Current.Root.AddChangeWatcher(() => Project.Current, project => TangerineMenu.OnProjectChanged(project));
+			WidgetContext.Current.Root.AddChangeWatcher(
+				getter: () => Project.Current,
+				action: project => TangerineMenu.OnProjectChanged(project)
+			);
 
-			WidgetContext.Current.Root.AddChangeWatcher(() => ProjectUserPreferences.Instance.RecentDocuments.Count == 0 ?
-				null : ProjectUserPreferences.Instance.RecentDocuments[0], document => TangerineMenu.RebuildRecentDocumentsMenu());
+			WidgetContext.Current.Root.AddChangeWatcher(
+				getter: () => ProjectUserPreferences.Instance.RecentDocuments.Count == 0
+					? null
+					: ProjectUserPreferences.Instance.RecentDocuments[0],
+				action: document => TangerineMenu.RebuildRecentDocumentsMenu()
+			);
 
-			WidgetContext.Current.Root.AddChangeWatcher(() => AppUserPreferences.Instance.RecentProjects.Count == 0 ?
-				null : AppUserPreferences.Instance.RecentProjects[0], document => TangerineMenu.RebuildRecentProjectsMenu());
+			WidgetContext.Current.Root.AddChangeWatcher(
+				getter: () => AppUserPreferences.Instance.RecentProjects.Count == 0
+					? null
+					: AppUserPreferences.Instance.RecentProjects[0],
+				action: document => TangerineMenu.RebuildRecentProjectsMenu()
+			);
 
-			new UI.FilesystemView.FilesystemPane(filesystemPanel);
-			new UI.RemoteScripting.RemoteScriptingPane(remoteScriptingPanel);
+			_ = new UI.FilesystemView.FilesystemPane(filesystemPanel);
+			_ = new UI.RemoteScripting.RemoteScriptingPane(remoteScriptingPanel);
 			RegisterGlobalCommands();
 
 			Documentation.Init();
 			DocumentationComponent.Clicked = page => Documentation.ShowHelp(page);
 		}
 
-		private void LoadProject()
+		private static void LoadProject()
 		{
 			if (Orange.Toolbox.TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)) {
 				try {
-					new Project(projectFilePath);
+					_ = new Project(projectFilePath);
 				} catch (System.Exception e) {
 					AlertDialog.Show($"Can't open project '{projectFilePath}':\n{e.Message}");
 				}
@@ -383,7 +415,7 @@ namespace Tangerine
 			}
 		}
 
-		private List<Document> missingDocumentsList = new List<Document>();
+		private readonly List<Document> missingDocumentsList = new List<Document>();
 
 		private IEnumerator<object> HandleMissingDocumentsTask()
 		{
@@ -391,7 +423,10 @@ namespace Tangerine
 				while (missingDocumentsList.Count == 0) {
 					yield return null;
 				}
-				var missingDocuments = missingDocumentsList.Where(d => !Project.Current.GetFullPath(d.Path, out string fullPath) && Project.Current.Documents.Contains(d));
+				var missingDocuments = missingDocumentsList.Where(
+					d => !Project.Current.GetFullPath(d.Path, out string fullPath) &&
+					Project.Current.Documents.Contains(d)
+				);
 				while (missingDocuments.Any()) {
 					var nextDocument = missingDocuments.First();
 					bool loaded = nextDocument.Loaded;
@@ -448,7 +483,7 @@ namespace Tangerine
 			}
 		}
 
-		private string SearhForCitproj(string filePath)
+		private static string SearhForCitproj(string filePath)
 		{
 			var path = filePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 			path[0] += Path.DirectorySeparatorChar;
@@ -462,7 +497,7 @@ namespace Tangerine
 			return null;
 		}
 
-		void SetupMainWindowTitle(WindowWidget windowWidget)
+		private static void SetupMainWindowTitle(WindowWidget windowWidget)
 		{
 			var title = "Tangerine";
 			if (Project.Current != Project.Null) {
@@ -472,7 +507,7 @@ namespace Tangerine
 			windowWidget.Window.Title = title;
 		}
 
-		void SetColorTheme(ColorTheme theme, Theme.ColorTheme limeTheme)
+		private static void SetColorTheme(ColorTheme theme, Theme.ColorTheme limeTheme)
 		{
 			AppUserPreferences.Instance.LimeColorTheme = Theme.Colors = limeTheme.Clone();
 			AppUserPreferences.Instance.ColorTheme = ColorTheme.Current = theme.Clone();
@@ -486,7 +521,7 @@ namespace Tangerine
 			UI.SceneView.VisualHintsPanel.Refresh();
 		}
 
-		void RegisterCommands()
+		private static void RegisterCommands()
 		{
 			RegisterCommands(typeof(TimelineCommands));
 			RegisterCommands(typeof(InspectorCommands));
@@ -495,18 +530,37 @@ namespace Tangerine
 			RegisterCommands(typeof(Tools));
 			RegisterCommands(typeof(OrangeCommands));
 			RegisterCommands(typeof(FilesystemCommands));
-			CommandRegistry.Register(Command.Undo, "GenericCommands", "Undo");
-			CommandRegistry.Register(Command.Redo, "GenericCommands", "Redo");
+			CommandRegistry.Register(
+				command: Command.Undo,
+				categoryId: "GenericCommands",
+				commandId: "Undo",
+				@override: false,
+				isProjectSpecific: false
+			);
+			CommandRegistry.Register(
+				command: Command.Redo,
+				categoryId: "GenericCommands",
+				commandId: "Redo",
+				@override: false,
+				isProjectSpecific: false
+			);
 		}
 
-		void RegisterCommands(Type type)
+		private static void RegisterCommands(Type type)
 		{
-			foreach (var field in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)) {
+			var fields = type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+			foreach (var field in fields) {
 				var fieldType = field.FieldType;
 				if (!(fieldType == typeof(ICommand) || fieldType.IsSubclassOf(typeof(ICommand)))) {
 					continue;
 				}
-				CommandRegistry.Register((ICommand)field.GetValue(null), type.Name, field.Name);
+				CommandRegistry.Register(
+					command: (ICommand)field.GetValue(null),
+					categoryId: type.Name,
+					commandId: field.Name,
+					@override: false,
+					isProjectSpecific: false
+				);
 			}
 		}
 
@@ -518,7 +572,7 @@ namespace Tangerine
 				Layout = new StackLayout(),
 				HitTestTarget = true
 			};
-			new DocumentTabsProcessor(tabBar);
+			_ = new DocumentTabsProcessor(tabBar);
 			var docArea = dockManager.DocumentArea;
 			docArea.Layout = new VBoxLayout();
 			docArea.AddNode(tabBar);
@@ -526,7 +580,7 @@ namespace Tangerine
 			return documentViewContainer;
 		}
 
-		class DocumentTabsProcessor
+		private class DocumentTabsProcessor
 		{
 			private readonly TabBar tabBar;
 
@@ -569,20 +623,27 @@ namespace Tangerine
 		public static void LoadFont()
 		{
 			var asianFont = LoadFont("Tangerine.Resources.NotoSansCJKtc-Regular.ttf");
-			FontPool.Instance.AddFont(FontPool.DefaultFontName,
-				new CompoundFont(LoadFont("Tangerine.Resources.SegoeUI.ttf"), asianFont));
-			FontPool.Instance.AddFont(FontPool.DefaultBoldFontName,
-				new CompoundFont(LoadFont("Tangerine.Resources.SegoeUI-Bold.ttf"),
-					// Use the same asian font for the bold one,
-					// since we don't need asian bold for now and it is too heavy.
-					asianFont));
-			IFont LoadFont(string resource)
+			FontPool.Instance.AddFont(
+				name: FontPool.DefaultFontName,
+				font: new CompoundFont(LoadFont("Tangerine.Resources.SegoeUI.ttf"), asianFont)
+			);
+			FontPool.Instance.AddFont(
+				name: FontPool.DefaultBoldFontName,
+				font: new CompoundFont(
+					LoadFont("Tangerine.Resources.SegoeUI-Bold.ttf"),
+					// Use the same Asian font for the bold one,
+					// since we don't need Asian bold for now and it is too heavy.
+					asianFont
+				)
+			);
+			static IFont LoadFont(string resource)
 			{
-				return new DynamicFont(new UI.EmbeddedResource(resource, "Tangerine").GetResourceBytes());
+				return new DynamicFont(new UI.EmbeddedResource(resource, "Tangerine")
+					.GetResourceBytes());
 			}
 		}
 
-		void RegisterGlobalCommands()
+		private void RegisterGlobalCommands()
 		{
 			UI.Inspector.Inspector.RegisterGlobalCommands();
 			UI.Timeline.CommandBindings.Bind();
@@ -607,11 +668,26 @@ namespace Tangerine
 			h.Connect(GenericCommands.LookupCommands, () => new LookupDialog(LookupSections.SectionType.Commands));
 			h.Connect(GenericCommands.LookupFiles, () => new LookupDialog(LookupSections.SectionType.Files));
 			h.Connect(GenericCommands.LookupNodes, () => new LookupDialog(LookupSections.SectionType.Nodes));
-			h.Connect(GenericCommands.LookupAnimationMarkers, () => new LookupDialog(LookupSections.SectionType.AnimationMarkers));
-			h.Connect(GenericCommands.LookupDocumentMarkers, () => new LookupDialog(LookupSections.SectionType.DocumentMarkers));
-			h.Connect(GenericCommands.LookupAnimationFrames, () => new LookupDialog(LookupSections.SectionType.AnimationFrames));
-			h.Connect(GenericCommands.LookupNodeAnimations, () => new LookupDialog(LookupSections.SectionType.NodeAnimations));
-			h.Connect(GenericCommands.LookupDocumentAnimations, () => new LookupDialog(LookupSections.SectionType.DocumentAnimations));
+			h.Connect(
+				GenericCommands.LookupAnimationMarkers,
+				() => new LookupDialog(LookupSections.SectionType.AnimationMarkers)
+			);
+			h.Connect(
+				GenericCommands.LookupDocumentMarkers,
+				() => new LookupDialog(LookupSections.SectionType.DocumentMarkers)
+			);
+			h.Connect(
+				GenericCommands.LookupAnimationFrames,
+				() => new LookupDialog(LookupSections.SectionType.AnimationFrames)
+			);
+			h.Connect(
+				GenericCommands.LookupNodeAnimations,
+				() => new LookupDialog(LookupSections.SectionType.NodeAnimations)
+			);
+			h.Connect(
+				GenericCommands.LookupDocumentAnimations,
+				() => new LookupDialog(LookupSections.SectionType.DocumentAnimations)
+			);
 			h.Connect(GenericCommands.LookupComponents, () => new LookupDialog(LookupSections.SectionType.Components));
 			h.Connect(GenericCommands.Group, new GroupNodes());
 			h.Connect(GenericCommands.Ungroup, new UngroupNodes());
@@ -658,7 +734,10 @@ namespace Tangerine
 			h.Connect(Tools.AnimeshModify, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Modification));
 			h.Connect(Tools.AnimeshCreate, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Creation));
 			h.Connect(Tools.AnimeshRemove, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Removal));
-			h.Connect(Tools.AnimeshTransform, new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Transformation));
+			h.Connect(
+				Tools.AnimeshTransform,
+				new AnimeshTools.ChangeState(AnimeshTools.ModificationState.Transformation))
+			;
 			h.Connect(Command.Copy, Core.Operations.Copy.CopyToClipboard);
 			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));
@@ -668,9 +747,20 @@ namespace Tangerine
 					Core.Operations.SelectRow.Perform(row, true);
 				}
 			}, () => Document.Current?.Rows.Count > 0));
-			h.Connect(Command.Undo, () => Document.Current.History.Undo(), () => Document.Current?.History.CanUndo() ?? false);
-			h.Connect(Command.Redo, () => Document.Current.History.Redo(), () => Document.Current?.History.CanRedo() ?? false);
-			h.Connect(SceneViewCommands.PasteAtOldPosition, new DocumentDelegateCommandHandler(() => Paste(pasteAtMouse: false), Document.HasCurrent));
+			h.Connect(
+				Command.Undo,
+				() => Document.Current.History.Undo(),
+				() => Document.Current?.History.CanUndo() ?? false
+			);
+			h.Connect(
+				Command.Redo,
+				() => Document.Current.History.Redo(),
+				() => Document.Current?.History.CanRedo() ?? false
+			);
+			h.Connect(
+				SceneViewCommands.PasteAtOldPosition,
+				new DocumentDelegateCommandHandler(() => Paste(pasteAtMouse: false), Document.HasCurrent)
+			);
 			h.Connect(SceneViewCommands.SnapWidgetBorderToRuler, new SnapWidgetBorderCommandHandler());
 			h.Connect(SceneViewCommands.SnapWidgetPivotToRuler, new SnapWidgetPivotCommandHandler());
 			h.Connect(SceneViewCommands.SnapRulerLinesToWidgets, new SnapRulerLinesToWidgetCommandHandler());
@@ -685,7 +775,10 @@ namespace Tangerine
 			h.Connect(TimelineCommands.CreatePositionKeyframe, UI.Timeline.Operations.TogglePositionKeyframe.Perform);
 			h.Connect(TimelineCommands.CreateRotationKeyframe, UI.Timeline.Operations.ToggleRotationKeyframe.Perform);
 			h.Connect(TimelineCommands.CreateScaleKeyframe, UI.Timeline.Operations.ToggleScaleKeyframe.Perform);
-			h.Connect(TimelineCommands.CenterTimelineOnCurrentColumn, new DocumentDelegateCommandHandler(UI.Timeline.Operations.CenterTimelineOnCurrentColumn.Perform));
+			h.Connect(
+				TimelineCommands.CenterTimelineOnCurrentColumn,
+				new DocumentDelegateCommandHandler(UI.Timeline.Operations.CenterTimelineOnCurrentColumn.Perform)
+			);
 			h.Connect(SceneViewCommands.ToggleDisplayRuler, new DisplayRuler());
 			h.Connect(SceneViewCommands.SaveCurrentRuler, new SaveRuler());
 			h.Connect(TimelineCommands.NumericMove, () => new NumericMoveDialog());
@@ -698,16 +791,15 @@ namespace Tangerine
 			h.Connect(GenericCommands.PurgeBackups, new PurgeBackUps());
 		}
 
-		private void InitializeHotkeys()
+		private static void InitializeHotkeys()
 		{
 			string dir = HotkeyRegistry.ProfilesDirectory;
 			Directory.CreateDirectory(dir);
 			HotkeyRegistry.InitDefaultShortcuts();
 			var defaultProfile = HotkeyRegistry.CreateProfile(HotkeyRegistry.DefaultProfileName);
-			if (File.Exists(defaultProfile.Filepath)) {
+			if (File.Exists(defaultProfile.FilePath)) {
 				defaultProfile.Load();
-			}
-			else {
+			} else {
 				defaultProfile.Save();
 			}
 			HotkeyRegistry.Profiles.Add(defaultProfile);
@@ -720,11 +812,12 @@ namespace Tangerine
 				profile.Load();
 				HotkeyRegistry.Profiles.Add(profile);
 			}
-			var currentProfile = HotkeyRegistry.Profiles.FirstOrDefault(i => i.Name == AppUserPreferences.Instance.CurrentHotkeyProfile);
+			var currentProfile = HotkeyRegistry.Profiles.FirstOrDefault(
+				i => i.Name == AppUserPreferences.Instance.CurrentHotkeyProfile
+			);
 			if (currentProfile != null) {
 				HotkeyRegistry.CurrentProfile = currentProfile;
-			}
-			else {
+			} else {
 				HotkeyRegistry.CurrentProfile = defaultProfile;
 			}
 		}
@@ -741,12 +834,13 @@ namespace Tangerine
 			}
 		}
 
-		static void Paste(bool pasteAtMouse = true)
+		private static void Paste(bool pasteAtMouse = true)
 		{
 			try {
 				Core.Operations.Paste.Perform(out var pastedItems);
 				if (
-					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() && pasteAtMouse &&
+					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() &&
+					pasteAtMouse &&
 				    !CoreUserPreferences.Instance.DontPasteAtMouse
 				) {
 					var mousePosition =
