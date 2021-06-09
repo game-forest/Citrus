@@ -59,6 +59,9 @@ namespace Lime
 #else
 		public RenderingBackend RenderingBackend = RenderingBackend.ES20;
 #endif // MAC
+#if WIN
+		public bool AlwaysThrowUnhandledException;
+#endif // WIN
 	}
 
 	public static class Application
@@ -270,13 +273,21 @@ namespace Lime
 			AudioSystem.Initialize(options);
 #if WIN
 			System.Windows.Forms.Application.EnableVisualStyles();
-			if (System.Diagnostics.Debugger.IsAttached) {
+			if (options.AlwaysThrowUnhandledException) {
 				System.Windows.Forms.Application.SetUnhandledExceptionMode(
-					System.Windows.Forms.UnhandledExceptionMode.ThrowException);
+					mode: System.Windows.Forms.UnhandledExceptionMode.ThrowException
+				);
 			} else {
-				SetGlobalExceptionHandler();
-				System.Windows.Forms.Application.SetUnhandledExceptionMode(
-					System.Windows.Forms.UnhandledExceptionMode.CatchException);
+				if (System.Diagnostics.Debugger.IsAttached) {
+					System.Windows.Forms.Application.SetUnhandledExceptionMode(
+						System.Windows.Forms.UnhandledExceptionMode.ThrowException
+					);
+				} else {
+					SetGlobalExceptionHandler();
+					System.Windows.Forms.Application.SetUnhandledExceptionMode(
+						System.Windows.Forms.UnhandledExceptionMode.CatchException
+					);
+				}
 			}
 			// This function doesn't work on XP, and we don't want to add dpiAware into manifest
 			// because this will require adding into every new project.
