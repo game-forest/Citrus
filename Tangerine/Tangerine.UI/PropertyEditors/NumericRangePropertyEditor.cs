@@ -23,8 +23,8 @@ namespace Tangerine.UI
 			var currentDisp = CoalescedPropertyComponentValue(v => v.Dispersion);
 			medEditor.Submitted += text => SetComponent(editorParams, 0, medEditor, currentMed.GetValue());
 			dispEditor.Submitted += text => SetComponent(editorParams, 1, dispEditor, currentDisp.GetValue());
-			medEditor.AddChangeLateWatcher(currentMed, v => medEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			dispEditor.AddChangeLateWatcher(currentDisp, v => dispEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			medEditor.AddLateChangeWatcher(currentMed, v => medEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			dispEditor.AddLateChangeWatcher(currentDisp, v => dispEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
 			ManageManyValuesOnFocusChange(medEditor, currentMed);
 			ManageManyValuesOnFocusChange(dispEditor, currentDisp);
 		}

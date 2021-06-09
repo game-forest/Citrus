@@ -90,7 +90,7 @@ namespace Tangerine.UI.Timeline
 				HitTestTarget = true,
 				MinMaxSize = new Vector2(16),
 			};
-			nodeIcon.AddChangeLateWatcher(
+			nodeIcon.AddLateChangeWatcher(
 				() => {
 					var node = sceneItem.GetNode();
 					if (node == null) {

@@ -29,7 +29,7 @@ namespace Tangerine.Core
 	}
 
 	[NodeComponentDontSerialize]
-	public class ConsumeBehaviour : BehaviorComponent
+	public abstract class ConsumeBehaviour : BehaviorComponent
 	{
 		private readonly List<IConsumer> consumers = new List<IConsumer>();
 
@@ -45,8 +45,8 @@ namespace Tangerine.Core
 		}
 	}
 
-	[NodeComponentDontSerialize]
 	[UpdateStage(typeof(EarlyUpdateStage))]
+	[NodeComponentDontSerialize]
 	public class EarlyConsumeBehaviour : ConsumeBehaviour
 	{
 	}
@@ -54,6 +54,12 @@ namespace Tangerine.Core
 	[UpdateStage(typeof(LateUpdateStage))]
 	[NodeComponentDontSerialize]
 	public class LateConsumeBehaviour : ConsumeBehaviour
+	{
+	}
+
+	[UpdateStage(typeof(PreLateUpdateStage))]
+	[NodeComponentDontSerialize]
+	public class PreLateConsumeBehaviour : ConsumeBehaviour
 	{
 	}
 }

@@ -273,7 +273,7 @@ namespace Tangerine
 
 			IEnumerator<object> AddChangeWatcherTask()
 			{
-				content.AddChangeLateWatcher(() => content.ActiveTabIndex, activeTabIndex => {
+				content.AddLateChangeWatcher(() => content.ActiveTabIndex, activeTabIndex => {
 					PanelState.ActiveTabIndex = activeTabIndex;
 					if (PanelState.ActiveTabIndex == 3) {
 						var t = animationsPane["Container"];

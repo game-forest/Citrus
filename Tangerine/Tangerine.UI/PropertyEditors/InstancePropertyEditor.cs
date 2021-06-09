@@ -10,7 +10,10 @@ namespace Tangerine.UI
 {
 	public class InstancePropertyEditor<T> : ExpandablePropertyEditor<T>
 	{
-		public InstancePropertyEditor(IPropertyEditorParams editorParams, Action<Widget> onValueChanged) : base(editorParams)
+		public InstancePropertyEditor(
+			IPropertyEditorParams editorParams,
+			Action<Widget> onValueChanged
+		) : base(editorParams)
 		{
 			var selectImplementationButton = new ThemedButton {
 				LayoutCell = new LayoutCell(Alignment.Center),
@@ -25,8 +28,8 @@ namespace Tangerine.UI
 					var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 					var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
 					ICommand command = new Command(
-						type.Name,
-						() => SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null)
+						text: type.Name,
+						execute: () => SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null)
 					) {
 						TooltipText = tooltipText
 					};
@@ -38,8 +41,8 @@ namespace Tangerine.UI
 				}
 				menu.Popup();
 			};
-			EditorContainer.AddChangeLateWatcher(
-				CoalescedPropertyValue(
+			EditorContainer.AddLateChangeWatcher(
+				provider: CoalescedPropertyValue(
 					comparator: (t1, t2) =>
 						   t1 == null
 						&& t2 == null
@@ -47,7 +50,7 @@ namespace Tangerine.UI
 						&& t2 != null
 						&& t1.GetType() == t2.GetType()
 				),
-				v => {
+				action: v => {
 					onValueChanged?.Invoke(ExpandableContent);
 					string tooltipText;
 					if (v.IsDefined) {
@@ -102,7 +105,7 @@ namespace Tangerine.UI
 				EditorContainer.Nodes.Insert(0, selectImplementationButton);
 			}
 			EditorContainer.AddNode(resetToDefaultButton);
-			EditorContainer.AddChangeLateWatcher(CoalescedPropertyValue(), v => {
+			EditorContainer.AddLateChangeWatcher(CoalescedPropertyValue(), v => {
 				resetToDefaultButton.Visible = !Equals(v.Value, defaultValue);
 			});
 		}
@@ -116,7 +119,7 @@ namespace Tangerine.UI
 
 		public static bool IsContainerType(Type type)
 		{
-			// This function was constructed as a result of combinating multiple Yuzu.Util methods.
+			// This function was constructed as a result of combining multiple Yuzu.Util methods.
 			try {
 				return
 					type.IsArray ||
@@ -151,7 +154,8 @@ namespace Tangerine.UI
 								!t.IsAbstract &&
 								t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null &&
 								t != propertyType &&
-								propertyType.IsAssignableFrom(t)).ToList();
+								propertyType.IsAssignableFrom(t)
+							).ToList();
 						foreach (var type in types) {
 							typesHash.Add(type);
 						}

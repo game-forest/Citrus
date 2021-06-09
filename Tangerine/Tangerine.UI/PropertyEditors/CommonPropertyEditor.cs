@@ -357,7 +357,7 @@ namespace Tangerine.UI
 				}
 			};
 
-			editBox.AddChangeLateWatcher(editBox.IsFocused, focused => {
+			editBox.AddLateChangeWatcher(editBox.IsFocused, focused => {
 				if (!focused && !current.GetValue().IsDefined) {
 					editBox.Editor.Text.Invalidate();
 				} else if (focused && !current.GetValue().IsDefined) {

@@ -68,8 +68,8 @@ namespace Tangerine.UI
 			editor.Submitted += text => {
 				SetComponent(text, currentColorString);
 			};
-			editor.AddChangeLateWatcher(currentColorString, v => editor.Text = SameValues() ? v : ManyValuesText);
-			editor.AddChangeLateWatcher(() => editor.Text, value => CheckEditorText(value, editor));
+			editor.AddLateChangeWatcher(currentColorString, v => editor.Text = SameValues() ? v : ManyValuesText);
+			editor.AddLateChangeWatcher(() => editor.Text, value => CheckEditorText(value, editor));
 			ManageManyValuesOnFocusChange(editor, currentColor);
 		}
 

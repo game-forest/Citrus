@@ -15,7 +15,7 @@ namespace Tangerine.UI
 					SetProperty(args.Value);
 				}
 			};
-			checkBox.AddChangeLateWatcher(CoalescedPropertyValue(), v => checkBox.State = v.IsDefined
+			checkBox.AddLateChangeWatcher(CoalescedPropertyValue(), v => checkBox.State = v.IsDefined
 				? v.Value ? CheckBoxState.Checked : CheckBoxState.Unchecked : CheckBoxState.Indeterminate);
 		}
 	}

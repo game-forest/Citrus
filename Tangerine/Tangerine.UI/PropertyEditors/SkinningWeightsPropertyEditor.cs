@@ -67,9 +67,9 @@ namespace Tangerine.UI
 			indexEditor.Submitted += text => SetIndexValue(index, indexEditor, currentIndexValue);
 			weightEditor.Changed += () => SetWeightValue(index, weightEditor);
 			weightEditor.Value = currentWeightValue.IsDefined ? currentWeightValue.Value : 0;
-			indexEditor.AddChangeLateWatcher(indexProvider,
+			indexEditor.AddLateChangeWatcher(indexProvider,
 				v => indexEditor.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
-			weightEditor.AddChangeLateWatcher(weightProvider,
+			weightEditor.AddLateChangeWatcher(weightProvider,
 				v => {
 					weightEditor.Value = v.IsDefined ? v.Value : 0;
 					if (!v.IsDefined) {
