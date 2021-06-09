@@ -5544,6 +5544,12 @@ references:
   commentId: T:Lime.ApplicationOptions
   fullName: Lime.ApplicationOptions
   nameWithType: ApplicationOptions
+- uid: Lime.ApplicationOptions.AlwaysThrowUnhandledException
+  name: AlwaysThrowUnhandledException
+  href: api/Lime.ApplicationOptions.html#Lime_ApplicationOptions_AlwaysThrowUnhandledException
+  commentId: F:Lime.ApplicationOptions.AlwaysThrowUnhandledException
+  fullName: Lime.ApplicationOptions.AlwaysThrowUnhandledException
+  nameWithType: ApplicationOptions.AlwaysThrowUnhandledException
 - uid: Lime.ApplicationOptions.DecodeAudioInSeparateThread
   name: DecodeAudioInSeparateThread
   href: api/Lime.ApplicationOptions.html#Lime_ApplicationOptions_DecodeAudioInSeparateThread
