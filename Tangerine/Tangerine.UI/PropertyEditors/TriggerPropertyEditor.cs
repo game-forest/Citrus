@@ -54,7 +54,7 @@ namespace Tangerine.UI
 					}
 				);
 			};
-			editBox.AddChangeLateWatcher(CoalescedPropertyValue(), v => editBox.Text = v.Value);
+			editBox.AddLateChangeWatcher(CoalescedPropertyValue(), v => editBox.Text = v.Value);
 			Invalidate();
 		}
 

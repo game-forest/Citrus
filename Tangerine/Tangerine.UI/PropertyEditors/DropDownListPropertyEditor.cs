@@ -21,7 +21,7 @@ namespace Tangerine.UI
 					SetProperty((T)itemLister.ElementAt(a.Index).Item2);
 				}
 			};
-			Selector.AddChangeLateWatcher(CoalescedPropertyValue(), v => {
+			Selector.AddLateChangeWatcher(CoalescedPropertyValue(), v => {
 				if (v.IsDefined) {
 					Selector.Value = v.Value;
 				} else {

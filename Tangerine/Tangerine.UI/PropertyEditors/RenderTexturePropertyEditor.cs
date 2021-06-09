@@ -12,7 +12,7 @@ namespace Tangerine.UI
 			editor.LayoutCell = new LayoutCell(Alignment.Center);
 			EditorContainer.AddNode(editor);
 			var current = CoalescedPropertyValue();
-			editor.AddChangeLateWatcher(current, v =>
+			editor.AddLateChangeWatcher(current, v =>
 				editor.Text = v.Value == null ?
 					"RenderTexture (null)" :
 					$"RenderTexture ({v.Value.ImageSize.Width}x{v.Value.ImageSize.Height})"

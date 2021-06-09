@@ -16,7 +16,7 @@ namespace Tangerine.UI
 			EditorContainer.AddNode(Spacer.HStretch());
 			var current = CoalescedPropertyValue();
 			editor.Submitted += text => SetComponent(text, current.GetValue());
-			editor.AddChangeLateWatcher(current, v => editor.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
+			editor.AddLateChangeWatcher(current, v => editor.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
 			ManageManyValuesOnFocusChange(editor, current);
 		}
 

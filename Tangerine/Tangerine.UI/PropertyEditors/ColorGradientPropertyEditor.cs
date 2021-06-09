@@ -53,7 +53,7 @@ namespace Tangerine.UI
 			};
 			var gradientProperty = CoalescedPropertyValue(new ColorGradient(Color4.White, Color4.Black)).DistinctUntilChanged();
 			gradientControlWidget.Gradient = gradientProperty.GetValue().Value;
-			ContainerWidget.AddChangeLateWatcher(gradientProperty, g => gradientControlWidget.Gradient = g.Value);
+			ContainerWidget.AddLateChangeWatcher(gradientProperty, g => gradientControlWidget.Gradient = g.Value);
 			gradientControlWidget.SelectionChanged += SelectPoint;
 			EditorContainer.AddNode(gradientControlWidget);
 			EditorContainer.AddNode(CreatePipetteButton());
@@ -143,7 +143,7 @@ namespace Tangerine.UI
 			currentColorString = selectedPointColorProperty.DistinctUntilChanged().Select(i => i.ToString(Color4.StringPresentation.Dec));
 			colorEditor.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColorString.Consume(v => colorEditor.Text = v));
 			colorPanel.Color = selectedPointColorProperty.GetValue();
-			colorEditor.AddChangeLateWatcher(selectedPointColorProperty, v => {
+			colorEditor.AddLateChangeWatcher(selectedPointColorProperty, v => {
 				if (colorPanel.Color != v) {
 					colorPanel.Color = v;
 				}
@@ -231,7 +231,7 @@ namespace Tangerine.UI
 			Gradient = new ColorGradient(Color4.White, Color4.Black);
 			Nodes.Add(gradientPaneContainer);
 			Nodes.Add(createPointsPane);
-			this.AddChangeLateWatcher(() => Gradient.Count, _ => {
+			this.AddLateChangeWatcher(() => Gradient.Count, _ => {
 				var controlPoint = Gradient.Contains(SelectedControlPoint) ?
 					SelectedControlPoint : Gradient.Ordered().FirstOrDefault();
 				Rebuild();

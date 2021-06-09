@@ -29,14 +29,14 @@ namespace Tangerine.UI
 			var first = true;
 			var submitted = false;
 			var current = CoalescedPropertyValue();
-			editor.AddChangeLateWatcher(current, v => editor.Text = v.IsDefined ? v.Value : ManyValuesText);
+			editor.AddLateChangeWatcher(current, v => editor.Text = v.IsDefined ? v.Value : ManyValuesText);
 			button.Clicked += () => {
 				var window = new TextEditorDialog(editorParams.DisplayName ?? editorParams.PropertyName, editor.Text, (s) => {
 					SetProperty(s);
 				});
 			};
 			editor.Submitted += text => Submit();
-			editor.AddChangeLateWatcher(() => editor.Text, text => {
+			editor.AddLateChangeWatcher(() => editor.Text, text => {
 				if (first) {
 					first = false;
 					return;
@@ -50,7 +50,7 @@ namespace Tangerine.UI
 				submitted = true;
 				Submit();
 			});
-			editor.AddChangeLateWatcher(() => editor.IsFocused(), focused => {
+			editor.AddLateChangeWatcher(() => editor.IsFocused(), focused => {
 				if (submitted) {
 					Document.Current.History.Undo();
 				}

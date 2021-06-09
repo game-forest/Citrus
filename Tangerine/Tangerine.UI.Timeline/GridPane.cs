@@ -49,7 +49,7 @@ namespace Tangerine.UI.Timeline
 			DropFilesGesture.Recognized += new GridPaneFilesDropHandler().Handle;
 			RootWidget.Gestures.Add(DropFilesGesture);
 			OnCreate?.Invoke(this);
-			RootWidget.AddChangeLateWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
+			RootWidget.AddLateChangeWatcher(() => Document.Current.SceneTreeVersion, _ => Rebuild());
 		}
 
 		private void Rebuild()

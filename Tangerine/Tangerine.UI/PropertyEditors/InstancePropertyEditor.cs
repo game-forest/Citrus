@@ -41,7 +41,7 @@ namespace Tangerine.UI
 				}
 				menu.Popup();
 			};
-			EditorContainer.AddChangeLateWatcher(
+			EditorContainer.AddLateChangeWatcher(
 				provider: CoalescedPropertyValue(
 					comparator: (t1, t2) =>
 						   t1 == null
@@ -105,7 +105,7 @@ namespace Tangerine.UI
 				EditorContainer.Nodes.Insert(0, selectImplementationButton);
 			}
 			EditorContainer.AddNode(resetToDefaultButton);
-			EditorContainer.AddChangeLateWatcher(CoalescedPropertyValue(), v => {
+			EditorContainer.AddLateChangeWatcher(CoalescedPropertyValue(), v => {
 				resetToDefaultButton.Visible = !Equals(v.Value, defaultValue);
 			});
 		}
