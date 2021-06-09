@@ -39,5 +39,15 @@ namespace Tangerine.Core
 		{
 			node.Components.GetOrAdd<LateConsumeBehaviour>().Add(provider.DistinctUntilChanged().Consume(action));
 		}
+
+		public static void AddPreLateChangeWatcher<T>(this Node node, Func<T> getter, Action<T> action)
+		{
+			node.Components.GetOrAdd<PreLateConsumeBehaviour>().Add(new Property<T>(getter).DistinctUntilChanged().Consume(action));
+		}
+
+		public static void AddPreLateChangeWatcher<T>(this Node node, IDataflowProvider<T> provider, Action<T> action)
+		{
+			node.Components.GetOrAdd<PreLateConsumeBehaviour>().Add(provider.DistinctUntilChanged().Consume(action));
+		}
 	}
 }

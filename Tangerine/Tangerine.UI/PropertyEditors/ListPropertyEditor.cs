@@ -61,7 +61,16 @@ namespace Tangerine.UI
 				}
 			);
 			var current = PropertyValue(EditorParams.Objects.First());
-			ContainerWidget.AddChangeWatcher(
+			// Commands (e.g. Undo) are processed between the Early Update and before the Late Update.
+			// NodeManager processes regular ChangeWatcher at EarlyUpdateStage, and ChangeLateWatcher at
+			// LateUpdateStage. So the order is:
+			// ChangeWatcher (EarlyUpdateStage) => Commands => ChangeLateWatcher (LateUpdateStage).
+			// It is possible that there are nested change watchers somewhere down the hierarchy, watching for
+			// coalesced value changes. When value is being deleted by both user or Undo command
+			// we must remove nodes owning those change watchers before they'll be processed. Otherwise
+			// they'll crash trying to access removed list element. To fix this as a temporary solution
+			// we made PreLateChangeWatcher which is processed at PreLateUpdateStage which is before LateUpdateStage.
+			ContainerWidget.AddPreLateChangeWatcher(
 				getter: () => (list?.Count ?? 0) - pendingRemovals.Count,
 				action: RemoveAndBuild
 			);

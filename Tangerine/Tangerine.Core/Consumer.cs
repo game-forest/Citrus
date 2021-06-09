@@ -56,4 +56,10 @@ namespace Tangerine.Core
 	public class LateConsumeBehaviour : ConsumeBehaviour
 	{
 	}
+
+	[UpdateStage(typeof(PreLateUpdateStage))]
+	[NodeComponentDontSerialize]
+	public class PreLateConsumeBehaviour : ConsumeBehaviour
+	{
+	}
 }
