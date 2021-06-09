@@ -1,0 +1,236 @@
+{
+	"class":"Lime.Frame, Lime",
+	"Anchors":48,
+	"Color":[4294967295],
+	"Nodes":[
+		{
+			"class":"Lime.DistortionMesh, Lime",
+			"Anchors":3,
+			"Color":[4294967295],
+			"Id":"Win",
+			"Nodes":[
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;0",
+					"Position":[0.095852114,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;1",
+					"Position":[0.13318577,0],
+					"UV":[0.33333334,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;2",
+					"Position":[0.8382928,0],
+					"UV":[0.6666667,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;3",
+					"Position":[0.88289404,0],
+					"UV":[1,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;0",
+					"Position":[0.095852114,0.25714287],
+					"UV":[0,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;1",
+					"Position":[0.13318577,0.25714287],
+					"UV":[0.33333334,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;2",
+					"Position":[0.8382928,0.25714287],
+					"UV":[0.6666667,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;3",
+					"Position":[0.88289404,0.25714287],
+					"UV":[1,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;0",
+					"Position":[0.10549317,0.7555556],
+					"UV":[0,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;1",
+					"Position":[0.13976601,0.7555556],
+					"UV":[0.33333334,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;2",
+					"Position":[0.8192786,0.7555556],
+					"UV":[0.6666667,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;3",
+					"Position":[0.8683569,0.7555556],
+					"UV":[1,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;0",
+					"Position":[0.123047315,1],
+					"UV":[0,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;1",
+					"Position":[0.15295526,1],
+					"UV":[0.33333334,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;2",
+					"Position":[0.80692375,1],
+					"UV":[0.6666667,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;3",
+					"Position":[0.85815805,1],
+					"UV":[1,1]
+				}
+			],
+			"NumCols":3,
+			"NumRows":3,
+			"Pivot":[0.5,0.5],
+			"Position":[263.5,64],
+			"Size":[627.3333,105],
+			"TangerineFlags":4,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Shell/Ui/WinBlue"
+			}
+		},
+		{
+			"class":"Lime.DistortionMesh, Lime",
+			"Anchors":3,
+			"Color":[1811939328],
+			"Id":"Sh",
+			"Nodes":[
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;0",
+					"Position":[0.07592616,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;1",
+					"Position":[0.11325983,0],
+					"UV":[0.33333334,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;2",
+					"Position":[0.86034346,0],
+					"UV":[0.6666667,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;3",
+					"Position":[0.9049446,0],
+					"UV":[1,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;0",
+					"Position":[0.07592616,0.25714287],
+					"UV":[0,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;1",
+					"Position":[0.11325983,0.25714287],
+					"UV":[0.33333334,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;2",
+					"Position":[0.86034346,0.25714287],
+					"UV":[0.6666667,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;3",
+					"Position":[0.9049446,0.25714287],
+					"UV":[1,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;0",
+					"Position":[0.10522717,0.7555556],
+					"UV":[0,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;1",
+					"Position":[0.1395,0.7555556],
+					"UV":[0.33333334,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;2",
+					"Position":[0.8296395,0.7555556],
+					"UV":[0.6666667,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;3",
+					"Position":[0.87871784,0.7555556],
+					"UV":[1,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;0",
+					"Position":[0.122781314,1],
+					"UV":[0,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;1",
+					"Position":[0.15268926,1],
+					"UV":[0.33333334,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;2",
+					"Position":[0.81728464,1],
+					"UV":[0.6666667,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;3",
+					"Position":[0.8685192,1],
+					"UV":[1,1]
+				}
+			],
+			"NumCols":3,
+			"NumRows":3,
+			"Pivot":[0.5,0.5],
+			"Position":[263.5,84],
+			"Size":[627.3333,105],
+			"TangerineFlags":4,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Stuff/CircleBlured"
+			}
+		}
+	],
+	"Size":[512,128]
+}{8069CDD4-F02F-4981-A3CB-A0BAD4018D00}
+
+iVBORw0KGgoAAAANSUhEUgAAAJYAAAAmCAYAAAAmy2KXAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANlSURBVHhe7dzHUlRBGAXg+xryCFaJa1YmGANGDAQT5pwTpoViICkqYM45YM4555zFgaU56wNcz5n5G5rxymgVraX8XfUtp273OWc9nh49evTo0dPAT2rOnpHxldfS9m+a/G8LNRBer6VVfk8qq/KzyiojMqm00s+gkko/vVrYT18S9nuI7pZutDiqqyVtUVQXKq7Rufh5RKeFtXW0LYjqEKuowm//E6mFtbWLVVDht/0FbYz8H7X+DSFbXsPhpRRU+ckBWuUHaxkrr24taqn8qeY034F5Uc3UH+Ul5YZ9peqbDks5ocNSTuiwlBM6LOWEDks5ocNSTuiwlBM6LOWEDks5ocNSTuiwlBM6LOWEDks5ocNSTuiwlBM6LOWEDks5ocNSTuiwlBM6LOWEDks5ocNSTuiwlBM6LOWEDks54SXNrvCVqm9e4+y1vlL1zUto2uZlQtPQK8tr8aZaYspby7tGiaH3USkfAnxslJhco0nyJ8vnH7X6EsfXOnz7jwS9L1ZQPiIo24ia/O1eIoL6i3abkBh6x66re7f3ULMRazfcUcQL4l9kHYXjcAJOwik4DWfgLJwT5+GiuCyuwFVxDa6LG+Im3ILbcEfcFffEffEAHsZ4JB6LJ5an4lkcFQGexxH+BUG/swV9N+h+ZN5C9hvJvN1kYbJhXobJ0GRqMjaZEztgF2T6YVfszXTIPk23l4BdXwB2zw1wD9wF98GdcC/cDfdzDLilI3AIvLkwH/IgHwqgEBbAQiiGRbAYSqAUymApLIcVsBJWwWpYA2thHawXG2AjbILNsEVshW2wXeyAnbBLlIvdsEfsFfss+8UBy0HBRwY5XAeGE0/Q74K+Y+5h2Hckc3f7PeaN5s18v8mCuTAjZkUmO+ZIzJTZMmdi5szedMFe2A97Yl/sjf2xR1oG7JYds+slwO65Ae6BuygCboRb4Wa4H+5oDuTCLPA6QRfRFbpBd0gXGZAlekFv6AN9IRv6iQFiIAyCwTAEhsIwMUKMhFEwGsaIsWIcjIcJYiJMEpMtUyAHpsaYJqZbZsDMv4TfNvcwdzPse/MtfJON7+S7mQGZTJgPczKZmQyZJ3Mlk/VwYPbsgX0Q+yH21R/YH7tkp+yWHbPrnsDeMwW30AO4D+6Ee0kDbqczcEsdPc/r8B0H7VVcr0qlzAAAAABJRU5ErkJggg==
