@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Lime;
 
 namespace Tangerine.UI
@@ -12,6 +13,10 @@ namespace Tangerine.UI
 		private const float BorderSize = IconSize * 0.09375f;
 		private const float FontHeight = 48;
 		private const int IconTextMaxLength = 2;
+		private static readonly UTF8Encoding utf8 = new UTF8Encoding(
+			encoderShouldEmitUTF8Identifier: false,
+			throwOnInvalidBytes: true
+		);
 		private static readonly string[] ignoringTypeNameSuffixes = {
 			"Component",
 			"Behavior",
@@ -91,7 +96,9 @@ namespace Tangerine.UI
 					iconAbbreviation = typeAbbreviation.Length > 0 ? typeAbbreviation : typeName;
 					iconAbbreviation = iconAbbreviation.Substring(0, Math.Min(IconTextMaxLength, iconAbbreviation.Length)).ToUpperInvariant();
 				}
-				var (commonColor, secondaryColor) = colors[Math.Abs(type.Name.GetHashCode()) % colors.Count];
+				var buffer = new byte[utf8.GetByteCount(type.Name)];
+				utf8.GetBytes(type.Name, buffer);
+				var (commonColor, secondaryColor) = colors[Math.Abs(Toolbox.ComputeHash(buffer, buffer.Length)) % colors.Count];
 				if (iconGenerationAttribute?.CommonColor != null) {
 					commonColor = iconGenerationAttribute.CommonColor.Value;
 				}
