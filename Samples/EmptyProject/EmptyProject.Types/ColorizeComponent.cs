@@ -4,7 +4,7 @@ using Yuzu;
 
 namespace EmptyProject.Types
 {
-	public partial class ColorizeMaterial : IMaterial
+	public class ColorizeMaterial : IMaterial
 	{
 		private readonly ShaderParams shaderParams;
 		private readonly ShaderParams[] shaderParamsArray;

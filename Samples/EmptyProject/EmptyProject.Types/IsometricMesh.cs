@@ -10,7 +10,7 @@ namespace EmptyProject.Types
 {
 	[TangerineRegisterNode]
 	[TangerineMenuPath("Custom/Isometric/")]
-	public partial class IsometricMesh : Widget
+	public class IsometricMesh : Widget
 	{
 		[YuzuMember]
 		public Face LeftFace { get; set; } = new Face();
@@ -129,7 +129,7 @@ namespace EmptyProject.Types
 			);
 		}
 
-		public partial class Face
+		public class Face
 		{
 			public enum RotationType
 			{
@@ -166,7 +166,6 @@ namespace EmptyProject.Types
 				{
 					if (ninePatchHelper.Texture != value) {
 						ninePatchHelper.Texture = value;
-						OnTextureChangedPartial();
 					}
 				}
 			}
@@ -304,8 +303,6 @@ namespace EmptyProject.Types
 			{
 				return ninePatchHelper.HitTestByContents(point);
 			}
-
-			partial void OnTextureChangedPartial();
 		}
 
 		private class MeshRenderObject : RenderObject
@@ -335,7 +332,7 @@ namespace EmptyProject.Types
 			}
 		}
 
-		public partial class NinePatchHelper
+		public class NinePatchHelper
 		{
 			public enum RenderType
 			{

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Lime;
 using Tangerine.Core;
-using System.Linq;
 
 namespace Tangerine.UI
 {
@@ -29,7 +28,9 @@ namespace Tangerine.UI
 					var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
 					ICommand command = new Command(
 						text: type.Name,
-						execute: () => SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null)
+						execute: () => {
+							SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null);
+						}
 					) {
 						TooltipText = tooltipText
 					};
