@@ -44,6 +44,11 @@ namespace Tangerine.UI
 						Expanded = true;
 						if (list == null) {
 							var pi = EditorParams.PropertyInfo;
+							if (IsSetterPrivate()) {
+								ShowPrivateSetterAlert();
+								return;
+							}
+							// TODO: this should be part of transaction to be able to undo
 							var o = EditorParams.Objects.First();
 							pi.SetValue(o, list = Activator.CreateInstance<TList>());
 						}

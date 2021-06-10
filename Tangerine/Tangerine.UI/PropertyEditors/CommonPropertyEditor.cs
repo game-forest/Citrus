@@ -292,6 +292,10 @@ namespace Tangerine.UI
 
 		protected void SetProperty(object value)
 		{
+			if (IsSetterPrivate()) {
+				ShowPrivateSetterAlert();
+				return;
+			}
 			ClearWarnings();
 			var result = PropertyValidator.ValidateValue(value, EditorParams.PropertyInfo, out string message);
 			if (result != ValidationResult.Ok) {
@@ -317,6 +321,10 @@ namespace Tangerine.UI
 
 		protected void SetProperty<ValueType>(Func<ValueType, object> valueProducer)
 		{
+			if (IsSetterPrivate()) {
+				ShowPrivateSetterAlert();
+				return;
+			}
 			ClearWarnings();
 			void ValidateAndApply(object o, ValueType current)
 			{
@@ -415,6 +423,16 @@ namespace Tangerine.UI
 					AddWarning(message, result);
 				}
 			}
+		}
+
+		protected bool IsSetterPrivate() => EditorParams.PropertyInfo.SetMethod.IsPrivate;
+
+		protected void ShowPrivateSetterAlert()
+		{
+			new AlertDialog(
+				$"Can't assign value to property '{EditorParams.PropertyInfo.Name}' because it's setter is private. " +
+				$"Either make setter public or make sure property is initialized."
+			).Show();
 		}
 	}
 

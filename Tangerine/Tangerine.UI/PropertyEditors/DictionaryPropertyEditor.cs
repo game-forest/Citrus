@@ -55,6 +55,11 @@ namespace Tangerine.UI.PropertyEditors
 			var addButton = new ThemedAddButton {
 				Clicked = () => {
 					if (dictionary == null) {
+						if (IsSetterPrivate()) {
+							ShowPrivateSetterAlert();
+							return;
+						}
+						// TODO: this should be part of transaction to be able to undo
 						var pi = EditorParams.PropertyInfo;
 						var o = EditorParams.Objects.First();
 						pi.SetValue(o, dictionary = Activator.CreateInstance<TDictionary>());
