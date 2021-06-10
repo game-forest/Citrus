@@ -6,19 +6,19 @@
 			"IsLegacy":true,
 			"Markers":[
 				{
-					"Id":"Show"
-				},
-				{
-					"Action":1,
-					"Frame":10
-				},
-				{
-					"Frame":22,
 					"Id":"Hide"
 				},
 				{
 					"Action":1,
-					"Frame":30
+					"Frame":5
+				},
+				{
+					"Frame":10,
+					"Id":"Show"
+				},
+				{
+					"Action":1,
+					"Frame":15
 				}
 			]
 		}
@@ -32,83 +32,55 @@
 				{
 					"class":"Lime.Color4Animator, Lime",
 					"ReadonlyKeys":[
-						[0,0,[16777215]],
-						[6,0,[4294967295]],
-						[22,0,[4294967295]],
-						[30,0,[16777215]]
+						[0,0,[4294967295]],
+						[2,0,[4294967295]],
+						[5,0,[16777215]],
+						[10,0,[16777215]],
+						[11,0,[4294967295]]
 					],
 					"TargetProperty":"Color"
 				},
 				{
 					"class":"Lime.Vector2Animator, Lime",
 					"ReadonlyKeys":[
-						[0,0,[0.04586,1]],
-						[6,0,[1,1.13575]],
-						[10,0,[1,1]],
-						[22,0,[1,1]],
-						[30,0,[1,0.04586]]
+						[0,2,[1,1]],
+						[2,2,[0.9737964,0.8393116]],
+						[5,2,[1.0489011,1.2152174]],
+						[10,2,[1.0489011,1.2152174]],
+						[13,2,[0.9737964,0.8393116]],
+						[15,2,[1,1]]
 					],
 					"TargetProperty":"Scale"
+				},
+				{
+					"class":"Lime.Vector2Animator, Lime",
+					"ReadonlyKeys":[
+						[0,2,[512,384]],
+						[2,2,[512,434]],
+						[5,2,[512,-7]],
+						[10,2,[512,-7]],
+						[13,2,[512,434]],
+						[15,2,[512,384]]
+					],
+					"TargetProperty":"Position"
 				}
 			],
-			"Color":[16777215],
+			"Color":[4294967295],
 			"Id":"Win",
 			"Nodes":[
 				{
 					"class":"Lime.Button, Lime",
+					"Anchors":48,
 					"Color":[4294967295],
-					"ContentsPath":"Buttons/BtnOk",
+					"ContentsPath":"Externals/BtnOk",
 					"Id":"@BtnOk",
 					"Pivot":[0.5,0.5],
-					"Position":[555,531],
-					"Scale":[0.5,0.5],
-					"Size":[256,256]
-				},
-				{
-					"class":"Lime.SimpleText, Lime",
-					"Color":[4294967295],
-					"Font":{
-						"Name":"Default"
-					},
-					"FontHeight":66,
-					"HAlignment":1,
-					"Id":"Title",
-					"Pivot":[0.5,0.5],
-					"Position":[388,167],
-					"Size":[462,60],
-					"Spacing":-9,
-					"Text":"Options",
-					"TextColor":[4278254590],
-					"VAlignment":1
-				},
-				{
-					"class":"Lime.Image, Lime",
-					"Color":[3114114461],
-					"Id":"Line01",
-					"Pivot":[0.5,1],
-					"Position":[390,206],
-					"Scale":[0.59184,0.59184],
-					"Size":[794.5608,8],
-					"Texture":{
-						"class":"Lime.SerializableTexture, Lime",
-						"SerializationPath":"Windows/Line02"
-					}
-				},
-				{
-					"class":"Lime.Image, Lime",
-					"Color":[4283427256],
-					"Id":"BarSm",
-					"Pivot":[0.5,0.5],
-					"Position":[389,169],
-					"Scale":[0.96947,1],
-					"Size":[485.21146,60],
-					"Texture":{
-						"class":"Lime.SerializableTexture, Lime",
-						"SerializationPath":"Windows/BarSm"
-					}
+					"Position":[622,583],
+					"Size":[128,128]
 				},
 				{
 					"class":"Lime.Frame, Lime",
+					"Anchors":48,
 					"Color":[4294967295],
 					"Id":">[CheckGroup]MusicGroup",
 					"Nodes":[
@@ -147,37 +119,62 @@
 										{
 											"class":"Lime.Color4Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[16777215]],
-												[6,0,[4294967295]],
-												[10,0,[4294967295]],
-												[40,0,[4294967295]],
-												[46,0,[4294967295]],
-												[50,0,[16777215]]
+												[0,0,[0]],
+												[6,0,[4278190080]],
+												[10,0,[4278190080]],
+												[40,0,[4278190080]],
+												[46,0,[4278190080]],
+												[50,0,[0]]
 											],
 											"TargetProperty":"Color"
 										},
 										{
 											"class":"Lime.Vector2Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[0.3753,0.3753]],
-												[6,0,[1.01449,1.01449]],
-												[10,0,[0.78261,0.78261]],
-												[40,0,[0.78261,0.78261]],
-												[46,0,[1.01449,1.01449]],
-												[50,0,[0.3753,0.3753]]
+												[0,0,[0.32236573,0.32236573]],
+												[6,0,[0.8714011,0.8714011]],
+												[10,0,[0.6722266,0.6722266]],
+												[40,0,[0.6722266,0.6722266]],
+												[46,0,[0.8714011,0.8714011]],
+												[50,0,[0.32236573,0.32236573]]
 											],
 											"TargetProperty":"Scale"
 										}
 									],
-									"Color":[16777215],
+									"Color":[0],
 									"Id":"BulletCheck",
 									"Pivot":[0.40171,0.66091],
-									"Position":[25,23],
-									"Scale":[0.3753,0.3753],
-									"Size":[104,90],
+									"Position":[21.162865,25.447626],
+									"Scale":[0.32236573,0.32236573],
+									"Size":[65,54],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletCheck"
+										"SerializationPath":"Ui/IcoCheck"
+									}
+								},
+								{
+									"class":"Lime.Image, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Vector2Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[0,0]],
+												[1,0,[0.5908704,0.5908704]],
+												[40,0,[0.5908704,0.5908704]],
+												[41,0,[0,0]]
+											],
+											"TargetProperty":"Scale"
+										}
+									],
+									"Color":[4294967295],
+									"Id":"BtnOrange",
+									"Pivot":[0.5,0.5],
+									"Position":[24.831238,20.144005],
+									"Scale":[0,0],
+									"Size":[105,105],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime",
+										"SerializationPath":"Ui/BtnOrange"
 									}
 								}
 							],
@@ -188,17 +185,32 @@
 						},
 						{
 							"class":"Lime.SimpleText, Lime",
-							"Color":[4279979393],
+							"Color":[4294967295],
+							"Components":[
+								{
+									"class":"Lime.SignedDistanceFieldComponent, Lime",
+									"Gradient":[
+										{
+											"Color":[4294967295]
+										},
+										{
+											"Color":[4278190080],
+											"Position":1
+										}
+									]
+								}
+							],
 							"Font":{
-								"Name":"Default"
+								"Name":"Arial"
 							},
 							"FontHeight":41,
 							"Id":"Text",
 							"Pivot":[0,0.5],
-							"Position":[66,29],
+							"Position":[76,29],
 							"Size":[197.33325,55],
 							"Spacing":-14,
 							"Text":"Music",
+							"TextColor":[4287880191],
 							"VAlignment":1
 						},
 						{
@@ -270,32 +282,35 @@
 										}
 									],
 									"BottomOffset":0.4,
-									"Color":[4280586817],
+									"Color":[4288256409],
 									"Id":"NineGrid2",
 									"LeftOffset":0.4,
 									"Pivot":[0.5,0.5],
 									"Position":[29.21646,29.21646],
 									"RightOffset":0.4,
+									"Rotation":-180,
 									"Scale":[1.12371,1.12371],
 									"Size":[52,52],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletMicroFrame"
+										"SerializationPath":"Ui/WinGrey"
 									},
 									"TopOffset":0.4
 								}
 							],
 							"Pivot":[0.5,0.5],
-							"Position":[114,29],
-							"Size":[226,58]
+							"Position":[136.49506,29],
+							"Size":[270.9901,58]
 						}
 					],
 					"Pivot":[0.5,0.5],
-					"Position":[250,251],
+					"Position":[287.29953,293.28687],
+					"Rotation":-4.2667847,
 					"Size":[58.43292,58.43292]
 				},
 				{
 					"class":"Lime.Frame, Lime",
+					"Anchors":48,
 					"Color":[4294967295],
 					"Id":">[CheckGroup]SoundGroup",
 					"Nodes":[
@@ -334,37 +349,62 @@
 										{
 											"class":"Lime.Color4Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[16777215]],
-												[6,0,[4294967295]],
-												[10,0,[4294967295]],
-												[40,0,[4294967295]],
-												[46,0,[4294967295]],
-												[50,0,[16777215]]
+												[0,0,[0]],
+												[6,0,[4278190080]],
+												[10,0,[4278190080]],
+												[40,0,[4278190080]],
+												[46,0,[4278190080]],
+												[50,0,[0]]
 											],
 											"TargetProperty":"Color"
 										},
 										{
 											"class":"Lime.Vector2Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[0.3753,0.3753]],
-												[6,0,[1.01449,1.01449]],
-												[10,0,[0.78261,0.78261]],
-												[40,0,[0.78261,0.78261]],
-												[46,0,[1.01449,1.01449]],
-												[50,0,[0.3753,0.3753]]
+												[0,0,[0.32236573,0.32236573]],
+												[6,0,[0.8714011,0.8714011]],
+												[10,0,[0.6722266,0.6722266]],
+												[40,0,[0.6722266,0.6722266]],
+												[46,0,[0.8714011,0.8714011]],
+												[50,0,[0.32236573,0.32236573]]
 											],
 											"TargetProperty":"Scale"
 										}
 									],
-									"Color":[16777215],
+									"Color":[0],
 									"Id":"BulletCheck",
 									"Pivot":[0.40171,0.66091],
-									"Position":[25,23],
-									"Scale":[0.3753,0.3753],
-									"Size":[104,90],
+									"Position":[21.162865,25.447626],
+									"Scale":[0.32236573,0.32236573],
+									"Size":[65,54],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletCheck"
+										"SerializationPath":"Ui/IcoCheck"
+									}
+								},
+								{
+									"class":"Lime.Image, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Vector2Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[0,0]],
+												[1,0,[0.5908704,0.5908704]],
+												[40,0,[0.5908704,0.5908704]],
+												[41,0,[0,0]]
+											],
+											"TargetProperty":"Scale"
+										}
+									],
+									"Color":[4294967295],
+									"Id":"BtnOrange",
+									"Pivot":[0.5,0.5],
+									"Position":[24.831238,20.144005],
+									"Scale":[0,0],
+									"Size":[105,105],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime",
+										"SerializationPath":"Ui/BtnOrange"
 									}
 								}
 							],
@@ -375,17 +415,32 @@
 						},
 						{
 							"class":"Lime.SimpleText, Lime",
-							"Color":[4279979393],
+							"Color":[4294967295],
+							"Components":[
+								{
+									"class":"Lime.SignedDistanceFieldComponent, Lime",
+									"Gradient":[
+										{
+											"Color":[4294967295]
+										},
+										{
+											"Color":[4278190080],
+											"Position":1
+										}
+									]
+								}
+							],
 							"Font":{
-								"Name":"Default"
+								"Name":"Arial"
 							},
 							"FontHeight":41,
 							"Id":"Text",
 							"Pivot":[0,0.5],
-							"Position":[66,29],
+							"Position":[76,29],
 							"Size":[197.33325,55],
 							"Spacing":-14,
 							"Text":"Sound",
+							"TextColor":[4287880191],
 							"VAlignment":1
 						},
 						{
@@ -457,32 +512,35 @@
 										}
 									],
 									"BottomOffset":0.4,
-									"Color":[4280586817],
+									"Color":[4288256409],
 									"Id":"NineGrid2",
 									"LeftOffset":0.4,
 									"Pivot":[0.5,0.5],
 									"Position":[29.21646,29.21646],
 									"RightOffset":0.4,
+									"Rotation":-180,
 									"Scale":[1.12371,1.12371],
 									"Size":[52,52],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletMicroFrame"
+										"SerializationPath":"Ui/WinGrey"
 									},
 									"TopOffset":0.4
 								}
 							],
 							"Pivot":[0.5,0.5],
-							"Position":[114,29],
-							"Size":[226,58]
+							"Position":[136.49506,29],
+							"Size":[270.9901,58]
 						}
 					],
 					"Pivot":[0.5,0.5],
-					"Position":[250,320],
+					"Position":[292.43317,362.0956],
+					"Rotation":-4.2667847,
 					"Size":[58.43292,58.43292]
 				},
 				{
 					"class":"Lime.Frame, Lime",
+					"Anchors":48,
 					"Color":[4294967295],
 					"Id":">[CheckGroup]VoiceGroup",
 					"Nodes":[
@@ -521,37 +579,62 @@
 										{
 											"class":"Lime.Color4Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[16777215]],
-												[6,0,[4294967295]],
-												[10,0,[4294967295]],
-												[40,0,[4294967295]],
-												[46,0,[4294967295]],
-												[50,0,[16777215]]
+												[0,0,[0]],
+												[6,0,[4278190080]],
+												[10,0,[4278190080]],
+												[40,0,[4278190080]],
+												[46,0,[4278190080]],
+												[50,0,[0]]
 											],
 											"TargetProperty":"Color"
 										},
 										{
 											"class":"Lime.Vector2Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[0.3753,0.3753]],
-												[6,0,[1.01449,1.01449]],
-												[10,0,[0.78261,0.78261]],
-												[40,0,[0.78261,0.78261]],
-												[46,0,[1.01449,1.01449]],
-												[50,0,[0.3753,0.3753]]
+												[0,0,[0.32236573,0.32236573]],
+												[6,0,[0.8714011,0.8714011]],
+												[10,0,[0.6722266,0.6722266]],
+												[40,0,[0.6722266,0.6722266]],
+												[46,0,[0.8714011,0.8714011]],
+												[50,0,[0.32236573,0.32236573]]
 											],
 											"TargetProperty":"Scale"
 										}
 									],
-									"Color":[16777215],
+									"Color":[0],
 									"Id":"BulletCheck",
 									"Pivot":[0.40171,0.66091],
-									"Position":[25,23],
-									"Scale":[0.3753,0.3753],
-									"Size":[104,90],
+									"Position":[21.162865,25.447626],
+									"Scale":[0.32236573,0.32236573],
+									"Size":[65,54],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletCheck"
+										"SerializationPath":"Ui/IcoCheck"
+									}
+								},
+								{
+									"class":"Lime.Image, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Vector2Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[0,0]],
+												[1,0,[0.5908704,0.5908704]],
+												[40,0,[0.5908704,0.5908704]],
+												[41,0,[0,0]]
+											],
+											"TargetProperty":"Scale"
+										}
+									],
+									"Color":[4294967295],
+									"Id":"BtnOrange",
+									"Pivot":[0.5,0.5],
+									"Position":[24.831238,20.144005],
+									"Scale":[0,0],
+									"Size":[105,105],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime",
+										"SerializationPath":"Ui/BtnOrange"
 									}
 								}
 							],
@@ -562,17 +645,32 @@
 						},
 						{
 							"class":"Lime.SimpleText, Lime",
-							"Color":[4279979393],
+							"Color":[4294967295],
+							"Components":[
+								{
+									"class":"Lime.SignedDistanceFieldComponent, Lime",
+									"Gradient":[
+										{
+											"Color":[4294967295]
+										},
+										{
+											"Color":[4278190080],
+											"Position":1
+										}
+									]
+								}
+							],
 							"Font":{
-								"Name":"Default"
+								"Name":"Arial"
 							},
 							"FontHeight":41,
 							"Id":"Text",
 							"Pivot":[0,0.5],
-							"Position":[66,29],
+							"Position":[76,29],
 							"Size":[197.33325,55],
 							"Spacing":-14,
 							"Text":"Voice",
+							"TextColor":[4287880191],
 							"VAlignment":1
 						},
 						{
@@ -644,32 +742,35 @@
 										}
 									],
 									"BottomOffset":0.4,
-									"Color":[4280586817],
+									"Color":[4288256409],
 									"Id":"NineGrid2",
 									"LeftOffset":0.4,
 									"Pivot":[0.5,0.5],
 									"Position":[29.21646,29.21646],
 									"RightOffset":0.4,
+									"Rotation":-180,
 									"Scale":[1.12371,1.12371],
 									"Size":[52,52],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletMicroFrame"
+										"SerializationPath":"Ui/WinGrey"
 									},
 									"TopOffset":0.4
 								}
 							],
 							"Pivot":[0.5,0.5],
-							"Position":[114,29],
-							"Size":[226,58]
+							"Position":[136.49506,29],
+							"Size":[270.9901,58]
 						}
 					],
 					"Pivot":[0.5,0.5],
-					"Position":[250,389],
+					"Position":[297.56683,430.9044],
+					"Rotation":-4.2667847,
 					"Size":[58.43292,58.43292]
 				},
 				{
 					"class":"Lime.Frame, Lime",
+					"Anchors":48,
 					"Color":[4294967295],
 					"Id":">[CheckGroup]FullScreenGroup",
 					"Nodes":[
@@ -708,37 +809,62 @@
 										{
 											"class":"Lime.Color4Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[16777215]],
-												[6,0,[4294967295]],
-												[10,0,[4294967295]],
-												[40,0,[4294967295]],
-												[46,0,[4294967295]],
-												[50,0,[16777215]]
+												[0,0,[0]],
+												[6,0,[4278190080]],
+												[10,0,[4278190080]],
+												[40,0,[4278190080]],
+												[46,0,[4278190080]],
+												[50,0,[0]]
 											],
 											"TargetProperty":"Color"
 										},
 										{
 											"class":"Lime.Vector2Animator, Lime",
 											"ReadonlyKeys":[
-												[0,0,[0.3753,0.3753]],
-												[6,0,[1.01449,1.01449]],
-												[10,0,[0.78261,0.78261]],
-												[40,0,[0.78261,0.78261]],
-												[46,0,[1.01449,1.01449]],
-												[50,0,[0.3753,0.3753]]
+												[0,0,[0.32236573,0.32236573]],
+												[6,0,[0.8714011,0.8714011]],
+												[10,0,[0.6722266,0.6722266]],
+												[40,0,[0.6722266,0.6722266]],
+												[46,0,[0.8714011,0.8714011]],
+												[50,0,[0.32236573,0.32236573]]
 											],
 											"TargetProperty":"Scale"
 										}
 									],
-									"Color":[16777215],
+									"Color":[0],
 									"Id":"BulletCheck",
 									"Pivot":[0.40171,0.66091],
-									"Position":[25,23],
-									"Scale":[0.3753,0.3753],
-									"Size":[104,90],
+									"Position":[21.162865,25.447626],
+									"Scale":[0.32236573,0.32236573],
+									"Size":[65,54],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletCheck"
+										"SerializationPath":"Ui/IcoCheck"
+									}
+								},
+								{
+									"class":"Lime.Image, Lime",
+									"Animators":[
+										{
+											"class":"Lime.Vector2Animator, Lime",
+											"ReadonlyKeys":[
+												[0,0,[0,0]],
+												[1,0,[0.5908704,0.5908704]],
+												[40,0,[0.5908704,0.5908704]],
+												[41,0,[0,0]]
+											],
+											"TargetProperty":"Scale"
+										}
+									],
+									"Color":[4294967295],
+									"Id":"BtnOrange",
+									"Pivot":[0.5,0.5],
+									"Position":[24.831238,20.144005],
+									"Scale":[0,0],
+									"Size":[105,105],
+									"Texture":{
+										"class":"Lime.SerializableTexture, Lime",
+										"SerializationPath":"Ui/BtnOrange"
 									}
 								}
 							],
@@ -749,17 +875,32 @@
 						},
 						{
 							"class":"Lime.SimpleText, Lime",
-							"Color":[4279979393],
+							"Color":[4294967295],
+							"Components":[
+								{
+									"class":"Lime.SignedDistanceFieldComponent, Lime",
+									"Gradient":[
+										{
+											"Color":[4294967295]
+										},
+										{
+											"Color":[4278190080],
+											"Position":1
+										}
+									]
+								}
+							],
 							"Font":{
-								"Name":"Default"
+								"Name":"Arial"
 							},
 							"FontHeight":41,
 							"Id":"Text",
 							"Pivot":[0,0.5],
-							"Position":[66,29],
+							"Position":[76,29],
 							"Size":[197.33325,55],
 							"Spacing":-14,
 							"Text":"Full Screen",
+							"TextColor":[4287880191],
 							"VAlignment":1
 						},
 						{
@@ -831,74 +972,117 @@
 										}
 									],
 									"BottomOffset":0.4,
-									"Color":[4280586817],
+									"Color":[4288256409],
 									"Id":"NineGrid2",
 									"LeftOffset":0.4,
 									"Pivot":[0.5,0.5],
 									"Position":[29.21646,29.21646],
 									"RightOffset":0.4,
+									"Rotation":-180,
 									"Scale":[1.12371,1.12371],
 									"Size":[52,52],
 									"Texture":{
 										"class":"Lime.SerializableTexture, Lime",
-										"SerializationPath":"Buttons/BulletMicroFrame"
+										"SerializationPath":"Ui/WinGrey"
 									},
 									"TopOffset":0.4
 								}
 							],
 							"Pivot":[0.5,0.5],
-							"Position":[114,29],
-							"Size":[226,58]
+							"Position":[136.49506,29],
+							"Size":[270.9901,58]
 						}
 					],
 					"Pivot":[0.5,0.5],
-					"Position":[250,458],
+					"Position":[302.70047,499.71313],
+					"Rotation":-4.2667847,
 					"Size":[58.43292,58.43292]
 				},
 				{
-					"class":"Lime.Image, Lime",
+					"class":"Lime.SimpleText, Lime",
+					"Anchors":48,
 					"Color":[4294967295],
-					"Id":"WinSmall",
+					"Components":[
+						{
+							"class":"Lime.SignedDistanceFieldComponent, Lime",
+							"Dilate":2,
+							"Gradient":[
+								{
+									"Color":[4294967295]
+								},
+								{
+									"Color":[4278190080],
+									"Position":1
+								}
+							]
+						}
+					],
+					"Font":{
+						"Name":"Arial"
+					},
+					"FontHeight":60,
+					"HAlignment":1,
+					"Id":"Title",
+					"OverflowMode":1,
+					"Pivot":[0.5,1],
+					"Position":[419.66647,196.79285],
+					"Rotation":-3.0702667,
+					"Size":[337,64],
+					"Text":"Options",
+					"VAlignment":1
+				},
+				{
+					"class":"Lime.Frame, Lime",
+					"Anchors":48,
+					"Color":[4294967295],
+					"ContentsPath":"Externals/TitleBar",
+					"Id":"TitleBar",
 					"Pivot":[0.5,0.5],
-					"Position":[389,371],
+					"Position":[411.01935,166.27159],
+					"Rotation":-3.0702667,
+					"Scale":[0.85744077,0.85744077],
+					"Size":[484,128],
+					"TangerineFlags":1024
+				},
+				{
+					"class":"Lime.Frame, Lime",
+					"Anchors":48,
+					"Color":[4294967295],
+					"ContentsPath":"Externals/Win",
+					"Id":"Win",
+					"Pivot":[0.5,0.5],
+					"Position":[449,414],
+					"Rotation":-3.5308838,
+					"Scale":[1.0807222,1.0577639],
 					"Size":[512,512],
-					"Texture":{
-						"class":"Lime.SerializableTexture, Lime",
-						"SerializationPath":"Windows/WinSmall"
-					}
+					"TangerineFlags":1792
 				}
 			],
 			"Pivot":[0.5,0.5],
 			"Position":[512,384],
-			"Scale":[0.04586,1],
 			"Size":[768,768]
 		},
 		{
-			"class":"Lime.Image, Lime",
-			"Anchors":48,
+			"class":"Lime.Frame, Lime",
+			"Anchors":15,
 			"Animators":[
 				{
-					"class":"Lime.Color4Animator, Lime",
+					"class":"Lime.Animator`1[[System.String]], Lime",
 					"ReadonlyKeys":[
-						[0,0,[13409074]],
-						[6,0,[3368852274]],
-						[22,0,[3368852274]],
-						[30,0,[13409074]]
+						[0,0,"Hide"],
+						[10,0,"Show"]
 					],
-					"TargetProperty":"Color"
+					"TargetProperty":"Trigger"
 				}
 			],
-			"Blending":2,
-			"Color":[13409074],
+			"Color":[4294967295],
+			"ContentsPath":"Externals/Shade",
 			"Id":"Shade",
 			"Pivot":[0.5,0.5],
 			"Position":[512,384],
-			"Shader":3,
-			"Size":[1556,1366],
-			"Texture":{
-				"class":"Lime.SerializableTexture, Lime"
-			}
+			"Size":[1024,768]
 		}
 	],
 	"Size":[1024,768]
-}
+}{8069CDD4-F02F-4981-A3CB-A0BAD4018D00}
+iVBORw0KGgoAAAANSUhEUgAAAJYAAABxCAYAAAA3QFrYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABnpSURBVHhe7Z0HeFRVFscHxFURpUnvpECAACkz6b33nlASSCGFHkIniCggAoKKggUVUCy4iK5t3XVtuxbW9i2rrO4iuAqCWHclk545e/538oZJuKHMBDYJl+/7fTO58zJD7vvNvWfOPe+OTjfK97RC0epIGxUKe5E2KhT2Im1UKOxF2qhQ2Iu0UaGwF2mjQmEv0kaFwl6kjQqFvUgbFQp7kTYqFPYibVQo7EXaqFDYi7RRobAXaaNCYS/SRoXCXqSNistCZxf/079xDam4alxoRVf3GOONPmmV3XyyKvuFFVT1i5xdNSC2rNohfVXNsJTVNTf6TKmSPUebRdqoaJHOo/1OdxkXeLrzmKCKrh7RFd0MycbrDWnGviG5VX3Ciqv6R8+rGpGygmW4tcZ5ysaacXn31brkPVjnMXtPvX7+/nrP0hcbgsrfNPmXv2sKuOVDU+jaTyl43ecUcvs/KWT9YeZLCmaCmMDbv6SAdWb813xBQ1LX1cr+T20SaWMHoxPL0Gm0v6CreySPDnHGrvokY5/gnMqbQgqqBkTNrhqZsqx6WHJ5zegp62vGTb+ndkzu9lr97Mfr9HP31htKn68PWvF6g//yt01Bqw6YwtYepJC1h1iGL1iEf1lkAJBBE8Kf8Vt7mHzBmsPkYydeqz6l6zySKmV/ozWdmM6jfU93cfGr4NsK3Sgf6XGXFGljO6SrZ5zRULC5NrB0d13Agqfqgxc/Vx+96rWGsJvfaohec8AUt+EgRW84RNEb/0nRmw4zRyhy4xEK33CEQu84Yh4lLpEQrcmohHl1zv5RNRNC42sMUUm1PtHJdWFJWfURSen1yVnZDemTsxum5Ew35RcUUG5uLqVmZJlcfMPqOjt7GXXOl1EwaWM742rXyIqS+z82xd91VIgBKWQnpb3jfds/KatoGRUVFlLhjBk0A7BABSA/n/KZvLw8ymOhIBWYPn26uDUEhzd0cvBkubx5BJP3Y6sibWxnOKctr0m799/Sk3GxYLTCc0FS2eMg+s6jlHj3V7T0mRM0fcc30mMuBV63fEYpU4ooJydHCHMxZGdnU7+x+lrdSLdKnZO38ZJPj9LG9oAz4M5hXKdtrkOwKzsZFwNkOfhNFR04YqTPT1TTcx//h0U7+7idf/mJbvvdd1Sy6zhN2v61kLFo5zGaufu4OL7gkWNUvu8k7X73Z5rx6DEh4u8++S+9868KWvjUibOe70IxlH9EiWmThCQyec6HV2CoSTd4bLXOwf3Sj1zSxjZKt3H+xtHBcTXjOb7wjk2rDUzKrAtPmVQXXbKpAQGz7GRcDK8c/JU2vfK9uI8p9f0vjbTityeFYO8dNgrpZj12nD49XkX/+LaKHnzzR9rIxz914Bf642e/0h8+/ZX2ffgfevjtn+iDo0a6+dmTdPSHGrr9xVP0xj9OCxHXv3TqrNe9UPRL/kypqWk2jVggLCrGpBvoXKMbwaOWEsuMZ2Ri7epbb6XyFeVUWlpK8+bNozmzZ9PMkhJKK1gsgm/ZybgYjnxfQ6lWU+p6FuKJ938RQmE0mvbQN/S3byrpzt9/T1tf+0FIsv31H+n4z7UUIj4AHKFvf6kVbVte/UEE/l+xWAk8EmLEwv33WFZ/G2NA37KXKC0tjaZNmyYV53yERkabdAOUWBaGe4VWb9iwgcrKyiwBqQbevQnpUylwzSHpybgYIFD+w2diJsjz2Ds/07uHKyh561dCHsixhqfBR3hUWrX/O9rNj395qkbEZTGbj9Ixlgyj2P1v/CieA48t51HvZR4N5+35Vohn67QdMPdJysrKavL3XwyBYREslhOLNVGJxYFmxeTp+ably5ZLOwvv3rS0DAq6+X3pybgY1r1wij7kKSxz279FbHSURzAE5386dFpMk5jynueRZ+7jx8VjGJme+eAXWrL3BH1xspo+4yny1ue/EwJpU96Ot36iiE1HaBOPcpAw/xHbg/2gGXfRlClTpP1wIQSFR54Ri/tV2t+thbSxrcCB+dXOhspZs2ZRcVGRtLPApEmTKHTxC9KTcTEgb7WOpz/EVq9zTITpD+2Yxnb+5WcxQmG0QToDwsVuOUrhG4+IYxCTAevna008lx2g6EzbPhFqBEdgKlRiQayK68f6VSJfg/yMrLMAPiVFzn34kiUzd7FUpU9+K33sUuN96xfkXvY6+WcsEG8gW+MroMTSYLE6O3lWojPPJRZIKlrDI4b85NiL7cL+i8X4XOSfvG4+SPryj0i//APyXPoeuS96m4V5k9xK/0gT571ChvkvkHvxE+Q+Yxd5Fz5IHtmbyZC9gQxpCyksPpMyMjLsGq1AYHgUxKpVYrFYOgePyhzuFGSVZZ2lMXlqDvnPf1Zyci8WyPAFea/+h1ibM6z8hPQrPmIZ3iePxX9hId4itwWv0cT5r5J+/ovkVvI0uRftIa/CHeSWfRfpczaRYdJqcktZSt7pi8iQOJP08cUUkDSDfGKmkn/cVAplUQKjkikiNpmiomMpIjKKoqOjKSYmhmJjYykuLo4SEhIoMTGRkpOTRcBur1TALyRciSVoFCtj8lQTli1knaWBUS0pI5v0RbuECIbyjzku+St5LHmXPBb9mWV4XYwOnvNfpokz95HHzL1kKNpJE6fdS4bpd5N+8hpySy8nn8ylpE+cQ/qEmeSfVEhe0dnkF5dNQTGZ5BeRTGExyRQaEU3BoREUHh5BYWFhfBsuiIyMpKioM5JAkPj4eIskSUlJlJKSQqmpqSJtkJ6eLkaizMxMMc0BBOdg6tSpAkzz9kx/1hgCglksR4hVpXPyMkr7vLWQNrYVhFiexvjUDBPiLFlnWYOTkJySSgHxORScXEChiSxEbBZFJWZSREwChUfFUXRMrBBAk8BaBOsRQxPCWgqMHhADUjQXA6MKgByTJ08WNBcEYOQBkMUa2d/T2rh5+1uJdcWPWJ7GmJT0hgsRC+Ck4UTjpGsnXjv51gJoEliL0JIM5xLicknRGkz08jPp+iuxGsXSGwMi4xoKCwulnSUDJ7slCTRkv9fRcfcJUGIJsMjMYvlFxdejVETWWYoLx903UIklgFiOeuPEgIi6cyVIFReGW5MRy+sKFgs1QyzWON+wuuLiYmlnKS6cCSrGsoLFcvYOaVWxELAjeEccJnu8ozLW01uJZcHRYBwy0be2uMh2sZAq8Pb2Jg8PD3J3dxe3np6e4hYpBNnvnIv8vFzKY2SPtWWcJ3gosSywWIPd/Fks22IspBAgkY+PT4tonxIL8nPp9pvniPtLSoto061zmzyXBh4rnTOD5s6aQUsWtJ/Yb+S4iWfEUmUzBmPvsYaaGQUXlsdqDkYrmUwWeCTTpsTiwnw6cWATzS4poN1bF9Hvdq6gO2+bJy5O2LahlH770DLa//AyWrtyNt3HP7+4q5we2lzGv3fudcy2gqOrmxLLgpOXsberT01+3rnXClsCmXKpUI34+vqKmAvHYop7iWXZdc8iIRZEArm50+nZHcto592LWKYVtGXNPHpy+xLac99iKptXSGVz20cqxHG81VSoxPIy3uBiqG5eOXqhINuO+EomFfD38xPH4FgI9MyDZpl2bF7I95fSU/cvoR1byuiVx8ppz7bFtJfbMGJtZrm2bVggBMQU2vx12yKO1jGWEsur4lpnj2rEQbbIhRjLy8tLKhUICgoSi8La8bcun0ULeATCdIg4CkE67kM66+dtb6D/HMa7NyixNFisa5z1VVivs3XUakksTINYgEbqQfZ7HQnEkcPHTlRiWUAHcEdkZU06b7FfS6CCQRMJ+PH0FxgYSLExMSIGk/1ORwNiDR7lqomlLqZoFKsyc9IUDq5t//SVxtMdyl+0sheMUvZcmNDegFj9HVyUWBYaxYpLSjWdr4r0YrmSqhwQSiixrEHpzAi3yuiEFFNB/rmrSM8FCvYwDSLe0uv15ObmJrLwmBZReyX7nYth/uwZbTrAh1gDnMYqsSxArJFulSExCQ3nK09uCUx/58q+o7zY+vg15eZ0AvJa1u3N0R6fx1IhRVFc1LojamsCsQY6j1NiWRBiuVd6h0RecBVpc1CPLhNKIyQkxHLsLctm0s57FtG6lbPF8s7qZbPosXsXiREJidGF8wtp4+q59ObeVfTK4+Uip7X/keX0+tOrRJrC+nXbEhiVB0Asc2kyi8X9Kuvv1kLa2JZoFMsQElWPPaFknXY+kFKQCaWBJKl2bAmPOljKefmxciHXcyzNjII82v/wctq3Y5nIsj9y10IxQkHCpx9YSveuLxWsXFzS5HXbEhCrn+MYJZYFUUXqUeniFVh/MeXJ1uDiCJlQGgH+/pZjl5YV0x23zKFCluml3SvEEs6qpTNpLwv00u5ysYyDJR9tFMOxWOp5YtsSHs3a7oI0PgHfNHI0i4XLv7ApyJUuFor9HDyNLt7BdbaWJyNwlwml4c9iIQbBsQjAd2wuE6Ig8z6ruIDWr5pD+fm5gsIZ7WPBuTlYgegxxBFi1YjN15RYjKPeOMzNt87WqRBLNjKhAD4VRkVGdfjUA8S6YdBIJVYTHA3GQeN9am0VC8lBCGQtFFIPyL5jmkTCVPZ7HQlUcHRXI1YzWKz+LJat6QaA4FW7EDWeb7Wrka+U7DvE6jHMWYnVBCeDsccozxp7lnSudLCEZRbLmcVyV2IJnLyMPcd51+RKOuxiwIgVEBAgQAZey8IjHSE7viOBmrPuQ1ks7EGqxGoENVlO7tXTOFaytXQG8hgMhiZxlgYEs76oAqkG3KKAzzrpiYy8ra///wZidRvMMZYSywrUZDl5VNtTk9U8eLcGgTw2A9GOfXl3uSjwu+OWuSLVsGXtPJHLQpZ9zswC2rNtiUiSIin6xPYltPX20iav1RbB/hXXDhhRrxs4Sollwcm7oouDW9Uk/siMCxtkHXc+UCkqkwpArIiICMuxWMrZfNs8kVV/YNMCMVLhIgrktnZtXUTli0qEYG//9hZRmgysX6stArG69BliLZa8r1sLaWNbAwumwydUpWdk2lzsh/VAmVQa2NbI+ngs5aDmHaMSypVR+/4oj1Lb7lgglnaee3S5uEIHF1U8enf7EOsqiDWIxXJQYplprMlKyciyuSbrfAvRoaGhTY7HOiFGKoyQ2zcuED/PLM4Xl4ihBr6onWXgM/hN2aXv0EaxPJRYAsQDI9wqI2ITTPgyIlnHnQ+tPFkGPiWiTFn2ex2FDA7eu/QdxmKNVmJZgFgj3SrD45JsrsnCJmzNLwPTsu8J8fFiqpD9XkchHTGWRSx8C5gSq1Es90qf0KgGfI2arOMuBGTatW0i4/hTIBan07kN62iy4zsSqWnpdJUSqxmNYumDI+ptLfa70klOSaHOiLEGuyixLKAT+JPMhIAwm4v9ACoYkH1HKTLSD5gGMSWibKajT4XxCYnU6Sb+VDh4TLUQS9bPrYm0sa0hxPI0Onn621yTBZByaCn7jnbriypQz45qUuSrrJ9DJEr506L28+P3LhZpiQc2lYmfUW2Kmq65s8xXUqPKFMfj+R7eslBsLoJEK9IUKB7UnudSExsXTzpNLEe9EssMxNIbnQyBNouFrD3WBWVSAT8O5K3LZ97Yu0pk11EhijQD2haXFgmJAH6GQKh1R3Z+5ZISse0RKkwh0Lv7V4sa+T88sZJe3bNSJFux/8Nbz6yi3VsXi9wYnifvMl3ZExefALHqxBdhKrGs4M4Y6Optc00WpsGWLrUHWPJBMK8d/9qTN4uMOqRBfTvakBjdx/exMYi28dqSBcViq6O3nrlF7EiDdUYIiPu4hVRbG2viMUIhmQoBN6yeK0qaMcJpr3kpiU9MYrGG1umGKLGa4mgwDpzgW2vPp8KWpkEAsZISEy3HvrBzBRUV8rTG9zGyQABcYIH7GJW0EmXUxGOpB7crFpUIeR68s4zuWjtfPI5R6/6NC4SIyxYW01IWEfdR5qy91uUgLoHF6gOxxrFYBiWWBe6M3uO87KrJOtdCNB7DN1Nox+KCCe26wWVlxWJJByMN5EHFg/YYxGsPWfgYTIV9himxzsLJy9jdRW9XTRY+/cmkAsHBwWJvB9nvdQQiY+KUWFKcvCpuHOMlarJkHXchtLSsI7LvHF9pO/t1REIjoky6vsNZLFclVhNYrKsd3OzaJwsBfEx0jBidQkNChGjIwKeldvzse0BImFmsoa5VKPWW9nFrIm1sizh7V1zt5FE11Q6x2iM5Odm0JDeBtpRE0qaiCFpTkkTlxem0KD+N5szIsVS7ng//YIg1olGsS/yVckDa2BZhsTqNdKtMy8g02VqT1d6YPz2FDt02mEzvBBEdvI7oYx3RX5l3mDd1ZPpjJzK93Ilqnr2GDm0aSKtzwy0X3jYnIDTcpOsHscYrsZqAmiwWKyU9s9X3yWqL5GVn0bF13Ym+voPI+AXR332J3mOhDjAfMh8xnzB/Y/7OHNJR7bOd6fbpPtJtmQLDIliskbW64UqspjQuRMcmp3V4sRALbi/wJHryWqL3s4g+yCd69jdE+1ig/czzzIvMy8zvOxO9yrd/YngU+3nrb2hyary4SNf6Of1DNbEmKLGaALEc3CtDYuJtrslqL0CKP5U5Ed3PsjzYhW87me8/wDzEPMw8yjx5I9Gx51m04Xyff36aeVxHa7ImnLVhry9irP5KrLMRYnkag2IS7KrJag8gTnpj/khqWK9rysarybSBY6tNzLZeRCfeJfHvqxeJ7mP5trFYLOADOQ5i3dN6PwrxfdD9HZRYZ4EKB0e90SMovMPXZCFGenXmCKpdwXHTcmapjuofTyM69Xequ2Mg1d/Rj+jkJ2apxD8TmfYlU8M6lu92HW3MGt1k73ogvg/avJsfi3WJd/MD0sa2SKNY7sGRdtVktQewn8TzJS5UMU9HFXN0VLN7ClFDnVCo4djHZDr5mbhv/mei+g8fp5ry64WEdSzjlCgvUYpt/Zzj9T6X74vGgbSxLSLEMhhHe4fU2boBW3sBYj1TPJ5+KdIJ/rtsGDX89HWjSFb/6mqoet8CqpjbWQhYMVdHx+d3pZDgoLNiLPElmNgQ5HLsPwqkjW0Ss1gO+gC7iv3aA5gKd+W50nfTdIJT03X048oJ1FDxc6NRPHL99zv69c5Q+qXQLJ/GSzl9xMW3zVcSJmIqxIYgYjc/JVZTOOgc5hlY29HFQvB+T74vfTtFR19nMlk6+oY5dVsomWoqqebwX+n7+UMt0ml8n6uj9WlOYt2zeaJ0Ar4PWuzboMQ6Gxar33jvmo7+qRDphrzMOPpx1lVCrH+DDDMnV/rS11OvayKcxvd5OsqONVfCWn8iBOO9/BvMl9dfhr2xgLSxrcJBZ3+3gBpbL1ptTyBG2p4zhk7PZplydHQim+MnHsGOTWaJJpmlEnI1cpzb38nvQdHRUdIqjbF6nwZx6dfl2BAESBvbKjyE3zjGq8refbLaA4izEhMTaGfOSKpe1JlqF+qoulRHRg7QT8/S0X+KOe4q0NEP+ebY6vOZXSk1wkd8WULzrDtwdjOYxTLv26DEagKL1cXJsxIXXzbvuI4G5MAlabhcLSs2iFZmeNBdk11od+4o2l8wnN4qGUCfzO1LB2f3pB2Th1B0qL/YBrOl8p8Rru4N5ku/xOX1SqwmiOy7e+VovV998xiiI4K0A/JR+F5rVLciKIc8kA37eWEzOdSUATyGzdVa6pczYomLVZVYTRBieRq7DHWtDgwJM7VUItJRwKgFuRAzAcRdkAcjGYQDCNQB2mVVDdrzDBnrVi8u/TKLJe/f1kTa2JZB9eNQ16prBjnVGXz9Reei4/BO1ZB1bntF+5vwN2rgDQUgEoB8+Lmlvx2j3bWDHBvr3fVKLCnoFAfuHH73deo7rG6Aw2jTODcPGu/uSXofX/INCCS/wCDy9Q8gP74fFh5B0TExFBMTS1E8deC+2Jabp44E7nB0OsB0g31IEfxqW3UDiIvRAKMFwMiBOAYnUzuxOKn/b7lbek2MbsNGjW2sd1dinQdk4bmD0FF9R9bqeg2q1/UaWK/rOaBe16N/g65HvwZd974Nuhv7MDc16G7obdJ1A71Mnfn+Nb36ma7r3Z/pZ7qmZx/T9Xzbc8AQ002Dhpl6Dxxq6tl/kKnP4GGmQSMcTUMdnE1DRjqaBg0faRruOIqcxoyjUWNdydllLDmNHkNjXCfQRJbazVPPtx4Cg7cP+bPUgUHBFBAYyARReEQExXBcFMcxEuIjAMERG2lin0tuCKIJrk2N1oJrcmvgcTz/MKdRJPrCXJZsvpBCiXUeUP6BRVXEDghM8XEaSUBkmPFlRFjNRw1SvxG14h3LI5y4aBNXBGMfg96DWUgrKXtCSqZ7czGFnEwvIaeuW88zXN+jke4mXVeNG81cp3FDM7qZOvHj1/a4SUjdjenak+/36mvqNWCwkLrv4KGm3ny/76ChpsEs9jDHUQxLzrIPZ1kgtwtL7TJuPDmz7GPHT2S5DeRh8CZ3vReNcB5N1/Hzi/8P/q7LWTIDpI3tCSxP4F0o4FEMIEDFx2rkbJBpxvoYBETHAtR946ICjHhAJmYTOfmk9AMsKd75kBTX6AFrSQUQVZNVE3ZAg0VabUTVRlUNIbE1LLNFamu5m2A6L3g9/L8vV627hrSx3cNDPYZ7MxVNYREBSkecvM5gkZNBDGeRk0G2WsMsqZWofMLAGVkbhYWsVsIKIK2VuGZ5zQKjpEWTWANCnKFOXAwBhNyNgp8PvMZw/v9ejlIZa6SNiha4UGE1LOKekdYyqjaT1zLCWqONtpZRtzlVAm0kloHnxf9L+vdcQqSNiv8Pzrhlac0CNxO3JVias4S2QvY6lwNpo0JhL9JGhcJepI0Khb1IGxUKe5E2KhT2Im1UKOxF2qhQ2Iu0UaGwF2mjQmEv0kaFwi58T/8POMvbCGy+Y58AAAAASUVORK5CYII=
