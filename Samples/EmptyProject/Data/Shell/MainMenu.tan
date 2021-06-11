@@ -103,7 +103,7 @@
 						}
 					],
 					"Font":{
-						"Name":"Arial"
+						"Name":"RussoOne"
 					},
 					"FontHeight":60,
 					"HAlignment":1,
@@ -147,7 +147,7 @@
 						}
 					],
 					"Font":{
-						"Name":"Arial"
+						"Name":"RobotoMed"
 					},
 					"FontHeight":38.8,
 					"HAlignment":1,
