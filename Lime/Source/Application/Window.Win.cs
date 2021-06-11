@@ -530,7 +530,9 @@ namespace Lime
 			} else {
 				vSync = options.VSync;
 				renderControl.VSync = vSync;
-				WindowIdleUpdater.UpdateOnIdleWindows.Add(this);
+				lock (WindowIdleUpdater.UpdateOnIdleWindows) {
+					WindowIdleUpdater.UpdateOnIdleWindows.Add(this);
+				}
 			}
 
 			form.Controls.Add(renderControl);
@@ -640,7 +642,9 @@ namespace Lime
 				System.Windows.Forms.Application.Exit();
 			}
 			if (timer == null) {
-				WindowIdleUpdater.UpdateOnIdleWindows.Remove(this);
+				lock (WindowIdleUpdater.UpdateOnIdleWindows) {
+					WindowIdleUpdater.UpdateOnIdleWindows.Remove(this);
+				}
 			} else {
 				timer.Dispose();
 			}
@@ -1209,7 +1213,17 @@ namespace Lime
 				var restartLoop = false;
 				do {
 					restartLoop = false;
-					foreach (var window in UpdateOnIdleWindows) {
+					Window[] windows;
+					lock (UpdateOnIdleWindows) {
+						windows = UpdateOnIdleWindows.ToArray();
+					}
+					foreach (var window in windows) {
+						// check if it was not closed by previuos window
+						lock (UpdateOnIdleWindows) {
+							if (!UpdateOnIdleWindows.Contains(window)) {
+								continue;
+							}
+						}
 						restartLoop |= window.OnIdleUpdate();
 					}
 				} while (IsApplicationIdle() && restartLoop);
