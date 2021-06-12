@@ -20,16 +20,17 @@ namespace Tangerine.Core
 				Node.TangerineAnimationPositioningInProgress = true;
 				var animationStates = new Dictionary<Animation, AnimationState>();
 				BuildAnimationStates(animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
-				ApplyAnimationStates(animationStates, stopAnimations);
+				ApplyAnimationStates(animationStates, animation, stopAnimations);
 			} finally {
 				Audio.GloballyEnable = true;
 				Node.TangerineAnimationPositioningInProgress = false;
 			}
 		}
 
-		private void ApplyAnimationStates(Dictionary<Animation, AnimationState> animationStates, bool stopAnimations)
+		private void ApplyAnimationStates(Dictionary<Animation, AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
 		{
-			foreach (var (animation, state) in animationStates) {
+			// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
+			foreach (var (animation, state) in animationStates.OrderByDescending(p => p.Key == currentAnimation ? -1 : p.Value.FrameCount)) {
 				animation.Frame = state.CurrentFrame;
 				animation.IsRunning = !stopAnimations && state.IsRunning;
 			}
@@ -43,7 +44,6 @@ namespace Tangerine.Core
 		struct TriggerData
 		{
 			public Keyframe<string> Keyframe;
-			public int Order;
 			public int FrameCount;
 		}
 
@@ -78,10 +78,6 @@ namespace Tangerine.Core
 			var triggerAnimators = animation.EffectiveTriggerableAnimators.
 				Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode).
 				OfType<Animator<string>>().ToList();
-			foreach (var triggerAnimator in triggerAnimators) {
-				var node = (Node)triggerAnimator.Owner;
-				node.Components.GetOrAdd<TriggerDataComponent>().Triggers.Clear();
-			}
 			BuildTriggers(animation, frameCount, processMarkers, triggerAnimators, ref currentFrame, out bool isRunning);
 			animationStates[animation] = new AnimationState {
 				PreviousFrame = previousFrame,
@@ -96,8 +92,11 @@ namespace Tangerine.Core
 		{
 			foreach (var triggerAnimator in triggerAnimators) {
 				var node = (Node)triggerAnimator.Owner;
-				var triggers = node.Components.Get<TriggerDataComponent>().Triggers.Values.OrderBy(i => i.Order);
-				foreach (var trigger in triggers) {
+				var triggers = node.Components.Get<TriggerDataComponent>().Triggers;
+				var sortedTriggers = triggers.Values.ToList();
+				sortedTriggers.Sort((a, b) => b.FrameCount - a.FrameCount);
+				triggers.Clear();
+				foreach (var trigger in sortedTriggers) {
 					foreach (var (animationToRun, runAtFrame) in ParseTrigger(node, trigger.Keyframe.Value)) {
 						BuildAnimationStates(animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
 					}
@@ -108,7 +107,6 @@ namespace Tangerine.Core
 		private void BuildTriggers(Animation animation, int frameCount, bool processMarkers, List<Animator<string>> triggerAnimators, ref int currentFrame, out bool isRunning)
 		{
 			isRunning = false;
-			int order = 0;
 			foreach (
 				var (rangeBegin, rangeEnd, isRunning_, remainedFrameCount) in
 				EnumerateAnimationRangesWithLoopReduction(animation, currentFrame, frameCount, processMarkers)
@@ -116,7 +114,7 @@ namespace Tangerine.Core
 				isRunning = isRunning_;
 				foreach (var triggerAnimator in triggerAnimators) {
 					var node = (Node)triggerAnimator.Owner;
-					var triggers = node.Components.Get<TriggerDataComponent>().Triggers;
+					var triggers = node.Components.GetOrAdd<TriggerDataComponent>().Triggers;
 					foreach (var keyframe in triggerAnimator.ReadonlyKeys) {
 						if (keyframe.Frame < rangeBegin) {
 							continue;
@@ -129,7 +127,6 @@ namespace Tangerine.Core
 						}
 						triggers[keyframe.Value] = new TriggerData {
 							Keyframe = keyframe,
-							Order = order++,
 							FrameCount = remainedFrameCount - (keyframe.Frame - rangeBegin)
 						};
 					}
