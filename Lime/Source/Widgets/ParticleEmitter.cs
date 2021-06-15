@@ -74,7 +74,7 @@ namespace Lime
 			public float FullDirection;
 			// Motion direction without random motion(in degrees).
 			public float RegularDirection;
-			// Veclocity of motion.
+			// Velocity of motion.
 			public float Velocity;
 			// Velocity of changing motion direction(degrees/sec).
 			public float AngularVelocity;
@@ -86,9 +86,9 @@ namespace Lime
 			public float GravityDirection;
 			// Strength of gravity.
 			public float GravityAmount;
-			// Acceleration of gravity(calculated thru gravityAmount).
+			// Acceleration of gravity(calculated through gravityAmount).
 			public float GravityAcceleration;
-			// Velocity of the particle caused by gravity(calculated thru gravityAcceleration).
+			// Velocity of the particle caused by gravity(calculated through gravityAcceleration).
 			public float GravityVelocity;
 			// Strength of magnet's gravity at the moment of particle birth.
 			public float MagnetAmountInitial;
@@ -110,7 +110,7 @@ namespace Lime
 			public Color4 ColorInitial;
 			// Current color of the particle.
 			public Color4 ColorCurrent;
-			// Velocty of random motion.
+			// Velocity of random motion.
 			public float RandomMotionSpeed;
 			// Splined path of random particle motion.
 			public Vector2 RandomSplineVertex0;
@@ -159,7 +159,7 @@ namespace Lime
 		[TangerineKeyframeColor(13)]
 		public float Number { get; set; }
 		/// <summary>
-		/// Pre simulate TimeShift seconds.
+		/// Simulate TimeShift seconds on first update.
 		/// </summary>
 		[YuzuMember]
 		[TangerineKeyframeColor(14)]
@@ -275,17 +275,18 @@ namespace Lime
 
 		private bool firstUpdate = true;
 		/// <summary>
-		/// Number of particles to generate on Update. Used to make particle count FPS independent.
+		/// Number of particles to generate on Update. Used to make particle count FPS independent
+		/// by accumulating fractional part of number of particles to spawn on given frame.
 		/// </summary>
 		private float particlesToSpawn;
 		public List<Particle> particles = new List<Particle>();
 		private static readonly Stack<Particle> particlePool = new Stack<Particle>();
 		private static readonly object particlePoolSync = new object();
-		private List<EmitterShapePoint> emitterShapePoints = new List<EmitterShapePoint>();
-		private List<Vector2> cachedShapePoints = new List<Vector2>();
+		private readonly List<EmitterShapePoint> emitterShapePoints = new List<EmitterShapePoint>();
+		private readonly List<Vector2> cachedShapePoints = new List<Vector2>();
 		// indexed triangle list (3 values per triangle)
-		private List<int> cachedShapeTriangles = new List<int>();
-		private List<float> cachedShapeTriangleSizes = new List<float>();
+		private readonly List<int> cachedShapeTriangles = new List<int>();
+		private readonly List<float> cachedShapeTriangleSizes = new List<float>();
 		public static bool GloballyEnabled = true;
 
 		void ITangerinePreviewAnimationListener.OnStart()
@@ -427,13 +428,7 @@ namespace Lime
 				particlesToSpawn += Number * delta;
 			}
 			var currentBoundingRect = new Rectangle();
-
-			if (
-				Application.EnableParticleLimiter &&
-				GloballyVisible &&
-				Manager != null &&
-				Manager.ServiceProvider.TryGetService<ParticleLimiter>(out var particleLimiter)
-			) {
+			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
 			}
 			while (particlesToSpawn >= 1f) {
@@ -572,7 +567,7 @@ namespace Lime
 				cachedShapeTriangleSizes.Clear();
 				return;
 			}
-			// retriangulate area if number or position of points are changed
+			// Re-triangulate area if number or position of points are changed.
 			bool changed = false;
 			if (cachedShapePoints.Count == pointCount) {
 				for (int i = 0; i < pointCount; i++) {
@@ -594,7 +589,7 @@ namespace Lime
 			for (int i = 0; i < pointCount; i++) {
 				cachedShapePoints.Add(emitterShapePoints[i].TransformedPosition);
 			}
-			// find if polygon points ar cw or ccw oriented
+			// Find if polygon points are CW or CCW oriented.
 			float angle = 0;
 			angle += Vector2.AngleRad(cachedShapePoints[0] - cachedShapePoints[pointCount - 1],
 				cachedShapePoints[1] - cachedShapePoints[0]);
@@ -607,15 +602,12 @@ namespace Lime
 			float sign = Mathf.Sign(angle);
 			cachedShapeTriangles.Clear();
 			cachedShapeTriangleSizes.Clear();
-			int[] workPoints = new int[emitterShapePoints.Count()];
+			int[] workPoints = new int[emitterShapePoints.Count];
 			for (int i = 0; i < pointCount; i++) {
 				workPoints[i] = i;
 			}
-			int i1;
-			int i2;
-			int i3;
 			float totalSpace = 0;
-			while(GetTriangleHelper(workPoints, ref pointCount, out i1, out i2, out i3, sign)) {
+			while (GetTriangleHelper(workPoints, ref pointCount, out int i1, out int i2, out int i3, sign)) {
 				cachedShapeTriangles.Add(i1);
 				cachedShapeTriangles.Add(i2);
 				cachedShapeTriangles.Add(i3);
@@ -637,12 +629,7 @@ namespace Lime
 
 		public virtual void OnUpdate(float delta)
 		{
-			if (
-				Application.EnableParticleLimiter &&
-				GloballyVisible &&
-				Manager != null &&
-				Manager.ServiceProvider.TryGetService<ParticleLimiter>(out var particleLimiter)
-			) {
+			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.AddParticleCount(particles.Count);
 			}
 			if (firstUpdate) {
@@ -659,6 +646,17 @@ namespace Lime
 			} else {
 				UpdateHelper(delta);
 			}
+		}
+
+		private bool TryGetParticleLimiter(out ParticleLimiter particleLimiter)
+		{
+			particleLimiter = null;
+			return
+				Application.EnableParticleLimiter &&
+				GloballyVisible &&
+				EmissionMethod == EmissionMethod.NumberPerSecond &&
+				Manager != null &&
+				Manager.ServiceProvider.TryGetService(out particleLimiter);
 		}
 
 		private Vector2 GenerateRandomMotionControlPoint(ref float rayDirection)
@@ -679,17 +677,15 @@ namespace Lime
 
 		private bool InitializeParticle(Particle p)
 		{
-			Color4 color;
-			Matrix32 transform;
-			CalcInitialColorAndTransform(out color, out transform);
-			float emitterScaleAmount = 1;
-			Vector2 emitterScale = new Vector2();
-			emitterScale.X = transform.U.Length;
-			emitterScale.Y = transform.V.Length;
+			CalcInitialColorAndTransform(out Color4 color, out Matrix32 transform);
+			Vector2 emitterScale = new Vector2 {
+				X = transform.U.Length,
+				Y = transform.V.Length
+			};
 			float crossProduct = Vector2.CrossProduct(transform.U, transform.V);
 			if (crossProduct < 0.0f)
 				emitterScale.Y = -emitterScale.Y;
-			emitterScaleAmount = Mathf.Sqrt(Math.Abs(crossProduct));
+			float emitterScaleAmount = Mathf.Sqrt(Math.Abs(crossProduct));
 			float emitterAngle = transform.U.Atan2Deg;
 			NumericRange aspectRatioVariationPair = new NumericRange(0, Math.Max(0.0f, AspectRatio.Dispersion));
 			float zoom = Zoom.NormalRandomNumber(Rng);
@@ -818,7 +814,7 @@ namespace Lime
 			}
 			if (ImmortalParticles) {
 				if (p.Lifetime > 0.0f)
-					p.Age = p.Age % p.Lifetime;
+					p.Age %= p.Lifetime;
 			}
 			// Updating a particle texture index.
 			if (p.TextureIndex == 0.0f) {
