@@ -969,11 +969,10 @@ namespace Lime
 			var basicWidget = GetBasicWidget();
 			if (basicWidget != null) {
 				ro.Matrix = basicWidget.LocalToWorldTransform;
-				ro.Color = basicWidget.GlobalColor;
 			} else {
 				ro.Matrix = Matrix32.Identity;
-				ro.Color = Color4.White;
 			}
+			ro.Color = GlobalColor;
 			ro.Material = Material ?? DefaultMaterial;
 			foreach (var p in particles) {
 				if (p.ColorCurrent.A <= 0) {
