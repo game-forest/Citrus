@@ -14,13 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Templates\ParsedWidget.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Source\CodeTemplates\ParsedFrame.txt" />
     <EmbeddedResource Include="Source\CodeTemplates\ParsedNode.txt" />
     <EmbeddedResource Include="Source\CodeTemplates\SceneFile.txt" />
+    <EmbeddedResource Include="Source\CodeTemplates\ParsedWidget.txt" />
   </ItemGroup>
 
   <ItemGroup>

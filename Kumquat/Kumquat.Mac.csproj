@@ -71,9 +71,6 @@
     <EmbeddedResource Include="Templates\GeneratedScenes.Win.csproj.kumquat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Templates\ParsedWidget.cs.kumquat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\CodeFormatter.cs" />
@@ -85,6 +82,7 @@
     <EmbeddedResource Include="Source\CodeTemplates\ParsedFrame.txt" />
     <EmbeddedResource Include="Source\CodeTemplates\ParsedNode.txt" />
     <EmbeddedResource Include="Source\CodeTemplates\SceneFile.txt" />
+    <EmbeddedResource Include="Source\CodeTemplates\ParsedWidget.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lime\Lime.Mac.csproj">
