@@ -518,15 +518,9 @@ namespace Tangerine.Core
 				rules.WrapMode == TextureParams.Default.WrapModeU;
 		}
 
-		public static void RaiseDocumentSaving(Document document)
-		{
-			DocumentSaving?.Invoke(document);
-		}
+		public static void RaiseDocumentSaving(Document document) => DocumentSaving?.Invoke(document);
 
-		public static void RaiseDocumentSaved(Document document)
-		{
-			DocumentSaved?.Invoke(document);
-		}
+		public static void RaiseDocumentSaved(Document document) => DocumentSaved?.Invoke(document);
 
 		public static IEnumerable<Type> GetNodeTypesOrdered(string assemblyName)
 		{
@@ -535,9 +529,15 @@ namespace Tangerine.Core
 			}
 			return assembly
 				.GetTypes()
-				.Where(t => typeof(Node).IsAssignableFrom(t) && t.IsDefined(typeof(TangerineRegisterNodeAttribute)))
-				.ToDictionary(t => t, t => t.GetCustomAttributes(false).OfType<TangerineRegisterNodeAttribute>().First())
-				.OrderBy(kv => kv.Value.Order)
+				.Where(
+					predicate: t => typeof(Node).IsAssignableFrom(t)
+					&& t.IsDefined(typeof(TangerineRegisterNodeAttribute))
+				).ToDictionary(
+					keySelector: t => t,
+					elementSelector: t => t.GetCustomAttributes(false)
+						.OfType<TangerineRegisterNodeAttribute>()
+						.First()
+				).OrderBy(kv => kv.Value.Order)
 				.Select(kv => kv.Key);
 		}
 
@@ -548,11 +548,16 @@ namespace Tangerine.Core
 			}
 			return assembly
 				.GetTypes()
-				.Where(t => typeof(NodeComponent).IsAssignableFrom(t) && t.IsDefined(typeof(TangerineRegisterComponentAttribute)));
+				.Where(
+					t => typeof(NodeComponent).IsAssignableFrom(t)
+					&& t.IsDefined(typeof(TangerineRegisterComponentAttribute))
+				);
 		}
 
-		public string GetFullPath(string assetPath, string extension) =>
-			Path.Combine(AssetsDirectory, assetPath) + $".{extension}";
+		public string GetFullPath(string assetPath, string extension)
+		{
+			return $"{Path.Combine(AssetsDirectory, assetPath)}.{extension}";
+		}
 
 		public bool GetFullPath(string localPath, out string fullPath)
 		{
@@ -584,9 +589,10 @@ namespace Tangerine.Core
 			if (string.IsNullOrEmpty(path)) {
 				return false;
 			}
-			return GetFullPath(AssetPath.CorrectSlashes(path), out var fullPath) && File.Exists(fullPath);
+			return GetFullPath(AssetPath.CorrectSlashes(path), out var fullPath)
+				&& File.Exists(fullPath);
 		}
 
-		public bool IsDocumentUntitled(string path) => path.StartsWith(".untitled");
+		public static bool IsDocumentUntitled(string path) => path.StartsWith(".untitled");
 	}
 }

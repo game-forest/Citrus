@@ -11,17 +11,19 @@ namespace Tangerine.Core.Operations
 			var mesh =
 				(op as InsertIntoList<NodeList, Node>)?.Element as DistortionMesh ??
 				(op as SetProperty)?.Obj as DistortionMesh;
-			if (mesh != null)
+			if (mesh != null) {
 				RestorePointsIfNeeded(mesh);
+			}
 		}
 
 		public void Redo(IOperation op) { }
 		public void Undo(IOperation op) { }
 
-		void RestorePointsIfNeeded(DistortionMesh mesh)
+		private static void RestorePointsIfNeeded(DistortionMesh mesh)
 		{
-			if (ValidateMeshPoints(mesh))
+			if (ValidateMeshPoints(mesh)) {
 				return;
+			}
 			foreach (var item in Document.Current.GetSceneItemForObject(mesh).Rows.ToList()) {
 				UnlinkSceneItem.Perform(item);
 			}
@@ -40,15 +42,17 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		bool ValidateMeshPoints(DistortionMesh mesh)
+		private static bool ValidateMeshPoints(DistortionMesh mesh)
 		{
-			if ((mesh.NumRows + 1) * (mesh.NumCols + 1) != mesh.Nodes.Count)
+			if ((mesh.NumRows + 1) * (mesh.NumCols + 1) != mesh.Nodes.Count) {
 				return false;
+			}
 			int t = 0;
 			for (int i = 0; i <= mesh.NumRows; i++) {
 				for (int j = 0; j <= mesh.NumCols; j++) {
-					if (t >= mesh.Nodes.Count || mesh.Nodes[t].Id != $"{i};{j}")
+					if (t >= mesh.Nodes.Count || mesh.Nodes[t].Id != $"{i};{j}") {
 						return false;
+					}
 					t++;
 				}
 			}

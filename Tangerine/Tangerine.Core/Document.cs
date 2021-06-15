@@ -703,7 +703,7 @@ namespace Tangerine.Core
 
 		public void Save()
 		{
-			if (Project.Current.IsDocumentUntitled(Path)) {
+			if (Project.IsDocumentUntitled(Path)) {
 				if (PathSelector(out var path)) {
 					var directoryInfo = new DirectoryInfo(System.IO.Path.GetDirectoryName(FullPath));
 					SaveAs(path);
