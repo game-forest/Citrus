@@ -32,6 +32,18 @@ namespace Lime
 		Outer = 2,
 	}
 
+	public enum EmissionMethod
+	{
+		NumberPerSecond,
+		ConstantNumber,
+		NumberPerBurst,
+	}
+
+	public enum EmitterAction
+	{
+		Burst,
+	}
+
 	/// <summary>
 	/// Particles move with widget they're linked to.
 	/// </summary>
@@ -136,7 +148,21 @@ namespace Lime
 		/// </summary>
 		[YuzuMember]
 		[TangerineKeyframeColor(8)]
-		public bool ImmortalParticles { get; set; }
+		public bool ImmortalParticles
+		{
+			get
+			{
+				return this.EmissionMethod == Lime.EmissionMethod.ConstantNumber;
+			}
+			set
+			{
+				if (value) {
+					this.EmissionMethod = Lime.EmissionMethod.ConstantNumber;
+				}
+			}
+		}
+		[YuzuMember]
+		public EmissionMethod EmissionMethod { get; set; }
 		[YuzuMember]
 		[TangerineKeyframeColor(9)]
 		public EmitterShape Shape { get; set; }
@@ -254,7 +280,9 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(3)]
 		public NumericRange RandomMotionRotation { get; set; }
-
+		[Trigger]
+		[TangerineKeyframeColor(1)]
+		public EmitterAction Action { get; set; }
 
 		public IMaterial DefaultMaterial
 		{
@@ -322,6 +350,7 @@ namespace Lime
 			AlongPathOrientation = false;
 			TimeShift = 0;
 			ImmortalParticles = false;
+			EmissionMethod = EmissionMethod.NumberPerSecond;
 			Components.Add(new UpdatableNodeBehavior());
 		}
 
@@ -419,21 +448,46 @@ namespace Lime
 			}
 		}
 
+		public override void OnTrigger(string property, object value, double animationTimeCorrection = 0)
+		{
+			base.OnTrigger(property, value, animationTimeCorrection);
+			if (property == "Action") {
+				var action = (EmitterAction)value;
+				if (!GetTangerineFlag(TangerineFlags.Hidden)) {
+					switch (action) {
+						case EmitterAction.Burst:
+							splashOnUpdateOnce = true;
+							break;
+					}
+				}
+			}
+		}
+
 		private void UpdateHelper(float delta)
 		{
 			if (Shape == EmitterShape.Custom) {
 				RefreshCustomShape();
 			}
 			delta *= Speed;
-			if (ImmortalParticles) {
-				if (TimeShift > 0)
-					particlesToSpawn += Number * delta / TimeShift;
-				else
-					particlesToSpawn = Number;
-				particlesToSpawn = Math.Min(particlesToSpawn, Number - particles.Count);
-				FreeLastParticles(particles.Count - (int) Number);
-			} else {
-				particlesToSpawn += Number * delta;
+			switch (EmissionMethod) {
+				case EmissionMethod.NumberPerSecond:
+					particlesToSpawn += Number * delta;
+					break;
+				case EmissionMethod.ConstantNumber:
+					if (TimeShift > 0) {
+						particlesToSpawn += Number * delta / TimeShift;
+					} else {
+						particlesToSpawn = Number;
+					}
+					particlesToSpawn = Math.Min(particlesToSpawn, Number - particles.Count);
+					FreeLastParticles(particles.Count - (int)Number);
+					break;
+				case EmissionMethod.NumberPerBurst:
+					if (splashOnUpdateOnce) {
+						splashOnUpdateOnce = false;
+						particlesToSpawn = Number;
+					}
+					break;
 			}
 			var currentBoundingRect = new Rectangle();
 			if (TryGetParticleLimiter(out var particleLimiter)) {
@@ -475,7 +529,12 @@ namespace Lime
 				currentBoundingRect = currentBoundingRect.Transform(basicWidget.CalcTransitionToSpaceOf(this));
 			}
 			ExpandBoundingRect(currentBoundingRect);
+			if (EmissionMethod == EmissionMethod.NumberPerBurst) {
+				particlesToSpawn = 0.0f;
+			}
 		}
+
+		private bool splashOnUpdateOnce = false;
 
 		private bool CheckIntersection(Vector2[] v, int[] workPoints, int count, float sign, int startIndex = 0)
 		{
