@@ -411,7 +411,7 @@ namespace Tangerine.Core
 				RootNode.NotifyOnBuilt();
 				RefreshSceneTree();
 			} catch (System.Exception e) {
-				throw new System.InvalidOperationException($"Can't open '{Path}': {e.Message}");
+				throw new System.InvalidOperationException($"Can't open '{Path}':\n{e.Message}\n{e.StackTrace}\n---");
 			}
 			Loaded = true;
 			OnLocaleChanged();
