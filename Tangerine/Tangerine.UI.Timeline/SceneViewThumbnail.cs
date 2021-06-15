@@ -7,19 +7,56 @@ namespace Tangerine.UI.Timeline
 {
 	public class SceneViewThumbnail
 	{
-		private readonly Widget root;
-		private readonly Window window;
-		private readonly Image thumbnailImage;
+		private Widget root;
+		private Window window;
+		private Image thumbnailImage;
 		private readonly OverviewPane overviewPane;
-		private readonly ThemedSimpleText label;
+		private ThemedSimpleText label;
 		private readonly Vector2 thumbnailOffset = new Vector2(30);
 
 		public SceneViewThumbnail(OverviewPane overviewPane)
 		{
 			this.overviewPane = overviewPane;
+			overviewPane.RootWidget.Tasks.Add(ShowOnMouseOverTask());
+		}
+
+		private IEnumerator<object> ShowOnMouseOverTask()
+		{
+			while (true) {
+				yield return null;
+				if (CoreUserPreferences.Instance.ShowSceneThumbnail && overviewPane.RootWidget.IsMouseOver()) {
+					var showPopup = true;
+					for (float t = 0; t < 0.5f; t += Task.Current.Delta) {
+						if (!overviewPane.RootWidget.IsMouseOver()) {
+							showPopup = false;
+							break;
+						}
+						yield return null;
+					}
+					if (showPopup) {
+						if (window == null) {
+							Initialize();
+						}
+						UpdateThumbnailTexture();
+						window.Visible = true;
+						while (overviewPane.RootWidget.IsMouseOver()) {
+							UpdateThumbnailTexture();
+							RefreshThumbnailPosition(window);
+							yield return null;
+						}
+						window.Visible = false;
+					}
+				}
+			}
+		}
+
+		private void Initialize()
+		{
 			window = new Window(new WindowOptions {
 				Style = WindowStyle.Borderless,
 				FixedSize = true,
+				UseTimer = false,
+				VSync = false,
 				Visible = false,
 				Centered = false,
 				Type = WindowType.ToolTip
@@ -45,34 +82,6 @@ namespace Tangerine.UI.Timeline
 					root
 				}
 			};
-			overviewPane.RootWidget.Tasks.Add(ShowOnMouseOverTask());
-		}
-
-		private IEnumerator<object> ShowOnMouseOverTask()
-		{
-			while (true) {
-				yield return null;
-				if (CoreUserPreferences.Instance.ShowSceneThumbnail && overviewPane.RootWidget.IsMouseOver()) {
-					var showPopup = true;
-					for (float t = 0; t < 0.5f; t += Task.Current.Delta) {
-						if (!overviewPane.RootWidget.IsMouseOver()) {
-							showPopup = false;
-							break;
-						}
-						yield return null;
-					}
-					if (showPopup) {
-						UpdateThumbnailTexture();
-						window.Visible = true;
-						while (overviewPane.RootWidget.IsMouseOver()) {
-							UpdateThumbnailTexture();
-							RefreshThumbnailPosition(window);
-							yield return null;
-						}
-						window.Visible = false;
-					}
-				}
-			}
 		}
 
 		private void RefreshThumbnailPosition(IWindow window)
