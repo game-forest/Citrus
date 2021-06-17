@@ -18,8 +18,9 @@ namespace Tangerine.Core
 			Audio.GloballyEnable = false;
 			try {
 				Node.TangerineAnimationPositioningInProgress = true;
-				var animationStates = new Dictionary<Animation, AnimationState>();
-				BuildAnimationStates(animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
+				var processedAnimations = new HashSet<Animation>();
+				var animationStates = new List<AnimationState>();
+				BuildAnimationStates(processedAnimations, animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
 				ApplyAnimationStates(animationStates, animation, stopAnimations);
 			} finally {
 				Audio.GloballyEnable = true;
@@ -27,12 +28,16 @@ namespace Tangerine.Core
 			}
 		}
 
-		private void ApplyAnimationStates(Dictionary<Animation, AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
+		private void ApplyAnimationStates(List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
 		{
-			// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
-			foreach (var (animation, state) in animationStates.OrderByDescending(p => p.Key == currentAnimation ? -1 : p.Value.FrameCount)) {
-				animation.Frame = state.CurrentFrame;
-				animation.IsRunning = !stopAnimations && state.IsRunning;
+			var i = animationStates.FindIndex(s => s.Animation == currentAnimation);
+			if (i >= 0) {
+				// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
+				(animationStates[i], animationStates[^1]) = (animationStates[^1], animationStates[i]);
+			}
+			foreach (var s in animationStates) {
+				s.Animation.Frame = s.Frame;
+				s.Animation.IsRunning = !stopAnimations && s.IsRunning;
 			}
 		}
 
@@ -55,22 +60,17 @@ namespace Tangerine.Core
 
 		struct AnimationState
 		{
-			public int PreviousFrame;
-			public int CurrentFrame;
-			public int FrameCount;
+			public Animation Animation;
+			public int Frame;
 			public bool IsRunning;
 		}
 
-		private void BuildAnimationStates(Dictionary<Animation, AnimationState> animationStates, Animation animation, int currentFrame, int frameCount, bool processMarkers)
+		private void BuildAnimationStates(HashSet<Animation> processedAnimations, List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers)
 		{
-			if (
-				animationStates.TryGetValue(animation, out var state) &&
-				state.PreviousFrame == currentFrame &&
-				state.FrameCount == frameCount
-			) {
+			if (!processedAnimations.Add(animation)) {
 				return;
 			}
-			var previousFrame = currentFrame;
+			var previousFrame = frame;
 			var triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
 			if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
 				animation.AnimationEngine.BuildEffectiveAnimators(animation);
@@ -78,33 +78,32 @@ namespace Tangerine.Core
 			var triggerAnimators = animation.EffectiveTriggerableAnimators.
 				Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode).
 				OfType<Animator<string>>().ToList();
-			BuildTriggers(animation, frameCount, processMarkers, triggerAnimators, ref currentFrame, out bool isRunning);
-			animationStates[animation] = new AnimationState {
-				PreviousFrame = previousFrame,
-				CurrentFrame = currentFrame,
-				FrameCount = frameCount,
+			AdvanceCurrentFrameAndBuildTriggers(animation, frameCount, processMarkers, triggerAnimators, ref frame, out bool isRunning);
+			ExecuteTriggers(processedAnimations, animationStates, triggerAnimators);
+			animationStates.Add(new AnimationState {
+				Animation = animation,
+				Frame = frame,
 				IsRunning = isRunning
-			};
-			ExecuteTriggers(animationStates, triggerAnimators);
+			});
 		}
 
-		private void ExecuteTriggers(Dictionary<Animation, AnimationState> animationStates, List<Animator<string>> triggerAnimators)
+		private void ExecuteTriggers(HashSet<Animation> processedAnimations, List<AnimationState> animationStates, List<Animator<string>> triggerAnimators)
 		{
 			foreach (var triggerAnimator in triggerAnimators) {
 				var node = (Node)triggerAnimator.Owner;
 				var triggers = node.Components.Get<TriggerDataComponent>().Triggers;
 				var sortedTriggers = triggers.Values.ToList();
-				sortedTriggers.Sort((a, b) => b.FrameCount - a.FrameCount);
+				sortedTriggers.Sort((a, b) => a.FrameCount - b.FrameCount);
 				triggers.Clear();
 				foreach (var trigger in sortedTriggers) {
 					foreach (var (animationToRun, runAtFrame) in ParseTrigger(node, trigger.Keyframe.Value)) {
-						BuildAnimationStates(animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
+						BuildAnimationStates(processedAnimations, animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
 					}
 				}
 			}
 		}
 
-		private void BuildTriggers(Animation animation, int frameCount, bool processMarkers, List<Animator<string>> triggerAnimators, ref int currentFrame, out bool isRunning)
+		private void AdvanceCurrentFrameAndBuildTriggers(Animation animation, int frameCount, bool processMarkers, List<Animator<string>> triggerAnimators, ref int currentFrame, out bool isRunning)
 		{
 			isRunning = false;
 			foreach (
@@ -122,12 +121,9 @@ namespace Tangerine.Core
 						if (keyframe.Frame > rangeEnd) {
 							break;
 						}
-						if (keyframe.Value == null) {
-							continue;
-						}
-						triggers[keyframe.Value] = new TriggerData {
+						triggers[keyframe.Value ?? ""] = new TriggerData {
 							Keyframe = keyframe,
-							FrameCount = remainedFrameCount - (keyframe.Frame - rangeBegin)
+							FrameCount = remainedFrameCount - (keyframe.Frame - rangeBegin),
 						};
 					}
 				}
@@ -196,9 +192,7 @@ namespace Tangerine.Core
 
 		private IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
 		{
-			if (trigger == null) {
-				yield break;
-			}
+			trigger ??= "";
 			if (trigger.IndexOf(',') >= 0) {
 				foreach (var s in trigger.Split(',')) {
 					if (ParseTriggerHelper(node, s.Trim(), out var a, out var t)) {
@@ -224,6 +218,10 @@ namespace Tangerine.Core
 				}
 			} else {
 				animation = node.DefaultAnimation;
+				if (string.IsNullOrWhiteSpace(markerWithOptionalAnimationId)) {
+					frame = 0;
+					return true;
+				}
 			}
 			if (animation != null && animation.Markers.TryFind(markerWithOptionalAnimationId, out var marker)) {
 				frame = marker.Frame;
