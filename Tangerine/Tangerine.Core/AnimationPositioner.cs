@@ -13,14 +13,16 @@ namespace Tangerine.Core
 
 	public class AnimationPositioner : IAnimationPositioner
 	{
+		private HashSet<AnimationRange> processedAnimationRanges = new HashSet<AnimationRange>();
+
 		public void SetAnimationTime(Animation animation, double time, bool stopAnimations)
 		{
 			Audio.GloballyEnable = false;
 			try {
 				Node.TangerineAnimationPositioningInProgress = true;
-				var processedAnimations = new HashSet<Animation>();
+				processedAnimationRanges.Clear();
 				var animationStates = new List<AnimationState>();
-				BuildAnimationStates(processedAnimations, animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
+				BuildAnimationStates(processedAnimationRanges, animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
 				ApplyAnimationStates(animationStates, animation, stopAnimations);
 			} finally {
 				Audio.GloballyEnable = true;
@@ -65,13 +67,31 @@ namespace Tangerine.Core
 			public bool IsRunning;
 		}
 
-		private void BuildAnimationStates(HashSet<Animation> processedAnimations, List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers)
+		struct AnimationRange : IEquatable<AnimationRange>
 		{
-			if (!processedAnimations.Add(animation)) {
+			public Animation Animation;
+			public int Frame;
+			public int FrameCount;
+
+			public bool Equals(AnimationRange other)
+			{
+				return Animation == other.Animation && Frame == other.Frame && FrameCount == other.FrameCount;
+			}
+
+			public override int GetHashCode()
+			{
+				return Animation.GetHashCode() ^ Frame ^ FrameCount;
+			}
+		}
+
+		private int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
+
+		private void BuildAnimationStates(HashSet<AnimationRange> processedAnimationRanges, List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers)
+		{
+			if (!processedAnimationRanges.Add(new AnimationRange { Animation = animation, Frame = frame, FrameCount = frameCount })) {
 				return;
 			}
 			var previousFrame = frame;
-			var triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
 			if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
 				animation.AnimationEngine.BuildEffectiveAnimators(animation);
 			}
@@ -79,15 +99,17 @@ namespace Tangerine.Core
 				Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode).
 				OfType<Animator<string>>().ToList();
 			AdvanceCurrentFrameAndBuildTriggers(animation, frameCount, processMarkers, triggerAnimators, ref frame, out bool isRunning);
-			ExecuteTriggers(processedAnimations, animationStates, triggerAnimators);
-			animationStates.Add(new AnimationState {
-				Animation = animation,
-				Frame = frame,
-				IsRunning = isRunning
-			});
+			ExecuteTriggers(processedAnimationRanges, animationStates, triggerAnimators);
+			if (animationStates.FindIndex(i => i.Animation == animation) < 0) {
+				animationStates.Add(new AnimationState {
+					Animation = animation,
+					Frame = frame,
+					IsRunning = isRunning
+				});
+			}
 		}
 
-		private void ExecuteTriggers(HashSet<Animation> processedAnimations, List<AnimationState> animationStates, List<Animator<string>> triggerAnimators)
+		private void ExecuteTriggers(HashSet<AnimationRange> processedAnimationsRanges, List<AnimationState> animationStates, List<Animator<string>> triggerAnimators)
 		{
 			foreach (var triggerAnimator in triggerAnimators) {
 				var node = (Node)triggerAnimator.Owner;
@@ -97,7 +119,7 @@ namespace Tangerine.Core
 				triggers.Clear();
 				foreach (var trigger in sortedTriggers) {
 					foreach (var (animationToRun, runAtFrame) in ParseTrigger(node, trigger.Keyframe.Value)) {
-						BuildAnimationStates(processedAnimations, animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
+						BuildAnimationStates(processedAnimationsRanges, animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
 					}
 				}
 			}
