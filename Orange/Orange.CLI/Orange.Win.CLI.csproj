@@ -32,7 +32,7 @@ set errno=0" LogStandardErrorAsError="True" ContinueOnError="False" WorkingDirec
   </Target>
 
   <ItemGroup>
-    <Content Include="Orange.ico" />
+    <EmbeddedResource Include="..\Orange.ico" />
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
 

@@ -1,16 +1,5 @@
-# Citrus
+![](Samples/EmptyProject/Data/Shell/Splash/CitrusLogo.png)
 
-![](Orange/Logo.png)
+[https://game-forest.github.io/Citrus/](https://game-forest.github.io/Citrus/)
 
-Citrus is a game engine.
-
-- Lemon - bindings for native 3rd party libraries.
-- Lime - engine core
-- Yuzu - serialization library
-- Orange - builder application
-- Kumquat - code generator
-- Tangerine - scene editor
-
-Copyright (C) Forest LLC, 2018
-
-See LICENSE.
+Copyright (c) 2021 Game Forest Studio
