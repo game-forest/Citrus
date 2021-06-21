@@ -3897,7 +3897,7 @@
   "articles/intro.html": {
     "href": "articles/intro.html",
     "title": "Citrus Engine | Citrus Engine",
-    "keywords": "Citrus Engine"
+    "keywords": "Citrus Engine Citrus is a game engine. Major engine components are named after Citrus fruits: Lemon - bindings for native 3rd party libraries. Lime - engine core Yuzu - serialization library Orange - builder application Kumquat - code generator Tangerine - scene editor"
   },
   "articles/old/Android.html": {
     "href": "articles/old/Android.html",
@@ -3936,8 +3936,8 @@
   },
   "index.html": {
     "href": "index.html",
-    "title": "Citrus Engine | Citrus Engine",
-    "keywords": "Citrus Engine Engine articles API documentation generated from xmldoc in source code Tangerine (citrus asset editor) documentation"
+    "title": "| Citrus Engine",
+    "keywords": "Engine articles API documentation generated from xmldoc in source code Tangerine (citrus asset editor) documentation"
   },
   "tangerine/3d_attachment.html": {
     "href": "tangerine/3d_attachment.html",
