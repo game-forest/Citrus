@@ -32,12 +32,8 @@ namespace Tangerine.Core
 
 		private void ApplyAnimationStates(List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
 		{
-			var i = animationStates.FindIndex(s => s.Animation == currentAnimation);
-			if (i >= 0) {
-				// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
-				(animationStates[i], animationStates[^1]) = (animationStates[^1], animationStates[i]);
-			}
-			foreach (var s in animationStates) {
+			// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
+			foreach (var s in animationStates.OrderByDescending(s => s.Animation == currentAnimation ? -1 : s.FrameCount)) {
 				s.Animation.Frame = s.Frame;
 				s.Animation.IsRunning = !stopAnimations && s.IsRunning;
 			}
@@ -63,6 +59,7 @@ namespace Tangerine.Core
 		struct AnimationState
 		{
 			public Animation Animation;
+			public int FrameCount;
 			public int Frame;
 			public bool IsRunning;
 		}
@@ -103,6 +100,7 @@ namespace Tangerine.Core
 			if (animationStates.FindIndex(i => i.Animation == animation) < 0) {
 				animationStates.Add(new AnimationState {
 					Animation = animation,
+					FrameCount = frameCount,
 					Frame = frame,
 					IsRunning = isRunning
 				});
