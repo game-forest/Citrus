@@ -52,6 +52,30 @@ namespace Lime
 			return new WindowRect { X = value.Left, Y = value.Top, Width = value.Width, Height = value.Height };
 		}
 
+		public int this[int component]
+		{
+			get
+			{
+				switch (component) {
+					case 0: return A.X;
+					case 1: return A.Y;
+					case 2: return B.X;
+					case 3: return B.Y;
+					default: throw new IndexOutOfRangeException();
+				}
+			}
+			set
+			{
+				switch (component) {
+					case 0: A.X = value; break;
+					case 1: A.Y = value; break;
+					case 2: B.X = value; break;
+					case 3: B.Y = value; break;
+					default: throw new IndexOutOfRangeException();
+				}
+			}
+		}
+
 		/// <summary>
 		/// Returns this rectangle with swapped coordinates
 		/// of borders if width or height is negative.

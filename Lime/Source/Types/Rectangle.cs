@@ -166,6 +166,30 @@ namespace Lime
 			}
 		}
 
+		public float this[int component]
+		{
+			get
+			{
+				switch (component) {
+					case 0: return AX;
+					case 1: return AY;
+					case 2: return BX;
+					case 3: return BY;
+					default: throw new IndexOutOfRangeException();
+				}
+			}
+			set
+			{
+				switch (component) {
+					case 0: AX = value; break;
+					case 1: AY = value; break;
+					case 2: BX = value; break;
+					case 3: BY = value; break;
+					default: throw new IndexOutOfRangeException();
+				}
+			}
+		}
+
 		public Vector2 Size => B - A;
 
 		/// <summary>

@@ -151,6 +151,33 @@ namespace Lime
 		}
 
 		/// <summary>
+		/// Gets or sets the vector component by its index.
+		/// </summary>
+		public int this[int component]
+		{
+			get
+			{
+				if (component == 0) {
+					return X;
+				} else if (component == 1) {
+					return Y;
+				} else {
+					throw new IndexOutOfRangeException();
+				}
+			}
+			set
+			{
+				if (component == 0) {
+					X = value;
+				} else if (component == 1) {
+					Y = value;
+				} else {
+					throw new IndexOutOfRangeException();
+				}
+			}
+		}
+
+		/// <summary>
 		/// Returns the string representation of this <see cref="IntVector2"/> in the format:
 		/// "X, Y".
 		/// </summary>
