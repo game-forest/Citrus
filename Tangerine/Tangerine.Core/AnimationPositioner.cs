@@ -14,8 +14,28 @@ namespace Tangerine.Core
 	public class AnimationPositioner : IAnimationPositioner
 	{
 		private HashSet<AnimationRange> processedAnimationRanges = new HashSet<AnimationRange>();
+		private readonly NodeManager nodeManager;
+
+		public AnimationPositioner(NodeManager nodeManager)
+		{
+			this.nodeManager = nodeManager;
+		}
 
 		public void SetAnimationTime(Animation animation, double time, bool stopAnimations)
+		{
+			SetAnimationTimeHelper(animation, time, stopAnimations);
+			// The following code is intented for code that changes the node hierarchy while the animation is scrolling.
+			var hierarchyChanged = false;
+			HierarchyChangedEventHandler h = e => hierarchyChanged = true;
+			nodeManager.HierarchyChanged += h;
+			nodeManager.Update(0);
+			nodeManager.HierarchyChanged -= h;
+			if (hierarchyChanged) {
+				SetAnimationTimeHelper(animation, time, stopAnimations);
+			}
+		}
+
+		public void SetAnimationTimeHelper(Animation animation, double time, bool stopAnimations)
 		{
 			Audio.GloballyEnable = false;
 			try {

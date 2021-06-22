@@ -42,7 +42,7 @@ namespace Tangerine.Core
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
 		private readonly ConditionalWeakTable<object, Row> sceneItemCache = new ConditionalWeakTable<object, Row>();
 		private readonly MemoryStream preloadedSceneStream = null;
-		private readonly IAnimationPositioner animationPositioner = new AnimationPositioner();
+		private readonly IAnimationPositioner animationPositioner;
 		private static uint untitledCounter;
 
 		public static readonly string[] AllowedFileTypes = { "tan", "t3d", "fbx" };
@@ -285,6 +285,7 @@ namespace Tangerine.Core
 				return false;
 			};
 			Manager = ManagerFactory?.Invoke() ?? CreateDefaultManager();
+			animationPositioner = new AnimationPositioner(Manager);
 			SceneTreeBuilder = new SceneTreeBuilder(o => {
 				var item = GetSceneItemForObject(o);
 				if (item.Parent != null || item.Rows.Count > 0) {
