@@ -21526,6 +21526,30 @@ references:
   isSpec: "True"
   fullName: Lime.GestureProcessor.Update
   nameWithType: GestureProcessor.Update
+- uid: Lime.GLInfo
+  name: GLInfo
+  href: api/Lime.GLInfo.html
+  commentId: T:Lime.GLInfo
+  fullName: Lime.GLInfo
+  nameWithType: GLInfo
+- uid: Lime.GLInfo.ESProfile
+  name: ESProfile
+  href: api/Lime.GLInfo.html#Lime_GLInfo_ESProfile
+  commentId: F:Lime.GLInfo.ESProfile
+  fullName: Lime.GLInfo.ESProfile
+  nameWithType: GLInfo.ESProfile
+- uid: Lime.GLInfo.MajorVersion
+  name: MajorVersion
+  href: api/Lime.GLInfo.html#Lime_GLInfo_MajorVersion
+  commentId: F:Lime.GLInfo.MajorVersion
+  fullName: Lime.GLInfo.MajorVersion
+  nameWithType: GLInfo.MajorVersion
+- uid: Lime.GLInfo.MinorVersion
+  name: MinorVersion
+  href: api/Lime.GLInfo.html#Lime_GLInfo_MinorVersion
+  commentId: F:Lime.GLInfo.MinorVersion
+  fullName: Lime.GLInfo.MinorVersion
+  nameWithType: GLInfo.MinorVersion
 - uid: Lime.GradientComponent
   name: GradientComponent
   href: api/Lime.GradientComponent.html
@@ -22303,6 +22327,19 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.End
   nameWithType: PlatformRenderContext.End
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.ESProfile
+  name: ESProfile
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_ESProfile
+  commentId: P:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.ESProfile
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.ESProfile
+  nameWithType: PlatformRenderContext.ESProfile
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.ESProfile*
+  name: ESProfile
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_ESProfile_
+  commentId: Overload:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.ESProfile
+  isSpec: "True"
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.ESProfile
+  nameWithType: PlatformRenderContext.ESProfile
 - uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.Finish
   name: Finish()
   href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_Finish
@@ -22355,6 +22392,32 @@ references:
   isSpec: "True"
   fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GetPipelineCacheData
   nameWithType: PlatformRenderContext.GetPipelineCacheData
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMajorVersion
+  name: GLMajorVersion
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_GLMajorVersion
+  commentId: P:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMajorVersion
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMajorVersion
+  nameWithType: PlatformRenderContext.GLMajorVersion
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMajorVersion*
+  name: GLMajorVersion
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_GLMajorVersion_
+  commentId: Overload:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMajorVersion
+  isSpec: "True"
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMajorVersion
+  nameWithType: PlatformRenderContext.GLMajorVersion
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMinorVersion
+  name: GLMinorVersion
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_GLMinorVersion
+  commentId: P:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMinorVersion
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMinorVersion
+  nameWithType: PlatformRenderContext.GLMinorVersion
+- uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMinorVersion*
+  name: GLMinorVersion
+  href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_GLMinorVersion_
+  commentId: Overload:Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMinorVersion
+  isSpec: "True"
+  fullName: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.GLMinorVersion
+  nameWithType: PlatformRenderContext.GLMinorVersion
 - uid: Lime.Graphics.Platform.OpenGL.PlatformRenderContext.MaxTextureSlots
   name: MaxTextureSlots
   href: api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html#Lime_Graphics_Platform_OpenGL_PlatformRenderContext_MaxTextureSlots
@@ -48824,6 +48887,22 @@ references:
   isSpec: "True"
   fullName: Lime.PlatformRenderer.SetViewport
   nameWithType: PlatformRenderer.SetViewport
+- uid: Lime.PlatformRenderer.TryGetGLInfo(Lime.GLInfo@)
+  name: TryGetGLInfo(out GLInfo)
+  href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_TryGetGLInfo_Lime_GLInfo__
+  commentId: M:Lime.PlatformRenderer.TryGetGLInfo(Lime.GLInfo@)
+  name.vb: TryGetGLInfo(ByRef GLInfo)
+  fullName: Lime.PlatformRenderer.TryGetGLInfo(out Lime.GLInfo)
+  fullName.vb: Lime.PlatformRenderer.TryGetGLInfo(ByRef Lime.GLInfo)
+  nameWithType: PlatformRenderer.TryGetGLInfo(out GLInfo)
+  nameWithType.vb: PlatformRenderer.TryGetGLInfo(ByRef GLInfo)
+- uid: Lime.PlatformRenderer.TryGetGLInfo*
+  name: TryGetGLInfo
+  href: api/Lime.PlatformRenderer.html#Lime_PlatformRenderer_TryGetGLInfo_
+  commentId: Overload:Lime.PlatformRenderer.TryGetGLInfo
+  isSpec: "True"
+  fullName: Lime.PlatformRenderer.TryGetGLInfo
+  nameWithType: PlatformRenderer.TryGetGLInfo
 - uid: Lime.PlayParameters
   name: PlayParameters
   href: api/Lime.PlayParameters.html

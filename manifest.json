@@ -2558,6 +2558,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.GLInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.GLInfo.html",
+          "hash": "flAMcsRSqwd+Q1Svm/VgCQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.GeometryUtils.yml",
       "output": {
         ".html": {
@@ -2766,7 +2778,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Graphics.Platform.OpenGL.PlatformRenderContext.html",
-          "hash": "tBzQBYFav7i83FX8MChcVg=="
+          "hash": "4UqdJwXiO721eFw9OIV+ZQ=="
         }
       },
       "is_incremental": false,
@@ -5418,7 +5430,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PlatformRenderer.html",
-          "hash": "I1I8fyRCArMCyWx9JS51eg=="
+          "hash": "x3vhJRXI2+0S7L+FTMv8kw=="
         }
       },
       "is_incremental": false,
@@ -9258,7 +9270,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "dyrsGq+sCU42cVcR3QNRuA=="
+          "hash": "uV6Nr8N1NVhUfnH10Ce3Ag=="
         }
       },
       "is_incremental": false,
@@ -9306,7 +9318,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "ZmKsnxke/SM7DPFtN33TvQ=="
+          "hash": "QgDVPKh3IRRnpSfJgpnpxA=="
         }
       },
       "is_incremental": false,
@@ -11537,7 +11549,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 774,
+          "total_file_count": 775,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
