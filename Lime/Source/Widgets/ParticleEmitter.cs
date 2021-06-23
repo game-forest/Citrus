@@ -146,6 +146,7 @@ namespace Lime
 		/// <summary>
 		/// Particles are generated once and live forever.
 		/// </summary>
+		[TangerineIgnore]
 		[YuzuMember]
 		[TangerineKeyframeColor(8)]
 		public bool ImmortalParticles
@@ -456,7 +457,7 @@ namespace Lime
 				if (!GetTangerineFlag(TangerineFlags.Hidden)) {
 					switch (action) {
 						case EmitterAction.Burst:
-							splashOnUpdateOnce = true;
+							burstOnUpdateOnce = true;
 							break;
 					}
 				}
@@ -483,8 +484,8 @@ namespace Lime
 					FreeLastParticles(particles.Count - (int)Number);
 					break;
 				case EmissionMethod.NumberPerBurst:
-					if (splashOnUpdateOnce) {
-						splashOnUpdateOnce = false;
+					if (burstOnUpdateOnce) {
+						burstOnUpdateOnce = false;
 						particlesToSpawn = Number;
 					}
 					break;
@@ -518,6 +519,9 @@ namespace Lime
 				i--;
 			}
 			FreeLastParticles(particlesToFreeCount);
+			if (EmissionMethod == EmissionMethod.NumberPerBurst) {
+				particlesToSpawn = 0.0f;
+			}
 			if (particles.Count == 0) {
 				return;
 			}
@@ -529,12 +533,9 @@ namespace Lime
 				currentBoundingRect = currentBoundingRect.Transform(basicWidget.CalcTransitionToSpaceOf(this));
 			}
 			ExpandBoundingRect(currentBoundingRect);
-			if (EmissionMethod == EmissionMethod.NumberPerBurst) {
-				particlesToSpawn = 0.0f;
-			}
 		}
 
-		private bool splashOnUpdateOnce = false;
+		private bool burstOnUpdateOnce = false;
 
 		private bool CheckIntersection(Vector2[] v, int[] workPoints, int count, float sign, int startIndex = 0)
 		{
