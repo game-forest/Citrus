@@ -1,8 +1,6 @@
 #if WIN
-using System.Text;
 using System.Linq;
 using WinForms = System.Windows.Forms;
-//using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Lime
 {
@@ -59,15 +57,12 @@ namespace Lime
 		{
 			FileName = null;
 			FileNames = null;
-			switch (Mode) {
-				case FileDialogMode.Open:
-					return ShowOpenFileDialog();
-				case FileDialogMode.Save:
-					return ShowSaveFileDialog();
-				case FileDialogMode.SelectFolder:
-					return ShowFolderBrowserDialog();
-			}
-			return false;
+			return Mode switch {
+				FileDialogMode.Open => ShowOpenFileDialog(),
+				FileDialogMode.Save => ShowSaveFileDialog(),
+				FileDialogMode.SelectFolder => ShowFolderBrowserDialog(),
+				_ => false,
+			};
 		}
 
 		private void SetFilter(WinForms.FileDialog dialog)
@@ -108,23 +103,21 @@ namespace Lime
 
 		private bool ShowOpenFileDialog()
 		{
-			using (var openFileDialog = new WinForms.OpenFileDialog()) {
-				SetFilter(openFileDialog);
-				openFileDialog.RestoreDirectory = true;
-				openFileDialog.Multiselect = AllowsMultipleSelection;
-				openFileDialog.FileName = InitialFileName ?? System.String.Empty;
-				return ShowFileDialog(openFileDialog);
-			}
+			using var openFileDialog = new WinForms.OpenFileDialog();
+			SetFilter(openFileDialog);
+			openFileDialog.RestoreDirectory = true;
+			openFileDialog.Multiselect = AllowsMultipleSelection;
+			openFileDialog.FileName = InitialFileName ?? System.String.Empty;
+			return ShowFileDialog(openFileDialog);
 		}
 
 		private bool ShowSaveFileDialog()
 		{
-			using (var saveFileDialog = new WinForms.SaveFileDialog()) {
-				SetFilter(saveFileDialog);
-				saveFileDialog.RestoreDirectory = true;
-				saveFileDialog.FileName = InitialFileName ?? System.String.Empty;
-				return ShowFileDialog(saveFileDialog);
-			}
+			using var saveFileDialog = new WinForms.SaveFileDialog();
+			SetFilter(saveFileDialog);
+			saveFileDialog.RestoreDirectory = true;
+			saveFileDialog.FileName = InitialFileName ?? string.Empty;
+			return ShowFileDialog(saveFileDialog);
 		}
 	}
 }
