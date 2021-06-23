@@ -65,6 +65,10 @@ namespace Orange
 					throw new InvalidOperationException("Can't find Citrus directory.");
 				}
 			}
+			path = path.Replace('\\', '/');
+			if (!path.EndsWith('/')) {
+				path += '/';
+			}
 			return path;
 		}
 
