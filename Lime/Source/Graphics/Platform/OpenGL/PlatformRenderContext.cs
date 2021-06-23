@@ -69,12 +69,12 @@ namespace Lime.Graphics.Platform.OpenGL
 		internal bool SupportsPvrtc2;
 		internal bool SupportsEtc1;
 		internal bool SupportsEtc2;
-		internal int GLMajorVersion;
-		internal int GLMinorVersion;
-		internal bool ESProfile;
 		internal bool SupportsInternalFormatBgra8;
 		internal bool SupportsExternalFormatBgra8;
 
+		public int GLMajorVersion { get; private set; }
+		public int GLMinorVersion { get; private set; }
+		public bool ESProfile { get; private set; }
 		public int MaxTextureSlots { get; private set; }
 		public int MaxVertexBufferSlots { get; private set; }
 		public int MaxVertexAttributes { get; private set; }
@@ -171,7 +171,10 @@ namespace Lime.Graphics.Platform.OpenGL
 
 		private void CheckFeatures()
 		{
-			GLHelper.ParseGLVersion(GL.GetString(StringName.Version), out GLMajorVersion, out GLMinorVersion, out ESProfile);
+			GLHelper.ParseGLVersion(GL.GetString(StringName.Version), out var major, out var minor, out var es);
+			ESProfile = es;
+			GLMajorVersion = major;
+			GLMinorVersion = minor;
 			var glExtensions = new HashSet<string>(GL.GetString(StringName.Extensions).Split(' '));
 			SupportsTextureRG = !ESProfile || GLMajorVersion >= 3 || glExtensions.Contains("GL_EXT_texture_rg");
 			SupportsPackedDepth24Stencil8 = !ESProfile || GLMajorVersion >= 3 || glExtensions.Contains("GL_OES_packed_depth_stencil");
