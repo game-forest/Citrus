@@ -28424,6 +28424,22 @@ references:
   isSpec: "True"
   fullName: Lime.IntRectangle.Intersect
   nameWithType: IntRectangle.Intersect
+- uid: Lime.IntRectangle.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.IntRectangle.html#Lime_IntRectangle_Item_System_Int32_
+  commentId: P:Lime.IntRectangle.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.IntRectangle.Item[System.Int32]
+  fullName.vb: Lime.IntRectangle.Item(System.Int32)
+  nameWithType: IntRectangle.Item[Int32]
+  nameWithType.vb: IntRectangle.Item(Int32)
+- uid: Lime.IntRectangle.Item*
+  name: Item
+  href: api/Lime.IntRectangle.html#Lime_IntRectangle_Item_
+  commentId: Overload:Lime.IntRectangle.Item
+  isSpec: "True"
+  fullName: Lime.IntRectangle.Item
+  nameWithType: IntRectangle.Item
 - uid: Lime.IntRectangle.Left
   name: Left
   href: api/Lime.IntRectangle.html#Lime_IntRectangle_Left
@@ -28658,6 +28674,22 @@ references:
   isSpec: "True"
   fullName: Lime.IntVector2.GetHashCode
   nameWithType: IntVector2.GetHashCode
+- uid: Lime.IntVector2.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.IntVector2.html#Lime_IntVector2_Item_System_Int32_
+  commentId: P:Lime.IntVector2.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.IntVector2.Item[System.Int32]
+  fullName.vb: Lime.IntVector2.Item(System.Int32)
+  nameWithType: IntVector2.Item[Int32]
+  nameWithType.vb: IntVector2.Item(Int32)
+- uid: Lime.IntVector2.Item*
+  name: Item
+  href: api/Lime.IntVector2.html#Lime_IntVector2_Item_
+  commentId: Overload:Lime.IntVector2.Item
+  isSpec: "True"
+  fullName: Lime.IntVector2.Item
+  nameWithType: IntVector2.Item
 - uid: Lime.IntVector2.Left
   name: Left
   href: api/Lime.IntVector2.html#Lime_IntVector2_Left
@@ -51601,6 +51633,22 @@ references:
   isSpec: "True"
   fullName: Lime.Rectangle.Intersect
   nameWithType: Rectangle.Intersect
+- uid: Lime.Rectangle.Item(System.Int32)
+  name: Item[Int32]
+  href: api/Lime.Rectangle.html#Lime_Rectangle_Item_System_Int32_
+  commentId: P:Lime.Rectangle.Item(System.Int32)
+  name.vb: Item(Int32)
+  fullName: Lime.Rectangle.Item[System.Int32]
+  fullName.vb: Lime.Rectangle.Item(System.Int32)
+  nameWithType: Rectangle.Item[Int32]
+  nameWithType.vb: Rectangle.Item(Int32)
+- uid: Lime.Rectangle.Item*
+  name: Item
+  href: api/Lime.Rectangle.html#Lime_Rectangle_Item_
+  commentId: Overload:Lime.Rectangle.Item
+  isSpec: "True"
+  fullName: Lime.Rectangle.Item
+  nameWithType: Rectangle.Item
 - uid: Lime.Rectangle.Left
   name: Left
   href: api/Lime.Rectangle.html#Lime_Rectangle_Left

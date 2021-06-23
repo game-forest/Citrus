@@ -3786,7 +3786,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IntRectangle.html",
-          "hash": "v8oQwrDt874gcHIfr3neZw=="
+          "hash": "fvKZHoajiPq0huN5vc/wgg=="
         }
       },
       "is_incremental": false,
@@ -3798,7 +3798,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IntVector2.html",
-          "hash": "wDukFh3OpLnsuGTYUWyh2w=="
+          "hash": "iz9FncjC7iyQ96VmVLNtSQ=="
         }
       },
       "is_incremental": false,
@@ -5694,7 +5694,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Rectangle.html",
-          "hash": "PQKgEy2qArSCxlKNJ5OPjg=="
+          "hash": "8nBT3yJh0XfquUykDs/UDw=="
         }
       },
       "is_incremental": false,
