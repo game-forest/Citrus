@@ -71,6 +71,9 @@
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
     <Compile Include="PropertyEditors\CustomFilePropertyEditor.cs" />
     <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
+	<Compile Include="PropertyEditors\IntRectanglePropertyEditor.cs" />
+    <Compile Include="PropertyEditors\IntVector2PropertyEditor.cs" />
+    <Compile Include="PropertyEditors\RectanglePropertyEditor.cs" />
     <Compile Include="PropertyEditors\DropDownListPropertyEditor.cs" />
     <Compile Include="PropertyEditors\FolderPropertyEditor.cs" />
     <Compile Include="PropertyEditors\ListPropertyEditor.cs" />
