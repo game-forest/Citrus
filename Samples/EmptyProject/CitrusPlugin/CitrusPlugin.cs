@@ -37,8 +37,13 @@ namespace CitrusPlugin
 					System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(installedHookPath));
 					var citrusDirectory = Orange.Toolbox.FindCitrusDirectory();
 					var hookText = File.ReadAllText(distrHookPath)
-						.Replace("$(CITRUS_DIRECTORY)"
-							, Path.GetRelativePath(Path.Combine(gitRootPath, ".."), citrusDirectory).Replace("\\", "/"));
+						.Replace(
+							oldValue: "$(CITRUS_DIRECTORY)",
+							newValue: Path.GetRelativePath(
+								Path.Combine(gitRootPath, ".."),
+								path: citrusDirectory
+							).Replace("\\", "/")
+						);
 					File.WriteAllText(installedHookPath, hookText);
 					File.SetLastWriteTime(installedHookPath, fiDistrHook.LastWriteTime);
 					if (!fiInstalledHook.Exists) {

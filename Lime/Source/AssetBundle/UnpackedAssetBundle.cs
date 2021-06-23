@@ -78,7 +78,7 @@ namespace Lime
 		{
 			return File.Exists(ToSystemPath(path));
 		}
-		
+
 		public override void ImportFile(
 			string path, Stream stream, int reserve, string sourceExtension, DateTime time,
 			AssetAttributes attributes, byte[] cookingRulesSHA1)
@@ -100,7 +100,7 @@ namespace Lime
 			Directory.CreateDirectory(dir);
 			File.WriteAllBytes(Path.Combine(BaseDirectory, path), bytes);
 		}
-		
+
 		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
 		{
 			if (extension != null && !extension.StartsWith(".")) {
@@ -135,7 +135,9 @@ namespace Lime
 
 		private static string NormalizeDirectoryPath(string path)
 		{
-			path = path.Replace('\\', '/');
+			// Path.GetFullPath will resolve ".." special symbol in path and
+			// concatenate current directory if path is not rooted.
+			path = Path.GetFullPath(path).Replace('\\', '/');
 			if (!path.EndsWith("/")) {
 				path += '/';
 			}
