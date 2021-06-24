@@ -394,22 +394,28 @@ namespace Orange
 					continue;
 				}
 
-				Type[] exportedTypes = null;
+				Type[] allTypes = null;
+				HashSet<Type> exportedTypes = null;
 				try {
 					// dynamic assemblies don't support GetExportedTypes()
-					if (!assembly.IsDynamic) {
-						exportedTypes = assembly.GetExportedTypes();
+					if (assembly.IsDynamic) {
+						continue;
 					}
+					exportedTypes = new HashSet<Type>(assembly.GetExportedTypes());
+					allTypes = assembly.GetTypes();
 				} catch (System.Exception) {
-					exportedTypes = null;
+					continue;
 				}
-				if (exportedTypes != null) {
-					foreach (var t in exportedTypes) {
-						if (t.GetCustomAttributes(false).Any(i =>
-							i is TangerineRegisterNodeAttribute || i is TangerineRegisterComponentAttribute)
-						) {
-							yield return t;
+				foreach (var t in allTypes) {
+					if (t.GetCustomAttributes(false).Any(i =>
+						i is TangerineRegisterNodeAttribute || i is TangerineRegisterComponentAttribute)
+					) {
+						if (!exportedTypes.Contains(t)) {
+							throw new InvalidOperationException(
+								$"Error: type `{t.FullName}` is tangerine-registered but not public."
+							);
 						}
+						yield return t;
 					}
 				}
 			}

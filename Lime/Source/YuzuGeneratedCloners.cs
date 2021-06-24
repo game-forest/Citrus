@@ -2868,6 +2868,7 @@ namespace YuzuGenerated
 			}
 			result.ContentsPath = s.ContentsPath;
 			result.Direction = s.Direction;
+			result.EmissionMethod = s.EmissionMethod;
 			result.EmissionType = s.EmissionType;
 			if (s.Folders != null && result.Folders != null) {
 				var tmp8 = cl.GetCloner<global::Lime.Folder.Descriptor>();

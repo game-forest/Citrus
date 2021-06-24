@@ -24,7 +24,7 @@ namespace Tangerine.UI.Inspector
 		public readonly IReadOnlyList<IPropertyEditor> ReadonlyEditors;
 
 		public event Action<IMenu> CreatedAddComponentsMenu;
-		
+
 		public static event Action CreateLookupForAddComponent;
 
 		private bool enabled = true;
@@ -305,7 +305,7 @@ namespace Tangerine.UI.Inspector
 				}
 				if (0 != method.GetParameters().Length || method.IsStatic) {
 					throw new NotSupportedException(
-						$"TangerineCreateButtonAttribute Method {method.Name} " + 
+						$"TangerineCreateButtonAttribute Method {method.Name} " +
 						"only non-static methods with no arguments are supported!");
 				}
 				var attributeType = typeof(TangerineCreateButtonAttribute);
@@ -481,7 +481,7 @@ namespace Tangerine.UI.Inspector
 			}
 			return types;
 		}
-		
+
 		private void AddComponentsMenu(IReadOnlyList<Node> nodes, Widget widget)
 		{
 			if (nodes.Any(n => !string.IsNullOrEmpty(n.ContentsPath))) {
@@ -725,6 +725,12 @@ namespace Tangerine.UI.Inspector
 		private static void CreateComponent(Type type, IEnumerable<Node> nodes)
 		{
 			var constructor = type.GetConstructor(Type.EmptyTypes);
+			if (constructor == null) {
+				throw new InvalidOperationException(
+					$"Error: can't create component of type `{type.FullName}` because " +
+					$"it's has no default constructor or it is not public."
+				);
+			}
 			using (Document.Current.History.BeginTransaction()) {
 				foreach (var node in nodes) {
 					if (node.Components.Contains(type)) {
