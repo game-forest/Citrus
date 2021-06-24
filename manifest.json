@@ -2210,11 +2210,35 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.EmissionMethod.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.EmissionMethod.html",
+          "hash": "aTJPxhTYr2oKIxJQMnrw5g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.EmissionType.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.EmissionType.html",
           "hash": "fqavlvJeyQXDZ/l4iCmLvA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.EmitterAction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.EmitterAction.html",
+          "hash": "jEjU0KsWOUVlfi4GhgMfew=="
         }
       },
       "is_incremental": false,
@@ -5286,7 +5310,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleEmitter.html",
-          "hash": "k9JcoB5OiNT30kB3s0QHQg=="
+          "hash": "M4dTg0fJNzELuxv2nxyliQ=="
         }
       },
       "is_incremental": false,
@@ -9270,7 +9294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "uV6Nr8N1NVhUfnH10Ce3Ag=="
+          "hash": "LWLxw8w83yiNdaZTBtmvZw=="
         }
       },
       "is_incremental": false,
@@ -9318,7 +9342,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "QgDVPKh3IRRnpSfJgpnpxA=="
+          "hash": "ndDKYoxgmwbyYcfV/oRsfQ=="
         }
       },
       "is_incremental": false,
@@ -11279,7 +11303,7 @@
       "output": {
         ".html": {
           "relative_path": "tangerine/node/particles/particle_emitter.html",
-          "hash": "Co5TmjIlEHA59SX/3i33IQ=="
+          "hash": "IFlWk1RBRn1F0I6hrYZyvA=="
         }
       },
       "is_incremental": false,
@@ -11454,6 +11478,106 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "tangerine/tips/particles/emission_method.md",
+      "output": {
+        ".html": {
+          "relative_path": "tangerine/tips/particles/emission_method.html",
+          "hash": "A2XFv4CwPTy3RaDK6nCzaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/100ConstantNumber.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/100ConstantNumber.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/100PerSecond.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/100PerSecond.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/10ConstantNumber.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/10ConstantNumber.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/10PerSecond.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/10PerSecond.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/1ConstantNumber.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/1ConstantNumber.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/1PerSecond.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/1PerSecond.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/Burst.webp",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/Burst.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "tangerine/tips/particles/media/Particles.tan",
+      "output": {
+        "resource": {
+          "relative_path": "tangerine/tips/particles/media/Particles.tan"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "log_codes": [
         "InvalidFileLink"
       ],
@@ -11462,7 +11586,7 @@
       "output": {
         ".html": {
           "relative_path": "tangerine/toc.html",
-          "hash": "Jw6byHCqv2/rICwTuYJqwQ=="
+          "hash": "S3O8Ch+bO8SMA+Rw9gj9Ng=="
         }
       },
       "is_incremental": false,
@@ -11543,13 +11667,13 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 75,
+          "total_file_count": 76,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 775,
+          "total_file_count": 777,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

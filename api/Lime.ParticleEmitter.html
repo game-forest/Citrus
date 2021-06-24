@@ -636,9 +636,6 @@
       <a class="xref" href="Lime.Node.html#Lime_Node_AddSelfToRenderChain_Lime_RenderChain_System_Int32_">Node.AddSelfToRenderChain(RenderChain, Int32)</a>
     </div>
     <div>
-      <a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(String, Object, Double)</a>
-    </div>
-    <div>
       <a class="xref" href="Lime.Node.html#Lime_Node_TriggerMultipleAnimations_System_String_System_Double_">Node.TriggerMultipleAnimations(String, Double)</a>
     </div>
     <div>
@@ -840,6 +837,32 @@ public class ParticleEmitter : Widget, IDisposable, IAnimationHost, IRenderChain
   </h3>
   
   
+  <a id="Lime_ParticleEmitter_Action_" data-uid="Lime.ParticleEmitter.Action*"></a>
+  <h4 id="Lime_ParticleEmitter_Action" data-uid="Lime.ParticleEmitter.Action">Action</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[TangerineKeyframeColor(1)]
+public EmitterAction Action { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.EmitterAction.html">EmitterAction</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="Lime_ParticleEmitter_AlongPathOrientation_" data-uid="Lime.ParticleEmitter.AlongPathOrientation*"></a>
   <h4 id="Lime_ParticleEmitter_AlongPathOrientation" data-uid="Lime.ParticleEmitter.AlongPathOrientation">AlongPathOrientation</h4>
   <div class="markdown level1 summary"><p>Whether particles are oriented along track.</p>
@@ -971,6 +994,32 @@ public NumericRange Direction { get; set; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="Lime.NumericRange.html">NumericRange</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_ParticleEmitter_EmissionMethod_" data-uid="Lime.ParticleEmitter.EmissionMethod*"></a>
+  <h4 id="Lime_ParticleEmitter_EmissionMethod" data-uid="Lime.ParticleEmitter.EmissionMethod">EmissionMethod</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuMember]
+public EmissionMethod EmissionMethod { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.EmissionMethod.html">EmissionMethod</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -1471,7 +1520,7 @@ public NumericRange Spin { get; set; }</code></pre>
   
   <a id="Lime_ParticleEmitter_TimeShift_" data-uid="Lime.ParticleEmitter.TimeShift*"></a>
   <h4 id="Lime_ParticleEmitter_TimeShift" data-uid="Lime.ParticleEmitter.TimeShift">TimeShift</h4>
-  <div class="markdown level1 summary"><p>Pre simulate TimeShift seconds.</p>
+  <div class="markdown level1 summary"><p>Simulate TimeShift seconds on first update.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1913,6 +1962,45 @@ public NumericRange Zoom { get; set; }</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Lime.Node.html#Lime_Node_GetRenderObject">Node.GetRenderObject()</a></div>
+  
+  
+  <a id="Lime_ParticleEmitter_OnTrigger_" data-uid="Lime.ParticleEmitter.OnTrigger*"></a>
+  <h4 id="Lime_ParticleEmitter_OnTrigger_System_String_System_Object_System_Double_" data-uid="Lime.ParticleEmitter.OnTrigger(System.String,System.Object,System.Double)">OnTrigger(String, Object, Double)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void OnTrigger(string property, object value, double animationTimeCorrection = 0)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">property</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">animationTimeCorrection</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.Node.html#Lime_Node_OnTrigger_System_String_System_Object_System_Double_">Node.OnTrigger(String, Object, Double)</a></div>
   
   
   <a id="Lime_ParticleEmitter_OnUpdate_" data-uid="Lime.ParticleEmitter.OnUpdate*"></a>

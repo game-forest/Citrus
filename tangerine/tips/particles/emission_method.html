@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ParticleEmitter | Citrus Engine </title>
+    <title>Emission Method - &#1095;&#1090;&#1086; &#1101;&#1090;&#1086; &#1090;&#1072;&#1082;&#1086;&#1077; &#1080; &#1082;&#1072;&#1082; &#1101;&#1090;&#1080;&#1084; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100;&#1089;&#1103; | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="ParticleEmitter | Citrus Engine ">
+    <meta name="title" content="Emission Method - &#1095;&#1090;&#1086; &#1101;&#1090;&#1086; &#1090;&#1072;&#1082;&#1086;&#1077; &#1080; &#1082;&#1072;&#1082; &#1101;&#1090;&#1080;&#1084; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1100;&#1089;&#1103; | Citrus Engine ">
     <meta name="generator" content="docfx 2.56.3.0">
     
     <link rel="shortcut icon" href="../../../images/favicon.ico">
@@ -76,45 +76,37 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="particleemitter">ParticleEmitter</h1>
+<h1 id="emission-method---что-это-такое-и-как-этим-пользоваться">Emission Method - что это такое и как этим пользоваться</h1>
 
-<p>ParticleEmitter - контейнер для системы частиц</p>
-<p>Свойства <strong>ParticleEmitter</strong>:</p>
+<p><code>EmissionMethod</code> - это свойство виджета типа <code>ParticleEmitter</code>. От метода эмиссии зависит, по какому принципу частицы будут &quot;вылетать&quot; из эммитера.</p>
+<p>Доступны следующие типы эмиссии:</p>
 <ul>
-<li>Является <a href="../widget.html">виджетом</a></li>
-<li><strong>EmissionMethod</strong> - способ генерации частиц, а именно:
-<ul>
-<li><strong>NumberPerSecond</strong> - генерация N частиц в секунду (старый метод)</li>
-<li><strong>ConstantNumber</strong> - генерация N частиц за один вызов, которые никогда не исчезнут. ImmortalParticles для них всегда включен, хоть и скрыт из интерфейса.</li>
-<li><strong>NumberPerBurst</strong> - генерация N частиц каждый раз, когда вызвано определенное действие. Анимируется свойство Action, на данный момент доступен только Burst.</li>
+<li>NumberPerSecond</li>
+<li>ConstantNumber</li>
+<li>NumberPerBurst</li>
 </ul>
-</li>
-<li><strong>Shape</strong> - форма контейнера для частиц (Custom активируется автоматически при использовании EmitterShapePoint)</li>
-<li><strong>EmissionType</strong> - тип излучения частиц (от центра/к центру)</li>
-<li><strong>ParticlesLinkage</strong> - указать, куда привязывать контейнер частиц (root-сцена/текущий контейнер/другое)</li>
-<li><strong>Number</strong> - количество частиц, используемых в генерации различными методами</li>
-<li><strong>TimeShift</strong> - временной сдвиг (в секундах)</li>
-<li><strong>Speed</strong> - скорость движения частиц</li>
-<li><strong>AlongPathOrientation</strong> - включить ориентирование партиклей вдоль трека (сплайна/кривой)</li>
-<li><strong>WindDirection</strong> - направление ветра в градусах (0 - дует слева, 90 - дует сверху)</li>
-<li><strong>WindAmount</strong> - сила ветра</li>
-<li><strong>GravityDirection</strong> - направление гравитации (0 - тянет направо, 90 - тянет вниз)</li>
-<li><strong>GravityAmount</strong> - сила гравитации</li>
-<li><strong>MagnetAmount</strong> - сила влияния магнитов на эмиттер</li>
-<li><strong>Orientation</strong> - угол поворота созданных частиц</li>
-<li><strong>Direction</strong> - угол поворота эмиттера (контейнера) частиц</li>
-<li><strong>Lifetime</strong> - время жизни частиц в секундах</li>
-<li><strong>Zoom</strong> - зум для созданных частиц</li>
-<li><strong>AspectRatio</strong> - соотношение сторон для созданных частиц</li>
-<li><strong>Velocity</strong> - угловая скорость частиц</li>
-<li><strong>Spin</strong> - задать частицам угол вращения (в градусах)</li>
-<li><strong>AngularVelocity</strong> - угловая скорость контейнера частиц (в градусах)</li>
-<li><strong>RandomMotionRadius</strong> - радиус рандомного движения частиц</li>
-<li><strong>RandomMotionSpeed</strong> - скорость рандомного движения частиц</li>
-<li><strong>RandomMotionAspectRatio</strong> - соотношение сторон зоны движения частиц</li>
-<li><strong>RandomMotionRotation</strong> - вращение рандомного движения частиц</li>
-<li><strong>Action</strong> - триггер для NumberPerBurst, на данный момент доступен только Burst</li>
-</ul>
+<p><code>Number</code> свойство эмиттера, которое определяет количество частиц, по-разному в зависимости от метода эмиссии.</p>
+<p>Оба этих свойства могут быть анимированы.</p>
+<h2 id="numberpersecond">NumberPerSecond</h2>
+<p>Частицы генерируются непрерывно каждый кадр так, что за секунду генерируется <code>Number</code> количество частиц.</p>
+<p>На примерах показано, как выглядит данный тип эмиссии, если <code>Number</code> равно 1, 10 и 100 частиц соответственно.</p>
+<p><img src="media/1PerSecond.webp" alt="1perSecond">
+<img src="media/10PerSecond.webp" alt="10perSecond">
+<img src="media/100PerSecond.webp" alt="100perSecond"></p>
+<h2 id="constantnumber">ConstantNumber</h2>
+<p>Каждый раз, когда текущее число частиц выпущенных данным эмиттером отличается от <code>Number</code>, за один кадр генерируется <code>Number - particles.Count</code> количество частиц. В случае, если данное число отрицательно — частицы будут удалены. Таким образом, анимируя <code>Number</code> можно удалять и снова генерировать частицы с этим методом.</p>
+<p>Частицы сгенерированные методом <code>ConstantNumber</code> имеют бесконечное время жизни. Это реализовано так, что когда их время жизни кончатся, оно начинается снова, то есть анимация частицы начнётся заново согласно присвоенному ей при генерации <code>ParticleModifier</code> и тому как там анимированы свойства частицы.</p>
+<p>На примерах показано, как выглядит данный тип эмиссии, если генерировать 1, 10 и 100 частиц соответственно.</p>
+<p><img src="media/1ConstantNumber.webp" alt="1ConstantNumber">
+<img src="media/10ConstantNumber.webp" alt="10ConstantNumber">
+<img src="media/100ConstantNumber.webp" alt="100ConstantNumber"></p>
+<h2 id="numberperburst">NumberPerBurst</h2>
+<p>За один кадр генерируется <code>Number</code> количество частиц по триггеру со значением <code>Burst</code> (анимируемое свойство <code>ParticleEmitter</code> с названием <code>Action</code>).</p>
+<p><img src="media/Burst.webp" alt="Burst"></p>
+<p>На примере показано, что сначала генерится 5, затем 10, 20 частиц, вплоть до 50 (для наглядности были использованы разные цвета). Все эти &quot;импульсы&quot; были вызваны через <code>Action</code> у одного эммитера.</p>
+<p>Таким образом анимируя <code>Number</code> и <code>Action</code> можно с точностью до одной частицы управлять тем сколько частиц на каком кадре анимации генерируется.</p>
+<h2 id="сцена-с-примерами">Сцена с примерами</h2>
+<p>В сцене <a href="media/Particles.tan">Particles.tan</a> есть примеры использования всех описанных методов эмиссии. Нужно лишь включить нужный фрейм. Класть в ../Citrus/Samples/EmptyProject/Data и запускать из EmptyProject (работает везде, где есть Citrus)</p>
 </article>
           </div>
           

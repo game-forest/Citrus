@@ -18567,6 +18567,30 @@ references:
   isSpec: "True"
   fullName: Lime.EditorParams.UseSecureString
   nameWithType: EditorParams.UseSecureString
+- uid: Lime.EmissionMethod
+  name: EmissionMethod
+  href: api/Lime.EmissionMethod.html
+  commentId: T:Lime.EmissionMethod
+  fullName: Lime.EmissionMethod
+  nameWithType: EmissionMethod
+- uid: Lime.EmissionMethod.ConstantNumber
+  name: ConstantNumber
+  href: api/Lime.EmissionMethod.html#Lime_EmissionMethod_ConstantNumber
+  commentId: F:Lime.EmissionMethod.ConstantNumber
+  fullName: Lime.EmissionMethod.ConstantNumber
+  nameWithType: EmissionMethod.ConstantNumber
+- uid: Lime.EmissionMethod.NumberPerBurst
+  name: NumberPerBurst
+  href: api/Lime.EmissionMethod.html#Lime_EmissionMethod_NumberPerBurst
+  commentId: F:Lime.EmissionMethod.NumberPerBurst
+  fullName: Lime.EmissionMethod.NumberPerBurst
+  nameWithType: EmissionMethod.NumberPerBurst
+- uid: Lime.EmissionMethod.NumberPerSecond
+  name: NumberPerSecond
+  href: api/Lime.EmissionMethod.html#Lime_EmissionMethod_NumberPerSecond
+  commentId: F:Lime.EmissionMethod.NumberPerSecond
+  fullName: Lime.EmissionMethod.NumberPerSecond
+  nameWithType: EmissionMethod.NumberPerSecond
 - uid: Lime.EmissionType
   name: EmissionType
   href: api/Lime.EmissionType.html
@@ -18591,6 +18615,18 @@ references:
   commentId: F:Lime.EmissionType.Outer
   fullName: Lime.EmissionType.Outer
   nameWithType: EmissionType.Outer
+- uid: Lime.EmitterAction
+  name: EmitterAction
+  href: api/Lime.EmitterAction.html
+  commentId: T:Lime.EmitterAction
+  fullName: Lime.EmitterAction
+  nameWithType: EmitterAction
+- uid: Lime.EmitterAction.Burst
+  name: Burst
+  href: api/Lime.EmitterAction.html#Lime_EmitterAction_Burst
+  commentId: F:Lime.EmitterAction.Burst
+  fullName: Lime.EmitterAction.Burst
+  nameWithType: EmitterAction.Burst
 - uid: Lime.EmitterShape
   name: EmitterShape
   href: api/Lime.EmitterShape.html
@@ -46763,6 +46799,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.ParticleEmitter
   nameWithType: ParticleEmitter.ParticleEmitter
+- uid: Lime.ParticleEmitter.Action
+  name: Action
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Action
+  commentId: P:Lime.ParticleEmitter.Action
+  fullName: Lime.ParticleEmitter.Action
+  nameWithType: ParticleEmitter.Action
+- uid: Lime.ParticleEmitter.Action*
+  name: Action
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Action_
+  commentId: Overload:Lime.ParticleEmitter.Action
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.Action
+  nameWithType: ParticleEmitter.Action
 - uid: Lime.ParticleEmitter.AddToRenderChain(Lime.RenderChain)
   name: AddToRenderChain(RenderChain)
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_AddToRenderChain_Lime_RenderChain_
@@ -46928,6 +46977,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.DrawCustomShape
   nameWithType: ParticleEmitter.DrawCustomShape
+- uid: Lime.ParticleEmitter.EmissionMethod
+  name: EmissionMethod
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_EmissionMethod
+  commentId: P:Lime.ParticleEmitter.EmissionMethod
+  fullName: Lime.ParticleEmitter.EmissionMethod
+  nameWithType: ParticleEmitter.EmissionMethod
+- uid: Lime.ParticleEmitter.EmissionMethod*
+  name: EmissionMethod
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_EmissionMethod_
+  commentId: Overload:Lime.ParticleEmitter.EmissionMethod
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.EmissionMethod
+  nameWithType: ParticleEmitter.EmissionMethod
 - uid: Lime.ParticleEmitter.EmissionType
   name: EmissionType
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_EmissionType
@@ -47081,6 +47143,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.Number
   nameWithType: ParticleEmitter.Number
+- uid: Lime.ParticleEmitter.OnTrigger(System.String,System.Object,System.Double)
+  name: OnTrigger(String, Object, Double)
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_OnTrigger_System_String_System_Object_System_Double_
+  commentId: M:Lime.ParticleEmitter.OnTrigger(System.String,System.Object,System.Double)
+  fullName: Lime.ParticleEmitter.OnTrigger(System.String, System.Object, System.Double)
+  nameWithType: ParticleEmitter.OnTrigger(String, Object, Double)
+- uid: Lime.ParticleEmitter.OnTrigger*
+  name: OnTrigger
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_OnTrigger_
+  commentId: Overload:Lime.ParticleEmitter.OnTrigger
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.OnTrigger
+  nameWithType: ParticleEmitter.OnTrigger
 - uid: Lime.ParticleEmitter.OnUpdate(System.Single)
   name: OnUpdate(Single)
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_OnUpdate_System_Single_
