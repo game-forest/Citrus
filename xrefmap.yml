@@ -52361,12 +52361,6 @@ references:
   isSpec: "True"
   fullName: Lime.Renderer.CullMode
   nameWithType: Renderer.CullMode
-- uid: Lime.Renderer.CurrentRenderList
-  name: CurrentRenderList
-  href: api/Lime.Renderer.html#Lime_Renderer_CurrentRenderList
-  commentId: F:Lime.Renderer.CurrentRenderList
-  fullName: Lime.Renderer.CurrentRenderList
-  nameWithType: Renderer.CurrentRenderList
 - uid: Lime.Renderer.DepthState
   name: DepthState
   href: api/Lime.Renderer.html#Lime_Renderer_DepthState
@@ -52837,12 +52831,6 @@ references:
   commentId: F:Lime.Renderer.GlobalShaderParams
   fullName: Lime.Renderer.GlobalShaderParams
   nameWithType: Renderer.GlobalShaderParams
-- uid: Lime.Renderer.MainRenderList
-  name: MainRenderList
-  href: api/Lime.Renderer.html#Lime_Renderer_MainRenderList
-  commentId: F:Lime.Renderer.MainRenderList
-  fullName: Lime.Renderer.MainRenderList
-  nameWithType: Renderer.MainRenderList
 - uid: Lime.Renderer.MultiplyTransform1(Lime.Matrix32)
   name: MultiplyTransform1(Matrix32)
   href: api/Lime.Renderer.html#Lime_Renderer_MultiplyTransform1_Lime_Matrix32_
@@ -53753,86 +53741,6 @@ references:
   commentId: F:Lime.RenderingBackend.Vulkan
   fullName: Lime.RenderingBackend.Vulkan
   nameWithType: RenderingBackend.Vulkan
-- uid: Lime.RenderList
-  name: RenderList
-  href: api/Lime.RenderList.html
-  commentId: T:Lime.RenderList
-  fullName: Lime.RenderList
-  nameWithType: RenderList
-- uid: Lime.RenderList.Batches
-  name: Batches
-  href: api/Lime.RenderList.html#Lime_RenderList_Batches
-  commentId: F:Lime.RenderList.Batches
-  fullName: Lime.RenderList.Batches
-  nameWithType: RenderList.Batches
-- uid: Lime.RenderList.Clear
-  name: Clear()
-  href: api/Lime.RenderList.html#Lime_RenderList_Clear
-  commentId: M:Lime.RenderList.Clear
-  fullName: Lime.RenderList.Clear()
-  nameWithType: RenderList.Clear()
-- uid: Lime.RenderList.Clear*
-  name: Clear
-  href: api/Lime.RenderList.html#Lime_RenderList_Clear_
-  commentId: Overload:Lime.RenderList.Clear
-  isSpec: "True"
-  fullName: Lime.RenderList.Clear
-  nameWithType: RenderList.Clear
-- uid: Lime.RenderList.Empty
-  name: Empty
-  href: api/Lime.RenderList.html#Lime_RenderList_Empty
-  commentId: P:Lime.RenderList.Empty
-  fullName: Lime.RenderList.Empty
-  nameWithType: RenderList.Empty
-- uid: Lime.RenderList.Empty*
-  name: Empty
-  href: api/Lime.RenderList.html#Lime_RenderList_Empty_
-  commentId: Overload:Lime.RenderList.Empty
-  isSpec: "True"
-  fullName: Lime.RenderList.Empty
-  nameWithType: RenderList.Empty
-- uid: Lime.RenderList.Flush
-  name: Flush()
-  href: api/Lime.RenderList.html#Lime_RenderList_Flush
-  commentId: M:Lime.RenderList.Flush
-  fullName: Lime.RenderList.Flush()
-  nameWithType: RenderList.Flush()
-- uid: Lime.RenderList.Flush*
-  name: Flush
-  href: api/Lime.RenderList.html#Lime_RenderList_Flush_
-  commentId: Overload:Lime.RenderList.Flush
-  isSpec: "True"
-  fullName: Lime.RenderList.Flush
-  nameWithType: RenderList.Flush
-- uid: Lime.RenderList.GetBatch*
-  name: GetBatch
-  href: api/Lime.RenderList.html#Lime_RenderList_GetBatch_
-  commentId: Overload:Lime.RenderList.GetBatch
-  isSpec: "True"
-  fullName: Lime.RenderList.GetBatch
-  nameWithType: RenderList.GetBatch
-- uid: Lime.RenderList.GetBatch``1(Lime.ITexture,Lime.ITexture,Lime.IMaterial,System.Int32,System.Int32)
-  name: GetBatch<TVertex>(ITexture, ITexture, IMaterial, Int32, Int32)
-  href: api/Lime.RenderList.html#Lime_RenderList_GetBatch__1_Lime_ITexture_Lime_ITexture_Lime_IMaterial_System_Int32_System_Int32_
-  commentId: M:Lime.RenderList.GetBatch``1(Lime.ITexture,Lime.ITexture,Lime.IMaterial,System.Int32,System.Int32)
-  name.vb: GetBatch(Of TVertex)(ITexture, ITexture, IMaterial, Int32, Int32)
-  fullName: Lime.RenderList.GetBatch<TVertex>(Lime.ITexture, Lime.ITexture, Lime.IMaterial, System.Int32, System.Int32)
-  fullName.vb: Lime.RenderList.GetBatch(Of TVertex)(Lime.ITexture, Lime.ITexture, Lime.IMaterial, System.Int32, System.Int32)
-  nameWithType: RenderList.GetBatch<TVertex>(ITexture, ITexture, IMaterial, Int32, Int32)
-  nameWithType.vb: RenderList.GetBatch(Of TVertex)(ITexture, ITexture, IMaterial, Int32, Int32)
-- uid: Lime.RenderList.Render
-  name: Render()
-  href: api/Lime.RenderList.html#Lime_RenderList_Render
-  commentId: M:Lime.RenderList.Render
-  fullName: Lime.RenderList.Render()
-  nameWithType: RenderList.Render()
-- uid: Lime.RenderList.Render*
-  name: Render
-  href: api/Lime.RenderList.html#Lime_RenderList_Render_
-  commentId: Overload:Lime.RenderList.Render
-  isSpec: "True"
-  fullName: Lime.RenderList.Render
-  nameWithType: RenderList.Render
 - uid: Lime.RenderObject
   name: RenderObject
   href: api/Lime.RenderObject.html
