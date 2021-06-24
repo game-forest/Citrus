@@ -41,7 +41,7 @@
     <Content Include="Toolchain.Win\zlib1.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="..\3rdParty\FbxSdk\x64bit\FbxSdk.dll">
+    <None Include="..\3rdParty\FbxSdk\FbxSdk.dll">
       <Link>FbxSdk.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
