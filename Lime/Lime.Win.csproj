@@ -63,11 +63,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\3rdParty\OpenAL\x64bit\OpenAL32.dll">
+    <Content Include="..\3rdParty\OpenAL\OpenAL32.dll">
       <Link>OpenAL32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\3rdParty\OpenAL\x64bit\wrap_oal.dll">
+    <Content Include="..\3rdParty\OpenAL\wrap_oal.dll">
       <Link>wrap_oal.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
