@@ -5,7 +5,7 @@ using Lime.Profiler.Graphics;
 
 namespace Lime
 {
-	public class RenderList
+	internal class RenderList
 	{
 		public readonly List<IRenderBatch> Batches = new List<IRenderBatch>();
 		private IRenderBatch lastBatch;

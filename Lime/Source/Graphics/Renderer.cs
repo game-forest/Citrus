@@ -128,8 +128,7 @@ namespace Lime
 		public static Matrix32 Transform1 { private get; set; }
 		public static int RenderCycle { get; private set; }
 		public static int PolyCount3d = 0;
-		public static readonly RenderList MainRenderList = new RenderList();
-		public static RenderList CurrentRenderList;
+		internal static readonly RenderList RenderList = new RenderList();
 #if ANDROID
 		public static bool AmazonBindTextureWorkaround;
 #endif
@@ -215,7 +214,7 @@ namespace Lime
 		{
 			private get { return scissorState; }
 			set {
-				MainRenderList.Flush();
+				RenderList.Flush();
 				scissorState = value;
 				PlatformRenderer.SetScissorState(value);
 			}
@@ -225,7 +224,7 @@ namespace Lime
 		{
 			private get { return stencilState; }
 			set {
-				MainRenderList.Flush();
+				RenderList.Flush();
 				stencilState = value;
 				PlatformRenderer.SetStencilState(value);
 			}
@@ -235,7 +234,7 @@ namespace Lime
 		{
 			get { return viewport; }
 			set {
-				MainRenderList.Flush();
+				RenderList.Flush();
 				viewport = value;
 				PlatformRenderer.SetViewport(value);
 			}
@@ -245,7 +244,7 @@ namespace Lime
 		{
 			private get { return depthState; }
 			set {
-				MainRenderList.Flush();
+				RenderList.Flush();
 				depthState = value;
 				PlatformRenderer.SetDepthState(depthState);
 			}
@@ -336,7 +335,6 @@ namespace Lime
 			FrontFace = FrontFace.CW;
 			World = Matrix44.Identity;
 			View = Matrix44.Identity;
-			CurrentRenderList = MainRenderList;
 			Clear(ClearOptions.All, Color4.Black);
 			RenderCycle++;
 		}
@@ -348,7 +346,7 @@ namespace Lime
 
 		public static void Flush()
 		{
-			MainRenderList.Flush();
+			RenderList.Flush();
 		}
 
 		public static void DrawTextLine(float x, float y, string text, float fontHeight, Color4 color, float letterSpacing)
@@ -503,7 +501,7 @@ namespace Lime
 
 		private static RenderBatch<Vertex> DrawTrianglesHelper(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)
 		{
-			var batch = CurrentRenderList.GetBatch<Vertex>(texture1, texture2, material, numVertices, (numVertices - 2) * 3);
+			var batch = RenderList.GetBatch<Vertex>(texture1, texture2, material, numVertices, (numVertices - 2) * 3);
 			var transform = GetEffectiveTransform();
 			var vd = batch.Mesh.Vertices;
 			batch.Mesh.DirtyFlags |= MeshDirtyFlags.Vertices;
@@ -540,7 +538,7 @@ namespace Lime
 			texture1?.TransformUVCoordinatesToAtlasSpace(ref uv1t1);
 			texture2?.TransformUVCoordinatesToAtlasSpace(ref uv0t2);
 			texture2?.TransformUVCoordinatesToAtlasSpace(ref uv1t2);
-			var batch = CurrentRenderList.GetBatch<Vertex>(texture1, texture2, material, 4, 6);
+			var batch = RenderList.GetBatch<Vertex>(texture1, texture2, material, 4, 6);
 			batch.Mesh.DirtyFlags |= MeshDirtyFlags.VerticesIndices;
 			int v = batch.LastVertex;
 			int i = batch.LastIndex;
@@ -648,7 +646,7 @@ namespace Lime
 				var texture1 = batchedSprites[0].Texture1;
 				var texture2 = batchedSprites[0].Texture2;
 				var material = batchedSprites[0].Material;
-				var batch = CurrentRenderList.GetBatch<Vertex>(texture1, texture2, material, 4 * batchLength, 6 * batchLength);
+				var batch = RenderList.GetBatch<Vertex>(texture1, texture2, material, 4 * batchLength, 6 * batchLength);
 				int v = batch.LastVertex;
 				int i = batch.LastIndex;
 				batch.Mesh.DirtyFlags |= MeshDirtyFlags.VerticesIndices;
