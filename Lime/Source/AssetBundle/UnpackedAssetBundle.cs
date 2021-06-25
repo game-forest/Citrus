@@ -15,7 +15,9 @@ namespace Lime
 
 		public UnpackedAssetBundle(string baseDirectory)
 		{
-			BaseDirectory = NormalizeDirectoryPath(baseDirectory);
+			// Path.GetFullPath will resolve ".." special symbol in path and
+			// concatenate current directory if path is not rooted.
+			BaseDirectory = NormalizeDirectoryPath(Path.GetFullPath(baseDirectory));
 			watcher = new FileSystemWatcher(BaseDirectory, includeSubdirectories: true);
 			watcher.Changed += _ => assetsCached = false;
 			watcher.Created += _ => assetsCached = false;
@@ -135,9 +137,7 @@ namespace Lime
 
 		private static string NormalizeDirectoryPath(string path)
 		{
-			// Path.GetFullPath will resolve ".." special symbol in path and
-			// concatenate current directory if path is not rooted.
-			path = Path.GetFullPath(path).Replace('\\', '/');
+			path = path.Replace('\\', '/');
 			if (!path.EndsWith("/")) {
 				path += '/';
 			}
