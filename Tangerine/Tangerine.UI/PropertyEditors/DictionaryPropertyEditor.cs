@@ -11,13 +11,21 @@ namespace Tangerine.UI.PropertyEditors
 	public class DictionaryPropertyEditor<TDictionary, TValue> :
 		ExpandablePropertyEditor<TDictionary> where TDictionary : IDictionary<string, TValue>, IDictionary
 	{
-		private readonly Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>> populateEditors;
-		private static TValue DefaultValue => typeof(TValue) == typeof(string) ?
-			(TValue)(object)string.Empty : typeof(TValue).IsInterface || typeof(TValue).IsAbstract ?
-				default : Activator.CreateInstance<TValue>();
-		private KeyValuePair keyValueToAdd = new KeyValuePair { Key = "", Value = DefaultValue, };
+		private readonly Func<
+			Type,
+			PropertyEditorParams,
+			Widget,
+			object,
+			IEnumerable<IPropertyEditor>
+		> populateEditors;
+		private static TValue DefaultValue => typeof(TValue) == typeof(string)
+			? (TValue)(object)string.Empty
+			: typeof(TValue).IsInterface || typeof(TValue).IsAbstract
+				? default
+				: Activator.CreateInstance<TValue>();
+		private readonly KeyValuePair keyValueToAdd = new KeyValuePair { Key = "", Value = DefaultValue, };
 		private TDictionary dictionary;
-		private HashSet<KeyValuePair> pairs = new HashSet<KeyValuePair>();
+		private readonly HashSet<KeyValuePair> pairs = new HashSet<KeyValuePair>();
 
 		private class KeyValuePair
 		{
@@ -27,12 +35,17 @@ namespace Tangerine.UI.PropertyEditors
 			public override int GetHashCode() => Key.GetHashCode();
 		}
 
-		public DictionaryPropertyEditor(IPropertyEditorParams editorParams, Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>> populateEditors) : base(editorParams)
-		{
+		public DictionaryPropertyEditor(
+			IPropertyEditorParams editorParams,
+			Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>> populateEditors
+		) : base(editorParams) {
 			if (EditorParams.Objects.Skip(1).Any()) {
 				EditorContainer.AddNode(new Widget() {
 					Layout = new HBoxLayout(),
-					Nodes = { new ThemedSimpleText { Text = "Edit of dictionary properties isn't supported for multiple selection.", ForceUncutText = false } },
+					Nodes = { new ThemedSimpleText {
+						Text = "Edit of dictionary properties isn't supported for multiple selection.",
+						ForceUncutText = false
+					} },
 					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
 				});
 				return;
@@ -42,6 +55,11 @@ namespace Tangerine.UI.PropertyEditors
 			var addButton = new ThemedAddButton {
 				Clicked = () => {
 					if (dictionary == null) {
+						if (IsSetterPrivate()) {
+							ShowPrivateSetterAlert();
+							return;
+						}
+						// TODO: this should be part of transaction to be able to undo
 						var pi = EditorParams.PropertyInfo;
 						var o = EditorParams.Objects.First();
 						pi.SetValue(o, dictionary = Activator.CreateInstance<TDictionary>());
@@ -62,7 +80,12 @@ namespace Tangerine.UI.PropertyEditors
 				},
 				LayoutCell = new LayoutCell(Alignment.LeftCenter),
 			};
-			var keyEditorContainer = CreateKeyEditor(editorParams, keyValueToAdd, s => keyValueToAdd.Key = s, addButton);
+			var keyEditorContainer = CreateKeyEditor(
+				editorParams: editorParams,
+				keyValue: keyValueToAdd,
+				submitted: s => keyValueToAdd.Key = s,
+				button: addButton
+			);
 			ExpandableContent.Nodes.Add(keyEditorContainer);
 			ExpandableContent.Nodes.Add(CreateValueEditor(editorParams, keyValueToAdd, populateEditors));
 			Rebuild();
@@ -98,8 +121,17 @@ namespace Tangerine.UI.PropertyEditors
 			var container = new Widget {
 				Layout = new VBoxLayout(),
 				Nodes = {
-					(keyEditorContainer = CreateKeyEditor(EditorParams, keyValue, s => SetKey(keyValue, s), deleteButton)),
-					(CreateValueEditor(EditorParams, keyValue, populateEditors, (o, name, v) => SetValue(keyValue, (TValue)v))),
+					(keyEditorContainer = CreateKeyEditor(
+						editorParams: EditorParams,
+						keyValue: keyValue, submitted: s => SetKey(keyValue, s),
+						button: deleteButton
+					)),
+					CreateValueEditor(
+						editorParams: EditorParams,
+						keyValue: keyValue,
+						populateEditors: populateEditors,
+						setter: (o, name, v) => SetValue(keyValue, (TValue)v)
+					),
 				}
 			};
 			keyEditorContainer.Tasks.AddLoop(() => {
@@ -118,9 +150,9 @@ namespace Tangerine.UI.PropertyEditors
 				container.UnlinkAndDispose();
 			};
 			container.CompoundPresenter.Add(new WidgetFlatFillPresenter(
-				pairs.Count % 2 == 0 ?
-					ColorTheme.Current.Inspector.StripeBackground1 :
-					ColorTheme.Current.Inspector.StripeBackground2
+				pairs.Count % 2 == 0
+					? ColorTheme.Current.Inspector.StripeBackground1
+					: ColorTheme.Current.Inspector.StripeBackground2
 			) { IgnorePadding = true });
 			return container;
 		}
@@ -148,8 +180,12 @@ namespace Tangerine.UI.PropertyEditors
 			}
 		}
 
-		private static Widget CreateKeyEditor(IPropertyEditorParams editorParams, KeyValuePair keyValue, Action<string> submitted, Widget button)
-		{
+		private static Widget CreateKeyEditor(
+			IPropertyEditorParams editorParams,
+			KeyValuePair keyValue,
+			Action<string> submitted,
+			Widget button
+		) {
 			var keyEditor = editorParams.EditBoxFactory();
 			keyEditor.AddChangeWatcher(() => keyValue.Key, s => keyEditor.Text = s);
 			keyEditor.Submitted += submitted;
@@ -205,9 +241,14 @@ namespace Tangerine.UI.PropertyEditors
 			if (setter != null) {
 				valuePropertyEditorParams.PropertySetter = setter;
 			}
-			var valueEditor = populateEditors(typeof(KeyValuePair), valuePropertyEditorParams, valueContainer, keyValue).First();
+			var valueEditor = populateEditors(
+				typeof(KeyValuePair),
+				valuePropertyEditorParams,
+				valueContainer, keyValue
+			).First();
 			// Hack in order to keep same background for KeyValue pair.
-			valueEditor.ContainerWidget.CompoundPresenter.RemoveAt(valueEditor.ContainerWidget.CompoundPresenter.Count - 1);
+			valueEditor.ContainerWidget.CompoundPresenter
+				.RemoveAt(valueEditor.ContainerWidget.CompoundPresenter.Count - 1);
 			valueEditor.ContainerWidget.Padding = new Thickness(0f, 0f, 0f, 0f);
 			return valueContainer;
 		}
