@@ -13,19 +13,18 @@ namespace Tangerine.UI.Timeline
 			if (view.IsGridRowViewCreated) {
 				return;
 			}
-			if (item.TryGetNode(out var node)) {
+			if (item.Components.TryGet<Core.Components.PropertyRow>(out var propRow)) {
+				view.GridRowViewFactory ??= () => new GridPropertyView(propRow.Node, propRow.Animator);
+			} else if (item.TryGetNode(out var node)) {
 				if (node is Audio audio) {
-					view.GridRowViewFactory = () => new GridAudioView(audio);
+					view.GridRowViewFactory ??= () => new GridAudioView(audio);
 				} else {
-					view.GridRowViewFactory = () => new GridNodeView(node);
+					view.GridRowViewFactory ??= () => new GridNodeView(node);
 				}
 			} else if (item.GetFolder() != null) {
-				view.GridRowViewFactory = () => new GridFolderView();
-			} else if (item.Components.Contains<Core.Components.PropertyRow>()) {
-				var propRow = item.Components.Get<Core.Components.PropertyRow>();
-				view.GridRowViewFactory = () => new GridPropertyView(propRow.Node, propRow.Animator);
+				view.GridRowViewFactory ??= () => new GridFolderView();
 			} else if (item.Components.Contains<Core.Components.AnimationTrackRow>()) {
-				view.GridRowViewFactory = () => new GridAnimationTrackView(item);
+				view.GridRowViewFactory ??= () => new GridAnimationTrackView(item);
 			}
 		}
 	}
