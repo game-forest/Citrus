@@ -39,14 +39,12 @@ namespace Tangerine.Core
 		{
 			Audio.GloballyEnable = false;
 			try {
-				Node.TangerineAnimationPositioningInProgress = true;
 				processedAnimationRanges.Clear();
 				var animationStates = new List<AnimationState>();
 				BuildAnimationStates(processedAnimationRanges, animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
 				ApplyAnimationStates(animationStates, animation, stopAnimations);
 			} finally {
 				Audio.GloballyEnable = true;
-				Node.TangerineAnimationPositioningInProgress = false;
 			}
 		}
 
