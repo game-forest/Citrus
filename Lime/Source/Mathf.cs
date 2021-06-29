@@ -11,8 +11,8 @@ namespace Lime
 
 		public const float ZeroTolerance = 1e-6f; // Value a 8x higher than 1.19209290E-07F
 
-		public const float E = (float)Math.E;
-		public const float Pi = (float)Math.PI;
+		public const float E = MathF.E;
+		public const float Pi = MathF.PI;
 		public const float TwoPi = 2 * Pi;
 		public const float HalfPi = Pi / 2;
 		public const float DegToRad = Pi / 180;
@@ -30,7 +30,7 @@ namespace Lime
 		/// <param name="v"></param>
 		/// <returns></returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Abs(float v) => Math.Abs(v);
+		public static float Abs(float v) => MathF.Abs(v);
 
 		/// <summary>
 		///  Returns <see cref="Vector2"/> with absolute values of corresponding components of <paramref name="v"/>
@@ -47,11 +47,10 @@ namespace Lime
 		public static Vector3 Abs(Vector3 v) => new Vector3(Abs(v.X), Abs(v.Y), Abs(v.Z));
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int Sign(float x) => Math.Sign(x);
+		public static int Sign(float x) => MathF.Sign(x);
 
 		public static Vector2 Sign(Vector2 x) => new Vector2(Sign(x.X), Sign(x.Y));
 
-#if iOS
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Cos(float radians) => MathF.Cos(radians);
 
@@ -81,37 +80,7 @@ namespace Lime
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Pow(float x, float y) => MathF.Pow(x, y);
-#else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Cos(float radians) => (float)Math.Cos(radians);
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Sin(float radians) => (float)Math.Sin(radians);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Atan2(Vector2 v) => (float)Math.Atan2(v.Y, v.X);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Atan2(float y, float x) => (float)Math.Atan2(y, x);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Asin(float v) => (float)Math.Asin(v);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Acos(float v) => (float)Math.Acos(v);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Sqrt(float x) => (float)Math.Sqrt(x);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Exp(float x) => (float)Math.Exp(x);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Log(float x) => (float)Math.Log(x);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Pow(float x, float y) => (float)Math.Pow(x, y);
-#endif
 		/// <summary>
 		/// Gauss error function. The maximum error is below 1.5 × 10-7.
 		/// </summary>
@@ -153,7 +122,7 @@ namespace Lime
 		public static float Wrap360(float angle)
 		{
 			if ((angle >= 360.0f) || (angle < 0.0f)) {
-				angle -= (float)Math.Floor(angle * (1.0f / 360.0f)) * 360.0f;
+				angle -= MathF.Floor(angle * (1.0f / 360.0f)) * 360.0f;
 			}
 			return angle;
 		}
