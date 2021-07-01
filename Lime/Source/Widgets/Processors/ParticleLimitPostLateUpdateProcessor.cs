@@ -1,6 +1,6 @@
 namespace Lime
 {
-	internal class ParticleLimitPostLateUpdateProcessor : NodeProcessor
+	public class ParticleLimitPostLateUpdateProcessor : NodeProcessor
 	{
 		private ParticleLimiter particleLimiter;
 

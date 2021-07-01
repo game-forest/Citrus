@@ -15,7 +15,7 @@ namespace Lime
 		/// </summary>
 		public int ParticleCountLimit { get; set; } = -1;
 
-		internal ParticleLimiter()
+		public ParticleLimiter()
 		{
 			Reset();
 		}
