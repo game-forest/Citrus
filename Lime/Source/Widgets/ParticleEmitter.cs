@@ -32,12 +32,17 @@ namespace Lime
 		Outer = 2,
 	}
 
-	public enum EmissionMethod
-	{
-		NumberPerSecond,
-		ConstantNumber,
-		NumberPerBurst,
-	}
+	// TODO: Introduce
+	// [YuzuMember]
+	// public EmissionMethod EmissionMethod { get; set; }
+	// when migrations are ready and migrate ImmortalParticles
+	// and NumberPerBurst flags into that field.
+	//public enum EmissionMethod
+	//{
+	//	NumberPerSecond,
+	//	ConstantNumber,
+	//	NumberPerBurst,
+	//}
 
 	public enum EmitterAction
 	{
@@ -146,24 +151,11 @@ namespace Lime
 		/// <summary>
 		/// Particles are generated once and live forever.
 		/// </summary>
-		[TangerineIgnore]
 		[YuzuMember]
 		[TangerineKeyframeColor(8)]
-		public bool ImmortalParticles
-		{
-			get
-			{
-				return this.EmissionMethod == Lime.EmissionMethod.ConstantNumber;
-			}
-			set
-			{
-				if (value) {
-					this.EmissionMethod = Lime.EmissionMethod.ConstantNumber;
-				}
-			}
-		}
+		public bool ImmortalParticles { get; set; }
 		[YuzuMember]
-		public EmissionMethod EmissionMethod { get; set; }
+		public bool NumberPerBurst { get; set; }
 		[YuzuMember]
 		[TangerineKeyframeColor(9)]
 		public EmitterShape Shape { get; set; }
@@ -351,7 +343,7 @@ namespace Lime
 			AlongPathOrientation = false;
 			TimeShift = 0;
 			ImmortalParticles = false;
-			EmissionMethod = EmissionMethod.NumberPerSecond;
+			NumberPerBurst = false;
 			Components.Add(new UpdatableNodeBehavior());
 		}
 
@@ -470,25 +462,24 @@ namespace Lime
 				RefreshCustomShape();
 			}
 			delta *= Speed;
-			switch (EmissionMethod) {
-				case EmissionMethod.NumberPerSecond:
-					particlesToSpawn += Number * delta;
-					break;
-				case EmissionMethod.ConstantNumber:
-					if (TimeShift > 0) {
-						particlesToSpawn += Number * delta / TimeShift;
-					} else {
-						particlesToSpawn = Number;
-					}
-					particlesToSpawn = Math.Min(particlesToSpawn, Number - particles.Count);
-					FreeLastParticles(particles.Count - (int)Number);
-					break;
-				case EmissionMethod.NumberPerBurst:
-					if (burstOnUpdateOnce) {
-						burstOnUpdateOnce = false;
-						particlesToSpawn = Number;
-					}
-					break;
+			if (NumberPerBurst) {
+				// Spawn this.Number of particles each time Action.Burst is triggered
+				if (burstOnUpdateOnce) {
+					burstOnUpdateOnce = false;
+					particlesToSpawn = Number;
+				}
+			} else if (ImmortalParticles) {
+				// Constant number each frame made equal to this.Number of immortal particles
+				if (TimeShift > 0) {
+					particlesToSpawn += Number * delta / TimeShift;
+				} else {
+					particlesToSpawn = Number;
+				}
+				particlesToSpawn = Math.Min(particlesToSpawn, Number - particles.Count);
+				FreeLastParticles(particles.Count - (int)Number);
+			} else {
+				// this.Number per second
+				particlesToSpawn += Number * delta;
 			}
 			var currentBoundingRect = new Rectangle();
 			if (TryGetParticleLimiter(out var particleLimiter)) {
@@ -519,7 +510,7 @@ namespace Lime
 				i--;
 			}
 			FreeLastParticles(particlesToFreeCount);
-			if (EmissionMethod == EmissionMethod.NumberPerBurst) {
+			if (NumberPerBurst) {
 				particlesToSpawn = 0.0f;
 			}
 			if (particles.Count == 0) {
@@ -722,7 +713,7 @@ namespace Lime
 			return
 				Application.EnableParticleLimiter &&
 				GloballyVisible &&
-				EmissionMethod == EmissionMethod.NumberPerSecond &&
+				(!NumberPerBurst && !ImmortalParticles) &&
 				Manager != null &&
 				Manager.ServiceProvider.TryGetService(out particleLimiter);
 		}
