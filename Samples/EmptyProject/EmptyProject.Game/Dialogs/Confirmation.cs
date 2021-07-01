@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Lime;
 
 namespace EmptyProject.Dialogs
 {
-	public class Confirmation : Dialog<Scenes.Confirmation>
+	public class Confirmation : Dialog<Scenes.Data.Confirmation>
 	{
 		public event Action OkClicked;
 

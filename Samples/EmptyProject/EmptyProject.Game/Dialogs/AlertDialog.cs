@@ -1,8 +1,8 @@
-﻿using Lime;
+using Lime;
 
 namespace EmptyProject.Dialogs
 {
-	public class AlertDialog : Dialog<Scenes.AlertDialog>
+	public class AlertDialog : Dialog<Scenes.Data.AlertDialog>
 	{
 		public AlertDialog(string text)
 		{

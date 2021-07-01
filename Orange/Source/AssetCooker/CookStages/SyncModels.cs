@@ -1,35 +1,51 @@
 using System;
-using System.IO;
-using Lime;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Lime;
 using Orange.FbxImporter;
+using SHA256 = Lime.SHA256;
 
 namespace Orange
 {
-	class SyncModels : AssetCookerCookStage, ICookStage
+	class SyncModels : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return fbxExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return t3dExtension; } }
+		private readonly AssetCooker assetCooker;
 
-		private readonly string fbxExtension = ".fbx";
-		private readonly string t3dExtension = ".t3d";
-
-		public SyncModels(AssetCooker assetCooker) : base(assetCooker) { }
-
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(fbxExtension);
-
-		public void Action() => AssetCooker.SyncUpdated(fbxExtension, t3dExtension, Converter, (srcPath, dstPath) => AssetCooker.ModelsToRebuild.Contains(dstPath));
-
-		private bool Converter(string srcPath, string dstPath)
+		public SyncModels(AssetCooker assetCooker)
 		{
-			var cookingRules = AssetCooker.CookingRulesMap[srcPath];
+			this.assetCooker = assetCooker;
+		}
+
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			foreach (var fbx in assetCooker.InputBundle.EnumerateFiles(null, ".fbx")) {
+				var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
+					fbx, assetCooker.CookingRulesMap[fbx]
+				);
+				var attachment = System.IO.Path.ChangeExtension(fbx, Model3DAttachment.FileExtension);
+				if (assetCooker.InputBundle.FileExists(attachment)) {
+					hash = SHA256.Compute(
+						hash,
+						assetCooker.InputBundle.ComputeCookingUnitHash(
+							attachment,
+							assetCooker.CookingRulesMap[attachment]
+						)
+					);
+				}
+				yield return (fbx, hash);
+			}
+		}
+
+		public void Cook(string fbxPath, SHA256 cookingUnitHash)
+		{
+			var cookingRules = assetCooker.CookingRulesMap[fbxPath];
 			var compression = cookingRules.ModelCompression;
 			Model3D model;
 			var options = new FbxImportOptions {
-				Path = srcPath,
-				Target = AssetCooker.Target,
-				CookingRulesMap = AssetCooker.CookingRulesMap
+				Path = fbxPath,
+				Target = assetCooker.Target,
+				CookingRulesMap = assetCooker.CookingRulesMap
 			};
 			using (var fbxImporter = new FbxModelImporter(options)) {
 				model = fbxImporter.LoadModel();
@@ -48,22 +64,32 @@ namespace Orange
 				default:
 					throw new ArgumentOutOfRangeException($"Unknown compression: {compression}");
 			}
-			var animationPathPrefix = AssetCooker.GetModelAnimationPathPrefix(dstPath);
-			AssetCooker.DeleteModelExternalAnimations(animationPathPrefix);
-			ExportModelAnimations(model, animationPathPrefix, assetAttributes, cookingRules.SHA1);
+			ExportModelAnimations(model, fbxPath, assetAttributes, cookingUnitHash);
 			model.RemoveAnimatorsForExternalAnimations();
-			var externalMeshPath = AssetCooker.GetModelExternalMeshPath(dstPath);
-			if (AssetCooker.OutputBundle.FileExists(externalMeshPath)) {
-				AssetCooker.DeleteFileFromBundle(externalMeshPath);
-			}
-			ExportModelMeshes(model, externalMeshPath, assetAttributes, cookingRules.SHA1);
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, model, Persistence.Format.Binary, t3dExtension,
-				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), assetAttributes, cookingRules.SHA1);
-			return true;
+			ExportModelMeshData(model, fbxPath, assetAttributes, cookingUnitHash);
+			InternalPersistence.Instance.WriteObjectToBundle(
+				bundle: assetCooker.OutputBundle,
+				path: Path.ChangeExtension(fbxPath, ".t3d"),
+				instance: model,
+				format: Persistence.Format.Binary,
+				cookingUnitHash: cookingUnitHash,
+				attributes: assetAttributes
+			);
 		}
 
-		private void ExportModelAnimations(Model3D model, string pathPrefix, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
+		private static string GetModelAnimationPathPrefix(string modelPath)
 		{
+			return Toolbox.ToUnixSlashes(Path.ChangeExtension(modelPath, null) + "@");
+		}
+
+		private static string GetModelExternalMeshPath(string modelPath)
+		{
+			return Toolbox.ToUnixSlashes(Path.ChangeExtension(modelPath, null) + ".msh");
+		}
+
+		private void ExportModelAnimations(Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
+		{
+			var pathPrefix = GetModelAnimationPathPrefix(cookingUnit);
 			foreach (var animation in model.Animations) {
 				if (animation.IsLegacy) {
 					continue;
@@ -73,13 +99,15 @@ namespace Orange
 				var path = pathWithoutExt + ".ant";
 				var data = animation.GetData();
 				animation.ContentsPath = pathWithoutExt;
-				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".ant", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
-				Console.WriteLine("+ " + path);
+				InternalPersistence.Instance.WriteObjectToBundle(
+					assetCooker.OutputBundle, path, data, Persistence.Format.Binary,
+					cookingUnitHash, assetAttributes);
 			}
 		}
 
-		private void ExportModelMeshes(Model3D model, string path, AssetAttributes assetAttributes, byte[] cookingRulesSHA1)
+		private void ExportModelMeshData(Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
 		{
+			var path = GetModelExternalMeshPath(cookingUnit);
 			var data = new Model3D.MeshData();
 			var submeshes = model.Descendants
 				.OfType<Mesh3D>()
@@ -90,8 +118,8 @@ namespace Orange
 			}
 			if (data.Meshes.Count > 0) {
 				model.MeshContentPath = Path.ChangeExtension(path, null);
-				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, path, data, Persistence.Format.Binary, ".msh", AssetCooker.InputBundle.GetFileLastWriteTime(path), assetAttributes, cookingRulesSHA1);
-				Console.WriteLine("+ " + path);
+				InternalPersistence.Instance.WriteObjectToBundle(
+					assetCooker.OutputBundle, path, data, Persistence.Format.Binary, cookingUnitHash, assetAttributes);
 			}
 		}
 	}

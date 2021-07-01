@@ -40,7 +40,9 @@ namespace Orange
 					) {
 						allScenes.Add(scenePath);
 						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
-						var dateModified = File.GetLastWriteTime(scenePath).ToUniversalTime();
+						var sourceHash = AssetBundle.Current.ComputeCookingUnitHash(
+							scenePath, assetToCookingRules[scenePath]
+						);
 						if (!cache.SceneFiles.ContainsKey(scenePath)) {
 							modifiedScenes.Add(scenePath);
 							scenesToCook.Add(scenePath);
@@ -50,11 +52,11 @@ namespace Orange
 							}
 							cache.SceneFiles.Add(scenePath, new SceneRecord {
 								Bundle = bundles.First(),
-								DateModified = dateModified
+								CookingUnitHash = sourceHash
 							});
 						} else {
 							var cacheRecord = cache.SceneFiles[kv.Key];
-							if (dateModified > cacheRecord.DateModified) {
+							if (sourceHash != cacheRecord.CookingUnitHash) {
 								var queue = new Queue<string>();
 								if (!visitedScenes.Contains(scenePath)) {
 									queue.Enqueue(scenePath);
@@ -74,7 +76,7 @@ namespace Orange
 										}
 									}
 								}
-								cache.SceneFiles[scenePath].DateModified = dateModified;
+								cache.SceneFiles[scenePath].CookingUnitHash = sourceHash;
 								modifiedScenes.Add(scenePath);
 							}
 						}
@@ -83,13 +85,16 @@ namespace Orange
 			}
 			try {
 				// Don't return early even if there's nothing modified since there may be stuff to delete
-				// Also, don't bother with loading ony usedBundles for now, just load all of them
-				AssetBundle.SetCurrent(new AggregateAssetBundle(cookingBundles.Select(bundleName => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName))).ToArray()), false);
+				// Also, don't bother with loading only usedBundles for now, just load all of them
+				var allBundles = cookingBundles
+					.Select(bundleName => new PackedAssetBundle(
+						The.Workspace.GetBundlePath(target.Platform, bundleName)
+					)).ToArray();
+				AssetBundle.SetCurrent(new AggregateAssetBundle(allBundles), false);
 				new ScenesCodeCooker(
 					The.Workspace.ProjectDirectory,
 					The.Workspace.GeneratedScenesPath,
 					The.Workspace.ProjectName,
-					CookingRulesBuilder.MainBundleName,
 					sceneToBundleMap,
 					scenesToCook,
 					allScenes,
@@ -164,10 +169,9 @@ namespace Orange
 			}
 			var codeCookerCachePath = GetCodeCachePath();
 			Directory.CreateDirectory(Path.GetDirectoryName(codeCookerCachePath));
-			using (FileStream stream = new FileStream(codeCookerCachePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
-				var js = new Yuzu.Json.JsonSerializer();
-				js.ToStream(codeCookerCache, stream);
-			}
+			using FileStream stream = new FileStream(codeCookerCachePath, FileMode.Create, FileAccess.Write, FileShare.None);
+			var js = new Yuzu.Json.JsonSerializer();
+			js.ToStream(codeCookerCache, stream);
 		}
 
 		private static CodeCookerCache InvalidateCache(string scenesPath)

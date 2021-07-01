@@ -107,9 +107,8 @@
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\BuildGame.cs" />
-    <Compile Include="UI\ConsoleUI.cs" />
     <Compile Include="Main.CLI.cs" />
+    <Compile Include="UI\ConsoleUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Lemon\Lemon.Mac.csproj">

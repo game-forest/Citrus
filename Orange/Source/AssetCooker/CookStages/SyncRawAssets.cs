@@ -1,33 +1,41 @@
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Orange
 {
-	class SyncRawAssets : AssetCookerCookStage, ICookStage
+	class SyncRawAssets : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return extension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return extension; } }
-
 		private readonly string extension;
 		private readonly AssetAttributes attributes;
+		private readonly AssetCooker assetCooker;
 
 		public SyncRawAssets(AssetCooker assetCooker, string extension, AssetAttributes attributes = AssetAttributes.None)
-			: base(assetCooker)
 		{
+			this.assetCooker = assetCooker;
 			this.extension = extension;
 			this.attributes = attributes;
 		}
 
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(extension);
-
-		public void Action() => AssetCooker.SyncUpdated(extension, extension, Converter);
-
-		private bool Converter(string srcPath, string dstPath)
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
-			AssetCooker.OutputBundle.ImportFile(AssetCooker.InputBundle.ToSystemPath(srcPath), dstPath, 0, extension, attributes,
-				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1);
-			return true;
+			return assetCooker.InputBundle.EnumerateFiles(null, extension)
+				.Select(i => {
+					var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
+						i, assetCooker.CookingRulesMap[i]
+					);
+					return (i, hash);
+				});
+		}
+
+		public void Cook(string filePath, SHA256 cookingUnitHash)
+		{
+			assetCooker.OutputBundle.ImportFile(
+				sourcePath: assetCooker.InputBundle.ToSystemPath(filePath),
+				destinationPath: filePath,
+				cookingUnitHash: cookingUnitHash,
+				attributes: attributes
+			);
 		}
 	}
 }

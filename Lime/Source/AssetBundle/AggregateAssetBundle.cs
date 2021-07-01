@@ -9,7 +9,7 @@ namespace Lime
 	public class AggregateAssetBundle : AssetBundle
 	{
 		private readonly List<AssetBundle> bundles = new List<AssetBundle>();
-		private ReaderWriterLockSlim sync = new ReaderWriterLockSlim();
+		private readonly ReaderWriterLockSlim sync = new ReaderWriterLockSlim();
 
 		public AggregateAssetBundle(params AssetBundle[] bundles)
 		{
@@ -73,13 +73,13 @@ namespace Lime
 			}
 		}
 
-		public override DateTime GetFileLastWriteTime(string path)
+		public override SHA256 GetFileContentsHash(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetFileLastWriteTime(path);
+						return bundle.GetFileContentsHash(path);
 					}
 				}
 			} finally {
@@ -88,18 +88,13 @@ namespace Lime
 			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
 		}
 
-		public override void SetFileLastWriteTime(string path, DateTime time)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override byte[] GetCookingRulesSHA1(string path)
+		public override SHA256 GetFileCookingUnitHash(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetCookingRulesSHA1(path);
+						return bundle.GetFileCookingUnitHash(path);
 					}
 				}
 			} finally {
@@ -123,13 +118,13 @@ namespace Lime
 			throw new InvalidOperationException($"Path {path} not found in aggregate asset bundle.");
 		}
 
-		public override string GetSourceExtension(string path)
+		public override int GetFileUnpackedSize(string path)
 		{
 			sync.EnterReadLock();
 			try {
 				foreach (var bundle in bundles) {
 					if (bundle.FileExists(path)) {
-						return bundle.GetSourceExtension(path);
+						return bundle.GetFileUnpackedSize(path);
 					}
 				}
 			} finally {
@@ -158,30 +153,41 @@ namespace Lime
 			return false;
 		}
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time,
-			AssetAttributes attributes = AssetAttributes.None, byte[] cookingRulesSHA1 = null)
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time,
-			AssetAttributes attributes = AssetAttributes.None, byte[] cookingRulesSHA1 = null)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes = AssetAttributes.None)
 		{
 			throw new InvalidOperationException("Not supported by aggregate asset bundle.");
 		}
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 		{
 			sync.EnterReadLock();
 			try {
-				return bundles.SelectMany(bundle => bundle.EnumerateFileInfos(path, extension));
+				return bundles.SelectMany(bundle => bundle.EnumerateFiles(path, extension));
 			} finally {
 				sync.ExitReadLock();
 			}
 		}
-		
+
 		public override string FromSystemPath(string systemPath) => throw new NotImplementedException();
 
-		public override string ToSystemPath(string bundlePath) => throw new NotImplementedException();
+		public override string ToSystemPath(string bundlePath)
+		{
+			sync.EnterReadLock();
+			try {
+				foreach (var bundle in bundles) {
+					if (bundle.FileExists(bundlePath)) {
+						return bundle.ToSystemPath(bundlePath);
+					}
+				}
+			} finally {
+				sync.ExitReadLock();
+			}
+			throw new InvalidOperationException($"Path {bundlePath} not found in aggregate asset bundle.");
+		}
 	}
 }

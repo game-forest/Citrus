@@ -153,7 +153,7 @@ namespace Orange.FbxImporter
 				var rulesPath = tex.SerializationPath + ".png";
 
 				// TODO: implement U and V wrapping modes separately for cooking rules.
-				// Set "Repeat" wrpap mode if wrap mode of any of the components is set as "Repeat".
+				// Set "Repeat" wrap mode if wrap mode of any of the components is set as "Repeat".
 				var mode = material.MaterialDescriptor.WrapModeU == TextureWrapMode.Repeat || material.MaterialDescriptor.WrapModeV == TextureWrapMode.Repeat ?
 						TextureWrapMode.Repeat : TextureWrapMode.Clamp;
 				if (options.CookingRulesMap.ContainsKey(rulesPath)) {

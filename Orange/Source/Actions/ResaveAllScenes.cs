@@ -29,10 +29,8 @@ namespace Orange
 						path: file,
 						instance: node,
 						format: Persistence.Format.Json,
-						sourceExtension: "tan",
-						time: File.GetLastWriteTime(file),
-						attributes: AssetAttributes.None,
-						cookingRulesSHA1: null
+						default,
+						attributes: AssetAttributes.None
 					);
 				} catch (System.Exception e) {
 					Console.WriteLine($"An exception was caught when trying to resave: {file}");

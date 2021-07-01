@@ -1,22 +1,30 @@
 using System.IO;
 using System.IO.Compression;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Lzma;
 using Yuzu;
 
 namespace Lime
 {
-	struct AssetDescriptor
+	public class InvalidBundleVersionException : Lime.Exception
 	{
-		public DateTime ModificationTime;
-		public byte[] CookingRulesSHA1;
+		public InvalidBundleVersionException(string message) : base(message) { }
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	internal struct AssetDescriptor
+	{
 		public int Offset;
-		public int Length;
+		public int Size;
 		public int AllocatedSize;
+		public int UnpackedSize;
 		public AssetAttributes Attributes;
-		public string SourceExtension;
+		public SHA256 ContentsHash;
+		public SHA256 CookingUnitHash;
 	}
 
 	public static class AssetPath
@@ -34,16 +42,16 @@ namespace Lime
 	{
 		readonly PackedAssetBundle bundle;
 		internal AssetDescriptor descriptor;
-		int position;
-		Stream stream;
+		private int position;
+		private Stream stream;
 
 		public AssetStream(PackedAssetBundle bundle, string path)
 		{
 			this.bundle = bundle;
 			if (!bundle.index.TryGetValue(AssetPath.CorrectSlashes(path), out descriptor)) {
-				throw new Exception("Can't open asset: {0}", path);
+				throw new Exception($"Can't open asset: {path}");
 			}
-			stream = bundle.AllocStream();
+			stream = bundle.AllocateStream();
 			Seek(0, SeekOrigin.Begin);
 		}
 
@@ -51,27 +59,20 @@ namespace Lime
 
 		public override bool CanWrite => false;
 
-		public override long Length => descriptor.Length;
+		public override long Length => descriptor.Size;
 
-		public override long Position {
-			get {
-				return position;
-			}
-			set {
-				Seek(value, SeekOrigin.Begin);
-			}
+		public override long Position
+		{
+			get => position;
+			set => Seek(value, SeekOrigin.Begin);
 		}
 
-		public override bool CanSeek {
-			get {
-				return true;
-			}
-		}
+		public override bool CanSeek => true;
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			ThrowIfDisposed();
-			count = Math.Min(count, descriptor.Length - position);
+			count = Math.Min(count, descriptor.Size - position);
 			if (count > 0) {
 				count = stream.Read(buffer, offset, count);
 				if (count < 0)
@@ -91,29 +92,17 @@ namespace Lime
 			} else if (origin == SeekOrigin.Current) {
 				position += (int)offset;
 			} else {
-				position = descriptor.Length - (int)offset;
+				position = descriptor.Size - (int)offset;
 			}
-			position = Math.Max(0, Math.Min(position, descriptor.Length));
+			position = Math.Max(0, Math.Min(position, descriptor.Size));
 			stream.Seek(position + descriptor.Offset, SeekOrigin.Begin);
 			return position;
 		}
 
-		public override void Flush()
-		{
-			throw new NotImplementedException();
-		}
+		public override void Flush() => throw new NotSupportedException();
+		public override void SetLength(long value) => throw new NotSupportedException();
+		public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
 
-		public override void SetLength(long value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Write(byte[] buffer, int offset, int count)
-		{
-			throw new NotImplementedException();
-		}
-
-		#region IDisposable Support
 		private bool disposedValue;
 
 		protected override void Dispose(bool disposing)
@@ -133,7 +122,6 @@ namespace Lime
 				throw new ObjectDisposedException(GetType().Name);
 			}
 		}
-		#endregion
 	}
 
 	[Flags]
@@ -150,7 +138,7 @@ namespace Lime
 		/// </summary>
 		public class Manifest
 		{
-			public const string FileName = ".Manifest";
+			public const string FileName = ".manifest";
 
 			[YuzuMember]
 			public int? BaseBundleVersion { get; set; }
@@ -169,115 +157,124 @@ namespace Lime
 				return new Manifest();
 			}
 
-			public void Write(AssetBundle bundle)
+			public void Save(AssetBundle bundle)
 			{
 				InternalPersistence.Instance.WriteObjectToBundle(
-					bundle, FileName, this, Persistence.Format.Binary, FileName,
-					DateTime.MinValue, AssetAttributes.None, null);
+					bundle: bundle,
+					path: FileName,
+					instance: this,
+					format: Persistence.Format.Binary,
+					cookingUnitHash: default,
+					attributes: AssetAttributes.None
+				);
 			}
 		}
 
+		private const int Signature = 0x13AF;
+
 		private readonly Stack<Stream> streamPool = new Stack<Stream>();
-		const int Signature = 0x13AF;
 		private int indexOffset;
-		private readonly BinaryReader reader;
-		private readonly BinaryWriter writer;
-		private readonly Stream stream;
-		private AssetBundleFlags flags;
-		internal Dictionary <string, AssetDescriptor> index = new Dictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
+		private BinaryReader reader;
+		private BinaryWriter writer;
+		private Stream stream;
+		internal readonly SortedDictionary<string, AssetDescriptor> index
+			= new SortedDictionary<string, AssetDescriptor>(StringComparer.OrdinalIgnoreCase);
 		private readonly List<AssetDescriptor> trash = new List<AssetDescriptor>();
 		private readonly System.Reflection.Assembly resourcesAssembly;
-		private bool wasModified { get; set; }
-		public string Path { get; private set; }
-		public event Action OnWrite;
+		private bool WasModified { get; set; }
+		public string Path { get; }
 
 		public PackedAssetBundle(string resourceId, string assemblyName)
 		{
-			this.Path = resourceId;
-			resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
-				SingleOrDefault(a => a.GetName().Name == assemblyName);
-			if (resourcesAssembly == null) {
-				throw new Lime.Exception("Assembly '{0}' doesn't exist", assemblyName);
+			try {
+				this.Path = resourceId;
+				resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
+					SingleOrDefault(a => a.GetName().Name == assemblyName);
+				if (resourcesAssembly == null) {
+					throw new Lime.Exception($"Assembly {assemblyName} doesn't exist");
+				}
+				stream = AllocateStream();
+				reader = new BinaryReader(stream);
+				ReadIndexTable();
+			} catch {
+				Dispose();
+				throw;
 			}
-			stream = AllocStream();
-			reader = new BinaryReader(stream);
-			ReadIndexTable();
 		}
 
 		public PackedAssetBundle(string path, AssetBundleFlags flags = Lime.AssetBundleFlags.None)
 		{
-			this.Path = path;
-			this.flags = flags;
-			if ((flags & AssetBundleFlags.Writable) != 0) {
-				stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-				reader = new BinaryReader(stream);
-				writer = new BinaryWriter(stream);
-			} else {
-				stream = AllocStream();
-				reader = new BinaryReader(stream);
+			try {
+				this.Path = path;
+				if ((flags & AssetBundleFlags.Writable) != 0) {
+					stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+					reader = new BinaryReader(stream);
+					writer = new BinaryWriter(stream);
+				} else {
+					stream = AllocateStream();
+					reader = new BinaryReader(stream);
+				}
+				ReadIndexTable();
+			} catch {
+				Dispose();
+				throw;
 			}
-			ReadIndexTable();
 		}
 
-		public static int CalcBundleCheckSum(string bundlePath)
+		public static int CalcBundleChecksum(string bundlePath)
 		{
 			// "Modified FNV with good avalanche behavior and uniform distribution with larger hash sizes."
-			// see http://papa.bretmulvey.com/post/124027987928/hash-functions for algo
-			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				var data = new byte[16 * 1024];
-				int size = stream.Read(data, 0, data.Length);
-				if (size < 8) {
-					return 0;
-				}
-				data[4] = 0;
-				data[5] = 0;
-				data[6] = 0;
-				data[7] = 0;
-				unchecked {
-					const int p = 16777619;
-					int hash = (int)2166136261;
-					while (size > 0) {
-						for (int i = 0; i < size; i++) {
-							hash = (hash ^ data[i]) * p;
-						}
-						size = stream.Read(data, 0, data.Length);
+			// See http://papa.bretmulvey.com/post/124027987928/hash-functions for algorithm.
+			using var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			var data = new byte[16 * 1024];
+			int size = stream.Read(data, 0, data.Length);
+			if (size < 8) {
+				return 0;
+			}
+			data[4] = 0;
+			data[5] = 0;
+			data[6] = 0;
+			data[7] = 0;
+			unchecked {
+				const int p = 16777619;
+				int hash = (int)2166136261;
+				while (size > 0) {
+					for (int i = 0; i < size; i++) {
+						hash = (hash ^ data[i]) * p;
 					}
-					// are these actually needed?
-					hash += hash << 13;
-					hash ^= hash >> 7;
-					hash += hash << 3;
-					hash ^= hash >> 17;
-					hash += hash << 5;
-					return hash;
+					size = stream.Read(data, 0, data.Length);
 				}
+				hash += hash << 13;
+				hash ^= hash >> 7;
+				hash += hash << 3;
+				hash ^= hash >> 17;
+				hash += hash << 5;
+				return hash;
 			}
 		}
 
 		public static bool IsBundleCorrupted(string bundlePath)
 		{
-			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				if (stream.Length < 8) {
-					return true;
-				}
-				var reader = new BinaryReader(stream);
-				// Bundle signature
-				reader.ReadInt32();
-				int storedCheckSum = reader.ReadInt32();
-				int actualCheckSum = CalcBundleCheckSum(bundlePath);
-				return storedCheckSum != actualCheckSum;
+			using var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			if (stream.Length < 8) {
+				return true;
 			}
+			var reader = new BinaryReader(stream);
+			// Bundle signature
+			reader.ReadInt32();
+			int storedChecksum = reader.ReadInt32();
+			int actualChecksum = CalcBundleChecksum(bundlePath);
+			return storedChecksum != actualChecksum;
 		}
 
-		public static void RefreshBundleCheckSum(string bundlePath)
+		public static void RefreshBundleChecksum(string bundlePath)
 		{
-			int checkSum = CalcBundleCheckSum(bundlePath);
-			using (var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite)) {
-				if (stream.Length > 8) {
-					using (var writer = new BinaryWriter(stream)) {
-						writer.Seek(4, SeekOrigin.Begin);
-						writer.Write(checkSum);
-					}
-				}
+			int checksum = CalcBundleChecksum(bundlePath);
+			using var stream = new FileStream(bundlePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+			if (stream.Length > 8) {
+				using var writer = new BinaryWriter(stream);
+				writer.Seek(4, SeekOrigin.Begin);
+				writer.Write(checksum);
 			}
 		}
 
@@ -303,8 +300,7 @@ namespace Lime
 				// return early to avoid modifying Date Modified of bundle file with stream.SetLength
 				return;
 			}
-			trash.Sort((x, y) => {
-				return x.Offset - y.Offset; });
+			trash.Sort((x, y) => x.Offset - y.Offset);
 			int moveDelta = 0;
 			var indexKeys = new string[index.Keys.Count];
 			index.Keys.CopyTo(indexKeys, 0);
@@ -312,7 +308,7 @@ namespace Lime
 				moveDelta += trash[i].AllocatedSize;
 				int blockBegin = trash[i].Offset + trash[i].AllocatedSize;
 				int blockEnd = (i < trash.Count - 1) ? trash[i + 1].Offset : indexOffset;
-				MoveBlock (blockBegin, blockEnd - blockBegin, -moveDelta);
+				MoveBlock(blockBegin, blockEnd - blockBegin, -moveDelta);
 				foreach (var k in indexKeys) {
 					var d = index[k];
 					if (d.Offset >= blockBegin && d.Offset < blockEnd) {
@@ -330,18 +326,21 @@ namespace Lime
 		{
 			base.Dispose();
 			if (writer != null) {
-				if (wasModified) {
+				if (WasModified) {
 					CleanupBundle();
 					WriteIndexTable();
-					RefreshBundleCheckSum(Path);
+					RefreshBundleChecksum(Path);
 				}
 				writer.Close();
+				writer = null;
 			}
 			if (reader != null) {
 				reader.Close();
+				reader = null;
 			}
 			if (stream != null) {
 				stream.Close();
+				stream = null;
 			}
 			index.Clear();
 			while (streamPool.Count > 0) {
@@ -365,7 +364,7 @@ namespace Lime
 			}
 			var stream = new AssetStream(this, path);
 			if (CommandLineArgs.SimulateSlowExternalStorage) {
-				ExternalStorageLagsSimulator.SimulateReadDelay(path, stream.descriptor.Length);
+				ExternalStorageLagsSimulator.SimulateReadDelay(path, stream.descriptor.Size);
 			}
 			return stream;
 		}
@@ -381,123 +380,89 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		public override DateTime GetFileLastWriteTime(string path)
-		{
-			return GetDescriptor(path).ModificationTime;
-		}
+		public override SHA256 GetFileContentsHash(string path) => GetDescriptor(path).ContentsHash;
 
-		public override void SetFileLastWriteTime(string path, DateTime time)
-		{
-			throw new NotImplementedException();
-		}
+		public override SHA256 GetFileCookingUnitHash(string path) => GetDescriptor(path).CookingUnitHash;
 
-		public override byte[] GetCookingRulesSHA1(string path)
-		{
-			return GetDescriptor(path).CookingRulesSHA1;
-		}
+		public override int GetFileSize(string path) => GetDescriptor(path).Size;
 
-		public override int GetFileSize(string path)
-		{
-			return GetDescriptor(path).Length;
-		}
-
-		public override string GetSourceExtension(string path)
-		{
-			return GetDescriptor(path).SourceExtension;
-		}
+		public override int GetFileUnpackedSize(string path) => GetDescriptor(path).UnpackedSize;
 
 		public override void DeleteFile(string path)
 		{
-			OnWrite?.Invoke();
 			path = AssetPath.CorrectSlashes(path);
 			var desc = GetDescriptor(path);
 			index.Remove(path);
 			trash.Add(desc);
-			wasModified = true;
+			WasModified = true;
 		}
 
-		public override bool FileExists(string path)
-		{
-			return index.ContainsKey(AssetPath.CorrectSlashes(path));
-		}
+		public override bool FileExists(string path) => index.ContainsKey(AssetPath.CorrectSlashes(path));
 
-		public override AssetAttributes GetAttributes(string path)
-		{
-			return GetDescriptor(path).Attributes;
-		}
+		public override AssetAttributes GetFileAttributes(string path) => GetDescriptor(path).Attributes;
 
-		public override void SetAttributes(string path, AssetAttributes attributes)
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			OnWrite?.Invoke();
-			var desc = GetDescriptor(path);
-			index[AssetPath.CorrectSlashes(path)] = desc;
-			wasModified = true;
-		}
-
-		public override void ImportFile(
-			string path, Stream stream, int reserve, string sourceExtension,
-			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
-		{
-			if ((attributes & AssetAttributes.Zipped) != 0) {
-				stream = CompressAssetStream(stream, attributes);
+			var length = (int)stream.Length;
+			var buffer = ArrayPool<byte>.Shared.Rent(length);
+			try {
+				if (stream.Read(buffer, 0, length) != length) {
+					throw new IOException();
+				}
+				var hash = SHA256.Compute(buffer, 0, length);
+				stream = new MemoryStream(buffer, 0, length);
+				if ((attributes & AssetAttributes.Zipped) != 0) {
+					stream = CompressAssetStream(stream, attributes);
+				}
+				ImportFileRaw(destinationPath, stream, length, hash, cookingUnitHash, attributes);
+			} finally {
+				ArrayPool<byte>.Shared.Return(buffer);
 			}
-			ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
 		}
 
-		public override void ImportFileRaw(
-			string path, Stream stream, int reserve, string sourceExtension,
-			DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			OnWrite?.Invoke();
-			AssetDescriptor d;
-			bool reuseExistingDescriptor = index.TryGetValue(AssetPath.CorrectSlashes(path), out d) &&
-				(d.AllocatedSize >= stream.Length) &&
-				(d.AllocatedSize <= stream.Length + reserve);
+			var reuseExistingDescriptor =
+				index.TryGetValue(AssetPath.CorrectSlashes(destinationPath), out AssetDescriptor d) &&
+				d.AllocatedSize == stream.Length;
 			if (reuseExistingDescriptor) {
-				d.Length = (int)stream.Length;
-				d.ModificationTime = time;
-				d.CookingRulesSHA1 = cookingRulesSHA1;
+				d.Size = (int)stream.Length;
 				d.Attributes = attributes;
-				d.SourceExtension = sourceExtension;
-				index[AssetPath.CorrectSlashes(path)] = d;
+				d.ContentsHash = hash;
+				d.CookingUnitHash = cookingUnitHash;
+				d.UnpackedSize = unpackedSize;
+				index[AssetPath.CorrectSlashes(destinationPath)] = d;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);
-				reserve = d.AllocatedSize - (int)stream.Length;
-				if (reserve > 0) {
-					byte[] zeroBytes = new byte[reserve];
-					this.stream.Write(zeroBytes, 0, zeroBytes.Length);
-				}
 			} else {
-				if (FileExists(path)) {
-					DeleteFile(path);
+				if (FileExists(destinationPath)) {
+					DeleteFile(destinationPath);
 				}
 				d = new AssetDescriptor();
-				d.ModificationTime = time;
-				d.CookingRulesSHA1 = cookingRulesSHA1;
-				d.Length = (int)stream.Length;
+				d.Size = (int)stream.Length;
 				d.Offset = indexOffset;
-				d.AllocatedSize = d.Length + reserve;
+				d.AllocatedSize = d.Size;
+				d.UnpackedSize = unpackedSize;
 				d.Attributes = attributes;
-				d.SourceExtension = sourceExtension;
-				index[AssetPath.CorrectSlashes(path)] = d;
+				d.ContentsHash = hash;
+				d.CookingUnitHash = cookingUnitHash;
+				index[AssetPath.CorrectSlashes(destinationPath)] = d;
 				indexOffset += d.AllocatedSize;
 				this.stream.Seek(d.Offset, SeekOrigin.Begin);
 				stream.CopyTo(this.stream);
-				byte[] zeroBytes = new byte[reserve];
-				this.stream.Write(zeroBytes, 0, zeroBytes.Length);
 				this.stream.Flush();
 			}
-			wasModified = true;
+			WasModified = true;
 		}
 
-		private static Stream CompressAssetStream(Stream stream, AssetAttributes attributes)
+		internal static Stream CompressAssetStream(Stream stream, AssetAttributes attributes)
 		{
-			MemoryStream memStream = new MemoryStream();
-			using (var compressionStream = CreateCompressionStream(memStream, attributes)) {
+			var memoryStream = new MemoryStream((int)stream.Length);
+			using (var compressionStream = CreateCompressionStream(memoryStream, attributes)) {
 				stream.CopyTo(compressionStream);
 			}
-			memStream.Seek(0, SeekOrigin.Begin);
-			stream = memStream;
+			memoryStream.Seek(0, SeekOrigin.Begin);
+			stream = memoryStream;
 			return stream;
 		}
 
@@ -512,7 +477,7 @@ namespace Lime
 			throw new NotImplementedException();
 		}
 
-		private void ReadIndexTable()
+		private unsafe void ReadIndexTable()
 		{
 			if (stream.Length == 0) {
 				indexOffset = sizeof(int) * 4;
@@ -524,79 +489,60 @@ namespace Lime
 			if (signature != Signature) {
 				throw new Exception($"The asset bundle at \"{Path}\" has been corrupted");
 			}
-			reader.ReadInt32(); // CheckSum
+			// Checksum. Use IsBundleCorrupted to validate.
+			reader.ReadInt32();
 			var version = reader.ReadInt32();
-			if (version != Lime.Version.GetBundleFormatVersion()) {
-				throw new Exception(string.Format("The bundle format has been changed. Please update Citrus and rebuild game.\n" +
-					"Bundle format version: {0}, but expected: {1}", version, Lime.Version.GetBundleFormatVersion()));
+			if (version != Version.GetBundleFormatVersion()) {
+				throw new InvalidBundleVersionException(
+					$"The bundle format has been changed. Please update Citrus and rebuild game.\n" +
+				            $"Bundle format version: {version}, but expected: {Version.GetBundleFormatVersion()}");
 			}
 			indexOffset = reader.ReadInt32();
 			stream.Seek(indexOffset, SeekOrigin.Begin);
 			int numDescriptors = reader.ReadInt32();
 			index.Clear();
 			for (int i = 0; i < numDescriptors; i++) {
-				var desc = new AssetDescriptor();
-				string name = reader.ReadString();
-				desc.ModificationTime = DateTime.FromBinary(reader.ReadInt64());
-				ushort sha1Length = reader.ReadUInt16();
-				if (sha1Length != 0) {
-					desc.CookingRulesSHA1 = reader.ReadBytes(sha1Length);
-				}
-				desc.Offset = reader.ReadInt32();
-				desc.Length = reader.ReadInt32();
-				desc.AllocatedSize = reader.ReadInt32();
-				desc.Attributes = (AssetAttributes)reader.ReadInt32();
-				desc.SourceExtension = reader.ReadString();
-				index.Add(name, desc);
+				var name = reader.ReadString();
+				var descriptor = new AssetDescriptor();
+				stream.Read(new Span<byte>((byte*)&descriptor, sizeof(AssetDescriptor)));
+				index[name] = descriptor;
 			}
 		}
 
-		private void WriteIndexTable()
+		private unsafe void WriteIndexTable()
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			writer.Write(Signature);
+			// Checksum. Will be updated on Dispose with RefreshBundleChecksum.
 			writer.Write(0);
 			writer.Write(Lime.Version.GetBundleFormatVersion());
 			writer.Write(indexOffset);
 			stream.Seek(indexOffset, SeekOrigin.Begin);
 			int numDescriptors = index.Count;
 			writer.Write(numDescriptors);
-			foreach (KeyValuePair <string, AssetDescriptor> p in index) {
-				writer.Write(p.Key);
-				writer.Write((Int64)p.Value.ModificationTime.ToBinary());
-				if (p.Value.CookingRulesSHA1 != null && p.Value.CookingRulesSHA1.Length > ushort.MaxValue) {
-					throw new InvalidOperationException("Invalid Cooking Rules hash in asset descriptor. Must be 20 byte long SHA1");
-				}
-				ushort sha1Length = (ushort)(p.Value.CookingRulesSHA1?.Length ?? 0);
-				writer.Write(sha1Length);
-				if (sha1Length != 0) {
-					writer.Write(p.Value.CookingRulesSHA1);
-				}
-				writer.Write(p.Value.Offset);
-				writer.Write(p.Value.Length);
-				writer.Write(p.Value.AllocatedSize);
-				writer.Write((int)p.Value.Attributes);
-				writer.Write(p.Value.SourceExtension);
+			foreach (var (path, descriptor) in index) {
+				writer.Write(path);
+				stream.Write(new ReadOnlySpan<byte>((byte*)&descriptor, sizeof(AssetDescriptor)));
 			}
 			writer.Flush();
 		}
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 		{
 			if (extension != null && !extension.StartsWith(".")) {
 				throw new InvalidOperationException();
 			}
-			foreach (var file in index) {
-				if (path == null || file.Key.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
-					if (extension != null && !file.Key.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+			foreach (var file in index.Keys) {
+				if (path == null || file.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+					if (extension != null && !file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
 						continue;
 					}
-					yield return new FileInfo { Path = file.Key, LastWriteTime = file.Value.ModificationTime };
+					yield return file;
 				}
 			}
 		}
 
-		internal Stream AllocStream()
+		internal Stream AllocateStream()
 		{
 			lock (streamPool) {
 				if (streamPool.Count > 0) {
@@ -624,11 +570,10 @@ namespace Lime
 
 		private AssetDescriptor GetDescriptor(string path)
 		{
-			AssetDescriptor desc;
-			if (index.TryGetValue(AssetPath.CorrectSlashes(path), out desc)) {
-				return desc;
+			if (index.TryGetValue(AssetPath.CorrectSlashes(path), out var descriptor)) {
+				return descriptor;
 			}
-			throw new Exception("Asset '{0}' doesn't exist", path);
+			throw new Exception($"Asset '{path}' doesn't exist");
 		}
 
 		public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
@@ -651,15 +596,15 @@ namespace Lime
 				if (FileExists(file)) {
 					DeleteFile(file);
 				}
-				using (var stream = patchBundle.OpenFileRaw(file)) {
-					ImportFileRaw(
-						file, stream, 0,
-						patchBundle.GetSourceExtension(file),
-						patchBundle.GetFileLastWriteTime(file),
-						patchBundle.GetAttributes(file),
-						patchBundle.GetCookingRulesSHA1(file)
-					);
-				}
+				using var stream = patchBundle.OpenFileRaw(file);
+				ImportFileRaw(
+					file,
+					stream,
+					patchBundle.GetFileUnpackedSize(file),
+					patchBundle.GetFileContentsHash(file),
+					patchBundle.GetFileCookingUnitHash(file),
+					patchBundle.GetFileAttributes(file)
+				);
 			}
 			foreach (var file in patchManifest.DeletedAssets) {
 				if (FileExists(file)) {
@@ -669,7 +614,7 @@ namespace Lime
 					}
 				}
 			}
-			manifest.Write(this);
+			manifest.Save(this);
 		}
 	}
 }

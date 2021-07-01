@@ -266,16 +266,16 @@ namespace Launcher
 					Console.WriteLine($"Output Path is {outputPath}");
 					Console.WriteLine("Begin copying artifacts to temporary directory");
 #if WIN
-					foreach (var fi in orangeFiles.Enumerate()) {
-						var srcPath = Path.Combine(orangeBinDir, fi.Path);
-						var dstPath = Path.Combine(tempPath, fi.Path);
+					foreach (var path in orangeFiles.Enumerate()) {
+						var srcPath = Path.Combine(orangeBinDir, path);
+						var dstPath = Path.Combine(tempPath, path);
 						Directory.CreateDirectory(Path.GetDirectoryName(dstPath));
 						File.Copy(srcPath, dstPath);
 						Console.WriteLine($"Copying {srcPath} => {dstPath}");
 					}
-					foreach (var fi in tangerineFiles.Enumerate()) {
-						var srcPath = Path.Combine(tangerineBinDir, fi.Path);
-						var dstPath = Path.Combine(tempPath, fi.Path);
+					foreach (var path in tangerineFiles.Enumerate()) {
+						var srcPath = Path.Combine(tangerineBinDir, path);
+						var dstPath = Path.Combine(tempPath, path);
 						Directory.CreateDirectory(Path.GetDirectoryName(dstPath));
 						File.Copy(srcPath, dstPath, true);
 						Console.WriteLine($"Copying {srcPath} => {dstPath}");

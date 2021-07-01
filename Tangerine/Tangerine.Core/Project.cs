@@ -130,8 +130,8 @@ namespace Tangerine.Core
 					HandleFileSystemWatcherEvent(path);
 				} else if (Directory.Exists(path)) {
 					foreach (var f in new ScanOptimizedFileEnumerator(path, null).Enumerate()) {
-						HandleFileSystemWatcherEvent(Path.Combine(previousPath, f.Path));
-						HandleFileSystemWatcherEvent(Path.Combine(path, f.Path));
+						HandleFileSystemWatcherEvent(Path.Combine(previousPath, f));
+						HandleFileSystemWatcherEvent(Path.Combine(path, f));
 					}
 				}
 				Tasks.StopByTag(aggregateAssetsDatabaseModificationsTaskTag);
@@ -477,12 +477,10 @@ namespace Tangerine.Core
 		private void UpdateTextureParams()
 		{
 			var rules = CookingRulesBuilder.Build(AssetBundle.Current, null);
-			foreach (var kv in rules) {
-				var path = kv.Key;
-				var rule = kv.Value;
+			foreach (var (path, rule) in rules) {
 				if (path.EndsWith(".png")) {
 					var textureParamsPath = Path.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(path, ".texture"));
-					if (!AssetCooker.AreTextureParamsDefault(rule)) {
+					if (!AreTextureParamsDefault(rule)) {
 						var textureParams = new TextureParams {
 							WrapMode = rule.WrapMode,
 							MinFilter = rule.MinFilter,
@@ -511,6 +509,13 @@ namespace Tangerine.Core
 					File.Delete(Path.Combine(AssetsDirectory, path));
 				}
 			}
+		}
+
+		private static bool AreTextureParamsDefault(ICookingRules rules)
+		{
+			return rules.MinFilter == TextureParams.Default.MinFilter &&
+				rules.MagFilter == TextureParams.Default.MagFilter &&
+				rules.WrapMode == TextureParams.Default.WrapModeU;
 		}
 
 		public static void RaiseDocumentSaving(Document document)

@@ -6,142 +6,140 @@ using Lime;
 
 namespace Orange
 {
-	class SyncAtlases : AssetCookerCookStage, ICookStage
+	class SyncAtlases : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return textureExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return atlasPartExtension; } }
-
-		private readonly string textureExtension = ".png";
+		private const int MaxAtlasChainLength = 1000;
 		private readonly string atlasPartExtension = ".atlasPart";
+		private readonly AssetCooker assetCooker;
 
-		public SyncAtlases(AssetCooker assetCooker) : base(assetCooker) { }
-
-		public int GetOperationCount() => AssetCooker.InputBundle.EnumerateFiles(null, textureExtension).Count();
-
-		public void Action()
+		public SyncAtlases(AssetCooker assetCooker)
 		{
-			var textures = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
-			foreach (var fileInfo in AssetCooker.InputBundle.EnumerateFileInfos(null, textureExtension)) {
-				textures[fileInfo.Path] = fileInfo.LastWriteTime;
-			}
-			var atlasChainsToRebuild = new HashSet<string>();
-			// Figure out atlas chains to rebuild
-			foreach (var atlasPartPath in AssetCooker.OutputBundle.EnumerateFiles().ToList()) {
-				if (!atlasPartPath.EndsWith(atlasPartExtension, StringComparison.OrdinalIgnoreCase))
-					continue;
+			this.assetCooker = assetCooker;
+		}
 
-				// If atlas part has been outdated we should rebuild full atlas chain
-				var srcTexturePath = Path.ChangeExtension(atlasPartPath, textureExtension);
-				var bundleSHA1 = AssetCooker.OutputBundle.GetCookingRulesSHA1(atlasPartPath);
-				if (bundleSHA1 == null) {
-					throw new InvalidOperationException("CookingRules SHA1 for atlas part shouldn't be null");
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			var atlasToHash = new Dictionary<string, SHA256>(StringComparer.Ordinal);
+			var files = assetCooker.InputBundle.EnumerateFiles(null, ".png").ToList();
+			files.Sort();
+			foreach (var texturePath in files) {
+				var textureCookingRules = assetCooker.CookingRulesMap[texturePath];
+				var atlas = textureCookingRules.TextureAtlas;
+				if (atlas == null) {
+					continue;
 				}
-				if (
-					!textures.ContainsKey(srcTexturePath) ||
-					AssetCooker.OutputBundle.GetFileLastWriteTime(atlasPartPath) != textures[srcTexturePath] ||
-					(!AssetCooker.CookingRulesMap[srcTexturePath].SHA1.SequenceEqual(bundleSHA1))
-				) {
-					srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, srcTexturePath);
-					var part = InternalPersistence.Instance.ReadObjectFromBundle<TextureAtlasElement.Params>(AssetCooker.OutputBundle, atlasPartPath);
-					var atlasChain = Path.GetFileNameWithoutExtension(part.AtlasPath);
-					atlasChainsToRebuild.Add(atlasChain);
-					if (!textures.ContainsKey(srcTexturePath)) {
-						AssetCooker.DeleteFileFromBundle(atlasPartPath);
-					} else {
-						srcTexturePath = Path.ChangeExtension(atlasPartPath, textureExtension);
-						if (AssetCooker.CookingRulesMap[srcTexturePath].TextureAtlas != null) {
-							var rules = AssetCooker.CookingRulesMap[srcTexturePath];
-							atlasChainsToRebuild.Add(rules.TextureAtlas);
-						} else {
-							AssetCooker.DeleteFileFromBundle(atlasPartPath);
-						}
-					}
-				}
+				var textureHash = assetCooker.InputBundle.ComputeCookingUnitHash(
+					texturePath, textureCookingRules
+				);
+				atlasToHash[atlas] = atlasToHash.TryGetValue(atlas, out var atlasHash)
+					? SHA256.Compute(atlasHash, textureHash)
+					: textureHash;
 			}
-			// Find which new textures must be added to the atlas chain
-			foreach (var t in textures) {
-				var atlasPartPath = Path.ChangeExtension(t.Key, atlasPartExtension);
-				var cookingRules = AssetCooker.CookingRulesMap[t.Key];
-				var atlasNeedRebuld = cookingRules.TextureAtlas != null && !AssetCooker.OutputBundle.FileExists(atlasPartPath);
-				if (atlasNeedRebuld) {
-					atlasChainsToRebuild.Add(cookingRules.TextureAtlas);
-				} else {
-					UserInterface.Instance.IncreaseProgressBar();
-				}
-			}
-			foreach (var atlasChain in atlasChainsToRebuild) {
-				AssetCooker.CheckCookCancelation();
-				BuildAtlasChain(atlasChain);
+			foreach (var (atlas, hash) in atlasToHash) {
+				yield return (atlas, hash);
 			}
 		}
 
-		private void BuildAtlasChain(string atlasChain)
+		public void Cook(string atlasName, SHA256 cookingUnitHash)
 		{
-			for (var i = 0; i < AssetCooker.MaxAtlasChainLength; i++) {
-				var atlasPath = AssetCooker.GetAtlasPath(atlasChain, i);
-				if (AssetCooker.OutputBundle.FileExists(atlasPath)) {
-					AssetCooker.DeleteFileFromBundle(atlasPath);
-				}
-				else {
-					break;
-				}
-			}
 			var pluginItems = new Dictionary<string, List<TextureTools.AtlasItem>>();
-			var items = new Dictionary<(AtlasOptimization AtlasOptimization, int MaxAtlasSize), List<TextureTools.AtlasItem>>();
-			foreach (var fileInfo in AssetBundle.Current.EnumerateFileInfos(null, textureExtension)) {
-				var cookingRules = AssetCooker.CookingRulesMap[fileInfo.Path];
-				if (cookingRules.TextureAtlas == atlasChain) {
-					var item = new TextureTools.AtlasItem {
-						Path = Path.ChangeExtension(fileInfo.Path, atlasPartExtension),
-						CookingRules = cookingRules,
-						SourceExtension = Path.GetExtension(fileInfo.Path)
-					};
-					var bitmapInfo = TextureTools.BitmapInfo.FromFile(AssetCooker.InputBundle, fileInfo.Path);
-					if (bitmapInfo == null) {
-						using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(AssetCooker.Platform, item)) {
-							item.BitmapInfo = TextureTools.BitmapInfo.FromBitmap(bitmap);
-						}
-					} else {
-						var srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(item.Path, item.SourceExtension));
-						if (TextureTools.ShouldDownscale(AssetCooker.Platform, bitmapInfo, item.CookingRules)) {
-							TextureTools.DownscaleTextureInfo(AssetCooker.Platform, bitmapInfo, srcTexturePath, item.CookingRules);
-						}
-						// Ensure that no image exceeded maxAtlasSize limit
-						TextureTools.DownscaleTextureToFitAtlas(bitmapInfo, srcTexturePath, item.CookingRules.MaxAtlasSize);
-						item.BitmapInfo = bitmapInfo;
+			var items = new Dictionary<
+				(AtlasOptimization AtlasOptimization, int MaxAtlasSize),
+				List<TextureTools.AtlasItem>
+			>();
+			var files = AssetBundle.Current.EnumerateFiles(null, ".png").ToList();
+			files.Sort();
+			foreach (var file in files) {
+				var cookingRules = assetCooker.CookingRulesMap[file];
+				if (cookingRules.TextureAtlas != atlasName) {
+					continue;
+				}
+				var item = new TextureTools.AtlasItem {
+					Path = Path.ChangeExtension(file, atlasPartExtension),
+					CookingRules = cookingRules,
+					SourceExtension = Path.GetExtension(file)
+				};
+				var bitmapInfo = TextureTools.BitmapInfo.FromFile(assetCooker.InputBundle, file);
+				if (bitmapInfo == null) {
+					using var bitmap =
+						TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item);
+					item.BitmapInfo = TextureTools.BitmapInfo.FromBitmap(bitmap);
+				} else {
+					var srcTexturePath = AssetPath.Combine(
+						The.Workspace.AssetsDirectory,
+						Path.ChangeExtension(item.Path, item.SourceExtension)
+					);
+					if (TextureTools.ShouldDownscale(assetCooker.Platform, bitmapInfo, item.CookingRules)) {
+						TextureTools.DownscaleTextureInfo(
+							assetCooker.Platform,
+							bitmapInfo,
+							srcTexturePath,
+							item.CookingRules
+						);
 					}
-					var k = cookingRules.AtlasPacker;
-					if (!string.IsNullOrEmpty(k) && k != "Default") {
-						List<TextureTools.AtlasItem> l;
-						if (!pluginItems.TryGetValue(k, out l)) {
-							pluginItems.Add(k, l = new List<TextureTools.AtlasItem>());
-						}
-						l.Add(item);
-					} else {
-						var key = (cookingRules.AtlasOptimization, cookingRules.MaxAtlasSize);
-						if (!items.TryGetValue(key, out var list)) {
-							items.Add(key, list = new List<TextureTools.AtlasItem>());
-						}
-						list.Add(item);
+					// Ensure that no image exceeded maxAtlasSize limit
+					TextureTools.DownscaleTextureToFitAtlas(
+						bitmapInfo,
+						srcTexturePath,
+						item.CookingRules.MaxAtlasSize
+					);
+					item.BitmapInfo = bitmapInfo;
+				}
+				var k = cookingRules.AtlasPacker;
+				if (!string.IsNullOrEmpty(k) && k != "Default") {
+					if (!pluginItems.TryGetValue(k, out List<TextureTools.AtlasItem> l)) {
+						pluginItems.Add(k, l = new List<TextureTools.AtlasItem>());
 					}
+					l.Add(item);
+				} else {
+					var key = (cookingRules.AtlasOptimization, cookingRules.MaxAtlasSize);
+					if (!items.TryGetValue(key, out var l)) {
+						items.Add(key, l = new List<TextureTools.AtlasItem>());
+					}
+					l.Add(item);
 				}
 			}
 			var initialAtlasId = 0;
 			foreach (var ((atlasOptimization, maxAtlasSize), atlasItems) in items) {
 				if (atlasItems.Any()) {
-					if (AssetCooker.Platform == TargetPlatform.iOS) {
-						Predicate<PVRFormat> isRequireSquare = (format) => {
+					if (assetCooker.Platform == TargetPlatform.iOS) {
+						var square = atlasItems.Where(item => IsSquareOnly(item.CookingRules.PVRFormat)).ToList();
+						var nonSquare = atlasItems.Where(item => !IsSquareOnly(item.CookingRules.PVRFormat)).ToList();
+						initialAtlasId = PackItemsToAtlas(
+							atlasName: atlasName,
+							cookingUnitHash: cookingUnitHash,
+							items: square,
+							atlasOptimization: atlasOptimization,
+							maxAtlasSize: maxAtlasSize,
+							initialAtlasId: initialAtlasId,
+							isAtlasSquare: true
+						);
+						initialAtlasId = PackItemsToAtlas(
+							atlasName: atlasName,
+							cookingUnitHash: cookingUnitHash,
+							items: nonSquare,
+							atlasOptimization: atlasOptimization,
+							maxAtlasSize: maxAtlasSize,
+							initialAtlasId: initialAtlasId,
+							isAtlasSquare: false
+						);
+						static bool IsSquareOnly(PVRFormat format)
+						{
 							return
 								format == PVRFormat.PVRTC2 ||
 								format == PVRFormat.PVRTC4 ||
 								format == PVRFormat.PVRTC4_Forced;
-						};
-						var square = atlasItems.Where(item => isRequireSquare(item.CookingRules.PVRFormat)).ToList();
-						var nonSquare = atlasItems.Where(item => !isRequireSquare(item.CookingRules.PVRFormat)).ToList();
-						initialAtlasId = PackItemsToAtlas(atlasChain, square, atlasOptimization, maxAtlasSize, initialAtlasId, true);
-						initialAtlasId = PackItemsToAtlas(atlasChain, nonSquare, atlasOptimization, maxAtlasSize, initialAtlasId, false);
+						}
 					} else {
-						initialAtlasId = PackItemsToAtlas(atlasChain, atlasItems, atlasOptimization, maxAtlasSize, initialAtlasId, false);
+						initialAtlasId = PackItemsToAtlas(
+							atlasName: atlasName,
+							cookingUnitHash: cookingUnitHash,
+							items: atlasItems,
+							atlasOptimization: atlasOptimization,
+							maxAtlasSize: maxAtlasSize,
+							initialAtlasId: initialAtlasId,
+							isAtlasSquare: false
+						);
 					}
 				}
 			}
@@ -150,13 +148,19 @@ namespace Orange
 				if (!packers.ContainsKey(kv.Key)) {
 					throw new InvalidOperationException($"Packer {kv.Key} not found");
 				}
-				initialAtlasId = packers[kv.Key](atlasChain, kv.Value, initialAtlasId);
+				initialAtlasId = packers[kv.Key](atlasName, kv.Value, initialAtlasId);
 			}
 		}
 
-		private int PackItemsToAtlas(string atlasChain, List<TextureTools.AtlasItem> items,
-			AtlasOptimization atlasOptimization, int maxAtlasSize, int initialAtlasId, bool squareAtlas)
-		{
+		private int PackItemsToAtlas(
+			string atlasName,
+			SHA256 cookingUnitHash,
+			List<TextureTools.AtlasItem> items,
+			AtlasOptimization atlasOptimization,
+			int maxAtlasSize,
+			int initialAtlasId,
+			bool isAtlasSquare
+		) {
 			// Sort images in descending size order
 			items.Sort((x, y) => {
 				var a = Math.Max(x.BitmapInfo.Width, x.BitmapInfo.Height);
@@ -166,8 +170,8 @@ namespace Orange
 
 			var atlasId = initialAtlasId;
 			while (items.Count > 0) {
-				if (atlasId >= AssetCooker.MaxAtlasChainLength) {
-					throw new Lime.Exception("Too many textures in the atlas chain {0}", atlasChain);
+				if (atlasId >= MaxAtlasChainLength) {
+					throw new Lime.Exception($"Too many textures in the atlas chain {atlasName}");
 				}
 				var bestSize = new Size(0, 0);
 				double bestPackRate = 0;
@@ -177,7 +181,7 @@ namespace Orange
 				var maxTextureSize = items.Max(item => Math.Max(item.BitmapInfo.Height, item.BitmapInfo.Width));
 				var minAtlasSize = Math.Max(64, TextureTools.CalcUpperPowerOfTwo(maxTextureSize));
 
-				foreach (var size in EnumerateAtlasSizes(squareAtlas: squareAtlas, minSize: minAtlasSize, maxSize: maxAtlasSize)) {
+				foreach (var size in EnumerateAtlasSizes(isAtlasSquare, minAtlasSize, maxAtlasSize)) {
 					var prevAllocated = items.Where(i => i.Allocated).ToList();
 					PackItemsToAtlas(items, size, out double packRate);
 					switch (atlasOptimization) {
@@ -209,10 +213,10 @@ namespace Orange
 				}
 				end:
 				if (atlasOptimization == AtlasOptimization.Memory && bestPackRate == 0) {
-					throw new Lime.Exception("Failed to create atlas '{0}'", atlasChain);
+					throw new Lime.Exception("Failed to create atlas '{0}'", atlasName);
 				}
 				PackItemsToAtlas(items, bestSize, out bestPackRate);
-				CopyAllocatedItemsToAtlas(items, atlasChain, atlasId, bestSize);
+				CopyAllocatedItemsToAtlas(items, atlasName, atlasId, bestSize, cookingUnitHash);
 				items.RemoveAll(x => x.Allocated);
 				atlasId++;
 			}
@@ -229,16 +233,19 @@ namespace Orange
 			TextureTools.AtlasItem firstAllocatedItem = null;
 			foreach (var item in items) {
 				var padding = item.CookingRules.AtlasItemPadding;
-				var paddedItemSize = new Size(item.BitmapInfo.Width + padding * 2, item.BitmapInfo.Height + padding * 2);
+				var paddedItemSize = new Size(
+					item.BitmapInfo.Width + padding * 2,
+					item.BitmapInfo.Height + padding * 2
+				);
 				if (firstAllocatedItem == null || AreAtlasItemsCompatible(items, firstAllocatedItem, item)) {
 					if (rectAllocator.Allocate(paddedItemSize, out item.AtlasRect)) {
 						item.Allocated = true;
-						firstAllocatedItem = firstAllocatedItem ?? item;
+						firstAllocatedItem ??= item;
 					}
 				}
 			}
 			packRate = rectAllocator.GetPackRate();
-			// Adjust item rects according to theirs paddings.
+			// Adjust item rectangles according to theirs paddings.
 			foreach (var item in items) {
 				if (!item.Allocated) {
 					continue;
@@ -258,8 +265,11 @@ namespace Orange
 		/// <summary>
 		/// Checks whether two items can be packed to the same texture
 		/// </summary>
-		private bool AreAtlasItemsCompatible(List<TextureTools.AtlasItem> items, TextureTools.AtlasItem item1, TextureTools.AtlasItem item2)
-		{
+		private bool AreAtlasItemsCompatible(
+			List<TextureTools.AtlasItem> items,
+			TextureTools.AtlasItem item1,
+			TextureTools.AtlasItem item2
+		) {
 			if (item1.CookingRules.GenerateOpacityMask != item2.CookingRules.GenerateOpacityMask) {
 				return false;
 			}
@@ -279,14 +289,18 @@ namespace Orange
 				return false;
 			}
 			if (items.Count > 0) {
-				if (item1.CookingRules.WrapMode != TextureWrapMode.Clamp || item2.CookingRules.WrapMode != TextureWrapMode.Clamp) {
+				if (
+					item1.CookingRules.WrapMode != TextureWrapMode.Clamp ||
+					item2.CookingRules.WrapMode != TextureWrapMode.Clamp
+				) {
 					return false;
 				}
 			}
-			switch (AssetCooker.Platform) {
+			switch (assetCooker.Platform) {
 				case TargetPlatform.Android:
 				case TargetPlatform.iOS:
-					return item1.CookingRules.PVRFormat == item2.CookingRules.PVRFormat && item1.BitmapInfo.HasAlpha == item2.BitmapInfo.HasAlpha;
+					return item1.CookingRules.PVRFormat == item2.CookingRules.PVRFormat &&
+						item1.BitmapInfo.HasAlpha == item2.BitmapInfo.HasAlpha;
 				case TargetPlatform.Win:
 				case TargetPlatform.Mac:
 					return item1.CookingRules.DDSFormat == item2.CookingRules.DDSFormat;
@@ -295,37 +309,50 @@ namespace Orange
 			}
 		}
 
-		private void CopyAllocatedItemsToAtlas(List<TextureTools.AtlasItem> items, string atlasChain, int atlasId, Size size)
-		{
-			var atlasPath = AssetCooker.GetAtlasPath(atlasChain, atlasId);
+		private void CopyAllocatedItemsToAtlas(
+			List<TextureTools.AtlasItem> items,
+			string atlasName,
+			int atlasId,
+			Size size,
+			SHA256 cookingUnitHash
+		) {
+			var atlasPath = GetAtlasPath(atlasName, atlasId);
 			var atlasPixels = new Color4[size.Width * size.Height];
 			foreach (var item in items.Where(i => i.Allocated)) {
 				var atlasRect = item.AtlasRect;
-				using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(AssetCooker.Platform, item)) {
+				using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item)) {
 					CopyPixels(bitmap, atlasPixels, atlasRect.A.X, atlasRect.A.Y, size.Width, size.Height);
 				}
 				var atlasPart = new TextureAtlasElement.Params {
 					AtlasRect = atlasRect,
 					AtlasPath = Path.ChangeExtension(atlasPath, null)
 				};
-				var srcPath = Path.ChangeExtension(item.Path, item.SourceExtension);
-				InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, item.Path, atlasPart, Persistence.Format.Binary,
-					item.SourceExtension, AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, item.CookingRules.SHA1);
-				// Delete non-atlased texture since now its useless
-				var texturePath = Path.ChangeExtension(item.Path, AssetCooker.GetPlatformTextureExtension());
-				if (AssetCooker.OutputBundle.FileExists(texturePath)) {
-					AssetCooker.DeleteFileFromBundle(texturePath);
-				}
-				UserInterface.Instance.IncreaseProgressBar();
+				InternalPersistence.Instance.WriteObjectToBundle(
+					bundle: assetCooker.OutputBundle,
+					path: item.Path,
+					instance: atlasPart,
+					format: Persistence.Format.Binary,
+					cookingUnitHash: cookingUnitHash,
+					attributes: AssetAttributes.None
+				);
 			}
-			Console.WriteLine("+ " + atlasPath);
 			var firstItem = items.First(i => i.Allocated);
-			using (var atlas = new Bitmap(atlasPixels, size.Width, size.Height)) {
-				AssetCooker.ImportTexture(atlasPath, atlas, firstItem.CookingRules, AssetCooker.InputBundle.GetFileLastWriteTime(atlasPath), CookingRulesSHA1: null);
-			}
+			using var atlas = new Bitmap(atlasPixels, size.Width, size.Height);
+			SyncTextures.ImportTexture(assetCooker, atlasPath, atlas, firstItem.CookingRules, cookingUnitHash);
 		}
 
-		private IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize, int maxSize)
+		private string GetAtlasPath(string atlasName, int index)
+		{
+			// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
+			var postfix = assetCooker.BundleBeingCookedName ?? "";
+			var path = AssetPath.Combine(
+				"Atlases_" + postfix,
+				atlasName + '.' + index.ToString("000") + SyncTextures.GetPlatformTextureExtension(assetCooker.Platform)
+			);
+			return path;
+		}
+
+		private static IEnumerable<Size> EnumerateAtlasSizes(bool squareAtlas, int minSize, int maxSize)
 		{
 			if (squareAtlas) {
 				for (var i = minSize; i <= maxSize; i *= 2) {
@@ -341,11 +368,18 @@ namespace Orange
 			}
 		}
 
-		private void CopyPixels(Bitmap source, Color4[] dstPixels, int dstX, int dstY, int dstWidth, int dstHeight)
-		{
+		private static void CopyPixels(
+			Bitmap source,
+			Color4[] dstPixels,
+			int dstX,
+			int dstY,
+			int dstWidth,
+			int dstHeight
+		) {
 			if (source.Width > dstWidth - dstX || source.Height > dstHeight - dstY) {
 				throw new Lime.Exception(
-					"Unable to copy pixels. Source image runs out of the bounds of destination image.");
+					"Unable to copy pixels. Source image runs out of the bounds of destination image."
+				);
 			}
 			var srcPixels = source.GetPixels();
 			// Make 1-pixel border around image by duplicating image edges

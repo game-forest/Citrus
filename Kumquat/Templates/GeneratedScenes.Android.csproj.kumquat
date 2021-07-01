@@ -49,6 +49,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
+    <Compile Include=".\**\*.cs" />
+    <Compile Remove=".\bin\**" />
+    <Compile Remove=".\obj\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Citrus\Lime\Lime.Android.csproj">

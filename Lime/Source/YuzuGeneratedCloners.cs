@@ -1355,6 +1355,18 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		protected static global::Lime.UnpackedAssetBundle.FileInfo Clone_Lime__UnpackedAssetBundle__FileInfo(Cloner cl, object src)
+		{
+			if (src == null) return null;
+			if (src.GetType() != typeof(global::Lime.UnpackedAssetBundle.FileInfo))
+				return (global::Lime.UnpackedAssetBundle.FileInfo)cl.DeepObject(src);
+			var s = (global::Lime.UnpackedAssetBundle.FileInfo)src;
+			var result = new global::Lime.UnpackedAssetBundle.FileInfo();
+			result.ContentsHash = s.ContentsHash;
+			result.DateModified = s.DateModified;
+			return result;
+		}
+
 		protected static global::Lime.Font Clone_Lime__Font(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -3445,6 +3457,9 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static global::Lime.SHA256 Clone_Lime__SHA256(Cloner cl, object src) =>
+			(global::Lime.SHA256)src;
+
 		protected static global::Lime.ShadowParams Clone_Lime__ShadowParams(Cloner cl, object src)
 		{
 			if (src == null) return null;
@@ -4744,6 +4759,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.DistortionMesh)] = Clone_Lime__DistortionMesh;
 			clonerCache[typeof(global::Lime.DistortionMeshPoint)] = Clone_Lime__DistortionMeshPoint;
 			clonerCache[typeof(global::Lime.EmitterShapePoint)] = Clone_Lime__EmitterShapePoint;
+			clonerCache[typeof(global::Lime.UnpackedAssetBundle.FileInfo)] = Clone_Lime__UnpackedAssetBundle__FileInfo;
 			clonerCache[typeof(global::Lime.Font)] = Clone_Lime__Font;
 			clonerCache[typeof(global::Lime.FontChar)] = Clone_Lime__FontChar;
 			clonerCache[typeof(global::Lime.Frame)] = Clone_Lime__Frame;
@@ -4843,6 +4859,7 @@ namespace YuzuGenerated
 			clonerCache[typeof(global::Lime.SerializableFont)] = Clone_Lime__SerializableFont;
 			clonerCache[typeof(global::Lime.SerializableSample)] = Clone_Lime__SerializableSample;
 			clonerCache[typeof(global::Lime.SerializableTexture)] = Clone_Lime__SerializableTexture;
+			clonerCache[typeof(global::Lime.SHA256)] = ValueCopyCloner;
 			clonerCache[typeof(global::Lime.ShadowParams)] = Clone_Lime__ShadowParams;
 			clonerCache[typeof(global::Lime.SharpenMaterial)] = Clone_Lime__SharpenMaterial;
 			clonerCache[typeof(global::Lime.SignedDistanceFieldComponent)] = Clone_Lime__SignedDistanceFieldComponent;

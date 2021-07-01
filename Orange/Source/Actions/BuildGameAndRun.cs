@@ -17,7 +17,7 @@ namespace Orange
 
 		public static string BuildAndRun(Target target)
 		{
-			var bundles = The.UI.GetSelectedBundles().Concat(target.Bundles).Distinct().ToList();
+			var bundles = The.UI.GetSelectedBundles();
 			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 				return errorMessage;
 			}

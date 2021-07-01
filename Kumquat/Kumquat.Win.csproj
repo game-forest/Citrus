@@ -14,19 +14,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Templates\ParsedWidget.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Source\CodeTemplates\ParsedFrame.txt" />
     <EmbeddedResource Include="Source\CodeTemplates\ParsedNode.txt" />
     <EmbeddedResource Include="Source\CodeTemplates\SceneFile.txt" />
+    <EmbeddedResource Include="Source\CodeTemplates\ParsedWidget.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\GeneratedScenes.Android.csproj.kumquat" />
     <EmbeddedResource Include="Templates\GeneratedScenes.iOS.csproj.kumquat" />
     <EmbeddedResource Include="Templates\GeneratedScenes.Win.csproj.kumquat" />
+    <EmbeddedResource Include="Templates\GeneratedScenes.Mac.csproj.kumquat" />
   </ItemGroup>
 
 </Project>

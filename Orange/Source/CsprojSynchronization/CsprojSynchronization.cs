@@ -69,7 +69,7 @@ namespace Orange
 		{
 			var compileItems = GetCompileItemGroup(doc);
 			foreach (var file in new ScanOptimizedFileEnumerator(".", SkipUnwantedDirectoriesPredicate).Enumerate(".cs")) {
-				var path = ToWindowsSlashes(file.Path);
+				var path = ToWindowsSlashes(file);
 				if (Path.GetFileName(path).StartsWith("TemporaryGeneratedFile")) {
 					continue;
 				}
@@ -80,7 +80,7 @@ namespace Orange
 						include.Value = path;
 						compileItems.AppendChild(item);
 						changed = true;
-						Console.WriteLine("Added a new file: " + file.Path);
+						Console.WriteLine("Added a new file: " + file);
 					}
 				}
 			}

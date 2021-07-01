@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Reflection;
 using EmptyProject.Scenes.Common;
 using Lime;
 
 namespace EmptyProject.Dialogs
 {
-	public class Options : Dialog<Scenes.Options>
+	public class Options : Dialog<Scenes.Data.Options>
 	{
 		public Options()
 		{

@@ -32,7 +32,6 @@ namespace Orange
 			var suspiciousTexturesReport = new List<string>();
 			var bundles = new HashSet<string>();
 			var cookingRulesMap = CookingRulesBuilder.Build(AssetBundle.Current, target);
-			AssetBundle.Current = new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, CookingRulesBuilder.MainBundleName));
 			foreach (var i in cookingRulesMap) {
 				if (i.Key.EndsWith(".png", StringComparison.OrdinalIgnoreCase)) {
 					if (i.Value.TextureAtlas == null && i.Value.PVRFormat != PVRFormat.PVRTC4 && i.Value.PVRFormat != PVRFormat.PVRTC4_Forced) {
@@ -40,10 +39,7 @@ namespace Orange
 							i.Key, i.Value.PVRFormat));
 					}
 					if (i.Value.PVRFormat != PVRFormat.PVRTC4 && i.Value.PVRFormat != PVRFormat.PVRTC4_Forced && i.Value.PVRFormat != PVRFormat.PVRTC2) {
-						int w;
-						int h;
-						bool hasAlpha;
-						TextureConverterUtils.GetPngFileInfo(AssetBundle.Current, i.Key, out w, out h, out hasAlpha);
+						TextureConverterUtils.GetPngFileInfo(AssetBundle.Current, i.Key, out int w, out int h, out bool hasAlpha);
 						if (w >= 1024 || h >= 1024) {
 							suspiciousTexturesReport.Add(string.Format("{3}: {0}, {1}, {2}, {4}, atlas: {5}",
 								w, h, hasAlpha, i.Key, i.Value.PVRFormat, i.Value.TextureAtlas));
@@ -51,9 +47,7 @@ namespace Orange
 					}
 				}
 				foreach (var bundle in i.Value.Bundles) {
-					if (bundle != CookingRulesBuilder.MainBundleName) {
-						bundles.Add(bundle);
-					}
+					bundles.Add(bundle);
 				}
 			}
 			var savedAssetBundle = AssetBundle.Current;
@@ -63,8 +57,8 @@ namespace Orange
 					bundles.Select(
 						i => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, i))).ToArray());
 				AssetBundle.Current = new CustomSetAssetBundle(aggregateBundle,
-					aggregateBundle.EnumerateFileInfos().Where(i => {
-						if (cookingRulesMap.TryGetValue(i.Path, out CookingRules rules)) {
+					aggregateBundle.EnumerateFiles().Where(i => {
+						if (cookingRulesMap.TryGetValue(i, out CookingRules rules)) {
 							if (rules.Ignore) {
 								return false;
 							}
@@ -230,5 +224,70 @@ namespace Orange
 				AssetBundle.Current = savedAssetBundle;
 			}
 		}
+
+		[Export(nameof(OrangePlugin.MenuItems))]
+		[ExportMetadata("Label", "Show Duplicate Assets in Assets Directory")]
+		//[ExportMetadata("Priority", 4)]
+		public static void ShowDuplicateAssetsInAssetsDirectory()
+		{
+			PrintDuplicates(AssetBundle.Current);
+		}
+
+		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
+		[ExportMetadata("Label", "Show Duplicate Assets in Bundles")]
+		//[ExportMetadata("Priority", 4)]
+		[ExportMetadata("ApplicableToBundleSubset", true)]
+		public static string ShowDuplicateAssetsInBundles()
+		{
+			var target = The.UI.GetActiveTarget();
+			var bundles = The.UI.GetSelectedBundles();
+			if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
+				return errorMessage;
+			}
+			foreach (var bundle in bundles) {
+				Console.WriteLine("Bundle: " + bundle);
+				PrintDuplicates(new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundle)));
+			}
+			return null;
+		}
+
+		private static void PrintDuplicates(AssetBundle bundle)
+		{
+			var files = new Dictionary<SHA256, string>();
+			var duplicates = new Dictionary<SHA256, List<string>>();
+			foreach (var file in bundle.EnumerateFiles()) {
+				var hash = bundle.GetFileContentsHash(file);
+				if (files.TryGetValue(hash, out var firstFile)) {
+					if (duplicates.TryGetValue(hash, out var list)) {
+						list.Add(file);
+					} else {
+						duplicates.Add(hash, list = new List<string> { firstFile, file });
+					}
+				} else {
+					files.Add(hash, file);
+				}
+			}
+			if (duplicates.Any()) {
+				var results = duplicates.Select(kv => kv).ToList();
+				results.Sort((a, b) => {
+					var aSize = bundle.GetFileSize(a.Value.First()) * (a.Value.Count - 1);
+					var bSize = bundle.GetFileSize(b.Value.First()) * (b.Value.Count - 1);
+					return aSize.CompareTo(bSize);
+				});
+				ulong totalOverhead = 0;
+				Console.WriteLine("Files with same contents hash:");
+				foreach (var (k, l) in results) {
+					Console.WriteLine("> " + k);
+					var overhead = bundle.GetFileSize(l.First()) * (l.Count - 1);
+					totalOverhead += (ulong)overhead;
+					Console.WriteLine($"(with size overhead of {overhead} bytes)");
+					foreach (var f in l) {
+						Console.WriteLine("  " + f);
+					}
+				}
+				Console.WriteLine($"Total size overhead of duplicates: {totalOverhead}");
+			}
+		}
+
 	}
 }

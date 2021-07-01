@@ -1,28 +1,40 @@
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Orange
 {
-	class SyncFonts : AssetCookerCookStage, ICookStage
+	class SyncFonts : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return fontExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return fontExtension; } }
+		private readonly AssetCooker assetCooker;
 
-		private readonly string fontExtension = ".tft";
-
-		public SyncFonts(AssetCooker assetCooker) : base(assetCooker) { }
-
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(fontExtension);
-
-		public void Action() => AssetCooker.SyncUpdated(fontExtension, fontExtension, Converter);
-
-		private bool Converter(string srcPath, string dstPath)
+		public SyncFonts(AssetCooker assetCooker)
 		{
-			var font = InternalPersistence.Instance.ReadObjectFromBundle<Font>(AssetCooker.InputBundle, srcPath);
-			InternalPersistence.Instance.WriteObjectToBundle(AssetCooker.OutputBundle, dstPath, font, Persistence.Format.Binary, fontExtension,
-				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetAttributes.None, AssetCooker.CookingRulesMap[srcPath].SHA1);
-			return true;
+			this.assetCooker = assetCooker;
+		}
+
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			return assetCooker.InputBundle.EnumerateFiles(null, ".tft")
+				.Select(i => {
+					var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
+						i, assetCooker.CookingRulesMap[i]
+					);
+					return (i, hash);
+				});
+		}
+
+		public void Cook(string fontPath, SHA256 cookingUnitHash)
+		{
+			var font = InternalPersistence.Instance.ReadObjectFromBundle<Font>(assetCooker.InputBundle, fontPath);
+			InternalPersistence.Instance.WriteObjectToBundle(
+				bundle: assetCooker.OutputBundle,
+				path: fontPath,
+				instance: font,
+				format: Persistence.Format.Binary,
+				cookingUnitHash: cookingUnitHash,
+				attributes: AssetAttributes.None
+			);
 		}
 	}
 }

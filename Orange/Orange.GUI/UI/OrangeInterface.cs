@@ -18,6 +18,7 @@ namespace Orange
 		private BundlePickerWidget bundlePickerWidget;
 		private FileChooser projectPicker;
 		private TargetPicker targetPicker;
+		private CheckBox unpackBundles;
 		private PluginPanel pluginPanel;
 		private ThemedTextView textView;
 		private TextWriter textWriter;
@@ -134,7 +135,7 @@ namespace Orange
 			var header = new Widget {
 				Layout = new TableLayout {
 					ColumnCount = 2,
-					RowCount = 2,
+					RowCount = 3,
 					RowSpacing = 6,
 					ColumnSpacing = 6,
 					RowDefaults = new List<DefaultLayoutCell> {
@@ -143,7 +144,7 @@ namespace Orange
 					},
 					ColumnDefaults = new List<DefaultLayoutCell> {
 						new DefaultLayoutCell { StretchX = 0 },
-						new DefaultLayoutCell(),
+						new DefaultLayoutCell { VerticalAlignment = VAlignment.Center },
 					}
 				},
 				LayoutCell = new LayoutCell { StretchY = 0 }
@@ -151,6 +152,7 @@ namespace Orange
 			AddPicker(header, "Target", targetPicker = new TargetPicker());
 			AddPicker(header, "Citrus Project", projectPicker = CreateProjectPicker());
 			targetPicker.Changed += OnActionOrTargetChanged;
+			AddPicker(header, "Unpack Bundles", unpackBundles = new ThemedCheckBox());
 			return header;
 		}
 
@@ -242,7 +244,7 @@ namespace Orange
 
 		public override void IncreaseProgressBar(int amount = 1)
 		{
-			progressBarField.Progress(amount);
+			progressBarField.Advance(amount);
 		}
 
 		private void UpdateBundlePicker(bool value)
@@ -427,6 +429,8 @@ namespace Orange
 		{
 			return The.MenuController.Items.Find(i => i.Label == actionPicker.Text);
 		}
+
+		public override bool ShouldUnpackBundles() => unpackBundles.Checked;
 
 		public override Target GetActiveTarget()
 		{
@@ -762,7 +766,7 @@ namespace Orange
 							}),
 							new ThemedButton("X") {
 								Clicked = () => {
-									The.Workspace.RemoveRecentProject(projectPathBound);
+									Workspace.RemoveRecentProject(projectPathBound);
 									root.Nodes.Remove(f);
 								},
 							}
@@ -829,6 +833,8 @@ namespace Orange
 			private ThemedSimpleText textFieldA;
 			private ThemedSimpleText textFieldB;
 
+			private float Progress => MaxPosition == 0 ? 0 : (float)CurrentPosition / MaxPosition;
+
 			public ProgressBarField()
 			{
 				Layout = new HBoxLayout { Spacing = 6 };
@@ -838,7 +844,7 @@ namespace Orange
 				var rect = new Widget();
 				rect.CompoundPresenter.Add(new WidgetFlatFillPresenter(Lime.Theme.Colors.SelectedBorder));
 				rect.Tasks.AddLoop(() => {
-					rect.Size = new Vector2(bar.Width * Mathf.Clamp((float)CurrentPosition / MaxPosition, 0, 1), bar.ContentHeight);
+					rect.Size = new Vector2(bar.Width * Progress, bar.ContentHeight);
 				});
 				bar.AddNode(rect);
 
@@ -858,11 +864,11 @@ namespace Orange
 				HideAndClear();
 			}
 
-			public void Progress(int amount = 1)
+			public void Advance(int amount = 1)
 			{
 				CurrentPosition += amount;
 				Application.InvokeOnMainThread(() => {
-					textFieldA.Text = (int)((float)CurrentPosition / MaxPosition * 100) + "%";
+					textFieldA.Text = (int)(Progress * 100) + "%";
 					textFieldB.Text = CurrentPosition + " / " + MaxPosition;
 				});
 			}
@@ -871,7 +877,7 @@ namespace Orange
 			{
 				CurrentPosition = 0;
 				MaxPosition = maxPosition;
-				Progress(0);
+				Advance(0);
 				Visible = true;
 			}
 

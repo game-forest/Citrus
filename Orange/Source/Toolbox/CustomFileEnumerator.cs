@@ -8,10 +8,10 @@ namespace Orange
 	public class CustomFilesEnumerator : IFileEnumerator
 	{
 		public string Directory { get; }
-		public Predicate<FileInfo> EnumerationFilter { get; set; }
-		private readonly List<FileInfo> files;
+		public Predicate<string> EnumerationFilter { get; set; }
+		private readonly List<string> files;
 
-		public CustomFilesEnumerator(string directory, List<FileInfo> files)
+		public CustomFilesEnumerator(string directory, List<string> files)
 		{
 			Directory = directory;
 			this.files = files;
@@ -19,13 +19,13 @@ namespace Orange
 
 		public void Rescan() { }
 
-		public IEnumerable<FileInfo> Enumerate(string extension = null)
+		public IEnumerable<string> Enumerate(string extension = null)
 		{
 			if (extension == null && EnumerationFilter == null) {
 				return files;
 			}
 			return files
-				.Where(file => extension == null || file.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+				.Where(file => extension == null || file.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
 				.Where(file => EnumerationFilter == null || EnumerationFilter(file));
 		}
 	}

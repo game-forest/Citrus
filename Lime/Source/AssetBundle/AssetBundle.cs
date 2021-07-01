@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Lime
@@ -30,10 +29,7 @@ namespace Lime
 				}
 				return current;
 			}
-			set
-			{
-				SetCurrent(value, resetTexturePool: true);
-			}
+			set => SetCurrent(value, resetTexturePool: true);
 		}
 
 		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool)
@@ -64,60 +60,44 @@ namespace Lime
 
 		public byte[] ReadFile(string path)
 		{
-			using (var stream = OpenFile(path, FileMode.Open)) {
-				using (var memoryStream = new MemoryStream()) {
-					stream.CopyTo(memoryStream);
-					return memoryStream.ToArray();
-				}
-			}
+			using var stream = OpenFile(path, FileMode.Open);
+			using var memoryStream = new MemoryStream();
+			stream.CopyTo(memoryStream);
+			return memoryStream.ToArray();
 		}
 
 		public string ReadAllText(string path, Encoding encoding)
 		{
-			using (var streamReader = new StreamReader(OpenFile(path), encoding, detectEncodingFromByteOrderMarks: true)) {
-				return streamReader.ReadToEnd();
-			}
+			using var streamReader = new StreamReader(
+				stream: OpenFile(path),
+				encoding: encoding,
+				detectEncodingFromByteOrderMarks: true
+			);
+			return streamReader.ReadToEnd();
 		}
 
-		public abstract DateTime GetFileLastWriteTime(string path);
-		public abstract void SetFileLastWriteTime(string path, DateTime time);
-		public abstract byte[] GetCookingRulesSHA1(string path);
-		public abstract int GetFileSize(string path);
-
 		public abstract void DeleteFile(string path);
-		public abstract bool FileExists(string path);
-		
-		/// <summary>
-		/// Enumerates all file infos by given path and having the given extension.
-		/// </summary>
-		public abstract IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null);
 
-		public abstract void ImportFile(
-			string path, Stream stream, int reserve,
-			string sourceExtension, DateTime time, AssetAttributes attributes,
-			byte[] cookingRulesSHA1);
+		public abstract bool FileExists(string path);
+
+		public abstract void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
 
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
-		public abstract void ImportFileRaw(
-			string path, Stream stream, int reserve, 
-			string sourceExtension, DateTime time, AssetAttributes attributes,
-			byte[] cookingRulesSHA1);
-		
+		public abstract void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
+
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.
+		/// Order is specific to implementation.
 		/// </summary>
-		public IEnumerable<string> EnumerateFiles(string path = null, string extension = null) => EnumerateFileInfos(path, extension).Select(i => i.Path);
+		public abstract IEnumerable<string> EnumerateFiles(string path = null, string extension = null);
 
 		public void ImportFile(
-			string srcPath, string dstPath, int reserve, 
-			string sourceExtension, AssetAttributes attributes, 
-			DateTime time, byte[] cookingRulesSHA1)
+			string sourcePath, string destinationPath, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-				ImportFile(dstPath, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
-			}
+			using var stream = new FileStream(sourcePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			ImportFile(destinationPath, stream, cookingUnitHash, attributes);
 		}
 
 		/// <summary>
@@ -138,8 +118,9 @@ namespace Lime
 
 		public string GetLocalizedPath(string path)
 		{
-			if (string.IsNullOrEmpty(Application.CurrentLanguage))
+			if (string.IsNullOrEmpty(Application.CurrentLanguage)) {
 				return path;
+			}
 			string language = Application.CurrentLanguage;
 			string extension = Path.GetExtension(path);
 			string pathWithoutExtension = Path.ChangeExtension(path, null);
@@ -147,15 +128,20 @@ namespace Lime
 			return FileExists(localizedParth) ? localizedParth : path;
 		}
 
-		public virtual AssetAttributes GetAttributes(string path)
-		{
-			return AssetAttributes.None;
-		}
+		public abstract int GetFileSize(string path);
 
-		public abstract string GetSourceExtension(string path);
+		public abstract int GetFileUnpackedSize(string path);
 
-		public virtual void SetAttributes(string path, AssetAttributes attributes)
-		{
-		}
+		public virtual AssetAttributes GetFileAttributes(string path) => AssetAttributes.None;
+
+		/// <summary>
+		/// Returns SHA256 that was passed to the ImportFile or ImportFileRaw methods.
+		/// </summary>
+		public abstract SHA256 GetFileCookingUnitHash(string path);
+
+		/// <summary>
+		/// Returns SHA256 based on the file contents.
+		/// </summary>
+		public abstract SHA256 GetFileContentsHash(string path);
 	}
 }

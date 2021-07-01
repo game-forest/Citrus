@@ -136,9 +136,6 @@
     </Compile>
     <Compile Include="Toolbox.cs" />
     <Compile Include="LauncherConsole.cs" />
-    <Compile Include="..\..\Lime\Source\AssetBundle\FileInfo.cs">
-      <Link>FileInfo.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Mac\MainWindow.xib" />

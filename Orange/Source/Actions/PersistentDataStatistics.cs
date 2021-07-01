@@ -179,8 +179,7 @@ namespace Orange
 				var savedAnimationDataLoaded = Animation.AnimationData.Loaded;
 
 				var target = The.UI.GetActiveTarget();
-				var ac = new AssetCooker(target);
-				var bundles = ac.GetListOfAllBundles();
+				var bundles = Toolbox.GetListOfAllBundles(target);
 
 				statisticsForPath.Clear();
 				foreach (var ext in extensions) {
@@ -282,6 +281,9 @@ namespace Orange
 			{
 				t.Filename = suffixFilter + " total:";
 				var filteredRecords = statisticsForPath.Where(i => i.Key.EndsWith(suffixFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+				if (!filteredRecords.Any()) {
+					return;
+				}
 				foreach (var (k, r) in filteredRecords) {
 					t.AnimatorCount += r.AnimatorCount;
 					t.ExternalAnimationsSize += r.ExternalAnimationsSize;
@@ -625,12 +627,9 @@ namespace Orange
 		private class CachingBundle : AssetBundle
 		{
 			private readonly Dictionary<string, UncloseableMemoryStream> files = new Dictionary<string, UncloseableMemoryStream>(StringComparer.OrdinalIgnoreCase);
-			private readonly DateTime lastWriteTime = new DateTime();
-			// private readonly string systemRootDirectory;
 
 			public CachingBundle(string directory)
 			{
-				lastWriteTime = DateTime.Now;
 				using (var bundle = new UnpackedAssetBundle(directory)) {
 					foreach (var f in bundle.EnumerateFiles()) {
 						var memoryStream = new UncloseableMemoryStream();
@@ -644,7 +643,6 @@ namespace Orange
 
 			public CachingBundle(IEnumerable<(string Filepath, Stream Stream)> streamEnumerator)
 			{
-				lastWriteTime = DateTime.Now;
 				foreach (var (file, stream) in streamEnumerator) {
 					if (files.ContainsKey(file)) {
 						continue;
@@ -657,19 +655,16 @@ namespace Orange
 
 			public override void DeleteFile(string path) => throw new NotSupportedException();
 
-			public override IEnumerable<Lime.FileInfo> EnumerateFileInfos(string path = null, string extension = null)
+			public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
 			{
-				foreach (var (k, _) in files) {
-					if (path != null && !k.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
+				foreach (var file in files.Keys) {
+					if (path != null && !file.StartsWith(path, StringComparison.OrdinalIgnoreCase)) {
 						continue;
 					}
-					if (extension != null && !k.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+					if (extension != null && !file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
 						continue;
 					}
-					yield return new Lime.FileInfo {
-						LastWriteTime = lastWriteTime,
-						Path = k,
-					};
+					yield return file;
 				}
 			}
 
@@ -679,14 +674,13 @@ namespace Orange
 
 			public override string ToSystemPath(string bundlePath) => throw new NotSupportedException();
 
-			public override byte[] GetCookingRulesSHA1(string path) => throw new NotSupportedException();
-			public override DateTime GetFileLastWriteTime(string path) => lastWriteTime;
-
 			public override int GetFileSize(string path) => (int)files[path].Length;
 
-			public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1) => throw new NotSupportedException();
+			public override int GetFileUnpackedSize(string path) => throw new NotSupportedException();
 
-			public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1) => throw new NotImplementedException();
+			public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotSupportedException();
+
+			public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotImplementedException();
 
 			public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)
 			{
@@ -695,14 +689,11 @@ namespace Orange
 				return stream;
 			}
 
-			public override void SetFileLastWriteTime(string path, DateTime time) => throw new NotSupportedException();
-
 			public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open) => OpenFile(path, fileMode);
 
-			public override string GetSourceExtension(string path)
-			{
-				throw new NotImplementedException();
-			}
+			public override SHA256 GetFileContentsHash(string path) => throw new NotImplementedException();
+
+			public override SHA256 GetFileCookingUnitHash(string path) => throw new NotImplementedException();
 		}
 	}
 }

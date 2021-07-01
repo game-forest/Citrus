@@ -33,9 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Lime\Source\AssetBundle\FileInfo.cs">
-      <Link>FileInfo.cs</Link>
-    </Compile>
     <Compile Include="..\Source\CitrusVersion.cs">
       <Link>CitrusVersion.cs</Link>
     </Compile>

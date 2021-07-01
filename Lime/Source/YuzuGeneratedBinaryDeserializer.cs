@@ -8498,6 +8498,16 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static object Make_Lime__SHA256(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.SHA256();
+			result.A = d.Reader.ReadUInt64();
+			result.B = d.Reader.ReadUInt64();
+			result.C = d.Reader.ReadUInt64();
+			result.D = d.Reader.ReadUInt64();
+			return result;
+		}
+
 		private static void Read_Lime__ShadowParams(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.ShadowParams)obj;
@@ -10701,6 +10711,34 @@ namespace YuzuGenerated
 			return result;
 		}
 
+		private static void Read_Lime__UnpackedAssetBundle__FileInfo(BinaryDeserializer d, ReaderClassDef def, object obj)
+		{
+			var result = (global::Lime.UnpackedAssetBundle.FileInfo)obj;
+			var dg = (LimeDeserializer)d;
+			ReaderClassDef.FieldDef fd;
+			fd = def.Fields[d.Reader.ReadInt16()];
+			if (1 == fd.OurIndex) {
+				dg.EnsureClassDef(typeof(global::Lime.SHA256));
+				result.ContentsHash.A = d.Reader.ReadUInt64();
+				result.ContentsHash.B = d.Reader.ReadUInt64();
+				result.ContentsHash.C = d.Reader.ReadUInt64();
+				result.ContentsHash.D = d.Reader.ReadUInt64();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (2 == fd.OurIndex) {
+				result.DateModified = DateTime.FromBinary(d.Reader.ReadInt64());
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (fd.OurIndex != ReaderClassDef.EOF) throw dg.Error("Unfinished object");
+		}
+
+		private static object Make_Lime__UnpackedAssetBundle__FileInfo(BinaryDeserializer d, ReaderClassDef def)
+		{
+			var result = new global::Lime.UnpackedAssetBundle.FileInfo();
+			Read_Lime__UnpackedAssetBundle__FileInfo(d, def, result);
+			return result;
+		}
+
 		private static void Read_Lime__VBoxLayout(BinaryDeserializer d, ReaderClassDef def, object obj)
 		{
 			var result = (global::Lime.VBoxLayout)obj;
@@ -11864,6 +11902,7 @@ namespace YuzuGenerated
 			readCache[typeof(global::Lime.TiledImage)] = Read_Lime__TiledImage;
 			readCache[typeof(global::Lime.TwistComponent)] = Read_Lime__TwistComponent;
 			readCache[typeof(global::Lime.TwistMaterial)] = Read_Lime__TwistMaterial;
+			readCache[typeof(global::Lime.UnpackedAssetBundle.FileInfo)] = Read_Lime__UnpackedAssetBundle__FileInfo;
 			readCache[typeof(global::Lime.VBoxLayout)] = Read_Lime__VBoxLayout;
 			readCache[typeof(global::Lime.Vector2Animator)] = Read_Lime__Vector2Animator;
 			readCache[typeof(global::Lime.Vector3Animator)] = Read_Lime__Vector3Animator;
@@ -12050,6 +12089,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.SerializableFont)] = Make_Lime__SerializableFont;
 			makeCache[typeof(global::Lime.SerializableSample)] = Make_Lime__SerializableSample;
 			makeCache[typeof(global::Lime.SerializableTexture)] = Make_Lime__SerializableTexture;
+			makeCache[typeof(global::Lime.SHA256)] = Make_Lime__SHA256;
 			makeCache[typeof(global::Lime.ShadowParams)] = Make_Lime__ShadowParams;
 			makeCache[typeof(global::Lime.SharpenMaterial)] = Make_Lime__SharpenMaterial;
 			makeCache[typeof(global::Lime.SignedDistanceField.SDFInnerShadowMaterial)] = Make_Lime_SignedDistanceField__SDFInnerShadowMaterial;
@@ -12080,6 +12120,7 @@ namespace YuzuGenerated
 			makeCache[typeof(global::Lime.TopologyFace)] = Make_Lime__TopologyFace;
 			makeCache[typeof(global::Lime.TwistComponent)] = Make_Lime__TwistComponent;
 			makeCache[typeof(global::Lime.TwistMaterial)] = Make_Lime__TwistMaterial;
+			makeCache[typeof(global::Lime.UnpackedAssetBundle.FileInfo)] = Make_Lime__UnpackedAssetBundle__FileInfo;
 			makeCache[typeof(global::Lime.VBoxLayout)] = Make_Lime__VBoxLayout;
 			makeCache[typeof(global::Lime.Vector2)] = Make_Lime__Vector2;
 			makeCache[typeof(global::Lime.Vector2Animator)] = Make_Lime__Vector2Animator;

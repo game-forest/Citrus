@@ -179,6 +179,7 @@
     <PackageReference Include="FluentFTP">
       <Version>33.0.3</Version>
     </PackageReference>
+    <Compile Include="Source\AssetCooker\MemoryAssetBundle.cs" />
     <Compile Include="Source\Builder\Dotnet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -189,7 +190,6 @@
     <Compile Include="Source\Actions\BuildGameAndRun.cs" />
     <Compile Include="Source\Actions\ConvertDictionaryToNewFormat.cs" />
     <Compile Include="Source\Actions\CookGameAssets.cs" />
-    <Compile Include="Source\Actions\CookMainBundle.cs" />
     <Compile Include="Source\Actions\DeleteUnpackedBundles.cs" />
     <Compile Include="Source\Actions\GenerateDeserializers.cs" />
     <Compile Include="Source\Actions\InvalidateFonts.cs" />
@@ -198,22 +198,16 @@
     <Compile Include="Source\Actions\PersistentDataStatistics.cs" />
     <Compile Include="Source\Actions\RebuildGame.cs" />
     <Compile Include="Source\Actions\ResaveAllScenes.cs" />
-    <Compile Include="Source\Actions\RevealCookedAssets.cs" />
     <Compile Include="Source\Actions\RunTangerine.cs" />
     <Compile Include="Source\Actions\SynchronizeDocumentation.cs" />
     <Compile Include="Source\Actions\UpdateDictionaryTxt.cs" />
     <Compile Include="Source\Actions\UploadCacheToServer.cs" />
     <Compile Include="Source\AssetCooker\AssetCache.cs" />
     <Compile Include="Source\AssetCooker\AssetCooker.cs" />
-    <Compile Include="Source\AssetCooker\AssetsUnpacker.cs" />
     <Compile Include="Source\AssetCooker\CodeCooker.cs" />
     <Compile Include="Source\AssetCooker\CookingRulesBuilder.cs" />
-    <Compile Include="Source\AssetCooker\CookStages\DeleteOrphanedMasks.cs" />
-    <Compile Include="Source\AssetCooker\CookStages\DeleteOrphanedTextureParams.cs" />
-    <Compile Include="Source\AssetCooker\CookStages\RemoveDeprecatedModels.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncAtlases.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncCompoundFonts.cs" />
-    <Compile Include="Source\AssetCooker\CookStages\SyncDeleted.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncFonts.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncModels.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncRawAssets.cs" />
@@ -221,7 +215,7 @@
     <Compile Include="Source\AssetCooker\CookStages\SyncSounds.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncTextures.cs" />
     <Compile Include="Source\AssetCooker\CookStages\SyncTxtAssets.cs" />
-    <Compile Include="Source\AssetCooker\ICookStage.cs" />
+    <Compile Include="Source\AssetCooker\ICookingStage.cs" />
     <Compile Include="Source\AssetCooker\OpacityMaskCreator.cs" />
     <Compile Include="Source\AssetCooker\RectAllocator.cs" />
     <Compile Include="Source\AssetCooker\TextureConverter.cs">

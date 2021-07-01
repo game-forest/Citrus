@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Lime
 {
@@ -16,9 +14,11 @@ namespace Lime
 		/// <param name="currentBundlePatch">Output bundle patch.</param>
 		/// <param name="baseBundleVersion">Version on the last bundle patch in the previousBundlePatches list.</param>
 		public static void CreatePatch(
-			List<AssetBundle> previousBundlePatches, AssetBundle currentBundle, AssetBundle currentBundlePatch,
-			int baseBundleVersion)
-		{
+			List<AssetBundle> previousBundlePatches,
+			AssetBundle currentBundle,
+			AssetBundle currentBundlePatch,
+			int baseBundleVersion
+		) {
 			// Build up list of files inherited from the base bundle.
 			var inheritedFiles = new HashSet<string>();
 			foreach (var patch in previousBundlePatches) {
@@ -44,12 +44,12 @@ namespace Lime
 					if (!patch.FileExists(file)) {
 						continue;
 					}
-					// Don't compare last write time because it can be different for the same files on different machines.
 					if (
-						currentBundle.GetAttributes(file) == patch.GetAttributes(file) &&
-						currentBundle.GetSourceExtension(file) == patch.GetSourceExtension(file) &&
-						AreByteArraysEqual(currentBundle.GetCookingRulesSHA1(file), patch.GetCookingRulesSHA1(file)) &&
-						AreFilesEqual(file, patch, currentBundle)
+						// TODO: think if checking hash only is enough.
+						// Attributes are produced from cooking rules which are part of cooking unit hash.
+						currentBundle.GetFileAttributes(file) == patch.GetFileAttributes(file) &&
+						currentBundle.GetFileCookingUnitHash(file) == patch.GetFileCookingUnitHash(file) &&
+						currentBundle.GetFileContentsHash(file) == patch.GetFileContentsHash(file)
 					) {
 						fileModified = false;
 					}
@@ -68,72 +68,20 @@ namespace Lime
 				}
 			}
 			currentManifest.BaseBundleVersion = baseBundleVersion;
-			currentManifest.Write(currentBundlePatch);
+			currentManifest.Save(currentBundlePatch);
 		}
 
 		private static void ImportAsset(string file, AssetBundle sourceBundle, AssetBundle destinationBundle)
 		{
-			using (var stream = sourceBundle.OpenFileRaw(file)) {
-				destinationBundle.ImportFileRaw(
-					file, stream, 0,
-					sourceBundle.GetSourceExtension(file),
-					sourceBundle.GetFileLastWriteTime(file),
-					sourceBundle.GetAttributes(file),
-					sourceBundle.GetCookingRulesSHA1(file));
-			}
+			using var stream = sourceBundle.OpenFileRaw(file);
+			destinationBundle.ImportFileRaw(
+				destinationPath: file,
+				stream: stream,
+				unpackedSize: sourceBundle.GetFileUnpackedSize(file),
+				hash: sourceBundle.GetFileContentsHash(file),
+				cookingUnitHash: sourceBundle.GetFileCookingUnitHash(file),
+				attributes: sourceBundle.GetFileAttributes(file)
+			);
 		}
-
-		private static readonly byte[] buffer1 = new byte[1024 * 128];
-		private static readonly byte[] buffer2 = new byte[1024 * 128];
-
-		private static bool AreFilesEqual(string file, AssetBundle bundle1, AssetBundle bundle2)
-		{
-			using (var stream1 = bundle1.OpenFileRaw(file)) {
-				using (var stream2 = bundle2.OpenFileRaw(file)) {
-					var reader1 = new BinaryReader(stream1);
-					var reader2 = new BinaryReader(stream2);
-					for (;;) {
-						var c1= reader1.Read(buffer1, 0, buffer1.Length);
-						var c2= reader2.Read(buffer2, 0, buffer2.Length);
-						if (c1 != c2) {
-							return false;
-						}
-						if (c1 == 0) {
-							return true;
-						}
-						if (!AreByteArraysEqual(buffer1, buffer2)) {
-							return false;
-						}
-					}
-				}
-			}
-		}
-
-		private static unsafe bool AreByteArraysEqual(byte[] array1, byte[] array2)
-		{
-			if (array1 == null && array2 == null) {
-				return true;
-			} else if (
-				array1 == null ||
-				array2 == null ||
-				array1.Length != array2.Length
-			) {
-				return false;
-			}
-			fixed (byte* ptr1 = array1) {
-				fixed (byte* ptr2 = array2) {
-					return memcmp(ptr1, ptr2, array1.Length) == 0;
-				}
-			}
-		}
-
-#if iOS
-		const string stdlib = "libc";
-#else
-		const string stdlib = "msvcrt";
-#endif
-
-		[DllImport(stdlib, EntryPoint = "memcmp", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
-		private static unsafe extern int memcmp(byte* ptr1, byte* ptr2, int count);
 	}
 }

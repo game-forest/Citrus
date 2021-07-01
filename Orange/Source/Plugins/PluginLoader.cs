@@ -53,9 +53,6 @@ namespace Orange
 		[ImportMany(nameof(BeforeBundlesCooking), AllowRecomposition = true)]
 		public IEnumerable<Action> BeforeBundlesCooking { get; set; }
 
-		[ImportMany(nameof(AfterAssetUpdated), AllowRecomposition = true)]
-		public IEnumerable<Action<Lime.AssetBundle, CookingRules, string>> AfterAssetUpdated { get; set; }
-
 		[ImportMany(nameof(AfterAssetsCooked), AllowRecomposition = true)]
 		public IEnumerable<Action<string>> AfterAssetsCooked { get; set; }
 
@@ -303,13 +300,6 @@ namespace Orange
 		{
 			foreach (var action in CurrentPlugin.BeforeBundlesCooking) {
 				action();
-			}
-		}
-
-		public static void AfterAssetUpdated(Lime.AssetBundle bundle, CookingRules cookingRules, string path)
-		{
-			foreach (var i in CurrentPlugin.AfterAssetUpdated) {
-				i(bundle, cookingRules, path);
 			}
 		}
 

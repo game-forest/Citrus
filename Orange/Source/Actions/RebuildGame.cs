@@ -19,7 +19,7 @@ namespace Orange
 			var target = The.UI.GetActiveTarget();
 			if (The.UI.AskConfirmation("Are you sure you want to rebuild the game?")) {
 				CleanupGame(target);
-				var bundles = The.UI.GetSelectedBundles().Concat(target.Bundles).Distinct().ToList();
+				var bundles = The.UI.GetSelectedBundles();
 				if (!AssetCooker.CookForTarget(target, bundles, out string errorMessage)) {
 					return errorMessage;
 				}
@@ -32,9 +32,7 @@ namespace Orange
 
 		public static bool CleanupGame(Target target)
 		{
-			DeleteAllBundlesInTopDirectory(target);
 			DeleteAllBundlesReferredInCookingRules(target);
-
 			var builder = new SolutionBuilder(target);
 			if (!builder.Clean()) {
 				Console.WriteLine("CLEANUP FAILED");
@@ -45,7 +43,7 @@ namespace Orange
 
 		private static void DeleteAllBundlesReferredInCookingRules(Target target)
 		{
-			var bundles = GetAllBundles(target);
+			var bundles = Toolbox.GetListOfAllBundles(target);
 			foreach (var path in bundles.Select(bundle => The.Workspace.GetBundlePath(target.Platform, bundle)).Where(File.Exists)) {
 				try {
 					Console.WriteLine("Deleting {0}", path);
@@ -54,28 +52,6 @@ namespace Orange
 					Console.WriteLine("Can not remove {0}: {1}", path, e.Message);
 				}
 			}
-		}
-
-		private static void DeleteAllBundlesInTopDirectory(Target target)
-		{
-			string bundlePath = The.Workspace.GetMainBundlePath(target.Platform);
-			var dirInfo = new System.IO.DirectoryInfo(Path.GetDirectoryName(bundlePath));
-			foreach (var fileInfo in dirInfo.GetFiles('*' + Path.GetExtension(bundlePath), SearchOption.TopDirectoryOnly)) {
-				Console.WriteLine("Deleting {0}", fileInfo.Name);
-				File.Delete(fileInfo.FullName);
-			}
-		}
-
-		private static HashSet<string> GetAllBundles(Target target)
-		{
-			var bundles = new HashSet<string>() {
-				CookingRulesBuilder.MainBundleName
-			};
-			var cookingRulesMap = CookingRulesBuilder.Build(Lime.AssetBundle.Current, target);
-			foreach (var bundle in cookingRulesMap.SelectMany(i => i.Value.Bundles.Where(bundle => bundle != CookingRulesBuilder.MainBundleName))) {
-				bundles.Add(bundle);
-			}
-			return bundles;
 		}
 	}
 }

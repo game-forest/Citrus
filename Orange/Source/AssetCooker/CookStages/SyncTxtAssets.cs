@@ -1,32 +1,39 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using Lime;
 
 namespace Orange
 {
-	class SyncTxtAssets: AssetCookerCookStage, ICookStage
+	class SyncTxtAssets : ICookingStage
 	{
-		public IEnumerable<string> ImportedExtensions { get { yield return txtExtension; } }
-		public IEnumerable<string> BundleExtensions { get { yield return txtExtension; } }
+		private readonly AssetCooker assetCooker;
 
-		private readonly string txtExtension = ".txt";
-		private readonly string t3dExtension = ".t3d";
-
-		public SyncTxtAssets(AssetCooker assetCooker) : base(assetCooker) { }
-
-		public int GetOperationCount() => AssetCooker.GetUpdateOperationCount(txtExtension);
-
-		public void Action() => AssetCooker.SyncUpdated(txtExtension, txtExtension, Converter);
-
-		private bool Converter(string srcPath, string dstPath)
+		public SyncTxtAssets(AssetCooker assetCooker)
 		{
-			var modelAttachmentExtIndex = dstPath.LastIndexOf(Model3DAttachment.FileExtension);
-			if (modelAttachmentExtIndex >= 0) {
-				AssetCooker.ModelsToRebuild.Add(dstPath.Remove(modelAttachmentExtIndex) + t3dExtension);
-			}
-			AssetCooker.OutputBundle.ImportFile(AssetCooker.InputBundle.ToSystemPath(srcPath), dstPath, 0, txtExtension, AssetAttributes.Zipped,
-				AssetCooker.InputBundle.GetFileLastWriteTime(srcPath), AssetCooker.CookingRulesMap[srcPath].SHA1);
-			return true;
+			this.assetCooker = assetCooker;
+		}
+
+		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
+		{
+			return assetCooker.InputBundle.EnumerateFiles(null, ".txt")
+				.Where(i => !i.EndsWith(Model3DAttachment.FileExtension, StringComparison.Ordinal))
+				.Select(i => {
+					var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
+						i, assetCooker.CookingRulesMap[i]
+					);
+					return (i, hash);
+				});
+		}
+
+		public void Cook(string txtPath, SHA256 cookingUnitHash)
+		{
+			assetCooker.OutputBundle.ImportFile(
+				sourcePath: assetCooker.InputBundle.ToSystemPath(txtPath),
+				destinationPath: txtPath,
+				cookingUnitHash: cookingUnitHash,
+				attributes: AssetAttributes.Zipped
+			);
 		}
 	}
 }

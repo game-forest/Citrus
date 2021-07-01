@@ -8,6 +8,7 @@ using Lime;
 using Yuzu;
 using Yuzu.Json;
 using Yuzu.Metadata;
+using System.Threading;
 
 namespace Orange
 {
@@ -149,20 +150,26 @@ namespace Orange
 		[YuzuMember]
 		public int MaxAtlasSize { get; set; } = 2048;
 
-		private static System.Security.Cryptography.SHA1 sha1 = System.Security.Cryptography.SHA1.Create();
-		// using json format for SHA1 since binary one includes all fields definitions header anyway.
-		// so adding a field with binary triggers rebuild of all bundles
-		private static JsonSerializer yjs = new JsonSerializer();
+		// Json is used instead of binary because binary format includes
+		// a definition of CookingRules class serializable fields. Which
+		// means adding a field to cooking rules class will change binary
+		// representation of already existing cooking rules. Consequently
+		// cooking rules hash will also change and all bundles for all
+		// projects will require rebuild.
+		private static readonly ThreadLocal<JsonSerializer> yjs =
+			new ThreadLocal<JsonSerializer>(() => new JsonSerializer() {
+				JsonOptions = jsonSerializeOptions,
+			});
 
-		public byte[] SHA1 => sha1.ComputeHash(Encoding.UTF8.GetBytes(yjs.ToString(this).ToLower()));
+		public override string ToString() => yjs.Value.ToString(this);
 
-		public DateTime LastChangeTime;
+		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.Value.ToString(this)));
 
 		public HashSet<Meta.Item> FieldOverrides;
 
 		public ParticularCookingRules Parent;
 
-		private static readonly Meta meta = Meta.Get(typeof (ParticularCookingRules), new CommonOptions());
+		private static readonly Meta meta = Meta.Get(typeof(ParticularCookingRules), new CommonOptions());
 
 		private static readonly Dictionary<string, Meta.Item> fieldNameToYuzuMetaItemCache =
 			new Dictionary<string, Meta.Item>();
@@ -170,27 +177,27 @@ namespace Orange
 		private static readonly Dictionary<TargetPlatform, ParticularCookingRules> defaultRules =
 			new Dictionary<TargetPlatform, ParticularCookingRules>();
 
+		private static JsonSerializeOptions jsonSerializeOptions = new JsonSerializeOptions {
+			ArrayLengthPrefix = false,
+			ClassTag = "class",
+			DateFormat = "O",
+			TimeSpanFormat = "c",
+			DecimalAsString = false,
+			EnumAsString = false,
+			FieldSeparator = "",
+			IgnoreCompact = false,
+			Indent = "",
+			Int64AsString = false,
+			MaxOnelineFields = 0,
+			SaveClass = JsonSaveClass.None,
+			Unordered = false,
+		};
+
 		static ParticularCookingRules()
 		{
 			foreach (var item in meta.Items) {
 				fieldNameToYuzuMetaItemCache.Add(item.Name, item);
 			}
-			// initializing all fields here, so any changes to yuzu default values won't affect us here
-			yjs.JsonOptions = new JsonSerializeOptions {
-				ArrayLengthPrefix = false,
-				ClassTag = "class",
-				DateFormat = "O",
-				TimeSpanFormat = "c",
-				DecimalAsString = false,
-				EnumAsString = false,
-				FieldSeparator = "",
-				IgnoreCompact = false,
-				Indent = "",
-				Int64AsString = false,
-				MaxOnelineFields = 0,
-				SaveRootClass = false,
-				Unordered = false,
-			};
 		}
 
 		public void Override(string fieldName)
@@ -212,8 +219,7 @@ namespace Orange
 				TextureScaleFactor = 1.0f,
 				PVRFormat = platform == TargetPlatform.Android ? PVRFormat.ETC2 : PVRFormat.PVRTC4,
 				DDSFormat = DDSFormat.DXTi,
-				LastChangeTime = new DateTime(0),
-				Bundles = new[] { CookingRulesBuilder.MainBundleName },
+				Bundles = new[] { "Data" },
 				Ignore = false,
 				Only = false,
 				ADPCMLimit = 100,
@@ -273,7 +279,7 @@ namespace Orange
 		public int AtlasItemPadding => EffectiveRules.AtlasItemPadding;
 		public int MaxAtlasSize => EffectiveRules.MaxAtlasSize;
 
-		public byte[] SHA1 => EffectiveRules.SHA1;
+		public SHA256 Hash => EffectiveRules.Hash;
 
 		public bool Ignore
 		{
@@ -331,14 +337,11 @@ namespace Orange
 
 		public void Save()
 		{
-			using (
-				var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create)) {
-				using (var sw = new StreamWriter(fs)) {
-					SaveCookingRules(sw, CommonRules, null);
-					foreach (var kv in TargetRules) {
-						SaveCookingRules(sw, kv.Value, kv.Key);
-					}
-				}
+			using var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create);
+			using var sw = new StreamWriter(fs);
+			SaveCookingRules(sw, CommonRules, null);
+			foreach (var kv in TargetRules) {
+				SaveCookingRules(sw, kv.Value, kv.Key);
 			}
 		}
 
@@ -431,22 +434,62 @@ namespace Orange
 
 	public class CookingRulesBuilder
 	{
-		public const string MainBundleName = "Main";
 		public const string CookingRulesFilename = "#CookingRules.txt";
 		public const string DirectoryNameToken = "${DirectoryName}";
+		private static readonly Dictionary<string, CacheRecord> cache =
+			new Dictionary<string, CacheRecord>();
+
+		private class CacheRecord
+		{
+			public bool Dirty;
+			public Dictionary<string, CookingRules> Map =
+				new Dictionary<string, CookingRules>(StringComparer.Ordinal);
+			private readonly IFileSystemWatcher watcher;
+			public CacheRecord(string path)
+			{
+				watcher = new Lime.FileSystemWatcher(path, includeSubdirectories: true);
+				watcher.Changed += p => OnChanged(p);
+				watcher.Created += p => OnChanged(p);
+				watcher.Deleted += p => OnChanged(p);
+				watcher.Renamed += (_, p) => OnChanged(p);
+				void OnChanged(string p)
+				{
+					if (!Path.GetFileName(p)?.Equals(UnpackedAssetBundle.IndexFile, StringComparison.Ordinal) ?? false) {
+						Dirty = true;
+					}
+				}
+			}
+		}
 
 		// pass target as null to build cooking rules disregarding targets
 		public static Dictionary<string, CookingRules> Build(AssetBundle bundle, Target target, string path = null)
 		{
+			CacheRecord cacheRecord = null;
+			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
+				var bundlePath = unpackedBundle.BaseDirectory;
+				if (!cache.TryGetValue(bundlePath, out cacheRecord)) {
+					cache.Add(bundlePath, cacheRecord = new CacheRecord(bundlePath));
+				} else {
+					if (!cacheRecord.Dirty) {
+						return cacheRecord.Map;
+					} else {
+						cacheRecord.Map.Clear();
+						cacheRecord.Dirty = false;
+					}
+				}
+			}
+			Console.WriteLine("Building Cooking Rules.");
+			var sw = System.Diagnostics.Stopwatch.StartNew();
 			var pathStack = new Stack<string>();
 			var rulesStack = new Stack<CookingRules>();
-			var map = new Dictionary<string, CookingRules>(StringComparer.OrdinalIgnoreCase);
+			var map = cacheRecord?.Map ?? new Dictionary<string, CookingRules>(StringComparer.Ordinal);
 			pathStack.Push("");
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
 			rulesStack.Push(rootRules);
-			foreach (var fileInfo in bundle.EnumerateFileInfos(path)) {
-				var filePath = fileInfo.Path;
+			var files = bundle.EnumerateFiles(path).ToList();
+			files.Sort();
+			foreach (var filePath in files) {
 				while (!filePath.StartsWith(pathStack.Peek())) {
 					rulesStack.Pop();
 					pathStack.Pop();
@@ -470,7 +513,7 @@ namespace Orange
 						}
 					}
 				} else  {
-					if (filePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) {
+					if (filePath.EndsWith(".txt", StringComparison.Ordinal)) {
 						var filename = filePath.Remove(filePath.Length - 4);
 						if (bundle.FileExists(filename)) {
 							continue;
@@ -486,16 +529,11 @@ namespace Orange
 						ignoreRules.Ignore = true;
 						map[rulesFile] = ignoreRules;
 					}
-					if (rules.CommonRules.LastChangeTime > fileInfo.LastWriteTime) {
-						try {
-							bundle.SetFileLastWriteTime(filePath, rules.CommonRules.LastChangeTime);
-						} catch (UnauthorizedAccessException) {
-							// In case this is a folder
-						}
-					}
 					map[filePath] = rules;
 				}
 			}
+			sw.Stop();
+			System.Console.WriteLine($"Done building cooking rules ({sw.ElapsedMilliseconds}ms).");
 			return map;
 		}
 
@@ -577,7 +615,6 @@ namespace Orange
 			var rules = basicRules.InheritClone();
 			var currentRules = rules.CommonRules;
 			try {
-				rules.CommonRules.LastChangeTime = File.GetLastWriteTime(path);
 				using (var s = bundle.OpenFile(path)) {
 					TextReader r = new StreamReader(s);
 					string line;
@@ -586,9 +623,12 @@ namespace Orange
 						if (line == "") {
 							continue;
 						}
-						var words = line.Split(' ');
+						var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 						if (words.Length < 2) {
 							throw new Lime.Exception("Invalid rule format");
+						}
+						foreach (ref var word in words.AsSpan()) {
+							word = word.Trim();
 						}
 						// target-specific cooking rules
 						if (words[0].EndsWith(")")) {
@@ -681,10 +721,7 @@ namespace Orange
 					rules.DDSFormat = ParseDDSFormat(words[1]);
 					break;
 				case "Bundles":
-					rules.Bundles = new string[words.Count - 1];
-					for (var i = 0; i < rules.Bundles.Length; i++) {
-						rules.Bundles[i] = ParseBundle(words[i + 1]);
-					}
+					rules.Bundles = words.Skip(1).ToArray();
 					break;
 				case "Ignore":
 					rules.Ignore = ParseBool(words[1]);
@@ -760,15 +797,6 @@ namespace Orange
 				return TextureWrapMode.MirroredRepeat;
 			default:
 				throw new Lime.Exception("Error parsing AtlasOptimization. Must be one of: Memory, DrawCalls");
-			}
-		}
-
-		private static string ParseBundle(string word)
-		{
-			if (word.ToLowerInvariant() == "<default>" || word.ToLowerInvariant() == "data") {
-				return MainBundleName;
-			} else {
-				return word;
 			}
 		}
 	}

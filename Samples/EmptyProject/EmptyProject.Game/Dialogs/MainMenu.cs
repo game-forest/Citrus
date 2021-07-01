@@ -1,8 +1,8 @@
-﻿using Lime;
+using Lime;
 
 namespace EmptyProject.Dialogs
 {
-	public class MainMenu : Dialog<Scenes.MainMenu>
+	public class MainMenu : Dialog<Scenes.Data.MainMenu>
 	{
 		public MainMenu()
 		{

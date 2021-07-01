@@ -143,9 +143,9 @@ namespace Orange
 
 			var sourceFiles = new ScanOptimizedFileEnumerator(The.Workspace.ProjectDirectory, ScanFilter);
 			using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
-				foreach (var fileInfo in sourceFiles.Enumerate(".cs")) {
-					var content = File.ReadAllText(fileInfo.Path, Encoding.UTF8);
-					ProcessSourceFile(fileInfo.Path, content);
+				foreach (var file in sourceFiles.Enumerate(".cs")) {
+					var content = File.ReadAllText(file, Encoding.UTF8);
+					ProcessSourceFile(file, content);
 				}
 			}
 			foreach (var file in AssetBundle.Current.EnumerateFiles(null, ".json")) {

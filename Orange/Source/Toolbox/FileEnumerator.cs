@@ -2,17 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Lime;
 
 namespace Orange
 {
-	using FileInfo = Lime.FileInfo;
-
 	public class FileEnumerator : IFileEnumerator
 	{
 		public string Directory { get; }
-		public Predicate<FileInfo> EnumerationFilter { get; set; }
-		readonly List<FileInfo> files = new List<FileInfo>();
+		public Predicate<string> EnumerationFilter { get; set; }
+		readonly List<string> files = new List<string>();
 
 		public FileEnumerator(string directory)
 		{
@@ -30,19 +27,19 @@ namespace Orange
 					continue;
 				file = file.Remove(0, dirInfo.FullName.Length + 1);
 				file = CsprojSynchronization.ToUnixSlashes(file);
-				files.Add(new FileInfo { Path = file, LastWriteTime = fileInfo.LastWriteTime });
+				files.Add(file);
 			}
 			// According to documentation the file order is not guaranteed.
-			files.Sort((a, b) => string.Compare(a.Path, b.Path));
+			files.Sort((a, b) => string.Compare(a, b));
 		}
 
-		public IEnumerable<FileInfo> Enumerate(string extension = null)
+		public IEnumerable<string> Enumerate(string extension = null)
 		{
 			if (extension == null && EnumerationFilter == null) {
 				return files;
 			}
 			return files
-				.Where(file => extension == null || file.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+				.Where(file => extension == null || file.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
 				.Where(file => EnumerationFilter == null || EnumerationFilter(file));
 		}
 	}
@@ -53,7 +50,7 @@ namespace Orange
 	public class ScanOptimizedFileEnumerator : IFileEnumerator
 	{
 		private readonly Predicate<DirectoryInfo> scanFilter;
-		private readonly List<FileInfo> files = new List<FileInfo>();
+		private readonly List<string> files = new List<string>();
 		private readonly bool cutDirectoryPrefix = true;
 
 		public ScanOptimizedFileEnumerator(string directory, Predicate<DirectoryInfo> scanFilter, bool cutDirectoryPrefix = true)
@@ -65,7 +62,7 @@ namespace Orange
 		}
 
 		public string Directory { get; }
-		public Predicate<FileInfo> EnumerationFilter { get; set; }
+		public Predicate<string> EnumerationFilter { get; set; }
 
 		public void Rescan()
 		{
@@ -81,7 +78,7 @@ namespace Orange
 						file = file.Remove(0, dirInfo.FullName.Length + 1);
 					}
 					file = CsprojSynchronization.ToUnixSlashes(file);
-					files.Add(new FileInfo { Path = file, LastWriteTime = fileInfo.LastWriteTime });
+					files.Add(file);
 				}
 				foreach (var directoryInfo in rootDirectoryInfo.EnumerateDirectories()) {
 					if (scanFilter?.Invoke(directoryInfo) ?? true) {
@@ -90,16 +87,16 @@ namespace Orange
 				}
 			}
 			// According to documentation the file order is not guaranteed.
-			files.Sort((a, b) => string.Compare(a.Path, b.Path));
+			files.Sort((a, b) => string.Compare(a, b));
 		}
 
-		public IEnumerable<FileInfo> Enumerate(string extension = null)
+		public IEnumerable<string> Enumerate(string extension = null)
 		{
 			if (extension == null && EnumerationFilter == null) {
 				return files;
 			}
 			return files
-				.Where(file => extension == null || file.Path.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+				.Where(file => extension == null || file.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
 				.Where(file => EnumerationFilter == null || EnumerationFilter(file));
 		}
 	}

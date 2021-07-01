@@ -236,5 +236,33 @@ namespace Orange
 					"Orange");
 #endif
 		}
+
+		public static List<string> GetListOfAllBundles(
+			Target target,
+			AssetBundle InputBundle = null,
+			Dictionary<string, CookingRules> cookungRules = null
+		) {
+			InputBundle ??= AssetBundle.Current;
+			cookungRules ??= CookingRulesBuilder.Build(InputBundle, target);
+			var bundles = new HashSet<string>();
+			foreach (var (_, rules) in cookungRules) {
+				foreach (var bundle in rules.Bundles) {
+					bundles.Add(bundle);
+				}
+			}
+			return bundles.ToList();
+		}
+
+		/// <summary>
+		/// Returns SHA256 based on the file path and contents.
+		/// </summary>
+		public static SHA256 ComputeCookingUnitHash(this AssetBundle bundle, string path, CookingRules cookingRules)
+		{
+			return SHA256.Compute(
+				SHA256.Compute(AssetPath.CorrectSlashes(path)),
+				bundle.GetFileContentsHash(path),
+				cookingRules.Hash
+			);
+		}
 	}
 }

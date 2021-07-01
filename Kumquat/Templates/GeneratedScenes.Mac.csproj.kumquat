@@ -3,13 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{56D2F029-2E73-4CF9-80C7-6175A9DBCFFE}</ProjectGuid>
+    <ProjectGuid>{1EE9C6F3-E8D7-4FF8-9420-2B4C9CF9B66D}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>Kumquat</RootNamespace>
-    <AssemblyName>Kumquat</AssemblyName>
+    <RootNamespace><%PROJECT_NAME%>.Scenes</RootNamespace>
+    <AssemblyName><%PROJECT_NAME%>.GeneratedScenes</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
@@ -29,7 +27,10 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>None</LinkMode>
+    <TlsProvider>
+    </TlsProvider>
+    <LinkMode>
+    </LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
@@ -49,7 +50,10 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>None</LinkMode>
+    <TlsProvider>
+    </TlsProvider>
+    <LinkMode>
+    </LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
@@ -61,41 +65,15 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Info.plist" />
-    <EmbeddedResource Include="Templates\GeneratedScenes.Android.csproj.kumquat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\GeneratedScenes.iOS.csproj.kumquat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\GeneratedScenes.Win.csproj.kumquat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Compile Include=".\**\*.cs" />
+    <Compile Remove=".\bin\**" />
+    <Compile Remove=".\obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\CodeFormatter.cs" />
-    <Compile Include="Source\ParsedFramesTree.cs" />
-    <Compile Include="Source\ParsedNode.cs" />
-    <Compile Include="Source\ScenesCodeCooker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Source\CodeTemplates\ParsedFrame.txt" />
-    <EmbeddedResource Include="Source\CodeTemplates\ParsedNode.txt" />
-    <EmbeddedResource Include="Source\CodeTemplates\SceneFile.txt" />
-    <EmbeddedResource Include="Source\CodeTemplates\ParsedWidget.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Lime\Lime.Mac.csproj">
+    <ProjectReference Include="..\..\..\Lime\Lime.Mac.csproj">
       <Project>{DC16EEBF-404D-4610-B87A-15B57464D707}</Project>
       <Name>Lime.Mac</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Yuzu\Yuzu.Mac.csproj">
-      <Project>{5F16D8E4-A0F1-4341-83A0-3897FC44EBB8}</Project>
-      <Name>Yuzu.Mac</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Templates\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

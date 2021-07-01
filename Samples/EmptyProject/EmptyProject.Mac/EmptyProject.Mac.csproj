@@ -128,7 +128,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\Data.Mac">
+    <BundleResource Include="..\Bundles\Data.Mac">
       <Link>Data.Mac</Link>
     </BundleResource>
   </ItemGroup>

@@ -45,7 +45,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\Data.Android">
+    <EmbeddedResource Include="..\..\Bundles\Data.Android">
       <Link>Resources\Data.Android</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <LogicalName>Assets.Android.Data.Android</LogicalName>

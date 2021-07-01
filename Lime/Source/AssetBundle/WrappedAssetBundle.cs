@@ -8,41 +8,38 @@ namespace Lime
 	{
 		public readonly AssetBundle Bundle;
 
-		public WrappedAssetBundle(AssetBundle bundle)
-		{
-			this.Bundle = bundle;
-		}
+		public WrappedAssetBundle(AssetBundle bundle) => this.Bundle = bundle;
+
+		public override void Dispose() => Bundle.Dispose();
 
 		public override void DeleteFile(string path) => Bundle.DeleteFile(path);
 
-		public override IEnumerable<FileInfo> EnumerateFileInfos(string path = null, string extension = null) => Bundle.EnumerateFileInfos(path, extension);
+		public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null) => Bundle.EnumerateFiles(path, extension);
 
 		public override bool FileExists(string path) => Bundle.FileExists(path);
 
-		public override byte[] GetCookingRulesSHA1(string path) => Bundle.GetCookingRulesSHA1(path);
+		public override SHA256 GetFileContentsHash(string path) => Bundle.GetFileContentsHash(path);
 
-		public override DateTime GetFileLastWriteTime(string path) => Bundle.GetFileLastWriteTime(path);
-
-		public override string GetSourceExtension(string path) => Bundle.GetSourceExtension(path);
-
-		public override void SetFileLastWriteTime(string path, DateTime time) => Bundle.SetFileLastWriteTime(path, time);
+		public override SHA256 GetFileCookingUnitHash(string path) => Bundle.GetFileCookingUnitHash(path);
 
 		public override int GetFileSize(string path) => Bundle.GetFileSize(path);
 
-		public override void ImportFile(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override int GetFileUnpackedSize(string path) => Bundle.GetFileUnpackedSize(path);
+
+		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			Bundle.ImportFile(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+			Bundle.ImportFile(destinationPath, stream, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string path, Stream stream, int reserve, string sourceExtension, DateTime time, AssetAttributes attributes, byte[] cookingRulesSHA1)
+		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
 		{
-			Bundle.ImportFileRaw(path, stream, reserve, sourceExtension, time, attributes, cookingRulesSHA1);
+			Bundle.ImportFileRaw(destinationPath, stream, unpackedSize, hash, cookingUnitHash, attributes);
 		}
 
 		public override Stream OpenFile(string path, FileMode mode = FileMode.Open) => Bundle.OpenFile(path, mode);
 
 		public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open) => Bundle.OpenFileRaw(path, mode);
-		
+
 		public override string ToSystemPath(string bundlePath) => Bundle.ToSystemPath(bundlePath);
 
 		public override string FromSystemPath(string systemPath) => Bundle.FromSystemPath(systemPath);

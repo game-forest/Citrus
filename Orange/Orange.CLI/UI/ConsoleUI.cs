@@ -84,11 +84,13 @@ namespace Orange
 
 		private static void WriteHelpAndExit()
 		{
-			Console.WriteLine($"Orange.CLI [citrus_project]" +
-			                  $" --target:[Win|Mac|ios|android|uc]" +
-			                  $" --command:command" +
-			                  $" [--autoupdate]" +
-			                  $" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
+			Console.WriteLine(
+				$"Orange.CLI [citrus_project]" +
+				$" --target:[Win|Mac|ios|android|uc]" +
+				$" --unpack_bundles" +
+				$" --command:command" +
+				$" --bundles:[<bundle>|<bundle1>,<bundle2>,..,<bundlen>]" +
+				$" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
 			);
 			var commands = The.MenuController.GetVisibleAndSortedItems();
 			if (commands.Count > 0) {
@@ -132,6 +134,21 @@ namespace Orange
 			return false;
 		}
 
+		public override List<string> GetSelectedBundles()
+		{
+			var cliBundles = Toolbox.GetCommandLineArg("--bundles")
+				?.Split(',')
+				.Select(s => s.Trim())
+				.ToList();
+			if (cliBundles != null) {
+				return cliBundles;
+			}
+			if (The.UI.GetActiveAction().UsesTargetBundles && The.UI.GetActiveTarget().Bundles.Any()) {
+				return The.UI.GetActiveTarget().Bundles.ToList();
+			}
+			return Toolbox.GetListOfAllBundles(The.UI.GetActiveTarget());
+		}
+
 		public override void ShowError(string message)
 		{
 			Console.WriteLine(message);
@@ -140,6 +157,11 @@ namespace Orange
 		public override MenuItem GetActiveAction()
 		{
 			return The.MenuController.Items.Find(i => i.Label == selectedActionName);
+		}
+
+		public override bool ShouldUnpackBundles()
+		{
+			return Toolbox.GetCommandLineFlag("--unpack_bundles");
 		}
 
 		public override Target GetActiveTarget()
