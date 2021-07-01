@@ -436,8 +436,8 @@ namespace Orange
 	{
 		public const string CookingRulesFilename = "#CookingRules.txt";
 		public const string DirectoryNameToken = "${DirectoryName}";
-		private static readonly Dictionary<string, CacheRecord> cache =
-			new Dictionary<string, CacheRecord>();
+		private static readonly Dictionary<(string bundlePath, string targetName), CacheRecord> cache =
+			new Dictionary<(string, string), CacheRecord>();
 
 		private class CacheRecord
 		{
@@ -467,8 +467,8 @@ namespace Orange
 			CacheRecord cacheRecord = null;
 			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
 				var bundlePath = unpackedBundle.BaseDirectory;
-				if (!cache.TryGetValue(bundlePath, out cacheRecord)) {
-					cache.Add(bundlePath, cacheRecord = new CacheRecord(bundlePath));
+				if (!cache.TryGetValue((bundlePath, target.Name), out cacheRecord)) {
+					cache.Add((bundlePath, target.Name), cacheRecord = new CacheRecord(bundlePath));
 				} else {
 					if (!cacheRecord.Dirty) {
 						return cacheRecord.Map;
