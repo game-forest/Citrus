@@ -610,8 +610,9 @@ namespace Orange
 			}
 		}
 
-		private static CookingRules ParseCookingRules(AssetBundle bundle, CookingRules basicRules, string path, Target target)
-		{
+		private static CookingRules ParseCookingRules(
+			AssetBundle bundle, CookingRules basicRules, string path, Target target
+		) {
 			var rules = basicRules.InheritClone();
 			var currentRules = rules.CommonRules;
 			try {
