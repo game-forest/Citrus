@@ -70,6 +70,8 @@ namespace Orange
 		private bool Cook(List<string> bundles, out string errorMessage)
 		{
 			AssetCache.Instance.Initialize();
+			var originToAlias = GetOriginToAliasMap(CookingRulesMap);
+			RemapCookingRules(originToAlias, CookingRulesMap);
 			LogText = "";
 			var allTimer = StartBenchmark(
 				$"Asset cooking. Asset cache mode: {AssetCache.Instance.Mode}. Active platform: {Target.Platform}" +
@@ -80,13 +82,13 @@ namespace Orange
 			PluginLoader.BeforeBundlesCooking();
 			var requiredCookCode = !The.Workspace.ProjectJson.GetValue<bool>("SkipCodeCooking");
 			try {
-				GetBundlesToCook(bundles, out var bundlesToCook, out var cookingUnitCount);
+				GetBundlesToCook(bundles, out var bundlesToCook, out var cookingUnitCount, originToAlias);
 				UserInterface.Instance.SetupProgressBar(cookingUnitCount);
 				BeginCookBundles?.Invoke();
 				var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), bundlesToCook);
 				for (int i = 0; i < bundlesToCook.Count; i++) {
 					var extraTimer = StartBenchmark();
-					CookBundle(bundlesToCook[i], assetsGroupedByBundles[i]);
+					CookBundle(bundlesToCook[i], assetsGroupedByBundles[i], originToAlias);
 					StopBenchmark(extraTimer, $"{bundlesToCook[i]} cooked: ");
 				}
 				UserInterface.Instance.SetupProgressBar(bundles.Count);
@@ -116,6 +118,40 @@ namespace Orange
 			}
 			errorMessage = null;
 			return true;
+		}
+
+		private static void RemapCookingRules(
+			Dictionary<string, string> originToAlias,
+			Dictionary<string, CookingRules> cookingRulesMap
+		) {
+			foreach (var (origin, alias) in originToAlias) {
+				// Does not remove origin entry from map because we also want to access
+				// it's cooking rules also by it's original name.
+				cookingRulesMap[alias] = cookingRulesMap[origin];
+			}
+		}
+
+		private Dictionary<string, string> GetOriginToAliasMap(Dictionary<string, CookingRules> cookingRules)
+		{
+			var result = new Dictionary<string, string>();
+			foreach (var (path, rules) in cookingRules) {
+				if (rules.Alias != null) {
+					var directory = Path.GetDirectoryName(rules.Alias);
+					if (!string.IsNullOrEmpty(directory) && !Directory.Exists(InputBundle.ToSystemPath(directory))) {
+						throw new InvalidOperationException($"Alias refers to non-existing directory '{directory}'");
+					}
+					if (rules.SourcePath == null || rules.Ignore) {
+						// This is a cooking rules entry itself or is ignored e.g. by Only.
+						continue;
+					}
+					if (path == rules.Alias) {
+						// Because we also store reference to the same cooking rules for source of aliased path.
+						continue;
+					}
+					result.Add(path, rules.Alias);
+				}
+			}
+			return result;
 		}
 
 		private void UnpackBundle(string bundleName)
@@ -174,8 +210,12 @@ namespace Orange
 			}
 		}
 
-		private void GetBundlesToCook(List<string> allBundles, out List<string> bundlesToCook, out int cookingUnitCount)
-		{
+		private void GetBundlesToCook(
+			List<string> allBundles,
+			out List<string> bundlesToCook,
+			out int cookingUnitCount,
+			Dictionary<string, string> originToAlias
+		) {
 			UserInterface.Instance.SetupProgressBar(allBundles.Count);
 			cookingUnitCount = 0;
 			bundlesToCook = new List<string>();
@@ -184,7 +224,10 @@ namespace Orange
 				Console.WriteLine($"Computing modified cooking unit count for bundle '{allBundles[i]}', ({i + 1}/{allBundles.Count})");
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(
-					new CustomSetAssetBundle(InputBundle, assetsGroupedByBundles[i]),
+					bundle: new RemappedAssetBundle(
+						originToAlias,
+						new CustomSetAssetBundle(InputBundle, assetsGroupedByBundles[i])
+					),
 					resetTexturePool: false
 				);
 				OutputBundle = CreateOutputBundle(allBundles[i]);
@@ -212,7 +255,7 @@ namespace Orange
 			}
 		}
 
-		private void CookBundle(string bundleName, List<string> assets)
+		private void CookBundle(string bundleName, List<string> assets, Dictionary<string, string> originToAlias)
 		{
 			MemoryAssetBundle memoryBundle;
 			using (var packedBundle = CreateOutputBundle(bundleName)) {
@@ -252,7 +295,13 @@ namespace Orange
 			void CookBundleHelper()
 			{
 				var savedInputBundle = InputBundle;
-				AssetBundle.SetCurrent(new CustomSetAssetBundle(InputBundle, assets), resetTexturePool: false);
+				AssetBundle.SetCurrent(
+					new RemappedAssetBundle(
+						originToAlias,
+						new CustomSetAssetBundle(InputBundle, assets)
+					),
+					resetTexturePool: false
+				);
 				BundleBeingCookedName = bundleName;
 				try {
 					var unitsToCookHashes = new HashSet<SHA256>();
@@ -449,6 +498,94 @@ namespace Orange
 			w.WriteLine(LogText);
 			w.WriteLine();
 			w.WriteLine();
+		}
+
+		private class RemappedAssetBundle : WrappedAssetBundle
+		{
+			private readonly Dictionary<string, string> originToAlias;
+			private readonly Dictionary<string, string> aliasToOrigin;
+
+			public RemappedAssetBundle(Dictionary<string, string> originToAlias, AssetBundle bundle)
+				: base(bundle)
+			{
+				this.originToAlias = originToAlias;
+				aliasToOrigin = new Dictionary<string, string>();
+				foreach (var (origin, alias) in originToAlias) {
+					if (aliasToOrigin.ContainsKey(alias)) {
+						throw new InvalidOperationException($"Multiple assets with with the same alias '{alias}'");
+					}
+					aliasToOrigin.Add(alias, origin);
+				}
+			}
+
+			public override IEnumerable<string> EnumerateFiles(string path = null, string extension = null)
+			{
+				foreach (var fi in Bundle.EnumerateFiles(path, extension)) {
+					yield return ToAliasPath(fi);
+				}
+			}
+
+			public override void DeleteFile(string path) => Bundle.DeleteFile(ToOriginPath(path));
+
+			public override bool FileExists(string path) => Bundle.FileExists(ToOriginPath(path));
+
+			public override SHA256 GetFileContentsHash(string path) => Bundle.GetFileContentsHash(ToOriginPath(path));
+
+			public override SHA256 GetFileCookingUnitHash(string path) {
+				return Bundle.GetFileCookingUnitHash(ToOriginPath(path));
+			}
+
+			public override int GetFileSize(string path) => Bundle.GetFileSize(ToOriginPath(path));
+
+			public override int GetFileUnpackedSize(string path) => Bundle.GetFileUnpackedSize(ToOriginPath(path));
+
+			public override void ImportFile(
+				string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+			) {
+				Bundle.ImportFile(ToOriginPath(destinationPath), stream, cookingUnitHash, attributes);
+			}
+
+			public override void ImportFileRaw(
+				string destinationPath,
+				Stream stream,
+				int unpackedSize,
+				SHA256 hash,
+				SHA256 cookingUnitHash,
+				AssetAttributes attributes
+			) {
+				Bundle.ImportFileRaw(
+					ToOriginPath(destinationPath), stream, unpackedSize, hash, cookingUnitHash, attributes
+				);
+			}
+
+			public override Stream OpenFile(string path, FileMode mode = FileMode.Open)
+			{
+				return Bundle.OpenFile(ToOriginPath(path), mode);
+			}
+
+			public override Stream OpenFileRaw(string path, FileMode mode = FileMode.Open)
+			{
+				return Bundle.OpenFileRaw(ToOriginPath(path), mode);
+			}
+
+
+			public override string ToSystemPath(string bundlePath) => Bundle.ToSystemPath(ToOriginPath(bundlePath));
+
+			public override string FromSystemPath(string systemPath) => ToAliasPath(Bundle.FromSystemPath(systemPath));
+
+			private string ToOriginPath(string aliasPath)
+			{
+				return aliasToOrigin.TryGetValue(aliasPath, out string originPath)
+					? originPath
+					: aliasPath;
+			}
+
+			private string ToAliasPath(string originPath)
+			{
+				return originToAlias.TryGetValue(originPath, out string aliasPath)
+					? aliasPath
+					: originPath;
+			}
 		}
 	}
 }
