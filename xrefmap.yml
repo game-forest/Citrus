@@ -47582,6 +47582,19 @@ references:
   commentId: T:Lime.ParticleLimiter
   fullName: Lime.ParticleLimiter
   nameWithType: ParticleLimiter
+- uid: Lime.ParticleLimiter.#ctor
+  name: ParticleLimiter()
+  href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter__ctor
+  commentId: M:Lime.ParticleLimiter.#ctor
+  fullName: Lime.ParticleLimiter.ParticleLimiter()
+  nameWithType: ParticleLimiter.ParticleLimiter()
+- uid: Lime.ParticleLimiter.#ctor*
+  name: ParticleLimiter
+  href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter__ctor_
+  commentId: Overload:Lime.ParticleLimiter.#ctor
+  isSpec: "True"
+  fullName: Lime.ParticleLimiter.ParticleLimiter
+  nameWithType: ParticleLimiter.ParticleLimiter
 - uid: Lime.ParticleLimiter.ParticleCount
   name: ParticleCount
   href: api/Lime.ParticleLimiter.html#Lime_ParticleLimiter_ParticleCount
@@ -47608,6 +47621,96 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleLimiter.ParticleCountLimit
   nameWithType: ParticleLimiter.ParticleCountLimit
+- uid: Lime.ParticleLimitPostLateUpdateProcessor
+  name: ParticleLimitPostLateUpdateProcessor
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html
+  commentId: T:Lime.ParticleLimitPostLateUpdateProcessor
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor
+  nameWithType: ParticleLimitPostLateUpdateProcessor
+- uid: Lime.ParticleLimitPostLateUpdateProcessor.Start
+  name: Start()
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html#Lime_ParticleLimitPostLateUpdateProcessor_Start
+  commentId: M:Lime.ParticleLimitPostLateUpdateProcessor.Start
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor.Start()
+  nameWithType: ParticleLimitPostLateUpdateProcessor.Start()
+- uid: Lime.ParticleLimitPostLateUpdateProcessor.Start*
+  name: Start
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html#Lime_ParticleLimitPostLateUpdateProcessor_Start_
+  commentId: Overload:Lime.ParticleLimitPostLateUpdateProcessor.Start
+  isSpec: "True"
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor.Start
+  nameWithType: ParticleLimitPostLateUpdateProcessor.Start
+- uid: Lime.ParticleLimitPostLateUpdateProcessor.Stop(Lime.NodeManager)
+  name: Stop(NodeManager)
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html#Lime_ParticleLimitPostLateUpdateProcessor_Stop_Lime_NodeManager_
+  commentId: M:Lime.ParticleLimitPostLateUpdateProcessor.Stop(Lime.NodeManager)
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor.Stop(Lime.NodeManager)
+  nameWithType: ParticleLimitPostLateUpdateProcessor.Stop(NodeManager)
+- uid: Lime.ParticleLimitPostLateUpdateProcessor.Stop*
+  name: Stop
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html#Lime_ParticleLimitPostLateUpdateProcessor_Stop_
+  commentId: Overload:Lime.ParticleLimitPostLateUpdateProcessor.Stop
+  isSpec: "True"
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor.Stop
+  nameWithType: ParticleLimitPostLateUpdateProcessor.Stop
+- uid: Lime.ParticleLimitPostLateUpdateProcessor.Update(System.Single)
+  name: Update(Single)
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html#Lime_ParticleLimitPostLateUpdateProcessor_Update_System_Single_
+  commentId: M:Lime.ParticleLimitPostLateUpdateProcessor.Update(System.Single)
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor.Update(System.Single)
+  nameWithType: ParticleLimitPostLateUpdateProcessor.Update(Single)
+- uid: Lime.ParticleLimitPostLateUpdateProcessor.Update*
+  name: Update
+  href: api/Lime.ParticleLimitPostLateUpdateProcessor.html#Lime_ParticleLimitPostLateUpdateProcessor_Update_
+  commentId: Overload:Lime.ParticleLimitPostLateUpdateProcessor.Update
+  isSpec: "True"
+  fullName: Lime.ParticleLimitPostLateUpdateProcessor.Update
+  nameWithType: ParticleLimitPostLateUpdateProcessor.Update
+- uid: Lime.ParticleLimitPreLateUpdateProcessor
+  name: ParticleLimitPreLateUpdateProcessor
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html
+  commentId: T:Lime.ParticleLimitPreLateUpdateProcessor
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor
+  nameWithType: ParticleLimitPreLateUpdateProcessor
+- uid: Lime.ParticleLimitPreLateUpdateProcessor.Start
+  name: Start()
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html#Lime_ParticleLimitPreLateUpdateProcessor_Start
+  commentId: M:Lime.ParticleLimitPreLateUpdateProcessor.Start
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor.Start()
+  nameWithType: ParticleLimitPreLateUpdateProcessor.Start()
+- uid: Lime.ParticleLimitPreLateUpdateProcessor.Start*
+  name: Start
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html#Lime_ParticleLimitPreLateUpdateProcessor_Start_
+  commentId: Overload:Lime.ParticleLimitPreLateUpdateProcessor.Start
+  isSpec: "True"
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor.Start
+  nameWithType: ParticleLimitPreLateUpdateProcessor.Start
+- uid: Lime.ParticleLimitPreLateUpdateProcessor.Stop(Lime.NodeManager)
+  name: Stop(NodeManager)
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html#Lime_ParticleLimitPreLateUpdateProcessor_Stop_Lime_NodeManager_
+  commentId: M:Lime.ParticleLimitPreLateUpdateProcessor.Stop(Lime.NodeManager)
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor.Stop(Lime.NodeManager)
+  nameWithType: ParticleLimitPreLateUpdateProcessor.Stop(NodeManager)
+- uid: Lime.ParticleLimitPreLateUpdateProcessor.Stop*
+  name: Stop
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html#Lime_ParticleLimitPreLateUpdateProcessor_Stop_
+  commentId: Overload:Lime.ParticleLimitPreLateUpdateProcessor.Stop
+  isSpec: "True"
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor.Stop
+  nameWithType: ParticleLimitPreLateUpdateProcessor.Stop
+- uid: Lime.ParticleLimitPreLateUpdateProcessor.Update(System.Single)
+  name: Update(Single)
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html#Lime_ParticleLimitPreLateUpdateProcessor_Update_System_Single_
+  commentId: M:Lime.ParticleLimitPreLateUpdateProcessor.Update(System.Single)
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor.Update(System.Single)
+  nameWithType: ParticleLimitPreLateUpdateProcessor.Update(Single)
+- uid: Lime.ParticleLimitPreLateUpdateProcessor.Update*
+  name: Update
+  href: api/Lime.ParticleLimitPreLateUpdateProcessor.html#Lime_ParticleLimitPreLateUpdateProcessor_Update_
+  commentId: Overload:Lime.ParticleLimitPreLateUpdateProcessor.Update
+  isSpec: "True"
+  fullName: Lime.ParticleLimitPreLateUpdateProcessor.Update
+  nameWithType: ParticleLimitPreLateUpdateProcessor.Update
 - uid: Lime.ParticleModifier
   name: ParticleModifier
   href: api/Lime.ParticleModifier.html
