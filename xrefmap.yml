@@ -62632,12 +62632,6 @@ references:
   commentId: F:Lime.TangerineFlags.HiddenOnExposition
   fullName: Lime.TangerineFlags.HiddenOnExposition
   nameWithType: TangerineFlags.HiddenOnExposition
-- uid: Lime.TangerineFlags.IgnoreMarkers
-  name: IgnoreMarkers
-  href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_IgnoreMarkers
-  commentId: F:Lime.TangerineFlags.IgnoreMarkers
-  fullName: Lime.TangerineFlags.IgnoreMarkers
-  nameWithType: TangerineFlags.IgnoreMarkers
 - uid: Lime.TangerineFlags.Locked
   name: Locked
   href: api/Lime.TangerineFlags.html#Lime_TangerineFlags_Locked
