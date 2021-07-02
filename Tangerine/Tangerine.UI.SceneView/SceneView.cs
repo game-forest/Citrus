@@ -506,7 +506,7 @@ namespace Tangerine.UI.SceneView
 			} else {
 				thumbSize.X *= sceneSize.X / sceneSize.Y;
 			}
-			var ap = new AnimationPositioner();
+			var ap = new AnimationPositioner(Document.Current.Manager);
 			var savedTime = document.Animation.Time;
 			var savedIsRunning = Document.Current.Animation.IsRunning;
 			renderChain.Clear();
