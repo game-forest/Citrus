@@ -53,17 +53,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\MFDecoder\MFDecoder.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl">
-      <HintPath>..\3rdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
-    </Reference>
+    <PackageReference Include="OpenTK.GLControl" Version="3.1.0" />
     <Reference Include="ShaderCompilerBinding.Win">
       <HintPath>..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Win.dll</HintPath>
     </Reference>
     <Reference Include="SharpVulkan">
       <HintPath>..\3rdParty\SharpVulkan\SharpVulkan.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\3rdParty\OpenTK\OpenTK.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -76,18 +71,18 @@
       <Link>wrap_oal.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\3rdParty\OpenTK\Dependencies_x86\d3dcompiler_47.dll">
-      <Link>d3dcompiler_47.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\3rdParty\OpenTK\Dependencies_x86\libEGL.dll">
-      <Link>libEGL.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\3rdParty\OpenTK\Dependencies_x86\libGLESv2.dll">
-      <Link>libGLESv2.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+	<Content Include="..\3rdParty\OpenTK\Dependencies_x64\d3dcompiler_47.dll">
+		<Link>d3dcompiler_47.dll</Link>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="..\3rdParty\OpenTK\Dependencies_x64\libEGL.dll">
+		<Link>libEGL.dll</Link>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="..\3rdParty\OpenTK\Dependencies_x64\libGLESv2.dll">
+		<Link>libGLESv2.dll</Link>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
     <Content Include="..\3rdParty\ShaderCompilerBinding\ShaderCompiler.dll">
       <Link>ShaderCompiler.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

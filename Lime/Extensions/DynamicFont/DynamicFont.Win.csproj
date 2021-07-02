@@ -30,8 +30,8 @@
       <Link>libfreetype-6.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libcairo-2.dll">
-      <Link>libcairo-2.dll</Link>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libgio-2.0-0.dll">
+      <Link>libgio-2.0-0.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libglib-2.0-0.dll">
@@ -46,42 +46,38 @@
       <Link>libharfbuzz-subset-0.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libpcre-1.dll">
-      <Link>libpcre-1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libwinpthread-1.dll">
-      <Link>libwinpthread-1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\zlib1.dll">
-      <Link>zlib1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libbz2-1.dll">
-      <Link>libbz2-1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libgcc_s_sjlj-1.dll">
-      <Link>libgcc_s_sjlj-1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libintl-8.dll">
-      <Link>libintl-8.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libpixman-1-0.dll">
-      <Link>libpixman-1-0.dll</Link>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libgobject-2.0-0.dll">
+      <Link>libgobject-2.0-0.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libpng16-16.dll">
       <Link>libpng16-16.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\iconv.dll">
-      <Link>iconv.dll</Link>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libz.dll">
+      <Link>libz.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libharfbuzz-gobject-0.dll">
+      <Link>libharfbuzz-gobject-0.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libffi-7.dll">
+      <Link>libffi-7.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libgmodule-2.0-0.dll">
+      <Link>libgmodule-2.0-0.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libgthread-2.0-0.dll">
+      <Link>libgthread-2.0-0.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\3rdParty\HarfBuzz\Win32\libintl-8.dll">
+      <Link>libintl-8.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
+  
 </Project>
