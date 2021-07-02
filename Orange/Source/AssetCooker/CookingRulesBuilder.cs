@@ -476,8 +476,9 @@ namespace Orange
 			CacheRecord cacheRecord = null;
 			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
 				var bundlePath = unpackedBundle.BaseDirectory;
-				if (!cache.TryGetValue((bundlePath, target.Name), out cacheRecord)) {
-					cache.Add((bundlePath, target.Name), cacheRecord = new CacheRecord(bundlePath));
+				var targetName = target?.Name ?? string.Empty;
+				if (!cache.TryGetValue((bundlePath, targetName), out cacheRecord)) {
+					cache.Add((bundlePath, targetName), cacheRecord = new CacheRecord(bundlePath));
 				} else {
 					if (!cacheRecord.Dirty) {
 						return cacheRecord.Map;
