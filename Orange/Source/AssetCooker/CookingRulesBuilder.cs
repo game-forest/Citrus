@@ -70,6 +70,10 @@ namespace Orange
 		/// Asset goes into the bundle Only if specified target is chosen.
 		/// </summary>
 		bool Only { get; }
+		/// <summary>
+		/// Asset alias.
+		/// </summary>
+		string Alias { get; }
 		int ADPCMLimit { get; }
 		AtlasOptimization AtlasOptimization { get; }
 		ModelCompression ModelCompression { get; }
@@ -119,6 +123,9 @@ namespace Orange
 		public bool Ignore { get; set; }
 		[YuzuMember]
 		public bool Only { get; set; }
+
+		[YuzuMember]
+		public string Alias { get; set; }
 
 		[YuzuMember]
 		public int ADPCMLimit { get; set; } // Kb
@@ -298,6 +305,8 @@ namespace Orange
 
 		public bool Only => EffectiveRules.Only;
 
+		public string Alias => EffectiveRules.Alias;
+
 		public ParticularCookingRules EffectiveRules { get; private set; }
 
 		public IEnumerable<(Target Target, ParticularCookingRules Rules)> Enumerate()
@@ -436,8 +445,8 @@ namespace Orange
 	{
 		public const string CookingRulesFilename = "#CookingRules.txt";
 		public const string DirectoryNameToken = "${DirectoryName}";
-		private static readonly Dictionary<string, CacheRecord> cache =
-			new Dictionary<string, CacheRecord>();
+		private static readonly Dictionary<(string bundlePath, string targetName), CacheRecord> cache =
+			new Dictionary<(string, string), CacheRecord>();
 
 		private class CacheRecord
 		{
@@ -467,8 +476,8 @@ namespace Orange
 			CacheRecord cacheRecord = null;
 			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
 				var bundlePath = unpackedBundle.BaseDirectory;
-				if (!cache.TryGetValue(bundlePath, out cacheRecord)) {
-					cache.Add(bundlePath, cacheRecord = new CacheRecord(bundlePath));
+				if (!cache.TryGetValue((bundlePath, target.Name), out cacheRecord)) {
+					cache.Add((bundlePath, target.Name), cacheRecord = new CacheRecord(bundlePath));
 				} else {
 					if (!cacheRecord.Dirty) {
 						return cacheRecord.Map;
@@ -610,8 +619,9 @@ namespace Orange
 			}
 		}
 
-		private static CookingRules ParseCookingRules(AssetBundle bundle, CookingRules basicRules, string path, Target target)
-		{
+		private static CookingRules ParseCookingRules(
+			AssetBundle bundle, CookingRules basicRules, string path, Target target
+		) {
 			var rules = basicRules.InheritClone();
 			var currentRules = rules.CommonRules;
 			try {
@@ -656,7 +666,7 @@ namespace Orange
 						} else {
 							currentRules = rules.CommonRules;
 						}
-						ParseRule(currentRules, words, path);
+						ParseRule(currentRules, words, path, bundle);
 					}
 				}
 			} catch (Lime.Exception e) {
@@ -683,8 +693,9 @@ namespace Orange
 			return true;
 		}
 
-		private static void ParseRule(ParticularCookingRules rules, IReadOnlyList<string> words, string path)
-		{
+		private static void ParseRule(
+			ParticularCookingRules rules, IReadOnlyList<string> words, string path, AssetBundle bundle
+		) {
 			try {
 				switch (words[0]) {
 				case "TextureAtlas":
@@ -728,6 +739,12 @@ namespace Orange
 					break;
 				case "Only":
 					rules.Only = ParseBool(words[1]);
+					break;
+				case "Alias":
+					var absPath = Path.GetFullPath(
+						bundle.ToSystemPath(Path.Combine(Path.GetDirectoryName(path), words[1]))
+					);
+					rules.Alias = bundle.FromSystemPath(absPath);
 					break;
 				case "ADPCMLimit":
 					rules.ADPCMLimit = int.Parse(words[1]);
