@@ -373,15 +373,13 @@ namespace Lime
 			for (var n = FirstChild; n != null; n = n.NextSibling) {
 				if (n is ParticleModifier particleModifier) {
 					if (index == targetIndex) {
-#if TANGERINE
-						// Not cloning it in Tangerine makes impossible to modify ParticleModifier when particle
-						// system is running or there are immortal particles still alive. With Number = 8000
-						// it was a 74 FPS with Clone and 90 FPS without Clone.
+						// TODO: Not cloning it in Tangerine makes it impossible to modify keyframes of animors of
+						// default animation of the ParticleModifier when those animators were present before
+						// entering animation preview mode and system is running or there are immortal particles
+						// still alive. But we can't clone the modifier because it may be animated via
+						// parallel animation and assigning a clone to the particle will break that behavior.
 						// TODO: Implement Node.MergeInto via Yuzu.Cloner.Merge and try to improve performance with it.
-						modifier = particleModifier.Clone<ParticleModifier>();
-#else
 						modifier = particleModifier;
-#endif // TANGERINE
 						return true;
 					}
 					index++;
