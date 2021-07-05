@@ -173,7 +173,7 @@ namespace Tangerine.Core
 								if (expanded) {
 									var hierarchyMode =
 										!Animation.IsLegacy &&
-									    CoreUserPreferences.Instance.ExperimentalTimelineHierarchy;
+										CoreUserPreferences.Instance.ExperimentalTimelineHierarchy;
 									cachedVisibleSceneItems.Add(i);
 									TraverseSceneTree(i,
 										(node is Bone || i.GetFolder() != null || hierarchyMode)
@@ -284,6 +284,7 @@ namespace Tangerine.Core
 				};
 				return false;
 			};
+			History.DocumentChanged += () => fullHierarchyChangeTime = DateTime.Now;
 			Manager = ManagerFactory?.Invoke() ?? CreateDefaultManager();
 			animationPositioner = new AnimationPositioner(Manager);
 			SceneTreeBuilder = new SceneTreeBuilder(o => {
@@ -513,79 +514,136 @@ namespace Tangerine.Core
 			}
 		}
 
-		private static readonly Dictionary<string, Document> documentCache = new Dictionary<string, Document>();
-		private static readonly Dictionary<string, SHA256> documentHashes = new Dictionary<string, SHA256>();
+		public void RefreshExternalScenes()
+		{
+			RefreshExternalScenes(new HashSet<string>());
+			RefreshSceneTree();
+		}
 
-		public void RefreshExternalScenes() => RefreshExternalScenes(new HashSet<string>());
-
-		private void RefreshExternalScenes(HashSet<string> documentsBeingLoaded)
+		private void RefreshExternalScenes(HashSet<string> scenesBeingRefreshed)
 		{
 			if (!Loaded) {
 				return;
 			}
-			if (documentsBeingLoaded.Contains(Path)) {
+			if (scenesBeingRefreshed.Contains(Path)) {
 				throw new CyclicDependencyException($"Cyclic scenes dependency was detected: {Path}");
 			}
-			documentsBeingLoaded.Add(Path);
+			scenesBeingRefreshed.Add(Path);
 			try {
-				RefreshExternalContentHelper(documentsBeingLoaded);
-				RefreshSceneTree();
+				RefreshExternalScenesHelper(scenesBeingRefreshed);
 			} finally {
-				documentsBeingLoaded.Remove(Path);
+				scenesBeingRefreshed.Remove(Path);
 			}
 		}
 
-		private void RefreshExternalContentHelper(HashSet<string> documentsBeingLoaded)
+		/// <summary>
+		/// Contains all the external scenes even those which are not currently opened in the tangerine.
+		/// </summary>
+		private static readonly Dictionary<string, (Document, SHA256)> externalScenesCache = new Dictionary<string, (Document, SHA256)>();
+
+		/// <summary>
+		/// Denotes the timestamp when hierarchy (including content of external scenes) was changed.
+		/// </summary>
+		private DateTime fullHierarchyChangeTime;
+
+		private void RefreshExternalScenesHelper(HashSet<string> scenesBeingRefreshed)
 		{
-			var nodesWithContentsPath = RootNodeUnwrapped.SelfAndDescendants
-				.Where(
+			var nodesGroupedByContentsPath =
+				RootNodeUnwrapped.SelfAndDescendants.Where(
 					i => !string.IsNullOrEmpty(i.ContentsPath) &&
 					i.Ancestors.All(i => string.IsNullOrEmpty(i.ContentsPath) // Only the top-level external scenes.
-				)).ToList();
-			var processedNodes = new List<Node>();
-			foreach (var node in nodesWithContentsPath) {
-				var document = Project.Current.Documents.FirstOrDefault(i => i.Path == node.ContentsPath);
-				if (document != null) {
-					if (!document.Loaded) {
-						document.Load(documentsBeingLoaded);
-					}
-				} else {
-					var assetPath = Node.ResolveScenePath(node.ContentsPath);
-					if (assetPath != null) {
-						var hash = AssetBundle.Current.GetFileContentsHash(assetPath);
-						if (assetPath.EndsWith(".t3d")) {
-							var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
-							if (AssetBundle.Current.FileExists(attachmentPath)) {
-								hash = SHA256.Compute(hash, AssetBundle.Current.GetFileContentsHash(attachmentPath));
-							}
-						}
-						if (
-							!documentCache.TryGetValue(node.ContentsPath, out document) ||
-							hash != documentHashes[node.ContentsPath]
-						) {
-							documentCache[node.ContentsPath] = document = new Document(node.ContentsPath);
-							documentHashes[node.ContentsPath] = hash;
+				)).GroupBy(i => i.ContentsPath).ToList();
+			var someContentReplaced = false;
+			foreach (var nodesWithSameContentPath in nodesGroupedByContentsPath) {
+				var contentsPath = nodesWithSameContentPath.Key;
+				var externalScene = GetExternalSceneDocument(
+					scenesBeingRefreshed,
+					contentsPath,
+					nodesWithSameContentPath.First().GetType()
+				);
+				if (
+					fullHierarchyChangeTime == DateTime.MinValue ||
+					externalScene.fullHierarchyChangeTime == DateTime.MinValue ||
+					externalScene.fullHierarchyChangeTime > fullHierarchyChangeTime
+				) {
+					someContentReplaced = true;
+					foreach (var node in nodesWithSameContentPath) {
+						var clone = InternalPersistence.Instance.Clone(externalScene.RootNodeUnwrapped);
+						node.ReplaceContent(clone);
+						foreach (var n in node.Descendants.ToList()) {
+							Decorate(n);
 						}
 					}
 				}
-				if (document == null) {
-					node.ReplaceContent((Node)Activator.CreateInstance(node.GetType()));
-				} else {
-					// optimization: don't refresh external scenes twice.
-					if (!processedNodes.Any(i => i.ContentsPath == document.Path)) {
-						document.RefreshExternalScenes(documentsBeingLoaded);
-					}
-					var clone = InternalPersistence.Instance.Clone(document.RootNodeUnwrapped);
-					node.ReplaceContent(clone);
-					foreach (var n in node.Descendants.ToList()) {
-						Decorate(n);
-					}
+				foreach (var node in nodesWithSameContentPath) {
+					SynchronizeAnimations(externalScene.RootNodeUnwrapped, node);
 				}
-				processedNodes.Add(node);
 			}
-			// Force animation update to synchronize reloaded external scenes.
+			if (someContentReplaced) {
+				fullHierarchyChangeTime = DateTime.Now;
+			}
+			// Apply the current animation to synchronize external scenes.
 			ForceAnimationUpdate();
 		}
+
+		private Document GetExternalSceneDocument(HashSet<string> scenesBeingRefreshed, string path, Type ownerNodeType)
+		{
+			var document = Project.Current.Documents.FirstOrDefault(i => i.Path == path);
+			var contentHash = new SHA256();
+			if (document != null) {
+				if (!document.Loaded) {
+					document.Load(scenesBeingRefreshed);
+				}
+			} else {
+				var assetPath = Node.ResolveScenePath(path);
+				if (assetPath != null) {
+					contentHash = AssetBundle.Current.GetFileContentsHash(assetPath);
+					if (assetPath.EndsWith(".t3d")) {
+						var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
+						if (AssetBundle.Current.FileExists(attachmentPath)) {
+							contentHash = SHA256.Compute(contentHash,
+								AssetBundle.Current.GetFileContentsHash(attachmentPath));
+						}
+					}
+					document =
+						externalScenesCache.TryGetValue(path, out (Document Document, SHA256 ContentHash) i) &&
+						i.ContentHash == contentHash
+							? i.Document
+							: new Document(path);
+				} else {
+					document = new Document {
+						Path = path,
+						RootNodeUnwrapped = (Node)Activator.CreateInstance(ownerNodeType),
+					};
+					document.Animation = document.RootNodeUnwrapped.DefaultAnimation;
+				}
+			}
+			externalScenesCache[path] = (document, contentHash);
+			document.RefreshExternalScenes(scenesBeingRefreshed);
+			return document;
+		}
+
+		private static void SynchronizeAnimations(Node origin, Node target)
+		{
+			// Heuristic: it is necessary to check the number of nodes and animations,
+			// because the user code can change the node hierarchy.
+			if (origin.Nodes.Count == target.Nodes.Count) {
+				int i = 0;
+				foreach (var o in origin.Nodes) {
+					SynchronizeAnimations(o, target.Nodes[i++]);
+				}
+			}
+			if (origin.Animations.Count == target.Animations.Count) {
+				int i = 0;
+				foreach (var a1 in origin.Animations) {
+					var a2 = target.Animations[i++];
+					if (a2.Frame != a1.Frame) {
+						a2.Frame = a1.Frame;
+					}
+				}
+			}
+		}
+
 		private void AttachViews()
 		{
 			RefreshExternalScenes();
@@ -639,8 +697,7 @@ namespace Tangerine.Core
 					Save();
 				}
 			}
-			documentCache.Remove(Path);
-			documentHashes.Remove(Path);
+			externalScenesCache.Remove(Path);
 			return true;
 		}
 

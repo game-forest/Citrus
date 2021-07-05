@@ -36,7 +36,6 @@ namespace Tangerine.Core
 			Processors.OperationProcessorTypes.AddRange(types);
 		}
 
-
 		/// <summary>
 		/// Inserts <paramref name="processorType"/> before <paramref name="beforeProcessorType"/>
 		/// which must already be present in the list of processor types.
