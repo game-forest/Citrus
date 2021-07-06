@@ -103,7 +103,19 @@ namespace Orange
 				extraBundles.Reverse();
 				PluginLoader.AfterBundlesCooked(extraBundles);
 				if (requiredCookCode) {
-					CodeCooker.Cook(Target, CookingRulesMap, bundles.ToList());
+					var savedInputBundle = InputBundle;
+					try {
+						AssetBundle.SetCurrent(
+							bundle: new RemappedAssetBundle(
+								originToAlias,
+								InputBundle
+							),
+							resetTexturePool: false
+						);
+						CodeCooker.Cook(Target, InputBundle, CookingRulesMap, bundles.ToList());
+					} finally {
+						AssetBundle.Current = savedInputBundle;
+					}
 				}
 				StopBenchmark(allTimer, "All bundles cooked: ");
 				PrintBenchmark();

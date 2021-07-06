@@ -10,8 +10,12 @@ namespace Orange
 {
 	public static class CodeCooker
 	{
-		public static void Cook(Target target, Dictionary<string, CookingRules> assetToCookingRules, List<string> cookingBundles)
-		{
+		public static void Cook(
+			Target target,
+			AssetBundle inputBundle,
+			Dictionary<string, CookingRules> assetToCookingRules,
+			List<string> cookingBundles
+		) {
 			var cache = LoadCodeCookerCache();
 			var scenesToCook = new List<string>();
 			var visitedScenes = new HashSet<string>();
@@ -21,10 +25,10 @@ namespace Orange
 			var modifiedScenes = new List<string>();
 
 			using (var dc = new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				foreach (var kv in assetToCookingRules) {
-					var scenePath = kv.Key;
+				foreach (var scenePath in inputBundle.EnumerateFiles()) {
 					bool presentInCookingBundles = false;
-					foreach (var bundle in kv.Value.Bundles) {
+					var rules = assetToCookingRules[scenePath];
+					foreach (var bundle in rules.Bundles) {
 						if (cookingBundles.Contains(bundle)) {
 							presentInCookingBundles = true;
 							break;
@@ -35,11 +39,11 @@ namespace Orange
 							scenePath.EndsWith(".tan", StringComparison.OrdinalIgnoreCase) ||
 							scenePath.EndsWith(".model", StringComparison.OrdinalIgnoreCase)
 						) &&
-							!kv.Value.Ignore &&
+							!rules.Ignore &&
 							presentInCookingBundles
 					) {
 						allScenes.Add(scenePath);
-						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
+						sceneToBundleMap.Add(scenePath, rules.Bundles.First());
 						var sourceHash = AssetBundle.Current.ComputeCookingUnitHash(
 							scenePath, assetToCookingRules[scenePath]
 						);
@@ -55,7 +59,7 @@ namespace Orange
 								CookingUnitHash = sourceHash
 							});
 						} else {
-							var cacheRecord = cache.SceneFiles[kv.Key];
+							var cacheRecord = cache.SceneFiles[scenePath];
 							if (sourceHash != cacheRecord.CookingUnitHash) {
 								var queue = new Queue<string>();
 								if (!visitedScenes.Contains(scenePath)) {
