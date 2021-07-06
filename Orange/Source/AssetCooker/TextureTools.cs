@@ -47,8 +47,8 @@ namespace Orange
 
 		public static Bitmap OpenAtlasItemBitmapAndRescaleIfNeeded(TargetPlatform platform, AtlasItem item)
 		{
-			var srcTexturePath = AssetPath.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(item.Path, item.SourceExtension));
-			using var stream = File.OpenRead(srcTexturePath);
+			var srcTexturePath = Path.ChangeExtension(item.Path, item.SourceExtension);
+			using var stream = AssetBundle.Current.OpenFile(srcTexturePath);
 			var bitmap = new Bitmap(stream);
 			if (item.BitmapInfo == null) {
 				if (ShouldDownscale(platform, bitmap, item.CookingRules)) {
