@@ -67,6 +67,7 @@ namespace Lime
 		public ThemedNumericEditBox()
 		{
 			ThemedEditBox.Decorate(this);
+			Editor.EditorParams.ReplaceCommaWithDecimalPoint = true;
 			MinWidth = 0.0f;
 			MaxWidth = 105.0f;
 			TextWidget.Padding = new Thickness(left: 5.0f, right: 5.0f, top: 2.0f, bottom: 2.0f);

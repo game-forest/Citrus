@@ -286,6 +286,7 @@ namespace Lime
 		int MaxUndoDepth { get; set; }
 		SoftKeyboardType SoftKeyboardType { get; set; }
 		bool UseSecureString { get; set; }
+		bool ReplaceCommaWithDecimalPoint { get; set; }
 		char? PasswordChar { get; set; }
 		float PasswordLastCharShowTime { get; set; }
 		Predicate<string> AcceptText { get; set; }
@@ -307,6 +308,7 @@ namespace Lime
 		public float MaxHeight { get; set; }
 		public int MaxUndoDepth { get; set; } = 100;
 		public SoftKeyboardType SoftKeyboardType { get; set; }
+		public bool ReplaceCommaWithDecimalPoint { get; set; }
 		public bool UseSecureString { get; set; }
 		public char? PasswordChar { get; set; }
 		public float PasswordLastCharShowTime { get; set; } =

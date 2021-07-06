@@ -63,14 +63,15 @@ namespace Lime
 
 			if (EditorParams.PasswordChar.HasValue) {
 				Text.TextProcessor += ProcessHiddenPassword;
-				if (EditorParams.PasswordLastCharShowTime > 0)
+				if (EditorParams.PasswordLastCharShowTime > 0) {
 					displayWidget.Tasks.Add(TrackLastCharInput, this);
-			}
-			else if (EditorParams.UseSecureString) {
+				}
+			} else if (EditorParams.UseSecureString) {
 				Text.TextProcessor += ProcessUnsecuredPassword;
 			}
-			if (EditorParams.UseSecureString)
+			if (EditorParams.UseSecureString) {
 				Password = new SecureString();
+			}
 
 			displayWidget.Tasks.Add(HandleInputTask(), this);
 		}
@@ -135,8 +136,9 @@ namespace Lime
 		// This totally defeats the point of using SecureString.
 		private static string Unsecure(SecureString s)
 		{
-			if (s.Length == 0)
+			if (s.Length == 0) {
 				return "";
+			}
 			var bstr = Marshal.SecureStringToBSTR(s);
 			try {
 				return Marshal.PtrToStringBSTR(bstr);
@@ -212,7 +214,9 @@ namespace Lime
 
 		private void EnsureSelection()
 		{
-			if (SelectionStart.IsVisible) return;
+			if (SelectionStart.IsVisible) {
+				return;
+			}
 			SelectionStart.IsVisible = SelectionEnd.IsVisible = true;
 			SelectionStart.TextPos = SelectionEnd.TextPos = CaretPos.TextPos;
 		}
@@ -237,36 +241,56 @@ namespace Lime
 		{
 			if (EditorParams.UseSecureString) {
 				HideSelection();
-				for (int i = 0; i < length; ++i)
+				for (int i = 0; i < length; ++i) {
 					Password.RemoveAt(start);
+				}
 				Text.Invalidate();
 			} else {
 				History.Add(MakeUndoItem());
 				HideSelection();
 				Text.Text = Text.Text.Remove(start, length);
 			}
-			if (start <= lastChar.Pos && lastChar.Pos < start + length)
+			if (start <= lastChar.Pos && lastChar.Pos < start + length) {
 				lastChar.ShowTimeLeft = 0;
-			if (newTextPos >= 0)
+			}
+			if (newTextPos >= 0) {
 				CaretPos.TextPos = newTextPos;
+			}
 			CaretPos.InvalidatePreservingTextPos();
 		}
 
 		private bool InsertChar(char ch)
 		{
 #if WIN
-			if (ch == '\r') return false;
+			if (ch == '\r') {
+				return false;
+			}
 #endif
-			if (CaretPos.TextPos < 0 || CaretPos.TextPos > TextLength) return false;
-			if (!EditorParams.IsAcceptableLength(TextLength + 1)) return false;
+			if (CaretPos.TextPos < 0 || CaretPos.TextPos > TextLength) {
+				return false;
+			}
+			if (!EditorParams.IsAcceptableLength(TextLength + 1)) {
+				return false;
+			}
 			if (EditorParams.UseSecureString) {
-				if (ch == '\n') return false;
+				if (ch == '\n') {
+					return false;
+				}
 				Password.InsertAt(CaretPos.TextPos, ch);
 			} else {
-				if (ch != '\n' && !EditorParams.AllowNonDisplayableChars && !Text.CanDisplay(ch)) return false;
+				if (EditorParams.ReplaceCommaWithDecimalPoint && ch == ',') {
+					ch = '.';
+				}
+				if (ch != '\n' && !EditorParams.AllowNonDisplayableChars && !Text.CanDisplay(ch)) {
+					return false;
+				}
 				var newText = Text.Text.Insert(CaretPos.TextPos, ch.ToString());
-				if (EditorParams.AcceptText != null && !EditorParams.AcceptText(newText)) return false;
-				if (EditorParams.MaxHeight > 0 && !EditorParams.IsAcceptableHeight(CalcTextHeight(newText))) return false;
+				if (EditorParams.AcceptText != null && !EditorParams.AcceptText(newText)) {
+					return false;
+				}
+				if (EditorParams.MaxHeight > 0 && !EditorParams.IsAcceptableHeight(CalcTextHeight(newText))) {
+					return false;
+				}
 				Text.Text = newText;
 			}
 			lastChar.ShowTimeLeft = EditorParams.PasswordLastCharShowTime;
@@ -277,15 +301,18 @@ namespace Lime
 
 		private void InsertText(string text)
 		{
-			if (HasSelection())
+			if (HasSelection()) {
 				DeleteSelection();
+			}
 			if (EditorParams.UseSecureString) {
-				if (text.Count(InsertChar) > 0)
+				if (text.Count(InsertChar) > 0) {
 					Text.Invalidate();
+				}
 			} else {
 				var u = MakeUndoItem();
-				if (text.Count(InsertChar) > 0)
+				if (text.Count(InsertChar) > 0) {
 					History.Add(u);
+				}
 			}
 		}
 
@@ -309,7 +336,9 @@ namespace Lime
 
 		private void SelectWord()
 		{
-			if (Text.Text == "") return;
+			if (Text.Text == "") {
+				return;
+			}
 			EnsureSelection();
 			var w = WordAt(Text.Text, CaretPos.TextPos);
 			SelectionStart.TextPos = w.Left;
@@ -327,10 +356,11 @@ namespace Lime
 
 		public void DeleteChar()
 		{
-			if (HasSelection())
+			if (HasSelection()) {
 				DeleteSelection();
-			else if (CaretPos.TextPos >= 0 && CaretPos.TextPos < TextLength)
+			} else if (CaretPos.TextPos >= 0 && CaretPos.TextPos < TextLength) {
 				RemoveText(CaretPos.TextPos, 1, CaretPos.TextPos);
+			}
 		}
 
 		private void HandleKeys()
@@ -339,62 +369,80 @@ namespace Lime
 				if (Cmds.ContextMenu.WasIssued()) {
 					ShowContextMenu(atCaret: true);
 				}
-				if (Cmds.MoveCharPrev.WasIssued())
+				if (Cmds.MoveCharPrev.WasIssued()) {
 					MoveCaret(() => CaretPos.TextPos--);
-				if (Cmds.MoveCharNext.WasIssued())
+				}
+				if (Cmds.MoveCharNext.WasIssued()) {
 					MoveCaret(() => CaretPos.TextPos++);
-				if (Cmds.MoveWordPrev.WasIssued() && IsTextReadable)
+				}
+				if (Cmds.MoveWordPrev.WasIssued() && IsTextReadable) {
 					MoveCaret(() => CaretPos.TextPos = PreviousWord(Text.Text, CaretPos.TextPos));
-				if (Cmds.MoveWordNext.WasIssued() && IsTextReadable)
+				}
+				if (Cmds.MoveWordNext.WasIssued() && IsTextReadable) {
 					MoveCaret(() => CaretPos.TextPos = NextWord(Text.Text, CaretPos.TextPos));
-				if (IsMultiline() && Cmds.MoveLinePrev.WasIssued() && IsTextReadable)
+				}
+				if (IsMultiline() && Cmds.MoveLinePrev.WasIssued() && IsTextReadable) {
 					MoveCaret(() => CaretPos.Line--);
-				if (IsMultiline() && Cmds.MoveLineNext.WasIssued() && IsTextReadable)
+				}
+				if (IsMultiline() && Cmds.MoveLineNext.WasIssued() && IsTextReadable) {
 					MoveCaret(() => CaretPos.Line++);
-				if (Cmds.MoveLineStart.WasIssued())
+				}
+				if (Cmds.MoveLineStart.WasIssued()) {
 					MoveCaret(() => CaretPos.Col = 0);
-				if (Cmds.MoveLineEnd.WasIssued())
+				}
+				if (Cmds.MoveLineEnd.WasIssued()) {
 					MoveCaret(() => CaretPos.Col = int.MaxValue);
-
-				if (Cmds.SelectCharPrev.WasIssued())
+				}
+				if (Cmds.SelectCharPrev.WasIssued()) {
 					MoveCaretSelection(() => CaretPos.TextPos--);
-				if (Cmds.SelectCharNext.WasIssued())
+				}
+				if (Cmds.SelectCharNext.WasIssued()) {
 					MoveCaretSelection(() => CaretPos.TextPos++);
-				if (Cmds.SelectWordPrev.WasIssued() && IsTextReadable)
+				}
+				if (Cmds.SelectWordPrev.WasIssued() && IsTextReadable) {
 					MoveCaretSelection(() => CaretPos.TextPos = PreviousWord(Text.Text, CaretPos.TextPos));
-				if (Cmds.SelectWordNext.WasIssued() && IsTextReadable)
+				}
+				if (Cmds.SelectWordNext.WasIssued() && IsTextReadable) {
 					MoveCaretSelection(() => CaretPos.TextPos = NextWord(Text.Text, CaretPos.TextPos));
-				if (Cmds.SelectLineStart.WasIssued())
+				}
+				if (Cmds.SelectLineStart.WasIssued()) {
 					MoveCaretSelection(() => CaretPos.Col = 0);
-				if (Cmds.SelectLineEnd.WasIssued())
+				}
+				if (Cmds.SelectLineEnd.WasIssued()) {
 					MoveCaretSelection(() => CaretPos.Col = int.MaxValue);
-				if (Command.SelectAll.WasIssued())
+				}
+				if (Command.SelectAll.WasIssued()) {
 					SelectAll();
-				if (Cmds.SelectCurrentWord.WasIssued() && IsTextReadable)
+				}
+				if (Cmds.SelectCurrentWord.WasIssued() && IsTextReadable) {
 					SelectWord();
-
-				if (Cmds.ToggleOverwrite.WasIssued())
+				}
+				if (Cmds.ToggleOverwrite.WasIssued()) {
 					OverwriteMode = !OverwriteMode;
+				}
 				if (!Command.Delete.IsConsumed()) {
 					Command.Delete.Enabled = HasSelection() || CaretPos.TextPos < TextLength;
-					if (Command.Delete.WasIssued())
+					if (Command.Delete.WasIssued()) {
 						DeleteChar();
+					}
 				}
 				if (Cmds.DeleteWordPrev.WasIssued() && IsTextReadable) {
 					var p = PreviousWord(Text.Text, CaretPos.TextPos);
-					if (p < CaretPos.TextPos)
+					if (p < CaretPos.TextPos) {
 						RemoveText(p, CaretPos.TextPos - p, p);
+					}
 				}
 				if (Cmds.DeleteWordNext.WasIssued() && IsTextReadable) {
 					var p = NextWord(Text.Text, CaretPos.TextPos);
-					if (p > CaretPos.TextPos)
+					if (p > CaretPos.TextPos) {
 						RemoveText(CaretPos.TextPos, p - CaretPos.TextPos);
+					}
 				}
-
 				if (Cmds.Submit.WasIssued()) {
 					if (IsMultiline()) {
-						if (EditorParams.IsAcceptableLines(Text.Text.Count(ch => ch == '\n') + 2))
+						if (EditorParams.IsAcceptableLines(Text.Text.Count(ch => ch == '\n') + 2)) {
 							InsertText("\n");
+						}
 						Cmds.Submit.Consume();
 					} else {
 						HideSelection();
@@ -403,8 +451,9 @@ namespace Lime
 					}
 				}
 				if (Cmds.Cancel.WasIssued() && IsTextReadable) {
-					if (History.CanUndo())
+					if (History.CanUndo()) {
 						ApplyUndoItem(History.ClearAndRestore());
+					}
 					HideSelection();
 					History.Clear();
 					Cmds.Cancel.Consume();
@@ -428,19 +477,20 @@ namespace Lime
 						DeleteSelection();
 					}
 				}
-				if (!Command.Paste.IsConsumed()) {
-					if (Command.Paste.WasIssued())
-						InsertText(Clipboard.Text);
+				if (!Command.Paste.IsConsumed() && Command.Paste.WasIssued()) {
+					InsertText(Clipboard.Text);
 				}
 				if (!Command.Undo.IsConsumed()) {
 					Command.Undo.Enabled = History.CanUndo();
-					if (Command.Undo.WasIssued())
+					if (Command.Undo.WasIssued()) {
 						ApplyUndoItem(History.Undo(MakeUndoItem()));
+					}
 				}
 				if (!Command.Redo.IsConsumed()) {
 					Command.Redo.Enabled = History.CanRedo();
-					if (Command.Redo.WasIssued())
+					if (Command.Redo.WasIssued()) {
 						ApplyUndoItem(History.Redo());
+					}
 				}
 			} finally {
 				Command.ConsumeRange(consumingCommands);
@@ -453,20 +503,22 @@ namespace Lime
 
 		private void HandleTextInput()
 		{
-			if (!ProcessInput || FocusableWidget.Input.TextInput == null)
+			if (!ProcessInput || FocusableWidget.Input.TextInput == null) {
 				return;
-
+			}
 			foreach (var ch in FocusableWidget.Input.TextInput) {
 				// Some platforms, notably iOS, do not generate Key.BackSpace.
 				// OTOH, '\b' is emulated everywhere.
 				if (ch == '\b') {
-					if (HasSelection())
+					if (HasSelection()) {
 						DeleteSelection();
-					else if (CaretPos.TextPos > 0 && CaretPos.TextPos <= TextLength)
+					} else if (CaretPos.TextPos > 0 && CaretPos.TextPos <= TextLength) {
 						RemoveText(CaretPos.TextPos - 1, 1, CaretPos.TextPos - 1);
+					}
 				} else if (ch >= ' ' && ch != '\u007f') { // Ignore control and 'delete' characters.
-					if (OverwriteMode)
+					if (OverwriteMode) {
 						DeleteChar();
+					}
 					InsertText(ch.ToString());
 				}
 			}
@@ -477,8 +529,9 @@ namespace Lime
 			while (true) {
 				if (lastChar.Visible) {
 					lastChar.ShowTimeLeft -= Task.Current.Delta;
-					if (!lastChar.Visible)
+					if (!lastChar.Visible) {
 						Text.Invalidate();
+					}
 				}
 				yield return null;
 			}
@@ -487,10 +540,16 @@ namespace Lime
 		public void AdjustSizeAndScrollToCaret()
 		{
 			var s = EditorParams.Scroll;
-			if (s == null) return;
+			if (s == null) {
+				return;
+			}
 			// Layout has not been done yet.
-			if (s.Frame.Size == Vector2.Zero) return;
-			if (!CaretPos.IsVisible) return;
+			if (s.Frame.Size == Vector2.Zero) {
+				return;
+			}
+			if (!CaretPos.IsVisible) {
+				return;
+			}
 			s.ScrollTo(
 				s.PositionToView(s.ProjectToScrollAxis(CaretPos.WorldPos),
 				DisplayWidget.Padding.Left, DisplayWidget.Padding.Right), instantly: true);
@@ -522,8 +581,9 @@ namespace Lime
 				}
 				if (clickGesture.WasRecognized()) {
 					if (!FocusableWidget.IsFocused()) {
-						if (EditorParams.SelectAllOnFocus)
+						if (EditorParams.SelectAllOnFocus) {
 							SelectAll();
+						}
 					} else {
 						HideSelection();
 					}
@@ -531,10 +591,11 @@ namespace Lime
 					CaretPos.WorldPos = DisplayWidget.LocalMousePosition();
 				}
 				if (doubleClickGesture.WasRecognized()) {
-					if (IsTextReadable)
+					if (IsTextReadable) {
 						SelectWord();
-					else
+					} else {
 						SelectAll();
+					}
 				}
 				if (rightClickGesture.WasRecognized()) {
 					FocusableWidget.SetFocus();
@@ -588,11 +649,13 @@ namespace Lime
 			};
 			if (atCaret) {
 				var p = DisplayWidget.LocalToWorldTransform.TransformVector(CaretPos.WorldPos);
-				if (EditorParams.OffsetContextMenu != null)
+				if (EditorParams.OffsetContextMenu != null) {
 					p = EditorParams.OffsetContextMenu(p);
+				}
 				m.Popup(Window.Current, p, 0, null);
-			} else
+			} else {
 				m.Popup();
+			}
 #endif
 		}
 	}
