@@ -147,21 +147,31 @@ namespace Orange
 		{
 			var result = new Dictionary<string, string>();
 			foreach (var (path, rules) in cookingRules) {
-				if (rules.Alias != null) {
-					var directory = Path.GetDirectoryName(rules.Alias);
-					if (!string.IsNullOrEmpty(directory) && !Directory.Exists(InputBundle.ToSystemPath(directory))) {
-						throw new InvalidOperationException($"Alias refers to non-existing directory '{directory}'");
-					}
-					if (rules.SourcePath == null || rules.Ignore) {
-						// This is a cooking rules entry itself or is ignored e.g. by Only.
-						continue;
-					}
-					if (path == rules.Alias) {
-						// Because we also store reference to the same cooking rules for source of aliased path.
-						continue;
-					}
-					result.Add(path, rules.Alias);
+				if (rules.Alias == null) {
+					continue;
 				}
+				// rules.Alias is unchanged from how it was defined the rules: relative to the directory
+				// where cooking rules file is located.
+				var expandedAlias = InputBundle.FromSystemPath(
+					Path.GetFullPath(
+						InputBundle.ToSystemPath(
+							Path.Combine(Path.GetDirectoryName(path), rules.Alias)
+						)
+					)
+				);
+				var directory = Path.GetDirectoryName(expandedAlias);
+				if (!string.IsNullOrEmpty(directory) && !Directory.Exists(InputBundle.ToSystemPath(directory))) {
+					throw new InvalidOperationException($"Alias refers to non-existing directory '{directory}'");
+				}
+				if (rules.SourcePath == null || rules.Ignore) {
+					// This is a cooking rules entry itself or is ignored e.g. by Only.
+					continue;
+				}
+				if (path == expandedAlias) {
+					// Because we also store reference to the same cooking rules for source of aliased path.
+					continue;
+				}
+				result.Add(path, expandedAlias);
 			}
 			return result;
 		}
