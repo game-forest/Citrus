@@ -23,7 +23,6 @@ namespace Orange
 		private static int RemoveDanglingAnimators(this Node self, Dictionary<string, int> scope)
 		{
 			int result = 0;
-			FillAnimationsScope(self, scope);
 			var animators = self.Animators.ToList();
 			foreach (var animator in animators) {
 				if (animator.AnimationId == null || scope.TryGetValue(animator.AnimationId, out var count) && count > 0) {
@@ -32,6 +31,7 @@ namespace Orange
 				self.Animators.Remove(animator);
 				result += 1;
 			}
+			FillAnimationsScope(self, scope);
 			foreach (var child in self.Nodes) {
 				result += RemoveDanglingAnimators(child, scope);
 			}
