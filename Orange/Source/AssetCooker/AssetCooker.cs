@@ -105,13 +105,11 @@ namespace Orange
 				if (requiredCookCode) {
 					var savedInputBundle = InputBundle;
 					try {
-						AssetBundle.SetCurrent(
-							bundle: new RemappedAssetBundle(
-								originToAlias,
-								InputBundle
-							),
-							resetTexturePool: false
-						);
+						var bundle = new AggregateAssetBundle();
+						foreach (var bundleName in bundles) {
+							bundle.Attach(new PackedAssetBundle(The.Workspace.GetBundlePath(Target.Platform, bundleName)));
+						}
+						AssetBundle.SetCurrent(bundle, false);
 						CodeCooker.Cook(Target, InputBundle, CookingRulesMap, bundles.ToList());
 					} finally {
 						AssetBundle.Current = savedInputBundle;
