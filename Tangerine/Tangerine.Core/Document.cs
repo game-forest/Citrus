@@ -747,6 +747,10 @@ namespace Tangerine.Core
 			var ms = new MemoryStream();
 			// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().
 			using (node = CreateCloneForSerialization(node)) {
+				// Removing dangling animators is a context dependent action, so performing it inside
+				// CreateCloneForSerializetion will lead to bugs (e.g. disappearing animators on paste)
+				var removedDanglingAnimatorCount = Orange.NodeExtensions.RemoveDanglingAnimators(node);
+				Console.WriteLine($"Removed {removedDanglingAnimatorCount} dangling animators.");
 				InternalPersistence.Instance.WriteObject(assetPath, ms, node, Persistence.Format.Json);
 			}
 			var fileModeForHiddenFile = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
