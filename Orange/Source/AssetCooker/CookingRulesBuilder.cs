@@ -742,10 +742,10 @@ namespace Orange
 					rules.Only = ParseBool(words[1]);
 					break;
 				case "Alias":
-					var absPath = Path.GetFullPath(
-						bundle.ToSystemPath(Path.Combine(Path.GetDirectoryName(path), words[1]))
-					);
-					rules.Alias = bundle.FromSystemPath(absPath);
+					// Alias is defined relative to the directory where cooking rules files is placed and
+					// left unexpanded. Cooking rules should't be modified when parsing them because that way
+					// cooking rules editor will save the modification.
+					rules.Alias = words[1];
 					break;
 				case "ADPCMLimit":
 					rules.ADPCMLimit = int.Parse(words[1]);

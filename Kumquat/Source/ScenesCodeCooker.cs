@@ -23,7 +23,7 @@ namespace Kumquat
 
 	public class CodeCookerCache
 	{
-		private const string CurrentVersion = "1.2";
+		private const string CurrentVersion = "2.0";
 
 		[YuzuRequired]
 		public string Version = CurrentVersion;
@@ -38,6 +38,14 @@ namespace Kumquat
 		public Dictionary<string, DateTime> GeneratedProjectFileToModificationDate = new Dictionary<string, DateTime>();
 
 		public bool IsActual => Version == CurrentVersion;
+
+		public static SHA256 ComputeHash(AssetBundle bundle, string path)
+		{
+			return SHA256.Compute(
+				SHA256.Compute(AssetPath.CorrectSlashes(path)),
+				bundle.GetFileContentsHash(path)
+			);
+		}
 	}
 
 	public class ScenesCodeCooker
@@ -188,8 +196,8 @@ namespace Kumquat
 					}
 				}
 			}
-			foreach (var scene in reprocessScenes) {
-				GenerateParsedFramesTree(scene, Node.Load(scene));
+			foreach (var scenePath in reprocessScenes) {
+				GenerateParsedFramesTree(scenePath, Node.Load(Path.ChangeExtension(scenePath, null)));
 			}
 			GenerateCommonParts(scenesPath);
 			UpdateCommonPartsCache();
@@ -224,7 +232,7 @@ namespace Kumquat
 				}
 				codeCookerCache.SceneFiles.Add(key, new SceneRecord {
 					Bundle = sceneToBundleMap[key],
-					CookingUnitHash = AssetBundle.Current.GetFileCookingUnitHash(key),
+					CookingUnitHash = CodeCookerCache.ComputeHash(AssetBundle.Current, key),
 					ReferringScenes = kv.Value.Select(path => externalSceneToOriginalScenePath[Path.ChangeExtension(path, null)]).ToList()
 				});
 			}

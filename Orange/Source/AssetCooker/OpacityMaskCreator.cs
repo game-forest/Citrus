@@ -10,11 +10,9 @@ namespace Orange
 
 		public static void CreateMask(AssetBundle assetBundle, string srcPath, string maskPath, SHA256 cookingUnitHash)
 		{
-			using (var stream = File.OpenRead(srcPath)) {
-				using (var bitmap = new Bitmap(stream)) {
-					CreateMask(assetBundle, bitmap, maskPath, cookingUnitHash);
-				}
-			}
+			using var stream = File.OpenRead(srcPath);
+			using var bitmap = new Bitmap(stream);
+			CreateMask(assetBundle, bitmap, maskPath, cookingUnitHash);
 		}
 
 		public static void CreateMask(AssetBundle assetBundle, Bitmap bitmap, string maskPath, SHA256 cookingUnitHash)
@@ -24,26 +22,23 @@ namespace Orange
 			}
 			int newWidth = Math.Max(bitmap.Width / 2, 1);
 			int newHeight = Math.Max(bitmap.Height / 2, 1);
-			using (var scaledBitmap = bitmap.Rescale(newWidth, newHeight)) {
-				bool bundled = assetBundle.FileExists(maskPath);
-				Console.WriteLine((bundled ? "* " : "+ ") + maskPath);
-				WriteMask(assetBundle, maskPath, scaledBitmap, cookingUnitHash);
-			}
+			using var scaledBitmap = bitmap.Rescale(newWidth, newHeight);
+			bool bundled = assetBundle.FileExists(maskPath);
+			Console.WriteLine((bundled ? "* " : "+ ") + maskPath);
+			WriteMask(assetBundle, maskPath, scaledBitmap, cookingUnitHash);
 		}
 
 		private static void WriteMask(AssetBundle assetBundle, string maskPath, Bitmap bitmap, SHA256 cookingUnitHash)
 		{
 			var mask = CreateMaskHelper(bitmap);
-			using (var stream = new MemoryStream()) {
-				using (var writer = new BinaryWriter(stream)) {
-					writer.Write((uint) bitmap.Width);
-					writer.Write((uint) bitmap.Height);
-					writer.Write(mask, 0, mask.Length);
-					writer.Flush();
-					stream.Seek(0, SeekOrigin.Begin);
-					assetBundle.ImportFile(maskPath, stream, cookingUnitHash, AssetAttributes.Zipped);
-				}
-			}
+			using var stream = new MemoryStream();
+			using var writer = new BinaryWriter(stream);
+			writer.Write((uint)bitmap.Width);
+			writer.Write((uint)bitmap.Height);
+			writer.Write(mask, 0, mask.Length);
+			writer.Flush();
+			stream.Seek(0, SeekOrigin.Begin);
+			assetBundle.ImportFile(maskPath, stream, cookingUnitHash, AssetAttributes.Zipped);
 		}
 
 		private static byte[] CreateMaskHelper(Bitmap bitmap)

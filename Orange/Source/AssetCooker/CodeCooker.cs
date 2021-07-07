@@ -10,8 +10,12 @@ namespace Orange
 {
 	public static class CodeCooker
 	{
-		public static void Cook(Target target, Dictionary<string, CookingRules> assetToCookingRules, List<string> cookingBundles)
-		{
+		public static void Cook(
+			Target target,
+			AssetBundle inputBundle,
+			Dictionary<string, CookingRules> assetToCookingRules,
+			List<string> cookingBundles
+		) {
 			var cache = LoadCodeCookerCache();
 			var scenesToCook = new List<string>();
 			var visitedScenes = new HashSet<string>();
@@ -21,64 +25,52 @@ namespace Orange
 			var modifiedScenes = new List<string>();
 
 			using (var dc = new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				foreach (var kv in assetToCookingRules) {
-					var scenePath = kv.Key;
-					bool presentInCookingBundles = false;
-					foreach (var bundle in kv.Value.Bundles) {
-						if (cookingBundles.Contains(bundle)) {
-							presentInCookingBundles = true;
-							break;
-						}
-					}
+				foreach (var scenePath in inputBundle.EnumerateFiles()) {
 					if (
-						(
-							scenePath.EndsWith(".tan", StringComparison.OrdinalIgnoreCase) ||
-							scenePath.EndsWith(".model", StringComparison.OrdinalIgnoreCase)
-						) &&
-							!kv.Value.Ignore &&
-							presentInCookingBundles
+						!scenePath.EndsWith(".tan", StringComparison.OrdinalIgnoreCase) &&
+						!scenePath.EndsWith(".model", StringComparison.OrdinalIgnoreCase)
 					) {
-						allScenes.Add(scenePath);
-						sceneToBundleMap.Add(scenePath, kv.Value.Bundles.First());
-						var sourceHash = AssetBundle.Current.ComputeCookingUnitHash(
-							scenePath, assetToCookingRules[scenePath]
-						);
-						if (!cache.SceneFiles.ContainsKey(scenePath)) {
+						continue;
+					}
+					var rules = assetToCookingRules[scenePath];
+					allScenes.Add(scenePath);
+					sceneToBundleMap.Add(scenePath, rules.Bundles.First());
+					var sourceHash = CodeCookerCache.ComputeHash(AssetBundle.Current, scenePath);
+					if (!cache.SceneFiles.ContainsKey(scenePath)) {
+						modifiedScenes.Add(scenePath);
+						scenesToCook.Add(scenePath);
+						var bundles = assetToCookingRules[scenePath].Bundles;
+						foreach (var bundle in bundles) {
+							usedBundles.Add(bundle);
+						}
+						cache.SceneFiles.Add(scenePath, new SceneRecord {
+							Bundle = bundles.First(),
+							CookingUnitHash = sourceHash
+						});
+					} else {
+						var cacheRecord = cache.SceneFiles[scenePath];
+						if (sourceHash != cacheRecord.CookingUnitHash) {
+							var queue = new Queue<string>();
+							if (!visitedScenes.Contains(scenePath)) {
+								queue.Enqueue(scenePath);
+								visitedScenes.Add(scenePath);
+							}
+							while (queue.Count != 0) {
+								var scene = queue.Dequeue();
+								scenesToCook.Add(scene);
+								var bundles = assetToCookingRules[scene].Bundles;
+								foreach (var bundle in bundles) {
+									usedBundles.Add(bundle);
+								}
+								foreach (var referringScene in cache.SceneFiles[scene].ReferringScenes) {
+									if (!visitedScenes.Contains(referringScene)) {
+										visitedScenes.Add(referringScene);
+										queue.Enqueue(referringScene);
+									}
+								}
+							}
+							cache.SceneFiles[scenePath].CookingUnitHash = sourceHash;
 							modifiedScenes.Add(scenePath);
-							scenesToCook.Add(scenePath);
-							var bundles = assetToCookingRules[scenePath].Bundles;
-							foreach (var bundle in bundles) {
-								usedBundles.Add(bundle);
-							}
-							cache.SceneFiles.Add(scenePath, new SceneRecord {
-								Bundle = bundles.First(),
-								CookingUnitHash = sourceHash
-							});
-						} else {
-							var cacheRecord = cache.SceneFiles[kv.Key];
-							if (sourceHash != cacheRecord.CookingUnitHash) {
-								var queue = new Queue<string>();
-								if (!visitedScenes.Contains(scenePath)) {
-									queue.Enqueue(scenePath);
-									visitedScenes.Add(scenePath);
-								}
-								while (queue.Count != 0) {
-									var scene = queue.Dequeue();
-									scenesToCook.Add(scene);
-									var bundles = assetToCookingRules[scene].Bundles;
-									foreach (var bundle in bundles) {
-										usedBundles.Add(bundle);
-									}
-									foreach (var referringScene in cache.SceneFiles[scene].ReferringScenes) {
-										if (!visitedScenes.Contains(referringScene)) {
-											visitedScenes.Add(referringScene);
-											queue.Enqueue(referringScene);
-										}
-									}
-								}
-								cache.SceneFiles[scenePath].CookingUnitHash = sourceHash;
-								modifiedScenes.Add(scenePath);
-							}
 						}
 					}
 				}
