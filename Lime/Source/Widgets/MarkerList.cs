@@ -42,9 +42,14 @@ namespace Lime
 
 		public int IndexOf(Marker item) => markers.IndexOf(item);
 
-		public void Insert(int index, Marker item)
+		public void Insert(int index, Marker marker)
 		{
-			throw new NotSupportedException();
+			if (marker.Owner != null) {
+				throw new InvalidOperationException();
+			}
+			marker.Owner = owner;
+			markers.Insert(index, marker);
+			owner?.InvalidateCache();
 		}
 
 		public bool Remove(Marker item)

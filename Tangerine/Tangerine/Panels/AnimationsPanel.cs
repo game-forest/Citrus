@@ -135,24 +135,21 @@ namespace Tangerine.Panels
 			public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
 			{
 				var s = ItemStateProvider(sceneItem);
-				s.TreeViewItem = s.TreeViewItem ?? new NodeTreeViewItem(
-					sceneItem, s, sceneItem.GetNode(), IsSearchActiveGetter);
+				s.TreeViewItem ??= new NodeTreeViewItem(sceneItem, s, sceneItem.GetNode(), IsSearchActiveGetter);
 				return s.TreeViewItem;
 			}
 
 			public TreeViewItem GetAnimationTreeViewItem(Row sceneItem)
 			{
 				var s = ItemStateProvider(sceneItem);
-				s.TreeViewItem = s.TreeViewItem ?? new AnimationTreeViewItem(
-					sceneItem, s, sceneItem.GetAnimation(), IsSearchActiveGetter);
+				s.TreeViewItem ??= new AnimationTreeViewItem(sceneItem, s, sceneItem.GetAnimation(), IsSearchActiveGetter);
 				return s.TreeViewItem;
 			}
 
 			public TreeViewItem GetMarkerTreeViewItem(Row sceneItem)
 			{
 				var s = ItemStateProvider(sceneItem);
-				s.TreeViewItem = s.TreeViewItem ?? new MarkerTreeViewItem(
-					sceneItem, s, sceneItem.GetMarker(), IsSearchActiveGetter);
+				s.TreeViewItem ??= new MarkerTreeViewItem(sceneItem, s, sceneItem.GetMarker(), IsSearchActiveGetter);
 				return s.TreeViewItem;
 			}
 		}
@@ -278,15 +275,23 @@ namespace Tangerine.Panels
 			return ((CommonTreeViewItem)parent).SceneItem.Rows.IndexOf(item) + i;
 		}
 
+		private const string MarkerContainerAnimationId = "#MarkerContainer";
+
 		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
 		{
 			var stream = new MemoryStream();
 			var container = new Frame();
-			var animations = args.Items.OfType<AnimationTreeViewItem>().
-				Select(i => i.Animation).
-				Where(a => !a.IsLegacy);
+			var animations = args.Items.OfType<AnimationTreeViewItem>().Select(i => i.Animation).Where(a => !a.IsLegacy);
 			foreach (var animation in animations) {
 				container.Animations.Add(Cloner.Clone(animation));
+			}
+			if (!animations.Any()) {
+				var markers = args.Items.OfType<MarkerTreeViewItem>().Select(i => i.Marker);
+				var a = new Animation { Id = MarkerContainerAnimationId };
+				container.Animations.Add(a);
+				foreach (var marker in markers) {
+					a.Markers.Add(Cloner.Clone(marker));
+				}
 			}
 			TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
 			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
@@ -303,6 +308,27 @@ namespace Tangerine.Panels
 			var animationItems = args.Items.OfType<AnimationTreeViewItem>().
 				Where(a => !a.Animation.IsLegacy).ToList();
 			if (animationItems.Count == 0) {
+				var markers = args.Items.OfType<MarkerTreeViewItem>().Select(i => i.Marker).ToList();
+				Document.Current.History.DoTransaction(() => {
+					foreach (var g in markers.GroupBy(i => i.Owner)) {
+						var animation = g.Key;
+						var sortedMarkers = g.OrderBy(i => i.Frame).ToList();
+						var rangeBegin = sortedMarkers[0].Frame;
+						var rangeEnd = sortedMarkers[^1].Frame;
+						// Grab all markers in the given range.
+						sortedMarkers = animation.Markers.
+							Where(i => i.Frame >= rangeBegin && i.Frame <= rangeEnd).ToList();
+						if (sortedMarkers.Count > 0) {
+							foreach (var marker in markers) {
+								UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(marker));
+							}
+							foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+								RemoveKeyframeRange.Perform(animator, sortedMarkers[0].Frame, sortedMarkers[^1].Frame);
+							}
+							ShiftMarkersAndKeyframes(animation, rangeEnd, rangeBegin - rangeEnd - 1);
+						}
+					}
+				});
 				return;
 			}
 			Document.Current.History.DoTransaction(() => {
@@ -375,14 +401,36 @@ namespace Tangerine.Panels
 		private void TreeView_OnPaste(object sender, TreeView.PasteEventArgs args, TreeViewItemProvider provider)
 		{
 			var data = Clipboard.Text;
-			if (!string.IsNullOrEmpty(data)) {
+			if (!string.IsNullOrEmpty(data) && args.Parent is CommonTreeViewItem parent) {
 				Document.Current.History.DoTransaction(() => {
 					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
-					if (args.Parent is CommonTreeViewItem parent && parent.SceneItem.GetNode() != null) {
-						RebuildTreeView((TreeView)sender, provider);
-						((TreeView)sender).ClearSelection();
-						var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
+					RebuildTreeView((TreeView)sender, provider);
+					((TreeView)sender).ClearSelection();
+					var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
+					var markerContainerAnimation = container.Animations.FirstOrDefault(i => i.Id == MarkerContainerAnimationId);
+					if (markerContainerAnimation != null) {
+						// Paste markers
+						var animationSceneItem = parent.SceneItem;
+						if (animationSceneItem.GetNode() != null) {
+							animationSceneItem = animationSceneItem.Rows[index];
+							index = animationSceneItem.GetAnimation().Markers.Count;
+						}
+						var markersToPaste = markerContainerAnimation.Markers.
+							Select(i => i.Clone()).OrderBy(i => i.Frame).ToList();
+						var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
+						var animation = animationSceneItem.GetAnimation();
+						var pasteAtFrame = animation.Markers.Count > 0 && index > 0 ?
+							animation.Markers[index - 1].Frame + 1 : 0;
+						ShiftMarkersAndKeyframes(animation, pasteAtFrame, range);
+						var d = pasteAtFrame - markersToPaste[0].Frame;
+						foreach (var marker in markersToPaste) {
+							marker.Frame += d;
+							LinkSceneItem.Perform(
+								animationSceneItem, index++, Document.Current.SceneTreeBuilder.BuildMarkerSceneItem(marker));
+						}
+					} else if (parent.SceneItem.GetNode() != null) {
+						// Paste animations
 						foreach (var animation in container.Animations.ToList()) {
 							if (animation.Id == CopySceneItemsToStream.AnimationTracksContainerAnimationId) {
 								continue;
@@ -397,12 +445,36 @@ namespace Tangerine.Panels
 								animation.Id = baseAnimationId + " - Copy" + (counter == 1 ? "" : counter.ToString());
 								counter++;
 							}
-							var animationSceneItem = LinkSceneItem.Perform(
-								parent.SceneItem, index++, animation);
+							var animationSceneItem = LinkSceneItem.Perform(parent.SceneItem, index++, animation);
 							provider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 						}
 					}
 				});
+			}
+		}
+
+		private static void ShiftMarkersAndKeyframes(Animation animation, int startFrame, int delta)
+		{
+			foreach (var marker in animation.Markers) {
+				if (marker.Frame >= startFrame) {
+					SetProperty.Perform(marker, nameof(marker.Frame), marker.Frame + delta);
+				}
+			}
+			foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+				var changed = false;
+				foreach (var keyframe in animator.Keys) {
+					if (keyframe.Frame >= startFrame) {
+						changed = true;
+						SetProperty.Perform(keyframe, nameof(IKeyframe.Frame), keyframe.Frame + delta);
+					}
+				}
+				if (changed) {
+					DelegateOperation.Perform(
+						() => animator.IncreaseVersion(),
+						() => animator.IncreaseVersion(),
+						true
+					);
+				}
 			}
 		}
 
@@ -1276,6 +1348,32 @@ namespace Tangerine.Panels
 			public MarkerTreeViewItemPresentation(TreeView treeView, TreeViewItem item, TreeViewItemPresentationOptions options)
 				: base(treeView, item, options)
 			{
+				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+			}
+
+			private void ShowContextMenu()
+			{
+				if (!Item.Selected) {
+					TreeView.ClearSelection();
+					Item.Selected = true;
+				}
+				var properties = new Command { Text = "Properties" };
+				properties.Issued += () => {
+					Document.Current.History.DoTransaction(() => {
+						var marker = ((MarkerTreeViewItem) Item).Marker;
+						var markerClone = marker.Clone();
+						var r = new MarkerPropertiesDialog().Show(markerClone, canDelete: true);
+						if (r == MarkerPropertiesDialog.Result.Ok) {
+							Core.Operations.SetMarker.Perform(markerClone, true);
+						} else if (r == MarkerPropertiesDialog.Result.Delete) {
+							Core.Operations.DeleteMarker.Perform(marker, true);
+						}
+					});
+				};
+				var menu = new Menu {
+					Command.Cut, Command.Copy, Command.Paste, Command.Delete, Command.MenuSeparator, properties
+				};
+				menu.Popup();
 			}
 		}
 

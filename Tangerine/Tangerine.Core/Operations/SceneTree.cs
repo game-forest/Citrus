@@ -67,6 +67,8 @@ namespace Tangerine.Core.Operations
 				RemoveFromList<AnimationCollection, Animation>.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
 			} else if (item.TryGetAnimationTrack(out var track)) {
 				RemoveFromList<AnimationTrackList, AnimationTrack>.Perform(track.Owner.Tracks, track.Owner.Tracks.IndexOf(track));
+			} else if (item.TryGetMarker(out var marker)) {
+				RemoveFromList<MarkerList, Marker>.Perform(marker.Owner.Markers, marker.Owner.Markers.IndexOf(marker));
 			} else {
 				throw new InvalidOperationException();
 			}
@@ -171,6 +173,9 @@ namespace Tangerine.Core.Operations
 			if (item.TryGetAnimationTrack(out var track)) {
 				return CanLink(parent, track);
 			}
+			if (item.TryGetMarker(out var marker)) {
+				return CanLink(parent, marker);
+			}
 			throw new InvalidOperationException();
 		}
 
@@ -224,6 +229,11 @@ namespace Tangerine.Core.Operations
 		private static bool CanLink(Row parent, AnimationTrack track)
 		{
 			return parent.GetAnimation() != null;
+		}
+
+		private static bool CanLink(Row parent, Marker marker)
+		{
+			return parent.GetAnimation() != null && parent.GetAnimation().Markers.All(i => i.Frame != marker.Frame);
 		}
 
 		public static bool CanLink(Row parent, Folder.Descriptor folder)
@@ -311,6 +321,8 @@ namespace Tangerine.Core.Operations
 				LinkAnimationItem(parent, index, item);
 			} else if (item.TryGetAnimationTrack(out _)) {
 				LinkAnimationTrackItem(parent, index, item);
+			} else if (item.TryGetMarker(out _)) {
+				LinkMarkerItem(parent, index, item);
 			} else {
 				throw new InvalidOperationException();
 			}
@@ -483,6 +495,17 @@ namespace Tangerine.Core.Operations
 			var track = item.GetAnimationTrack();
 			var animation = parent.GetAnimation();
 			AddIntoCollection<AnimationTrackList, AnimationTrack>.Perform(animation.Tracks, track);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
+		}
+
+		private static void LinkMarkerItem(Row parent, int index, Row item)
+		{
+			if (!CanLink(parent, item)) {
+				throw new InvalidOperationException();
+			}
+			var marker = item.GetMarker();
+			var animation = parent.GetAnimation();
+			InsertIntoList<MarkerList, Marker>.Perform(animation.Markers, index, marker);
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
 		}
 	}
