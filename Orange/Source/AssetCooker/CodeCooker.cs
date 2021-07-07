@@ -35,9 +35,7 @@ namespace Orange
 					var rules = assetToCookingRules[scenePath];
 					allScenes.Add(scenePath);
 					sceneToBundleMap.Add(scenePath, rules.Bundles.First());
-					var sourceHash = AssetBundle.Current.ComputeCookingUnitHash(
-						scenePath, assetToCookingRules[scenePath]
-					);
+					var sourceHash = CodeCookerCache.ComputeHash(AssetBundle.Current, scenePath);
 					if (!cache.SceneFiles.ContainsKey(scenePath)) {
 						modifiedScenes.Add(scenePath);
 						scenesToCook.Add(scenePath);
