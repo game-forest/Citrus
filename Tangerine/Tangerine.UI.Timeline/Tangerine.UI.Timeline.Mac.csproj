@@ -17,56 +17,48 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>__UNIFIED__;__MACOS__;DEBUG;MAC</DefineConstants>
+    <DefineConstants>__UNIFIED__;DEBUG;MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
     <EnablePackageSigning>false</EnablePackageSigning>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <UseSGen>false</UseSGen>
-    <CodeSignEntitlements>
-    </CodeSignEntitlements>
-    <CodeSignResourceRules>
-    </CodeSignResourceRules>
+    <HttpClientHandler>
+    </HttpClientHandler>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
-    <Profiling>true</Profiling>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AOTMode>None</AOTMode>
     <LangVersion>8.0</LangVersion>
-    <AssemblyName>
-    </AssemblyName>
-    <LinkMode>None</LinkMode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>__UNIFIED__;__MACOS__;MAC</DefineConstants>
+    <DefineConstants>__UNIFIED__;MAC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
     <EnablePackageSigning>false</EnablePackageSigning>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
     <UseSGen>false</UseSGen>
-    <CodeSignEntitlements>
-    </CodeSignEntitlements>
-    <CodeSignResourceRules>
-    </CodeSignResourceRules>
+    <HttpClientHandler>
+    </HttpClientHandler>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AOTMode>None</AOTMode>
     <LangVersion>8.0</LangVersion>
-    <LinkMode>None</LinkMode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimatorAdapter.cs" />
@@ -138,17 +130,17 @@
     <Compile Include="Utils\TimelineMetrics.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Orange\Orange.Mac.csproj">
-      <Project>{4b2bdd5a-2aae-46ae-aa1a-8c9308baa50d}</Project>
-      <Name>Orange.Mac</Name>
+    <Folder Include="Processors\Rulerbar\" />
+    <Folder Include="Processors\CurveEditor\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lime\Lime.Mac.csproj">
+      <Project>{DC16EEBF-404D-4610-B87A-15B57464D707}</Project>
+      <Name>Lime.Mac</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tangerine.Core\Tangerine.Core.Mac.csproj">
       <Project>{05FB6476-C29B-49A7-918C-A52CAF73FCA7}</Project>
       <Name>Tangerine.Core.Mac</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Lime\Lime.Mac.csproj">
-      <Project>{DC16EEBF-404D-4610-B87A-15B57464D707}</Project>
-      <Name>Lime.Mac</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Mac.csproj">
       <Project>{E62BA18F-4E1A-466A-8299-67AD567F17E5}</Project>
@@ -158,17 +150,14 @@
       <Project>{5F16D8E4-A0F1-4341-83A0-3897FC44EBB8}</Project>
       <Name>Yuzu.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Orange\Orange.Mac.csproj">
+      <Project>{4B2BDD5A-2AAE-46AE-AA1A-8C9308BAA50D}</Project>
+      <Name>Orange.Mac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tangerine.Common\Tangerine.Common.Mac.csproj">
       <Project>{17DCD218-2ED0-4E5E-B0F1-50970A5287AB}</Project>
       <Name>Tangerine.Common.Mac</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tangerine.UI.Timeline.Mac.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Processors\Rulerbar\" />
-    <Folder Include="Processors\CurveEditor\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
