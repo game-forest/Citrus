@@ -6890,60 +6890,59 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (20 == fd.OurIndex) {
-				result.Lifetime = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				dg.EnsureClassDef(typeof(global::Lime.Color4));
+				var tmp10 = new global::Lime.Color4();
+				tmp10.ABGR = d.Reader.ReadUInt32();
+				result.InitialColor = tmp10;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (21 == fd.OurIndex) {
+				result.Lifetime = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (22 == fd.OurIndex) {
 				result.LinkageWidgetName = d.Reader.ReadString();
 				if (result.LinkageWidgetName == "" && d.Reader.ReadBoolean()) result.LinkageWidgetName = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (22 == fd.OurIndex) {
+			if (23 == fd.OurIndex) {
 				result.MagnetAmount = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (23 == fd.OurIndex) {
-				var tmp10 = d.Reader.ReadInt32();
-				if (tmp10 >= 0) {
-					while (--tmp10 >= 0) {
-						var tmp11 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
-						result.Nodes.Add(tmp11);
+			if (24 == fd.OurIndex) {
+				var tmp11 = d.Reader.ReadInt32();
+				if (tmp11 >= 0) {
+					while (--tmp11 >= 0) {
+						var tmp12 = (global::Lime.Node)dg.ReadObject<global::Lime.Node>();
+						result.Nodes.Add(tmp12);
 					}
 				}
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (24 == fd.OurIndex) {
+			if (25 == fd.OurIndex) {
 				result.Number = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (25 == fd.OurIndex) {
+			if (26 == fd.OurIndex) {
 				result.NumberPerBurst = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (26 == fd.OurIndex) {
+			if (27 == fd.OurIndex) {
 				result.Orientation = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (27 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Thickness));
-				var tmp12 = new global::Lime.Thickness();
-				tmp12.Left = d.Reader.ReadSingle();
-				tmp12.Right = d.Reader.ReadSingle();
-				tmp12.Top = d.Reader.ReadSingle();
-				tmp12.Bottom = d.Reader.ReadSingle();
-				result.Padding = tmp12;
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
 			if (28 == fd.OurIndex) {
-				result.ParticlesLinkage = (global::Lime.ParticlesLinkage)d.Reader.ReadInt32();
+				dg.EnsureClassDef(typeof(global::Lime.Thickness));
+				var tmp13 = new global::Lime.Thickness();
+				tmp13.Left = d.Reader.ReadSingle();
+				tmp13.Right = d.Reader.ReadSingle();
+				tmp13.Top = d.Reader.ReadSingle();
+				tmp13.Bottom = d.Reader.ReadSingle();
+				result.Padding = tmp13;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (29 == fd.OurIndex) {
-				dg.EnsureClassDef(typeof(global::Lime.Vector2));
-				var tmp13 = new global::Lime.Vector2();
-				tmp13.X = d.Reader.ReadSingle();
-				tmp13.Y = d.Reader.ReadSingle();
-				result.Pivot = tmp13;
+				result.ParticlesLinkage = (global::Lime.ParticlesLinkage)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (30 == fd.OurIndex) {
@@ -6951,95 +6950,103 @@ namespace YuzuGenerated
 				var tmp14 = new global::Lime.Vector2();
 				tmp14.X = d.Reader.ReadSingle();
 				tmp14.Y = d.Reader.ReadSingle();
-				result.Position = tmp14;
+				result.Pivot = tmp14;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (31 == fd.OurIndex) {
-				result.RandomMotionAspectRatio = d.Reader.ReadSingle();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (32 == fd.OurIndex) {
-				result.RandomMotionRadius = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (33 == fd.OurIndex) {
-				result.RandomMotionRotation = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (34 == fd.OurIndex) {
-				result.RandomMotionSpeed = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (35 == fd.OurIndex) {
-				result.Rotation = d.Reader.ReadSingle();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (36 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
 				var tmp15 = new global::Lime.Vector2();
 				tmp15.X = d.Reader.ReadSingle();
 				tmp15.Y = d.Reader.ReadSingle();
-				result.Scale = tmp15;
+				result.Position = tmp15;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (32 == fd.OurIndex) {
+				result.RandomMotionAspectRatio = d.Reader.ReadSingle();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (33 == fd.OurIndex) {
+				result.RandomMotionRadius = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (34 == fd.OurIndex) {
+				result.RandomMotionRotation = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (35 == fd.OurIndex) {
+				result.RandomMotionSpeed = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (36 == fd.OurIndex) {
+				result.Rotation = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (37 == fd.OurIndex) {
-				result.Shader = (global::Lime.ShaderId)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (38 == fd.OurIndex) {
-				result.Shape = (global::Lime.EmitterShape)d.Reader.ReadInt32();
-				fd = def.Fields[d.Reader.ReadInt16()];
-			}
-			if (39 == fd.OurIndex) {
 				dg.EnsureClassDef(typeof(global::Lime.Vector2));
 				var tmp16 = new global::Lime.Vector2();
 				tmp16.X = d.Reader.ReadSingle();
 				tmp16.Y = d.Reader.ReadSingle();
-				result.SilentSize = tmp16;
+				result.Scale = tmp16;
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (38 == fd.OurIndex) {
+				result.Shader = (global::Lime.ShaderId)d.Reader.ReadInt32();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (39 == fd.OurIndex) {
+				result.Shape = (global::Lime.EmitterShape)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (40 == fd.OurIndex) {
-				result.SkinningWeights = (global::Lime.SkinningWeights)dg.ReadObject<global::Lime.SkinningWeights>();
+				dg.EnsureClassDef(typeof(global::Lime.Vector2));
+				var tmp17 = new global::Lime.Vector2();
+				tmp17.X = d.Reader.ReadSingle();
+				tmp17.Y = d.Reader.ReadSingle();
+				result.SilentSize = tmp17;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (41 == fd.OurIndex) {
-				result.Speed = d.Reader.ReadSingle();
+				result.SkinningWeights = (global::Lime.SkinningWeights)dg.ReadObject<global::Lime.SkinningWeights>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (42 == fd.OurIndex) {
-				result.Spin = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				result.Speed = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (43 == fd.OurIndex) {
+				result.Spin = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (44 == fd.OurIndex) {
 				result.Tag = d.Reader.ReadString();
 				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (44 == fd.OurIndex) {
+			if (45 == fd.OurIndex) {
 				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (45 == fd.OurIndex) {
+			if (46 == fd.OurIndex) {
 				result.TimeShift = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (46 == fd.OurIndex) {
+			if (47 == fd.OurIndex) {
 				result.Velocity = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (47 == fd.OurIndex) {
+			if (48 == fd.OurIndex) {
 				result.Visible = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (48 == fd.OurIndex) {
+			if (49 == fd.OurIndex) {
 				result.WindAmount = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (49 == fd.OurIndex) {
+			if (50 == fd.OurIndex) {
 				result.WindDirection = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (50 == fd.OurIndex) {
+			if (51 == fd.OurIndex) {
 				result.Zoom = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
