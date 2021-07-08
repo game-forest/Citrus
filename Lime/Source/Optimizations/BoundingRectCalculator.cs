@@ -201,7 +201,7 @@ namespace Lime.RenderOptimizer
 
 				for (var time = 0f; time < EmulationDuration; time += EmulationStep) {
 					foreach (var particle in emitter.particles) {
-						if (particle.ColorCurrent.A <= 0) {
+						if (particle.CurrentColor.A <= 0) {
 							continue;
 						}
 						isEmpty = false;

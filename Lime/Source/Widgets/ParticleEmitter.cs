@@ -124,9 +124,9 @@ namespace Lime
 			// Full life time of particle in seconds.
 			public float Lifetime;
 			// Color of the particle at the moment of birth.
-			public Color4 ColorInitial;
+			public Color4 InitialColor;
 			// Current color of the particle.
-			public Color4 ColorCurrent;
+			public Color4 CurrentColor;
 			// Velocity of random motion.
 			public float RandomMotionSpeed;
 			// Splined path of random particle motion.
@@ -273,6 +273,11 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(3)]
 		public NumericRange RandomMotionRotation { get; set; }
+		/// <summary>
+		/// Initial color of the particle at the moment of birth.
+		/// </summary>
+		[YuzuMember]
+		public Color4 InitialColor { get; set; }
 		[Trigger]
 		[TangerineKeyframeColor(1)]
 		public EmitterAction Action { get; set; }
@@ -344,6 +349,7 @@ namespace Lime
 			TimeShift = 0;
 			ImmortalParticles = false;
 			NumberPerBurst = false;
+			InitialColor = Color4.White;
 			Components.Add(new UpdatableNodeBehavior());
 		}
 
@@ -734,7 +740,7 @@ namespace Lime
 
 		private bool InitializeParticle(Particle p)
 		{
-			CalcInitialColorAndTransform(out Color4 color, out Matrix32 transform);
+			CalcInitialTransform(out Matrix32 transform);
 			Vector2 emitterScale = new Vector2 {
 				X = transform.U.Length,
 				Y = transform.V.Length
@@ -765,8 +771,8 @@ namespace Lime
 			p.AngularVelocity = AngularVelocity.NormalRandomNumber(Rng);
 			p.Angle = Orientation.UniformRandomNumber(Rng) + emitterAngle;
 			p.Spin = Spin.NormalRandomNumber(Rng);
-			p.ColorInitial = color;
-			p.ColorCurrent = color;
+			p.InitialColor = InitialColor;
+			p.CurrentColor = InitialColor;
 			p.RandomRayDirection = (new NumericRange(0, 360)).UniformRandomNumber(Rng);
 			p.RandomSplineVertex0 = GenerateRandomMotionControlPoint(ref p.RandomRayDirection);
 			p.RandomSplineVertex1 = Vector2.Zero;
@@ -848,16 +854,14 @@ namespace Lime
 			return cachedShapePoints[i1] * k1 + cachedShapePoints[i2] * k2 + cachedShapePoints[i3] * k3;
 		}
 
-		private void CalcInitialColorAndTransform(out Color4 color, out Matrix32 transform)
+		private void CalcInitialTransform(out Matrix32 transform)
 		{
-			color = Color;
 			transform = CalcLocalToParentTransform();
 			Widget basicWidget = GetBasicWidget();
 			if (basicWidget != null) {
 				for (Node node = Parent; node != null && node != basicWidget; node = node.Parent) {
 					if (node.AsWidget != null) {
 						transform *= node.AsWidget.CalcLocalToParentTransform();
-						color *= node.AsWidget.Color;
 					}
 				}
 			}
@@ -919,7 +923,7 @@ namespace Lime
 			p.RegularPosition += velocity * delta * direction;
 			p.Angle += p.Spin * p.Modifier.Spin * delta;
 			p.ScaleCurrent = p.ScaleInitial * p.Modifier.Scale;
-			p.ColorCurrent = p.ColorInitial * p.Modifier.Color;
+			p.CurrentColor = p.InitialColor * p.Modifier.Color;
 			p.MagnetAmountCurrent = p.MagnetAmountInitial * p.Modifier.MagnetAmount;
 			ApplyMagnetsToParticle(p, delta);
 			Vector2 positionOnSpline = Vector2.Zero;
@@ -1028,7 +1032,7 @@ namespace Lime
 			ro.Color = GlobalColor;
 			ro.Material = Material ?? DefaultMaterial;
 			foreach (var p in particles) {
-				if (p.ColorCurrent.A <= 0) {
+				if (p.CurrentColor.A <= 0) {
 					continue;
 				}
 				var angle = p.Angle;
@@ -1038,7 +1042,7 @@ namespace Lime
 				ro.Particles.Add(new ParticleRenderData {
 					Texture = p.Modifier.GetTexture((int)p.TextureIndex - 1),
 					Transform = p.Transform,
-					Color = p.ColorCurrent,
+					Color = p.CurrentColor,
 					Angle = angle
 				});
 			}
