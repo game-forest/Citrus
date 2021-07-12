@@ -654,6 +654,14 @@ namespace Tangerine.UI.Inspector
 							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
 							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 						}));
+
+						menu.Add(new Command("Cut component", () => {
+							var stream = new System.IO.MemoryStream();
+							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
+							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+
+							RemoveComponents(components);
+						}));
 					}
 					menu.Popup();
 				}
