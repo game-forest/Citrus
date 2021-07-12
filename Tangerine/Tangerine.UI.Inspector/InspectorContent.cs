@@ -647,15 +647,15 @@ namespace Tangerine.UI.Inspector
 			label.Nodes.Add(new ToolbarButton(IconPool.GetTexture("Inspector.Options")) {
 				LayoutCell = new LayoutCell(Alignment.Center),
 				Clicked = () => {
-					var menu = new Menu { new Command("Remove component", () => RemoveComponents(components)) };
+					var menu = new Menu { new Command("Remove", () => RemoveComponents(components)) };
 					if (componentsCount == 1) {
-						menu.Add(new Command("Copy to clipboard", () => {
+						menu.Add(new Command("Copy", () => {
 							var stream = new System.IO.MemoryStream();
 							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
 							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 						}));
 
-						menu.Add(new Command("Cut component", () => {
+						menu.Add(new Command("Cut", () => {
 							var stream = new System.IO.MemoryStream();
 							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
 							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
