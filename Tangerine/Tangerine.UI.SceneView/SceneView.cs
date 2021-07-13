@@ -50,7 +50,12 @@ namespace Tangerine.UI.SceneView
 
 		public static void RegisterGlobalCommands()
 		{
-			ConnectCommand(SceneViewCommands.PreviewAnimation, new PreviewAnimationHandler());
+			ConnectCommand(
+				SceneViewCommands.PreviewAnimation,
+				new PreviewAnimationHandler(PreviewAnimationBehaviour.StopOnStartingFrame));
+			ConnectCommand(
+				SceneViewCommands.PreviewAnimationOnce,
+				new PreviewAnimationHandler(PreviewAnimationBehaviour.StopOnCurrentFrame));
 			ConnectCommand(SceneViewCommands.ResolutionChanger, new ResolutionChangerHandler());
 			ConnectCommand(SceneViewCommands.ResolutionReverceChanger, new ResolutionChangerHandler(isReverse: true));
 			ConnectCommand(SceneViewCommands.ResolutionOrientation, new ResolutionOrientationHandler());

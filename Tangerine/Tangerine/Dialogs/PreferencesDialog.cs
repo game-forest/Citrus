@@ -340,8 +340,6 @@ namespace Tangerine
 				new IntPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, Tangerine.AppUserPreferences.Instance, propertyName: nameof(Tangerine.AppUserPreferences.AutosaveDelay),  displayName: "Autosave delay")),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.StopAnimationOnCurrentFrame),  displayName: "Stop animaion on current frame")),
-				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ShowSceneThumbnail),  displayName: "Show scene thumbnail")),
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ShowSplinesGlobally),  displayName: "Show splines globally")),
