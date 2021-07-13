@@ -47037,6 +47037,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.ImmortalParticles
   nameWithType: ParticleEmitter.ImmortalParticles
+- uid: Lime.ParticleEmitter.InitialColor
+  name: InitialColor
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_InitialColor
+  commentId: P:Lime.ParticleEmitter.InitialColor
+  fullName: Lime.ParticleEmitter.InitialColor
+  nameWithType: ParticleEmitter.InitialColor
+- uid: Lime.ParticleEmitter.InitialColor*
+  name: InitialColor
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_InitialColor_
+  commentId: Overload:Lime.ParticleEmitter.InitialColor
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.InitialColor
+  nameWithType: ParticleEmitter.InitialColor
 - uid: Lime.ParticleEmitter.Lifetime
   name: Lifetime
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Lifetime
@@ -47201,18 +47214,12 @@ references:
   commentId: F:Lime.ParticleEmitter.Particle.AngularVelocity
   fullName: Lime.ParticleEmitter.Particle.AngularVelocity
   nameWithType: ParticleEmitter.Particle.AngularVelocity
-- uid: Lime.ParticleEmitter.Particle.ColorCurrent
-  name: ColorCurrent
-  href: api/Lime.ParticleEmitter.Particle.html#Lime_ParticleEmitter_Particle_ColorCurrent
-  commentId: F:Lime.ParticleEmitter.Particle.ColorCurrent
-  fullName: Lime.ParticleEmitter.Particle.ColorCurrent
-  nameWithType: ParticleEmitter.Particle.ColorCurrent
-- uid: Lime.ParticleEmitter.Particle.ColorInitial
-  name: ColorInitial
-  href: api/Lime.ParticleEmitter.Particle.html#Lime_ParticleEmitter_Particle_ColorInitial
-  commentId: F:Lime.ParticleEmitter.Particle.ColorInitial
-  fullName: Lime.ParticleEmitter.Particle.ColorInitial
-  nameWithType: ParticleEmitter.Particle.ColorInitial
+- uid: Lime.ParticleEmitter.Particle.CurrentColor
+  name: CurrentColor
+  href: api/Lime.ParticleEmitter.Particle.html#Lime_ParticleEmitter_Particle_CurrentColor
+  commentId: F:Lime.ParticleEmitter.Particle.CurrentColor
+  fullName: Lime.ParticleEmitter.Particle.CurrentColor
+  nameWithType: ParticleEmitter.Particle.CurrentColor
 - uid: Lime.ParticleEmitter.Particle.FullDirection
   name: FullDirection
   href: api/Lime.ParticleEmitter.Particle.html#Lime_ParticleEmitter_Particle_FullDirection
@@ -47249,6 +47256,12 @@ references:
   commentId: F:Lime.ParticleEmitter.Particle.GravityVelocity
   fullName: Lime.ParticleEmitter.Particle.GravityVelocity
   nameWithType: ParticleEmitter.Particle.GravityVelocity
+- uid: Lime.ParticleEmitter.Particle.InitialColor
+  name: InitialColor
+  href: api/Lime.ParticleEmitter.Particle.html#Lime_ParticleEmitter_Particle_InitialColor
+  commentId: F:Lime.ParticleEmitter.Particle.InitialColor
+  fullName: Lime.ParticleEmitter.Particle.InitialColor
+  nameWithType: ParticleEmitter.Particle.InitialColor
 - uid: Lime.ParticleEmitter.Particle.Lifetime
   name: Lifetime
   href: api/Lime.ParticleEmitter.Particle.html#Lime_ParticleEmitter_Particle_Lifetime
