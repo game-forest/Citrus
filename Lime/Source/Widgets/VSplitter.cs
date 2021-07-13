@@ -42,7 +42,7 @@ namespace Lime
 					separartorRenderer.SeparatorUnderMouse = p.SeparatorUnderMouse;
 					isNeedToInvalidate = true;
 				}
-				if (IsMouseOver() && p.SeparatorUnderMouse >= 0) {
+				if (IsMouseOver() && p.SeparatorUnderMouse >= 0 && !IsLocked) {
 					WidgetContext.Current.MouseCursor = MouseCursor.SizeNS;
 					if (Input.WasMousePressed()) {
 						separartorRenderer.isSeparatorUnderMouseDrag = true;

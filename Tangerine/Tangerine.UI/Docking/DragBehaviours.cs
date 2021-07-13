@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tangerine.Core;
 using Lime;
 
 namespace Tangerine.UI.Docking
@@ -53,7 +54,7 @@ namespace Tangerine.UI.Docking
 		private void OnMouseRelease()
 		{
 			ResetDockComponents();
-			if (requestedSite != DockSite.None) {
+			if (requestedSite != DockSite.None && !CoreUserPreferences.Instance.LockLayout) {
 				DockManager.Instance.DockPlacementTo(placement, requestedPlacement, requestedSite, -1f);
 			}
 			IsActive = false;
