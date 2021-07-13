@@ -651,13 +651,23 @@ namespace Tangerine.UI.Inspector
 					if (componentsCount == 1) {
 						menu.Add(new Command("Cut", () => {
 							var stream = new System.IO.MemoryStream();
-							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
+							InternalPersistence.Instance.WriteObject(
+								Document.Current.Path,
+								stream,
+								Cloner.Clone(components.First()),
+								Persistence.Format.Json
+							);
 							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 							RemoveComponents(components);
 						}));
 						menu.Add(new Command("Copy", () => {
 							var stream = new System.IO.MemoryStream();
-							InternalPersistence.Instance.WriteObject(Document.Current.Path, stream, Cloner.Clone(components.First()), Persistence.Format.Json);
+							InternalPersistence.Instance.WriteObject(
+								Document.Current.Path,
+								stream,
+								Cloner.Clone(components.First()),
+								Persistence.Format.Json
+							);
 							Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 						}));
 					}
