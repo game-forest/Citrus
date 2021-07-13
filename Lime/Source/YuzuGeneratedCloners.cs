@@ -2892,6 +2892,7 @@ namespace YuzuGenerated
 			result.HitTestMethod = s.HitTestMethod;
 			result.Id = s.Id;
 			result.ImmortalParticles = s.ImmortalParticles;
+			result.InitialColor = s.InitialColor;
 			result.Lifetime = s.Lifetime;
 			result.LinkageWidgetName = s.LinkageWidgetName;
 			result.MagnetAmount = s.MagnetAmount;
