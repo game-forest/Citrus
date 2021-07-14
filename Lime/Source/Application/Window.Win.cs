@@ -878,7 +878,7 @@ namespace Lime
 		{
 			var wasInvalidated = isInvalidated;
 			isInvalidated = false;
-			if (!form.Visible || !form.CanFocus || !renderControl.IsHandleCreated) {
+			if (!form.Visible || !renderControl.IsHandleCreated) {
 				return false;
 			}
 			UnclampedDelta = (float)stopwatch.Elapsed.TotalSeconds;
