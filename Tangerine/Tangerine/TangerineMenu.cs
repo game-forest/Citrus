@@ -203,6 +203,7 @@ namespace Tangerine
 #if !MAC
 					GenericCommands.PreferencesDialog,
 					GenericCommands.OpenLookupDialog,
+					GenericCommands.OpenConflictingAnimatorsDialog,
 					Command.MenuSeparator,
 #endif
 					GenericCommands.Close,

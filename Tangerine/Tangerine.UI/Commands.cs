@@ -80,6 +80,7 @@ namespace Tangerine.UI
 		public static readonly ICommand LookupNodeAnimations = new Command("Lookup Node's Animations");
 		public static readonly ICommand LookupDocumentAnimations = new Command("Lookup Document's Animations");
 		public static readonly ICommand LookupComponents = new Command("Lookup Components");
+		public static readonly ICommand OpenConflictingAnimatorsDialog = new Command("Open Conflicting Animators Dialog", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.A));
 		public static readonly ICommand Close = new Command("Close");
 		public static readonly ICommand CloseAll = new Command("Close All");
 		public static readonly ICommand CloseAllButCurrent = new Command("Close All but Current");
