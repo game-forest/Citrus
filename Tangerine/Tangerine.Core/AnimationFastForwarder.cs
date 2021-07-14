@@ -5,61 +5,44 @@ using Lime;
 
 namespace Tangerine.Core
 {
-	public interface IAnimationPositioner
+	public class AnimationFastForwarder
 	{
-		void SetAnimationTime(Animation animation, double time, bool stopAnimations);
-		void SetAnimationFrame(Animation animation, int frame, bool stopAnimations);
-	}
+		private readonly HashSet<AnimationRange> processedAnimationRanges = new HashSet<AnimationRange>();
 
-	public class AnimationPositioner : IAnimationPositioner
-	{
-		private HashSet<AnimationRange> processedAnimationRanges = new HashSet<AnimationRange>();
-		private readonly NodeManager nodeManager;
-
-		public AnimationPositioner(NodeManager nodeManager)
+		public void FastForward(Animation animation, int frame, int frameCount, bool stopAnimations)
 		{
-			this.nodeManager = nodeManager;
-		}
-
-		public void SetAnimationTime(Animation animation, double time, bool stopAnimations)
-		{
-			SetAnimationTimeHelper(animation, time, stopAnimations);
+			var animationStates = new List<AnimationState>();
+			BuildAnimationStates(animationStates, animation, frame, frameCount);
+			ApplyAnimationStates(animationStates, animation, stopAnimations);
 			// The following code is intented for code that changes the node hierarchy while the animation is scrolling.
 			var hierarchyChanged = false;
 			HierarchyChangedEventHandler h = e => hierarchyChanged = true;
-			nodeManager.HierarchyChanged += h;
-			nodeManager.Update(0);
-			nodeManager.HierarchyChanged -= h;
-			if (hierarchyChanged) {
-				SetAnimationTimeHelper(animation, time, stopAnimations);
+			var nodeManager = animation.OwnerNode.Manager;
+			if (nodeManager != null) {
+				nodeManager.HierarchyChanged += h;
+				nodeManager.Update(0);
+				nodeManager.HierarchyChanged -= h;
+				if (hierarchyChanged) {
+					animationStates.Clear();
+					BuildAnimationStates(animationStates, animation, frame, frameCount);
+					ApplyAnimationStates(animationStates, animation, stopAnimations);
+				}
 			}
 		}
 
-		public void SetAnimationTimeHelper(Animation animation, double time, bool stopAnimations)
+		public void BuildAnimationStates(List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers = false)
 		{
-			Audio.GloballyEnable = false;
-			try {
-				processedAnimationRanges.Clear();
-				var animationStates = new List<AnimationState>();
-				BuildAnimationStates(processedAnimationRanges, animationStates, animation, 0, AnimationUtils.SecondsToFrames(time), processMarkers: false);
-				ApplyAnimationStates(animationStates, animation, stopAnimations);
-			} finally {
-				Audio.GloballyEnable = true;
-			}
+			processedAnimationRanges.Clear();
+			BuildAnimationStatesHelper(processedAnimationRanges, animationStates, animation, frame, frameCount, processMarkers);
 		}
 
-		private void ApplyAnimationStates(List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
+		public void ApplyAnimationStates(List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
 		{
 			// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
 			foreach (var s in animationStates.OrderByDescending(s => s.Animation == currentAnimation ? -1 : s.FrameCount)) {
 				s.Animation.Frame = s.Frame;
 				s.Animation.IsRunning = !stopAnimations && s.IsRunning;
 			}
-		}
-
-		public void SetAnimationFrame(Animation animation, int frame, bool stopAnimations)
-		{
-			SetAnimationTime(animation, AnimationUtils.FramesToSeconds(frame),  stopAnimations);
 		}
 
 		struct TriggerData
@@ -74,11 +57,11 @@ namespace Tangerine.Core
 			public readonly Dictionary<string, TriggerData> Triggers = new Dictionary<string, TriggerData>();
 		}
 
-		struct AnimationState
+		public struct AnimationState
 		{
 			public Animation Animation;
-			public int FrameCount;
 			public int Frame;
+			public int FrameCount;
 			public bool IsRunning;
 		}
 
@@ -101,12 +84,11 @@ namespace Tangerine.Core
 
 		private int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
 
-		private void BuildAnimationStates(HashSet<AnimationRange> processedAnimationRanges, List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers)
+		private void BuildAnimationStatesHelper(HashSet<AnimationRange> processedAnimationRanges, List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers)
 		{
 			if (!processedAnimationRanges.Add(new AnimationRange { Animation = animation, Frame = frame, FrameCount = frameCount })) {
 				return;
 			}
-			var previousFrame = frame;
 			if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
 				animation.AnimationEngine.BuildEffectiveAnimators(animation);
 			}
@@ -115,13 +97,17 @@ namespace Tangerine.Core
 				OfType<Animator<string>>().ToList();
 			AdvanceCurrentFrameAndBuildTriggers(animation, frameCount, processMarkers, triggerAnimators, ref frame, out bool isRunning);
 			ExecuteTriggers(processedAnimationRanges, animationStates, triggerAnimators);
-			if (animationStates.FindIndex(i => i.Animation == animation) < 0) {
-				animationStates.Add(new AnimationState {
-					Animation = animation,
-					FrameCount = frameCount,
-					Frame = frame,
-					IsRunning = isRunning
-				});
+			var state = new AnimationState {
+				Animation = animation,
+				FrameCount = frameCount,
+				Frame = frame,
+				IsRunning = isRunning
+			};
+			var j = animationStates.FindIndex(i => i.Animation == animation);
+			if (j < 0) {
+				animationStates.Add(state);
+			} else if (animationStates[j].FrameCount > state.FrameCount) {
+				animationStates[j] = state;
 			}
 		}
 
@@ -135,7 +121,7 @@ namespace Tangerine.Core
 				triggers.Clear();
 				foreach (var trigger in sortedTriggers) {
 					foreach (var (animationToRun, runAtFrame) in ParseTrigger(node, trigger.Keyframe.Value)) {
-						BuildAnimationStates(processedAnimationsRanges, animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
+						BuildAnimationStatesHelper(processedAnimationsRanges, animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
 					}
 				}
 			}

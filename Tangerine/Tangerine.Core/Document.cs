@@ -24,9 +24,9 @@ namespace Tangerine.Core
 		Fbx
 	}
 
-	public interface ISceneViewThumbnailProvider
+	public interface ISceneViewSnapshotProvider
 	{
-		void Generate(int frame, Action<ITexture> callback);
+		void Generate(RenderTexture texture, Action callback);
 	}
 
 	public sealed class Document
@@ -42,7 +42,7 @@ namespace Tangerine.Core
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
 		private readonly ConditionalWeakTable<object, Row> sceneItemCache = new ConditionalWeakTable<object, Row>();
 		private readonly MemoryStream preloadedSceneStream = null;
-		private readonly IAnimationPositioner animationPositioner;
+		private readonly AnimationFastForwarder animationFastForwarder;
 		private static uint untitledCounter;
 
 		public static readonly string[] AllowedFileTypes = { "tan", "t3d", "fbx" };
@@ -95,7 +95,7 @@ namespace Tangerine.Core
 		/// </summary>
 		public Node RootNode { get; private set; }
 
-		public ISceneViewThumbnailProvider SceneViewThumbnailProvider { get; set; }
+		public ISceneViewSnapshotProvider SceneViewSnapshotProvider { get; set; }
 
 		private Node container;
 
@@ -237,7 +237,7 @@ namespace Tangerine.Core
 				if (animation != value) {
 					animation = value;
 					if (animation != null) {
-						animationPositioner.SetAnimationTime(animation, value.Time, true);
+						animationFastForwarder.FastForward(animation, 0, value.Frame, true);
 					}
 					BumpSceneTreeVersion();
 				}
@@ -248,7 +248,7 @@ namespace Tangerine.Core
 
 		public string AnimationId => Animation.Id;
 
-		private static NodeManager CreateDefaultManager()
+		public static NodeManager CreateDefaultManager()
 		{
 			var services = new ServiceRegistry();
 			services.Add(new BehaviorSystem());
@@ -281,7 +281,7 @@ namespace Tangerine.Core
 			};
 			History.DocumentChanged += () => fullHierarchyChangeTime = DateTime.Now;
 			Manager = ManagerFactory?.Invoke() ?? CreateDefaultManager();
-			animationPositioner = new AnimationPositioner(Manager);
+			animationFastForwarder = new AnimationFastForwarder();
 			SceneTreeBuilder = new SceneTreeBuilder(o => {
 				var item = GetSceneItemForObject(o);
 				if (item.Parent != null || item.Rows.Count > 0) {
@@ -899,7 +899,7 @@ namespace Tangerine.Core
 
 		public void SetAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
-			animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
+			animationFastForwarder.FastForward(animation, 0, frameIndex, stopAnimations);
 		}
 
 		public void TogglePreviewAnimation()

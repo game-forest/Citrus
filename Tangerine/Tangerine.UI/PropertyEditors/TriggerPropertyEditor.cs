@@ -45,7 +45,7 @@ namespace Tangerine.UI
 			};
 			button.Clicked += () => {
 				var window = new TriggerSelectionDialog(
-					GetAvailableTriggers(),
+					node,
 					new HashSet<string>(CurrentTriggers),
 					s => {
 						s = FilterTriggers(s);
@@ -72,7 +72,7 @@ namespace Tangerine.UI
 			foreach (var a in node.Animations) {
 				foreach (var m in a.Markers.Where(i => i.Action != MarkerAction.Jump && !string.IsNullOrEmpty(i.Id))) {
 					var id = a.Id != null ? m.Id + '@' + a.Id : m.Id;
-					var key = a.Id ?? "Primary";
+					var key = a.Id ?? "";
 					if (!triggers.Keys.Contains(key)) {
 						triggers[key] = new HashSet<string>();
 					}
@@ -82,16 +82,6 @@ namespace Tangerine.UI
 				}
 			}
 			return triggers;
-		}
-
-		private bool EnsureMarkersAvailable()
-		{
-			foreach (var a in node.Animations) {
-				if (a.Markers.Where(i => i.Action != MarkerAction.Jump && !string.IsNullOrEmpty(i.Id)).ToList().Count > 0) {
-					return true;
-				}
-			}
-			return false;
 		}
 
 		private Widget CreateWarning(string message)
@@ -120,7 +110,7 @@ namespace Tangerine.UI
 				foreach (var key in triggers.Keys) {
 					foreach (var trigger in triggersToSet) {
 						if (triggers[key].Contains(trigger.Trim(' '))) {
-							newValue += $"{trigger.Trim(' ')},";
+							newValue += trigger.Trim(' ') + ',';
 							break;
 						}
 					}
@@ -130,34 +120,6 @@ namespace Tangerine.UI
 				}
 			}
 			return newValue;
-		}
-
-		protected static void SplitTrigger(string trigger, out string markerId, out string animationId)
-		{
-			if (!trigger.Contains('@')) {
-				markerId = trigger;
-				animationId = null;
-			} else {
-				var t = trigger.Split('@');
-				markerId = t[0];
-				animationId = t[1];
-			}
-		}
-
-		private class TriggerStringComparer : IEqualityComparer<string>
-		{
-			public bool Equals(string x, string y)
-			{
-				SplitTrigger(x, out _, out var xAnimation);
-				SplitTrigger(y, out _, out var yAnimation);
-				return xAnimation == yAnimation;
-			}
-
-			public int GetHashCode(string obj)
-			{
-				SplitTrigger(obj, out _, out var animation);
-				return animation == null ? 0 : animation.GetHashCode();
-			}
 		}
 	}
 }

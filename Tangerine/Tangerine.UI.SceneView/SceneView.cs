@@ -139,7 +139,7 @@ namespace Tangerine.UI.SceneView
 					renderChain.Clear();
 				}
 #if PROFILER
-				ro.IsThumbnailOwner = SceneViewThumbnailProvider.IsGettingRenderObjects;
+				ro.IsThumbnailOwner = SceneViewSnapshotProvider.IsGettingRenderObjects;
 				ro.Frame = new RenderObject.FrameInfo {
 					Transform = node.Parent.AsWidget.LocalToWorldTransform,
 					Size = (Size)node.Parent.AsWidget.Size
@@ -341,7 +341,7 @@ namespace Tangerine.UI.SceneView
 		public void Attach()
 		{
 			Instance = this;
-			Document.Current.SceneViewThumbnailProvider = new SceneViewThumbnailProvider(Document.Current, Frame);
+			Document.Current.SceneViewSnapshotProvider = new SceneViewSnapshotProvider(Frame);
 			Panel.AddNode(AnimeshPanel.RootNode);
 			Panel.AddNode(ShowNodeDecorationsPanelButton);
 			Panel.AddNode(ZoomWidget);
@@ -481,13 +481,11 @@ namespace Tangerine.UI.SceneView
 		}
 	}
 
-	public class SceneViewThumbnailProvider : ISceneViewThumbnailProvider
+	public class SceneViewSnapshotProvider : ISceneViewSnapshotProvider
 	{
 		private readonly RenderChain renderChain = new RenderChain();
 		private readonly RenderObjectList renderList = new RenderObjectList();
-		private readonly Document document;
 		private readonly Widget sceneViewFrame;
-		private RenderTexture texture;
 
 #if PROFILER
 		/// <summary>
@@ -496,13 +494,12 @@ namespace Tangerine.UI.SceneView
 		internal static bool IsGettingRenderObjects { get; private set; }
 #endif // PROFILER
 
-		public SceneViewThumbnailProvider(Document document, Widget sceneViewFrame)
+		public SceneViewSnapshotProvider(Widget sceneViewFrame)
 		{
-			this.document = document;
 			this.sceneViewFrame = sceneViewFrame;
 		}
 
-		public void Generate(int frame, Action<ITexture> callback)
+		public void Generate(RenderTexture texture, Action callback)
 		{
 			var sceneSize = sceneViewFrame.Size;
 			var thumbSize = new Vector2(200);
@@ -511,11 +508,7 @@ namespace Tangerine.UI.SceneView
 			} else {
 				thumbSize.X *= sceneSize.X / sceneSize.Y;
 			}
-			var ap = new AnimationPositioner(Document.Current.Manager);
-			var savedTime = document.Animation.Time;
-			var savedIsRunning = Document.Current.Animation.IsRunning;
 			renderChain.Clear();
-			ap.SetAnimationFrame(document.Animation, frame, stopAnimations: true);
 			sceneViewFrame.RenderChainBuilder?.AddToRenderChain(renderChain);
 			renderList.Clear();
 #if PROFILER
@@ -525,20 +518,11 @@ namespace Tangerine.UI.SceneView
 #if PROFILER
 			IsGettingRenderObjects = false;
 #endif // PROFILER
-			ap.SetAnimationTime(document.Animation, savedTime, stopAnimations: true);
-			Document.Current.Animation.IsRunning = savedIsRunning;
-			Window.Current.InvokeOnRendering(() => RenderThumbnail(callback));
+			Window.Current.InvokeOnRendering(() => RenderThumbnail(texture, callback));
 		}
 
-		private void RenderThumbnail(Action<ITexture> callback)
+		private void RenderThumbnail(RenderTexture texture, Action callback)
 		{
-			var pixelScale = Window.Current.PixelScale;
-			var scaledWidth = (int)(sceneViewFrame.Width * pixelScale);
-			var scaledHeight = (int)(sceneViewFrame.Height * pixelScale);
-			if (texture == null || texture.ImageSize != new Size(scaledWidth, scaledHeight)) {
-				texture?.Dispose();
-				texture = new RenderTexture(scaledWidth, scaledHeight);
-			}
 			if (sceneViewFrame.Width > 0 && sceneViewFrame.Height > 0) {
 				texture.SetAsRenderTarget();
 				Renderer.PushState(
@@ -562,7 +546,7 @@ namespace Tangerine.UI.SceneView
 				renderList.Render();
 				Renderer.PopState();
 				texture.RestoreRenderTarget();
-				callback?.Invoke(texture);
+				callback?.Invoke();
 			}
 		}
 	}

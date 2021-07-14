@@ -13,9 +13,12 @@ namespace Tangerine.UI.Timeline
 		private readonly OverviewPane overviewPane;
 		private ThemedSimpleText label;
 		private readonly Vector2 thumbnailOffset = new Vector2(30);
+		private readonly RenderTexture texture;
 
 		public SceneViewThumbnail(OverviewPane overviewPane)
 		{
+			var textureSize = (int)(512 * Window.Current.PixelScale);
+			texture = new RenderTexture(textureSize, textureSize);
 			this.overviewPane = overviewPane;
 			overviewPane.RootWidget.Tasks.Add(ShowOnMouseOverTask());
 		}
@@ -109,7 +112,12 @@ namespace Tangerine.UI.Timeline
 			} else {
 				label.Text = frame.ToString();
 			}
-			doc.SceneViewThumbnailProvider.Generate(frame, texture => {
+			var animation = Document.Current.Animation;
+			var savedFrame = animation.Frame;
+			var savedIsRunning = animation.IsRunning;
+			var animationFastForwarder = new AnimationFastForwarder();
+			animationFastForwarder.FastForward(animation, 0, frame, stopAnimations: true);
+			doc.SceneViewSnapshotProvider.Generate(texture, () => {
 				var sceneSize = (Vector2)texture.ImageSize;
 				var thumbSize = new Vector2(200);
 				if (sceneSize.X > sceneSize.Y) {
@@ -121,6 +129,8 @@ namespace Tangerine.UI.Timeline
 				thumbnailImage.MinMaxSize = thumbSize;
 				window.Invalidate();
 			});
+			animationFastForwarder.FastForward(animation, 0, savedFrame, stopAnimations: true);
+			animation.IsRunning = savedIsRunning;
 		}
 
 		private Marker FindMarker(int frame)
