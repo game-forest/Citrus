@@ -287,6 +287,7 @@ namespace Lime
 		public void Close() {}
 		public void Invalidate() {}
 		public void ShowModal() {}
+		public void Restore() {}
 		public void Activate() {}
 
 		/// <summary>

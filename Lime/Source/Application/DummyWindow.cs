@@ -46,6 +46,8 @@ namespace Lime
 
 		public void ShowModal() {}
 
+		public void Restore() {}
+
 		public bool AllowDropFiles { get; set; }
 
 #pragma warning disable CS0067

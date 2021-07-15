@@ -126,6 +126,7 @@ namespace Lime
 		public void Center() { }
 		public void Close() { }
 		public void ShowModal() { }
+		public void Restore() { }
 		public void Invalidate() { }
 		public void Activate() { }
 		public void WaitForRendering() { }

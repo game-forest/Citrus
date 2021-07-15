@@ -610,6 +610,11 @@ namespace Lime
 			};
 		}
 
+		public void Restore()
+		{
+			form.Restore();
+		}
+
 		public void Activate()
 		{
 			form.Activate();
