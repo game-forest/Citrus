@@ -18565,6 +18565,19 @@ references:
   isSpec: "True"
   fullName: Lime.EditorParams.PasswordLastCharShowTime
   nameWithType: EditorParams.PasswordLastCharShowTime
+- uid: Lime.EditorParams.ReplaceCommaWithDecimalPoint
+  name: ReplaceCommaWithDecimalPoint
+  href: api/Lime.EditorParams.html#Lime_EditorParams_ReplaceCommaWithDecimalPoint
+  commentId: P:Lime.EditorParams.ReplaceCommaWithDecimalPoint
+  fullName: Lime.EditorParams.ReplaceCommaWithDecimalPoint
+  nameWithType: EditorParams.ReplaceCommaWithDecimalPoint
+- uid: Lime.EditorParams.ReplaceCommaWithDecimalPoint*
+  name: ReplaceCommaWithDecimalPoint
+  href: api/Lime.EditorParams.html#Lime_EditorParams_ReplaceCommaWithDecimalPoint_
+  commentId: Overload:Lime.EditorParams.ReplaceCommaWithDecimalPoint
+  isSpec: "True"
+  fullName: Lime.EditorParams.ReplaceCommaWithDecimalPoint
+  nameWithType: EditorParams.ReplaceCommaWithDecimalPoint
 - uid: Lime.EditorParams.Scroll
   name: Scroll
   href: api/Lime.EditorParams.html#Lime_EditorParams_Scroll
@@ -25547,6 +25560,19 @@ references:
   isSpec: "True"
   fullName: Lime.IEditorParams.PasswordLastCharShowTime
   nameWithType: IEditorParams.PasswordLastCharShowTime
+- uid: Lime.IEditorParams.ReplaceCommaWithDecimalPoint
+  name: ReplaceCommaWithDecimalPoint
+  href: api/Lime.IEditorParams.html#Lime_IEditorParams_ReplaceCommaWithDecimalPoint
+  commentId: P:Lime.IEditorParams.ReplaceCommaWithDecimalPoint
+  fullName: Lime.IEditorParams.ReplaceCommaWithDecimalPoint
+  nameWithType: IEditorParams.ReplaceCommaWithDecimalPoint
+- uid: Lime.IEditorParams.ReplaceCommaWithDecimalPoint*
+  name: ReplaceCommaWithDecimalPoint
+  href: api/Lime.IEditorParams.html#Lime_IEditorParams_ReplaceCommaWithDecimalPoint_
+  commentId: Overload:Lime.IEditorParams.ReplaceCommaWithDecimalPoint
+  isSpec: "True"
+  fullName: Lime.IEditorParams.ReplaceCommaWithDecimalPoint
+  nameWithType: IEditorParams.ReplaceCommaWithDecimalPoint
 - uid: Lime.IEditorParams.Scroll
   name: Scroll
   href: api/Lime.IEditorParams.html#Lime_IEditorParams_Scroll
