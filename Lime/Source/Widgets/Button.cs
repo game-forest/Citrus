@@ -210,8 +210,8 @@ namespace Lime
 		{
 			if (GloballyVisible) {
 				stateHandler.MoveNext();
-				textPresentersFeeder.Update();
 			}
+			textPresentersFeeder.Update();
 			if ((!EnableMask.All() || !GloballyEnabled) && !isDisabledState) {
 				SetState(DisabledState());
 			}
