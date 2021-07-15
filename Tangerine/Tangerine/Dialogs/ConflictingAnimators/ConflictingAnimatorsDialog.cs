@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
@@ -11,7 +10,6 @@ namespace Tangerine
 {
 	public class ConflictingAnimatorsDialog
 	{
-
 		public static class ConflictingAnimatorsWindowWidgetProvider {
 			private const string AppIconPath = @"Tangerine.Resources.Icons.icon.ico";
 			private const string Title = @"Conflicting Animators";
@@ -34,75 +32,14 @@ namespace Tangerine
 					window.DecoratedPosition = position ?? (displayCenter - window.DecoratedSize / 2f);
 					window.Closing += OnClose;
 
-					var scrollView = new ThemedScrollView {
-						Content = {
-							Layout = new VBoxLayout(),
-						},
-					};
+					var scrollView = CreateScrollView();
+					var controls = CreateControls(scrollView);
 					instance = new ThemedInvalidableWindowWidget(window) {
+						Layout = new VBoxLayout { Spacing = 8 },
 						Padding = new Thickness(8),
-						Layout = new VBoxLayout {
-							Spacing = 8
-						},
 						Nodes = {
 							scrollView,
-							new Widget {
-								Padding = new Thickness(8),
-								Layout = new HBoxLayout {
-									Spacing = 8
-								},
-								LayoutCell = new LayoutCell(Alignment.LeftCenter),
-								Nodes = {
-									new ThemedButton {
-										Text = "Search",
-										Clicked = () => {
-											var doc = Document.Current;
-											//var queue = new Queue<Node>(doc.RootNode.Nodes);
-											var queue = new Queue<Node>(doc.RootNode.Descendants);
-											while (queue.Count > 0) {
-												var node = queue.Dequeue();
-												//if (node.ContentsPath != null) continue;
-												//foreach (var child in node.Nodes) {
-												//	queue.Enqueue(child);
-												//}
-												var props = new Dictionary<string, HashSet<string>>();
-												foreach (var animator in node.Animators) {
-													var id = animator.AnimationId;
-													var prop = animator.TargetPropertyPath;
-													if (!props.TryGetValue(animator.TargetPropertyPath, out var hash)) {
-														props[prop] = new HashSet<string>();
-													}
-													props[prop].Add(id);
-												}
-												foreach (var (property, animations) in props) {
-													if (animations.Count > 1) {
-														scrollView.Content.AddNode(
-															new ThemedButton {
-																Text = "Navigate",
-																Clicked = () => {
-																	//Project.Current.OpenDocument(doc.Path);
-																	NavigateToNode.Perform(node, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
-																}
-															}
-														);
-														scrollView.Content.AddNode(
-															new ThemedSimpleText($"{node}:\n[{property}] {string.Join(',', animations)}\n")
-														);
-
-													}
-												}
-											}
-										},
-									},
-									new ThemedCheckBox {
-										Checked = false,
-									},
-									new ThemedSimpleText("Global"),
-								},
-							},
-							new ThemedSimpleText($"Scenes: {Project.Current.AssetDatabase.Count(i => i.Value.Type == ".tan").ToString()}"),
-							new ThemedSimpleText($"Documents: {Project.Current.Documents.Count.ToString()}"),
-							new ThemedSimpleText($"Nodes: {Document.Current.RootNodeUnwrapped.Descendants.Count().ToString()}"),
+							controls,
 						},
 					};
 					instance.FocusScope = new KeyboardFocusScope(instance);
@@ -110,9 +47,62 @@ namespace Tangerine
 				return instance;
 			}
 
+			private static ThemedScrollView CreateScrollView()
+			{
+				var scrollView = new ThemedScrollView {
+					Content = {
+						Layout = new VBoxLayout { Spacing = 16 },
+						Padding = new Thickness(8),
+					},
+				};
+				scrollView.Content.CompoundPostPresenter.AddRange(new[] {
+					new SyncDelegatePresenter<Widget>((w) => {
+						w.PrepareRendererState();
+						var rect = CalcRect(w);
+						Renderer.DrawRect(rect.A, rect.B, Theme.Colors.GrayBackground.Transparentify(0.9f));
+					}),
+					new SyncDelegatePresenter<Widget>((w) => {
+						w.PrepareRendererState();
+						var rect = CalcRect(w);
+						Renderer.DrawRectOutline(rect.A, rect.B, Theme.Colors.ControlBorder);
+					}),
+				});
+				return scrollView;
+
+				static Rectangle CalcRect(Widget w)
+				{
+					var wp = w.ParentWidget;
+					var p = wp.Padding;
+					return new Rectangle(
+						-w.Position + Vector2.Zero - new Vector2(p.Left, p.Top),
+						-w.Position + wp.Size + new Vector2(p.Right, p.Bottom)
+					);
+				}
+			}
+
+			private static Widget CreateControls(ThemedScrollView scrollView)
+			{
+				return new Widget {
+					//Padding = new Thickness(8),
+					Layout = new HBoxLayout { Spacing = 8 },
+					LayoutCell = new LayoutCell(Alignment.LeftCenter),
+					Nodes = {
+						new ThemedButton {
+							Text = "Search",
+							Clicked = () => {
+								scrollView.Content.Nodes.Clear();
+								foreach (var info in ConflictingAnimatorsInfoProvider.Get(Document.Current.Path)) {
+									scrollView.Content.AddNode(new ConflictingAnimatorsItem(info));
+								}
+							},
+						},
+					},
+				};
+			}
+
 			public static bool OnClose(CloseReason reason)
 			{
-				position = instance.Window.DecoratedPosition;
+				position = instance?.Window?.DecoratedPosition;
 				instance = null;
 				return true;
 			}
@@ -121,7 +111,7 @@ namespace Tangerine
 		public ConflictingAnimatorsDialog()
 		{
 			var windowWidget = ConflictingAnimatorsWindowWidgetProvider.Get();
-			windowWidget.Window.Activate();
+			windowWidget.Window.Restore();
 			windowWidget.SetFocus();
 		}
 	}
