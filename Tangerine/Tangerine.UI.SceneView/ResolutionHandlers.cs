@@ -78,6 +78,10 @@ namespace Tangerine.UI.SceneView
 			var resolutionPreview = document.ResolutionPreview;
 			resolutionPreview.Enabled = true;
 			if (resolutionPreview.Preset == null) {
+				if (Preferences.Resolutions.Count() == 0) {
+					System.Console.WriteLine("Нет пресетов. Добавьте в .citproj");
+					return;
+				}
 				resolutionPreview.IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault;
 				resolutionPreview.Preset = !isReverse ? resolutions.First() : resolutions.Last();
 			} else {
@@ -105,6 +109,10 @@ namespace Tangerine.UI.SceneView
 			var resolutionPreview = document.ResolutionPreview;
 			resolutionPreview.Enabled = true;
 			if (resolutionPreview.Preset == null) {
+				if (Preferences.Resolutions.Count() == 0) {
+					System.Console.WriteLine("Нет пресетов. Добавьте в .citproj");
+					return;
+				} 
 				resolutionPreview.IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault;
 				resolutionPreview.Preset = Preferences.Resolutions.First();
 			} else {
