@@ -339,18 +339,7 @@ namespace Lime
 		{
 			var surfaceRect = holder.SurfaceFrame;
 			Size = new System.Drawing.Size(surfaceRect.Right - surfaceRect.Left, surfaceRect.Bottom - surfaceRect.Top);
-			// We don't use Display's rotation to determine orientation because it shows rotation
-			// from "natural" orientation. On some devices 0 degrees may refer to portrait and on some devices
-			// 0 degrees may refer to landscape.
-			DeviceOrientation orientation;
-			using (var realSize = new Android.Graphics.Point()) {
-				// On some tablets Surface may be created twice after resuming game if orientation is restricted -
-				// For example if you use tablet in landscape and game is restricted to portrait,
-				// surface will be created for landscape and on a next frame recreated for portrait.
-				// So we prefer to use Display's Real Size which seems always follow restricted orientation.
-				windowManager.DefaultDisplay.GetRealSize(realSize);
-				orientation = realSize.X < realSize.Y ? DeviceOrientation.Portrait : DeviceOrientation.LandscapeLeft;
-			}
+			var orientation = Size.Width < Size.Height ? DeviceOrientation.Portrait : DeviceOrientation.LandscapeLeft;
 			var deviceRotated = Application.CurrentDeviceOrientation != orientation;
 			Application.CurrentDeviceOrientation = orientation;
 			Resize?.Invoke(this, new ResizeEventArgs { DeviceRotated = deviceRotated });
