@@ -17,6 +17,9 @@ namespace Orange
 				node = node.Parent;
 				FillAnimationsScope(node, scope);
 			}
+			// Removes legacy animators from root. Those are also considered "dangling" since there's no parent and
+			// therefore no legacy animation to become an owner of those animators.
+			node.Animators.Clear();
 			return self.RemoveDanglingAnimators(scope);
 		}
 
