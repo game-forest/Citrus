@@ -36,7 +36,6 @@ namespace Tangerine.UI
 			}
 			ExpandableContent.Padding = new Thickness(left: 4.0f, right: 0.0f, top: 4.0f, bottom: 4.0f);
 			list = PropertyValue(EditorParams.Objects.First()).GetValue();
-			Expanded = true;
 
 			EditorContainer.AddNode(
 				new ThemedAddButton() {

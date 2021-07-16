@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
 
@@ -12,6 +14,8 @@ namespace Tangerine.UI
 	public class ExpandablePropertyEditor<T> : CommonPropertyEditor<T>, IExpandablePropertyEditor
 	{
 		private bool expanded;
+		private string editorPath;
+
 		public bool Expanded
 		{
 			get => expanded;
@@ -20,6 +24,11 @@ namespace Tangerine.UI
 				expanded = value;
 				ExpandButton.Expanded = value;
 				ExpandableContent.Visible = value;
+				if (value) {
+					CoreUserPreferences.Instance.InspectorExpandableEditorsState.TryAdd(editorPath, true);
+				} else {
+					CoreUserPreferences.Instance.InspectorExpandableEditorsState.Remove(editorPath);
+				}
 			}
 		}
 		public Widget ExpandableContent { get; }
@@ -41,6 +50,10 @@ namespace Tangerine.UI
 			ExpandableContent.AddChangeWatcher(() => EditorContainer.GloballyEnabled,
 				enabled => ExpandableContent.Enabled = enabled);
 			LabelContainer.Nodes.Insert(0, ExpandButton);
+			editorPath = editorParams.PropertyPath;
+			Expanded = Expanded ||
+				CoreUserPreferences.Instance.InspectorExpandableEditorsState.TryGetValue(editorPath, out var isEnabled) &&
+				isEnabled;
 		}
 	}
 }

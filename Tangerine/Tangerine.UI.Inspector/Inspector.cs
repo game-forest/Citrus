@@ -68,7 +68,6 @@ namespace Tangerine.UI.Inspector
 		{
 			Instance = this;
 			PanelWidget.PushNode(RootWidget);
-			content.LoadExpandedStates();
 			content.CreatedAddComponentsMenu += CreatedAddComponentsMenu;
 			Rebuild();
 		}
@@ -76,7 +75,6 @@ namespace Tangerine.UI.Inspector
 		public void Detach()
 		{
 			Instance = null;
-			content.SaveExpandedStates();
 			RootWidget.Unlink();
 			content.CreatedAddComponentsMenu -= CreatedAddComponentsMenu;
 		}
