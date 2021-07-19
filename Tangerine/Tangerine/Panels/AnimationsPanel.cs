@@ -604,6 +604,8 @@ namespace Tangerine.Panels
 				set { }
 			}
 
+			public string Looltip { get; private set; }
+
 			private static readonly StringBuilder stringBuilder = new StringBuilder(128);
 
 			private string label;
@@ -612,10 +614,12 @@ namespace Tangerine.Panels
 			{
 				stringBuilder.Clear();
 				label = null;
-				if (Node != Document.Current.RootNode) {
+				bool isRoot = Node == Document.Current.RootNode;
+				if (!isRoot) {
 					BuildLabelForNode(Node);
 				}
-				label = stringBuilder.ToString();
+				label = !isRoot && string.IsNullOrEmpty(Node.Id) ? Node.GetType().Name : Node.Id;
+				Looltip = stringBuilder.ToString();
 
 				void BuildLabelForNode(Node node)
 				{
@@ -1013,6 +1017,7 @@ namespace Tangerine.Panels
 			{
 				this.itemProvider = itemProvider;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+				Label.Components.Add(new TooltipComponent(() => ((NodeTreeViewItem)Item).Looltip));
 			}
 
 			private void ShowContextMenu()
