@@ -43,6 +43,14 @@ namespace Tangerine
 		}
 	}
 
+	public class LockLayout : CommandHandler
+	{
+		public override void Execute()
+		{
+			CoreUserPreferences.Instance.LockLayout = !CoreUserPreferences.Instance.LockLayout;
+		}
+	}
+
 	public class LoadLayout : CommandHandler
 	{
 		private static Yuzu.Json.JsonDeserializer deserializer = new Yuzu.Json.JsonDeserializer();
