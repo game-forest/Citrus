@@ -16,13 +16,18 @@ namespace Tangerine.UI
 			AssemblyName = assemblyName;
 		}
 
-		private static List<(string Name, Assembly Assembly)> assemblies = null;
+		static EmbeddedResource()
+		{
+			assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => (a.GetName().Name, a)).ToList();
+			AppDomain.CurrentDomain.AssemblyLoad += (sender, args) => {
+				assemblies.Add((args.LoadedAssembly.GetName().Name, args.LoadedAssembly));
+			};
+		}
+
+		private static List<(string Name, Assembly Assembly)> assemblies;
 
 		protected Assembly GetAssembly()
 		{
-			if (assemblies == null) {
-				assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => (a.GetName().Name, a)).ToList();
-			}
 			var resourcesAssembly = assemblies.SingleOrDefault(e => e.Name == AssemblyName).Assembly;
 			if (resourcesAssembly == null) {
 				throw new Lime.Exception("Assembly '{0}' doesn't exist", AssemblyName);
