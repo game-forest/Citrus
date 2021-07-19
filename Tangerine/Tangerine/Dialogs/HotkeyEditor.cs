@@ -432,6 +432,14 @@ namespace Tangerine.Dialogs
 			Key = key;
 			((KeyboardButtonPresenter) Presenter).IsModifier = Key.IsModifier();
 			State = KeyboardButtonState.None;
+			Awoke += Awake;
+		}
+
+		private static void Awake(Node owner)
+		{
+			var button = (KeyboardButton)owner;
+			button.Components.Add(new TooltipComponent(() => button.Text));
+			button.AddChangeWatcher(() => button.Enabled, _ => Window.Current.Invalidate());
 		}
 
 		public string CommandName
@@ -526,5 +534,7 @@ namespace Tangerine.Dialogs
 			float thickness = borderColor == ColorTheme.Current.Keyboard.SelectedBorder ? 2 : 1;
 			Renderer.DrawRectOutline(Vector2.Zero, widget.Size, borderColor, thickness);
 		}
+
+		public override bool PartialHitTest(Node node, ref HitTestArgs args) => node.PartialHitTest(ref args);
 	}
 }
