@@ -79,7 +79,7 @@ namespace Tangerine.UI.SceneView
 			resolutionPreview.Enabled = true;
 			if (resolutionPreview.Preset == null) {
 				if (Preferences.Resolutions.Count() == 0) {
-					System.Console.WriteLine("Нет пресетов. Добавьте в .citproj");
+					System.Console.WriteLine("There are no presets. Add them to .citproj");
 					return;
 				}
 				resolutionPreview.IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault;
@@ -110,7 +110,7 @@ namespace Tangerine.UI.SceneView
 			resolutionPreview.Enabled = true;
 			if (resolutionPreview.Preset == null) {
 				if (Preferences.Resolutions.Count() == 0) {
-					System.Console.WriteLine("Нет пресетов. Добавьте в .citproj");
+					System.Console.WriteLine("There are no presets. Add them to .citproj");
 					return;
 				} 
 				resolutionPreview.IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault;
