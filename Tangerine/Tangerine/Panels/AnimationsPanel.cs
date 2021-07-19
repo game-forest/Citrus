@@ -1066,7 +1066,7 @@ namespace Tangerine.Panels
 					var indentation = node.AsWidget;
 					var ro = RenderObjectPool<IndentationRenderObject>.Acquire();
 					ro.CaptureRenderState(indentation);
-					if (presentation.Item is AnimationTreeViewItem ai) {
+					if (presentation.Label.Visible && presentation.Item is AnimationTreeViewItem ai) {
 						ro.IsCurrentAnimation = ai.Animation == Document.Current.Animation;
 						ro.IndentationSize = presentation.IndentationSpacer.Size;
 						var label = presentation.Label;
