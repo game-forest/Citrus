@@ -989,6 +989,7 @@ namespace Tangerine.Panels
 				: base(treeView, item, options)
 			{
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+				IndentationSpacer.Presenter = new Presenter(this);
 			}
 
 			private void ShowContextMenu()
@@ -1048,6 +1049,65 @@ namespace Tangerine.Panels
 						}
 					}
 				});
+			}
+			
+			private class Presenter : IPresenter
+			{
+				private readonly AnimationTreeViewItemPresentation presentation;
+
+				private SerializableFont font;
+				private string measuredText;
+				private float measuredTextWidth;
+
+				public Presenter(AnimationTreeViewItemPresentation presentation) => this.presentation = presentation;
+
+				public RenderObject GetRenderObject(Node node)
+				{
+					var indentation = node.AsWidget;
+					var ro = RenderObjectPool<IndentationRenderObject>.Acquire();
+					ro.CaptureRenderState(indentation);
+					if (presentation.Item is AnimationTreeViewItem ai) {
+						ro.IsCurrentAnimation = ai.Animation == Document.Current.Animation;
+						ro.IndentationSize = presentation.IndentationSpacer.Size;
+						var label = presentation.Label;
+						if (!ReferenceEquals(label.Font, font) || !ReferenceEquals(label.Text, measuredText)) {
+							measuredTextWidth = label.Font.MeasureTextLine(label.Text, Theme.Metrics.TextHeight, 0).X;
+							measuredText = label.Text;
+							font = label.Font;
+						}
+						ro.RightSpacePosition = label.CalcPositionInSpaceOf(presentation.Widget).X + measuredTextWidth + 7;
+						ro.RightSpaceWidth = presentation.Widget.Width - ro.RightSpacePosition;
+					} else {
+						ro.IsCurrentAnimation = false;
+					}
+					return ro;
+				}
+
+				public bool PartialHitTest(Node node, ref HitTestArgs args) =>
+					DefaultPresenter.Instance.PartialHitTest(node, ref args);
+				
+				private class IndentationRenderObject : WidgetRenderObject
+				{
+					public bool IsCurrentAnimation;
+					public Vector2 IndentationSize;
+					public float RightSpacePosition;
+					public float RightSpaceWidth;
+					
+					public override void Render()
+					{
+						if (IsCurrentAnimation) {
+							PrepareRenderState();
+							float height = IndentationSize.Y / 2 + 0.5f;
+							var a1 = new Vector2(0, height - 1);
+							var b1 = new Vector2(IndentationSize.X, height + 1);
+							var a2 = new Vector2(RightSpacePosition, height - 1);
+							var b2 = new Vector2(RightSpacePosition + RightSpaceWidth, height + 1);
+							var color = new Color4(70, 160, 12);
+							Renderer.DrawRect(a1, b1, color);
+							Renderer.DrawRect(a2, b2, color);
+						}
+					}
+				}
 			}
 		}
 
