@@ -55,6 +55,12 @@
 		"IsLandscapeDefault": false,
 		"Resolutions": [
 			{
+				"Name": "Wide Screen",
+				"Width": 1366,
+				"Height": 768,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
 				"Name": "4:3 (iPad)",
 				"Width": 1024,
 				"Height": 768,
@@ -86,21 +92,33 @@
 			},
 			{
 				"Name": "iPhone X",
-				"Width": 1664,
-				"Height": 768,
+				"Width": 2436,
+				"Height": 1125,
 				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
 			},
 			{
-				"Name": "iPhone 5(rough), 6, 7, 8",
-				"Width": 1336,
-				"Height": 768,
-				"ResolutionMarkers": [ "Normal", "Default" ]
+				"Name": "iPhone 4",
+				"Width": 960,
+				"Height": 640,
+				"ResolutionMarkers": [ "Default" ]
 			},
 			{
-				"Name": "iPhone 4",
-				"Width": 1152,
-				"Height": 768,
-				"ResolutionMarkers": [ "4x3", "Normal", "Default" ]
+				"Name": "iPhone 5",
+				"Width": 1136,
+				"Height": 640,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "iPhone 6, 7, 8",
+				"Width": 1334,
+				"Height": 750,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "iPhone 6, 7, 8 Plus",
+				"Width": 1920,
+				"Height": 1080,
+				"ResolutionMarkers": [ "Default" ]
 			},
 			{
 				"Name": "iPhone 4S",
@@ -122,20 +140,20 @@
 			},
 			{
 				"Name": "Galaxy S8",
-				"Width": 1578,
-				"Height": 768,
+				"Width": 2960,
+				"Height": 1440,
 				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
 			},
 			{
 				"Name": "LG G6",
-				"Width": 1536,
-				"Height": 768,
+				"Width": 2880,
+				"Height": 1440,
 				"ResolutionMarkers": [ "Normal", "Default" ]
 			},
 			{
 				"Name": "Xperia Z4 Tablet",
-				"Width": 1280,
-				"Height": 800,
+				"Width": 2560,
+				"Height": 1600,
 				"ResolutionMarkers": [ "16x10", "Tablet", "Normal", "Default" ]
 			},
 			{

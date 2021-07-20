@@ -12,10 +12,6 @@ namespace Tangerine
 		static DisplayResolutions()
 		{
 			Items = new List<ResolutionInfo>();
-			Items.Add(new ResolutionInfo("iPhone5 Portrait", "@Portrait", new Vector2(640, 1136)));
-			Items.Add(new ResolutionInfo("iPhone5 Landscape", "@Landscape", new Vector2(1136, 640)));
-			Items.Add(new ResolutionInfo("iPad Portrait", "@iPadPortrait", new Vector2(768, 1024)));
-			Items.Add(new ResolutionInfo("iPad Landscape", "@iPadLandscape", new Vector2(1024, 768)));
 		}
 
 		private static void SetMarker(Node rootNode, string markerId)
