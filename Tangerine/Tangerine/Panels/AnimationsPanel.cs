@@ -888,7 +888,7 @@ namespace Tangerine.Panels
 				Widget.Nodes.Add(Label);
 			}
 
-			private void HighlightLabel(Widget widget, SimpleText label, string searchString)
+			protected void HighlightLabel(Widget widget, SimpleText label, string searchString)
 			{
 				if (string.IsNullOrEmpty(searchString)) {
 					return;
@@ -989,7 +989,7 @@ namespace Tangerine.Panels
 				: base(treeView, item, options)
 			{
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
-				IndentationSpacer.Presenter = new Presenter(this);
+				Widget.CompoundPostPresenter.Push(new Presenter(this));
 			}
 
 			private void ShowContextMenu()
@@ -1053,30 +1053,38 @@ namespace Tangerine.Panels
 			
 			private class Presenter : IPresenter
 			{
-				private readonly AnimationTreeViewItemPresentation presentation;
-
-				private SerializableFont font;
-				private string measuredText;
+				
+				private SerializableFont labelFont;
+				private string measuredLabelText;
 				private float measuredTextWidth;
+				
+				private readonly AnimationTreeViewItemPresentation presentation;
 
 				public Presenter(AnimationTreeViewItemPresentation presentation) => this.presentation = presentation;
 
 				public RenderObject GetRenderObject(Node node)
 				{
-					var indentation = node.AsWidget;
 					var ro = RenderObjectPool<IndentationRenderObject>.Acquire();
-					ro.CaptureRenderState(indentation);
-					if (presentation.Label.Visible && presentation.Item is AnimationTreeViewItem ai) {
+					var container = presentation.Widget;
+					var spacer = presentation.IndentationSpacer;
+					var expandButton = presentation.ExpandButton;
+					var label = presentation.Label;
+					ro.CaptureRenderState(container);
+					ro.ContainerSize = container.Size;
+					if (label.Visible && presentation.Item is AnimationTreeViewItem ai) {
 						ro.IsCurrentAnimation = ai.Animation == Document.Current.Animation;
-						ro.IndentationSize = presentation.IndentationSpacer.Size;
-						var label = presentation.Label;
-						if (!ReferenceEquals(label.Font, font) || !ReferenceEquals(label.Text, measuredText)) {
+						if (
+							!ReferenceEquals(label.Font, labelFont) || 
+							!ReferenceEquals(label.Text, measuredLabelText)
+						) {
 							measuredTextWidth = label.Font.MeasureTextLine(label.Text, Theme.Metrics.TextHeight, 0).X;
-							measuredText = label.Text;
-							font = label.Font;
+							measuredLabelText = label.Text;
+							labelFont = label.Font;
 						}
-						ro.RightSpacePosition = label.CalcPositionInSpaceOf(presentation.Widget).X + measuredTextWidth + 7;
-						ro.RightSpaceWidth = presentation.Widget.Width - ro.RightSpacePosition;
+						ro.LeftSpacePosition = spacer.Position.X;
+						ro.LeftSpaceWidth = spacer.Width + (expandButton.Visible ? 0 : expandButton.Width);
+						ro.RightSpacePosition = label.Position.X + measuredTextWidth + 7;
+						ro.RightSpaceWidth = container.Width - ro.RightSpacePosition;
 					} else {
 						ro.IsCurrentAnimation = false;
 					}
@@ -1089,17 +1097,19 @@ namespace Tangerine.Panels
 				private class IndentationRenderObject : WidgetRenderObject
 				{
 					public bool IsCurrentAnimation;
-					public Vector2 IndentationSize;
+					public Vector2 ContainerSize;
+					public float LeftSpacePosition;
+					public float LeftSpaceWidth;
 					public float RightSpacePosition;
 					public float RightSpaceWidth;
 					
 					public override void Render()
 					{
+						PrepareRenderState();
 						if (IsCurrentAnimation) {
-							PrepareRenderState();
-							float height = IndentationSize.Y / 2 + 0.5f;
-							var a1 = new Vector2(0, height - 1);
-							var b1 = new Vector2(IndentationSize.X, height + 1);
+							float height = ContainerSize.Y / 2 + 0.5f;
+							var a1 = new Vector2(LeftSpacePosition, height - 1);
+							var b1 = new Vector2(LeftSpacePosition + LeftSpaceWidth, height + 1);
 							var a2 = new Vector2(RightSpacePosition, height - 1);
 							var b2 = new Vector2(RightSpacePosition + RightSpaceWidth, height + 1);
 							var color = new Color4(70, 160, 12);
