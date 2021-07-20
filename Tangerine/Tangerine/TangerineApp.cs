@@ -89,7 +89,7 @@ namespace Tangerine
 			mainWidget.Window.AllowDropFiles = true;
 			mainWidget.AddChangeWatcher(() => Project.Current, _ => {
 				SetupMainWindowTitle(mainWidget);
-				TangerineMenu.RebuildCreateImportedTypeMenu();
+				TangerineMenu.RebuildProjectDependentMenus();
 			});
 			mainWidget.AddChangeWatcher(
 				() => Document.Current?.Container,
@@ -713,7 +713,6 @@ namespace Tangerine
 			h.Connect(GenericCommands.HelpMode, () => Documentation.IsHelpModeOn = !Documentation.IsHelpModeOn);
 			h.Connect(GenericCommands.About, () => About.DisplayInformation());
 			h.Connect(GenericCommands.ViewChangelog, () => Documentation.ShowHelp(Documentation.ChangelogPageName));
-			h.Connect(GenericCommands.ConvertToButton, new ConvertToButton());
 			h.Connect(Tools.AlignLeft, new AlignLeft());
 			h.Connect(Tools.AlignRight, new AlignRight());
 			h.Connect(Tools.AlignTop, new AlignTop());

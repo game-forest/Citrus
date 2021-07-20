@@ -146,7 +146,8 @@ namespace Tangerine.UI.Timeline
 		{
 			var label = new ThemedSimpleText {
 				HitTestTarget = true,
-				ForceUncutText = false, // We want ellipsed text if the panel is too narrow.
+				// To display ellipsis-minified text if the panel is too narrow.
+				ForceUncutText = false,
 				VAlignment = VAlignment.Center,
 				OverflowMode = TextOverflowMode.Ellipsis,
 				LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
@@ -382,8 +383,7 @@ namespace Tangerine.UI.Timeline
 						CreateSetColorMarkCommand("Violet", 6),
 						CreateSetColorMarkCommand("Gray", 7),
 					}),
-				Command.MenuSeparator,
-				GenericCommands.ConvertToButton
+				GenericCommands.ConvertTo
 			};
 			if (NodeCompositionValidator.CanHaveChildren(Node.GetType())) {
 				menu.Insert(8, new Command("Propagate Markers", () => {

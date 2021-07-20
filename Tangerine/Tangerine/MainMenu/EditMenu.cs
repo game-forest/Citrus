@@ -163,39 +163,6 @@ namespace Tangerine
 		}
 	}
 
-	public class ConvertToButton : DocumentCommandHandler
-	{
-		public override void ExecuteTransaction()
-		{
-			var rows = Document.Current.SelectedRows().ToList();
-			foreach (var row in rows) {
-				if (row.Components.Get<NodeRow>()?.Node is Frame frame) {
-					if (frame.DefaultAnimation.Markers.Count > 0) {
-						AlertDialog.Show("It is not possible to convert a widget with existing markers");
-						return;
-					}
-				} else {
-					AlertDialog.Show("Only frames can be converted");
-					return;
-				}
-			}
-			foreach (var row in rows) {
-				try {
-					NodeTypeConvert.Perform(row, typeof(Button), typeof(Widget), new HashSet<string> {
-						nameof(Node.Parent),
-						nameof(Node.Nodes),
-						nameof(Node.Animations),
-						nameof(Node.Animators)
-					});
-				} catch (InvalidOperationException e) {
-					AlertDialog.Show(e.Message);
-					Document.Current.History.RollbackTransaction();
-					return;
-				}
-			}
-		}
-	}
-
 	public class GeneratePreview : DocumentCommandHandler
 	{
 		public override void ExecuteTransaction()

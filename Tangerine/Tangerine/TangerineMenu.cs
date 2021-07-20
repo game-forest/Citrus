@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Lime;
 using Orange;
 using Tangerine.Core;
 using Tangerine.Core.Commands;
+using Tangerine.Core.Operations;
 using Tangerine.MainMenu;
 using Tangerine.UI;
 using Tangerine.UI.SceneView;
@@ -52,7 +54,7 @@ namespace Tangerine
 			}
 		}
 
-		public static void RebuildCreateImportedTypeMenu()
+		public static void RebuildProjectDependentMenus()
 		{
 			var menus = new[] { customNodes.Menu, GenericCommands.NewSceneWithCustomRoot.Menu, create };
 			foreach (var menu in menus) {
@@ -69,6 +71,7 @@ namespace Tangerine
 				Project.Current == Project.Null
 				? Project.GetNodeTypesOrdered("Lime")
 				: Project.Current.RegisteredNodeTypes;
+			GenericCommands.ConvertTo.Menu = GenerateConvertToMenu(registeredNodeTypes);
 			foreach (var type in registeredNodeTypes) {
 				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
 				var cmd = new Command("Create " + type.Name) {
@@ -110,6 +113,42 @@ namespace Tangerine
 				? null
 				: System.IO.Path.GetFileNameWithoutExtension(Project.Current.CitprojPath);
 			TangerineApp.Instance?.RefreshCreateNodeCommands();
+		}
+
+		private static IMenu GenerateConvertToMenu(IEnumerable<Type> registeredNodeTypes)
+		{
+			IMenu menu = new Menu();
+			foreach (var type in registeredNodeTypes) {
+				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+				var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+				ICommand command = new Command(CamelCaseToLabel(type.Name), () => {
+					Core.Document.Current.History.DoTransaction(() => {
+						var nodeRows = Document.Current.SelectedRows().Where(r => r.GetNode() != null).ToList();
+						foreach (var row in nodeRows) {
+							try {
+								NodeTypeConvert.Perform(row, type, typeof(Node));
+							} catch (InvalidOperationException e) {
+								AlertDialog.Show(e.Message);
+								Document.Current.History.RollbackTransaction();
+								return;
+							}
+						}
+					});
+				}) {
+					TooltipText = tooltipText
+				};
+				if (menuPath != null) {
+					menu.InsertCommandAlongPath(command, menuPath);
+				} else {
+					menu.Add(command);
+				}
+			}
+			return menu;
+		}
+
+		private static string CamelCaseToLabel(string text)
+		{
+			return Regex.Replace(Regex.Replace(text, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
 		}
 
 		private static bool IsNodeTypeCanBeRoot(Type type)
@@ -186,7 +225,7 @@ namespace Tangerine
 					SceneViewCommands.UntieWidgetsFromBones,
 					GenericCommands.ExportScene,
 					GenericCommands.UpsampleAnimationTwice,
-					GenericCommands.ConvertToButton,
+					GenericCommands.ConvertTo,
 					SceneViewCommands.GeneratePreview,
 					SceneViewCommands.AddComponentToSelection
 				}),

@@ -104,7 +104,7 @@ namespace Tangerine.UI
 		public static readonly ICommand LockLayout = new Command("Lock layout");
 		public static readonly ICommand SaveLayout = new Command("Save layout");
 		public static readonly ICommand LoadLayout = new Command("Load layout");
-		public static readonly ICommand ConvertToButton = new Command("Convert to Button");
+		public static readonly ICommand ConvertTo = new Command("Convert to");
 		public static readonly ICommand ClearCache = new Command("Clear cache");
 		public static readonly ICommand PurgeBackups = new Command("Purge Backups");
 		public static readonly ICommand ResetGlobalSettings = new Command("Reset global settings");
