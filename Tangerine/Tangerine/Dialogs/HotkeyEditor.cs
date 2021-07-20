@@ -2,6 +2,7 @@ using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Tangerine.Core;
 using Tangerine.UI;
 
@@ -432,7 +433,15 @@ namespace Tangerine.Dialogs
 			Key = key;
 			((KeyboardButtonPresenter) Presenter).IsModifier = Key.IsModifier();
 			State = KeyboardButtonState.None;
-			Components.Add(new TooltipComponent(() => Text));
+			
+			Components.Add(new TooltipComponent(() => {
+				var tooltip = new StringBuilder();
+				foreach (var command in Commands) {
+					tooltip.AppendLine(command.Title);
+				}
+
+				return tooltip.ToString();
+			}));
 		}
 
 		public string CommandName
