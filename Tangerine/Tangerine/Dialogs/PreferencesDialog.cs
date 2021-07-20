@@ -354,7 +354,9 @@ namespace Tangerine
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),  displayName: "Reload modified files")),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LockLayout),  displayName: "Lock layout"))
+					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LockLayout),  displayName: "Lock layout")),
+				new BooleanPropertyEditor(
+					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.AnimationPanelOldOrder),  displayName: "Animation panel old order")),
 			});
 			var boneWidthPropertyEditor =
 				new FloatPropertyEditor(

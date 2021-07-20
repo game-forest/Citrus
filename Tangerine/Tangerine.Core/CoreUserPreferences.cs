@@ -51,10 +51,12 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public bool ExperimentalTimelineHierarchy { get; set; }
 
-
 		[YuzuOptional]
 		public bool LockLayout { get; set; }
 
+		[YuzuOptional]
+		public bool AnimationPanelOldOrder { get; set; }
+		
 		public CoreUserPreferences()
 		{
 			ResetToDefaults();
