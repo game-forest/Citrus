@@ -67,8 +67,10 @@ namespace Tangerine.Common.Operations
 					UnlinkSceneItem.Perform(item);
 				}
 				int index = 0;
+				var groupSceneItem = Document.Current.GetSceneItemForObject(group);
 				foreach (var item in topSceneItems) {
-					LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(group), index++, item);
+					LinkSceneItem.Perform(groupSceneItem, index, item);
+					index = groupSceneItem.Rows.IndexOf(item) + 1;
 				}
 				foreach (var node in nodes) {
 					if (node is Widget) {
