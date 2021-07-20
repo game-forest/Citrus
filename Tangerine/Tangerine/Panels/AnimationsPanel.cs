@@ -411,6 +411,8 @@ namespace Tangerine.Panels
 			if (mode == TreeViewMode.AllHierarchy) {
 				nodeItems.Sort((a, b) =>
 					string.Compare(a.Label, b.Label, StringComparison.Ordinal));
+			} else if (!CoreUserPreferences.Instance.AnimationPanelOldOrder) {
+				nodeItems.Reverse();
 			}
 			foreach (var item in nodeItems) {
 				treeView.RootItem.Items.Add(item);
@@ -422,9 +424,11 @@ namespace Tangerine.Panels
 			// Animated (dis)appearance of list header.
 			if (animated && mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
 				scrollView.LayoutManager.Layout();
+				var reversed = CoreUserPreferences.Instance.AnimationPanelOldOrder;
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
-				var savedScrollPosition = scrollView.Behaviour.ScrollPosition;
-				scrollView.Behaviour.ScrollPosition += treeViewHeightDelta;
+				var savedScrollPosition = reversed ? 
+					scrollView.Behaviour.ScrollPosition : scrollView.Content.Height - scrollView.Height;
+				scrollView.Behaviour.ScrollPosition += reversed ? treeViewHeightDelta : 0;
 				scrollView.Behaviour.ScrollToItemVelocity = Math.Abs(treeViewHeightDelta * 5);
 				scrollView.Behaviour.ScrollTo(savedScrollPosition);
 			}
