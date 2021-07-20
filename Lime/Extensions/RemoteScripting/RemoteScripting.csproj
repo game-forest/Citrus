@@ -24,8 +24,6 @@
     <ProjectReference Include="..\..\Lime.Win.csproj" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)RemoteScripting.dll" "$(SolutionDir)RemoteScripting.net5.dll" /y</PostBuildEvent>
-  </PropertyGroup>
+  <PropertyGroup />
 
 </Project>
