@@ -297,11 +297,13 @@ namespace Tangerine.UI
 				return;
 			}
 			ClearWarnings();
-			var result = PropertyValidator.ValidateValue(value, EditorParams.PropertyInfo, out string message);
-			if (result != ValidationResult.Ok) {
-				AddWarning(message, result);
-				if (result == ValidationResult.Error) {
-					return;
+			var result = PropertyValidator.ValidateValue(EditorParams.RootObjects.First(), value, EditorParams.PropertyInfo);
+			foreach (var (validationResult, message) in result) {
+				if (validationResult != ValidationResult.Ok) {
+					AddWarning(message, validationResult);
+					if (validationResult == ValidationResult.Error) {
+						return;
+					}
 				}
 			}
 			DoTransaction(() => {
@@ -329,14 +331,17 @@ namespace Tangerine.UI
 			void ValidateAndApply(object o, ValueType current)
 			{
 				var next = valueProducer(current);
-				var result = PropertyValidator.ValidateValue(next, EditorParams.PropertyInfo, out var message);
-				if (result !=ValidationResult.Ok) {
-					if (!message.IsNullOrWhiteSpace() && o is Node node) {
-						message = $"{node.Id}: {message}";
-					}
-					AddWarning(message, result);
-					if (result == ValidationResult.Error) {
-						return;
+				var result = PropertyValidator.ValidateValue(EditorParams.RootObjects.First(), next, EditorParams.PropertyInfo);
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						var messageCopy = message;
+						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
+							messageCopy = $"{node.Id}: {messageCopy}";
+						}
+						AddWarning(messageCopy, validationResult);
+						if (validationResult == ValidationResult.Error) {
+							return;
+						}
 					}
 				}
 				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
@@ -412,15 +417,18 @@ namespace Tangerine.UI
 			_ = EditorParams.IsAnimable ? EditorParams.RootObjects : EditorParams.Objects;
 			foreach (var o in EditorParams.Objects) {
 				var result = PropertyValidator.ValidateValue(
+					owner: EditorParams.RootObjects.First(), 
 					value: PropertyValue(o).GetValue(),
-					propertyInfo: EditorParams.PropertyInfo,
-					message: out var message
+					propertyInfo: EditorParams.PropertyInfo
 				);
-				if (result != ValidationResult.Ok) {
-					if (!message.IsNullOrWhiteSpace() && o is Node node) {
-						message = $"{node.Id}: {message}";
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						var messageCopy = message;
+						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
+							messageCopy = $"{node.Id}: {messageCopy}";
+						}
+						AddWarning(messageCopy, validationResult);
 					}
-					AddWarning(message, result);
 				}
 			}
 		}

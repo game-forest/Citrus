@@ -224,6 +224,7 @@ namespace Lime
 		Ok,
 		Warning,
 		Error,
+		Info
 	}
 
 	/// <summary>
@@ -233,9 +234,45 @@ namespace Lime
 	/// </summary>
 	public abstract class TangerineValidationAttribute : Attribute
 	{
-		public abstract ValidationResult IsValid(object value, out string message);
+		public abstract ValidationResult IsValid(object owner, object value, out string message);
 	}
 
+	public class TangerineSizeInfo : TangerineValidationAttribute
+	{
+		public override ValidationResult IsValid(object owner, object value, out string message)
+		{
+			if (owner is Image image && value is Vector2 size) {
+				var imageSize = image.Texture.ImageSize;
+				var accuracy = 1e-4;
+				if (Math.Abs(imageSize.Height - size.Y) > accuracy || Math.Abs(imageSize.Width - size.X) > accuracy) {
+					message = $"Size of image is different from size of image on disc";
+					return ValidationResult.Info;
+				}
+			}
+
+			message = "";
+			return ValidationResult.Ok;
+		}
+	}
+
+	public class TangerineRatioInfo : TangerineValidationAttribute
+	{
+		public override ValidationResult IsValid(object owner, object value, out string message)
+		{
+			if (owner is Image image && value is Vector2 size) {
+				var imageSize = image.Texture.ImageSize;
+				var accuracy = 1e-4;
+				if (Math.Abs((float) imageSize.Width / (float) imageSize.Height - size.X / size.Y) > accuracy) {
+					message = $"Ratio of image is different from ratio of image on disc";
+					return ValidationResult.Info;
+				}
+			}
+
+			message = "";
+			return ValidationResult.Ok;
+		}
+	}
+	
 	public class TangerineValidRangeAttribute : TangerineValidationAttribute
 	{
 		public ValidationResult WarningLevel = ValidationResult.Warning;
@@ -255,7 +292,7 @@ namespace Lime
 			Minimum = minimum;
 		}
 
-		public override ValidationResult IsValid(object value, out string message)
+		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
 			var min = (IComparable)Minimum;
 			var max = (IComparable)Maximum;
@@ -277,7 +314,7 @@ namespace Lime
 	{
 		private static readonly Regex regex = new Regex(@"\p{IsCyrillic}", RegexOptions.Compiled);
 
-		public override ValidationResult IsValid(object value, out string message)
+		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
 			return IsValid(value as string, out message);
 		}
@@ -291,7 +328,7 @@ namespace Lime
 
 	public class TangerineTileImageTextureAttribute : TangerineValidationAttribute
 	{
-		public override ValidationResult IsValid(object value, out string message)
+		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
 			var res = value is ITexture texture && (texture.IsStubTexture ||
 			                                        !(texture.TextureParams.WrapModeU == TextureWrapMode.Clamp ||

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Lime;
 
@@ -6,16 +8,18 @@ namespace Tangerine.Core
 {
 	public static class PropertyValidator
 	{
-		public static ValidationResult ValidateValue(object value, Type type, string property, out string message)
+		public static List<(ValidationResult, string)> ValidateValue(object owner, object value, Type type, string property)
 		{
-			var attr = PropertyAttributes<TangerineValidationAttribute>.Get(type, property);
-			message = null;
-			return attr == null ? ValidationResult.Ok : attr.IsValid(value, out message);
+			var attributes = PropertyAttributes<TangerineValidationAttribute>.GetAll(type, property);
+			return attributes.Select(attribute => attribute == null
+					? (ValidationResult.Ok, "")
+					: (attribute.IsValid(owner, value, out var message), message))
+				.ToList();
 		}
 
-		public static ValidationResult ValidateValue(object value, PropertyInfo propertyInfo, out string message)
+		public static List<(ValidationResult, string)> ValidateValue(object owner, object value, PropertyInfo propertyInfo)
 		{
-			return ValidateValue(value, propertyInfo.DeclaringType, propertyInfo.Name, out message);
+			return ValidateValue(owner, value, propertyInfo.DeclaringType, propertyInfo.Name);
 		}
 	}
 }
