@@ -93,6 +93,8 @@ namespace Tangerine.Dialogs
 					button.CommandState = KeyboardCommandState.Generic;
 				}
 
+				button.CurrentCommands.Clear();
+				button.CurrentCommands.AddRange(currentCommands);
 				button.CommandName = currentCommands.FirstOrDefault(i => i.CategoryInfo == Category)?.Title;
 			}
 			SelectedShortcutChanged?.Invoke();
@@ -436,10 +438,9 @@ namespace Tangerine.Dialogs
 			
 			Components.Add(new TooltipComponent(() => {
 				var tooltip = new StringBuilder();
-				foreach (var command in Commands) {
-					tooltip.AppendLine(command.Title);
+				foreach (var command in CurrentCommands) {
+					tooltip.AppendLine($"{command.Title} <{command.Shortcut}>");
 				}
-
 				return tooltip.ToString();
 			}));
 		}
@@ -457,6 +458,8 @@ namespace Tangerine.Dialogs
 		}
 
 		public List<CommandInfo> Commands { get; private set; } = new List<CommandInfo>();
+		
+		public List<CommandInfo> CurrentCommands { get; private set; } = new List<CommandInfo>();
 
 		private KeyboardButtonState state;
 		public KeyboardButtonState State
