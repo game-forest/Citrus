@@ -457,7 +457,9 @@ namespace Tangerine.Panels
 			void TraverseNodeChildren(Row sceneTree)
 			{
 				var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
+				bool isCurrentNode = ((NodeTreeViewItem)nodeItem).Node == Document.Current.Container;
 				var nodeSatisfyFilter = Filter(nodeItem.Label);
+				bool isContainsEmptyLegacyAnimation = false;
 				foreach (var animationSceneItem in sceneTree.Rows) {
 					if (animationSceneItem.GetAnimation() == null) {
 						// Do not use LINQ trying to reduce GC pressure
@@ -469,11 +471,19 @@ namespace Tangerine.Panels
 							animationItem.Items.Add(provider.GetMarkerTreeViewItem(markerSceneItem));
 						}
 					}
-					if (animationItem.Items.Count > 0 || nodeSatisfyFilter || Filter(animationItem.Label)) {
-						nodeItem.Items.Add(animationItem);
+					var animation = animationSceneItem.GetAnimation();
+					bool isNotEmptyAnimation =
+						animationItem.Items.Count > 0 ||
+						animation.ValidatedEffectiveAnimators.Count > 0;
+					if (isNotEmptyAnimation || isCurrentNode || !animation.IsLegacy) {
+						if (nodeSatisfyFilter || Filter(animationItem.Label)) {
+							nodeItem.Items.Add(animationItem);
+						}
+					} else {
+						isContainsEmptyLegacyAnimation = true;
 					}
 				}
-				if (nodeItem.Items.Count > 0) {
+				if (nodeItem.Items.Count > 0 || string.IsNullOrEmpty(filter) && isContainsEmptyLegacyAnimation) {
 					((NodeTreeViewItem) nodeItem).RefreshLabel();
 					nodeItems.Add(nodeItem);
 				}
