@@ -432,14 +432,7 @@ namespace Tangerine.Dialogs
 			Key = key;
 			((KeyboardButtonPresenter) Presenter).IsModifier = Key.IsModifier();
 			State = KeyboardButtonState.None;
-			Awoke += Awake;
-		}
-
-		private static void Awake(Node owner)
-		{
-			var button = (KeyboardButton)owner;
-			button.Components.Add(new TooltipComponent(() => button.Text));
-			button.AddChangeWatcher(() => button.Enabled, _ => Window.Current.Invalidate());
+			Components.Add(new TooltipComponent(() => Text));
 		}
 
 		public string CommandName
