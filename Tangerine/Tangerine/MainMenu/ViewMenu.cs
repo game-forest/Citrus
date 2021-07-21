@@ -49,6 +49,11 @@ namespace Tangerine
 		{
 			CoreUserPreferences.Instance.LockLayout = !CoreUserPreferences.Instance.LockLayout;
 		}
+
+		public override void RefreshCommand(ICommand command)
+		{
+			command.Checked = CoreUserPreferences.Instance.LockLayout;
+		}
 	}
 
 	public class LoadLayout : CommandHandler
