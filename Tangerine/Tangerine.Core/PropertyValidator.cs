@@ -8,7 +8,7 @@ namespace Tangerine.Core
 {
 	public static class PropertyValidator
 	{
-		public static List<(ValidationResult, string)> ValidateValue(object owner, object value, Type type, string property)
+		public static List<(ValidationResult Result, string Message)> ValidateValue(object owner, object value, Type type, string property)
 		{
 			var attributes = PropertyAttributes<TangerineValidationAttribute>.GetAll(type, property);
 			return attributes.Select(attribute => attribute == null
@@ -17,7 +17,7 @@ namespace Tangerine.Core
 				.ToList();
 		}
 
-		public static List<(ValidationResult, string)> ValidateValue(object owner, object value, PropertyInfo propertyInfo)
+		public static List<(ValidationResult Result, string Message)> ValidateValue(object owner, object value, PropertyInfo propertyInfo)
 		{
 			return ValidateValue(owner, value, propertyInfo.DeclaringType, propertyInfo.Name);
 		}

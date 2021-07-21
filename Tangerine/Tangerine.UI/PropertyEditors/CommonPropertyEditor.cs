@@ -298,10 +298,10 @@ namespace Tangerine.UI
 			}
 			ClearWarnings();
 			var result = PropertyValidator.ValidateValue(EditorParams.RootObjects.First(), value, EditorParams.PropertyInfo);
-			foreach (var (validationResult, message) in result) {
-				if (validationResult != ValidationResult.Ok) {
-					AddWarning(message, validationResult);
-					if (validationResult == ValidationResult.Error) {
+			foreach (var tuple in result) {
+				if (tuple.Result != ValidationResult.Ok) {
+					AddWarning(tuple.Message, tuple.Result);
+					if (tuple.Result == ValidationResult.Error) {
 						return;
 					}
 				}
@@ -332,14 +332,14 @@ namespace Tangerine.UI
 			{
 				var next = valueProducer(current);
 				var result = PropertyValidator.ValidateValue(EditorParams.RootObjects.First(), next, EditorParams.PropertyInfo);
-				foreach (var (validationResult, message) in result) {
-					if (validationResult != ValidationResult.Ok) {
-						var messageCopy = message;
+				foreach (var tuple in result) {
+					if (tuple.Result != ValidationResult.Ok) {
+						var messageCopy = tuple.Message;
 						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
 							messageCopy = $"{node.Id}: {messageCopy}";
 						}
-						AddWarning(messageCopy, validationResult);
-						if (validationResult == ValidationResult.Error) {
+						AddWarning(messageCopy, tuple.Result);
+						if (tuple.Result == ValidationResult.Error) {
 							return;
 						}
 					}
@@ -421,13 +421,13 @@ namespace Tangerine.UI
 					value: PropertyValue(o).GetValue(),
 					propertyInfo: EditorParams.PropertyInfo
 				);
-				foreach (var (validationResult, message) in result) {
-					if (validationResult != ValidationResult.Ok) {
-						var messageCopy = message;
+				foreach (var tuple in result) {
+					if (tuple.Result != ValidationResult.Ok) {
+						var messageCopy = tuple.Message;
 						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
 							messageCopy = $"{node.Id}: {messageCopy}";
 						}
-						AddWarning(messageCopy, validationResult);
+						AddWarning(messageCopy, tuple.Result);
 					}
 				}
 			}
