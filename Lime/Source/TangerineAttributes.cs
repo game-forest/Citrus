@@ -224,7 +224,7 @@ namespace Lime
 		Ok,
 		Warning,
 		Error,
-		Info
+		Info,
 	}
 
 	/// <summary>
@@ -249,7 +249,6 @@ namespace Lime
 					return ValidationResult.Info;
 				}
 			}
-
 			message = "";
 			return ValidationResult.Ok;
 		}
@@ -267,7 +266,6 @@ namespace Lime
 					return ValidationResult.Info;
 				}
 			}
-
 			message = "";
 			return ValidationResult.Ok;
 		}
