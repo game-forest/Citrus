@@ -7,20 +7,20 @@ namespace Tangerine.Core
 {
 	public static class PropertyAttributes<T> where T: Attribute
 	{
-		static readonly Dictionary<Type, Dictionary<string, List<T>>> map = new Dictionary<Type, Dictionary<string, List<T>>>();
+		static readonly Dictionary<Type, Dictionary<string, T[]>> map = new Dictionary<Type, Dictionary<string, T[]>>();
 
 		public static T Get(System.Reflection.PropertyInfo property)
 		{
 			return Get(property.DeclaringType, property.Name);
 		}
 
-		public static List<T> GetAll(Type type, string property)
+		public static T[] GetAll(Type type, string property)
 		{
-			Dictionary<string, List<T>> propMap;
+			Dictionary<string, T[]> propMap;
 			if (!map.TryGetValue(type, out propMap)) {
-				map[type] = propMap = new Dictionary<string, List<T>>();
+				map[type] = propMap = new Dictionary<string, T[]>();
 			}
-			List<T> attr;
+			T[] attr;
 			if (!propMap.TryGetValue(property, out attr)) {
 				// use last part of property path in case it's Animator.PropertyPath
 				int index = property.LastIndexOf('.');
@@ -33,7 +33,7 @@ namespace Tangerine.Core
 				}
 				var prop = type.GetProperties().First(p => p.Name == actualProperty);
 				// workaround for hidden properties ambiguity (e.g. Layout.Owner vs NodeComponent.Owner)
-				propMap[property] = attr = prop.GetCustomAttributes(false).OfType<T>().ToList();
+				propMap[property] = attr = prop.GetCustomAttributes(false).OfType<T>().ToArray();
 			}
 			return attr;
 		}
