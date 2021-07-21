@@ -82,7 +82,8 @@ namespace Tangerine.UI
 				LayoutCell = new LayoutCell(),
 			};
 			ContainerWidget.AddNode(WarningsContainer);
-			Validate();
+			EditorContainer.AddLateChangeWatcher(CoalescedPropertyValue(), v => ClearWarningsAndValidate());
+			ClearWarningsAndValidate();
 		}
 
 		protected void AddWarning(string message, ValidationResult validationResult)
@@ -412,12 +413,13 @@ namespace Tangerine.UI
 		public virtual void Submit()
 		{ }
 
-		protected void Validate()
+		protected void ClearWarningsAndValidate()
 		{
+			ClearWarnings();
 			_ = EditorParams.IsAnimable ? EditorParams.RootObjects : EditorParams.Objects;
 			foreach (var o in EditorParams.Objects) {
 				var result = PropertyValidator.ValidateValue(
-					owner: EditorParams.RootObjects.First(), 
+					owner: o,
 					value: PropertyValue(o).GetValue(),
 					propertyInfo: EditorParams.PropertyInfo
 				);

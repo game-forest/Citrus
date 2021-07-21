@@ -26,14 +26,8 @@ namespace Tangerine.UI
 			var currentY = CoalescedPropertyComponentValue(v => v.Y);
 			editorX.Submitted += text => SetComponent(editorParams, 0, editorX, currentX.GetValue());
 			editorY.Submitted += text => SetComponent(editorParams, 1, editorY, currentY.GetValue());
-			editorX.AddLateChangeWatcher(currentX, v => {
-				editorX.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText;
-				SetComponent(editorParams, 0, editorX, new CoalescedValue<float>(editorX.Value, true));
-			});
-			editorY.AddLateChangeWatcher(currentY, v => {
-				editorY.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText;
-				SetComponent(editorParams, 1, editorY, new CoalescedValue<float>(editorY.Value, true));
-			});
+			editorX.AddLateChangeWatcher(currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			editorY.AddLateChangeWatcher(currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
 			ManageManyValuesOnFocusChange(editorX, currentX);
 			ManageManyValuesOnFocusChange(editorY, currentY);
 		}
