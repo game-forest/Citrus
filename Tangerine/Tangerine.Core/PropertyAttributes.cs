@@ -34,13 +34,10 @@ namespace Tangerine.Core
 				var prop = type.GetProperties().First(p => p.Name == actualProperty);
 				// workaround for hidden properties ambiguity (e.g. Layout.Owner vs NodeComponent.Owner)
 				propMap[property] = attr = prop.GetCustomAttributes(false).OfType<T>().ToList();
-				if (attr.Count == 0) {
-					attr.Add(null);
-				}
 			}
 			return attr;
 		}
 		
-		public static T Get(Type type, string property) => GetAll(type, property).First();
+		public static T Get(Type type, string property) => GetAll(type, property).FirstOrDefault();
 	}
 }
