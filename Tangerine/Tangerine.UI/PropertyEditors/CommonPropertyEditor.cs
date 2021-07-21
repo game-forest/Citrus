@@ -298,25 +298,32 @@ namespace Tangerine.UI
 				return;
 			}
 			ClearWarnings();
-			var result = PropertyValidator.ValidateValue(EditorParams.RootObjects.First(), value, EditorParams.PropertyInfo);
-			foreach (var tuple in result) {
-				if (tuple.Result != ValidationResult.Ok) {
-					AddWarning(tuple.Message, tuple.Result);
-					if (tuple.Result == ValidationResult.Error) {
-						return;
+			void ValidateAndApply(object o, object next)
+			{
+				var result = PropertyValidator.ValidateValue(o, next, EditorParams.PropertyInfo);
+				bool errorExist = false;
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						AddWarning(message, validationResult);
+						if (validationResult == ValidationResult.Error) {
+							errorExist = true;
+						}
 					}
 				}
+				if (errorExist) {
+					return;
+				}
+				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
+					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName, next);
 			}
 			DoTransaction(() => {
 				if (EditorParams.IsAnimable) {
 					foreach (var o in EditorParams.RootObjects) {
-						((IPropertyEditorParamsInternal)EditorParams)
-							.PropertySetter(o, EditorParams.PropertyPath, value);
+						ValidateAndApply(o, value);
 					}
 				} else {
 					foreach (var o in EditorParams.Objects) {
-						((IPropertyEditorParamsInternal)EditorParams)
-							.PropertySetter(o, EditorParams.PropertyName, value);
+						ValidateAndApply(o, value);
 					}
 				}
 			});
@@ -332,18 +339,22 @@ namespace Tangerine.UI
 			void ValidateAndApply(object o, ValueType current)
 			{
 				var next = valueProducer(current);
-				var result = PropertyValidator.ValidateValue(EditorParams.RootObjects.First(), next, EditorParams.PropertyInfo);
-				foreach (var tuple in result) {
-					if (tuple.Result != ValidationResult.Ok) {
-						var messageCopy = tuple.Message;
+				var result = PropertyValidator.ValidateValue(o, next, EditorParams.PropertyInfo);
+				bool errorExist = false;
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						var messageCopy = message;
 						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
 							messageCopy = $"{node.Id}: {messageCopy}";
 						}
-						AddWarning(messageCopy, tuple.Result);
-						if (tuple.Result == ValidationResult.Error) {
-							return;
+						AddWarning(messageCopy, validationResult);
+						if (validationResult == ValidationResult.Error) {
+							errorExist = true;
 						}
 					}
+				}
+				if (errorExist) {
+					return;
 				}
 				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
 					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName, next);
@@ -423,13 +434,13 @@ namespace Tangerine.UI
 					value: PropertyValue(o).GetValue(),
 					propertyInfo: EditorParams.PropertyInfo
 				);
-				foreach (var tuple in result) {
-					if (tuple.Result != ValidationResult.Ok) {
-						var messageCopy = tuple.Message;
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						var messageCopy = message;
 						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
 							messageCopy = $"{node.Id}: {messageCopy}";
 						}
-						AddWarning(messageCopy, tuple.Result);
+						AddWarning(messageCopy, validationResult);
 					}
 				}
 			}
