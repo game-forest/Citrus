@@ -67,8 +67,10 @@ namespace Tangerine.Core.Operations
 			doc.History.DoTransaction(() => {
 				Row newFocused = null;
 				foreach (var item in SceneTreeUtils.EnumerateSelectedTopSceneItems().ToList()) {
-					newFocused = FindFocusedAfterUnlink(item);
-					UnlinkSceneItem.Perform(item);
+					if (!(item.Parent.GetNode() is DistortionMesh)) {
+						newFocused = FindFocusedAfterUnlink(item);
+						UnlinkSceneItem.Perform(item);
+					}
 				}
 				if (newFocused != null) {
 					SelectRow.Perform(newFocused);
