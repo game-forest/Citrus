@@ -55,7 +55,7 @@ namespace Tangerine.Core
 		public bool LockLayout { get; set; }
 
 		[YuzuOptional]
-		public bool AnimationPanelOldOrder { get; set; }
+		public bool AnimationPanelReversedOrder { get; set; }
 		
 		public CoreUserPreferences()
 		{

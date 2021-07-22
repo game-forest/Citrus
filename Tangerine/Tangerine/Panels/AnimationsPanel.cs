@@ -411,7 +411,7 @@ namespace Tangerine.Panels
 			if (mode == TreeViewMode.AllHierarchy) {
 				nodeItems.Sort((a, b) =>
 					string.Compare(a.Label, b.Label, StringComparison.Ordinal));
-			} else if (!CoreUserPreferences.Instance.AnimationPanelOldOrder) {
+			} else if (!CoreUserPreferences.Instance.AnimationPanelReversedOrder) {
 				nodeItems.Reverse();
 			}
 			foreach (var item in nodeItems) {
@@ -424,7 +424,7 @@ namespace Tangerine.Panels
 			// Animated (dis)appearance of list header.
 			if (animated && mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
 				scrollView.LayoutManager.Layout();
-				var reversed = CoreUserPreferences.Instance.AnimationPanelOldOrder;
+				var reversed = CoreUserPreferences.Instance.AnimationPanelReversedOrder;
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
 				var savedScrollPosition = reversed ? 
 					scrollView.Behaviour.ScrollPosition : scrollView.Content.Height - scrollView.Height;
