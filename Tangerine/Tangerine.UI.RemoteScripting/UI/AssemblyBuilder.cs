@@ -246,6 +246,7 @@ namespace Tangerine.UI.RemoteScripting
 
 		private void ConfigurationChanged()
 		{
+			autoRebuildAssemblyAllowed = false;
 			TimeSinceAssemblyWasModified = 0;
 			fileSystemWatcher?.Dispose();
 			fileSystemWatcher = null;
