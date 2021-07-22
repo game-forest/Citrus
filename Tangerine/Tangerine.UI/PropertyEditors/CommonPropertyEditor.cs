@@ -305,9 +305,7 @@ namespace Tangerine.UI
 				foreach (var (validationResult, message) in result) {
 					if (validationResult != ValidationResult.Ok) {
 						AddWarning(message, validationResult);
-						if (validationResult == ValidationResult.Error) {
-							errorExist = true;
-						}
+						errorExist = validationResult == ValidationResult.Error;
 					}
 				}
 				if (errorExist) {
@@ -348,9 +346,7 @@ namespace Tangerine.UI
 							messageCopy = $"{node.Id}: {messageCopy}";
 						}
 						AddWarning(messageCopy, validationResult);
-						if (validationResult == ValidationResult.Error) {
-							errorExist = true;
-						}
+						errorExist = validationResult == ValidationResult.Error;
 					}
 				}
 				if (errorExist) {

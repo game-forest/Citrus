@@ -222,9 +222,9 @@ namespace Lime
 	public enum ValidationResult
 	{
 		Ok,
+		Info,
 		Warning,
 		Error,
-		Info,
 	}
 
 	/// <summary>
