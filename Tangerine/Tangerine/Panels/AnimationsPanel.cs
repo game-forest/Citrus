@@ -181,6 +181,7 @@ namespace Tangerine.Panels
 						break;
 					case AnimationTreeViewItem ai:
 						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(ai.Animation));
+						AnimationTreeViewItemPresentation.UpdateWarnings(treeView);
 						break;
 					case MarkerTreeViewItem mi:
 						Document.Current.History.DoTransaction(() => {
@@ -422,10 +423,11 @@ namespace Tangerine.Panels
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
 			}
-
+			
 			nodeItems.Clear();
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
+			TreeViewItem someAnimationItem = null;
 			if (mode == TreeViewMode.CurrentBranch) {
 				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(Document.Current.Container));
 			} else {
@@ -443,6 +445,9 @@ namespace Tangerine.Panels
 				treeView.RootItem.Items.Add(item);
 			}
 			treeView.Refresh();
+			if (someAnimationItem != null) {
+				AnimationTreeViewItemPresentation.UpdateWarnings(treeView);
+			}
 
 			var animated = previousContainer != Document.Current.Container;
 			previousContainer = Document.Current.Container;
@@ -507,6 +512,7 @@ namespace Tangerine.Panels
 					if (isNotEmptyAnimation || isCurrentNode || !animation.IsLegacy) {
 						if (nodeSatisfyFilter || Filter(animationItem.Label)) {
 							nodeItem.Items.Add(animationItem);
+							someAnimationItem = animationItem;
 						}
 					} else {
 						isContainsEmptyLegacyAnimation = true;
@@ -721,7 +727,7 @@ namespace Tangerine.Panels
 					});
 				}
 			}
-
+			
 			public override bool CanRename() => !Animation.IsLegacy && Animation.Id != Animation.ZeroPoseId;
 
 			public override ITexture Icon
@@ -983,6 +989,20 @@ namespace Tangerine.Panels
 
 		private class AnimationTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
+			private Widget warningWidget;
+			private string warningText;
+
+			public string WarningText
+			{
+				get { return warningText; }
+				set {
+					if (warningText != value) {
+						warningText = value;
+						warningWidget.Visible = !string.IsNullOrEmpty(warningText);
+					}
+				}
+			}
+			
 			public AnimationTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item,
 				TreeViewItemPresentationOptions options)
@@ -990,6 +1010,13 @@ namespace Tangerine.Panels
 			{
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 				Widget.CompoundPostPresenter.Push(new Presenter(this));
+				warningWidget = new Widget {
+					MinMaxSize = Vector2.One * TimelineMetrics.DefaultRowHeight,
+					HitTestTarget = true,
+					Visible = false
+				};
+				warningWidget.Components.Add(new TooltipComponent(() => warningText));
+				Widget.AddNode(warningWidget);
 			}
 
 			private void ShowContextMenu()
@@ -1049,10 +1076,41 @@ namespace Tangerine.Panels
 						}
 					}
 				});
+				UpdateWarnings(TreeView);
+			}
+			
+			public static void UpdateWarnings(TreeView treeView)
+			{
+				var activeAnimation = Document.Current.Animation;
+				bool isAfterActiveAnimation = activeAnimation == null || activeAnimation.IsLegacy;
+				var nodeItems = treeView.RootItem.Items;
+				foreach (var nodeItem in NodeItemsFromRootToLeaves(nodeItems)) {
+					foreach (var item in nodeItem.Items) {
+						if (item is AnimationTreeViewItem animationItem) {
+							isAfterActiveAnimation |= animationItem.Animation == activeAnimation;
+							var animation = animationItem.Animation;
+							((AnimationTreeViewItemPresentation)animationItem.Presentation).WarningText =
+								isAfterActiveAnimation || animation.IsLegacy || animation.Id != activeAnimation.Id ? 
+									null : "This animation has a higher priority than the active one.";
+						}
+					}
+				}
+				IEnumerable<TreeViewItem> NodeItemsFromRootToLeaves(TreeViewItemList nodeItems)
+				{
+					if (nodeItems.Count > 0) {
+						bool isDirectOrder = ((NodeTreeViewItem)nodeItems[^1]).Node == Document.Current.RootNode;
+						int step = isDirectOrder ? 1 : -1;
+						int currentNodeItemIndex = isDirectOrder ? 0 : nodeItems.Count - 1;
+						for (int i = 0; i < nodeItems.Count; i++, currentNodeItemIndex += step) {
+							yield return nodeItems[currentNodeItemIndex];
+						}
+					}
+				}
 			}
 			
 			private class Presenter : IPresenter
 			{
+				private static readonly ITexture warningTexture = IconPool.GetTexture("Inspector.Warning");
 				
 				private SerializableFont labelFont;
 				private string measuredLabelText;
@@ -1069,7 +1127,10 @@ namespace Tangerine.Panels
 					var spacer = presentation.IndentationSpacer;
 					var expandButton = presentation.ExpandButton;
 					var label = presentation.Label;
+					var warning = presentation.warningWidget;
 					ro.CaptureRenderState(container);
+					ro.IsWarning = warning.Visible;
+					ro.WarningPosition = warning.Position.X;
 					ro.ContainerSize = container.Size;
 					if (label.Visible && presentation.Item is AnimationTreeViewItem ai) {
 						ro.IsCurrentAnimation = ai.Animation == Document.Current.Animation;
@@ -1084,6 +1145,9 @@ namespace Tangerine.Panels
 						ro.LeftSpacePosition = spacer.Position.X;
 						ro.LeftSpaceWidth = spacer.Width + (expandButton.Visible ? 0 : expandButton.Width);
 						ro.RightSpacePosition = label.Position.X + measuredTextWidth + 7;
+						if (warning.Visible) {
+							ro.RightSpacePosition = Mathf.Min(ro.RightSpacePosition, warning.Position.X);
+						}
 						ro.RightSpaceWidth = container.Width - ro.RightSpacePosition;
 					} else {
 						ro.IsCurrentAnimation = false;
@@ -1096,6 +1160,8 @@ namespace Tangerine.Panels
 				
 				private class IndentationRenderObject : WidgetRenderObject
 				{
+					public bool IsWarning;
+					public float WarningPosition;
 					public bool IsCurrentAnimation;
 					public Vector2 ContainerSize;
 					public float LeftSpacePosition;
@@ -1115,6 +1181,13 @@ namespace Tangerine.Panels
 							var color = new Color4(70, 160, 12);
 							Renderer.DrawRect(a1, b1, color);
 							Renderer.DrawRect(a2, b2, color);
+						}
+						if (IsWarning) {
+							var position = new Vector2(WarningPosition, 0);
+							var size = 24 * Vector2.One;
+							var uv0 = Vector2.Zero;
+							var uv1 = Vector2.One;
+							Renderer.DrawSprite(warningTexture, Color4.White, position, size, uv0, uv1);
 						}
 					}
 				}
