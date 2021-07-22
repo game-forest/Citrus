@@ -1,5 +1,6 @@
 #if WIN
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,21 @@ namespace Lime
 
 		public Menu(bool ignoreFirstFocusLoss = false) : base()
 		{
+			var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+			var menuType = NativeContextMenu.GetType();
+			var scroll =
+				menuType.GetMethod("ScrollInternal", flags, null, new[] { typeof(bool) }, null);
+			var btnUp = (ToolStripControlHost)
+				menuType.BaseType.GetProperty("UpScrollButton", flags).GetValue(NativeContextMenu);
+			var btnDown = (ToolStripControlHost)
+				menuType.BaseType.GetProperty("DownScrollButton", flags).GetValue(NativeContextMenu);
+			NativeContextMenu.MouseWheel += (s, e) => {
+				bool canScrollUp = btnUp.Visible && btnUp.Enabled && e.Delta > 0;
+				bool canScrollDown = btnDown.Visible && btnDown.Enabled && e.Delta < 0;
+				if (canScrollDown || canScrollUp) {
+					scroll.Invoke(NativeContextMenu, new object[] { canScrollUp });
+				}
+			};
 			if (!ignoreFirstFocusLoss) {
 				return;
 			}
