@@ -51,14 +51,10 @@ namespace Tangerine.Core
 				ScriptsAssemblyName = (string)json.ScriptsAssemblyName;
 				var projectReferencesPath = Path.Combine(projectDirectory, (string)json.ProjectReferencesPath);
 				var frameworkReferencesPath = Path.Combine(
-						projectDirectory,
-						(string)(json.FrameworkReferencesPath ?? defaultFrameworkPath)
-					);
-				var references = new List<string>();
-				foreach (string reference in json.FrameworkReferences) {
-					references.Add(reference);
-				}
-				foreach (string reference in defaultFrameworkReferences.Concat(references).Distinct()) {
+					projectDirectory,
+					(string)(json.FrameworkReferencesPath ?? defaultFrameworkPath)
+				);
+				foreach (string reference in json.FrameworkReferences ?? defaultFrameworkReferences) {
 					frameworkReferences.Add(AssetPath.CorrectSlashes(Path.Combine(frameworkReferencesPath, reference)));
 				}
 				foreach (string reference in json.ProjectReferences) {
