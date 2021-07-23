@@ -30,6 +30,8 @@ namespace Tangerine.UI.Timeline
 					CreateApplyZeroPoseButton(),
 					CreateAnimationIndicator(),
 					new Widget(),
+					CreatePlaybackButton(),
+					CreateStopButton(),
 					CreateExitButton(),
 					CreateShowAnimatorsButton(),
 					CreateLockAnimationButton(),
@@ -73,6 +75,32 @@ namespace Tangerine.UI.Timeline
 			button.Clicked += () => CoreUserPreferences.AutoKeyframes = !CoreUserPreferences.AutoKeyframes;
 			button.Components.Add(new DocumentationComponent("AutomaticKeyframes"));
 			button.AddChangeWatcher(() => Document.Current.Animation.IsCompound, v => button.Visible = !v);
+			return button;
+		}
+
+		ToolbarButton CreatePlaybackButton()
+		{
+			var imgPlay = IconPool.GetTexture("Timeline.Play");
+			var imgPause = IconPool.GetTexture("Timeline.Pause");
+			var button = new ToolbarButton(imgPlay) { Tooltip = "Play Animation" };
+			button.AddChangeWatcher(() => Document.Current.PreviewAnimation, i => {
+				button.Texture = i ? imgPause : imgPlay;
+				button.Tooltip = i ? "Pause Animation" : "Play Animation";
+			});
+			button.Clicked += () => (SceneViewCommands.PreviewOrPauseAnimation as Command)?.Issue();
+			button.Components.Add(new DocumentationComponent("PlaybackAnimation"));
+			return button;
+		}
+
+		ToolbarButton CreateStopButton()
+		{
+			var button = new ToolbarButton(IconPool.GetTexture("Timeline.Stop")) { Tooltip = "Stop Animation" };
+			button.Clicked += () => {
+				if (Document.Current.PreviewAnimation) {
+					(SceneViewCommands.PreviewOrStopAnimation as Command)?.Issue();
+				}
+			};
+			button.Components.Add(new DocumentationComponent("StopAnimation"));
 			return button;
 		}
 
