@@ -73,6 +73,7 @@
     <Compile Include="InspectorPropertyRegistry.cs" />
     <Compile Include="KeyframeButton.cs" />
     <Compile Include="KeyframeDataflow.cs" />
+    <Compile Include="KeyFunctionDropdown.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Orange\Orange.Mac.csproj">

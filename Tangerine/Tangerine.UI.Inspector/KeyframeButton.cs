@@ -12,6 +12,7 @@ namespace Tangerine.UI.Inspector
 		private readonly Image image;
 		private readonly Image fillImage;
 		private readonly Image outlineImage;
+		private static KeyFunctionDropdown dropdown => KeyFunctionDropdown.Instance;
 		private static readonly string[] iconNames = new[] { "Linear", "Step", "Catmullrom", "Loop" };
 		private readonly List<ITexture> fillTextures = new List<ITexture>();
 		private readonly List<ITexture> outlineTextures = new List<ITexture>();
@@ -35,12 +36,18 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
+		public int SwitchIndex => CoreUserPreferences.Instance.SwapMouseButtonsForKeyframeSwitch ? 0 : 1;
+
 		public void SetKeyFunction(KeyFunction function)
 		{
 			this.function = function;
 			fillImage.Texture = fillTextures[(int)function];
 			outlineImage.Texture = outlineTextures[(int)function];
 		}
+
+		public void ShowDropdown() => dropdown.ShowWindow(this, fillTextures);
+
+		public void HideDropdown() => dropdown.HideWindow();
 
 		private static void Awake(Node owner)
 		{
@@ -50,6 +57,23 @@ namespace Tangerine.UI.Inspector
 		}
 
 		public bool WasRightClicked() => rightClickGesture?.WasRecognized() ?? false;
+
+		public bool IsRightMousePressed() => Input.IsMousePressed(SwitchIndex);
+
+		public IEnumerator<object> DelayIfPressed(float duration)
+		{
+			for (float t = 0; t < duration; t += Task.Current.Delta) {
+				if (!Input.IsMousePressed(SwitchIndex)) {
+					break;
+				}
+				yield return null;
+			}
+		}
+
+		public bool TryGetKeyFunctionFromDropdown(out KeyFunction kf)
+		{
+			return dropdown.TryGetKeyFunction(out kf);
+		}
 
 		public KeyframeButton()
 		{
@@ -92,6 +116,26 @@ namespace Tangerine.UI.Inspector
 				button.Checked = kf.HasValue;
 				if (kf.HasValue) {
 					button.SetKeyFunction(kf.Value);
+				}
+				yield return button.DelayIfPressed(0.2f);
+				if (button.IsRightMousePressed()) {
+					button.ShowDropdown();
+					while (button.IsRightMousePressed()) {
+						yield return null;
+					}
+					if (button.TryGetKeyFunctionFromDropdown(out var keyFunction)) {
+						Document.Current.History.DoTransaction(() => {
+							if (!kf.HasValue) {
+								SetKeyframe(true);
+								button.Checked = true;
+							}
+							SetKeyFunction(keyFunction);
+							button.SetKeyFunction(keyFunction);
+						});
+					}
+					yield return null;
+					button.HideDropdown();
+					continue;
 				}
 				bool wasClicked = button.WasClicked();
 				bool wasRightClicked = button.WasRightClicked();
