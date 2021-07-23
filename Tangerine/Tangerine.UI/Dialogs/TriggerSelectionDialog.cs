@@ -165,7 +165,7 @@ namespace Tangerine.UI
 							} else {
 								visiblePreviews.Remove(preview);
 							}
- 						});
+						});
 					}
 				}
 				animationIndex++;
@@ -193,14 +193,12 @@ namespace Tangerine.UI
 		private IEnumerator<object> AttachPreviewsTask(ScrollView scrollView, List<AnimationPreview> previews, HashSet<AnimationPreview> visiblePreviews)
 		{
 			while (true) {
-				if (!scrollView.IsScrolling()) {
-					foreach (var p in previews) {
-						if (visiblePreviews.Contains(p) != p.IsAttached) {
-							if (!p.IsAttached) {
-								p.Attach();
-							} else {
-								p.Detach();
-							}
+				foreach (var p in previews) {
+					if (visiblePreviews.Contains(p) != p.IsAttached) {
+						if (!p.IsAttached) {
+							p.Attach();
+						} else {
+							p.Detach();
 						}
 					}
 				}
@@ -526,8 +524,8 @@ namespace Tangerine.UI
 
 			private IEnumerator<object> RestartAnimationOnNextFrame()
 			{
+				yield return null;
 				incrementalFF.FastForward(clone, animationIndex, frame);
-				yield break;
 			}
 
 			public void Detach()
