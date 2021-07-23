@@ -22,10 +22,12 @@ namespace Tangerine.Core.Operations
 				result.Components.Add(Cloner.Clone(assetBundlePathComponent));
 			} else {
 				int j = 0;
+				var resultSceneItem = Document.Current.GetSceneItemForObject(result);
 				foreach (var i in sceneItem.Rows.ToList()) {
 					if (i.TryGetNode(out _) || i.TryGetFolder(out _)) {
 						UnlinkSceneItem.Perform(i);
-						LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(result), j++, i);
+						LinkSceneItem.Perform(resultSceneItem, j, i);
+						j = resultSceneItem.Rows.IndexOf(i) + 1;
 					}
 				}
 			}
