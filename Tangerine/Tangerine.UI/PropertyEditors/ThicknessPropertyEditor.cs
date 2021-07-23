@@ -15,9 +15,13 @@ namespace Tangerine.UI
 			EditorContainer.AddNode(new Widget {
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 },
 				Nodes = {
+					new ThemedSimpleText("L"),
 					(editorLeft = editorParams.NumericEditBoxFactory()),
+					new ThemedSimpleText("R"),
 					(editorRight = editorParams.NumericEditBoxFactory()),
+					new ThemedSimpleText("T"),
 					(editorTop = editorParams.NumericEditBoxFactory()),
+					new ThemedSimpleText("B"),
 					(editorBottom = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
 				}
