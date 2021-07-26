@@ -124,15 +124,20 @@ namespace Tangerine.UI.SceneView
 
 	public sealed class ResolutionPreviewOperation : Operation
 	{
+		static ResolutionPreviewOperation()
+		{
+			Project.DocumentSaving += (Document document) => {
+				if (document.ResolutionPreview.Enabled) {
+					Perform(DisabledResolutionPreview, requiredSave: false);
+				}
+			};
+		}
+
 		private static bool ResolutionPreviewMode
 		{
-			set {
+			set
+			{
 				var document = Document.Current;
-				if (!document.ResolutionPreview.Enabled && value) {
-					Project.DocumentSaving += DocumentOnSaving;
-				} else if (document.ResolutionPreview.Enabled && !value) {
-					Project.DocumentSaving -= DocumentOnSaving;
-				}
 				document.ResolutionPreview = new ResolutionPreview {
 					Enabled = value,
 					Preset = document.ResolutionPreview.Preset,
@@ -152,8 +157,6 @@ namespace Tangerine.UI.SceneView
 		private readonly bool requiredSave;
 
 		public override bool IsChangingDocument => false;
-
-		private static void DocumentOnSaving(Document document) => Perform(DisabledResolutionPreview, requiredSave: false);
 
 		public static void Perform(ResolutionPreview resolutionPreview, bool requiredSave = true)
 		{
