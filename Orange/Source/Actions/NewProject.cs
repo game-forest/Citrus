@@ -88,7 +88,7 @@ namespace Orange
 						var fileUri = new Uri(targetPath);
 						var relativeUri = fileUri.MakeRelativeUri(citrusUri);
 						// TODO: apply only to .sln and .csproj file
-						text = text.Replace("..\\..\\..", relativeUri.ToString());
+						text = text.Replace("..\\..\\..", relativeUri.ToString().Replace('/', '\\'));
 						if (targetPath.EndsWith(".citproj", StringComparison.OrdinalIgnoreCase)) {
 							text = text.Replace("\"CitrusDirectory\": \"../../\",", $"\"CitrusDirectory\": \"{relativeUri}\",");
 							newProjectCitprojPath = targetPath;
@@ -107,9 +107,9 @@ namespace Orange
 			var relativeSourceCitrusPath = new Uri(targetDirectory).MakeRelativeUri(new Uri(citrusPath)).ToString();
 			Git.Exec(targetDirectory, "init");
 			Git.Exec(targetDirectory, "add -A");
-			Git.Exec(targetDirectory, $"submodule add {relativeSourceCitrusPath} citrus");
+			Git.Exec(targetDirectory, $"submodule add {relativeSourceCitrusPath} Citrus");
 			Git.Exec(targetDirectory, "submodule update --init --recursive");
-			Git.Exec(targetDirectory, $"submodule set-url citrus {citrusRemoteUri}");
+			Git.Exec(targetDirectory, $"submodule set-url Citrus {citrusRemoteUri}");
 			Git.Exec(targetDirectory, "submodule sync");
 			Git.Exec(targetDirectory, "submodule foreach git submodule sync");
 			Git.Exec(targetDirectory, "submodule update --init --recursive");

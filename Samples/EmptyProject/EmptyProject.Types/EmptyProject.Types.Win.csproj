@@ -34,7 +34,6 @@
     <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.SceneView\Tangerine.UI.SceneView.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
     <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.Timeline\Tangerine.UI.Timeline.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
     <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI\Tangerine.UI.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
-    <ProjectReference Include="..\..\..\Tangerine\Tangerine\Tangerine.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
   </ItemGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
