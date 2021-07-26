@@ -696,7 +696,7 @@ namespace Tangerine
 				() => new LookupDialog(LookupSections.SectionType.DocumentAnimations)
 			);
 			h.Connect(GenericCommands.LookupComponents, () => new LookupDialog(LookupSections.SectionType.Components));
-			h.Connect(GenericCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimatorsDialog());
+			h.Connect(GenericCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimatorsWindow());
 			h.Connect(GenericCommands.Group, new GroupNodes());
 			h.Connect(GenericCommands.Ungroup, new UngroupNodes());
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
