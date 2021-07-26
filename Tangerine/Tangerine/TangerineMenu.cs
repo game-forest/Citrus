@@ -196,6 +196,7 @@ namespace Tangerine
 				}),
 				new Command("View", (viewMenu = new Menu {
 					new Command("Layouts", (new Menu {
+						GenericCommands.LockLayout,
 						GenericCommands.SaveLayout,
 						GenericCommands.LoadLayout,
 						GenericCommands.DefaultLayout,

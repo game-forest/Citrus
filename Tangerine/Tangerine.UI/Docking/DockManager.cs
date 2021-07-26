@@ -244,6 +244,7 @@ namespace Tangerine.UI.Docking
 			splitter.SeparatorDragColor = Theme.Colors.SeparatorDragColor;
 			splitter.SeparatorWidth = 5f;
 			splitter.SeparatorActiveAreaWidth = 6f;
+			splitter.Tasks.AddLoop(() => splitter.IsLocked = CoreUserPreferences.Instance.LockLayout);
 			Widget rootWidget = splitter;
 			bool hasTabBarPlacement = false;
 			// Due to the mechanism of docking size refreshing, Placements[i] does not
@@ -416,9 +417,12 @@ namespace Tangerine.UI.Docking
 		{
 			var db = new DragBehaviour(inputWidget, contentWidget, placement);
 			db.OnUndock += (positionOffset, windowPosition) => {
+				if (CoreUserPreferences.Instance.LockLayout) {
+					return;
+				}
 				var panelWindow = (WindowWidget)contentWidget.GetRoot();
 				var windowPlacement = Model.GetWindowByPlacement(placement);
-				if (windowPlacement.Root.GetPanelPlacements().Count(p => !p.Hidden) > 1) {
+				if (windowPlacement.Root.GetPanelPlacements().Count(p => !p.Hidden) > 1 && !CoreUserPreferences.Instance.LockLayout) {
 					var globalSize = placement.CalcGlobalStretch() * panelWindow.Size;
 					var wrapper = new WindowPlacement {
 						Size = new Vector2(Mathf.Max(panelMinWidth, globalSize.X), globalSize.Y)
@@ -685,6 +689,9 @@ namespace Tangerine.UI.Docking
 
 			private static void Render(Widget widget)
 			{
+				if (CoreUserPreferences.Instance.LockLayout) {
+					return;
+				}
 				var comp = widget.Components.Get<RequestedDockingComponent>();
 				if (!comp.Bounds.HasValue) return;
 				widget.PrepareRendererState();

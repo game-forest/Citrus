@@ -20,6 +20,8 @@ namespace Lime
 		public Color4 SeparatorHighlightColor;
 		public Color4 SeparatorDragColor;
 
+		public bool IsLocked { get; set; }
+
 		public abstract float SeparatorWidth { get; set; }
 
 		public List<float> Stretches { get; set; } = new List<float>();
@@ -143,7 +145,7 @@ namespace Lime
 					separartorRenderer.SeparatorUnderMouse = p.SeparatorUnderMouse;
 					isNeedToInvalidate = true;
 				}
-				if (IsMouseOver() && separartorRenderer.SeparatorUnderMouse >= 0) {
+				if (IsMouseOver() && separartorRenderer.SeparatorUnderMouse >= 0 && !IsLocked) {
 					WidgetContext.Current.MouseCursor = MouseCursor.SizeWE;
 					if (Input.WasMousePressed()) {
 						separartorRenderer.isSeparatorUnderMouseDrag = true;

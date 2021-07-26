@@ -353,6 +353,8 @@ namespace Tangerine
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LookupItemsLimit),  displayName: "Limit the number of lookup items")),
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),  displayName: "Reload modified files")),
+				new BooleanPropertyEditor(
+					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LockLayout),  displayName: "Lock layout"))
 			});
 			var boneWidthPropertyEditor =
 				new FloatPropertyEditor(

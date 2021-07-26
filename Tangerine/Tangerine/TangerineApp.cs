@@ -697,6 +697,7 @@ namespace Tangerine
 			h.Connect(GenericCommands.PreviousDocument, new SetPreviousDocument());
 			h.Connect(GenericCommands.DefaultLayout, new ViewDefaultLayout());
 			h.Connect(GenericCommands.SaveLayout, new SaveLayout());
+			h.Connect(GenericCommands.LockLayout, new LockLayout());
 			h.Connect(GenericCommands.LoadLayout, new LoadLayout());
 			h.Connect(GenericCommands.ExportScene, new ExportScene());
 			h.Connect(GenericCommands.InlineExternalScene, new InlineExternalScene());
