@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
 using Tangerine.UI;
+using KeyframeColor = Tangerine.Core.PropertyAttributes<Lime.TangerineKeyframeColorAttribute>;
 
 namespace Tangerine
 {
@@ -10,55 +11,82 @@ namespace Tangerine
 	{
 		private const string AssetType = ".tan";
 
-		public static IEnumerable<ConflictingAnimatorsInfo> Get(string assetName)
+		private static HashSet<string> visited;
+
+		public static void Invalidate() => visited = null;
+
+		public static IEnumerable<ConflictingAnimatorsInfo> Get(string assetName = null, bool shouldTraverseExternalScenes = true)
 		{
 			if (Project.Current == null) yield break;
 
+			visited ??= new HashSet<string>();
 			assetName ??= string.Empty;
-			var used = new HashSet<string>();
 			var assets = Project.Current.AssetDatabase
 				.Where(asset => asset.Value.Type == AssetType && asset.Value.Path.EndsWith(assetName))
 				.Select(asset => asset.Value.Path);
 
 			foreach (var asset in assets) {
-				if (used.Contains(asset)) continue;
-				used.Add(asset);
+				if (visited.Contains(asset)) continue;
+				visited.Add(asset);
 
-				var root = Node.Load(asset);
+				Node root;
+				try {
+					root = Node.Load(asset);
+				} catch {
+					continue;
+				}
+
 				var queue = new Queue<Node>(root.Nodes);
 				while (queue.Count > 0) {
 					var node = queue.Dequeue();
+					var documentPath = asset;
+					var relativePathStack = new Stack<string>();
+					relativePathStack.Push(node.Id);
+					foreach (var ancestor in node.Ancestors) {
+						if (ancestor.Components.TryGet<Node.AssetBundlePathComponent>(out var pathComponent)) {
+							documentPath = pathComponent.Path.Replace(AssetType, string.Empty);
+							break;
+						}
+						relativePathStack.Push(ancestor.Id);
+					}
+					var relativePath = string.Join("/", relativePathStack);
+					var tag = $"{relativePath} ({documentPath})";
+					if (visited.Contains(tag)) continue;
+					visited.Add(tag);
+
 					var conflicts = node.Animators
 						.GroupBy(i => i.TargetPropertyPath)
 						.Where(i => i.Count() > 1)
-						.Select(i => (property: i.Key, animations: new SortedSet<string>(i.Select(j => j.AnimationId ?? "Legacy"))));
+						.Select(i => (
+							property: i.Key,
+							animable: i.First().Animable,
+							animations: new SortedSet<string>(i.Select(j => j.AnimationId ?? "Legacy")
+						)));
 
 					if (conflicts.Any()) {
-						var documentPath = asset;
-						var relativePathStack = new Stack<string>();
-						relativePathStack.Push(node.Id);
-						foreach (var ancestor in node.Ancestors) {
-							if (ancestor.Components.TryGet<Node.AssetBundlePathComponent>(out var pathComponent)) {
-								documentPath = pathComponent.Path.Replace(AssetType, string.Empty);
-								break;
-							}
-							relativePathStack.Push(ancestor.Id);
-						}
-						var relativePath = string.Join("/", relativePathStack);
+						var nodeType = node.GetType();
+						var targetProperties = conflicts.Select(i => i.property).ToArray();
+						var concurrentAnimations = conflicts.Select(i => i.animations).ToArray();
+						var propertyKeyframeColorIndices = conflicts.Select(i =>
+							KeyframeColor.Get(i.animable.GetType(), i.property)?.ColorIndex ?? 0
+						).ToArray();
 						yield return new ConflictingAnimatorsInfo(
-							node.GetType(),
+							nodeType,
 							relativePath,
 							documentPath,
-							conflicts.Select(i => i.property).ToArray(),
-							conflicts.Select(i => i.animations).ToArray(),
-							indexForPathCollisions: node.Parent?.Nodes.IndexOf(node)
+							targetProperties,
+							concurrentAnimations,
+							propertyKeyframeColorIndices,
+							nodeIndexForPathCollisions: node.Parent?.Nodes.IndexOf(node)
 						);
 					}
 
 					var isExternal = !string.IsNullOrEmpty(node.ContentsPath);
 					if (isExternal) {
-						foreach (var child in Get(node.ContentsPath)) {
-							yield return child;
+						if (shouldTraverseExternalScenes) {
+							foreach (var child in Get(node.ContentsPath)) {
+								yield return child;
+							}
 						}
 					} else {
 						foreach (var child in node.Nodes) {
