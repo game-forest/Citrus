@@ -60767,6 +60767,19 @@ references:
   isSpec: "True"
   fullName: Lime.Splitter.GetStretchesList
   nameWithType: Splitter.GetStretchesList
+- uid: Lime.Splitter.IsLocked
+  name: IsLocked
+  href: api/Lime.Splitter.html#Lime_Splitter_IsLocked
+  commentId: P:Lime.Splitter.IsLocked
+  fullName: Lime.Splitter.IsLocked
+  nameWithType: Splitter.IsLocked
+- uid: Lime.Splitter.IsLocked*
+  name: IsLocked
+  href: api/Lime.Splitter.html#Lime_Splitter_IsLocked_
+  commentId: Overload:Lime.Splitter.IsLocked
+  isSpec: "True"
+  fullName: Lime.Splitter.IsLocked
+  nameWithType: Splitter.IsLocked
 - uid: Lime.Splitter.RaiseDragEnded
   name: RaiseDragEnded()
   href: api/Lime.Splitter.html#Lime_Splitter_RaiseDragEnded
