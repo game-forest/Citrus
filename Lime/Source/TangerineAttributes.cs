@@ -237,12 +237,48 @@ namespace Lime
 		public abstract ValidationResult IsValid(object owner, object value, out string message);
 	}
 
-	public class TangerineSizeInfo : TangerineValidationAttribute
+	public abstract class TangerineTextureInfoAttribute : TangerineValidationAttribute
 	{
+		private readonly Type[] validatableTypes;
+		private MethodInfo[] getTextureMethods;
+		
+		public TangerineTextureInfoAttribute(params Type[] validatableTypes)
+		{
+			this.validatableTypes = validatableTypes;
+			getTextureMethods = validatableTypes.Select(type => type.GetProperty("Texture").GetGetMethod()).ToArray();
+		}
+		
+		protected abstract ValidationResult Validate(ITexture texture, object value, out string message);
+
 		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
-			if (owner is Image image && value is Vector2 size) {
-				var imageSize = image.Texture.ImageSize;
+			var ownerType = owner.GetType();
+			var index = -1;
+			for (int i = 0; i < validatableTypes.Length; i++) {
+				if (ownerType == validatableTypes[i]) {
+					index = i;
+					break;
+				}
+			}
+			if (index != -1) {
+				var texture = getTextureMethods[index].Invoke(owner, new object[0]) as ITexture;
+				return Validate(texture, value, out message);
+			}
+			message = "";
+			return ValidationResult.Ok;
+		}
+	}
+	
+	public class TangerineSizeInfoAttribute : TangerineTextureInfoAttribute
+	{
+		public TangerineSizeInfoAttribute(params Type[] validatableTypes) : base(validatableTypes)
+		{
+		}
+		
+		protected override ValidationResult Validate(ITexture texture, object value, out string message)
+		{
+			if (!(texture is null) && value is Vector2 size) {
+				var imageSize = texture.ImageSize;
 				var accuracy = 1e-4;
 				if (Math.Abs(imageSize.Height - size.Y) > accuracy || Math.Abs(imageSize.Width - size.X) > accuracy) {
 					message = $"Size of image is different from size of image on disc";
@@ -254,12 +290,16 @@ namespace Lime
 		}
 	}
 
-	public class TangerineRatioInfo : TangerineValidationAttribute
+	public class TangerineRatioInfoAttribute : TangerineTextureInfoAttribute
 	{
-		public override ValidationResult IsValid(object owner, object value, out string message)
+		public TangerineRatioInfoAttribute(params Type[] validatableTypes) : base(validatableTypes)
 		{
-			if (owner is Image image && value is Vector2 size) {
-				var imageSize = image.Texture.ImageSize;
+		}
+		
+		protected override ValidationResult Validate(ITexture texture, object value, out string message)
+		{
+			if (!(texture is null) && value is Vector2 size) {
+				var imageSize = texture.ImageSize;
 				var accuracy = 1e-4;
 				if (Math.Abs((float) imageSize.Width / (float) imageSize.Height - size.X / size.Y) > accuracy) {
 					message = $"Ratio of image is different from ratio of image on disc";

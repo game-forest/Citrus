@@ -323,8 +323,8 @@ namespace Lime
 
 		[TangerineKeyframeColor(7)]
 		[TangerineNumericEditBoxStep(1f)]
-		[TangerineRatioInfo]
-		[TangerineSizeInfo]
+		[TangerineRatioInfo(typeof(Image), typeof(DistortionMesh), typeof(NineGrid))]
+		[TangerineSizeInfo(typeof(Image), typeof(DistortionMesh), typeof(NineGrid))]
 		public Vector2 Size
 		{
 			get { return size; }
