@@ -82,8 +82,7 @@ namespace Tangerine.UI
 				LayoutCell = new LayoutCell(),
 			};
 			ContainerWidget.AddNode(WarningsContainer);
-			EditorContainer.AddLateChangeWatcher(CoalescedPropertyValue(), v => ClearWarningsAndValidate());
-			ClearWarningsAndValidate();
+			EditorContainer.AddChangeWatcher(CoalescedPropertyValue(), v => ClearWarningsAndValidate());
 		}
 
 		protected void AddWarning(string message, ValidationResult validationResult)

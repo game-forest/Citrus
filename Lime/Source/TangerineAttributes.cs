@@ -241,13 +241,13 @@ namespace Lime
 	{
 		private readonly Type[] validatableTypes;
 		private MethodInfo[] getTextureMethods;
-		
+
 		public TangerineTextureInfoAttribute(params Type[] validatableTypes)
 		{
 			this.validatableTypes = validatableTypes;
 			getTextureMethods = validatableTypes.Select(type => type.GetProperty("Texture").GetGetMethod()).ToArray();
 		}
-		
+
 		protected abstract ValidationResult Validate(ITexture texture, object value, out string message);
 
 		public override ValidationResult IsValid(object owner, object value, out string message)
@@ -268,13 +268,13 @@ namespace Lime
 			return ValidationResult.Ok;
 		}
 	}
-	
+
 	public class TangerineSizeInfoAttribute : TangerineTextureInfoAttribute
 	{
 		public TangerineSizeInfoAttribute(params Type[] validatableTypes) : base(validatableTypes)
 		{
 		}
-		
+
 		protected override ValidationResult Validate(ITexture texture, object value, out string message)
 		{
 			if (!(texture is null) && value is Vector2 size) {
@@ -295,7 +295,7 @@ namespace Lime
 		public TangerineRatioInfoAttribute(params Type[] validatableTypes) : base(validatableTypes)
 		{
 		}
-		
+
 		protected override ValidationResult Validate(ITexture texture, object value, out string message)
 		{
 			if (!(texture is null) && value is Vector2 size) {
@@ -310,7 +310,7 @@ namespace Lime
 			return ValidationResult.Ok;
 		}
 	}
-	
+
 	public class TangerineValidRangeAttribute : TangerineValidationAttribute
 	{
 		public ValidationResult WarningLevel = ValidationResult.Warning;
@@ -507,5 +507,5 @@ namespace Lime
 	{
 		public string Name;
 	}
-	
+
 }
