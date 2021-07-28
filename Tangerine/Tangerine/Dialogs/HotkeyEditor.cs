@@ -435,7 +435,6 @@ namespace Tangerine.Dialogs
 			Key = key;
 			((KeyboardButtonPresenter) Presenter).IsModifier = Key.IsModifier();
 			State = KeyboardButtonState.None;
-			
 			Components.Add(new TooltipComponent(() => {
 				var tooltip = new StringBuilder();
 				foreach (var command in CurrentCommands) {
@@ -458,7 +457,7 @@ namespace Tangerine.Dialogs
 		}
 
 		public List<CommandInfo> Commands { get; private set; } = new List<CommandInfo>();
-		
+
 		public List<CommandInfo> CurrentCommands { get; private set; } = new List<CommandInfo>();
 
 		private KeyboardButtonState state;
