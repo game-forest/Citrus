@@ -68,7 +68,7 @@ namespace Tangerine.UI.SceneView
 				widgets,
 				widgets.Count <= 1 ? (Vector2?) null : pivotPoint, widgets.Count <= 1,
 				curMousePos, prevMousePos,
-				false,
+				convertScaleToSize: false, isNumericalMode: false,
 				(originalVectorInObbSpace, deformedVectorInObbSpace) => {
 
 					double rotation = 0;

@@ -20,7 +20,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		public static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
 			Vector2? overridePivotInSceneSpace, bool obbInFirstWidgetSpace,
 			Vector2 currentMousePosInSceneSpace, Vector2 previousMousePosSceneSpace,
-			bool convertScaleToSize, CalculateTransformationDelegate onCalculateTransformation)
+			bool convertScaleToSize, bool isNumericalMode, CalculateTransformationDelegate onCalculateTransformation)
 		{
 			if (widgetsInParentSpace.Count == 0) return;
 
@@ -35,13 +35,13 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				obbInFirstWidgetSpace,
 				(Vector2d) currentMousePosInSceneSpace * fromSceneToParentSpace,
 				(Vector2d) previousMousePosSceneSpace * fromSceneToParentSpace,
-				convertScaleToSize, onCalculateTransformation);
+				convertScaleToSize, isNumericalMode, onCalculateTransformation);
 		}
 
 		private static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
 			Vector2d? overridePivotInParentSpace, bool obbInFirstWidgetSpace,
 			Vector2d currentMousePosInParentSpace, Vector2d previousMousePosInParentSpace,
-			bool convertScaleToSize, CalculateTransformationDelegate onCalculateTransformation)
+			bool convertScaleToSize, bool isNumericalMode, CalculateTransformationDelegate onCalculateTransformation)
 		{
 			if (widgetsInParentSpace.Count == 0) return;
 
@@ -92,12 +92,12 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			ApplyTransformationToWidgetsGroupObb(
 				widgetsInParentSpace, originalObbToParentSpace,
 				currentMousePosInParentSpace, previousMousePosInParentSpace,
-				convertScaleToSize, onCalculateTransformation);
+				convertScaleToSize, isNumericalMode, onCalculateTransformation);
 		}
 
 		private static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
 			Matrix32d obbInParentSpace, Vector2d currentMousePosInParentSpace, Vector2d previousMousePosInParentSpace,
-			bool convertScaleToSize, CalculateTransformationDelegate onCalculateTransformation)
+			bool convertScaleToSize, bool isNumericalMode, CalculateTransformationDelegate onCalculateTransformation)
 		{
 			if (Math.Abs(obbInParentSpace.CalcDeterminant()) < Mathf.ZeroTolerance) return;
 
@@ -113,12 +113,12 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			);
 
 			ApplyTransformationToWidgetsGroupObb(
-				widgetsInParentSpace, obbInParentSpace, obbTransformation, convertScaleToSize
+				widgetsInParentSpace, obbInParentSpace, obbTransformation, convertScaleToSize, isNumericalMode
 			);
 		}
 
 		private static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
-			Matrix32d obbInParentSpace, Transform2d obbTransformation, bool convertScaleToSize)
+			Matrix32d obbInParentSpace, Transform2d obbTransformation, bool convertScaleToSize, bool isNumericalMode)
 		{
 			Matrix32d originalObbToParentSpace = obbInParentSpace;
 
@@ -160,7 +160,8 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 						zeroScalePreserver.Restore();
 
 						if (!convertScaleToSize) {
-							SetAnimableProperty.Perform(widget, nameof(Widget.Scale), useScale,
+							SetAnimableProperty.Perform(widget, nameof(Widget.Scale),
+								isNumericalMode ? Vector2.Floor(useScale * 10f) * 0.1f : useScale,
 								CoreUserPreferences.Instance.AutoKeyframes);
 						} else {
 							Vector2 useSize = new Vector2(
@@ -171,7 +172,8 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 									? widget.Size.Y
 									: widget.Size.Y * useScale.Y / widget.Scale.Y
 							);
-							SetAnimableProperty.Perform(widget, nameof(Widget.Size), useSize,
+							SetAnimableProperty.Perform(widget, nameof(Widget.Size),
+								isNumericalMode ? Vector2.Floor(useSize) : useSize,
 								CoreUserPreferences.Instance.AutoKeyframes);
 						}
 

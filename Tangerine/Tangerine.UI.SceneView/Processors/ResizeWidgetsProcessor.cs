@@ -83,6 +83,7 @@ namespace Tangerine.UI.SceneView
 					var isFreezeAllowed = !isChangingScale && toBeTransformed.Count == 1;
 					var areChildrenFrozen = SceneView.Input.IsKeyPressed(Key.Z) && isFreezeAllowed;
 					var isPivotFrozen = SceneView.Input.IsKeyPressed(Key.X) && isFreezeAllowed;
+					var isNumericalMode = SceneView.Input.IsKeyPressed(Key.C);
 					if (areChildrenFrozen) {
 						transform = toBeTransformed[0].CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
 					}
@@ -98,7 +99,8 @@ namespace Tangerine.UI.SceneView
 						SceneView.MousePosition,
 						mouseStartPos,
 						proportional,
-						!isChangingScale
+						!isChangingScale,
+						isNumericalMode
 					);
 					if (areChildrenFrozen) {
 						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(toBeTransformed[0]);
@@ -153,11 +155,11 @@ namespace Tangerine.UI.SceneView
 		}
 
 		private static void RescaleWidgets(bool hullInFirstWidgetSpace, Vector2? pivotPoint, List<Widget> widgets, int controlPointIndex,
-			Vector2 curMousePos, Vector2 prevMousePos, bool proportional, bool convertScaleToSize)
+			Vector2 curMousePos, Vector2 prevMousePos, bool proportional, bool convertScaleToSize, bool isNumericalMode)
 		{
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
 				widgets, pivotPoint, hullInFirstWidgetSpace, curMousePos, prevMousePos,
-				convertScaleToSize,
+				convertScaleToSize, isNumericalMode,
 				(originalVectorInObbSpace, deformedVectorInObbSpace) => {
 					var deformationScaleInObbSpace = new Vector2d(
 						Math.Abs(originalVectorInObbSpace.X) < Mathf.ZeroTolerance ? 1 : deformedVectorInObbSpace.X / originalVectorInObbSpace.X,

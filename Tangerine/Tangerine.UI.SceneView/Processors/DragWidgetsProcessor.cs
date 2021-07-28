@@ -190,7 +190,8 @@ namespace Tangerine.UI.SceneView
 				widgets.Count <= 1 ? (Vector2?) null : pivot,
 				widgets.Count <= 1, initialMousePos + mouseDelta,
 				initialMousePos,
-				false,
+				convertScaleToSize: false,
+				isNumericalMode: false,
 				OnCalculateTransformation
 			);
 		}
