@@ -11,6 +11,7 @@ namespace Tangerine.UI
 	{
 		private const string BoldStyleTag = "b";
 		private const string PropertyColorStyleTag = "pc";
+		private const string AnimationLinkStyleTag = "al";
 
 		private Node cachedNode;
 
@@ -29,30 +30,6 @@ namespace Tangerine.UI
 			foreach (var widget in CreateContent()) {
 				AddNode(widget);
 			}
-
-			HitTestTarget = true;
-			Gestures.Add(new DoubleClickGesture(() => {
-				try {
-					Project.Current.OpenDocument(info.DocumentPath);
-					if (cachedNode == null) {
-						cachedNode = Document.Current.RootNode.FindNode(info.RelativePath);
-						if (info.NodeIndexForPathCollisions.HasValue) {
-							cachedNode = cachedNode.Parent.Nodes[info.NodeIndexForPathCollisions.Value];
-						}
-					}
-					NavigateToNode.Perform(cachedNode, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
-					using (Document.Current.History.BeginTransaction()) {
-						SelectNode.Perform(cachedNode);
-						Document.Current.History.CommitTransaction();
-					}
-				} catch (System.Exception e) {
-					new AlertDialog($"Couldn't navigate to node {info.RelativePath} in {info.DocumentPath}", "Ok").Show();
-					Logger.Write(e.Message);
-				}
-			}));
-
-			CompoundPresenter.Add(new ItemPresenter(this));
-			Tasks.Add(Theme.MouseHoverInvalidationTask(this));
 		}
 
 		protected IEnumerable<Widget> CreateContent()
@@ -101,14 +78,47 @@ namespace Tangerine.UI
 			};
 			for (var i = 0; i < Info.AffectedProperties.Length; ++i) {
 				var propertyColor = KeyframePalette.Colors[Info.PropertyKeyframeColorIndices[i]];
-				conflicts.AddNode(new Widget {
+				var conflict = new Widget {
 					Layout = new HBoxLayout { Spacing = 2 },
 					Padding = new Thickness(2),
 					Nodes = {
 						Spacer.HSpacer(2 * IconSize + IconRightPadding + 4 + Theme.Metrics.CloseButtonSize.X),
-						new RichText {
-							Text = $"Target Property: <{PropertyColorStyleTag}>{Info.AffectedProperties[i]}</{PropertyColorStyleTag}>; " +
-							       $"Potential Conflicts: {string.Join(", ", Info.ConcurrentAnimations[i].Select(j => $"<{BoldStyleTag}>{j}</{BoldStyleTag}>"))}",
+					},
+				};
+				var label = new RichText {
+					Text = $"Target Property: <{PropertyColorStyleTag}>{Info.AffectedProperties[i]}</{PropertyColorStyleTag}>; " +
+						   $"Potential Conflicts: ",
+					Padding = new Thickness(left: 5.0f),
+					MinHeight = Theme.Metrics.TextHeight,
+					Localizable = false,
+					Color = Color4.White,
+					HAlignment = HAlignment.Left,
+					VAlignment = VAlignment.Center,
+					OverflowMode = TextOverflowMode.Ellipsis,
+					TrimWhitespaces = true,
+					Nodes = {
+						new TextStyle {
+							Size = Theme.Metrics.TextHeight,
+							TextColor = Theme.Colors.GrayText,
+						},
+						new TextStyle {
+							Id = PropertyColorStyleTag,
+							Size = Theme.Metrics.TextHeight,
+							TextColor = propertyColor,
+							Font = new SerializableFont(FontPool.DefaultBoldFontName),
+						}
+					},
+				};
+				label.Width = 1024.0f;
+				label.MinMaxWidth = label.Width = label.MeasureText().Width;
+				conflict.AddNode(label);
+				var conflictingAnimationsLinks = Info.ConcurrentAnimations[i].Select(j => CreateAnimationLink(j, Info.AffectedProperties[i])).ToList();
+				for (var j = 0; j < conflictingAnimationsLinks.Count; ++j) {
+					var link = conflictingAnimationsLinks[j];
+					conflict.AddNode(link);
+					if (j! != conflictingAnimationsLinks.Count - 1) {
+						var sep = new RichText {
+							Text = ",",
 							Padding = new Thickness(left: 5.0f),
 							MinHeight = Theme.Metrics.TextHeight,
 							Localizable = false,
@@ -122,76 +132,105 @@ namespace Tangerine.UI
 									Size = Theme.Metrics.TextHeight,
 									TextColor = Theme.Colors.GrayText,
 								},
-								new TextStyle {
-									Id = BoldStyleTag,
-									Size = Theme.Metrics.TextHeight,
-									TextColor = Theme.Colors.BlackText,
-									Font = new SerializableFont(FontPool.DefaultBoldFontName),
-								},
-								new TextStyle {
-									Id = PropertyColorStyleTag,
-									Size = Theme.Metrics.TextHeight,
-									TextColor = propertyColor,
-									Font = new SerializableFont(FontPool.DefaultBoldFontName),
-								}
-							},
-						},
-					},
-				});
+							}
+						};
+						sep.Width = 1024.0f;
+						sep.MinMaxWidth = sep.Width = sep.MeasureText().Width + 1;
+						conflict.AddNode(sep);
+					}
+				}
+				conflicts.AddNode(conflict);
 			}
 			yield return conflicts;
 		}
 
-		private class ItemPresenter : IPresenter
+		private RichText CreateAnimationLink(string text, string property)
 		{
-			private readonly ConflictingAnimatorsItem item;
-
-			public ItemPresenter(ConflictingAnimatorsItem item) => this.item = item;
-
-			public Lime.RenderObject GetRenderObject(Node node)
-			{
-				var widget = (Widget)node;
-				var scrollView = (ScrollViewWithSlider)item.Container.Behaviour;
-
-				if (widget.GloballyEnabled) {
-					var isMouseOverThisOrDescendant = widget.IsMouseOverThisOrDescendant();
-					if (isMouseOverThisOrDescendant) {
-						var margin = new Vector2(3.0f);
-						var ro = RenderObjectPool<RenderObject>.Acquire();
-						ro.CaptureRenderState(widget);
-						ro.A = -margin;
-						ro.B = new Vector2(widget.Width - scrollView.SliderVisibleWidth, widget.Height) + margin;
-						ro.SelectedColor = Theme.Colors.WhiteBackground;
-						ro.HoveredColor = Theme.Colors.SelectedBorder;
-						ro.IsSelected = false;
-						ro.IsHovered = isMouseOverThisOrDescendant;
-						return ro;
-					}
+			var label = new RichText {
+				Text = text,
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+				Padding = new Thickness(left: 5.0f),
+				MinHeight = Theme.Metrics.TextHeight,
+				Localizable = false,
+				Color = Color4.White,
+				HAlignment = HAlignment.Left,
+				VAlignment = VAlignment.Center,
+				OverflowMode = TextOverflowMode.Ellipsis,
+				TrimWhitespaces = true,
+				HitTestTarget = true,
+				Nodes = {
+					new TextStyle {
+						Id = BoldStyleTag,
+						Size = Theme.Metrics.TextHeight,
+						TextColor = Theme.Colors.BlackText,
+						Font = new SerializableFont(FontPool.DefaultBoldFontName),
+					},
+					new TextStyle {
+						Id = AnimationLinkStyleTag,
+						Size = Theme.Metrics.TextHeight,
+						TextColor = Theme.Colors.GrayText,
+						Font = new SerializableFont(FontPool.DefaultBoldFontName),
+					},
+				},
+			};
+			label.Width = 1024.0f;
+			label.MinMaxWidth = label.Width = label.MeasureText().Width;
+			label.Clicked += () => {
+				if (label.IsMouseOver()) {
+					try {
+						Project.Current.OpenDocument(Info.DocumentPath);
+						if (cachedNode == null) {
+							cachedNode = Document.Current.RootNode.FindNode(Info.RelativePath);
+							if (Info.NodeIndexForPathCollisions.HasValue) {
+								cachedNode = cachedNode.Parent.Nodes[Info.NodeIndexForPathCollisions.Value];
+							}
+						}
+						NavigateToNode.Perform(cachedNode, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
+						var animationId = text == "Legacy" ? null : text;
+						foreach (var a in cachedNode.Ancestors) {
+							if (a.Animations.TryFind(animationId, out var animation)) {
+								NavigateToAnimation.Perform(animation);
+								break;
+							}
+						}
+						var sceneItem = Document.Current.GetSceneItemForObject(cachedNode);
+						var timelineItemState = sceneItem.GetTimelineItemState();
+						var row = sceneItem.Rows
+							.Where(i => i.Id == property)
+							.First(i => i.Components.Get<Core.Components.CommonPropertyRowData>().Animator.AnimationId == animationId);
+						using (Document.Current.History.BeginTransaction()) {
+							timelineItemState.ShowAnimators = true;
+							timelineItemState.Expanded = true;
+							SelectRow.Perform(row);
+							Document.Current.History.CommitTransaction();
+						}
+					} catch (System.Exception e) {
+						new AlertDialog($"Couldn't navigate to node {Info.RelativePath} in {Info.DocumentPath}\n\n{e.Message}", "Ok").Show();
+						Logger.Write(e.Message);
+					};
 				}
-				return null;
-			}
+			};
+			label.Tasks.Add(Theme.MouseHoverInvalidationTask(this));
+			label.Tasks.Add(MouseHoverTask(label));
+			return label;
+		}
 
-			public bool PartialHitTest(Node node, ref HitTestArgs args) => false;
-
-			private class RenderObject : WidgetRenderObject
-			{
-				public Vector2 A;
-				public Vector2 B;
-				public bool IsSelected;
-				public bool IsHovered;
-				public Color4 SelectedColor;
-				public Color4 HoveredColor;
-
-				public override void Render()
-				{
-					PrepareRenderState();
-					if (IsSelected) {
-						Renderer.DrawRect(A, B, SelectedColor);
+		private IEnumerator<object> MouseHoverTask(RichText label)
+		{
+			while (true) {
+				if (label.IsMouseOver()) {
+					var style = label.FindNode(AnimationLinkStyleTag);
+					style.Unlink();
+					style.PushToNode(label);
+					while (label.IsMouseOver()) {
+						WidgetContext.Current.MouseCursor = MouseCursor.Hand;
+						yield return null;
 					}
-					if (IsHovered) {
-						Renderer.DrawRectOutline(A, B, HoveredColor);
-					}
+					style = label.FindNode(BoldStyleTag);
+					style.Unlink();
+					style.PushToNode(label);
 				}
+				yield return null;
 			}
 		}
 	}
