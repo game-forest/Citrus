@@ -490,7 +490,7 @@ namespace Tangerine.UI.FilesystemView
 					}
 				};
 			}
-			Gestures.Add(new ClickGesture(0, FlipState));
+			Clicked += FlipState;
 			Layout = new HBoxLayout();
 			MinMaxSize = new Vector2(TargetWidth = 15, 20);
 			Nodes.Add(icon = new Image {
