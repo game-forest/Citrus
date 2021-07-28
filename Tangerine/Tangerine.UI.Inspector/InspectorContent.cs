@@ -556,6 +556,7 @@ namespace Tangerine.UI.Inspector
 			var menu = CreateAddComponentsMenu(validateClipboard: false);
 			CreatedAddComponentsMenu?.Invoke(menu);
 			var label = new Widget {
+				Visible = componentTypes.Count > 0,
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				Layout = new HBoxLayout(),
 				MinHeight = Theme.Metrics.DefaultButtonSize.Y,
