@@ -10,6 +10,8 @@ namespace Lime
 	{
 		[YuzuMember]
 		[TangerineKeyframeColor(18)]
+		[TangerineRatioInfo(typeof(ParticleModifier))]
+		[TangerineSizeInfo(typeof(ParticleModifier))]
 		public Vector2 Size { get; set; }
 
 		[YuzuMember]

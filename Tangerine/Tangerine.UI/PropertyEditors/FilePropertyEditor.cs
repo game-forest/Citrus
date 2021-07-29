@@ -134,7 +134,13 @@ namespace Tangerine.UI
 
 		protected virtual bool IsValid(string path)
 		{
-			return PropertyValidator.ValidateValue(path, EditorParams.PropertyInfo, out var none) == ValidationResult.Ok;
+			foreach (var o in EditorParams.Objects) {
+				var validatedValues = PropertyValidator.ValidateValue(o, path, EditorParams.PropertyInfo);
+				if (validatedValues.Any(value => value.Result != ValidationResult.Ok && value.Result != ValidationResult.Info)) {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public string GetLongestCommonPrefix(List<string> paths)

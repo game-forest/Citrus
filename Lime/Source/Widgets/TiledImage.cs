@@ -43,6 +43,8 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(16)]
+		[TangerineRatioInfo(typeof(TiledImage))]
+		[TangerineSizeInfo(typeof(TiledImage))]
 		public Vector2 TileSize { get; set; }
 
 		[YuzuMember]

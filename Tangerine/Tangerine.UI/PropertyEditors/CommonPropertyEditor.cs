@@ -82,7 +82,7 @@ namespace Tangerine.UI
 				LayoutCell = new LayoutCell(),
 			};
 			ContainerWidget.AddNode(WarningsContainer);
-			Validate();
+			EditorContainer.AddChangeWatcher(CoalescedPropertyValue(), v => ClearWarningsAndValidate());
 		}
 
 		protected void AddWarning(string message, ValidationResult validationResult)
@@ -297,23 +297,30 @@ namespace Tangerine.UI
 				return;
 			}
 			ClearWarnings();
-			var result = PropertyValidator.ValidateValue(value, EditorParams.PropertyInfo, out string message);
-			if (result != ValidationResult.Ok) {
-				AddWarning(message, result);
-				if (result == ValidationResult.Error) {
+			void ValidateAndApply(object o, object next)
+			{
+				var result = PropertyValidator.ValidateValue(o, next, EditorParams.PropertyInfo);
+				bool errorExist = false;
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						AddWarning(message, validationResult);
+						errorExist = validationResult == ValidationResult.Error;
+					}
+				}
+				if (errorExist) {
 					return;
 				}
+				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
+					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName, next);
 			}
 			DoTransaction(() => {
 				if (EditorParams.IsAnimable) {
 					foreach (var o in EditorParams.RootObjects) {
-						((IPropertyEditorParamsInternal)EditorParams)
-							.PropertySetter(o, EditorParams.PropertyPath, value);
+						ValidateAndApply(o, value);
 					}
 				} else {
 					foreach (var o in EditorParams.Objects) {
-						((IPropertyEditorParamsInternal)EditorParams)
-							.PropertySetter(o, EditorParams.PropertyName, value);
+						ValidateAndApply(o, value);
 					}
 				}
 			});
@@ -329,15 +336,20 @@ namespace Tangerine.UI
 			void ValidateAndApply(object o, ValueType current)
 			{
 				var next = valueProducer(current);
-				var result = PropertyValidator.ValidateValue(next, EditorParams.PropertyInfo, out var message);
-				if (result !=ValidationResult.Ok) {
-					if (!message.IsNullOrWhiteSpace() && o is Node node) {
-						message = $"{node.Id}: {message}";
+				var result = PropertyValidator.ValidateValue(o, next, EditorParams.PropertyInfo);
+				bool errorExist = false;
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						var messageCopy = message;
+						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
+							messageCopy = $"{node.Id}: {messageCopy}";
+						}
+						AddWarning(messageCopy, validationResult);
+						errorExist = validationResult == ValidationResult.Error;
 					}
-					AddWarning(message, result);
-					if (result == ValidationResult.Error) {
-						return;
-					}
+				}
+				if (errorExist) {
+					return;
 				}
 				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
 					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName, next);
@@ -407,20 +419,24 @@ namespace Tangerine.UI
 		public virtual void Submit()
 		{ }
 
-		protected void Validate()
+		protected void ClearWarningsAndValidate()
 		{
+			ClearWarnings();
 			_ = EditorParams.IsAnimable ? EditorParams.RootObjects : EditorParams.Objects;
 			foreach (var o in EditorParams.Objects) {
 				var result = PropertyValidator.ValidateValue(
+					owner: o,
 					value: PropertyValue(o).GetValue(),
-					propertyInfo: EditorParams.PropertyInfo,
-					message: out var message
+					propertyInfo: EditorParams.PropertyInfo
 				);
-				if (result != ValidationResult.Ok) {
-					if (!message.IsNullOrWhiteSpace() && o is Node node) {
-						message = $"{node.Id}: {message}";
+				foreach (var (validationResult, message) in result) {
+					if (validationResult != ValidationResult.Ok) {
+						var messageCopy = message;
+						if (!messageCopy.IsNullOrWhiteSpace() && o is Node node) {
+							messageCopy = $"{node.Id}: {messageCopy}";
+						}
+						AddWarning(messageCopy, validationResult);
 					}
-					AddWarning(message, result);
 				}
 			}
 		}

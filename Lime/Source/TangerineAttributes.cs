@@ -222,6 +222,7 @@ namespace Lime
 	public enum ValidationResult
 	{
 		Ok,
+		Info,
 		Warning,
 		Error,
 	}
@@ -233,7 +234,83 @@ namespace Lime
 	/// </summary>
 	public abstract class TangerineValidationAttribute : Attribute
 	{
-		public abstract ValidationResult IsValid(object value, out string message);
+		public abstract ValidationResult IsValid(object owner, object value, out string message);
+	}
+
+	public abstract class TangerineTextureInfoAttribute : TangerineValidationAttribute
+	{
+		private readonly Type[] validatableTypes;
+		private MethodInfo[] getTextureMethods;
+
+		public TangerineTextureInfoAttribute(params Type[] validatableTypes)
+		{
+			this.validatableTypes = validatableTypes;
+			getTextureMethods = validatableTypes.Select(type => type.GetProperty("Texture").GetGetMethod()).ToArray();
+		}
+
+		protected abstract ValidationResult Validate(ITexture texture, object value, out string message);
+
+		public override ValidationResult IsValid(object owner, object value, out string message)
+		{
+			var ownerType = owner.GetType();
+			var index = -1;
+			for (int i = 0; i < validatableTypes.Length; i++) {
+				if (ownerType == validatableTypes[i]) {
+					index = i;
+					break;
+				}
+			}
+			if (index != -1) {
+				var texture = getTextureMethods[index].Invoke(owner, new object[0]) as ITexture;
+				return Validate(texture, value, out message);
+			}
+			message = "";
+			return ValidationResult.Ok;
+		}
+	}
+
+	public class TangerineSizeInfoAttribute : TangerineTextureInfoAttribute
+	{
+		public TangerineSizeInfoAttribute(params Type[] validatableTypes) : base(validatableTypes)
+		{
+		}
+
+		protected override ValidationResult Validate(ITexture texture, object value, out string message)
+		{
+			if (!(texture is null) && value is Vector2 size) {
+				var imageSize = texture.ImageSize;
+				var accuracy = Mathf.ZeroTolerance;
+				if (Math.Abs(imageSize.Height - size.Y) > accuracy || Math.Abs(imageSize.Width - size.X) > accuracy) {
+					message = $"The size is different from the size of the original image ({imageSize.Width}x{imageSize.Height})";
+					return ValidationResult.Info;
+				}
+			}
+			message = "";
+			return ValidationResult.Ok;
+		}
+	}
+
+	public class TangerineRatioInfoAttribute : TangerineTextureInfoAttribute
+	{
+		public TangerineRatioInfoAttribute(params Type[] validatableTypes) : base(validatableTypes)
+		{
+		}
+
+		protected override ValidationResult Validate(ITexture texture, object value, out string message)
+		{
+			if (!(texture is null) && value is Vector2 size) {
+				var imageSize = texture.ImageSize;
+				var accuracy = Mathf.ZeroTolerance;
+				var originalAspectRatio = (float)imageSize.Width / (float)imageSize.Height;
+				var currentAspectRatio = size.X / size.Y;
+				if (Math.Abs(currentAspectRatio - originalAspectRatio) > accuracy) {
+					message = $"Aspect ratio ({currentAspectRatio}) is different from the aspect ratio of the original image ({originalAspectRatio})";
+					return ValidationResult.Info;
+				}
+			}
+			message = "";
+			return ValidationResult.Ok;
+		}
 	}
 
 	public class TangerineValidRangeAttribute : TangerineValidationAttribute
@@ -255,7 +332,7 @@ namespace Lime
 			Minimum = minimum;
 		}
 
-		public override ValidationResult IsValid(object value, out string message)
+		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
 			var min = (IComparable)Minimum;
 			var max = (IComparable)Maximum;
@@ -277,7 +354,7 @@ namespace Lime
 	{
 		private static readonly Regex regex = new Regex(@"\p{IsCyrillic}", RegexOptions.Compiled);
 
-		public override ValidationResult IsValid(object value, out string message)
+		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
 			return IsValid(value as string, out message);
 		}
@@ -291,7 +368,7 @@ namespace Lime
 
 	public class TangerineTileImageTextureAttribute : TangerineValidationAttribute
 	{
-		public override ValidationResult IsValid(object value, out string message)
+		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
 			var res = value is ITexture texture && (texture.IsStubTexture ||
 			                                        !(texture.TextureParams.WrapModeU == TextureWrapMode.Clamp ||
@@ -432,5 +509,5 @@ namespace Lime
 	{
 		public string Name;
 	}
-	
+
 }
