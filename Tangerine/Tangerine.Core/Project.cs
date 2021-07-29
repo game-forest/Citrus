@@ -534,9 +534,7 @@ namespace Tangerine.Core
 					&& t.IsDefined(typeof(TangerineRegisterNodeAttribute))
 				).ToDictionary(
 					keySelector: t => t,
-					elementSelector: t => t.GetCustomAttributes(false)
-						.OfType<TangerineRegisterNodeAttribute>()
-						.First()
+					elementSelector: t => ClassAttributes<TangerineRegisterNodeAttribute>.Get(t)
 				).OrderBy(kv => kv.Value.Order)
 				.Select(kv => kv.Key);
 		}

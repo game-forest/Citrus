@@ -12,6 +12,19 @@ namespace Tangerine.UI
 		private DropDownList selectorH { get; }
 		private DropDownList selectorV { get; }
 
+		private static Dictionary<Type, IEnumerable<FieldInfo>> allowedFields;
+
+		static AlignmentPropertyEditor()
+		{
+			var items = new[] { typeof(HAlignment), typeof(VAlignment) };
+			allowedFields = new Dictionary<Type, IEnumerable<FieldInfo>>();
+			foreach (var type in items) {
+				var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
+				var allowed = fields.Where(f => !Attribute.IsDefined((MemberInfo)f, typeof(TangerineIgnoreAttribute)));
+				allowedFields[type] = allowed;
+			}
+		}
+
 		public AlignmentPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
 			EditorContainer.AddNode(new Widget {
@@ -21,14 +34,13 @@ namespace Tangerine.UI
 					(selectorV = editorParams.DropDownListFactory())
 				}
 			});
-			var items = new [] {
+			var items = new[] {
 				(type: typeof(HAlignment), selector: selectorH),
 				(type: typeof(VAlignment), selector: selectorV)
 			};
 			foreach (var (type, selector) in items) {
-				var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
-				var allowedFields = fields.Where(f => !Attribute.IsDefined((MemberInfo)f, typeof(TangerineIgnoreAttribute)));
-				foreach (var field in allowedFields) {
+				var fields = allowedFields[type];
+				foreach (var field in fields) {
 					selector.Items.Add(new CommonDropDownList.Item(field.Name, field.GetValue(null)));
 				}
 				selector.Changed += a => {
