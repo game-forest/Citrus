@@ -28,7 +28,7 @@ namespace Tangerine.Common.Operations
 					var containerItem = itemForGroup.Parent;
 					int index = containerItem.Rows.IndexOf(itemForGroup);
 					UnlinkSceneItem.Perform(itemForGroup);
-					var groupItems = itemForGroup.Rows.ToList();
+					var groupItems = itemForGroup.Rows.Where(i => i.GetNode() != null).ToList();
 					var localToParentTransform = group.CalcLocalToParentTransform();
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);
