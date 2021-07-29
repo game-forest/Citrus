@@ -437,9 +437,7 @@ namespace Tangerine.Dialogs
 			State = KeyboardButtonState.None;
 			Components.Add(new TooltipComponent(() => {
 				var tooltip = new StringBuilder();
-				foreach (var command in CurrentCommands) {
-					tooltip.AppendLine($"{command.Title} <{command.Shortcut}>");
-				}
+				tooltip.AppendJoin('\n', CurrentCommands.Select(command => $"{command.Title} <{command.Shortcut}>"));
 				return tooltip.ToString();
 			}));
 		}
