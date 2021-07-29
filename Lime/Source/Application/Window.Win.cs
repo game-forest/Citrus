@@ -1309,6 +1309,8 @@ namespace Lime
 				cp.Style = unchecked((int)0x80000000) | 0x01 | 0x02;
 				// WS_EX_TOOLWINDOW | WS_EX_TOPMOST
 				cp.ExStyle = 0x00000080 | 0x00000008;
+				// CS_DROP_SHADOW
+				cp.ClassStyle |= 0x20000;
 				return cp;
 			}
 		}

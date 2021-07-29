@@ -45,7 +45,7 @@ namespace Tangerine.UI.Inspector
 			outlineImage.Texture = outlineTextures[(int)function];
 		}
 
-		public void ShowDropdown() => dropdown.ShowWindow(this, fillTextures);
+		public void ShowDropdown() => dropdown.ShowWindow(this, fillTextures, function);
 
 		public void HideDropdown() => dropdown.HideWindow();
 
@@ -70,7 +70,7 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		public bool TryGetKeyFunctionFromDropdown(out KeyFunction kf)
+		public bool TryGetKeyFunctionFromDropdown(out KeyFunction? kf)
 		{
 			return dropdown.TryGetKeyFunction(out kf);
 		}
@@ -125,12 +125,14 @@ namespace Tangerine.UI.Inspector
 					}
 					if (button.TryGetKeyFunctionFromDropdown(out var keyFunction)) {
 						Document.Current.History.DoTransaction(() => {
-							if (!kf.HasValue) {
-								SetKeyframe(true);
-								button.Checked = true;
+							if (keyFunction.HasValue) {
+								if (!kf.HasValue) {
+									SetKeyframe(true);
+								}
+								SetKeyFunction(keyFunction.Value);
+							} else {
+								SetKeyframe(false);
 							}
-							SetKeyFunction(keyFunction);
-							button.SetKeyFunction(keyFunction);
 						});
 					}
 					yield return null;
