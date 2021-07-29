@@ -375,12 +375,12 @@
   
   
   <a id="Lime_TangerineValidRangeAttribute_IsValid_" data-uid="Lime.TangerineValidRangeAttribute.IsValid*"></a>
-  <h4 id="Lime_TangerineValidRangeAttribute_IsValid_System_Object_System_String__" data-uid="Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.String@)">IsValid(Object, out String)</h4>
+  <h4 id="Lime_TangerineValidRangeAttribute_IsValid_System_Object_System_Object_System_String__" data-uid="Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.Object,System.String@)">IsValid(Object, Object, out String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override ValidationResult IsValid(object value, out string message)</code></pre>
+    <pre><code class="lang-csharp hljs">public override ValidationResult IsValid(object owner, object value, out string message)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -392,6 +392,11 @@
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td></td>
+      </tr>
       <tr>
         <td><span class="xref">System.Object</span></td>
         <td><span class="parametername">value</span></td>
@@ -420,7 +425,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_System_Object_System_String__">TangerineValidationAttribute.IsValid(Object, out String)</a></div>
+  <div><a class="xref" href="Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_System_Object_System_Object_System_String__">TangerineValidationAttribute.IsValid(Object, Object, out String)</a></div>
 </article>
           </div>
           

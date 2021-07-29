@@ -5346,7 +5346,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ParticleModifier.html",
-          "hash": "yYqmq6fQwS7OzCuwaO9N2A=="
+          "hash": "ibwltQMF3IR4tJ44uPMN6w=="
         }
       },
       "is_incremental": false,
@@ -7206,7 +7206,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TangerineDefaultCharsetAttribute.html",
-          "hash": "g23jMOFEprRRevlWXiPfuw=="
+          "hash": "bunYfC6UrqT2OKmZVYhn1g=="
         }
       },
       "is_incremental": false,
@@ -7418,6 +7418,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineRatioInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineRatioInfoAttribute.html",
+          "hash": "G+y5vjB8CgoBL4UVZBrIFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineReadOnlyAttribute.yml",
       "output": {
         ".html": {
@@ -7466,6 +7478,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineSizeInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineSizeInfoAttribute.html",
+          "hash": "mK2VG2dcEntwgsJZMLrqIg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineStaticPropertyAttribute.yml",
       "output": {
         ".html": {
@@ -7478,11 +7502,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.TangerineTextureInfoAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.TangerineTextureInfoAttribute.html",
+          "hash": "ZIFB2+SDyjDhEP7XZJjjLQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.TangerineTileImageTextureAttribute.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.TangerineTileImageTextureAttribute.html",
-          "hash": "IX9Z2XT1ihM9jXNu/vXXhQ=="
+          "hash": "4KEIvPNl8Omcyd4P16syHg=="
         }
       },
       "is_incremental": false,
@@ -7506,7 +7542,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TangerineValidRangeAttribute.html",
-          "hash": "dDbmFncgD/W+X9qAC1YQag=="
+          "hash": "dxm/UfFiIBsf0MenVyr/rg=="
         }
       },
       "is_incremental": false,
@@ -7518,7 +7554,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TangerineValidationAttribute.html",
-          "hash": "u4gpPIIJmuS9LltI99jcug=="
+          "hash": "AU/r9tCYJZczNLxzIEFueg=="
         }
       },
       "is_incremental": false,
@@ -8214,7 +8250,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TiledImage.html",
-          "hash": "HDUoSf1TXcateja5uUB0zg=="
+          "hash": "eq/N8BUox2/TJgux3nNIMQ=="
         }
       },
       "is_incremental": false,
@@ -8598,7 +8634,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ValidationResult.html",
-          "hash": "2/luSHOonvL3znzZ575m/g=="
+          "hash": "xvDGdrhphsMPOmWAX2b5fA=="
         }
       },
       "is_incremental": false,
@@ -9042,7 +9078,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Widget.html",
-          "hash": "OOBW+/Sm4HxTkmNP0sAJDA=="
+          "hash": "eAlV/L2QT92XsT1YVtyPDA=="
         }
       },
       "is_incremental": false,
@@ -9318,7 +9354,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "PdSdEL1hxaJUFk36QXrnkg=="
+          "hash": "l4SR4t2qRv4FsF2YQBCkmQ=="
         }
       },
       "is_incremental": false,
@@ -9366,7 +9402,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "nRW/Uknds+lQTXXV7z4ufA=="
+          "hash": "1VaTdPfbBaOpj+6g5m1eFw=="
         }
       },
       "is_incremental": false,
@@ -11697,7 +11733,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 779,
+          "total_file_count": 782,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

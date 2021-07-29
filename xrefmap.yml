@@ -62500,15 +62500,15 @@ references:
   commentId: T:Lime.TangerineDefaultCharsetAttribute
   fullName: Lime.TangerineDefaultCharsetAttribute
   nameWithType: TangerineDefaultCharsetAttribute
-- uid: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.String@)
-  name: IsValid(Object, out String)
-  href: api/Lime.TangerineDefaultCharsetAttribute.html#Lime_TangerineDefaultCharsetAttribute_IsValid_System_Object_System_String__
-  commentId: M:Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.String@)
-  name.vb: IsValid(Object, ByRef String)
-  fullName: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object, out System.String)
-  fullName.vb: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object, ByRef System.String)
-  nameWithType: TangerineDefaultCharsetAttribute.IsValid(Object, out String)
-  nameWithType.vb: TangerineDefaultCharsetAttribute.IsValid(Object, ByRef String)
+- uid: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.Object,System.String@)
+  name: IsValid(Object, Object, out String)
+  href: api/Lime.TangerineDefaultCharsetAttribute.html#Lime_TangerineDefaultCharsetAttribute_IsValid_System_Object_System_Object_System_String__
+  commentId: M:Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object,System.Object,System.String@)
+  name.vb: IsValid(Object, Object, ByRef String)
+  fullName: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object, System.Object, out System.String)
+  fullName.vb: Lime.TangerineDefaultCharsetAttribute.IsValid(System.Object, System.Object, ByRef System.String)
+  nameWithType: TangerineDefaultCharsetAttribute.IsValid(Object, Object, out String)
+  nameWithType.vb: TangerineDefaultCharsetAttribute.IsValid(Object, Object, ByRef String)
 - uid: Lime.TangerineDefaultCharsetAttribute.IsValid(System.String,System.String@)
   name: IsValid(String, out String)
   href: api/Lime.TangerineDefaultCharsetAttribute.html#Lime_TangerineDefaultCharsetAttribute_IsValid_System_String_System_String__
@@ -63095,6 +63095,44 @@ references:
   isSpec: "True"
   fullName: Lime.TangerinePropertyDefaultValueAttribute.GetValue
   nameWithType: TangerinePropertyDefaultValueAttribute.GetValue
+- uid: Lime.TangerineRatioInfoAttribute
+  name: TangerineRatioInfoAttribute
+  href: api/Lime.TangerineRatioInfoAttribute.html
+  commentId: T:Lime.TangerineRatioInfoAttribute
+  fullName: Lime.TangerineRatioInfoAttribute
+  nameWithType: TangerineRatioInfoAttribute
+- uid: Lime.TangerineRatioInfoAttribute.#ctor(System.Type[])
+  name: TangerineRatioInfoAttribute(Type[])
+  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute__ctor_System_Type___
+  commentId: M:Lime.TangerineRatioInfoAttribute.#ctor(System.Type[])
+  name.vb: TangerineRatioInfoAttribute(Type())
+  fullName: Lime.TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(System.Type[])
+  fullName.vb: Lime.TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(System.Type())
+  nameWithType: TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(Type[])
+  nameWithType.vb: TangerineRatioInfoAttribute.TangerineRatioInfoAttribute(Type())
+- uid: Lime.TangerineRatioInfoAttribute.#ctor*
+  name: TangerineRatioInfoAttribute
+  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute__ctor_
+  commentId: Overload:Lime.TangerineRatioInfoAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineRatioInfoAttribute.TangerineRatioInfoAttribute
+  nameWithType: TangerineRatioInfoAttribute.TangerineRatioInfoAttribute
+- uid: Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
+  name: Validate(ITexture, Object, out String)
+  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__
+  commentId: M:Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
+  name.vb: Validate(ITexture, Object, ByRef String)
+  fullName: Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture, System.Object, out System.String)
+  fullName.vb: Lime.TangerineRatioInfoAttribute.Validate(Lime.ITexture, System.Object, ByRef System.String)
+  nameWithType: TangerineRatioInfoAttribute.Validate(ITexture, Object, out String)
+  nameWithType.vb: TangerineRatioInfoAttribute.Validate(ITexture, Object, ByRef String)
+- uid: Lime.TangerineRatioInfoAttribute.Validate*
+  name: Validate
+  href: api/Lime.TangerineRatioInfoAttribute.html#Lime_TangerineRatioInfoAttribute_Validate_
+  commentId: Overload:Lime.TangerineRatioInfoAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.TangerineRatioInfoAttribute.Validate
+  nameWithType: TangerineRatioInfoAttribute.Validate
 - uid: Lime.TangerineReadOnlyAttribute
   name: TangerineReadOnlyAttribute
   href: api/Lime.TangerineReadOnlyAttribute.html
@@ -63160,27 +63198,119 @@ references:
   commentId: F:Lime.TangerineRegisterNodeAttribute.Order
   fullName: Lime.TangerineRegisterNodeAttribute.Order
   nameWithType: TangerineRegisterNodeAttribute.Order
+- uid: Lime.TangerineSizeInfoAttribute
+  name: TangerineSizeInfoAttribute
+  href: api/Lime.TangerineSizeInfoAttribute.html
+  commentId: T:Lime.TangerineSizeInfoAttribute
+  fullName: Lime.TangerineSizeInfoAttribute
+  nameWithType: TangerineSizeInfoAttribute
+- uid: Lime.TangerineSizeInfoAttribute.#ctor(System.Type[])
+  name: TangerineSizeInfoAttribute(Type[])
+  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute__ctor_System_Type___
+  commentId: M:Lime.TangerineSizeInfoAttribute.#ctor(System.Type[])
+  name.vb: TangerineSizeInfoAttribute(Type())
+  fullName: Lime.TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(System.Type[])
+  fullName.vb: Lime.TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(System.Type())
+  nameWithType: TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(Type[])
+  nameWithType.vb: TangerineSizeInfoAttribute.TangerineSizeInfoAttribute(Type())
+- uid: Lime.TangerineSizeInfoAttribute.#ctor*
+  name: TangerineSizeInfoAttribute
+  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute__ctor_
+  commentId: Overload:Lime.TangerineSizeInfoAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineSizeInfoAttribute.TangerineSizeInfoAttribute
+  nameWithType: TangerineSizeInfoAttribute.TangerineSizeInfoAttribute
+- uid: Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
+  name: Validate(ITexture, Object, out String)
+  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__
+  commentId: M:Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
+  name.vb: Validate(ITexture, Object, ByRef String)
+  fullName: Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture, System.Object, out System.String)
+  fullName.vb: Lime.TangerineSizeInfoAttribute.Validate(Lime.ITexture, System.Object, ByRef System.String)
+  nameWithType: TangerineSizeInfoAttribute.Validate(ITexture, Object, out String)
+  nameWithType.vb: TangerineSizeInfoAttribute.Validate(ITexture, Object, ByRef String)
+- uid: Lime.TangerineSizeInfoAttribute.Validate*
+  name: Validate
+  href: api/Lime.TangerineSizeInfoAttribute.html#Lime_TangerineSizeInfoAttribute_Validate_
+  commentId: Overload:Lime.TangerineSizeInfoAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.TangerineSizeInfoAttribute.Validate
+  nameWithType: TangerineSizeInfoAttribute.Validate
 - uid: Lime.TangerineStaticPropertyAttribute
   name: TangerineStaticPropertyAttribute
   href: api/Lime.TangerineStaticPropertyAttribute.html
   commentId: T:Lime.TangerineStaticPropertyAttribute
   fullName: Lime.TangerineStaticPropertyAttribute
   nameWithType: TangerineStaticPropertyAttribute
+- uid: Lime.TangerineTextureInfoAttribute
+  name: TangerineTextureInfoAttribute
+  href: api/Lime.TangerineTextureInfoAttribute.html
+  commentId: T:Lime.TangerineTextureInfoAttribute
+  fullName: Lime.TangerineTextureInfoAttribute
+  nameWithType: TangerineTextureInfoAttribute
+- uid: Lime.TangerineTextureInfoAttribute.#ctor(System.Type[])
+  name: TangerineTextureInfoAttribute(Type[])
+  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute__ctor_System_Type___
+  commentId: M:Lime.TangerineTextureInfoAttribute.#ctor(System.Type[])
+  name.vb: TangerineTextureInfoAttribute(Type())
+  fullName: Lime.TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(System.Type[])
+  fullName.vb: Lime.TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(System.Type())
+  nameWithType: TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(Type[])
+  nameWithType.vb: TangerineTextureInfoAttribute.TangerineTextureInfoAttribute(Type())
+- uid: Lime.TangerineTextureInfoAttribute.#ctor*
+  name: TangerineTextureInfoAttribute
+  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute__ctor_
+  commentId: Overload:Lime.TangerineTextureInfoAttribute.#ctor
+  isSpec: "True"
+  fullName: Lime.TangerineTextureInfoAttribute.TangerineTextureInfoAttribute
+  nameWithType: TangerineTextureInfoAttribute.TangerineTextureInfoAttribute
+- uid: Lime.TangerineTextureInfoAttribute.IsValid(System.Object,System.Object,System.String@)
+  name: IsValid(Object, Object, out String)
+  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_IsValid_System_Object_System_Object_System_String__
+  commentId: M:Lime.TangerineTextureInfoAttribute.IsValid(System.Object,System.Object,System.String@)
+  name.vb: IsValid(Object, Object, ByRef String)
+  fullName: Lime.TangerineTextureInfoAttribute.IsValid(System.Object, System.Object, out System.String)
+  fullName.vb: Lime.TangerineTextureInfoAttribute.IsValid(System.Object, System.Object, ByRef System.String)
+  nameWithType: TangerineTextureInfoAttribute.IsValid(Object, Object, out String)
+  nameWithType.vb: TangerineTextureInfoAttribute.IsValid(Object, Object, ByRef String)
+- uid: Lime.TangerineTextureInfoAttribute.IsValid*
+  name: IsValid
+  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_IsValid_
+  commentId: Overload:Lime.TangerineTextureInfoAttribute.IsValid
+  isSpec: "True"
+  fullName: Lime.TangerineTextureInfoAttribute.IsValid
+  nameWithType: TangerineTextureInfoAttribute.IsValid
+- uid: Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
+  name: Validate(ITexture, Object, out String)
+  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_Validate_Lime_ITexture_System_Object_System_String__
+  commentId: M:Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture,System.Object,System.String@)
+  name.vb: Validate(ITexture, Object, ByRef String)
+  fullName: Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture, System.Object, out System.String)
+  fullName.vb: Lime.TangerineTextureInfoAttribute.Validate(Lime.ITexture, System.Object, ByRef System.String)
+  nameWithType: TangerineTextureInfoAttribute.Validate(ITexture, Object, out String)
+  nameWithType.vb: TangerineTextureInfoAttribute.Validate(ITexture, Object, ByRef String)
+- uid: Lime.TangerineTextureInfoAttribute.Validate*
+  name: Validate
+  href: api/Lime.TangerineTextureInfoAttribute.html#Lime_TangerineTextureInfoAttribute_Validate_
+  commentId: Overload:Lime.TangerineTextureInfoAttribute.Validate
+  isSpec: "True"
+  fullName: Lime.TangerineTextureInfoAttribute.Validate
+  nameWithType: TangerineTextureInfoAttribute.Validate
 - uid: Lime.TangerineTileImageTextureAttribute
   name: TangerineTileImageTextureAttribute
   href: api/Lime.TangerineTileImageTextureAttribute.html
   commentId: T:Lime.TangerineTileImageTextureAttribute
   fullName: Lime.TangerineTileImageTextureAttribute
   nameWithType: TangerineTileImageTextureAttribute
-- uid: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object,System.String@)
-  name: IsValid(Object, out String)
-  href: api/Lime.TangerineTileImageTextureAttribute.html#Lime_TangerineTileImageTextureAttribute_IsValid_System_Object_System_String__
-  commentId: M:Lime.TangerineTileImageTextureAttribute.IsValid(System.Object,System.String@)
-  name.vb: IsValid(Object, ByRef String)
-  fullName: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object, out System.String)
-  fullName.vb: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object, ByRef System.String)
-  nameWithType: TangerineTileImageTextureAttribute.IsValid(Object, out String)
-  nameWithType.vb: TangerineTileImageTextureAttribute.IsValid(Object, ByRef String)
+- uid: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object,System.Object,System.String@)
+  name: IsValid(Object, Object, out String)
+  href: api/Lime.TangerineTileImageTextureAttribute.html#Lime_TangerineTileImageTextureAttribute_IsValid_System_Object_System_Object_System_String__
+  commentId: M:Lime.TangerineTileImageTextureAttribute.IsValid(System.Object,System.Object,System.String@)
+  name.vb: IsValid(Object, Object, ByRef String)
+  fullName: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object, System.Object, out System.String)
+  fullName.vb: Lime.TangerineTileImageTextureAttribute.IsValid(System.Object, System.Object, ByRef System.String)
+  nameWithType: TangerineTileImageTextureAttribute.IsValid(Object, Object, out String)
+  nameWithType.vb: TangerineTileImageTextureAttribute.IsValid(Object, Object, ByRef String)
 - uid: Lime.TangerineTileImageTextureAttribute.IsValid*
   name: IsValid
   href: api/Lime.TangerineTileImageTextureAttribute.html#Lime_TangerineTileImageTextureAttribute_IsValid_
@@ -63219,15 +63349,15 @@ references:
   commentId: T:Lime.TangerineValidationAttribute
   fullName: Lime.TangerineValidationAttribute
   nameWithType: TangerineValidationAttribute
-- uid: Lime.TangerineValidationAttribute.IsValid(System.Object,System.String@)
-  name: IsValid(Object, out String)
-  href: api/Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_System_Object_System_String__
-  commentId: M:Lime.TangerineValidationAttribute.IsValid(System.Object,System.String@)
-  name.vb: IsValid(Object, ByRef String)
-  fullName: Lime.TangerineValidationAttribute.IsValid(System.Object, out System.String)
-  fullName.vb: Lime.TangerineValidationAttribute.IsValid(System.Object, ByRef System.String)
-  nameWithType: TangerineValidationAttribute.IsValid(Object, out String)
-  nameWithType.vb: TangerineValidationAttribute.IsValid(Object, ByRef String)
+- uid: Lime.TangerineValidationAttribute.IsValid(System.Object,System.Object,System.String@)
+  name: IsValid(Object, Object, out String)
+  href: api/Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_System_Object_System_Object_System_String__
+  commentId: M:Lime.TangerineValidationAttribute.IsValid(System.Object,System.Object,System.String@)
+  name.vb: IsValid(Object, Object, ByRef String)
+  fullName: Lime.TangerineValidationAttribute.IsValid(System.Object, System.Object, out System.String)
+  fullName.vb: Lime.TangerineValidationAttribute.IsValid(System.Object, System.Object, ByRef System.String)
+  nameWithType: TangerineValidationAttribute.IsValid(Object, Object, out String)
+  nameWithType.vb: TangerineValidationAttribute.IsValid(Object, Object, ByRef String)
 - uid: Lime.TangerineValidationAttribute.IsValid*
   name: IsValid
   href: api/Lime.TangerineValidationAttribute.html#Lime_TangerineValidationAttribute_IsValid_
@@ -63260,15 +63390,15 @@ references:
   isSpec: "True"
   fullName: Lime.TangerineValidRangeAttribute.TangerineValidRangeAttribute
   nameWithType: TangerineValidRangeAttribute.TangerineValidRangeAttribute
-- uid: Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.String@)
-  name: IsValid(Object, out String)
-  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_IsValid_System_Object_System_String__
-  commentId: M:Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.String@)
-  name.vb: IsValid(Object, ByRef String)
-  fullName: Lime.TangerineValidRangeAttribute.IsValid(System.Object, out System.String)
-  fullName.vb: Lime.TangerineValidRangeAttribute.IsValid(System.Object, ByRef System.String)
-  nameWithType: TangerineValidRangeAttribute.IsValid(Object, out String)
-  nameWithType.vb: TangerineValidRangeAttribute.IsValid(Object, ByRef String)
+- uid: Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.Object,System.String@)
+  name: IsValid(Object, Object, out String)
+  href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_IsValid_System_Object_System_Object_System_String__
+  commentId: M:Lime.TangerineValidRangeAttribute.IsValid(System.Object,System.Object,System.String@)
+  name.vb: IsValid(Object, Object, ByRef String)
+  fullName: Lime.TangerineValidRangeAttribute.IsValid(System.Object, System.Object, out System.String)
+  fullName.vb: Lime.TangerineValidRangeAttribute.IsValid(System.Object, System.Object, ByRef System.String)
+  nameWithType: TangerineValidRangeAttribute.IsValid(Object, Object, out String)
+  nameWithType.vb: TangerineValidRangeAttribute.IsValid(Object, Object, ByRef String)
 - uid: Lime.TangerineValidRangeAttribute.IsValid*
   name: IsValid
   href: api/Lime.TangerineValidRangeAttribute.html#Lime_TangerineValidRangeAttribute_IsValid_
@@ -69448,6 +69578,12 @@ references:
   commentId: F:Lime.ValidationResult.Error
   fullName: Lime.ValidationResult.Error
   nameWithType: ValidationResult.Error
+- uid: Lime.ValidationResult.Info
+  name: Info
+  href: api/Lime.ValidationResult.html#Lime_ValidationResult_Info
+  commentId: F:Lime.ValidationResult.Info
+  fullName: Lime.ValidationResult.Info
+  nameWithType: ValidationResult.Info
 - uid: Lime.ValidationResult.Ok
   name: Ok
   href: api/Lime.ValidationResult.html#Lime_ValidationResult_Ok

@@ -93,6 +93,7 @@ Otherwise it's Warning.</p>
     <div class="level1"><span class="xref">System.Attribute</span></div>
     <div class="level2"><span class="xref">TangerineValidationAttribute</span></div>
       <div class="level3"><a class="xref" href="Lime.TangerineDefaultCharsetAttribute.html">TangerineDefaultCharsetAttribute</a></div>
+      <div class="level3"><a class="xref" href="Lime.TangerineTextureInfoAttribute.html">TangerineTextureInfoAttribute</a></div>
       <div class="level3"><a class="xref" href="Lime.TangerineTileImageTextureAttribute.html">TangerineTileImageTextureAttribute</a></div>
       <div class="level3"><a class="xref" href="Lime.TangerineValidRangeAttribute.html">TangerineValidRangeAttribute</a></div>
   </div>
@@ -236,12 +237,12 @@ Otherwise it's Warning.</p>
   
   
   <a id="Lime_TangerineValidationAttribute_IsValid_" data-uid="Lime.TangerineValidationAttribute.IsValid*"></a>
-  <h4 id="Lime_TangerineValidationAttribute_IsValid_System_Object_System_String__" data-uid="Lime.TangerineValidationAttribute.IsValid(System.Object,System.String@)">IsValid(Object, out String)</h4>
+  <h4 id="Lime_TangerineValidationAttribute_IsValid_System_Object_System_Object_System_String__" data-uid="Lime.TangerineValidationAttribute.IsValid(System.Object,System.Object,System.String@)">IsValid(Object, Object, out String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract ValidationResult IsValid(object value, out string message)</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract ValidationResult IsValid(object owner, object value, out string message)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -253,6 +254,11 @@ Otherwise it's Warning.</p>
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">owner</span></td>
+        <td></td>
+      </tr>
       <tr>
         <td><span class="xref">System.Object</span></td>
         <td><span class="parametername">value</span></td>
