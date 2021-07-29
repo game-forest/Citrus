@@ -281,7 +281,7 @@ namespace Lime
 				var imageSize = texture.ImageSize;
 				var accuracy = 1e-4;
 				if (Math.Abs(imageSize.Height - size.Y) > accuracy || Math.Abs(imageSize.Width - size.X) > accuracy) {
-					message = $"Size of image is different from size of image on disc";
+					message = $"The size is different from the size of the original image ({imageSize.Width}x{imageSize.Height})";
 					return ValidationResult.Info;
 				}
 			}
@@ -301,8 +301,10 @@ namespace Lime
 			if (!(texture is null) && value is Vector2 size) {
 				var imageSize = texture.ImageSize;
 				var accuracy = 1e-4;
-				if (Math.Abs((float) imageSize.Width / (float) imageSize.Height - size.X / size.Y) > accuracy) {
-					message = $"Ratio of image is different from ratio of image on disc";
+				var originalAspectRatio = (float)imageSize.Width / (float)imageSize.Height;
+				var currentAspectRatio = size.X / size.Y;
+				if (Math.Abs(currentAspectRatio - originalAspectRatio) > accuracy) {
+					message = $"Aspect ratio ({currentAspectRatio}) is different from the aspect ratio of the original image ({originalAspectRatio})";
 					return ValidationResult.Info;
 				}
 			}
