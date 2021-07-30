@@ -1,7 +1,5 @@
 ﻿#if ANDROID
-using System;
 using Android.Content;
-using Android;
 
 namespace Lime
 {
@@ -11,9 +9,13 @@ namespace Lime
 		{
 			get
 			{
-				var clipboard = (Android.Content.ClipboardManager)ActivityDelegate.Instance.Activity.
+				var clipboard = (ClipboardManager) ActivityDelegate.Instance.Activity.
 					GetSystemService(Android.Content.Context.ClipboardService);
-				if ((clipboard.HasPrimaryClip) && (clipboard.PrimaryClipDescription.HasMimeType(ClipDescription.MimetypeTextPlain))) {
+
+				if (
+					clipboard.HasPrimaryClip &&
+					clipboard.PrimaryClipDescription.HasMimeType(ClipDescription.MimetypeTextPlain)
+				) {
 					return clipboard.PrimaryClip.GetItemAt(0).Text;
 				} else {
 					return "";
@@ -21,10 +23,10 @@ namespace Lime
 			}
 			set
 			{
-				var clipboard = (Android.Content.ClipboardManager)ActivityDelegate.Instance.Activity.
+				var clipboard = (ClipboardManager) ActivityDelegate.Instance.Activity.
 					GetSystemService(Android.Content.Context.ClipboardService);
-				var clip = Android.Content.ClipData.NewPlainText("", value);				
-			}	
+				clipboard.PrimaryClip = ClipData.NewPlainText("", value);
+			}
 		}
 	}
 }
