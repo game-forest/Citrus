@@ -2,6 +2,7 @@ using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Tangerine.Core;
 using Tangerine.UI;
 
@@ -92,6 +93,8 @@ namespace Tangerine.Dialogs
 					button.CommandState = KeyboardCommandState.Generic;
 				}
 
+				button.CurrentCommands.Clear();
+				button.CurrentCommands.AddRange(currentCommands);
 				button.CommandName = currentCommands.FirstOrDefault(i => i.CategoryInfo == Category)?.Title;
 			}
 			SelectedShortcutChanged?.Invoke();
@@ -432,6 +435,11 @@ namespace Tangerine.Dialogs
 			Key = key;
 			((KeyboardButtonPresenter) Presenter).IsModifier = Key.IsModifier();
 			State = KeyboardButtonState.None;
+			Components.Add(new TooltipComponent(() => {
+				var tooltip = new StringBuilder();
+				tooltip.AppendJoin('\n', CurrentCommands.Select(command => $"{command.Title} <{command.Shortcut}>"));
+				return tooltip.ToString();
+			}));
 		}
 
 		public string CommandName
@@ -447,6 +455,8 @@ namespace Tangerine.Dialogs
 		}
 
 		public List<CommandInfo> Commands { get; private set; } = new List<CommandInfo>();
+
+		public List<CommandInfo> CurrentCommands { get; private set; } = new List<CommandInfo>();
 
 		private KeyboardButtonState state;
 		public KeyboardButtonState State
@@ -526,5 +536,7 @@ namespace Tangerine.Dialogs
 			float thickness = borderColor == ColorTheme.Current.Keyboard.SelectedBorder ? 2 : 1;
 			Renderer.DrawRectOutline(Vector2.Zero, widget.Size, borderColor, thickness);
 		}
+
+		public override bool PartialHitTest(Node node, ref HitTestArgs args) => node.PartialHitTest(ref args);
 	}
 }
