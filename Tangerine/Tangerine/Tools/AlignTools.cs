@@ -17,20 +17,22 @@ namespace Tangerine
 	{
 		private readonly ICommand command;
 
+		protected virtual string DisplayedPrefix => "Align";
+
 		protected AlignToHandler(ICommand command)
 		{
 			this.command = command;
 		}
 
-		protected static string GetDisplayedTextForAlign(AlignTo align)
+		protected static string GetDisplayedTextForAlign(AlignTo align, AlignToHandler alignToHandler)
 		{
 			switch (align) {
 				case AlignTo.Selection:
-					return "Align to Selection";
+					return $"{alignToHandler.DisplayedPrefix} to Selection";
 				case AlignTo.Root:
-					return "Align to Root";
+					return $"{alignToHandler.DisplayedPrefix} to Root";
 				case AlignTo.Parent:
-					return "Align to Parent";
+					return $"{alignToHandler.DisplayedPrefix} to Parent";
 				default:
 					throw new ArgumentException();
 			}
@@ -44,7 +46,7 @@ namespace Tangerine
 		protected void SetTextAndTexture()
 		{
 			var alignTo = GetAlignTo();
-			command.Text = GetDisplayedTextForAlign(alignTo);
+			command.Text = GetDisplayedTextForAlign(alignTo, this);
 			command.Icon = GetIconForAlign(alignTo);
 		}
 
@@ -96,7 +98,7 @@ namespace Tangerine
 				var menu = new Menu();
 				var currentAlignObject = alignToHandler.GetAlignTo();
 				foreach (AlignTo alignObject in Enum.GetValues(typeof(AlignTo))) {
-					menu.Add(new Command(GetDisplayedTextForAlign(alignObject),
+					menu.Add(new Command(GetDisplayedTextForAlign(alignObject, alignToHandler),
 						new ChangeAlignTo(alignObject, alignToHandler).Execute) {
 						Checked = currentAlignObject == alignObject
 					});
@@ -109,6 +111,8 @@ namespace Tangerine
 	public class CenterToHandler : AlignToHandler
 	{
 		public static AlignTo CenterAlignTo = AlignTo.Parent;
+
+		protected override string DisplayedPrefix => "Center";
 
 		public CenterToHandler(ICommand command) : base(command)
 		{
@@ -133,13 +137,13 @@ namespace Tangerine
 				var alignTo = alignToHandler.GetAlignTo();
 				new Menu {
 					new Command(
-						GetDisplayedTextForAlign(AlignTo.Parent),
+						GetDisplayedTextForAlign(AlignTo.Parent, alignToHandler),
 						new ChangeAlignTo(AlignTo.Parent, alignToHandler).Execute
 					) {
 						Checked = alignTo == AlignTo.Parent
 					},
 					new Command(
-						GetDisplayedTextForAlign(AlignTo.Root),
+						GetDisplayedTextForAlign(AlignTo.Root, alignToHandler),
 						new ChangeAlignTo(AlignTo.Root, alignToHandler).Execute
 					) {
 						Checked = alignTo == AlignTo.Root
