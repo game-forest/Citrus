@@ -77,7 +77,8 @@ namespace Tangerine.UI.SceneView
 		private static void SnapLineToNearestPoint(RulerLine line, IEnumerable<Quadrangle> hulls)
 		{
 			var step = 1f;
-			var mousePos = SceneView.Instance.Scene.LocalMousePosition();
+			var rootMatrix = Document.Current.RootNode.AsWidget.CalcLocalToParentTransform().CalcInversed();
+			var mousePos = SceneView.Instance.Scene.LocalMousePosition() * rootMatrix;
 			if (!sceneView.Input.IsKeyPressed(Key.Shift)) {
 				step = (float)Math.Truncate(RulersWidget.CalculateEffectiveStep()) / RulersWidget.Tesselation;
 			}
@@ -106,10 +107,12 @@ namespace Tangerine.UI.SceneView
 
 		private RulerLine GetLineUnderMouse()
 		{
-			var pos = SceneView.Instance.Scene.LocalMousePosition();
+			var rootMatrix = Document.Current.RootNode.AsWidget.CalcLocalToParentTransform().CalcInversed();
+			var pos = SceneView.Instance.Scene.LocalMousePosition() * rootMatrix;
 			return ProjectUserPreferences.Instance.ActiveRuler.Lines.FirstOrDefault(line => {
 				var mask = line.RulerOrientation.GetDirection();
-				return ((line.GetClosestPointToOrigin() - pos) * mask).Length <= Threshold / sceneView.Scene.Scale.X;
+				var origin = line.GetClosestPointToOrigin();
+				return ((origin - pos) * mask).Length <= Threshold / sceneView.Scene.Scale.X;
 			});
 		}
 	}
