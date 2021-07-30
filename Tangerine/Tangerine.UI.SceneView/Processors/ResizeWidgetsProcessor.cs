@@ -155,11 +155,11 @@ namespace Tangerine.UI.SceneView
 		}
 
 		private static void RescaleWidgets(bool hullInFirstWidgetSpace, Vector2? pivotPoint, List<Widget> widgets, int controlPointIndex,
-			Vector2 curMousePos, Vector2 prevMousePos, bool proportional, bool convertScaleToSize, bool isNumericalMode)
+			Vector2 curMousePos, Vector2 prevMousePos, bool proportional, bool convertScaleToSize, bool isRoundingMode)
 		{
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
 				widgets, pivotPoint, hullInFirstWidgetSpace, curMousePos, prevMousePos,
-				convertScaleToSize, isNumericalMode,
+				convertScaleToSize, isRoundingMode,
 				(originalVectorInObbSpace, deformedVectorInObbSpace) => {
 					var deformationScaleInObbSpace = new Vector2d(
 						Math.Abs(originalVectorInObbSpace.X) < Mathf.ZeroTolerance ? 1 : deformedVectorInObbSpace.X / originalVectorInObbSpace.X,

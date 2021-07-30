@@ -191,7 +191,7 @@ namespace Tangerine.UI.SceneView
 				widgets.Count <= 1, initialMousePos + mouseDelta,
 				initialMousePos,
 				convertScaleToSize: false,
-				isNumericalMode: false,
+				isRoundingMode: false,
 				OnCalculateTransformation
 			);
 		}
