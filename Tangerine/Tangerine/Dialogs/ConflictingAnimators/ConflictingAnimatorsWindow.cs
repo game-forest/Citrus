@@ -33,7 +33,8 @@ namespace Tangerine
 					window.DecoratedPosition = position ?? (displayCenter - window.DecoratedSize / 2f);
 					window.Closing += OnClose;
 
-					// TODO: Fix memory leaks.
+					// TODO:
+					// Fix memory leaks.
 					Project.Closing += () => window.Title = DefaultTitle;
 					Project.Opening += path => window.Title = $"{System.IO.Path.GetFileNameWithoutExtension(Project.Current.CitprojPath)} - {DefaultTitle}";
 					instance = new ConflictingAnimatorsWindowWidget(window);
@@ -44,6 +45,7 @@ namespace Tangerine
 			public static bool OnClose(CloseReason reason)
 			{
 				position = instance?.Window?.DecoratedPosition;
+				instance.UnlinkAndDispose();
 				instance = null;
 				return true;
 			}

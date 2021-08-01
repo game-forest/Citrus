@@ -2,6 +2,7 @@ using Lime;
 using System.Collections.Generic;
 using Tangerine.Core;
 using Tangerine.UI;
+using Tangerine.UI.Widgets.ConflictingAnimators;
 
 namespace Tangerine
 {
@@ -113,18 +114,19 @@ namespace Tangerine
 		{
 			SearchResultsView.Content.Nodes.Clear();
 			ConflictingAnimatorsInfoProvider.Invalidate();
-			var sections = new Dictionary<string, ConflictingAnimatorsSection>();
+			var sections = new Dictionary<string, SectionWidget>();
 			var isGlobal = GlobalCheckBox.Checked;
 			var external = ExternalScenesCheckBox.Checked;
 			var path = isGlobal ? null : Document.Current.Path;
+			var iconTexture = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
 			foreach (var info in ConflictingAnimatorsInfoProvider.Get(path, external && !isGlobal)) {
 				if (info != null) {
 					if (!sections.TryGetValue(info.DocumentPath, out var section)) {
-						section = new ConflictingAnimatorsSection(info.DocumentPath);
+						section = new SectionWidget(info.DocumentPath, iconTexture);
 						sections[info.DocumentPath] = section;
 						SearchResultsView.Content.AddNode(section);
 					}
-					section.AddItem(new ConflictingAnimatorsItem(info, SearchResultsView));
+					section.AddItem(new SectionItemWidget(info));
 				}
 			}
 		}

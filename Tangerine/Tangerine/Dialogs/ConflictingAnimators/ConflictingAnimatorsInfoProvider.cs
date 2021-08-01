@@ -2,7 +2,7 @@ using Lime;
 using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
-using Tangerine.UI;
+using Tangerine.UI.Widgets.ConflictingAnimators;
 using KeyframeColor = Tangerine.Core.PropertyAttributes<Lime.TangerineKeyframeColorAttribute>;
 
 namespace Tangerine
@@ -15,7 +15,7 @@ namespace Tangerine
 
 		public static void Invalidate() => visited = null;
 
-		public static IEnumerable<ConflictingAnimatorsInfo> Get(string assetName = null, bool shouldTraverseExternalScenes = true)
+		public static IEnumerable<ConflictInfo> Get(string assetName = null, bool shouldTraverseExternalScenes = true)
 		{
 			if (Project.Current == null) yield break;
 
@@ -70,14 +70,14 @@ namespace Tangerine
 						var propertyKeyframeColorIndices = conflicts.Select(i =>
 							KeyframeColor.Get(i.animable.GetType(), i.property)?.ColorIndex ?? 0
 						).ToArray();
-						yield return new ConflictingAnimatorsInfo(
+						yield return new ConflictInfo(
 							nodeType,
 							relativePath,
 							documentPath,
 							targetProperties,
 							concurrentAnimations,
 							propertyKeyframeColorIndices,
-							nodeIndexForPathCollisions: node.Parent?.Nodes.IndexOf(node)
+							nodeIndex: node.Parent?.Nodes.IndexOf(node)
 						);
 					}
 
