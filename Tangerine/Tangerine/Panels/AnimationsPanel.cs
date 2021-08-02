@@ -618,7 +618,7 @@ namespace Tangerine.Panels
 				if (!isRoot) {
 					BuildTooltipForNode(Node);
 				}
-				label = !isRoot && string.IsNullOrEmpty(Node.Id) ? Node.GetType().Name : Node.Id;
+				label = string.IsNullOrEmpty(Node.Id) ? $"<{Node.GetType().Name}>" : Node.Id;
 				Tooltip = stringBuilder.ToString();
 
 				void BuildTooltipForNode(Node node)
