@@ -1103,7 +1103,7 @@ namespace Tangerine.Panels
 							}
 							var animation = animationItem.Animation;
 							var presentation = (AnimationTreeViewItemPresentation)animationItem.Presentation;
-							if (activeAnimation.IsLegacy || mode == TreeViewMode.AllHierarchy) {
+							if (activeAnimation == null || activeAnimation.IsLegacy || mode == TreeViewMode.AllHierarchy) {
 								SetEmptyWarning(presentation);
 							} else {
 								if (animation == activeAnimation) {
