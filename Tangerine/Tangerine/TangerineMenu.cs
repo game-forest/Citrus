@@ -227,7 +227,8 @@ namespace Tangerine
 				new Command("Help", new Menu {
 					GenericCommands.ViewHelp,
 					GenericCommands.HelpMode,
-					GenericCommands.ViewChangelog
+					GenericCommands.ViewChangelog,
+					GenericCommands.About
 				}),
 				new Command("System", new Menu {
 					GenericCommands.ResetGlobalSettings,
