@@ -36,7 +36,7 @@ namespace Tangerine.UI.Timeline.Operations
 	{
 		public static void Perform<T>(string propertyName, Func<T, object> valueGetter) where T: IAnimationHost
 		{
-			Document.Current.History.DoTransaction(() => {
+			Document.Current?.History.DoTransaction(() => {
 				bool hasKey = false;
 				bool hasNoKey = false;
 				var nodes = Document.Current.SelectedNodes().Editable().OfType<T>().ToList();
