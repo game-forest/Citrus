@@ -16,18 +16,16 @@ namespace Tangerine.UI
 			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
 			StringBuilder stringbBuilder = new StringBuilder();
 			var citrusDir = Orange.Toolbox.FindCitrusDirectory();
-			Git.Update(projectDir);
 			Git.Exec(projectDir, "remote -v", stringbBuilder);
 			var projectRemoteUri = stringbBuilder.ToString().IsNullOrWhiteSpace() ?
 				"" : stringbBuilder.ToString().Split('\n')[0].Split(' ', '\t')[1];
 			Git.Exec(projectDir, "rev-parse HEAD", stringbBuilder.Clear());
 			var projectLatestCommit = stringbBuilder.ToString();
-			Git.Update(citrusDir);
 			Git.Exec(citrusDir, "rev-parse HEAD", stringbBuilder.Clear());
 			var citrusLatestCommit = stringbBuilder.ToString();
 			string info = $"Project remote url: {projectRemoteUri} \n" +
-						  $"Project commit: {projectLatestCommit}" +
-						  $"Citrus commit: {citrusLatestCommit}";
+				$"Project commit: {projectLatestCommit}" +
+				$"Citrus commit: {citrusLatestCommit}";
 			return info;
 		}
 		public static void DisplayInformation()

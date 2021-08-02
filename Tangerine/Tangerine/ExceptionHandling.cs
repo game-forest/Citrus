@@ -11,7 +11,7 @@ namespace Tangerine
 	{
 		public static void Handle(System.Exception e)
 		{
-			var errorText = About.GetInformation() + "\n" + e.Message + "\n" + e.StackTrace;
+			var errorText = $"{About.GetInformation()} \n {e.Message} \n {e.StackTrace}";
 			var alertDialog = new AlertDialog(errorText, "Copy", "Save As", "Ok");
 			switch (alertDialog.Show()) {
 				case 0: {
