@@ -8,6 +8,7 @@ using Orange;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.Dialogs.ConflictingAnimators;
 using Tangerine.MainMenu;
 using Tangerine.Panels;
 using Tangerine.UI;

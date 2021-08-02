@@ -1,32 +1,49 @@
-using Lime;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using Lime;
+using Orange;
 using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.Widgets.ConflictingAnimators;
+using Console = System.Console;
 
-namespace Tangerine
+namespace Tangerine.Dialogs.ConflictingAnimators
 {
 	public class ConflictingAnimatorsWindowWidget : ThemedInvalidableWindowWidget
 	{
-		private const string BoldStyleTag = "b";
+		// TODO:
+		// Encapsulate data in a specialized view widget.
+		private readonly ITexture sectionTexture = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
+		private readonly Dictionary<string, SectionWidget> sections = new Dictionary<string, SectionWidget>();
+		private readonly Queue<ConflictInfo> pending = new Queue<ConflictInfo>();
 
-		public ThemedScrollView SearchResultsView { get; protected set; }
-		public ThemedButton SearchButton { get; protected set; }
-		public ThemedCheckBox GlobalCheckBox { get; protected set; }
-		public ThemedCheckBox ExternalScenesCheckBox { get; protected set; }
+		private CancellationTokenSource enumeratingNodesCancellationSource;
+
+		public readonly ThemedScrollView SearchResultsView;
+		public readonly ThemedButton SearchButton;
+		public readonly ThemedButton CancelButton;
+		public readonly ThemedCheckBox GlobalCheckBox;
+		public readonly ThemedCheckBox ExternalScenesCheckBox;
 
 		public ConflictingAnimatorsWindowWidget(Window window) : base(window)
 		{
 			Layout = new VBoxLayout { Spacing = 8 };
 			Padding = new Thickness(8);
 			FocusScope = new KeyboardFocusScope(this);
-			CreateContent();
-		}
 
-		private void CreateContent()
-		{
+			SearchButton = new ThemedButton { Text = "Search" };
+			CancelButton = new ThemedButton { Text = "Cancel" };
+			GlobalCheckBox = new ThemedCheckBox();
+			ExternalScenesCheckBox = new ThemedCheckBox();
+			SearchButton.Clicked += OnSearchIssued;
+			CancelButton.Clicked += OnSearchCancelled;
+			GlobalCheckBox.Changed += OnGlobalSearchToggled;
+			ExternalScenesCheckBox.Changed += OnExternalScenesTraversionToggled;
+
 			AddNode(SearchResultsView = CreateScrollView());
 			AddNode(CreateSearchControlsBar());
+			Tasks.Add(PendingInfoProcessor);
 		}
 
 		private ThemedScrollView CreateScrollView()
@@ -66,34 +83,16 @@ namespace Tangerine
 
 		private Widget CreateSearchControlsBar()
 		{
-			SearchButton = new ThemedButton {
-				Text = "Search",
-				Clicked = OnSearchIssued,
-			};
-
-			var labeledGlobalCheckBox = CreateLabeledCheckBox(
-				GlobalCheckBox = new ThemedCheckBox {
-					Checked = false,
-				},
-				text: "Global"
-			);
-			GlobalCheckBox.Changed += OnGlobalSearchToggled;
-
-			var labeledExternalScenesCheckBox = CreateLabeledCheckBox(
-				ExternalScenesCheckBox = new ThemedCheckBox {
-					Checked = false,
-				},
-				text: "External Scenes"
-			);
-			ExternalScenesCheckBox.Changed += OnExternalScenesTraversionToggled;
-
-			var observedSceneLabel = CreateLabel();
-			observedSceneLabel.Tasks.AddLoop(() => {
-				observedSceneLabel.Visible = Document.Current != null;
-				observedSceneLabel.Text = $"Observed Document: <{BoldStyleTag}>{Document.Current?.DisplayName}</{BoldStyleTag}>";
-				AdjustLabelWidth(observedSceneLabel);
+			var sceneCaption = new ThemedCaption();
+			sceneCaption.Tasks.AddLoop(() => {
+				sceneCaption.Visible = Document.Current != null;
+				sceneCaption.Text = $"Observed Document: {ThemedCaption.Stylize(Document.Current?.DisplayName, TextStyleIdentifiers.Bold)}";
+				sceneCaption.AdjustWidthToText();
 			});
 
+			// TODO:
+			// Make progress bar that shows up
+			// once search has been issued.
 			var spacer = Spacer.HFill();
 			spacer.Height = spacer.MaxHeight = 0.0f;
 
@@ -102,32 +101,76 @@ namespace Tangerine
 				LayoutCell = new LayoutCell(Alignment.LeftCenter),
 				Nodes = {
 					SearchButton,
-					labeledGlobalCheckBox,
-					labeledExternalScenesCheckBox,
+					CancelButton,
+					AddCaptionToCheckBox(GlobalCheckBox, "Global"),
+					AddCaptionToCheckBox(ExternalScenesCheckBox, "External Scenes"),
 					spacer,
-					observedSceneLabel,
+					sceneCaption,
 				},
 			};
 		}
 
-		private void OnSearchIssued()
+		private IEnumerator<object> PendingInfoProcessor()
 		{
-			SearchResultsView.Content.Nodes.Clear();
-			ConflictingAnimatorsInfoProvider.Invalidate();
-			var sections = new Dictionary<string, SectionWidget>();
-			var isGlobal = GlobalCheckBox.Checked;
-			var external = ExternalScenesCheckBox.Checked;
-			var path = isGlobal ? null : Document.Current.Path;
-			var iconTexture = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
-			foreach (var info in ConflictingAnimatorsInfoProvider.Get(path, external && !isGlobal)) {
-				if (info != null) {
+			while (true) {
+				for (var i = 0; i < 100; ++i) {
+					if (pending.Count == 0) break;
+
+					var info = pending.Dequeue();
 					if (!sections.TryGetValue(info.DocumentPath, out var section)) {
-						section = new SectionWidget(info.DocumentPath, iconTexture);
+						section = new SectionWidget(info.DocumentPath, sectionTexture);
 						sections[info.DocumentPath] = section;
 						SearchResultsView.Content.AddNode(section);
 					}
 					section.AddItem(new SectionItemWidget(info));
 				}
+				yield return null;
+			}
+		}
+
+		private void OnSearchIssued()
+		{
+			FillItemsCancel();
+			SearchResultsView.Content.Nodes.Clear();
+			ConflictingAnimatorsInfoProvider.Invalidate();
+			FillItemsAsync();
+		}
+
+		private void OnSearchCancelled() => FillItemsCancel();
+
+		private void FillItemsCancel()
+		{
+			enumeratingNodesCancellationSource?.Cancel();
+			enumeratingNodesCancellationSource = null;
+		}
+
+		private async void FillItemsAsync()
+		{
+			sections.Clear();
+			pending.Clear();
+			var isGlobal = GlobalCheckBox.Checked;
+			var external = ExternalScenesCheckBox.Checked;
+			var path = isGlobal ? null : Document.Current.Path;
+			var shouldTraverseExternal = external && !isGlobal;
+			enumeratingNodesCancellationSource = new CancellationTokenSource();
+			try {
+				var cancellationToken = enumeratingNodesCancellationSource.Token;
+				await System.Threading.Tasks.Task.Run(
+					() => {
+						AssetBundle.Current = new TangerineAssetBundle(The.Workspace.AssetsDirectory);
+						foreach (var info in ConflictingAnimatorsInfoProvider.Get(path, shouldTraverseExternal, cancellationToken)) {
+							cancellationToken.ThrowIfCancellationRequested();
+							pending.Enqueue(info);
+						}
+					},
+					cancellationToken
+				);
+				enumeratingNodesCancellationSource = null;
+			} catch (OperationCanceledException) {
+				// Suppress
+			} catch (System.Exception exception) {
+				Console.WriteLine(exception);
+				enumeratingNodesCancellationSource = null;
 			}
 		}
 
@@ -140,52 +183,15 @@ namespace Tangerine
 
 		private void OnExternalScenesTraversionToggled(CheckBox.ChangedEventArgs args) { }
 
-		private static RichText CreateLabel(string text = null) {
-			text ??= string.Empty;
-			var label = new RichText {
-				Text = text,
-				LayoutCell = new LayoutCell(Alignment.LeftCenter),
-				Padding = new Thickness(left: 5.0f),
-				MinMaxHeight = Theme.Metrics.TextHeight,
-				Localizable = false,
-				Color = Color4.White,
-				HAlignment = HAlignment.Left,
-				VAlignment = VAlignment.Center,
-				OverflowMode = TextOverflowMode.Ellipsis,
-				TrimWhitespaces = true,
-				Nodes = {
-					new TextStyle {
-						Size = Theme.Metrics.TextHeight,
-						TextColor = Theme.Colors.BlackText,
-					},
-					new TextStyle {
-						Id = BoldStyleTag,
-						Size = Theme.Metrics.TextHeight,
-						TextColor = Theme.Colors.BlackText,
-						Font = new SerializableFont(FontPool.DefaultBoldFontName),
-					},
-				},
-			};
-			AdjustLabelWidth(label);
-			return label;
-		}
-
-		private static void AdjustLabelWidth(RichText label)
+		private static Widget AddCaptionToCheckBox(ThemedCheckBox checkBox, string text)
 		{
-			// TODO: Reconsider after uniform TextWidget is merged.
-			label.Width = 1024.0f;
-			label.MinMaxWidth = label.Width = label.MeasureText().Width;
-		}
-
-		private static Widget CreateLabeledCheckBox(ThemedCheckBox checkBox, string text)
-		{
-			var label = CreateLabel(text);
+			var caption = new ThemedCaption(text);
 			return new Frame {
 				Layout = new HBoxLayout { Spacing = 2 },
 				LayoutCell = new LayoutCell(Alignment.LeftCenter),
 				Nodes = {
 					checkBox,
-					label,
+					caption,
 				}
 			};
 		}

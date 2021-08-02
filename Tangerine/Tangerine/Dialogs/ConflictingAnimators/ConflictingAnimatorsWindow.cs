@@ -3,7 +3,7 @@ using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.Docking;
 
-namespace Tangerine
+namespace Tangerine.Dialogs.ConflictingAnimators
 {
 	public class ConflictingAnimatorsWindow
 	{

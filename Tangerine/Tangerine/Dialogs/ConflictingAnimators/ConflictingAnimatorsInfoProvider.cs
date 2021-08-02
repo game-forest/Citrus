@@ -1,11 +1,14 @@
-using Lime;
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
+using Lime;
 using Tangerine.Core;
 using Tangerine.UI.Widgets.ConflictingAnimators;
 using KeyframeColor = Tangerine.Core.PropertyAttributes<Lime.TangerineKeyframeColorAttribute>;
 
-namespace Tangerine
+namespace Tangerine.Dialogs.ConflictingAnimators
 {
 	public static class ConflictingAnimatorsInfoProvider
 	{
@@ -15,8 +18,13 @@ namespace Tangerine
 
 		public static void Invalidate() => visited = null;
 
-		public static IEnumerable<ConflictInfo> Get(string assetName = null, bool shouldTraverseExternalScenes = true)
-		{
+		// TODO:
+		// Decompose this Charlie Foxtrot.
+		public static IEnumerable<ConflictInfo> Get(
+			string assetName,
+			bool shouldTraverseExternalScenes,
+			CancellationToken cancellationToken
+		) {
 			if (Project.Current == null) yield break;
 
 			visited ??= new HashSet<string>();
@@ -26,18 +34,21 @@ namespace Tangerine
 				.Select(asset => asset.Value.Path);
 
 			foreach (var asset in assets) {
+				cancellationToken.ThrowIfCancellationRequested();
 				if (visited.Contains(asset)) continue;
 				visited.Add(asset);
 
 				Node root;
 				try {
 					root = Node.Load(asset);
-				} catch {
+				} catch (System.Exception exception) {
+					Console.WriteLine(exception);
 					continue;
 				}
 
 				var queue = new Queue<Node>(root.Nodes);
 				while (queue.Count > 0) {
+					cancellationToken.ThrowIfCancellationRequested();
 					var node = queue.Dequeue();
 					var documentPath = asset;
 					var relativePathStack = new Stack<string>();
@@ -61,7 +72,7 @@ namespace Tangerine
 							property: i.Key,
 							animable: i.First().Animable,
 							animations: new SortedSet<string>(i.Select(j => j.AnimationId ?? "Legacy")
-						)));
+						))).ToImmutableList();
 
 					if (conflicts.Any()) {
 						var nodeType = node.GetType();
@@ -84,7 +95,8 @@ namespace Tangerine
 					var isExternal = !string.IsNullOrEmpty(node.ContentsPath);
 					if (isExternal) {
 						if (shouldTraverseExternalScenes) {
-							foreach (var child in Get(node.ContentsPath)) {
+							foreach (var child in Get(node.ContentsPath, shouldTraverseExternalScenes, cancellationToken)) {
+								cancellationToken.ThrowIfCancellationRequested();
 								yield return child;
 							}
 						}

@@ -100,9 +100,9 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		{
 			try {
 				Project.Current.OpenDocument(Info.DocumentPath);
-			} catch (System.Exception e) {
-				var message = $"Couldn't open {Info.DocumentPath}\n{e.Message}";
-				Logger.Write(message);
+			} catch (System.Exception exception) {
+				System.Console.WriteLine(exception);
+				var message = $"Couldn't open {Info.DocumentPath}\n\n{exception.Message}";
 				new AlertDialog(message, "Ok").Show();
 				return;
 			}
@@ -112,9 +112,9 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				NavigateToNode.Perform(node, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
 				NavigateToAnimation.Perform(GetAnimation(node));
 				SelectPropertyRow(Document.Current.GetSceneItemForObject(node));
-			} catch (System.Exception e) {
-				var message = $"Couldn't perform navigation\n{e.Message}";
-				Logger.Write(message);
+			} catch (System.Exception exception) {
+				System.Console.WriteLine(exception);
+				var message = $"Couldn't perform navigation\n\n{exception.Message}";
 				new AlertDialog(message, "Ok").Show();
 			}
 		}

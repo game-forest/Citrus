@@ -128,7 +128,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				Nodes = { Margin },
 			};
 
-			var caption = new ThemedCaption($"Target Property: {WrapProperty(property)}; Potential Conflicts: ");
+			var caption = new ThemedCaption($"Target Property: {StylizeProperty(property)}; Potential Conflicts: ");
 			caption.PropertyStyle.TextColor = propertyColor;
 			conflict.AddNode(caption);
 
@@ -156,7 +156,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			return caption;
 		}
 
-		private static string WrapProperty(string text) =>
-			$"<{TextStyleIdentifiers.PropertyColor}>{text}</{TextStyleIdentifiers.PropertyColor}>";
+		private static string StylizeProperty(string text) => ThemedCaption.Stylize(text, TextStyleIdentifiers.PropertyColor);
 	}
 }

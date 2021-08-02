@@ -47,5 +47,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			Width = 1024.0f;
 			MinMaxWidth = Width = MeasureText().Width + ExtraWidth;
 		}
+
+		public static string Stylize(string text, TextStyleIdentifier id) => $"<{id}>{text}</{id}>";
 	}
 }
