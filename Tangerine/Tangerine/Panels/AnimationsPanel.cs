@@ -616,17 +616,16 @@ namespace Tangerine.Panels
 				label = null;
 				bool isRoot = Node == Document.Current.RootNode;
 				if (!isRoot) {
-					BuildLabelForNode(Node);
+					BuildTooltipForNode(Node);
 				}
 				label = !isRoot && string.IsNullOrEmpty(Node.Id) ? Node.GetType().Name : Node.Id;
 				Tooltip = stringBuilder.ToString();
 
-				void BuildLabelForNode(Node node)
+				void BuildTooltipForNode(Node node)
 				{
-					if (node.Parent?.Parent != null) {
-						BuildLabelForNode(node.Parent);
+					if (node.Parent != null) {
+						BuildTooltipForNode(node.Parent);
 					}
-					var id = string.IsNullOrEmpty(node.Id) ? node.GetType().Name : node.Id;
 					if (!string.IsNullOrEmpty(node.Tag)) {
 						stringBuilder.Append(' ');
 						stringBuilder.Append('(');
@@ -643,7 +642,13 @@ namespace Tangerine.Panels
 					if (stringBuilder.Length > 0) {
 						stringBuilder.Append('/');
 					}
-					stringBuilder.Append(id);
+					if (string.IsNullOrEmpty(node.Id)) {
+						stringBuilder.Append('<');
+						stringBuilder.Append(node.GetType().Name);
+						stringBuilder.Append('>');
+					} else {
+						stringBuilder.Append(node.Id);
+					}
 				}
 			}
 
