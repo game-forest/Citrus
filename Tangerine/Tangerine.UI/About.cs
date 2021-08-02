@@ -11,7 +11,7 @@ namespace Tangerine.UI
 	/// </summary>
 	public static class About
 	{
-		public static void DisplayInformation()
+		public static string GetInformation()
 		{
 			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
 			StringBuilder stringbBuilder = new StringBuilder();
@@ -28,7 +28,12 @@ namespace Tangerine.UI
 			string info = $"Project remote url: {projectRemoteUri} \n" +
 						  $"Project commit: {projectLatestCommit}" +
 						  $"Citrus commit: {citrusLatestCommit}";
-			var alertDialog = new AlertDialog(info, "Copy", "Close");
+			return info;
+		}
+		public static void DisplayInformation()
+		{
+			var info = GetInformation();
+			var alertDialog = new AlertDialog(info, "Copy Info", "Close");
 			switch (alertDialog.Show()) {
 				case 0: {
 						// Copy to clipboard
