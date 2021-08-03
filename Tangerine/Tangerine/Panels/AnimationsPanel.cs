@@ -604,6 +604,8 @@ namespace Tangerine.Panels
 				set { }
 			}
 
+			public string Tooltip { get; private set; }
+
 			private static readonly StringBuilder stringBuilder = new StringBuilder(128);
 
 			private string label;
@@ -612,17 +614,18 @@ namespace Tangerine.Panels
 			{
 				stringBuilder.Clear();
 				label = null;
-				if (Node != Document.Current.RootNode) {
-					BuildLabelForNode(Node);
+				bool isRoot = Node == Document.Current.RootNode;
+				if (!isRoot) {
+					BuildTooltipForNode(Node);
 				}
-				label = stringBuilder.ToString();
+				label = string.IsNullOrEmpty(Node.Id) ? $"<{Node.GetType().Name}>" : Node.Id;
+				Tooltip = stringBuilder.ToString();
 
-				void BuildLabelForNode(Node node)
+				void BuildTooltipForNode(Node node)
 				{
-					if (node.Parent?.Parent != null) {
-						BuildLabelForNode(node.Parent);
+					if (node.Parent != null) {
+						BuildTooltipForNode(node.Parent);
 					}
-					var id = string.IsNullOrEmpty(node.Id) ? node.GetType().Name : node.Id;
 					if (!string.IsNullOrEmpty(node.Tag)) {
 						stringBuilder.Append(' ');
 						stringBuilder.Append('(');
@@ -639,7 +642,13 @@ namespace Tangerine.Panels
 					if (stringBuilder.Length > 0) {
 						stringBuilder.Append('/');
 					}
-					stringBuilder.Append(id);
+					if (string.IsNullOrEmpty(node.Id)) {
+						stringBuilder.Append('<');
+						stringBuilder.Append(node.GetType().Name);
+						stringBuilder.Append('>');
+					} else {
+						stringBuilder.Append(node.Id);
+					}
 				}
 			}
 
@@ -1013,6 +1022,7 @@ namespace Tangerine.Panels
 			{
 				this.itemProvider = itemProvider;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+				Label.Components.Add(new TooltipComponent(() => ((NodeTreeViewItem)Item).Tooltip));
 			}
 
 			private void ShowContextMenu()
