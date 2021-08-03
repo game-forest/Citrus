@@ -145,7 +145,8 @@ namespace Tangerine.UI.SceneView
 					} else {
 						dragDirection = DragDirection.Any;
 					}
-					DragWidgets(widgets, curMousePos, initialMousePos);
+					var isRoundingMode = SceneView.Input.IsKeyPressed(Key.C);
+					DragWidgets(widgets, curMousePos, initialMousePos, isRoundingMode);
 					yield return null;
 				}
 				Document.Current.History.CommitTransaction();
@@ -153,8 +154,9 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		public static void DragWidgets(List<Widget> widgets, Vector2 curMousePos, Vector2 initialMousePos)
-		{
+		public static void DragWidgets(
+			List<Widget> widgets, Vector2 curMousePos, Vector2 initialMousePos, bool isRoundingMode
+		) {
 			var mouseDelta = curMousePos - initialMousePos;
 
 			Utils.CalcHullAndPivot(widgets, out _, out var pivot);
@@ -182,17 +184,25 @@ namespace Tangerine.UI.SceneView
 				}
 			}
 
-			Transform2d OnCalculateTransformation(Vector2d originalVectorInObbSpace, Vector2d deformedVectorInObbSpace) =>
-				new Transform2d((deformedVectorInObbSpace - originalVectorInObbSpace).Snap(Vector2d.Zero), Vector2d.One, 0);
+			static Transform2d OnCalculateTransformation(
+				Vector2d originalVectorInObbSpace,
+				Vector2d deformedVectorInObbSpace
+			) {
+				return new Transform2d(
+					(deformedVectorInObbSpace - originalVectorInObbSpace).Snap(Vector2d.Zero), Vector2d.One, 0
+				);
+			}
+
 
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
-				widgets,
-				widgets.Count <= 1 ? (Vector2?) null : pivot,
-				widgets.Count <= 1, initialMousePos + mouseDelta,
-				initialMousePos,
+				widgetsInParentSpace: widgets,
+				overridePivotInSceneSpace: widgets.Count <= 1 ? (Vector2?) null : pivot,
+				obbInFirstWidgetSpace: widgets.Count <= 1,
+				currentMousePosInSceneSpace: initialMousePos + mouseDelta,
+				previousMousePosSceneSpace: initialMousePos,
 				convertScaleToSize: false,
-				isRoundingMode: false,
-				OnCalculateTransformation
+				isRoundingMode: isRoundingMode,
+				onCalculateTransformation: OnCalculateTransformation
 			);
 		}
 
@@ -231,8 +241,9 @@ namespace Tangerine.UI.SceneView
 			return point;
 		}
 
-		private static bool TrySnapPoint(Vector2 pos, List<Ruler> rulers, RulerOrientation orientationFilter, out Vector2 snappedPoint)
-		{
+		private static bool TrySnapPoint(
+			Vector2 pos, List<Ruler> rulers, RulerOrientation orientationFilter, out Vector2 snappedPoint
+		) {
 			var sceneZoom = SceneView.Instance.Scene.Scale.X;
 			foreach (var ruler in rulers) {
 				foreach (var line in ruler.Lines) {

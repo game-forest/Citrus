@@ -45,15 +45,24 @@ namespace Tangerine.UI.SceneView
 				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>().ToList();
 				var mouseStartPos = sv.MousePosition;
 
-				List<Tuple<Widget, AccumulativeRotationHelper>> accumulateRotationHelpers =
+				List<(Widget, AccumulativeRotationHelper)> accumulateRotationHelpers =
 					widgets.Select(widget =>
-						new Tuple<Widget, AccumulativeRotationHelper>(widget, new AccumulativeRotationHelper(widget.Rotation, 0))
+						(widget, new AccumulativeRotationHelper(widget.Rotation, 0))
 					).ToList();
 
 				while (sv.Input.IsMousePressed()) {
 					Utils.ChangeCursorIfDefault(Cursors.Rotate);
+					var isRoundingMode = sv.Input.IsKeyPressed(Key.C);
 					Document.Current.History.RollbackTransaction();
-					RotateWidgets(pivot, widgets, sv.MousePosition, mouseStartPos, sv.Input.IsKeyPressed(Key.Shift), accumulateRotationHelpers);
+					RotateWidgets(
+						pivotPoint: pivot,
+						widgets: widgets,
+						curMousePos: sv.MousePosition,
+						prevMousePos: mouseStartPos,
+						snapped: sv.Input.IsKeyPressed(Key.Shift),
+						accumulativeRotationHelpers: accumulateRotationHelpers,
+						isRoundingMode: isRoundingMode
+					);
 					yield return null;
 				}
 				Document.Current.History.CommitTransaction();
@@ -61,37 +70,52 @@ namespace Tangerine.UI.SceneView
 			sv.Input.ConsumeKey(Key.Mouse0);
 		}
 
-		private void RotateWidgets(Vector2 pivotPoint, List<Widget> widgets, Vector2 curMousePos, Vector2 prevMousePos,
-			bool snapped, List<Tuple<Widget, AccumulativeRotationHelper>> accumulativeRotationHelpers)
-		{
+		private static void RotateWidgets(
+			Vector2 pivotPoint,
+			List<Widget> widgets,
+			Vector2 curMousePos,
+			Vector2 prevMousePos,
+			bool snapped,
+			List<(Widget, AccumulativeRotationHelper)> accumulativeRotationHelpers,
+			bool isRoundingMode
+		) {
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
-				widgets,
-				widgets.Count <= 1 ? (Vector2?) null : pivotPoint, widgets.Count <= 1,
-				curMousePos, prevMousePos,
-				convertScaleToSize: false, isRoundingMode: false,
-				(originalVectorInObbSpace, deformedVectorInObbSpace) => {
-
+				widgetsInParentSpace: widgets,
+				overridePivotInSceneSpace: widgets.Count <= 1
+					? (Vector2?) null
+					: pivotPoint,
+				obbInFirstWidgetSpace: widgets.Count <= 1,
+				currentMousePosInSceneSpace: curMousePos,
+				previousMousePosSceneSpace: prevMousePos,
+				convertScaleToSize: false,
+				isRoundingMode: isRoundingMode,
+				onCalculateTransformation: (originalVectorInObbSpace, deformedVectorInObbSpace) => {
 					double rotation = 0;
 					if (originalVectorInObbSpace.Length > Mathf.ZeroTolerance &&
 						deformedVectorInObbSpace.Length > Mathf.ZeroTolerance) {
 						rotation = Mathd.Wrap180(deformedVectorInObbSpace.Atan2Deg - originalVectorInObbSpace.Atan2Deg);
 					}
-
 					if (snapped) {
 						rotation = WidgetTransformsHelper.RoundTo(rotation, 15);
 					}
-
-					foreach (Tuple<Widget, AccumulativeRotationHelper> tuple in accumulativeRotationHelpers) {
-						tuple.Item2.Rotate((float) rotation);
+					foreach (var (widget, newRotation) in accumulativeRotationHelpers) {
+						newRotation.Rotate((float) rotation);
 					}
-
 					return new Transform2d(Vector2d.Zero, Vector2d.One, rotation);
 				}
 			);
 
-			foreach (Tuple<Widget, AccumulativeRotationHelper> tuple in accumulativeRotationHelpers) {
-				SetAnimableProperty.Perform(tuple.Item1, nameof(Widget.Rotation), tuple.Item2.Rotation,
-					CoreUserPreferences.Instance.AutoKeyframes);
+			foreach ((Widget, AccumulativeRotationHelper) tuple in accumulativeRotationHelpers) {
+				var newRotation = tuple.Item2.Rotation;
+				if (isRoundingMode) {
+					newRotation = MathF.Floor(newRotation);
+				}
+				SetAnimableProperty.Perform(
+					@object: tuple.Item1,
+					propertyPath: nameof(Widget.Rotation),
+					value: newRotation,
+					createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+				);
 			}
 		}
 

@@ -7,7 +7,7 @@ using Tangerine.Core.Operations;
 namespace Tangerine.UI.SceneView.WidgetTransforms
 {
 	/// <summary>
-	/// All this code is serves to increase ACCURACY of mathematical transformations.
+	/// All this code serves to increase ACCURACY of mathematical transformations.
 	/// That is why it is uses double numbers and a calculation of optimal transition matrices.
 	/// </summary>
 	public static class WidgetTransformsHelper
@@ -17,35 +17,52 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		public delegate Transform2d CalculateTransformationDelegate(Vector2d originalVectorInObbSpace,
 			Vector2d deformedVectorInObbSpace);
 
-		public static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
-			Vector2? overridePivotInSceneSpace, bool obbInFirstWidgetSpace,
-			Vector2 currentMousePosInSceneSpace, Vector2 previousMousePosSceneSpace,
-			bool convertScaleToSize, bool isRoundingMode, CalculateTransformationDelegate onCalculateTransformation)
-		{
-			if (widgetsInParentSpace.Count == 0) return;
+		public static void ApplyTransformationToWidgetsGroupObb(
+			IList<Widget> widgetsInParentSpace,
+			Vector2? overridePivotInSceneSpace,
+			bool obbInFirstWidgetSpace,
+			Vector2 currentMousePosInSceneSpace,
+			Vector2 previousMousePosSceneSpace,
+			bool convertScaleToSize,
+			bool isRoundingMode,
+			CalculateTransformationDelegate onCalculateTransformation
+		) {
+			if (widgetsInParentSpace.Count == 0) {
+				return;
+			}
 
 			Matrix32d fromSceneToParentSpace = widgetsInParentSpace[0]
 				.ParentWidget?.CalcLocalToWorldTransformDouble().CalcInversed() ?? Matrix32d.Identity;
 
 			ApplyTransformationToWidgetsGroupObb(
-				widgetsInParentSpace,
-				overridePivotInSceneSpace == null
+				widgetsInParentSpace: widgetsInParentSpace,
+				overridePivotInParentSpace: overridePivotInSceneSpace == null
 					? (Vector2d?) null
 					: ((Vector2d) overridePivotInSceneSpace.Value * fromSceneToParentSpace),
-				obbInFirstWidgetSpace,
-				(Vector2d) currentMousePosInSceneSpace * fromSceneToParentSpace,
-				(Vector2d) previousMousePosSceneSpace * fromSceneToParentSpace,
-				convertScaleToSize, isRoundingMode, onCalculateTransformation);
+				obbInFirstWidgetSpace: obbInFirstWidgetSpace,
+				currentMousePosInParentSpace: (Vector2d) currentMousePosInSceneSpace * fromSceneToParentSpace,
+				previousMousePosInParentSpace: (Vector2d) previousMousePosSceneSpace * fromSceneToParentSpace,
+				convertScaleToSize: convertScaleToSize,
+				isRoundingMode: isRoundingMode,
+				onCalculateTransformation: onCalculateTransformation
+			);
 		}
 
-		private static void ApplyTransformationToWidgetsGroupObb(IList<Widget> widgetsInParentSpace,
-			Vector2d? overridePivotInParentSpace, bool obbInFirstWidgetSpace,
-			Vector2d currentMousePosInParentSpace, Vector2d previousMousePosInParentSpace,
-			bool convertScaleToSize, bool isRoundingMode, CalculateTransformationDelegate onCalculateTransformation)
-		{
-			if (widgetsInParentSpace.Count == 0) return;
+		private static void ApplyTransformationToWidgetsGroupObb(
+			IList<Widget> widgetsInParentSpace,
+			Vector2d? overridePivotInParentSpace,
+			bool obbInFirstWidgetSpace,
+			Vector2d currentMousePosInParentSpace,
+			Vector2d previousMousePosInParentSpace,
+			bool convertScaleToSize,
+			bool isRoundingMode,
+			CalculateTransformationDelegate onCalculateTransformation
+		) {
+			if (widgetsInParentSpace.Count == 0) {
+				return;
+			}
 
-			// Importent. Try to correct the pivot point to the closest pivot of one of widgets.
+			// Important: try to correct the pivot point to the closest pivot of one of widgets.
 			if (overridePivotInParentSpace != null) {
 				foreach (Widget widget in widgetsInParentSpace) {
 					double length = ((Vector2d) widget.Position - overridePivotInParentSpace.Value).Length;
@@ -90,16 +107,28 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			}
 
 			ApplyTransformationToWidgetsGroupObb(
-				widgetsInParentSpace, originalObbToParentSpace,
-				currentMousePosInParentSpace, previousMousePosInParentSpace,
-				convertScaleToSize, isRoundingMode, onCalculateTransformation);
+				widgetsInParentSpace: widgetsInParentSpace,
+				obbInParentSpace: originalObbToParentSpace,
+				currentMousePosInParentSpace: currentMousePosInParentSpace,
+				previousMousePosInParentSpace: previousMousePosInParentSpace,
+				convertScaleToSize: convertScaleToSize,
+				isRoundingMode: isRoundingMode,
+				onCalculateTransformation: onCalculateTransformation
+			);
 		}
 
-		private static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
-			Matrix32d obbInParentSpace, Vector2d currentMousePosInParentSpace, Vector2d previousMousePosInParentSpace,
-			bool convertScaleToSize, bool isRoundingMode, CalculateTransformationDelegate onCalculateTransformation)
-		{
-			if (Math.Abs(obbInParentSpace.CalcDeterminant()) < Mathf.ZeroTolerance) return;
+		private static void ApplyTransformationToWidgetsGroupObb(
+			IEnumerable<Widget> widgetsInParentSpace,
+			Matrix32d obbInParentSpace,
+			Vector2d currentMousePosInParentSpace,
+			Vector2d previousMousePosInParentSpace,
+			bool convertScaleToSize,
+			bool isRoundingMode,
+			CalculateTransformationDelegate onCalculateTransformation
+		) {
+			if (Math.Abs(obbInParentSpace.CalcDeterminant()) < Mathf.ZeroTolerance)	{
+				return;
+			}
 
 			Matrix32d transformationFromParentToObb = obbInParentSpace.CalcInversed();
 			Vector2d controlPointInObbSpace = previousMousePosInParentSpace * transformationFromParentToObb;
@@ -117,12 +146,18 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			);
 		}
 
-		private static void ApplyTransformationToWidgetsGroupObb(IEnumerable<Widget> widgetsInParentSpace,
-			Matrix32d obbInParentSpace, Transform2d obbTransformation, bool convertScaleToSize, bool isRoundingMode)
-		{
+		private static void ApplyTransformationToWidgetsGroupObb(
+			IEnumerable<Widget> widgetsInParentSpace,
+			Matrix32d obbInParentSpace,
+			Transform2d obbTransformation,
+			bool convertScaleToSize,
+			bool isRoundingMode
+		) {
 			Matrix32d originalObbToParentSpace = obbInParentSpace;
 
-			if (Math.Abs(originalObbToParentSpace.CalcDeterminant()) < Mathf.ZeroTolerance) return;
+			if (Math.Abs(originalObbToParentSpace.CalcDeterminant()) < Mathf.ZeroTolerance) {
+				return;
+			}
 
 			Matrix32d obbTransformationMatrix = obbTransformation.ToMatrix32();
 
@@ -179,21 +214,34 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 
 					}
 
-					bool needChangePositionX = IsSignificantChangeOfValue(widget.Position.X, widgetResultTransform.Translation.X);
-					bool needChangePositionY = IsSignificantChangeOfValue(widget.Position.Y, widgetResultTransform.Translation.Y);
+					bool needChangePositionX = IsSignificantChangeOfValue(
+						widget.Position.X, widgetResultTransform.Translation.X
+					);
+					bool needChangePositionY = IsSignificantChangeOfValue(
+						widget.Position.Y, widgetResultTransform.Translation.Y
+					);
 
 					if (needChangePositionX || needChangePositionY) {
-						SetAnimableProperty.Perform(widget, nameof(Widget.Position),
-							new Vector2(
-								(float) (!needChangePositionX ? widget.Position.X : widgetResultTransform.Translation.X),
-								(float) (!needChangePositionY ? widget.Position.Y : widgetResultTransform.Translation.Y)
-							),
-							CoreUserPreferences.Instance.AutoKeyframes);
+						var newPosition = new Vector2(
+							(float)(!needChangePositionX ? widget.Position.X : widgetResultTransform.Translation.X),
+							(float)(!needChangePositionY ? widget.Position.Y : widgetResultTransform.Translation.Y)
+						);
+						if (isRoundingMode) {
+							newPosition = Vector2.Floor(newPosition);
+						}
+						SetAnimableProperty.Perform(
+							widget, nameof(Widget.Position), newPosition, CoreUserPreferences.Instance.AutoKeyframes
+						);
 					}
 
 					if (IsSignificantChangeByDelta(widget.Rotation, rotationDelta)) {
-						SetAnimableProperty.Perform(widget, nameof(Widget.Rotation), (float) (widget.Rotation + rotationDelta),
-							CoreUserPreferences.Instance.AutoKeyframes);
+						var newRotation = (float)(widget.Rotation + rotationDelta);
+						if (isRoundingMode) {
+							newRotation = MathF.Floor(newRotation);
+						}
+						SetAnimableProperty.Perform(
+							widget, nameof(Widget.Rotation), newRotation, CoreUserPreferences.Instance.AutoKeyframes
+						);
 					}
 
 				} finally {
@@ -260,9 +308,9 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			return localToParentTransform.ToTransform2Double(preferedRotationDeg, (Vector2d) widget.Scale);
 		}
 
-		private static Transform2d ToTransform2Double(this Matrix32d matrix, double preferedRotationDeg,
-			Vector2d originalScale)
-		{
+		private static Transform2d ToTransform2Double(
+			this Matrix32d matrix, double preferedRotationDeg, Vector2d originalScale
+		) {
 			// Calculate the required signs of the scale axes, excluding rotation from the deformation matrix.
 			Matrix32d matrixWithoutRotation = matrix * Matrix32d.Rotation(-preferedRotationDeg * Math.PI / 180.0);
 			int directionClock = Math.Sign(Vector2d.CrossProduct(matrixWithoutRotation.U, matrixWithoutRotation.V));
