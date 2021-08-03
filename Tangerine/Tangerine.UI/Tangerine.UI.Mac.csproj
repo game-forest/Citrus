@@ -63,6 +63,7 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs" />
     <Compile Include="ColorPicker.Win.cs" />
     <Compile Include="ComponentIconPool.cs" />
     <Compile Include="Dialogs\TriggerSelectionDialog.cs" />
@@ -71,13 +72,13 @@
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
     <Compile Include="PropertyEditors\CustomFilePropertyEditor.cs" />
     <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
-	<Compile Include="PropertyEditors\IntRectanglePropertyEditor.cs" />
-    <Compile Include="PropertyEditors\IntVector2PropertyEditor.cs" />
-    <Compile Include="PropertyEditors\RectanglePropertyEditor.cs" />
     <Compile Include="PropertyEditors\DropDownListPropertyEditor.cs" />
     <Compile Include="PropertyEditors\FolderPropertyEditor.cs" />
+    <Compile Include="PropertyEditors\IntRectanglePropertyEditor.cs" />
+    <Compile Include="PropertyEditors\IntVector2PropertyEditor.cs" />
     <Compile Include="PropertyEditors\ListPropertyEditor.cs" />
     <Compile Include="PropertyEditors\NodeIdPropertyEditor.cs" />
+    <Compile Include="PropertyEditors\RectanglePropertyEditor.cs" />
     <Compile Include="PropertyEditors\SliderPropertyEditor.cs" />
     <Compile Include="Tooltip\Tooltip.cs" />
     <Compile Include="Tooltip\TooltipComponent.cs" />
@@ -175,6 +176,10 @@
     <ProjectReference Include="..\..\Yuzu\Yuzu.Mac.csproj">
       <Project>{5F16D8E4-A0F1-4341-83A0-3897FC44EBB8}</Project>
       <Name>Yuzu.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Orange\Orange.Mac.csproj">
+      <Project>{4B2BDD5A-2AAE-46AE-AA1A-8C9308BAA50D}</Project>
+      <Name>Orange.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
