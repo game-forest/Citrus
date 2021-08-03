@@ -464,7 +464,6 @@ namespace Tangerine.UI
 
 			private static AnimationFastForwarder.AnimationState FromReflessAnimationState(ReferencelessAnimationState state, Node root)
 			{
-				// var node = root.SelfAndDescendants.ElementAt(state.NodeIndex);
 				var node = GetNode(state.NodeIndex, root);
 				return new AnimationFastForwarder.AnimationState {
 					Animation = node.Animations[state.AnimationIndex],
@@ -554,17 +553,25 @@ namespace Tangerine.UI
 
 			public Node Acquire()
 			{
+				Node result;
 				if (pool.Count == 0) {
-					var clone = originNode.Clone();
-					foreach (var n in clone.SelfAndDescendants) {
+					result = originNode.Clone();
+					foreach (var n in result.SelfAndDescendants) {
 						var _ = n.DefaultAnimation; // Force create the default animation.
 					}
 					var manager = Document.CreateDefaultManager();
 					manager.Processors.Add(new AnimationProcessor());
-					manager.RootNodes.Add(clone);
-					return clone;
+					manager.RootNodes.Add(result);
+				} else {
+					result = pool.Pop();
 				}
-				return pool.Pop();
+				foreach (var n in result.SelfAndDescendants) {
+					foreach (var a in n.Animations) {
+						a.IsRunning = false;
+						a.Frame = 0;
+					}
+				}
+				return result;
 			}
 
 			public void Release(Node node) => pool.Push(node);
