@@ -584,7 +584,12 @@ namespace Tangerine.Core.Operations
 				index = 0;
 				return;
 			}
-			parent = focusedItem.Parent;
+			if (focusedItem.TryGetAnimator(out _)) {
+				parent = focusedItem.Parent.Parent;
+				focusedItem = focusedItem.Parent;
+			} else {
+				parent = focusedItem.Parent;
+			}
 			index = parent.Rows.IndexOf(focusedItem);
 			if (!aboveFocused) {
 				index++;
