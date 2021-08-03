@@ -302,6 +302,8 @@ namespace Tangerine.Panels
 			}
 			Document.Current.History.DoTransaction(() => {
 				((TreeView)sender).ClearSelection();
+				bool isCurrentAnimationRemoved = false;
+				var currentAnimation = Document.Current.Animation;
 				AnimationTreeViewItem newSelected = null;
 				foreach (var item in animationItems) {
 					var parent = item.Parent;
@@ -315,11 +317,14 @@ namespace Tangerine.Panels
 					}
 					if (item.SceneItem.TryGetAnimation(out var animation)) {
 						DeleteAnimators(animation.Id, animation.OwnerNode);
+						isCurrentAnimationRemoved |= currentAnimation == animation;
 					}
 					UnlinkSceneItem.Perform(item.SceneItem);
 					RebuildTreeView((TreeView)sender, provider);
 				}
-				if (newSelected == null) {
+				if (!isCurrentAnimationRemoved) {
+					NavigateToAnimation.Perform(currentAnimation);
+				} else if (newSelected == null) {
 					NavigateToAnimation.Perform(Document.Current.Container.DefaultAnimation);
 				}
 			});
