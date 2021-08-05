@@ -574,7 +574,9 @@ namespace Tangerine.UI
 					OnCut?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
 				}
 				if (Command.Delete.Consume()) {
-					OnDelete?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
+					OnDelete?.Invoke(this, new CopyEventArgs {
+						Items = currentItems.Where(i => i.Selected).OrderBy(i => i.SelectionOrder)
+					});
 				}
 				if (Command.Paste.Consume()) {
 					var focused = GetRecentlySelected();

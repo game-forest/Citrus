@@ -263,7 +263,7 @@ namespace Tangerine.Panels
 			});
 		}
 
-		private int TranslateTreeViewToSceneTreeIndex(TreeViewItem parent, int index)
+		private static int TranslateTreeViewToSceneTreeIndex(TreeViewItem parent, int index)
 		{
 			if (parent.Items.Count == 0) {
 				return 0;
@@ -302,32 +302,51 @@ namespace Tangerine.Panels
 			}
 			Document.Current.History.DoTransaction(() => {
 				((TreeView)sender).ClearSelection();
-				bool isCurrentAnimationRemoved = false;
-				var currentAnimation = Document.Current.Animation;
-				AnimationTreeViewItem newSelected = null;
+				AnimationTreeViewItem nextItem = null;
 				foreach (var item in animationItems) {
 					var parent = item.Parent;
-					if ((newSelected == null || newSelected == item) && parent.Items.Count > 1) {
-						var index = parent.Items.IndexOf(item);
-						index = index > 0 ? index - 1 : index + 1;
-						newSelected = (AnimationTreeViewItem)parent.Items[index];
-						newSelected.Selected = true;
-						Document.Current.History.DoTransaction(() =>
-							NavigateToAnimation.Perform(newSelected.Animation));
+					nextItem = GetNextItem(parent, parent.Items.IndexOf(item));
+					if (item.Animation == Document.Current.Animation) {
+						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(nextItem.Animation));
 					}
 					if (item.SceneItem.TryGetAnimation(out var animation)) {
 						DeleteAnimators(animation.Id, animation.OwnerNode);
-						isCurrentAnimationRemoved |= currentAnimation == animation;
 					}
 					UnlinkSceneItem.Perform(item.SceneItem);
 					RebuildTreeView((TreeView)sender, provider);
 				}
-				if (!isCurrentAnimationRemoved) {
-					NavigateToAnimation.Perform(currentAnimation);
-				} else if (newSelected == null) {
-					NavigateToAnimation.Perform(Document.Current.Container.DefaultAnimation);
-				}
+				// Not null because Legacy animation of current container is always present and cannot be removed.
+				nextItem.Selected = true;
 			});
+
+			// Searches for the next animation item. Starts within the parent. Next one above parent.Items[index] is
+			// selected, unless there are no such items, then the item below is selected. If, besides the provided
+			// index, there are no more items in that node, selects last item in first non empty node above
+			// (in the tree view) and if there are no non empty nodes above the parent, it will start to search for
+			// the first animation item in first non empty node below the parent. A next item is guaranteed to
+			// be found since there's always legacy animation in the current container which can't be removed.
+			// This way next element selection behaves as there's no parent nodes and all animations from different
+			// nodes are in the same list.
+			AnimationTreeViewItem GetNextItem(TreeViewItem parent, int index)
+			{
+				index = index > 0 ? index - 1 : index + 1;
+				if (parent.Items.Count > index && index >= 0) {
+					return (AnimationTreeViewItem)parent.Items[index];
+				}
+				var items = parent.Parent.Items;
+				index = items.IndexOf(parent);
+				for (int i = index - 1; i >= 0; i--) {
+					if (items[i].Items.Count > 0) {
+						return (AnimationTreeViewItem)items[i].Items.Last();
+					}
+				}
+				for (int i = index + 1; i < items.Count; i++) {
+					if (items[i].Items.Count > 0) {
+						return (AnimationTreeViewItem)items[i].Items.First();
+					}
+				}
+				throw new InvalidOperationException();
+			}
 
 			void DeleteAnimators(string animationId, Node node)
 			{
@@ -432,7 +451,7 @@ namespace Tangerine.Panels
 				scrollView.LayoutManager.Layout();
 				var reversed = CoreUserPreferences.Instance.AnimationPanelReversedOrder;
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
-				var savedScrollPosition = reversed ? 
+				var savedScrollPosition = reversed ?
 					scrollView.Behaviour.ScrollPosition : scrollView.Content.Height - scrollView.Height;
 				scrollView.Behaviour.ScrollPosition += reversed ? treeViewHeightDelta : 0;
 				scrollView.Behaviour.ScrollToItemVelocity = Math.Abs(treeViewHeightDelta * 5);
