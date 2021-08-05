@@ -54,7 +54,7 @@ namespace Tangerine.UI.Timeline.Operations
 				}
 				void ProcessAnimator(IAnimator animator)
 				{
-					if (animator.AnimationId != Document.Current.AnimationId) {
+					if (!Document.Current.Animation.ValidatedEffectiveAnimatorsSet.Contains(animator)) {
 						return;
 					}
 					foreach (var keyframe in animator.Keys.Where(i => spans.Any(j => j.Contains(i.Frame)))) {
