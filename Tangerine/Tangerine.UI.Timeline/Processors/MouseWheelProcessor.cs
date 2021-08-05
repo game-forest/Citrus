@@ -53,7 +53,8 @@ namespace Tangerine.UI.Timeline
 				var prevColWidth = TimelineMetrics.ColWidth;
 				TimelineMetrics.ColWidth = (TimelineMetrics.ColWidth + delta).Clamp(5, 30);
 				if (prevColWidth != TimelineMetrics.ColWidth) {
-					timeline.ClampAndSetOffset(new Vector2(timeline.CurrentColumn * delta, timeline.OffsetY));
+					timeline.ClampAndSetOffset(new Vector2(timeline.OffsetX + timeline.CurrentColumn * delta,
+						timeline.OffsetY));
 					Core.Operations.Dummy.Perform(Document.Current.History);
 				}
 			}
