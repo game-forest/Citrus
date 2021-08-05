@@ -9,7 +9,7 @@ namespace Tangerine.UI
 	public class ColorPickerPanel
 	{
 		readonly TriangleColorWheel colorWheel;
-		readonly AlphaSlider alphaSlider;
+		readonly AlphaEditorSlider alphaEditorSlider;
 		public readonly Widget Widget;
 		ColorHSVA colorHSVA;
 
@@ -32,7 +32,7 @@ namespace Tangerine.UI
 				if (enabled != value) {
 					enabled = value;
 					colorWheel.Widget.Enabled = enabled;
-					alphaSlider.Widget.Enabled = enabled;
+					alphaEditorSlider.Enabled = enabled;
 				}
 			}
 		}
@@ -44,8 +44,7 @@ namespace Tangerine.UI
 			colorWheel.DragStarted += () => DragStarted?.Invoke();
 			colorWheel.Changed += () => Changed?.Invoke();
 			colorWheel.DragEnded += () => DragEnded?.Invoke();
-			alphaSlider = new AlphaSlider(colorProperty);
-			SetupSliderDragHandlers(alphaSlider.Widget);
+			alphaEditorSlider = new AlphaEditorSlider(colorProperty);
 			Widget = new Widget {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout { Spacing = 8 },
@@ -57,17 +56,12 @@ namespace Tangerine.UI
 							colorWheel.Widget
 						}
 					},
-					alphaSlider.Widget,
+					alphaEditorSlider,
+					new HsvSliders(colorProperty),
+					new RgbSliders(colorProperty),
 				}
 			};
 			Widget.FocusScope = new KeyboardFocusScope(Widget);
-		}
-
-		void SetupSliderDragHandlers(Slider slider)
-		{
-			slider.DragStarted += () => DragStarted?.Invoke();
-			slider.DragEnded += () => DragEnded?.Invoke();
-			slider.Changed += () => Changed?.Invoke();
 		}
 
 		class TriangleColorWheel
@@ -267,48 +261,304 @@ namespace Tangerine.UI
 			}
 		}
 
-		class AlphaSlider
+		class PixelsSlider : Widget
 		{
-			public readonly Slider Widget;
+			protected ThemedSlider Slider { get; }
+			protected Color4[] Pixels { get; }
 
-			public AlphaSlider(Property<ColorHSVA> color)
+			public PixelsSlider(string name, int min, int max, int pixelCount)
 			{
-				Widget = new ThemedSlider { RangeMin = 0, RangeMax = 1 };
-				Widget.Changed += () => {
-					color.Value = new ColorHSVA(color.Value.H, color.Value.S, color.Value.V, Widget.Value);
+				Layout = new LinearLayout();
+				Pixels = new Color4[pixelCount];
+				Slider = new ThemedSlider() {
+					RangeMin = min,
+					RangeMax = max,
+					MinSize = new Vector2(30, 16),
 				};
-				Widget.Updating += delta => Widget.Value = color.Value.A;
-				var presenter = new BackgroundPresenter(color);
-				Widget.CompoundPresenter.Insert(0, presenter);
+				var labelWidget = new ThemedSimpleText {
+					HitTestTarget = false,
+					HAlignment = HAlignment.Left,
+					VAlignment = VAlignment.Bottom,
+					Anchors = Anchors.LeftRightTopBottom,
+					Padding = new Thickness { Left = 4, Top = 2 },
+					MinSize = new Vector2(60, Slider.MinSize.Y),
+					Text = Slider.Value.ToString("0.###")
+				};
+				Slider.Changed += () => {
+					labelWidget.Text = Slider.Value.ToString("0.###");
+				};
+				Slider.CompoundPresenter.Insert(0, new PixelsSliderPresenter(Pixels));
+				var textWidget = new ThemedSimpleText {
+					HitTestTarget = false,
+					HAlignment = HAlignment.Left,
+					VAlignment = VAlignment.Bottom,
+					Anchors = Anchors.LeftRightTopBottom,
+					Padding = new Thickness { Left = 4, Top = 2 },
+					MinSize = new Vector2(20, Slider.MinSize.Y),
+					Text = name,
+				};
+				AddNode(textWidget);
+				AddNode(Slider);
+				AddNode(labelWidget);
 			}
 
-			class BackgroundPresenter : SyncCustomPresenter
+			class PixelsSliderPresenter : IPresenter
 			{
-				readonly Property<ColorHSVA> color;
+				private readonly Color4[] pixels;
 
-				public BackgroundPresenter(Property<ColorHSVA> color)
+				public PixelsSliderPresenter(Color4[] pixels)
 				{
-					this.color = color;
+					this.pixels = pixels;
 				}
 
-				public override void Render(Node node)
+				public Lime.RenderObject GetRenderObject(Node node)
 				{
-					var widget = node.AsWidget;
-					widget.PrepareRendererState();
-					RendererWrapper.Current.DrawRect(Vector2.Zero, widget.Size, Color4.White);
-					int numChecks = 20;
-					var checkSize = new Vector2(widget.Width / numChecks, widget.Height / 2);
-					for (int i = 0; i < numChecks; i++) {
-						var checkPos = new Vector2(i * checkSize.X, (i % 2 == 0) ? 0 : checkSize.Y);
-						Renderer.DrawRect(checkPos, checkPos + checkSize, Color4.Black);
+					var widget = (Widget)node;
+					var renderObject = RenderObjectPool<RenderObject>.Acquire();
+					renderObject.CaptureRenderState(widget);
+					renderObject.Size = widget.Size;
+					renderObject.Color = Theme.Colors.WhiteBackground;
+					renderObject.BorderColor = Theme.Colors.ControlBorder;
+					renderObject.Pixels = pixels;
+					return renderObject;
+				}
+
+				public bool PartialHitTest(Node node, ref HitTestArgs args) => false;
+
+				private class RenderObject : WidgetRenderObject
+				{
+					public Vector2 Size;
+					public Color4 Color;
+					public Color4 BorderColor;
+					public Color4[] Pixels;
+					private readonly Texture2D texture = new Texture2D();
+
+					public override void Render()
+					{
+						PrepareRenderState();
+						texture.LoadImage(Pixels, Pixels.Length, 1);
+						Renderer.DrawRect(Vector2.Zero, Size, Color);
+						Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+						Renderer.DrawSprite(texture, Color4.White, Vector2.Zero, Vector2.One * Size,
+							new Vector2(1, 0), new Vector2(0, 1));
 					}
-					RendererWrapper.Current.DrawRect(Vector2.Zero, widget.Size, color.Value.ToRGBA());
-					RendererWrapper.Current.DrawRectOutline(Vector2.Zero, widget.Size, Theme.Colors.ControlBorder);
 				}
 			}
 		}
 
-		struct ColorHSVA
+		abstract class ColorEditorSlider : PixelsSlider
+		{
+			protected Property<ColorHSVA> Color { get; }
+
+			public ColorEditorSlider(Property<ColorHSVA> color, string name, int min, int max, int pixelCounts) : base(name, min, max, pixelCounts)
+			{
+				Color = color;
+				Slider.Changed += OnSliderValueChange;
+				Slider.Updating += _ => OnColorValueChange();
+			}
+
+			protected abstract void OnSliderValueChange();
+			protected abstract void OnColorValueChange();
+		}
+
+		class AlphaEditorSlider : ColorEditorSlider
+		{
+			private static int pixelCounts = 100;
+			public AlphaEditorSlider(Property<ColorHSVA> color) : base(color, "A", 0, 1, pixelCounts)
+			{
+			}
+
+			protected override void OnSliderValueChange()
+			{
+				Color.Value = new ColorHSVA(Color.Value.H, Color.Value.S, Color.Value.V, Slider.Value);
+			}
+
+			protected override void OnColorValueChange()
+			{
+				Slider.SetValue(Color.Value.A);
+				for (var i = 0; i < pixelCounts; i++) {
+					Pixels[pixelCounts - i - 1] = Color.Value.ToRGBA();
+				}
+			}
+		}
+
+		class HsvSliders : Widget
+		{
+			public HsvSliders(Property<ColorHSVA> color)
+			{
+				Padding = new Thickness(8);
+				Layout = new VBoxLayout {Spacing = 8};
+				Nodes.AddRange(new List<Node>() {
+					new HSlider(color),
+					new SSlider(color),
+					new VSlider(color),
+				});
+			}
+
+			class HSlider : ColorEditorSlider
+			{
+				private static int pixelCounts = 360;
+				public HSlider(Property<ColorHSVA> color) : base(color, "H", 0, 360, pixelCounts)
+				{
+					for (var i = 0; i < pixelCounts; i++) {
+						Pixels[pixelCounts - i - 1] = new ColorHSVA(i, 1, 1).ToRGBA();
+					}
+				}
+
+				protected override void OnSliderValueChange()
+				{
+					Color.Value = new ColorHSVA(Slider.Value, Color.Value.S, Color.Value.V, Color.Value.A);
+				}
+
+				protected override void OnColorValueChange()
+				{
+					Slider.SetValue(Color.Value.H);
+				}
+			}
+
+			class SSlider : ColorEditorSlider
+			{
+				private static int pixelCounts = 100;
+
+				public SSlider(Property<ColorHSVA> color) : base(color, "S", 0, 1, pixelCounts)
+				{
+				}
+
+				protected override void OnSliderValueChange()
+				{
+					Color.Value = new ColorHSVA(Color.Value.H, Slider.Value, Color.Value.V, Color.Value.A);
+				}
+
+				protected override void OnColorValueChange()
+				{
+					Slider.SetValue(Color.Value.S);
+					for (var i = 0; i < pixelCounts; i++) {
+						Pixels[pixelCounts - i - 1] = new ColorHSVA(Color.Value.H, i / (float)pixelCounts,
+							Color.Value.V, 1).ToRGBA();
+					}
+				}
+			}
+
+			class VSlider : ColorEditorSlider
+			{
+				private static int pixelCounts = 100;
+
+				public VSlider(Property<ColorHSVA> color) : base(color, "V", 0, 1, pixelCounts)
+				{
+				}
+
+				protected override void OnSliderValueChange()
+				{
+					Color.Value = new ColorHSVA(Color.Value.H, Color.Value.S, Slider.Value, Color.Value.A);
+				}
+
+				protected override void OnColorValueChange()
+				{
+					Slider.SetValue(Color.Value.V);
+					for (var i = 0; i < pixelCounts; i++) {
+						Pixels[pixelCounts - i - 1] = new ColorHSVA(Color.Value.H, Color.Value.S,
+							i / (float)pixelCounts, 1).ToRGBA();
+					}
+				}
+			}
+		}
+
+		class RgbSliders : Widget
+		{
+			public RgbSliders(Property<ColorHSVA> color)
+			{
+				Padding = new Thickness(8);
+				Layout = new VBoxLayout {Spacing = 8};
+				Nodes.AddRange(new List<Node>() {
+					new RSlider(color),
+					new GSlider(color),
+					new BSlider(color),
+				});
+			}
+
+			class RSlider : ColorEditorSlider
+			{
+				private static int pixelCounts = 256;
+
+				public RSlider(Property<ColorHSVA> color) : base(color, "R", 0, 255, pixelCounts)
+				{
+				}
+
+				protected override void OnSliderValueChange()
+				{
+					var sliderValue = (byte)Slider.Value;
+					var rgba = Color.Value.ToRGBA();
+					rgba.R = sliderValue;
+					Color.Value = ColorHSVA.FromRGBA(rgba);
+				}
+
+				protected override void OnColorValueChange()
+				{
+					Slider.SetValue(Color.Value.ToRGBA().R);
+					for (var i = 0; i < pixelCounts; i++) {
+						Pixels[pixelCounts - i - 1] = Color.Value.ToRGBA();
+						Pixels[pixelCounts - i - 1].R = (byte)i;
+						Pixels[pixelCounts - i - 1].A = 255;
+					}
+				}
+			}
+
+			class GSlider : ColorEditorSlider
+			{
+				private static int pixelCounts = 256;
+
+				public GSlider(Property<ColorHSVA> color) : base(color, "G", 0, 255, pixelCounts)
+				{
+				}
+
+				protected override void OnSliderValueChange()
+				{
+					var sliderValue = (byte)Slider.Value;
+					var rgba = Color.Value.ToRGBA();
+					rgba.G = sliderValue;
+					Color.Value = ColorHSVA.FromRGBA(rgba);
+				}
+
+				protected override void OnColorValueChange()
+				{
+					Slider.SetValue(Color.Value.ToRGBA().G);
+					for (var i = 0; i < pixelCounts; i++) {
+						Pixels[pixelCounts - i - 1] = Color.Value.ToRGBA();
+						Pixels[pixelCounts - i - 1].G = (byte)i;
+						Pixels[pixelCounts - i - 1].A = 255;
+					}
+				}
+			}
+
+			class BSlider : ColorEditorSlider
+			{
+				private static int pixelCounts = 256;
+
+				public BSlider(Property<ColorHSVA> color) : base(color, "B", 0, 255, pixelCounts)
+				{
+				}
+
+				protected override void OnSliderValueChange()
+				{
+					var sliderValue = (byte)Slider.Value;
+					var rgba = Color.Value.ToRGBA();
+					rgba.B = sliderValue;
+					Color.Value = ColorHSVA.FromRGBA(rgba);
+				}
+
+				protected override void OnColorValueChange()
+				{
+					Slider.SetValue(Color.Value.ToRGBA().B);
+					for (var i = 0; i < pixelCounts; i++) {
+						Pixels[pixelCounts - i - 1] = Color.Value.ToRGBA();
+						Pixels[pixelCounts - i - 1].B = (byte)i;
+						Pixels[pixelCounts - i - 1].A = 255;
+					}
+				}
+			}
+		}
+
+		public struct ColorHSVA
 		{
 			public float H;
 			public float S;
@@ -379,7 +629,7 @@ namespace Tangerine.UI
 					hue = 60.0f * (6.0f + bnorm - gnorm);
 				if (g == maxval)
 					hue = 60.0f * (2.0f + rnorm - bnorm);
-				if (b  == maxval)
+				if (b == maxval)
 					hue = 60.0f * (4.0f + gnorm - rnorm);
 				if (hue >= 360.0f)
 					hue = hue - 360.0f;
