@@ -17,7 +17,7 @@ namespace Tangerine.MainMenu
 					Path.GetFileNameWithoutExtension(Project.Current?.CitprojPath ?? ""));
 				if (Directory.Exists(path)) {
 					Directory.Delete(path, true);
-					BackupHistoryPanel.Instance.RefreshHistory();
+					BackupHistoryPanel.Instance?.RefreshHistory();
 				}
 			}
 		}
