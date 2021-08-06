@@ -204,7 +204,8 @@ namespace Tangerine.Panels
 			contentWidget.AddChangeWatcher(
 				() => (
 					Document.Current?.SceneTreeVersion ?? 0,
-					Document.Current?.Container),
+					Document.Current?.Container,
+					Document.Current?.AnimationFrame),
 				_ => RebuildTreeView(treeView, provider));
 			RebuildTreeView(treeView, provider);
 			return treeView;
@@ -756,6 +757,7 @@ namespace Tangerine.Panels
 				this.options = options;
 				Processors = new List<ITreeViewItemPresentationProcessor> {
 					new CommonTreeViewItemPresentationProcessor(),
+					new MarkerTreeViewItemPresentationProcessor(),
 					new AnimationTreeViewItemPresentationProcessor(),
 				};
 			}
@@ -1158,6 +1160,28 @@ namespace Tangerine.Panels
 					if (isCurrentAnimation && !isBold) {
 						p.Label.Font = new SerializableFont(FontPool.DefaultBoldFontName);
 					} else if (!isCurrentAnimation && isBold) {
+						p.Label.Font = new SerializableFont(FontPool.DefaultFontName);
+					}
+				}
+			}
+		}
+
+		private class MarkerTreeViewItemPresentationProcessor : ITreeViewItemPresentationProcessor
+		{
+			public void Process(ITreeViewItemPresentation presentation)
+			{
+				if (presentation is MarkerTreeViewItemPresentation p && p.Item is MarkerTreeViewItem mi) {
+					var isTimelineCursorOnMarker = mi.Marker.Frame == Document.Current.AnimationFrame;
+					var isBold = p.Label.Font.Name == FontPool.DefaultBoldFontName;
+					var parent = (AnimationTreeViewItem)mi.Parent;
+					var isCurrentAnimation = parent.Animation == Document.Current.Animation;
+					if (String.IsNullOrWhiteSpace(mi.Label)) {
+						p.Label.Text = mi.Marker.Action == MarkerAction.Stop ? "<Stop>" :
+							(mi.Marker.Action == MarkerAction.Jump ? "<Jump>" : "<Start>");
+					}
+					if (isTimelineCursorOnMarker && !isBold && isCurrentAnimation) {
+						p.Label.Font = new SerializableFont(FontPool.DefaultBoldFontName);
+					} else if (isBold && (!isCurrentAnimation || !isTimelineCursorOnMarker)) {
 						p.Label.Font = new SerializableFont(FontPool.DefaultFontName);
 					}
 				}
