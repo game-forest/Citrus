@@ -29,8 +29,8 @@ namespace Tangerine.Core
 		public static bool GetSelectionBoundaries(out IntRectangle result)
 		{
 			result = new IntRectangle();
-			var rows = Document.Current.SelectedRows().ToList();
-			if (rows.Count == 0) {
+			var rows = Document.Current?.SelectedRows().ToList();
+			if (rows == null || rows?.Count == 0) {
 				return false;
 			}
 			var span = SingleSpan(

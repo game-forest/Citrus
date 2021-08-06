@@ -13,6 +13,10 @@ namespace Tangerine.MainMenu
 {
 	class RenderToPngSequence : CommandHandler
 	{
+		public override void RefreshCommand(ICommand command)
+		{
+			command.Enabled = Document.Current != null;
+		}
 		public override void Execute()
 		{
 			if (!GridSelection.GetSelectionBoundaries(out var gs)) {
