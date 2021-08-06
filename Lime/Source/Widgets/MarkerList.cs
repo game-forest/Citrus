@@ -117,6 +117,29 @@ namespace Lime
 			return index >= 0 ? markers[index] : null;
 		}
 
+
+		/// <summary>
+		/// Returns index for insertion of a marker given the frame of the marker preserving frame sort order.
+		/// </summary>
+		/// <param name="frame">Frame of the marker being inserted.</param>
+		/// <returns>-1 if marker with given frame already exists, insertion index otherwise.</returns>
+		internal int GetInsertionIndexByFrame(int frame)
+		{
+			int l = 0;
+			int r = markers.Count - 1;
+			while (l <= r) {
+				int m = (l + r) / 2;
+				if (markers[m].Frame < frame) {
+					l = m + 1;
+				} else if (markers[m].Frame > frame) {
+					r = m - 1;
+				} else {
+					return -1;
+				}
+			}
+			return l;
+		}
+
 		private int GetIndexByFrame(int frame)
 		{
 			int l = 0;

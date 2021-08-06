@@ -36,10 +36,6 @@ namespace Tangerine.UI.Timeline
 			ConnectCommand(TimelineCommands.CreateMarkerStop, () => CreateMarker(MarkerAction.Stop));
 			ConnectCommand(TimelineCommands.CreateMarkerJump, () => CreateMarker(MarkerAction.Jump));
 			ConnectCommand(TimelineCommands.DeleteMarker, DeleteMarker);
-			ConnectCommand(TimelineCommands.CopyMarkers, Rulerbar.CopyMarkers);
-			ConnectCommand(TimelineCommands.PasteMarkers, Rulerbar.PasteMarkers);
-			ConnectCommand(TimelineCommands.DeleteMarkers, Rulerbar.DeleteMarkers);
-			ConnectCommand(TimelineCommands.DeleteMarkersInRange, Rulerbar.DeleteMarkersInRange);
 			ConnectCommand(TimelineCommands.MoveDown, MoveNodesDown.Perform);
 			ConnectCommand(TimelineCommands.MoveUp, MoveNodesUp.Perform);
 			ConnectCommand(TimelineCommands.SelectAllRowKeyframes, SelectAllRowKeyframes);

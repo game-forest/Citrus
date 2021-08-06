@@ -275,26 +275,22 @@ namespace Tangerine.Panels
 			return ((CommonTreeViewItem)parent).SceneItem.Rows.IndexOf(item) + i;
 		}
 
-		private const string MarkerContainerAnimationId = "#MarkerContainer";
-
 		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
 		{
-			var stream = new MemoryStream();
-			var container = new Frame();
-			var animations = args.Items.OfType<AnimationTreeViewItem>().Select(i => i.Animation).Where(a => !a.IsLegacy);
-			foreach (var animation in animations) {
-				container.Animations.Add(Cloner.Clone(animation));
-			}
+			var animations = args.Items.OfType<AnimationTreeViewItem>().
+				Select(i => i.Animation).Where(a => !a.IsLegacy).ToList();
 			if (!animations.Any()) {
 				var markers = args.Items.OfType<MarkerTreeViewItem>().Select(i => i.Marker);
-				var a = new Animation { Id = MarkerContainerAnimationId };
-				container.Animations.Add(a);
-				foreach (var marker in markers) {
-					a.Markers.Add(Cloner.Clone(marker));
+				Common.Operations.CopyPasteMarkers.CopyMarkers(markers);
+			} else {
+				var container = new Frame();
+				foreach (var animation in animations) {
+					container.Animations.Add(Cloner.Clone(animation));
 				}
+				var stream = new MemoryStream();
+				TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+				Clipboard.Text = Encoding.UTF8.GetString(stream.ToArray());
 			}
-			TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
-			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 		}
 
 		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider)
@@ -325,7 +321,7 @@ namespace Tangerine.Panels
 							foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
 								RemoveKeyframeRange.Perform(animator, sortedMarkers[0].Frame, sortedMarkers[^1].Frame);
 							}
-							ShiftMarkersAndKeyframes(animation, rangeEnd, rangeBegin - rangeEnd - 1);
+							Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(animation, rangeEnd, rangeBegin - rangeEnd - 1);
 						}
 					}
 				});
@@ -403,78 +399,46 @@ namespace Tangerine.Panels
 			var data = Clipboard.Text;
 			if (!string.IsNullOrEmpty(data) && args.Parent is CommonTreeViewItem parent) {
 				Document.Current.History.DoTransaction(() => {
-					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
-					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
 					RebuildTreeView((TreeView)sender, provider);
 					((TreeView)sender).ClearSelection();
 					var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
-					var markerContainerAnimation = container.Animations.FirstOrDefault(i => i.Id == MarkerContainerAnimationId);
-					if (markerContainerAnimation != null) {
-						// Paste markers
-						var animationSceneItem = parent.SceneItem;
-						if (animationSceneItem.GetNode() != null) {
-							animationSceneItem = animationSceneItem.Rows[index];
-							index = animationSceneItem.GetAnimation().Markers.Count;
+					// Trying to paste markers
+					var animationSceneItem = parent.SceneItem;
+					if (animationSceneItem.GetNode() != null) {
+						animationSceneItem = animationSceneItem.Rows[index];
+						index = animationSceneItem.GetAnimation().Markers.Count;
+					}
+					var animationPasteTo = animationSceneItem.GetAnimation();
+					var pasteAtFrame = animationPasteTo.Markers.Count > 0 && index > 0
+						? animationPasteTo.Markers[index - 1].Frame + 1
+						: 0;
+					if (
+						Common.Operations.CopyPasteMarkers.TryPasteMarkers(animationPasteTo, pasteAtFrame, expandAnimation: true) ||
+						parent.SceneItem.GetNode() == null
+					) {
+						return;
+					}
+					var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+					// Paste animations
+					foreach (var animation in container.Animations.ToList()) {
+						if (animation.Id == CopySceneItemsToStream.AnimationTracksContainerAnimationId) {
+							continue;
 						}
-						var markersToPaste = markerContainerAnimation.Markers.
-							Select(i => i.Clone()).OrderBy(i => i.Frame).ToList();
-						var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
-						var animation = animationSceneItem.GetAnimation();
-						var pasteAtFrame = animation.Markers.Count > 0 && index > 0 ?
-							animation.Markers[index - 1].Frame + 1 : 0;
-						ShiftMarkersAndKeyframes(animation, pasteAtFrame, range);
-						var d = pasteAtFrame - markersToPaste[0].Frame;
-						foreach (var marker in markersToPaste) {
-							marker.Frame += d;
-							LinkSceneItem.Perform(
-								animationSceneItem, index++, Document.Current.SceneTreeBuilder.BuildMarkerSceneItem(marker));
+						container.Animations.Remove(animation);
+						var baseAnimationId = animation.Id;
+						var counter = 1;
+						while (
+							parent.SceneItem.TryGetNode(out var node) &&
+							node.Animations.Any(i => i.Id == animation.Id)
+						) {
+							animation.Id = baseAnimationId + " - Copy" + (counter == 1 ? "" : counter.ToString());
+							counter++;
 						}
-					} else if (parent.SceneItem.GetNode() != null) {
-						// Paste animations
-						foreach (var animation in container.Animations.ToList()) {
-							if (animation.Id == CopySceneItemsToStream.AnimationTracksContainerAnimationId) {
-								continue;
-							}
-							container.Animations.Remove(animation);
-							var baseAnimationId = animation.Id;
-							var counter = 1;
-							while (
-								parent.SceneItem.TryGetNode(out var node) &&
-								node.Animations.Any(i => i.Id == animation.Id)
-							) {
-								animation.Id = baseAnimationId + " - Copy" + (counter == 1 ? "" : counter.ToString());
-								counter++;
-							}
-							var animationSceneItem = LinkSceneItem.Perform(parent.SceneItem, index++, animation);
-							provider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
-						}
+						animationSceneItem = LinkSceneItem.Perform(parent.SceneItem, index++, animation);
+						provider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 					}
 				});
-			}
-		}
-
-		private static void ShiftMarkersAndKeyframes(Animation animation, int startFrame, int delta)
-		{
-			foreach (var marker in animation.Markers) {
-				if (marker.Frame >= startFrame) {
-					SetProperty.Perform(marker, nameof(marker.Frame), marker.Frame + delta);
-				}
-			}
-			foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
-				var changed = false;
-				foreach (var keyframe in animator.Keys) {
-					if (keyframe.Frame >= startFrame) {
-						changed = true;
-						SetProperty.Perform(keyframe, nameof(IKeyframe.Frame), keyframe.Frame + delta);
-					}
-				}
-				if (changed) {
-					DelegateOperation.Perform(
-						() => animator.IncreaseVersion(),
-						() => animator.IncreaseVersion(),
-						true
-					);
-				}
 			}
 		}
 

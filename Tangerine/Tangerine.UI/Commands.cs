@@ -26,10 +26,6 @@ namespace Tangerine.UI
 		public static readonly ICommand CreateMarkerStop = new Command("Create Stop Marker", new Shortcut(Modifiers.Alt, Key.Number2));
 		public static readonly ICommand CreateMarkerJump = new Command("Create Jump Marker", new Shortcut(Modifiers.Alt, Key.Number3));
 		public static readonly ICommand DeleteMarker = new Command("Delete Marker", new Shortcut(Modifiers.Alt, Key.Number4));
-		public static readonly ICommand CopyMarkers = new Command("Copy All Markers");
-		public static readonly ICommand PasteMarkers = new Command("Paste All Markers");
-		public static readonly ICommand DeleteMarkers = new Command("Delete All Markers");
-		public static readonly ICommand DeleteMarkersInRange = new Command("Delete Markers in range");
 		public static readonly ICommand CutKeyframes = new Command("Cut Keyframes", new Shortcut(Modifiers.Alt | Modifiers.Control, Key.X));
 		public static readonly ICommand CopyKeyframes = new Command("Copy Keyframes", new Shortcut(Modifiers.Alt | Modifiers.Control, Key.C));
 		public static readonly ICommand PasteKeyframes = new Command("Paste Keyframes", new Shortcut(Modifiers.Alt | Modifiers.Control, Key.V));
