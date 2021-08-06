@@ -37,7 +37,7 @@ namespace Tangerine.UI.Timeline
 				if (input.IsKeyPressed(Key.Mouse2)) {
 					var delta = input.MousePosition - prevPosition;
 					if (delta != Vector2.Zero && (timeline.Offset.X - delta.X > 0 || timeline.Offset.Y - delta.Y > 0)) {
-						timeline.Offset -= delta;
+						timeline.ClampAndSetOffset(timeline.Offset - delta);
 						Core.Operations.Dummy.Perform(Document.Current.History);
 					}
 				}
@@ -53,7 +53,8 @@ namespace Tangerine.UI.Timeline
 				var prevColWidth = TimelineMetrics.ColWidth;
 				TimelineMetrics.ColWidth = (TimelineMetrics.ColWidth + delta).Clamp(5, 30);
 				if (prevColWidth != TimelineMetrics.ColWidth) {
-					timeline.OffsetX += timeline.CurrentColumn * delta;
+					timeline.ClampAndSetOffset(new Vector2(timeline.OffsetX + timeline.CurrentColumn * delta,
+						timeline.OffsetY));
 					Core.Operations.Dummy.Perform(Document.Current.History);
 				}
 			}
