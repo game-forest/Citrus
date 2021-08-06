@@ -533,4 +533,36 @@ namespace Lime
 		public string Name;
 	}
 
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
+	public abstract class TangerineToStringAttribute : Attribute
+	{
+		protected const string NullText = "<null>";
+		public virtual string GetText(object obj) => obj?.ToString() ?? NullText;
+	}
+
+	public class TangerineToStringUsingMethodAttribute : TangerineToStringAttribute
+	{
+		private readonly string methodName;
+		private Func<object, string> idGetter;
+		private readonly object[] parameters = new object[1];
+
+		public TangerineToStringUsingMethodAttribute(string methodName)
+		{
+			this.methodName = methodName;
+		}
+
+		public override string GetText(object obj)
+		{
+			if (obj == null) {
+				return NullText;
+			}
+			if (idGetter == null) {
+				var classMethod = obj.GetType().GetMethod(methodName);
+				idGetter = (o) => (string)classMethod.Invoke(null, parameters);
+			}
+			parameters[0] = obj;
+			return idGetter(obj);
+		}
+	}
+
 }
