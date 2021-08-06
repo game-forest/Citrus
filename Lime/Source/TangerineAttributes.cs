@@ -141,6 +141,7 @@ namespace Lime
 	public sealed class TangerineOnPropertySetAttribute : Attribute
 	{
 		private readonly string methodName;
+		private MethodInfo method;
 
 		public TangerineOnPropertySetAttribute(string methodName)
 		{
@@ -149,9 +150,11 @@ namespace Lime
 
 		public void Invoke(object o)
 		{
-			var type = o.GetType();
-			var fn = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic);
-			fn.Invoke(o, new object[] { });
+			if (method == null) {
+				var type = o.GetType();
+				method = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic);
+			}
+			method.Invoke(o, null);
 		}
 	}
 
@@ -173,20 +176,39 @@ namespace Lime
 		public readonly string[] AllowedFileTypes;
 		private readonly string valueToStringMethodName;
 		private readonly string stringToValueMethodName;
-		public TangerineFilePropertyAttribute(string[] allowedFileTypes, string ValueToStringMethodName = null, string StringToValueMethodName = null)
-		{
+		private MethodInfo valueToStringMethod;
+		private MethodInfo stringToValueMethod;
+		private readonly object[] parameters = new object[1];
+
+		public TangerineFilePropertyAttribute(
+			string[] allowedFileTypes, string ValueToStringMethodName = null, string StringToValueMethodName = null
+		) {
 			AllowedFileTypes = allowedFileTypes;
 			stringToValueMethodName = StringToValueMethodName;
 			valueToStringMethodName = ValueToStringMethodName;
 		}
 
-		public T StringToValueConverter<T>(Type type, string s) => string.IsNullOrEmpty(stringToValueMethodName)
-				? (T)(object)(s ?? "")
-				: (T)type.GetMethod(stringToValueMethodName).Invoke(null, new object[] { s });
+		public T StringToValueConverter<T>(Type type, string s)
+		{
+			if (string.IsNullOrEmpty(stringToValueMethodName)) {
+				return (T)(object)(s ?? "");
+			} else {
+				parameters[0] = s;
+				stringToValueMethod ??= type.GetMethod(stringToValueMethodName);
+				return (T)stringToValueMethod.Invoke(null, parameters);
+			}
+		}
 
-		public string ValueToStringConverter<T>(Type type, T v) => string.IsNullOrEmpty(valueToStringMethodName)
-			? (string)(object)(v == null ? (T)(object)"" : v)
-			: (string)type.GetMethod(valueToStringMethodName).Invoke(null, new object[] { v });
+		public string ValueToStringConverter<T>(Type type, T v)
+		{
+			if (string.IsNullOrEmpty(valueToStringMethodName)) {
+				return (string)(object)(v == null ? (T)(object)"" : v);
+			} else {
+				parameters[0] = v;
+				valueToStringMethod ??= type.GetMethod(valueToStringMethodName);
+				return (string)valueToStringMethod.Invoke(null, parameters);
+			}
+		}
 	}
 
 	public sealed class TangerineDropDownListPropertyEditorAttribute : Attribute
