@@ -409,15 +409,21 @@ namespace Tangerine.UI
 
 		public void ClearSelection()
 		{
-			ClearSelectionHelper(RootItem);
+			List<TreeViewItem> selectedItems = new List<TreeViewItem>();
+			FillSelectedItems(RootItem);
+			// Unselects items in reverse-selection order to preserve selection order when undoing an operation.
+			selectedItems.Sort((a, b) => b.SelectionOrder - a.SelectionOrder);
+			foreach (var item in selectedItems) {
+				item.Selected = false;
+			}
 
-			void ClearSelectionHelper(TreeViewItem tree)
+			void FillSelectedItems(TreeViewItem tree)
 			{
 				if (tree.Selected) {
-					tree.Selected = false;
+					selectedItems.Add(tree);
 				}
 				foreach (var i in tree.Items) {
-					ClearSelectionHelper(i);
+					FillSelectedItems(i);
 				}
 			}
 		}
@@ -574,7 +580,9 @@ namespace Tangerine.UI
 					OnCut?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
 				}
 				if (Command.Delete.Consume()) {
-					OnDelete?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
+					OnDelete?.Invoke(this, new CopyEventArgs {
+						Items = currentItems.Where(i => i.Selected).OrderBy(i => i.SelectionOrder)
+					});
 				}
 				if (Command.Paste.Consume()) {
 					var focused = GetRecentlySelected();
