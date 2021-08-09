@@ -282,6 +282,16 @@ namespace Tangerine.UI
 						});
 				}
 			};
+			scrollContent.Gestures.Add(new ClickGesture(() => {
+				var itemUnderMouse = GetItemUnderMouse();
+				if (
+					itemUnderMouse != null &&
+					!scrollContent.Input.IsKeyPressed(Key.Shift) &&
+					!scrollContent.Input.IsKeyPressed(toggleSelectionModificator)
+				) {
+					SelectItem(itemUnderMouse);
+				}
+			}));
 			scrollContent.Gestures.Add(dg);
 			scrollContent.Layout = new VBoxLayout();
 			if (options.HandleCommands) {
