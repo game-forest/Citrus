@@ -23,14 +23,11 @@ namespace Tangerine.UI.FilesystemView
 			Instance = this;
 			this.panel = panel;
 			dockPanelWidget = panel.ContentWidget;
-			dockPanelWidget.AddChangeWatcher(() => Core.Project.Current.CitprojPath, (path) => {
-				Initialize();
-			});
 			CommandHandlerList.Global.Connect(FilesystemCommands.NavigateTo, HandleHavigateTo);
 			CommandHandlerList.Global.Connect(FilesystemCommands.OpenInSystemFileManager, HandleOpenInSystemFileManager);
 		}
 
-		private void Initialize()
+		public void Initialize()
 		{
 			views.Clear();
 			// clear unwanted Widget references for GC to collect

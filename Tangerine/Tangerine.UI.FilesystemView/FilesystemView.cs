@@ -245,8 +245,9 @@ namespace Tangerine.UI.FilesystemView
 				up.Path = p;
 				AddToNavHystory(p);
 				// In case of preventing the unselecting file that selected via "Navigate to"
-				if (!Directory.GetFiles(filesystemModel.CurrentPath).Any(x => filesystemSelection.Contains(x)))
+				if (!Directory.GetFiles(filesystemModel.CurrentPath).Any(x => filesystemSelection.Contains(x))) {
 					filesystemSelection.Clear();
+				}
 				InvalidateView(p);
 				InvalidateFSWatcher(p);
 				preview.ClearTextureCache();
@@ -668,7 +669,6 @@ namespace Tangerine.UI.FilesystemView
 							dragStartPosition = scrollView.Content.LocalMousePosition();
 						} else {
 							if (!filesystemSelection.Contains(path)) {
-
 								filesystemSelection.Clear();
 								filesystemSelection.Select(path);
 								lastSelected = path;

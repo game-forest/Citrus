@@ -368,7 +368,14 @@ namespace Tangerine
 				action: document => TangerineMenu.RebuildRecentProjectsMenu()
 			);
 
-			_ = new UI.FilesystemView.FilesystemPane(filesystemPanel);
+			var filesystemView = new UI.FilesystemView.FilesystemPane(filesystemPanel);
+			WidgetContext.Current.Root.AddChangeWatcher(
+				getter: () => Project.Current.CitprojPath,
+				action: (path) => {
+					filesystemView.Initialize();
+				}
+			);
+
 			_ = new UI.RemoteScripting.RemoteScriptingPane(remoteScriptingPanel);
 			RegisterGlobalCommands();
 
