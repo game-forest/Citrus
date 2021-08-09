@@ -19,6 +19,9 @@ namespace Tangerine.UI
 		private ThemedEditBox filter;
 
 		private static bool showAnimationPreviews = true;
+		private static bool showPlayMarkers = true;
+		private static bool showJumpMarkers = true;
+		private static bool showStopMarkers = true;
 
 		public TriggerSelectionDialog(Node scene, HashSet<string> selected, Action<string> onSave)
 		{
@@ -64,32 +67,68 @@ namespace Tangerine.UI
 
 		private Widget CreateToolbar()
 		{
-			ToolbarButton togglePreview;
+			ToolbarButton togglePreviewButton;
+			ToolbarButton toggleShowPlayMarkersButton;
+			ToolbarButton toggleShowJumpMarkersButton;
+			ToolbarButton toggleShowStopMarkersButton;
 			var toolbar = new Widget {
 				Padding = new Thickness(2, 10, 0, 0),
 				MinMaxHeight = Metrics.ToolbarHeight,
 				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 2 },
 				Nodes = {
-					(togglePreview = new ToolbarButton {
+					(togglePreviewButton = new ToolbarButton {
 						Texture = IconPool.GetTexture("TriggerSelectionDialog.ShowPreview"),
 						Tooltip = "Toggle Animation Previews",
+					}),
+					(toggleShowPlayMarkersButton = new ToolbarButton {
+						Texture = IconPool.GetTexture("Lookup.MarkerPlayAction"),
+						Tooltip = "Show Play Markers",
+					}),
+					(toggleShowJumpMarkersButton = new ToolbarButton {
+						Texture = IconPool.GetTexture("Lookup.MarkerJumpAction"),
+						Tooltip = "Show Jump Markers",
+					}),
+					(toggleShowStopMarkersButton = new ToolbarButton {
+						Texture = IconPool.GetTexture("Lookup.MarkerStopAction"),
+						Tooltip = "Show Stop Markers",
 					}),
 					(filter = new ThemedEditBox())
 				}
 			};
-			togglePreview.AddTransactionClickHandler(() => {
+			togglePreviewButton.AddTransactionClickHandler(() => {
 				showAnimationPreviews = !showAnimationPreviews;
-				var i = rootWidget.Nodes.IndexOf(scrollView);
-				scrollView.Unlink();
-				scrollView = CreateScrollView();
-				rootWidget.Nodes.Insert(i, scrollView);
+				RecreateScrollView();
 			});
-			togglePreview.AddChangeWatcher(() => showAnimationPreviews, v => togglePreview.Checked = v);
+			toggleShowPlayMarkersButton.AddTransactionClickHandler(() => {
+				showPlayMarkers = !showPlayMarkers;
+				RecreateScrollView();
+			});
+			toggleShowJumpMarkersButton.AddTransactionClickHandler(() => {
+				showJumpMarkers = !showJumpMarkers;
+				RecreateScrollView();
+			});
+			toggleShowStopMarkersButton.AddTransactionClickHandler(() => {
+				showStopMarkers = !showStopMarkers;
+				RecreateScrollView();
+			});
+			togglePreviewButton.AddChangeWatcher(() => showAnimationPreviews, v => togglePreviewButton.Checked = v);
+			toggleShowPlayMarkersButton.AddChangeWatcher(() => showPlayMarkers, v => toggleShowPlayMarkersButton.Checked = v);
+			toggleShowJumpMarkersButton.AddChangeWatcher(() => showJumpMarkers, v => toggleShowJumpMarkersButton.Checked = v);
+			toggleShowStopMarkersButton.AddChangeWatcher(() => showStopMarkers, v => toggleShowStopMarkersButton.Checked = v);
+
 			filter.AddChangeWatcher(
 				() => filter.Text,
 				_ => ApplyFilter(_)
 			);
+
+			void RecreateScrollView()
+			{
+				var i = rootWidget.Nodes.IndexOf(scrollView);
+				scrollView.Unlink();
+				scrollView = CreateScrollView();
+				rootWidget.Nodes.Insert(i, scrollView);
+			}
 			return toolbar;
 		}
 
@@ -151,7 +190,16 @@ namespace Tangerine.UI
 					wrapper.Visible = !wrapper.Visible;
 					expandButton.Expanded = !expandButton.Expanded;
 				};
-				foreach (var trigger in animation.Markers.Select(i => i.Id).Distinct().Where(i => !string.IsNullOrWhiteSpace(i))) {
+				var triggers = animation.Markers.
+					Where(
+						i =>
+							(i.Action == MarkerAction.Play && showPlayMarkers ||
+							i.Action == MarkerAction.Jump && showJumpMarkers ||
+							i.Action == MarkerAction.Stop && showStopMarkers)
+							&& !string.IsNullOrWhiteSpace(i.Id)
+					).
+					Select(i => i.Id).Distinct();
+				foreach (var trigger in triggers) {
 					wrapper.AddNode(CreateTriggerSelectionWidget(animation, trigger, out var previewContainer));
 					if (previewContainer != null) {
 						var preview = new AnimationPreview(incrementalFF, scenePool, previewContainer, animationIndex, trigger);
