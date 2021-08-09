@@ -13,7 +13,6 @@ namespace Tangerine.UI
 		private readonly Node scene;
 		private readonly Action<string> onSave;
 		private readonly Dictionary<Animation, Dictionary<string, ThemedCheckBox>> checkBoxes;
-		private readonly Dictionary<Animation, Queue<string>> groupSelection;
 		private readonly Widget rootWidget;
 		private readonly HashSet<string> selected;
 		private ThemedScrollView scrollView;
@@ -26,7 +25,6 @@ namespace Tangerine.UI
 			this.scene = scene;
 			this.onSave = onSave;
 			this.selected = selected;
-			groupSelection = new Dictionary<Animation, Queue<string>>();
 			checkBoxes = new Dictionary<Animation, Dictionary<string, ThemedCheckBox>>();
 			window = new Window(new WindowOptions {
 				Title = "Trigger Selection",
@@ -119,7 +117,6 @@ namespace Tangerine.UI
 				scrollView.Content.LateTasks.Add(AttachPreviewsTask(scrollView.Behaviour, previews, visiblePreviews));
 			}
 			foreach (var animation in scene.Animations) {
-				groupSelection[animation] = new Queue<string>();
 				checkBoxes[animation] = new Dictionary<string, ThemedCheckBox>();
 				var expandButton = new ThemedExpandButton {
 					MinMaxSize = Vector2.One * 20f,
@@ -209,15 +206,10 @@ namespace Tangerine.UI
 		private Widget CreateTriggerSelectionWidget(Animation animation, string trigger, out Widget previewContainer)
 		{
 			previewContainer = null;
-			var isChecked = selected.Contains(trigger);
 			var checkBox = new ThemedCheckBox {
-				Checked = isChecked
+				Checked = selected.Contains(animation.IsLegacy ? trigger : $"{trigger}@{animation.Id}")
 			};
-			if (isChecked) {
-				groupSelection[animation].Enqueue(trigger);
-			}
 			checkBoxes[animation].Add(trigger, checkBox);
-			Frame previewFrame;
 			var widget = new Widget {
 				Layout = new HBoxLayout(),
 				LayoutCell = new LayoutCell(Alignment.Center),
@@ -238,7 +230,7 @@ namespace Tangerine.UI
 				previewContainer = new Frame {
 					Size = new Vector2(64),
 				};
-				previewFrame = new Frame {
+				var previewFrame = new Frame {
 					ClipChildren = ClipMethod.ScissorTest,
 					MinMaxSize = previewContainer.Size,
 					Nodes = {
@@ -295,22 +287,13 @@ namespace Tangerine.UI
 		{
 			var currentBoxes = checkBoxes[animation];
 			var checkBox = currentBoxes[trigger];
+			if (!animation.IsLegacy) {
+				trigger = $"{trigger}@{animation.Id}";
+			}
 			if (checkBox.Checked) {
 				selected.Add(trigger);
 			} else {
 				selected.Remove(trigger);
-			}
-			var currentGroup = groupSelection[animation];
-			if (currentGroup.Count > 0) {
-				var last = currentGroup.Peek();
-				if (last == trigger) {
-					currentGroup.Dequeue();
-				} else {
-					currentBoxes[last].Toggle();
-					currentGroup.Enqueue(trigger);
-				}
-			} else {
-				currentGroup.Enqueue(trigger);
 			}
 		}
 
