@@ -124,7 +124,12 @@ namespace Tangerine.UI.Docking
 
 		public void ShowPanel(string panelId)
 		{
-			Model.FindPanelPlacement(panelId).Hidden = false;
+			var panel = Model.FindPanelPlacement(panelId);
+			panel.Hidden = false;
+			if (panel.Parent is TabBarPlacement tabBarPlacement) {
+				tabBarPlacement.ActiveTabIndex = tabBarPlacement.Placements.IndexOf(
+					tabBarPlacement.Placements.First(p => p.Id == panel.Id));
+			}
 			Refresh();
 		}
 
