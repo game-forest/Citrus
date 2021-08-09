@@ -70,7 +70,7 @@ namespace Tangerine.UI
 		{
 			var triggers = new Dictionary<string, HashSet<string>>();
 			foreach (var a in node.Animations) {
-				foreach (var m in a.Markers.Where(i => i.Action != MarkerAction.Jump && !string.IsNullOrEmpty(i.Id))) {
+				foreach (var m in a.Markers.Where(i => !string.IsNullOrEmpty(i.Id))) {
 					var id = a.Id != null ? m.Id + '@' + a.Id : m.Id;
 					var key = a.Id ?? "";
 					if (!triggers.Keys.Contains(key)) {
