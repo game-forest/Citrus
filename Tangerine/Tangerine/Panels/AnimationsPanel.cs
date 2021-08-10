@@ -399,8 +399,9 @@ namespace Tangerine.Panels
 			var data = Clipboard.Text;
 			if (!string.IsNullOrEmpty(data) && args.Parent is CommonTreeViewItem parent) {
 				Document.Current.History.DoTransaction(() => {
-					RebuildTreeView((TreeView)sender, provider);
-					((TreeView)sender).ClearSelection();
+					var treeView = (TreeView) sender;
+					RebuildTreeView(treeView, provider);
+					treeView.ClearSelection();
 					var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 					// Trying to paste markers
 					var animationSceneItem = parent.SceneItem;
@@ -409,6 +410,7 @@ namespace Tangerine.Panels
 						index = animationSceneItem.GetAnimation().Markers.Count;
 					}
 					var animationPasteTo = animationSceneItem.GetAnimation();
+					var previousMarkers = animationPasteTo.Markers.ToList();
 					var pasteAtFrame = animationPasteTo.Markers.Count > 0 && index > 0
 						? animationPasteTo.Markers[index - 1].Frame + 1
 						: 0;
@@ -416,6 +418,13 @@ namespace Tangerine.Panels
 						Common.Operations.CopyPasteMarkers.TryPasteMarkers(animationPasteTo, pasteAtFrame, expandAnimation: true) ||
 						parent.SceneItem.GetNode() == null
 					) {
+						provider.GetAnimationTreeViewItem(animationSceneItem).Expanded = true;
+						foreach (var marker in animationPasteTo.Markers) {
+							if (!previousMarkers.Contains(marker)) {
+								provider.GetMarkerTreeViewItem(
+									Document.Current.GetSceneItemForObject(marker)).Selected = true;
+							}
+						}
 						return;
 					}
 					var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
