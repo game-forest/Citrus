@@ -32,22 +32,21 @@ namespace Tangerine.Common.Operations
 			}
 			var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 			var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
-			var markerContainerAnimation = container.Animations
-				.FirstOrDefault(i => i.Id == MarkerContainerAnimationId);
-			if (markerContainerAnimation == null) {
-				return false;
-			}
-			var markersToPaste = markerContainerAnimation.Markers.Select(i => i.Clone()).OrderBy(i => i.Frame)
-				.ToList();
-			if (markersToPaste.Count == 0) {
-				return true;
-			}
-			pasteAtFrame ??= markersToPaste[0].Frame;
-				var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
-			if (expandAnimation) {
-				ShiftMarkersAndKeyframes(animation, pasteAtFrame.Value, range);
-			}
-			var d = pasteAtFrame.Value - markersToPaste[0].Frame;
+			var markerContainerAnimation = container.Animations.FirstOrDefault(i => i.Id == MarkerContainerAnimationId);
+		    if (markerContainerAnimation == null) {
+		        return false;
+		    }
+		    var markersToPaste = markerContainerAnimation.Markers.Select(i => i.Clone()).OrderBy(i => i.Frame)
+		        .ToList();
+		    if (markersToPaste.Count == 0) {
+			    return true;
+		    }
+		    pasteAtFrame ??= markersToPaste[0].Frame;
+			    var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
+		    if (expandAnimation) {
+			    ShiftMarkersAndKeyframes(animation, pasteAtFrame.Value, range);
+		    }
+		    var d = pasteAtFrame.Value - markersToPaste[0].Frame;
 			// Firstly insert all non-Jump markers in order to correctly resolve Jump markers dependencies.
 			// It doesn't fix a case when Jump marker jumps to Jump marker because
 			// it doesn't make any sense and will clutter the code.
@@ -59,6 +58,11 @@ namespace Tangerine.Common.Operations
 			{
 				foreach (var marker in markers) {
 					marker.Frame += d;
+					var existingMarkerIndex = animation.Markers.FindIndex(i => i.Frame == marker.Frame);
+					if (existingMarkerIndex >= 0) {
+						UnlinkSceneItem.Perform(
+							Document.Current.GetSceneItemForObject(animation.Markers[existingMarkerIndex]));
+					}
 					LinkSceneItem.Perform(
 						Document.Current.GetSceneItemForObject(animation),
 						animation.Markers.GetInsertionIndexByFrame(marker.Frame),
