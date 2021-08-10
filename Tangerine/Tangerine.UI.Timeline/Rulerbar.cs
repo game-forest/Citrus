@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
+using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.UI.Timeline
 {
@@ -23,10 +24,8 @@ namespace Tangerine.UI.Timeline
 				HitTestTarget = true
 			};
 			RootWidget.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
-			RootWidget.LateTasks.Add(
-				new KeyPressHandler(Key.Mouse0DoubleClick, RootWidget_DoubleClick),
-				new KeyPressHandler(Key.Mouse1, (input, key) => new ContextMenu().Show())
-			);
+			RootWidget.Gestures.Add(new DoubleClickGesture(0, ShowContextMenu));
+			RootWidget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			RootWidget.AddChangeWatcher(() => Document.Current.AnimationFrame, (value) => {
 				var markers = Document.Current.Animation.Markers;
 				int i = markers.FindIndex(m => m.Frame == value);
@@ -38,6 +37,18 @@ namespace Tangerine.UI.Timeline
 				upperMarker = null;
 			});
 			warningIcon = IconPool.GetTexture("Inspector.Warning");
+
+			void ShowContextMenu()
+			{
+				Document.Current.History.DoTransaction(() => SetCurrentColumn.Perform(CalcColumnUnderMouse()));
+				new ContextMenu().Show();
+			}
+		}
+
+		public int CalcColumnUnderMouse()
+		{
+			var mouseX = RootWidget.LocalMousePosition().X;
+			return ((mouseX + Timeline.Instance.Offset.X) / TimelineMetrics.ColWidth).Floor().Max(0);
 		}
 
 		void RootWidget_DoubleClick(WidgetInput input, Key key)
