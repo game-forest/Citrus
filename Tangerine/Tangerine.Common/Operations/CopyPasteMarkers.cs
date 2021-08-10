@@ -30,8 +30,13 @@ namespace Tangerine.Common.Operations
 			if (string.IsNullOrEmpty(data)) {
 				return false;
 			}
-			var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
-			var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+			Frame container;
+			try {
+				var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
+				container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+			} catch {
+				return false;
+			}
 			var markerContainerAnimation = container.Animations.FirstOrDefault(i => i.Id == MarkerContainerAnimationId);
 		    if (markerContainerAnimation == null) {
 		        return false;

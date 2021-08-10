@@ -427,8 +427,13 @@ namespace Tangerine.Panels
 						}
 						return;
 					}
-					var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-					var container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+					Frame container;
+					try {
+						var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+						container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+					} catch {
+						return;
+					}
 					// Paste animations
 					foreach (var animation in container.Animations.ToList()) {
 						if (animation.Id == CopySceneItemsToStream.AnimationTracksContainerAnimationId) {
