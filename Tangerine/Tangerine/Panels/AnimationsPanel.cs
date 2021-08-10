@@ -992,21 +992,17 @@ namespace Tangerine.Panels
 		{
 			private static readonly Warning higherPriorityWarning = new Warning {
 				Icon = IconPool.GetTexture("Inspector.Warning"),
-				Text = "This animation has a higher priority than the active one.",
-				Size = Vector2.One * TimelineMetrics.DefaultRowHeight,
-				Padding = new Thickness(0)
+				Text = "This animation has a higher priority than the active one."
 			};
 			private static readonly Warning insufficientPriorityWarning = new Warning {
 				Icon = IconPool.GetTexture("Universal.NoEdit"),
-				Text = "This animation has insufficient priority for editing.",
-				Size = Vector2.One * TimelineMetrics.DefaultRowHeight,
-				Padding = new Thickness(5)
+				Text = "This animation has insufficient priority for editing."
 			};
 			
 			private readonly Func<TreeViewMode> treeViewModeGetter;
 			private readonly Image warningWidget;
 			
-			private Warning warning;
+			private string warningText;
 
 			public AnimationTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item,
@@ -1017,11 +1013,12 @@ namespace Tangerine.Panels
 				this.treeViewModeGetter = treeViewModeGetter;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 				warningWidget = new Image {
-					MinMaxSize = new Vector2(16),
+					MinMaxSize = Vector2.One * TimelineMetrics.DefaultRowHeight,
+					Padding = new Thickness(1),
 					HitTestTarget = true,
 					Visible = false
 				};
-				warningWidget.Components.Add(new TooltipComponent(() => warning.Text));
+				warningWidget.Components.Add(new TooltipComponent(() => warningText));
 				Widget.AddNode(warningWidget);
 			}
 
@@ -1123,20 +1120,20 @@ namespace Tangerine.Panels
 						SetWarning(activePresentation, insufficientPriorityWarning);
 					}
 				}
+				
 				void ClearWarning(AnimationTreeViewItemPresentation presentation)
 				{
-					presentation.warning = new Warning();
+					presentation.warningText = string.Empty;
 					presentation.warningWidget.Visible = false;
 				}
+				
 				void SetWarning(AnimationTreeViewItemPresentation presentation, Warning warning)
 				{
-					presentation.warning = warning;
-					presentation.warningWidget.Padding = warning.Padding;
-					presentation.warningWidget.MinMaxSize = warning.Size;
-					presentation.warningWidget.Size = warning.Size;
+					presentation.warningText = warning.Text;
 					presentation.warningWidget.Texture = warning.Icon;
 					presentation.warningWidget.Visible = true;
 				}
+				
 				IEnumerable<TreeViewItem> NodeItemsFromRootToLeaves(TreeViewItemList nodeItems) =>
 					nodeItems.Count > 0 ? ((NodeTreeViewItem)nodeItems[0]).Node == Document.Current.RootNode ?
 						nodeItems : nodeItems.Reverse() : Enumerable.Empty<TreeViewItem>();
@@ -1146,8 +1143,6 @@ namespace Tangerine.Panels
 			{
 				public ITexture Icon;
 				public string Text;
-				public Vector2 Size;
-				public Thickness Padding;
 			}
 		}
 
