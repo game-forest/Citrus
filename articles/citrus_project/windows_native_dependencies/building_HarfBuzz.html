@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1057;&#1073;&#1086;&#1088;&#1082;&#1072; HarfBuzz &#1080; &#1077;&#1075;&#1086; &#1079;&#1072;&#1074;&#1080;&#1089;&#1080;&#1084;&#1086;&#1089;&#1090;&#1077;&#1081; | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1057;&#1073;&#1086;&#1088;&#1082;&#1072; HarfBuzz &#1080; &#1077;&#1075;&#1086; &#1079;&#1072;&#1074;&#1080;&#1089;&#1080;&#1084;&#1086;&#1089;&#1090;&#1077;&#1081; | Citrus Engine ">
+    <meta name="generator" content="docfx 2.56.3.0">
+    
+    <link rel="shortcut icon" href="../../../images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    <meta property="docfx:rel" content="../../../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h2 id="сборка-harfbuzz-и-его-зависимостей">Сборка HarfBuzz и его зависимостей</h2>
+
+<h3 id="шаги-сборки">Шаги сборки</h3>
+<ol>
+<li><a href="###%D0%A1%D0%BA%D0%B0%D1%87%D0%B0%D1%82%D1%8C-%D1%80%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%B9-HarfBuzz-%D0%B0">Скачать репозиторий HarfBuzz-а</a></li>
+<li><a href="###%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%82%D1%8C-MinGW-w64">Установить mingw-w64</a></li>
+<li><a href="###%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%82%D1%8C-Meson">Установить Meson</a></li>
+<li><a href="###%D0%97%D0%B0%D0%BF%D1%83%D1%81%D1%82%D0%B8%D1%82%D1%8C-%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D1%83-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-Meson">Запустить сборку через Meson</a></li>
+</ol>
+<h3 id="скачать-репозиторий-harfbuzz-а">Скачать репозиторий HarfBuzz-а</h3>
+<p>Мы используем свой форк HarfBuzz-a: <a href="https://gitlab.game-forest.com:8888/Common/3rdparty/harfbuzz">https://gitlab.game-forest.com:8888/Common/3rdparty/harfbuzz</a>.</p>
+<p>Также в нашем gitlab репозитории содержатся форки зависимостей HarfBuzz-a.</p>
+<p>Для сборки HarfBuzz-a нужно выкачать только наш форк.</p>
+<p><strong>Остальные зависимости установятся автоматически.</strong></p>
+<h3 id="установить-mingw-w64">Установить MinGW-w64</h3>
+<p>MinGW-w64 распространяется через SourceForge.net</p>
+<p><a href="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/">https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/</a></p>
+<p>При установке нужно выбрать следующие опции (см. таблицу и скриншот):</p>
+<table>
+<thead>
+<tr>
+<th>Опция</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Architecture</td>
+<td>x86_64</td>
+</tr>
+<tr>
+<td>Threads</td>
+<td>posix</td>
+</tr>
+<tr>
+<td>Exception</td>
+<td>seh</td>
+</tr>
+</tbody>
+</table>
+<img src="images/MinGW_installing_options.png" alt="MinGW Installing Options" style="zoom: 67%;">
+<p>После этого необходимо выбрать расположение для MinGW</p>
+<p><strong>Важно!</strong> В пути к MinGW не должно быть пробелов. В ином случае вы получите ошибку во время компиляции одной из библиотек зависимостей HarfBuzz-a.</p>
+<img src="images/MinGW_installing_path.png" alt="MinGW Installing Path" style="zoom:67%;">
+<h3 id="установить-meson">Установить Meson</h3>
+<p>Meson - это система сборки.</p>
+<p><a href="https://mesonbuild.com/Getting-meson.html">https://mesonbuild.com/Getting-meson.html</a></p>
+<p>На данный момент это основной способ сборки HarfBuzz-a.</p>
+<p>У HarfBuzz-а много опций и библиотек зависимостей.</p>
+<p>Meson автоматически скачает и соберёт все зависимости.</p>
+<p>Управлять зависимостями нужно через опции.</p>
+<p>В нашем форке HarfBuzz-a всё уже настроено.</p>
+<h3 id="запустить-сборку-через-meson">Запустить сборку через Meson</h3>
+<p>Чтобы начать сборку HarfBuzz-а, нужно запустить скрипт <code>build-for-citrus-win64.sh</code></p>
+<p>Для этого открываем директорию, в которую установили MinGW (для меня это <code>C:\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0</code>). В этой директории должен лежать файл <code>mingw-w64.bat</code>. Нужно заменить последнюю строчку в этом файле (<code>&quot;C:\WINDOWS\system32\cmd.exe&quot;</code>) на путь к <code>git bash</code> (для меня это <code>&quot;C:\Program Files\Git\git-bash.exe&quot;</code>). После этого запускаем <code>mingw-w64.bat</code>.</p>
+<p>Должно открыться окно gitbash. Вместе с ним может открыться окно cmd, которое можно сразу закрыть. В открывшемся gitbash-e переходим в директорию с HarfBuzz-ом (для меня это <code>C:\Users\dshcherbina\Desktop\harfbuzz</code>).</p>
+<p>Теперь нужно запустить скрипт:<code>sh .\ci/build-for-citrus-win64.sh</code></p>
+<p>Этот скрипт должен отработать без ошибок.</p>
+<p>В результате его работы должен получиться набор библиотек в <code>...\harfbuzz\win32build\harfbuzz-win32\</code></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5></h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

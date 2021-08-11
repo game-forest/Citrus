@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Native dependencies win64_support | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Native dependencies win64_support | Citrus Engine ">
+    <meta name="generator" content="docfx 2.56.3.0">
+    
+    <link rel="shortcut icon" href="../../../images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    
+    <meta property="docfx:rel" content="../../../">
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="native-dependencies-win64_support">Native dependencies win64_support</h1>
+
+<p>В этом документе описаны нативные зависимости под виндовс и мас, которые были затронуты в эпике <code>win64_support</code>.</p>
+<h2 id="оглавление">Оглавление</h2>
+<ul>
+<li>[x] <a href="#Lemon">Lemon</a></li>
+<li>[x] <a href="#ShaderCompiler">ShaderCompiler</a></li>
+<li>[x] <a href="#ShaderCompilerBinding.Win">ShaderCompilerBinding.Win</a></li>
+<li>[x] <a href="#OpenAL">OpenAL</a></li>
+<li>[x] <a href="#OpenTK">OpenTK</a></li>
+<li>[x] <a href="#Newtonsoft.Json">Newtonsoft.Json</a></li>
+<li>[x] <a href="#FbxSdk">FbxSdk</a></li>
+<li>[x] <a href="#FreeType">FreeType</a></li>
+<li>[x] <a href="#HarfBuzz">HarfBuzz</a></li>
+</ul>
+<h2 id="lemon">Lemon</h2>
+<p>Источник: исходный код в <a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/tree/master/Lemon">Citrus\Lemon</a></p>
+<p>Включает в себя</p>
+<ul>
+<li>Theora <a href="https://www.theora.org/">https://www.theora.org/</a></li>
+<li>Vorbis and Tremor <a href="https://xiph.org/vorbis/">https://xiph.org/vorbis/</a></li>
+<li>yuv2rgb <a href="http://wss.co.uk/pinknoise/yuv2rgb/">http://wss.co.uk/pinknoise/yuv2rgb/</a></li>
+</ul>
+<p>Используется при взаимодействии с <code>.ogg</code> <code>.ogv</code> <code>.oga</code> <code>.ogx</code> <code>.spx</code> <code>.opus</code> <code>.ogm</code> файлами.</p>
+<p>Список изменений:</p>
+<ul>
+<li>Стандартная конфигурация <code>Lemon.vcxproj</code> теперь нацелена на <code>x64</code></li>
+<li>Для перехода на <code>x64</code> отключены оптимизации, связанные с ассемблерными вставками</li>
+<li>LemonNative.dll пересобран под <code>x64</code></li>
+</ul>
+<h2 id="shadercompiler">ShaderCompiler</h2>
+<p>Источник: исходный код в <a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/tree/master/3rdParty">Citrus\3rdParty</a></p>
+<p>Включает в себя:</p>
+<ul>
+<li>glslang <a href="https://github.com/KhronosGroup/glslang">https://github.com/KhronosGroup/glslang</a></li>
+<li>SPIRV-Tools <a href="https://github.com/KhronosGroup/SPIRV-Tools">https://github.com/KhronosGroup/SPIRV-Tools</a></li>
+<li>spirv-headers <a href="https://github.com/KhronosGroup/SPIRV-Headers.git">https://github.com/KhronosGroup/SPIRV-Headers.git</a></li>
+<li>SPIRV-Cross <a href="https://github.com/KhronosGroup/SPIRV-Cross">https://github.com/KhronosGroup/SPIRV-Cross</a></li>
+</ul>
+<p>Автор: <em>Костя Егоров</em> <a href="kostonke@mail.ru">kegorov</a></p>
+<p>Список изменений:</p>
+<ul>
+<li>ShaderCompiler.dll пересобран под <code>x64</code></li>
+</ul>
+<h2 id="shadercompilerbindingwin">ShaderCompilerBinding.Win</h2>
+<p>Источник: исходный код в <a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/tree/master/3rdParty">Citrus\3rdParty</a></p>
+<p>Автор: <em>Костя Егоров</em> <a href="kostonke@mail.ru">kegorov</a></p>
+<p>Используется в процессе компиляции шейдеров.
+<em>(Компиляция шейдерев происходит при первом использовании материала (</em><code>IMaterial</code><em>))</em></p>
+<p>Список изменений:</p>
+<ul>
+<li>Стандартная конфигурация <code>ShaderCompilerBinding.Win.csproj</code> теперь нацелена на <code>x64</code></li>
+<li>ShaderCompilerBinding.Win.dll пересобран под <code>x64</code></li>
+</ul>
+<h2 id="openal">OpenAL</h2>
+<p>Источник: <strong>nuget</strong> (утанавливается как зависимость <a href="#OpenTK">OpenTK</a>)</p>
+<p>Используется аудиосистемой движка.</p>
+<p>Список изменений:</p>
+<ul>
+<li>OpenAL теперь устанавливается из <strong>nuget</strong>-а</li>
+<li>Версия изменена и зависит от OpenTK</li>
+</ul>
+<h2 id="opentk">OpenTK</h2>
+<p>Версия: 3.1.0</p>
+<p>Источник: <strong>nuget</strong> <a href="https://www.nuget.org/packages/OpenTK.GLControl/">OpenTK.GLControl</a></p>
+<p>По крайней мере используется в процессе рендеринга в Empty Project-е, код из OpenTK используется аудиосистемой движка.
+<em>(Типы данных из OpenTK используются, даже если ОpenGL не используется в качесте бэкенда. Возможно, что-то подскажет Костя Егоров</em> <a href="kostonke@mail.ru">kegorov</a><em>)</em></p>
+<p>Список изменений:</p>
+<ul>
+<li>OpenTK теперь устанавливается из <strong>nuget</strong>-а</li>
+<li>Версия обновлена с 1.1.2 до 3.1.0</li>
+<li>Удалены библиотеки в <code>3rdParty/OpenTK/</code></li>
+<li>Добавлены библиотеки в <code>3rdParty/OpenTK/Dependencies_x64</code>.
+(замена аналогичных библиотек в <code>3rdParty/OpenTK/Dependencies_x86/</code>)
+<ul>
+<li>d3dcompiler_47.dll</li>
+<li>libEGL.dll</li>
+<li>libGLESv2.dll</li>
+</ul>
+</li>
+</ul>
+<p>Примечания:</p>
+<p>Библиотеки в <code>3rdParty/OpenTK/Dependencies_x64</code> необходимы для запуска OpenGL ES 2.0 на виндовс.
+Они получены путём сборки <a href="https://github.com/google/angle">google/angle</a> со следующими параметрами (OpenGL ES 2.0 эмулируется через DirectX 9):</p>
+<pre><code class="lang-c">is_debug = false
+angle_enable_d3d9 = true
+angle_enable_d3d11 = false
+angle_enable_gl = true
+angle_enable_gl_desktop = false
+angle_enable_metal = false
+angle_enable_vulkan = false
+angle_build_all = false
+enable_stripping = true
+build_angle_perftests = false
+angle_enable_null = false
+</code></pre>
+<h2 id="newtonsoftjson">Newtonsoft.Json</h2>
+<p>Версия: 12.0.3</p>
+<p>Источник: <strong>nuget</strong> <a href="https://www.nuget.org/packages/Newtonsoft.Json/">Newtonsoft.Json</a></p>
+<p>Отрабатывает отрабатывает при чтении файлов сцены, при десериализации объектов.</p>
+<p>Список изменений:</p>
+<ul>
+<li>Newtonsoft.Json теперь устанавливается из <strong>nuget</strong>-а</li>
+<li>Версия обновлена с 6.0.0.0 до 12.0.3</li>
+</ul>
+<h2 id="fbxsdk">FbxSdk</h2>
+<p>Источник: <a href="https://gitlab.game-forest.com:8888/rshutov/FbxSdk">https://gitlab.game-forest.com:8888/rshutov/FbxSdk</a></p>
+<p>Отрабатывает отрабатывает при импорте 3d моделей.</p>
+<p>Список изменений:</p>
+<ul>
+<li>Добавлена конфигурация для <code>x64</code></li>
+<li>FbxSdk.dll пересобран под <code>x64</code></li>
+</ul>
+<h2 id="mfdecoder">MFDecoder</h2>
+<p>Источник: исходный код в <a href="https://gitlab.game-forest.com:8888/Common/Citrus/-/tree/master/3rdParty">Citrus\3rdParty</a></p>
+<p>Написан на базе примеров в msdn: <a href="https://docs.microsoft.com/en-us/windows/win32/medfound/processing-media-data-with-the-source-reader">https://docs.microsoft.com/en-us/windows/win32/medfound/processing-media-data-with-the-source-reader</a></p>
+<p>Используется в <code>VideoPlayer</code>.</p>
+<p>Список изменений:</p>
+<ul>
+<li>Добавлена конфигурация для <code>x64</code></li>
+<li>MFDecoder.dll пересобран под <code>x64</code></li>
+</ul>
+<h2 id="freetype">FreeType</h2>
+<p>Версия: 2.10.4</p>
+<p>Источник: наш форк <a href="https://gitlab.game-forest.com:8888/Common/3rdparty/freetype">https://gitlab.game-forest.com:8888/Common/3rdparty/freetype</a></p>
+<p>Исходный репозиторий: <a href="https://gitlab.freedesktop.org/freetype/freetype">https://gitlab.freedesktop.org/freetype/freetype</a></p>
+<p>Отрабатывает во время запуска движка.</p>
+<p>Отвечает за растеризацию глифов.</p>
+<p>Список изменений:</p>
+<ul>
+<li>Версия для виндовс обновлена с 2.10.1 до 2.10.4</li>
+<li>Версия для виндовс собрана как зависимость <a href="#HarfBuzz">HarfBuzz</a></li>
+<li>Добален патч, который позволяет использовать FreeType через SharpFont в приложении с архитектурой <code>x64</code> на виндовс.
+<em>(Этот патч не оказывает влияния на остальные платформы. Патч описан в файле</em> <code>building_FreeType.md</code><em>.)</em></li>
+<li>libfreetype-6.dll пересобран под <code>x64</code></li>
+</ul>
+<h2 id="harfbuzz">HarfBuzz</h2>
+<p>Версия: 2.8.1</p>
+<p>Источник: наш форк <a href="https://gitlab.game-forest.com:8888/Common/3rdparty/harfbuzz">https://gitlab.game-forest.com:8888/Common/3rdparty/harfbuzz</a></p>
+<p>Исходный репозиторий: <a href="https://github.com/harfbuzz/harfbuzz">https://github.com/harfbuzz/harfbuzz</a></p>
+<p>Отрабатывает во время генерации шрифтов.</p>
+<p>Отвечает за межсимвольные интервалы.</p>
+<p>Список изменений:</p>
+<ul>
+<li>Версия для виндовс обновлена с 2.5.3 до 2.8.1</li>
+<li>Обновлена версия FreeType.
+<em>(Изначально при сборке HarfBuzz-а используется некоторый форк <a href="#FreeType">FreeType</a>-а, но там старая версия FreeType-а.</em> <em>Оригиналый FreeType с версии 2.10.3 поддерживает систему сборки (Meson), которая используется в этом процессе.</em> <em>Теперь используется наш форк оригинального репозитория FreeType-а.)</em></li>
+<li>В версии для виндовс отключена поддержка <a href="https://cgit.freedesktop.org/cairo">cairo</a> и <a href="https://www.freedesktop.org/wiki/Software/fontconfig/">fontconfig</a>
+<em>(cairo и fontconfig используются для тестирования HarfBuzz, но мы эти тесты не используем.)</em></li>
+<li>В нашем GitLab созданы форки для зависимостей HarfBuzz-а.
+<em>(Эти форки будут использоваться для сборки HarfBuzz-а.)</em>
+<ul>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/harfbuzz">HarfBuzz</a> (ветка для нужд движка: 2.8.1_citrus, ссылки на зависимости заменены на наши форки)</li>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/freetype">FreeType</a> (ветка для нужд движка: 2.10.4_citrus, ссылки на зависимости заменены на наши форки)</li>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/zlib">Zlib</a> (ветка для нужд движка: 1.2.11_citrus, ссылки на зависимости заменены на наши форки)</li>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/glib">Glib</a> (ветка для нужд движка: 2.58.1_citrus)</li>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/libpng">Libpng</a> (ветка для нужд движка: master)</li>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/libffi">Libffi</a> (ветка для нужд движка: citrus)</li>
+<li><a href="https://gitlab.game-forest.com:8888/Common/3rdparty/proxylibintl">ProxyLibintl</a> (ветка для нужд движка: citrus)</li>
+</ul>
+</li>
+</ul>
+<p>Примечания:</p>
+<p>Последовательность действий для сборки HarfBuzz-а подробно описана в файле <code>building_HarfBuzz.md</code>.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5></h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

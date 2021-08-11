@@ -189,6 +189,10 @@
 <li>Windows FNT/FON bitmap fonts</li>
 <li>Apple's TrueType GX fonts are supported as normal TTFs (the advanced tables are ignored)</li>
 </ul>
+<h2 id="the-kern-table">The 'kern' table</h2>
+<p>Only old, windows-only-compatible 'kern' table is supported. If your font have &quot;new&quot; 'kern' table - extracting kerning pairs won't work. You should resave font, forcing old 'kern' table in any font editor (for example - FontForge).</p>
+<p>More info info about 'kern' table can be found here <a href="https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6kern.html">https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6kern.html</a></p>
+<p>Info about resaving font can be found here <a href="https://github.com/fontforge/fontforge/issues/3435">https://github.com/fontforge/fontforge/issues/3435</a></p>
 <h1 id="how-to-generate-font">How to generate font</h1>
 <ul>
 <li>Place a font file inside <code>Fonts</code> directory (e.g. Digits.ttf)</li>
@@ -213,6 +217,9 @@
 <li>You'll be notified after engine finishes font generation. You should be able to see <code>Digits.ttf</code> and <code>Digit.png</code> files in <code>Fonts</code> directory</li>
 <li>Unfortunately you have to restart Tangerine for changes to take place :(</li>
 </ul>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<h2 id="i-generated-my-font-but-dont-see-any-kind-of-kerning-pairs-from-initial-font">I generated my font, but don't see any kind of kerning pairs from initial font</h2>
+<p>This will happen when font has any kind of kerning pairs (GPOS, for example) table instead of legacy, windows-compatible ones. This can be fixed by resaving original font within font editor (fontforge) with compatible 'kern' table. This problem fully described there <a href="https://github.com/fontforge/fontforge/issues/3435">https://github.com/fontforge/fontforge/issues/3435</a></p>
 </article>
           </div>
           

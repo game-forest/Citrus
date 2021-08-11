@@ -9450,7 +9450,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/tangerine_font_configuration.html",
-          "hash": "atJFXWk7o/7xFpkJpN2twQ=="
+          "hash": "Sxj/gaFJ8v/CBRg9T34J2g=="
         }
       },
       "is_incremental": false,
@@ -9463,6 +9463,90 @@
         ".html": {
           "relative_path": "articles/citrus_project/tangerine_scene_tree.html",
           "hash": "6ZHF930mhFAqQFT/C+oYtw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/building_FreeType.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/building_FreeType.html",
+          "hash": "qE59AtnCChWXYgpL0Evnpg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/building_HarfBuzz.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/building_HarfBuzz.html",
+          "hash": "IIGNtc82KgwqMSVBK49iDw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/images/MinGW_installing_options.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/images/MinGW_installing_options.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/images/MinGW_installing_path.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/images/MinGW_installing_path.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/images/subpixel_text.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/images/subpixel_text.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/native_dependencies_win64_support.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/native_dependencies_win64_support.html",
+          "hash": "oSVhP8borhWmuZhn7699XA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/citrus_project/windows_native_dependencies/windows_dependency_list.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/citrus_project/windows_native_dependencies/windows_dependency_list.html",
+          "hash": "kMTOVvpHEAMoZg+FlM/5Jw=="
         }
       },
       "is_incremental": false,
@@ -9680,7 +9764,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "3KMr9t7hr3wYl18MXa9TXw=="
+          "hash": "cnjH+w4ESaFViZgTsrR+kw=="
         }
       },
       "is_incremental": false,
@@ -11507,7 +11591,7 @@
       "output": {
         ".html": {
           "relative_path": "tangerine/node/widget.html",
-          "hash": "EBtQF9Xo8PaEFXgDeYDP4g=="
+          "hash": "S1y5nL/25jWr8kcvKkwAGg=="
         }
       },
       "is_incremental": false,
@@ -11727,7 +11811,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 76,
+          "total_file_count": 80,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
