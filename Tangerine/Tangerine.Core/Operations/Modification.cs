@@ -759,7 +759,7 @@ namespace Tangerine.Core.Operations
 	{
 		public static Node Perform(Type nodeType, bool aboveSelected = true)
 		{
-			SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var index, aboveSelected);
+			SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var index, nodeType, aboveSelected);
 			return Perform(parent, index, nodeType);
 		}
 
