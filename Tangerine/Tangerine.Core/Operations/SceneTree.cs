@@ -576,42 +576,25 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static void GetSceneItemLinkLocation(out Row parent, out int index, bool aboveFocused = true)
+		public static bool GetSceneItemLinkLocation(out Row parent, out int index, bool aboveFocused = true, Func<Row, Row, bool> raiseThroughHierarchyPredicate = null)
 		{
 			var focusedItem = Document.Current.RecentlySelectedSceneItem();
 			if (focusedItem == null) {
 				parent = Document.Current.GetSceneItemForObject(Document.Current.Container);
 				index = 0;
-				return;
-			}
-			if (focusedItem.TryGetAnimator(out _)) {
-				parent = focusedItem.Parent.Parent;
-				focusedItem = focusedItem.Parent;
 			} else {
 				parent = focusedItem.Parent;
+				index = parent.Rows.IndexOf(focusedItem);
 			}
-			index = parent.Rows.IndexOf(focusedItem);
-			if (!aboveFocused) {
-				index++;
-			}
-		}
-
-		public static bool GetSceneItemLinkLocation(
-			out Row parent,
-			out int index,
-			bool aboveFocused,
-			Func<Row, bool> raiseThroughHierarchyPredicate)
-		{
-			GetSceneItemLinkLocation(out parent, out index, aboveFocused);
-			while (raiseThroughHierarchyPredicate.Invoke(parent)) {
-				if (parent.Parent == null) {
-					return false;
+			if (raiseThroughHierarchyPredicate != null) {
+				while (raiseThroughHierarchyPredicate.Invoke(parent, focusedItem)) {
+					if (parent.Parent == null) {
+						return false;
+					}
+					focusedItem = null;
+					index = parent.Parent.Rows.IndexOf(parent);
+					parent = parent.Parent;
 				}
-				index = parent.Parent.Rows.IndexOf(parent);
-				if (!aboveFocused) {
-					index++;
-				}
-				parent = parent.Parent;
 			}
 			return true;
 		}

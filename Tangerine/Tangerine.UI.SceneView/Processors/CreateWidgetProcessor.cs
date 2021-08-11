@@ -40,8 +40,9 @@ namespace Tangerine.UI.SceneView
 				if (
 					!SceneTreeUtils.GetSceneItemLinkLocation(
 						out var containerSceneItem, out var linkLocation, aboveFocused: true,
-						raiseThroughHierarchyPredicate: i =>
-							!LinkSceneItem.CanLink(i, (Node)Activator.CreateInstance(nodeTypeActive)))
+						raiseThroughHierarchyPredicate: (i, j) =>
+							!LinkSceneItem.CanLink(i, (Node)Activator.CreateInstance(nodeTypeActive)) ||
+							j != null && j.TryGetAnimator(out _))
 				) {
 					throw new InvalidOperationException();
 				}

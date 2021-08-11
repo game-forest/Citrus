@@ -31,7 +31,7 @@ namespace Tangerine.UI.SceneView
 				Bone bone = null;
 				if (!SceneTreeUtils.GetSceneItemLinkLocation(
 					out var containerSceneItem, out _, aboveFocused: true,
-					raiseThroughHierarchyPredicate: i => !LinkSceneItem.CanLink(i, new Bone()))
+					raiseThroughHierarchyPredicate: (i, _) => !LinkSceneItem.CanLink(i, new Bone()))
 				) {
 					throw new InvalidOperationException();
 				}
@@ -75,8 +75,8 @@ namespace Tangerine.UI.SceneView
 								bone = (Bone)CreateNode.Perform(baseBoneItem, 0, typeof(Bone));
 							} else {
 								if (!SceneTreeUtils.GetSceneItemLinkLocation(
-									out var parent, out var index, true,
-									raiseThroughHierarchyPredicate: i => i.GetNode() is Bone)
+									out var parent, out var index,
+									raiseThroughHierarchyPredicate: (i, _) => i.GetNode() is Bone)
 								) {
 									throw new InvalidOperationException();
 								}
