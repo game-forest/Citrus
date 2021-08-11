@@ -28,6 +28,7 @@ namespace Tangerine.UI.Timeline
 					CreateSlowMotionButton(),
 					CreateFrameProgressionButton(),
 					CreateApplyZeroPoseButton(),
+					CreateCenterTimelineButton(),
 					CreateAnimationIndicator(),
 					new Widget(),
 					CreatePlaybackButton(),
@@ -74,6 +75,15 @@ namespace Tangerine.UI.Timeline
 			button.AddChangeWatcher(() => CoreUserPreferences.AutoKeyframes, i => button.Checked = i);
 			button.Clicked += () => CoreUserPreferences.AutoKeyframes = !CoreUserPreferences.AutoKeyframes;
 			button.Components.Add(new DocumentationComponent("AutomaticKeyframes"));
+			button.AddChangeWatcher(() => Document.Current.Animation.IsCompound, v => button.Visible = !v);
+			return button;
+		}
+
+		ToolbarButton CreateCenterTimelineButton()
+		{
+			var button = new ToolbarButton(IconPool.GetTexture("AnimationsPanel.ShowCurrent")) { Tooltip = "Center Timeline on Current Column" };
+			button.Clicked += () => (TimelineCommands.CenterTimelineOnCurrentColumn as Command)?.Issue();
+			button.Components.Add(new DocumentationComponent("CenterTimeline"));
 			button.AddChangeWatcher(() => Document.Current.Animation.IsCompound, v => button.Visible = !v);
 			return button;
 		}
