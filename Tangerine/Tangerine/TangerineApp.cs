@@ -859,7 +859,7 @@ namespace Tangerine
 					if (widgets.Count > 0) {
 						Utils.CalcHullAndPivot(widgets, out _, out var pivot);
 						pivot *= Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
-						DragWidgetsProcessor.DragWidgets(widgets, mousePosition, pivot, true);
+						DragWidgetsProcessor.DragWidgets(widgets, mousePosition, pivot, isRoundingMode: true);
 					}
 				}
 			} catch (InvalidOperationException e) {
