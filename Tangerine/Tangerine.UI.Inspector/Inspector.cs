@@ -14,9 +14,11 @@ namespace Tangerine.UI.Inspector
 		private static readonly Icon inspectRootActivatedTexture;
 		private static readonly Icon inspectRootDeactivatedTexture;
 
+		private readonly Widget rootWrapperWidget;
 		private readonly InspectorContent content;
 		private readonly ThemedScrollView contentWidget;
-
+		private readonly Widget orangeLineWidget;
+		
 		private HashSet<Type> prevTypes = new HashSet<Type>();
 
 		public static Inspector Instance { get; private set; }
@@ -67,7 +69,7 @@ namespace Tangerine.UI.Inspector
 		public void Attach()
 		{
 			Instance = this;
-			PanelWidget.PushNode(RootWidget);
+			PanelWidget.PushNode(rootWrapperWidget);
 			content.CreatedAddComponentsMenu += CreatedAddComponentsMenu;
 			Rebuild();
 		}
@@ -75,7 +77,7 @@ namespace Tangerine.UI.Inspector
 		public void Detach()
 		{
 			Instance = null;
-			RootWidget.Unlink();
+			rootWrapperWidget.Unlink();
 			content.CreatedAddComponentsMenu -= CreatedAddComponentsMenu;
 		}
 
@@ -100,12 +102,23 @@ namespace Tangerine.UI.Inspector
 			contentWidget.Content.Layout = new VBoxLayout();
 			Toolbar = new ToolbarView(toolbarArea, GetToolbarLayout());
 			Objects = new List<object>();
-			content = new InspectorContent(contentWidget.Content)
-			{
+			content = new InspectorContent(contentWidget.Content) {
 				Footer = new Widget { MinHeight = 300.0f },
 				History = Document.Current.History
 			};
 			DropFilesGesture.Recognized += content.DropFiles;
+			orangeLineWidget = new Widget {
+				Anchors = Anchors.TopBottom, 
+				MinMaxWidth = 4,
+				Presenter = new WidgetFlatFillPresenter(Color4.Orange)
+			};
+			rootWrapperWidget = new Widget {
+				Layout = new HBoxLayout(),
+				Nodes = {
+					orangeLineWidget,
+					RootWidget
+				}
+			};
 			CreateWatchersToRebuild();
 			OnCreate?.Invoke(this);
 		}
@@ -210,7 +223,9 @@ namespace Tangerine.UI.Inspector
 			} else {
 				content.BuildForObjects(Document.Current.SelectedNodes().ToList());
 			}
-			InspectorCommands.InspectRootNodeCommand.Icon = Document.Current.InspectRootNode ? inspectRootActivatedTexture : inspectRootDeactivatedTexture;
+			InspectorCommands.InspectRootNodeCommand.Icon = Document.Current.InspectRootNode ? 
+				inspectRootActivatedTexture : inspectRootDeactivatedTexture;
+			orangeLineWidget.Visible = Document.Current.InspectRootNode;
 			Toolbar.Rebuild();
 			// Delay UpdateScrollPosition, since contentWidget.MaxScrollPosition is not updated yet.
 			contentWidget.LateTasks.Add(UpdateScrollPositionOnNextUpdate);
