@@ -339,6 +339,16 @@ namespace Tangerine.UI
 				trigger = $"{trigger}@{animation.Id}";
 			}
 			if (checkBox.Checked) {
+				// Uncheck other triggers for the given animation.
+				foreach (var s in selected.ToList()) {
+					var t = s.Contains('@') ? s.Split('@') : new[] { s, null };
+					var otherTrigger = t[0];
+					var animationId = t[1];
+					if (animationId == animation.Id) {
+						selected.Remove(otherTrigger);
+						currentBoxes[otherTrigger].Checked = false;
+					}
+				}
 				selected.Add(trigger);
 			} else {
 				selected.Remove(trigger);

@@ -10,17 +10,6 @@ namespace Tangerine.UI
 		private readonly EditBox editBox;
 		private readonly Node node;
 
-		private List<string> CurrentTriggers
-		{
-			get
-			{
-				return (CoalescedPropertyValue().GetValue().Value ?? "").
-					Split(',').
-					Select(el => el.Trim()).
-					ToList();
-			}
-		}
-
 		public TriggerPropertyEditor(IPropertyEditorParams editorParams, bool multiline = false) : base(editorParams)
 		{
 			if (EditorParams.Objects.Skip(1).Any()) {
@@ -33,7 +22,6 @@ namespace Tangerine.UI
 				MinMaxWidth = 20,
 				LayoutCell = new LayoutCell(Alignment.Center)
 			};
-			var color = button.GlobalColor;
 			EditorContainer.AddNode(editBox = editorParams.EditBoxFactory());
 			EditorContainer.AddNode(Spacer.HSpacer(4));
 			EditorContainer.AddNode(button);
@@ -44,9 +32,13 @@ namespace Tangerine.UI
 				SetProperty(newValue);
 			};
 			button.Clicked += () => {
+				var value = CoalescedPropertyValue().GetValue().Value;
+				var currentTriggers = string.IsNullOrEmpty(value) ?
+					new HashSet<string>() :
+					value.Split(',').Select(el => el.Trim()).ToHashSet();
 				var window = new TriggerSelectionDialog(
 					node,
-					new HashSet<string>(CurrentTriggers),
+					currentTriggers,
 					s => {
 						s = FilterTriggers(s);
 						SetProperty(s);
@@ -86,7 +78,7 @@ namespace Tangerine.UI
 
 		private Widget CreateWarning(string message)
 		{
-			return new Widget() {
+			return new Widget {
 				Layout = new HBoxLayout(),
 				Nodes = {
 					new ThemedSimpleText {
