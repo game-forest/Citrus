@@ -44,6 +44,8 @@ namespace Tangerine.UI
 		public static readonly ICommand NumericMove = new Command("Numeric Move");
 		public static readonly ICommand NumericScale = new Command("Numeric Scale");
 		public static readonly ICommand CenterTimelineOnCurrentColumn = new Command("Center Timeline on Current Column", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.C));
+		public static readonly ICommand AdvanceToPreviousKeyframe = new Command("Advance to Previous Keyframe", new Shortcut(Modifiers.Control, Key.Left));
+		public static readonly ICommand AdvanceToNextKeyframe = new Command("Advance to Next Keyframe", new Shortcut(Modifiers.Control, Key.Right));
 	}
 
 	public static class InspectorCommands

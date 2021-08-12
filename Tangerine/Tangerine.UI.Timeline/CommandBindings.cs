@@ -6,6 +6,7 @@ using Tangerine.Core;
 using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 using Tangerine.UI.Timeline.Components;
+using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.UI.Timeline
 {
@@ -43,6 +44,8 @@ namespace Tangerine.UI.Timeline
 			ConnectCommand(TimelineCommands.MoveUp, MoveNodesUp.Perform);
 			ConnectCommand(TimelineCommands.SelectAllRowKeyframes, SelectAllRowKeyframes);
 			ConnectCommand(TimelineCommands.SelectAllKeyframes, SelectAllKeyframes);
+			ConnectCommand(TimelineCommands.AdvanceToNextKeyframe, SelectNextKeyframe.Perform);
+			ConnectCommand(TimelineCommands.AdvanceToPreviousKeyframe, SelectPreviousKeyframe.Perform);
 		}
 
 		private static void SelectAllKeyframes()
