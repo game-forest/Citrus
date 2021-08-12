@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.Timeline
@@ -72,6 +73,9 @@ namespace Tangerine.UI.Timeline
 			var parentSceneItem = GetSceneItem(args.Parent);
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(args.Items.Select(GetSceneItem)).ToList();
 			Document.Current.History.DoTransaction(() => {
+				DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+				SetProperty.Perform(parentSceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.NodesExpanded), true, false);
+				DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in topSceneItems) {
 					if (item.Parent == parentSceneItem && index > parentSceneItem.Rows.IndexOf(item)) {

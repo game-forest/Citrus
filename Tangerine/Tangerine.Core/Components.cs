@@ -10,13 +10,13 @@ namespace Tangerine.Core.Components
 	[NodeComponentDontSerialize]
 	public class TimelineItemStateComponent : Component
 	{
-		public bool Expandable { get; set; }
+		public bool NodesExpandable { get; set; }
 
-		public bool Expanded { get; set; }
+		public bool NodesExpanded { get; set; }
 
-		public bool ShowAnimators { get; set; }
+		public bool AnimatorsExpandable { get; set; }
 
-		public bool HasAnimators { get; set; }
+		public bool AnimatorsExpanded { get; set; }
 
 		public bool Selected
 		{

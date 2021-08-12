@@ -19,7 +19,9 @@ namespace Tangerine.UI.Timeline
 		public void Process(ITreeViewItemPresentation presentation)
 		{
 			if (presentation is TreeViewItemPresentation p) {
-				p.ExpandButton.Texture = p.Item.Expanded
+				p.ExpandButton.Texture =
+					p.Minimalistic && p.Item.Expanded ||
+					!p.Minimalistic && p.SceneItem.GetTimelineItemState().NodesExpanded
 					? IconPool.GetTexture("Timeline.Expanded")
 					: IconPool.GetTexture("Timeline.Collapsed");
 				p.ExpandButton.Visible = p.Item.CanExpand();
@@ -200,9 +202,19 @@ namespace Tangerine.UI.Timeline
 		private ToolbarButton CreateExpandButton()
 		{
 			var button = new ToolbarButton { Highlightable = false };
-			button.Clicked += () => {
-				Item.Expanded = !Item.Expanded;
-			};
+			if (Minimalistic) {
+				button.Clicked += () => {
+					Item.Expanded = !Item.Expanded;
+				};
+			} else {
+				button.AddTransactionClickHandler(() => {
+					SetProperty.Perform(
+						SceneItem.GetTimelineItemState(),
+						nameof(TimelineItemStateComponent.NodesExpanded),
+						!SceneItem.GetTimelineItemState().NodesExpanded
+					);
+				});
+			}
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
 		}
@@ -414,28 +426,25 @@ namespace Tangerine.UI.Timeline
 				Texture = IconPool.GetTexture("Timeline.Animator")
 			};
 			button.AddChangeWatcher(
-				() => (SceneItem.GetTimelineItemState().HasAnimators, Document.Current.ShowAnimators),
-				i => button.Enabled = SceneItem.GetTimelineItemState().HasAnimators && !Document.Current.ShowAnimators
+				() => (HasAnimators: SceneItem.GetTimelineItemState().AnimatorsExpandable, Document.Current.ShowAnimators),
+				i => button.Enabled = SceneItem.GetTimelineItemState().AnimatorsExpandable && !Document.Current.ShowAnimators
 			);
 			button.AddChangeWatcher(
-				() => (SceneItem.GetTimelineItemState().ShowAnimators, Document.Current.ShowAnimators),
-				i => button.Checked = SceneItem.GetTimelineItemState().ShowAnimators || Document.Current.ShowAnimators
+				() => (ShowAnimators: SceneItem.GetTimelineItemState().AnimatorsExpanded, Document.Current.ShowAnimators),
+				i => button.Checked = SceneItem.GetTimelineItemState().AnimatorsExpanded || Document.Current.ShowAnimators
 			);
 			button.AddTransactionClickHandler(
 				() => {
 					var nodes = Document.Current.SelectedRows()
 						.Select(i => i.GetNode())
 						.Where(i => i != null).ToList();
-					var showAnimators = !SceneItem.GetTimelineItemState().ShowAnimators;
+					var showAnimators = !SceneItem.GetTimelineItemState().AnimatorsExpanded;
 					if (!nodes.Contains(Node)) {
 						nodes.Clear();
 						nodes.Add(Node);
 					}
 					foreach (var n in nodes) {
-						SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.ShowAnimators), showAnimators);
-						if (showAnimators) {
-							SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.Expanded), true);
-						}
+						SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.AnimatorsExpanded), showAnimators);
 					}
 				}
 			);

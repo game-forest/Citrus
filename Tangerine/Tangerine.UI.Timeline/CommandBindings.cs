@@ -82,8 +82,8 @@ namespace Tangerine.UI.Timeline
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					SetProperty.Perform(
 						focusedItem.GetTimelineItemState(),
-						nameof(TimelineItemStateComponent.Expanded),
-						!focusedItem.GetTimelineItemState().Expanded,
+						nameof(TimelineItemStateComponent.NodesExpanded),
+						!focusedItem.GetTimelineItemState().NodesExpanded,
 						isChangingDocument: false
 					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
@@ -99,7 +99,7 @@ namespace Tangerine.UI.Timeline
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					ExpandOrCollapseHelper(
 						Document.Current.RecentlySelectedSceneItem(),
-						!focusedItem.GetTimelineItemState().Expanded
+						!focusedItem.GetTimelineItemState().NodesExpanded
 					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
@@ -107,10 +107,10 @@ namespace Tangerine.UI.Timeline
 
 			void ExpandOrCollapseHelper(Row sceneItem, bool expand)
 			{
-				if (sceneItem.GetTimelineItemState().Expanded != expand) {
+				if (sceneItem.GetTimelineItemState().NodesExpanded != expand) {
 					SetProperty.Perform(
 						sceneItem.GetTimelineItemState(),
-						nameof(TimelineItemStateComponent.Expanded),
+						nameof(TimelineItemStateComponent.NodesExpanded),
 						expand,
 						isChangingDocument: false
 					);

@@ -273,9 +273,7 @@ namespace Tangerine.UI
 				}
 				scrollContent.CompoundPostPresenter.Remove(dragCursorPresenter);
 				if (TryCalcDragDestination(out var parent, out var childIndex, out _)) {
-					if (!parent.Expanded) {
-						parent.Expanded = true;
-					}
+					parent.Expanded = true;
 					OnDragEnd?.Invoke(this,
 						new DragEventArgs {
 							Items = currentItems.Where(i => i.Selected),
@@ -721,7 +719,7 @@ namespace Tangerine.UI
 				if (!skipRoot) {
 					currentItems.Add(item);
 					item.Index = index++;
-					item.Presentation = item.Presentation ?? presentation.CreateItemPresentation(this, item);
+					item.Presentation ??= presentation.CreateItemPresentation(this, item);
 				}
 				if (skipRoot || item.Expanded) {
 					foreach (var i in item.Items) {
