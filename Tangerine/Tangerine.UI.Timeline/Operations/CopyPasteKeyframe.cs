@@ -32,21 +32,30 @@ namespace Tangerine.UI.Timeline.Operations
 			}
 			int startCol = spans.First().A;
 			int animationHostIndex = -1;
+			IAnimationHost previousAnimationHost = null;
 
 			foreach (var row in Document.Current.SelectedRows()) {
 				spans = row.Components.Get<GridSpanListComponent>()?.Spans;
 				if (spans == null) {
 					continue;
 				}
-				var animable = row.Components.Get<NodeRow>()?.Node as IAnimationHost;
-				if (animable == null) {
-					continue;
+				if (row.TryGetAnimator(out var animator)) {
+					if (previousAnimationHost != animator.Owner) {
+						previousAnimationHost = animator.Owner;
+						animationHostIndex++;
+					}
+					ProcessAnimator(animator);
+				} else if (row.TryGetNode(out var node)) {
+					animationHostIndex++;
+					previousAnimationHost = node;
+					foreach (var a in node.Animators) {
+						ProcessAnimator(a);
+					}
 				}
-				animationHostIndex++;
-
-				foreach (var animator in animable.Animators) {
-					if (animator.AnimationId != Document.Current.AnimationId) {
-						continue;
+				void ProcessAnimator(IAnimator animator)
+				{
+					if (!Document.Current.Animation.ValidatedEffectiveAnimatorsSet.Contains(animator)) {
+						return;
 					}
 					foreach (var keyframe in animator.Keys.Where(i => spans.Any(j => j.Contains(i.Frame)))) {
 						list.Add(new AnimationHostKeyBinding {
@@ -102,6 +111,9 @@ namespace Tangerine.UI.Timeline.Operations
 			int startCol = spans.First().A;
 			Document.Current.History.DoTransaction(() => {
 				var rows = Document.Current.Rows;
+				if (rows[startRow].TryGetAnimator(out _)) {
+					startRow = rows.IndexOf(Document.Current.Rows[startRow].Parent);
+				}
 				int rowIndex = startRow;
 				int animationHostIndex = 0;
 				IAnimationHost animationHost = null;
