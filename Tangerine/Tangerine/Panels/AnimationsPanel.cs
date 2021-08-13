@@ -120,7 +120,7 @@ namespace Tangerine.Panels
 			}
 		}
 
-		class TreeViewItemStateComponent : Component
+		private class TreeViewItemStateComponent : Component
 		{
 			public TreeViewItemState StateForCurrentBranch;
 			public TreeViewItemState StateForAllHierarchy;
@@ -166,7 +166,7 @@ namespace Tangerine.Panels
 			ThemedScrollView scrollView, TreeViewItemProvider provider,
 			TreeViewItemPresentationOptions presentationOptions)
 		{
-			var presentation = new TreeViewPresentation(provider, presentationOptions);
+			var presentation = new TreeViewPresentation(provider, presentationOptions, treeViewModeGetter: () => mode);
 			var treeView = new TreeView(scrollView, presentation, new TreeViewOptions { ShowRoot = false });
 			treeView.OnDragBegin += TreeView_OnDragBegin;
 			treeView.OnDragEnd += TreeView_OnDragEnd;
@@ -181,6 +181,7 @@ namespace Tangerine.Panels
 						break;
 					case AnimationTreeViewItem ai:
 						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(ai.Animation));
+						AnimationTreeViewItemPresentation.UpdateWarnings(treeView, mode);
 						break;
 					case MarkerTreeViewItem mi:
 						Document.Current.History.DoTransaction(() => {
@@ -422,7 +423,7 @@ namespace Tangerine.Panels
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
 			}
-
+			
 			nodeItems.Clear();
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
@@ -443,6 +444,7 @@ namespace Tangerine.Panels
 				treeView.RootItem.Items.Add(item);
 			}
 			treeView.Refresh();
+			AnimationTreeViewItemPresentation.UpdateWarnings(treeView, mode);
 
 			var animated = previousContainer != Document.Current.Container;
 			previousContainer = Document.Current.Container;
@@ -721,7 +723,7 @@ namespace Tangerine.Panels
 					});
 				}
 			}
-
+			
 			public override bool CanRename() => !Animation.IsLegacy && Animation.Id != Animation.ZeroPoseId;
 
 			public override ITexture Icon
@@ -771,12 +773,17 @@ namespace Tangerine.Panels
 			public const float IndentWidth = 20;
 
 			private readonly TreeViewItemPresentationOptions options;
+			private readonly Func<TreeViewMode> treeViewModeGetter;
 			private TreeViewItemProvider itemProvider;
 
 			public IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
 
-			public TreeViewPresentation(TreeViewItemProvider itemProvider, TreeViewItemPresentationOptions options)
-			{
+			public TreeViewPresentation(
+				TreeViewItemProvider itemProvider, 
+				TreeViewItemPresentationOptions options,
+				Func<TreeViewMode> treeViewModeGetter
+			) {
+				this.treeViewModeGetter = treeViewModeGetter;
 				this.itemProvider = itemProvider;
 				this.options = options;
 				Processors = new List<ITreeViewItemPresentationProcessor> {
@@ -790,7 +797,7 @@ namespace Tangerine.Panels
 			{
 				switch (item) {
 					case AnimationTreeViewItem _:
-						return new AnimationTreeViewItemPresentation(treeView, item, options);
+						return new AnimationTreeViewItemPresentation(treeView, item, options, treeViewModeGetter);
 					case MarkerTreeViewItem _:
 						return new MarkerTreeViewItemPresentation(treeView, item, options);
 					case NodeTreeViewItem _:
@@ -888,7 +895,7 @@ namespace Tangerine.Panels
 				Widget.Nodes.Add(Label);
 			}
 
-			private void HighlightLabel(Widget widget, SimpleText label, string searchString)
+			protected void HighlightLabel(Widget widget, SimpleText label, string searchString)
 			{
 				if (string.IsNullOrEmpty(searchString)) {
 					return;
@@ -983,12 +990,36 @@ namespace Tangerine.Panels
 
 		private class AnimationTreeViewItemPresentation : CommonTreeViewItemPresentation, ITreeViewItemPresentation
 		{
+			private static readonly Warning higherPriorityWarning = new Warning {
+				Icon = IconPool.GetTexture("Inspector.Warning"),
+				Text = "This animation has a higher priority than the active one."
+			};
+			private static readonly Warning insufficientPriorityWarning = new Warning {
+				Icon = IconPool.GetTexture("Universal.NoEdit"),
+				Text = "This animation has insufficient priority for editing."
+			};
+			
+			private readonly Func<TreeViewMode> treeViewModeGetter;
+			private readonly Image warningWidget;
+			
+			private string warningText;
+
 			public AnimationTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item,
-				TreeViewItemPresentationOptions options)
+				TreeViewItemPresentationOptions options,
+				Func<TreeViewMode> treeViewModeGetter)
 				: base(treeView, item, options)
 			{
+				this.treeViewModeGetter = treeViewModeGetter;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+				warningWidget = new Image {
+					MinMaxSize = Vector2.One * TimelineMetrics.DefaultRowHeight,
+					Padding = new Thickness(1),
+					HitTestTarget = true,
+					Visible = false
+				};
+				warningWidget.Components.Add(new TooltipComponent(() => warningText));
+				Widget.AddNode(warningWidget);
 			}
 
 			private void ShowContextMenu()
@@ -1048,6 +1079,70 @@ namespace Tangerine.Panels
 						}
 					}
 				});
+				UpdateWarnings(TreeView, treeViewModeGetter());
+			}
+			
+			public static void UpdateWarnings(TreeView treeView, TreeViewMode mode)
+			{
+				var activeAnimation = Document.Current.Animation;
+				AnimationTreeViewItemPresentation topmostPresentation = null;
+				AnimationTreeViewItemPresentation activePresentation = null;
+				var nodeItems = treeView.RootItem.Items;
+				foreach (var nodeItem in NodeItemsFromRootToLeaves(nodeItems)) {
+					foreach (var item in nodeItem.Items) {
+						if (item is AnimationTreeViewItem animationItem) {
+							if (animationItem.Presentation == null) {
+								continue;
+							}
+							var animation = animationItem.Animation;
+							var presentation = (AnimationTreeViewItemPresentation)animationItem.Presentation;
+							if (activeAnimation == null || activeAnimation.IsLegacy || mode == TreeViewMode.AllHierarchy) {
+								ClearWarning(presentation);
+							} else {
+								if (animation == activeAnimation) {
+									activePresentation = presentation;
+									topmostPresentation = presentation;
+								} else if (animation.Id == activeAnimation.Id) {
+									topmostPresentation = presentation;
+									SetWarning(presentation, insufficientPriorityWarning);
+								} else {
+									ClearWarning(presentation);
+								}
+							}
+						}
+					}
+				}
+				if (activePresentation != null) {
+					if (activePresentation == topmostPresentation) {
+						ClearWarning(activePresentation);
+					} else {
+						SetWarning(topmostPresentation, higherPriorityWarning);
+						SetWarning(activePresentation, insufficientPriorityWarning);
+					}
+				}
+				
+				void ClearWarning(AnimationTreeViewItemPresentation presentation)
+				{
+					presentation.warningText = string.Empty;
+					presentation.warningWidget.Visible = false;
+				}
+				
+				void SetWarning(AnimationTreeViewItemPresentation presentation, Warning warning)
+				{
+					presentation.warningText = warning.Text;
+					presentation.warningWidget.Texture = warning.Icon;
+					presentation.warningWidget.Visible = true;
+				}
+				
+				IEnumerable<TreeViewItem> NodeItemsFromRootToLeaves(TreeViewItemList nodeItems) =>
+					nodeItems.Count > 0 ? ((NodeTreeViewItem)nodeItems[0]).Node == Document.Current.RootNode ?
+						nodeItems : nodeItems.Reverse() : Enumerable.Empty<TreeViewItem>();
+			}
+			
+			private struct Warning
+			{
+				public ITexture Icon;
+				public string Text;
 			}
 		}
 
