@@ -871,7 +871,7 @@ namespace Tangerine.Panels
 						Renderer.DrawRect(
 							Vector2.Zero, w.Size,
 							Item.Selected ? Widget.Focused == w.Parent ? Theme.Colors.SelectedBackground :
-							Color4.Transparent : Theme.Colors.WhiteBackground
+							Theme.Colors.SelectedInactiveBackground : Theme.Colors.WhiteBackground
 						);
 						HighlightLabel(Widget, Label, options.SearchStringGetter?.Invoke());
 					})

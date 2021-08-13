@@ -248,18 +248,23 @@ namespace Tangerine.UI
 				}
 			});
 			var dragRecognized = false;
+			// To avoid double selection in the drag and click gestures.
+			var clickRecognized = false;
 			dg.Began += () => {
 				dragRecognized = false;
 				var itemUnderMouse = GetItemUnderMouse();
 				if (itemUnderMouse == null) {
 					return;
 				}
+				clickRecognized = true;
 				if (scrollContent.Input.IsKeyPressed(toggleSelectionModificator)) {
 					SelectItem(itemUnderMouse, !itemUnderMouse.Selected, false, activateIfNeeded: false);
 				} else if (scrollContent.Input.IsKeyPressed(Key.Shift)) {
 					SelectRange(itemUnderMouse);
 				} else if (!itemUnderMouse.Selected) {
 					SelectItem(itemUnderMouse);
+				} else {
+					clickRecognized = false;
 				}
 			};
 			dg.Recognized += () => {
@@ -282,11 +287,32 @@ namespace Tangerine.UI
 						});
 				}
 			};
+			// Click gesture is required to select a single item under the mouse that is already part of a group of
+			// selected items (and unselect other items from this group). This logic can not be implemented in the drag
+			// gesture because it's impossible to determine in that gesture if we just clicked on the item or we are trying to drag it.
+			// So implementing it in the drag gesture will lead to not being able to drag a group of selected items.
+			scrollContent.Gestures.Add(new ClickGesture(() => {
+				var itemUnderMouse = GetItemUnderMouse();
+				if (
+					itemUnderMouse != null &&
+					!scrollContent.Input.IsKeyPressed(Key.Shift) &&
+					!scrollContent.Input.IsKeyPressed(toggleSelectionModificator) &&
+					!clickRecognized
+				) {
+					SelectItem(itemUnderMouse);
+				}
+			}));
 			scrollContent.Gestures.Add(dg);
 			scrollContent.Layout = new VBoxLayout();
 			if (options.HandleCommands) {
 				scrollContent.Tasks.Add(HandleCommands);
 			}
+			// To clear selection when clicking on an empty area in the frame.
+			scrollContent.Parent.Gestures.Add(new ClickGesture(() => {
+				if (GetItemUnderMouse() == null) {
+					ClearSelection();
+				}
+			}));
 		}
 
 		private TreeViewItem GetRecentlySelected()
@@ -407,6 +433,10 @@ namespace Tangerine.UI
 
 		public void ClearSelection()
 		{
+			// In case when user clicks on an empty area to clear selection when RootItem is not yet created.
+			if (RootItem == null) {
+				return;
+			}
 			List<TreeViewItem> selectedItems = new List<TreeViewItem>();
 			FillSelectedItems(RootItem);
 			// Unselects items in reverse-selection order to preserve selection order when undoing an operation.
