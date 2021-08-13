@@ -340,6 +340,8 @@ namespace Tangerine.Dialogs
 			foreach (var id in panel.CommandIds) {
 				if (CommandRegistry.TryGetCommandInfo(id, out CommandInfo commandInfo)) {
 					usedCommands.AddItem(new CommandItem(commandInfo));
+				} else if (id == "ToolbarSpacer") {
+					usedCommands.AddItem(CreateToolbarSpacerItem());
 				}
 			}
 		}
@@ -361,9 +363,36 @@ namespace Tangerine.Dialogs
 					CreateButton("Preferences.MoveUp", "Move command up", () => MoveCommand(-1), usedCommands),
 					CreateButton("Preferences.MoveRight", "Add command", AddCommand, usedCommands, availableCommands),
 					CreateButton("Preferences.MoveLeft", "Remove command", RemoveCommand, usedCommands, availableCommands),
-					CreateButton("Preferences.MoveDown", "Move command down", () => MoveCommand(1), usedCommands)
+					CreateButton("Preferences.MoveDown", "Move command down", () => MoveCommand(1), usedCommands),
+					CreateButton("Preferences.ToolbarSpacer", "Add spacer", () => AddSpacer(), usedCommands)
 				}
 			};
+		}
+
+		private static Widget CreateToolbarSpacerItem()
+		{
+			var spacer = new Widget {
+				Layout = new HBoxLayout { Spacing = 10 },
+				Padding = new Thickness(5)
+			};
+			spacer.AddNode(Spacer.HSpacer(16));
+			spacer.AddNode(new ThemedSimpleText {
+				Text = "Spacer",
+				LayoutCell = new LayoutCell(Alignment.Center),
+				Padding = new Thickness { Left = 5 }
+			});
+			spacer.AddNode(new Widget());
+			return spacer;
+		}
+
+		private void AddSpacer()
+		{
+			var panel = ((PanelItem)panelList.SelectedItem.Widget).Panel;
+			var rightPanelIndex = usedCommands.SelectedIndex;
+			rightPanelIndex = rightPanelIndex < 0 ? 0 : rightPanelIndex;
+			usedCommands.InsertItem(rightPanelIndex, CreateToolbarSpacerItem());
+			panel.CommandIds.Insert(rightPanelIndex, "ToolbarSpacer");
+			TangerineApp.Instance.Toolbar.Rebuild();
 		}
 
 		private void AddCommand()

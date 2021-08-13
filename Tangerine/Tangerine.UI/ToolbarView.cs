@@ -51,6 +51,13 @@ namespace Tangerine.UI
 					}
 					foreach (var id in panel.CommandIds) {
 						if (!CommandRegistry.TryGetCommandInfo(id, out var commandInfo)) {
+							if (id == "ToolbarSpacer") {
+								panelWidget.AddNode(new Widget {
+									LayoutCell = new LayoutCell(Alignment.Center),
+									MinMaxSize = new Vector2(16),
+									HitTestTarget = false
+								});
+							}
 							continue;
 						}
 						var command = commandInfo.Command;
