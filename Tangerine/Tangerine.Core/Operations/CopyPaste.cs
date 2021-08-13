@@ -42,11 +42,17 @@ namespace Tangerine.Core.Operations
 		{
 			Row parent;
 			int index;
-			SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index);
 			var data = Clipboard.Text;
 			var result = new List<Row>();
 			if (!string.IsNullOrEmpty(data)) {
 				var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
+				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
+				// To explicitly determine if animators are selected to paste or not
+				if (container.Animators.Count > 0) {
+					SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index, typeof(IAnimator));
+				} else {
+					SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index, typeof(Node));
+				}
 				Document.Current.History.DoTransaction(() => {
 					ClearRowSelection.Perform();
 					PasteSceneItemsFromStream.Perform(stream, parent, index, out result);

@@ -39,7 +39,7 @@ namespace Tangerine.UI.SceneView
 				}
 				if (
 					!SceneTreeUtils.GetSceneItemLinkLocation(
-						out var containerSceneItem, out var linkLocation, aboveFocused: true,
+						out var containerSceneItem, out var linkLocation, nodeTypeActive, aboveFocused: true,
 						raiseThroughHierarchyPredicate: i =>
 							!LinkSceneItem.CanLink(i, (Node)Activator.CreateInstance(nodeTypeActive)))
 				) {

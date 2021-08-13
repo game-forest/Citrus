@@ -576,37 +576,43 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static void GetSceneItemLinkLocation(out Row parent, out int index, bool aboveFocused = true)
+		public static bool GetSceneItemLinkLocation(
+			out Row parent,
+			out int index,
+			Type insertingType,
+			bool aboveFocused = true,
+			Func<Row, bool> raiseThroughHierarchyPredicate = null)
 		{
 			var focusedItem = Document.Current.RecentlySelectedSceneItem();
 			if (focusedItem == null) {
 				parent = Document.Current.GetSceneItemForObject(Document.Current.Container);
 				index = 0;
-				return;
-			}
-			parent = focusedItem.Parent;
-			index = parent.Rows.IndexOf(focusedItem);
-			if (!aboveFocused) {
-				index++;
-			}
-		}
-
-		public static bool GetSceneItemLinkLocation(
-			out Row parent,
-			out int index,
-			bool aboveFocused,
-			Func<Row, bool> raiseThroughHierarchyPredicate)
-		{
-			GetSceneItemLinkLocation(out parent, out index, aboveFocused);
-			while (raiseThroughHierarchyPredicate.Invoke(parent)) {
-				if (parent.Parent == null) {
-					return false;
+			} else {
+				if (!insertingType.IsAssignableFrom(typeof(IAnimator)) && focusedItem.TryGetAnimator(out _)) {
+					parent = focusedItem.Parent.Parent;
+					index = parent.Rows.IndexOf(focusedItem.Parent);
+				} else if (insertingType.IsAssignableFrom(typeof(IAnimator)) && !focusedItem.TryGetAnimator(out _)) {
+					parent = focusedItem;
+					index = 0;
+				} else {
+					parent = focusedItem.Parent;
+					index = parent.Rows.IndexOf(focusedItem);
 				}
-				index = parent.Parent.Rows.IndexOf(parent);
 				if (!aboveFocused) {
 					index++;
 				}
-				parent = parent.Parent;
+			}
+			if (raiseThroughHierarchyPredicate != null) {
+				while (raiseThroughHierarchyPredicate.Invoke(parent)) {
+					if (parent.Parent == null) {
+						return false;
+					}
+					index = parent.Parent.Rows.IndexOf(parent);
+					if (!aboveFocused) {
+						index++;
+					}
+					parent = parent.Parent;
+				}
 			}
 			return true;
 		}
