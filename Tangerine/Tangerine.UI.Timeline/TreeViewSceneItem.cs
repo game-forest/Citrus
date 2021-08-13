@@ -1,7 +1,6 @@
 using System;
 using Lime;
 using Tangerine.Core;
-using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.Timeline
@@ -14,7 +13,7 @@ namespace Tangerine.UI.Timeline
 		public static TreeViewItem GetTreeViewItem(Row item)
 		{
 			var c = item.Components.GetOrAdd<TreeViewComponent>();
-			c.TreeViewItem = c.TreeViewItem ?? new TreeViewSceneItem(item);
+			c.TreeViewItem ??= new TreeViewSceneItem(item);
 			return c.TreeViewItem;
 		}
 	}
@@ -41,20 +40,18 @@ namespace Tangerine.UI.Timeline
 
 		public override int SelectionOrder => SceneItem.GetTimelineItemState().SelectionOrder;
 
+		/// <summary>
+		/// All the control of Expanded property is now laid upon the TimelineItemStateComponent,
+		/// since we've separated Expanded into NodesExpanded and AnimatorsExpanded.
+		/// TreeView considers all items are already expanded.
+		/// </summary>
 		public override bool Expanded
 		{
-			get => SceneItem.GetTimelineItemState().Expanded;
-			set
-			{
-				Document.Current.History.DoTransaction(() => {
-					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
-					SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.Expanded), value, false);
-					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
-				});
-			}
+			get => true;
+			set { }
 		}
 
-		public override bool CanExpand() => SceneItem.GetTimelineItemState().Expandable;
+		public override bool CanExpand() => SceneItem.GetTimelineItemState().NodesExpandable;
 
 		public override string Label
 		{

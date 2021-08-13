@@ -153,24 +153,26 @@ namespace Tangerine.Core
 				{
 					var currentAnimation = Animation;
 					var timelineItemState = sceneTree.GetTimelineItemState();
-					timelineItemState.Expandable = false;
-					timelineItemState.HasAnimators = false;
+					timelineItemState.NodesExpandable = false;
+					timelineItemState.AnimatorsExpandable = false;
 					var containerSceneItem = GetSceneItemForObject(Container);
-					var expanded = timelineItemState.Expanded || sceneTree == containerSceneItem;
 					foreach (var i in sceneTree.Rows) {
 						i.GetTimelineItemState().Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
-							if (!animator.IsZombie && currentAnimation.ValidatedEffectiveAnimatorsSet.Contains(animator)) {
-								timelineItemState.HasAnimators = true;
-								timelineItemState.Expandable |= (ShowAnimators || timelineItemState.ShowAnimators);
-								if (timelineItemState.Expanded && (ShowAnimators || timelineItemState.ShowAnimators)) {
+							if (
+								sceneTree != containerSceneItem &&
+								!animator.IsZombie &&
+								currentAnimation.ValidatedEffectiveAnimatorsSet.Contains(animator)
+							) {
+								timelineItemState.AnimatorsExpandable = true;
+								if (ShowAnimators || timelineItemState.AnimatorsExpanded) {
 									cachedVisibleSceneItems.Add(i);
 								}
 							}
-						} else if (i.TryGetNode(out var node) || i.GetFolder() != null) {
+						} else if (i.TryGetNode(out var node) || i.TryGetFolder(out _)) {
 							if (addNodes) {
-								timelineItemState.Expandable = true;
-								if (expanded) {
+								timelineItemState.NodesExpandable = true;
+								if (timelineItemState.NodesExpanded || sceneTree == containerSceneItem) {
 									var hierarchyMode =
 										!Animation.IsLegacy &&
 										CoreUserPreferences.Instance.ExperimentalTimelineHierarchy;
@@ -179,13 +181,6 @@ namespace Tangerine.Core
 										(node is Bone || i.GetFolder() != null || hierarchyMode)
 										&& (!i.TryGetNode(out var n) || string.IsNullOrEmpty(n.ContentsPath)));
 								}
-							}
-						} else if (i.TryGetAnimation(out _)) {
-						} else {
-							timelineItemState.Expandable = true;
-							if (expanded) {
-								cachedVisibleSceneItems.Add(i);
-								TraverseSceneTree(i, addNodes);
 							}
 						}
 					}

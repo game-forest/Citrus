@@ -23,9 +23,9 @@ namespace Tangerine.Core.Operations
 					if (i.TryGetNode(out var n) && n == Document.Current.Container) {
 						break;
 					}
-					if (!i.GetTimelineItemState().Expanded) {
+					if (!i.GetTimelineItemState().NodesExpanded) {
 						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
-						SetProperty.Perform(i.GetTimelineItemState(), nameof(TimelineItemStateComponent.Expanded), true, false);
+						SetProperty.Perform(i.GetTimelineItemState(), nameof(TimelineItemStateComponent.NodesExpanded), true, false);
 						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					}
 				}
