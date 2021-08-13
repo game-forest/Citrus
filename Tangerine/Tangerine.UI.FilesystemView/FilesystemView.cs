@@ -72,6 +72,7 @@ namespace Tangerine.UI.FilesystemView
 
 		public void GoBackward()
 		{
+			filesystemSelection.Clear();
 			var newIndex = navigationHistoryIndex - 1;
 			(string Path, FilesystemSelection Selection) i;
 			do {
@@ -95,6 +96,7 @@ namespace Tangerine.UI.FilesystemView
 
 		public void GoForward()
 		{
+			filesystemSelection.Clear();
 			var newIndex = navigationHistoryIndex + 1;
 			(string Path, FilesystemSelection Selection) i;
 			do {
@@ -242,7 +244,10 @@ namespace Tangerine.UI.FilesystemView
 				var up = RootWidget.Components.Get<ViewNodeComponent>().ViewNode as FSViewNode;
 				up.Path = p;
 				AddToNavHystory(p);
-				filesystemSelection.Clear();
+				// In case of preventing the unselecting file that selected via "Navigate to"
+				if (!Directory.GetFiles(filesystemModel.CurrentPath).Any(x => filesystemSelection.Contains(x))) {
+					filesystemSelection.Clear();
+				}
 				InvalidateView(p);
 				InvalidateFSWatcher(p);
 				preview.ClearTextureCache();
@@ -975,6 +980,7 @@ namespace Tangerine.UI.FilesystemView
 			foreach (string f in Directory.GetFiles(dir)) {
 				if (Path.ChangeExtension(f, null).EndsWith(path)) {
 					filesystemSelection.Select(f);
+					lastSelected = f;
 				}
 			}
 			EnsureSelectionVisible();

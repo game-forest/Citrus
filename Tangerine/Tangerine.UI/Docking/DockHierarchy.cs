@@ -76,6 +76,7 @@ namespace Tangerine.UI.Docking
 				panelPlacement.Unlink();
 				target.Placements.Insert(0, panelPlacement);
 			}
+			target.ActiveTabIndex = placement.ActiveTabIndex;
 		}
 
 		private static void DockPlacementTo(TabBarPlacement placement, PanelPlacement target)
@@ -104,6 +105,7 @@ namespace Tangerine.UI.Docking
 				parent.Placements[index] = tabBarPlacement;
 			}
 			tabBarPlacement.Placements.Insert(0, placement);
+			tabBarPlacement.ActiveTabIndex = 0;
 		}
 
 		private void DockPlacementTo(LinearPlacement placement, PanelPlacement target)
@@ -214,6 +216,7 @@ namespace Tangerine.UI.Docking
 								break;
 							case PanelPlacement panelPlacement:
 								targetTabBarPlacement.Placements.Insert(0, panelPlacement);
+								targetTabBarPlacement.ActiveTabIndex = 0;
 								break;
 							case LinearPlacement linearPlacement:
 								DockPlacementTo(linearPlacement, targetTabBarPlacement);
