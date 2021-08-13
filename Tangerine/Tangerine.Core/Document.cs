@@ -159,7 +159,11 @@ namespace Tangerine.Core
 					foreach (var i in sceneTree.Rows) {
 						i.GetTimelineItemState().Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
-							if (!animator.IsZombie && currentAnimation.ValidatedEffectiveAnimatorsSet.Contains(animator)) {
+							if (
+								sceneTree != containerSceneItem &&
+								!animator.IsZombie &&
+								currentAnimation.ValidatedEffectiveAnimatorsSet.Contains(animator)
+							) {
 								timelineItemState.AnimatorsExpandable = true;
 								if (ShowAnimators || timelineItemState.AnimatorsExpanded) {
 									cachedVisibleSceneItems.Add(i);
