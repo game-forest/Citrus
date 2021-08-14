@@ -80,4 +80,6 @@
     </Content>
   </ItemGroup>
 
+  <Import Project="..\..\..\Analyzers.targets" />
+
 </Project>

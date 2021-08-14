@@ -44,4 +44,6 @@
     <ProjectReference Include="..\Orange.Win.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\Analyzers.targets" />
+
 </Project>

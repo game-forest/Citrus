@@ -17,4 +17,6 @@
     <ProjectReference Include="..\Tangerine.UI\Tangerine.UI.Win.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\Analyzers.targets" />
+
 </Project>

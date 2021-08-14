@@ -36,4 +36,6 @@
     </PackageReference>
   </ItemGroup>
 
+  <Import Project="..\..\Analyzers.targets" />
+
 </Project>

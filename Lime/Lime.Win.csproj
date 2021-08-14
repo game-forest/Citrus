@@ -93,6 +93,8 @@
     <Folder Include="Resources\" />
   </ItemGroup>
 
+  <Import Project="..\Analyzers.targets" />
+
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
 </Project>

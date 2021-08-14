@@ -54,4 +54,6 @@ set errno=0" LogStandardErrorAsError="True" ContinueOnError="False" WorkingDirec
     <ProjectReference Include="..\Orange.Win.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\Analyzers.targets" />
+
 </Project>

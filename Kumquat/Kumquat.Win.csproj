@@ -27,4 +27,6 @@
     <EmbeddedResource Include="Templates\GeneratedScenes.Mac.csproj.kumquat" />
   </ItemGroup>
 
+  <Import Project="..\Analyzers.targets" />
+
 </Project>
