@@ -178,7 +178,7 @@ namespace Tangerine.Core.Operations
 				var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
 				foreach (var i in itemsToPaste.Rows.ToList()) {
 					UnlinkSceneItem.Perform(i);
-					LinkSceneItem.Perform(parent, index, i);
+					PasteSceneItem.Perform(parent, index, i);
 					index = parent.Rows.IndexOf(i) + 1;
 					pastedItems.Add(i);
 					DecorateNodes(i);
@@ -216,7 +216,7 @@ namespace Tangerine.Core.Operations
 				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
 				var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
 				foreach (var i in rowTree.Rows) {
-					if (!LinkSceneItem.CanLink(parent, i)) {
+					if (!PasteSceneItem.CanPaste(item: i, parent: parent)) {
 						return false;
 					}
 				}
@@ -234,6 +234,54 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
+	public static class PasteSceneItem
+	{
+		public static bool CanPaste(Row item, Row parent) =>
+			LinkSceneItem.CanLink(parent, item) || HasTargetForMerge(parent, item, out _);
+
+		private static bool HasTargetForMerge(Row parent, Row item, out IAnimator existingAnimator)
+		{
+			existingAnimator = null;
+			if (item.TryGetAnimator(out var animator)) {
+				var node = parent.GetNode();
+				if (node == null) {
+					// Can put the animator only into the node.
+					return false;
+				}
+				if (parent.Parent == null) {
+					// Can't drag the animator into the root item.
+					return false;
+				}
+				existingAnimator = Document.Current.Animation.
+					ValidatedEffectiveAnimators.OfType<IAnimator>().FirstOrDefault(
+						i => i.Owner == node && i.TargetPropertyPath == animator.TargetPropertyPath);
+				if (existingAnimator == null) {
+					// No same animator to merge.
+					return false;
+				}
+				var p = AnimationUtils.GetPropertyByPath(node, animator.TargetPropertyPath);
+				if (p.PropertyData.Info.PropertyType != animator.ValueType) {
+					// Property type mismatch.
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
+		
+		public static void Perform(Row parent, int index, Row item)
+		{
+			if (HasTargetForMerge(parent, item, out var dstAnimator)) {
+				var srcAnimator = item.GetAnimator();
+				foreach (var srcKey in srcAnimator.Keys) {
+					SetKeyframe.Perform(dstAnimator, Document.Current.Animation, srcKey.Clone());
+				}
+			} else {
+				LinkSceneItem.Perform(parent, index, item);
+			}
+		}
+	}
+	
 	public static class LinkSceneItem
 	{
 		public static bool CanLink(Row parent, Row item)

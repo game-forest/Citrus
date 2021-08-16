@@ -64,7 +64,7 @@ namespace Tangerine.UI.Timeline
 				args.CancelDrag = true;
 			} else {
 				args.CancelDrag = !topSceneItems.All(
-					i => LinkSceneItem.CanLink(GetSceneItem(args.Parent), i));
+					i => PasteSceneItem.CanPaste(item: i, parent: GetSceneItem(args.Parent)));
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace Tangerine.UI.Timeline
 					UnlinkSceneItem.Perform(item);
 				}
 				foreach (var item in topSceneItems) {
-					LinkSceneItem.Perform(parentSceneItem, index, item);
+					PasteSceneItem.Perform(parentSceneItem, index, item);
 					index = parentSceneItem.Rows.IndexOf(item) + 1;
 				}
 			});
