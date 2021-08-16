@@ -123,7 +123,8 @@ namespace Orange
 				Last,
 			}
 
-			private static bool IsStateWithExternals(BenchmarkState state) {
+			private static bool IsStateWithExternals(BenchmarkState state)
+			{
 				switch (state) {
 					case BenchmarkState.WithoutExternals:
 					case BenchmarkState.WithoutAnimatorsWithoutExternals:

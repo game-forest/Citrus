@@ -14,7 +14,7 @@ namespace Lime
 		private UIActivityIndicatorView activityIndicator;
 		private bool isActivityIndicatorVisible = false;
 		private Rectangle aabbInDeviceSpace;
-		
+
 		public WebBrowser(Widget parentWidget)
 			: this()
 		{
@@ -37,7 +37,7 @@ namespace Lime
 			webView.NavigationDelegate = webViewDelegate;
 			GameView.AddSubview(webView);
 			Components.Add(new UpdatableNodeBehavior());
-		}	
+		}
 
 		public void AddToWidget(Widget parentWidget)
 		{
@@ -46,17 +46,18 @@ namespace Lime
 			Anchors = Anchors.LeftRightTopBottom;
 		}
 
-		public Uri Url 
-		{ 
-			get { return new Uri(webView.Url.AbsoluteString); } 
-			set 
-			{ 
+		public Uri Url
+		{
+			get { return new Uri(webView.Url.AbsoluteString); }
+			set
+			{
 				var request = new NSUrlRequest(new NSUrl(value.AbsoluteUri));
-				webView.LoadRequest(request); 
-			} 
+				webView.LoadRequest(request);
+			}
 		}
 
-		private void WebView_LoadStarted() {
+		private void WebView_LoadStarted()
+		{
 			if (activityIndicator == null) {
 				activityIndicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.WhiteLarge);
 				activityIndicator.Center = ActivityIndicatorPosition;
@@ -66,31 +67,32 @@ namespace Lime
 			isActivityIndicatorVisible = true;
 		}
 
-		private UIView GameView 
+		private UIView GameView
 		{
 			get { return Window.Current.UIViewController.View; }
 		}
 
-		private void WebView_LoadFinished() {
+		private void WebView_LoadFinished()
+		{
 			activityIndicator.StopAnimating();
 			activityIndicator.RemoveFromSuperview();
 			isActivityIndicatorVisible = false;
 		}
 
-		private PointF ActivityIndicatorPosition 
+		private PointF ActivityIndicatorPosition
 		{
-			get { 
+			get {
 				return new PointF((WebViewSize.Width * 0.5f) + WebViewPosition.X,
 					(WebViewSize.Height * 0.5f) + WebViewPosition.Y);
 			}
 		}
 
-		private PointF WebViewPosition 
+		private PointF WebViewPosition
 		{
 			get { return new PointF(aabbInDeviceSpace.Left, aabbInDeviceSpace.Top); }
 		}
 
-		private SizeF WebViewSize 
+		private SizeF WebViewSize
 		{
 			get { return new SizeF(aabbInDeviceSpace.Width, aabbInDeviceSpace.Height); }
 		}

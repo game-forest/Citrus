@@ -551,7 +551,8 @@ namespace Orange
 
 			public override SHA256 GetFileContentsHash(string path) => Bundle.GetFileContentsHash(ToOriginPath(path));
 
-			public override SHA256 GetFileCookingUnitHash(string path) {
+			public override SHA256 GetFileCookingUnitHash(string path)
+			{
 				return Bundle.GetFileCookingUnitHash(ToOriginPath(path));
 			}
 

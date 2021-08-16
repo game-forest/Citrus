@@ -69,7 +69,8 @@ namespace Lime
 			}
 		}
 
-		private void CleanLastRenameEvent() {
+		private void CleanLastRenameEvent()
+		{
 			if (lastRenameEvent != null) {
 				var path = lastRenameEvent.Value.Path;
 				if (Filter?.Invoke(lastRenameEvent.Value.Path) ?? true) {
