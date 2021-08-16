@@ -641,12 +641,14 @@ namespace Tangerine.Core.Operations
 				parent = Document.Current.GetSceneItemForObject(Document.Current.Container);
 				index = 0;
 			} else {
-				if (!insertingType.IsAssignableFrom(typeof(IAnimator)) && focusedItem.TryGetAnimator(out _)) {
+				bool isAnimatorItem = insertingType.IsAssignableFrom(typeof(IAnimator));
+				bool isAnimatorFocused = focusedItem.TryGetAnimator(out _);
+				if (!isAnimatorItem && isAnimatorFocused) {
 					parent = focusedItem.Parent.Parent;
 					index = parent.Rows.IndexOf(focusedItem.Parent);
-				} else if (insertingType.IsAssignableFrom(typeof(IAnimator)) && !focusedItem.TryGetAnimator(out _)) {
+				} else if (isAnimatorItem && !isAnimatorFocused) {
 					parent = focusedItem;
-					index = 0;
+					index = parent.Rows.Count;
 				} else {
 					parent = focusedItem.Parent;
 					index = parent.Rows.IndexOf(focusedItem);
