@@ -304,6 +304,7 @@ namespace Tangerine.UI
 			}));
 			scrollContent.Gestures.Add(dg);
 			scrollContent.Layout = new VBoxLayout();
+			scrollContent.Tasks.Add(HandleHover);
 			if (options.HandleCommands) {
 				scrollContent.Tasks.Add(HandleCommands);
 			}
@@ -652,6 +653,28 @@ namespace Tangerine.UI
 			}
 		}
 
+		private IEnumerator<object> HandleHover()
+		{
+			var hoveredWidget = WidgetContext.Current.NodeUnderMouse;
+			while (true) {
+				if (
+					hoveredWidget != WidgetContext.Current.NodeUnderMouse &&
+					(hoveredWidget != null || IsMouseInside(scrollView.Content))
+				) {
+					hoveredWidget = WidgetContext.Current.NodeUnderMouse;
+					Window.Current.Invalidate();
+				}
+				yield return null;
+			}
+			bool IsMouseInside(Widget container)
+			{
+				var lmp = container.LocalMousePosition();
+				return
+					lmp.X >= 0 & lmp.X <= container.Width &
+					lmp.Y >= 0 & lmp.Y <= container.Height;
+			}
+		}
+		
 		private void Invalidate()
 		{
 			((WindowWidget)scrollView.Manager?.RootNodes[0])?.Window?.Invalidate();
