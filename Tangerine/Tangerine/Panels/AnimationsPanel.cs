@@ -64,6 +64,7 @@ namespace Tangerine.Panels
 					}
 				}
 			};
+			scrollView.CompoundPresenter.Add(new WidgetFlatFillPresenter(ColorTheme.Current.Animations.PanelBackground));
 			var itemProvider = new TreeViewItemProvider {
 				IsSearchActiveGetter = () => searchStringEditor.Text.Length > 0,
 				ItemStateProvider = sceneItem => {
