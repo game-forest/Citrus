@@ -79,6 +79,15 @@ namespace Lime
 
 		public bool WasMouseReleased(int button = 0) => WasKeyReleased(Input.GetMouseButtonByIndex(button));
 
+		public bool WasAnyMouseButtonPressed()
+		{
+			return WasKeyPressed(Key.Mouse0) ||
+				WasKeyPressed(Key.Mouse1) ||
+				WasKeyPressed(Key.Mouse2) ||
+				WasKeyPressed(Key.MouseBack) ||
+				WasKeyPressed(Key.MouseForward);
+		}
+
 		public float WheelScrollAmount => IsAcceptingKey(Key.MouseWheelUp) ? WindowInput.WheelScrollAmount : 0;
 
 		public bool IsKeyPressed(Key key) => WindowInput.IsKeyPressed(key) && IsAcceptingKey(key);

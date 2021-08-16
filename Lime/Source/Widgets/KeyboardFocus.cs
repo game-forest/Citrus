@@ -48,7 +48,7 @@ namespace Lime
 		private void HandleSetFocusOnMousePress()
 		{
 			var focused = Widget.Focused;
-			if (FocusOnMousePress && Widget.Input.WasMousePressed()) {
+			if (FocusOnMousePress && Widget.Input.WasAnyMouseButtonPressed()) {
 				if (
 					focused == null ||
 					!focused.SameOrDescendantOf(Widget) ||
