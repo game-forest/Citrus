@@ -519,6 +519,7 @@ namespace Tangerine.Core.Operations
 				// Animations should go first.
 				index++;
 			}
+			SetProperty.Perform(animatorItem.Components.Get<PropertyRow>(), nameof(PropertyRow.Node), node);
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, animatorItem);
 		}
 
