@@ -62,7 +62,7 @@ namespace Tangerine.Core.Operations
 				RemoveFromList<FolderList, Folder.Descriptor>.Perform(owner.Folders, folder.CollectionIndex());
 			} else if (item.TryGetAnimator(out var animator)) {
 				var owner = (Node)animator.Owner;
-				RemoveFromCollection<AnimatorList, IAnimator>.Perform(owner.Animators, animator);
+				RemoveFromList<AnimatorList, IAnimator>.Perform(owner.Animators, animator);
 			} else if (item.TryGetAnimation(out var animation)) {
 				RemoveFromList<AnimationCollection, Animation>.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
 			} else if (item.TryGetAnimationTrack(out var track)) {
