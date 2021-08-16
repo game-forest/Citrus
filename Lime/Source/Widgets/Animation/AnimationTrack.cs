@@ -33,7 +33,7 @@ namespace Lime
 		public AnimationClipList Clips { get; private set; }
 
 		[YuzuMember]
-		public AnimatorCollection Animators { get; private set; }
+		public AnimatorList Animators { get; private set; }
 
 		IAnimable IAnimable.Owner { get => null; set => throw new NotSupportedException(); }
 
@@ -85,7 +85,7 @@ namespace Lime
 		public AnimationTrack()
 		{
 			Clips = new AnimationClipList(this);
-			Animators = new AnimatorCollection(this);
+			Animators = new AnimatorList(this);
 		}
 
 		void IAnimationHost.OnTrigger(string property, object value, double animationTimeCorrection) { }

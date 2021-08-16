@@ -355,7 +355,7 @@ namespace Tangerine.Panels
 				foreach (var child in node.Nodes) {
 					foreach (var animator in child.Animators.ToList()) {
 						if (animator.AnimationId == animationId) {
-							RemoveFromCollection<AnimatorCollection, IAnimator>.Perform(child.Animators, animator);
+							RemoveFromCollection<AnimatorList, IAnimator>.Perform(child.Animators, animator);
 						}
 					}
 					if (child.ContentsPath != null) {

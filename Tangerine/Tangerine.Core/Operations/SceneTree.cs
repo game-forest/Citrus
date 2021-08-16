@@ -62,7 +62,7 @@ namespace Tangerine.Core.Operations
 				RemoveFromList<FolderList, Folder.Descriptor>.Perform(owner.Folders, folder.CollectionIndex());
 			} else if (item.TryGetAnimator(out var animator)) {
 				var owner = (Node)animator.Owner;
-				RemoveFromCollection<AnimatorCollection, IAnimator>.Perform(owner.Animators, animator);
+				RemoveFromCollection<AnimatorList, IAnimator>.Perform(owner.Animators, animator);
 			} else if (item.TryGetAnimation(out var animation)) {
 				RemoveFromList<AnimationCollection, Animation>.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
 			} else if (item.TryGetAnimationTrack(out var track)) {
@@ -513,7 +513,7 @@ namespace Tangerine.Core.Operations
 				throw new InvalidOperationException();
 			}
 			var node = parent.GetNode();
-			AddIntoCollection<AnimatorCollection, IAnimator>.Perform(node.Animators, animatorItem.GetAnimator());
+			AddIntoCollection<AnimatorList, IAnimator>.Perform(node.Animators, animatorItem.GetAnimator());
 			index = node.Animators.ToList().IndexOf(animatorItem.GetAnimator());
 			while (index < parent.Rows.Count && parent.Rows[index].GetAnimation() != null) {
 				// Animations should go first.

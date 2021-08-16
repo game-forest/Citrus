@@ -398,7 +398,7 @@ namespace Lime
 		/// Collections of Animators.
 		/// </summary>
 		[YuzuMember]
-		public AnimatorCollection Animators { get; private set; }
+		public AnimatorList Animators { get; private set; }
 
 		/// <summary>
 		/// Child nodes.
@@ -597,7 +597,7 @@ namespace Lime
 		{
 			AnimationSpeed = 1;
 			Components = new NodeComponentCollection(this);
-			Animators = new AnimatorCollection(this);
+			Animators = new AnimatorList(this);
 			Nodes = new NodeList(this);
 			Folders = new FolderList(this);
 			Presenter = DefaultPresenter.Instance;
