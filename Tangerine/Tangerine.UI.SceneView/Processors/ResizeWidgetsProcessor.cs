@@ -27,8 +27,6 @@ namespace Tangerine.UI.SceneView
 			new[] {true, false},
 		};
 
-		private readonly Dictionary<Widget, Vector2> childPositions = new Dictionary<Widget, Vector2>();
-
 		public IEnumerator<object> Task()
 		{
 			while (true) {
@@ -64,7 +62,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		private IEnumerator<object> Resize(Quadrangle hull, int controlPointIndex, Vector2 pivot)
+		private static IEnumerator<object> Resize(Quadrangle hull, int controlPointIndex, Vector2 pivot)
 		{
 			var cursor = WidgetContext.Current.MouseCursor;
 			using (Document.Current.History.BeginTransaction()) {
@@ -78,11 +76,13 @@ namespace Tangerine.UI.SceneView
 					Utils.ChangeCursorIfDefault(cursor);
 					var proportional = SceneView.Input.IsKeyPressed(Key.Shift);
 					var isChangingScale = SceneView.Input.IsKeyPressed(Key.Control);
-					var toBeTransformed = widgets.Where(w => isChangingScale ?
-						!w.IsPropertyReadOnly(nameof(Widget.Scale)) : !w.IsPropertyReadOnly(nameof(Widget.Size))).ToList();
+					var toBeTransformed = widgets.Where(w => isChangingScale
+						? !w.IsPropertyReadOnly(nameof(Widget.Scale))
+						: !w.IsPropertyReadOnly(nameof(Widget.Size))).ToList();
 					var isFreezeAllowed = !isChangingScale && toBeTransformed.Count == 1;
 					var areChildrenFrozen = SceneView.Input.IsKeyPressed(Key.Z) && isFreezeAllowed;
 					var isPivotFrozen = SceneView.Input.IsKeyPressed(Key.X) && isFreezeAllowed;
+					var isRoundingMode = SceneView.Input.IsKeyPressed(Key.C);
 					if (areChildrenFrozen) {
 						transform = toBeTransformed[0].CalcTransitionToSpaceOf(Document.Current.Container.AsWidget);
 					}
@@ -91,21 +91,22 @@ namespace Tangerine.UI.SceneView
 						(toBeTransformed.Count <= 1 ? (Vector2?)null : pivot) :
 						hull[lookupPivotIndex[controlPointIndex] / 2];
 					RescaleWidgets(
-						toBeTransformed.Count <= 1,
-						pivotPoint,
-						toBeTransformed,
-						controlPointIndex,
-						SceneView.MousePosition,
-						mouseStartPos,
-						proportional,
-						!isChangingScale
+						hullInFirstWidgetSpace: toBeTransformed.Count <= 1,
+						pivotPoint: pivotPoint,
+						widgets: toBeTransformed,
+						controlPointIndex: controlPointIndex,
+						curMousePos: SceneView.MousePosition,
+						prevMousePos: mouseStartPos,
+						proportional: proportional,
+						convertScaleToSize: !isChangingScale,
+						isRoundingMode: isRoundingMode
 					);
 					if (areChildrenFrozen) {
 						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(toBeTransformed[0]);
-						RestoreChildrenPositions(toBeTransformed[0], transform);
+						RestoreChildrenPositions(toBeTransformed[0], transform, isRoundingMode);
 					}
 					if (isPivotFrozen) {
-						RestorePivot(toBeTransformed[0], pivot, startPositionForPivotRestore.Value);
+						RestorePivot(toBeTransformed[0], pivot, startPositionForPivotRestore.Value, isRoundingMode);
 					}
 					yield return null;
 				}
@@ -114,7 +115,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		private static void RestorePivot(Widget widget, Vector2 globalPivot, Vector2 startPosition)
+		private static void RestorePivot(Widget widget, Vector2 globalPivot, Vector2 startPosition, bool isRoundingMode)
 		{
 			var newPivot = widget.LocalToWorldTransform.CalcInversed().TransformVector(globalPivot) / widget.Size;
 			SetProperty.Perform(widget, nameof(Widget.Pivot), newPivot);
@@ -125,6 +126,9 @@ namespace Tangerine.UI.SceneView
 					newKey.Value = newPivot;
 					SetKeyframe.Perform(pivotAnimator, Document.Current.Animation, newKey);
 				}
+			}
+			if (isRoundingMode) {
+				startPosition = Vector2.Floor(startPosition);
 			}
 			SetProperty.Perform(widget, nameof(Widget.Position), startPosition);
 			if (widget.Animators.TryFind(nameof(Widget.Position), out var positionAnimator)) {
@@ -137,36 +141,64 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		private static void RestoreChildrenPositions(Widget widget, Matrix32 transform)
+		private static void RestoreChildrenPositions(Widget widget, Matrix32 transform, bool isRoundingMode)
 		{
 			foreach (var child in widget.Nodes.OfType<Widget>()) {
 				var newPosition = transform.TransformVector(child.Position);
+				if (isRoundingMode) {
+					newPosition = Vector2.Floor(newPosition);
+				}
 				SetProperty.Perform(child, nameof(Widget.Position), newPosition);
 				if (child.Animators.TryFind(nameof(Widget.Position), out var animator)) {
 					foreach (var key in animator.ReadonlyKeys.ToList()) {
 						var newKey = key.Clone();
-						newKey.Value = transform.TransformVector((Vector2)key.Value);
+						newPosition = transform.TransformVector((Vector2)key.Value);
+						if (isRoundingMode) {
+							newPosition = Vector2.Floor(newPosition);
+						}
+						newKey.Value = newPosition;
 						SetKeyframe.Perform(animator, Document.Current.Animation, newKey);
 					}
 				}
 			}
 		}
 
-		private static void RescaleWidgets(bool hullInFirstWidgetSpace, Vector2? pivotPoint, List<Widget> widgets, int controlPointIndex,
-			Vector2 curMousePos, Vector2 prevMousePos, bool proportional, bool convertScaleToSize)
-		{
+		private static void RescaleWidgets(
+			bool hullInFirstWidgetSpace,
+			Vector2? pivotPoint,
+			List<Widget> widgets,
+			int controlPointIndex,
+			Vector2 curMousePos,
+			Vector2 prevMousePos,
+			bool proportional,
+			bool convertScaleToSize,
+			bool isRoundingMode
+		) {
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
-				widgets, pivotPoint, hullInFirstWidgetSpace, curMousePos, prevMousePos,
-				convertScaleToSize,
-				(originalVectorInObbSpace, deformedVectorInObbSpace) => {
+				widgetsInParentSpace: widgets,
+				overridePivotInSceneSpace: pivotPoint,
+				obbInFirstWidgetSpace: hullInFirstWidgetSpace,
+				currentMousePosInSceneSpace: curMousePos,
+				previousMousePosSceneSpace: prevMousePos,
+				convertScaleToSize: convertScaleToSize,
+				isRoundingMode: isRoundingMode,
+				onCalculateTransformation: (originalVectorInObbSpace, deformedVectorInObbSpace) => {
 					var deformationScaleInObbSpace = new Vector2d(
-						Math.Abs(originalVectorInObbSpace.X) < Mathf.ZeroTolerance ? 1 : deformedVectorInObbSpace.X / originalVectorInObbSpace.X,
-						Math.Abs(originalVectorInObbSpace.Y) < Mathf.ZeroTolerance ? 1 : deformedVectorInObbSpace.Y / originalVectorInObbSpace.Y
+						x: Math.Abs(originalVectorInObbSpace.X) < Mathf.ZeroTolerance
+							? 1
+							: deformedVectorInObbSpace.X / originalVectorInObbSpace.X,
+						y: Math.Abs(originalVectorInObbSpace.Y) < Mathf.ZeroTolerance
+							? 1
+							: deformedVectorInObbSpace.Y / originalVectorInObbSpace.Y
 					);
 					if (!lookupInvolvedAxes[controlPointIndex][0]) {
-						deformationScaleInObbSpace.X = proportional ? deformationScaleInObbSpace.Y : 1;
+						deformationScaleInObbSpace.X = proportional
+							? deformationScaleInObbSpace.Y
+							: 1;
 					} else if (!lookupInvolvedAxes[controlPointIndex][1]) {
-						deformationScaleInObbSpace.Y = proportional ? deformationScaleInObbSpace.X : 1;
+						deformationScaleInObbSpace.Y = proportional
+							? deformationScaleInObbSpace.X
+							: 1;
 					} else if (proportional) {
 						deformationScaleInObbSpace.X = (deformationScaleInObbSpace.X + deformationScaleInObbSpace.Y) / 2;
 						deformationScaleInObbSpace.Y = deformationScaleInObbSpace.X;

@@ -645,7 +645,7 @@ namespace Tangerine
 			);
 			static IFont LoadFont(string resource)
 			{
-				return new DynamicFont(new UI.EmbeddedResource(resource, "Tangerine")
+				return new Lime.DynamicFont(new UI.EmbeddedResource(resource, "Tangerine")
 					.GetResourceBytes());
 			}
 		}
@@ -859,7 +859,7 @@ namespace Tangerine
 					if (widgets.Count > 0) {
 						Utils.CalcHullAndPivot(widgets, out _, out var pivot);
 						pivot *= Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
-						DragWidgetsProcessor.DragWidgets(widgets, mousePosition, pivot);
+						DragWidgetsProcessor.DragWidgets(widgets, mousePosition, pivot, isRoundingMode: true);
 					}
 				}
 			} catch (InvalidOperationException e) {

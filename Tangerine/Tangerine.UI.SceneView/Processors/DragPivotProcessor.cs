@@ -8,7 +8,7 @@ namespace Tangerine.UI.SceneView
 {
 	public class DragPivotProcessor : ITaskProvider
 	{
-		SceneView sv => SceneView.Instance;
+		private SceneView sv => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
@@ -22,36 +22,48 @@ namespace Tangerine.UI.SceneView
 				{
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
-						yield return sv.Input.IsKeyPressed(Key.Alt) ? DragShared(hull) : Drag();
+						yield return sv.Input.IsKeyPressed(Key.Alt)
+							? DragShared(hull)
+							: Drag();
 					}
 				}
 				yield return null;
 			}
 		}
 
-		enum DragDirection
+		private enum DragDirection
 		{
-			Any, Horizontal, Vertical
+			Any,
+			Horizontal,
+			Vertical
 		}
 
-		IEnumerator<object> DragShared(Quadrangle hull)
+		private IEnumerator<object> DragShared(Quadrangle hull)
 		{
 			var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
 			using (Document.Current.History.BeginTransaction()) {
 				while (sv.Input.IsMousePressed()) {
+					var isRoundingMode = sv.Input.IsKeyPressed(Key.C);
 					Document.Current.History.RollbackTransaction();
 					var curMousePos = SnapMousePosToSpecialPoints(hull, sv.MousePosition, Vector2.Zero);
 					foreach (var widget in widgets) {
+						var newPosition = curMousePos * widget.ParentWidget.LocalToWorldTransform.CalcInversed();
+						if (isRoundingMode) {
+							newPosition = Vector2.Floor(newPosition);
+						}
+						Core.Operations.SetAnimableProperty.Perform(
+							@object: widget,
+							propertyPath: nameof(Widget.Position),
+							value: newPosition,
+							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+						);
 						var transform = widget.LocalToWorldTransform.CalcInversed();
 						var newPivot = curMousePos * transform / widget.Size;
 						Core.Operations.SetAnimableProperty.Perform(
-							widget, nameof(Widget.Position),
-							curMousePos * widget.ParentWidget.LocalToWorldTransform.CalcInversed(),
-							CoreUserPreferences.Instance.AutoKeyframes
-						);
-						Core.Operations.SetAnimableProperty.Perform(
-							widget, nameof(Widget.Pivot), newPivot,
-							CoreUserPreferences.Instance.AutoKeyframes
+							@object: widget,
+							propertyPath: nameof(Widget.Pivot),
+							value: newPivot,
+							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
 						);
 					}
 					yield return null;
@@ -61,7 +73,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		IEnumerator<object> Drag()
+		private IEnumerator<object> Drag()
 		{
 			var iniMousePos = sv.MousePosition;
 			var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
@@ -69,6 +81,10 @@ namespace Tangerine.UI.SceneView
 				var dragDirection = DragDirection.Any;
 				Utils.CalcHullAndPivot(widgets, out var hull, out var iniPivot);
 				while (sv.Input.IsMousePressed()) {
+					// TODO: isRoundingMode is always false because to drag pivot you press Ctrl
+					// and when you also press C to enable rounding mode it seems to be consumed
+					// as Ctrl+C shortcut.
+					var isRoundingMode = sv.Input.IsKeyPressed(Key.C);
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var curMousePos = sv.MousePosition;
@@ -100,14 +116,20 @@ namespace Tangerine.UI.SceneView
 						deltaPivot = deltaPivot.Snap(Vector2.Zero);
 						if (deltaPivot != Vector2.Zero) {
 							Core.Operations.SetAnimableProperty.Perform(
-								widget, nameof(Widget.Pivot),
-								widget.Pivot + deltaPivot,
-								CoreUserPreferences.Instance.AutoKeyframes
+								@object: widget,
+								propertyPath: nameof(Widget.Pivot),
+								value: widget.Pivot + deltaPivot,
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
 							);
+							var newPosition = widget.Position + deltaPos.Snap(Vector2.Zero);
+							if (isRoundingMode) {
+								newPosition = Vector2.Floor(newPosition);
+							}
 							Core.Operations.SetAnimableProperty.Perform(
-								widget, nameof(Widget.Position),
-								widget.Position + deltaPos.Snap(Vector2.Zero),
-								CoreUserPreferences.Instance.AutoKeyframes
+								@object: widget,
+								propertyPath: nameof(Widget.Position),
+								value: newPosition,
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
 							);
 						}
 					}
@@ -118,7 +140,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		Vector2 SnapMousePosToSpecialPoints(Quadrangle hull, Vector2 mousePos, Vector2 correction)
+		private Vector2 SnapMousePosToSpecialPoints(Quadrangle hull, Vector2 mousePos, Vector2 correction)
 		{
 			var md = float.MaxValue;
 			var mp = Vector2.Zero;
@@ -137,7 +159,7 @@ namespace Tangerine.UI.SceneView
 			return mousePos;
 		}
 
-		IEnumerable<Vector2> GetSpecialPoints(Quadrangle hull)
+		private IEnumerable<Vector2> GetSpecialPoints(Quadrangle hull)
 		{
 			for (int i = 0; i < 4; i++) {
 				yield return hull[i];
