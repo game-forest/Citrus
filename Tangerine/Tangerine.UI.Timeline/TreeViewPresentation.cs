@@ -78,11 +78,23 @@ namespace Tangerine.UI.Timeline
 				Padding = new Thickness { Right = 10 },	// Add padding for the scrollbar.
 				Presenter = new SyncDelegatePresenter<Widget>(w => {
 					w.PrepareRendererState();
-					Renderer.DrawRect(
-						Vector2.Zero, w.Size,
-						Item.Selected ? Widget.Focused == w.Parent ? Theme.Colors.SelectedBackground :
-							Theme.Colors.SelectedInactiveBackground : Theme.Colors.WhiteBackground
-					);
+					Renderer.DrawRect(Vector2.Zero, w.Size, ColorTheme.Current.Hierarchy.DefaultBackground);
+					bool isSelected = Item.Selected;
+					bool isHovered = IsHovered();
+					if (isSelected | isHovered) {
+						Renderer.PushState(RenderState.Blending);
+						Renderer.Blending = Blending.Add;
+						if (isSelected) {
+							var color = w.ParentWidget.IsFocused() ?
+								ColorTheme.Current.Hierarchy.SelectedBackground :
+								ColorTheme.Current.Hierarchy.SelectedInactiveBackground;
+							Renderer.DrawRect(Vector2.Zero, w.Size, color);
+						}
+						if (isHovered & Application.WindowUnderMouse == Window.Current) {
+							Renderer.DrawRect(Vector2.Zero, w.Size, ColorTheme.Current.Hierarchy.HoveredBackground);
+						}
+						Renderer.PopState();
+					}
 					HighlightLabel(options.SearchStringGetter());
 				})
 			};
@@ -221,6 +233,12 @@ namespace Tangerine.UI.Timeline
 			}
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
+		}
+		
+		private bool IsHovered()
+		{
+			var lmp = Widget.LocalMousePosition();
+			return lmp.X >= 0 & lmp.X <= Widget.Width & lmp.Y >= 0 & lmp.Y <= Widget.Height;
 		}
 	}
 
