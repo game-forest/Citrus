@@ -561,14 +561,18 @@ namespace Tangerine.Core.Operations
 				throw new InvalidOperationException();
 			}
 			var node = parent.GetNode();
-			AddIntoCollection<AnimatorList, IAnimator>.Perform(node.Animators, animatorItem.GetAnimator());
-			index = node.Animators.ToList().IndexOf(animatorItem.GetAnimator());
-			while (index < parent.Rows.Count && parent.Rows[index].GetAnimation() != null) {
-				// Animations should go first.
-				index++;
+			int lastAnimationRowIndex = -1;
+			for (int i = 0; i < parent.Rows.Count; i++) {
+				if (parent.Rows[i].TryGetAnimation(out _)) {
+					lastAnimationRowIndex = i;
+				}
 			}
+			// Animations should go first.
+			int firstAnimatorRowIndex = 1 + lastAnimationRowIndex;
+			int animatorIndex = Math.Clamp(index - firstAnimatorRowIndex, 0, node.Animators.Count);
+			InsertIntoList<AnimatorList, IAnimator>.Perform(node.Animators, animatorIndex, animator);
 			SetProperty.Perform(animatorItem.Components.Get<PropertyRow>(), nameof(PropertyRow.Node), node);
-			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, animatorItem);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, firstAnimatorRowIndex + animatorIndex, animatorItem);
 		}
 
 		private static void LinkAnimationItem(Row parent, int index, Row item)
