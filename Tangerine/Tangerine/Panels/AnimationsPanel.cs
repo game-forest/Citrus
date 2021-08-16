@@ -27,7 +27,7 @@ namespace Tangerine.Panels
 			ToolbarButton expandAll, collapseAll, showAll, showCurrent;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
-				Padding = new Thickness(5),
+				Padding = new Thickness(0),
 				Layout = new VBoxLayout { Spacing = 5 },
 				Nodes = {
 					new Frame {
