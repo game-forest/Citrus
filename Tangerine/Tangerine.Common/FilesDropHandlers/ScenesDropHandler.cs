@@ -73,6 +73,7 @@ namespace Tangerine.Common.FilesDropHandlers
 						try {
 							var node = CreateNodeFromAsset.Perform(assetPath);
 							postProcessNode?.Invoke(node);
+							Document.Current.RefreshSceneTree();
 						} catch (System.Exception exception) {
 							AlertDialog.Show(exception.Message);
 							break;
