@@ -123,8 +123,21 @@ namespace Tangerine
 				var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
 				ICommand command = new Command(CamelCaseToLabel(type.Name), () => {
 					Core.Document.Current.History.DoTransaction(() => {
-						var nodeRows = Document.Current.SelectedRows().Where(r => r.GetNode() != null).ToList();
-						foreach (var row in nodeRows) {
+						var rowToParentCount = Document.Current.SelectedRows()
+							.Where(r => r.GetNode() != null)
+							.ToDictionary(k => k, v => 0);
+						foreach (var (row, _) in rowToParentCount) {
+							var parent = row.Parent;
+							while (parent != null) {
+								if (rowToParentCount.ContainsKey(parent)) {
+									rowToParentCount[row]++;
+								}
+								parent = parent.Parent;
+							}
+						}
+						var sortedRows = rowToParentCount.OrderBy(i => -i.Value).ToList();
+						foreach (var kv in sortedRows) {
+							var row = kv.Key;
 							try {
 								NodeTypeConvert.Perform(row, type, typeof(Node));
 							} catch (InvalidOperationException e) {
