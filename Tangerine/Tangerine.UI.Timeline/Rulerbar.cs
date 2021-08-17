@@ -178,10 +178,6 @@ namespace Tangerine.UI.Timeline
 		{
 			Document.Current.History.DoTransaction(() => {
 				Core.Operations.DeleteMarker.Perform(marker, true);
-				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
-					Core.Operations.RemoveKeyframeRange.Perform(animator, marker.Frame, marker.Frame);
-				}
-				Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(Document.Current.Animation, marker.Frame, -1);
 			});
 		}
 

@@ -318,10 +318,14 @@ namespace Tangerine.Panels
 							foreach (var marker in markers) {
 								UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(marker));
 							}
-							foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
-								RemoveKeyframeRange.Perform(animator, sortedMarkers[0].Frame, sortedMarkers[^1].Frame);
+							if (sortedMarkers.Count > 1) {
+								foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+									RemoveKeyframeRange.Perform(animator, sortedMarkers[0].Frame,
+										sortedMarkers[^1].Frame);
+								}
+								Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(
+									animation, rangeEnd, rangeBegin - rangeEnd - 1);
 							}
-							Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(animation, rangeEnd, rangeBegin - rangeEnd - 1);
 						}
 					}
 				});
