@@ -233,7 +233,8 @@ namespace Lime
 			}
 		}
 
-		private IntPtr AlignmentPixelBuffer(CVPixelBuffer pb, out int pixelDataSize) {
+		private IntPtr AlignmentPixelBuffer(CVPixelBuffer pb, out int pixelDataSize)
+		{
 			var addr = pb.BaseAddress;
 			var pixels = new byte[Height * Width * 4];
 			var rowLength = Width * 4;

@@ -12,12 +12,12 @@ namespace Lime
 {
 	public class Window : CommonWindow, IWindow
 	{
-		private ManualResetEvent renderReady = new ManualResetEvent(false);
-		private ManualResetEvent renderCompleted = new ManualResetEvent(true);
+		private readonly ManualResetEvent renderReady = new ManualResetEvent(false);
+		private readonly ManualResetEvent renderCompleted = new ManualResetEvent(true);
 
-		private Thread renderThread;
-		private CancellationTokenSource renderThreadTokenSource;
-		private CancellationToken renderThreadToken;
+		private readonly Thread renderThread;
+		private readonly CancellationTokenSource renderThreadTokenSource;
+		private readonly CancellationToken renderThreadToken;
 
 		// This line only suppresses warning: "Window.Current: a name can be simplified".
 		public new static IWindow Current => CommonWindow.Current;
@@ -32,8 +32,8 @@ namespace Lime
 		}
 		private readonly System.Windows.Forms.Timer timer;
 		private RenderControl renderControl;
-		private Form form;
-		private Stopwatch stopwatch;
+		private readonly Form form;
+		private readonly Stopwatch stopwatch;
 		private bool active;
 		private RenderingState renderingState = RenderingState.Rendered;
 		private Point lastMousePosition;
@@ -48,8 +48,8 @@ namespace Lime
 
 		public string Title
 		{
-			get { return form.Text; }
-			set { form.Text = value; }
+			get => form.Text;
+			set => form.Text = value;
 		}
 
 		public WindowState State
@@ -186,7 +186,7 @@ namespace Lime
 
 		public float UnclampedDelta { get; private set; }
 
-		FPSCounter fpsCounter = new FPSCounter();
+		readonly FPSCounter fpsCounter = new FPSCounter();
 		public float FPS { get { return fpsCounter.FPS; } }
 
 		[Obsolete("Use FPS property instead", true)]
@@ -238,8 +238,8 @@ namespace Lime
 			private OpenTK.Graphics.GraphicsMode graphicsMode;
 			private OpenTK.Graphics.GraphicsContext graphicsContext;
 			private OpenTK.Graphics.GraphicsContextFlags graphicsContextFlags;
-			private int major;
-			private int minor;
+			private readonly int major;
+			private readonly int minor;
 			private static Graphics.Platform.OpenGL.PlatformRenderContext platformRenderContext;
 
 			static OpenGLRenderControl()
@@ -247,8 +247,12 @@ namespace Lime
 				OpenTK.Graphics.GraphicsContext.ShareContexts = true;
 			}
 
-			public OpenGLRenderControl(OpenTK.Graphics.GraphicsMode graphicsMode, int major, int minor, OpenTK.Graphics.GraphicsContextFlags graphicsContextFlags)
-			{
+			public OpenGLRenderControl(
+				OpenTK.Graphics.GraphicsMode graphicsMode,
+				int major,
+				int minor,
+				OpenTK.Graphics.GraphicsContextFlags graphicsContextFlags
+			) {
 				this.graphicsMode = graphicsMode;
 				this.graphicsContextFlags = graphicsContextFlags;
 				this.major = major;
@@ -259,7 +263,9 @@ namespace Lime
 			{
 				base.OnHandleCreated(e);
 				windowInfo = OpenTK.Platform.Utilities.CreateWindowsWindowInfo(Handle);
-				graphicsContext = new OpenTK.Graphics.GraphicsContext(graphicsMode, windowInfo, major, minor, graphicsContextFlags);
+				graphicsContext = new OpenTK.Graphics.GraphicsContext(
+					graphicsMode, windowInfo, major, minor, graphicsContextFlags
+				);
 				graphicsContext.MakeCurrent(windowInfo);
 				graphicsContext.LoadAll();
 				graphicsContext.SwapInterval = VSync ? 1 : 0;
@@ -336,7 +342,9 @@ namespace Lime
 			private void RecreateSwapchain()
 			{
 				swapchain?.Dispose();
-				swapchain = new Graphics.Platform.Vulkan.Swapchain(platformRenderContext, Handle, ClientSize.Width, ClientSize.Height, VSync);
+				swapchain = new Graphics.Platform.Vulkan.Swapchain(
+					platformRenderContext, Handle, ClientSize.Width, ClientSize.Height, VSync
+				);
 			}
 
 			protected override void OnHandleDestroyed(EventArgs e)
@@ -460,7 +468,9 @@ namespace Lime
 		{
 			if (Application.MainWindow != null && Application.RenderingBackend == RenderingBackend.ES20) {
 				// ES20 doesn't allow multiple contexts for now, because of a bug in OpenTK
-				throw new Lime.Exception("Attempt to create a second window for ES20 rendering backend. Use OpenGL backend instead.");
+				throw new Lime.Exception(
+					"Attempt to create a second window for ES20 rendering backend. Use OpenGL backend instead."
+				);
 			}
 			if (options.UseTimer && options.AsyncRendering) {
 				throw new Lime.Exception("Can't use both timer and async rendering");
@@ -675,8 +685,7 @@ namespace Lime
 
 		private void OnMove(object sender, EventArgs e)
 		{
-			bool hasBeenMinimized, hasBeenRestored;
-			HasWindowStateChanged(out hasBeenMinimized, out hasBeenRestored);
+			HasWindowStateChanged(out bool hasBeenMinimized, out bool hasBeenRestored);
 
 			// We should ignore this event after minimize or restore.
 			// Calling to RaiseMoved() after minimize can lead to various bugs because window position is negative
@@ -698,7 +707,8 @@ namespace Lime
 			if (active) {
 				active = false;
 				// Clearing key state on deactivate is required so no keys will get stuck.
-				// If, for some reason, you need to transfer key state between windows use InputSimulator to hack it. See docking implementation in Tangerine.
+				// If, for some reason, you need to transfer key state between windows use InputSimulator to hack it.
+				// See docking implementation in Tangerine.
 				Input.ClearKeyState();
 				RaiseDeactivated();
 			}
@@ -706,11 +716,10 @@ namespace Lime
 
 		private void OnResize(object sender, EventArgs e)
 		{
-			bool hasBeenMinimized, hasBeenRestored;
-			HasWindowStateChanged(out hasBeenMinimized, out hasBeenRestored);
+			HasWindowStateChanged(out bool hasBeenMinimized, out bool hasBeenRestored);
 			prevWindowState = State;
 
-			// This will produce extra invokes, but will keep "active" flag in consistant state when minimizing app by
+			// This will produce extra invokes, but will keep "active" flag in consistent state when minimizing app by
 			// clicking on taskbar icon
 			if (hasBeenRestored) {
 				OnActivated(this, EventArgs.Empty);
@@ -747,17 +756,17 @@ namespace Lime
 				}
 			} else if (e.Button == MouseButtons.Middle) {
 				Input.SetKeyState(Key.Mouse2, true);
-			}
-			else if (e.Button == MouseButtons.XButton1) {
+			} else if (e.Button == MouseButtons.XButton1) {
 				Input.SetKeyState(Key.MouseBack, true);
-			}
-			else if (e.Button == MouseButtons.XButton2) {
+			} else if (e.Button == MouseButtons.XButton2) {
 				Input.SetKeyState(Key.MouseForward, true);
 			}
 			Input.SetKeyState(Key.Control, Control.ModifierKeys.HasFlag(Keys.Control));
 			Input.SetKeyState(Key.Shift, Control.ModifierKeys.HasFlag(Keys.Shift));
 			Input.SetKeyState(Key.Alt, Control.ModifierKeys.HasFlag(Keys.Alt));
-			Input.SetKeyState(Key.Win, Control.ModifierKeys.HasFlag(Keys.LWin) || Control.ModifierKeys.HasFlag(Keys.RWin));
+			Input.SetKeyState(
+				Key.Win, Control.ModifierKeys.HasFlag(Keys.LWin) || Control.ModifierKeys.HasFlag(Keys.RWin)
+			);
 		}
 
 		private void OnMouseUp(object sender, MouseEventArgs e)
@@ -771,11 +780,9 @@ namespace Lime
 				Input.SetKeyState(Key.Mouse1DoubleClick, false);
 			} else if (e.Button == MouseButtons.Middle) {
 				Input.SetKeyState(Key.Mouse2, false);
-			}
-			else if (e.Button == MouseButtons.XButton1) {
+			} else if (e.Button == MouseButtons.XButton1) {
 				Input.SetKeyState(Key.MouseBack, false);
-			}
-			else if (e.Button == MouseButtons.XButton2) {
+			} else if (e.Button == MouseButtons.XButton2) {
 				Input.SetKeyState(Key.MouseForward, false);
 			}
 		}
@@ -859,7 +866,13 @@ namespace Lime
 			switch (renderingState) {
 				case RenderingState.Updated:
 					PixelScale = CalcPixelScale(e.Graphics.DpiX);
-					if (!AsyncRendering && renderControl.IsHandleCreated && form.Visible && !renderControl.IsDisposed && renderControl.CanRender) {
+					if (
+						!AsyncRendering &&
+						renderControl.IsHandleCreated &&
+						form.Visible &&
+						!renderControl.IsDisposed &&
+						renderControl.CanRender
+					) {
 						renderControl.Begin();
 						RaiseRendering();
 						renderControl.SwapBuffers();
@@ -1210,7 +1223,7 @@ namespace Lime
 
 			private static void OnBecomeIdle(object sender, EventArgs e)
 			{
-				var restartLoop = false;
+				bool restartLoop;
 				do {
 					restartLoop = false;
 					Window[] windows;
@@ -1218,7 +1231,7 @@ namespace Lime
 						windows = UpdateOnIdleWindows.ToArray();
 					}
 					foreach (var window in windows) {
-						// check if it was not closed by previuos window
+						// check if it was not closed by previous window
 						lock (UpdateOnIdleWindows) {
 							if (!UpdateOnIdleWindows.Contains(window)) {
 								continue;
@@ -1246,7 +1259,9 @@ namespace Lime
 			}
 
 			[DllImport("user32.dll")]
-			private static extern int PeekMessage(out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove);
+			private static extern int PeekMessage(
+				out NativeMessage message, IntPtr window, uint filterMin, uint filterMax, uint remove
+			);
 		}
 	}
 
@@ -1270,7 +1285,7 @@ namespace Lime
 		}
 		public static System.Drawing.Size ConvertToSize(Vector2 p, float pixelScale)
 		{
-			p = (p * pixelScale);
+			p *= pixelScale;
 			return new System.Drawing.Size(p.X.Round(), p.Y.Round());
 		}
 	}

@@ -49,7 +49,8 @@ namespace Tangerine.UI
 			return obj ?? "";
 		}
 
-		protected override string StringToValueConverter(string path) {
+		protected override string StringToValueConverter(string path)
+		{
 			return path;
 		}
 	}

@@ -9,7 +9,8 @@ namespace Tangerine.UI
 	{
 		public void Setup(MarkdownPipelineBuilder pipeline) { }
 
-		public void Setup(MarkdownPipeline pipeline, IMarkdownRenderer renderer) {
+		public void Setup(MarkdownPipeline pipeline, IMarkdownRenderer renderer)
+		{
 			var htmlRenderer = renderer as HtmlRenderer;
 			if (htmlRenderer != null) {
 				var inlineRenderer = htmlRenderer.ObjectRenderers.FindExact<LinkInlineRenderer>();

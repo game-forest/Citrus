@@ -5,16 +5,18 @@ using System.Collections.Generic;
 namespace Lime
 {
 	/// <summary>
-	/// The WidgetInput class allows a widget to capture an input device (mouse, keyboard).
-	/// After capturing the device, the widget and all its children receive an actual buttons and device axes state (e.g. mouse position). Other widgets receive released buttons state and frozen axes values.
+	/// WidgetInput class allows a widget to capture an input device (mouse, keyboard).
+	/// After capturing the device, the widget and all its children receive
+	/// an actual buttons and device axes state (e.g. mouse position).
+	/// Other widgets receive released buttons state and frozen axes values.
 	/// </summary>
 	public class WidgetInput : IDisposable
 	{
-		private Widget widget;
-		private WindowInput windowInput { get { return CommonWindow.Current.Input; } }
-		private WidgetContext context { get { return WidgetContext.Current; } }
+		private readonly Widget widget;
+		private WindowInput WindowInput => CommonWindow.Current.Input;
+		private WidgetContext Context => WidgetContext.Current;
 
-		public static readonly WidgetStack InputScopeStack = new WidgetStack();
+		internal static readonly WidgetStack InputScopeStack = new WidgetStack();
 
 		public delegate bool FilterFunc(Widget widget, Key key);
 		public static FilterFunc Filter;
@@ -36,30 +38,18 @@ namespace Lime
 			this.widget = widget;
 		}
 
-		public string TextInput
-		{
-			get { return widget.IsFocused() ? windowInput.TextInput : string.Empty; }
-		}
+		public string TextInput => widget.IsFocused() ? WindowInput.TextInput : string.Empty;
 
-		public Vector2 MousePosition { get { return windowInput.MousePosition; } }
+		public Vector2 MousePosition => WindowInput.MousePosition;
 
 		[Obsolete("Use Widget.LocalMousePosition()")]
-		public Vector2 LocalMousePosition { get { return windowInput.MousePosition * widget.LocalToWorldTransform.CalcInversed(); } }
+		public Vector2 LocalMousePosition => WindowInput.MousePosition * widget.LocalToWorldTransform.CalcInversed();
 
-		public Vector2 GetTouchPosition(int index)
-		{
-			return CommonWindow.Current.Input.GetTouchPosition(index);
-		}
+		public Vector2 GetTouchPosition(int index) => CommonWindow.Current.Input.GetTouchPosition(index);
 
-		public int GetNumTouches()
-		{
-			return IsAcceptingKey(Key.Touch0) ? windowInput.GetNumTouches() : 0;
-		}
+		public int GetNumTouches() => IsAcceptingKey(Key.Touch0) ? WindowInput.GetNumTouches() : 0;
 
-		public bool IsAcceptingMouse()
-		{
-			return IsAcceptingKey(Key.Mouse0);
-		}
+		public bool IsAcceptingMouse() => IsAcceptingKey(Key.Mouse0);
 
 		public bool IsAcceptingKey(Key key)
 		{
@@ -73,7 +63,7 @@ namespace Lime
 				if (AcceptMouseBeyondWidget) {
 					return true;
 				}
-				var node = context.NodeCapturedByMouse ?? context.NodeUnderMouse; 
+				var node = Context.NodeCapturedByMouse ?? Context.NodeUnderMouse;
 				return AcceptMouseThroughDescendants ? (node?.SameOrDescendantOf(widget) ?? false) : node == widget;
 			}
 			if (key.IsModifier()) {
@@ -89,11 +79,20 @@ namespace Lime
 
 		public bool WasMouseReleased(int button = 0) => WasKeyReleased(Input.GetMouseButtonByIndex(button));
 
-		public float WheelScrollAmount => IsAcceptingKey(Key.MouseWheelUp) ? windowInput.WheelScrollAmount : 0;
+		public bool WasAnyMouseButtonPressed()
+		{
+			return WasKeyPressed(Key.Mouse0) ||
+				WasKeyPressed(Key.Mouse1) ||
+				WasKeyPressed(Key.Mouse2) ||
+				WasKeyPressed(Key.MouseBack) ||
+				WasKeyPressed(Key.MouseForward);
+		}
 
-		public bool IsKeyPressed(Key key) => windowInput.IsKeyPressed(key) && IsAcceptingKey(key);
+		public float WheelScrollAmount => IsAcceptingKey(Key.MouseWheelUp) ? WindowInput.WheelScrollAmount : 0;
 
-		public bool WasKeyPressed(Key key) => windowInput.WasKeyPressed(key) && IsAcceptingKey(key);
+		public bool IsKeyPressed(Key key) => WindowInput.IsKeyPressed(key) && IsAcceptingKey(key);
+
+		public bool WasKeyPressed(Key key) => WindowInput.WasKeyPressed(key) && IsAcceptingKey(key);
 
 		public bool ConsumeKeyPress(Key key)
 		{
@@ -104,7 +103,7 @@ namespace Lime
 			return false;
 		}
 
-		public bool WasKeyReleased(Key key) => windowInput.WasKeyReleased(key) && IsAcceptingKey(key);
+		public bool WasKeyReleased(Key key) => WindowInput.WasKeyReleased(key) && IsAcceptingKey(key);
 
 		public bool ConsumeKeyRelease(Key key)
 		{
@@ -115,7 +114,7 @@ namespace Lime
 			return false;
 		}
 
-		public bool WasKeyRepeated(Key key) => windowInput.WasKeyRepeated(key) && IsAcceptingKey(key);
+		public bool WasKeyRepeated(Key key) => WindowInput.WasKeyRepeated(key) && IsAcceptingKey(key);
 
 		public bool ConsumeKeyRepeat(Key key)
 		{
@@ -129,7 +128,7 @@ namespace Lime
 		public void ConsumeKey(Key key)
 		{
 			if (IsAcceptingKey(key)) {
-				windowInput.ConsumeKey(key);
+				WindowInput.ConsumeKey(key);
 			}
 		}
 
@@ -201,30 +200,15 @@ namespace Lime
 				Top = i > 0 ? stack[i - 1] : null;
 			}
 
-			public IEnumerator<Widget> GetEnumerator()
-			{
-				return stack.GetEnumerator();
-			}
+			public IEnumerator<Widget> GetEnumerator() => stack.GetEnumerator();
 
-			IEnumerator IEnumerable.GetEnumerator()
-			{
-				return ((IEnumerable) stack).GetEnumerator();
-			}
+			IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)stack).GetEnumerator();
 
-			public int Count
-			{
-				get { return stack.Count; }
-			}
+			public int Count => stack.Count;
 
-			public Widget this[int index]
-			{
-				get { throw new NotImplementedException(); }
-			}
+			public Widget this[int index] => throw new NotImplementedException();
 		}
 
-		public void Dispose()
-		{
-			InputScopeStack.RemoveAll(i => i == widget);
-		}
+		public void Dispose() => InputScopeStack.RemoveAll(i => i == widget);
 	}
 }

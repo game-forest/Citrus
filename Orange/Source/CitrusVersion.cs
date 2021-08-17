@@ -9,7 +9,8 @@ namespace Orange
 	{
 		public const string Filename = "citrus_version.json";
 
-		public static CitrusVersion Load(Stream stream) {
+		public static CitrusVersion Load(Stream stream)
+		{
 			var yjd = new JsonDeserializer { JsonOptions = new JsonSerializeOptions() { Unordered = true } };
 			return yjd.FromStream<CitrusVersion>(stream);
 		}

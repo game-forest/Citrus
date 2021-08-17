@@ -20,7 +20,8 @@ namespace Tangerine.UI.Timeline
 		private Dictionary<Marker, double> savedMarkerPositions = new Dictionary<Marker, double>();
 		private List<Marker> savedMarkers = new List<Marker>();
 
-		public IEnumerator<object> Task() {
+		public IEnumerator<object> Task()
+		{
 			while (true) {
 				if (!TimelineUserPreferences.Instance.AnimationStretchMode) {
 					yield return null;

@@ -10,7 +10,7 @@ namespace Lime
 		public const int MaxCount = 512;
 
 		public static int Count { get; private set; } = 1;
-		public static Key New() { return Count++; }
+		public static Key New() => Count++;
 
 		public static readonly Key Unknown = 0;
 		public static readonly Dictionary<Shortcut, Key> ShortcutMap = new Dictionary<Shortcut, Key>();
@@ -31,17 +31,24 @@ namespace Lime
 
 		public bool IsLetter() => this >= A && this <= Z;
 
-		public bool IsTextNavigation() =>
-			this == PageUp || this == PageDown || this == Home || this == End ||
-			this == Left || this == Right || this == Up || this == Down;
+		public bool IsTextNavigation()
+		{
+			return this == PageUp ||
+				this == PageDown ||
+				this == Home ||
+				this == End ||
+				this == Left ||
+				this == Right ||
+				this == Up ||
+				this == Down;
+		}
 
-		public bool IsPrintable() =>
-			IsAlphanumeric() || (this >= Tilde && this <= BackSlash) || this == Space;
 
-		public bool IsTextEditing() =>
-			this == Delete || this == BackSpace || this == Insert || this == Enter;
+		public bool IsPrintable() => IsAlphanumeric() || (this >= Tilde && this <= BackSlash) || this == Space;
 
-		public bool IsFunctional() =>this >= F1 && this <= F12;
+		public bool IsTextEditing() => this == Delete || this == BackSpace || this == Insert || this == Enter;
+
+		public bool IsFunctional() => this >= F1 && this <= F12;
 
 		public static bool operator == (Key lhs, Key rhs) => lhs.Code == rhs.Code;
 		public static bool operator != (Key lhs, Key rhs) => lhs.Code != rhs.Code;
@@ -53,32 +60,29 @@ namespace Lime
 		public static IEnumerable<Key> Enumerate()
 		{
 			for (int i = 0; i < Count; i++) {
-				yield return (Key)i;
+				yield return i;
 			}
 		}
 
 		public override int GetHashCode() => Code;
 		public override bool Equals(object obj) => (Key)obj == this;
 
-		public static Key GetByName(string name) =>
-			keyToNameCache.FirstOrDefault(p => p.Value == name).Key;
+		public static Key GetByName(string name) => keyToNameCache.FirstOrDefault(p => p.Value == name).Key;
 
 		public override string ToString()
 		{
-			string value;
-			if (keyToNameCache.TryGetValue(this, out value)) {
+			if (keyToNameCache.TryGetValue(this, out string value)) {
 				return value;
 			}
-
 			var sb = new StringBuilder(10);
 			foreach (var kv in ShortcutMap) {
 				if (kv.Value == this)
-					sb.Append($"[{kv.Key.ToString()}]");
+					sb.Append($"[{kv.Key}]");
 			}
 			return sb.Length > 0 ? sb.ToString() : Code.ToString();
 		}
 
-		private static Dictionary<Key, string> keyToNameCache;
+		private static readonly Dictionary<Key, string> keyToNameCache;
 
 		static Key()
 		{
@@ -90,38 +94,34 @@ namespace Lime
 		public static implicit operator Key (int code) => new Key(code);
 		public static implicit operator int (Key key) => key.Code;
 
-		public static Key MapShortcut(Key main) =>
-			MapShortcut(new Shortcut(Modifiers.None, main));
+		public static Key MapShortcut(Key main) => MapShortcut(new Shortcut(Modifiers.None, main));
 
-		public static Key MapShortcut(Modifiers modifiers, Key main) =>
-			MapShortcut(new Shortcut(modifiers, main));
+		public static Key MapShortcut(Modifiers modifiers, Key main) => MapShortcut(new Shortcut(modifiers, main));
 
 		public static Key MapShortcut(Shortcut shortcut)
 		{
 			if (!Shortcut.ValidateMainKey(shortcut.Main)) {
-				throw new ArgumentException();
+				throw new ArgumentException($"Key {shortcut.Main} is invalid.");
 			}
-			Key key;
-			if (!ShortcutMap.TryGetValue(shortcut, out key)) {
+			if (!ShortcutMap.TryGetValue(shortcut, out Key key)) {
 				key = New();
 				ShortcutMap.Add(shortcut, key);
 			}
 			return key;
 		}
 
-		public void AddAlias(Modifiers modifiers, Key main) =>
-			AddAlias(new Shortcut(modifiers, main));
+		public void AddAlias(Modifiers modifiers, Key main) => AddAlias(new Shortcut(modifiers, main));
 
 		public void AddAlias(Shortcut shortcut)
 		{
 			if (!Shortcut.ValidateMainKey(shortcut.Main)) {
-				throw new ArgumentException();
+				throw new ArgumentException($"Key {shortcut.Main} is invalid.");
 			}
-			Key key;
-			if (!ShortcutMap.TryGetValue(shortcut, out key))
+			if (!ShortcutMap.TryGetValue(shortcut, out Key key)) {
 				ShortcutMap.Add(shortcut, this);
-			else if (key != this)
+			} else if (key != this) {
 				throw new InvalidOperationException();
+			}
 		}
 
 #region Keyboard
