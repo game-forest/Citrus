@@ -209,11 +209,14 @@ namespace Tangerine.UI.Timeline
 				};
 			} else {
 				button.AddTransactionClickHandler(() => {
+					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					SetProperty.Perform(
-						SceneItem.GetTimelineItemState(),
-						nameof(TimelineItemStateComponent.NodesExpanded),
-						!SceneItem.GetTimelineItemState().NodesExpanded
+						obj: SceneItem.GetTimelineItemState(),
+						propertyName: nameof(TimelineItemStateComponent.NodesExpanded),
+						value: !SceneItem.GetTimelineItemState().NodesExpanded,
+						isChangingDocument: false
 					);
+					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
 			button.Components.Add(new DisableAncestralGesturesComponent());
@@ -444,7 +447,14 @@ namespace Tangerine.UI.Timeline
 						nodes.Add(Node);
 					}
 					foreach (var n in nodes) {
-						SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.AnimatorsExpanded), showAnimators);
+						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+						SetProperty.Perform(
+							obj: SceneItem.GetTimelineItemState(),
+							propertyName: nameof(TimelineItemStateComponent.AnimatorsExpanded),
+							value: showAnimators,
+							isChangingDocument: false
+						);
+						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 					}
 				}
 			);
