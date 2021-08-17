@@ -124,12 +124,18 @@ namespace Tangerine.UI.Timeline
 			}
 			if (offset != IntVector2.Zero) {
 				Timeline.Globals.Add(new DragKeyframesRequest(offset, !input.IsKeyPressed(Key.Alt)));
+				lastSelectedCell = IntVector2.Clamp(
+					lastSelectedCell + offset,
+					IntVector2.Zero,
+					new IntVector2(int.MaxValue, int.MaxValue)
+				);
 				Timeline.Ruler.MeasuredFrameDistance = 0;
 			} else {
 				// If a user has clicked with control on a keyframe, try to deselect it [CIT-125].
 				var cell = Grid.CellUnderMouse();
 				if (input.IsKeyPressed(Key.Control) && time < 0.2f) {
 					Operations.DeselectGridSpan.Perform(cell.Y, cell.X, cell.X + 1);
+					lastSelectedCell = cell;
 				} else if (input.IsKeyPressed(Key.Shift)) {
 					Operations.ClearGridSelection.Perform();
 					SelectRange(lastSelectedCell, initialCell, input.IsKeyPressed(Key.Alt));
@@ -140,6 +146,7 @@ namespace Tangerine.UI.Timeline
 						cell.X,
 						cell.X + 1
 					);
+					lastSelectedCell = cell;
 				}
 			}
 			Grid.OnPostRender -= Action;
