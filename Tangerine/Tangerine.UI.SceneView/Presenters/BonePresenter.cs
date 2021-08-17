@@ -26,11 +26,14 @@ namespace Tangerine.UI.SceneView
 			}
 			canvas.PrepareRendererState();
 			if (VisualHintsRegistry.Instance.FindHint(typeof(Bone)).Enabled) {
-				var notSelected =
-					Document.Current.ContainerChildNodes().Where(IsVisibleNode).OfType<Bone>().
-					Except(Document.Current.SelectedNodes().OfType<Bone>());
-				foreach (var bone in notSelected) {
-					DrawBone(bone, canvas, selected: false);
+				var nodesContainingBones = Document.Current.Rows
+					.Select(i => i.GetNode())
+					.OfType<Bone>()
+					.Select(i => i.Parent).Distinct();
+				foreach (var node in nodesContainingBones) {
+					foreach (var bone in node.Nodes.OfType<Bone>().Where(IsVisibleNode)) {
+						DrawBone(bone, canvas, selected: false);
+					}
 				}
 			}
 			foreach (var bone in Document.Current.SelectedNodes().Where(IsVisibleNode).OfType<Bone>()) {
