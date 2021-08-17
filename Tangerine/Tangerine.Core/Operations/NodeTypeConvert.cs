@@ -12,6 +12,9 @@ namespace Tangerine.Core.Operations
 		public static Node Perform(Row sceneItem, Type destType, Type commonParent)
 		{
 			var node = sceneItem.Components.Get<NodeRow>()?.Node;
+			if (node.ContentsPath != null) {
+				Console.WriteLine($"Converting nodes with non empty contents path is not supported.");
+			}
 			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
 			Validate(node, destType, commonParent);
 			var result = CreateNode.Perform(sceneItem.Parent, sceneItem.Parent.Rows.IndexOf(sceneItem), destType);
