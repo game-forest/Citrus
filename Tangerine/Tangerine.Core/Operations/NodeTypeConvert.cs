@@ -18,7 +18,6 @@ namespace Tangerine.Core.Operations
 			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
 			Validate(node, destType, commonParent);
 			var result = CreateNode.Perform(sceneItem.Parent, sceneItem.Parent.Rows.IndexOf(sceneItem), destType);
-			CopyProperties(node, result);
 			var assetBundlePathComponent = node.Components.Get<Node.AssetBundlePathComponent>();
 			if (assetBundlePathComponent != null) {
 				result.Components.Add(Cloner.Clone(assetBundlePathComponent));
@@ -42,6 +41,7 @@ namespace Tangerine.Core.Operations
 					}
 				}
 			}
+			CopyProperties(node, result);
 			UnlinkSceneItem.Perform(sceneItem);
 			DelegateOperation.Perform(Document.Current.RefreshSceneTree, null, false);
 			return result;
@@ -79,20 +79,8 @@ namespace Tangerine.Core.Operations
 				}
 			}
 			var destType = to.GetType();
-			foreach (var animator in from.Animators) {
-				var prop = destType.GetProperty(animator.TargetPropertyPath);
-				if (
-					prop == null ||
-					prop.PropertyType != from.GetType().GetProperty(animator.TargetPropertyPath).PropertyType
-				) {
-					Console.WriteLine($"[Warning] Node {from} has animator on property " +
-						$"{animator.TargetPropertyPath}, which doesn't exist in {destType}, skipping.");
-					continue;
-				}
-				to.Animators.Add(Cloner.Clone(animator));
-			}
 			foreach (var component in from.Components) {
-				if  (!NodeCompositionValidator.ValidateComponentType(destType, component.GetType())) {
+				if (!NodeCompositionValidator.ValidateComponentType(destType, component.GetType())) {
 					Console.WriteLine($"[Warning] Node {from} has component {component} " +
 						$"that will be incompatible with {destType}, skipping.");
 					continue;
@@ -101,6 +89,21 @@ namespace Tangerine.Core.Operations
 					continue;
 				}
 				to.Components.Add(Cloner.Clone(component));
+			}
+			foreach (var animator in from.Animators) {
+				var (propertyDataOfSourceNode, animableOfSourceNode, _) =
+					AnimationUtils.GetPropertyByPath(from, animator.TargetPropertyPath);
+				var (propertyDataOfTargetNode, animableOfTargetNode, _) =
+					AnimationUtils.GetPropertyByPath(to, animator.TargetPropertyPath);
+				if (
+					animableOfTargetNode == null ||
+					propertyDataOfTargetNode.Info.PropertyType != propertyDataOfSourceNode.Info.PropertyType
+				) {
+					Console.WriteLine($"[Warning] Node {from} has animator on property " +
+						$"{animator.TargetPropertyPath}, which doesn't exist in {destType}, skipping.");
+					continue;
+				}
+				to.Animators.Add(Cloner.Clone(animator));
 			}
 			foreach (var animation in from.Animations) {
 				if (string.IsNullOrEmpty(animation.Id)) {
