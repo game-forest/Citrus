@@ -51,13 +51,6 @@ namespace Tangerine.UI.Timeline
 			return ((mouseX + Timeline.Instance.Offset.X) / TimelineMetrics.ColWidth).Floor().Max(0);
 		}
 
-		void RootWidget_DoubleClick(WidgetInput input, Key key)
-		{
-			ShowMarkerDialog(Timeline.Instance.CurrentColumn);
-			// To prevent RulerbarMouseScroll.
-			RootWidget.Input.ConsumeKey(Key.Mouse0);
-		}
-
 		void Render(Widget widget)
 		{
 			widget.PrepareRendererState();
@@ -185,6 +178,10 @@ namespace Tangerine.UI.Timeline
 		{
 			Document.Current.History.DoTransaction(() => {
 				Core.Operations.DeleteMarker.Perform(marker, true);
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+					Core.Operations.RemoveKeyframeRange.Perform(animator, marker.Frame, marker.Frame);
+				}
+				Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(Document.Current.Animation, marker.Frame, -1);
 			});
 		}
 
