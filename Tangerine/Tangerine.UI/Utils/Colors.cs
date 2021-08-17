@@ -286,13 +286,19 @@ namespace Tangerine.UI
 			[YuzuOptional]
 			public Color4 NodeBackground { get; set; }
 			[YuzuOptional]
+			public Color4 CurrentAnimationText { get; set; }
+			[YuzuOptional]
 			public Color4 CurrentAnimationBackground { get; set; }
 			[YuzuOptional]
 			public Color4 CurrentAnimationMarker { get; set; }
 			[YuzuOptional]
+			public Color4 RootText { get; set; }
+			[YuzuOptional]
 			public Color4 RootNodeMarker { get; set; }
+			[YuzuOptional]
+			public Color4 RootBackground { get; set; }
 		}
-		
+
 		public class RemoteScriptingColors : Theme.DefaultColors
 		{
 			[YuzuOptional]
@@ -493,9 +499,12 @@ namespace Tangerine.UI
 			var animations = new AnimationsColors {
 				PanelBackground = hierarchy.DefaultBackground,
 				NodeBackground = new Color4(68, 68, 68),
-				CurrentAnimationBackground = new Color4(70, 80, 70),
+				CurrentAnimationText = basic.BlackText,
+				CurrentAnimationBackground =  inspector.StripeBackground2,
 				CurrentAnimationMarker = new Color4(76, 175, 80),
-				RootNodeMarker = new Color4(253, 131, 0)
+				RootText = basic.BlackText,
+				RootNodeMarker = new Color4(253, 131, 0),
+				RootBackground = new Color4(68, 68, 68),
 			};
 			var remoteScripting = new RemoteScriptingColors {
 				AssemblyDefaultIcon = new Color4(204, 204, 204),
@@ -665,9 +674,12 @@ namespace Tangerine.UI
 			var animations = new AnimationsColors {
 				PanelBackground = new Color4(240, 240, 240),
 				NodeBackground = inspector.StripeBackground2,
-				CurrentAnimationBackground = new Color4(208, 236, 209),
+				CurrentAnimationText = basic.BlackText,
+				CurrentAnimationBackground = inspector.StripeBackground1,
 				CurrentAnimationMarker = new Color4(76, 175, 80),
-				RootNodeMarker = new Color4(253, 131, 0)
+				RootText = basic.BlackText,
+				RootNodeMarker = new Color4(253, 131, 0),
+				RootBackground = inspector.StripeBackground2,
 			};
 			var remoteScripting = new RemoteScriptingColors {
 				AssemblyDefaultIcon = Color4.Black.Lighten(0.7f),

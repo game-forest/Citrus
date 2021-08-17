@@ -846,7 +846,7 @@ namespace Tangerine.Panels
 		private class CommonTreeViewItemPresentation
 		{
 			private static ColorTheme.HierarchyColors HierarchyColors => ColorTheme.Current.Hierarchy;
-			
+
 			private readonly Widget ExpandButtonContainer;
 			public readonly TreeViewItem Item;
 			public readonly ToolbarButton ExpandButton;
@@ -879,8 +879,8 @@ namespace Tangerine.Panels
 							Renderer.PushState(RenderState.Blending);
 							Renderer.Blending = Blending.Add;
 							if (isSelected) {
-								var color = w.ParentWidget.IsFocused() ? 
-									HierarchyColors.SelectedBackground : 
+								var color = w.ParentWidget.IsFocused() ?
+									HierarchyColors.SelectedBackground :
 									HierarchyColors.SelectedInactiveBackground;
 								Renderer.DrawRect(Vector2.Zero, w.Size, color);
 							}
@@ -1184,6 +1184,8 @@ namespace Tangerine.Panels
 				BackgroundColor = ColorTheme.Current.Animations.NodeBackground;
 				if (((NodeTreeViewItem)Item).Node == Document.Current.RootNode) {
 					MarkerColor = ColorTheme.Current.Animations.RootNodeMarker;
+					BackgroundColor = ColorTheme.Current.Animations.RootBackground;
+					Label.TextColor = ColorTheme.Current.Animations.RootText;
 				}
 			}
 
@@ -1311,9 +1313,11 @@ namespace Tangerine.Panels
 					if (isCurrentAnimation) {
 						p.BackgroundColor = ColorTheme.Current.Animations.CurrentAnimationBackground;
 						p.MarkerColor = ColorTheme.Current.Animations.CurrentAnimationMarker;
+						p.Label.TextColor = ColorTheme.Current.Animations.CurrentAnimationText;
 					} else {
 						p.BackgroundColor = ColorTheme.Current.Hierarchy.DefaultBackground;
 						p.MarkerColor = Color4.Transparent;
+						p.Label.TextColor = AppUserPreferences.Instance.LimeColorTheme.BlackText;
 					}
 				}
 			}
