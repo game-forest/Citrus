@@ -41,17 +41,22 @@ namespace Tangerine.Common.Operations
 		    if (markerContainerAnimation == null) {
 		        return false;
 		    }
-		    var markersToPaste = markerContainerAnimation.Markers.Select(i => i.Clone()).OrderBy(i => i.Frame)
-		        .ToList();
+		    var markersToPaste = markerContainerAnimation.Markers
+			    .Select(i => i.Clone())
+			    .OrderBy(i => i.Frame)
+			    .ToList();
 		    if (markersToPaste.Count == 0) {
 			    return true;
 		    }
 		    pasteAtFrame ??= markersToPaste[0].Frame;
 			    var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
-		    if (expandAnimation) {
+			if (expandAnimation) {
 			    ShiftMarkersAndKeyframes(animation, pasteAtFrame.Value, range);
 		    }
 		    var d = pasteAtFrame.Value - markersToPaste[0].Frame;
+		    foreach (var marker in markersToPaste) {
+
+		    }
 			// Firstly insert all non-Jump markers in order to correctly resolve Jump markers dependencies.
 			// It doesn't fix a case when Jump marker jumps to Jump marker because
 			// it doesn't make any sense and will clutter the code.
@@ -68,6 +73,10 @@ namespace Tangerine.Common.Operations
 						UnlinkSceneItem.Perform(
 							Document.Current.GetSceneItemForObject(animation.Markers[existingMarkerIndex]));
 					}
+					//int index = animation.Markers.FindIndex(m => m.Frame > pasteAtFrame);
+					//if (index < 0) {
+					//	index = animation.Markers.Count;
+					//}
 					LinkSceneItem.Perform(
 						Document.Current.GetSceneItemForObject(animation),
 						animation.Markers.GetInsertionIndexByFrame(marker.Frame),
