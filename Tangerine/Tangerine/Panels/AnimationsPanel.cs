@@ -503,15 +503,12 @@ namespace Tangerine.Panels
 						}
 					}
 					var animation = animationSceneItem.GetAnimation();
-					bool isNotEmptyAnimation =
-						animationItem.Items.Count > 0 ||
-						animation.ValidatedEffectiveAnimators.Count > 0;
-					if (isNotEmptyAnimation || isCurrentNode || !animation.IsLegacy) {
-						if (nodeSatisfyFilter || Filter(animationItem.Label)) {
-							nodeItem.Items.Add(animationItem);
-						}
-					} else {
+					bool hasItems = animationItem.Items.Count > 0;
+					bool hasAnimators = animation.ValidatedEffectiveAnimators.Count > 0;
+					if (!hasItems & !hasAnimators & animation.IsLegacy & !isCurrentNode) {
 						isContainsEmptyLegacyAnimation = true;
+					} else if (hasItems || nodeSatisfyFilter || Filter(animationItem.Label)) {
+						nodeItem.Items.Add(animationItem);
 					}
 				}
 				if (nodeItem.Items.Count > 0 || string.IsNullOrEmpty(filter) && isContainsEmptyLegacyAnimation) {
