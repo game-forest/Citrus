@@ -82,8 +82,10 @@
   
   <h1 id="Lime_WidgetInput" data-uid="Lime.WidgetInput" class="text-break">Class WidgetInput
   </h1>
-  <div class="markdown level0 summary"><p>The WidgetInput class allows a widget to capture an input device (mouse, keyboard).
-After capturing the device, the widget and all its children receive an actual buttons and device axes state (e.g. mouse position). Other widgets receive released buttons state and frozen axes values.</p>
+  <div class="markdown level0 summary"><p>WidgetInput class allows a widget to capture an input device (mouse, keyboard).
+After capturing the device, the widget and all its children receive
+an actual buttons and device axes state (e.g. mouse position).
+Other widgets receive released buttons state and frozen axes values.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -250,30 +252,6 @@ After capturing the device, the widget and all its children receive an actual bu
     <tbody>
       <tr>
         <td><a class="xref" href="Lime.WidgetInput.FilterFunc.html">WidgetInput.FilterFunc</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_WidgetInput_InputScopeStack" data-uid="Lime.WidgetInput.InputScopeStack">InputScopeStack</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static readonly WidgetInput.WidgetStack InputScopeStack</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.WidgetInput.WidgetStack.html">WidgetInput.WidgetStack</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -862,6 +840,31 @@ public void ReleaseAll()</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void RestrictScope()</code></pre>
   </div>
+  
+  
+  <a id="Lime_WidgetInput_WasAnyMouseButtonPressed_" data-uid="Lime.WidgetInput.WasAnyMouseButtonPressed*"></a>
+  <h4 id="Lime_WidgetInput_WasAnyMouseButtonPressed" data-uid="Lime.WidgetInput.WasAnyMouseButtonPressed">WasAnyMouseButtonPressed()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WasAnyMouseButtonPressed()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="Lime_WidgetInput_WasKeyPressed_" data-uid="Lime.WidgetInput.WasKeyPressed*"></a>

@@ -75186,12 +75186,6 @@ references:
   isSpec: "True"
   fullName: Lime.WidgetInput.GetTouchPosition
   nameWithType: WidgetInput.GetTouchPosition
-- uid: Lime.WidgetInput.InputScopeStack
-  name: InputScopeStack
-  href: api/Lime.WidgetInput.html#Lime_WidgetInput_InputScopeStack
-  commentId: F:Lime.WidgetInput.InputScopeStack
-  fullName: Lime.WidgetInput.InputScopeStack
-  nameWithType: WidgetInput.InputScopeStack
 - uid: Lime.WidgetInput.IsAcceptingKey(Lime.Key)
   name: IsAcceptingKey(Key)
   href: api/Lime.WidgetInput.html#Lime_WidgetInput_IsAcceptingKey_Lime_Key_
@@ -75309,6 +75303,19 @@ references:
   isSpec: "True"
   fullName: Lime.WidgetInput.TextInput
   nameWithType: WidgetInput.TextInput
+- uid: Lime.WidgetInput.WasAnyMouseButtonPressed
+  name: WasAnyMouseButtonPressed()
+  href: api/Lime.WidgetInput.html#Lime_WidgetInput_WasAnyMouseButtonPressed
+  commentId: M:Lime.WidgetInput.WasAnyMouseButtonPressed
+  fullName: Lime.WidgetInput.WasAnyMouseButtonPressed()
+  nameWithType: WidgetInput.WasAnyMouseButtonPressed()
+- uid: Lime.WidgetInput.WasAnyMouseButtonPressed*
+  name: WasAnyMouseButtonPressed
+  href: api/Lime.WidgetInput.html#Lime_WidgetInput_WasAnyMouseButtonPressed_
+  commentId: Overload:Lime.WidgetInput.WasAnyMouseButtonPressed
+  isSpec: "True"
+  fullName: Lime.WidgetInput.WasAnyMouseButtonPressed
+  nameWithType: WidgetInput.WasAnyMouseButtonPressed
 - uid: Lime.WidgetInput.WasKeyPressed(Lime.Key)
   name: WasKeyPressed(Key)
   href: api/Lime.WidgetInput.html#Lime_WidgetInput_WasKeyPressed_Lime_Key_
