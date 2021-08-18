@@ -618,12 +618,12 @@ namespace Tangerine.UI
 			public void Release(Node node) => pool.Push(node);
 		}
 
-		public class AnimationProcessor : NodeComponentProcessor<AnimationComponent>
+		private class AnimationProcessor : NodeComponentProcessor<AnimationComponent>
 		{
 			public event Action AllAnimationsStopped;
-			private int activeAnimationsCount;
+			private readonly HashSet<Animation> activeAnimations = new HashSet<Animation>();
 
-			public void Reset() => activeAnimationsCount = 0;
+			public void Reset() => activeAnimations.Clear();
 
 			protected override void Add(AnimationComponent component, Node owner)
 			{
@@ -633,19 +633,24 @@ namespace Tangerine.UI
 
 			protected override void Remove(AnimationComponent component, Node owner)
 			{
+				foreach (var animation in component.Animations) {
+					if (animation.IsRunning) {
+						activeAnimations.Remove(animation);
+					}
+				}
 				component.AnimationRun -= OnAnimationRun;
 				component.AnimationStopped -= OnAnimationStopped;
 			}
 
 			internal void OnAnimationRun(AnimationComponent component, Animation animation)
 			{
-				activeAnimationsCount++;
+				activeAnimations.Add(animation);
 			}
 
 			internal void OnAnimationStopped(AnimationComponent component, Animation animation)
 			{
-				activeAnimationsCount--;
-				if (activeAnimationsCount <= 0) {
+				activeAnimations.Remove(animation);
+				if (activeAnimations.Count == 0) {
 					AllAnimationsStopped?.Invoke();
 				}
 			}
