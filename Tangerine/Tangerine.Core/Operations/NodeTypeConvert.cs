@@ -13,7 +13,16 @@ namespace Tangerine.Core.Operations
 		{
 			var node = sceneItem.Components.Get<NodeRow>()?.Node;
 			if (node.ContentsPath != null) {
-				Console.WriteLine($"Converting nodes with non empty contents path is not supported.");
+				Console.WriteLine(
+					$"[Warning] Skipping conversion: converting nodes with non empty contents path is not supported."
+				);
+				return;
+			}
+			if (!NodeCompositionValidator.Validate(node.Parent.GetType(), destType)) {
+				Console.WriteLine(
+					$"[Warning] Skipping conversion: parent node of type `{node.Parent.GetType().FullName}` "
+					+ $"can't contain node of type `{destType.FullName}`"
+				);
 				return;
 			}
 			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
@@ -105,20 +114,24 @@ namespace Tangerine.Core.Operations
 				}
 				to.Animators.Add(Cloner.Clone(animator));
 			}
-			foreach (var animation in from.Animations) {
-				if (string.IsNullOrEmpty(animation.Id)) {
-					if (!to.DefaultAnimation.Markers.Any()) {
-						foreach (var m in animation.Markers) {
-							to.DefaultAnimation.Markers.Add(m.Clone());
+			if (NodeCompositionValidator.CanHaveChildren(destType)) {
+				foreach (var animation in from.Animations) {
+					if (string.IsNullOrEmpty(animation.Id)) {
+						if (!to.DefaultAnimation.Markers.Any()) {
+							foreach (var m in animation.Markers) {
+								to.DefaultAnimation.Markers.Add(m.Clone());
+							}
+						} else {
+							foreach (var m in animation.Markers) {
+								Console.WriteLine(
+									$"[Warning] Removing marker '{m.Id}', frame: {m.Frame}, type: {m.Action}"
+								);
+							}
 						}
-					} else {
-						foreach (var m in animation.Markers) {
-							Console.WriteLine($"[Warning] Removing marker '{m.Id}', frame: {m.Frame}, type: {m.Action}");
-						}
+						continue;
 					}
-					continue;
+					to.Animations.Add(Cloner.Clone(animation));
 				}
-				to.Animations.Add(Cloner.Clone(animation));
 			}
 		}
 
