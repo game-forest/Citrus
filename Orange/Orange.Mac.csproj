@@ -131,6 +131,7 @@
     <PackageReference Include="FluentFTP">
       <Version>33.0.3</Version>
     </PackageReference>
+    <Compile Include="Source\Actions\SearchForExternalsWithIncompatiblePlaceholder.cs" />
     <Compile Include="Source\AssetCooker\MemoryAssetBundle.cs" />
     <Compile Include="Source\Builder\Dotnet.cs" />
     <Compile Include="Source\Plugins\AssemblyTracker.cs" />
