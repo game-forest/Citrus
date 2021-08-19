@@ -1,5 +1,5 @@
 {
-	"class":"Lime.Frame, Lime",
+	"class":"Lime.Button, Lime",
 	"Animations":[
 		{
 			"IsLegacy":true,
