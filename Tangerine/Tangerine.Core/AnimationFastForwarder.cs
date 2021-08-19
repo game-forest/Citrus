@@ -14,7 +14,8 @@ namespace Tangerine.Core
 			var animationStates = new List<AnimationState>();
 			BuildAnimationStates(animationStates, animation, frame, frameCount);
 			ApplyAnimationStates(animationStates, animation, stopAnimations);
-			// The following code is intented for code that changes the node hierarchy while the animation is scrolling.
+			// The following code is intended for code that
+			// changes the node hierarchy while the animation is scrolling.
 			var hierarchyChanged = false;
 			HierarchyChangedEventHandler h = e => hierarchyChanged = true;
 			var nodeManager = animation.OwnerNode.Manager;
@@ -30,16 +31,27 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void BuildAnimationStates(List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers = false)
-		{
+		public void BuildAnimationStates(
+			List<AnimationState> animationStates,
+			Animation animation,
+			int frame,
+			int frameCount,
+			bool processMarkers = false
+		) {
 			processedAnimationRanges.Clear();
-			BuildAnimationStatesHelper(processedAnimationRanges, animationStates, animation, frame, frameCount, processMarkers);
+			BuildAnimationStatesHelper(
+				processedAnimationRanges, animationStates, animation, frame, frameCount, processMarkers
+			);
 		}
 
-		public void ApplyAnimationStates(List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations)
-		{
-			// Apply the current animation state last so all the triggers will have the correct values on the inspector pane.
-			foreach (var s in animationStates.OrderByDescending(s => s.Animation == currentAnimation ? -1 : s.FrameCount)) {
+		public static void ApplyAnimationStates(
+			List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations
+		) {
+			// Apply current animation state last so all triggers will have correct values on the inspector pane.
+			var orderedStates = animationStates.OrderByDescending(
+				s => s.Animation == currentAnimation ? -1 : s.FrameCount
+			);
+			foreach (var s in orderedStates) {
 				s.Animation.Frame = s.Frame;
 				s.Animation.IsRunning = !stopAnimations && s.IsRunning;
 			}
@@ -76,26 +88,39 @@ namespace Tangerine.Core
 				return Animation == other.Animation && Frame == other.Frame && FrameCount == other.FrameCount;
 			}
 
-			public override int GetHashCode()
-			{
-				return Animation.GetHashCode() ^ Frame ^ FrameCount;
-			}
+			public override int GetHashCode() => Animation.GetHashCode() ^ Frame ^ FrameCount;
+
+			public override bool Equals(object obj) => obj is AnimationRange range && Equals(range);
 		}
 
-		private int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
+		private readonly int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
 
-		private void BuildAnimationStatesHelper(HashSet<AnimationRange> processedAnimationRanges, List<AnimationState> animationStates, Animation animation, int frame, int frameCount, bool processMarkers)
-		{
-			if (!processedAnimationRanges.Add(new AnimationRange { Animation = animation, Frame = frame, FrameCount = frameCount })) {
+		private void BuildAnimationStatesHelper(
+			HashSet<AnimationRange> processedAnimationRanges,
+			List<AnimationState> animationStates,
+			Animation animation,
+			int frame,
+			int frameCount,
+			bool processMarkers
+		) {
+			var range = new AnimationRange {
+				Animation = animation,
+				Frame = frame,
+				FrameCount = frameCount
+			};
+			if (!processedAnimationRanges.Add(range)) {
 				return;
 			}
 			if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
 				animation.AnimationEngine.BuildEffectiveAnimators(animation);
 			}
-			var triggerAnimators = animation.EffectiveTriggerableAnimators.
-				Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode).
-				OfType<Animator<string>>().ToList();
-			AdvanceCurrentFrameAndBuildTriggers(animation, frameCount, processMarkers, triggerAnimators, ref frame, out bool isRunning);
+			var triggerAnimators = animation.EffectiveTriggerableAnimators
+				.Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode)
+				.OfType<Animator<string>>()
+				.ToList();
+			AdvanceCurrentFrameAndBuildTriggers(
+				animation, frameCount, processMarkers, triggerAnimators, ref frame, out bool isRunning
+			);
 			ExecuteTriggers(processedAnimationRanges, animationStates, triggerAnimators);
 			var state = new AnimationState {
 				Animation = animation,
@@ -111,8 +136,11 @@ namespace Tangerine.Core
 			}
 		}
 
-		private void ExecuteTriggers(HashSet<AnimationRange> processedAnimationsRanges, List<AnimationState> animationStates, List<Animator<string>> triggerAnimators)
-		{
+		private void ExecuteTriggers(
+			HashSet<AnimationRange> processedAnimationsRanges,
+			List<AnimationState> animationStates,
+			List<Animator<string>> triggerAnimators
+		) {
 			foreach (var triggerAnimator in triggerAnimators) {
 				var node = (Node)triggerAnimator.Owner;
 				var triggers = node.Components.Get<TriggerDataComponent>().Triggers;
@@ -121,14 +149,27 @@ namespace Tangerine.Core
 				triggers.Clear();
 				foreach (var trigger in sortedTriggers) {
 					foreach (var (animationToRun, runAtFrame) in ParseTrigger(node, trigger.Keyframe.Value)) {
-						BuildAnimationStatesHelper(processedAnimationsRanges, animationStates, animationToRun, runAtFrame, trigger.FrameCount, processMarkers: true);
+						BuildAnimationStatesHelper(
+							processedAnimationsRanges,
+							animationStates,
+							animationToRun,
+							runAtFrame,
+							trigger.FrameCount,
+							processMarkers: true
+						);
 					}
 				}
 			}
 		}
 
-		private void AdvanceCurrentFrameAndBuildTriggers(Animation animation, int frameCount, bool processMarkers, List<Animator<string>> triggerAnimators, ref int currentFrame, out bool isRunning)
-		{
+		private static void AdvanceCurrentFrameAndBuildTriggers(
+			Animation animation,
+			int frameCount,
+			bool processMarkers,
+			List<Animator<string>> triggerAnimators,
+			ref int currentFrame,
+			out bool isRunning
+		) {
 			isRunning = false;
 			foreach (
 				var (rangeBegin, rangeEnd, isRunning_, remainedFrameCount) in
@@ -155,13 +196,12 @@ namespace Tangerine.Core
 			}
 		}
 
-		private IEnumerable<(int, int, bool, int)> EnumerateAnimationRangesWithLoopReduction(Animation animation, int startFrame, int frameCount, bool processMarkers)
-		{
+		private static IEnumerable<(int, int, bool, int)> EnumerateAnimationRangesWithLoopReduction(
+			Animation animation, int startFrame, int frameCount, bool processMarkers
+		) {
 			var previousRange = (-1, -1, false);
 			foreach (var range in EnumerateAnimationRanges(animation, startFrame, frameCount, processMarkers)) {
-				var rangeBegin = range.Item1;
-				var rangeEnd = range.Item2;
-				var isRunning = range.Item3;
+				var (rangeBegin, rangeEnd, isRunning) = range;
 				var rangeLength = rangeEnd - rangeBegin;
 				if (range == previousRange) {
 					if (rangeLength == 0) {
@@ -183,8 +223,9 @@ namespace Tangerine.Core
 			}
 		}
 
-		private IEnumerable<(int, int, bool)> EnumerateAnimationRanges(Animation animation, int startFrame, int frameCount, bool processMarkers)
-		{
+		private static IEnumerable<(int, int, bool)> EnumerateAnimationRanges(
+			Animation animation, int startFrame, int frameCount, bool processMarkers
+		) {
 			while (true) {
 				var jumped = false;
 				if (processMarkers) {
@@ -214,10 +255,10 @@ namespace Tangerine.Core
 			}
 		}
 
-		private IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
+		private static IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
 		{
 			trigger ??= "";
-			if (trigger.IndexOf(',') >= 0) {
+			if (trigger.Contains(',')) {
 				foreach (var s in trigger.Split(',')) {
 					if (ParseTriggerHelper(node, s.Trim(), out var a, out var t)) {
 						yield return (a, t);
@@ -230,11 +271,12 @@ namespace Tangerine.Core
 			}
 		}
 
-		private bool ParseTriggerHelper(Node node, string markerWithOptionalAnimationId, out Animation animation, out int frame)
-		{
+		private static bool ParseTriggerHelper(
+			Node node, string markerWithOptionalAnimationId, out Animation animation, out int frame
+		) {
 			animation = null;
 			frame = 0;
-			if (markerWithOptionalAnimationId.IndexOf('@') >= 0) {
+			if (markerWithOptionalAnimationId.Contains('@')) {
 				var s = markerWithOptionalAnimationId.Split('@');
 				if (s.Length == 2) {
 					node.Animations.TryFind(s[1], out animation);

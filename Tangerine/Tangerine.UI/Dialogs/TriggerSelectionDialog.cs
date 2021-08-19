@@ -113,9 +113,15 @@ namespace Tangerine.UI
 				RecreateScrollView();
 			});
 			togglePreviewButton.AddChangeWatcher(() => showAnimationPreviews, v => togglePreviewButton.Checked = v);
-			toggleShowPlayMarkersButton.AddChangeWatcher(() => showPlayMarkers, v => toggleShowPlayMarkersButton.Checked = v);
-			toggleShowJumpMarkersButton.AddChangeWatcher(() => showJumpMarkers, v => toggleShowJumpMarkersButton.Checked = v);
-			toggleShowStopMarkersButton.AddChangeWatcher(() => showStopMarkers, v => toggleShowStopMarkersButton.Checked = v);
+			toggleShowPlayMarkersButton.AddChangeWatcher(
+				() => showPlayMarkers, v => toggleShowPlayMarkersButton.Checked = v
+			);
+			toggleShowJumpMarkersButton.AddChangeWatcher(
+				() => showJumpMarkers, v => toggleShowJumpMarkersButton.Checked = v
+			);
+			toggleShowStopMarkersButton.AddChangeWatcher(
+				() => showStopMarkers, v => toggleShowStopMarkersButton.Checked = v
+			);
 
 			filter.AddChangeWatcher(
 				() => filter.Text,
@@ -140,11 +146,17 @@ namespace Tangerine.UI
 			scrollView.Behaviour.Content.LayoutCell = new LayoutCell(Alignment.Center);
 			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 				w.PrepareRendererState();
-				Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition, Theme.Colors.GrayBackground.Transparentify(0.9f));
+				Renderer.DrawRect(
+					a: w.ContentPosition,
+					b: w.ContentSize + w.ContentPosition,
+					color: Theme.Colors.GrayBackground.Transparentify(0.9f)
+				);
 			}));
 			scrollView.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 				w.PrepareRendererState();
-				Renderer.DrawRectOutline(w.ContentPosition, w.ContentSize + w.ContentPosition, Theme.Colors.ControlBorder);
+				Renderer.DrawRectOutline(
+					w.ContentPosition, w.ContentSize + w.ContentPosition, Theme.Colors.ControlBorder
+				);
 			}));
 
 			int animationIndex = 0;
@@ -153,7 +165,7 @@ namespace Tangerine.UI
 			var	scenePool = new ScenePool(scene);
 			var incrementalFF = new IncrementalFastForwarder();
 			if (showAnimationPreviews) {
-				scrollView.Content.LateTasks.Add(AttachPreviewsTask(scrollView.Behaviour, previews, visiblePreviews));
+				scrollView.Content.LateTasks.Add(AttachPreviewsTask(previews, visiblePreviews));
 			}
 			foreach (var animation in scene.Animations) {
 				checkBoxes[animation] = new Dictionary<string, ThemedCheckBox>();
@@ -202,15 +214,19 @@ namespace Tangerine.UI
 				foreach (var trigger in triggers) {
 					wrapper.AddNode(CreateTriggerSelectionWidget(animation, trigger, out var previewContainer));
 					if (previewContainer != null) {
-						var preview = new AnimationPreview(incrementalFF, scenePool, previewContainer, animationIndex, trigger);
+						var preview =
+							new AnimationPreview(incrementalFF, scenePool, previewContainer, animationIndex, trigger);
 						previews.Add(preview);
-						previewContainer.AddLateChangeWatcher(() => IsWidgetOnscreen(scrollView, previewContainer), onScreen => {
-							if (onScreen) {
-								visiblePreviews.Add(preview);
-							} else {
-								visiblePreviews.Remove(preview);
+						previewContainer.AddLateChangeWatcher(
+							() => IsWidgetOnscreen(scrollView, previewContainer),
+							onScreen => {
+								if (onScreen) {
+									visiblePreviews.Add(preview);
+								} else {
+									visiblePreviews.Remove(preview);
+								}
 							}
-						});
+						);
 					}
 				}
 				animationIndex++;
@@ -225,7 +241,7 @@ namespace Tangerine.UI
 				});
 			}
 
-			bool IsWidgetOnscreen(ThemedScrollView scrollView, Widget widget)
+			static bool IsWidgetOnscreen(ThemedScrollView scrollView, Widget widget)
 			{
 				var widgetTop = widget.CalcPositionInSpaceOf(scrollView).Y;
 				var widgetBottom = widgetTop + widget.Height;
@@ -235,8 +251,9 @@ namespace Tangerine.UI
 			return scrollView;
 		}
 
-		private IEnumerator<object> AttachPreviewsTask(ScrollView scrollView, List<AnimationPreview> previews, HashSet<AnimationPreview> visiblePreviews)
-		{
+		private static IEnumerator<object> AttachPreviewsTask(
+			List<AnimationPreview> previews, HashSet<AnimationPreview> visiblePreviews
+		) {
 			while (true) {
 				foreach (var p in previews) {
 					if (visiblePreviews.Contains(p) != p.IsAttached) {
@@ -388,7 +405,8 @@ namespace Tangerine.UI
 
 			private struct ReferencelessAnimationState
 			{
-				// Denotes a path to the node from the root node. The path consists of NodeList indexes packed as bitfields.
+				// Denotes a path to the node from the root node.
+				// The path consists of NodeList indexes packed as bitfields.
 				// The number of bits allocated to a particular index depends on the NodeList.Count value.
 				// If it turns out that 64 bit are not enough, I suggest to use BitArray instead.
 				public long NodeIndex;
@@ -442,19 +460,23 @@ namespace Tangerine.UI
 								states.Add(state);
 							}
 						}
-						animationFF.BuildAnimationStates(states, animation, closestSnapshot.Frame, frame - closestSnapshot.Frame);
+						animationFF.BuildAnimationStates(
+							states, animation, closestSnapshot.Frame, frame - closestSnapshot.Frame
+						);
 					} else {
 						animationFF.BuildAnimationStates(states, animation, 0, frame);
 					}
 					effectiveSnapshot.States.AddRange(states.Select(i => ToReflessAnimationState(i, node)));
 					snapshots.Add(effectiveSnapshot);
 				}
-				var effectiveStates = effectiveSnapshot.States.Select(i => FromReflessAnimationState(i, node)).ToList();
-				animationFF.ApplyAnimationStates(effectiveStates, animation, stopAnimations: false);
+				var effectiveStates =
+					effectiveSnapshot.States.Select(i => FromReflessAnimationState(i, node)).ToList();
+				AnimationFastForwarder.ApplyAnimationStates(effectiveStates, animation, stopAnimations: false);
 			}
 
-			private static ReferencelessAnimationState ToReflessAnimationState(AnimationFastForwarder.AnimationState state, Node root)
-			{
+			private static ReferencelessAnimationState ToReflessAnimationState(
+				AnimationFastForwarder.AnimationState state, Node root
+			) {
 				var node = state.Animation.OwnerNode;
 				return new ReferencelessAnimationState {
 					NodeIndex = GetNodeIndex(node, root),
@@ -488,23 +510,19 @@ namespace Tangerine.UI
 
 			private static int GetNearestPowerOf2(int value)
 			{
-				if (!IsPowerOf2(value)) {
-					int i = 1;
-					while (i < value) {
-						i *= 2;
-					}
-					return i;
-				}
+				value--;
+				value |= value >> 1;
+				value |= value >> 2;
+				value |= value >> 4;
+				value |= value >> 8;
+				value |= value >> 16;
+				value++;
 				return value;
 			}
 
-			private static bool IsPowerOf2(int value)
-			{
-				return value == 1 || (value & (value - 1)) == 0;
-			}
-
-			private static AnimationFastForwarder.AnimationState FromReflessAnimationState(ReferencelessAnimationState state, Node root)
-			{
+			private static AnimationFastForwarder.AnimationState FromReflessAnimationState(
+				ReferencelessAnimationState state, Node root
+			) {
 				var node = GetNode(state.NodeIndex, root);
 				return new AnimationFastForwarder.AnimationState {
 					Animation = node.Animations[state.AnimationIndex],

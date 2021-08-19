@@ -81,7 +81,8 @@ namespace Tangerine.Core
 		/// <summary>
 		/// Document name to be displayed.
 		/// </summary>
-		public string DisplayName => (IsModified ? "*" : string.Empty) + System.IO.Path.GetFileName(Path ?? "Untitled");
+		public string DisplayName => (IsModified ? "*" : string.Empty)
+			+ System.IO.Path.GetFileName(Path ?? "Untitled");
 
 		/// <summary>
 		/// Gets or sets the file format the document should be saved to.
@@ -117,7 +118,8 @@ namespace Tangerine.Core
 		public NodeManager Manager { get; }
 
 		/// <summary>
-		/// Gets or sets the scene we are navigated from. Need for getting back into the main scene from the external one.
+		/// Gets or sets the scene we are navigated from.
+		/// Required for getting back into the main scene from the external one.
 		/// </summary>
 		public string SceneNavigatedFrom { get; set; }
 
@@ -534,7 +536,8 @@ namespace Tangerine.Core
 		/// <summary>
 		/// Contains all the external scenes even those which are not currently opened in the tangerine.
 		/// </summary>
-		private static readonly Dictionary<string, (Document, SHA256)> externalScenesCache = new Dictionary<string, (Document, SHA256)>();
+		private static readonly Dictionary<string, (Document, SHA256)> externalScenesCache =
+			new Dictionary<string, (Document, SHA256)>();
 
 		/// <summary>
 		/// Denotes the timestamp when hierarchy (including content of external scenes) was changed.
@@ -581,8 +584,9 @@ namespace Tangerine.Core
 			ForceAnimationUpdate();
 		}
 
-		private Document GetExternalSceneDocument(HashSet<string> scenesBeingRefreshed, string path, Type ownerNodeType)
-		{
+		private Document GetExternalSceneDocument(
+			HashSet<string> scenesBeingRefreshed, string path, Type ownerNodeType
+		) {
 			var document = Project.Current.Documents.FirstOrDefault(i => i.Path == path);
 			var contentHash = new SHA256();
 			if (document != null) {
@@ -594,7 +598,8 @@ namespace Tangerine.Core
 				if (assetPath != null) {
 					contentHash = AssetBundle.Current.GetFileContentsHash(assetPath);
 					if (assetPath.EndsWith(".t3d")) {
-						var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
+						var attachmentPath =
+							System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
 						if (AssetBundle.Current.FileExists(attachmentPath)) {
 							contentHash = SHA256.Compute(contentHash,
 								AssetBundle.Current.GetFileContentsHash(attachmentPath));
@@ -722,7 +727,7 @@ namespace Tangerine.Core
 			History.AddSavePoint();
 			Path = path;
 			Directory.CreateDirectory(System.IO.Path.GetDirectoryName(FullPath));
-			ExportNodeToFile(FullPath, Path, Format, RootNodeUnwrapped);
+			ExportNodeToFile(FullPath, Path, RootNodeUnwrapped);
 			if (Format == DocumentFormat.Tan) {
 				DocumentPreview.AppendToFile(FullPath, Preview);
 			}
@@ -733,11 +738,15 @@ namespace Tangerine.Core
 
 		public void ExportToFile(string filePath, string assetPath, FileAttributes attributes = 0)
 		{
-			ExportNodeToFile(filePath, assetPath, Format, RootNodeUnwrapped, attributes);
+			ExportNodeToFile(filePath, assetPath, RootNodeUnwrapped, attributes);
 		}
 
-		public static void ExportNodeToFile(string filePath, string assetPath, DocumentFormat format, Node node, FileAttributes attributes = 0)
-		{
+		public static void ExportNodeToFile(
+			string filePath,
+			string assetPath,
+			Node node,
+			FileAttributes attributes = 0
+		) {
 			// Save the document into memory at first to avoid a torn file in the case of a serialization error.
 			var ms = new MemoryStream();
 			// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().

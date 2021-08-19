@@ -180,7 +180,8 @@ namespace Tangerine.UI.SceneView
 				public override void Render()
 				{
 					Renderer.PushState(RenderState.All);
-					// Hack: use the current state of Transform2 since it may be configured for generating SceneViewThumbnail.
+					// Hack: use the current state of Transform2
+					// since it may be configured for generating SceneViewThumbnail.
 					var sceneTransform2 = LocalToWorldTransform * Renderer.Transform2;
 					Renderer.Transform2 = sceneTransform2;
 #if PROFILER
@@ -304,22 +305,33 @@ namespace Tangerine.UI.SceneView
 			DropFilesGesture.Recognized += new ImagesDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 			DropFilesGesture.Recognized += new AudiosDropHandler().Handle;
 			DropFilesGesture.Recognized += new ScenesDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
-			DropFilesGesture.Recognized += new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
+			DropFilesGesture.Recognized +=
+				new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 		}
 
 		private void CenterDocumentRoot(Node node)
 		{
-			// Before Frame awakens something is being changed on this frame enough to change Frame Size on LayoutManager.Layout()
+			// Before Frame awakens something is being changed on this frame
+			// enough to change Frame Size on LayoutManager.Layout()
 			// which will come at the end of the frame. Force it now to get accurate Frame.Size;
 			WidgetContext.Current.Root.LayoutManager.Layout();
 			var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
 			var widget = Document.Current.RootNode.AsWidget;
 			var frameWidth = Frame.Width - rulerSize;
 			var frameHeight = Frame.Height - ZoomWidget.FrameHeight - rulerSize;
-			var wantedZoom = Mathf.Clamp(Mathf.Min(frameWidth / (widget.Width * widget.Scale.X), frameHeight / (widget.Height * widget.Scale.Y)), 0.0f, 1.0f);
+			var wantedZoom = Mathf.Clamp(
+				Mathf.Min(
+					frameWidth / (widget.Width * widget.Scale.X),
+					frameHeight / (widget.Height * widget.Scale.Y)
+				),
+				0.0f,
+				1.0f
+			);
 			var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
 			Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
-			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale + new Vector2(frameWidth * 0.5f, frameHeight * 0.5f) + Vector2.One * rulerSize;
+			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
+				+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
+				+ Vector2.One * rulerSize;
 		}
 
 		private void OnBeforeFilesDrop()
@@ -328,7 +340,8 @@ namespace Tangerine.UI.SceneView
 				Window.Current.Activate();
 				InputArea.SetFocus();
 			}
-			mousePositionOnFilesDrop = MousePosition * Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+			mousePositionOnFilesDrop =
+				MousePosition * Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 		}
 
 		private static void FilesDropNodePostProcessor(Node node)
@@ -453,8 +466,9 @@ namespace Tangerine.UI.SceneView
 		public Type NodeType { get; set; }
 		public ICommand Command { get; set; }
 
-		public static bool Consume<T>(ComponentCollection<Component> components, out Type nodeType, out ICommand command) where T : Node
-		{
+		public static bool Consume<T>(
+			ComponentCollection<Component> components, out Type nodeType, out ICommand command
+		) where T : Node {
 			var c = components.Get<CreateNodeRequestComponent>();
 			if (c != null && (c.NodeType.IsSubclassOf(typeof(T)) || c.NodeType == typeof(T))) {
 				components.Remove<CreateNodeRequestComponent>();
@@ -469,15 +483,12 @@ namespace Tangerine.UI.SceneView
 
 		public static bool Consume<T>(ComponentCollection<Component> components) where T : Node
 		{
-			Type type;
-			ICommand command;
-			return Consume<T>(components, out type, out command);
+			return Consume<T>(components, out Type type, out ICommand command);
 		}
 
 		public static bool Consume<T>(ComponentCollection<Component> components, out ICommand command) where T : Node
 		{
-			Type type;
-			return Consume<T>(components, out type, out command);
+			return Consume<T>(components, out Type type, out command);
 		}
 	}
 
