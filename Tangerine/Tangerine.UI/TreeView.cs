@@ -212,6 +212,8 @@ namespace Tangerine.UI
 			}
 		}
 
+		public TreeViewItem HoveredItem { get; private set; }
+
 		public TreeView(
 			ThemedScrollView scrollView,
 			ITreeViewPresentation presentation,
@@ -655,23 +657,20 @@ namespace Tangerine.UI
 
 		private IEnumerator<object> HandleHover()
 		{
-			var hoveredWidget = WidgetContext.Current.NodeUnderMouse;
 			while (true) {
-				if (
-					hoveredWidget != WidgetContext.Current.NodeUnderMouse &&
-					(hoveredWidget != null || IsMouseInside(scrollView.Content))
-				) {
-					hoveredWidget = WidgetContext.Current.NodeUnderMouse;
-					Window.Current.Invalidate();
+				if (HoveredItem != null || scrollView.Content.IsMouseOverThisOrDescendant()) {
+					var context = WidgetContext.Current;
+					bool shouldHover =
+						(context.NodeCapturedByMouse == null ||
+						 context.NodeCapturedByMouse == context.NodeUnderMouse) &&
+						Application.WindowUnderMouse == Window.Current;
+					var hoveredItem = shouldHover ? GetItemUnderMouse() : null;
+					if (HoveredItem != hoveredItem) {
+						HoveredItem = hoveredItem;
+						Window.Current.Invalidate();
+					}
 				}
 				yield return null;
-			}
-			bool IsMouseInside(Widget container)
-			{
-				var lmp = container.LocalMousePosition();
-				return
-					lmp.X >= 0 & lmp.X <= container.Width &
-					lmp.Y >= 0 & lmp.Y <= container.Height;
 			}
 		}
 		

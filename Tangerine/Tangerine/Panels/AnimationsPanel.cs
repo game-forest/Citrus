@@ -874,7 +874,7 @@ namespace Tangerine.Panels
 						w.PrepareRendererState();
 						Renderer.DrawRect(Vector2.Zero, w.Size, BackgroundColor);
 						bool isSelected = Item.Selected;
-						bool isHovered = IsHovered();
+						bool isHovered = Item == TreeView.HoveredItem;
 						if (isSelected | isHovered) {
 							Renderer.PushState(RenderState.Blending);
 							Renderer.Blending = Blending.Add;
@@ -884,7 +884,7 @@ namespace Tangerine.Panels
 									HierarchyColors.SelectedInactiveBackground;
 								Renderer.DrawRect(Vector2.Zero, w.Size, color);
 							}
-							if (isHovered & Application.WindowUnderMouse == Window.Current) {
+							if (isHovered) {
 								Renderer.DrawRect(Vector2.Zero, w.Size, HierarchyColors.HoveredBackground);
 							}
 							Renderer.PopState();
@@ -1002,12 +1002,6 @@ namespace Tangerine.Panels
 				};
 				button.Components.Add(new DisableAncestralGesturesComponent());
 				return button;
-			}
-
-			private bool IsHovered()
-			{
-				var lmp = Widget.LocalMousePosition();
-				return lmp.X >= 0 & lmp.X <= Widget.Width & lmp.Y >= 0 & lmp.Y <= Widget.Height;
 			}
 		}
 
