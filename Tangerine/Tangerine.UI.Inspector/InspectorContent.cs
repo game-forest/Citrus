@@ -626,10 +626,6 @@ namespace Tangerine.UI.Inspector
 
 		private void AddComponentsMenu(IReadOnlyList<Node> nodes, Widget widget)
 		{
-			if (nodes.Any(n => !string.IsNullOrEmpty(n.ContentsPath))) {
-				CreatedAddComponentsMenu?.Invoke(null);
-				return;
-			}
 			var nodesTypes = nodes.Select(n => n.GetType()).ToList();
 			var componentTypes = new List<Type>();
 			foreach (var type in Project.Current.RegisteredComponentTypes) {

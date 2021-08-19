@@ -1525,17 +1525,7 @@ namespace Lime
 				Nodes.AddRange(nodes);
 			}
 			if (nodeType != contentType && !contentType.IsSubclassOf(nodeType) && !nodeType.IsSubclassOf(contentType)) {
-				// Handle legacy case: Replace Button content by external Frame
-				if (nodeType == typeof(Button) && contentType == typeof(Frame)) {
-					Components.Remove(typeof(AssetBundlePathComponent));
-					ReplaceAnimationComponent();
-					var assetBundlePathComponent = content.Components.Get<AssetBundlePathComponent>();
-					if (assetBundlePathComponent != null) {
-						Components.Add(Cloner.Clone(assetBundlePathComponent));
-					}
-				} else {
-					throw new Exception($"Can not replace {nodeType.FullName} content with {contentType.FullName}");
-				}
+				throw new Exception($"Can not replace {nodeType.FullName} content with {contentType.FullName}");
 			} else {
 				foreach (var c in Components.Where(i => NodeComponent.IsSerializable(i.GetType())).ToList()) {
 					Components.Remove(c);
