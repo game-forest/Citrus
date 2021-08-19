@@ -181,6 +181,7 @@
     </PackageReference>
     <Compile Include="Source\AssetCooker\MemoryAssetBundle.cs" />
     <Compile Include="Source\Builder\Dotnet.cs" />
+    <Compile Include="Source\Plugins\AssemblyTracker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
