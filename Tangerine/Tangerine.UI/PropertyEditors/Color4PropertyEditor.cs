@@ -39,8 +39,8 @@ namespace Tangerine.UI
 			panel.Widget.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColor.Consume(v => {
 				if (panel.Color != v.Value) {
 					panel.Color = v.Value;
+					Changed?.Invoke();
 				}
-				Changed?.Invoke();
 			}));
 			panel.Changed += () => {
 				EditorParams.History?.RollbackTransaction();

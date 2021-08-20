@@ -241,6 +241,8 @@ namespace Tangerine.UI
 			public Color4 EasingSpline { get; set; }
 			[YuzuOptional]
 			public Color4 EasingControls { get; set; }
+			[YuzuOptional]
+			public Color4 RootNode { get; set; }
 		}
 
 		public class KeyboardColors : Theme.DefaultColors
@@ -267,6 +269,34 @@ namespace Tangerine.UI
 		{
 			[YuzuOptional]
 			public Color4 MatchColor { get; set; }
+			[YuzuOptional]
+			public Color4 DefaultBackground { get; set; }
+			[YuzuOptional]
+			public Color4 HoveredBackground { get; set; }
+			[YuzuOptional]
+			public Color4 SelectedBackground { get; set; }
+			[YuzuOptional]
+			public Color4 SelectedInactiveBackground { get; set; }
+		}
+
+		public class AnimationsColors : Theme.DefaultColors
+		{
+			[YuzuOptional]
+			public Color4 PanelBackground { get; set; }
+			[YuzuOptional]
+			public Color4 NodeBackground { get; set; }
+			[YuzuOptional]
+			public Color4 CurrentAnimationText { get; set; }
+			[YuzuOptional]
+			public Color4 CurrentAnimationBackground { get; set; }
+			[YuzuOptional]
+			public Color4 CurrentAnimationMarker { get; set; }
+			[YuzuOptional]
+			public Color4 RootText { get; set; }
+			[YuzuOptional]
+			public Color4 RootNodeMarker { get; set; }
+			[YuzuOptional]
+			public Color4 RootBackground { get; set; }
 		}
 
 		public class RemoteScriptingColors : Theme.DefaultColors
@@ -305,6 +335,8 @@ namespace Tangerine.UI
 		public KeyboardColors Keyboard { get; set; }
 		[YuzuOptional]
 		public HierarchyColors Hierarchy { get; set; }
+		[YuzuOptional]
+		public AnimationsColors Animations { get; set; }
 		[YuzuOptional]
 		public RemoteScriptingColors RemoteScripting { get; set; }
 
@@ -445,6 +477,7 @@ namespace Tangerine.UI
 				StripeBackground2 = basic.GrayBackground.Lighten(0.05f),
 				EasingSpline = basic.SelectedBorder,
 				EasingControls = basic.GrayText,
+				RootNode = new Color4(253, 131, 0),
 			};
 			var keyboard = new KeyboardColors {
 				BlackText = Color4.White,
@@ -458,6 +491,20 @@ namespace Tangerine.UI
 			};
 			var hierarchy = new HierarchyColors {
 				MatchColor = Color4.Yellow.Darken(0.5f).Transparentify(0.6f),
+				DefaultBackground = inspector.StripeBackground2,
+				HoveredBackground = new Color4(74, 85, 102, 132),
+				SelectedBackground = new Color4(75, 97, 125, 139),
+				SelectedInactiveBackground = new Color4(107, 107, 107, 102),
+			};
+			var animations = new AnimationsColors {
+				PanelBackground = hierarchy.DefaultBackground,
+				NodeBackground = new Color4(68, 68, 68),
+				CurrentAnimationText = basic.BlackText,
+				CurrentAnimationBackground =  inspector.StripeBackground2,
+				CurrentAnimationMarker = new Color4(76, 175, 80),
+				RootText = basic.BlackText,
+				RootNodeMarker = new Color4(253, 131, 0),
+				RootBackground = new Color4(68, 68, 68),
 			};
 			var remoteScripting = new RemoteScriptingColors {
 				AssemblyDefaultIcon = new Color4(204, 204, 204),
@@ -477,6 +524,7 @@ namespace Tangerine.UI
 				Inspector = inspector,
 				Keyboard = keyboard,
 				Hierarchy = hierarchy,
+				Animations = animations,
 				RemoteScripting = remoteScripting,
 			};
 		}
@@ -604,6 +652,7 @@ namespace Tangerine.UI
 				StripeBackground2 = basic.GrayBackground.Darken(0.05f),
 				EasingSpline = basic.SelectedBorder,
 				EasingControls = basic.GrayText,
+				RootNode = new Color4(253, 131, 0),
 			};
 			var keyboard = new KeyboardColors {
 				BlackText = Color4.Black,
@@ -617,6 +666,20 @@ namespace Tangerine.UI
 			};
 			var hierarchy = new HierarchyColors {
 				MatchColor = Color4.Yellow.Transparentify(0.6f),
+				DefaultBackground = inspector.StripeBackground1,
+				HoveredBackground = new Color4(205, 232, 255, 189),
+				SelectedBackground = new Color4(160, 211, 255, 122),
+				SelectedInactiveBackground = new Color4(190, 190, 190, 139),
+			};
+			var animations = new AnimationsColors {
+				PanelBackground = new Color4(240, 240, 240),
+				NodeBackground = inspector.StripeBackground2,
+				CurrentAnimationText = basic.BlackText,
+				CurrentAnimationBackground = inspector.StripeBackground1,
+				CurrentAnimationMarker = new Color4(76, 175, 80),
+				RootText = basic.BlackText,
+				RootNodeMarker = new Color4(253, 131, 0),
+				RootBackground = inspector.StripeBackground2,
 			};
 			var remoteScripting = new RemoteScriptingColors {
 				AssemblyDefaultIcon = Color4.Black.Lighten(0.7f),
@@ -636,6 +699,7 @@ namespace Tangerine.UI
 				Inspector = inspector,
 				Keyboard = keyboard,
 				Hierarchy = hierarchy,
+				Animations = animations,
 				RemoteScripting = remoteScripting,
 			};
 		}

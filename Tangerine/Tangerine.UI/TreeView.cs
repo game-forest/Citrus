@@ -212,6 +212,8 @@ namespace Tangerine.UI
 			}
 		}
 
+		public TreeViewItem HoveredItem { get; private set; }
+
 		public TreeView(
 			ThemedScrollView scrollView,
 			ITreeViewPresentation presentation,
@@ -304,6 +306,7 @@ namespace Tangerine.UI
 			}));
 			scrollContent.Gestures.Add(dg);
 			scrollContent.Layout = new VBoxLayout();
+			scrollContent.Tasks.Add(HandleHover);
 			if (options.HandleCommands) {
 				scrollContent.Tasks.Add(HandleCommands);
 			}
@@ -652,6 +655,25 @@ namespace Tangerine.UI
 			}
 		}
 
+		private IEnumerator<object> HandleHover()
+		{
+			while (true) {
+				if (HoveredItem != null || scrollView.Content.IsMouseOverThisOrDescendant()) {
+					var context = WidgetContext.Current;
+					bool shouldHover =
+						(context.NodeCapturedByMouse == null ||
+						 context.NodeCapturedByMouse == context.NodeUnderMouse) &&
+						Application.WindowUnderMouse == Window.Current;
+					var hoveredItem = shouldHover ? GetItemUnderMouse() : null;
+					if (HoveredItem != hoveredItem) {
+						HoveredItem = hoveredItem;
+						Window.Current.Invalidate();
+					}
+				}
+				yield return null;
+			}
+		}
+		
 		private void Invalidate()
 		{
 			((WindowWidget)scrollView.Manager?.RootNodes[0])?.Window?.Invalidate();

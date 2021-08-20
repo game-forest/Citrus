@@ -163,7 +163,7 @@ namespace Lime
 			public static ColorTheme CreateDarkTheme()
 			{
 				var grayBackground = new Color4(45, 45, 48);
-				var blackText = new Color4(204, 204, 204);
+				var blackText = new Color4(255, 255, 255);
 				return new ColorTheme {
 					BlackText = blackText,
 					RedText = new Color4(255, 100, 100),

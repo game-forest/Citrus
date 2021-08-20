@@ -27,7 +27,7 @@ namespace Tangerine.Panels
 			ToolbarButton expandAll, collapseAll, showAll, showCurrent;
 			contentWidget = new Frame {
 				Id = nameof(AnimationsPanel),
-				Padding = new Thickness(5),
+				Padding = new Thickness(0),
 				Layout = new VBoxLayout { Spacing = 5 },
 				Nodes = {
 					new Frame {
@@ -64,6 +64,7 @@ namespace Tangerine.Panels
 					}
 				}
 			};
+			scrollView.CompoundPresenter.Add(new WidgetFlatFillPresenter(ColorTheme.Current.Animations.PanelBackground));
 			var itemProvider = new TreeViewItemProvider {
 				IsSearchActiveGetter = () => searchStringEditor.Text.Length > 0,
 				ItemStateProvider = sceneItem => {
@@ -844,6 +845,8 @@ namespace Tangerine.Panels
 
 		private class CommonTreeViewItemPresentation
 		{
+			private static ColorTheme.HierarchyColors HierarchyColors => ColorTheme.Current.Hierarchy;
+
 			private readonly Widget ExpandButtonContainer;
 			public readonly TreeViewItem Item;
 			public readonly ToolbarButton ExpandButton;
@@ -851,12 +854,16 @@ namespace Tangerine.Panels
 			public readonly Widget IndentationSpacer;
 			public readonly TreeView TreeView;
 			public Widget Widget { get; }
+			public Color4 MarkerColor { get; set; }
+			public Color4 BackgroundColor { get; set; }
 
 			public CommonTreeViewItemPresentation(
 				TreeView treeView, TreeViewItem item, TreeViewItemPresentationOptions options)
 			{
 				TreeView = treeView;
 				Item = item;
+				MarkerColor = Color4.Transparent;
+				BackgroundColor = HierarchyColors.DefaultBackground;
 				Widget = new Widget {
 					MinMaxHeight = TimelineMetrics.DefaultRowHeight,
 					Layout = new HBoxLayout {
@@ -865,11 +872,24 @@ namespace Tangerine.Panels
 					Padding = new Thickness { Right = 10 },	// Add padding for the scrollbar.
 					Presenter = new SyncDelegatePresenter<Widget>(w => {
 						w.PrepareRendererState();
-						Renderer.DrawRect(
-							Vector2.Zero, w.Size,
-							Item.Selected ? Widget.Focused == w.Parent ? Theme.Colors.SelectedBackground :
-							Theme.Colors.SelectedInactiveBackground : Theme.Colors.WhiteBackground
-						);
+						Renderer.DrawRect(Vector2.Zero, w.Size, BackgroundColor);
+						bool isSelected = Item.Selected;
+						bool isHovered = Item == TreeView.HoveredItem;
+						if (isSelected | isHovered) {
+							Renderer.PushState(RenderState.Blending);
+							Renderer.Blending = Blending.Add;
+							if (isSelected) {
+								var color = w.ParentWidget.IsFocused() ?
+									HierarchyColors.SelectedBackground :
+									HierarchyColors.SelectedInactiveBackground;
+								Renderer.DrawRect(Vector2.Zero, w.Size, color);
+							}
+							if (isHovered) {
+								Renderer.DrawRect(Vector2.Zero, w.Size, HierarchyColors.HoveredBackground);
+							}
+							Renderer.PopState();
+						}
+						Renderer.DrawRect(Vector2.Zero, new Vector2(4, w.Size.Y), MarkerColor);
 						HighlightLabel(Widget, Label, options.SearchStringGetter?.Invoke());
 					})
 				};
@@ -1155,6 +1175,12 @@ namespace Tangerine.Panels
 				this.itemProvider = itemProvider;
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 				Label.Components.Add(new TooltipComponent(() => ((NodeTreeViewItem)Item).Tooltip));
+				BackgroundColor = ColorTheme.Current.Animations.NodeBackground;
+				if (((NodeTreeViewItem)Item).Node == Document.Current.RootNode) {
+					MarkerColor = ColorTheme.Current.Animations.RootNodeMarker;
+					BackgroundColor = ColorTheme.Current.Animations.RootBackground;
+					Label.TextColor = ColorTheme.Current.Animations.RootText;
+				}
 			}
 
 			private void ShowContextMenu()
@@ -1277,6 +1303,15 @@ namespace Tangerine.Panels
 						p.Label.Font = new SerializableFont(FontPool.DefaultBoldFontName);
 					} else if (!isCurrentAnimation && isBold) {
 						p.Label.Font = new SerializableFont(FontPool.DefaultFontName);
+					}
+					if (isCurrentAnimation) {
+						p.BackgroundColor = ColorTheme.Current.Animations.CurrentAnimationBackground;
+						p.MarkerColor = ColorTheme.Current.Animations.CurrentAnimationMarker;
+						p.Label.TextColor = ColorTheme.Current.Animations.CurrentAnimationText;
+					} else {
+						p.BackgroundColor = ColorTheme.Current.Hierarchy.DefaultBackground;
+						p.MarkerColor = Color4.Transparent;
+						p.Label.TextColor = AppUserPreferences.Instance.LimeColorTheme.BlackText;
 					}
 				}
 			}
