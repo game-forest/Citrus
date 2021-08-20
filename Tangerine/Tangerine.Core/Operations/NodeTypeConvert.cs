@@ -12,7 +12,7 @@ namespace Tangerine.Core.Operations
 		public static void Perform(Row sceneItem, Type destType, Type commonParent)
 		{
 			var node = sceneItem.Components.Get<NodeRow>()?.Node;
-			if (node.ContentsPath != null) {
+			if (!string.IsNullOrEmpty(node.ContentsPath)) {
 				Console.WriteLine(
 					$"[Warning] Skipping conversion: converting nodes with non empty contents path is not supported."
 				);

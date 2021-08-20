@@ -29,7 +29,7 @@ namespace Tangerine.UI
 		{
 			if (IsValid(path)) {
 				DoTransaction(() => {
-					SetProperty(path);
+					SetProperty(string.IsNullOrEmpty(path) ? null : path);
 					try {
 						Document.Current.RefreshExternalScenes();
 					} catch (System.Exception e) {
