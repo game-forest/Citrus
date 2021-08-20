@@ -146,7 +146,8 @@ namespace Tangerine.UI.Timeline
 		{
 			var label = new ThemedSimpleText {
 				HitTestTarget = true,
-				ForceUncutText = false, // We want ellipsed text if the panel is too narrow.
+				// To display ellipsis-minified text if the panel is too narrow.
+				ForceUncutText = false,
 				VAlignment = VAlignment.Center,
 				OverflowMode = TextOverflowMode.Ellipsis,
 				LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
@@ -208,11 +209,14 @@ namespace Tangerine.UI.Timeline
 				};
 			} else {
 				button.AddTransactionClickHandler(() => {
+					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					SetProperty.Perform(
-						SceneItem.GetTimelineItemState(),
-						nameof(TimelineItemStateComponent.NodesExpanded),
-						!SceneItem.GetTimelineItemState().NodesExpanded
+						obj: SceneItem.GetTimelineItemState(),
+						propertyName: nameof(TimelineItemStateComponent.NodesExpanded),
+						value: !SceneItem.GetTimelineItemState().NodesExpanded,
+						isChangingDocument: false
 					);
+					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
 			button.Components.Add(new DisableAncestralGesturesComponent());
@@ -382,8 +386,7 @@ namespace Tangerine.UI.Timeline
 						CreateSetColorMarkCommand("Violet", 6),
 						CreateSetColorMarkCommand("Gray", 7),
 					}),
-				Command.MenuSeparator,
-				GenericCommands.ConvertToButton
+				GenericCommands.ConvertTo
 			};
 			if (NodeCompositionValidator.CanHaveChildren(Node.GetType())) {
 				menu.Insert(8, new Command("Propagate Markers", () => {
@@ -444,7 +447,14 @@ namespace Tangerine.UI.Timeline
 						nodes.Add(Node);
 					}
 					foreach (var n in nodes) {
-						SetProperty.Perform(SceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.AnimatorsExpanded), showAnimators);
+						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+						SetProperty.Perform(
+							obj: SceneItem.GetTimelineItemState(),
+							propertyName: nameof(TimelineItemStateComponent.AnimatorsExpanded),
+							value: showAnimators,
+							isChangingDocument: false
+						);
+						DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 					}
 				}
 			);

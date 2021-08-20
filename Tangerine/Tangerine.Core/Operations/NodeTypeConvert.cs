@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using Lime;
 using Tangerine.Core.Components;
 
@@ -10,13 +9,25 @@ namespace Tangerine.Core.Operations
 {
 	public static class NodeTypeConvert
 	{
-		public static Node Perform(Row sceneItem, Type destType, Type commonParent, ICollection<string> excludedProperties)
+		public static void Perform(Row sceneItem, Type destType, Type commonParent)
 		{
 			var node = sceneItem.Components.Get<NodeRow>()?.Node;
+			if (!string.IsNullOrEmpty(node.ContentsPath)) {
+				Console.WriteLine(
+					$"[Warning] Skipping conversion: converting nodes with non empty contents path is not supported."
+				);
+				return;
+			}
+			if (!NodeCompositionValidator.Validate(node.Parent.GetType(), destType)) {
+				Console.WriteLine(
+					$"[Warning] Skipping conversion: parent node of type `{node.Parent.GetType().FullName}` "
+					+ $"can't contain node of type `{destType.FullName}`"
+				);
+				return;
+			}
 			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
 			Validate(node, destType, commonParent);
 			var result = CreateNode.Perform(sceneItem.Parent, sceneItem.Parent.Rows.IndexOf(sceneItem), destType);
-			CopyProperties(node, result, excludedProperties);
 			var assetBundlePathComponent = node.Components.Get<Node.AssetBundlePathComponent>();
 			if (assetBundlePathComponent != null) {
 				result.Components.Add(Cloner.Clone(assetBundlePathComponent));
@@ -24,20 +35,35 @@ namespace Tangerine.Core.Operations
 				int j = 0;
 				var resultSceneItem = Document.Current.GetSceneItemForObject(result);
 				foreach (var i in sceneItem.Rows.ToList()) {
-					if (i.TryGetNode(out _) || i.TryGetFolder(out _)) {
+					var isNode = i.TryGetNode(out var childNode);
+					if (isNode || i.TryGetFolder(out _)) {
 						UnlinkSceneItem.Perform(i);
+						if (isNode) {
+							if (!NodeCompositionValidator.Validate(destType, childNode.GetType())) {
+								Console.WriteLine($"[Warning] Skipping child `{childNode}` of Node `{node}` " +
+									$"because it is incompatible with `{destType}`."
+								);
+								continue;
+							}
+						}
 						LinkSceneItem.Perform(resultSceneItem, j, i);
 						j = resultSceneItem.Rows.IndexOf(i) + 1;
 					}
 				}
 			}
+			CopyProperties(node, result);
 			UnlinkSceneItem.Perform(sceneItem);
 			DelegateOperation.Perform(Document.Current.RefreshSceneTree, null, false);
-			return result;
 		}
 
-		private static void CopyProperties(Node from, Node to, ICollection<string> excludedProperties)
+		private static void CopyProperties(Node from, Node to)
 		{
+			var excludedProperties = new HashSet<string> {
+				nameof(Node.Parent),
+				nameof(Node.Nodes),
+				nameof(Node.Animations),
+				nameof(Node.Animators)
+			};
 			var sourceProperties =
 				from.GetType().GetProperties()
 				.Where(prop =>
@@ -61,42 +87,60 @@ namespace Tangerine.Core.Operations
 					pair.DestProp.SetValue(to, pair.SourceProp.GetValue(from));
 				}
 			}
+			var destType = to.GetType();
+			foreach (var component in from.Components) {
+				if (!NodeCompositionValidator.ValidateComponentType(destType, component.GetType())) {
+					Console.WriteLine($"[Warning] Node {from} has component {component} " +
+						$"that will be incompatible with {destType}, skipping.");
+					continue;
+				}
+				if (component.GetType().GetCustomAttribute<NodeComponentDontSerializeAttribute>(true) != null) {
+					continue;
+				}
+				to.Components.Add(Cloner.Clone(component));
+			}
 			foreach (var animator in from.Animators) {
+				var (propertyDataOfSourceNode, animableOfSourceNode, _) =
+					AnimationUtils.GetPropertyByPath(from, animator.TargetPropertyPath);
+				var (propertyDataOfTargetNode, animableOfTargetNode, _) =
+					AnimationUtils.GetPropertyByPath(to, animator.TargetPropertyPath);
+				if (
+					animableOfTargetNode == null ||
+					propertyDataOfTargetNode.Info.PropertyType != propertyDataOfSourceNode.Info.PropertyType
+				) {
+					Console.WriteLine($"[Warning] Node {from} has animator on property " +
+						$"{animator.TargetPropertyPath}, which doesn't exist in {destType}, skipping.");
+					continue;
+				}
 				to.Animators.Add(Cloner.Clone(animator));
+			}
+			if (NodeCompositionValidator.CanHaveChildren(destType)) {
+				foreach (var animation in from.Animations) {
+					if (string.IsNullOrEmpty(animation.Id)) {
+						if (!to.DefaultAnimation.Markers.Any()) {
+							foreach (var m in animation.Markers) {
+								to.DefaultAnimation.Markers.Add(m.Clone());
+							}
+						} else {
+							foreach (var m in animation.Markers) {
+								Console.WriteLine(
+									$"[Warning] Removing marker '{m.Id}', frame: {m.Frame}, type: {m.Action}"
+								);
+							}
+						}
+						continue;
+					}
+					to.Animations.Add(Cloner.Clone(animation));
+				}
 			}
 		}
 
 		private static void Validate(Node source, Type destType, Type commonParent)
 		{
-			foreach (var child in source.Nodes) {
-				if (!NodeCompositionValidator.Validate(destType, child.GetType())) {
-					throw new InvalidOperationException(
-						$"Node {source} has child {child} that will be incompatible with {destType}"
-					);
-				}
-			}
-			foreach (var component in source.Components) {
-				if (!NodeCompositionValidator.ValidateComponentType(destType, component.GetType())) {
-					throw new InvalidOperationException(
-						$"Node {source} has component {component} that will be incompatible with {destType}"
-					);
-				}
-			}
 			if (!(source.GetType().IsSubclassOf(commonParent) && destType.IsSubclassOf(commonParent))) {
 				throw new InvalidOperationException(
 					$"Node {source} type or/and destination {destType} type are not subclasses of {commonParent}"
 				);
-			}
-			foreach (var animator in source.Animators) {
-				var prop = destType.GetProperty(animator.TargetPropertyPath);
-				if (
-					prop == null ||
-					prop.PropertyType != source.GetType().GetProperty(animator.TargetPropertyPath).PropertyType
-				) {
-					throw new InvalidOperationException(
-						$"Node {source} has animator on property {animator.TargetPropertyPath}, which doesn't exist in {destType}"
-					);
-				}
 			}
 		}
 	}

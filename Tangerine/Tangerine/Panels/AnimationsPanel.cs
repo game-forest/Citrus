@@ -423,7 +423,7 @@ namespace Tangerine.Panels
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
 			}
-			
+
 			nodeItems.Clear();
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
@@ -720,7 +720,7 @@ namespace Tangerine.Panels
 					});
 				}
 			}
-			
+
 			public override bool CanRename() => !Animation.IsLegacy && Animation.Id != Animation.ZeroPoseId;
 
 			public override ITexture Icon
@@ -776,7 +776,7 @@ namespace Tangerine.Panels
 			public IEnumerable<ITreeViewItemPresentationProcessor> Processors { get; }
 
 			public TreeViewPresentation(
-				TreeViewItemProvider itemProvider, 
+				TreeViewItemProvider itemProvider,
 				TreeViewItemPresentationOptions options,
 				Func<TreeViewMode> treeViewModeGetter
 			) {
@@ -995,10 +995,10 @@ namespace Tangerine.Panels
 				Icon = IconPool.GetTexture("Universal.NoEdit"),
 				Text = "This animation has insufficient priority for editing."
 			};
-			
+
 			private readonly Func<TreeViewMode> treeViewModeGetter;
 			private readonly Image warningWidget;
-			
+
 			private string warningText;
 
 			public AnimationTreeViewItemPresentation(
@@ -1078,7 +1078,7 @@ namespace Tangerine.Panels
 				});
 				UpdateWarnings(TreeView, treeViewModeGetter());
 			}
-			
+
 			public static void UpdateWarnings(TreeView treeView, TreeViewMode mode)
 			{
 				var activeAnimation = Document.Current.Animation;
@@ -1117,25 +1117,25 @@ namespace Tangerine.Panels
 						SetWarning(activePresentation, insufficientPriorityWarning);
 					}
 				}
-				
+
 				void ClearWarning(AnimationTreeViewItemPresentation presentation)
 				{
 					presentation.warningText = string.Empty;
 					presentation.warningWidget.Visible = false;
 				}
-				
+
 				void SetWarning(AnimationTreeViewItemPresentation presentation, Warning warning)
 				{
 					presentation.warningText = warning.Text;
 					presentation.warningWidget.Texture = warning.Icon;
 					presentation.warningWidget.Visible = true;
 				}
-				
+
 				IEnumerable<TreeViewItem> NodeItemsFromRootToLeaves(TreeViewItemList nodeItems) =>
 					nodeItems.Count > 0 ? ((NodeTreeViewItem)nodeItems[0]).Node == Document.Current.RootNode ?
 						nodeItems : nodeItems.Reverse() : Enumerable.Empty<TreeViewItem>();
 			}
-			
+
 			private struct Warning
 			{
 				public ITexture Icon;

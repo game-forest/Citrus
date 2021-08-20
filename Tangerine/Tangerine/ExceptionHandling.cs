@@ -60,7 +60,7 @@ namespace Tangerine
 
 		private static bool TrySelectFileSavePath(out string path, string[] allowedFileTypes = null)
 		{
-			var test = Project.Current.IsDocumentUntitled(Document.Current?.Path ?? "") ?
+			var test = Project.IsDocumentUntitled(Document.Current?.Path ?? "") ?
 					Project.Current.AssetsDirectory : Path.GetDirectoryName(Document.Current?.FullPath);
 			var dlg = new FileDialog {
 				AllowedFileTypes = allowedFileTypes ?? new string[] { "txt" },

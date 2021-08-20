@@ -23,7 +23,8 @@ namespace Tangerine.UI
 
 		public bool ShowPrefix { get; set; } = true;
 
-		protected FilePropertyEditor(IPropertyEditorParams editorParams, string[] allowedFileTypes) : base(editorParams)
+		protected FilePropertyEditor(IPropertyEditorParams editorParams, string[] allowedFileTypes)
+			: base(editorParams)
 		{
 			ThemedButton button;
 			this.allowedFileTypes = allowedFileTypes;
@@ -35,7 +36,7 @@ namespace Tangerine.UI
 					(button = new ThemedButton {
 						Text = "...",
 						MinMaxWidth = 20,
-						LayoutCell = new LayoutCell(Alignment.Center)
+						LayoutCell = new LayoutCell(Alignment.Center),
 					})
 				}
 			});
@@ -43,7 +44,9 @@ namespace Tangerine.UI
 			editor.Submitted += text => SetComponent(text);
 			button.Clicked += OnSelectClicked;
 			ExpandableContent.Padding = new Thickness(24, 10, 2, 2);
-			var prefixEditor = new StringPropertyEditor(new PropertyEditorParams(ExpandableContent, prefix, nameof(PrefixData.Prefix)) { LabelWidth = 180 });
+			var prefixEditor = new StringPropertyEditor(
+				new PropertyEditorParams(ExpandableContent, prefix, nameof(PrefixData.Prefix)) { LabelWidth = 180 }
+			);
 			prefix.Prefix = GetLongestCommonPrefix(GetPaths());
 			ContainerWidget.AddChangeWatcher(() => prefix.Prefix, v => {
 				string oldPrefix = GetLongestCommonPrefix(GetPaths());
@@ -87,9 +90,16 @@ namespace Tangerine.UI
 			return result;
 		}
 
-		private void SetPathPrefix(string oldPrefix, string prefix) =>
-			this.SetProperty<T>(current => StringToValueConverter(AssetPath.CorrectSlashes(
-				Path.Combine(prefix, ValueToStringConverter(current).Substring(oldPrefix.Length).TrimStart('/')))));
+		private void SetPathPrefix(string oldPrefix, string prefix)
+		{
+			SetProperty<T>(
+				current => StringToValueConverter(
+					AssetPath.CorrectSlashes(
+						Path.Combine(prefix, ValueToStringConverter(current)[oldPrefix.Length..].TrimStart('/'))
+					)
+				)
+			);
+		}
 
 		protected abstract string ValueToStringConverter(T obj);
 
@@ -101,12 +111,14 @@ namespace Tangerine.UI
 
 		private void SetFilePath(string path)
 		{
-			string asset, type;
-			if (Utils.ExtractAssetPathOrShowAlert(path, out asset, out type) &&
-			    Utils.AssertCurrentDocument(asset, type))
-			{
+			if (
+				Utils.ExtractAssetPathOrShowAlert(path, out string asset, out string type)
+				&& Utils.AssertCurrentDocument(asset, type)
+			) {
 				if (!IsValid(asset)) {
-					AlertDialog.Show($"Asset '{asset}' missing or path contains characters other than latin letters and digits.");
+					AlertDialog.Show(
+						$"Asset '{asset}' missing or path contains characters other than Latin letters and digits."
+					);
 				} else {
 					AssignAsset(AssetPath.CorrectSlashes(asset));
 				}
@@ -136,7 +148,10 @@ namespace Tangerine.UI
 		{
 			foreach (var o in EditorParams.Objects) {
 				var validatedValues = PropertyValidator.ValidateValue(o, path, EditorParams.PropertyInfo);
-				if (validatedValues.Any(value => value.Result != ValidationResult.Ok && value.Result != ValidationResult.Info)) {
+				if (validatedValues.Any(
+						value => value.Result != ValidationResult.Ok && value.Result != ValidationResult.Info
+					)
+				) {
 					return false;
 				}
 			}
@@ -178,18 +193,28 @@ namespace Tangerine.UI
 
 		protected virtual void OnSelectClicked()
 		{
+			var initialDirectory = Project.Current.AssetsDirectory;
+			if (Directory.Exists(LastOpenedDirectory)) {
+				initialDirectory = LastOpenedDirectory;
+			}
 			var current = CoalescedPropertyValue().GetDataflow();
 			current.Poll();
 			var value = current.Value;
 			var path = ValueToStringConverter(value.Value);
+			if (
+				current.GotValue
+				&& value.IsDefined
+				&& !string.IsNullOrEmpty(path)
+				&& TryGetClosestAvailableDirectory(
+					AssetPath.Combine(Project.Current.AssetsDirectory, path), out var dir
+				)
+			) {
+				initialDirectory = dir;
+			}
 			var dlg = new FileDialog {
 				AllowedFileTypes = allowedFileTypes,
 				Mode = FileDialogMode.Open,
-				InitialDirectory =
-					current.GotValue && value.IsDefined && !string.IsNullOrEmpty(path) && TryGetClosestAvailableDirectory(
-						AssetPath.Combine(Project.Current.AssetsDirectory, path), out var dir) ?
-							dir : Directory.Exists(LastOpenedDirectory) ?
-								LastOpenedDirectory : Project.Current.AssetsDirectory
+				InitialDirectory = initialDirectory,
 			};
 			if (dlg.RunModal()) {
 				SetFilePath(dlg.FileName);

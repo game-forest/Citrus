@@ -139,7 +139,7 @@ namespace Tangerine
 			var dlg = new FileDialog {
 				AllowedFileTypes = new string[] { Document.Current.GetFileExtension() },
 				Mode = FileDialogMode.Save,
-				InitialDirectory = Project.Current.IsDocumentUntitled(Document.Current.Path) ?
+				InitialDirectory = Project.IsDocumentUntitled(Document.Current.Path) ?
 					Project.Current.AssetsDirectory : Path.GetDirectoryName(Document.Current.FullPath),
 			};
 			path = null;
