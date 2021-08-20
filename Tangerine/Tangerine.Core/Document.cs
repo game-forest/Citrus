@@ -24,9 +24,9 @@ namespace Tangerine.Core
 		Fbx
 	}
 
-	public interface ISceneViewThumbnailProvider
+	public interface ISceneViewSnapshotProvider
 	{
-		void Generate(int frame, Action<ITexture> callback);
+		void Generate(RenderTexture texture, Action callback);
 	}
 
 	public sealed class Document
@@ -42,7 +42,7 @@ namespace Tangerine.Core
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
 		private readonly ConditionalWeakTable<object, Row> sceneItemCache = new ConditionalWeakTable<object, Row>();
 		private readonly MemoryStream preloadedSceneStream = null;
-		private readonly IAnimationPositioner animationPositioner;
+		private readonly AnimationFastForwarder animationFastForwarder;
 		private static uint untitledCounter;
 
 		public static readonly string[] AllowedFileTypes = { "tan", "t3d", "fbx" };
@@ -81,7 +81,8 @@ namespace Tangerine.Core
 		/// <summary>
 		/// Document name to be displayed.
 		/// </summary>
-		public string DisplayName => (IsModified ? "*" : string.Empty) + System.IO.Path.GetFileName(Path ?? "Untitled");
+		public string DisplayName => (IsModified ? "*" : string.Empty)
+			+ System.IO.Path.GetFileName(Path ?? "Untitled");
 
 		/// <summary>
 		/// Gets or sets the file format the document should be saved to.
@@ -95,7 +96,7 @@ namespace Tangerine.Core
 		/// </summary>
 		public Node RootNode { get; private set; }
 
-		public ISceneViewThumbnailProvider SceneViewThumbnailProvider { get; set; }
+		public ISceneViewSnapshotProvider SceneViewSnapshotProvider { get; set; }
 
 		private Node container;
 
@@ -117,7 +118,8 @@ namespace Tangerine.Core
 		public NodeManager Manager { get; }
 
 		/// <summary>
-		/// Gets or sets the scene we are navigated from. Need for getting back into the main scene from the external one.
+		/// Gets or sets the scene we are navigated from.
+		/// Required for getting back into the main scene from the external one.
 		/// </summary>
 		public string SceneNavigatedFrom { get; set; }
 
@@ -237,7 +239,7 @@ namespace Tangerine.Core
 				if (animation != value) {
 					animation = value;
 					if (animation != null) {
-						animationPositioner.SetAnimationTime(animation, value.Time, true);
+						animationFastForwarder.FastForward(animation, 0, value.Frame, true);
 					}
 					BumpSceneTreeVersion();
 				}
@@ -248,7 +250,7 @@ namespace Tangerine.Core
 
 		public string AnimationId => Animation.Id;
 
-		private static NodeManager CreateDefaultManager()
+		public static NodeManager CreateDefaultManager()
 		{
 			var services = new ServiceRegistry();
 			services.Add(new BehaviorSystem());
@@ -281,7 +283,7 @@ namespace Tangerine.Core
 			};
 			History.DocumentChanged += () => fullHierarchyChangeTime = DateTime.Now;
 			Manager = ManagerFactory?.Invoke() ?? CreateDefaultManager();
-			animationPositioner = new AnimationPositioner(Manager);
+			animationFastForwarder = new AnimationFastForwarder();
 			SceneTreeBuilder = new SceneTreeBuilder(o => {
 				var item = GetSceneItemForObject(o);
 				if (item.Parent != null || item.Rows.Count > 0) {
@@ -534,7 +536,8 @@ namespace Tangerine.Core
 		/// <summary>
 		/// Contains all the external scenes even those which are not currently opened in the tangerine.
 		/// </summary>
-		private static readonly Dictionary<string, (Document, SHA256)> externalScenesCache = new Dictionary<string, (Document, SHA256)>();
+		private static readonly Dictionary<string, (Document, SHA256)> externalScenesCache =
+			new Dictionary<string, (Document, SHA256)>();
 
 		/// <summary>
 		/// Denotes the timestamp when hierarchy (including content of external scenes) was changed.
@@ -581,8 +584,9 @@ namespace Tangerine.Core
 			ForceAnimationUpdate();
 		}
 
-		private Document GetExternalSceneDocument(HashSet<string> scenesBeingRefreshed, string path, Type ownerNodeType)
-		{
+		private Document GetExternalSceneDocument(
+			HashSet<string> scenesBeingRefreshed, string path, Type ownerNodeType
+		) {
 			var document = Project.Current.Documents.FirstOrDefault(i => i.Path == path);
 			var contentHash = new SHA256();
 			if (document != null) {
@@ -594,7 +598,8 @@ namespace Tangerine.Core
 				if (assetPath != null) {
 					contentHash = AssetBundle.Current.GetFileContentsHash(assetPath);
 					if (assetPath.EndsWith(".t3d")) {
-						var attachmentPath = System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
+						var attachmentPath =
+							System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
 						if (AssetBundle.Current.FileExists(attachmentPath)) {
 							contentHash = SHA256.Compute(contentHash,
 								AssetBundle.Current.GetFileContentsHash(attachmentPath));
@@ -722,7 +727,7 @@ namespace Tangerine.Core
 			History.AddSavePoint();
 			Path = path;
 			Directory.CreateDirectory(System.IO.Path.GetDirectoryName(FullPath));
-			ExportNodeToFile(FullPath, Path, Format, RootNodeUnwrapped);
+			ExportNodeToFile(FullPath, Path, RootNodeUnwrapped);
 			if (Format == DocumentFormat.Tan) {
 				DocumentPreview.AppendToFile(FullPath, Preview);
 			}
@@ -733,11 +738,15 @@ namespace Tangerine.Core
 
 		public void ExportToFile(string filePath, string assetPath, FileAttributes attributes = 0)
 		{
-			ExportNodeToFile(filePath, assetPath, Format, RootNodeUnwrapped, attributes);
+			ExportNodeToFile(filePath, assetPath, RootNodeUnwrapped, attributes);
 		}
 
-		public static void ExportNodeToFile(string filePath, string assetPath, DocumentFormat format, Node node, FileAttributes attributes = 0)
-		{
+		public static void ExportNodeToFile(
+			string filePath,
+			string assetPath,
+			Node node,
+			FileAttributes attributes = 0
+		) {
 			// Save the document into memory at first to avoid a torn file in the case of a serialization error.
 			var ms = new MemoryStream();
 			// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().
@@ -899,7 +908,7 @@ namespace Tangerine.Core
 
 		public void SetAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
-			animationPositioner.SetAnimationFrame(animation, frameIndex, stopAnimations);
+			animationFastForwarder.FastForward(animation, 0, frameIndex, stopAnimations);
 		}
 
 		public void TogglePreviewAnimation()

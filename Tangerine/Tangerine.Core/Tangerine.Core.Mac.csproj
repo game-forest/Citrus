@@ -59,7 +59,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimationPositioner.cs" />
+    <Compile Include="AnimationFastForwarder.cs" />
     <Compile Include="AnimationTrackEditorState.cs" />
     <Compile Include="AssetDatabase.cs" />
     <Compile Include="Commands\OrangeCommands.cs" />

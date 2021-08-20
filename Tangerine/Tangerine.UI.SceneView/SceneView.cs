@@ -139,7 +139,7 @@ namespace Tangerine.UI.SceneView
 					renderChain.Clear();
 				}
 #if PROFILER
-				ro.IsThumbnailOwner = SceneViewThumbnailProvider.IsGettingRenderObjects;
+				ro.IsThumbnailOwner = SceneViewSnapshotProvider.IsGettingRenderObjects;
 				ro.Frame = new RenderObject.FrameInfo {
 					Transform = node.Parent.AsWidget.LocalToWorldTransform,
 					Size = (Size)node.Parent.AsWidget.Size
@@ -180,7 +180,8 @@ namespace Tangerine.UI.SceneView
 				public override void Render()
 				{
 					Renderer.PushState(RenderState.All);
-					// Hack: use the current state of Transform2 since it may be configured for generating SceneViewThumbnail.
+					// Hack: use the current state of Transform2
+					// since it may be configured for generating SceneViewThumbnail.
 					var sceneTransform2 = LocalToWorldTransform * Renderer.Transform2;
 					Renderer.Transform2 = sceneTransform2;
 #if PROFILER
@@ -304,22 +305,33 @@ namespace Tangerine.UI.SceneView
 			DropFilesGesture.Recognized += new ImagesDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 			DropFilesGesture.Recognized += new AudiosDropHandler().Handle;
 			DropFilesGesture.Recognized += new ScenesDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
-			DropFilesGesture.Recognized += new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
+			DropFilesGesture.Recognized +=
+				new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 		}
 
 		private void CenterDocumentRoot(Node node)
 		{
-			// Before Frame awakens something is being changed on this frame enough to change Frame Size on LayoutManager.Layout()
+			// Before Frame awakens something is being changed on this frame
+			// enough to change Frame Size on LayoutManager.Layout()
 			// which will come at the end of the frame. Force it now to get accurate Frame.Size;
 			WidgetContext.Current.Root.LayoutManager.Layout();
 			var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
 			var widget = Document.Current.RootNode.AsWidget;
 			var frameWidth = Frame.Width - rulerSize;
 			var frameHeight = Frame.Height - ZoomWidget.FrameHeight - rulerSize;
-			var wantedZoom = Mathf.Clamp(Mathf.Min(frameWidth / (widget.Width * widget.Scale.X), frameHeight / (widget.Height * widget.Scale.Y)), 0.0f, 1.0f);
+			var wantedZoom = Mathf.Clamp(
+				Mathf.Min(
+					frameWidth / (widget.Width * widget.Scale.X),
+					frameHeight / (widget.Height * widget.Scale.Y)
+				),
+				0.0f,
+				1.0f
+			);
 			var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
 			Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
-			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale + new Vector2(frameWidth * 0.5f, frameHeight * 0.5f) + Vector2.One * rulerSize;
+			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
+				+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
+				+ Vector2.One * rulerSize;
 		}
 
 		private void OnBeforeFilesDrop()
@@ -328,7 +340,8 @@ namespace Tangerine.UI.SceneView
 				Window.Current.Activate();
 				InputArea.SetFocus();
 			}
-			mousePositionOnFilesDrop = MousePosition * Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
+			mousePositionOnFilesDrop =
+				MousePosition * Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 		}
 
 		private static void FilesDropNodePostProcessor(Node node)
@@ -341,7 +354,7 @@ namespace Tangerine.UI.SceneView
 		public void Attach()
 		{
 			Instance = this;
-			Document.Current.SceneViewThumbnailProvider = new SceneViewThumbnailProvider(Document.Current, Frame);
+			Document.Current.SceneViewSnapshotProvider = new SceneViewSnapshotProvider(Frame);
 			Panel.AddNode(AnimeshPanel.RootNode);
 			Panel.AddNode(ShowNodeDecorationsPanelButton);
 			Panel.AddNode(ZoomWidget);
@@ -453,8 +466,9 @@ namespace Tangerine.UI.SceneView
 		public Type NodeType { get; set; }
 		public ICommand Command { get; set; }
 
-		public static bool Consume<T>(ComponentCollection<Component> components, out Type nodeType, out ICommand command) where T : Node
-		{
+		public static bool Consume<T>(
+			ComponentCollection<Component> components, out Type nodeType, out ICommand command
+		) where T : Node {
 			var c = components.Get<CreateNodeRequestComponent>();
 			if (c != null && (c.NodeType.IsSubclassOf(typeof(T)) || c.NodeType == typeof(T))) {
 				components.Remove<CreateNodeRequestComponent>();
@@ -469,25 +483,20 @@ namespace Tangerine.UI.SceneView
 
 		public static bool Consume<T>(ComponentCollection<Component> components) where T : Node
 		{
-			Type type;
-			ICommand command;
-			return Consume<T>(components, out type, out command);
+			return Consume<T>(components, out Type type, out ICommand command);
 		}
 
 		public static bool Consume<T>(ComponentCollection<Component> components, out ICommand command) where T : Node
 		{
-			Type type;
-			return Consume<T>(components, out type, out command);
+			return Consume<T>(components, out Type type, out command);
 		}
 	}
 
-	public class SceneViewThumbnailProvider : ISceneViewThumbnailProvider
+	public class SceneViewSnapshotProvider : ISceneViewSnapshotProvider
 	{
 		private readonly RenderChain renderChain = new RenderChain();
 		private readonly RenderObjectList renderList = new RenderObjectList();
-		private readonly Document document;
 		private readonly Widget sceneViewFrame;
-		private RenderTexture texture;
 
 #if PROFILER
 		/// <summary>
@@ -496,13 +505,12 @@ namespace Tangerine.UI.SceneView
 		internal static bool IsGettingRenderObjects { get; private set; }
 #endif // PROFILER
 
-		public SceneViewThumbnailProvider(Document document, Widget sceneViewFrame)
+		public SceneViewSnapshotProvider(Widget sceneViewFrame)
 		{
-			this.document = document;
 			this.sceneViewFrame = sceneViewFrame;
 		}
 
-		public void Generate(int frame, Action<ITexture> callback)
+		public void Generate(RenderTexture texture, Action callback)
 		{
 			var sceneSize = sceneViewFrame.Size;
 			var thumbSize = new Vector2(200);
@@ -511,11 +519,7 @@ namespace Tangerine.UI.SceneView
 			} else {
 				thumbSize.X *= sceneSize.X / sceneSize.Y;
 			}
-			var ap = new AnimationPositioner(Document.Current.Manager);
-			var savedTime = document.Animation.Time;
-			var savedIsRunning = Document.Current.Animation.IsRunning;
 			renderChain.Clear();
-			ap.SetAnimationFrame(document.Animation, frame, stopAnimations: true);
 			sceneViewFrame.RenderChainBuilder?.AddToRenderChain(renderChain);
 			renderList.Clear();
 #if PROFILER
@@ -525,20 +529,11 @@ namespace Tangerine.UI.SceneView
 #if PROFILER
 			IsGettingRenderObjects = false;
 #endif // PROFILER
-			ap.SetAnimationTime(document.Animation, savedTime, stopAnimations: true);
-			Document.Current.Animation.IsRunning = savedIsRunning;
-			Window.Current.InvokeOnRendering(() => RenderThumbnail(callback));
+			Window.Current.InvokeOnRendering(() => RenderThumbnail(texture, callback));
 		}
 
-		private void RenderThumbnail(Action<ITexture> callback)
+		private void RenderThumbnail(RenderTexture texture, Action callback)
 		{
-			var pixelScale = Window.Current.PixelScale;
-			var scaledWidth = (int)(sceneViewFrame.Width * pixelScale);
-			var scaledHeight = (int)(sceneViewFrame.Height * pixelScale);
-			if (texture == null || texture.ImageSize != new Size(scaledWidth, scaledHeight)) {
-				texture?.Dispose();
-				texture = new RenderTexture(scaledWidth, scaledHeight);
-			}
 			if (sceneViewFrame.Width > 0 && sceneViewFrame.Height > 0) {
 				texture.SetAsRenderTarget();
 				Renderer.PushState(
@@ -562,7 +557,7 @@ namespace Tangerine.UI.SceneView
 				renderList.Render();
 				Renderer.PopState();
 				texture.RestoreRenderTarget();
-				callback?.Invoke(texture);
+				callback?.Invoke();
 			}
 		}
 	}

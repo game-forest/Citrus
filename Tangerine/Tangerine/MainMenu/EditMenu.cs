@@ -94,7 +94,7 @@ namespace Tangerine
 						clone.LoadExternalScenes();
 						clone.ContentsPath = null;
 						int removedAnimatorsCount = clone.RemoveDanglingAnimators();
-						Document.ExportNodeToFile(dlg.FileName, assetPath, Document.Current.Format, clone);
+						Document.ExportNodeToFile(dlg.FileName, assetPath, clone);
 						if (removedAnimatorsCount != 0) {
 							var message = "Your exported content has references to external animations. It's forbidden.\n";
 							if (removedAnimatorsCount == 1) {
