@@ -5,7 +5,8 @@ namespace Tangerine.UI
 {
 	public class ContentsPathPropertyEditor : FilePropertyEditor<string>
 	{
-		public ContentsPathPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams, Document.AllowedFileTypes)
+		public ContentsPathPropertyEditor(IPropertyEditorParams editorParams)
+			: base(editorParams, Document.AllowedFileTypes)
 		{ }
 
 		protected override bool IsValid(string path)
@@ -18,10 +19,8 @@ namespace Tangerine.UI
 				if (resolvedPath == null || !AssetBundle.Current.FileExists(resolvedPath)) {
 					return false;
 				}
-				string assetPath;
-				string assetType;
-				return Utils.ExtractAssetPathOrShowAlert(path, out assetPath, out assetType)
-				       && Utils.AssertCurrentDocument(assetPath, assetType);
+				return Utils.ExtractAssetPathOrShowAlert(path, out string assetPath, out string assetType)
+					&& Utils.AssertCurrentDocument(assetPath, assetType);
 			}
 			return false;
 		}
@@ -44,14 +43,8 @@ namespace Tangerine.UI
 			}
 		}
 
-		protected override string ValueToStringConverter(string obj)
-		{
-			return obj ?? "";
-		}
+		protected override string ValueToStringConverter(string obj) => obj ?? "";
 
-		protected override string StringToValueConverter(string path)
-		{
-			return path;
-		}
+		protected override string StringToValueConverter(string path) => path;
 	}
 }

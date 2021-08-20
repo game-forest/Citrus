@@ -19,9 +19,13 @@ namespace Tangerine.UI.SceneView
 				if (sv.Input.WasKeyPressed(Key.Escape) || sv.Input.WasMousePressed(1)) {
 					nodeTypeActive = null;
 				}
-				Type nodeTypeIncome;
-				ICommand newCommand;
-				if (CreateNodeRequestComponent.Consume<Widget>(sv.Components, out nodeTypeIncome, out newCommand)) {
+				if (
+					CreateNodeRequestComponent.Consume<Widget>(
+						sv.Components,
+						out Type nodeTypeIncome,
+						out ICommand newCommand
+					)
+				) {
 					nodeTypeActive = nodeTypeIncome;
 					command.Checked = false;
 					command = newCommand;
@@ -39,9 +43,13 @@ namespace Tangerine.UI.SceneView
 				}
 				if (
 					!SceneTreeUtils.GetSceneItemLinkLocation(
-						out var containerSceneItem, out var linkLocation, nodeTypeActive, aboveFocused: true,
+						parent: out var containerSceneItem,
+						index: out var linkLocation,
+						insertingType: nodeTypeActive,
+						aboveFocused: true,
 						raiseThroughHierarchyPredicate: i =>
-							!LinkSceneItem.CanLink(i, (Node)Activator.CreateInstance(nodeTypeActive)))
+							!LinkSceneItem.CanLink(i, (Node)Activator.CreateInstance(nodeTypeActive))
+					)
 				) {
 					throw new InvalidOperationException();
 				}
