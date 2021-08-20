@@ -55,8 +55,18 @@ namespace Orange
 			return (assembly = assemblies.SingleOrDefault(e => e.Name == assemblyName).Assembly) != null;
 		}
 
-		public IEnumerator<(string Name, Assembly Assembly)> GetEnumerator() => assemblies.GetEnumerator();
 
-		IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)assemblies).GetEnumerator();
+		public IEnumerator<(string Name, Assembly Assembly)> GetEnumerator()
+		{
+			// Assemblies may be loaded while being enumerated.
+			// This will allow to enumerate all loaded assemblies.
+			int i = 0;
+			while (i < assemblies.Count) {
+				yield return assemblies[i];
+				i++;
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 	}
 }
