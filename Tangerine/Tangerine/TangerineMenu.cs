@@ -67,7 +67,7 @@ namespace Tangerine
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
 			var registeredNodeTypes =
 				Project.Current == Project.Null
-				? Project.GetNodesTypesOrdered("Lime")
+				? Project.GetNodeTypesOrdered("Lime")
 				: Project.Current.RegisteredNodeTypes;
 			foreach (var type in registeredNodeTypes) {
 				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
@@ -237,7 +237,7 @@ namespace Tangerine
 				}),
 			};
 			create.Add(customNodes = new Command("Custom Nodes", new Menu()));
-			foreach (var t in Project.GetNodesTypesOrdered("Lime")) {
+			foreach (var t in Project.GetNodeTypesOrdered("Lime")) {
 				var cmd = new Command(t.Name);
 				if (NodeIconPool.TryGetIcon(t, out var icon)) {
 					cmd.Icon = icon;

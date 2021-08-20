@@ -32,7 +32,11 @@ namespace Tangerine.UI
 
 		private static Icon CreateIcon(string id, string defaultId = null)
 		{
-			if (TryCreateIcon(id, out var icon) || !string.IsNullOrEmpty(defaultId) && TryCreateIcon(defaultId, out icon)) {
+			if (
+				TryCreateIcon(id, out var icon)
+				|| !string.IsNullOrEmpty(defaultId)
+				&& TryCreateIcon(defaultId, out icon)
+			) {
 				return icon;
 			}
 			throw new ArgumentException($"Icon '{id}' doesn't exist");
@@ -41,9 +45,9 @@ namespace Tangerine.UI
 		private static bool TryCreateIcon(string id, out Icon icon)
 		{
 			icon = null;
-			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+			foreach (var (name, assembly) in Orange.AssemblyTracker.Instance) {
 				try {
-					var png = new ThemedIconResource(id, assembly.GetName().Name).GetResourceStream();
+					var png = new ThemedIconResource(id, name).GetResourceStream();
 					if (png != null) {
 						icon = new Icon(new Bitmap(png));
 						return true;

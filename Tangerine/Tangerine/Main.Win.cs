@@ -1,8 +1,7 @@
 #if WIN
 using System;
-using System.Collections.Generic;
-using Lime;
 using System.Linq;
+using Lime;
 
 namespace Tangerine
 {
@@ -12,7 +11,7 @@ namespace Tangerine
 		public static void Main(string[] args)
 		{
 			var thisExe = System.Reflection.Assembly.GetExecutingAssembly();
-			string [] resources = thisExe.GetManifestResourceNames();
+			_ = thisExe.GetManifestResourceNames();
 			var supportedRenderingBackends = Lime.Application.EnumerateSupportedRenderingBackends().ToList();
 			var renderingBackend = RenderingBackend.OpenGL;
 			if (supportedRenderingBackends.Contains(RenderingBackend.Vulkan)) {

@@ -143,8 +143,8 @@ namespace Tangerine.Core
 						Node.Load<Widget>(Path.ChangeExtension(file, null), null));
 				}
 			}
-			registeredNodeTypes.AddRange(GetNodesTypesOrdered("Lime"));
-			registeredComponentTypes.AddRange(GetComponentsTypes("Lime"));
+			registeredNodeTypes.AddRange(GetNodeTypesOrdered("Lime"));
+			registeredComponentTypes.AddRange(GetComponentTypes("Lime"));
 			foreach (var type in PluginLoader.EnumerateTangerineExportedTypes()) {
 				if (typeof(Node).IsAssignableFrom(type)) {
 					registeredNodeTypes.Add(type);
@@ -528,10 +528,9 @@ namespace Tangerine.Core
 			DocumentSaved?.Invoke(document);
 		}
 
-		public static IEnumerable<Type> GetNodesTypesOrdered(string assemblyName)
+		public static IEnumerable<Type> GetNodeTypesOrdered(string assemblyName)
 		{
-			var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == assemblyName);
-			if (assembly == null) {
+			if (!AssemblyTracker.Instance.TryGetAssemblyByName(assemblyName, out var assembly)) {
 				return new List<Type>();
 			}
 			return assembly
@@ -542,10 +541,9 @@ namespace Tangerine.Core
 				.Select(kv => kv.Key);
 		}
 
-		public static IEnumerable<Type> GetComponentsTypes(string assemblyName)
+		public static IEnumerable<Type> GetComponentTypes(string assemblyName)
 		{
-			var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == assemblyName);
-			if (assembly == null) {
+			if (!AssemblyTracker.Instance.TryGetAssemblyByName(assemblyName, out var assembly)) {
 				return new List<Type>();
 			}
 			return assembly

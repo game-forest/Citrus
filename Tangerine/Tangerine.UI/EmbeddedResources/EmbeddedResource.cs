@@ -16,31 +16,15 @@ namespace Tangerine.UI
 			AssemblyName = assemblyName;
 		}
 
-		private static List<(string Name, Assembly Assembly)> assemblies = null;
+		protected Assembly GetAssembly() => Orange.AssemblyTracker.Instance.GetAssemblyByName(AssemblyName);
 
-		protected Assembly GetAssembly()
-		{
-			if (assemblies == null) {
-				assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(a => (a.GetName().Name, a)).ToList();
-			}
-			var resourcesAssembly = assemblies.SingleOrDefault(e => e.Name == AssemblyName).Assembly;
-			if (resourcesAssembly == null) {
-				throw new Lime.Exception("Assembly '{0}' doesn't exist", AssemblyName);
-			}
-			return resourcesAssembly;
-		}
-
-		public virtual System.IO.Stream GetResourceStream()
-		{
-			return GetAssembly().GetManifestResourceStream(ResourceId);
-		}
+		public virtual System.IO.Stream GetResourceStream() => GetAssembly().GetManifestResourceStream(ResourceId);
 
 		public byte[] GetResourceBytes()
 		{
-			using (var ms = new System.IO.MemoryStream()) {
-				GetResourceStream().CopyTo(ms);
-				return ms.ToArray();
-			}
+			using var ms = new System.IO.MemoryStream();
+			GetResourceStream().CopyTo(ms);
+			return ms.ToArray();
 		}
 	}
 }

@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orange
 {
@@ -19,20 +16,17 @@ namespace Orange
 
 		public System.IO.Stream GetResourceStream()
 		{
-			var resourcesAssembly = AppDomain.CurrentDomain.GetAssemblies().
-				SingleOrDefault(a => a.GetName().Name == AssemblyName);
-			if (resourcesAssembly == null) {
+			if (!AssemblyTracker.Instance.TryGetAssemblyByName(AssemblyName, out var assembly)) {
 				throw new Lime.Exception("Assembly '{0}' doesn't exist", AssemblyName);
 			}
-			return resourcesAssembly.GetManifestResourceStream(ResourceId);
+			return assembly.GetManifestResourceStream(ResourceId);
 		}
 
 		public byte[] GetResourceBytes()
 		{
-			using (var ms = new System.IO.MemoryStream()) {
-				GetResourceStream().CopyTo(ms);
-				return ms.ToArray();
-			}
+			using var ms = new System.IO.MemoryStream();
+			GetResourceStream().CopyTo(ms);
+			return ms.ToArray();
 		}
 	}
 

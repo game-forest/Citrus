@@ -48,7 +48,9 @@ namespace Orange
 		public Func<string[]> GetRequiredAssemblies;
 
 		[ImportMany(nameof(AtlasPackers), AllowRecomposition = true)]
-		public IEnumerable<Lazy<Func<string, List<TextureTools.AtlasItem>, int, int>, IAtlasPackerMetadata>> AtlasPackers { get; set; }
+		public IEnumerable<
+			Lazy<Func<string, List<TextureTools.AtlasItem>, int, int>, IAtlasPackerMetadata>
+		> AtlasPackers { get; set; }
 
 		[ImportMany(nameof(BeforeBundlesCooking), AllowRecomposition = true)]
 		public IEnumerable<Action> BeforeBundlesCooking { get; set; }
@@ -122,10 +124,8 @@ namespace Orange
 			// For some reason first call of Type.GetType on custom types doesn't find already
 			// proper loaded assembly and calls AssemblyResolve. Returning already loaded assembly
 			// solves the problem but looks like bad workaround. Need to go deeper in investigation (see CIT-1647).
-			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-				if (assembly.GetName().Name == assemblyName) {
-					return assembly;
-				}
+			if (AssemblyTracker.Instance.TryGetAssemblyByName(assemblyName, out var assembly)) {
+				return assembly;
 			}
 			foreach (var path in EnumerateCurrentApplicationPluginAssemblyPaths()) {
 				var expanded = Toolbox.ReplaceCitrusProjectSubstituteTokens(path);
@@ -194,7 +194,9 @@ namespace Orange
 					The.UI.CreatePluginUI(uiBuilder);
 				}
 			} catch (System.Exception e) {
-				Orange.UserInterface.Instance.ShowError($"Failed to build Orange Plugin UI with an error: {e.Message}\n{e.StackTrace}");
+				Orange.UserInterface.Instance.ShowError(
+					$"Failed to build Orange Plugin UI with an error: {e.Message}\n{e.StackTrace}"
+				);
 			}
 			The.MenuController.CreateAssemblyMenuItems();
 		}
@@ -250,17 +252,26 @@ namespace Orange
 		{
 			if (!assemblyPath.Contains(Toolbox.ConfigurationSubstituteToken)) {
 				Console.WriteLine(
-					$"Warning: Using '{Toolbox.ConfigurationSubstituteToken}' instead of 'Debug' or 'Release' in dll path" +
-					$" is strictly recommended ('{Toolbox.ConfigurationSubstituteToken}' line not found in {assemblyPath}");
+					$"Warning: Using '{Toolbox.ConfigurationSubstituteToken}' instead of 'Debug' or 'Release' "
+					+ $"in dll path is strictly recommended ('{Toolbox.ConfigurationSubstituteToken}' "
+					+ $"line not found in {assemblyPath}"
+				);
 			}
-			assemblyPath = Path.Combine(The.Workspace.ProjectDirectory, Toolbox.ReplaceCitrusProjectSubstituteTokens(assemblyPath));
+			assemblyPath = Path.Combine(
+				The.Workspace.ProjectDirectory,
+				Toolbox.ReplaceCitrusProjectSubstituteTokens(assemblyPath)
+			);
 			if (!File.Exists(assemblyPath)) {
-				throw new FileNotFoundException("File not found on attempt to import PluginAssemblies: " + assemblyPath);
+				throw new FileNotFoundException(
+					"File not found on attempt to import PluginAssemblies: " + assemblyPath
+				);
 			}
-			var domainAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-			if (!TryFindDomainAssembliesByPath(domainAssemblies, assemblyPath, out var assembly)) {
+			if (!TryFindDomainAssemblyByPath(
+					AssemblyTracker.Instance.Select(i => i.Assembly), assemblyPath, out var assembly
+				)
+			) {
 				var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
-				TryFindDomainAssembliesByName(domainAssemblies, assemblyName.Name, out assembly);
+				AssemblyTracker.Instance.TryGetAssemblyByName(assemblyName.Name, out assembly);
 			}
 			try {
 				if (assembly == null) {
@@ -378,19 +389,13 @@ namespace Orange
 				}
 			}
 
-			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-				var assemblyName = assembly.GetName().Name;
+			foreach (var (assemblyName, assembly) in AssemblyTracker.Instance) {
 				if (ignoredAssemblies.IsMatch(assemblyName)) {
 					continue;
 				}
-
 				Type[] allTypes = null;
 				HashSet<Type> exportedTypes = null;
 				try {
-					// dynamic assemblies don't support GetExportedTypes()
-					if (assembly.IsDynamic) {
-						continue;
-					}
 					exportedTypes = new HashSet<Type>(assembly.GetExportedTypes());
 					allTypes = assembly.GetTypes();
 				} catch (System.Exception) {
@@ -411,23 +416,19 @@ namespace Orange
 			}
 		}
 
-		private static bool TryFindDomainAssembliesByPath(Assembly[] domainAssemblies, string path, out Assembly assembly)
-		{
+		private static bool TryFindDomainAssemblyByPath(
+			IEnumerable<Assembly> domainAssemblies,
+			string path,
+			out Assembly assembly
+		) {
 			assembly = domainAssemblies.FirstOrDefault(i => {
 				try {
-					return !i.IsDynamic && !string.IsNullOrEmpty(i.Location) && string.Equals(Path.GetFullPath(i.Location), Path.GetFullPath(path), StringComparison.CurrentCultureIgnoreCase);
-				} catch {
-					return false;
-				}
-			});
-			return assembly != null;
-		}
-
-		private static bool TryFindDomainAssembliesByName(Assembly[] domainAssemblies, string name, out Assembly assembly)
-		{
-			assembly = domainAssemblies.FirstOrDefault(i => {
-				try {
-					return string.Equals(i.GetName().Name, name, StringComparison.CurrentCultureIgnoreCase);
+					return !string.IsNullOrEmpty(i.Location)
+						&& string.Equals(
+						Path.GetFullPath(i.Location),
+						Path.GetFullPath(path),
+						StringComparison.CurrentCultureIgnoreCase
+					);
 				} catch {
 					return false;
 				}

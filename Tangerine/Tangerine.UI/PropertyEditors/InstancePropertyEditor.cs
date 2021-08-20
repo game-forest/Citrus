@@ -146,16 +146,16 @@ namespace Tangerine.UI
 				if (!propertyType.IsInterface && !propertyType.IsAbstract) {
 					typesHash.Add(propertyType);
 				}
-				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+				foreach (var (name, assembly) in Orange.AssemblyTracker.Instance) {
 					try {
+						// TODO: reduce reflection usage
 						var types = assembly
 							.GetTypes()
-							.Where(t =>
-								!t.IsInterface &&
-								!t.IsAbstract &&
-								t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null &&
-								t != propertyType &&
-								propertyType.IsAssignableFrom(t)
+							.Where(t => !t.IsInterface
+								&& !t.IsAbstract
+								&& t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null
+								&& t != propertyType
+								&& propertyType.IsAssignableFrom(t)
 							).ToList();
 						foreach (var type in types) {
 							typesHash.Add(type);

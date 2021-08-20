@@ -572,9 +572,9 @@ namespace Tangerine.UI.Inspector
 							Color4.White : Color4.Black,
 						Clicked = () => {
 							if (CreateLookupForAddComponent == null) {
-								var typeHandle = AppDomain.CurrentDomain.GetAssemblies()
-									.First(a => string.Equals(a.GetName().Name, "Tangerine"))
-									.GetType("Tangerine.LookupAddComponentSection").TypeHandle;
+								// TODO: invert dependency on Tangerine assembly
+								var assembly = Orange.AssemblyTracker.Instance.GetAssemblyByName("Tangerine");
+								var typeHandle = assembly.GetType("Tangerine.LookupAddComponentSection").TypeHandle;
 								System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeHandle);
 							}
 							CreateLookupForAddComponent.Invoke();
