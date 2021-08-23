@@ -139,13 +139,32 @@ namespace Tangerine.UI
 					SetAnimableProperty.Perform(@object, name, value, CoreUserPreferences.Instance.AutoKeyframes))
 				: (@object, name, value) => SetIndexedProperty.Perform(@object, name, index, value);
 			var editorWidget = onAdd(p);
-			var removeButton = new ThemedDeleteButton {
-				Enabled = Enabled
-			};
-			editorWidget.Components.Get<PropertyEditorComponent>()
-				.PropertyEditor.EditorContainer.AddNode(removeButton);
 			ExpandableContent.Nodes.Insert(index, editorWidget);
+			var removeButton = new ThemedDeleteButton { Enabled = Enabled };
 			removeButton.Clicked += () => pendingRemovals.Add(p.IndexInList);
+			var editorContainer = editorWidget.Components.Get<PropertyEditorComponent>()
+				.PropertyEditor.EditorContainer;
+			var upButton = new ToolbarButton(IconPool.GetTexture("Universal.ArrowUp"));
+			upButton.Clicked += () => MoveItemTo(index, index - 1);
+			var downButton = new ToolbarButton(IconPool.GetTexture("Universal.ArrowDown"));
+			downButton.Clicked += () => MoveItemTo(index, index + 1);
+			editorContainer.AddNode(upButton);
+			editorContainer.AddNode(downButton);
+			editorContainer.AddNode(removeButton);
+		}
+
+		public void MoveItemTo(int index, int to)
+		{
+			if (to < 0 || to >= list.Count) {
+				return;
+			}
+			using (Document.Current.History.BeginTransaction()) {
+				var value = list[index];
+				RemoveFromList.Perform(list, index);
+				InsertIntoList.Perform(list, to, value);
+				Document.Current.History.CommitTransaction();
+			}
+			RemoveAndBuild(list.Count);
 		}
 	}
 }
