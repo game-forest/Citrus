@@ -478,6 +478,9 @@ namespace Lime
 
 			if (exclusiveChannels.Contains(channel)) {
 				exclusiveChannels.Remove(channel);
+				if (exclusiveChannelsStack.Contains(channel)) {
+					exclusiveChannelsStack.Remove(channel);
+				}
 			}
 			channel.SamplePath = path;
 			if (parameters.Exclusive) {
