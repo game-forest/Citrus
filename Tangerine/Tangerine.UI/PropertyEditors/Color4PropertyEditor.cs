@@ -7,7 +7,7 @@ using Tangerine.Core;
 
 namespace Tangerine.UI
 {
-	public class Color4PropertyEditor : ExpandablePropertyEditor<Color4>
+	public class Color4PropertyEditor : CommonPropertyEditor<Color4>
 	{
 		private EditBox editor;
 		private Color4 previousColor;
@@ -25,16 +25,21 @@ namespace Tangerine.UI
 			var currentColor = CoalescedPropertyValue(@default).DistinctUntilChanged();
 			panel.Color = currentColor.GetValue().Value;
 			EditorContainer.AddNode(new Widget {
-				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
+				Layout = new VBoxLayout(),
 				Nodes = {
-					(editor = editorParams.EditBoxFactory()),
-					Spacer.HSpacer(4),
-					(colorBox = new ColorBoxButton(currentColor)),
-					CreatePipetteButton(),
-					Spacer.HStretch(),
-				},
+					new Widget {
+						Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center) },
+						Nodes = {
+							(editor = editorParams.EditBoxFactory()),
+							Spacer.HSpacer(4),
+							(colorBox = new ColorBoxButton(currentColor)),
+							CreatePipetteButton(),
+							Spacer.HStretch()
+						},
+					},
+					panel.Widget
+				}		
 			});
-			ExpandableContent.AddNode(panel.Widget);
 			panel.Widget.Padding += new Thickness(right: 12.0f);
 			panel.Widget.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColor.Consume(v => {
 				if (panel.Color != v.Value) {
@@ -63,7 +68,6 @@ namespace Tangerine.UI
 				}
 				EditorParams.History?.EndTransaction();
 			};
-			colorBox.Clicked += () => Expanded = !Expanded;
 			var currentColorString = currentColor.Select(i => i.Value.ToString(Color4.StringPresentation.Dec));
 			editor.Submitted += text => {
 				SetComponent(text, currentColorString);

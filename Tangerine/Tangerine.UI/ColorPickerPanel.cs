@@ -8,10 +8,11 @@ namespace Tangerine.UI
 {
 	public class ColorPickerPanel
 	{
-		readonly TriangleColorWheel colorWheel;
-		readonly AlphaEditorSlider alphaEditorSlider;
+		private Dictionary<ToolbarButton, Widget> colorComponents;
+		private readonly HsvTriangleColorWheel hsvColorPicker;
+		private readonly HsvTriangleColorWheel labColorPicker;
 		public readonly Widget Widget;
-		ColorHSVA colorHSVA;
+		private ColorHSVA colorHSVA;
 
 		public event Action DragStarted;
 		public event Action DragEnded;
@@ -31,8 +32,10 @@ namespace Tangerine.UI
 			{
 				if (enabled != value) {
 					enabled = value;
-					colorWheel.Widget.Enabled = enabled;
-					alphaEditorSlider.Enabled = enabled;
+					foreach(var (button, component) in colorComponents) {
+						button.Enabled = enabled;
+						component.Enabled = enabled;
+					};
 				}
 			}
 		}
@@ -40,31 +43,46 @@ namespace Tangerine.UI
 		public ColorPickerPanel()
 		{
 			var colorProperty = new Property<ColorHSVA>(() => colorHSVA, c => colorHSVA = c);
-			colorWheel = new TriangleColorWheel(colorProperty);
-			colorWheel.DragStarted += () => DragStarted?.Invoke();
-			colorWheel.Changed += () => Changed?.Invoke();
-			colorWheel.DragEnded += () => DragEnded?.Invoke();
-			alphaEditorSlider = new AlphaEditorSlider(colorProperty);
+			hsvColorPicker = new HsvTriangleColorWheel(colorProperty);
+			hsvColorPicker.DragStarted += () => DragStarted?.Invoke();
+			hsvColorPicker.Changed += () => Changed?.Invoke();
+			hsvColorPicker.DragEnded += () => DragEnded?.Invoke();
+			hsvColorPicker.Widget.Visible = false;
+			labColorPicker = new HsvTriangleColorWheel(colorProperty);
+			labColorPicker.DragStarted += () => DragStarted?.Invoke();
+			labColorPicker.Changed += () => Changed?.Invoke();
+			labColorPicker.DragEnded += () => DragEnded?.Invoke();
+			labColorPicker.Widget.Visible = false;
+			colorComponents = new Dictionary<ToolbarButton, Widget>{
+				{new ToolbarButton("Alpha"), new AlphaEditorSlider(colorProperty)},
+				{new ToolbarButton("HSV Wheel"), hsvColorPicker.Widget},
+				{new ToolbarButton("LAB Wheel"), labColorPicker.Widget},
+				{new ToolbarButton("HSV"), new HsvEditorSlider(colorProperty)},
+				{new ToolbarButton("LAB"), new RgbEditorSlider(colorProperty)},
+				{new ToolbarButton("RGB"), new RgbEditorSlider(colorProperty)},
+			};
 			Widget = new Widget {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout { Spacing = 8 },
 				Nodes = {
 					new Widget {
-						LayoutCell = new LayoutCell(Alignment.Center),
-						Layout = new StackLayout(),
-						Nodes = {
-							colorWheel.Widget
-						}
-					},
-					alphaEditorSlider,
-					new HsvSliders(colorProperty),
-					new RgbSliders(colorProperty),
+						Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4f },
+						Padding = new Thickness(8),
+					}
 				}
 			};
+			foreach(var (button, component) in colorComponents) {
+				Widget.Nodes.Add(component);
+				button.Clicked = () => {
+					button.Checked = !button.Checked;
+					component.Visible = button.Checked;
+				};
+				Widget.Nodes[0].Nodes.Add(button);
+			}
 			Widget.FocusScope = new KeyboardFocusScope(Widget);
 		}
 
-		class TriangleColorWheel
+		class HsvTriangleColorWheel
 		{
 			private readonly Property<ColorHSVA> color;
 
@@ -83,7 +101,7 @@ namespace Tangerine.UI
 
 			private bool wasHueChanged = true;
 
-			public TriangleColorWheel(Property<ColorHSVA> color)
+			public HsvTriangleColorWheel(Property<ColorHSVA> color)
 			{
 				this.color = color;
 				Widget = new Widget {
@@ -265,7 +283,6 @@ namespace Tangerine.UI
 		{
 			protected ThemedSlider Slider { get; }
 			protected Color4[] Pixels { get; }
-
 			public PixelsSlider(string name, int min, int max, int pixelCount)
 			{
 				Layout = new LinearLayout();
@@ -301,7 +318,6 @@ namespace Tangerine.UI
 				AddNode(Slider);
 				AddNode(labelWidget);
 			}
-
 			class PixelsSliderPresenter : IPresenter
 			{
 				private readonly Color4[] pixels;
@@ -366,6 +382,7 @@ namespace Tangerine.UI
 			private static int pixelCounts = 100;
 			public AlphaEditorSlider(Property<ColorHSVA> color) : base(color, "A", 0, 1, pixelCounts)
 			{
+				Visible = false;
 			}
 
 			protected override void OnSliderValueChange()
@@ -382,9 +399,9 @@ namespace Tangerine.UI
 			}
 		}
 
-		class HsvSliders : Widget
+		class HsvEditorSlider : Widget
 		{
-			public HsvSliders(Property<ColorHSVA> color)
+			public HsvEditorSlider(Property<ColorHSVA> color)
 			{
 				Padding = new Thickness(8);
 				Layout = new VBoxLayout {Spacing = 8};
@@ -393,6 +410,7 @@ namespace Tangerine.UI
 					new SSlider(color),
 					new VSlider(color),
 				});
+				Visible = false;
 			}
 
 			class HSlider : ColorEditorSlider
@@ -463,9 +481,9 @@ namespace Tangerine.UI
 			}
 		}
 
-		class RgbSliders : Widget
+		class RgbEditorSlider : Widget
 		{
-			public RgbSliders(Property<ColorHSVA> color)
+			public RgbEditorSlider(Property<ColorHSVA> color)
 			{
 				Padding = new Thickness(8);
 				Layout = new VBoxLayout {Spacing = 8};
@@ -474,6 +492,7 @@ namespace Tangerine.UI
 					new GSlider(color),
 					new BSlider(color),
 				});
+				Visible = false;
 			}
 
 			class RSlider : ColorEditorSlider
