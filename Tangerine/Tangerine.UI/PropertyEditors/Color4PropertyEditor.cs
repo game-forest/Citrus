@@ -47,8 +47,12 @@ namespace Tangerine.UI
 					Changed?.Invoke();
 				}
 			}));
+			panel.DragStarted += () => {
+				EditorParams.History?.BeginTransaction();
+				previousColor = panel.Color;
+			};
 			panel.Changed += () => {
-				EditorParams.History?.RollbackTransaction();
+				//EditorParams.History?.RollbackTransaction();
 				if ((panel.Color.ABGR & 0xFFFFFF) == (previousColor.ABGR & 0xFFFFFF) && panel.Color.A != previousColor.A) {
 					SetProperty<Color4>(c => {
 						c.A = panel.Color.A;
@@ -57,10 +61,6 @@ namespace Tangerine.UI
 				} else {
 					SetProperty(panel.Color);
 				}
-			};
-			panel.DragStarted += () => {
-				EditorParams.History?.BeginTransaction();
-				previousColor = panel.Color;
 			};
 			panel.DragEnded += () => {
 				if (panel.Color != previousColor || (editorParams.Objects.Skip(1).Any() && SameValues())) {
