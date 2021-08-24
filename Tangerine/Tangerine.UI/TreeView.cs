@@ -216,6 +216,9 @@ namespace Tangerine.UI
 
 		public IEnumerable<TreeViewItem> SelectedItems => currentItems.Where(i => i.Selected);
 
+		public TreeViewItem LastSelectedItem =>
+			SelectedItems.OrderBy(i => i.SelectionOrder).FirstOrDefault();
+
 		public TreeView(
 			ThemedScrollView scrollView,
 			ITreeViewPresentation presentation,

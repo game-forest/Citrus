@@ -277,7 +277,7 @@ namespace Tangerine.Panels
 
 		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
 		{
-			((CommonTreeViewItem)((TreeView)sender).HoveredItem).OnCopy(args);
+			((CommonTreeViewItem)((TreeView)sender).LastSelectedItem)?.OnCopy(args);
 		}
 
 		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider)
@@ -383,7 +383,7 @@ namespace Tangerine.Panels
 					}
 					var animationPasteTo = animationSceneItem.GetAnimation();
 					var previousMarkers = animationPasteTo.Markers.ToList();
-					var pasteAtFrame = animationPasteTo.Markers.Count > 0
+					var pasteAtFrame = index < animationPasteTo.Markers.Count
 						? animationPasteTo.Markers[index].Frame
 						: 0;
 					if (
@@ -407,6 +407,7 @@ namespace Tangerine.Panels
 						return;
 					}
 					// Paste animations
+					index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 					foreach (var animation in container.Animations.ToList()) {
 						if (animation.Id == CopySceneItemsToStream.AnimationTracksContainerAnimationId) {
 							continue;
