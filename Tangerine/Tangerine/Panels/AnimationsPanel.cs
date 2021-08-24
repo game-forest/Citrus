@@ -306,27 +306,8 @@ namespace Tangerine.Panels
 			if (animationItems.Count == 0) {
 				var markers = args.Items.OfType<MarkerTreeViewItem>().Select(i => i.Marker).ToList();
 				Document.Current.History.DoTransaction(() => {
-					foreach (var g in markers.GroupBy(i => i.Owner)) {
-						var animation = g.Key;
-						var sortedMarkers = g.OrderBy(i => i.Frame).ToList();
-						var rangeBegin = sortedMarkers[0].Frame;
-						var rangeEnd = sortedMarkers[^1].Frame;
-						// Grab all markers in the given range.
-						sortedMarkers = animation.Markers.
-							Where(i => i.Frame >= rangeBegin && i.Frame <= rangeEnd).ToList();
-						if (sortedMarkers.Count > 0) {
-							foreach (var marker in markers) {
-								UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(marker));
-							}
-							if (sortedMarkers.Count > 1) {
-								foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
-									RemoveKeyframeRange.Perform(animator, sortedMarkers[0].Frame,
-										sortedMarkers[^1].Frame);
-								}
-								Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(
-									animation, rangeEnd, rangeBegin - rangeEnd - 1);
-							}
-						}
+					foreach (var marker in markers) {
+						UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(marker));
 					}
 				});
 				return;
@@ -1339,6 +1320,10 @@ namespace Tangerine.Panels
 					TreeView.ClearSelection();
 					Item.Selected = true;
 				}
+				var deleteAnimationRange = new Command { Text = "Delete Animation Range" };
+				deleteAnimationRange.Issued += () => {
+					Document.Current.History.DoTransaction(DeleteAnimationRange);
+				};
 				var properties = new Command { Text = "Properties" };
 				properties.Issued += () => {
 					Document.Current.History.DoTransaction(() => {
@@ -1346,16 +1331,50 @@ namespace Tangerine.Panels
 						var markerClone = marker.Clone();
 						var r = new MarkerPropertiesDialog().Show(markerClone, canDelete: true);
 						if (r == MarkerPropertiesDialog.Result.Ok) {
-							Core.Operations.SetMarker.Perform(markerClone, true);
+							SetMarker.Perform(markerClone, true);
 						} else if (r == MarkerPropertiesDialog.Result.Delete) {
-							Core.Operations.DeleteMarker.Perform(marker, true);
+							DeleteMarker.Perform(marker, true);
 						}
 					});
 				};
 				var menu = new Menu {
-					Command.Cut, Command.Copy, Command.Paste, Command.Delete, Command.MenuSeparator, properties
+					Command.Cut,
+					Command.Copy,
+					Command.Paste,
+					Command.Delete,
+					deleteAnimationRange,
+					Command.MenuSeparator,
+					properties,
 				};
 				menu.Popup();
+			}
+
+			private void DeleteAnimationRange()
+			{
+				var markers = TreeView.SelectedItems
+					.OfType<MarkerTreeViewItem>()
+					.Select(i => i.Marker)
+					.ToList();
+				foreach (var g in markers.GroupBy(i => i.Owner)) {
+					var animation = g.Key;
+					var sortedMarkers = g.OrderBy(i => i.Frame).ToList();
+					var rangeBegin = sortedMarkers[0].Frame;
+					var rangeEnd = sortedMarkers[^1].Frame;
+					// Grab all markers in the given range.
+					sortedMarkers = animation.Markers.
+						Where(i => i.Frame >= rangeBegin && i.Frame <= rangeEnd).ToList();
+					if (sortedMarkers.Count > 0) {
+						foreach (var marker in markers) {
+							UnlinkSceneItem.Perform(Document.Current.GetSceneItemForObject(marker));
+						}
+						foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+							RemoveKeyframeRange.Perform(animator, sortedMarkers[0].Frame,
+								sortedMarkers[^1].Frame);
+						}
+						Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(
+							animation, rangeEnd, rangeBegin - rangeEnd - 1);
+					}
+				}
 			}
 		}
 

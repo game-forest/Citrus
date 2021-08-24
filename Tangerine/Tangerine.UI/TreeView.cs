@@ -214,6 +214,8 @@ namespace Tangerine.UI
 
 		public TreeViewItem HoveredItem { get; private set; }
 
+		public IEnumerable<TreeViewItem> SelectedItems => currentItems.Where(i => i.Selected);
+
 		public TreeView(
 			ThemedScrollView scrollView,
 			ITreeViewPresentation presentation,
@@ -283,7 +285,7 @@ namespace Tangerine.UI
 					parent.Expanded = true;
 					OnDragEnd?.Invoke(this,
 						new DragEventArgs {
-							Items = currentItems.Where(i => i.Selected),
+							Items = SelectedItems,
 							Parent = parent,
 							Index = childIndex
 						});
@@ -356,11 +358,10 @@ namespace Tangerine.UI
 			parent = null;
 			childIndex = 0;
 			dragInto = false;
-			var selectedItems = currentItems.Where(i => i.Selected);
 			foreach (var item in currentItems) {
 				var t = (p - item.Presentation.Widget.Y) / item.Presentation.Widget.Height;
 				if (t > 0.25f && t < 0.75f) {
-					var a = new DragEventArgs { Items = selectedItems, Parent = item };
+					var a = new DragEventArgs { Items = SelectedItems, Parent = item };
 					OnDragBegin?.Invoke(this, a);
 					if (!a.CancelDrag) {
 						parent = item;
@@ -373,7 +374,7 @@ namespace Tangerine.UI
 				if (item == currentItems.Last() && t > 0.5f) {
 					parent = RootItem;
 					childIndex = RootItem.Items.Count;
-					var a = new DragEventArgs { Items = selectedItems, Parent = parent };
+					var a = new DragEventArgs { Items = SelectedItems, Parent = parent };
 					OnDragBegin?.Invoke(this, a);
 					if (!a.CancelDrag) {
 						return true;
@@ -398,7 +399,7 @@ namespace Tangerine.UI
 					if (parent == null) {
 						return false;
 					}
-					var a = new DragEventArgs { Items = selectedItems, Parent = parent };
+					var a = new DragEventArgs { Items = SelectedItems, Parent = parent };
 					OnDragBegin?.Invoke(this, a);
 					if (!a.CancelDrag) {
 						return true;
@@ -464,7 +465,7 @@ namespace Tangerine.UI
 			if (rangeSelectionFirstItem == null || !currentItems.Contains(rangeSelectionFirstItem)) {
 				rangeSelectionFirstItem = GetRecentlySelected() ?? item;
 			}
-			foreach (var i in currentItems.Where(i => i.Selected)) {
+			foreach (var i in SelectedItems) {
 				i.Selected = false;
 			}
 			if (item.Index > rangeSelectionFirstItem.Index) {
@@ -605,14 +606,14 @@ namespace Tangerine.UI
 					continue;
 				}
 				if (Command.Copy.Consume()) {
-					OnCopy?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
+					OnCopy?.Invoke(this, new CopyEventArgs { Items = SelectedItems });
 				}
 				if (Command.Cut.Consume()) {
-					OnCut?.Invoke(this, new CopyEventArgs { Items = currentItems.Where(i => i.Selected) });
+					OnCut?.Invoke(this, new CopyEventArgs { Items = SelectedItems });
 				}
 				if (Command.Delete.Consume()) {
 					OnDelete?.Invoke(this, new CopyEventArgs {
-						Items = currentItems.Where(i => i.Selected).OrderBy(i => i.SelectionOrder)
+						Items = SelectedItems.OrderBy(i => i.SelectionOrder)
 					});
 				}
 				if (Command.Paste.Consume()) {
@@ -673,7 +674,7 @@ namespace Tangerine.UI
 				yield return null;
 			}
 		}
-		
+
 		private void Invalidate()
 		{
 			((WindowWidget)scrollView.Manager?.RootNodes[0])?.Window?.Invalidate();

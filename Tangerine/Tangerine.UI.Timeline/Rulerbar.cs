@@ -186,7 +186,7 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		public static void DeleteMarkers()
+		public static void DeleteAllMarkers()
 		{
 			Document.Current.History.DoTransaction(() => {
 				foreach (var marker in Document.Current.Animation.Markers.ToList()) {
@@ -195,21 +195,27 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		private static void DeleteMarkersInRange()
+		private static void DeleteAnimationRange()
 		{
-			using (Document.Current.History.BeginTransaction()) {
-				if (!GridSelection.GetSelectionBoundaries(out var gs)) {
+			Document.Current.History.DoTransaction(() => {
+				if (!GridSelection.GetSelectionBoundaries(out var gridSelection)) {
 					new AlertDialog("Select a range on the timeline", "Ok").Show();
 					return;
 				}
+				int rangeBegin = gridSelection.Left;
+				int rangeEnd = gridSelection.Right - 1;
 				foreach (
 					var marker in Document.Current.Animation.Markers.Where(m =>
-						m.Frame >= gs.Left && m.Frame <= gs.Right).ToList()
+						m.Frame >= rangeBegin && m.Frame <= rangeEnd).ToList()
 				) {
 					Core.Operations.DeleteMarker.Perform(marker, true);
 				}
-				Document.Current.History.CommitTransaction();
-			}
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+					Core.Operations.RemoveKeyframeRange.Perform(animator, rangeBegin, rangeEnd);
+				}
+				Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(
+					Document.Current.Animation, rangeEnd, rangeBegin - rangeEnd - 1);
+			});
 		}
 
 		class ContextMenu
@@ -232,11 +238,11 @@ namespace Tangerine.UI.Timeline
 				});
 				menu.Add(new Command("Paste Markers", () => PasteMarkers(atCursor: true, expandAnimation: true)));
 				menu.Add(new Command("Paste Markers At Original Positions", () => PasteMarkers(atCursor: false, expandAnimation: false)));
-				menu.Add(new Command("Delete All Markers", DeleteMarkers) {
+				menu.Add(new Command("Delete All Markers", DeleteAllMarkers) {
 					Enabled = Document.Current.Animation.Markers.Count > 0
 				});
-				menu.Add(new Command("Delete Markers In Range", DeleteMarkersInRange) {
-					Enabled = GridSelection.GetSelectionBoundaries(out _) && Document.Current.Animation.Markers.Count > 0
+				menu.Add(new Command("Delete Animation Range", DeleteAnimationRange) {
+					Enabled = GridSelection.GetSelectionBoundaries(out _)
 				});
 				menu.Popup();
 			}
