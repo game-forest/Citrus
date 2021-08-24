@@ -277,20 +277,7 @@ namespace Tangerine.Panels
 
 		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
 		{
-			var animations = args.Items.OfType<AnimationTreeViewItem>().
-				Select(i => i.Animation).Where(a => !a.IsLegacy).ToList();
-			if (!animations.Any()) {
-				var markers = args.Items.OfType<MarkerTreeViewItem>().Select(i => i.Marker);
-				Common.Operations.CopyPasteMarkers.CopyMarkers(markers);
-			} else {
-				var container = new Frame();
-				foreach (var animation in animations) {
-					container.Animations.Add(Cloner.Clone(animation));
-				}
-				var stream = new MemoryStream();
-				TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
-				Clipboard.Text = Encoding.UTF8.GetString(stream.ToArray());
-			}
+			((CommonTreeViewItem)((TreeView)sender).HoveredItem).OnCopy(args);
 		}
 
 		private void TreeView_OnCut(object sender, TreeView.CopyEventArgs args, TreeViewItemProvider provider)
@@ -616,6 +603,10 @@ namespace Tangerine.Panels
 				this.isSearchActiveGetter = isSearchActiveGetter;
 			}
 
+			public virtual void OnCopy(TreeView.CopyEventArgs args)
+			{
+			}
+
 			public override bool CanExpand() => Items.Count > 0;
 
 			public override bool Selected
@@ -749,6 +740,19 @@ namespace Tangerine.Panels
 				Animation = animation;
 			}
 
+			public override void OnCopy(TreeView.CopyEventArgs args)
+			{
+				var animations = args.Items.OfType<AnimationTreeViewItem>().
+					Select(i => i.Animation).Where(a => !a.IsLegacy).ToList();
+				var container = new Frame();
+				foreach (var animation in animations) {
+					container.Animations.Add(Cloner.Clone(animation));
+				}
+				var stream = new MemoryStream();
+				TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+				Clipboard.Text = Encoding.UTF8.GetString(stream.ToArray());
+			}
+
 			public override string Label
 			{
 				get => Animation.IsLegacy ? "Legacy" : Animation.Id;
@@ -780,6 +784,12 @@ namespace Tangerine.Panels
 				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Marker = marker;
+			}
+
+			public override void OnCopy(TreeView.CopyEventArgs args)
+			{
+				var markers = args.Items.OfType<MarkerTreeViewItem>().Select(i => i.Marker);
+				Common.Operations.CopyPasteMarkers.CopyMarkers(markers);
 			}
 
 			public override string Label
@@ -1066,7 +1076,6 @@ namespace Tangerine.Panels
 				: base(treeView, item, options)
 			{
 				this.treeViewModeGetter = treeViewModeGetter;
-				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 				warningWidget = new Image {
 					MinMaxSize = Vector2.One * TimelineMetrics.DefaultRowHeight,
 					Padding = new Thickness(1),
@@ -1075,6 +1084,7 @@ namespace Tangerine.Panels
 				};
 				warningWidget.Components.Add(new TooltipComponent(() => warningText));
 				Widget.AddNode(warningWidget);
+				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			}
 
 			private void ShowContextMenu()
@@ -1083,7 +1093,12 @@ namespace Tangerine.Panels
 					TreeView.ClearSelection();
 					Item.Selected = true;
 				}
-				var menu = new Menu { Command.Cut, Command.Copy, Command.Paste, Command.Delete };
+				var menu = new Menu {
+					Command.Cut,
+					Command.Copy,
+					Command.Paste,
+					Command.Delete,
+				};
 				menu.Popup();
 			}
 
