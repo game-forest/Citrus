@@ -51,14 +51,20 @@ namespace Lime
 			};
 			var missingCharacters = new List<char>();
 			var margin = new Vector2(config.Margin * .5f);
+			var charToFace = new Dictionary<char, Face>();
+			var pathToRenderer = new Dictionary<string, FontRenderer>();
 			foreach (var charSet in config.CharSets) {
-				var fontPath = AssetPath.Combine(assetDirectory, charSet.Font);
+				var fontPath = Path.GetFullPath(AssetPath.Combine(assetDirectory, charSet.Font));
 				if (!File.Exists(fontPath)) {
 					Console.WriteLine($"Missing font: {fontPath}\n Please ensure font existence!!!");
 					return;
 				}
-				var fontData = File.ReadAllBytes(fontPath);
-				chars.FontRenderer = new FontRenderer(fontData) { LcdSupported = false };
+				if (!pathToRenderer.TryGetValue(fontPath, out var fontRenderer)) {
+					var fontData = File.ReadAllBytes(fontPath);
+					fontRenderer = new FontRenderer(fontData) { LcdSupported = false };
+					pathToRenderer[fontPath] = fontRenderer;
+				}
+				chars.FontRenderer = fontRenderer;
 				missingCharacters.Clear();
 				foreach (var c in charSet.Chars) {
 					if (config.ExcludeChars.Any(character => character == c) || chars.Contains(c)) {
@@ -69,28 +75,25 @@ namespace Lime
 						missingCharacters.Add(c);
 						continue;
 					}
+					charToFace[c] = fontRenderer.Face;
 					fontChar.ACWidths += margin;
+					// FontRenderer uses predefined KerningPairCharsets and may generate redundant pairs.
+					// We further generate only necessary kerning pairs.
+					fontChar.KerningPairs = null;
 					if (config.IsSdf) {
 						fontChar.ACWidths *= config.SdfScale;
 						fontChar.Height *= config.SdfScale;
 						fontChar.Width *= config.SdfScale;
 						fontChar.Padding *= config.SdfScale;
 						fontChar.VerticalOffset *= config.SdfScale;
-						if (fontChar.KerningPairs != null) {
-							for (int i = 0; i < fontChar.KerningPairs.Count; i++) {
-								var pair = fontChar.KerningPairs[i];
-								pair.Kerning *= config.SdfScale;
-								fontChar.KerningPairs[i] = pair;
-							}
-						}
 					}
 					fontCharCollection.Add(fontChar);
 				}
 				if (missingCharacters.Count > 0) {
 					Console.WriteLine($"Characters: {string.Join("", missingCharacters)} -- are missing in font {charSet.Font}");
 				}
-				GenerateKerningPairs(fontCharCollection, chars.FontRenderer.Face, config);
 			}
+			GenerateKerningPairs(fontCharCollection, charToFace, config);
 			if (config.IsSdf) {
 				foreach (var texture in fontCharCollection.Textures) {
 					SdfConverter.ConvertToSdf(texture.GetPixels(), texture.ImageSize.Width, texture.ImageSize.Height, config.Padding / 2);
@@ -104,35 +107,32 @@ namespace Lime
 		/// <summary>
 		/// Generates kerning pairs using HarfBuzz.
 		/// </summary>
-		private static void GenerateKerningPairs(FontCharCollection fontChars, Face face, TftConfig config)
-		{
-			var font = SharpFont.HarfBuzz.Font.FromFTFace(face);
-			foreach (var fontChar in fontChars) {
-				var lhs = fontChar.Char;
-				var kerningCharset = FontRenderer.KerningPairCharsets.FirstOrDefault(c => c.Contains(lhs));
-				if (kerningCharset == null) {
-					continue;
-				}
+		private static void GenerateKerningPairs(
+			FontCharCollection fontChars,
+			Dictionary<char, Face> charToFace,
+			TftConfig config
+		) {
+			foreach (var lhsFontChar in fontChars) {
+				var lhs = lhsFontChar.Char;
+				var face = charToFace[lhs];
 				config.CustomKerningPairs.TryGetValue(lhs, out var customKernings);
 				var leftGlyphId = face.GetCharIndex(lhs);
-				foreach (var rhs in kerningCharset) {
+				foreach (var rhsFontChar in fontChars) {
+					var rhs = rhsFontChar.Char;
+					// Allow cross face kerning pairs via custom kernings.
 					if (customKernings != null && TryGetKerning(rhs, out var kerningPair)) {
-						fontChar.AddOrReplaceKerningPair(kerningPair.Char, kerningPair.Kerning);
+						lhsFontChar.AddOrReplaceKerningPair(kerningPair.Char, kerningPair.Kerning);
 						continue;
 					}
-					if (!fontChars.Contains(rhs) || fontChar.ContainsKerningFor(rhs)) {
+					if (charToFace[rhs] != face) {
 						continue;
 					}
 					var rightGlyphId = face.GetCharIndex(rhs);
-					// 0 is undefined character
-					if (rightGlyphId == 0) {
-						continue;
-					}
-					var kerningAmount = font.GetHorizontalKerning(leftGlyphId, rightGlyphId) / 64f;
+					var kerningAmount = (float)face.GetKerning(leftGlyphId, rightGlyphId, KerningMode.Default).X;
 					kerningAmount = config.IsSdf ? kerningAmount * config.SdfScale : kerningAmount;
 					if (kerningAmount != 0) {
-						fontChar.KerningPairs = fontChar.KerningPairs ?? new List<KerningPair>();
-						fontChar.KerningPairs.Add(new KerningPair { Char = rhs, Kerning = kerningAmount });
+						lhsFontChar.KerningPairs ??= new List<KerningPair>();
+						lhsFontChar.KerningPairs.Add(new KerningPair { Char = rhs, Kerning = kerningAmount });
 					}
 				}
 				bool TryGetKerning(char c, out KerningPair kerningPair)
