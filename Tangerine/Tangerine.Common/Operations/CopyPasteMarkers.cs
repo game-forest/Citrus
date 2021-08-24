@@ -49,7 +49,7 @@ namespace Tangerine.Common.Operations
 			    return true;
 		    }
 		    pasteAtFrame ??= markersToPaste[0].Frame;
-			    var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
+			var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
 			if (expandAnimation) {
 			    ShiftMarkersAndKeyframes(animation, pasteAtFrame.Value, range);
 		    }
