@@ -24,7 +24,12 @@ namespace Tangerine.UI.Timeline
 				HitTestTarget = true
 			};
 			RootWidget.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
-			RootWidget.Gestures.Add(new DoubleClickGesture(0, ShowContextMenu));
+			RootWidget.Gestures.Add(
+				new DoubleClickGesture(
+					0,
+					() => ShowMarkerDialog(Timeline.Instance.CurrentColumn)
+				)
+			);
 			RootWidget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			RootWidget.AddChangeWatcher(() => Document.Current.AnimationFrame, (value) => {
 				var markers = Document.Current.Animation.Markers;
