@@ -151,137 +151,6 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public static class PasteSceneItemsFromStream
-	{
-		public static bool Perform(MemoryStream stream, Row parent, int index, out List<Row> pastedItems)
-		{
-			pastedItems = new List<Row>();
-			if (!CanPaste(stream, parent)) {
-				return false;
-			}
-			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
-			container.LoadExternalScenes();
-			foreach (var n in container.Nodes) {
-				Document.Decorate(n);
-			}
-			foreach (var a in container.Animators) {
-				a.AnimationId = Document.Current.AnimationId;
-			}
-			if (container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out var animation)) {
-				foreach (var track in animation.Tracks.ToList()) {
-					animation.Tracks.Remove(track);
-					LinkSceneItem.Perform(parent, index++, track);
-					pastedItems.Add(Document.Current.GetSceneItemForObject(track));
-				}
-			} else {
-				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-				var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-				foreach (var i in itemsToPaste.Rows.ToList()) {
-					UnlinkSceneItem.Perform(i);
-					PasteSceneItem.Perform(parent, index, i);
-					index = parent.Rows.IndexOf(i) + 1;
-					pastedItems.Add(i);
-					DecorateNodes(i);
-				}
-			}
-			return true;
-		}
-
-		private static void DecorateNodes(Row item)
-		{
-			if (item.TryGetNode(out var node)) {
-				Document.Decorate(node);
-			} else if (item.TryGetFolder(out _)) {
-				foreach (var i in item.Rows) {
-					DecorateNodes(i);
-				}
-			}
-		}
-
-		private static bool CanPaste(MemoryStream stream, Row parent)
-		{
-			try {
-				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
-				foreach (var a in container.Animators) {
-					a.AnimationId = Document.Current.AnimationId;
-				}
-				if (parent.TryGetAnimation(out _)) {
-					// Allow inserting animation tracks into the compound animation.
-					return container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out _);
-				}
-				if (container.Animations.Count > 0) {
-					// Use animations panel to paste animations.
-					return false;
-				}
-				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-				var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
-				foreach (var i in rowTree.Rows) {
-					if (!PasteSceneItem.CanPaste(item: i, parent: parent)) {
-						return false;
-					}
-				}
-				if (parent.TryGetNode(out var node) &&
-				    ClassAttributes<TangerineLockChildrenNodeList>.Get(node.GetType()) != null) {
-					return false;
-				}
-				if (container.DefaultAnimation.Tracks.Count > 0 && parent.GetAnimation() == null) {
-					return false;
-				}
-				return true;
-			} catch {
-				return false;
-			}
-		}
-	}
-
-	public static class PasteSceneItem
-	{
-		public static bool CanPaste(Row item, Row parent) =>
-			LinkSceneItem.CanLink(parent, item) || HasTargetForMerge(parent, item, out _);
-
-		private static bool HasTargetForMerge(Row parent, Row item, out IAnimator existingAnimator)
-		{
-			existingAnimator = null;
-			if (item.TryGetAnimator(out var animator)) {
-				var node = parent.GetNode();
-				if (node == null) {
-					// Can put the animator only into the node.
-					return false;
-				}
-				if (parent.Parent == null) {
-					// Can't drag the animator into the root item.
-					return false;
-				}
-				existingAnimator = Document.Current.Animation.
-					ValidatedEffectiveAnimators.OfType<IAnimator>().FirstOrDefault(
-						i => i.Owner == node && i.TargetPropertyPath == animator.TargetPropertyPath);
-				if (existingAnimator == null) {
-					// No same animator to merge.
-					return false;
-				}
-				var p = AnimationUtils.GetPropertyByPath(node, animator.TargetPropertyPath);
-				if (p.PropertyData.Info.PropertyType != animator.ValueType) {
-					// Property type mismatch.
-					return false;
-				}
-				return true;
-			}
-			return false;
-		}
-		
-		public static void Perform(Row parent, int index, Row item)
-		{
-			if (HasTargetForMerge(parent, item, out var dstAnimator)) {
-				var srcAnimator = item.GetAnimator();
-				foreach (var srcKey in srcAnimator.Keys) {
-					SetKeyframe.Perform(dstAnimator, Document.Current.Animation, srcKey.Clone());
-				}
-			} else {
-				LinkSceneItem.Perform(parent, index, item);
-			}
-		}
-	}
-	
 	public static class LinkSceneItem
 	{
 		public static bool CanLink(Row parent, Row item)
@@ -318,10 +187,6 @@ namespace Tangerine.Core.Operations
 			}
 			if (parent.Parent == null) {
 				// Can't drag the animator into the root item.
-				return false;
-			}
-			if (node.Animators.Any(a => a.TargetPropertyPath == animator.TargetPropertyPath)) {
-				// The same animator is already exists.
 				return false;
 			}
 			var p = AnimationUtils.GetPropertyByPath(node, animator.TargetPropertyPath);
@@ -560,6 +425,14 @@ namespace Tangerine.Core.Operations
 			if (!CanLink(parent, animator)) {
 				throw new InvalidOperationException();
 			}
+			var existedAnimatorItem = parent.Rows.FirstOrDefault(i =>
+				i.TryGetAnimator(out var a)
+				&& a.TargetPropertyPath == animator.TargetPropertyPath
+				&& a.AnimationId == animator.AnimationId
+			);
+			if (existedAnimatorItem != null) {
+				UnlinkSceneItem.Perform(existedAnimatorItem);
+			}
 			var node = parent.GetNode();
 			int lastAnimationRowIndex = -1;
 			for (int i = 0; i < parent.Rows.Count; i++) {
@@ -573,6 +446,14 @@ namespace Tangerine.Core.Operations
 			InsertIntoList<AnimatorList, IAnimator>.Perform(node.Animators, animatorIndex, animator);
 			SetProperty.Perform(animatorItem.Components.Get<PropertyRow>(), nameof(PropertyRow.Node), node);
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, firstAnimatorRowIndex + animatorIndex, animatorItem);
+			if (existedAnimatorItem != null) {
+				var existedAnimator = existedAnimatorItem.GetAnimator();
+				foreach (var key in existedAnimator.Keys) {
+					if (animator.Keys.All(i => i.Frame != key.Frame)) {
+						SetKeyframe.Perform(animator, Document.Current.Animation, key.Clone());
+					}
+				}
+			}
 		}
 
 		private static void LinkAnimationItem(Row parent, int index, Row item)
