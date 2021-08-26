@@ -1,12 +1,14 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Lime;
+using System;
 
 namespace Citrus.Tests.Widgets
 {
 	[TestClass]
 	public class ComponentCollectionTests
 	{
+		[AllowMultiple]
 		private class TestComponent : Component
 		{
 			public int Value { get; set; }
@@ -61,6 +63,7 @@ namespace Citrus.Tests.Widgets
 			foreach (var c in components) {
 				Assert.IsTrue(c == dummy || c == testComponent2);
 			}
+			Assert.ThrowsException<InvalidOperationException>(() => components.Add(new DummyComponent()));
 		}
 	}
 }

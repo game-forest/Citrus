@@ -9,9 +9,14 @@ namespace Lime
 	public class MutuallyExclusiveDerivedComponentsAttribute : Attribute
 	{ }
 
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	public sealed class AllowMultipleAttribute : Attribute
+	{ }
+
 	public class Component
 	{
 		private static Dictionary<Type, int> keyMap = new Dictionary<Type, int>();
+		private static Dictionary<Type, bool> canAddMultiple = new Dictionary<Type, bool>();
 		private static int keyCounter;
 
 		internal static int GetKeyForType(Type type)
@@ -39,6 +44,18 @@ namespace Lime
 			}
 		}
 
+		internal static bool CanAddMultiple(Type type)
+		{
+			lock (canAddMultiple) {
+				if (canAddMultiple.TryGetValue(type, out var result)) {
+					return result;
+				}
+				result = type.GetCustomAttribute<AllowMultipleAttribute>() != null;
+				canAddMultiple.Add(type, result);
+				return result;
+			}
+		}
+
 		internal int GetKey() => GetKeyForType(GetType());
 	}
 
@@ -63,7 +80,7 @@ namespace Lime
 			return false;
 		}
 
-		public bool Contains<T>() where T : TComponent => ContainsKey(ComponentKeyResolver<T>.Key);
+		public bool Contains<T>() where T : TComponent => ContainsKey(ComponentInfoResolver<T>.Key);
 		public bool Contains(Type type) => ContainsKey(Component.GetKeyForType(type));
 
 		private bool ContainsKey(int key)
@@ -100,14 +117,14 @@ namespace Lime
 
 		public TComponent Get(Type type) => Get(Component.GetKeyForType(type));
 
-		public T Get<T>() where T : TComponent => Get(ComponentKeyResolver<T>.Key) as T;
+		public T Get<T>() where T : TComponent => Get(ComponentInfoResolver<T>.Key) as T;
 
 		public IEnumerable<T> GetAll<T>() where T : TComponent
 		{
 			if (list == null) {
 				yield break;
 			}
-			var key = ComponentKeyResolver<T>.Key;
+			var key = ComponentInfoResolver<T>.Key;
 			foreach (var (k, c) in list) {
 				if (c == null) {
 					yield break;
@@ -123,7 +140,7 @@ namespace Lime
 			if (list == null) {
 				return;
 			}
-			var key = ComponentKeyResolver<T>.Key;
+			var key = ComponentInfoResolver<T>.Key;
 			foreach (var (k, c) in list) {
 				if (c == null) {
 					return;
@@ -136,7 +153,7 @@ namespace Lime
 
 		public bool TryGet<T>(out T result) where T : TComponent
 		{
-			result = Get(ComponentKeyResolver<T>.Key) as T;
+			result = Get(ComponentInfoResolver<T>.Key) as T;
 			return result != null;
 		}
 
@@ -152,22 +169,26 @@ namespace Lime
 
 		public virtual void Add(TComponent component)
 		{
+			var type = component.GetType();
 			if (Contains(component)) {
 				throw new InvalidOperationException("Attempt to add a component twice.");
 			}
+			if (!Component.CanAddMultiple(type) && Contains(type)) {
+				throw new InvalidOperationException("Adding multiple component of this type is not permitted");
+			}
 			if (list == null) {
 				list = new (int, TComponent)[4];
-				list[0] = (component.GetKey(), component);
+				list[0] = (Component.GetKeyForType(type), component);
 				Count = 1;
 				return;
 			}
 			if (Count == list.Length) {
 				Array.Resize(ref list, Count * 2);
 			}
-			list[Count++] = (component.GetKey(), component);
+			list[Count++] = (Component.GetKeyForType(type), component);
 		}
 
-		public bool Remove<T>() where T : TComponent => Remove(ComponentKeyResolver<T>.Key);
+		public bool Remove<T>() where T : TComponent => Remove(ComponentInfoResolver<T>.Key);
 
 		public bool Remove(Type type) => Remove(Component.GetKeyForType(type));
 
@@ -274,9 +295,10 @@ namespace Lime
 			public void Dispose() { }
 		}
 
-		private static class ComponentKeyResolver<T> where T : TComponent
+		private static class ComponentInfoResolver<T> where T : TComponent
 		{
 			public static readonly int Key = Component.GetKeyForType(typeof(T));
+			public static readonly bool CanAddMultiple = Component.CanAddMultiple(typeof(T));
 		}
 	}
 }
