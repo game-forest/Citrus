@@ -109,7 +109,7 @@ namespace Tangerine.Core
 		{
 			var i = sceneItemFactory(animator);
 			i.Components.GetOrAdd<CommonPropertyRowData>().Animator = animator;
-			var component = i.Components.GetOrAdd<PropertyRow>();
+			var component = i.Components.GetOrAdd<AnimatorRow>();
 			component.Node = (Node)animator.Owner;
 			component.Animator = animator;
 			SceneItemCreated?.Invoke(i);

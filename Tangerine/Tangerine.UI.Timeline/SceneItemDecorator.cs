@@ -13,7 +13,7 @@ namespace Tangerine.UI.Timeline
 			if (view.IsGridRowViewCreated) {
 				return;
 			}
-			if (item.Components.TryGet<Core.Components.PropertyRow>(out var propRow)) {
+			if (item.Components.TryGet<Core.Components.AnimatorRow>(out var propRow)) {
 				view.GridRowViewFactory ??= () => new GridPropertyView(propRow.Node, propRow.Animator);
 			} else if (item.TryGetNode(out var node)) {
 				if (node is Audio audio) {

@@ -139,11 +139,11 @@ namespace Tangerine.UI.Timeline
 			foreach (var row in Document.Current.Rows.ToList()) {
 				var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans;
 				foreach (var span in spans.GetNonOverlappedSpans()) {
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<PropertyRow>()?.Node;
+					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
 					if (node == null || node.EditorState().Locked) {
 						continue;
 					}
-					var property = row.Components.Get<PropertyRow>()?.Animator.TargetPropertyPath;
+					var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
 					foreach (var a in node.Animators.ToList()) {
 						if (a.AnimationId != Document.Current.AnimationId) {
 							continue;

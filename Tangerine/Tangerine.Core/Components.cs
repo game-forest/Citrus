@@ -60,7 +60,7 @@ namespace Tangerine.Core.Components
 		public Folder.Descriptor Folder { get; set; }
 	}
 
-	public sealed class PropertyRow : Component
+	public sealed class AnimatorRow : Component
 	{
 		public Node Node { get; set; }
 		public IAnimator Animator { get; set; }

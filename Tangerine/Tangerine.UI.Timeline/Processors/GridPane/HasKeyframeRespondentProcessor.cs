@@ -30,7 +30,7 @@ namespace Tangerine.UI.Timeline
 				var hasKey = nodeData.Node.Animators.Any(i => i.Keys.Any(k => k.Frame == cell.X));
 				return hasKey;
 			}
-			var pr = row.Components.Get<PropertyRow>();
+			var pr = row.Components.Get<AnimatorRow>();
 			return pr != null && pr.Animator.Keys.Any(k => k.Frame == cell.X);
 		}
 	}

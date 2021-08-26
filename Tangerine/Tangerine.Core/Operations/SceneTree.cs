@@ -444,7 +444,7 @@ namespace Tangerine.Core.Operations
 			int firstAnimatorRowIndex = 1 + lastAnimationRowIndex;
 			int animatorIndex = Math.Clamp(index - firstAnimatorRowIndex, 0, node.Animators.Count);
 			InsertIntoList<AnimatorList, IAnimator>.Perform(node.Animators, animatorIndex, animator);
-			SetProperty.Perform(animatorItem.Components.Get<PropertyRow>(), nameof(PropertyRow.Node), node);
+			SetProperty.Perform(animatorItem.Components.Get<AnimatorRow>(), nameof(AnimatorRow.Node), node);
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, firstAnimatorRowIndex + animatorIndex, animatorItem);
 			if (existedAnimatorItem != null) {
 				var existedAnimator = existedAnimatorItem.GetAnimator();

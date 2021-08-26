@@ -50,7 +50,7 @@ namespace Tangerine.Core
 			return folder != null;
 		}
 
-		public IAnimator GetAnimator() => Components.Get<PropertyRow>()?.Animator;
+		public IAnimator GetAnimator() => Components.Get<AnimatorRow>()?.Animator;
 
 		public bool TryGetAnimator(out IAnimator animator)
 		{
