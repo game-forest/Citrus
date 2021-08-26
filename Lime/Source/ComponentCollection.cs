@@ -50,7 +50,19 @@ namespace Lime
 
 		public bool IsReadOnly => false;
 
-		public virtual bool Contains(TComponent component) => ContainsKey(component.GetKey());
+		public virtual bool Contains(TComponent component)
+		{
+			if (list == null) {
+				return false;
+			}
+			foreach (var (_, c) in list) {
+				if (c == component) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public bool Contains<T>() where T : TComponent => ContainsKey(ComponentKeyResolver<T>.Key);
 		public bool Contains(Type type) => ContainsKey(Component.GetKeyForType(type));
 
@@ -90,6 +102,38 @@ namespace Lime
 
 		public T Get<T>() where T : TComponent => Get(ComponentKeyResolver<T>.Key) as T;
 
+		public IEnumerable<T> GetAll<T>() where T : TComponent
+		{
+			if (list == null) {
+				yield break;
+			}
+			var key = ComponentKeyResolver<T>.Key;
+			foreach (var (k, c) in list) {
+				if (c == null) {
+					yield break;
+				}
+				if (k == key) {
+					yield return (T)c;
+				}
+			}
+		}
+
+		public void GetAll<T>(IList<T> result) where T : TComponent
+		{
+			if (list == null) {
+				return;
+			}
+			var key = ComponentKeyResolver<T>.Key;
+			foreach (var (k, c) in list) {
+				if (c == null) {
+					return;
+				}
+				if (k == key) {
+					result.Add((T)c);
+				}
+			}
+		}
+
 		public bool TryGet<T>(out T result) where T : TComponent
 		{
 			result = Get(ComponentKeyResolver<T>.Key) as T;
@@ -108,7 +152,7 @@ namespace Lime
 
 		public virtual void Add(TComponent component)
 		{
-			if (Contains(component.GetType())) {
+			if (Contains(component)) {
 				throw new InvalidOperationException("Attempt to add a component twice.");
 			}
 			if (list == null) {
@@ -123,16 +167,26 @@ namespace Lime
 			list[Count++] = (component.GetKey(), component);
 		}
 
-		public bool Remove<T>() where T : TComponent
-		{
-			var c = Get<T>();
-			return c != null && Remove(c);
-		}
+		public bool Remove<T>() where T : TComponent => Remove(ComponentKeyResolver<T>.Key);
 
-		public bool Remove(Type type)
+		public bool Remove(Type type) => Remove(Component.GetKeyForType(type));
+
+		private bool Remove(int key)
 		{
-			var c = Get(type);
-			return c != null && Remove(c);
+			var j = 0;
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (c.Key != key) {
+					list[j] = list[i];
+					j++;
+				}
+			}
+			for (int i = j; i< Count; i++) {
+				list[i] = (-1, null);
+			}
+			var oldCount = Count;
+			Count = j;
+			return oldCount != Count;
 		}
 
 		public virtual bool Remove(TComponent component)
