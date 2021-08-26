@@ -115,25 +115,14 @@ namespace Orange
 			if (TextureConverterUtils.IsPowerOf2(texture.Width) && TextureConverterUtils.IsPowerOf2(texture.Height)) {
 				return;
 			}
-			int newWidth = CalcUpperPowerOfTwo(texture.Width);
-			int newHeight = CalcUpperPowerOfTwo(texture.Height);
+			int newWidth = Mathf.CalcUpperPowerOfTwo(texture.Width);
+			int newHeight = Mathf.CalcUpperPowerOfTwo(texture.Height);
 			if (square) {
 				newHeight = newWidth = Math.Max(newWidth, newHeight);
 			}
 			var newTexture = texture.Rescale(newWidth, newHeight);
 			texture.Dispose();
 			texture = newTexture;
-		}
-
-		public static int CalcUpperPowerOfTwo(int x)
-		{
-			x--;
-			x |= (x >> 1);
-			x |= (x >> 2);
-			x |= (x >> 4);
-			x |= (x >> 8);
-			x |= (x >> 16);
-			return (x + 1);
 		}
 
 		private static bool DownscaleTextureToFitAtlasHelper(int width, int height, string path, int maxAtlasSize, out int newWidth, out int newHeight)
