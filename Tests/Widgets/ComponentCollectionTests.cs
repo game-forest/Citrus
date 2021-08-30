@@ -42,7 +42,7 @@ namespace Citrus.Tests.Widgets
 		}
 
 		[TestMethod]
-		public void Test()
+		public void ComponentCollectionTest()
 		{
 			var components = new ComponentCollection<Component>();
 			var testComponent1 = new BaseTestComponent(1);
@@ -90,6 +90,56 @@ namespace Citrus.Tests.Widgets
 			Assert.AreEqual(0, components.GetAll<BaseTestComponent>().Count());
 			Assert.AreEqual(1, components.GetAll<Component>().Count());
 			Assert.ThrowsException<InvalidOperationException>(() => components.Add(new DummyComponent()));
+		}
+
+		private class DummyNodeComponent : NodeComponent
+		{
+
+		}
+
+		[AllowMultiple]
+		private class BaseTestNodeComponent : NodeComponent
+		{
+			public int Value { get; set; }
+
+			public BaseTestNodeComponent(int value)
+			{
+				Value = value;
+			}
+
+			public override string ToString() => Value.ToString();
+		}
+
+		[AllowMultiple]
+		private class DerivedTestNodeComponent : BaseTestNodeComponent
+		{
+			public DerivedTestNodeComponent(int value) : base(value) { }
+
+			public override string ToString() => $"D{Value}";
+		}
+
+		[TestMethod]
+		public void NodeComponentCollectionTest()
+		{
+			var node = new Widget();
+			var components = node.Components;
+			var dummy = new DummyNodeComponent();
+			var test1 = new BaseTestNodeComponent(1);
+			var test2 = new DerivedTestNodeComponent(2);
+			components.Add(test1);
+			components.Add(dummy);
+			components.Add(test2);
+			components.Remove<BaseTestNodeComponent>();
+			Assert.IsTrue(dummy.Owner == node && test1.Owner == null && test2.Owner == null);
+			components.Add(test1);
+			components.Remove(dummy);
+			Assert.IsTrue(dummy.Owner == null && test1.Owner == node && test2.Owner == null);
+			components.Add(dummy);
+			components.Add(test2);
+			components.Remove(test2.GetType());
+			Assert.IsTrue(dummy.Owner == node && test1.Owner == node && test2.Owner == null);
+			components.Clear();
+			Assert.IsTrue(dummy.Owner == null && test1.Owner == null && test2.Owner == null);
 		}
 	}
 }

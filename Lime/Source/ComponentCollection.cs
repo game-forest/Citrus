@@ -15,49 +15,7 @@ namespace Lime
 
 	public class Component
 	{
-		private static Dictionary<Type, int> keyMap = new Dictionary<Type, int>();
 		private static Dictionary<Type, bool> canAddMultiple = new Dictionary<Type, bool>();
-		private static Dictionary<Type, BitArray> typeChildren = new Dictionary<Type, BitArray>();
-		private static int keyCounter;
-
-		internal static int GetKeyForType(Type type)
-		{
-			lock (keyMap) {
-				if (keyMap.TryGetValue(type, out int key)) {
-					return key;
-				}
-				Type t = type;
-				while (t != null) {
-					if (t.GetCustomAttribute<MutuallyExclusiveDerivedComponentsAttribute>(false) != null) {
-						break;
-					}
-					t = t.BaseType;
-				}
-				t = t ?? type;
-				if (!keyMap.TryGetValue(t, out key)) {
-					key = ++keyCounter;
-					keyMap.Add(t, key);
-				}
-				if (!keyMap.TryGetValue(type, out _)) {
-					keyMap.Add(type, key);
-				}
-				t = type;
-				while (t != null) {
-					if (t != type) {
-						var parentKey = GetKeyForType(t);
-						if (!typeChildren.TryGetValue(t, out var children)) {
-							typeChildren.Add(t, children = new BitArray(128));
-						}
-						if (key >= children.Length) {
-							children.Length = Mathf.CalcUpperPowerOfTwo(key);
-						}
-						children.Set(key, true);
-					}
-					t = t.BaseType;
-				}
-				return key;
-			}
-		}
 
 		internal static bool CanAddMultiple(Type type)
 		{
@@ -70,24 +28,11 @@ namespace Lime
 				return result;
 			}
 		}
-
-		internal int GetKey() => GetKeyForType(GetType());
-
-		internal static BitArray GetChildrenOfType(Type type)
-		{
-			if (!typeChildren.TryGetValue(type, out var children)) {
-				typeChildren.Add(type, children = new BitArray(128));
-			}
-			return children;
-		}
-
-		internal static bool IsChildOfType(BitArray children, int childKey) =>
-			childKey < children.Length && children.Get(childKey);
 	}
 
 	public class ComponentCollection<TComponent> : ICollection<TComponent> where TComponent : Component
 	{
-		private (int Key, TComponent Component)[] list;
+		private TComponent[] list;
 
 		public int Count { get; private set; }
 
@@ -98,7 +43,7 @@ namespace Lime
 			if (list == null) {
 				return false;
 			}
-			foreach (var (_, c) in list) {
+			foreach (var c in list) {
 				if (c == component) {
 					return true;
 				}
@@ -106,58 +51,74 @@ namespace Lime
 			return false;
 		}
 
-		public bool Contains<T>() where T : TComponent => ContainsKey(ComponentInfoResolver<T>.Key);
-		public bool Contains(Type type) => ContainsKey(Component.GetKeyForType(type));
-
-		private bool ContainsKey(int key)
+		public bool Contains<T>() where T : TComponent
 		{
 			if (list == null) {
 				return false;
 			}
-			foreach (var (k, c) in list) {
-				if (k == key) {
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T) {
 					return true;
 				}
-				if (c == null) {
-					return false;
+			}
+			return false;
+		}
+		public bool Contains(Type type)
+		{
+			if (list == null) {
+				return false;
+			}
+			for (int i = 0; i < Count; i++) {
+				if (type.IsInstanceOfType(list[i])) {
+					return true;
 				}
 			}
 			return false;
 		}
 
-		private TComponent Get(int key)
+		public TComponent Get(Type type)
 		{
 			if (list == null) {
 				return default;
 			}
-			foreach (var (k, c) in list) {
+			foreach (var c in list) {
 				if (c == null) {
 					return default;
 				}
-				if (k == key) {
+				if (type.IsInstanceOfType(c)) {
 					return c;
 				}
 			}
 			return default;
 		}
 
-		public TComponent Get(Type type) => Get(Component.GetKeyForType(type));
-
-		public T Get<T>() where T : TComponent => Get(ComponentInfoResolver<T>.Key) as T;
+		public T Get<T>() where T : TComponent
+		{
+			if (list == null) {
+				return default;
+			}
+			foreach (var c in list) {
+				if (c == null) {
+					return default;
+				}
+				if (c is T t) {
+					return t;
+				}
+			}
+			return default;
+		}
 
 		public IEnumerable<T> GetAll<T>() where T : TComponent
 		{
 			if (list == null) {
 				yield break;
 			}
-			var key = ComponentInfoResolver<T>.Key;
-			var children = ComponentInfoResolver<T>.Children;
-			foreach (var (k, c) in list) {
+			foreach (var c in list) {
 				if (c == null) {
 					yield break;
 				}
-				if (k == key || Component.IsChildOfType(children, k)) {
-					yield return (T)c;
+				if (c is T t) {
+					yield return t;
 				}
 			}
 		}
@@ -167,14 +128,12 @@ namespace Lime
 			if (list == null) {
 				return;
 			}
-			var key = ComponentInfoResolver<T>.Key;
-			var children = ComponentInfoResolver<T>.Children;
-			foreach (var (k, c) in list) {
+			foreach (var c in list) {
 				if (c == null) {
 					return;
 				}
-				if (k == key || Component.IsChildOfType(children, k)) {
-					result.Add((T)c);
+				if (c is T t) {
+					result.Add(t);
 				}
 			}
 		}
@@ -184,13 +143,11 @@ namespace Lime
 			if (list == null) {
 				yield break;
 			}
-			var key = Component.GetKeyForType(type);
-			var children = Component.GetChildrenOfType(type);
-			foreach (var (k, c) in list) {
+			foreach (var c in list) {
 				if (c == null) {
 					yield break;
 				}
-				if (k == key || Component.IsChildOfType(children, k)) {
+				if (type.IsInstanceOfType(c)) {
 					yield return c;
 				}
 			}
@@ -201,13 +158,11 @@ namespace Lime
 			if (list == null) {
 				return;
 			}
-			var key = Component.GetKeyForType(type);
-			var children = Component.GetChildrenOfType(type);
-			foreach (var (k, c) in list) {
+			foreach (var c in list) {
 				if (c == null) {
 					return;
 				}
-				if (k == key || Component.IsChildOfType(children, k)) {
+				if (type.IsInstanceOfType(c)) {
 					result.Add(c);
 				}
 			}
@@ -215,7 +170,7 @@ namespace Lime
 
 		public bool TryGet<T>(out T result) where T : TComponent
 		{
-			result = Get(ComponentInfoResolver<T>.Key) as T;
+			result = Get<T>();
 			return result != null;
 		}
 
@@ -239,35 +194,51 @@ namespace Lime
 				throw new InvalidOperationException("Adding multiple component of this type is not permitted");
 			}
 			if (list == null) {
-				list = new (int, TComponent)[4];
-				list[0] = (Component.GetKeyForType(type), component);
+				list = new TComponent[4];
+				list[0] = component;
 				Count = 1;
 				return;
 			}
 			if (Count == list.Length) {
 				Array.Resize(ref list, Count * 2);
 			}
-			list[Count++] = (Component.GetKeyForType(type), component);
+			list[Count++] = component;
 		}
 
-		public bool Remove<T>() where T : TComponent =>
-			Remove(ComponentInfoResolver<T>.Key, ComponentInfoResolver<T>.Children);
-
-		public bool Remove(Type type) =>
-			Remove(Component.GetKeyForType(type), Component.GetChildrenOfType(type));
-
-		private bool Remove(int key, BitArray children)
+		public bool Remove<T>() where T : TComponent
 		{
 			var j = 0;
 			for (int i = 0; i < Count; i++) {
 				var c = list[i];
-				if (c.Key != key && !Component.IsChildOfType(children, c.Key)) {
+				if (!(c is T)) {
 					list[j] = list[i];
 					j++;
+				} else {
+					OnRemove(list[i]);
 				}
 			}
-			for (int i = j; i< Count; i++) {
-				list[i] = (-1, null);
+			for (int i = j; i < Count; i++) {
+				list[i] = null;
+			}
+			var oldCount = Count;
+			Count = j;
+			return oldCount != Count;
+		}
+
+		public bool Remove(Type type)
+		{
+			var j = 0;
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (!type.IsInstanceOfType(c)) {
+					list[j] = list[i];
+					j++;
+				} else {
+					OnRemove(list[i]);
+				}
+			}
+			for (int i = j; i < Count; i++) {
+				list[i] = null;
 			}
 			var oldCount = Count;
 			Count = j;
@@ -282,8 +253,9 @@ namespace Lime
 			int index = -1;
 			for (int i = 0; i < Count; i++) {
 				if (index == -1) {
-					if (list[i].Component == component) {
+					if (list[i] == component) {
 						index = i;
+						OnRemove(component);
 					}
 				} else {
 					list[i - 1] = list[i];
@@ -292,7 +264,7 @@ namespace Lime
 			if (index == -1) {
 				return false;
 			}
-			list[--Count] = (-1, null);
+			list[--Count] = null;
 			return true;
 		}
 
@@ -303,6 +275,8 @@ namespace Lime
 			return r;
 		}
 
+		protected virtual void OnRemove(TComponent component) { }
+
 		IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator() => new Enumerator(list, Count);
 
 		IEnumerator IEnumerable.GetEnumerator() => new Enumerator(list, Count);
@@ -312,7 +286,8 @@ namespace Lime
 		public virtual void Clear()
 		{
 			for (int i = 0; i < Count; i++) {
-				list[i] = (-1, null);
+				OnRemove(list[i]);
+				list[i] = null;
 			}
 			Count = 0;
 		}
@@ -323,25 +298,25 @@ namespace Lime
 				return;
 			}
 			for (var i = 0; i < Count; i++) {
-				array[arrayIndex++] = list[i].Component;
+				array[arrayIndex++] = list[i];
 			}
 		}
 
 		public struct Enumerator : IEnumerator<TComponent>
 		{
-			private readonly (int Key, TComponent Component)[] list;
+			private readonly TComponent [] list;
 			private readonly int length;
 			private int index;
 
-			public Enumerator((int, TComponent)[] list, int length)
+			public Enumerator(TComponent[] list, int length)
 			{
 				this.list = list;
 				this.length = length;
 				index = -1;
 			}
 
-			public TComponent Current => list?[index].Component;
-			object IEnumerator.Current => list?[index].Component;
+			public TComponent Current => list?[index];
+			object IEnumerator.Current => list?[index];
 
 			public bool MoveNext()
 			{
@@ -361,9 +336,7 @@ namespace Lime
 
 		private static class ComponentInfoResolver<T> where T : TComponent
 		{
-			public static readonly int Key = Component.GetKeyForType(typeof(T));
 			public static readonly bool CanAddMultiple = Component.CanAddMultiple(typeof(T));
-			public static readonly BitArray Children = Component.GetChildrenOfType(typeof(T));
 		}
 	}
 }
