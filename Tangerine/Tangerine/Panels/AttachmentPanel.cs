@@ -389,7 +389,7 @@ namespace Tangerine
 				var ic = new InspectorContent(this) {
 					History = history
 				};
-				ic.BuildForObjects(new[] { material });
+				ic.Build(new[] { material });
 				// Change displayed property name to material name.
 				editor = ic.ReadonlyEditors.OfType<InstancePropertyEditor<IMaterial>>().First();
 				HeaderContainer = editor.ContainerWidget;
@@ -529,7 +529,7 @@ namespace Tangerine
 						History = history,
 						Enabled = false
 					};
-					ic.BuildForObjects(new[] { source });
+					ic.Build(new[] { source });
 				}));
 				button.AddChangeWatcher(() => button.Expanded, v => wrapper.Visible = v);
 				Padding = new Thickness(0f, 5f);
@@ -736,11 +736,17 @@ namespace Tangerine
 		{
 			var container = CreateContentWrapper();
 			container.Content.Padding = new Thickness(10, AttachmentMetrics.Spacing);
-			new FloatPropertyEditor(Decorate(new PropertyEditorParams(
-					container.Content,
-					attachment,
-					nameof(Model3DAttachment.ScaleFactor),
-					nameof(Model3DAttachment.ScaleFactor)), displayLabel: true));
+			var editor = new FloatPropertyEditor(
+				Decorate(
+					new PropertyEditorParams(
+						attachment,
+						nameof(Model3DAttachment.ScaleFactor),
+						nameof(Model3DAttachment.ScaleFactor)
+					),
+					displayLabel: true
+				)
+			);
+			container.Content.AddNode(editor.ContainerWidget);
 			return container;
 		}
 
@@ -918,11 +924,12 @@ namespace Tangerine
 						Nodes.Add(Spacer.HStretch());
 						Nodes.Add(AddButton);
 					} else {
-						new BlendingPropertyEditor(new PropertyEditorParams(this, obj, propName) {
+						var editor = new BlendingPropertyEditor(new PropertyEditorParams(obj, propName) {
 							ShowLabel = false,
 							History = history,
 							PropertySetter = SetProperty
 						});
+						Nodes.Add(editor.ContainerWidget);
 						Nodes.Add(RemoveButton);
 					}
 				});
@@ -942,9 +949,11 @@ namespace Tangerine
 				Padding = new Thickness(AttachmentMetrics.Spacing);
 				var nodeIdPropertyEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						removal,
-						nameof(Model3DAttachment.NodeRemoval.NodeId))));
+						nameof(Model3DAttachment.NodeRemoval.NodeId))
+					)
+				);
+				Header.AddNode(nodeIdPropertyEditor.ContainerWidget);
 				nodeIdPropertyEditor.ContainerWidget.MinMaxWidth = AttachmentMetrics.EditorWidth;
 				CompoundPresenter.Add(Presenters.StripePresenter);
 			}
@@ -984,37 +993,37 @@ namespace Tangerine
 				label.ExpandToContainerWithAnchors();
 				var cullModePropEditor = new EnumPropertyEditor<CullMode>(
 					Decorate(new PropertyEditorParams(
-						Header,
 						mesh,
 						nameof(Model3DAttachment.MeshOption.CullMode))));
+				Header.AddNode(cullModePropEditor.ContainerWidget);
 				cullModePropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0f;
 				cullModePropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 				var opaquePropEditor = new BooleanPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						mesh,
 						nameof(Model3DAttachment.MeshOption.Opaque))));
+				Header.AddNode(opaquePropEditor.ContainerWidget);
 				opaquePropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0f;
 				opaquePropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 				var hitPropEditor = new BooleanPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						mesh,
 						nameof(Model3DAttachment.MeshOption.HitTestTarget))));
+				Header.AddNode(hitPropEditor.ContainerWidget);
 				hitPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0f;
 				hitPropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 				var disableMergingPropEditor = new BooleanPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						mesh,
 						nameof(Model3DAttachment.MeshOption.DisableMerging))));
+				Header.AddNode(disableMergingPropEditor.ContainerWidget);
 				disableMergingPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0f;
 				disableMergingPropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 				var skinningModePropEditor = new EnumPropertyEditor<SkinningMode>(
 					Decorate(new PropertyEditorParams(
-						Header,
 						mesh,
 						nameof(Model3DAttachment.MeshOption.SkinningMode))));
+				Header.AddNode(skinningModePropEditor.ContainerWidget);
 				skinningModePropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0f;
 				skinningModePropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 				CompoundPresenter.Add(Presenters.StripePresenter);
@@ -1061,9 +1070,11 @@ namespace Tangerine
 
 				var animationNamePropEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						animation,
-						nameof(Model3DAttachment.Animation.Id))));
+						nameof(Model3DAttachment.Animation.Id))
+					)
+				);
+				Header.AddNode(animationNamePropEditor.ContainerWidget);
 				animationNamePropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 
 				sourceAnimationSelector = new ThemedDropDownList { LayoutCell = new LayoutCell(Alignment.Center) };
@@ -1085,16 +1096,18 @@ namespace Tangerine
 				sourceAnimationSelector.AddChangeWatcher(() => animation.SourceAnimationId, v => sourceAnimationSelector.Text = v);
 				var startFramePropEditor = new IntPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						animation,
-						nameof(Model3DAttachment.Animation.StartFrame))));
+						nameof(Model3DAttachment.Animation.StartFrame))
+					)
+				);
+				Header.AddNode(startFramePropEditor.ContainerWidget);
 				startFramePropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 
 				var lastFramePropEditor = new IntPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						animation,
 						nameof(Model3DAttachment.Animation.LastFrame))));
+				Header.AddNode(lastFramePropEditor.ContainerWidget);
 				lastFramePropEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 
 				Header.AddNode(new BlendingCell(Source, nameof(Model3DAttachment.Animation.Blending)));
@@ -1214,8 +1227,9 @@ namespace Tangerine
 				Trigger = trigger
 			};
 			var propEditorParams = new PropertyEditorParams(
-				content, node, nameof(Node.Trigger), displayName: "Entry Animation");
+				node, nameof(Node.Trigger), displayName: "Entry Animation");
 			var editor = new TriggerPropertyEditor(propEditorParams);
+			content.AddNode(editor.ContainerWidget);
 			void Sync()
 			{
 				node.Animations.Clear();
@@ -1253,9 +1267,9 @@ namespace Tangerine
 				Padding = new Thickness(AttachmentMetrics.Spacing);
 				var nodeIdPropEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						source,
 						nameof(Model3DAttachment.NodeData.Id))));
+				Header.AddNode(nodeIdPropEditor.ContainerWidget);
 				nodeIdPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 				Presenter = Presenters.StripePresenter;
 				Header.LayoutCell.StretchX = Header.Nodes.Count * 2.0f;
@@ -1284,23 +1298,23 @@ namespace Tangerine
 				Padding = new Thickness(AttachmentMetrics.Spacing);
 				var destMarkerPropEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						Source,
 						nameof(Model3DAttachment.MarkerBlendingData.DestMarkerId))));
+				Header.AddNode(destMarkerPropEditor.ContainerWidget);
 				destMarkerPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 
 				var sourceMarkerPropEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						Source,
 						nameof(Model3DAttachment.MarkerBlendingData.SourceMarkerId))));
+				Header.AddNode(sourceMarkerPropEditor.ContainerWidget);
 				sourceMarkerPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 
 				var blendingOptionEditBox = new BlendingPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						Source,
 						nameof(Model3DAttachment.MarkerBlendingData.Blending))));
+				Header.AddNode(blendingOptionEditBox.ContainerWidget);
 				blendingOptionEditBox.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 				Header.LayoutCell.StretchX = Header.Nodes.Count * 2.0f;
 			}
@@ -1332,22 +1346,22 @@ namespace Tangerine
 				Padding = new Thickness(AttachmentMetrics.Spacing);
 				var markerIdPropEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						Source.Marker,
 						nameof(Marker.Id))));
+				Header.AddNode(markerIdPropEditor.ContainerWidget);
 				markerIdPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 
 				var frameEditor = new IntPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						Source.Marker,
 						nameof(Marker.Frame))));
+				Header.AddNode(frameEditor.ContainerWidget);
 				frameEditor.ContainerWidget.Nodes[0].AsWidget.MaxWidth = float.PositiveInfinity;
 				var actionPropEditor = new EnumPropertyEditor<MarkerAction>(
 					Decorate(new PropertyEditorParams(
-						Header,
 						Source.Marker,
 						nameof(Marker.Action))));
+				Header.AddNode(actionPropEditor.ContainerWidget);
 				actionPropEditor.ContainerWidget.Nodes[0].AsWidget.MinWidth = 0.0f;
 				var jumpToPropEditor = new ThemedComboBox { LayoutCell = new LayoutCell(Alignment.Center) };
 				jumpToPropEditor.MinSize = Vector2.Zero;
@@ -1415,9 +1429,9 @@ namespace Tangerine
 				} else {
 					var nodeIdPropEditor = new StringPropertyEditor(
 					Decorate(new PropertyEditorParams(
-						Header,
 						source,
 						nameof(Model3DAttachment.NodeComponentCollection.NodeId))));
+					Header.AddNode(nodeIdPropEditor.ContainerWidget);
 					nodeIdPropEditor.ContainerWidget.MinMaxWidth = AttachmentMetrics.EditorWidth;
 				}
 
@@ -1528,7 +1542,7 @@ namespace Tangerine
 					history.DoTransaction(() => Core.Operations.RemoveFromList.Perform(sourceCollection, sourceCollection.IndexOf(c)));
 				};
 				Nodes.Add(container);
-				content.BuildForObjects(new List<object> { source });
+				content.Build(new List<object> { source });
 				Padding = new Thickness { Bottom = 4f};
 			}
 		}

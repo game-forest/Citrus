@@ -81,9 +81,8 @@ namespace Tangerine.Dialogs
 
 		private void CreateColorEditor(ThemedScrollView container, object source, string propertyName, string displayName, Func<object> valueGetter)
 		{
-			var tmp = new Color4PropertyEditor(
+			var e = new Color4PropertyEditor(
 				new PreferencesPropertyEditorParams(
-					container.Content,
 					source,
 					propertyName: propertyName,
 					displayName: displayName
@@ -91,7 +90,8 @@ namespace Tangerine.Dialogs
 					DefaultValueGetter = valueGetter
 				}
 			);
-			tmp.Changed += Editor_Changed;
+			container.Content.AddNode(e.ContainerWidget);
+			e.Changed += Editor_Changed;
 		}
 
 		private void Editor_Changed()

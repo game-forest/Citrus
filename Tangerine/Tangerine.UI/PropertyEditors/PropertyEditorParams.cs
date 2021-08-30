@@ -12,7 +12,6 @@ namespace Tangerine.UI
 		private Func<NumericEditBox> numericEditBoxFactory;
 
 		public bool ShowLabel { get; set; } = true;
-		public Widget InspectorPane { get; set; }
 		public IEnumerable<object> RootObjects { get; set; }
 		public IEnumerable<object> Objects { get; set; }
 		public Type Type { get; set; }
@@ -54,21 +53,30 @@ namespace Tangerine.UI
 		public bool IsAnimableWithEasing {
 			get {
 				var t = PropertyInfo.PropertyType;
-				return t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Quaternion) || t == typeof(float) || t == typeof(Color4);
+				return t == typeof(Vector2)
+					|| t == typeof(Vector3)
+					|| t == typeof(Quaternion)
+					|| t == typeof(float)
+					|| t == typeof(Color4);
 			}
 		}
 
-		public PropertyEditorParams(Widget inspectorPane, IEnumerable<object> objects, IEnumerable<object> rootObjects, Type type, string propertyName, string propertyPath)
-		{
+		public PropertyEditorParams(
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			Type type,
+			string propertyName,
+			string propertyPath
+		) {
 			PropertySetter = SetProperty;
-			InspectorPane = inspectorPane;
 			Editable = Editable;
 			Objects = objects;
 			RootObjects = rootObjects;
 			Type = type;
 			PropertyName = propertyName;
 			PropertyPath = propertyPath;
-			TangerineAttribute = PropertyAttributes<TangerineKeyframeColorAttribute>.Get(Type, PropertyName) ?? new TangerineKeyframeColorAttribute(0);
+			TangerineAttribute = PropertyAttributes<TangerineKeyframeColorAttribute>.Get(Type, PropertyName)
+				?? new TangerineKeyframeColorAttribute(0);
 			Group = PropertyAttributes<TangerineGroupAttribute>.Get(Type, PropertyName)?.Name ?? String.Empty;
 			PropertyInfo = Type.GetProperty(PropertyName);
 			NumericEditBoxFactory = () => new ThemedNumericEditBox();
@@ -76,8 +84,12 @@ namespace Tangerine.UI
 			EditBoxFactory = () => new ThemedEditBox();
 		}
 
-		public PropertyEditorParams(Widget inspectorPane, object obj, string propertyName, string propertyPath = null, string displayName = null)
-			: this(inspectorPane, new [] { obj }, new [] { obj }, obj.GetType(), propertyName, propertyPath ?? propertyName)
+		public PropertyEditorParams(
+			object obj,
+			string propertyName,
+			string propertyPath = null,
+			string displayName = null
+		) : this(new [] { obj }, new [] { obj }, obj.GetType(), propertyName, propertyPath ?? propertyName)
 		{
 			DisplayName = displayName;
 		}
@@ -87,12 +99,20 @@ namespace Tangerine.UI
 
 	public class PreferencesPropertyEditorParams : PropertyEditorParams
 	{
-		public PreferencesPropertyEditorParams(Widget inspectorPane, object obj, string propertyName, string propertyPath = null, string displayName = null) : base(inspectorPane, obj, propertyName, propertyPath, displayName)
+		public PreferencesPropertyEditorParams(
+			object obj, string propertyName, string propertyPath = null, string displayName = null
+		) : base(obj, propertyName, propertyPath, displayName)
 		{
 			LabelWidth = 200;
 		}
 
-		public PreferencesPropertyEditorParams(Widget inspectorPane, IEnumerable<object> objects, IEnumerable<object> rootObjects, Type type, string propertyName, string propertyPath) : base(inspectorPane, objects, rootObjects, type, propertyName, propertyPath)
+		public PreferencesPropertyEditorParams(
+			IEnumerable<object> objects,
+			IEnumerable<object> rootObjects,
+			Type type,
+			string propertyName,
+			string propertyPath
+		) : base(objects, rootObjects, type, propertyName, propertyPath)
 		{
 			LabelWidth = 200;
 		}

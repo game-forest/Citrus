@@ -49,7 +49,8 @@ namespace Tangerine.UI.Timeline
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
 			Scale = 1;
-			var editor = new FloatPropertyEditor(new PropertyEditorParams(container, this, nameof(Scale), "Scale"));
+			var editor = new FloatPropertyEditor(new PropertyEditorParams(this, nameof(Scale), "Scale"));
+			container.AddNode(editor.ContainerWidget);
 			cancelButton.Clicked += () => {
 				window.Close();
 			};

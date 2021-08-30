@@ -20,8 +20,7 @@ namespace Tangerine.Core
 			if (!map.TryGetValue(type, out propMap)) {
 				map[type] = propMap = new Dictionary<string, T[]>();
 			}
-			T[] attr;
-			if (!propMap.TryGetValue(property, out attr)) {
+			if (!propMap.TryGetValue(property, out T[] attr)) {
 				// use last part of property path in case it's Animator.PropertyPath
 				int index = property.LastIndexOf('.');
 				var actualProperty = index == -1
@@ -37,7 +36,7 @@ namespace Tangerine.Core
 			}
 			return attr;
 		}
-		
+
 		public static T Get(Type type, string property) => GetAll(type, property).FirstOrDefault();
 	}
 }
