@@ -52,11 +52,7 @@ namespace Tangerine.UI
 				previousColor = panel.Color;
 			};
 			panel.Changed += () => {
-				if (panel.OpeningWidgetCount == 0) {
-					EditorParams.History?.RollbackTransaction();
-				} else {
-					panel.OpeningWidgetCount--;
-				}
+				EditorParams.History?.RollbackTransaction();
 				if ((panel.Color.ABGR & 0xFFFFFF) == (previousColor.ABGR & 0xFFFFFF) && panel.Color.A != previousColor.A) {
 					SetProperty<Color4>(c => {
 						c.A = panel.Color.A;

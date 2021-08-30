@@ -42,12 +42,6 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		private int openingWidgetCount = 0;
-		public int OpeningWidgetCount
-		{
-			get => openingWidgetCount;
-			set => openingWidgetCount = value;
-		}
 
 		public ColorPickerPanel()
 		{
@@ -80,7 +74,7 @@ namespace Tangerine.UI
 			};
 
 			Widget = new Widget {
-				Padding = new Thickness(8),
+				Padding = new Thickness(28, 8),
 				Layout = new VBoxLayout { Spacing = 8 },
 				Nodes = {
 					new Widget {
@@ -92,10 +86,6 @@ namespace Tangerine.UI
 			foreach(var (button, component) in colorComponents) {
 				Widget.Nodes.Add(component);
 				button.Clicked = () => {
-					OpeningWidgetCount =
-					component.Nodes
-						.Where(node => node.GetType().BaseType == typeof(ColorEditorSlider))
-						.Count();
 					button.Checked = !button.Checked;
 					component.Visible = button.Checked;
 				};
@@ -338,7 +328,7 @@ namespace Tangerine.UI
 					MinSize = new Vector2(60, Slider.MinSize.Y),
 					Text = Slider.Value.ToString("0.###")
 				};
-				Slider.Changed += () => {
+				Slider.Updating += _ => {
 					labelWidget.Text = Slider.Value.ToString("0.###");
 				};
 				Slider.CompoundPresenter.Insert(0, new PixelsSliderPresenter(Pixels));
@@ -358,12 +348,10 @@ namespace Tangerine.UI
 			class PixelsSliderPresenter : IPresenter
 			{
 				private readonly Color4[] pixels;
-
 				public PixelsSliderPresenter(Color4[] pixels)
 				{
 					this.pixels = pixels;
 				}
-
 				public Lime.RenderObject GetRenderObject(Node node)
 				{
 					var widget = (Widget)node;
@@ -375,9 +363,7 @@ namespace Tangerine.UI
 					renderObject.Pixels = pixels;
 					return renderObject;
 				}
-
 				public bool PartialHitTest(Node node, ref HitTestArgs args) => false;
-
 				private class RenderObject : WidgetRenderObject
 				{
 					public Vector2 Size;
@@ -437,7 +423,7 @@ namespace Tangerine.UI
 				}
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue(Color.Value.A);
+					Slider.Value = (Color.Value.A);
 					for (var i = 0; i < pixelCount; i++) {
 						Pixels[pixelCount - i - 1] = Color.Value.HSVAtoRGB();
 					}
@@ -481,7 +467,7 @@ namespace Tangerine.UI
 
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue((int)Color.Value.H);
+					Slider.Value = ((int)Color.Value.H);
 				}
 			}
 			public class SSlider : ColorEditorSlider
@@ -496,7 +482,7 @@ namespace Tangerine.UI
 				}
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue(Color.Value.S);
+					Slider.Value = (Color.Value.S);
 					for (var i = 0; i < pixelCount; i++) {
 						Pixels[pixelCount - i - 1] = new ColorHSVA(Color.Value.H, i / (float)pixelCount,
 							Color.Value.V, 1).HSVAtoRGB();
@@ -515,7 +501,7 @@ namespace Tangerine.UI
 				}
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue(Color.Value.V);
+					Slider.Value = (Color.Value.V);
 					for (var i = 0; i < pixelCount; i++) {
 						Pixels[pixelCount - i - 1] = new ColorHSVA(Color.Value.H, Color.Value.S,
 							i / (float)pixelCount, 1).HSVAtoRGB();
@@ -557,7 +543,7 @@ namespace Tangerine.UI
 				}
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue(Color.Value.HSVAtoRGB().R);
+					Slider.Value = (Color.Value.HSVAtoRGB().R);
 					for (var i = 0; i < pixelCount; i++) {
 						Pixels[pixelCount - i - 1] = Color.Value.HSVAtoRGB();
 						Pixels[pixelCount - i - 1].R = (byte)i;
@@ -580,7 +566,7 @@ namespace Tangerine.UI
 				}
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue(Color.Value.HSVAtoRGB().G);
+					Slider.Value = (Color.Value.HSVAtoRGB().G);
 					for (var i = 0; i < pixelCount; i++) {
 						Pixels[pixelCount - i - 1] = Color.Value.HSVAtoRGB();
 						Pixels[pixelCount - i - 1].G = (byte)i;
@@ -603,7 +589,7 @@ namespace Tangerine.UI
 				}
 				protected override void OnColorValueChange()
 				{
-					Slider.SetValue(Color.Value.HSVAtoRGB().B);
+					Slider.Value = (Color.Value.HSVAtoRGB().B);
 					for (var i = 0; i < pixelCount; i++) {
 						Pixels[pixelCount - i - 1] = Color.Value.HSVAtoRGB();
 						Pixels[pixelCount - i - 1].B = (byte)i;
@@ -641,18 +627,19 @@ namespace Tangerine.UI
 				protected override void OnColorValueChange()
 				{
 					var c = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
-					Slider.SetValue((int)c.L);
+					Slider.Value = ((int)c.L);
 					for (int i = 0; i < pixelCount; i++) {
 						c.L = i;
 						Pixels[pixelCount - i - 1] = c.LABtoRGB();
+						Pixels[pixelCount - i - 1].A = 255;
 					}
 				}
 				protected override void OnSliderValueChange()
 				{
-					//var sliderValue = (int)Slider.Value;
-					//var lab = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
-					//lab.L = sliderValue;
-					//Color.Value = ColorHSVA.RGBtoHSVA(lab.LABtoRGB());
+					var sliderValue = Math.Round(Slider.Value);
+					var lab = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
+					lab.L = sliderValue;
+					Color.Value = ColorHSVA.RGBtoHSVA(lab.LABtoRGB());
 				}
 			}
 			public class ASlider : ColorEditorSlider
@@ -664,18 +651,19 @@ namespace Tangerine.UI
 				protected override void OnColorValueChange()
 				{
 					var c = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
-					Slider.SetValue((int)c.A);
+					Slider.Value = ((int)c.A);
 					for (int i = 0; i < pixelCount; i++) {
 						c.A = i - 128;
 						Pixels[pixelCount - i - 1] = c.LABtoRGB();
+						Pixels[pixelCount - i - 1].A = 255;
 					}
 				}
 				protected override void OnSliderValueChange()
 				{
-					//var sliderValue = (byte)Slider.Value;
-					//var lab = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
-					//lab.A = sliderValue;
-					//Color.Value = ColorHSVA.RGBtoHSVA(lab.LABtoRGB());
+					var sliderValue = Math.Round(Slider.Value);
+					var lab = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
+					lab.A = sliderValue;
+					Color.Value = ColorHSVA.RGBtoHSVA(lab.LABtoRGB());
 				}
 			}
 			public class BSlider : ColorEditorSlider
@@ -687,19 +675,20 @@ namespace Tangerine.UI
 				protected override void OnColorValueChange()
 				{
 					var c = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
-					Slider.SetValue((int)c.B);
+					Slider.Value = ((int)c.B);
 					for (int i = 0; i < pixelCount; i++) {
-
 						c.B = i - 128;
 						Pixels[pixelCount - i - 1] = c.LABtoRGB();
+						Pixels[pixelCount - i - 1].A = 255;
 					}
 				}
 				protected override void OnSliderValueChange()
 				{
-					//var sliderValue = (byte)Slider.Value;
-					//var lab = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
-					//lab.B = sliderValue;
-					//Color.Value = ColorHSVA.RGBtoHSVA(lab.LABtoRGB());
+
+					var sliderValue = Math.Round(Slider.Value);
+					var lab = ColorLAB.RGBtoLAB(Color.Value.HSVAtoRGB());
+					lab.B = sliderValue;
+					Color.Value = ColorHSVA.RGBtoHSVA(lab.LABtoRGB());
 				}
 			}
 		}
@@ -729,7 +718,6 @@ namespace Tangerine.UI
 				c.A = rgb.A / 255f;
 				return c;
 			}
-
 			public Color4 HSVAtoRGB()
 			{
 				var a = (byte)(A * 255);
@@ -754,7 +742,6 @@ namespace Tangerine.UI
 						return new Color4(v, p, q, a);
 				}
 			}
-
 			private static float GetHue(Color4 rgb)
 			{
 				int r = rgb.R;
@@ -780,23 +767,39 @@ namespace Tangerine.UI
 					hue = hue - 360.0f;
 				return hue;
 			}
+			public bool isEqual(ColorHSVA color)
+			{
+				return (
+					isEqualWithTolarance(H, color.H) &&
+					isEqualWithTolarance(V, color.V) &&
+					isEqualWithTolarance(S, color.S) &&
+					isEqualWithTolarance(A , color.A)
+					);
+				bool isEqualWithTolarance(float lv, float rv)
+				{
+					return Mathf.Abs(lv - rv) < 0.02f;
+				}
+			}
 		}
 		struct ColorXYZ
 		{
 			public double X;
 			public double Y;
 			public double Z;
-			public ColorXYZ(int X, int Y, int Z)
+			public float alpha;
+			public ColorXYZ(int X, int Y, int Z, int alpha)
 			{
 				this.X = X;
 				this.Y = Y;
 				this.Z = Z;
+				this.alpha = alpha;
 			}
-			public ColorXYZ(double X, double Y, double Z)
+			public ColorXYZ(double X, double Y, double Z, float alpha)
 			{
 				this.X = X;
 				this.Y = Y;
 				this.Z = Z;
+				this.alpha = alpha;
 			}
 		};
 		class ColorLAB
@@ -804,23 +807,24 @@ namespace Tangerine.UI
 			public double L;
 			public double A;
 			public double B;
+			public float alpha;
 			// Bradford-adapted D50. 
 			private static (double X, double Y, double Z) D50 = (0.964212, 1, 0.825188);
 			private static readonly double kE = 216.0 / 24389.0;
 			private static readonly double kK = 24389.0 / 27.0;
 			private static readonly double kKE = 8.0;
-			public ColorLAB(double L, double A, double B)
+			public ColorLAB(double L, double A, double B, float alpha)
 			{
 				this.L = L;
 				this.A = A;
 				this.B = B;
+				this.alpha = alpha;
 			}			
 			public static ColorLAB RGBtoLAB(Color4 rgb)
 			{
 				var xyz = RGBtoXYZ(rgb);
 				return XYZtoLAB(xyz);
 			}
-			//correct
 			private static ColorXYZ RGBtoXYZ(Color4 rgb)
 			{
 				var var_R = InverseCompand(rgb.R / 255.0);
@@ -829,7 +833,8 @@ namespace Tangerine.UI
 				return new ColorXYZ(
 					X: var_R * 0.4360747 + var_G * 0.3850649 + var_B * 0.1430804,
 					Y: var_R * 0.2225045 + var_G * 0.7168786 + var_B * 0.0606169,
-					Z: var_R * 0.0139322 + var_G * 0.0971045 + var_B * 0.7141733);
+					Z: var_R * 0.0139322 + var_G * 0.0971045 + var_B * 0.7141733,
+					alpha: rgb.A);
 				double InverseCompand(double colorPart)
 				{
 					var sign = 1.0;
@@ -856,7 +861,7 @@ namespace Tangerine.UI
 				var A = 500.0 * (var_X - var_Y);
 				var B = 200.0 * (var_Y - var_Z);
 
-				return new ColorLAB(L, A, B);
+				return new ColorLAB(Math.Round(L), Math.Round(A), Math.Round(B), xyz.alpha);
 
 				double ConvertXYZtoLAB(double colorPart)
 				{
@@ -878,16 +883,16 @@ namespace Tangerine.UI
 
 				var_x = (Math.Pow(var_x, 3) > kE) ? Math.Pow(var_x, 3) : ((116.0 * var_x - 16.0) / kK);
 				var_y = (L > kKE) ? Math.Pow((L + 16.0) / 116.0, 3.0) : (L / kK);
-				var_z = (Math.Pow(var_z, 3) > kE) ? Math.Pow(var_z, 3) : ((116.0 * var_x - 16.0) / kK);
+				var_z = (Math.Pow(var_z, 3) > kE) ? Math.Pow(var_z, 3) : ((116.0 * var_z - 16.0) / kK);
 
-				return new ColorXYZ(var_x * D50.X, var_y * D50.Y, var_z * D50.Z);
+				return new ColorXYZ(var_x * D50.X, var_y * D50.Y, var_z * D50.Z, alpha);
 			}
 			private static Color4 XYZtoRGB(ColorXYZ xyz)
 			{
 				double r = Compand(xyz.X * 3.1338561 + xyz.Y * -1.6168667 + xyz.Z * -0.4906146);
 				double g = Compand(xyz.X * -0.9787684 + xyz.Y * 1.9161415 + xyz.Z * 0.0334540);
 				double b = Compand(xyz.X * 0.0719453 + xyz.Y * -0.2289914 + xyz.Z * 1.4052427);
-				return new Color4((byte)(r * 255.0), (byte)(g * 255.0), (byte)(b * 255.0));
+				return new Color4((byte)Math.Round(r * 255.0), (byte)Math.Round(g * 255.0), (byte)Math.Round(b * 255.0), (byte)xyz.alpha);
 				double Compand(double colorPart)
 				{
 					var sign = 1.0;
@@ -897,7 +902,11 @@ namespace Tangerine.UI
 					}
 					var companded = (colorPart <= 0.0031308) ? (colorPart * 12.92) : (1.055 * Math.Pow(colorPart, 1.0 / 2.4) - 0.055);
 					companded *= sign;
-					return companded;
+					return companded < 0
+						? 0
+						: companded * 255 > 255
+							? 1
+							: companded;
 				}
 			}
 		}
