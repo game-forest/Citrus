@@ -69,7 +69,7 @@ namespace Tangerine.Common.Operations
 				int index = 0;
 				var groupSceneItem = Document.Current.GetSceneItemForObject(group);
 				foreach (var item in topSceneItems) {
-					LinkSceneItem.Perform(groupSceneItem, index, item);
+					LinkSceneItem.Perform(groupSceneItem, new SceneTreeIndex(index), item);
 					index = groupSceneItem.Rows.IndexOf(item) + 1;
 				}
 				foreach (var node in nodes) {
@@ -94,7 +94,7 @@ namespace Tangerine.Common.Operations
 			}
 			var group = (Frame)CreateNode.Perform(
 				i.Parent,
-				i.Parent.Rows.IndexOf(i),
+				new SceneTreeIndex(i.Parent.Rows.IndexOf(i)),
 				typeof(Frame));
 			group.Id = item.Id + "Group";
 			return group;

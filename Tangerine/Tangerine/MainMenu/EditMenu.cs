@@ -132,7 +132,7 @@ namespace Tangerine
 			var parentItem = nodeItem.Parent;
 			var index = parentItem.Rows.IndexOf(nodeItem);
 			UnlinkSceneItem.Perform(nodeItem);
-			LinkSceneItem.Perform(parentItem, index, clone);
+			LinkSceneItem.Perform(parentItem, new SceneTreeIndex(index), clone);
 		}
 	}
 

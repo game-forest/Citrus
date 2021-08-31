@@ -597,9 +597,12 @@ namespace Tangerine.UI.Timeline
 			}
 			Document.Current.History.DoTransaction(() => {
 				var track = new AnimationTrack { Id = GenerateTrackId() };
+				var parentItem = Document.Current.GetSceneItemForObject(Document.Current.Animation);
 				var item = LinkSceneItem.Perform(
-					Document.Current.GetSceneItemForObject(Document.Current.Animation),
-					index, track);
+					parentItem,
+					SceneTreeIndex.FromAnimationTrackIndex(parentItem, index),
+					track
+				);
 				ClearRowSelection.Perform();
 				SelectRow.Perform(item);
 			});
@@ -642,7 +645,7 @@ namespace Tangerine.UI.Timeline
 			menu.Popup();
 		}
 	}
-	
+
 	public class TreeViewPresentation : ITreeViewPresentation
 	{
 		public const float IndentWidth = 20;

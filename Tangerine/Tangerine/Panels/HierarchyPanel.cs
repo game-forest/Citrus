@@ -128,7 +128,7 @@ namespace Tangerine.Panels
 					UnlinkSceneItem.Perform(item);
 				}
 				foreach (var item in topSceneItems) {
-					LinkSceneItem.Perform(parentSceneItem, index, item);
+					LinkSceneItem.Perform(parentSceneItem, new SceneTreeIndex(index), item);
 					index = parentSceneItem.Rows.IndexOf(item) + 1;
 				}
 			});
@@ -182,8 +182,12 @@ namespace Tangerine.Panels
 				Document.Current.History.DoTransaction(() => {
 					var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 					var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
-					Paste.Perform(stream, GetSceneItem(args.Parent), index,
-						out var pastedItems);
+					Paste.Perform(
+						stream,
+						GetSceneItem(args.Parent),
+						new SceneTreeIndex(index),
+						out var pastedItems
+					);
 					RebuildTreeView();
 					treeView.Refresh();
 					treeView.ClearSelection();

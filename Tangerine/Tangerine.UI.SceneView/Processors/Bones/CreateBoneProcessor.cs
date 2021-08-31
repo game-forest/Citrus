@@ -71,7 +71,7 @@ namespace Tangerine.UI.SceneView
 								var baseBone = container.Nodes.First(
 									n => n is Bone b && b.Index == baseBoneIndex);
 								var baseBoneItem = Document.Current.GetSceneItemForObject(baseBone);
-								bone = (Bone)CreateNode.Perform(baseBoneItem, 0, typeof(Bone));
+								bone = (Bone)CreateNode.Perform(baseBoneItem, new SceneTreeIndex(0), typeof(Bone));
 							} else {
 								if (!SceneTreeUtils.TryGetSceneItemLinkLocation(
 									out var parent, out var index, typeof(Bone), true,

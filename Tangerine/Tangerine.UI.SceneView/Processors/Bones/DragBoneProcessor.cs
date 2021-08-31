@@ -93,7 +93,7 @@ namespace Tangerine.UI.SceneView
 					} else {
 						baseItem = Document.Current.GetSceneItemForObject(bone.Parent);
 					}
-					LinkSceneItem.Perform(baseItem, 0, boneSceneItem);
+					LinkSceneItem.Perform(baseItem, new SceneTreeIndex(0), boneSceneItem);
 				}
 				SceneView.Instance.Components.Remove<CreateBoneHelper>();
 				sv.Input.ConsumeKey(Key.Mouse0);

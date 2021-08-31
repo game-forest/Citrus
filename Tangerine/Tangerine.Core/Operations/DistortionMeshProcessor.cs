@@ -36,7 +36,11 @@ namespace Tangerine.Core.Operations
 						UV = pos,
 						Position = pos
 					};
-					LinkSceneItem.Perform(Document.Current.GetSceneItemForObject(mesh), mesh.Nodes.Count, point);
+					LinkSceneItem.Perform(
+						Document.Current.GetSceneItemForObject(mesh),
+						new SceneTreeIndex(mesh.Nodes.Count),
+						point
+					);
 					Document.Decorate(point);
 				}
 			}

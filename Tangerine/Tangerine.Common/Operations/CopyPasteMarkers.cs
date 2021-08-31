@@ -78,7 +78,7 @@ namespace Tangerine.Common.Operations
 					}
 					LinkSceneItem.Perform(
 						Document.Current.GetSceneItemForObject(animation),
-						animation.Markers.GetInsertionIndexByFrame(marker.Frame),
+						new SceneTreeIndex(animation.Markers.GetInsertionIndexByFrame(marker.Frame)),
 						Document.Current.SceneTreeBuilder.BuildMarkerSceneItem(marker)
 					);
 				}

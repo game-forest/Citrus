@@ -20,7 +20,7 @@ namespace Tangerine.UI.Timeline
 				var index = parent.Rows.IndexOf(item);
 				if (index > 0) {
 					UnlinkSceneItem.Perform(item);
-					LinkSceneItem.Perform(parent, index - 1, item);
+					LinkSceneItem.Perform(parent, new SceneTreeIndex(index - 1), item);
 				}
 			}
 		}
@@ -36,7 +36,7 @@ namespace Tangerine.UI.Timeline
 				var index = parent.Rows.IndexOf(item);
 				if (index < parent.Rows.Count - 1) {
 					UnlinkSceneItem.Perform(item);
-					LinkSceneItem.Perform(parent, index + 1, item);
+					LinkSceneItem.Perform(parent, new SceneTreeIndex(index + 1), item);
 				}
 			}
 		}

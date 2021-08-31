@@ -763,7 +763,7 @@ namespace Tangerine.Core.Operations
 			return Perform(parent, index, nodeType);
 		}
 
-		public static Node Perform(Row parent, int index, Type nodeType)
+		public static Node Perform(Row parent, SceneTreeIndex index, Type nodeType)
 		{
 			if (!nodeType.IsSubclassOf(typeof(Node))) {
 				throw new InvalidOperationException();
