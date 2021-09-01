@@ -30,9 +30,8 @@ namespace Tangerine.UI.SceneView
 			while (true) {
 				Bone bone = null;
 				if (!SceneTreeUtils.GetSceneItemLinkLocation(
-					out var containerSceneItem, out _, typeof(Bone), aboveFocused: true,
-					raiseThroughHierarchyPredicate: i => !LinkSceneItem.CanLink(i, new Bone()))
-				) {
+					out var containerSceneItem, out _, typeof(Bone), aboveFocused: true
+				)) {
 					throw new InvalidOperationException();
 				}
 				var container = (Widget)SceneTreeUtils.GetOwnerNodeSceneItem(containerSceneItem).GetNode();
