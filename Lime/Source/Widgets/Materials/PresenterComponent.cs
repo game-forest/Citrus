@@ -1,6 +1,6 @@
 namespace Lime
 {
-	[MutuallyExclusiveDerivedComponents]
+	[ComponentSettings(StartEquivalenceClass = true)]
 	[AllowedComponentOwnerTypes(typeof(Image))]
 	public class PresenterComponent : NodeComponent { }
 

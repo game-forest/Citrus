@@ -1813,7 +1813,7 @@ namespace Lime
 		}
 	}
 
-	[MutuallyExclusiveDerivedComponents]
+	[ComponentSettings(StartEquivalenceClass = true)]
 	[NodeComponentDontSerialize]
 	[UpdateStage(typeof(LateUpdateStage))]
 	public class UpdatableNodeBehavior : BehaviorComponent

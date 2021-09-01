@@ -132,7 +132,8 @@ namespace Tangerine.UI.Inspector
 		{
 			var current = t;
 			while (current != typeof(NodeComponent)) {
-				if (current.IsDefined(typeof(MutuallyExclusiveDerivedComponentsAttribute), false)) {
+				var attr = ClassAttributes<ComponentSettingsAttribute>.Get(current);
+				if (attr != null && attr.StartEquivalenceClass) {
 					t = current;
 					break;
 				}

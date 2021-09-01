@@ -6,26 +6,35 @@ using System.Reflection;
 namespace Lime
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-	public class MutuallyExclusiveDerivedComponentsAttribute : Attribute
-	{ }
-
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-	public sealed class AllowMultipleAttribute : Attribute
-	{ }
+	public class ComponentSettingsAttribute : Attribute
+	{
+		public bool StartEquivalenceClass { get; set; } = false;
+		public bool AllowMultiple { get; set; } = false;
+	}
 
 	public class Component
 	{
-		private static Dictionary<Type, bool> canAddMultiple = new Dictionary<Type, bool>();
+		private static Dictionary<Type, (Type EqualityClassRoot, bool AllowMultiple)> equalityClassRoot =
+			new Dictionary<Type, (Type, bool)>();
 
-		internal static bool CanAddMultiple(Type type)
+		internal static (Type Type, bool AllowMultiple) GetEqualityClassRoot(Type type)
 		{
-			lock (canAddMultiple) {
-				if (canAddMultiple.TryGetValue(type, out var result)) {
+			lock (equalityClassRoot) {
+				if (equalityClassRoot.TryGetValue(type, out var result)) {
 					return result;
 				}
-				result = type.GetCustomAttribute<AllowMultipleAttribute>() != null;
-				canAddMultiple.Add(type, result);
-				return result;
+				var t = type;
+				while (t != typeof(Component)) {
+					var attr = t.GetCustomAttribute<ComponentSettingsAttribute>();
+					if (attr != null && (attr.StartEquivalenceClass || t == type)) {
+						var ecr = (attr.StartEquivalenceClass ? t : null, attr.AllowMultiple);
+						equalityClassRoot.Add(type, ecr);
+						return ecr;
+					}
+					t = t.BaseType;
+				}
+				equalityClassRoot.Add(type, (null, false));
+				return (null, false);
 			}
 		}
 	}
@@ -190,7 +199,12 @@ namespace Lime
 			if (Contains(component)) {
 				throw new InvalidOperationException("Attempt to add a component twice.");
 			}
-			if (!Component.CanAddMultiple(type) && Contains(type)) {
+			var (equalityClassRoot, allowMultiple) = Component.GetEqualityClassRoot(type);
+			if (
+				!allowMultiple
+				&& ((equalityClassRoot == null && ContainsExactType(type))
+				|| (equalityClassRoot != null && Contains(equalityClassRoot)))
+			) {
 				throw new InvalidOperationException("Adding multiple component of this type is not permitted");
 			}
 			if (list == null) {
@@ -203,6 +217,19 @@ namespace Lime
 				Array.Resize(ref list, Count * 2);
 			}
 			list[Count++] = component;
+		}
+
+		private bool ContainsExactType(Type type)
+		{
+			if (list == null) {
+				return false;
+			}
+			for (int i = 0; i < Count; i++) {
+				if (type == list[i].GetType()) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public bool Remove<T>() where T : TComponent
@@ -336,7 +363,8 @@ namespace Lime
 
 		private static class ComponentInfoResolver<T> where T : TComponent
 		{
-			public static readonly bool CanAddMultiple = Component.CanAddMultiple(typeof(T));
+			public static readonly (Type Type, bool AllowMultiple) EqualityClassRoot =
+				Component.GetEqualityClassRoot(typeof(T));
 		}
 	}
 }
