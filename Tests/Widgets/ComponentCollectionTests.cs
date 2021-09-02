@@ -8,21 +8,20 @@ namespace Citrus.Tests.Widgets
 	[TestClass]
 	public class ComponentCollectionTests
 	{
-		[ComponentSettings(AllowMultiple = true, StartEquivalenceClass = false)]
 		private class BaseTestComponent : Component { }
 
 		private class DerivedTestComponent : BaseTestComponent { }
 
-		[ComponentSettings(StartEquivalenceClass = true, AllowMultiple = true)]
-		public class BaseEqualityClassStarterAllowMultipleComponent : Component { }
+		[AllowMultipleComponents]
+		public class BaseAllowMultipleComponent : Component { }
 
-		public class DerivedEqualityClassStarterAllowMultipleComponent :
-			BaseEqualityClassStarterAllowMultipleComponent { }
+		public class DerivedAllowMultipleComponent :
+			BaseAllowMultipleComponent { }
 
-		[ComponentSettings(StartEquivalenceClass = true, AllowMultiple = false)]
-		public class BaseEqualityClassStarterComponent : Component { }
+		[AllowOnlyOneComponent]
+		public class BaseAllowOnlyOneComponent : Component { }
 
-		public class DerivedEqualityClassStarterComponent : BaseEqualityClassStarterComponent { }
+		public class DerivedAllowOnlyOneComponent : BaseAllowOnlyOneComponent { }
 
 		private class DummyComponent : Component
 		{
@@ -49,26 +48,25 @@ namespace Citrus.Tests.Widgets
 		{
 			var components = new ComponentCollection<Component>();
 			{
-				// Can add base mutiple times but that doesn't apply to dervied
-				// because they're in the separate equality classes.
+				// Default behaviour: can't add multiple components of exactly the same type
 				var base1 = new BaseTestComponent();
 				var base2 = new BaseTestComponent();
 				var derived1 = new DerivedTestComponent();
 				var derived2 = new DerivedTestComponent();
 				components.Add(base1);
-				components.Add(base2);
 				components.Add(derived1);
-				Assert.AreEqual(3, components.Count);
+				Assert.AreEqual(2, components.Count);
 				Assert.ThrowsException<InvalidOperationException>(() => components.Add(derived2));
+				Assert.ThrowsException<InvalidOperationException>(() => components.Add(base2));
 				components.Clear();
 			}
 			{
-				// Base declares equality class and spreads along inheritance hierarchy.
-				// Can't add both base and derived as well as 2 base or 2 derived.
-				var base1 = new BaseEqualityClassStarterComponent();
-				var base2 = new BaseEqualityClassStarterComponent();
-				var derived1 = new DerivedEqualityClassStarterComponent();
-				var derived2 = new DerivedEqualityClassStarterComponent();
+				// Base is marked with AllowOnlyOneComponentAttribute that disallows additions of
+				// multiple components of Base type or it's subtypes.
+				var base1 = new BaseAllowOnlyOneComponent();
+				var base2 = new BaseAllowOnlyOneComponent();
+				var derived1 = new DerivedAllowOnlyOneComponent();
+				var derived2 = new DerivedAllowOnlyOneComponent();
 				components.Add(base1);
 				Assert.ThrowsException<InvalidOperationException>(() => components.Add(derived1));
 				Assert.ThrowsException<InvalidOperationException>(() => components.Add(base2));
@@ -79,18 +77,82 @@ namespace Citrus.Tests.Widgets
 				components.Clear();
 			}
 			{
-				// Base declares equality class, spreads along inheritance hierarchy
-				// and allows to add multiple components of declared equality class.
-				// Can add 2 base and 2 dervied.
-				var base1 = new BaseEqualityClassStarterAllowMultipleComponent();
-				var base2 = new BaseEqualityClassStarterAllowMultipleComponent();
-				var derived1 = new DerivedEqualityClassStarterAllowMultipleComponent();
-				var derived2 = new DerivedEqualityClassStarterAllowMultipleComponent();
+				// Base is marked with AllowMultipleComponentsAttribute that allows additions of
+				// multiple components of Base type or it's subtypes.
+				var base1 = new BaseAllowMultipleComponent();
+				var base2 = new BaseAllowMultipleComponent();
+				var derived1 = new DerivedAllowMultipleComponent();
+				var derived2 = new DerivedAllowMultipleComponent();
 				components.Add(base1);
 				components.Add(base2);
 				components.Add(derived1);
 				components.Add(derived2);
 
+			}
+		}
+
+		[TestMethod]
+		public void CanAddTestTest()
+		{
+			var components = new ComponentCollection<Component>();
+			{
+				// Default behaviour: can't add multiple components of exactly the same type
+				var base1 = new BaseTestComponent();
+				var derived1 = new DerivedTestComponent();
+				Assert.IsTrue(components.CanAdd<BaseTestComponent>());
+				Assert.IsTrue(components.CanAdd<DerivedTestComponent>());
+				Assert.IsTrue(components.CanAdd(typeof(BaseTestComponent)));
+				Assert.IsTrue(components.CanAdd(typeof(DerivedTestComponent)));
+				components.Add(base1);
+				components.Add(derived1);
+				Assert.AreEqual(2, components.Count);
+				Assert.IsFalse(components.CanAdd<BaseTestComponent>());
+				Assert.IsFalse(components.CanAdd<DerivedTestComponent>());
+				Assert.IsFalse(components.CanAdd(typeof(BaseTestComponent)));
+				Assert.IsFalse(components.CanAdd(typeof(DerivedTestComponent)));
+				components.Clear();
+			}
+			{
+				// Base is marked with AllowOnlyOneComponentAttribute that disallows additions of
+				// multiple components of Base type or it's subtypes.
+				var base1 = new BaseAllowOnlyOneComponent();
+				var derived1 = new DerivedAllowOnlyOneComponent();
+				Assert.IsTrue(components.CanAdd<BaseAllowOnlyOneComponent>());
+				Assert.IsTrue(components.CanAdd<DerivedAllowOnlyOneComponent>());
+				Assert.IsTrue(components.CanAdd(typeof(BaseAllowOnlyOneComponent)));
+				Assert.IsTrue(components.CanAdd(typeof(DerivedAllowOnlyOneComponent)));
+				components.Add(base1);
+				Assert.IsFalse(components.CanAdd<BaseAllowOnlyOneComponent>());
+				Assert.IsFalse(components.CanAdd<DerivedAllowOnlyOneComponent>());
+				Assert.IsFalse(components.CanAdd(typeof(BaseAllowOnlyOneComponent)));
+				Assert.IsFalse(components.CanAdd(typeof(DerivedAllowOnlyOneComponent)));
+				components.Clear();
+				components.Add(derived1);
+				Assert.IsFalse(components.CanAdd<BaseAllowOnlyOneComponent>());
+				Assert.IsFalse(components.CanAdd<DerivedAllowOnlyOneComponent>());
+				Assert.IsFalse(components.CanAdd(typeof(BaseAllowOnlyOneComponent)));
+				Assert.IsFalse(components.CanAdd(typeof(DerivedAllowOnlyOneComponent)));
+				components.Clear();
+			}
+			{
+				// Base is marked with AllowMultipleComponentsAttribute that allows additions of
+				// multiple components of Base type or it's subtypes.
+				var base1 = new BaseAllowMultipleComponent();
+				var base2 = new BaseAllowMultipleComponent();
+				var derived1 = new DerivedAllowMultipleComponent();
+				var derived2 = new DerivedAllowMultipleComponent();
+				Assert.IsTrue(components.CanAdd<BaseAllowMultipleComponent>());
+				Assert.IsTrue(components.CanAdd<DerivedAllowMultipleComponent>());
+				Assert.IsTrue(components.CanAdd(typeof(BaseAllowMultipleComponent)));
+				Assert.IsTrue(components.CanAdd(typeof(DerivedAllowMultipleComponent)));
+				components.Add(base1);
+				components.Add(base2);
+				components.Add(derived1);
+				components.Add(derived2);
+				Assert.IsTrue(components.CanAdd<BaseAllowMultipleComponent>());
+				Assert.IsTrue(components.CanAdd<DerivedAllowMultipleComponent>());
+				Assert.IsTrue(components.CanAdd(typeof(BaseAllowMultipleComponent)));
+				Assert.IsTrue(components.CanAdd(typeof(DerivedAllowMultipleComponent)));
 			}
 		}
 
@@ -161,8 +223,8 @@ namespace Citrus.Tests.Widgets
 			Assert.IsTrue(components.Contains(typeof(DerivedTestComponent)));
 			Assert.IsTrue(components.Contains(typeof(DummyComponent)));
 			Assert.IsTrue(components.Contains(typeof(Component)));
-			Assert.IsFalse(components.Contains<BaseEqualityClassStarterAllowMultipleComponent>());
-			Assert.IsFalse(components.Contains(typeof(BaseEqualityClassStarterAllowMultipleComponent)));
+			Assert.IsFalse(components.Contains<BaseAllowMultipleComponent>());
+			Assert.IsFalse(components.Contains(typeof(BaseAllowMultipleComponent)));
 		}
 
 		[TestMethod]
@@ -192,7 +254,7 @@ namespace Citrus.Tests.Widgets
 		}
 		private class DummyNodeComponent : NodeComponent { }
 
-		[ComponentSettings(AllowMultiple = true, StartEquivalenceClass = true)]
+		[AllowMultipleComponents]
 		private class BaseTestNodeComponent : NodeComponent { }
 
 

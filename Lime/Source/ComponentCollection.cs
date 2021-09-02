@@ -6,34 +6,34 @@ using System.Reflection;
 namespace Lime
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-	public class ComponentSettingsAttribute : Attribute
-	{
-		public bool StartEquivalenceClass { get; set; } = false;
-		public bool AllowMultiple { get; set; } = false;
-	}
+	public class AllowMultipleComponentsAttribute : Attribute { }
+
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	public class AllowOnlyOneComponentAttribute : Attribute { }
 
 	public class Component
 	{
-		private static Dictionary<Type, (Type EqualityClassRoot, bool AllowMultiple)> equalityClassRoot =
+		private static Dictionary<Type, (Type Type, bool AllowMultiple)> ruleSpreader =
 			new Dictionary<Type, (Type, bool)>();
 
-		internal static (Type Type, bool AllowMultiple) GetEqualityClassRoot(Type type)
+		internal static (Type Type, bool AllowMultiple) GetRuleSpreader(Type type)
 		{
-			lock (equalityClassRoot) {
-				if (equalityClassRoot.TryGetValue(type, out var result)) {
+			lock (ruleSpreader) {
+				if (ruleSpreader.TryGetValue(type, out var result)) {
 					return result;
 				}
 				var t = type;
 				while (t != typeof(Component)) {
-					var attr = t.GetCustomAttribute<ComponentSettingsAttribute>();
-					if (attr != null && (attr.StartEquivalenceClass || t == type)) {
-						var ecr = (attr.StartEquivalenceClass ? t : null, attr.AllowMultiple);
-						equalityClassRoot.Add(type, ecr);
-						return ecr;
+					var allowMultiple = t.GetCustomAttribute<AllowMultipleComponentsAttribute>();
+					var allowOnlyOne = t.GetCustomAttribute<AllowOnlyOneComponentAttribute>();
+					if (allowMultiple != null || allowOnlyOne != null) {
+						var rs = (t, allowMultiple != null);
+						ruleSpreader.Add(type, rs);
+						return rs;
 					}
 					t = t.BaseType;
 				}
-				equalityClassRoot.Add(type, (null, false));
+				ruleSpreader.Add(type, (null, false));
 				return (null, false);
 			}
 		}
@@ -199,11 +199,10 @@ namespace Lime
 			if (Contains(component)) {
 				throw new InvalidOperationException("Attempt to add a component twice.");
 			}
-			var (equalityClassRoot, allowMultiple) = Component.GetEqualityClassRoot(type);
+			var (ruleSpreaderType, allowMultiple) = Component.GetRuleSpreader(type);
 			if (
-				!allowMultiple
-				&& ((equalityClassRoot == null && ContainsExactType(type))
-				|| (equalityClassRoot != null && Contains(equalityClassRoot)))
+				(ruleSpreaderType == null && ContainsExactType(type))
+				|| (ruleSpreaderType != null && !allowMultiple && Contains(ruleSpreaderType))
 			) {
 				throw new InvalidOperationException("Adding multiple component of this type is not permitted");
 			}
@@ -230,6 +229,23 @@ namespace Lime
 				}
 			}
 			return false;
+		}
+		public bool CanAdd(Type type)
+		{
+			var (ruleSpreaderType, allowMultiple) = Component.GetRuleSpreader(type);
+			return
+				allowMultiple
+				|| (ruleSpreaderType == null && !ContainsExactType(type))
+				|| (ruleSpreaderType != null && !Contains(ruleSpreaderType));
+		}
+
+		public bool CanAdd<T>() where T : TComponent
+		{
+			var (ruleSpreaderType, allowMultiple) = ComponentInfoResolver<T>.RuleSpreader;
+			return
+				allowMultiple
+				|| (ruleSpreaderType == null && !ContainsExactType(typeof(T)))
+				|| (ruleSpreaderType != null && !Contains(ruleSpreaderType));
 		}
 
 		public bool Remove<T>() where T : TComponent
@@ -363,8 +379,8 @@ namespace Lime
 
 		private static class ComponentInfoResolver<T> where T : TComponent
 		{
-			public static readonly (Type Type, bool AllowMultiple) EqualityClassRoot =
-				Component.GetEqualityClassRoot(typeof(T));
+			public static readonly (Type Type, bool AllowMultiple) RuleSpreader =
+				Component.GetRuleSpreader(typeof(T));
 		}
 	}
 }

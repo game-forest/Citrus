@@ -88,8 +88,7 @@ namespace EmptyProject.Types
 		}
 	}
 
-	[TangerineRegisterComponent]
-	[ComponentSettings(StartEquivalenceClass = true)]
+	[TangerineRegisterComponent]	
 	[TangerineMenuPath("Effects/")]
 	[TangerineTooltip(
 		"Paints gray image with selected Color hue."

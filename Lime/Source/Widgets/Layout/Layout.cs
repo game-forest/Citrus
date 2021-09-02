@@ -28,7 +28,7 @@ namespace Lime
 		TopToBottom,
 	}
 
-	[ComponentSettings(StartEquivalenceClass = true)]
+	[AllowOnlyOneComponent]
 	[AllowedComponentOwnerTypes(typeof(Widget))]
 	[YuzuDontGenerateDeserializer]
 	public class Layout : NodeComponent, ILayout
@@ -209,7 +209,7 @@ namespace Lime
 	[TangerineMenuPath("Layout/Layout Constraints")]
 	[TangerineRegisterComponent]
 	[AllowedComponentOwnerTypes(typeof(Widget))]
-	[ComponentSettings(StartEquivalenceClass = true)]
+	[AllowOnlyOneComponent]
 	public class LayoutConstraints : NodeComponent
 	{
 		public new Widget Owner

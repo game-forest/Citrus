@@ -132,9 +132,10 @@ namespace Tangerine.UI.Inspector
 		{
 			var current = t;
 			while (current != typeof(NodeComponent)) {
-				var attr = ClassAttributes<ComponentSettingsAttribute>.Get(current);
-				if (attr != null && attr.StartEquivalenceClass) {
-					t = current;
+				var allowOnlyOne = ClassAttributes<AllowOnlyOneComponentAttribute>.Get(current);
+				var allowMultiple = ClassAttributes<AllowMultipleComponentsAttribute>.Get(current);
+				if (allowMultiple != null || allowOnlyOne != null) {
+					t = allowOnlyOne == null ? t : current;
 					break;
 				}
 				current = current.BaseType;
@@ -503,9 +504,9 @@ namespace Tangerine.UI.Inspector
 			var componentTypes = new List<Type>();
 			foreach (var type in Project.Current.RegisteredComponentTypes) {
 				if (
-					!nodes.All(n => n.Components.Contains(type)) &&
+					!nodes.All(n => !n.Components.CanAdd(type)) &&
 					nodesTypes.All(t => NodeCompositionValidator.ValidateComponentType(t, type))
-					) {
+				) {
 					componentTypes.Add(type);
 				}
 			}
@@ -546,7 +547,7 @@ namespace Tangerine.UI.Inspector
 					}
 					using (Document.Current.History.BeginTransaction()) {
 						foreach (var node in nodes) {
-							if (!node.Components.Contains(type)) {
+							if (node.Components.CanAdd(type)) {
 								SetComponent.Perform(node, Cloner.Clone(component));
 							}
 						}
@@ -559,7 +560,7 @@ namespace Tangerine.UI.Inspector
 						pasteFromClipboardCommand.Enabled = false;
 					} else if (!componentTypes.Contains(component.GetType())) {
 						pasteFromClipboardCommand.Enabled = false;
-					} else if (nodes.All(n => n.Components.Contains(component.GetType()))) {
+					} else if (nodes.All(n => !n.Components.CanAdd(component.GetType()))) {
 						pasteFromClipboardCommand.Enabled = false;
 					}
 				}
@@ -791,7 +792,7 @@ namespace Tangerine.UI.Inspector
 			}
 			using (Document.Current.History.BeginTransaction()) {
 				foreach (var node in nodes) {
-					if (node.Components.Contains(type)) {
+					if (!node.Components.CanAdd(type)) {
 						continue;
 					}
 

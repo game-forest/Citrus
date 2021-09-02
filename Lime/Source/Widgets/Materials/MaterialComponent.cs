@@ -11,7 +11,7 @@ namespace Lime
 		Vector2 UV1 { get; }
 	}
 
-	[ComponentSettings(StartEquivalenceClass = true)]
+	[AllowOnlyOneComponent]
 	[AllowedComponentOwnerTypes(typeof(IMaterialComponentOwner))]
 	public class MaterialComponent : NodeComponent
 	{
