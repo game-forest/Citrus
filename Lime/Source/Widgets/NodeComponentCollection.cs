@@ -279,10 +279,8 @@ namespace Lime
 
 		protected override void OnRemove(NodeComponent component)
 		{
-			if (component != null && component.Owner == owner) {
-				component.Owner = null;
-				owner.Manager?.UnregisterComponent(component, owner);
-			}
+			component.Owner = null;
+			owner.Manager?.UnregisterComponent(component, owner);
 		}
 	}
 }

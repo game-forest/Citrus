@@ -63,30 +63,52 @@ namespace Tangerine.UI.Inspector
 			}
 			if (objects.Any() && objects.All(o => o is Node)) {
 				var nodes = objects.Cast<Node>().ToList();
+				var queriedComponents = new List<NodeComponent>();
+				var nodesWithComponent = new List<Node>();
 				foreach (var t in GetComponentTypes(nodes)) {
-					var components = new List<NodeComponent>();
-					var nodesWithComponent = new List<Node>();
+					var nodesComponents = new List<List<NodeComponent>>();
+					var maxCount = 0;
 					foreach (var n in nodes) {
-						var c = n.Components.Get(t);
-						if (c != null && t.IsAssignableFrom(c.GetType())) {
-							components.Add(c);
-							nodesWithComponent.Add(n);
+						var nodeComponents = new List<NodeComponent>();
+						nodesComponents.Add(nodeComponents);
+						queriedComponents.Clear();
+						n.Components.GetAll(t, queriedComponents);
+						foreach (var c in queriedComponents) {
+							if (c != null && t.IsAssignableFrom(c.GetType())) {
+								nodeComponents.Add(c);
+							}
 						}
+						maxCount = Math.Max(nodeComponents.Count, maxCount);
+
 					}
-					var headerWidget = CreateComponentHeader(t, components);
-					headerWidget.Components.Add(new HeaderElementComponent());
-					DecorateElement(headerWidget);
-					rootWidget.AddNode(headerWidget);
-					var elementWidgets = CreateElementsForType(
-						type: t,
-						objects: components,
-						rootObjects: nodesWithComponent,
-						animableByPath: !Document.Current.InspectRootNode,
-						propertyPath: SerializeMutuallyExclusiveComponentGroupBaseType(t)
-					).ToList();
-					foreach (var w in elementWidgets) {
-						DecorateElement(w);
-						rootWidget.AddNode(w);
+					var components = new List<NodeComponent>();
+					for (int i = 0; i < maxCount; i++) {
+						// Column slice
+						components.Clear();
+						nodesWithComponent.Clear();
+						for (int j = 0; j < nodesComponents.Count; j++) {
+							var row = nodesComponents[j];
+							if (i >= row.Count) {
+								continue;
+							}
+							components.Add(row[i]);
+							nodesWithComponent.Add(nodes[j]);
+						}
+						var headerWidget = CreateComponentHeader(t, components);
+						headerWidget.Components.Add(new HeaderElementComponent());
+						DecorateElement(headerWidget);
+						rootWidget.AddNode(headerWidget);
+						var elementWidgets = CreateElementsForType(
+							type: t,
+							objects: components,
+							rootObjects: nodesWithComponent,
+							animableByPath: !Document.Current.InspectRootNode,
+							propertyPath: SerializeMutuallyExclusiveComponentGroupBaseType(t)
+						).ToList();
+						foreach (var w in elementWidgets) {
+							DecorateElement(w);
+							rootWidget.AddNode(w);
+						}
 					}
 				}
 				AddComponentsMenu(nodes, rootWidget);
@@ -833,7 +855,7 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		[MutuallyExclusiveDerivedComponents]
+		[AllowOnlyOneComponent]
 		private class InspectorElementComponent : NodeComponent
 		{
 		}

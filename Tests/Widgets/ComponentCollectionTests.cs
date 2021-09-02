@@ -8,9 +8,11 @@ namespace Citrus.Tests.Widgets
 	[TestClass]
 	public class ComponentCollectionTests
 	{
+		private interface ISomeInterface { }
+
 		private class BaseTestComponent : Component { }
 
-		private class DerivedTestComponent : BaseTestComponent { }
+		private class DerivedTestComponent : BaseTestComponent, ISomeInterface { }
 
 		[AllowMultipleComponents]
 		public class BaseAllowMultipleComponent : Component { }
@@ -19,9 +21,9 @@ namespace Citrus.Tests.Widgets
 			BaseAllowMultipleComponent { }
 
 		[AllowOnlyOneComponent]
-		public class BaseAllowOnlyOneComponent : Component { }
+		private class BaseAllowOnlyOneComponent : Component { }
 
-		public class DerivedAllowOnlyOneComponent : BaseAllowOnlyOneComponent { }
+		private class DerivedAllowOnlyOneComponent : BaseAllowOnlyOneComponent { }
 
 		private class DummyComponent : Component
 		{
@@ -170,6 +172,8 @@ namespace Citrus.Tests.Widgets
 			Assert.AreEqual(derived, components.Get(typeof(BaseTestComponent)));
 			Assert.AreEqual(derived, components.Get<DerivedTestComponent>());
 			Assert.AreEqual(derived, components.Get(typeof(DerivedTestComponent)));
+			Assert.AreEqual(derived, components.Get<ISomeInterface>());
+			Assert.AreEqual(derived, components.Get(typeof(ISomeInterface)));
 		}
 
 		[TestMethod]
@@ -204,6 +208,24 @@ namespace Citrus.Tests.Widgets
 				CollectionAssert.Contains(cs, derived);
 				Assert.AreEqual(2, cs.Count);
 			}
+			{
+				var cs = components.GetAll<ISomeInterface>().ToList();
+				CollectionAssert.Contains(cs, derived);
+				Assert.AreEqual(1, cs.Count);
+				cs.Clear();
+				components.GetAll(cs);
+				CollectionAssert.Contains(cs, derived);
+				Assert.AreEqual(1, cs.Count);
+			}
+			{
+				var cs = components.GetAll(typeof(ISomeInterface)).ToList();
+				CollectionAssert.Contains(cs, derived);
+				Assert.AreEqual(1, cs.Count);
+				cs.Clear();
+				components.GetAll(typeof(ISomeInterface), cs);
+				CollectionAssert.Contains(cs, derived);
+				Assert.AreEqual(1, cs.Count);
+			}
 
 		}
 
@@ -219,10 +241,12 @@ namespace Citrus.Tests.Widgets
 			Assert.IsTrue(components.Contains<DerivedTestComponent>());
 			Assert.IsTrue(components.Contains<DummyComponent>());
 			Assert.IsTrue(components.Contains<Component>());
+			Assert.IsTrue(components.Contains<ISomeInterface>());
 			Assert.IsTrue(components.Contains(typeof(BaseTestComponent)));
 			Assert.IsTrue(components.Contains(typeof(DerivedTestComponent)));
 			Assert.IsTrue(components.Contains(typeof(DummyComponent)));
 			Assert.IsTrue(components.Contains(typeof(Component)));
+			Assert.IsTrue(components.Contains(typeof(ISomeInterface)));
 			Assert.IsFalse(components.Contains<BaseAllowMultipleComponent>());
 			Assert.IsFalse(components.Contains(typeof(BaseAllowMultipleComponent)));
 		}
@@ -234,6 +258,7 @@ namespace Citrus.Tests.Widgets
 			var @base = new BaseTestComponent();
 			var dervied = new DerivedTestComponent();
 			var dummyComponent = new DummyComponent();
+			Assert.IsFalse(components.Remove<Component>());
 			components.Add(@base);
 			components.Add(dummyComponent);
 			components.Add(dervied);
@@ -251,6 +276,12 @@ namespace Citrus.Tests.Widgets
 			components.Add(dervied);
 			components.Clear();
 			Assert.AreEqual(0, components.Count);
+			components.Add(@base);
+			components.Add(dummyComponent);
+			components.Add(dervied);
+			Assert.IsTrue(components.Remove<ISomeInterface>());
+			Assert.IsFalse(components.Remove(typeof(ISomeInterface)));
+			Assert.AreEqual(2, components.Count);
 		}
 		private class DummyNodeComponent : NodeComponent { }
 

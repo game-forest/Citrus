@@ -13,7 +13,7 @@ namespace Lime
 
 	public class Component
 	{
-		private static Dictionary<Type, (Type Type, bool AllowMultiple)> ruleSpreader =
+		private static Dictionary<Type, (Type TypeOwningAttribute, bool AllowMultiple)> ruleSpreader =
 			new Dictionary<Type, (Type, bool)>();
 
 		internal static (Type Type, bool AllowMultiple) GetRuleSpreader(Type type)
@@ -24,8 +24,8 @@ namespace Lime
 				}
 				var t = type;
 				while (t != typeof(Component)) {
-					var allowMultiple = t.GetCustomAttribute<AllowMultipleComponentsAttribute>();
-					var allowOnlyOne = t.GetCustomAttribute<AllowOnlyOneComponentAttribute>();
+					var allowMultiple = t.GetCustomAttribute<AllowMultipleComponentsAttribute>(false);
+					var allowOnlyOne = t.GetCustomAttribute<AllowOnlyOneComponentAttribute>(false);
 					if (allowMultiple != null || allowOnlyOne != null) {
 						var rs = (t, allowMultiple != null);
 						ruleSpreader.Add(type, rs);
@@ -49,22 +49,16 @@ namespace Lime
 
 		public virtual bool Contains(TComponent component)
 		{
-			if (list == null) {
-				return false;
-			}
-			foreach (var c in list) {
-				if (c == component) {
+			for (int i = 0; i < Count; i++) {
+				if (list[i] == component) {
 					return true;
 				}
 			}
 			return false;
 		}
 
-		public bool Contains<T>() where T : TComponent
+		public bool Contains<T>()
 		{
-			if (list == null) {
-				return false;
-			}
 			for (int i = 0; i < Count; i++) {
 				if (list[i] is T) {
 					return true;
@@ -74,9 +68,6 @@ namespace Lime
 		}
 		public bool Contains(Type type)
 		{
-			if (list == null) {
-				return false;
-			}
 			for (int i = 0; i < Count; i++) {
 				if (type.IsInstanceOfType(list[i])) {
 					return true;
@@ -87,13 +78,8 @@ namespace Lime
 
 		public TComponent Get(Type type)
 		{
-			if (list == null) {
-				return default;
-			}
-			foreach (var c in list) {
-				if (c == null) {
-					return default;
-				}
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
 				if (type.IsInstanceOfType(c)) {
 					return c;
 				}
@@ -101,47 +87,29 @@ namespace Lime
 			return default;
 		}
 
-		public T Get<T>() where T : TComponent
+		public T Get<T>()
 		{
-			if (list == null) {
-				return default;
-			}
-			foreach (var c in list) {
-				if (c == null) {
-					return default;
-				}
-				if (c is T t) {
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T t) {
 					return t;
 				}
 			}
 			return default;
 		}
 
-		public IEnumerable<T> GetAll<T>() where T : TComponent
+		public IEnumerable<T> GetAll<T>()
 		{
-			if (list == null) {
-				yield break;
-			}
-			foreach (var c in list) {
-				if (c == null) {
-					yield break;
-				}
-				if (c is T t) {
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T t) {
 					yield return t;
 				}
 			}
 		}
 
-		public void GetAll<T>(IList<T> result) where T : TComponent
+		public void GetAll<T>(IList<T> result)
 		{
-			if (list == null) {
-				return;
-			}
-			foreach (var c in list) {
-				if (c == null) {
-					return;
-				}
-				if (c is T t) {
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T t) {
 					result.Add(t);
 				}
 			}
@@ -149,13 +117,8 @@ namespace Lime
 
 		public IEnumerable<TComponent> GetAll(Type type)
 		{
-			if (list == null) {
-				yield break;
-			}
-			foreach (var c in list) {
-				if (c == null) {
-					yield break;
-				}
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
 				if (type.IsInstanceOfType(c)) {
 					yield return c;
 				}
@@ -164,20 +127,15 @@ namespace Lime
 
 		public void GetAll(Type type, IList<TComponent> result)
 		{
-			if (list == null) {
-				return;
-			}
-			foreach (var c in list) {
-				if (c == null) {
-					return;
-				}
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
 				if (type.IsInstanceOfType(c)) {
 					result.Add(c);
 				}
 			}
 		}
 
-		public bool TryGet<T>(out T result) where T : TComponent
+		public bool TryGet<T>(out T result)
 		{
 			result = Get<T>();
 			return result != null;
@@ -195,10 +153,10 @@ namespace Lime
 
 		public virtual void Add(TComponent component)
 		{
-			var type = component.GetType();
 			if (Contains(component)) {
 				throw new InvalidOperationException("Attempt to add a component twice.");
 			}
+			var type = component.GetType();
 			var (ruleSpreaderType, allowMultiple) = Component.GetRuleSpreader(type);
 			if (
 				(ruleSpreaderType == null && ContainsExactType(type))
@@ -220,9 +178,6 @@ namespace Lime
 
 		private bool ContainsExactType(Type type)
 		{
-			if (list == null) {
-				return false;
-			}
 			for (int i = 0; i < Count; i++) {
 				if (type == list[i].GetType()) {
 					return true;
@@ -248,7 +203,7 @@ namespace Lime
 				|| (ruleSpreaderType != null && !Contains(ruleSpreaderType));
 		}
 
-		public bool Remove<T>() where T : TComponent
+		public bool Remove<T>()
 		{
 			var j = 0;
 			for (int i = 0; i < Count; i++) {
@@ -290,9 +245,6 @@ namespace Lime
 
 		public virtual bool Remove(TComponent component)
 		{
-			if (list == null) {
-				return false;
-			}
 			int index = -1;
 			for (int i = 0; i < Count; i++) {
 				if (index == -1) {
