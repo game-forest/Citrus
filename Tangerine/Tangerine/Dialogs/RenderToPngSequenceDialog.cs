@@ -69,18 +69,20 @@ namespace Tangerine.Dialogs
 					window.Close();
 				}
 			));
-			new IntPropertyEditor(new PropertyEditorParams(inspectorPanel, options, "FPS") {
+			IPropertyEditor editor = new IntPropertyEditor(new PropertyEditorParams(options, "FPS") {
 				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions) o).FPS = (int)value,
 				DisplayName = "FPS",
 				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(nameof(RenderToPngSequenceOptions.FPS))
 			});
-			new FolderPropertyEditor(new PropertyEditorParams(inspectorPanel, options, "Folder") {
+			inspectorPanel.AddNode(editor.ContainerWidget);
+			editor = new FolderPropertyEditor(new PropertyEditorParams(options, "Folder") {
 				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions)o).Folder = (string)value,
 				DisplayName = "Folder",
 				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(nameof(RenderToPngSequenceOptions.Folder)),
 			}) {
 				ShowPrefix = false
 			};
+			inspectorPanel.AddNode(editor.ContainerWidget);
 			okButton.Clicked += () => {
 				result = Result.Ok;
 				window.Close();

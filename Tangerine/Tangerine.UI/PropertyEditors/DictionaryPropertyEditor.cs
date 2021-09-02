@@ -11,13 +11,7 @@ namespace Tangerine.UI.PropertyEditors
 	public class DictionaryPropertyEditor<TDictionary, TValue> :
 		ExpandablePropertyEditor<TDictionary> where TDictionary : IDictionary<string, TValue>, IDictionary
 	{
-		private readonly Func<
-			Type,
-			PropertyEditorParams,
-			Widget,
-			object,
-			IEnumerable<IPropertyEditor>
-		> populateEditors;
+		private readonly Func<PropertyEditorParams, Widget> populateEditors;
 		private static TValue DefaultValue => typeof(TValue) == typeof(string)
 			? (TValue)(object)string.Empty
 			: typeof(TValue).IsInterface || typeof(TValue).IsAbstract
@@ -36,8 +30,7 @@ namespace Tangerine.UI.PropertyEditors
 		}
 
 		public DictionaryPropertyEditor(
-			IPropertyEditorParams editorParams,
-			Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>> populateEditors
+			IPropertyEditorParams editorParams, Func<PropertyEditorParams, Widget> populateEditors
 		) : base(editorParams) {
 			if (EditorParams.Objects.Skip(1).Any()) {
 				EditorContainer.AddNode(new Widget() {
@@ -224,33 +217,27 @@ namespace Tangerine.UI.PropertyEditors
 		private static Widget CreateValueEditor(
 			IPropertyEditorParams editorParams,
 			KeyValuePair keyValue,
-			Func<Type, PropertyEditorParams, Widget, object, IEnumerable<IPropertyEditor>> populateEditors,
+			Func<PropertyEditorParams, Widget> populateEditors,
 			PropertySetterDelegate setter = null
 		) {
-			var valueContainer = new Widget { Layout = new HBoxLayout() };
 			var valuePropertyEditorParams = new PropertyEditorParams(
-				valueContainer,
-				new object[] { keyValue },
-				editorParams.RootObjects,
-				typeof(KeyValuePair),
-				"Value",
-				"Value"
+				objects: new object[] { keyValue },
+				rootObjects: editorParams.RootObjects,
+				type: typeof(KeyValuePair),
+				propertyName: "Value",
+				propertyPath: "Value"
 			) {
 				History = editorParams.History,
 			};
 			if (setter != null) {
 				valuePropertyEditorParams.PropertySetter = setter;
 			}
-			var valueEditor = populateEditors(
-				typeof(KeyValuePair),
-				valuePropertyEditorParams,
-				valueContainer, keyValue
-			).First();
+			var valueEditor = populateEditors(valuePropertyEditorParams);
 			// Hack in order to keep same background for KeyValue pair.
-			valueEditor.ContainerWidget.CompoundPresenter
-				.RemoveAt(valueEditor.ContainerWidget.CompoundPresenter.Count - 1);
-			valueEditor.ContainerWidget.Padding = new Thickness(0f, 0f, 0f, 0f);
-			return valueContainer;
+			valueEditor.CompoundPresenter
+				.RemoveAt(valueEditor.CompoundPresenter.Count - 1);
+			valueEditor.Padding = new Thickness(0f, 0f, 0f, 0f);
+			return valueEditor;
 		}
 	}
 }

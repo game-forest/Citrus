@@ -371,7 +371,7 @@ namespace Tangerine.UI.FilesystemView
 				YuzuItem = yi,
 			});
 			var targetRules = RulesForTarget(rules, target);
-			var editorParams = new PropertyEditorParams(innerContainer, targetRules, yi.Name) {
+			var editorParams = new PropertyEditorParams(targetRules, yi.Name) {
 				ShowLabel = false,
 				PropertySetter = (owner, name, value) => {
 					yi.SetValue(owner, value);
@@ -398,22 +398,25 @@ namespace Tangerine.UI.FilesystemView
 					return r;
 				},
 			};
-			CreatePropertyEditorForType(yi, editorParams);
+			var editor = CreatePropertyEditorForType(yi, editorParams);
+			innerContainer.AddNode(editor.ContainerWidget);
 			return container;
 		}
 
-		private static void CreatePropertyEditorForType(Meta.Item yi, IPropertyEditorParams editorParams)
+		private static IPropertyEditor CreatePropertyEditorForType(Meta.Item yi, IPropertyEditorParams editorParams)
 		{
 			if (yi.Type.IsEnum) {
-				Activator.CreateInstance(typeof(EnumPropertyEditor<>).MakeGenericType(yi.Type), editorParams);
+				return (IPropertyEditor)Activator.CreateInstance(typeof(EnumPropertyEditor<>).MakeGenericType(yi.Type), editorParams);
 			} else if (yi.Type == typeof(string)) {
-				new StringPropertyEditor(editorParams);
+				return new StringPropertyEditor(editorParams);
 			} else if (yi.Type == typeof(int)) {
-				new IntPropertyEditor(editorParams);
+				return new IntPropertyEditor(editorParams);
 			} else if (yi.Type == typeof(bool)) {
-				new BooleanPropertyEditor(editorParams);
+				return new BooleanPropertyEditor(editorParams);
 			} else if (yi.Type == typeof(float)) {
-				new FloatPropertyEditor(editorParams);
+				return new FloatPropertyEditor(editorParams);
+			} else {
+				throw new InvalidOperationException();
 			}
 		}
 

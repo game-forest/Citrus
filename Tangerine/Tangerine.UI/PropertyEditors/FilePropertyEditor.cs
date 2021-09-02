@@ -45,8 +45,9 @@ namespace Tangerine.UI
 			button.Clicked += OnSelectClicked;
 			ExpandableContent.Padding = new Thickness(24, 10, 2, 2);
 			var prefixEditor = new StringPropertyEditor(
-				new PropertyEditorParams(ExpandableContent, prefix, nameof(PrefixData.Prefix)) { LabelWidth = 180 }
+				new PropertyEditorParams(prefix, nameof(PrefixData.Prefix)) { LabelWidth = 180 }
 			);
+			ExpandableContent.AddNode(prefixEditor.ContainerWidget);
 			prefix.Prefix = GetLongestCommonPrefix(GetPaths());
 			ContainerWidget.AddChangeWatcher(() => prefix.Prefix, v => {
 				string oldPrefix = GetLongestCommonPrefix(GetPaths());

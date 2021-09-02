@@ -9,7 +9,6 @@ namespace Tangerine.UI
 
 	public interface IPropertyEditorParams
 	{
-		Widget InspectorPane { get; set; }
 		IEnumerable<object> RootObjects { get; set; }
 		IEnumerable<object> Objects { get; set; }
 		Type Type { get; set; }

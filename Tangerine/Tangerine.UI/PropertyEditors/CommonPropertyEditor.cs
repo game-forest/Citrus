@@ -33,6 +33,7 @@ namespace Tangerine.UI
 				Layout = new VBoxLayout(),
 				LayoutCell = new LayoutCell { StretchY = 0f }
 			};
+			ContainerWidget.Components.Add(new PropertyEditorComponent(this));
 
 			PropertyContainerWidget = new Widget {
 				Layout = new HBoxLayout { IgnoreHidden = false },
@@ -40,7 +41,6 @@ namespace Tangerine.UI
 			};
 
 			ContainerWidget.AddNode(PropertyContainerWidget);
-			editorParams.InspectorPane.AddNode(ContainerWidget);
 			if (editorParams.ShowLabel) {
 				LabelContainer = new Widget {
 					Layout = new HBoxLayout(),

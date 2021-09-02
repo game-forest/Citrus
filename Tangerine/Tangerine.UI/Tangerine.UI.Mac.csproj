@@ -78,6 +78,7 @@
     <Compile Include="PropertyEditors\IntVector2PropertyEditor.cs" />
     <Compile Include="PropertyEditors\ListPropertyEditor.cs" />
     <Compile Include="PropertyEditors\NodeIdPropertyEditor.cs" />
+    <Compile Include="PropertyEditors\PropertyEditorComponent.cs" />
     <Compile Include="PropertyEditors\RectanglePropertyEditor.cs" />
     <Compile Include="PropertyEditors\SliderPropertyEditor.cs" />
     <Compile Include="Tooltip\Tooltip.cs" />

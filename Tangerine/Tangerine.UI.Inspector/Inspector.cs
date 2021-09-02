@@ -217,11 +217,11 @@ namespace Tangerine.UI.Inspector
 		{
 			SceneViewCommands.AddComponentToSelection.Menu?.Clear();
 			if (Document.Current.Animation.IsCompound) {
-				content.BuildForObjects(GetSelectedAnimationTracksAndClips().ToList());
+				content.Build(GetSelectedAnimationTracksAndClips().ToList());
 			} else if (Document.Current.InspectRootNode) {
-				content.BuildForObjects(new[] { Document.Current.RootNode });
+				content.Build(new[] { Document.Current.RootNode });
 			} else {
-				content.BuildForObjects(Document.Current.SelectedNodes().ToList());
+				content.Build(Document.Current.SelectedNodes().ToList());
 			}
 			InspectorCommands.InspectRootNodeCommand.Icon = Document.Current.InspectRootNode ? 
 				inspectRootActivatedTexture : inspectRootDeactivatedTexture;

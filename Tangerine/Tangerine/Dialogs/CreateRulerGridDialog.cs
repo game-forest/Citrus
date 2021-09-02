@@ -50,10 +50,13 @@ namespace Tangerine
 			};
 			editors.AddRange(new IPropertyEditor[] {
 				new Vector2PropertyEditor(
-					 new PropertyEditorParams(pane, this, nameof(GridSize), displayName: "Grid Size")),
+					 new PropertyEditorParams(this, nameof(GridSize), displayName: "Grid Size")),
 				new Vector2PropertyEditor(
-					new PropertyEditorParams(pane, this, nameof(GridSubdivision), displayName: "Grid Subdivision"))
+					new PropertyEditorParams(this, nameof(GridSubdivision), displayName: "Grid Subdivision"))
 			});
+			foreach (var e in editors) {
+				pane.AddNode(e.ContainerWidget);
+			}
 			okButton.Clicked += () => {
 				editors.ForEach(i => i.Submit());
 				if (editors.Any(i => (i is Vector2PropertyEditor e) && e.WarningsContainer.Nodes.Count > 0)) {

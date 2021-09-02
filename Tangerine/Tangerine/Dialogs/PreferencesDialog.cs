@@ -143,13 +143,29 @@ namespace Tangerine
 			pane.Content.Layout = new VBoxLayout { Spacing = 4 };
 			pane.Content.Padding = contentPadding;
 			var tmp = new BooleanPropertyEditor(
-				new PreferencesPropertyEditorParams(pane.Content, UI.SceneView.SceneUserPreferences.Instance, propertyName: nameof(UI.SceneView.SceneUserPreferences.EnableChessBackground), displayName: "Chess background"));
+				new PreferencesPropertyEditorParams(
+					UI.SceneView.SceneUserPreferences.Instance,
+					propertyName: nameof(UI.SceneView.SceneUserPreferences.EnableChessBackground),
+					displayName: "Chess background"
+				)
+			);
+			pane.Content.AddNode(tmp.ContainerWidget);
 			tmp.ContainerWidget.AddChangeWatcher(
-				() => UI.SceneView.SceneUserPreferences.Instance.EnableChessBackground, (v) => Application.InvalidateWindows());
+				() => UI.SceneView.SceneUserPreferences.Instance.EnableChessBackground,
+				(v) => Application.InvalidateWindows()
+			);
 			tmp = new BooleanPropertyEditor(
-				new PreferencesPropertyEditorParams(pane.Content, UI.SceneView.SceneUserPreferences.Instance, propertyName: nameof(UI.SceneView.SceneUserPreferences.DrawFrameBorder), displayName: "Draw frame border"));
+				new PreferencesPropertyEditorParams(
+					UI.SceneView.SceneUserPreferences.Instance,
+					propertyName: nameof(UI.SceneView.SceneUserPreferences.DrawFrameBorder),
+					displayName: "Draw frame border"
+				)
+			);
+			pane.Content.AddNode(tmp.ContainerWidget);
 			tmp.ContainerWidget.AddChangeWatcher(
-				() => UI.SceneView.SceneUserPreferences.Instance.DrawFrameBorder, (v) => Application.InvalidateWindows());
+				() => UI.SceneView.SceneUserPreferences.Instance.DrawFrameBorder,
+				(v) => Application.InvalidateWindows()
+			);
 			editors.Add(tmp);
 			CreateColorPropertyEditor(
 				nameof(UI.SceneView.SceneUserPreferences.BackgroundColorA),
@@ -217,7 +233,8 @@ namespace Tangerine
 				themeChanged = true;
 				themeEdited = true;
 			});
-			var darkIcons = CreateDarkIconsSwitch(pane);
+			var darkIcons = CreateDarkIconsSwitch();
+			pane.AddNode(darkIcons.ContainerWidget);
 			var loadDarkButton = new ThemedButton("Dark preset") {
 				Clicked = () => {
 					AppUserPreferences.Instance.ColorThemeKind = ColorTheme.ColorThemeKind.Dark;
@@ -290,25 +307,35 @@ namespace Tangerine
 			return pane;
 		}
 
-		private IPropertyEditor CreateDarkIconsSwitch(Widget pane)
+		private IPropertyEditor CreateDarkIconsSwitch()
 		{
 			return new BooleanPropertyEditor(
-				new PreferencesPropertyEditorParams(pane, this, propertyName: nameof(DarkIcons), displayName: "Dark icon theme"));
+				new PreferencesPropertyEditorParams(
+					this, propertyName: nameof(DarkIcons), displayName: "Dark icon theme"
+				)
+			);
 		}
 
-		public void CreateColorPropertyEditor(string targetProperty, string text, object source, System.Func<object> valueGetter, ThemedScrollView container)
-		{
+		public void CreateColorPropertyEditor(
+			string targetProperty,
+			string text,
+			object source,
+			System.Func<object> valueGetter,
+			ThemedScrollView container
+		) {
 			var tmp = new Color4PropertyEditor(
 				new PreferencesPropertyEditorParams(
-					container.Content,
-					source,
+					obj: source,
 					propertyName: targetProperty,
 					displayName: text
 				) {
 					DefaultValueGetter = valueGetter
-				});
+				}
+			);
+			container.Content.AddNode(tmp.ContainerWidget);
 			tmp.ContainerWidget.AddChangeWatcher(
-				new Property<Color4>(source, targetProperty), (v) => Application.InvalidateWindows());
+				new Property<Color4>(source, targetProperty), (v) => Application.InvalidateWindows()
+			);
 			editors.Add(tmp);
 		}
 
@@ -330,42 +357,121 @@ namespace Tangerine
 			pane.Content.Padding = contentPadding;
 			editors.AddRange(new IPropertyEditor[] {
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ExperimentalTimelineHierarchy),  displayName: "Experimental: timeline hierarchy")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.ExperimentalTimelineHierarchy),
+						displayName: "Experimental: timeline hierarchy"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),  displayName: "Reload modified files")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),
+						displayName: "Reload modified files"
+					)
+				),
 				new Vector2PropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, Tangerine.AppUserPreferences.Instance, propertyName: nameof(Tangerine.AppUserPreferences.DefaultSceneDimensions),  displayName: "Default scene dimensions")),
+					new PreferencesPropertyEditorParams(
+						Tangerine.AppUserPreferences.Instance,
+						propertyName: nameof(Tangerine.AppUserPreferences.DefaultSceneDimensions),
+						displayName: "Default scene dimensions"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.AutoKeyframes),  displayName: "Automatic keyframes")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.AutoKeyframes),
+						displayName: "Automatic keyframes"
+					)
+				),
 				new IntPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, Tangerine.AppUserPreferences.Instance, propertyName: nameof(Tangerine.AppUserPreferences.AutosaveDelay),  displayName: "Autosave delay")),
+					new PreferencesPropertyEditorParams(
+						Tangerine.AppUserPreferences.Instance,
+						propertyName: nameof(Tangerine.AppUserPreferences.AutosaveDelay),
+						displayName: "Autosave delay"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ShowSceneThumbnail),  displayName: "Show scene thumbnail")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.ShowSceneThumbnail),
+						displayName: "Show scene thumbnail"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ShowSplinesGlobally),  displayName: "Show splines globally")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.ShowSplinesGlobally),
+						displayName: "Show splines globally"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.DontPasteAtMouse),  displayName: "Don't paste at mouse pointer")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.DontPasteAtMouse),
+						displayName: "Don't paste at mouse pointer"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.InverseShiftKeyframeDrag), displayName: "Inverse Shift behaviour when dragging keyframes")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.InverseShiftKeyframeDrag),
+						displayName: "Inverse Shift behavior when dragging keyframes"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.SwapMouseButtonsForKeyframeSwitch), displayName: "Swap mouse buttons for keyframe switch")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.SwapMouseButtonsForKeyframeSwitch),
+						displayName: "Swap mouse buttons for keyframe switch"
+					)
+				),
 				new IntPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LookupItemsLimit),  displayName: "Limit the number of lookup items")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.LookupItemsLimit),
+						displayName: "Limit the number of lookup items"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.ReloadModifiedFiles),  displayName: "Reload modified files")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.LockLayout),
+						displayName: "Lock layout"
+					)
+				),
 				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.LockLayout),  displayName: "Lock layout")),
-				new BooleanPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.AnimationPanelReversedOrder),  displayName: "Animation panel reversed order")),
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.AnimationPanelReversedOrder),
+						displayName: "Animation panel reversed order"
+					)
+				),
 			});
-			var boneWidthPropertyEditor =
-				new FloatPropertyEditor(
-					new PreferencesPropertyEditorParams(pane.Content, UI.SceneView.SceneUserPreferences.Instance, propertyName: nameof(UI.SceneView.SceneUserPreferences.DefaultBoneWidth), displayName: "Bone Width"));
-
+			foreach (var e in editors) {
+				pane.Content.AddNode(e.ContainerWidget);
+			}
+			var boneWidthPropertyEditor = new FloatPropertyEditor(
+				new PreferencesPropertyEditorParams(
+					UI.SceneView.SceneUserPreferences.Instance,
+					propertyName: nameof(UI.SceneView.SceneUserPreferences.DefaultBoneWidth),
+					displayName: "Bone Width"
+				)
+			);
+			pane.Content.AddNode(boneWidthPropertyEditor.ContainerWidget);
 			boneWidthPropertyEditor.ContainerWidget.AddChangeWatcher(
-				() => UI.SceneView.SceneUserPreferences.Instance.DefaultBoneWidth, (v) => Application.InvalidateWindows());
-			new EnumPropertyEditor<KeyFunction>(
-				new PreferencesPropertyEditorParams(pane.Content, CoreUserPreferences.Instance, propertyName: nameof(CoreUserPreferences.DefaultKeyFunction), displayName: "Default interpolation"));
+				() => UI.SceneView.SceneUserPreferences.Instance.DefaultBoneWidth,
+				(v) => Application.InvalidateWindows()
+			);
+			var tmp = new EnumPropertyEditor<KeyFunction>(
+				new PreferencesPropertyEditorParams(
+					CoreUserPreferences.Instance,
+					propertyName: nameof(CoreUserPreferences.DefaultKeyFunction),
+					displayName: "Default interpolation"
+				)
+			);
+			pane.Content.AddNode(tmp.ContainerWidget);
+
 			parent.AddNode(pane);
 			return parent;
 		}
@@ -408,7 +514,12 @@ namespace Tangerine
 				if (dlg.RunModal()) {
 					string name = Path.GetFileName(dlg.FileName);
 					if (HotkeyRegistry.Profiles.Any(i => i.Name == name)) {
-						if (new AlertDialog($"Profile with name \"{name}\" already exists. Do you want to rewrite it?", "Yes", "Cancel").Show() != 0) {
+						if (
+							new AlertDialog(
+								$"Profile with name \"{name}\" already exists. "
+								+ $"Do you want to rewrite it?", "Yes", "Cancel"
+							).Show() != 0
+						) {
 							return;
 						} else {
 							profilePicker.Items.Remove(profilePicker.Items.First(i => i.Text == name));
@@ -424,7 +535,11 @@ namespace Tangerine
 			};
 			var deleteButton = new ThemedButton("Delete");
 			deleteButton.Clicked = () => {
-				if (new AlertDialog($"Are you sure you want to delete profile \"{currentProfile.Name}\"?", "Yes", "Cancel").Show() == 0) {
+				if (
+					new AlertDialog(
+						$"Are you sure you want to delete profile \"{currentProfile.Name}\"?", "Yes", "Cancel"
+					).Show() == 0
+				) {
 					currentProfile.Delete();
 					profilePicker.Items.Remove(profilePicker.Items.First(i => i.Value == currentProfile));
 					profilePicker.Index = 0;
@@ -523,7 +638,8 @@ namespace Tangerine
 					hotkeyEditor.Profile = profile;
 					filterBox.Text = null;
 					UpdateAllShortcutsView(allShortcutsView, selectedShortcutsView, hotkeyEditor, filterBox.Text);
-					deleteButton.Enabled = profile.Name != HotkeyRegistry.DefaultProfileName && profilePicker.Items.Count > 1;
+					deleteButton.Enabled = profile.Name != HotkeyRegistry.DefaultProfileName
+						&& profilePicker.Items.Count > 1;
 					categoryPicker.Items.Clear();
 					foreach (var category in profile.Categories) {
 						categoryPicker.Items.Add(new CommonDropDownList.Item(category.Title, category));
@@ -590,8 +706,12 @@ namespace Tangerine
 			return pane;
 		}
 
-		private void UpdateAllShortcutsView(ThemedScrollView allShortcutsView, ThemedScrollView selectedShortcutsView, HotkeyEditor hotkeyEditor, string filter)
-		{
+		private void UpdateAllShortcutsView(
+			ThemedScrollView allShortcutsView,
+			ThemedScrollView selectedShortcutsView,
+			HotkeyEditor hotkeyEditor,
+			string filter
+		) {
 			allShortcutsView.Content.Nodes.Clear();
 			if (hotkeyEditor.Profile == null) {
 				return;
@@ -627,7 +747,11 @@ namespace Tangerine
 				expandButton.Enabled = filteredCommands.Any();
 				foreach (var command in filteredCommands) {
 					var editor = new ShortcutPropertyEditor(
-						new PreferencesPropertyEditorParams(expandableContent, command, propertyName: "Shortcut", displayName: command.Title));
+						new PreferencesPropertyEditorParams(
+							command, propertyName: "Shortcut", displayName: command.Title
+						)
+					);
+					expandableContent.AddNode(editor.ContainerWidget);
 					editor.PropertyLabel.OverflowMode = TextOverflowMode.Ellipsis;
 					editor.PropertyLabel.LayoutCell = new LayoutCell(Alignment.LeftCenter, 1);
 					editor.PropertyLabel.Padding = new Thickness(expandButton.Width, 0);

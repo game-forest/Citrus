@@ -11,13 +11,13 @@ namespace Tangerine.UI
 	public class ListPropertyEditor<TList, TElement>
 		: ExpandablePropertyEditor<TList> where TList : IList<TElement>, IList
 	{
-		private readonly Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd;
+		private readonly Func<PropertyEditorParams, Widget> onAdd;
 		private IList list;
 		private readonly List<int> pendingRemovals;
 
 		public ListPropertyEditor(
 			IPropertyEditorParams editorParams,
-			Func<PropertyEditorParams, Widget, IList, IEnumerable<IPropertyEditor>> onAdd
+			Func<PropertyEditorParams, Widget> onAdd
 		) : base(editorParams)
 		{
 			this.onAdd = onAdd;
@@ -120,10 +120,12 @@ namespace Tangerine.UI
 
 		private void AfterInsertNewElement(int index)
 		{
-			var elementContainer = new Widget { Layout = new VBoxLayout() };
 			var p = new PropertyEditorParams(
-				elementContainer, new[] { list }, EditorParams.RootObjects,
-				EditorParams.PropertyInfo.PropertyType, "Item", EditorParams.PropertyPath + $".Item[{index}]"
+				new[] { list },
+				EditorParams.RootObjects,
+				EditorParams.PropertyInfo.PropertyType,
+				"Item",
+				EditorParams.PropertyPath + $".Item[{index}]"
 			) {
 				NumericEditBoxFactory = EditorParams.NumericEditBoxFactory,
 				History = EditorParams.History,
@@ -136,14 +138,14 @@ namespace Tangerine.UI
 				? (PropertySetterDelegate)((@object, name, value) =>
 					SetAnimableProperty.Perform(@object, name, value, CoreUserPreferences.Instance.AutoKeyframes))
 				: (@object, name, value) => SetIndexedProperty.Perform(@object, name, index, value);
-			var editor = onAdd(p, elementContainer, list).ToList().First();
+			var editorWidget = onAdd(p);
 			var removeButton = new ThemedDeleteButton {
 				Enabled = Enabled
 			};
-
-			ExpandableContent.Nodes.Insert(index, elementContainer);
+			editorWidget.Components.Get<PropertyEditorComponent>()
+				.PropertyEditor.EditorContainer.AddNode(removeButton);
+			ExpandableContent.Nodes.Insert(index, editorWidget);
 			removeButton.Clicked += () => pendingRemovals.Add(p.IndexInList);
-			editor.EditorContainer.AddNode(removeButton);
 		}
 	}
 }

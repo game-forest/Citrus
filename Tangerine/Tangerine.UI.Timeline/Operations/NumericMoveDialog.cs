@@ -1,6 +1,5 @@
-using Lime;
-using System;
 using Tangerine.Core;
+using Lime;
 
 namespace Tangerine.UI.Timeline
 {
@@ -43,7 +42,8 @@ namespace Tangerine.UI.Timeline
 				}
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
-			var editor = new IntPropertyEditor(new PropertyEditorParams(container, this, nameof(Shift), "Shift"));
+			var editor = new IntPropertyEditor(new PropertyEditorParams(this, nameof(Shift), "Shift"));
+			container.AddNode(editor.ContainerWidget);
 			cancelButton.Clicked += () => {
 				window.Close();
 			};
