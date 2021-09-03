@@ -9,19 +9,18 @@ namespace Tangerine.UI
 {
 	public class AlignmentPropertyEditor : CommonPropertyEditor<Alignment>
 	{
-		private DropDownList selectorH { get; }
-		private DropDownList selectorV { get; }
+		private readonly DropDownList selectorH;
+		private readonly DropDownList selectorV;
 
-		private static Dictionary<Type, IEnumerable<FieldInfo>> allowedFields;
+		private static readonly Dictionary<Type, IEnumerable<FieldInfo>> allowedFields =
+			new Dictionary<Type, IEnumerable<FieldInfo>>();
 
 		static AlignmentPropertyEditor()
 		{
 			var items = new[] { typeof(HAlignment), typeof(VAlignment) };
-			allowedFields = new Dictionary<Type, IEnumerable<FieldInfo>>();
 			foreach (var type in items) {
-				var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
-				var allowed = fields.Where(f => !Attribute.IsDefined((MemberInfo)f, typeof(TangerineIgnoreAttribute)));
-				allowedFields[type] = allowed;
+				allowedFields[type] = type.GetFields(BindingFlags.Public | BindingFlags.Static)
+					.Where(f => !Attribute.IsDefined(f, typeof(TangerineIgnoreAttribute)));
 			}
 		}
 
@@ -45,7 +44,7 @@ namespace Tangerine.UI
 				}
 				selector.Changed += a => {
 					if (a.ChangedByUser) {
-						SetComponent(editorParams, type);
+						SetComponent(type);
 					}
 				};
 			}
@@ -67,7 +66,7 @@ namespace Tangerine.UI
 			});
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, Type t)
+		private void SetComponent(Type t)
 		{
 			DoTransaction(() => {
 				SetProperty<Alignment>((current) => {
@@ -85,8 +84,8 @@ namespace Tangerine.UI
 		{
 			var currentX = CoalescedPropertyComponentValue(v => v.X);
 			var currentY = CoalescedPropertyComponentValue(v => v.Y);
-			SetComponent(EditorParams, typeof(HAlignment));
-			SetComponent(EditorParams, typeof(VAlignment));
+			SetComponent(typeof(HAlignment));
+			SetComponent(typeof(VAlignment));
 		}
 	}
 }

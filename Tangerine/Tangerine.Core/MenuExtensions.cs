@@ -36,8 +36,8 @@ namespace Tangerine.Core
 		public static void SortTypesByMenuPath(List<Type> types)
 		{
 			types.Sort((a, b) => {
-				string aPath = ClassAttributes<TangerineMenuPathAttribute>.Get(a)?.Path ?? a.Name;
-				string bPath = ClassAttributes<TangerineMenuPathAttribute>.Get(b)?.Path ?? b.Name;
+				string aPath = ClassAttributes<TangerineMenuPathAttribute>.Get(a, true)?.Path ?? a.Name;
+				string bPath = ClassAttributes<TangerineMenuPathAttribute>.Get(b, true)?.Path ?? b.Name;
 				int aRank = aPath.Count(c => c == '/');
 				int bRank = bPath.Count(c => c == '/');
 				int r = (bRank).CompareTo(aRank);

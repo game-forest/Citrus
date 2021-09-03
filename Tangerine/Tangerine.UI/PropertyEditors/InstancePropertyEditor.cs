@@ -24,8 +24,8 @@ namespace Tangerine.UI
 			selectImplementationButton.Clicked = () => {
 				IMenu menu = new Menu();
 				foreach (var type in GetPossibleTypes(propertyType)) {
-					var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type)?.Text;
-					var menuPath = ClassAttributes<TangerineMenuPathAttribute>.Get(type)?.Path;
+					var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
+					var menuPath = ClassAttributes<TangerineMenuPathAttribute>.Get(type, true)?.Path;
 					ICommand command = new Command(
 						text: type.Name,
 						execute: () => {
@@ -58,7 +58,7 @@ namespace Tangerine.UI
 						var type = v.Value?.GetType();
 						selectImplementationButton.Text = type?.Name ?? "<not set>";
 						if (type != null) {
-							tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type)?.Text;
+							tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
 						}
 					} else {
 						selectImplementationButton.Text = ManyValuesText;

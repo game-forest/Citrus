@@ -11,15 +11,13 @@ namespace Tangerine.UI
 	{
 		protected DropDownList Selector { get; }
 
-		private static Dictionary<Type, IEnumerable<FieldInfo>> allowedFields;
+		private static readonly Dictionary<Type, IEnumerable<FieldInfo>> allowedFields =
+			new Dictionary<Type, IEnumerable<FieldInfo>>();
 
 		static EnumPropertyEditor()
 		{
-			allowedFields = new Dictionary<Type, IEnumerable<FieldInfo>>();
-			var type = typeof(T);
-			var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
-			var allowed = fields.Where(f => !Attribute.IsDefined((MemberInfo)f, typeof(TangerineIgnoreAttribute)));
-			allowedFields[type] = allowed;
+			allowedFields[typeof(T)] = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static)
+				.Where(f => !Attribute.IsDefined(f, typeof(TangerineIgnoreAttribute)));
 		}
 
 		public EnumPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
