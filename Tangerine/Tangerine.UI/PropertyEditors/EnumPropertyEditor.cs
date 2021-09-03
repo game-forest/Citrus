@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Lime;
@@ -10,15 +11,23 @@ namespace Tangerine.UI
 	{
 		protected DropDownList Selector { get; }
 
+		private static readonly Dictionary<Type, IEnumerable<FieldInfo>> allowedFields =
+			new Dictionary<Type, IEnumerable<FieldInfo>>();
+
+		static EnumPropertyEditor()
+		{
+			allowedFields[typeof(T)] = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static)
+				.Where(f => !Attribute.IsDefined(f, typeof(TangerineIgnoreAttribute)));
+		}
+
 		public EnumPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
 			Selector = editorParams.DropDownListFactory();
 			Selector.LayoutCell = new LayoutCell(Alignment.Center);
 			EditorContainer.AddNode(Selector);
 			var propType = editorParams.PropertyInfo.PropertyType;
-			var fields = propType.GetFields(BindingFlags.Public | BindingFlags.Static);
-			var allowedFields = fields.Where(f => !Attribute.IsDefined((MemberInfo)f, typeof(TangerineIgnoreAttribute)));
-			foreach (var field in allowedFields) {
+			var fields = allowedFields[propType];
+			foreach (var field in fields) {
 				Selector.Items.Add(new CommonDropDownList.Item(field.Name, field.GetValue(null)));
 			}
 			Selector.Changed += a => {

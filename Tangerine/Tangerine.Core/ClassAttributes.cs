@@ -6,14 +6,14 @@ namespace Tangerine.Core
 {
 	public static class ClassAttributes<T> where T: Attribute
 	{
-		static readonly Dictionary<Type, T> map = new Dictionary<Type, T>();
+		static readonly Dictionary<(Type, bool), T> map = new Dictionary<(Type, bool), T>();
 
-		public static T Get(Type type)
+		public static T Get(Type type, bool inherit = false)
 		{
-			T attr;
-			if (!map.TryGetValue(type, out attr)) {
-				attr = type.GetCustomAttributes(false).FirstOrDefault(i => i is T) as T;
-				map[type] = attr;
+			var key = (type, inherit);
+			if (!map.TryGetValue(key, out T attr)) {
+				attr = type.GetCustomAttributes(inherit).FirstOrDefault(i => i is T) as T;
+				map[key] = attr;
 			}
 			return attr;
 		}

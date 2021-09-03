@@ -68,6 +68,7 @@
     <Compile Include="GridSpanList.cs" />
     <Compile Include="ISceneView.cs" />
     <Compile Include="MenuExtensions.cs" />
+    <Compile Include="MethodAttributes.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
     <Compile Include="NodeExtensions.cs" />
     <Compile Include="Operations\ContentsPathProcessor.cs" />

@@ -104,8 +104,8 @@ namespace Tangerine.UI.SceneView
 
 		public VisualHint Register(Type type, ICommand command, Func<VisualHint, bool> hideRule)
 		{
-			if (!(type.GetCustomAttributes(typeof(TangerineVisualHintGroupAttribute), false).FirstOrDefault()
-					is TangerineVisualHintGroupAttribute attribute)) {
+			var attribute = ClassAttributes<TangerineVisualHintGroupAttribute>.Get(type);
+			if (!(attribute is TangerineVisualHintGroupAttribute)) {
 				return EmptyHint;
 			}
 			var hint = Register($"{attribute.Group.TrimEnd(' ', '/')}/{attribute.AliasTypeName ?? type.Name}", command, hideRule);

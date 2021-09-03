@@ -165,7 +165,7 @@ namespace Tangerine.UI.Inspector
 				// Create group header for block of elements belonging to the type if there's at least once element.
 				if (elements.Count > 0) {
 					var objectsCount = o.Count;
-					string tooltipText = t.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+					string tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(t, true)?.Text;
 					var text = t.Name;
 					if (text == "Node" && !objects.Skip(1).Any()) {
 						text += $" of type '{objects.First().GetType().Name}'";
@@ -257,13 +257,12 @@ namespace Tangerine.UI.Inspector
 					History = History,
 					Editable = Enabled,
 					DefaultValueGetter = () => {
-						var defaultValueAttribute = type.GetProperty(property.Name)
-							.GetCustomAttribute<TangerinePropertyDefaultValueAttribute>();
+						var defaultValueAttribute =
+							PropertyAttributes<TangerinePropertyDefaultValueAttribute>.Get(property, true);
 						if (defaultValueAttribute != null) {
 							return defaultValueAttribute.GetValue();
 						}
-
-						var ctr = type.GetConstructor(new Type[] {});
+						var ctr = type.GetConstructor(Array.Empty<Type>());
 						if (ctr == null) {
 							return null;
 						}
@@ -279,7 +278,6 @@ namespace Tangerine.UI.Inspector
 					: SetProperty;
 				editorParams.Add(@params);
 			}
-
 			string previousGroup = null;
 			foreach (var p in editorParams.OrderBy(p => p.Group)) {
 				var editorWidget = CreatePropertyEditor(p);
@@ -297,7 +295,7 @@ namespace Tangerine.UI.Inspector
 
 			var methodBindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 			var methods = type.GetMethods(methodBindingFlags)
-				.Where(m => Attribute.IsDefined(m, typeof(TangerineCreateButtonAttribute)));
+				.Where(m => MethodAttributes<TangerineCreateButtonAttribute>.Get(m, true) != null);
 			foreach (var method in methods) {
 				if (0 != method.GetParameters().Length || method.IsStatic) {
 					throw new NotSupportedException(
@@ -305,15 +303,13 @@ namespace Tangerine.UI.Inspector
 						"only non-static methods with no arguments are supported!"
 					);
 				}
-				var attributeType = typeof(TangerineCreateButtonAttribute);
-				var attribute = Attribute.GetCustomAttribute(method, attributeType);
-				var typedAttribute = (TangerineCreateButtonAttribute)attribute;
+				var attribute = MethodAttributes<TangerineCreateButtonAttribute>.Get(method, true);
 				var buttonWidget = new Widget {
 					Layout = new HBoxLayout(),
 					Anchors = Anchors.LeftRight,
 					Padding = new Thickness(4, 14, 2, 2),
 					Nodes = {
-						new ThemedButton(typedAttribute.Name ?? method.Name) {
+						new ThemedButton(attribute.Name ?? method.Name) {
 							Anchors = Anchors.LeftRight,
 							MaxWidth = 10000,
 							Clicked = () => {
@@ -516,8 +512,8 @@ namespace Tangerine.UI.Inspector
 			{
 				IMenu menu = new Menu();
 				foreach (var type in componentTypes) {
-					var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
-					var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+					var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
+					var menuPath = ClassAttributes<TangerineMenuPathAttribute>.Get(type, true)?.Path;
 					ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes)) {
 						TooltipText = tooltipText
 					};
@@ -628,7 +624,7 @@ namespace Tangerine.UI.Inspector
 			if (totalObjectCount > 1) {
 				text += $"({componentsCount}/{totalObjectCount})";
 			}
-			string tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+			string tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
 			var label = CreateCategoryHeader(
 				text: text,
 				iconTexture: ComponentIconPool.GetTexture(type),

@@ -9,8 +9,20 @@ namespace Tangerine.UI
 {
 	public class AlignmentPropertyEditor : CommonPropertyEditor<Alignment>
 	{
-		private DropDownList selectorH { get; }
-		private DropDownList selectorV { get; }
+		private readonly DropDownList selectorH;
+		private readonly DropDownList selectorV;
+
+		private static readonly Dictionary<Type, IEnumerable<FieldInfo>> allowedFields =
+			new Dictionary<Type, IEnumerable<FieldInfo>>();
+
+		static AlignmentPropertyEditor()
+		{
+			var items = new[] { typeof(HAlignment), typeof(VAlignment) };
+			foreach (var type in items) {
+				allowedFields[type] = type.GetFields(BindingFlags.Public | BindingFlags.Static)
+					.Where(f => !Attribute.IsDefined(f, typeof(TangerineIgnoreAttribute)));
+			}
+		}
 
 		public AlignmentPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
@@ -21,19 +33,18 @@ namespace Tangerine.UI
 					(selectorV = editorParams.DropDownListFactory())
 				}
 			});
-			var items = new [] {
+			var items = new[] {
 				(type: typeof(HAlignment), selector: selectorH),
 				(type: typeof(VAlignment), selector: selectorV)
 			};
 			foreach (var (type, selector) in items) {
-				var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static);
-				var allowedFields = fields.Where(f => !Attribute.IsDefined((MemberInfo)f, typeof(TangerineIgnoreAttribute)));
-				foreach (var field in allowedFields) {
+				var fields = allowedFields[type];
+				foreach (var field in fields) {
 					selector.Items.Add(new CommonDropDownList.Item(field.Name, field.GetValue(null)));
 				}
 				selector.Changed += a => {
 					if (a.ChangedByUser) {
-						SetComponent(editorParams, type);
+						SetComponent(type);
 					}
 				};
 			}
@@ -55,7 +66,7 @@ namespace Tangerine.UI
 			});
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, Type t)
+		private void SetComponent(Type t)
 		{
 			DoTransaction(() => {
 				SetProperty<Alignment>((current) => {
@@ -73,8 +84,8 @@ namespace Tangerine.UI
 		{
 			var currentX = CoalescedPropertyComponentValue(v => v.X);
 			var currentY = CoalescedPropertyComponentValue(v => v.Y);
-			SetComponent(EditorParams, typeof(HAlignment));
-			SetComponent(EditorParams, typeof(VAlignment));
+			SetComponent(typeof(HAlignment));
+			SetComponent(typeof(VAlignment));
 		}
 	}
 }

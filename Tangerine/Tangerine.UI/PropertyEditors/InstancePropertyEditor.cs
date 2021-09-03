@@ -24,8 +24,8 @@ namespace Tangerine.UI
 			selectImplementationButton.Clicked = () => {
 				IMenu menu = new Menu();
 				foreach (var type in GetPossibleTypes(propertyType)) {
-					var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
-					var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+					var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
+					var menuPath = ClassAttributes<TangerineMenuPathAttribute>.Get(type, true)?.Path;
 					ICommand command = new Command(
 						text: type.Name,
 						execute: () => {
@@ -53,11 +53,13 @@ namespace Tangerine.UI
 				),
 				action: v => {
 					onValueChanged?.Invoke(ExpandableContent);
-					string tooltipText;
+					string tooltipText = null;
 					if (v.IsDefined) {
 						var type = v.Value?.GetType();
 						selectImplementationButton.Text = type?.Name ?? "<not set>";
-						tooltipText = type?.GetCustomAttribute<TangerineTooltipAttribute>()?.Text ?? null;
+						if (type != null) {
+							tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
+						}
 					} else {
 						selectImplementationButton.Text = ManyValuesText;
 						tooltipText = "Multiple distinct values are selected.";
@@ -153,7 +155,7 @@ namespace Tangerine.UI
 							.GetTypes()
 							.Where(t => !t.IsInterface
 								&& !t.IsAbstract
-								&& t.GetCustomAttribute<TangerineIgnoreAttribute>(false) == null
+								&& ClassAttributes<TangerineIgnoreAttribute>.Get(t) == null
 								&& t != propertyType
 								&& propertyType.IsAssignableFrom(t)
 							).ToList();

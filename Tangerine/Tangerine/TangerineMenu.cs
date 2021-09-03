@@ -73,7 +73,7 @@ namespace Tangerine
 				: Project.Current.RegisteredNodeTypes;
 			GenericCommands.ConvertTo.Menu = GenerateConvertToMenu(registeredNodeTypes);
 			foreach (var type in registeredNodeTypes) {
-				var tooltipText = type.GetCustomAttribute<TangerineTooltipAttribute>()?.Text;
+				var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
 				var cmd = new Command("Create " + type.Name) {
 					TooltipText = tooltipText
 				};
@@ -84,7 +84,7 @@ namespace Tangerine
 					cmd.Icon = NodeIconPool.DefaultIcon;
 					NodeIconPool.GenerateIcon(type, newIcon => cmd.Icon = newIcon);
 				}
-				var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
+				var menuPath = ClassAttributes<TangerineMenuPathAttribute>.Get(type, true)?.Path;
 				if (menuPath != null) {
 					create.InsertCommandAlongPath(cmd, menuPath);
 					if (!menuPath.EndsWith("/")) {
@@ -166,7 +166,7 @@ namespace Tangerine
 
 		private static bool IsNodeTypeCanBeRoot(Type type)
 		{
-			return type.GetCustomAttributes(false).OfType<TangerineRegisterNodeAttribute>().First().CanBeRoot;
+			return ClassAttributes<TangerineRegisterNodeAttribute>.Get(type).CanBeRoot;
 		}
 
 		private static void CreateMainMenu()

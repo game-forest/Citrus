@@ -49,9 +49,8 @@ namespace Tangerine.UI.Inspector
 			AddEditor(c => c.PropertyName == "Id", c => new NodeIdPropertyEditor(c));
 			AddEditor(typeof(string), c => new StringPropertyEditor(c));
 			AddEditor(typeof(float), c => {
-				if (Attribute.IsDefined(c.PropertyInfo, typeof(TangerineValidRangeAttribute))) {
-					var type = typeof(TangerineValidRangeAttribute);
-					var attribute = (TangerineValidRangeAttribute)Attribute.GetCustomAttribute(c.PropertyInfo, type);
+				var attribute = PropertyAttributes<TangerineValidRangeAttribute>.Get(c.PropertyInfo, true);
+				if (attribute != null) {
 					float min = (float)attribute.Minimum;
 					float max = (float)attribute.Maximum;
 					bool noInfinity = !float.IsInfinity(min) && !float.IsInfinity(max);
