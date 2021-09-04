@@ -6,20 +6,26 @@ using System.Reflection;
 namespace Lime
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	/// <summary>
+	/// Allow to add multiple component of owning type and it's derived types.
+	/// </summary>
 	public class AllowMultipleComponentsAttribute : Attribute { }
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	/// <summary>
+	/// Allow to add only one component of owning type and it's derived types.
+	/// </summary>
 	public class AllowOnlyOneComponentAttribute : Attribute { }
 
 	public class Component
 	{
-		private static Dictionary<Type, (Type TypeOwningAttribute, bool AllowMultiple)> ruleSpreader =
+		private static Dictionary<Type, (Type RuleDeclaringType, bool AllowMultiple)> ruleCache =
 			new Dictionary<Type, (Type, bool)>();
 
-		internal static (Type Type, bool AllowMultiple) GetRuleSpreader(Type type)
+		internal static (Type Type, bool AllowMultiple) GetRule(Type type)
 		{
-			lock (ruleSpreader) {
-				if (ruleSpreader.TryGetValue(type, out var result)) {
+			lock (ruleCache) {
+				if (ruleCache.TryGetValue(type, out var result)) {
 					return result;
 				}
 				var t = type;
@@ -28,12 +34,12 @@ namespace Lime
 					var allowOnlyOne = t.GetCustomAttribute<AllowOnlyOneComponentAttribute>(false);
 					if (allowMultiple != null || allowOnlyOne != null) {
 						var rs = (t, allowMultiple != null);
-						ruleSpreader.Add(type, rs);
+						ruleCache.Add(type, rs);
 						return rs;
 					}
 					t = t.BaseType;
 				}
-				ruleSpreader.Add(type, (null, false));
+				ruleCache.Add(type, (null, false));
 				return (null, false);
 			}
 		}
@@ -154,15 +160,19 @@ namespace Lime
 		public virtual void Add(TComponent component)
 		{
 			if (Contains(component)) {
-				throw new InvalidOperationException("Attempt to add a component twice.");
+				throw new InvalidOperationException("Attempt to add the same component twice.");
 			}
 			var type = component.GetType();
-			var (ruleSpreaderType, allowMultiple) = Component.GetRuleSpreader(type);
+			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
 			if (
-				(ruleSpreaderType == null && ContainsExactType(type))
-				|| (ruleSpreaderType != null && !allowMultiple && Contains(ruleSpreaderType))
+				(ruleDeclaringType == null && ContainsExactType(type))
+				|| (ruleDeclaringType != null && !allowMultiple && Contains(ruleDeclaringType))
 			) {
-				throw new InvalidOperationException("Adding multiple component of this type is not permitted");
+				throw new InvalidOperationException(
+					$"Attempt to add multiple components of type {type.FullName}. " +
+					$"Use {nameof(AllowMultipleComponentsAttribute)} or {nameof(AllowOnlyOneComponentAttribute)} " +
+					$"to declare multiple component rules."
+				);
 			}
 			if (list == null) {
 				list = new TComponent[4];
@@ -185,22 +195,23 @@ namespace Lime
 			}
 			return false;
 		}
+
 		public bool CanAdd(Type type)
 		{
-			var (ruleSpreaderType, allowMultiple) = Component.GetRuleSpreader(type);
+			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
 			return
 				allowMultiple
-				|| (ruleSpreaderType == null && !ContainsExactType(type))
-				|| (ruleSpreaderType != null && !Contains(ruleSpreaderType));
+				|| (ruleDeclaringType == null && !ContainsExactType(type))
+				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
 		}
 
 		public bool CanAdd<T>() where T : TComponent
 		{
-			var (ruleSpreaderType, allowMultiple) = ComponentInfoResolver<T>.RuleSpreader;
+			var (ruleDeclaringType, allowMultiple) = ComponentRuleResolver<T>.Rule;
 			return
 				allowMultiple
-				|| (ruleSpreaderType == null && !ContainsExactType(typeof(T)))
-				|| (ruleSpreaderType != null && !Contains(ruleSpreaderType));
+				|| (ruleDeclaringType == null && !ContainsExactType(typeof(T)))
+				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
 		}
 
 		public bool Remove<T>()
@@ -329,10 +340,10 @@ namespace Lime
 			public void Dispose() { }
 		}
 
-		private static class ComponentInfoResolver<T> where T : TComponent
+		private static class ComponentRuleResolver<T> where T : TComponent
 		{
-			public static readonly (Type Type, bool AllowMultiple) RuleSpreader =
-				Component.GetRuleSpreader(typeof(T));
+			public static readonly (Type RuleDeclaringType, bool AllowMultiple) Rule =
+				Component.GetRule(typeof(T));
 		}
 	}
 }

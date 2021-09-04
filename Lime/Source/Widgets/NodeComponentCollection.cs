@@ -279,6 +279,7 @@ namespace Lime
 
 		protected override void OnRemove(NodeComponent component)
 		{
+			animationComponent = null;
 			component.Owner = null;
 			owner.Manager?.UnregisterComponent(component, owner);
 		}
