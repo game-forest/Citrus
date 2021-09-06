@@ -64,7 +64,6 @@ namespace Tangerine.UI.Inspector
 			if (objects.Any() && objects.All(o => o is Node)) {
 				var nodes = objects.Cast<Node>().ToList();
 				var queriedComponents = new List<NodeComponent>();
-				var nodesWithComponent = new List<Node>();
 				foreach (var t in GetComponentTypes(nodes)) {
 					var nodesComponents = new List<List<NodeComponent>>();
 					var maxCount = 0;
@@ -81,11 +80,10 @@ namespace Tangerine.UI.Inspector
 						maxCount = Math.Max(nodeComponents.Count, maxCount);
 
 					}
-					var components = new List<NodeComponent>();
 					for (int i = 0; i < maxCount; i++) {
 						// Column slice
-						components.Clear();
-						nodesWithComponent.Clear();
+						var components = new List<NodeComponent>();
+						var nodesWithComponent = new List<Node>();
 						for (int j = 0; j < nodesComponents.Count; j++) {
 							var row = nodesComponents[j];
 							if (i >= row.Count) {

@@ -7,13 +7,13 @@ namespace Lime
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
-	/// Allow to add multiple component of attribute declaring type and it's derived types.
+	/// Allow to add multiple components of a type decorated with the attribute and it's derived types.
 	/// </summary>
 	public class AllowMultipleComponentsAttribute : Attribute { }
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
-	/// Allow to add only one component of attribute declaring type and it's derived types.
+	/// Allow to add only one component of a type decorated with the attribute and it's derived types.
 	/// </summary>
 	public class AllowOnlyOneComponentAttribute : Attribute { }
 
