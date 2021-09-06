@@ -1,3 +1,5 @@
+#if WIN
+
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -22,7 +24,7 @@ namespace Tangerine.UI.RemoteScripting
 			"System.Threading.Tasks"
 		);
 
-		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp8);
+		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp9);
 		public IEnumerable<string> ProjectReferences { get; set; }
 		public IEnumerable<string> Namespaces { get; set; } = DefaultNamespaces;
 		public OutputKind OutputKind { get; set; } = OutputKind.DynamicallyLinkedLibrary;
@@ -74,3 +76,5 @@ namespace Tangerine.UI.RemoteScripting
 		}
 	}
 }
+
+#endif
