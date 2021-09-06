@@ -117,16 +117,37 @@
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Get__1">ComponentCollection&lt;NodeComponent&gt;.Get&lt;T&gt;()</a>
     </div>
     <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll__1">ComponentCollection&lt;NodeComponent&gt;.GetAll&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll__1_System_Collections_Generic_IList___0__">ComponentCollection&lt;NodeComponent&gt;.GetAll&lt;T&gt;(IList&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll_System_Type_">ComponentCollection&lt;NodeComponent&gt;.GetAll(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll_System_Type_System_Collections_Generic_IList__0__">ComponentCollection&lt;NodeComponent&gt;.GetAll(Type, IList&lt;NodeComponent&gt;)</a>
+    </div>
+    <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_TryGet__1___0__">ComponentCollection&lt;NodeComponent&gt;.TryGet&lt;T&gt;(T)</a>
     </div>
     <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetOrAdd__1">ComponentCollection&lt;NodeComponent&gt;.GetOrAdd&lt;T&gt;()</a>
     </div>
     <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_CanAdd_System_Type_">ComponentCollection&lt;NodeComponent&gt;.CanAdd(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_CanAdd__1">ComponentCollection&lt;NodeComponent&gt;.CanAdd&lt;T&gt;()</a>
+    </div>
+    <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Remove__1">ComponentCollection&lt;NodeComponent&gt;.Remove&lt;T&gt;()</a>
     </div>
     <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Remove_System_Type_">ComponentCollection&lt;NodeComponent&gt;.Remove(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Remove__0_">ComponentCollection&lt;NodeComponent&gt;.Remove(NodeComponent)</a>
     </div>
     <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Replace__1___0_">ComponentCollection&lt;NodeComponent&gt;.Replace&lt;T&gt;(T)</a>
@@ -139,6 +160,9 @@
     </div>
     <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetEnumerator">ComponentCollection&lt;NodeComponent&gt;.GetEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Clear">ComponentCollection&lt;NodeComponent&gt;.Clear()</a>
     </div>
     <div>
       <a class="xref" href="Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_CopyTo__0___System_Int32_">ComponentCollection&lt;NodeComponent&gt;.CopyTo(NodeComponent[], Int32)</a>
@@ -260,18 +284,6 @@
   <div><span class="xref">Lime.ComponentCollection&lt;Lime.NodeComponent&gt;.Add(Lime.NodeComponent)</span></div>
   
   
-  <a id="Lime_NodeComponentCollection_Clear_" data-uid="Lime.NodeComponentCollection.Clear*"></a>
-  <h4 id="Lime_NodeComponentCollection_Clear" data-uid="Lime.NodeComponentCollection.Clear">Clear()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Clear()</code></pre>
-  </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">Lime.ComponentCollection&lt;Lime.NodeComponent&gt;.Clear()</span></div>
-  
-  
   <a id="Lime_NodeComponentCollection_Contains_" data-uid="Lime.NodeComponentCollection.Contains*"></a>
   <h4 id="Lime_NodeComponentCollection_Contains_Lime_NodeComponent_" data-uid="Lime.NodeComponentCollection.Contains(Lime.NodeComponent)">Contains(NodeComponent)</h4>
   <div class="markdown level1 summary"></div>
@@ -316,13 +328,13 @@
   <div><span class="xref">Lime.ComponentCollection&lt;Lime.NodeComponent&gt;.Contains(Lime.NodeComponent)</span></div>
   
   
-  <a id="Lime_NodeComponentCollection_Remove_" data-uid="Lime.NodeComponentCollection.Remove*"></a>
-  <h4 id="Lime_NodeComponentCollection_Remove_Lime_NodeComponent_" data-uid="Lime.NodeComponentCollection.Remove(Lime.NodeComponent)">Remove(NodeComponent)</h4>
+  <a id="Lime_NodeComponentCollection_OnRemove_" data-uid="Lime.NodeComponentCollection.OnRemove*"></a>
+  <h4 id="Lime_NodeComponentCollection_OnRemove_Lime_NodeComponent_" data-uid="Lime.NodeComponentCollection.OnRemove(Lime.NodeComponent)">OnRemove(NodeComponent)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool Remove(NodeComponent component)</code></pre>
+    <pre><code class="lang-csharp hljs">protected override void OnRemove(NodeComponent component)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -341,23 +353,8 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">Lime.ComponentCollection&lt;Lime.NodeComponent&gt;.Remove(Lime.NodeComponent)</span></div>
+  <div><span class="xref">Lime.ComponentCollection&lt;Lime.NodeComponent&gt;.OnRemove(Lime.NodeComponent)</span></div>
   
   
   <a id="Lime_NodeComponentCollection_SerializeItemIf_" data-uid="Lime.NodeComponentCollection.SerializeItemIf*"></a>

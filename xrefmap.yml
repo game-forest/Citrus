@@ -353,6 +353,18 @@ references:
   commentId: F:Lime.AllowedComponentOwnerTypes.Types
   fullName: Lime.AllowedComponentOwnerTypes.Types
   nameWithType: AllowedComponentOwnerTypes.Types
+- uid: Lime.AllowMultipleComponentsAttribute
+  name: AllowMultipleComponentsAttribute
+  href: api/Lime.AllowMultipleComponentsAttribute.html
+  commentId: T:Lime.AllowMultipleComponentsAttribute
+  fullName: Lime.AllowMultipleComponentsAttribute
+  nameWithType: AllowMultipleComponentsAttribute
+- uid: Lime.AllowOnlyOneComponentAttribute
+  name: AllowOnlyOneComponentAttribute
+  href: api/Lime.AllowOnlyOneComponentAttribute.html
+  commentId: T:Lime.AllowOnlyOneComponentAttribute
+  fullName: Lime.AllowOnlyOneComponentAttribute
+  nameWithType: AllowOnlyOneComponentAttribute
 - uid: Lime.AlphaIntensityComponent
   name: AlphaIntensityComponent
   href: api/Lime.AlphaIntensityComponent.html
@@ -13945,6 +13957,32 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).Add
   nameWithType: ComponentCollection<TComponent>.Add
   nameWithType.vb: ComponentCollection(Of TComponent).Add
+- uid: Lime.ComponentCollection`1.CanAdd(System.Type)
+  name: CanAdd(Type)
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_CanAdd_System_Type_
+  commentId: M:Lime.ComponentCollection`1.CanAdd(System.Type)
+  fullName: Lime.ComponentCollection<TComponent>.CanAdd(System.Type)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).CanAdd(System.Type)
+  nameWithType: ComponentCollection<TComponent>.CanAdd(Type)
+  nameWithType.vb: ComponentCollection(Of TComponent).CanAdd(Type)
+- uid: Lime.ComponentCollection`1.CanAdd*
+  name: CanAdd
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_CanAdd_
+  commentId: Overload:Lime.ComponentCollection`1.CanAdd
+  isSpec: "True"
+  fullName: Lime.ComponentCollection<TComponent>.CanAdd
+  fullName.vb: Lime.ComponentCollection(Of TComponent).CanAdd
+  nameWithType: ComponentCollection<TComponent>.CanAdd
+  nameWithType.vb: ComponentCollection(Of TComponent).CanAdd
+- uid: Lime.ComponentCollection`1.CanAdd``1
+  name: CanAdd<T>()
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_CanAdd__1
+  commentId: M:Lime.ComponentCollection`1.CanAdd``1
+  name.vb: CanAdd(Of T)()
+  fullName: Lime.ComponentCollection<TComponent>.CanAdd<T>()
+  fullName.vb: Lime.ComponentCollection(Of TComponent).CanAdd(Of T)()
+  nameWithType: ComponentCollection<TComponent>.CanAdd<T>()
+  nameWithType.vb: ComponentCollection(Of TComponent).CanAdd(Of T)()
 - uid: Lime.ComponentCollection`1.Clear
   name: Clear()
   href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Clear
@@ -14040,15 +14078,15 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).Enumerator
   nameWithType: ComponentCollection<TComponent>.Enumerator
   nameWithType.vb: ComponentCollection(Of TComponent).Enumerator
-- uid: Lime.ComponentCollection`1.Enumerator.#ctor(System.ValueTuple{System.Int32,`0}[],System.Int32)
-  name: Enumerator((Int32, TComponent)[], Int32)
-  href: api/Lime.ComponentCollection-1.Enumerator.html#Lime_ComponentCollection_1_Enumerator__ctor_System_ValueTuple_System_Int32__0____System_Int32_
-  commentId: M:Lime.ComponentCollection`1.Enumerator.#ctor(System.ValueTuple{System.Int32,`0}[],System.Int32)
-  name.vb: Enumerator((Int32, TComponent)(), Int32)
-  fullName: Lime.ComponentCollection<TComponent>.Enumerator.Enumerator(System.ValueTuple<System.Int32, TComponent>[], System.Int32)
-  fullName.vb: Lime.ComponentCollection(Of TComponent).Enumerator.Enumerator(System.ValueTuple(Of System.Int32, TComponent)(), System.Int32)
-  nameWithType: ComponentCollection<TComponent>.Enumerator.Enumerator((Int32, TComponent)[], Int32)
-  nameWithType.vb: ComponentCollection(Of TComponent).Enumerator.Enumerator((Int32, TComponent)(), Int32)
+- uid: Lime.ComponentCollection`1.Enumerator.#ctor(`0[],System.Int32)
+  name: Enumerator(TComponent[], Int32)
+  href: api/Lime.ComponentCollection-1.Enumerator.html#Lime_ComponentCollection_1_Enumerator__ctor__0___System_Int32_
+  commentId: M:Lime.ComponentCollection`1.Enumerator.#ctor(`0[],System.Int32)
+  name.vb: Enumerator(TComponent(), Int32)
+  fullName: Lime.ComponentCollection<TComponent>.Enumerator.Enumerator(TComponent[], System.Int32)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).Enumerator.Enumerator(TComponent(), System.Int32)
+  nameWithType: ComponentCollection<TComponent>.Enumerator.Enumerator(TComponent[], Int32)
+  nameWithType.vb: ComponentCollection(Of TComponent).Enumerator.Enumerator(TComponent(), Int32)
 - uid: Lime.ComponentCollection`1.Enumerator.#ctor*
   name: Enumerator
   href: api/Lime.ComponentCollection-1.Enumerator.html#Lime_ComponentCollection_1_Enumerator__ctor_
@@ -14171,6 +14209,50 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).Get(Of T)()
   nameWithType: ComponentCollection<TComponent>.Get<T>()
   nameWithType.vb: ComponentCollection(Of TComponent).Get(Of T)()
+- uid: Lime.ComponentCollection`1.GetAll(System.Type)
+  name: GetAll(Type)
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll_System_Type_
+  commentId: M:Lime.ComponentCollection`1.GetAll(System.Type)
+  fullName: Lime.ComponentCollection<TComponent>.GetAll(System.Type)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).GetAll(System.Type)
+  nameWithType: ComponentCollection<TComponent>.GetAll(Type)
+  nameWithType.vb: ComponentCollection(Of TComponent).GetAll(Type)
+- uid: Lime.ComponentCollection`1.GetAll(System.Type,System.Collections.Generic.IList{`0})
+  name: GetAll(Type, IList<TComponent>)
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll_System_Type_System_Collections_Generic_IList__0__
+  commentId: M:Lime.ComponentCollection`1.GetAll(System.Type,System.Collections.Generic.IList{`0})
+  name.vb: GetAll(Type, IList(Of TComponent))
+  fullName: Lime.ComponentCollection<TComponent>.GetAll(System.Type, System.Collections.Generic.IList<TComponent>)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).GetAll(System.Type, System.Collections.Generic.IList(Of TComponent))
+  nameWithType: ComponentCollection<TComponent>.GetAll(Type, IList<TComponent>)
+  nameWithType.vb: ComponentCollection(Of TComponent).GetAll(Type, IList(Of TComponent))
+- uid: Lime.ComponentCollection`1.GetAll*
+  name: GetAll
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll_
+  commentId: Overload:Lime.ComponentCollection`1.GetAll
+  isSpec: "True"
+  fullName: Lime.ComponentCollection<TComponent>.GetAll
+  fullName.vb: Lime.ComponentCollection(Of TComponent).GetAll
+  nameWithType: ComponentCollection<TComponent>.GetAll
+  nameWithType.vb: ComponentCollection(Of TComponent).GetAll
+- uid: Lime.ComponentCollection`1.GetAll``1
+  name: GetAll<T>()
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll__1
+  commentId: M:Lime.ComponentCollection`1.GetAll``1
+  name.vb: GetAll(Of T)()
+  fullName: Lime.ComponentCollection<TComponent>.GetAll<T>()
+  fullName.vb: Lime.ComponentCollection(Of TComponent).GetAll(Of T)()
+  nameWithType: ComponentCollection<TComponent>.GetAll<T>()
+  nameWithType.vb: ComponentCollection(Of TComponent).GetAll(Of T)()
+- uid: Lime.ComponentCollection`1.GetAll``1(System.Collections.Generic.IList{``0})
+  name: GetAll<T>(IList<T>)
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetAll__1_System_Collections_Generic_IList___0__
+  commentId: M:Lime.ComponentCollection`1.GetAll``1(System.Collections.Generic.IList{``0})
+  name.vb: GetAll(Of T)(IList(Of T))
+  fullName: Lime.ComponentCollection<TComponent>.GetAll<T>(System.Collections.Generic.IList<T>)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).GetAll(Of T)(System.Collections.Generic.IList(Of T))
+  nameWithType: ComponentCollection<TComponent>.GetAll<T>(IList<T>)
+  nameWithType.vb: ComponentCollection(Of TComponent).GetAll(Of T)(IList(Of T))
 - uid: Lime.ComponentCollection`1.GetEnumerator
   name: GetEnumerator()
   href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_GetEnumerator
@@ -14223,6 +14305,23 @@ references:
   fullName.vb: Lime.ComponentCollection(Of TComponent).IsReadOnly
   nameWithType: ComponentCollection<TComponent>.IsReadOnly
   nameWithType.vb: ComponentCollection(Of TComponent).IsReadOnly
+- uid: Lime.ComponentCollection`1.OnRemove(`0)
+  name: OnRemove(TComponent)
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_OnRemove__0_
+  commentId: M:Lime.ComponentCollection`1.OnRemove(`0)
+  fullName: Lime.ComponentCollection<TComponent>.OnRemove(TComponent)
+  fullName.vb: Lime.ComponentCollection(Of TComponent).OnRemove(TComponent)
+  nameWithType: ComponentCollection<TComponent>.OnRemove(TComponent)
+  nameWithType.vb: ComponentCollection(Of TComponent).OnRemove(TComponent)
+- uid: Lime.ComponentCollection`1.OnRemove*
+  name: OnRemove
+  href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_OnRemove_
+  commentId: Overload:Lime.ComponentCollection`1.OnRemove
+  isSpec: "True"
+  fullName: Lime.ComponentCollection<TComponent>.OnRemove
+  fullName.vb: Lime.ComponentCollection(Of TComponent).OnRemove
+  nameWithType: ComponentCollection<TComponent>.OnRemove
+  nameWithType.vb: ComponentCollection(Of TComponent).OnRemove
 - uid: Lime.ComponentCollection`1.Remove(`0)
   name: Remove(TComponent)
   href: api/Lime.ComponentCollection-1.html#Lime_ComponentCollection_1_Remove__0_
@@ -35456,6 +35555,19 @@ references:
   isSpec: "True"
   fullName: Lime.Mathf.CalcDistanceToSegment
   nameWithType: Mathf.CalcDistanceToSegment
+- uid: Lime.Mathf.CalcUpperPowerOfTwo(System.Int32)
+  name: CalcUpperPowerOfTwo(Int32)
+  href: api/Lime.Mathf.html#Lime_Mathf_CalcUpperPowerOfTwo_System_Int32_
+  commentId: M:Lime.Mathf.CalcUpperPowerOfTwo(System.Int32)
+  fullName: Lime.Mathf.CalcUpperPowerOfTwo(System.Int32)
+  nameWithType: Mathf.CalcUpperPowerOfTwo(Int32)
+- uid: Lime.Mathf.CalcUpperPowerOfTwo*
+  name: CalcUpperPowerOfTwo
+  href: api/Lime.Mathf.html#Lime_Mathf_CalcUpperPowerOfTwo_
+  commentId: Overload:Lime.Mathf.CalcUpperPowerOfTwo
+  isSpec: "True"
+  fullName: Lime.Mathf.CalcUpperPowerOfTwo
+  nameWithType: Mathf.CalcUpperPowerOfTwo
 - uid: Lime.Mathf.CatmullRomSpline(System.Single,Lime.Vector2,Lime.Vector2,Lime.Vector2,Lime.Vector2)
   name: CatmullRomSpline(Single, Vector2, Vector2, Vector2, Vector2)
   href: api/Lime.Mathf.html#Lime_Mathf_CatmullRomSpline_System_Single_Lime_Vector2_Lime_Vector2_Lime_Vector2_Lime_Vector2_
@@ -41186,12 +41298,6 @@ references:
   isSpec: "True"
   fullName: Lime.MultiCaretPosition.WorldPos
   nameWithType: MultiCaretPosition.WorldPos
-- uid: Lime.MutuallyExclusiveDerivedComponentsAttribute
-  name: MutuallyExclusiveDerivedComponentsAttribute
-  href: api/Lime.MutuallyExclusiveDerivedComponentsAttribute.html
-  commentId: T:Lime.MutuallyExclusiveDerivedComponentsAttribute
-  fullName: Lime.MutuallyExclusiveDerivedComponentsAttribute
-  nameWithType: MutuallyExclusiveDerivedComponentsAttribute
 - uid: Lime.NineGrid
   name: NineGrid
   href: api/Lime.NineGrid.html
@@ -43600,19 +43706,6 @@ references:
   isSpec: "True"
   fullName: Lime.NodeComponentCollection.AnimationComponent
   nameWithType: NodeComponentCollection.AnimationComponent
-- uid: Lime.NodeComponentCollection.Clear
-  name: Clear()
-  href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_Clear
-  commentId: M:Lime.NodeComponentCollection.Clear
-  fullName: Lime.NodeComponentCollection.Clear()
-  nameWithType: NodeComponentCollection.Clear()
-- uid: Lime.NodeComponentCollection.Clear*
-  name: Clear
-  href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_Clear_
-  commentId: Overload:Lime.NodeComponentCollection.Clear
-  isSpec: "True"
-  fullName: Lime.NodeComponentCollection.Clear
-  nameWithType: NodeComponentCollection.Clear
 - uid: Lime.NodeComponentCollection.Contains(Lime.NodeComponent)
   name: Contains(NodeComponent)
   href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_Contains_Lime_NodeComponent_
@@ -43626,19 +43719,19 @@ references:
   isSpec: "True"
   fullName: Lime.NodeComponentCollection.Contains
   nameWithType: NodeComponentCollection.Contains
-- uid: Lime.NodeComponentCollection.Remove(Lime.NodeComponent)
-  name: Remove(NodeComponent)
-  href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_Remove_Lime_NodeComponent_
-  commentId: M:Lime.NodeComponentCollection.Remove(Lime.NodeComponent)
-  fullName: Lime.NodeComponentCollection.Remove(Lime.NodeComponent)
-  nameWithType: NodeComponentCollection.Remove(NodeComponent)
-- uid: Lime.NodeComponentCollection.Remove*
-  name: Remove
-  href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_Remove_
-  commentId: Overload:Lime.NodeComponentCollection.Remove
+- uid: Lime.NodeComponentCollection.OnRemove(Lime.NodeComponent)
+  name: OnRemove(NodeComponent)
+  href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_OnRemove_Lime_NodeComponent_
+  commentId: M:Lime.NodeComponentCollection.OnRemove(Lime.NodeComponent)
+  fullName: Lime.NodeComponentCollection.OnRemove(Lime.NodeComponent)
+  nameWithType: NodeComponentCollection.OnRemove(NodeComponent)
+- uid: Lime.NodeComponentCollection.OnRemove*
+  name: OnRemove
+  href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_OnRemove_
+  commentId: Overload:Lime.NodeComponentCollection.OnRemove
   isSpec: "True"
-  fullName: Lime.NodeComponentCollection.Remove
-  nameWithType: NodeComponentCollection.Remove
+  fullName: Lime.NodeComponentCollection.OnRemove
+  nameWithType: NodeComponentCollection.OnRemove
 - uid: Lime.NodeComponentCollection.SerializeItemIf(System.Int32,System.Object)
   name: SerializeItemIf(Int32, Object)
   href: api/Lime.NodeComponentCollection.html#Lime_NodeComponentCollection_SerializeItemIf_System_Int32_System_Object_

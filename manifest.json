@@ -50,6 +50,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.AllowMultipleComponentsAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.AllowMultipleComponentsAttribute.html",
+          "hash": "rmpAUXJ1XGvGyI5B3RIiSQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.AllowOnlyOneComponentAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.AllowOnlyOneComponentAttribute.html",
+          "hash": "Z3o019bDLV1pob/Y21XOvA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.AllowedComponentOwnerTypes.yml",
       "output": {
         ".html": {
@@ -1626,7 +1650,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ComponentCollection-1.Enumerator.html",
-          "hash": "d8hixCGhy4jv5/z9s+uoVQ=="
+          "hash": "tlB8mu5gak8mh1LSw0yubQ=="
         }
       },
       "is_incremental": false,
@@ -1638,7 +1662,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ComponentCollection-1.html",
-          "hash": "FIa3gYy2YpcwvY81XAgbVQ=="
+          "hash": "XHrjL6MITRl629tVXjg97A=="
         }
       },
       "is_incremental": false,
@@ -4302,7 +4326,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Mathf.html",
-          "hash": "xEWSEWPBq1TjXTy5IYXDHA=="
+          "hash": "PkeZtyl8jNVYQskZHoJo1Q=="
         }
       },
       "is_incremental": false,
@@ -4802,18 +4826,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.MutuallyExclusiveDerivedComponentsAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.MutuallyExclusiveDerivedComponentsAttribute.html",
-          "hash": "iOY+7N56aGv2p0qd9VgvMw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.NineGrid.Part.yml",
       "output": {
         ".html": {
@@ -4950,7 +4962,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeComponentCollection.html",
-          "hash": "wcL+XaGE45thAcdTPYVwYw=="
+          "hash": "jARoJCFrPgtCFhXTYCJjAg=="
         }
       },
       "is_incremental": false,
@@ -7494,7 +7506,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TangerineStaticPropertyAttribute.html",
-          "hash": "gan8mOLm+8UHtP92Wh0Ebg=="
+          "hash": "GIQKOrtG+4JPBZz+1ESHUQ=="
         }
       },
       "is_incremental": false,
@@ -9354,7 +9366,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "Gc20rfx6SNdLrWwOuUj5tQ=="
+          "hash": "6TxSIT1H5WIM91dfwFwNVg=="
         }
       },
       "is_incremental": false,
@@ -9402,7 +9414,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "1VaTdPfbBaOpj+6g5m1eFw=="
+          "hash": "dwyINfw7ftZQSZhs1B00tA=="
         }
       },
       "is_incremental": false,
@@ -11817,7 +11829,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 782,
+          "total_file_count": 783,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
