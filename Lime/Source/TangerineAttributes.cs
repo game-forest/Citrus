@@ -18,8 +18,9 @@ namespace Lime
 	}
 
 	/// <summary>
-	/// Denotes a property which can not be animated within Tangerine.
+	/// Denotes a property which can not be animated with Tangerine.
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 	public sealed class TangerineStaticPropertyAttribute : Attribute
 	{ }
 

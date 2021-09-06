@@ -86,7 +86,7 @@ namespace Tangerine.Core.Components
 		public AnimationTrack Track { get; set; }
 	}
 
-	[MutuallyExclusiveDerivedComponents]
+	[AllowOnlyOneComponent]
 	public abstract class CommonRowData : Component
 	{
 		public abstract string Id { get; set; }

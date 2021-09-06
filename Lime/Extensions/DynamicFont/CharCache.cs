@@ -104,23 +104,12 @@ namespace Lime
 			const int glyphsPerTexture = 30;
 			var glyphMaxArea = fontHeight * (fontHeight / 2);
 			var size =
-				CalcUpperPowerOfTwo((int)Math.Sqrt(glyphMaxArea * glyphsPerTexture))
+				Mathf.CalcUpperPowerOfTwo((int)Math.Sqrt(glyphMaxArea * glyphsPerTexture))
 				.Clamp(64, 2048);
 			return new Size(
 				size.Clamp(MinTextureSize.Width, MaxTextureSize.Width),
 				size.Clamp(MinTextureSize.Height, MaxTextureSize.Height)
 			);
-		}
-
-		private static int CalcUpperPowerOfTwo(int x)
-		{
-			x--;
-			x |= (x >> 1);
-			x |= (x >> 2);
-			x |= (x >> 4);
-			x |= (x >> 8);
-			x |= (x >> 16);
-			return (x + 1);
 		}
 
 		private static void CopyGlyphToTexture(FontRenderer.Glyph glyph, DynamicTexture texture, IntVector2 position)

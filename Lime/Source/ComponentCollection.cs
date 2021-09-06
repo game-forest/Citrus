@@ -6,93 +6,145 @@ using System.Reflection;
 namespace Lime
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-	public class MutuallyExclusiveDerivedComponentsAttribute : Attribute
-	{ }
+	/// <summary>
+	/// Allow to add multiple components of a type decorated with the attribute and it's derived types.
+	/// </summary>
+	public class AllowMultipleComponentsAttribute : Attribute { }
+
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+	/// <summary>
+	/// Allow to add only one component of a type decorated with the attribute and it's derived types.
+	/// </summary>
+	public class AllowOnlyOneComponentAttribute : Attribute { }
 
 	public class Component
 	{
-		private static Dictionary<Type, int> keyMap = new Dictionary<Type, int>();
-		private static int keyCounter;
+		private static readonly Dictionary<Type, (Type RuleDeclaringType, bool AllowMultiple)> ruleCache =
+			new Dictionary<Type, (Type, bool)>();
 
-		internal static int GetKeyForType(Type type)
+		internal static (Type RuleDeclaringType, bool AllowMultiple) GetRule(Type type)
 		{
-			lock (keyMap) {
-				if (keyMap.TryGetValue(type, out int key)) {
-					return key;
+			lock (ruleCache) {
+				if (ruleCache.TryGetValue(type, out var result)) {
+					return result;
 				}
-				Type t = type;
-				while (t != null) {
-					if (t.GetCustomAttribute<MutuallyExclusiveDerivedComponentsAttribute>(false) != null) {
-						break;
+				var t = type;
+				while (t != typeof(Component)) {
+					var allowMultiple = t.GetCustomAttribute<AllowMultipleComponentsAttribute>(false);
+					var allowOnlyOne = t.GetCustomAttribute<AllowOnlyOneComponentAttribute>(false);
+					if (allowMultiple != null || allowOnlyOne != null) {
+						var rule = (t, allowMultiple != null);
+						ruleCache.Add(type, rule);
+						return rule;
 					}
 					t = t.BaseType;
 				}
-				t = t ?? type;
-				if (!keyMap.TryGetValue(t, out key)) {
-					key = ++keyCounter;
-					keyMap.Add(t, key);
-				}
-				if (!keyMap.TryGetValue(type, out _)) {
-					keyMap.Add(type, key);
-				}
-				return key;
+				ruleCache.Add(type, (null, false));
+				return (null, false);
 			}
 		}
-
-		internal int GetKey() => GetKeyForType(GetType());
 	}
 
 	public class ComponentCollection<TComponent> : ICollection<TComponent> where TComponent : Component
 	{
-		private (int Key, TComponent Component)[] list;
+		private TComponent[] list;
 
 		public int Count { get; private set; }
 
 		public bool IsReadOnly => false;
 
-		public virtual bool Contains(TComponent component) => ContainsKey(component.GetKey());
-		public bool Contains<T>() where T : TComponent => ContainsKey(ComponentKeyResolver<T>.Key);
-		public bool Contains(Type type) => ContainsKey(Component.GetKeyForType(type));
-
-		private bool ContainsKey(int key)
+		public virtual bool Contains(TComponent component)
 		{
-			if (list == null) {
-				return false;
-			}
-			foreach (var (k, c) in list) {
-				if (k == key) {
+			for (int i = 0; i < Count; i++) {
+				if (list[i] == component) {
 					return true;
-				}
-				if (c == null) {
-					return false;
 				}
 			}
 			return false;
 		}
 
-		private TComponent Get(int key)
+		public bool Contains<T>()
 		{
-			if (list == null) {
-				return default;
-			}
-			foreach (var (k, c) in list) {
-				if (c == null) {
-					return default;
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T) {
+					return true;
 				}
-				if (k == key) {
+			}
+			return false;
+		}
+
+		public bool Contains(Type type)
+		{
+			for (int i = 0; i < Count; i++) {
+				if (type.IsInstanceOfType(list[i])) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public TComponent Get(Type type)
+		{
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (type.IsInstanceOfType(c)) {
 					return c;
 				}
 			}
 			return default;
 		}
 
-		public TComponent Get(Type type) => Get(Component.GetKeyForType(type));
-
-		public T Get<T>() where T : TComponent => Get(ComponentKeyResolver<T>.Key) as T;
-
-		public bool TryGet<T>(out T result) where T : TComponent
+		public T Get<T>()
 		{
-			result = Get(ComponentKeyResolver<T>.Key) as T;
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T t) {
+					return t;
+				}
+			}
+			return default;
+		}
+
+		public IEnumerable<T> GetAll<T>()
+		{
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T t) {
+					yield return t;
+				}
+			}
+		}
+
+		public void GetAll<T>(IList<T> result)
+		{
+			for (int i = 0; i < Count; i++) {
+				if (list[i] is T t) {
+					result.Add(t);
+				}
+			}
+		}
+
+		public IEnumerable<TComponent> GetAll(Type type)
+		{
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (type.IsInstanceOfType(c)) {
+					yield return c;
+				}
+			}
+		}
+
+		public void GetAll(Type type, IList<TComponent> result)
+		{
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (type.IsInstanceOfType(c)) {
+					result.Add(c);
+				}
+			}
+		}
+
+		public bool TryGet<T>(out T result)
+		{
+			result = Get<T>();
 			return result != null;
 		}
 
@@ -108,43 +160,107 @@ namespace Lime
 
 		public virtual void Add(TComponent component)
 		{
-			if (Contains(component.GetType())) {
-				throw new InvalidOperationException("Attempt to add a component twice.");
+			if (Contains(component)) {
+				throw new InvalidOperationException("Attempt to add the same component twice.");
+			}
+			var type = component.GetType();
+			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
+			if (
+				(ruleDeclaringType == null && ContainsExactType(type))
+				|| (ruleDeclaringType != null && !allowMultiple && Contains(ruleDeclaringType))
+			) {
+				throw new InvalidOperationException(
+					$"Attempt to add multiple components of type `{type.FullName}`. " +
+					$"Use `{nameof(AllowMultipleComponentsAttribute)}` or " +
+					$"`{nameof(AllowOnlyOneComponentAttribute)}` to manage adding multiple components."
+				);
 			}
 			if (list == null) {
-				list = new (int, TComponent)[4];
-				list[0] = (component.GetKey(), component);
+				list = new TComponent[4];
+				list[0] = component;
 				Count = 1;
 				return;
 			}
 			if (Count == list.Length) {
 				Array.Resize(ref list, Count * 2);
 			}
-			list[Count++] = (component.GetKey(), component);
+			list[Count++] = component;
 		}
 
-		public bool Remove<T>() where T : TComponent
+		private bool ContainsExactType(Type type)
 		{
-			var c = Get<T>();
-			return c != null && Remove(c);
+			for (int i = 0; i < Count; i++) {
+				if (type == list[i].GetType()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public bool CanAdd(Type type)
+		{
+			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
+			return allowMultiple
+				|| (ruleDeclaringType == null && !ContainsExactType(type))
+				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
+		}
+
+		public bool CanAdd<T>() where T : TComponent
+		{
+			var (ruleDeclaringType, allowMultiple) = ComponentRuleResolver<T>.Rule;
+			return allowMultiple
+				|| (ruleDeclaringType == null && !ContainsExactType(typeof(T)))
+				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
+		}
+
+		public bool Remove<T>()
+		{
+			var j = 0;
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (!(c is T)) {
+					list[j] = list[i];
+					j++;
+				} else {
+					OnRemove(list[i]);
+				}
+			}
+			for (int i = j; i < Count; i++) {
+				list[i] = null;
+			}
+			var oldCount = Count;
+			Count = j;
+			return oldCount != Count;
 		}
 
 		public bool Remove(Type type)
 		{
-			var c = Get(type);
-			return c != null && Remove(c);
+			var j = 0;
+			for (int i = 0; i < Count; i++) {
+				var c = list[i];
+				if (!type.IsInstanceOfType(c)) {
+					list[j] = list[i];
+					j++;
+				} else {
+					OnRemove(list[i]);
+				}
+			}
+			for (int i = j; i < Count; i++) {
+				list[i] = null;
+			}
+			var oldCount = Count;
+			Count = j;
+			return oldCount != Count;
 		}
 
 		public virtual bool Remove(TComponent component)
 		{
-			if (list == null) {
-				return false;
-			}
 			int index = -1;
 			for (int i = 0; i < Count; i++) {
 				if (index == -1) {
-					if (list[i].Component == component) {
+					if (list[i] == component) {
 						index = i;
+						OnRemove(component);
 					}
 				} else {
 					list[i - 1] = list[i];
@@ -153,7 +269,7 @@ namespace Lime
 			if (index == -1) {
 				return false;
 			}
-			list[--Count] = (-1, null);
+			list[--Count] = null;
 			return true;
 		}
 
@@ -164,6 +280,8 @@ namespace Lime
 			return r;
 		}
 
+		protected virtual void OnRemove(TComponent component) { }
+
 		IEnumerator<TComponent> IEnumerable<TComponent>.GetEnumerator() => new Enumerator(list, Count);
 
 		IEnumerator IEnumerable.GetEnumerator() => new Enumerator(list, Count);
@@ -173,7 +291,8 @@ namespace Lime
 		public virtual void Clear()
 		{
 			for (int i = 0; i < Count; i++) {
-				list[i] = (-1, null);
+				OnRemove(list[i]);
+				list[i] = null;
 			}
 			Count = 0;
 		}
@@ -184,25 +303,25 @@ namespace Lime
 				return;
 			}
 			for (var i = 0; i < Count; i++) {
-				array[arrayIndex++] = list[i].Component;
+				array[arrayIndex++] = list[i];
 			}
 		}
 
 		public struct Enumerator : IEnumerator<TComponent>
 		{
-			private readonly (int Key, TComponent Component)[] list;
+			private readonly TComponent [] list;
 			private readonly int length;
 			private int index;
 
-			public Enumerator((int, TComponent)[] list, int length)
+			public Enumerator(TComponent[] list, int length)
 			{
 				this.list = list;
 				this.length = length;
 				index = -1;
 			}
 
-			public TComponent Current => list?[index].Component;
-			object IEnumerator.Current => list?[index].Component;
+			public TComponent Current => list?[index];
+			object IEnumerator.Current => list?[index];
 
 			public bool MoveNext()
 			{
@@ -220,9 +339,10 @@ namespace Lime
 			public void Dispose() { }
 		}
 
-		private static class ComponentKeyResolver<T> where T : TComponent
+		private static class ComponentRuleResolver<T> where T : TComponent
 		{
-			public static readonly int Key = Component.GetKeyForType(typeof(T));
+			public static readonly (Type RuleDeclaringType, bool AllowMultiple) Rule =
+				Component.GetRule(typeof(T));
 		}
 	}
 }

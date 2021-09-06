@@ -63,30 +63,50 @@ namespace Tangerine.UI.Inspector
 			}
 			if (objects.Any() && objects.All(o => o is Node)) {
 				var nodes = objects.Cast<Node>().ToList();
+				var queriedComponents = new List<NodeComponent>();
 				foreach (var t in GetComponentTypes(nodes)) {
-					var components = new List<NodeComponent>();
-					var nodesWithComponent = new List<Node>();
+					var nodesComponents = new List<List<NodeComponent>>();
+					var maxCount = 0;
 					foreach (var n in nodes) {
-						var c = n.Components.Get(t);
-						if (c != null && t.IsAssignableFrom(c.GetType())) {
-							components.Add(c);
-							nodesWithComponent.Add(n);
+						var nodeComponents = new List<NodeComponent>();
+						nodesComponents.Add(nodeComponents);
+						queriedComponents.Clear();
+						n.Components.GetAll(t, queriedComponents);
+						foreach (var c in queriedComponents) {
+							if (c != null && t.IsAssignableFrom(c.GetType())) {
+								nodeComponents.Add(c);
+							}
 						}
+						maxCount = Math.Max(nodeComponents.Count, maxCount);
+
 					}
-					var headerWidget = CreateComponentHeader(t, components);
-					headerWidget.Components.Add(new HeaderElementComponent());
-					DecorateElement(headerWidget);
-					rootWidget.AddNode(headerWidget);
-					var elementWidgets = CreateElementsForType(
-						type: t,
-						objects: components,
-						rootObjects: nodesWithComponent,
-						animableByPath: !Document.Current.InspectRootNode,
-						propertyPath: SerializeMutuallyExclusiveComponentGroupBaseType(t)
-					).ToList();
-					foreach (var w in elementWidgets) {
-						DecorateElement(w);
-						rootWidget.AddNode(w);
+					for (int i = 0; i < maxCount; i++) {
+						// Column slice
+						var components = new List<NodeComponent>();
+						var nodesWithComponent = new List<Node>();
+						for (int j = 0; j < nodesComponents.Count; j++) {
+							var row = nodesComponents[j];
+							if (i >= row.Count) {
+								continue;
+							}
+							components.Add(row[i]);
+							nodesWithComponent.Add(nodes[j]);
+						}
+						var headerWidget = CreateComponentHeader(t, components);
+						headerWidget.Components.Add(new HeaderElementComponent());
+						DecorateElement(headerWidget);
+						rootWidget.AddNode(headerWidget);
+						var elementWidgets = CreateElementsForType(
+							type: t,
+							objects: components,
+							rootObjects: nodesWithComponent,
+							animableByPath: !Document.Current.InspectRootNode,
+							propertyPath: SerializeMutuallyExclusiveComponentGroupBaseType(t)
+						).ToList();
+						foreach (var w in elementWidgets) {
+							DecorateElement(w);
+							rootWidget.AddNode(w);
+						}
 					}
 				}
 				AddComponentsMenu(nodes, rootWidget);
@@ -132,8 +152,10 @@ namespace Tangerine.UI.Inspector
 		{
 			var current = t;
 			while (current != typeof(NodeComponent)) {
-				if (current.IsDefined(typeof(MutuallyExclusiveDerivedComponentsAttribute), false)) {
-					t = current;
+				var allowOnlyOne = ClassAttributes<AllowOnlyOneComponentAttribute>.Get(current);
+				var allowMultiple = ClassAttributes<AllowMultipleComponentsAttribute>.Get(current);
+				if (allowMultiple != null || allowOnlyOne != null) {
+					t = allowOnlyOne == null ? t : current;
 					break;
 				}
 				current = current.BaseType;
@@ -502,9 +524,9 @@ namespace Tangerine.UI.Inspector
 			var componentTypes = new List<Type>();
 			foreach (var type in Project.Current.RegisteredComponentTypes) {
 				if (
-					!nodes.All(n => n.Components.Contains(type)) &&
+					!nodes.All(n => !n.Components.CanAdd(type)) &&
 					nodesTypes.All(t => NodeCompositionValidator.ValidateComponentType(t, type))
-					) {
+				) {
 					componentTypes.Add(type);
 				}
 			}
@@ -545,7 +567,7 @@ namespace Tangerine.UI.Inspector
 					}
 					using (Document.Current.History.BeginTransaction()) {
 						foreach (var node in nodes) {
-							if (!node.Components.Contains(type)) {
+							if (node.Components.CanAdd(type)) {
 								SetComponent.Perform(node, Cloner.Clone(component));
 							}
 						}
@@ -558,7 +580,7 @@ namespace Tangerine.UI.Inspector
 						pasteFromClipboardCommand.Enabled = false;
 					} else if (!componentTypes.Contains(component.GetType())) {
 						pasteFromClipboardCommand.Enabled = false;
-					} else if (nodes.All(n => n.Components.Contains(component.GetType()))) {
+					} else if (nodes.All(n => !n.Components.CanAdd(component.GetType()))) {
 						pasteFromClipboardCommand.Enabled = false;
 					}
 				}
@@ -790,7 +812,7 @@ namespace Tangerine.UI.Inspector
 			}
 			using (Document.Current.History.BeginTransaction()) {
 				foreach (var node in nodes) {
-					if (node.Components.Contains(type)) {
+					if (!node.Components.CanAdd(type)) {
 						continue;
 					}
 
@@ -831,7 +853,7 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		[MutuallyExclusiveDerivedComponents]
+		[AllowOnlyOneComponent]
 		private class InspectorElementComponent : NodeComponent
 		{
 		}

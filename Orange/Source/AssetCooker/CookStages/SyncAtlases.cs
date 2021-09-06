@@ -179,7 +179,7 @@ namespace Orange
 
 				// TODO: Fix for non-square atlases
 				var maxTextureSize = items.Max(item => Math.Max(item.BitmapInfo.Height, item.BitmapInfo.Width));
-				var minAtlasSize = Math.Max(64, TextureTools.CalcUpperPowerOfTwo(maxTextureSize));
+				var minAtlasSize = Math.Max(64, Mathf.CalcUpperPowerOfTwo(maxTextureSize));
 
 				foreach (var size in EnumerateAtlasSizes(isAtlasSquare, minAtlasSize, maxAtlasSize)) {
 					var prevAllocated = items.Where(i => i.Allocated).ToList();

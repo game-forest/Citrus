@@ -266,28 +266,6 @@ namespace Lime
 			owner?.Manager?.RegisterComponent(component, owner);
 		}
 
-		public override bool Remove(NodeComponent component)
-		{
-			animationComponent = null;
-			if (component != null && component.Owner == owner) {
-				base.Remove(component);
-				component.Owner = null;
-				owner.Manager?.UnregisterComponent(component, owner);
-				return true;
-			}
-			return false;
-		}
-
-		public override void Clear()
-		{
-			animationComponent = null;
-			foreach (var component in this) {
-				component.Owner = null;
-				owner.Manager?.UnregisterComponent(component, owner);
-			}
-			base.Clear();
-		}
-
 		public override bool Contains(NodeComponent component)
 		{
 			return component != null && component.Owner == owner;
@@ -297,6 +275,13 @@ namespace Lime
 		public bool SerializeItemIf(int index, Object component)
 		{
 			return NodeComponent.IsSerializable(component.GetType());
+		}
+
+		protected override void OnRemove(NodeComponent component)
+		{
+			animationComponent = null;
+			component.Owner = null;
+			owner.Manager?.UnregisterComponent(component, owner);
 		}
 	}
 }
