@@ -7,22 +7,22 @@ namespace Lime
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
-	/// Allow to add multiple component of owning type and it's derived types.
+	/// Allow to add multiple component of attribute declaring type and it's derived types.
 	/// </summary>
 	public class AllowMultipleComponentsAttribute : Attribute { }
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
-	/// Allow to add only one component of owning type and it's derived types.
+	/// Allow to add only one component of attribute declaring type and it's derived types.
 	/// </summary>
 	public class AllowOnlyOneComponentAttribute : Attribute { }
 
 	public class Component
 	{
-		private static Dictionary<Type, (Type RuleDeclaringType, bool AllowMultiple)> ruleCache =
+		private static readonly Dictionary<Type, (Type RuleDeclaringType, bool AllowMultiple)> ruleCache =
 			new Dictionary<Type, (Type, bool)>();
 
-		internal static (Type Type, bool AllowMultiple) GetRule(Type type)
+		internal static (Type RuleDeclaringType, bool AllowMultiple) GetRule(Type type)
 		{
 			lock (ruleCache) {
 				if (ruleCache.TryGetValue(type, out var result)) {
@@ -33,9 +33,9 @@ namespace Lime
 					var allowMultiple = t.GetCustomAttribute<AllowMultipleComponentsAttribute>(false);
 					var allowOnlyOne = t.GetCustomAttribute<AllowOnlyOneComponentAttribute>(false);
 					if (allowMultiple != null || allowOnlyOne != null) {
-						var rs = (t, allowMultiple != null);
-						ruleCache.Add(type, rs);
-						return rs;
+						var rule = (t, allowMultiple != null);
+						ruleCache.Add(type, rule);
+						return rule;
 					}
 					t = t.BaseType;
 				}
@@ -72,6 +72,7 @@ namespace Lime
 			}
 			return false;
 		}
+
 		public bool Contains(Type type)
 		{
 			for (int i = 0; i < Count; i++) {
@@ -169,9 +170,9 @@ namespace Lime
 				|| (ruleDeclaringType != null && !allowMultiple && Contains(ruleDeclaringType))
 			) {
 				throw new InvalidOperationException(
-					$"Attempt to add multiple components of type {type.FullName}. " +
-					$"Use {nameof(AllowMultipleComponentsAttribute)} or {nameof(AllowOnlyOneComponentAttribute)} " +
-					$"to declare multiple component rules."
+					$"Attempt to add multiple components of type `{type.FullName}`. " +
+					$"Use `{nameof(AllowMultipleComponentsAttribute)}` or " +
+					$"`{nameof(AllowOnlyOneComponentAttribute)}` to manage adding multiple components."
 				);
 			}
 			if (list == null) {
@@ -199,8 +200,7 @@ namespace Lime
 		public bool CanAdd(Type type)
 		{
 			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
-			return
-				allowMultiple
+			return allowMultiple
 				|| (ruleDeclaringType == null && !ContainsExactType(type))
 				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
 		}
@@ -208,8 +208,7 @@ namespace Lime
 		public bool CanAdd<T>() where T : TComponent
 		{
 			var (ruleDeclaringType, allowMultiple) = ComponentRuleResolver<T>.Rule;
-			return
-				allowMultiple
+			return allowMultiple
 				|| (ruleDeclaringType == null && !ContainsExactType(typeof(T)))
 				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
 		}
