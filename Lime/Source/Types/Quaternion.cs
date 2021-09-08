@@ -545,9 +545,7 @@ namespace Lime
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is Quaternion)
-				return Equals((Quaternion)obj);
-			return false;
+			return obj is Quaternion quaternion && Equals(quaternion);
 		}
 
 		/// <summary>
@@ -557,10 +555,7 @@ namespace Lime
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public bool Equals(Quaternion other)
 		{
-			return X == other.X &&
-				Y == other.Y &&
-				Z == other.Z &&
-				W == other.W;
+			return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && W.Equals(other.W);
 		}
 
 		/// <summary>

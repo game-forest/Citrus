@@ -141,7 +141,7 @@ namespace Lime
 
 		public override bool Equals(object obj)
 		{
-			return obj is Bounds && Equals((Bounds)obj);
+			return obj is Bounds bounds && Equals(bounds);
 		}
 
 		public bool Equals(Bounds other)
@@ -151,12 +151,12 @@ namespace Lime
 
 		public static bool operator ==(Bounds lhs, Bounds rhs)
 		{
-			return lhs.Equals(rhs);
+			return lhs.A == rhs.A && lhs.B == rhs.B;
 		}
 
 		public static bool operator !=(Bounds lhs, Bounds rhs)
 		{
-			return !lhs.Equals(rhs);
+			return !(lhs == rhs);
 		}
 	}
 }

@@ -75,7 +75,7 @@ namespace Lime
 
 		public override bool Equals(object obj)
 		{
-			return obj is IntVector2 && Equals((IntVector2)obj);
+			return obj is IntVector2 vector && Equals(vector);
 		}
 
 		public override int GetHashCode()

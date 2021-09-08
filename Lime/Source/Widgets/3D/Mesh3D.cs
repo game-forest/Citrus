@@ -34,10 +34,10 @@ namespace Lime
 
 			public bool Equals(BlendIndices other)
 			{
-				return index0 == other.index0 &&
-					index1 == other.index1 &&
-					index2 == other.index2 &&
-					index3 == other.index3;
+				return index0.Equals(other.index0) &&
+					index1.Equals(other.index1) &&
+					index2.Equals(other.index2) &&
+					index3.Equals(other.index3);
 			}
 
 			public override int GetHashCode()
@@ -72,10 +72,10 @@ namespace Lime
 
 			public bool Equals(BlendWeights other)
 			{
-				return Weight0 == other.Weight0 &&
-					Weight1 == other.Weight1 &&
-					Weight2 == other.Weight2 &&
-					Weight3 == other.Weight3;
+				return Weight0.Equals(other.Weight0) &&
+					Weight1.Equals(other.Weight1) &&
+					Weight2.Equals(other.Weight2) &&
+					Weight3.Equals(other.Weight3);
 			}
 
 			public override int GetHashCode()
@@ -116,13 +116,13 @@ namespace Lime
 
 			public bool Equals(Vertex other)
 			{
-				return Pos == other.Pos &&
+				return Pos.Equals(other.Pos) &&
 					Color == other.Color &&
-					UV1 == other.UV1 &&
+					UV1.Equals(other.UV1) &&
 					BlendIndices.Equals(other.BlendIndices) &&
 					BlendWeights.Equals(other.BlendWeights) &&
-					Normal == other.Normal &&
-					Tangent == other.Tangent;
+					Normal.Equals(other.Normal) &&
+					Tangent.Equals(other.Tangent);
 			}
 
 			public override int GetHashCode()

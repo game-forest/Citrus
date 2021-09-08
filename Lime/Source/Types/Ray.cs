@@ -22,7 +22,7 @@ namespace Lime
 
 		public override bool Equals(object obj)
 		{
-			return obj is Ray && Equals((Ray)obj);
+			return obj is Ray ray && Equals(ray);
 		}
 
 
@@ -130,12 +130,12 @@ namespace Lime
 
 		public static bool operator !=(Ray a, Ray b)
 		{
-			return !a.Equals(b);
+			return !(a == b);
 		}
 
 		public static bool operator ==(Ray a, Ray b)
 		{
-			return a.Equals(b);
+			return a.Position == b.Position && a.Direction == b.Direction;
 		}
 	}
 }
