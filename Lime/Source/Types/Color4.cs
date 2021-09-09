@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using Yuzu;
 
@@ -306,7 +306,7 @@ namespace Lime
 
 		public override bool Equals(object obj)
 		{
-			return (Color4)obj == this;
+			return obj is Color4 color && color == this;
 		}
 	}
 }
