@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Components;
@@ -15,50 +16,71 @@ namespace Tangerine.UI.Timeline.Operations
 	{
 		public static void Perform(SelectKeyframeMode mode)
 		{
-			int minFrame = int.MaxValue;
+			int adjacentFrame = int.MaxValue;
+			int currentFrame = Document.Current.AnimationFrame;
+			var animators = new HashSet<IAnimator>();
 			foreach (var row in Document.Current.SelectedRows()) {
 				var animable = row.Components.Get<NodeRow>()?.Node as IAnimationHost;
-				if (animable == null) {
+				if (animable != null) {
+					animators.UnionWith(animable.Animators);
 					continue;
 				}
-				foreach (var animator in animable.Animators) {
-					if (animator.AnimationId != Document.Current.AnimationId || animator.Keys.Count == 0) {
-						continue;
-					}
-					int current = GetIndexByFrame(animator.Keys, Document.Current.AnimationFrame);
-					bool overflow = current == animator.Keys.Count;
-					switch (mode) {
-						case SelectKeyframeMode.Next:
-							current = !overflow && animator.Keys[current].Frame == Document.Current.AnimationFrame
-								? current + 1
-								: overflow
-									? current - 1
-									: current;
-							break;
-
-						case SelectKeyframeMode.Previous:
-							current = current - 1;
-							break;
-					}
-					current = Mathf.Clamp(current, 0, animator.Keys.Count - 1);
-					if (animator.Keys[current].Frame < minFrame) {
-						minFrame = animator.Keys[current].Frame;
-					}
+				var animator = row.Components.Get<AnimatorRow>()?.Animator;
+				if (animator != null) {
+					animators.Add(animator);
+					continue;
+				}
+				var bone = row.Components.Get<BoneRow>()?.Bone;
+				if (bone != null) {
+					animators.UnionWith(bone.Animators);
+					continue;
 				}
 			}
-			if (minFrame == int.MaxValue) {
+			foreach (var animator in animators) {
+				if (animator.AnimationId != Document.Current.AnimationId || animator.Keys.Count == 0) {
+					continue;
+				}
+				int sign = 1;
+				int current = GetUpperKeyframeIndexByFrame(animator.Keys, currentFrame);
+				bool overflow = current == animator.Keys.Count;
+				switch (mode) {
+					case SelectKeyframeMode.Next:
+						current = !overflow && animator.Keys[current].Frame == currentFrame
+							? current + 1
+							: overflow
+								? current - 1
+								: current;
+						break;
+
+					case SelectKeyframeMode.Previous:
+						sign = -1;
+						current = current - 1;
+						break;
+				}
+				current = Mathf.Clamp(current, 0, animator.Keys.Count - 1);
+				if (animator.Keys[current].Frame == currentFrame) {
+					continue;
+				}
+				if (
+					Mathf.Sign(animator.Keys[current].Frame - currentFrame) == sign &&
+					Mathf.Abs(animator.Keys[current].Frame - currentFrame) < Mathf.Abs(adjacentFrame - currentFrame)
+				) {
+					adjacentFrame = animator.Keys[current].Frame;
+				}
+			}
+			if (adjacentFrame == int.MaxValue) {
 				return;
 			}
 			var timeline = Timeline.Instance;
 			Document.Current.History.DoTransaction(() => {
-				timeline.OffsetX = Mathf.Max(0, (minFrame + 1) * TimelineMetrics.ColWidth - timeline.Grid.RootWidget.Width / 2);
-				SetCurrentColumn.Perform(minFrame);
+				timeline.OffsetX = Mathf.Max(0, (adjacentFrame + 1) * TimelineMetrics.ColWidth - timeline.Grid.RootWidget.Width / 2);
+				SetCurrentColumn.Perform(adjacentFrame);
 				var timelineOffset = Document.Current.Container.Components.GetOrAdd<TimelineOffset>();
 				timelineOffset.Offset = timeline.Offset;
 			});
 		}
 
-		private static int GetIndexByFrame(IKeyframeList keys, int frame)
+		private static int GetUpperKeyframeIndexByFrame(IKeyframeList keys, int frame)
 		{
 			int l = 0;
 			int r = keys.Count - 1;
