@@ -698,7 +698,6 @@ namespace Tangerine
 				() => new LookupDialog(LookupSections.SectionType.DocumentAnimations)
 			);
 			h.Connect(GenericCommands.LookupComponents, () => new LookupDialog(LookupSections.SectionType.Components));
-			h.Connect(GenericCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimatorsWindow());
 			h.Connect(GenericCommands.Group, new GroupNodes());
 			h.Connect(GenericCommands.Ungroup, new UngroupNodes());
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
@@ -795,6 +794,7 @@ namespace Tangerine
 			h.Connect(TimelineCommands.NumericMove, () => new NumericMoveDialog());
 			h.Connect(TimelineCommands.NumericScale, () => new NumericScaleDialog());
 			h.Connect(ToolsCommands.RenderToPngSequence, new RenderToPngSequence());
+			h.Connect(ToolsCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimatorsWindow());
 			h.Connect(GitCommands.ForceUpdate, new ForceUpdate());
 			h.Connect(GitCommands.Update, new Update());
 			h.Connect(GenericCommands.ClearCache, new ClearCache());

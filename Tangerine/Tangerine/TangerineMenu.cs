@@ -203,7 +203,6 @@ namespace Tangerine
 #if !MAC
 					GenericCommands.PreferencesDialog,
 					GenericCommands.OpenLookupDialog,
-					GenericCommands.OpenConflictingAnimatorsDialog,
 					Command.MenuSeparator,
 #endif
 					GenericCommands.Close,
@@ -246,6 +245,7 @@ namespace Tangerine
 				new Command("Create", (create = new Menu())),
 				new Command("Tools", new Menu {
 					ToolsCommands.RenderToPngSequence,
+					ToolsCommands.OpenConflictingAnimatorsDialog,
 				}),
 				new Command("View", (viewMenu = new Menu {
 					new Command("Layouts", (new Menu {
