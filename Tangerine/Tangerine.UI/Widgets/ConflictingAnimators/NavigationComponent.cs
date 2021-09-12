@@ -138,8 +138,8 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			var state = item.GetTimelineItemState();
 
 			using (Document.Current.History.BeginTransaction()) {
-				state.ShowAnimators = true;
-				state.Expanded = true;
+				state.AnimatorsExpanded = true;
+				state.NodesExpanded = true;
 				ClearRowSelection.Perform();
 				SelectRow.Perform(row);
 				Document.Current.BumpSceneTreeVersion();
