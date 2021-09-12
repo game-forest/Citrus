@@ -18,6 +18,7 @@ using Tangerine.UI.SceneView;
 using Tangerine.UI.Docking;
 using Tangerine.UI.Timeline;
 using FileInfo = System.IO.FileInfo;
+using WindowWidget = Lime.WindowWidget;
 
 namespace Tangerine
 {
