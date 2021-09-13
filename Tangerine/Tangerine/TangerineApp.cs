@@ -319,7 +319,8 @@ namespace Tangerine
 				typeof(TriggersValidatorOnSetKeyframe),
 				typeof(Core.Operations.DeleteRuler.Processor),
 				typeof(Core.Operations.CreateRuler.Processor),
-				typeof(InvalidateAnimesh.Processor)
+				typeof(InvalidateAnimesh.Processor),
+				typeof(ChangeAnimatorsTargetPropertyPath.Processor),
 			});
 			DocumentHistory.AddOperationProcessorTypes(UI.Timeline.Timeline.GetOperationProcessorTypes());
 
