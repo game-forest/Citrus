@@ -68,6 +68,25 @@ namespace Lime
 		/// </summary>
 		/// <returns></returns>
 		public Widget CurrentScope => InputScopeStack.Top;
+
+		/// <summary>
+		/// Removes widgets which are not <see cref="Widget.GloballyVisible"/> or
+		/// not attached to <see cref="Lime.NodeManager"/> from InputScope.
+		/// Should only be called once per frame because input scope stack is static.
+		/// </summary>
+		internal static void CleanScopeStack()
+		{
+			foreach (var w in InputScopeStack) {
+				if (w.Manager == null || !w.GloballyVisible) {
+					toRemoveFromScopeStack.Add(w);
+				}
+			}
+			foreach (var w in toRemoveFromScopeStack) {
+				InputScopeStack.Remove(w);
+			}
+		}
+		private static List<Widget> toRemoveFromScopeStack = new List<Widget>();
+
 		public bool IsAcceptingKey(Key key)
 		{
 			if (Filter != null && !Filter(widget, key)) {

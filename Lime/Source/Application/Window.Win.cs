@@ -912,6 +912,7 @@ namespace Lime
 			RaiseUpdating(delta);
 			if (this == Application.MainWindow) {
 				AudioSystem.Update();
+				WidgetInput.CleanScopeStack();
 			}
 			if (active || Input.IsSimulationRunning) {
 				Input.CopyKeysState();

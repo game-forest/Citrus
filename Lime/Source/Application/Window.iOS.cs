@@ -141,6 +141,7 @@ namespace Lime
 			RaiseUpdating(clampedDelta);
 			Input.CopyKeysState();
 			AudioSystem.Update();
+			WidgetInput.CleanScopeStack();
 			RaiseSync();
 		}
 
