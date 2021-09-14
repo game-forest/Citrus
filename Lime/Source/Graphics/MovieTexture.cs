@@ -36,18 +36,31 @@ namespace Lime
 				throw new ArgumentException();
 			}
 			Stop();
-			rgbStream = AssetBundle.Current.OpenFile(Path + ".ogv");
-			rgbDecoder = new OgvDecoder(rgbStream);
-			foreach (var i in new string[] { "_alpha.ogv", "_Alpha.ogv" }) {
-				if (AssetBundle.Current.FileExists(Path + i)) {
-					alphaStream = AssetBundle.Current.OpenFile(Path + i);
-					alphaDecoder = new OgvDecoder(alphaStream);
-					break;
-				}
+			if (TryLoadFile(Path + ".ogv", out rgbStream)) {
+				rgbDecoder = new OgvDecoder(rgbStream);
+			}
+			if (
+				TryLoadFile(Path + "_alpha.ogv", out alphaStream)
+				|| TryLoadFile(Path + "_Alpha.ogv", out alphaStream)
+			) {
+				alphaDecoder = new OgvDecoder(alphaStream);
 			}
 			this.ImageSize = rgbDecoder.FrameSize;
 			this.SurfaceSize = ImageSize;
 			pixels = new Color4[ImageSize.Width * ImageSize.Height];
+		}
+
+		private bool TryLoadFile(string path, out Stream result)
+		{
+			if (!AssetBundle.Current.FileExists(path)) {
+				result = null;
+				return false;
+			}
+			using var stream = AssetBundle.Current.OpenFile(path);
+			result = new MemoryStream((int)stream.Length);
+			stream.CopyTo(result);
+			result.Position = 0;
+			return true;
 		}
 
 		public void Play()
