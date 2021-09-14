@@ -16,7 +16,7 @@ namespace Lime
 		private WindowInput WindowInput => CommonWindow.Current.Input;
 		private WidgetContext Context => WidgetContext.Current;
 
-		internal static readonly WidgetStack InputScopeStack = new WidgetStack();
+		private static readonly WidgetStack InputScopeStack = new WidgetStack();
 
 		public delegate bool FilterFunc(Widget widget, Key key);
 		public static FilterFunc Filter;
@@ -51,6 +51,23 @@ namespace Lime
 
 		public bool IsAcceptingMouse() => IsAcceptingKey(Key.Mouse0);
 
+		/// <summary>
+		/// Enumerates input scope stack from top to bottom.
+		/// Top being the highest priority input scope widget.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<Widget> EnumerateScopes()
+		{
+			for (int i = InputScopeStack.Count - 1; i >= 0; i--) {
+				yield return InputScopeStack[i];
+			}
+		}
+
+		/// <summary>
+		/// Returns input scope widget with highest priority.
+		/// </summary>
+		/// <returns></returns>
+		public Widget CurrentScope => InputScopeStack.Top;
 		public bool IsAcceptingKey(Key key)
 		{
 			if (Filter != null && !Filter(widget, key)) {
@@ -165,7 +182,7 @@ namespace Lime
 		[Obsolete("Use DerestrictScope() instead")]
 		public void ReleaseAll() => DerestrictScope();
 
-		public class WidgetStack : IReadOnlyList<Widget>
+		private class WidgetStack : IReadOnlyList<Widget>
 		{
 			private readonly List<Widget> stack = new List<Widget>();
 
@@ -206,7 +223,7 @@ namespace Lime
 
 			public int Count => stack.Count;
 
-			public Widget this[int index] => throw new NotImplementedException();
+			public Widget this[int index] => stack[index];
 		}
 
 		public void Dispose() => InputScopeStack.RemoveAll(i => i == widget);
