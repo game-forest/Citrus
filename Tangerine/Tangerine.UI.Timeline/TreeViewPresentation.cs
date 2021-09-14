@@ -250,11 +250,8 @@ namespace Tangerine.UI.Timeline
 
 		private void ShowContextMenu()
 		{
-			if (!SceneItem.GetTimelineItemState().Selected) {
-				Document.Current.History.DoTransaction(() => {
-					ClearRowSelection.Perform();
-					SelectRow.Perform(SceneItem);
-				});
+			if (!Item.Selected) {
+				TreeView.SelectItem(Item);
 			}
 			var menu = new Menu {
 				Command.Cut,
@@ -371,11 +368,8 @@ namespace Tangerine.UI.Timeline
 
 		private void ShowContextMenu()
 		{
-			if (!SceneItem.GetTimelineItemState().Selected) {
-				Document.Current.History.DoTransaction(() => {
-					ClearRowSelection.Perform();
-					SelectRow.Perform(SceneItem);
-				});
+			if (!Item.Selected) {
+				TreeView.SelectItem(Item);
 			}
 			var menu = new Menu {
 				GenericCommands.ExportScene,
