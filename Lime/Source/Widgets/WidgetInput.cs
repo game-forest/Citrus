@@ -16,7 +16,7 @@ namespace Lime
 		private WindowInput WindowInput => CommonWindow.Current.Input;
 		private WidgetContext Context => WidgetContext.Current;
 
-		internal static readonly WidgetStack InputScopeStack = new WidgetStack();
+		private static readonly WidgetStack InputScopeStack = new WidgetStack();
 
 		public delegate bool FilterFunc(Widget widget, Key key);
 		public static FilterFunc Filter;
@@ -50,6 +50,42 @@ namespace Lime
 		public int GetNumTouches() => IsAcceptingKey(Key.Touch0) ? WindowInput.GetNumTouches() : 0;
 
 		public bool IsAcceptingMouse() => IsAcceptingKey(Key.Mouse0);
+
+		/// <summary>
+		/// Enumerates input scope stack from top to bottom.
+		/// Top being the highest priority input scope widget.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<Widget> EnumerateScopes()
+		{
+			for (int i = InputScopeStack.Count - 1; i >= 0; i--) {
+				yield return InputScopeStack[i];
+			}
+		}
+
+		/// <summary>
+		/// Returns input scope widget with highest priority.
+		/// </summary>
+		/// <returns></returns>
+		public Widget CurrentScope => InputScopeStack.Top;
+
+		/// <summary>
+		/// Removes widgets which are not <see cref="Widget.GloballyVisible"/> or
+		/// not attached to <see cref="Lime.NodeManager"/> from InputScope.
+		/// Should only be called once per frame because input scope stack is static.
+		/// </summary>
+		internal static void CleanScopeStack()
+		{
+			foreach (var w in InputScopeStack) {
+				if (w.Manager == null || !w.GloballyVisible) {
+					toRemoveFromScopeStack.Add(w);
+				}
+			}
+			foreach (var w in toRemoveFromScopeStack) {
+				InputScopeStack.Remove(w);
+			}
+		}
+		private static List<Widget> toRemoveFromScopeStack = new List<Widget>();
 
 		public bool IsAcceptingKey(Key key)
 		{
@@ -165,7 +201,7 @@ namespace Lime
 		[Obsolete("Use DerestrictScope() instead")]
 		public void ReleaseAll() => DerestrictScope();
 
-		public class WidgetStack : IReadOnlyList<Widget>
+		private class WidgetStack : IReadOnlyList<Widget>
 		{
 			private readonly List<Widget> stack = new List<Widget>();
 
@@ -206,7 +242,7 @@ namespace Lime
 
 			public int Count => stack.Count;
 
-			public Widget this[int index] => throw new NotImplementedException();
+			public Widget this[int index] => stack[index];
 		}
 
 		public void Dispose() => InputScopeStack.RemoveAll(i => i == widget);

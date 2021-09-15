@@ -240,9 +240,9 @@ namespace Lime
 			renderChain.HitTest(ref hitTestArgs);
 			var n = hitTestArgs.Node;
 			if (
-				n != null &&
-				WidgetInput.InputScopeStack.Top != null &&
-				!n.SameOrDescendantOf(WidgetInput.InputScopeStack.Top)
+				n != null
+				&& Input.CurrentScope != null
+				&& !n.SameOrDescendantOf(Input.CurrentScope)
 			) {
 				n = null;
 			}

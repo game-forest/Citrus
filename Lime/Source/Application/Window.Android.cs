@@ -270,6 +270,7 @@ namespace Lime
 			Input.ProcessPendingKeyEvents(delta);
 			base.RaiseUpdating(delta);
 			AudioSystem.Update();
+			WidgetInput.CleanScopeStack();
 			Input.CopyKeysState();
 		}
 
