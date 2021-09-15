@@ -46011,6 +46011,32 @@ references:
   isSpec: "True"
   fullName: Lime.NumericRange.NormalRandomNumber
   nameWithType: NumericRange.NormalRandomNumber
+- uid: Lime.NumericRange.op_Equality(Lime.NumericRange,Lime.NumericRange)
+  name: Equality(NumericRange, NumericRange)
+  href: api/Lime.NumericRange.html#Lime_NumericRange_op_Equality_Lime_NumericRange_Lime_NumericRange_
+  commentId: M:Lime.NumericRange.op_Equality(Lime.NumericRange,Lime.NumericRange)
+  fullName: Lime.NumericRange.Equality(Lime.NumericRange, Lime.NumericRange)
+  nameWithType: NumericRange.Equality(NumericRange, NumericRange)
+- uid: Lime.NumericRange.op_Equality*
+  name: Equality
+  href: api/Lime.NumericRange.html#Lime_NumericRange_op_Equality_
+  commentId: Overload:Lime.NumericRange.op_Equality
+  isSpec: "True"
+  fullName: Lime.NumericRange.Equality
+  nameWithType: NumericRange.Equality
+- uid: Lime.NumericRange.op_Inequality(Lime.NumericRange,Lime.NumericRange)
+  name: Inequality(NumericRange, NumericRange)
+  href: api/Lime.NumericRange.html#Lime_NumericRange_op_Inequality_Lime_NumericRange_Lime_NumericRange_
+  commentId: M:Lime.NumericRange.op_Inequality(Lime.NumericRange,Lime.NumericRange)
+  fullName: Lime.NumericRange.Inequality(Lime.NumericRange, Lime.NumericRange)
+  nameWithType: NumericRange.Inequality(NumericRange, NumericRange)
+- uid: Lime.NumericRange.op_Inequality*
+  name: Inequality
+  href: api/Lime.NumericRange.html#Lime_NumericRange_op_Inequality_
+  commentId: Overload:Lime.NumericRange.op_Inequality
+  isSpec: "True"
+  fullName: Lime.NumericRange.Inequality
+  nameWithType: NumericRange.Inequality
 - uid: Lime.NumericRange.ToString
   name: ToString()
   href: api/Lime.NumericRange.html#Lime_NumericRange_ToString
