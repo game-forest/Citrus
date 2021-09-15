@@ -260,6 +260,32 @@ Other widgets receive released buttons state and frozen axes values.</p>
   </h3>
   
   
+  <a id="Lime_WidgetInput_CurrentScope_" data-uid="Lime.WidgetInput.CurrentScope*"></a>
+  <h4 id="Lime_WidgetInput_CurrentScope" data-uid="Lime.WidgetInput.CurrentScope">CurrentScope</h4>
+  <div class="markdown level1 summary"><p>Returns input scope widget with highest priority.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Widget CurrentScope { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Widget.html">Widget</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="Lime_WidgetInput_LocalMousePosition_" data-uid="Lime.WidgetInput.LocalMousePosition*"></a>
   <h4 id="Lime_WidgetInput_LocalMousePosition" data-uid="Lime.WidgetInput.LocalMousePosition">LocalMousePosition</h4>
   <div class="markdown level1 summary"></div>
@@ -600,6 +626,33 @@ public void CaptureAll()</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
   </div>
+  
+  
+  <a id="Lime_WidgetInput_EnumerateScopes_" data-uid="Lime.WidgetInput.EnumerateScopes*"></a>
+  <h4 id="Lime_WidgetInput_EnumerateScopes" data-uid="Lime.WidgetInput.EnumerateScopes">EnumerateScopes()</h4>
+  <div class="markdown level1 summary"><p>Enumerates input scope stack from top to bottom.
+Top being the highest priority input scope widget.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Widget&gt; EnumerateScopes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Widget.html">Widget</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="Lime_WidgetInput_GetNumTouches_" data-uid="Lime.WidgetInput.GetNumTouches*"></a>

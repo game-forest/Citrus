@@ -75215,6 +75215,19 @@ references:
   isSpec: "True"
   fullName: Lime.WidgetInput.ConsumeKeys
   nameWithType: WidgetInput.ConsumeKeys
+- uid: Lime.WidgetInput.CurrentScope
+  name: CurrentScope
+  href: api/Lime.WidgetInput.html#Lime_WidgetInput_CurrentScope
+  commentId: P:Lime.WidgetInput.CurrentScope
+  fullName: Lime.WidgetInput.CurrentScope
+  nameWithType: WidgetInput.CurrentScope
+- uid: Lime.WidgetInput.CurrentScope*
+  name: CurrentScope
+  href: api/Lime.WidgetInput.html#Lime_WidgetInput_CurrentScope_
+  commentId: Overload:Lime.WidgetInput.CurrentScope
+  isSpec: "True"
+  fullName: Lime.WidgetInput.CurrentScope
+  nameWithType: WidgetInput.CurrentScope
 - uid: Lime.WidgetInput.DerestrictScope
   name: DerestrictScope()
   href: api/Lime.WidgetInput.html#Lime_WidgetInput_DerestrictScope
@@ -75241,6 +75254,19 @@ references:
   isSpec: "True"
   fullName: Lime.WidgetInput.Dispose
   nameWithType: WidgetInput.Dispose
+- uid: Lime.WidgetInput.EnumerateScopes
+  name: EnumerateScopes()
+  href: api/Lime.WidgetInput.html#Lime_WidgetInput_EnumerateScopes
+  commentId: M:Lime.WidgetInput.EnumerateScopes
+  fullName: Lime.WidgetInput.EnumerateScopes()
+  nameWithType: WidgetInput.EnumerateScopes()
+- uid: Lime.WidgetInput.EnumerateScopes*
+  name: EnumerateScopes
+  href: api/Lime.WidgetInput.html#Lime_WidgetInput_EnumerateScopes_
+  commentId: Overload:Lime.WidgetInput.EnumerateScopes
+  isSpec: "True"
+  fullName: Lime.WidgetInput.EnumerateScopes
+  nameWithType: WidgetInput.EnumerateScopes
 - uid: Lime.WidgetInput.Filter
   name: Filter
   href: api/Lime.WidgetInput.html#Lime_WidgetInput_Filter
@@ -75487,126 +75513,6 @@ references:
   isSpec: "True"
   fullName: Lime.WidgetInput.WheelScrollAmount
   nameWithType: WidgetInput.WheelScrollAmount
-- uid: Lime.WidgetInput.WidgetStack
-  name: WidgetInput.WidgetStack
-  href: api/Lime.WidgetInput.WidgetStack.html
-  commentId: T:Lime.WidgetInput.WidgetStack
-  fullName: Lime.WidgetInput.WidgetStack
-  nameWithType: WidgetInput.WidgetStack
-- uid: Lime.WidgetInput.WidgetStack.Add(Lime.Widget)
-  name: Add(Widget)
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Add_Lime_Widget_
-  commentId: M:Lime.WidgetInput.WidgetStack.Add(Lime.Widget)
-  fullName: Lime.WidgetInput.WidgetStack.Add(Lime.Widget)
-  nameWithType: WidgetInput.WidgetStack.Add(Widget)
-- uid: Lime.WidgetInput.WidgetStack.Add*
-  name: Add
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Add_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.Add
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.Add
-  nameWithType: WidgetInput.WidgetStack.Add
-- uid: Lime.WidgetInput.WidgetStack.Count
-  name: Count
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Count
-  commentId: P:Lime.WidgetInput.WidgetStack.Count
-  fullName: Lime.WidgetInput.WidgetStack.Count
-  nameWithType: WidgetInput.WidgetStack.Count
-- uid: Lime.WidgetInput.WidgetStack.Count*
-  name: Count
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Count_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.Count
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.Count
-  nameWithType: WidgetInput.WidgetStack.Count
-- uid: Lime.WidgetInput.WidgetStack.GetEnumerator
-  name: GetEnumerator()
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_GetEnumerator
-  commentId: M:Lime.WidgetInput.WidgetStack.GetEnumerator
-  fullName: Lime.WidgetInput.WidgetStack.GetEnumerator()
-  nameWithType: WidgetInput.WidgetStack.GetEnumerator()
-- uid: Lime.WidgetInput.WidgetStack.GetEnumerator*
-  name: GetEnumerator
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_GetEnumerator_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.GetEnumerator
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.GetEnumerator
-  nameWithType: WidgetInput.WidgetStack.GetEnumerator
-- uid: Lime.WidgetInput.WidgetStack.Item(System.Int32)
-  name: Item[Int32]
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Item_System_Int32_
-  commentId: P:Lime.WidgetInput.WidgetStack.Item(System.Int32)
-  name.vb: Item(Int32)
-  fullName: Lime.WidgetInput.WidgetStack.Item[System.Int32]
-  fullName.vb: Lime.WidgetInput.WidgetStack.Item(System.Int32)
-  nameWithType: WidgetInput.WidgetStack.Item[Int32]
-  nameWithType.vb: WidgetInput.WidgetStack.Item(Int32)
-- uid: Lime.WidgetInput.WidgetStack.Item*
-  name: Item
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Item_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.Item
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.Item
-  nameWithType: WidgetInput.WidgetStack.Item
-- uid: Lime.WidgetInput.WidgetStack.Remove(Lime.Widget)
-  name: Remove(Widget)
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Remove_Lime_Widget_
-  commentId: M:Lime.WidgetInput.WidgetStack.Remove(Lime.Widget)
-  fullName: Lime.WidgetInput.WidgetStack.Remove(Lime.Widget)
-  nameWithType: WidgetInput.WidgetStack.Remove(Widget)
-- uid: Lime.WidgetInput.WidgetStack.Remove*
-  name: Remove
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Remove_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.Remove
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.Remove
-  nameWithType: WidgetInput.WidgetStack.Remove
-- uid: Lime.WidgetInput.WidgetStack.RemoveAll(System.Predicate{Lime.Widget})
-  name: RemoveAll(Predicate<Widget>)
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_RemoveAll_System_Predicate_Lime_Widget__
-  commentId: M:Lime.WidgetInput.WidgetStack.RemoveAll(System.Predicate{Lime.Widget})
-  name.vb: RemoveAll(Predicate(Of Widget))
-  fullName: Lime.WidgetInput.WidgetStack.RemoveAll(System.Predicate<Lime.Widget>)
-  fullName.vb: Lime.WidgetInput.WidgetStack.RemoveAll(System.Predicate(Of Lime.Widget))
-  nameWithType: WidgetInput.WidgetStack.RemoveAll(Predicate<Widget>)
-  nameWithType.vb: WidgetInput.WidgetStack.RemoveAll(Predicate(Of Widget))
-- uid: Lime.WidgetInput.WidgetStack.RemoveAll*
-  name: RemoveAll
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_RemoveAll_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.RemoveAll
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.RemoveAll
-  nameWithType: WidgetInput.WidgetStack.RemoveAll
-- uid: Lime.WidgetInput.WidgetStack.System#Collections#IEnumerable#GetEnumerator
-  name: IEnumerable.GetEnumerator()
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_System_Collections_IEnumerable_GetEnumerator
-  commentId: M:Lime.WidgetInput.WidgetStack.System#Collections#IEnumerable#GetEnumerator
-  name.vb: System.Collections.IEnumerable.GetEnumerator()
-  fullName: Lime.WidgetInput.WidgetStack.System.Collections.IEnumerable.GetEnumerator()
-  nameWithType: WidgetInput.WidgetStack.IEnumerable.GetEnumerator()
-  nameWithType.vb: WidgetInput.WidgetStack.System.Collections.IEnumerable.GetEnumerator()
-- uid: Lime.WidgetInput.WidgetStack.System#Collections#IEnumerable#GetEnumerator*
-  name: IEnumerable.GetEnumerator
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_System_Collections_IEnumerable_GetEnumerator_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.System#Collections#IEnumerable#GetEnumerator
-  isSpec: "True"
-  name.vb: System.Collections.IEnumerable.GetEnumerator
-  fullName: Lime.WidgetInput.WidgetStack.System.Collections.IEnumerable.GetEnumerator
-  nameWithType: WidgetInput.WidgetStack.IEnumerable.GetEnumerator
-  nameWithType.vb: WidgetInput.WidgetStack.System.Collections.IEnumerable.GetEnumerator
-- uid: Lime.WidgetInput.WidgetStack.Top
-  name: Top
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Top
-  commentId: P:Lime.WidgetInput.WidgetStack.Top
-  fullName: Lime.WidgetInput.WidgetStack.Top
-  nameWithType: WidgetInput.WidgetStack.Top
-- uid: Lime.WidgetInput.WidgetStack.Top*
-  name: Top
-  href: api/Lime.WidgetInput.WidgetStack.html#Lime_WidgetInput_WidgetStack_Top_
-  commentId: Overload:Lime.WidgetInput.WidgetStack.Top
-  isSpec: "True"
-  fullName: Lime.WidgetInput.WidgetStack.Top
-  nameWithType: WidgetInput.WidgetStack.Top
 - uid: Lime.WidgetMaterial
   name: WidgetMaterial
   href: api/Lime.WidgetMaterial.html
