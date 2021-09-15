@@ -71,14 +71,12 @@ namespace Lime
 
 		public bool Equals(Vector3 other)
 		{
-			return X == other.X
-				&& Y == other.Y
-				&& Z == other.Z;
+			return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is Vector3 && Equals((Vector3)obj);
+			return obj is Vector3 vector && Equals(vector);
 		}
 
 		/// <summary>

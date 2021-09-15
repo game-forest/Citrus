@@ -119,12 +119,12 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 
 		public bool Equals(Vector2d other)
 		{
-			return X == other.X && Y == other.Y;
+			return X.Equals(other.X) && Y.Equals(other.Y);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is Vector2d && Equals((Vector2d) obj);
+			return obj is Vector2d d && Equals(d);
 		}
 
 		public override int GetHashCode()

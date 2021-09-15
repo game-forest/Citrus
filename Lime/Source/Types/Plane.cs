@@ -66,22 +66,22 @@ namespace Lime
 
 		public static bool operator !=(Plane plane1, Plane plane2)
 		{
-			return !plane1.Equals(plane2);
+			return !(plane1 == plane2);
 		}
 
 		public static bool operator ==(Plane plane1, Plane plane2)
 		{
-			return plane1.Equals(plane2);
+			return plane1.D == plane2.D && plane1.Normal == plane2.Normal;
 		}
 
 		public override bool Equals(object other)
 		{
-			return other is Plane && this.Equals((Plane)other);
+			return other is Plane plane && Equals(plane);
 		}
 
 		public bool Equals(Plane other)
 		{
-			return Normal == other.Normal && D == other.D;
+			return Normal.Equals(other.Normal) && D.Equals(other.D);
 		}
 
 		public override int GetHashCode()

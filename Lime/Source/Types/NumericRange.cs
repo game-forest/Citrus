@@ -52,7 +52,17 @@ namespace Lime
 
 		public bool Equals(NumericRange rhs)
 		{
-			return Median == rhs.Median && Dispersion == rhs.Dispersion;
+			return Median.Equals(rhs.Median) && Dispersion.Equals(rhs.Dispersion);
+		}
+
+		public static bool operator ==(NumericRange lhs, NumericRange rhs)
+		{
+			return lhs.Median == rhs.Median && lhs.Dispersion == rhs.Dispersion;
+		}
+
+		public static bool operator !=(NumericRange lhs, NumericRange rhs)
+		{
+			return !(lhs == rhs);
 		}
 
 		public override string ToString()

@@ -63,7 +63,12 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 
 		public bool Equals(Matrix32d rhs)
 		{
-			return UX == rhs.UX && UY == rhs.UY && VX == rhs.VX && VY == rhs.VY && TX == rhs.TX && TY == rhs.TY;
+			return UX.Equals(rhs.UX)
+				&& UY.Equals(rhs.UY)
+				&& VX.Equals(rhs.VX)
+				&& VY.Equals(rhs.VY)
+				&& TX.Equals(rhs.TX)
+				&& TY.Equals(rhs.TY);
 		}
 
 		public double CalcDeterminant()

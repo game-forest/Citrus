@@ -117,12 +117,12 @@ namespace Lime
 
 		public bool Equals(Vector2 other)
 		{
-			return X == other.X && Y == other.Y;
+			return X.Equals(other.X) && Y.Equals(other.Y);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is Vector2 && Equals((Vector2) obj);
+			return obj is Vector2 vector && Equals(vector);
 		}
 
 		public override int GetHashCode()

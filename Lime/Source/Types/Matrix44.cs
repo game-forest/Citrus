@@ -637,22 +637,25 @@ namespace Lime
 
 		public bool Equals(Matrix44 other)
 		{
-			return ((((((this.M11 == other.M11) && (this.M22 == other.M22)) && ((this.M33 == other.M33) &&
-				(this.M44 == other.M44))) && (((this.M12 == other.M12) && (this.M13 == other.M13)) &&
-				((this.M14 == other.M14) && (this.M21 == other.M21)))) && ((((this.M23 == other.M23) &&
-				(this.M24 == other.M24)) && ((this.M31 == other.M31) && (this.M32 == other.M32))) &&
-				(((this.M34 == other.M34) && (this.M41 == other.M41)) && (this.M42 == other.M42)))) &&
-				(this.M43 == other.M43));
+			return M11.Equals(other.M11)
+				&& M22.Equals(other.M22)
+				&& M33.Equals(other.M33)
+				&& M44.Equals(other.M44)
+				&& M12.Equals(other.M12)
+				&& M13.Equals(other.M13)
+				&& M14.Equals(other.M14)
+				&& M21.Equals(other.M21)
+				&& M23.Equals(other.M23)
+				&& M24.Equals(other.M24)
+				&& M31.Equals(other.M31)
+				&& M32.Equals(other.M32)
+				&& M34.Equals(other.M34)
+				&& M41.Equals(other.M41)
+				&& M42.Equals(other.M42)
+				&& M43.Equals(other.M43);
 		}
 
-		public override bool Equals(object obj)
-		{
-			bool flag = false;
-			if (obj is Matrix44) {
-				flag = this.Equals((Matrix44)obj);
-			}
-			return flag;
-		}
+		public override bool Equals(object obj) => obj is Matrix44 matrix && Equals(matrix);
 
 		public override int GetHashCode()
 		{

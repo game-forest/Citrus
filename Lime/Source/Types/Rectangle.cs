@@ -65,11 +65,17 @@ namespace Lime
 
 		public override bool Equals(object obj) => obj is Rectangle rectangle && Equals(rectangle);
 
-		public bool Equals(Rectangle other) => A.Equals(other.A) && B.Equals(other.B);
+		public bool Equals(Rectangle other)
+		{
+			return AX.Equals(other.AX) && AY.Equals(other.AY) && BX.Equals(other.BX) && BY.Equals(other.BY);
+		}
 
-		public static bool operator ==(Rectangle lhs, Rectangle rhs) => lhs.Equals(rhs);
+		public static bool operator ==(Rectangle lhs, Rectangle rhs)
+		{
+			return lhs.AX == rhs.AX && lhs.AY == rhs.AY && lhs.BX == rhs.BX && lhs.BY == rhs.BY;
+		}
 
-		public static bool operator !=(Rectangle lhs, Rectangle rhs) => !lhs.Equals(rhs);
+		public static bool operator !=(Rectangle lhs, Rectangle rhs) => !(lhs == rhs);
 
 		public float Width
 		{

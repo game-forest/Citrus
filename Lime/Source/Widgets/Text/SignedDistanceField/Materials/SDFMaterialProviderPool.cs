@@ -56,10 +56,10 @@ namespace Lime.SignedDistanceField
 		public bool Equals(SDFShadowMaterialKey other)
 		{
 			return
-				Dilate == other.Dilate &&
-				Softness == other.Softness &&
+				Dilate.Equals(other.Dilate) &&
+				Softness.Equals(other.Softness) &&
 				Color == other.Color &&
-				Offset == other.Offset;
+				Offset.Equals(other.Offset);
 		}
 
 		public override int GetHashCode()
@@ -86,11 +86,11 @@ namespace Lime.SignedDistanceField
 		public bool Equals(SDFInnerShadowMaterialKey other)
 		{
 			return
-				Dilate == other.Dilate &&
-				TextDilate == other.TextDilate &&
-				Softness == other.Softness &&
+				Dilate.Equals(other.Dilate) &&
+				TextDilate.Equals(other.TextDilate) &&
+				Softness.Equals(other.Softness) &&
 				Color == other.Color &&
-				Offset == other.Offset;
+				Offset.Equals(other.Offset);
 		}
 
 		public override int GetHashCode()

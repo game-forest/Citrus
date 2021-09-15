@@ -30,7 +30,7 @@ namespace Lime
 
 		public bool Equals(BezierEasing other)
 		{
-			return P1X == other.P1X && P2X == other.P2X && P1Y == other.P1Y && P2Y == other.P2Y;
+			return P1X.Equals(other.P1X) && P2X.Equals(other.P2X) && P1Y.Equals(other.P1Y) && P2Y.Equals(other.P2Y);
 		}
 
 		public static readonly BezierEasing Default = new BezierEasing { P1X = 0, P1Y = 0, P2X = 1, P2Y = 1 };

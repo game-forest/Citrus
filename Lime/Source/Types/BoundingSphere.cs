@@ -133,12 +133,12 @@ namespace Lime
 
 		public bool Equals(BoundingSphere other)
 		{
-			return Center == other.Center && Radius == other.Radius;
+			return Center.Equals(other.Center) && Radius.Equals(other.Radius);
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is BoundingSphere && Equals((BoundingSphere)obj);
+			return obj is BoundingSphere sphere && Equals(sphere);
 		}
 
 		public override int GetHashCode()

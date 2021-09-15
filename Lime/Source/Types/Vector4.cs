@@ -66,12 +66,12 @@ namespace Lime
 
 		public override bool Equals(object obj)
 		{
-			return obj is Vector4 && Equals((Vector4)obj);
+			return obj is Vector4 vector && Equals(vector);
 		}
 
-		public bool Equals(Vector4 value)
+		public bool Equals(Vector4 rhs)
 		{
-			return this == value;
+			return X.Equals(rhs.X) && Y.Equals(rhs.Y) && Z.Equals(rhs.Z) && W.Equals(rhs.W);
 		}
 
 		public static float DotProduct(Vector4 value1, Vector4 value2)
