@@ -84,8 +84,9 @@ namespace Lime
 			foreach (var w in toRemoveFromScopeStack) {
 				InputScopeStack.Remove(w);
 			}
+			toRemoveFromScopeStack.Clear();
 		}
-		private static List<Widget> toRemoveFromScopeStack = new List<Widget>();
+		private static readonly List<Widget> toRemoveFromScopeStack = new List<Widget>();
 
 		public bool IsAcceptingKey(Key key)
 		{
