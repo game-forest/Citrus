@@ -1527,6 +1527,7 @@ namespace Lime
 				// Handle legacy case: Replace Button content by external Frame
 				if (nodeType == typeof(Button) && contentType == typeof(Frame)) {
 					Components.Remove(typeof(AssetBundlePathComponent));
+					ReplaceAnimationComponent();
 					var assetBundlePathComponent = content.Components.Get<AssetBundlePathComponent>();
 					if (assetBundlePathComponent != null) {
 						Components.Add(Cloner.Clone(assetBundlePathComponent));
@@ -1538,18 +1539,24 @@ namespace Lime
 				foreach (var c in Components.Where(i => NodeComponent.IsSerializable(i.GetType())).ToList()) {
 					Components.Remove(c);
 				}
+				ReplaceAnimationComponent();
 				foreach (var c in content.Components.Where(i => NodeComponent.IsSerializable(i.GetType()))) {
 					Components.Add(Cloner.Clone(c));
 				}
 			}
-			Components.Remove<AnimationComponent>();
-			var animationComponent = content.Components.Get<AnimationComponent>();
-			if (animationComponent != null) {
-				var newAnimationComponent = new AnimationComponent();
-				foreach (var a in animationComponent.Animations) {
-					newAnimationComponent.Animations.Add(Cloner.Clone(a));
+
+			void ReplaceAnimationComponent()
+			{
+				Components.Remove<AnimationComponent>();
+				var animationComponent = content.Components.Get<AnimationComponent>();
+				if (animationComponent != null) {
+					var newAnimationComponent = new AnimationComponent();
+					foreach (var a in animationComponent.Animations) {
+						newAnimationComponent.Animations.Add(Cloner.Clone(a));
+					}
+
+					Components.Add(newAnimationComponent);
 				}
-				Components.Add(newAnimationComponent);
 			}
 		}
 
