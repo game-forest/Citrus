@@ -179,9 +179,12 @@ namespace Tangerine.Core
 			return new DataflowProvider<R>(() => new SelectDataflow<T, R>(arg.GetDataflow(), selector));
 		}
 
-		public static IDataflowProvider<Tuple<T1, T2>> Coalesce<T1, T2>(this IDataflowProvider<T1> arg1, IDataflowProvider<T2> arg2)
-		{
-			return new DataflowProvider<Tuple<T1, T2>>(() => new CoalesceDataflow<T1, T2>(arg1.GetDataflow(), arg2.GetDataflow()));
+		public static IDataflowProvider<Tuple<T1, T2>> Coalesce<T1, T2>(
+			this IDataflowProvider<T1> arg1, IDataflowProvider<T2> arg2
+		) {
+			return new DataflowProvider<Tuple<T1, T2>>(
+				() => new CoalesceDataflow<T1, T2>(arg1.GetDataflow(), arg2.GetDataflow())
+			);
 		}
 
 		public static IDataflowProvider<T> Where<T>(this IDataflowProvider<T> arg, Predicate<T> predicate)
@@ -199,9 +202,12 @@ namespace Tangerine.Core
 			return DistinctUntilChanged(arg).Consume(action);
 		}
 
-		public static IDataflowProvider<T> SameOrDefault<T>(this IDataflowProvider<T> arg1, IDataflowProvider<T> arg2, T defaultValue = default(T))
-		{
-			return new DataflowProvider<T>(() => new SameOrDefaultDataflow<T>(arg1.GetDataflow(), arg2.GetDataflow(), defaultValue));
+		public static IDataflowProvider<T> SameOrDefault<T>(
+			this IDataflowProvider<T> arg1, IDataflowProvider<T> arg2, T defaultValue = default(T)
+		) {
+			return new DataflowProvider<T>(
+				() => new SameOrDefaultDataflow<T>(arg1.GetDataflow(), arg2.GetDataflow(), defaultValue)
+			);
 		}
 
 		public static IDataflowProvider<T> Skip<T>(this IDataflowProvider<T> arg, int count)
@@ -209,8 +215,9 @@ namespace Tangerine.Core
 			return new DataflowProvider<T>(() => new SkipDataflow<T>(arg.GetDataflow(), count));
 		}
 
-		public static void AddDataflow<T>(this CoalescedDataflow<T> coalescedValuesProvider, IDataflowProvider<T> provider)
-		{
+		public static void AddDataflow<T>(
+			this CoalescedDataflow<T> coalescedValuesProvider, IDataflowProvider<T> provider
+		) {
 			coalescedValuesProvider.AddDataflow(provider.GetDataflow());
 		}
 
