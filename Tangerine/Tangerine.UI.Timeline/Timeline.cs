@@ -265,12 +265,12 @@ namespace Tangerine.UI.Timeline
 		}
 
 		IConsumer PanelTitleUpdater() =>
-			new Property<Node>(() => Document.Current.Container).WhenChanged(_ => UpdateTitle());
+			new DelegateDataflowProvider<Node>(() => Document.Current.Container).WhenChanged(_ => UpdateTitle());
 
 		IConsumer ShowCurveEditorTask()
 		{
-			var editCurvesProp = new Property<bool>(() => TimelineUserPreferences.Instance.EditCurves);
-			return new Property<Row>(FirstSelectedRow).Coalesce(editCurvesProp).WhenChanged(t => {
+			var editCurvesProp = new DelegateDataflowProvider<bool>(() => TimelineUserPreferences.Instance.EditCurves);
+			return new DelegateDataflowProvider<Row>(FirstSelectedRow).Coalesce(editCurvesProp).WhenChanged(t => {
 				var row = t.Item1;
 				var showCurves =
 					TimelineUserPreferences.Instance.EditCurves &&

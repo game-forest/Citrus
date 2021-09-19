@@ -334,7 +334,7 @@ namespace Tangerine
 			);
 			container.Content.AddNode(tmp.ContainerWidget);
 			tmp.ContainerWidget.AddChangeWatcher(
-				new Property<Color4>(source, targetProperty), (v) => Application.InvalidateWindows()
+				new PropertyDataflowProvider<Color4>(source, targetProperty), (v) => Application.InvalidateWindows()
 			);
 			editors.Add(tmp);
 		}

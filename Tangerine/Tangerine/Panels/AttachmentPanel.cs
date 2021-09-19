@@ -937,7 +937,7 @@ namespace Tangerine
 
 			private void AddChangeWatcher(Func<BlendingOption> getter, Action<BlendingOption> action)
 			{
-				Components.GetOrAdd<EarlyConsumeBehaviour>().Add(new Property<BlendingOption>(getter).DistinctUntilChanged().Consume(action));
+				Components.GetOrAdd<EarlyConsumeBehaviour>().Add(new DelegateDataflowProvider<BlendingOption>(getter).DistinctUntilChanged().Consume(action));
 			}
 		}
 
