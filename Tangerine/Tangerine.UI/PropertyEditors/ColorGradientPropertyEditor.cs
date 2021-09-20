@@ -138,8 +138,8 @@ namespace Tangerine.UI
 		{
 			colorEditor.Tasks.Clear();
 			positionEditor.Tasks.Clear();
-			selectedPointColorProperty = new Property<Color4>(point, nameof(GradientControlPoint.Color));
-			selectedPointPositionProperty = new Property<float>(point, nameof(GradientControlPoint.Position));
+			selectedPointColorProperty = new PropertyDataflowProvider<Color4>(point, nameof(GradientControlPoint.Color));
+			selectedPointPositionProperty = new PropertyDataflowProvider<float>(point, nameof(GradientControlPoint.Position));
 			currentColorString = selectedPointColorProperty.DistinctUntilChanged().Select(i => i.ToString(Color4.StringPresentation.Dec));
 			colorEditor.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColorString.Consume(v => colorEditor.Text = v));
 			colorPanel.Color = selectedPointColorProperty.GetValue();

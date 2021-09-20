@@ -216,9 +216,9 @@ namespace Tangerine.UI
 			switch (indexParameters.Length)
 			{
 				case 0:
-					return new Property<T>(o, EditorParams.PropertyName);
+					return new PropertyDataflowProvider<T>(o, EditorParams.PropertyName);
 				case 1 when indexParameters[0].ParameterType == typeof(int):
-					return new IndexedProperty<T>(o, EditorParams.PropertyName, EditorParams.IndexInList);
+					return new IndexedPropertyDataflowProvider<T>(o, EditorParams.PropertyName, EditorParams.IndexInList);
 				default:
 					throw new NotSupportedException();
 			}
@@ -229,20 +229,20 @@ namespace Tangerine.UI
 			Func<T, T, bool> comparator = null
 		) {
 			var indexParameters = EditorParams.PropertyInfo.GetIndexParameters();
-			var provider = new CoalescedValuesProvider<T>(defaultValue, comparator);
+			var dataflow = new CoalescedDataflow<T>(defaultValue, comparator);
 			switch (indexParameters.Length) {
 				case 0:
 					foreach (var o in EditorParams.Objects) {
-						provider.AddDataflow(new Property<T>(o, EditorParams.PropertyName));
+						dataflow.AddDataflow(new PropertyDataflowProvider<T>(o, EditorParams.PropertyName));
 					}
-					return new DataflowProvider<CoalescedValue<T>>(() => provider);
+					return new DataflowProvider<CoalescedValue<T>>(() => dataflow);
 				case 1 when indexParameters[0].ParameterType == typeof(int):
 					foreach (var o in EditorParams.Objects) {
-						provider.AddDataflow(
-							new IndexedProperty<T>(o, EditorParams.PropertyName, EditorParams.IndexInList)
+						dataflow.AddDataflow(
+							new IndexedPropertyDataflowProvider<T>(o, EditorParams.PropertyName, EditorParams.IndexInList)
 						);
 					}
-					return new DataflowProvider<CoalescedValue<T>>(() => provider);
+					return new DataflowProvider<CoalescedValue<T>>(() => dataflow);
 				default:
 					throw new NotSupportedException();
 			}
@@ -253,20 +253,20 @@ namespace Tangerine.UI
 			ComponentValue defaultValue = default
 		) {
 			var indexParameters = EditorParams.PropertyInfo.GetIndexParameters();
-			var provider = new CoalescedValuesProvider<ComponentValue>(defaultValue);
+			var dataflow = new CoalescedDataflow<ComponentValue>(defaultValue);
 			switch (indexParameters.Length) {
 				case 0:
 					foreach (var o in EditorParams.Objects) {
-						provider.AddDataflow(new Property<T>(o, EditorParams.PropertyName).Select(selector));
+						dataflow.AddDataflow(new PropertyDataflowProvider<T>(o, EditorParams.PropertyName).Select(selector));
 					}
-					return new DataflowProvider<CoalescedValue<ComponentValue>>(() => provider);
+					return new DataflowProvider<CoalescedValue<ComponentValue>>(() => dataflow);
 				case 1 when indexParameters[0].ParameterType == typeof(int):
 					foreach (var o in EditorParams.Objects) {
-						provider.AddDataflow(
-							new IndexedProperty<T>(o, EditorParams.PropertyName, EditorParams.IndexInList
+						dataflow.AddDataflow(
+							new IndexedPropertyDataflowProvider<T>(o, EditorParams.PropertyName, EditorParams.IndexInList
 						).Select(selector));
 					}
-					return new DataflowProvider<CoalescedValue<ComponentValue>>(() => provider);
+					return new DataflowProvider<CoalescedValue<ComponentValue>>(() => dataflow);
 				default:
 					throw new NotSupportedException();
 			}
@@ -279,9 +279,9 @@ namespace Tangerine.UI
 			var indexParameters = EditorParams.PropertyInfo.GetIndexParameters();
 			switch (indexParameters.Length) {
 				case 0:
-					return new Property<T>(o, EditorParams.PropertyName).Select(selector);
+					return new PropertyDataflowProvider<T>(o, EditorParams.PropertyName).Select(selector);
 				case 1 when indexParameters[0].ParameterType == typeof(int):
-					return new IndexedProperty<T>(
+					return new IndexedPropertyDataflowProvider<T>(
 						o,
 						EditorParams.PropertyName, EditorParams.IndexInList
 					).Select(selector);
@@ -310,8 +310,11 @@ namespace Tangerine.UI
 				if (errorExist) {
 					return;
 				}
-				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
-					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName, next);
+				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(
+					o,
+					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName,
+					next
+				);
 			}
 			DoTransaction(() => {
 				if (EditorParams.IsAnimable) {

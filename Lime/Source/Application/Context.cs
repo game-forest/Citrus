@@ -33,7 +33,7 @@ namespace Lime
 		private static ThreadLocal<Stack<ActivationRecord>> stack =
 			new ThreadLocal<Stack<ActivationRecord>>(() => new Stack<ActivationRecord>());
 
-		public Context(Property property, object value)
+		internal Context(Property property, object value)
 		{
 			this.property = property;
 			this.value = value;
@@ -45,7 +45,7 @@ namespace Lime
 			this.value = this;
 		}
 
-		protected Context(Property property)
+		internal Context(Property property)
 		{
 			this.property = property;
 			this.value = this;
@@ -109,7 +109,10 @@ namespace Lime
 		}
 	}
 
-	public class Property
+	// TODO: Property wrappers in this file should either hidden from public or refactored:
+	// - improve performance
+	// - remove unrelated constructors
+	internal class Property
 	{
 		public Func<object> Getter { get; private set; }
 		public Action<object> Setter { get; private set; }
@@ -146,7 +149,30 @@ namespace Lime
 		}
 	}
 
-	public class IndexedProperty
+	internal class Property<T>
+	{
+		public Func<T> Getter { get; private set; }
+		public Action<T> Setter { get; private set; }
+
+		public Property(object obj, string propertyName)
+		{
+			var pi = obj.GetType().GetProperty(propertyName);
+			Getter = () => (T)pi.GetValue(obj, null);
+			Setter = val => pi.SetValue((T)obj, val, null);
+		}
+		public Property(Func<T> getter, Action<T> setter)
+		{
+			Getter = getter;
+			Setter = setter;
+		}
+		public T Value
+		{
+			get { return Getter(); }
+			set { Setter(value); }
+		}
+	}
+
+	internal class IndexedProperty
 	{
 		public Func<object> Getter { get; private set; }
 		public Action<object> Setter { get; private set; }
