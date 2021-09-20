@@ -179,14 +179,6 @@ namespace Tangerine.Core
 			return new DataflowProvider<R>(() => new SelectDataflow<T, R>(arg.GetDataflow(), selector));
 		}
 
-		public static IDataflowProvider<Tuple<T1, T2>> Coalesce<T1, T2>(
-			this IDataflowProvider<T1> arg1, IDataflowProvider<T2> arg2
-		) {
-			return new DataflowProvider<Tuple<T1, T2>>(
-				() => new CoalesceDataflow<T1, T2>(arg1.GetDataflow(), arg2.GetDataflow())
-			);
-		}
-
 		public static IDataflowProvider<T> Where<T>(this IDataflowProvider<T> arg, Predicate<T> predicate)
 		{
 			return new DataflowProvider<T>(() => new WhereDataflow<T>(arg.GetDataflow(), predicate));
@@ -260,30 +252,6 @@ namespace Tangerine.Core
 				arg.Poll();
 				if ((GotValue = arg.GotValue)) {
 					Value = selector(arg.Value);
-				}
-			}
-		}
-
-		private class CoalesceDataflow<T1, T2> : IDataflow<Tuple<T1, T2>>
-		{
-			private readonly IDataflow<T1> arg1;
-			private readonly IDataflow<T2> arg2;
-
-			public bool GotValue { get; private set; }
-			public Tuple<T1, T2> Value { get; private set; }
-
-			public CoalesceDataflow(IDataflow<T1> arg1, IDataflow<T2> arg2)
-			{
-				this.arg1 = arg1;
-				this.arg2 = arg2;
-			}
-
-			public void Poll()
-			{
-				arg1.Poll();
-				if ((GotValue = arg1.GotValue)) {
-					arg2.Poll();
-					Value = new Tuple<T1, T2>(arg1.Value, arg2.Value);
 				}
 			}
 		}

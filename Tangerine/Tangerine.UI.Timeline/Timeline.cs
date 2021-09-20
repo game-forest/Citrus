@@ -173,7 +173,7 @@ namespace Tangerine.UI.Timeline
 			Detached?.Invoke();
 		}
 
-		void InitializeWidgets()
+		private void InitializeWidgets()
 		{
 			RootWidget.Layout = new StackLayout();
 			RootWidget.AddNode(new ThemedVSplitter {
@@ -211,7 +211,7 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		void CreateProcessors()
+		private void CreateProcessors()
 		{
 			RootWidget.LateTasks.Add(
 				new SlowMotionProcessor(),
@@ -251,7 +251,7 @@ namespace Tangerine.UI.Timeline
 			return maxColumn;
 		}
 
-		void UpdateTitle()
+		private void UpdateTitle()
 		{
 			Panel.Title = "Timeline";
 			var t = "";
@@ -264,17 +264,18 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		IConsumer PanelTitleUpdater() =>
+		private IConsumer PanelTitleUpdater() =>
 			new DelegateDataflowProvider<Node>(() => Document.Current.Container).WhenChanged(_ => UpdateTitle());
 
-		IConsumer ShowCurveEditorTask()
+		private IConsumer ShowCurveEditorTask()
 		{
-			var editCurvesProp = new DelegateDataflowProvider<bool>(() => TimelineUserPreferences.Instance.EditCurves);
-			return new DelegateDataflowProvider<Row>(FirstSelectedRow).Coalesce(editCurvesProp).WhenChanged(t => {
-				var row = t.Item1;
-				var showCurves =
-					TimelineUserPreferences.Instance.EditCurves &&
-					row != null && CurveEditorPane.CanEditRow(row);
+			return new DelegateDataflowProvider<(Row Row, bool)>(() =>
+				(FirstSelectedRow(), TimelineUserPreferences.Instance.EditCurves)
+			).WhenChanged(t => {
+				var row = t.Row;
+				var showCurves = TimelineUserPreferences.Instance.EditCurves
+					&& row != null
+					&& CurveEditorPane.CanEditRow(row);
 				CurveEditor.RootWidget.Visible = showCurves;
 				Grid.RootWidget.Visible = !showCurves;
 				if (showCurves) {
@@ -283,7 +284,7 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		Row FirstSelectedRow() => Document.Current.SelectedRows().FirstOrDefault();
+		private static Row FirstSelectedRow() => Document.Current.SelectedRows().FirstOrDefault();
 
 		public void EnsureColumnVisible(int column)
 		{
