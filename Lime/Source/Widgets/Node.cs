@@ -1527,12 +1527,11 @@ namespace Lime
 			if (nodeType != contentType && !contentType.IsSubclassOf(nodeType) && !nodeType.IsSubclassOf(contentType)) {
 				throw new Exception($"Can not replace {nodeType.FullName} content with {contentType.FullName}");
 			} else {
-				foreach (var c in Components.Where(i => NodeComponent.IsSerializable(i.GetType())).ToList()) {
-					Components.Remove(c);
-				}
 				ReplaceAnimationComponent();
 				foreach (var c in content.Components.Where(i => NodeComponent.IsSerializable(i.GetType()))) {
-					Components.Add(Cloner.Clone(c));
+					if (!Components.Contains(c.GetType())) {
+						Components.Add(Cloner.Clone(c));
+					}
 				}
 			}
 
