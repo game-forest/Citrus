@@ -16,8 +16,9 @@ namespace Tangerine.UI
 
 		public Color4PropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			ColorBoxButton colorBox;
-			var panel = new ColorPickerPanel();
+			var preferencesState = CoreUserPreferences.Instance.InspectorColorPickersState;
+			preferencesState.TryGetValue(editorParams.PropertyPath, out var state);
+			var panel = new ColorPickerPanel(state);
 			var objects = EditorParams.Objects.ToList();
 			var first = PropertyValue(objects.First()).GetValue();
 			var @default = objects.All(o =>
@@ -32,16 +33,28 @@ namespace Tangerine.UI
 						Nodes = {
 							(editor = editorParams.EditBoxFactory()),
 							Spacer.HSpacer(4),
-							(colorBox = new ColorBoxButton(currentColor)),
+							new ColorBoxButton(currentColor),
 							CreatePipetteButton(),
+							panel.ButtonsWidget,
 							Spacer.HStretch()
 						},
-					},
-					panel.Widget
+					}
 				}		
 			});
-			panel.Widget.Padding += new Thickness(right: 12.0f);
-			panel.Widget.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColor.Consume(v => {
+			editor.MinWidth = 4 + editor.TextWidget.Font.MeasureTextLine("255._255. 255. 255", 16, 0).X;
+			ContainerWidget.AddNode(panel.EditorsWidget);
+			foreach (var b in panel.ButtonsWidget.Nodes) {
+				if (b is ToolbarButton tb) {
+					tb.Clicked += () => {
+						if (preferencesState.ContainsKey(editorParams.PropertyPath)) {
+							preferencesState[editorParams.PropertyPath] = panel.GetEditorsVisibleState();
+						} else {
+							preferencesState.Add(editorParams.PropertyPath, panel.GetEditorsVisibleState());
+						}
+					};
+				}
+			}
+			panel.EditorsWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColor.Consume(v => {
 				if (panel.Color != v.Value) {
 					panel.Color = v.Value;
 					Changed?.Invoke();
