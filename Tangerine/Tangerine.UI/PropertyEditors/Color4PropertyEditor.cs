@@ -41,7 +41,7 @@ namespace Tangerine.UI
 					}
 				}		
 			});
-			editor.MinWidth = 4 + editor.TextWidget.Font.MeasureTextLine("255._255. 255. 255", 16, 0).X;
+			editor.MinWidth = 4 + editor.TextWidget.Font.MeasureTextLine("255. 255. 255. 255", 16, 0).X;
 			ContainerWidget.AddNode(panel.EditorsWidget);
 			foreach (var b in panel.ButtonsWidget.Nodes) {
 				if (b is ToolbarButton tb) {
