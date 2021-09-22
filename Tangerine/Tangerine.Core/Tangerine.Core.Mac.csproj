@@ -71,12 +71,12 @@
     <Compile Include="MethodAttributes.cs" />
     <Compile Include="NodeChangeWatcherExtensions.cs" />
     <Compile Include="NodeExtensions.cs" />
-    <Compile Include="Operations\ChangeAnimatorsTargetPropertyPath.cs" />
     <Compile Include="Operations\ContentsPathProcessor.cs" />
     <Compile Include="Operations\RemoveKeyframeRange.cs" />
     <Compile Include="Operations\RenameAnimationProcessor.cs" />
     <Compile Include="Operations\RulerAction.cs" />
     <Compile Include="Operations\SceneTree.cs" />
+    <Compile Include="Operations\SetAnimatorTargetPropertyPath.cs" />
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="SceneTreeBuilder.cs" />
     <Compile Include="SyncPresenters.cs" />

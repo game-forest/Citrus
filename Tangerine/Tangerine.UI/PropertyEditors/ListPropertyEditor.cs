@@ -65,7 +65,6 @@ namespace Tangerine.UI
 					}
 				}
 			);
-			EditorContainer.AddNode(new ThemedDeleteButton { Clicked = () => { pendingRemovals.Add(2); pendingRemovals.Add(5); } });
 			var current = PropertyValue(EditorParams.Objects.First());
 			// Commands (e.g. Undo) are processed between the Early Update and before the Late Update.
 			// NodeManager processes regular ChangeWatcher at EarlyUpdateStage, and LateChangeWatcher at
@@ -137,7 +136,7 @@ namespace Tangerine.UI
 										from
 										+ (index - offset).ToString()
 										+ tpp.Substring(closingBracketIndex);
-									ChangeAnimatorsTargetPropertyPath.Perform(animator, newPropertyPath);
+									SetAnimatorTargetPropertyPath.Perform(animator, newPropertyPath);
 								}
 							}
 						}
@@ -206,10 +205,10 @@ namespace Tangerine.UI
 					foreach (var animator in animators) {
 						if (animator.TargetPropertyPath.StartsWith(pathFrom)) {
 							var newPropertyPath = animator.TargetPropertyPath.Replace(pathFrom, pathTo);
-							ChangeAnimatorsTargetPropertyPath.Perform(animator, newPropertyPath);
+							SetAnimatorTargetPropertyPath.Perform(animator, newPropertyPath);
 						} else if (animator.TargetPropertyPath.StartsWith(pathTo)) {
 							var newPropertyPath = animator.TargetPropertyPath.Replace(pathTo, pathFrom);
-							ChangeAnimatorsTargetPropertyPath.Perform(animator, newPropertyPath);
+							SetAnimatorTargetPropertyPath.Perform(animator, newPropertyPath);
 						}
 					}
 				}

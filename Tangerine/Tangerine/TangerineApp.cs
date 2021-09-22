@@ -320,7 +320,7 @@ namespace Tangerine
 				typeof(Core.Operations.DeleteRuler.Processor),
 				typeof(Core.Operations.CreateRuler.Processor),
 				typeof(InvalidateAnimesh.Processor),
-				typeof(ChangeAnimatorsTargetPropertyPath.Processor),
+				typeof(SetAnimatorTargetPropertyPath.Processor),
 			});
 			DocumentHistory.AddOperationProcessorTypes(UI.Timeline.Timeline.GetOperationProcessorTypes());
 
