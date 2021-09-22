@@ -53,8 +53,10 @@ namespace Tangerine.UI
 							ForceUncutText = false,
 							Padding = new Thickness(left: 5.0f),
 							HitTestTarget = true,
+							AutoMaxSize = true,
 							TabTravesable = new TabTraversable()
-						})
+						}),
+						Spacer.HStretch()
 					}
 				};
 				PropertyLabel.Tasks.Add(ManageLabelTask());

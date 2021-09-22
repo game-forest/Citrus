@@ -204,6 +204,7 @@ namespace Tangerine.UI
 					}
 					valueTextWidget = new ThemedSimpleText {
 						ForceUncutText = false,
+						AutoMaxSize = true,
 						HitTestTarget = true,
 						Padding = new Thickness(left: 5),
 						VAlignment = VAlignment.Center,
