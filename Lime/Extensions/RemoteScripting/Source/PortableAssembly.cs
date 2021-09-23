@@ -38,6 +38,8 @@ namespace RemoteScripting
 						loadableParametersInfo = methodInfo.GetParameters();
 					} catch (ReflectionTypeLoadException) {
 						continue;
+					} catch (TypeLoadException) {
+						continue;
 					} catch (FileNotFoundException) {
 						continue;
 					}
