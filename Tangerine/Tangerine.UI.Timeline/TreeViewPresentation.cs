@@ -616,6 +616,33 @@ namespace Tangerine.UI.Timeline
 		}
 	}
 
+	public class AnimatorTreeViewItemPresentation : TreeViewItemPresentation
+	{
+		public AnimatorTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem,
+			TreeViewItemPresentationOptions options)
+			: base(treeView, item, sceneItem, options)
+		{
+			Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+		}
+
+		private void ShowContextMenu()
+		{
+			if (!SceneItem.GetTimelineItemState().Selected) {
+				Document.Current.History.DoTransaction(() => {
+					ClearRowSelection.Perform();
+					SelectRow.Perform(SceneItem);
+				});
+			}
+			var menu = new Menu {
+				Command.Cut,
+				Command.Copy,
+				Command.Paste,
+				Command.Delete
+			};
+			menu.Popup();
+		}
+	}
+	
 	public class TreeViewPresentation : ITreeViewPresentation
 	{
 		public const float IndentWidth = 20;
@@ -649,6 +676,9 @@ namespace Tangerine.UI.Timeline
 			}
 			if (sceneItem.TryGetAnimationTrack(out _)) {
 				return new AnimationTrackTreeViewItemPresentation(treeView, item, sceneItem, options);
+			}
+			if (sceneItem.TryGetAnimator(out _)) {
+				return new AnimatorTreeViewItemPresentation(treeView, item, sceneItem, options);
 			}
 			return new TreeViewItemPresentation(treeView, item, sceneItem, options);
 		}

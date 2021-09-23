@@ -90,6 +90,7 @@ namespace Tangerine.UI.Inspector
 			AddEditor(typeof(SkinningWeights), c => new SkinningWeightsPropertyEditor(c));
 			AddEditor(typeof(Alignment), c => new AlignmentPropertyEditor(c));
 			AddEditor(typeof(Thickness), c => new ThicknessPropertyEditor(c));
+			AddEditor(typeof(AnimatorList), _ => null);
 		}
 
 		void AddEditor(Type type, PropertyEditorBuilder builder)

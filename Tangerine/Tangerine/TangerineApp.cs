@@ -171,7 +171,6 @@ namespace Tangerine
 					} else {
 						message += $"{removedAnimatorsCount} dangling animators have been removed!";
 					}
-
 					Document.Current.ShowWarning(message);
 				}
 			};

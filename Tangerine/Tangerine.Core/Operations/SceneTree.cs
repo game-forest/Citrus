@@ -62,7 +62,7 @@ namespace Tangerine.Core.Operations
 				RemoveFromList<FolderList, Folder.Descriptor>.Perform(owner.Folders, folder.CollectionIndex());
 			} else if (item.TryGetAnimator(out var animator)) {
 				var owner = (Node)animator.Owner;
-				RemoveFromCollection<AnimatorCollection, IAnimator>.Perform(owner.Animators, animator);
+				RemoveFromList<AnimatorList, IAnimator>.Perform(owner.Animators, animator);
 			} else if (item.TryGetAnimation(out var animation)) {
 				RemoveFromList<AnimationCollection, Animation>.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
 			} else if (item.TryGetAnimationTrack(out var track)) {
@@ -151,89 +151,6 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public static class PasteSceneItemsFromStream
-	{
-		public static bool Perform(MemoryStream stream, Row parent, int index, out List<Row> pastedItems)
-		{
-			pastedItems = new List<Row>();
-			if (!CanPaste(stream, parent)) {
-				return false;
-			}
-			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
-			container.LoadExternalScenes();
-			foreach (var n in container.Nodes) {
-				Document.Decorate(n);
-			}
-			foreach (var a in container.Animators) {
-				a.AnimationId = Document.Current.AnimationId;
-			}
-			if (container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out var animation)) {
-				foreach (var track in animation.Tracks.ToList()) {
-					animation.Tracks.Remove(track);
-					LinkSceneItem.Perform(parent, index++, track);
-					pastedItems.Add(Document.Current.GetSceneItemForObject(track));
-				}
-			} else {
-				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-				var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-				foreach (var i in itemsToPaste.Rows.ToList()) {
-					UnlinkSceneItem.Perform(i);
-					LinkSceneItem.Perform(parent, index, i);
-					index = parent.Rows.IndexOf(i) + 1;
-					pastedItems.Add(i);
-					DecorateNodes(i);
-				}
-			}
-			return true;
-		}
-
-		private static void DecorateNodes(Row item)
-		{
-			if (item.TryGetNode(out var node)) {
-				Document.Decorate(node);
-			} else if (item.TryGetFolder(out _)) {
-				foreach (var i in item.Rows) {
-					DecorateNodes(i);
-				}
-			}
-		}
-
-		private static bool CanPaste(MemoryStream stream, Row parent)
-		{
-			try {
-				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
-				foreach (var a in container.Animators) {
-					a.AnimationId = Document.Current.AnimationId;
-				}
-				if (parent.TryGetAnimation(out _)) {
-					// Allow inserting animation tracks into the compound animation.
-					return container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out _);
-				}
-				if (container.Animations.Count > 0) {
-					// Use animations panel to paste animations.
-					return false;
-				}
-				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-				var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
-				foreach (var i in rowTree.Rows) {
-					if (!LinkSceneItem.CanLink(parent, i)) {
-						return false;
-					}
-				}
-				if (parent.TryGetNode(out var node) &&
-				    ClassAttributes<TangerineLockChildrenNodeList>.Get(node.GetType()) != null) {
-					return false;
-				}
-				if (container.DefaultAnimation.Tracks.Count > 0 && parent.GetAnimation() == null) {
-					return false;
-				}
-				return true;
-			} catch {
-				return false;
-			}
-		}
-	}
-
 	public static class LinkSceneItem
 	{
 		public static bool CanLink(Row parent, Row item)
@@ -270,10 +187,6 @@ namespace Tangerine.Core.Operations
 			}
 			if (parent.Parent == null) {
 				// Can't drag the animator into the root item.
-				return false;
-			}
-			if (node.Animators.Any(a => a.TargetPropertyPath == animator.TargetPropertyPath)) {
-				// The same animator is already exists.
 				return false;
 			}
 			var p = AnimationUtils.GetPropertyByPath(node, animator.TargetPropertyPath);
@@ -512,14 +425,35 @@ namespace Tangerine.Core.Operations
 			if (!CanLink(parent, animator)) {
 				throw new InvalidOperationException();
 			}
-			var node = parent.GetNode();
-			AddIntoCollection<AnimatorCollection, IAnimator>.Perform(node.Animators, animatorItem.GetAnimator());
-			index = node.Animators.ToList().IndexOf(animatorItem.GetAnimator());
-			while (index < parent.Rows.Count && parent.Rows[index].GetAnimation() != null) {
-				// Animations should go first.
-				index++;
+			var existedAnimatorItem = parent.Rows.FirstOrDefault(i =>
+				i.TryGetAnimator(out var a)
+				&& a.TargetPropertyPath == animator.TargetPropertyPath
+				&& a.AnimationId == animator.AnimationId
+			);
+			if (existedAnimatorItem != null) {
+				UnlinkSceneItem.Perform(existedAnimatorItem);
 			}
-			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, animatorItem);
+			var node = parent.GetNode();
+			int lastAnimationRowIndex = -1;
+			for (int i = 0; i < parent.Rows.Count; i++) {
+				if (parent.Rows[i].TryGetAnimation(out _)) {
+					lastAnimationRowIndex = i;
+				}
+			}
+			// Animations should go first.
+			int firstAnimatorRowIndex = 1 + lastAnimationRowIndex;
+			int animatorIndex = Math.Clamp(index - firstAnimatorRowIndex, 0, node.Animators.Count);
+			InsertIntoList<AnimatorList, IAnimator>.Perform(node.Animators, animatorIndex, animator);
+			SetProperty.Perform(animatorItem.Components.Get<PropertyRow>(), nameof(PropertyRow.Node), node);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, firstAnimatorRowIndex + animatorIndex, animatorItem);
+			if (existedAnimatorItem != null) {
+				var existedAnimator = existedAnimatorItem.GetAnimator();
+				foreach (var key in existedAnimator.Keys) {
+					if (animator.Keys.All(i => i.Frame != key.Frame)) {
+						SetKeyframe.Perform(animator, Document.Current.Animation, key.Clone());
+					}
+				}
+			}
 		}
 
 		private static void LinkAnimationItem(Row parent, int index, Row item)
@@ -588,12 +522,14 @@ namespace Tangerine.Core.Operations
 				parent = Document.Current.GetSceneItemForObject(Document.Current.Container);
 				index = 0;
 			} else {
-				if (!insertingType.IsAssignableFrom(typeof(IAnimator)) && focusedItem.TryGetAnimator(out _)) {
+				bool isAnimatorItem = insertingType.IsAssignableFrom(typeof(IAnimator));
+				bool isAnimatorFocused = focusedItem.TryGetAnimator(out _);
+				if (!isAnimatorItem && isAnimatorFocused) {
 					parent = focusedItem.Parent.Parent;
 					index = parent.Rows.IndexOf(focusedItem.Parent);
-				} else if (insertingType.IsAssignableFrom(typeof(IAnimator)) && !focusedItem.TryGetAnimator(out _)) {
+				} else if (isAnimatorItem && !isAnimatorFocused) {
 					parent = focusedItem;
-					index = 0;
+					index = parent.Rows.Count;
 				} else {
 					parent = focusedItem.Parent;
 					index = parent.Rows.IndexOf(focusedItem);

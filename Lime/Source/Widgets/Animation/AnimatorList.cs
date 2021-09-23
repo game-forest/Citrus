@@ -8,13 +8,14 @@ namespace Lime
 {
 	public sealed class TriggerAttribute : Attribute {}
 
-	public sealed class AnimatorCollection : ICollection<IAnimator>, IDisposable
+	public sealed class AnimatorList : IList<IAnimator>, IDisposable
 	{
 		private IAnimationHost owner;
 		private List<IAnimator> list;
+		
 		public int Count => list?.Count ?? 0;
 
-		public AnimatorCollection(IAnimationHost owner)
+		public AnimatorList(IAnimationHost owner)
 		{
 			this.owner = owner;
 		}
@@ -36,6 +37,36 @@ namespace Lime
 			CreateListIfNeeded();
 			list.Add(item);
 			owner.OnAnimatorCollectionChanged();
+		}
+
+		public int IndexOf(IAnimator item) => list.IndexOf(item);
+
+		public void Insert(int index, IAnimator item)
+		{
+			if (item.Owner != null) {
+				throw new InvalidOperationException();
+			}
+			item.Owner = owner;
+			CreateListIfNeeded();
+			list.Insert(index, item);
+			owner.OnAnimatorCollectionChanged();
+		}
+
+		public IAnimator this[int index]
+		{
+			get => list[index];
+			set
+			{
+				if (value.Owner != null) {
+					throw new InvalidOperationException();
+				}
+				var replacedItem = list[index];
+				replacedItem.Unbind();
+				replacedItem.Owner = null;
+				value.Owner = owner;
+				list[index] = value;
+				owner.OnAnimatorCollectionChanged();
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -138,6 +169,15 @@ namespace Lime
 			return TryFind(propertyName, out var animator, animationId) ? Remove(animator) : false;
 		}
 
+		public void RemoveAt(int index)
+		{
+			var item = list[index];
+			list.RemoveAt(index);
+			item.Unbind();
+			item.Owner = null;
+			owner.OnAnimatorCollectionChanged();
+		}
+		
 		public int GetOverallDuration(string animationId = null)
 		{
 			int val = 0;

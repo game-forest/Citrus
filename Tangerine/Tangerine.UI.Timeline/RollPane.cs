@@ -64,7 +64,7 @@ namespace Tangerine.UI.Timeline
 				args.CancelDrag = true;
 			} else {
 				args.CancelDrag = !topSceneItems.All(
-					i => LinkSceneItem.CanLink(GetSceneItem(args.Parent), i));
+					i => LinkSceneItem.CanLink(item: i, parent: GetSceneItem(args.Parent)));
 			}
 		}
 

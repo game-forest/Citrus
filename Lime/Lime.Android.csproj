@@ -339,7 +339,7 @@
     <Compile Include="Source\Widgets\Animation\AnimationTrack.cs" />
     <Compile Include="Source\Widgets\Animation\AnimationUtils.cs" />
     <Compile Include="Source\Widgets\Animation\Animator.cs" />
-    <Compile Include="Source\Widgets\Animation\AnimatorCollection.cs" />
+    <Compile Include="Source\Widgets\Animation\AnimatorList.cs" />
     <Compile Include="Source\Widgets\Animation\AnimatorRegistry.cs" />
     <Compile Include="Source\Widgets\Animation\BezierEasing.cs" />
     <Compile Include="Source\Widgets\Animation\BlendAnimationEngine.cs" />
