@@ -86,7 +86,6 @@ namespace YuzuGenerated
 			var s = (global::Lime.AnimationBlending)src;
 			var result = new global::Lime.AnimationBlending();
 			if (s.MarkersOptions != null) {
-				result.MarkersOptions = new global::System.Collections.Generic.Dictionary<string, global::Lime.MarkerBlending>();
 				foreach (var tmp1 in s.MarkersOptions)
 					result.MarkersOptions.Add(tmp1.Key, Clone_Lime__MarkerBlending(cl, tmp1.Value));
 			}
@@ -2257,7 +2256,6 @@ namespace YuzuGenerated
 			var result = new global::Lime.MarkerBlending();
 			result.Option = Clone_Lime__BlendingOption(cl, s.Option);
 			if (s.SourceMarkersOptions != null) {
-				result.SourceMarkersOptions = new global::System.Collections.Generic.Dictionary<string, global::Lime.BlendingOption>();
 				foreach (var tmp1 in s.SourceMarkersOptions)
 					result.SourceMarkersOptions.Add(tmp1.Key, Clone_Lime__BlendingOption(cl, tmp1.Value));
 			}

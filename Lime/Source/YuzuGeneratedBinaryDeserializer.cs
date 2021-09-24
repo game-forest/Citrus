@@ -214,10 +214,8 @@ namespace YuzuGenerated
 			ReaderClassDef.FieldDef fd;
 			fd = def.Fields[d.Reader.ReadInt16()];
 			if (1 == fd.OurIndex) {
-				result.MarkersOptions = (global::System.Collections.Generic.Dictionary<string, global::Lime.MarkerBlending>)null;
 				var tmp1 = d.Reader.ReadInt32();
 				if (tmp1 >= 0) {
-					result.MarkersOptions = new global::System.Collections.Generic.Dictionary<string, global::Lime.MarkerBlending>();
 					while (--tmp1 >= 0) {
 						var tmp2 = d.Reader.ReadString();
 						if (tmp2 == "" && d.Reader.ReadBoolean()) tmp2 = null;
@@ -5082,10 +5080,8 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (2 == fd.OurIndex) {
-				result.SourceMarkersOptions = (global::System.Collections.Generic.Dictionary<string, global::Lime.BlendingOption>)null;
 				var tmp1 = d.Reader.ReadInt32();
 				if (tmp1 >= 0) {
-					result.SourceMarkersOptions = new global::System.Collections.Generic.Dictionary<string, global::Lime.BlendingOption>();
 					while (--tmp1 >= 0) {
 						var tmp2 = d.Reader.ReadString();
 						if (tmp2 == "" && d.Reader.ReadBoolean()) tmp2 = null;

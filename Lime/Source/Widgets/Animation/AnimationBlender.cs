@@ -6,37 +6,14 @@ using Yuzu;
 namespace Lime
 {
 	[TangerineRegisterComponent]
+	[UpdateStage(typeof(EarlyUpdateStage))]
 	public class AnimationBlender : BehaviorComponent
 	{
 		private Dictionary<string, BlendingProcess> blendings = new Dictionary<string, BlendingProcess>();
 
 		[YuzuMember]
-		public Dictionary<string, AnimationBlending> Options { get; private set; } = new Dictionary<string, AnimationBlending>();
-
-		[TangerineInspect]
-		public double BlendDuration
-		{
-			get {
-				if (Owner == null) {
-					return 0;
-				}
-				Options.TryGetValue(Owner.DefaultAnimation.Id ?? "", out var animationBlending);
-				return animationBlending?.Option?.Frames ?? 0;
-			}
-			set {
-				if (Owner == null) {
-					throw new InvalidOperationException();
-				}
-				var animationId = Owner.DefaultAnimation.Id ?? "";
-				if (!Options.TryGetValue(animationId, out var animationBlending)) {
-					animationBlending = new AnimationBlending {
-						Option = new BlendingOption()
-					};
-					Options.Add(animationId, animationBlending);
-				}
-				animationBlending.Option.Frames = value;
-			}
-		}
+		public Dictionary<string, AnimationBlending> Options { get; private set; } =
+			new Dictionary<string, AnimationBlending>();
 
 		public bool Enabled { get; set; } = true;
 
@@ -51,6 +28,13 @@ namespace Lime
 		{
 			foreach (var animation in owner.Animations) {
 				animation.AnimationEngine = DefaultAnimationEngine.Instance;
+			}
+		}
+
+		protected internal override void Update(float delta)
+		{
+			foreach (var animation in Owner.Animations) {
+				animation.AnimationEngine = BlendAnimationEngine.Instance;
 			}
 		}
 
@@ -403,19 +387,21 @@ namespace Lime
 	public class AnimationBlending
 	{
 		[YuzuMember]
-		public BlendingOption Option;
+		public BlendingOption Option { get; set; }
 
 		[YuzuMember]
-		public Dictionary<string, MarkerBlending> MarkersOptions = new Dictionary<string, MarkerBlending>();
+		public Dictionary<string, MarkerBlending> MarkersOptions { get; private set; } =
+			new Dictionary<string, MarkerBlending>();
 	}
 
 	public class MarkerBlending
 	{
 		[YuzuMember]
-		public BlendingOption Option;
+		public BlendingOption Option { get; set; }
 
 		[YuzuMember]
-		public Dictionary<string, BlendingOption> SourceMarkersOptions = new Dictionary<string, BlendingOption>();
+		public Dictionary<string, BlendingOption> SourceMarkersOptions { get; private set; }
+			= new Dictionary<string, BlendingOption>();
 	}
 
 	public class BlendingOption
