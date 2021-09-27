@@ -62,7 +62,7 @@ namespace Tangerine.UI
 						new Widget {
 							Layout = new HBoxLayout(),
 							Nodes = {
-								new ThemedAddButton { Clicked = AddDefaultRecord, },
+								new ThemedAddButton { Clicked = AddAnimationBlendingMenu, },
 								new ThemedSimpleText("Add new"),
 							},
 						},
@@ -111,6 +111,7 @@ namespace Tangerine.UI
 				}
 				var value = (int)(animationBlending.Option?.Frames ?? 0);
 				if (value != (int)keyValue.Value) {
+					keyValue.Value = value;
 					valueEditor.Value = value;
 				}
 			});
@@ -163,16 +164,34 @@ namespace Tangerine.UI
 			}
 		}
 
-		private void AddDefaultRecord()
+		private void AddAnimationBlendingMenu()
+		{
+			var menu = new Menu();
+			foreach (var animationId in GetAnimationIds()) {
+				var (text, key) = animationId == null
+					? (LegacyAnimationName, "") : (animationId, animationId);
+				if (!dictionary.ContainsKey(key)) {
+					menu.Add(new Command(text, () => AddAnimationBlending(key)));
+				}
+			}
+			if (menu.Count != 0) {
+				menu.Popup();
+			} else {
+				ClearWarningsAndValidate();
+				AddWarning("There is no animation left to blend.", ValidationResult.Info);
+			}
+		}
+
+		private void AddAnimationBlending(string animationId)
 		{
 			ClearWarningsAndValidate();
-			if (dictionary.ContainsKey("")) {
+			if (dictionary.ContainsKey(animationId)) {
 				AddWarning($"Key already exists.", ValidationResult.Warning);
 				return;
 			}
 			using (Document.Current.History.BeginTransaction()) {
 				InsertIntoDictionary<Dictionary<string, AnimationBlending>, string, AnimationBlending>
-					.Perform(dictionary, "", new AnimationBlending());
+					.Perform(dictionary, animationId, new AnimationBlending());
 				Document.Current.History.CommitTransaction();
 			}
 		}
