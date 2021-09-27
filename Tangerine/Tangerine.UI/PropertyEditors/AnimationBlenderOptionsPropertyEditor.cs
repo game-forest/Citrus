@@ -9,6 +9,7 @@ namespace Tangerine.UI
 	public class AnimationBlenderOptionsPropertyEditor : CommonPropertyEditor<Dictionary<string, AnimationBlending>>
 	{
 		private const float Spacing = 4;
+		private const string LegacyAnimationName = "<Legacy>";
 		private Widget rows;
 		private Dictionary<string, AnimationBlending> dictionary;
 
@@ -23,9 +24,10 @@ namespace Tangerine.UI
 			if (EditorParams.Objects.Skip(1).Any()) {
 				EditorContainer.AddNode(new Widget() {
 					Layout = new HBoxLayout(),
-					Nodes = { new ThemedSimpleText {
-						Text = "Edit of dictionary properties isn't supported for multiple selection.",
-						ForceUncutText = false
+					Nodes = {
+						new ThemedSimpleText {
+							Text = "Edit of dictionary properties isn't supported for multiple selection.",
+							ForceUncutText = false
 					} },
 					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
 				});
@@ -80,19 +82,32 @@ namespace Tangerine.UI
 
 		private void CreateWidgetsForKeyValuePair(KeyValuePair<string, AnimationBlending> kv)
 		{
-			var keyEditor = EditorParams.EditBoxFactory();
+			var keyEditor = EditorParams.DropDownListFactory();
 			var valueEditor = EditorParams.NumericEditBoxFactory();
+			var animationExists = false;
+			foreach (var animationId in GetAnimationIds()) {
+				var (text, value) = animationId == null
+					? (LegacyAnimationName, "") : (animationId, animationId);
+				animationExists |= value == kv.Key;
+				keyEditor.Items.Add(new CommonDropDownList.Item(text, value));
+			}
+			// Text is used over Value because animation can be renamed or deleted.
+			if (animationExists) {
+				keyEditor.Value = kv.Key;
+			} else {
+				keyEditor.Text = kv.Key;
+				AddWarning($"Animation \"{kv.Key}\" doesn't exist.", ValidationResult.Warning);
+			}
 			valueEditor.MaxWidth = float.PositiveInfinity;
-			keyEditor.Text = kv.Key;
 			valueEditor.Value = (float)(kv.Value?.Option?.Frames ?? 0f);
-			var keyValue = new KeyValuePair { Key = keyEditor.Text, Value = valueEditor.Value, };
+			var keyValue = new KeyValuePair { Key = kv.Key, Value = valueEditor.Value, };
 			var deleteButton = new ThemedDeleteButton { Clicked = () => DeleteRecord(keyValue.Key), };
-			keyEditor.Submitted += (key) => SetKey(keyValue, key);
+			keyEditor.Changed += (args) => SetKey(keyValue, (string)args.Value);
 			valueEditor.AddChangeWatcher(() => valueEditor.Value, (value) => SetValue(keyValue, value));
 			rows.AddNode(new Widget {
 				Layout = new HBoxLayout {
 					DefaultCell = new DefaultLayoutCell(Alignment.Center),
-					Spacing = Spacing
+					Spacing = Spacing,
 				},
 				Nodes = {
 					keyEditor,
@@ -101,6 +116,32 @@ namespace Tangerine.UI
 					Spacer.HStretch(),
 				},
 			});
+		}
+
+		private IEnumerable<string> GetAnimationIds()
+		{
+			var node = (Node)EditorParams.RootObjects.First();
+			var sceneTree = Document.Current.GetSceneItemForObject(node);
+			if (node == null) {
+				yield break;
+			}
+			yield return null;
+			var used = new HashSet<string>();
+			do {
+				while (!sceneTree.TryGetNode(out _)) {
+					sceneTree = sceneTree.Parent;
+				}
+				foreach (var animationSceneItem in sceneTree.Rows) {
+					var animation = animationSceneItem.GetAnimation();
+					if (animation == null || animation.Id == null) {
+						continue;
+					}
+					if (used.Add(animation.Id)) {
+						yield return animation.Id;
+					}
+				}
+				sceneTree = sceneTree.Parent;
+			} while (sceneTree != null);
 		}
 
 		private void DeleteRecord(string key)
