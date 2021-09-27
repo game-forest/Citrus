@@ -69,6 +69,7 @@
     <Compile Include="Dialogs\TriggerSelectionDialog.cs" />
     <Compile Include="EmbeddedResources\ThemedIconResource.cs" />
     <Compile Include="IconGenerator.cs" />
+    <Compile Include="PropertyEditors\AnimationBlenderOptionsPropertyEditor.cs" />
     <Compile Include="PropertyEditors\BezierEasingPropertyEditor.cs" />
     <Compile Include="PropertyEditors\CustomFilePropertyEditor.cs" />
     <Compile Include="PropertyEditors\DictionaryPropertyEditor.cs" />
