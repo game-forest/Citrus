@@ -75,6 +75,16 @@ namespace Tangerine.UI
 				( CreateIcon("Universal.LAB.Sliders"), labEditor ),
 				( CreateIcon("Universal.RGB.Sliders"), rgbEditor ),
 			};
+			void SwitchAlpha() {
+				var color = colorProperty.Value;
+				color.A = Math.Abs(color.A) > Mathf.ZeroTolerance ? 0f : 1f;
+				DragStarted?.Invoke();
+				colorProperty.Value = color;
+				Changed?.Invoke();
+				DragEnded?.Invoke();
+				Window.Current.Invalidate();
+			}
+			components[1].Item1.Gestures.Add(new ClickGesture(1, SwitchAlpha));
 			EditorsWidget = new Widget {
 				Padding = new Thickness(horizontal: 0, vertical: 0),
 				Layout = new VBoxLayout { Spacing = 8 },
