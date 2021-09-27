@@ -103,7 +103,17 @@ namespace Tangerine.UI
 			var keyValue = new KeyValuePair { Key = kv.Key, Value = valueEditor.Value, };
 			var deleteButton = new ThemedDeleteButton { Clicked = () => DeleteRecord(keyValue.Key), };
 			keyEditor.Changed += (args) => SetKey(keyValue, (string)args.Value);
-			valueEditor.AddChangeWatcher(() => valueEditor.Value, (value) => SetValue(keyValue, value));
+			valueEditor.Submitted += ((_) => SetValue(keyValue, valueEditor.Value));
+			keyEditor.Tasks.AddLoop(() => {
+				if (!dictionary.TryGetValue(keyValue.Key, out var animationBlending)) {
+					Rebuild();
+					return;
+				}
+				var value = (int)(animationBlending.Option?.Frames ?? 0);
+				if (value != (int)keyValue.Value) {
+					valueEditor.Value = value;
+				}
+			});
 			rows.AddNode(new Widget {
 				Layout = new HBoxLayout {
 					DefaultCell = new DefaultLayoutCell(Alignment.Center),
@@ -169,9 +179,12 @@ namespace Tangerine.UI
 
 		private void SetValue(KeyValuePair keyValue, double value)
 		{
+			if ((int)value == (int)keyValue.Value) {
+				return;
+			}
 			using (Document.Current.History.BeginTransaction()) {
 				var blending = new AnimationBlending() {
-					Option = (int)value == 0 ? null : new BlendingOption((int)value)
+					Option = (int)value == 0 ? null : new BlendingOption { Frames = (int)value, },
 				};
 				InsertIntoDictionary<Dictionary<string, AnimationBlending>, string, AnimationBlending>
 					.Perform(dictionary, keyValue.Key, blending);
@@ -195,7 +208,8 @@ namespace Tangerine.UI
 					.Perform(dictionary, keyValue.Key);
 				keyValue.Key = key;
 				var blending = new AnimationBlending() {
-					Option = keyValue.Value == 0 ? null : new BlendingOption(keyValue.Value),
+					Option = keyValue.Value == 0
+						? null : new BlendingOption() { Frames = (int)keyValue.Value, },
 				};
 				InsertIntoDictionary<Dictionary<string, AnimationBlending>, string, AnimationBlending>
 					.Perform(dictionary, key, blending);
