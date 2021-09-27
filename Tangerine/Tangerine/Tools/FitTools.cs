@@ -131,7 +131,11 @@ namespace Tangerine
 			var sv = SceneView.Instance;
 			var scene = sv.Scene;
 			var frame = sv.Frame;
-			if (Utils.CalcHullAndPivot(Core.Document.Current.SelectedNodes().Editable(), out var hull, out _)) {
+			var editableNodes = Core.Document.Current.SelectedNodes().Editable().ToList();
+			if (editableNodes.Count == 0 && Core.Document.Current.Container != null) {
+				editableNodes.Add(Core.Document.Current.Container);
+			}
+			if (Utils.CalcHullAndPivot(editableNodes, out var hull, out _)) {
 				var aabb = hull.ToAABB();
 				var sceneViewBottomOffset = SceneView.ShowNodeDecorationsPanelButton.Size.Y;
 				// The Vector2(9) is extra offset to make rect markers visible.
