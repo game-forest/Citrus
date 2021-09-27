@@ -176,17 +176,50 @@ namespace Tangerine.UI
 				: (@object, name, value) => SetIndexedProperty.Perform(@object, name, index, value);
 			var editorWidget = onAdd(p);
 			ExpandableContent.Nodes.Insert(index, editorWidget);
+			var editor = editorWidget.Components.Get<PropertyEditorComponent>()
+				.PropertyEditor;
 			var removeButton = new ThemedDeleteButton { Enabled = Enabled };
 			removeButton.Clicked += () => pendingRemovals.Add(p.IndexInList);
-			var editorContainer = editorWidget.Components.Get<PropertyEditorComponent>()
-				.PropertyEditor.EditorContainer;
 			var upButton = new ToolbarButton(IconPool.GetTexture("Universal.ArrowUp"));
 			upButton.Clicked += () => MoveItemTo(index, index - 1);
 			var downButton = new ToolbarButton(IconPool.GetTexture("Universal.ArrowDown"));
 			downButton.Clicked += () => MoveItemTo(index, index + 1);
-			editorContainer.AddNode(upButton);
-			editorContainer.AddNode(downButton);
-			editorContainer.AddNode(removeButton);
+			editor.EditorContainer.AddNode(upButton);
+			editor.EditorContainer.AddNode(downButton);
+			editor.EditorContainer.AddNode(removeButton);
+			SimpleText valueTextWidget = null;
+			editor.EditorContainer.AddChangeWatcher(
+				() => list?[index],
+				(v) => {
+					if (v == null) {
+						return;
+					}
+					if (valueTextWidget != null) {
+						valueTextWidget.UnlinkAndDispose();
+					}
+					var type = v.GetType();
+					var toStringAttribute = ClassAttributes<TangerineToStringAttribute>.Get(type, inherit: true);
+					if (toStringAttribute == null) {
+						return;
+					}
+					valueTextWidget = new ThemedSimpleText {
+						ForceUncutText = false,
+						AutoMaxSize = true,
+						HitTestTarget = true,
+						Padding = new Thickness(left: 5),
+						VAlignment = VAlignment.Center,
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
+					};
+					valueTextWidget.Components.Add(new TooltipComponent(() => valueTextWidget.Text));
+					editor.LabelContainer.Nodes.Insert(
+						editor.LabelContainer.Nodes.IndexOf(editor.PropertyLabel) + 1,
+						valueTextWidget
+					);
+					valueTextWidget.Tasks.AddLoop(() => {
+						valueTextWidget.Text = toStringAttribute.GetText(v);
+					});
+				}
+			);
 		}
 
 		public void MoveItemTo(int index, int to)

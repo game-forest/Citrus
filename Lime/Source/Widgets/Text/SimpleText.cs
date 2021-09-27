@@ -219,15 +219,20 @@ namespace Lime
 
 		[YuzuMember]
 		public bool ForceUncutText { get; set; }
+
+		internal bool AutoMinSize { get; set; }
+
+		internal bool AutoMaxSize { get; set; }
+
 		public TextRenderingMode RenderMode{ get; set; }
 
 		public override Vector2 EffectiveMinSize =>
-			Vector2.Max(MeasuredMinSize, ForceUncutText ? Vector2.Max(MinSize, MeasureUncutText() + Padding) : MinSize);
+			Vector2.Max(MeasuredMinSize, (ForceUncutText || AutoMinSize) ? Vector2.Max(MinSize, MeasureUncutText() + Padding) : MinSize);
 
 		public override Vector2 EffectiveMaxSize =>
 			Vector2.Max(
 				EffectiveMinSize,
-				Vector2.Min(MeasuredMaxSize, ForceUncutText ? Vector2.Min(MaxSize, MeasureUncutText() + Padding) : MaxSize)
+				Vector2.Min(MeasuredMaxSize, (ForceUncutText || AutoMaxSize) ? Vector2.Min(MaxSize, MeasureUncutText() + Padding) : MaxSize)
 			);
 
 		public bool TrimWhitespaces { get; set; }
