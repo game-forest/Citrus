@@ -76,6 +76,7 @@
     <Compile Include="Operations\RenameAnimationProcessor.cs" />
     <Compile Include="Operations\RulerAction.cs" />
     <Compile Include="Operations\SceneTree.cs" />
+    <Compile Include="Operations\SetAnimatorTargetPropertyPath.cs" />
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="SceneTreeBuilder.cs" />
     <Compile Include="SyncPresenters.cs" />

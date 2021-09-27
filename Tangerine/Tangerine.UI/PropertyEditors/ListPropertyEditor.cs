@@ -14,6 +14,7 @@ namespace Tangerine.UI
 		private readonly Func<PropertyEditorParams, Widget> onAdd;
 		private IList list;
 		private readonly List<int> pendingRemovals;
+		private readonly List<IAnimator> animatorsToRemove = new List<IAnimator>();
 
 		public ListPropertyEditor(
 			IPropertyEditorParams editorParams,
@@ -101,9 +102,44 @@ namespace Tangerine.UI
 			// (in this case -- CoalescedPropertyValue with IndexedProperty underneath)
 			if (pendingRemovals.Count > 0) {
 				pendingRemovals.Sort();
+				var animators = (list as IAnimable)?.GetAnimationHost()?.Animators;
 				using (Document.Current.History.BeginTransaction()) {
+					var oldCount = list.Count;
 					for (int i = pendingRemovals.Count - 1; i >= 0; --i) {
 						RemoveFromList.Perform(list, pendingRemovals[i]);
+					}
+					if (animators != null) {
+						foreach (var removed in pendingRemovals) {
+							var propertyPath = EditorParams.PropertyPath + $".Item[{removed}]";
+							animatorsToRemove.AddRange(
+								animators.Where(a => a.TargetPropertyPath.Contains(propertyPath))
+							);
+							foreach (var animator in animatorsToRemove) {
+								var min = animator.Keys[0].Frame;
+								var max = animator.Keys[animator.Keys.Count - 1].Frame;
+								RemoveKeyframeRange.Perform(animator, min, max);
+							}
+							animatorsToRemove.Clear();
+						}
+						if (pendingRemovals.Count != 0) {
+							var from = EditorParams.PropertyPath + $".Item[";
+							foreach (var animator in animators) {
+								var tpp = animator.TargetPropertyPath;
+								if (tpp.StartsWith(from)) {
+									var closingBracketIndex = tpp.IndexOf(']', from.Length);
+									var index = int.Parse(tpp.Substring(from.Length, closingBracketIndex - from.Length));
+									var offset = ~pendingRemovals.BinarySearch(index);
+									if (offset == 0) {
+										continue;
+									}
+									var newPropertyPath =
+										from
+										+ (index - offset).ToString()
+										+ tpp.Substring(closingBracketIndex);
+									SetAnimatorTargetPropertyPath.Perform(animator, newPropertyPath);
+								}
+							}
+						}
 					}
 					pendingRemovals.Clear();
 					Document.Current.History.CommitTransaction();
@@ -139,13 +175,46 @@ namespace Tangerine.UI
 					SetAnimableProperty.Perform(@object, name, value, CoreUserPreferences.Instance.AutoKeyframes))
 				: (@object, name, value) => SetIndexedProperty.Perform(@object, name, index, value);
 			var editorWidget = onAdd(p);
-			var removeButton = new ThemedDeleteButton {
-				Enabled = Enabled
-			};
-			editorWidget.Components.Get<PropertyEditorComponent>()
-				.PropertyEditor.EditorContainer.AddNode(removeButton);
 			ExpandableContent.Nodes.Insert(index, editorWidget);
+			var removeButton = new ThemedDeleteButton { Enabled = Enabled };
 			removeButton.Clicked += () => pendingRemovals.Add(p.IndexInList);
+			var editorContainer = editorWidget.Components.Get<PropertyEditorComponent>()
+				.PropertyEditor.EditorContainer;
+			var upButton = new ToolbarButton(IconPool.GetTexture("Universal.ArrowUp"));
+			upButton.Clicked += () => MoveItemTo(index, index - 1);
+			var downButton = new ToolbarButton(IconPool.GetTexture("Universal.ArrowDown"));
+			downButton.Clicked += () => MoveItemTo(index, index + 1);
+			editorContainer.AddNode(upButton);
+			editorContainer.AddNode(downButton);
+			editorContainer.AddNode(removeButton);
+		}
+
+		public void MoveItemTo(int index, int to)
+		{
+			if (to < 0 || to >= list.Count) {
+				return;
+			}
+			var pathFrom = EditorParams.PropertyPath + $".Item[{index}]";
+			var pathTo = EditorParams.PropertyPath + $".Item[{to}]";
+			var animators = (list as IAnimable)?.GetAnimationHost()?.Animators;
+			using (Document.Current.History.BeginTransaction()) {
+				var value = list[index];
+				RemoveFromList.Perform(list, index);
+				InsertIntoList.Perform(list, to, value);
+				if (animators != null) {
+					foreach (var animator in animators) {
+						if (animator.TargetPropertyPath.StartsWith(pathFrom)) {
+							var newPropertyPath = animator.TargetPropertyPath.Replace(pathFrom, pathTo);
+							SetAnimatorTargetPropertyPath.Perform(animator, newPropertyPath);
+						} else if (animator.TargetPropertyPath.StartsWith(pathTo)) {
+							var newPropertyPath = animator.TargetPropertyPath.Replace(pathTo, pathFrom);
+							SetAnimatorTargetPropertyPath.Perform(animator, newPropertyPath);
+						}
+					}
+				}
+				Document.Current.History.CommitTransaction();
+			}
+			RemoveAndBuild(list.Count);
 		}
 	}
 }

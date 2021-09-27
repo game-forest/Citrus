@@ -126,7 +126,14 @@ namespace Lime
 			InvalidateAnimableOrUnbindAnimators(item, this);
 			list.Insert(index, item);
 		}
-		public bool Remove(T item) => list.Remove(item);
+		public bool Remove(T item)
+		{
+			var result = list.Remove(item);
+			if (result) {
+				InvalidateAnimableOrUnbindAnimators(item);
+			}
+			return result;
+		}
 		public void RemoveAt(int index)
 		{
 			InvalidateAnimableOrUnbindAnimators(list[index], null);
