@@ -133,26 +133,16 @@ namespace Tangerine.UI
 		{
 			var node = (Node)EditorParams.RootObjects.First();
 			var sceneTree = Document.Current.GetSceneItemForObject(node);
-			if (node == null) {
-				yield break;
-			}
-			yield return null;
-			var used = new HashSet<string>();
-			do {
-				while (!sceneTree.TryGetNode(out _)) {
-					sceneTree = sceneTree.Parent;
-				}
-				foreach (var animationSceneItem in sceneTree.Rows) {
-					var animation = animationSceneItem.GetAnimation();
-					if (animation == null || animation.Id == null) {
-						continue;
-					}
-					if (used.Add(animation.Id)) {
-						yield return animation.Id;
-					}
-				}
+			while (!sceneTree.TryGetNode(out _)) {
 				sceneTree = sceneTree.Parent;
-			} while (sceneTree != null);
+			}
+			foreach (var animationSceneItem in sceneTree.Rows) {
+				var animation = animationSceneItem.GetAnimation();
+				if (animation == null) {
+					continue;
+				}
+				yield return animation.Id;
+			}
 		}
 
 		private void DeleteRecord(string key)
