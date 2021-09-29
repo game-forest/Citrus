@@ -17,7 +17,7 @@ namespace Tangerine.UI.Timeline
 		readonly Widget toolbar;
 
 		readonly Timeline timeline;
-		PropertyRow property;
+		AnimatorRow property;
 
 		public float MinValue { get; set; }
 		public float MaxValue { get; set; }
@@ -34,7 +34,7 @@ namespace Tangerine.UI.Timeline
 
 		public static bool CanEditRow(Row row)
 		{
-			var animator = row.Components.Get<PropertyRow>()?.Animator;
+			var animator = row.Components.Get<AnimatorRow>()?.Animator;
 			return animator != null && adapters.ContainsKey(animator.ValueType);
 		}
 
@@ -77,7 +77,7 @@ namespace Tangerine.UI.Timeline
 
 		public void EditRow(Row row)
 		{
-			property = row?.Components.Get<PropertyRow>();
+			property = row?.Components.Get<AnimatorRow>();
 			var adapter = adapters[property.Animator.ValueType];
 			float min, max;
 			CalcRange(property.Animator, adapter, out min, out max);

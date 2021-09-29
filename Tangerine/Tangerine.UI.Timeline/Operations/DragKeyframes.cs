@@ -18,11 +18,11 @@ namespace Tangerine.UI.Timeline.Operations
 			foreach (var row in Document.Current.Rows) {
 				var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans(offset.X > 0);
 				foreach (var span in spans) {
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<PropertyRow>()?.Node;
+					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
 					if (node == null || node.EditorState().Locked) {
 						continue;
 					}
-					var property = row.Components.Get<PropertyRow>()?.Animator.TargetPropertyPath;
+					var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
 					var animators = Document.Current.Animation.ValidatedEffectiveAnimators.Intersect(node.Animators).OfType<IAnimator>().ToList();
 					foreach (var a in animators) {
 						if (property != null && a.TargetPropertyPath != property) {
@@ -42,7 +42,7 @@ namespace Tangerine.UI.Timeline.Operations
 								continue;
 							}
 							var destRowComponents = Document.Current.Rows[destRow].Components;
-							var destNode = destRowComponents.Get<NodeRow>()?.Node ?? destRowComponents.Get<PropertyRow>()?.Node;
+							var destNode = destRowComponents.Get<NodeRow>()?.Node ?? destRowComponents.Get<AnimatorRow>()?.Node;
 							if (destNode == null || !ArePropertyPathsCompatible(node, destNode, a.TargetPropertyPath)) {
 								continue;
 							}

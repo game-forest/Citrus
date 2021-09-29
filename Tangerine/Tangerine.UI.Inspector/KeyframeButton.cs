@@ -237,7 +237,7 @@ namespace Tangerine.UI.Inspector
 		{
 			var rows = Document.Current
 				.SelectedRows()
-				.Where(r => animable == r.Components.Get<NodeRow>()?.Node || animator != null && r.Components.Get<PropertyRow>()?.Animator == animator)
+				.Where(r => animable == r.Components.Get<NodeRow>()?.Node || animator != null && r.Components.Get<AnimatorRow>()?.Animator == animator)
 				.ToList();
 			var spans = new GridSpanList {
 				new GridSpan(Document.Current.AnimationFrame, Document.Current.AnimationFrame + 1)

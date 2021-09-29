@@ -102,7 +102,6 @@ namespace Tangerine.UI.Timeline
 		public event Action Detached;
 
 		public static IEnumerable<Type> GetOperationProcessorTypes() => new[] {
-			typeof(EnsureCurrentColumnVisibleIfContainerChanged),
 			typeof(EnsureRowVisibleIfSelected)
 		};
 
@@ -121,7 +120,7 @@ namespace Tangerine.UI.Timeline
 			InitializeWidgets();
 			WaveformCache = new WaveformCache(Project.Current.FileSystemWatcher);
 			RootWidget.AddChangeWatcher(() => Document.Current.Container, container => {
-				Offset = container.Components.GetOrAdd<TimelineOffset>().Offset;
+				container.Components.GetOrAdd<TimelineOffset>().Offset = Offset;
 			});
 			Document.Current.SceneTreeBuilder.SceneItemCreated += SceneItemDecorator.Decorate;
 			DecorateSceneTree(Document.Current.SceneTree);

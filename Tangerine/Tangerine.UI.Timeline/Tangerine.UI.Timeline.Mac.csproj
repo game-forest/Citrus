@@ -95,6 +95,7 @@
     <Compile Include="Operations\NumericScaleDialog.cs" />
     <Compile Include="Operations\ReverseKeyframes.cs" />
     <Compile Include="Operations\SelectGridSpan.cs" />
+    <Compile Include="Operations\SelectKeyframe.cs" />
     <Compile Include="Operations\SetCurrentColumn.cs" />
     <Compile Include="Operations\ShiftGridSelection.cs" />
     <Compile Include="Operations\ToggleKeyframes.cs" />

@@ -6,6 +6,7 @@ using Tangerine.Core;
 using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 using Tangerine.UI.Timeline.Components;
+using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.UI.Timeline
 {
@@ -43,6 +44,8 @@ namespace Tangerine.UI.Timeline
 			ConnectCommand(TimelineCommands.MoveUp, MoveNodesUp.Perform);
 			ConnectCommand(TimelineCommands.SelectAllRowKeyframes, SelectAllRowKeyframes);
 			ConnectCommand(TimelineCommands.SelectAllKeyframes, SelectAllKeyframes);
+			ConnectCommand(TimelineCommands.AdvanceToNextKeyframe, SelectNextKeyframe.Perform);
+			ConnectCommand(TimelineCommands.AdvanceToPreviousKeyframe, SelectPreviousKeyframe.Perform);
 		}
 
 		private static void SelectAllKeyframes()
@@ -136,11 +139,11 @@ namespace Tangerine.UI.Timeline
 			foreach (var row in Document.Current.Rows.ToList()) {
 				var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans;
 				foreach (var span in spans.GetNonOverlappedSpans()) {
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<PropertyRow>()?.Node;
+					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
 					if (node == null || node.EditorState().Locked) {
 						continue;
 					}
-					var property = row.Components.Get<PropertyRow>()?.Animator.TargetPropertyPath;
+					var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
 					foreach (var a in node.Animators.ToList()) {
 						if (a.AnimationId != Document.Current.AnimationId) {
 							continue;

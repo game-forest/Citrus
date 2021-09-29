@@ -163,7 +163,7 @@ namespace Tangerine.UI.Timeline.Operations
 					if (spans == null) {
 						continue;
 					}
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<PropertyRow>()?.Node;
+					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
 					if (node.EditorState().Locked) {
 						continue;
 					}

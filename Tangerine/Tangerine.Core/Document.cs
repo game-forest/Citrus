@@ -824,7 +824,7 @@ namespace Tangerine.Core
 					node = nr.Node;
 					prevNode = nr.Node;
 				}
-				var pr = item.Components.Get<PropertyRow>();
+				var pr = item.Components.Get<AnimatorRow>();
 				if (pr != null && pr.Node != prevNode) {
 					node = pr.Node;
 					prevNode = pr.Node;
