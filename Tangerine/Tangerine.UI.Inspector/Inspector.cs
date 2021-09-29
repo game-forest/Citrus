@@ -18,7 +18,7 @@ namespace Tangerine.UI.Inspector
 		private readonly InspectorContent content;
 		private readonly ThemedScrollView contentWidget;
 		private readonly Widget orangeLineWidget;
-		
+
 		private HashSet<Type> prevTypes = new HashSet<Type>();
 
 		public static Inspector Instance { get; private set; }
@@ -108,7 +108,7 @@ namespace Tangerine.UI.Inspector
 			};
 			DropFilesGesture.Recognized += content.DropFiles;
 			orangeLineWidget = new Widget {
-				Anchors = Anchors.TopBottom, 
+				Anchors = Anchors.TopBottom,
 				MinMaxWidth = 4,
 				Presenter = new WidgetFlatFillPresenter(Color4.Orange)
 			};
@@ -152,6 +152,7 @@ namespace Tangerine.UI.Inspector
 		private IEnumerator<object> DisableInspectorTask()
 		{
 			while (true) {
+				contentWidget.Enabled = true;
 				if (!Document.Current.InspectRootNode) {
 					var enabled = true;
 					foreach (var i in Document.Current.Rows) {
@@ -223,7 +224,7 @@ namespace Tangerine.UI.Inspector
 			} else {
 				content.Build(Document.Current.SelectedNodes().ToList());
 			}
-			InspectorCommands.InspectRootNodeCommand.Icon = Document.Current.InspectRootNode ? 
+			InspectorCommands.InspectRootNodeCommand.Icon = Document.Current.InspectRootNode ?
 				inspectRootActivatedTexture : inspectRootDeactivatedTexture;
 			orangeLineWidget.Visible = Document.Current.InspectRootNode;
 			Toolbar.Rebuild();
