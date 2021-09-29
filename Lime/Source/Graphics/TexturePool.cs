@@ -47,23 +47,8 @@ namespace Lime
 			lock (textures) {
 				foreach (WeakReference r in textures.Values.ToList()) {
 					var texture = r.Target as ITexture;
-					if (texture != null && !texture.IsDisposed) {
+					if (texture != null && !texture.IsStubTexture && !texture.IsDisposed) {
 						texture.Dispose();
-					}
-				}
-			}
-		}
-
-		public void DiscardAllStubTextures()
-		{
-			lock (textures) {
-				foreach (WeakReference r in textures.Values.ToList()) {
-					var target = r.Target as ITexture;
-					if (target != null && target.IsStubTexture && !target.IsDisposed) {
-						target.Dispose();
-
-						//TODO: Вместо следующей строки, нужно реализовать нормальный Discard у StubTexture
-						r.Target = null;
 					}
 				}
 			}

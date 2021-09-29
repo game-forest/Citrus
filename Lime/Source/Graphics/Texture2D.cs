@@ -38,6 +38,8 @@ namespace Lime
 
 		public bool IsStubTexture { get; private set; }
 
+		private static IPlatformTexture2D stubPlatformTexture;
+
 		private TextureParams textureParams = TextureParams.Default;
 		public TextureParams TextureParams {
 			get
@@ -115,22 +117,35 @@ namespace Lime
 		internal void LoadStubImage(bool transparent)
 		{
 			const int side = 128;
-
 			TextureParams = TextureParams.Default;
-			OpacityMask = transparent? new OpacityMask(side, side) : null;
+			OpacityMask = transparent ? new OpacityMask(side, side) : null;
 
-			var pixels = new Color4[side * side];
-			for (int i = 0; i < side; i++) {
-				for (int j = 0; j < side; j++) {
-					pixels[i * side + j] =
-						transparent
-							? Color4.Transparent
-							: ((i + (j & ~7)) & 8) == 0
-								? Color4.Blue
-								: Color4.White;
+			if (stubPlatformTexture == null) {
+				var pixels = new Color4[side * side];
+				for (int i = 0; i < side; i++) {
+					for (int j = 0; j < side; j++) {
+						pixels[i * side + j] =
+							transparent
+								? Color4.Transparent
+								: ((i + (j & ~7)) & 8) == 0
+									? Color4.Blue
+									: Color4.White;
+					}
 				}
+				LoadImage(pixels, side, side);
+				stubPlatformTexture = platformTexture;
+			} else {
+				// MemoryUsed = 4 * side * side; Does we need it?
+				MemoryUsed = 0;
+				ImageSize = new Size(side, side);
+				SurfaceSize = ImageSize;
+				uvRect = new Rectangle(0, 0, 1, 1);
+
+				Window.Current.InvokeOnRendering(() => {
+					platformTexture = stubPlatformTexture;
+					PlatformRenderer.RebindTexture(this);
+				});
 			}
-			LoadImage(pixels, side, side);
 
 			IsStubTexture = true;
 		}
@@ -266,6 +281,9 @@ namespace Lime
 
 		public override void Dispose()
 		{
+			if (IsStubTexture) {
+				return;
+			}
 			MemoryUsed = 0;
 			if (platformTexture != null) {
 				var platformTextureCopy = platformTexture;
