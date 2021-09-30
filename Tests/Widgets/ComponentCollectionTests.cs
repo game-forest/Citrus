@@ -314,5 +314,41 @@ namespace Citrus.Tests.Widgets
 			components.Clear();
 			Assert.IsTrue(dummy.Owner == null && test1.Owner == null && test2.Owner == null);
 		}
+
+		[TestMethod]
+		public void OnRemoveWithSideEffectTest()
+		{
+			var node = new Widget();
+			var components = node.Components;
+			var weird = new WeirdNodeComponent();
+			components.Add(weird);
+			Assert.IsTrue(components.Remove(weird));
+			Assert.AreEqual(1, components.Count);
+			Assert.IsTrue(components.Contains<BaseTestNodeComponent>());
+			components.Add(weird);
+			components.Clear();
+			Assert.AreEqual(0, components.Count);
+			components.Add(weird);
+			Assert.IsTrue(components.Remove<Component>());
+			Assert.AreEqual(0, components.Count);
+			components.Add(weird);
+			components.Add(new DummyNodeComponent());
+			Assert.IsTrue(components.Remove<WeirdNodeComponent>());
+			Assert.IsTrue(components.Remove<DummyNodeComponent>());
+			Assert.IsTrue(components.Remove<BaseTestNodeComponent>());
+		}
+
+
+
+		public class WeirdNodeComponent : NodeComponent
+		{
+			protected override void OnOwnerChanged(Node oldOwner)
+			{
+				base.OnOwnerChanged(oldOwner);
+				if (oldOwner != null) {
+					oldOwner.Components.Add(new BaseTestNodeComponent());
+				}
+			}
+		}
 	}
 }

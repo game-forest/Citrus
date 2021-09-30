@@ -215,52 +215,69 @@ namespace Lime
 
 		public bool Remove<T>()
 		{
-			var j = 0;
-			for (int i = 0; i < Count; i++) {
-				var c = list[i];
-				if (!(c is T)) {
-					list[j] = list[i];
-					j++;
-				} else {
-					OnRemove(list[i]);
-				}
+			var performedRemove = false;
+			while (RemoveOne<T>()) {
+				performedRemove = true;
 			}
-			for (int i = j; i < Count; i++) {
-				list[i] = null;
-			}
-			var oldCount = Count;
-			Count = j;
-			return oldCount != Count;
+			return performedRemove;
 		}
 
 		public bool Remove(Type type)
 		{
-			var j = 0;
-			for (int i = 0; i < Count; i++) {
-				var c = list[i];
-				if (!type.IsInstanceOfType(c)) {
-					list[j] = list[i];
-					j++;
-				} else {
-					OnRemove(list[i]);
-				}
+			var performedRemove = false;
+			while (RemoveOne(type)) {
+				performedRemove = true;
 			}
-			for (int i = j; i < Count; i++) {
-				list[i] = null;
-			}
-			var oldCount = Count;
-			Count = j;
-			return oldCount != Count;
+			return performedRemove;
 		}
 
-		public virtual bool Remove(TComponent component)
+		private bool RemoveOne(Type type)
+		{
+			int indexToRemove;
+			for (indexToRemove = Count - 1; indexToRemove >= 0; indexToRemove--) {
+				if (type.IsInstanceOfType(list[indexToRemove])) {
+					break;
+				}
+			}
+			if (indexToRemove < 0) {
+				return false;
+			}
+			var c = list[indexToRemove];
+			for (int i = indexToRemove + 1; i < Count; i++) {
+				list[i - 1] = list[i];
+			}
+			list[--Count] = null;
+			OnRemove(c);
+			return true;
+		}
+
+		private bool RemoveOne<T>()
+		{
+			int indexToRemove;
+			for (indexToRemove = Count - 1; indexToRemove >= 0; indexToRemove--) {
+				if (list[indexToRemove] is T) {
+					break;
+				}
+			}
+			if (indexToRemove < 0) {
+				return false;
+			}
+			var c = list[indexToRemove];
+			for (int i = indexToRemove + 1; i < Count; i++) {
+				list[i - 1] = list[i];
+			}
+			list[--Count] = null;
+			OnRemove(c);
+			return true;
+		}
+
+		public bool Remove(TComponent component)
 		{
 			int index = -1;
 			for (int i = 0; i < Count; i++) {
 				if (index == -1) {
 					if (list[i] == component) {
 						index = i;
-						OnRemove(component);
 					}
 				} else {
 					list[i - 1] = list[i];
@@ -270,6 +287,7 @@ namespace Lime
 				return false;
 			}
 			list[--Count] = null;
+			OnRemove(component);
 			return true;
 		}
 
@@ -288,13 +306,13 @@ namespace Lime
 
 		public Enumerator GetEnumerator() => new Enumerator(list, Count);
 
-		public virtual void Clear()
+		public void Clear()
 		{
-			for (int i = 0; i < Count; i++) {
-				OnRemove(list[i]);
-				list[i] = null;
+			while (Count > 0) {
+				var c = list[--Count];
+				list[Count] = null;
+				OnRemove(c);
 			}
-			Count = 0;
 		}
 
 		public void CopyTo(TComponent[] array, int arrayIndex)
