@@ -29,7 +29,7 @@ namespace Tangerine.UI.SceneView
 			command.Checked = true;
 			while (true) {
 				Bone bone = null;
-				if (!SceneTreeUtils.GetSceneItemLinkLocation(
+				if (!SceneTreeUtils.TryGetSceneItemLinkLocation(
 					out var containerSceneItem, out _, typeof(Bone), aboveFocused: true
 				)) {
 					throw new InvalidOperationException();
@@ -73,7 +73,7 @@ namespace Tangerine.UI.SceneView
 								var baseBoneItem = Document.Current.GetSceneItemForObject(baseBone);
 								bone = (Bone)CreateNode.Perform(baseBoneItem, 0, typeof(Bone));
 							} else {
-								if (!SceneTreeUtils.GetSceneItemLinkLocation(
+								if (!SceneTreeUtils.TryGetSceneItemLinkLocation(
 									out var parent, out var index, typeof(Bone), true,
 									raiseThroughHierarchyPredicate: i => i.GetNode() is Bone)
 								) {

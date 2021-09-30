@@ -42,7 +42,7 @@ namespace Tangerine.UI.SceneView
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
 				if (
-					!SceneTreeUtils.GetSceneItemLinkLocation(
+					!SceneTreeUtils.TryGetSceneItemLinkLocation(
 						parent: out var containerSceneItem,
 						index: out var linkLocation,
 						insertingType: nodeTypeActive,
