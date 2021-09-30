@@ -47,7 +47,7 @@ namespace Lime
 			lock (textures) {
 				foreach (WeakReference r in textures.Values.ToList()) {
 					var texture = r.Target as ITexture;
-					if (texture != null && !texture.IsStubTexture && !texture.IsDisposed) {
+					if (texture != null && !texture.IsDisposed) {
 						texture.Dispose();
 					}
 				}

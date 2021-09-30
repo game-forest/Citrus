@@ -29,7 +29,7 @@ namespace Lime
 				}
 				return current;
 			}
-			set => SetCurrent(value, resetTexturePool: true);
+			set => SetCurrent(value);
 		}
 
 		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool = false)
@@ -47,7 +47,7 @@ namespace Lime
 		public virtual void Dispose()
 		{
 			if (current == this) {
-				SetCurrent(null, false);
+				SetCurrent(null);
 			}
 		}
 
