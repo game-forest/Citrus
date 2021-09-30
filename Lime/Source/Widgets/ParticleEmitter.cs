@@ -867,7 +867,7 @@ namespace Lime
 			}
 		}
 
-		private bool AdvanceParticle(Particle p, float delta, ref Rectangle boundingRect)
+		private void AdvanceParticle(Particle p, float delta, ref Rectangle boundingRect)
 		{
 			p.Age += delta;
 			if (p.AgeToAnimationTime > 0) {
@@ -1004,7 +1004,17 @@ namespace Lime
 			if (v4x > boundingRect.BX) boundingRect.BX = v4x;
 			if (v4y < boundingRect.AY) boundingRect.AY = v4y;
 			if (v4y > boundingRect.BY) boundingRect.BY = v4y;
-			return true;
+#if TANGERINE
+			if (p.AgeToAnimationTime > 0) {
+				// If particle modifier's values were altered by applying modifier to
+				// the particle then return it's values to the state corresponding to current time
+				// of emitter's default animation. This is being done in Tangerine to avoid interfering
+				// with user changing the modifier and them seeing incorrect values at given keyframe
+				// after running the animation.
+				// TODO: Handle non legacy animation case when getting rid of legacy animations.
+				p.Modifier.Animators.Apply(DefaultAnimation.Time);
+			}
+#endif // TANGERINE
 		}
 
 		public override void AddToRenderChain(RenderChain chain)
