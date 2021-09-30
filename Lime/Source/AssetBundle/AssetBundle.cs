@@ -32,13 +32,10 @@ namespace Lime
 			set => SetCurrent(value);
 		}
 
-		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool = false)
+		public static void SetCurrent(AssetBundle bundle)
 		{
 			if (current != bundle) {
 				current = bundle;
-				if (resetTexturePool) {
-					Console.WriteLine("Warning: Use of deprecated 'resetTexturePool' parameter. Not needed.");
-				}
 			}
 		}
 

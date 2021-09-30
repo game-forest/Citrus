@@ -119,7 +119,8 @@ namespace Lime
 			const int side = 128;
 			TextureParams = TextureParams.Default;
 			OpacityMask = transparent ? new OpacityMask(side, side) : null;
-			MemoryUsed = 0; // MemoryUsed = 4 * side * side; Does we need it?
+			// MemoryUsed = 4 * side * side; Do we need it?
+			MemoryUsed = 0;
 			if (stubPlatformTexture == null) {
 				var pixels = new Color4[side * side];
 				for (int i = 0; i < side; i++) {
