@@ -13,16 +13,6 @@ obj
 *.userprefs
 .bak
 
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]eleases/
-x64/
-x86/
-bld/
-[Oo]bj/
-[Ll]og/
-
 # Visual Studio 2015 cache/options directory
 .vs/
 
