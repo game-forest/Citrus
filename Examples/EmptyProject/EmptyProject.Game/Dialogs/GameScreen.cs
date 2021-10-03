@@ -1,3 +1,4 @@
+using EmptyProject.Types;
 using Lime;
 
 namespace EmptyProject.Dialogs
@@ -8,6 +9,7 @@ namespace EmptyProject.Dialogs
 		{
 			SoundManager.PlayMusic("Ingame");
 			Scene._BtnExit.It.Clicked = ReturnToMenu;
+			var emptyComponent = Root.Components.Get<EmptyComponent>();
 		}
 
 		protected override void Update(float delta)
