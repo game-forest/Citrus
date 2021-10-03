@@ -112,6 +112,38 @@
       <Project>{DC16EEBF-404D-4610-B87A-15B57464D707}</Project>
       <Name>Lime.Mac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Orange\Orange.Mac.csproj">
+      <Project>{4b2bdd5a-2aae-46ae-aa1a-8c9308baa50d}</Project>
+      <Name>Orange.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.Core\Tangerine.Core.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{05fb6476-c29b-49a7-918c-a52caf73fca7}</Project>
+      <Name>Tangerine.Core.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.FilesystemView\Tangerine.UI.FilesystemView.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{8799ea66-04e0-4075-95fe-bf0ec1bc88a1}</Project>
+      <Name>Tangerine.UI.FilesystemView.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.Inspector\Tangerine.UI.Inspector.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{d6b543cb-0223-4210-bb0f-7d8250760895}</Project>
+      <Name>Tangerine.UI.Inspector.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{f93da48e-2a86-4dc4-a392-102b1e567b3a}</Project>
+      <Name>Tangerine.UI.RemoteScripting.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.SceneView\Tangerine.UI.SceneView.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{80486551-a659-42b0-aada-165c54e9b0af}</Project>
+      <Name>Tangerine.UI.SceneView.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI.Timeline\Tangerine.UI.Timeline.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{fb325fe1-f328-4755-885f-e713bd7e7dad}</Project>
+      <Name>Tangerine.UI.Timeline.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tangerine\Tangerine.UI\Tangerine.UI.Mac.csproj" Condition="$(Configuration.Contains('Tangerine'))">
+      <Project>{e62ba18f-4e1a-466a-8299-67ad567f17e5}</Project>
+      <Name>Tangerine.UI.Mac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Yuzu\Yuzu.Mac.csproj">
       <Project>{5F16D8E4-A0F1-4341-83A0-3897FC44EBB8}</Project>
       <Name>Yuzu.Mac</Name>
