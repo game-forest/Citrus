@@ -1,0 +1,56 @@
+<Project>
+
+  <PropertyGroup>
+    <MSBuildProjectExtensionsPath>obj/msbuild_project_extensions</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Configurations>Release;Debug;Profiler.Release;Profiler.Debug</Configurations>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Message Text="[PreBuild] Configuration: $(Configuration.ToUpperInvariant())" Importance="high" />
+    <Message Text="[PreBuild] Defines: $(DefineConstants)" Importance="high" />
+    <Message Text="[PreBuild] OS: $(OS)" Importance="high" />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\\3rdParty\OpenTK\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="RemoteScripting">
+      <HintPath>..\..\..\\Lime\Extensions\RemoteScripting\RemoteScripting.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Bundles\Data.Win">
+      <Link>Data.Win</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\\Lemon\Lemon.Win.csproj" />
+    <ProjectReference Include="..\..\..\\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
+    <ProjectReference Include="..\..\..\\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\..\\Yuzu\Yuzu.csproj" />
+    <ProjectReference Include="..\Tests.GeneratedScenes\Tests.GeneratedScenes.Win.csproj" />
+    <ProjectReference Include="..\Tests.Types\Tests.Types.Win.csproj" />
+  </ItemGroup>
+  <Import Project="..\Tests.Game\Tests.Game.projitems" Label="Shared" />
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+</Project>

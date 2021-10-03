@@ -1,0 +1,224 @@
+{
+	"Name": "Tests",
+	"CitrusDirectory": "../../",
+	"Targets": [
+		{
+			"BaseTarget": "Android",
+			"CleanBeforeBuild": false,
+			"Name": "RemoteScriptingProject",
+			"Configuration": "Debug",
+			"Hidden": true,
+			"Project": "Tests.Android/Tests.Android.sln"
+		},
+		{
+			"BaseTarget": "$(PLATFORM)",
+			"Name": "CitrusPlugin",
+			"CleanBeforeBuild": false,
+			"Configuration": "$(HOST_APPLICATION).$(CONFIGURATION)",
+			"Hidden": true,
+			"Project": "CitrusPlugin/CitrusPlugin.$(PLATFORM).sln"
+		}
+	],
+	"PluginAssemblies": {
+		"OrangeAndTangerineBuildTargets": ["CitrusPlugin"],
+		"OrangeBuildTargets": [],
+		"TangerineBuildTargets": [],
+		"OrangeAndTangerine": [
+			"CitrusPlugin/bin/$(HOST_APPLICATION).$(CONFIGURATION)/CitrusPlugin.dll",
+			"Tests.Types/bin/$(HOST_APPLICATION).$(CONFIGURATION)/Tests.Types.dll"
+		],
+		"Orange": [],
+		"Tangerine": []
+	},
+	"RemoteScripting": {
+		"Scripts": {
+			"ScriptsProjectPath": "Tests.Scripts/Tests.Scripts.csproj",
+			"ScriptsAssemblyName": "Scripts.dll",
+			"BuildTarget": "RemoteScriptingProject",
+			"FrameworkReferencesPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/MonoAndroid/v1.0/",
+			"ProjectReferencesPath": "Tests.Android/bin/Debug/",
+			"ProjectReferences": [
+				"Lime.dll",
+				"Yuzu.dll",
+				"RemoteScripting.dll",
+				"Tests.dll"
+			],
+			"FrameworkReferences": [
+				"mscorlib.dll",
+				"System.dll",
+				"System.Core.dll"
+			],
+			"RemoteStoragePath": "StorageForRemoteScripting/"
+		}
+	},
+	"ResolutionSettings": {
+		"IsLandscapeDefault": false,
+		"Resolutions": [
+			{
+				"Name": "Wide Screen",
+				"Width": 1366,
+				"Height": 768,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "4:3 (iPad)",
+				"Width": 1024,
+				"Height": 768,
+				"ResolutionMarkers": [ "Tablet", "4x3",  "Normal", "Default" ]
+			},
+			{
+				"Name": "16:9",
+				"Width": 960,
+				"Height": 540,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "16:10",
+				"Width": 960,
+				"Height": 600,
+				"ResolutionMarkers": [ "16x10", "Default" ]
+			},
+			{
+				"Name": "Android 4.0.3 devices",
+				"Width": 800,
+				"Height": 480,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "Nexus 9",
+				"Width": 1024,
+				"Height": 720,
+				"ResolutionMarkers": [ "4x3", "Default" ]
+			},
+			{
+				"Name": "iPhone X",
+				"Width": 2436,
+				"Height": 1125,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "iPhone 4",
+				"Width": 960,
+				"Height": 640,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "iPhone 5",
+				"Width": 1136,
+				"Height": 640,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "iPhone 6, 7, 8",
+				"Width": 1334,
+				"Height": 750,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "iPhone 6, 7, 8 Plus",
+				"Width": 1920,
+				"Height": 1080,
+				"ResolutionMarkers": [ "Default" ]
+			},
+			{
+				"Name": "iPhone 4S",
+				"Width": 960,
+				"Height": 640,
+				"ResolutionMarkers": [ "iPhone4S", "4x3", "Default" ]
+			},
+			{
+				"Name": "iPad Pro 11",
+				"Width": 1194,
+				"Height": 834,
+				"ResolutionMarkers": [ "4x3", "Default" ]
+			},
+			{
+				"Name": "iPad Pro 12.9",
+				"Width": 1092,
+				"Height": 819,
+				"ResolutionMarkers": [ "4x3", "Default" ]
+			},
+			{
+				"Name": "Galaxy S8",
+				"Width": 2960,
+				"Height": 1440,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "LG G6",
+				"Width": 2880,
+				"Height": 1440,
+				"ResolutionMarkers": [ "Normal", "Default" ]
+			},
+			{
+				"Name": "Xperia Z4 Tablet",
+				"Width": 2560,
+				"Height": 1600,
+				"ResolutionMarkers": [ "16x10", "Tablet", "Normal", "Default" ]
+			},
+			{
+				"Name": "Amazon 5 gen",
+				"Width": 1024,
+				"Height": 600,
+				"ResolutionMarkers": [ "Normal", "Default" ]
+			},
+			{
+				"Name": "iPhone XR",
+				"Width": 1662,
+				"Height": 768,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "Sony Xperia 1",
+				"Width": 3840,
+				"Height": 1644,
+				"ResolutionMarkers": [ "Notch", "iPhoneX", "Normal", "Default" ]
+			},
+			{
+				"Name": "Galaxy Fold",
+				"Width": 2152,
+				"Height": 1536,
+				"ResolutionMarkers": [ "Tablet", "4x3", "Normal", "Default" ]
+			}
+		],
+		"Markers": [
+			{
+				"Name": "Default",
+				"LandscapeMarker": "@Landscape",
+				"PortraitMarker": "@Portrait"
+			},
+			{
+				"Name": "Normal",
+				"PortraitMarker": "@Normal"
+			},
+			{
+				"Name": "Tablet",
+				"PortraitMarker": "@Tablet"
+			},
+			{
+				"Name": "Notch",
+				"PortraitMarker": "@Notch"
+			},
+			{
+				"Name": "4x3",
+				"LandscapeMarker": "@iPadLandscape",
+				"PortraitMarker": "@iPadPortrait"
+			},
+			{
+				"Name": "iPhoneX",
+				"LandscapeMarker": "@iPhoneXLandscape",
+				"PortraitMarker": "@iPhoneXPortrait"
+			},
+			{
+				"Name": "iPhone4S",
+				"LandscapeMarker": "@iPhone4SLandscape",
+				"PortraitMarker": "@iPhone4SPortrait"
+			},
+			{
+				"Name": "16x10",
+				"LandscapeMarker": "@16x10Landscape",
+				"PortraitMarker": "@16x10Portrait"
+			}
+		]
+	},
+}

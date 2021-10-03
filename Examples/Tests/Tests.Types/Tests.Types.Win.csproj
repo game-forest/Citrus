@@ -1,0 +1,41 @@
+<Project>
+
+  <PropertyGroup>
+    <MSBuildProjectExtensionsPath>obj/msbuild_project_extensions</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests.Types</AssemblyName>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Configurations>Release;Debug;Orange.Release;Orange.Debug;Tangerine.Release;Tangerine.Debug</Configurations>
+    <DefineConstants Condition="!$(DefineConstants.EndsWith(';'))">$(DefineConstants);</DefineConstants>
+    <DefineConstants>$(DefineConstants)WIN;$(Configuration.ToUpperInvariant().Replace('.', ';'));</DefineConstants>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Message Text="[PreBuild] Configuration: $(Configuration.ToUpperInvariant())" Importance="high" />
+    <Message Text="[PreBuild] Defines: $(DefineConstants)" Importance="high" />
+    <Message Text="[PreBuild] OS: $(OS)" Importance="high" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\..\\Yuzu\Yuzu.csproj" />
+    <ProjectReference Include="..\..\..\\Orange\Orange.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.Core\Tangerine.Core.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.UI.FilesystemView\Tangerine.UI.FilesystemView.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.UI.Inspector\Tangerine.UI.Inspector.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.UI.RemoteScripting\Tangerine.UI.RemoteScripting.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.UI.SceneView\Tangerine.UI.SceneView.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.UI.Timeline\Tangerine.UI.Timeline.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+    <ProjectReference Include="..\..\..\\Tangerine\Tangerine.UI\Tangerine.UI.Win.csproj" Condition="$(Configuration.Contains('Tangerine'))" />
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+</Project>

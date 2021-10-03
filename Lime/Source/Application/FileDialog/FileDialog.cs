@@ -29,6 +29,11 @@ namespace Lime
 	public interface IFileDialog
 	{
 		/// <summary>
+		/// Title text of the file dialog window.
+		/// </summary>
+		public string Title { get; set; }
+
+		/// <summary>
 		/// Gets or sets an array of allowed file types. Example { "txt", "png" }.
 		/// </summary>
 		string[] AllowedFileTypes { get; set; }
@@ -59,7 +64,7 @@ namespace Lime
 		FileDialogMode Mode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the dialog's initial directory. 
+		/// Gets or sets the dialog's initial directory.
 		/// </summary>
 		string InitialDirectory { get; set; }
 

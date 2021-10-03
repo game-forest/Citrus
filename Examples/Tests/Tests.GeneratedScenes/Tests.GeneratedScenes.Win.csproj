@@ -1,0 +1,26 @@
+<Project>
+
+  <PropertyGroup>
+    <MSBuildProjectExtensionsPath>obj/msbuild_project_extensions</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>Tests.Scenes</RootNamespace>
+    <AssemblyName>Tests.GeneratedScenes</AssemblyName>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Resources\Resource.designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\\Lime\Lime.Win.csproj" />
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+</Project>

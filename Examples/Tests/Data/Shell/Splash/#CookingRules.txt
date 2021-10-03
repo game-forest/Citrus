@@ -1,0 +1,3 @@
+TextureAtlas ${DirectoryName}
+PVRFormat ARGB8
+DDSFormat ARGB8
