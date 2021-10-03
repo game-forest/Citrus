@@ -11,6 +11,7 @@ namespace Lime
 {
 	public class FileDialog : IFileDialog
 	{
+		public string Title { get; set; }
 		public FileDialogMode Mode { get; set; }
 		public bool AllowsMultipleSelection { get; set; }
 		public bool CanCreateDirectories { get; set; }

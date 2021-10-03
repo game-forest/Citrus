@@ -10,6 +10,10 @@ namespace Lime
 	public class FileDialog : IFileDialog
 	{
 		/// <summary>
+		/// Title text of the file dialog window.
+		/// </summary>
+		public string Title { get; set; }
+		/// <summary>
 		/// Gets or sets an array of allowed file types. Example { "txt", "png" }.
 		/// </summary>
 		public string[] AllowedFileTypes { get; set; }
@@ -89,6 +93,10 @@ namespace Lime
 		private bool ShowFolderBrowserDialog()
 		{
 			using (var folderBrowserDialog = new WinForms.FolderBrowserDialog()) {
+				folderBrowserDialog.UseDescriptionForTitle = true;
+				if (!string.IsNullOrEmpty(Title)) {
+					folderBrowserDialog.Description = Title;
+				}
 				if (InitialDirectory != null) {
 					folderBrowserDialog.SelectedPath = InitialDirectory;
 				}
@@ -105,6 +113,9 @@ namespace Lime
 		{
 			using var openFileDialog = new WinForms.OpenFileDialog();
 			SetFilter(openFileDialog);
+			if (!string.IsNullOrEmpty(Title)) {
+				openFileDialog.Title = Title;
+			}
 			openFileDialog.RestoreDirectory = true;
 			openFileDialog.Multiselect = AllowsMultipleSelection;
 			openFileDialog.FileName = InitialFileName ?? System.String.Empty;
@@ -115,6 +126,9 @@ namespace Lime
 		{
 			using var saveFileDialog = new WinForms.SaveFileDialog();
 			SetFilter(saveFileDialog);
+			if (!string.IsNullOrEmpty(Title)) {
+				saveFileDialog.Title = Title;
+			}
 			saveFileDialog.RestoreDirectory = true;
 			saveFileDialog.FileName = InitialFileName ?? string.Empty;
 			return ShowFileDialog(saveFileDialog);

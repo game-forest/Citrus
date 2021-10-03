@@ -13,10 +13,6 @@ namespace Orange
 {
 	public static class NewProject
 	{
-		private static string newCitrusDirectory;
-		private static string targetDirectory;
-		private static string newProjectCitprojPath;
-
 		[Export(nameof(OrangePlugin.MenuItems))]
 		[ExportMetadata("Label", "New Project")]
 		[ExportMetadata("Priority", 3)]
@@ -34,7 +30,8 @@ namespace Orange
 			var citrusPath = Toolbox.FindCitrusDirectory();
 			var dialog = new FileDialog {
 				AllowedFileTypes = new [] { "" },
-				Mode = FileDialogMode.SelectFolder
+				Mode = FileDialogMode.SelectFolder,
+				Title = "Select source example project"
 			};
 			bool? dialogCancelled = null;
 			// Showing UI must be executed on the UI thread.
@@ -45,17 +42,35 @@ namespace Orange
 			if (dialogCancelled.Value) {
 				return;
 			}
-			targetDirectory = NormalizePath(dialog.FileName);
-			newCitrusDirectory = NormalizePath(Path.Combine(targetDirectory, "Citrus"));
+			string sourceDirectory = NormalizePath(dialog.FileName);
+			dialog.Title = "Select new project directory. Directory name will be used as project name.";
+			dialogCancelled = null;
+			Application.InvokeOnMainThread(() => dialogCancelled = !dialog.RunModal());
+			while (!dialogCancelled.HasValue) {
+				System.Threading.Thread.Sleep(50);
+			}
+			if (dialogCancelled.Value) {
+				return;
+			}
+			string targetDirectory = NormalizePath(dialog.FileName);
+			var isNewExample = Path.GetDirectoryName(Path.GetDirectoryName(sourceDirectory))
+				== Path.GetDirectoryName(Path.GetDirectoryName(targetDirectory));
+			string newCitrusDirectory = !isNewExample
+				? NormalizePath(Path.Combine(targetDirectory, "Citrus"))
+				: citrusPath;
 			var projectName = Path.GetFileName(Path.GetDirectoryName(targetDirectory));
 			if (char.IsDigit(projectName[0])) {
 				throw new System.Exception($"Project name '{projectName}' cannot start with a digit");
 			}
 			foreach (char c in projectName) {
 				if (!ValidChars.Contains(c)) {
-					throw new System.Exception($"Project name '{projectName}' must contain only Latin letters and digits");
+					throw new System.Exception(
+						$"Project name '{projectName}' must contain only Latin letters and digits"
+					);
 				}
 			}
+			var sourceProjectName = Path.GetFileName(Path.GetDirectoryName(sourceDirectory));
+			var sourceProjectApplicationName = String.Join(" ", Regex.Split(sourceProjectName, @"(?<!^)(?=[A-Z])"));
 			var newProjectApplicationName = String.Join(" ", Regex.Split(projectName, @"(?<!^)(?=[A-Z])"));
 			Console.WriteLine($"New project name is \"{projectName}\"");
 			var textfileExtensions = new HashSet<string> {
@@ -71,19 +86,26 @@ namespace Orange
 				".strings",
 				".gitignore",
 				".tan",
+				".ps1",
+				".command",
 			};
-			using (var dc = new DirectoryChanger(Path.Combine(citrusPath, "Examples/EmptyProject"))) {
+			string newProjectCitprojPath = null;
+			using (var dc = new DirectoryChanger(sourceDirectory)) {
 				var fe = new FileEnumerator(".");
 				foreach (var f in fe.Enumerate()) {
 					var targetPath = Path.Combine(targetDirectory, f.Replace("EmptyProject", projectName));
 					Console.WriteLine($"Copying: {f} => {targetPath}");
 					Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
 					System.IO.File.Copy(f, targetPath);
-					if (textfileExtensions.Contains(Path.GetExtension(targetPath).ToLower(CultureInfo.InvariantCulture))) {
+					if (
+						textfileExtensions.Contains(
+							Path.GetExtension(targetPath).ToLower(CultureInfo.InvariantCulture)
+						)
+					) {
 						string text = File.ReadAllText(targetPath);
-						text = text.Replace("EmptyProject", projectName);
-						text = text.Replace("Empty Project", newProjectApplicationName);
-						text = text.Replace("emptyproject", projectName.ToLower());
+						text = text.Replace(sourceProjectName, projectName);
+						text = text.Replace(sourceProjectApplicationName, newProjectApplicationName);
+						text = text.Replace(sourceProjectName.ToLower(), projectName.ToLower());
 						var citrusUri = new Uri(newCitrusDirectory);
 						var fileUri = new Uri(targetPath);
 						var relativeUri = fileUri.MakeRelativeUri(citrusUri);
@@ -93,9 +115,22 @@ namespace Orange
 							text = text.Replace("\"CitrusDirectory\": \"../../\",", $"\"CitrusDirectory\": \"{relativeUri}\",");
 							newProjectCitprojPath = targetPath;
 						}
+						if (targetPath.EndsWith(".ps1", StringComparison.OrdinalIgnoreCase)) {
+							text = text.Replace("..\\..", relativeUri.ToString().Replace('/', '\\'));
+						}
+						if (targetPath.EndsWith(".command", StringComparison.OrdinalIgnoreCase)) {
+							text = text.Replace("../..", relativeUri.ToString());
+						}
 						File.WriteAllText(targetPath, text);
 					}
 				}
+			}
+			if (string.IsNullOrEmpty(newProjectCitprojPath)) {
+				throw new InvalidOperationException($"Invalid new project citproj path: `{newProjectCitprojPath}`");
+			}
+			if (isNewExample) {
+				// Skip git repository initialization step if new project is being made next to example project.
+				return;
 			}
 #if WIN
 // TODO: fix unresponsiveness on mac
