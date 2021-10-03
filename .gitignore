@@ -63,7 +63,7 @@ Lemon/Library/Android/libs/
 *.sublime-project
 TangerineLog.txt
 
-Samples/EmptyProject/TangerineLog.txt
+Examples/EmptyProject/TangerineLog.txt
 
 **/Resources/Resource.designer.cs
-/Samples/EmptyProject/Data/.index
+/Examples/EmptyProject/Data/.index

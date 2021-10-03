@@ -1,4 +1,4 @@
-![](Samples/EmptyProject/Data/Shell/Splash/CitrusLogo.png)
+![](Examples/EmptyProject/Data/Shell/Splash/CitrusLogo.png)
 
 [https://game-forest.github.io/Citrus/](https://game-forest.github.io/Citrus/)
 

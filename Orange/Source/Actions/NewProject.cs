@@ -72,7 +72,7 @@ namespace Orange
 				".gitignore",
 				".tan",
 			};
-			using (var dc = new DirectoryChanger(Path.Combine(citrusPath, "Samples/EmptyProject"))) {
+			using (var dc = new DirectoryChanger(Path.Combine(citrusPath, "Examples/EmptyProject"))) {
 				var fe = new FileEnumerator(".");
 				foreach (var f in fe.Enumerate()) {
 					var targetPath = Path.Combine(targetDirectory, f.Replace("EmptyProject", projectName));
