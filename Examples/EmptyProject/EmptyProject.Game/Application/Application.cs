@@ -108,7 +108,6 @@ namespace EmptyProject.Application
 
 		private void OnUpdateFrame(float delta)
 		{
-			Cheats.ProcessCheatKeys();
 			var speedMultiplier = 1.0f;
 			if (TimeAccelerationMode || Cheats.IsKeyPressed(Key.Shift) || Cheats.IsTripleTouch()) {
 				speedMultiplier = 10.0f;
