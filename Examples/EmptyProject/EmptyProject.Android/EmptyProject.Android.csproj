@@ -148,6 +148,10 @@
       <Project>{cf150772-5f4a-453c-91bd-d52911174b4e}</Project>
       <Name>EmptyProject.GeneratedScenes.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EmptyProject.Types\EmptyProject.Types.Android.csproj">
+      <Project>{9ba635da-5ba4-4daa-8c7a-9089d9fda501}</Project>
+      <Name>EmptyProject.Types.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="Assets\Assets.Android.csproj">
       <Project>{1C601E58-2EF5-462E-86CB-B7443A410FC5}</Project>
       <Name>Assets.Android</Name>
