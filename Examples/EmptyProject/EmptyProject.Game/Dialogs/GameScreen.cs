@@ -9,6 +9,8 @@ namespace EmptyProject.Dialogs
 		{
 			SoundManager.PlayMusic("Ingame");
 			Scene._BtnExit.It.Clicked = ReturnToMenu;
+			// This line ensures this module depends on <project_name>.Types module.
+			// TODO: Leave that line only in TestProject and remove from all other examples.
 			var emptyComponent = Root.Components.Get<EmptyComponent>();
 		}
 
