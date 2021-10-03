@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -100,14 +100,26 @@
     <ProjectReference Include="..\..\..\Lime\Lime.iOS.csproj">
       <Project>{9CFD3A2F-7DA5-420E-B475-44749DC61485}</Project>
       <Name>Lime.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\EmptyProject.GeneratedScenes\EmptyProject.GeneratedScenes.iOS.csproj">
       <Project>{DF52C768-5E17-4A26-AD77-4BDD41A2224C}</Project>
       <Name>EmptyProject.GeneratedScenes.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Yuzu\Yuzu.iOS.csproj">
       <Project>{DF52C768-5E17-4A26-AD77-4BDD31A2224C}</Project>
       <Name>Yuzu.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\EmptyProject.Types\EmptyProject.Types.iOS.csproj">
+      <Project>{0bc4853c-ff3a-4105-9a69-91e25ee570a1}</Project>
+      <Name>EmptyProject.Types.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

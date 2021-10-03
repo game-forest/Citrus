@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhone</Platform>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{DF52C768-5E17-4A26-AD77-4BDD41A2224C}</ProjectGuid>
+    <ProjectGuid>{0BC4853C-FF3A-4105-9A69-91E25EE570A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>EmptyProject</RootNamespace>
     <AssemblyName>EmptyProject.Types</AssemblyName>
@@ -62,5 +62,9 @@
     <Compile Include=".\**\*.cs" />
     <Compile Remove=".\bin\**" />
     <Compile Remove=".\obj\**" />
+    <ProjectReference Include="..\..\..\Yuzu\Yuzu.iOS.csproj">
+      <Project>{df52c768-5e17-4a26-ad77-4bdd31a2224c}</Project>
+      <Name>Yuzu.iOS</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
