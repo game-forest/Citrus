@@ -1,0 +1,234 @@
+{
+	"class":"Lime.Frame, Lime",
+	"Anchors":48,
+	"Color":[4294967295],
+	"Nodes":[
+		{
+			"class":"Lime.DistortionMesh, Lime",
+			"Anchors":48,
+			"Color":[4294967295],
+			"Id":"WinGrey",
+			"Nodes":[
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;0",
+					"Position":[-0.013671875,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;1",
+					"Position":[0.040364593,0],
+					"UV":[0.33333334,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;2",
+					"Position":[0.9557292,0],
+					"UV":[0.6666667,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;3",
+					"Position":[1.0136719,0],
+					"UV":[1,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;0",
+					"Position":[-0.013671875,0.06380209],
+					"UV":[0,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;1",
+					"Position":[0.040364593,0.06380209],
+					"UV":[0.33333334,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;2",
+					"Position":[0.9557292,0.06380209],
+					"UV":[0.6666667,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;3",
+					"Position":[1.0136719,0.06380209],
+					"UV":[1,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;0",
+					"Position":[-0.013671875,0.84733075],
+					"UV":[0,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;1",
+					"Position":[0.040364593,0.86783856],
+					"UV":[0.33333334,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;2",
+					"Position":[0.8854167,0.94596356],
+					"UV":[0.6666667,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;3",
+					"Position":[0.9433594,0.94596356],
+					"UV":[1,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;0",
+					"Position":[-0.013671875,0.9013672],
+					"UV":[0,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;1",
+					"Position":[0.040364593,0.921875],
+					"UV":[0.33333334,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;2",
+					"Position":[0.8727214,1],
+					"UV":[0.6666667,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;3",
+					"Position":[0.93066406,1],
+					"UV":[1,1]
+				}
+			],
+			"NumCols":3,
+			"NumRows":3,
+			"Pivot":[0.5,0.5],
+			"Position":[256,256],
+			"Size":[512,512],
+			"TangerineFlags":4,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Shell/Ui/WinGrey"
+			}
+		},
+		{
+			"class":"Lime.DistortionMesh, Lime",
+			"Anchors":48,
+			"Color":[3523215360],
+			"Id":"Sh",
+			"Nodes":[
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;0",
+					"Position":[-0.013671875,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;1",
+					"Position":[0.058576934,0],
+					"UV":[0.33333334,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;2",
+					"Position":[0.9429805,0.005483835],
+					"UV":[0.6666667,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"0;3",
+					"Position":[1.0136719,0],
+					"UV":[1,0]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;0",
+					"Position":[-0.013671875,0.06380209],
+					"UV":[0,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;1",
+					"Position":[0.058576934,0.06380209],
+					"UV":[0.33333334,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;2",
+					"Position":[0.9429805,0.06928592],
+					"UV":[0.6666667,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"1;3",
+					"Position":[1.0136719,0.06380209],
+					"UV":[1,0.33333334]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;0",
+					"Position":[-0.013671875,0.84733075],
+					"UV":[0,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;1",
+					"Position":[0.058576934,0.86783856],
+					"UV":[0.33333334,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;2",
+					"Position":[0.87266797,0.9514473],
+					"UV":[0.6666667,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"2;3",
+					"Position":[0.9433594,0.94596356],
+					"UV":[1,0.6666667]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;0",
+					"Position":[-0.013671875,0.9013672],
+					"UV":[0,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;1",
+					"Position":[0.058576934,0.921875],
+					"UV":[0.33333334,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;2",
+					"Position":[0.85997266,1.0054837],
+					"UV":[0.6666667,1]
+				},
+				{
+					"class":"Lime.DistortionMeshPoint, Lime",
+					"Id":"3;3",
+					"Position":[0.93066406,1],
+					"UV":[1,1]
+				}
+			],
+			"NumCols":3,
+			"NumRows":3,
+			"Pivot":[0.5,0.5],
+			"Position":[261,266],
+			"Scale":[1.0724287,1.0684931],
+			"Size":[512,512],
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Stuff/CircleBlured"
+			}
+		}
+	],
+	"Size":[512,512]
+}

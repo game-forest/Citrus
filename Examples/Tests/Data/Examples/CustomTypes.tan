@@ -1,0 +1,84 @@
+{
+	"class":"Lime.Frame, Lime",
+	"Color":[4294967295],
+	"Nodes":[
+		{
+			"class":"Tests.Types.IsometricMesh, Tests.Types",
+			"Color":[4294967295],
+			"Id":"IsometricMesh",
+			"IsometricAspect":1.2,
+			"LeftFace":{
+				"Border":{
+				},
+				"Texture":{
+					"class":"Lime.SerializableTexture, Lime",
+					"SerializationPath":"/Shell/Buttons/BigRound"
+				},
+				"TextureSize":[67,58],
+				"Type":0
+			},
+			"Pivot":[0.38924047,0.519704],
+			"Position":[507.0211,403.18],
+			"RightFace":{
+				"Border":{
+					"Bottom":0.39087948,
+					"Left":0.17589578,
+					"Right":0.22801302,
+					"Top":0.13029316
+				},
+				"Texture":{
+					"class":"Lime.SerializableTexture, Lime",
+					"SerializationPath":"/Shell/Buttons/IcoGear"
+				},
+				"TextureSize":[42.5,51.200005],
+				"Type":0
+			},
+			"Size":[702.2759,715.1761],
+			"TopFace":{
+				"Border":{
+				},
+				"Texture":{
+					"class":"Lime.SerializableTexture, Lime",
+					"SerializationPath":"/Shell/Buttons/IcoX"
+				},
+				"TextureSize":[48.4,43.4],
+				"Type":0
+			}
+		},
+		{
+			"class":"Lime.Image, Lime",
+			"Color":[4286644479],
+			"Components":[
+				{
+					"class":"Tests.Types.ColorizeComponent, Tests.Types"
+				}
+			],
+			"Id":"BulletCheck",
+			"Pivot":[0.5,0.5],
+			"Position":[115.07614,241.33331],
+			"Size":[122.81904,90],
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Shell/Buttons/BulletCheck"
+			}
+		},
+		{
+			"class":"Lime.Image, Lime",
+			"Color":[4294901801],
+			"Components":[
+				{
+					"class":"Tests.Types.ColorizeComponent, Tests.Types"
+				}
+			],
+			"Id":"RoundDisable",
+			"Pivot":[0.5,0.5],
+			"Position":[118.33334,91.5],
+			"Size":[128,128],
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Shell/Buttons/RoundDisable"
+			}
+		}
+	],
+	"Size":[1024,768]
+}
