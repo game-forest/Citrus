@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoltenVK", "..\..\..\3rdPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderCompilerBinding.Mac", "..\..\..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Mac.csproj", "{94911E6A-53F9-4B86-9ADE-E3B510C810B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyProject.Types.Mac", "..\EmptyProject.Types\EmptyProject.Types.Mac.csproj", "{3B088699-719E-40AA-AF1D-6D436EEEDC23}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\EmptyProject.Game\EmptyProject.Game.projitems*{6ac2e264-44bc-4508-b819-ca4b0cba764b}*SharedItemsImports = 4
@@ -97,6 +99,14 @@ Global
 		{94911E6A-53F9-4B86-9ADE-E3B510C810B9}.Release.Profiler|Any CPU.Build.0 = Release|Any CPU
 		{94911E6A-53F9-4B86-9ADE-E3B510C810B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94911E6A-53F9-4B86-9ADE-E3B510C810B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Debug.Profiler|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Debug.Profiler|Any CPU.Build.0 = Debug|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Release.Profiler|Any CPU.ActiveCfg = Release|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Release.Profiler|Any CPU.Build.0 = Release|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B088699-719E-40AA-AF1D-6D436EEEDC23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

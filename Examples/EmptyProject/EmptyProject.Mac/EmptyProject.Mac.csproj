@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -125,6 +125,10 @@
     <ProjectReference Include="..\..\..\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.Mac.csproj">
       <Project>{94911E6A-53F9-4B86-9ADE-E3B510C810B9}</Project>
       <Name>ShaderCompilerBinding.Mac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmptyProject.Types\EmptyProject.Types.Mac.csproj">
+      <Project>{3b088699-719e-40aa-af1d-6d436eeedc23}</Project>
+      <Name>EmptyProject.Types.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
