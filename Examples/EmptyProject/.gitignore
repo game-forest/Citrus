@@ -266,3 +266,7 @@ bfg_emptyproject_android_client/
 
 cache.log
 Data/.untitled/
+Data/.index
+**/Resources/Resource.designer.cs
+TangerineLog.txt
+dotnet/
