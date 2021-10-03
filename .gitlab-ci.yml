@@ -28,6 +28,10 @@ windows_build:
   - echo "Empty project Win - OK"
   - '.\Orange\Orange.CLI\bin\Release\Orange.CLI.exe .\Examples\EmptyProject\EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache --delete-tancache'
   - echo "Empty project Android - OK"
+  - '.\Orange\Orange.CLI\bin\Release\Orange.CLI.exe .\Examples\Tests\Tests.citproj --target:Win --command:"Build" --disable-asset-cache --delete-tancache'
+  - echo "Tests project Win - OK"
+  - '.\Orange\Orange.CLI\bin\Release\Orange.CLI.exe .\Examples\Tests\Tests.citproj --target:Android --command:"Build" --disable-asset-cache --delete-tancache'
+  - echo "Tests project Android - OK"
   - dotnet build -c:Release .\Orange\Launcher\Launcher.Win.Sln
   - echo "Launcher - OK"
 
@@ -50,6 +54,12 @@ osx_build:
   - echo "Empty project Android - OK"
   - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Examples/EmptyProject/EmptyProject.citproj --target:Android --command:"Build" --disable-asset-cache --delete-tancache'
   - echo "Empty project iOS - OK"
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Examples/Tests/Tests.citproj --target:Mac --command:"Build" --disable-asset-cache --delete-tancache'
+  - echo "Tests project Mac - OK"
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Examples/Tests/Tests.citproj --target:iOS --command:"Build" --disable-asset-cache --delete-tancache'
+  - echo "Tests project Android - OK"
+  - 'Orange/Orange.CLI/bin/Release/Orange.CLI.app/Contents/MacOS/Orange.CLI $(pwd)/Examples/Tests/Tests.citproj --target:Android --command:"Build" --disable-asset-cache --delete-tancache'
+  - echo "Tests project iOS - OK"
   - nuget restore ./Orange/Launcher/Launcher.Mac.sln
   - msbuild ./Orange/Launcher/Launcher.Mac.sln -property:Configuration=Release
   - echo "Launcher - OK"
