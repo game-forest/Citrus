@@ -1,0 +1,4 @@
+TextureAtlas ${DirectoryName}
+AtlasOptimization DrawCalls
+DDSFormat DXTi
+PVRFormat PVRTC4

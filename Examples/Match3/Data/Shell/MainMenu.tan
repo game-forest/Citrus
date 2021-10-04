@@ -1,0 +1,289 @@
+{
+	"class":"Lime.Frame, Lime",
+	"Anchors":15,
+	"Animations":[
+		{
+			"IsLegacy":true,
+			"Markers":[
+				{
+					"Id":"Hide"
+				},
+				{
+					"Action":1,
+					"Frame":5
+				},
+				{
+					"Frame":10,
+					"Id":"Show"
+				},
+				{
+					"Action":1,
+					"Frame":15
+				}
+			]
+		}
+	],
+	"Color":[4294967295],
+	"Nodes":[
+		{
+			"class":"Lime.Frame, Lime",
+			"Anchors":48,
+			"Animators":[
+				{
+					"class":"Lime.Color4Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[4294967295]],
+						[1,0,[16777215]],
+						[5,0,[16777215]],
+						[10,0,[16777215]],
+						[11,0,[4294967295]]
+					],
+					"TargetProperty":"Color"
+				},
+				{
+					"class":"Lime.Vector2Animator, Lime",
+					"ReadonlyKeys":[
+						[0,2,[1,1]],
+						[5,0,[1.15,1.15]],
+						[10,2,[1.0489011,1.2152174]],
+						[13,2,[0.9737964,0.8393116]],
+						[15,2,[1,1]]
+					],
+					"TargetProperty":"Scale"
+				},
+				{
+					"class":"Lime.Vector2Animator, Lime",
+					"ReadonlyKeys":[
+						[0,2,[683,384]],
+						[10,2,[683,-7]],
+						[13,2,[683,434]],
+						[15,2,[683,384]]
+					],
+					"TargetProperty":"Position"
+				}
+			],
+			"Color":[4294967295],
+			"Id":"Dialog",
+			"Nodes":[
+				{
+					"class":"Lime.Button, Lime",
+					"Color":[4294967295],
+					"ContentsPath":"Externals/BtnPlay",
+					"Id":"@BtnPlay",
+					"Pivot":[0.5,0.5],
+					"Position":[517,493],
+					"Size":[232,148],
+					"TangerineFlags":512
+				},
+				{
+					"class":"Lime.Button, Lime",
+					"Color":[4294967295],
+					"ContentsPath":"Externals/BtnOptions",
+					"Id":"@BtnOptions",
+					"Pivot":[0.5,0.5],
+					"Position":[729.03687,551.03674],
+					"Size":[128,128]
+				},
+				{
+					"class":"Lime.SimpleText, Lime",
+					"Color":[4294967295],
+					"Components":[
+						{
+							"class":"Lime.SignedDistanceFieldComponent, Lime",
+							"Dilate":2,
+							"Gradient":[
+								{
+									"Color":[4294967295]
+								},
+								{
+									"Color":[4278190080],
+									"Position":1
+								}
+							]
+						}
+					],
+					"Font":{
+						"Name":"RussoOne"
+					},
+					"FontHeight":60,
+					"HAlignment":1,
+					"Id":"Title",
+					"OverflowMode":1,
+					"Pivot":[0.5,1],
+					"Position":[472.66647,178.79285],
+					"Rotation":-3.0702667,
+					"Size":[337,64],
+					"Text":"Main Menu",
+					"VAlignment":1
+				},
+				{
+					"class":"Lime.Frame, Lime",
+					"Color":[4294967295],
+					"ContentsPath":"Externals/TitleBar",
+					"Id":"TitleBar",
+					"Pivot":[0.5,0.5],
+					"Position":[464.01935,148.27159],
+					"Rotation":-3.0702667,
+					"Scale":[0.85744077,0.85744077],
+					"Size":[512,128],
+					"TangerineFlags":1024
+				},
+				{
+					"class":"Lime.SimpleText, Lime",
+					"Color":[4294967295],
+					"Components":[
+						{
+							"class":"Lime.SignedDistanceFieldComponent, Lime",
+							"Dilate":2,
+							"Gradient":[
+								{
+									"Color":[4294967295]
+								},
+								{
+									"Color":[4278190080],
+									"Position":1
+								}
+							]
+						}
+					],
+					"Font":{
+						"Name":"RobotoMed"
+					},
+					"FontHeight":38.8,
+					"HAlignment":1,
+					"Id":"Text",
+					"OverflowMode":1,
+					"Pivot":[0.5,0.5],
+					"Position":[522,311.96194],
+					"Size":[336,180],
+					"Text":"Welcome to\n\"Match3\"",
+					"TextColor":[4287880191],
+					"VAlignment":1
+				},
+				{
+					"class":"Lime.Frame, Lime",
+					"Color":[4294967295],
+					"ContentsPath":"Externals/Win",
+					"Id":"Win",
+					"Pivot":[0.5,0.5],
+					"Position":[532,384],
+					"Rotation":-3.5308838,
+					"Scale":[1.154089,1.0313396],
+					"Size":[512,512],
+					"TangerineFlags":1792
+				}
+			],
+			"Pivot":[0.5,0.5],
+			"Position":[683,384],
+			"Size":[1024,768]
+		},
+		{
+			"class":"Lime.Image, Lime",
+			"Anchors":11,
+			"Animators":[
+				{
+					"class":"Lime.Color4Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[939524096]],
+						[5,0,[0]],
+						[10,0,[0]],
+						[11,0,[939524096]]
+					],
+					"TargetProperty":"Color"
+				}
+			],
+			"Color":[939524096],
+			"Id":"LineGradient",
+			"Pivot":[0.5,1],
+			"Position":[683,773],
+			"Size":[1366,560.38214],
+			"TangerineFlags":4,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Stuff/LineGradient"
+			},
+			"UV1":[1,0.5]
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Anchors":10,
+			"Animators":[
+				{
+					"class":"Lime.Color4Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[4294967295]],
+						[5,0,[16777215]],
+						[10,0,[16777215]],
+						[11,0,[4294967295]]
+					],
+					"TargetProperty":"Color"
+				}
+			],
+			"Color":[4294967295],
+			"Id":"Logos",
+			"Nodes":[
+				{
+					"class":"Lime.Image, Lime",
+					"Anchors":10,
+					"Color":[2868903935],
+					"Id":"CitrusLogo",
+					"Pivot":[1,0.99999964],
+					"Position":[94.297,88.836],
+					"Scale":[0.34875566,0.34875566],
+					"Size":[220,219.89764],
+					"TangerineFlags":4,
+					"Texture":{
+						"class":"Lime.SerializableTexture, Lime",
+						"SerializationPath":"Splash/CitrusLogo"
+					},
+					"UV1":[1,0.67]
+				},
+				{
+					"class":"Lime.Image, Lime",
+					"Anchors":10,
+					"Color":[3170893823],
+					"Id":"GameForest",
+					"Pivot":[1.0000001,1.0000011],
+					"Position":[192.08752,85.878265],
+					"Scale":[0.6376132,0.6376132],
+					"Size":[128,114],
+					"TangerineFlags":4,
+					"Texture":{
+						"class":"Lime.SerializableTexture, Lime",
+						"SerializationPath":"Splash/GF"
+					}
+				}
+			],
+			"Pivot":[1,1],
+			"Position":[1366,768],
+			"Size":[228,112]
+		},
+		{
+			"class":"Lime.TiledImage, Lime",
+			"Anchors":15,
+			"Animators":[
+				{
+					"class":"Lime.Color4Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[4294967295]],
+						[5,0,[16777215]],
+						[10,0,[16777215]],
+						[11,0,[4294967295]]
+					],
+					"TargetProperty":"Color"
+				}
+			],
+			"Color":[4294967295],
+			"Id":"Bg",
+			"Pivot":[0.5,0.5],
+			"Position":[683,384],
+			"Size":[1366,768],
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"Ui/Bg"
+			},
+			"TileSize":[332,512]
+		}
+	],
+	"Size":[1366,768]
+}

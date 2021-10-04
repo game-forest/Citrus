@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{46B5FF2E-5ED1-42FE-A557-2CDB3C485291}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Match3</RootNamespace>
+    <AssemblyName>Match3</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidLinkSkip>
+    </AndroidLinkSkip>
+    <AndroidStoreUncompressedFileExtensions>
+    </AndroidStoreUncompressedFileExtensions>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;ANDROID</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
+    <MandroidI18n>
+    </MandroidI18n>
+    <Debugger>Xamarin</Debugger>
+    <LangVersion>8.0</LangVersion>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;ANDROID</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <MandroidI18n>
+    </MandroidI18n>
+    <Debugger>Xamarin</Debugger>
+    <AndroidEnableMultipleDex>false</AndroidEnableMultipleDex>
+    <LangVersion>8.0</LangVersion>
+    <AotAssemblies>true</AotAssemblies>
+    <EnableLLVM>true</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <DebugSymbols>false</DebugSymbols>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+    <LangVersion>8.0</LangVersion>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidSupportedAbis />
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>Portable</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+    <AotAssemblies>true</AotAssemblies>
+    <EnableLLVM>true</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <DebugSymbols>false</DebugSymbols>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="RemoteScripting">
+      <HintPath>..\..\..\\Lime\Extensions\RemoteScripting\RemoteScripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Main.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\\Lemon\Lemon.Android.csproj">
+      <Project>{B4435A5F-51DA-42BA-9315-61691A5F58AC}</Project>
+      <Name>Lemon.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\\Lime\Extensions\DynamicFont\DynamicFont.Android.csproj">
+      <Project>{b305434e-2233-4f9e-9815-577df6f9a737}</Project>
+      <Name>DynamicFont.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\\Lime\Lime.Android.csproj">
+      <Project>{72E2DDBB-C320-4356-89EC-BDED6036D29B}</Project>
+      <Name>Lime.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\\Yuzu\Yuzu.Android.csproj">
+      <Project>{cf150772-5f4a-453c-91bd-d52901174b4e}</Project>
+      <Name>Yuzu.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Match3.GeneratedScenes\Match3.GeneratedScenes.Android.csproj">
+      <Project>{cf150772-5f4a-453c-91bd-d52911174b4e}</Project>
+      <Name>Match3.GeneratedScenes.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Match3.Types\Match3.Types.Android.csproj">
+      <Project>{9ba635da-5ba4-4daa-8c7a-9089d9fda501}</Project>
+      <Name>Match3.Types.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets\Assets.Android.csproj">
+      <Project>{1C601E58-2EF5-462E-86CB-B7443A410FC5}</Project>
+      <Name>Assets.Android</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\Icon.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\Icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\Icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\values\Strings.xml" />
+  </ItemGroup>
+  <Import Project="..\Match3.Game\Match3.Game.projitems" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+     Other similar extension points exist, see Microsoft.Common.targets.
+		<Target Name="BeforeBuild">
+		</Target>
+		<Target Name="AfterBuild">
+		</Target>
+ -->
+</Project>
