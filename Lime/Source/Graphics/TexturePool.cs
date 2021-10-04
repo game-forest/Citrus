@@ -54,6 +54,20 @@ namespace Lime
 			}
 		}
 
+		public void DiscardAllStubTextures()
+		{
+			lock (textures) {
+				foreach (WeakReference r in textures.Values.ToList()) {
+					var texture = r.Target as ITexture;
+					if (texture != null && texture.IsStubTexture && !texture.IsDisposed) {
+						texture.Dispose();
+						r.Target = null;
+					}
+				}
+			}
+		}
+
+
 		public ITexture GetTexture(string path)
 		{
 			lock (textures) {

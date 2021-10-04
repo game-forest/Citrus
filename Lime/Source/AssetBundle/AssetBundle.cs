@@ -29,13 +29,16 @@ namespace Lime
 				}
 				return current;
 			}
-			set => SetCurrent(value);
+			set => SetCurrent(value, true);
 		}
 
-		public static void SetCurrent(AssetBundle bundle)
+		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool = false)
 		{
 			if (current != bundle) {
 				current = bundle;
+				if (resetTexturePool) {
+					TexturePool.Instance.DiscardAllStubTextures();
+				}
 			}
 		}
 

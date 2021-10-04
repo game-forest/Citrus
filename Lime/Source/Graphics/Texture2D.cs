@@ -121,29 +121,29 @@ namespace Lime
 			OpacityMask = transparent ? new OpacityMask(side, side) : null;
 			// MemoryUsed = 4 * side * side; Do we need it?
 			MemoryUsed = 0;
-			if (stubPlatformTexture == null) {
-				var pixels = new Color4[side * side];
-				for (int i = 0; i < side; i++) {
-					for (int j = 0; j < side; j++) {
-						pixels[i * side + j] =
-							transparent
-								? Color4.Transparent
-								: ((i + (j & ~7)) & 8) == 0
-									? Color4.Blue
-									: Color4.White;
+			Window.Current.InvokeOnRendering(() => {
+				if (stubPlatformTexture == null) {
+					var pixels = new Color4[side * side];
+					for (int i = 0; i < side; i++) {
+						for (int j = 0; j < side; j++) {
+							pixels[i * side + j] =
+								transparent
+									? Color4.Transparent
+									: ((i + (j & ~7)) & 8) == 0
+										? Color4.Blue
+										: Color4.White;
+						}
 					}
-				}
-				LoadImage(pixels, side, side);
-				stubPlatformTexture = platformTexture;
-			} else {
-				ImageSize = new Size(side, side);
-				SurfaceSize = ImageSize;
-				uvRect = new Rectangle(0, 0, 1, 1);
-				Window.Current.InvokeOnRendering(() => {
+					LoadImage(pixels, side, side);
+					stubPlatformTexture = platformTexture;
+				} else {
+					ImageSize = new Size(side, side);
+					SurfaceSize = ImageSize;
+					uvRect = new Rectangle(0, 0, 1, 1);
 					platformTexture = stubPlatformTexture;
 					PlatformRenderer.RebindTexture(this);
-				});
-			}
+				}
+			});
 			IsStubTexture = true;
 		}
 
