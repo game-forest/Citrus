@@ -46,7 +46,6 @@
     <ProjectReference Include="..\..\..\\Lime\Extensions\DynamicFont\DynamicFont.Win.csproj" />
     <ProjectReference Include="..\..\..\\Lime\Lime.Win.csproj" />
     <ProjectReference Include="..\..\..\\Yuzu\Yuzu.csproj" />
-    <ProjectReference Include="..\Match3.GeneratedScenes\Match3.GeneratedScenes.Win.csproj" />
     <ProjectReference Include="..\Match3.Types\Match3.Types.Win.csproj" />
   </ItemGroup>
   <Import Project="..\Match3.Game\Match3.Game.projitems" Label="Shared" />

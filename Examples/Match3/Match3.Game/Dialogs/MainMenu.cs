@@ -2,13 +2,16 @@ using Lime;
 
 namespace Match3.Dialogs
 {
-	public class MainMenu : Dialog<Scenes.Data.MainMenu>
+	[ScenePath("Shell/MainMenu")]
+	public class MainMenu : Dialog
 	{
 		public MainMenu()
 		{
 			SoundManager.PlayMusic("Theme");
-			Scene._BtnPlay.It.Clicked = CrossfadeInto<GameScreen>;
-			Scene._BtnOptions.It.Clicked = Open<Options>;
+			var playButton = Root["BtnPlay"];
+			var optionsButton = Root["BtnOptions"];
+			playButton.Clicked = () => CrossFadeInto("Shell/GameScreen");
+			optionsButton.Clicked = () => DialogManager.Open("Shell/Options");
 		}
 
 		protected override bool HandleAndroidBackButton()

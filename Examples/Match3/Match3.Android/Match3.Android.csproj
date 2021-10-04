@@ -144,10 +144,6 @@
       <Project>{cf150772-5f4a-453c-91bd-d52901174b4e}</Project>
       <Name>Yuzu.Android</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Match3.GeneratedScenes\Match3.GeneratedScenes.Android.csproj">
-      <Project>{cf150772-5f4a-453c-91bd-d52911174b4e}</Project>
-      <Name>Match3.GeneratedScenes.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Match3.Types\Match3.Types.Android.csproj">
       <Project>{9ba635da-5ba4-4daa-8c7a-9089d9fda501}</Project>
       <Name>Match3.Types.Android</Name>

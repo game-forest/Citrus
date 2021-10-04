@@ -12,8 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuzu.iOS", "..\..\..\\Yuzu\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Match3.Game", "..\Match3.Game\Match3.Game.shproj", "{E72754D5-6DF7-42F1-9E14-0EF4D1491621}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match3.GeneratedScenes.iOS", "..\Match3.GeneratedScenes\Match3.GeneratedScenes.iOS.csproj", "{DF52C768-5E17-4A26-AD77-4BDD41A2224C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoltenVK.iOS", "..\..\..\\3rdParty\MoltenVK\MoltenVK.iOS.csproj", "{84242EF1-42D6-4AA4-AED3-8C26E530F671}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderCompilerBinding.iOS", "..\..\..\\3rdParty\ShaderCompilerBinding\ShaderCompilerBinding.iOS.csproj", "{70D61E3D-D6FF-48B5-B90F-F17EE0D30362}"
@@ -100,22 +98,6 @@ Global
 		{DF52C768-5E17-4A26-AD77-4BDD31A2224C}.Release|iPhone.Build.0 = Release|iPhone
 		{DF52C768-5E17-4A26-AD77-4BDD31A2224C}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{DF52C768-5E17-4A26-AD77-4BDD31A2224C}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Ad-Hoc|iPhone.ActiveCfg = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Ad-Hoc|iPhone.Build.0 = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.AppStore|iPhone.ActiveCfg = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.AppStore|iPhone.Build.0 = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.AppStore|iPhoneSimulator.ActiveCfg = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.AppStore|iPhoneSimulator.Build.0 = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Debug|iPhone.Build.0 = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Debug|iPhoneSimulator.Build.0 = Debug|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Release|iPhone.ActiveCfg = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Release|iPhone.Build.0 = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Release|iPhoneSimulator.ActiveCfg = Release|iPhone
-		{DF52C768-5E17-4A26-AD77-4BDD41A2224C}.Release|iPhoneSimulator.Build.0 = Release|iPhone
 		{84242EF1-42D6-4AA4-AED3-8C26E530F671}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
 		{84242EF1-42D6-4AA4-AED3-8C26E530F671}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
 		{84242EF1-42D6-4AA4-AED3-8C26E530F671}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU

@@ -83,7 +83,7 @@
 			"Anchors":6,
 			"Color":[4294967295],
 			"ContentsPath":"Externals/BtnX",
-			"Id":"@BtnExit",
+			"Id":"BtnExit",
 			"Pivot":[0.5,0.5],
 			"Position":[1283,77],
 			"Scale":[0.8,0.8],

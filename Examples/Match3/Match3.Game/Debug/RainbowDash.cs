@@ -424,7 +424,7 @@ namespace RainbowDash
 			}
 		}
 
-		private static SerializableFont Font => new SerializableFont(null);
+		private static SerializableFont Font => new SerializableFont("RobotoMed");
 
 		private static IEnumerator<object> RefreshTask()
 		{
@@ -456,7 +456,9 @@ namespace RainbowDash
 						Font = Font,
 						Size = FontSize,
 						Tag = "1",
-						SpaceAfter = SpaceAfter
+						SpaceAfter = SpaceAfter,
+						TextColor = Color4.Black,
+						Components = { new SignedDistanceFieldComponent() },
 					}
 				},
 				Height = Height,
@@ -477,6 +479,8 @@ namespace RainbowDash
 						Font = Font,
 						Tag = "1",
 						Size = FontSize,
+						TextColor = Color4.Black,
+						Components = { new SignedDistanceFieldComponent() },
 					}
 				},
 				Height = Height,
@@ -526,7 +530,9 @@ namespace RainbowDash
 						Font = Font,
 						Tag = "1",
 						Size = FontSize,
-						SpaceAfter = SpaceAfter
+						SpaceAfter = SpaceAfter,
+						TextColor = Color4.Black,
+						Components = { new SignedDistanceFieldComponent() },
 					}
 				},
 				HAlignment = HAlignment.Center,

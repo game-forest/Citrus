@@ -103,12 +103,6 @@
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
-    <ProjectReference Include="..\Match3.GeneratedScenes\Match3.GeneratedScenes.iOS.csproj">
-      <Project>{DF52C768-5E17-4A26-AD77-4BDD41A2224C}</Project>
-      <Name>Match3.GeneratedScenes.iOS</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\\Yuzu\Yuzu.iOS.csproj">
       <Project>{DF52C768-5E17-4A26-AD77-4BDD31A2224C}</Project>
       <Name>Yuzu.iOS</Name>

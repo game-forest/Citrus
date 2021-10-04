@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicFont.Win", "..\..\..
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Match3.Game", "..\Match3.Game\Match3.Game.shproj", "{E72754D5-6DF7-42F1-9E14-0EF4D1491621}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Match3.GeneratedScenes.Win", "..\Match3.GeneratedScenes\Match3.GeneratedScenes.Win.csproj", "{6270D842-8DB1-47E0-8168-FB8D03D405FF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Match3.Scripts", "..\Match3.Scripts\Match3.Scripts.csproj", "{915713C0-953C-4863-B541-60597EA781D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match3.Types", "..\Match3.Types\Match3.Types.Win.csproj", "{BC533734-E7B5-4131-9C39-6F1047A4FE38}"
@@ -73,14 +71,6 @@ Global
 		{FE8512BC-7A55-425C-8BC1-AD4D9785CF12}.Profiler.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE8512BC-7A55-425C-8BC1-AD4D9785CF12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE8512BC-7A55-425C-8BC1-AD4D9785CF12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Profiler.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Profiler.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Profiler.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Profiler.Release|Any CPU.Build.0 = Release|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6270D842-8DB1-47E0-8168-FB8D03D405FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{915713C0-953C-4863-B541-60597EA781D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{915713C0-953C-4863-B541-60597EA781D8}.Profiler.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{915713C0-953C-4863-B541-60597EA781D8}.Profiler.Debug|Any CPU.Build.0 = Debug|Any CPU

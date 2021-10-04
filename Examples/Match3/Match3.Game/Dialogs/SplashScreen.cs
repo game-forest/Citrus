@@ -1,11 +1,12 @@
 namespace Match3.Dialogs
 {
-	public class SplashScreen : Dialog<Scenes.Data.Splash>
+	[ScenePath("Shell/Splash")]
+	public class SplashScreen : Dialog
 	{
 		public SplashScreen()
 		{
-			Scene.RunAnimationStart();
-			Root.AnimationStopped += CrossfadeInto<MainMenu>;
+			Root.RunAnimation("Start");
+			Root.AnimationStopped += () => CrossFadeInto("Shell/MainMenu");
 		}
 	}
 }

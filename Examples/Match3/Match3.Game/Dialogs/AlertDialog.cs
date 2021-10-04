@@ -2,14 +2,13 @@ using Lime;
 
 namespace Match3.Dialogs
 {
-	public class AlertDialog : Dialog<Scenes.Data.AlertDialog>
+	[ScenePath("Shell/AlertDialog")]
+	public class AlertDialog : Dialog
 	{
 		public AlertDialog(string text)
 		{
-			var label = Scene._Title.It;
-			label.OverflowMode = TextOverflowMode.Minify;
-			label.Text = text;
-			Scene._BtnOk.It.Clicked = Close;
+			Root["Title"].Text = text;
+			Root["BtnOk"].Clicked = Close;
 		}
 	}
 }

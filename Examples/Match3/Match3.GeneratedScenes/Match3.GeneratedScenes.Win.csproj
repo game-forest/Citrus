@@ -7,7 +7,7 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
     <RootNamespace>Match3.Scenes</RootNamespace>
     <AssemblyName>Match3.GeneratedScenes</AssemblyName>
     <LangVersion>8.0</LangVersion>
@@ -18,9 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\Citrus\Lime\Lime.Win.csproj" />
   </ItemGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
 </Project>
+

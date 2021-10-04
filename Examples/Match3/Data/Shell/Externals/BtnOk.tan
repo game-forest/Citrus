@@ -49,7 +49,6 @@
 		}
 	],
 	"Color":[4294967295],
-	"Id":"@",
 	"Nodes":[
 		{
 			"class":"Lime.Image, Lime",

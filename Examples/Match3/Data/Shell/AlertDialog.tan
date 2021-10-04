@@ -72,7 +72,7 @@
 					"class":"Lime.RichText, Lime",
 					"Color":[4294967295],
 					"HAlignment":1,
-					"Id":"@Title",
+					"Id":"Title",
 					"Nodes":[
 						{
 							"class":"Lime.TextStyle, Lime",
@@ -111,7 +111,7 @@
 					"Anchors":48,
 					"Color":[4294967295],
 					"ContentsPath":"Externals/BtnOk",
-					"Id":"@BtnOk",
+					"Id":"BtnOk",
 					"Pivot":[0.5,0.5],
 					"Position":[518.33325,510.6667],
 					"Size":[128,128]

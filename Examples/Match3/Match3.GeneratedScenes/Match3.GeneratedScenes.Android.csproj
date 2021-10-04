@@ -9,10 +9,11 @@
     <RootNamespace>Match3.Scenes</RootNamespace>
     <AssemblyName>Match3.GeneratedScenes</AssemblyName>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
-    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,7 +26,6 @@
     <AndroidLinkMode>None</AndroidLinkMode>
     <ConsolePause>false</ConsolePause>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -36,7 +36,6 @@
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <DefineConstants>ANDROID;GOOGLE;NET40</DefineConstants>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -55,7 +54,7 @@
     <Compile Remove=".\obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\\Lime\Lime.Android.csproj">
+    <ProjectReference Include="..\Citrus\Lime\Lime.Android.csproj">
       <Project>{72E2DDBB-C320-4356-89EC-BDED6036D29B}</Project>
       <Name>Lime.Android</Name>
     </ProjectReference>

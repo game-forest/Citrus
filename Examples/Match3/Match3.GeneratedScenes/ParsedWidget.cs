@@ -2,8 +2,8 @@ using Lime;
 
 namespace Match3.Scenes
 {
-	public class ParsedNode
+	public class ParsedWidget
 	{
-		public Node Node { get; protected set; }
+		public Widget Widget { get; protected set; }
 	}
 }
