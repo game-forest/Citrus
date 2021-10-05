@@ -215,7 +215,6 @@
     <Compile Include="Source\Application\Window.iOS.cs" />
     <Compile Include="Source\Application\Window.Mac.cs" />
     <Compile Include="Source\Application\Window.Win.cs" />
-    <Compile Include="Source\Application\WindowExtensions.cs" />
     <Compile Include="Source\Application\WindowInput.cs" />
     <Compile Include="Source\Application\WindowOptions.cs" />
     <Compile Include="Source\AssemblyInfo.cs" />
