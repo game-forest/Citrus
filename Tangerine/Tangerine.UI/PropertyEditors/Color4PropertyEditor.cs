@@ -25,6 +25,7 @@ namespace Tangerine.UI
 				PropertyValue(o).GetValue().A == first.A) ? new Color4(255, 255, 255, first.A) : Color4.White;
 			var currentColor = CoalescedPropertyValue(@default).DistinctUntilChanged();
 			panel.Color = currentColor.GetValue().Value;
+			var colorBoxButton = new ColorBoxButton(currentColor);
 			EditorContainer.AddNode(new Widget {
 				Layout = new VBoxLayout(),
 				Nodes = {
@@ -33,7 +34,7 @@ namespace Tangerine.UI
 						Nodes = {
 							(editor = editorParams.EditBoxFactory()),
 							Spacer.HSpacer(4),
-							new ColorBoxButton(currentColor),
+							colorBoxButton,
 							CreatePipetteButton(),
 							panel.ButtonsWidget,
 							Spacer.HStretch()
@@ -54,6 +55,21 @@ namespace Tangerine.UI
 					};
 				}
 			}
+			void SwitchAlpha()
+			{
+				var history = EditorParams.History;
+				history?.BeginTransaction();
+				var color = panel.Color;
+				color.A = (byte)(color.A > 0 ? 0 : 255);
+				panel.Color = color;
+				SetProperty<Color4>(c => {
+					c.A = panel.Color.A;
+					return c;
+				});
+				history?.CommitTransaction();
+				history?.EndTransaction();
+			}
+			colorBoxButton.Clicked += SwitchAlpha;
 			panel.EditorsWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColor.Consume(v => {
 				if (panel.Color != v.Value) {
 					panel.Color = v.Value;
@@ -154,7 +170,7 @@ namespace Tangerine.UI
 			return pipetteButton;
 		}
 
-		class ColorBoxButton : Button
+		private class ColorBoxButton : Button
 		{
 			public ColorBoxButton(IDataflowProvider<CoalescedValue<Color4>> colorProvider)
 			{
