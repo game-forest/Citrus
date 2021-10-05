@@ -510,13 +510,13 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static bool GetSceneItemLinkLocation(
+		public static bool TryGetSceneItemLinkLocation(
 			out Row parent,
 			out int index,
 			Type insertingType,
 			bool aboveFocused = true,
-			Func<Row, bool> raiseThroughHierarchyPredicate = null)
-		{
+			Func<Row, bool> raiseThroughHierarchyPredicate = null
+		) {
 			var focusedItem = Document.Current.RecentlySelectedSceneItem();
 			if (focusedItem == null) {
 				parent = Document.Current.GetSceneItemForObject(Document.Current.Container);

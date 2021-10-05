@@ -85,9 +85,9 @@ namespace Tangerine.Core.Operations
 				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
 				// To explicitly determine if animators are selected to paste or not
 				if (container.Animators.Count > 0) {
-					SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index, typeof(IAnimator));
+					SceneTreeUtils.TryGetSceneItemLinkLocation(out parent, out index, typeof(IAnimator));
 				} else {
-					SceneTreeUtils.GetSceneItemLinkLocation(out parent, out index, typeof(Node));
+					SceneTreeUtils.TryGetSceneItemLinkLocation(out parent, out index, typeof(Node));
 				}
 				Document.Current.History.DoTransaction(() => {
 					ClearRowSelection.Perform();

@@ -119,7 +119,7 @@ namespace Tangerine.UI.Timeline
 			var button = new ToolbarButton(IconPool.GetTexture("Tools.NewFolder")) { Tooltip = "Create folder" };
 			button.AddTransactionClickHandler(() => {
 				var folder = new Folder.Descriptor { Id = "Folder" };
-				SceneTreeUtils.GetSceneItemLinkLocation(out var parent, out var i, typeof(Folder.Descriptor));
+				SceneTreeUtils.TryGetSceneItemLinkLocation(out var parent, out var i, typeof(Folder.Descriptor));
 				if (!LinkSceneItem.CanLink(parent, folder)) {
 					return;
 				}
