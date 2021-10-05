@@ -19,12 +19,10 @@ namespace Tangerine.Dialogs.ConflictingAnimators
             {
 	            Layout = new HBoxLayout { Spacing = 8 };
 	            LayoutCell = new LayoutCell(Alignment.LeftCenter, stretchX: 0, stretchY: 0);
-	            
 	            SearchButton = new ThemedButton { Text = "Search", Visible = true };
 	            CancelButton = new ThemedButton { Text = "Cancel", Visible = false };
 	            GlobalCheckBox = new ThemedCheckBox();
 	            var sceneCaption = new ThemedCaption();
-
 				AddNode(SearchButton);
 				AddNode(CancelButton);
 				AddNode(new Widget {
@@ -37,7 +35,6 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				});
 				AddNode(Spacer.HFill());
 				AddNode(sceneCaption);
-
 				sceneCaption.Tasks.AddLoop(() => {
 					sceneCaption.Visible = Document.Current != null;
 					var documentName = ThemedCaption.Stylize(
@@ -47,7 +44,6 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 					sceneCaption.Text = $"Observed Document: {documentName}";
 					sceneCaption.AdjustWidthToText();
 				});
-				
 				WorkProgress = ConflictFinder.WorkProgress.Done;
 	            Updating += delta => {
 		            var isCompleted = WorkProgress.IsCompleted;

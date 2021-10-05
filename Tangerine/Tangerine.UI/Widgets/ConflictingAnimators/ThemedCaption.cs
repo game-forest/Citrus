@@ -23,7 +23,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			TrimWhitespaces = true;
 			Text = text;
 			ExtraWidth = extraWidth;
-
 			AddNode(BoldStyle = TextStylePool.Get(TextStyleIdentifiers.Bold));
 			AddNode(RegularStyle = TextStylePool.Get(TextStyleIdentifiers.Regular));
 			AddNode(PropertyStyle = TextStylePool.Get(TextStyleIdentifiers.PropertyColor));
@@ -37,7 +36,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			if (Nodes.Contains(style)) {
 				style.Unlink();
 			}
-
 			PushNode(style);
 			AdjustWidthToText();
 		}

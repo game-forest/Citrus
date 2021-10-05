@@ -77,11 +77,9 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				Padding = new Thickness(horizontal: 2, vertical: 0),
 				Nodes = { Margin },
 			};
-
 			var caption = new ThemedCaption($"Property: {StylizeProperty(property)}; Potential Conflicts: ");
 			caption.PropertyStyle.TextColor = propertyColor;
 			conflictWidget.AddNode(caption);
-
 			var links = animations.Select(i => CreateNavigationLink(property, i)).ToList();
 			for (var i = 1; i < links.Count; i += 2) {
 				links.Insert(i, new ThemedCaption(",", extraWidth: 1.0f));

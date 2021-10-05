@@ -13,7 +13,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		{
 			Layout = new HBoxLayout { Spacing = 2 };
 			Padding = new Thickness(horizontal: 2, vertical: 0);
-
 			AddNode(new Image {
 				LayoutCell = new LayoutCell {
 					Stretch = Vector2.Zero,

@@ -40,7 +40,6 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				AddNode(image);
 				AddNode(textWidget);
 				AddNode(Spacer.HFill());
-
 				float animationTime = 0;
 				int animationStage = 0;
 				bool isCompletedCached = false;

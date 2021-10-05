@@ -106,7 +106,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				new AlertDialog(message, "Ok").Show();
 				return;
 			}
-
 			try {
 				var node = info.RetrieveNode();
 				NavigateToNode.Perform(node, enterInto: false, turnOnInspectRootNodeIfNeeded: true);

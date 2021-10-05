@@ -19,15 +19,12 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		public SectionWidget(string text, ITexture iconTexture)
 		{
 			Layout = new VBoxLayout { Spacing = 0 };
-
 			ExpandButton = new ThemedExpandButton() {
 				Padding = new Thickness(bottom: 4)
 			};
 			ExpandButton.Clicked += () => content.Visible = ExpandButton.Expanded;
-
 			Description = new DescriptionWidget(text, iconTexture);
 			Description.Caption.RegularStyle.TextColor = Theme.Colors.BlackText;
-
 			AddNode(CreateHeader());
 			AddNode(content = CreateContent());
 		}
