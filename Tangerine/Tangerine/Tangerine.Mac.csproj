@@ -89,9 +89,12 @@
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-32%402x.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-512.png" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\AppIcon-512%402x.png" />
-    <Compile Include="Dialogs\ConflictingAnimators\ConflictingAnimatorsInfoProvider.cs" />
-    <Compile Include="Dialogs\ConflictingAnimators\ConflictingAnimatorsWindow.cs" />
-    <Compile Include="Dialogs\ConflictingAnimators\ConflictingAnimatorsWindowWidget.cs" />
+    <Compile Include="Dialogs\ConflictingAnimators\ConflictFinder.cs" />
+    <Compile Include="Dialogs\ConflictingAnimators\Window.cs" />
+    <Compile Include="Dialogs\ConflictingAnimators\WindowWidget.Controls.cs" />
+    <Compile Include="Dialogs\ConflictingAnimators\WindowWidget.cs" />
+    <Compile Include="Dialogs\ConflictingAnimators\WindowWidget.SearchResultsView.cs" />
+    <Compile Include="Dialogs\ConflictingAnimators\WindowWidget.WorkIndicator.cs" />
     <Compile Include="Dialogs\CreateRulerGridDialog.cs" />
     <Compile Include="Dialogs\Lookup\LookupAddComponentSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupAnimationFramesSection.cs" />
