@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
@@ -6,148 +6,98 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.Widgets.ConflictingAnimators
 {
-	public class ConflictInfo : IEquatable<ConflictInfo>
-	{
-		public readonly Type NodeType;
-		public readonly string RelativePath;
-		public readonly string DocumentPath;
-		public readonly string[] AffectedProperties;
-		public readonly SortedSet<string>[] ConcurrentAnimations;
-		public readonly int[] PropertyKeyframeColorIndices;
-		public readonly int? NodeIndex;
-
-		public ConflictInfo(
-			Type nodeType,
-			string relativePath,
-			string documentPath,
-			string[] affectedProperties,
-			SortedSet<string>[] concurrentAnimations,
-			int[] propertyKeyframeColorIndices,
-			int? nodeIndex
-		)
-		{
-			NodeType = nodeType;
-			RelativePath = relativePath;
-			DocumentPath = documentPath;
-			AffectedProperties = affectedProperties;
-			PropertyKeyframeColorIndices = propertyKeyframeColorIndices;
-			ConcurrentAnimations = concurrentAnimations;
-			NodeIndex = nodeIndex;
-		}
-
-		public bool Equals(ConflictInfo other) =>
-			ReferenceEquals(this, other) ||
-			RelativePath == other.RelativePath &&
-			DocumentPath == other.DocumentPath &&
-			NodeIndex == other.NodeIndex;
-
-		public override bool Equals(object obj) => Equals(obj as ConflictInfo);
-
-		public override int GetHashCode() =>
-			HashCode.Combine(RelativePath, DocumentPath, AffectedProperties, ConcurrentAnimations);
-	}
-
 	public class SectionItemWidget : Widget
 	{
+		private readonly ConflictInfo conflict;
+		
 		private Node cache;
+		
 		private Node Cache
 		{
 			get
 			{
 				if (cache == null) {
-					// TODO:
-					// Assert that both document and node exist.
-					// Otherwise, mark item for deletion and notify its owner.
-					cache = Document.Current.RootNode.FindNode(Info.RelativePath);
-					if (Info.NodeIndex.HasValue) {
-						cache = cache.Parent.Nodes[Info.NodeIndex.Value];
+					Project.Current.OpenDocument(conflict.DocumentPath);
+					cache = Document.Current.RootNode;
+					var segments = conflict.RelativeIndexedPath;
+					for (int i = segments.Count - 1; i >= 0; --i) {
+						cache = cache.Nodes[segments[i]];
 					}
 				}
-
 				return cache;
 			}
 		}
-
-		// TODO:
-		// Consider implementing specialized widget for storing info.
-		// Get rid of having explicit ConflictInfo, reduce it to proxy data class as it naturally is.
-		public readonly ConflictInfo Info;
-		public readonly DescriptionWidget Description;
-		public readonly Frame Conflicts;
 
 		private Spacer Margin => Spacer.HSpacer(
 			DescriptionWidget.IconSize +
 			DescriptionWidget.IconRightPadding
 		);
 
-		public SectionItemWidget(ConflictInfo info)
+		public SectionItemWidget(ConflictInfo conflict)
 		{
-			Info = info;
+			this.conflict = conflict;
 			Layout = new VBoxLayout { Spacing = 4 };
 
-			AddNode(Description = CreateDescription());
-			AddNode(Conflicts = ParseConflicts());
+			AddNode(CreateDescriptionWidget());
+			AddNode(ParseConflicts());
 		}
 
-		private DescriptionWidget CreateDescription()
+		private DescriptionWidget CreateDescriptionWidget()
 		{
-			var iconTexture = NodeIconPool.GetTexture(Info.NodeType);
+			var iconTexture = NodeIconPool.GetTexture(conflict.NodeType);
 			var text = string.Join(
 				" in ",
-				Info.RelativePath
+				conflict.RelativeTextPath
 					.Split('/')
 					.Reverse()
 					.Select(i => $"'{i}'")
-				);
-
+			);
 			return new DescriptionWidget(text, iconTexture);
 		}
 
-		private Frame ParseConflicts()
+		private Widget ParseConflicts()
 		{
-			var conflicts = new Frame {
-				Layout = new VBoxLayout { Spacing = 2 },
+			var conflictsWidget = new Widget {
+				Layout = new VBoxLayout { Spacing = 0 },
 				Padding = new Thickness(left: 5),
 			};
-
-			for (var i = 0; i < Info.AffectedProperties.Length; ++i) {
-				var property = Info.AffectedProperties[i];
-				var propertyColor = KeyframePalette.Colors[Info.PropertyKeyframeColorIndices[i]];
-				var animations = Info.ConcurrentAnimations[i].ToList();
-				conflicts.AddNode(ParseConflict(property, propertyColor, animations));
+			for (var i = 0; i < conflict.AffectedProperties.Length; ++i) {
+				var property = conflict.AffectedProperties[i];
+				var propertyColor = KeyframePalette.Colors[property.KeyframeColorIndex];
+				var animations = conflict.ConcurrentAnimations[i].ToList();
+				conflictsWidget.AddNode(ParseConflict(property.Path, propertyColor, animations));
 			}
-
-			return conflicts;
+			return conflictsWidget;
 		}
 
 		private Widget ParseConflict(string property, Color4 propertyColor, List<string> animations)
 		{
-			var conflict = new Widget {
+			var conflictWidget = new Widget {
 				Layout = new HBoxLayout { Spacing = 2 },
-				Padding = new Thickness(2),
+				Padding = new Thickness(horizontal: 2, vertical: 0),
 				Nodes = { Margin },
 			};
 
-			var caption = new ThemedCaption($"Target Property: {StylizeProperty(property)}; Potential Conflicts: ");
+			var caption = new ThemedCaption($"Property: {StylizeProperty(property)}; Potential Conflicts: ");
 			caption.PropertyStyle.TextColor = propertyColor;
-			conflict.AddNode(caption);
+			conflictWidget.AddNode(caption);
 
 			var links = animations.Select(i => CreateNavigationLink(property, i)).ToList();
 			for (var i = 1; i < links.Count; i += 2) {
 				links.Insert(i, new ThemedCaption(",", extraWidth: 1.0f));
 			}
 			foreach (var link in links) {
-				conflict.AddNode(link);
+				conflictWidget.AddNode(link);
 			}
 
-			return conflict;
+			return conflictWidget;
 		}
 
 		private ThemedCaption CreateNavigationLink(string property, string animation)
 		{
 			var component = new NavigationComponent(new NavigationInfo {
 				RetrieveNode = () => Cache,
-				DocumentPath = Info.DocumentPath,
+				DocumentPath = conflict.DocumentPath,
 				AnimationId = animation == "Legacy" ? null : animation,
 				TargetProperty = property,
 			});

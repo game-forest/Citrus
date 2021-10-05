@@ -1,5 +1,5 @@
-﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Lime;
 using Tangerine.Core;
 using Tangerine.UI;
@@ -7,17 +7,20 @@ using Tangerine.UI.Widgets.ConflictingAnimators;
 
 namespace Tangerine.Dialogs.ConflictingAnimators
 {
-	public partial class WindowWidget
+	internal sealed partial class WindowWidget
 	{
 		private sealed class SearchResultsView : ThemedScrollView
 		{
-			private readonly ITexture sectionIcon = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
-			private readonly Dictionary<string, SectionWidget> sections = new Dictionary<string, SectionWidget>();
-			private readonly Queue<ConflictInfo> pending = new Queue<ConflictInfo>();
+			private readonly ITexture sectionIcon;
+			private readonly Dictionary<string, SectionWidget> sections;
+			private readonly ConcurrentQueue<ConflictInfo> pending;
 
 			public SearchResultsView()
 			{
-				Content.Layout = new VBoxLayout { Spacing = 16 };
+				sectionIcon = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
+				sections = new Dictionary<string, SectionWidget>();
+				pending = new ConcurrentQueue<ConflictInfo>();
+				Content.Layout = new VBoxLayout { Spacing = 0 };
 				Content.Padding = new Thickness(8);
 				Tasks.Add(PendingInfoProcessor);
 				Decorate();
@@ -27,33 +30,46 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			{
 				Content.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
-					var rect = w.CalcRect();
+					var rect = CalcRect(w);
 					Renderer.DrawRect(rect.A, rect.B, Theme.Colors.WhiteBackground);
 				}));
 				Content.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
-					var rect = w.CalcRect();
+					var rect = CalcRect(w);
 					Renderer.DrawRectOutline(rect.A, rect.B, Theme.Colors.ControlBorder);
 				}));
+
+				static Rectangle CalcRect(Widget w)
+				{
+					var wp = w.ParentWidget;
+					var p = wp.Padding;
+					return new Rectangle(
+						-w.Position + Vector2.Zero - new Vector2(p.Left, p.Top),
+						-w.Position + wp.Size + new Vector2(p.Right, p.Bottom)
+					);
+				}
 			}
 
 			private IEnumerator<object> PendingInfoProcessor()
 			{
 				while (true) {
-					for (var i = 0; i < Math.Min(pending.Count, 100); ++i) {
-						var info = pending.Dequeue();
-						if (!sections.TryGetValue(info.DocumentPath, out var section)) {
-							section = new SectionWidget(info.DocumentPath, sectionIcon);
-							sections[info.DocumentPath] = section;
-							Content.AddNode(section);
+					int processedPerIteration = 0;
+					while (!pending.IsEmpty && processedPerIteration < 100) {
+						if (pending.TryDequeue(out var conflict)) {
+							++processedPerIteration;
+							var path = conflict.DocumentPath;
+							if (!sections.TryGetValue(path, out var section)) {
+								sections.Add(path, section = new SectionWidget(path, sectionIcon));
+								Content.AddNode(section);
+							}
+							section.AddItem(new SectionItemWidget(conflict));
 						}
-						section.AddItem(new SectionItemWidget(info));
 					}
 					yield return null;
 				}
 			}
 
-			public void Enqueue(ConflictInfo info) => pending.Enqueue(info);
+			public void EnqueueThreadSafe(ConflictInfo info) => pending.Enqueue(info);
 
 			public void Clear()
 			{

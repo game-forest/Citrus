@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
@@ -9,9 +9,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 {
 	public class NavigationInfo
 	{
-		public delegate Node RetrieveNodeDelegate();
-
-		public RetrieveNodeDelegate RetrieveNode { get; set; }
+		public Func<Node> RetrieveNode { get; set; }
 		public string DocumentPath { get; set; }
 		public string TargetProperty { get; set; }
 		public string AnimationId { get; set; }
@@ -20,23 +18,24 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 	[AllowedComponentOwnerTypes(typeof(ThemedCaption))]
 	public class NavigationComponent : NodeBehavior
 	{
-		private static object invalidationTaskTag = new object();
+		private static readonly object invalidationTaskTag = new object();
 
 		private bool wasMouseOver;
 		private bool savedHitTestTarget;
 		private TextStyle savedTextStyle;
 
-		public readonly NavigationInfo Info;
-		public readonly TextStyle AnimationLinkStyle;
+		private readonly NavigationInfo info;
+		private readonly TextStyle animationLinkStyle;
+		
 		public event Action MouseMovedOver;
 		public event Action MouseMovedAway;
 
-		public ThemedCaption Caption => Owner as ThemedCaption;
+		private ThemedCaption Caption => Owner as ThemedCaption;
 
 		public NavigationComponent(NavigationInfo info)
 		{
-			Info = info;
-			AnimationLinkStyle = TextStylePool.Get(TextStyleIdentifiers.AnimationLink);
+			this.info = info;
+			animationLinkStyle = TextStylePool.Get(TextStyleIdentifiers.AnimationLink);
 			MouseMovedOver += OnMouseOver;
 			MouseMovedAway += OnMouseAway;
 		}
@@ -78,8 +77,9 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		public override void Update(float delta)
 		{
 			base.Update(delta);
-			if (Owner == null) return;
-
+			if (Owner == null) {
+				return;
+			}
 			if (Owner.IsMouseOver()) {
 				WidgetContext.Current.MouseCursor = MouseCursor.Hand;
 				if (!wasMouseOver) {
@@ -92,59 +92,79 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			}
 		}
 
-		private void OnMouseOver() => Caption?.SetDefaultStyle(AnimationLinkStyle);
+		private void OnMouseOver() => Caption?.SetDefaultStyle(animationLinkStyle);
 
 		private void OnMouseAway() => Caption?.SetDefaultStyle(Caption?.BoldStyle);
 
 		private void OnClick()
 		{
 			try {
-				Project.Current.OpenDocument(Info.DocumentPath);
+				Project.Current.OpenDocument(info.DocumentPath);
 			} catch (System.Exception exception) {
 				System.Console.WriteLine(exception);
-				var message = $"Couldn't open {Info.DocumentPath}\n\n{exception.Message}";
+				var message = $"Couldn't open {info.DocumentPath}\n\n{exception.Message}";
 				new AlertDialog(message, "Ok").Show();
 				return;
 			}
 
 			try {
-				var node = Info.RetrieveNode();
+				var node = info.RetrieveNode();
 				NavigateToNode.Perform(node, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
 				NavigateToAnimation.Perform(GetAnimation(node));
 				SelectPropertyRow(Document.Current.GetSceneItemForObject(node));
+			} catch (AnimationNotFoundException exception) {
+				HandleException(exception);
+			} catch (CannotSelectPropertyRowException exception) {
+				HandleException(exception);
 			} catch (System.Exception exception) {
+				HandleException(exception);
+			}
+
+			void HandleException(System.Exception exception)
+			{
 				System.Console.WriteLine(exception);
-				var message = $"Couldn't perform navigation\n\n{exception.Message}";
-				new AlertDialog(message, "Ok").Show();
+				new AlertDialog($"Couldn't perform navigation\n\n{exception.Message}", "Ok").Show();
 			}
 		}
 
 		private Animation GetAnimation(Node node)
 		{
+			if (node.Animations.TryFind(info.AnimationId, out var animation)) {
+				return animation;
+			}
 			foreach (var a in node.Ancestors) {
-				if (a.Animations.TryFind(Info.AnimationId, out var animation)) {
+				if (a.Animations.TryFind(info.AnimationId, out animation)) {
 					return animation;
 				}
 			}
-
-			return null;
+			throw new AnimationNotFoundException(info.AnimationId);
 		}
 
 		private void SelectPropertyRow(Row item)
 		{
-			var row = item.Rows
-				.Where(i => i.Id == Info.TargetProperty)
-				.First(i => i.Components.Get<CommonPropertyRowData>().Animator.AnimationId == Info.AnimationId);
-			var state = item.GetTimelineItemState();
-
-			using (Document.Current.History.BeginTransaction()) {
-				state.AnimatorsExpanded = true;
-				state.NodesExpanded = true;
-				ClearRowSelection.Perform();
-				SelectRow.Perform(row);
-				Document.Current.BumpSceneTreeVersion();
-				Document.Current.History.CommitTransaction();
+			try {
+				var row = item.Rows
+					.Where(i => i.Id == info.TargetProperty)
+					.First(i => i.Components.Get<CommonPropertyRowData>().Animator.AnimationId == info.AnimationId);
+				Document.Current.History.DoTransaction(() => {
+					ClearRowSelection.Perform();
+					SelectRow.Perform(row);
+				});
+			} catch (System.Exception exception) {
+				throw new CannotSelectPropertyRowException(exception);
 			}
+		}
+
+		private class AnimationNotFoundException : System.Exception
+		{
+			public AnimationNotFoundException(string animationId) :
+				base($"Neither this node nor its ancestors contain animation with \"{animationId}\" id!") { }
+		}
+
+		private class CannotSelectPropertyRowException : System.Exception
+		{
+			public CannotSelectPropertyRowException(System.Exception inner) :
+				base("Cannot select property row!", inner) { }
 		}
 	}
 }

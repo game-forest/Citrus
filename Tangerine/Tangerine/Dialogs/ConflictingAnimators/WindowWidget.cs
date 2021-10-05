@@ -1,68 +1,97 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Lime;
-using Orange;
 using Tangerine.Core;
-using Console = System.Console;
-using SearchFlags = Tangerine.Dialogs.ConflictingAnimators.ConflictInfoProvider.SearchFlags;
+using Tangerine.UI.Widgets.ConflictingAnimators;
+using Task = System.Threading.Tasks.Task;
 
 namespace Tangerine.Dialogs.ConflictingAnimators
 {
-	public sealed partial class WindowWidget : ThemedInvalidableWindowWidget
+	internal sealed partial class WindowWidget : ThemedInvalidableWindowWidget
 	{
+		private readonly SearchResultsView searchResultsView;
 		private readonly Controls controls;
-		private readonly SearchResultsView results;
-		private readonly ConflictInfoProvider provider = new ConflictInfoProvider();
+		private readonly WorkIndicator workIndicator;
 
-		private CancellationTokenSource searchCancellationSource;
-		private SearchFlags searchFlags;
-
-		public WindowWidget(Window window) : base(window)
+		private Task currentSearchTask;
+		private CancellationTokenSource searchCancellation;
+		private ConflictFinder.Content contentSource;
+		private ConflictFinder.WorkProgress workProgress;
+		
+		public WindowWidget(Lime.Window window) : base(window)
 		{
-			Layout = new VBoxLayout { Spacing = 8 };
-			Padding = new Thickness(8);
-			FocusScope = new KeyboardFocusScope(this);
-			AddNode(results = new SearchResultsView());
-			AddNode(controls = new Controls());
+			currentSearchTask = Task.CompletedTask;
+			contentSource = ConflictFinder.Content.CurrentDocument;
+			var size = CoreUserPreferences.Instance.ConflictingAnimatorsWindowSize;
+			if (size != Vector2.PositiveInfinity) {
+				window.DecoratedSize = size;
+			}
+			window.Resized += rotated => 
+				CoreUserPreferences.Instance.ConflictingAnimatorsWindowSize = window.DecoratedSize;
+			var contentWidget = new Widget {
+				Layout = new VBoxLayout { Spacing = 8 },
+				Padding = new Thickness(8),
+				Nodes = {
+					(searchResultsView = new SearchResultsView()), 
+					(controls = new Controls())
+				},
+				FocusScope = new KeyboardFocusScope(this)
+			};
+			workIndicator = new WorkIndicator();
+			Layout = new VBoxLayout { Spacing = 0 };
+			Padding = new Thickness(0);
+			AddNode(contentWidget);
+			AddNode(workIndicator);
 			SetupCallbacks();
-		}
-
-		private void SearchCancel()
-		{
-			searchCancellationSource?.Cancel();
-			searchCancellationSource = null;
 		}
 
 		private async void SearchAsync()
 		{
-			searchCancellationSource = new CancellationTokenSource();
+			if (!currentSearchTask.IsCompleted) {
+				return;
+			}
 			try {
-				await System.Threading.Tasks.Task.Run(Search, searchCancellationSource.Token);
-				searchCancellationSource = null;
+				searchCancellation = new CancellationTokenSource();
+				IEnumerable<ConflictInfo> conflicts = null;
+				var cancellationToken = searchCancellation.Token;
+				(conflicts, workProgress) = ConflictFinder.Enumerate(contentSource, cancellationToken);
+				controls.WorkProgress = workProgress;
+				workIndicator.WorkProgress = workProgress;
+				Thread.MemoryBarrier();
+				currentSearchTask = Task.Run(() => {
+					foreach (var conflict in conflicts) {
+						cancellationToken.ThrowIfCancellationRequested();
+						searchResultsView.EnqueueThreadSafe(conflict);
+					}
+				}, searchCancellation.Token);
+				await currentSearchTask;
 			} catch (OperationCanceledException) {
 				// Suppress
 			} catch (System.Exception exception) {
 				Console.WriteLine(exception);
-				searchCancellationSource = null;
-			} finally {
-				provider.Invalidate();
 			}
 		}
-
-		private void Search()
+		
+		private void SetupCallbacks()
 		{
-			var cancellationToken = searchCancellationSource?.Token;
-			AssetBundle.Current = new TangerineAssetBundle(The.Workspace.AssetsDirectory);
-			foreach (var info in provider.Enumerate(searchFlags, cancellationToken)) {
-				cancellationToken?.ThrowIfCancellationRequested();
-				results.Enqueue(info);
-			}
-		}
-
-		public override void Dispose()
-		{
-			base.Dispose();
-			provider.Dispose();
+			controls.SearchButton.Clicked += () => {
+				if (currentSearchTask.IsCompleted) {
+					searchResultsView.Clear();
+					SearchAsync();
+				}
+			};
+			controls.CancelButton.Clicked += () => {
+				if (!currentSearchTask.IsCompleted) {
+					searchCancellation?.Cancel();
+				}
+			};
+			controls.GlobalCheckBox.Changed += (args) => {
+				var enabled = args.Value;
+				contentSource = enabled ?
+					ConflictFinder.Content.AssetDatabase :
+					ConflictFinder.Content.CurrentDocument;
+			};
 		}
 	}
 }
