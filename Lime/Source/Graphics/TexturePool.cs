@@ -54,6 +54,7 @@ namespace Lime
 			}
 		}
 
+		// Don't delete this function. More info in AssetBundle.cs
 		public void DiscardAllStubTextures()
 		{
 			lock (textures) {
@@ -74,7 +75,8 @@ namespace Lime
 				if (path == null) {
 					path = string.Empty;
 				}
-				if (path.StartsWith("#")) { // It's supposed render target texture
+				// It's supposed render target texture
+				if (path.StartsWith("#")) {
 					path = path.ToLower();
 				}
 				ITexture texture;
