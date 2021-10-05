@@ -138,15 +138,17 @@ namespace Tangerine.UI
 			}
 			ToolbarButton CreateIcon(string icon)
 			{
-				var button = new ToolbarButton();
+				var button = new ToolbarButton {
+					Layout = new StackLayout(),
+					LayoutCell = new LayoutCell(),
+					Size = new Vector2(20),
+					MinMaxSize = new Vector2(20),
+					Padding = Thickness.Zero,
+					Text = ""
+				};
 				button.AddNode(new Image(IconPool.GetTexture(icon)) {
-					MinMaxSize = new Vector2(16, 16),
-					Size = new Vector2(16, 16),
-					Position = Vector2.One
+					Padding = new Thickness(1)
 				});
-				button.Text = "";
-				button.Size = new Vector2(18, 18);
-				button.MinMaxSize = new Vector2(18, 18);
 				return button;
 			}
 		}

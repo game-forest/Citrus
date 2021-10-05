@@ -42,6 +42,9 @@ namespace Tangerine.UI
 					}
 				}		
 			});
+			panel.ButtonsWidget.MinMaxHeight = 20;
+			panel.ButtonsWidget.Padding = new Thickness(left: 1);
+			((HBoxLayout)panel.ButtonsWidget.Layout).Spacing = 1;
 			editor.MinWidth = 4 + editor.TextWidget.Font.MeasureTextLine("255. 255. 255. 255", 16, 0).X;
 			ContainerWidget.AddNode(panel.EditorsWidget);
 			foreach (var b in panel.ButtonsWidget.Nodes) {
