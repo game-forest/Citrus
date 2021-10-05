@@ -5,7 +5,7 @@ using Tangerine.UI.Docking;
 
 namespace Tangerine.Dialogs.ConflictingAnimators
 {
-	public class ConflictingAnimatorsWindow
+	public class Window
 	{
 		private const string AppIconPath = @"Tangerine.Resources.Icons.icon.ico";
 		private const string DefaultTitle = @"Conflicting Animators";
@@ -14,51 +14,56 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		private const bool FixedSize = false;
 
 		private static Vector2? savedPosition;
+		
+#if WIN
 		private static readonly System.Drawing.Icon icon = new System.Drawing.Icon(
 			new EmbeddedResource(AppIconPath, "Tangerine").GetResourceStream()
 		);
+#endif
+		
+		internal readonly WindowWidget WindowWidget;
 
-		public readonly WindowWidget WindowWidget;
-
-		public ConflictingAnimatorsWindow()
+		public Window()
 		{
 			var display = DockManager.Instance.MainWindowWidget.Window.Display;
 			var displayCenter = display.Position + display.Size / 2;
-			var window = new Window(new WindowOptions {
+			var window = new Lime.Window(new WindowOptions {
+#if WIN
 				Icon = icon,
+#endif
 				Title = DefaultTitle,
 				Style = Style,
 				Type = Type,
 				FixedSize = FixedSize,
 			});
 			window.DecoratedPosition = savedPosition ?? (displayCenter - window.DecoratedSize / 2f);
-			window.Closing += Window_Closing;
+			window.Closing += WindowClosing;
 
 			WindowWidget = new WindowWidget(window);
 			WindowWidget.Window.Restore();
 			WindowWidget.SetFocus();
 
-			Project.Closing += Project_Closing;
-			Project.Opening += Project_Opening;
+			Project.Closing += ProjectClosing;
+			Project.Opening += ProjectOpening;
 		}
 
-		private void Project_Closing()
+		private void ProjectClosing()
 		{
 			WindowWidget.Window.Title = DefaultTitle;
 		}
 
-		private void Project_Opening(string path)
+		private void ProjectOpening(string path)
 		{
 			var proj = System.IO.Path.GetFileNameWithoutExtension(path);
 			WindowWidget.Window.Title = $"{proj} - {DefaultTitle}";
 		}
 
-		private bool Window_Closing(CloseReason reason)
+		private bool WindowClosing(CloseReason reason)
 		{
 			savedPosition = WindowWidget?.Window?.DecoratedPosition;
 			WindowWidget?.UnlinkAndDispose();
-			Project.Closing -= Project_Closing;
-			Project.Opening -= Project_Opening;
+			Project.Closing -= ProjectClosing;
+			Project.Opening -= ProjectOpening;
 			return true;
 		}
 	}
