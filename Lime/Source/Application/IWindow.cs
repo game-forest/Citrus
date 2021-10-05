@@ -276,11 +276,6 @@ namespace Lime
 		void ShowModal();
 
 		/// <summary>
-		/// Restores window if currently minimized.
-		/// </summary>
-		void Restore();
-
-		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="T:Lime.IWindow"/> allow files drop.
 		/// </summary>
 		bool AllowDropFiles { get; set; }

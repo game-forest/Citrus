@@ -40,7 +40,6 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			window.Closing += WindowClosing;
 
 			WindowWidget = new WindowWidget(window);
-			WindowWidget.Window.Restore();
 			WindowWidget.SetFocus();
 
 			Project.Closing += ProjectClosing;

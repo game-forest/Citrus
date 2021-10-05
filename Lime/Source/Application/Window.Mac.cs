@@ -467,8 +467,6 @@ namespace Lime
 			RaiseVisibleChanging(false, true);
 		}
 
-		public void Restore() {}
-
 		internal void HandleRenderFrame()
 		{
 			if (invalidated) {
