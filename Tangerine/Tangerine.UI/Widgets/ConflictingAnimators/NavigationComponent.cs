@@ -110,7 +110,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				var node = info.RetrieveNode();
 				NavigateToNode.Perform(node, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
 				NavigateToAnimation.Perform(GetAnimation(node));
-				SelectPropertyRow(Document.Current.GetSceneItemForObject(node));
+				SelectPropertyRow(node);
 			} catch (AnimationNotFoundException exception) {
 				HandleException(exception);
 			} catch (CannotSelectPropertyRowException exception) {
@@ -139,14 +139,23 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			throw new AnimationNotFoundException(info.AnimationId);
 		}
 
-		private void SelectPropertyRow(Row item)
+		private void SelectPropertyRow(Node node)
 		{
 			try {
-				var row = item.Rows
-					.Where(i => i.Id == info.TargetProperty)
-					.First(i => i.Components.Get<CommonPropertyRowData>().Animator.AnimationId == info.AnimationId);
 				Document.Current.History.DoTransaction(() => {
 					ClearRowSelection.Perform();
+					SelectNode.Perform(node);
+					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
+					SetProperty.Perform(
+						obj: Document.Current.GetSceneItemForObject(node).GetTimelineItemState(),
+						propertyName: nameof(TimelineItemStateComponent.AnimatorsExpanded),
+						value: true,
+						isChangingDocument: false
+					);
+					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
+					var row = Document.Current.GetSceneItemForObject(node).Rows
+						.Where(i => i.Id == info.TargetProperty)
+						.First(i => i.Components.Get<CommonPropertyRowData>().Animator.AnimationId == info.AnimationId);
 					SelectRow.Perform(row);
 				});
 			} catch (System.Exception exception) {
