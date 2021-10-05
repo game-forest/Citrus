@@ -399,7 +399,9 @@ namespace Tangerine.UI.FilesystemView
 				},
 			};
 			var editor = CreatePropertyEditorForType(yi, editorParams);
-			innerContainer.AddNode(editor.ContainerWidget);
+			if (editor != null) {
+				innerContainer.AddNode(editor.ContainerWidget);
+			}
 			return container;
 		}
 
@@ -416,7 +418,7 @@ namespace Tangerine.UI.FilesystemView
 			} else if (yi.Type == typeof(float)) {
 				return new FloatPropertyEditor(editorParams);
 			} else {
-				throw new InvalidOperationException();
+				return null;
 			}
 		}
 
