@@ -293,11 +293,13 @@ namespace Tangerine.UI
 			};
 			if (showAnimationPreviews) {
 				previewContainer = new Frame {
-					Size = new Vector2(64),
+					MinMaxSize = new Vector2(128),
+					Size = new Vector2(128),
 				};
 				var previewFrame = new Frame {
 					ClipChildren = ClipMethod.ScissorTest,
 					MinMaxSize = previewContainer.Size,
+					Size = previewContainer.Size,
 					Nodes = {
 						previewContainer,
 					}
@@ -533,7 +535,7 @@ namespace Tangerine.UI
 			}
 		}
 
-		class AnimationPreview
+		private class AnimationPreview
 		{
 			private readonly IncrementalFastForwarder incrementalFF;
 			private readonly ScenePool scenePool;
@@ -567,7 +569,7 @@ namespace Tangerine.UI
 				}
 				clone = scenePool.Acquire();
 				previewContainer.Components.Add(new AnimationPreviewBehavior(clone.Manager));
-				previewContainer.PostPresenter = new AnimationPreviewPresenter((Widget)clone);
+				previewContainer.PostPresenter = new AnimationPreviewPresenter(clone);
 				var animation = clone.Animations[animationIndex];
 				frame = animation.Markers.First(i => i.Id == trigger).Frame;
 				animationProcessor = clone.Manager.Processors.OfType<AnimationProcessor>().First();
@@ -612,25 +614,43 @@ namespace Tangerine.UI
 
 			public Node Acquire()
 			{
-				Node result;
+				Node clonedModel;
 				if (pool.Count == 0) {
-					result = originNode.Clone();
-					foreach (var n in result.SelfAndDescendants) {
+					clonedModel = originNode.Clone();
+					foreach (var n in clonedModel.SelfAndDescendants) {
 						var _ = n.DefaultAnimation; // Force create the default animation.
 					}
 					var manager = Document.CreateDefaultManager();
 					manager.Processors.Add(new AnimationProcessor());
-					manager.RootNodes.Add(result);
+					if (clonedModel is Node3D) {
+						var viewport3D = new Viewport3D();
+						var camera = new Camera3D {
+							Id = "DefaultCamera",
+							Position = new Vector3(0, 0, 10),
+							FarClipPlane = 10000,
+							NearClipPlane = 0.001f,
+							FieldOfView = 1.0f,
+							AspectRatio = 1.3f,
+							OrthographicSize = 1.0f
+						};
+						viewport3D.Nodes.Add(camera);
+						viewport3D.CameraRef = new NodeReference<Camera3D>(camera.Id);
+						viewport3D.AddNode(clonedModel);
+						manager.RootNodes.Add(viewport3D);
+					} else {
+						manager.RootNodes.Add(clonedModel);
+					}
+					manager.Update(0f);
 				} else {
-					result = pool.Pop();
+					clonedModel = pool.Pop();
 				}
-				foreach (var n in result.SelfAndDescendants) {
+				foreach (var n in clonedModel.SelfAndDescendants) {
 					foreach (var a in n.Animations) {
 						a.IsRunning = false;
 						a.Frame = 0;
 					}
 				}
-				return result;
+				return clonedModel;
 			}
 
 			public void Release(Node node) => pool.Push(node);
@@ -697,9 +717,13 @@ namespace Tangerine.UI
 			private readonly RenderChain renderChain = new RenderChain();
 			private readonly Widget content;
 
-			public AnimationPreviewPresenter(Widget content)
+			public AnimationPreviewPresenter(Node content)
 			{
-				this.content = content;
+				if (content is Node3D node3D) {
+					this.content = node3D.Viewport;
+				} else {
+					this.content = content.AsWidget;
+				}
 			}
 
 			public Lime.RenderObject GetRenderObject(Node node)
@@ -712,7 +736,8 @@ namespace Tangerine.UI
 				} finally {
 					renderChain.Clear();
 				}
-				ro.LocalToWorldTransform = content.AsWidget.LocalToWorldTransform.CalcInversed() *
+				ro.LocalToWorldTransform = 
+					content.LocalToWorldTransform.CalcInversed() *
 					Matrix32.Scaling(previewContainer.Size / content.Size) *
 					previewContainer.LocalToWorldTransform;
 				return ro;
