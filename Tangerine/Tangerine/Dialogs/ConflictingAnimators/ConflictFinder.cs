@@ -112,6 +112,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 								)?.ColorIndex ?? 0
 							};
 						}
+						workProgress.IncrementConflictCount();
 						yield return  new ConflictInfo(
 							nodeType: node.GetType(),
 							documentPath: scenePath,
@@ -197,11 +198,13 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			protected volatile bool isCancelled;
 			protected volatile bool isException;
 			protected volatile string currentFile;
+			protected volatile int currentConflictCount;
 
 			public bool IsCompleted => isCompleted;
 			public bool IsCancelled => isCancelled;
 			public bool IsException => isException;
 			public string CurrentFile => currentFile;
+			public int CurrentConflictCount => currentConflictCount;
 
 			public static WorkProgress Done => new WorkProgress { isCompleted = true };
 			
@@ -214,6 +217,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			public void MarkAsCancelled() => isCompleted = isCancelled = true;
 			public void MarkAsException() => isCompleted = isException = true;
 			public void SetCurrentFile(string path) => currentFile = path;
+			public void IncrementConflictCount() => Interlocked.Increment(ref currentConflictCount);
 		}
 	}
 }

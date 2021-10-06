@@ -52,15 +52,16 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 						isCompletedCached = true;
 						animationTime = 0f;
 						animationStage = 0;
+						const string ConflictCountPrefix = "Count of potential conflicts";
 						if (isException) {
 							backgroundPresenter.Color = new Color4(255, 87, 34);
 							textWidget.Text = "Exception";
 						} else if (isCancelled) {
 							backgroundPresenter.Color = new Color4(255, 152, 0);
-							textWidget.Text = "Cancelled";
+							textWidget.Text = $"Cancelled. {ConflictCountPrefix} {WorkProgress.CurrentConflictCount}";
 						} else {
 							backgroundPresenter.Color = new Color4(76, 175, 80);
-							textWidget.Text = "Done";
+							textWidget.Text = $"Done. {ConflictCountPrefix} {WorkProgress.CurrentConflictCount}";
 						}
 					}
 					if (!isCompleted) {
