@@ -147,7 +147,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		private ImmutableList<(string property, IAnimable animable, SortedSet<string> animations)> GetConflicts(Node node) =>
 			node.Animators
 			    .GroupBy(i => i.TargetPropertyPath)
-			    .Where(i => i.Count() > 1)
+			    .Where(i => i.Count(a => a.AnimationId != Animation.ZeroPoseId) > 1)
 			    .Select(i => (
 		            property: i.Key,
 		            animable: i.First().Animable,
