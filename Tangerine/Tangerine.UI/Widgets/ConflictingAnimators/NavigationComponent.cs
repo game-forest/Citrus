@@ -128,11 +128,8 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 
 		private Animation GetAnimation(Node node)
 		{
-			if (node.Animations.TryFind(info.AnimationId, out var animation)) {
-				return animation;
-			}
 			foreach (var a in node.Ancestors) {
-				if (a.Animations.TryFind(info.AnimationId, out animation)) {
+				if (a.Animations.TryFind(info.AnimationId, out var animation)) {
 					return animation;
 				}
 			}
