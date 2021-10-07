@@ -131,7 +131,7 @@ namespace Match3.Debug
 			debugInfoStrings.Add(info);
 		}
 
-		public static void RenderDebugInfo()
+		public static void RenderDebugInfo(int drawCalls)
 		{
 			if (!IsDebugInfoVisible) {
 				return;
@@ -150,6 +150,7 @@ namespace Match3.Debug
 				$"FPS: {The.Window.FPS}",
 				$"Window Size: {The.Window.ClientSize}",
 				$"World Size: {The.World.Size}",
+				$"Draw Calls: {drawCalls}",
 			};
 #if PROFILER
 			if (Lime.Profiler.Graphics.Overdraw.MetricRequired) {

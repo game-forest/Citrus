@@ -174,7 +174,7 @@ namespace Lime
 		public const float MaxDelta = 1 / 33.333f;
 
 		/// <summary>
-		/// Gets the main (UI) thread. All rendering is beging processed on the main thread.
+		/// Gets the main (UI) thread. All rendering is being processed on the main thread.
 		/// </summary>
 		public static Thread MainThread { get; private set; }
 

@@ -11,7 +11,7 @@ namespace Match3.Application
 		public static AppData Instance;
 
 		[YuzuMember]
-		public float MusicVolume = 1;
+		public float MusicVolume = 0;
 
 		[YuzuMember]
 		public float EffectsVolume = 1;
