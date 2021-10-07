@@ -9,7 +9,7 @@ namespace Match3
 {
 	public static class Match3Config
 	{
-
+		public static float CellSize { get; set; } = 90.0f;
 	}
 
 	public static class BoardConfig
@@ -39,11 +39,11 @@ namespace Match3
 			yield break;
 		}
 
-		private Piece CreatePiece()
+		private Piece CreatePiece(IntVector2 gridPosition)
 		{
 			var pieceWidget = pieceTemplate.Clone<Widget>();
 			pieceContainer.AddNode(pieceWidget);
-			var piece = new Piece(pieceWidget);
+			var piece = new Piece(pieceWidget, gridPosition);
 			return piece;
 		}
 	}

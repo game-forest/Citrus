@@ -6,9 +6,26 @@ namespace Match3
 {
 	public class Piece : WidgetBehaviorComponent
 	{
-		public Piece(Widget pieceWidget)
+		public IntVector2 GridPosition
+		{
+			get
+			{
+				return gridPosition;
+			}
+
+			set
+			{
+				gridPosition = value;
+				Widget.Position = (Vector2)GridPosition * Match3Config.CellSize;
+			}
+		}
+
+		IntVector2 gridPosition;
+
+		public Piece(Node pieceWidget, IntVector2 gridPosition)
 		{
 			pieceWidget.Components.Add(this);
+			GridPosition = gridPosition;
 		}
 
 		protected override void Update(float delta)
