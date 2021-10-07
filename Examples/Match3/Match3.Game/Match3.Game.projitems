@@ -32,6 +32,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Layers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Match3\Board.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Match3\Grid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Match3\Piece.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Match3\WidgetBehaviorComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Profile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)The.cs" />
   </ItemGroup>

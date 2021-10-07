@@ -11,6 +11,7 @@ namespace Match3.Dialogs
 			SoundManager.PlayMusic("Ingame");
 			var exitButton = Root["BtnExit"];
 			exitButton.Clicked = ReturnToMenu;
+			new Board(Root["Board"]);
 		}
 
 		protected override void Update(float delta)
