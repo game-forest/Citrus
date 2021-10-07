@@ -891,7 +891,16 @@ namespace Lime
 		{
 			var wasInvalidated = isInvalidated;
 			isInvalidated = false;
-			if (!form.Visible || !renderControl.IsHandleCreated) {
+			// Do not remove `!form.CanFocus` condition:
+			// Modal window stops code execution when shown until user closes it but
+			// if we remove `!form.CanFocus` condition then all windows with `WindowOptions.UseTimer == true`
+			// will continue to update, because Update is called by the Timer event
+			// which is triggered regardless of the current state of the windows.
+			// So when modal window gets closed the state of a program may be invalid to continue code execution.
+			// That's why modal window MUST block other windows from updating.
+			// TODO: Deal with 'window independent systems update` that currently are updated
+			// in main window Update (e.g. AudioSystem).
+			if (!form.Visible || !form.CanFocus || !renderControl.IsHandleCreated) {
 				return false;
 			}
 			UnclampedDelta = (float)stopwatch.Elapsed.TotalSeconds;
