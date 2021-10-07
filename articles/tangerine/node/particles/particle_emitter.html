@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>ParticleEmitter | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="ParticleEmitter | Citrus Engine ">
+    <meta name="generator" content="docfx 2.56.3.0">
+    
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+    <link rel="stylesheet" href="../../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../../toc.html">
+    <meta property="docfx:tocrel" content="../../../toc.html">
+    
+    <meta property="docfx:rel" content="../../../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../../index.html">
+                <img id="logo" class="svg" src="../../../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="particleemitter">ParticleEmitter</h1>
+
+<p>ParticleEmitter - контейнер для системы частиц</p>
+<p>Свойства <strong>ParticleEmitter</strong>:</p>
+<ul>
+<li>Является <a href="../widget.html">виджетом</a></li>
+<li><strong>EmissionMethod</strong> - способ генерации частиц, а именно:
+<ul>
+<li><strong>NumberPerSecond</strong> - генерация N частиц в секунду (старый метод)</li>
+<li><strong>ConstantNumber</strong> - генерация N частиц за один вызов, которые никогда не исчезнут. ImmortalParticles для них всегда включен, хоть и скрыт из интерфейса.</li>
+<li><strong>NumberPerBurst</strong> - генерация N частиц каждый раз, когда вызвано определенное действие. Анимируется свойство Action, на данный момент доступен только Burst.</li>
+</ul>
+</li>
+<li><strong>Shape</strong> - форма контейнера для частиц (Custom активируется автоматически при использовании EmitterShapePoint)</li>
+<li><strong>EmissionType</strong> - тип излучения частиц (от центра/к центру)</li>
+<li><strong>ParticlesLinkage</strong> - указать, куда привязывать контейнер частиц (root-сцена/текущий контейнер/другое)</li>
+<li><strong>Number</strong> - количество частиц, используемых в генерации различными методами</li>
+<li><strong>TimeShift</strong> - временной сдвиг (в секундах)</li>
+<li><strong>Speed</strong> - скорость движения частиц</li>
+<li><strong>AlongPathOrientation</strong> - включить ориентирование партиклей вдоль трека (сплайна/кривой)</li>
+<li><strong>WindDirection</strong> - направление ветра в градусах (0 - дует слева, 90 - дует сверху)</li>
+<li><strong>WindAmount</strong> - сила ветра</li>
+<li><strong>GravityDirection</strong> - направление гравитации (0 - тянет направо, 90 - тянет вниз)</li>
+<li><strong>GravityAmount</strong> - сила гравитации</li>
+<li><strong>MagnetAmount</strong> - сила влияния магнитов на эмиттер</li>
+<li><strong>Orientation</strong> - угол поворота созданных частиц</li>
+<li><strong>Direction</strong> - угол поворота эмиттера (контейнера) частиц</li>
+<li><strong>Lifetime</strong> - время жизни частиц в секундах</li>
+<li><strong>Zoom</strong> - зум для созданных частиц</li>
+<li><strong>AspectRatio</strong> - соотношение сторон для созданных частиц</li>
+<li><strong>Velocity</strong> - угловая скорость частиц</li>
+<li><strong>Spin</strong> - задать частицам угол вращения (в градусах)</li>
+<li><strong>AngularVelocity</strong> - угловая скорость контейнера частиц (в градусах)</li>
+<li><strong>RandomMotionRadius</strong> - радиус рандомного движения частиц</li>
+<li><strong>RandomMotionSpeed</strong> - скорость рандомного движения частиц</li>
+<li><strong>RandomMotionAspectRatio</strong> - соотношение сторон зоны движения частиц</li>
+<li><strong>RandomMotionRotation</strong> - вращение рандомного движения частиц</li>
+<li><strong>Action</strong> - триггер для NumberPerBurst, на данный момент доступен только Burst</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5></h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    <script type="text/javascript" src="../../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../../styles/main.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

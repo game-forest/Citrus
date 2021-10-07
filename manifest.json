@@ -13,12 +13,49 @@
       "is_incremental": false
     },
     {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/Photoshop_assign_profile.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/Photoshop_assign_profile.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/Photoshop_new_image_settings.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/Photoshop_new_image_settings.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "articles/assets/tangerine_image_settings.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/assets/tangerine_image_settings.html",
+          "hash": "hoIjKNPWYxhpGoSUMREwQA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "articles/citrus_project/configuration.md",
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/configuration.html",
-          "hash": "SSyX78wqP4dbqWCOwRXxmA=="
+          "hash": "OWgFpi0BaW4DG8GhpEULgA=="
         }
       },
       "is_incremental": false,
@@ -30,7 +67,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/cooking_rules.html",
-          "hash": "Nleoq04EIYAgz/HV8JAIbQ=="
+          "hash": "8+MVCuIbDfCHmikpIhcpQA=="
         }
       },
       "is_incremental": false,
@@ -42,7 +79,29 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/directory_structure.html",
-          "hash": "Ax1RS7QctRE10z0VITbV2Q=="
+          "hash": "dO+MvNDwrTbSrTY2p/QQRQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/citrus_project/images/Photoshop_assign_profile.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/citrus_project/images/Photoshop_assign_profile.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/citrus_project/images/Photoshop_new_image_settings.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/citrus_project/images/Photoshop_new_image_settings.png"
         }
       },
       "is_incremental": false,
@@ -54,7 +113,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/tangerine_font_configuration.html",
-          "hash": "Sxj/gaFJ8v/CBRg9T34J2g=="
+          "hash": "EdKAdJY0crIIHRFG7UciBQ=="
         }
       },
       "is_incremental": false,
@@ -62,11 +121,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/citrus_project/tangerine_scene_tree.md",
+      "source_relative_path": "articles/citrus_project/tangerine_image_settings.md",
       "output": {
         ".html": {
-          "relative_path": "articles/citrus_project/tangerine_scene_tree.html",
-          "hash": "6ZHF930mhFAqQFT/C+oYtw=="
+          "relative_path": "articles/citrus_project/tangerine_image_settings.html",
+          "hash": "AiQXXEZnthNzXtIrHa9hBA=="
         }
       },
       "is_incremental": false,
@@ -78,7 +137,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/windows_native_dependencies/building_FreeType.html",
-          "hash": "qE59AtnCChWXYgpL0Evnpg=="
+          "hash": "hHMOoBK9GmovMplFrASr7Q=="
         }
       },
       "is_incremental": false,
@@ -90,7 +149,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/windows_native_dependencies/building_HarfBuzz.html",
-          "hash": "IIGNtc82KgwqMSVBK49iDw=="
+          "hash": "L1uc4P8ReEQvOcU9VpcB/g=="
         }
       },
       "is_incremental": false,
@@ -138,7 +197,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/windows_native_dependencies/native_dependencies_win64_support.html",
-          "hash": "oSVhP8borhWmuZhn7699XA=="
+          "hash": "37tt5CXiDZG/AN477lEtgg=="
         }
       },
       "is_incremental": false,
@@ -150,7 +209,19 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/windows_native_dependencies/windows_dependency_list.html",
-          "hash": "kMTOVvpHEAMoZg+FlM/5Jw=="
+          "hash": "tH79R083cu/xX6mKMUMknw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/internal/tangerine_scene_tree.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/internal/tangerine_scene_tree.html",
+          "hash": "RH2TL/CtBGO8/v58WzPa2A=="
         }
       },
       "is_incremental": false,
@@ -162,7 +233,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "ZlEQofQbCySsupr50cbK5A=="
+          "hash": "CLrXIAsVlCHibbq/Xe2qIA=="
         }
       },
       "is_incremental": false,
@@ -174,7 +245,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/old/Android.html",
-          "hash": "POjUjFx+JDbADvbwUUcE9w=="
+          "hash": "0kML5vKsAsDyZKec+vN2fA=="
         }
       },
       "is_incremental": false,
@@ -186,7 +257,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/old/HowToMakeStandaloneBuildOnWin32.html",
-          "hash": "WnWd5Q9VOJntNsLsXA4BvQ=="
+          "hash": "PWODyH5m2jHOhAIv30kRLg=="
         }
       },
       "is_incremental": false,
@@ -198,7 +269,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/old/Making XCode Project.html",
-          "hash": "0Xipl/HrTnNgz4CkX8vShg=="
+          "hash": "cCbVaeYtW1eltMGDh3ktUA=="
         }
       },
       "is_incremental": false,
@@ -210,107 +281,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/old/SmoothAssetsLoading.html",
-          "hash": "6LMDKX0IKJuDTGZrKia74Q=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/animations_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/animations_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/commands_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/commands_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/components_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/components_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/files_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/files_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/frames_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/frames_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/help_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/help_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/markers_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/markers_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "articles/productivity_tools/lookup/content/nodes_menu.gif",
-      "output": {
-        "resource": {
-          "relative_path": "articles/productivity_tools/lookup/content/nodes_menu.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "articles/productivity_tools/lookup/lookup.md",
-      "output": {
-        ".html": {
-          "relative_path": "articles/productivity_tools/lookup/lookup.html",
-          "hash": "w76Ai8LI50Mq9aGwcxqXzw=="
+          "hash": "oXyl8hgQOHMcafVucYj7Qg=="
         }
       },
       "is_incremental": false,
@@ -344,7 +315,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/profiling/overdraw.html",
-          "hash": "M886pgkvLBe+aPx7lQ8LzQ=="
+          "hash": "ZRrXEJZgkFx8RN66SgEukQ=="
         }
       },
       "is_incremental": false,
@@ -356,7 +327,2061 @@
       "output": {
         ".html": {
           "relative_path": "articles/specifications/coding_conventions.html",
-          "hash": "RE/wPVtWQSJazs0QPQknPQ=="
+          "hash": "86ULc9i9XgM+WxL4nQVYHQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/3d_attachment.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/3d_attachment.html",
+          "hash": "ABlpfQBJ595hpAmpusi+Rw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/backups.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/backups.html",
+          "hash": "Kr63AZcQ3HLNeOu/6Q8l4Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/changelog.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/changelog.html",
+          "hash": "43b2W0UNHH8WCoXW4oPIcg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/components/animation_blender.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/components/animation_blender.html",
+          "hash": "FlP7aX0zLzO3P2xb783Rbw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/components/components.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/components/components.html",
+          "hash": "NYUZENuO7inwb+tDUF3cdQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/components/gradient.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/components/gradient.html",
+          "hash": "ns4D7aV1v3EG1PsIe8DFsQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/components/hsl.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/components/hsl.html",
+          "hash": "SllSOhprIOYnh1vHECK9Gg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/components/layouts.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/components/layouts.html",
+          "hash": "UFGxcBb6td103BA29xN5QQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/components/shaders.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/components/shaders.html",
+          "hash": "Ia5f11xBV5b3Go3ql7NZUA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/console.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/console.html",
+          "hash": "lMNn0d+7gzVde287g08XGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/animations_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/animations_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/commands_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/commands_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/components_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/components_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/files_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/files_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/frames_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/frames_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/help_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/help_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/markers_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/markers_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/content/nodes_menu.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/content/nodes_menu.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/custom_components.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/custom_components.html",
+          "hash": "gGduuaISDBzIv+TFO70zBg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/filesystem.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/filesystem.html",
+          "hash": "kGahKXGY+2zGTriu/dRX5g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/hierarchy.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/hierarchy.html",
+          "hash": "9OJx+LOcKGJX9bV7CJd+ow=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/3d_attach.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/3d_attach.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/animators.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/animators.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/backups.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/backups.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/console.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/console.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/filesystem.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/filesystem.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/flow_layout.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/flow_layout.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/hierarchy.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/hierarchy.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/align_bottom.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/align_bottom.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/align_centers_horizontally.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/align_centers_horizontally.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/align_centers_vertically.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/align_centers_vertically.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/align_left.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/align_left.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/align_right.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/align_right.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/align_top.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/align_top.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/center_h.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/center_h.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/center_v.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/center_v.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/distribute_bottom.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/distribute_bottom.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/distribute_centers_horizontally.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/distribute_centers_horizontally.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/distribute_centers_vertically.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/distribute_centers_vertically.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/distribute_left.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/distribute_left.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/distribute_right.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/distribute_right.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/distribute_top.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/distribute_top.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/arrow_left.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/arrow_left.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/arrow_right.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/arrow_right.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/arrow_up.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/arrow_up.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/cooking_rules.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/cooking_rules.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/home.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/home.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/preview.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/preview.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/split_h.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/split_h.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/filesystem/split_v.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/filesystem/split_v.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/fit_to_container.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/fit_to_container.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/fit_to_content.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/fit_to_content.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/flip_h.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/flip_h.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/flip_v.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/flip_v.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_audio.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_audio.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_bone.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_bone.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_button.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_button.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_camera_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_camera_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_distortion_mesh.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_distortion_mesh.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_emitter_shape_point.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_emitter_shape_point.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_frame.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_frame.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_image.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_image.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_image_combiner.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_image_combiner.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_model_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_model_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_model_view.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_model_view.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_movie.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_movie.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_nine_grid.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_nine_grid.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_node_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_node_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_particle_emitter.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_particle_emitter.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_particle_modifier.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_particle_modifier.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_particles_magnet.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_particles_magnet.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_polyline.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_polyline.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_polyline_point.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_polyline_point.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_rich_text.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_rich_text.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_simple_text.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_simple_text.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_slider.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_slider.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_spline.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_spline.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_spline_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_spline_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_spline_gear.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_spline_gear.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_spline_gear_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_spline_gear_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_spline_point.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_spline_point.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_spline_point_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_spline_point_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_text_style.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_text_style.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_tiled_image.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_tiled_image.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_viewport_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_viewport_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/lime_widget_adapter_3d.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/lime_widget_adapter_3d.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/node/unknown.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/node/unknown.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/overdraw_ratio.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/overdraw_ratio.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/parent.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/parent.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/redo.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/redo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/restore_original_size.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/restore_original_size.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/revert.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/revert.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/root.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/root.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/selection.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/selection.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/set_unit_scale.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/set_unit_scale.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/set_zero_rotation.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/set_zero_rotation.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/animation_enabled.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/animation_enabled.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/animation_mode.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/animation_mode.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/animation_stretch.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/animation_stretch.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/curve.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/curve.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/exit_container.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/exit_container.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/eye.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/eye.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/key.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/key.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/lock.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/lock.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/new_folder.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/new_folder.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/timeline/slow_motion_mode.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/timeline/slow_motion_mode.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/tools_center_view.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/tools_center_view.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/icons/undo.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/icons/undo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/inspector.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/inspector.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/linear_layout.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/linear_layout.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/main_window.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/main_window.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/marker.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/marker.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/prefs/appearance.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/prefs/appearance.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/prefs/general.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/prefs/general.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/prefs/ks.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/prefs/ks.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/prefs/theme.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/prefs/theme.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/prefs/toolbar.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/prefs/toolbar.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/stack_layout.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/stack_layout.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/table_layout.gif",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/table_layout.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/timeline.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/timeline.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/toolbar.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/toolbar.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/viewport.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/viewport.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/images/visual_hints.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/images/visual_hints.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/inspector.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/inspector.html",
+          "hash": "UAKfLpwCcBypBjDiXtqlhw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/intro.html",
+          "hash": "6BXnGlVNENZpM7sIZcj8kA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/lookup.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/lookup.html",
+          "hash": "cGqe00E5yhTXfuHMmEg1wQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_bar.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_bar.html",
+          "hash": "zlPpYkk2OA+Cd2PSvS9gqw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_create.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_create.html",
+          "hash": "G0afL4OJSDV9hU583iKe4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_edit.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_edit.html",
+          "hash": "DR5126vdSQXwWnzRwJuSlg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_file.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_file.html",
+          "hash": "dHFfYHMWzfTv3jM5p+jIvg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_help.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_help.html",
+          "hash": "tB6fgZbDosNLZNcgmYwLVA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_orange.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_orange.html",
+          "hash": "vLN11//ZGgK0QIMObHRmsA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_view.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_view.html",
+          "hash": "3Ng7390/e5XqS2pU94t9bw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/menu_bar/menu_window.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/menu_bar/menu_window.html",
+          "hash": "+yIA+ZgLhxG6VZXPKTwEdA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/camera_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/camera_3d.html",
+          "hash": "5wuSFsSB+eVfgyKrMiAlhA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/model_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/model_3d.html",
+          "hash": "X79/D1vxOYGbS0tCoywtDw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/node_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/node_3d.html",
+          "hash": "VXxrrI1vgSsNlVh6xpA8kQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/spline_3d/spline_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/spline_3d/spline_3d.html",
+          "hash": "/8vO9TTzWzYOszogUAostA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/spline_3d/spline_gear_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/spline_3d/spline_gear_3d.html",
+          "hash": "ewCWvedsGBgzo6N24WrkCQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/spline_3d/spline_point_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/spline_3d/spline_point_3d.html",
+          "hash": "easS7O2E/Ye0GcZQgqXdAA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/viewport_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/viewport_3d.html",
+          "hash": "ThlYJONaXZcou/ek3nY56w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/3d/widget_adapter_3d.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/3d/widget_adapter_3d.html",
+          "hash": "CaRxmOWBlm0GDZyG1xVV4g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/audio.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/audio.html",
+          "hash": "r94DwgX9BEdi1dbX3URFrw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/bone.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/bone.html",
+          "hash": "wy2MFZIhQ6/v7xnVlOg7bA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/button.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/button.html",
+          "hash": "R3704Pq44n3voaJvwqiU1w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/frame.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/frame.html",
+          "hash": "fJItE3ml74QUNZJJP6omgQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/image/distortion_mesh.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/image/distortion_mesh.html",
+          "hash": "Q9HR0vWxw+Sa4oT6t+EeyA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/image/image.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/image/image.html",
+          "hash": "F4R1/kOr/CS36+mM8APn9Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/image/nine_grid.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/image/nine_grid.html",
+          "hash": "bugvKJdt2I8NuG1U8Aq/3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/image/tiled_image.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/image/tiled_image.html",
+          "hash": "AqHPu7zKIO6uGR4TelHGsQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/image_combiner.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/image_combiner.html",
+          "hash": "XuDNBV4BN6bDJqZXp2uXxA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/movie.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/movie.html",
+          "hash": "Qfqiew9QXbvrflDcReS+GQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/particles/emitter_shape_point.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/particles/emitter_shape_point.html",
+          "hash": "4LNqEu8u+0gazHP2CdoVEQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/particles/particle_emitter.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/particles/particle_emitter.html",
+          "hash": "8u0NdIwBNUihZdKtYd3wRw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/particles/particle_modifier.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/particles/particle_modifier.html",
+          "hash": "BS555QgLkcDw9s260y1zxg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/particles/particles_magnet.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/particles/particles_magnet.html",
+          "hash": "93H1CBmTMawUt7A2Y+/+fg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/polyline/polyline.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/polyline/polyline.html",
+          "hash": "j/rSyzwy4HooQB+Tb6BK3A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/polyline/polyline_point.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/polyline/polyline_point.html",
+          "hash": "o9JnwAkZfKwDISfCNNbXXg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/slider.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/slider.html",
+          "hash": "DwAAkCmpOutj3gqMJi+iwQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/spline/spline.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/spline/spline.html",
+          "hash": "SM7PRLmDv0gHYqati+Xd8A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/spline/spline_gear.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/spline/spline_gear.html",
+          "hash": "tDsZQkpKduCNfOGHgtwYJw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/spline/spline_point.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/spline/spline_point.html",
+          "hash": "pqBMF3uBI9lxkjTaPmQrfw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/text/rich_text.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/text/rich_text.html",
+          "hash": "xuKOjQa+nFjn+WSML0GiKA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/text/simple_text.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/text/simple_text.html",
+          "hash": "y+Y+2xXWa5tV7jPCB0UUbQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/text/text_style.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/text/text_style.html",
+          "hash": "K6d/YmHhLpGEONGrKBciow=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/node/widget.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/node/widget.html",
+          "hash": "VModYooSVY4VIboA3Sbg4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/prefs.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/prefs.html",
+          "hash": "8sinAXJSBgnV4hbXVYjP+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/timeline.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/timeline.html",
+          "hash": "24kPAT9hUk3d2KJnI+k4yA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/tips/particles/emission_method.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/tips/particles/emission_method.html",
+          "hash": "B1qz230Cq5Cj4nButrKa+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/100ConstantNumber.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/100ConstantNumber.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/100PerSecond.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/100PerSecond.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/10ConstantNumber.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/10ConstantNumber.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/10PerSecond.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/10PerSecond.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/1ConstantNumber.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/1ConstantNumber.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/1PerSecond.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/1PerSecond.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/Burst.webp",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/Burst.webp"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/tangerine/tips/particles/media/Particles.tan",
+      "output": {
+        "resource": {
+          "relative_path": "articles/tangerine/tips/particles/media/Particles.tan"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/toolbar.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/toolbar.html",
+          "hash": "z8UFOqLgT1KXZLUk8yJr/g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/ui.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/ui.html",
+          "hash": "RglFf16O5UdPusdJ+GPNMA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/viewport.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/viewport.html",
+          "hash": "+4CgbrwrZMnmhaRSvkz7Mw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/tangerine/visual_hints.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tangerine/visual_hints.html",
+          "hash": "spm/+7i0obLigU27aALreg=="
         }
       },
       "is_incremental": false,
@@ -368,7 +2393,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "cnjH+w4ESaFViZgTsrR+kw=="
+          "hash": "D1JhIcVYLXdnmxBnAN2UKw=="
         }
       },
       "is_incremental": false,
@@ -416,1976 +2441,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "3Qn++jPxMmxoHMMIpl7txQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/3d_attachment.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/3d_attachment.html",
-          "hash": "ZR6tUaWTJJl9eUDTfVsrrg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/backups.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/backups.html",
-          "hash": "tXI9XlI475R6T26Jg9FIMQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/changelog.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/changelog.html",
-          "hash": "4nEPTZxLOwFpdpoKeYT7zg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/components/animation_blender.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/components/animation_blender.html",
-          "hash": "P1VrC8TBRNI89gA+QD7XUw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/components/components.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/components/components.html",
-          "hash": "7TK12M3/uBBZTiln31+03A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/components/gradient.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/components/gradient.html",
-          "hash": "xmvTGjIMjfgkAanzyeeqyQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/components/hsl.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/components/hsl.html",
-          "hash": "NM8NJS6Nh3+87D3tBNgtsQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/components/layouts.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/components/layouts.html",
-          "hash": "nnimiqA+XWDzUcwp8OHvHQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/components/shaders.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/components/shaders.html",
-          "hash": "s23wvWa+Vk5sTJyQAgK5Pg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/console.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/console.html",
-          "hash": "EpMADgkV14N2iPe1rwTLHA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/custom_components.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/custom_components.html",
-          "hash": "g8o3yt7pw0Rao1hzjATcgA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/filesystem.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/filesystem.html",
-          "hash": "nDNNU6FictGaFcDTHDznNg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/hierarchy.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/hierarchy.html",
-          "hash": "lrMM0v7lxFrrTLhlGraqhw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/3d_attach.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/3d_attach.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/animators.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/animators.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/backups.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/backups.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/console.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/console.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/filesystem.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/filesystem.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/flow_layout.gif",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/flow_layout.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/hierarchy.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/hierarchy.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/align_bottom.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/align_bottom.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/align_centers_horizontally.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/align_centers_horizontally.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/align_centers_vertically.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/align_centers_vertically.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/align_left.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/align_left.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/align_right.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/align_right.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/align_top.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/align_top.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/center_h.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/center_h.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/center_v.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/center_v.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/distribute_bottom.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/distribute_bottom.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/distribute_centers_horizontally.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/distribute_centers_horizontally.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/distribute_centers_vertically.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/distribute_centers_vertically.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/distribute_left.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/distribute_left.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/distribute_right.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/distribute_right.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/distribute_top.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/distribute_top.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/arrow_left.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/arrow_left.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/arrow_right.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/arrow_right.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/arrow_up.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/arrow_up.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/cooking_rules.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/cooking_rules.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/home.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/home.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/preview.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/preview.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/split_h.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/split_h.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/filesystem/split_v.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/filesystem/split_v.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/fit_to_container.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/fit_to_container.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/fit_to_content.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/fit_to_content.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/flip_h.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/flip_h.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/flip_v.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/flip_v.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_audio.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_audio.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_bone.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_bone.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_button.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_button.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_camera_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_camera_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_distortion_mesh.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_distortion_mesh.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_emitter_shape_point.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_emitter_shape_point.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_frame.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_frame.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_image.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_image.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_image_combiner.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_image_combiner.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_model_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_model_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_model_view.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_model_view.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_movie.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_movie.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_nine_grid.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_nine_grid.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_node_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_node_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_particle_emitter.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_particle_emitter.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_particle_modifier.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_particle_modifier.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_particles_magnet.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_particles_magnet.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_polyline.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_polyline.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_polyline_point.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_polyline_point.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_rich_text.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_rich_text.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_simple_text.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_simple_text.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_slider.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_slider.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_spline.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_spline.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_spline_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_spline_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_spline_gear.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_spline_gear.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_spline_gear_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_spline_gear_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_spline_point.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_spline_point.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_spline_point_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_spline_point_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_text_style.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_text_style.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_tiled_image.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_tiled_image.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_viewport_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_viewport_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/lime_widget_adapter_3d.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/lime_widget_adapter_3d.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/node/unknown.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/node/unknown.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/overdraw_ratio.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/overdraw_ratio.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/parent.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/parent.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/redo.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/redo.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/restore_original_size.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/restore_original_size.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/revert.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/revert.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/root.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/root.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/selection.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/selection.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/set_unit_scale.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/set_unit_scale.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/set_zero_rotation.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/set_zero_rotation.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/animation_enabled.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/animation_enabled.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/animation_mode.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/animation_mode.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/animation_stretch.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/animation_stretch.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/curve.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/curve.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/exit_container.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/exit_container.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/eye.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/eye.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/key.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/key.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/lock.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/lock.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/new_folder.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/new_folder.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/timeline/slow_motion_mode.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/timeline/slow_motion_mode.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/tools_center_view.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/tools_center_view.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/icons/undo.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/icons/undo.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/inspector.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/inspector.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/linear_layout.gif",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/linear_layout.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/main_window.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/main_window.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/marker.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/marker.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/prefs/appearance.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/prefs/appearance.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/prefs/general.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/prefs/general.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/prefs/ks.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/prefs/ks.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/prefs/theme.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/prefs/theme.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/prefs/toolbar.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/prefs/toolbar.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/stack_layout.gif",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/stack_layout.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/table_layout.gif",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/table_layout.gif"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/timeline.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/timeline.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/toolbar.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/toolbar.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/viewport.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/viewport.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/images/visual_hints.png",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/images/visual_hints.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/inspector.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/inspector.html",
-          "hash": "M+cuUetE7Tu+uji1XoyEIw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/intro.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/intro.html",
-          "hash": "JLiZRKcvH72qQR+2Bo4EOw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_bar.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_bar.html",
-          "hash": "q/ifoMqtkUrjWHQT1DPsew=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_create.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_create.html",
-          "hash": "yfhXXHMHbeh0DXl53USlYA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_edit.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_edit.html",
-          "hash": "qmHHhymCLEbH58Qykgh3iQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_file.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_file.html",
-          "hash": "/TunPyPfPQ0Cln9gkAs0CA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_help.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_help.html",
-          "hash": "6lSfSK43goBjPYfg7mPXZw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_orange.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_orange.html",
-          "hash": "Z2SpjbSsseGrFyAarn7mTg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_view.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_view.html",
-          "hash": "p3njvjf6XQWLPvXdhhZGcw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/menu_bar/menu_window.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/menu_bar/menu_window.html",
-          "hash": "bk2xCg5BIYzBItDe3CPL9A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/camera_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/camera_3d.html",
-          "hash": "N2aJgrC0Yr3yiwrU7iVSbg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/model_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/model_3d.html",
-          "hash": "B213fht9qcgLjZ9qskBhiQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/node_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/node_3d.html",
-          "hash": "l4Z9e+Tb9HGZfH5Pu8+OVw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/spline_3d/spline_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/spline_3d/spline_3d.html",
-          "hash": "zg8IaQuTXLEiUrGU2NWFbw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/spline_3d/spline_gear_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/spline_3d/spline_gear_3d.html",
-          "hash": "Z/cTT+5BeAowKWWG9/uz7g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/spline_3d/spline_point_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/spline_3d/spline_point_3d.html",
-          "hash": "+qV7lGvsq2ZEsAhv8Us9bg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/viewport_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/viewport_3d.html",
-          "hash": "1hIA9tTbmgmX64/OZqOgcg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/3d/widget_adapter_3d.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/3d/widget_adapter_3d.html",
-          "hash": "EgM4O7cnzsaSlR3qnq07CA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/audio.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/audio.html",
-          "hash": "wzHjoc1o9o2aLkW1VQNFiw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/bone.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/bone.html",
-          "hash": "9kUrJgGLSgID+ReveeH55Q=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/button.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/button.html",
-          "hash": "ZMZCpzsV53VtjwYEO1qQyQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/frame.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/frame.html",
-          "hash": "m8QjZ7c3gCld0acthZZuVg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/image/distortion_mesh.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/image/distortion_mesh.html",
-          "hash": "89BzlLrj2Sy7uqi3TSENiQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/image/image.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/image/image.html",
-          "hash": "bPgepWr74q/V/bnrsql2GA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/image/nine_grid.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/image/nine_grid.html",
-          "hash": "xhERD3DZngw/26Nyj9zY1w=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/image/tiled_image.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/image/tiled_image.html",
-          "hash": "Nx2pF/5ASisqnA+sDf63hA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/image_combiner.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/image_combiner.html",
-          "hash": "ZKiYffhgdVIKTUeYhjCP2A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/movie.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/movie.html",
-          "hash": "o5blnnKUF6DQhkgWNhZ72Q=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/particles/emitter_shape_point.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/particles/emitter_shape_point.html",
-          "hash": "+BDVuCktCG58udeLMffTmA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/particles/particle_emitter.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/particles/particle_emitter.html",
-          "hash": "IFlWk1RBRn1F0I6hrYZyvA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/particles/particle_modifier.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/particles/particle_modifier.html",
-          "hash": "qE5gD1SjbBbwnqrlgulJ8w=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/particles/particles_magnet.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/particles/particles_magnet.html",
-          "hash": "9uf3D0mF9eWHYadKVmU9bg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/polyline/polyline.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/polyline/polyline.html",
-          "hash": "dhKnPvhRNfxIUTf3UttoAQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/polyline/polyline_point.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/polyline/polyline_point.html",
-          "hash": "KflGQ5+s0qb0Tas7aP8ynA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/slider.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/slider.html",
-          "hash": "gLr7FAIXh3Z427cXX8fFOA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/spline/spline.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/spline/spline.html",
-          "hash": "f7WNFinrRnQO9jYaUFteBg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/spline/spline_gear.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/spline/spline_gear.html",
-          "hash": "rwEJ5ItBDUDUZyumZ5DBSg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/spline/spline_point.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/spline/spline_point.html",
-          "hash": "vPJPIC4dY0g8LFrczQSaXg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/text/rich_text.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/text/rich_text.html",
-          "hash": "6WLuxJKqubXTjZksyT1FzA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/text/simple_text.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/text/simple_text.html",
-          "hash": "4k5TR1ZAv1T4Acko+89cpg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/text/text_style.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/text/text_style.html",
-          "hash": "n1+9V4zHxbjt+ATeQlqceg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/node/widget.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/node/widget.html",
-          "hash": "S1y5nL/25jWr8kcvKkwAGg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/prefs.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/prefs.html",
-          "hash": "HZ0iSFogkVNAqjcUBddsfg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/timeline.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/timeline.html",
-          "hash": "Xi9iwAklfiV0LspKihkM5g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/tips/particles/emission_method.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/tips/particles/emission_method.html",
-          "hash": "8yXsTjP2pWaWKEDyHYz1Tw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/100ConstantNumber.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/100ConstantNumber.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/100PerSecond.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/100PerSecond.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/10ConstantNumber.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/10ConstantNumber.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/10PerSecond.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/10PerSecond.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/1ConstantNumber.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/1ConstantNumber.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/1PerSecond.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/1PerSecond.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/Burst.webp",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/Burst.webp"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "tangerine/tips/particles/media/Particles.tan",
-      "output": {
-        "resource": {
-          "relative_path": "tangerine/tips/particles/media/Particles.tan"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Toc",
-      "source_relative_path": "tangerine/toc.yml",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/toc.html",
-          "hash": "S3O8Ch+bO8SMA+Rw9gj9Ng=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/toolbar.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/toolbar.html",
-          "hash": "RYskAH5rwS9n4CB+r7Xwng=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/ui.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/ui.html",
-          "hash": "vy51zZE76ikJNPmetLWnEA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/viewport.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/viewport.html",
-          "hash": "RZ3uHGLt79ICU0O7GheC1Q=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "tangerine/visual_hints.md",
-      "output": {
-        ".html": {
-          "relative_path": "tangerine/visual_hints.html",
-          "hash": "a0M7TrpL+7xiH6AD7N0N8w=="
+          "hash": "C/46qGV+f5rhW7QBZVTw9g=="
         }
       },
       "is_incremental": false,
@@ -2397,7 +2453,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "SD/8p8l16EU3J++mTU/z5Q=="
+          "hash": "SShBUzGb+a3F6qFKY02E3Q=="
         }
       },
       "is_incremental": false,
@@ -2418,7 +2474,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 80,
+          "total_file_count": 82,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

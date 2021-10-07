@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" | Citrus Engine ">
+    <meta name="generator" content="docfx 2.56.3.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<h5 id="changelog-20042009---25042019">Changelog 20.04.2009 - 25.04.2019</h5>
+<ul>
+<li>Ключи анимации альфа-канала в ParticleModifier были изменены на 0 30 60 <a href="https://jira.game-forest.com:2000/browse/CIT-1044">CIT-1044</a></li>
+<li>Добавлена возможность копировать компоненты <a href="https://jira.game-forest.com:2000/browse/CIT-1140">CIT-1140</a></li>
+<li>Добавлена возможность сбрасывать анимации на начальное положение при использовании Animation Mode <a href="https://jira.game-forest.com:2000/browse/CIT-1143">CIT-1143</a></li>
+<li>Переделан механизм загрузки .dll OrangePlugin <a href="https://jira.game-forest.com:2000/browse/CIT-1150">CIT-1150</a></li>
+<li>Теперь кости игнорируются при перетаскивании виджетов на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-1157">CIT-1157</a></li>
+<li>Реализован интеллектуальный автоскролл в Orange <a href="https://jira.game-forest.com:2000/browse/CIT-1164">CIT-1164</a></li>
+<li>Отрефакторен AssetCoocker <a href="https://jira.game-forest.com:2000/browse/CIT-1165">CIT-1165</a></li>
+<li>Реализован сетевой кэш для сборки билдов в Orange <a href="https://jira.game-forest.com:2000/browse/CIT-1166">CIT-1166</a></li>
+<li>Реализован dual quaternion skinning для 3D моделей <a href="https://jira.game-forest.com:2000/browse/CIT-1170">CIT-1170</a></li>
+<li>При экспорте фрейма во внешнюю сцену его значения больше не экспортируются <a href="https://jira.game-forest.com:2000/browse/CIT-1180">CIT-1180</a></li>
+<li>Реализованы маркеры для локалей <a href="https://jira.game-forest.com:2000/browse/CIT-1192">CIT-1192</a></li>
+<li>Реализованы составные анимации (CompoundAnimations)</li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена проблема со &quot;съезжающими&quot; панелями в редакторе <a href="https://jira.game-forest.com:2000/browse/CIT-922">CIT-922</a></li>
+<li>Исправлена проблема, при которой использоватся по-умолчанию первый словарь в списке <a href="https://jira.game-forest.com:2000/browse/CIT-1007">CIT-1007</a></li>
+<li>Исправлены неработающие ограничения для значений, введенных с помощью мыши <a href="https://jira.game-forest.com:2000/browse/CIT-1061">CIT-1061</a></li>
+<li>Исправлена ошибка, не позволяющая назначить DefaultLayout в Layouts <a href="https://jira.game-forest.com:2000/browse/CIT-1071">CIT-1071</a></li>
+<li>Исправлена проблема, когда при запуске нового проекта возникал черный экран <a href="https://jira.game-forest.com:2000/browse/CIT-1138">CIT-1138</a></li>
+<li>Исправлена ошибка, когда Frame Progression не отрисовывается поверх всех виджетов <a href="https://jira.game-forest.com:2000/browse/CIT-1167">CIT-1167</a></li>
+<li>Исправлена ошибка ObjectDisposedException &quot;Texture2D&quot; <a href="https://jira.game-forest.com:2000/browse/CIT-1174">CIT-1174</a></li>
+<li>Исправлена ошибка, при которой BounceZoneThickness в ScrollView ни на что не влиял <a href="https://jira.game-forest.com:2000/browse/CIT-1186">CIT-1186</a></li>
+</ul>
+<h5 id="changelog-19032019">Changelog 19.03.2019</h5>
+<ul>
+<li>Реализован автоскролл в Orange <a href="https://jira.game-forest.com:2000/browse/CIT-1152">CIT-1152</a></li>
+<li>ContentsPath теперь проверяется на наличие внешней сцены <a href="https://jira.game-forest.com:2000/browse/CIT-1156">CIT-1156</a></li>
+<li>Widget.Input.RestrictScope заменены Widget.Enabled в Orange <a href="https://jira.game-forest.com:2000/browse/CIT-1160">CIT-1160</a></li>
+<li>Реворк реализации SDF-шрифтов (SDFCleanup)</li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, при которой невозможно открыть файлы, в пути которых содержится больше одной точки <a href="https://jira.game-forest.com:2000/browse/CIT-1139">CIT-1139</a></li>
+</ul>
+<h5 id="changelog-1032019---14032019">Changelog 1.03.2019 - 14.03.2019</h5>
+<ul>
+<li>Добавлена возможность настраивать плавность анимации через изинги (easings)</li>
+<li>Добавлена возможность очистить кэш, настройки и проч. прямо из редактора <a href="https://jira.game-forest.com:2000/browse/CIT-874">CIT-874</a></li>
+<li>Убрана возможность сделать Undo после конвертации сцены <a href="https://jira.game-forest.com:2000/browse/CIT-1108">CIT-1108</a></li>
+<li>Реализован прогрессбар для Orange Launcher <a href="https://jira.game-forest.com:2000/browse/CIT-1144">CIT-1144</a></li>
+<li>Реализован кэш для файлов, сжатых алгоритмом DDS <a href="https://jira.game-forest.com:2000/browse/CIT-1146">CIT-1146</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, при которой не рендерились вложенные шрифты <a href="https://jira.game-forest.com:2000/browse/CIT-1120">CIT-1120</a></li>
+<li>Исправлена ошибка, при которой файлы со старшей датой изменения не перекукивались при сборке <a href="https://jira.game-forest.com:2000/browse/CIT-1127">CIT-1127</a></li>
+<li>Исправлена ошибка, при которой не обновлялись значения триггеров при выделении кейфрейма <a href="https://jira.game-forest.com:2000/browse/CIT-1130">CIT-1130</a></li>
+</ul>
+<h5 id="changelog-1032019">Changelog 1.03.2019</h5>
+<ul>
+<li>Добавлена возможность сбрасывать значения свойств виджета кликом средней кнопки мыши <a href="https://jira.game-forest.com:2000/browse/CIT-846">CIT-846</a></li>
+<li>Реализован кэш для файлов, сжатых алгоритмом ETC <a href="https://jira.game-forest.com:2000/browse/CIT-1122">CIT-1122</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлены проблемы с отображением меню <a href="https://jira.game-forest.com:2000/browse/CIT-736">CIT-736</a></li>
+<li>Исправлен некорректный сброс значений пивота <a href="https://jira.game-forest.com:2000/browse/CIT-926">CIT-926</a></li>
+<li>Исправлена ошибка, при которой бандл пересобирался при изменении регистра пути до файлов <a href="https://jira.game-forest.com:2000/browse/CIT-1109">CIT-1109</a></li>
+<li>Исправлена ошибка, при которой файлы, имеющие дату старше, чем в бандлах, не перекукивались <a href="https://jira.game-forest.com:2000/browse/CIT-1127">CIT-1127</a></li>
+</ul>
+<h5 id="changelog-26022019">Changelog 26.02.2019</h5>
+<ul>
+<li>Добавлена возможность использовать Audio во Viewport3D <a href="https://jira.game-forest.com:2000/browse/CIT-1002">CIT-1002</a></li>
+<li>Добавлено отображение свойств в readonly <a href="https://jira.game-forest.com:2000/browse/CIT-1096">CIT-1096</a></li>
+<li>Переработана работа с кешом в режиме Animation Mode <a href="https://jira.game-forest.com:2000/browse/CIT-1121">CIT-1121</a></li>
+<li>Добавлена возможность обновить рабочий проект через Git напрямую через редактор <a href="https://jira.game-forest.com:2000/browse/CIT-1121">CIT-1126</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, при которой выбор SplinePoint3D блокировал ввод с клавиатуры <a href="https://jira.game-forest.com:2000/browse/CIT-754">CIT-754</a></li>
+<li>Исправлено отображение кириллицы в окне вывода Orange <a href="https://jira.game-forest.com:2000/browse/CIT-916">CIT-916</a></li>
+<li>Исправлено отображение иероглифов для различных языков в свойстве Text <a href="https://jira.game-forest.com:2000/browse/CIT-1015">CIT-1015</a></li>
+<li>Исправлена ошибка, приводящая к поломке сцен с Viewport3D при конвертации из .scene в .tan <a href="https://jira.game-forest.com:2000/browse/CIT-1082">CIT-1082</a></li>
+<li>Исправлена ошибка, приводящая к крашу при использовании унарных тегов <a href="https://jira.game-forest.com:2000/browse/CIT-1133">CIT-1133</a></li>
+</ul>
+<h5 id="changelog-22022019">Changelog 22.02.2019</h5>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, не позволяющая скроллить вывод Orange <a href="https://jira.game-forest.com:2000/browse/CIT-220">CIT-220</a></li>
+<li>Увеличена производительность при работе с Model3D <a href="https://jira.game-forest.com:2000/browse/CIT-974">CIT-974</a></li>
+<li>Исправлена ошибка, не обновляющая значение триггеров при выборе фреймов <a href="https://jira.game-forest.com:2000/browse/CIT-1130">CIT-1130</a></li>
+</ul>
+<h5 id="changelog-20022019">Changelog 20.02.2019</h5>
+<ul>
+<li>Переделан интерфейс работы с триггерами <a href="https://jira.game-forest.com:2000/browse/CIT-1062">CIT-1062</a>, <a href="https://jira.game-forest.com:2000/browse/CIT-1112">CIT-1112</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, когда из параллельной анимации вызывались неиспользуемые триггеры <a href="https://jira.game-forest.com:2000/browse/CIT-1118">CIT-1118</a></li>
+<li>Исправлена ошибка, при которой вызов &quot;Update XCode Project&quot; пересобирал все доступные бандлы <a href="https://jira.game-forest.com:2000/browse/CIT-1125">CIT-1125</a></li>
+</ul>
+<h5 id="changelog-15022019">Changelog 15.02.2019</h5>
+<ul>
+<li>Реализована возможность объединять меши с одинаковыми материалами в Model3D <a href="https://jira.game-forest.com:2000/browse/CIT-1115">CIT-1115</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, приводящая к крашу редактору при использовании некоторых мешей в .fbx <a href="https://jira.game-forest.com:2000/browse/CIT-1123">CIT-1123</a></li>
+<li>Исправлены другие мелкие ошибки и проблемы в производительности.</li>
+</ul>
+<h5 id="changelog-13022019">Changelog 13.02.2019</h5>
+<ul>
+<li>Возвращена возможность таскать ключи анимации без клика на фрейме <a href="https://jira.game-forest.com:2000/browse/CIT-1119">CIT-1119</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлены ошибки и недоработки, связанные с работой Hierarchy <a href="https://jira.game-forest.com:2000/browse/CIT-866">CIT-866</a>, <a href="https://jira.game-forest.com:2000/browse/CIT-1008">CIT-1008</a></li>
+<li>Исправлены ошибки, связанные с LetterSpacing в RichText.</li>
+</ul>
+<h5 id="changelog-12022019">Changelog 12.02.2019</h5>
+<ul>
+<li>Добавлена возможность рендерить анимацию в последовательность PNG-файлов <a href="https://jira.game-forest.com:2000/browse/CIT-1009">CIT-1009</a></li>
+<li>Доработан функционал <code>Lock timeline cursor</code> <a href="https://jira.game-forest.com:2000/browse/CIT-1110">CIT-1110</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, при которой настройки шейдеров/блендинга не наследовались в DistortionMesh <a href="https://jira.game-forest.com:2000/browse/CIT-1102">CIT-1102</a></li>
+</ul>
+<h5 id="changelog-11022019">Changelog 11.02.2019</h5>
+<ul>
+<li><code>Lock widgets</code> теперь блокирует виджет от редактирования <a href="https://jira.game-forest.com:2000/browse/CIT-1095">CIT-1095</a></li>
+<li>Добавлены аниматоры для NumericRange <a href="https://jira.game-forest.com:2000/browse/CIT-1114">CIT-1114</a></li>
+</ul>
+<h5 id="changelog-07022019">Changelog 07.02.2019</h5>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлены проблемы, связанные с конвертацией .scene в .tan <a href="https://jira.game-forest.com:2000/browse/CIT-964">CIT-964</a>, <a href="https://jira.game-forest.com:2000/browse/CIT-1080">CIT-1080</a></li>
+<li>Исправлена ошибка, приводящая к остановке анимации при использовании Animation Mode <a href="https://jira.game-forest.com:2000/browse/CIT-1048">CIT-1048</a></li>
+</ul>
+<h5 id="changelog-06022019">Changelog 06.02.2019</h5>
+<ul>
+<li>Добавлен выбор анимации по-умолчанию для 3d-моделей в 3DAttachment <a href="https://jira.game-forest.com:2000/browse/CIT-1099">CIT-1099</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлен краш при открытии Model3D в сцене через панель Hierarchy <a href="https://jira.game-forest.com:2000/browse/CIT-1100">CIT-1100</a></li>
+<li>В root-сцене убрана возможность менять Position <a href="https://jira.game-forest.com:2000/browse/CIT-1092">CIT-1092</a></li>
+</ul>
+<h5 id="changelog-05022019">Changelog 05.02.2019</h5>
+<ul>
+<li>При использовании TiledImage выдаётся предупреждение, если задействованная текстура не имеет <code>wrap mode: repeat</code> <a href="https://jira.game-forest.com:2000/browse/CIT-779">CIT-779</a></li>
+<li>Реализована возможность конвертировать виджет во внешнюю сцену через контекстное меню в списке таймлайна <a href="https://jira.game-forest.com:2000/browse/CIT-1049">CIT-1049</a></li>
+<li>Добавлена возможность игнорировать подгружающиеся типы в <code>dropdown list</code> <a href="https://jira.game-forest.com:2000/browse/CIT-1078">CIT-1078</a></li>
+<li>Добавлена возможность уменьшать список виджетов таймлайна в ширину <a href="https://jira.game-forest.com:2000/browse/CIT-1094">CIT-1094</a></li>
+<li>Добавлена возможность фиксировать каретку на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-1097">CIT-1097</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, сбрасывающая значения альфа-канала при использовании инструмента &quot;пипетка&quot; <a href="https://jira.game-forest.com:2000/browse/CIT-1001">CIT-1001</a></li>
+<li>Исправлена ошибка, при которой виртуальная клавиатура перестается отвечать на ввод <a href="https://jira.game-forest.com:2000/browse/CIT-1057">CIT-1057</a></li>
+<li>Исправлено неправильное отображение кнопки удаления анимаций <a href="https://jira.game-forest.com:2000/browse/CIT-1058">CIT-1058</a></li>
+<li>Исправлена некорректная работа LetterSpacing у TextStyle <a href="https://jira.game-forest.com:2000/browse/CIT-1063">CIT-1063</a></li>
+<li>Исправлен краш при выборе <code>ImageUsage -&gt; Overlay</code> в TextStyle <a href="https://jira.game-forest.com:2000/browse/CIT-1076">CIT-1076</a></li>
+<li>Исправлены различные краши при использовании Gradient Component <a href="https://jira.game-forest.com:2000/browse/CIT-1083">CIT-1083</a>, <a href="https://jira.game-forest.com:2000/browse/CIT-1084">CIT-1084</a></li>
+<li>Цвета теперь корректно свапаются при перестановке точек местами в Gradient Component <a href="https://jira.game-forest.com:2000/browse/CIT-1085">CIT-1085</a></li>
+<li>Исправлен краш при выборе инструмента &quot;пипетка&quot; при отсутствии открытого проекта <a href="https://jira.game-forest.com:2000/browse/CIT-1088">CIT-1088</a></li>
+<li>Исправлена ошибка, позволяющая сбросить развёрнутое на весь экран окно до исходного размера <a href="https://jira.game-forest.com:2000/browse/CIT-1089">CIT-1089</a></li>
+<li>Исправлена ошибка, позволяющая отрисовывать несколько Animation Path одновременно при использовании параллельных анимаций <a href="https://jira.game-forest.com:2000/browse/CIT-1093">CIT-1093</a></li>
+</ul>
+<h5 id="changelog-04022019">Changelog 04.02.2019</h5>
+<ul>
+<li>Реализовано визуальное отображение изменения виджета на определенном промежутке времени (Frame Progression) <a href="https://jira.game-forest.com:2000/browse/CIT-721">CIT-721</a></li>
+</ul>
+<h5 id="changelog-22012019">Changelog 22.01.2019</h5>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, приводящая к крашу при выборе списка из выпадающего списка листов <a href="https://jira.game-forest.com:2000/browse/CIT-1081">CIT-1081</a></li>
+</ul>
+<h5 id="changelog-11012019">Changelog 11.01.2019</h5>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, позволяющая циклические зависимости между сценами <a href="https://jira.game-forest.com:2000/browse/CIT-835">CIT-835</a></li>
+<li>Исправлена ошибка, делающая невозможным изменение цвета во множественном выделении <a href="https://jira.game-forest.com:2000/browse/CIT-1035">CIT-1035</a></li>
+<li>Исправлена ошибка, позволяющая заменить содержимое root-сцены <a href="https://jira.game-forest.com:2000/browse/CIT-1040">CIT-1040</a></li>
+<li>Исправлена ошибка, делающая невозможным обновление проекта XCode <a href="https://jira.game-forest.com:2000/browse/CIT-1055">CIT-1055</a></li>
+</ul>
+<h5 id="changelog-29122018">Changelog 29.12.2018</h5>
+<ul>
+<li>При клике на надпись <code>&lt;many values&gt;</code> она автоматически убирается <a href="https://jira.game-forest.com:2000/browse/CIT-1021">CIT-1021</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, не позволяющая изменять значение Color у нескольких выбранных виджетов, если они имели различные значения данного параметра <a href="https://jira.game-forest.com:2000/browse/CIT-1022">CIT-1022</a></li>
+</ul>
+<h5 id="changelog-26122018">Changelog 26.12.2018</h5>
+<ul>
+<li>Реализована возможность отображать предупреждения и ошибки прямо в панели Inspector <a href="https://jira.game-forest.com:2000/browse/CIT-1016">CIT-1016</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, позволяющая случайно зайти в контейнер при изменении значения в инспекторе <a href="https://jira.game-forest.com:2000/browse/CIT-783">CIT-783</a></li>
+<li>Исправлена ошибка, приводящая к крашу, если введенное значение Color было больше 4 байт <a href="https://jira.game-forest.com:2000/browse/CIT-1034">CIT-1034</a></li>
+</ul>
+<h5 id="changelog-19122018">Changelog 19.12.2018</h5>
+<ul>
+<li>Добавлен новый тип блендинга PremultipliedAlpha для корректной работы RenderTarget с прозрачностью <a href="https://jira.game-forest.com:2000/browse/CIT-971">CIT-971</a></li>
+<li>Исправлена ошибка, приводящая к невозможности настроить видимость виджета после взаимодействия с Hierarchy <a href="https://jira.game-forest.com:2000/browse/CIT-973">CIT-973</a></li>
+<li>Исправлена некорректная работа LetterSpacing в Text <a href="https://jira.game-forest.com:2000/browse/CIT-1014">CIT-1014</a></li>
+</ul>
+<h5 id="changelog-18122018">Changelog 18.12.2018</h5>
+<ul>
+<li>Реализована возможность анимировать кастомные enum-поля <a href="https://jira.game-forest.com:2000/browse/CIT-995">CIT-995</a></li>
+<li>Параметры Position, Size, и Rotation теперь по-умолчанию изменяются с шагом в 1 единицу <a href="https://jira.game-forest.com:2000/browse/CIT-582">CIT-582</a></li>
+</ul>
+<h5 id="changelog-14122018">Changelog 14.12.2018</h5>
+<ul>
+<li>Добавлена возможность свернуть список аниматоров виджета, выбрав один из аниматоров <a href="https://jira.game-forest.com:2000/browse/CIT-827">CIT-827</a></li>
+<li>Реализована валидация текстовый полей окна Inspector <a href="https://jira.game-forest.com:2000/browse/CIT-932">CIT-932</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, позволяющая переместить таймлайн кликом с зажатым Ctrl + Shift <a href="https://jira.game-forest.com:2000/browse/CIT-931">CIT-931</a></li>
+<li>Исправлена ошибка при копировании аниматоров виджетов с расвёрнутым списком аниматоров <a href="https://jira.game-forest.com:2000/browse/CIT-933">CIT-933</a></li>
+<li>Исправлена ошибка, ломающая сцену, если в ContentsPath Viewport3D вставить внешнюю сцену с отличным от Viewport3D root-сценой <a href="https://jira.game-forest.com:2000/browse/CIT-993">CIT-993</a></li>
+</ul>
+<h5 id="changelog-12122018">Changelog 12.12.2018</h5>
+<ul>
+<li>Исправлена ошибка, позволяющая удалять ключи анимаций глобально из всех анимаций <a href="https://jira.game-forest.com:2000/browse/CIT-996">CIT-996</a></li>
+</ul>
+<h5 id="changelog-11122018">Changelog 11.12.2018</h5>
+<ul>
+<li>Для кнопок в играх и редакторе теперь можно задавать доп. лимиты, где кнопка считается нажатой <a href="https://jira.game-forest.com:2000/browse/CIT-902">CIT-902</a></li>
+<li>Реализована возможность использовать SDF-шрифты в RichText и SimpleText <a href="https://jira.game-forest.com:2000/browse/CIT-929">CIT-929</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, приводящая к невозможности снять выделение с отдельного фрейма, используя Ctrl <a href="https://jira.game-forest.com:2000/browse/CIT-CIT-967">CIT-967</a></li>
+</ul>
+<h5 id="changelog-07122018">Changelog 07.12.2018</h5>
+<ul>
+<li>Исправлена ошибка, приводящая к нерабочим анимациям, если в Model3D Attachment название анимации выставлено в отличное от Default значение</li>
+</ul>
+<p><code>commit: a0d0a7cf79f490e8a2f3e5159634c5420d72aaa4</code></p>
+<h5 id="changelog-06122018">Changelog 06.12.2018</h5>
+<ul>
+<li>Исправлена ошибка, приводящая к необновляемым значениями в инспекторе <a href="https://jira.game-forest.com:2000/browse/CIT-973">CIT-973</a></li>
+</ul>
+<h5 id="changelog-05122018">Changelog 05.12.2018</h5>
+<ul>
+<li>Увеличена производительность редактора при работе со внешними сценами <a href="https://jira.game-forest.com:2000/browse/CIT-428">CIT-428</a></li>
+<li>Внешние сцены больше не подгружаются, если не были изменены <a href="https://jira.game-forest.com:2000/browse/CIT-719">CIT-719</a></li>
+<li>Добавлена возможность переназначать материал в Model3D Attachment <a href="https://jira.game-forest.com:2000/browse/CIT-912">CIT-912</a></li>
+<li>Переделана вкладка &quot;Mesh Options&quot; в Model3D Attachment <a href="https://jira.game-forest.com:2000/browse/CIT-913">CIT-913</a></li>
+<li>AlignmentPropertyEditor теперь используется для Alignment <a href="https://jira.game-forest.com:2000/browse/CIT-919">CIT-919</a></li>
+<li>В объектах типa Bone (кости) теперь доступны параметры Index и BaseIndex (в readonly) <a href="https://jira.game-forest.com:2000/browse/CIT-975">CIT-975</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, при которой открывался последний закрытый проект после перезапуска редактора <a href="https://jira.game-forest.com:2000/browse/CIT-839">CIT-839</a></li>
+<li>Исправлена ошибка, приводящая к крашу при попытке дублирования (<code>Ctrl + D</code>) виджета ImageCombiner и свёрнутой папки (Folder) <a href="https://jira.game-forest.com:2000/browse/CIT-956">CIT-956</a></li>
+<li>Исправлена ошибка, приводящая к неправильной работе Undo после удаления столбца <a href="https://jira.game-forest.com:2000/browse/CIT-968">CIT-968</a></li>
+</ul>
+<h5 id="changelog-30112018">Changelog 30.11.2018</h5>
+<ul>
+<li>Исправлено медленное удаление столбца на таймлайне (через <code>Ctrl + W</code>) <a href="https://jira.game-forest.com:2000/browse/CIT-739">CIT-739</a></li>
+<li>Исправлено поведение Resize, если положение пивота виджета было отлично от значений по-умолчанию <a href="https://jira.game-forest.com:2000/browse/CIT-800">CIT-800</a></li>
+<li>При множественном выделении теперь отображается <code>&lt;many values&gt;</code>, если значения у свойств виджетов было разное <a href="https://jira.game-forest.com:2000/browse/CIT-884">CIT-884</a></li>
+<li>В исключения валидатора FilesystemPropertyEditor добавлен символ &quot;-&quot; <a href="https://jira.game-forest.com:2000/browse/CIT-910">CIT-910</a></li>
+<li>При смене виджета, если скролл оказался в недоступной зоне, он откатывается на последнюю доступную позицию <a href="https://jira.game-forest.com:2000/browse/CIT-920">CIT-920</a></li>
+<li>Исправлена ошибка, не позволяющая сохранять текущий тип интерполяции на таймлайне при работе с кейфреймами <a href="https://jira.game-forest.com:2000/browse/CIT-935">CIT-935</a></li>
+<li>RowCount и ColumnCount в Table Layout больше не могут быть отрицательными значениями <a href="https://jira.game-forest.com:2000/browse/CIT-945">CIT-945</a></li>
+<li>Исправлена проблема, приводящая к ошибки в обновлении дерева Hierarchy <a href="https://jira.game-forest.com:2000/browse/CIT-957">CIT-957</a></li>
+</ul>
+<h5 id="changelog-26112018">Changelog 26.11.2018</h5>
+<ul>
+<li>Исправлена ошибка, приводящая к крашу, если была использована модель .fbx c частотой кадров 30 fps <a href="https://jira.game-forest.com:2000/browse/CIT-947">CIT-947</a></li>
+</ul>
+<h5 id="changelog-22112018">Changelog 22.11.2018</h5>
+<ul>
+<li>Исправлена ошибка в SplineGear, приводящая к неверному просчету анимации при использовании AlongPathOrientation <a href="https://jira.game-forest.com:2000/browse/CIT-905">CIT-905</a></li>
+<li>Исправлена ошибка, позволяющая обходить валидацию имени виджетов через переименование в списке Timeline <a href="https://jira.game-forest.com:2000/browse/CIT-906">CIT-906</a></li>
+<li>Исправлен краш при установке ключа анимации хоткеем при развернутом списке аниматоров <a href="https://jira.game-forest.com:2000/browse/CIT-918">CIT-918</a></li>
+<li>Исправлена ошибка, приводящая к применению всех доступных анимаций родительского виджета к дочерним, когда этого не требовалось <a href="https://jira.game-forest.com:2000/browse/CIT-925">CIT-925</a></li>
+</ul>
+<h5 id="changelog-15112018">Changelog 15.11.2018</h5>
+<ul>
+<li>Теперь позиция скролла в Inspector сохраняется при выборе однотипного виджета <a href="https://jira.game-forest.com:2000/browse/CIT-882">CIT-882</a></li>
+<li>Реализован проброс параметра <code>tag</code> в <code>TaskList.AddLoop</code> <a href="https://jira.game-forest.com:2000/browse/CIT-904">CIT-904</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, позволяющая создать виджет с отрицательными значениями параметра Size <a href="https://jira.game-forest.com:2000/browse/CIT-896">CIT-896</a></li>
+<li>Исправлена ошибка, не позволяющая возвращать исходные значения параметра (после Undo), если они были изменены через Paste Keyframes <a href="https://jira.game-forest.com:2000/browse/CIT-903">CIT-903</a></li>
+</ul>
+<h5 id="changelog-14112018">Changelog 14.11.2018</h5>
+<ul>
+<li>Добавлена документация по редактору. Теперь узнать информацию по Tangerine можно, вызвав Help -&gt; View Help <code>Ctrl + F1</code> (на данный момент работает только на платформе Win) <a href="https://jira.game-forest.com:2000/browse/CIT-798">CIT-798</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, создающая в дочерних виджетах лейаутов LayoutConstraints, если у виджета уже был добавлен кастомный компонент, наследуемый от класса LayoutConstraints <a href="https://jira.game-forest.com:2000/browse/CIT-752">CIT-752</a></li>
+<li>Исправлена ошибка, приводящая к невозможности смены типа интерполяции у множественного выделения виджетов <a href="https://jira.game-forest.com:2000/browse/CIT-848">CIT-848</a></li>
+<li>Исправлена регрессия, не позволяющая скроллить список виджетов таймлайна при перетаскивании виджетов <a href="https://jira.game-forest.com:2000/browse/CIT-881">CIT-881</a></li>
+</ul>
+<h5 id="changelog-12112018---13112018">Changelog (12.11.2018 - 13.11.2018)</h5>
+<ul>
+<li>Разворачиваемые списки больше не сворачиваются при смене кадра <a href="https://jira.game-forest.com:2000/browse/CIT-764">CIT-764</a></li>
+<li>Теперь по клику в любое доступное место можно снять фокус с текущего активного текстового/числового поля <a href="https://jira.game-forest.com:2000/browse/CIT-792">CIT-792</a></li>
+<li>MFDecoder убран из движка в 3rdparty <a href="https://jira.game-forest.com:2000/browse/CIT-879">CIT-879</a></li>
+</ul>
+<h5 id="changelog-01112018---9112018">Changelog (01.11.2018 - 9.11.2018)</h5>
+<ul>
+<li>Переработан интерфейс работы с Attachment3D. Теперь он вызывается как панель (View -&gt; Panels -&gt; Model3D Attachment) <a href="https://jira.game-forest.com:2000/browse/CIT-744">CIT-744</a></li>
+<li>Добавлен выбор источника анимации при использовании Model3D.
+По-умолчанию теперь будут импортироваться все анимации из fbx модели (раньше импортировалась только одна). Следовательно, можно создавать разные анимации вместо размещения всех анимаций на одном таймлайне. В 3DAttachment можно явно указать, какую анимацию нужно перегрузить <a href="https://jira.game-forest.com:2000/browse/CIT-795">CIT-795</a></li>
+</ul>
+<p>Багфиксы:</p>
+<ul>
+<li>Исправлена ошибка, позволяющая при анимировании поля Text создавать новые ключи анимации без Automatic Keyframes <a href="https://jira.game-forest.com:2000/browse/CIT-763">CIT-763</a></li>
+<li>Исправлена ошибка, приводящая к крашу, если применить Fit to Container при выставленном ключе анимации Rotation <a href="https://jira.game-forest.com:2000/browse/CIT-786">CIT-786</a></li>
+<li>Исправлена ошибка, приводящая к невозможности использовать стандартные операции (вставка/копирование/вырезание и т.п.) над аниматорами кастомных виджетов <a href="https://jira.game-forest.com:2000/browse/CIT-864">CIT-864</a> / <a href="https://jira.game-forest.com:2000/browse/CIT-887">CIT-887</a></li>
+<li>Исправлена ошибка, приводившая к крашу при копировании виджета с анимированным Spacing в любом Layout <a href="https://jira.game-forest.com:2000/browse/CIT-886">CIT-886</a></li>
+<li>Исправлена ошибка, приводивщая к пробрасыванию нажатия Enter в диалоге создания маркера <a href="https://jira.game-forest.com:2000/browse/CIT-891">CIT-891</a></li>
+</ul>
+<h5 id="changelog-1102018---1112018">Changelog (1.10.2018 - 1.11.2018)</h5>
+<ul>
+<li>Ревамп внешнего вида редактора, изменен дизайн табов панелей и толщина сплиттеров между ними <a href="https://jira.game-forest.com:2000/browse/CIT-332">CIT-332</a></li>
+<li>Была изменена логика работы с пивотами - теперь активный (выбранный) пивот всегда отображается поверх остальных, также добавлена цветовая индикация. <a href="https://jira.game-forest.com:2000/browse/CIT-810">CIT-810</a></li>
+<li>Убрана задержка при драге виджетов (теперь она справедлива только для дублирования через Alt) <a href="https://jira.game-forest.com:2000/browse/CIT-819">CIT-819</a></li>
+<li>Меню, которые невозможно использовать в данный момент, теперь остаются неактивными <a href="https://jira.game-forest.com:2000/browse/CIT-850">CIT-850</a></li>
+<li>Начат переход к использованию параллельных анимаций. Подробная информация об этом и как это использовать будет позднее. Кратко: теперь есть возможность создавать несколько неймспейсов у корневых виджетов (контейнеров), в пределах этих неймспейсов будут свои ключи анимации и маркеры. Применятся они, соответственно, будут на дочерние контейнеру виджеты</li>
+<li>Исправлено множество ошибок и багов. В том числе устранена проблема с некорректной обработкой даблкликов и большинство проблем с инпутом</li>
+</ul>
+<h5 id="changelog-11092018---1102018">Changelog (11.09.2018 - 1.10.2018)</h5>
+<ul>
+<li>Теперь Orange Launcher регенерирует бинарные десериалайзеры Yuzu <a href="https://jira.game-forest.com:2000/browse/CIT-110">CIT-110</a></li>
+<li>Добавлена обводка для маркеров на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-713">CIT-713</a></li>
+<li>Добавлена возможность работы с аниматорами на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-720">CIT-720</a></li>
+<li>Реализован ListPropertyEditor (редактор полей типа List<t>) <a href="https://jira.game-forest.com:2000/browse/CIT-750">CIT-750</a></t></li>
+<li>Для текста теперь можно указать PathPropertyEditor <a href="https://jira.game-forest.com:2000/browse/CIT-765">CIT-765</a></li>
+<li>Недостающие цвета в конфиге теперь берутся из текущей темы <a href="https://jira.game-forest.com:2000/browse/CIT-766">CIT-766</a></li>
+<li>При запуске редактора неиспользуемые сцены не грузятся до их открытия <a href="https://jira.game-forest.com:2000/browse/CIT-790">CIT-790</a></li>
+<li>Изменена индикация изменений на сцене <a href="https://jira.game-forest.com:2000/browse/CIT-796">CIT-796</a></li>
+<li>Исправлено множество багов и недоработок</li>
+</ul>
+<h5 id="changelog-1082018---11092018">Changelog (1.08.2018 - 11.09.2018)</h5>
+<ul>
+<li>Добавлен пользовательский компонент Gradient <a href="https://jira.game-forest.com:2000/browse/CIT-102">CIT-102</a></li>
+<li>Добавлен пользовательский компонент HSL <a href="https://jira.game-forest.com:2000/browse/CIT-650">CIT-650</a></li>
+<li>Добавлен пользовательский компонент Layout - Stack, Table, Flow, Linear. <a href="https://jira.game-forest.com:8888/snippets/13">layout branch report</a></li>
+<li>Добавлен фильтр элементов для Viewport (Visual Hints) <a href="https://jira.game-forest.com:2000/browse/CIT-246">CIT-246</a></li>
+<li>Добавлена индикация связей костей/SplineGear с виджетами <a href="https://jira.game-forest.com:2000/browse/CIT-267">CIT-267</a>, <a href="https://jira.game-forest.com:2000/browse/CIT-612">CIT-612</a></li>
+<li>Добавлена возможность раскрывать список аниматоров хоткеем (<code>Shift + Space</code>) <a href="https://jira.game-forest.com:2000/browse/CIT-274">CIT-274</a></li>
+<li>Добавлена возможность выставить/убрать ключи анимации хоткеями (Position, Scale, Rotation - <code>E/R/T</code>) <a href="https://jira.game-forest.com:2000/browse/CIT-280">CIT-280</a>, <a href="https://jira.game-forest.com:2000/browse/CIT-673">CIT-673</a></li>
+<li>Добавлена возможность Copy/Paste в курсор мыши <a href="https://jira.game-forest.com:2000/browse/CIT-286">CIT-286</a></li>
+<li>Добавлена возможность производить поиск по полю Text <a href="https://jira.game-forest.com:2000/browse/CIT-344">CIT-344</a></li>
+<li>Добавлен общий заголовок для панелей <a href="https://jira.game-forest.com:2000/browse/CIT-349">CIT-349</a></li>
+<li>Добавлена возможность конвертировать Frame в Button <a href="https://jira.game-forest.com:2000/browse/CIT-379">CIT-379</a></li>
+<li>Переработана работа с цветовыми схемами в редакторе <a href="https://jira.game-forest.com:2000/browse/CIT-417">CIT-417</a></li>
+<li>Добавлена поддержка арифметический операций в числовых полях <a href="https://jira.game-forest.com:2000/browse/CIT-431">CIT-431</a></li>
+<li>Добавлена возможность смещать/масштабировать ключи анимации (Numeric Scale/Move Keys) <a href="https://jira.game-forest.com:2000/browse/CIT-450">CIT-450</a></li>
+<li>Исправлено отображение мелких записей в интерфейсе <a href="https://jira.game-forest.com:2000/browse/CIT-466">CIT-466</a></li>
+<li>Добавлена возможность центрировать экран на выбранном виджете/ноде (Center View) <a href="https://jira.game-forest.com:2000/browse/CIT-490">CIT-490</a></li>
+<li>Превью виджетов по <code>Tab</code> теперь работает циклически <a href="https://jira.game-forest.com:2000/browse/CIT-495">CIT-495</a></li>
+<li>Окна панелей теперь имеют класс ToolWindow <a href="https://jira.game-forest.com:2000/browse/CIT-496">CIT-496</a></li>
+<li>Добавлен механизм проверки &quot;плохих&quot; путей файлов <a href="https://jira.game-forest.com:2000/browse/CIT-500">CIT-500</a></li>
+<li>Переработана панель инструментов (теперь ее можно кастомизировать) <a href="https://jira.game-forest.com:2000/browse/CIT-501">CIT-501</a></li>
+<li>Добавлена возможность быстрого масштабирования ключей анимации на таймлайне (растягиванием выделения) <a href="https://jira.game-forest.com:2000/browse/CIT-525">CIT-525</a></li>
+<li>Переработана панель Filesystem с поддержкой адресной строки и навигации по клавишам (как в Windows Explorer) <a href="https://jira.game-forest.com:2000/browse/CIT-534">CIT-534</a></li>
+<li>Добавлена возможность центрироваться на каретке по хоткею (<code>Ctrl + Shift + C</code>) <a href="https://jira.game-forest.com:2000/browse/CIT-539">CIT-539</a></li>
+<li>Добавлено превью в Filesystem для .tan <a href="https://jira.game-forest.com:2000/browse/CIT-556">CIT-556</a></li>
+<li>Ускорена работа с ключами анимации/маркерами на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-557">CIT-557</a></li>
+<li>Реализован новый виджет - TiledImage <a href="https://jira.game-forest.com:2000/browse/CIT-560">CIT-560</a></li>
+<li>Добавлена возможность drag &amp; drop для TiledImage <a href="https://jira.game-forest.com:2000/browse/CIT-625">CIT-625</a></li>
+<li>Добавлена возможность выставить свой коэф. Zoom <a href="https://jira.game-forest.com:2000/browse/CIT-581">CIT-581</a></li>
+<li>Добавлена возможность изменения рамок виджета без затрагивания его содержимого <a href="https://jira.game-forest.com:2000/browse/CIT-589">CIT-589</a></li>
+<li>Реализован AlongPathOrientation для SplineGear <a href="https://jira.game-forest.com:2000/browse/CIT-607">CIT-607</a></li>
+<li>Переработана панель Search - переименована в Hierarchy, реализовано в виде древовидной структуры <a href="https://jira.game-forest.com:2000/browse/CIT-619">CIT-619</a></li>
+<li>Удалена возможность анимировать Root-cцену <a href="https://jira.game-forest.com:2000/browse/CIT-613">CIT-613</a></li>
+<li>Добавлен режим Slowmotion (x0.10) для режима проигрывания анимации (F5) <a href="https://jira.game-forest.com:2000/browse/CIT-629">CIT-629</a></li>
+<li>Реализован базовый функционал внутренней справки <a href="https://jira.game-forest.com:2000/browse/CIT-634">CIT-634</a></li>
+<li>Переработан редактор текста для RichText/SimpleText <a href="https://jira.game-forest.com:2000/browse/CIT-641">CIT-641</a></li>
+<li>Переработан внешний вид меню (добавлены иконки и сплиттеры) <a href="https://jira.game-forest.com:2000/browse/CIT-662">CIT-662</a></li>
+<li>Unsample animation twice теперь работает только внутри контейнера <a href="https://jira.game-forest.com:2000/browse/CIT-663">CIT-663</a></li>
+<li>Добавлена возможность выбрать все ключи анимации для текущей строки (<code>Ctrl + Shift + A</code>) и выбрать только ключи анимации выделением через <code>Alt </code> <a href="https://jira.game-forest.com:2000/browse/CIT-668">CIT-668</a></li>
+<li>Выделение теперь сбрасывается по клику на выделенной области <a href="https://jira.game-forest.com:2000/browse/CIT-670">CIT-670</a></li>
+<li>Изменен порядок интерполяций по-умолчанию (Linear → Spline → Steep → ClosedSpline) <a href="https://jira.game-forest.com:2000/browse/CIT-671">CIT-671</a></li>
+<li>Добавлена возможность скрывать только выделенные виджеты на таймлайне (Shift + Show widgets) <a href="https://jira.game-forest.com:2000/browse/CIT-675">CIT-675</a></li>
+<li>Реализована возможность добавить кастомные компоненты в Model3DAttachment <a href="https://jira.game-forest.com:2000/browse/CIT-697">CIT-697</a></li>
+<li>Добавлена возможность изменять префикс во множественном выделении виджетов <a href="https://jira.game-forest.com:2000/browse/CIT-699">CIT-699</a></li>
+<li>Реализована функция Timeshift для ParticleEmitter (аналогично HotStudio) <a href="https://jira.game-forest.com:2000/browse/CIT-708">CIT-708</a></li>
+<li>Исправлено множество багов и недоработок</li>
+</ul>
+<h5 id="changelog-11082018---1102018">Changelog (11.08.2018 - 1.10.2018)</h5>
+<ul>
+<li>Теперь Orange Launcher регенерирует бинарные десериалайзеры Yuzu <a href="https://jira.game-forest.com:2000/browse/CIT-110">CIT-110</a></li>
+<li>Добавлена обводка для маркеров на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-713">CIT-713</a></li>
+<li>Добавлена возможность работы с аниматорами на таймлайне <a href="https://jira.game-forest.com:2000/browse/CIT-720">CIT-720</a></li>
+<li>Реализован ListPropertyEditor (редактор полей типа List<t>) <a href="https://jira.game-forest.com:2000/browse/CIT-750">CIT-750</a></t></li>
+<li>Для текста теперь можно указать PathPropertyEditor <a href="https://jira.game-forest.com:2000/browse/CIT-765">CIT-765</a></li>
+<li>Недостающие цвета в конфиге теперь берутся из текущей темы <a href="https://jira.game-forest.com:2000/browse/CIT-766">CIT-766</a></li>
+<li>При запуске редактора неиспользуемые сцены не грузятся до их открытия <a href="https://jira.game-forest.com:2000/browse/CIT-790">CIT-790</a></li>
+<li>Изменена индикация изменений на сцене <a href="https://jira.game-forest.com:2000/browse/CIT-796">CIT-796</a></li>
+<li>Исправлено множество багов и недоработок</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5></h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

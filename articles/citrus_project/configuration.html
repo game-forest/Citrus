@@ -19,7 +19,8 @@
     
     <meta property="docfx:rel" content="../../">
     
-  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -99,6 +100,11 @@
 <td><code>AssetsDirectory</code></td>
 <td>string</td>
 <td>can be used to override default Assets Directory <code>./Data/</code></td>
+</tr>
+<tr>
+<td><code>BundlesOutputDirectory</code></td>
+<td>string</td>
+<td>Relative path to a directory where Orange will place produced asset bundles. Default value is <code>./Bundles/</code></td>
 </tr>
 <tr>
 <td><code>GeneratedScenesPath</code></td>
@@ -542,9 +548,14 @@
         </div>
         <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
       </footer>    </div>
-    
     <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
-  </body>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
 </html>

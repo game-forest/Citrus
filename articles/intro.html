@@ -19,7 +19,8 @@
     
     <meta property="docfx:rel" content="../">
     
-  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
         
@@ -78,15 +79,31 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="citrus-engine">Citrus Engine</h1>
 
-<p>Citrus is a game engine. Major engine components are named after Citrus fruits:</p>
+<p>Major engine components are named after Citrus fruits. In the repository you'll see various directories. Following is what they are about:</p>
 <ul>
-<li>Lemon - bindings for native 3rd party libraries.</li>
-<li>Lime - engine core</li>
-<li>Yuzu - serialization library</li>
-<li>Orange - builder application</li>
-<li>Kumquat - code generator</li>
 <li>Tangerine - scene editor</li>
+<li>Lime - core library</li>
+<li>Orange - cook game assets, build and run projects</li>
+<li>Examples - example projects also used as templates for new projects</li>
+<li>Yuzu - serialization library</li>
+<li>Kumquat - generates code from scenes</li>
+<li>Lemon - bindings for native 3rd party libraries.</li>
 </ul>
+<p>In order to run Tangerine and Orange you'll need .NET5 runtime installed. Or you can use following scripts which are located in each example project directory:</p>
+<ul>
+<li><code>./Examples/&lt;project_name&gt;/run-orange.ps1</code></li>
+<li><code>./Examples/&lt;project_name&gt;/run-tangerine.ps1</code></li>
+</ul>
+<p>They will install local .NET5 runtime in <code>./dotnet/</code> directory and run corresponding application with installed runtime.</p>
+<p>Following scripts are for MAC OS and you'll need Visual Studio for Mac installed.</p>
+<ul>
+<li><code>./Examples/&lt;project_name&gt;/run-orange.command</code></li>
+<li><code>./Examples/&lt;project_name&gt;/run-tangerine.command</code></li>
+</ul>
+<p>To write code you'll need visual studio for either windows or mac and .NET5 SDK.</p>
+<p>Also if you have .NET5 installed you can also use <code>./Orange.bat</code> and <code>./Tangerine.bat</code>.</p>
+<p>To create new project run Orange, open any example project and execute action
+<code>New Project</code>. First select project template from <code>./Examples</code> directory and in the next directory selection dialog choose directory for you new project.</p>
 </article>
           </div>
           
@@ -146,9 +163,14 @@
         </div>
         <script type="text/javascript" src="../styles/toggle-theme.js"></script>
       </footer>    </div>
-    
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
-  </body>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
 </html>
