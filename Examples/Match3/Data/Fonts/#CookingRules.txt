@@ -1,4 +1,3 @@
-TextureAtlas ${DirectoryName}
 MipMaps No
 PVRFormat RGBA4
 DDSFormat ARGB8
