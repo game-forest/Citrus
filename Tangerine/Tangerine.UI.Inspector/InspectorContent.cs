@@ -57,8 +57,7 @@ namespace Tangerine.UI.Inspector
 			if (CoreUserPreferences.Instance.InspectEasing) {
 				AddEasingEditor();
 			}
-			IEnumerable<Widget> widgets = BuildHelper(objects).ToList();
-			foreach (var w in widgets) {
+			foreach (var w in BuildHelper(objects)) {
 				DecorateElement(w);
 				rootWidget.AddNode(w);
 			}
@@ -97,7 +96,9 @@ namespace Tangerine.UI.Inspector
 						headerWidget.Components.Add(new HeaderElementComponent());
 						DecorateElement(headerWidget);
 						rootWidget.AddNode(headerWidget);
-						var expandableContainer = CreateExpandableContainer(headerWidget, t.FullName, components.First().Owner.ToString());
+						var expandableContainer = CreateExpandableContainer(
+							headerWidget, t.FullName, components.First().Owner.ToString()
+						);
 						rootWidget.AddNode(expandableContainer);
 						var elementWidgets = CreateElementsForType(
 							type: t,
@@ -135,19 +136,17 @@ namespace Tangerine.UI.Inspector
 
 			ThemedExpandButton CreateExpandButton()
 			{
-				var isLocalExpansionSet =
-				  CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
-				  .TryGetValue(globalKey, out var localExpansion);
-				var isGlobalExpansionSet =
-				  CoreUserPreferences.Instance.InspectorExpandableEditorsState
-				  .TryGetValue(globalKey, out var isExpandedGlobally);
+				var isLocalExpansionSet = CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+					.TryGetValue(globalKey, out var localExpansion);
+				var isGlobalExpansionSet = CoreUserPreferences.Instance.InspectorExpandableEditorsState
+					.TryGetValue(globalKey, out var isExpandedGlobally);
 				bool isExpandedLocally = false;
 				if (isLocalExpansionSet) {
 					isLocalExpansionSet = localExpansion.TryGetValue(localKey, out isExpandedLocally);
 				}
 				var storedExpansionValue = isLocalExpansionSet
-				  ? isExpandedLocally
-				  : !isGlobalExpansionSet || isExpandedGlobally;
+					? isExpandedLocally
+					: !isGlobalExpansionSet || isExpandedGlobally;
 				var expandButton = new ThemedExpandButton {
 					MinMaxSize = Vector2.One * 20f,
 					LayoutCell = new LayoutCell(Alignment.LeftCenter),
@@ -156,18 +155,16 @@ namespace Tangerine.UI.Inspector
 				expandButton.Clicked = () => {
 					widget.Visible = expandButton.Expanded = !expandButton.Expanded;
 					CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
-					.TryGetValue(globalKey, out var localExpansion);
+						.TryGetValue(globalKey, out var localExpansion);
 					if (Application.Input.IsKeyPressed(Key.Shift)) {
 						if (expandButton.Expanded) {
 							ApplyLocalExpansion();
 						} else {
-							CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
-							.Remove(globalKey);
+							CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates.Remove(globalKey);
 						}
+						CoreUserPreferences.Instance.InspectorExpandableEditorsState.Remove(globalKey);
 						CoreUserPreferences.Instance.InspectorExpandableEditorsState
-						.Remove(globalKey);
-						CoreUserPreferences.Instance.InspectorExpandableEditorsState
-						.TryAdd(globalKey, expandButton.Expanded);
+							.TryAdd(globalKey, expandButton.Expanded);
 					} else {
 						ApplyLocalExpansion();
 					}
@@ -178,9 +175,9 @@ namespace Tangerine.UI.Inspector
 				{
 					if (localExpansion == null) {
 						CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
-						  .TryAdd(globalKey, new Dictionary<string, bool>());
+							.TryAdd(globalKey, new Dictionary<string, bool>());
 						CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
-						  .TryGetValue(globalKey, out localExpansion);
+							.TryGetValue(globalKey, out localExpansion);
 					}
 					localExpansion.Remove(localKey);
 					localExpansion.TryAdd(localKey, expandButton.Expanded);
@@ -274,7 +271,9 @@ namespace Tangerine.UI.Inspector
 						tooltipText: tooltipText
 					);
 					headerWidget.Components.Add(new HeaderElementComponent());
-					expandableContainer = CreateExpandableContainer(headerWidget, t.FullName, objects.First().ToString());
+					expandableContainer = CreateExpandableContainer(
+						headerWidget, t.FullName, objects.First().ToString()
+					);
 					yield return headerWidget;
 					yield return expandableContainer;
 				}
@@ -730,7 +729,9 @@ namespace Tangerine.UI.Inspector
 					}
 				}
 			};
-			label.CompoundPresenter.Add(new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground));
+			label.CompoundPresenter.Add(
+				new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground)
+			);
 			widget.AddNode(label);
 		}
 
@@ -899,13 +900,21 @@ namespace Tangerine.UI.Inspector
 				row % 2 == 0 ?
 				ColorTheme.Current.Inspector.StripeBackground1 :
 				ColorTheme.Current.Inspector.StripeBackground2
-			) { IgnorePadding = true });
-			editor.ContainerWidget.Components.Add(new DocumentationComponent(editor.EditorParams.PropertyInfo.DeclaringType.Name + "." + editor.EditorParams.PropertyName));
+			) {
+				IgnorePadding = true
+			});
+			editor.ContainerWidget.Components.Add(
+				new DocumentationComponent(
+					editor.EditorParams.PropertyInfo.DeclaringType.Name + "." + editor.EditorParams.PropertyName
+				)
+			);
 		}
 
 		private static string CamelCaseToLabel(string text)
 		{
-			return Regex.Replace(Regex.Replace(text, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
+			return Regex.Replace(
+				Regex.Replace(text, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2"
+			);
 		}
 
 		private static void CreateComponent(Type type, IEnumerable<Node> nodes)
