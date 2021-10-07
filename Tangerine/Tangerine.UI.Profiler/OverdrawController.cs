@@ -2,6 +2,7 @@
 using System.Linq;
 using Lime;
 using Lime.Profiler.Graphics;
+using Tangerine.Core;
 
 namespace Tangerine.UI
 {
@@ -106,7 +107,12 @@ namespace Tangerine.UI
 				}
 			};
 			AddNode(gradientControlWidget);
-			colorPickerPanel = new ColorPickerPanel();
+			colorPickerPanel = new ColorPickerPanel(ColorPickerState.Default);
+			colorPickerPanel.EditorsWidget.Nodes[0].AsWidget.Visible = false;
+			var colorPickerWheel = colorPickerPanel.EditorsWidget.Nodes[1].AsWidget;
+			colorPickerWheel.Visible = true;
+			colorPickerWheel.Padding += new Thickness { Left = 8 };
+			colorPickerPanel.EditorsWidget.Nodes[1].AsWidget.Visible = true;
 			var toggleOverdrawButton = UnclampWidgetSize(new ThemedButton());
 			toggleOverdrawButton.Clicked = () => Overdraw.Enabled = !Overdraw.Enabled;
 			toggleOverdrawButton.Updating = (d) => toggleOverdrawButton.Text =
@@ -123,7 +129,7 @@ namespace Tangerine.UI
 							toggleOverdrawButton,
 						}
 					},
-					colorPickerPanel.Widget
+					colorPickerPanel.EditorsWidget
 				}
 			});
 			void NoPointSelected()

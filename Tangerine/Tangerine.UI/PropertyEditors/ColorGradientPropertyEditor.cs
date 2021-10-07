@@ -19,6 +19,7 @@ namespace Tangerine.UI
 		private ToolbarButton pipetteButton;
 
 		private bool enabled = true;
+		
 		public bool Enabled
 		{
 			get => enabled;
@@ -77,11 +78,24 @@ namespace Tangerine.UI
 			positionEditor.Step = 0.005f;
 			colorEditor.Submitted += SetColor;
 			positionEditor.Submitted += SetPosition;
-			colorPanel = new ColorPickerPanel();
-			ExpandableContent.AddNode(colorPanel.Widget);
-			var padding = colorPanel.Widget.Padding;
-			padding.Right = 12;
-			colorPanel.Widget.Padding = padding;
+			var preferencesState = CoreUserPreferences.Instance.InspectorColorPickersState;
+			preferencesState.TryGetValue(editorParams.PropertyPath, out var state);
+			colorPanel = new ColorPickerPanel(state);
+			ExpandableContent.AddNode(colorPanel.ButtonsWidget);
+			ExpandableContent.AddNode(colorPanel.EditorsWidget);
+			colorPanel.ButtonsWidget.Padding += new Thickness(0, 0, 0, 4);
+			colorPanel.EditorsWidget.Padding += new Thickness(0, 0, 0, 4);
+			foreach (var b in colorPanel.ButtonsWidget.Nodes) {
+				if (b is ToolbarButton tb) {
+					tb.Clicked += () => {
+						if (preferencesState.ContainsKey(editorParams.PropertyPath)) {
+							preferencesState[editorParams.PropertyPath] = colorPanel.GetEditorsVisibleState();
+						} else {
+							preferencesState.Add(editorParams.PropertyPath, colorPanel.GetEditorsVisibleState());
+						}
+					};
+				}
+			}
 			colorPanel.DragStarted += () => EditorParams.History?.BeginTransaction();
 			gradientControlWidget.DragStarted += () => EditorParams.History?.BeginTransaction();
 			gradientControlWidget.DragEnded += () => {
