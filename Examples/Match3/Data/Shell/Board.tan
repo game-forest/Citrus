@@ -1,0 +1,380 @@
+{
+	"class":"Lime.Frame, Lime",
+	"Animations":[
+		{
+			"IsLegacy":true
+		}
+	],
+	"Color":[4294967295],
+	"Nodes":[
+		{
+			"class":"Lime.SimpleText, Lime",
+			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"Lime.SignedDistanceFieldComponent, Lime",
+					"Dilate":2,
+					"Gradient":[
+						{
+							"Color":[4294967295]
+						},
+						{
+							"Color":[4278190080],
+							"Position":1
+						}
+					]
+				}
+			],
+			"Font":{
+				"Name":"RobotoMed"
+			},
+			"FontHeight":32,
+			"HAlignment":2,
+			"Id":"Text",
+			"OverflowMode":1,
+			"Pivot":[1,0.5],
+			"Position":[138,331.86438],
+			"Size":[120.92233,43.728813],
+			"TangerineFlags":2,
+			"Text":"Drop:",
+			"TextColor":[4287880191],
+			"VAlignment":1
+		},
+		{
+			"class":"Lime.SimpleText, Lime",
+			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"Lime.SignedDistanceFieldComponent, Lime",
+					"Dilate":2,
+					"Gradient":[
+						{
+							"Color":[4294967295]
+						},
+						{
+							"Color":[4278190080],
+							"Position":1
+						}
+					]
+				}
+			],
+			"Font":{
+				"Name":"RobotoMed"
+			},
+			"FontHeight":32,
+			"HAlignment":2,
+			"Id":"Text",
+			"OverflowMode":1,
+			"Pivot":[1,0.5],
+			"Position":[138,445.86435],
+			"Size":[133.52946,43.728813],
+			"TangerineFlags":2,
+			"Text":"Obstacle:",
+			"TextColor":[4287880191],
+			"VAlignment":1
+		},
+		{
+			"class":"Lime.SimpleText, Lime",
+			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"Lime.SignedDistanceFieldComponent, Lime",
+					"Dilate":2,
+					"Gradient":[
+						{
+							"Color":[4294967295]
+						},
+						{
+							"Color":[4278190080],
+							"Position":1
+						}
+					]
+				}
+			],
+			"Font":{
+				"Name":"RobotoMed"
+			},
+			"FontHeight":32,
+			"Id":"Text",
+			"OverflowMode":1,
+			"Pivot":[0,0.5],
+			"Position":[442.00003,250.30775],
+			"Size":[336,126.615486],
+			"TangerineFlags":2,
+			"Text":"Combo:\nLine + Lightning\nBomb + Lightning",
+			"TextColor":[4278215049],
+			"VAlignment":1
+		},
+		{
+			"class":"Lime.SimpleText, Lime",
+			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"Lime.SignedDistanceFieldComponent, Lime",
+					"Dilate":2,
+					"Gradient":[
+						{
+							"Color":[4294967295]
+						},
+						{
+							"Color":[4278190080],
+							"Position":1
+						}
+					]
+				}
+			],
+			"Font":{
+				"Name":"RobotoMed"
+			},
+			"FontHeight":32,
+			"HAlignment":2,
+			"Id":"Text",
+			"OverflowMode":1,
+			"Pivot":[1,0.5],
+			"Position":[138,244.86441],
+			"Size":[152.29343,43.728813],
+			"TangerineFlags":2,
+			"Text":"Bonuses:",
+			"TextColor":[4287880191],
+			"VAlignment":1
+		},
+		{
+			"class":"Lime.SimpleText, Lime",
+			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"Lime.SignedDistanceFieldComponent, Lime",
+					"Dilate":2,
+					"Gradient":[
+						{
+							"Color":[4294967295]
+						},
+						{
+							"Color":[4278190080],
+							"Position":1
+						}
+					]
+				}
+			],
+			"Font":{
+				"Name":"RobotoMed"
+			},
+			"FontHeight":32,
+			"HAlignment":2,
+			"Id":"Text",
+			"OverflowMode":1,
+			"Pivot":[1,0.5],
+			"Position":[138,155.86441],
+			"Size":[128.45427,43.728813],
+			"TangerineFlags":2,
+			"Text":"Marbles:",
+			"TextColor":[4287880191],
+			"VAlignment":1
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Shown@Show"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/ObstacleSticker",
+			"Id":"Sticker",
+			"Pivot":[0.5,0.5],
+			"Position":[196.83331,428.8333],
+			"Size":[90,90],
+			"TangerineFlags":1792
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Start@Act"]
+					],
+					"TargetProperty":"Trigger"
+				},
+				{
+					"class":"Lime.Vector2Animator, Lime",
+					"ReadonlyKeys":[
+						[0,0,[717.33154,155.0063]]
+					],
+					"TargetProperty":"Position"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/BonusLightningFX",
+			"Id":"BonusLightningFX",
+			"Pivot":[0.5,0.5],
+			"Position":[717.33154,155.0063],
+			"Size":[90,90],
+			"TangerineFlags":768
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Start@Act"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/BonusLineFX",
+			"Id":"LineFX",
+			"Pivot":[2.9802322E-8,0.5],
+			"Position":[423,159],
+			"Size":[180,90],
+			"TangerineFlags":768
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Shown@Show"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/BonusLine",
+			"Id":"Line",
+			"Pivot":[0.5,0.5],
+			"Position":[196.83331,247.16669],
+			"Size":[90,90],
+			"TangerineFlags":512
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Shown@Show"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/BonusBomb",
+			"Id":"Bomb",
+			"Pivot":[0.5,0.5],
+			"Position":[286.5,250.16669],
+			"Size":[90,90],
+			"TangerineFlags":512
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Shown@Show"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/BonusLightning",
+			"Id":"Lightning",
+			"Pivot":[0.5,0.5],
+			"Position":[376.83337,248.5],
+			"Size":[90,90],
+			"TangerineFlags":512
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Start@Idle"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/Drop",
+			"Id":"Drop",
+			"Pivot":[0.5,0.5],
+			"Position":[196.5,339.49997],
+			"Size":[90,90],
+			"TangerineFlags":1536
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/MatchBlowFx",
+			"Id":"MatchBlowFx",
+			"Pivot":[0.5,0.5],
+			"Position":[376.5,428.5],
+			"Size":[90,90]
+		},
+		{
+			"class":"Lime.Frame, Lime",
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"02@Color,Shown@Show,None@Selection"]
+					],
+					"TargetProperty":"Trigger"
+				}
+			],
+			"Color":[4294967295],
+			"ContentsPath":"/Game/Match3/MultiMarble",
+			"Id":"MultiMarble",
+			"Pivot":[0.5,0.5],
+			"Position":[197,159],
+			"Size":[90,90]
+		},
+		{
+			"class":"Lime.Image, Lime",
+			"Anchors":48,
+			"Color":[4294967295],
+			"Id":"Board",
+			"Pivot":[0.5,0.5],
+			"Position":[512,384],
+			"Size":[720,720],
+			"TangerineFlags":2,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime",
+				"SerializationPath":"/Game/Match3/Board/Board"
+			}
+		},
+		{
+			"class":"Lime.Image, Lime",
+			"Anchors":15,
+			"Color":[4286282619],
+			"Id":"BG",
+			"Pivot":[0.5,0.5],
+			"Position":[512,384],
+			"Shader":3,
+			"Size":[1024,768],
+			"TangerineFlags":2,
+			"Texture":{
+				"class":"Lime.SerializableTexture, Lime"
+			}
+		}
+	],
+	"Size":[1024,768]
+}{8069CDD4-F02F-4981-A3CB-A0BAD4018D00}
+
+
+
+
+
+
+
+
+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
