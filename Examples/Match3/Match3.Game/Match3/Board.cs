@@ -29,11 +29,13 @@ namespace Match3
 			this.boardContainer = boardContainer;
 			pieceTemplate = Node.Load<Widget>("Game/Match3/MultiMarble");
 			pieceContainer = new Frame {
-
+				Width = BoardConfig.ColumnCount * Match3Config.CellSize,
+				Height = BoardConfig.RowCount * Match3Config.CellSize,
 			};
 			this.boardContainer.Nodes.Insert(0, pieceContainer);
 			this.boardContainer.Tasks.Add(this.Update);
 			pieceContainer.CompoundPostPresenter.Add(new WidgetBoundsPresenter(Color4.Green, 2.0f));
+			pieceContainer.CenterOnParent();
 			FillBoard();
 		}
 

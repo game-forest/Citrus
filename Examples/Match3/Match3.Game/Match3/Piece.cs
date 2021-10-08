@@ -16,7 +16,7 @@ namespace Match3
 			set
 			{
 				gridPosition = value;
-				Widget.Position = (Vector2)GridPosition * Match3Config.CellSize;
+				Widget.Position = ((Vector2)GridPosition + Vector2.Half) * Match3Config.CellSize;
 			}
 		}
 
