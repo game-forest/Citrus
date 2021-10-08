@@ -28,7 +28,6 @@ namespace Match3
 			{
 				onSetGridPosition.Invoke(this, value);
 				this.gridPosition = value;
-				Widget.Position = ((Vector2)GridPosition + Vector2.Half) * Match3Config.CellSize;
 			}
 		}
 
@@ -37,11 +36,29 @@ namespace Match3
 		IntVector2 gridPosition = new IntVector2(int.MinValue, int.MinValue);
 		private int kind;
 
+		public IEnumerator<object> MoveTo(IntVector2 position, float time)
+		{
+			GridPosition = position;
+			var p0 = Widget.Position;
+			var p1 = ((Vector2)position + Vector2.Half) * Match3Config.CellSize;
+			if (time == 0.0f) {
+				Widget.Position = p1;
+				yield break;
+			}
+			var t = time;
+			do {
+				t -= Task.Current.Delta;
+				Widget.Position = t < 0.0f ? p1 : Mathf.Lerp(1.0f - t / time, p0, p1);
+				yield return null;
+			} while (t > 0.0f);
+		}
+
 		public Piece(Node pieceWidget, IntVector2 gridPosition, int kind, Action<Piece, IntVector2> onSetGridPosition)
 		{
 			pieceWidget.Components.Add(this);
 			this.onSetGridPosition = onSetGridPosition;
 			GridPosition = gridPosition;
+			Widget.Position = ((Vector2)gridPosition + Vector2.Half) * Match3Config.CellSize;
 			var kindAnimation = Owner.Animations.Find("Kind");
 			var marker = kindAnimation.Markers[kind];
 			Owner.RunAnimation(marker.Id, kindAnimation.Id);
