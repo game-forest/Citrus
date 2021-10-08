@@ -148,16 +148,21 @@ namespace Match3
 			if (nextPiece == null || nextPiece?.Task != null) {
 				yield break;
 			}
-			piece.AnimateSelect();
 			piece.Owner.Parent.Nodes.Swap(0, piece.Owner.Parent.Nodes.IndexOf(piece.Owner));
 			float projectionAmount = 0.0f;
 			var swapActivationDistance = Match3Config.DragPercentOfPieceSizeRequiredForSwapActivation
 				* 0.01 * Match3Config.CellSize;
 			var nextPieceOriginalPosition = nextPiece.Owner.AsWidget.Position;
 			bool syncFinished = false;
+			int swapPhase = 0;
 			Func<bool> syncPosition = () => {
 				var delta = (originalPiecePosition - piece.Owner.AsWidget.Position);
 				nextPiece.Owner.AsWidget.Position = nextPieceOriginalPosition + delta;
+				if (swapPhase == 0) {
+					nextPiece.ApplyAnimationPercent(delta.Length / Match3Config.CellSize, "Swap", "Backward");
+				} else {
+					nextPiece.ApplyAnimationPercent(delta.Length / Match3Config.CellSize, "Swap", "Forward");
+				}
 				return !syncFinished;
 			};
 			nextPiece.RunTask(Task.Repeat(syncPosition));
@@ -171,14 +176,16 @@ namespace Match3
 				);
 				piece.Owner.AsWidget.Position = ((Vector2)piece.GridPosition + Vector2.Half) * Match3Config.CellSize
 					+ projectionAmount * (Vector2)projectionAxis;
+				piece.ApplyAnimationPercent(projectionAmount / Match3Config.CellSize, "Swap", "Forward");
 				yield return null;
 			}
-			piece.AnimateUnselect();
 			var timeRatioPassed = projectionAmount / Match3Config.CellSize;
 			var timeRatioLeft = 1.0f - timeRatioPassed;
 			if (projectionAmount > swapActivationDistance) {
 				SwapPieces(piece, nextPiece);
-				yield return piece.MoveTo(piece.GridPosition, timeRatioLeft * Match3Config.SwapTime);
+				yield return piece.MoveTo(piece.GridPosition, timeRatioLeft * Match3Config.SwapTime, (t) => {
+					piece.ApplyAnimationPercent(timeRatioPassed + t * timeRatioLeft, "Swap", "Forward");
+				});
 				if (Match3Config.SwapBackOnNonMatchingSwap) {
 					bool success = false;
 					var matches = FindMatches();
@@ -192,16 +199,25 @@ namespace Match3
 						}
 					}
 					if (!success) {
+						swapPhase = 1;
 						yield return Match3Config.UnsuccessfulSwapDelay;
 						var i0 = piece.Owner.Parent.Nodes.IndexOf(piece.Owner);
 						var i1 = nextPiece.Owner.Parent.Nodes.IndexOf(nextPiece.Owner);
 						piece.Owner.Parent.Nodes.Swap(i0, i1);
 						SwapPieces(piece, nextPiece);
-						yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+						yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime, (t) => {
+							piece.ApplyAnimationPercent(t, "Swap", "Backward");
+						});
 					}
+				} else {
+					yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime * timeRatioLeft, (t) => {
+						piece.ApplyAnimationPercent(timeRatioPassed + t * timeRatioLeft, "Swap", "Forward");
+					});
 				}
 			} else {
-				yield return piece.MoveTo(piece.GridPosition, timeRatioPassed * Match3Config.SwapTime);
+				yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime * timeRatioPassed, (t) => {
+					piece.ApplyAnimationPercent((1.0f - t) * timeRatioPassed, "Swap", "Forward");
+				});
 			}
 			syncFinished = true;
 		}

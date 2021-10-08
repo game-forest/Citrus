@@ -39,7 +39,7 @@ namespace Match3
 		private int kind;
 		private WidgetBoundsPresenter hasTaskPresenter;
 
-		public IEnumerator<object> MoveTo(IntVector2 position, float time)
+		public IEnumerator<object> MoveTo(IntVector2 position, float time, Action<float> onStep = null)
 		{
 			GridPosition = position;
 			var p0 = Widget.Position;
@@ -52,8 +52,19 @@ namespace Match3
 			do {
 				t -= Task.Current.Delta;
 				Widget.Position = t < 0.0f ? p1 : Mathf.Lerp(1.0f - t / time, p0, p1);
+				onStep?.Invoke(1.0f - (t < 0.0f ? 0.0f : t) / time);
 				yield return null;
 			} while (t > 0.0f);
+		}
+
+		public void ApplyAnimationPercent(float t, string animationName, string markerName)
+		{
+			var animation = Owner.Animations.Find(animationName);
+			var markers = animation.Markers;
+			var m0 = markers.Find(markerName);
+			var m1 = markers[markers.IndexOf(m0) + 1];
+			animation.Time = (m1.Time - m0.Time) * t + m0.Time;
+			animation.ApplyAnimators();
 		}
 
 		public bool CanMatch(Piece otherPiece)
