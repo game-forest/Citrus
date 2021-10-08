@@ -21,11 +21,16 @@ namespace Match3
 		}
 
 		IntVector2 gridPosition;
+		private int kind;
 
-		public Piece(Node pieceWidget, IntVector2 gridPosition)
+		public Piece(Node pieceWidget, IntVector2 gridPosition, int kind)
 		{
 			pieceWidget.Components.Add(this);
 			GridPosition = gridPosition;
+			var kindAnimation = Owner.Animations.Find("Kind");
+			var marker = kindAnimation.Markers[kind];
+			Owner.RunAnimation(marker.Id, kindAnimation.Id);
+			this.kind = kind;
 		}
 
 		protected override void Update(float delta)

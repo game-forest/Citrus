@@ -16,6 +16,8 @@ namespace Match3
 	{
 		public static int ColumnCount { get; set; } = 6;
 		public static int RowCount { get; set; } = 10;
+
+		public static int[] AllowedPieceKinds = { 0, 1, 2, 3, 4 };
 	}
 
 	public class Board
@@ -60,16 +62,16 @@ namespace Match3
 		{
 			for (int x = 0; x < BoardConfig.ColumnCount; x++) {
 				for (int y = 0; y < BoardConfig.RowCount; y++) {
-					CreatePiece(new IntVector2(x, y));
+					CreatePiece(new IntVector2(x, y), BoardConfig.AllowedPieceKinds.RandomItem());
 				}
 			}
 		}
 
-		private Piece CreatePiece(IntVector2 gridPosition)
+		private Piece CreatePiece(IntVector2 gridPosition, int kind)
 		{
 			var pieceWidget = pieceTemplate.Clone<Widget>();
 			pieceContainer.AddNode(pieceWidget);
-			var piece = new Piece(pieceWidget, gridPosition);
+			var piece = new Piece(pieceWidget, gridPosition, kind);
 			return piece;
 		}
 	}
