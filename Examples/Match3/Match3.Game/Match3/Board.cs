@@ -15,6 +15,7 @@ namespace Match3
 		public static float InputDetectionLength { get; set; } = 2.0f;
 		public static double DragPercentOfPieceSizeRequiredForSwapActivation { get; set; } = 30.0f;
 		public static float SwapTime { get; set; } = 0.2f;
+		public static float DiagonalSwipeDeadZoneAngle { get; set; } = 30.0f;
 		internal static float OneCellFallTime { get; set; } = 0.1f;
 	}
 
@@ -172,6 +173,10 @@ namespace Match3
 			var angle = Mathf.Wrap360(Mathf.RadToDeg * Mathf.Atan2(touchDelta));
 			int sectorIndex = 3 - ((int)((angle + 45.0f) / 90)) % 4;
 			projectionAxis = new IntVector2(Math.Abs(sectorIndex - 1) - 1, 1 - Math.Abs(sectorIndex - 2));
+			var halfDeadAngle = Match3Config.DiagonalSwipeDeadZoneAngle * 0.5f;
+			if (angle % 90.0f > 45.0f - halfDeadAngle && angle % 90.0f < 45.0f + halfDeadAngle) {
+				return false;
+			}
 			return true;
 		}
 
