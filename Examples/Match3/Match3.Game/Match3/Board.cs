@@ -27,6 +27,7 @@ namespace Match3
 		private readonly Widget pieceTemplate;
 		private float boardScale;
 		private Grid<Piece> grid = new Grid<Piece>();
+		private List<Piece> pieces = new List<Piece>();
 
 		public Board(Widget boardContainer)
 		{
@@ -90,6 +91,7 @@ namespace Match3
 				BoardConfig.AllowedPieceKinds.RandomItem(),
 				Piece_SetGridPosition
 			);
+			pieces.Add(piece);
 			return piece;
 
 			void Piece_SetGridPosition(Piece piece, IntVector2 gridPosition)
