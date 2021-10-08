@@ -34,6 +34,7 @@ namespace Match3
 		private readonly Widget boardContainer;
 		private readonly Frame pieceContainer;
 		private readonly Widget pieceTemplate;
+		private readonly Widget matchBlowFxTemplate;
 		private float boardScale;
 		private Grid<Piece> grid = new Grid<Piece>();
 		private List<Piece> pieces = new List<Piece>();
@@ -42,6 +43,7 @@ namespace Match3
 		{
 			this.boardContainer = boardContainer;
 			pieceTemplate = Node.Load<Widget>("Game/Match3/MultiMarble");
+			matchBlowFxTemplate = Node.Load<Widget>("Game/Match3/MatchBlowFx");
 			pieceContainer = new Frame {
 				Width = BoardConfig.ColumnCount * Match3Config.CellSize,
 				Height = BoardConfig.RowCount * Match3Config.CellSize,
@@ -313,6 +315,10 @@ namespace Match3
 
 		private IEnumerator<object> BlowTask(Piece piece)
 		{
+			var fx = matchBlowFxTemplate.Clone<Widget>();
+			pieceContainer.AddNode(fx);
+			fx.Position = piece.Widget.CalcPositionInSpaceOf(pieceContainer);
+			pieceContainer.Tasks.Add(FxTask(fx));
 			Animation animation = piece.AnimateMatch();
 			yield return animation;
 			KillPiece(piece);
@@ -354,6 +360,15 @@ namespace Match3
 				System.Diagnostics.Debug.Assert(grid[gridPosition] == null);
 				grid[gridPosition] = piece;
 			}
+		}
+
+		private IEnumerator<object> FxTask(Widget fx)
+		{
+			fx.Layer = 99;
+			var fxAnimation = fx.Animations.Find("Act");
+			fxAnimation.Run("Start");
+			yield return fxAnimation;
+			fx.UnlinkAndDispose();
 		}
 	}
 }
