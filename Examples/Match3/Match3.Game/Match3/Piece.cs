@@ -6,6 +6,21 @@ namespace Match3
 {
 	public class Piece : WidgetBehaviorComponent
 	{
+		public Task Task { get; private set; }
+
+		public void RunTask(IEnumerator<object> task)
+		{
+			System.Diagnostics.Debug.Assert(Task == null);
+			Task = Task.Sequence(task, ClearTaskTask());
+			Owner.Tasks.Add(Task);
+		}
+
+		private IEnumerator<object> ClearTaskTask()
+		{
+			Task = null;
+			yield break;
+		}
+
 		public IntVector2 GridPosition
 		{
 			get => gridPosition;
