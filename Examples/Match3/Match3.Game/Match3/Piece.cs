@@ -11,6 +11,7 @@ namespace Match3
 		public void RunTask(IEnumerator<object> task)
 		{
 			System.Diagnostics.Debug.Assert(Task == null);
+			Owner.CompoundPostPresenter.Add(hasTaskPresenter);
 			Task = Task.Sequence(task, ClearTaskTask());
 			Owner.Tasks.Add(Task);
 		}
@@ -18,6 +19,7 @@ namespace Match3
 		private IEnumerator<object> ClearTaskTask()
 		{
 			Task = null;
+			Owner.CompoundPostPresenter.Remove(hasTaskPresenter);
 			yield break;
 		}
 
@@ -35,6 +37,7 @@ namespace Match3
 
 		IntVector2 gridPosition = new IntVector2(int.MinValue, int.MinValue);
 		private int kind;
+		private WidgetBoundsPresenter hasTaskPresenter;
 
 		public IEnumerator<object> MoveTo(IntVector2 position, float time)
 		{
@@ -63,6 +66,7 @@ namespace Match3
 			var marker = kindAnimation.Markers[kind];
 			Owner.RunAnimation(marker.Id, kindAnimation.Id);
 			this.kind = kind;
+			hasTaskPresenter = new WidgetBoundsPresenter(Color4.Green, 2.0f);
 		}
 
 		protected override void Update(float delta)
