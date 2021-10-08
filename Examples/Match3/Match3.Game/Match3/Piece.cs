@@ -58,9 +58,7 @@ namespace Match3
 
 		public bool CanMatch(Piece otherPiece)
 		{
-			return this.Task == null
-				&& otherPiece != null
-				&& otherPiece.Task == null
+			return otherPiece != null
 				&& otherPiece.kind == this.kind;
 		}
 

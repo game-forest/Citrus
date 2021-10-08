@@ -12,6 +12,9 @@ namespace Match3
 		public static float CellSize { get; set; } = 90.0f;
 		public static bool WaitForAnimateDropDownLand { get; set; } = true;
 		public static bool WaitForAnimateDropDownFall { get; set; } = true;
+		public static float InputDetectionLength { get; set; } = 2.0f;
+		public static double DragPercentOfPieceSizeRequiredForSwapActivation { get; set; } = 30.0f;
+		public static float SwapTime { get; set; } = 0.2f;
 		internal static float OneCellFallTime { get; set; } = 0.1f;
 	}
 
@@ -118,15 +121,77 @@ namespace Match3
 			if (Window.Current.Input.WasMousePressed()) {
 				var piece = WidgetContext.Current.NodeUnderMouse?.Components.Get<Piece>();
 				if (piece != null && piece.Task == null) {
-					piece.RunTask(BlowTask(piece));
+					piece.RunTask(InputTask(piece));
 				}
 			}
+		}
+
+		private IEnumerator<object> InputTask(Piece piece)
+		{
+			var input = Window.Current.Input;
+			var touchPosition0 = input.MousePosition;
+			Vector2 touchDelta;
+			do {
+				yield return null;
+				touchDelta = input.MousePosition - touchPosition0;
+			} while (
+				touchDelta.Length < Match3Config.InputDetectionLength && input.IsMousePressed()
+			);
+			if (!TryGetProjectionAxis(touchDelta, out var projectionAxis)) {
+				yield break;
+			}
+			var nextPiece = grid[piece.GridPosition + projectionAxis];
+			if (nextPiece == null || nextPiece?.Task != null) {
+				yield break;
+			}
+			piece.AnimateSelect();
+			piece.Owner.Parent.Nodes.Swap(0, piece.Owner.Parent.Nodes.IndexOf(piece.Owner));
+			float projectionAmount = 0.0f;
+			var swapActivationDistance = Match3Config.DragPercentOfPieceSizeRequiredForSwapActivation
+				* 0.01 * Match3Config.CellSize;
+			while (input.IsMousePressed() && projectionAmount < swapActivationDistance) {
+				touchDelta = input.MousePosition - touchPosition0;
+				projectionAmount = Vector2.DotProduct((Vector2)projectionAxis, touchDelta);
+				yield return null;
+			}
+			piece.AnimateUnselect();
+			if (projectionAmount < swapActivationDistance) {
+				yield break;
+			}
+			SwapPieces(piece, nextPiece);
+			nextPiece.RunTask(nextPiece.MoveTo(nextPiece.GridPosition, Match3Config.SwapTime));
+			yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+		}
+
+		private static bool TryGetProjectionAxis(Vector2 touchDelta, out IntVector2 projectionAxis)
+		{
+			projectionAxis = default;
+			if (touchDelta.Length < Match3Config.InputDetectionLength) {
+				return false;
+			}
+			var angle = Mathf.Wrap360(Mathf.RadToDeg * Mathf.Atan2(touchDelta));
+			int sectorIndex = 3 - ((int)((angle + 45.0f) / 90)) % 4;
+			projectionAxis = new IntVector2(Math.Abs(sectorIndex - 1) - 1, 1 - Math.Abs(sectorIndex - 2));
+			return true;
+		}
+
+		public static void SwapPieces(Piece lhs, Piece rhs)
+		{
+			var t1 = lhs.GridPosition;
+			var t2 = rhs.GridPosition;
+			lhs.GridPosition = new IntVector2(int.MaxValue, int.MaxValue);
+			rhs.GridPosition = new IntVector2(int.MinValue, int.MinValue);
+			lhs.GridPosition = t2;
+			rhs.GridPosition = t1;
 		}
 
 		private void ProcessMatches()
 		{
 			var matches = FindMatches();
 			foreach (var match in matches) {
+				if (match.Any(p => p.Task != null)) {
+					continue;
+				}
 				foreach (var piece in match) {
 					piece.RunTask(BlowTask(piece));
 				}
