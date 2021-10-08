@@ -16,6 +16,8 @@ namespace Match3
 		public static double DragPercentOfPieceSizeRequiredForSwapActivation { get; set; } = 30.0f;
 		public static float SwapTime { get; set; } = 0.2f;
 		public static float DiagonalSwipeDeadZoneAngle { get; set; } = 30.0f;
+		public static bool SwapBackOnNonMatchingSwap { get; set; } = true;
+		public static object UnsuccessfulSwapDelay { get; set; } = 0.1f;
 		internal static float OneCellFallTime { get; set; } = 0.1f;
 	}
 
@@ -162,6 +164,28 @@ namespace Match3
 			SwapPieces(piece, nextPiece);
 			nextPiece.RunTask(nextPiece.MoveTo(nextPiece.GridPosition, Match3Config.SwapTime));
 			yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+			if (Match3Config.SwapBackOnNonMatchingSwap) {
+				bool success = false;
+				var matches = FindMatches();
+				foreach (var match in matches) {
+					foreach (var p in match) {
+						if (p == piece || p == nextPiece) {
+							if (match.Except(new[] { piece, nextPiece }).All(i => i.Task == null)) {
+								success = true;
+							}
+						}
+					}
+				}
+				if (!success) {
+					yield return Match3Config.UnsuccessfulSwapDelay;
+					var i0 = piece.Owner.Parent.Nodes.IndexOf(piece.Owner);
+					var i1 = nextPiece.Owner.Parent.Nodes.IndexOf(nextPiece.Owner);
+					piece.Owner.Parent.Nodes.Swap(i0, i1);
+					SwapPieces(piece, nextPiece);
+					nextPiece.RunTask(nextPiece.MoveTo(nextPiece.GridPosition, Match3Config.SwapTime));
+					yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+				}
+			}
 		}
 
 		private static bool TryGetProjectionAxis(Vector2 touchDelta, out IntVector2 projectionAxis)
