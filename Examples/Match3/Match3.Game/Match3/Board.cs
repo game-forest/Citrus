@@ -61,6 +61,7 @@ namespace Match3
 				UpdateBoardScale();
 				Spawn();
 				Fall();
+				HandleInput();
 				yield return null;
 			}
 		}
@@ -109,6 +110,31 @@ namespace Match3
 			if (Match3Config.WaitForAnimateDropDownLand) {
 				yield return a;
 			}
+		}
+
+		private void HandleInput()
+		{
+			if (Window.Current.Input.WasMousePressed()) {
+				var piece = WidgetContext.Current.NodeUnderMouse?.Components.Get<Piece>();
+				if (piece != null && piece.Task == null) {
+					piece.RunTask(BlowTask(piece));
+				}
+			}
+		}
+
+		private IEnumerator<object> BlowTask(Piece piece)
+		{
+			Animation animation = piece.AnimateMatch();
+			yield return animation;
+			KillPiece(piece);
+		}
+
+		private void KillPiece(Piece piece)
+		{
+			grid[piece.GridPosition] = null;
+			pieces.Remove(piece);
+			piece.Owner.UnlinkAndDispose();
+
 		}
 
 		private void FillBoard()
