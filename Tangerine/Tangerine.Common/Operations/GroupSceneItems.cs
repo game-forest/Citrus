@@ -151,17 +151,23 @@ namespace Tangerine.Common.Operations
 						SetKeyframe.Perform(
 							node,
 							animator.TargetPropertyPath,
-							FindAnimationById(node, animator.AnimationId),
-							newKeyframe);
+							FindAnimation(node, animator),
+							newKeyframe
+						);
 					}
 				}
 			}
 		}
 
-		private static Animation FindAnimationById(Node node, string animationId)
+		private static Animation FindAnimation(Node animatorOwner, IAnimator animator)
 		{
+			var node = animatorOwner;
+			var animationId = animator.AnimationId;
 			while (true) {
-				if (node.Animations.TryFind(animationId, out var a)) {
+				if (
+					node.Animations.TryFind(animationId, out var a)
+					&& a.ValidatedEffectiveAnimatorsSet.Contains(animator)
+				) {
 					return a;
 				}
 				node = node.Parent;
