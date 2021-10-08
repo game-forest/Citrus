@@ -174,9 +174,11 @@ namespace Match3
 				yield return null;
 			}
 			piece.AnimateUnselect();
+			var timeRatioPassed = projectionAmount / Match3Config.CellSize;
+			var timeRatioLeft = 1.0f - timeRatioPassed;
 			if (projectionAmount > swapActivationDistance) {
 				SwapPieces(piece, nextPiece);
-				yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+				yield return piece.MoveTo(piece.GridPosition, timeRatioLeft * Match3Config.SwapTime);
 				if (Match3Config.SwapBackOnNonMatchingSwap) {
 					bool success = false;
 					var matches = FindMatches();
@@ -199,7 +201,7 @@ namespace Match3
 					}
 				}
 			} else {
-				yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+				yield return piece.MoveTo(piece.GridPosition, timeRatioPassed * Match3Config.SwapTime);
 			}
 			syncFinished = true;
 		}
