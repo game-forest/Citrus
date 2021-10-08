@@ -26,6 +26,7 @@ namespace Match3
 		private readonly Frame pieceContainer;
 		private readonly Widget pieceTemplate;
 		private float boardScale;
+		private Grid<Piece> grid = new Grid<Piece>();
 
 		public Board(Widget boardContainer)
 		{
@@ -38,7 +39,7 @@ namespace Match3
 			this.boardContainer.Nodes.Insert(0, pieceContainer);
 			this.boardContainer.Tasks.Add(this.Update);
 			pieceContainer.CompoundPostPresenter.Add(new WidgetBoundsPresenter(Color4.Green, 2.0f));
-			FillBoard();
+			//FillBoard();
 		}
 
 		void UpdateBoardScale()
@@ -54,7 +55,19 @@ namespace Match3
 		{
 			while (true) {
 				UpdateBoardScale();
+				Spawn();
 				yield return null;
+			}
+		}
+
+		private void Spawn()
+		{
+			for (int x = 0; x < BoardConfig.ColumnCount; x++) {
+				var gridPosition = new IntVector2(x, 0);
+				if (grid[gridPosition] == null) {
+					var piece = CreatePiece(gridPosition);
+					piece.AnimateShow();
+				}
 			}
 		}
 
@@ -62,17 +75,29 @@ namespace Match3
 		{
 			for (int x = 0; x < BoardConfig.ColumnCount; x++) {
 				for (int y = 0; y < BoardConfig.RowCount; y++) {
-					CreatePiece(new IntVector2(x, y), BoardConfig.AllowedPieceKinds.RandomItem());
+					CreatePiece(new IntVector2(x, y));
 				}
 			}
 		}
 
-		private Piece CreatePiece(IntVector2 gridPosition, int kind)
+		private Piece CreatePiece(IntVector2 gridPosition)
 		{
 			var pieceWidget = pieceTemplate.Clone<Widget>();
 			pieceContainer.AddNode(pieceWidget);
-			var piece = new Piece(pieceWidget, gridPosition, kind);
+			var piece = new Piece(
+				pieceWidget,
+				gridPosition,
+				BoardConfig.AllowedPieceKinds.RandomItem(),
+				Piece_SetGridPosition
+			);
 			return piece;
+
+			void Piece_SetGridPosition(Piece piece, IntVector2 gridPosition)
+			{
+				grid[piece.GridPosition] = null;
+				System.Diagnostics.Debug.Assert(grid[gridPosition] == null);
+				grid[gridPosition] = piece;
+			}
 		}
 	}
 }

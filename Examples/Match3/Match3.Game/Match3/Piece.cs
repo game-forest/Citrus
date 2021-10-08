@@ -8,24 +8,24 @@ namespace Match3
 	{
 		public IntVector2 GridPosition
 		{
-			get
-			{
-				return gridPosition;
-			}
-
+			get => gridPosition;
 			set
 			{
-				gridPosition = value;
+				onSetGridPosition.Invoke(this, value);
+				this.gridPosition = value;
 				Widget.Position = ((Vector2)GridPosition + Vector2.Half) * Match3Config.CellSize;
 			}
 		}
 
-		IntVector2 gridPosition;
+		private Action<Piece, IntVector2> onSetGridPosition;
+
+		IntVector2 gridPosition = new IntVector2(int.MinValue, int.MinValue);
 		private int kind;
 
-		public Piece(Node pieceWidget, IntVector2 gridPosition, int kind)
+		public Piece(Node pieceWidget, IntVector2 gridPosition, int kind, Action<Piece, IntVector2> onSetGridPosition)
 		{
 			pieceWidget.Components.Add(this);
+			this.onSetGridPosition = onSetGridPosition;
 			GridPosition = gridPosition;
 			var kindAnimation = Owner.Animations.Find("Kind");
 			var marker = kindAnimation.Markers[kind];
