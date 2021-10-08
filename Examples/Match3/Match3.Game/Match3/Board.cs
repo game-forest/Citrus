@@ -14,7 +14,8 @@ namespace Match3
 
 	public static class BoardConfig
 	{
-
+		public static int ColumnCount { get; set; } = 6;
+		public static int RowCount { get; set; } = 10;
 	}
 
 	public class Board
@@ -32,11 +33,21 @@ namespace Match3
 			};
 			this.boardContainer.Nodes.Insert(0, pieceContainer);
 			this.boardContainer.Tasks.Add(this.Update);
+			FillBoard();
 		}
 
 		private IEnumerator<object> Update()
 		{
 			yield break;
+		}
+
+		private void FillBoard()
+		{
+			for (int x = 0; x < BoardConfig.ColumnCount; x++) {
+				for (int y = 0; y < BoardConfig.RowCount; y++) {
+					CreatePiece(new IntVector2(x, y));
+				}
+			}
 		}
 
 		private Piece CreatePiece(IntVector2 gridPosition)
