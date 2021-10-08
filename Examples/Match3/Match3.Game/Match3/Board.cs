@@ -10,6 +10,9 @@ namespace Match3
 	public static class Match3Config
 	{
 		public static float CellSize { get; set; } = 90.0f;
+		public static bool WaitForAnimateDropDownLand { get; set; } = true;
+		public static bool WaitForAnimateDropDownFall { get; set; } = true;
+		internal static float OneCellFallTime { get; set; } = 0.1f;
 	}
 
 	public static class BoardConfig
@@ -57,6 +60,7 @@ namespace Match3
 			while (true) {
 				UpdateBoardScale();
 				Spawn();
+				Fall();
 				yield return null;
 			}
 		}
@@ -69,6 +73,38 @@ namespace Match3
 					var piece = CreatePiece(gridPosition);
 					piece.AnimateShow();
 				}
+			}
+		}
+
+		private void Fall()
+		{
+			foreach (var piece in pieces) {
+				if (piece.Task == null && CanFall(piece)) {
+					piece.RunTask(FallTask(piece));
+				}
+			}
+		}
+
+		private bool CanFall(Piece piece)
+		{
+			var belowPosition = piece.GridPosition + IntVector2.Down;
+			return grid[belowPosition] == null
+				&& belowPosition.Y < BoardConfig.RowCount;
+		}
+
+		private IEnumerator<object> FallTask(Piece piece)
+		{
+			var a = piece.AnimateDropDownFall();
+			if (Match3Config.WaitForAnimateDropDownFall) {
+				yield return a;
+			}
+			while (CanFall(piece)) {
+				var belowPosition = piece.GridPosition + IntVector2.Down;
+				yield return piece.MoveTo(belowPosition, Match3Config.OneCellFallTime);
+			}
+			a = piece.AnimateDropDownLand();
+			if (Match3Config.WaitForAnimateDropDownLand) {
+				yield return a;
 			}
 		}
 
