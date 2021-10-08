@@ -71,7 +71,10 @@ namespace Match3
 				var gridPosition = new IntVector2(x, 0);
 				if (grid[gridPosition] == null) {
 					var piece = CreatePiece(gridPosition);
-					piece.AnimateShow();
+					var a = piece.AnimateShow();
+					piece.RunTask(Task.Repeat(() => {
+						return a.IsRunning;
+					}));
 				}
 			}
 		}
