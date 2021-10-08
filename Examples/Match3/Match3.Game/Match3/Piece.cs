@@ -56,6 +56,14 @@ namespace Match3
 			} while (t > 0.0f);
 		}
 
+		public bool CanMatch(Piece otherPiece)
+		{
+			return this.Task == null
+				&& otherPiece != null
+				&& otherPiece.Task == null
+				&& otherPiece.kind == this.kind;
+		}
+
 		public Piece(Node pieceWidget, IntVector2 gridPosition, int kind, Action<Piece, IntVector2> onSetGridPosition)
 		{
 			pieceWidget.Components.Add(this);

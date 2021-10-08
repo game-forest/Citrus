@@ -62,6 +62,7 @@ namespace Match3
 				Spawn();
 				Fall();
 				HandleInput();
+				ProcessMatches();
 				yield return null;
 			}
 		}
@@ -118,6 +119,66 @@ namespace Match3
 				var piece = WidgetContext.Current.NodeUnderMouse?.Components.Get<Piece>();
 				if (piece != null && piece.Task == null) {
 					piece.RunTask(BlowTask(piece));
+				}
+			}
+		}
+
+		private void ProcessMatches()
+		{
+			var matches = FindMatches();
+			foreach (var match in matches) {
+				foreach (var piece in match) {
+					piece.RunTask(BlowTask(piece));
+				}
+			}
+		}
+
+		private List<List<Piece>> FindMatches()
+		{
+			var matches = new List<List<Piece>>();
+			Grid<List<Piece>> matchMap = new Grid<List<Piece>>();
+			Pass(0);
+			Pass(1);
+			return matches;
+
+			void Pass(int passIndex)
+			{
+				int[] boardSize = { BoardConfig.ColumnCount, BoardConfig.RowCount };
+				for (int i = 0; i <= boardSize[passIndex]; i++) {
+					Piece a = null;
+					var matchLength = 1;
+					List<Piece> match = new List<Piece>();
+					for (int j = -1; j <= boardSize[(passIndex + 1) % 2]; j++) {
+						var (x, y) = passIndex == 0 ? (i, j) : (j, i);
+						var p = new IntVector2(x, y);
+						var b = grid[p];
+						if (a?.CanMatch(b) ?? false) {
+							matchLength++;
+						} else {
+							if (matchLength >= 3) {
+								var newMatch = match.ToList();
+								var intersectedMatches = match
+									.Select(i => matchMap[i.GridPosition])
+									.Where(i => i != null)
+									.Distinct()
+									.ToList();
+								foreach (var m in intersectedMatches) {
+									matches.Remove(m);
+								}
+								newMatch = newMatch
+									.Union(intersectedMatches.SelectMany(i => i))
+									.ToList();
+								foreach (var piece in newMatch) {
+									matchMap[piece.GridPosition] = newMatch;
+								}
+								matches.Add(newMatch);
+							}
+							matchLength = 1;
+							match.Clear();
+						}
+						match.Add(b);
+						a = b;
+					}
 				}
 			}
 		}
