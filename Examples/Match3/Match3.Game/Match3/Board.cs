@@ -23,6 +23,7 @@ namespace Match3
 		private readonly Widget boardContainer;
 		private readonly Frame pieceContainer;
 		private readonly Widget pieceTemplate;
+		private float boardScale;
 
 		public Board(Widget boardContainer)
 		{
@@ -35,13 +36,24 @@ namespace Match3
 			this.boardContainer.Nodes.Insert(0, pieceContainer);
 			this.boardContainer.Tasks.Add(this.Update);
 			pieceContainer.CompoundPostPresenter.Add(new WidgetBoundsPresenter(Color4.Green, 2.0f));
-			pieceContainer.CenterOnParent();
 			FillBoard();
+		}
+
+		void UpdateBoardScale()
+		{
+			var widthAspect = boardContainer.Width / pieceContainer.Width;
+			var heightAspect = boardContainer.Height / pieceContainer.Height;
+			boardScale = Mathf.Min(widthAspect, heightAspect);
+			pieceContainer.Scale = new Vector2(boardScale);
+			pieceContainer.CenterOnParent();
 		}
 
 		private IEnumerator<object> Update()
 		{
-			yield break;
+			while (true) {
+				UpdateBoardScale();
+				yield return null;
+			}
 		}
 
 		private void FillBoard()
