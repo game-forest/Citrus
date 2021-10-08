@@ -153,15 +153,6 @@ namespace Match3
 			float projectionAmount = 0.0f;
 			var swapActivationDistance = Match3Config.DragPercentOfPieceSizeRequiredForSwapActivation
 				* 0.01 * Match3Config.CellSize;
-			while (input.IsMousePressed() && projectionAmount < swapActivationDistance) {
-				touchDelta = input.MousePosition - touchPosition0;
-				projectionAmount = Vector2.DotProduct((Vector2)projectionAxis, touchDelta);
-				yield return null;
-			}
-			piece.AnimateUnselect();
-			if (projectionAmount < swapActivationDistance) {
-				yield break;
-			}
 			var nextPieceOriginalPosition = nextPiece.Owner.AsWidget.Position;
 			bool syncFinished = false;
 			Func<bool> syncPosition = () => {
@@ -170,28 +161,45 @@ namespace Match3
 				return !syncFinished;
 			};
 			nextPiece.RunTask(Task.Repeat(syncPosition));
-			SwapPieces(piece, nextPiece);
-			yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
-			if (Match3Config.SwapBackOnNonMatchingSwap) {
-				bool success = false;
-				var matches = FindMatches();
-				foreach (var match in matches) {
-					foreach (var p in match) {
-						if (p == piece || p == nextPiece) {
-							if (match.Except(new[] { piece, nextPiece }).All(i => i.Task == null)) {
-								success = true;
+			while (input.IsMousePressed()) {
+				touchDelta = input.MousePosition - touchPosition0;
+				projectionAmount = Vector2.DotProduct((Vector2)projectionAxis, touchDelta);
+				projectionAmount = Mathf.Clamp(
+					value: 1.0f / boardScale * projectionAmount,
+					min: 0,
+					max: Match3Config.CellSize
+				);
+				piece.Owner.AsWidget.Position = ((Vector2)piece.GridPosition + Vector2.Half) * Match3Config.CellSize
+					+ projectionAmount * (Vector2)projectionAxis;
+				yield return null;
+			}
+			piece.AnimateUnselect();
+			if (projectionAmount > swapActivationDistance) {
+				SwapPieces(piece, nextPiece);
+				yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+				if (Match3Config.SwapBackOnNonMatchingSwap) {
+					bool success = false;
+					var matches = FindMatches();
+					foreach (var match in matches) {
+						foreach (var p in match) {
+							if (p == piece || p == nextPiece) {
+								if (match.Except(new[] { piece, nextPiece }).All(i => i.Task == null)) {
+									success = true;
+								}
 							}
 						}
 					}
+					if (!success) {
+						yield return Match3Config.UnsuccessfulSwapDelay;
+						var i0 = piece.Owner.Parent.Nodes.IndexOf(piece.Owner);
+						var i1 = nextPiece.Owner.Parent.Nodes.IndexOf(nextPiece.Owner);
+						piece.Owner.Parent.Nodes.Swap(i0, i1);
+						SwapPieces(piece, nextPiece);
+						yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
+					}
 				}
-				if (!success) {
-					yield return Match3Config.UnsuccessfulSwapDelay;
-					var i0 = piece.Owner.Parent.Nodes.IndexOf(piece.Owner);
-					var i1 = nextPiece.Owner.Parent.Nodes.IndexOf(nextPiece.Owner);
-					piece.Owner.Parent.Nodes.Swap(i0, i1);
-					SwapPieces(piece, nextPiece);
-					yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
-				}
+			} else {
+				yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
 			}
 			syncFinished = true;
 		}
