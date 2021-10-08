@@ -51,7 +51,7 @@ namespace Match3
 			this.boardContainer.Nodes.Insert(0, pieceContainer);
 			this.boardContainer.Tasks.Add(this.Update);
 			pieceContainer.CompoundPostPresenter.Add(new WidgetBoundsPresenter(Color4.Green, 2.0f));
-			//FillBoard();
+			FillBoard();
 		}
 
 		void UpdateBoardScale()
@@ -80,7 +80,7 @@ namespace Match3
 			for (int x = 0; x < BoardConfig.ColumnCount; x++) {
 				var gridPosition = new IntVector2(x, 0);
 				if (grid[gridPosition] == null) {
-					var piece = CreatePiece(gridPosition);
+					var piece = CreatePiece(gridPosition, BoardConfig.AllowedPieceKinds.RandomItem());
 					var a = piece.AnimateShow();
 					piece.RunTask(Task.Repeat(() => {
 						return a.IsRunning;
@@ -334,21 +334,68 @@ namespace Match3
 
 		private void FillBoard()
 		{
-			for (int x = 0; x < BoardConfig.ColumnCount; x++) {
-				for (int y = 0; y < BoardConfig.RowCount; y++) {
-					CreatePiece(new IntVector2(x, y));
+			if (BoardConfig.AllowedPieceKinds.Any()) {
+				int pieceCount = BoardConfig.ColumnCount * BoardConfig.RowCount;
+				for (int i = 0; i < pieceCount; i++) {
+					var gridPosition = new IntVector2(i % BoardConfig.ColumnCount, i / BoardConfig.ColumnCount);
+					if (grid[gridPosition] == null) {
+						var adjacentKinds = EnumerateAdjacentItems(gridPosition)
+							.Where(i => i.Item != null)
+							.Select(i => i.Item.Kind)
+							.Distinct();
+						var allowedKinds = BoardConfig.AllowedPieceKinds.Except(adjacentKinds).ToList();
+						if (!allowedKinds.Any()) {
+							allowedKinds.Add(BoardConfig.AllowedPieceKinds.RandomItem());
+						}
+						int pieceKind = Mathf.RandomItem(allowedKinds);
+						var item = CreatePiece(gridPosition, pieceKind);
+						item.AnimateShown();
+					}
 				}
 			}
 		}
 
-		private Piece CreatePiece(IntVector2 gridPosition)
+		private static readonly IntVector2[] directionVectors =	{
+			IntVector2.Right,
+			IntVector2.Down,
+			IntVector2.Left,
+			IntVector2.Up
+		};
+
+		[Flags]
+		private enum Direction
+		{
+			Right = 1,
+			Down = 2,
+			Left = 4,
+			Up = 8,
+			Horizontal = Right | Left,
+			Vertical = Up | Down,
+			Any = Horizontal | Vertical,
+		}
+
+		private static readonly Direction[] directions = {
+			Direction.Right, Direction.Down, Direction.Left, Direction.Up
+		};
+
+		private IEnumerable<(Piece Item, IntVector2 Delta, Direction Direction)> EnumerateAdjacentItems(
+			IntVector2 position
+		)
+		{
+			for (int i = 0; i < 4; i++) {
+				var delta = directionVectors[i];
+				yield return (grid[position + delta], delta, directions[i]);
+			}
+		}
+
+		private Piece CreatePiece(IntVector2 gridPosition, int kind)
 		{
 			var pieceWidget = pieceTemplate.Clone<Widget>();
 			pieceContainer.AddNode(pieceWidget);
 			var piece = new Piece(
 				pieceWidget,
 				gridPosition,
-				BoardConfig.AllowedPieceKinds.RandomItem(),
+				kind,
 				Piece_SetGridPosition
 			);
 			pieces.Add(piece);

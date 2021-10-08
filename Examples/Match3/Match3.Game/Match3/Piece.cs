@@ -37,6 +37,7 @@ namespace Match3
 
 		IntVector2 gridPosition = new IntVector2(int.MinValue, int.MinValue);
 		private int kind;
+		public int Kind => kind;
 		private WidgetBoundsPresenter hasTaskPresenter;
 
 		public IEnumerator<object> MoveTo(IntVector2 position, float time, Action<float> onStep = null)
