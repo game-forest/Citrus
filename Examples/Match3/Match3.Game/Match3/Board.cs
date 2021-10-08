@@ -133,6 +133,7 @@ namespace Match3
 		{
 			var input = Window.Current.Input;
 			var touchPosition0 = input.MousePosition;
+			var originalPiecePosition = piece.Owner.AsWidget.Position;
 			Vector2 touchDelta;
 			do {
 				yield return null;
@@ -161,8 +162,15 @@ namespace Match3
 			if (projectionAmount < swapActivationDistance) {
 				yield break;
 			}
+			var nextPieceOriginalPosition = nextPiece.Owner.AsWidget.Position;
+			bool syncFinished = false;
+			Func<bool> syncPosition = () => {
+				var delta = (originalPiecePosition - piece.Owner.AsWidget.Position);
+				nextPiece.Owner.AsWidget.Position = nextPieceOriginalPosition + delta;
+				return !syncFinished;
+			};
+			nextPiece.RunTask(Task.Repeat(syncPosition));
 			SwapPieces(piece, nextPiece);
-			nextPiece.RunTask(nextPiece.MoveTo(nextPiece.GridPosition, Match3Config.SwapTime));
 			yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
 			if (Match3Config.SwapBackOnNonMatchingSwap) {
 				bool success = false;
@@ -182,10 +190,10 @@ namespace Match3
 					var i1 = nextPiece.Owner.Parent.Nodes.IndexOf(nextPiece.Owner);
 					piece.Owner.Parent.Nodes.Swap(i0, i1);
 					SwapPieces(piece, nextPiece);
-					nextPiece.RunTask(nextPiece.MoveTo(nextPiece.GridPosition, Match3Config.SwapTime));
 					yield return piece.MoveTo(piece.GridPosition, Match3Config.SwapTime);
 				}
 			}
+			syncFinished = true;
 		}
 
 		private static bool TryGetProjectionAxis(Vector2 touchDelta, out IntVector2 projectionAxis)
