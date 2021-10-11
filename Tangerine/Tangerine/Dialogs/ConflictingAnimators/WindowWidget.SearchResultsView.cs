@@ -30,16 +30,16 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			{
 				Content.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
-					var rect = CalcRect(w);
+					var rect = CalculateRect(w);
 					Renderer.DrawRect(rect.A, rect.B, Theme.Colors.WhiteBackground);
 				}));
 				Content.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
-					var rect = CalcRect(w);
+					var rect = CalculateRect(w);
 					Renderer.DrawRectOutline(rect.A, rect.B, Theme.Colors.ControlBorder);
 				}));
 
-				static Rectangle CalcRect(Widget w)
+				static Rectangle CalculateRect(Widget w)
 				{
 					var wp = w.ParentWidget;
 					var p = wp.Padding;

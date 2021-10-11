@@ -36,7 +36,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		/// <remarks>
 		/// Modifying scenes during enumeration will cause a race condition and lead to undefined behavior!
 		/// </remarks>
-		public static (IEnumerable<ConflictInfo> conflicts, WorkProgress workProgress) Enumerate(
+		public static (IEnumerable<ConflictInfo> Conflicts, WorkProgress Progress) Enumerate(
 			Content content, 
 			CancellationToken cancellationToken
 		) {
