@@ -5,6 +5,11 @@ using Yuzu;
 
 namespace Lime
 {
+	public interface ITriggerable
+	{
+		void OnTrigger(string property, object value, double animationTimeCorrection = 0);
+	}
+
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 	public sealed class NodeComponentDontSerializeAttribute : Attribute
 	{ }
@@ -61,7 +66,7 @@ namespace Lime
 		protected internal virtual void OnBuilt() { }
 	}
 
-	public class NodeBehavior : BehaviorComponent
+	public class NodeBehavior : BehaviorComponent, ITriggerable
 	{
 		private bool registered;
 		private LegacyEarlyBehaviorContainer earlyBehaviorContainer;
