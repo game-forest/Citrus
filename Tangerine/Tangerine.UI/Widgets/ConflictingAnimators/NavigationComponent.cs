@@ -58,7 +58,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				savedTextStyle = caption.GetDefaultStyle();
 				caption.SetDefaultStyle(caption.BoldStyle);
 				caption.HitTestTarget = true;
-				caption.Clicked += OnClick;
+				caption.Clicked += OnCaptionClick;
 				caption.Tasks.Add(Theme.MouseHoverInvalidationTask(caption), invalidationTaskTag);
 			}
 		}
@@ -69,7 +69,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			if (caption != null) {
 				caption.HitTestTarget = savedHitTestTarget;
 				caption.SetDefaultStyle(savedTextStyle);
-				caption.Clicked -= OnClick;
+				caption.Clicked -= OnCaptionClick;
 				caption.Tasks.StopByTag(invalidationTaskTag);
 			}
 		}
@@ -96,7 +96,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 
 		private void OnMouseAway() => Caption?.SetDefaultStyle(Caption?.BoldStyle);
 
-		private void OnClick()
+		private void OnCaptionClick()
 		{
 			try {
 				Project.Current.OpenDocument(info.DocumentPath);

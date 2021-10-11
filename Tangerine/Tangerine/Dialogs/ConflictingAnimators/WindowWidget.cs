@@ -62,7 +62,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				currentSearchTask = Task.Run(() => {
 					foreach (var conflict in conflicts) {
 						cancellationToken.ThrowIfCancellationRequested();
-						searchResultsView.EnqueueThreadSafe(conflict);
+						searchResultsView.Enqueue(conflict);
 					}
 				}, searchCancellation.Token);
 				await currentSearchTask;

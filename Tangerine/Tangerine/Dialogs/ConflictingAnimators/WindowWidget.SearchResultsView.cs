@@ -69,7 +69,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				}
 			}
 
-			public void EnqueueThreadSafe(ConflictInfo info) => pending.Enqueue(info);
+			public void Enqueue(ConflictInfo info) => pending.Enqueue(info);
 
 			public void Clear()
 			{

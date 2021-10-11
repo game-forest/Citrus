@@ -37,7 +37,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		{
 			this.conflict = conflict;
 			Layout = new VBoxLayout { Spacing = 4 };
-
 			AddNode(CreateDescriptionWidget());
 			AddNode(ParseConflicts());
 		}
@@ -87,7 +86,6 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			foreach (var link in links) {
 				conflictWidget.AddNode(link);
 			}
-
 			return conflictWidget;
 		}
 
