@@ -73,7 +73,7 @@ namespace Tangerine.UI.Inspector
 						queriedComponents.Clear();
 						n.Components.GetAll(t, queriedComponents);
 						foreach (var c in queriedComponents) {
-							if (c != null && t.IsAssignableFrom(c.GetType())) {
+							if (c != null && t == c.GetType()) {
 								nodeComponents.Add(c);
 							}
 						}
