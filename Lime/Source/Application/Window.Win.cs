@@ -900,7 +900,12 @@ namespace Lime
 			// That's why modal window MUST block other windows from updating.
 			// TODO: Deal with 'window independent systems update` that currently are updated
 			// in main window Update (e.g. AudioSystem).
-			if (!form.Visible || !form.CanFocus || !renderControl.IsHandleCreated) {
+			if (
+				!form.Visible
+				|| !form.CanFocus
+				|| !renderControl.IsHandleCreated
+				|| form.WindowState == FormWindowState.Minimized
+			) {
 				return false;
 			}
 			UnclampedDelta = (float)stopwatch.Elapsed.TotalSeconds;
