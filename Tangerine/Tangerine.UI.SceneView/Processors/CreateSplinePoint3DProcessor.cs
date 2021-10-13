@@ -42,7 +42,7 @@ namespace Tangerine.UI.SceneView
 						}
 						var spline = (Spline3D) Document.Current.Container;
 						var vp = spline.Viewport;
-						var ray = vp.ScreenPointToRay(input.MousePosition);
+						var ray = vp.ScreenPointToRay(sv.MousePosition);
 						var xyPlane = new Plane(new Vector3(0, 0, 1), 0).Transform(spline.GlobalTransform);
 						var d = ray.Intersects(xyPlane);
 						if (d.HasValue) {
@@ -51,7 +51,7 @@ namespace Tangerine.UI.SceneView
 							using (history.BeginTransaction()) {
 								while (input.IsMousePressed()) {
 									history.RollbackTransaction();
-									ray = vp.ScreenPointToRay(input.MousePosition);
+									ray = vp.ScreenPointToRay(sv.MousePosition);
 									d = ray.Intersects(xyPlane);
 									if (d.HasValue) {
 										var tangent = (ray.Position + ray.Direction * d.Value) *
