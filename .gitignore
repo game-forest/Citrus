@@ -8,6 +8,7 @@ obj
 *.userosscache
 *.sln.docstates
 .svn
+dotnet
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
