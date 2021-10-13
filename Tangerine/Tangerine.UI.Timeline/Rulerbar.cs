@@ -204,9 +204,21 @@ namespace Tangerine.UI.Timeline
 		public static void PasteMarkers()
 		{
 			Document.Current.History.DoTransaction(() => {
+				// Firstly insert all non-Jump markers
+				// in order to correctly resolve Jump markers dependencies.
+				// Yep, it doesn't fix a case when Jump marker jumps to Jump marker,
+				// because it doesn't make any sense and will clutter the code.
 				foreach (var marker in copiedMarkers) {
-					var m = marker.Clone();
-					SetMarker.Perform(m, true);
+					if (marker.Action != MarkerAction.Jump) {
+						var m = marker.Clone();
+						SetMarker.Perform(m, true);
+					}
+				}
+				foreach (var marker in copiedMarkers) {
+					if (marker.Action == MarkerAction.Jump) {
+						var m = marker.Clone();
+						SetMarker.Perform(m, true);
+					}
 				}
 			});
 		}
