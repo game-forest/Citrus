@@ -320,27 +320,89 @@ namespace Citrus.Tests.Widgets
 		{
 			var node = new Widget();
 			var components = node.Components;
-			var weird = new WeirdNodeComponent();
-			components.Add(weird);
-			Assert.IsTrue(components.Remove(weird));
-			Assert.AreEqual(1, components.Count);
-			Assert.IsTrue(components.Contains<BaseTestNodeComponent>());
-			components.Add(weird);
-			components.Clear();
-			Assert.AreEqual(0, components.Count);
-			components.Add(weird);
-			Assert.IsTrue(components.Remove<Component>());
-			Assert.AreEqual(0, components.Count);
-			components.Add(weird);
-			components.Add(new DummyNodeComponent());
-			Assert.IsTrue(components.Remove<WeirdNodeComponent>());
-			Assert.IsTrue(components.Remove<DummyNodeComponent>());
-			Assert.IsTrue(components.Remove<BaseTestNodeComponent>());
+
+			{
+				var weird = new RemoveComponentOnRemoveComponent();
+				components.Add(weird);
+				components.Add(new BaseTestNodeComponent());
+				Assert.IsTrue(components.Remove<RemoveComponentOnRemoveComponent>());
+				Assert.IsFalse(components.Remove<BaseTestNodeComponent>());
+				Assert.AreEqual(0, components.Count);
+			}
+
+			{
+				var weird = new RemoveComponentOnAddComponent();
+				components.Add(new BaseTestNodeComponent());
+				Assert.AreEqual(1, components.Count);
+				components.Add(weird);
+				Assert.AreEqual(1, components.Count);
+				Assert.IsFalse(components.Remove<BaseTestNodeComponent>());
+				Assert.IsTrue(components.Remove<RemoveComponentOnAddComponent>());
+			}
+
+			{
+				var weird = new AddComponentOnRemoveComponent();
+				components.Add(weird);
+				Assert.IsTrue(components.Remove(weird));
+				Assert.AreEqual(1, components.Count);
+				Assert.IsTrue(components.Contains<BaseTestNodeComponent>());
+				components.Add(weird);
+				components.Clear();
+				Assert.AreEqual(0, components.Count);
+				components.Add(weird);
+				Assert.IsTrue(components.Remove<Component>());
+				Assert.AreEqual(0, components.Count);
+				components.Add(weird);
+				components.Add(new DummyNodeComponent());
+				Assert.IsTrue(components.Remove<AddComponentOnRemoveComponent>());
+				Assert.IsTrue(components.Remove<DummyNodeComponent>());
+				Assert.IsTrue(components.Remove<BaseTestNodeComponent>());
+			}
+
+			{
+				var weird = new AddComponentOnAddComponent();
+				components.Add(weird);
+				Assert.AreEqual(2, components.Count);
+				Assert.IsTrue(components.Remove<AddComponentOnAddComponent>());
+				Assert.IsTrue(components.Remove<BaseTestNodeComponent>());
+			}
 		}
 
 
 
-		public class WeirdNodeComponent : NodeComponent
+		public class RemoveComponentOnRemoveComponent : NodeComponent
+		{
+			protected override void OnOwnerChanged(Node oldOwner)
+			{
+				base.OnOwnerChanged(oldOwner);
+				if (oldOwner != null) {
+					oldOwner.Components.Remove<BaseTestNodeComponent>();
+				}
+			}
+		}
+		public class RemoveComponentOnAddComponent : NodeComponent
+		{
+			protected override void OnOwnerChanged(Node oldOwner)
+			{
+				base.OnOwnerChanged(oldOwner);
+				if (oldOwner == null && Owner != null) {
+					Owner.Components.Remove<BaseTestNodeComponent>();
+				}
+			}
+		}
+
+		public class AddComponentOnAddComponent : NodeComponent
+		{
+			protected override void OnOwnerChanged(Node oldOwner)
+			{
+				base.OnOwnerChanged(oldOwner);
+				if (oldOwner == null && Owner != null) {
+					Owner.Components.Add(new BaseTestNodeComponent());
+				}
+			}
+		}
+
+		public class AddComponentOnRemoveComponent : NodeComponent
 		{
 			protected override void OnOwnerChanged(Node oldOwner)
 			{
