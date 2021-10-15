@@ -62,14 +62,6 @@ namespace Lime
 			sliderTimeToLive = time;
 		}
 
-		public bool IsSliderVisible => sliderTimeToLive > 0 && (slider?.GloballyVisible ?? false);
-		public Vector2 SliderSize => slider?.Size ?? Vector2.Zero;
-		public float SliderWidth => SliderSize.X;
-		public float SliderHeight => SliderSize.Y;
-		public Vector2 SliderVisibleSize => IsSliderVisible ? SliderSize : Vector2.Zero;
-		public float SliderVisibleWidth => SliderVisibleSize.X;
-		public float SliderVisibleHeight => SliderVisibleSize.Y;
-
 		private IEnumerator<object> ShowSliderWhenScrollingTask()
 		{
 			yield return Task.WaitWhile(() => slider == null);
