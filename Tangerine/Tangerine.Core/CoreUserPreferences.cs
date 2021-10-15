@@ -59,6 +59,9 @@ namespace Tangerine.Core
 		public bool ExperimentalTimelineHierarchy { get; set; }
 
 		[YuzuOptional]
+		public bool TimelineAllComponentIcons { get; set; }
+		
+		[YuzuOptional]
 		public bool LockLayout { get; set; }
 
 		[YuzuOptional]
