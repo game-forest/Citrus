@@ -11,8 +11,7 @@ namespace Lime
 	}
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-	public sealed class NodeComponentDontSerializeAttribute : Attribute
-	{ }
+	public sealed class NodeComponentDontSerializeAttribute : Attribute { }
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 	public sealed class RemoveOnAssetCookAttribute : Attribute { }
@@ -21,23 +20,16 @@ namespace Lime
 	{
 		public Type[] Types;
 
-		public AllowedComponentOwnerTypes(params Type[] types)
-		{
-			Types = types;
-		}
+		public AllowedComponentOwnerTypes(params Type[] types) => Types = types;
 	}
-
+	
 	public class NodeComponent : Component, IDisposable, IAnimable
 	{
 		IAnimable IAnimable.Owner { get => Owner; set => Owner = (Node)value; }
 		private Node owner;
 		public Node Owner
 		{
-			get
-			{
-				return owner;
-			}
-
+			get => owner;
 			set
 			{
 				if (value != owner) {
@@ -54,10 +46,8 @@ namespace Lime
 
 		public virtual void Dispose() { }
 
-		public static bool IsSerializable(Type type)
-		{
-			return !type.IsDefined(typeof(NodeComponentDontSerializeAttribute), true);
-		}
+		public static bool IsSerializable(Type type) => 
+			!type.IsDefined(typeof(NodeComponentDontSerializeAttribute), true);
 
 		protected internal virtual void OnBeforeNodeSerialization() { }
 
@@ -261,7 +251,7 @@ namespace Lime
 		private AnimationComponent animationComponent;
 
 		public AnimationComponent AnimationComponent =>
-			(animationComponent ?? (animationComponent = Get<AnimationComponent>()));
+			animationComponent ??= Get<AnimationComponent>();
 
 		public override void Add(NodeComponent component)
 		{
