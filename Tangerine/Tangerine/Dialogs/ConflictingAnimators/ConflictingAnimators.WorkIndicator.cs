@@ -10,7 +10,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		{
 			private const int StageCount = 5;
 			private const float IconLengthInTextureCoordinates = 1f / StageCount;
-
+			
 			public ConflictFinder.WorkProgress WorkProgress { get; set; }
 
 			public WorkIndicator()
@@ -39,20 +39,20 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				float animationTime = 0;
 				int animationStage = 0;
 				bool isCompletedCached = false;
+				ConflictFinder.WorkProgress workProgressCached = null;
 				Updating += delta => {
 					animationTime += delta;
 					bool isCompleted = WorkProgress.IsCompleted;
-					bool isCancelled = WorkProgress.IsCancelled;
-					bool isException = WorkProgress.IsException;
-					if (isCompleted & !isCompletedCached) {
+					if (isCompleted & (!isCompletedCached | WorkProgress != workProgressCached)) {
+						workProgressCached = WorkProgress;
 						isCompletedCached = true;
 						animationTime = 0f;
 						animationStage = 0;
 						const string ConflictCountPrefix = "Count of potential conflicts";
-						if (isException) {
+						if (WorkProgress.IsException) {
 							backgroundPresenter.Color = new Color4(255, 87, 34);
 							textWidget.Text = "Exception";
-						} else if (isCancelled) {
+						} else if (WorkProgress.IsCancelled) {
 							backgroundPresenter.Color = new Color4(255, 152, 0);
 							textWidget.Text = $"Cancelled. {ConflictCountPrefix} {WorkProgress.CurrentConflictCount}";
 						} else {
@@ -61,13 +61,14 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 						}
 					}
 					if (!isCompleted) {
-						textWidget.Text = WorkProgress.CurrentFile ?? string.Empty;
-						if (isCompletedCached) {
+						if (isCompletedCached | WorkProgress != workProgressCached) {
+							workProgressCached = WorkProgress;
 							isCompletedCached = false;
 							animationTime = 0f;
 							animationStage = 1;
 							backgroundPresenter.Color = new Color4(0, 122, 204);
 						}
+						textWidget.Text = WorkProgress.CurrentFile ?? string.Empty;
 					}
 					if (animationTime > 0.5f) {
 						animationTime -= 0.5f;
