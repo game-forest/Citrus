@@ -1,0 +1,723 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CustomSetAssetBundle
+   | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CustomSetAssetBundle
+   | Citrus Engine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lime.CustomSetAssetBundle">
+  
+  
+  <h1 id="Lime_CustomSetAssetBundle" data-uid="Lime.CustomSetAssetBundle" class="text-break">Class CustomSetAssetBundle
+  </h1>
+  <div class="markdown level0 summary"><p>Asset bundle which substitutes enumeration results with the given list of files.
+All file operations will throw FileNotFoundException if provided file path
+does not exist in provided list of files.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lime.AssetBundle.html">AssetBundle</a></div>
+    <div class="level2"><a class="xref" href="Lime.WrappedAssetBundle.html">WrappedAssetBundle</a></div>
+    <div class="level3"><span class="xref">CustomSetAssetBundle</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_Bundle">WrappedAssetBundle.Bundle</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_Dispose">WrappedAssetBundle.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ImportFile_System_String_System_IO_Stream_Lime_SHA256_Lime_AssetAttributes_">WrappedAssetBundle.ImportFile(String, Stream, SHA256, AssetAttributes)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ImportFileRaw_System_String_System_IO_Stream_System_Int32_Lime_SHA256_Lime_SHA256_Lime_AssetAttributes_">WrappedAssetBundle.ImportFileRaw(String, Stream, Int32, SHA256, SHA256, AssetAttributes)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_ToSystemPath_System_String_">WrappedAssetBundle.ToSystemPath(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_FromSystemPath_System_String_">WrappedAssetBundle.FromSystemPath(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_Current">AssetBundle.Current</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_SetCurrent_Lime_AssetBundle_System_Boolean_">AssetBundle.SetCurrent(AssetBundle, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_Initialized">AssetBundle.Initialized</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ReadFile_System_String_">AssetBundle.ReadFile(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ReadAllText_System_String_System_Text_Encoding_">AssetBundle.ReadAllText(String, Encoding)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_ImportFile_System_String_System_String_Lime_SHA256_Lime_AssetAttributes_">AssetBundle.ImportFile(String, String, SHA256, AssetAttributes)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_OpenFileLocalized_System_String_">AssetBundle.OpenFileLocalized(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_GetLocalizedPath_System_String_">AssetBundle.GetLocalizedPath(String)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
+  <h6><strong>Assembly</strong>: Lime.dll</h6>
+  <h5 id="Lime_CustomSetAssetBundle_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class CustomSetAssetBundle : WrappedAssetBundle, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  
+  
+  <a id="Lime_CustomSetAssetBundle__ctor_" data-uid="Lime.CustomSetAssetBundle.#ctor*"></a>
+  <h4 id="Lime_CustomSetAssetBundle__ctor_Lime_AssetBundle_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lime.CustomSetAssetBundle.#ctor(Lime.AssetBundle,System.Collections.Generic.IEnumerable{System.String})">CustomSetAssetBundle(AssetBundle, IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CustomSetAssetBundle(AssetBundle bundle, IEnumerable&lt;string&gt; files)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.AssetBundle.html">AssetBundle</a></td>
+        <td><span class="parametername">bundle</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">files</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_DeleteFile_" data-uid="Lime.CustomSetAssetBundle.DeleteFile*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_DeleteFile_System_String_" data-uid="Lime.CustomSetAssetBundle.DeleteFile(System.String)">DeleteFile(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DeleteFile(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_DeleteFile_System_String_">WrappedAssetBundle.DeleteFile(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_EnumerateFiles_" data-uid="Lime.CustomSetAssetBundle.EnumerateFiles*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_EnumerateFiles_System_String_System_String_" data-uid="Lime.CustomSetAssetBundle.EnumerateFiles(System.String,System.String)">EnumerateFiles(String, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;string&gt; EnumerateFiles(string path = null, string extension = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">extension</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_EnumerateFiles_System_String_System_String_">WrappedAssetBundle.EnumerateFiles(String, String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_FileExists_" data-uid="Lime.CustomSetAssetBundle.FileExists*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_FileExists_System_String_" data-uid="Lime.CustomSetAssetBundle.FileExists(System.String)">FileExists(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool FileExists(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_FileExists_System_String_">WrappedAssetBundle.FileExists(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_GetFileAttributes_" data-uid="Lime.CustomSetAssetBundle.GetFileAttributes*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_GetFileAttributes_System_String_" data-uid="Lime.CustomSetAssetBundle.GetFileAttributes(System.String)">GetFileAttributes(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override AssetAttributes GetFileAttributes(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.AssetAttributes.html">AssetAttributes</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.AssetBundle.html#Lime_AssetBundle_GetFileAttributes_System_String_">AssetBundle.GetFileAttributes(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_GetFileContentsHash_" data-uid="Lime.CustomSetAssetBundle.GetFileContentsHash*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_GetFileContentsHash_System_String_" data-uid="Lime.CustomSetAssetBundle.GetFileContentsHash(System.String)">GetFileContentsHash(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override SHA256 GetFileContentsHash(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.SHA256.html">SHA256</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileContentsHash_System_String_">WrappedAssetBundle.GetFileContentsHash(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_GetFileCookingUnitHash_" data-uid="Lime.CustomSetAssetBundle.GetFileCookingUnitHash*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_GetFileCookingUnitHash_System_String_" data-uid="Lime.CustomSetAssetBundle.GetFileCookingUnitHash(System.String)">GetFileCookingUnitHash(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override SHA256 GetFileCookingUnitHash(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.SHA256.html">SHA256</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileCookingUnitHash_System_String_">WrappedAssetBundle.GetFileCookingUnitHash(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_GetFileSize_" data-uid="Lime.CustomSetAssetBundle.GetFileSize*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_GetFileSize_System_String_" data-uid="Lime.CustomSetAssetBundle.GetFileSize(System.String)">GetFileSize(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetFileSize(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileSize_System_String_">WrappedAssetBundle.GetFileSize(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_GetFileUnpackedSize_" data-uid="Lime.CustomSetAssetBundle.GetFileUnpackedSize*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_GetFileUnpackedSize_System_String_" data-uid="Lime.CustomSetAssetBundle.GetFileUnpackedSize(System.String)">GetFileUnpackedSize(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetFileUnpackedSize(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_GetFileUnpackedSize_System_String_">WrappedAssetBundle.GetFileUnpackedSize(String)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_OpenFile_" data-uid="Lime.CustomSetAssetBundle.OpenFile*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_OpenFile_System_String_System_IO_FileMode_" data-uid="Lime.CustomSetAssetBundle.OpenFile(System.String,System.IO.FileMode)">OpenFile(String, FileMode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.FileMode</span></td>
+        <td><span class="parametername">fileMode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_OpenFile_System_String_System_IO_FileMode_">WrappedAssetBundle.OpenFile(String, FileMode)</a></div>
+  
+  
+  <a id="Lime_CustomSetAssetBundle_OpenFileRaw_" data-uid="Lime.CustomSetAssetBundle.OpenFileRaw*"></a>
+  <h4 id="Lime_CustomSetAssetBundle_OpenFileRaw_System_String_System_IO_FileMode_" data-uid="Lime.CustomSetAssetBundle.OpenFileRaw(System.String,System.IO.FileMode)">OpenFileRaw(String, FileMode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.FileMode</span></td>
+        <td><span class="parametername">fileMode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lime.WrappedAssetBundle.html#Lime_WrappedAssetBundle_OpenFileRaw_System_String_System_IO_FileMode_">WrappedAssetBundle.OpenFileRaw(String, FileMode)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>
