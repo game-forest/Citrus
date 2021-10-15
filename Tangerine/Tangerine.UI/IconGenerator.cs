@@ -136,7 +136,7 @@ namespace Tangerine.UI
 					Renderer.CullMode = CullMode.None;
 					Renderer.Blending = Blending.Alpha;
 					Renderer.Transform2 = Matrix32.Identity;
-					Renderer.Transform1 = Matrix32.Identity;
+					Renderer.Transform1 = Matrix32.Scaling(1f / Window.Current.PixelScale * Vector2.One);
 					Renderer.Clear(ClearOptions.All, Color4.Zero);
 
 					Renderer.DrawRect(Vector2.One * 1, Vector2.One * IconSize, secondaryColor);
