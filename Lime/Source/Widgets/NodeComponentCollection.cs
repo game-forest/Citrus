@@ -14,6 +14,9 @@ namespace Lime
 	public sealed class NodeComponentDontSerializeAttribute : Attribute
 	{ }
 
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+	public sealed class RemoveOnAssetCookAttribute : Attribute { }
+	
 	public sealed class AllowedComponentOwnerTypes : Attribute
 	{
 		public Type[] Types;
