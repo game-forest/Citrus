@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lime\Lime.Win.csproj" />
+    <ProjectReference Include="..\..\Lime\Lime.Win.csproj" />
   </ItemGroup>
 
 </Project>
