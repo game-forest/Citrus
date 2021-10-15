@@ -102,13 +102,13 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 						var properties = new ConflictInfo.Property[count];
 						var animations = new SortedSet<string>[count];
 						for (var i = 0; i < count; ++i) {
-							var conflict = conflicts[i];
-							animations[i] = conflict.animations;
+							var (property, animable, sortedSet) = conflicts[i];
+							animations[i] = sortedSet;
 							properties[i] = new ConflictInfo.Property {
-								Path = conflict.property,
+								Path = property,
 								KeyframeColorIndex = KeyframeColor.Get(
-									type: conflict.animable.GetType(),
-									property: conflict.property
+									type: animable.GetType(),
+									property: property
 								)?.ColorIndex ?? 0
 							};
 						}
