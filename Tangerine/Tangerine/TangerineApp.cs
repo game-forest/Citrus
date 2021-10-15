@@ -794,7 +794,7 @@ namespace Tangerine
 			h.Connect(TimelineCommands.NumericMove, () => new NumericMoveDialog());
 			h.Connect(TimelineCommands.NumericScale, () => new NumericScaleDialog());
 			h.Connect(ToolsCommands.RenderToPngSequence, new RenderToPngSequence());
-			h.Connect(ToolsCommands.OpenConflictingAnimatorsDialog, () => new Dialogs.ConflictingAnimators.Window());
+			h.Connect(ToolsCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimators.Window());
 			h.Connect(GitCommands.ForceUpdate, new ForceUpdate());
 			h.Connect(GitCommands.Update, new Update());
 			h.Connect(GenericCommands.ClearCache, new ClearCache());

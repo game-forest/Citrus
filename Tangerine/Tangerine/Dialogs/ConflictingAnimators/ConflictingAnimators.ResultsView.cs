@@ -7,15 +7,15 @@ using Tangerine.UI.Widgets.ConflictingAnimators;
 
 namespace Tangerine.Dialogs.ConflictingAnimators
 {
-	internal sealed partial class WindowWidget
+	public static partial class ConflictingAnimators
 	{
-		private sealed class SearchResultsView : ThemedScrollView
+		private class ResultsView : ThemedScrollView
 		{
 			private readonly ITexture sectionIcon;
 			private readonly Dictionary<string, SectionWidget> sections;
 			private readonly ConcurrentQueue<ConflictInfo> pending;
 
-			public SearchResultsView()
+			public ResultsView()
 			{
 				sectionIcon = IconPool.GetIcon("Lookup.SceneFileIcon").AsTexture;
 				sections = new Dictionary<string, SectionWidget>();
@@ -59,7 +59,8 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 							++processedPerIteration;
 							var path = conflict.DocumentPath;
 							if (!sections.TryGetValue(path, out var section)) {
-								sections.Add(path, section = new SectionWidget(path, sectionIcon));
+								section = new SectionWidget(path, sectionIcon);
+								sections.Add(path, section);
 								Content.AddNode(section);
 							}
 							section.AddItem(new SectionItemWidget(conflict));
