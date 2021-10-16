@@ -4,7 +4,7 @@ using Lime;
 
 namespace Orange
 {
-	class SyncScenes : ICookingStage
+	internal class SyncScenes : ICookingStage
 	{
 		private readonly AssetCooker assetCooker;
 
@@ -16,17 +16,18 @@ namespace Orange
 		public IEnumerable<(string, SHA256)> EnumerateCookingUnits()
 		{
 			return assetCooker.InputBundle.EnumerateFiles(null, ".tan")
-				.Select(i => {
+				.Select(path => {
 					var hash = assetCooker.InputBundle.ComputeCookingUnitHash(
-						i, assetCooker.CookingRulesMap[i]
+						path, assetCooker.CookingRulesMap[path]
 					);
-					return (i, hash);
+					return (path, hash);
 				});
 		}
 
 		public void Cook(string scenePath, SHA256 cookingUnitHash)
 		{
 			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(assetCooker.InputBundle, scenePath);
+			DeleteNodesAndComponentsWithRemoveOnAssetCookAttribute(node);
 			InternalPersistence.Instance.WriteObjectToBundle(
 				bundle: assetCooker.OutputBundle,
 				path: scenePath,
@@ -35,6 +36,24 @@ namespace Orange
 				cookingUnitHash: cookingUnitHash,
 				attributes: AssetAttributes.None
 			);
+		}
+
+		private static void DeleteNodesAndComponentsWithRemoveOnAssetCookAttribute(Node scene)
+		{
+			foreach (var component in scene.Components.ToList()) {
+				if (HasTheAttribute(component)) {
+					scene.Components.Remove(component);
+				}
+			}
+			foreach (var node in scene.Nodes.ToList()) {
+				if (HasTheAttribute(node)) {
+					scene.Nodes.Remove(node);
+				} else {
+					DeleteNodesAndComponentsWithRemoveOnAssetCookAttribute(node);
+				}
+			}
+			static bool HasTheAttribute(object @object) =>
+				@object.GetType().IsDefined(typeof(RemoveOnAssetCookAttribute), true);
 		}
 	}
 }
