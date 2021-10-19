@@ -13,6 +13,7 @@ namespace Tangerine.Core.Operations
 		{
 			if (op.Obj is Animation animation && op.Property.Name == nameof(Animation.Id)) {
 				var newAnimationName = (string)op.Value;
+				DelegateOperation.Perform(redo: null, undo: UpdateAnimatorCollection, false);
 				foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 					foreach (var otherAnimator in animator.Owner.Animators.ToList()) {
 						if (
@@ -30,6 +31,8 @@ namespace Tangerine.Core.Operations
 					}
 					SetProperty.Perform(animator, nameof(IAnimator.AnimationId), newAnimationName);
 				}
+				DelegateOperation.Perform(redo: UpdateAnimatorCollection, undo: null, false);
+				void UpdateAnimatorCollection() => ((IAnimationHost)animation.OwnerNode).OnAnimatorCollectionChanged();
 			}
 		}
 
