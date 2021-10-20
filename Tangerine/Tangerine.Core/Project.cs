@@ -43,8 +43,8 @@ namespace Tangerine.Core
 		public static HandleMissingDocumentsDelegate HandleMissingDocuments;
 		public static TaskList Tasks { get; set; }
 		public SortedDictionary<string, Widget> Overlays { get; } = new SortedDictionary<string, Widget>();
-		public ProjectPreferences Preferences { get; private set; } = new ProjectPreferences();
-		public ProjectUserPreferences UserPreferences { get; private set; } = new ProjectUserPreferences();
+		public ProjectPreferences Preferences { get; } = new ProjectPreferences();
+		public ProjectUserPreferences UserPreferences { get; } = new ProjectUserPreferences();
 		public IReadOnlyList<Type> RegisteredNodeTypes => registeredNodeTypes;
 		public IReadOnlyList<Type> RegisteredComponentTypes => registeredComponentTypes;
 
