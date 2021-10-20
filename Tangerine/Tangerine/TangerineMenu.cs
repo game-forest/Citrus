@@ -517,7 +517,11 @@ namespace Tangerine
 			int counter = 1;
 			foreach (var i in recentDocuments) {
 				string name = System.String.Format("{0}. {1}", counter++, i);
-				menu.Add(new Command(name, () => Project.Current.OpenDocument(i) ));
+				menu.Add(new Command(name, () => {
+					if (null == Project.Current.OpenDocument(i)) {
+						AlertDialog.Show($"File \"{i}\" not found!");
+					}
+				}));
 			}
 			GenericCommands.RecentDocuments.Menu = menu;
 			GenericCommands.RecentDocuments.Enabled = recentDocuments.Count > 0;

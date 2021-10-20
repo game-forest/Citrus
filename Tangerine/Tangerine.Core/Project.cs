@@ -268,16 +268,21 @@ namespace Tangerine.Core
 			}
 			var doc = Documents.FirstOrDefault(i => i.Path == localPath);
 			if (doc == null) {
-				var tmpFile = AutosaveProcessor.GetTemporaryFilePath(localPath);
-				string systemPath;
-				if (GetFullPath(tmpFile, out systemPath) && TempFileLoadConfirmation.Invoke(localPath)) {
-					doc = new Document(tmpFile);
+				var tmpFileLocalPath = AutosaveProcessor.GetTemporaryFilePath(localPath);
+				bool hasFullTmpFilePath = GetFullPath(tmpFileLocalPath, out var tmpFileFullPath);
+				if (hasFullTmpFilePath && TempFileLoadConfirmation.Invoke(localPath)) {
+					doc = new Document(tmpFileLocalPath);
 					doc.SaveAs(localPath);
 				} else {
-					doc = new Document(localPath, delayLoad);
+					if (GetFullPath(localPath, fullPath: out _)) {
+						doc = new Document(localPath, delayLoad);
+					} else {
+						UserPreferences.RecentDocuments.RemoveAll(p => p == localPath);
+						return null;
+					}
 				}
-				if (systemPath != null) {
-					File.Delete(systemPath);
+				if (hasFullTmpFilePath) {
+					File.Delete(tmpFileFullPath);
 				}
 				documents.Add(doc);
 			}
@@ -308,7 +313,7 @@ namespace Tangerine.Core
 				recentDocuments.RemoveTail(startIndex: CoreUserPreferences.Instance.RecentDocumentCount);
 			}
 		}
-
+		
 		public bool CloseDocument(Document doc, bool force = false)
 		{
 			int currentIndex = documents.IndexOf(Document.Current);
