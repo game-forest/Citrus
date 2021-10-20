@@ -11,12 +11,10 @@ namespace Tangerine.UI
 	/// </summary>
 	public static class About
 	{
-		public static bool IsGitInstalled = true;
-
 		public static string GetInformation()
 		{
-			if (!IsGitInstalled) {
-				return "Git is not installed\n";
+			if (!Git.IsGitInPath) {
+				return "Git is not in PATH\n";
 			}
 			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
 			StringBuilder stringbBuilder = new StringBuilder();

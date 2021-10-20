@@ -383,12 +383,6 @@ namespace Tangerine
 
 			Documentation.Init();
 			DocumentationComponent.Clicked = page => Documentation.ShowHelp(page);
-
-			try {
-				Git.Exec("", "");
-			} catch (System.Exception) {
-				About.IsGitInstalled = false;
-			}
 		}
 
 		private static void LoadProject()
