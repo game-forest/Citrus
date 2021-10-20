@@ -11,8 +11,13 @@ namespace Tangerine.UI
 	/// </summary>
 	public static class About
 	{
+		public static bool IsGitInstalled = true;
+
 		public static string GetInformation()
 		{
+			if (!IsGitInstalled) {
+				return "Git is not installed\n";
+			}
 			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
 			StringBuilder stringbBuilder = new StringBuilder();
 			var citrusDir = Orange.Toolbox.FindCitrusDirectory();
