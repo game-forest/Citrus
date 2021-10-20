@@ -391,6 +391,13 @@ namespace Tangerine
 						displayName: "Autosave delay"
 					)
 				),
+				new IntPropertyEditor(
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.RecentDocumentCount),
+						displayName: "Recent document count"
+					)
+				),
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(
 						CoreUserPreferences.Instance,
