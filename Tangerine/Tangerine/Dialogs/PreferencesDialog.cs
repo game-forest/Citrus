@@ -393,6 +393,13 @@ namespace Tangerine
 				),
 				new IntPropertyEditor(
 					new PreferencesPropertyEditorParams(
+						Tangerine.AppUserPreferences.Instance,
+						propertyName: nameof(Tangerine.AppUserPreferences.RecentProjectCount),
+						displayName: "Recent project count"
+					)
+				),
+				new IntPropertyEditor(
+					new PreferencesPropertyEditorParams(
 						CoreUserPreferences.Instance,
 						propertyName: nameof(CoreUserPreferences.RecentDocumentCount),
 						displayName: "Recent document count"
