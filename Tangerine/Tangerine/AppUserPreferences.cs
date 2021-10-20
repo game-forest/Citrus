@@ -57,7 +57,7 @@ namespace Tangerine
 			LimeColorTheme = Theme.ColorTheme.CreateLightTheme();
 			DefaultSceneDimensions = new Vector2(1024, 768);
 			AutosaveDelay = 600;
-			RecentProjectCount = 8;
+			RecentProjectCount = 10;
 		}
 
 		public static AppUserPreferences Instance => Core.UserPreferences.Instance.GetOrAdd<AppUserPreferences>();
