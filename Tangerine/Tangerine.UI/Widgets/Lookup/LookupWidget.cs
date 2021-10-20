@@ -120,9 +120,6 @@ namespace Tangerine.UI
 				new { Command = Commands.SelectNextPage, Action = (Action)SelectNextPage },
 			};
 			Components.GetOrAdd<PreEarlyUpdateBehavior>().Updating += () => {
-				if (string.IsNullOrEmpty(FilterText) && Commands.NavigateBack.Consume()) {
-					NavigateBack();
-				}
 				foreach (var binding in bindings) {
 					if (binding.Command.Consume()) {
 						binding.Action.Invoke();
@@ -297,7 +294,6 @@ namespace Tangerine.UI
 		{
 			public static readonly ICommand Submit = new Command(Key.Enter);
 			public static readonly ICommand Cancel = new Command(Key.Escape);
-			public static readonly ICommand NavigateBack = new Command(Key.BackSpace);
 			public static readonly ICommand SelectPreviousItem = new Command(Key.Up);
 			public static readonly ICommand SelectNextItem = new Command(Key.Down);
 			public static readonly ICommand SelectPreviousPage = new Command(Key.PageUp);
