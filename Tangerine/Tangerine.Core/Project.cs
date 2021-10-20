@@ -301,10 +301,14 @@ namespace Tangerine.Core
 
 		public void AddRecentDocument(string path)
 		{
-			UserPreferences.RecentDocuments.Remove(path);
-			UserPreferences.RecentDocuments.Insert(0, path);
-			if (UserPreferences.RecentDocuments.Count > ProjectUserPreferences.MaxRecentDocuments)
-				UserPreferences.RecentDocuments.RemoveAt(UserPreferences.RecentDocuments.Count - 1);
+			var recentDocuments = UserPreferences.RecentDocuments;
+			recentDocuments.Remove(path);
+			recentDocuments.Insert(0, path);
+			if (recentDocuments.Count > CoreUserPreferences.Instance.RecentDocumentCount) {
+				int removeIndex = CoreUserPreferences.Instance.RecentDocumentCount;
+				int removeCount = recentDocuments.Count - removeIndex;
+				recentDocuments.RemoveRange(removeIndex, removeCount);
+			}
 		}
 
 		public bool CloseDocument(Document doc, bool force = false)
