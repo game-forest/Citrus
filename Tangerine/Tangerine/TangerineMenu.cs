@@ -537,8 +537,13 @@ namespace Tangerine
 					System.IO.Path.GetDirectoryName(i));
 				menu.Add(new Command(name, () =>  {
 					if (Project.Current.Close()) {
-						_ = new Project(i);
-						FileOpenProject.AddRecentProject(i);
+						if (File.Exists(i)) {
+							_ = new Project(i);
+							FileOpenProject.AddRecentProject(i);
+						} else {
+							AppUserPreferences.Instance.RecentProjects.RemoveAll(p => p == i);
+							AlertDialog.Show($"File {i} not found!");
+						}
 					}
 				}));
 			}
