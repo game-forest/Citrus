@@ -184,6 +184,7 @@ namespace Tangerine.UI
 	public static class ToolsCommands
 	{
 		public static readonly ICommand RenderToPngSequence = new Command("Render to PNG sequence");
+		public static readonly ICommand OpenConflictingAnimatorsDialog = new Command("Open Conflicting Animators Dialog");
 	}
 
 	public static class GitCommands

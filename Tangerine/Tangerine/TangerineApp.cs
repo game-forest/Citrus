@@ -8,6 +8,7 @@ using Orange;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
+using Tangerine.Dialogs.ConflictingAnimators;
 using Tangerine.MainMenu;
 using Tangerine.Panels;
 using Tangerine.UI;
@@ -17,6 +18,7 @@ using Tangerine.UI.SceneView;
 using Tangerine.UI.Docking;
 using Tangerine.UI.Timeline;
 using FileInfo = System.IO.FileInfo;
+using WindowWidget = Lime.WindowWidget;
 
 namespace Tangerine
 {
@@ -792,6 +794,7 @@ namespace Tangerine
 			h.Connect(TimelineCommands.NumericMove, () => new NumericMoveDialog());
 			h.Connect(TimelineCommands.NumericScale, () => new NumericScaleDialog());
 			h.Connect(ToolsCommands.RenderToPngSequence, new RenderToPngSequence());
+			h.Connect(ToolsCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimators.Window());
 			h.Connect(GitCommands.ForceUpdate, new ForceUpdate());
 			h.Connect(GitCommands.Update, new Update());
 			h.Connect(GenericCommands.ClearCache, new ClearCache());

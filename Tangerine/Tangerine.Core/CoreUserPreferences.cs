@@ -61,6 +61,9 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public bool AnimationPanelReversedOrder { get; set; }
 		
+		[YuzuOptional]
+		public Vector2 ConflictingAnimatorsWindowSize { get; set; }
+		
 		public CoreUserPreferences()
 		{
 			ResetToDefaults();
@@ -76,6 +79,7 @@ namespace Tangerine.Core
 			InspectorExpandableEditorsState = new Dictionary<string, bool>();
 			InspectorColorPickersState = new Dictionary<string, ColorPickerState>();
 			LookupItemsLimit = 30;
+			ConflictingAnimatorsWindowSize = Vector2.PositiveInfinity;
 		}
 
 		public static CoreUserPreferences Instance => UserPreferences.Instance.GetOrAdd<CoreUserPreferences>();

@@ -87,6 +87,14 @@
     <Compile Include="Tooltip\TooltipProcessor.cs" />
     <Compile Include="TreeView.cs" />
     <Compile Include="Utils\RichTextHighlightComponent.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\ConflictInfo.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\DescriptionWidget.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\NavigationComponent.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\SectionItemWidget.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\SectionWidget.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\TextStyleIdentifier.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\TextStylePool.cs" />
+    <Compile Include="Widgets\ConflictingAnimators\ThemedCaption.cs" />
     <Compile Include="Widgets\Lookup\FuzzyStringSearch.cs" />
     <Compile Include="Widgets\Lookup\LookupDataSource.cs" />
     <Compile Include="Widgets\Lookup\LookupFilter.cs" />

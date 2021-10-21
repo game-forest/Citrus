@@ -6,7 +6,7 @@ namespace Tangerine.UI
 	/// Converts the pixels of the icon to the specified color based on the red channel of the texture.
 	/// The lower the pixel value in the red channel, the more transparency.
 	/// </summary>
-	internal class RedChannelToColorMaterial : IMaterial
+	public class RedChannelToColorMaterial : IMaterial
 	{
 		private readonly ShaderParams[] shaderParamsArray;
 		private readonly ShaderParams shaderParams;
