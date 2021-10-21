@@ -109,7 +109,7 @@ namespace Orange
 						foreach (var bundleName in bundles) {
 							bundle.Attach(new PackedAssetBundle(The.Workspace.GetBundlePath(Target.Platform, bundleName)));
 						}
-						AssetBundle.SetCurrent(bundle, false);
+						AssetBundle.SetCurrent(bundle);
 						CodeCooker.Cook(Target, InputBundle, CookingRulesMap, bundles.ToList());
 					} finally {
 						AssetBundle.Current = savedInputBundle;
@@ -244,11 +244,10 @@ namespace Orange
 				Console.WriteLine($"Computing modified cooking unit count for bundle '{allBundles[i]}', ({i + 1}/{allBundles.Count})");
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(
-					bundle: new RemappedAssetBundle(
+					new RemappedAssetBundle(
 						originToAlias,
 						new CustomSetAssetBundle(InputBundle, assetsGroupedByBundles[i])
-					),
-					resetTexturePool: false
+					)
 				);
 				OutputBundle = CreateOutputBundle(allBundles[i]);
 				try {
@@ -269,7 +268,7 @@ namespace Orange
 				} finally {
 					OutputBundle.Dispose();
 					OutputBundle = null;
-					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
+					AssetBundle.SetCurrent(savedInputBundle);
 				}
 				UserInterface.Instance.IncreaseProgressBar();
 			}
@@ -319,8 +318,7 @@ namespace Orange
 					new RemappedAssetBundle(
 						originToAlias,
 						new CustomSetAssetBundle(InputBundle, assets)
-					),
-					resetTexturePool: false
+					)
 				);
 				BundleBeingCookedName = bundleName;
 				try {
@@ -360,7 +358,7 @@ namespace Orange
 						}
 					}
 				} finally {
-					AssetBundle.SetCurrent(savedInputBundle, resetTexturePool: false);
+					AssetBundle.SetCurrent(savedInputBundle);
 					BundleBeingCookedName = null;
 				}
 			}

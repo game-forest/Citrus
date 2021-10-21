@@ -54,20 +54,20 @@ namespace Lime
 			}
 		}
 
+		// Don't delete this function. More info in AssetBundle.cs
 		public void DiscardAllStubTextures()
 		{
 			lock (textures) {
 				foreach (WeakReference r in textures.Values.ToList()) {
-					var target = r.Target as ITexture;
-					if (target != null && target.IsStubTexture && !target.IsDisposed) {
-						target.Dispose();
-
-						//TODO: Вместо следующей строки, нужно реализовать нормальный Discard у StubTexture
+					var texture = r.Target as ITexture;
+					if (texture != null && texture.IsStubTexture && !texture.IsDisposed) {
+						texture.Dispose();
 						r.Target = null;
 					}
 				}
 			}
 		}
+
 
 		public ITexture GetTexture(string path)
 		{
@@ -75,7 +75,8 @@ namespace Lime
 				if (path == null) {
 					path = string.Empty;
 				}
-				if (path.StartsWith("#")) { // It's supposed render target texture
+				// It's supposed render target texture
+				if (path.StartsWith("#")) {
 					path = path.ToLower();
 				}
 				ITexture texture;

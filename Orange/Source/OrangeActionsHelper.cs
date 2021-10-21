@@ -25,7 +25,7 @@ namespace Orange.Source
 					AssetBundle bundle = null;
 					if (Workspace.Instance.AssetsDirectory != null) {
 						bundle = new TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
-						AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+						AssetBundle.SetCurrent(bundle);
 					}
 					try {
 						var errorDetails = SafeExecuteWithErrorDetails(action);
@@ -39,7 +39,7 @@ namespace Orange.Source
 					} finally {
 						if (bundle != null) {
 							bundle.Dispose();
-							AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+							AssetBundle.SetCurrent(savedAssetBundle);
 						}
 					}
 				}

@@ -32,10 +32,12 @@ namespace Lime
 			set => SetCurrent(value, resetTexturePool: true);
 		}
 
-		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool)
+		public static void SetCurrent(AssetBundle bundle, bool resetTexturePool = false)
 		{
 			if (current != bundle) {
 				current = bundle;
+				// We have to discard stubs on bundle changes to load new textures.
+				// If there are some assets which were missing we'll update stubs with them after this discard.
 				if (resetTexturePool) {
 					TexturePool.Instance.DiscardAllStubTextures();
 				}
@@ -47,7 +49,7 @@ namespace Lime
 		public virtual void Dispose()
 		{
 			if (current == this) {
-				SetCurrent(null, false);
+				SetCurrent(null);
 			}
 		}
 

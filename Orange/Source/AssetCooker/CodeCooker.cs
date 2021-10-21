@@ -82,7 +82,7 @@ namespace Orange
 					.Select(bundleName => new PackedAssetBundle(
 						The.Workspace.GetBundlePath(target.Platform, bundleName)
 					)).ToArray();
-				AssetBundle.SetCurrent(new AggregateAssetBundle(allBundles), false);
+				AssetBundle.SetCurrent(new AggregateAssetBundle(allBundles));
 				new ScenesCodeCooker(
 					The.Workspace.ProjectDirectory,
 					The.Workspace.GeneratedScenesPath,
@@ -96,7 +96,7 @@ namespace Orange
 				SaveCodeCookerCache(cache);
 			} finally {
 				AssetBundle.Current.Dispose();
-				AssetBundle.SetCurrent(null, false);
+				AssetBundle.SetCurrent(null);
 			}
 		}
 

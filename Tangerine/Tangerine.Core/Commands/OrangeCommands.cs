@@ -30,12 +30,12 @@ namespace Tangerine.Core.Commands
 			{
 				var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
 				var bundle = new TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
-				AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+				AssetBundle.SetCurrent(bundle);
 				try {
 					action();
 				} finally {
 					bundle.Dispose();
-					AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+					AssetBundle.SetCurrent(savedAssetBundle);
 				}
 				return null;
 			}
@@ -48,12 +48,12 @@ namespace Tangerine.Core.Commands
 			{
 				var savedAssetBundle = AssetBundle.Initialized ? AssetBundle.Current : null;
 				var bundle = new TangerineAssetBundle(Workspace.Instance.AssetsDirectory);
-				AssetBundle.SetCurrent(bundle, resetTexturePool: false);
+				AssetBundle.SetCurrent(bundle);
 				try {
 					return function();
 				} finally {
 					bundle.Dispose();
-					AssetBundle.SetCurrent(savedAssetBundle, resetTexturePool: false);
+					AssetBundle.SetCurrent(savedAssetBundle);
 				}
 			}
 

@@ -164,7 +164,7 @@ namespace Lime
 		public void RenderAll()
 		{
 			if (assetBundle != null) {
-				AssetBundle.SetCurrent(assetBundle, resetTexturePool: false);
+				AssetBundle.SetCurrent(assetBundle);
 			}
 #if !TANGERINE && PROFILER
 			RenderTexture renderTexture = null;
