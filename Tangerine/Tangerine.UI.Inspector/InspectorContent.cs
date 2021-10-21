@@ -264,7 +264,7 @@ namespace Tangerine.UI.Inspector
 				propertyBindingFlags |= BindingFlags.DeclaredOnly;
 			}
 			var properties = type.GetProperties(propertyBindingFlags)
-				.Where(p => ShouldInspectProperty(type, objects, p));
+				.Where(p => ShouldInspectProperty(type, objects, p, isSubclassOfNodeComponent));
 			if (isSubclassOfNodeComponent) {
 				properties = properties
 					.GroupBy(p => p.DeclaringType)
@@ -353,8 +353,12 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		private static bool ShouldInspectProperty(Type type, IEnumerable<object> objects, PropertyInfo property)
-		{
+		private static bool ShouldInspectProperty(
+			Type type,
+			IEnumerable<object> objects,
+			PropertyInfo property,
+			bool inspectOverridenVirtualProperties
+		) {
 			if (property.GetIndexParameters().Length > 0) {
 				// we don't inspect indexers (they have "Item" name by default
 				return false;
@@ -362,10 +366,13 @@ namespace Tangerine.UI.Inspector
 			var yuzuItem = Yuzu.Metadata.Meta.Get(type, InternalPersistence.Instance.YuzuCommonOptions)
 				.Items
 				.Find(i => i.PropInfo == property);
-			var tang = PropertyAttributes<TangerineKeyframeColorAttribute>.Get(type, property.Name);
-			var tangIgnore = PropertyAttributes<TangerineIgnoreAttribute>.Get(type, property.Name);
-			var tangInspect = PropertyAttributes<TangerineInspectAttribute>.Get(type, property.Name);
-			if (tangInspect == null && (yuzuItem == null && tang == null || tangIgnore != null)) {
+			var hasKeyframeColor = PropertyAttributes<TangerineKeyframeColorAttribute>
+				.Get(type, property.Name, true) != null;
+			var shouldIgnore = PropertyAttributes<TangerineIgnoreAttribute>
+				.Get(type, property.Name, true) != null;
+			var shouldInspect = PropertyAttributes<TangerineInspectAttribute>
+				.Get(type, property.Name, true) != null;
+			if (!shouldInspect && (yuzuItem == null && !hasKeyframeColor || shouldIgnore)) {
 				return false;
 			}
 			if (type.IsSubclassOf(typeof(Node))) {
@@ -381,6 +388,19 @@ namespace Tangerine.UI.Inspector
 					(obj is NodeComponent component && !string.IsNullOrEmpty(component.Owner?.ContentsPath))
 				)
 			)) {
+				return false;
+			}
+			// if `inspectOverridenVirtualProperties` is set to `false` then we only inspect
+			// virtual properies for types that introduce `YuzuMember` or `TangerineInspect`.
+			if (
+				!inspectOverridenVirtualProperties
+				&& property.GetMethod.IsVirtual
+				&& !(
+					PropertyAttributes<Yuzu.YuzuMember>.Get(type, property.Name, false) != null
+					|| PropertyAttributes<TangerineInspectAttribute>.Get(type, property.Name, false) != null
+					|| PropertyAttributes<TangerineKeyframeColorAttribute>.Get(type, property.Name, false) != null
+				)
+			) {
 				return false;
 			}
 			return true;
