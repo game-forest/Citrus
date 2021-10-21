@@ -73,7 +73,7 @@ namespace Tangerine.UI.Inspector
 						queriedComponents.Clear();
 						n.Components.GetAll(t, queriedComponents);
 						foreach (var c in queriedComponents) {
-							if (c != null && t.IsAssignableFrom(c.GetType())) {
+							if (c != null && t == c.GetType()) {
 								nodeComponents.Add(c);
 							}
 						}
@@ -265,6 +265,12 @@ namespace Tangerine.UI.Inspector
 			}
 			var properties = type.GetProperties(propertyBindingFlags)
 				.Where(p => ShouldInspectProperty(type, objects, p));
+			if (isSubclassOfNodeComponent) {
+				properties = properties
+					.GroupBy(p => p.DeclaringType)
+					.Reverse()
+					.SelectMany(group => group);
+			}
 			foreach (var property in properties) {
 				var @params = new PropertyEditorParams(
 					objects,
