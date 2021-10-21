@@ -271,8 +271,12 @@ namespace Tangerine.UI.Inspector
 						tooltipText: tooltipText
 					);
 					headerWidget.Components.Add(new HeaderElementComponent());
+					// TODO: o[0].ToString() used as local key is wrong in general because there are types which
+					// don't implement ToString() in a way it could be used as a unique identifyer.
+					// When we'll have GUIDS and interface to check if object has a GUID we'll be able to use it as a
+					// local key.
 					expandableContainer = CreateExpandableContainer(
-						headerWidget, t.FullName, objects.First().ToString()
+						headerWidget, t.FullName, o.First().ToString()
 					);
 					yield return headerWidget;
 					yield return expandableContainer;
