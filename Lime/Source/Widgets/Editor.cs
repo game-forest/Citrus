@@ -348,7 +348,7 @@ namespace Lime
 
 		public void SelectAll()
 		{
-			SelectionStart.IsVisible = SelectionEnd.IsVisible = true;
+			SelectionStart.IsVisible = SelectionEnd.IsVisible = Text.Text.Length > 0;
 			SelectionStart.TextPos = 0;
 			SelectionEnd.TextPos = int.MaxValue;
 			Window.Current.Invalidate();
