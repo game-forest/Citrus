@@ -122,10 +122,10 @@ namespace Tangerine.UI
 				new { Command = Commands.SelectNextPage, Action = (Action)SelectNextPage },
 			};
 			Components.GetOrAdd<PreEarlyUpdateBehavior>().Updating += () => {
+				if (NavigateBackEnabled && string.IsNullOrEmpty(FilterText) && Commands.NavigateBack.Consume()) {
+					NavigateBack();
+				}
 				foreach (var binding in bindings) {
-					if (NavigateBackEnabled && string.IsNullOrEmpty(FilterText) && Commands.NavigateBack.Consume()) {
-						NavigateBack();
-					}
 					if (binding.Command.Consume()) {
 						binding.Action.Invoke();
 						break;
