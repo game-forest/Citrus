@@ -137,13 +137,19 @@ namespace Tangerine.UI.Timeline
 		private static void RemoveKeyframes()
 		{
 			foreach (var row in Document.Current.Rows.ToList()) {
+				var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
+				if (node == null || node.EditorState().Locked) {
+					continue;
+				}
+				var animation = node.Ancestors
+					.SelectMany(n => n.Animations)
+					.FirstOrDefault(a => a.Id == Document.Current.AnimationId);
+				if (animation != Document.Current.Animation) {
+					continue;
+				}
+				var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
 				var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans;
 				foreach (var span in spans.GetNonOverlappedSpans()) {
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
-					if (node == null || node.EditorState().Locked) {
-						continue;
-					}
-					var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
 					foreach (var a in node.Animators.ToList()) {
 						if (a.AnimationId != Document.Current.AnimationId) {
 							continue;

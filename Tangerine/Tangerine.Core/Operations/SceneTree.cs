@@ -463,8 +463,16 @@ namespace Tangerine.Core.Operations
 			}
 			var animation = item.GetAnimation();
 			var node = parent.GetNode();
+			bool hasLowPriorityAnimation = node.Ancestors.Any(n => n.Animations.Any(a => a.Id == animation.Id));
+			if (hasLowPriorityAnimation) {
+				DelegateOperation.Perform(redo: null, undo: AnimatorCollectionChanged, isChangingDocument: false);
+			}
 			InsertIntoList<AnimationCollection, Animation>.Perform(node.Animations, index, animation);
 			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
+			if (hasLowPriorityAnimation) {
+				DelegateOperation.Perform(redo: AnimatorCollectionChanged, undo: null, isChangingDocument: false);
+			}
+			void AnimatorCollectionChanged() => ((IAnimationHost)node).OnAnimatorCollectionChanged();
 		}
 
 		private static void LinkAnimationTrackItem(Row parent, int index, Row item)
