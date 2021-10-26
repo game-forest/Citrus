@@ -9,7 +9,7 @@ namespace Tangerine
 {
 	public class LookupDialog
 	{
-		private LookupDialog(out LookupSections sections, bool navigateBackEnabled)
+		private LookupDialog(out LookupSections sections)
 		{
 			Vector2? displayCenter = null;
 			try {
@@ -35,7 +35,6 @@ namespace Tangerine
 				Nodes = {
 					(lookupWidget = new LookupWidget {
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-						NavigateBackEnabled = navigateBackEnabled
 					})
 				},
 			};
@@ -70,12 +69,13 @@ namespace Tangerine
 			windowWidget.FocusScope.SetDefaultFocus();
 		}
 		
-		public LookupDialog(LookupSections.SectionType? sectionType = null) : this(out var sections, sectionType == null)
+		public LookupDialog(LookupSections.SectionType? sectionType = null) : this(out var sections)
 		{
 			sections.Initialize(sectionType);
+			sections.ForceLastSection();
 		}
 
-		public LookupDialog(Func<LookupSections, IEnumerable<LookupSection>> getSections) : this(out var sections, false)
+		public LookupDialog(Func<LookupSections, IEnumerable<LookupSection>> getSections) : this(out var sections)
 		{
 			var startSections = getSections(sections);
 			if (!startSections.Any()) {
@@ -86,6 +86,7 @@ namespace Tangerine
 			foreach (var section in startSections.Skip(1)) {
 				sections.Push(section);
 			}
+			sections.ForceLastSection();
 		}
 	}
 }

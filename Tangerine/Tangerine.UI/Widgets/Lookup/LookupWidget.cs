@@ -25,8 +25,6 @@ namespace Tangerine.UI
 		public event Action Canceled;
 		public event Action FilterApplied;
 
-		public bool NavigateBackEnabled;
-
 		public string FilterText
 		{
 			get => FilterEditBox.Text;
@@ -122,7 +120,7 @@ namespace Tangerine.UI
 				new { Command = Commands.SelectNextPage, Action = (Action)SelectNextPage },
 			};
 			Components.GetOrAdd<PreEarlyUpdateBehavior>().Updating += () => {
-				if (NavigateBackEnabled && string.IsNullOrEmpty(FilterText) && Commands.NavigateBack.Consume()) {
+				if (string.IsNullOrEmpty(FilterText) && Commands.NavigateBack.Consume()) {
 					NavigateBack();
 				}
 				foreach (var binding in bindings) {
