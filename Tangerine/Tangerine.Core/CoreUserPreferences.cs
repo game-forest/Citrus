@@ -47,6 +47,9 @@ namespace Tangerine.Core
 		public Dictionary<string, bool> InspectorExpandableEditorsState { get; set; }
 
 		[YuzuOptional]
+		public Dictionary<string, Dictionary<string, bool>> LocalInspectorExpandableEditorStates { get; set; }
+
+		[YuzuOptional]
 		public Dictionary<string, ColorPickerState> InspectorColorPickersState { get; set; }
 
 		[YuzuOptional]
@@ -63,7 +66,7 @@ namespace Tangerine.Core
 		
 		[YuzuOptional]
 		public Vector2 ConflictingAnimatorsWindowSize { get; set; }
-		
+
 		public CoreUserPreferences()
 		{
 			ResetToDefaults();
@@ -77,6 +80,7 @@ namespace Tangerine.Core
 			ShowSceneThumbnail = true;
 			ShowSplinesGlobally = false;
 			InspectorExpandableEditorsState = new Dictionary<string, bool>();
+			LocalInspectorExpandableEditorStates = new Dictionary<string, Dictionary<string, bool>>();
 			InspectorColorPickersState = new Dictionary<string, ColorPickerState>();
 			LookupItemsLimit = 30;
 			ConflictingAnimatorsWindowSize = Vector2.PositiveInfinity;
@@ -117,7 +121,7 @@ namespace Tangerine.Core
 			LabSliders = states[3];
 			RgbSliders = states[4];
 		}
-		
+
 		public IEnumerable<EditorState> Enumerate()
 		{
 			yield return HsvWheel;
@@ -126,7 +130,7 @@ namespace Tangerine.Core
 			yield return LabSliders;
 			yield return RgbSliders;
 		}
-		
+
 		public struct EditorState
 		{
 			[YuzuMember]

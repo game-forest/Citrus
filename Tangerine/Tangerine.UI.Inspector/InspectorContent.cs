@@ -96,6 +96,10 @@ namespace Tangerine.UI.Inspector
 						headerWidget.Components.Add(new HeaderElementComponent());
 						DecorateElement(headerWidget);
 						rootWidget.AddNode(headerWidget);
+						var expandableContainer = CreateExpandableContainer(
+							headerWidget, t.FullName, components.First().Owner.ToString()
+						);
+						rootWidget.AddNode(expandableContainer);
 						var elementWidgets = CreateElementsForType(
 							type: t,
 							objects: components,
@@ -105,7 +109,7 @@ namespace Tangerine.UI.Inspector
 						).ToList();
 						foreach (var w in elementWidgets) {
 							DecorateElement(w);
-							rootWidget.AddNode(w);
+							expandableContainer.AddNode(w);
 						}
 					}
 				}
@@ -114,6 +118,70 @@ namespace Tangerine.UI.Inspector
 
 			if (Footer != null) {
 				rootWidget.AddNode(Footer);
+			}
+		}
+
+		private static Widget CreateExpandableContainer(Widget headerWidget, string globalKey, string localKey)
+		{
+			var widget = new Frame {
+				Layout = new VBoxLayout(),
+			};
+			widget.Components.Add(new ContainerElementComponent());
+			var expandButton = CreateExpandButton();
+			headerWidget.Nodes.Insert(0, expandButton);
+			headerWidget.HitTestTarget = true;
+			headerWidget.Clicked += () => expandButton.Clicked();
+			widget.Visible = expandButton.Expanded;
+			return widget;
+
+			ThemedExpandButton CreateExpandButton()
+			{
+				var isLocalExpansionSet = CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+					.TryGetValue(globalKey, out var localExpansion);
+				var isGlobalExpansionSet = CoreUserPreferences.Instance.InspectorExpandableEditorsState
+					.TryGetValue(globalKey, out var isExpandedGlobally);
+				bool isExpandedLocally = false;
+				if (isLocalExpansionSet) {
+					isLocalExpansionSet = localExpansion.TryGetValue(localKey, out isExpandedLocally);
+				}
+				var storedExpansionValue = isLocalExpansionSet
+					? isExpandedLocally
+					: !isGlobalExpansionSet || isExpandedGlobally;
+				var expandButton = new ThemedExpandButton {
+					MinMaxSize = Vector2.One * 20f,
+					LayoutCell = new LayoutCell(Alignment.LeftCenter),
+					Expanded = storedExpansionValue
+				};
+				expandButton.Clicked = () => {
+					widget.Visible = expandButton.Expanded = !expandButton.Expanded;
+					CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+						.TryGetValue(globalKey, out var localExpansion);
+					if (Application.Input.IsKeyPressed(Key.Shift)) {
+						if (expandButton.Expanded) {
+							ApplyLocalExpansion();
+						} else {
+							CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates.Remove(globalKey);
+						}
+						CoreUserPreferences.Instance.InspectorExpandableEditorsState.Remove(globalKey);
+						CoreUserPreferences.Instance.InspectorExpandableEditorsState
+							.TryAdd(globalKey, expandButton.Expanded);
+					} else {
+						ApplyLocalExpansion();
+					}
+				};
+				return expandButton;
+
+				void ApplyLocalExpansion()
+				{
+					if (localExpansion == null) {
+						CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+							.TryAdd(globalKey, new Dictionary<string, bool>());
+						CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+							.TryGetValue(globalKey, out localExpansion);
+					}
+					localExpansion.Remove(localKey);
+					localExpansion.TryAdd(localKey, expandButton.Expanded);
+				}
 			}
 		}
 
@@ -185,6 +253,7 @@ namespace Tangerine.UI.Inspector
 					propertyPath: propertyPath
 				).ToList();
 				// Create group header for block of elements belonging to the type if there's at least once element.
+				Widget expandableContainer = null;
 				if (elements.Count > 0) {
 					var objectsCount = o.Count;
 					string tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(t, true)?.Text;
@@ -195,17 +264,32 @@ namespace Tangerine.UI.Inspector
 					if (totalObjectCount > 1) {
 						text += $" ({objectsCount}/{totalObjectCount})";
 					}
-					var widgetHeader = CreateCategoryHeader(
+					var headerWidget = CreateCategoryHeader(
 						text: text,
 						iconTexture: NodeIconPool.GetTexture(t),
 						color: ColorTheme.Current.Inspector.CategoryLabelBackground,
 						tooltipText: tooltipText
 					);
-					widgetHeader.Components.Add(new HeaderElementComponent());
-					yield return widgetHeader;
+					headerWidget.Components.Add(new HeaderElementComponent());
+					// TODO: o[0].ToString() used as local key is wrong in general because there are types which
+					// don't implement ToString() in a way it could be used as a unique identifyer.
+					// When we'll have GUIDS and interface to check if object has a GUID we'll be able to use it as a
+					// local key.
+					expandableContainer = CreateExpandableContainer(
+						headerWidget, t.FullName, o.First().ToString()
+					);
+					yield return headerWidget;
+					yield return expandableContainer;
 				}
-				foreach (var e in elements) {
-					yield return e;
+				if (expandableContainer == null) {
+					foreach (var e in elements) {
+						yield return e;
+					}
+				} else {
+					foreach (var e in elements) {
+						expandableContainer.AddNode(e);
+						DecorateElement(e);
+					}
 				}
 			}
 		}
@@ -649,7 +733,9 @@ namespace Tangerine.UI.Inspector
 					}
 				}
 			};
-			label.CompoundPresenter.Add(new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground));
+			label.CompoundPresenter.Add(
+				new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground)
+			);
 			widget.AddNode(label);
 		}
 
@@ -745,7 +831,7 @@ namespace Tangerine.UI.Inspector
 		{
 			var header = new Widget {
 				LayoutCell = new LayoutCell { StretchY = 0 },
-				Layout = new StackLayout(),
+				Layout = new HBoxLayout(),
 				MinHeight = Theme.Metrics.DefaultButtonSize.Y,
 				Nodes = {
 					new ThemedSimpleText {
@@ -754,7 +840,7 @@ namespace Tangerine.UI.Inspector
 						VAlignment = VAlignment.Center,
 						ForceUncutText = false,
 					}
-				}
+				},
 			};
 			header.CompoundPresenter.Add(
 				new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.GroupHeaderLabelBackground)
@@ -818,13 +904,21 @@ namespace Tangerine.UI.Inspector
 				row % 2 == 0 ?
 				ColorTheme.Current.Inspector.StripeBackground1 :
 				ColorTheme.Current.Inspector.StripeBackground2
-			) { IgnorePadding = true });
-			editor.ContainerWidget.Components.Add(new DocumentationComponent(editor.EditorParams.PropertyInfo.DeclaringType.Name + "." + editor.EditorParams.PropertyName));
+			) {
+				IgnorePadding = true
+			});
+			editor.ContainerWidget.Components.Add(
+				new DocumentationComponent(
+					editor.EditorParams.PropertyInfo.DeclaringType.Name + "." + editor.EditorParams.PropertyName
+				)
+			);
 		}
 
 		private static string CamelCaseToLabel(string text)
 		{
-			return Regex.Replace(Regex.Replace(text, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
+			return Regex.Replace(
+				Regex.Replace(text, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2"
+			);
 		}
 
 		private static void CreateComponent(Type type, IEnumerable<Node> nodes)
@@ -841,8 +935,17 @@ namespace Tangerine.UI.Inspector
 					if (!node.Components.CanAdd(type)) {
 						continue;
 					}
-
-					var component = (NodeComponent)constructor.Invoke(new object[] { });
+					CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+						.TryGetValue(type.Name, out var localExpansion);
+					if (localExpansion == null) {
+						CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+							.TryAdd(type.Name, new Dictionary<string, bool>());
+						CoreUserPreferences.Instance.LocalInspectorExpandableEditorStates
+							.TryGetValue(type.Name, out localExpansion);
+					}
+					localExpansion.Remove(node.ToString());
+					localExpansion.TryAdd(node.ToString(), true);
+					var component = (NodeComponent)constructor.Invoke(Array.Empty<object>());
 					SetComponent.Perform(node, component);
 				}
 				Document.Current.History.CommitTransaction();
@@ -905,6 +1008,14 @@ namespace Tangerine.UI.Inspector
 		{
 			public WidgetElementComponent()
 			{
+			}
+		}
+
+		private class ContainerElementComponent : InspectorElementComponent
+		{
+			public ContainerElementComponent()
+			{
+
 			}
 		}
 	}
