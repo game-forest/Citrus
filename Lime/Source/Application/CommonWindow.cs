@@ -49,6 +49,7 @@ namespace Lime
 				Current = (IWindow)this;
 			}
 			Context = new Context(Property.Create(() => Current, (v) => Current = v), this);
+			UnhandledExceptionOnUpdate += Application.UnhandledExceptionOnUpdate;
 		}
 
 		protected void RaiseActivated()

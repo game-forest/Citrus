@@ -36,9 +36,6 @@ namespace Tangerine.UI.Docking
 				Icon = new System.Drawing.Icon(new EmbeddedResource(AppIconPath, "Tangerine").GetResourceStream()),
 #endif // WIN
 			});
-#if !MAC || !DEBUG // JetBrains Rider doesn't stop on exceptions if the handler is set.
-			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
-#endif
 			window.AllowDropFiles = true;
 			MainWindowWidget = new ThemedInvalidableWindowWidget(window) {
 				Id = "MainWindow",
@@ -460,7 +457,6 @@ namespace Tangerine.UI.Docking
 #endif
 				Type = WindowType.Tool,
 			});
-			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
 			window.AllowDropFiles = true;
 			window.Closing += reason => {
 				if (reason == CloseReason.MainWindowClosing) {
@@ -587,6 +583,11 @@ namespace Tangerine.UI.Docking
 				LoadDefaultLayoutWithWarning("Unable to load dock state from user preferences");
 			}
 			Refresh();
+		}
+
+		public void RaiseUnhandledExceptionOccurred(System.Exception e)
+		{
+			UnhandledExceptionOccurred?.Invoke(e);
 		}
 
 		private static void LoadDefaultLayoutWithWarning(string message)

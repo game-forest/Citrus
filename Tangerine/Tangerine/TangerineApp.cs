@@ -104,6 +104,7 @@ namespace Tangerine
 				Core.UserPreferences.Instance.Save();
 				Orange.The.Workspace.Save();
 			};
+			Application.UnhandledExceptionOnUpdate = e => DockManager.Instance.RaiseUnhandledExceptionOccurred(e);
 
 			var timelinePanel = new Panel("Timeline");
 			var inspectorPanel = new Panel("Inspector");

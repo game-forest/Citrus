@@ -67,6 +67,7 @@ namespace Lime
 	public static class Application
 	{
 		public static event Action<DeviceOrientation> SupportedDeviceOrientationsChanged;
+		public static Action<System.Exception> UnhandledExceptionOnUpdate;
 		public static readonly List<IWindow> Windows = new List<IWindow>();
 
 		private static IWindow mainWindow;
