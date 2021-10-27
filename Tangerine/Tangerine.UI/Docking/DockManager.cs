@@ -23,7 +23,6 @@ namespace Tangerine.UI.Docking
 		/// Manages DocumentArea files drop.
 		/// </summary>
 		public DropFilesGesture DocumentAreaDropFilesGesture { get; private set; }
-		public event Action<System.Exception> UnhandledExceptionOccurred;
 
 		private DockManager(Vector2 windowSize)
 		{
@@ -583,11 +582,6 @@ namespace Tangerine.UI.Docking
 				LoadDefaultLayoutWithWarning("Unable to load dock state from user preferences");
 			}
 			Refresh();
-		}
-
-		public void RaiseUnhandledExceptionOccurred(System.Exception e)
-		{
-			UnhandledExceptionOccurred?.Invoke(e);
 		}
 
 		private static void LoadDefaultLayoutWithWarning(string message)

@@ -104,7 +104,7 @@ namespace Tangerine
 				Core.UserPreferences.Instance.Save();
 				Orange.The.Workspace.Save();
 			};
-			Application.UnhandledExceptionOnUpdate = e => DockManager.Instance.RaiseUnhandledExceptionOccurred(e);
+			Application.UnhandledExceptionOnUpdate = ExceptionHandling.Handle;
 
 			var timelinePanel = new Panel("Timeline");
 			var inspectorPanel = new Panel("Inspector");
@@ -280,7 +280,6 @@ namespace Tangerine
 			VisualHintsRegistry.Instance.RegisterDefaultHints();
 
 			Document.NodeDecorators.AddFor<Node>(n => n.SetTangerineFlag(TangerineFlags.SceneNode, true));
-			dockManager.UnhandledExceptionOccurred += ExceptionHandling.Handle;
 
 			Document.NodeDecorators.AddFor<ParticleEmitter>(
 				n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter())
