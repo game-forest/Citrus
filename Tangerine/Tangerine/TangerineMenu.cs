@@ -519,7 +519,7 @@ namespace Tangerine
 				string name = System.String.Format("{0}. {1}", counter++, document);
 				menu.Add(new Command(name, () => {
 					if (null == Project.Current.OpenDocument(document)) {
-						AlertDialog.Show($"File \"{document}\" not found!");
+						AlertDialog.Show($"File `{document}` not found");
 					}
 				}));
 			}
