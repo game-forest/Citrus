@@ -102,6 +102,12 @@ namespace Lime
 #endif
 			return false;
 		}
+
+		/// <summary>
+		/// Removes from the list all elements whose index is greater than the specified index.
+		/// </summary>
+		public static void RemoveAfter<T>(this List<T> list, int index) => 
+			list.RemoveRange(index + 1, list.Count - (index + 1));
 	}
 
 	public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>
