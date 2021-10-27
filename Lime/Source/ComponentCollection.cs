@@ -5,16 +5,16 @@ using System.Reflection;
 
 namespace Lime
 {
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
 	/// Allow to add multiple components of a type decorated with the attribute and it's derived types.
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	public class AllowMultipleComponentsAttribute : Attribute { }
 
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
 	/// Allow to add only one component of a type decorated with the attribute and it's derived types.
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	public class AllowOnlyOneComponentAttribute : Attribute { }
 
 	public class Component
@@ -164,11 +164,7 @@ namespace Lime
 				throw new InvalidOperationException("Attempt to add the same component twice.");
 			}
 			var type = component.GetType();
-			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
-			if (
-				(ruleDeclaringType == null && ContainsExactType(type))
-				|| (ruleDeclaringType != null && !allowMultiple && Contains(ruleDeclaringType))
-			) {
+			if (!CanAdd(type)) {
 				throw new InvalidOperationException(
 					$"Attempt to add multiple components of type `{type.FullName}`. " +
 					$"Use `{nameof(AllowMultipleComponentsAttribute)}` or " +
@@ -197,80 +193,76 @@ namespace Lime
 			return false;
 		}
 
-		public bool CanAdd(Type type)
-		{
-			var (ruleDeclaringType, allowMultiple) = Component.GetRule(type);
-			return allowMultiple
-				|| (ruleDeclaringType == null && !ContainsExactType(type))
-				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
-		}
+		public bool CanAdd(Type type) => CanAddHelper(type, Component.GetRule(type));
 
-		public bool CanAdd<T>() where T : TComponent
+		public bool CanAdd<T>() where T : TComponent => CanAddHelper(typeof(T), ComponentRuleResolver<T>.Rule);
+
+		private bool CanAddHelper(Type type, (Type RuleDeclaringType, bool AllowMultiple) rule)
 		{
-			var (ruleDeclaringType, allowMultiple) = ComponentRuleResolver<T>.Rule;
-			return allowMultiple
-				|| (ruleDeclaringType == null && !ContainsExactType(typeof(T)))
-				|| (ruleDeclaringType != null && !Contains(ruleDeclaringType));
+			return rule.AllowMultiple
+				|| (rule.RuleDeclaringType == null && !ContainsExactType(type))
+				|| (rule.RuleDeclaringType != null && !Contains(rule.RuleDeclaringType));
 		}
 
 		public bool Remove<T>()
 		{
-			var j = 0;
-			for (int i = 0; i < Count; i++) {
-				var c = list[i];
-				if (!(c is T)) {
-					list[j] = list[i];
-					j++;
-				} else {
-					OnRemove(list[i]);
-				}
+			var performedRemove = false;
+			while (RemoveOne<T>()) {
+				performedRemove = true;
 			}
-			for (int i = j; i < Count; i++) {
-				list[i] = null;
-			}
-			var oldCount = Count;
-			Count = j;
-			return oldCount != Count;
+			return performedRemove;
 		}
 
 		public bool Remove(Type type)
 		{
-			var j = 0;
-			for (int i = 0; i < Count; i++) {
-				var c = list[i];
-				if (!type.IsInstanceOfType(c)) {
-					list[j] = list[i];
-					j++;
-				} else {
-					OnRemove(list[i]);
-				}
+			var performedRemove = false;
+			while (RemoveOne(type)) {
+				performedRemove = true;
 			}
-			for (int i = j; i < Count; i++) {
-				list[i] = null;
-			}
-			var oldCount = Count;
-			Count = j;
-			return oldCount != Count;
+			return performedRemove;
 		}
 
-		public virtual bool Remove(TComponent component)
+		private bool RemoveOne(Type type)
 		{
-			int index = -1;
-			for (int i = 0; i < Count; i++) {
-				if (index == -1) {
-					if (list[i] == component) {
-						index = i;
-						OnRemove(component);
-					}
-				} else {
-					list[i - 1] = list[i];
+			for (var i = Count - 1; i >= 0; i--) {
+				if (type.IsInstanceOfType(list[i])) {
+					RemoveAt(i);
+					return true;
 				}
 			}
-			if (index == -1) {
-				return false;
+			return false;
+		}
+
+		private bool RemoveOne<T>()
+		{
+			for (int i = Count - 1; i >= 0; i--) {
+				if (list[i] is T) {
+					RemoveAt(i);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public bool Remove(TComponent component)
+		{
+			for (int i = 0; i < Count; i++) {
+				if (list[i] == component) {
+					RemoveAt(i);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void RemoveAt(int index)
+		{
+			var component = list[index];
+			for (int i = index + 1; i < Count; i++) {
+				list[i - 1] = list[i];
 			}
 			list[--Count] = null;
-			return true;
+			OnRemove(component);
 		}
 
 		public bool Replace<T>(T component) where T : TComponent
@@ -288,13 +280,13 @@ namespace Lime
 
 		public Enumerator GetEnumerator() => new Enumerator(list, Count);
 
-		public virtual void Clear()
+		public void Clear()
 		{
-			for (int i = 0; i < Count; i++) {
-				OnRemove(list[i]);
-				list[i] = null;
+			while (Count > 0) {
+				var c = list[--Count];
+				list[Count] = null;
+				OnRemove(c);
 			}
-			Count = 0;
 		}
 
 		public void CopyTo(TComponent[] array, int arrayIndex)
@@ -309,7 +301,7 @@ namespace Lime
 
 		public struct Enumerator : IEnumerator<TComponent>
 		{
-			private readonly TComponent [] list;
+			private readonly TComponent[] list;
 			private readonly int length;
 			private int index;
 
