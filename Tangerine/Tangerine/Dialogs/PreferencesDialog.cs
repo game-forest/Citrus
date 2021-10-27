@@ -112,13 +112,11 @@ namespace Tangerine
 					var recentProjects = AppUserPreferences.Instance.RecentProjects;
 					int recentProjectsCount = AppUserPreferences.Instance.RecentProjectCount;
 					if (recentProjects.Count > recentProjectsCount) {
-						recentProjects.RemoveAfter(index: recentProjectsCount - 1);
 						TangerineMenu.RebuildRecentProjectsMenu();
 					}
 					var recentDocuments = ProjectUserPreferences.Instance.RecentDocuments;
 					int recentDocumentCount = CoreUserPreferences.Instance.RecentDocumentCount;
 					if (recentDocuments.Count > recentDocumentCount) {
-						recentDocuments.RemoveAfter(index: recentDocumentCount - 1);
 						TangerineMenu.RebuildRecentDocumentsMenu();
 					}
 					foreach (var profile in HotkeyRegistry.Profiles) {
