@@ -452,7 +452,7 @@ namespace Lime
 			return 0;
 		}
 
-		private float CalcTotalHeight(int numLines)
+		public float CalcTotalHeight(int numLines)
 		{
 			return Math.Max(FontHeight * numLines + Spacing * (numLines - 1), FontHeight);
 		}
@@ -471,7 +471,7 @@ namespace Lime
 			}
 		}
 
-		private List<string> SplitText(string text)
+		public List<string> SplitText(string text)
 		{
 			var strings = new List<string>(text.Split('\n'));
 			// Add linebreaks to make editor happy.
@@ -510,7 +510,7 @@ namespace Lime
 			return Font.MeasureTextLine(line, FontHeight, start, count, letterSpacing + font.Spacing).X <= ContentWidth;
 		}
 
-		private Vector2 MeasureTextLine(string line)
+		public Vector2 MeasureTextLine(string line)
 		{
 			return Font.MeasureTextLine(line, FontHeight, letterSpacing + font.Spacing);
 		}
