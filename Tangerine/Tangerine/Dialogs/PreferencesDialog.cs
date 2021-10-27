@@ -111,7 +111,7 @@ namespace Tangerine
 				if (saved) {
 					var appUserPreferences = Tangerine.AppUserPreferences.Instance;
 					var recentProjects = appUserPreferences.RecentProjects;
-					int recentProjectCount = Math.Clamp(appUserPreferences.RecentProjectCount, 2, 48);
+					int recentProjectCount = appUserPreferences.RecentProjectCount;
 					appUserPreferences.RecentProjectCount = recentProjectCount;
 					if (recentProjects.Count > recentProjectCount) {
 						int removeCount = recentProjects.Count - recentProjectCount;
@@ -120,7 +120,7 @@ namespace Tangerine
 					}
 					var projectUserPreferences = ProjectUserPreferences.Instance;
 					var recentDocuments = projectUserPreferences.RecentDocuments;
-					int recentDocumentCount = Math.Clamp(CoreUserPreferences.Instance.RecentDocumentCount, 2, 48);
+					int recentDocumentCount = CoreUserPreferences.Instance.RecentDocumentCount;
 					CoreUserPreferences.Instance.RecentDocumentCount = recentDocumentCount;
 					if (recentDocuments.Count > recentDocumentCount) {
 						int removeCount = recentDocuments.Count - recentDocumentCount;
