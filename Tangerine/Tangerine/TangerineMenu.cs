@@ -520,6 +520,7 @@ namespace Tangerine
 				menu.Add(new Command(name, () => {
 					if (null == Project.Current.OpenDocument(document)) {
 						AlertDialog.Show($"File `{document}` not found");
+						RebuildRecentDocumentsMenu();
 					}
 				}));
 			}
