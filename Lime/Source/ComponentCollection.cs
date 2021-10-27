@@ -5,16 +5,16 @@ using System.Reflection;
 
 namespace Lime
 {
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
 	/// Allow to add multiple components of a type decorated with the attribute and it's derived types.
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	public class AllowMultipleComponentsAttribute : Attribute { }
 
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	/// <summary>
 	/// Allow to add only one component of a type decorated with the attribute and it's derived types.
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	public class AllowOnlyOneComponentAttribute : Attribute { }
 
 	public class Component
