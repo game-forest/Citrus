@@ -546,7 +546,7 @@ namespace Tangerine
 							FileOpenProject.AddRecentProject(project);
 						} else {
 							AppUserPreferences.Instance.RecentProjects.RemoveAll(p => p == project);
-							AlertDialog.Show($"File {project} not found!");
+							AlertDialog.Show($"File `{project}` not found");
 						}
 					}
 				}));
