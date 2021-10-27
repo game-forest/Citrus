@@ -305,9 +305,7 @@ namespace Tangerine.Core
 			recentDocuments.Remove(path);
 			recentDocuments.Insert(0, path);
 			if (recentDocuments.Count > CoreUserPreferences.Instance.RecentDocumentCount) {
-				int removeIndex = CoreUserPreferences.Instance.RecentDocumentCount;
-				int removeCount = recentDocuments.Count - removeIndex;
-				recentDocuments.RemoveRange(removeIndex, removeCount);
+				recentDocuments.RemoveAfter(index: CoreUserPreferences.Instance.RecentDocumentCount - 1);
 			}
 		}
 
