@@ -72,7 +72,7 @@ namespace Tangerine
 		public LookupDialog(LookupSections.SectionType? sectionType = null) : this(out var sections)
 		{
 			sections.Initialize(sectionType);
-			sections.ForceLastSection();
+			sections.LockNavigationOnLastSection();
 		}
 
 		public LookupDialog(Func<LookupSections, IEnumerable<LookupSection>> getSections) : this(out var sections)
@@ -86,7 +86,7 @@ namespace Tangerine
 			foreach (var section in startSections.Skip(1)) {
 				sections.Push(section);
 			}
-			sections.ForceLastSection();
+			sections.LockNavigationOnLastSection();
 		}
 	}
 }

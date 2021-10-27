@@ -7,7 +7,7 @@ namespace Tangerine
 {
 	public class LookupSections
 	{
-		private LookupSection forceSection;
+		private LookupSection lockedSection;
 
 		private static SubmittedData recentlySubmittedData;
 
@@ -126,10 +126,10 @@ namespace Tangerine
 			SetupSection(null);
 		}
 
-		public void ForceLastSection()
+		public void LockNavigationOnLastSection()
 		{
 			if (stack.Count > 0) {
-				forceSection = stack.Peek();
+				lockedSection = stack.Peek();
 			}
 		}
 
@@ -144,7 +144,7 @@ namespace Tangerine
 
 		private void NavigatedBack()
 		{
-			if (stack.Count <= 0 || stack.Peek() == Initial || stack.Peek() == forceSection) {
+			if (stack.Count <= 0 || stack.Peek() == Initial || stack.Peek() == lockedSection) {
 				return;
 			}
 			Pop();
