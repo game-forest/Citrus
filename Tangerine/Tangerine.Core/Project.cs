@@ -268,10 +268,10 @@ namespace Tangerine.Core
 			}
 			var doc = Documents.FirstOrDefault(i => i.Path == localPath);
 			if (doc == null) {
-				var tmpFileLocalPath = AutosaveProcessor.GetTemporaryFilePath(localPath);
-				bool hasFullTmpFilePath = GetFullPath(tmpFileLocalPath, out var tmpFileFullPath);
-				if (hasFullTmpFilePath && TempFileLoadConfirmation.Invoke(localPath)) {
-					doc = new Document(tmpFileLocalPath);
+				var tmpFile = AutosaveProcessor.GetTemporaryFilePath(localPath);
+				string systemPath;
+				if (GetFullPath(tmpFile, out systemPath) && TempFileLoadConfirmation.Invoke(localPath)) {
+					doc = new Document(tmpFile);
 					doc.SaveAs(localPath);
 				} else {
 					if (GetFullPath(localPath, fullPath: out _)) {
@@ -281,8 +281,8 @@ namespace Tangerine.Core
 						return null;
 					}
 				}
-				if (hasFullTmpFilePath) {
-					File.Delete(tmpFileFullPath);
+				if (systemPath != null) {
+					File.Delete(systemPath);
 				}
 				documents.Add(doc);
 			}
