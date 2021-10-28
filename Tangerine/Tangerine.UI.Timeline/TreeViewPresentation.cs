@@ -51,6 +51,18 @@ namespace Tangerine.UI.Timeline
 			node is Frame frame && frame.ClipChildren == ClipMethod.NoRender;
 	}
 
+	public class NodeTreeViewComponentsProcessor : ITreeViewItemPresentationProcessor
+	{
+		public void Process(ITreeViewItemPresentation presentation)
+		{
+			if (presentation is NodeTreeViewItemPresentation p) {
+				if (p.IsComponentCollectionChanged()) {
+					p.RebuildComponentIcons();
+				}
+			}
+		}
+	}
+	
 	public class TreeViewItemPresentation : ITreeViewItemPresentation
 	{
 		public readonly Widget ExpandButtonContainer;
@@ -322,6 +334,8 @@ namespace Tangerine.UI.Timeline
 		public readonly Node Node;
 		public readonly LinkIndicatorButtonContainer LinkIndicatorButtonContainer;
 
+		private uint componentsVersion;
+
 		private static readonly Color4[] ColorMarks = {
 			Color4.Transparent,
 			ColorTheme.Current.TimelineRoll.RedMark,
@@ -366,6 +380,33 @@ namespace Tangerine.UI.Timeline
 			}));
 		}
 
+		public bool IsComponentCollectionChanged() => componentsVersion != Node.Components.Version;
+
+		public void RebuildComponentIcons()
+		{
+			if (LinkIndicatorButtonContainer == null) {
+				return;
+			}
+			componentsVersion = Node.Components.Version;
+			Widget.Nodes.RemoveAll(n => n is ComponentIcon);
+			int index = 1 + Widget.Nodes.IndexOf(LinkIndicatorButtonContainer.Container);
+			bool showAllComponents = CoreUserPreferences.Instance.TimelineAllComponentIcons;
+			foreach (var component in Node.Components) {
+				var componentType = component.GetType();
+				if (showAllComponents || HasTangerineRegisterComponentAttribute(componentType)) {
+					if (component is ITimelineIconProvider iconProvider) {
+						Widget.Nodes.Insert(index, new ComponentIcon(iconProvider));
+					} else {
+						Widget.Nodes.Insert(index, new ComponentIcon(componentType));
+					}
+					++index;
+				}
+			}
+			
+			static bool HasTangerineRegisterComponentAttribute(Type type) =>
+				ClassAttributes<TangerineRegisterComponentAttribute>.Get(type, inherit: true) != null;
+		}
+		
 		private void ShowContextMenu()
 		{
 			if (!Item.Selected) {
@@ -552,14 +593,6 @@ namespace Tangerine.UI.Timeline
 			return button;
 		}
 
-		private enum AnimationState
-		{
-			None,
-			Enabled,
-			PartiallyEnabled,
-			Disabled
-		}
-
 		private static AnimationState GetAnimationState(IAnimationHost animationHost)
 		{
 			var animators = animationHost.Animators;
@@ -578,6 +611,39 @@ namespace Tangerine.UI.Timeline
 				return AnimationState.Enabled;
 			} else {
 				return AnimationState.PartiallyEnabled;
+			}
+		}
+		
+		private enum AnimationState
+		{
+			None,
+			Enabled,
+			PartiallyEnabled,
+			Disabled
+		}
+
+		private sealed class ComponentIcon : ToolbarButton
+		{
+			public ComponentIcon(Type componentType) : base()
+			{
+				Texture = NodeIconPool.GetTexture(componentType);
+				Tooltip = componentType.Name;
+				Highlightable = false;
+			}
+
+			public ComponentIcon(ITimelineIconProvider iconProvider) : base()
+			{
+				FreezeInvisible = false;
+				Highlightable = false;
+				int cachedVersion = 0;
+				Updated += _ => {
+					if (cachedVersion != iconProvider.TextureVersion) {
+						cachedVersion = iconProvider.TextureVersion;
+						Visible = iconProvider.Texture != null;
+						Texture = iconProvider.Texture;
+					}
+					Tooltip = iconProvider.Tooltip;
+				};
 			}
 		}
 	}
@@ -660,6 +726,7 @@ namespace Tangerine.UI.Timeline
 			Processors = new List<ITreeViewItemPresentationProcessor> {
 				new TreeViewItemPresentationProcessor(),
 				new NodeTreeViewItemLabelProcessor(),
+				new NodeTreeViewComponentsProcessor(),
 				new LinkIndicationCleanerProcessor(),
 				new ImageCombinerLinkIndicationProcessor(),
 				new BoneLinkIndicationProcessor(),
