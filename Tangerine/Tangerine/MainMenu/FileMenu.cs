@@ -32,7 +32,7 @@ namespace Tangerine
 			prefs.RecentProjects.Remove(path);
 			prefs.RecentProjects.Insert(0, path);
 			if (prefs.RecentProjects.Count > prefs.RecentProjectCount) {
-				prefs.RecentProjects.RemoveAfter(index: prefs.RecentProjectCount - 1);
+				prefs.RecentProjects.RemoveTail(startIndex: prefs.RecentProjectCount);
 			}
 			UserPreferences.Instance.Save();
 		}
