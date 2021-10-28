@@ -239,7 +239,7 @@ namespace Tangerine.Core
 				if (animation != value) {
 					animation = value;
 					if (animation != null) {
-						animationFastForwarder.FastForward(animation, 0, value.Frame, true);
+						animationFastForwarder.FastForwardSafe(animation, value.Frame, true);
 					}
 					BumpSceneTreeVersion();
 				}
@@ -914,7 +914,7 @@ namespace Tangerine.Core
 
 		public void SetAnimationFrame(Animation animation, int frameIndex, bool stopAnimations = true)
 		{
-			animationFastForwarder.FastForward(animation, 0, frameIndex, stopAnimations);
+			animationFastForwarder.FastForwardSafe(animation, frameIndex, stopAnimations);
 		}
 
 		public void TogglePreviewAnimation()

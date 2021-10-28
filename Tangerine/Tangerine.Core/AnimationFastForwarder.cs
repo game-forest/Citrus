@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
@@ -7,13 +8,39 @@ namespace Tangerine.Core
 {
 	public class AnimationFastForwarder
 	{
-		private readonly HashSet<AnimationRange> processedAnimationRanges = new HashSet<AnimationRange>();
+		private readonly List<AnimationState> animationStates = new List<AnimationState>();	
+		private readonly Dictionary<Animation, List<Edge>> incomingEdges = new Dictionary<Animation, List<Edge>>();
+		private readonly Dictionary<Animation, List<Edge>> outgoingEdges = new Dictionary<Animation, List<Edge>>();
+		private readonly bool cacheParsedTriggersInAnimations;
 
-		public void FastForward(Animation animation, int frame, int frameCount, bool stopAnimations)
+		private class AnimationParsedTriggersTableComponent : Component
 		{
-			var animationStates = new List<AnimationState>();
-			BuildAnimationStates(animationStates, animation, frame, frameCount);
-			ApplyAnimationStates(animationStates, animation, stopAnimations);
+			public int EffectiveAnimatorsVersion = -1;
+			public ParsedTriggersTable Table;
+		}
+
+		private struct Edge
+		{
+			public Animation Animation;
+			public ushort[] Triggers;
+		}
+
+		private struct AnimationState
+		{
+			public Animation Animation;
+			public int Frame;
+			public int TickStoppedOn;
+			public int Depth;
+		}
+
+		public AnimationFastForwarder(bool cacheParsedTriggersInAnimations = true)
+		{
+			this.cacheParsedTriggersInAnimations = cacheParsedTriggersInAnimations;
+		}
+
+		public void FastForwardSafe(Animation animation, int currentTick, bool stopAnimations)
+		{
+			FastForward(animation, currentTick, stopAnimations);
 			// The following code is intended for code that
 			// changes the node hierarchy while the animation is scrolling.
 			var hierarchyChanged = false;
@@ -24,276 +51,407 @@ namespace Tangerine.Core
 				nodeManager.Update(0);
 				nodeManager.HierarchyChanged -= h;
 				if (hierarchyChanged) {
-					animationStates.Clear();
-					BuildAnimationStates(animationStates, animation, frame, frameCount);
-					ApplyAnimationStates(animationStates, animation, stopAnimations);
+					FastForward(animation, currentTick, stopAnimations);
 				}
 			}
 		}
 
-		public void BuildAnimationStates(
-			List<AnimationState> animationStates,
-			Animation animation,
-			int frame,
-			int frameCount,
-			bool processMarkers = false
-		) {
-			processedAnimationRanges.Clear();
-			BuildAnimationStatesHelper(
-				processedAnimationRanges, animationStates, animation, frame, frameCount, processMarkers
-			);
-		}
-
-		public static void ApplyAnimationStates(
-			List<AnimationState> animationStates, Animation currentAnimation, bool stopAnimations
-		) {
-			// Apply current animation state last so all triggers will have correct values on the inspector pane.
-			var orderedStates = animationStates.OrderByDescending(
-				s => s.Animation == currentAnimation ? -1 : s.FrameCount
-			);
-			foreach (var s in orderedStates) {
+		private void FastForward(Animation animation, int currentTick, bool stopAnimations)
+		{
+			BuildAnimationStatesRecursively(animation, currentTick, ignoreMarkers: true);
+			
+			// The order of applying of the animation states is as follows:
+			// Stopped animations go first in the order they were stopped.
+			// The current animation goes last so all triggers will have the correct values in the inspector pane.
+			animationStates.Sort((a, b) => {
+				var d = GetStateOrder(a) - GetStateOrder(b);
+				return d == 0 ? a.Depth - b.Depth : d;
+			});
+			foreach (var s in animationStates) {
 				s.Animation.Frame = s.Frame;
-				s.Animation.IsRunning = !stopAnimations && s.IsRunning;
+				s.Animation.IsRunning = !stopAnimations && s.TickStoppedOn < 0;
 			}
-		}
-
-		struct TriggerData
-		{
-			public Keyframe<string> Keyframe;
-			public int FrameCount;
-		}
-
-		[NodeComponentDontSerialize]
-		class TriggerDataComponent : NodeComponent
-		{
-			public readonly Dictionary<string, TriggerData> Triggers = new Dictionary<string, TriggerData>();
-		}
-
-		public struct AnimationState
-		{
-			public Animation Animation;
-			public int Frame;
-			public int FrameCount;
-			public bool IsRunning;
-		}
-
-		struct AnimationRange : IEquatable<AnimationRange>
-		{
-			public Animation Animation;
-			public int Frame;
-			public int FrameCount;
-
-			public bool Equals(AnimationRange other)
+			foreach (var edges in incomingEdges.Values) {
+				foreach (var e in edges) {
+					ArrayPool<ushort>.Shared.Return(e.Triggers);
+				}
+			}
+			animationStates.Clear();
+			incomingEdges.Clear();
+			outgoingEdges.Clear();
+			
+			int GetStateOrder(AnimationState state)
 			{
-				return Animation == other.Animation && Frame == other.Frame && FrameCount == other.FrameCount;
+				return state.Animation == animation
+					? ushort.MaxValue + 1
+					: (state.TickStoppedOn >= 0 ? state.TickStoppedOn : ushort.MaxValue);
 			}
-
-			public override int GetHashCode() => Animation.GetHashCode() ^ Frame ^ FrameCount;
-
-			public override bool Equals(object obj) => obj is AnimationRange range && Equals(range);
 		}
 
-		private readonly int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
-
-		private void BuildAnimationStatesHelper(
-			HashSet<AnimationRange> processedAnimationRanges,
-			List<AnimationState> animationStates,
-			Animation animation,
-			int frame,
-			int frameCount,
-			bool processMarkers
+		private void BuildAnimationStatesRecursively(Animation animation, int currentTick, bool ignoreMarkers)
+		{
+			foreach (var edge in GetOutgoingEdges(animation).ToList()) {
+				RemoveEdge(animation, edge.Animation);
+				BuildAnimationStatesRecursively(edge.Animation, currentTick, ignoreMarkers: false);
+			}
+			BuildAnimationState(animation, currentTick, ignoreMarkers, out var newOutgoingEdges);
+			foreach (var edge in newOutgoingEdges) {
+				AddEdge(animation, edge.Animation, edge.Triggers);
+				BuildAnimationStatesRecursively(edge.Animation, currentTick, ignoreMarkers: false);
+			}
+		}
+		
+		private void BuildAnimationState(
+			Animation animation, 
+			int currentTick, 
+			bool isTopLevelAnimation, 
+			out List<Edge> newOutgoingEdges
 		) {
-			var range = new AnimationRange {
-				Animation = animation,
-				Frame = frame,
-				FrameCount = frameCount
+			var animationState = new AnimationState {
+				Animation = animation, 
+				TickStoppedOn = -1,
+				Depth = GetNodeDepth(animation.OwnerNode)
 			};
-			if (!processedAnimationRanges.Add(range)) {
-				return;
-			}
-			if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
-				animation.AnimationEngine.BuildEffectiveAnimators(animation);
-			}
-			var triggerAnimators = animation.EffectiveTriggerableAnimators
-				.Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode)
-				.OfType<Animator<string>>()
-				.ToList();
-			AdvanceCurrentFrameAndBuildTriggers(
-				animation, frameCount, processMarkers, triggerAnimators, ref frame, out bool isRunning
-			);
-			ExecuteTriggers(processedAnimationRanges, animationStates, triggerAnimators);
-			var state = new AnimationState {
-				Animation = animation,
-				FrameCount = frameCount,
-				Frame = frame,
-				IsRunning = isRunning
-			};
-			var j = animationStates.FindIndex(i => i.Animation == animation);
-			if (j < 0) {
-				animationStates.Add(state);
-			} else if (animationStates[j].FrameCount > state.FrameCount) {
-				animationStates[j] = state;
-			}
-		}
-
-		private void ExecuteTriggers(
-			HashSet<AnimationRange> processedAnimationsRanges,
-			List<AnimationState> animationStates,
-			List<Animator<string>> triggerAnimators
-		) {
-			foreach (var triggerAnimator in triggerAnimators) {
-				var node = (Node)triggerAnimator.Owner;
-				var triggers = node.Components.Get<TriggerDataComponent>().Triggers;
-				var sortedTriggers = triggers.Values.ToList();
-				sortedTriggers.Sort((a, b) => a.FrameCount - b.FrameCount);
-				triggers.Clear();
-				foreach (var trigger in sortedTriggers) {
-					foreach (var (animationToRun, runAtFrame) in ParseTrigger(node, trigger.Keyframe.Value)) {
-						BuildAnimationStatesHelper(
-							processedAnimationsRanges,
-							animationStates,
-							animationToRun,
-							runAtFrame,
-							trigger.FrameCount,
-							processMarkers: true
-						);
-					}
+			try {
+				if (!isTopLevelAnimation && GetIncomingEdges(animation).Count == 0) {
+					newOutgoingEdges = new List<Edge>();
+					return;
 				}
-			}
-		}
-
-		private static void AdvanceCurrentFrameAndBuildTriggers(
-			Animation animation,
-			int frameCount,
-			bool processMarkers,
-			List<Animator<string>> triggerAnimators,
-			ref int currentFrame,
-			out bool isRunning
-		) {
-			isRunning = false;
-			foreach (
-				var (rangeBegin, rangeEnd, isRunning_, remainedFrameCount) in
-				EnumerateAnimationRangesWithLoopReduction(animation, currentFrame, frameCount, processMarkers)
-			) {
-				isRunning = isRunning_;
-				foreach (var triggerAnimator in triggerAnimators) {
-					var node = (Node)triggerAnimator.Owner;
-					var triggers = node.Components.GetOrAdd<TriggerDataComponent>().Triggers;
-					foreach (var keyframe in triggerAnimator.ReadonlyKeys) {
-						if (keyframe.Frame < rangeBegin) {
-							continue;
-						}
-						if (keyframe.Frame > rangeEnd) {
-							break;
-						}
-						triggers[keyframe.Value ?? ""] = new TriggerData {
-							Keyframe = keyframe,
-							FrameCount = remainedFrameCount - (keyframe.Frame - rangeBegin),
-						};
-					}
-				}
-				currentFrame = rangeEnd;
-			}
-		}
-
-		private static IEnumerable<(int, int, bool, int)> EnumerateAnimationRangesWithLoopReduction(
-			Animation animation, int startFrame, int frameCount, bool processMarkers
-		) {
-			var previousRange = (-1, -1, false);
-			foreach (var range in EnumerateAnimationRanges(animation, startFrame, frameCount, processMarkers)) {
-				var (rangeBegin, rangeEnd, isRunning) = range;
-				var rangeLength = rangeEnd - rangeBegin;
-				if (range == previousRange) {
-					if (rangeLength == 0) {
-						yield return (rangeBegin, rangeEnd, isRunning, 0);
-						yield break;
-					}
-					if (frameCount >= rangeLength) {
-						yield return (rangeBegin, rangeEnd, isRunning, rangeLength + frameCount % rangeLength);
-					}
-					frameCount %= rangeLength;
-					rangeEnd = rangeBegin + frameCount;
-					yield return (rangeBegin, rangeEnd, isRunning, frameCount);
-					yield break;
+				var unitedTriggers = ArrayPool<ushort>.Shared.Rent(currentTick + 1);
+				Array.Fill(unitedTriggers, ushort.MaxValue, 0, currentTick + 1);
+				if (isTopLevelAnimation) {
+					unitedTriggers[0] = 0;
 				} else {
-					yield return (rangeBegin, rangeEnd, isRunning, frameCount);
-				}
-				previousRange = range;
-				frameCount -= rangeLength;
-			}
-		}
-
-		private static IEnumerable<(int, int, bool)> EnumerateAnimationRanges(
-			Animation animation, int startFrame, int frameCount, bool processMarkers
-		) {
-			while (true) {
-				var jumped = false;
-				if (processMarkers) {
-					foreach (var marker in animation.Markers) {
-						if (marker.Frame < startFrame || marker.Frame - startFrame > frameCount) {
-							continue;
-						}
-						if (marker.Action == MarkerAction.Stop) {
-							yield return (startFrame, marker.Frame, false);
-							yield break;
-						}
-						if (marker.Action == MarkerAction.Jump) {
-							if (animation.Markers.TryFind(marker.JumpTo, out var jumpToMarker)) {
-								frameCount -= marker.Frame - startFrame;
-								yield return (startFrame, marker.Frame, true);
-								startFrame = jumpToMarker.Frame;
-								jumped = true;
-								break;
+					foreach (var edge in GetIncomingEdges(animation).OrderBy(e => GetNodeDepth(e.Animation.OwnerNode))) {
+						var edgeTriggers = edge.Triggers;
+						for (int t = 0; t <= currentTick; t++) {
+							if (edgeTriggers[t] != ushort.MaxValue) {
+								unitedTriggers[t] = edgeTriggers[t];
 							}
 						}
 					}
 				}
-				if (!jumped) {
-					yield return (startFrame, startFrame + frameCount, true);
-					yield break;
+				var outgoingTriggers = new List<ushort[]>();
+				ParsedTriggersTable parsedTriggers;
+				if (cacheParsedTriggersInAnimations) {
+					if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
+						animation.AnimationEngine.BuildEffectiveAnimators(animation);
+					}
+					var parsedTriggersComponent = animation.Components.GetOrAdd<AnimationParsedTriggersTableComponent>();
+					if (
+						parsedTriggersComponent.EffectiveAnimatorsVersion != animation.EffectiveAnimatorsVersion
+						|| parsedTriggersComponent.Table == null
+					) {
+						parsedTriggersComponent.EffectiveAnimatorsVersion = animation.EffectiveAnimatorsVersion;
+						parsedTriggersComponent.Table?.Dispose();
+						parsedTriggersComponent.Table = new ParsedTriggersTable(animation);
+					}
+					parsedTriggers = parsedTriggersComponent.Table;
+				} else {
+					parsedTriggers = new ParsedTriggersTable(animation);
+				}
+				using var caret = new Caret(animation, isTopLevelAnimation);
+				ushort currentFrame = 0;
+				var running = false;
+				for (int t = 0; t <= currentTick; t++) {
+					if (unitedTriggers[t] != ushort.MaxValue) {
+						currentFrame = unitedTriggers[t];
+						running = true;
+						animationState.TickStoppedOn = -1;
+					}
+					if (running) {
+						var index = parsedTriggers.GetFirstKeyframeIndex(currentFrame);
+						while (index != ushort.MaxValue) {
+							var key = parsedTriggers.Keyframes[index];
+							while (outgoingTriggers.Count <= key.AnimationIndex) {
+								outgoingTriggers.Add(null);
+							}
+							if (outgoingTriggers[key.AnimationIndex] == null) {
+								var triggers = ArrayPool<ushort>.Shared.Rent(currentTick + 1);
+								Array.Fill(triggers, ushort.MaxValue, 0, currentTick + 1);
+								outgoingTriggers[key.AnimationIndex] = triggers;
+							}
+							outgoingTriggers[key.AnimationIndex][t] = key.Frame;
+							index = key.NextKeyframeIndex;
+						}
+						var nextFrame = caret.NextFrame(currentFrame);
+						if (nextFrame == currentFrame) {
+							running = false;
+							animationState.TickStoppedOn = t;
+						}
+						if (t < currentTick) {
+							currentFrame = nextFrame;
+						}
+					}
+				}
+				newOutgoingEdges = new List<Edge>();
+				for (int i = 0; i < outgoingTriggers.Count; i++) {
+					if (outgoingTriggers[i] != null) {
+						newOutgoingEdges.Add(new Edge {
+							Animation = parsedTriggers.TriggeredAnimations[i],
+							Triggers = outgoingTriggers[i]
+						});
+					}
+				}
+				animationState.Frame = currentFrame;
+				ArrayPool<ushort>.Shared.Return(unitedTriggers);
+				if (!cacheParsedTriggersInAnimations) {
+					parsedTriggers.Dispose();
+				}
+			} finally {
+				var index = animationStates.FindIndex(s => s.Animation == animation);
+				if (index >= 0) {
+					animationStates[index] = animationState;
+				} else {
+					animationStates.Add(animationState);
+				}
+			}
+		}
+		
+		private static int GetNodeDepth(Node node)
+		{
+			var depth = 0;
+			var p = node.Parent;
+			while (p != null) {
+				depth++;
+				p = p.Parent;
+			}
+			return depth;
+		}
+
+		private void AddEdge(Animation from, Animation to, ushort[] triggers)
+		{
+			GetIncomingEdges(to).Add(new Edge { Animation = from, Triggers = triggers });
+			GetOutgoingEdges(from).Add(new Edge { Animation = to, Triggers = triggers });
+		}
+		
+		private void RemoveEdge(Animation from, Animation to)
+		{
+			Remove(GetIncomingEdges(to), from, returnToPool: true);
+			Remove(GetOutgoingEdges(from), to, returnToPool: false);
+			
+			void Remove(List<Edge> edges, Animation animation, bool returnToPool)
+			{
+				for (int i = 0; i < edges.Count; i++) {
+					if (edges[i].Animation == animation) {
+						if (returnToPool) {
+							ArrayPool<ushort>.Shared.Return(edges[i].Triggers);
+						}
+						edges.RemoveAt(i);
+						break;
+					}
 				}
 			}
 		}
 
-		private static IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
+		private List<Edge> GetIncomingEdges(Animation animation)
 		{
-			trigger ??= "";
-			if (trigger.Contains(',')) {
-				foreach (var s in trigger.Split(',')) {
-					if (ParseTriggerHelper(node, s.Trim(), out var a, out var t)) {
+			if (!incomingEdges.TryGetValue(animation, out var edges)) {
+				edges = new List<Edge>();
+				incomingEdges.Add(animation, edges);	
+			}
+			return edges;
+		}
+		
+		private List<Edge> GetOutgoingEdges(Animation animation)
+		{
+			if (!outgoingEdges.TryGetValue(animation, out var edges)) {
+				edges = new List<Edge>();
+				outgoingEdges.Add(animation, edges);
+			}
+			return edges;
+		}
+
+		private class ParsedTriggersTable : IDisposable
+		{
+			private static readonly int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
+			private readonly Animation animation;
+			private ushort[][] table;
+			
+			public readonly List<Animation> TriggeredAnimations = new List<Animation>();
+			public readonly List<Keyframe> Keyframes = new List<Keyframe>(); 
+
+			public struct Keyframe
+			{
+				public int AnimationIndex;
+				public ushort Frame;
+				public ushort NextKeyframeIndex;
+			}
+			
+			public ParsedTriggersTable(Animation animation) 
+			{
+				this.animation = animation;
+				table = ArrayPool<ushort[]>.Shared.Rent(256);
+				Array.Clear(table, 0, 256);
+			}
+			
+			public int GetFirstKeyframeIndex(int frame)
+			{
+				if (table[frame >> 8] is {} page) {
+					return page[frame & 0xFF];
+				}
+				table[frame >> 8] = page = ArrayPool<ushort>.Shared.Rent(256);
+				Array.Fill(page, ushort.MaxValue, 0, 256);
+				int baseFrame = frame & 0xFF00;
+				if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
+					animation.AnimationEngine.BuildEffectiveAnimators(animation);
+				}
+				var triggerAnimators = animation.EffectiveTriggerableAnimators
+					.Where(i => i.TargetPropertyPathComparisonCode == triggerComparisonCode)
+					.OfType<Animator<string>>()
+					.ToList();
+				foreach (var triggerAnimator in triggerAnimators) {
+					var node = (Node)triggerAnimator.Owner;
+					foreach (var key in triggerAnimator.ReadonlyKeys) {
+						if (key.Frame < baseFrame || key.Frame > baseFrame + 255) {
+							continue;
+						}
+						foreach ((var triggerAnimation, int triggerFrame) in ParseTrigger(node, key.Value)) {
+							int animationIndex = 0;
+							foreach (var a in TriggeredAnimations) {
+								if (a == triggerAnimation) {
+									break;
+								}
+								animationIndex++;
+							}
+							if (animationIndex == TriggeredAnimations.Count) {
+								TriggeredAnimations.Add(triggerAnimation);
+							}
+							var i = page[key.Frame - baseFrame];
+							page[key.Frame - baseFrame] = (ushort)Keyframes.Count;
+							Keyframes.Add(new Keyframe {
+								AnimationIndex = animationIndex,
+								Frame = (ushort)triggerFrame,
+								NextKeyframeIndex = i
+							});
+						}
+					}
+				}
+				return page[frame & 0xFF];
+			}
+			
+			public void Dispose()
+			{
+				for (int i = 0; i < table.Length; i++) {
+					if (table[i] != null) {
+						ArrayPool<ushort>.Shared.Return(table[i]);
+						table[i] = null;
+					}
+				}
+				ArrayPool<ushort[]>.Shared.Return(table, clearArray: true);
+				table = null;
+			}
+			
+			private static IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
+			{
+				trigger ??= "";
+				if (trigger.Contains(',')) {
+					foreach (var s in trigger.Split(',')) {
+						if (ParseTriggerHelper(node, s.Trim(), out var a, out var t)) {
+							yield return (a, t);
+						}
+					}
+				} else {
+					if (ParseTriggerHelper(node, trigger, out var a, out var t)) {
 						yield return (a, t);
 					}
 				}
-			} else {
-				if (ParseTriggerHelper(node, trigger, out var a, out var t)) {
-					yield return (a, t);
+			}
+
+			private static bool ParseTriggerHelper(
+				Node node,
+				string markerWithOptionalAnimationId,
+				out Animation animation,
+				out int frame
+			) {
+				animation = null;
+				frame = 0;
+				if (markerWithOptionalAnimationId.Contains('@')) {
+					var s = markerWithOptionalAnimationId.Split('@');
+					if (s.Length == 2) {
+						node.Animations.TryFind(s[1], out animation);
+						markerWithOptionalAnimationId = s[0];
+					}
+				} else {
+					animation = node.DefaultAnimation;
+					if (string.IsNullOrWhiteSpace(markerWithOptionalAnimationId)) {
+						frame = 0;
+						return true;
+					}
 				}
+				if (animation != null && animation.Markers.TryFind(markerWithOptionalAnimationId, out var marker)) {
+					frame = marker.Frame;
+					return true;
+				}
+				return false;
 			}
 		}
 
-		private static bool ParseTriggerHelper(
-			Node node, string markerWithOptionalAnimationId, out Animation animation, out int frame
-		) {
-			animation = null;
-			frame = 0;
-			if (markerWithOptionalAnimationId.Contains('@')) {
-				var s = markerWithOptionalAnimationId.Split('@');
-				if (s.Length == 2) {
-					node.Animations.TryFind(s[1], out animation);
-					markerWithOptionalAnimationId = s[0];
-				}
-			} else {
-				animation = node.DefaultAnimation;
-				if (string.IsNullOrWhiteSpace(markerWithOptionalAnimationId)) {
-					frame = 0;
-					return true;
-				}
+		private class Caret : IDisposable
+		{
+			private readonly Animation animation;
+			private readonly bool ignoreMarkers;
+			private ushort[][] table;
+
+			public Caret(Animation animation, bool ignoreMarkers) 
+			{
+				this.animation = animation;
+				this.ignoreMarkers = ignoreMarkers;
+				table = ArrayPool<ushort[]>.Shared.Rent(256);
+				Array.Clear(table, 0, 256);
 			}
-			if (animation != null && animation.Markers.TryFind(markerWithOptionalAnimationId, out var marker)) {
-				frame = marker.Frame;
-				return true;
+	
+			public ushort NextFrame(ushort frame)
+			{
+				if (table[frame >> 8] is {} page) {
+					return page[frame & 0xFF];
+				}
+				table[frame >> 8] = page = ArrayPool<ushort>.Shared.Rent(256);
+				int currentFrame = frame & 0xFF00;
+				var markerAhead = FindMarkerAhead(currentFrame);
+				Marker markerJumpTo = null;
+				for (var i = 0; i < 256; i++, currentFrame++) {
+					page[i] = (ushort)(currentFrame + 1);
+					if (markerAhead != null && markerAhead.Frame == currentFrame) {
+						if (markerAhead.Action == MarkerAction.Stop) {
+							page[i] = (ushort)currentFrame;
+						} else if (markerAhead.Action == MarkerAction.Jump) {
+							if (markerJumpTo == null || markerAhead.JumpTo != markerJumpTo.Id) {
+								animation.Markers.TryFind(markerAhead.JumpTo, out markerJumpTo);
+							}
+							if (markerJumpTo != null) {
+								page[i] = (ushort)markerJumpTo.Frame;
+							}
+						}
+						markerAhead = FindMarkerAhead(currentFrame + 1);
+					}
+				}
+				return page[frame & 0xFF];
 			}
-			return false;
+
+			private Marker FindMarkerAhead(int frame)
+			{
+				if (animation.Markers.Count > 0 && !ignoreMarkers) {
+					foreach (var marker in animation.Markers) {
+						if (marker.Frame >= frame) {
+							return marker;
+						}
+					}
+				}
+				return null;
+			}
+
+			public void Dispose()
+			{
+				for (int i = 0; i < table.Length; i++) {
+					if (table[i] != null) {
+						ArrayPool<ushort>.Shared.Return(table[i]);
+						table[i] = null;
+					}
+				}
+				ArrayPool<ushort[]>.Shared.Return(table, clearArray: true);
+				table = null;
+			}
 		}
 	}
 }
