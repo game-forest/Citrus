@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Lime;
+using DynamicFont = Lime.DynamicFont;
 
 namespace Tangerine.UI
 {
