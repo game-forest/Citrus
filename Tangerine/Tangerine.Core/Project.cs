@@ -43,8 +43,8 @@ namespace Tangerine.Core
 		public static HandleMissingDocumentsDelegate HandleMissingDocuments;
 		public static TaskList Tasks { get; set; }
 		public SortedDictionary<string, Widget> Overlays { get; } = new SortedDictionary<string, Widget>();
-		public ProjectPreferences Preferences { get; private set; } = new ProjectPreferences();
-		public ProjectUserPreferences UserPreferences { get; private set; } = new ProjectUserPreferences();
+		public ProjectPreferences Preferences { get; } = new ProjectPreferences();
+		public ProjectUserPreferences UserPreferences { get; } = new ProjectUserPreferences();
 		public IReadOnlyList<Type> RegisteredNodeTypes => registeredNodeTypes;
 		public IReadOnlyList<Type> RegisteredComponentTypes => registeredComponentTypes;
 
@@ -301,10 +301,12 @@ namespace Tangerine.Core
 
 		public void AddRecentDocument(string path)
 		{
-			UserPreferences.RecentDocuments.Remove(path);
-			UserPreferences.RecentDocuments.Insert(0, path);
-			if (UserPreferences.RecentDocuments.Count > ProjectUserPreferences.MaxRecentDocuments)
-				UserPreferences.RecentDocuments.RemoveAt(UserPreferences.RecentDocuments.Count - 1);
+			var recentDocuments = UserPreferences.RecentDocuments;
+			recentDocuments.Remove(path);
+			recentDocuments.Insert(0, path);
+			if (recentDocuments.Count > CoreUserPreferences.Instance.RecentDocumentCount) {
+				recentDocuments.RemoveTail(startIndex: CoreUserPreferences.Instance.RecentDocumentCount);
+			}
 		}
 
 		public bool CloseDocument(Document doc, bool force = false)

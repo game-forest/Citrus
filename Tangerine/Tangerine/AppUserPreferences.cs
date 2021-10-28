@@ -16,7 +16,8 @@ namespace Tangerine
 		[YuzuOptional]
 		public readonly List<string> RecentProjects;
 
-		public static int RecentProjectsCount { get; private set; } = 5;
+		[YuzuOptional]
+		public int RecentProjectCount { get; set; }
 
 		[YuzuOptional]
 		public ColorTheme.ColorThemeKind ColorThemeKind { get; set; } = ColorTheme.ColorThemeKind.Light;
@@ -56,6 +57,7 @@ namespace Tangerine
 			LimeColorTheme = Theme.ColorTheme.CreateLightTheme();
 			DefaultSceneDimensions = new Vector2(1024, 768);
 			AutosaveDelay = 600;
+			RecentProjectCount = 10;
 		}
 
 		public static AppUserPreferences Instance => Core.UserPreferences.Instance.GetOrAdd<AppUserPreferences>();

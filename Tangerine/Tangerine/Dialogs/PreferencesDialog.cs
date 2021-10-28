@@ -109,6 +109,16 @@ namespace Tangerine
 
 			window.Closed += () => {
 				if (saved) {
+					var recentProjects = AppUserPreferences.Instance.RecentProjects;
+					int recentProjectsCount = AppUserPreferences.Instance.RecentProjectCount;
+					if (recentProjects.Count > recentProjectsCount) {
+						TangerineMenu.RebuildRecentProjectsMenu();
+					}
+					var recentDocuments = ProjectUserPreferences.Instance.RecentDocuments;
+					int recentDocumentCount = CoreUserPreferences.Instance.RecentDocumentCount;
+					if (recentDocuments.Count > recentDocumentCount) {
+						TangerineMenu.RebuildRecentDocumentsMenu();
+					}
 					foreach (var profile in HotkeyRegistry.Profiles) {
 						profile.Save();
 					}
@@ -389,6 +399,20 @@ namespace Tangerine
 						Tangerine.AppUserPreferences.Instance,
 						propertyName: nameof(Tangerine.AppUserPreferences.AutosaveDelay),
 						displayName: "Autosave delay"
+					)
+				),
+				new IntPropertyEditor(
+					new PreferencesPropertyEditorParams(
+						Tangerine.AppUserPreferences.Instance,
+						propertyName: nameof(Tangerine.AppUserPreferences.RecentProjectCount),
+						displayName: "Recent project count"
+					)
+				),
+				new IntPropertyEditor(
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.RecentDocumentCount),
+						displayName: "Recent document count"
 					)
 				),
 				new BooleanPropertyEditor(

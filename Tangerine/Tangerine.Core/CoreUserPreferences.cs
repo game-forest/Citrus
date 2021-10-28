@@ -67,10 +67,10 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public Vector2 ConflictingAnimatorsWindowSize { get; set; }
 
-		public CoreUserPreferences()
-		{
-			ResetToDefaults();
-		}
+		[YuzuOptional]
+		public int RecentDocumentCount { get; set; }
+		
+		public CoreUserPreferences() => ResetToDefaults();
 
 		public void ResetToDefaults()
 		{
@@ -84,6 +84,7 @@ namespace Tangerine.Core
 			InspectorColorPickersState = new Dictionary<string, ColorPickerState>();
 			LookupItemsLimit = 30;
 			ConflictingAnimatorsWindowSize = Vector2.PositiveInfinity;
+			RecentDocumentCount = 30;
 		}
 
 		public static CoreUserPreferences Instance => UserPreferences.Instance.GetOrAdd<CoreUserPreferences>();

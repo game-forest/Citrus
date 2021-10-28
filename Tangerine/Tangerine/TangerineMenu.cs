@@ -510,6 +510,10 @@ namespace Tangerine
 		public static void RebuildRecentDocumentsMenu()
 		{
 			var recentDocuments = ProjectUserPreferences.Instance.RecentDocuments;
+			int recentDocumentCount = CoreUserPreferences.Instance.RecentDocumentCount;
+			if (recentDocuments.Count > recentDocumentCount) {
+				recentDocuments.RemoveTail(startIndex: recentDocumentCount);
+			}
 			var menu = new Menu();
 			int counter = 1;
 			foreach (var i in recentDocuments) {
@@ -523,6 +527,10 @@ namespace Tangerine
 		public static void RebuildRecentProjectsMenu()
 		{
 			var recentProjects = AppUserPreferences.Instance.RecentProjects;
+			int recentProjectCount = AppUserPreferences.Instance.RecentProjectCount;
+			if (recentProjects.Count > recentProjectCount) {
+				recentProjects.RemoveTail(startIndex: recentProjectCount);
+			}
 			var menu = new Menu();
 			int counter = 1;
 			foreach (var i in recentProjects) {

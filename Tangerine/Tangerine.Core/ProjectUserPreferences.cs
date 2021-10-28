@@ -47,8 +47,6 @@ namespace Tangerine.Core
 		[YuzuOptional]
 		public bool RemoteScriptingAutoRebuildAssembly { get; set; }
 
-		public const int MaxRecentDocuments = 5;
-
 		public static ProjectUserPreferences Instance => Project.Current.UserPreferences;
 
 		public ProjectUserPreferences()

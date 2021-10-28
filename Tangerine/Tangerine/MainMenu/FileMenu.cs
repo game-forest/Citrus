@@ -31,8 +31,8 @@ namespace Tangerine
 			var prefs = AppUserPreferences.Instance;
 			prefs.RecentProjects.Remove(path);
 			prefs.RecentProjects.Insert(0, path);
-			if (prefs.RecentProjects.Count > AppUserPreferences.RecentProjectsCount) {
-				prefs.RecentProjects.RemoveAt(prefs.RecentProjects.Count - 1);
+			if (prefs.RecentProjects.Count > prefs.RecentProjectCount) {
+				prefs.RecentProjects.RemoveTail(startIndex: prefs.RecentProjectCount);
 			}
 			UserPreferences.Instance.Save();
 		}
