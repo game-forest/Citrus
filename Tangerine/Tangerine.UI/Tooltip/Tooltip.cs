@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Lime;
-using Tangerine.Core;
 
 namespace Tangerine.UI
 {
 	public class Tooltip
 	{
-		private readonly Widget content;
 		private readonly Window window;
-		private readonly ThemedInvalidableWindowWidget rootWidget;
+		private readonly Widget content;
+		private readonly Widget textWidgetWrapper;
 		private readonly ThemedSimpleText textWidget;
+		private readonly float maxWidth;
 
 		private static Tooltip instance;
 		public static Tooltip Instance => instance ?? (instance = new Tooltip());
@@ -42,21 +42,27 @@ namespace Tangerine.UI
 				Type = WindowType.ToolTip,
 				Title = "Tooltip",
 			});
+			textWidget = new ThemedSimpleText {
+				Padding = new Thickness(4),
+				OverflowMode = TextOverflowMode.Ellipsis
+			};
+			textWidgetWrapper = new Widget {
+				MinSize = Vector2.Zero,
+				MaxSize = Vector2.PositiveInfinity,
+				Nodes = { textWidget },
+			};
 			content = new ThemedFrame {
 				LayoutCell = new LayoutCell { Ignore = true },
 				Layout = new StackLayout(),
-				Nodes = {
-					(textWidget = new ThemedSimpleText { Padding = new Thickness(4), }),
-				},
+				Nodes = { textWidgetWrapper },
 				Presenter = new ThemedFramePresenter(Color4.Yellow.Transparentify(0.8f), Color4.Black),
 			};
-			rootWidget = new ThemedInvalidableWindowWidget(window) {
+			new ThemedInvalidableWindowWidget(window) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
-				Nodes = {
-					content
-				}
+				Nodes = { content }
 			};
+			maxWidth = textWidget.MeasureTextLine(new string('W', 80)).X;
 		}
 
 		public void Hide()
@@ -67,7 +73,13 @@ namespace Tangerine.UI
 		public void Show()
 		{
 			window.Visible = true;
-			window.ClientSize = window.DecoratedSize = content.Size = content.EffectiveMinSize;
+			textWidget.Size = new Vector2(maxWidth, 1000);
+			int lineCount = string.IsNullOrEmpty(Text) ?
+				0 : textWidget.SplitText(Text).Count;
+			float textWidth = Math.Min(maxWidth, textWidget.EffectiveMinSize.X);
+			float textHeight = textWidget.CalcTotalHeight(lineCount);
+			var size = new Vector2(textWidth,  Math.Min(10 + textHeight, 1000));
+			window.ClientSize = window.DecoratedSize = content.Size = textWidgetWrapper.Size = textWidget.Size = size;
 		}
 
 		public void Show(string text, Vector2 position)
@@ -79,7 +91,7 @@ namespace Tangerine.UI
 			Show();
 			UpdatePosition(position);
 		}
-
+		
 		public void Toggle()
 		{
 			if (window.Visible) {
