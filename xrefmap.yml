@@ -68001,6 +68001,22 @@ references:
   isSpec: "True"
   fullName: Lime.Toolbox.IsNullOrWhiteSpace
   nameWithType: Toolbox.IsNullOrWhiteSpace
+- uid: Lime.Toolbox.RemoveTail*
+  name: RemoveTail
+  href: api/Lime.Toolbox.html#Lime_Toolbox_RemoveTail_
+  commentId: Overload:Lime.Toolbox.RemoveTail
+  isSpec: "True"
+  fullName: Lime.Toolbox.RemoveTail
+  nameWithType: Toolbox.RemoveTail
+- uid: Lime.Toolbox.RemoveTail``1(System.Collections.Generic.List{``0},System.Int32)
+  name: RemoveTail<T>(List<T>, Int32)
+  href: api/Lime.Toolbox.html#Lime_Toolbox_RemoveTail__1_System_Collections_Generic_List___0__System_Int32_
+  commentId: M:Lime.Toolbox.RemoveTail``1(System.Collections.Generic.List{``0},System.Int32)
+  name.vb: RemoveTail(Of T)(List(Of T), Int32)
+  fullName: Lime.Toolbox.RemoveTail<T>(System.Collections.Generic.List<T>, System.Int32)
+  fullName.vb: Lime.Toolbox.RemoveTail(Of T)(System.Collections.Generic.List(Of T), System.Int32)
+  nameWithType: Toolbox.RemoveTail<T>(List<T>, Int32)
+  nameWithType.vb: Toolbox.RemoveTail(Of T)(List(Of T), Int32)
 - uid: Lime.Toolbox.ResetEnumerator*
   name: ResetEnumerator
   href: api/Lime.Toolbox.html#Lime_Toolbox_ResetEnumerator_
