@@ -83,6 +83,7 @@ namespace Tangerine
 
 			LoadFont();
 
+			Application.UnhandledExceptionOnUpdate = ExceptionHandling.Handle;
 			DockManager.Initialize(new Vector2(1024, 768));
 			DockManager.Instance.DocumentAreaDropFilesGesture.Recognized +=
 				new ScenesDropHandler { ShouldCreateContextMenu = false }.Handle;
@@ -104,7 +105,6 @@ namespace Tangerine
 				Core.UserPreferences.Instance.Save();
 				Orange.The.Workspace.Save();
 			};
-			Application.UnhandledExceptionOnUpdate = ExceptionHandling.Handle;
 
 			var timelinePanel = new Panel("Timeline");
 			var inspectorPanel = new Panel("Inspector");
