@@ -390,21 +390,29 @@ namespace Tangerine.UI.Timeline
 			componentsVersion = Node.Components.Version;
 			Widget.Nodes.RemoveAll(n => n is ComponentIcon);
 			int index = 1 + Widget.Nodes.IndexOf(LinkIndicatorButtonContainer.Container);
-			bool showAllComponents = CoreUserPreferences.Instance.TimelineAllComponentIcons;
+			var showMode = CoreUserPreferences.Instance.TimelineComponentIconsShowMode;
+			if (showMode == TimelineComponentIconsShowMode.None) {
+				return;
+			}
 			foreach (var component in Node.Components) {
 				var componentType = component.GetType();
-				if (showAllComponents || HasTangerineRegisterComponentAttribute(componentType)) {
-					if (component is ITimelineIconProvider iconProvider) {
-						Widget.Nodes.Insert(index, new ComponentIcon(iconProvider));
-					} else {
-						Widget.Nodes.Insert(index, new ComponentIcon(componentType));
-					}
+				var iconProvider = component as ITimelineIconProvider;
+				if (
+					showMode == TimelineComponentIconsShowMode.All || 
+					showMode == TimelineComponentIconsShowMode.VisibleInInspector && IsVisibleInInspector(component) ||
+					showMode == TimelineComponentIconsShowMode.ProvidingTimelineIcon && iconProvider != null
+				) {
+					var icon = iconProvider != null ? 
+						new ComponentIcon(iconProvider) : 
+						new ComponentIcon(componentType);
+					Widget.Nodes.Insert(index, icon);
 					++index;
 				}
 			}
-			
-			static bool HasTangerineRegisterComponentAttribute(Type type) =>
-				ClassAttributes<TangerineRegisterComponentAttribute>.Get(type, inherit: true) != null;
+
+			bool IsVisibleInInspector(NodeComponent component) =>
+				component is ITimelineIconProvider ||
+				ClassAttributes<TangerineRegisterComponentAttribute>.Get(component.GetType(), inherit: true) != null;
 		}
 		
 		private void ShowContextMenu()

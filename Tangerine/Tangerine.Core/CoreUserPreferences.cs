@@ -59,7 +59,7 @@ namespace Tangerine.Core
 		public bool ExperimentalTimelineHierarchy { get; set; }
 
 		[YuzuOptional]
-		public bool TimelineAllComponentIcons { get; set; }
+		public TimelineComponentIconsShowMode TimelineComponentIconsShowMode { get; set; }
 		
 		[YuzuOptional]
 		public bool LockLayout { get; set; }
@@ -93,6 +93,14 @@ namespace Tangerine.Core
 		public static CoreUserPreferences Instance => UserPreferences.Instance.GetOrAdd<CoreUserPreferences>();
 	}
 
+	public enum TimelineComponentIconsShowMode
+	{
+		VisibleInInspector,
+		ProvidingTimelineIcon,
+		None,
+		All
+	}
+	
 	public struct ColorPickerState
 	{
 		[YuzuMember]

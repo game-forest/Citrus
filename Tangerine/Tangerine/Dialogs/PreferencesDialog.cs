@@ -471,11 +471,11 @@ namespace Tangerine
 						displayName: "Animation panel reversed order"
 					)
 				),
-				new BooleanPropertyEditor(
+				new EnumPropertyEditor<TimelineComponentIconsShowMode>(
 					new PreferencesPropertyEditorParams(
 						CoreUserPreferences.Instance,
-						propertyName: nameof(CoreUserPreferences.TimelineAllComponentIcons),
-						displayName: "Show icons of all components on the timeline"
+						propertyName: nameof(CoreUserPreferences.TimelineComponentIconsShowMode),
+						displayName: "Display component icons on the timeline"
 					)
 				),
 			});
