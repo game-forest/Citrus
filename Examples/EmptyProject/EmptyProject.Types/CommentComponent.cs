@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Lime;
 using Yuzu;
+#if TANGERINE
+using Tangerine.UI.Timeline;
+#endif // TANGERINE
 
 namespace EmptyProject.Types
 {
