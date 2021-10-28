@@ -175,7 +175,11 @@ namespace Lime
 					return start.Position * Size;
 
 				float segLength = ((end.Position - start.Position) * Size).Length;
-				if (segStart <= polylineLengthFromBeginning && polylineLengthFromBeginning < segStart + segLength) {
+				if (
+					segStart <= polylineLengthFromBeginning &&
+					polylineLengthFromBeginning <= segStart + segLength &&
+					segLength != 0
+				) {
 					return Interpolate(start, end, (polylineLengthFromBeginning - segStart) / segLength);
 				}
 				segStart += segLength;
@@ -195,7 +199,11 @@ namespace Lime
 					return start.Position * Size;
 
 				float segLength = ((end.Position - start.Position) * Size).Length;
-				if (segStart <= polylineLengthFromBeginning && polylineLengthFromBeginning <= segStart + segLength) {
+				if (
+					segStart <= polylineLengthFromBeginning &&
+					polylineLengthFromBeginning <= segStart + segLength &&
+					segLength != 0
+				) {
 					return InterpolateDerivative(start, end, (polylineLengthFromBeginning - segStart) / segLength);
 				}
 				segStart += segLength;
