@@ -211,6 +211,12 @@ Use Fade In Time and Fade Out Time for transitions.")]
 		[YuzuMember]
 		public NumericRange Volume { get; set; } = new NumericRange(1, 0);
 
+		[YuzuMember]
+		[TangerineDisplayName("Avoid Repetition")]
+		public bool AvoidRepetition { get; set; }
+
+		private int previousSampleIndex;
+
 		public AudioRandomizerComponent()
 		{
 			Samples = new AnimableList<SerializableSample> { Owner = this };
@@ -220,16 +226,33 @@ Use Fade In Time and Fade Out Time for transitions.")]
 		{
 			base.OnOwnerChanged(oldOwner);
 			Samples.Owner = this;
+			previousSampleIndex = Mathf.RandomInt(Samples.Count);
 		}
 
 		public override void OnTrigger(string property, object value, double animationTimeCorrection = 0)
 		{
 			if (Samples.Count > 0) {
 				var audio = (Audio)Owner;
-				audio.Sample = Samples[Mathf.RandomInt(Samples.Count)];
+				audio.Sample = NextSample();
 				audio.Pitch = Pitch.NormalRandomNumber();
 				audio.Volume = Volume.NormalRandomNumber();
 			}
+		}
+
+		private SerializableSample NextSample()
+		{
+			if (Samples.Count == 1) {
+				return Samples[0];
+			}
+			if (!AvoidRepetition) {
+				return Samples[Mathf.RandomInt(Samples.Count)];
+			}
+			int randomIndex = Mathf.RandomInt(Samples.Count - 1);
+			if (randomIndex >= previousSampleIndex) {
+				randomIndex++;
+			}
+			previousSampleIndex = randomIndex;
+			return Samples[randomIndex];
 		}
 	}
 }
