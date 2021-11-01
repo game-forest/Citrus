@@ -70,10 +70,6 @@ namespace Tangerine.Common.Operations
 						UnlinkSceneItem.Perform(
 							Document.Current.GetSceneItemForObject(animation.Markers[existingMarkerIndex]));
 					}
-					//int index = animation.Markers.FindIndex(m => m.Frame > marker.Frame);
-					//if (index < 0) {
-					// index = animation.Markers.Count;
-					//}
 					LinkSceneItem.Perform(
 						Document.Current.GetSceneItemForObject(animation),
 						animation.Markers.GetInsertionIndexByFrame(marker.Frame),
