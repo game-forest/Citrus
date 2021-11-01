@@ -7,7 +7,7 @@ namespace Orange
 {
 	public static class Git
 	{
-		public static bool IsGitInPath;
+		public static readonly bool IsGitInPath;
 
 		static Git()
 		{
