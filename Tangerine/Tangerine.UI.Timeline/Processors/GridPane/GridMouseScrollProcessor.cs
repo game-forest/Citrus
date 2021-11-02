@@ -27,7 +27,7 @@ namespace Tangerine.UI.Timeline
 					}
 					if (!userPreferences.LockTimelineCursor) {
 						Core.Document.Current.History.DoTransaction(() => {
-							Operations.SetCurrentColumn.Perform(RulerbarMouseScrollProcessor.CalcColumn(p.X));
+							Operations.SetCurrentColumn.Perform(timeline.Ruler.CalcColumnUnderMouse());
 						});
 					}
 					var rh = TimelineMetrics.DefaultRowHeight;

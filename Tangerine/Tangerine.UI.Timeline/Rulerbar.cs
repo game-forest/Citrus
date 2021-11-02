@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
-using Tangerine.Core.Operations;
+using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.UI.Timeline
 {
@@ -11,11 +12,9 @@ namespace Tangerine.UI.Timeline
 		public int MeasuredFrameDistance { get; set; }
 		public Widget RootWidget { get; private set; }
 
-		private Marker upperMarker = null;
-		private static Marker copiedMarker;
-		private static List<Marker> copiedMarkers;
+		private Marker upperMarker;
 
-		private static ITexture warningIcon = null;
+		private static ITexture warningIcon;
 
 		public Rulerbar()
 		{
@@ -25,10 +24,13 @@ namespace Tangerine.UI.Timeline
 				HitTestTarget = true
 			};
 			RootWidget.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
-			RootWidget.LateTasks.Add(
-				new KeyPressHandler(Key.Mouse0DoubleClick, RootWidget_DoubleClick),
-				new KeyPressHandler(Key.Mouse1, (input, key) => new ContextMenu().Show())
+			RootWidget.Gestures.Add(
+				new DoubleClickGesture(
+					0,
+					() => ShowMarkerDialog(Timeline.Instance.CurrentColumn)
+				)
 			);
+			RootWidget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			RootWidget.AddChangeWatcher(() => Document.Current.AnimationFrame, (value) => {
 				var markers = Document.Current.Animation.Markers;
 				int i = markers.FindIndex(m => m.Frame == value);
@@ -40,13 +42,18 @@ namespace Tangerine.UI.Timeline
 				upperMarker = null;
 			});
 			warningIcon = IconPool.GetTexture("Inspector.Warning");
+
+			void ShowContextMenu()
+			{
+				Document.Current.History.DoTransaction(() => SetCurrentColumn.Perform(CalcColumnUnderMouse()));
+				new ContextMenu().Show();
+			}
 		}
 
-		void RootWidget_DoubleClick(WidgetInput input, Key key)
+		public int CalcColumnUnderMouse()
 		{
-			ShowMarkerDialog(Timeline.Instance.CurrentColumn);
-			// To prevent RulerbarMouseScroll.
-			RootWidget.Input.ConsumeKey(Key.Mouse0);
+			var mouseX = RootWidget.LocalMousePosition().X;
+			return ((mouseX + Timeline.Instance.Offset.X) / TimelineMetrics.ColWidth).Floor().Max(0);
 		}
 
 		void Render(Widget widget)
@@ -108,8 +115,7 @@ namespace Tangerine.UI.Timeline
 				var size = new Vector2(RootWidget.Height, RootWidget.Height);
 				var pos = new Vector2(r.Left - (size.X - r.Size.X) / 2.0f, r.Bottom - RootWidget.Height - 2);
 				Renderer.DrawSprite(warningIcon, Color4.White, pos, size, Vector2.Zero, Vector2.One);
-			}
-			else if (!string.IsNullOrWhiteSpace(marker.Id)) {
+			} else if (!string.IsNullOrWhiteSpace(marker.Id)) {
 				var h = Theme.Metrics.TextHeight;
 				var padding = new Thickness { Left = 3.0f, Right = 5.0f, Top = 1.0f, Bottom = 1.0f };
 				var extent = FontPool.Instance.DefaultFont.MeasureTextLine(marker.Id, h, 0.0f);
@@ -148,22 +154,14 @@ namespace Tangerine.UI.Timeline
 			};
 		}
 
-		private static void CopyMarker(Marker marker)
+		private static void PasteMarkers(bool atCursor, bool expandAnimation)
 		{
-			copiedMarker = marker;
-		}
-
-		private static bool CanParseMarkerFromClipboard()
-		{
-			return copiedMarker != null;
-		}
-
-		private static void PasteMarker(int frameUnderMouse)
-		{
-			var m = copiedMarker.Clone();
-			m.Frame = frameUnderMouse;
 			Document.Current.History.DoTransaction(() => {
-				SetMarker.Perform(m, true);
+				Common.Operations.CopyPasteMarkers.TryPasteMarkers(
+					Document.Current.Animation,
+					atCursor ? (int?)Document.Current.AnimationFrame : null,
+					expandAnimation
+				);
 			});
 		}
 
@@ -188,42 +186,7 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		public static void CopyMarkers()
-		{
-			copiedMarkers = new List<Marker>();
-			foreach (var marker in Document.Current.Animation.Markers) {
-				copiedMarkers.Add(marker);
-			}
-		}
-
-		private static bool CanParseMarkersFromClipboard()
-		{
-			return copiedMarkers != null;
-		}
-
-		public static void PasteMarkers()
-		{
-			Document.Current.History.DoTransaction(() => {
-				// Firstly insert all non-Jump markers
-				// in order to correctly resolve Jump markers dependencies.
-				// Yep, it doesn't fix a case when Jump marker jumps to Jump marker,
-				// because it doesn't make any sense and will clutter the code.
-				foreach (var marker in copiedMarkers) {
-					if (marker.Action != MarkerAction.Jump) {
-						var m = marker.Clone();
-						SetMarker.Perform(m, true);
-					}
-				}
-				foreach (var marker in copiedMarkers) {
-					if (marker.Action == MarkerAction.Jump) {
-						var m = marker.Clone();
-						SetMarker.Perform(m, true);
-					}
-				}
-			});
-		}
-
-		public static void DeleteMarkers()
+		public static void DeleteAllMarkers()
 		{
 			Document.Current.History.DoTransaction(() => {
 				foreach (var marker in Document.Current.Animation.Markers.ToList()) {
@@ -232,21 +195,27 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		public static void DeleteMarkersInRange()
+		private static void DeleteAnimationRange()
 		{
-			using (Document.Current.History.BeginTransaction()) {
-				if (!GridSelection.GetSelectionBoundaries(out var gs)) {
+			Document.Current.History.DoTransaction(() => {
+				if (!GridSelection.GetSelectionBoundaries(out var gridSelection)) {
 					new AlertDialog("Select a range on the timeline", "Ok").Show();
 					return;
 				}
+				int rangeBegin = gridSelection.Left;
+				int rangeEnd = gridSelection.Right - 1;
 				foreach (
 					var marker in Document.Current.Animation.Markers.Where(m =>
-						m.Frame >= gs.Left && m.Frame <= gs.Right).ToList()
+						m.Frame >= rangeBegin && m.Frame <= rangeEnd).ToList()
 				) {
 					Core.Operations.DeleteMarker.Perform(marker, true);
 				}
-				Document.Current.History.CommitTransaction();
-			}
+				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>()) {
+					Core.Operations.RemoveKeyframeRange.Perform(animator, rangeBegin, rangeEnd);
+				}
+				Common.Operations.CopyPasteMarkers.ShiftMarkersAndKeyframes(
+					Document.Current.Animation, rangeEnd, rangeBegin - rangeEnd - 1);
+			});
 		}
 
 		class ContextMenu
@@ -257,27 +226,23 @@ namespace Tangerine.UI.Timeline
 				var frameUnderMouse = Timeline.Instance.Grid.CellUnderMouse().X;
 				var marker = Document.Current.Animation.Markers.GetByFrame(frameUnderMouse);
 				menu.Add(new Command(marker == null ? "Add Marker" : "Edit Marker", () => ShowMarkerDialog(frameUnderMouse)));
-				menu.Add(new Command("Copy Marker", () => CopyMarker(marker)) {
+				menu.Add(new Command("Copy Marker", () => Common.Operations.CopyPasteMarkers.CopyMarkers(new [] { marker })) {
 					Enabled = marker != null
-				});
-				menu.Add(new Command("Paste Marker", () => PasteMarker(frameUnderMouse)) {
-					Enabled = CanParseMarkerFromClipboard()
 				});
 				menu.Add(new Command("Delete Marker", () => DeleteMarker(marker)) {
 					Enabled = marker != null
 				});
 				menu.Add(Command.MenuSeparator);
-				menu.Add(new Command(TimelineCommands.CopyMarkers.Text, CopyMarkers) {
+				menu.Add(new Command("Copy All Markers", () => Common.Operations.CopyPasteMarkers.CopyMarkers(Document.Current.Animation.Markers)) {
 					Enabled = Document.Current.Animation.Markers.Count > 0
 				});
-				menu.Add(new Command(TimelineCommands.PasteMarkers.Text, PasteMarkers) {
-					Enabled = CanParseMarkersFromClipboard()
-				});
-				menu.Add(new Command(TimelineCommands.DeleteMarkers.Text, DeleteMarkers) {
+				menu.Add(new Command("Paste Markers", () => PasteMarkers(atCursor: true, expandAnimation: true)));
+				menu.Add(new Command("Paste Markers At Original Positions", () => PasteMarkers(atCursor: false, expandAnimation: false)));
+				menu.Add(new Command("Delete All Markers", DeleteAllMarkers) {
 					Enabled = Document.Current.Animation.Markers.Count > 0
 				});
-				menu.Add(new Command(TimelineCommands.DeleteMarkersInRange.Text, DeleteMarkersInRange) {
-					Enabled = GridSelection.GetSelectionBoundaries(out _) && Document.Current.Animation.Markers.Count > 0
+				menu.Add(new Command("Delete Animation Range", DeleteAnimationRange) {
+					Enabled = GridSelection.GetSelectionBoundaries(out _)
 				});
 				menu.Popup();
 			}

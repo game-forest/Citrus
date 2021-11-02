@@ -20,7 +20,7 @@ namespace Tangerine.UI.Timeline
 			while (true) {
 				if (input.WasMousePressed()) {
 					using (Document.Current.History.BeginTransaction()) {
-						int initialCurrentColumn = CalcColumn(rulerWidget.LocalMousePosition().X);
+						int initialCurrentColumn = timeline.Ruler.CalcColumnUnderMouse();
 						Document.Current.AnimationFrame = initialCurrentColumn;
 						var saved = CoreUserPreferences.Instance.StopAnimationOnCurrentFrame;
 						// Dirty hack: prevent creating RestoreAnimationsTimesComponent
@@ -43,7 +43,7 @@ namespace Tangerine.UI.Timeline
 							} else if (mp < cw / 2) {
 								timeline.OffsetX = Math.Max(0, timeline.OffsetX - cw);
 							}
-							int newColumn = CalcColumn(mp);
+							int newColumn = timeline.Ruler.CalcColumnUnderMouse();
 							if (newColumn == previousColumn) {
 								yield return null;
 								continue;
@@ -56,11 +56,11 @@ namespace Tangerine.UI.Timeline
 
 							if (isEditing) {
 								if (isShifting) {
-									ShiftTimeline(CalcColumn(mp));
-								} else if (startShifting && CalcColumn(mp) == initialCurrentColumn) {
+									ShiftTimeline(newColumn);
+								} else if (startShifting && newColumn == initialCurrentColumn) {
 									isShifting = true;
 								} else if (!startShifting && marker != null) {
-									DragMarker(marker, CalcColumn(mp));
+									DragMarker(marker, newColumn);
 								}
 							}
 							// Evgenii Polikutin: we need operation to backup the value we need, not the previous one
@@ -107,11 +107,6 @@ namespace Tangerine.UI.Timeline
 			DeleteMarker.Perform(marker, false);
 			SetProperty.Perform(marker, "Frame", destColumn);
 			SetMarker.Perform(marker, true);
-		}
-
-		public static int CalcColumn(float mouseX)
-		{
-			return ((mouseX + timeline.Offset.X) / TimelineMetrics.ColWidth).Floor().Max(0);
 		}
 	}
 }
