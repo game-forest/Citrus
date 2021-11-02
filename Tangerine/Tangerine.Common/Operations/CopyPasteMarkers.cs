@@ -70,6 +70,12 @@ namespace Tangerine.Common.Operations
 						UnlinkSceneItem.Perform(
 							Document.Current.GetSceneItemForObject(animation.Markers[existingMarkerIndex]));
 					}
+					if (marker.Action == MarkerAction.Jump && animation.Markers.TryFind(marker.JumpTo) == null) {
+						// If target marker of a jump marker doesn't exist then clear target marker for
+						// warning to be explicitly shown. Ignoring case when target of a jump marker is a jump marker
+						// itself.
+						marker.JumpTo = null;
+					}
 					LinkSceneItem.Perform(
 						Document.Current.GetSceneItemForObject(animation),
 						animation.Markers.GetInsertionIndexByFrame(marker.Frame),
