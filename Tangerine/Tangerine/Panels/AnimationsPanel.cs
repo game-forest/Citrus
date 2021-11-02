@@ -383,9 +383,9 @@ namespace Tangerine.Panels
 					}
 					var animationPasteTo = animationSceneItem.GetAnimation();
 					var previousMarkers = animationPasteTo.Markers.ToList();
-					var pasteAtFrame = index < animationPasteTo.Markers.Count
+					int pasteAtFrame = index < animationPasteTo.Markers.Count
 						? animationPasteTo.Markers[index].Frame
-						: animationPasteTo.Markers.Last().Frame + 1;
+						: (animationPasteTo.Markers.LastOrDefault()?.Frame ?? -1) + 1;
 					if (
 						Common.Operations.CopyPasteMarkers.TryPasteMarkers(animationPasteTo, pasteAtFrame, expandAnimation: true) ||
 						parent.SceneItem.GetNode() == null
