@@ -9,6 +9,7 @@ obj
 *.sln.docstates
 .svn
 dotnet
+dotnet-install.ps1
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
