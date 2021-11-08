@@ -8,6 +8,7 @@ namespace Lime
 	public partial class ListView : ScrollViewWithSlider, IList<Widget>
 	{
 		public bool ManualItemsPositioning;
+		public float Spacing;
 
 		public ListView(Frame frame, ScrollDirection scrollDirection = ScrollDirection.Vertical, bool processChildrenFirst = false)
 			: this(frame, null, scrollDirection, processChildrenFirst)
@@ -23,22 +24,20 @@ namespace Lime
 
 		public void Refresh()
 		{
-			int itemCount = 0;
 			float p = 0;
 			foreach (var node in Content.Nodes) {
 				var item = node.AsWidget;
 				if (item.Visible) {
-					itemCount++;
 					if (ScrollDirection == ScrollDirection.Vertical) {
 						if (!ManualItemsPositioning) {
 							item.Y = p;
 						}
-						p += item.Height * item.Scale.Y;
+						p += item.Height * item.Scale.Y + Spacing;
 					} else {
 						if (!ManualItemsPositioning) {
 							item.X = p;
 						}
-						p += item.Width * item.Scale.X;
+						p += item.Width * item.Scale.X + Spacing;
 					}
 				}
 			}
