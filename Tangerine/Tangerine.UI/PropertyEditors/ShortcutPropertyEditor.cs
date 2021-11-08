@@ -14,12 +14,15 @@ namespace Tangerine.UI
 
 		private WidgetFlatFillPresenter flatFillPresenter;
 
+		public Func<Shortcut, bool> RequestPropertyChange { get; set; }
 		public Action PropertyChanged { get; set; }
 
 		private void SetValue(Shortcut value)
 		{
 			var oldValue = CoalescedPropertyValue().GetValue().Value;
-			SetProperty(value);
+			if (value.Main == Key.Unknown || RequestPropertyChange(value)) {
+				SetProperty(value);
+			}
 			if (value != oldValue) {
 				PropertyChanged?.Invoke();
 			}
