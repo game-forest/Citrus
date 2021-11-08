@@ -34316,6 +34316,12 @@ references:
   isSpec: "True"
   fullName: Lime.ListView.SetRefreshGesture
   nameWithType: ListView.SetRefreshGesture
+- uid: Lime.ListView.Spacing
+  name: Spacing
+  href: api/Lime.ListView.html#Lime_ListView_Spacing
+  commentId: F:Lime.ListView.Spacing
+  fullName: Lime.ListView.Spacing
+  nameWithType: ListView.Spacing
 - uid: Lime.ListView.System#Collections#IEnumerable#GetEnumerator
   name: IEnumerable.GetEnumerator()
   href: api/Lime.ListView.html#Lime_ListView_System_Collections_IEnumerable_GetEnumerator
