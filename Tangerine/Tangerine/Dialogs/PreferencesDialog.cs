@@ -806,13 +806,13 @@ namespace Tangerine
 					}
 
 					editor.ContainerWidget.LayoutCell = new LayoutCell(Alignment.LeftCenter, 1);
-					editor.RequestPropertyChange = (shortcut) => {
+					editor.CanAssignShortcut = (shortcut) => {
 						var existingCommands = hotkeyEditor.Profile.Commands.Where(c => c.Shortcut == shortcut);
 						if (existingCommands.Any()) {
 							string commandsText = string.Empty;
 							foreach (var existingCommand in existingCommands) {
 								var category = hotkeyEditor.Profile.Categories
-									.Find(ctg => ctg.Commands.Values.Contains(existingCommand));
+									.Find(c => c.Commands.Values.Contains(existingCommand));
 								commandsText += $"{category.Title} - {existingCommand.Title}\n";
 							}
 							var dialog = new AlertDialog(
