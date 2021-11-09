@@ -163,7 +163,6 @@ namespace Tangerine.UI
 			var previews = new List<AnimationPreview>();
 			var visiblePreviews = new HashSet<AnimationPreview>();
 			var	scenePool = new ScenePool(scene);
-			var animationFF = new AnimationFastForwarder();
 			if (showAnimationPreviews) {
 				scrollView.Content.LateTasks.Add(AttachPreviewsTask(previews, visiblePreviews));
 			}
@@ -214,8 +213,7 @@ namespace Tangerine.UI
 				foreach (var trigger in triggers) {
 					wrapper.AddNode(CreateTriggerSelectionWidget(animation, trigger, out var previewContainer));
 					if (previewContainer != null) {
-						var preview =
-							new AnimationPreview(animationFF, scenePool, previewContainer, animationIndex, trigger);
+						var preview = new AnimationPreview(scenePool, previewContainer, animationIndex, trigger);
 						previews.Add(preview);
 						previewContainer.AddLateChangeWatcher(
 							() => IsWidgetOnscreen(scrollView, previewContainer),
@@ -398,7 +396,6 @@ namespace Tangerine.UI
 		
 		private class AnimationPreview
 		{
-			private readonly AnimationFastForwarder animationFF;
 			private readonly ScenePool scenePool;
 			private readonly Widget previewContainer;
 			private readonly int animationIndex;
@@ -410,13 +407,11 @@ namespace Tangerine.UI
 			public bool IsAttached { get; private set; }
 
 			public AnimationPreview(
-				AnimationFastForwarder animationFF,
 				ScenePool scenePool,
 				Widget previewContainer,
 				int animationIndex,
 				string trigger
 			) {
-				this.animationFF = animationFF;
 				this.scenePool = scenePool;
 				this.previewContainer = previewContainer;
 				this.animationIndex = animationIndex;
@@ -435,18 +430,29 @@ namespace Tangerine.UI
 				frame = animation.Markers.First(i => i.Id == trigger).Frame;
 				animationProcessor = clone.Manager.Processors.OfType<AnimationProcessor>().First();
 				animationProcessor.Reset();
-				animationProcessor.AllAnimationsStopped += RestartAnimation;
-				animationFF.FastForwardSafe(clone.Animations[animationIndex], frame, stopAnimations: false);
-				animation.IsRunning = true;
+				animationProcessor.AllAnimationsStopped += AddRestartAnimationOnNextFrameTask;
+				RestartAnimation();
 				IsAttached = true;
 			}
 
-			private void RestartAnimation() => previewContainer.Tasks.Add(RestartAnimationOnNextFrame());
+			private void RestartAnimation()
+			{
+				foreach (var n in clone.SelfAndDescendants) {
+					foreach (var a in n.Animations) {
+						a.IsRunning = false;
+						a.Frame = 0;
+					}
+				}
+				clone.Animations[animationIndex].Frame = frame;
+				clone.Animations[animationIndex].IsRunning = true;
+			}
+
+			private void AddRestartAnimationOnNextFrameTask() => previewContainer.Tasks.Add(RestartAnimationOnNextFrame());
 
 			private IEnumerator<object> RestartAnimationOnNextFrame()
 			{
 				yield return null;
-				animationFF.FastForwardSafe(clone.Animations[animationIndex], frame, stopAnimations: false);
+				RestartAnimation();
 			}
 
 			public void Detach()
@@ -454,8 +460,7 @@ namespace Tangerine.UI
 				if (!IsAttached) {
 					throw new InvalidOperationException();
 				}
-				animationProcessor.AllAnimationsStopped -= RestartAnimation;
-				animationFF.FastForwardSafe(clone.Animations[animationIndex], 0, stopAnimations: false); // Restore animation to default state.
+				animationProcessor.AllAnimationsStopped -= AddRestartAnimationOnNextFrameTask;
 				scenePool.Release(clone);
 				previewContainer.Components.Remove<AnimationPreviewBehavior>();
 				previewContainer.PostPresenter = null;
