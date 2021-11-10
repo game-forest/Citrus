@@ -116,7 +116,7 @@ namespace Tangerine.UI.Timeline
 			var savedFrame = animation.Frame;
 			var savedIsRunning = animation.IsRunning;
 			var animationFastForwarder = new AnimationFastForwarder();
-			animationFastForwarder.FastForward(animation, 0, frame, stopAnimations: true);
+			animationFastForwarder.FastForwardSafe(animation, frame, stopAnimations: true);
 			doc.SceneViewSnapshotProvider.Generate(texture, () => {
 				var sceneSize = (Vector2)texture.ImageSize;
 				var thumbSize = new Vector2(200);
@@ -129,7 +129,7 @@ namespace Tangerine.UI.Timeline
 				thumbnailImage.MinMaxSize = thumbSize;
 				window.Invalidate();
 			});
-			animationFastForwarder.FastForward(animation, 0, savedFrame, stopAnimations: true);
+			animationFastForwarder.FastForwardSafe(animation, savedFrame, stopAnimations: true);
 			animation.IsRunning = savedIsRunning;
 		}
 

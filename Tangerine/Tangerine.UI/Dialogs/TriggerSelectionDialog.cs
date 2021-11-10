@@ -163,7 +163,6 @@ namespace Tangerine.UI
 			var previews = new List<AnimationPreview>();
 			var visiblePreviews = new HashSet<AnimationPreview>();
 			var	scenePool = new ScenePool(scene);
-			var incrementalFF = new IncrementalFastForwarder();
 			if (showAnimationPreviews) {
 				scrollView.Content.LateTasks.Add(AttachPreviewsTask(previews, visiblePreviews));
 			}
@@ -214,8 +213,7 @@ namespace Tangerine.UI
 				foreach (var trigger in triggers) {
 					wrapper.AddNode(CreateTriggerSelectionWidget(animation, trigger, out var previewContainer));
 					if (previewContainer != null) {
-						var preview =
-							new AnimationPreview(incrementalFF, scenePool, previewContainer, animationIndex, trigger);
+						var preview = new AnimationPreview(scenePool, previewContainer, animationIndex, trigger);
 						previews.Add(preview);
 						previewContainer.AddLateChangeWatcher(
 							() => IsWidgetOnscreen(scrollView, previewContainer),
@@ -395,149 +393,9 @@ namespace Tangerine.UI
 				}
 			}
 		}
-
-		private class IncrementalFastForwarder
-		{
-			private class AnimationSnapshot
-			{
-				public int AnimationIndex;
-				public int Frame;
-				public List<ReferencelessAnimationState> States;
-			}
-
-			private struct ReferencelessAnimationState
-			{
-				// Denotes a path to the node from the root node.
-				// The path consists of NodeList indexes packed as bitfields.
-				// The number of bits allocated to a particular index depends on the NodeList.Count value.
-				// If it turns out that 64 bit are not enough, I suggest to use BitArray instead.
-				public long NodeIndex;
-				public int AnimationIndex;
-				public int Frame;
-				public int FrameCount;
-				public bool IsRunning;
-			}
-
-			private readonly List<AnimationSnapshot> snapshots = new List<AnimationSnapshot>();
-			private readonly AnimationFastForwarder animationFF = new AnimationFastForwarder();
-
-			public void FastForward(Node node, int animationIndex, int frame)
-			{
-				AnimationSnapshot closestSnapshot = null;
-				foreach (var i in snapshots) {
-					if (
-						i.AnimationIndex == animationIndex &&
-						i.Frame <= frame &&
-						(closestSnapshot == null || closestSnapshot.Frame < i.Frame)
-					) {
-						closestSnapshot = i;
-					}
-				}
-				AnimationSnapshot effectiveSnapshot = null;
-				var animation = node.Animations[animationIndex];
-				if (closestSnapshot != null && frame == closestSnapshot.Frame) {
-					effectiveSnapshot = closestSnapshot;
-				} else {
-					effectiveSnapshot = new AnimationSnapshot {
-						AnimationIndex = animationIndex,
-						Frame = frame,
-						States = new List<ReferencelessAnimationState>()
-					};
-					var states = new List<AnimationFastForwarder.AnimationState>();
-					if (closestSnapshot != null) {
-						foreach (var reflessState in closestSnapshot.States) {
-							var state = FromReflessAnimationState(reflessState, node);
-							if (state.IsRunning) {
-								if (state.Animation != animation) {
-									animationFF.BuildAnimationStates(
-										states,
-										state.Animation,
-										closestSnapshot.Frame,
-										frame - closestSnapshot.Frame,
-										processMarkers: true
-									);
-								}
-							} else {
-								state.FrameCount += frame - closestSnapshot.Frame;
-								states.Add(state);
-							}
-						}
-						animationFF.BuildAnimationStates(
-							states, animation, closestSnapshot.Frame, frame - closestSnapshot.Frame
-						);
-					} else {
-						animationFF.BuildAnimationStates(states, animation, 0, frame);
-					}
-					effectiveSnapshot.States.AddRange(states.Select(i => ToReflessAnimationState(i, node)));
-					snapshots.Add(effectiveSnapshot);
-				}
-				var effectiveStates =
-					effectiveSnapshot.States.Select(i => FromReflessAnimationState(i, node)).ToList();
-				AnimationFastForwarder.ApplyAnimationStates(effectiveStates, animation, stopAnimations: false);
-			}
-
-			private static ReferencelessAnimationState ToReflessAnimationState(
-				AnimationFastForwarder.AnimationState state, Node root
-			) {
-				var node = state.Animation.OwnerNode;
-				return new ReferencelessAnimationState {
-					NodeIndex = GetNodeIndex(node, root),
-					AnimationIndex = node.Animations.IndexOf(state.Animation),
-					Frame = state.Frame,
-					FrameCount = state.FrameCount,
-					IsRunning = state.IsRunning
-				};
-			}
-
-			private static long GetNodeIndex(Node node, Node root)
-			{
-				long result = 0;
-				for (; node != root; node = node.Parent) {
-					result *= GetNearestPowerOf2(node.Parent.Nodes.Count + 1);
-					result += node.Parent.Nodes.IndexOf(node) + 1;
-				}
-				return result;
-			}
-
-			private static Node GetNode(long index, Node root)
-			{
-				if (index == 0) {
-					return root;
-				}
-				var range = GetNearestPowerOf2(root.Nodes.Count + 1);
-				root = root.Nodes[(int)(index & (range - 1)) - 1];
-				index /= range;
-				return index > 0 ? GetNode(index, root) : root;
-			}
-
-			private static int GetNearestPowerOf2(int value)
-			{
-				value--;
-				value |= value >> 1;
-				value |= value >> 2;
-				value |= value >> 4;
-				value |= value >> 8;
-				value |= value >> 16;
-				value++;
-				return value;
-			}
-
-			private static AnimationFastForwarder.AnimationState FromReflessAnimationState(
-				ReferencelessAnimationState state, Node root
-			) {
-				var node = GetNode(state.NodeIndex, root);
-				return new AnimationFastForwarder.AnimationState {
-					Animation = node.Animations[state.AnimationIndex],
-					Frame = state.Frame,
-					FrameCount = state.FrameCount,
-					IsRunning = state.IsRunning
-				};
-			}
-		}
-
+		
 		private class AnimationPreview
 		{
-			private readonly IncrementalFastForwarder incrementalFF;
 			private readonly ScenePool scenePool;
 			private readonly Widget previewContainer;
 			private readonly int animationIndex;
@@ -549,13 +407,11 @@ namespace Tangerine.UI
 			public bool IsAttached { get; private set; }
 
 			public AnimationPreview(
-				IncrementalFastForwarder incrementalFF,
 				ScenePool scenePool,
 				Widget previewContainer,
 				int animationIndex,
 				string trigger
 			) {
-				this.incrementalFF = incrementalFF;
 				this.scenePool = scenePool;
 				this.previewContainer = previewContainer;
 				this.animationIndex = animationIndex;
@@ -574,18 +430,29 @@ namespace Tangerine.UI
 				frame = animation.Markers.First(i => i.Id == trigger).Frame;
 				animationProcessor = clone.Manager.Processors.OfType<AnimationProcessor>().First();
 				animationProcessor.Reset();
-				animationProcessor.AllAnimationsStopped += RestartAnimation;
-				incrementalFF.FastForward(clone, animationIndex, frame);
-				animation.IsRunning = true;
+				animationProcessor.AllAnimationsStopped += AddRestartAnimationOnNextFrameTask;
+				RestartAnimation();
 				IsAttached = true;
 			}
 
-			private void RestartAnimation() => previewContainer.Tasks.Add(RestartAnimationOnNextFrame());
+			private void RestartAnimation()
+			{
+				foreach (var n in clone.SelfAndDescendants) {
+					foreach (var a in n.Animations) {
+						a.IsRunning = false;
+						a.Frame = 0;
+					}
+				}
+				clone.Animations[animationIndex].Frame = frame;
+				clone.Animations[animationIndex].IsRunning = true;
+			}
+
+			private void AddRestartAnimationOnNextFrameTask() => previewContainer.Tasks.Add(RestartAnimationOnNextFrame());
 
 			private IEnumerator<object> RestartAnimationOnNextFrame()
 			{
 				yield return null;
-				incrementalFF.FastForward(clone, animationIndex, frame);
+				RestartAnimation();
 			}
 
 			public void Detach()
@@ -593,8 +460,7 @@ namespace Tangerine.UI
 				if (!IsAttached) {
 					throw new InvalidOperationException();
 				}
-				animationProcessor.AllAnimationsStopped -= RestartAnimation;
-				incrementalFF.FastForward(clone, animationIndex, 0); // Restore animation to default state.
+				animationProcessor.AllAnimationsStopped -= AddRestartAnimationOnNextFrameTask;
 				scenePool.Release(clone);
 				previewContainer.Components.Remove<AnimationPreviewBehavior>();
 				previewContainer.PostPresenter = null;
