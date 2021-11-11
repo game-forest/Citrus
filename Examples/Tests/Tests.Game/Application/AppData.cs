@@ -45,7 +45,7 @@ namespace Tests.Application
 			Instance = null;
 			if (File.Exists(path)) {
 				try {
-					Instance = The.Persistence.ReadObjectFromFile<AppData>(path);
+					Instance = The.Persistence.ReadFromFile<AppData>(path);
 				}
 				catch (System.Exception e) {
 					The.Log.Warn("Failed to load the application profile: {0}", e.Message);
@@ -64,7 +64,7 @@ namespace Tests.Application
 			MusicVolume = AudioSystem.GetGroupVolume(AudioChannelGroup.Music);
 
 			try {
-				The.Persistence.WriteObjectToFile(GetDataFilePath(), this, Persistence.Format.Binary);
+				The.Persistence.WriteToFile(GetDataFilePath(), this, Persistence.Format.Binary);
 			}
 			catch (System.Exception e) {
 				The.Log.Warn("AppData saving failed: {0}", e.Message);

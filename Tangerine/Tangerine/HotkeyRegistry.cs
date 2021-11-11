@@ -270,7 +270,7 @@ namespace Tangerine
 			// Since there can be several Tangerines open, it is
 			// possible that we will not be able to access the file.
 			CategoriesDictionary UnsafeLoadCategories(string path) =>
-				TangerinePersistence.Instance.ReadObjectFromFile<CategoriesDictionary>(path);
+				TangerinePersistence.Instance.ReadFromFile<CategoriesDictionary>(path);
 			CategoriesDictionary TryLoadCategories(int nestingLevel)
 			{
 				try {
@@ -292,7 +292,7 @@ namespace Tangerine
 			// Since there can be several Tangerines open, it is
 			// possible that we will not be able to access the file.
 			void UnsafeSaveCategories() =>
-				TangerinePersistence.Instance.WriteObjectToFile(filePath, data, Persistence.Format.Json);
+				TangerinePersistence.Instance.WriteToFile(filePath, data, Persistence.Format.Json);
 			void TrySaveCategories(int nestingLevel)
 			{
 				try {

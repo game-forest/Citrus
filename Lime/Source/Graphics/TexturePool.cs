@@ -140,7 +140,7 @@ namespace Lime
 			if (!AssetBundle.Current.FileExists(path)) {
 				return null;
 			}
-			var data = InternalPersistence.Instance.ReadObject<TextureAtlasElement.Params>(path);
+			var data = InternalPersistence.Instance.ReadFromCurrentBundle<TextureAtlasElement.Params>(path);
 			var texture = new TextureAtlasElement(data);
 			return texture;
 		}

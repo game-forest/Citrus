@@ -87,7 +87,7 @@ namespace Tangerine.Core
 			FileSystemWatcher = new FileSystemWatcher(AssetsDirectory, includeSubdirectories: true);
 			if (File.Exists(UserprefsPath)) {
 				try {
-					UserPreferences = TangerinePersistence.Instance.ReadObjectFromFile<ProjectUserPreferences>(UserprefsPath);
+					UserPreferences = TangerinePersistence.Instance.ReadFromFile<ProjectUserPreferences>(UserprefsPath);
 					foreach (var path in UserPreferences.Documents) {
 						try {
 							if (GetFullPath(path, out string fullPath)) {
@@ -202,7 +202,7 @@ namespace Tangerine.Core
 				}
 			}
 			try {
-				TangerinePersistence.Instance.WriteObjectToFile(UserprefsPath, UserPreferences, Persistence.Format.Json);
+				TangerinePersistence.Instance.WriteToFile(UserprefsPath, UserPreferences, Persistence.Format.Json);
 			} catch (System.Exception) { }
 			AssetBundle.Current = null;
 			FileSystemWatcher?.Dispose();
@@ -499,7 +499,7 @@ namespace Tangerine.Core
 						// и мешает работать.
 						if (File.Exists(textureParamsPath)) {
 							try {
-								var existingParams = InternalPersistence.Instance.ReadObjectFromFile<TextureParams>(textureParamsPath);
+								var existingParams = InternalPersistence.Instance.ReadFromFile<TextureParams>(textureParamsPath);
 								if (existingParams.Equals(textureParams)) {
 									continue;
 								}
@@ -508,7 +508,7 @@ namespace Tangerine.Core
 								// этот костыль ещё и валил Танжерин по хз какому поводу.
 							}
 						}
-						InternalPersistence.Instance.WriteObjectToFile(textureParamsPath, textureParams, Persistence.Format.Json);
+						InternalPersistence.Instance.WriteToFile(textureParamsPath, textureParams, Persistence.Format.Json);
 					} else if (File.Exists(textureParamsPath)) {
 						File.Delete(textureParamsPath);
 					}

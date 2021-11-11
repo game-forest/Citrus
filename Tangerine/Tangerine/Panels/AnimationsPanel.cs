@@ -402,7 +402,7 @@ namespace Tangerine.Panels
 					Frame container;
 					try {
 						var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-						container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+						container = TangerinePersistence.Instance.ReadFromStream<Frame>(stream);
 					} catch {
 						return;
 					}
@@ -752,7 +752,7 @@ namespace Tangerine.Panels
 					container.Animations.Add(Cloner.Clone(animation));
 				}
 				var stream = new MemoryStream();
-				TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+				TangerinePersistence.Instance.WriteToStream(stream, container, Persistence.Format.Json);
 				Clipboard.Text = Encoding.UTF8.GetString(stream.ToArray());
 			}
 

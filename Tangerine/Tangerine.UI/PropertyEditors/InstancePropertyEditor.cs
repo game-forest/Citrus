@@ -20,7 +20,7 @@ namespace Tangerine.UI
 				MinSize = Vector2.Zero,
 			};
 			var propertyType = typeof(T);
-			var meta = Yuzu.Metadata.Meta.Get(editorParams.Type, InternalPersistence.Instance.YuzuCommonOptions);
+			var meta = Yuzu.Metadata.Meta.Get(editorParams.Type, InternalPersistence.Instance.YuzuOptions);
 			selectImplementationButton.Clicked = () => {
 				IMenu menu = new Menu();
 				foreach (var type in GetPossibleTypes(propertyType)) {

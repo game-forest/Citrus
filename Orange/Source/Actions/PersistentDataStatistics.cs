@@ -411,7 +411,7 @@ namespace Orange
 						foreach (var n in node.SelfAndDescendants) {
 							process(n);
 						}
-						InternalPersistence.Instance.WriteObjectToFile(path, node, Persistence.Format.Binary);
+						InternalPersistence.Instance.WriteToFile(path, node, Persistence.Format.Binary);
 						afterSave(f, path);
 					}
 				}

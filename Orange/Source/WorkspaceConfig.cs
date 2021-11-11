@@ -92,13 +92,13 @@ namespace Orange
 		public static WorkspaceConfig Load()
 		{
 			try {
-				return persistence.ReadObjectFromFile<WorkspaceConfig>(GetConfigPath());
+				return persistence.ReadFromFile<WorkspaceConfig>(GetConfigPath());
 			} catch {
 				return new WorkspaceConfig();
 			}
 		}
 
-		public static void Save(WorkspaceConfig config) => persistence.WriteObjectToFile(GetConfigPath(), config, Persistence.Format.Json);
+		public static void Save(WorkspaceConfig config) => persistence.WriteToFile(GetConfigPath(), config, Persistence.Format.Json);
 
 		public void RemoveRecentProject(string projectPath)
 		{

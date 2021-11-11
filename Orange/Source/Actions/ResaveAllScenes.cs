@@ -24,10 +24,10 @@ namespace Orange
 						ignoreExternals: true
 					);
 					removedAnimatorsCount += node.RemoveDanglingAnimators();
-					InternalPersistence.Instance.WriteObjectToBundle(
+					InternalPersistence.Instance.WriteToBundle(
 						bundle: AssetBundle.Current,
 						path: file,
-						instance: node,
+						@object: node,
 						format: Persistence.Format.Json,
 						default,
 						attributes: AssetAttributes.None

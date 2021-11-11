@@ -67,10 +67,10 @@ namespace Orange
 			ExportModelAnimations(model, fbxPath, assetAttributes, cookingUnitHash);
 			model.RemoveAnimatorsForExternalAnimations();
 			ExportModelMeshData(model, fbxPath, assetAttributes, cookingUnitHash);
-			InternalPersistence.Instance.WriteObjectToBundle(
+			InternalPersistence.Instance.WriteToBundle(
 				bundle: assetCooker.OutputBundle,
 				path: Path.ChangeExtension(fbxPath, ".t3d"),
-				instance: model,
+				@object: model,
 				format: Persistence.Format.Binary,
 				cookingUnitHash: cookingUnitHash,
 				attributes: assetAttributes
@@ -99,7 +99,7 @@ namespace Orange
 				var path = pathWithoutExt + ".ant";
 				var data = animation.GetData();
 				animation.ContentsPath = pathWithoutExt;
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					assetCooker.OutputBundle, path, data, Persistence.Format.Binary,
 					cookingUnitHash, assetAttributes);
 			}
@@ -118,8 +118,14 @@ namespace Orange
 			}
 			if (data.Meshes.Count > 0) {
 				model.MeshContentPath = Path.ChangeExtension(path, null);
-				InternalPersistence.Instance.WriteObjectToBundle(
-					assetCooker.OutputBundle, path, data, Persistence.Format.Binary, cookingUnitHash, assetAttributes);
+				InternalPersistence.Instance.WriteToBundle(
+					assetCooker.OutputBundle,
+					path,
+					data,
+					Persistence.Format.Binary,
+					cookingUnitHash,
+					assetAttributes
+				);
 			}
 		}
 	}

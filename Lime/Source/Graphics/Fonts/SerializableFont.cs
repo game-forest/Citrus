@@ -123,9 +123,9 @@ namespace Lime
 					return font;
 				if (AssetBundle.Initialized) {
 					if (TryGetOrUpdateBundleFontPath(name, out var fontPath, defaultFontExtensions)) {
-						font = InternalPersistence.Instance.ReadObject<Font>(fontPath);
+						font = InternalPersistence.Instance.ReadFromCurrentBundle<Font>(fontPath);
 					} else if (TryGetOrUpdateBundleFontPath(name, out var compoundFontPath, ".cft")) {
-						font = InternalPersistence.Instance.ReadObject<SerializableCompoundFont>(compoundFontPath);
+						font = InternalPersistence.Instance.ReadFromCurrentBundle<SerializableCompoundFont>(compoundFontPath);
 					} else {
 						return Null;
 					}

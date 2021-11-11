@@ -760,7 +760,7 @@ namespace Tangerine.Core
 						Console.WriteLine($"Removed {removedDanglingAnimatorCount} dangling animators.");
 					}
 				}
-				InternalPersistence.Instance.WriteObject(assetPath, ms, node, Persistence.Format.Json);
+				InternalPersistence.Instance.WriteToStream(assetPath, ms, node, Persistence.Format.Json);
 			}
 			var fileModeForHiddenFile = File.Exists(filePath) ? FileMode.Truncate : FileMode.Create;
 			using (var fs = new FileStream(filePath, fileModeForHiddenFile)) {

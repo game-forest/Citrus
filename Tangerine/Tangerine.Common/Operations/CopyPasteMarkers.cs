@@ -20,7 +20,7 @@ namespace Tangerine.Common.Operations
 			foreach (var marker in markers) {
 				animation.Markers.Add(Cloner.Clone(marker));
 			}
-			TangerinePersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToStream(null, stream, container, Persistence.Format.Json);
 			Clipboard.Text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 		}
 
@@ -33,7 +33,7 @@ namespace Tangerine.Common.Operations
 			Frame container;
 			try {
 				var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
-				container = TangerinePersistence.Instance.ReadObject<Frame>(null, stream);
+				container = InternalPersistence.Instance.ReadFromStream<Frame>(null, stream);
 			} catch {
 				return false;
 			}

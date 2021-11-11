@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using SharpVulkan;
 using Yuzu;
-using Yuzu.Binary;
-using Yuzu.Json;
 
 namespace Lime
 {
@@ -34,8 +29,8 @@ namespace Lime
 
 		}
 
-		public InternalPersistence(CommonOptions yuzuCommonOptions, JsonSerializeOptions yuzuJsonOptions)
-			: base(yuzuCommonOptions, yuzuJsonOptions)
+		public InternalPersistence(CommonOptions yuzuOptions, Yuzu.Json.JsonSerializeOptions yuzuJsonOptions)
+			: base(yuzuOptions, yuzuJsonOptions)
 		{ }
 
 		internal string ShrinkPath(string path)
@@ -86,42 +81,102 @@ namespace Lime
 			return path;
 		}
 
-		public override void WriteObject<T>(string path, Stream stream, T instance, Format format)
+		public override int CalcObjectCheckSum(object @object)
+		{
+			throw new NotSupportedException();
+		}
+
+		public int CalcObjectCheckSum(string path, object obj)
+		{
+			using var stream = new MemoryStream();
+			WriteToStream(path, stream, obj, Format.Binary);
+			stream.Flush();
+			return Toolbox.ComputeHash(stream.GetBuffer(), (int)stream.Length);
+		}
+
+		public override string WriteToString(object @object, Format format)
+		{
+			throw new NotSupportedException();
+		}
+
+		public string WriteToString(string path, object @object, Format format)
+		{
+			using var stream = new MemoryStream();
+			WriteToStream(path, stream, @object, format);
+			return Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+		}
+
+		public override void WriteToFile(string path, object @object, Format format)
+		{
+			using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+			WriteToStream(path, stream, @object, format);
+		}
+
+		public override void WriteToBundle(
+			AssetBundle bundle,
+			string path,
+			object @object,
+			Format format,
+			SHA256 cookingUnitHash,
+			AssetAttributes attributes
+		) {
+			using MemoryStream stream = new MemoryStream();
+			WriteToStream(path, stream, @object, format);
+			stream.Seek(0, SeekOrigin.Begin);
+			bundle.ImportFile(path, stream, cookingUnitHash, attributes);
+		}
+
+		public override void WriteToStream(Stream stream, object @object, Format format)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void WriteToStream(string path, Stream stream, object @object, Format format)
 		{
 			pathStack.Push(path);
 			PushCurrent(this);
 			try {
-				base.WriteObject<T>(path, stream, instance, format);
+				base.WriteToStream(stream, @object, format);
 			} finally {
 				pathStack.Pop();
 				PopCurrent();
 			}
 		}
 
-		public override void WriteObject<T>(string path, Stream stream, T instance, AbstractSerializer serializer)
+		public override T ReadFromString<T>(string source, object @object = null)
+		{
+			throw new NotSupportedException();
+		}
+
+		public T ReadFromString<T>(string path, string source, object @object = null)
+		{
+			using var stream = new MemoryStream(Encoding.UTF8.GetBytes(source));
+			return ReadFromStream<T>(path, stream, @object);
+		}
+
+		public override T ReadFromBundle<T>(AssetBundle bundle, string path, object obj = null)
+		{
+			using Stream stream = bundle.OpenFileLocalized(path);
+			return ReadFromStream<T>(path, stream, obj);
+		}
+
+		public override T ReadFromFile<T>(string path, object @object = null)
+		{
+			using FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+			return ReadFromStream<T>(path, stream, @object);
+		}
+
+		public override T ReadFromStream<T>(Stream stream, object @object = null)
+		{
+			throw new NotSupportedException();
+		}
+
+		public T ReadFromStream<T>(string path, Stream stream, object obj = null)
 		{
 			pathStack.Push(path);
 			PushCurrent(this);
 			try {
-				base.WriteObject<T>(path, stream, instance, serializer);
-			} finally {
-				pathStack.Pop();
-				PopCurrent();
-			}
-		}
-
-		public T ReadObjectFromBundle<T>(AssetBundle bundle, string path, object obj = null)
-		{
-			using (Stream stream = bundle.OpenFileLocalized(path))
-				return ReadObject<T>(path, stream, obj);
-		}
-
-		public override T ReadObject<T>(string path, Stream stream, object obj = null)
-		{
-			pathStack.Push(path);
-			PushCurrent(this);
-			try {
-				return base.ReadObject<T>(path, stream, obj);
+				return base.ReadFromStream<T>(stream, obj);
 			} catch {
 				if (!stream.CanSeek) {
 					var ms = new MemoryStream();
@@ -129,7 +184,7 @@ namespace Lime
 					ms.Seek(0, SeekOrigin.Begin);
 					stream = ms;
 				}
-				if (!CheckBinarySignature(stream) && HasConflicts(path, stream)) {
+				if (!CheckBinarySignature(stream) && HasConflicts(stream)) {
 					throw new InvalidOperationException($"{path} has git conflicts");
 				} else {
 					throw;
@@ -140,12 +195,11 @@ namespace Lime
 			}
 		}
 
-		private bool HasConflicts(string path, Stream stream)
+		private static bool HasConflicts(Stream stream)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
-			using (var reader = new StreamReader(stream)) {
-				return conflictRegex.IsMatch(reader.ReadToEnd());
-			}
+			using var reader = new StreamReader(stream);
+			return conflictRegex.IsMatch(reader.ReadToEnd());
 		}
 	}
 }
