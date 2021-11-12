@@ -758,7 +758,6 @@ namespace YuzuGenerated
 				return (global::Lime.AudioRandomizerComponent)cl.DeepObject(src);
 			var s = (global::Lime.AudioRandomizerComponent)src;
 			var result = new global::Lime.AudioRandomizerComponent();
-			result.AvoidRepetition = s.AvoidRepetition;
 			result.Pitch = s.Pitch;
 			if (s.Samples != null && result.Samples != null) {
 				foreach (var tmp1 in s.Samples)

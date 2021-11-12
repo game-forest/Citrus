@@ -211,10 +211,6 @@ Use Fade In Time and Fade Out Time for transitions.")]
 		[YuzuMember]
 		public NumericRange Volume { get; set; } = new NumericRange(1, 0);
 
-		[YuzuMember]
-		[TangerineDisplayName("Avoid Repetition")]
-		public bool AvoidRepetition { get; set; }
-
 		private int previousSampleIndex;
 
 		public AudioRandomizerComponent()
@@ -243,9 +239,6 @@ Use Fade In Time and Fade Out Time for transitions.")]
 		{
 			if (Samples.Count == 1) {
 				return Samples[0];
-			}
-			if (!AvoidRepetition) {
-				return Samples[Mathf.RandomInt(Samples.Count)];
 			}
 			int randomIndex = Mathf.RandomInt(Samples.Count - 1);
 			if (randomIndex >= previousSampleIndex) {
