@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using Lime;
-using Tangerine;
 using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.Docking;
 using Application = Lime.Application;
-using Clipboard = Lime.Clipboard;
 using Panel = Tangerine.UI.Docking.Panel;
 using Shortcut = Lime.Shortcut;
 
