@@ -303,14 +303,24 @@ namespace Tangerine.UI
 		{
 			[YuzuOptional]
 			public Color4 AssemblyDefaultIcon { get; set; }
-
 			[YuzuOptional]
 			public Color4 AssemblyBuildSucceededIcon { get; set; }
-
 			[YuzuOptional]
 			public Color4 AssemblyBuildFailedIcon { get; set; }
 		}
 
+		public class NavigatorColors : Theme.DefaultColors
+		{
+			[YuzuOptional]
+			public Color4 PanelBackground { get; set; }
+			[YuzuOptional]
+			public Color4 ListBackground { get; set; }
+			[YuzuOptional]
+			public Color4 AccentColor { get; set; }
+			[YuzuOptional]
+			public Color4 HoveredItemBackground { get; set; }
+		}
+		
 		[YuzuOptional]
 		public bool IsDark { get; set; }
 		[YuzuOptional]
@@ -339,7 +349,9 @@ namespace Tangerine.UI
 		public AnimationsColors Animations { get; set; }
 		[YuzuOptional]
 		public RemoteScriptingColors RemoteScripting { get; set; }
-
+		[YuzuOptional]
+		public NavigatorColors Navigator { get; set; }
+		
 		public ColorTheme Clone()
 		{
 			var clone = (ColorTheme)this.MemberwiseClone();
@@ -511,6 +523,12 @@ namespace Tangerine.UI
 				AssemblyBuildSucceededIcon = new Color4(0, 163, 0),
 				AssemblyBuildFailedIcon = new Color4(163, 0, 0),
 			};
+			var navigator = new NavigatorColors {
+				PanelBackground = new Color4(48, 48, 48),
+				ListBackground = new Color4(54, 54, 54),
+				AccentColor = new Color4(77, 199, 255),
+				HoveredItemBackground = new Color4(50, 75, 100),
+			};
 			return new ColorTheme {
 				IsDark = true,
 				Toolbar = toolbar,
@@ -526,6 +544,7 @@ namespace Tangerine.UI
 				Hierarchy = hierarchy,
 				Animations = animations,
 				RemoteScripting = remoteScripting,
+				Navigator = navigator,
 			};
 		}
 
@@ -686,6 +705,12 @@ namespace Tangerine.UI
 				AssemblyBuildSucceededIcon = new Color4(0, 220, 0),
 				AssemblyBuildFailedIcon = Color4.Red,
 			};
+			var navigator = new NavigatorColors {
+				PanelBackground = new Color4(252, 252, 252),
+				ListBackground = new Color4(247, 247, 247),
+				AccentColor = new Color4(74, 134, 232),
+				HoveredItemBackground = new Color4(213, 236, 255),
+			};
 			return new ColorTheme {
 				IsDark = false,
 				Toolbar = toolbar,
@@ -701,6 +726,7 @@ namespace Tangerine.UI
 				Hierarchy = hierarchy,
 				Animations = animations,
 				RemoteScripting = remoteScripting,
+				Navigator = navigator,
 			};
 		}
 	}
