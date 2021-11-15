@@ -50,6 +50,12 @@ namespace Tangerine
 				Nodes = { navigatorWidget },
 			};
 			windowWidget.Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Navigator.PanelBackground);
+			if (
+				GenericCommands.NextDocument.Shortcut != new Shortcut(Modifiers.Control, Key.Tab) ||
+				GenericCommands.PreviousDocument.Shortcut != new Shortcut(Modifiers.Control | Modifiers.Shift, Key.Tab)
+			) {
+				throw new System.Exception("Unsupported shortcut");
+			}
 			var focusScope = new KeyboardFocusScope(windowWidget);
 			focusScope.FocusNext.Clear();
 			focusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Tab));
