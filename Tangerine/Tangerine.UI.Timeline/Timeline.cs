@@ -50,7 +50,7 @@ namespace Tangerine.UI.Timeline
 					columnCount = CalcColumnCount();
 				}
 				var maxVisibleColumn = ((OffsetX + Ruler.RootWidget.Width) / TimelineMetrics.ColWidth).Ceiling();
-				var result = Math.Max(columnCount + 1, maxVisibleColumn);
+				var result = Math.Max(CurrentColumn, Math.Max(columnCount + 1, maxVisibleColumn));
 				return result;
 			}
 		}
