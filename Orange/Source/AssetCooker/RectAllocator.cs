@@ -19,15 +19,21 @@ namespace Orange
 			rects.Add(new IntRectangle(0, 0, size.Width, size.Height));
 		}
 
-		public bool Allocate(Size size, out IntRectangle rect)
+		public bool Allocate(Size size, int padding, out IntRectangle rect)
 		{
 			int j = -1;
 			IntRectangle r;
 			int spareSquare = Int32.MaxValue;
+			int topPadding;
+			int leftPadding;
 			for (int i = 0; i < rects.Count; i++) {
 				r = rects[i];
-				if (r.Width >= size.Width && r.Height >= size.Height) {
-					int z = r.Width * r.Height - size.Width * size.Height;
+				leftPadding = r.Left == 0 ? 0 : padding;
+				topPadding = r.Top == 0 ? 0 : padding;
+				var requestedWidth = size.Width + leftPadding;
+				var requestedHeight = size.Height + topPadding;
+				if (r.Width >= requestedWidth && r.Height >= requestedHeight) {
+					int z = r.Width * r.Height - requestedWidth * requestedHeight;
 					if (z < spareSquare) {
 						j = i;
 						spareSquare = z;
@@ -40,17 +46,46 @@ namespace Orange
 			}
 			// Split the rest, minimizing the sum of parts perimeters.
 			r = rects[j];
-			rect = new IntRectangle(r.A.X, r.A.Y, r.A.X + size.Width, r.A.Y + size.Height);
-			int a = 2 * r.Width + r.Height - size.Width;
-			int b = 2 * r.Height + r.Width - size.Height;
+			leftPadding = r.Left == 0 ? 0 : padding;
+			topPadding = r.Top == 0 ? 0 : padding;
+			var occupiedWidth = size.Width + leftPadding + padding;
+			var occupiedHeight = size.Height + topPadding + padding;
+			rect = new IntRectangle(
+				r.A.X + leftPadding,
+				r.A.Y + topPadding,
+				r.A.X + leftPadding + size.Width,
+				r.A.Y + topPadding + size.Height
+			);
+			int a = 2 * r.Width + r.Height - occupiedWidth;
+			int b = 2 * r.Height + r.Width - occupiedHeight;
 			if (a < b) {
-				rects[j] = new IntRectangle(r.A.X, r.A.Y + size.Height, r.B.X, r.B.Y);
-				rects.Add(new IntRectangle(r.A.X + size.Width, r.A.Y, r.B.X, r.A.Y + size.Height));
+				rects[j] = new IntRectangle(
+					r.A.X,
+					r.A.Y + topPadding + size.Height + padding,
+					r.B.X,
+					r.B.Y
+				);
+				rects.Add(new IntRectangle(
+					r.A.X + leftPadding + size.Width + padding,
+					r.A.Y,
+					r.B.X,
+					r.A.Y + topPadding + size.Height + padding
+				));
 			} else {
-				rects[j] = new IntRectangle(r.A.X, r.A.Y + size.Height, r.A.X + size.Width, r.B.Y);
-				rects.Add(new IntRectangle(r.A.X + size.Width, r.A.Y, r.B.X, r.B.Y));
+				rects[j] = new IntRectangle(
+					r.A.X,
+					r.A.Y + topPadding + size.Height + padding,
+					r.A.X + leftPadding + size.Width + padding,
+					r.B.Y
+				);
+				rects.Add(new IntRectangle(
+					r.A.X + leftPadding + size.Width + padding,
+					r.A.Y,
+					r.B.X,
+					r.B.Y
+				));
 			}
-			allocatedSquare += size.Width * size.Height;
+			allocatedSquare += occupiedWidth * occupiedHeight;
 			return true;
 		}
 	}
