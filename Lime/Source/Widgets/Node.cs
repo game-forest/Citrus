@@ -190,7 +190,8 @@ namespace Lime
 					var oldParent = parent;
 					parent = value;
 					if (parent != null) {
-						PropagateParentBoundsChanged();
+						DirtyMask |= DirtyFlags.ParentBoundingRect;
+						PropagateParentBoundsChangedHelper();
 					}
 					PropagateDirtyFlags();
 					for (var n = Parent; n != null; n = n.Parent) {
@@ -651,7 +652,7 @@ namespace Lime
 			PropagateParentBoundsChangedHelper();
 		}
 
-		private void PropagateParentBoundsChangedHelper()
+		protected void PropagateParentBoundsChangedHelper()
 		{
 			for (var p = Parent; p != null; p = p.Parent) {
 				var flags = DirtyFlags.ParentBoundingRect | DirtyFlags.BoundingRect;
@@ -659,7 +660,7 @@ namespace Lime
 					return;
 				}
 				p.DirtyMask |= flags;
-				if (p.AsWidget != null && !AsWidget.Visible) {
+				if (p.AsWidget != null && !p.AsWidget.Visible) {
 					return;
 				}
 			}

@@ -559,8 +559,8 @@ namespace Lime
 			{
 				if (visible != value) {
 					visible = value;
-					if (visible && DirtyMask.HasFlag(DirtyFlags.ParentBoundingRect)) {
-						PropagateParentBoundsChanged();
+					if (visible && (DirtyMask & DirtyFlags.ParentBoundingRect) == DirtyFlags.ParentBoundingRect) {
+						PropagateParentBoundsChangedHelper();
 					}
 					PropagateDirtyFlags(DirtyFlags.Visible | DirtyFlags.Frozen);
 					InvalidateParentConstraintsAndArrangement();
