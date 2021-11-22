@@ -177,7 +177,7 @@ Use Fade In Time and Fade Out Time for transitions.")]
 			base.OnTrigger(property, value, animationTimeCorrection);
 			if (property == "Action") {
 				var action = (AudioAction)value;
-				if (GloballyEnable && !GetTangerineFlag(TangerineFlags.Hidden)) {
+				if (GloballyEnable && !GetTangerineFlag(TangerineFlags.Hidden) && !GloballyFrozen) {
 					switch (action) {
 						case AudioAction.Play:
 							if (sound.IsPaused) {
