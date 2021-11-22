@@ -42641,6 +42641,19 @@ references:
   isSpec: "True"
   fullName: Lime.Node.PropagateParentBoundsChanged
   nameWithType: Node.PropagateParentBoundsChanged
+- uid: Lime.Node.PropagateParentBoundsChangedHelper
+  name: PropagateParentBoundsChangedHelper()
+  href: api/Lime.Node.html#Lime_Node_PropagateParentBoundsChangedHelper
+  commentId: M:Lime.Node.PropagateParentBoundsChangedHelper
+  fullName: Lime.Node.PropagateParentBoundsChangedHelper()
+  nameWithType: Node.PropagateParentBoundsChangedHelper()
+- uid: Lime.Node.PropagateParentBoundsChangedHelper*
+  name: PropagateParentBoundsChangedHelper
+  href: api/Lime.Node.html#Lime_Node_PropagateParentBoundsChangedHelper_
+  commentId: Overload:Lime.Node.PropagateParentBoundsChangedHelper
+  isSpec: "True"
+  fullName: Lime.Node.PropagateParentBoundsChangedHelper
+  nameWithType: Node.PropagateParentBoundsChangedHelper
 - uid: Lime.Node.PushNode(Lime.Node)
   name: PushNode(Node)
   href: api/Lime.Node.html#Lime_Node_PushNode_Lime_Node_
