@@ -129,6 +129,9 @@ namespace Tangerine.Core.Operations
 						$"{animator.TargetPropertyPath}, which doesn't exist in {destType}, skipping.");
 					continue;
 				}
+				if (animator.TargetPropertyPath == "Trigger" && !NodeCompositionValidator.CanHaveChildren(destType)) {
+					continue;
+				}
 				to.Animators.Add(Cloner.Clone(animator));
 			}
 			if (NodeCompositionValidator.CanHaveChildren(destType)) {
