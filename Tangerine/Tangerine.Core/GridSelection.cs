@@ -74,7 +74,7 @@ namespace Tangerine.Core
 						Host = host,
 						Animators = new List<IAnimator>(host.Animators.ToList())
 					};
-				} else if (components.Get<AnimatorRow>() is AnimatorRow prop && prop.Node is IAnimationHost) {
+				} else if (components.Get<AnimatorRow>() is AnimatorRow prop && prop.Node != null) {
 					animable = new RowAnimators {
 						Host = prop.Node,
 						Animators = new List<IAnimator>()
