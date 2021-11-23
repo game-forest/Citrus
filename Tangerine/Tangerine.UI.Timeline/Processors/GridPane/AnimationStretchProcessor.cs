@@ -170,12 +170,17 @@ namespace Tangerine.UI.Timeline
 			savedKeyframes.Clear();
 			savedMarkerPositions.Clear();
 			savedMarkers.Clear();
+			var animators = new HashSet<IAnimator>();
 			var length = boundaries.Right - boundaries.Left - 1;
 			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
 				foreach (var animator in animable.Animators) {
 					if (animator.AnimationId != Document.Current.AnimationId) {
 						continue;
 					}
+					if (animators.Contains(animator)) {
+						continue;
+					}
+					animators.Add(animator);
 					savedKeyframes.Add(animator, new List<IKeyframe>());
 					var keys = animator.Keys.Where(k =>
 						boundaries.Left <= k.Frame &&
