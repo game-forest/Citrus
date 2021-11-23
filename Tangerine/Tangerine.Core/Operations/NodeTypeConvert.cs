@@ -129,6 +129,19 @@ namespace Tangerine.Core.Operations
 						$"{animator.TargetPropertyPath}, which doesn't exist in {destType}, skipping.");
 					continue;
 				}
+				var property = destType.GetProperties().First(p => p.Name == animator.TargetPropertyPath);
+				var yuzuItem = Yuzu.Metadata.Meta.Get(destType, InternalPersistence.Instance.YuzuCommonOptions)
+					.Items
+					.Find(i => i.PropInfo == property);
+				var hasKeyframeColor = PropertyAttributes<TangerineKeyframeColorAttribute>
+					.Get(destType, property.Name, true) != null;
+				var shouldIgnore = PropertyAttributes<TangerineIgnoreAttribute>
+					.Get(destType, property.Name, true) != null;
+				var shouldInspect = PropertyAttributes<TangerineInspectAttribute>
+					.Get(destType, property.Name, true) != null;
+				if (!shouldInspect && (yuzuItem == null && !hasKeyframeColor || shouldIgnore)) {
+					continue;
+				}
 				if (animator.TargetPropertyPath == "Trigger" && !NodeCompositionValidator.CanHaveChildren(destType)) {
 					continue;
 				}
