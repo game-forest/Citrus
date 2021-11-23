@@ -98,12 +98,13 @@ namespace Lime.SignedDistanceField
 				lowp float shadowDistance = texture2D(tex1, texCoords1).r;
 				lowp float smoothing = clamp(abs(dFdx(shadowDistance)) + abs(dFdy(shadowDistance)), 0.0001, 0.05);
 				lowp float shadowAlpha = smoothstep(dilate - softness - smoothing, dilate + softness + smoothing, shadowDistance);
-				gl_FragColor = vec4(color.rgb, color.a * shadowAlpha * global_color.a);
+				lowp vec4 c = color * global_color;
+				gl_FragColor = vec4(c.rgb, c.a * shadowAlpha);
 			}";
 
 		private static SDFShadowShaderProgram instance;
 
-		public static SDFShadowShaderProgram GetInstance() => instance ?? (instance = new SDFShadowShaderProgram());
+		public static SDFShadowShaderProgram GetInstance() => instance ??= new SDFShadowShaderProgram();
 
 		private SDFShadowShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
 
