@@ -27,7 +27,11 @@ namespace Tangerine.Core.Operations
 			}
 			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
 			Validate(node, destType, commonParent);
-			var result = CreateNode.Perform(sceneItem.Parent, sceneItem.Parent.Rows.IndexOf(sceneItem), destType);
+			var result = CreateNode.Perform(
+				sceneItem.Parent,
+				new SceneTreeIndex(sceneItem.Parent.Rows.IndexOf(sceneItem)),
+				destType
+			);
 			var assetBundlePathComponent = node.Components.Get<Node.AssetBundlePathComponent>();
 			if (assetBundlePathComponent != null) {
 				result.Components.Add(Cloner.Clone(assetBundlePathComponent));
@@ -46,7 +50,7 @@ namespace Tangerine.Core.Operations
 								continue;
 							}
 						}
-						LinkSceneItem.Perform(resultSceneItem, j, i);
+						LinkSceneItem.Perform(resultSceneItem, new SceneTreeIndex(j), i);
 						j = resultSceneItem.Rows.IndexOf(i) + 1;
 					}
 				}

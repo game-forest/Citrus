@@ -33,7 +33,7 @@ namespace Tangerine.Common.Operations
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);
 						if (LinkSceneItem.CanLink(containerItem, i)) {
-							LinkSceneItem.Perform(containerItem, index++, i);
+							LinkSceneItem.Perform(containerItem, new SceneTreeIndex(index++), i);
 						}
 						result.Add(i);
 					}

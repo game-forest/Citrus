@@ -7,6 +7,76 @@ using Tangerine.Core.Components;
 
 namespace Tangerine.Core.Operations
 {
+	public struct SceneTreeIndex
+	{
+		public int Value { get; private set; }
+
+		public SceneTreeIndex(int value) => Value = value;
+
+		public static SceneTreeIndex ClampIndex(Row sceneTree, Row itemToLink, SceneTreeIndex index)
+		{
+			int minIndex, maxIndex;
+			if (itemToLink.TryGetAnimation(out _)) {
+				minIndex = FromAnimationIndex(sceneTree, 0).Value;
+				maxIndex = FromAnimatorIndex(sceneTree, 0).Value;
+			} else if (itemToLink.TryGetAnimator(out _)) {
+				minIndex = FromAnimatorIndex(sceneTree, 0).Value;
+				maxIndex = FromNodeOrFolderIndex(sceneTree, 0).Value;
+			} else if (itemToLink.TryGetNode(out _) || itemToLink.TryGetFolder(out _)) {
+				minIndex = FromNodeOrFolderIndex(sceneTree, 0).Value;
+				maxIndex = sceneTree.Rows.Count;
+			} else if (itemToLink.TryGetMarker(out _)) {
+				minIndex = FromMarkerIndex(sceneTree, 0).Value;
+				maxIndex = FromAnimationTrackIndex(sceneTree, 0).Value;
+			} else if (itemToLink.TryGetAnimationTrack(out _)) {
+				minIndex = FromAnimationTrackIndex(sceneTree, 0).Value;
+				maxIndex = sceneTree.Rows.Count;
+			} else {
+				throw new InvalidOperationException();
+			}
+			return new SceneTreeIndex(Math.Clamp(index.Value, minIndex, maxIndex));
+		}
+
+		public static SceneTreeIndex FromAnimationIndex(Row sceneTree, int animationIndex)
+		{
+			return new SceneTreeIndex(animationIndex);
+		}
+
+		public int ToAnimationIndex(Row sceneTree) => Value;
+
+		public static SceneTreeIndex FromMarkerIndex(Row sceneTree, int markerIndex)
+		{
+			return new SceneTreeIndex(markerIndex);
+		}
+
+		public int ToMarkerIndex(Row sceneTree) => Value;
+
+		public static SceneTreeIndex FromAnimationTrackIndex(Row sceneTree, int animationTrackIndex)
+		{
+			return new SceneTreeIndex(animationTrackIndex + sceneTree.Rows.Count(i => i.TryGetMarker(out _)));
+		}
+
+		public int ToAnimationTrackIndex(Row sceneTree) => Value - sceneTree.Rows.Count(i => i.TryGetMarker(out _));
+
+		public static SceneTreeIndex FromAnimatorIndex(Row sceneTree, int animatorIndex)
+		{
+			return new SceneTreeIndex(animatorIndex + sceneTree.Rows.Count(i => i.TryGetAnimation(out _)));
+		}
+
+		public int ToAnimatorIndex(Row sceneTree) => Value - sceneTree.Rows.Count(i => i.TryGetAnimation(out _));
+
+		public static SceneTreeIndex FromNodeOrFolderIndex(Row sceneTree, int nodeIndex)
+		{
+			return new SceneTreeIndex(
+				nodeIndex + sceneTree.Rows.Count(i => i.TryGetAnimation(out _) || i.TryGetAnimator(out _))
+			);
+		}
+
+		public int ToNodeOrFolderIndex(Row sceneTree)
+		{
+			return Value - sceneTree.Rows.Count(i => i.TryGetAnimation(out _) || i.TryGetAnimator(out _));
+		}
+	}
 	public static class UnlinkSceneItem
 	{
 		public delegate void NodeUnlinkDelegate(Node node, Node previousParent);
@@ -260,60 +330,77 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static Row Perform(Row parent, int index, Node node)
+		public static Row Perform(Row parent, SceneTreeIndex index, Node node, bool clampIndex = true)
 		{
 			var item = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(node);
-			Perform(parent, index, item);
+			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		public static Row Perform(Row parent, int index, Folder.Descriptor folder)
+		public static Row Perform(Row parent, SceneTreeIndex index, Folder.Descriptor folder, bool clampIndex = true)
 		{
 			var item = Document.Current.SceneTreeBuilder.BuildFolderSceneItem(folder);
-			Perform(parent, index, item);
+			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		private static Row Perform(Row parent, IAnimator animator)
+		private static Row Perform(Row parent, SceneTreeIndex index, IAnimator animator, bool clampIndex = true)
 		{
 			var item = Document.Current.SceneTreeBuilder.BuildAnimatorSceneItem(animator);
-			Perform(parent, 0, item);
+			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		public static Row Perform(Row parent, int index, Animation animation)
+		public static Row Perform(Row parent, SceneTreeIndex index, Animation animation, bool clampIndex = true)
 		{
 			var item = Document.Current.SceneTreeBuilder.BuildAnimationSceneItem(animation);
-			Perform(parent, index, item);
+			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		public static Row Perform(Row parent, int index, AnimationTrack track)
+		public static Row Perform(Row parent, SceneTreeIndex index, AnimationTrack track, bool clampIndex = true)
 		{
 			var item = Document.Current.SceneTreeBuilder.BuildAnimationTrackSceneItem(track);
-			Perform(parent, index, item);
+			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		public static void Perform(Row parent, int index, Row item)
+		public static void Perform(Row parent, SceneTreeIndex index, Row item, bool clampIndex = true)
 		{
-			PerformHelper(parent, index, item, addToSceneTree: true);
+			PerformHelper(parent, index, item, addToSceneTree: true, clampIndex);
 		}
 
-		private static void PerformHelper(Row parent, int index, Row item, bool addToSceneTree)
+		private static void PerformHelper(Row parent, SceneTreeIndex index, Row item, bool addToSceneTree, bool clampIndex)
 		{
+			if (clampIndex) {
+				index = SceneTreeIndex.ClampIndex(parent, item, index);
+			} else if (SceneTreeIndex.ClampIndex(parent, item, index).Value != index.Value) {
+				throw new InvalidOperationException("Attempt to link an scene tree item onto a wrong index");
+			}
 			if (item.TryGetNode(out var node)) {
 				LinkNodeItem(parent, index, item, addToSceneTree);
 				if (node is Bone) {
 					// Insert child bones after animators.
 					foreach (var subBone in item.Rows.Where(j => j.GetNode() is Bone)) {
-						PerformHelper(item, item.Rows.Count, subBone, addToSceneTree: false);
+						PerformHelper(
+							item,
+							new SceneTreeIndex(item.Rows.Count),
+							subBone,
+							addToSceneTree: false,
+							clampIndex
+						);
 					}
 				}
 			} else if (item.TryGetFolder(out _)) {
 				LinkFolderItem(parent, index, item, addToSceneTree);
 				foreach (var i in item.Rows) {
-					PerformHelper(item, item.Rows.Count, i, addToSceneTree: false);
+					PerformHelper(
+						item,
+						new SceneTreeIndex(item.Rows.Count),
+						i,
+						addToSceneTree: false,
+						clampIndex
+					);
 				}
 			} else if (item.TryGetAnimator(out _)) {
 				LinkAnimatorItem(parent, index, item);
@@ -328,21 +415,14 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		private static void LinkFolderItem(Row parent, int index, Row folderItem, bool addToSceneTree)
+		private static void LinkFolderItem(Row parent, SceneTreeIndex index, Row folderItem, bool addToSceneTree)
 		{
 			var folder = folderItem.GetFolder();
 			if (!CanLink(parent, folder)) {
 				throw new InvalidOperationException();
 			}
-			while (
-				index < parent.Rows.Count &&
-				(parent.Rows[index].GetAnimator() != null || parent.Rows[index].GetAnimation() != null)
-			) {
-				// Animations and animators should go first.
-				index++;
-			}
 			if (addToSceneTree) {
-				InsertIntoList<RowList, Row>.Perform(parent.Rows, index, folderItem);
+				InsertIntoList<RowList, Row>.Perform(parent.Rows, index.Value, folderItem);
 			}
 			var ownerNodeItem = SceneTreeUtils.GetOwnerNodeSceneItem(parent);
 			var ownerNode = ownerNodeItem.GetNode();
@@ -367,18 +447,11 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		private static void LinkNodeItem(Row parent, int index, Row nodeItem, bool addToSceneTree)
+		private static void LinkNodeItem(Row parent, SceneTreeIndex index, Row nodeItem, bool addToSceneTree)
 		{
 			var node = nodeItem.GetNode();
 			if (!CanLink(parent, node)) {
 				throw new InvalidOperationException();
-			}
-			while (
-				index < parent.Rows.Count &&
-				(parent.Rows[index].GetAnimator() != null || parent.Rows[index].GetAnimation() != null)
-			) {
-				// Animations and animators should go first.
-				index++;
 			}
 			var ownerNodeItem = SceneTreeUtils.GetOwnerNodeSceneItem(parent);
 			var ownerNode = ownerNodeItem.GetNode();
@@ -390,7 +463,7 @@ namespace Tangerine.Core.Operations
 				SetProperty.Perform(bone, nameof(Bone.Index), newIndex);
 			}
 			if (addToSceneTree) {
-				InsertIntoList<RowList, Row>.Perform(parent.Rows, index, nodeItem);
+				InsertIntoList<RowList, Row>.Perform(parent.Rows, index.Value, nodeItem);
 			}
 			var nodeIndex =
 				ownerNodeItem.TraversePreoder(skipRoot: true).TakeWhile(i => i != nodeItem)
@@ -431,7 +504,7 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		private static void LinkAnimatorItem(Row parent, int index, Row animatorItem)
+		private static void LinkAnimatorItem(Row parent, SceneTreeIndex index, Row animatorItem)
 		{
 			var animator = animatorItem.GetAnimator();
 			if (!CanLink(parent, animator)) {
@@ -443,21 +516,15 @@ namespace Tangerine.Core.Operations
 				&& a.AnimationId == animator.AnimationId
 			);
 			if (existedAnimatorItem != null) {
+				if (index.Value > new SceneTreeIndex(parent.Rows.IndexOf(existedAnimatorItem)).Value) {
+					index = new SceneTreeIndex(index.Value - 1);
+				}
 				UnlinkSceneItem.Perform(existedAnimatorItem);
 			}
 			var node = parent.GetNode();
-			int lastAnimationRowIndex = -1;
-			for (int i = 0; i < parent.Rows.Count; i++) {
-				if (parent.Rows[i].TryGetAnimation(out _)) {
-					lastAnimationRowIndex = i;
-				}
-			}
-			// Animations should go first.
-			int firstAnimatorRowIndex = 1 + lastAnimationRowIndex;
-			int animatorIndex = Math.Clamp(index - firstAnimatorRowIndex, 0, node.Animators.Count);
-			InsertIntoList<AnimatorList, IAnimator>.Perform(node.Animators, animatorIndex, animator);
+			InsertIntoList<AnimatorList, IAnimator>.Perform(node.Animators, index.ToAnimatorIndex(parent), animator);
 			SetProperty.Perform(animatorItem.Components.Get<AnimatorRow>(), nameof(AnimatorRow.Node), node);
-			InsertIntoList<RowList, Row>.Perform(parent.Rows, firstAnimatorRowIndex + animatorIndex, animatorItem);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, index.Value, animatorItem);
 			if (existedAnimatorItem != null) {
 				var existedAnimator = existedAnimatorItem.GetAnimator();
 				foreach (var key in existedAnimator.Keys) {
@@ -468,7 +535,7 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		private static void LinkAnimationItem(Row parent, int index, Row item)
+		private static void LinkAnimationItem(Row parent, SceneTreeIndex index, Row item)
 		{
 			if (!CanLink(parent, item)) {
 				throw new InvalidOperationException();
@@ -479,34 +546,38 @@ namespace Tangerine.Core.Operations
 			if (hasLowPriorityAnimation) {
 				DelegateOperation.Perform(redo: null, undo: AnimatorCollectionChanged, isChangingDocument: false);
 			}
-			InsertIntoList<AnimationCollection, Animation>.Perform(node.Animations, index, animation);
-			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
+			InsertIntoList<AnimationCollection, Animation>.Perform(node.Animations, index.ToAnimationIndex(parent), animation);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, index.Value, item);
 			if (hasLowPriorityAnimation) {
 				DelegateOperation.Perform(redo: AnimatorCollectionChanged, undo: null, isChangingDocument: false);
 			}
 			void AnimatorCollectionChanged() => ((IAnimationHost)node).OnAnimatorCollectionChanged();
 		}
 
-		private static void LinkAnimationTrackItem(Row parent, int index, Row item)
+		private static void LinkAnimationTrackItem(Row parent, SceneTreeIndex index, Row item)
 		{
 			if (!CanLink(parent, item)) {
 				throw new InvalidOperationException();
 			}
 			var track = item.GetAnimationTrack();
 			var animation = parent.GetAnimation();
-			AddIntoCollection<AnimationTrackList, AnimationTrack>.Perform(animation.Tracks, track);
-			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
+			InsertIntoList<AnimationTrackList, AnimationTrack>.Perform(
+				animation.Tracks,
+				index.ToAnimationTrackIndex(parent),
+				track
+			);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, index.Value, item);
 		}
 
-		private static void LinkMarkerItem(Row parent, int index, Row item)
+		private static void LinkMarkerItem(Row parent, SceneTreeIndex index, Row item)
 		{
 			if (!CanLink(parent, item)) {
 				throw new InvalidOperationException();
 			}
 			var marker = item.GetMarker();
 			var animation = parent.GetAnimation();
-			InsertIntoList<MarkerList, Marker>.Perform(animation.Markers, index, marker);
-			InsertIntoList<RowList, Row>.Perform(parent.Rows, index, item);
+			InsertIntoList<MarkerList, Marker>.Perform(animation.Markers, index.ToMarkerIndex(parent), marker);
+			InsertIntoList<RowList, Row>.Perform(parent.Rows, index.Value, item);
 		}
 	}
 
@@ -543,7 +614,7 @@ namespace Tangerine.Core.Operations
 
 		public static bool TryGetSceneItemLinkLocation(
 			out Row parent,
-			out int index,
+			out SceneTreeIndex index,
 			Type insertingType,
 			bool aboveFocused = true,
 			Func<Row, bool> raiseThroughHierarchyPredicate = null
@@ -551,22 +622,22 @@ namespace Tangerine.Core.Operations
 			var focusedItem = Document.Current.RecentlySelectedSceneItem();
 			if (focusedItem == null) {
 				parent = Document.Current.GetSceneItemForObject(Document.Current.Container);
-				index = 0;
+				index = new SceneTreeIndex(0);
 			} else {
 				bool isAnimatorItem = insertingType.IsAssignableFrom(typeof(IAnimator));
 				bool isAnimatorFocused = focusedItem.TryGetAnimator(out _);
 				if (!isAnimatorItem && isAnimatorFocused) {
 					parent = focusedItem.Parent.Parent;
-					index = parent.Rows.IndexOf(focusedItem.Parent);
+					index = new SceneTreeIndex(parent.Rows.IndexOf(focusedItem.Parent));
 				} else if (isAnimatorItem && !isAnimatorFocused) {
 					parent = focusedItem;
-					index = parent.Rows.Count;
+					index = new SceneTreeIndex(parent.Rows.Count);
 				} else {
 					parent = focusedItem.Parent;
-					index = parent.Rows.IndexOf(focusedItem);
+					index = new SceneTreeIndex(parent.Rows.IndexOf(focusedItem));
 				}
 				if (!aboveFocused) {
-					index++;
+					index = new SceneTreeIndex(index.Value + 1);
 				}
 			}
 			if (raiseThroughHierarchyPredicate != null) {
@@ -574,9 +645,9 @@ namespace Tangerine.Core.Operations
 					if (parent.Parent == null) {
 						return false;
 					}
-					index = parent.Parent.Rows.IndexOf(parent);
+					index = new SceneTreeIndex(parent.Parent.Rows.IndexOf(parent));
 					if (!aboveFocused) {
-						index++;
+						index = new SceneTreeIndex(index.Value + 1);
 					}
 					parent = parent.Parent;
 				}

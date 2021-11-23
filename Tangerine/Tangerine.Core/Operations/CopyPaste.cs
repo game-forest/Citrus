@@ -77,7 +77,7 @@ namespace Tangerine.Core.Operations
 		public static void Perform(out List<Row> pastedItems)
 		{
 			Row parent;
-			int index;
+			SceneTreeIndex index;
 			var data = Clipboard.Text;
 			var result = new List<Row>();
 			if (!string.IsNullOrEmpty(data)) {
@@ -100,7 +100,7 @@ namespace Tangerine.Core.Operations
 			pastedItems = result;
 		}
 
-		public static bool Perform(MemoryStream stream, Row parent, int index, out List<Row> pastedItems)
+		public static bool Perform(MemoryStream stream, Row parent, SceneTreeIndex index, out List<Row> pastedItems)
 		{
 			pastedItems = new List<Row>();
 			if (!CanPaste(stream, parent)) {
@@ -117,7 +117,8 @@ namespace Tangerine.Core.Operations
 			if (container.Animations.TryFind(CopySceneItemsToStream.AnimationTracksContainerAnimationId, out var animation)) {
 				foreach (var track in animation.Tracks.ToList()) {
 					animation.Tracks.Remove(track);
-					LinkSceneItem.Perform(parent, index++, track);
+					LinkSceneItem.Perform(parent, index, track);
+					index = new SceneTreeIndex(index.Value + 1);
 					pastedItems.Add(Document.Current.GetSceneItemForObject(track));
 				}
 			} else {
@@ -126,7 +127,7 @@ namespace Tangerine.Core.Operations
 				foreach (var i in itemsToPaste.Rows.ToList()) {
 					UnlinkSceneItem.Perform(i);
 					LinkSceneItem.Perform(parent, index, i);
-					index = parent.Rows.IndexOf(i) + 1;
+					index = new SceneTreeIndex(parent.Rows.IndexOf(i) + 1);
 					pastedItems.Add(i);
 					DecorateNodes(i);
 				}

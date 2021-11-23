@@ -260,7 +260,7 @@ namespace Tangerine.Panels
 					return;
 				}
 				foreach (var item in animationItems) {
-					LinkSceneItem.Perform(parentItem.SceneItem, index++, item.SceneItem);
+					LinkSceneItem.Perform(parentItem.SceneItem, new SceneTreeIndex(index++), item.SceneItem);
 				}
 			});
 		}
@@ -422,7 +422,9 @@ namespace Tangerine.Panels
 							animation.Id = baseAnimationId + " - Copy" + (counter == 1 ? "" : counter.ToString());
 							counter++;
 						}
-						animationSceneItem = LinkSceneItem.Perform(parent.SceneItem, index++, animation);
+						animationSceneItem = LinkSceneItem.Perform(
+							parent.SceneItem, new SceneTreeIndex(index++), animation
+						);
 						provider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 					}
 				});
@@ -1256,14 +1258,14 @@ namespace Tangerine.Panels
 						var animation = new Animation
 							{ Id = GenerateAnimationId(node, "NewAnimation"), IsCompound = compound };
 						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
-						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, 0, animation);
+						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, new SceneTreeIndex(0), animation);
 						TreeView.ClearSelection();
 						itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
 						itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 						if (compound) {
 							var track = new AnimationTrack { Id = "Track1" };
-							var animationTrackSceneItem = LinkSceneItem.Perform(animationSceneItem, 0,
-								track);
+							var animationTrackSceneItem = LinkSceneItem.Perform(
+								animationSceneItem, new SceneTreeIndex(0), track);
 							SelectRow.Perform(animationTrackSceneItem);
 						}
 					});
@@ -1274,7 +1276,7 @@ namespace Tangerine.Panels
 					Document.Current.History.DoTransaction(() => {
 						var animation = new Animation { Id = Animation.ZeroPoseId };
 						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
-						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, 0, animation);
+						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, new SceneTreeIndex(0), animation);
 						TreeView.ClearSelection();
 						itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
 						itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;

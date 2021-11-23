@@ -83,8 +83,9 @@ namespace Tangerine.UI.Timeline
 					}
 					UnlinkSceneItem.Perform(item);
 				}
+
 				foreach (var item in topSceneItems) {
-					LinkSceneItem.Perform(parentSceneItem, index, item);
+					LinkSceneItem.Perform(parentSceneItem, new SceneTreeIndex(index), item);
 					index = parentSceneItem.Rows.IndexOf(item) + 1;
 				}
 			});
