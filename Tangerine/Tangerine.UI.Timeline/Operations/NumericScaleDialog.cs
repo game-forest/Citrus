@@ -71,43 +71,39 @@ namespace Tangerine.UI.Timeline
 		private void ScaleKeyframes()
 		{
 			if (GridSelection.GetSelectionBoundaries(out var boundaries) && Scale > Mathf.ZeroTolerance) {
-				var processed = new HashSet<IAnimator>();
 				var saved = new List<IKeyframe>();
-				foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
-					foreach (var animator in animable.Animators) {
-						if (animator.AnimationId != Document.Current.AnimationId || processed.Contains(animator)) {
-							continue;
-						}
-						processed.Add(animator);
-						saved.Clear();
-						IEnumerable<IKeyframe> keys = animator.ReadonlyKeys.Where(k =>
-							k.Frame >= boundaries.Left && k.Frame < boundaries.Right
-						).ToList();
-						if (Scale < 1) {
-							keys = keys.Reverse().ToList();
-						}
-						foreach (var key in keys) {
-							saved.Add(key);
-							RemoveKeyframe.Perform(animator, key.Frame);
-						}
-						foreach (var key in saved) {
-							// The formula should behave similiar to stretching animation with mouse
-							int newFrame = (int)(
-								boundaries.Left +
-								(key.Frame - boundaries.Left) *
-								(1 + (boundaries.Left - boundaries.Right) * Scale) /
-								(1 + boundaries.Left - boundaries.Right)
-							);
-							var newKey = key.Clone();
-							newKey.Frame = newFrame;
-							SetAnimableProperty.Perform(
-								animable.Host, animator.TargetPropertyPath, newKey.Value,
-								createAnimatorIfNeeded: true,
-								createInitialKeyframeForNewAnimator: false,
-								newKey.Frame
-							);
-							SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
-						}
+				foreach (var (host, animator) in GridSelection.EnumerateAnimators(boundaries)) {
+					if (animator.AnimationId != Document.Current.AnimationId) {
+						continue;
+					}
+					saved.Clear();
+					IEnumerable<IKeyframe> keys = animator.ReadonlyKeys.Where(k =>
+						k.Frame >= boundaries.Left && k.Frame < boundaries.Right
+					).ToList();
+					if (Scale < 1) {
+						keys = keys.Reverse().ToList();
+					}
+					foreach (var key in keys) {
+						saved.Add(key);
+						RemoveKeyframe.Perform(animator, key.Frame);
+					}
+					foreach (var key in saved) {
+						// The formula should behave similiar to stretching animation with mouse
+						int newFrame = (int)(
+							boundaries.Left +
+							(key.Frame - boundaries.Left) *
+							(1 + (boundaries.Left - boundaries.Right) * Scale) /
+							(1 + boundaries.Left - boundaries.Right)
+						);
+						var newKey = key.Clone();
+						newKey.Frame = newFrame;
+						SetAnimableProperty.Perform(
+							host, animator.TargetPropertyPath, newKey.Value,
+							createAnimatorIfNeeded: true,
+							createInitialKeyframeForNewAnimator: false,
+							newKey.Frame
+						);
+						SetKeyframe.Perform(host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
 					}
 				}
 				ClearGridSelection.Perform();

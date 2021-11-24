@@ -108,41 +108,37 @@ namespace Tangerine.UI.Timeline
 				length = newPos - boundaries.Left - 1;
 			}
 			int oldLength = boundaries.Right - boundaries.Left - 1;
-			var processed = new HashSet<IAnimator>();
-			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
-				foreach (var animator in animable.Animators) {
-					if (animator.AnimationId != Document.Current.AnimationId || processed.Contains(animator) || !savedKeyframes.ContainsKey(animator)) {
-						continue;
+			foreach (var (host, animator) in GridSelection.EnumerateAnimators(boundaries)) {
+				if (animator.AnimationId != Document.Current.AnimationId || !savedKeyframes.ContainsKey(animator)) {
+					continue;
+				}
+				IEnumerable<IKeyframe> saved = savedKeyframes[animator];
+				if (
+					side == DragSide.Left && length < oldLength ||
+					side == DragSide.Right && length > oldLength
+				) {
+					saved = saved.Reverse();
+				}
+				foreach (var key in saved) {
+					RemoveKeyframe.Perform(animator, key.Frame);
+				}
+				foreach (var key in saved) {
+					double relpos = savedPositions[key];
+					int newFrame;
+					if (side == DragSide.Left) {
+						newFrame = (int)Math.Round(newPos + relpos * length);
+					} else {
+						newFrame = (int)Math.Round(boundaries.Left + relpos * length);
 					}
-					processed.Add(animator);
-					IEnumerable<IKeyframe> saved = savedKeyframes[animator];
-					if (
-						side == DragSide.Left && length < oldLength ||
-						side == DragSide.Right && length > oldLength
-					) {
-						saved = saved.Reverse();
-					}
-					foreach (var key in saved) {
-						RemoveKeyframe.Perform(animator, key.Frame);
-					}
-					foreach (var key in saved) {
-						double relpos = savedPositions[key];
-						int newFrame;
-						if (side == DragSide.Left) {
-							newFrame = (int)Math.Round(newPos + relpos * length);
-						} else {
-							newFrame = (int)Math.Round(boundaries.Left + relpos * length);
-						}
-						var newKey = key.Clone();
-						newKey.Frame = newFrame;
-						SetAnimableProperty.Perform(
-							animable.Host, animator.TargetPropertyPath, newKey.Value,
-							createAnimatorIfNeeded: true,
-							createInitialKeyframeForNewAnimator: false,
-							newKey.Frame
-						);
-						SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
-					}
+					var newKey = key.Clone();
+					newKey.Frame = newFrame;
+					SetAnimableProperty.Perform(
+						host, animator.TargetPropertyPath, newKey.Value,
+						createAnimatorIfNeeded: true,
+						createInitialKeyframeForNewAnimator: false,
+						newKey.Frame
+					);
+					SetKeyframe.Perform(host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
 				}
 			}
 			if (stretchMarkers) {
@@ -170,26 +166,19 @@ namespace Tangerine.UI.Timeline
 			savedKeyframes.Clear();
 			savedMarkerPositions.Clear();
 			savedMarkers.Clear();
-			var animators = new HashSet<IAnimator>();
 			var length = boundaries.Right - boundaries.Left - 1;
-			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
-				foreach (var animator in animable.Animators) {
-					if (animator.AnimationId != Document.Current.AnimationId) {
-						continue;
-					}
-					if (animators.Contains(animator)) {
-						continue;
-					}
-					animators.Add(animator);
-					savedKeyframes.Add(animator, new List<IKeyframe>());
-					var keys = animator.Keys.Where(k =>
-						boundaries.Left <= k.Frame &&
-						k.Frame < boundaries.Right
-					);
-					foreach (var key in keys) {
-						savedPositions.Add(key, ((double)key.Frame - boundaries.Left) / length);
-						savedKeyframes[animator].Add(key);
-					}
+			foreach (var (node, animator) in GridSelection.EnumerateAnimators(boundaries)) {
+				if (animator.AnimationId != Document.Current.AnimationId) {
+					continue;
+				}
+				savedKeyframes.Add(animator, new List<IKeyframe>());
+				var keys = animator.Keys.Where(k =>
+					boundaries.Left <= k.Frame &&
+					k.Frame < boundaries.Right
+				);
+				foreach (var key in keys) {
+					savedPositions.Add(key, ((double)key.Frame - boundaries.Left) / length);
+					savedKeyframes[animator].Add(key);
 				}
 			}
 			var markers = Document.Current.Animation.Markers.Where(k =>
