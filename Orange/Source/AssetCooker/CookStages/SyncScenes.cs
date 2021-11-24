@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lime;
@@ -40,20 +41,25 @@ namespace Orange
 
 		private static void DeleteNodesAndComponentsWithRemoveOnAssetCookAttribute(Node scene)
 		{
-			foreach (var component in scene.Components.ToList()) {
-				if (HasTheAttribute(component)) {
-					scene.Components.Remove(component);
-				}
+			if (HasTheAttribute(scene)) {
+				throw new InvalidOperationException("Can't remove root node.");
 			}
-			foreach (var node in scene.Nodes.ToList()) {
-				if (HasTheAttribute(node)) {
-					scene.Nodes.Remove(node);
+			foreach (var n in scene.SelfAndDescendants.ToList()) {
+				if (HasTheAttribute(n) && n.Parent != null) {
+					n.UnlinkAndDispose();
 				} else {
-					DeleteNodesAndComponentsWithRemoveOnAssetCookAttribute(node);
+					foreach (var component in n.Components.ToList()) {
+						if (HasTheAttribute(component) && component.Owner?.Parent != null) {
+							scene.Components.Remove(component);
+							component.Dispose();
+						}
+					}
 				}
 			}
-			static bool HasTheAttribute(object @object) =>
-				@object.GetType().IsDefined(typeof(RemoveOnAssetCookAttribute), true);
+			static bool HasTheAttribute(object @object)
+			{
+				return @object.GetType().IsDefined(typeof(RemoveOnAssetCookAttribute), true);
+			}
 		}
 	}
 }
