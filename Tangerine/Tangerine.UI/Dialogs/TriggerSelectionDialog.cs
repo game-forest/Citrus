@@ -393,7 +393,7 @@ namespace Tangerine.UI
 				}
 			}
 		}
-		
+
 		private class AnimationPreview
 		{
 			private readonly ScenePool scenePool;
@@ -602,7 +602,7 @@ namespace Tangerine.UI
 				} finally {
 					renderChain.Clear();
 				}
-				ro.LocalToWorldTransform = 
+				ro.LocalToWorldTransform =
 					content.LocalToWorldTransform.CalcInversed() *
 					Matrix32.Scaling(previewContainer.Size / content.Size) *
 					previewContainer.LocalToWorldTransform;

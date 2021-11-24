@@ -234,33 +234,33 @@ namespace Lime.Platform
 			}
 
 			attributes.Add(NSOpenGLPixelFormatAttribute.OpenGLProfile);
-			attributes.Add((NSOpenGLPixelFormatAttribute)profile); 
+			attributes.Add((NSOpenGLPixelFormatAttribute)profile);
 
 			if (mode.ColorFormat.BitsPerPixel > 0) {
 				attributes.Add(NSOpenGLPixelFormatAttribute.ColorSize);
-				attributes.Add((NSOpenGLPixelFormatAttribute)mode.ColorFormat.BitsPerPixel); 
+				attributes.Add((NSOpenGLPixelFormatAttribute)mode.ColorFormat.BitsPerPixel);
 			}
 
 			if (mode.Depth > 0) {
 				attributes.Add(NSOpenGLPixelFormatAttribute.DepthSize);
-				attributes.Add((NSOpenGLPixelFormatAttribute)mode.Depth); 
+				attributes.Add((NSOpenGLPixelFormatAttribute)mode.Depth);
 			}
 
 			if (mode.Stencil > 0) {
 				attributes.Add(NSOpenGLPixelFormatAttribute.StencilSize);
-				attributes.Add((NSOpenGLPixelFormatAttribute)mode.Stencil); 
+				attributes.Add((NSOpenGLPixelFormatAttribute)mode.Stencil);
 			}
 
 			if (mode.AccumulatorFormat.BitsPerPixel > 0) {
 				attributes.Add(NSOpenGLPixelFormatAttribute.AccumSize);
-				attributes.Add((NSOpenGLPixelFormatAttribute)mode.AccumulatorFormat.BitsPerPixel); 
+				attributes.Add((NSOpenGLPixelFormatAttribute)mode.AccumulatorFormat.BitsPerPixel);
 			}
 
 			if (mode.Samples > 1) {
 				attributes.Add(NSOpenGLPixelFormatAttribute.SampleBuffers);
-				attributes.Add((NSOpenGLPixelFormatAttribute)1); 
+				attributes.Add((NSOpenGLPixelFormatAttribute)1);
 				attributes.Add(NSOpenGLPixelFormatAttribute.Samples);
-				attributes.Add((NSOpenGLPixelFormatAttribute)mode.Samples); 
+				attributes.Add((NSOpenGLPixelFormatAttribute)mode.Samples);
 			}
 
 			if (mode.Buffers > 1) {
@@ -268,7 +268,7 @@ namespace Lime.Platform
 			}
 
 			attributes.Add(NSOpenGLPixelFormatAttribute.Accelerated);
-			attributes.Add((NSOpenGLPixelFormatAttribute)0); 
+			attributes.Add((NSOpenGLPixelFormatAttribute)0);
 
 			return new NSOpenGLPixelFormat(attributes.ToArray());
 		}
@@ -278,7 +278,7 @@ namespace Lime.Platform
 			openGLContext.View = this;
 			openGLContext.Update();
 		}
-	
+
 		public void Stop()
 		{
 			if (running) {

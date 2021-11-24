@@ -60,19 +60,19 @@ namespace Tangerine.Core
 
 		[YuzuOptional]
 		public TimelineComponentIconsShowMode TimelineComponentIconsShowMode { get; set; }
-		
+
 		[YuzuOptional]
 		public bool LockLayout { get; set; }
 
 		[YuzuOptional]
 		public bool AnimationPanelReversedOrder { get; set; }
-		
+
 		[YuzuOptional]
 		public Vector2 ConflictingAnimatorsWindowSize { get; set; }
 
 		[YuzuOptional]
 		public int RecentDocumentCount { get; set; }
-		
+
 		public CoreUserPreferences() => ResetToDefaults();
 
 		public void ResetToDefaults()
@@ -100,7 +100,7 @@ namespace Tangerine.Core
 		None,
 		All
 	}
-	
+
 	public struct ColorPickerState
 	{
 		[YuzuMember]

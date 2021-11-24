@@ -74,7 +74,7 @@ namespace Lime.Platform
 
 		public int Buffers { get; private set; }
 
-		public int Samples 
+		public int Samples
 		{
 			get { return samples; }
 			private set { samples = value; }

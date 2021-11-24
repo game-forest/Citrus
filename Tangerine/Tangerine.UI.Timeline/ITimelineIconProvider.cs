@@ -1,7 +1,10 @@
-﻿using Lime;
+using Lime;
 
 namespace Tangerine.UI.Timeline
 {
+	/// <summary>
+	///
+	/// </summary>
 	public interface ITimelineIconProvider
 	{
 		/// <summary>
@@ -12,7 +15,7 @@ namespace Tangerine.UI.Timeline
 		/// <para>It is guaranteed that this property will be read before the others.</para>
 		/// </remarks>
 		int TextureVersion { get; }
-		
+
 		/// <summary>
 		/// The texture of the icon that will be drawn on the timeline.
 		/// </summary>
@@ -20,7 +23,7 @@ namespace Tangerine.UI.Timeline
 		/// Changes of this property will be processed only after changing the <see cref="TextureVersion"/> property.
 		/// </remarks>
 		ITexture Texture { get; }
-		
+
 		/// <summary>
 		/// A tooltip that will be displayed when you hover over the icon.
 		/// </summary>

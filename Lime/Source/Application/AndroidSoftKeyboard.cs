@@ -22,10 +22,10 @@ namespace Lime
 			get { return Height > 0; }
 		}
 
-		public float Height 
-		{ 
+		public float Height
+		{
 			get { return height / Window.Current.PixelScale; }
-			internal set 
+			internal set
 			{
 				height = value;
 				OnHeightChanged();

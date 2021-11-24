@@ -15,14 +15,14 @@ namespace Lime
 
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 	public sealed class RemoveOnAssetCookAttribute : Attribute { }
-	
+
 	public sealed class AllowedComponentOwnerTypes : Attribute
 	{
 		public Type[] Types;
 
 		public AllowedComponentOwnerTypes(params Type[] types) => Types = types;
 	}
-	
+
 	public class NodeComponent : Component, IDisposable, IAnimable
 	{
 		IAnimable IAnimable.Owner { get => Owner; set => Owner = (Node)value; }
@@ -46,8 +46,10 @@ namespace Lime
 
 		public virtual void Dispose() { }
 
-		public static bool IsSerializable(Type type) => 
-			!type.IsDefined(typeof(NodeComponentDontSerializeAttribute), true);
+		public static bool IsSerializable(Type type)
+		{
+			return !type.IsDefined(typeof(NodeComponentDontSerializeAttribute), true);
+		}
 
 		protected internal virtual void OnBeforeNodeSerialization() { }
 
@@ -87,10 +89,7 @@ namespace Lime
 			}
 		}
 
-		protected internal override void Start()
-		{
-			Register();
-		}
+		protected internal override void Start() => Register();
 
 		protected internal override void Stop(Node owner)
 		{
@@ -123,26 +122,26 @@ namespace Lime
 		{
 		}
 
-		private static ThreadLocal<OverridenBehaviorMethodChecker> behaviorEarlyUpdateChecker =
-			new ThreadLocal<OverridenBehaviorMethodChecker>(() => new OverridenBehaviorMethodChecker(nameof(NodeBehavior.Update)));
+		private static readonly ThreadLocal<OverridenBehaviorMethodChecker> behaviorEarlyUpdateChecker =
+			new ThreadLocal<OverridenBehaviorMethodChecker>(
+				() => new OverridenBehaviorMethodChecker(nameof(NodeBehavior.Update))
+			);
 
-		private static ThreadLocal<OverridenBehaviorMethodChecker> behaviorLateUpdateChecker =
-			new ThreadLocal<OverridenBehaviorMethodChecker>(() => new OverridenBehaviorMethodChecker(nameof(NodeBehavior.LateUpdate)));
+		private static readonly ThreadLocal<OverridenBehaviorMethodChecker> behaviorLateUpdateChecker =
+			new ThreadLocal<OverridenBehaviorMethodChecker>(
+				() => new OverridenBehaviorMethodChecker(nameof(NodeBehavior.LateUpdate))
+			);
 
 		private class OverridenBehaviorMethodChecker
 		{
 			private readonly string methodName;
 			private readonly Dictionary<Type, bool> checkedTypes = new Dictionary<Type, bool>();
 
-			public OverridenBehaviorMethodChecker(string methodName)
-			{
-				this.methodName = methodName;
-			}
+			public OverridenBehaviorMethodChecker(string methodName) => this.methodName = methodName;
 
 			public bool IsMethodOverriden(Type type)
 			{
-				bool result;
-				if (!checkedTypes.TryGetValue(type, out result)) {
+				if (!checkedTypes.TryGetValue(type, out bool result)) {
 					result = type.GetMethod(methodName).DeclaringType != typeof(NodeBehavior);
 					checkedTypes.Add(type, result);
 				}
@@ -156,10 +155,7 @@ namespace Lime
 	[UpdateFrozen]
 	public class LegacyEarlyBehaviorContainer : LegacyBehaviorContainer
 	{
-		protected override void UpdateBehavior(NodeBehavior b, float delta)
-		{
-			b.Update(delta);
-		}
+		protected override void UpdateBehavior(NodeBehavior b, float delta) => b.Update(delta);
 	}
 
 	[NodeComponentDontSerialize]
@@ -168,15 +164,12 @@ namespace Lime
 	[UpdateFrozen]
 	public class LegacyLateBehaviorContainer : LegacyBehaviorContainer
 	{
-		protected override void UpdateBehavior(NodeBehavior b, float delta)
-		{
-			b.LateUpdate(delta);
-		}
+		protected override void UpdateBehavior(NodeBehavior b, float delta) => b.LateUpdate(delta);
 	}
 
 	public abstract class LegacyBehaviorContainer : BehaviorComponent
 	{
-		private List<NodeBehavior> behaviors = new List<NodeBehavior>();
+		private readonly List<NodeBehavior> behaviors = new List<NodeBehavior>();
 
 		public bool IsEmpty => behaviors.Count == 0;
 
@@ -199,15 +192,9 @@ namespace Lime
 			CheckActivity();
 		}
 
-		protected internal override void Start()
-		{
-			CheckActivity();
-		}
+		protected internal override void Start() => CheckActivity();
 
-		protected internal override void OnOwnerFrozenChanged()
-		{
-			CheckActivity();
-		}
+		protected internal override void OnOwnerFrozenChanged() => CheckActivity();
 
 		private bool active = true;
 
@@ -243,15 +230,11 @@ namespace Lime
 	{
 		private readonly Node owner;
 
-		public NodeComponentCollection(Node owner)
-		{
-			this.owner = owner;
-		}
+		public NodeComponentCollection(Node owner) => this.owner = owner;
 
 		private AnimationComponent animationComponent;
 
-		public AnimationComponent AnimationComponent =>
-			animationComponent ??= Get<AnimationComponent>();
+		public AnimationComponent AnimationComponent => animationComponent ??= Get<AnimationComponent>();
 
 		public override void Add(NodeComponent component)
 		{
@@ -264,10 +247,7 @@ namespace Lime
 			owner?.Manager?.RegisterComponent(component, owner);
 		}
 
-		public override bool Contains(NodeComponent component)
-		{
-			return component != null && component.Owner == owner;
-		}
+		public override bool Contains(NodeComponent component) => component != null && component.Owner == owner;
 
 		[global::Yuzu.YuzuSerializeItemIf]
 		public bool SerializeItemIf(int index, Object component)

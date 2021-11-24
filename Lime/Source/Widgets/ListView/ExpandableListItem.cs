@@ -37,7 +37,7 @@ namespace Lime
 			AlignTop(header);
 		}
 
-		public void AddContentItem(Widget item) 
+		public void AddContentItem(Widget item)
 		{
 			AlignTop(item);
 			subContainer.Nodes.Add(item);

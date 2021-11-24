@@ -8,7 +8,7 @@ namespace Tangerine.Core
 {
 	public class AnimationFastForwarder
 	{
-		private readonly List<AnimationState> animationStates = new List<AnimationState>();	
+		private readonly List<AnimationState> animationStates = new List<AnimationState>();
 		private readonly Dictionary<Animation, List<Edge>> incomingEdges = new Dictionary<Animation, List<Edge>>();
 		private readonly Dictionary<Animation, List<Edge>> outgoingEdges = new Dictionary<Animation, List<Edge>>();
 		private readonly bool cacheParsedTriggersInAnimations;
@@ -59,7 +59,7 @@ namespace Tangerine.Core
 		private void FastForward(Animation animation, int currentTick, bool stopAnimations)
 		{
 			BuildAnimationStatesRecursively(animation, currentTick, ignoreMarkers: true);
-			
+
 			// The order of applying of the animation states is as follows:
 			// Stopped animations go first in the order they were stopped.
 			// The current animation goes last so all triggers will have the correct values in the inspector pane.
@@ -79,7 +79,7 @@ namespace Tangerine.Core
 			animationStates.Clear();
 			incomingEdges.Clear();
 			outgoingEdges.Clear();
-			
+
 			int GetStateOrder(AnimationState state)
 			{
 				return state.Animation == animation
@@ -100,15 +100,15 @@ namespace Tangerine.Core
 				BuildAnimationStatesRecursively(edge.Animation, currentTick, ignoreMarkers: false);
 			}
 		}
-		
+
 		private void BuildAnimationState(
-			Animation animation, 
-			int currentTick, 
-			bool isTopLevelAnimation, 
+			Animation animation,
+			int currentTick,
+			bool isTopLevelAnimation,
 			out List<Edge> newOutgoingEdges
 		) {
 			var animationState = new AnimationState {
-				Animation = animation, 
+				Animation = animation,
 				TickStoppedOn = -1,
 				Depth = GetNodeDepth(animation.OwnerNode)
 			};
@@ -207,7 +207,7 @@ namespace Tangerine.Core
 				}
 			}
 		}
-		
+
 		private static int GetNodeDepth(Node node)
 		{
 			var depth = 0;
@@ -224,12 +224,12 @@ namespace Tangerine.Core
 			GetIncomingEdges(to).Add(new Edge { Animation = from, Triggers = triggers });
 			GetOutgoingEdges(from).Add(new Edge { Animation = to, Triggers = triggers });
 		}
-		
+
 		private void RemoveEdge(Animation from, Animation to)
 		{
 			Remove(GetIncomingEdges(to), from, returnToPool: true);
 			Remove(GetOutgoingEdges(from), to, returnToPool: false);
-			
+
 			void Remove(List<Edge> edges, Animation animation, bool returnToPool)
 			{
 				for (int i = 0; i < edges.Count; i++) {
@@ -248,11 +248,11 @@ namespace Tangerine.Core
 		{
 			if (!incomingEdges.TryGetValue(animation, out var edges)) {
 				edges = new List<Edge>();
-				incomingEdges.Add(animation, edges);	
+				incomingEdges.Add(animation, edges);
 			}
 			return edges;
 		}
-		
+
 		private List<Edge> GetOutgoingEdges(Animation animation)
 		{
 			if (!outgoingEdges.TryGetValue(animation, out var edges)) {
@@ -267,9 +267,9 @@ namespace Tangerine.Core
 			private static readonly int triggerComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate("Trigger");
 			private readonly Animation animation;
 			private ushort[][] table;
-			
+
 			public readonly List<Animation> TriggeredAnimations = new List<Animation>();
-			public readonly List<Keyframe> Keyframes = new List<Keyframe>(); 
+			public readonly List<Keyframe> Keyframes = new List<Keyframe>();
 
 			public struct Keyframe
 			{
@@ -277,14 +277,14 @@ namespace Tangerine.Core
 				public ushort Frame;
 				public ushort NextKeyframeIndex;
 			}
-			
-			public ParsedTriggersTable(Animation animation) 
+
+			public ParsedTriggersTable(Animation animation)
 			{
 				this.animation = animation;
 				table = ArrayPool<ushort[]>.Shared.Rent(256);
 				Array.Clear(table, 0, 256);
 			}
-			
+
 			public int GetFirstKeyframeIndex(int frame)
 			{
 				if (table[frame >> 8] is {} page) {
@@ -329,7 +329,7 @@ namespace Tangerine.Core
 				}
 				return page[frame & 0xFF];
 			}
-			
+
 			public void Dispose()
 			{
 				for (int i = 0; i < table.Length; i++) {
@@ -341,7 +341,7 @@ namespace Tangerine.Core
 				ArrayPool<ushort[]>.Shared.Return(table, clearArray: true);
 				table = null;
 			}
-			
+
 			private static IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
 			{
 				trigger ??= "";
@@ -393,14 +393,14 @@ namespace Tangerine.Core
 			private readonly bool ignoreMarkers;
 			private ushort[][] table;
 
-			public Caret(Animation animation, bool ignoreMarkers) 
+			public Caret(Animation animation, bool ignoreMarkers)
 			{
 				this.animation = animation;
 				this.ignoreMarkers = ignoreMarkers;
 				table = ArrayPool<ushort[]>.Shared.Rent(256);
 				Array.Clear(table, 0, 256);
 			}
-	
+
 			public ushort NextFrame(ushort frame)
 			{
 				if (table[frame >> 8] is {} page) {

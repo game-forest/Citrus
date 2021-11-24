@@ -168,7 +168,7 @@ namespace Tangerine
 			var filteredItems = base.ApplyLookupFilter(text, MutableItemList).Take(filteredItemsLimit).ToList();
 			lookupWidget.ClearItems(disposeItems: false);
 
-			// Adding nodes after LayoutProcessor.Update() cause flickering 
+			// Adding nodes after LayoutProcessor.Update() cause flickering
 			Application.InvokeOnNextUpdate(() => {
 				if (Active) {
 					lookupWidget.AddRange(filteredItems);

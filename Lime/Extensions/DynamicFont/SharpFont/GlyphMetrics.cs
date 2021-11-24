@@ -1,4 +1,4 @@
-﻿#region MIT License
+#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -36,7 +36,7 @@ namespace SharpFont
 	/// </summary>
 	/// <remarks>
 	/// If not disabled with <see cref="LoadFlags.NoHinting"/>, the values represent dimensions of the hinted glyph (in
-	/// case hinting is applicable). 
+	/// case hinting is applicable).
 	/// </remarks>
 	public sealed class GlyphMetrics
 	{

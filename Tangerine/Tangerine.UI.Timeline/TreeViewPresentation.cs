@@ -62,7 +62,7 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 	}
-	
+
 	public class TreeViewItemPresentation : ITreeViewItemPresentation
 	{
 		public readonly Widget ExpandButtonContainer;
@@ -398,12 +398,12 @@ namespace Tangerine.UI.Timeline
 				var componentType = component.GetType();
 				var iconProvider = component as ITimelineIconProvider;
 				if (
-					showMode == TimelineComponentIconsShowMode.All || 
+					showMode == TimelineComponentIconsShowMode.All ||
 					showMode == TimelineComponentIconsShowMode.VisibleInInspector && IsVisibleInInspector(component) ||
 					showMode == TimelineComponentIconsShowMode.ProvidingTimelineIcon && iconProvider != null
 				) {
-					var icon = iconProvider != null ? 
-						new ComponentIcon(iconProvider) : 
+					var icon = iconProvider != null ?
+						new ComponentIcon(iconProvider) :
 						new ComponentIcon(componentType);
 					Widget.Nodes.Insert(index, icon);
 					++index;
@@ -414,7 +414,7 @@ namespace Tangerine.UI.Timeline
 				component is ITimelineIconProvider ||
 				ClassAttributes<TangerineRegisterComponentAttribute>.Get(component.GetType(), inherit: true) != null;
 		}
-		
+
 		private void ShowContextMenu()
 		{
 			if (!Item.Selected) {
@@ -621,7 +621,7 @@ namespace Tangerine.UI.Timeline
 				return AnimationState.PartiallyEnabled;
 			}
 		}
-		
+
 		private enum AnimationState
 		{
 			None,

@@ -143,7 +143,7 @@ namespace Lime
 					return false;
 				}
 
-				// Otherwise allow the OS to handle things like tel, mailto, etc. 
+				// Otherwise allow the OS to handle things like tel, mailto, etc.
 				var intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(url));
 				ActivityDelegate.Instance.Activity.StartActivity(intent);
 				return true;
