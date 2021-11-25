@@ -793,6 +793,7 @@ namespace Tangerine
 			h.Connect(SceneViewCommands.SaveCurrentRuler, new SaveRuler());
 			h.Connect(TimelineCommands.NumericMove, () => new NumericMoveDialog());
 			h.Connect(TimelineCommands.NumericScale, () => new NumericScaleDialog());
+			h.Connect(TimelineCommands.NextInterpolation, UI.Timeline.Operations.SetNextInterpolation.Perform);
 			h.Connect(ToolsCommands.RenderToPngSequence, new RenderToPngSequence());
 			h.Connect(ToolsCommands.OpenConflictingAnimatorsDialog, () => new ConflictingAnimators.Window());
 			h.Connect(GitCommands.ForceUpdate, new ForceUpdate());
