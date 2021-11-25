@@ -178,11 +178,11 @@ namespace Lime.SignedDistanceField
 				lowp float g_cos = cos(g_angle);
 
 				lowp vec2 gradientCoords = vec2(dot(texCoords2, vec2(g_cos, g_sin)), dot(texCoords2, vec2(-g_sin, g_cos)));
-				inner_color = texture2D(tex2, gradientCoords);
+				inner_color = color * texture2D(tex2, gradientCoords);
 ";
 		private const string FragmentShaderOutlinePart3 = @"
 				lowp float outlineFactor = smoothstep(dilate - smoothing - softness, dilate + smoothing + softness, distance);
-				lowp vec4 c = mix(outlineColor, inner_color, outlineFactor);
+				lowp vec4 c = mix(color * outlineColor, inner_color, outlineFactor);
 ";
 		private const string FragmentShaderPart3 = @"
 				lowp vec4 c = inner_color;

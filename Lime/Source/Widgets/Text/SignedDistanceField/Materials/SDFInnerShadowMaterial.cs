@@ -112,12 +112,13 @@ namespace Lime.SignedDistanceField
 				lowp float smoothing = clamp(abs(dFdx(shadowDistance)) + abs(dFdy(shadowDistance)), 0.0001, 0.05);
 				lowp float shadowFactor = smoothstep(dilate - softness - smoothing, dilate + softness + smoothing, shadowDistance);
 				lowp float innerShadowFactor = textFactor * (1.0 - shadowFactor);
-				gl_FragColor = vec4(color.rgb, color.a * innerShadowFactor * global_color.a);
+				lowp vec4 c = color * global_color;
+				gl_FragColor = vec4(c.rgb, c.a * innerShadowFactor);
 			}";
 
 		private static SDFInnerShadowShaderProgram instance;
 
-		public static SDFInnerShadowShaderProgram GetInstance() => instance ?? (instance = new SDFInnerShadowShaderProgram());
+		public static SDFInnerShadowShaderProgram GetInstance() => instance ??= new SDFInnerShadowShaderProgram();
 
 		private SDFInnerShadowShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
 
