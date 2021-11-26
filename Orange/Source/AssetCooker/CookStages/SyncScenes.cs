@@ -50,7 +50,7 @@ namespace Orange
 				} else {
 					foreach (var component in n.Components.ToList()) {
 						if (HasTheAttribute(component) && component.Owner?.Parent != null) {
-							scene.Components.Remove(component);
+							n.Components.Remove(component);
 							component.Dispose();
 						}
 					}
