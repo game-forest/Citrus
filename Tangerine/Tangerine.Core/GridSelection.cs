@@ -57,7 +57,7 @@ namespace Tangerine.Core
 			return true;
 		}
 
-		public static IEnumerable<(Node, IAnimator)> EnumerateAnimators(IntRectangle boundaries)
+		public static IEnumerable<(Node AnimationHost, IAnimator Animator)> EnumerateAnimators(IntRectangle boundaries)
 		{
 			var processed = new HashSet<IAbstractAnimator>();
 			var rows = Document.Current.Rows.ToList();
