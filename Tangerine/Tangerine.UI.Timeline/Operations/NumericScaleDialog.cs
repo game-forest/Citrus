@@ -73,9 +73,6 @@ namespace Tangerine.UI.Timeline
 			if (GridSelection.GetSelectionBoundaries(out var boundaries) && Scale > Mathf.ZeroTolerance) {
 				var saved = new List<IKeyframe>();
 				foreach (var (host, animator) in GridSelection.EnumerateAnimators(boundaries)) {
-					if (animator.AnimationId != Document.Current.AnimationId) {
-						continue;
-					}
 					saved.Clear();
 					IEnumerable<IKeyframe> keys = animator.ReadonlyKeys.Where(k =>
 						k.Frame >= boundaries.Left && k.Frame < boundaries.Right

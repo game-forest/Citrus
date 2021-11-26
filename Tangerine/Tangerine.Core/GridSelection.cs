@@ -59,23 +59,29 @@ namespace Tangerine.Core
 
 		public static IEnumerable<(Node, IAnimator)> EnumerateAnimators(IntRectangle boundaries)
 		{
-			var processed = new HashSet<IAnimator>();
+			var processed = new HashSet<IAbstractAnimator>();
 			var rows = Document.Current.Rows.ToList();
 			for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
 				var components = rows[i].Components;
 				if (components.Get<NodeRow>()?.Node is Node node) {
 					foreach (var animator in node.Animators) {
-						if (processed.Add(animator)) {
+						if (ShouldProcessAnimator(animator)) {
 							yield return (node, animator);
 						}
 					}
 				} else {
 					var row = components.Get<AnimatorRow>();
-					if (row != null && row.Node != null && processed.Add(row.Animator)) {
+					if (row != null && row.Node != null && ShouldProcessAnimator(row.Animator)) {
 						yield return (row.Node, row.Animator);
 					}
 				}
 			}
+			
+			bool ShouldProcessAnimator(IAbstractAnimator animator) =>
+				processed.Add(animator) && CanAccessAnimator(animator);
+			
+			static bool CanAccessAnimator(IAbstractAnimator animator) =>
+				Document.Current.Animation.ValidatedEffectiveAnimatorsSet.Contains(animator);
 		}
 	}
 }

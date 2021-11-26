@@ -109,7 +109,7 @@ namespace Tangerine.UI.Timeline
 			}
 			int oldLength = boundaries.Right - boundaries.Left - 1;
 			foreach (var (host, animator) in GridSelection.EnumerateAnimators(boundaries)) {
-				if (animator.AnimationId != Document.Current.AnimationId || !savedKeyframes.ContainsKey(animator)) {
+				if (!savedKeyframes.ContainsKey(animator)) {
 					continue;
 				}
 				IEnumerable<IKeyframe> saved = savedKeyframes[animator];
@@ -167,10 +167,7 @@ namespace Tangerine.UI.Timeline
 			savedMarkerPositions.Clear();
 			savedMarkers.Clear();
 			var length = boundaries.Right - boundaries.Left - 1;
-			foreach (var (node, animator) in GridSelection.EnumerateAnimators(boundaries)) {
-				if (animator.AnimationId != Document.Current.AnimationId) {
-					continue;
-				}
+			foreach (var (_, animator) in GridSelection.EnumerateAnimators(boundaries)) {
 				savedKeyframes.Add(animator, new List<IKeyframe>());
 				var keys = animator.Keys.Where(k =>
 					boundaries.Left <= k.Frame &&
