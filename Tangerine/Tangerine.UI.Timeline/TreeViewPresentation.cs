@@ -643,7 +643,9 @@ namespace Tangerine.UI.Timeline
 			{
 				FreezeInvisible = false;
 				Highlightable = false;
-				int cachedVersion = 0;
+				int cachedVersion = iconProvider.TextureVersion;
+				Visible = iconProvider.Texture != null;
+				Texture = iconProvider.Texture;
 				Updated += _ => {
 					if (cachedVersion != iconProvider.TextureVersion) {
 						cachedVersion = iconProvider.TextureVersion;
