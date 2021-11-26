@@ -1,4 +1,4 @@
-﻿#region MIT License
+#region MIT License
 /*Copyright (c) 2012-2013, 2015-2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -51,25 +51,25 @@ namespace SharpFont
 	/// <code>
 	/// FT_Pos  origin_x	   = 0;
 	///	FT_Pos  prev_rsb_delta = 0;
-	/// 
-	/// 
+	///
+	///
 	///	for all glyphs do
 	///	&lt;compute kern between current and previous glyph and add it to
 	///		`origin_x'&gt;
-	/// 
+	///
 	///	&lt;load glyph with `FT_Load_Glyph'&gt;
-	/// 
+	///
 	/// if ( prev_rsb_delta - face-&gt;glyph-&gt;lsb_delta &gt;= 32 )
 	/// 	origin_x -= 64;
 	/// else if ( prev_rsb_delta - face->glyph-&gt;lsb_delta &lt; -32 )
 	/// 	origin_x += 64;
-	/// 
+	///
 	/// prev_rsb_delta = face-&gt;glyph->rsb_delta;
-	/// 
+	///
 	/// &lt;save glyph image, or render glyph, or ...&gt;
-	/// 
+	///
 	/// origin_x += face-&gt;glyph-&gt;advance.x;
-	/// endfor  
+	/// endfor
 	/// </code>
 	/// </example>
 	public sealed class GlyphSlot

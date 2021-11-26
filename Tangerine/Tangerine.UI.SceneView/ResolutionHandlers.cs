@@ -112,7 +112,7 @@ namespace Tangerine.UI.SceneView
 				if (Preferences.Resolutions.Count() == 0) {
 					System.Console.WriteLine("There are no presets. Add them to .citproj");
 					return;
-				} 
+				}
 				resolutionPreview.IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault;
 				resolutionPreview.Preset = Preferences.Resolutions.First();
 			} else {

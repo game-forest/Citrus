@@ -6,7 +6,7 @@ namespace Tangerine.UI
 	public class TooltipComponent : NodeComponent
 	{
 		public Func<string> GetText;
-
+		
 		/// <summary>
 		/// Delay to show tooltip.
 		/// </summary>
@@ -17,12 +17,8 @@ namespace Tangerine.UI
 		/// </summary>
 		public float HideDelay { get; set; } = 10.0f;
 
-		public TooltipComponent(Func<string> textGetter)
-		{
-			GetText = textGetter;
-		}
+		public TooltipComponent(Func<string> textGetter) => GetText = textGetter;
 
-		public TooltipComponent()
-		{ }
+		public TooltipComponent() { }
 	}
 }

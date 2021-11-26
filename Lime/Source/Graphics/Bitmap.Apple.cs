@@ -25,12 +25,12 @@ namespace Lime
 				data = ms.ToArray();
 			}
 			cgImage = CGImage.FromPNG(new CGDataProvider(data), null, false, CGColorRenderingIntent.Default);
-            if (cgImage == null) {
-                cgImage = CGImage.FromJPEG(new CGDataProvider(data), null, false, CGColorRenderingIntent.Default);
-            }
+			if (cgImage == null) {
+				cgImage = CGImage.FromJPEG(new CGDataProvider(data), null, false, CGColorRenderingIntent.Default);
+			}
 			if (cgImage == null) {
 				throw new FailedToCreateCGImageFromGivenStreamException();
-			} 
+			}
 			var alphaInfo = cgImage.AlphaInfo;
 			HasAlpha =
 				alphaInfo != CGImageAlphaInfo.None &&
@@ -211,7 +211,7 @@ namespace Lime
 								for (int j = 0; j < width; j++) {
 									v = (*pBytes++);
 									pixels[index++] = new Color4(v, v, v, 255);
-								}	
+								}
 								// Sometimes Width can be smaller then length of a row due to byte alignment.
 								// It's just an empty bytes at the end of each row, so we can skip them here.
 								if (rowLength > width) {
@@ -260,7 +260,7 @@ namespace Lime
 			}
 			if (dest != null) {
 				dest.AddImage(cgImage);
-				dest.Close(); 
+				dest.Close();
 				using (var bitmapStream = data.AsStream()) {
 					bitmapStream.CopyTo(stream);
 				}
@@ -278,7 +278,7 @@ namespace Lime
 				}
 				disposed = true;
 			}
-		}	
+		}
 	}
 }
 #endif

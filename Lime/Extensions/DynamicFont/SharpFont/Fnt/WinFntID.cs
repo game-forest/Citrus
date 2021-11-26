@@ -1,4 +1,4 @@
-﻿#region MIT License
+#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -138,7 +138,7 @@ namespace SharpFont.Fnt
 		/// OEM-specific character set. The OEM character set is system dependent.
 		/// </para><para>
 		/// In general OEM, as opposed to ANSI (i.e., cp1252), denotes the second default codepage that most
-		/// international versions of Windows have. It is one of the OEM codepages from 
+		/// international versions of Windows have. It is one of the OEM codepages from
 		/// <see href="http://www.microsoft.com/globaldev/reference/cphome.mspx"/>, and is used for the ‘DOS boxes’, to
 		/// support legacy applications. A German Windows version for example usually uses ANSI codepage 1252 and OEM
 		/// codepage 850.

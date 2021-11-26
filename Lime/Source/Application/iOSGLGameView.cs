@@ -52,12 +52,12 @@ namespace Lime
 				}
 				MakeCurrent();
 				renderContext = new PlatformRenderContext();
-				PlatformRenderer.Initialize(renderContext);				
+				PlatformRenderer.Initialize(renderContext);
 			}
 			DestroyFramebuffer();
-			CreateFramebuffer();					
+			CreateFramebuffer();
 		}
-		
+
 		private void ConfigureLayer()
 		{
 			var eaglLayer = (CAEAGLLayer)Layer;
@@ -69,7 +69,7 @@ namespace Lime
 			PixelScale = (float)UIScreen.MainScreen.Scale;
 			eaglLayer.ContentsScale = PixelScale;
 		}
-		
+
 		private void CreateFramebuffer()
 		{
 			if (framebuffer != 0) {
@@ -79,17 +79,17 @@ namespace Lime
 			framebuffer = GL.GenFramebuffer();
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
 			GLHelper.CheckGLErrors();
-			
+
 			colorRenderbuffer = GL.GenRenderbuffer();
 			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, colorRenderbuffer);
 			GLHelper.CheckGLErrors();
-			
+
 			var eaglLayer = (CAEAGLLayer)Layer;
 			if (!mgleaglContext.RenderBufferStorage((uint)RenderbufferTarget.Renderbuffer, eaglLayer)) {
 				Logger.Write("Failed to bind render buffer with error: {0}", GL.GetErrorCode());
 				//throw new InvalidOperationException("EAGLContext.RenderBufferStorage() failed");
 			}
-			
+
 			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, RenderbufferTarget.Renderbuffer, colorRenderbuffer);
 			GL.Viewport(0, 0, (int)ClientSize.X, (int)ClientSize.Y);
 			GL.Scissor(0, 0, (int)ClientSize.X, (int)ClientSize.Y);
@@ -101,7 +101,7 @@ namespace Lime
 
 			// Allocate storage for the new renderbuffer
 			var scale = (float)UIScreen.MainScreen.Scale;
-			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)All.Depth24Stencil8Oes, 
+			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)All.Depth24Stencil8Oes,
 				(int)(ClientSize.X * scale), (int)(ClientSize.Y * scale));
 			// Attach the renderbuffer to the framebuffer's depth attachment point
 			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, depthRenderbuffer);
@@ -236,10 +236,10 @@ namespace Lime
 		private class CADisplayLinkTimeSource : NSObject, ITimeSource
 		{
 			private static Selector selRunIteration = new Selector("runIteration");
-	
+
 			private GLGameView view;
 			private CADisplayLink displayLink;
-	
+
 			public CADisplayLinkTimeSource(GLGameView view, int frameInterval)
 			{
 				this.view = view;
@@ -250,18 +250,18 @@ namespace Lime
 				displayLink.FrameInterval = frameInterval;
 				displayLink.Paused = true;
 			}
-	
+
 			public void Suspend()
 			{
 				displayLink.Paused = true;
 			}
-	
+
 			public void Resume()
 			{
 				displayLink.Paused = false;
 				displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
 			}
-	
+
 			public void Invalidate()
 			{
 				if (displayLink != null) {
@@ -269,7 +269,7 @@ namespace Lime
 					displayLink = null;
 				}
 			}
-	
+
 			[Export("runIteration")]
 			[Preserve(Conditional = true)]
 			void RunIteration()
@@ -282,26 +282,26 @@ namespace Lime
 		{
 			void Suspend();
 			void Resume();
-	
+
 			void Invalidate();
 		}
-	
+
 		private class NSTimerTimeSource : ITimeSource
 		{
 			private TimeSpan timeout;
 			private NSTimer timer;
 			private GLGameView view;
-	
+
 			public NSTimerTimeSource(GLGameView view, double updatesPerSecond)
 			{
 				this.view = view;
-	
+
 				// Can't use TimeSpan.FromSeconds() as that only has 1ms
 				// resolution, and we need better(e.g. 60fps doesn't fit nicely
 				// in 1ms resolution, but does in ticks).
 				timeout = new TimeSpan((long)(((1.0 * TimeSpan.TicksPerSecond) / updatesPerSecond) + 0.5));
 			}
-	
+
 			public void Suspend()
 			{
 				if (timer != null) {
@@ -309,13 +309,13 @@ namespace Lime
 					timer = null;
 				}
 			}
-	
+
 			public void Resume()
 			{
 				if (timeout != new TimeSpan(-1))
 					timer = NSTimer.CreateRepeatingScheduledTimer(timeout, view.RunIteration);
 			}
-	
+
 			public void Invalidate()
 			{
 				if (timer != null) {

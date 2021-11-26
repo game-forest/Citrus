@@ -126,6 +126,7 @@
     <Compile Include="Toolbar.cs" />
     <Compile Include="TreeViewNodeLinkIndication.cs" />
     <Compile Include="TreeViewPresentation.cs" />
+    <Compile Include="ITimelineIconProvider.cs" />
     <Compile Include="TreeViewSceneItem.cs" />
     <Compile Include="Utils\KeyframeFigure.cs" />
     <Compile Include="Utils\TimelineMetrics.cs" />

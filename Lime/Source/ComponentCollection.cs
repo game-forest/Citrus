@@ -53,6 +53,12 @@ namespace Lime
 
 		public bool IsReadOnly => false;
 
+#if TANGERINE
+		private uint version;
+
+		public uint Version => version;
+#endif // TANGERINE
+		
 		public virtual bool Contains(TComponent component)
 		{
 			for (int i = 0; i < Count; i++) {
@@ -157,7 +163,7 @@ namespace Lime
 			}
 			return c;
 		}
-
+		
 		public virtual void Add(TComponent component)
 		{
 			if (Contains(component)) {
@@ -175,12 +181,18 @@ namespace Lime
 				list = new TComponent[4];
 				list[0] = component;
 				Count = 1;
+#if TANGERINE
+				++version;
+#endif // TANGERINE
 				return;
 			}
 			if (Count == list.Length) {
 				Array.Resize(ref list, Count * 2);
 			}
 			list[Count++] = component;
+#if TANGERINE
+			++version;
+#endif // TANGERINE
 		}
 
 		private bool ContainsExactType(Type type)
@@ -263,6 +275,9 @@ namespace Lime
 			}
 			list[--Count] = null;
 			OnRemove(component);
+#if TANGERINE
+			++version;
+#endif // TANGERINE
 		}
 
 		public bool Replace<T>(T component) where T : TComponent
@@ -282,11 +297,17 @@ namespace Lime
 
 		public void Clear()
 		{
+#if TANGERINE
+			int count = Count;
+#endif // TANGERINE
 			while (Count > 0) {
 				var c = list[--Count];
 				list[Count] = null;
 				OnRemove(c);
 			}
+#if TANGERINE
+			version += count > 0 ? 1u : 0u;
+#endif // TANGERINE
 		}
 
 		public void CopyTo(TComponent[] array, int arrayIndex)

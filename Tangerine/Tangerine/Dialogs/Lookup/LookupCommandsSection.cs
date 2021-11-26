@@ -38,9 +38,9 @@ namespace Tangerine
 					if (menuItem.Menu != null) {
 						var menuCopy = menuItem.Menu;
 						lookupWidget.AddItem(new LookupDialogItem(
-							headerText: text, 
-							text: null, 
-							label: "Menu", 
+							headerText: text,
+							text: null,
+							label: "Menu",
 							() => Sections.Push(new LookupCommandsSection(Sections, menuCopy, text))
 						));
 						FillLookupByMenuCommands(menuItem.Menu, text);

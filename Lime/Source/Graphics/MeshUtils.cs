@@ -89,7 +89,7 @@ namespace Lime
 			int j = 0;
 			for (int i = 0; i < tesselation; i++) {
 				var x =	Mathf.Cos(i * Mathf.TwoPi / tesselation);
-				var z = Mathf.Sin(i * Mathf.TwoPi / tesselation); 
+				var z = Mathf.Sin(i * Mathf.TwoPi / tesselation);
 				vertices[i * 2 + 2] = new VertexPositionColor { Position = new Vector3(x * radius2, height, z * radius2), Color = color };
 				vertices[i * 2 + 3] = new VertexPositionColor { Position = new Vector3(x * radius1, 0, z * radius1), Color = color };
 				var t1 = (ushort)(i * 2 + 2);

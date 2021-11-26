@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Lime;
-using Tangerine.Core;
 
 namespace Tangerine.UI
 {
 	public class Tooltip
 	{
-		private readonly Widget content;
 		private readonly Window window;
-		private readonly ThemedInvalidableWindowWidget rootWidget;
+		private readonly Widget content;
+		private readonly Widget textWidgetWrapper;
 		private readonly ThemedSimpleText textWidget;
+		private readonly Regex regex;
 
 		private static Tooltip instance;
 		public static Tooltip Instance => instance ?? (instance = new Tooltip());
@@ -42,21 +45,22 @@ namespace Tangerine.UI
 				Type = WindowType.ToolTip,
 				Title = "Tooltip",
 			});
+			textWidget = new ThemedSimpleText {
+				Padding = new Thickness(4),
+				OverflowMode = TextOverflowMode.Ellipsis
+			};
 			content = new ThemedFrame {
 				LayoutCell = new LayoutCell { Ignore = true },
 				Layout = new StackLayout(),
-				Nodes = {
-					(textWidget = new ThemedSimpleText { Padding = new Thickness(4), }),
-				},
+				Nodes = { textWidget },
 				Presenter = new ThemedFramePresenter(Color4.Yellow.Transparentify(0.8f), Color4.Black),
 			};
-			rootWidget = new ThemedInvalidableWindowWidget(window) {
+			new ThemedInvalidableWindowWidget(window) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
-				Nodes = {
-					content
-				}
+				Nodes = { content }
 			};
+			regex = new Regex("\x20+", RegexOptions.Compiled);
 		}
 
 		public void Hide()
@@ -66,8 +70,38 @@ namespace Tangerine.UI
 
 		public void Show()
 		{
-			window.Visible = true;
-			window.ClientSize = window.DecoratedSize = content.Size = content.EffectiveMinSize;
+			window.Visible = !string.IsNullOrEmpty(Text);
+			if (!window.Visible) {
+				return;
+			}
+			textWidget.Text = SplitText(Text);
+			window.ClientSize = window.DecoratedSize = content.Size = textWidget.Size = textWidget.EffectiveMinSize;
+
+			string SplitText(string text)
+			{
+				const int MaxRowLength = 80;
+				var strings = new List<string>(regex.Replace(text.Trim(), " ").Split('\n'));
+				for (int i = 0; i < strings.Count - 1; ++i) {
+					strings[i] += '\n';
+				}
+				for (int lineIndex = 0; lineIndex < strings.Count; ++lineIndex) {
+					var textLine = strings[lineIndex];
+					if (textLine.Length > MaxRowLength + 1) {
+						int spaceIndex = MaxRowLength;
+						while (--spaceIndex > 0 && textLine[spaceIndex] != ' ');
+						if (spaceIndex == 0) {
+							strings[lineIndex] = textLine.Substring(startIndex: 0, length: MaxRowLength - 3) + "...\n";
+							strings.Insert(index: lineIndex + 1, item: "..." + textLine.Substring(MaxRowLength - 3));
+						} else {
+							strings[lineIndex] = textLine.Substring(startIndex: 0, length: spaceIndex) + '\n';
+							if (spaceIndex < textLine.Length - 1) {
+								strings.Insert(index: lineIndex + 1, item: textLine.Substring(spaceIndex + 1));
+							}
+						}
+					}
+				}
+				return string.Concat(strings);
+			}
 		}
 
 		public void Show(string text, Vector2 position)
@@ -79,7 +113,7 @@ namespace Tangerine.UI
 			Show();
 			UpdatePosition(position);
 		}
-
+		
 		public void Toggle()
 		{
 			if (window.Visible) {

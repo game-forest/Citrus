@@ -41,8 +41,8 @@ namespace SharpFont.HarfBuzz
 			var glyphInfos = new GlyphInfo[length];
 			for (int i = 0; i < length; ++i)
 			{
-#if FIX			
-				// Portable class library Profile 111 does not support 
+#if FIX
+				// Portable class library Profile 111 does not support
 				// the generic version of Marshal.PtrToStructure
 				glyphInfos[i] = Marshal.PtrToStructure<GlyphInfo>(
 					glyphInfoPtr + 20 * i);
@@ -63,8 +63,8 @@ namespace SharpFont.HarfBuzz
 			var glyphPositions = new GlyphPosition[length];
 			for (int i = 0; i < length; ++i)
 			{
-#if FIX			
-				// Portable class library Profile 111 does not support 
+#if FIX
+				// Portable class library Profile 111 does not support
 				// the generic version of Marshal.PtrToStructure
 				glyphPositions[i] = Marshal.PtrToStructure<GlyphPosition>(
 					glyphPositionPtr + 20 * i);

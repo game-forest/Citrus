@@ -16,7 +16,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		private const string AssetType = ".tan";
 
 		private readonly HashSet<string> visited = new HashSet<string>();
-		
+
 		private readonly Content content;
 		private readonly AssetBundle assetBundle;
 		private readonly WorkProgressSetter workProgress;
@@ -29,7 +29,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			workProgress = new WorkProgressSetter();
 			assetBundle = new TangerineAssetBundle(The.Workspace.AssetsDirectory);
 		}
-		
+
 		/// <summary>
 		/// Performs enumeration of animation conflicts.
 		/// </summary>
@@ -37,7 +37,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		/// Modifying scenes during enumeration will cause a race condition and lead to undefined behavior!
 		/// </remarks>
 		public static (IEnumerable<ConflictInfo> Conflicts, WorkProgress Progress) Enumerate(
-			Content content, 
+			Content content,
 			CancellationToken cancellationToken
 		) {
 			var cf = new ConflictFinder(content, cancellationToken);
@@ -50,7 +50,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			}
 			bool isException = true;
 			AssetBundle.Current = assetBundle;
-			var root = content == Content.AssetDatabase ? 
+			var root = content == Content.AssetDatabase ?
 				string.Empty : Document.Current.Path;
 			try {
 				foreach (var info in Enumerate(root)) {
@@ -166,7 +166,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				}
 			}
 			return string.Join("/", relativePathStack);
-			
+
 			string IdOrTypeName(Node n) => string.IsNullOrWhiteSpace(n.Id) ? n.GetType().Name : n.Id;
 		}
 
@@ -182,16 +182,16 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			}
 			indexedPath.RemoveAt(indexedPath.Count - 1);
 			return indexedPath;
-			
+
 			int IndexInParent(Node n) => n.Parent?.Nodes.IndexOf(n) ?? -1;
 		}
-		
+
 		public enum Content
 		{
 			AssetDatabase,
 			CurrentDocument
 		}
-		
+
 		public class WorkProgress
 		{
 			protected volatile bool isCompleted;
@@ -207,10 +207,10 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			public int CurrentConflictCount => currentConflictCount;
 
 			public static WorkProgress Done => new WorkProgress { isCompleted = true };
-			
+
 			protected WorkProgress() {}
 		}
-		
+
 		private class WorkProgressSetter : WorkProgress
 		{
 			public void MarkAsCompleted() => isCompleted = true;

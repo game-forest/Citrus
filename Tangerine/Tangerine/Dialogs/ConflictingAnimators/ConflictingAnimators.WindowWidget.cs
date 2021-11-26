@@ -20,7 +20,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			private CancellationTokenSource searchCancellation;
 			private ConflictFinder.Content contentSource;
 			private ConflictFinder.WorkProgress workProgress;
-			
+
 			public WindowWidget(Lime.Window window) : base(window)
 			{
 				currentSearchTask = Task.CompletedTask;
@@ -29,13 +29,13 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				if (size != Vector2.PositiveInfinity) {
 					window.DecoratedSize = size;
 				}
-				window.Resized += rotated => 
+				window.Resized += rotated =>
 					CoreUserPreferences.Instance.ConflictingAnimatorsWindowSize = window.DecoratedSize;
 				var contentWidget = new Widget {
 					Layout = new VBoxLayout { Spacing = 8 },
 					Padding = new Thickness(8),
 					Nodes = {
-						(resultsView = new ResultsView()), 
+						(resultsView = new ResultsView()),
 						(controls = new Controls())
 					},
 					FocusScope = new KeyboardFocusScope(this)
@@ -74,7 +74,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 					Console.WriteLine(exception);
 				}
 			}
-			
+
 			private void SetupCallbacks()
 			{
 				controls.SearchButton.Clicked += () => {

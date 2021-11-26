@@ -106,8 +106,10 @@ namespace Lime
 		/// <summary>
 		/// Removes from the list all elements whose index is greater than or equal to the specified index.
 		/// </summary>
-		public static void RemoveTail<T>(this List<T> list, int startIndex) => 
+		public static void RemoveTail<T>(this List<T> list, int startIndex)
+		{
 			list.RemoveRange(startIndex, list.Count - startIndex);
+		}
 	}
 
 	public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>

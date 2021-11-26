@@ -30,7 +30,7 @@ namespace Lime
 
 		public StockCursors()
 		{
-			Default = FromNSCursor(NSCursor.ArrowCursor); 
+			Default = FromNSCursor(NSCursor.ArrowCursor);
 			Hand = FromNSCursor(NSCursor.PointingHandCursor);
 			IBeam = FromNSCursor(NSCursor.IBeamCursor);
 			SizeNS = FromNSCursor(NSCursor.ResizeUpDownCursor);

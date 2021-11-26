@@ -471,6 +471,13 @@ namespace Tangerine
 						displayName: "Animation panel reversed order"
 					)
 				),
+				new EnumPropertyEditor<TimelineComponentIconsShowMode>(
+					new PreferencesPropertyEditorParams(
+						CoreUserPreferences.Instance,
+						propertyName: nameof(CoreUserPreferences.TimelineComponentIconsShowMode),
+						displayName: "Display component icons on the timeline"
+					)
+				),
 			});
 			foreach (var e in editors) {
 				pane.Content.AddNode(e.ContainerWidget);

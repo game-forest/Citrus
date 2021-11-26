@@ -12,7 +12,7 @@ namespace Lime
 	{
 		private WKWebView webView;
 
-		public Uri Url { get { return GetUrl(); } set { SetUrl(value); } }	
+		public Uri Url { get { return GetUrl(); } set { SetUrl(value); } }
 
 		public WebBrowser(Widget parentWidget)
 			: this()
@@ -30,7 +30,7 @@ namespace Lime
 		public WebBrowser()
 		{
 			webView = new WKWebView(CGRect.Empty, new WKWebViewConfiguration());
-			webView.AutoresizingMask = NSViewResizingMask.HeightSizable | NSViewResizingMask.WidthSizable; 
+			webView.AutoresizingMask = NSViewResizingMask.HeightSizable | NSViewResizingMask.WidthSizable;
 			webView.WantsLayer = true;
 			Window.Current.NSGameView.AddSubview(webView);
 			Components.Add(new UpdatableNodeBehavior());

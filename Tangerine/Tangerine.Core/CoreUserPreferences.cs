@@ -59,17 +59,20 @@ namespace Tangerine.Core
 		public bool ExperimentalTimelineHierarchy { get; set; }
 
 		[YuzuOptional]
+		public TimelineComponentIconsShowMode TimelineComponentIconsShowMode { get; set; }
+
+		[YuzuOptional]
 		public bool LockLayout { get; set; }
 
 		[YuzuOptional]
 		public bool AnimationPanelReversedOrder { get; set; }
-		
+
 		[YuzuOptional]
 		public Vector2 ConflictingAnimatorsWindowSize { get; set; }
 
 		[YuzuOptional]
 		public int RecentDocumentCount { get; set; }
-		
+
 		public CoreUserPreferences() => ResetToDefaults();
 
 		public void ResetToDefaults()
@@ -88,6 +91,14 @@ namespace Tangerine.Core
 		}
 
 		public static CoreUserPreferences Instance => UserPreferences.Instance.GetOrAdd<CoreUserPreferences>();
+	}
+
+	public enum TimelineComponentIconsShowMode
+	{
+		VisibleInInspector,
+		ProvidingTimelineIcon,
+		None,
+		All
 	}
 
 	public struct ColorPickerState

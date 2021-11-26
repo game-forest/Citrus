@@ -127,7 +127,7 @@ namespace Lime.Platform
                     return Key.Left;
                 case MacKeyCode.M:
                     return Key.M;
-                //Key.MaxKeys 
+                //Key.MaxKeys
                 case MacKeyCode.Minus:
                     return Key.Minus;
                 case MacKeyCode.N:
@@ -182,7 +182,7 @@ namespace Lime.Platform
                     return Key.Semicolon;
                 case MacKeyCode.Shift:
                     return Key.Shift;
-                //Key.RShift 
+                //Key.RShift
                 case MacKeyCode.Slash:
                     return Key.Slash;
                 // Key.Sleep

@@ -71,7 +71,7 @@ namespace Lime
 			var vPlane = Lemon.Api.OgvGetBuffer(ogvHandle, 2);
 			unsafe {
 				fixed (Color4* p = &pixels[0]) {
-					Lemon.Api.DecodeRGBX8((IntPtr)p, 
+					Lemon.Api.DecodeRGBX8((IntPtr)p,
 						yPlane.Data, uPlane.Data, vPlane.Data,
 						yPlane.Width, yPlane.Height, yPlane.Stride, uPlane.Stride,
 						width * 4, 0);
@@ -145,7 +145,7 @@ namespace Lime
 			var stream = streamMap[handle];
 			return (int)stream.Position;
 		}
-		
+
 #if iOS
 		[MonoPInvokeCallback(typeof(Lemon.Api.SeekCallback))]
 #endif
@@ -154,7 +154,7 @@ namespace Lime
 			var stream = streamMap[handle];
 			return (int)stream.Seek(offset, whence);
 		}
-		
+
 #if iOS
 		[MonoPInvokeCallback(typeof(Lemon.Api.CloseCallback))]
 #endif

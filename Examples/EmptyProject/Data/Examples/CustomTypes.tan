@@ -5,6 +5,23 @@
 		{
 			"class":"EmptyProject.Types.IsometricMesh, EmptyProject.Types",
 			"Color":[4294967295],
+			"Components":[
+				{
+					"class":"EmptyProject.Types.CommentComponent, EmptyProject.Types",
+					"Comments":[
+						"Comment 1",
+						"Comment 2",
+						"Comment 3",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						""
+					]
+				}
+			],
 			"Id":"IsometricMesh",
 			"IsometricAspect":1.2,
 			"LeftFace":{

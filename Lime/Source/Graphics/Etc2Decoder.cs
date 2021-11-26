@@ -31,7 +31,7 @@ namespace Lime
 				throw new ArgumentException("Texture dimensions should be multiple of 4");
 			}
 			var bytesPerBlock = format.GetSize();
-			uint* decodedBlock = stackalloc uint[16];  
+			uint* decodedBlock = stackalloc uint[16];
 			fixed (byte* fixedEtcData = &etcData[0]) {
 				var etcDataPtr = (IntPtr)fixedEtcData;
 				for (int i = 0; i < height / 4; i++) {
