@@ -6,7 +6,8 @@ namespace Orange
 {
 	public class RectAllocator
 	{
-		List<IntRectangle> rects = new List<IntRectangle>();
+		private List<IntRectangle> rects = new List<IntRectangle>();
+		private readonly IntRectangle initial;
 
 		int totalSquare;
 		int allocatedSquare;
@@ -16,7 +17,7 @@ namespace Orange
 		public RectAllocator(Size size)
 		{
 			totalSquare = size.Width * size.Height;
-			rects.Add(new IntRectangle(0, 0, size.Width, size.Height));
+			rects.Add(initial = new IntRectangle(0, 0, size.Width, size.Height));
 		}
 
 		public bool Allocate(Size size, int padding, out IntRectangle rect)
@@ -28,10 +29,12 @@ namespace Orange
 			int leftPadding;
 			for (int i = 0; i < rects.Count; i++) {
 				r = rects[i];
-				leftPadding = r.Left == 0 ? 0 : padding;
-				topPadding = r.Top == 0 ? 0 : padding;
-				var requestedWidth = size.Width + leftPadding;
-				var requestedHeight = size.Height + topPadding;
+				leftPadding = r.Left == initial.Left ? 0 : padding;
+				topPadding = r.Top == initial.Top ? 0 : padding;
+				var rightPadding = r.Right == initial.Right ? 0 : padding;
+				var bottomPadding = r.Bottom == initial.Bottom ? 0 : padding;
+				var requestedWidth = leftPadding + size.Width + rightPadding;
+				var requestedHeight = topPadding + size.Height + bottomPadding;
 				if (r.Width >= requestedWidth && r.Height >= requestedHeight) {
 					int z = r.Width * r.Height - requestedWidth * requestedHeight;
 					if (z < spareSquare) {
@@ -46,10 +49,10 @@ namespace Orange
 			}
 			// Split the rest, minimizing the sum of parts perimeters.
 			r = rects[j];
-			leftPadding = r.Left == 0 ? 0 : padding;
-			topPadding = r.Top == 0 ? 0 : padding;
-			var occupiedWidth = size.Width + leftPadding + padding;
-			var occupiedHeight = size.Height + topPadding + padding;
+			leftPadding = r.Left == initial.Left ? 0 : padding;
+			topPadding = r.Top == initial.Top ? 0 : padding;
+			var occupiedWidth = leftPadding + size.Width + padding;
+			var occupiedHeight = topPadding + size.Height + padding;
 			rect = new IntRectangle(
 				r.A.X + leftPadding,
 				r.A.Y + topPadding,
