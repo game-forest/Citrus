@@ -24,7 +24,7 @@ namespace Tangerine.UI.Timeline.Operations
 							continue;
 						}
 						var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
-						var animators = ValidatedEffectiveAnimators.Intersect(node.Animators).ToList();
+						var animators = ValidatedEffectiveAnimators.Intersect(node.Animators);
 						foreach (var animator in animators) {
 							if (property != null && animator.TargetPropertyPath != property) {
 								continue;
@@ -35,7 +35,7 @@ namespace Tangerine.UI.Timeline.Operations
 						}
 					}
 				} else {
-					foreach (var row in Document.Current.Rows.ToList()) {
+					foreach (var row in Document.Current.Rows) {
 						var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans();
 						foreach (var span in spans) {
 							var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
@@ -43,7 +43,7 @@ namespace Tangerine.UI.Timeline.Operations
 								continue;
 							}
 							var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
-							var animators = ValidatedEffectiveAnimators.Intersect(node.Animators).ToList();
+							var animators = ValidatedEffectiveAnimators.Intersect(node.Animators);
 							foreach (var animator in animators) {
 								if (property != null && animator.TargetPropertyPath != property) {
 									continue;
