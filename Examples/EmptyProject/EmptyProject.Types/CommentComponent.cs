@@ -48,7 +48,7 @@ namespace EmptyProject.Types
 					cachedComments.Clear();
 					if (Comments != null) {
 						cachedComments.AddRange(Comments);
-						cachedTexture = icons[Math.Clamp(value: Comments.Count - 1, min: 0, max: IconCount - 1)];
+						cachedTexture = Comments.Count == 0 ? null : icons[Math.Min(Comments.Count - 1, IconCount - 1)];
 						const int MaxVisibleCommentCount = 9;
 						cachedTooltip = string.Join(
 							separator: "\n\n",
