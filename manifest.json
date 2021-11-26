@@ -5738,6 +5738,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.RemoveOnAssetCookAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.RemoveOnAssetCookAttribute.html",
+          "hash": "TataGZjS6jkqwTAcPWn0zM2HXsMO+ubLRxRvWgMyRQY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.RenderBatch-1.yml",
       "output": {
         ".html": {
@@ -9366,7 +9378,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "gu6U0gzPyCTDv9r83RBxE5XIWocw9Lp0jxCX4gL3LUQ="
+          "hash": "ExOSHtvU+WQ043fORT1Pp2yd+UxIsRm1EHX/m++apx0="
         }
       },
       "is_incremental": false,
@@ -9414,7 +9426,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "5phwIrFVRkmqb9SSaEWwlV+SjoFyn3sQuxkrU/ob3FM="
+          "hash": "jtr63Gr0ckBxGtDpVuVvvQ4PB0RdZGLx7qoPem2YVMQ="
         }
       },
       "is_incremental": false,
@@ -11885,7 +11897,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 783,
+          "total_file_count": 784,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

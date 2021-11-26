@@ -52149,6 +52149,12 @@ references:
   isSpec: "True"
   fullName: Lime.Rectangle.Width
   nameWithType: Rectangle.Width
+- uid: Lime.RemoveOnAssetCookAttribute
+  name: RemoveOnAssetCookAttribute
+  href: api/Lime.RemoveOnAssetCookAttribute.html
+  commentId: T:Lime.RemoveOnAssetCookAttribute
+  fullName: Lime.RemoveOnAssetCookAttribute
+  nameWithType: RemoveOnAssetCookAttribute
 - uid: Lime.RenderBatch`1
   name: RenderBatch<TVertex>
   href: api/Lime.RenderBatch-1.html
