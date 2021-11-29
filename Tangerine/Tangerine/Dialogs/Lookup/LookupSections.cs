@@ -23,6 +23,7 @@ namespace Tangerine
 		public readonly LookupNodeAnimationsSection NodeAnimations;
 		public readonly LookupDocumentAnimationsSection DocumentAnimations;
 		public readonly LookupComponentsSection Components;
+		public readonly LookupOpenDocumentsSection OpenDocuments;
 		public readonly LookupSection[] List;
 		public readonly FuzzyStringSearch FuzzyStringSearch = new FuzzyStringSearch();
 
@@ -45,6 +46,7 @@ namespace Tangerine
 				NodeAnimations = new LookupNodeAnimationsSection(this),
 				DocumentAnimations = new LookupDocumentAnimationsSection(this),
 				Components = new LookupComponentsSection(this),
+				OpenDocuments = new LookupOpenDocumentsSection(this),
 			};
 		}
 
@@ -61,6 +63,7 @@ namespace Tangerine
 					case SectionType.NodeAnimations: Push(NodeAnimations); break;
 					case SectionType.DocumentAnimations: Push(DocumentAnimations); break;
 					case SectionType.Components: Push(Components); break;
+					case SectionType.OpenDocuments: Push(OpenDocuments); break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(sectionType), sectionType, null);
 				}
@@ -176,6 +179,7 @@ namespace Tangerine
 			NodeAnimations,
 			DocumentAnimations,
 			Components,
+			OpenDocuments,
 		}
 	}
 }
