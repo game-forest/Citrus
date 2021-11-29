@@ -230,12 +230,9 @@ namespace Orange
 			TextureTools.AtlasItem firstAllocatedItem = null;
 			foreach (var item in items) {
 				var padding = item.CookingRules.AtlasItemPadding;
-				var paddedItemSize = new Size(
-					item.BitmapInfo.Width,
-					item.BitmapInfo.Height
-				);
+				var itemSize = new Size(item.BitmapInfo.Width, item.BitmapInfo.Height);
 				if (firstAllocatedItem == null || AreAtlasItemsCompatible(items, firstAllocatedItem, item)) {
-					if (rectAllocator.Allocate(paddedItemSize, padding, out item.AtlasRect)) {
+					if (rectAllocator.Allocate(itemSize, padding, out item.AtlasRect)) {
 						item.Allocated = true;
 						firstAllocatedItem ??= item;
 					}
