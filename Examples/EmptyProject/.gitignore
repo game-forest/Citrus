@@ -270,3 +270,4 @@ Data/.index
 **/Resources/Resource.designer.cs
 TangerineLog.txt
 dotnet/
+dotnet-install.ps1
