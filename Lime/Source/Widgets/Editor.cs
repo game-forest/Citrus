@@ -214,7 +214,7 @@ namespace Lime
 
 		private void EnsureSelection()
 		{
-			if (SelectionStart.IsVisible) {
+			if (HasSelection()) {
 				return;
 			}
 			SelectionStart.IsVisible = SelectionEnd.IsVisible = true;
