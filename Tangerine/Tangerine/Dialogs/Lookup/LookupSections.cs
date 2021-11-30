@@ -7,6 +7,8 @@ namespace Tangerine
 {
 	public class LookupSections
 	{
+		private LookupSection lockedSection;
+
 		private static SubmittedData recentlySubmittedData;
 
 		private readonly LookupWidget lookupWidget;
@@ -124,6 +126,13 @@ namespace Tangerine
 			SetupSection(null);
 		}
 
+		public void LockNavigationOnLastSection()
+		{
+			if (stack.Count > 0) {
+				lockedSection = stack.Peek();
+			}
+		}
+
 		private void SetupSection(LookupSection section)
 		{
 			lookupWidget.FilterText = null;
@@ -135,7 +144,7 @@ namespace Tangerine
 
 		private void NavigatedBack()
 		{
-			if (stack.Count <= 0 || stack.Peek() == Initial) {
+			if (stack.Count <= 0 || stack.Peek() == Initial || stack.Peek() == lockedSection) {
 				return;
 			}
 			Pop();
