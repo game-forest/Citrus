@@ -806,6 +806,34 @@ namespace Tangerine
 					}
 
 					editor.ContainerWidget.LayoutCell = new LayoutCell(Alignment.LeftCenter, 1);
+					editor.CanAssignShortcut = (shortcut) => {
+						var existingCommands = hotkeyEditor.Profile.Commands.Where(c => c.Shortcut == shortcut);
+						if (existingCommands.Any()) {
+							string commandsText = string.Empty;
+							foreach (var existingCommand in existingCommands) {
+								var category = hotkeyEditor.Profile.Categories
+									.Find(c => c.Commands.Values.Contains(existingCommand));
+								commandsText += $"{category.Title} - {existingCommand.Title}\n";
+							}
+							var dialog = new AlertDialog(
+								$"Shortcut {shortcut} is already assigned to following commands:\n"
+								+ commandsText + "\nRemove old shortcuts?",
+								"Remove", "Don't Remove", "Cancel"
+							);
+							switch (dialog.Show()) {
+								case 0:
+									foreach (var existingCommand in existingCommands) {
+										existingCommand.Shortcut = new Shortcut(Key.Unknown);
+									}
+									return true;
+								case 1:
+									return true;
+								case 2:
+									return false;
+							}
+						}
+						return true;
+					};
 					editor.PropertyChanged = () => {
 						hotkeyEditor.UpdateButtonCommands();
 						hotkeyEditor.UpdateShortcuts();
