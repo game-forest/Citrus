@@ -163,8 +163,8 @@ namespace Orange
 		) {
 			// Sort images in descending size order
 			items.Sort((x, y) => {
-				var a = Math.Max(x.BitmapInfo.Width, x.BitmapInfo.Height);
-				var b = Math.Max(y.BitmapInfo.Width, y.BitmapInfo.Height);
+				var a = Math.Max(x.BitmapInfo.Width, x.BitmapInfo.Height) + 2 * x.CookingRules.AtlasItemPadding;
+				var b = Math.Max(y.BitmapInfo.Width, y.BitmapInfo.Height) + 2 * y.CookingRules.AtlasItemPadding;
 				return b - a;
 			});
 
