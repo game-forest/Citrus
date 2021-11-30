@@ -999,7 +999,15 @@ namespace Tangerine.Core.Operations
 			this.component = component;
 		}
 
-		public static void Perform(Node node, NodeComponent component) => DocumentHistory.Current.Perform(new DeleteComponent(node, component));
+		public static void Perform(Node node, NodeComponent component)
+		{
+			foreach (var row in Document.Current.Rows.ToList()) {
+				if (row.TryGetAnimator(out var animator) && animator.Animable == component) {
+					UnlinkSceneItem.Perform(row);
+				}
+			}
+			DocumentHistory.Current.Perform(new DeleteComponent(node, component));
+		}
 
 		public sealed class Processor : OperationProcessor<DeleteComponent>
 		{
