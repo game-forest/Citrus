@@ -68,19 +68,23 @@ namespace Tangerine.Core.Operations
 				nameof(Node.Animations),
 				nameof(Node.Animators)
 			};
-			var sourceProperties =
-				from.GetType().GetProperties()
+			if (!(from is Animesh | from is DistortionMesh) && (to is Animesh | to is DistortionMesh)) {
+				excludedProperties.Add(nameof(Widget.SkinningWeights));
+			}
+			var sourceProperties = from
+				.GetType()
+				.GetProperties()
 				.Where(prop =>
 					prop.IsDefined(typeof(Yuzu.YuzuMember), true) &&
 					prop.CanWrite &&
 					!excludedProperties.Contains(prop.Name)
 				);
-			var destinationProperties =
-				to.GetType().GetProperties()
+			var destinationProperties = to
+				.GetType()
+				.GetProperties()
 				.Where(prop => prop.IsDefined(typeof(Yuzu.YuzuMember), true) && prop.CanRead);
-			var pairs =
-				sourceProperties.
-				Join(
+			var pairs = sourceProperties
+				.Join(
 					destinationProperties,
 					prop => prop.Name,
 					prop => prop.Name,
@@ -90,6 +94,15 @@ namespace Tangerine.Core.Operations
 				if (pair.SourceProp.PropertyType == pair.DestProp.PropertyType) {
 					pair.DestProp.SetValue(to, pair.SourceProp.GetValue(from));
 				}
+			}
+			if (excludedProperties.Contains(nameof(Widget.SkinningWeights))) {
+				var sw = from.AsWidget.SkinningWeights;
+				var bones = Enumerable.Range(0, 4)
+					.Where(i => sw[i].Index > 0)
+					.Select(i => from.Parent.Nodes.GetBone(sw[i].Index));
+				var widgets = new [] { to.AsWidget };
+				UntieWidgetsFromBones.Perform(bones, widgets);
+				TieWidgetsWithBones.Perform(bones, widgets);
 			}
 			var destType = to.GetType();
 			foreach (var component in from.Components) {

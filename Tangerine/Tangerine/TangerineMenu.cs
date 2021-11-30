@@ -126,7 +126,7 @@ namespace Tangerine
 						var rowToParentCount = Document.Current.SelectedRows()
 							.Where(r => r.GetNode() != null)
 							.ToDictionary(k => k, v => 0);
-						foreach (var (row, _) in rowToParentCount) {
+						foreach (var row in rowToParentCount.Keys) {
 							var parent = row.Parent;
 							while (parent != null) {
 								if (rowToParentCount.ContainsKey(parent)) {
@@ -136,8 +136,7 @@ namespace Tangerine
 							}
 						}
 						var sortedRows = rowToParentCount.OrderBy(i => -i.Value).ToList();
-						foreach (var kv in sortedRows) {
-							var row = kv.Key;
+						foreach (var (row, _) in sortedRows) {
 							try {
 								NodeTypeConvert.Perform(row, type, typeof(Node));
 							} catch (InvalidOperationException e) {
