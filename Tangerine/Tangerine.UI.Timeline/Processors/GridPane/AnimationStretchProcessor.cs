@@ -3,18 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tangerine.Core;
-using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
-using Tangerine.UI.Timeline.Components;
 using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.UI.Timeline
 {
 	public class AnimationStretchProcessor : ITaskProvider
 	{
-		private Timeline timeline => Timeline.Instance;
-		private GridPane grid => Timeline.Instance.Grid;
-		private WidgetInput input => grid.RootWidget.Input;
+		private GridPane Grid => Timeline.Instance.Grid;
+		private WidgetInput Input => Grid.RootWidget.Input;
 		private Dictionary<IKeyframe, double> savedPositions = new Dictionary<IKeyframe, double>();
 		private Dictionary<IAnimator, List<IKeyframe>> savedKeyframes = new Dictionary<IAnimator, List<IKeyframe>>();
 		private Dictionary<Marker, double> savedMarkerPositions = new Dictionary<Marker, double>();
@@ -31,21 +28,21 @@ namespace Tangerine.UI.Timeline
 					yield return null;
 					continue;
 				}
-				var topLeft = grid.CellToGridCoordinates(boundaries.Top, boundaries.Left);
-				var bottomRight = grid.CellToGridCoordinates(boundaries.Bottom + 1, boundaries.Right);
-				var mousePosition = grid.ContentWidget.LocalMousePosition();
+				var topLeft = Grid.CellToGridCoordinates(boundaries.Top, boundaries.Left);
+				var bottomRight = Grid.CellToGridCoordinates(boundaries.Bottom + 1, boundaries.Right);
+				var mousePosition = Grid.ContentWidget.LocalMousePosition();
 				if (mousePosition.Y < topLeft.Y || mousePosition.Y > bottomRight.Y) {
 					yield return null;
 					continue;
 				}
 				if (mousePosition.X - topLeft.X < 0 && mousePosition.X - topLeft.X > -10) {
 					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
-					if (input.ConsumeKeyPress(Key.Mouse0)) {
+					if (Input.ConsumeKeyPress(Key.Mouse0)) {
 						yield return Drag(boundaries, DragSide.Left);
 					}
 				} else if (mousePosition.X - bottomRight.X > 0 && mousePosition.X - bottomRight.X < 10) {
 					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
-					if (input.ConsumeKeyPress(Key.Mouse0)) {
+					if (Input.ConsumeKeyPress(Key.Mouse0)) {
 						yield return Drag(boundaries, DragSide.Right);
 					}
 				}
@@ -53,17 +50,21 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		private enum DragSide { Left, Right }
+		private enum DragSide
+		{
+			Left, 
+			Right
+		}
 
 		private IEnumerator<object> Drag(IntRectangle boundaries, DragSide side)
 		{
 			IntVector2? last = null;
 			Save(boundaries);
-			bool isStretchingMarkers = input.IsKeyPressed(Key.Control);
+			bool isStretchingMarkers = Input.IsKeyPressed(Key.Control);
 			using (Document.Current.History.BeginTransaction()) {
-				while (input.IsMousePressed()) {
+				while (Input.IsMousePressed()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
-					var current = grid.CellUnderMouse();
+					var current = Grid.CellUnderMouse();
 					if (current == last) {
 						yield return null;
 						continue;
@@ -107,41 +108,37 @@ namespace Tangerine.UI.Timeline
 				length = newPos - boundaries.Left - 1;
 			}
 			int oldLength = boundaries.Right - boundaries.Left - 1;
-			var processed = new HashSet<IAnimator>();
-			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
-				foreach (var animator in animable.Animators) {
-					if (animator.AnimationId != Document.Current.AnimationId || processed.Contains(animator) || !savedKeyframes.ContainsKey(animator)) {
-						continue;
+			foreach (var (host, animator) in GridSelection.EnumerateAnimators(boundaries)) {
+				if (!savedKeyframes.ContainsKey(animator)) {
+					continue;
+				}
+				IEnumerable<IKeyframe> saved = savedKeyframes[animator];
+				if (
+					side == DragSide.Left && length < oldLength ||
+					side == DragSide.Right && length > oldLength
+				) {
+					saved = saved.Reverse();
+				}
+				foreach (var key in saved) {
+					RemoveKeyframe.Perform(animator, key.Frame);
+				}
+				foreach (var key in saved) {
+					double relpos = savedPositions[key];
+					int newFrame;
+					if (side == DragSide.Left) {
+						newFrame = (int)Math.Round(newPos + relpos * length);
+					} else {
+						newFrame = (int)Math.Round(boundaries.Left + relpos * length);
 					}
-					processed.Add(animator);
-					IEnumerable<IKeyframe> saved = savedKeyframes[animator];
-					if (
-						side == DragSide.Left && length < oldLength ||
-						side == DragSide.Right && length > oldLength
-					) {
-						saved = saved.Reverse();
-					}
-					foreach (var key in saved) {
-						RemoveKeyframe.Perform(animator, key.Frame);
-					}
-					foreach (var key in saved) {
-						double relpos = savedPositions[key];
-						int newFrame;
-						if (side == DragSide.Left) {
-							newFrame = (int)Math.Round(newPos + relpos * length);
-						} else {
-							newFrame = (int)Math.Round(boundaries.Left + relpos * length);
-						}
-						var newKey = key.Clone();
-						newKey.Frame = newFrame;
-						SetAnimableProperty.Perform(
-							animable.Host, animator.TargetPropertyPath, newKey.Value,
-							createAnimatorIfNeeded: true,
-							createInitialKeyframeForNewAnimator: false,
-							newKey.Frame
-						);
-						SetKeyframe.Perform(animable.Host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
-					}
+					var newKey = key.Clone();
+					newKey.Frame = newFrame;
+					SetAnimableProperty.Perform(
+						host, animator.TargetPropertyPath, newKey.Value,
+						createAnimatorIfNeeded: true,
+						createInitialKeyframeForNewAnimator: false,
+						newKey.Frame
+					);
+					SetKeyframe.Perform(host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
 				}
 			}
 			if (stretchMarkers) {
@@ -170,20 +167,15 @@ namespace Tangerine.UI.Timeline
 			savedMarkerPositions.Clear();
 			savedMarkers.Clear();
 			var length = boundaries.Right - boundaries.Left - 1;
-			foreach (var animable in GridSelection.EnumerateAnimators(boundaries)) {
-				foreach (var animator in animable.Animators) {
-					if (animator.AnimationId != Document.Current.AnimationId) {
-						continue;
-					}
-					savedKeyframes.Add(animator, new List<IKeyframe>());
-					var keys = animator.Keys.Where(k =>
-						boundaries.Left <= k.Frame &&
-						k.Frame < boundaries.Right
-					);
-					foreach (var key in keys) {
-						savedPositions.Add(key, ((double)key.Frame - boundaries.Left) / length);
-						savedKeyframes[animator].Add(key);
-					}
+			foreach (var (_, animator) in GridSelection.EnumerateAnimators(boundaries)) {
+				savedKeyframes.Add(animator, new List<IKeyframe>());
+				var keys = animator.Keys.Where(k =>
+					boundaries.Left <= k.Frame &&
+					k.Frame < boundaries.Right
+				);
+				foreach (var key in keys) {
+					savedPositions.Add(key, ((double)key.Frame - boundaries.Left) / length);
+					savedKeyframes[animator].Add(key);
 				}
 			}
 			var markers = Document.Current.Animation.Markers.Where(k =>
