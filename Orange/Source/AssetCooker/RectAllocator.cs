@@ -11,7 +11,7 @@ namespace Orange
 		private readonly int totalArea;
 		private int allocatedArea;
 
-		public double GetPackRate() { return allocatedArea / (double)totalArea; }
+		public double GetPackRate() => allocatedArea / (double)totalArea;
 
 		public RectAllocator(Size size)
 		{
@@ -26,12 +26,14 @@ namespace Orange
 			int minSpareArea = int.MaxValue;
 			int topPadding;
 			int leftPadding;
+			int rightPadding;
+			int bottomPadding;
 			for (int i = 0; i < rectangles.Count; i++) {
 				r = rectangles[i];
 				leftPadding = r.Left == initialRectangle.Left ? 0 : padding;
 				topPadding = r.Top == initialRectangle.Top ? 0 : padding;
-				var rightPadding = r.Right == initialRectangle.Right ? 0 : padding;
-				var bottomPadding = r.Bottom == initialRectangle.Bottom ? 0 : padding;
+				rightPadding = r.Right == initialRectangle.Right ? 0 : padding;
+				bottomPadding = r.Bottom == initialRectangle.Bottom ? 0 : padding;
 				var requiredWidth = leftPadding + size.Width + rightPadding;
 				var requiredHeight = topPadding + size.Height + bottomPadding;
 				if (r.Width >= requiredWidth && r.Height >= requiredHeight) {
@@ -50,8 +52,10 @@ namespace Orange
 			r = rectangles[j];
 			leftPadding = r.Left == initialRectangle.Left ? 0 : padding;
 			topPadding = r.Top == initialRectangle.Top ? 0 : padding;
-			var occupiedWidth = leftPadding + size.Width + padding;
-			var occupiedHeight = topPadding + size.Height + padding;
+			rightPadding = padding.Clamp(0, r.Width - (leftPadding + size.Width));
+			bottomPadding = padding.Clamp(0, r.Height - (topPadding + size.Height));
+			var occupiedWidth = leftPadding + size.Width + rightPadding;
+			var occupiedHeight = topPadding + size.Height + bottomPadding;
 			rect = new IntRectangle(
 				r.A.X + leftPadding,
 				r.A.Y + topPadding,
