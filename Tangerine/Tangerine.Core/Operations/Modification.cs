@@ -1002,8 +1002,15 @@ namespace Tangerine.Core.Operations
 		public static void Perform(Node node, NodeComponent component)
 		{
 			foreach (var row in Document.Current.Rows.ToList()) {
-				if (row.TryGetAnimator(out var animator) && animator.Animable == component) {
-					UnlinkSceneItem.Perform(row);
+				if (row.TryGetAnimator(out var animator)) {
+					var animable = animator.Animable;
+					while (animable != null) {
+						if (animable == component) {
+							UnlinkSceneItem.Perform(row);
+							break;
+						}
+						animable = animable.Owner;
+					}
 				}
 			}
 			DocumentHistory.Current.Perform(new DeleteComponent(node, component));
