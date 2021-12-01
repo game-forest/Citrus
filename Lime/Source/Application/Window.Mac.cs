@@ -241,7 +241,7 @@ namespace Lime
 			if (Application.MainWindow == null) {
 				Application.MainWindow = this;
 			}
-			Application.Windows.Add(this);
+			Application.AddWindow(this);
 			Input = new WindowInput (this);
 			ClientSize = options.ClientSize;
 			Title = options.Title;
@@ -411,7 +411,7 @@ namespace Lime
 			RaiseVisibleChanging(false, true);
 			RaiseClosed();
 			View.Stop();
-			Application.Windows.Remove(this);
+			Application.RemoveWindow(this);
 			// ReleasedWhenClosed = true caused native crashes, so dispose window manually
 			// TODO: check the right way to dispose window and its resources (e.g. WindowController)
 			window.Dispose();

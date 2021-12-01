@@ -38,10 +38,7 @@ namespace Lime
 		[ThreadStatic]
 		private static bool isRenderingPhase;
 
-		public bool IsRenderingPhase
-		{
-			get { return isRenderingPhase; }
-		}
+		public bool IsRenderingPhase => isRenderingPhase;
 
 		protected CommonWindow()
 		{
@@ -49,7 +46,6 @@ namespace Lime
 				Current = (IWindow)this;
 			}
 			Context = new Context(Property.Create(() => Current, (v) => Current = v), this);
-			UnhandledExceptionOnUpdate += Application.UnhandledExceptionOnUpdate;
 		}
 
 		protected void RaiseActivated()

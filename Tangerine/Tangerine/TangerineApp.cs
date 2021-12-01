@@ -83,7 +83,7 @@ namespace Tangerine
 
 			LoadFont();
 
-			Application.UnhandledExceptionOnUpdate = ExceptionHandling.Handle;
+			Application.UnhandledExceptionOnUpdate += ExceptionHandling.Handle;
 			DockManager.Initialize(new Vector2(1024, 768));
 			DockManager.Instance.DocumentAreaDropFilesGesture.Recognized +=
 				new ScenesDropHandler { ShouldCreateContextMenu = false }.Handle;
