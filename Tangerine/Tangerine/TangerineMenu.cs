@@ -515,9 +515,14 @@ namespace Tangerine
 			}
 			var menu = new Menu();
 			int counter = 1;
-			foreach (var i in recentDocuments) {
-				string name = System.String.Format("{0}. {1}", counter++, i);
-				menu.Add(new Command(name, () => Project.Current.OpenDocument(i) ));
+			foreach (var document in recentDocuments) {
+				string name = System.String.Format("{0}. {1}", counter++, document);
+				menu.Add(new Command(name, () => {
+					if (Project.Current.OpenDocument(document) == null) {
+						AlertDialog.Show($"File `{document}` not found");
+						RebuildRecentDocumentsMenu();
+					}
+				}));
 			}
 			GenericCommands.RecentDocuments.Menu = menu;
 			GenericCommands.RecentDocuments.Enabled = recentDocuments.Count > 0;
@@ -532,13 +537,19 @@ namespace Tangerine
 			}
 			var menu = new Menu();
 			int counter = 1;
-			foreach (var i in recentProjects) {
-				string name = System.String.Format("{0}. {1} ({2})", counter++, System.IO.Path.GetFileName(i),
-					System.IO.Path.GetDirectoryName(i));
+			foreach (var project in recentProjects) {
+				string name = System.String.Format("{0}. {1} ({2})", counter++, System.IO.Path.GetFileName(project),
+					System.IO.Path.GetDirectoryName(project));
 				menu.Add(new Command(name, () =>  {
 					if (Project.Current.Close()) {
-						_ = new Project(i);
-						FileOpenProject.AddRecentProject(i);
+						if (File.Exists(project)) {
+							_ = new Project(project);
+							FileOpenProject.AddRecentProject(project);
+						} else {
+							AppUserPreferences.Instance.RecentProjects.RemoveAll(p => p == project);
+							AlertDialog.Show($"File `{project}` not found");
+							RebuildRecentProjectsMenu();
+						}
 					}
 				}));
 			}

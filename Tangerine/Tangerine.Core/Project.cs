@@ -274,7 +274,12 @@ namespace Tangerine.Core
 					doc = new Document(tmpFile);
 					doc.SaveAs(localPath);
 				} else {
-					doc = new Document(localPath, delayLoad);
+					if (GetFullPath(localPath, fullPath: out _)) {
+						doc = new Document(localPath, delayLoad);
+					} else {
+						UserPreferences.RecentDocuments.RemoveAll(p => p == localPath);
+						return null;
+					}
 				}
 				if (systemPath != null) {
 					File.Delete(systemPath);
@@ -308,7 +313,7 @@ namespace Tangerine.Core
 				recentDocuments.RemoveTail(startIndex: CoreUserPreferences.Instance.RecentDocumentCount);
 			}
 		}
-
+		
 		public bool CloseDocument(Document doc, bool force = false)
 		{
 			int currentIndex = documents.IndexOf(Document.Current);
