@@ -8,7 +8,7 @@ using Tangerine.Core.Operations;
 namespace Tangerine.Core.Components
 {
 	[NodeComponentDontSerialize]
-	public class TimelineItemStateComponent : Component
+	public class TimelineSceneItemStateComponent : Component
 	{
 		public bool NodesExpandable { get; set; }
 
@@ -36,13 +36,13 @@ namespace Tangerine.Core.Components
 		public int Index { get; set; }
 	}
 
-	public sealed class CurveRow : Component
+	public sealed class CurveSceneItem : Component
 	{
 		public Node Node { get; }
 		public IAnimator Animator { get; }
 		public CurveEditorState State { get; }
 
-		public CurveRow(Node node, IAnimator animator, CurveEditorState state)
+		public CurveSceneItem(Node node, IAnimator animator, CurveEditorState state)
 		{
 			Node = node;
 			Animator = animator;
@@ -50,49 +50,49 @@ namespace Tangerine.Core.Components
 		}
 	}
 
-	public sealed class NodeRow : Component
+	public sealed class NodeSceneItem : Component
 	{
 		public Node Node { get; set; }
 	}
 
-	public sealed class FolderRow : Component
+	public sealed class FolderSceneItem : Component
 	{
 		public Folder.Descriptor Folder { get; set; }
 	}
 
-	public sealed class AnimatorRow : Component
+	public sealed class AnimatorSceneItem : Component
 	{
 		public Node Node { get; set; }
 		public IAnimator Animator { get; set; }
 	}
 
-	public sealed class BoneRow : Component
+	public sealed class BoneSceneItem : Component
 	{
 		public Bone Bone { get; set; }
 	}
 
-	public sealed class AnimationRow : Component
+	public sealed class AnimationSceneItem : Component
 	{
 		public Animation Animation { get; set; }
 	}
 
-	public sealed class MarkerRow : Component
+	public sealed class MarkerSceneItem : Component
 	{
 		public Marker Marker { get; set; }
 	}
 
-	public sealed class AnimationTrackRow : Component
+	public sealed class AnimationTrackSceneItem : Component
 	{
 		public AnimationTrack Track { get; set; }
 	}
 
 	[AllowOnlyOneComponent]
-	public abstract class CommonRowData : Component
+	public abstract class CommonSceneItemData : Component
 	{
 		public abstract string Id { get; set; }
 	}
 
-	public sealed class CommonNodeRowData : CommonRowData
+	public sealed class CommonNodeSceneItemData : CommonSceneItemData
 	{
 		public Node Node { get; set; }
 
@@ -105,7 +105,7 @@ namespace Tangerine.Core.Components
 		}
 	}
 
-	public sealed class CommonFolderRowData : CommonRowData
+	public sealed class CommonFolderSceneItemData : CommonSceneItemData
 	{
 		public Folder.Descriptor Folder { get; set; }
 
@@ -118,7 +118,7 @@ namespace Tangerine.Core.Components
 		}
 	}
 
-	public sealed class CommonPropertyRowData : CommonRowData
+	public sealed class CommonPropertySceneItemData : CommonSceneItemData
 	{
 		public IAnimator Animator { get; set; }
 
@@ -129,14 +129,14 @@ namespace Tangerine.Core.Components
 		}
 	}
 
-	public class CommonAnimationRowData : CommonRowData
+	public class CommonAnimationSceneItemData : CommonSceneItemData
 	{
 		public Animation Animation { get; set; }
 
 		public override string Id { get; set; }
 	}
 
-	public sealed class CommonMarkerRowData : CommonRowData
+	public sealed class CommonMarkerSceneItemData : CommonSceneItemData
 	{
 		public Marker Marker { get; set; }
 
@@ -149,7 +149,7 @@ namespace Tangerine.Core.Components
 		}
 	}
 
-	public sealed class CommonAnimationTrackRowData : CommonRowData
+	public sealed class CommonAnimationTrackSceneItemData : CommonSceneItemData
 	{
 		public AnimationTrack Track { get; set; }
 

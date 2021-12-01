@@ -86,7 +86,7 @@ namespace Tangerine.UI.SceneView
 					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Rotation), index == 0 ? boneAngle : boneAngle - parentAngle, CoreUserPreferences.Instance.AutoKeyframes);
 					var boneSceneItem = Document.Current.GetSceneItemForObject(bone);
 					UnlinkSceneItem.Perform(boneSceneItem);
-					Row baseItem;
+					SceneItem baseItem;
 					if (index != 0) {
 						baseItem = Document.Current.GetSceneItemForObject(
 							BoneUtils.GetBone(bone.Parent.Nodes, index));

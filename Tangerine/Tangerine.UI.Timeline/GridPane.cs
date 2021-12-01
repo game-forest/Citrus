@@ -56,7 +56,7 @@ namespace Tangerine.UI.Timeline
 		{
 			var content = ContentWidget;
 			content.Nodes.Clear();
-			foreach (var item in Document.Current.Rows) {
+			foreach (var item in Document.Current.VisibleSceneItems) {
 				var gridItem = item.Components.Get<Components.RowView>().GridRowView;
 				var widget = gridItem.GridWidget;
 				if (!gridItem.GridWidgetAwakeBehavior.IsAwoken) {
@@ -71,7 +71,7 @@ namespace Tangerine.UI.Timeline
 
 		private void RefreshItemWidths()
 		{
-			foreach (var item in Document.Current.Rows) {
+			foreach (var item in Document.Current.VisibleSceneItems) {
 				var gridItem = item.Components.Get<Components.RowView>().GridRowView;
 				gridItem.GridWidget.MinWidth = Timeline.Instance.ColumnCount * TimelineMetrics.ColWidth;
 			}
@@ -84,27 +84,31 @@ namespace Tangerine.UI.Timeline
 			if (ContentWidget.Nodes.Count > 0) {
 				ContentWidget.PrepareRendererState();
 				Renderer.DrawRect(Vector2.Zero, ContentWidget.Size, Theme.Colors.WhiteBackground);
-				RenderSelectedRowsBackground();
+				RenderSelectedItemsBackground();
 			}
 			RenderVerticalLines();
 			RenderHorizontalLines();
 			RenderMarkerRulers();
 		}
 
-		private void RenderSelectedRowsBackground()
+		private void RenderSelectedItemsBackground()
 		{
-			foreach (var row in Document.Current.SelectedRows()) {
-				var gridWidget = row.GridWidget();
+			foreach (var i in Document.Current.SelectedSceneItems()) {
+				var gridWidget = i.GridWidget();
 				Renderer.DrawRect(
-					0.0f, gridWidget.Top(), gridWidget.Right(), gridWidget.Bottom(),
-					ColorTheme.Current.TimelineGrid.SelectedRowBackground);
+					x0: 0.0f,
+					y0: gridWidget.Top(),
+					x1: gridWidget.Right(),
+					y1: gridWidget.Bottom(),
+					color: ColorTheme.Current.TimelineGrid.SelectedRowBackground
+				);
 			}
 		}
 
 		private void RenderVerticalLines()
 		{
 			var a = new Vector2(0, 1);
-			var b = new Vector2(0, Document.Current.Rows.Count * (TimelineMetrics.DefaultRowHeight + 1) + 1);
+			var b = new Vector2(0, Document.Current.VisibleSceneItems.Count * (TimelineMetrics.DefaultRowHeight + 1) + 1);
 			timeline.GetVisibleColumnRange(out var minColumn, out var maxColumn);
 			var offset = Document.Current.Animation.IsCompound ? 0.5f : 0;
 			for (int columnIndex = minColumn; columnIndex <= maxColumn; columnIndex++) {
@@ -118,8 +122,8 @@ namespace Tangerine.UI.Timeline
 			var a = new Vector2(0.0f, 0.5f);
 			var b = new Vector2(ContentWidget.Width, 0.5f);
 			Renderer.DrawLine(a, b, ColorTheme.Current.TimelineGrid.Lines);
-			foreach (var row in Document.Current.Rows) {
-				a.Y = b.Y = 0.5f + row.GridWidget().Bottom();
+			foreach (var i in Document.Current.VisibleSceneItems) {
+				a.Y = b.Y = 0.5f + i.GridWidget().Bottom();
 				Renderer.DrawLine(a, b, ColorTheme.Current.TimelineGrid.Lines);
 			}
 		}
@@ -157,19 +161,27 @@ namespace Tangerine.UI.Timeline
 		{
 			widget.PrepareRendererState();
 			var gridSpans = new List<Core.Components.GridSpanList>();
-			foreach (var row in Document.Current.Rows) {
-				gridSpans.Add(row.Components.GetOrAdd<Core.Components.GridSpanListComponent>().Spans.GetNonOverlappedSpans());
+			foreach (var item in Document.Current.VisibleSceneItems) {
+				gridSpans.Add(
+					item.Components.GetOrAdd<Core.Components.GridSpanListComponent>().Spans.GetNonOverlappedSpans()
+				);
 			}
 
-			for (var row = 0; row < Document.Current.Rows.Count; row++) {
-				var spans = gridSpans[row];
+			for (var itemIndex = 0; itemIndex < Document.Current.VisibleSceneItems.Count; itemIndex++) {
+				var spans = gridSpans[itemIndex];
 				int? lastColumn = null;
-				var topSpans = row > 0 ? gridSpans[row - 1].GetEnumerator() : (IEnumerator<Core.Components.GridSpan>)null;
-				var bottomSpans = row + 1 < Document.Current.Rows.Count ? gridSpans[row + 1].GetEnumerator() : (IEnumerator<Core.Components.GridSpan>)null;
+				var topSpans = itemIndex > 0
+					? gridSpans[itemIndex - 1].GetEnumerator()
+					: (IEnumerator<Core.Components.GridSpan>)null;
+				var bottomSpans = itemIndex + 1 < Document.Current.VisibleSceneItems.Count
+					? gridSpans[itemIndex + 1].GetEnumerator()
+					: (IEnumerator<Core.Components.GridSpan>)null;
 				Core.Components.GridSpan? topSpan = null;
 				Core.Components.GridSpan? bottomSpan = null;
-				var offsetRow = row + offset.Y;
-				var gridWidgetBottom = (0 <= offsetRow && offsetRow < Document.Current.Rows.Count) ? (float?)Document.Current.Rows[offsetRow].GridWidget().Bottom() : null;
+				var offsetItem = itemIndex + offset.Y;
+				var gridWidgetBottom = (0 <= offsetItem && offsetItem < Document.Current.VisibleSceneItems.Count)
+					? (float?)Document.Current.VisibleSceneItems[offsetItem].GridWidget().Bottom()
+					: null;
 				for (var i = 0; i < spans.Count; i++) {
 					var span = spans[i];
 					var isLastSpan = i + 1 == spans.Count;
@@ -200,22 +212,55 @@ namespace Tangerine.UI.Timeline
 						var isBottomCellMissing = !bottomSpan.HasValue || column < bottomSpan.Value.A;
 						lastColumn = column;
 
-						var a = CellToGridCoordinates(new IntVector2(column, row) + offset);
-						var b = CellToGridCoordinates(new IntVector2(column + 1, row + 1) + offset);
+						var a = CellToGridCoordinates(new IntVector2(column, itemIndex) + offset);
+						var b = CellToGridCoordinates(new IntVector2(column + 1, itemIndex + 1) + offset);
 						a = new Vector2(a.X + 1.5f, a.Y + 0.5f);
 						b = new Vector2(b.X - 0.5f, (gridWidgetBottom ?? b.Y) - 0.5f);
-						Renderer.DrawRect(a + Vector2.Up * 0.5f, b + new Vector2(1f + (isRightCellMissing ? 0 : 1), (isBottomCellMissing ? 0 : 1)), ColorTheme.Current.TimelineGrid.Selection);
+						Renderer.DrawRect(
+							a: a + Vector2.Up * 0.5f,
+							b: b + new Vector2(1f + (isRightCellMissing ? 0 : 1),
+							y: (isBottomCellMissing ? 0 : 1)),
+							color: ColorTheme.Current.TimelineGrid.Selection
+						);
 						if (isLeftCellMissing) {
-							Renderer.DrawLine(a.X, a.Y - (isTopCellMissing ? 0 : 1), a.X, b.Y + (isBottomCellMissing ? 0 : 1), ColorTheme.Current.TimelineGrid.SelectionBorder, cap: LineCap.Square);
+							Renderer.DrawLine(
+								x0: a.X,
+								y0: a.Y - (isTopCellMissing ? 0 : 1),
+								x1: a.X,
+								y1: b.Y + (isBottomCellMissing ? 0 : 1),
+								color: ColorTheme.Current.TimelineGrid.SelectionBorder,
+								cap: LineCap.Square
+							);
 						}
 						if (isTopCellMissing) {
-							Renderer.DrawLine(a.X - (isLeftCellMissing ? 0 : 1), a.Y, b.X + (isRightCellMissing ? 0 : 1), a.Y, ColorTheme.Current.TimelineGrid.SelectionBorder, cap: LineCap.Square);
+							Renderer.DrawLine(
+								x0: a.X - (isLeftCellMissing ? 0 : 1),
+								y0: a.Y,
+								x1: b.X + (isRightCellMissing ? 0 : 1),
+								y1: a.Y,
+								color: ColorTheme.Current.TimelineGrid.SelectionBorder,
+								cap: LineCap.Square
+							);
 						}
 						if (isRightCellMissing) {
-							Renderer.DrawLine(b.X, a.Y - (isTopCellMissing ? 0 : 1), b.X, b.Y + (isBottomCellMissing ? 0 : 1), ColorTheme.Current.TimelineGrid.SelectionBorder, cap: LineCap.Square);
+							Renderer.DrawLine(
+								x0: b.X,
+								y0: a.Y - (isTopCellMissing ? 0 : 1),
+								x1: b.X,
+								y1: b.Y + (isBottomCellMissing ? 0 : 1),
+								color: ColorTheme.Current.TimelineGrid.SelectionBorder,
+								cap: LineCap.Square
+							);
 						}
 						if (isBottomCellMissing) {
-							Renderer.DrawLine(a.X - (isLeftCellMissing ? 0 : 1), b.Y, b.X + (isRightCellMissing ? 0 : 1), b.Y, ColorTheme.Current.TimelineGrid.SelectionBorder, cap: LineCap.Square);
+							Renderer.DrawLine(
+								x0: a.X - (isLeftCellMissing ? 0 : 1),
+								y0: b.Y,
+								x1: b.X + (isRightCellMissing ? 0 : 1),
+								y1: b.Y,
+								color: ColorTheme.Current.TimelineGrid.SelectionBorder,
+								cap: LineCap.Square
+							);
 						}
 					}
 				}
@@ -230,8 +275,10 @@ namespace Tangerine.UI.Timeline
 		public Vector2 CellToGridCoordinates(int row, int col)
 		{
 			var doc = Document.Current;
-			var rows = doc.Rows;
-			var y = row < rows.Count ? rows[Math.Max(row, 0)].GridWidget().Top() : rows[rows.Count - 1].GridWidget().Bottom();
+			var items = doc.VisibleSceneItems;
+			var y = row < items.Count
+				? items[Math.Max(row, 0)].GridWidget().Top()
+				: items[items.Count - 1].GridWidget().Bottom();
 			return new Vector2((col + (doc.Animation.IsCompound ? 0.5f : 0)) * TimelineMetrics.ColWidth, y);
 		}
 
@@ -241,15 +288,15 @@ namespace Tangerine.UI.Timeline
 			var offset = Document.Current.Animation.IsCompound ? -0.5f : 0;
 			var x = (int)(mousePos.X / TimelineMetrics.ColWidth + offset);
 			if (mousePos.Y <= 0) {
-				return new IntVector2(x, Document.Current.Rows.Count > 0 ? 0 : -1);
+				return new IntVector2(x, Document.Current.VisibleSceneItems.Count > 0 ? 0 : -1);
 			}
-			foreach (var row in Document.Current.Rows) {
-				var gridWidget = row.GridWidget();
+			foreach (var item in Document.Current.VisibleSceneItems) {
+				var gridWidget = item.GridWidget();
 				if (mousePos.Y >= gridWidget.Top() && mousePos.Y < gridWidget.Bottom() + TimelineMetrics.RowSpacing) {
-					return new IntVector2(x, row.GetTimelineItemState().Index);
+					return new IntVector2(x, item.GetTimelineSceneItemState().Index);
 				}
 			}
-			return new IntVector2(x, Math.Max(0, Document.Current.Rows.Count - 1));
+			return new IntVector2(x, Math.Max(0, Document.Current.VisibleSceneItems.Count - 1));
 		}
 
 		public bool IsMouseOverRow() => RootWidget.Input.MousePosition.Y - ContentWidget.GlobalPosition.Y < ContentSize.Y;

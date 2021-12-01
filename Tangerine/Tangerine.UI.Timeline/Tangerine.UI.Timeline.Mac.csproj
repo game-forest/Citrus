@@ -76,6 +76,7 @@
     <Compile Include="CurveEditorPane.cs" />
     <Compile Include="GridPane.cs" />
     <Compile Include="GridPaneFilesDropHandler.cs" />
+    <Compile Include="ITimelineIconProvider.cs" />
     <Compile Include="LinkIndicatorButton.cs" />
     <Compile Include="MarkerPropertiesDialog.cs" />
     <Compile Include="Operations\CenterTimelineOnCurrentColumn.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Operations\DeselectGridSpan.cs" />
     <Compile Include="Operations\DragKeyframes.cs" />
     <Compile Include="Operations\EnsureCurrentColumnVisibleIfContainerChanged.cs" />
-    <Compile Include="Operations\EnsureRowVisibleIfSelected.cs" />
+    <Compile Include="Operations\EnsureSceneItemVisibleIfSelected.cs" />
     <Compile Include="Operations\MoveNodes.cs" />
     <Compile Include="Operations\NumericMoveDialog.cs" />
     <Compile Include="Operations\NumericScaleDialog.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Toolbar.cs" />
     <Compile Include="TreeViewNodeLinkIndication.cs" />
     <Compile Include="TreeViewPresentation.cs" />
-    <Compile Include="ITimelineIconProvider.cs" />
     <Compile Include="TreeViewSceneItem.cs" />
     <Compile Include="Utils\KeyframeFigure.cs" />
     <Compile Include="Utils\TimelineMetrics.cs" />

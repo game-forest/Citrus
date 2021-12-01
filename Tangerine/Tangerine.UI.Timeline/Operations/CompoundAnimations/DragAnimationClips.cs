@@ -12,19 +12,25 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 	{
 		public static void Perform(IntVector2 offset, bool removeOriginals)
 		{
-			var rows = Document.Current.Rows.ToList();
+			var items = Document.Current.VisibleSceneItems.ToList();
 			if (offset.Y > 0) {
-				rows.Reverse();
+				items.Reverse();
 			}
-			foreach (var row in rows) {
-				var track = row.Components.Get<AnimationTrackRow>()?.Track;
+			foreach (var item in items) {
+				var track = item.Components.Get<AnimationTrackSceneItem>()?.Track;
 				if (track?.EditorState().Locked != false) {
 					continue;
 				}
 				var clips = track.Clips.Where(i => i.IsSelected).ToList();
 				var keys = new List<IKeyframe>();
-				if (track.Animators.TryFind(nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.AnimationId)) {
-					keys = weightAnimator.ReadonlyKeys.Where(k => clips.Any(c => c.BeginFrame <= k.Frame && k.Frame <= c.EndFrame)).ToList();
+				if (
+					track.Animators.TryFind(
+						nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.AnimationId
+					)
+				) {
+					keys = weightAnimator.ReadonlyKeys
+						.Where(k => clips.Any(c => c.BeginFrame <= k.Frame && k.Frame <= c.EndFrame))
+						.ToList();
 				}
 				if (removeOriginals) {
 					foreach (var key in keys) {
@@ -38,9 +44,10 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 						SetProperty.Perform(clip, nameof(AnimationClip.IsSelected), false);
 					}
 				}
-				int numRows = Document.Current.Rows.Count;
-				var destRow = Document.Current.Rows[(row.GetTimelineItemState().Index + offset.Y).Clamp(0, numRows - 1)];
-				var destTrack = destRow.Components.Get<AnimationTrackRow>()?.Track;
+				int itemCount = Document.Current.VisibleSceneItems.Count;
+				var destItemIndex = (item.GetTimelineSceneItemState().Index + offset.Y).Clamp(0, itemCount - 1);
+				var destItem = Document.Current.VisibleSceneItems[destItemIndex];
+				var destTrack = destItem.Components.Get<AnimationTrackSceneItem>()?.Track;
 				foreach (var clip in clips) {
 					var newClip = clip.Clone();
 					newClip.BeginFrame += offset.X;

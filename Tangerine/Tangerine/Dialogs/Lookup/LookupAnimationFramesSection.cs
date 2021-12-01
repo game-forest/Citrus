@@ -49,8 +49,8 @@ namespace Tangerine
 		private static int GetLastAnimationFrame()
 		{
 			var lastFrameIndex = 0;
-			foreach (var row in Document.Current.Rows) {
-				var node = row.Components.Get<Core.Components.NodeRow>()?.Node;
+			foreach (var i in Document.Current.VisibleSceneItems) {
+				var node = i.Components.Get<Core.Components.NodeSceneItem>()?.Node;
 				if (node == null) {
 					continue;
 				}

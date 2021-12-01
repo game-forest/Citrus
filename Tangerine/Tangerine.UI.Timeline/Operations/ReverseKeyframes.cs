@@ -26,7 +26,7 @@ namespace Tangerine.UI.Timeline.Operations
 			}
 			using (Document.Current.History.BeginTransaction()) {
 				for (int i = Boundaries.Value.Top; i <= Boundaries.Value.Bottom; ++i) {
-					if (!(Document.Current.Rows[i].Components.Get<NodeRow>()?.Node is IAnimationHost animable)) {
+					if (!(Document.Current.VisibleSceneItems[i].Components.Get<NodeSceneItem>()?.Node is IAnimationHost animable)) {
 						continue;
 					}
 					foreach (var animator in animable.Animators.ToList()) {
@@ -48,26 +48,26 @@ namespace Tangerine.UI.Timeline.Operations
 
 		private static Boundaries? GetSelectionBoundaries()
 		{
-			var rows = Document.Current.SelectedRows().ToList();
-			if (rows.Count == 0) {
+			var items = Document.Current.SelectedSceneItems().ToList();
+			if (items.Count == 0) {
 				return GetTimelineBoundaries();
 			}
 			var span = SingleSpan(
-				rows[0].Components.Get<GridSpanListComponent>()
+				items[0].Components.Get<GridSpanListComponent>()
 				?.Spans.GetNonOverlappedSpans());
-			var index = rows[0].GetTimelineItemState().Index;
+			var index = items[0].GetTimelineSceneItemState().Index;
 			if (span == null) {
 				return null;
 			}
-			for (int i = 1; i < rows.Count; ++i) {
+			for (int i = 1; i < items.Count; ++i) {
 				var newSpan = SingleSpan(
-					rows[i].Components.Get<GridSpanListComponent>()
+					items[i].Components.Get<GridSpanListComponent>()
 					?.Spans.GetNonOverlappedSpans());
 				if (
 					newSpan == null ||
 					span?.A != newSpan?.A ||
 					span?.B != newSpan?.B ||
-					++index != rows[i].GetTimelineItemState().Index
+					++index != items[i].GetTimelineSceneItemState().Index
 				) {
 					return null;
 				}
@@ -76,7 +76,7 @@ namespace Tangerine.UI.Timeline.Operations
 			return new Boundaries {
 				Left = span.Value.A,
 				Right = span.Value.B,
-				Top = rows[0].GetTimelineItemState().Index,
+				Top = items[0].GetTimelineSceneItemState().Index,
 				Bottom = index
 			};
 		}
@@ -93,9 +93,8 @@ namespace Tangerine.UI.Timeline.Operations
 		private static Boundaries? GetTimelineBoundaries()
 		{
 			int right = 0;
-			foreach (var row in Document.Current.Rows) {
-				var animable = row.Components.Get<NodeRow>()?.Node as IAnimationHost;
-				if (animable == null) {
+			foreach (var i in Document.Current.VisibleSceneItems) {
+				if (!(i.Components.Get<NodeSceneItem>()?.Node is IAnimationHost animable)) {
 					continue;
 				}
 				foreach (var animator in animable.Animators) {
@@ -108,7 +107,7 @@ namespace Tangerine.UI.Timeline.Operations
 				Left = 0,
 				Right = right,
 				Top = 0,
-				Bottom = Document.Current.Rows.Last().GetTimelineItemState().Index
+				Bottom = Document.Current.VisibleSceneItems.Last().GetTimelineSceneItemState().Index
 			};
 		}
 	}

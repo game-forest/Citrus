@@ -11,7 +11,7 @@ namespace Tangerine.UI
 {
 	public class WidgetFactoryComponent<TItem> : NodeComponent
 	{
-		private Func<TItem, Widget> rowBuilder;
+		private readonly Func<TItem, Widget> rowBuilder;
 		protected Widget Container { get; }
 		protected readonly Dictionary<TItem, Widget> widgetCache;
 

@@ -763,7 +763,7 @@ namespace Tangerine.Core.Operations
 			return Perform(parent, index, nodeType);
 		}
 
-		public static Node Perform(Row parent, SceneTreeIndex index, Type nodeType)
+		public static Node Perform(SceneItem parent, SceneTreeIndex index, Type nodeType)
 		{
 			if (!nodeType.IsSubclassOf(typeof(Node))) {
 				throw new InvalidOperationException();
@@ -785,7 +785,7 @@ namespace Tangerine.Core.Operations
 			node.Id = GenerateNodeId(hostNode, nodeType);
 			Document.Decorate(node);
 			LinkSceneItem.Perform(parent, index, node);
-			ClearRowSelection.Perform();
+			ClearSceneItemSelection.Perform();
 			SelectNode.Perform(node);
 			return node;
 		}

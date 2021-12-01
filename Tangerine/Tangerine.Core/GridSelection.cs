@@ -23,26 +23,26 @@ namespace Tangerine.Core
 		public static bool GetSelectionBoundaries(out IntRectangle result)
 		{
 			result = new IntRectangle();
-			var rows = Document.Current?.SelectedRows().ToList();
-			if (rows == null || rows?.Count == 0) {
+			var items = Document.Current?.SelectedSceneItems().ToList();
+			if (items == null || items?.Count == 0) {
 				return false;
 			}
 			var span = SingleSpan(
-				rows[0].Components.Get<GridSpanListComponent>()
+				items[0].Components.Get<GridSpanListComponent>()
 				?.Spans.GetNonOverlappedSpans());
-			var index = rows[0].GetTimelineItemState().Index;
+			var index = items[0].GetTimelineSceneItemState().Index;
 			if (span == null) {
 				return false;
 			}
-			for (int i = 1; i < rows.Count; ++i) {
+			for (int i = 1; i < items.Count; ++i) {
 				var newSpan = SingleSpan(
-					rows[i].Components.Get<GridSpanListComponent>()
+					items[i].Components.Get<GridSpanListComponent>()
 					?.Spans.GetNonOverlappedSpans());
 				if (
 					newSpan == null ||
 					span?.A != newSpan?.A ||
 					span?.B != newSpan?.B ||
-					++index != rows[i].GetTimelineItemState().Index
+					++index != items[i].GetTimelineSceneItemState().Index
 				) {
 					return false;
 				}
@@ -51,7 +51,7 @@ namespace Tangerine.Core
 			result = new IntRectangle {
 				Left = Math.Max(span.Value.A, 0),
 				Right = span.Value.B,
-				Top = rows[0].GetTimelineItemState().Index,
+				Top = items[0].GetTimelineSceneItemState().Index,
 				Bottom = index
 			};
 			return true;
@@ -60,27 +60,28 @@ namespace Tangerine.Core
 		public static IEnumerable<(Node AnimationHost, IAnimator Animator)> EnumerateAnimators(IntRectangle boundaries)
 		{
 			var processed = new HashSet<IAbstractAnimator>();
-			var rows = Document.Current.Rows.ToList();
+			var items = Document.Current.VisibleSceneItems.ToList();
 			for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
-				var components = rows[i].Components;
-				if (components.Get<NodeRow>()?.Node is Node node) {
+				var components = items[i].Components;
+				if (components.Get<NodeSceneItem>()?.Node is Node node) {
 					foreach (var animator in node.Animators) {
 						if (ShouldProcessAnimator(animator)) {
 							yield return (node, animator);
 						}
 					}
 				} else {
-					var row = components.Get<AnimatorRow>();
-					if (row != null && row.Node != null && ShouldProcessAnimator(row.Animator)) {
-						yield return (row.Node, row.Animator);
+					var item = components.Get<AnimatorSceneItem>();
+					if (item != null && item.Node != null && ShouldProcessAnimator(item.Animator)) {
+						yield return (item.Node, item.Animator);
 					}
 				}
 			}
-			
+
 			bool ShouldProcessAnimator(IAbstractAnimator animator)
 			{
 				return processed.Add(animator) && CanAccessAnimator(animator);
 			}
+
 			static bool CanAccessAnimator(IAbstractAnimator animator)
 			{
 				return Document.Current.Animation.ValidatedEffectiveAnimatorsSet.Contains(animator);

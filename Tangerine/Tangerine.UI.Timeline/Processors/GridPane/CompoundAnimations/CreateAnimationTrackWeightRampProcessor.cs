@@ -40,8 +40,8 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 		{
 			if (Document.Current.Animation.IsCompound && Grid.RootWidget.Input.IsKeyPressed(Key.Shift)) {
 				var c = Grid.CellUnderMouse();
-				if (Document.Current.Rows.Count > 0) {
-					var w = Document.Current.Rows[c.Y].GridWidget();
+				if (Document.Current.VisibleSceneItems.Count > 0) {
+					var w = Document.Current.VisibleSceneItems[c.Y].GridWidget();
 					w.PrepareRendererState();
 					Renderer.DrawLine(
 						(c.X + .5f) * TimelineMetrics.ColWidth + .5f, 0,

@@ -21,8 +21,8 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 					var c = Timeline.Instance.Grid.CellUnderMouse();
 					Document.Current.History.DoTransaction(() => {
 						Operations.SetCurrentColumn.Perform(c.X);
-						Core.Operations.ClearRowSelection.Perform();
-						Core.Operations.SelectRow.Perform(Document.Current.Rows[c.Y]);
+						Core.Operations.ClearSceneItemSelection.Perform();
+						Core.Operations.SelectSceneItem.Perform(Document.Current.VisibleSceneItems[c.Y]);
 					});
 					var menu = new Menu {
 						new Command("Add", () => AddAnimationClip.Perform(c)) { Enabled = AddAnimationClip.IsEnabled() },

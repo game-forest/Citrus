@@ -216,7 +216,7 @@ namespace Tangerine.UI.SceneView
 							if (clickArea.Input.WasMousePressed()) {
 								if (!input.IsKeyPressed(MultiSelectKey)) {
 									Document.Current.History.DoTransaction(() => {
-										Core.Operations.ClearRowSelection.Perform();
+										Core.Operations.ClearSceneItemSelection.Perform();
 										Core.Operations.SelectNode.Perform(widget);
 									});
 									Closed = true;

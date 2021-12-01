@@ -25,8 +25,11 @@ namespace Tangerine.UI.Timeline.Operations
 		{
 			var list = new List<AnimationHostKeyBinding>();
 
-			int startRow = Document.Current.TopLevelSelectedRows().First().GetTimelineItemState().Index;
-			var spans = Document.Current.Rows[startRow].Components.Get<GridSpanListComponent>()?.Spans;
+			int startItemIndex = Document.Current.TopLevelSelectedSceneItems()
+				.First()
+				.GetTimelineSceneItemState().Index;
+			var spans = Document.Current.VisibleSceneItems[startItemIndex].Components
+				.Get<GridSpanListComponent>()?.Spans;
 			if (spans == null || !spans.Any()) {
 				return list;
 			}
@@ -34,18 +37,18 @@ namespace Tangerine.UI.Timeline.Operations
 			int animationHostIndex = -1;
 			IAnimationHost previousAnimationHost = null;
 
-			foreach (var row in Document.Current.SelectedRows()) {
-				spans = row.Components.Get<GridSpanListComponent>()?.Spans;
+			foreach (var item in Document.Current.SelectedSceneItems()) {
+				spans = item.Components.Get<GridSpanListComponent>()?.Spans;
 				if (spans == null) {
 					continue;
 				}
-				if (row.TryGetAnimator(out var animator)) {
+				if (item.TryGetAnimator(out var animator)) {
 					if (previousAnimationHost != animator.Owner) {
 						previousAnimationHost = animator.Owner;
 						animationHostIndex++;
 					}
 					ProcessAnimator(animator);
-				} else if (row.TryGetNode(out var node)) {
+				} else if (item.TryGetNode(out var node)) {
 					animationHostIndex++;
 					previousAnimationHost = node;
 					foreach (var a in node.Animators) {
@@ -100,32 +103,35 @@ namespace Tangerine.UI.Timeline.Operations
 		public static void Perform()
 		{
 			var keys = KeyframeClipboard.Keys;
-			if (keys == null || !Document.Current.TopLevelSelectedRows().Any()) {
+			if (keys == null || !Document.Current.TopLevelSelectedSceneItems().Any()) {
 				return;
 			}
-			int startRow = Document.Current.TopLevelSelectedRows().First().GetTimelineItemState().Index;
-			var spans = Document.Current.Rows[startRow].Components.Get<GridSpanListComponent>()?.Spans;
+			int startItemIndex = Document.Current.TopLevelSelectedSceneItems()
+				.First()
+				.GetTimelineSceneItemState().Index;
+			var spans = Document.Current.VisibleSceneItems[startItemIndex].Components
+				.Get<GridSpanListComponent>()?.Spans;
 			if (spans == null || !spans.Any()) {
 				return;
 			}
 			int startCol = spans.First().A;
 			Document.Current.History.DoTransaction(() => {
-				var rows = Document.Current.Rows;
-				if (rows[startRow].TryGetAnimator(out _)) {
-					startRow = rows.IndexOf(Document.Current.Rows[startRow].Parent);
+				var items = Document.Current.VisibleSceneItems;
+				if (items[startItemIndex].TryGetAnimator(out _)) {
+					startItemIndex = items.IndexOf(Document.Current.VisibleSceneItems[startItemIndex].Parent);
 				}
-				int rowIndex = startRow;
+				int itemIndex = startItemIndex;
 				int animationHostIndex = 0;
 				IAnimationHost animationHost = null;
 				Node node = null;
 
 				foreach (var key in keys) {
 					int colIndex = startCol + key.Frame;
-					if (rowIndex >= Document.Current.Rows.Count || colIndex < 0) {
+					if (itemIndex >= Document.Current.VisibleSceneItems.Count || colIndex < 0) {
 						continue;
 					}
-					while (rowIndex < rows.Count) {
-						node = rows[rowIndex].Components.Get<NodeRow>()?.Node;
+					while (itemIndex < items.Count) {
+						node = items[itemIndex].Components.Get<NodeSceneItem>()?.Node;
 						animationHost = node;
 						if (animationHost != null) {
 							if (animationHostIndex == key.AnimationHostOrderIndex) {
@@ -133,9 +139,9 @@ namespace Tangerine.UI.Timeline.Operations
 							}
 							animationHostIndex++;
 						}
-						++rowIndex;
+						++itemIndex;
 					}
-					if (rowIndex >= rows.Count) {
+					if (itemIndex >= items.Count) {
 						break;
 					}
 					if (node.EditorState().Locked) {
@@ -158,12 +164,13 @@ namespace Tangerine.UI.Timeline.Operations
 		public static void Perform()
 		{
 			Document.Current.History.DoTransaction(() => {
-				foreach (var row in Document.Current.SelectedRows().ToList()) {
-					var spans = row.Components.Get<GridSpanListComponent>()?.Spans;
+				foreach (var item in Document.Current.SelectedSceneItems().ToList()) {
+					var spans = item.Components.Get<GridSpanListComponent>()?.Spans;
 					if (spans == null) {
 						continue;
 					}
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
+					var node = item.Components.Get<NodeSceneItem>()?.Node
+						?? item.Components.Get<AnimatorSceneItem>()?.Node;
 					if (node.EditorState().Locked) {
 						continue;
 					}
@@ -175,7 +182,8 @@ namespace Tangerine.UI.Timeline.Operations
 						if (animator.AnimationId != Document.Current.AnimationId) {
 							continue;
 						}
-						foreach (var keyframe in animator.Keys.Where(i => spans.Any(j => j.Contains(i.Frame))).ToList()) {
+						var keysWithinSpan = animator.Keys.Where(i => spans.Any(j => j.Contains(i.Frame))).ToList();
+						foreach (var keyframe in keysWithinSpan) {
 							RemoveKeyframe.Perform(animator, keyframe.Frame);
 						}
 					}

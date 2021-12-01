@@ -18,9 +18,9 @@ namespace Tangerine.UI
 		public static readonly ICommand ExitNode = new Command("Exit Node", new Shortcut(Key.BackSpace));
 		public static readonly ICommand ExitNodeAlias = new Command("Exit Node", new Shortcut(Modifiers.Alt | Modifiers.Shift, Key.Left));
 		public static readonly ICommand ExitNodeMouse = new Command("Exit Node", new Shortcut(Key.MouseBack));
-		public static readonly ICommand RenameRow = new Command("Rename Row", new Shortcut(Key.F2));
-		public static readonly ICommand Expand = new Command("Expand Row", new Shortcut(Modifiers.Shift, Key.Space));
-		public static readonly ICommand ExpandRecursively = new Command("Expand Row With Children", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.Space));
+		public static readonly ICommand RenameSceneItem = new Command("Rename Item", new Shortcut(Key.F2));
+		public static readonly ICommand Expand = new Command("Expand Item", new Shortcut(Modifiers.Shift, Key.Space));
+		public static readonly ICommand ExpandRecursively = new Command("Expand Item With Children", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.Space));
 		public static readonly ICommand DeleteKeyframes = new Command("Delete Selected Keyframes", new Shortcut(Modifiers.Shift, Key.Delete));
 		public static readonly ICommand CreateMarkerPlay = new Command("Create Play Marker", new Shortcut(Modifiers.Alt, Key.Number1));
 		public static readonly ICommand CreateMarkerStop = new Command("Create Stop Marker", new Shortcut(Modifiers.Alt, Key.Number2));
@@ -35,7 +35,7 @@ namespace Tangerine.UI
 		public static readonly ICommand CreatePositionKeyframe = new Command("Create Position Keyframe", new Shortcut(Key.E));
 		public static readonly ICommand CreateRotationKeyframe = new Command("Create Rotation Keyframe", new Shortcut(Key.R));
 		public static readonly ICommand CreateScaleKeyframe = new Command("Create Scale Keyframe", new Shortcut(Key.T));
-		public static readonly ICommand SelectAllRowKeyframes = new Command("Select All Row Keyframes", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.A));
+		public static readonly ICommand SelectAllSelectedSceneItemKeyframes = new Command("Select All Keyframes of Selected Items", new Shortcut(Modifiers.Control | Modifiers.Shift, Key.A));
 		public static readonly ICommand SelectAllKeyframes = new Command("Select All Keyframes", new Shortcut(Modifiers.Control | Modifiers.Alt, Key.A));
 		public static readonly ICommand NumericMove = new Command("Numeric Move");
 		public static readonly ICommand NumericScale = new Command("Numeric Scale");

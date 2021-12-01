@@ -19,18 +19,18 @@ namespace Tangerine.UI.Timeline.Operations
 			int adjacentFrame = int.MaxValue;
 			int currentFrame = Document.Current.AnimationFrame;
 			var animators = new HashSet<IAnimator>();
-			foreach (var row in Document.Current.SelectedRows()) {
-				var animable = row.Components.Get<NodeRow>()?.Node as IAnimationHost;
+			foreach (var item in Document.Current.SelectedSceneItems()) {
+				var animable = item.Components.Get<NodeSceneItem>()?.Node as IAnimationHost;
 				if (animable != null) {
 					animators.UnionWith(animable.Animators);
 					continue;
 				}
-				var animator = row.Components.Get<AnimatorRow>()?.Animator;
+				var animator = item.Components.Get<AnimatorSceneItem>()?.Animator;
 				if (animator != null) {
 					animators.Add(animator);
 					continue;
 				}
-				var bone = row.Components.Get<BoneRow>()?.Bone;
+				var bone = item.Components.Get<BoneSceneItem>()?.Bone;
 				if (bone != null) {
 					animators.UnionWith(bone.Animators);
 					continue;
@@ -54,7 +54,7 @@ namespace Tangerine.UI.Timeline.Operations
 
 					case SelectKeyframeMode.Previous:
 						sign = -1;
-						current = current - 1;
+						current--;
 						break;
 				}
 				current = Mathf.Clamp(current, 0, animator.Keys.Count - 1);

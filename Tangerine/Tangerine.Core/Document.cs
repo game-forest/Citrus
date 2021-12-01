@@ -40,7 +40,7 @@ namespace Tangerine.Core
 
 		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}";
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
-		private readonly ConditionalWeakTable<object, Row> sceneItemCache = new ConditionalWeakTable<object, Row>();
+		private readonly ConditionalWeakTable<object, SceneItem> sceneItemCache = new ConditionalWeakTable<object, SceneItem>();
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly AnimationFastForwarder animationFastForwarder;
 		private static uint untitledCounter;
@@ -124,10 +124,9 @@ namespace Tangerine.Core
 		public string SceneNavigatedFrom { get; set; }
 
 		/// <summary>
-		/// The list of rows, currently displayed on the timeline.
-		/// TODO: Rename to VisibleSceneItems
+		/// The list of scene items, currently displayed on the timeline.
 		/// </summary>
-		public List<Row> Rows
+		public List<SceneItem> VisibleSceneItems
 		{
 			get
 			{
@@ -140,26 +139,26 @@ namespace Tangerine.Core
 				}
 				return cachedVisibleSceneItems;
 
-				void TraverseAnimationTree(Row animationTree)
+				void TraverseAnimationTree(SceneItem animationTree)
 				{
-					foreach (var i in animationTree.Rows) {
+					foreach (var i in animationTree.SceneItems) {
 						if (i.TryGetAnimationTrack(out _)) {
-							i.GetTimelineItemState().Index = cachedVisibleSceneItems.Count;
+							i.GetTimelineSceneItemState().Index = cachedVisibleSceneItems.Count;
 							cachedVisibleSceneItems.Add(i);
 							TraverseAnimationTree(i);
 						}
 					}
 				}
 
-				void TraverseSceneTree(Row sceneTree, bool addNodes)
+				void TraverseSceneTree(SceneItem sceneTree, bool addNodes)
 				{
 					var currentAnimation = Animation;
-					var timelineItemState = sceneTree.GetTimelineItemState();
+					var timelineItemState = sceneTree.GetTimelineSceneItemState();
 					timelineItemState.NodesExpandable = false;
 					timelineItemState.AnimatorsExpandable = false;
 					var containerSceneItem = GetSceneItemForObject(Container);
-					foreach (var i in sceneTree.Rows) {
-						i.GetTimelineItemState().Index = cachedVisibleSceneItems.Count;
+					foreach (var i in sceneTree.SceneItems) {
+						i.GetTimelineSceneItemState().Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
 							if (
 								sceneTree != containerSceneItem &&
@@ -190,12 +189,12 @@ namespace Tangerine.Core
 			}
 		}
 
-		private readonly List<Row> cachedVisibleSceneItems = new List<Row>();
+		private readonly List<SceneItem> cachedVisibleSceneItems = new List<SceneItem>();
 
 		/// <summary>
 		/// The root of the scene hierarchy.
 		/// </summary>
-		public Row SceneTree { get; private set; }
+		public SceneItem SceneTree { get; private set; }
 
 		public SceneTreeBuilder SceneTreeBuilder { get; }
 
@@ -286,7 +285,7 @@ namespace Tangerine.Core
 			animationFastForwarder = new AnimationFastForwarder();
 			SceneTreeBuilder = new SceneTreeBuilder(o => {
 				var item = GetSceneItemForObject(o);
-				if (item.Parent != null || item.Rows.Count > 0) {
+				if (item.Parent != null || item.SceneItems.Count > 0) {
 					throw new InvalidOperationException("Attempt to allocate a SceneItem built into hierarchy");
 				}
 				return item;
@@ -359,12 +358,12 @@ namespace Tangerine.Core
 			BumpSceneTreeVersion();
 		}
 
-		private static void DisintegrateTree(Row tree)
+		private static void DisintegrateTree(SceneItem tree)
 		{
-			foreach (var child in tree.Rows) {
+			foreach (var child in tree.SceneItems) {
 				DisintegrateTree(child);
 			}
-			tree.Rows.Clear();
+			tree.SceneItems.Clear();
 		}
 
 		private void Load() => Load(new HashSet<string>());
@@ -651,16 +650,16 @@ namespace Tangerine.Core
 			foreach (var i in Current.Views) {
 				i.Attach();
 			}
-			SelectFirstRowIfNoneSelected();
+			SelectFirstSceneItemIfNoneSelected();
 		}
 
-		private void SelectFirstRowIfNoneSelected()
+		private void SelectFirstSceneItemIfNoneSelected()
 		{
-			if (!SceneTree.SelfAndDescendants().Any(i => i.GetTimelineItemState().Selected)) {
+			if (!SceneTree.SelfAndDescendants().Any(i => i.GetTimelineSceneItemState().Selected)) {
 				using (History.BeginTransaction()) {
 					Operations.Dummy.Perform(Current.History);
-					if (Rows.Count > 0) {
-						Operations.SelectRow.Perform(Rows[0]);
+					if (VisibleSceneItems.Count > 0) {
+						Operations.SelectSceneItem.Perform(VisibleSceneItems[0]);
 					}
 					History.CommitTransaction();
 				}
@@ -779,29 +778,29 @@ namespace Tangerine.Core
 
 		public IEnumerable<Node> Nodes()
 		{
-			foreach (var row in Rows) {
-				var nr = row.Components.Get<NodeRow>();
-				if (nr != null) {
-					yield return nr.Node;
+			foreach (var i in VisibleSceneItems) {
+				var ni = i.Components.Get<NodeSceneItem>();
+				if (ni != null) {
+					yield return ni.Node;
 				}
 			}
 		}
 
-		public IEnumerable<Row> SelectedRows()
+		public IEnumerable<SceneItem> SelectedSceneItems()
 		{
-			foreach (var i in Rows) {
-				if (i.GetTimelineItemState().Selected) {
+			foreach (var i in VisibleSceneItems) {
+				if (i.GetTimelineSceneItemState().Selected) {
 					yield return i;
 				}
 			}
 		}
 
-		public Row RecentlySelectedSceneItem()
+		public SceneItem RecentlySelectedSceneItem()
 		{
 			int c = 0;
-			Row result = null;
-			foreach (var i in Rows) {
-				var order = i.GetTimelineItemState().SelectionOrder;
+			SceneItem result = null;
+			foreach (var i in VisibleSceneItems) {
+				var order = i.GetTimelineSceneItemState().SelectionOrder;
 				if (order > c) {
 					c = order;
 					result = i;
@@ -817,14 +816,14 @@ namespace Tangerine.Core
 				yield break;
 			}
 			Node prevNode = null;
-			foreach (var item in Rows.Where(i => i.GetTimelineItemState().Selected).ToList()) {
+			foreach (var item in VisibleSceneItems.Where(i => i.GetTimelineSceneItemState().Selected).ToList()) {
 				Node node = null;
-				var nr = item.Components.Get<NodeRow>();
+				var nr = item.Components.Get<NodeSceneItem>();
 				if (nr != null) {
 					node = nr.Node;
 					prevNode = nr.Node;
 				}
-				var pr = item.Components.Get<AnimatorRow>();
+				var pr = item.Components.Get<AnimatorSceneItem>();
 				if (pr != null && pr.Node != prevNode) {
 					node = pr.Node;
 					prevNode = pr.Node;
@@ -832,7 +831,7 @@ namespace Tangerine.Core
 				if (node != null) {
 					if (onlyTopLevel) {
 						for (var i = item.Parent; i != null; i = i.Parent) {
-							if (i.GetTimelineItemState().Selected && i.Components.Contains<NodeRow>()) {
+							if (i.GetTimelineSceneItemState().Selected && i.Components.Contains<NodeSceneItem>()) {
 								node = null;
 								break;
 							}
@@ -850,13 +849,13 @@ namespace Tangerine.Core
 
 		public IEnumerable<Node> ContainerChildNodes() => Container.Nodes;
 
-		public IEnumerable<Row> TopLevelSelectedRows()
+		public IEnumerable<SceneItem> TopLevelSelectedSceneItems()
 		{
-			foreach (var item in Rows) {
-				if (item.GetTimelineItemState().Selected) {
+			foreach (var item in VisibleSceneItems) {
+				if (item.GetTimelineSceneItemState().Selected) {
 					var discardItem = false;
 					for (var p = item.Parent; p != null; p = p.Parent) {
-						discardItem |= p.GetTimelineItemState().Selected;
+						discardItem |= p.GetTimelineSceneItemState().Selected;
 					}
 					if (!discardItem) {
 						yield return item;
@@ -865,10 +864,10 @@ namespace Tangerine.Core
 			}
 		}
 
-		public Row GetSceneItemForObject(object obj)
+		public SceneItem GetSceneItemForObject(object obj)
 		{
 			if (!sceneItemCache.TryGetValue(obj, out var i)) {
-				i = new Row();
+				i = new SceneItem();
 				sceneItemCache.Add(obj, i);
 			}
 			return i;

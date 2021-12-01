@@ -102,7 +102,7 @@ namespace Tangerine.UI.Timeline
 		public event Action Detached;
 
 		public static IEnumerable<Type> GetOperationProcessorTypes() => new[] {
-			typeof(EnsureRowVisibleIfSelected)
+			typeof(EnsureSceneItemVisibleIfSelected)
 		};
 
 		public Timeline(Panel panel)
@@ -137,10 +137,10 @@ namespace Tangerine.UI.Timeline
 			OnCreate?.Invoke(this);
 		}
 
-		private void DecorateSceneTree(Row sceneTree)
+		private void DecorateSceneTree(SceneItem sceneTree)
 		{
 			SceneItemDecorator.Decorate(sceneTree);
-			foreach (var i in sceneTree.Rows) {
+			foreach (var i in sceneTree.SceneItems) {
 				DecorateSceneTree(i);
 			}
 		}
@@ -176,11 +176,15 @@ namespace Tangerine.UI.Timeline
 		{
 			RootWidget.Layout = new StackLayout();
 			RootWidget.AddNode(new ThemedVSplitter {
-				Stretches = Splitter.GetStretchesList(TimelineUserPreferences.Instance.TimelineVSplitterStretches, 0.5f, 1),
+				Stretches = Splitter.GetStretchesList(
+					TimelineUserPreferences.Instance.TimelineVSplitterStretches, 0.5f, 1
+				),
 				Nodes = {
 					Overview.RootWidget,
 					new ThemedHSplitter {
-						Stretches = Splitter.GetStretchesList(TimelineUserPreferences.Instance.TimelineHSplitterStretches, 0.3f, 1),
+						Stretches = Splitter.GetStretchesList(
+							TimelineUserPreferences.Instance.TimelineHSplitterStretches, 0.3f, 1
+						),
 						Nodes = {
 							new Widget {
 								Layout = new VBoxLayout(),
@@ -236,7 +240,7 @@ namespace Tangerine.UI.Timeline
 		{
 			const int ExtraFramesCount = 100;
 			int maxColumn = 0;
-			foreach (var item in Document.Current.Rows) {
+			foreach (var item in Document.Current.VisibleSceneItems) {
 				if (item.TryGetNode(out var node)) {
 					maxColumn = Math.Max(maxColumn, node.Animators.GetOverallDuration());
 				}
@@ -263,27 +267,31 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		private IConsumer PanelTitleUpdater() =>
-			new DelegateDataflowProvider<Node>(() => Document.Current.Container).WhenChanged(_ => UpdateTitle());
+		private IConsumer PanelTitleUpdater()
+		{
+			return new DelegateDataflowProvider<Node>(
+				() => Document.Current.Container).WhenChanged(_ => UpdateTitle()
+			);
+		}
 
 		private IConsumer ShowCurveEditorTask()
 		{
-			return new DelegateDataflowProvider<(Row Row, bool)>(() =>
-				(FirstSelectedRow(), TimelineUserPreferences.Instance.EditCurves)
+			return new DelegateDataflowProvider<(SceneItem SceneItem, bool)>(() =>
+				(FirstSelectedSceneItem(), TimelineUserPreferences.Instance.EditCurves)
 			).WhenChanged(t => {
-				var row = t.Row;
+				var i = t.SceneItem;
 				var showCurves = TimelineUserPreferences.Instance.EditCurves
-					&& row != null
-					&& CurveEditorPane.CanEditRow(row);
+					&& i != null
+					&& CurveEditorPane.CanEditSceneItem(i);
 				CurveEditor.RootWidget.Visible = showCurves;
 				Grid.RootWidget.Visible = !showCurves;
 				if (showCurves) {
-					CurveEditor.EditRow(row);
+					CurveEditor.EditSceneItem(i);
 				}
 			});
 		}
 
-		private static Row FirstSelectedRow() => Document.Current.SelectedRows().FirstOrDefault();
+		private static SceneItem FirstSelectedSceneItem() => Document.Current.SelectedSceneItems().FirstOrDefault();
 
 		public void EnsureColumnVisible(int column)
 		{
@@ -307,11 +315,11 @@ namespace Tangerine.UI.Timeline
 			return pos >= 0 && pos < Ruler.RootWidget.Width;
 		}
 
-		public void EnsureRowVisible(Row row)
+		public void EnsureSceneItemVisible(SceneItem sceneItem)
 		{
-			// Make sure any Row.Index is in order.
-			_ = Document.Current.Rows;
-			var top = row.GetTimelineItemState().Index * TimelineMetrics.DefaultRowHeight;
+			// Make sure any SceneItem.Index is in order.
+			_ = Document.Current.VisibleSceneItems;
+			var top = sceneItem.GetTimelineSceneItemState().Index * TimelineMetrics.DefaultRowHeight;
 			var bottom = top + TimelineMetrics.DefaultRowHeight;
 			if (bottom > Offset.Y + Roll.RootWidget.Height) {
 				OffsetY = bottom - Roll.RootWidget.Height;
@@ -322,8 +330,11 @@ namespace Tangerine.UI.Timeline
 		}
 	}
 
-	public static class RowExtensions
+	public static class SceneItemExtensions
 	{
-		public static Widget GridWidget(this Row row) => row.Components.Get<RowView>()?.GridRowView.GridWidget;
+		public static Widget GridWidget(this SceneItem sceneItem)
+		{
+			return sceneItem.Components.Get<RowView>()?.GridRowView.GridWidget;
+		}
 	}
 }

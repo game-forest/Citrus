@@ -18,14 +18,14 @@ namespace Tangerine.UI.Timeline.Operations
 			DocumentHistory.Current.Perform(new ShiftGridSelection(offset));
 		}
 
-		ShiftGridSelection(IntVector2 offset)
+		private ShiftGridSelection(IntVector2 offset)
 		{
 			Offset = offset;
 		}
 
 		public sealed class Processor : OperationProcessor<ShiftGridSelection>
 		{
-			class Backup { public List<Core.Components.GridSpanList> Spans; }
+			private class Backup { public List<Core.Components.GridSpanList> Spans; }
 
 			protected override void InternalRedo(ShiftGridSelection op)
 			{
@@ -39,10 +39,10 @@ namespace Tangerine.UI.Timeline.Operations
 				ShiftX(-op.Offset.X);
 			}
 
-			void ShiftX(int offset)
+			private void ShiftX(int offset)
 			{
-				foreach (var row in Document.Current.Rows) {
-					var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans;
+				foreach (var item in Document.Current.VisibleSceneItems) {
+					var spans = item.Components.GetOrAdd<GridSpanListComponent>().Spans;
 					for (int i = 0; i < spans.Count; i++) {
 						var s = spans[i];
 						s.A += offset;
@@ -52,25 +52,29 @@ namespace Tangerine.UI.Timeline.Operations
 				}
 			}
 
-			void ShiftY(ShiftGridSelection op)
+			private void ShiftY(ShiftGridSelection op)
 			{
-				var b = new Backup { Spans = Document.Current.Rows.Select(r => r.Components.GetOrAdd<GridSpanListComponent>().Spans).ToList() };
+				var b = new Backup {
+					Spans = Document.Current.VisibleSceneItems
+						.Select(i => i.Components.GetOrAdd<GridSpanListComponent>().Spans)
+						.ToList()
+				};
 				op.Save(b);
 				if (op.Offset.Y != 0) {
-					foreach (var row in Document.Current.Rows) {
-						var i = row.GetTimelineItemState().Index - op.Offset.Y;
-						row.Components.Remove<GridSpanListComponent>();
-						row.Components.Add(i >= 0 && i < Document.Current.Rows.Count ? new GridSpanListComponent(b.Spans[i]) : new GridSpanListComponent());
+					foreach (var item in Document.Current.VisibleSceneItems) {
+						var i = item.GetTimelineSceneItemState().Index - op.Offset.Y;
+						item.Components.Remove<GridSpanListComponent>();
+						item.Components.Add(i >= 0 && i < Document.Current.VisibleSceneItems.Count ? new GridSpanListComponent(b.Spans[i]) : new GridSpanListComponent());
 					}
 				}
 			}
 
-			void UnshiftY(ShiftGridSelection op)
+			private void UnshiftY(ShiftGridSelection op)
 			{
 				var b = op.Restore<Backup>();
-				foreach (var row in Document.Current.Rows) {
-					row.Components.Remove<GridSpanListComponent>();
-					row.Components.Add(new GridSpanListComponent(b.Spans[row.GetTimelineItemState().Index]));
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					i.Components.Remove<GridSpanListComponent>();
+					i.Components.Add(new GridSpanListComponent(b.Spans[i.GetTimelineSceneItemState().Index]));
 				}
 			}
 		}

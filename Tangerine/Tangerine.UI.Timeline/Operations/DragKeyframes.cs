@@ -15,14 +15,14 @@ namespace Tangerine.UI.Timeline.Operations
 		{
 			var processedKeys = new HashSet<IKeyframe>();
 			var operations = new List<Action>();
-			foreach (var row in Document.Current.Rows) {
-				var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans(offset.X > 0);
+			foreach (var item in Document.Current.VisibleSceneItems) {
+				var spans = item.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans(offset.X > 0);
 				foreach (var span in spans) {
-					var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
+					var node = item.Components.Get<NodeSceneItem>()?.Node ?? item.Components.Get<AnimatorSceneItem>()?.Node;
 					if (node == null || node.EditorState().Locked) {
 						continue;
 					}
-					var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
+					var property = item.Components.Get<AnimatorSceneItem>()?.Animator.TargetPropertyPath;
 					var animators = Document.Current.Animation.ValidatedEffectiveAnimators.Intersect(node.Animators).OfType<IAnimator>().ToList();
 					foreach (var a in animators) {
 						if (property != null && a.TargetPropertyPath != property) {
@@ -37,12 +37,12 @@ namespace Tangerine.UI.Timeline.Operations
 								continue;
 							}
 							processedKeys.Add(k);
-							var destRow = row.GetTimelineItemState().Index + offset.Y;
-							if (!CheckRowRange(destRow)) {
+							var destItemIndex = item.GetTimelineSceneItemState().Index + offset.Y;
+							if (!CheckSceneItemRange(destItemIndex)) {
 								continue;
 							}
-							var destRowComponents = Document.Current.Rows[destRow].Components;
-							var destNode = destRowComponents.Get<NodeRow>()?.Node ?? destRowComponents.Get<AnimatorRow>()?.Node;
+							var destRowComponents = Document.Current.VisibleSceneItems[destItemIndex].Components;
+							var destNode = destRowComponents.Get<NodeSceneItem>()?.Node ?? destRowComponents.Get<AnimatorSceneItem>()?.Node;
 							if (destNode == null || !ArePropertyPathsCompatible(node, destNode, a.TargetPropertyPath)) {
 								continue;
 							}
@@ -68,9 +68,9 @@ namespace Tangerine.UI.Timeline.Operations
 			}
 		}
 
-		static bool CheckRowRange(int row)
+		static bool CheckSceneItemRange(int sceneItemIndex)
 		{
-			return row >= 0 && row < Document.Current.Rows.Count;
+			return sceneItemIndex >= 0 && sceneItemIndex < Document.Current.VisibleSceneItems.Count;
 		}
 
 		static bool ArePropertyPathsCompatible(IAnimationHost object1, IAnimationHost object2, string property)

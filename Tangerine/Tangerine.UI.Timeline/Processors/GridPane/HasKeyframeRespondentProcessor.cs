@@ -24,14 +24,14 @@ namespace Tangerine.UI.Timeline
 
 		bool HasKeyframeOnCell(IntVector2 cell)
 		{
-			var row = Document.Current.Rows[cell.Y];
-			var nodeData = row.Components.Get<NodeRow>();
+			var item = Document.Current.VisibleSceneItems[cell.Y];
+			var nodeData = item.Components.Get<NodeSceneItem>();
 			if (nodeData != null) {
 				var hasKey = nodeData.Node.Animators.Any(i => i.Keys.Any(k => k.Frame == cell.X));
 				return hasKey;
 			}
-			var pr = row.Components.Get<AnimatorRow>();
-			return pr != null && pr.Animator.Keys.Any(k => k.Frame == cell.X);
+			var ai = item.Components.Get<AnimatorSceneItem>();
+			return ai != null && ai.Animator.Keys.Any(k => k.Frame == cell.X);
 		}
 	}
 }

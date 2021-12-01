@@ -75,15 +75,15 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 
 			void RenderSelectedClips(Widget widget)
 			{
-				foreach (var i in Document.Current.Rows) {
-					var track = i.Components.Get<AnimationTrackRow>()?.Track;
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					var track = i.Components.Get<AnimationTrackSceneItem>()?.Track;
 					if (track?.EditorState().Locked != false) {
 						continue;
 					}
 					widget.PrepareRendererState();
 					foreach (var clip in track.Clips.Where(i => i.IsSelected)) {
-						var a = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineItemState().Index, offset.X + clip.BeginFrame);
-						var b = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineItemState().Index + 1, offset.X + clip.EndFrame);
+						var a = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineSceneItemState().Index, offset.X + clip.BeginFrame);
+						var b = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineSceneItemState().Index + 1, offset.X + clip.EndFrame);
 						Renderer.DrawRect(a, b, ColorTheme.Current.TimelineGrid.AnimationClip);
 						Renderer.DrawRectOutline(a, b, ColorTheme.Current.TimelineGrid.AnimationClipBorder);
 					}
@@ -93,8 +93,8 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 
 		private static void DeselectAllClips()
 		{
-			foreach (var row in Document.Current.Rows.ToList()) {
-				var track = row.Components.Get<AnimationTrackRow>().Track;
+			foreach (var i in Document.Current.VisibleSceneItems.ToList()) {
+				var track = i.Components.Get<AnimationTrackSceneItem>().Track;
 				foreach (var c in track.Clips) {
 					Core.Operations.SetProperty.Perform(c, nameof(AnimationClip.IsSelected), false);
 				}
@@ -103,7 +103,7 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 
 		private static bool TryFindClip(IntVector2 cell, out AnimationClip clip)
 		{
-			var track = Document.Current.Rows[cell.Y].Components.Get<AnimationTrackRow>().Track;
+			var track = Document.Current.VisibleSceneItems[cell.Y].Components.Get<AnimationTrackSceneItem>().Track;
 			return AnimationClipToolbox.TryFindClip(track, cell.X, out clip);
 		}
 
@@ -143,17 +143,17 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 				buttonIndex == 1 && TryFindClip(initialCell, out var clip2) && !clip2.IsSelected;
 			if (shouldDeselectAll) {
 				DeselectAllClips();
-				Core.Operations.ClearRowSelection.Perform();
+				Core.Operations.ClearSceneItemSelection.Perform();
 			}
 			for (var r = rect.Top; r < rect.Bottom; r++) {
-				var track = Document.Current.Rows[r].Components.Get<AnimationTrackRow>().Track;
+				var track = Document.Current.VisibleSceneItems[r].Components.Get<AnimationTrackSceneItem>().Track;
 				foreach (var clip in track.Clips) {
 					if (Math.Max(clip.BeginFrame, rect.Left) >= Math.Min(clip.EndFrame, rect.Right)) {
 						continue;
 					}
 					Core.Operations.SetProperty.Perform(clip, nameof(AnimationClip.IsSelected), true);
 				}
-				Core.Operations.SelectRow.Perform(Document.Current.Rows[r]);
+				Core.Operations.SelectSceneItem.Perform(Document.Current.VisibleSceneItems[r]);
 			}
 
 			void RenderSelectionRect(Widget widget)

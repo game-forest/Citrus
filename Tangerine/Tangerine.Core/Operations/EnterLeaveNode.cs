@@ -111,7 +111,7 @@ namespace Tangerine.Core.Operations
 
 		private static void ChangeContainer(Node container, bool selectFirstNode)
 		{
-			ClearRowSelection.Perform();
+			ClearSceneItemSelection.Perform();
 			DocumentHistory.Current.Perform(new SetContainer(container));
 			if (Document.Current.Animation.IsLegacy) {
 				SetProperty.Perform(Document.Current, nameof(Document.Animation), container.DefaultAnimation, false);
