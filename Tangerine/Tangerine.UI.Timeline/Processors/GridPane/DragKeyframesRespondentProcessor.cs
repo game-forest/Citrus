@@ -23,13 +23,13 @@ namespace Tangerine.UI.Timeline
 						Operations.ShiftGridSelection.Perform(rq.Offset);
 						if (rq.Offset.Y != 0) {
 							var selected =
-								Document.Current.SelectedRows().
-								Where(r => r.GetTimelineItemState().Selected).
-								Select(r => r.GetTimelineItemState().Index).ToDictionary(x => x);
-							ClearRowSelection.Perform();
-							foreach (var row in Document.Current.Rows) {
-								if (selected.ContainsKey(row.GetTimelineItemState().Index - rq.Offset.Y)) {
-									SelectRow.Perform(row, select: true);
+								Document.Current.SelectedSceneItems().
+								Where(r => r.GetTimelineSceneItemState().Selected).
+								Select(r => r.GetTimelineSceneItemState().Index).ToDictionary(x => x);
+							ClearSceneItemSelection.Perform();
+							foreach (var i in Document.Current.VisibleSceneItems) {
+								if (selected.ContainsKey(i.GetTimelineSceneItemState().Index - rq.Offset.Y)) {
+									SelectSceneItem.Perform(i, select: true);
 								}
 							}
 						}

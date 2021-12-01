@@ -136,7 +136,7 @@ namespace Tangerine.UI
 			while (!sceneTree.TryGetNode(out _)) {
 				sceneTree = sceneTree.Parent;
 			}
-			foreach (var animationSceneItem in sceneTree.Rows) {
+			foreach (var animationSceneItem in sceneTree.SceneItems) {
 				var animation = animationSceneItem.GetAnimation();
 				if (animation == null) {
 					continue;

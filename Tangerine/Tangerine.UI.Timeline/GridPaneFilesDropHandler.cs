@@ -37,10 +37,10 @@ namespace Tangerine.UI.Timeline
 					}
 					switch (assetType) {
 						case ".png": {
-							if (Document.Current.Rows.Count == 0) {
+							if (Document.Current.VisibleSceneItems.Count == 0) {
 								continue;
 							}
-							var widget = Document.Current.Rows[cellUnderMouseOnFilesDrop.Y].Components.Get<NodeRow>()?.Node as Widget;
+							var widget = Document.Current.VisibleSceneItems[cellUnderMouseOnFilesDrop.Y].Components.Get<NodeSceneItem>()?.Node as Widget;
 							if (widget == null) {
 								continue;
 							}

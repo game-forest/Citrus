@@ -103,7 +103,7 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 						AlertDialog.Show("Please select markers in ascending order", "Ok");
 						return;
 					}
-					var track = Document.Current.Rows[cell.Y].Components.Get<Core.Components.AnimationTrackRow>().Track;
+					var track = Document.Current.VisibleSceneItems[cell.Y].Components.Get<Core.Components.AnimationTrackSceneItem>().Track;
 					Document.Current.History.DoTransaction(() => {
 						var clip = new AnimationClip {
 							AnimationId = animationSelector.Text,

@@ -26,7 +26,7 @@ namespace Tangerine.UI.SceneView
 			}
 			canvas.PrepareRendererState();
 			if (VisualHintsRegistry.Instance.FindHint(typeof(Bone)).Enabled) {
-				var nodesContainingBones = Document.Current.Rows
+				var nodesContainingBones = Document.Current.VisibleSceneItems
 					.Select(i => i.GetNode())
 					.OfType<Bone>()
 					.Select(i => i.Parent).Distinct();

@@ -24,18 +24,24 @@ namespace Tangerine.UI.Timeline.Operations
 
 			protected override void InternalRedo(ClearGridSelection op)
 			{
-				op.Save(new Backup { Spans = Document.Current.Rows.Select(r => r.Components.GetOrAdd<GridSpanListComponent>().Spans).ToList() });
-				foreach (var row in Document.Current.Rows) {
-					row.Components.Remove<GridSpanListComponent>();
+				op.Save(
+					new Backup {
+						Spans = Document.Current.VisibleSceneItems
+							.Select(r => r.Components.GetOrAdd<GridSpanListComponent>().Spans)
+							.ToList()
+					}
+				);
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					i.Components.Remove<GridSpanListComponent>();
 				}
 			}
 
 			protected override void InternalUndo(ClearGridSelection op)
 			{
 				var s = op.Restore<Backup>().Spans;
-				foreach (var row in Document.Current.Rows) {
-					row.Components.Remove<GridSpanListComponent>();
-					row.Components.Add(new GridSpanListComponent(s[row.GetTimelineItemState().Index]));
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					i.Components.Remove<GridSpanListComponent>();
+					i.Components.Add(new GridSpanListComponent(s[i.GetTimelineSceneItemState().Index]));
 				}
 			}
 		}

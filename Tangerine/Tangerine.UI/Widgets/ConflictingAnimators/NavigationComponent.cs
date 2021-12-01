@@ -26,7 +26,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 
 		private readonly NavigationInfo info;
 		private readonly TextStyle animationLinkStyle;
-		
+
 		public event Action MouseMovedOver;
 		public event Action MouseMovedAway;
 
@@ -140,20 +140,20 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		{
 			try {
 				Document.Current.History.DoTransaction(() => {
-					ClearRowSelection.Perform();
+					ClearSceneItemSelection.Perform();
 					SelectNode.Perform(node);
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					SetProperty.Perform(
-						obj: Document.Current.GetSceneItemForObject(node).GetTimelineItemState(),
-						propertyName: nameof(TimelineItemStateComponent.AnimatorsExpanded),
+						obj: Document.Current.GetSceneItemForObject(node).GetTimelineSceneItemState(),
+						propertyName: nameof(TimelineSceneItemStateComponent.AnimatorsExpanded),
 						value: true,
 						isChangingDocument: false
 					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
-					var row = Document.Current.GetSceneItemForObject(node).Rows
+					var item = Document.Current.GetSceneItemForObject(node).SceneItems
 						.Where(i => i.Id == info.TargetProperty)
-						.First(i => i.Components.Get<CommonPropertyRowData>().Animator.AnimationId == info.AnimationId);
-					SelectRow.Perform(row);
+						.First(i => i.Components.Get<CommonPropertySceneItemData>().Animator.AnimationId == info.AnimationId);
+					SelectSceneItem.Perform(item);
 				});
 			} catch (System.Exception exception) {
 				throw new CannotSelectPropertyRowException(exception);
@@ -169,7 +169,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		private class CannotSelectPropertyRowException : System.Exception
 		{
 			public CannotSelectPropertyRowException(System.Exception inner) :
-				base("Cannot select property row!", inner) { }
+				base("Cannot select property scene item!", inner) { }
 		}
 	}
 }

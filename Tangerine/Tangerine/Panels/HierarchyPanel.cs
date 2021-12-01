@@ -105,7 +105,7 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private bool IsExternalSceneItem(Row item)
+		private bool IsExternalSceneItem(SceneItem item)
 		{
 			for (var i = item; i != null; i = i.Parent) {
 				if (i.TryGetNode(out var n) && !string.IsNullOrEmpty(n.ContentsPath)) {
@@ -122,14 +122,14 @@ namespace Tangerine.Panels
 			Document.Current.History.DoTransaction(() => {
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in topSceneItems) {
-					if (item.Parent == parentSceneItem && index > parentSceneItem.Rows.IndexOf(item)) {
+					if (item.Parent == parentSceneItem && index > parentSceneItem.SceneItems.IndexOf(item)) {
 						index--;
 					}
 					UnlinkSceneItem.Perform(item);
 				}
 				foreach (var item in topSceneItems) {
 					LinkSceneItem.Perform(parentSceneItem, new SceneTreeIndex(index), item);
-					index = parentSceneItem.Rows.IndexOf(item) + 1;
+					index = parentSceneItem.SceneItems.IndexOf(item) + 1;
 				}
 			});
 		}
@@ -141,7 +141,7 @@ namespace Tangerine.Panels
 			}
 			var i = index >= parent.Items.Count ? 1 : 0;
 			var item = GetSceneItem(parent.Items[index - i]);
-			return GetSceneItem(parent).Rows.IndexOf(item) + i;
+			return GetSceneItem(parent).SceneItems.IndexOf(item) + i;
 		}
 
 		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
@@ -166,8 +166,8 @@ namespace Tangerine.Panels
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(args.Items.Select(GetSceneItem)).ToList();
 			Document.Current.History.DoTransaction(() => {
 				treeView.ClearSelection();
-				foreach (var row in topSceneItems) {
-					UnlinkSceneItem.Perform(row);
+				foreach (var i in topSceneItems) {
+					UnlinkSceneItem.Perform(i);
 				}
 			});
 		}
@@ -199,14 +199,14 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private TreeViewItem GetTreeViewItem(Row item)
+		private TreeViewItem GetTreeViewItem(SceneItem item)
 		{
 			var c = item.Components.GetOrAdd<TreeViewComponent>();
 			c.TreeViewItem = c.TreeViewItem ?? new TreeViewSceneItem(item, isSearchActiveGetter);
 			return c.TreeViewItem;
 		}
 
-		private static Row GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
+		private static SceneItem GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
 
 		private void TreeViewOnActivateItem(object sender, TreeView.ActivateItemEventArgs args)
 		{
@@ -253,10 +253,10 @@ namespace Tangerine.Panels
 				tree.Items.Clear();
 			}
 
-			TreeViewItem CreateTree(Row sceneTree)
+			TreeViewItem CreateTree(SceneItem sceneTree)
 			{
 				var currentItem = GetTreeViewItem(sceneTree);
-				foreach (var i in sceneTree.Rows) {
+				foreach (var i in sceneTree.SceneItems) {
 					if (i.GetAnimator() != null || i.GetAnimation() != null) {
 						continue;
 					}
@@ -311,10 +311,10 @@ namespace Tangerine.Panels
 
 		private class TreeViewSceneItem : TreeViewItem, ISceneItemHolder
 		{
-			public Row SceneItem { get; }
+			public SceneItem SceneItem { get; }
 			public Func<bool> IsSearchActiveGetter { get; }
 
-			public TreeViewSceneItem(Row sceneItem, Func<bool> isSearchActiveGetter)
+			public TreeViewSceneItem(SceneItem sceneItem, Func<bool> isSearchActiveGetter)
 			{
 				SceneItem = sceneItem;
 				IsSearchActiveGetter = isSearchActiveGetter;
@@ -390,11 +390,11 @@ namespace Tangerine.Panels
 			{
 				get
 				{
-					var row = SceneItem;
-					if (row.TryGetNode(out var node)) {
+					var i = SceneItem;
+					if (i.TryGetNode(out var node)) {
 						return NodeIconPool.GetTexture(node);
 					}
-					if (row.TryGetFolder(out _)) {
+					if (i.TryGetFolder(out _)) {
 						return IconPool.GetTexture("Tools.NewFolder");
 					}
 					return IconPool.GetTexture("Nodes.Unknown");

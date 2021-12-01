@@ -19,7 +19,7 @@ namespace Tangerine.Core.Operations
 		private static string CopyToString()
 		{
 			var stream = new System.IO.MemoryStream();
-			var topItems = SceneTreeUtils.EnumerateTopSceneItems(Document.Current.SelectedRows()).ToList();
+			var topItems = SceneTreeUtils.EnumerateTopSceneItems(Document.Current.SelectedSceneItems()).ToList();
 			CopySceneItemsToStream.Perform(topItems, stream);
 			var text = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 			return text;
@@ -39,7 +39,7 @@ namespace Tangerine.Core.Operations
 	{
 		public static event Action Pasted;
 
-		private static bool CanPaste(MemoryStream stream, Row parent)
+		private static bool CanPaste(MemoryStream stream, SceneItem parent)
 		{
 			try {
 				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
@@ -55,8 +55,8 @@ namespace Tangerine.Core.Operations
 					return false;
 				}
 				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
-				var rowTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
-				foreach (var i in rowTree.Rows) {
+				var sceneTree = new SceneTreeBuilder().BuildSceneTreeForNode(container);
+				foreach (var i in sceneTree.SceneItems) {
 					if (!LinkSceneItem.CanLink(item: i, parent: parent)) {
 						return false;
 					}
@@ -74,12 +74,12 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		public static void Perform(out List<Row> pastedItems)
+		public static void Perform(out List<SceneItem> pastedItems)
 		{
-			Row parent;
+			SceneItem parent;
 			SceneTreeIndex index;
 			var data = Clipboard.Text;
-			var result = new List<Row>();
+			var result = new List<SceneItem>();
 			if (!string.IsNullOrEmpty(data)) {
 				var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
 				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
@@ -90,19 +90,19 @@ namespace Tangerine.Core.Operations
 					SceneTreeUtils.TryGetSceneItemLinkLocation(out parent, out index, typeof(Node));
 				}
 				Document.Current.History.DoTransaction(() => {
-					ClearRowSelection.Perform();
+					ClearSceneItemSelection.Perform();
 					Perform(stream, parent, index, out result);
 					foreach (var i in result) {
-						SelectRow.Perform(i);
+						SelectSceneItem.Perform(i);
 					}
 				});
 			}
 			pastedItems = result;
 		}
 
-		public static bool Perform(MemoryStream stream, Row parent, SceneTreeIndex index, out List<Row> pastedItems)
+		public static bool Perform(MemoryStream stream, SceneItem parent, SceneTreeIndex index, out List<SceneItem> pastedItems)
 		{
-			pastedItems = new List<Row>();
+			pastedItems = new List<SceneItem>();
 			if (!CanPaste(stream, parent)) {
 				return false;
 			}
@@ -124,10 +124,10 @@ namespace Tangerine.Core.Operations
 			} else {
 				// Don't use Document.Current.SceneTreeBuilder since we don't want to store an item in the scene item cache.
 				var itemsToPaste = Document.Current.SceneTreeBuilder.BuildSceneTreeForNode(container);
-				foreach (var i in itemsToPaste.Rows.ToList()) {
+				foreach (var i in itemsToPaste.SceneItems.ToList()) {
 					UnlinkSceneItem.Perform(i);
 					LinkSceneItem.Perform(parent, index, i);
-					index = new SceneTreeIndex(parent.Rows.IndexOf(i) + 1);
+					index = new SceneTreeIndex(parent.SceneItems.IndexOf(i) + 1);
 					pastedItems.Add(i);
 					DecorateNodes(i);
 				}
@@ -136,12 +136,12 @@ namespace Tangerine.Core.Operations
 			return true;
 		}
 
-		private static void DecorateNodes(Row item)
+		private static void DecorateNodes(SceneItem item)
 		{
 			if (item.TryGetNode(out var node)) {
 				Document.Decorate(node);
 			} else if (item.TryGetFolder(out _)) {
-				foreach (var i in item.Rows) {
+				foreach (var i in item.SceneItems) {
 					DecorateNodes(i);
 				}
 			}
@@ -154,7 +154,7 @@ namespace Tangerine.Core.Operations
 		{
 			var doc = Document.Current;
 			doc.History.DoTransaction(() => {
-				Row newFocused = null;
+				SceneItem newFocused = null;
 				foreach (var item in SceneTreeUtils.EnumerateSelectedTopSceneItems().ToList()) {
 					if (!(item.Parent.GetNode() is DistortionMesh)) {
 						newFocused = FindFocusedAfterUnlink(item);
@@ -162,18 +162,18 @@ namespace Tangerine.Core.Operations
 					}
 				}
 				if (newFocused != null) {
-					SelectRow.Perform(newFocused);
+					SelectSceneItem.Perform(newFocused);
 				}
 			});
 
-			Row FindFocusedAfterUnlink(Row item)
+			SceneItem FindFocusedAfterUnlink(SceneItem item)
 			{
-				var i = item.Parent.Rows.IndexOf(item);
+				var i = item.Parent.SceneItems.IndexOf(item);
 				if (i > 0) {
-					return item.Parent.Rows[i - 1];
+					return item.Parent.SceneItems[i - 1];
 				}
-				if (i < item.Parent.Rows.Count - 1) {
-					return item.Parent.Rows[i + 1];
+				if (i < item.Parent.SceneItems.Count - 1) {
+					return item.Parent.SceneItems[i + 1];
 				}
 				return item.Parent.GetNode() == Document.Current.Container ? null : item.Parent;
 			}

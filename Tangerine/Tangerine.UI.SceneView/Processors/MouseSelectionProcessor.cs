@@ -51,7 +51,7 @@ namespace Tangerine.UI.SceneView
 						if (clicked) {
 							var controlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
 							if (!controlPressed)
-								Core.Operations.ClearRowSelection.Perform();
+								Core.Operations.ClearSceneItemSelection.Perform();
 							Node selectedNode = null;
 							foreach (var widget in WidgetsPivotMarkPresenter.WidgetsWithDisplayedPivot()) {
 								var pos = widget.GlobalPivotPosition;
@@ -89,7 +89,7 @@ namespace Tangerine.UI.SceneView
 			var newSelection = Document.Current.ContainerChildNodes().Editable().Where(n =>
 				ctrlPressed ? Probe(n, rect) ^ originalSelection.Contains(n) : Probe(n, rect));
 			if (!newSelection.SequenceEqual(currentSelection)) {
-				Core.Operations.ClearRowSelection.Perform();
+				Core.Operations.ClearSceneItemSelection.Perform();
 				foreach (var node in newSelection) {
 					Core.Operations.SelectNode.Perform(node);
 				}

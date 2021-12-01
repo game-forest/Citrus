@@ -28,12 +28,12 @@ namespace Tangerine.UI.Timeline.Operations
 		{
 			protected override void InternalRedo(DeselectGridSpan op)
 			{
-				Document.Current.Rows[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.DeselectGridSpan(op.Span);
+				Document.Current.VisibleSceneItems[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.DeselectGridSpan(op.Span);
 			}
 
 			protected override void InternalUndo(DeselectGridSpan op)
 			{
-				Document.Current.Rows[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.UndoDeselectGridSpan(op.Span);
+				Document.Current.VisibleSceneItems[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.UndoDeselectGridSpan(op.Span);
 			}
 		}
 	}

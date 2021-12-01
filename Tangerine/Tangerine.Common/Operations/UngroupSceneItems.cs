@@ -9,14 +9,14 @@ namespace Tangerine.Common.Operations
 {
 	public static class UngroupSceneItems
 	{
-		public static List<Row> Perform(IEnumerable<Frame> groups)
+		public static List<SceneItem> Perform(IEnumerable<Frame> groups)
 		{
 			var history = Core.Document.Current.History;
 			using (history.BeginTransaction()) {
 				if (!groups.Any()) {
 					throw new InvalidOperationException("Can't ungroup empty node list.");
 				}
-				var result = new List<Row>();
+				var result = new List<SceneItem>();
 				foreach (var group in groups) {
 					UntieWidgetsFromBones.Perform(
 						group.Parent.Nodes.OfType<Bone>(),
@@ -26,9 +26,9 @@ namespace Tangerine.Common.Operations
 				foreach (var group in groups) {
 					var itemForGroup = Document.Current.GetSceneItemForObject(group);
 					var containerItem = itemForGroup.Parent;
-					int index = containerItem.Rows.IndexOf(itemForGroup);
+					int index = containerItem.SceneItems.IndexOf(itemForGroup);
 					UnlinkSceneItem.Perform(itemForGroup);
-					var groupItems = itemForGroup.Rows.Where(i => i.GetNode() != null).ToList();
+					var groupItems = itemForGroup.SceneItems.Where(i => i.GetNode() != null).ToList();
 					var localToParentTransform = group.CalcLocalToParentTransform();
 					foreach (var i in groupItems) {
 						UnlinkSceneItem.Perform(i);

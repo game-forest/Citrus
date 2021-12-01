@@ -753,10 +753,10 @@ namespace Tangerine
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));
 			h.Connect(Command.Delete, new DocumentDelegateCommandHandler(Core.Operations.Delete.Perform));
 			h.Connect(Command.SelectAll, new DocumentDelegateCommandHandler(() => {
-				foreach (var row in Document.Current.Rows) {
-					Core.Operations.SelectRow.Perform(row, true);
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					Core.Operations.SelectSceneItem.Perform(i, true);
 				}
-			}, () => Document.Current?.Rows.Count > 0));
+			}, () => Document.Current?.VisibleSceneItems.Count > 0));
 			h.Connect(
 				Command.Undo,
 				() => Document.Current.History.Undo(),

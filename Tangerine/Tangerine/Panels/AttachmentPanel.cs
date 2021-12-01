@@ -110,11 +110,11 @@ namespace Tangerine
 				foreach (var node in RootWidget.Nodes) {
 					node.UnlinkAndDispose();
 				}
-				var rows = Document.Current.Rows;
+				var items = Document.Current.VisibleSceneItems;
 				Model3D model3d = null;
-				foreach (var r in rows) {
-					if (r.GetTimelineItemState().Selected) {
-						var nr = r.Components.Get<Core.Components.NodeRow>();
+				foreach (var i in items) {
+					if (i.GetTimelineSceneItemState().Selected) {
+						var nr = i.Components.Get<Core.Components.NodeSceneItem>();
 						if (nr != null && nr.Node is Model3D m3d) {
 							if (model3d != null) {
 								return;
@@ -181,10 +181,10 @@ namespace Tangerine
 					r ^= component.GetHashCode();
 				}
 			} else {
-				foreach (var row in Document.Current.Rows) {
-					if (row.GetTimelineItemState().Selected) {
-						r ^= row.GetHashCode();
-						var node = row.Components.Get<Core.Components.NodeRow>()?.Node;
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					if (i.GetTimelineSceneItemState().Selected) {
+						r ^= i.GetHashCode();
+						var node = i.Components.Get<Core.Components.NodeSceneItem>()?.Node;
 						if (node != null) {
 							foreach (var component in node.Components) {
 								r ^= component.GetHashCode();

@@ -124,8 +124,8 @@ namespace Tangerine.UI.Timeline
 					return;
 				}
 				LinkSceneItem.Perform(parent, i, folder);
-				ClearRowSelection.Perform();
-				SelectRow.Perform(parent.Rows[i.Value]);
+				ClearSceneItemSelection.Perform();
+				SelectSceneItem.Perform(parent.SceneItems[i.Value]);
 			});
 			button.Components.Add(new DocumentationComponent("CreateFolder"));
 			button.AddChangeWatcher(() => Document.Current.Animation.IsCompound, v => button.Visible = !v);

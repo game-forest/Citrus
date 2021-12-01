@@ -17,7 +17,7 @@ namespace Tangerine.UI.Timeline
 		readonly Widget toolbar;
 
 		readonly Timeline timeline;
-		AnimatorRow property;
+		AnimatorSceneItem property;
 
 		public float MinValue { get; set; }
 		public float MaxValue { get; set; }
@@ -32,9 +32,9 @@ namespace Tangerine.UI.Timeline
 			adapters[typeof(Vector2)] = new Vector2AnimatorAdapter();
 		}
 
-		public static bool CanEditRow(Row row)
+		public static bool CanEditSceneItem(SceneItem sceneItem)
 		{
-			var animator = row.Components.Get<AnimatorRow>()?.Animator;
+			var animator = sceneItem.Components.Get<AnimatorSceneItem>()?.Animator;
 			return animator != null && adapters.ContainsKey(animator.ValueType);
 		}
 
@@ -75,12 +75,11 @@ namespace Tangerine.UI.Timeline
 			);
 		}
 
-		public void EditRow(Row row)
+		public void EditSceneItem(SceneItem sceneItem)
 		{
-			property = row?.Components.Get<AnimatorRow>();
+			property = sceneItem?.Components.Get<AnimatorSceneItem>();
 			var adapter = adapters[property.Animator.ValueType];
-			float min, max;
-			CalcRange(property.Animator, adapter, out min, out max);
+			CalcRange(property.Animator, adapter, out float min, out float max);
 			MinValue = min;
 			MaxValue = max;
 			toolbar.Nodes.Clear();
@@ -94,7 +93,8 @@ namespace Tangerine.UI.Timeline
 				int c = i;
 				label.AddChangeWatcher(
 					() => adapter.GetComponentValue(curve.Animator, Document.Current.Animation.Time, c),
-					v => label.Text = name + ": " + v.ToString("0.00"));
+					v => label.Text = name + ": " + v.ToString("0.00")
+				);
 				toolbar.AddNode(label);
 			}
 		}

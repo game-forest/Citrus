@@ -16,7 +16,7 @@ namespace Tangerine.UI.Timeline.Operations
 		public static void Perform(int row, int a, int b)
 		{
 			DocumentHistory.Current.Perform(new SelectGridSpan(row, a, b));
-			Core.Operations.SelectRow.Perform(Document.Current.Rows[row]);
+			Core.Operations.SelectSceneItem.Perform(Document.Current.VisibleSceneItems[row]);
 		}
 
 		private SelectGridSpan(int row, int a, int b)
@@ -29,12 +29,12 @@ namespace Tangerine.UI.Timeline.Operations
 		{
 			protected override void InternalRedo(SelectGridSpan op)
 			{
-				Document.Current.Rows[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.Add(op.Span);
+				Document.Current.VisibleSceneItems[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.Add(op.Span);
 			}
 
 			protected override void InternalUndo(SelectGridSpan op)
 			{
-				Document.Current.Rows[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.Remove(op.Span);
+				Document.Current.VisibleSceneItems[op.Row].Components.GetOrAdd<GridSpanListComponent>().Spans.Remove(op.Span);
 			}
 		}
 	}

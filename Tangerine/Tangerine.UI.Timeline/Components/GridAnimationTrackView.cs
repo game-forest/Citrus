@@ -15,9 +15,9 @@ namespace Tangerine.UI.Timeline.Components
 		public AwakeBehavior GridWidgetAwakeBehavior => GridWidget.Components.GetOrAdd<AwakeBehavior>();
 		public AwakeBehavior OverviewWidgetAwakeBehavior => OverviewWidget.Components.GetOrAdd<AwakeBehavior>();
 
-		public GridAnimationTrackView(Row row)
+		public GridAnimationTrackView(SceneItem sceneItem)
 		{
-			track = row.Components.Get<AnimationTrackRow>().Track;
+			track = sceneItem.Components.Get<AnimationTrackSceneItem>().Track;
 			GridWidget = new Widget {
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				MinHeight = TimelineMetrics.DefaultRowHeight,

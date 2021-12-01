@@ -24,7 +24,7 @@ namespace Tangerine.Core.Operations
 			if (ValidateMeshPoints(mesh)) {
 				return;
 			}
-			foreach (var item in Document.Current.GetSceneItemForObject(mesh).Rows.ToList()) {
+			foreach (var item in Document.Current.GetSceneItemForObject(mesh).SceneItems.ToList()) {
 				UnlinkSceneItem.Perform(item);
 			}
 			for (int i = 0; i <= mesh.NumRows; i++) {

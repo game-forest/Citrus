@@ -235,15 +235,15 @@ namespace Tangerine.UI.Inspector
 
 		private static GridSpanList GetAnimableSpans(IAnimationHost animable, IAnimator animator)
 		{
-			var rows = Document.Current
-				.SelectedRows()
-				.Where(r => animable == r.Components.Get<NodeRow>()?.Node || animator != null && r.Components.Get<AnimatorRow>()?.Animator == animator)
+			var items = Document.Current
+				.SelectedSceneItems()
+				.Where(r => animable == r.Components.Get<NodeSceneItem>()?.Node || animator != null && r.Components.Get<AnimatorSceneItem>()?.Animator == animator)
 				.ToList();
 			var spans = new GridSpanList {
 				new GridSpan(Document.Current.AnimationFrame, Document.Current.AnimationFrame + 1)
 			};
-			foreach (var row in rows) {
-				var rowSpans = row.Components.Get<GridSpanListComponent>()?.Spans;
+			foreach (var i in items) {
+				var rowSpans = i.Components.Get<GridSpanListComponent>()?.Spans;
 				if (rowSpans != null && rowSpans.Count > 0) {
 					spans.AddRange(rowSpans);
 				}

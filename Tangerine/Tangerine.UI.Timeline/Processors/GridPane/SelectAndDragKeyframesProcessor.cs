@@ -59,7 +59,7 @@ namespace Tangerine.UI.Timeline
 		private static void SelectRange(IntVector2 a, IntVector2 b, bool selectKeyframes)
 		{
 			Operations.ClearGridSelection.Perform();
-			Core.Operations.ClearRowSelection.Perform();
+			Core.Operations.ClearSceneItemSelection.Perform();
 			var r = new IntRectangle {
 				A = {
 					X = Math.Min(a.X, b.X),
@@ -81,15 +81,15 @@ namespace Tangerine.UI.Timeline
 
 		private static void SelectKeyframes(IntRectangle bounds)
 		{
-			foreach (var i in Document.Current.Rows) {
+			foreach (var i in Document.Current.VisibleSceneItems) {
 				if (
-					i.GetTimelineItemState().Index >= bounds.A.Y && i.GetTimelineItemState().Index <= bounds.B.Y &&
-					i.Components.Get<NodeRow>() is NodeRow nodeRow
+					i.GetTimelineSceneItemState().Index >= bounds.A.Y && i.GetTimelineSceneItemState().Index <= bounds.B.Y &&
+					i.Components.Get<NodeSceneItem>() is NodeSceneItem nodeRow
 				) {
 					foreach (var animator in nodeRow.Node.Animators) {
 						foreach (var key in animator.ReadonlyKeys) {
 							if (key.Frame >= bounds.A.X && key.Frame <= bounds.B.X) {
-								Operations.SelectGridSpan.Perform(i.GetTimelineItemState().Index, key.Frame, key.Frame + 1);
+								Operations.SelectGridSpan.Perform(i.GetTimelineSceneItemState().Index, key.Frame, key.Frame + 1);
 							}
 						}
 					}
@@ -99,7 +99,7 @@ namespace Tangerine.UI.Timeline
 
 		private static bool IsCellSelected(IntVector2 cell)
 		{
-			return Document.Current.Rows[cell.Y].Components.GetOrAdd<GridSpanListComponent>().Spans.IsCellSelected(cell.X);
+			return Document.Current.VisibleSceneItems[cell.Y].Components.GetOrAdd<GridSpanListComponent>().Spans.IsCellSelected(cell.X);
 		}
 
 		private IEnumerator<object> DragSelectionTask(IntVector2 initialCell)
@@ -155,7 +155,7 @@ namespace Tangerine.UI.Timeline
 
 		private IEnumerator<object> DragSingleKeyframeTask(IntVector2 cell)
 		{
-			Core.Operations.ClearRowSelection.Perform();
+			Core.Operations.ClearSceneItemSelection.Perform();
 			Operations.ClearGridSelection.Perform();
 			Operations.SelectGridSpan.Perform(cell.Y, cell.X, cell.X + 1);
 			yield return DragSelectionTask(cell);
@@ -193,14 +193,14 @@ namespace Tangerine.UI.Timeline
 			}
 			Timeline.Instance.Ruler.MeasuredFrameDistance = 0;
 			Grid.OnPostRender -= RenderSelectionRect;
-			var selectedRows = Document.Current.SelectedRows();
+			var selectedItems = Document.Current.SelectedSceneItems();
 			if (!input.IsKeyPressed(Key.Control)) {
-				foreach (var row in selectedRows) {
+				foreach (var i in selectedItems) {
 					if (
-						row.GetTimelineItemState().Index < selectionRectangle.A.Y ||
-						selectionRectangle.B.Y <= row.GetTimelineItemState().Index
+						i.GetTimelineSceneItemState().Index < selectionRectangle.A.Y
+						|| selectionRectangle.B.Y <= i.GetTimelineSceneItemState().Index
 					) {
-						Core.Operations.ClearRowSelection.Perform();
+						Core.Operations.ClearSceneItemSelection.Perform();
 						break;
 					}
 				}

@@ -19,7 +19,7 @@ namespace Tangerine.UI.Timeline
 			ConnectCommand(TimelineCommands.EnterNodeMouse, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
 			ConnectCommand(TimelineCommands.Expand, ExpandOrCollapse, Document.HasCurrent);
 			ConnectCommand(TimelineCommands.ExpandRecursively, ExpandOrCollapseRecursively, Document.HasCurrent);
-			ConnectCommand(TimelineCommands.RenameRow, RenameCurrentRow);
+			ConnectCommand(TimelineCommands.RenameSceneItem, RenameCurrentSceneItem);
 			ConnectCommand(TimelineCommands.ExitNode, LeaveNode.Perform);
 			ConnectCommand(TimelineCommands.ExitNodeAlias, LeaveNode.Perform);
 			ConnectCommand(TimelineCommands.ExitNodeMouse, LeaveNode.Perform);
@@ -38,7 +38,7 @@ namespace Tangerine.UI.Timeline
 			ConnectCommand(TimelineCommands.DeleteMarker, DeleteMarker);
 			ConnectCommand(TimelineCommands.MoveDown, MoveNodesDown.Perform);
 			ConnectCommand(TimelineCommands.MoveUp, MoveNodesUp.Perform);
-			ConnectCommand(TimelineCommands.SelectAllRowKeyframes, SelectAllRowKeyframes);
+			ConnectCommand(TimelineCommands.SelectAllSelectedSceneItemKeyframes, SelectAllSelectedSceneItemKeyframes);
 			ConnectCommand(TimelineCommands.SelectAllKeyframes, SelectAllKeyframes);
 			ConnectCommand(TimelineCommands.AdvanceToNextKeyframe, SelectNextKeyframe.Perform);
 			ConnectCommand(TimelineCommands.AdvanceToPreviousKeyframe, SelectPreviousKeyframe.Perform);
@@ -46,22 +46,24 @@ namespace Tangerine.UI.Timeline
 
 		private static void SelectAllKeyframes()
 		{
-			SelectKeyframes(Document.Current.Rows);
+			SelectKeyframes(Document.Current.VisibleSceneItems);
 		}
 
-		private static void SelectAllRowKeyframes()
+		private static void SelectAllSelectedSceneItemKeyframes()
 		{
-			SelectKeyframes(Document.Current.SelectedRows());
+			SelectKeyframes(Document.Current.SelectedSceneItems());
 		}
 
-		private static void SelectKeyframes(IEnumerable<Row> rows)
+		private static void SelectKeyframes(IEnumerable<SceneItem> sceneItems)
 		{
 			Operations.ClearGridSelection.Perform();
-			foreach (var row in rows) {
-				if (row.Components.Get<NodeRow>() is NodeRow nodeRow) {
-					foreach (var animator in nodeRow.Node.Animators) {
+			foreach (var i in sceneItems) {
+				if (i.Components.Get<NodeSceneItem>() is NodeSceneItem nodeItem) {
+					foreach (var animator in nodeItem.Node.Animators) {
 						foreach (var key in animator.ReadonlyKeys) {
-							Operations.SelectGridSpan.Perform(row.GetTimelineItemState().Index, key.Frame, key.Frame + 1);
+							Operations.SelectGridSpan.Perform(
+								i.GetTimelineSceneItemState().Index, key.Frame, key.Frame + 1
+							);
 						}
 					}
 				}
@@ -80,9 +82,9 @@ namespace Tangerine.UI.Timeline
 				Document.Current.History.DoTransaction(() => {
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					SetProperty.Perform(
-						focusedItem.GetTimelineItemState(),
-						nameof(TimelineItemStateComponent.NodesExpanded),
-						!focusedItem.GetTimelineItemState().NodesExpanded,
+						focusedItem.GetTimelineSceneItemState(),
+						nameof(TimelineSceneItemStateComponent.NodesExpanded),
+						!focusedItem.GetTimelineSceneItemState().NodesExpanded,
 						isChangingDocument: false
 					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
@@ -98,42 +100,42 @@ namespace Tangerine.UI.Timeline
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					ExpandOrCollapseHelper(
 						Document.Current.RecentlySelectedSceneItem(),
-						!focusedItem.GetTimelineItemState().NodesExpanded
+						!focusedItem.GetTimelineSceneItemState().NodesExpanded
 					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				});
 			}
 
-			void ExpandOrCollapseHelper(Row sceneItem, bool expand)
+			void ExpandOrCollapseHelper(SceneItem sceneItem, bool expand)
 			{
-				if (sceneItem.GetTimelineItemState().NodesExpanded != expand) {
+				if (sceneItem.GetTimelineSceneItemState().NodesExpanded != expand) {
 					SetProperty.Perform(
-						sceneItem.GetTimelineItemState(),
-						nameof(TimelineItemStateComponent.NodesExpanded),
+						sceneItem.GetTimelineSceneItemState(),
+						nameof(TimelineSceneItemStateComponent.NodesExpanded),
 						expand,
 						isChangingDocument: false
 					);
 				}
-				foreach (var i in sceneItem.Rows) {
+				foreach (var i in sceneItem.SceneItems) {
 					ExpandOrCollapseHelper(i, expand);
 				}
 			}
 		}
 
-		private static void RenameCurrentRow()
+		private static void RenameCurrentSceneItem()
 		{
 			var doc = Document.Current;
-			if (doc.SelectedRows().Count() != 1) {
+			if (doc.SelectedSceneItems().Count() != 1) {
 				return;
 			}
-			var item = doc.SelectedRows().First();
+			var item = doc.SelectedSceneItems().First();
 			TreeViewComponent.GetTreeViewItem(item).Presentation.Rename();
 		}
 
 		private static void RemoveKeyframes()
 		{
-			foreach (var row in Document.Current.Rows.ToList()) {
-				var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
+			foreach (var item in Document.Current.VisibleSceneItems.ToList()) {
+				var node = item.Components.Get<NodeSceneItem>()?.Node ?? item.Components.Get<AnimatorSceneItem>()?.Node;
 				if (node == null || node.EditorState().Locked) {
 					continue;
 				}
@@ -143,8 +145,8 @@ namespace Tangerine.UI.Timeline
 				if (animation != Document.Current.Animation) {
 					continue;
 				}
-				var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
-				var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans;
+				var property = item.Components.Get<AnimatorSceneItem>()?.Animator.TargetPropertyPath;
+				var spans = item.Components.GetOrAdd<GridSpanListComponent>().Spans;
 				foreach (var span in spans.GetNonOverlappedSpans()) {
 					foreach (var a in node.Animators.ToList()) {
 						if (a.AnimationId != Document.Current.AnimationId) {

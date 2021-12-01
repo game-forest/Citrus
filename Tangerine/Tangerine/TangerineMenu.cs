@@ -123,22 +123,22 @@ namespace Tangerine
 				var menuPath = type.GetCustomAttribute<TangerineMenuPathAttribute>()?.Path;
 				ICommand command = new Command(CamelCaseToLabel(type.Name), () => {
 					Core.Document.Current.History.DoTransaction(() => {
-						var rowToParentCount = Document.Current.SelectedRows()
+						var sceneItemToParentCount = Document.Current.SelectedSceneItems()
 							.Where(r => r.GetNode() != null)
 							.ToDictionary(k => k, v => 0);
-						foreach (var row in rowToParentCount.Keys) {
-							var parent = row.Parent;
+						foreach (var i in sceneItemToParentCount.Keys) {
+							var parent = i.Parent;
 							while (parent != null) {
-								if (rowToParentCount.ContainsKey(parent)) {
-									rowToParentCount[row]++;
+								if (sceneItemToParentCount.ContainsKey(parent)) {
+									sceneItemToParentCount[i]++;
 								}
 								parent = parent.Parent;
 							}
 						}
-						var sortedRows = rowToParentCount.OrderBy(i => -i.Value).ToList();
-						foreach (var (row, _) in sortedRows) {
+						var sortedItems = sceneItemToParentCount.OrderBy(i => -i.Value).ToList();
+						foreach (var (i, _) in sortedItems) {
 							try {
-								NodeTypeConvert.Perform(row, type, typeof(Node));
+								NodeTypeConvert.Perform(i, type, typeof(Node));
 							} catch (InvalidOperationException e) {
 								AlertDialog.Show(e.Message);
 								Document.Current.History.RollbackTransaction();

@@ -67,7 +67,7 @@ namespace Tangerine.UI.Timeline
                 		if (parent != Document.Current.Container) {
                 			Core.Operations.EnterNode.Perform(parent, false);
                 		}
-                		Core.Operations.ClearRowSelection.Perform();
+                		Core.Operations.ClearSceneItemSelection.Perform();
                 		foreach (var node in nodes) {
                 			Core.Operations.SelectNode.Perform(node);
                 		}

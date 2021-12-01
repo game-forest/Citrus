@@ -9,9 +9,9 @@ namespace Tangerine.Core.Operations
 {
 	public static class NodeTypeConvert
 	{
-		public static void Perform(Row sceneItem, Type destType, Type commonParent)
+		public static void Perform(SceneItem sceneItem, Type destType, Type commonParent)
 		{
-			var node = sceneItem.Components.Get<NodeRow>()?.Node;
+			var node = sceneItem.Components.Get<NodeSceneItem>()?.Node;
 			if (!string.IsNullOrEmpty(node.ContentsPath)) {
 				Console.WriteLine(
 					$"[Warning] Skipping conversion: converting nodes with non empty contents path is not supported."
@@ -29,7 +29,7 @@ namespace Tangerine.Core.Operations
 			Validate(node, destType, commonParent);
 			var result = CreateNode.Perform(
 				sceneItem.Parent,
-				new SceneTreeIndex(sceneItem.Parent.Rows.IndexOf(sceneItem)),
+				new SceneTreeIndex(sceneItem.Parent.SceneItems.IndexOf(sceneItem)),
 				destType
 			);
 			var assetBundlePathComponent = node.Components.Get<Node.AssetBundlePathComponent>();
@@ -38,7 +38,7 @@ namespace Tangerine.Core.Operations
 			} else {
 				int j = 0;
 				var resultSceneItem = Document.Current.GetSceneItemForObject(result);
-				foreach (var i in sceneItem.Rows.ToList()) {
+				foreach (var i in sceneItem.SceneItems.ToList()) {
 					var isNode = i.TryGetNode(out var childNode);
 					if (isNode || i.TryGetFolder(out _)) {
 						UnlinkSceneItem.Perform(i);
@@ -51,7 +51,7 @@ namespace Tangerine.Core.Operations
 							}
 						}
 						LinkSceneItem.Perform(resultSceneItem, new SceneTreeIndex(j), i);
-						j = resultSceneItem.Rows.IndexOf(i) + 1;
+						j = resultSceneItem.SceneItems.IndexOf(i) + 1;
 					}
 				}
 			}

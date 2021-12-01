@@ -129,24 +129,24 @@ namespace Tangerine.Panels
 
 		private class TreeViewItemProvider
 		{
-			public Func<Row, TreeViewItemState> ItemStateProvider;
+			public Func<SceneItem, TreeViewItemState> ItemStateProvider;
 			public Func<bool> IsSearchActiveGetter;
 
-			public TreeViewItem GetNodeTreeViewItem(Row sceneItem)
+			public TreeViewItem GetNodeTreeViewItem(SceneItem sceneItem)
 			{
 				var s = ItemStateProvider(sceneItem);
 				s.TreeViewItem ??= new NodeTreeViewItem(sceneItem, s, sceneItem.GetNode(), IsSearchActiveGetter);
 				return s.TreeViewItem;
 			}
 
-			public TreeViewItem GetAnimationTreeViewItem(Row sceneItem)
+			public TreeViewItem GetAnimationTreeViewItem(SceneItem sceneItem)
 			{
 				var s = ItemStateProvider(sceneItem);
 				s.TreeViewItem ??= new AnimationTreeViewItem(sceneItem, s, sceneItem.GetAnimation(), IsSearchActiveGetter);
 				return s.TreeViewItem;
 			}
 
-			public TreeViewItem GetMarkerTreeViewItem(Row sceneItem)
+			public TreeViewItem GetMarkerTreeViewItem(SceneItem sceneItem)
 			{
 				var s = ItemStateProvider(sceneItem);
 				s.TreeViewItem ??= new MarkerTreeViewItem(sceneItem, s, sceneItem.GetMarker(), IsSearchActiveGetter);
@@ -248,7 +248,7 @@ namespace Tangerine.Panels
 			Document.Current.History.DoTransaction(() => {
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in animationItems) {
-					var itemIndex = parentItem.SceneItem.Rows.IndexOf(item.SceneItem);
+					var itemIndex = parentItem.SceneItem.SceneItems.IndexOf(item.SceneItem);
 					if (item.Parent == parentItem && index > itemIndex) {
 						index--;
 					}
@@ -272,7 +272,7 @@ namespace Tangerine.Panels
 			}
 			var i = index >= parent.Items.Count ? 1 : 0;
 			var item = ((CommonTreeViewItem)parent.Items[index - i]).SceneItem;
-			return ((CommonTreeViewItem)parent).SceneItem.Rows.IndexOf(item) + i;
+			return ((CommonTreeViewItem)parent).SceneItem.SceneItems.IndexOf(item) + i;
 		}
 
 		private void TreeView_OnCopy(object sender, TreeView.CopyEventArgs args)
@@ -378,7 +378,7 @@ namespace Tangerine.Panels
 					// Trying to paste markers
 					var animationSceneItem = parent.SceneItem;
 					if (animationSceneItem.GetNode() != null) {
-						animationSceneItem = animationSceneItem.Rows[index];
+						animationSceneItem = animationSceneItem.SceneItems[index];
 						index = animationSceneItem.GetAnimation().Markers.Count;
 					}
 					var animationPasteTo = animationSceneItem.GetAnimation();
@@ -489,7 +489,7 @@ namespace Tangerine.Panels
 				scrollView.Behaviour.ScrollTo(savedScrollPosition);
 			}
 
-			void TraverseSceneTreeForCurrentBranch(Row sceneTree)
+			void TraverseSceneTreeForCurrentBranch(SceneItem sceneTree)
 			{
 				// Skip folders
 				while (!sceneTree.TryGetNode(out _)) {
@@ -501,7 +501,7 @@ namespace Tangerine.Panels
 				}
 			}
 
-			void TraverseSceneTree(Row sceneTree)
+			void TraverseSceneTree(SceneItem sceneTree)
 			{
 				if (
 					sceneTree.TryGetNode(out var node) &&
@@ -509,24 +509,24 @@ namespace Tangerine.Panels
 				) {
 					TraverseNodeChildren(sceneTree);
 				}
-				foreach (var child in sceneTree.Rows) {
+				foreach (var child in sceneTree.SceneItems) {
 					TraverseSceneTree(child);
 				}
 			}
 
-			void TraverseNodeChildren(Row sceneTree)
+			void TraverseNodeChildren(SceneItem sceneTree)
 			{
 				var nodeItem = provider.GetNodeTreeViewItem(sceneTree);
 				bool isCurrentNode = ((NodeTreeViewItem)nodeItem).Node == Document.Current.Container;
 				var nodeSatisfyFilter = Filter(nodeItem.Label);
 				bool isContainsEmptyLegacyAnimation = false;
-				foreach (var animationSceneItem in sceneTree.Rows) {
+				foreach (var animationSceneItem in sceneTree.SceneItems) {
 					if (animationSceneItem.GetAnimation() == null) {
 						// Do not use LINQ trying to reduce GC pressure
 						continue;
 					}
 					var animationItem = provider.GetAnimationTreeViewItem(animationSceneItem);
-					foreach (var markerSceneItem in animationSceneItem.Rows) {
+					foreach (var markerSceneItem in animationSceneItem.SceneItems) {
 						if (markerSceneItem.TryGetMarker(out var marker) && Filter(marker.Id)) {
 							animationItem.Items.Add(provider.GetMarkerTreeViewItem(markerSceneItem));
 						}
@@ -597,9 +597,9 @@ namespace Tangerine.Panels
 			private readonly Func<bool> isSearchActiveGetter;
 			private readonly TreeViewItemState itemState;
 
-			public Row SceneItem { get; }
+			public SceneItem SceneItem { get; }
 
-			protected CommonTreeViewItem(Row sceneItem, TreeViewItemState itemState, Func<bool> isSearchActiveGetter)
+			protected CommonTreeViewItem(SceneItem sceneItem, TreeViewItemState itemState, Func<bool> isSearchActiveGetter)
 			{
 				this.SceneItem = sceneItem;
 				this.itemState = itemState;
@@ -663,7 +663,7 @@ namespace Tangerine.Panels
 		{
 			public Node Node { get; }
 
-			public NodeTreeViewItem(Row sceneItem, TreeViewItemState itemState, Node node, Func<bool> isSearchActiveGetter)
+			public NodeTreeViewItem(SceneItem sceneItem, TreeViewItemState itemState, Node node, Func<bool> isSearchActiveGetter)
 				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Node = node;
@@ -737,7 +737,7 @@ namespace Tangerine.Panels
 			public Animation Animation { get; }
 
 			public AnimationTreeViewItem(
-				Row sceneItem, TreeViewItemState itemState, Animation animation, Func<bool> isSearchActiveGetter)
+				SceneItem sceneItem, TreeViewItemState itemState, Animation animation, Func<bool> isSearchActiveGetter)
 				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Animation = animation;
@@ -783,7 +783,7 @@ namespace Tangerine.Panels
 		{
 			public Marker Marker { get; }
 
-			public MarkerTreeViewItem(Row sceneItem, TreeViewItemState itemState, Marker marker, Func<bool> isSearchActiveGetter)
+			public MarkerTreeViewItem(SceneItem sceneItem, TreeViewItemState itemState, Marker marker, Func<bool> isSearchActiveGetter)
 				: base(sceneItem, itemState, isSearchActiveGetter)
 			{
 				Marker = marker;
@@ -988,7 +988,8 @@ namespace Tangerine.Panels
 			{
 				var label = new ThemedSimpleText {
 					HitTestTarget = true,
-					ForceUncutText = false, // We want ellipsed text if the panel is too narrow.
+					// We want ellipsed text if the panel is too narrow.
+					ForceUncutText = false,
 					VAlignment = VAlignment.Center,
 					OverflowMode = TextOverflowMode.Ellipsis,
 					LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
@@ -1266,7 +1267,7 @@ namespace Tangerine.Panels
 							var track = new AnimationTrack { Id = "Track1" };
 							var animationTrackSceneItem = LinkSceneItem.Perform(
 								animationSceneItem, new SceneTreeIndex(0), track);
-							SelectRow.Perform(animationTrackSceneItem);
+							SelectSceneItem.Perform(animationTrackSceneItem);
 						}
 					});
 				}

@@ -16,10 +16,10 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			var items = Document.Current.SelectedRows();
+			var items = Document.Current.SelectedSceneItems();
 			if (items.Any()) {
 				var group = Common.Operations.GroupSceneItems.Perform(items);
-				ClearRowSelection.Perform();
+				ClearSceneItemSelection.Perform();
 				SelectNode.Perform(group);
 			}
 		}
@@ -29,15 +29,15 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			var groups = Document.Current.SelectedRows()
+			var groups = Document.Current.SelectedSceneItems()
 				.Select(i => i.GetNode()).OfType<Frame>().ToList();
 			if (groups.Count == 0) {
 				return;
 			}
-			ClearRowSelection.Perform();
+			ClearSceneItemSelection.Perform();
 			var items = Common.Operations.UngroupSceneItems.Perform(groups);
 			foreach (var i in items) {
-				SelectRow.Perform(i, true);
+				SelectSceneItem.Perform(i, true);
 			}
 		}
 
@@ -130,7 +130,7 @@ namespace Tangerine
 			clone.ContentsPath = null;
 			var nodeItem = Document.Current.GetSceneItemForObject(node);
 			var parentItem = nodeItem.Parent;
-			var index = parentItem.Rows.IndexOf(nodeItem);
+			var index = parentItem.SceneItems.IndexOf(nodeItem);
 			UnlinkSceneItem.Perform(nodeItem);
 			LinkSceneItem.Perform(parentItem, new SceneTreeIndex(index), clone);
 		}

@@ -13,7 +13,7 @@ namespace Tangerine.Common.Operations
 		private const string DefaultAnimationId = "<DefaultAnimationId>";
 
 		/// <exception cref="InvalidOperationException">Thrown when sceneItems contains no elements.</exception>
-		public static Node Perform(IEnumerable<Row> sceneItems)
+		public static Node Perform(IEnumerable<SceneItem> sceneItems)
 		{
 			if (!sceneItems.Any()) {
 				throw new InvalidOperationException();
@@ -70,7 +70,7 @@ namespace Tangerine.Common.Operations
 				var groupSceneItem = Document.Current.GetSceneItemForObject(group);
 				foreach (var item in topSceneItems) {
 					LinkSceneItem.Perform(groupSceneItem, new SceneTreeIndex(index), item);
-					index = groupSceneItem.Rows.IndexOf(item) + 1;
+					index = groupSceneItem.SceneItems.IndexOf(item) + 1;
 				}
 				foreach (var node in nodes) {
 					if (node is Widget) {
@@ -86,7 +86,7 @@ namespace Tangerine.Common.Operations
 			}
 		}
 
-		private static Frame CreateGroupFrame(Row item)
+		private static Frame CreateGroupFrame(SceneItem item)
 		{
 			var i = item;
 			while (i.Parent.TryGetNode(out var node) && node is Bone) {
@@ -94,26 +94,26 @@ namespace Tangerine.Common.Operations
 			}
 			var group = (Frame)CreateNode.Perform(
 				i.Parent,
-				new SceneTreeIndex(i.Parent.Rows.IndexOf(i)),
+				new SceneTreeIndex(i.Parent.SceneItems.IndexOf(i)),
 				typeof(Frame));
 			group.Id = item.Id + "Group";
 			return group;
 		}
 
-		public static IEnumerable<Node> EnumerateNodes(IEnumerable<Row> items)
+		public static IEnumerable<Node> EnumerateNodes(IEnumerable<SceneItem> items)
 		{
 			foreach (var i in items) {
 				if (i.TryGetNode(out var node)) {
 					if (node is Bone) {
 						yield return node;
-						foreach (var n in EnumerateNodes(i.Rows)) {
+						foreach (var n in EnumerateNodes(i.SceneItems)) {
 							yield return n;
 						}
 					} else {
 						yield return node;
 					}
 				} else if (i.TryGetFolder(out _)) {
-					foreach (var n in EnumerateNodes(i.Rows)) {
+					foreach (var n in EnumerateNodes(i.SceneItems)) {
 						yield return n;
 					}
 				}

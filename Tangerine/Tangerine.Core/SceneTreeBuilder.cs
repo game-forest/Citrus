@@ -8,15 +8,15 @@ namespace Tangerine.Core
 {
 	public class SceneTreeBuilder
 	{
-		private readonly Func<object, Row> sceneItemFactory;
-		public event Action<Row> SceneItemCreated;
+		private readonly Func<object, SceneItem> sceneItemFactory;
+		public event Action<SceneItem> SceneItemCreated;
 
-		public SceneTreeBuilder(Func<object, Row> sceneItemFactory = null)
+		public SceneTreeBuilder(Func<object, SceneItem> sceneItemFactory = null)
 		{
-			this.sceneItemFactory = sceneItemFactory ?? (o => new Row());
+			this.sceneItemFactory = sceneItemFactory ?? (o => new SceneItem());
 		}
 
-		public Row BuildSceneTreeForNode(Node node)
+		public SceneItem BuildSceneTreeForNode(Node node)
 		{
 			var item = GetNodeSceneItem(node);
 			int folderIndex = 0;
@@ -27,9 +27,9 @@ namespace Tangerine.Core
 			return item;
 		}
 
-		void BuildFolderTree(Row parent, int itemCount, Node node, ref int folderIndex, ref int nodeIndex)
+		void BuildFolderTree(SceneItem parent, int itemCount, Node node, ref int folderIndex, ref int nodeIndex)
 		{
-			Dictionary<int, Row> boneToSceneItem = null;
+			Dictionary<int, SceneItem> boneToSceneItem = null;
 			var folders = node.Folders;
 			while (itemCount-- > 0) {
 				var folder = folderIndex < folders?.Count ? folders[folderIndex] : null;
@@ -41,15 +41,15 @@ namespace Tangerine.Core
 					}
 					if (currentNode is Bone bone) {
 						// Link the bone to its base bone.
-						boneToSceneItem = boneToSceneItem ?? new Dictionary<int, Row>();
+						boneToSceneItem = boneToSceneItem ?? new Dictionary<int, SceneItem>();
 						boneToSceneItem[bone.Index] = nodeSceneItem;
 						if (bone.BaseIndex > 0) {
-							boneToSceneItem[bone.BaseIndex].Rows.Add(nodeSceneItem);
+							boneToSceneItem[bone.BaseIndex].SceneItems.Add(nodeSceneItem);
 						} else {
-							parent.Rows.Add(nodeSceneItem);
+							parent.SceneItems.Add(nodeSceneItem);
 						}
 					} else {
-						parent.Rows.Add(nodeSceneItem);
+						parent.SceneItems.Add(nodeSceneItem);
 					}
 				} else if (folder != null) {
 					folderIndex++;
@@ -57,7 +57,7 @@ namespace Tangerine.Core
 					if (folderSceneItem.Parent != null) {
 						folderSceneItem.Unlink();
 					}
-					parent.Rows.Add(folderSceneItem);
+					parent.SceneItems.Add(folderSceneItem);
 					BuildFolderTree(folderSceneItem, folder.ItemCount, node, ref folderIndex, ref nodeIndex);
 				} else {
 					break;
@@ -65,86 +65,86 @@ namespace Tangerine.Core
 			}
 		}
 
-		public Row BuildFolderSceneItem(Folder.Descriptor folder)
+		public SceneItem BuildFolderSceneItem(Folder.Descriptor folder)
 		{
 			var i = sceneItemFactory(folder);
-			i.Components.GetOrAdd<FolderRow>().Folder = folder;
-			i.Components.GetOrAdd<CommonFolderRowData>().Folder = folder;
+			i.Components.GetOrAdd<FolderSceneItem>().Folder = folder;
+			i.Components.GetOrAdd<CommonFolderSceneItemData>().Folder = folder;
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}
 
-		private Row GetNodeSceneItem(Node node)
+		private SceneItem GetNodeSceneItem(Node node)
 		{
 			var i = sceneItemFactory(node);
-			i.Components.GetOrAdd<NodeRow>().Node = node;
-			i.Components.GetOrAdd<CommonNodeRowData>().Node = node;
+			i.Components.GetOrAdd<NodeSceneItem>().Node = node;
+			i.Components.GetOrAdd<CommonNodeSceneItemData>().Node = node;
 			if (node is Bone bone) {
-				i.Components.GetOrAdd<BoneRow>().Bone = bone;
+				i.Components.GetOrAdd<BoneSceneItem>().Bone = bone;
 			}
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}
 
-		private void AddSceneItemsForAnimations(Row parent, Node node)
+		private void AddSceneItemsForAnimations(SceneItem parent, Node node)
 		{
 			var animationComponent = node.Components.AnimationComponent;
 			if (animationComponent != null && animationComponent.Animations.Count > 0) {
 				foreach (var animation in animationComponent.Animations) {
 					var animationItem = BuildAnimationSceneItem(animation);
-					parent.Rows.Add(animationItem);
+					parent.SceneItems.Add(animationItem);
 				}
 			}
 		}
 
-		private void AddSceneItemsForAnimatedProperties(Row parent, Node node)
+		private void AddSceneItemsForAnimatedProperties(SceneItem parent, Node node)
 		{
 			foreach (var animator in node.Animators) {
 				var animatorItem = BuildAnimatorSceneItem(animator);
-				parent.Rows.Add(animatorItem);
+				parent.SceneItems.Add(animatorItem);
 			}
 		}
 
-		public Row BuildAnimatorSceneItem(IAnimator animator)
+		public SceneItem BuildAnimatorSceneItem(IAnimator animator)
 		{
 			var i = sceneItemFactory(animator);
-			i.Components.GetOrAdd<CommonPropertyRowData>().Animator = animator;
-			var component = i.Components.GetOrAdd<AnimatorRow>();
+			i.Components.GetOrAdd<CommonPropertySceneItemData>().Animator = animator;
+			var component = i.Components.GetOrAdd<AnimatorSceneItem>();
 			component.Node = (Node)animator.Owner;
 			component.Animator = animator;
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}
 
-		public Row BuildAnimationSceneItem(Animation animation)
+		public SceneItem BuildAnimationSceneItem(Animation animation)
 		{
 			var i = sceneItemFactory(animation);
-			i.Components.GetOrAdd<AnimationRow>().Animation = animation;
-			i.Components.GetOrAdd<CommonAnimationRowData>().Animation = animation;
+			i.Components.GetOrAdd<AnimationSceneItem>().Animation = animation;
+			i.Components.GetOrAdd<CommonAnimationSceneItemData>().Animation = animation;
 			foreach (var marker in animation.Markers) {
-				i.Rows.Add(BuildMarkerSceneItem(marker));
+				i.SceneItems.Add(BuildMarkerSceneItem(marker));
 			}
 			foreach (var track in animation.Tracks) {
-				i.Rows.Add(BuildAnimationTrackSceneItem(track));
+				i.SceneItems.Add(BuildAnimationTrackSceneItem(track));
 			}
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}
 
-		public Row BuildMarkerSceneItem(Marker marker)
+		public SceneItem BuildMarkerSceneItem(Marker marker)
 		{
 			var i = sceneItemFactory(marker);
-			i.Components.GetOrAdd<MarkerRow>().Marker = marker;
-			i.Components.GetOrAdd<CommonMarkerRowData>().Marker = marker;
+			i.Components.GetOrAdd<MarkerSceneItem>().Marker = marker;
+			i.Components.GetOrAdd<CommonMarkerSceneItemData>().Marker = marker;
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}
 
-		public Row BuildAnimationTrackSceneItem(AnimationTrack track)
+		public SceneItem BuildAnimationTrackSceneItem(AnimationTrack track)
 		{
 			var i = sceneItemFactory(track);
-			i.Components.GetOrAdd<AnimationTrackRow>().Track = track;
-			i.Components.GetOrAdd<CommonAnimationTrackRowData>().Track = track;
+			i.Components.GetOrAdd<AnimationTrackSceneItem>().Track = track;
+			i.Components.GetOrAdd<CommonAnimationTrackSceneItemData>().Track = track;
 			SceneItemCreated?.Invoke(i);
 			return i;
 		}

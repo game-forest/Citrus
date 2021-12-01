@@ -21,7 +21,7 @@ namespace Tangerine.UI.Timeline
 			if (presentation is TreeViewItemPresentation p) {
 				p.ExpandButton.Texture =
 					p.Minimalistic && p.Item.Expanded ||
-					!p.Minimalistic && p.SceneItem.GetTimelineItemState().NodesExpanded
+					!p.Minimalistic && p.SceneItem.GetTimelineSceneItemState().NodesExpanded
 					? IconPool.GetTexture("Timeline.Expanded")
 					: IconPool.GetTexture("Timeline.Collapsed");
 				p.ExpandButton.Visible = p.Item.CanExpand();
@@ -70,13 +70,13 @@ namespace Tangerine.UI.Timeline
 		public readonly SimpleText Label;
 		public readonly Widget IndentationSpacer;
 		public readonly TreeViewItem Item;
-		public readonly Row SceneItem;
+		public readonly SceneItem SceneItem;
 		public readonly bool Minimalistic;
 		public readonly TreeView TreeView;
 
 		public Widget Widget { get; }
 
-		public TreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
+		public TreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options)
 		{
 			TreeView = treeView;
 			Item = item;
@@ -235,9 +235,9 @@ namespace Tangerine.UI.Timeline
 				button.AddTransactionClickHandler(() => {
 					DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 					SetProperty.Perform(
-						obj: SceneItem.GetTimelineItemState(),
-						propertyName: nameof(TimelineItemStateComponent.NodesExpanded),
-						value: !SceneItem.GetTimelineItemState().NodesExpanded,
+						obj: SceneItem.GetTimelineSceneItemState(),
+						propertyName: nameof(TimelineSceneItemStateComponent.NodesExpanded),
+						value: !SceneItem.GetTimelineSceneItemState().NodesExpanded,
 						isChangingDocument: false
 					);
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
@@ -250,7 +250,7 @@ namespace Tangerine.UI.Timeline
 
 	public class FolderTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public FolderTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem, TreeViewItemPresentationOptions options)
+		public FolderTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options)
 			: base(treeView, item, sceneItem, options)
 		{
 			if (!options.Minimalistic) {
@@ -315,9 +315,9 @@ namespace Tangerine.UI.Timeline
 			return button;
 		}
 
-		IEnumerable<Node> InnerNodes(Row item)
+		IEnumerable<Node> InnerNodes(SceneItem item)
 		{
-			foreach (var i in item.Rows) {
+			foreach (var i in item.SceneItems) {
 				if (i.TryGetNode(out var node)) {
 					yield return node;
 				} else if (i.TryGetFolder(out var folder)) {
@@ -347,7 +347,7 @@ namespace Tangerine.UI.Timeline
 			ColorTheme.Current.TimelineRoll.GrayMark,
 		};
 
-		public NodeTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem, Node node, TreeViewItemPresentationOptions options)
+		public NodeTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem, Node node, TreeViewItemPresentationOptions options)
 			: base(treeView, item, sceneItem, options)
 		{
 			Node = node;
@@ -484,19 +484,19 @@ namespace Tangerine.UI.Timeline
 				Texture = IconPool.GetTexture("Timeline.Animator")
 			};
 			button.AddChangeWatcher(
-				() => (HasAnimators: SceneItem.GetTimelineItemState().AnimatorsExpandable, Document.Current.ShowAnimators),
-				i => button.Enabled = SceneItem.GetTimelineItemState().AnimatorsExpandable && !Document.Current.ShowAnimators
+				() => (HasAnimators: SceneItem.GetTimelineSceneItemState().AnimatorsExpandable, Document.Current.ShowAnimators),
+				i => button.Enabled = SceneItem.GetTimelineSceneItemState().AnimatorsExpandable && !Document.Current.ShowAnimators
 			);
 			button.AddChangeWatcher(
-				() => (ShowAnimators: SceneItem.GetTimelineItemState().AnimatorsExpanded, Document.Current.ShowAnimators),
-				i => button.Checked = SceneItem.GetTimelineItemState().AnimatorsExpanded || Document.Current.ShowAnimators
+				() => (ShowAnimators: SceneItem.GetTimelineSceneItemState().AnimatorsExpanded, Document.Current.ShowAnimators),
+				i => button.Checked = SceneItem.GetTimelineSceneItemState().AnimatorsExpanded || Document.Current.ShowAnimators
 			);
 			button.AddTransactionClickHandler(
 				() => {
-					var nodes = Document.Current.SelectedRows()
+					var nodes = Document.Current.SelectedSceneItems()
 						.Select(i => i.GetNode())
 						.Where(i => i != null).ToList();
-					var showAnimators = !SceneItem.GetTimelineItemState().AnimatorsExpanded;
+					var showAnimators = !SceneItem.GetTimelineSceneItemState().AnimatorsExpanded;
 					if (!nodes.Contains(Node)) {
 						nodes.Clear();
 						nodes.Add(Node);
@@ -504,8 +504,8 @@ namespace Tangerine.UI.Timeline
 					foreach (var n in nodes) {
 						DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
 						SetProperty.Perform(
-							obj: SceneItem.GetTimelineItemState(),
-							propertyName: nameof(TimelineItemStateComponent.AnimatorsExpanded),
+							obj: SceneItem.GetTimelineSceneItemState(),
+							propertyName: nameof(TimelineSceneItemStateComponent.AnimatorsExpanded),
 							value: showAnimators,
 							isChangingDocument: false
 						);
@@ -531,7 +531,7 @@ namespace Tangerine.UI.Timeline
 			});
 			button.AddTransactionClickHandler(
 				() => {
-					var nodes = Document.Current.SelectedRows()
+					var nodes = Document.Current.SelectedSceneItems()
 						.Select(i => i.GetNode())
 						.Where(i => i != null).ToList();
 					var visibility = (NodeVisibility)(((int)Node.EditorState().Visibility + 1) % 3);
@@ -557,7 +557,7 @@ namespace Tangerine.UI.Timeline
 			);
 			button.AddTransactionClickHandler(
 				() => {
-					var nodes = Document.Current.SelectedRows()
+					var nodes = Document.Current.SelectedSceneItems()
 						.Select(i => i.GetNode())
 						.Where(i => i != null).ToList();
 					var locked = !Node.EditorState().Locked;
@@ -660,7 +660,7 @@ namespace Tangerine.UI.Timeline
 
 	public class AnimationTrackTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public AnimationTrackTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem,
+		public AnimationTrackTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem,
 			TreeViewItemPresentationOptions options)
 			: base(treeView, item, sceneItem, options)
 		{
@@ -679,8 +679,8 @@ namespace Tangerine.UI.Timeline
 					SceneTreeIndex.FromAnimationTrackIndex(parentItem, index),
 					track
 				);
-				ClearRowSelection.Perform();
-				SelectRow.Perform(item);
+				ClearSceneItemSelection.Perform();
+				SelectSceneItem.Perform(item);
 			});
 
 			string GenerateTrackId()
@@ -697,7 +697,7 @@ namespace Tangerine.UI.Timeline
 
 	public class AnimatorTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public AnimatorTreeViewItemPresentation(TreeView treeView, TreeViewItem item, Row sceneItem,
+		public AnimatorTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem,
 			TreeViewItemPresentationOptions options)
 			: base(treeView, item, sceneItem, options)
 		{
@@ -706,10 +706,10 @@ namespace Tangerine.UI.Timeline
 
 		private void ShowContextMenu()
 		{
-			if (!SceneItem.GetTimelineItemState().Selected) {
+			if (!SceneItem.GetTimelineSceneItemState().Selected) {
 				Document.Current.History.DoTransaction(() => {
-					ClearRowSelection.Perform();
-					SelectRow.Perform(SceneItem);
+					ClearSceneItemSelection.Perform();
+					SelectSceneItem.Perform(SceneItem);
 				});
 			}
 			var menu = new Menu {

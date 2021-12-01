@@ -145,7 +145,7 @@ namespace Tangerine.UI.Inspector
 
 		private void CreateWatchersToRebuild()
 		{
-			RootWidget.AddChangeWatcher(CalcSelectedRowsHashcode, _ => Rebuild());
+			RootWidget.AddChangeWatcher(CalcSelectedSceneItemsHashcode, _ => Rebuild());
 			RootWidget.Tasks.Add(DisableInspectorTask());
 		}
 
@@ -155,9 +155,9 @@ namespace Tangerine.UI.Inspector
 				contentWidget.Enabled = true;
 				if (!Document.Current.InspectRootNode) {
 					var enabled = true;
-					foreach (var i in Document.Current.Rows) {
-						if (i.GetTimelineItemState().Selected) {
-							var node = i.Components.Get<NodeRow>()?.Node;
+					foreach (var i in Document.Current.VisibleSceneItems) {
+						if (i.GetTimelineSceneItemState().Selected) {
+							var node = i.Components.Get<NodeSceneItem>()?.Node;
 							enabled &= !node?.GetTangerineFlag(TangerineFlags.Locked) ?? true;
 						}
 					}
@@ -167,7 +167,7 @@ namespace Tangerine.UI.Inspector
 			}
 		}
 
-		private static int CalcSelectedRowsHashcode()
+		private static int CalcSelectedSceneItemsHashcode()
 		{
 			var r = 0;
 			if (CoreUserPreferences.Instance.InspectEasing) {
@@ -184,10 +184,10 @@ namespace Tangerine.UI.Inspector
 					r ^= component.GetHashCode();
 				}
 			} else {
-				foreach (var i in Document.Current.Rows) {
-					if (i.GetTimelineItemState().Selected) {
+				foreach (var i in Document.Current.VisibleSceneItems) {
+					if (i.GetTimelineSceneItemState().Selected) {
 						r ^= i.GetHashCode();
-						var node = i.Components.Get<NodeRow>()?.Node;
+						var node = i.Components.Get<NodeSceneItem>()?.Node;
 						if (node != null) {
 							foreach (var component in node.Components) {
 								if (ClassAttributes<NodeComponentDontSerializeAttribute>.Get(component.GetType()) != null) {
@@ -234,11 +234,11 @@ namespace Tangerine.UI.Inspector
 
 		private static IEnumerable<object> GetSelectedAnimationTracksAndClips()
 		{
-			foreach (var row in Document.Current.SelectedRows()) {
-				yield return row.Components.Get<AnimationTrackRow>().Track;
+			foreach (var i in Document.Current.SelectedSceneItems()) {
+				yield return i.Components.Get<AnimationTrackSceneItem>().Track;
 			}
-			foreach (var row in Document.Current.Rows) {
-				var track = row.Components.Get<AnimationTrackRow>().Track;
+			foreach (var i in Document.Current.VisibleSceneItems) {
+				var track = i.Components.Get<AnimationTrackSceneItem>().Track;
 				foreach (var clip in track.Clips) {
 					if (clip.IsSelected) {
 						yield return clip;

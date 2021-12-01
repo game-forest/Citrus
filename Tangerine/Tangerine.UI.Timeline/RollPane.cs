@@ -74,11 +74,11 @@ namespace Tangerine.UI.Timeline
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(args.Items.Select(GetSceneItem)).ToList();
 			Document.Current.History.DoTransaction(() => {
 				DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
-				SetProperty.Perform(parentSceneItem.GetTimelineItemState(), nameof(TimelineItemStateComponent.NodesExpanded), true, false);
+				SetProperty.Perform(parentSceneItem.GetTimelineSceneItemState(), nameof(TimelineSceneItemStateComponent.NodesExpanded), true, false);
 				DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in topSceneItems) {
-					if (item.Parent == parentSceneItem && index > parentSceneItem.Rows.IndexOf(item)) {
+					if (item.Parent == parentSceneItem && index > parentSceneItem.SceneItems.IndexOf(item)) {
 						index--;
 					}
 					UnlinkSceneItem.Perform(item);
@@ -86,7 +86,7 @@ namespace Tangerine.UI.Timeline
 
 				foreach (var item in topSceneItems) {
 					LinkSceneItem.Perform(parentSceneItem, new SceneTreeIndex(index), item);
-					index = parentSceneItem.Rows.IndexOf(item) + 1;
+					index = parentSceneItem.SceneItems.IndexOf(item) + 1;
 				}
 			});
 		}
@@ -98,10 +98,10 @@ namespace Tangerine.UI.Timeline
 			}
 			var i = index >= parent.Items.Count ? 1 : 0;
 			var item = GetSceneItem(parent.Items[index - i]);
-			return GetSceneItem(parent).Rows.IndexOf(item) + i;
+			return GetSceneItem(parent).SceneItems.IndexOf(item) + i;
 		}
 
-		private static Row GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
+		private static SceneItem GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
 
 		private void RebuildTreeView()
 		{
@@ -109,7 +109,7 @@ namespace Tangerine.UI.Timeline
 				DestroyTree(TreeView.RootItem);
 			}
 			TreeView.RootItem = null;
-			foreach (var i in Document.Current.Rows) {
+			foreach (var i in Document.Current.VisibleSceneItems) {
 				var parent = TreeViewComponent.GetTreeViewItem(i.Parent);
 				if (TreeView.RootItem == null) {
 					parent.Items.Clear();

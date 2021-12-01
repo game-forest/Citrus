@@ -14,10 +14,10 @@ namespace Tangerine.UI.Timeline
 	{
 		public static void Perform()
 		{
-			var items = Document.Current.TopLevelSelectedRows().ToList();
+			var items = Document.Current.TopLevelSelectedSceneItems().ToList();
 			foreach (var item in items) {
 				var parent = item.Parent;
-				var index = parent.Rows.IndexOf(item);
+				var index = parent.SceneItems.IndexOf(item);
 				if (index > 0) {
 					UnlinkSceneItem.Perform(item);
 					LinkSceneItem.Perform(parent, new SceneTreeIndex(index - 1), item);
@@ -30,11 +30,11 @@ namespace Tangerine.UI.Timeline
 	{
 		public static void Perform()
 		{
-			var items = Document.Current.TopLevelSelectedRows().ToList();
+			var items = Document.Current.TopLevelSelectedSceneItems().ToList();
 			foreach (var item in items) {
 				var parent = item.Parent;
-				var index = parent.Rows.IndexOf(item);
-				if (index < parent.Rows.Count - 1) {
+				var index = parent.SceneItems.IndexOf(item);
+				if (index < parent.SceneItems.Count - 1) {
 					UnlinkSceneItem.Perform(item);
 					LinkSceneItem.Perform(parent, new SceneTreeIndex(index + 1), item);
 				}
