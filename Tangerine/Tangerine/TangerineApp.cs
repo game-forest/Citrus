@@ -703,13 +703,13 @@ namespace Tangerine
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
 			h.Connect(GenericCommands.RemoveTimelineColumn, new RemoveTimelineColumn());
 			h.Connect(GenericCommands.NextDocument, () => {
-				if (Navigator.Instance == null) {
-					new Navigator(startFocusedDocumentOffset: 1);
+				if (DocumentNavigator.Instance == null) {
+					new DocumentNavigator(startFocusedDocumentOffset: 1);
 				}
 			});
 			h.Connect(GenericCommands.PreviousDocument, () => {
-				if (Navigator.Instance == null) {
-					new Navigator(startFocusedDocumentOffset: -1);
+				if (DocumentNavigator.Instance == null) {
+					new DocumentNavigator(startFocusedDocumentOffset: -1);
 				}
 			});
 			h.Connect(GenericCommands.DefaultLayout, new ViewDefaultLayout());

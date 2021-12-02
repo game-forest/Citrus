@@ -11,9 +11,9 @@ using Shortcut = Lime.Shortcut;
 
 namespace Tangerine
 {
-	public class Navigator
+	public class DocumentNavigator
 	{
-		public static Navigator Instance { get; private set; }
+		public static DocumentNavigator Instance { get; private set; }
 
 		private readonly Window navigatorWindow;
 		private readonly Widget windowWidget;
@@ -21,7 +21,7 @@ namespace Tangerine
 		private Shortcut nextDocumentShortcut;
 		private Shortcut previousDocumentShortcut;
 		
-		public Navigator(int startFocusedDocumentOffset)
+		public DocumentNavigator(int startFocusedDocumentOffset)
 		{
 			if (Instance != null) {
 				throw new System.Exception();

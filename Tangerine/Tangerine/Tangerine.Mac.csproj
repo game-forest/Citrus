@@ -111,7 +111,7 @@
     <Compile Include="Dialogs\Lookup\LookupSection.cs" />
     <Compile Include="Dialogs\Lookup\LookupSections.cs" />
     <Compile Include="Dialogs\Lookup\LookupOpenDocumentsSection.cs" />
-    <Compile Include="Dialogs\Navigator.cs" />
+    <Compile Include="Dialogs\DocumentNavigator.cs" />
     <Compile Include="Dialogs\RenderToPngSequenceDialog.cs" />
     <Compile Include="ExceptionHandling.cs" />
     <Compile Include="Main.Win.cs" />
