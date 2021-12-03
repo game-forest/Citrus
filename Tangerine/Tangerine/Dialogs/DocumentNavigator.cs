@@ -56,7 +56,7 @@ namespace Tangerine
 			windowWidget = new ThemedInvalidableWindowWidget(navigatorWindow) {
 				Nodes = { navigatorWidget },
 			};
-			windowWidget.Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Navigator.PanelBackground);
+			windowWidget.Presenter = new WidgetFlatFillPresenter(Theme.Colors.WhiteBackground);
 			if (
 				GenericCommands.NextDocument.Shortcut != new Shortcut(Modifiers.Control, Key.Tab) ||
 				GenericCommands.PreviousDocument.Shortcut != new Shortcut(Modifiers.Control | Modifiers.Shift, Key.Tab)
@@ -253,7 +253,7 @@ namespace Tangerine
 						new TextStyle {
 							Id = AccentTextId,
 							Size = PathCaptionTextHeight,
-							TextColor = ColorTheme.Current.Navigator.AccentColor,
+							TextColor = Theme.Colors.KeyboardFocusBorder
 						},
 					},
 				};
@@ -268,10 +268,11 @@ namespace Tangerine
 				filesView = new ThemedScrollView(ScrollDirection.Horizontal) {
 					MinMaxSize = new Vector2(3 * labelsListSize.X, labelsListSize.Y)
 				};
+				var alternativeWhiteBackground = Theme.Colors.WhiteBackground.Darken(0.03f);
 				filesView.CompoundPresenter.Add(
-					new WidgetFlatFillPresenter(ColorTheme.Current.Navigator.ListBackground)
+					new WidgetFlatFillPresenter(alternativeWhiteBackground)
 				);
-				var hoveredItemBackground = ColorTheme.Current.Navigator.HoveredItemBackground;
+				var hoveredItemBackground = alternativeWhiteBackground.Darken(ColorTheme.Current.IsDark ? 0.17f : 0.05f);
 				filesView.Content.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					if (FocusedLabel is DocumentLabel label) {
 						label.PrepareRendererState();
@@ -280,7 +281,7 @@ namespace Tangerine
 				}));
 				panelsView.Presenter = new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
-					Renderer.DrawRect(Vector2.Zero, w.Size, ColorTheme.Current.Navigator.ListBackground);
+					Renderer.DrawRect(Vector2.Zero, w.Size, alternativeWhiteBackground);
 					if (FocusedLabel is PanelLabel label) {
 						label.PrepareRendererState();
 						Renderer.DrawRect(Vector2.Zero, label.Size, hoveredItemBackground);
@@ -295,7 +296,7 @@ namespace Tangerine
 					MinMaxHeight = PathCaptionHeight,
 				});
 				AddNode(new Widget {
-					Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Navigator.AccentColor),
+					Presenter = new WidgetFlatFillPresenter(Theme.Colors.KeyboardFocusBorder),
 					Padding = SeparationLinePadding,
 					MinMaxHeight = SeparationLineHeight,
 					Anchors = Anchors.LeftRight,
@@ -370,7 +371,7 @@ namespace Tangerine
 					FocusedLabel = (LabelBase)filesView.Content.Nodes
 						.SelectMany(n => n.Nodes)
 						.First(n => ((DocumentLabel)n).Document == targetDocument);
-					FocusedLabel.Color = ColorTheme.Current.Navigator.AccentColor;
+					FocusedLabel.Color = Theme.Colors.KeyboardFocusBorder;
 					FocusedLabel.SetFocus();
 				}
 			}
@@ -387,7 +388,7 @@ namespace Tangerine
 					}
 					HoveredLabel = hoveredLabel;
 					if (HoveredLabel != null) {
-						HoveredLabel.Color = ColorTheme.Current.Navigator.AccentColor;
+						HoveredLabel.Color = Theme.Colors.KeyboardFocusBorder;
 					}
 				}
 			}
@@ -408,7 +409,7 @@ namespace Tangerine
 					FocusedLabel = focusedLabel;
 					if (FocusedLabel != null) {
 						FocusedLabel.SetFocus();
-						FocusedLabel.Color = ColorTheme.Current.Navigator.AccentColor;
+						FocusedLabel.Color = Theme.Colors.KeyboardFocusBorder;
 						if (focusedLabel is DocumentLabel documentLabel) {
 							var labelsList = documentLabel.Parent.AsWidget;
 							if (!filesView.Behaviour.IsItemFullyOnscreen(labelsList)) {
