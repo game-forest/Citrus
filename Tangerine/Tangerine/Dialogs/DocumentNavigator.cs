@@ -257,7 +257,9 @@ namespace Tangerine
 						},
 					},
 				};
-				SetFilePathCaption(Document.Current.FullPath);
+				if (Document.Current != null) {
+					SetFilePathCaption(Document.Current.FullPath);
+				}
 				var labelsListSize = LabelsListSize;
 				panelsView = new Widget {
 					Layout = new VBoxLayout(),
