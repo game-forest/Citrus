@@ -73,6 +73,11 @@ namespace Tangerine
 
 		private void InitializeTasks()
 		{
+			// The navigator window is a window without a native menu. For this reason, when the navigator
+			// window is open in modal mode, the commands from the native menu of the main window still work.
+			// The navigator window is called by a shortcut (ctrl+tab) and inside the window we use the same
+			// shortcut to switch the document, but it does not work because of the above. To get around this,
+			// we temporarily remove commands from the native menu of the main window.
 			ClearAndSaveConflictingShortcuts();
 			int updateIndex = 0;
 			windowWidget.Tasks.AddLoop(() => {
@@ -111,7 +116,7 @@ namespace Tangerine
 			GenericCommands.NextDocument.Shortcut = new Shortcut();
 			GenericCommands.PreviousDocument.Shortcut = new Shortcut();
 		}
-
+		
 		private void RestoreConflictingShortcuts()
 		{
 			GenericCommands.NextDocument.Shortcut = nextDocumentShortcut;
