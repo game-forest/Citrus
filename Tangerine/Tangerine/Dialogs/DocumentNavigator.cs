@@ -13,7 +13,7 @@ namespace Tangerine
 {
 	public class DocumentNavigator
 	{
-		public static DocumentNavigator Instance { get; private set; }
+		private static DocumentNavigator Instance { get; set; }
 
 		private readonly Window navigatorWindow;
 		private readonly Widget windowWidget;
@@ -21,7 +21,7 @@ namespace Tangerine
 		private Shortcut nextDocumentShortcut;
 		private Shortcut previousDocumentShortcut;
 		
-		public DocumentNavigator(int startFocusedDocumentOffset)
+		private DocumentNavigator(int startFocusedDocumentOffset)
 		{
 			if (Instance != null) {
 				throw new System.Exception();
@@ -77,6 +77,8 @@ namespace Tangerine
 			InitializeTasks();
 			navigatorWindow.ShowModal();
 		}
+
+		public static void Show(int startFocusedDocumentOffset) => new DocumentNavigator(startFocusedDocumentOffset);
 
 		private void InitializeTasks()
 		{
