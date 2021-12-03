@@ -38,7 +38,14 @@ namespace Tangerine
 			navigatorWindow = new Window(new WindowOptions {
 				Visible = false,
 				FixedSize = true,
+#if WIN
 				Style = WindowStyle.Borderless,
+#elif MAC
+				// There is a problem with windows without a close button on the mac.
+				// Such windows cannot be closed. Without the close button, the event 
+				// responsible for closing the window is interrupted somewhere. 
+				Style = WindowStyle.Regular,
+#endif
 				ClientSize = navigatorWidget.EffectiveMinSize
 			});
 			if (!displayCenter.HasValue) {
