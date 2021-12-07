@@ -87,6 +87,7 @@ namespace Orange
 		TextureFilter MagFilter { get; }
 		int AtlasItemPadding { get; }
 		int MaxAtlasSize { get; }
+		bool AtlasDebug { get; }
 	}
 
 	public class ParticularCookingRules : ICookingRules
@@ -153,6 +154,9 @@ namespace Orange
 
 		[YuzuMember]
 		public int AtlasItemPadding { get; set; } = 1;
+
+		[YuzuMember]
+		public bool AtlasDebug { get; set; } = false;
 
 		[YuzuMember]
 		public int MaxAtlasSize { get; set; } = 2048;
@@ -234,6 +238,7 @@ namespace Orange
 				ModelCompression = ModelCompression.Deflate,
 				FieldOverrides = new HashSet<Meta.Item>(),
 				AtlasItemPadding = 1,
+				AtlasDebug = false,
 				MaxAtlasSize = 2048,
 			});
 			return defaultRules[platform];
@@ -284,6 +289,7 @@ namespace Orange
 		public TextureFilter MagFilter => EffectiveRules.MagFilter;
 		public string CustomRule => EffectiveRules.CustomRule;
 		public int AtlasItemPadding => EffectiveRules.AtlasItemPadding;
+		public bool AtlasDebug => EffectiveRules.AtlasDebug;
 		public int MaxAtlasSize => EffectiveRules.MaxAtlasSize;
 
 		public SHA256 Hash => EffectiveRules.Hash;
@@ -776,6 +782,9 @@ namespace Orange
 					break;
 				case "AtlasItemPadding":
 					rules.AtlasItemPadding = int.Parse(words[1]);
+					break;
+				case "AtlasDebug":
+					rules.AtlasDebug = ParseBool(words[1]);
 					break;
 				case "MaxAtlasSize":
 					rules.MaxAtlasSize = int.Parse(words[1]);

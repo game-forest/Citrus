@@ -307,7 +307,8 @@ namespace Orange
 						atlasRect.A.X,
 						atlasRect.A.Y,
 						size.Width,
-						size.Height
+						size.Height,
+						item.CookingRules.AtlasDebug
 					);
 				}
 				var atlasPart = new TextureAtlasElement.Params {
@@ -362,7 +363,8 @@ namespace Orange
 			int dstX,
 			int dstY,
 			int dstWidth,
-			int dstHeight
+			int dstHeight,
+			bool debugRectangle
 		) {
 			if (source.Width > dstWidth - dstX || source.Height > dstHeight - dstY) {
 				throw new Lime.Exception(
@@ -384,6 +386,23 @@ namespace Orange
 				// Fill padding with edge texels.
 				Array.Fill(dstPixels, srcPixels[srcOffset], dstOffset - leftPadding, leftPadding);
 				Array.Fill(dstPixels, srcPixels[srcOffset + source.Width - 1], dstOffset + source.Width, rightPadding);
+			}
+
+			if (debugRectangle) {
+				int dstOffset;
+				for (int x = 0; x < source.Width; x++) {
+					dstOffset = (0 + dstY) * dstWidth + dstX + x;
+					dstPixels[dstOffset] = Color4.Red;
+					dstOffset = (source.Height - 1 + dstY) * dstWidth + dstX + x;
+					dstPixels[dstOffset] = Color4.Red;
+				}
+
+				for (int y = 0; y < source.Height; y++) {
+					dstOffset = (y + dstY) * dstWidth + dstX + 0;
+					dstPixels[dstOffset] = Color4.Red;
+					dstOffset = (y + dstY) * dstWidth + dstX + source.Width - 1;
+					dstPixels[dstOffset] = Color4.Red;
+				}
 			}
 		}
 	}
