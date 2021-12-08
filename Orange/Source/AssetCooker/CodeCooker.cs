@@ -25,7 +25,8 @@ namespace Orange
 			var modifiedScenes = new List<string>();
 
 			using (var dc = new DirectoryChanger(The.Workspace.AssetsDirectory)) {
-				foreach (var scenePath in inputBundle.EnumerateFiles()) {
+				// Distinct because same asset may be present in multiple bundles.
+				foreach (var scenePath in inputBundle.EnumerateFiles().Distinct()) {
 					if (
 						!scenePath.EndsWith(".tan", StringComparison.OrdinalIgnoreCase) &&
 						!scenePath.EndsWith(".model", StringComparison.OrdinalIgnoreCase)
