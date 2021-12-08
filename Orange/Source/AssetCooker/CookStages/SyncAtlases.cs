@@ -163,8 +163,8 @@ namespace Orange
 		) {
 			// Sort images in descending size order
 			items.Sort((x, y) => {
-				var a = Math.Max(x.BitmapInfo.Width, x.BitmapInfo.Height);
-				var b = Math.Max(y.BitmapInfo.Width, y.BitmapInfo.Height);
+				var a = Math.Max(x.BitmapInfo.Width, x.BitmapInfo.Height) + 2 * x.CookingRules.AtlasItemPadding;
+				var b = Math.Max(y.BitmapInfo.Width, y.BitmapInfo.Height) + 2 * y.CookingRules.AtlasItemPadding;
 				return b - a;
 			});
 
@@ -226,40 +226,19 @@ namespace Orange
 		private void PackItemsToAtlas(List<TextureTools.AtlasItem> items, Size atlasSize, out double packRate)
 		{
 			items.ForEach(i => i.Allocated = false);
-			// Reserve space for default one-pixel padding.
-			atlasSize.Width += 2;
-			atlasSize.Height += 2;
 			var rectAllocator = new RectAllocator(atlasSize);
 			TextureTools.AtlasItem firstAllocatedItem = null;
 			foreach (var item in items) {
 				var padding = item.CookingRules.AtlasItemPadding;
-				var paddedItemSize = new Size(
-					item.BitmapInfo.Width + padding * 2,
-					item.BitmapInfo.Height + padding * 2
-				);
+				var itemSize = new Size(item.BitmapInfo.Width, item.BitmapInfo.Height);
 				if (firstAllocatedItem == null || AreAtlasItemsCompatible(items, firstAllocatedItem, item)) {
-					if (rectAllocator.Allocate(paddedItemSize, out item.AtlasRect)) {
+					if (rectAllocator.Allocate(itemSize, padding, out item.AtlasRect)) {
 						item.Allocated = true;
 						firstAllocatedItem ??= item;
 					}
 				}
 			}
 			packRate = rectAllocator.GetPackRate();
-			// Adjust item rectangles according to theirs paddings.
-			foreach (var item in items) {
-				if (!item.Allocated) {
-					continue;
-				}
-				var atlasRect = item.AtlasRect;
-				atlasRect.A += new IntVector2(item.CookingRules.AtlasItemPadding);
-				atlasRect.B -= new IntVector2(item.CookingRules.AtlasItemPadding);
-				// Don't leave space between item rectangle and texture boundaries for items with 1 pixel padding.
-				if (item.CookingRules.AtlasItemPadding == 1) {
-					atlasRect.A -= new IntVector2(1);
-					atlasRect.B -= new IntVector2(1);
-				}
-				item.AtlasRect = atlasRect;
-			}
 		}
 
 		/// <summary>
@@ -321,7 +300,16 @@ namespace Orange
 			foreach (var item in items.Where(i => i.Allocated)) {
 				var atlasRect = item.AtlasRect;
 				using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item)) {
-					CopyPixels(bitmap, atlasPixels, atlasRect.A.X, atlasRect.A.Y, size.Width, size.Height);
+					CopyPixels(
+						bitmap,
+						atlasPixels,
+						item.CookingRules.AtlasItemPadding,
+						atlasRect.A.X,
+						atlasRect.A.Y,
+						size.Width,
+						size.Height,
+						item.CookingRules.AtlasDebug
+					);
 				}
 				var atlasPart = new TextureAtlasElement.Params {
 					AtlasRect = atlasRect,
@@ -371,10 +359,12 @@ namespace Orange
 		private static void CopyPixels(
 			Bitmap source,
 			Color4[] dstPixels,
+			int padding,
 			int dstX,
 			int dstY,
 			int dstWidth,
-			int dstHeight
+			int dstHeight,
+			bool debugRectangle
 		) {
 			if (source.Width > dstWidth - dstX || source.Height > dstHeight - dstY) {
 				throw new Lime.Exception(
@@ -382,8 +372,9 @@ namespace Orange
 				);
 			}
 			var srcPixels = source.GetPixels();
-			// Make 1-pixel border around image by duplicating image edges
-			for (int y = -1; y <= source.Height; y++) {
+			var leftPadding = padding.Clamp(0, dstX);
+			var rightPadding = padding.Clamp(0, dstWidth - dstX - source.Width);
+			for (int y = -padding; y < source.Height + padding; y++) {
 				int dstRow = y + dstY;
 				if (dstRow < 0 || dstRow >= dstHeight) {
 					continue;
@@ -392,11 +383,43 @@ namespace Orange
 				int srcOffset = srcRow * source.Width;
 				int dstOffset = (y + dstY) * dstWidth + dstX;
 				Array.Copy(srcPixels, srcOffset, dstPixels, dstOffset, source.Width);
-				if (dstX > 0) {
-					dstPixels[dstOffset - 1] = srcPixels[srcOffset];
+				// Fill padding with edge texels.
+				Array.Fill(dstPixels, srcPixels[srcOffset], dstOffset - leftPadding, leftPadding);
+				Array.Fill(dstPixels, srcPixels[srcOffset + source.Width - 1], dstOffset + source.Width, rightPadding);
+			}
+
+			if (debugRectangle) {
+				int dstOffset;
+				for (int x = 0; x < source.Width; x++) {
+					dstOffset = (0 + dstY) * dstWidth + dstX + x;
+					if (ShouldWriteBorder(x, source.Width)) {
+						dstPixels[dstOffset] = GetColor(x);
+					}
+					dstOffset = (source.Height - 1 + dstY) * dstWidth + dstX + x;
+					if (ShouldWriteBorder(x, source.Width)) {
+						dstPixels[dstOffset] = GetColor(x);
+					}
 				}
-				if (dstX + source.Width < dstWidth) {
-					dstPixels[dstOffset + source.Width] = srcPixels[srcOffset + source.Width - 1];
+
+				for (int y = 0; y < source.Height; y++) {
+					dstOffset = (y + dstY) * dstWidth + dstX + 0;
+					if (ShouldWriteBorder(y, source.Height)) {
+						dstPixels[dstOffset] = GetColor(y);
+					}
+					dstOffset = (y + dstY) * dstWidth + dstX + source.Width - 1;
+					if (ShouldWriteBorder(y, source.Height)) {
+						dstPixels[dstOffset] = GetColor(y);
+					}
+				}
+
+				bool ShouldWriteBorder(int p, int length)
+				{
+					return dstPixels[dstOffset].A == 0 || p < 16 || p > length - 16;
+				}
+
+				Color4 GetColor(int p)
+				{
+					return (p / 4) % 2 == 0 ? Color4.Red : Color4.Blue;
 				}
 			}
 		}

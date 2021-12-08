@@ -104,8 +104,9 @@ namespace Orange
 				PluginLoader.AfterBundlesCooked(extraBundles);
 				if (requiredCookCode) {
 					var savedInputBundle = InputBundle;
+					AggregateAssetBundle bundle = null;
 					try {
-						var bundle = new AggregateAssetBundle();
+						bundle = new AggregateAssetBundle();
 						foreach (var bundleName in bundles) {
 							bundle.Attach(new PackedAssetBundle(The.Workspace.GetBundlePath(Target.Platform, bundleName)));
 						}
@@ -113,6 +114,7 @@ namespace Orange
 						CodeCooker.Cook(Target, InputBundle, CookingRulesMap, bundles.ToList());
 					} finally {
 						AssetBundle.Current = savedInputBundle;
+						bundle?.Dispose();
 					}
 				}
 				StopBenchmark(allTimer, "All bundles cooked: ");

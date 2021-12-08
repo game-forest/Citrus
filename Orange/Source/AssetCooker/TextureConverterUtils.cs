@@ -71,7 +71,9 @@ namespace Orange
 							}
 						}
 						if (count == 0) {
-							throw new InvalidOperationException("Pending pixel has no non-transparent adjacent pixel.");
+							throw new InvalidOperationException(
+								"Pending pixel has no non-transparent adjacent pixel."
+							);
 						}
 						if (radius > 0) {
 							image[i] = new Color4((byte) (r / count), (byte) (g / count), (byte) (b / count), 0);
@@ -87,68 +89,79 @@ namespace Orange
 
 		public static void SaveToTGA(Bitmap bitmap, string path, bool swapRedAndBlue)
 		{
-			using (var stream = new FileStream(path, FileMode.Create)) {
-				using (var writer = new BinaryWriter(stream)) {
-					int width = bitmap.Width;
-					int height = bitmap.Height;
-					bool hasAlpha = bitmap.HasAlpha;
-					writer.Write((byte) 0); // size of ID field that follows 18 byte header(0 usually)
-					writer.Write((byte) 0); // type of color map 0 = none, 1 = has palette
-					writer.Write((byte) 2); // type of image 0 = none, 1 = indexed, 2 = rgb, 3 = grey, +8 = rle packed
-					writer.Write((short) 0); // first color map entry in palette
-					writer.Write((short) 0); // number of colors in palette
-					writer.Write((byte) 0); // number of bits per palette entry 15,16,24,32
-					writer.Write((short) 0); // image x origin
-					writer.Write((short) 0); // image y origin
-					writer.Write((short) width); // image width in pixels
-					writer.Write((short) height); // image height in pixels
-					writer.Write((byte) (hasAlpha ? 32 : 24)); // image bits per pixel 8,16,24,32
-					writer.Write((byte) 0); // descriptor
-					Color4[] pixels = bitmap.GetPixels();
-					var bytes = new byte[hasAlpha ? pixels.Length * 4 : pixels.Length * 3];
-					int bi = 0;
-					for (int y = height - 1; y >= 0; y--) {
-						int rowsOffset = y * width;
-						for (int x = 0; x < width; x++) {
-							Color4 pixel = pixels[x + rowsOffset];
-							if (swapRedAndBlue) {
-								bytes[bi++] = pixel.B;
-								bytes[bi++] = pixel.G;
-								bytes[bi++] = pixel.R;
-							}
-							else {
-								bytes[bi++] = pixel.R;
-								bytes[bi++] = pixel.G;
-								bytes[bi++] = pixel.B;
-							}
-							if (hasAlpha) {
-								bytes[bi++] = pixel.A;
-							}
-						}
+			using var stream = new FileStream(path, FileMode.Create);
+			using var writer = new BinaryWriter(stream);
+			int width = bitmap.Width;
+			int height = bitmap.Height;
+			bool hasAlpha = bitmap.HasAlpha;
+			// size of ID field that follows 18 byte header(0 usually)
+			writer.Write((byte)0);
+			// type of color map 0 = none, 1 = has palette
+			writer.Write((byte)0);
+			// type of image 0 = none, 1 = indexed, 2 = rgb, 3 = grey, +8 = rle packed
+			writer.Write((byte)2);
+			// first color map entry in palette
+			writer.Write((short)0);
+			// number of colors in palette
+			writer.Write((short)0);
+			// number of bits per palette entry 15, 16, 24, 32
+			writer.Write((byte)0);
+			// image x origin
+			writer.Write((short)0);
+			// image y origin
+			writer.Write((short)0);
+			// image width in pixels
+			writer.Write((short)width);
+			// image height in pixels
+			writer.Write((short)height);
+			// image bits per pixel 8, 16, 24, 32
+			writer.Write((byte)(hasAlpha ? 32 : 24));
+			// descriptor
+			writer.Write((byte)0);
+			Color4[] pixels = bitmap.GetPixels();
+			var bytes = new byte[hasAlpha ? pixels.Length * 4 : pixels.Length * 3];
+			int bi = 0;
+			for (int y = height - 1; y >= 0; y--) {
+				int rowsOffset = y * width;
+				for (int x = 0; x < width; x++) {
+					Color4 pixel = pixels[x + rowsOffset];
+					if (swapRedAndBlue) {
+						bytes[bi++] = pixel.B;
+						bytes[bi++] = pixel.G;
+						bytes[bi++] = pixel.R;
+					} else {
+						bytes[bi++] = pixel.R;
+						bytes[bi++] = pixel.G;
+						bytes[bi++] = pixel.B;
 					}
-					writer.Write(bytes, 0, bytes.Length);
+					if (hasAlpha) {
+						bytes[bi++] = pixel.A;
+					}
 				}
 			}
+			writer.Write(bytes, 0, bytes.Length);
 		}
 
 		public static bool GetPngFileInfo(AssetBundle bundle, string path, out int width, out int height, out bool hasAlpha)
 		{
 			width = height = 0;
 			hasAlpha = false;
-			using (var stream = bundle.OpenFile(path)) {
-				using (var reader = new BinaryReader(stream)) {
-					byte[] sign = reader.ReadBytes(8); // PNG signature
-					if (sign[1] != 'P' || sign[2] != 'N' || sign[3] != 'G')
-						return false;
-					reader.ReadBytes(4);
-					reader.ReadBytes(4); // 'IHDR'
-					width = IPAddress.NetworkToHostOrder(reader.ReadInt32());
-					height = IPAddress.NetworkToHostOrder(reader.ReadInt32());
-					reader.ReadByte(); // color depth
-					int colorType = reader.ReadByte();
-					hasAlpha = (colorType == 4) || (colorType == 6);
-				}
+			using var stream = bundle.OpenFile(path);
+			using var reader = new BinaryReader(stream);
+			// PNG signature
+			byte[] sign = reader.ReadBytes(8);
+			if (sign[1] != 'P' || sign[2] != 'N' || sign[3] != 'G') {
+				return false;
 			}
+			reader.ReadBytes(4);
+			// 'IHDR'
+			reader.ReadBytes(4);
+			width = IPAddress.NetworkToHostOrder(reader.ReadInt32());
+			height = IPAddress.NetworkToHostOrder(reader.ReadInt32());
+			// color depth
+			reader.ReadByte();
+			int colorType = reader.ReadByte();
+			hasAlpha = (colorType == 4) || (colorType == 6);
 			return true;
 		}
 
@@ -160,20 +173,18 @@ namespace Orange
 			return x;
 		}
 
-		static int GetNearestPowerOf2Helper(int value)
+		private static int GetNearestPowerOf2Helper(int value)
 		{
 			if (!IsPowerOf2(value)) {
 				int i = 1;
-				while (i < value)
+				while (i < value) {
 					i *= 2;
+				}
 				return i;
 			}
 			return value;
 		}
 
-		public static bool IsPowerOf2(int value)
-		{
-			return value == 1 || (value & (value - 1)) == 0;
-		}
+		public static bool IsPowerOf2(int value) => (value & (value - 1)) == 0;
 	}
 }
