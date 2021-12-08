@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>&#1042;&#1072;&#1083;&#1080;&#1076;&#1072;&#1094;&#1080;&#1103; | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="&#1042;&#1072;&#1083;&#1080;&#1076;&#1072;&#1094;&#1080;&#1103; | Citrus Engine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="валидация">Валидация</h1>
+
+<p>Валидация позволяет контроллировать корректность данных в ассетах. В Цитрусе есть несколько типов валидации.</p>
+<ol>
+<li>Валидация по свойству</li>
+<li>Валидация по типу</li>
+<li>Валидация по расширению ассета</li>
+</ol>
+<p>В любом из этих случев вам надо реализовать интерфейс <code>Lime.Validation.IValidator&lt;T&gt;</code> где T это входной тип данных для валидации. В нём надо реализовать единственный метод</p>
+<pre><code class="lang-csharp">IEnumerable&lt;(Lime.Validation.Result Result, string Message)&gt; Validate(T value);
+</code></pre>
+<p>При вызове этого метода будет использована не генерик версия данного интерфейса <code>Lime.Validation.IValidator</code>, это означает что где-то там есть каст <code>value</code> из <code>object</code> в <code>T</code>. Если не верно указан тип для валидатора, то этот каст бросит исключение.</p>
+<p>Result может быть <code>Info</code>, <code>Error</code> и <code>Warning</code>. В Message должен содержаться текст соответствующий результату. Этот метод должен перечислять пары результат и сообщение согласно логике валидатора. Примеры валидаторов можно посмотреть в Lime.Validation.</p>
+<p>Все валидаторы не должны иметь состояния, т.к. не гарантируется, будут ли они пересозданы или закешированы в той или иной ситуации.</p>
+<p>Далее реализация этого интерфейса либо регистрируется в <code>Orange.ValidationRunner</code> либо является атрибутом.</p>
+<h2 id="валидация-свойства">Валидация свойства</h2>
+<p>Валидаторы свойств извлекаются из атрибутов свойства с помощью рефлексии. То есть чтобы повесить валидатор на свойство надо унаследоваться от <code>System.Attribute</code> и реализовать <code>IValidator&lt;T&gt;</code>, а затем применить его к свойству.</p>
+<p>Такие валидаторы можно параметризировать и в каждом конкретном случае передавать параметры применимые к конкретному свойству. Например см. <code>Lime.Validation.Range</code>.</p>
+<p>Только для валидаторов свойств проводится проверка на реализацию интерфейса <code>Lime.Validation.IRequireOwner</code>, если она есть, то перед вызовом валидации валидатору будет назначен владелец. При этом проверяемое значение для свойства не обязательно должно быть уже присвоено, т.к. оно передаётся в <code>Validate</code> отдельно.</p>
+<p>Только для валидаторов свойств проводится проверка не реализацию интерфейса <code>Lime.Validation.PassThroughEnumerable</code>, если она есть, то такие валидаторы будучи назначенными на свойства будут применяться не к самому свойству, а к его элементам, если свойство реализует <code>IEnumerable</code>. Это верно также для вложенных перечислений, например <code>public List&lt;List&lt;List&lt;int&gt;&gt;&gt; List { get; set; }</code>.</p>
+<p>Валидаторы свойств вызываются для всех свойств маркированных <code>YuzuMember</code> через <code>Orange.ValidationRunner.ValidateObject</code> (который можно использовать в своих валидаторах ассетов, а также используется для валидации сцен), а также для <code>YuzuMember</code> и <code>TangerineInspect</code> маркированных полей валидаторы свойств будут вызваны в инспекторе в Танжерине. (И в некоторых других интерфейсах редактирования свойств в танжерине).</p>
+<h2 id="валидация-типа">Валидация типа</h2>
+<p>Аналогично валидации свойства, но атрибут применяется к объявлению типа.</p>
+<p>Вызывается через　<code>Orange.ValidationRunner.ValidateObject</code> для всех значений.</p>
+<p>Вызывается для всех значений свойств в Танжерине в инспекторе. Для поиска атрибутов валидации также перечисляются интерфейсы, которые реализует рантайм тип данного значения свойства.</p>
+<h2 id="валидация-ассета">Валидация ассета</h2>
+<p>Такой валидатор должен валидировать значение типа <code>string</code>. Это путь к ассету в текущем бандле (входной бандл для кука, asset directory). Если данный ассет можно десериализовать в инстанс некого класса, то для из него можно вызвать <code>Orange.ValidationRunner.ValidateObject</code> и перечислить его результаты.</p>
+<p>При куке ассетов для каждого нового или изменённого файла в директории ассетов проекта, если данный файл попадает в один из cooking stages, вызываются все валидаторы зарегистрированные через Orange.ValidationRunner.RegisterAssetValidator.</p>
+<p>Также через Orange Action -&gt; Validate Everything валидаторы ассетов будут вызваны для каждого ассета в директории ассетов.</p>
+<h2 id="примеры-того-что-можно-валидировать">Примеры того, что можно валидировать.</h2>
+<ul>
+<li>Допустимые интервалы для численных значений.</li>
+<li>Символы в путях и айди. Если у вас в проекте естьк акие-то соглашения по именованию, можно проверять эти соглашения.</li>
+<li>Для изображений можно проверять что они не сильно большие, если попробовать частично выяснить кладётся ли оно в атлас или нет, то в случае если нет, можно проверять, насколько оно не вписывается в степень двойки.</li>
+<li>Про размер изображений -- проверять размер на диске, то есть если по факту файл занимает в несколько раз больше чем разжатое изображение, возможно там какая-то метадата лишняя.</li>
+<li>Можно проверять, что цветовой профиль отсутсвует или указан СРГБ, который должен у нас использоваться согласно документации. Ну и что угодно в кастомных компонентах и виджетах.</li>
+<li>Информировать, что размер или аспект ратио виджета отличается от оного у изображения, которое этот виджет рисует.</li>
+<li>Убеждаться, что для текстуры виджета установленны параметры, которые требуются данному виджету. (Например WrapModeU/V == Clamp/Mirror)</li>
+<li>Проверять композицию нод и компонент. Это означает, что среди детей ноды должны быть только дети допустимых типов для каждого типа нода владельца. Аналогично для компонент.</li>
+<li>Проверять, что указанный ассет существует.</li>
+<li>Проверять, что бандл сцены и бандл ассета совпадают (Warning).</li>
+<li>Вызывать валидаторы для значений свойств на ключевых кадрах.</li>
+<li>Убеждаться, что ключевые кадры правильно отсортированы и не содержат повторов.</li>
+<li>Убеждаться, что нет таких двух маркеров, у которых кадр совпадает.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>

@@ -9455,6 +9455,83 @@
       "version": ""
     },
     {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/compressed_1px_padding_atlas.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/compressed_1px_padding_atlas.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/compressed_4px_padding_atlas.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/compressed_4px_padding_atlas.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/compression_seams.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/compression_seams.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/noseams.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/noseams.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/seams.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/seams.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/uncompressed_0px_padding_atlas.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/uncompressed_0px_padding_atlas.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/assets/images/uncompressed_1px_padding_atlas.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/assets/images/uncompressed_1px_padding_atlas.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "log_codes": [
         "InvalidFileLink"
       ],
@@ -9464,6 +9541,33 @@
         ".html": {
           "relative_path": "articles/assets/tangerine_image_settings.html",
           "hash": "lT7McRORKbA5fDEdJNVpcBiHv5ZQs0iIk+bY27+g2ls="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "articles/assets/texture_atlas_configuration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/assets/texture_atlas_configuration.html",
+          "hash": "Ej3m8wOv795LkkAA3Ag43JytYQAtXAv8xoXi/khyaOs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/assets/validation.ru.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/assets/validation.ru.html",
+          "hash": "6jXd8vkSlh/I0HiiDHCba9k/hQEQTYCidxEuHfOpM9A="
         }
       },
       "is_incremental": false,
@@ -11813,7 +11917,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "A1Dz31+VUj+Kj3bkrtCnfCpg5dYw70rtlxVWJHGXlPo="
+          "hash": "y4ltzKoraOURiAf02mz6RfQN1iGAJ+Q1em4vUuTdy2w="
         }
       },
       "is_incremental": false,
@@ -11891,7 +11995,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 82,
+          "total_file_count": 84,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {

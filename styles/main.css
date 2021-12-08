@@ -35,6 +35,10 @@ body {
   color: var(--color-foreground);
 }
 
+p {
+  max-width: 80ch;
+}
+
 h1 {
   font-weight: 600;
   font-size: 32px;

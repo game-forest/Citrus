@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Configuring texture atlas | Citrus Engine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Configuring texture atlas | Citrus Engine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="configuring-texture-atlas">Configuring texture atlas</h1>
+
+<h2 id="texture-bleeding">Texture bleeding</h2>
+<p>When the engine renders a scene it uses <a href="https://en.wikipedia.org/wiki/Texture_filtering">texture filtering</a> to smooth transition between texels when it's magnified or minified. If textures lie right next to each other in a texture atlas then edge texels of the texture will blend into neighbor textures' texels causing such artifacts as seams on a tiled surface. In order to avoid the most common artifact <code>AtlasItemPadding</code> cooking rule is set to 1 pixel by default. <code>AtlasItemPadding</code> cooking rule adds spacing between textures in atlas and fills it with edge pixels.</p>
+<p>Consider this example. Surface is tiled with teal squares. Teal square is packed with other textures with zero padding. That'll introduce visual artifacts for sure:</p>
+<center>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Cuncompressed_0px_padding_atlas.png" alt="0px_atlas"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">atlas</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Cseams.png" alt="seams"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">tiled surface</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p>However <code>AtlasItemPadding</code> set to 1 solves visual artifacts problem:</p>
+<center>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Cuncompressed_1px_padding_atlas.png" alt="1px_atlas"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">atlas</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Cnoseams.png" alt="seams"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">tiled surface</td>
+</tr>
+</tbody>
+</table>
+</center>
+But this may be not enough. Texture compression can lead to texture bleeding inside atlas:
+<center>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Ccompressed_1px_padding_atlas.png" alt="1px_atlas"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">atlas</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Ccompression_seams.png" alt="compression_seams"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">tiled surface</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p>Correct way to solve compression bleeding is to increase value of <code>AtlasItemPadding</code> so it matches the size of compression block. For example compression block of ETC2 algorithm have 4x4 size, so in most cases 4 pixels should be enough for <code>AtlasItemPadding</code> to resolve compression bleeding problem:</p>
+<center>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Ccompressed_4px_padding_atlas.png" alt="1px_atlas"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">atlas</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img src="images%5Cnoseams.png" alt="compression_seams"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">tiled surface</td>
+</tr>
+</tbody>
+</table>
+</center>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              GameForest 2020
+              
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js" integrity="sha384-dV0RNdYNgPqjamYrB83Q21NNeuYk1jpKyUBkKQrT+c7krNFk4k39ktYZV4mOdMV1" crossorigin="anonymous"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false
+        });
+        mermaid.init(undefined, ".lang-mermaid");
+    </script>  </body>
+</html>
