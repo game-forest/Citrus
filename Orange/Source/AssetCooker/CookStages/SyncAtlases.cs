@@ -392,16 +392,34 @@ namespace Orange
 				int dstOffset;
 				for (int x = 0; x < source.Width; x++) {
 					dstOffset = (0 + dstY) * dstWidth + dstX + x;
-					dstPixels[dstOffset] = Color4.Red;
+					if (ShouldWriteBorder(x, source.Width)) {
+						dstPixels[dstOffset] = GetColor(x);
+					}
 					dstOffset = (source.Height - 1 + dstY) * dstWidth + dstX + x;
-					dstPixels[dstOffset] = Color4.Red;
+					if (ShouldWriteBorder(x, source.Width)) {
+						dstPixels[dstOffset] = GetColor(x);
+					}
 				}
 
 				for (int y = 0; y < source.Height; y++) {
 					dstOffset = (y + dstY) * dstWidth + dstX + 0;
-					dstPixels[dstOffset] = Color4.Red;
+					if (ShouldWriteBorder(y, source.Height)) {
+						dstPixels[dstOffset] = GetColor(y);
+					}
 					dstOffset = (y + dstY) * dstWidth + dstX + source.Width - 1;
-					dstPixels[dstOffset] = Color4.Red;
+					if (ShouldWriteBorder(y, source.Height)) {
+						dstPixels[dstOffset] = GetColor(y);
+					}
+				}
+
+				bool ShouldWriteBorder(int p, int length)
+				{
+					return dstPixels[dstOffset].A == 0 || p < 16 || p > length - 16;
+				}
+
+				Color4 GetColor(int p)
+				{
+					return (p / 4) % 2 == 0 ? Color4.Red : Color4.Blue;
 				}
 			}
 		}
