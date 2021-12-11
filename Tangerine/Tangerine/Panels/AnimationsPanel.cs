@@ -1349,84 +1349,24 @@ namespace Tangerine.Panels
 			{
 				TreeView.ClearSelection();
 				Item.Selected = true;
-				var menu = new Menu();
+				var menu = new Menu {
+					TimelineCommands.AddAnimation,
+					TimelineCommands.AddCompoundAnimation,
+					TimelineCommands.AddZeroPoseAnimation,
+				};
 				var node = ((INodeTreeViewItem)Item).Node;
-				menu.Add(new Command("Add", () => AddAnimation(false)));
-				menu.Add(new Command("Add Compound", () => AddAnimation(true)));
-				menu.Add(new Command("Add ZeroPose", AddZeroPoseAnimation) {
-					Enabled = !node.Animations.TryFind(Animation.ZeroPoseId, out _),
-				});
+				var data = new Tuple<Node, Action<SceneItem, SceneItem>>(node, SelectAnimationItem);
+				TimelineCommands.AddAnimation.UserData = data;
+				TimelineCommands.AddCompoundAnimation.UserData = data;
+				TimelineCommands.AddZeroPoseAnimation.UserData = data;
 				menu.Popup();
-
-				void AddAnimation(bool compound)
-				{
-					Document.Current.History.DoTransaction(() => {
-						var animation = new Animation
-							{ Id = GenerateAnimationId(node, "NewAnimation"), IsCompound = compound };
-						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
-						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, new SceneTreeIndex(0), animation);
-						TreeView.ClearSelection();
-						itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
-						itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
-						if (compound) {
-							var track = new AnimationTrack { Id = "Track1" };
-							var animationTrackSceneItem = LinkSceneItem.Perform(
-								animationSceneItem, new SceneTreeIndex(0), track);
-							SelectSceneItem.Perform(animationTrackSceneItem);
-						}
-					});
-				}
-
-				void AddZeroPoseAnimation()
-				{
-					Document.Current.History.DoTransaction(() => {
-						var animation = new Animation { Id = Animation.ZeroPoseId };
-						var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
-						var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, new SceneTreeIndex(0), animation);
-						TreeView.ClearSelection();
-						itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
-						itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
-						foreach (var a in node.Descendants.SelectMany(n => n.Animators).ToList()) {
-							var (propertyData, animable, index) =
-								AnimationUtils.GetPropertyByPath(a.Owner, a.TargetPropertyPath);
-							var zeroPoseKey = Keyframe.CreateForType(propertyData.Info.PropertyType);
-							zeroPoseKey.Value = index == -1
-								? propertyData.Info.GetValue(animable)
-								: propertyData.Info.GetValue(animable, new object[] { index });
-							zeroPoseKey.Function = KeyFunction.Step;
-							SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, animation, zeroPoseKey);
-						}
-					});
-				}
 			}
 
-			private static string GenerateAnimationId(Node node, string prefix)
+			private void SelectAnimationItem(SceneItem nodeSceneItem, SceneItem animationSceneItem)
 			{
-				var animations = GetAnimations(node);
-				for (int i = 1; ; i++) {
-					var id = prefix + (i > 1 ? i.ToString() : string.Empty);
-					if (animations.All(a => a.Id != id)) {
-						return id;
-					}
-				}
-			}
-
-			private static List<Animation> GetAnimations(Node node)
-			{
-				var usedAnimations = new HashSet<string>();
-				var animations = new List<Animation>();
-				var ancestor = node;
-				while (true) {
-					foreach (var a in ancestor.Animations) {
-						if (!a.IsLegacy && usedAnimations.Add(a.Id)) {
-							animations.Add(a);
-						}
-					}
-					if (ancestor == Document.Current.RootNode) {
-						return animations;
-					}
-					ancestor = ancestor.Parent;
-				}
+				TreeView.ClearSelection();
+				itemProvider.GetNodeTreeViewItem(nodeSceneItem).Expanded = true;
+				itemProvider.GetAnimationTreeViewItem(animationSceneItem).Selected = true;
 			}
 		}
 

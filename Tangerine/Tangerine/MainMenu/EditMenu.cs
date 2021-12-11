@@ -60,6 +60,103 @@ namespace Tangerine
 		}
 	}
 
+	public class AddAnimation : DocumentCommandHandler
+	{
+		public enum AnimationType
+		{
+			Default,
+			Compound,
+			ZeroPose,
+		}
+
+		private AnimationType type;
+
+		private Node Node =>
+			type == AnimationType.ZeroPose ?
+				(TimelineCommands.AddZeroPoseAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item1 :
+			type == AnimationType.Compound ?
+				(TimelineCommands.AddCompoundAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item1 :
+			(TimelineCommands.AddAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item1;
+
+		private Action<SceneItem, SceneItem> Callback =>
+			type == AnimationType.ZeroPose ?
+				(TimelineCommands.AddZeroPoseAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item2 :
+			type == AnimationType.Compound ?
+				(TimelineCommands.AddCompoundAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item2 :
+			(TimelineCommands.AddAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item2;
+
+		public override bool GetEnabled() =>
+			Node != null &&
+			string.IsNullOrEmpty(Node.ContentsPath) &&
+			(type != AnimationType.ZeroPose || !Node.Animations.TryFind(Animation.ZeroPoseId, out _));
+
+		public AddAnimation(AnimationType animationType)
+		{
+			type = animationType;
+		}
+
+		public override void ExecuteTransaction()
+		{
+			var node = Node;
+			var animation = new Animation {
+				Id = type == AnimationType.ZeroPose ? Animation.ZeroPoseId : GenerateAnimationId(node, "NewAnimation"),
+				IsCompound = type == AnimationType.Compound,
+			};
+			var nodeSceneItem = Document.Current.GetSceneItemForObject(node);
+			var animationSceneItem = LinkSceneItem.Perform(nodeSceneItem, new SceneTreeIndex(0), animation);
+			Callback?.Invoke(nodeSceneItem, animationSceneItem);
+			switch (type) {
+				case AnimationType.Compound:
+					var track = new AnimationTrack { Id = "Track1" };
+					var animationTrackSceneItem = LinkSceneItem.Perform(
+						animationSceneItem, new SceneTreeIndex(0), track);
+					SelectSceneItem.Perform(animationTrackSceneItem);
+					break;
+				case AnimationType.ZeroPose:
+					foreach (var a in node.Descendants.SelectMany(n => n.Animators).ToList()) {
+						var (propertyData, animable, index) =
+							AnimationUtils.GetPropertyByPath(a.Owner, a.TargetPropertyPath);
+						var zeroPoseKey = Keyframe.CreateForType(propertyData.Info.PropertyType);
+						zeroPoseKey.Value = index == -1
+							? propertyData.Info.GetValue(animable)
+							: propertyData.Info.GetValue(animable, new object[] { index });
+						zeroPoseKey.Function = KeyFunction.Step;
+						SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, animation, zeroPoseKey);
+					}
+					break;
+			}
+		}
+
+		private static string GenerateAnimationId(Node node, string prefix)
+		{
+			var animations = GetAnimations(node);
+			for (int i = 1; ; i++) {
+				var id = prefix + (i > 1 ? i.ToString() : string.Empty);
+				if (animations.All(a => a.Id != id)) {
+					return id;
+				}
+			}
+		}
+
+		private static List<Animation> GetAnimations(Node node)
+		{
+			var usedAnimations = new HashSet<string>();
+			var animations = new List<Animation>();
+			var ancestor = node;
+			while (true) {
+				foreach (var a in ancestor.Animations) {
+					if (!a.IsLegacy && usedAnimations.Add(a.Id)) {
+						animations.Add(a);
+					}
+				}
+				if (ancestor == Document.Current.RootNode) {
+					return animations;
+				}
+				ancestor = ancestor.Parent;
+			}
+		}
+	}
+
 	public class ExportScene : DocumentCommandHandler
 	{
 		public override void ExecuteTransaction()
