@@ -99,7 +99,7 @@
 							"TargetProperty":"Trigger"
 						}
 					],
-					"ContentsPath":"Data/BoxWLink",
+					"ContentsPath":"BoxWLink",
 					"Id":"Model3D"
 				},
 				{
