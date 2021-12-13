@@ -17,13 +17,15 @@ namespace Tangerine.UI.Timeline.Operations
 			Document.Current?.History.DoTransaction(() => {
 				var processedKeyframes = new Dictionary<IKeyframe, (IAnimator, Node)>();
 				if (!Timeline.Instance.Grid.RootWidget.DescendantOf(Widget.Focused)) {
-					foreach (var item in Timeline.Instance.Roll.TreeView.SelectedItems) {
-						var row = ((ISceneItemHolder)item).SceneItem;
-						var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
+					foreach (var treeViewItem in Timeline.Instance.Roll.TreeView.SelectedItems) {
+						var item = ((ISceneItemHolder)treeViewItem).SceneItem;
+						var node = 
+							item.Components.Get<NodeSceneItem>()?.Node ?? 
+							item.Components.Get<AnimatorSceneItem>()?.Node;
 						if (node == null || node.EditorState().Locked) {
 							continue;
 						}
-						var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
+						var property = item.Components.Get<AnimatorSceneItem>()?.Animator.TargetPropertyPath;
 						var animators = ValidatedEffectiveAnimators.Intersect(node.Animators);
 						foreach (var animator in animators) {
 							if (property != null && animator.TargetPropertyPath != property) {
@@ -35,14 +37,16 @@ namespace Tangerine.UI.Timeline.Operations
 						}
 					}
 				} else {
-					foreach (var row in Document.Current.Rows) {
-						var spans = row.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans();
+					foreach (var item in Document.Current.VisibleSceneItems) {
+						var spans = item.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans();
 						foreach (var span in spans) {
-							var node = row.Components.Get<NodeRow>()?.Node ?? row.Components.Get<AnimatorRow>()?.Node;
+							var node = 
+								item.Components.Get<NodeSceneItem>()?.Node ?? 
+								item.Components.Get<AnimatorSceneItem>()?.Node;
 							if (node == null || node.EditorState().Locked) {
 								continue;
 							}
-							var property = row.Components.Get<AnimatorRow>()?.Animator.TargetPropertyPath;
+							var property = item.Components.Get<AnimatorSceneItem>()?.Animator.TargetPropertyPath;
 							var animators = ValidatedEffectiveAnimators.Intersect(node.Animators);
 							foreach (var animator in animators) {
 								if (property != null && animator.TargetPropertyPath != property) {
