@@ -1001,12 +1001,12 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(Node node, NodeComponent component)
 		{
-			foreach (var row in Document.Current.Rows.ToList()) {
-				if (row.TryGetAnimator(out var animator)) {
+			foreach (var item in Document.Current.VisibleSceneItems.ToList()) {
+				if (item.TryGetAnimator(out var animator)) {
 					var animable = animator.Animable;
 					while (animable != null) {
 						if (animable == component) {
-							UnlinkSceneItem.Perform(row);
+							UnlinkSceneItem.Perform(item);
 							break;
 						}
 						animable = animable.Owner;
