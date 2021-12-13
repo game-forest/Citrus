@@ -443,11 +443,7 @@ namespace Tangerine.UI.Inspector
 			PropertyInfo property,
 			bool inspectOverridenVirtualProperties
 		) {
-			if (property.GetIndexParameters().Length > 0) {
-				// we don't inspect indexers (they have "Item" name by default
-				return false;
-			}
-			if (!PropertyInspection.CanAnimateProperty(type, property)) {
+			if (!PropertyInspection.CanInspectProperty(type, property)) {
 				return false;
 			}
 			if (type.IsSubclassOf(typeof(Node))) {
