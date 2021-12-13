@@ -1170,10 +1170,21 @@ namespace Tangerine.Panels
 							if (activeAnimation == null || activeAnimation.IsLegacy || mode == TreeViewMode.AllHierarchy) {
 								ClearWarning(presentation);
 							} else {
+								var rootOwner = animation.OwnerNode;
+								var activeRootOwner = activeAnimation.OwnerNode;
+								while (rootOwner.Parent != null && rootOwner != activeAnimation.OwnerNode) {
+									rootOwner = rootOwner.Parent;
+								}
+								while (activeRootOwner.Parent != null && activeRootOwner != animation.OwnerNode) {
+									activeRootOwner = activeRootOwner.Parent;
+								}
 								if (animation == activeAnimation) {
 									activePresentation = presentation;
 									topmostPresentation = presentation;
-								} else if (animation.Id == activeAnimation.Id) {
+								} else if (
+									animation.Id == activeAnimation.Id &&
+									(rootOwner == activeAnimation.OwnerNode || activeRootOwner == animation.OwnerNode)
+								) {
 									topmostPresentation = presentation;
 									SetWarning(presentation, insufficientPriorityWarning);
 								} else {
