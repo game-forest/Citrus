@@ -456,11 +456,15 @@ namespace Tangerine.Core
 
 		private void ReloadDocument(Document doc)
 		{
+			doc.PreserveState();
 			int index = documents.IndexOf(doc);
 			documents.Remove(doc);
-			var newDoc = new Document(doc.Path);
+			var newDoc = new Document(doc.Path) {
+				PreservedViewportState = doc.PreservedViewportState
+			};
 			documents.Insert(index, newDoc);
 			var savedCurrent = Document.Current == doc ? null : Document.Current;
+			newDoc.RestoreState();
 			newDoc.MakeCurrent();
 			savedCurrent?.MakeCurrent();
 		}

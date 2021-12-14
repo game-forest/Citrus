@@ -296,7 +296,7 @@ namespace Tangerine.UI.SceneView
 			CreateProcessors();
 			CreatePresenters();
 			CreateFilesDropHandlers();
-			Frame.Awoke += CenterDocumentRoot;
+			Frame.Awoke += ArrangeDocumentRoot;
 			OnCreate?.Invoke(this);
 		}
 
@@ -309,12 +309,17 @@ namespace Tangerine.UI.SceneView
 				new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 		}
 
-		private void CenterDocumentRoot(Node node)
+		private void ArrangeDocumentRoot(Node node)
 		{
 			// Before Frame awakens something is being changed on this frame
 			// enough to change Frame Size on LayoutManager.Layout()
 			// which will come at the end of the frame. Force it now to get accurate Frame.Size;
 			WidgetContext.Current.Root.LayoutManager.Layout();
+			if (Document.Current.PreservedViewportState != ViewportState.Null) {
+				Scene.Scale = Document.Current.PreservedViewportState.Scale;
+				Scene.Position = Document.Current.PreservedViewportState.Position;
+				return;
+			}
 			var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
 			var widget = Document.Current.RootNode.AsWidget;
 			var frameWidth = Frame.Width - rulerSize;

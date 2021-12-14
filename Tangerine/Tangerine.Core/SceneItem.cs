@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using Lime;
@@ -39,6 +40,16 @@ namespace Tangerine.Core
 		public bool SameOrDescendantOf(SceneItem sceneItem)
 		{
 			return sceneItem == this || DescendantOf(sceneItem);
+		}
+
+		public string GetIndexPath()
+		{
+			var builder = new StringBuilder(Id);
+			for (var i = this; i != null; i = i.Parent) {
+				builder.Append('/');
+				builder.Append(i.Parent == null ? -1 : i.Parent.SceneItems.IndexOf(i));
+			}
+			return builder.ToString();
 		}
 
 		public TimelineSceneItemStateComponent GetTimelineSceneItemState()

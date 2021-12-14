@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,30 @@ namespace Tangerine.Core
 		void Generate(RenderTexture texture, Action callback);
 	}
 
+	public class ViewportState
+	{
+		public Vector2 Position;
+		public Vector2 Scale;
+		public string AnimationId;
+		public string AnimationPath;
+		public string ContainerPath;
+		public bool InspectRootNode;
+		public HashSet<string> SelectedItems;
+
+		public static readonly ViewportState Null = new ViewportState();
+
+		public ViewportState()
+		{
+			Position = Vector2.Zero;
+			Scale = Vector2.One;
+			AnimationId = null;
+			AnimationPath = null;
+			ContainerPath = null;
+			InspectRootNode = false;
+			SelectedItems = new HashSet<string>();
+		}
+	}
+
 	public sealed class Document
 	{
 		public enum CloseAction
@@ -54,6 +79,7 @@ namespace Tangerine.Core
 		public bool SlowMotion { get; set; }
 		public bool ShowAnimators { get; set; }
 
+		public static event Action<Document> Reloading;
 		public static event Action<Document> AttachingViews;
 		public static event Action<Document, string> ShowingWarning;
 		public static Func<Document, CloseAction> CloseConfirmation;
@@ -231,6 +257,7 @@ namespace Tangerine.Core
 		public Node PreviewAnimationContainer { get; set; }
 		public bool ExpositionMode { get; set; }
 		public ResolutionPreview ResolutionPreview { get; set; } = new ResolutionPreview();
+		public ViewportState PreservedViewportState = ViewportState.Null;
 		public bool InspectRootNode { get; set; }
 
 		public Animation Animation
@@ -649,6 +676,77 @@ namespace Tangerine.Core
 					}
 				}
 			}
+		}
+
+		public void RestoreState()
+		{
+			if (PreservedViewportState == ViewportState.Null) {
+				return;
+			}
+			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
+				Load();
+			}
+			if (PreservedViewportState.InspectRootNode) {
+				InspectRootNode = true;
+				PreservedViewportState.InspectRootNode = false;
+			}
+			if (PreservedViewportState.SelectedItems.Count > 0 ||
+				PreservedViewportState.AnimationPath != null ||
+				PreservedViewportState.ContainerPath != null
+			) {
+				bool containerWasUpdated = false;
+				var states = new List<TimelineSceneItemStateComponent>();
+				foreach (var item in SceneTree.SelfAndDescendants()) {
+					var state = item.GetTimelineSceneItemState();
+					state.Selected = PreservedViewportState.SelectedItems.Contains(item.GetIndexPath());
+					if (state.Selected) {
+						states.Add(state);
+					}
+					var node = item.GetNode();
+					if (node == null) {
+						continue;
+					}
+					string path = node.GetNodeIndexPath();
+					if (path == PreservedViewportState.ContainerPath) {
+						Container = node;
+						containerWasUpdated = true;
+					}
+					if (path == PreservedViewportState.AnimationPath) {
+						if (node.Animations.TryFind(PreservedViewportState.AnimationId, out var animation)) {
+							Animation = animation;
+						} else {
+							Animation = node.DefaultAnimation;
+						}
+					}
+				}
+				if (states.Count != PreservedViewportState.SelectedItems.Count || !containerWasUpdated) {
+					foreach (var state in states) {
+						state.Selected = false;
+					}
+				}
+				PreservedViewportState.SelectedItems.Clear();
+			}
+		}
+
+		public void PreserveState()
+		{
+			var state = new ViewportState {
+				AnimationId = Animation.Id,
+				AnimationPath = Animation.OwnerNode.GetNodeIndexPath(),
+				ContainerPath = Container.GetNodeIndexPath(),
+				InspectRootNode = InspectRootNode
+			};
+			foreach (var view in Views) {
+				if (view is ISceneView sv) {
+					state.Position = sv.Scene.Position;
+					state.Scale = sv.Scene.Scale;
+					break;
+				}
+			}
+			foreach (var item in SceneTree.SelfAndDescendants().Where(i => i.GetTimelineSceneItemState().Selected)) {
+				state.SelectedItems.Add(item.GetIndexPath());
+			}
+			PreservedViewportState = state;
 		}
 
 		private void AttachViews()
