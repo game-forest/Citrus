@@ -298,31 +298,35 @@ namespace Orange
 			var atlasPath = GetAtlasPath(atlasName, atlasId);
 			var atlasPixels = new Color4[size.Width * size.Height];
 			foreach (var item in items.Where(i => i.Allocated)) {
-				var atlasRect = item.AtlasRect;
-				using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item)) {
-					CopyPixels(
-						bitmap,
-						atlasPixels,
-						item.CookingRules.AtlasItemPadding,
-						atlasRect.A.X,
-						atlasRect.A.Y,
-						size.Width,
-						size.Height,
-						item.CookingRules.AtlasDebug
+				try {
+					var atlasRect = item.AtlasRect;
+					using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item)) {
+						CopyPixels(
+							bitmap,
+							atlasPixels,
+							item.CookingRules.AtlasItemPadding,
+							atlasRect.A.X,
+							atlasRect.A.Y,
+							size.Width,
+							size.Height,
+							item.CookingRules.AtlasDebug
+						);
+					}
+					var atlasPart = new TextureAtlasElement.Params {
+						AtlasRect = atlasRect,
+						AtlasPath = Path.ChangeExtension(atlasPath, null)
+					};
+					InternalPersistence.Instance.WriteToBundle(
+						bundle: assetCooker.OutputBundle,
+						path: item.Path,
+						@object: atlasPart,
+						format: Persistence.Format.Binary,
+						cookingUnitHash: cookingUnitHash,
+						attributes: AssetAttributes.None
 					);
+				} catch (System.Exception e) {
+					throw new System.Exception($"{Path.ChangeExtension(item.Path, item.SourceExtension)}: {e}");
 				}
-				var atlasPart = new TextureAtlasElement.Params {
-					AtlasRect = atlasRect,
-					AtlasPath = Path.ChangeExtension(atlasPath, null)
-				};
-				InternalPersistence.Instance.WriteToBundle(
-					bundle: assetCooker.OutputBundle,
-					path: item.Path,
-					@object: atlasPart,
-					format: Persistence.Format.Binary,
-					cookingUnitHash: cookingUnitHash,
-					attributes: AssetAttributes.None
-				);
 			}
 			var firstItem = items.First(i => i.Allocated);
 			using var atlas = new Bitmap(atlasPixels, size.Width, size.Height);
