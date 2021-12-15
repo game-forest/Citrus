@@ -1,6 +1,32 @@
 {
 	"class":"Lime.Frame, Lime",
 	"Anchors":15,
+	"Animations":[
+		{
+			"IsLegacy":true,
+			"Markers":[
+				{
+					"Action":1,
+					"Id":"Idle"
+				},
+				{
+					"Action":1,
+					"Frame":10,
+					"Id":"Rotate"
+				},
+				{
+					"Action":1,
+					"Frame":20,
+					"Id":"Side"
+				},
+				{
+					"Action":1,
+					"Frame":30,
+					"Id":"Up"
+				}
+			]
+		}
+	],
 	"Color":[4294967295],
 	"Nodes":[
 		{
@@ -12,7 +38,7 @@
 					"Markers":[
 						{
 							"Action":1,
-							"Id":"Idel",
+							"Id":"Idle",
 							"JumpTo":""
 						},
 						{
@@ -40,7 +66,7 @@
 					"Markers":[
 						{
 							"Action":1,
-							"Id":"Idel",
+							"Id":"Idle",
 							"JumpTo":""
 						},
 						{
@@ -65,6 +91,18 @@
 				},
 				{
 					"IsLegacy":true
+				}
+			],
+			"Animators":[
+				{
+					"class":"Lime.Animator`1[[System.String]], Lime",
+					"ReadonlyKeys":[
+						[0,0,"Idle@Animation1"],
+						[10,0,"Rotate@Animation1"],
+						[20,0,"MoveSide@Animation1"],
+						[30,0,"MoveUp@Animation1"]
+					],
+					"TargetProperty":"Trigger"
 				}
 			],
 			"CameraRef":{
@@ -118,35 +156,6 @@
 			"Pivot":[0.5,0.5],
 			"Position":[683,384],
 			"Size":[1366,768]
-		},
-		{
-			"class":"Lime.Image, Lime",
-			"Anchors":11,
-			"Color":[951432629],
-			"Id":"LineGradient",
-			"Pivot":[0.5,1],
-			"Position":[683,773],
-			"Size":[1366,560.38214],
-			"TangerineFlags":4,
-			"Texture":{
-				"class":"Lime.SerializableTexture, Lime",
-				"SerializationPath":"/Stuff/LineGradient"
-			},
-			"UV1":[1,0.5]
-		},
-		{
-			"class":"Lime.TiledImage, Lime",
-			"Anchors":15,
-			"Color":[4294967295],
-			"Id":"Bg",
-			"Pivot":[0.5,0.5],
-			"Position":[683,384],
-			"Size":[1366,768],
-			"Texture":{
-				"class":"Lime.SerializableTexture, Lime",
-				"SerializationPath":"/Shell/Ui/Bg"
-			},
-			"TileSize":[256,512]
 		}
 	],
 	"Size":[1366,768]
