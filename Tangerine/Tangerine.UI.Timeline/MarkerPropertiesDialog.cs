@@ -40,7 +40,7 @@ namespace Tangerine.UI.Timeline
 					new Widget {
 						Layout = new TableLayout {
 							ColumnCount = 2,
-							RowCount = 3,
+							RowCount = 4,
 							Spacing = 8,
 							ColumnDefaults = {
 								new DefaultLayoutCell(Alignment.RightCenter, 0.5f, 0),
@@ -61,6 +61,14 @@ namespace Tangerine.UI.Timeline
 							}),
 							new ThemedSimpleText("Jump to"),
 							jumpToSelector,
+							new ThemedSimpleText("Easing"),
+							new BezierEasingPropertyEditor(
+								new PropertyEditorParams(marker, nameof(Marker.BezierEasing)) {
+									ShowLabel = false,
+									History = Document.Current.History,
+									PropertySetter = (obj, propertyName, value) => Core.Operations.SetProperty.Perform(obj, propertyName, value)
+								}
+							).ContainerWidget,
 						}
 					},
 					(buttonsPanel = new Widget {

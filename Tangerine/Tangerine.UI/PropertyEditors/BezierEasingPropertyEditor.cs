@@ -14,7 +14,19 @@ namespace Tangerine.UI
 				var reset = new Command("Reset", () => {
 					DoTransaction(() => SetProperty<BezierEasing>(_ => BezierEasing.Default));
 				});
-				new Menu { reset }.Popup();
+				var cut = new Command("Cut", () => {
+					DoTransaction(() => {
+						Copy();
+						SetProperty<BezierEasing>(_ => BezierEasing.Default);
+					});
+				});
+				var copy = new Command("Copy", () => {
+					DoTransaction(() => Copy());
+				});
+				var paste = new Command("Paste", () => {
+					DoTransaction(() => Paste());
+				});
+				new Menu { reset, cut, copy, paste }.Popup();
 			}));
 		}
 
