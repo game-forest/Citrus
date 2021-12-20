@@ -7,7 +7,7 @@ namespace Tests.Dialogs
 	{
 		public GameScreen()
 		{
-			//SoundManager.PlayMusic("Ingame");
+			SoundManager.PlayMusic("Ingame");
 			Scene._BtnExit.It.Clicked = ReturnToMenu;
 			Scene._ShowContent.It.Clicked = CrossfadeInto<ShowContent>;
 			// This line ensures this module depends on <project_name>.Types module.
