@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Lime;
@@ -13,19 +14,14 @@ namespace Tangerine
 {
 	public class DocumentNavigator
 	{
-		private static DocumentNavigator Instance { get; set; }
+		private static DocumentNavigator Instance;
 
 		private readonly Window navigatorWindow;
-		private readonly Widget windowWidget;
+		private readonly KeyboardFocusScope focusScope;
 		private readonly NavigatorWidget navigatorWidget;
-		private Shortcut nextDocumentShortcut;
-		private Shortcut previousDocumentShortcut;
 		
-		private DocumentNavigator(int startFocusedDocumentOffset)
+		private DocumentNavigator(KeyboardFocusScope.Direction direction)
 		{
-			if (Instance != null) {
-				throw new System.Exception();
-			}
 			Instance = this;
 			Vector2? displayCenter = null;
 			try {
@@ -34,7 +30,7 @@ namespace Tangerine
 			} catch (System.ObjectDisposedException) {
 				// Suppress
 			}
-			navigatorWidget = new NavigatorWidget(startFocusedDocumentOffset);
+			navigatorWidget = new NavigatorWidget(direction);
 			navigatorWindow = new Window(new WindowOptions {
 				Visible = false,
 				FixedSize = true,
@@ -53,7 +49,7 @@ namespace Tangerine
 				displayCenter = display.Position + display.Size / 2;
 			}
 			navigatorWindow.DecoratedPosition = displayCenter.Value - navigatorWindow.DecoratedSize / 2f;
-			windowWidget = new ThemedInvalidableWindowWidget(navigatorWindow) {
+			var windowWidget = new ThemedInvalidableWindowWidget(navigatorWindow) {
 				Nodes = { navigatorWidget },
 			};
 			windowWidget.Presenter = new WidgetFlatFillPresenter(Theme.Colors.WhiteBackground);
@@ -63,73 +59,64 @@ namespace Tangerine
 			) {
 				throw new System.Exception("Unsupported shortcut");
 			}
-			var focusScope = new KeyboardFocusScope(windowWidget);
+			focusScope = new KeyboardFocusScope(windowWidget);
 			focusScope.FocusNext.Clear();
-			focusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Tab));
 			focusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Down));
 			focusScope.FocusPrevious.Clear();
-			focusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control | Modifiers.Shift, Key.Tab));
 			focusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control, Key.Up));
 			windowWidget.FocusScope = focusScope;
 			if (navigatorWidget.FocusedLabel == null) {
 				focusScope.SetDefaultFocus();
 			}
-			InitializeTasks();
+			windowWidget.Tasks.Add(HandleCloseTask);
+			navigatorWindow.Closed += () => navigatorWidget.UnlinkAndDispose();
 			navigatorWindow.ShowModal();
 		}
-
-		public static void Show(int startFocusedDocumentOffset) => new DocumentNavigator(startFocusedDocumentOffset);
-
-		private void InitializeTasks()
+		
+		public static void ShowOrAdvanceFocus(KeyboardFocusScope.Direction direction)
 		{
-			// The navigator window is a window without a native menu. For this reason, when the navigator
-			// window is open in modal mode, the commands from the native menu of the main window still work.
-			// The navigator window is called by a shortcut (ctrl+tab) and inside the window we use the same
-			// shortcut to switch the document, but it does not work because of the above. To get around this,
-			// we temporarily remove commands from the native menu of the main window.
-			ClearAndSaveConflictingShortcuts();
-			int updateIndex = 0;
-			windowWidget.Tasks.AddLoop(() => {
-				if (updateIndex < 2) {
-					++updateIndex;
-					Application.Input.Simulator.SetKeyState(Key.Control, true);
-				} else if (Application.Input.WasKeyReleased(Key.Control)) {
+			if (Instance == null) {
+				new DocumentNavigator(direction);
+			} else {
+				// Since NSView, which is not the main window,
+				// will not receive the Ctrl+Tab (Ctrl+Shift+Tab) event,
+				// we forward this event from the main window.
+				Instance.focusScope.AdvanceFocus(direction);
+			}
+		}
+
+		private IEnumerator<object> HandleCloseTask()
+		{
+			yield return null;
+			Application.Input.Simulator.SetKeyState(Key.Control, true);
+			while (true) {
+				yield return null;
+				if (Application.Input.WasKeyReleased(Key.Control)) {
 					CloseWindow(navigatorWidget.FocusedLabel);
-				} else if (
+					yield break;
+				}
+				if (
 					Application.Input.WasMouseReleased() &&
 					navigatorWidget.HoveredLabel != null
 				) {
 					CloseWindow(navigatorWidget.HoveredLabel);
+					yield break;
 				}
-			});
-			navigatorWindow.Closed += () => navigatorWidget.UnlinkAndDispose();
-
+			}
+			
 			void CloseWindow(NavigatorWidget.LabelBase selectedLabel)
 			{
-				RestoreConflictingShortcuts();
-				if (selectedLabel is NavigatorWidget.PanelLabel panelLabel) {
-					panelLabel.Panel.PanelWidget.SetFocus();
+				switch (selectedLabel) {
+					case NavigatorWidget.PanelLabel panelLabel:
+						panelLabel.Panel.PanelWidget.SetFocus();
+						break;
+					case NavigatorWidget.DocumentLabel documentLabel:
+						documentLabel.Document.MakeCurrent();
+						break;
 				}
-				if (selectedLabel is NavigatorWidget.DocumentLabel documentLabel) {
-					documentLabel.Document.MakeCurrent();
-				}
-				Instance = null;
 				navigatorWindow.Close();
+				Instance = null;
 			}
-		}
-		
-		private void ClearAndSaveConflictingShortcuts()
-		{
-			nextDocumentShortcut = GenericCommands.NextDocument.Shortcut;
-			previousDocumentShortcut = GenericCommands.PreviousDocument.Shortcut;
-			GenericCommands.NextDocument.Shortcut = new Shortcut();
-			GenericCommands.PreviousDocument.Shortcut = new Shortcut();
-		}
-		
-		private void RestoreConflictingShortcuts()
-		{
-			GenericCommands.NextDocument.Shortcut = nextDocumentShortcut;
-			GenericCommands.PreviousDocument.Shortcut = previousDocumentShortcut;
 		}
 		
 		private class NavigatorWidget : Widget
@@ -235,7 +222,7 @@ namespace Tangerine
 			
 			public LabelBase HoveredLabel { get; private set; }
 			
-			public NavigatorWidget(int startFocusedDocumentOffset)
+			public NavigatorWidget(KeyboardFocusScope.Direction direction)
 			{
 				windowSize = WindowSize;
 				pathCaption = new RichText {
@@ -333,7 +320,7 @@ namespace Tangerine
 				});
 				var documents = Project.Current.Documents.ToArray();
 				FillContents(documents);
-				SelectCurrentDocument(documents, startFocusedDocumentOffset);
+				SelectCurrentDocument(documents, direction);
 				LateTasks.AddLoop(HoverTask);
 				LateTasks.AddLoop(FocusTask);
 			}
@@ -363,10 +350,10 @@ namespace Tangerine
 				}
 			}
 
-			private void SelectCurrentDocument(Document[] documents, int startFocusedDocumentOffset)
+			private void SelectCurrentDocument(Document[] documents, KeyboardFocusScope.Direction direction)
 			{
 				if (Project.Current.Documents.Count > 0) {
-					int currentIndex = Array.IndexOf(documents, Document.Current) + startFocusedDocumentOffset;
+					int currentIndex = Array.IndexOf(documents, Document.Current) + (int)direction;
 					var targetDocument = documents[currentIndex.Wrap(0, documents.Length - 1)];
 					FocusedLabel = (LabelBase)filesView.Content.Nodes
 						.SelectMany(n => n.Nodes)
