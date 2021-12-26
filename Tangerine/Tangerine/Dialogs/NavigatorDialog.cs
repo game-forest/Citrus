@@ -12,15 +12,15 @@ using Shortcut = Lime.Shortcut;
 
 namespace Tangerine
 {
-	public class DocumentNavigator
+	public class NavigatorDialog
 	{
-		private static DocumentNavigator Instance;
+		private static NavigatorDialog Instance;
 
 		private readonly Window navigatorWindow;
 		private readonly KeyboardFocusScope focusScope;
 		private readonly NavigatorWidget navigatorWidget;
 		
-		private DocumentNavigator(KeyboardFocusScope.Direction direction)
+		private NavigatorDialog(KeyboardFocusScope.Direction direction)
 		{
 			Instance = this;
 			Vector2? displayCenter = null;
@@ -76,7 +76,7 @@ namespace Tangerine
 		public static void ShowOrAdvanceFocus(KeyboardFocusScope.Direction direction)
 		{
 			if (Instance == null) {
-				new DocumentNavigator(direction);
+				new NavigatorDialog(direction);
 			} else {
 				// Since NSView, which is not the main window,
 				// will not receive the Ctrl+Tab (Ctrl+Shift+Tab) event,

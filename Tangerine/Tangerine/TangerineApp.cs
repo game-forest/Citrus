@@ -703,9 +703,9 @@ namespace Tangerine
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
 			h.Connect(GenericCommands.RemoveTimelineColumn, new RemoveTimelineColumn());
 			h.Connect(GenericCommands.NextDocument, 
-				() => DocumentNavigator.ShowOrAdvanceFocus(KeyboardFocusScope.Direction.Forward));
+				() => NavigatorDialog.ShowOrAdvanceFocus(KeyboardFocusScope.Direction.Forward));
 			h.Connect(GenericCommands.PreviousDocument, 
-				() => DocumentNavigator.ShowOrAdvanceFocus(KeyboardFocusScope.Direction.Backward));
+				() => NavigatorDialog.ShowOrAdvanceFocus(KeyboardFocusScope.Direction.Backward));
 			h.Connect(GenericCommands.DefaultLayout, new ViewDefaultLayout());
 			h.Connect(GenericCommands.SaveLayout, new SaveLayout());
 			h.Connect(GenericCommands.LockLayout, new LockLayout());
