@@ -2,7 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if MAC
+using AppKit;
+#endif
 using Lime;
+#if MAC
+using Lime.Platform;
+#endif
 using Tangerine.Core;
 using Tangerine.UI;
 using Tangerine.UI.Docking;
@@ -70,6 +76,14 @@ namespace Tangerine
 			}
 			windowWidget.Tasks.Add(HandleCloseTask);
 			navigatorWindow.Closed += () => navigatorWidget.UnlinkAndDispose();
+#if MAC
+			var controlMask = (NSEventModifierMask)(MacKeyModifiers.LCtrlFlag | MacKeyModifiers.RCtrlFlag);
+			// When a modifier for a key is changed, it is stored in a variable that lets us know if the
+			// modifier is pressed or released. Since this value is different for each window, and we do not
+			// press the Ctrl after entering the navigator window, we do not know when the Ctrl is released.
+			// For this reason we just hack this value.
+			navigatorWindow.View.SetEventModifierMask(controlMask);
+#endif
 			navigatorWindow.ShowModal();
 		}
 		

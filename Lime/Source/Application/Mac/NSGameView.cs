@@ -76,6 +76,8 @@ namespace Lime.Platform
 			swapInterval = true;
 		}
 
+		internal void SetEventModifierMask(NSEventModifierMask mask) => prevMask = mask;
+		
 		public override void MouseEntered(NSEvent theEvent)
 		{
 			if (capturedByMouseView == null) {
