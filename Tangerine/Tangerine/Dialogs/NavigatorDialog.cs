@@ -23,8 +23,9 @@ namespace Tangerine
 		private static NavigatorDialog Instance;
 
 		private readonly Window navigatorWindow;
-		private readonly KeyboardFocusScope focusScope;
 		private readonly NavigatorWidget navigatorWidget;
+		private readonly KeyboardFocusScope panelsFocusScope;
+		private readonly KeyboardFocusScope filesFocusScope;
 		
 		private NavigatorDialog(KeyboardFocusScope.Direction direction)
 		{
@@ -65,14 +66,22 @@ namespace Tangerine
 			) {
 				throw new System.Exception("Unsupported shortcut");
 			}
-			focusScope = new KeyboardFocusScope(windowWidget);
-			focusScope.FocusNext.Clear();
-			focusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Down));
-			focusScope.FocusPrevious.Clear();
-			focusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control, Key.Up));
-			windowWidget.FocusScope = focusScope;
+			panelsFocusScope = new KeyboardFocusScope(navigatorWidget.PanelsView);
+			panelsFocusScope.FocusNext.Clear();
+			panelsFocusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Down));
+			panelsFocusScope.FocusPrevious.Clear();
+			panelsFocusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control, Key.Up));
+			navigatorWidget.PanelsView.FocusScope = panelsFocusScope;
+			
+			filesFocusScope = new KeyboardFocusScope(navigatorWidget.FilesView.Content);
+			filesFocusScope.FocusNext.Clear();
+			filesFocusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Down));
+			filesFocusScope.FocusPrevious.Clear();
+			filesFocusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control, Key.Up));
+			navigatorWidget.FilesView.Content.FocusScope = filesFocusScope;
+			
 			if (navigatorWidget.FocusedLabel == null) {
-				focusScope.SetDefaultFocus();
+				filesFocusScope.SetDefaultFocus();
 			}
 			windowWidget.Tasks.Add(HandleCloseTask);
 			navigatorWindow.Closed += () => navigatorWidget.UnlinkAndDispose();
@@ -95,7 +104,11 @@ namespace Tangerine
 				// Since NSView, which is not the main window,
 				// will not receive the Ctrl+Tab (Ctrl+Shift+Tab) event,
 				// we forward this event from the main window.
-				Instance.focusScope.AdvanceFocus(direction);
+				if (Widget.Focused.DescendantOf(Instance.navigatorWidget.PanelsView)) {
+					Instance.panelsFocusScope.AdvanceFocus(direction);
+				} else {
+					Instance.filesFocusScope.AdvanceFocus(direction);
+				}
 			}
 		}
 
@@ -142,9 +155,10 @@ namespace Tangerine
 			private const string AccentTextId = "at";
 			
 			private readonly RichText pathCaption;
-			private readonly Widget panelsView;
-			private readonly ThemedScrollView filesView;
 			private readonly Vector2 windowSize;
+			
+			public readonly Widget PanelsView;
+			public readonly ThemedScrollView FilesView;
 
 			private static float PathCaptionTextHeight => Theme.Metrics.TextHeight;
 			
@@ -262,25 +276,25 @@ namespace Tangerine
 					SetFilePathCaption(Document.Current.FullPath);
 				}
 				var labelsListSize = LabelsListSize;
-				panelsView = new Widget {
+				PanelsView = new Widget {
 					Layout = new VBoxLayout(),
 					MinMaxSize = labelsListSize
 				};
-				filesView = new ThemedScrollView(ScrollDirection.Horizontal) {
+				FilesView = new ThemedScrollView(ScrollDirection.Horizontal) {
 					MinMaxSize = new Vector2(3 * labelsListSize.X, labelsListSize.Y)
 				};
 				var alternativeWhiteBackground = Theme.Colors.WhiteBackground.Darken(0.03f);
-				filesView.CompoundPresenter.Add(
+				FilesView.CompoundPresenter.Add(
 					new WidgetFlatFillPresenter(alternativeWhiteBackground)
 				);
 				var hoveredItemBackground = alternativeWhiteBackground.Darken(ColorTheme.Current.IsDark ? 0.17f : 0.05f);
-				filesView.Content.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
+				FilesView.Content.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					if (FocusedLabel is DocumentLabel label) {
 						label.PrepareRendererState();
 						Renderer.DrawRect(Vector2.Zero, label.Size, hoveredItemBackground);
 					}
 				}));
-				panelsView.Presenter = new SyncDelegatePresenter<Widget>((w) => {
+				PanelsView.Presenter = new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
 					Renderer.DrawRect(Vector2.Zero, w.Size, alternativeWhiteBackground);
 					if (FocusedLabel is PanelLabel label) {
@@ -317,7 +331,7 @@ namespace Tangerine
 									FontHeight = PanelCaptionTextHeight,
 									MinMaxHeight = PanelCaptionHeight
 								},
-								panelsView,
+								PanelsView,
 							}
 						},
 						new Widget {
@@ -327,7 +341,7 @@ namespace Tangerine
 									FontHeight = PanelCaptionTextHeight,
 									MinMaxHeight = PanelCaptionHeight
 								},
-								filesView,
+								FilesView,
 							}
 						}
 					}
@@ -347,20 +361,20 @@ namespace Tangerine
 				var labelsListSize = LabelsListSize;
 				foreach (var panel in DockHierarchy.Instance.Panels) {
 					if (panel.PanelWidget != null && panel.PanelWidget.Visible) {
-						panelsView.AddNode(new PanelLabel(panel) {
+						PanelsView.AddNode(new PanelLabel(panel) {
 							FontHeight = fontHeight,
 							Padding = labelPadding,
 							MinMaxSize = labelSize
 						});
 					}
 				}
-				filesView.Content.Layout = new HBoxLayout();
+				FilesView.Content.Layout = new HBoxLayout();
 				for (int i = 0; i < documents.Length; i += LabelsListLength) {
 					int segmentLength = Math.Min(LabelsListLength, documents.Length - i);
 					var segment = new ArraySegment<Document>(documents, offset: i, count: segmentLength);
 					var labelList = CreateLabelList(segment);
 					labelList.Position = new Vector2((i / LabelsListLength) * labelsListSize.X, 0);
-					filesView.Content.AddNode(labelList);
+					FilesView.Content.AddNode(labelList);
 				}
 			}
 
@@ -369,7 +383,7 @@ namespace Tangerine
 				if (Project.Current.Documents.Count > 0) {
 					int currentIndex = Array.IndexOf(documents, Document.Current) + (int)direction;
 					var targetDocument = documents[currentIndex.Wrap(0, documents.Length - 1)];
-					FocusedLabel = (LabelBase)filesView.Content.Nodes
+					FocusedLabel = (LabelBase)FilesView.Content.Nodes
 						.SelectMany(n => n.Nodes)
 						.First(n => ((DocumentLabel)n).Document == targetDocument);
 					FocusedLabel.Color = Theme.Colors.KeyboardFocusBorder;
@@ -380,8 +394,8 @@ namespace Tangerine
 			private void HoverTask()
 			{
 				var nodeUnderMouse = WidgetContext.Current?.NodeUnderMouse;
-				var hoveredFileLabel = TryGetSelectedLabel(nodeUnderMouse, filesView.Content);
-				var hoveredPanelLabel = TryGetSelectedLabel(nodeUnderMouse, panelsView.Parent);
+				var hoveredFileLabel = TryGetSelectedLabel(nodeUnderMouse, FilesView.Content);
+				var hoveredPanelLabel = TryGetSelectedLabel(nodeUnderMouse, PanelsView.Parent);
 				var hoveredLabel = hoveredFileLabel ?? hoveredPanelLabel;
 				if (HoveredLabel != hoveredLabel) {
 					if (HoveredLabel != null && HoveredLabel != FocusedLabel) {
@@ -396,8 +410,8 @@ namespace Tangerine
 
 			private void FocusTask()
 			{
-				var focusedFileLabel = TryGetSelectedLabel(Widget.Focused, filesView.Content);
-				var focusedPanelLabel = TryGetSelectedLabel(Widget.Focused, panelsView.Parent);
+				var focusedFileLabel = TryGetSelectedLabel(Widget.Focused, FilesView.Content);
+				var focusedPanelLabel = TryGetSelectedLabel(Widget.Focused, PanelsView.Parent);
 				var focusedLabel = focusedFileLabel ?? focusedPanelLabel;
 				if (Application.Input.IsMousePressed() && HoveredLabel != null) {
 					focusedLabel = HoveredLabel;
@@ -413,9 +427,9 @@ namespace Tangerine
 						FocusedLabel.Color = Theme.Colors.KeyboardFocusBorder;
 						if (focusedLabel is DocumentLabel documentLabel) {
 							var labelsList = documentLabel.Parent.AsWidget;
-							if (!filesView.Behaviour.IsItemFullyOnscreen(labelsList)) {
-								var position = filesView.Behaviour.PositionToViewFully(labelsList);
-								filesView.Behaviour.ScrollTo(position);
+							if (!FilesView.Behaviour.IsItemFullyOnscreen(labelsList)) {
+								var position = FilesView.Behaviour.PositionToViewFully(labelsList);
+								FilesView.Behaviour.ScrollTo(position);
 							}
 							SetFilePathCaption(documentLabel.Document.FullPath);
 						}
@@ -431,17 +445,17 @@ namespace Tangerine
 						focusedLabel = null;
 						return;
 					}
-					bool havePanels = panelsView.Nodes.Count > 0;
-					bool haveDocuments = filesView.Content.Nodes.Count > 0;
+					bool havePanels = PanelsView.Nodes.Count > 0;
+					bool haveDocuments = FilesView.Content.Nodes.Count > 0;
 					var currentList = focusedLabel.Parent.Nodes;
 					int index = currentList.IndexOf(focusedLabel);
 					if (Input.ConsumeKeyRepeat(Key.Left)) {
 						if (focusedLabel is PanelLabel && haveDocuments) {
-							focusedLabel = GetDocumentLabel(filesView.Content.Nodes.Count - 1);
+							focusedLabel = GetDocumentLabel(FilesView.Content.Nodes.Count - 1);
 							return;
 						}
 						if (focusedLabel is DocumentLabel) {
-							int currentListIndex = filesView.Content.Nodes.IndexOf(focusedLabel.Parent);
+							int currentListIndex = FilesView.Content.Nodes.IndexOf(focusedLabel.Parent);
 							if (currentListIndex == 0) {
 								if (havePanels) {
 									focusedLabel = GetPanelLabel();
@@ -459,8 +473,8 @@ namespace Tangerine
 							return;
 						}
 						if (focusedLabel is DocumentLabel) {
-							int currentListIndex = filesView.Content.Nodes.IndexOf(focusedLabel.Parent);
-							if (currentListIndex == filesView.Content.Nodes.Count - 1) {
+							int currentListIndex = FilesView.Content.Nodes.IndexOf(focusedLabel.Parent);
+							if (currentListIndex == FilesView.Content.Nodes.Count - 1) {
 								if (havePanels) {
 									focusedLabel = GetPanelLabel();
 								}
@@ -472,14 +486,14 @@ namespace Tangerine
 
 					LabelBase GetPanelLabel()
 					{
-						if (index < panelsView.Nodes.Count) {
-							return (LabelBase)panelsView.Nodes[index];
+						if (index < PanelsView.Nodes.Count) {
+							return (LabelBase)PanelsView.Nodes[index];
 						}
-						return (LabelBase)panelsView.Nodes.Last();
+						return (LabelBase)PanelsView.Nodes.Last();
 					}
 					LabelBase GetDocumentLabel(int documentListIndex)
 					{
-						var targetList = filesView.Content.Nodes[documentListIndex].Nodes;
+						var targetList = FilesView.Content.Nodes[documentListIndex].Nodes;
 						if (index < targetList.Count) {
 							return (LabelBase)targetList[index];
 						}
