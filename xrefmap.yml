@@ -47187,6 +47187,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.EmissionType
   nameWithType: ParticleEmitter.EmissionType
+- uid: Lime.ParticleEmitter.GetLinkageWidget
+  name: GetLinkageWidget()
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_GetLinkageWidget
+  commentId: M:Lime.ParticleEmitter.GetLinkageWidget
+  fullName: Lime.ParticleEmitter.GetLinkageWidget()
+  nameWithType: ParticleEmitter.GetLinkageWidget()
+- uid: Lime.ParticleEmitter.GetLinkageWidget*
+  name: GetLinkageWidget
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_GetLinkageWidget_
+  commentId: Overload:Lime.ParticleEmitter.GetLinkageWidget
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.GetLinkageWidget
+  nameWithType: ParticleEmitter.GetLinkageWidget
 - uid: Lime.ParticleEmitter.GetRenderObject
   name: GetRenderObject()
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_GetRenderObject
