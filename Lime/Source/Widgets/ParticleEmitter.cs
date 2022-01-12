@@ -394,7 +394,7 @@ namespace Lime
 			return false;
 		}
 
-		private Widget GetBasicWidget()
+		public Widget GetBasicWidget()
 		{
 			switch (ParticlesLinkage) {
 			case ParticlesLinkage.Parent:
