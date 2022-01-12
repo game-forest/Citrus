@@ -394,7 +394,7 @@ namespace Lime
 			return false;
 		}
 
-		public Widget GetBasicWidget()
+		public Widget GetLinkageWidget()
 		{
 			switch (ParticlesLinkage) {
 			case ParticlesLinkage.Parent:
@@ -520,12 +520,12 @@ namespace Lime
 			if (particles.Count == 0) {
 				return;
 			}
-			var basicWidget = GetBasicWidget();
-			if (basicWidget != null) {
+			var linkageWidget = GetLinkageWidget();
+			if (linkageWidget != null) {
 				// AABB for particles is calculated in space of linked widget (and it's ok)
 				// But ParticleEmitter is responsible of drawing particles
 				// So we should expand its bounding box to pass ClipRegionTest
-				currentBoundingRect = currentBoundingRect.Transform(basicWidget.CalcTransitionToSpaceOf(this));
+				currentBoundingRect = currentBoundingRect.Transform(linkageWidget.CalcTransitionToSpaceOf(this));
 			}
 			ExpandBoundingRect(currentBoundingRect);
 		}
@@ -857,9 +857,9 @@ namespace Lime
 		private void CalcInitialTransform(out Matrix32 transform)
 		{
 			transform = CalcLocalToParentTransform();
-			Widget basicWidget = GetBasicWidget();
-			if (basicWidget != null) {
-				for (Node node = Parent; node != null && node != basicWidget; node = node.Parent) {
+			Widget linkageWidget = GetLinkageWidget();
+			if (linkageWidget != null) {
+				for (Node node = Parent; node != null && node != linkageWidget; node = node.Parent) {
 					if (node.AsWidget != null) {
 						transform *= node.AsWidget.CalcLocalToParentTransform();
 					}
@@ -1033,9 +1033,9 @@ namespace Lime
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
 			var ro = RenderObjectPool<RenderObject>.Acquire();
-			var basicWidget = GetBasicWidget();
-			if (basicWidget != null) {
-				ro.Matrix = basicWidget.LocalToWorldTransform;
+			var linkageWidget = GetLinkageWidget();
+			if (linkageWidget != null) {
+				ro.Matrix = linkageWidget.LocalToWorldTransform;
 			} else {
 				ro.Matrix = Matrix32.Identity;
 			}
