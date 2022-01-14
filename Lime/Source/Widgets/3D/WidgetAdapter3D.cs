@@ -113,7 +113,10 @@ namespace Lime
 
 			public override void Render()
 			{
-				Renderer.PushState(RenderState.World | RenderState.CullMode);
+				Renderer.PushState(RenderState.World | RenderState.CullMode | RenderState.Transform2);
+				// Transform2 is utility matrix used by engine
+				// and it mustn't affect 2D scene that is located inside 3D context.
+				Renderer.Transform2 = Matrix32.Identity;
 				Renderer.World = World;
 				Renderer.CullMode = CullMode.None;
 				Objects.Render();
