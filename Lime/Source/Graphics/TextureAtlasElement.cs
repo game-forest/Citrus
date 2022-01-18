@@ -20,9 +20,9 @@ namespace Lime
 			[YuzuMember]
 			public IntRectangle AtlasRect;
 
-			public void Load(string path)
+			public static Params Load(string path)
 			{
-				InternalPersistence.Instance.ReadObject<Params>(path, this);
+				return InternalPersistence.Instance.ReadObject<Params>(path);
 			}
 		}
 
