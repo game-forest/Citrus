@@ -17,8 +17,13 @@ namespace Lime
 
 		private Func<string, bool> Filter;
 
+		public static bool Disabled;
+
 		public FileSystemWatcher(string path, bool includeSubdirectories)
 		{
+			if (Disabled) {
+				return;
+			}
 			if (!includeSubdirectories) {
 				Filter = (s) => {
 					return System.IO.Path.GetDirectoryName(s) == path;

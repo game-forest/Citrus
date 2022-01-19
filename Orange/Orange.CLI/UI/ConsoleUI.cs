@@ -29,6 +29,12 @@ namespace Orange
 #else
 			AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
 #endif
+#if MAC
+			// Required for virtual machine based MAC OS because FileSystemWatcher is crashing under such conditions.
+			if (Toolbox.GetCommandLineFlag("--disable-filesystem-watcher")) {
+				Lime.FileSystemWatcher.Disabled = true;
+			}
+#endif // MAC
 			CreateMenuItems();
 			OpenWorkspace();
 			RunCommand(Toolbox.GetCommandLineArg("--command"));
@@ -90,6 +96,9 @@ namespace Orange
 				$" --unpack_bundles" +
 				$" --command:command" +
 				$" --bundles:[<bundle>|<bundle1>,<bundle2>,..,<bundlen>]" +
+#if MAC
+				$" --disable-filesystem-watcher" +
+#endif // MAC
 				$" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
 			);
 			var commands = The.MenuController.GetVisibleAndSortedItems();
