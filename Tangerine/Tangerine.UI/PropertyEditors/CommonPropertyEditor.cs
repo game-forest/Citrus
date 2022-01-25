@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Lime;
 using Lime.RenderOptimizer;
 using Tangerine.Core;
@@ -12,11 +13,15 @@ namespace Tangerine.UI
 	{
 		protected const string ManyValuesText = "<many values>";
 
+		private Dictionary<ValidationResult, List<string>> warnings;
+		private bool areWarningsUpdated;
+
 		public IPropertyEditorParams EditorParams { get; private set; }
 		public Widget ContainerWidget { get; private set; }
 		public SimpleText PropertyLabel { get; private set; }
 		public Widget LabelContainer { get; private set; }
 		public Widget EditorContainer { get; private set; }
+		public Widget WarningCounters { get; private set; }
 		public Widget WarningsContainer { get; private set; }
 		public Widget PropertyContainerWidget { get; private set; }
 
@@ -25,6 +30,8 @@ namespace Tangerine.UI
 			get => PropertyContainerWidget.Enabled;
 			set => PropertyContainerWidget.Enabled = value;
 		}
+
+		public bool IsMultiselection => EditorParams.Objects.Skip(1).Any();
 
 		public CommonPropertyEditor(IPropertyEditorParams editorParams)
 		{
@@ -83,6 +90,18 @@ namespace Tangerine.UI
 				Layout = new VBoxLayout(),
 				LayoutCell = new LayoutCell(),
 			};
+			WarningCounters = new Widget {
+				Layout = new HBoxLayout(),
+				LayoutCell = new LayoutCell { StretchX = 0f },
+			};
+			warnings = new Dictionary<ValidationResult, List<string>>();
+			foreach (var result in (ValidationResult[])Enum.GetValues(typeof(ValidationResult))) {
+				if (result == ValidationResult.Ok) {
+					continue;
+				}
+				warnings.Add(result, new List<string>());
+			}
+			WarningsContainer.Tasks.Add(UpdateWarningsTask());
 			ContainerWidget.AddNode(WarningsContainer);
 			EditorContainer.AddChangeWatcher(CoalescedPropertyValue(), v => ClearWarningsAndValidate());
 		}
@@ -92,12 +111,72 @@ namespace Tangerine.UI
 			if (message.IsNullOrWhiteSpace() || validationResult == ValidationResult.Ok) {
 				return;
 			}
-			WarningsContainer.AddNode(CommonPropertyEditor.CreateWarning(message, validationResult));
+			if (!IsMultiselection) {
+				WarningsContainer.AddNode(CommonPropertyEditor.CreateWarning(message, validationResult));
+			}
+			warnings[validationResult].Add(message);
+			areWarningsUpdated = true;
 		}
 
 		private void ClearWarnings()
 		{
 			WarningsContainer.Nodes.Clear();
+			foreach (var key in warnings.Keys) {
+				warnings[key].Clear();
+			}
+			areWarningsUpdated = true;
+		}
+
+		private void UpdateWarningCounters()
+		{
+			WarningCounters.Nodes.Clear();
+			if (IsMultiselection) {
+				Widget counterContainer;
+				const int MaxTooltipLength = 8;
+				foreach (var result in (ValidationResult[])Enum.GetValues(typeof(ValidationResult))) {
+					if (result == ValidationResult.Ok || warnings[result].Count == 0) {
+						continue;
+					}
+					WarningCounters.AddNode(counterContainer = new Widget {
+						Layout = new HBoxLayout(),
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
+						HitTestTarget = true,
+						Nodes = {
+							CommonPropertyEditor.CreateWarningIcon(result),
+							CommonPropertyEditor.CreateWarningText(
+								text: $"({warnings[result].Count})",
+								autoMinSize: true
+							),
+						},
+					});
+					var builder = new StringBuilder(warnings[result][0]);
+					for (int i = 1; i < Math.Min(warnings[result].Count, MaxTooltipLength); i++) {
+						builder.Append('\n');
+						builder.Append(warnings[result][i]);
+					}
+					if (warnings[result].Count > MaxTooltipLength) {
+						builder.Append("...");
+					}
+					string tooltip = builder.ToString();
+					counterContainer.Components.Add(new TooltipComponent(() => tooltip));
+				}
+			}
+			if (WarningCounters.Nodes.Count > 0 && WarningCounters.Parent == null) {
+				PropertyContainerWidget.AddNode(WarningCounters);
+			} else if (WarningCounters.Nodes.Count == 0 && WarningCounters.Parent != null) {
+				WarningCounters.Unlink();
+			}
+		}
+
+		private IEnumerator<object> UpdateWarningsTask()
+		{
+			while (true) {
+				if (areWarningsUpdated) {
+					UpdateWarningCounters();
+					areWarningsUpdated = false;
+				}
+				yield return null;
+			}
 		}
 
 		private IEnumerator<object> ManageLabelTask()
@@ -489,20 +568,30 @@ namespace Tangerine.UI
 			return new Widget {
 				Layout = new HBoxLayout(),
 				Nodes = {
-					new Image(IconPool.GetTexture($"Inspector.{validationResult}")) {
-						MinMaxSize = new Vector2(16, 16),
-						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-					},
-					new ThemedSimpleText {
-						Text = message,
-						VAlignment = VAlignment.Center,
-						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-						ForceUncutText = false,
-						Padding = new Thickness(left: 5.0f),
-						HitTestTarget = true,
-						TabTravesable = new TabTraversable(),
-					},
+					CreateWarningIcon(validationResult),
+					CreateWarningText(message),
 				},
+			};
+		}
+
+		public static Widget CreateWarningIcon(ValidationResult validationResult)
+		{
+			return new Image(IconPool.GetTexture($"Inspector.{validationResult}")) {
+				MinMaxSize = new Vector2(16, 16),
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+			};
+		}
+
+		public static Widget CreateWarningText(string text, bool autoMinSize = false)
+		{
+			return new ThemedSimpleText {
+				Text = text,
+				VAlignment = VAlignment.Center,
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+				ForceUncutText = false,
+				AutoMinSize = autoMinSize,
+				Padding = new Thickness(left: 5.0f),
+				TabTravesable = new TabTraversable(),
 			};
 		}
 	}
