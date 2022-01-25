@@ -121,10 +121,15 @@ namespace Lime
 			view.UpdateFrame += OnUpdateFrame;
 			Display = new Display(UIScreen.MainScreen);
 			Application.WindowUnderMouse = this;
+			Application.AddWindow(this);
 		}
 
 		public void Center() { }
-		public void Close() { }
+
+		public void Close() {
+			Application.RemoveWindow(this);
+		}
+
 		public void ShowModal() { }
 		public void Invalidate() { }
 		public void Activate() { }

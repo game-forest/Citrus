@@ -150,10 +150,11 @@ namespace Lime
 			var ccb = new ChoreographerCallback();
 			ccb.OnFrame += OnFrame;
 			Choreographer.Instance.PostFrameCallback(ccb);
+			Application.AddWindow(this);
 		}
-		
+
 		UpdateState updateState;
-		
+
 		void OnFrame(long frameTimeNanos)
 		{
 			var _continue = true;
@@ -174,9 +175,9 @@ namespace Lime
 				}
 			}
 		}
-		
+
 		long prevFrameTime = Java.Lang.JavaSystem.NanoTime();
-		
+
 		bool HandleUpdateState_Update(long frameTimeNanos)
 		{
 			var delta = (float)((frameTimeNanos - prevFrameTime) / 1000000000d);
@@ -192,7 +193,7 @@ namespace Lime
 				return false;
 			}
 		}
-		
+
 		bool HandleUpdateState_WaitForRender()
 		{
 			if (renderCompleted.WaitOne(100)) {
@@ -207,7 +208,7 @@ namespace Lime
 			}
 			return false;
 		}
-		
+
 		bool HandleUpdateState_RenderAsync()
 		{
 			RaiseSync();
@@ -217,7 +218,7 @@ namespace Lime
 			updateState = UpdateState.Update;
 			return false;
 		}
-		
+
 		bool HandleUpdateState_RenderSync()
 		{
 			RaiseSync();
@@ -226,7 +227,7 @@ namespace Lime
 			updateState = UpdateState.Update;
 			return false;
 		}
-		
+
 		enum UpdateState
 		{
 			Update,
@@ -284,7 +285,11 @@ namespace Lime
 		}
 
 		public void Center() {}
-		public void Close() {}
+
+		public void Close() {
+			Application.RemoveWindow(this);
+		}
+
 		public void Invalidate() {}
 		public void ShowModal() {}
 		public void Activate() {}
