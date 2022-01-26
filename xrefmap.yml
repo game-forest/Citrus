@@ -5567,10 +5567,23 @@ references:
   commentId: E:Lime.Application.SupportedDeviceOrientationsChanged
   fullName: Lime.Application.SupportedDeviceOrientationsChanged
   nameWithType: Application.SupportedDeviceOrientationsChanged
+- uid: Lime.Application.UnhandledExceptionOnUpdate
+  name: UnhandledExceptionOnUpdate
+  href: api/Lime.Application.html#Lime_Application_UnhandledExceptionOnUpdate
+  commentId: E:Lime.Application.UnhandledExceptionOnUpdate
+  fullName: Lime.Application.UnhandledExceptionOnUpdate
+  nameWithType: Application.UnhandledExceptionOnUpdate
 - uid: Lime.Application.Windows
   name: Windows
   href: api/Lime.Application.html#Lime_Application_Windows
-  commentId: F:Lime.Application.Windows
+  commentId: P:Lime.Application.Windows
+  fullName: Lime.Application.Windows
+  nameWithType: Application.Windows
+- uid: Lime.Application.Windows*
+  name: Windows
+  href: api/Lime.Application.html#Lime_Application_Windows_
+  commentId: Overload:Lime.Application.Windows
+  isSpec: "True"
   fullName: Lime.Application.Windows
   nameWithType: Application.Windows
 - uid: Lime.Application.WindowUnderMouse
