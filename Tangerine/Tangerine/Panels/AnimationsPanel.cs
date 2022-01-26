@@ -178,10 +178,7 @@ namespace Tangerine.Panels
 						Document.Current.History.DoTransaction(() => NavigateToNode.Perform(ni.Node, true));
 						break;
 					case AnimationTreeViewItem ai:
-						Document.Current.History.DoTransaction(() => {
-							NavigateToAnimation.Perform(ai.Animation);
-							CenterTimelineOnCurrentColumn.Perform();
-						});
+						Document.Current.History.DoTransaction(() => NavigateToAnimation.Perform(ai.Animation));
 						AnimationTreeViewItemPresentation.UpdateWarnings(treeView, mode);
 						break;
 					case MarkerTreeViewItem mi:

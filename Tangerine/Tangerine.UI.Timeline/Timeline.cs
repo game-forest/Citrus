@@ -7,6 +7,7 @@ using Tangerine.Core;
 using Tangerine.Core.Components;
 using Tangerine.UI.Docking;
 using Tangerine.UI.Timeline.Components;
+using Tangerine.UI.Timeline.Operations;
 
 namespace Tangerine.UI.Timeline
 {
@@ -132,7 +133,10 @@ namespace Tangerine.UI.Timeline
 			});
 			RootWidget.Gestures.Add(DropFilesGesture = new DropFilesGesture());
 			CreateFilesDropHandlers();
-			RootWidget.AddChangeWatcher(() => Document.Current?.Animation, _ => columnCount = 0);
+			RootWidget.AddChangeWatcher(() => Document.Current?.Animation, _ => {
+				columnCount = 0;
+				CenterTimelineOnCurrentColumn.Perform();
+			});
 			Document.Current.History.DocumentChanged += () => columnCount = 0;
 			OnCreate?.Invoke(this);
 		}
