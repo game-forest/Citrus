@@ -136,10 +136,10 @@ namespace Lime
 			ro.Arg1Material = CustomMaterial;
 			if (ro.Arg1Material == null) {
 				var shader = Shader == ShaderId.Inherited ? Parent.AsWidget.GlobalShader : Shader;
-				if (arg2.Shader == ShaderId.Silhuette) {
-					shader = ShaderId.Silhuette;
-				} else if (arg1.Shader == ShaderId.Silhuette) {
-					shader = ShaderId.Silhuette;
+				if (arg2.Shader == ShaderId.Silhouette) {
+					shader = ShaderId.Silhouette;
+				} else if (arg1.Shader == ShaderId.Silhouette) {
+					shader = ShaderId.Silhouette;
 					Toolbox.Swap(ref arg1, ref arg2);
 					Toolbox.Swap(ref texture1, ref texture2);
 				}

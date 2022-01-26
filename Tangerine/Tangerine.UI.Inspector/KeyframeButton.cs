@@ -83,7 +83,7 @@ namespace Tangerine.UI.Inspector
 			}
 			Nodes.Clear();
 			Size = MinMaxSize = new Vector2(22, 22);
-			image = new Image { Size = Size, Shader = ShaderId.Silhuette, Texture = new SerializableTexture(), Color = Theme.Colors.WhiteBackground };
+			image = new Image { Size = Size, Shader = ShaderId.Silhouette, Texture = new SerializableTexture(), Color = Theme.Colors.WhiteBackground };
 			fillImage = new Image { Size = Size, Visible = false };
 			outlineImage = new Image { Size = Size, Visible = false };
 			Nodes.Add(outlineImage);
@@ -187,7 +187,7 @@ namespace Tangerine.UI.Inspector
 
 		private static readonly KeyFunction[] nextKeyFunction = {
 			KeyFunction.Spline, KeyFunction.ClosedSpline,
-			KeyFunction.Steep, KeyFunction.Linear
+			KeyFunction.Step, KeyFunction.Linear
 		};
 
 		internal void SetKeyFunction(KeyFunction value)

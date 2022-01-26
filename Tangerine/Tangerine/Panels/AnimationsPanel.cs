@@ -1288,7 +1288,7 @@ namespace Tangerine.Panels
 							zeroPoseKey.Value = index == -1
 								? propertyData.Info.GetValue(animable)
 								: propertyData.Info.GetValue(animable, new object[] { index });
-							zeroPoseKey.Function = KeyFunction.Steep;
+							zeroPoseKey.Function = KeyFunction.Step;
 							SetKeyframe.Perform(a.Owner, a.TargetPropertyPath, animation, zeroPoseKey);
 						}
 					});

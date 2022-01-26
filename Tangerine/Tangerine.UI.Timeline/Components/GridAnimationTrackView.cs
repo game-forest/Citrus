@@ -113,14 +113,14 @@ namespace Tangerine.UI.Timeline.Components
 			var b = new Vector2(widget.Width, a.Y);
 			if (track.Animators.TryFind<float>(nameof(AnimationTrack.Weight), out var animator, Document.Current.Animation.Id)) {
 				var first = true;
-				var func = KeyFunction.Steep;
+				var func = KeyFunction.Step;
 				foreach (var k in animator.ReadonlyKeys) {
 					b = CalcWeightCurvePoint(k.Frame, k.Value, widget.Height);
 					if (first) {
 						a = new Vector2(0, b.Y);
 						first = false;
 					}
-					var b2 = func == KeyFunction.Steep ? new Vector2(b.X, a.Y) : b;
+					var b2 = func == KeyFunction.Step ? new Vector2(b.X, a.Y) : b;
 					DrawQuad(a, b2, widget.Height, color);
 					func = k.Function;
 					a = b;

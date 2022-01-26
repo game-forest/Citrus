@@ -22,7 +22,7 @@ namespace Tangerine.UI.Inspector
 		private static readonly KeyFunction[] keyFunctionSequence = {
 			KeyFunction.Linear,
 			KeyFunction.Spline,
-			KeyFunction.Steep,
+			KeyFunction.Step,
 			KeyFunction.ClosedSpline
 		};
 
@@ -79,7 +79,7 @@ namespace Tangerine.UI.Inspector
 			};
 			cancelImage = new Image {
 				Padding = new Thickness(1.5f),
-				Shader = ShaderId.Silhuette,
+				Shader = ShaderId.Silhouette,
 				Texture = new SerializableTexture(),
 				Color = Color4.White
 			};

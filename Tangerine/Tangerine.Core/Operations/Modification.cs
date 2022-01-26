@@ -294,7 +294,7 @@ namespace Tangerine.Core.Operations
 					var (propertyData, animable, index) = AnimationUtils.GetPropertyByPath(animationHost, propertyPath);
 					var zeroPoseKey = Lime.Keyframe.CreateForType(propertyData.Info.PropertyType);
 					zeroPoseKey.Value = index == -1 ? propertyData.Info.GetValue(animable) : propertyData.Info.GetValue(animable, new object [] { index });
-					zeroPoseKey.Function = KeyFunction.Steep;
+					zeroPoseKey.Function = KeyFunction.Step;
 					DocumentHistory.Current.Perform(new SetKeyframe(animationHost, propertyPath, Animation.ZeroPoseId, keyframe));
 				}
 			}
@@ -703,7 +703,7 @@ namespace Tangerine.Core.Operations
 							new Keyframe<ITexture> {
 								Value = texture,
 								Frame = i++,
-								Function = KeyFunction.Steep,
+								Function = KeyFunction.Step,
 							}
 						);
 					}

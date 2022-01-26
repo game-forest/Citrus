@@ -88,7 +88,7 @@ namespace Tangerine.UI.Timeline.Operations
 		}
 		
 		private static readonly KeyFunction[] nextKeyFunction = {
-			KeyFunction.Steep,
+			KeyFunction.Step,
 			KeyFunction.Spline,
 			KeyFunction.ClosedSpline,
 			KeyFunction.Linear,
