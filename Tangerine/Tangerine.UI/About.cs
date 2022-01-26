@@ -13,6 +13,9 @@ namespace Tangerine.UI
 	{
 		public static string GetInformation()
 		{
+			if (!Git.IsGitInPath) {
+				return "Git is not in PATH\n";
+			}
 			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
 			StringBuilder stringbBuilder = new StringBuilder();
 			var citrusDir = Orange.Toolbox.FindCitrusDirectory();

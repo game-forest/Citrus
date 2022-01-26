@@ -67,7 +67,31 @@ namespace Lime
 	public static class Application
 	{
 		public static event Action<DeviceOrientation> SupportedDeviceOrientationsChanged;
-		public static readonly List<IWindow> Windows = new List<IWindow>();
+		public static event Action<System.Exception> UnhandledExceptionOnUpdate;
+
+		public static IEnumerable<IWindow> Windows
+		{
+			get
+			{
+				foreach (var w in windows) {
+					yield return w;
+				}
+			}
+		}
+
+		private static readonly List<IWindow> windows = new List<IWindow>();
+
+		internal static void AddWindow(IWindow window)
+		{
+			windows.Add(window);
+			window.UnhandledExceptionOnUpdate += UnhandledExceptionOnUpdate;
+		}
+
+		internal static void RemoveWindow(IWindow window)
+		{
+			windows.Remove(window);
+			window.UnhandledExceptionOnUpdate -= UnhandledExceptionOnUpdate;
+		}
 
 		private static IWindow mainWindow;
 		public static IWindow MainWindow
@@ -90,14 +114,14 @@ namespace Lime
 
 		public static void InvalidateWindows()
 		{
-			foreach (var window in Windows) {
+			foreach (var window in windows) {
 				window.Invalidate();
 			}
 		}
 
 		public static bool AreAllWindowsInactive()
 		{
-			foreach (var window in Windows) {
+			foreach (var window in windows) {
 				if (window.Active) {
 					return false;
 				}

@@ -38,10 +38,7 @@ namespace Lime
 		[ThreadStatic]
 		private static bool isRenderingPhase;
 
-		public bool IsRenderingPhase
-		{
-			get { return isRenderingPhase; }
-		}
+		public bool IsRenderingPhase => isRenderingPhase;
 
 		protected CommonWindow()
 		{

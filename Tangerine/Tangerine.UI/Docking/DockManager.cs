@@ -23,7 +23,6 @@ namespace Tangerine.UI.Docking
 		/// Manages DocumentArea files drop.
 		/// </summary>
 		public DropFilesGesture DocumentAreaDropFilesGesture { get; private set; }
-		public event Action<System.Exception> UnhandledExceptionOccurred;
 
 		private DockManager(Vector2 windowSize)
 		{
@@ -36,9 +35,6 @@ namespace Tangerine.UI.Docking
 				Icon = new System.Drawing.Icon(new EmbeddedResource(AppIconPath, "Tangerine").GetResourceStream()),
 #endif // WIN
 			});
-#if !MAC || !DEBUG // JetBrains Rider doesn't stop on exceptions if the handler is set.
-			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
-#endif
 			window.AllowDropFiles = true;
 			MainWindowWidget = new ThemedInvalidableWindowWidget(window) {
 				Id = "MainWindow",
@@ -460,7 +456,6 @@ namespace Tangerine.UI.Docking
 #endif
 				Type = WindowType.Tool,
 			});
-			window.UnhandledExceptionOnUpdate += e => UnhandledExceptionOccurred?.Invoke(e);
 			window.AllowDropFiles = true;
 			window.Closing += reason => {
 				if (reason == CloseReason.MainWindowClosing) {

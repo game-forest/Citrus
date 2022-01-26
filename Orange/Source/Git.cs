@@ -7,6 +7,16 @@ namespace Orange
 {
 	public static class Git
 	{
+		public static readonly bool IsGitInPath;
+
+		static Git()
+		{
+			try {
+				Exec("", "");
+				IsGitInPath = true;
+			} catch (Exception) { }
+		}
+
 		public static bool Exec(string workingDirectory, string gitArgs, StringBuilder output = null)
 		{
 			return Process.Start("git", gitArgs, workingDirectory, Process.Options.RedirectErrors | Process.Options.RedirectOutput, output) == 0;

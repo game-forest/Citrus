@@ -83,6 +83,7 @@ namespace Tangerine
 
 			LoadFont();
 
+			Application.UnhandledExceptionOnUpdate += ExceptionHandling.Handle;
 			DockManager.Initialize(new Vector2(1024, 768));
 			DockManager.Instance.DocumentAreaDropFilesGesture.Recognized +=
 				new ScenesDropHandler { ShouldCreateContextMenu = false }.Handle;
@@ -279,7 +280,6 @@ namespace Tangerine
 			VisualHintsRegistry.Instance.RegisterDefaultHints();
 
 			Document.NodeDecorators.AddFor<Node>(n => n.SetTangerineFlag(TangerineFlags.SceneNode, true));
-			dockManager.UnhandledExceptionOccurred += ExceptionHandling.Handle;
 
 			Document.NodeDecorators.AddFor<ParticleEmitter>(
 				n => n.CompoundPostPresenter.Add(new UI.SceneView.ParticleEmitterPresenter())

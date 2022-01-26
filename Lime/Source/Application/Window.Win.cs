@@ -580,7 +580,7 @@ namespace Lime
 				renderThread.IsBackground = true;
 				renderThread.Start();
 			}
-			Application.Windows.Add(this);
+			Application.AddWindow(this);
 		}
 
 		private void OnShown(object sender, EventArgs e) => renderControl.Focus();
@@ -647,7 +647,7 @@ namespace Lime
 				renderThread.Join();
 			}
 			RaiseClosed();
-			Application.Windows.Remove(this);
+			Application.RemoveWindow(this);
 			if (this == Application.MainWindow) {
 				System.Windows.Forms.Application.Exit();
 			}
