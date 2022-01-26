@@ -145,6 +145,7 @@ namespace Tangerine
 					}
 					break;
 			}
+			NavigateToAnimation.Perform(animation);
 		}
 
 		private static string GenerateAnimationId(Node node, string prefix)
