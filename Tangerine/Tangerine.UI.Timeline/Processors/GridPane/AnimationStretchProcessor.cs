@@ -120,7 +120,7 @@ namespace Tangerine.UI.Timeline
 					saved = saved.Reverse();
 				}
 				foreach (var key in saved) {
-					RemoveKeyframe.Perform(animator, key.Frame);
+					RemoveKeyframe.Perform(animator, key.Frame, removeAnimator: false);
 				}
 				foreach (var key in saved) {
 					double relpos = savedPositions[key];
