@@ -17,22 +17,12 @@ namespace Tangerine.Core
 			if (CanInspectPropertyCache.ContainsKey((type, property))) {
 				return CanInspectPropertyCache[(type, property)];
 			}
-			bool result = _CanInspectProperty(type, property);
+			bool result = CanInspectPropertyHelper(type, property);
 			CanInspectPropertyCache[(type, property)] = result;
 			return result;
 		}
 
-		public static bool CanAnimateProperty(Type type, PropertyInfo property)
-		{
-			if (CanAnimatePropertyCache.ContainsKey((type, property))) {
-				return CanAnimatePropertyCache[(type, property)];
-			}
-			bool result = _CanAnimateProperty(type, property);
-			CanAnimatePropertyCache[(type, property)] = result;
-			return result;
-		}
-
-		private static bool _CanInspectProperty(Type type, PropertyInfo property)
+		private static bool CanInspectPropertyHelper(Type type, PropertyInfo property)
 		{
 			if (property.GetIndexParameters().Length > 0) {
 				// we don't inspect indexers (they have "Item" name by default)
@@ -56,13 +46,18 @@ namespace Tangerine.Core
 			return yuzuItem != null || hasKeyframeColor;
 		}
 
-		private static bool _CanAnimateProperty(Type type, PropertyInfo property)
+		public static bool CanAnimateProperty(Type type, PropertyInfo property)
 		{
+			if (CanAnimatePropertyCache.ContainsKey((type, property))) {
+				return CanAnimatePropertyCache[(type, property)];
+			}
 			bool canInspect = CanInspectProperty(type, property);
 			bool isIanimationHost = typeof(IAnimationHost).IsAssignableFrom(type);
 			bool isTangerineStatic = PropertyAttributes<TangerineStaticPropertyAttribute>.Get(property) != null;
 			bool isInAnimatorRegistry = AnimatorRegistry.Instance.Contains(property.PropertyType);
-			return canInspect && isIanimationHost && !isTangerineStatic && isInAnimatorRegistry;
+			bool result = canInspect && isIanimationHost && !isTangerineStatic && isInAnimatorRegistry;
+			CanAnimatePropertyCache[(type, property)] = result;
+			return result;
 		}
 	}
 }
