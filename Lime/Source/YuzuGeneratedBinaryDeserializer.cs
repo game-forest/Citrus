@@ -7012,43 +7012,47 @@ namespace YuzuGenerated
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (42 == fd.OurIndex) {
-				result.Speed = d.Reader.ReadSingle();
+				result.SpawnBetweenFrames = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (43 == fd.OurIndex) {
-				result.Spin = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				result.Speed = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
 			if (44 == fd.OurIndex) {
+				result.Spin = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
+				fd = def.Fields[d.Reader.ReadInt16()];
+			}
+			if (45 == fd.OurIndex) {
 				result.Tag = d.Reader.ReadString();
 				if (result.Tag == "" && d.Reader.ReadBoolean()) result.Tag = null;
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (45 == fd.OurIndex) {
+			if (46 == fd.OurIndex) {
 				result.TangerineFlags = (global::Lime.TangerineFlags)d.Reader.ReadInt32();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (46 == fd.OurIndex) {
+			if (47 == fd.OurIndex) {
 				result.TimeShift = d.Reader.ReadSingle();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (47 == fd.OurIndex) {
+			if (48 == fd.OurIndex) {
 				result.Velocity = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (48 == fd.OurIndex) {
+			if (49 == fd.OurIndex) {
 				result.Visible = d.Reader.ReadBoolean();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (49 == fd.OurIndex) {
+			if (50 == fd.OurIndex) {
 				result.WindAmount = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (50 == fd.OurIndex) {
+			if (51 == fd.OurIndex) {
 				result.WindDirection = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}
-			if (51 == fd.OurIndex) {
+			if (52 == fd.OurIndex) {
 				result.Zoom = (global::Lime.NumericRange)dg.ReadStruct<global::Lime.NumericRange>();
 				fd = def.Fields[d.Reader.ReadInt16()];
 			}

@@ -146,6 +146,17 @@ namespace Lime
 			public Matrix32 Transform;
 		}
 
+		[AllowOnlyOneComponent]
+		[NodeComponentDontSerialize]
+		[UpdateStage(typeof(AfterAnimationStage))]
+		private class EmitterUpdatableBehavior : BehaviorComponent
+		{
+			protected internal override void Update(float delta)
+			{
+				((IUpdatableNode)Owner).OnUpdate(delta);
+			}
+		}
+
 		private IMaterial defaultMaterial;
 
 		/// <summary>
@@ -156,6 +167,8 @@ namespace Lime
 		public bool ImmortalParticles { get; set; }
 		[YuzuMember]
 		public bool NumberPerBurst { get; set; }
+		[YuzuMember]
+		public bool SpawnBetweenFrames { get; set; }
 		[YuzuMember]
 		[TangerineKeyframeColor(9)]
 		public EmitterShape Shape { get; set; }
@@ -300,6 +313,8 @@ namespace Lime
 		public Vector2 UV1 => Vector2.One;
 
 		private bool firstUpdate = true;
+
+		private Vector2 previousPosition;
 		/// <summary>
 		/// Number of particles to generate on Update. Used to make particle count FPS independent
 		/// by accumulating fractional part of number of particles to spawn on given frame.
@@ -350,7 +365,7 @@ namespace Lime
 			ImmortalParticles = false;
 			NumberPerBurst = false;
 			InitialColor = Color4.White;
-			Components.Add(new UpdatableNodeBehavior());
+			Components.Add(new EmitterUpdatableBehavior());
 		}
 
 		public override void Dispose()
@@ -497,20 +512,35 @@ namespace Lime
 			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
 			}
+			var offsetPosition = Number > 0 && SpawnBetweenFrames
+				? (previousPosition - Position) / ((int)particlesToSpawn)
+				: Vector2.Zero;
+			previousPosition = Position;
+			var offsetDelta = delta / ((int)particlesToSpawn);
+			int particleIndex = 0;
+			int i = particles.Count - 1;
 			while (particlesToSpawn >= 1f) {
 				Particle particle = AllocParticle();
-				if (GloballyEnabled && Nodes.Count > 0 && InitializeParticle(particle)) {
-					AdvanceParticle(particle, 0, ref currentBoundingRect);
+				if (
+					GloballyEnabled &&
+					Nodes.Count > 0 &&
+					InitializeParticle(particle, offsetPosition * particleIndex)
+				) {
+					AdvanceParticle(
+						p: particle,
+						delta: offsetDelta * ((int)particlesToSpawn - particleIndex - 1),
+						boundingRect: ref currentBoundingRect
+					);
 				} else {
 					FreeLastParticles(1);
 				}
 				particlesToSpawn -= 1;
+				particleIndex++;
 			}
 			if (MagnetAmount.Median != 0 || MagnetAmount.Dispersion != 0) {
 				EnumerateMagnets();
 			}
 			int particlesToFreeCount = 0;
-			int i = particles.Count - 1;
 			while (i >= 0) {
 				Particle particle = particles[i];
 				AdvanceParticle(particle, delta, ref currentBoundingRect);
@@ -721,6 +751,7 @@ namespace Lime
 			}
 			if (firstUpdate) {
 				firstUpdate = false;
+				previousPosition = Position;
 				const float ModellingStep = 0.04f;
 				delta = Math.Max(delta, TimeShift);
 				while (delta >= ModellingStep) {
@@ -762,7 +793,7 @@ namespace Lime
 			return result;
 		}
 
-		private bool InitializeParticle(Particle p)
+		private bool InitializeParticle(Particle p, Vector2 offsetPosition)
 		{
 			CalcInitialTransform(out Matrix32 transform);
 			Vector2 emitterScale = new Vector2 {
@@ -834,7 +865,7 @@ namespace Lime
 			default:
 				throw new Lime.Exception("Invalid particle emitter shape");
 			}
-			p.RegularPosition = transform.TransformVector(position);
+			p.RegularPosition = transform.TransformVector(position) + offsetPosition;
 			if (!TryGetRandomModifier(out p.Modifier)) {
 				return false;
 			}
@@ -1192,6 +1223,7 @@ namespace Lime
 
 		private void BuildForTangerine()
 		{
+			SpawnBetweenFrames = true;
 			var defaultModifier = new ParticleModifier() {
 				Id = "ParticleModifier",
 			};
