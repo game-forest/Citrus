@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Lime
 {
-	public class TypedKeyframeList<T> : IList<Keyframe<T>>
+	public class TypedKeyframeList<T> : IList<Keyframe<T>>, ICloneable
 	{
 		private List<Keyframe<T>> items = new List<Keyframe<T>>();
 
@@ -15,12 +15,12 @@ namespace Lime
 		internal void AddRef() => RefCount++;
 		internal void Release() => RefCount--;
 
-		public TypedKeyframeList<T> Clone()
+		public object Clone()
 		{
-			var clone = new TypedKeyframeList<T>();
-			foreach (var i in this) {
-				clone.Add(i.Clone());
-			}
+			var clone = Lime.InternalPersistence.Instance.Clone(this);
+#if TANGERINE
+			clone.Version = Version + 1;
+#endif // TANGERINE
 			return clone;
 		}
 
