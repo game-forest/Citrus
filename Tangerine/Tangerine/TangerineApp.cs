@@ -865,7 +865,7 @@ namespace Tangerine
 						DragWidgetsProcessor.DragWidgets(widgets, mousePosition, pivot, isRoundingMode: true);
 					}
 				}
-			} catch (InvalidOperationException e) {
+			} catch (System.Exception e) {
 				Document.Current.History.RollbackTransaction();
 				AlertDialog.Show(e.Message);
 			}
