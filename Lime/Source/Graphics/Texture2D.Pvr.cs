@@ -96,12 +96,15 @@ namespace Lime
 				throw new NotSupportedException();
 			}
 			Action deferredCommands = () => EnsurePlatformTexture(format, width, height, numMipmaps > 1);
-			MemoryUsed = 0;
+			int newMemoryUsed = 0;
 			for (int level = 0; level < numMipmaps; level++) {
 				var levelCopy = level;
-				var buffer = ReadTextureData(reader, GraphicsUtility.CalculateMipLevelDataSize(levelCopy, format, width, height));
+				var dataSize = GraphicsUtility.CalculateMipLevelDataSize(levelCopy, format, width, height);
+				newMemoryUsed += dataSize;
+				var buffer = ReadTextureData(reader, dataSize);
 				deferredCommands += () => platformTexture.SetData(levelCopy, buffer);
 			}
+			MemoryUsed = newMemoryUsed;
 			Window.Current.InvokeOnRendering(deferredCommands);
 		}
 	}

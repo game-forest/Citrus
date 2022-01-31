@@ -354,7 +354,6 @@ namespace Lime
 
 		private byte[] ReadTextureData(BinaryReader reader, int length)
 		{
-			MemoryUsed += length;
 			var result = reader.ReadBytes(length);
 			if (result.Length != length) {
 				throw new InvalidOperationException($"Read texture data length {result.Length} was not equal to requested length {length}");
