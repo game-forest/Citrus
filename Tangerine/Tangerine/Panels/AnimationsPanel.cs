@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 using Tangerine.UI;
 using Tangerine.UI.Timeline;
@@ -1334,6 +1335,7 @@ namespace Tangerine.Panels
 			) : base(treeView, item, options)
 			{
 				this.itemProvider = itemProvider;
+				Widget.Gestures.Add(new ClickGesture(0, NavigateToNode));
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 				Label.Components.Add(new TooltipComponent(() => ((NodeTreeViewItem)Item).Tooltip));
 				BackgroundColor = ColorTheme.Current.Animations.NodeBackground;
@@ -1341,6 +1343,38 @@ namespace Tangerine.Panels
 					MarkerColor = ColorTheme.Current.Animations.RootNodeMarker;
 					BackgroundColor = ColorTheme.Current.Animations.RootBackground;
 					Label.TextColor = ColorTheme.Current.Animations.RootText;
+				}
+			}
+
+			private void NavigateToNode()
+			{
+				if (Application.Input.IsKeyPressed(Key.Alt)) {
+					var targetNode = ((NodeTreeViewItem)Item).Node;
+					if (targetNode == Document.Current.RootNode) {
+						return;
+					}
+					Document.Current.History.DoTransaction(() => ExpandPath.Perform(targetNode));
+					Timeline.Instance.RootWidget.LateTasks.Add(ScrollToNodeTask(targetNode));
+				}
+			}
+
+			private static IEnumerator<object> ScrollToNodeTask(Node node)
+			{
+				var treeView = Timeline.Instance.Roll.TreeView;
+				// The timeline is rebuilt in a late update. This task may
+				// execute on the next update or may execute after one update.
+				for (int i = 0; i < 2; i++) {
+					var sceneItem = Document.Current.GetSceneItemForObject(node);
+					var treeViewItem = TreeViewComponent.GetTreeViewItem(sceneItem);
+					// Item may not have a widget. Widgets are created when the
+					// timeline is rebuilt, which happens at some point in the update.
+					// So we do it as part of the task.
+					var presentation = treeViewItem.Presentation as TreeViewItemPresentation;
+					if (presentation?.Widget.Visible ?? false) {
+						treeView.ScrollToItem(treeViewItem, instantly: true);
+						yield break;
+					}
+					yield return null;
 				}
 			}
 
