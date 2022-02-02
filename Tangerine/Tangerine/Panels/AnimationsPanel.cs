@@ -1371,6 +1371,7 @@ namespace Tangerine.Panels
 					// So we do it as part of the task.
 					var presentation = treeViewItem.Presentation as TreeViewItemPresentation;
 					if (presentation?.Widget.Visible ?? false) {
+						presentation.RunHighlightAnimation(Timeline.Instance.RootWidget);
 						treeView.ScrollToItem(treeViewItem, instantly: true);
 						yield break;
 					}
