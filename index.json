@@ -1642,7 +1642,7 @@
   "api/Lime.KeyFunction.html": {
     "href": "api/Lime.KeyFunction.html",
     "title": "Enum KeyFunction | Citrus Engine",
-    "keywords": "Enum KeyFunction Namespace : Lime Assembly : Lime.dll Syntax public enum KeyFunction : byte Fields Name Description ClosedSpline Linear Spline Steep"
+    "keywords": "Enum KeyFunction Namespace : Lime Assembly : Lime.dll Syntax public enum KeyFunction : byte Fields Name Description ClosedSpline Linear Spline Step"
   },
   "api/Lime.LateTasksBehavior.html": {
     "href": "api/Lime.LateTasksBehavior.html",
@@ -2637,7 +2637,7 @@
   "api/Lime.ShaderId.html": {
     "href": "api/Lime.ShaderId.html",
     "title": "Enum ShaderId | Citrus Engine",
-    "keywords": "Enum ShaderId Namespace : Lime Assembly : Lime.dll Syntax public enum ShaderId Fields Name Description Diffuse Inherited InversedSilhuette None Silhuette"
+    "keywords": "Enum ShaderId Namespace : Lime Assembly : Lime.dll Syntax public enum ShaderId Fields Name Description Diffuse Inherited InversedSilhouette None Silhouette"
   },
   "api/Lime.ShaderOptions.html": {
     "href": "api/Lime.ShaderOptions.html",

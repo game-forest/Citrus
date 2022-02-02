@@ -33140,12 +33140,12 @@ references:
   commentId: F:Lime.KeyFunction.Spline
   fullName: Lime.KeyFunction.Spline
   nameWithType: KeyFunction.Spline
-- uid: Lime.KeyFunction.Steep
-  name: Steep
-  href: api/Lime.KeyFunction.html#Lime_KeyFunction_Steep
-  commentId: F:Lime.KeyFunction.Steep
-  fullName: Lime.KeyFunction.Steep
-  nameWithType: KeyFunction.Steep
+- uid: Lime.KeyFunction.Step
+  name: Step
+  href: api/Lime.KeyFunction.html#Lime_KeyFunction_Step
+  commentId: F:Lime.KeyFunction.Step
+  fullName: Lime.KeyFunction.Step
+  nameWithType: KeyFunction.Step
 - uid: Lime.LateTasksBehavior
   name: LateTasksBehavior
   href: api/Lime.LateTasksBehavior.html
@@ -57073,24 +57073,24 @@ references:
   commentId: F:Lime.ShaderId.Inherited
   fullName: Lime.ShaderId.Inherited
   nameWithType: ShaderId.Inherited
-- uid: Lime.ShaderId.InversedSilhuette
-  name: InversedSilhuette
-  href: api/Lime.ShaderId.html#Lime_ShaderId_InversedSilhuette
-  commentId: F:Lime.ShaderId.InversedSilhuette
-  fullName: Lime.ShaderId.InversedSilhuette
-  nameWithType: ShaderId.InversedSilhuette
+- uid: Lime.ShaderId.InversedSilhouette
+  name: InversedSilhouette
+  href: api/Lime.ShaderId.html#Lime_ShaderId_InversedSilhouette
+  commentId: F:Lime.ShaderId.InversedSilhouette
+  fullName: Lime.ShaderId.InversedSilhouette
+  nameWithType: ShaderId.InversedSilhouette
 - uid: Lime.ShaderId.None
   name: None
   href: api/Lime.ShaderId.html#Lime_ShaderId_None
   commentId: F:Lime.ShaderId.None
   fullName: Lime.ShaderId.None
   nameWithType: ShaderId.None
-- uid: Lime.ShaderId.Silhuette
-  name: Silhuette
-  href: api/Lime.ShaderId.html#Lime_ShaderId_Silhuette
-  commentId: F:Lime.ShaderId.Silhuette
-  fullName: Lime.ShaderId.Silhuette
-  nameWithType: ShaderId.Silhuette
+- uid: Lime.ShaderId.Silhouette
+  name: Silhouette
+  href: api/Lime.ShaderId.html#Lime_ShaderId_Silhouette
+  commentId: F:Lime.ShaderId.Silhouette
+  fullName: Lime.ShaderId.Silhouette
+  nameWithType: ShaderId.Silhouette
 - uid: Lime.ShaderOptions
   name: ShaderOptions
   href: api/Lime.ShaderOptions.html
