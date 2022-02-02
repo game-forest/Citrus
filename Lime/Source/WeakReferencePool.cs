@@ -27,11 +27,23 @@ namespace Lime
 
 		public TValue GetItem(TKey key)
 		{
-			var prehashedKey = new PrehashedKey(comparer.GetHashCode(key), key);
-			var index = (int)(unchecked((uint)prehashedKey.Hash) % stores.Length);
+			var (prehashedKey, index) = GetPrehashedKeyAndStoreIndex(key);
 			return stores[index].GetItem(prehashedKey);
 		}
 
+		public bool TryRemoveItem(TKey key)
+		{
+			var (prehashedKey, index) = GetPrehashedKeyAndStoreIndex(key);
+			return stores[index].TryRemoveItem(prehashedKey);
+		}
+
+		private (PrehashedKey, int) GetPrehashedKeyAndStoreIndex(TKey key)
+		{
+			var prehashedKey = new PrehashedKey(comparer.GetHashCode(key), key);
+			var index = (int)(unchecked((uint)prehashedKey.Hash) % stores.Length);
+			return (prehashedKey, index);
+		}
+		
 		private class Store
 		{
 			private const int MinCountUntilCleanUp = 4;
@@ -64,12 +76,10 @@ namespace Lime
 				}
 				TValue result;
 				try {
-					if (entry.Reference == null || !entry.Reference.TryGetTarget(out result)) {
-						lock (entry) {
-							if (entry.Reference == null || !entry.Reference.TryGetTarget(out result)) {
-								result = createItem(prehashedKey.Key);
-								Volatile.Write(ref entry.Reference, new WeakReference<TValue>(result, trackResurrection));
-							}
+					lock (entry) {
+						if (entry.Reference == null || !entry.Reference.TryGetTarget(out result)) {
+							result = createItem(prehashedKey.Key);
+							entry.Reference = new WeakReference<TValue>(result, trackResurrection);
 						}
 					}
 				} finally {
@@ -78,11 +88,35 @@ namespace Lime
 				return result;
 			}
 
+			public bool TryRemoveItem(PrehashedKey prehashedKey)
+			{
+				CacheEntry entry;
+				lock (cacheLock) {
+					if (!cache.TryGetValue(prehashedKey, out entry)) {
+						return false;
+					}
+					Interlocked.Increment(ref entry.LockCount);
+				}
+				bool isReferenceRemoved = false;
+				try {
+					lock (entry) {
+						if (entry.Reference != null && entry.Reference.TryGetTarget(out _)) {
+							entry.Reference = null;
+							isReferenceRemoved = true;
+						}
+					}
+				} finally {
+					Interlocked.Decrement(ref entry.LockCount);
+				}
+				return isReferenceRemoved;
+			}
+
 			private void CleanUpGarbageCollectedObjects()
 			{
 				var toRemove = new List<PrehashedKey>();
 				foreach (var (key, entry) in cache) {
-					if (Interlocked.CompareExchange(ref entry.LockCount, 0, 0) == 0 && !entry.Reference.TryGetTarget(out _)) {
+					bool locked = Interlocked.CompareExchange(ref entry.LockCount, 0, 0) != 0;
+					if (!locked && (entry.Reference == null || !entry.Reference.TryGetTarget(out _))) {
 						toRemove.Add(key);
 					}
 				}
