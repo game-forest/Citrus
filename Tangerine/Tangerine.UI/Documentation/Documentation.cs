@@ -20,9 +20,9 @@ namespace Tangerine.UI
 
 		public static string PageExtension { get; set; } = ".md";
 		public static string DocExtension { get; set; } = ".html";
-		public static string StartPageName { get; set; } = "https://game-forest.github.io/Citrus/tangerine/intro.html";
+		public static string StartPageName { get; set; } = "https://game-forest.github.io/Citrus/articles/intro.html";
 		public static string ErrorPageName { get; set; } = "ErrorPage";
-		public static string ChangelogPageName { get; set; } = "https://game-forest.github.io/Citrus/tangerine/changelog.html";
+		public static string ChangelogPageName { get; set; } = "https://game-forest.github.io/Citrus/articles/tangerine/changelog.html";
 
 		public static string GetPagePath(string pageName)
 		{
