@@ -47,7 +47,7 @@ namespace Tangerine.UI.Timeline
 							var key = new Keyframe<ITexture> {
 								Frame = cellUnderMouseOnFilesDrop.X + animateTextureCellOffset,
 								Value = new SerializableTexture(assetPath),
-								Function = KeyFunction.Steep,
+								Function = KeyFunction.Step,
 							};
 							SetKeyframe.Perform(widget, nameof(Widget.Texture), Document.Current.Animation, key);
 							animateTextureCellOffset++;

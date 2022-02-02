@@ -96,7 +96,7 @@ namespace Tangerine.UI
 			};
 			CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
-				Renderer.Shader = Enabled ? ShaderId.Diffuse : ShaderId.Silhuette;
+				Renderer.Shader = Enabled ? ShaderId.Diffuse : ShaderId.Silhouette;
 				Color4 bgColor, borderColor;
 				GetColors(state, out bgColor, out borderColor);
 				if (bgColor != Color4.Transparent) {

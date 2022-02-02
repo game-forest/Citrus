@@ -204,11 +204,11 @@ namespace Tangerine.UI.Timeline
 			foreach (var nextKey in curve.Animator.ReadonlyKeys) {
 				Renderer.DrawRound(CalcPosition(curve, nextKey.Frame), 2.5f, 10, color);
 				if (key != null) {
-					if (key.Function == KeyFunction.Steep || (key.Function == KeyFunction.Linear
+					if (key.Function == KeyFunction.Step || (key.Function == KeyFunction.Linear
 						&& key.EasingFunction == Mathf.EasingFunction.Linear)) {
 						var p0 = CalcPosition(curve, key.Frame);
 						var p1 = CalcPosition(curve, nextKey.Frame);
-						if (key.Function == KeyFunction.Steep) {
+						if (key.Function == KeyFunction.Step) {
 							p1.Y = p0.Y;
 						}
 						Renderer.DrawLine(p0, p1, color);

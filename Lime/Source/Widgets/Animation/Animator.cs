@@ -304,7 +304,7 @@ namespace Lime
 			if (time < minTime || time >= maxTime) {
 				CacheInterpolationParameters(time);
 			}
-			if (@params.Function == KeyFunction.Steep) {
+			if (@params.Function == KeyFunction.Step) {
 				return Value2;
 			}
 			var t = (float)((time - minTime) / (maxTime - minTime));
@@ -321,7 +321,7 @@ namespace Lime
 		object IAnimator.CalcValue(double time) => CalcValue(time);
 
 		private static KeyframeParams defaultKeyframeParams = new KeyframeParams {
-			Function = KeyFunction.Steep,
+			Function = KeyFunction.Step,
 			EasingFunction = Mathf.EasingFunction.Linear
 		};
 

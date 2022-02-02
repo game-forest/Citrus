@@ -28,8 +28,8 @@ namespace Lime
 		None,
 		Inherited,
 		Diffuse,
-		Silhuette,
-		InversedSilhuette,
+		Silhouette,
+		InversedSilhouette,
 	}
 
 	public enum LineCap

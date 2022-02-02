@@ -104,9 +104,9 @@ namespace Lime
 			colorOnlyBlendingProgram = CreateShaderProgram(oneTextureVertexShader, colorOnlyFragmentShader);
 			oneTextureBlengingProgram = CreateShaderProgram(oneTextureVertexShader, oneTextureFragmentShader);
 			twoTexturesBlengingProgram = CreateShaderProgram(twoTexturesVertexShader, twoTexturesFragmentShader);
-			silhuetteBlendingProgram = CreateShaderProgram(oneTextureVertexShader, silhouetteFragmentShader);
-			twoTexturesSilhuetteBlendingProgram = CreateShaderProgram(twoTexturesVertexShader, twoTexturesSilhouetteFragmentShader);
-			inversedSilhuetteBlendingProgram = CreateShaderProgram(oneTextureVertexShader, inversedSilhouetteFragmentShader);
+			silhouetteBlendingProgram = CreateShaderProgram(oneTextureVertexShader, silhouetteFragmentShader);
+			twoTexturesSilhouetteBlendingProgram = CreateShaderProgram(twoTexturesVertexShader, twoTexturesSilhouetteFragmentShader);
+			inversedSilhouetteBlendingProgram = CreateShaderProgram(oneTextureVertexShader, inversedSilhouetteFragmentShader);
 		}
 
 		public ShaderProgram GetShaderProgram(ShaderId shader, ITexture texture1, ITexture texture2, ShaderOptions options)
@@ -128,14 +128,14 @@ namespace Lime
 				} else if (numTextures == 2) {
 					return twoTexturesBlengingProgram;
 				}
-			} else if (shader == ShaderId.Silhuette) {
+			} else if (shader == ShaderId.Silhouette) {
 				if (numTextures == 1) {
-					return silhuetteBlendingProgram;
+					return silhouetteBlendingProgram;
 				} else if (numTextures == 2) {
-					return twoTexturesSilhuetteBlendingProgram;
+					return twoTexturesSilhouetteBlendingProgram;
 				}
-			} else if (shader == ShaderId.InversedSilhuette && numTextures == 1) {
-				return inversedSilhuetteBlendingProgram;
+			} else if (shader == ShaderId.InversedSilhouette && numTextures == 1) {
+				return inversedSilhouetteBlendingProgram;
 			}
 			return colorOnlyBlendingProgram;
 		}
@@ -264,9 +264,9 @@ namespace Lime
 		private readonly CustomShaderProgram colorOnlyBlendingProgram;
 		private readonly CustomShaderProgram oneTextureBlengingProgram;
 		private readonly CustomShaderProgram twoTexturesBlengingProgram;
-		private readonly CustomShaderProgram silhuetteBlendingProgram;
-		private readonly CustomShaderProgram twoTexturesSilhuetteBlendingProgram;
-		private readonly CustomShaderProgram inversedSilhuetteBlendingProgram;
+		private readonly CustomShaderProgram silhouetteBlendingProgram;
+		private readonly CustomShaderProgram twoTexturesSilhouetteBlendingProgram;
+		private readonly CustomShaderProgram inversedSilhouetteBlendingProgram;
 
 		private static CustomShaderProgram CreateShaderProgram(string vertexShader, string fragmentShader)
 		{

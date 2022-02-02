@@ -7,7 +7,7 @@ namespace Lime
 	public enum KeyFunction : byte
 	{
 		Linear,
-		Steep,
+		Step,
 		Spline,
 		ClosedSpline,
 	}

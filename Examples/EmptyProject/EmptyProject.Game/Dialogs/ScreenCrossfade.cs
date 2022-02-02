@@ -13,7 +13,7 @@ namespace EmptyProject.Dialogs
 		{
 			image = new Image {
 				Layer = Layers.AboveAllElse,
-				Shader = ShaderId.Silhuette,
+				Shader = ShaderId.Silhouette,
 				Color = Color4.Black
 			};
 		}

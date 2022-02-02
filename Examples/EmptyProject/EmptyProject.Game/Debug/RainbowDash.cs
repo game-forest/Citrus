@@ -272,7 +272,7 @@ namespace RainbowDash
 			var back = new Widget {
 				Anchors = Anchors.LeftRightTopBottom,
 				Size = topContainer.Size + Vector2.One * 20,
-				Shader = ShaderId.Silhuette,
+				Shader = ShaderId.Silhouette,
 				Color = Color4.DarkGray,
 				Presenter = new WidgetFlatFillPresenter(Color4.Gray.Transparentify(0.3f))
 			};
@@ -465,7 +465,7 @@ namespace RainbowDash
 			};
 			var bg = new Image {
 				Id = "bg",
-				Shader = ShaderId.Silhuette,
+				Shader = ShaderId.Silhouette,
 				Height = Height,
 				Anchors = Anchors.LeftRightTopBottom,
 				Color = Color4.White
@@ -489,7 +489,7 @@ namespace RainbowDash
 				Id = "padding",
 				MinWidth = 0,
 				MaxWidth = 0,
-				Shader = ShaderId.Silhuette,
+				Shader = ShaderId.Silhouette,
 				Color = Color4.DarkGray
 			};
 			var w = new Widget {
@@ -534,7 +534,7 @@ namespace RainbowDash
 			};
 			var bg = new Image {
 				Id = "bg",
-				Shader = ShaderId.Silhuette,
+				Shader = ShaderId.Silhouette,
 				Color = Color4.White
 			};
 			b.AddNode(textPresenter);

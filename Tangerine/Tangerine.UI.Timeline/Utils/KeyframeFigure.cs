@@ -21,7 +21,7 @@ namespace Tangerine.UI
 					Renderer.DrawTriangleFan(vertices, numVertices: 3);
 					break;
 
-				case KeyFunction.Steep:
+				case KeyFunction.Step:
 					var leftSmallRectVertexA = new Vector2(a.X + 0.5f, a.Y + segmentHeight / 2);
 					var leftSmallRectVertexB = new Vector2(a.X + segmentWidth / 2, b.Y - 0.5f);
 					Renderer.DrawRect(leftSmallRectVertexA, leftSmallRectVertexB, color);
