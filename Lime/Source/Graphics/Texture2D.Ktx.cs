@@ -44,8 +44,9 @@ namespace Lime
 			if ((pixelWidth & 3) != 0 || (pixelHeight & 3) != 0) {
 				throw new InvalidDataException("Texture dimensions should multiple of 4");
 			}
-			if (numberOfMipmapLevels > 1 && numberOfMipmapLevels != GraphicsUtility.CalculateMipLevelCount(pixelWidth, pixelHeight)) {
-				throw new InvalidDataException();
+			var expectedMipmapCount = GraphicsUtility.CalculateMipLevelCount(pixelWidth, pixelHeight);
+			if (numberOfMipmapLevels > 1 && numberOfMipmapLevels != expectedMipmapCount) {
+				throw new InvalidDataException($"Invalid mipmap count {numberOfMipmapLevels} expected {expectedMipmapCount}.");
 			}
 			var format = ConvertGLFormat(glInternalFormat, glBaseInternalFormat, glFormat, glType);
 			var etcFormat =
@@ -55,17 +56,18 @@ namespace Lime
 				format == Format.ETC2_R8G8B8A8_UNorm_Block;
 			SurfaceSize = ImageSize = new Size(pixelWidth, pixelHeight);
 			Action deferredCommands = null;
+			int newMemoryUsed = 0;
 			for (int level = 0; level < numberOfMipmapLevels; level++) {
 				var levelCopy = level;
 				var dataLength = reader.ReadInt32();
 				GraphicsUtility.CalculateMipLevelSize(levelCopy, pixelWidth, pixelHeight, out var levelWidth, out var levelHeight);
 				GraphicsUtility.EnsureTextureDataSizeValid(format, levelWidth, levelHeight, dataLength);
 				var data = ReadTextureData(reader, dataLength);
-				MemoryUsed = 0;
 				deferredCommands += () => {
 					var formatFeatures = PlatformRenderer.Context.GetFormatFeatures(format);
 					if (etcFormat && (formatFeatures & FormatFeatures.Sample) == 0) {
 						var rgba8DataSize = levelWidth * levelHeight * 4;
+						newMemoryUsed += rgba8DataSize;
 						var rgba8Data = Marshal.AllocHGlobal(rgba8DataSize);
 						try {
 							Etc2Decoder.Decode(data, rgba8Data, levelWidth, levelHeight, format);
@@ -75,11 +77,15 @@ namespace Lime
 							Marshal.FreeHGlobal(rgba8Data);
 						}
 					} else {
+						newMemoryUsed += dataLength;
 						EnsurePlatformTexture(format, pixelWidth, pixelHeight, numberOfMipmapLevels > 1);
 						platformTexture.SetData(levelCopy, data);
 					}
 				};
 			}
+			deferredCommands += () => {
+				MemoryUsed = newMemoryUsed;
+			};
 			Window.Current.InvokeOnRendering(deferredCommands);
 		}
 

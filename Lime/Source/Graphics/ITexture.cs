@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Lime.Graphics.Platform;
 using Yuzu;
 
@@ -85,7 +86,12 @@ namespace Lime
 
 	public class CommonTexture
 	{
-		public static int TotalMemoryUsed { get; private set; }
+		/// <summary>
+		/// Gets total bytes uploaded to vram by all alive textures. Thread safe.
+		/// </summary>
+		public static int TotalMemoryUsed => Volatile.Read(ref totalMemoryUsed);
+
+		private static int totalMemoryUsed;
 
 		public static int TotalMemoryUsedMb => TotalMemoryUsed / (1024 * 1024);
 
@@ -98,7 +104,7 @@ namespace Lime
 			get => memoryUsed;
 			protected set
 			{
-				TotalMemoryUsed += value - memoryUsed;
+				Interlocked.Add(ref totalMemoryUsed, value - memoryUsed);
 				memoryUsed = value;
 			}
 		}
