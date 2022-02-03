@@ -303,10 +303,8 @@ namespace Tangerine.UI
 		{
 			[YuzuOptional]
 			public Color4 AssemblyDefaultIcon { get; set; }
-
 			[YuzuOptional]
 			public Color4 AssemblyBuildSucceededIcon { get; set; }
-
 			[YuzuOptional]
 			public Color4 AssemblyBuildFailedIcon { get; set; }
 		}
@@ -339,7 +337,7 @@ namespace Tangerine.UI
 		public AnimationsColors Animations { get; set; }
 		[YuzuOptional]
 		public RemoteScriptingColors RemoteScripting { get; set; }
-
+		
 		public ColorTheme Clone()
 		{
 			var clone = (ColorTheme)this.MemberwiseClone();
