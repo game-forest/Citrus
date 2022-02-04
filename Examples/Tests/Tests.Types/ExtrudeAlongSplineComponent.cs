@@ -25,16 +25,10 @@ namespace Tests.Types
 			public List<float> Us { get; set; }
 		}
 
+		private static Stack<Mesh<Mesh3D.Vertex>> meshPool = new Stack<Mesh<Mesh3D.Vertex>>();
+
 		private Presenter presenter;
-		private Mesh<Mesh3D.Vertex> mesh = new Mesh<Mesh3D.Vertex>() {
-			AttributeLocations = new[] {
-				ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
-				ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
-				ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
-			},
-			Topology = PrimitiveTopology.TriangleList,
-			DirtyFlags = MeshDirtyFlags.All,
-		};
+		private Mesh<Mesh3D.Vertex> mesh;
 		private long hash = 0;
 
 		[YuzuMember]
@@ -70,6 +64,11 @@ namespace Tests.Types
 			if (newHash == hash) {
 				return;
 			}
+			var oldMesh = mesh;
+			mesh = AcquireMesh();
+			if (oldMesh != null) {
+				ReleaseMesh(mesh);
+			}
 			hash = newHash;
 			var spline = (Spline3D)Owner;
 			var savedTransform = spline.GlobalTransform;
@@ -96,11 +95,13 @@ namespace Tests.Types
 			ushort shapeVertexCount = (ushort)Shape.Vertices.Count;
 			var segmentCount = path.Count - 1;
 			var edgeLoopCount = path.Count;
-			var vertexCount = shapeVertexCount * edgeLoopCount;
+			mesh.VertexCount = shapeVertexCount * edgeLoopCount;
 			var triangleCount = Shape.Lines.Count * segmentCount;
-			var indexCount = triangleCount * 3;
-			var indicies = new ushort[indexCount];
-			var vertices = new Mesh3D.Vertex[vertexCount];
+			mesh.IndexCount = triangleCount * 3;
+			var indicies = mesh.Indices == null || mesh.Indices.Length < mesh.IndexCount
+				? new ushort[mesh.IndexCount] : mesh.Indices;
+			var vertices = mesh.Vertices == null || mesh.Vertices.Length < mesh.VertexCount
+				? new Mesh3D.Vertex[mesh.VertexCount] : mesh.Vertices;
 			ushort offset = 0;
 			var vScale = 1f;
 			if (CompensationStrategy != VCompensationStrategy.Stretch) {
@@ -132,9 +133,9 @@ namespace Tests.Types
 				}
 				offset += shapeVertexCount;
 			}
-			mesh.Vertices = vertices;
 			mesh.Indices = indicies;
-			mesh.DirtyFlags = MeshDirtyFlags.All;
+			mesh.Vertices = vertices;
+			mesh.DirtyFlags = MeshDirtyFlags.VerticesIndices;
 			spline.SetGlobalTransform(savedTransform);
 		}
 
@@ -165,6 +166,32 @@ namespace Tests.Types
 				hasher.Write(splinePoint.TangentB);
 			}
 			return hasher.End();
+		}
+
+		private static Mesh<Mesh3D.Vertex> AcquireMesh()
+		{
+			Mesh<Mesh3D.Vertex> mesh;
+			if (meshPool.Count > 0) {
+				mesh = meshPool.Pop();
+			} else {
+				mesh = new Mesh<Mesh3D.Vertex> {
+					AttributeLocations = new[] {
+						ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
+						ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
+						ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
+					},
+					Topology = PrimitiveTopology.TriangleList,
+					DirtyFlags = MeshDirtyFlags.All,
+				};
+			}
+			mesh.VertexCount = 0;
+			mesh.IndexCount = 0;
+			return mesh;
+		}
+
+		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> item)
+		{
+			meshPool.Push(item);
 		}
 
 		protected override void OnOwnerChanged(Node oldOwner)
@@ -241,7 +268,7 @@ namespace Tests.Types
 					Renderer.World = World;
 					Material.DiffuseTexture = Texture;
 					Material.Apply(0);
-					Mesh.DrawIndexed(0, Mesh.Indices.Length);
+					Mesh.DrawIndexed(0, Mesh.IndexCount);
 					Renderer.PopState();
 				}
 			}
