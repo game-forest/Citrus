@@ -116,8 +116,12 @@ namespace Tangerine.UI
 			return true;
 		}
 
-		public static bool ExtractAssetPathOrShowAlert(string filePath, out string assetPath, out string assetType)
-		{
+		public static bool ExtractAssetPathOrShowAlert(
+			string filePath,
+			out string assetPath,
+			out string assetType,
+			bool includeExtension = false
+		) {
 			string path = AssetPath.CorrectSlashes(filePath);
 			string assetsPath = AssetPath.CorrectSlashes(Core.Project.Current.AssetsDirectory);
 			if (Path.IsPathRooted(path)) {
@@ -130,7 +134,7 @@ namespace Tangerine.UI
 					path = path.Substring(assetsPath.Length + 1);
 				}
 			}
-			assetPath = Path.ChangeExtension(path, null);
+			assetPath = includeExtension ? path : Path.ChangeExtension(path, null);
 			assetType = Path.GetExtension(path).ToLower();
 			return true;
 		}

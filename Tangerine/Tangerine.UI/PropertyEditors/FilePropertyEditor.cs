@@ -23,6 +23,8 @@ namespace Tangerine.UI
 
 		public bool ShowPrefix { get; set; } = true;
 
+		protected virtual bool SaveFileExtension { get; set; } = false;
+
 		protected FilePropertyEditor(IPropertyEditorParams editorParams, string[] allowedFileTypes)
 			: base(editorParams)
 		{
@@ -113,8 +115,12 @@ namespace Tangerine.UI
 		private void SetFilePath(string path)
 		{
 			if (
-				Utils.ExtractAssetPathOrShowAlert(path, out string asset, out string type)
-				&& Utils.AssertCurrentDocument(asset, type)
+				Utils.ExtractAssetPathOrShowAlert(
+					path,
+					out string asset,
+					out string type,
+					includeExtension: SaveFileExtension
+			) && Utils.AssertCurrentDocument(asset, type)
 			) {
 				if (!IsValid(asset)) {
 					AlertDialog.Show(
