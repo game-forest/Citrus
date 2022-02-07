@@ -25,7 +25,7 @@ namespace Tests.Types
 			public List<float> Us { get; set; }
 		}
 
-		private static Stack<Mesh<Mesh3D.Vertex>> meshPool = new Stack<Mesh<Mesh3D.Vertex>>();
+		private static Queue<Mesh<Mesh3D.Vertex>> meshPool = new Queue<Mesh<Mesh3D.Vertex>>();
 
 		private Presenter presenter;
 		private Mesh<Mesh3D.Vertex> mesh;
@@ -171,27 +171,33 @@ namespace Tests.Types
 		private static Mesh<Mesh3D.Vertex> AcquireMesh()
 		{
 			Mesh<Mesh3D.Vertex> mesh;
-			if (meshPool.Count > 0) {
-				mesh = meshPool.Pop();
-			} else {
-				mesh = new Mesh<Mesh3D.Vertex> {
-					AttributeLocations = new[] {
-						ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
-						ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
-						ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
-					},
-					Topology = PrimitiveTopology.TriangleList,
-					DirtyFlags = MeshDirtyFlags.All,
-				};
+			lock (meshPool) {
+				if (meshPool.Count > 0) {
+					mesh = meshPool.Dequeue();
+				} else {
+					mesh = new Mesh<Mesh3D.Vertex> {
+						AttributeLocations = new[] {
+							ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
+							ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
+							ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
+						},
+						Topology = PrimitiveTopology.TriangleList,
+						DirtyFlags = MeshDirtyFlags.All,
+					};
+				}
 			}
 			mesh.VertexCount = 0;
 			mesh.IndexCount = 0;
 			return mesh;
 		}
 
-		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> item)
+		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> mesh)
 		{
-			meshPool.Push(item);
+			Window.Current.InvokeOnRendering(() => {
+				lock (meshPool) {
+					meshPool.Enqueue(mesh);
+				}
+			});
 		}
 
 		protected override void OnOwnerChanged(Node oldOwner)
