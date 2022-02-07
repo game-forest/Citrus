@@ -319,10 +319,11 @@ namespace Tangerine.UI.Timeline
 		{
 			// Make sure any SceneItem.Index is in order.
 			_ = Document.Current.VisibleSceneItems;
-			var top = sceneItem.GetTimelineSceneItemState().Index * TimelineMetrics.DefaultRowHeight;
+			var heightWithSpacing = TimelineMetrics.DefaultRowHeight + TimelineMetrics.RowSpacing;
+			var top = sceneItem.GetTimelineSceneItemState().Index * heightWithSpacing;
 			var bottom = top + TimelineMetrics.DefaultRowHeight;
-			if (bottom > Offset.Y + Roll.RootWidget.Height) {
-				OffsetY = bottom - Roll.RootWidget.Height;
+			if (bottom > Offset.Y + Roll.RootWidget.ContentHeight) {
+				OffsetY = bottom - Roll.RootWidget.ContentHeight;
 			}
 			if (top < Offset.Y) {
 				OffsetY = Math.Max(0, top);
