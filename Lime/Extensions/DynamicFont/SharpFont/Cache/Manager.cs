@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -42,16 +40,10 @@ namespace SharpFont.Cache
 	/// </para></summary>
 	public sealed class Manager : IDisposable
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private Library parentLibrary;
 
 		private bool disposed;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the Manager class.
@@ -74,16 +66,21 @@ namespace SharpFont.Cache
 		/// A generic pointer that is passed to the requester each time it is called (see <see cref="FaceRequester"/>).
 		/// </param>
 		[CLSCompliant(false)]
-		public Manager(Library library, uint maxFaces, uint maxSizes, ulong maxBytes, FaceRequester requester, IntPtr requestData)
-		{
-			if (library == null)
+		public Manager(
+			Library library, uint maxFaces, uint maxSizes, ulong maxBytes, FaceRequester requester, IntPtr requestData
+		) {
+			if (library == null) {
 				throw new ArgumentNullException("library");
+			}
 
 			IntPtr mgrRef;
-			Error err = FT.FTC_Manager_New(library.Reference, maxFaces, maxSizes, maxBytes, requester, requestData, out mgrRef);
+			Error err = FT.FTC_Manager_New(
+				library.Reference, maxFaces, maxSizes, maxBytes, requester, requestData, out mgrRef
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = mgrRef;
 
@@ -98,10 +95,6 @@ namespace SharpFont.Cache
 		{
 			Dispose(false);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a value indicating whether the object has been disposed.
@@ -118,24 +111,22 @@ namespace SharpFont.Cache
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				return reference;
 			}
 
 			set
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				reference = value;
 			}
 		}
-
-		#endregion
-
-		#region Public Members
 
 		/// <summary>
 		/// Empty a given cache manager. This simply gets rid of all the currently cached <see cref="Face"/> and
@@ -143,8 +134,9 @@ namespace SharpFont.Cache
 		/// </summary>
 		public void Reset()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Manager", "Cannot access a disposed object.");
+			}
 
 			FT.FTC_Manager_Reset(Reference);
 		}
@@ -172,16 +164,18 @@ namespace SharpFont.Cache
 		/// <returns>A handle to the face object.</returns>
 		public Face LookupFace(IntPtr faceId)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Manager", "Cannot access a disposed object.");
+			}
 
 			IntPtr faceRef;
 			Error err = FT.FTC_Manager_LookupFace(Reference, faceId, out faceRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
-			//HACK fix this later.
+			// HACK fix this later.
 			return new Face(faceRef, null);
 		}
 
@@ -206,16 +200,18 @@ namespace SharpFont.Cache
 		/// <returns>A handle to the size object.</returns>
 		public FTSize LookupSize(Scaler scaler)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Manager", "Cannot access a disposed object.");
+			}
 
 			IntPtr sizeRef;
 			Error err = FT.FTC_Manager_LookupSize(Reference, scaler.Reference, out sizeRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
-			//HACK fix this later.
+			// HACK fix this later.
 			return new FTSize(sizeRef, false, null);
 		}
 
@@ -233,15 +229,12 @@ namespace SharpFont.Cache
 		/// <param name="faceId">The FTC_FaceID to be removed.</param>
 		public void RemoveFaceId(IntPtr faceId)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Manager", "Cannot access a disposed object.");
+			}
 
 			FT.FTC_Manager_RemoveFaceID(Reference, faceId);
 		}
-
-		#endregion
-
-		#region IDisposable Members
 
 		/// <summary>
 		/// Disposes the Manager.
@@ -254,8 +247,7 @@ namespace SharpFont.Cache
 
 		private void Dispose(bool disposing)
 		{
-			if (!disposed)
-			{
+			if (!disposed) {
 				disposed = true;
 
 				FT.FTC_Manager_Done(reference);
@@ -264,11 +256,10 @@ namespace SharpFont.Cache
 				// removes itself from the parent Library, with a check to prevent this from happening when Library is
 				// being disposed (Library disposes all it's children with a foreach loop, this causes an
 				// InvalidOperationException for modifying a collection during enumeration)
-				if (!parentLibrary.IsDisposed)
+				if (!parentLibrary.IsDisposed) {
 					parentLibrary.RemoveChildManager(this);
+				}
 			}
 		}
-
-		#endregion
 	}
 }

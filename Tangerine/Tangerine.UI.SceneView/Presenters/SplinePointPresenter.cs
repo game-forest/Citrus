@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Lime;
 using Tangerine.Core;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Tangerine.UI.SceneView
 {
@@ -30,7 +30,9 @@ namespace Tangerine.UI.SceneView
 					var sv = SceneView.Instance;
 					sv.Frame.PrepareRendererState();
 					var t = point.Parent.AsWidget.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
-					var a = Vector2.CosSin(point.TangentAngle * Mathf.DegToRad) * TangentWeightRatio * point.TangentWeight;
+					var a = Vector2.CosSin(point.TangentAngle * Mathf.DegToRad)
+						* TangentWeightRatio
+						* point.TangentWeight;
 					var p1 = t * (point.TransformedPosition + a);
 					var p2 = t * (point.TransformedPosition - a);
 					var norm = (p2 - p1).Normalized;
@@ -46,7 +48,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		static List<SplinePoint> GetSelectedPoints()
+		private static List<SplinePoint> GetSelectedPoints()
 		{
 			if (Document.Current.Container is Spline) {
 				return Document.Current.SelectedNodes().OfType<SplinePoint>().Editable().ToList();

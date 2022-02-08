@@ -14,7 +14,7 @@ namespace Lime
 	{
 		Default,
 		Linear,
-		DualQuaternion
+		DualQuaternion,
 	}
 
 	public interface IMaterialSkin
@@ -39,6 +39,6 @@ namespace Lime
 		None,
 		Linear,
 		Exp,
-		ExpSquared
+		ExpSquared,
 	}
 }

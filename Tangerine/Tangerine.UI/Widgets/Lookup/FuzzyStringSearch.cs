@@ -10,8 +10,9 @@ namespace Tangerine.UI
 	{
 		private readonly ThreadLocal<Data> threadLocalData = new ThreadLocal<Data>(() => new Data());
 
-		public bool DoesTextMatch(string text, string pattern, ICollection<int> matches, out int distance, out int gapCount)
-		{
+		public bool DoesTextMatch(
+			string text, string pattern, ICollection<int> matches, out int distance, out int gapCount
+		) {
 			distance = 0;
 			gapCount = 0;
 			if (string.IsNullOrEmpty(text)) {
@@ -41,7 +42,8 @@ namespace Tangerine.UI
 							if (data.Matches[i, pi - 1] >= ti) {
 								continue;
 							}
-							// data.Matches can be unsorted array in some cases. Need to rework calculation of isNewMatch variable
+							// data.Matches can be unsorted array in some cases.
+							// Need to rework calculation of isNewMatch variable
 							var isNewMatch = false;
 							for (var tpi = 0; tpi < pi; tpi++) {
 								if (isNewMatch || data.TempPattern[tpi] < data.Matches[i, tpi]) {
@@ -171,8 +173,10 @@ namespace Tangerine.UI
 					}
 					while (current < min) {
 						current *= 2;
+#pragma warning disable MEN002 // Line is too long
 						// Maximum object size allowed in the GC Heap at 2GB, even on the 64-bit version of the runtime
 						// https://docs.microsoft.com/en-us/archive/blogs/joshwil/bigarrayt-getting-around-the-2gb-array-size-limit
+#pragma warning restore MEN002 // Line is too long
 						if (current > 2146435071) {
 							return 2146435071;
 						}

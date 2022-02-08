@@ -34,7 +34,7 @@ namespace Tangerine.UI.Timeline
 		public static List<Curve> Curves(this IAnimator animator) =>
 			(List<Curve>)(animator.UserData ?? (animator.UserData = CreateCurves(animator)));
 
-		static List<Curve> CreateCurves(IAnimator animator)
+		private static List<Curve> CreateCurves(IAnimator animator)
 		{
 			var adapter = Curve.Adapters[animator.ValueType];
 			var curves = new List<Curve>();

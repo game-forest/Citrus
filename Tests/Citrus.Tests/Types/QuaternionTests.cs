@@ -1,6 +1,6 @@
 ﻿namespace Citrus.Tests.Types
 {
-	class QuaternionTests
+	internal class QuaternionTests
 	{
 	}
 }

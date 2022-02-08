@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -111,8 +111,9 @@ namespace Lime.RenderOptimizer
 			return selfSize;
 		}
 
-		private static ContentSizeComponent ProcessWidget(Widget widget, Dictionary<Node, ContentSizeComponent> children)
-		{
+		private static ContentSizeComponent ProcessWidget(
+			Widget widget, Dictionary<Node, ContentSizeComponent> children
+		) {
 			var animationDuration = 0;
 			foreach (var child in widget.Nodes) {
 				foreach (var animator in child.Animators) {
@@ -170,7 +171,7 @@ namespace Lime.RenderOptimizer
 				Vector2.Zero,
 				Vector2.Right,
 				Vector2.One,
-				Vector2.Down
+				Vector2.Down,
 			};
 			// Particles pivot == (0.5, 0.5)
 			for (var i = 0; i < corners.Length; i++) {
@@ -248,14 +249,16 @@ namespace Lime.RenderOptimizer
 			return selfSize;
 		}
 
-		private static ContentSizeComponent ProcessNode3D(Node3D node3D, Dictionary<Node, ContentSizeComponent> children)
-		{
+		private static ContentSizeComponent ProcessNode3D(
+			Node3D node3D, Dictionary<Node, ContentSizeComponent> children
+		) {
 			// TODO: Content size for 3D nodes
 			return null;
 		}
 
-		private static ContentSizeComponent ProcessViewport(Viewport3D viewport, Dictionary<Node, ContentSizeComponent> children)
-		{
+		private static ContentSizeComponent ProcessViewport(
+			Viewport3D viewport, Dictionary<Node, ContentSizeComponent> children
+		) {
 			// TODO: Content size for viewports
 			return null;
 		}

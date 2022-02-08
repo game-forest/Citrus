@@ -37,7 +37,8 @@ namespace Lime
 			GetPlatformBuffer().SetData(offset, data, size, mode);
 		}
 
-		public void SetData<T>(int offset, T[] data, int startIndex, int count, BufferSetDataMode mode) where T : unmanaged
+		public void SetData<T>(int offset, T[] data, int startIndex, int count, BufferSetDataMode mode)
+			where T : unmanaged
 		{
 			fixed (T* pData = data) {
 				SetData(offset, new IntPtr(pData) + startIndex * sizeof(T), count * sizeof(T), mode);
@@ -66,12 +67,12 @@ namespace Lime
 	public enum BufferType
 	{
 		Vertex,
-		Index
+		Index,
 	}
 
 	public enum BufferSetDataMode
 	{
 		Default,
-		Discard
+		Discard,
 	}
 }

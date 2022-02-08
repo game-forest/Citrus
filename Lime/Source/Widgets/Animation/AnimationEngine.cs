@@ -7,16 +7,23 @@ namespace Lime
 	{
 		public static bool JumpAffectsRunningMarkerId = false;
 
-		public virtual bool TryRunAnimation(Animation animation, string markerId, double animationTimeCorrection = 0) { return false; }
+		public virtual bool TryRunAnimation(Animation animation, string markerId, double animationTimeCorrection = 0)
+		{
+			return false;
+		}
 		public virtual void AdvanceAnimation(Animation animation, double delta) { }
+
 		/// <summary>
 		/// 1. Refreshes animation.EffectiveAnimators;
 		/// 2. Applies each animator at currentTime;
 		/// 3. Executes triggers in given range.
-		/// The range is [previousTime, currentTime) or [previousTime, currentTime] depending on executeTriggersAtCurrentTime flag.
+		/// The range is [previousTime, currentTime) or [previousTime, currentTime]
+		/// depending on executeTriggersAtCurrentTime flag.
 		/// This method doesn't depend on animation.Time value.
 		/// </summary>
-		public virtual void ApplyAnimatorsAndExecuteTriggers(Animation animation, double previousTime, double currentTime, bool executeTriggersAtCurrentTime) { }
+		public virtual void ApplyAnimatorsAndExecuteTriggers(
+			Animation animation, double previousTime, double currentTime, bool executeTriggersAtCurrentTime
+		) { }
 		public virtual bool AreEffectiveAnimatorsValid(Animation animation) => false;
 		public virtual void BuildEffectiveAnimators(Animation animation) { }
 		public virtual void RaiseStopped(Animation animation) { }
@@ -38,9 +45,12 @@ namespace Lime
 			OnAdvanceAnimation?.Invoke(animation, delta);
 		}
 
-		public override void ApplyAnimatorsAndExecuteTriggers(Animation animation, double previousTime, double currentTime, bool executeTriggersAtCurrentTime)
-		{
-			OnApplyEffectiveAnimatorsAndBuildTriggersList?.Invoke(animation, previousTime, currentTime, executeTriggersAtCurrentTime);
+		public override void ApplyAnimatorsAndExecuteTriggers(
+			Animation animation, double previousTime, double currentTime, bool executeTriggersAtCurrentTime
+		) {
+			OnApplyEffectiveAnimatorsAndBuildTriggersList?.Invoke(
+				animation, previousTime, currentTime, executeTriggersAtCurrentTime
+			);
 		}
 	}
 
@@ -59,7 +69,11 @@ namespace Lime
 				frame = marker.Frame;
 			}
 			// Easings may give huge animationTimeCorrection values, clamp it.
-			animationTimeCorrection = Mathf.Clamp(animationTimeCorrection, -AnimationUtils.SecondsPerFrame + AnimationUtils.Threshold, 0);
+			animationTimeCorrection = Mathf.Clamp(
+				animationTimeCorrection,
+				-AnimationUtils.SecondsPerFrame + AnimationUtils.Threshold,
+				0
+			);
 			animation.Time = AnimationUtils.FramesToSeconds(frame) + animationTimeCorrection;
 			animation.RunningMarkerId = markerId;
 			animation.IsRunning = true;
@@ -73,7 +87,9 @@ namespace Lime
 			animation.TimeInternal = currentTime;
 			animation.MarkerAhead = animation.MarkerAhead ?? FindMarkerAhead(animation, previousTime);
 			if (animation.MarkerAhead == null || currentTime < animation.MarkerAhead.Time) {
-				ApplyAnimatorsAndExecuteTriggers(animation, previousTime, currentTime, executeTriggersAtCurrentTime: false);
+				ApplyAnimatorsAndExecuteTriggers(
+					animation, previousTime, currentTime, executeTriggersAtCurrentTime: false
+				);
 			} else {
 				var marker = animation.MarkerAhead;
 				animation.MarkerAhead = null;
@@ -94,8 +110,9 @@ namespace Lime
 			return null;
 		}
 
-		protected virtual void ProcessMarker(Animation animation, Marker marker, double previousTime, double currentTime)
-		{
+		protected virtual void ProcessMarker(
+			Animation animation, Marker marker, double previousTime, double currentTime
+		) {
 			switch (marker.Action) {
 				case MarkerAction.Jump:
 					var gotoMarker = animation.Markers.TryFind(marker.JumpTo);
@@ -110,11 +127,15 @@ namespace Lime
 					break;
 				case MarkerAction.Stop:
 					animation.TimeInternal = AnimationUtils.FramesToSeconds(marker.Frame);
-					ApplyAnimatorsAndExecuteTriggers(animation, previousTime, animation.Time, executeTriggersAtCurrentTime: true);
+					ApplyAnimatorsAndExecuteTriggers(
+						animation, previousTime, animation.Time, executeTriggersAtCurrentTime: true
+					);
 					animation.IsRunning = false;
 					break;
 				case MarkerAction.Play:
-					ApplyAnimatorsAndExecuteTriggers(animation, previousTime, currentTime, executeTriggersAtCurrentTime: false);
+					ApplyAnimatorsAndExecuteTriggers(
+						animation, previousTime, currentTime, executeTriggersAtCurrentTime: false
+					);
 					break;
 			}
 			marker.CustomAction?.Invoke();
@@ -129,8 +150,9 @@ namespace Lime
 			savedAction?.Invoke();
 		}
 
-		public override void ApplyAnimatorsAndExecuteTriggers(Animation animation, double previousTime, double currentTime, bool executeTriggersAtCurrentTime)
-		{
+		public override void ApplyAnimatorsAndExecuteTriggers(
+			Animation animation, double previousTime, double currentTime, bool executeTriggersAtCurrentTime
+		) {
 			if (!AreEffectiveAnimatorsValid(animation)) {
 				BuildEffectiveAnimators(animation);
 			}
@@ -179,7 +201,7 @@ namespace Lime
 				BuildEffectiveAnimatorsForSimpleAnimation(animation);
 			}
 #if TANGERINE
-			(animation.EffectiveAnimatorsSet ?? (animation.EffectiveAnimatorsSet = new HashSet<IAbstractAnimator>())).Clear();
+			(animation.EffectiveAnimatorsSet ??= new HashSet<IAbstractAnimator>()).Clear();
 			foreach (var animator in animation.EffectiveAnimators) {
 				animation.EffectiveAnimatorsSet.Add(animator);
 			}
@@ -188,8 +210,8 @@ namespace Lime
 
 		private static void BuildEffectiveAnimatorsForCompoundAnimation(Animation animation)
 		{
-			(animation.EffectiveAnimators ?? (animation.EffectiveAnimators = new List<IAbstractAnimator>())).Clear();
-			(animation.EffectiveTriggerableAnimators ?? (animation.EffectiveTriggerableAnimators = new List<IAbstractAnimator>())).Clear();
+			(animation.EffectiveAnimators ??= new List<IAbstractAnimator>()).Clear();
+			(animation.EffectiveTriggerableAnimators ??= new List<IAbstractAnimator>()).Clear();
 #if TANGERINE
 			// Necessary to edit track weights in the inspector.
 			animation.EffectiveAnimatorsVersion++;
@@ -199,7 +221,8 @@ namespace Lime
 				}
 			}
 #endif
-			var animationBindings = new Dictionary<AnimatorBinding, (IAbstractAnimator Animator, AnimationTrack Track)>();
+			var animationBindings =
+				new Dictionary<AnimatorBinding, (IAbstractAnimator Animator, AnimationTrack Track)>();
 			var trackBindings = new Dictionary<AnimatorBinding, IChainedAnimator>();
 			foreach (var track in animation.Tracks) {
 				trackBindings.Clear();
@@ -265,7 +288,8 @@ namespace Lime
 
 			public bool Equals(AnimatorBinding other)
 			{
-				return Animable == other.Animable && TargetPropertyPathComparisonCode == other.TargetPropertyPathComparisonCode;
+				return Animable == other.Animable
+					&& TargetPropertyPathComparisonCode == other.TargetPropertyPathComparisonCode;
 			}
 
 			public override int GetHashCode()
@@ -281,8 +305,8 @@ namespace Lime
 
 		private static void BuildEffectiveAnimatorsForSimpleAnimation(Animation animation)
 		{
-			(animation.EffectiveAnimators ?? (animation.EffectiveAnimators = new List<IAbstractAnimator>())).Clear();
-			(animation.EffectiveTriggerableAnimators ?? (animation.EffectiveTriggerableAnimators = new List<IAbstractAnimator>())).Clear();
+			(animation.EffectiveAnimators ??= new List<IAbstractAnimator>()).Clear();
+			(animation.EffectiveTriggerableAnimators ??= new List<IAbstractAnimator>()).Clear();
 			animation.EffectiveAnimatorsVersion = animation.OwnerNode.DescendantAnimatorsVersion;
 			AddEffectiveAnimatorsRecursively(animation.OwnerNode);
 
@@ -297,7 +321,8 @@ namespace Lime
 			void AddEffectiveAnimatorsRecursively(Node node)
 			{
 				foreach (var child in node.Nodes) {
-					// Optimization: avoid calling Animators.GetEnumerator() for empty collection since it allocates memory
+					// Optimization: avoid calling Animators.GetEnumerator()
+					// for empty collection since it allocates memory
 					if (child.Animators.Count > 0) {
 						foreach (var a in child.Animators) {
 							if (a.AnimationId == animation.Id) {
@@ -330,7 +355,8 @@ namespace Lime
 			void AddZeroPoseAnimatorsRecursively(HashSet<AnimatorBinding> animatorBindings, Node node)
 			{
 				foreach (var child in node.Nodes) {
-					// Optimization: avoid calling Animators.GetEnumerator() for empty collection since it allocates memory
+					// Optimization: avoid calling Animators.GetEnumerator()
+					// for empty collection since it allocates memory
 					if (child.Animators.Count > 0) {
 						foreach (var a in child.Animators) {
 							if (a.AnimationId == Animation.ZeroPoseId) {

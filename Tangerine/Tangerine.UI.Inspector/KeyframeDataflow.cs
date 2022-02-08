@@ -28,7 +28,9 @@ namespace Tangerine.UI.Inspector
 		{
 			IDataflowProvider<R> provider = null;
 			foreach (var obj in context.RootObjects) {
-				var p = new DataflowProvider<IKeyframe>(() => new KeyframeDataflow(obj, context.PropertyPath)).Select(selector);
+				var p = new DataflowProvider<IKeyframe>(
+					() => new KeyframeDataflow(obj, context.PropertyPath)
+				).Select(selector);
 				provider = (provider == null) ? p : provider.SameOrDefault(p);
 			}
 			return provider;
@@ -40,18 +42,18 @@ namespace Tangerine.UI.Inspector
 			if (!(obj is IAnimationHost animationHost)) {
 				return;
 			}
-			if ((GotValue |= Document.Current.AnimationFrame != animationFrame)) {
+			if (GotValue |= Document.Current.AnimationFrame != animationFrame) {
 				animationFrame = Document.Current.AnimationFrame;
 			}
-			if ((GotValue |= Document.Current.Animation != animation)) {
+			if (GotValue |= Document.Current.Animation != animation) {
 				animation = Document.Current.Animation;
 				effectiveAnimatorsVersion = int.MinValue;
 			}
-			if ((GotValue |= effectiveAnimatorsVersion != animation.EffectiveAnimatorsVersion)) {
+			if (GotValue |= effectiveAnimatorsVersion != animation.EffectiveAnimatorsVersion) {
 				effectiveAnimatorsVersion = animation.EffectiveAnimatorsVersion;
 				animator = FindAnimator();
 			}
-			if ((GotValue |= animator != null && animator.ReadonlyKeys.Version != animatorVersion)) {
+			if (GotValue |= animator != null && animator.ReadonlyKeys.Version != animatorVersion) {
 				if (animator != null) {
 					animatorVersion = animator.ReadonlyKeys.Version;
 					Value = FindKeyframe();
@@ -66,7 +68,10 @@ namespace Tangerine.UI.Inspector
 		{
 			var pathComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(propertyPath);
 			foreach (var i in animation.ValidatedEffectiveAnimators) {
-				if (i.TargetPropertyPathComparisonCode == pathComparisonCode && i.Animable.GetAnimationHost() == obj && i is IAnimator a) {
+				if (
+					i.TargetPropertyPathComparisonCode == pathComparisonCode
+					&& i.Animable.GetAnimationHost() == obj && i is IAnimator a
+				) {
 					return a;
 				}
 			}

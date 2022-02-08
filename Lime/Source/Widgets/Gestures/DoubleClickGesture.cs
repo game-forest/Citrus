@@ -5,21 +5,21 @@ namespace Lime
 {
 	public class DoubleClickGesture : Gesture
 	{
-		enum State
+		private enum State
 		{
 			Idle,
 			FirstPress,
 			WaitSecondPress,
-		};
+		}
 
-		private readonly float MaxDelayBetweenClicks =
+		private readonly float maxDelayBetweenClicks =
 #if WIN
 			(float)TimeSpan.FromMilliseconds(System.Windows.Forms.SystemInformation.DoubleClickTime).TotalSeconds;
 #else // WIN
 			0.3f;
 #endif // WIN
 
-		private readonly Vector2 DoubleClickThreshold =
+		private readonly Vector2 doubleClickThreshold =
 #if WIN
 			new Vector2(
 				System.Windows.Forms.SystemInformation.DoubleClickSize.Width,
@@ -56,11 +56,14 @@ namespace Lime
 			: this(0, recognized)
 		{ }
 
-		internal protected override bool OnUpdate()
+		protected internal override bool OnUpdate()
 		{
 			bool result = false;
 
-			if (state != State.Idle && (WidgetContext.Current.GestureManager.AccumulatedDelta - firstPressTime) > MaxDelayBetweenClicks) {
+			if (
+				state != State.Idle
+				&& (WidgetContext.Current.GestureManager.AccumulatedDelta - firstPressTime) > maxDelayBetweenClicks
+			) {
 				state = State.Idle;
 			}
 			if (state == State.Idle && Input.WasMousePressed(ButtonIndex)) {
@@ -84,8 +87,8 @@ namespace Lime
 			bool IsCloseToFirstPressPosition(Vector2 mousePosition)
 			{
 				return new Rectangle(
-					firstPressPosition - DoubleClickThreshold,
-					firstPressPosition + DoubleClickThreshold
+					firstPressPosition - doubleClickThreshold,
+					firstPressPosition + doubleClickThreshold
 				).Contains(mousePosition);
 			}
 		}

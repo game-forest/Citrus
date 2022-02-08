@@ -31,15 +31,15 @@ namespace Tangerine
 							Spacing = 8,
 							ColumnDefaults = {
 								new DefaultLayoutCell(Alignment.RightCenter, 0.5f, 0),
-								new DefaultLayoutCell(Alignment.LeftCenter, 1, 0)
-							}
+								new DefaultLayoutCell(Alignment.LeftCenter, 1, 0),
+							},
 						},
 						Nodes = {
 							new ThemedSimpleText("Ruler name"),
-							(editBox = new ThemedEditBox { MinWidth = 150}),
+							(editBox = new ThemedEditBox { MinWidth = 150 }),
 							new ThemedSimpleText("Anchor to root"),
-							(checkBox = new ThemedCheckBox())
-						}
+							(checkBox = new ThemedCheckBox()),
+						},
 					},
 					new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
@@ -47,9 +47,9 @@ namespace Tangerine
 						Nodes = {
 							(okButton = new ThemedButton("Ok")),
 							(cancelButton = new ThemedButton("Cancel")),
-						}
-					}
-				}
+						},
+					},
+				},
 			};
 			cancelButton.Clicked += window.Close;
 			okButton.AddChangeWatcher(() => editBox.Text, (text) => okButton.Enabled = !string.IsNullOrEmpty(text));
@@ -68,6 +68,5 @@ namespace Tangerine
 			window.ShowModal();
 			return result;
 		}
-
 	}
 }

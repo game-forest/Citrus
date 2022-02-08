@@ -9,8 +9,8 @@ namespace Tangerine.UI.SceneView
 	public class RulerProcessor : ITaskProvider
 	{
 		private const float Threshold = 5f;
-		private static SceneView sceneView => SceneView.Instance;
-		private static Widget container => Document.Current.RootNode.AsWidget;
+		private static SceneView SceneView => SceneView.Instance;
+		private static Widget Container => Document.Current.RootNode.AsWidget;
 		private static Ruler Ruler => ProjectUserPreferences.Instance.ActiveRuler;
 
 		public IEnumerator<object> Task()
@@ -18,13 +18,12 @@ namespace Tangerine.UI.SceneView
 			while (true) {
 				if (ProjectUserPreferences.Instance.RulerVisible &&
 					!Document.Current.PreviewScene &&
-					sceneView.Frame.ParentWidget.IsMouseOverThisOrDescendant()
-				) {
+					SceneView.Frame.ParentWidget.IsMouseOverThisOrDescendant()) {
 					RulerLine line;
 					bool lineCaptured;
 					Func<bool> isHovered = null;
 					var hulls = Document.Current.Container.Nodes.OfType<Widget>().Editable()
-						.Select(w => w.CalcHullInSpaceOf(container)).ToList();
+						.Select(w => w.CalcHullInSpaceOf(Container)).ToList();
 					if (lineCaptured = SceneView.Instance.Components.Contains<CreateLineRequestComponent>()) {
 						var comp = SceneView.Instance.Components.Get<CreateLineRequestComponent>();
 						line = new RulerLine(Vector2.Zero, comp.Orientation);
@@ -38,8 +37,12 @@ namespace Tangerine.UI.SceneView
 						line = GetLineUnderMouse();
 					}
 					if (line != null) {
-						Utils.ChangeCursorIfDefault(line.RulerOrientation == RulerOrientation.Horizontal ? MouseCursor.SizeNS : MouseCursor.SizeWE);
-						if (sceneView.Input.ConsumeKeyPress(Key.Mouse0) || lineCaptured) {
+						Utils.ChangeCursorIfDefault(
+							line.RulerOrientation == RulerOrientation.Horizontal
+								? MouseCursor.SizeNS
+								: MouseCursor.SizeWE
+						);
+						if (SceneView.Input.ConsumeKeyPress(Key.Mouse0) || lineCaptured) {
 							Window.Current.Invalidate();
 							using (Document.Current.History.BeginTransaction()) {
 								if (Ruler.ContainsLine(line)) {
@@ -52,7 +55,9 @@ namespace Tangerine.UI.SceneView
 									yield return null;
 								}
 								if (isHovered == null || !isHovered()) {
-									Core.Operations.CreateRuler.Perform(ProjectUserPreferences.Instance.ActiveRuler, line = line.Clone());
+									Core.Operations.CreateRuler.Perform(
+										ProjectUserPreferences.Instance.ActiveRuler, line = line.Clone()
+									);
 									Document.Current.History.CommitTransaction();
 								}
 							}
@@ -79,7 +84,7 @@ namespace Tangerine.UI.SceneView
 			var step = 1f;
 			var rootMatrix = Document.Current.RootNode.AsWidget.CalcLocalToParentTransform().CalcInversed();
 			var mousePos = SceneView.Instance.Scene.LocalMousePosition() * rootMatrix;
-			if (!sceneView.Input.IsKeyPressed(Key.Shift)) {
+			if (!SceneView.Input.IsKeyPressed(Key.Shift)) {
 				step = (float)Math.Truncate(RulersWidget.CalculateEffectiveStep()) / RulersWidget.Tesselation;
 			}
 			var curValue = new Vector2(Utils.RoundTo(mousePos.X, step), Utils.RoundTo(mousePos.Y, step));
@@ -88,8 +93,11 @@ namespace Tangerine.UI.SceneView
 				var mask = line.RulerOrientation.GetDirection();
 				foreach (var hull in hulls) {
 					for (int i = 0; i < 4; i++) {
-						if (((hull[i] - mousePos) * mask).Length < ((mousePos - curValue) * mask).Length &&
-							!IsRulerContainLine(line.RulerOrientation.GetComponentFor(hull[i]), line.RulerOrientation)
+						if (
+							((hull[i] - mousePos) * mask).Length < ((mousePos - curValue) * mask).Length
+							&& !IsRulerContainLine(
+								line.RulerOrientation.GetComponentFor(hull[i]), line.RulerOrientation
+							)
 						) {
 							line.MakePassingThroughPoint(hull[i]);
 							Window.Current.Invalidate();
@@ -112,7 +120,7 @@ namespace Tangerine.UI.SceneView
 			return ProjectUserPreferences.Instance.ActiveRuler.Lines.FirstOrDefault(line => {
 				var mask = line.RulerOrientation.GetDirection();
 				var origin = line.GetClosestPointToOrigin();
-				return ((origin - pos) * mask).Length <= Threshold / sceneView.Scene.Scale.X;
+				return ((origin - pos) * mask).Length <= Threshold / SceneView.Scene.Scale.X;
 			});
 		}
 	}

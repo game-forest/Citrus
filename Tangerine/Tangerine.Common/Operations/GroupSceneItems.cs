@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tangerine.Core.Operations;
+using Lime;
 using Tangerine.Core;
+using Tangerine.Core.Operations;
 using Tangerine.UI;
 
 namespace Tangerine.Common.Operations
@@ -174,8 +174,9 @@ namespace Tangerine.Common.Operations
 			}
 		}
 
-		private static BoneAnimationData EvaluateBoneAnimationUsingParent(Bone node, Func<Vector2, Vector2> positionTransformer)
-		{
+		private static BoneAnimationData EvaluateBoneAnimationUsingParent(
+			Bone node, Func<Vector2, Vector2> positionTransformer
+		) {
 			var boneChain = new List<Bone>();
 			var parentNode = node.Parent.AsWidget;
 			var parentBone = node;
@@ -184,7 +185,7 @@ namespace Tangerine.Common.Operations
 				if (parentBone != null) {
 					boneChain.Insert(0, parentBone);
 				}
-			};
+			}
 			var data = new BoneAnimationData();
 			var framesDict = new Dictionary<string, SortedSet<int>>();
 			foreach (var bone in boneChain) {
@@ -220,12 +221,12 @@ namespace Tangerine.Common.Operations
 					data.PositionKeyframes.Add(frame, new Keyframe<Vector2> {
 						Frame = frame,
 						Function = KeyFunction.Spline,
-						Value = positionTransformer(GetBonePositionInSpaceOfParent(node))
+						Value = positionTransformer(GetBonePositionInSpaceOfParent(node)),
 					});
 					data.RotationKeyframes.Add(frame, new Keyframe<float> {
 						Frame = frame,
 						Function = KeyFunction.Spline,
-						Value = GetBoneRotationInSpaceOfParent(node)
+						Value = GetBoneRotationInSpaceOfParent(node),
 					});
 				}
 			}
@@ -240,7 +241,8 @@ namespace Tangerine.Common.Operations
 							}
 							data.PositionKeyframes[key.Frame].Frame = key.Frame;
 							data.PositionKeyframes[key.Frame].Function = key.Function;
-							data.PositionKeyframes[key.Frame].Value = positionTransformer(GetBonePositionInSpaceOfParent(node));
+							data.PositionKeyframes[key.Frame].Value =
+								positionTransformer(GetBonePositionInSpaceOfParent(node));
 							break;
 						case nameof(Bone.Rotation):
 							if (!data.RotationKeyframes.ContainsKey(key.Frame)) {
@@ -280,11 +282,15 @@ namespace Tangerine.Common.Operations
 			}
 		}
 
-		public static bool IsValidNode(Node node) => (node is Widget) || (node is Bone) || (node is Audio) || (node is ImageCombiner);
+		public static bool IsValidNode(Node node)
+		{
+			return (node is Widget) || (node is Bone) || (node is Audio) || (node is ImageCombiner);
+		}
 
 		private class BoneAnimationData
 		{
-			public readonly Dictionary<int, Keyframe<Vector2>> PositionKeyframes = new Dictionary<int, Keyframe<Vector2>>();
+			public readonly Dictionary<int, Keyframe<Vector2>> PositionKeyframes =
+				new Dictionary<int, Keyframe<Vector2>>();
 			public readonly Dictionary<int, Keyframe<float>> RotationKeyframes = new Dictionary<int, Keyframe<float>>();
 			public Vector2 CurrentPosition { get; set; }
 			public float CurrentRotation { get; set; }

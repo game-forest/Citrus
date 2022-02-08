@@ -1,12 +1,12 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using McMaster.Extensions.CommandLineUtils;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using McMaster.Extensions.CommandLineUtils;
 using Octokit;
 using Orange;
 using FileMode = System.IO.FileMode;
-using System.Runtime.CompilerServices;
 #if WIN
 using System.Runtime.InteropServices;
 #elif MAC
@@ -17,12 +17,13 @@ namespace Orange
 {
 	public class UserInterface
 	{
-		public void ProcessPendingEvents() { }
+		public void ProcessPendingEvents()
+		{ }
 		public static UserInterface Instance = new UserInterface();
 	}
 	public static class The
 	{
-		public static UserInterface UI { get { return UserInterface.Instance; } }
+		public static UserInterface UI => UserInterface.Instance;
 	}
 }
 
@@ -43,20 +44,20 @@ namespace Launcher
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		public struct STARTUPINFO
 		{
-			public Int32 cb;
+			public int cb;
 			public string lpReserved;
 			public string lpDesktop;
 			public string lpTitle;
-			public Int32 dwX;
-			public Int32 dwY;
-			public Int32 dwXSize;
-			public Int32 dwYSize;
-			public Int32 dwXCountChars;
-			public Int32 dwYCountChars;
-			public Int32 dwFillAttribute;
-			public Int32 dwFlags;
-			public Int16 wShowWindow;
-			public Int16 cbReserved2;
+			public int dwX;
+			public int dwY;
+			public int dwXSize;
+			public int dwYSize;
+			public int dwXCountChars;
+			public int dwYCountChars;
+			public int dwFillAttribute;
+			public int dwFlags;
+			public short wShowWindow;
+			public short cbReserved2;
 			public IntPtr lpReserved2;
 			public IntPtr hStdInput;
 			public IntPtr hStdOutput;
@@ -66,9 +67,9 @@ namespace Launcher
 		[DllImport("kernel32.dll", SetLastError = true)]
 		private static extern IntPtr GetStdHandle(StandardHandle nStdHandle);
 		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-		static extern IntPtr GetCommandLineW();
+		private static extern IntPtr GetCommandLineW();
 		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-		static extern bool CreateProcessW(
+		private static extern bool CreateProcessW(
 			IntPtr lpApplicationName,
 			IntPtr lpCommandLine,
 			IntPtr lpProcessAttributes,
@@ -78,30 +79,32 @@ namespace Launcher
 			IntPtr lpEnvironment,
 			IntPtr lpCurrentDirectory,
 			[In] ref STARTUPINFO lpStartupInfo,
-			out PROCESS_INFORMATION lpProcessInformation);
+			out PROCESS_INFORMATION lpProcessInformation
+		);
 
-
-		const int SW_HIDE = 0;
-		const int SW_SHOW = 5;
+		private const int SW_HIDE = 0;
+		private const int SW_SHOW = 5;
 
 		private enum StandardHandle : uint
 		{
 			Input = unchecked((uint)-10),
 			Output = unchecked((uint)-11),
-			Error = unchecked((uint)-12)
+			Error = unchecked((uint)-12),
 		}
 
-		const int STARTF_USESHOWWINDOW = 0x00000001;
-		const int STARTF_USESIZE = 0x00000002;
-		const int STARTF_USEPOSITION = 0x00000004;
-		const int STARTF_USECOUNTCHARS = 0x00000008;
-		const int STARTF_USEFILLATTRIBUTE = 0x00000010;
-		const int STARTF_RUNFULLSCREEN = 0x00000020;  // ignored for non-x86 platforms
-		const int STARTF_FORCEONFEEDBACK = 0x00000040;
-		const int STARTF_FORCEOFFFEEDBACK = 0x00000080;
-		const int STARTF_USESTDHANDLES = 0x00000100;
+		private const int STARTF_USESHOWWINDOW = 0x00000001;
+		private const int STARTF_USESIZE = 0x00000002;
+		private const int STARTF_USEPOSITION = 0x00000004;
+		private const int STARTF_USECOUNTCHARS = 0x00000008;
+		private const int STARTF_USEFILLATTRIBUTE = 0x00000010;
+		private const int STARTF_RUNFULLSCREEN = 0x00000020;  // ignored for non-x86 platforms
+		private const int STARTF_FORCEONFEEDBACK = 0x00000040;
+		private const int STARTF_FORCEOFFFEEDBACK = 0x00000080;
+		private const int STARTF_USESTDHANDLES = 0x00000100;
 
+#pragma warning disable SA1306 // Field names should begin with lower-case letter
 		private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+#pragma warning restore SA1306 // Field names should begin with lower-case letter
 #endif // WIN
 
 		private static Builder orangeBuilder;
@@ -112,7 +115,7 @@ namespace Launcher
 #elif MAC
 			Path.Combine(citrusDirectory, "Orange", "Orange.Mac.sln");
 #endif // WIN
-		private static string OrangeExecutablePath;
+		private static string orangeExecutablePath;
 		private static string citrusDirectory;
 		private static string platformSuffix =
 #if WIN
@@ -127,8 +130,10 @@ namespace Launcher
 		{
 			var originalArgs = args;
 			citrusDirectory = Toolbox.FindCitrusDirectory();
-			var orangeExecutablePathFile = Path.Combine(citrusDirectory, "Orange", "Launcher", $"orange_executable.{platformSuffix}.txt");
-			OrangeExecutablePath = Path.Combine(citrusDirectory, File.ReadLines(orangeExecutablePathFile).First());
+			var orangeExecutablePathFile = Path.Combine(
+				citrusDirectory, "Orange", "Launcher", $"orange_executable.{platformSuffix}.txt"
+			);
+			orangeExecutablePath = Path.Combine(citrusDirectory, File.ReadLines(orangeExecutablePathFile).First());
 #if MAC
 			args = args.Where(s => !s.StartsWith("-psn")).ToArray();
 			// Workaround see LauncherConsole.
@@ -140,23 +145,48 @@ namespace Launcher
 			cli.Description = "Orange Launcher";
 			cli.HelpOption("-h --help");
 			var optionConsole = cli.Option<bool>("-c --console", "Console mode.", CommandOptionType.NoValue);
-			var optionJustBuild = cli.Option<bool>("-j --justbuild", "Build project without running executable.", CommandOptionType.NoValue);
-			var optionBuildProjectPath = cli.Option<string>("-b --build <PROJECT_PATH>", "Project path, default: \"Orange/Orange.%Platform%.sln\".", CommandOptionType.SingleValue);
-			var optionExecutablePath = cli.Option<string>("-r --run <EXECUTABLE_PATH>", "Executable path, default: \"Orange/bin/%Platform%/Release/%PlatformExecutable%\".", CommandOptionType.SingleValue);
-			var optionRunArgs = cli.Option<string>("-a --runargs <ARGUMENTS>", "Args to pass to executable.", CommandOptionType.SingleValue);
+			var optionJustBuild = cli.Option<bool>(
+				"-j --justbuild", "Build project without running executable.", CommandOptionType.NoValue
+			);
+			var optionBuildProjectPath = cli.Option<string>(
+				"-b --build <PROJECT_PATH>",
+				"Project path, default: \"Orange/Orange.%Platform%.sln\".",
+				CommandOptionType.SingleValue
+			);
+			var optionExecutablePath = cli.Option<string>(
+				"-r --run <EXECUTABLE_PATH>",
+				"Executable path, default: \"Orange/bin/%Platform%/Release/%PlatformExecutable%\".",
+				CommandOptionType.SingleValue
+			);
+			var optionRunArgs = cli.Option<string>(
+				"-a --runargs <ARGUMENTS>", "Args to pass to executable.", CommandOptionType.SingleValue
+				);
 
 			cli.Command("release", (releaseCommand) => {
 				releaseCommand.HelpOption("-h --help");
 				releaseCommand.Description = "Release provided Citrus bundle on github.";
-				var githubUserOption = releaseCommand.Option<string>("-u --user <GITHUB_USER_NAME>", "github user name", CommandOptionType.SingleValue);
+				var githubUserOption = releaseCommand.Option<string>(
+					"-u --user <GITHUB_USER_NAME>", "github user name", CommandOptionType.SingleValue
+				);
 				githubUserOption.IsRequired();
-				var githubPasswordOption = releaseCommand.Option<string>("-p --password <GITHUB_PASSWORD>", "github password", CommandOptionType.SingleValue);
+				var githubPasswordOption = releaseCommand.Option<string>(
+					"-p --password <GITHUB_PASSWORD>", "github password", CommandOptionType.SingleValue);
 				githubPasswordOption.IsRequired();
-				var winBundlePath = releaseCommand.Option<string>("-w --win-bundle <WINDOWS_BUNDLE_PATH>", "Path to windows bundle of Citrus.", CommandOptionType.SingleValue);
+				var winBundlePath = releaseCommand.Option<string>(
+					"-w --win-bundle <WINDOWS_BUNDLE_PATH>",
+					"Path to windows bundle of Citrus.",
+					CommandOptionType.SingleValue
+				);
 				winBundlePath.IsRequired();
-				var macBundlePath = releaseCommand.Option<string>("-m --mac-bundle <MAC_BUNDLE_PATH>", "Path to MAC OS bundle of Citrus.", CommandOptionType.SingleValue);
+				var macBundlePath = releaseCommand.Option<string>(
+					"-m --mac-bundle <MAC_BUNDLE_PATH>",
+					"Path to MAC OS bundle of Citrus.",
+					CommandOptionType.SingleValue
+				);
 				macBundlePath.IsRequired();
-				var buildNumberOption = releaseCommand.Option<string>("-n --build-number <BUILD_NUMBER>", "Build number.", CommandOptionType.SingleValue);
+				var buildNumberOption = releaseCommand.Option<string>(
+					"-n --build-number <BUILD_NUMBER>", "Build number.", CommandOptionType.SingleValue
+				);
 				buildNumberOption.IsRequired();
 				releaseCommand.OnExecute(async () => {
 #if MAC
@@ -190,7 +220,7 @@ namespace Launcher
 					var result = await client.Repository.Release.Create("mrojkov", "Citrus", release);
 					Console.WriteLine("Created release id {0}", result.Id);
 					// TODO: abort upload if nothing changed
-					//var releases = await client.Repository.Release.GetAll("mrojkov", "Citrus");
+					// var releases = await client.Repository.Release.GetAll("mrojkov", "Citrus");
 					var latest = result;
 					var archiveContents = File.OpenRead(Path.Combine(citrusDirectory, winBundlePath.ParsedValue));
 					var assetUpload = new ReleaseAssetUpload() {
@@ -216,9 +246,22 @@ namespace Launcher
 			cli.Command("bundle", (bundleCommand) => {
 				bundleCommand.HelpOption("-h --help");
 				bundleCommand.Description = "Build Tangerine, Orange and bundle them together into zip.";
-				var tempOption = bundleCommand.Option<string>("-t --temp-directory <DIRECTORY_PATH>", "Temporary directory. If specified path is not full it becomes relative to Citrus directory.", CommandOptionType.SingleValue);
-				var outputOption = bundleCommand.Option<string>("-o --output <OUTPUT_PATH>", "Output path including bundle name (e.g. bundle_win.zip). If specified path is not full it becomes relative to Citrus directory.", CommandOptionType.SingleValue);
-				var buildNumberOption = bundleCommand.Option<string>("-n --build-number <BUILD_NUMBER>", "Build number.", CommandOptionType.SingleValue);
+				var tempOption = bundleCommand.Option<string>(
+					"-t --temp-directory <DIRECTORY_PATH>",
+					"Temporary directory. If specified path is not full it becomes relative to Citrus directory.",
+					CommandOptionType.SingleValue
+				);
+				var outputOption = bundleCommand.Option<string>(
+					"-o --output <OUTPUT_PATH>",
+					"Output path including bundle name (e.g. bundle_win.zip). "
+						+ "If specified path is not full it becomes relative to Citrus directory.",
+					CommandOptionType.SingleValue
+				);
+				var buildNumberOption = bundleCommand.Option<string>(
+					"-n --build-number <BUILD_NUMBER>",
+					"Build number.",
+					CommandOptionType.SingleValue
+				);
 				buildNumberOption.IsRequired();
 				bundleCommand.OnExecute(() => {
 #if MAC
@@ -227,7 +270,7 @@ namespace Launcher
 					orangeBuilder = new Builder(citrusDirectory) {
 						NeedRunExecutable = false,
 						SolutionPath = OrangeSolutionPath,
-						ExecutablePath = OrangeExecutablePath,
+						ExecutablePath = orangeExecutablePath,
 					};
 					orangeBuilder.OnBuildStatusChange += Console.WriteLine;
 					orangeBuilder.OnBuildFail += () => Environment.Exit(1);
@@ -238,7 +281,7 @@ namespace Launcher
 #elif MAC
 						SolutionPath = Path.Combine(citrusDirectory, "Tangerine", "Tangerine.Mac.sln"),
 #endif // WIN
-						NeedRunExecutable = false
+						NeedRunExecutable = false,
 					};
 					tangerineBuilder.OnBuildStatusChange += Console.WriteLine;
 					tangerineBuilder.OnBuildFail += () => Environment.Exit(1);
@@ -248,8 +291,9 @@ namespace Launcher
 					var orangeFiles = new FileEnumerator(orangeBinDir);
 					var tangerineFiles = new FileEnumerator(tangerineBinDir);
 
-
-					var tempPath = tempOption.HasValue() ? tempOption.ParsedValue : Path.Combine(citrusDirectory, "launcher_temp");
+					var tempPath = tempOption.HasValue()
+						? tempOption.ParsedValue
+						: Path.Combine(citrusDirectory, "launcher_temp");
 					var outputPath = outputOption.HasValue()
 						? Path.Combine(citrusDirectory, outputOption.ParsedValue)
 						: Path.Combine(citrusDirectory, "launcher_output", $"bundle_{platformSuffix}.zip");
@@ -301,13 +345,21 @@ namespace Launcher
 					process.WaitForExit();
 #endif // WIN
 					CitrusVersion citrusVersion = null;
-					using (var stream = File.Open(Path.Combine(citrusDirectory, Orange.CitrusVersion.Filename), FileMode.Open)) {
-						citrusVersion =	 CitrusVersion.Load(stream);
+					using (
+						var stream = File.Open(
+							Path.Combine(citrusDirectory, Orange.CitrusVersion.Filename), FileMode.Open
+						)
+					) {
+						citrusVersion = CitrusVersion.Load(stream);
 						citrusVersion.IsStandalone = true;
 						citrusVersion.BuildNumber = buildNumberOption.ParsedValue;
 						// TODO: fill in checksums for each file?
 					}
-					using (var stream = File.Open(Path.Combine(tempPath, Orange.CitrusVersion.Filename), FileMode.CreateNew)) {
+					using (
+						var stream = File.Open(
+							Path.Combine(tempPath, Orange.CitrusVersion.Filename), FileMode.CreateNew
+						)
+					) {
 						CitrusVersion.Save(citrusVersion, stream);
 					}
 					Console.WriteLine($"Begin zipping archive.");
@@ -345,22 +397,24 @@ namespace Launcher
 					si.hStdOutput = INVALID_HANDLE_VALUE;
 					si.hStdInput = INVALID_HANDLE_VALUE;
 					si.hStdError = INVALID_HANDLE_VALUE;
-					CreateProcessW(IntPtr.Zero,
-						GetCommandLineW(),
-						IntPtr.Zero,
-						IntPtr.Zero,
-						true,
-						0x00000008, // DETACHED_PROCESS
-						IntPtr.Zero,
-						IntPtr.Zero,
-						ref si,
-						out pi
+					CreateProcessW(
+						lpApplicationName: IntPtr.Zero,
+						lpCommandLine: GetCommandLineW(),
+						lpProcessAttributes: IntPtr.Zero,
+						lpThreadAttributes: IntPtr.Zero,
+						bInheritHandles: true,
+						// DETACHED_PROCESS
+						dwCreationFlags: 0x00000008,
+						lpEnvironment: IntPtr.Zero,
+						lpCurrentDirectory: IntPtr.Zero,
+						lpStartupInfo: ref si,
+						lpProcessInformation: out pi
 					);
 					return 0;
 				}
 #endif // WIN
 				string solutionPath = OrangeSolutionPath;
-				string executablePath = OrangeExecutablePath;
+				string executablePath = orangeExecutablePath;
 				if (optionBuildProjectPath.HasValue()) {
 					solutionPath = Path.Combine(citrusDirectory, optionBuildProjectPath.ParsedValue);
 				}
@@ -371,7 +425,7 @@ namespace Launcher
 					NeedRunExecutable = !optionJustBuild.HasValue(),
 					SolutionPath = solutionPath,
 					ExecutablePath = executablePath,
-					ExecutableArgs = optionRunArgs.ParsedValue
+					ExecutableArgs = optionRunArgs.ParsedValue,
 				};
 
 				if (optionConsole.HasValue()) {

@@ -52,7 +52,7 @@ namespace Lime
 			var segmentCount = GetSegmentCount();
 			for (int i = 0; i < segmentCount; i++) {
 				for (int j = 1; j < approximateCount; j++) {
-					Vector2 position = Interpolate(GetPoint(i), GetPoint(i + 1), (float)(j) / approximateCount);
+					Vector2 position = Interpolate(GetPoint(i), GetPoint(i + 1), (float)j / approximateCount);
 					result.Add(position);
 				}
 				result.Add(GetPoint(i + 1).Position);
@@ -65,7 +65,7 @@ namespace Lime
 			float length = 0;
 			Vector2 prevPosition = point1.Position * Size;
 			for (int i = 1; i < approximateCount; i++) {
-				Vector2 curPosition = Interpolate(point1, point2, (float)(i) / approximateCount);
+				Vector2 curPosition = Interpolate(point1, point2, (float)i / approximateCount);
 				length += (curPosition - prevPosition).Length;
 				prevPosition = curPosition;
 			}
@@ -87,7 +87,7 @@ namespace Lime
 		}
 
 		// https://pomax.github.io/bezierinfo/legendre-gauss.html
-		private static List<Vector2> GaussLegendreCoefficients = new List<Vector2> {
+		private static List<Vector2> gaussLegendreCoefficients = new List<Vector2> {
 			new Vector2(0.0f, 0.5688889f),
 			new Vector2(-0.5384693f, 0.47862867f),
 			new Vector2(0.5384693f, 0.47862867f),
@@ -108,7 +108,7 @@ namespace Lime
 		private float CalcSegmentLengthUsingGaussLegendreQuadrature(SplinePoint p0, SplinePoint p1, float param = 1.0f)
 		{
 			float length = 0.0f;
-			foreach (var glc in GaussLegendreCoefficients) {
+			foreach (var glc in gaussLegendreCoefficients) {
 				length += InterpolateDerivative(p0, p1, param * 0.5f * (1.0f + glc.X)).Length * glc.Y;
 			}
 			return length * 0.5f * param;
@@ -171,8 +171,9 @@ namespace Lime
 			for (int i = 0; i < segmentCount; i++) {
 				var start = GetPoint(i);
 				var end = GetPoint(i + 1);
-				if (polylineLengthFromBeginning < 0)
+				if (polylineLengthFromBeginning < 0) {
 					return start.Position * Size;
+				}
 
 				float segLength = ((end.Position - start.Position) * Size).Length;
 				if (
@@ -195,8 +196,9 @@ namespace Lime
 			for (int i = 0; i < segmentCount; i++) {
 				var start = GetPoint(i);
 				var end = GetPoint(i + 1);
-				if (polylineLengthFromBeginning < 0)
+				if (polylineLengthFromBeginning < 0) {
 					return start.Position * Size;
+				}
 
 				float segLength = ((end.Position - start.Position) * Size).Length;
 				if (
@@ -229,7 +231,7 @@ namespace Lime
 				segStart += segLength;
 			}
 			if (Nodes.Count > 0) {
-				yield return GetPoint(segmentCount % Nodes.Count).Position* Size;
+				yield return GetPoint(segmentCount % Nodes.Count).Position * Size;
 			}
 		}
 
@@ -245,7 +247,7 @@ namespace Lime
 				Vector2 t2 = Vector2.CosSinRough(ta2);
 				t1 *= len * v1.TangentWeight;
 				t2 *= len * v2.TangentWeight;
-				return Mathf.HermiteSpline( t, p1, t1, p2, t2 );
+				return Mathf.HermiteSpline(t, p1, t1, p2, t2);
 			} else {
 				Vector2 p1 = v1.Position * Size;
 				Vector2 p2 = v2.Position * Size;
@@ -296,18 +298,19 @@ namespace Lime
 			return offset;
 		}
 
-		private bool CalcSplineLengthToNearestPointHelper(SplinePoint v1, SplinePoint v2, Vector2 point, out float minDistance, out float offset)
-		{
+		private bool CalcSplineLengthToNearestPointHelper(
+			SplinePoint v1, SplinePoint v2, Vector2 point, out float minDistance, out float offset
+		) {
 			const int InnerSegmentCount = 10;
 			float ta = 0;
-			Vector2 a = Interpolate( v1, v2, ta );
+			Vector2 a = Interpolate(v1, v2, ta);
 			minDistance = float.MaxValue;
 			offset = 0;
 			for (int i = 0; i < InnerSegmentCount; ++i) {
 				float tb = (float)(i + 1) / InnerSegmentCount;
 				Vector2 b = Interpolate(v1, v2, tb);
 				float minDistance_, offset_;
-				if (ProjectPointToLine(a, b, point, out minDistance_, out offset_ )) {
+				if (ProjectPointToLine(a, b, point, out minDistance_, out offset_)) {
 					if (minDistance_ < minDistance) {
 						offset = offset_ * (tb - ta) + ta;
 						minDistance = minDistance_;

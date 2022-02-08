@@ -25,7 +25,8 @@ namespace Lime
 		public static float Min(float x, float y) => (x < y) ? x : y;
 
 		/// <summary>
-		/// Returns absolute value of <paramref name="v"/>. Equals to -<paramref name="v"/> if <paramref name="v"/> less than 0 or <paramref name="v"/> otherwise.
+		/// Returns absolute value of <paramref name="v"/>. Equals to -<paramref name="v"/> if <paramref name="v"/>
+		/// less than 0 or <paramref name="v"/> otherwise.
 		/// </summary>
 		/// <param name="v"></param>
 		/// <returns></returns>
@@ -107,7 +108,7 @@ namespace Lime
 		public static int Wrap(int x, int lowerBound, int upperBound)
 		{
 			int range = upperBound - lowerBound + 1;
-			x = ((x - lowerBound) % range);
+			x = (x - lowerBound) % range;
 			return x < 0 ? upperBound + 1 + x : lowerBound + x;
 		}
 
@@ -167,9 +168,15 @@ namespace Lime
 		/// <param name="max">The exclusive upper bound of the random number returned.</param>
 		/// <returns>A single-precision floating point number that is greater than or equal to min,
 		/// and less than max.</returns>
-		public static float RandomFloat(this System.Random rng, float min, float max) => rng.RandomFloat() * (max - min) + min;
+		public static float RandomFloat(this System.Random rng, float min, float max)
+		{
+			return rng.RandomFloat() * (max - min) + min;
+		}
 
-		public static double RandomDouble(this System.Random rng, double min, double max) => rng.NextDouble() * (max - min) + min;
+		public static double RandomDouble(this System.Random rng, double min, double max)
+		{
+			return rng.NextDouble() * (max - min) + min;
+		}
 
 		public static float CalcDistanceToSegment(Vector2 start, Vector2 end, Vector2 point)
 		{
@@ -222,7 +229,10 @@ namespace Lime
 		/// If max equals min or (min - 1), min is returned.</returns>
 		public static int RandomInt(int min, int max) => RandomGenerator.RandomInt(min, max);
 
-		public static T RandomOf<T>(this System.Random rng, params T[] objects) => objects[rng.RandomInt(objects.Length)];
+		public static T RandomOf<T>(this System.Random rng, params T[] objects)
+		{
+			return objects[rng.RandomInt(objects.Length)];
+		}
 
 		public static T RandomOf<T>(params T[] objects) => RandomGenerator.RandomOf(objects);
 
@@ -238,8 +248,10 @@ namespace Lime
 
 		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng = null)
 		{
-			if (rng == null)
+			if (rng == null) {
 				rng = RandomGenerator;
+			}
+
 			var elements = source.ToArray();
 			for (int i = elements.Length; i > 0; i--) {
 				int j = rng.Next(i);
@@ -300,41 +312,71 @@ namespace Lime
 				Sin(2.0f * Pi * rng.RandomFloat());
 		}
 
-		public static float NormalRandom(float median, float dispersion) => RandomGenerator.NormalRandom(median, dispersion);
+		public static float NormalRandom(float median, float dispersion)
+		{
+			return RandomGenerator.NormalRandom(median, dispersion);
+		}
 
-		public static float UniformRandom(this System.Random rng, float median, float dispersion) => median + (rng.RandomFloat() - 0.5f) * dispersion;
+		public static float UniformRandom(this System.Random rng, float median, float dispersion)
+		{
+			return median + (rng.RandomFloat() - 0.5f) * dispersion;
+		}
 
-		public static float UniformRandom(float median, float dispersion) => RandomGenerator.UniformRandom(median, dispersion);
+		public static float UniformRandom(float median, float dispersion)
+		{
+			return RandomGenerator.UniformRandom(median, dispersion);
+		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool InRange(float x, float upper, float lower) => lower <= x && x <= upper;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Clamp(float value, float min, float max) => (value < min) ? min : (value > max ? max : value);
+		public static float Clamp(float value, float min, float max)
+		{
+			return (value < min) ? min : (value > max ? max : value);
+		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int Clamp(int value, int min, int max) => (value < min) ? min : (value > max ? max : value);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double Clamp(double value, double min, double max) => (value < min) ? min : (value > max ? max : value);
+		public static double Clamp(double value, double min, double max)
+		{
+			return (value < min) ? min : (value > max ? max : value);
+		}
 
-		public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max) => new Vector2(
-			Clamp(value.X, min.X, max.X),
-			Clamp(value.Y, min.Y, max.Y)
-		);
+		public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
+		{
+			return new Vector2(
+				Clamp(value.X, min.X, max.X),
+				Clamp(value.Y, min.Y, max.Y)
+			);
+		}
 
-		public static Vector2 HermiteSpline(float t, Vector2 p0, Vector2 m0, Vector2 p1, Vector2 m1) => new Vector2(
-			HermiteSpline(t, p0.X, m0.X, p1.X, m1.X),
-			HermiteSpline(t, p0.Y, m0.Y, p1.Y, m1.Y));
+		public static Vector2 HermiteSpline(float t, Vector2 p0, Vector2 m0, Vector2 p1, Vector2 m1)
+		{
+			return new Vector2(
+				HermiteSpline(t, p0.X, m0.X, p1.X, m1.X),
+				HermiteSpline(t, p0.Y, m0.Y, p1.Y, m1.Y)
+			);
+		}
 
-		public static Vector2 HermiteSplineDerivative(float t, Vector2 p0, Vector2 m0, Vector2 p1, Vector2 m1) => new Vector2(
-			HermiteSplineDerivative(t, p0.X, m0.X, p1.X, m1.X),
-			HermiteSplineDerivative(t, p0.Y, m0.Y, p1.Y, m1.Y));
+		public static Vector2 HermiteSplineDerivative(float t, Vector2 p0, Vector2 m0, Vector2 p1, Vector2 m1)
+		{
+			return new Vector2(
+				HermiteSplineDerivative(t, p0.X, m0.X, p1.X, m1.X),
+				HermiteSplineDerivative(t, p0.Y, m0.Y, p1.Y, m1.Y)
+			);
+		}
 
-		public static Vector3 HermiteSpline(float t, Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1) => new Vector3(
-			HermiteSpline(t, p0.X, m0.X, p1.X, m1.X),
-			HermiteSpline(t, p0.Y, m0.Y, p1.Y, m1.Y),
-			HermiteSpline(t, p0.Z, m0.Z, p1.Z, m1.Z));
+		public static Vector3 HermiteSpline(float t, Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1)
+		{
+			return new Vector3(
+				HermiteSpline(t, p0.X, m0.X, p1.X, m1.X),
+				HermiteSpline(t, p0.Y, m0.Y, p1.Y, m1.Y),
+				HermiteSpline(t, p0.Z, m0.Z, p1.Z, m1.Z)
+			);
+		}
 
 		public static float HermiteSpline(float t, float p0, float m0, float p1, float m1)
 		{
@@ -347,43 +389,56 @@ namespace Lime
 		public static float HermiteSplineDerivative(float t, float p0, float m0, float p1, float m1)
 		{
 			float t2 = t * t;
-			return (6 * t2 - 6 * t) * p0 +
-				(3 * t2 - 4 * t + 1) * m0 +
-				(-6 * t2 + 6 * t) * p1 +
-				(3 * t2 - 2 * t) * m1;
+			return (6 * t2 - 6 * t) * p0
+				+ (3 * t2 - 4 * t + 1) * m0
+				+ (-6 * t2 + 6 * t) * p1
+				+ (3 * t2 - 2 * t) * m1;
 		}
 
-		public static Vector2 CatmullRomSpline(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3) => new Vector2(
-			CatmullRomSpline(t, p0.X, p1.X, p2.X, p3.X),
-			CatmullRomSpline(t, p0.Y, p1.Y, p2.Y, p3.Y)
-		);
+		public static Vector2 CatmullRomSpline(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+		{
+			return new Vector2(
+				CatmullRomSpline(t, p0.X, p1.X, p2.X, p3.X),
+				CatmullRomSpline(t, p0.Y, p1.Y, p2.Y, p3.Y)
+			);
+		}
 
-		public static Vector3 CatmullRomSpline(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) => new Vector3(
-			CatmullRomSpline(t, p0.X, p1.X, p2.X, p3.X),
-			CatmullRomSpline(t, p0.Y, p1.Y, p2.Y, p3.Y),
-			CatmullRomSpline(t, p0.Z, p1.Z, p2.Z, p3.Z)
-		);
+		public static Vector3 CatmullRomSpline(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+		{
+			return new Vector3(
+				CatmullRomSpline(t, p0.X, p1.X, p2.X, p3.X),
+				CatmullRomSpline(t, p0.Y, p1.Y, p2.Y, p3.Y),
+				CatmullRomSpline(t, p0.Z, p1.Z, p2.Z, p3.Z)
+			);
+		}
 
 		public static float CatmullRomSpline(float t, float p0, float p1, float p2, float p3)
 		{
 			float t2 = t * t;
 			float t3 = t2 * t;
 			return p1 + 0.5f * (
-				(p2 - p0) * t +
-				(2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 +
-				(3.0f * p1 - p0 - 3.0f * p2 + p3) * t3);
+				(p2 - p0) * t
+				+ (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2
+				+ (3.0f * p1 - p0 - 3.0f * p2 + p3) * t3
+			);
 		}
 
-		public static Vector3 BezierSpline(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) => new Vector3 {
-			X = BezierSpline(t, p0.X, p1.X, p2.X, p3.X),
-			Y = BezierSpline(t, p0.Y, p1.Y, p2.Y, p3.Y),
-			Z = BezierSpline(t, p0.Z, p1.Z, p2.Z, p3.Z),
-		};
+		public static Vector3 BezierSpline(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+		{
+			return new Vector3 {
+				X = BezierSpline(t, p0.X, p1.X, p2.X, p3.X),
+				Y = BezierSpline(t, p0.Y, p1.Y, p2.Y, p3.Y),
+				Z = BezierSpline(t, p0.Z, p1.Z, p2.Z, p3.Z),
+			};
+		}
 
-		public static Vector2 BezierSpline(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3) => new Vector2 {
-			X = BezierSpline(t, p0.X, p1.X, p2.X, p3.X),
-			Y = BezierSpline(t, p0.Y, p1.Y, p2.Y, p3.Y)
-		};
+		public static Vector2 BezierSpline(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+		{
+			return new Vector2 {
+				X = BezierSpline(t, p0.X, p1.X, p2.X, p3.X),
+				Y = BezierSpline(t, p0.Y, p1.Y, p2.Y, p3.Y),
+			};
+		}
 
 		public static float BezierSpline(float t, float p0, float p1, float p2, float p3)
 		{
@@ -395,38 +450,45 @@ namespace Lime
 			return oneMinusT3 * p0 + 3 * t * oneMinusT2 * p1 + 3 * t2 * oneMinusT * p2 + t3 * p3;
 		}
 
-		public static Vector3 BezierTangent(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) => new Vector3(
-			BezierTangent(t, p0.X, p1.X, p2.X, p3.X),
-			BezierTangent(t, p0.Y, p1.Y, p2.Y, p3.Y),
-			BezierTangent(t, p0.Z, p1.Z, p2.Z, p3.Z));
+		public static Vector3 BezierTangent(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+		{
+			return new Vector3(
+				BezierTangent(t, p0.X, p1.X, p2.X, p3.X),
+				BezierTangent(t, p0.Y, p1.Y, p2.Y, p3.Y),
+				BezierTangent(t, p0.Z, p1.Z, p2.Z, p3.Z)
+			);
+		}
 
-		public static Vector2 BezierTangent(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3) => new Vector2(
-			BezierTangent(t, p0.X, p1.X, p2.X, p3.X),
-			BezierTangent(t, p0.Y, p1.Y, p2.Y, p3.Y));
+		public static Vector2 BezierTangent(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+		{
+			return new Vector2(
+				BezierTangent(t, p0.X, p1.X, p2.X, p3.X),
+				BezierTangent(t, p0.Y, p1.Y, p2.Y, p3.Y)
+			);
+		}
 
 		public static float BezierTangent(float t, float p0, float p1, float p2, float p3)
 		{
 			var oneMinusT = 1 - t;
 			var oneMinusT2 = oneMinusT * oneMinusT;
 			var t2 = t * t;
-			return
-				-3 * oneMinusT2 * p0 +
-				3 * oneMinusT2 * p1 -
-				6 * t * oneMinusT * p1 -
-				3 * t2 * p2 +
-				6 * t * oneMinusT * p2 +
-				3 * t2 * p3;
+			return -3 * oneMinusT2 * p0
+				+ 3 * oneMinusT2 * p1
+				- 6 * t * oneMinusT * p1
+				- 3 * t2 * p2
+				+ 6 * t * oneMinusT * p2
+				+ 3 * t2 * p3;
 		}
 
 		public static int CalcUpperPowerOfTwo(int x)
 		{
 			x--;
-			x |= (x >> 1);
-			x |= (x >> 2);
-			x |= (x >> 4);
-			x |= (x >> 8);
-			x |= (x >> 16);
-			return (x + 1);
+			x |= x >> 1;
+			x |= x >> 2;
+			x |= x >> 4;
+			x |= x >> 8;
+			x |= x >> 16;
+			return x + 1;
 		}
 	}
 }

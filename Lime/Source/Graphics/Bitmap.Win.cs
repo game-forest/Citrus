@@ -21,7 +21,6 @@ namespace Lime
 			stream.CopyTo(streamClone);
 			Bitmap = new SD.Bitmap(streamClone);
 			HasAlpha = SD.Image.IsAlphaPixelFormat(Bitmap.PixelFormat) && IsReallyHasAlpha(Bitmap);
-
 		}
 
 		public BitmapImplementation(Color4[] colors, int width, int height)
@@ -99,8 +98,7 @@ namespace Lime
 		private static Color4[] ArrayFromPointer(IntPtr data, int arraySize)
 		{
 			var array = new Color4[arraySize];
-			unsafe
-			{
+			unsafe {
 				var ptr = (Color4*)data;
 				for (int i = 0; i < array.Length; i++) {
 					var c = *ptr++;
@@ -118,8 +116,7 @@ namespace Lime
 			var data = Marshal.AllocHGlobal(lengthInBytes);
 
 			// Copy pixels to data, swap r & b
-			unsafe
-			{
+			unsafe {
 				var pixelsPtr = (Color4*)data;
 				foreach (var c in pixels) {
 					*pixelsPtr++ = new Color4(c.B, c.G, c.R, c.A);
@@ -149,7 +146,6 @@ namespace Lime
 			}
 		}
 
-		#region IDisposable Support
 		private bool disposed;
 
 		private void Dispose(bool disposing)
@@ -179,7 +175,6 @@ namespace Lime
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
-		#endregion
 	}
 }
 #endif

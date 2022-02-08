@@ -17,7 +17,7 @@ namespace Lime
 		private readonly HashSet<string> fileSet;
 
 		public CustomSetAssetBundle(AssetBundle bundle, IEnumerable<string> files)
-			: base (bundle)
+			: base(bundle)
 		{
 			this.files = files.ToList();
 			fileSet = new HashSet<string>(files);

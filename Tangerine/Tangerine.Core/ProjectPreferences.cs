@@ -36,7 +36,7 @@ namespace Tangerine.Core
 			private static readonly List<string> defaultFrameworkReferences = new List<string> {
 				@"mscorlib.dll",
 				@"System.dll",
-				@"System.Core.dll"
+				@"System.Core.dll",
 			};
 
 			public bool IsValid =>
@@ -47,7 +47,9 @@ namespace Tangerine.Core
 			public RemoteScriptingConfiguration(dynamic json)
 			{
 				var projectDirectory = Orange.The.Workspace.ProjectDirectory;
-				ScriptsProjectPath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.ScriptsProjectPath));
+				ScriptsProjectPath = AssetPath.CorrectSlashes(
+					Path.Combine(projectDirectory, (string)json.ScriptsProjectPath)
+				);
 				ScriptsAssemblyName = (string)json.ScriptsAssemblyName;
 				var projectReferencesPath = Path.Combine(projectDirectory, (string)json.ProjectReferencesPath);
 				var frameworkReferencesPath = Path.Combine(
@@ -60,7 +62,9 @@ namespace Tangerine.Core
 				foreach (string reference in json.ProjectReferences) {
 					projectReferences.Add(AssetPath.CorrectSlashes(Path.Combine(projectReferencesPath, reference)));
 				}
-				RemoteStoragePath = AssetPath.CorrectSlashes(Path.Combine(projectDirectory, (string)json.RemoteStoragePath));
+				RemoteStoragePath = AssetPath.CorrectSlashes(
+					Path.Combine(projectDirectory, (string)json.RemoteStoragePath)
+				);
 				BuildTarget = (string)json.BuildTarget;
 			}
 		}
@@ -78,7 +82,9 @@ namespace Tangerine.Core
 				var resolutionMarkers = new Dictionary<string, ResolutionMarker>();
 				foreach (var marker in projectJson.ResolutionSettings.Markers) {
 					var name = (string)marker.Name;
-					resolutionMarkers.Add(name, new ResolutionMarker((string)marker.PortraitMarker, (string)marker.LandscapeMarker));
+					resolutionMarkers.Add(
+						name, new ResolutionMarker((string)marker.PortraitMarker, (string)marker.LandscapeMarker)
+					);
 				}
 				foreach (var resolution in projectJson.ResolutionSettings.Resolutions) {
 					var name = (string)resolution.Name;

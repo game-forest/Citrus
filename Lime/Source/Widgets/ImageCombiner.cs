@@ -40,7 +40,7 @@ namespace Lime
 		[TangerineIgnore]
 		None,
 		Multiply,
-		CutOut
+		CutOut,
 	}
 
 	[TangerineRegisterNode(Order = 19)]
@@ -84,8 +84,9 @@ namespace Lime
 				if (index < Parent.Nodes.Count - 2) {
 					arg1 = Parent.Nodes[index + 1] as IImageCombinerArg;
 					arg2 = Parent.Nodes[index + 2] as IImageCombinerArg;
-					if (arg1 != null & arg2 != null)
+					if (arg1 != null & arg2 != null) {
 						return true;
+					}
 				}
 			}
 			arg1 = arg2 = null;
@@ -144,10 +145,15 @@ namespace Lime
 					Toolbox.Swap(ref texture1, ref texture2);
 				}
 				var blending = Blending == Blending.Inherited ? Parent.AsWidget.GlobalBlending : Blending;
-				ro.Arg1Material = WidgetMaterial.GetInstance(blending, shader, WidgetMaterial.GetNumTextures(texture1, null));
+				ro.Arg1Material = WidgetMaterial.GetInstance(
+					blending, shader, WidgetMaterial.GetNumTextures(texture1, null)
+				);
 				ro.Arg12CommonMaterial = WidgetMaterial.GetInstance(
-					blending, shader, WidgetMaterial.GetNumTextures(texture1, texture2),
-					Operation == ImageCombinerOperation.Multiply ? TextureBlending.Multiply : TextureBlending.CutOut);
+					blending,
+					shader,
+					WidgetMaterial.GetNumTextures(texture1, texture2),
+					Operation == ImageCombinerOperation.Multiply ? TextureBlending.Multiply : TextureBlending.CutOut
+				);
 			}
 			ro.Arg1Texture = texture1;
 			ro.Arg2Texture = texture2;
@@ -186,7 +192,7 @@ namespace Lime
 				new Vector2(0, 0),
 				new Vector2(1, 0),
 				new Vector2(1, 1),
-				new Vector2(0, 1)
+				new Vector2(0, 1),
 			};
 
 			public override void Render()
@@ -225,14 +231,18 @@ namespace Lime
 				Renderer.Transform1 = LocalToWorldTransform;
 				if (Operation == ImageCombinerOperation.Multiply) {
 					PrepareVertices(arg12CommonArea);
-					Renderer.DrawTriangleFan(Arg1Texture, Arg2Texture, Arg12CommonMaterial, vertices, arg12CommonArea.Count);
+					Renderer.DrawTriangleFan(
+						Arg1Texture, Arg2Texture, Arg12CommonMaterial, vertices, arg12CommonArea.Count
+					);
 				} else {
 					for (int i = 0; i < arg1RemainedAreaCount; i++) {
 						PrepareVertices(arg1RemainedAreas[i]);
 						Renderer.DrawTriangleFan(Arg1Texture, null, Arg1Material, vertices, arg1RemainedAreas[i].Count);
 					}
 					PrepareVertices(arg12CommonArea);
-					Renderer.DrawTriangleFan(Arg1Texture, Arg2Texture, Arg12CommonMaterial, vertices, arg12CommonArea.Count);
+					Renderer.DrawTriangleFan(
+						Arg1Texture, Arg2Texture, Arg12CommonMaterial, vertices, arg12CommonArea.Count
+					);
 				}
 
 				void PrepareVertices(Polygon polygon)
@@ -263,8 +273,8 @@ namespace Lime
 				result2.Clear();
 				for (int i = 0; i < polygon.Count; i++) {
 					int j = (i < polygon.Count - 1) ? i + 1 : 0;
-					var u = polygon [i];
-					var v = polygon [j];
+					var u = polygon[i];
+					var v = polygon[j];
 					float d1 = (u.Y - a.Y) * (b.X - a.X) - (u.X - a.X) * (b.Y - a.Y);
 					float d2 = (v.Y - a.Y) * (b.X - a.X) - (v.X - a.X) * (b.Y - a.Y);
 					int s1 = Math.Abs(d1) < Eps ? 0 : ((d1 < 0) ? -1 : 1);
@@ -297,4 +307,3 @@ namespace Lime
 		}
 	}
 }
-

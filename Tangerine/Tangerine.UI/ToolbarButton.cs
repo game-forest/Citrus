@@ -12,7 +12,7 @@ namespace Tangerine.UI
 		{
 			Default,
 			Highlight,
-			Press
+			Press,
 		}
 
 		private State state;
@@ -61,7 +61,8 @@ namespace Tangerine.UI
 		public override string Text
 		{
 			get => text;
-			set {
+			set
+			{
 				if (value != text) {
 					text = value;
 					if (caption != null) {
@@ -92,7 +93,7 @@ namespace Tangerine.UI
 					}
 					Window.Current.Invalidate();
 					return true;
-				}
+				},
 			};
 			CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
@@ -103,7 +104,9 @@ namespace Tangerine.UI
 					Renderer.DrawRect(Vector2.Zero, Size, bgColor);
 				}
 				if (Texture != null) {
-					var iconColor = Enabled ? GlobalColor : GlobalColor * ColorTheme.Current.Toolbar.ButtonDisabledColor;
+					var iconColor = Enabled
+						? GlobalColor
+						: GlobalColor * ColorTheme.Current.Toolbar.ButtonDisabledColor;
 					Renderer.DrawSprite(Texture, iconColor, ContentPosition, ContentSize, Vector2.Zero, Vector2.One);
 				} else if (caption != null) {
 					caption.Color = Enabled ? Theme.Colors.BlackText : Theme.Colors.GrayText;
@@ -148,7 +151,7 @@ namespace Tangerine.UI
 		{
 			caption = new ThemedSimpleText(text) {
 				HAlignment = HAlignment.Center,
-				VAlignment = VAlignment.Center
+				VAlignment = VAlignment.Center,
 			};
 			Text = text;
 			MinMaxSize = new Vector2(caption.MeasureUncutText().X + 10, MaxSize.Y);

@@ -5,7 +5,7 @@ using Lime;
 
 namespace Orange
 {
-	class SyncTxtAssets : ICookingStage
+	internal class SyncTxtAssets : ICookingStage
 	{
 		private readonly AssetCooker assetCooker;
 

@@ -1,8 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Orange.Source;
-using System.Linq;
 using Exception = Lime.Exception;
 
 namespace Orange
@@ -13,7 +13,6 @@ namespace Orange
 		private readonly Target target;
 		private readonly string projectDirectory;
 		private readonly string projectName;
-
 
 		public SolutionBuilder(Target target)
 		{
@@ -41,15 +40,23 @@ namespace Orange
 				cutDirectoryPrefix: false
 			);
 			foreach (var target in The.Workspace.Targets) {
-				var limeProj = CsprojSynchronization.ToUnixSlashes(The.Workspace.GetProjectRelatedLimeCsprojFilePath(target.Platform));
+				var limeProj = CsprojSynchronization.ToUnixSlashes(
+					The.Workspace.GetProjectRelatedLimeCsprojFilePath(target.Platform)
+				);
 				CsprojSynchronization.SynchronizeProject(limeProj);
 				using (new DirectoryChanger(The.Workspace.ProjectDirectory)) {
 					var dirInfo = new System.IO.DirectoryInfo(The.Workspace.ProjectDirectory);
-					foreach (var file in fileEnumerator.Enumerate(Workspace.GetPlatformSuffix(target.Platform) + ".csproj")) {
+					foreach (
+						var file
+						in fileEnumerator.Enumerate(Workspace.GetPlatformSuffix(target.Platform) + ".csproj")
+					) {
 						CsprojSynchronization.SynchronizeProject(file);
-					};
+					}
 					if (target.ProjectPath != null && target.ProjectPath.EndsWith(".csproj")) {
-						foreach (var targetCsprojFile in fileEnumerator.Enumerate(Path.GetFileName(target.ProjectPath))) {
+						foreach (
+							var targetCsprojFile
+							in fileEnumerator.Enumerate(Path.GetFileName(target.ProjectPath))
+						) {
 							CsprojSynchronization.SynchronizeProject(targetCsprojFile);
 						}
 					}
@@ -70,19 +77,19 @@ namespace Orange
 					Console.WriteLine("NuGet exited with code: {0}", nugetResult);
 				}
 			}
-			return (buildSystem.Execute(BuildAction.Build, output) == 0);
+			return buildSystem.Execute(BuildAction.Build, output) == 0;
 		}
 
 		public bool Restore()
 		{
 			Console.WriteLine("------------- Restore Application -------------");
-			return (buildSystem.Execute(BuildAction.Restore) == 0);
+			return buildSystem.Execute(BuildAction.Restore) == 0;
 		}
 
 		public bool Clean()
 		{
 			Console.WriteLine("------------- Cleanup Game Application -------------");
-			return (buildSystem.Execute(BuildAction.Clean) == 0);
+			return buildSystem.Execute(BuildAction.Clean) == 0;
 		}
 
 		public string GetApplicationPath()
@@ -139,7 +146,10 @@ namespace Orange
 				return Process.Start(GetMacAppName(), string.Empty);
 			} else {
 				var args = "--sdkroot=/Applications/Xcode.app" + ' ' + "--installdev=" + GetIOSAppName();
-				int exitCode = Process.Start("/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch", args);
+				int exitCode = Process.Start(
+					"/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch",
+					args
+				);
 				if (exitCode != 0) {
 					return exitCode;
 				}
@@ -186,8 +196,9 @@ namespace Orange
 			var packageName = Path.GetFileNameWithoutExtension(apkPath);
 
 			var signedIndex = packageName.IndexOf("-Signed");
-			if (signedIndex != -1)
+			if (signedIndex != -1) {
 				packageName = packageName.Substring(0, signedIndex);
+			}
 
 			Console.WriteLine("------------------ Deploying ------------------");
 			Console.WriteLine($"Uninstalling previous apk ({packageName})");

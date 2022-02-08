@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI
@@ -19,7 +19,9 @@ namespace Tangerine.UI
 			editor.Editor.EditorParams.MaxLines = 1;
 			EditorContainer.AddNode(editor);
 			editor.Submitted += SetValue;
-			editor.AddLateChangeWatcher(CoalescedPropertyValue(), v => editor.Text = v.IsDefined ? v.Value : ManyValuesText);
+			editor.AddLateChangeWatcher(
+				CoalescedPropertyValue(), v => editor.Text = v.IsDefined ? v.Value : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(editor, CoalescedPropertyValue());
 		}
 

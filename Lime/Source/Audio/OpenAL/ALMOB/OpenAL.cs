@@ -1,4 +1,4 @@
-﻿#if OPENAL && iOS
+#if OPENAL && iOS
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -172,7 +172,16 @@ namespace Lime.OpenALSoft
 		internal const string Lib = "__Internal";
 		private const CallingConvention Style = CallingConvention.Cdecl;
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetString", ExactSpelling = true, CallingConvention = Style, CharSet = CharSet.Ansi), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(
+				Lib,
+				EntryPoint = "ALMOB_alGetString",
+				ExactSpelling = true,
+				CallingConvention = Style,
+				CharSet = CharSet.Ansi
+			),
+			SuppressUnmanagedCodeSecurity()
+		]
 		private static extern IntPtr GetStringPrivate(ALGetString param); // accepts the enums AlError, AlContextString
 
 		public static string Get(ALGetString param)
@@ -185,16 +194,28 @@ namespace Lime.OpenALSoft
 			return Marshal.PtrToStringAnsi(GetStringPrivate((ALGetString)param));
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetInteger", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGetInteger", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern int Get(ALGetInteger param);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetFloat", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGetFloat", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern float Get(ALGetFloat param);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetError", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGetError", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern ALError GetError();
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGenSources", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGenSources", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		unsafe private static extern void GenSources(int n, out int sources);
 
 		public static int GenSource()
@@ -204,7 +225,10 @@ namespace Lime.OpenALSoft
 			return temp;
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alDeleteSources", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alDeleteSources", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void DeleteSources(int n, ref int sources);
 
 		public static void DeleteSource(int source)
@@ -212,16 +236,28 @@ namespace Lime.OpenALSoft
 			DeleteSources(1, ref source);
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alIsSource", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alIsSource", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern bool IsSource(int sid);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSourcef", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSourcef", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void Source(int sid, ALSourcef param, float value);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSource3f", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSource3f", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void Source(int sid, ALSource3f param, float value1, float value2, float value3);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSourcei", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSourcei", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void Source(int sid, ALSourcei param, int value);
 			
 		public static void Source(int sid, ALSourceb param, bool value)
@@ -234,16 +270,30 @@ namespace Lime.OpenALSoft
 			Source(source, ALSourcei.Buffer, buffer);
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSource3i", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSource3i", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void Source(int sid, ALSource3i param, int value1, int value2, int value3);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetSourcef", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGetSourcef", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void GetSource(int sid, ALSourcef param, [Out] out float value);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetSource3f", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
-		public static extern void GetSource(int sid, ALSource3f param, [Out] out float value1, [Out] out float value2, [Out] out float value3);
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGetSource3f", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
+		public static extern void GetSource(
+			int sid, ALSource3f param, [Out] out float value1, [Out] out float value2, [Out] out float value3
+		);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGetSourcei", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGetSourcei", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void GetSource(int sid, ALGetSourcei param, [Out] out int value);
 
 		public static void GetSource(int sid, ALSourceb param, out bool value)
@@ -253,13 +303,22 @@ namespace Lime.OpenALSoft
 			value = result != 0;
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSourcePlay", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSourcePlay", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void SourcePlay(int sid);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSourceStop", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSourceStop", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void SourceStop(int sid);
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alSourcePause", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alSourcePause", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void SourcePause(int sid);
 
 		[DllImport(Lib, EntryPoint = "ALMOB_alSourceQueueBuffers"), SuppressUnmanagedCodeSecurity]
@@ -280,7 +339,10 @@ namespace Lime.OpenALSoft
 			return buf;
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alGenBuffers", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alGenBuffers", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity
+		]
 		unsafe public static extern void GenBuffers(int n, [Out] out int buffers);
 
 		public static int GenBuffer()
@@ -290,7 +352,10 @@ namespace Lime.OpenALSoft
 			return temp;
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alDeleteBuffers", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alDeleteBuffers", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		unsafe public static extern void DeleteBuffers(int n, [In] ref int buffers);
 
 		public static void DeleteBuffer(int buffer)
@@ -298,7 +363,10 @@ namespace Lime.OpenALSoft
 			DeleteBuffers(1, ref buffer);
 		}
 
-		[DllImport(Lib, EntryPoint = "ALMOB_alBufferData", ExactSpelling = true, CallingConvention = Style), SuppressUnmanagedCodeSecurity()]
+		[
+			DllImport(Lib, EntryPoint = "ALMOB_alBufferData", ExactSpelling = true, CallingConvention = Style),
+			SuppressUnmanagedCodeSecurity()
+		]
 		public static extern void BufferData(int bid, ALFormat format, IntPtr buffer, int size, int freq);
 
 		public static ALSourceState GetSourceState(int sid)

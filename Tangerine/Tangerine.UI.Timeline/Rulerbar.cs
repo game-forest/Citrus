@@ -21,7 +21,7 @@ namespace Tangerine.UI.Timeline
 			RootWidget = new Widget {
 				Id = nameof(Rulerbar),
 				MinMaxHeight = Metrics.ToolbarHeight,
-				HitTestTarget = true
+				HitTestTarget = true,
 			};
 			RootWidget.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
 			RootWidget.Gestures.Add(
@@ -56,7 +56,7 @@ namespace Tangerine.UI.Timeline
 			return ((mouseX + Timeline.Instance.Offset.X) / TimelineMetrics.ColWidth).Floor().Max(0);
 		}
 
-		void Render(Widget widget)
+		private void Render(Widget widget)
 		{
 			widget.PrepareRendererState();
 			Renderer.DrawRect(Vector2.Zero, RootWidget.Size, ColorTheme.Current.Toolbar.Background);
@@ -69,10 +69,12 @@ namespace Tangerine.UI.Timeline
 					float textHeight = Theme.Metrics.TextHeight;
 					float y = (RootWidget.Height - textHeight) / 2;
 					Renderer.DrawTextLine(
-						new Vector2(x, y), i.ToString(),
-						Theme.Metrics.TextHeight,
-						Theme.Colors.BlackText,
-						0.0f);
+						position: new Vector2(x, y),
+						text: i.ToString(),
+						fontHeight: Theme.Metrics.TextHeight,
+						color: Theme.Colors.BlackText,
+						letterSpacing: 0.0f
+					);
 					if (!Document.Current.Animation.IsCompound) {
 						Renderer.DrawLine(x, 0, x, RootWidget.Height, ColorTheme.Current.TimelineRuler.Notchings);
 					}
@@ -92,25 +94,33 @@ namespace Tangerine.UI.Timeline
 			RenderUpperMarker();
 		}
 
-		void RenderCursor()
+		private void RenderCursor()
 		{
 			var r = GetRectangle(Timeline.Instance.CurrentColumnEased);
 			Renderer.DrawRect(
-				r.A, r.B,
-				Document.Current.PreviewScene ?
-					ColorTheme.Current.TimelineRuler.RunningCursor :
-					ColorTheme.Current.TimelineRuler.Cursor);
+				a: r.A,
+				b: r.B,
+				color: Document.Current.PreviewScene
+					? ColorTheme.Current.TimelineRuler.RunningCursor
+					: ColorTheme.Current.TimelineRuler.Cursor
+			);
 		}
 
-		void RenderMarker(Marker marker)
+		private void RenderMarker(Marker marker)
 		{
 			var r = GetRectangle(marker.Frame);
 			r.AY = r.BY - 5;
 			Renderer.DrawRect(r.A, r.B, GetMarkerColor(marker));
 			Renderer.DrawRectOutline(r.A, r.B, ColorTheme.Current.TimelineRuler.MarkerBorder);
 			if (
-				marker.Action == MarkerAction.Jump &&
-				(string.IsNullOrEmpty(marker.JumpTo) || (!string.IsNullOrEmpty(marker.Id) && (marker.Id == marker.JumpTo)))
+				marker.Action == MarkerAction.Jump
+				&& (
+					string.IsNullOrEmpty(marker.JumpTo)
+					|| (
+						!string.IsNullOrEmpty(marker.Id)
+						&& (marker.Id == marker.JumpTo)
+					)
+				)
 			) {
 				var size = new Vector2(RootWidget.Height, RootWidget.Height);
 				var pos = new Vector2(r.Left - (size.X - r.Size.X) / 2.0f, r.Bottom - RootWidget.Height - 2);
@@ -120,19 +130,28 @@ namespace Tangerine.UI.Timeline
 				var padding = new Thickness { Left = 3.0f, Right = 5.0f, Top = 1.0f, Bottom = 1.0f };
 				var extent = FontPool.Instance.DefaultFont.MeasureTextLine(marker.Id, h, 0.0f);
 				var pos = new Vector2(r.A.X, r.A.Y - extent.Y - padding.Top - padding.Bottom - 1);
-				Renderer.DrawRect(pos, pos + extent + padding.LeftTop + padding.RightBottom, Theme.Colors.WhiteBackground);
-				Renderer.DrawRectOutline(pos, pos + extent + padding.LeftTop + padding.RightBottom, Theme.Colors.ControlBorder);
+				Renderer.DrawRect(
+					a: pos,
+					b: pos + extent + padding.LeftTop + padding.RightBottom,
+					color: Theme.Colors.WhiteBackground
+				);
+				Renderer.DrawRectOutline(
+					a: pos,
+					b: pos + extent + padding.LeftTop + padding.RightBottom,
+					color: Theme.Colors.ControlBorder
+				);
 				Renderer.DrawTextLine(pos + padding.LeftTop, marker.Id, h, Theme.Colors.BlackText, 0.0f);
 			}
 		}
 
-		void RenderUpperMarker()
+		private void RenderUpperMarker()
 		{
-			if (upperMarker != null)
+			if (upperMarker != null) {
 				RenderMarker(upperMarker);
+			}
 		}
 
-		Color4 GetMarkerColor(Marker marker)
+		private Color4 GetMarkerColor(Marker marker)
 		{
 			switch (marker.Action) {
 				case MarkerAction.Jump:
@@ -150,7 +169,7 @@ namespace Tangerine.UI.Timeline
 		{
 			return new Rectangle {
 				A = new Vector2(frame * TimelineMetrics.ColWidth + 0.5f, 0),
-				B = new Vector2((frame + 1) * TimelineMetrics.ColWidth + 1.5f, RootWidget.Height)
+				B = new Vector2((frame + 1) * TimelineMetrics.ColWidth + 1.5f, RootWidget.Height),
 			};
 		}
 
@@ -218,31 +237,51 @@ namespace Tangerine.UI.Timeline
 			});
 		}
 
-		class ContextMenu
+		private class ContextMenu
 		{
 			public void Show()
 			{
 				var menu = new Menu();
 				var frameUnderMouse = Timeline.Instance.Grid.CellUnderMouse().X;
 				var marker = Document.Current.Animation.Markers.GetByFrame(frameUnderMouse);
-				menu.Add(new Command(marker == null ? "Add Marker" : "Edit Marker", () => ShowMarkerDialog(frameUnderMouse)));
-				menu.Add(new Command("Copy Marker", () => Common.Operations.CopyPasteMarkers.CopyMarkers(new [] { marker })) {
-					Enabled = marker != null
+				menu.Add(
+					new Command(
+						marker == null ? "Add Marker" : "Edit Marker",
+						() => ShowMarkerDialog(frameUnderMouse)
+					)
+				);
+				menu.Add(
+					new Command(
+						"Copy Marker",
+						() => Common.Operations.CopyPasteMarkers.CopyMarkers(new[] { marker }
+					)
+				) {
+					Enabled = marker != null,
 				});
 				menu.Add(new Command("Delete Marker", () => DeleteMarker(marker)) {
-					Enabled = marker != null
+					Enabled = marker != null,
 				});
 				menu.Add(Command.MenuSeparator);
-				menu.Add(new Command("Copy All Markers", () => Common.Operations.CopyPasteMarkers.CopyMarkers(Document.Current.Animation.Markers)) {
-					Enabled = Document.Current.Animation.Markers.Count > 0
-				});
+				menu.Add(
+					new Command(
+						"Copy All Markers",
+						() => Common.Operations.CopyPasteMarkers.CopyMarkers(Document.Current.Animation.Markers)
+					) {
+						Enabled = Document.Current.Animation.Markers.Count > 0,
+					}
+				);
 				menu.Add(new Command("Paste Markers", () => PasteMarkers(atCursor: true, expandAnimation: true)));
-				menu.Add(new Command("Paste Markers At Original Positions", () => PasteMarkers(atCursor: false, expandAnimation: false)));
+				menu.Add(
+					new Command(
+						"Paste Markers At Original Positions",
+						() => PasteMarkers(atCursor: false, expandAnimation: false)
+					)
+				);
 				menu.Add(new Command("Delete All Markers", DeleteAllMarkers) {
-					Enabled = Document.Current.Animation.Markers.Count > 0
+					Enabled = Document.Current.Animation.Markers.Count > 0,
 				});
 				menu.Add(new Command("Delete Animation Range", DeleteAnimationRange) {
-					Enabled = GridSelection.GetSelectionBoundaries(out _)
+					Enabled = GridSelection.GetSelectionBoundaries(out _),
 				});
 				menu.Popup();
 			}

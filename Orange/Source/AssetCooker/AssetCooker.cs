@@ -43,12 +43,12 @@ namespace Orange
 			var skipCooking = The.Workspace.ProjectJson.GetValue<bool>("SkipAssetsCooking");
 			if (!skipCooking) {
 				return assetCooker.Cook(
-					bundles ??
-					Toolbox.GetListOfAllBundles(
+					bundles ?? Toolbox.GetListOfAllBundles(
 						target,
 						assetCooker.InputBundle,
-						assetCooker.CookingRulesMap)
-					, out errorMessage
+						assetCooker.CookingRulesMap
+					),
+					out errorMessage
 				);
 			} else {
 				Console.WriteLine("-------------  Skip Assets Cooking -------------");
@@ -72,7 +72,7 @@ namespace Orange
 			AssetCache.Instance.Initialize();
 			var originToAlias = GetOriginToAliasMap(CookingRulesMap);
 			RemapCookingRules(originToAlias, CookingRulesMap);
-			LogText = "";
+			logText = string.Empty;
 			var allTimer = StartBenchmark(
 				$"Asset cooking. Asset cache mode: {AssetCache.Instance.Mode}. Active platform: {Target.Platform}" +
 				System.Environment.NewLine +
@@ -108,7 +108,9 @@ namespace Orange
 					try {
 						bundle = new AggregateAssetBundle();
 						foreach (var bundleName in bundles) {
-							bundle.Attach(new PackedAssetBundle(The.Workspace.GetBundlePath(Target.Platform, bundleName)));
+							bundle.Attach(
+								new PackedAssetBundle(The.Workspace.GetBundlePath(Target.Platform, bundleName))
+							);
 						}
 						AssetBundle.SetCurrent(bundle);
 						CodeCooker.Cook(Target, InputBundle, CookingRulesMap, bundles.ToList());
@@ -208,14 +210,18 @@ namespace Orange
 								source.GetFileAttributes(file)
 							);
 						} catch (System.Exception e) {
-							Console.WriteLine($"Error: caught an exception when unpacking bundle '{bundleName}', file '{file}': {e}");
+							Console.WriteLine(
+								$"Error: caught an exception when unpacking bundle '{bundleName}', file '{file}': {e}"
+							);
 						}
 					}
 				}
 				try {
 					DeleteEmptyDirectories(destinationPath);
 				} catch (System.Exception e) {
-					Console.WriteLine($"Error: caught an exception when deleting empty directories at '{destinationPath}': '{e}'.");
+					Console.WriteLine(
+						$"Error: caught an exception when deleting empty directories at '{destinationPath}': '{e}'."
+					);
 				}
 			}
 
@@ -224,8 +230,7 @@ namespace Orange
 				foreach (var directory in Directory.GetDirectories(baseDirectory)) {
 					DeleteEmptyDirectories(directory);
 					if (Directory.GetFiles(directory).Length == 0 &&
-					    Directory.GetDirectories(directory).Length == 0)
-					{
+						Directory.GetDirectories(directory).Length == 0) {
 						Directory.Delete(directory, false);
 					}
 				}
@@ -243,7 +248,9 @@ namespace Orange
 			bundlesToCook = new List<string>();
 			var assetsGroupedByBundles = GetAssetsGroupedByBundles(InputBundle.EnumerateFiles(), allBundles);
 			for (int i = 0; i < allBundles.Count; i++) {
-				Console.WriteLine($"Computing modified cooking unit count for bundle '{allBundles[i]}', ({i + 1}/{allBundles.Count})");
+				Console.WriteLine(
+					$"Computing modified cooking unit count for bundle '{allBundles[i]}', ({i + 1}/{allBundles.Count})"
+				);
 				var savedInputBundle = InputBundle;
 				AssetBundle.SetCurrent(
 					new RemappedAssetBundle(
@@ -285,12 +292,13 @@ namespace Orange
 			try {
 				Console.WriteLine("------------- Cooking Assets ({0}) -------------", bundleName);
 				CookBundleHelper();
-				// Open the bundle again in order to make some plugin post-processing (e.g. generate code from scene assets)
+				// Open the bundle again in order to make
+				// some plugin post-processing (e.g. generate code from scene assets)
 				using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 					PluginLoader.AfterAssetsCooked(bundleName);
 				}
 				CommitToDisk();
-			} catch (OperationCanceledException e) {
+			} catch (OperationCanceledException) {
 				CommitToDisk();
 				throw;
 			} finally {
@@ -378,8 +386,9 @@ namespace Orange
 				base.DeleteFile(path);
 			}
 
-			public override void ImportFile(string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
-			{
+			public override void ImportFile(
+				string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+			) {
 				base.ImportFile(path, stream, cookingUnitHash, attributes);
 				if (deletedFiles.TryGetValue(path, out var hash)) {
 					if (hash != GetFileContentsHash(path)) {
@@ -488,13 +497,13 @@ namespace Orange
 			}
 		}
 
-		private static string LogText;
-		private static Stopwatch StartBenchmark(string text="")
+		private static string logText;
+		private static Stopwatch StartBenchmark(string text = "")
 		{
 			if (!The.Workspace.BenchmarkEnabled) {
 				return null;
 			}
-			LogText += text;
+			logText += text;
 			var timer = new Stopwatch();
 			timer.Start();
 			return timer;
@@ -506,7 +515,7 @@ namespace Orange
 				return;
 			}
 			timer.Stop();
-			LogText += text + $"{timer.ElapsedMilliseconds} ms" + System.Environment.NewLine;
+			logText += text + $"{timer.ElapsedMilliseconds} ms" + System.Environment.NewLine;
 		}
 
 		private static void PrintBenchmark()
@@ -515,7 +524,7 @@ namespace Orange
 				return;
 			}
 			using var w = File.AppendText(Path.Combine(The.Workspace.ProjectDirectory, "cache.log"));
-			w.WriteLine(LogText);
+			w.WriteLine(logText);
 			w.WriteLine();
 			w.WriteLine();
 		}
@@ -588,7 +597,6 @@ namespace Orange
 			{
 				return Bundle.OpenFileRaw(ToOriginPath(path), mode);
 			}
-
 
 			public override string ToSystemPath(string bundlePath) => Bundle.ToSystemPath(ToOriginPath(bundlePath));
 

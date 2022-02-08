@@ -7,7 +7,7 @@ namespace Lime
 	{
 		Play,
 		Stop,
-		Jump
+		Jump,
 	}
 
 	public class Marker
@@ -17,9 +17,9 @@ namespace Lime
 
 		public Animation Owner { get; internal set; }
 
-	#if TANGERINE
+#if TANGERINE
 		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
-	#endif
+#endif
 
 		[YuzuMember]
 		public string Id { get; set; }
@@ -28,7 +28,8 @@ namespace Lime
 		public int Frame
 		{
 			get => frame;
-			set {
+			set
+			{
 				if (frame != value) {
 					frame = value;
 					Owner?.InvalidateCache();
@@ -48,7 +49,8 @@ namespace Lime
 		public BezierEasing BezierEasing
 		{
 			get => bezierEasing;
-			set {
+			set
+			{
 				if (!bezierEasing.Equals(value)) {
 					bezierEasing = value;
 					Owner?.InvalidateCache();

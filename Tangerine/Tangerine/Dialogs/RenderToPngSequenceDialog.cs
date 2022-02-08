@@ -11,7 +11,7 @@ namespace Tangerine.Dialogs
 		public enum Result
 		{
 			Ok,
-			Cancel
+			Cancel,
 		}
 
 		public class RenderToPngSequenceOptions
@@ -21,7 +21,8 @@ namespace Tangerine.Dialogs
 			[TangerineValidRange(1, 1000, WarningLevel = ValidationResult.Error)]
 			public int FPS { get; set; }
 
-			private string folder = LastOpenedDirectory ?? Path.GetDirectoryName(Project.Current?.CitprojPath ?? "C:\\");
+			private string folder =
+				LastOpenedDirectory ?? Path.GetDirectoryName(Project.Current?.CitprojPath ?? "C:\\");
 
 			public string Folder
 			{
@@ -37,7 +38,7 @@ namespace Tangerine.Dialogs
 			Button cancelButton;
 			Widget inspectorPanel;
 			var result = Result.Cancel;
-			options = new RenderToPngSequenceOptions {FPS = 60};
+			options = new RenderToPngSequenceOptions { FPS = 60 };
 			var window = new Window(new WindowOptions {
 				Title = "Options",
 				Visible = false,
@@ -50,7 +51,7 @@ namespace Tangerine.Dialogs
 				MinSize = new Vector2(256, 0),
 				Nodes = {
 					(inspectorPanel = new Widget {
-						Layout = new VBoxLayout { Spacing = 2f }
+						Layout = new VBoxLayout { Spacing = 2f },
 					}),
 					(buttonPanel = new Widget {
 						Layout = new HBoxLayout { Spacing = 8f },
@@ -58,29 +59,31 @@ namespace Tangerine.Dialogs
 						Nodes = {
 							(okButton = new ThemedButton("Ok")),
 							(cancelButton = new ThemedButton("Cancel")),
-						}
-					})
-				}
+						},
+					}),
+				},
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
-			rootWidget.LateTasks.Add(new KeyPressHandler(Key.Escape,
+			rootWidget.LateTasks.Add(new KeyPressHandler(
+				Key.Escape,
 				(input, key) => {
 					input.ConsumeKey(key);
 					window.Close();
 				}
 			));
 			IPropertyEditor editor = new IntPropertyEditor(new PropertyEditorParams(options, "FPS") {
-				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions) o).FPS = (int)value,
+				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions)o).FPS = (int)value,
 				DisplayName = "FPS",
-				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(nameof(RenderToPngSequenceOptions.FPS))
+				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(nameof(RenderToPngSequenceOptions.FPS)),
 			});
 			inspectorPanel.AddNode(editor.ContainerWidget);
 			editor = new FolderPropertyEditor(new PropertyEditorParams(options, "Folder") {
 				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions)o).Folder = (string)value,
 				DisplayName = "Folder",
-				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(nameof(RenderToPngSequenceOptions.Folder)),
+				PropertyInfo = typeof(RenderToPngSequenceOptions)
+					.GetProperty(nameof(RenderToPngSequenceOptions.Folder)),
 			}) {
-				ShowPrefix = false
+				ShowPrefix = false,
 			};
 			inspectorPanel.AddNode(editor.ContainerWidget);
 			okButton.Clicked += () => {

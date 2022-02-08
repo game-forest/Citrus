@@ -13,11 +13,12 @@ namespace Lime
 
 		public Plane Normalized
 		{
-			get {
+			get
+			{
 				var magnitude = 1.0f / Normal.Length;
 				return new Plane {
 					Normal = Normal * magnitude,
-					D = D * magnitude
+					D = D * magnitude,
 				};
 			}
 		}
@@ -36,7 +37,7 @@ namespace Lime
 			var normal = cross.Normalized;
 			return new Plane {
 				Normal = normal,
-				D = -Vector3.DotProduct(normal, a)
+				D = -Vector3.DotProduct(normal, a),
 			};
 		}
 

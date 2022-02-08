@@ -1,16 +1,18 @@
-using Lime;
 using System;
 using System.Collections.Generic;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
-	class DragPaddingLineProcessor : ITaskProvider
+	internal class DragPaddingLineProcessor : ITaskProvider
 	{
 		private readonly VisualHint paddingVisualHint =
-			VisualHintsRegistry.Instance.Register("/All/Padding", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+			VisualHintsRegistry.Instance.Register(
+				"/All/Padding", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
-		private static SceneView sv => SceneView.Instance;
+		private static SceneView ScneView => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
@@ -20,8 +22,8 @@ namespace Tangerine.UI.SceneView
 					continue;
 				}
 				var nodes = Document.Current.SelectedNodes().Editable();
-				var mousePosition = sv.MousePosition;
-				float zoom = sv.Scene.Scale.X;
+				var mousePosition = ScneView.MousePosition;
+				float zoom = ScneView.Scene.Scale.X;
 				foreach (var node in nodes) {
 					if (node is Widget widget) {
 						var matrix = widget.LocalToWorldTransform;
@@ -35,10 +37,9 @@ namespace Tangerine.UI.SceneView
 							var quad = new Rectangle(-1, -1, 1, 1).ToQuadrangle().Transform(rectMatrix);
 							if (
 								(Utils.LineHitTest(mousePosition, a, b, 10f / zoom) || quad.Contains(mousePosition)) &&
-								paddingVisualHint.Enabled
-							) {
+								paddingVisualHint.Enabled) {
 								Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-								if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+								if (ScneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 									yield return Drag(line);
 								}
 								goto Next;
@@ -46,23 +47,23 @@ namespace Tangerine.UI.SceneView
 						}
 					}
 				}
-				Next:
+			Next:
 				yield return null;
 			}
 		}
 
 		private static IEnumerator<object> Drag(PaddingLine paddingLine)
 		{
-			var initMousePos = sv.MousePosition;
+			var initMousePos = ScneView.MousePosition;
 			var dir = paddingLine.GetDirection();
 			var widget = paddingLine.Owner;
 			var name = paddingLine.PropertyName;
 			var rotation = Matrix32.Rotation(-widget.LocalToWorldTransform.U.Atan2Rad);
 			using (Document.Current.History.BeginTransaction()) {
-				while (sv.Input.IsMousePressed()) {
+				while (ScneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var curMousePos = sv.MousePosition;
+					var curMousePos = ScneView.MousePosition;
 					var diff = Vector2.DotProduct(rotation * (curMousePos - initMousePos) / widget.Scale, dir);
 					if (Mathf.Abs(diff) > Mathf.ZeroTolerance) {
 						var padding = widget.Padding;
@@ -82,12 +83,16 @@ namespace Tangerine.UI.SceneView
 							default:
 								throw new InvalidOperationException();
 						}
-						Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Padding),
-							padding, CoreUserPreferences.Instance.AutoKeyframes);
+						Core.Operations.SetAnimableProperty.Perform(
+							widget,
+							nameof(Widget.Padding),
+							padding,
+							CoreUserPreferences.Instance.AutoKeyframes
+						);
 					}
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				ScneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 		}

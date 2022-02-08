@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -36,14 +34,8 @@ namespace SharpFont.MultipleMasters
 	/// </para></summary>
 	public class MMAxis
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private MMAxisRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal MMAxis(IntPtr reference)
 		{
@@ -54,10 +46,6 @@ namespace SharpFont.MultipleMasters
 		{
 			this.rec = axisInternal;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the axis's name.
@@ -105,7 +93,5 @@ namespace SharpFont.MultipleMasters
 				rec = PInvokeHelper.PtrToStructure<MMAxisRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

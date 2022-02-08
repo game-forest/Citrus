@@ -19,7 +19,7 @@ namespace Lime
 #if iOS || ANDROID
 			".pvr", ".jpg"
 #else
-			".dds", ".pvr", ".jpg", ".png"
+			".dds", ".pvr", ".jpg", ".png",
 #endif
 		};
 
@@ -61,9 +61,8 @@ namespace Lime
 		{
 			var textureParamsPath = path + ".texture";
 			if (AssetBundle.Current.FileExists(textureParamsPath)) {
-				using (var stream = AssetBundle.Current.OpenFile(textureParamsPath)) {
-					TextureParams = InternalPersistence.Instance.ReadFromStream<TextureParams>(textureParamsPath, stream);
-				}
+				using var stream = AssetBundle.Current.OpenFile(textureParamsPath);
+				TextureParams = InternalPersistence.Instance.ReadFromStream<TextureParams>(textureParamsPath, stream);
 			} else {
 				TextureParams = TextureParams.Default;
 			}
@@ -179,7 +178,7 @@ namespace Lime
 				stream.Seek(0, SeekOrigin.Begin);
 				int sign = reader.ReadInt32();
 				stream.Seek(0, SeekOrigin.Begin);
-				if (sign == PVRMagic) {
+				if (sign == pVRMagic) {
 					InitWithPVRTexture(reader);
 				} else if (sign == KTXMagic) {
 					InitWithKTXTexture(reader);
@@ -214,7 +213,9 @@ namespace Lime
 				if (platformTexture != null) {
 					platformTexture.Dispose();
 				}
-				platformTexture = PlatformRenderer.Context.CreateTexture2D(format, width, height, mipmaps, textureParams);
+				platformTexture = PlatformRenderer.Context.CreateTexture2D(
+					format, width, height, mipmaps, textureParams
+				);
 				PlatformRenderer.RebindTexture(this);
 			}
 		}
@@ -232,7 +233,9 @@ namespace Lime
 			uvRect = new Rectangle(0, 0, 1, 1);
 
 			var format = Format.R8G8B8A8_UNorm;
-			GraphicsUtility.EnsureTextureDataSizeValid(format, width, height, pixels.Length * Marshal.SizeOf(new Color4()));
+			GraphicsUtility.EnsureTextureDataSizeValid(
+				format, width, height, pixels.Length * Marshal.SizeOf(new Color4())
+			);
 			Window.Current.InvokeOnRendering(() => {
 				EnsurePlatformTexture(format, width, height, false);
 				platformTexture.SetData(0, pixels);
@@ -265,7 +268,9 @@ namespace Lime
 		{
 			IsStubTexture = false;
 
-			GraphicsUtility.EnsureTextureDataSizeValid(platformTexture.Format, width, height, pixels.Length * Marshal.SizeOf(new Color4()));
+			GraphicsUtility.EnsureTextureDataSizeValid(
+				platformTexture.Format, width, height, pixels.Length * Marshal.SizeOf(new Color4())
+			);
 			Window.Current.InvokeOnRendering(() => {
 				platformTexture.SetData(0, x, y, width, height, pixels);
 			});
@@ -336,14 +341,14 @@ namespace Lime
 				if (TextureParams.WrapModeU == TextureWrapMode.Repeat) {
 					x1 = Math.Abs(x1 % OpacityMask.Width);
 				} else if (TextureParams.WrapModeU == TextureWrapMode.MirroredRepeat) {
-					x1 = (x1 / OpacityMask.Width) % 2 == 0
+					x1 = x1 / OpacityMask.Width % 2 == 0
 						? Math.Abs(x1 % OpacityMask.Width)
 						: OpacityMask.Width - Math.Abs(x1 % OpacityMask.Width);
 				}
 				if (TextureParams.WrapModeV == TextureWrapMode.Repeat) {
 					y1 = Math.Abs(y1 % OpacityMask.Height);
 				} else if (TextureParams.WrapModeV == TextureWrapMode.MirroredRepeat) {
-					y1 = (y1 / OpacityMask.Height) % 2 == 0
+					y1 = y1 / OpacityMask.Height % 2 == 0
 						? Math.Abs(y1 % OpacityMask.Height)
 						: OpacityMask.Height - Math.Abs(y1 % OpacityMask.Height);
 				}
@@ -356,7 +361,9 @@ namespace Lime
 		{
 			var result = reader.ReadBytes(length);
 			if (result.Length != length) {
-				throw new InvalidOperationException($"Read texture data length {result.Length} was not equal to requested length {length}");
+				throw new InvalidOperationException(
+					$"Read texture data length {result.Length} was not equal to requested length {length}"
+				);
 			}
 			return result;
 		}

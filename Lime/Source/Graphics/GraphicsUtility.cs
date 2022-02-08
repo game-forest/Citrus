@@ -19,30 +19,34 @@ namespace Lime
 
 		public static ulong AlignDown(ulong value, ulong alignment)
 		{
-			return (value / alignment) * alignment;
+			return value / alignment * alignment;
 		}
 
 		public static ulong AlignUp(ulong value, ulong alignment)
 		{
-			return ((value + alignment - 1) / alignment) * alignment;
+			return (value + alignment - 1) / alignment * alignment;
 		}
 
 #if iOS
-		const string stdlib = "__Internal";
+		private const string Stdlib = "__Internal";
 #else
-		const string stdlib = "msvcrt";
+		private const string Stdlib = "msvcrt";
 #endif
 
-		[DllImport(stdlib, EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
+		[DllImport(Stdlib, EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
+#pragma warning disable SA1300 // Element should begin with upper-case letter
 		private static extern IntPtr memcpy(IntPtr dest, IntPtr src, UIntPtr count);
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
 		public static unsafe void CopyMemory(IntPtr dst, IntPtr src, int count)
 		{
 			memcpy(dst, src, new UIntPtr((uint)count));
 		}
 
-		[DllImport(stdlib, EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
+		[DllImport(Stdlib, EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
+#pragma warning disable SA1300 // Element should begin with upper-case letter
 		private static extern IntPtr memset(IntPtr dest, int c, UIntPtr count);
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
 		public static unsafe void FillMemory(IntPtr dst, int c, int count)
 		{
@@ -67,12 +71,15 @@ namespace Lime
 		{
 			var imageSize = GraphicsUtility.CalculateImageDataSize(format, width, height);
 			if (imageSize != dataSize) {
-				throw new InvalidDataException($"Texture data size {dataSize} is not equal to calculated size {imageSize}");
+				throw new InvalidDataException(
+					$"Texture data size {dataSize} is not equal to calculated size {imageSize}"
+				);
 			}
 		}
 
-		public static void CalculateMipLevelSize(int level, int width, int height, out int levelWidth, out int levelHeight)
-		{
+		public static void CalculateMipLevelSize(
+			int level, int width, int height, out int levelWidth, out int levelHeight
+		) {
 			levelWidth = width;
 			levelHeight = height;
 			while (level > 0) {

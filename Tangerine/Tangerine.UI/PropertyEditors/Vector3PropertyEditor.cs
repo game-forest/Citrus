@@ -7,7 +7,9 @@ namespace Tangerine.UI
 {
 	public class Vector3PropertyEditor : CommonPropertyEditor<Vector3>
 	{
-		private NumericEditBox editorX, editorY, editorZ;
+		private NumericEditBox editorX;
+		private NumericEditBox editorY;
+		private NumericEditBox editorZ;
 
 		public Vector3PropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
@@ -18,7 +20,7 @@ namespace Tangerine.UI
 					(editorY = editorParams.NumericEditBoxFactory()),
 					(editorZ = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
-				}
+				},
 			});
 			var currentX = CoalescedPropertyComponentValue(v => v.X);
 			var currentY = CoalescedPropertyComponentValue(v => v.Y);
@@ -26,16 +28,23 @@ namespace Tangerine.UI
 			editorX.Submitted += text => SetComponent(editorParams, 0, editorX, currentX.GetValue());
 			editorY.Submitted += text => SetComponent(editorParams, 1, editorY, currentY.GetValue());
 			editorZ.Submitted += text => SetComponent(editorParams, 2, editorZ, currentZ.GetValue());
-			editorX.AddLateChangeWatcher(currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			editorY.AddLateChangeWatcher(currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			editorZ.AddLateChangeWatcher(currentZ, v => editorZ.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			editorX.AddLateChangeWatcher(
+				currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			editorY.AddLateChangeWatcher(
+				currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			editorZ.AddLateChangeWatcher(
+				currentZ, v => editorZ.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(editorX, currentX);
 			ManageManyValuesOnFocusChange(editorY, currentY);
 			ManageManyValuesOnFocusChange(editorZ, currentZ);
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, int component, NumericEditBox editor, CoalescedValue<float> currentValue)
-		{
+		private void SetComponent(
+			IPropertyEditorParams editorParams, int component, NumericEditBox editor, CoalescedValue<float> currentValue
+		) {
 			if (Parser.TryParse(editor.Text, out double newValue)) {
 				DoTransaction(() => {
 					SetProperty<Vector3>(current => {

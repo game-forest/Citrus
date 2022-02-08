@@ -26,7 +26,7 @@ namespace Lime
 			CompoundPresenter.Add(new SliderPresenter());
 		}
 
-		class SliderThumbPresenter : IPresenter
+		private class SliderThumbPresenter : IPresenter
 		{
 			public Lime.RenderObject GetRenderObject(Node node)
 			{
@@ -57,7 +57,7 @@ namespace Lime
 			}
 		}
 
-		class SliderPresenter : IPresenter
+		private class SliderPresenter : IPresenter
 		{
 			public Lime.RenderObject GetRenderObject(Node node)
 			{

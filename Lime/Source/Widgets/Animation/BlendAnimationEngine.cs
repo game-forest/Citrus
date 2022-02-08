@@ -5,7 +5,7 @@ namespace Lime
 #if TANGERINE
 		public static bool ApplyAnimationBlenderInTangerine { get; set; }
 #endif
-		public new static BlendAnimationEngine Instance = new BlendAnimationEngine();
+		public static new BlendAnimationEngine Instance = new BlendAnimationEngine();
 
 		public override void AdvanceAnimation(Animation animation, double delta)
 		{
@@ -35,8 +35,9 @@ namespace Lime
 			return true;
 		}
 
-		protected override void ProcessMarker(Animation animation, Marker marker, double previousTime, double currentTime)
-		{
+		protected override void ProcessMarker(
+			Animation animation, Marker marker, double previousTime, double currentTime
+		) {
 			var blender = animation.OwnerNode.Components.Get<AnimationBlender>();
 			if (blender == null || marker.Action != MarkerAction.Jump) {
 				base.ProcessMarker(animation, marker, previousTime, currentTime);

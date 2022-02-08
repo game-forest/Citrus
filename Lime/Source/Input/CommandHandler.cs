@@ -12,7 +12,7 @@ namespace Lime
 
 	public class CommandHandlerList
 	{
-		struct Item
+		private struct Item
 		{
 			public ICommand Command;
 			public CommandHandler Handler;
@@ -36,7 +36,13 @@ namespace Lime
 
 		public void Connect(ICommand command, Action action, Func<bool> enableChecker = null)
 		{
-			items.Add(new Item { Command = command, Handler = new DelegateHandler { Action = action, EnableChecker = enableChecker } });
+			items.Add(new Item {
+				Command = command,
+				Handler = new DelegateHandler {
+					Action = action,
+					EnableChecker = enableChecker,
+				},
+			});
 		}
 
 		public void ProcessCommands()
@@ -56,7 +62,7 @@ namespace Lime
 			}
 		}
 
-		class DelegateHandler : CommandHandler
+		private class DelegateHandler : CommandHandler
 		{
 			public Action Action;
 			public Func<bool> EnableChecker;

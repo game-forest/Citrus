@@ -9,7 +9,7 @@ namespace Orange
 	{
 		public string Directory { get; }
 		public Predicate<string> EnumerationFilter { get; set; }
-		readonly List<string> files = new List<string>();
+		private readonly List<string> files = new List<string>();
 
 		public FileEnumerator(string directory)
 		{
@@ -23,8 +23,10 @@ namespace Orange
 			var dirInfo = new DirectoryInfo(Directory);
 			foreach (var fileInfo in dirInfo.GetFiles("*.*", SearchOption.AllDirectories)) {
 				var file = fileInfo.FullName;
-				if (file.Contains(".svn"))
+				if (file.Contains(".svn")) {
 					continue;
+				}
+
 				file = file.Remove(0, dirInfo.FullName.Length + 1);
 				file = CsprojSynchronization.ToUnixSlashes(file);
 				files.Add(file);
@@ -53,8 +55,9 @@ namespace Orange
 		private readonly List<string> files = new List<string>();
 		private readonly bool cutDirectoryPrefix = true;
 
-		public ScanOptimizedFileEnumerator(string directory, Predicate<DirectoryInfo> scanFilter, bool cutDirectoryPrefix = true)
-		{
+		public ScanOptimizedFileEnumerator(
+			string directory, Predicate<DirectoryInfo> scanFilter, bool cutDirectoryPrefix = true
+		) {
 			this.scanFilter = scanFilter;
 			this.cutDirectoryPrefix = cutDirectoryPrefix;
 			Directory = directory;

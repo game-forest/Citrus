@@ -2,7 +2,10 @@ namespace Lime
 {
 	internal class PostProcessingActionOverallImpact : PostProcessingAction
 	{
-		public override bool EnabledCheck(PostProcessingRenderObject ro) => ro.OverallImpactEnabled && ro.IsNotDebugViewMode;
+		public override bool EnabledCheck(PostProcessingRenderObject ro)
+		{
+			return ro.OverallImpactEnabled && ro.IsNotDebugViewMode;
+		}
 
 		public override void Do(PostProcessingRenderObject ro)
 		{

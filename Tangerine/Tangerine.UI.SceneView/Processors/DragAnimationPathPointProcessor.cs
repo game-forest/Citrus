@@ -8,9 +8,11 @@ namespace Tangerine.UI.SceneView
 {
 	public class DragAnimationPathPointProcessor : ITaskProvider
 	{
-		static SceneView sv => SceneView.Instance;
+		private static SceneView SceneView => SceneView.Instance;
 		private readonly VisualHint animationPathHint =
-			VisualHintsRegistry.Instance.Register("/All/Animation Path", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+			VisualHintsRegistry.Instance.Register(
+				"/All/Animation Path", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		public IEnumerator<object> Task()
 		{
@@ -18,13 +20,12 @@ namespace Tangerine.UI.SceneView
 				if (
 					!animationPathHint.Enabled ||
 					!SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() ||
-					!sv.Input.IsKeyPressed(Key.Control)
-				) {
+					!SceneView.Input.IsKeyPressed(Key.Control)) {
 					yield return null;
 					continue;
 				}
 				var nodes = Document.Current.SelectedNodes().Editable();
-				var mousePosition = sv.Frame.LocalMousePosition();
+				var mousePosition = SceneView.Frame.LocalMousePosition();
 				foreach (var node in nodes) {
 					if (!(node is Widget)) {
 						continue;
@@ -34,14 +35,14 @@ namespace Tangerine.UI.SceneView
 						foreach (var animator in animable.Animators) {
 							if (
 								animator is Vector2Animator &&
-								animator.TargetPropertyPath == nameof(Widget.Position)
-							) {
+								animator.TargetPropertyPath == nameof(Widget.Position)) {
 								var keys = animator.ReadonlyKeys.ToList();
-								var transform = node.Parent.AsWidget.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
+								var transform = node.Parent.AsWidget.LocalToWorldTransform
+									* SceneView.CalcTransitionFromSceneSpace(SceneView.Frame);
 								foreach (var key in keys) {
 									if ((mousePosition - (Vector2)key.Value * transform).Length < 20) {
 										Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-										if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+										if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 											yield return Drag(node as Widget, animator, key);
 										}
 										goto Next;
@@ -51,7 +52,7 @@ namespace Tangerine.UI.SceneView
 						}
 					}
 				}
-				Next:
+			Next:
 				yield return null;
 			}
 		}
@@ -59,18 +60,18 @@ namespace Tangerine.UI.SceneView
 		private IEnumerator<object> Drag(Widget widget, IAnimator animator, IKeyframe key)
 		{
 			var transform = widget.Parent.AsWidget.LocalToWorldTransform.CalcInversed();
-			var initMousePos = sv.MousePosition * transform;
+			var initMousePos = SceneView.MousePosition * transform;
 			using (Document.Current.History.BeginTransaction()) {
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var curMousePos = sv.MousePosition * transform;
+					var curMousePos = SceneView.MousePosition * transform;
 					var diff = curMousePos - initMousePos;
 					animator.ResetCache();
 					Core.Operations.SetProperty.Perform(key, nameof(IKeyframe.Value), (Vector2)key.Value + diff);
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 		}

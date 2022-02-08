@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -35,26 +33,16 @@ namespace SharpFont
 	/// </summary>
 	public sealed class CharMap
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private CharMapRec rec;
 
 		private Face parentFace;
-
-		#endregion
-
-		#region Constructors
 
 		internal CharMap(IntPtr reference, Face parent)
 		{
 			Reference = reference;
 			this.parentFace = parent;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a handle to the parent face object.
@@ -102,7 +90,7 @@ namespace SharpFont
 		{
 			get
 			{
-				//TODO find some way of getting a proper encoding ID enum...
+				// TODO find some way of getting a proper encoding ID enum...
 				return rec.encoding_id;
 			}
 		}
@@ -121,12 +109,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Methods
-
-		#region Base Interface
-
 		/// <summary>
 		/// Retrieve index of a given charmap.
 		/// </summary>
@@ -135,10 +117,6 @@ namespace SharpFont
 		{
 			return FT.FT_Get_Charmap_Index(Reference);
 		}
-
-		#endregion
-
-		#region TrueType Tables
 
 		/// <summary>
 		/// Return TrueType/sfnt specific cmap language ID. Definitions of language ID values are in
@@ -162,9 +140,5 @@ namespace SharpFont
 		{
 			return FT.FT_Get_CMap_Format(Reference);
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

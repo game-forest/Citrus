@@ -25,7 +25,7 @@ namespace Tangerine.Core.Operations
 				);
 				return;
 			}
-			DelegateOperation.Perform(null,Document.Current.RefreshSceneTree, false);
+			DelegateOperation.Perform(null, Document.Current.RefreshSceneTree, false);
 			Validate(node, destType, commonParent);
 			var result = CreateNode.Perform(
 				sceneItem.Parent,
@@ -66,7 +66,7 @@ namespace Tangerine.Core.Operations
 				nameof(Node.Parent),
 				nameof(Node.Nodes),
 				nameof(Node.Animations),
-				nameof(Node.Animators)
+				nameof(Node.Animators),
 			};
 			if (!(from is Animesh | from is DistortionMesh) && (to is Animesh | to is DistortionMesh)) {
 				excludedProperties.Add(nameof(Widget.SkinningWeights));
@@ -100,7 +100,7 @@ namespace Tangerine.Core.Operations
 				var bones = Enumerable.Range(0, 4)
 					.Where(i => sw[i].Index > 0)
 					.Select(i => from.Parent.Nodes.GetBone(sw[i].Index));
-				var widgets = new [] { to.AsWidget };
+				var widgets = new[] { to.AsWidget };
 				UntieWidgetsFromBones.Perform(bones, widgets);
 				TieWidgetsWithBones.Perform(bones, widgets);
 			}
@@ -135,7 +135,10 @@ namespace Tangerine.Core.Operations
 						$"{animator.TargetPropertyPath}, which is not animable in {destType}, skipping.");
 					continue;
 				}
-				if (animator.TargetPropertyPath == nameof(Node.Trigger) && !NodeCompositionValidator.CanHaveChildren(destType)) {
+				if (
+					animator.TargetPropertyPath == nameof(Node.Trigger)
+					&& !NodeCompositionValidator.CanHaveChildren(destType)
+				) {
 					Console.WriteLine($"[Warning] Node {from} has animator on property " +
 						$"{nameof(Node.Trigger)}, but {destType} cannot have children nodes, skipping.");
 					continue;

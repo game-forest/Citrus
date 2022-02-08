@@ -4,7 +4,7 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline.Components
 {
-	class HasKeyframeRequest : Component
+	internal class HasKeyframeRequest : Component
 	{
 		public readonly IntVector2 Cell;
 		public bool Result;

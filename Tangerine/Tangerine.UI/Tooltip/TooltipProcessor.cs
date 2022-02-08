@@ -7,7 +7,7 @@ namespace Tangerine.UI
 {
 	public class TooltipProcessor : ITaskProvider
 	{
-		private static Tooltip tooltip => Tooltip.Instance;
+		private static Tooltip Tooltip => Tooltip.Instance;
 
 #if MAC || MONOMAC
 		private static float offsetCoefficient = -2f;
@@ -37,26 +37,28 @@ namespace Tangerine.UI
 				if (string.IsNullOrEmpty(component?.GetText?.Invoke())) {
 					continue;
 				}
-				bool isNodeChanged() => node != NodeUnderMouse;
-				yield return tooltip.Delay(component.ShowDelay, isNodeChanged);
-				if (!isNodeChanged()) {
-					if (tooltip.IsVisible) {
-						tooltip.Hide();
+				bool IsNodeChanged() => node != NodeUnderMouse;
+				yield return Tooltip.Delay(component.ShowDelay, IsNodeChanged);
+				if (!IsNodeChanged()) {
+					if (Tooltip.IsVisible) {
+						Tooltip.Hide();
 					}
 					var pos =
 						Application.Input.DesktopMousePosition +
 						offsetCoefficient * new Vector2(0, node.AsWidget?.Height ?? 0);
-					while (!isNodeChanged()) {
+					while (!IsNodeChanged()) {
 						yield return null;
-						if (!tooltip.IsVisible) {
-							tooltip.Show(component.GetText(), pos);
+						if (!Tooltip.IsVisible) {
+							Tooltip.Show(component.GetText(), pos);
 						} else if (component.HideDelay > float.Epsilon) {
-							yield return tooltip.Delay(component.HideDelay, isNodeChanged);
-							tooltip.Hide();
-							while (!isNodeChanged()) yield return null;
+							yield return Tooltip.Delay(component.HideDelay, IsNodeChanged);
+							Tooltip.Hide();
+							while (!IsNodeChanged()) {
+								yield return null;
+							}
 						}
 					}
-					tooltip.Hide();
+					Tooltip.Hide();
 				}
 			}
 		}

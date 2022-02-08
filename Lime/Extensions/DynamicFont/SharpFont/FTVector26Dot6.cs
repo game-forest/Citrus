@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2015 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -33,14 +31,8 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FTVector26Dot6 : IEquatable<FTVector26Dot6>
 	{
-		#region Fields
-
 		private IntPtr x;
 		private IntPtr y;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FTVector26Dot6"/> struct.
@@ -60,10 +52,6 @@ namespace SharpFont
 			this.x = Marshal.ReadIntPtr(reference);
 			this.y = Marshal.ReadIntPtr(reference, IntPtr.Size);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the horizontal coordinate.
@@ -97,10 +85,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Operators
-
 		/// <summary>
 		/// Compares two instances of <see cref="FTVector26Dot6"/> for equality.
 		/// </summary>
@@ -123,10 +107,6 @@ namespace SharpFont
 			return !left.Equals(right);
 		}
 
-		#endregion
-
-		#region Methods
-
 		/// <summary>
 		/// Compares this instance of <see cref="FTVector26Dot6"/> to another for equality.
 		/// </summary>
@@ -144,10 +124,11 @@ namespace SharpFont
 		/// <returns>A value indicating equality.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is FTVector26Dot6)
+			if (obj is FTVector26Dot6) {
 				return this.Equals((FTVector26Dot6)obj);
-			else
+			} else {
 				return false;
+			}
 		}
 
 		/// <summary>
@@ -158,7 +139,5 @@ namespace SharpFont
 		{
 			return x.GetHashCode() ^ y.GetHashCode();
 		}
-
-		#endregion
 	}
 }

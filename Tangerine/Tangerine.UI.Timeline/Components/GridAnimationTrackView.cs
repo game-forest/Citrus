@@ -21,15 +21,18 @@ namespace Tangerine.UI.Timeline.Components
 			GridWidget = new Widget {
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				MinHeight = TimelineMetrics.DefaultRowHeight,
-				Presenter = new SyncDelegatePresenter<Widget>(Render)
+				Presenter = new SyncDelegatePresenter<Widget>(Render),
 			};
 			GridWidgetAwakeBehavior.Action += _ => {
-				GridWidget.AddChangeWatcher(() => CalcLabelsHashCode(GridWidget, track), __ => RefreshLabels(GridWidget, track));
+				GridWidget.AddChangeWatcher(
+					() => CalcLabelsHashCode(GridWidget, track),
+					_ => RefreshLabels(GridWidget, track)
+				);
 			};
 			OverviewWidget = new Widget {
 				LayoutCell = new LayoutCell { StretchY = 0 },
 				MinHeight = TimelineMetrics.DefaultRowHeight,
-				Presenter = new SyncDelegatePresenter<Widget>(Render)
+				Presenter = new SyncDelegatePresenter<Widget>(Render),
 			};
 		}
 
@@ -77,7 +80,7 @@ namespace Tangerine.UI.Timeline.Components
 					Padding = new Thickness(4),
 					VAlignment = VAlignment.Center,
 					OverflowMode = TextOverflowMode.Ellipsis,
-					Color = ColorTheme.Current.TimelineGrid.AnimationClipLabel
+					Color = ColorTheme.Current.TimelineGrid.AnimationClipLabel,
 				});
 			}
 		}
@@ -111,7 +114,13 @@ namespace Tangerine.UI.Timeline.Components
 			var color = ColorTheme.Current.TimelineGrid.AnimationTrackWeightCurve;
 			var a = CalcWeightCurvePoint(-1, track.Weight, widget.Height);
 			var b = new Vector2(widget.Width, a.Y);
-			if (track.Animators.TryFind<float>(nameof(AnimationTrack.Weight), out var animator, Document.Current.Animation.Id)) {
+			if (
+				track.Animators.TryFind<float>(
+					nameof(AnimationTrack.Weight),
+					out var animator,
+					Document.Current.Animation.Id
+				)
+			) {
 				var first = true;
 				var func = KeyFunction.Step;
 				foreach (var k in animator.ReadonlyKeys) {

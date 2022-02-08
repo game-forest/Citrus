@@ -152,7 +152,10 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 					DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 					var item = Document.Current.GetSceneItemForObject(node).SceneItems
 						.Where(i => i.Id == info.TargetProperty)
-						.First(i => i.Components.Get<CommonPropertySceneItemData>().Animator.AnimationId == info.AnimationId);
+						.First(
+							i => i.Components.Get<CommonPropertySceneItemData>().Animator.AnimationId
+							== info.AnimationId
+						);
 					SelectSceneItem.Perform(item);
 				});
 			} catch (System.Exception exception) {
@@ -162,14 +165,16 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 
 		private class AnimationNotFoundException : System.Exception
 		{
-			public AnimationNotFoundException(string animationId) :
-				base($"Neither this node nor its ancestors contain animation with \"{animationId}\" id!") { }
+			public AnimationNotFoundException(string animationId)
+				: base($"Neither this node nor its ancestors contain animation with \"{animationId}\" id!")
+			{ }
 		}
 
 		private class CannotSelectPropertyRowException : System.Exception
 		{
-			public CannotSelectPropertyRowException(System.Exception inner) :
-				base("Cannot select property scene item!", inner) { }
+			public CannotSelectPropertyRowException(System.Exception inner)
+				: base("Cannot select property scene item!", inner)
+			{ }
 		}
 	}
 }

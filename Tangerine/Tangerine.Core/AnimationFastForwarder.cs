@@ -110,7 +110,7 @@ namespace Tangerine.Core
 			var animationState = new AnimationState {
 				Animation = animation,
 				TickStoppedOn = -1,
-				Depth = GetNodeDepth(animation.OwnerNode)
+				Depth = GetNodeDepth(animation.OwnerNode),
 			};
 			try {
 				if (!isTopLevelAnimation && GetIncomingEdges(animation).Count == 0) {
@@ -122,7 +122,10 @@ namespace Tangerine.Core
 				if (isTopLevelAnimation) {
 					unitedTriggers[0] = 0;
 				} else {
-					foreach (var edge in GetIncomingEdges(animation).OrderBy(e => GetNodeDepth(e.Animation.OwnerNode))) {
+					foreach (
+						var edge
+						in GetIncomingEdges(animation).OrderBy(e => GetNodeDepth(e.Animation.OwnerNode))
+					) {
 						var edgeTriggers = edge.Triggers;
 						for (int t = 0; t <= currentTick; t++) {
 							if (edgeTriggers[t] != ushort.MaxValue) {
@@ -137,7 +140,8 @@ namespace Tangerine.Core
 					if (!animation.AnimationEngine.AreEffectiveAnimatorsValid(animation)) {
 						animation.AnimationEngine.BuildEffectiveAnimators(animation);
 					}
-					var parsedTriggersComponent = animation.Components.GetOrAdd<AnimationParsedTriggersTableComponent>();
+					var parsedTriggersComponent =
+						animation.Components.GetOrAdd<AnimationParsedTriggersTableComponent>();
 					if (
 						parsedTriggersComponent.EffectiveAnimatorsVersion != animation.EffectiveAnimatorsVersion
 						|| parsedTriggersComponent.Table == null
@@ -189,7 +193,7 @@ namespace Tangerine.Core
 					if (outgoingTriggers[i] != null) {
 						newOutgoingEdges.Add(new Edge {
 							Animation = parsedTriggers.TriggeredAnimations[i],
-							Triggers = outgoingTriggers[i]
+							Triggers = outgoingTriggers[i],
 						});
 					}
 				}
@@ -287,7 +291,7 @@ namespace Tangerine.Core
 
 			public int GetFirstKeyframeIndex(int frame)
 			{
-				if (table[frame >> 8] is {} page) {
+				if (table[frame >> 8] is { } page) {
 					return page[frame & 0xFF];
 				}
 				table[frame >> 8] = page = ArrayPool<ushort>.Shared.Rent(256);
@@ -322,7 +326,7 @@ namespace Tangerine.Core
 							Keyframes.Add(new Keyframe {
 								AnimationIndex = animationIndex,
 								Frame = (ushort)triggerFrame,
-								NextKeyframeIndex = i
+								NextKeyframeIndex = i,
 							});
 						}
 					}
@@ -344,7 +348,7 @@ namespace Tangerine.Core
 
 			private static IEnumerable<(Animation, int)> ParseTrigger(Node node, string trigger)
 			{
-				trigger ??= "";
+				trigger ??= string.Empty;
 				if (trigger.Contains(',')) {
 					foreach (var s in trigger.Split(',')) {
 						if (ParseTriggerHelper(node, s.Trim(), out var a, out var t)) {
@@ -403,7 +407,7 @@ namespace Tangerine.Core
 
 			public ushort NextFrame(ushort frame)
 			{
-				if (table[frame >> 8] is {} page) {
+				if (table[frame >> 8] is { } page) {
 					return page[frame & 0xFF];
 				}
 				table[frame >> 8] = page = ArrayPool<ushort>.Shared.Rent(256);

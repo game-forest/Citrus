@@ -15,10 +15,22 @@ namespace Lime
 		{
 			get
 			{
-				if (index == 0) return V1;
-				if (index == 1) return V2;
-				if (index == 2) return V3;
-				if (index == 3) return V4;
+				if (index == 0) {
+					return V1;
+				}
+
+				if (index == 1) {
+					return V2;
+				}
+
+				if (index == 2) {
+					return V3;
+				}
+
+				if (index == 3) {
+					return V4;
+				}
+
 				throw new IndexOutOfRangeException();
 			}
 			set
@@ -153,7 +165,7 @@ namespace Lime
 				V1 = matrix.TransformVector(V1),
 				V2 = matrix.TransformVector(V2),
 				V3 = matrix.TransformVector(V3),
-				V4 = matrix.TransformVector(V4)
+				V4 = matrix.TransformVector(V4),
 			};
 		}
 	}

@@ -7,19 +7,29 @@ namespace Lime
 	public partial class Texture2D : CommonTexture, ITexture
 	{
 		// Values taken from PVRTexture.h from http://www.imgtec.com
-		enum PVRTextureFlag {
-			Mipmap			= (1<<8),		// has mip map levels
-			Twiddle			= (1<<9),		// is twiddled
-			FlagBumpmap		= (1<<10),		// has normals encoded for a bump map
-			Tiling			= (1<<11),		// is bordered for tiled pvr
-			Cubemap			= (1<<12),		// is a cubemap/skybox
-			FalseMipCol		= (1<<13),		// are there false coloured MIP levels
-			FlagVolume		= (1<<14),		// is this a volume texture
-			FlagAlpha		= (1<<15),		// v2.1 is there transparency info in the texture
-			VerticalFlip	= (1<<16),		// v2.1 is the texture vertically flipped
+		private enum PVRTextureFlag
+		{
+			// has mip map levels
+			Mipmap = 1 << 8,
+			// is twiddled
+			Twiddle = 1 << 9,
+			// has normals encoded for a bump map
+			FlagBumpmap = 1 << 10,
+			// is bordered for tiled pvr
+			Tiling = 1 << 11,
+			// is a cubemap/skybox
+			Cubemap = 1 << 12,
+			// are there false coloured MIP levels
+			FalseMipCol = 1 << 13,
+			// is this a volume texture
+			FlagVolume = 1 << 14,
+			// v2.1 is there transparency info in the texture
+			FlagAlpha = 1 << 15,
+			// v2.1 is the texture vertically flipped
+			VerticalFlip = 1 << 16,
 		}
 
-		enum LegacyPVRFormat
+		private enum LegacyPVRFormat
 		{
 			RGBA_4444 = 0x0,
 			RGBA_1555 = 0x1,
@@ -28,13 +38,13 @@ namespace Lime
 			RGB_888 = 0x4,
 			ARGB_8888 = 0x5,
 			PVRTC_2 = 0xC,
-			PVRTC_4 = 0xD,	
+			PVRTC_4 = 0xD,
 			GLARGB_4444 = 0x10,
 			GLARGB_8888 = 0x12,
 			GLRGB_565 = 0x13,
 		}
 
-		enum PVRFormat : ulong
+		private enum PVRFormat : ulong
 		{
 			RGBA8888 = 'r' | ('g' << 8) | ('b' << 16) | ('a' << 24) | (8L << 32) | (8L << 40) | (8L << 48) | (8L << 56),
 			RGBA4444 = 'r' | ('g' << 8) | ('b' << 16) | ('a' << 24) | (4L << 32) | (4L << 40) | (4L << 48) | (4L << 56),
@@ -46,12 +56,12 @@ namespace Lime
 			ETC1 = 6 << 32,
 		}
 
-		private UInt32 PVRMagic = 0x03525650;
+		private uint pVRMagic = 0x03525650;
 
 		private void InitWithPVRTexture(BinaryReader reader)
 		{
 			var version = reader.ReadUInt32();
-			if (version != PVRMagic) {
+			if (version != pVRMagic) {
 				throw new Exception("Invalid PVR header");
 			}
 			reader.ReadUInt32(); // flags

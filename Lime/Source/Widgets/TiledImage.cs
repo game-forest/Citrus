@@ -25,7 +25,8 @@ namespace Lime
 		public override sealed ITexture Texture
 		{
 			get { return texture; }
-			set {
+			set
+			{
 				if (texture != value) {
 					texture = value;
 					material = null;
@@ -75,7 +76,8 @@ namespace Lime
 		public bool IsTiledAlongY
 		{
 			get => TileSize.Y != 0.0f;
-			set {
+			set
+			{
 				if (value) {
 					TileSize = new Vector2(TileSize.X, savedTileSizeY);
 				} else {
@@ -129,7 +131,7 @@ namespace Lime
 			skipRender = false;
 		}
 
-		internal protected override bool PartialHitTestByContents(ref HitTestArgs args)
+		protected internal override bool PartialHitTestByContents(ref HitTestArgs args)
 		{
 			Vector2 localPoint = LocalToWorldTransform.CalcInversed().TransformVector(args.Point);
 			Vector2 size = Size;
@@ -142,9 +144,9 @@ namespace Lime
 				size.Y = -size.Y;
 			}
 			if (localPoint.X >= 0 && localPoint.Y >= 0 && localPoint.X < size.X && localPoint.Y < size.Y) {
-				var UV1 = CalcUV1();
-				float u = TileOffset.X + (UV1.X - TileOffset.X) * (localPoint.X / size.X);
-				float v = TileOffset.Y + (UV1.Y - TileOffset.Y) * (localPoint.Y / size.Y);
+				var uV1 = CalcUV1();
+				float u = TileOffset.X + (uV1.X - TileOffset.X) * (localPoint.X / size.X);
+				float v = TileOffset.Y + (uV1.Y - TileOffset.Y) * (localPoint.Y / size.Y);
 				int tu = (int)(Texture.ImageSize.Width * u);
 				int tv = (int)(Texture.ImageSize.Height * v);
 				return !Texture.IsTransparentPixel(tu, tv);
@@ -158,13 +160,13 @@ namespace Lime
 			if (material == null || CleanDirtyFlags(DirtyFlags.Material)) {
 				material = WidgetMaterial.GetInstance(GlobalBlending, GlobalShader, 1);
 			}
-			var UV1 = CalcUV1();
+			var uV1 = CalcUV1();
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			ro.CaptureRenderState(this);
 			ro.Texture = Texture;
 			ro.Material = CustomMaterial ?? material;
 			ro.TileOffset = TileOffset;
-			ro.UV1 = UV1;
+			ro.UV1 = uV1;
 			ro.Color = GlobalColor;
 			ro.Position = ContentPosition;
 			ro.Size = ContentSize;
@@ -173,16 +175,16 @@ namespace Lime
 
 		private Vector2 CalcUV1()
 		{
-			var UV1 = new Vector2 {
+			var uV1 = new Vector2 {
 				X = TileSize.X == 0.0f ? 1.0f : Size.X / TileSize.X,
-				Y = TileSize.Y == 0.0f ? 1.0f : Size.Y / TileSize.Y
+				Y = TileSize.Y == 0.0f ? 1.0f : Size.Y / TileSize.Y,
 			};
 			if (TileRounding) {
-				UV1.X = (float)Math.Round(UV1.X);
-				UV1.Y = (float)Math.Round(UV1.Y);
+				uV1.X = (float)Math.Round(uV1.X);
+				uV1.Y = (float)Math.Round(uV1.Y);
 			}
-			UV1 += TileOffset;
-			return UV1;
+			uV1 += TileOffset;
+			return uV1;
 		}
 
 		public bool IsNotRenderTexture()
@@ -203,7 +205,9 @@ namespace Lime
 			public override void Render()
 			{
 				PrepareRenderState();
-				Renderer.DrawSprite(Texture, null, Material, Color, Position, Size, TileOffset, UV1, Vector2.Zero, Vector2.Zero);
+				Renderer.DrawSprite(
+					Texture, null, Material, Color, Position, Size, TileOffset, UV1, Vector2.Zero, Vector2.Zero
+				);
 			}
 
 			protected override void OnRelease()

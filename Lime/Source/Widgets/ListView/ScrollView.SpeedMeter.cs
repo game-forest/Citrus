@@ -7,15 +7,15 @@ namespace Lime
 {
 	public partial class ScrollView
 	{
-		class VelocityMeter
+		private class VelocityMeter
 		{
-			struct Sample
+			private struct Sample
 			{
 				public float Position;
 				public DateTime Time;
 			}
 
-			const float MeasureTimeInterval = 0.15f;
+			private const float MeasureTimeInterval = 0.15f;
 
 			private readonly List<Sample> samples = new List<Sample>();
 

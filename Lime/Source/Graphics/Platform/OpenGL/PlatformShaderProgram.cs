@@ -105,13 +105,22 @@ namespace Lime.Graphics.Platform.OpenGL
 			var sb = new StringBuilder(maxUniformNameLength);
 #endif
 			for (var i = 0; i < uniformCount; i++) {
-				
 #if WIN
-				GL.GetActiveUniform(GLProgram, i, maxUniformNameLength, out _, out var arraySize, out ActiveUniformType type, out var name);
+				GL.GetActiveUniform(
+					program: GLProgram,
+					index: i,
+					bufSize: maxUniformNameLength,
+					length: out _,
+					size: out var arraySize,
+					type: out ActiveUniformType type,
+					name: out var name
+				);
 				GLHelper.CheckGLErrors();
 #else
 				sb.Clear();
-				GL.GetActiveUniform(GLProgram, i, maxUniformNameLength, out _, out var arraySize, out ActiveUniformType type, sb);
+				GL.GetActiveUniform(
+					GLProgram, i, maxUniformNameLength, out _, out var arraySize, out ActiveUniformType type, sb
+				);
 				GLHelper.CheckGLErrors();
 				var name = sb.ToString();
 #endif
@@ -123,7 +132,7 @@ namespace Lime.Graphics.Platform.OpenGL
 					ArraySize = arraySize,
 					Location = location,
 					StagingDataOffset = -1,
-					TextureSlot = -1
+					TextureSlot = -1,
 				};
 				if (info.Type.IsSampler()) {
 					if (info.ArraySize > 1) {
@@ -146,7 +155,9 @@ namespace Lime.Graphics.Platform.OpenGL
 				throw new InvalidOperationException();
 			}
 			elementCount = Math.Min(elementCount, info.ArraySize);
-			GraphicsUtility.CopyMemory(uniformStagingData + info.StagingDataOffset, data, info.ElementSize * elementCount);
+			GraphicsUtility.CopyMemory(
+				uniformStagingData + info.StagingDataOffset, data, info.ElementSize * elementCount
+			);
 			var lastDirtyElementCount = dirtyUniformElementCount[index];
 			if (lastDirtyElementCount == 0) {
 				dirtyUniformIndices[dirtyUniformCount++] = index;
@@ -223,7 +234,7 @@ namespace Lime.Graphics.Platform.OpenGL
 			return uniformInfos.Select(info => new UniformDesc {
 				Name = info.Name,
 				Type = info.Type,
-				ArraySize = info.ArraySize
+				ArraySize = info.ArraySize,
 			}).ToArray();
 		}
 

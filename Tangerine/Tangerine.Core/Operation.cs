@@ -62,7 +62,8 @@ namespace Tangerine.Core
 		void Redo(IOperation operation);
 	}
 
-	public abstract class OperationProcessor<TOperation> : IOperationProcessor where TOperation: IOperation
+	public abstract class OperationProcessor<TOperation> : IOperationProcessor
+		where TOperation : IOperation
 	{
 		public void Do(IOperation op) => InternalDo((TOperation)op);
 		public void Redo(IOperation op) => InternalRedo((TOperation)op);

@@ -4,7 +4,7 @@ using Lime;
 
 namespace Orange
 {
-	class SyncFonts : ICookingStage
+	internal class SyncFonts : ICookingStage
 	{
 		private readonly AssetCooker assetCooker;
 

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Yuzu;
-using System.Runtime.CompilerServices;
 
 namespace Lime
 {
@@ -15,7 +15,8 @@ namespace Lime
 	}
 
 	[YuzuSpecializeWith(typeof(Lime.Mesh3D.Vertex))]
-	public unsafe partial class Mesh<T> : IMesh, IDisposable where T : unmanaged
+	public unsafe partial class Mesh<T> : IMesh, IDisposable
+		where T : unmanaged
 	{
 		private bool disposed;
 
@@ -132,8 +133,8 @@ namespace Lime
 				var bindings = new[] {
 					new VertexInputLayoutBinding {
 						Slot = 0,
-						Stride = sizeof(T)
-					}
+						Stride = sizeof(T),
+					},
 				};
 				var attributes = new List<VertexInputLayoutAttribute>();
 				foreach (var elementDescription in GetElementDescriptions()) {
@@ -296,7 +297,7 @@ namespace Lime
 				x = (x >> 4) + x & 0x0f0f0f0f;
 				x += x >> 8;
 				x += x >> 16;
-				//subtract # of 1s from 32
+				// subtract # of 1s from 32
 				return (x & 0x0000003f) - 1;
 			}
 		}

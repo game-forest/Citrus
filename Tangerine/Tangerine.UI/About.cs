@@ -1,7 +1,7 @@
-using Lime;
-using Orange;
 using System.IO;
 using System.Text;
+using Lime;
+using Orange;
 using Tangerine.Core;
 
 namespace Tangerine.UI
@@ -16,12 +16,12 @@ namespace Tangerine.UI
 			if (!Git.IsGitInPath) {
 				return "Git is not in PATH\n";
 			}
-			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
+			var projectDir = Path.GetDirectoryName(Project.Current?.CitprojPath ?? string.Empty);
 			StringBuilder stringbBuilder = new StringBuilder();
 			var citrusDir = Orange.Toolbox.FindCitrusDirectory();
 			Git.Exec(projectDir, "remote -v", stringbBuilder);
 			var projectRemoteUri = stringbBuilder.ToString().IsNullOrWhiteSpace() ?
-				"" : stringbBuilder.ToString().Split('\n')[0].Split(' ', '\t')[1];
+				string.Empty : stringbBuilder.ToString().Split('\n')[0].Split(' ', '\t')[1];
 			Git.Exec(projectDir, "rev-parse HEAD", stringbBuilder.Clear());
 			var projectLatestCommit = stringbBuilder.ToString();
 			Git.Exec(citrusDir, "rev-parse HEAD", stringbBuilder.Clear());

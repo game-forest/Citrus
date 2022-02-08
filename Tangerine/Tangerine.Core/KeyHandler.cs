@@ -8,11 +8,15 @@ namespace Tangerine.Core
 
 	public abstract class KeyHandler : ITaskProvider
 	{
-		readonly Key key;
-		readonly KeyEventDelegate handler;
+		private readonly Key key;
+		private readonly KeyEventDelegate handler;
 
 		public KeyHandler(KeyEventDelegate handler) { this.handler = handler; }
-		public KeyHandler(Key key, KeyEventDelegate handler) { this.key = key; this.handler = handler; }
+		public KeyHandler(Key key, KeyEventDelegate handler)
+		{
+			this.key = key;
+			this.handler = handler;
+		}
 
 		public IEnumerator<object> Task()
 		{

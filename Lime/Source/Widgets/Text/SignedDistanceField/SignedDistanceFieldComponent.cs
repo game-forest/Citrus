@@ -1,11 +1,11 @@
-using Yuzu;
-using Lime.SignedDistanceField;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Collections;
-using System;
+using Lime.SignedDistanceField;
+using Yuzu;
 
 namespace Lime
 {
@@ -35,7 +35,8 @@ namespace Lime
 		public Color4 Color
 		{
 			get => color;
-			set {
+			set
+			{
 				if (color != value) {
 					materialProvider = null;
 				}
@@ -47,7 +48,8 @@ namespace Lime
 		public int OffsetX
 		{
 			get => offsetX;
-			set {
+			set
+			{
 				if (offsetX != value) {
 					materialProvider = null;
 				}
@@ -59,7 +61,8 @@ namespace Lime
 		public int OffsetY
 		{
 			get => offsetY;
-			set {
+			set
+			{
 				if (offsetY != value) {
 					materialProvider = null;
 				}
@@ -72,7 +75,8 @@ namespace Lime
 		public float Softness
 		{
 			get => softness;
-			set {
+			set
+			{
 				if (softness != value) {
 					materialProvider = null;
 				}
@@ -85,7 +89,8 @@ namespace Lime
 		public float Dilate
 		{
 			get => dilate;
-			set {
+			set
+			{
 				if (dilate != value) {
 					materialProvider = null;
 				}
@@ -104,7 +109,8 @@ namespace Lime
 		[TangerineIgnore]
 		internal Sprite.IMaterialProvider MaterialProvider
 		{
-			get {
+			get
+			{
 				Invalidate();
 				return materialProvider;
 			}
@@ -127,7 +133,7 @@ namespace Lime
 						Dilate = Dilate,
 						Softness = Softness,
 						Color = Color,
-						Offset = new Vector2(offsetX, offsetY) * 0.1f
+						Offset = new Vector2(offsetX, offsetY) * 0.1f,
 					};
 					materialProvider = SDFMaterialProviderPool.Instance.GetShadowProvider(shadowKey);
 					break;
@@ -137,7 +143,7 @@ namespace Lime
 						TextDilate = OwnerComponent.Dilate,
 						Softness = Softness,
 						Color = Color,
-						Offset = new Vector2(offsetX, offsetY) * 0.0001f
+						Offset = new Vector2(offsetX, offsetY) * 0.0001f,
 					};
 					materialProvider = SDFMaterialProviderPool.Instance.GetInnerShadowProvider(innerShadowKey);
 					break;
@@ -197,7 +203,8 @@ namespace Lime
 		public float Softness
 		{
 			get => softness;
-			set {
+			set
+			{
 				if (softness != value) {
 					materialProvider = null;
 					foreach (var shadow in InnerShadows) {
@@ -214,7 +221,8 @@ namespace Lime
 		public float Dilate
 		{
 			get => dilate;
-			set {
+			set
+			{
 				if (dilate != value) {
 					materialProvider = null;
 					foreach (var shadow in InnerShadows) {
@@ -230,7 +238,8 @@ namespace Lime
 		public Color4 OutlineColor
 		{
 			get => outlineColor;
-			set {
+			set
+			{
 				if (outlineColor != value) {
 					materialProvider = null;
 				}
@@ -244,7 +253,8 @@ namespace Lime
 		public float Thickness
 		{
 			get => thickness;
-			set {
+			set
+			{
 				if (thickness != value) {
 					materialProvider = null;
 				}
@@ -257,7 +267,8 @@ namespace Lime
 		public bool GradientEnabled
 		{
 			get => gradientEnabled;
-			set {
+			set
+			{
 				if (gradientEnabled != value) {
 					materialProvider = null;
 				}
@@ -270,7 +281,8 @@ namespace Lime
 		public ColorGradient Gradient
 		{
 			get => gradient;
-			set {
+			set
+			{
 				if (
 					value == null ||
 					gradient == null ||
@@ -287,7 +299,8 @@ namespace Lime
 		public float GradientAngle
 		{
 			get => gradientAngle;
-			set {
+			set
+			{
 				if (gradientAngle != value) {
 					materialProvider = null;
 				}
@@ -326,7 +339,7 @@ namespace Lime
 				OutlineColor = OutlineColor,
 				GradientEnabled = GradientEnabled,
 				Gradient = Gradient,
-				GradientAngle = GradientAngle
+				GradientAngle = GradientAngle,
 			};
 
 			materialProvider = SDFMaterialProviderPool.Instance.GetProvider(key);
@@ -400,7 +413,8 @@ namespace Lime
 				{
 					return list[index];
 				}
-				set {
+				set
+				{
 					RuntimeChecksBeforeInsertion(value);
 					value.OwnerComponent = owner;
 					var oldNode = list[index];

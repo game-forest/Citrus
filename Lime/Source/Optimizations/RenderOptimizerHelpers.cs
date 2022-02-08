@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace Lime.RenderOptimizer
@@ -84,7 +84,9 @@ namespace Lime.RenderOptimizer
 
 					for (var i = 0; i < mesh.Nodes.Count; i++) {
 						var point = (DistortionMeshPoint)mesh.Nodes[i];
-						rectangle = ExpandMeshLocalAABB(rectangle, mesh.Size, point, bones, weightsMatrix, weightsMatrixInversed);
+						rectangle = ExpandMeshLocalAABB(
+							rectangle, mesh.Size, point, bones, weightsMatrix, weightsMatrixInversed
+						);
 					}
 				}
 			}
@@ -101,8 +103,7 @@ namespace Lime.RenderOptimizer
 			BoneArray bones,
 			Matrix32 weightsMatrix,
 			Matrix32 weightsMatrixInversed
-		)
-		{
+		) {
 			var position = size * point.Position + point.Offset;
 			if (point.SkinningWeights != null) {
 				position = weightsMatrixInversed.TransformVector(bones.ApplySkinningToVector(

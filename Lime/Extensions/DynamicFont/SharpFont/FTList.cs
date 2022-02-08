@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -57,23 +55,13 @@ namespace SharpFont
 	/// </summary>
 	public sealed class FTList
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private ListRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal FTList(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the head (first element) of doubly-linked list.
@@ -110,10 +98,6 @@ namespace SharpFont
 				rec = PInvokeHelper.PtrToStructure<ListRec>(reference);
 			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Find the list node for a given listed object.
@@ -171,8 +155,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_List_Iterate(Reference, iterator, user);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -189,7 +174,5 @@ namespace SharpFont
 		{
 			FT.FT_List_Finalize(Reference, destroy, memory.Reference, user);
 		}
-
-		#endregion
 	}
 }

@@ -20,8 +20,8 @@ namespace Tangerine.UI
 			this.panel = panel;
 			RootWidget = new Widget {
 				Layout = new VBoxLayout {
-					Spacing = 6
-				}
+					Spacing = 6,
+				},
 			};
 			panel.ContentWidget.AddNode(RootWidget);
 #if PROFILER

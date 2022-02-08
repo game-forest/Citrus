@@ -1,7 +1,7 @@
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Lime;
 using System;
+using System.Linq;
+using Lime;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Citrus.Tests.Widgets
 {
@@ -27,7 +27,6 @@ namespace Citrus.Tests.Widgets
 
 		private class DummyComponent : Component
 		{
-
 		}
 
 		[TestMethod]
@@ -89,7 +88,6 @@ namespace Citrus.Tests.Widgets
 				components.Add(base2);
 				components.Add(derived1);
 				components.Add(derived2);
-
 			}
 		}
 
@@ -226,7 +224,6 @@ namespace Citrus.Tests.Widgets
 				CollectionAssert.Contains(cs, derived);
 				Assert.AreEqual(1, cs.Count);
 			}
-
 		}
 
 		[TestMethod]
@@ -287,7 +284,6 @@ namespace Citrus.Tests.Widgets
 
 		[AllowMultipleComponents]
 		private class BaseTestNodeComponent : NodeComponent { }
-
 
 		private class DerivedTestNodeComponent : BaseTestNodeComponent { }
 
@@ -367,8 +363,6 @@ namespace Citrus.Tests.Widgets
 				Assert.IsTrue(components.Remove<BaseTestNodeComponent>());
 			}
 		}
-
-
 
 		public class RemoveComponentOnRemoveComponent : NodeComponent
 		{

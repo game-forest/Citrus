@@ -72,7 +72,7 @@ namespace Tangerine
 		private static class WindowsFormActivator
 		{
 			[System.Runtime.InteropServices.DllImport("user32.dll")]
-			private static extern int ShowWindow(IntPtr hWnd, uint Msg);
+			private static extern int ShowWindow(IntPtr hWnd, uint msg);
 
 			private const uint SW_RESTORE = 0x09;
 
@@ -105,8 +105,7 @@ namespace Tangerine
 
 			public void StartServer()
 			{
-				thread = new Thread(pipeName =>
-				{
+				thread = new Thread(pipeName => {
 					while (true) {
 						string text;
 						using (var server = new NamedPipeServerStream((string)pipeName)) {

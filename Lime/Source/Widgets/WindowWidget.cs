@@ -68,8 +68,10 @@ namespace Lime
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(PreEarlyUpdateStage)));
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(EarlyUpdateStage)));
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(PostEarlyUpdateStage)));
-			// All context specific commands (e.g. EditBox Copy/Paste) should be processed and consumed before this processor.
-			// This processor is intended to process application wide commands registered in CommandHandlerList.Global
+			// All context specific commands (e.g. EditBox Copy/Paste)
+			// should be processed and consumed before this processor.
+			// This processor is intended to process application wide
+			// commands registered in CommandHandlerList.Global
 			manager.Processors.Add(new CommandProcessor());
 			manager.Processors.Add(new AnimationProcessor());
 			manager.Processors.Add(new BehaviorUpdateProcessor(typeof(AfterAnimationStage)));
@@ -220,7 +222,9 @@ namespace Lime
 				windowActivated = false;
 				if (lastFocused == null || !lastFocused.GloballyVisible || !lastFocused.SameOrDescendantOf(this)) {
 					// Looking the first focus scope widget on the window and make it focused.
-					lastFocused = Descendants.OfType<Widget>().FirstOrDefault(i => i.FocusScope != null && i.GloballyVisible);
+					lastFocused = Descendants
+						.OfType<Widget>()
+						.FirstOrDefault(i => i.FocusScope != null && i.GloballyVisible);
 				}
 				Widget.SetFocus(lastFocused);
 			}
@@ -258,9 +262,10 @@ namespace Lime
 		public WindowRect GetViewport()
 		{
 			return new WindowRect {
-				X = 0, Y = 0,
+				X = 0,
+				Y = 0,
 				Width = (int)(Window.ClientSize.X * Window.PixelScale),
-				Height = (int)(Window.ClientSize.Y * Window.PixelScale)
+				Height = (int)(Window.ClientSize.Y * Window.PixelScale),
 			};
 		}
 
@@ -291,8 +296,11 @@ namespace Lime
 			if (modal && showing) {
 				Input.RestrictScope();
 			}
-			if (!showing)
-				Input.DerestrictScope();{
+			if (!showing) {
+				Input.DerestrictScope();
+			}
+
+			{
 			}
 			if (showing) {
 				UpdateAndResize(0);
@@ -332,7 +340,7 @@ namespace Lime
 			}
 		}
 
-		void RenderRedrawMark()
+		private void RenderRedrawMark()
 		{
 			Renderer.Transform1 = Matrix32.Identity;
 			Renderer.Blending = Blending.Alpha;

@@ -1,8 +1,8 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Lime;
 
 namespace Tangerine.Core
 {
@@ -40,7 +40,7 @@ namespace Tangerine.Core
 				string bPath = ClassAttributes<TangerineMenuPathAttribute>.Get(b, true)?.Path ?? b.Name;
 				int aRank = aPath.Count(c => c == '/');
 				int bRank = bPath.Count(c => c == '/');
-				int r = (bRank).CompareTo(aRank);
+				int r = bRank.CompareTo(aRank);
 				if (r == 0) {
 					if (aPath.EndsWith("/")) {
 						aPath += a.Name;

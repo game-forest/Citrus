@@ -7,7 +7,8 @@ namespace Lime
 	{
 		private readonly Dictionary<Type, object> services = new Dictionary<Type, object>();
 
-		public void Add<T>(T service) where T : class
+		public void Add<T>(T service)
+			where T : class
 		{
 			Add(typeof(T), service);
 		}
@@ -20,7 +21,8 @@ namespace Lime
 			services.Add(type, service);
 		}
 
-		public bool Remove<T>() where T : class
+		public bool Remove<T>()
+			where T : class
 		{
 			return Remove(typeof(T));
 		}

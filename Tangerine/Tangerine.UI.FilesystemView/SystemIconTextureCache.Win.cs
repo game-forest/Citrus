@@ -49,19 +49,27 @@ namespace Tangerine.UI.FilesystemView
 				return textureCache[cacheKey];
 			}
 			var shInfo = new WinAPI.SHFILEINFO();
-			IntPtr r = WinAPI.SHGetFileInfo(path, 0, out shInfo, (uint)Marshal.SizeOf(shInfo), WinAPI.SHGFI.SHGFI_ICON | WinAPI.SHGFI.SHGFI_SMALLICON);
+			IntPtr r = WinAPI.SHGetFileInfo(
+				pszPath: path,
+				dwFileAttribs: 0,
+				psfi: out shInfo,
+				cbFileInfo: (uint)Marshal.SizeOf(shInfo),
+				uFlags: WinAPI.SHGFI.SHGFI_ICON | WinAPI.SHGFI.SHGFI_SMALLICON
+			);
 			if (r == IntPtr.Zero) {
 				return TexturePool.Instance.GetTexture(null);
 			}
 			var t = new Texture2D();
 			using (var icon = System.Drawing.Icon.FromHandle(shInfo.hIcon)) {
 				var b = new Bitmap(icon.Size.Width, icon.Size.Height);
-				using (Graphics g = Graphics.FromImage(b))
+				using (Graphics g = Graphics.FromImage(b)) {
 					g.DrawIcon(icon, 0, 0);
-					using (var s = new MemoryStream()) {
-						b.Save(s, ImageFormat.Png);
-						t.LoadImage(s);
-					}
+				}
+
+				using (var s = new MemoryStream()) {
+					b.Save(s, ImageFormat.Png);
+					t.LoadImage(s);
+				}
 			}
 			WinAPI.DestroyIcon(shInfo.hIcon);
 			if (isDirectory && !isRoot) {

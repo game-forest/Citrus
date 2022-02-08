@@ -9,7 +9,7 @@ namespace Lime
 	public class Animation
 	{
 		public const string ZeroPoseId = "ZeroPose";
-		public readonly static int ZeroPoseIdComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(ZeroPoseId);
+		public static readonly int ZeroPoseIdComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(ZeroPoseId);
 #if TANGERINE
 		public static Func<Animation, bool> EasingEnabledChecker;
 		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
@@ -50,7 +50,8 @@ namespace Lime
 
 		/// <summary>
 		/// Cached list of only triggerable animators used by this animation.
-		/// This cache may be in invalid state, in the user code use <see cref="ValidatedEffectiveTriggerableAnimators"/>.
+		/// This cache may be in invalid state, in the user code use
+		/// <see cref="ValidatedEffectiveTriggerableAnimators"/>.
 		/// </summary>
 		public List<IAbstractAnimator> EffectiveTriggerableAnimators;
 		public AnimationBezierEasingCalculator BezierEasingCalculator { get; private set; }
@@ -310,11 +311,13 @@ namespace Lime
 			}
 			return hasEasings.Value;
 		}
-		
+
 		public class AnimationData
 		{
 			private static readonly WeakReferencePool<string, AnimationData> weakReferencePool =
-				new WeakReferencePool<string, AnimationData>(path => InternalPersistence.Instance.ReadFromCurrentBundle<AnimationData>(path));
+				new WeakReferencePool<string, AnimationData>(
+					path => InternalPersistence.Instance.ReadFromCurrentBundle<AnimationData>(path)
+				);
 
 			public delegate bool LoadingDelegate(string path, ref AnimationData instance);
 			public delegate void LoadedDelegate(string path, AnimationData instance);

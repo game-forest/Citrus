@@ -27,7 +27,6 @@ namespace Tangerine.Common.FilesDropHandlers
 				}
 				Document.Current.History.CommitTransaction();
 			}
-
 		}
 	}
 }

@@ -58,12 +58,14 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		/// <summary>
 		/// Returns a vector with components Infinity, Infinity.
 		/// </summary>
-		public static readonly Vector2d PositiveInfinity = new Vector2d(double.PositiveInfinity, double.PositiveInfinity);
+		public static readonly Vector2d PositiveInfinity =
+			new Vector2d(double.PositiveInfinity, double.PositiveInfinity);
 
 		/// <summary>
 		/// Returns a vector with components -Infinity, -Infinity.
 		/// </summary>
-		public static readonly Vector2d NegativeInfinity = new Vector2d(double.NegativeInfinity, double.NegativeInfinity);
+		public static readonly Vector2d NegativeInfinity =
+			new Vector2d(double.NegativeInfinity, double.NegativeInfinity);
 
 		/// <summary>
 		/// Returns a vector with components 0, -1.
@@ -132,12 +134,12 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			return X.GetHashCode() ^ Y.GetHashCode();
 		}
 
-		public static bool operator == (Vector2d lhs, Vector2d rhs)
+		public static bool operator ==(Vector2d lhs, Vector2d rhs)
 		{
 			return lhs.X == rhs.X && lhs.Y == rhs.Y;
 		}
 
-		public static bool operator != (Vector2d lhs, Vector2d rhs)
+		public static bool operator !=(Vector2d lhs, Vector2d rhs)
 		{
 			return lhs.X != rhs.X || lhs.Y != rhs.Y;
 		}
@@ -172,7 +174,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			return new Vector2d
 			{
 				X = Mathd.Lerp(amount, value1.X, value2.X),
-				Y = Mathd.Lerp(amount, value1.Y, value2.Y)
+				Y = Mathd.Lerp(amount, value1.Y, value2.Y),
 			};
 		}
 
@@ -306,7 +308,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			return new Vector2d
 			{
 				X = value.X * cosSin.X - value.Y * cosSin.Y,
-				Y = value.X * cosSin.Y + value.Y * cosSin.X
+				Y = value.X * cosSin.Y + value.Y * cosSin.X,
 			};
 		}
 
@@ -386,7 +388,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				return false;
 			}
 
-			var parts = s.Split(new [] {", "}, StringSplitOptions.None);
+			var parts = s.Split(new[] { ", " }, StringSplitOptions.None);
 			if (parts.Length != 2 || parts.Any(i => i.IsNullOrWhiteSpace())) {
 				return false;
 			}
@@ -411,6 +413,5 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			}
 			return vector;
 		}
-
 	}
 }

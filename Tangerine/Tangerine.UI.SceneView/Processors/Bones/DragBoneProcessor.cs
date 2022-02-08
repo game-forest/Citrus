@@ -1,7 +1,7 @@
 using System;
-using Lime;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 
@@ -9,7 +9,7 @@ namespace Tangerine.UI.SceneView
 {
 	public class DragBoneProcessor : ITaskProvider
 	{
-		SceneView sv => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
@@ -22,14 +22,14 @@ namespace Tangerine.UI.SceneView
 				if (bone != null) {
 					var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
 					var t = bone.Parent.AsWidget.LocalToWorldTransform;
-					if (sv.HitTestControlPoint(t * entry.Joint, 20)) {
+					if (SceneView.HitTestControlPoint(t * entry.Joint, 20)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+						if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Drag(bone, entry);
 						}
-					} else if (sv.HitTestControlPoint(t * entry.Tip, 20)) {
+					} else if (SceneView.HitTestControlPoint(t * entry.Tip, 20)) {
 						Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+						if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return DragTip(bone, entry);
 						}
 					}
@@ -41,22 +41,22 @@ namespace Tangerine.UI.SceneView
 		private IEnumerator<object> Drag(Bone bone, BoneArray.Entry entry)
 		{
 			using (Document.Current.History.BeginTransaction()) {
-				var iniMousePos = sv.MousePosition;
+				var iniMousePos = SceneView.MousePosition;
 				var transform = bone.Parent.AsWidget.LocalToWorldTransform.CalcInversed();
 				var transformInversed = transform.CalcInversed();
 				int index = 0;
 				var dragDelta = Vector2.Zero;
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 
-					var snapEnabled = sv.Input.IsKeyPressed(Key.Alt);
+					var snapEnabled = SceneView.Input.IsKeyPressed(Key.Alt);
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					var items = bone.Parent.AsWidget.BoneArray.items;
 					index = 0;
 					SceneView.Instance.Components.GetOrAdd<CreateBoneHelper>().HitTip = null;
 					if (items != null && snapEnabled) {
 						for (var i = 0; i < items.Length; i++) {
-							if (sv.HitTestControlPoint(transformInversed * items[i].Tip)) {
+							if (SceneView.HitTestControlPoint(transformInversed * items[i].Tip)) {
 								index = i;
 								break;
 							}
@@ -67,23 +67,43 @@ namespace Tangerine.UI.SceneView
 						}
 					}
 					var b = bone.Parent.AsWidget.BoneArray[bone.BaseIndex];
-					dragDelta = sv.MousePosition * transform - iniMousePos * transform;
+					dragDelta = SceneView.MousePosition * transform - iniMousePos * transform;
 					var parentToLocalTransform = bone.CalcLocalToParentWidgetTransform().CalcInversed();
 					parentToLocalTransform.T = Vector2.Zero;
-					var position = parentToLocalTransform *
-						(entry.Joint - b.Tip + (index != 0 && index != bone.Index && snapEnabled ? items[index].Tip - entry.Joint : dragDelta));
-					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Position), position, CoreUserPreferences.Instance.AutoKeyframes);
+					var position = parentToLocalTransform
+						* (
+							entry.Joint
+							- b.Tip
+							+ (
+								index != 0 && index != bone.Index && snapEnabled
+									? items[index].Tip - entry.Joint
+									: dragDelta
+							)
+						);
+					Core.Operations.SetAnimableProperty.Perform(
+						bone, nameof(Bone.Position), position, CoreUserPreferences.Instance.AutoKeyframes
+					);
 
 					bone.Parent.Update(0);
 					yield return null;
 				}
-				if (index != bone.Index && sv.Input.IsKeyPressed(Key.Alt)) {
-					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Position), index == 0 ? entry.Joint + dragDelta : Vector2.Zero, CoreUserPreferences.Instance.AutoKeyframes);
+				if (index != bone.Index && SceneView.Input.IsKeyPressed(Key.Alt)) {
+					Core.Operations.SetAnimableProperty.Perform(
+						@object: bone,
+						propertyPath: nameof(Bone.Position),
+						value: index == 0 ? entry.Joint + dragDelta : Vector2.Zero,
+						createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+					);
 					var parentEntry = bone.Parent.AsWidget.BoneArray[index];
 					float parentAngle = (parentEntry.Tip - parentEntry.Joint).Atan2Deg;
 					var boneEntry = bone.Parent.AsWidget.BoneArray[bone.Index];
 					float boneAngle = (boneEntry.Tip - boneEntry.Joint).Atan2Deg;
-					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Rotation), index == 0 ? boneAngle : boneAngle - parentAngle, CoreUserPreferences.Instance.AutoKeyframes);
+					Core.Operations.SetAnimableProperty.Perform(
+						@object: bone,
+						propertyPath: nameof(Bone.Rotation),
+						value: index == 0 ? boneAngle : boneAngle - parentAngle,
+						createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+					);
 					var boneSceneItem = Document.Current.GetSceneItemForObject(bone);
 					UnlinkSceneItem.Perform(boneSceneItem);
 					SceneItem baseItem;
@@ -96,7 +116,7 @@ namespace Tangerine.UI.SceneView
 					LinkSceneItem.Perform(baseItem, new SceneTreeIndex(0), boneSceneItem);
 				}
 				SceneView.Instance.Components.Remove<CreateBoneHelper>();
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Window.Current.Invalidate();
 				Document.Current.History.CommitTransaction();
 			}
@@ -105,50 +125,64 @@ namespace Tangerine.UI.SceneView
 		private IEnumerator<object> DragTip(Bone bone, BoneArray.Entry entry)
 		{
 			using (Document.Current.History.BeginTransaction()) {
-				var iniMousePos = sv.MousePosition;
+				var iniMousePos = SceneView.MousePosition;
 				var transform = bone.Parent.AsWidget.LocalToWorldTransform.CalcInversed();
 
 				var accumulativeRotationsHelpersByBones = new Dictionary<Bone, AccumulativeRotationHelper>();
 
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					if (sv.Input.IsKeyPressed(Key.Control)) {
+					if (SceneView.Input.IsKeyPressed(Key.Control)) {
 						var parent = bone.Parent.AsWidget.BoneArray[bone.BaseIndex];
-						var dir = (sv.MousePosition * transform -
+						var dir = (SceneView.MousePosition * transform -
 							bone.Parent.AsWidget.BoneArray[bone.Index].Joint).Snap(Vector2.Zero);
 						var angle = dir.Atan2Deg;
 						if (bone.BaseIndex != 0) {
 							var prentDir = parent.Tip - parent.Joint;
 							angle = Vector2.AngleDeg(prentDir, dir);
 						}
-						if (!sv.Input.IsKeyPressed(Key.Alt)) {
-							Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Rotation),
-								GetRotationByBone(accumulativeRotationsHelpersByBones, bone, angle),
-								CoreUserPreferences.Instance.AutoKeyframes
+						if (!SceneView.Input.IsKeyPressed(Key.Alt)) {
+							Core.Operations.SetAnimableProperty.Perform(
+								@object: bone,
+								propertyPath: nameof(Bone.Rotation),
+								value: GetRotationByBone(accumulativeRotationsHelpersByBones, bone, angle),
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
 							);
 						}
-						Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Length), dir.Length, CoreUserPreferences.Instance.AutoKeyframes);
+						Core.Operations.SetAnimableProperty.Perform(
+							@object: bone,
+							propertyPath: nameof(Bone.Length),
+							value: dir.Length,
+							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+						);
 					} else {
-						var dragDelta = sv.MousePosition * transform - iniMousePos * transform;
+						var dragDelta = SceneView.MousePosition * transform - iniMousePos * transform;
 						var boneChain = IKSolver.SolveFor(bone, entry.Tip + dragDelta);
 						foreach (Tuple<Bone, float> pair in boneChain) {
-							Core.Operations.SetAnimableProperty.Perform(pair.Item1, nameof(Bone.Rotation),
-								GetRotationByBone(accumulativeRotationsHelpersByBones, pair.Item1, pair.Item2),
-								CoreUserPreferences.Instance.AutoKeyframes
+							Core.Operations.SetAnimableProperty.Perform(
+								@object: pair.Item1,
+								propertyPath: nameof(Bone.Rotation),
+								value: GetRotationByBone(
+									accumulativeRotationsHelpersByBones, pair.Item1, pair.Item2
+								),
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
 							);
 						}
 					}
 					bone.Parent.Update(0);
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Window.Current.Invalidate();
 				Document.Current.History.CommitTransaction();
 			}
 		}
 
-		private static float GetRotationByBone(IDictionary<Bone, AccumulativeRotationHelper> accumulativeRotationsHelpersByBones, Bone bone, float rotation)
-		{
+		private static float GetRotationByBone(
+			IDictionary<Bone, AccumulativeRotationHelper> accumulativeRotationsHelpersByBones,
+			Bone bone,
+			float rotation
+		) {
 			if (!accumulativeRotationsHelpersByBones.ContainsKey(bone)) {
 				accumulativeRotationsHelpersByBones[bone] = new AccumulativeRotationHelper(bone.Rotation, rotation);
 			}
@@ -156,7 +190,5 @@ namespace Tangerine.UI.SceneView
 			accumulativeRotationHelper.Rotate(rotation);
 			return accumulativeRotationHelper.Rotation;
 		}
-
 	}
-
 }

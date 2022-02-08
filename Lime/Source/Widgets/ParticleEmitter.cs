@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Yuzu;
 
 namespace Lime
@@ -22,7 +22,7 @@ namespace Lime
 		/// Polygon points are oriented clockwise.
 		/// </summary>
 		Custom,
-	};
+	}
 
 	[Flags]
 	public enum EmissionType
@@ -37,13 +37,12 @@ namespace Lime
 	// public EmissionMethod EmissionMethod { get; set; }
 	// when migrations are ready and migrate ImmortalParticles
 	// and NumberPerBurst flags into that field.
-	//public enum EmissionMethod
-	//{
-	//	NumberPerSecond,
-	//	ConstantNumber,
-	//	NumberPerBurst,
-	//}
-
+	// public enum EmissionMethod
+	// {
+	//     NumberPerSecond,
+	//     ConstantNumber,
+	//     NumberPerBurst,
+	// }
 	public enum EmitterAction
 	{
 		Burst,
@@ -65,7 +64,7 @@ namespace Lime
 		/// <summary>
 		/// User defined widget via LinkageWidgetName
 		/// </summary>
-		Other
+		Other,
 	}
 
 	[TangerineRegisterNode(Order = 8)]
@@ -76,7 +75,8 @@ namespace Lime
 	[TangerineNodeBuilder("BuildForTangerine")]
 	[TangerineAllowedChildrenTypes(typeof(ParticleModifier), typeof(EmitterShapePoint))]
 	[TangerineVisualHintGroup("/All/Nodes/Particles")]
-	public partial class ParticleEmitter : Widget, ITangerinePreviewAnimationListener, IUpdatableNode, IMaterialComponentOwner
+	public partial class ParticleEmitter
+		: Widget, ITangerinePreviewAnimationListener, IUpdatableNode, IMaterialComponentOwner
 	{
 		internal static System.Random Rng = new System.Random();
 
@@ -144,7 +144,7 @@ namespace Lime
 			public float AgeToAnimationTime;
 			// The final particle's transform
 			public Matrix32 Transform;
-		};
+		}
 
 		private IMaterial defaultMaterial;
 
@@ -402,9 +402,11 @@ namespace Lime
 			case ParticlesLinkage.Other: {
 				var widget = ParentWidget;
 				while (widget != null) {
-					if (widget.Id == LinkageWidgetName)
-						return widget;
-					widget = widget.ParentWidget;
+					if (widget.Id == LinkageWidgetName) {
+								return widget;
+							}
+
+							widget = widget.ParentWidget;
 				}
 				return null;
 			}
@@ -538,9 +540,9 @@ namespace Lime
 
 		private bool CheckIntersection(Vector2[] v, int[] workPoints, int count, float sign, int startIndex = 0)
 		{
-			for(int i = 0; i < count; i++) {
+			for (int i = 0; i < count; i++) {
 				Vector2 point = cachedShapePoints[workPoints[i + startIndex]];
-				if(
+				if (
 					Mathf.Sign(Vector2.CrossProduct(v[1] - v[0], point - v[0])) == sign &&
 					Mathf.Sign(Vector2.CrossProduct(v[2] - v[1], point - v[1])) == sign &&
 					Mathf.Sign(Vector2.CrossProduct(v[0] - v[2], point - v[2])) == sign
@@ -551,16 +553,21 @@ namespace Lime
 			return false;
 		}
 
-		static void ShiftArray(int[] arr, int cnt, int startIndex = 0)
+		private static void ShiftArray(int[] arr, int cnt, int startIndex = 0)
 		{
 			for (int i = 0; i < cnt; i++) {
 				arr[i + startIndex] = arr[i + startIndex + 1];
 			}
 		}
 
-		private bool GetTriangleHelper(int[] workPoints, ref int pointCount,
-			out int i1, out int i2, out int i3, float sign)
-		{
+		private bool GetTriangleHelper(
+			int[] workPoints,
+			ref int pointCount,
+			out int i1,
+			out int i2,
+			out int i3,
+			float sign
+		) {
 			i1 = 0;
 			i2 = 0;
 			i3 = 0;
@@ -598,7 +605,7 @@ namespace Lime
 				return true;
 			}
 			// rest of points
-			for(int i = 1; i < pointCount - 1; i++) {
+			for (int i = 1; i < pointCount - 1; i++) {
 				v[0] = cachedShapePoints[workPoints[i - 1]];
 				v[1] = cachedShapePoints[workPoints[i]];
 				v[2] = cachedShapePoints[workPoints[i + 1]];
@@ -658,13 +665,19 @@ namespace Lime
 			}
 			// Find if polygon points are CW or CCW oriented.
 			float angle = 0;
-			angle += Vector2.AngleRad(cachedShapePoints[0] - cachedShapePoints[pointCount - 1],
-				cachedShapePoints[1] - cachedShapePoints[0]);
-			angle += Vector2.AngleRad(cachedShapePoints[pointCount - 1] - cachedShapePoints[pointCount - 2],
-				cachedShapePoints[0] - cachedShapePoints[pointCount - 1]);
+			angle += Vector2.AngleRad(
+				cachedShapePoints[0] - cachedShapePoints[pointCount - 1],
+				cachedShapePoints[1] - cachedShapePoints[0]
+			);
+			angle += Vector2.AngleRad(
+				cachedShapePoints[pointCount - 1] - cachedShapePoints[pointCount - 2],
+				cachedShapePoints[0] - cachedShapePoints[pointCount - 1]
+			);
 			for (int i = 1; i < pointCount - 1; i++) {
-				angle += Vector2.AngleRad(cachedShapePoints[i] - cachedShapePoints[i - 1],
-					cachedShapePoints[i + 1] - cachedShapePoints[i]);
+				angle += Vector2.AngleRad(
+					cachedShapePoints[i] - cachedShapePoints[i - 1],
+					cachedShapePoints[i + 1] - cachedShapePoints[i]
+				);
 			}
 			float sign = Mathf.Sign(angle);
 			cachedShapeTriangles.Clear();
@@ -688,7 +701,7 @@ namespace Lime
 				totalSpace += s;
 			}
 			float accum = 0;
-			for(int i = 0; i < cachedShapeTriangleSizes.Count; i++) {
+			for (int i = 0; i < cachedShapeTriangleSizes.Count; i++) {
 				accum += cachedShapeTriangleSizes[i] / totalSpace;
 				cachedShapeTriangleSizes[i] = accum;
 			}
@@ -721,7 +734,7 @@ namespace Lime
 			return
 				Application.EnableParticleLimiter &&
 				GloballyVisible &&
-				(!NumberPerBurst && !ImmortalParticles) &&
+				!NumberPerBurst && !ImmortalParticles &&
 				Manager != null &&
 				Manager.ServiceProvider.TryGetService(out particleLimiter);
 		}
@@ -747,11 +760,13 @@ namespace Lime
 			CalcInitialTransform(out Matrix32 transform);
 			Vector2 emitterScale = new Vector2 {
 				X = transform.U.Length,
-				Y = transform.V.Length
+				Y = transform.V.Length,
 			};
 			float crossProduct = Vector2.CrossProduct(transform.U, transform.V);
-			if (crossProduct < 0.0f)
+			if (crossProduct < 0.0f) {
 				emitterScale.Y = -emitterScale.Y;
+			}
+
 			float emitterScaleAmount = Mathf.Sqrt(Math.Abs(crossProduct));
 			float emitterAngle = transform.U.Atan2Deg;
 			NumericRange aspectRatioVariationPair = new NumericRange(0, Math.Max(0.0f, AspectRatio.Dispersion));
@@ -777,7 +792,7 @@ namespace Lime
 			p.Spin = Spin.NormalRandomNumber(Rng);
 			p.InitialColor = InitialColor;
 			p.CurrentColor = InitialColor;
-			p.RandomRayDirection = (new NumericRange(0, 360)).UniformRandomNumber(Rng);
+			p.RandomRayDirection = new NumericRange(0, 360).UniformRandomNumber(Rng);
 			p.RandomSplineVertex0 = GenerateRandomMotionControlPoint(ref p.RandomRayDirection);
 			p.RandomSplineVertex1 = Vector2.Zero;
 			p.RandomSplineVertex2 = GenerateRandomMotionControlPoint(ref p.RandomRayDirection);
@@ -847,7 +862,7 @@ namespace Lime
 			}
 			float k1 = Rng.RandomFloat();
 			float k2 = Rng.RandomFloat();
-			if(k1 + k2 > 1) {
+			if (k1 + k2 > 1) {
 				k1 = 1 - k1;
 				k2 = 1 - k2;
 			}
@@ -878,8 +893,9 @@ namespace Lime
 				p.Modifier.Animators.Apply(p.Age * p.AgeToAnimationTime);
 			}
 			if (ImmortalParticles) {
-				if (p.Lifetime > 0.0f)
+				if (p.Lifetime > 0.0f) {
 					p.Age %= p.Lifetime;
+				}
 			}
 			// Updating a particle texture index.
 			if (p.TextureIndex == 0.0f) {
@@ -902,8 +918,9 @@ namespace Lime
 				p.TextureIndex -= delta * Math.Max(0, p.Modifier.AnimationFps);
 				if (p.Modifier.LoopedAnimation) {
 					float downLimit = p.Modifier.LastFrame - 1f;
-					while (p.TextureIndex < downLimit)
+					while (p.TextureIndex < downLimit) {
 						p.TextureIndex += p.Modifier.FirstFrame - downLimit;
+					}
 				} else {
 					p.TextureIndex = Math.Max(p.TextureIndex, p.Modifier.LastFrame);
 				}
@@ -940,16 +957,21 @@ namespace Lime
 					p.RandomSplineVertex2 = p.RandomSplineVertex3;
 					p.RandomSplineVertex3 = GenerateRandomMotionControlPoint(ref p.RandomRayDirection);
 				}
-				positionOnSpline = Mathf.CatmullRomSpline(p.RandomSplineOffset,
-					p.RandomSplineVertex0, p.RandomSplineVertex1,
-					p.RandomSplineVertex2, p.RandomSplineVertex3);
+				positionOnSpline = Mathf.CatmullRomSpline(
+					p.RandomSplineOffset,
+					p.RandomSplineVertex0,
+					p.RandomSplineVertex1,
+					p.RandomSplineVertex2,
+					p.RandomSplineVertex3
+				);
 			}
 			Vector2 previousPosition = p.FullPosition;
 			p.FullPosition = p.RegularPosition + positionOnSpline;
 			if (AlongPathOrientation) {
 				Vector2 deltaPos = p.FullPosition - previousPosition;
-				if (deltaPos.SqrLength > 0.00001f)
+				if (deltaPos.SqrLength > 0.00001f) {
 					p.FullDirection = deltaPos.Atan2Deg;
+				}
 			}
 			// Recalc transformation matrix.
 			float angle = p.Angle;
@@ -994,20 +1016,61 @@ namespace Lime
 			if (boundingRect.AX == boundingRect.BX && boundingRect.AY == boundingRect.BY) {
 				boundingRect = new Rectangle(v1x, v1y, v1x, v1y);
 			}
-			if (v1x < boundingRect.AX) boundingRect.AX = v1x;
-			if (v1x > boundingRect.BX) boundingRect.BX = v1x;
-			if (v2x < boundingRect.AX) boundingRect.AX = v2x;
-			if (v2x > boundingRect.BX) boundingRect.BX = v2x;
-			if (v2y < boundingRect.AY) boundingRect.AY = v2y;
-			if (v2y > boundingRect.BY) boundingRect.BY = v2y;
-			if (v3x < boundingRect.AX) boundingRect.AX = v3x;
-			if (v3x > boundingRect.BX) boundingRect.BX = v3x;
-			if (v3y < boundingRect.AY) boundingRect.AY = v3y;
-			if (v3y > boundingRect.BY) boundingRect.BY = v3y;
-			if (v4x < boundingRect.AX) boundingRect.AX = v4x;
-			if (v4x > boundingRect.BX) boundingRect.BX = v4x;
-			if (v4y < boundingRect.AY) boundingRect.AY = v4y;
-			if (v4y > boundingRect.BY) boundingRect.BY = v4y;
+			if (v1x < boundingRect.AX) {
+				boundingRect.AX = v1x;
+			}
+
+			if (v1x > boundingRect.BX) {
+				boundingRect.BX = v1x;
+			}
+
+			if (v2x < boundingRect.AX) {
+				boundingRect.AX = v2x;
+			}
+
+			if (v2x > boundingRect.BX) {
+				boundingRect.BX = v2x;
+			}
+
+			if (v2y < boundingRect.AY) {
+				boundingRect.AY = v2y;
+			}
+
+			if (v2y > boundingRect.BY) {
+				boundingRect.BY = v2y;
+			}
+
+			if (v3x < boundingRect.AX) {
+				boundingRect.AX = v3x;
+			}
+
+			if (v3x > boundingRect.BX) {
+				boundingRect.BX = v3x;
+			}
+
+			if (v3y < boundingRect.AY) {
+				boundingRect.AY = v3y;
+			}
+
+			if (v3y > boundingRect.BY) {
+				boundingRect.BY = v3y;
+			}
+
+			if (v4x < boundingRect.AX) {
+				boundingRect.AX = v4x;
+			}
+
+			if (v4x > boundingRect.BX) {
+				boundingRect.BX = v4x;
+			}
+
+			if (v4y < boundingRect.AY) {
+				boundingRect.AY = v4y;
+			}
+
+			if (v4y > boundingRect.BY) {
+				boundingRect.BY = v4y;
+			}
 #if TANGERINE
 			if (p.AgeToAnimationTime > 0) {
 				// If particle modifier's values were altered by applying modifier to
@@ -1057,7 +1120,7 @@ namespace Lime
 					Texture = p.Modifier.GetTexture((int)p.TextureIndex - 1),
 					Transform = p.Transform,
 					Color = p.CurrentColor,
-					Angle = angle
+					Angle = angle,
 				});
 			}
 			return ro;
@@ -1123,10 +1186,10 @@ namespace Lime
 		private void BuildForTangerine()
 		{
 			var defaultModifier = new ParticleModifier() {
-				Id = "ParticleModifier"
+				Id = "ParticleModifier",
 			};
 			var animator = new Color4Animator() {
-				TargetPropertyPath = "Color"
+				TargetPropertyPath = "Color",
 			};
 			animator.ReadonlyKeys.Add(0, new Color4(255, 255, 255, 0));
 			animator.ReadonlyKeys.Add(30, new Color4(255, 255, 255, 255));

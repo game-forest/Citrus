@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Lime;
 
 namespace Tangerine.UI.Widgets.ConflictingAnimators
 {
 	public static class TextStyleIdentifiers
 	{
-		public static TextStyleIdentifier Bold    = new TextStyleIdentifier("Bold");
+		public static TextStyleIdentifier Bold = new TextStyleIdentifier("Bold");
 		public static TextStyleIdentifier Regular = new TextStyleIdentifier("Regular");
 		public static TextStyleIdentifier PropertyColor = new TextStyleIdentifier("PropertyColor");
 		public static TextStyleIdentifier AnimationLink = new TextStyleIdentifier("AnimationLink");

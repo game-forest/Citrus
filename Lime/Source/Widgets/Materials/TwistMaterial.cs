@@ -95,17 +95,23 @@ namespace Lime
 					lowp float newAngle = angle * pow(max(0.0, 0.8 - length(localUV) * radius), 3.0);
 					lowp float cosAngle = cos(newAngle);
 					lowp float sinAngle = sin(newAngle);
-					lowp vec2 uv = clamp(mat2(cosAngle, -sinAngle, sinAngle, cosAngle) * localUV + pivot, vec2(0), vec2(1));
+					lowp vec2 uv = clamp(
+						mat2(cosAngle, -sinAngle, sinAngle, cosAngle) * localUV + pivot,
+						vec2(0),
+						vec2(1)
+					);
 					gl_FragColor = texture2D(tex1, uv0 + uv * (uv1 - uv0)) * outColor;
 				}";
 
-			private TwistShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+			private TwistShaderProgram()
+				: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+			{ }
 
 			private static Shader[] CreateShaders()
 			{
 				return new Shader[] {
 					new VertexShader(VertexShader),
-					new FragmentShader(FragmentShader)
+					new FragmentShader(FragmentShader),
 				};
 			}
 		}

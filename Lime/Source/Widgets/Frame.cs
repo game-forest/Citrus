@@ -13,7 +13,7 @@ namespace Lime
 		D,
 		E,
 		F,
-		G
+		G,
 	}
 
 	public enum ClipMethod
@@ -69,9 +69,9 @@ namespace Lime
 			PropagateDirtyFlags();
 		}
 
-		internal protected override bool IsRenderedToTexture() => renderTarget != RenderTarget.None;
+		protected internal override bool IsRenderedToTexture() => renderTarget != RenderTarget.None;
 
-		internal protected override bool PartialHitTest(ref HitTestArgs args)
+		protected internal override bool PartialHitTest(ref HitTestArgs args)
 		{
 			switch (ClipChildren) {
 				case ClipMethod.None:
@@ -105,7 +105,11 @@ namespace Lime
 			if (!GloballyVisible || ClipChildren == ClipMethod.NoRender || !ClipRegionTest(chain.ClipRegion)) {
 				return;
 			}
-			if (renderTexture != null || ClipChildren == ClipMethod.ScissorTest || ClipChildren == ClipMethod.StencilTest) {
+			if (
+				renderTexture != null
+				|| ClipChildren == ClipMethod.ScissorTest
+				|| ClipChildren == ClipMethod.StencilTest
+			) {
 				AddSelfToRenderChain(chain, Layer);
 				if (GetTangerineFlag(TangerineFlags.DisplayContent) && ClipChildren != ClipMethod.ScissorTest) {
 					AddSelfAndChildrenToRenderChain(chain, Layer);
@@ -137,8 +141,6 @@ namespace Lime
 			}
 		}
 
-		#region IImageCombinerArg
-
 		void IImageCombinerArg.SkipRender() { }
 
 		ITexture IImageCombinerArg.GetTexture()
@@ -147,8 +149,6 @@ namespace Lime
 		}
 
 		Matrix32 IImageCombinerArg.UVTransform { get { return Matrix32.Identity; } }
-
-		#endregion
 
 		private RenderChain renderChain;
 
@@ -159,7 +159,11 @@ namespace Lime
 
 		protected internal override Lime.RenderObject GetRenderObject()
 		{
-			if (renderTexture == null && ClipChildren != ClipMethod.ScissorTest && ClipChildren != ClipMethod.StencilTest) {
+			if (
+				renderTexture == null
+				&& ClipChildren != ClipMethod.ScissorTest
+				&& ClipChildren != ClipMethod.StencilTest
+			) {
 				return null;
 			}
 			var ro = RenderObjectPool<RenderObject>.Acquire();
@@ -241,7 +245,9 @@ namespace Lime
 					try {
 						Renderer.ScissorState = ScissorState.ScissorDisabled;
 						Renderer.StencilState = StencilState.Default;
-						Renderer.Viewport = new Viewport(0, 0, RenderTexture.ImageSize.Width, RenderTexture.ImageSize.Height);
+						Renderer.Viewport = new Viewport(
+							0, 0, RenderTexture.ImageSize.Width, RenderTexture.ImageSize.Height
+						);
 						Renderer.Clear(new Color4(0, 0, 0, 0));
 						Renderer.World = Renderer.View = Matrix44.Identity;
 						Renderer.SetOrthogonalProjection(0, 0, FrameSize.X, FrameSize.Y);
@@ -293,13 +299,17 @@ namespace Lime
 					X = min.X.Round(),
 					Y = min.Y.Round(),
 					Width = (max - min).X.Round(),
-					Height = (max - min).Y.Round()
+					Height = (max - min).Y.Round(),
 				};
 			}
 
 			private void RenderWithScissorTest()
 			{
-				var rect = CalculateScissorRectangle(ClipBySize, Renderer.Viewport.Bounds, (Matrix44)(ClipByLocalToWorld * Renderer.Transform2) * Renderer.FixupWVP(Renderer.Projection));
+				var rect = CalculateScissorRectangle(
+					ClipBySize,
+					Renderer.Viewport.Bounds,
+					(Matrix44)(ClipByLocalToWorld * Renderer.Transform2) * Renderer.FixupWVP(Renderer.Projection)
+				);
 				Renderer.PushState(RenderState.ScissorState);
 				try {
 					Renderer.SetScissorState(new ScissorState(rect), intersectWithCurrent: true);

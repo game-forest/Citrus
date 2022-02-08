@@ -4,7 +4,7 @@ using Lime;
 namespace Citrus.Tests.Types
 {
 	[TestClass]
-	class Color4Tests
+	internal class Color4Tests
 	{
 		[TestMethod]
 		public void ConstructorTest()

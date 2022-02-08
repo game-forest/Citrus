@@ -90,7 +90,12 @@ namespace Lime
 				//throw new InvalidOperationException("EAGLContext.RenderBufferStorage() failed");
 			}
 
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, RenderbufferTarget.Renderbuffer, colorRenderbuffer);
+			GL.FramebufferRenderbuffer(
+				FramebufferTarget.Framebuffer,
+				FramebufferSlot.ColorAttachment0,
+				RenderbufferTarget.Renderbuffer,
+				colorRenderbuffer
+			);
 			GL.Viewport(0, 0, (int)ClientSize.X, (int)ClientSize.Y);
 			GL.Scissor(0, 0, (int)ClientSize.X, (int)ClientSize.Y);
 			GLHelper.CheckGLErrors();
@@ -104,9 +109,19 @@ namespace Lime
 			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)All.Depth24Stencil8Oes,
 				(int)(ClientSize.X * scale), (int)(ClientSize.Y * scale));
 			// Attach the renderbuffer to the framebuffer's depth attachment point
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, depthRenderbuffer);
+			GL.FramebufferRenderbuffer(
+				FramebufferTarget.Framebuffer,
+				FramebufferSlot.DepthAttachment,
+				RenderbufferTarget.Renderbuffer,
+				depthRenderbuffer
+			);
 		  	// Attach the renderbuffer to the framebuffer's stencil attachment point
-		  	GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.StencilAttachment, RenderbufferTarget.Renderbuffer, depthRenderbuffer);
+		  	GL.FramebufferRenderbuffer(
+				FramebufferTarget.Framebuffer,
+				FramebufferSlot.StencilAttachment,
+				RenderbufferTarget.Renderbuffer,
+				depthRenderbuffer
+			);
 
 			GL.ClearStencil(0);
 			GL.ClearDepth(1.0f);

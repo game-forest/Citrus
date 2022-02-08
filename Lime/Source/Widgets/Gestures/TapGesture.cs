@@ -14,14 +14,14 @@ namespace Lime
 
 	public abstract class TapGesture : Gesture
 	{
-		enum State
+		private enum State
 		{
 			Idle,
 			Scheduled,
-			Began
-		};
+			Began,
+		}
 
-		private readonly float ClickBeginDelay = 0.064f;
+		private readonly float clickBeginDelay = 0.064f;
 		private readonly TapGestureOptions options;
 
 		private State state;
@@ -40,10 +40,12 @@ namespace Lime
 		/// the began event might be deferred in order to give the priority to drag gesture.
 		/// </summary>
 		public event Action Began { add { began.Handler += value; } remove { began.Handler -= value; } }
+
 		/// <summary>
 		/// Occurs if click was canceled by drag gesture.
 		/// </summary>
 		public event Action Canceled { add { canceled.Handler += value; } remove { canceled.Handler -= value; } }
+
 		/// <summary>
 		/// Occurs when the gesture is fully recognized.
 		/// </summary>
@@ -66,7 +68,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override void OnCancel(Gesture sender)
+		protected internal override void OnCancel(Gesture sender)
 		{
 			if (state == State.Began) {
 				canceled.Raise();
@@ -74,7 +76,7 @@ namespace Lime
 			state = State.Idle;
 		}
 
-		internal protected override bool OnUpdate()
+		protected internal override bool OnUpdate()
 		{
 			if (Input.GetNumTouches() > 1) {
 				OnCancel(this);
@@ -90,7 +92,7 @@ namespace Lime
 				// Defer began event if there are any drag gesture.
 				if (
 					!Deferred ||
-					(WidgetContext.Current.GestureManager.AccumulatedDelta - tapStartTime) > ClickBeginDelay ||
+					(WidgetContext.Current.GestureManager.AccumulatedDelta - tapStartTime) > clickBeginDelay ||
 					!Input.IsMousePressed(ButtonIndex)
 				) {
 					state = State.Began;
@@ -98,7 +100,8 @@ namespace Lime
 				}
 			}
 			if (state == State.Began) {
-				bool isTapTooShort = (WidgetContext.Current.GestureManager.AccumulatedDelta - tapStartTime) < options.MinTapDuration;
+				bool isTapTooShort = (WidgetContext.Current.GestureManager.AccumulatedDelta - tapStartTime)
+					< options.MinTapDuration;
 				if (!Input.IsMousePressed(ButtonIndex)) {
 					if (!isTapTooShort) {
 						result = Finish();
@@ -117,7 +120,7 @@ namespace Lime
 		{
 			state = State.Idle;
 			if ((Input.MousePosition - MousePressPosition).SqrLength < Threshold.Sqr() ||
-			    Owner.IsMouseOverThisOrDescendant()
+				Owner.IsMouseOverThisOrDescendant()
 			) {
 				InternalRecognized?.Invoke();
 				recognized.Raise();

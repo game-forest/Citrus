@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -56,8 +54,7 @@ namespace SharpFont
 
 		private static string GetErrorMessage(Error err)
 		{
-			switch (err)
-			{
+			switch (err) {
 				case Error.Ok: return "No error.";
 				case Error.CannotOpenResource: return "Cannot open resource.";
 				case Error.UnknownFileFormat: return "Unknown file format.";
@@ -146,7 +143,10 @@ namespace SharpFont
 				case Error.BbxTooBig: return "`BBX' too big.";
 				case Error.CorruptedFontHeader: return "Font header corrupted or missing fields.";
 				case Error.CorruptedFontGlyphs: return "Font glyphs corrupted or missing fields.";
-				default: return "Encountered an unknown error. Most likely this is a new error that hasn't been included in SharpFont yet. Error:" + (int)err;
+				default: return "Encountered an unknown error. " +
+						"Most likely this is a new error that hasn't been " +
+						"included in SharpFont yet. Error:"
+						+ (int)err;
 			}
 		}
 	}

@@ -26,13 +26,26 @@ namespace Lime.Graphics.Platform.Vulkan
 		public int LevelCount => levelCount;
 		public bool Disposed { get; private set; }
 
-		public PlatformTexture2D(PlatformRenderContext context, Format format, int width, int height, bool mipmaps, TextureParams textureParams)
-			: this(context, format, width, height, mipmaps, false, textureParams)
+		public PlatformTexture2D(
+			PlatformRenderContext context,
+			Format format,
+			int width,
+			int height,
+			bool mipmaps,
+			TextureParams textureParams
+		) : this(context, format, width, height, mipmaps, false, textureParams)
 		{
 		}
 
-		protected PlatformTexture2D(PlatformRenderContext context, Format format, int width, int height, bool mipmaps, bool renderTarget, TextureParams textureParams)
-		{
+		protected PlatformTexture2D(
+			PlatformRenderContext context,
+			Format format,
+			int width,
+			int height,
+			bool mipmaps,
+			bool renderTarget,
+			TextureParams textureParams
+		) {
 			this.context = context;
 			this.format = format;
 			this.width = width;
@@ -75,12 +88,13 @@ namespace Lime.Graphics.Platform.Vulkan
 				Samples = SharpVulkan.SampleCountFlags.Sample1,
 				SharingMode = SharpVulkan.SharingMode.Exclusive,
 				InitialLayout = SharpVulkan.ImageLayout.Undefined,
-				Tiling = tiling
+				Tiling = tiling,
 			};
 			image = context.Device.CreateImage(ref imageCreateInfo);
 			var memoryPropertyFlags = SharpVulkan.MemoryPropertyFlags.DeviceLocal;
 			if (IsPvrtc1Format(Format)) {
-				memoryPropertyFlags |= SharpVulkan.MemoryPropertyFlags.HostVisible | SharpVulkan.MemoryPropertyFlags.HostCoherent;
+				memoryPropertyFlags |= SharpVulkan.MemoryPropertyFlags.HostVisible
+					| SharpVulkan.MemoryPropertyFlags.HostCoherent;
 			}
 			memory = context.MemoryAllocator.Allocate(image, memoryPropertyFlags, tiling);
 			var viewCreateInfo = new SharpVulkan.ImageViewCreateInfo {
@@ -89,7 +103,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				Image = image,
 				Format = vkFormat,
 				Components = SharpVulkan.ComponentMapping.Identity,
-				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color)
+				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color),
 			};
 			imageView = context.Device.CreateImageView(ref viewCreateInfo);
 			var memoryBarrier = new SharpVulkan.ImageMemoryBarrier {
@@ -101,13 +115,22 @@ namespace Lime.Graphics.Platform.Vulkan
 				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.ShaderRead,
 				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color)
+				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color),
 			};
 			context.EndRenderPass();
 			context.EnsureCommandBuffer();
 			context.CommandBuffer.PipelineBarrier(
-				SharpVulkan.PipelineStageFlags.TopOfPipe, SharpVulkan.PipelineStageFlags.VertexShader | SharpVulkan.PipelineStageFlags.FragmentShader,
-				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &memoryBarrier);
+				sourceStageMask: SharpVulkan.PipelineStageFlags.TopOfPipe,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.VertexShader
+					| SharpVulkan.PipelineStageFlags.FragmentShader,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 1,
+				imageMemoryBarriers: &memoryBarrier
+			);
 		}
 
 		private static bool IsPvrtc1Format(Format format)
@@ -140,8 +163,12 @@ namespace Lime.Graphics.Platform.Vulkan
 				}
 			} else {
 				ulong bufferOffsetAlignment = 4;
-				bufferOffsetAlignment = GraphicsUtility.CombineAlignment(bufferOffsetAlignment, (ulong)Format.GetSize());
-				bufferOffsetAlignment = GraphicsUtility.CombineAlignment(bufferOffsetAlignment, context.PhysicalDeviceLimits.OptimalBufferCopyOffsetAlignment);
+				bufferOffsetAlignment = GraphicsUtility.CombineAlignment(
+					bufferOffsetAlignment, (ulong)Format.GetSize()
+				);
+				bufferOffsetAlignment = GraphicsUtility.CombineAlignment(
+					bufferOffsetAlignment, context.PhysicalDeviceLimits.OptimalBufferCopyOffsetAlignment
+				);
 				var uploadBufferAlloc = context.AllocateUploadBuffer((ulong)dataSize, bufferOffsetAlignment);
 				GraphicsUtility.CopyMemory(uploadBufferAlloc.Data, data, dataSize);
 				context.EndRenderPass();
@@ -155,22 +182,35 @@ namespace Lime.Graphics.Platform.Vulkan
 					SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 					DestinationAccessMask = SharpVulkan.AccessFlags.TransferWrite,
 					DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-					SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
+					SubresourceRange = new SharpVulkan.ImageSubresourceRange(
+						SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1
+					),
 				};
 				context.CommandBuffer.PipelineBarrier(
-					SharpVulkan.PipelineStageFlags.VertexShader | SharpVulkan.PipelineStageFlags.FragmentShader,
-					SharpVulkan.PipelineStageFlags.Transfer, SharpVulkan.DependencyFlags.None,
-					0, null, 0, null, 1, &preMemoryBarrier);
+					sourceStageMask: SharpVulkan.PipelineStageFlags.VertexShader
+						| SharpVulkan.PipelineStageFlags.FragmentShader,
+					destinationStageMask: SharpVulkan.PipelineStageFlags.Transfer,
+					dependencyFlags: SharpVulkan.DependencyFlags.None,
+					memoryBarrierCount: 0,
+					memoryBarriers: null,
+					bufferMemoryBarrierCount: 0,
+					bufferMemoryBarriers: null,
+					imageMemoryBarrierCount: 1,
+					imageMemoryBarriers: &preMemoryBarrier
+				);
 				var copyRegion = new SharpVulkan.BufferImageCopy {
 					BufferOffset = uploadBufferAlloc.BufferOffset,
 					BufferRowLength = (uint)width,
 					BufferImageHeight = (uint)height,
 					ImageOffset = new SharpVulkan.Offset3D(x, y, 0),
 					ImageExtent = new SharpVulkan.Extent3D((uint)width, (uint)height, 1),
-					ImageSubresource = new SharpVulkan.ImageSubresourceLayers(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level)
+					ImageSubresource = new SharpVulkan.ImageSubresourceLayers(
+						SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level
+					),
 				};
 				context.CommandBuffer.CopyBufferToImage(
-					uploadBufferAlloc.Buffer, image, SharpVulkan.ImageLayout.TransferDestinationOptimal, 1, &copyRegion);
+					uploadBufferAlloc.Buffer, image, SharpVulkan.ImageLayout.TransferDestinationOptimal, 1, &copyRegion
+				);
 				var postMemoryBarrier = new SharpVulkan.ImageMemoryBarrier {
 					StructureType = SharpVulkan.StructureType.ImageMemoryBarrier,
 					Image = image,
@@ -180,12 +220,22 @@ namespace Lime.Graphics.Platform.Vulkan
 					SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 					DestinationAccessMask = SharpVulkan.AccessFlags.ShaderRead,
 					DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-					SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
+					SubresourceRange = new SharpVulkan.ImageSubresourceRange(
+						SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1
+					),
 				};
 				context.CommandBuffer.PipelineBarrier(
-					SharpVulkan.PipelineStageFlags.Transfer,
-					SharpVulkan.PipelineStageFlags.VertexShader | SharpVulkan.PipelineStageFlags.FragmentShader,
-					SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &postMemoryBarrier);
+					sourceStageMask: SharpVulkan.PipelineStageFlags.Transfer,
+					destinationStageMask: SharpVulkan.PipelineStageFlags.VertexShader
+						| SharpVulkan.PipelineStageFlags.FragmentShader,
+					dependencyFlags: SharpVulkan.DependencyFlags.None,
+					memoryBarrierCount: 0,
+					memoryBarriers: null,
+					bufferMemoryBarrierCount: 0,
+					bufferMemoryBarriers: null,
+					imageMemoryBarrierCount: 1,
+					imageMemoryBarriers: &postMemoryBarrier
+				);
 			}
 		}
 
@@ -212,19 +262,31 @@ namespace Lime.Graphics.Platform.Vulkan
 				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.TransferRead,
 				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
+				SubresourceRange = new SharpVulkan.ImageSubresourceRange(
+					SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1
+				),
 			};
 			context.CommandBuffer.PipelineBarrier(
-				SharpVulkan.PipelineStageFlags.VertexShader | SharpVulkan.PipelineStageFlags.FragmentShader,
-				SharpVulkan.PipelineStageFlags.Transfer, SharpVulkan.DependencyFlags.None,
-				0, null, 0, null, 1, &preMemoryBarrier);
+				sourceStageMask: SharpVulkan.PipelineStageFlags.VertexShader
+					| SharpVulkan.PipelineStageFlags.FragmentShader,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.Transfer,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 1,
+				imageMemoryBarriers: &preMemoryBarrier
+			);
 			var copyRegion = new SharpVulkan.BufferImageCopy {
 				BufferOffset = 0,
 				BufferRowLength = (uint)width,
 				BufferImageHeight = (uint)height,
 				ImageOffset = new SharpVulkan.Offset3D(x, y, 0),
 				ImageExtent = new SharpVulkan.Extent3D((uint)width, (uint)height, 1),
-				ImageSubresource = new SharpVulkan.ImageSubresourceLayers(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level)
+				ImageSubresource = new SharpVulkan.ImageSubresourceLayers(
+					SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level
+				),
 			};
 			context.CommandBuffer.CopyImageToBuffer(
 				image, SharpVulkan.ImageLayout.TransferSourceOptimal, context.ReadbackBuffer, 1, &copyRegion);
@@ -237,12 +299,22 @@ namespace Lime.Graphics.Platform.Vulkan
 				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.ShaderRead,
 				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1)
+				SubresourceRange = new SharpVulkan.ImageSubresourceRange(
+					SharpVulkan.ImageAspectFlags.Color, 0, 1, (uint)level, 1
+				),
 			};
 			context.CommandBuffer.PipelineBarrier(
-				SharpVulkan.PipelineStageFlags.Transfer,
-				SharpVulkan.PipelineStageFlags.VertexShader | SharpVulkan.PipelineStageFlags.FragmentShader,
-				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &postMemoryBarrier);
+				sourceStageMask: SharpVulkan.PipelineStageFlags.Transfer,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.VertexShader
+					| SharpVulkan.PipelineStageFlags.FragmentShader,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 1,
+				imageMemoryBarriers: &postMemoryBarrier
+			);
 			context.Finish();
 			var readbackBufferMemory = context.ReadbackBufferMemory;
 			var readbackBufferMappedMemory = context.MemoryAllocator.Map(readbackBufferMemory);

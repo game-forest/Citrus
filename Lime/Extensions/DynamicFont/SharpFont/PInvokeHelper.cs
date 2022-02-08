@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -51,14 +49,16 @@ namespace SharpFont
 		/// <param name="destination">The destination pointer.</param>
 		/// <param name="destinationOffset">An offset into the destination buffer.</param>
 		/// <param name="count">The number of bytes to copy.</param>
-		internal static unsafe void Copy(IntPtr source, int sourceOffset, IntPtr destination, int destinationOffset, int count)
-		{
+		internal static unsafe void Copy(
+			IntPtr source, int sourceOffset, IntPtr destination, int destinationOffset, int count
+		) {
 			byte* src = (byte*)source + sourceOffset;
 			byte* dst = (byte*)destination + destinationOffset;
 			byte* end = dst + count;
 
-			while (dst != end)
+			while (dst != end) {
 				*dst++ = *src++;
+			}
 		}
 
 		/// <summary>

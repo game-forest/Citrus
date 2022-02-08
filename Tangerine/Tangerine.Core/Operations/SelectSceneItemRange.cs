@@ -21,4 +21,3 @@ namespace Tangerine.Core.Operations
 		}
 	}
 }
-

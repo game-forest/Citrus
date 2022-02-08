@@ -29,8 +29,9 @@ namespace Tangerine.Core
 		public bool DescendantOf(SceneItem sceneItem)
 		{
 			for (var i = Parent; i != null; i = i.Parent) {
-				if (i == sceneItem)
+				if (i == sceneItem) {
 					return true;
+				}
 			}
 			return false;
 		}

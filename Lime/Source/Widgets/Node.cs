@@ -31,7 +31,10 @@ namespace Lime
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface, AllowMultiple = true)]
+	[AttributeUsage(
+		AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface,
+		AllowMultiple = true
+	)]
 	public sealed class YuzuDontGenerateDeserializerAttribute : Attribute
 	{ }
 
@@ -63,7 +66,9 @@ namespace Lime
 	[DebuggerTypeProxy(typeof(NodeDebugView))]
 	public abstract class Node : IDisposable, IAnimationHost, IRenderChainBuilder, IAnimable, ICloneable
 #if PROFILER
+#pragma warning disable SA1001 // Commas should be spaced correctly
 		, IProfileableObject
+#pragma warning restore SA1001 // Commas should be spaced correctly
 #endif // PROFILER
 	{
 		[Flags]
@@ -84,7 +89,7 @@ namespace Lime
 			Frozen = 1 << 11,
 			Material = 1 << 12,
 			ParentBoundingRect = 1 << 13,
-			All = ~None
+			All = ~None,
 		}
 
 		/// <summary>
@@ -124,6 +129,7 @@ namespace Lime
 		}
 
 		private string contentsPath;
+
 		/// <summary>
 		/// Denotes the path to the external scene. If this path isn't null during node loading,
 		/// the node children are replaced by the external scene nodes.
@@ -154,7 +160,6 @@ namespace Lime
 			LoadExternalScenes();
 		}
 #endif
-
 
 		internal static long NodeReferenceCacheValidationCode = 1;
 
@@ -271,8 +276,14 @@ namespace Lime
 		/// <summary>
 		/// Makes the presenter compound and returns it.
 		/// </summary>
-		public CompoundPresenter CompoundPresenter =>
-			(Presenter as CompoundPresenter) ?? (CompoundPresenter)(Presenter = new CompoundPresenter(Presenter));
+		public CompoundPresenter CompoundPresenter
+		{
+			get
+			{
+				return (Presenter as CompoundPresenter)
+					?? (CompoundPresenter)(Presenter = new CompoundPresenter(Presenter));
+			}
+		}
 
 		/// <summary>
 		/// The presenter used for rendering the node after rendering its children.
@@ -282,8 +293,14 @@ namespace Lime
 		/// <summary>
 		/// Makes the post presenter compound and returns it.
 		/// </summary>
-		public CompoundPresenter CompoundPostPresenter =>
-			(PostPresenter as CompoundPresenter) ?? (CompoundPresenter)(PostPresenter = new CompoundPresenter(PostPresenter));
+		public CompoundPresenter CompoundPostPresenter
+		{
+			get
+			{
+				return (PostPresenter as CompoundPresenter)
+					?? (CompoundPresenter)(PostPresenter = new CompoundPresenter(PostPresenter));
+			}
+		}
 
 		/// <summary>
 		/// Gets the cached reference to the first children node.
@@ -354,12 +371,14 @@ namespace Lime
 		private float effectiveAnimationSpeed;
 
 		/// <summary>
-		/// Gets absolute animation speed that's product of self animation speed multiplied by parent absolute animation speed.
+		/// Gets absolute animation speed that's product of self animation speed
+		/// multiplied by parent absolute animation speed.
 		/// EffectiveAnimationSpeed = AnimationSpeed * Parent.EffectiveAnimationSpeed.
 		/// </summary>
 		public float EffectiveAnimationSpeed
 		{
-			get {
+			get
+			{
 				if (CleanDirtyFlags(DirtyFlags.EffectiveAnimationSpeed)) {
 					RecalcEffectiveAnimationSpeed();
 				}
@@ -388,7 +407,8 @@ namespace Lime
 
 		/// <summary>
 		/// Collections of Components.
-		/// If node component class don't need to be serialized mark it with <see cref="NodeComponentDontSerializeAttribute"/>.
+		/// If node component class don't need to be serialized mark it
+		/// with <see cref="NodeComponentDontSerializeAttribute"/>.
 		/// </summary>
 		[YuzuMember]
 		public NodeComponentCollection Components { get; private set; }
@@ -556,7 +576,7 @@ namespace Lime
 		/// <summary>
 		/// TODO: Add summary
 		/// </summary>
-		internal protected DirtyFlags DirtyMask = DirtyFlags.All;
+		protected internal DirtyFlags DirtyMask = DirtyFlags.All;
 
 		/// <summary>
 		/// TODO: Add summary
@@ -671,8 +691,10 @@ namespace Lime
 		/// </summary>
 		protected internal void PropagateDirtyFlags(DirtyFlags mask = DirtyFlags.All)
 		{
-			if ((DirtyMask & mask) == mask)
+			if ((DirtyMask & mask) == mask) {
 				return;
+			}
+
 			Window.Current?.Invalidate();
 			PropagateDirtyFlagsHelper(mask);
 		}
@@ -714,8 +736,9 @@ namespace Lime
 		public bool DescendantOf(Node node)
 		{
 			for (var n = Parent; n != null; n = n.Parent) {
-				if (n == node)
+				if (n == node) {
 					return true;
+				}
 			}
 			return false;
 		}
@@ -744,7 +767,10 @@ namespace Lime
 		/// Throws an exception if sought-for animation or marker doesn't exist.
 		/// Returns this (to use with yield return)
 		/// </summary>
-		public Animation RunAnimation(string markerId, string animationId = null) => Animations.Run(animationId, markerId);
+		public Animation RunAnimation(string markerId, string animationId = null)
+		{
+			return Animations.Run(animationId, markerId);
+		}
 
 		[YuzuBeforeSerialization]
 		public void OnBeforeSerialization()
@@ -767,7 +793,7 @@ namespace Lime
 		/// </summary>
 		public override string ToString()
 		{
-			string r = "";
+			string r = string.Empty;
 			for (var p = this; p != null; p = p.Parent) {
 				if (p != this) {
 					r += " in ";
@@ -967,7 +993,8 @@ namespace Lime
 		/// <typeparam name="T">Type of sought-for node.</typeparam>
 		/// <param name="path">Id or path of Node. Path can be incomplete
 		/// (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</param>
-		public T Find<T>(string path) where T : Node
+		public T Find<T>(string path)
+			where T : Node
 		{
 			if (!(TryFindNode(path) is T result)) {
 				throw new Lime.Exception("'{0}' of {1} not found for '{2}'", path, typeof(T).Name, ToString());
@@ -983,7 +1010,8 @@ namespace Lime
 		/// <typeparam name="T">Type of sought-for node.</typeparam>
 		/// <param name="format">Id or path of Node. Path can be incomplete
 		/// (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</param>
-		public T Find<T>(string format, params object[] args) where T : Node
+		public T Find<T>(string format, params object[] args)
+			where T : Node
 		{
 			return Find<T>(string.Format(format, args));
 		}
@@ -996,7 +1024,8 @@ namespace Lime
 		/// <typeparam name="T">Type of sought-for node.</typeparam>
 		/// <param name="path">Id or path of Node. Path can be incomplete
 		/// (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</param>
-		public bool TryFind<T>(string path, out T node) where T : Node
+		public bool TryFind<T>(string path, out T node)
+			where T : Node
 		{
 			node = TryFindNode(path) as T;
 			return node != null;
@@ -1010,7 +1039,8 @@ namespace Lime
 		/// <typeparam name="T">Type of sought-for node.</typeparam>
 		/// <param name="path">Id or path of Node. Path can be incomplete
 		/// (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</param>
-		public T TryFind<T>(string path) where T : Node
+		public T TryFind<T>(string path)
+			where T : Node
 		{
 			return TryFindNode(path) as T;
 		}
@@ -1023,7 +1053,8 @@ namespace Lime
 		/// <typeparam name="T">Type of sought-for node.</typeparam>
 		/// <param name="format">Id or path of Node. Path can be incomplete
 		/// (i.e. for path Root/Human/Head/Eye Human or Head can be ommited).</param>
-		public T TryFind<T>(string format, params object[] args) where T : Node
+		public T TryFind<T>(string format, params object[] args)
+			where T : Node
 		{
 			return TryFind<T>(string.Format(format, args));
 		}
@@ -1119,8 +1150,10 @@ namespace Lime
 		/// преобразованию.
 		/// Для текстовых виджетов, размер шрифта масштабируется.
 		/// </summary>
-		/// <param name="roundCoordinates">Если true, то после масштабирования виджета, его размер округляется, а сам виджет сдвигается таким образом,
-		/// чтобы его левый верхний угол (точка (0,0) в локальных координатах виджета) перешел в целочисленную позицию.</param>
+		/// <param name="roundCoordinates">
+		/// Если true, то после масштабирования виджета, его размер округляется, а сам виджет сдвигается таким образом,
+		/// чтобы его левый верхний угол (точка (0,0) в локальных координатах виджета) перешел в целочисленную позицию.
+		/// </param>
 		public virtual void StaticScale(float ratio, bool roundCoordinates)
 		{
 			foreach (var node in Nodes) {
@@ -1197,7 +1230,7 @@ namespace Lime
 		private void PreloadTexture(PropertyInfo prop)
 		{
 			var getter = prop.GetGetMethod();
-			var texture = getter.Invoke(this, new object[]{}) as ITexture;
+			var texture = getter.Invoke(this, new object[] { }) as ITexture;
 
 			if (texture is SerializableTexture serializableTexture &&
 				serializableTexture.SerializationPath.StartsWith("#")) {
@@ -1218,7 +1251,8 @@ namespace Lime
 			}
 		}
 
-		private static readonly ThreadLocal<HashSet<string>> scenesBeingLoaded = new ThreadLocal<HashSet<string>>(() => new HashSet<string>());
+		private static readonly ThreadLocal<HashSet<string>> scenesBeingLoaded =
+			new ThreadLocal<HashSet<string>>(() => new HashSet<string>());
 
 		public delegate bool SceneLoadingDelegate(string path, ref Node instance, bool external, bool ignoreExternals);
 		public delegate void SceneLoadedDelegate(string path, Node instance, bool external);
@@ -1226,7 +1260,8 @@ namespace Lime
 		public static ThreadLocal<SceneLoadedDelegate> SceneLoaded;
 
 		/// <summary>
-		/// For each root node of deserialized node hierarchy this component will be added and set to path in asset bundle.
+		/// For each root node of deserialized node hierarchy
+		/// this component will be added and set to path in asset bundle.
 		/// </summary>
 		[NodeComponentDontSerialize]
 		public class AssetBundlePathComponent : NodeComponent
@@ -1235,7 +1270,6 @@ namespace Lime
 			public string Path;
 			public AssetBundlePathComponent()
 			{
-
 			}
 			public AssetBundlePathComponent(string path)
 			{
@@ -1267,7 +1301,9 @@ namespace Lime
 		/// <summary>
 		/// Saves node to a stream.
 		/// </summary>
-		/// <param name="path">Path to the file. Required for correct asset path shrink or expand for relative assets.</param>
+		/// <param name="path">
+		/// Path to the file. Required for correct asset path shrink or expand for relative assets.
+		/// </param>
 		/// <param name="stream">The stream.</param>
 		/// <param name="format"><see cref="Persistence.Format"/></param>
 		public void Save(string path, Stream stream, Persistence.Format format)
@@ -1280,14 +1316,18 @@ namespace Lime
 		/// </summary>
 		/// <typeparam name="T">Expected concrete type of Node.</typeparam>
 		/// <param name="path">Path in asset bundle.</param>
-		/// <param name="instance">Existing instance of node. If set to <code>null</code> new instance is created.</param>
+		/// <param name="instance">
+		/// Existing instance of node. If set to <code>null</code> new instance is created.
+		/// </param>
 		/// <param name="ignoreExternals">Do not load prefabs.</param>
 		/// <returns>Instance of Node loaded from given path.</returns>
 		public static T Load<T>(
 			string path,
 			T instance = null,
 			bool ignoreExternals = false
-		) where T : Node {
+		)
+			where T : Node
+		{
 			return (T)LoadHelper(
 				path: path,
 				instance: instance,
@@ -1300,7 +1340,9 @@ namespace Lime
 		/// Loads node by given <paramref name="path"/> under <see cref="AssetBundle.Current"/>
 		/// </summary>
 		/// <param name="path">Path in asset bundle.</param>
-		/// <param name="instance">Existing instance of node. If set to <code>null</code> new instance is created.</param>
+		/// <param name="instance">
+		/// Existing instance of node. If set to <code>null</code> new instance is created.
+		/// </param>
 		/// <param name="ignoreExternals">Do not load prefabs.</param>
 		/// <returns>Instance of Node loaded from given path.</returns>
 		public static Node Load(
@@ -1322,7 +1364,9 @@ namespace Lime
 		/// <typeparam name="T">Expected concrete type of Node.</typeparam>
 		/// <param name="stream">Stream with serialized Node.</param>
 		/// <param name="path">Path in asset bundle.</param>
-		/// <param name="instance">Existing instance of node. If set to <code>null</code> new instance is created.</param>
+		/// <param name="instance">
+		/// Existing instance of node. If set to <code>null</code> new instance is created.
+		/// </param>
 		/// <param name="ignoreExternals">Do not load prefabs.</param>
 		/// <returns>Instance of Node loaded from given path.</returns>
 		public static Node Load(
@@ -1354,9 +1398,14 @@ namespace Lime
 				SceneLoaded?.Value?.Invoke(path, instance, external);
 				return instance;
 			}
-			var fullPath = stream != null && sceneExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase)) ? path : ResolveScenePath(path);
+			var fullPath = stream != null
+				&& sceneExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase))
+					? path
+					: ResolveScenePath(path);
 			if (fullPath == null) {
-				throw new FileNotFoundException($"None of {string.Join(", ", sceneExtensions.Select(e => $"{path}{e}"))} exists");
+				throw new FileNotFoundException(
+					$"None of {string.Join(", ", sceneExtensions.Select(e => $"{path}{e}"))} exists"
+				);
 			}
 			if (scenesBeingLoaded.Value.Contains(fullPath)) {
 				throw new CyclicDependencyException($"Cyclic scenes dependency was detected: {fullPath}");
@@ -1413,8 +1462,9 @@ namespace Lime
 			}
 		}
 
-		private void LoadExternalScenes(Dictionary<string, ExternalScene> externalScenes, List<ExternalScene> parentScenes)
-		{
+		private void LoadExternalScenes(
+			Dictionary<string, ExternalScene> externalScenes, List<ExternalScene> parentScenes
+		) {
 			if (string.IsNullOrEmpty(ContentsPath)) {
 				foreach (var child in Nodes) {
 					child.LoadExternalScenes(externalScenes, parentScenes);
@@ -1433,13 +1483,19 @@ namespace Lime
 					parentScenes.RemoveAt(parentScenes.Count - 1);
 				} else {
 					externalScene.ReferenceCount++;
-					foreach (var (nestedSceneContentsPath, nestedSceneReferences) in externalScene.NestedSceneReferences) {
+					foreach (
+						var (nestedSceneContentsPath, nestedSceneReferences) in externalScene.NestedSceneReferences
+					) {
 						externalScenes[nestedSceneContentsPath].ReferenceCount += nestedSceneReferences;
 					}
 					foreach (var parentScene in parentScenes) {
 						IncrementDictionaryValue(parentScene.NestedSceneReferences, ContentsPath);
-						foreach (var (nestedSceneContentsPath, nestedSceneReferences) in externalScene.NestedSceneReferences) {
-							IncrementDictionaryValue(parentScene.NestedSceneReferences, nestedSceneContentsPath, nestedSceneReferences);
+						foreach (
+							var (nestedSceneContentsPath, nestedSceneReferences) in externalScene.NestedSceneReferences
+						) {
+							IncrementDictionaryValue(
+								parentScene.NestedSceneReferences, nestedSceneContentsPath, nestedSceneReferences
+							);
 						}
 					}
 				}
@@ -1694,7 +1750,8 @@ namespace Lime
 		public bool Frozen
 		{
 			get => frozen;
-			set {
+			set
+			{
 				if (frozen != value) {
 					frozen = value;
 					PropagateDirtyFlags(DirtyFlags.Frozen);
@@ -1707,7 +1764,8 @@ namespace Lime
 
 		public bool GloballyFrozen
 		{
-			get {
+			get
+			{
 				if (CleanDirtyFlags(DirtyFlags.Frozen)) {
 					RecalcGloballyFrozen();
 				}
@@ -1734,7 +1792,8 @@ namespace Lime
 		/// <summary>
 		/// Returns a clone of the node hierarchy.
 		/// </summary>
-		public static T Clone<T>(this Node node) where T : Node
+		public static T Clone<T>(this Node node)
+			where T : Node
 		{
 			return (T)Clone(node);
 		}
@@ -1853,7 +1912,8 @@ namespace Lime
 
 		public Animation DefaultAnimation
 		{
-			get {
+			get
+			{
 				foreach (var a in Animations) {
 					if (a.IsLegacy) {
 						return a;

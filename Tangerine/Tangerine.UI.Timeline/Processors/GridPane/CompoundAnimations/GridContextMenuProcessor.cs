@@ -16,8 +16,7 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 			while (true) {
 				if (Document.Current.Animation.IsCompound &&
 					Timeline.Instance.Grid.RootWidget.Input.WasMouseReleased(1) &&
-					Timeline.Instance.Grid.IsMouseOverRow())
-				{
+					Timeline.Instance.Grid.IsMouseOverRow()) {
 					var c = Timeline.Instance.Grid.CellUnderMouse();
 					Document.Current.History.DoTransaction(() => {
 						Operations.SetCurrentColumn.Perform(c.X);
@@ -25,9 +24,18 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 						Core.Operations.SelectSceneItem.Perform(Document.Current.VisibleSceneItems[c.Y]);
 					});
 					var menu = new Menu {
-						new Command("Add", () => AddAnimationClip.Perform(c)) { Enabled = AddAnimationClip.IsEnabled() },
-						new Command("Delete", () => DeleteSelectedAnimationClips.Perform()) { Enabled = DeleteSelectedAnimationClips.IsEnabled() },
-						new Command("Split", () => SplitAnimationClip.Perform(c)) { Enabled = SplitAnimationClip.IsEnabled(c) },
+						new Command(
+							"Add",
+							() => AddAnimationClip.Perform(c)
+						) { Enabled = AddAnimationClip.IsEnabled() },
+						new Command(
+							"Delete",
+							() => DeleteSelectedAnimationClips.Perform()
+						) { Enabled = DeleteSelectedAnimationClips.IsEnabled() },
+						new Command(
+							"Split",
+							() => SplitAnimationClip.Perform(c)
+						) { Enabled = SplitAnimationClip.IsEnabled(c) },
 					};
 					menu.Popup();
 				}

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lime.Text
 {
-	class TextParser
+	internal class TextParser
 	{
 		private const char Nbsp = '\u00A0';
 		public struct Fragment
@@ -15,18 +15,18 @@ namespace Lime.Text
 			public bool IsNbsp;
 		}
 
-		readonly string text;
-		readonly Stack<string> tagStack = new Stack<string>();
+		private readonly string text;
+		private readonly Stack<string> tagStack = new Stack<string>();
 
-		int pos = 0;
-		int currentStyle = -1;
+		private int pos = 0;
+		private int currentStyle = -1;
 		public string ErrorMessage;
 		public List<string> Styles = new List<string>();
 		public List<Fragment> Fragments = new List<Fragment>();
 
 		public TextParser(string text = null)
 		{
-			text = text ?? "";
+			text = text ?? string.Empty;
 			this.text = text;
 			while (pos < text.Length) {
 				if (IsNbsp()) {
@@ -38,11 +38,11 @@ namespace Lime.Text
 				}
 			}
 			if (tagStack.Count > 0) {
-				ErrorMessage = String.Format("Unmatched tag '&lt;{0}&gt;'", tagStack.Peek());
+				ErrorMessage = string.Format("Unmatched tag '&lt;{0}&gt;'", tagStack.Peek());
 			}
 		}
 
-		void ParseText()
+		private void ParseText()
 		{
 			int p = pos;
 			while (pos < text.Length) {
@@ -61,7 +61,7 @@ namespace Lime.Text
 			}
 		}
 
-		void ParseTag()
+		private void ParseTag()
 		{
 			bool isOpeningTag = true;
 			bool isClosedTag = false;
@@ -84,7 +84,7 @@ namespace Lime.Text
 					if (isClosedTag) {
 						string tag = text.Substring(p, pos - p - 1);
 						ProcessOpeningTag(tag);
-						ProcessTextBlock("");
+						ProcessTextBlock(string.Empty);
 						ProcessClosingTag(tag);
 					} else if (isOpeningTag) {
 						string tag = text.Substring(p, pos - p);
@@ -95,7 +95,7 @@ namespace Lime.Text
 					} else {
 						string tag = text.Substring(p, pos - p);
 						if (p - 3 > 0 && text[p - 3] == '>') {
-							ProcessTextBlock("");
+							ProcessTextBlock(string.Empty);
 							ProcessClosingTag(tag);
 						} else if (!ProcessClosingTag(tag)) {
 							pos = text.Length;
@@ -132,17 +132,17 @@ namespace Lime.Text
 				(text[pos] == '&' && text.Length - pos >= 6 && text.Substring(pos, 6) == "&nbsp;");
 		}
 
-		bool ProcessOpeningTag(string tag)
+		private bool ProcessOpeningTag(string tag)
 		{
 			tagStack.Push(tag);
 			SetStyle(tag);
 			return true;
 		}
 
-		bool ProcessClosingTag(string tag)
+		private bool ProcessClosingTag(string tag)
 		{
 			if (tagStack.Count == 0 || tagStack.Peek() != tag) {
-				ErrorMessage = String.Format("Unexpected closing tag '&lt;/{0}&gt;'", tag);
+				ErrorMessage = string.Format("Unexpected closing tag '&lt;/{0}&gt;'", tag);
 				return false;
 			}
 			tagStack.Pop();
@@ -150,12 +150,12 @@ namespace Lime.Text
 			return true;
 		}
 
-		void ProcessTextBlock(string text)
+		private void ProcessTextBlock(string text)
 		{
 			Fragments.Add(new Fragment { Style = currentStyle, Text = UnescapeTaggedString(text) });
 		}
 
-		string UnescapeTaggedString(string text)
+		private string UnescapeTaggedString(string text)
 		{
 			text = text.Replace("&lt;", "<");
 			text = text.Replace("&gt;", ">");
@@ -163,7 +163,7 @@ namespace Lime.Text
 			return text;
 		}
 
-		void SetStyle(string styleName)
+		private void SetStyle(string styleName)
 		{
 			if (styleName != null) {
 				for (int i = 0; i < Styles.Count; i++) {
@@ -180,5 +180,4 @@ namespace Lime.Text
 			Styles.Add(styleName);
 		}
 	}
-
 }

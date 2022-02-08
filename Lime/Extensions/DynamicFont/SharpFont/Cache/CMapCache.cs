@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -32,13 +30,7 @@ namespace SharpFont.Cache
 	/// </summary>
 	public class CMapCache
 	{
-		#region Fields
-
 		private IntPtr reference;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CMapCache"/> class.
@@ -52,15 +44,12 @@ namespace SharpFont.Cache
 			IntPtr cacheRef;
 			Error err = FT.FTC_CMapCache_New(manager.Reference, out cacheRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = cacheRef;
 		}
-
-		#endregion
-
-		#region Properties
 
 		internal IntPtr Reference
 		{
@@ -74,10 +63,6 @@ namespace SharpFont.Cache
 				reference = value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Translate a character code into a glyph index, using the charmap cache.
@@ -94,7 +79,5 @@ namespace SharpFont.Cache
 		{
 			return FT.FTC_CMapCache_Lookup(Reference, faceId, cmapIndex, charCode);
 		}
-
-		#endregion
 	}
 }

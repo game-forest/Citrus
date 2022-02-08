@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -38,8 +36,6 @@ namespace SharpFont
 	/// </remarks>
 	public sealed class Outline : IDisposable
 	{
-		#region Fields
-
 		private bool disposed;
 		private bool duplicate;
 
@@ -48,10 +44,6 @@ namespace SharpFont
 
 		private Library parentLibrary;
 		private Memory parentMemory;
-
-		#endregion
-
-		#region Constructor
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Outline"/> class.
@@ -71,8 +63,9 @@ namespace SharpFont
 			IntPtr reference;
 			Error err = FT.FT_Outline_New(library.Reference, pointsCount, contoursCount, out reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			parentLibrary = library;
 			parentLibrary.AddChildOutline(this);
@@ -90,10 +83,11 @@ namespace SharpFont
 			IntPtr reference;
 			Error err = FT.FT_Outline_New_Internal(memory.Reference, pointsCount, contoursCount, out reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
-
-			parentMemory = memory; //TODO Should Memory be disposable as well?
+			}
+			// TODO Should Memory be disposable as well?
+			parentMemory = memory;
 		}
 
 		internal Outline(IntPtr reference, OutlineRec outlineInt)
@@ -111,10 +105,6 @@ namespace SharpFont
 		{
 			Dispose(false);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a value indicating whether the <see cref="Outline"/> has been disposed.
@@ -134,8 +124,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("ContoursCount", "Cannot access a disposed object.");
+				}
 
 				return rec.n_contours;
 			}
@@ -148,8 +139,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("PointsCount", "Cannot access a disposed object.");
+				}
 
 				return rec.n_points;
 			}
@@ -163,19 +155,20 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Points", "Cannot access a disposed object.");
+				}
 
 				int count = PointsCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				FTVector[] points = new FTVector[count];
 				IntPtr array = rec.points;
 
-				for (int i = 0; i < count; i++)
-				{
+				for (int i = 0; i < count; i++) {
 					points[i] = new FTVector(new IntPtr(array.ToInt64() + (IntPtr.Size * i * 2)));
 				}
 
@@ -200,19 +193,20 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Tags", "Cannot access a disposed object.");
+				}
 
 				int count = PointsCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				byte[] tags = new byte[count];
 				IntPtr array = rec.tags;
 
-				for (int i = 0; i < count; i++)
-				{
+				for (int i = 0; i < count; i++) {
 					tags[i] = Marshal.ReadByte(array, sizeof(byte) * i);
 				}
 
@@ -229,19 +223,20 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Contours", "Cannot access a disposed object.");
+				}
 
 				int count = ContoursCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				short[] contours = new short[count];
 				IntPtr array = rec.contours;
 
-				for (int i = 0; i < count; i++)
-				{
+				for (int i = 0; i < count; i++) {
 					contours[i] = Marshal.ReadInt16(array, sizeof(short) * i);
 				}
 
@@ -258,8 +253,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Flags", "Cannot access a disposed object.");
+				}
 
 				return rec.flags;
 			}
@@ -269,27 +265,23 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				return reference;
 			}
 
 			set
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				reference = value;
 				rec = PInvokeHelper.PtrToStructure<OutlineRec>(reference);
 			}
 		}
-
-		#endregion
-
-		#region Methods
-
-		#region Outline Processing
 
 		/// <summary>
 		/// Copy an outline into another one. Both objects must have the same sizes (number of points &amp; number of
@@ -298,18 +290,21 @@ namespace SharpFont
 		/// <param name="target">A handle to the target outline.</param>
 		public void Copy(Outline target)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
-			if (target == null)
+			if (target == null) {
 				throw new ArgumentNullException("target");
+			}
 
 			IntPtr targetRef = target.Reference;
 			Error err = FT.FT_Outline_Copy(reference, ref targetRef);
 			target.Reference = reference;
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -319,8 +314,9 @@ namespace SharpFont
 		/// <param name="offsetY">The vertical offset.</param>
 		public void Translate(int offsetX, int offsetY)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Outline_Translate(reference, offsetX, offsetY);
 		}
@@ -335,8 +331,9 @@ namespace SharpFont
 		/// <param name="matrix">A pointer to the transformation matrix.</param>
 		public void Transform(FTMatrix matrix)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Outline_Transform(reference, ref matrix);
 		}
@@ -356,18 +353,20 @@ namespace SharpFont
 		/// <example>
 		/// FT_Load_Glyph( face, index, FT_LOAD_DEFAULT );
 		/// if ( face-&gt;slot-&gt;format == FT_GLYPH_FORMAT_OUTLINE )
-		/// 	FT_Outline_Embolden( &amp;face-&gt;slot-&gt;outline, strength );
+		///   FT_Outline_Embolden( &amp;face-&gt;slot-&gt;outline, strength );
 		/// </example>
 		/// <param name="strength">How strong the glyph is emboldened. Expressed in 26.6 pixel format.</param>
 		public void Embolden(Fixed26Dot6 strength)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Outline_Embolden(reference, (IntPtr)strength.Value);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -382,13 +381,15 @@ namespace SharpFont
 		/// </param>
 		public void EmboldenXY(int strengthX, int strengthY)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Outline_EmboldenXY(reference, strengthX, strengthY);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -402,8 +403,9 @@ namespace SharpFont
 		/// </para></remarks>
 		public void Reverse()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Outline_Reverse(reference);
 		}
@@ -413,13 +415,15 @@ namespace SharpFont
 		/// </summary>
 		public void Check()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Outline_Check(reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -436,14 +440,16 @@ namespace SharpFont
 		/// <returns>The outline's exact bounding box.</returns>
 		public BBox GetBBox()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			BBox bbox;
 			Error err = FT.FT_Outline_Get_BBox(reference, out bbox);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return bbox;
 		}
@@ -461,17 +467,20 @@ namespace SharpFont
 		/// </param>
 		public void Decompose(OutlineFuncs funcInterface, IntPtr user)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
-			if (funcInterface == null)
+			if (funcInterface == null) {
 				throw new ArgumentNullException("funcInterface");
+			}
 
 			OutlineFuncsRec ofRec = funcInterface.Record;
 			Error err = FT.FT_Outline_Decompose(reference, ref ofRec, user);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary><para>
@@ -487,8 +496,9 @@ namespace SharpFont
 		/// <returns>The outline's control box.</returns>
 		public BBox GetCBox()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			BBox cbox;
 			FT.FT_Outline_Get_CBox(reference, out cbox);
@@ -511,13 +521,15 @@ namespace SharpFont
 		/// <param name="bitmap">A pointer to the target bitmap descriptor.</param>
 		public void GetBitmap(FTBitmap bitmap)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Outline_Get_Bitmap(parentLibrary.Reference, reference, bitmap.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -536,19 +548,23 @@ namespace SharpFont
 		/// <param name="bitmap">A pointer to the target bitmap descriptor.</param>
 		public void GetBitmap(Library library, FTBitmap bitmap)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
-			if (library == null)
+			if (library == null) {
 				throw new ArgumentNullException("library");
+			}
 
-			if (bitmap == null)
+			if (bitmap == null) {
 				throw new ArgumentNullException("bitmap");
+			}
 
 			Error err = FT.FT_Outline_Get_Bitmap(library.Reference, reference, bitmap.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -571,16 +587,19 @@ namespace SharpFont
 		/// </param>
 		public void Render(RasterParams parameters)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
-			if (parameters == null)
+			if (parameters == null) {
 				throw new ArgumentNullException("parameters");
+			}
 
 			Error err = FT.FT_Outline_Render(parentLibrary.Reference, reference, parameters.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -604,19 +623,23 @@ namespace SharpFont
 		/// </param>
 		public void Render(Library library, RasterParams parameters)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
-			if (library == null)
+			if (library == null) {
 				throw new ArgumentNullException("library");
+			}
 
-			if (parameters == null)
+			if (parameters == null) {
 				throw new ArgumentNullException("parameters");
+			}
 
 			Error err = FT.FT_Outline_Render(library.Reference, reference, parameters.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary><para>
@@ -629,15 +652,12 @@ namespace SharpFont
 		/// <returns>The orientation.</returns>
 		public Orientation GetOrientation()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Outline", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Outline_Get_Orientation(reference);
 		}
-
-		#endregion
-
-		#region Glyph Stroker
 
 		/// <summary>
 		/// Retrieve the <see cref="StrokerBorder"/> value corresponding to the ‘inside’ borders of a given outline.
@@ -657,8 +677,6 @@ namespace SharpFont
 			return FT.FT_Outline_GetOutsideBorder(Reference);
 		}
 
-		#endregion
-
 		/// <summary>
 		/// Disposes an instance of the <see cref="Outline"/> class.
 		/// </summary>
@@ -670,29 +688,27 @@ namespace SharpFont
 
 		private void Dispose(bool disposing)
 		{
-			if (!disposed)
-			{
+			if (!disposed) {
 				disposed = true;
 
-				if (!duplicate)
-				{
-					if (parentLibrary != null)
+				if (!duplicate) {
+					if (parentLibrary != null) {
 						FT.FT_Outline_Done(parentLibrary.Reference, reference);
-					else
+					} else {
 						FT.FT_Outline_Done_Internal(parentMemory.Reference, reference);
+					}
 
-					// removes itself from the parent Library, with a check to prevent this from happening when Library is
-					// being disposed (Library disposes all it's children with a foreach loop, this causes an
-					// InvalidOperationException for modifying a collection during enumeration)
-					if (!parentLibrary.IsDisposed)
+					// removes itself from the parent Library, with a check to prevent this from happening
+					// when Library is being disposed (Library disposes all it's children with a foreach loop,
+					// this causes an InvalidOperationException for modifying a collection during enumeration)
+					if (!parentLibrary.IsDisposed) {
 						parentLibrary.RemoveChildOutline(this);
+					}
 				}
 
 				reference = IntPtr.Zero;
 				rec = default(OutlineRec);
 			}
 		}
-
-		#endregion
 	}
 }

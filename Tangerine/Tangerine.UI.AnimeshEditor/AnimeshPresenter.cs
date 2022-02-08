@@ -10,7 +10,9 @@ namespace Tangerine.UI.AnimeshEditor
 
 		public AnimeshPresenter(ISceneView sceneView)
 		{
-			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(widget => Render(widget, sceneView)));
+			sceneView.Frame.CompoundPostPresenter.Add(
+				new SyncDelegatePresenter<Widget>(widget => Render(widget, sceneView))
+			);
 		}
 
 		private static void Render(Widget canvas, ISceneView sv)

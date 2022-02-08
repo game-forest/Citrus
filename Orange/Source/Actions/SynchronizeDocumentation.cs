@@ -1,10 +1,10 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Lime;
 
 namespace Orange
 {
@@ -33,7 +33,12 @@ namespace Orange
 		private static string GetPagePath(string pageName)
 		{
 			string path = Path.Combine(
-				Toolbox.FindCitrusDirectory(), "Tangerine", "Tangerine", "Documentation", Path.Combine(pageName.Split('.')));
+				Toolbox.FindCitrusDirectory(),
+				"Tangerine",
+				"Tangerine",
+				"Documentation",
+				Path.Combine(pageName.Split('.'))
+			);
 			return path + ".md";
 		}
 
@@ -42,8 +47,13 @@ namespace Orange
 		private static IEnumerable<Type> GetNodesTypes()
 		{
 			var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Lime");
-			return assembly == null ? new List<Type>() :
-				assembly.GetTypes().Where(t => typeof(Node).IsAssignableFrom(t) && t.IsDefined(typeof(TangerineRegisterNodeAttribute)));
+			return assembly == null
+				? new List<Type>()
+				: assembly.GetTypes()
+					.Where(
+						t => typeof(Node).IsAssignableFrom(t)
+						&& t.IsDefined(typeof(TangerineRegisterNodeAttribute))
+					);
 		}
 
 		private static void CreatePage(string pageName)

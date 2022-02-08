@@ -1,7 +1,12 @@
+using System.CodeDom.Compiler;
 using System.Runtime.CompilerServices;
 
 namespace Lime.Source.Widgets.Animesh
 {
+	[GeneratedCode(
+		"https://github.com/govert/RobustGeometry.NET/blob/master/RobustGeometry/Predicates/ExactArithmetic.cs",
+		"22be54fc5d251d6176486417da3b5b0e6e9416d1")
+	]
 	[System.Diagnostics.DebuggerStepThrough]
 	public static unsafe class ExactArithmetic
 	{
@@ -308,14 +313,14 @@ namespace Lime.Source.Widgets.Animesh
 		// e and h can be the same.
 		public static int GrowExpansion(int elen, double* e, double b, double* h)
 		{
-			double Q;
+			double q;
 			int eindex;
 
-			Q = b;
+			q = b;
 			for (eindex = 0; eindex < elen; eindex++) {
-				TwoSum(Q, e[eindex], out Q, out h[eindex]);
+				TwoSum(q, e[eindex], out q, out h[eindex]);
 			}
-			h[eindex] = Q;
+			h[eindex] = q;
 			return eindex + 1;
 		}
 
@@ -324,30 +329,30 @@ namespace Lime.Source.Widgets.Animesh
 		// e and h can be the same, but f and h cannot.
 		public static int ExpansionSum(int elen, double* e, int flen, double* f, double* h)
 		{
-			double Q, Qnew;
+			double q, qnew;
 			int findex, hindex, hlast;
 			double hnow;
 
 			// h <= e+f[0]
 			// GrowExpansion(e, f[0], h)
-			Q = f[0];
+			q = f[0];
 			for (hindex = 0; hindex < elen; hindex++) {
 				hnow = e[hindex];
-				TwoSum(Q, hnow, out Qnew, out h[hindex]);
-				Q = Qnew;
+				TwoSum(q, hnow, out qnew, out h[hindex]);
+				q = qnew;
 			}
-			h[hindex] = Q;
+			h[hindex] = q;
 
 			hlast = hindex;
 			for (findex = 1; findex < flen; findex++) {
 				// GrowExpansion(e, f[findex], h[findex...])
-				Q = f[findex];
+				q = f[findex];
 				for (hindex = findex; hindex <= hlast; hindex++) {
 					hnow = h[hindex];
-					TwoSum(Q, hnow, out Qnew, out h[hindex]);
-					Q = Qnew;
+					TwoSum(q, hnow, out qnew, out h[hindex]);
+					q = qnew;
 				}
-				h[++hlast] = Q;
+				h[++hlast] = q;
 			}
 			return hlast + 1;
 		}
@@ -360,8 +365,8 @@ namespace Lime.Source.Widgets.Animesh
 		// There are some minor changes here, because we don't want to read outside the array bounds.
 		public static int FastExpansionSum(int elen, double* e, int flen, double* f, double* h)
 		{
-			double Q;
-			double Qnew;
+			double q;
+			double qnew;
 			int eindex, findex, hindex;
 			double enow, fnow;
 
@@ -375,7 +380,7 @@ namespace Lime.Source.Widgets.Animesh
 			// First step is to assign to Q the entry with smaller magnitude
 			if ((fnow > enow) == (fnow > -enow)) // if |fnow| >= |enow|
 			{
-				Q = enow;
+				q = enow;
 				eindex++;
 
 				// NOTE: The original prdicates.c code here would read past the array bound here (but never use the value).
@@ -385,9 +390,8 @@ namespace Lime.Source.Widgets.Animesh
 				// Instead I just increment the index, and do an extra read later.
 				// Pattern is then to read both enow and fnow for every step
 				// This adds some extra array evaluations, especially for long arrays, but removes one at the end of each array.
-			}
-			else {
-				Q = fnow;
+			} else {
+				q = fnow;
 				findex++;
 			}
 
@@ -404,15 +408,14 @@ namespace Lime.Source.Widgets.Animesh
 				// if |fnow| >= |enow|
 				if ((fnow > enow) == (fnow > -enow)) {
 					// Add e and advance eindex
-					FastTwoSum(enow, Q, out Qnew, out h[0]);
+					FastTwoSum(enow, q, out qnew, out h[0]);
 					eindex++;
-				}
-				else {
+				} else {
 					// Add f and advance findex
-					FastTwoSum(fnow, Q, out Qnew, out h[0]);
+					FastTwoSum(fnow, q, out qnew, out h[0]);
 					findex++;
 				}
-				Q = Qnew;
+				q = qnew;
 				hindex = 1;
 				// While we still have entries in both lists
 				while ((eindex < elen) && (findex < flen)) {
@@ -422,14 +425,13 @@ namespace Lime.Source.Widgets.Animesh
 					// Pick smaller magnitude
 					// if |fnow| >= |enow|
 					if ((fnow > enow) == (fnow > -enow)) {
-						TwoSum(Q, enow, out Qnew, out h[hindex]);
+						TwoSum(q, enow, out qnew, out h[hindex]);
 						eindex++;
-					}
-					else {
-						TwoSum(Q, fnow, out Qnew, out h[hindex]);
+					} else {
+						TwoSum(q, fnow, out qnew, out h[hindex]);
 						findex++;
 					}
-					Q = Qnew;
+					q = qnew;
 					hindex++;
 				}
 			}
@@ -438,19 +440,19 @@ namespace Lime.Source.Widgets.Animesh
 			//    no more tests to try to pull from the correct list
 			while (eindex < elen) {
 				enow = e[eindex];
-				TwoSum(Q, enow, out Qnew, out h[hindex]);
+				TwoSum(q, enow, out qnew, out h[hindex]);
 				eindex++;
-				Q = Qnew;
+				q = qnew;
 				hindex++;
 			}
 			while (findex < flen) {
 				fnow = f[findex];
-				TwoSum(Q, fnow, out Qnew, out h[hindex]);
+				TwoSum(q, fnow, out qnew, out h[hindex]);
 				findex++;
-				Q = Qnew;
+				q = qnew;
 				hindex++;
 			}
-			h[hindex] = Q;
+			h[hindex] = q;
 			return hindex + 1;
 		}
 
@@ -463,8 +465,8 @@ namespace Lime.Source.Widgets.Animesh
 		// There are some minor changes here, because we don't want to read outside the array bounds.
 		public static int FastExpansionSumZeroElim(int elen, double* e, int flen, double* f, double* h)
 		{
-			double Q;
-			double Qnew;
+			double q;
+			double qnew;
 			double hh;
 			int eindex, findex, hindex;
 			double enow, fnow;
@@ -479,7 +481,7 @@ namespace Lime.Source.Widgets.Animesh
 			// First step is to assign to Q the entry with smaller magnitude
 			if ((fnow > enow) == (fnow > -enow)) // if |fnow| >= |enow|
 			{
-				Q = enow;
+				q = enow;
 				eindex++;
 
 				// NOTE: The original prdicates.c code here would read past the array bound here (but never use the value).
@@ -489,9 +491,8 @@ namespace Lime.Source.Widgets.Animesh
 				// Instead I just increment the index, and do an extra read later.
 				// Pattern is then to read both enow and fnow for every step
 				// This adds some extra array evaluations, especially for long arrays, but removes one at the end of each array.
-			}
-			else {
-				Q = fnow;
+			} else {
+				q = fnow;
 				findex++;
 			}
 
@@ -508,15 +509,14 @@ namespace Lime.Source.Widgets.Animesh
 				// if |fnow| >= |enow|
 				if ((fnow > enow) == (fnow > -enow)) {
 					// Add e and advance eindex
-					FastTwoSum(enow, Q, out Qnew, out hh);
+					FastTwoSum(enow, q, out qnew, out hh);
 					eindex++;
-				}
-				else {
+				} else {
 					// Add f and advance findex
-					FastTwoSum(fnow, Q, out Qnew, out hh);
+					FastTwoSum(fnow, q, out qnew, out hh);
 					findex++;
 				}
-				Q = Qnew;
+				q = qnew;
 				if (hh != 0.0) {
 					h[hindex++] = hh;
 				}
@@ -528,14 +528,13 @@ namespace Lime.Source.Widgets.Animesh
 					// Pick smaller magnitude
 					// if |fnow| >= |enow|
 					if ((fnow > enow) == (fnow > -enow)) {
-						TwoSum(Q, enow, out Qnew, out hh);
+						TwoSum(q, enow, out qnew, out hh);
 						eindex++;
-					}
-					else {
-						TwoSum(Q, fnow, out Qnew, out hh);
+					} else {
+						TwoSum(q, fnow, out qnew, out hh);
 						findex++;
 					}
-					Q = Qnew;
+					q = qnew;
 					if (hh != 0.0) {
 						h[hindex++] = hh;
 					}
@@ -546,24 +545,24 @@ namespace Lime.Source.Widgets.Animesh
 			//    no more tests to try to pull from the correct list
 			while (eindex < elen) {
 				enow = e[eindex];
-				TwoSum(Q, enow, out Qnew, out hh);
+				TwoSum(q, enow, out qnew, out hh);
 				eindex++;
-				Q = Qnew;
+				q = qnew;
 				if (hh != 0.0) {
 					h[hindex++] = hh;
 				}
 			}
 			while (findex < flen) {
 				fnow = f[findex];
-				TwoSum(Q, fnow, out Qnew, out hh);
+				TwoSum(q, fnow, out qnew, out hh);
 				findex++;
-				Q = Qnew;
+				q = qnew;
 				if (hh != 0.0) {
 					h[hindex++] = hh;
 				}
 			}
-			if ((Q != 0.0) || (hindex == 0)) {
-				h[hindex++] = Q;
+			if ((q != 0.0) || (hindex == 0)) {
+				h[hindex++] = q;
 			}
 			return hindex;
 		}
@@ -579,7 +578,7 @@ namespace Lime.Source.Widgets.Animesh
 		// If e is nonadjacent then h is nonadjacent
 		public static int ScaleExpansion(int elen, double* e, double b, double* h)
 		{
-			double Q, sum;
+			double q, sum;
 			double product1;
 			double product0;
 			int eindex, hindex;
@@ -587,19 +586,19 @@ namespace Lime.Source.Widgets.Animesh
 			double bhi, blo;
 
 			Split(b, out bhi, out blo);
-			TwoProductPresplit(e[0], b, bhi, blo, out Q, out h[0]);
+			TwoProductPresplit(e[0], b, bhi, blo, out q, out h[0]);
 			hindex = 1;
 			for (eindex = 1; eindex < elen; eindex++) {
 				enow = e[eindex];
 				TwoProductPresplit(enow, b, bhi, blo, out product1, out product0);
-				TwoSum(Q, product0, out sum, out h[hindex]);
+				TwoSum(q, product0, out sum, out h[hindex]);
 				hindex++;
 				// NOTE: Next step is indicated (and proven safe) as FastTwoSum in the S. paper,
 				// but TwoSum is used in predicates.c
-				FastTwoSum(product1, sum, out Q, out h[hindex]);
+				FastTwoSum(product1, sum, out q, out h[hindex]);
 				hindex++;
 			}
-			h[hindex] = Q;
+			h[hindex] = q;
 			return elen + elen;
 		}
 
@@ -613,7 +612,7 @@ namespace Lime.Source.Widgets.Animesh
 		// If e is nonadjacent then h is nonadjacent
 		public static int ScaleExpansionZeroElim(int elen, double* e, double b, double* h)
 		{
-			double Q, sum;
+			double q, sum;
 			double hh;
 			double product1;
 			double product0;
@@ -622,7 +621,7 @@ namespace Lime.Source.Widgets.Animesh
 			double bhi, blo;
 
 			Split(b, out bhi, out blo);
-			TwoProductPresplit(e[0], b, bhi, blo, out Q, out hh);
+			TwoProductPresplit(e[0], b, bhi, blo, out q, out hh);
 			hindex = 0;
 			if (hh != 0.0) {
 				h[hindex++] = hh;
@@ -630,17 +629,17 @@ namespace Lime.Source.Widgets.Animesh
 			for (eindex = 1; eindex < elen; eindex++) {
 				enow = e[eindex];
 				TwoProductPresplit(enow, b, bhi, blo, out product1, out product0);
-				TwoSum(Q, product0, out sum, out hh);
+				TwoSum(q, product0, out sum, out hh);
 				if (hh != 0.0) {
 					h[hindex++] = hh;
 				}
-				FastTwoSum(product1, sum, out Q, out hh);
+				FastTwoSum(product1, sum, out q, out hh);
 				if (hh != 0.0) {
 					h[hindex++] = hh;
 				}
 			}
-			if ((Q != 0.0) || (hindex == 0)) {
-				h[hindex++] = Q;
+			if ((q != 0.0) || (hindex == 0)) {
+				h[hindex++] = q;
 			}
 			return hindex;
 		}
@@ -650,21 +649,21 @@ namespace Lime.Source.Widgets.Animesh
 		// This assumes e is sorted
 		public static double Estimate(int elen, double* e)
 		{
-			double Q;
+			double q;
 			int eindex;
 
-			Q = e[0];
+			q = e[0];
 			for (eindex = 1; eindex < elen; eindex++) {
-				Q += e[eindex];
+				q += e[eindex];
 			}
-			return Q;
+			return q;
 		}
 
 		// Compress an expansion
 		public static int Compress(int elen, double* e, double* h)
 		{
 			double Q, q;
-			double Qnew;
+			double qnew;
 			int eindex, hindex;
 			double enow, hnow;
 			int top, bottom;
@@ -673,23 +672,22 @@ namespace Lime.Source.Widgets.Animesh
 			Q = e[bottom];
 			for (eindex = elen - 2; eindex >= 0; eindex--) {
 				enow = e[eindex];
-				FastTwoSum(Q, enow, out Qnew, out q);
+				FastTwoSum(Q, enow, out qnew, out q);
 				if (q != 0) {
-					h[bottom--] = Qnew;
+					h[bottom--] = qnew;
 					Q = q;
-				}
-				else {
-					Q = Qnew;
+				} else {
+					Q = qnew;
 				}
 			}
 			top = 0;
 			for (hindex = bottom + 1; hindex < elen; hindex++) {
 				hnow = h[hindex];
-				FastTwoSum(hnow, Q, out Qnew, out q);
+				FastTwoSum(hnow, Q, out qnew, out q);
 				if (q != 0) {
 					h[top++] = q;
 				}
-				Q = Qnew;
+				Q = qnew;
 			}
 			h[top] = Q;
 			return top + 1;

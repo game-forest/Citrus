@@ -9,7 +9,7 @@ namespace Lime
 {
 	internal class AudioCache
 	{
-		class CachedSample
+		private class CachedSample
 		{
 			public string Path;
 			public byte[] Data;
@@ -73,7 +73,7 @@ namespace Lime
 						if (samples.FindIndex(i => i.Path == path) < 0) {
 							samples.Add(new CachedSample {
 								Data = memStream.GetBuffer(),
-								Path = path
+								Path = path,
 							});
 						}
 					}

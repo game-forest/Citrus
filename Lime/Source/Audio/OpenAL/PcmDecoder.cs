@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,10 +18,7 @@ namespace Lime
 			this.stream = stream;
 		}
 
-		public void Dispose()
-		{
-			
-		}
+		public void Dispose() { }
 
 		public int GetBlockSize()
 		{
@@ -43,11 +40,12 @@ namespace Lime
 			return 44100;
 		}
 
-		byte[] readBuffer = new byte[1];
+		private byte[] readBuffer = new byte[1];
 		public int ReadBlocks(IntPtr buffer, int startIndex, int blockCount)
 		{
 			buffer = (IntPtr)(buffer.ToInt64() + BlockSize * startIndex);
-			int c = (int)Math.Min(blockCount, stream.Length - stream.Position); //(int) be careful
+			// (int) be careful
+			int c = (int)Math.Min(blockCount, stream.Length - stream.Position);
 			if (readBuffer.LongLength < blockCount) {
 				readBuffer = new byte[blockCount];
 			}

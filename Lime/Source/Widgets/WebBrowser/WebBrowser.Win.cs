@@ -39,8 +39,9 @@ namespace Lime
 		{
 			// OnSizeChanged() is called before WebBrowser constructor, where normal
 			// web browser implementation is constructed
-			if (implementation != null)
+			if (implementation != null) {
 				implementation.OnSizeChanged(sizeDelta);
+			}
 		}
 
 		public virtual void OnUpdate(float delta)

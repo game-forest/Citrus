@@ -5,12 +5,12 @@ namespace Tangerine
 {
 	public class OrangePluginOptionsDialog
 	{
-		readonly OrangePluginPanel pluginPanel;
-		readonly Window window;
-		readonly WindowWidget rootWidget;
-		readonly Button runButton;
-		readonly Button closeButton;
-		readonly Frame Frame;
+		private readonly OrangePluginPanel pluginPanel;
+		private readonly Window window;
+		private readonly WindowWidget rootWidget;
+		private readonly Button runButton;
+		private readonly Button closeButton;
+		private readonly Frame frame;
 
 		public OrangePluginOptionsDialog()
 		{
@@ -20,9 +20,9 @@ namespace Tangerine
 				ClientSize = new Vector2(400, 300),
 				FixedSize = true,
 				Title = pluginPanel.Title,
-				MinimumDecoratedSize = new Vector2(400, 300)
+				MinimumDecoratedSize = new Vector2(400, 300),
 			});
-			Frame = new ThemedFrame {
+			frame = new ThemedFrame {
 				Padding = new Thickness(8),
 				LayoutCell = new LayoutCell { StretchY = float.MaxValue },
 				Layout = new StackLayout(),
@@ -41,10 +41,10 @@ namespace Tangerine
 						LayoutCell = new LayoutCell(Alignment.RightCenter),
 						Nodes = {
 							(runButton = new ThemedButton { Text = "Build&Run" }),
-							(closeButton = new ThemedButton { Text = "Close" })
-						}
-					}
-				}
+							(closeButton = new ThemedButton { Text = "Close" }),
+						},
+					},
+				},
 			};
 			container.Content.Layout = new VBoxLayout { Spacing = 4 };
 
@@ -83,7 +83,7 @@ namespace Tangerine
 				AddNode(CheckBox);
 				Label = new ThemedSimpleText(pluginCheckBox.Label) {
 					HitTestTarget = true,
-					Clicked = CheckBox.Toggle
+					Clicked = CheckBox.Toggle,
 				};
 				AddNode(Label);
 			}

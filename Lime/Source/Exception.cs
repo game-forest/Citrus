@@ -10,7 +10,7 @@ namespace Lime
 		}
 
 		public Exception(string format, params object[] args)
-			: base(String.Format(format, args))
+			: base(string.Format(format, args))
 		{
 		}
 	}

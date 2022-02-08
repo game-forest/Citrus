@@ -20,7 +20,7 @@ namespace Lime
 		/// <summary>
 		/// Select folder dialog.
 		/// </summary>
-		SelectFolder
+		SelectFolder,
 	}
 
 	/// <summary>

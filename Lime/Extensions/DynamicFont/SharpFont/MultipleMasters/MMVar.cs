@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -36,23 +34,13 @@ namespace SharpFont.MultipleMasters
 	/// </para></summary>
 	public class MMVar
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private MMVarRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal MMVar(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the number of axes. The maximum value is 4 for MM; no limit in GX.
@@ -128,7 +116,5 @@ namespace SharpFont.MultipleMasters
 				rec = PInvokeHelper.PtrToStructure<MMVarRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

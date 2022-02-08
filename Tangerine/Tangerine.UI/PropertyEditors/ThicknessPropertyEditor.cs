@@ -24,7 +24,7 @@ namespace Tangerine.UI
 					new ThemedSimpleText("B"),
 					(editorBottom = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
-				}
+				},
 			});
 			var currentLeft = CoalescedPropertyComponentValue(v => v.Left);
 			var currentRight = CoalescedPropertyComponentValue(v => v.Right);
@@ -34,18 +34,27 @@ namespace Tangerine.UI
 			editorRight.Submitted += text => SetComponent(editorParams, 1, editorRight, currentRight.GetValue());
 			editorTop.Submitted += text => SetComponent(editorParams, 2, editorTop, currentTop.GetValue());
 			editorBottom.Submitted += text => SetComponent(editorParams, 3, editorBottom, currentBottom.GetValue());
-			editorLeft.AddLateChangeWatcher(currentLeft, v => editorLeft.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			editorRight.AddLateChangeWatcher(currentRight, v => editorRight.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			editorTop.AddLateChangeWatcher(currentTop, v => editorTop.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			editorBottom.AddLateChangeWatcher(currentBottom, v => editorBottom.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			editorLeft.AddLateChangeWatcher(
+				currentLeft, v => editorLeft.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			editorRight.AddLateChangeWatcher(
+				currentRight, v => editorRight.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			editorTop.AddLateChangeWatcher(
+				currentTop, v => editorTop.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			editorBottom.AddLateChangeWatcher(
+				currentBottom, v => editorBottom.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(editorLeft, currentLeft);
 			ManageManyValuesOnFocusChange(editorRight, currentRight);
 			ManageManyValuesOnFocusChange(editorTop, currentTop);
 			ManageManyValuesOnFocusChange(editorBottom, currentBottom);
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, int component, NumericEditBox editor, CoalescedValue<float> currentValue)
-		{
+		private void SetComponent(
+			IPropertyEditorParams editorParams, int component, NumericEditBox editor, CoalescedValue<float> currentValue
+		) {
 			float newValue;
 			if (float.TryParse(editor.Text, out newValue)) {
 				DoTransaction(() => {
@@ -61,10 +70,18 @@ namespace Tangerine.UI
 				});
 			} else {
 				switch (component) {
-					case 0: editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText; break;
-					case 1: editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText; break;
-					case 2: editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText; break;
-					case 3: editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText; break;
+					case 0:
+						editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText;
+						break;
+					case 1:
+						editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText;
+						break;
+					case 2:
+						editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText;
+						break;
+					case 3:
+						editor.Text = currentValue.IsDefined ? currentValue.Value.ToString("0.###") : ManyValuesText;
+						break;
 				}
 			}
 		}

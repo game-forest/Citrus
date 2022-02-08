@@ -1,6 +1,6 @@
 ﻿namespace Citrus.Tests.Types
 {
-	class NumericRangeTests
+	internal class NumericRangeTests
 	{
 	}
 }

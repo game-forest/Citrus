@@ -28,7 +28,7 @@ namespace Lime
 			return new TapGestureOptions {
 				ButtonIndex = buttonIndex,
 				MinTapDuration = tapDuration,
-				CanRecognizeByTapDuration = true
+				CanRecognizeByTapDuration = true,
 			};
 		}
 	}

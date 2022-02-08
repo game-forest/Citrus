@@ -28,8 +28,9 @@ namespace Tangerine.UI.Docking
 
 		private IEnumerator<object> MoveTask()
 		{
-			// Skip several frames here to let Input system respong to artificially setting Mouse0 key state to true
-			// with Input Simulator, so dragging will continue, disregaring clearing mouse keys state on window deactivate
+			// Skip several frames here to let Input system respong to artificially setting
+			// Mouse0 key state to true with Input Simulator, so dragging will continue,
+			// disregaring clearing mouse keys state on window deactivate.
 			yield return null;
 			yield return null;
 			while (true) {
@@ -46,7 +47,7 @@ namespace Tangerine.UI.Docking
 		public static void CreateFor(Placement placement, Vector2 positionOffset)
 		{
 			new WindowDragBehaviour(placement) {
-				positionOffset = positionOffset
+				positionOffset = positionOffset,
 			};
 			IsActive = true;
 		}
@@ -66,7 +67,7 @@ namespace Tangerine.UI.Docking
 				var panelPlacement = DockManager.Instance.Model.FindPanelPlacement(panel.Id);
 				if (!panelPlacement.Hidden &&
 					panel.ContentWidget.GetRoot() is WindowWidget &&
-					panelPlacement!= placement &&
+					panelPlacement != placement &&
 					!panelPlacement.IsDescendantOf(placement)
 				) {
 					yield return panel;
@@ -91,9 +92,15 @@ namespace Tangerine.UI.Docking
 				var bounds = p.PanelWidget.CalcAABBInWindowSpace();
 				var winPlacement = DockManager.Instance.Model.GetWindowByPlacement(placement);
 				var requestedDockingComponent = winPlacement.WindowWidget.Components.Get<RequestedDockingComponent>();
-				if (requestedDockingComponent == null) continue;
+				if (requestedDockingComponent == null) {
+					continue;
+				}
+
 				var clientMousePos = winPlacement.WindowWidget.Window.Input.MousePosition;
-				if (!bounds.Contains(clientMousePos)) continue;
+				if (!bounds.Contains(clientMousePos)) {
+					continue;
+				}
+
 				CalcSiteAndRect(clientMousePos, bounds, out DockSite site, out Rectangle? rect);
 				if (placement.Id == windowPlacement.Root.GetPanelPlacements().First().Id ||
 					placement.Id == DockManager.DocumentAreaId &&
@@ -123,8 +130,9 @@ namespace Tangerine.UI.Docking
 			}
 		}
 
-		private static void CalcSiteAndRect(Vector2 position, Rectangle originRect, out DockSite site, out Rectangle? rect)
-		{
+		private static void CalcSiteAndRect(
+			Vector2 position, Rectangle originRect, out DockSite site, out Rectangle? rect
+		) {
 			var pos = (position - originRect.A) / originRect.Size;
 			site = DockSite.None;
 			const float offset = 0.25f;
@@ -150,7 +158,10 @@ namespace Tangerine.UI.Docking
 				rect = rightRect;
 				site = DockSite.Right;
 			}
-			rect = new Rectangle(originRect.A + originRect.Size * rect.Value.A, originRect.A + originRect.Size * rect.Value.B);
+			rect = new Rectangle(
+				originRect.A + originRect.Size * rect.Value.A,
+				originRect.A + originRect.Size * rect.Value.B
+			);
 		}
 	}
 
@@ -212,7 +223,10 @@ namespace Tangerine.UI.Docking
 							yield return null;
 						}
 						if (input.IsMousePressed()) {
-							OnUndock?.Invoke(pressedPosition, Application.DesktopMousePosition - (input.MousePosition - contentWidget.GlobalPosition));
+							OnUndock?.Invoke(
+								pressedPosition,
+								Application.DesktopMousePosition - (input.MousePosition - contentWidget.GlobalPosition)
+							);
 						}
 					}
 				}

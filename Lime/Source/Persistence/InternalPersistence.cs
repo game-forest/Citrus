@@ -10,24 +10,26 @@ namespace Lime
 {
 	internal class InternalPersistence : Persistence
 	{
-		internal static InternalPersistence Current => stackOfCurrent.Value.Count > 0 ? stackOfCurrent.Value.Peek() : null;
+		internal static InternalPersistence Current => stackOfCurrent.Value.Count > 0
+			? stackOfCurrent.Value.Peek()
+			: null;
 		private static void PushCurrent(InternalPersistence persistence) => stackOfCurrent.Value.Push(persistence);
 		private static InternalPersistence PopCurrent() => stackOfCurrent.Value.Pop();
 
-		private static readonly ThreadLocal<Stack<InternalPersistence>> stackOfCurrent = new ThreadLocal<Stack<InternalPersistence>>(() => new Stack<InternalPersistence>());
+		private static readonly ThreadLocal<Stack<InternalPersistence>> stackOfCurrent =
+			new ThreadLocal<Stack<InternalPersistence>>(() => new Stack<InternalPersistence>());
 
 		private readonly Stack<string> pathStack = new Stack<string>();
 
-		private static readonly Regex conflictRegex = new Regex("^<<<<<<<.*?^=======.*?^>>>>>>>",
-			RegexOptions.Multiline | RegexOptions.Compiled | RegexOptions.Singleline);
+		private static readonly Regex conflictRegex = new Regex(
+			"^<<<<<<<.*?^=======.*?^>>>>>>>", RegexOptions.Multiline | RegexOptions.Compiled | RegexOptions.Singleline
+		);
 
 		public static InternalPersistence Instance => threadLocalInstance.Value;
-		private static readonly ThreadLocal<InternalPersistence>  threadLocalInstance = new ThreadLocal<InternalPersistence>(() => new InternalPersistence());
+		private static readonly ThreadLocal<InternalPersistence> threadLocalInstance =
+			new ThreadLocal<InternalPersistence>(() => new InternalPersistence());
 
-		public InternalPersistence()
-		{
-
-		}
+		public InternalPersistence() { }
 
 		public InternalPersistence(CommonOptions yuzuOptions, Yuzu.Json.JsonSerializeOptions yuzuJsonOptions)
 			: base(yuzuOptions, yuzuJsonOptions)
@@ -40,7 +42,8 @@ namespace Lime
 			}
 			// when current directory is an empty string it means the root of assets directory,
 			// thus every path is being treated as relative to it, so we don't add leading '/'.
-			// And when current directory is null, it means calling code wants to treat all paths as absolute (e.g. copy/paste)
+			// And when current directory is null,
+			// it means calling code wants to treat all paths as absolute (e.g. copy/paste)
 			var d = GetCurrentSerializationDirectory();
 			if (d == null) {
 				return '/' + path;

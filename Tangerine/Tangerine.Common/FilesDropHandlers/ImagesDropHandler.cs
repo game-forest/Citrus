@@ -39,7 +39,7 @@ namespace Tangerine.Common.FilesDropHandlers
 		/// <param name="files">Dropped files.</param>
 		public void Handle(List<string> files)
 		{
-			var supportedFiles = files.Where(f => Path.GetExtension(f) == ".png" ).ToList();
+			var supportedFiles = files.Where(f => Path.GetExtension(f) == ".png").ToList();
 			if (supportedFiles.Any()) {
 				supportedFiles.ForEach(f => files.Remove(f));
 				CreateContextMenu(supportedFiles);
@@ -51,7 +51,8 @@ namespace Tangerine.Common.FilesDropHandlers
 			var menu = new Menu();
 			foreach (var imageType in imageTypes) {
 				if (NodeCompositionValidator.Validate(Document.Current.Container.GetType(), imageType)) {
-					menu.Add(new Command($"Create {imageType.Name}",
+					menu.Add(new Command(
+						$"Create {imageType.Name}",
 						() => CreateImageTypeInstance(imageType, files)));
 				}
 			}

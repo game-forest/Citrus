@@ -39,24 +39,30 @@ namespace Tangerine.UI.FilesystemView
 			IntPtr result;
 			switch (msg) {
 				case WinAPI.WM.CREATE: {
-					WinAPI.SetWindowLongPtr(wnd, WinAPI.GWL.GWL_USERDATA, ((WinAPI.CREATESTRUCT*)lparam)->lpCreateParams);
-					result = WinAPI.DefWindowProc(wnd, msg, wparam, lparam);
-				}
+						WinAPI.SetWindowLongPtr(
+							wnd, WinAPI.GWL.GWL_USERDATA, ((WinAPI.CREATESTRUCT*)lparam)->lpCreateParams
+						);
+						result = WinAPI.DefWindowProc(wnd, msg, wparam, lparam);
+					}
 					break;
 				case WinAPI.WM.INITMENUPOPUP: {
-					contextMenu2 =
-						(WinAPI.IContextMenu2)Marshal.GetObjectForIUnknown(WinAPI.GetWindowLongPtr(wnd, WinAPI.GWL.GWL_USERDATA));
-					contextMenu2.HandleMenuMsg((uint)msg, wparam, lparam);
-					result = IntPtr.Zero;
-				}
+						contextMenu2 =
+							(WinAPI.IContextMenu2)Marshal.GetObjectForIUnknown(
+								WinAPI.GetWindowLongPtr(wnd, WinAPI.GWL.GWL_USERDATA)
+							);
+						contextMenu2.HandleMenuMsg((uint)msg, wparam, lparam);
+						result = IntPtr.Zero;
+					}
 					break;
 				case WinAPI.WM.DRAWITEM:
 				case WinAPI.WM.MEASUREITEM: {
-					contextMenu2 =
-						(WinAPI.IContextMenu2)Marshal.GetObjectForIUnknown(WinAPI.GetWindowLongPtr(wnd, WinAPI.GWL.GWL_USERDATA));
-					contextMenu2.HandleMenuMsg((uint)msg, wparam, lparam);
-					result = IntPtr.Zero + 1;
-				}
+						contextMenu2 =
+							(WinAPI.IContextMenu2)Marshal.GetObjectForIUnknown(
+								WinAPI.GetWindowLongPtr(wnd, WinAPI.GWL.GWL_USERDATA)
+							);
+						contextMenu2.HandleMenuMsg((uint)msg, wparam, lparam);
+						result = IntPtr.Zero + 1;
+					}
 					break;
 				default:
 					result = WinAPI.DefWindowProc(wnd, msg, wparam, lparam);
@@ -75,8 +81,20 @@ namespace Tangerine.UI.FilesystemView
 			wclass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(MenuCallbackDelegate);
 			wclass.hInstance = IntPtr.Zero;
 			int r = WinAPI.RegisterClassW(ref wclass);
-			IntPtr result = WinAPI.CreateWindowEx(0, icmCallbackWnd, icmCallbackWnd, WinAPI.WindowStyles.WS_POPUPWINDOW,
-				0, 0, 0, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, Marshal.GetIUnknownForObject(contextMenu));
+			IntPtr result = WinAPI.CreateWindowEx(
+				dwExStyle: 0,
+				lpClassName: icmCallbackWnd,
+				lpWindowName: icmCallbackWnd,
+				dwStyle: WinAPI.WindowStyles.WS_POPUPWINDOW,
+				x: 0,
+				y: 0,
+				nWidth: 0,
+				nHeight: 0,
+				hWndParent: IntPtr.Zero,
+				hMenu: IntPtr.Zero,
+				hInstance: IntPtr.Zero,
+				lpParam: Marshal.GetIUnknownForObject(contextMenu)
+			);
 			return result;
 		}
 
@@ -93,7 +111,7 @@ namespace Tangerine.UI.FilesystemView
 			var shellContextMenu = IntPtr.Zero;
 			var callbackWnd = IntPtr.Zero;
 			WinAPI.IContextMenu2 iCMenu2 = null;
-			Action Finalize = () => {
+			Action finalize = () => {
 				if (iCMenu2 != null) {
 					Marshal.FinalReleaseComObject(iCMenu2);
 				}
@@ -121,14 +139,14 @@ namespace Tangerine.UI.FilesystemView
 			};
 			Action<int> checkHResult = (result) => {
 				if (result != 0) {
-					Finalize();
+					finalize();
 					Marshal.ThrowExceptionForHR(result);
 				}
 			};
 			int r = 0;
 			var pidls = new List<IntPtr>();
 			foreach (var path in paths) {
-				string dir = Path.GetDirectoryName(path) ?? "";
+				string dir = Path.GetDirectoryName(path) ?? string.Empty;
 				string filename = Path.GetFileNameWithoutExtension(path);
 				string fileExt = Path.GetExtension(path);
 				string pathRoot = Path.GetPathRoot(path);
@@ -143,10 +161,14 @@ namespace Tangerine.UI.FilesystemView
 				if (string.IsNullOrEmpty(filename)) {
 					r = WinAPI.SHGetSpecialFolderLocation(IntPtr.Zero, WinAPI.CSIDL.CSIDL_DRIVES, ref pathPIDL);
 					checkHResult(r);
-					r = desktop.BindToObject(pathPIDL, IntPtr.Zero, ref WinAPI.Guid_IShellFolder.IID_IShellFolder, out ppv);
+					r = desktop.BindToObject(
+						pathPIDL, IntPtr.Zero, ref WinAPI.Guid_IShellFolder.IID_IShellFolder, out ppv
+					);
 					checkHResult(r);
 					shellFolder = (WinAPI.IShellFolder)Marshal.GetObjectForIUnknown(ppv);
-					r = shellFolder.ParseDisplayName(windowHandle, IntPtr.Zero, dir, ref pchEaten, out filePIDL, ref attr);
+					r = shellFolder.ParseDisplayName(
+						windowHandle, IntPtr.Zero, dir, ref pchEaten, out filePIDL, ref attr
+					);
 					checkHResult(r);
 				} else {
 					r = desktop.ParseDisplayName(windowHandle, IntPtr.Zero, dir, ref pchEaten, out pathPIDL, ref attr);
@@ -154,12 +176,16 @@ namespace Tangerine.UI.FilesystemView
 					r = desktop.BindToObject(pathPIDL, IntPtr.Zero, ref WinAPI.IID_IShellFolder, out ppv);
 					checkHResult(r);
 					shellFolder = (WinAPI.IShellFolder)Marshal.GetObjectForIUnknown(ppv);
-					r = shellFolder.ParseDisplayName(windowHandle, IntPtr.Zero, filename, ref pchEaten, out filePIDL, ref attr);
+					r = shellFolder.ParseDisplayName(
+						windowHandle, IntPtr.Zero, filename, ref pchEaten, out filePIDL, ref attr
+					);
 					checkHResult(r);
 				}
 				pidls.Add(filePIDL);
 			}
-			r = shellFolder.GetUIObjectOf(windowHandle, (uint)pidls.Count, ref pidls.ToArray()[0], ref WinAPI.IID_IContextMenu, 0, out ppv);
+			r = shellFolder.GetUIObjectOf(
+				windowHandle, (uint)pidls.Count, ref pidls.ToArray()[0], ref WinAPI.IID_IContextMenu, 0, out ppv
+			);
 			checkHResult(r);
 			iCMenu = (WinAPI.IContextMenu)Marshal.GetObjectForIUnknown(ppv);
 			shellContextMenu = WinAPI.CreatePopupMenu();
@@ -169,22 +195,27 @@ namespace Tangerine.UI.FilesystemView
 				Marshal.QueryInterface(ppv, ref WinAPI.IID_IContextMenu2, out ppv2);
 				iCMenu2 = (WinAPI.IContextMenu2)Marshal.GetObjectForIUnknown(ppv2);
 				callbackWnd = CreateMenuCallbackWnd(iCMenu2);
-				var popupMenuResult = WinAPI.TrackPopupMenuEx(shellContextMenu,
+				var popupMenuResult = WinAPI.TrackPopupMenuEx(
+					shellContextMenu,
 					WinAPI.TPM_LEFTALIGN | WinAPI.TPM_LEFTBUTTON | WinAPI.TPM_RIGHTBUTTON | WinAPI.TPM_RETURNCMD,
-					mousePos.X, mousePos.Y, callbackWnd, IntPtr.Zero);
+					mousePos.X,
+					mousePos.Y,
+					callbackWnd,
+					IntPtr.Zero
+				);
 				if (popupMenuResult > 0) {
 					var iCmd = popupMenuResult - 1;
-					var CMD = new WinAPI.CMINVOKECOMMANDINFO {
-						cbSize = (uint)Marshal.SizeOf(typeof (WinAPI.CMINVOKECOMMANDINFO)),
+					var cMD = new WinAPI.CMINVOKECOMMANDINFO {
+						cbSize = (uint)Marshal.SizeOf(typeof(WinAPI.CMINVOKECOMMANDINFO)),
 						hwnd = windowHandle,
 						verb = (IntPtr)iCmd,
 						nShow = 1, // SW_SHOWNORMAL
 					};
-					r = iCMenu.InvokeCommand(ref CMD);
+					r = iCMenu.InvokeCommand(ref cMD);
 					checkHResult(r);
 				}
 			}
-			Finalize();
+			finalize();
 		}
 	}
 }

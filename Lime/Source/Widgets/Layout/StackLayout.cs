@@ -28,7 +28,8 @@ namespace Lime
 		public bool VerticallySizeable
 		{
 			get => verticallySizeable;
-			set {
+			set
+			{
 				if (verticallySizeable != value) {
 					verticallySizeable = value;
 					InvalidateConstraintsAndArrangement();
@@ -52,8 +53,14 @@ namespace Lime
 				Owner.MeasuredMaxSize = Vector2.PositiveInfinity;
 				return;
 			}
-			var minSize = new Vector2(widgets.Max(i => i.EffectiveMinSize.X), widgets.Max(i => i.EffectiveMinSize.Y)) + Owner.Padding;
-			var maxSize = new Vector2(widgets.Max(i => i.EffectiveMaxSize.X), widgets.Max(i => i.EffectiveMaxSize.Y)) + Owner.Padding;
+			var minSize = new Vector2(
+				widgets.Max(i => i.EffectiveMinSize.X),
+				widgets.Max(i => i.EffectiveMinSize.Y)
+			) + Owner.Padding;
+			var maxSize = new Vector2(
+				widgets.Max(i => i.EffectiveMaxSize.X),
+				widgets.Max(i => i.EffectiveMaxSize.Y)
+			) + Owner.Padding;
 			if (HorizontallySizeable) {
 				minSize.X = 0;
 				maxSize.X = float.PositiveInfinity;

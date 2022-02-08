@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 
-
 namespace Orange.FbxImporter
 {
 	public static class ImportConfig
@@ -31,8 +30,10 @@ namespace Orange.FbxImporter
 		{
 			try {
 				var result = new int[size];
-				if (size == 0)
+				if (size == 0) {
 					return result;
+				}
+
 				Marshal.Copy(ptr, result, 0, size);
 				return result;
 			} finally {
@@ -40,13 +41,14 @@ namespace Orange.FbxImporter
 			}
 		}
 
-
 		public static float[] ToFloatArray(this IntPtr ptr, int size)
 		{
 			try {
 				var result = new float[size];
-				if (size == 0)
+				if (size == 0) {
 					return new float[0];
+				}
+
 				Marshal.Copy(ptr, result, 0, size);
 				return result;
 			} finally {
@@ -58,8 +60,10 @@ namespace Orange.FbxImporter
 		{
 			try {
 				var result = new double[size];
-				if (size == 0)
+				if (size == 0) {
 					return result;
+				}
+
 				Marshal.Copy(ptr, result, 0, size);
 				return result;
 			} finally {
@@ -70,7 +74,10 @@ namespace Orange.FbxImporter
 		public static T[] FromArrayOfPointersToStructArrayUnsafe<T>(this IntPtr ptr, int size)
 		{
 			try {
-				if (ptr == IntPtr.Zero) return null;
+				if (ptr == IntPtr.Zero) {
+					return null;
+				}
+
 				var result = new T[size];
 				var pointer = ptr;
 				for (var i = 0; i < size; i++) {
@@ -90,7 +97,10 @@ namespace Orange.FbxImporter
 			try {
 				var result = new T[size];
 				var tmpPtr = ptr;
-				if (ptr == IntPtr.Zero) return result;
+				if (ptr == IntPtr.Zero) {
+					return result;
+				}
+
 				var structSize = Marshal.SizeOf(typeof(T));
 				for (var i = 0; i < size; i++) {
 					result[i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
@@ -100,7 +110,6 @@ namespace Orange.FbxImporter
 			} finally {
 				Utils.ReleaseNative(ptr);
 			}
-
 		}
 
 		public static string PtrToString(this IntPtr ptr)
@@ -123,8 +132,9 @@ namespace Orange.FbxImporter
 
 		public static void ReleaseNative(IntPtr ptr)
 		{
-			if (ptr != IntPtr.Zero)
+			if (ptr != IntPtr.Zero) {
 				FbxUtilsReleaseMemory(ptr);
+			}
 		}
 	}
 }

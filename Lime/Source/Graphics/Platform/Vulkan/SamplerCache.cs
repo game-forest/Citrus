@@ -32,7 +32,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				MagFilter = GetVKFilter(textureParams.MagFilter),
 				MipmapMode = GetVKSamplerMipmapMode(textureParams.MipmapMode),
 				AddressModeU = GetVKSamplerAddressMode(textureParams.WrapModeU),
-				AddressModeV = GetVKSamplerAddressMode(textureParams.WrapModeV)
+				AddressModeV = GetVKSamplerAddressMode(textureParams.WrapModeV),
 			};
 			return context.Device.CreateSampler(ref createInfo);
 			// FIXME: Adjust MinLod, MaxLod to match OpenGL

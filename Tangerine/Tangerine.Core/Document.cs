@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Lime;
 using Tangerine.Core.Components;
-using System.Runtime.CompilerServices;
 #if PROFILER
 using Lime.Profiler;
 #endif // PROFILER
@@ -21,7 +21,7 @@ namespace Tangerine.Core
 	{
 		Tan,
 		T3D,
-		Fbx
+		Fbx,
 	}
 
 	public interface ISceneViewSnapshotProvider
@@ -35,12 +35,13 @@ namespace Tangerine.Core
 		{
 			Cancel,
 			SaveChanges,
-			DiscardChanges
+			DiscardChanges,
 		}
 
 		private readonly string untitledPathFormat = ".untitled/{0:D2}/Untitled{0:D2}";
 		private readonly Vector2 defaultSceneSize = new Vector2(1024, 768);
-		private readonly ConditionalWeakTable<object, SceneItem> sceneItemCache = new ConditionalWeakTable<object, SceneItem>();
+		private readonly ConditionalWeakTable<object, SceneItem> sceneItemCache =
+			new ConditionalWeakTable<object, SceneItem>();
 		private readonly MemoryStream preloadedSceneStream = null;
 		private readonly AnimationFastForwarder animationFastForwarder;
 		private static uint untitledCounter;
@@ -178,9 +179,11 @@ namespace Tangerine.Core
 										!Animation.IsLegacy &&
 										CoreUserPreferences.Instance.ExperimentalTimelineHierarchy;
 									cachedVisibleSceneItems.Add(i);
-									TraverseSceneTree(i,
-										(node is Bone || i.GetFolder() != null || hierarchyMode)
-										&& (!i.TryGetNode(out var n) || string.IsNullOrEmpty(n.ContentsPath)));
+									TraverseSceneTree(
+										sceneTree: i,
+										addNodes: (node is Bone || i.GetFolder() != null || hierarchyMode)
+											&& (!i.TryGetNode(out var n) || string.IsNullOrEmpty(n.ContentsPath))
+									);
 								}
 							}
 						}
@@ -277,7 +280,7 @@ namespace Tangerine.Core
 				if (e is Operations.AttemptToSetKeyFrameOutOfAnimationScopeException) {
 					ShowWarning("Attempt to set keframe out of the animation scope");
 					return true;
-				};
+				}
 				return false;
 			};
 			History.DocumentChanged += () => fullHierarchyChangeTime = DateTime.Now;
@@ -373,8 +376,11 @@ namespace Tangerine.Core
 			try {
 				// Load the scene without externals since they will be loaded further in RefreshExternalScenes().
 				if (preloadedSceneStream != null) {
-					RootNodeUnwrapped = Node.Load(preloadedSceneStream,
-						Path + $".{GetFileExtension(Format)}", ignoreExternals: true);
+					RootNodeUnwrapped = Node.Load(
+						preloadedSceneStream,
+						Path + $".{GetFileExtension(Format)}",
+						ignoreExternals: true
+					);
 				} else {
 					RootNodeUnwrapped = Node.Load(Path, ignoreExternals: true);
 				}
@@ -447,7 +453,7 @@ namespace Tangerine.Core
 					NearClipPlane = 0.01f,
 					FieldOfView = 1.0f,
 					AspectRatio = 1.3f,
-					OrthographicSize = 1.0f
+					OrthographicSize = 1.0f,
 				};
 				vp.AddNode(camera);
 			}
@@ -483,7 +489,7 @@ namespace Tangerine.Core
 
 		public string GetFileExtension() => GetFileExtension(Format);
 
-		static bool AssetExists(string path, string ext) => AssetBundle.Current.FileExists(path + $".{ext}");
+		private static bool AssetExists(string path, string ext) => AssetBundle.Current.FileExists(path + $".{ext}");
 
 		public void MakeCurrent()
 		{
@@ -600,8 +606,10 @@ namespace Tangerine.Core
 						var attachmentPath =
 							System.IO.Path.ChangeExtension(assetPath, Model3DAttachment.FileExtension);
 						if (AssetBundle.Current.FileExists(attachmentPath)) {
-							contentHash = SHA256.Compute(contentHash,
-								AssetBundle.Current.GetFileContentsHash(attachmentPath));
+							contentHash = SHA256.Compute(
+								contentHash,
+								AssetBundle.Current.GetFileContentsHash(attachmentPath)
+							);
 						}
 					}
 					document =
@@ -879,7 +887,7 @@ namespace Tangerine.Core
 		{
 			// Make sure the legacy animation is exists.
 			if (NodeCompositionValidator.CanHaveChildren(node.GetType())) {
-				var _ = node.DefaultAnimation;
+				_ = node.DefaultAnimation;
 			}
 			foreach (var decorator in NodeDecorators) {
 				decorator(node);
@@ -901,7 +909,8 @@ namespace Tangerine.Core
 
 		public class NodeDecoratorList : List<Action<Node>>
 		{
-			public void AddFor<T>(Action<Node> action) where T: Node
+			public void AddFor<T>(Action<Node> action)
+				where T : Node
 			{
 				Add(node => {
 					if (node is T) {

@@ -2,7 +2,6 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 {
 	public static class Mathd
 	{
-
 		public static double Wrap180(double angle)
 		{
 			angle = (angle + 180) % 360;
@@ -21,6 +20,5 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		{
 			return value1 + (value2 - value1) * amount;
 		}
-
 	}
 }

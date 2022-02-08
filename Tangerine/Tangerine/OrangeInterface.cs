@@ -57,7 +57,10 @@ namespace Tangerine
 
 		public override void SetActiveTarget(Target target)
 		{
-			PlatformPicker.Index = PlatformPicker.Items.IndexOf(PlatformPicker.Items.Where(i => (i.Value as Target == target)).First());
+			PlatformPicker.Index = PlatformPicker.Items
+				.IndexOf(
+					PlatformPicker.Items.Where(i => i.Value as Target == target).First()
+				);
 		}
 
 		public override EnvironmentType GetEnvironmentType()
@@ -133,7 +136,7 @@ namespace Tangerine
 		public IPluginPanel SidePanel { get; } = new OrangePluginPanel();
 	}
 
-	public class OrangePluginPanel :  IPluginPanel
+	public class OrangePluginPanel : IPluginPanel
 	{
 		public class PluginCheckBox : ICheckBox
 		{

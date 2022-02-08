@@ -46,7 +46,11 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		/// <summary>
 		/// Returns the identity matrix. It doesn't move the points at all.
 		/// </summary>
-		public static readonly Matrix32d Identity = new Matrix32d(new Vector2d(1, 0), new Vector2d(0, 1), new Vector2d(0, 0));
+		public static readonly Matrix32d Identity = new Matrix32d(
+			new Vector2d(1, 0),
+			new Vector2d(0, 1),
+			new Vector2d(0, 0)
+		);
 
 		public Matrix32d(Vector2d u, Vector2d v, Vector2d t)
 		{
@@ -80,8 +84,10 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		{
 			var m = new Matrix32d();
 			double invDet = 1.0 / CalcDeterminant();
-			m.UX = invDet * VY; m.UY = -invDet * UY;
-			m.VX = -invDet * VX; m.VY = invDet * UX;
+			m.UX = invDet * VY;
+			m.UY = -invDet * UY;
+			m.VX = -invDet * VX;
+			m.VY = invDet * UX;
 			m.TX = invDet * (VX * TY - VY * TX);
 			m.TY = invDet * (UY * TX - UX * TY);
 			return m;
@@ -97,7 +103,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				UX = cs.X,
 				UY = cs.Y,
 				VX = -cs.Y,
-				VY = cs.X
+				VY = cs.X,
 			};
 		}
 
@@ -153,8 +159,9 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		/// </summary>
 		/// <param name="center">Center of rotation and scaling.</param>
 		/// <param name="direction">Unit vector of abscissa.</param>
-		private static Matrix32d Transformation(Vector2d center, Vector2d scaling, Vector2d direction, Vector2d translation)
-		{
+		private static Matrix32d Transformation(
+			Vector2d center, Vector2d scaling, Vector2d direction, Vector2d translation
+		) {
 			var m = new Matrix32d();
 			m.UX = scaling.X * direction.X;
 			m.UY = scaling.X * direction.Y;
@@ -177,7 +184,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				VX = a.VX * b.UX + a.VY * b.VX,
 				VY = a.VX * b.UY + a.VY * b.VY,
 				TX = a.TX * b.UX + a.TY * b.VX + b.TX,
-				TY = a.TX * b.UY + a.TY * b.VY + b.TY
+				TY = a.TX * b.UY + a.TY * b.VY + b.TY,
 			};
 		}
 
@@ -193,7 +200,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 				VX = a.VX * b.UX + a.VY * b.VX,
 				VY = a.VX * b.UY + a.VY * b.VY,
 				TX = a.TX * b.UX + a.TY * b.VX + b.TX,
-				TY = a.TX * b.UY + a.TY * b.VY + b.TY
+				TY = a.TX * b.UY + a.TY * b.VY + b.TY,
 			};
 		}
 
@@ -204,7 +211,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		{
 			return new Vector2d {
 				X = b.X * a.UX + b.Y * a.VX + a.TX,
-				Y = b.X * a.UY + b.Y * a.VY + a.TY
+				Y = b.X * a.UY + b.Y * a.VY + a.TY,
 			};
 		}
 
@@ -212,7 +219,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		{
 			return new Vector2d {
 				X = a.X * UX + a.Y * VX + TX,
-				Y = a.X * UY + a.Y * VY + TY
+				Y = a.X * UY + a.Y * VY + TY,
 			};
 		}
 
@@ -220,7 +227,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		{
 			return new Vector2d {
 				X = x * UX + y * VX + TX,
-				Y = x * UY + y * VY + TY
+				Y = x * UY + y * VY + TY,
 			};
 		}
 
@@ -230,7 +237,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			return new Transform2d {
 				Translation = T,
 				Scale = new Vector2d(U.Length, V.Length * vSign),
-				Rotation = U.Atan2Deg
+				Rotation = U.Atan2Deg,
 			};
 		}
 
@@ -242,12 +249,12 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 		public static explicit operator Matrix44(Matrix32d m)
 		{
 			var r = Matrix44.Identity;
-			r.M41 = (float) m.TX;
-			r.M42 = (float) m.TY;
-			r.M11 = (float) m.UX;
-			r.M12 = (float) m.UY;
-			r.M21 = (float) m.VX;
-			r.M22 = (float) m.VY;
+			r.M41 = (float)m.TX;
+			r.M42 = (float)m.TY;
+			r.M11 = (float)m.UX;
+			r.M12 = (float)m.UY;
+			r.M21 = (float)m.VX;
+			r.M22 = (float)m.VY;
 			return r;
 		}
 
@@ -283,7 +290,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 
 		public static explicit operator Matrix32d(Matrix32 value)
 		{
-			return new Matrix32d((Vector2d) value.U, (Vector2d) value.V, (Vector2d) value.T);
+			return new Matrix32d((Vector2d)value.U, (Vector2d)value.V, (Vector2d)value.T);
 		}
 	}
 }

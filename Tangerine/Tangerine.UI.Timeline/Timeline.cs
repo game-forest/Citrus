@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Common.FilesDropHandlers;
 using Tangerine.Core;
 using Tangerine.Core.Components;
@@ -103,7 +103,7 @@ namespace Tangerine.UI.Timeline
 		public event Action Detached;
 
 		public static IEnumerable<Type> GetOperationProcessorTypes() => new[] {
-			typeof(EnsureSceneItemVisibleIfSelected)
+			typeof(EnsureSceneItemVisibleIfSelected),
 		};
 
 		public Timeline(Panel panel)
@@ -157,7 +157,6 @@ namespace Tangerine.UI.Timeline
 			DropFilesGesture.Recognized += new Models3DDropHandler().Handle;
 		}
 
-
 		public void Attach()
 		{
 			Attaching?.Invoke();
@@ -195,7 +194,7 @@ namespace Tangerine.UI.Timeline
 								Nodes = {
 									Toolbar.RootWidget,
 									Roll.RootWidget,
-								}
+								},
 							},
 							new Widget {
 								Layout = new HBoxLayout(),
@@ -208,13 +207,13 @@ namespace Tangerine.UI.Timeline
 											Ruler.RootWidget,
 											Grid.RootWidget,
 											CurveEditor.RootWidget,
-										}
+										},
 									},
-								}
-							}
-						}
-					}
-				}
+								},
+							},
+						},
+					},
+				},
 			});
 		}
 
@@ -261,12 +260,12 @@ namespace Tangerine.UI.Timeline
 		private void UpdateTitle()
 		{
 			Panel.Title = "Timeline";
-			var t = "";
+			var t = string.Empty;
 			for (var n = Document.Current.Container; n != Document.Current.RootNode; n = n.Parent) {
 				var id = string.IsNullOrEmpty(n.Id) ? "?" : n.Id;
-				t = id + ((t != "") ? ": " + t : t);
+				t = id + ((t != string.Empty) ? ": " + t : t);
 			}
-			if (t != "") {
+			if (t != string.Empty) {
 				Panel.Title += " - '" + t + "'";
 			}
 		}
@@ -310,7 +309,10 @@ namespace Tangerine.UI.Timeline
 		public void GetVisibleColumnRange(out int min, out int max)
 		{
 			min = Math.Max(0, (Offset.X / TimelineMetrics.ColWidth).Round() - 1);
-			max = Math.Min(ColumnCount - 1, ((Offset.X + Ruler.RootWidget.Width) / TimelineMetrics.ColWidth).Round() + 1);
+			max = Math.Min(
+				ColumnCount - 1,
+				((Offset.X + Ruler.RootWidget.Width) / TimelineMetrics.ColWidth).Round() + 1
+			);
 		}
 
 		public bool IsColumnVisible(int col)

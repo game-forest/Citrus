@@ -27,7 +27,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			AffectedProperties = affectedProperties;
 			ConcurrentAnimations = concurrentAnimations;
 		}
-		
+
 		public struct Property
 		{
 			public string Path;

@@ -22,9 +22,11 @@ namespace Lime.Graphics.Platform.Vulkan
 
 		public SharpVulkan.DescriptorSet AllocateDescriptorSet(PlatformShaderProgram program)
 		{
-			if (allocatedSets + 1 > poolLimits.MaxSets ||
-				allocatedCombinedImageSamplers + program.CombinedImageSamplerCount > poolLimits.MaxCombinedImageSamplers||
-				allocatedUniformBuffers + program.UniformBufferCount > poolLimits.MaxUniformBuffers
+			if (
+				allocatedSets + 1 > poolLimits.MaxSets
+				|| allocatedCombinedImageSamplers + program.CombinedImageSamplerCount
+					> poolLimits.MaxCombinedImageSamplers
+				|| allocatedUniformBuffers + program.UniformBufferCount > poolLimits.MaxUniformBuffers
 			) {
 				DiscardPool();
 			}
@@ -33,7 +35,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				StructureType = SharpVulkan.StructureType.DescriptorSetAllocateInfo,
 				DescriptorPool = pool,
 				DescriptorSetCount = 1,
-				SetLayouts = new IntPtr(&setLayout)
+				SetLayouts = new IntPtr(&setLayout),
 			};
 			SharpVulkan.DescriptorSet ds;
 			context.Device.AllocateDescriptorSets(ref allocateInfo, &ds);
@@ -53,19 +55,19 @@ namespace Lime.Graphics.Platform.Vulkan
 			var poolSizes = new[] {
 				new SharpVulkan.DescriptorPoolSize {
 					Type = SharpVulkan.DescriptorType.CombinedImageSampler,
-					DescriptorCount = (uint)poolLimits.MaxCombinedImageSamplers
+					DescriptorCount = (uint)poolLimits.MaxCombinedImageSamplers,
 				},
 				new SharpVulkan.DescriptorPoolSize {
 					Type = SharpVulkan.DescriptorType.UniformBuffer,
-					DescriptorCount = (uint)poolLimits.MaxUniformBuffers
-				}
+					DescriptorCount = (uint)poolLimits.MaxUniformBuffers,
+				},
 			};
 			fixed (SharpVulkan.DescriptorPoolSize* poolSizesPtr = poolSizes) {
 				var createInfo = new SharpVulkan.DescriptorPoolCreateInfo {
 					StructureType = SharpVulkan.StructureType.DescriptorPoolCreateInfo,
 					MaxSets = (uint)poolLimits.MaxSets,
 					PoolSizeCount = (uint)poolSizes.Length,
-					PoolSizes = new IntPtr(poolSizesPtr)
+					PoolSizes = new IntPtr(poolSizesPtr),
 				};
 				return context.Device.CreateDescriptorPool(ref createInfo);
 			}
@@ -76,7 +78,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			if (allocatedSets > 0) {
 				busyPools.Enqueue(new BusyPool {
 					FenceValue = context.NextFenceValue,
-					Pool = pool
+					Pool = pool,
 				});
 				pool = AcquireDescriptorPool();
 				allocatedSets = 0;

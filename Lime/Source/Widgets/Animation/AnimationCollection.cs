@@ -91,7 +91,9 @@ namespace Lime
 		{
 			if (!(TryFind(animationId, out var animation) && animation.TryRun(markerId, 0))) {
 				if (animationId != null && markerId != null) {
-					throw new Lime.Exception(string.Format("Unknown animation ({0}) or marker ({1})", animationId, markerId));
+					throw new Lime.Exception(
+						string.Format("Unknown animation ({0}) or marker ({1})", animationId, markerId)
+					);
 				} else if (animationId != null && markerId == null) {
 					throw new Lime.Exception(string.Format("Unknown animation ({0})", animationId));
 				} else if (animationId == null && markerId != null) {

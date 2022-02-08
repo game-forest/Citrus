@@ -22,18 +22,19 @@ namespace Tangerine.UI.Timeline
 				Id = nameof(RollPane),
 				Padding = new Thickness { Top = 1, Bottom = 1 },
 				Nodes = {
-					(ScrollView = new ThemedScrollView())
+					(ScrollView = new ThemedScrollView()),
 				},
 				Layout = new VBoxLayout(),
-				Presenter = new SyncDelegatePresenter<Node>(RenderBackground)
+				Presenter = new SyncDelegatePresenter<Node>(RenderBackground),
 			};
 			var presentation = new TreeViewPresentation(
 				new TreeViewItemPresentationOptions {
-					SearchStringGetter = () => string.Empty
+					SearchStringGetter = () => string.Empty,
 				}
 			);
 			TreeView = new TreeView(
-				ScrollView, presentation,
+				ScrollView,
+				presentation,
 				new TreeViewOptions { HandleCommands = false, ShowRoot = false }
 			);
 			TreeView.OnActivateItem += (sender, args) => {
@@ -43,11 +44,11 @@ namespace Tangerine.UI.Timeline
 			};
 			TreeView.OnDragBegin += TreeView_OnDragBegin;
 			TreeView.OnDragEnd += TreeView_OnDragEnd;
-			((VBoxLayout) ScrollView.Content.Layout).Spacing = TimelineMetrics.RowSpacing;
+			((VBoxLayout)ScrollView.Content.Layout).Spacing = TimelineMetrics.RowSpacing;
 			ContentWidget = new ThemedScrollView {
 				Padding = new Thickness { Top = 1, Bottom = 1 },
 				Layout = new VBoxLayout { Spacing = TimelineMetrics.RowSpacing },
-				Presenter = new SyncDelegatePresenter<Node>(RenderBackground)
+				Presenter = new SyncDelegatePresenter<Node>(RenderBackground),
 			};
 			RootWidget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 			RootWidget.AddLateChangeWatcher(
@@ -74,7 +75,12 @@ namespace Tangerine.UI.Timeline
 			var topSceneItems = SceneTreeUtils.EnumerateTopSceneItems(args.Items.Select(GetSceneItem)).ToList();
 			Document.Current.History.DoTransaction(() => {
 				DelegateOperation.Perform(null, Document.Current.BumpSceneTreeVersion, false);
-				SetProperty.Perform(parentSceneItem.GetTimelineSceneItemState(), nameof(TimelineSceneItemStateComponent.NodesExpanded), true, false);
+				SetProperty.Perform(
+					obj: parentSceneItem.GetTimelineSceneItemState(),
+					propertyName: nameof(TimelineSceneItemStateComponent.NodesExpanded),
+					value: true,
+					isChangingDocument: false
+				);
 				DelegateOperation.Perform(Document.Current.BumpSceneTreeVersion, null, false);
 				var index = TranslateTreeViewToSceneTreeIndex(args.Parent, args.Index);
 				foreach (var item in topSceneItems) {
@@ -101,7 +107,7 @@ namespace Tangerine.UI.Timeline
 			return GetSceneItem(parent).SceneItems.IndexOf(item) + i;
 		}
 
-		private static SceneItem GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
+		private static SceneItem GetSceneItem(TreeViewItem item) => ((ISceneItemHolder)item).SceneItem;
 
 		private void RebuildTreeView()
 		{
@@ -134,8 +140,10 @@ namespace Tangerine.UI.Timeline
 		{
 			if (Document.Current.Animation.IsCompound) {
 				new Menu {
-					new Command("Add",
-						() => AnimationTrackTreeViewItemPresentation.AddAnimationTrack()),
+					new Command(
+						"Add",
+						() => AnimationTrackTreeViewItemPresentation.AddAnimationTrack()
+					),
 				}.Popup();
 			}
 		}

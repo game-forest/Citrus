@@ -5,13 +5,16 @@ using System.IO;
 
 namespace Orange
 {
-	static class DeleteUnpackedBundles
+	internal static class DeleteUnpackedBundles
 	{
 		[Export(nameof(OrangePlugin.MenuItems))]
 		[ExportMetadata("Label", "Delete Unpacked Bundles")]
 		[ExportMetadata("Priority", 31)]
 		[ExportMetadata("ApplicableToBundleSubset", true)]
-		public static void DeleteUnpackedBundlesAction() => DeleteBundles(The.UI.GetActiveTarget(), The.UI.GetSelectedBundles());
+		public static void DeleteUnpackedBundlesAction()
+		{
+			DeleteBundles(The.UI.GetActiveTarget(), The.UI.GetSelectedBundles());
+		}
 
 		private static void DeleteBundles(Target target, List<string> bundles = null)
 		{

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Lime
 {
-	class ExternalStorageLagsSimulator
+	internal class ExternalStorageLagsSimulator
 	{
-		static DateTime lastReadTime;
+		private static DateTime lastReadTime;
 
 		internal static void SimulateReadDelay(string path, int dataLength)
 		{

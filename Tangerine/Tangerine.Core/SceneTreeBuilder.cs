@@ -27,7 +27,7 @@ namespace Tangerine.Core
 			return item;
 		}
 
-		void BuildFolderTree(SceneItem parent, int itemCount, Node node, ref int folderIndex, ref int nodeIndex)
+		private void BuildFolderTree(SceneItem parent, int itemCount, Node node, ref int folderIndex, ref int nodeIndex)
 		{
 			Dictionary<int, SceneItem> boneToSceneItem = null;
 			var folders = node.Folders;

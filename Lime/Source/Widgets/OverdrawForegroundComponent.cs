@@ -19,7 +19,7 @@ namespace Lime
 	/// you are probably faced with a special case where RenderObjects are created bypassing presenters.
 	/// As one possible solution, you can manually initialize <see cref="RenderObject.OwnerInfo"/>:
 	///     #if PROFILER
-	///			renderObject.OwnerInfo.Initialize(Node);
+	///         renderObject.OwnerInfo.Initialize(Node);
 	///     #endif // PROFILER
 	/// </remarks>
 	public class OverdrawForegroundBehavior : NodeBehavior
@@ -28,7 +28,7 @@ namespace Lime
 		private bool isEventConnectAwake;
 		private NodeManager cachedNodeManager;
 
-		private event HierarchyChangedEventHandler hierarchyChangedEvent;
+		private event HierarchyChangedEventHandler HierarchyChangedEvent;
 
 		protected override void OnRegister()
 		{
@@ -43,7 +43,7 @@ namespace Lime
 		private void UnsubscribeEvents(Node node)
 		{
 			if (cachedNodeManager != null) {
-				cachedNodeManager.HierarchyChanged -= hierarchyChangedEvent;
+				cachedNodeManager.HierarchyChanged -= HierarchyChangedEvent;
 				UpdateOverdrawForegroundFlags(node, HierarchyAction.Unlink);
 				if (node.RenderChainBuilder is RenderChainBuilderProxy proxy) {
 					node.RenderChainBuilder = proxy.OriginalRenderChainBuilder;
@@ -60,7 +60,7 @@ namespace Lime
 			if (cachedNodeManager == null) {
 				return;
 			}
-			hierarchyChangedEvent = (evt) => {
+			HierarchyChangedEvent = (evt) => {
 				if (Owner.Manager == null) {
 					UnsubscribeEvents(Owner);
 				} else if (evt.Parent != null && evt.Parent.IsOverdrawForeground) {
@@ -68,7 +68,7 @@ namespace Lime
 				}
 			};
 			UpdateOverdrawForegroundFlags(Owner, HierarchyAction.Link);
-			cachedNodeManager.HierarchyChanged += hierarchyChangedEvent;
+			cachedNodeManager.HierarchyChanged += HierarchyChangedEvent;
 			if (!(Owner.RenderChainBuilder is RenderChainBuilderProxy)) {
 				Owner.RenderChainBuilder = new RenderChainBuilderProxy(Owner);
 			}

@@ -29,7 +29,8 @@ namespace Tangerine.UI.AnimeshEditor
 	[YuzuDontGenerateDeserializer]
 	[NodeComponentDontSerialize]
 	[AllowedComponentOwnerTypes(typeof(Lime.Animesh))]
-	public sealed class AnimeshController<T> : NodeComponent where T : ITopology
+	public sealed class AnimeshController<T> : NodeComponent
+		where T : ITopology
 	{
 		public Animesh Mesh { get; private set; }
 		public ITopology Topology { get; private set; }
@@ -117,11 +118,13 @@ namespace Tangerine.UI.AnimeshEditor
 		private Vector2 CalcTransformedVertexPosition(int i)
 		{
 			var sceneToRenderContextTransform = sv.CalcTransitionFromSceneSpace(sv.Frame);
-			return AnimeshTools.State == AnimeshTools.ModificationState.Animation ?
-				// Parent to render context.
-				(Mesh.ParentWidget.LocalToWorldTransform * sceneToRenderContextTransform).TransformVector(Mesh.TransformedVertexPosition(i)) :
+			return AnimeshTools.State == AnimeshTools.ModificationState.Animation
+				 // Parent to render context.
+				 ? (Mesh.ParentWidget.LocalToWorldTransform * sceneToRenderContextTransform)
+					.TransformVector(Mesh.TransformedVertexPosition(i))
 				// Local to render context.
-				(Mesh.LocalToWorldTransform * sceneToRenderContextTransform).TransformVector(Mesh.CalcVertexPositionInCurrentSpace(i));
+				: (Mesh.LocalToWorldTransform * sceneToRenderContextTransform)
+					.TransformVector(Mesh.CalcVertexPositionInCurrentSpace(i));
 		}
 
 		private bool HitTest(Vector2 position, float scale, out TopologyHitTestResult result)
@@ -135,8 +138,12 @@ namespace Tangerine.UI.AnimeshEditor
 					transformedVertices[1] = CalcTransformedVertexPosition(face[1]);
 					transformedVertices[2] = CalcTransformedVertexPosition(face[2]);
 					if (
-						AnimeshUtils.PointTriangleIntersection(position, transformedVertices[0],
-							transformedVertices[1], transformedVertices[2])
+						AnimeshUtils.PointTriangleIntersection(
+							position,
+							transformedVertices[0],
+							transformedVertices[1],
+							transformedVertices[2]
+						)
 					) {
 						result.Target = face;
 						result.Info = info;
@@ -228,20 +235,55 @@ namespace Tangerine.UI.AnimeshEditor
 				foreach (var vertex in Vertices) {
 					bbox = bbox.IncludingPoint(vertex.Pos);
 				}
-				var bfv = new[] { Vector2.Zero, bbox.A, new Vector2(bbox.BX, bbox.AY), new Vector2(bbox.AX, bbox.BY), bbox.B, };
+				var bfv = new[] {
+					Vector2.Zero,
+					bbox.A,
+					new Vector2(bbox.BX, bbox.AY),
+					new Vector2(bbox.AX, bbox.BY),
+					bbox.B,
+				};
 				foreach (var (i1, i2, i3, t) in ((HalfEdgeTopology)Topology).DebugTriangles()) {
 					var v1 = transform.TransformVector(i1 >= 0 ? Vertices[i1].Pos : bfv[-i1]);
 					var v2 = transform.TransformVector(i2 >= 0 ? Vertices[i2].Pos : bfv[-i2]);
 					var v3 = transform.TransformVector(i3 >= 0 ? Vertices[i3].Pos : bfv[-i3]);
-					render(v1, v2);
-					render(v2, v3);
-					render(v3, v1);
+					Render(v1, v2);
+					Render(v2, v3);
+					Render(v3, v1);
 				}
-				AnimeshUtils.RenderLine(transform.TransformVector(bfv[1]), transform.TransformVector(bfv[2]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
-				AnimeshUtils.RenderLine(transform.TransformVector(bfv[2]), transform.TransformVector(bfv[4]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
-				AnimeshUtils.RenderLine(transform.TransformVector(bfv[4]), transform.TransformVector(bfv[3]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
-				AnimeshUtils.RenderLine(transform.TransformVector(bfv[3]), transform.TransformVector(bfv[1]), new Vector2(2f), new Vector2(2f), Color4.Red, Color4.Red);
-				void render(Vector2 s, Vector2 e)
+				AnimeshUtils.RenderLine(
+					transform.TransformVector(bfv[1]),
+					transform.TransformVector(bfv[2]),
+					new Vector2(2f),
+					new Vector2(2f),
+					Color4.Red,
+					Color4.Red
+				);
+				AnimeshUtils.RenderLine(
+					transform.TransformVector(bfv[2]),
+					transform.TransformVector(bfv[4]),
+					new Vector2(2f),
+					new Vector2(2f),
+					Color4.Red,
+					Color4.Red
+				);
+				AnimeshUtils.RenderLine(
+					transform.TransformVector(bfv[4]),
+					transform.TransformVector(bfv[3]),
+					new Vector2(2f),
+					new Vector2(2f),
+					Color4.Red,
+					Color4.Red
+				);
+				AnimeshUtils.RenderLine(
+					transform.TransformVector(bfv[3]),
+					transform.TransformVector(bfv[1]),
+					new Vector2(2f),
+					new Vector2(2f),
+					Color4.Red,
+					Color4.Red
+				);
+
+				void Render(Vector2 s, Vector2 e)
 				{
 					if (e.X < s.X || (e.X == s.X && e.Y < s.Y)) {
 						Toolbox.Swap(ref s, ref e);
@@ -287,7 +329,11 @@ namespace Tangerine.UI.AnimeshEditor
 					RenderVertex(v);
 				}
 			}
-			if (AnimeshTools.State == AnimeshTools.ModificationState.Creation && hitTestTarget != null && !hitTestTarget.IsVertex()) {
+			if (
+				AnimeshTools.State == AnimeshTools.ModificationState.Creation
+				&& hitTestTarget != null
+				&& !hitTestTarget.IsVertex()
+			) {
 				AnimeshUtils.RenderVertex(
 					(Mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame))
 						.TransformVector(SnapMousePositionToTopologyPrimitiveIfPossible(hitTestTarget)),
@@ -400,7 +446,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = animator?.Keys.ToList()
+						Keyframes = animator?.Keys.ToList(),
 					};
 					keyframes = animator?.Keys.ToList();
 					TieSkinnedVerticesWithBones.Perform(bones, Mesh, result.Target[0]);
@@ -420,7 +466,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = keyframes
+						Keyframes = keyframes,
 					};
 					AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
 				});
@@ -441,7 +487,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = animator?.Keys.ToList()
+						Keyframes = animator?.Keys.ToList(),
 					};
 					keyframes = animator?.Keys.ToList();
 					Core.Operations.UntieSkinnedVerticesFromBones.Perform(bones, Mesh, result.Target[0]);
@@ -461,7 +507,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = keyframes
+						Keyframes = keyframes,
 					};
 					AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
 				});
@@ -485,7 +531,7 @@ namespace Tangerine.UI.AnimeshEditor
 					Vertices = new List<SkinnedVertex>(animesh.Vertices),
 					IndexBuffer = new List<TopologyFace>(animesh.Faces),
 					ConstrainedVertices = new List<TopologyEdge>(animesh.ConstrainedEdges),
-					Keyframes = animator?.Keys.ToList()
+					Keyframes = animator?.Keys.ToList(),
 				};
 				var scale = animesh.Size / prevSize;
 				animesh.Controller().Topology.Scale(scale);
@@ -513,7 +559,7 @@ namespace Tangerine.UI.AnimeshEditor
 					Vertices = new List<SkinnedVertex>(animesh.Vertices),
 					IndexBuffer = new List<TopologyFace>(animesh.Faces),
 					ConstrainedVertices = new List<TopologyEdge>(animesh.ConstrainedEdges),
-					Keyframes = keyframes
+					Keyframes = keyframes,
 				};
 				AnimeshModification.Slice.Perform(animesh, sliceBefore, sliceAfter);
 				animesh.Invalidate();
@@ -532,7 +578,7 @@ namespace Tangerine.UI.AnimeshEditor
 				Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 				IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 				ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-				Keyframes = animator?.Keys.ToList()
+				Keyframes = animator?.Keys.ToList(),
 			};
 			var keyframes = animator?.Keys.ToList();
 			var missingBones = new HashSet<byte>();
@@ -580,7 +626,7 @@ namespace Tangerine.UI.AnimeshEditor
 				Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 				IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 				ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-				Keyframes = keyframes
+				Keyframes = keyframes,
 			};
 			AnimeshModification.Slice.Perform(Mesh, sliceBefore, sliceAfter);
 		}
@@ -590,7 +636,11 @@ namespace Tangerine.UI.AnimeshEditor
 			var transform = Mesh.LocalToWorldTransform.CalcInversed();
 			var cursor = WidgetContext.Current.MouseCursor;
 			var lastPosLocalPosition = transform.TransformVector(sv.MousePosition);
-			var lastPositionsBeforeBonesApplication = new [] { lastPosLocalPosition, lastPosLocalPosition, lastPosLocalPosition, };
+			var lastPositionsBeforeBonesApplication = new[] {
+				lastPosLocalPosition,
+				lastPosLocalPosition,
+				lastPosLocalPosition,
+			};
 			var hitTestTarget = HitTest(sv.MousePosition, sv.Scene.Scale.X, out var result) ? result.Target : null;
 			if (hitTestTarget == null) {
 				yield break;
@@ -599,7 +649,8 @@ namespace Tangerine.UI.AnimeshEditor
 			for (int i = 0; i < hitTestTarget.Count; i++) {
 				invSkinningMatrices[i] = Mesh.ParentWidget.BoneArray.
 					CalcWeightedRelativeTransform(Mesh.Vertices[hitTestTarget[i]].SkinningWeights).CalcInversed();
-				lastPositionsBeforeBonesApplication[i] = invSkinningMatrices[i].TransformVector(lastPositionsBeforeBonesApplication[i]);
+				lastPositionsBeforeBonesApplication[i] = invSkinningMatrices[i]
+					.TransformVector(lastPositionsBeforeBonesApplication[i]);
 			}
 			var positionDeltas = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, };
 			var mousePositionsBeforeBonesApplication = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, };
@@ -617,7 +668,8 @@ namespace Tangerine.UI.AnimeshEditor
 					for (int i = 0; i < hitTestTarget.Count; i++) {
 						mousePositionsBeforeBonesApplication[i] =
 							invSkinningMatrices[i].TransformVector(mousePositionInMeshSpace);
-						positionDeltas[i] = mousePositionsBeforeBonesApplication[i] - lastPositionsBeforeBonesApplication[i];
+						positionDeltas[i] =
+							mousePositionsBeforeBonesApplication[i] - lastPositionsBeforeBonesApplication[i];
 						lastPositionsBeforeBonesApplication[i] = mousePositionsBeforeBonesApplication[i];
 					}
 					TranslateTransientVertices(hitTestTarget, positionDeltas);
@@ -656,7 +708,7 @@ namespace Tangerine.UI.AnimeshEditor
 					Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 					IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 					ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-					Keyframes = animator?.Keys.ToList()
+					Keyframes = animator?.Keys.ToList(),
 				};
 				var lastValidDelta = Vector2.Zero;
 				var lastValidUVDelta = Vector2.Zero;
@@ -665,7 +717,7 @@ namespace Tangerine.UI.AnimeshEditor
 					Document.Current.History.RollbackTransaction();
 					var keyframes = animator?.Keys.ToList();
 					UI.Utils.ChangeCursorIfDefault(cursor);
-					var delta = (transform.TransformVector(sv.MousePosition) - lastPos);
+					var delta = transform.TransformVector(sv.MousePosition) - lastPos;
 					var size = Mesh.Texture == null ? Mesh.Size : (Vector2)Mesh.Texture.ImageSize;
 					var uvDelta = delta / size;
 					if (Topology.TranslateVertex(target.Index, delta, uvDelta, out var removedVertices)) {
@@ -702,7 +754,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = keyframes
+						Keyframes = keyframes,
 					};
 					AnimeshModification.Slice.Perform(
 						Mesh,
@@ -797,7 +849,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = animator?.Keys.ToList()
+						Keyframes = animator?.Keys.ToList(),
 					};
 					var pos = SnapMousePositionToTopologyPrimitiveIfPossible(initialHitTestTarget);
 					var vertex = new SkinnedVertex {
@@ -826,7 +878,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = keyframes
+						Keyframes = keyframes,
 					};
 					AnimeshModification.Slice.Perform(
 						Mesh,
@@ -858,7 +910,7 @@ namespace Tangerine.UI.AnimeshEditor
 					Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 					IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 					ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-					Keyframes = animator?.Keys.ToList()
+					Keyframes = animator?.Keys.ToList(),
 				};
 				while (sv.Input.IsMousePressed()) {
 					UpdateHitTestMetrics();
@@ -869,7 +921,7 @@ namespace Tangerine.UI.AnimeshEditor
 						: null;
 					if (
 						hitTestTarget == null ||
-					    hitTestTarget.IsVertex() && initialHitTestTarget.Index == hitTestTarget[0]
+						hitTestTarget.IsVertex() && initialHitTestTarget.Index == hitTestTarget[0]
 					) {
 						yield return null;
 						continue;
@@ -890,7 +942,7 @@ namespace Tangerine.UI.AnimeshEditor
 							foreach (var key in animator.Keys.ToList()) {
 								var newKey = key.Clone();
 								var vertices = new List<SkinnedVertex>(newKey.Value as List<SkinnedVertex>) {
-									vertex
+									vertex,
 								};
 								newKey.Value = vertices;
 								keyframes.Add(newKey);
@@ -905,7 +957,7 @@ namespace Tangerine.UI.AnimeshEditor
 							Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 							IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 							ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-							Keyframes = keyframes
+							Keyframes = keyframes,
 						};
 
 						AnimeshModification.Slice.Perform(
@@ -923,7 +975,7 @@ namespace Tangerine.UI.AnimeshEditor
 			yield return null;
 		}
 
-		public  IEnumerator<object> RemovalTask()
+		public IEnumerator<object> RemovalTask()
 		{
 			UI.Utils.ChangeCursorIfDefault(WidgetContext.Current.MouseCursor);
 			if (Topology.Vertices.Count == 3) {
@@ -947,7 +999,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = animator?.Keys.ToList()
+						Keyframes = animator?.Keys.ToList(),
 					};
 					if (hitTestTarget.IsVertex()) {
 						Topology.RemoveVertex(hitTestTarget[0]);
@@ -972,7 +1024,7 @@ namespace Tangerine.UI.AnimeshEditor
 						Vertices = new List<SkinnedVertex>(Mesh.Vertices),
 						IndexBuffer = new List<TopologyFace>(Mesh.Faces),
 						ConstrainedVertices = new List<TopologyEdge>(Mesh.ConstrainedEdges),
-						Keyframes = keyframes
+						Keyframes = keyframes,
 					};
 					AnimeshModification.Slice.Perform(
 						Mesh,

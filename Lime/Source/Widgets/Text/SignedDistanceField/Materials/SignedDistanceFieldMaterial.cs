@@ -8,8 +8,9 @@ namespace Lime.SignedDistanceField
 {
 	public class SignedDistanceFieldMaterial : IMaterial
 	{
-		private const int gradientTexturePixelCount = 256;
-		private static readonly ConcurrentDictionary<int, Texture2D> gradientTexturePool = new ConcurrentDictionary<int, Texture2D>();
+		private const int GradientTexturePixelCount = 256;
+		private static readonly ConcurrentDictionary<int, Texture2D> gradientTexturePool =
+			new ConcurrentDictionary<int, Texture2D>();
 
 		private static readonly BlendState disabledBlendingState = new BlendState { Enable = false };
 
@@ -78,7 +79,9 @@ namespace Lime.SignedDistanceField
 			shaderParams.Set(gradientAngleKey, GradientAngle * Mathf.DegToRad);
 
 			PlatformRenderer.SetBlendState(Blending.GetBlendState());
-			PlatformRenderer.SetShaderProgram(SDFShaderProgram.GetInstance(GradientEnabled, Thickness > Mathf.ZeroTolerance));
+			PlatformRenderer.SetShaderProgram(
+				SDFShaderProgram.GetInstance(GradientEnabled, Thickness > Mathf.ZeroTolerance)
+			);
 			PlatformRenderer.SetShaderParams(shaderParamsArray);
 			if (GradientEnabled && Gradient != null) {
 				InvalidateTextureIfNecessary();
@@ -93,15 +96,15 @@ namespace Lime.SignedDistanceField
 				if (gradientTexturePool.TryGetValue(hash, out var texture)) {
 					GradientTexture = texture;
 				} else {
-					var gradientTexturePixels = new Color4[gradientTexturePixelCount];
+					var gradientTexturePixels = new Color4[GradientTexturePixelCount];
 					Gradient.Rasterize(ref gradientTexturePixels);
 					GradientTexture = new Texture2D {
 						TextureParams = new TextureParams {
 							WrapMode = TextureWrapMode.Clamp,
 							MinMagFilter = TextureFilter.Linear,
-						}
+						},
 					};
-					GradientTexture.LoadImage(gradientTexturePixels, gradientTexturePixelCount, 1);
+					GradientTexture.LoadImage(gradientTexturePixels, GradientTexturePixelCount, 1);
 					gradientTexturePool.GetOrAdd(hash, GradientTexture);
 				}
 			}
@@ -116,7 +119,7 @@ namespace Lime.SignedDistanceField
 		public IMaterial GetMaterial(int tag) => Material;
 
 		public Sprite.IMaterialProvider Clone() => new SDFMaterialProvider() {
-			Material = Material
+			Material = Material,
 		};
 
 		public Sprite ProcessSprite(Sprite s)
@@ -177,11 +180,18 @@ namespace Lime.SignedDistanceField
 				lowp float g_sin = sin(g_angle);
 				lowp float g_cos = cos(g_angle);
 
-				lowp vec2 gradientCoords = vec2(dot(texCoords2, vec2(g_cos, g_sin)), dot(texCoords2, vec2(-g_sin, g_cos)));
+				lowp vec2 gradientCoords = vec2(
+					dot(texCoords2, vec2(g_cos, g_sin)),
+					dot(texCoords2, vec2(-g_sin, g_cos))
+				);
 				inner_color = color * texture2D(tex2, gradientCoords);
 ";
 		private const string FragmentShaderOutlinePart3 = @"
-				lowp float outlineFactor = smoothstep(dilate - smoothing - softness, dilate + smoothing + softness, distance);
+				lowp float outlineFactor = smoothstep(
+					dilate - smoothing - softness,
+					dilate + smoothing + softness,
+					distance
+				);
 				lowp vec4 c = mix(color * outlineColor, inner_color, outlineFactor);
 ";
 		private const string FragmentShaderPart3 = @"
@@ -199,10 +209,17 @@ namespace Lime.SignedDistanceField
 		public static SDFShaderProgram GetInstance(bool gradient = false, bool outline = false)
 		{
 			var key = GetInstanceKey(gradient, outline);
-			return instances.TryGetValue(key, out var shaderProgram) ? shaderProgram : (instances[key] = new SDFShaderProgram(gradient, outline));
+			return instances.TryGetValue(key, out var shaderProgram)
+				? shaderProgram
+				: (instances[key] = new SDFShaderProgram(gradient, outline));
 		}
 
-		private SDFShaderProgram(bool solidColor, bool outline) : base(CreateShaders(solidColor, outline), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private SDFShaderProgram(bool solidColor, bool outline)
+			: base(
+				  CreateShaders(solidColor, outline),
+				  ShaderPrograms.Attributes.GetLocations(),
+				  ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders(bool gradient, bool outline)
 		{
@@ -221,7 +238,7 @@ namespace Lime.SignedDistanceField
 
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

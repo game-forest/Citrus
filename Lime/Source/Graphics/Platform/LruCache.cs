@@ -6,7 +6,8 @@ namespace Lime.Graphics.Platform
 	{
 		private Dictionary<TKey, LinkedListNode<KeyValuePair<TKey, TValue>>> lookup;
 		private LinkedList<KeyValuePair<TKey, TValue>> list;
-		private Stack<LinkedListNode<KeyValuePair<TKey, TValue>>> freeNodes = new Stack<LinkedListNode<KeyValuePair<TKey, TValue>>>();
+		private Stack<LinkedListNode<KeyValuePair<TKey, TValue>>> freeNodes =
+			new Stack<LinkedListNode<KeyValuePair<TKey, TValue>>>();
 
 		public int Count => list.Count;
 

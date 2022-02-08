@@ -16,7 +16,7 @@ namespace Tangerine.UI
 		}
 
 		protected readonly EditBox editor;
-		protected static string LastOpenedDirectory = Path.GetDirectoryName(Document.Current.FullPath);
+		protected static string lastOpenedDirectory = Path.GetDirectoryName(Document.Current.FullPath);
 		protected readonly string[] allowedFileTypes;
 
 		private readonly PrefixData prefix = new PrefixData();
@@ -37,8 +37,8 @@ namespace Tangerine.UI
 						Text = "...",
 						MinMaxWidth = 20,
 						LayoutCell = new LayoutCell(Alignment.Center),
-					})
-				}
+					}),
+				},
 			});
 			editor.LayoutCell = new LayoutCell(Alignment.Center);
 			editor.Submitted += text => SetComponent(text);
@@ -62,7 +62,7 @@ namespace Tangerine.UI
 				ExpandButton.Visible = show;
 			});
 			var current = CoalescedPropertyValue();
-			editor.AddLateChangeWatcher(current, v => editor.Text = ValueToStringConverter(v.Value) ?? "");
+			editor.AddLateChangeWatcher(current, v => editor.Text = ValueToStringConverter(v.Value) ?? string.Empty);
 			ManageManyValuesOnFocusChange(editor, current);
 		}
 
@@ -140,7 +140,8 @@ namespace Tangerine.UI
 		{
 			try {
 				AssignAsset(AssetPath.CorrectSlashes(Clipboard.Text));
-			} catch (System.Exception) { }
+			} catch (System.Exception) {
+			}
 		}
 
 		protected abstract void AssignAsset(string path);
@@ -162,7 +163,7 @@ namespace Tangerine.UI
 		public string GetLongestCommonPrefix(List<string> paths)
 		{
 			if (paths == null || paths.Count == 0) {
-				return String.Empty;
+				return string.Empty;
 			}
 			const char Separator = '/';
 			var directoryParts = new List<string>(paths[0].Split(Separator));
@@ -172,12 +173,13 @@ namespace Tangerine.UI
 				int maxPrefixLength = Math.Min(first.Count, second.Length);
 				var tempDirectoryParts = new List<string>(maxPrefixLength);
 				for (int part = 0; part < maxPrefixLength; part++) {
-					if (first[part] == second[part])
+					if (first[part] == second[part]) {
 						tempDirectoryParts.Add(first[part]);
+					}
 				}
 				directoryParts = tempDirectoryParts;
 			}
-			return String.Join(Separator.ToString(), directoryParts);
+			return string.Join(Separator.ToString(), directoryParts);
 		}
 
 		public bool TryGetClosestAvailableDirectory(string path, out string directory)
@@ -195,8 +197,8 @@ namespace Tangerine.UI
 		protected virtual void OnSelectClicked()
 		{
 			var initialDirectory = Project.Current.AssetsDirectory;
-			if (Directory.Exists(LastOpenedDirectory)) {
-				initialDirectory = LastOpenedDirectory;
+			if (Directory.Exists(lastOpenedDirectory)) {
+				initialDirectory = lastOpenedDirectory;
 			}
 			var current = CoalescedPropertyValue().GetDataflow();
 			current.Poll();
@@ -219,7 +221,7 @@ namespace Tangerine.UI
 			};
 			if (dlg.RunModal()) {
 				SetFilePath(dlg.FileName);
-				LastOpenedDirectory = Path.GetDirectoryName(dlg.FileName);
+				lastOpenedDirectory = Path.GetDirectoryName(dlg.FileName);
 			}
 		}
 	}

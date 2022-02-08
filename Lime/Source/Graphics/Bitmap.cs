@@ -14,7 +14,7 @@ namespace Lime
 	public enum CompressionFormat
 	{
 		Jpeg,
-		Png
+		Png,
 	}
 
 	internal interface IBitmapImplementation : IDisposable

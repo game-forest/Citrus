@@ -7,7 +7,8 @@ namespace Lime
 {
 	public static class MeshUtils
 	{
-		public static Mesh<T> Combine<T>(params Mesh<T>[] meshes) where T : unmanaged
+		public static Mesh<T> Combine<T>(params Mesh<T>[] meshes)
+			where T : unmanaged
 		{
 			int numVertices = meshes.Sum(m => m.Vertices.Length);
 			int numIndices = meshes.Sum(m => m.Indices.Length);
@@ -29,13 +30,15 @@ namespace Lime
 				Vertices = outVertices,
 				Indices = outIndices,
 				AttributeLocations = meshes[0].AttributeLocations,
-				DirtyFlags = MeshDirtyFlags.All
+				DirtyFlags = MeshDirtyFlags.All,
 			};
 		}
 
-		public delegate void VertexProcessor<T>(ref T vertex) where T : unmanaged;
+		public delegate void VertexProcessor<T>(ref T vertex)
+			where T : unmanaged;
 
-		public static void TransformVertices<T>(Mesh<T> mesh, VertexProcessor<T> processor) where T : unmanaged
+		public static void TransformVertices<T>(Mesh<T> mesh, VertexProcessor<T> processor)
+			where T : unmanaged
 		{
 			var vertices = mesh.Vertices;
 			for (int i = 0; i < vertices.Length; i++) {
@@ -60,7 +63,7 @@ namespace Lime
 						Mathf.Cos(i * Mathf.TwoPi / tesselation) * radius,
 						0,
 						Mathf.Sin(i * Mathf.TwoPi / tesselation) * radius),
-					Color = color
+					Color = color,
 				};
 				indices[j++] = 0;
 				indices[j++] = (ushort)((i + 1) % tesselation + 2);
@@ -73,25 +76,32 @@ namespace Lime
 				Vertices = vertices,
 				Indices = indices,
 				AttributeLocations = new[] { ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1 },
-				DirtyFlags = MeshDirtyFlags.All
+				DirtyFlags = MeshDirtyFlags.All,
 			};
 		}
 
 		/// <summary>
 		/// Creates a frustum standing on the X-Z plane.
 		/// </summary>
-		public static Mesh<VertexPositionColor> CreateFrustum(float height, float radius1, float radius2, int tesselation, Color4 color)
-		{
+		public static Mesh<VertexPositionColor> CreateFrustum(
+			float height, float radius1, float radius2, int tesselation, Color4 color
+		) {
 			var indices = new ushort[tesselation * 12];
 			var vertices = new VertexPositionColor[tesselation * 2 + 2];
 			vertices[0] = new VertexPositionColor { Position = new Vector3(0, height, 0), Color = color };
 			vertices[1] = new VertexPositionColor { Position = Vector3.Zero, Color = color };
 			int j = 0;
 			for (int i = 0; i < tesselation; i++) {
-				var x =	Mathf.Cos(i * Mathf.TwoPi / tesselation);
+				var x = Mathf.Cos(i * Mathf.TwoPi / tesselation);
 				var z = Mathf.Sin(i * Mathf.TwoPi / tesselation);
-				vertices[i * 2 + 2] = new VertexPositionColor { Position = new Vector3(x * radius2, height, z * radius2), Color = color };
-				vertices[i * 2 + 3] = new VertexPositionColor { Position = new Vector3(x * radius1, 0, z * radius1), Color = color };
+				vertices[i * 2 + 2] = new VertexPositionColor {
+					Position = new Vector3(x * radius2, height, z * radius2),
+					Color = color,
+				};
+				vertices[i * 2 + 3] = new VertexPositionColor {
+					Position = new Vector3(x * radius1, 0, z * radius1),
+					Color = color,
+				};
 				var t1 = (ushort)(i * 2 + 2);
 				var t2 = (ushort)((i + 1) % tesselation * 2 + 2);
 				var b1 = (ushort)(i * 2 + 3);
@@ -116,24 +126,27 @@ namespace Lime
 				Vertices = vertices,
 				Indices = indices,
 				AttributeLocations = new[] { ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1 },
-				DirtyFlags = MeshDirtyFlags.All
+				DirtyFlags = MeshDirtyFlags.All,
 			};
 		}
 
 		/// <summary>
 		/// Creates a cylinder standing on the X-Z plane.
 		/// </summary>
-		public static Mesh<VertexPositionColor> CreateCylinder(float height, float radius, int tesselation, Color4 color)
-		{
+		public static Mesh<VertexPositionColor> CreateCylinder(
+			float height, float radius, int tesselation, Color4 color
+		) {
 			return CreateFrustum(height, radius, radius, tesselation, color);
 		}
 
-		public static void RemoveDuplicates<TVertex>(Mesh<TVertex> mesh) where TVertex : unmanaged
+		public static void RemoveDuplicates<TVertex>(Mesh<TVertex> mesh)
+			where TVertex : unmanaged
 		{
 			RemoveDuplicates(mesh, EqualityComparer<TVertex>.Default);
 		}
 
-		public static void RemoveDuplicates<TVertex>(Mesh<TVertex> mesh, IEqualityComparer<TVertex> comparer) where TVertex : unmanaged
+		public static void RemoveDuplicates<TVertex>(Mesh<TVertex> mesh, IEqualityComparer<TVertex> comparer)
+			where TVertex : unmanaged
 		{
 			var indexByVertexMap = new Dictionary<TVertex, ushort>(comparer);
 			var vertices = new List<TVertex>();

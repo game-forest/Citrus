@@ -9,8 +9,8 @@ namespace Tangerine.UI.Timeline.Operations
 		// Evgenii Polikutin: needed for RulerbarMouseScrollProcessor to avoid extra operations
 		public static bool IsFrozen;
 
-		private readonly int Column;
-		private readonly Animation Animation;
+		private readonly int column;
+		private readonly Animation animation;
 
 		public override bool IsChangingDocument => false;
 
@@ -39,18 +39,18 @@ namespace Tangerine.UI.Timeline.Operations
 
 		private SetCurrentColumn(int column, Animation animation)
 		{
-			Column = column;
-			Animation = animation;
+			this.column = column;
+			this.animation = animation;
 		}
 
 		public sealed class Processor : OperationProcessor<SetCurrentColumn>
 		{
-			class Backup { public int Column; }
+			private class Backup { public int Column; }
 
 			protected override void InternalRedo(SetCurrentColumn op)
 			{
 				op.Save(new Backup { Column = Timeline.Instance.CurrentColumn });
-				SetColumn(op.Column, op.Animation);
+				SetColumn(op.column, op.animation);
 			}
 
 			protected override void InternalUndo(SetCurrentColumn op)
@@ -58,7 +58,7 @@ namespace Tangerine.UI.Timeline.Operations
 				if (IsFrozen) {
 					return;
 				}
-				SetColumn(op.Restore<Backup>().Column, op.Animation);
+				SetColumn(op.Restore<Backup>().Column, op.animation);
 			}
 
 			private static void SetColumn(int value, Animation animation)

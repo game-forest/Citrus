@@ -16,7 +16,9 @@ namespace Tangerine.UI
 			EditorContainer.AddNode(Spacer.HStretch());
 			var current = CoalescedPropertyValue();
 			editor.Submitted += text => SetComponent(text, current.GetValue());
-			editor.AddLateChangeWatcher(current, v => editor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			editor.AddLateChangeWatcher(
+				current, v => editor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(editor, current);
 		}
 
@@ -24,7 +26,7 @@ namespace Tangerine.UI
 		{
 			if (Parser.TryParse(text, out double newValue)) {
 				SetProperty((float)newValue);
-				editor.Text = ((float) newValue).ToString("0.###");
+				editor.Text = ((float)newValue).ToString("0.###");
 			} else {
 				editor.Text = current.IsDefined ? current.Value.ToString("0.###") : ManyValuesText;
 			}

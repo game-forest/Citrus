@@ -2,12 +2,12 @@ using System;
 
 namespace Orange
 {
-	class MainClass
+	internal class MainClass
 	{
 #if WIN
 		[STAThread]
 #endif
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 #if MAC
 			Lime.Application.Initialize();

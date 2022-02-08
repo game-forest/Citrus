@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -58,28 +56,20 @@ namespace SharpFont
 	/// <param name="block">The block's current address.</param>
 	/// <returns>New block address. 0 in case of memory shortage.</returns>
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate IntPtr ReallocFunc(NativeReference<Memory> memory, IntPtr currentSize, IntPtr newSize, IntPtr block);
+	public delegate IntPtr ReallocFunc(
+		NativeReference<Memory> memory, IntPtr currentSize, IntPtr newSize, IntPtr block
+	);
 
 	/// <summary>
 	/// A structure used to describe a given memory manager to FreeType 2.
 	/// </summary>
-	public class Memory: NativeObject
+	public class Memory : NativeObject
 	{
-		#region Fields
-
 		private MemoryRec rec;
 
-		#endregion
-
-		#region Constructors
-
-		internal Memory(IntPtr reference): base(reference)
+		internal Memory(IntPtr reference) : base(reference)
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a generic typeless pointer for user data.
@@ -139,10 +129,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Methods
-
 		/// <summary>
 		/// Decompress a zipped input buffer into an output buffer. This function is modeled after zlib's ‘uncompress’
 		/// function.
@@ -158,17 +144,17 @@ namespace SharpFont
 		{
 			IntPtr len = (IntPtr)output.Length;
 
-			fixed (byte* inPtr = input, outPtr = output)
-			{
-				Error err = FT.FT_Gzip_Uncompress(Reference, (IntPtr)outPtr, ref len, (IntPtr)inPtr, (IntPtr)input.Length);
+			fixed (byte* inPtr = input, outPtr = output) {
+				Error err = FT.FT_Gzip_Uncompress(
+					Reference, (IntPtr)outPtr, ref len, (IntPtr)inPtr, (IntPtr)input.Length
+				);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 			}
 
 			return (int)len;
 		}
-
-		#endregion
 	}
 }

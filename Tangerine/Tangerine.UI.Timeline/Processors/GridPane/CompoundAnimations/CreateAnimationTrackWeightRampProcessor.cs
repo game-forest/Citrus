@@ -44,9 +44,13 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 					var w = Document.Current.VisibleSceneItems[c.Y].GridWidget();
 					w.PrepareRendererState();
 					Renderer.DrawLine(
-						(c.X + .5f) * TimelineMetrics.ColWidth + .5f, 0,
-						(c.X + .5f) * TimelineMetrics.ColWidth + .5f, w.Height,
-						ColorTheme.Current.TimelineGrid.AnimationTrackWeightCurveKey, 2);
+						x0: (c.X + .5f) * TimelineMetrics.ColWidth + .5f,
+						y0: 0,
+						x1: (c.X + .5f) * TimelineMetrics.ColWidth + .5f,
+						y1: w.Height,
+						color: ColorTheme.Current.TimelineGrid.AnimationTrackWeightCurveKey,
+						thickness: 2
+					);
 				}
 			}
 		}
@@ -72,20 +76,27 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 			}
 			if (!rampAdded) {
 				var hasKey =
-					track.Animators.TryFind(nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.Animation.Id) &&
-					weightAnimator.ReadonlyKeys.Any(k => k.Frame == initFrame);
+					track.Animators.TryFind(
+						nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.Animation.Id
+					) && weightAnimator.ReadonlyKeys.Any(k => k.Frame == initFrame);
 				if (hasKey && currFrame == initFrame) {
 					Core.Operations.RemoveKeyframe.Perform(weightAnimator, currFrame);
 				} else {
 					var k = new Keyframe<float>(currFrame, AnimationTrack.MaxWeight, KeyFunction.Step);
-					Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation, k);
+					Core.Operations.SetKeyframe.Perform(
+						track, nameof(AnimationTrack.Weight), Document.Current.Animation, k
+					);
 				}
 			}
 		}
 
 		private static void SetRamp(AnimationTrack track, int initFrame, int currFrame)
 		{
-			if (track.Animators.TryFind(nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.Animation.Id)) {
+			if (
+				track.Animators.TryFind(
+					nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.Animation.Id
+				)
+			) {
 				foreach (var k in weightAnimator.ReadonlyKeys.ToList()) {
 					if (k.Frame > Math.Min(initFrame, currFrame) && k.Frame < Math.Max(initFrame, currFrame)) {
 						Core.Operations.RemoveKeyframe.Perform(weightAnimator, k.Frame);
@@ -94,7 +105,11 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 			}
 			var k1 = new Keyframe<float>(initFrame, 0f, initFrame < currFrame ? KeyFunction.Linear : KeyFunction.Step);
 			Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation, k1);
-			var k2 = new Keyframe<float>(currFrame, AnimationTrack.MaxWeight, initFrame < currFrame ? KeyFunction.Step : KeyFunction.Linear);
+			var k2 = new Keyframe<float>(
+				frame: currFrame,
+				value: AnimationTrack.MaxWeight,
+				function: initFrame < currFrame ? KeyFunction.Step : KeyFunction.Linear
+			);
 			Core.Operations.SetKeyframe.Perform(track, nameof(AnimationTrack.Weight), Document.Current.Animation, k2);
 		}
 	}

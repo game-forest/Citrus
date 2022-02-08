@@ -14,8 +14,29 @@ namespace Tangerine.UI.FilesystemView
 		// zoom, maxZoom for each element
 		private List<Tuple<int, int>> zoom = new List<Tuple<int, int>>();
 		private int maxZoom = zoomValues.Length - 1;
-		private static float[] zoomValues = { 1/32.0f, 1/24.0f, 1/16.0f, 1/12.0f, 1/8.0f, 1/6.0f, 1/4.0f, 1/3.0f, 1/2.0f, 1/1.5f,
-			1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 12.0f, 16.0f, 24.0f, 32.0f };
+		private static float[] zoomValues = {
+			1 / 32.0f,
+			1 / 24.0f,
+			1 / 16.0f,
+			1 / 12.0f,
+			1 / 8.0f,
+			1 / 6.0f,
+			1 / 4.0f,
+			1 / 3.0f,
+			1 / 2.0f,
+			1 / 1.5f,
+			1.0f,
+			1.5f,
+			2.0f,
+			3.0f,
+			4.0f,
+			6.0f,
+			8.0f,
+			12.0f,
+			16.0f,
+			24.0f,
+			32.0f,
+		};
 		// TODO: Clear Cache on fs navigation
 		private Dictionary<string, ITexture> textureCache = new Dictionary<string, ITexture>();
 
@@ -46,8 +67,8 @@ namespace Tangerine.UI.FilesystemView
 		{
 			var t = PrepareChessTexture(Theme.Colors.ZebraColor1.Transparentify(0.5f), Theme.Colors.ZebraColor2);
 			const float ChessCellSize = 50;
-			//Color4 Color1 = Core.UserPreferences.Instance.Get<UserPreferences>().BackgroundColorA;
-			//Color4 Color2 = Core.UserPreferences.Instance.Get<UserPreferences>().BackgroundColorB;
+			// Color4 Color1 = Core.UserPreferences.Instance.Get<UserPreferences>().BackgroundColorA;
+			// Color4 Color2 = Core.UserPreferences.Instance.Get<UserPreferences>().BackgroundColorB;
 			RootWidget = new ThemedScrollView();
 			RootWidget.Content.Layout = new FlowLayout {
 				Spacing = 5.0f,
@@ -141,9 +162,9 @@ namespace Tangerine.UI.FilesystemView
 						t.Item2,
 						new ThemedSimpleText {
 							OverflowMode = TextOverflowMode.Ellipsis,
-							Text = Path.GetFileName(t.Item1)
-						}
-					}
+							Text = Path.GetFileName(t.Item1),
+						},
+					},
 				});
 			}
 			CalcZoomAndMaxZoom();
@@ -172,7 +193,7 @@ namespace Tangerine.UI.FilesystemView
 			textureCache[filename] = texture;
 			var img = new Image(texture);
 			img.Texture.TextureParams = new TextureParams {
-				MinMagFilter = TextureFilter.Nearest
+				MinMagFilter = TextureFilter.Nearest,
 			};
 			img.MinMaxSize = img.Size = (Vector2)img.Texture.SurfaceSize;
 			return img;

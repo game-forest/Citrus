@@ -10,10 +10,11 @@ namespace Tangerine
 
 		public override string Breadcrumb { get; } = "Select Document";
 		public override string Prefix { get; } = $"{PrefixConst}:";
-		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for document in the open documents";
+		public override string HelpText { get; } =
+			$"Type '{PrefixConst}:' to search for document in the open documents";
 
 		public LookupOpenDocumentsSection(LookupSections sections) : base(sections) { }
-		
+
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
 			if (Project.Current == null || Project.Current.Documents == null) {

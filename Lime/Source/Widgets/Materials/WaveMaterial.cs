@@ -69,9 +69,9 @@ namespace Lime
 	public enum WaveType
 	{
 		Sinusoidal,
-		CircleWave
+		CircleWave,
 	}
-	
+
 	public class WaveShaderProgram : ShaderProgram
 	{
 		private static readonly Dictionary<int, WaveShaderProgram> instances =
@@ -143,11 +143,17 @@ namespace Lime
 			}";
 
 		private WaveShaderProgram(WaveType type, bool clamping)
-			: base(CreateShaders(type, clamping), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+			: base(
+				CreateShaders(type, clamping),
+				ShaderPrograms.Attributes.GetLocations(),
+				ShaderPrograms.GetSamplers()
+			)
+		{ }
 
 		private static Shader[] CreateShaders(WaveType type, bool clamping)
 		{
-			var fragmentShader = new StringBuilder(FragmentShaderHeader,
+			var fragmentShader = new StringBuilder(
+				FragmentShaderHeader,
 				FragmentShaderHeader.Length + FragmentSinWave.Length + FragmentShaderFooter.Length);
 
 			switch (type) {
@@ -166,7 +172,7 @@ namespace Lime
 			fragmentShader.Append(FragmentShaderFooter);
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

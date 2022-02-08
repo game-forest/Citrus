@@ -1,9 +1,9 @@
 using System;
-using Lime;
-using Orange.FbxImporter;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Lime;
+using Orange.FbxImporter;
 
 namespace Orange.FbxImporter
 {
@@ -22,7 +22,8 @@ namespace Orange.FbxImporter
 		* points along a node's positive X axis.
 		* so we have to rotate it by 90 around the Y-axis to correct it.
 		*/
-		private static readonly Quaternion CameraPostRotation = Quaternion.CreateFromEulerAngles(Vector3.UnitY * -Mathf.Pi / 2);
+		private static readonly Quaternion CameraPostRotation =
+			Quaternion.CreateFromEulerAngles(Vector3.UnitY * -Mathf.Pi / 2);
 		private readonly FbxManager manager;
 		private readonly FbxImportOptions options;
 
@@ -57,14 +58,16 @@ namespace Orange.FbxImporter
 		private Lime.Node ImportNodes(FbxNode root, Node parent = null)
 		{
 			Node3D node = null;
-			if (root == null)
+			if (root == null) {
 				return null;
+			}
+
 			switch (root.Attribute.Type) {
 				case FbxNodeAttribute.FbxNodeType.Mesh:
 					var meshAttribute = root.Attribute as FbxMeshAttribute;
 					var mesh = new Mesh3D {
 						Id = root.Name,
-						SkinningMode = meshAttribute.SkinningMode
+						SkinningMode = meshAttribute.SkinningMode,
 					};
 					foreach (var submesh in meshAttribute.Submeshes) {
 						mesh.Submeshes.Add(ImportSubmesh(submesh, root));
@@ -112,7 +115,7 @@ namespace Orange.FbxImporter
 			var sm = new Submesh3D {
 				Mesh = new Mesh<Mesh3D.Vertex> {
 					Vertices = meshAttribute.Vertices,
-					Indices = meshAttribute.Indices.Select(index => checked((ushort) index)).ToArray(),
+					Indices = meshAttribute.Indices.Select(index => checked((ushort)index)).ToArray(),
 					AttributeLocations = new[] {
 						ShaderPrograms.Attributes.Pos1,
 						ShaderPrograms.Attributes.Color1,
@@ -120,12 +123,12 @@ namespace Orange.FbxImporter
 						ShaderPrograms.Attributes.BlendIndices,
 						ShaderPrograms.Attributes.BlendWeights,
 						ShaderPrograms.Attributes.Normal,
-						ShaderPrograms.Attributes.Tangent
-					}
+						ShaderPrograms.Attributes.Tangent,
+					},
 				},
 				Material = meshAttribute.MaterialIndex != -1 && node.Materials != null
 					? GetOrCreateLimeMaterial(node.Materials[meshAttribute.MaterialIndex])
-					: FbxMaterial.Default
+					: FbxMaterial.Default,
 			};
 			MeshUtils.RemoveDuplicates(sm.Mesh);
 			if (meshAttribute.Bones.Length > 0) {
@@ -137,15 +140,16 @@ namespace Orange.FbxImporter
 			return sm;
 		}
 
-		private Dictionary<FbxMaterialDescriptor, CommonMaterial> MaterialPool = new Dictionary<FbxMaterialDescriptor, CommonMaterial>();
+		private Dictionary<FbxMaterialDescriptor, CommonMaterial> materialPool =
+			new Dictionary<FbxMaterialDescriptor, CommonMaterial>();
 
 		public CommonMaterial GetOrCreateLimeMaterial(FbxMaterial material)
 		{
-			if (MaterialPool.ContainsKey(material.MaterialDescriptor)) {
-				return MaterialPool[material.MaterialDescriptor];
+			if (materialPool.ContainsKey(material.MaterialDescriptor)) {
+				return materialPool[material.MaterialDescriptor];
 			}
 			var commonMaterial = new CommonMaterial {
-				Id = material.MaterialDescriptor.Name
+				Id = material.MaterialDescriptor.Name,
 			};
 			if (!string.IsNullOrEmpty(material.MaterialDescriptor.Path)) {
 				var tex = CreateSerializableTexture(options.Path, material.MaterialDescriptor.Path);
@@ -154,10 +158,14 @@ namespace Orange.FbxImporter
 
 				// TODO: implement U and V wrapping modes separately for cooking rules.
 				// Set "Repeat" wrap mode if wrap mode of any of the components is set as "Repeat".
-				var mode = material.MaterialDescriptor.WrapModeU == TextureWrapMode.Repeat || material.MaterialDescriptor.WrapModeV == TextureWrapMode.Repeat ?
-						TextureWrapMode.Repeat : TextureWrapMode.Clamp;
+				var mode = material.MaterialDescriptor.WrapModeU == TextureWrapMode.Repeat
+					|| material.MaterialDescriptor.WrapModeV == TextureWrapMode.Repeat
+						? TextureWrapMode.Repeat
+						: TextureWrapMode.Clamp;
 				if (options.CookingRulesMap.ContainsKey(rulesPath)) {
-					var cookingRules = options.CookingRulesMap[rulesPath] = options.CookingRulesMap[rulesPath].InheritClone();
+					var cookingRules =
+						options.CookingRulesMap[rulesPath] =
+						options.CookingRulesMap[rulesPath].InheritClone();
 					if (cookingRules.CommonRules.WrapMode != mode) {
 						cookingRules.CommonRules.WrapMode = mode;
 						cookingRules.SourcePath = rulesPath + ".txt";
@@ -168,13 +176,14 @@ namespace Orange.FbxImporter
 				}
 			}
 			commonMaterial.DiffuseColor = material.MaterialDescriptor.DiffuseColor;
-			MaterialPool[material.MaterialDescriptor] = commonMaterial;
+			materialPool[material.MaterialDescriptor] = commonMaterial;
 			return commonMaterial;
 		}
 
 		private SerializableTexture CreateSerializableTexture(string root, string texturePath)
 		{
-			return new SerializableTexture(Toolbox.ToUnixSlashes(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(root),
+			return new SerializableTexture(Toolbox.ToUnixSlashes(System.IO.Path.Combine(
+				System.IO.Path.GetDirectoryName(root),
 				System.IO.Path.GetFileNameWithoutExtension(Toolbox.ToUnixSlashes(texturePath)))));
 		}
 
@@ -182,7 +191,9 @@ namespace Orange.FbxImporter
 		{
 			origin.Decompose(out var scale, out Matrix44 rotationMatrix, out var translation);
 			var newRotation = rotationMatrix.Rotation * CameraPostRotation;
-			return Matrix44.CreateRotation(newRotation) * Matrix44.CreateScale(scale) * Matrix44.CreateTranslation(translation);
+			return Matrix44.CreateRotation(newRotation)
+				* Matrix44.CreateScale(scale)
+				* Matrix44.CreateTranslation(translation);
 		}
 
 		private void CorrectCameraAnimationKeys(IEnumerable<Keyframe<Quaternion>> keys)
@@ -222,12 +233,16 @@ namespace Orange.FbxImporter
 			}
 		}
 
-		private static T GetOrAddAnimator<T>(AnimationData animation, Node3D n, string propName) where  T: IAnimator, new()
+		private static T GetOrAddAnimator<T>(AnimationData animation, Node3D n, string propName)
+			where T : IAnimator, new()
 		{
-			if (n.Animators.TryFind(propName, out var a)) return (T)a;
+			if (n.Animators.TryFind(propName, out var a)) {
+				return (T)a;
+			}
+
 			var animator = new T {
 				AnimationId = animation.AnimationStackName,
-				TargetPropertyPath = propName
+				TargetPropertyPath = propName,
 			};
 			n.Animators.Add(animator);
 			return animator;

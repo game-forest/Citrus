@@ -12,7 +12,13 @@ namespace Tangerine.UI.RemoteScripting
 		private int selectedIndex = -1;
 
 		public Widget ExploringWidget { get; set; }
-		public ExplorableItem SelectedItem => selectedIndex >= 0 && selectedIndex < items.Count ? items[selectedIndex] : null;
+		public ExplorableItem SelectedItem
+		{
+			get
+			{
+				return selectedIndex >= 0 && selectedIndex < items.Count ? items[selectedIndex] : null;
+			}
+		}
 
 		public ExplorableScrollView()
 		{
@@ -22,9 +28,11 @@ namespace Tangerine.UI.RemoteScripting
 			Content.CompoundPresenter.Insert(0, new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
 				Renderer.DrawRect(
-					1, rowHeight * selectedIndex + 1,
-					w.Width - 1, rowHeight * (selectedIndex + 1),
-					Theme.Colors.SelectedBackground
+					x0: 1,
+					y0: rowHeight * selectedIndex + 1,
+					x1: w.Width - 1,
+					y1: rowHeight * (selectedIndex + 1),
+					color: Theme.Colors.SelectedBackground
 				);
 			}));
 			Updating += delta => {
@@ -60,7 +68,7 @@ namespace Tangerine.UI.RemoteScripting
 						LayoutCell = new LayoutCell { VerticalAlignment = VAlignment.Center },
 						ForceUncutText = false,
 					}),
-				}
+				},
 			};
 			Content.Nodes.Add(widget);
 			items.Add(item);

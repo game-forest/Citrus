@@ -49,7 +49,7 @@ namespace Lime
 			}
 		}
 
-		class CustomShaderProgram
+		private class CustomShaderProgram
 		{
 			private ShaderProgram[] programs;
 			private string vertexShader;
@@ -57,8 +57,12 @@ namespace Lime
 			private IEnumerable<ShaderProgram.AttribLocation> attribLocations;
 			private IEnumerable<ShaderProgram.Sampler> samplers;
 
-			public CustomShaderProgram(string vertexShader, string fragmentShader, IEnumerable<ShaderProgram.AttribLocation> attribLocations, IEnumerable<ShaderProgram.Sampler> samplers)
-			{
+			public CustomShaderProgram(
+				string vertexShader,
+				string fragmentShader,
+				IEnumerable<ShaderProgram.AttribLocation> attribLocations,
+				IEnumerable<ShaderProgram.Sampler> samplers
+			) {
 				this.vertexShader = vertexShader;
 				this.fragmentShader = fragmentShader;
 				this.attribLocations = attribLocations;
@@ -74,16 +78,18 @@ namespace Lime
 					programs[(int)options] = program = new ShaderProgram(
 						new Shader[] {
 							new VertexShader(preamble + vertexShader),
-							new FragmentShader(preamble + fragmentShader)
+							new FragmentShader(preamble + fragmentShader),
 						},
-						attribLocations, samplers);
+						attribLocations,
+						samplers
+					);
 				}
 				return program;
 			}
 
 			private string CreateShaderPreamble(ShaderOptions options)
 			{
-				string result = "";
+				string result = string.Empty;
 				int bit = 1;
 				while (options != ShaderOptions.None) {
 					if (((int)options & 1) == 1) {
@@ -105,12 +111,19 @@ namespace Lime
 			oneTextureBlengingProgram = CreateShaderProgram(oneTextureVertexShader, oneTextureFragmentShader);
 			twoTexturesBlengingProgram = CreateShaderProgram(twoTexturesVertexShader, twoTexturesFragmentShader);
 			silhouetteBlendingProgram = CreateShaderProgram(oneTextureVertexShader, silhouetteFragmentShader);
-			twoTexturesSilhouetteBlendingProgram = CreateShaderProgram(twoTexturesVertexShader, twoTexturesSilhouetteFragmentShader);
-			inversedSilhouetteBlendingProgram = CreateShaderProgram(oneTextureVertexShader, inversedSilhouetteFragmentShader);
+			twoTexturesSilhouetteBlendingProgram = CreateShaderProgram(
+				twoTexturesVertexShader,
+				twoTexturesSilhouetteFragmentShader
+			);
+			inversedSilhouetteBlendingProgram = CreateShaderProgram(
+				oneTextureVertexShader,
+				inversedSilhouetteFragmentShader
+			);
 		}
 
-		public ShaderProgram GetShaderProgram(ShaderId shader, ITexture texture1, ITexture texture2, ShaderOptions options)
-		{
+		public ShaderProgram GetShaderProgram(
+			ShaderId shader, ITexture texture1, ITexture texture2, ShaderOptions options
+		) {
 			int numTextures = texture2 != null ? 2 : (texture1 != null ? 1 : 0);
 			return GetShaderProgram(shader, numTextures, options);
 		}
@@ -140,7 +153,7 @@ namespace Lime
 			return colorOnlyBlendingProgram;
 		}
 
-		readonly string oneTextureVertexShader = @"
+		private readonly string oneTextureVertexShader = @"
 			attribute vec4 inPos;
 			attribute vec4 inPos2;
 			attribute vec4 inColor;
@@ -155,7 +168,9 @@ namespace Lime
 			void main()
 			{
 				#ifdef VertexAnimation
-					gl_Position = matProjection * (globalTransform * vec4((1.0 - morphKoeff) * inPos + morphKoeff * inPos2));
+					gl_Position = matProjection * (
+						globalTransform * vec4((1.0 - morphKoeff) * inPos + morphKoeff * inPos2)
+					);
 					color = ((1.0 - morphKoeff) * inColor + morphKoeff * inColor2) * globalColor;
 				#else
 					gl_Position = matProjection * inPos;
@@ -164,7 +179,7 @@ namespace Lime
 				texCoords = inTexCoords1;
 			}";
 
-		readonly string twoTexturesVertexShader = @"
+		private readonly string twoTexturesVertexShader = @"
 			attribute vec4 inPos;
 			attribute vec4 inPos2;
 			attribute vec4 inColor;
@@ -181,7 +196,9 @@ namespace Lime
 			void main()
 			{
 				#ifdef VertexAnimation
-					gl_Position = matProjection * (globalTransform * vec4((1.0 - morphKoeff) * inPos + morphKoeff * inPos2));
+					gl_Position = matProjection * (
+						globalTransform * vec4((1.0 - morphKoeff) * inPos + morphKoeff * inPos2)
+					);
 					color = ((1.0 - morphKoeff) * inColor + morphKoeff * inColor2) * globalColor;
 				#else
 					gl_Position = matProjection * inPos;
@@ -191,14 +208,14 @@ namespace Lime
 				texCoords2 = inTexCoords2;
 			}";
 
-		readonly string colorOnlyFragmentShader = @"
+		private readonly string colorOnlyFragmentShader = @"
 			varying lowp vec4 color;
 			void main()
 			{
 				gl_FragColor = color;
 			}";
 
-		readonly string oneTextureFragmentShader = @"
+		private readonly string oneTextureFragmentShader = @"
 			varying lowp vec4 color;
 			varying lowp vec2 texCoords;
 			uniform lowp sampler2D tex1;
@@ -210,7 +227,7 @@ namespace Lime
 				#endif
 			}";
 
-		readonly string twoTexturesFragmentShader = @"
+		private readonly string twoTexturesFragmentShader = @"
 			varying lowp vec4 color;
 			varying lowp vec2 texCoords1;
 			varying lowp vec2 texCoords2;
@@ -219,7 +236,8 @@ namespace Lime
 			void main()
 			{
 				#ifdef CutOutTextureBlending
-					gl_FragColor = color * (texture2D(tex1, texCoords1) - vec4(0.0, 0.0, 0.0, texture2D(tex2, texCoords2).a));
+					gl_FragColor = color * (texture2D(tex1, texCoords1)
+						- vec4(0.0, 0.0, 0.0, texture2D(tex2, texCoords2).a));
 				#else
 					gl_FragColor = color * texture2D(tex1, texCoords1) * texture2D(tex2, texCoords2);
 				#endif
@@ -228,7 +246,7 @@ namespace Lime
 				#endif
 			}";
 
-		readonly string silhouetteFragmentShader = @"
+		private readonly string silhouetteFragmentShader = @"
 			varying lowp vec4 color;
 			varying lowp vec2 texCoords;
 			uniform lowp sampler2D tex1;
@@ -237,7 +255,7 @@ namespace Lime
 				gl_FragColor = color * vec4(1.0, 1.0, 1.0, texture2D(tex1, texCoords).a);
 			}";
 
-		readonly string twoTexturesSilhouetteFragmentShader = @"
+		private readonly string twoTexturesSilhouetteFragmentShader = @"
 			varying lowp vec4 color;
 			varying lowp vec2 texCoords1;
 			varying lowp vec2 texCoords2;
@@ -246,13 +264,22 @@ namespace Lime
 			void main()
 			{
 				#ifdef CutOutTextureBlending
-					gl_FragColor = color * (vec4(1.0, 1.0, 1.0, texture2D(tex1, texCoords1).a - texture2D(tex2, texCoords2).a));
+					gl_FragColor = color * (
+						vec4(
+							1.0,
+							1.0,
+							1.0,
+							texture2D(tex1, texCoords1).a - texture2D(tex2, texCoords2).a
+						)
+					);
 				#else
-					gl_FragColor = color * texture2D(tex1, texCoords1) * vec4(1.0, 1.0, 1.0, texture2D(tex2, texCoords2).a);
+					gl_FragColor = color
+						* texture2D(tex1, texCoords1)
+						* vec4(1.0, 1.0, 1.0, texture2D(tex2, texCoords2).a);
 				#endif
 			}";
 
-		readonly string inversedSilhouetteFragmentShader = @"
+		private readonly string inversedSilhouetteFragmentShader = @"
 			varying lowp vec4 color;
 			varying lowp vec2 texCoords;
 			uniform lowp sampler2D tex1;
@@ -345,7 +372,7 @@ namespace Lime
 			{
 				return new Shader[] {
 					new VertexShader(vertexShaderText),
-					new FragmentShader(fragmentShaderText)
+					new FragmentShader(fragmentShaderText),
 				};
 			}
 
@@ -358,12 +385,18 @@ namespace Lime
 
 			private static ITexture fontGradientTexture;
 
-			public static ITexture GradientRampTexture => fontGradientTexture = fontGradientTexture ?? new SerializableTexture("Fonts/GradientMap");
+			public static ITexture GradientRampTexture
+			{
+				get
+				{
+					return fontGradientTexture ??= new SerializableTexture("Fonts/GradientMap");
+				}
+			}
 		}
 
 		public class DashedLineShaderProgram : ShaderProgram
 		{
-			private const string vertexShaderText = @"
+			private const string VertexShaderText = @"
 				attribute vec4 inPos;
 				attribute vec4 inColor;
 				attribute vec2 inTexCoords1;
@@ -380,7 +413,7 @@ namespace Lime
 					texCoords2 = inTexCoords2;
 				}";
 
-			private const string fragmentShaderText = @"
+			private const string FragmentShaderText = @"
 				varying lowp vec4 color;
 				varying lowp vec2 texCoords1;
 				varying lowp vec2 texCoords2;
@@ -414,8 +447,8 @@ namespace Lime
 			private static IEnumerable<Shader> GetShaders()
 			{
 				return new Shader[] {
-					new VertexShader(vertexShaderText),
-					new FragmentShader(fragmentShaderText)
+					new VertexShader(VertexShaderText),
+					new FragmentShader(FragmentShaderText),
 				};
 			}
 

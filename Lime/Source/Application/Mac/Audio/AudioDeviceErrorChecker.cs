@@ -1,5 +1,4 @@
 ﻿#if MAC || MONOMAC
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -24,7 +23,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -40,14 +38,11 @@ namespace OpenTK.Audio
 {
     struct AudioDeviceErrorChecker : IDisposable
     {
-        #region Fields
 
         readonly IntPtr Device;
         static readonly string ErrorString = "Device {0} reported {1}.";
 
-        #endregion
 
-        #region Constructors
 
         public AudioDeviceErrorChecker(IntPtr device)
         {
@@ -57,9 +52,7 @@ namespace OpenTK.Audio
             Device = device;
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         public void Dispose()
         {
@@ -85,7 +78,6 @@ namespace OpenTK.Audio
             }
         }
 
-        #endregion
     }
 }
 #endif

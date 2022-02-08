@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Lime;
 using Yuzu;
-using System.Collections.Generic;
 
 namespace Tangerine.Core
 {
@@ -41,7 +41,13 @@ namespace Tangerine.Core
 			foreach (var c in this) {
 				sortedComponents.Add(c);
 			}
-			sortedComponents.Sort((a, b) => String.Compare(a.GetType().FullName, b.GetType().FullName, StringComparison.Ordinal));
+			sortedComponents.Sort(
+				(a, b) => string.Compare(
+					a.GetType().FullName,
+					b.GetType().FullName,
+					StringComparison.Ordinal
+				)
+			);
 			TangerinePersistence.Instance.WriteToFile(GetPath(), sortedComponents, Persistence.Format.Json);
 		}
 

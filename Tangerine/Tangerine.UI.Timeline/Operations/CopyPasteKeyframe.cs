@@ -65,7 +65,7 @@ namespace Tangerine.UI.Timeline.Operations
 							Frame = keyframe.Frame - startCol,
 							Property = animator.TargetPropertyPath,
 							AnimationHostOrderIndex = animationHostIndex,
-							Keyframe = keyframe
+							Keyframe = keyframe,
 						});
 					}
 				}
@@ -174,7 +174,7 @@ namespace Tangerine.UI.Timeline.Operations
 					if (node.EditorState().Locked) {
 						continue;
 					}
-					var animable = (IAnimationHost) node;
+					var animable = (IAnimationHost)node;
 					if (animable == null) {
 						continue;
 					}

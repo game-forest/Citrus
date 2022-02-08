@@ -95,22 +95,38 @@ namespace Lime.Graphics.Platform.Vulkan
 			context.EndRenderPass();
 			context.EnsureCommandBuffer();
 			context.CommandBuffer.PipelineBarrier(
-				pipelineStageMask, SharpVulkan.PipelineStageFlags.Transfer,
-				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 0, null);
+				sourceStageMask: pipelineStageMask,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.Transfer,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 0,
+				imageMemoryBarriers: null
+			);
 			var copyRegion = new SharpVulkan.BufferCopy {
 				SourceOffset = uploadBufferAlloc.BufferOffset,
 				DestinationOffset = (ulong)offset,
-				Size = (ulong)size
+				Size = (ulong)size,
 			};
 			context.CommandBuffer.CopyBuffer(uploadBufferAlloc.Buffer, backingBuffer.Buffer, 1, &copyRegion);
 			var postMemoryBarrier = new SharpVulkan.MemoryBarrier {
 				StructureType = SharpVulkan.StructureType.MemoryBarrier,
 				SourceAccessMask = SharpVulkan.AccessFlags.TransferWrite,
-				DestinationAccessMask = accessMask
+				DestinationAccessMask = accessMask,
 			};
 			context.CommandBuffer.PipelineBarrier(
-				SharpVulkan.PipelineStageFlags.Transfer, pipelineStageMask,
-				SharpVulkan.DependencyFlags.None, 1, &postMemoryBarrier, 0, null, 0, null);
+				sourceStageMask: SharpVulkan.PipelineStageFlags.Transfer,
+				destinationStageMask: pipelineStageMask,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 1,
+				memoryBarriers: &postMemoryBarrier,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 0,
+				imageMemoryBarriers: null
+			);
 		}
 	}
 }

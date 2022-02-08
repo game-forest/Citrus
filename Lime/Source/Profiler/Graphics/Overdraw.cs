@@ -138,7 +138,7 @@ namespace Lime.Profiler.Graphics
 				Enable = true,
 				BlendFunc = BlendFunc.Add,
 				SrcBlend = Blend.One,
-				DstBlend = Blend.One
+				DstBlend = Blend.One,
 			};
 		}
 	}
@@ -184,10 +184,10 @@ namespace Lime.Profiler.Graphics
 		static OverdrawInterpreter()
 		{
 			gradientTexture = new Texture2D {
-				 TextureParams = new TextureParams {
-					 WrapMode = TextureWrapMode.Clamp,
-					 MinMagFilter = TextureFilter.Nearest,
-				 }
+				TextureParams = new TextureParams {
+					WrapMode = TextureWrapMode.Clamp,
+					MinMagFilter = TextureFilter.Nearest,
+				},
 			};
 			Gradient = DefaultGradient;
 		}
@@ -198,7 +198,8 @@ namespace Lime.Profiler.Graphics
 		public static ColorGradient Gradient
 		{
 			get { return gradient; }
-			set {
+			set
+			{
 				gradient = value;
 				if (gradientRasterizationTarget == null) {
 					gradientRasterizationTarget = new Color4[OverdrawShaderProgram.StateCount];
@@ -247,10 +248,17 @@ namespace Lime.Profiler.Graphics
 			Renderer.PushState(RenderState.Transform1);
 			Renderer.Transform1 = transform;
 			Renderer.DrawSprite(
-				texture1: rawResults, texture2: gradientTexture,
-				material: Material.Instance, color: Color4.Black,
-				position: Vector2.Zero, size: (Vector2)imageSize,
-				uv0t1: Vector2.Zero, uv1t1: Vector2.One, uv0t2: Vector2.Zero, uv1t2: Vector2.Zero);
+				texture1: rawResults,
+				texture2: gradientTexture,
+				material: Material.Instance,
+				color: Color4.Black,
+				position: Vector2.Zero,
+				size: (Vector2)imageSize,
+				uv0t1: Vector2.Zero,
+				uv1t1: Vector2.One,
+				uv0t2: Vector2.Zero,
+				uv1t2: Vector2.Zero
+			);
 			Renderer.PopState();
 		}
 
@@ -269,7 +277,7 @@ namespace Lime.Profiler.Graphics
 				new GradientControlPoint(new Color4(127, 0, 127, 255), 16f / statesCount),
 				new GradientControlPoint(new Color4(178, 76, 178, 255), 23f / statesCount),
 				new GradientControlPoint(new Color4(255, 229, 229, 255), 28f / statesCount),
-				new GradientControlPoint(new Color4(255, 255, 255, 255), 38f / statesCount)
+				new GradientControlPoint(new Color4(255, 255, 255, 255), 38f / statesCount),
 			};
 			return gradient;
 		}
@@ -284,10 +292,10 @@ namespace Lime.Profiler.Graphics
 			static Material()
 			{
 				blending = new BlendState {
-					Enable    = true,
+					Enable = true,
 					BlendFunc = BlendFunc.Add,
-					SrcBlend  = Blend.One,
-					DstBlend  = Blend.Zero
+					SrcBlend = Blend.One,
+					DstBlend = Blend.Zero,
 				};
 			}
 
@@ -355,7 +363,7 @@ namespace Lime.Profiler.Graphics
 				{
 					return new Shader[] {
 						new VertexShader(VertexShader),
-						new FragmentShader(FragmentShader)
+						new FragmentShader(FragmentShader),
 					};
 				}
 			}

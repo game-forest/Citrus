@@ -97,7 +97,7 @@ namespace Citrus.Tests.Widgets
 			var enumerator = list.GetEnumerator();
 			for (int i = 0; i < 10; i++) {
 				Assert.IsNull(enumerator.Current);
-				foreach (var node in new List<Node> {node1, node2, node3}) {
+				foreach (var node in new List<Node> { node1, node2, node3 }) {
 					Assert.IsTrue(enumerator.MoveNext());
 					Assert.AreEqual(node, enumerator.Current);
 				}
@@ -162,7 +162,7 @@ namespace Citrus.Tests.Widgets
 			var node1 = new TestNode();
 			var node2 = new TestNode();
 			var node3 = new TestNode();
-			var insertingList = new List<Node>{ node1, node2, node3 };
+			var insertingList = new List<Node> { node1, node2, node3 };
 			list.AddRange(insertingList);
 			for (int i = 0; i < list.Count; i++) {
 				Assert.AreSame(list[i], insertingList[i]);
@@ -185,7 +185,7 @@ namespace Citrus.Tests.Widgets
 		public void FirstOrDefaultNotEmptyTest()
 		{
 			var node = new TestNode();
-			var list = new NodeList(new TestNode()) {node};
+			var list = new NodeList(new TestNode()) { node };
 			Assert.AreSame(node, list.FirstOrDefault());
 		}
 
@@ -194,12 +194,12 @@ namespace Citrus.Tests.Widgets
 		{
 			var owner = new TestNode();
 			var list = new NodeList(owner);
-			var node1 = new TestNode {Id = "Node1"};
+			var node1 = new TestNode { Id = "Node1" };
 			list.Insert(0, node1);
 			Assert.AreSame(list[0], node1);
 			Assert.AreSame(node1.Parent, owner);
 			Assert.IsNull(node1.NextSibling);
-			var node2 = new TestNode { Id = "Node2"};
+			var node2 = new TestNode { Id = "Node2" };
 			list.Insert(1, node2);
 			Assert.AreSame(list[1], node2);
 			Assert.AreSame(node1.NextSibling, node2);
@@ -246,8 +246,8 @@ namespace Citrus.Tests.Widgets
 			var node1 = new TestNode();
 			var node2 = new TestNode();
 			var node3 = new TestNode();
-			var nodes = new List<Node> {node1, node2, node3};
-			var list = new NodeList(owner) {node1, node2, node3};
+			var nodes = new List<Node> { node1, node2, node3 };
+			var list = new NodeList(owner) { node1, node2, node3 };
 			list.Clear();
 			Assert.AreEqual(0, list.Count);
 			foreach (var node in nodes) {

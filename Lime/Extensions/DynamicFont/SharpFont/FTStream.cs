@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013, 2016 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013, 2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -57,21 +55,11 @@ namespace SharpFont
 	/// </summary>
 	public sealed class FTStream : NativeObject
 	{
-		#region Fields
-
 		private StreamRec rec;
 
-		#endregion
-
-		#region Constructors
-
-		internal FTStream(IntPtr reference): base(reference)
+		internal FTStream(IntPtr reference) : base(reference)
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets base. For memory-based streams, this is the address of the first stream byte in memory. This field
@@ -84,7 +72,7 @@ namespace SharpFont
 				return rec.@base;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the stream size in bytes.
 		/// </summary>
@@ -204,12 +192,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Methods
-
-		#region GZIP Streams
-
 		/// <summary>
 		/// Open a new stream to parse gzip-compressed font files. This is mainly used to support the compressed
 		/// ‘*.pcf.gz’ fonts that come with XFree86.
@@ -236,13 +218,10 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Stream_OpenGzip(Reference, source.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
-
-		#endregion
-
-		#region LZW Streams
 
 		/// <summary>
 		/// Open a new stream to parse LZW-compressed font files. This is mainly used to support the compressed
@@ -270,13 +249,10 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Stream_OpenLZW(Reference, source.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
-
-		#endregion
-
-		#region BZIP2 Streams
 
 		/// <summary>
 		/// Open a new stream to parse bzip2-compressed font files. This is mainly used to support the compressed
@@ -304,12 +280,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Stream_OpenBzip2(Reference, source.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

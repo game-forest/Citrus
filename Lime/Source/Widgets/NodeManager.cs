@@ -5,10 +5,14 @@ namespace Lime
 {
 	public class NodeManager
 	{
-		[Obsolete("A temporary solution to access global hierarchy changes. Will be removed later when work on Orange plugins will be finished.")]
+		[Obsolete(
+			"A temporary solution to access global hierarchy changes. " +
+			"Will be removed later when work on Orange plugins will be finished."
+		)]
 		public static event HierarchyChangedEventHandler GlobalHierarchyChanged;
 
-		private Dictionary<Type, List<NodeComponentProcessor>> processorsByComponentType = new Dictionary<Type, List<NodeComponentProcessor>>();
+		private Dictionary<Type, List<NodeComponentProcessor>> processorsByComponentType =
+			new Dictionary<Type, List<NodeComponentProcessor>>();
 		private HashSet<Node> frozenNodes = new HashSet<Node>(ReferenceEqualityComparer.Instance);
 
 		public event HierarchyChangedEventHandler HierarchyChanged;
@@ -49,8 +53,9 @@ namespace Lime
 			}
 		}
 
-		private void GetComponentsForProcessor(Node node, NodeComponentProcessor processor, List<(NodeComponent, Node)> result)
-		{
+		private void GetComponentsForProcessor(
+			Node node, NodeComponentProcessor processor, List<(NodeComponent, Node)> result
+		) {
 			foreach (var component in node.Components) {
 				if (processor.TargetComponentType.IsAssignableFrom(component.GetType())) {
 					result.Add((component, node));
@@ -203,6 +208,6 @@ namespace Lime
 	public enum HierarchyAction
 	{
 		Link,
-		Unlink
+		Unlink,
 	}
 }

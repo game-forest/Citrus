@@ -31,8 +31,7 @@ namespace Tangerine.UI
 				return false;
 			}
 
-			if (linkInline.IsImage)
-			{
+			if (linkInline.IsImage) {
 				linkInline.Url = "file:///" + Documentation.GetImagePath(linkInline.Url.TrimStart('@'));
 			} else {
 				linkInline.Url = "file:///" + Documentation.GetDocPath(linkInline.Url.TrimStart('@'));

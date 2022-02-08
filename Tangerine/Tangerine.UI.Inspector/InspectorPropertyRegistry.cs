@@ -14,26 +14,38 @@ namespace Tangerine.UI.Inspector
 
 		public static readonly InspectorPropertyRegistry Instance = new InspectorPropertyRegistry();
 
-		static bool AllowChildren(PropertyEditorParams context)
+		private static bool AllowChildren(PropertyEditorParams context)
 		{
 			return context.Objects.All(o => NodeCompositionValidator.CanHaveChildren(o.GetType()));
 		}
 
-		InspectorPropertyRegistry()
+		private InspectorPropertyRegistry()
 		{
 			Items = new List<RegistryItem>();
-			AddEditor(c => PropertyAttributes<TangerineDropDownListPropertyEditorAttribute>.Get(c.Type, c.PropertyName) != null,
+			AddEditor(
+				c => PropertyAttributes<TangerineDropDownListPropertyEditorAttribute>
+					.Get(c.Type, c.PropertyName) != null,
 				c => {
-					var a = PropertyAttributes<TangerineDropDownListPropertyEditorAttribute>.Get(c.Type, c.PropertyName);
-					Type specializedDropDownListPropertyEditorType = typeof(DropDownListPropertyEditor<>).MakeGenericType(c.PropertyInfo.PropertyType);
-					return Activator.CreateInstance(specializedDropDownListPropertyEditorType, new object[] { c, a.EnumerateItems(c.Objects.First()) }) as IPropertyEditor;
+					var a = PropertyAttributes<TangerineDropDownListPropertyEditorAttribute>
+						.Get(c.Type, c.PropertyName);
+					Type specializedDropDownListPropertyEditorType =
+						typeof(DropDownListPropertyEditor<>).MakeGenericType(c.PropertyInfo.PropertyType);
+					return Activator.CreateInstance(
+						specializedDropDownListPropertyEditorType,
+						new object[] { c, a.EnumerateItems(c.Objects.First()) }
+					) as IPropertyEditor;
 				}
 			);
-			AddEditor(c => PropertyAttributes<TangerineFilePropertyAttribute>.Get(c.Type, c.PropertyName) != null,
+			AddEditor(
+				c => PropertyAttributes<TangerineFilePropertyAttribute>.Get(c.Type, c.PropertyName) != null,
 				c => {
 					var a = PropertyAttributes<TangerineFilePropertyAttribute>.Get(c.Type, c.PropertyName);
-					Type specializedCustomFilePropertyEditorType = typeof(CustomFilePropertyEditor<>).MakeGenericType(c.PropertyInfo.PropertyType);
-					return Activator.CreateInstance(specializedCustomFilePropertyEditorType, new object[] { c, a }) as IPropertyEditor;
+					Type specializedCustomFilePropertyEditorType =
+						typeof(CustomFilePropertyEditor<>).MakeGenericType(c.PropertyInfo.PropertyType);
+					return Activator.CreateInstance(
+						specializedCustomFilePropertyEditorType,
+						new object[] { c, a }
+					) as IPropertyEditor;
 				}
 			);
 			AddEditor(
@@ -41,7 +53,10 @@ namespace Tangerine.UI.Inspector
 					&& c.Type == typeof(AnimationBlender),
 				c => new AnimationBlenderOptionsPropertyEditor(c)
 			);
-			AddEditor(c => c.PropertyName == "ContentsPath" && c.Objects.All(o => o is Node), c => AllowChildren(c) ? new ContentsPathPropertyEditor(c) : null);
+			AddEditor(
+				c => c.PropertyName == "ContentsPath" && c.Objects.All(o => o is Node),
+				c => AllowChildren(c) ? new ContentsPathPropertyEditor(c) : null
+			);
 			AddEditor(c => c.PropertyName == "Trigger", c => AllowChildren(c) ? new TriggerPropertyEditor(c) : null);
 			AddEditor(typeof(Vector2), c => new Vector2PropertyEditor(c));
 			AddEditor(typeof(Vector3), c => new Vector3PropertyEditor(c));
@@ -76,7 +91,8 @@ namespace Tangerine.UI.Inspector
 			AddEditor(typeof(Anchors), c => new AnchorsPropertyEditor(c));
 			AddEditor(typeof(Blending), c => new BlendingPropertyEditor(c));
 			AddEditor(typeof(RenderTarget), c => new RenderTargetPropertyEditor(c));
-			AddEditor(c => {
+			AddEditor(
+				c => {
 				return
 					!c.Objects.Skip(1).Any() &&
 					c.PropertyInfo.PropertyType == typeof(ITexture) &&
@@ -98,12 +114,12 @@ namespace Tangerine.UI.Inspector
 			AddEditor(typeof(AnimatorList), _ => null);
 		}
 
-		void AddEditor(Type type, PropertyEditorBuilder builder)
+		private void AddEditor(Type type, PropertyEditorBuilder builder)
 		{
 			Items.Add(new RegistryItem(c => c.PropertyInfo.PropertyType == type, builder));
 		}
 
-		void AddEditor(Func<PropertyEditorParams, bool> condition, PropertyEditorBuilder builder)
+		private void AddEditor(Func<PropertyEditorParams, bool> condition, PropertyEditorBuilder builder)
 		{
 			Items.Add(new RegistryItem(condition, builder));
 		}

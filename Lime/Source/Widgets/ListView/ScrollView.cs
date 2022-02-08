@@ -18,7 +18,8 @@ namespace Lime
 
 		protected bool IsBeingRefreshed { get; set; }
 		public bool CanScroll { get; set; }
-		public bool ScrollBySlider {
+		public bool ScrollBySlider
+		{
 			get => scrollBySlider;
 			set
 			{
@@ -79,8 +80,23 @@ namespace Lime
 			set { SetScrollPosition(value); }
 		}
 
-		public float MinScrollPosition => CenterWhenContentFits ? -Mathf.Max(0, ProjectToScrollAxis(Frame.Size - Content.Size) * 0.5f) : 0.0f;
-		public float MaxScrollPosition => Mathf.Max(0, ProjectToScrollAxis(Content.Size - Frame.Size).Round()) + MinScrollPosition;
+		public float MinScrollPosition
+		{
+			get
+			{
+				return CenterWhenContentFits
+					? -Mathf.Max(0, ProjectToScrollAxis(Frame.Size - Content.Size) * 0.5f)
+					: 0.0f;
+			}
+		}
+
+		public float MaxScrollPosition
+		{
+			get
+			{
+				return Mathf.Max(0, ProjectToScrollAxis(Content.Size - Frame.Size).Round()) + MinScrollPosition;
+			}
+		}
 
 		private Task scrollingTask;
 
@@ -89,8 +105,7 @@ namespace Lime
 			ScrollDirection scrollDirection = ScrollDirection.Vertical,
 			bool processChildrenFirst = false,
 			ScrollViewContentWidget overriddenContent = null
-		)
-		{
+		) {
 			ScrollDirection = scrollDirection;
 			RejectOrtogonalSwipes = true;
 			Frame = frame;
@@ -171,8 +186,10 @@ namespace Lime
 		public float PositionToViewFully(Widget w)
 		{
 			var p = ProjectToScrollAxis(w.CalcPositionInSpaceOf(Content));
-			if (p < ScrollPosition)
+			if (p < ScrollPosition) {
 				return p;
+			}
+
 			return Mathf.Clamp(
 				p + ProjectToScrollAxis(w.Size) - ProjectToScrollAxis(Frame.Size), ScrollPosition, p);
 		}
@@ -230,11 +247,17 @@ namespace Lime
 		public void AssimilateChildren()
 		{
 			foreach (var ch in Frame.Nodes.ToArray()) {
-				if (ch == Content) continue;
+				if (ch == Content) {
+					continue;
+				}
+
 				ch.Unlink();
 				Content.AddNode(ch);
 				var w = ch.AsWidget;
-				if (w == null) continue;
+				if (w == null) {
+					continue;
+				}
+
 				var end = ProjectToScrollAxis(w.Position + w.Size) * (1 - ProjectToScrollAxis(w.Pivot));
 				SetProjectedSize(Content, Mathf.Max(ProjectToScrollAxis(Content.Size), end));
 			}
@@ -248,12 +271,15 @@ namespace Lime
 
 		private void Bounce()
 		{
-			if (IsScrolling())
+			if (IsScrolling()) {
 				return;
-			if (ScrollPosition < MinScrollPosition)
+			}
+
+			if (ScrollPosition < MinScrollPosition) {
 				ScrollTo(MinScrollPosition, ScrollBySlider);
-			else if (ScrollPosition > MaxScrollPosition)
+			} else if (ScrollPosition > MaxScrollPosition) {
 				ScrollTo(MaxScrollPosition, ScrollBySlider);
+			}
 		}
 
 		private IEnumerator<object> MainTask()
@@ -270,7 +296,11 @@ namespace Lime
 				} else if (dragGesture.WasRecognized()) {
 					var velocityMeter = new VelocityMeter();
 					velocityMeter.AddSample(ScrollPosition);
-					yield return HandleDragTask(velocityMeter, ProjectToScrollAxisWithFrameRotation(dragGesture.MousePressPosition), dragGesture);
+					yield return HandleDragTask(
+						velocityMeter,
+						ProjectToScrollAxisWithFrameRotation(dragGesture.MousePressPosition),
+						dragGesture
+					);
 				} else if (!dragGesture.IsRecognizing()) {
 					Bounce();
 				}
@@ -285,10 +315,12 @@ namespace Lime
 			float totalScrollAmount = 0f;
 			while (true) {
 				yield return null;
-				var IsScrollingByMouseWheel =
-					!Frame.Input.IsMousePressed() &&
-					(Frame.Input.WasKeyPressed(Key.MouseWheelDown) || Frame.Input.WasKeyPressed(Key.MouseWheelUp)) && CanScroll;
-				if (IsScrollingByMouseWheel) {
+				var isScrollingByMouseWheel = !Frame.Input.IsMousePressed()
+					&& (
+						Frame.Input.WasKeyPressed(Key.MouseWheelDown)
+						|| Frame.Input.WasKeyPressed(Key.MouseWheelUp)
+					) && CanScroll;
+				if (isScrollingByMouseWheel) {
 					var newWheelScrollState = (WheelScrollState)Math.Sign(Frame.Input.WheelScrollAmount);
 					if (newWheelScrollState != wheelScrollState) {
 						totalScrollAmount = 0f;
@@ -308,7 +340,7 @@ namespace Lime
 						// If scroll stopped in the middle, we need to round to upper int if we move down
 						// or to lower int if we move up.
 						ScrollPosition = stepPerFrame > 0 ? ScrollPosition.Ceiling() : ScrollPosition.Floor();
-						totalScrollAmount += (prevScrollPosition - ScrollPosition);
+						totalScrollAmount += prevScrollPosition - ScrollPosition;
 					}
 				} else {
 					wheelScrollState = WheelScrollState.Stop;
@@ -320,7 +352,8 @@ namespace Lime
 		{
 			while (true) {
 				var delta = Task.Current.Delta;
-				float damping = InertialScrollingDamping * (ScrollPosition.InRange(MinScrollPosition, MaxScrollPosition) ? 1 : 10);
+				float damping = InertialScrollingDamping
+					* (ScrollPosition.InRange(MinScrollPosition, MaxScrollPosition) ? 1 : 10);
 				velocity -= velocity * damping * delta;
 				if (
 					velocity.Abs() < InertialScrollingStopVelocity ||
@@ -336,8 +369,9 @@ namespace Lime
 			scrollingTask = null;
 		}
 
-		private IEnumerator<object> HandleDragTask(VelocityMeter velocityMeter, float mouseProjectedPosition, DragGesture dragGesture)
-		{
+		private IEnumerator<object> HandleDragTask(
+			VelocityMeter velocityMeter, float mouseProjectedPosition, DragGesture dragGesture
+		) {
 			if (!CanScroll || !ScrollWhenContentFits && MaxScrollPosition == 0 || ScrollBySlider) {
 				yield break;
 			}
@@ -361,7 +395,9 @@ namespace Lime
 
 		private float ClampScrollPositionWithinBounceZone(float scrollPosition)
 		{
-			return scrollPosition.Clamp(MinScrollPosition - BounceZoneThickness, MaxScrollPosition + BounceZoneThickness);
+			return scrollPosition.Clamp(
+				MinScrollPosition - BounceZoneThickness, MaxScrollPosition + BounceZoneThickness
+			);
 		}
 
 		[YuzuDontGenerateDeserializer]
@@ -437,13 +473,13 @@ namespace Lime
 		{
 			Up = -1,
 			Stop = 0,
-			Down = 1
+			Down = 1,
 		}
 
 		[YuzuDontGenerateDeserializer]
 		protected class Layout : Lime.Layout, ILayout
 		{
-			readonly Widget content;
+			private readonly Widget content;
 			protected readonly ScrollDirection direction;
 
 			public Layout(ScrollDirection direction, Widget content)
@@ -478,4 +514,3 @@ namespace Lime
 		}
 	}
 }
-

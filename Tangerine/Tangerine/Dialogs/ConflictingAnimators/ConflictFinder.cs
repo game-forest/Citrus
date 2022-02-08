@@ -109,11 +109,11 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 								KeyframeColorIndex = KeyframeColor.Get(
 									type: animable.GetType(),
 									property: property
-								)?.ColorIndex ?? 0
+								)?.ColorIndex ?? 0,
 							};
 						}
 						workProgress.IncrementConflictCount();
-						yield return  new ConflictInfo(
+						yield return new ConflictInfo(
 							nodeType: node.GetType(),
 							documentPath: scenePath,
 							relativeTextPath: GetRelativeTextPath(node, root),
@@ -145,15 +145,21 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				   .Where(a => predicate(a))
 				   .Select(a => a.Path);
 
-		private ImmutableList<(string property, IAnimable animable, SortedSet<string> animations)> GetConflicts(Node node) =>
-			node.Animators
-			    .GroupBy(i => i.TargetPropertyPath)
-			    .Where(i => i.Count(a => a.AnimationId != Animation.ZeroPoseId) > 1)
-			    .Select(i => (
-		            property: i.Key,
-		            animable: i.First().Animable,
-		            animations: new SortedSet<string>(i.Select(j => j.AnimationId ?? "Legacy")
-		        ))).ToImmutableList();
+		private ImmutableList<(
+			string property,
+			IAnimable animable,
+			SortedSet<string> animations
+		)> GetConflicts(Node node)
+		{
+			return node.Animators
+				.GroupBy(i => i.TargetPropertyPath)
+				.Where(i => i.Count(a => a.AnimationId != Animation.ZeroPoseId) > 1)
+				.Select(i => (
+					property: i.Key,
+					animable: i.First().Animable,
+					animations: new SortedSet<string>(i.Select(j => j.AnimationId ?? "Legacy")
+				))).ToImmutableList();
+		}
 
 		private static string GetRelativeTextPath(Node node, Node root)
 		{
@@ -189,7 +195,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		public enum Content
 		{
 			AssetDatabase,
-			CurrentDocument
+			CurrentDocument,
 		}
 
 		public class WorkProgress
@@ -208,7 +214,8 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 
 			public static WorkProgress Done => new WorkProgress { isCompleted = true };
 
-			protected WorkProgress() {}
+			protected WorkProgress()
+			{ }
 		}
 
 		private class WorkProgressSetter : WorkProgress

@@ -10,7 +10,6 @@ namespace Lime
 		private Vector2 Touch0 => Input.GetTouchPosition(0);
 		private Vector2 Touch1 => Input.GetTouchPosition(1);
 
-
 		public PinchGesture() : this(DragDirection.Any, exclusive: false, DefaultDragThreshold)
 		{
 		}

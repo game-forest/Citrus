@@ -8,17 +8,17 @@ namespace Tangerine.UI.Timeline
 {
 	public class OverviewPane
 	{
-		readonly Widget overlayWidget;
+		private readonly Widget overlayWidget;
 		public readonly Widget RootWidget;
 		public readonly Widget ContentWidget;
 
-		Timeline timeline => Timeline.Instance;
+		private Timeline Timeline => Timeline.Instance;
 
 		public OverviewPane()
 		{
 			ContentWidget = new CustomFrame {
 				Layout = new VBoxLayout(),
-				SizeChanged = RefreshContentScale
+				SizeChanged = RefreshContentScale,
 			};
 			overlayWidget = new Widget { Presenter = new SyncDelegatePresenter<Widget>(RenderOverlay) };
 			RootWidget = new CustomFrame {
@@ -31,7 +31,7 @@ namespace Tangerine.UI.Timeline
 					overlayWidget,
 					ContentWidget,
 				},
-				SizeChanged = RefreshContentScale
+				SizeChanged = RefreshContentScale,
 			};
 			RootWidget.Updated += _ => {
 				RefreshItemWidths();
@@ -63,19 +63,21 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		void RefreshContentScale()
+		private void RefreshContentScale()
 		{
 			ContentWidget.Scale = RootWidget.Size / Vector2.Max(Vector2.One, ContentWidget.Size);
 		}
 
-		void RenderOverlay(Widget widget)
+		private void RenderOverlay(Widget widget)
 		{
 			var size = RootWidget.Size;
 			widget.PrepareRendererState();
 			var veilColor = ColorTheme.Current.TimelineOverview.Veil;
 			var zoom = ContentWidget.Scale;
-			var a = Vector2.Floor(timeline.Offset * zoom);
-			var b = a + Vector2.Floor(new Vector2(timeline.Ruler.RootWidget.Width, timeline.Roll.RootWidget.Height) * zoom);
+			var a = Vector2.Floor(Timeline.Offset * zoom);
+			var b = a + Vector2.Floor(
+				new Vector2(Timeline.Ruler.RootWidget.Width, Timeline.Roll.RootWidget.Height) * zoom
+			);
 			b = Vector2.Min(size, b);
 			Renderer.DrawRect(0, 0, a.X, size.Y, veilColor);
 			Renderer.DrawRect(b.X, 0, size.X, size.Y, veilColor);
@@ -83,18 +85,23 @@ namespace Tangerine.UI.Timeline
 			Renderer.DrawRect(a.X, b.Y, b.X, size.Y, veilColor);
 			Renderer.DrawRectOutline(a, b, ColorTheme.Current.TimelineOverview.Border);
 
-			foreach(var m in Document.Current.Animation.Markers) {
+			foreach (var m in Document.Current.Animation.Markers) {
 				RenderMarker(m);
 			}
 		}
 
 		private void RenderMarker(Marker m)
 		{
-			Renderer.DrawRect((m.Frame * TimelineMetrics.ColWidth) * ContentWidget.Scale.X, 0,
-				m.Frame * TimelineMetrics.ColWidth * ContentWidget.Scale.X + 1, RootWidget.Height, GetMarkerColor(m));
+			Renderer.DrawRect(
+				x0: m.Frame * TimelineMetrics.ColWidth * ContentWidget.Scale.X,
+				y0: 0,
+				x1: m.Frame * TimelineMetrics.ColWidth * ContentWidget.Scale.X + 1,
+				y1: RootWidget.Height,
+				color: GetMarkerColor(m)
+			);
 		}
 
-		Color4 GetMarkerColor(Marker marker)
+		private Color4 GetMarkerColor(Marker marker)
 		{
 			switch (marker.Action) {
 				case MarkerAction.Jump:
@@ -108,7 +115,7 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		class CustomFrame : Frame
+		private class CustomFrame : Frame
 		{
 			public Action SizeChanged;
 

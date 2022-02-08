@@ -45,7 +45,8 @@ namespace Lime
 		}
 	}
 
-	public class ComponentCollection<TComponent> : ICollection<TComponent> where TComponent : Component
+	public class ComponentCollection<TComponent> : ICollection<TComponent>
+		where TComponent : Component
 	{
 		private TComponent[] list;
 
@@ -58,7 +59,7 @@ namespace Lime
 
 		public uint Version => version;
 #endif // TANGERINE
-		
+
 		public virtual bool Contains(TComponent component)
 		{
 			for (int i = 0; i < Count; i++) {
@@ -154,7 +155,8 @@ namespace Lime
 			return result != null;
 		}
 
-		public T GetOrAdd<T>() where T : TComponent, new()
+		public T GetOrAdd<T>()
+			where T : TComponent, new()
 		{
 			var c = Get<T>();
 			if (c == null) {
@@ -163,7 +165,7 @@ namespace Lime
 			}
 			return c;
 		}
-		
+
 		public virtual void Add(TComponent component)
 		{
 			if (Contains(component)) {
@@ -207,7 +209,11 @@ namespace Lime
 
 		public bool CanAdd(Type type) => CanAddHelper(type, Component.GetRule(type));
 
-		public bool CanAdd<T>() where T : TComponent => CanAddHelper(typeof(T), ComponentRuleResolver<T>.Rule);
+		public bool CanAdd<T>()
+			where T : TComponent
+		{
+			return CanAddHelper(typeof(T), ComponentRuleResolver<T>.Rule);
+		}
 
 		private bool CanAddHelper(Type type, (Type RuleDeclaringType, bool AllowMultiple) rule)
 		{
@@ -280,7 +286,8 @@ namespace Lime
 #endif // TANGERINE
 		}
 
-		public bool Replace<T>(T component) where T : TComponent
+		public bool Replace<T>(T component)
+			where T : TComponent
 		{
 			var r = Remove<T>();
 			Add(component);
@@ -352,7 +359,8 @@ namespace Lime
 			public void Dispose() { }
 		}
 
-		private static class ComponentRuleResolver<T> where T : TComponent
+		private static class ComponentRuleResolver<T>
+			where T : TComponent
 		{
 			public static readonly (Type RuleDeclaringType, bool AllowMultiple) Rule =
 				Component.GetRule(typeof(T));

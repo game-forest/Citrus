@@ -21,11 +21,23 @@ namespace Lime
 			ro.BlurMaterial.Step = ro.ProcessedUV1 * ro.BlurTextureScaling / ro.CurrentBufferSize;
 			ro.BlurMaterial.Dir = Vector2.Down;
 			ro.BlurMaterial.AlphaCorrection = ro.BlurAlphaCorrection;
-			ro.RenderToTexture(ro.FirstTemporaryBuffer.Texture, ro.ProcessedTexture, ro.BlurMaterial, Color4.White, ro.TextureClearingColor);
+			ro.RenderToTexture(
+				ro.FirstTemporaryBuffer.Texture,
+				ro.ProcessedTexture,
+				ro.BlurMaterial,
+				Color4.White,
+				ro.TextureClearingColor
+			);
 			ro.CurrentBufferSize = (Vector2)ro.BlurBuffer.Size;
 			ro.ProcessedUV1 = (Vector2)ro.ViewportSize / ro.CurrentBufferSize;
 			ro.BlurMaterial.Dir = Vector2.Right;
-			ro.RenderToTexture(ro.BlurBuffer.Texture, ro.FirstTemporaryBuffer.Texture, ro.BlurMaterial, Color4.White, ro.TextureClearingColor);
+			ro.RenderToTexture(
+				ro.BlurBuffer.Texture,
+				ro.FirstTemporaryBuffer.Texture,
+				ro.BlurMaterial,
+				Color4.White,
+				ro.TextureClearingColor
+			);
 
 			ro.BlurBuffer.SetRenderParameters(ro);
 			ro.MarkBuffersAsDirty = true;

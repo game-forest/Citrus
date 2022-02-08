@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Lime;
 
 namespace Tangerine.Core
 {

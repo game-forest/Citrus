@@ -16,18 +16,24 @@ namespace Tangerine
 					if (!string.IsNullOrEmpty(frame.ContentsPath)) {
 						var extNode = Node.Load(frame.ContentsPath);
 						if (extNode is Widget) {
-							Core.Operations.SetAnimableProperty.Perform(node, nameof(Widget.Size), ((Widget)extNode).Size);
+							Core.Operations.SetAnimableProperty.Perform(
+								node, nameof(Widget.Size), ((Widget)extNode).Size
+							);
 						}
 						continue;
 					}
 				}
 				if (node is Widget) {
 					var widget = node as Widget;
-					var originalSize = widget.Texture == null ? Widget.DefaultWidgetSize : (Vector2)widget.Texture.ImageSize;
+					var originalSize =
+						widget.Texture == null ? Widget.DefaultWidgetSize : (Vector2)widget.Texture.ImageSize;
 					Core.Operations.SetAnimableProperty.Perform(node, nameof(Widget.Size), originalSize);
 				} else if (node is ParticleModifier) {
 					var particleModifier = node as ParticleModifier;
-					var originalSize = particleModifier.Texture == null ? Widget.DefaultWidgetSize : (Vector2)particleModifier.Texture.ImageSize;
+					var originalSize =
+						particleModifier.Texture == null
+							? Widget.DefaultWidgetSize
+							: (Vector2)particleModifier.Texture.ImageSize;
 					Core.Operations.SetAnimableProperty.Perform(node, nameof(ParticleModifier.Size), originalSize);
 				}
 			}
@@ -59,8 +65,11 @@ namespace Tangerine
 		public override void ExecuteTransaction()
 		{
 			Core.Operations.Flip.Perform(
-				Core.Document.Current.SelectedNodes().Editable(),
-				Core.Document.Current.Container.AsWidget, flipX: true, flipY: false);
+				nodes: Core.Document.Current.SelectedNodes().Editable(),
+				container: Core.Document.Current.Container.AsWidget,
+				flipX: true,
+				flipY: false
+			);
 		}
 	}
 
@@ -69,8 +78,11 @@ namespace Tangerine
 		public override void ExecuteTransaction()
 		{
 			Core.Operations.Flip.Perform(
-				Core.Document.Current.SelectedNodes().Editable(),
-				Core.Document.Current.Container.AsWidget, flipX: false, flipY: true);
+				nodes: Core.Document.Current.SelectedNodes().Editable(),
+				container: Core.Document.Current.Container.AsWidget,
+				flipX: false,
+				flipY: true
+			);
 		}
 	}
 
@@ -82,7 +94,11 @@ namespace Tangerine
 			foreach (var widget in Core.Document.Current.SelectedNodes().Editable().OfType<Widget>()) {
 				Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Size), container.Size);
 				Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Rotation), 0.0f);
-				Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), widget.Pivot * container.Size);
+				Core.Operations.SetAnimableProperty.Perform(
+					widget,
+					nameof(Widget.Position),
+					widget.Pivot * container.Size
+				);
 				Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Scale), Vector2.One);
 				Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Anchors), Anchors.LeftRightTopBottom);
 			}
@@ -118,7 +134,9 @@ namespace Tangerine
 					var p0 = widget.CalcTransitionToSpaceOf(container) * aabb.A;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Size), aabb.Size);
 					var p1 = widget.CalcTransitionToSpaceOf(container) * Vector2.Zero;
-					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), widget.Position + p0 - p1);
+					Core.Operations.SetAnimableProperty.Perform(
+						widget, nameof(Widget.Position), widget.Position + p0 - p1
+					);
 				}
 			}
 		}

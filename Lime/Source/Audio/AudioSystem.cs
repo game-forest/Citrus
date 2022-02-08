@@ -30,7 +30,7 @@ namespace Lime
 		/// </summary>
 		public static float ExclusiveAudioDefaultCrossfadeTime = 0.1f;
 
-		static readonly float[] groupVolumes = { 1, 1, 1 };
+		private static readonly float[] groupVolumes = { 1, 1, 1 };
 
 		public static void Initialize(ApplicationOptions options) => PlatformAudioSystem.Initialize(options);
 
@@ -71,7 +71,10 @@ namespace Lime
 
 		public static void StopAll() => PlatformAudioSystem.StopAll();
 
-		public static void StopGroup(AudioChannelGroup group, float fadeoutTime = 0) => PlatformAudioSystem.StopGroup(group, fadeoutTime);
+		public static void StopGroup(AudioChannelGroup group, float fadeoutTime = 0)
+		{
+			PlatformAudioSystem.StopGroup(group, fadeoutTime);
+		}
 
 		public static void Update() => PlatformAudioSystem.Update();
 
@@ -134,8 +137,7 @@ namespace Lime
 			float pitch = 1f,
 			bool exclusive = false,
 			float fadeOutTime = 0f
-		)
-		{
+		) {
 			if (group == AudioChannelGroup.Music && CommandLineArgs.NoMusic) {
 				return new Sound();
 			}

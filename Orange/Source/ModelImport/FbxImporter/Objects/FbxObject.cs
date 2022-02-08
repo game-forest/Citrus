@@ -8,7 +8,7 @@ namespace Orange.FbxImporter
 
 		public FbxObject(IntPtr ptr)
 		{
-			NativePtr = ptr;	
+			NativePtr = ptr;
 		}
 	}
 }

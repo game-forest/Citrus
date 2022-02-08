@@ -1,6 +1,6 @@
-using Lime;
 using System;
 using System.Collections.Generic;
+using Lime;
 
 namespace Tangerine.Core.ExpressionParser
 {
@@ -8,7 +8,7 @@ namespace Tangerine.Core.ExpressionParser
 	{
 		private enum Operator
 		{
-			Add, Substract, Multiply, Divide, Negate, LParenthesis
+			Add, Substract, Multiply, Divide, Negate, LParenthesis,
 		}
 
 		private static readonly Dictionary<TokenType, Operator> BinaryOperators = new Dictionary<TokenType, Operator> {
@@ -23,7 +23,7 @@ namespace Tangerine.Core.ExpressionParser
 			{ Operator.Substract, 1 },
 			{ Operator.Multiply, 2 },
 			{ Operator.Divide, 2 },
-			{ Operator.Negate, 4 }
+			{ Operator.Negate, 4 },
 		};
 
 		public static bool TryParse(string input, out double output)

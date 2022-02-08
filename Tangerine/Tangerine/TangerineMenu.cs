@@ -16,7 +16,7 @@ using Tangerine.UI.SceneView;
 
 namespace Tangerine
 {
-	static class TangerineMenu
+	internal static class TangerineMenu
 	{
 		public static readonly List<ICommand> CreateNodeCommands = new List<ICommand>();
 		public static IMenu PanelsMenu;
@@ -75,7 +75,7 @@ namespace Tangerine
 			foreach (var type in registeredNodeTypes) {
 				var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
 				var cmd = new Command("Create " + type.Name) {
-					TooltipText = tooltipText
+					TooltipText = tooltipText,
 				};
 				bool isProjectSpecificType = type.Namespace != "Lime";
 				if (NodeIconPool.TryGetIcon(type, out var icon)) {
@@ -98,7 +98,13 @@ namespace Tangerine
 					}
 				}
 				CreateNodeCommands.Add(cmd);
-				CommandRegistry.Register(cmd, "CreateCommands", "Create" + type.Name, @override: true, isProjectSpecificType);
+				CommandRegistry.Register(
+					cmd,
+					"CreateCommands",
+					"Create" + type.Name,
+					@override: true,
+					isProjectSpecificType
+				);
 				CommandHandlerList.Global.Connect(cmd, new CreateNode(type, cmd));
 				if (IsNodeTypeCanBeRoot(type)) {
 					var newFileCmd = new Command(type.Name);
@@ -147,7 +153,7 @@ namespace Tangerine
 						}
 					});
 				}) {
-					TooltipText = tooltipText
+					TooltipText = tooltipText,
 				};
 				if (menuPath != null) {
 					menu.InsertCommandAlongPath(command, menuPath);
@@ -239,20 +245,20 @@ namespace Tangerine
 					GenericCommands.UpsampleAnimationTwice,
 					GenericCommands.ConvertTo,
 					SceneViewCommands.GeneratePreview,
-					SceneViewCommands.AddComponentToSelection
+					SceneViewCommands.AddComponentToSelection,
 				}),
-				new Command("Create", (create = new Menu())),
+				new Command("Create", create = new Menu()),
 				new Command("Tools", new Menu {
 					ToolsCommands.RenderToPngSequence,
 					ToolsCommands.OpenConflictingAnimatorsDialog,
 				}),
-				new Command("View", (viewMenu = new Menu {
-					new Command("Layouts", (new Menu {
+				new Command("View", viewMenu = new Menu {
+					new Command("Layouts", new Menu {
 						GenericCommands.LockLayout,
 						GenericCommands.SaveLayout,
 						GenericCommands.LoadLayout,
 						GenericCommands.DefaultLayout,
-					})),
+					}),
 					new Command("Panels", PanelsMenu),
 					new Command("Resolution", resolution),
 					Command.MenuSeparator,
@@ -266,10 +272,10 @@ namespace Tangerine
 					SceneViewCommands.ResolutionOrientation,
 					TimelineCommands.CenterTimelineOnCurrentColumn,
 					new Command("Locale", localizationMenu = new Menu()),
-				})),
+				}),
 				new Command("Window", new Menu {
 					GenericCommands.NextDocument,
-					GenericCommands.PreviousDocument
+					GenericCommands.PreviousDocument,
 				}),
 				orangeMenuCommand,
 				new Command("Git", new Menu {
@@ -280,7 +286,7 @@ namespace Tangerine
 					GenericCommands.ViewHelp,
 					GenericCommands.HelpMode,
 					GenericCommands.ViewChangelog,
-					GenericCommands.About
+					GenericCommands.About,
 				}),
 				new Command("System", new Menu {
 					GenericCommands.ResetGlobalSettings,
@@ -343,7 +349,7 @@ namespace Tangerine
 			AddOrangeCommand(
 				OrangeCommands.Build,
 				OrangeBuildCommand.Instance = new OrangeBuildCommand(build.Action) {
-					Executing = OnOrangeCommandExecuting
+					Executing = OnOrangeCommandExecuting,
 				}
 			);
 			AddOrangeCommand(OrangeCommands.RunConfig, new OrangePluginOptionsCommand());
@@ -362,7 +368,7 @@ namespace Tangerine
 			}
 
 			// TODO Duplicates code from Orange.GUI.OrangeInterface.cs. Both should be presented at one file
-			var orangeInterfaceInstance = (OrangeInterface) Orange.UserInterface.Instance;
+			var orangeInterfaceInstance = (OrangeInterface)Orange.UserInterface.Instance;
 			var updateAction = new Action<AssetCacheMode>(
 				mode => orangeInterfaceInstance.UpdateCacheModeCheckboxes(mode)
 			);
@@ -387,20 +393,23 @@ namespace Tangerine
 			CommandHandlerList.Global.Connect(
 				uploadCacheToServerCommand,
 				new OrangeCommand(UploadCacheToServer.UploadCacheToServerAction) {
-					Executing = OnOrangeCommandExecuting
+					Executing = OnOrangeCommandExecuting,
 				}
 			);
 
 			orangeMenu.Add(new Command("Cache", new Menu {
 				new Command("&Actions", new Menu {
-					uploadCacheToServerCommand
+					uploadCacheToServerCommand,
 				}),
-				new Command("Mode", new Menu{
-					orangeInterfaceInstance.CacheLocalAndRemote,
-					orangeInterfaceInstance.CacheRemote,
-					orangeInterfaceInstance.CacheLocal,
-					orangeInterfaceInstance.CacheNone,
-				})
+				new Command(
+					"Mode",
+					new Menu {
+						orangeInterfaceInstance.CacheLocalAndRemote,
+						orangeInterfaceInstance.CacheRemote,
+						orangeInterfaceInstance.CacheLocal,
+						orangeInterfaceInstance.CacheNone,
+					}
+				),
 			}));
 			var config = Orange.WorkspaceConfig.Load();
 			Orange.The.UI.LoadFromWorkspaceConfig(config, config.GetProjectConfig(citprojPath));
@@ -415,8 +424,10 @@ namespace Tangerine
 			overlaysMenu.Clear();
 			RebuildOrangeMenu(proj.CitprojPath);
 			LocalizationMenuFactory.Rebuild(localizationMenu);
-			if (proj == Project.Null)
+			if (proj == Project.Null) {
 				return;
+			}
+
 			proj.UserPreferences.Rulers.CollectionChanged += OnRulersCollectionChanged;
 			AddRulersCommands(proj.UserPreferences.DefaultRulers);
 			AddRulersCommands(proj.UserPreferences.Rulers);
@@ -462,12 +473,14 @@ namespace Tangerine
 
 		public static void AddRulersCommands(IEnumerable rulers, bool issueCommands = false)
 		{
-			if (rulers == null)
+			if (rulers == null) {
 				return;
+			}
+
 			foreach (Ruler ruler in rulers) {
 				Command c;
 				ruler.Components.Add(new CommandComponent {
-					Command = (c = new Command(ruler.Name))
+					Command = c = new Command(ruler.Name),
 				});
 				CommandHandlerList.Global.Connect(c, new RulerToggleCommandHandler(ruler.Name));
 				if (issueCommands) {
@@ -478,8 +491,10 @@ namespace Tangerine
 
 		public static void RemoveRulersCommands(IEnumerable rulers)
 		{
-			if (rulers == null)
+			if (rulers == null) {
 				return;
+			}
+
 			foreach (Ruler ruler in rulers) {
 				CommandHandlerList.Global.Disconnect(ruler.Components.Get<CommandComponent>().Command);
 				ProjectUserPreferences.Instance.DisplayedRulers.Remove(ruler.Name);
@@ -492,7 +507,7 @@ namespace Tangerine
 			var commands = new List<ICommand>(overlays.Count) {
 				GenericCommands.Overlay1, GenericCommands.Overlay2, GenericCommands.Overlay3,
 				GenericCommands.Overlay4, GenericCommands.Overlay5, GenericCommands.Overlay6,
-				GenericCommands.Overlay7, GenericCommands.Overlay8, GenericCommands.Overlay9
+				GenericCommands.Overlay7, GenericCommands.Overlay8, GenericCommands.Overlay9,
 			};
 			int lastIndex = 0;
 			foreach (var overlayPair in overlays) {
@@ -516,7 +531,7 @@ namespace Tangerine
 			var menu = new Menu();
 			int counter = 1;
 			foreach (var document in recentDocuments) {
-				string name = System.String.Format("{0}. {1}", counter++, document);
+				string name = string.Format("{0}. {1}", counter++, document);
 				menu.Add(new Command(name, () => {
 					if (Project.Current.OpenDocument(document) == null) {
 						AlertDialog.Show($"File `{document}` not found");
@@ -538,9 +553,9 @@ namespace Tangerine
 			var menu = new Menu();
 			int counter = 1;
 			foreach (var project in recentProjects) {
-				string name = System.String.Format("{0}. {1} ({2})", counter++, System.IO.Path.GetFileName(project),
-					System.IO.Path.GetDirectoryName(project));
-				menu.Add(new Command(name, () =>  {
+				string name =
+					$"{counter++}. {System.IO.Path.GetFileName(project)} ({System.IO.Path.GetDirectoryName(project)})";
+				menu.Add(new Command(name, () => {
 					if (Project.Current.Close()) {
 						if (File.Exists(project)) {
 							_ = new Project(project);

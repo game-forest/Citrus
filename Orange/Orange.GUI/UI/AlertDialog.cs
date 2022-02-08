@@ -5,10 +5,10 @@ namespace Orange
 {
 	public class AlertDialog
 	{
-		readonly Window window;
-		readonly WindowWidget rootWidget;
-		readonly Widget buttonsPanel;
-		int result;
+		private readonly Window window;
+		private readonly WindowWidget rootWidget;
+		private readonly Widget buttonsPanel;
+		private int result;
 
 		public AlertDialog(string text, params string[] buttons)
 		{
@@ -19,7 +19,7 @@ namespace Orange
 				FixedSize = true,
 				Title = "Orange",
 				Visible = false,
-				Style = WindowStyle.Dialog
+				Style = WindowStyle.Dialog,
 			});
 			rootWidget = new ThemedInvalidableWindowWidget(window) {
 				LayoutBasedWindowSize = true,
@@ -27,13 +27,13 @@ namespace Orange
 				Layout = new VBoxLayout { Spacing = 16 },
 				Nodes = {
 					new ThemedSimpleText(text) {
-						Padding = new Thickness(4)
+						Padding = new Thickness(4),
 					},
 					(buttonsPanel = new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
 						LayoutCell = new LayoutCell(Alignment.RightCenter, 1, 0),
-					})
-				}
+					}),
+				},
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
 			var cancelIndex = buttons.ToList().IndexOf("Cancel");
@@ -55,7 +55,7 @@ namespace Orange
 			}
 		}
 
-		void Close(int result)
+		private void Close(int result)
 		{
 			this.result = result;
 			window.Close();
@@ -76,7 +76,9 @@ namespace Orange
 
 	public class ConfirmationDialog : AlertDialog
 	{
-		public ConfirmationDialog(string text): base(text, "Yes", "No") { }
+		public ConfirmationDialog(string text)
+			: base(text, "Yes", "No")
+		{ }
 
 		public new bool Show()
 		{

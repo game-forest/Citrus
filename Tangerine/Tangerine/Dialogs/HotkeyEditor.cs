@@ -1,8 +1,8 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Lime;
 using Tangerine.Core;
 using Tangerine.UI;
 
@@ -54,10 +54,14 @@ namespace Tangerine.Dialogs
 			}
 			foreach (var command in Profile.Commands) {
 				var key = command.Shortcut.Main;
-				if (key == Key.Unknown)
+				if (key == Key.Unknown) {
 					continue;
-				if (!buttons.TryGetValue(key, out var b))
+				}
+
+				if (!buttons.TryGetValue(key, out var b)) {
 					continue;
+				}
+
 				b.Commands.Add(command);
 			}
 		}
@@ -67,10 +71,10 @@ namespace Tangerine.Dialogs
 			if (Category == null) {
 				return;
 			}
-			bool isGenericCategory = (Category.Id == typeof(GenericCommands).Name);
+			bool isGenericCategory = Category.Id == typeof(GenericCommands).Name;
 			SelectedCommands = isGenericCategory ? Profile.Commands.Where(IsCommandSelected) :
 				Profile.Commands.Where(i => IsCommandSelected(i) && i.CategoryInfo == Category);
-			foreach (var (key, button)  in buttons) {
+			foreach (var (key, button) in buttons) {
 				button.CommandName = null;
 				button.CommandState = KeyboardCommandState.None;
 				var currentCommands = isGenericCategory ?
@@ -192,7 +196,6 @@ namespace Tangerine.Dialogs
 			}
 		}
 
-
 		private void BuildKeyboard()
 		{
 			Layout = new TableLayout { ColumnCount = 3, RowCount = 1, Spacing = 20 };
@@ -206,17 +209,17 @@ namespace Tangerine.Dialogs
 			var leftPart = new Widget {
 				Layout = new TableLayout { ColumnCount = 1, RowCount = 6, Spacing = 4 },
 				Nodes = { fRow, numbersRow, firstRow, secondRow, thirdRow, controlsRow },
-				LayoutCell = new LayoutCell { StretchX = 15 }
+				LayoutCell = new LayoutCell { StretchX = 15 },
 			};
 
 			var middlePart = new Widget {
 				Layout = new TableLayout { ColumnCount = 3, RowCount = 6, Spacing = 4 },
-				LayoutCell = new LayoutCell { StretchX = 3 }
+				LayoutCell = new LayoutCell { StretchX = 3 },
 			};
 
 			var rightPart = new Widget {
 				Layout = new TableLayout { ColumnCount = 4, RowCount = 7, Spacing = 4 },
-				LayoutCell = new LayoutCell { StretchX = 4 }
+				LayoutCell = new LayoutCell { StretchX = 4 },
 			};
 
 			for (int i = Key.F1.Code; i <= Key.F12.Code; ++i) {
@@ -369,7 +372,7 @@ namespace Tangerine.Dialogs
 			var button = new KeyboardButton(key) {
 				Text = string.IsNullOrEmpty(text) ? key.ToString() : text,
 				MinSize = Vector2.Zero,
-				MaxSize = Vector2.PositiveInfinity
+				MaxSize = Vector2.PositiveInfinity,
 			};
 			buttons[key] = button;
 			if (key.IsModifier()) {
@@ -384,30 +387,30 @@ namespace Tangerine.Dialogs
 			var space = new Widget {
 				MinSize = Vector2.Zero,
 				MaxSize = Vector2.PositiveInfinity,
-				LayoutCell = new LayoutCell { RowSpan = rowSpan, ColumnSpan = columnSpan }
+				LayoutCell = new LayoutCell { RowSpan = rowSpan, ColumnSpan = columnSpan },
 			};
 			parent.AddNode(space);
 			return space;
 		}
 	}
 
-	enum KeyboardButtonState
+	internal enum KeyboardButtonState
 	{
 		None = 0,
 		Press,
-		Hold
+		Hold,
 	}
 
-	enum KeyboardCommandState
+	internal enum KeyboardCommandState
 	{
 		None = 0,
 		Generic = 1,
 		Panel = 2,
 		Both = 3,
-		HalfPanel = 4
+		HalfPanel = 4,
 	}
 
-	class KeyboardButton : ThemedButton
+	internal class KeyboardButton : ThemedButton
 	{
 		private readonly SimpleText commandName;
 
@@ -426,14 +429,14 @@ namespace Tangerine.Dialogs
 				HAlignment = HAlignment.Left,
 				VAlignment = VAlignment.Top,
 				OverflowMode = TextOverflowMode.Ellipsis,
-				Padding = new Thickness(5, 2)
+				Padding = new Thickness(5, 2),
 			};
 			Nodes.Add(commandName);
 			commandName.ExpandToContainerWithAnchors();
 			commandName.Height -= caption.FontHeight;
 
 			Key = key;
-			((KeyboardButtonPresenter) Presenter).IsModifier = Key.IsModifier();
+			((KeyboardButtonPresenter)Presenter).IsModifier = Key.IsModifier();
 			State = KeyboardButtonState.None;
 			Components.Add(new TooltipComponent(() => {
 				var tooltip = new StringBuilder();
@@ -462,7 +465,8 @@ namespace Tangerine.Dialogs
 		public KeyboardButtonState State
 		{
 			get => state;
-			set {
+			set
+			{
 				state = value;
 				(Presenter as IButtonPresenter).SetState(state.ToString());
 			}
@@ -471,7 +475,7 @@ namespace Tangerine.Dialogs
 		public readonly Key Key;
 	}
 
-	class KeyboardButtonPresenter : SyncCustomPresenter, ThemedButton.IButtonPresenter
+	internal class KeyboardButtonPresenter : SyncCustomPresenter, ThemedButton.IButtonPresenter
 	{
 		private Color4 borderColor;
 		public bool IsModifier { get; set; } = false;

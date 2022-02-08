@@ -44,22 +44,24 @@ namespace Orange
 			JToken result = null;
 
 			foreach (var token in GetPathTokens(path)) {
-				if (token == null)
+				if (token == null) {
 					return @default;
+				}
 
 				result = token;
 			}
 
 			var value = result as JValue;
-			return value == null ? default(T) : (T) value.Value;
+			return value == null ? default(T) : (T)value.Value;
 		}
 
 		private IEnumerable<JToken> GetPathTokens(string path)
 		{
 			var json = JObject;
 			foreach (var element in path.Split('/')) {
-				if (json == null)
+				if (json == null) {
 					throw new Lime.Exception("{0} is not defined in {1}", path, sourcePath);
+				}
 
 				JToken token;
 				json.TryGetValue(element, out token);
@@ -71,8 +73,10 @@ namespace Orange
 
 		public void AddToArray(string name, object target)
 		{
-			if (name == null)
+			if (name == null) {
 				return;
+			}
+
 			var array = JObject.GetValue(name) as JArray;
 			if (array == null) {
 				array = new JArray();
@@ -83,8 +87,10 @@ namespace Orange
 
 		public void RemoveFromArray(string name, object target)
 		{
-			if (name == null)
+			if (name == null) {
 				return;
+			}
+
 			var array = JObject.GetValue(name) as JArray;
 			var targetJson = JObject.FromObject(target);
 			if (array != null) {

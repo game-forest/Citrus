@@ -49,7 +49,7 @@ namespace Lime
 		/// <summary>
 		/// Префикс ключа для комментариев
 		/// </summary>
-		private const string commentKeyPrefix = "_COMMENT";
+		private const string CommentKeyPrefix = "_COMMENT";
 
 		public Dictionary<string, LocalizationEntry>.KeyCollection Keys => dictionary.Keys;
 
@@ -109,7 +109,7 @@ namespace Lime
 		/// <returns></returns>
 		public static bool IsComment(string key)
 		{
-			return key.StartsWith(commentKeyPrefix);
+			return key.StartsWith(CommentKeyPrefix);
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Lime
 		/// <param name="comment">Текст комментария</param>
 		public void AddComment(string comment)
 		{
-			var e = GetEntry(commentKeyPrefix + commentsCounter.ToString());
+			var e = GetEntry(CommentKeyPrefix + commentsCounter.ToString());
 			e.Context = comment;
 
 			commentsCounter += 1;
@@ -189,7 +189,11 @@ namespace Lime
 
 		public Dictionary<string, LocalizationEntry>.Enumerator GetEnumerator() => dictionary.GetEnumerator();
 
-		IEnumerator<KeyValuePair<string, LocalizationEntry>> IEnumerable<KeyValuePair<string, LocalizationEntry>>.GetEnumerator() => GetEnumerator();
+		IEnumerator<KeyValuePair<string, LocalizationEntry>>
+			IEnumerable<KeyValuePair<string, LocalizationEntry>>.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}

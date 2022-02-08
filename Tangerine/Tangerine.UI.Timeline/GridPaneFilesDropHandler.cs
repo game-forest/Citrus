@@ -30,7 +30,8 @@ namespace Tangerine.UI.Timeline
 									cellUnderMouseOnFilesDrop.Y),
 								decodedAnimationId);
 							return;
-						} catch { }
+						} catch {
+						}
 					}
 					if (!Utils.ExtractAssetPathOrShowAlert(file, out var assetPath, out var assetType)) {
 						continue;
@@ -40,7 +41,8 @@ namespace Tangerine.UI.Timeline
 							if (Document.Current.VisibleSceneItems.Count == 0) {
 								continue;
 							}
-							var widget = Document.Current.VisibleSceneItems[cellUnderMouseOnFilesDrop.Y].Components.Get<NodeSceneItem>()?.Node as Widget;
+							var widget = Document.Current.VisibleSceneItems[cellUnderMouseOnFilesDrop.Y].Components
+									.Get<NodeSceneItem>()?.Node as Widget;
 							if (widget == null) {
 								continue;
 							}
@@ -61,7 +63,7 @@ namespace Tangerine.UI.Timeline
 							SetProperty.Perform(node, nameof(Audio.Volume), 1);
 							var key = new Keyframe<AudioAction> {
 								Frame = cellUnderMouseOnFilesDrop.X,
-								Value = AudioAction.Play
+								Value = AudioAction.Play,
 							};
 							SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.Animation, key);
 							break;

@@ -8,7 +8,7 @@ namespace Tangerine.UI.Timeline
 {
 	public class CurveEditorSelectAndDragKeysProcessor : ITaskProvider
 	{
-		readonly CurveEditorPane curveEditor;
+		private readonly CurveEditorPane curveEditor;
 
 		public CurveEditorSelectAndDragKeysProcessor(CurveEditorPane curveEditor)
 		{
@@ -27,7 +27,11 @@ namespace Tangerine.UI.Timeline
 						var currentMousePos = initialMousePos;
 						var rectanglePresenter = new SyncDelegatePresenter<Widget>(w => {
 							w.PrepareRendererState();
-							Renderer.DrawRectOutline(initialMousePos, currentMousePos, ColorTheme.Current.TimelineCurveEditor.Selection);
+							Renderer.DrawRectOutline(
+								initialMousePos,
+								currentMousePos,
+								ColorTheme.Current.TimelineCurveEditor.Selection
+							);
 						});
 						curveEditor.ContentWidget.CompoundPostPresenter.Add(rectanglePresenter);
 						while (input.IsMousePressed()) {
@@ -48,7 +52,7 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		void SelectKeysWithinRectangle(Curve curve, Rectangle rect)
+		private void SelectKeysWithinRectangle(Curve curve, Rectangle rect)
 		{
 			foreach (var k in curve.Animator.ReadonlyKeys.ToList()) {
 				var p = curveEditor.CalcPosition(curve, k.Frame);

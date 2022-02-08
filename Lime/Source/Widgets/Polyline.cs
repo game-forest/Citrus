@@ -32,7 +32,7 @@ namespace Lime
 			Thickness = 1f;
 		}
 
-		static Vector2 GetVectorNormal(Vector2 v)
+		private static Vector2 GetVectorNormal(Vector2 v)
 		{
 			return new Vector2(-v.Y, v.X).Normalized;
 		}
@@ -75,8 +75,7 @@ namespace Lime
 					if (!Closed || Vertices.Count == 2) {
 						DrawHalfLeft(Vertices[0], Vertices[1]);
 						DrawHalfRight(Vertices[Vertices.Count - 1], Vertices[Vertices.Count - 2]);
-					}
-					else {
+					} else {
 						DrawPart(
 							Vertices[Vertices.Count - 1],
 							Vertices[0],
@@ -126,8 +125,7 @@ namespace Lime
 					FillJointGap(p, b, n1, n2);
 					DrawQuad(a - n1, b - n1, p, a + n1);
 					DrawQuad(c - n2, b - n2, p, c + n2);
-				}
-				else {
+				} else {
 					FillJointGap(b, b, n1, n2);
 					DrawQuad(a - n1, b - n1, b + n1, a + n1);
 					DrawQuad(c - n2, b - n2, b + n2, c + n2);

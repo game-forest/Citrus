@@ -19,27 +19,32 @@ namespace Tangerine
 		public readonly RichTextHighlightComponent Header;
 		public RichText HeaderRichText { get; private set; }
 
-		public LookupDialogItem(string headerText, string text, Action action) : base(text, action)
+		public LookupDialogItem(string headerText, string text, Action action)
+			: base(text, action)
 		{
 			Header = new RichTextHighlightComponent(headerText, HighlightedTextStyleId);
 		}
 
-		public LookupDialogItem(string headerText, string text, string label, Action action) : this(headerText, text, action)
+		public LookupDialogItem(string headerText, string text, string label, Action action)
+			: this(headerText, text, action)
 		{
 			this.label = label;
 		}
 
-		public LookupDialogItem(string headerText, string text, Shortcut shortcut, Action action) : this(headerText, text, action)
+		public LookupDialogItem(string headerText, string text, Shortcut shortcut, Action action)
+			: this(headerText, text, action)
 		{
 			this.shortcut = shortcut;
 		}
 
-		public LookupDialogItem(string headerText, string text, ITexture iconTexture, Action action) : this(headerText, text, action)
+		public LookupDialogItem(string headerText, string text, ITexture iconTexture, Action action)
+			: this(headerText, text, action)
 		{
 			this.iconTexture = iconTexture;
 		}
 
-		public LookupDialogItem(string headerText, string text, Shortcut shortcut, ITexture iconTexture, Action action) : this(headerText, text, action)
+		public LookupDialogItem(string headerText, string text, Shortcut shortcut, ITexture iconTexture, Action action)
+			: this(headerText, text, action)
 		{
 			this.shortcut = shortcut;
 			this.iconTexture = iconTexture;
@@ -63,7 +68,7 @@ namespace Tangerine
 					new Image {
 						LayoutCell = new LayoutCell {
 							Stretch = Vector2.Zero,
-							Alignment = new Alignment { X = HAlignment.Center, Y = VAlignment.Center }
+							Alignment = new Alignment { X = HAlignment.Center, Y = VAlignment.Center },
 						},
 						Padding = new Thickness(right: IconRightPadding),
 						MinMaxSize = new Vector2(IconSize + IconRightPadding, IconSize),
@@ -94,7 +99,7 @@ namespace Tangerine
 						},
 						Components = { Header },
 					}),
-				}
+				},
 			});
 
 			if (string.IsNullOrEmpty(NameRichText.Text)) {
@@ -106,7 +111,7 @@ namespace Tangerine
 				var widget = new Widget {
 					LayoutCell = new LayoutCell {
 						Stretch = Vector2.Zero,
-						Alignment = new Alignment { X = HAlignment.Right, Y = VAlignment.Center }
+						Alignment = new Alignment { X = HAlignment.Right, Y = VAlignment.Center },
 					},
 					Layout = new HBoxLayout { Spacing = Spacing },
 					Padding = new Thickness(left: 10, right: 15, top: 3),
@@ -122,7 +127,9 @@ namespace Tangerine
 						ForceUncutText = false,
 						MinMaxHeight = 18.0f,
 					};
-					var v = simpleText.Font.MeasureTextLine(simpleText.Text, simpleText.FontHeight, simpleText.LetterSpacing);
+					var v = simpleText.Font.MeasureTextLine(
+						simpleText.Text, simpleText.FontHeight, simpleText.LetterSpacing
+					);
 					simpleText.MinMaxWidth = v.X + simpleText.Padding.Left + simpleText.Padding.Right;
 					width += simpleText.MaxWidth;
 					simpleText.CompoundPresenter.Add(shortcutPresenter);
@@ -132,13 +139,25 @@ namespace Tangerine
 					AddLabel(label);
 				}
 				if (shortcut.Main != Key.Unknown) {
-					if (shortcut.Modifiers.HasFlag(Modifiers.Alt)) AddLabel("Alt");
-					if (shortcut.Modifiers.HasFlag(Modifiers.Shift)) AddLabel("Shift");
-					if (shortcut.Modifiers.HasFlag(Modifiers.Control)) AddLabel("Ctrl");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Alt)) {
+						AddLabel("Alt");
+					}
+
+					if (shortcut.Modifiers.HasFlag(Modifiers.Shift)) {
+						AddLabel("Shift");
+					}
+
+					if (shortcut.Modifiers.HasFlag(Modifiers.Control)) {
+						AddLabel("Ctrl");
+					}
 #if MAC
-					if (shortcut.Modifiers.HasFlag(Modifiers.Command)) AddLabel("Cmd");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Command)) {
+						AddLabel("Cmd");
+					}
 #else
-					if (shortcut.Modifiers.HasFlag(Modifiers.Win)) AddLabel("Win");
+					if (shortcut.Modifiers.HasFlag(Modifiers.Win)) {
+						AddLabel("Win");
+					}
 #endif
 					AddLabel(shortcut.Main.ToString());
 				}

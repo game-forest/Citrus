@@ -36,9 +36,24 @@ namespace Lime
 			#ifdef SKIN_ENABLED
 				#ifdef DUAL_QUATERNION_SKINNING
 					// Take in account antipodality
-					float xySign = sign(dot(u_DualQuaternionPartA[int(a_BlendIndices.y)], u_DualQuaternionPartA[int(a_BlendIndices.x)]));
-					float xzSign = sign(dot(u_DualQuaternionPartA[int(a_BlendIndices.z)], u_DualQuaternionPartA[int(a_BlendIndices.x)]));
-					float xwSign = sign(dot(u_DualQuaternionPartA[int(a_BlendIndices.w)], u_DualQuaternionPartA[int(a_BlendIndices.x)]));
+					float xySign = sign(
+						dot(
+							u_DualQuaternionPartA[int(a_BlendIndices.y)],
+							u_DualQuaternionPartA[int(a_BlendIndices.x)]
+						)
+					);
+					float xzSign = sign(
+						dot(
+							u_DualQuaternionPartA[int(a_BlendIndices.z)],
+							u_DualQuaternionPartA[int(a_BlendIndices.x)]
+						)
+					);
+					float xwSign = sign(
+						dot(
+							u_DualQuaternionPartA[int(a_BlendIndices.w)],
+							u_DualQuaternionPartA[int(a_BlendIndices.x)]
+						)
+					);
 					vec4 b_0 =
 						u_DualQuaternionPartA[int(a_BlendIndices.x)] * a_BlendWeights.x +
 						u_DualQuaternionPartA[int(a_BlendIndices.y)] * xySign * a_BlendWeights.y +
@@ -128,13 +143,13 @@ namespace Lime
 			var preamble = BuildPreamble(spec);
 			return new Shader[] {
 				new VertexShader(preamble + VertexShader),
-				new FragmentShader(preamble + FragmentShader)
+				new FragmentShader(preamble + FragmentShader),
 			};
 		}
 
 		private static string BuildPreamble(CommonMaterialProgramSpec spec)
 		{
-			var preamble = "";
+			var preamble = string.Empty;
 			if (spec.ShadowRenderingMode) {
 				preamble += "#define SHADOWS_RENDERING_MODE\n";
 			}
@@ -144,7 +159,7 @@ namespace Lime
 			if (spec.DiffuseTextureEnabled) {
 				preamble += "#define DIFFUSE_TEXTURE_ENABLED\n";
 			}
-			switch(spec.SkinningMode) {
+			switch (spec.SkinningMode) {
 				case SkinningMode.Linear:
 					preamble += "#define LINEAR_SKINNING\n";
 					break;
@@ -168,7 +183,7 @@ namespace Lime
 		private static Sampler[] GetSamplers(CommonMaterialProgramSpec spec)
 		{
 			return new[] {
-				new Sampler { Name = "u_DiffuseTexture", Stage = DiffuseTextureStage }
+				new Sampler { Name = "u_DiffuseTexture", Stage = DiffuseTextureStage },
 			};
 		}
 
@@ -179,7 +194,7 @@ namespace Lime
 				new AttribLocation { Name = "a_UV", Index = ShaderPrograms.Attributes.UV1 },
 				new AttribLocation { Name = "a_Color", Index = ShaderPrograms.Attributes.Color1 },
 				new AttribLocation { Name = "a_BlendIndices", Index = ShaderPrograms.Attributes.BlendIndices },
-				new AttribLocation { Name = "a_BlendWeights", Index = ShaderPrograms.Attributes.BlendWeights }
+				new AttribLocation { Name = "a_BlendWeights", Index = ShaderPrograms.Attributes.BlendWeights },
 			};
 		}
 	}

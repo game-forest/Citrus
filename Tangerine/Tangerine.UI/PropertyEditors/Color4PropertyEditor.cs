@@ -37,10 +37,10 @@ namespace Tangerine.UI
 							colorBoxButton,
 							CreatePipetteButton(),
 							panel.ButtonsWidget,
-							Spacer.HStretch()
+							Spacer.HStretch(),
 						},
-					}
-				}		
+					},
+				},
 			});
 			panel.ButtonsWidget.MinMaxHeight = 20;
 			panel.ButtonsWidget.Padding = new Thickness(left: 1);
@@ -85,7 +85,9 @@ namespace Tangerine.UI
 			};
 			panel.Changed += () => {
 				EditorParams.History?.RollbackTransaction();
-				if ((panel.Color.ABGR & 0xFFFFFF) == (previousColor.ABGR & 0xFFFFFF) && panel.Color.A != previousColor.A) {
+				if (
+					(panel.Color.ABGR & 0xFFFFFF) == (previousColor.ABGR & 0xFFFFFF) && panel.Color.A != previousColor.A
+				) {
 					SetProperty<Color4>(c => {
 						c.A = panel.Color.A;
 						return c;
@@ -139,7 +141,7 @@ namespace Tangerine.UI
 			var match = Regex.Match(value, @"^\s*\[\s*(\d+)\s*\]\s*$");
 			if (match.Success && uint.TryParse(match.Groups[1].Value, out var number)) {
 				editor.Text = $"{0x000000FF & number}. {(0x0000FF00 & number) >> 8}. " +
-				              $"{(0x00FF0000 & number) >> 16}. {(0xFF000000 & number) >> 24}";
+							  $"{(0x00FF0000 & number) >> 16}. {(0xFF000000 & number) >> 24}";
 			}
 		}
 
@@ -185,15 +187,25 @@ namespace Tangerine.UI
 					var value = color.Value.Value;
 					widget.PrepareRendererState();
 					Renderer.DrawRect(Vector2.Zero, widget.Size, Color4.White);
-					Renderer.DrawRect(Vector2.Zero,
-						new Vector2(widget.Size.X / 2, widget.Size.Y), new Color4(value.ABGR | 0xFF000000));
+					Renderer.DrawRect(
+						Vector2.Zero,
+						new Vector2(widget.Size.X / 2, widget.Size.Y),
+						new Color4(value.ABGR | 0xFF000000)
+					);
 					var checkSize = new Vector2(widget.Width / 4, widget.Height / 3);
 					for (int i = 0; i < 3; i++) {
-						var checkPos = new Vector2(widget.Width / 2 + ((i == 1) ? widget.Width / 4 : 0), i * checkSize.Y);
+						var checkPos = new Vector2(
+							widget.Width / 2 + ((i == 1) ? widget.Width / 4 : 0),
+							i * checkSize.Y
+						);
 						Renderer.DrawRect(checkPos, checkPos + checkSize, Color4.Black);
 					}
 					Renderer.DrawRect(Vector2.Zero, widget.Size, value);
-					Renderer.DrawRectOutline(Vector2.Zero, widget.Size, ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox);
+					Renderer.DrawRectOutline(
+						Vector2.Zero,
+						widget.Size,
+						ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox
+					);
 				});
 			}
 		}

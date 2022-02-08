@@ -4,7 +4,9 @@ namespace Orange
 	{
 		Win,
 		Mac,
+#pragma warning disable SA1300 // Element should begin with upper-case letter
 		iOS,
-		Android
+#pragma warning restore SA1300 // Element should begin with upper-case letter
+		Android,
 	}
 }

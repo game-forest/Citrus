@@ -38,7 +38,11 @@ namespace Tangerine
 				var closeConfirmation = Document.CloseConfirmation;
 				try {
 					Document.CloseConfirmation = d => {
-						var alert = new AlertDialog($"Save the changes to document '{d.Path}' before closing?", "Yes", "No");
+						var alert = new AlertDialog(
+							$"Save the changes to document '{d.Path}' before closing?",
+							"Yes",
+							"No"
+						);
 						switch (alert.Show()) {
 							case 0: return Document.CloseAction.SaveChanges;
 							default: return Document.CloseAction.DiscardChanges;
@@ -60,7 +64,7 @@ namespace Tangerine
 
 		private static bool TrySelectFileSavePath(out string path, string[] allowedFileTypes = null)
 		{
-			var test = Project.IsDocumentUntitled(Document.Current?.Path ?? "") ?
+			var test = Project.IsDocumentUntitled(Document.Current?.Path ?? string.Empty) ?
 					Project.Current.AssetsDirectory : Path.GetDirectoryName(Document.Current?.FullPath);
 			var dlg = new FileDialog {
 				AllowedFileTypes = allowedFileTypes ?? new string[] { "txt" },

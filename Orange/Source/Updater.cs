@@ -9,7 +9,7 @@ using Octokit;
 
 namespace Orange
 {
-	static class Updater
+	internal static class Updater
 	{
 		private static GitHubClient client = new GitHubClient(new ProductHeaderValue("mrojkov-citrus-auto-updater"));
 		private static bool firstUpdate = true;
@@ -18,7 +18,7 @@ namespace Orange
 		public static async Task CheckForUpdates()
 		{
 			var task = Task.Run(async () => {
-				for (;;)
+				for (; ; )
 				{
 					if (!firstUpdate) {
 						await Task.Delay(TimeSpan.FromMinutes(5.0));
@@ -38,7 +38,9 @@ namespace Orange
 					if (tagName == latest.TagName) {
 						continue;
 					}
-					var exePath = Path.GetDirectoryName(Uri.UnescapeDataString((new Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath));
+					var exePath = Path.GetDirectoryName(
+						Uri.UnescapeDataString(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath)
+					);
 #if MAC
 					exePath = Path.Combine(exePath, "..", "..", "..");
 #endif // MAC
@@ -48,7 +50,10 @@ namespace Orange
 					}
 					File.Create(updatingFlagPath).Dispose();
 					try {
-						Console.WriteLine($"oh wow, you had a {tagName} version and new {latest.TagName} version is available! Downloading update!");
+						Console.WriteLine(
+							$"oh wow, you had a {tagName} version and new {latest.TagName} version " +
+							$"is available! Downloading update!"
+						);
 						// TODO: select corresponding asset for OS
 						var platformString =
 #if WIN
@@ -63,10 +68,16 @@ namespace Orange
 							}
 						}
 						if (platformAssetUrl == null) {
-							Console.WriteLine($"Update error: can't find release asset corresponding to platform {platformString}");
+							Console.WriteLine(
+								$"Update error: can't find release asset corresponding to platform {platformString}"
+							);
 							continue;
 						}
-						var response = await client.Connection.Get<object>(new Uri(platformAssetUrl), new Dictionary<string, string>(), "application/octet-stream");
+						var response = await client.Connection.Get<object>(
+							uri: new Uri(platformAssetUrl),
+							parameters: new Dictionary<string, string>(),
+							accepts: "application/octet-stream"
+						);
 						var zipFileBytes = response.Body as byte[];
 						using (var compressedFileStream = new MemoryStream()) {
 							compressedFileStream.Write(zipFileBytes, 0, zipFileBytes.Length);

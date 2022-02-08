@@ -12,8 +12,9 @@ namespace Lime.Graphics.Platform.OpenGL
 		internal int GLDepthBuffer;
 		internal int GLStencilBuffer;
 
-		internal PlatformRenderTexture2D(PlatformRenderContext context, Format format, int width, int height, TextureParams textureParams)
-			: base(context, format, width, height, false, textureParams)
+		internal PlatformRenderTexture2D(
+			PlatformRenderContext context, Format format, int width, int height, TextureParams textureParams
+		) : base(context, format, width, height, false, textureParams)
 		{
 			Initialize();
 		}
@@ -47,7 +48,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			GLHelper.CheckGLErrors();
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, GLFramebuffer);
 			GLHelper.CheckGLErrors();
-			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, TextureTarget.Texture2D, GLTexture, 0);
+			GL.FramebufferTexture2D(
+				FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, TextureTarget.Texture2D, GLTexture, 0
+			);
 			GLHelper.CheckGLErrors();
 			GLDepthBuffer = GLStencilBuffer = 0;
 			if (glDepthFormat != 0) {
@@ -55,10 +58,16 @@ namespace Lime.Graphics.Platform.OpenGL
 				GLHelper.CheckGLErrors();
 				GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, GLDepthBuffer);
 				GLHelper.CheckGLErrors();
-				GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)glDepthFormat, Width, Height);
+				GL.RenderbufferStorage(
+					RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)glDepthFormat, Width, Height
+				);
 				GLHelper.CheckGLErrors();
-				GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment,
-					RenderbufferTarget.Renderbuffer, GLDepthBuffer);
+				GL.FramebufferRenderbuffer(
+					FramebufferTarget.Framebuffer,
+					FramebufferSlot.DepthAttachment,
+					RenderbufferTarget.Renderbuffer,
+					GLDepthBuffer
+				);
 				GLHelper.CheckGLErrors();
 			}
 			if (glStencilFormat != 0) {
@@ -68,11 +77,17 @@ namespace Lime.Graphics.Platform.OpenGL
 					GLHelper.CheckGLErrors();
 					GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, GLStencilBuffer);
 					GLHelper.CheckGLErrors();
-					GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)glStencilFormat, Width, Height);
+					GL.RenderbufferStorage(
+						RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)glStencilFormat, Width, Height
+					);
 					GLHelper.CheckGLErrors();
 				}
-				GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.StencilAttachment,
-					RenderbufferTarget.Renderbuffer, GLStencilBuffer);
+				GL.FramebufferRenderbuffer(
+					FramebufferTarget.Framebuffer,
+					FramebufferSlot.StencilAttachment,
+					RenderbufferTarget.Renderbuffer,
+					GLStencilBuffer
+				);
 				GLHelper.CheckGLErrors();
 			}
 			CheckFramebufferStatus();

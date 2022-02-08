@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -33,16 +31,10 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct Fixed2Dot14 : IEquatable<Fixed2Dot14>, IComparable<Fixed2Dot14>
 	{
-		#region Fields
-
 		/// <summary>
 		/// The raw 2.14 short.
 		/// </summary>
 		private short value;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Fixed2Dot14"/> struct.
@@ -80,10 +72,6 @@ namespace SharpFont
 			this.value = (short)(value * 16384);
 		}
 
-		#endregion
-
-		#region Properties
-
 		/// <summary>
 		/// Gets the raw 2.14 integer.
 		/// </summary>
@@ -94,12 +82,6 @@ namespace SharpFont
 				return value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
-
-		#region Static
 
 		/// <summary>
 		/// Creates a <see cref="Fixed2Dot14"/> from an int containing a 2.14 value.
@@ -114,9 +96,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed2Dot14"/> from a <see cref="System.Int16"/>
+		/// Creates a new <see cref="Fixed2Dot14"/> from a <see cref="short"/>
 		/// </summary>
-		/// <param name="value">A <see cref="System.Int16"/> value.</param>
+		/// <param name="value">A <see cref="short"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed2Dot14"/> value.</returns>
 		public static Fixed2Dot14 FromInt16(short value)
 		{
@@ -124,7 +106,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed2Dot14"/> from <see cref="System.Single"/>.
+		/// Creates a new <see cref="Fixed2Dot14"/> from <see cref="float"/>.
 		/// </summary>
 		/// <param name="value">A floating-point value.</param>
 		/// <returns>A fixed 2.14 value.</returns>
@@ -134,7 +116,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed2Dot14"/> from <see cref="System.Double"/>.
+		/// Creates a new <see cref="Fixed2Dot14"/> from <see cref="double"/>.
 		/// </summary>
 		/// <param name="value">A floating-point value.</param>
 		/// <returns>A fixed 2.14 value.</returns>
@@ -144,7 +126,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed2Dot14"/> from <see cref="System.Decimal"/>.
+		/// Creates a new <see cref="Fixed2Dot14"/> from <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="value">A floating-point value.</param>
 		/// <returns>A fixed 2.14 value.</returns>
@@ -203,14 +185,10 @@ namespace SharpFont
 			return ans;
 		}
 
-		#endregion
-
-		#region Operators
-
 		/// <summary>
-		/// Casts a <see cref="System.Single"/> to a <see cref="Fixed2Dot14"/>.
+		/// Casts a <see cref="float"/> to a <see cref="Fixed2Dot14"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Single"/> value.</param>
+		/// <param name="value">A <see cref="float"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed2Dot14"/> value.</returns>
 		public static explicit operator Fixed2Dot14(float value)
 		{
@@ -218,9 +196,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="System.Double"/> to a <see cref="Fixed2Dot14"/>.
+		/// Casts a <see cref="double"/> to a <see cref="Fixed2Dot14"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Double"/> value.</param>
+		/// <param name="value">A <see cref="double"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed2Dot14"/> value.</returns>
 		public static explicit operator Fixed2Dot14(double value)
 		{
@@ -228,9 +206,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="System.Single"/> to a <see cref="Fixed2Dot14"/>.
+		/// Casts a <see cref="float"/> to a <see cref="Fixed2Dot14"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Decimal"/> value.</param>
+		/// <param name="value">A <see cref="decimal"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed2Dot14"/> value.</returns>
 		public static explicit operator Fixed2Dot14(decimal value)
 		{
@@ -238,33 +216,33 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed2Dot14"/> to a <see cref="System.Single"/>.
+		/// Casts a <see cref="Fixed2Dot14"/> to a <see cref="float"/>.
 		/// </summary>
 		/// <remarks>
 		/// This operation can result in a loss of data.
 		/// </remarks>
 		/// <param name="value">A <see cref="Fixed2Dot14"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Single"/> value.</returns>
+		/// <returns>The equivalent <see cref="float"/> value.</returns>
 		public static explicit operator float(Fixed2Dot14 value)
 		{
 			return value.ToSingle();
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed2Dot14"/> to a <see cref="System.Double"/>.
+		/// Casts a <see cref="Fixed2Dot14"/> to a <see cref="double"/>.
 		/// </summary>
 		/// <param name="value">A <see cref="Fixed2Dot14"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Double"/> value.</returns>
+		/// <returns>The equivalent <see cref="double"/> value.</returns>
 		public static implicit operator double(Fixed2Dot14 value)
 		{
 			return value.ToDouble();
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed2Dot14"/> to a <see cref="System.Decimal"/>.
+		/// Casts a <see cref="Fixed2Dot14"/> to a <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="value">A <see cref="Fixed2Dot14"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Single"/> value.</returns>
+		/// <returns>The equivalent <see cref="float"/> value.</returns>
 		public static implicit operator decimal(Fixed2Dot14 value)
 		{
 			return value.ToDecimal();
@@ -380,10 +358,6 @@ namespace SharpFont
 			return left.CompareTo(right) >= 0;
 		}
 
-		#endregion
-
-		#region Instance
-
 		/// <summary>
 		/// Removes the decimal part of the value.
 		/// </summary>
@@ -399,7 +373,7 @@ namespace SharpFont
 		/// <returns>The nearest whole number.</returns>
 		public short Round()
 		{
-			//add 2^13, rounds the integer part up if the decimal value is >= 0.5
+			// add 2^13, rounds the integer part up if the decimal value is >= 0.5
 			return (short)((value + 8192) >> 14);
 		}
 
@@ -409,12 +383,12 @@ namespace SharpFont
 		/// <returns>The next whole number.</returns>
 		public short Ceiling()
 		{
-			//add 2^14 - 1, rounds the integer part up if there's any decimal value
+			// add 2^14 - 1, rounds the integer part up if there's any decimal value
 			return (short)((value + 16383) >> 14);
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Int16"/>. The value is floored.
+		/// Converts the value to a <see cref="short"/>. The value is floored.
 		/// </summary>
 		/// <returns>An integer value.</returns>
 		public short ToInt16()
@@ -423,7 +397,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Single"/>.
+		/// Converts the value to a <see cref="float"/>.
 		/// </summary>
 		/// <returns>A floating-point value.</returns>
 		public float ToSingle()
@@ -432,7 +406,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Double"/>.
+		/// Converts the value to a <see cref="double"/>.
 		/// </summary>
 		/// <returns>A floating-point value.</returns>
 		public double ToDouble()
@@ -441,7 +415,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Decimal"/>.
+		/// Converts the value to a <see cref="decimal"/>.
 		/// </summary>
 		/// <returns>A decimal value.</returns>
 		public decimal ToDecimal()
@@ -470,10 +444,6 @@ namespace SharpFont
 		{
 			return value.CompareTo(other.value);
 		}
-
-		#endregion
-
-		#region Overrides
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -531,16 +501,13 @@ namespace SharpFont
 		/// <returns>A value indicating equality between the two objects.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is Fixed2Dot14)
+			if (obj is Fixed2Dot14) {
 				return this.Equals((Fixed2Dot14)obj);
-			else if (obj is int)
+			} else if (obj is int) {
 				return value == ((Fixed2Dot14)obj).value;
-			else
+			} else {
 				return false;
+			}
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

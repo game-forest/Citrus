@@ -8,7 +8,7 @@ using Tangerine.UI.Timeline.Components;
 
 namespace Tangerine.UI.Timeline
 {
-	class HasKeyframeRespondentProcessor : Core.ITaskProvider
+	internal class HasKeyframeRespondentProcessor : Core.ITaskProvider
 	{
 		public IEnumerator<object> Task()
 		{
@@ -22,7 +22,7 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		bool HasKeyframeOnCell(IntVector2 cell)
+		private bool HasKeyframeOnCell(IntVector2 cell)
 		{
 			var item = Document.Current.VisibleSceneItems[cell.Y];
 			var nodeData = item.Components.Get<NodeSceneItem>();

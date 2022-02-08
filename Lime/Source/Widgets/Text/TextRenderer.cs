@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lime.Text
 {
-	class TextRenderer
+	internal class TextRenderer
 	{
 		private readonly List<Word> words = new List<Word>();
 		private readonly List<Word> fittedWords = new List<Word>();
@@ -28,7 +28,7 @@ namespace Lime.Text
 			public bool LineBreak; // Effective line break after the text formatting.
 			public bool IsNbsp;
 			public Word Clone() { return (Word)MemberwiseClone(); }
-		};
+		}
 
 		public TextRenderer(TextOverflowMode overflowMode, bool wordSplitAllowed)
 		{
@@ -39,8 +39,10 @@ namespace Lime.Text
 		private int AddText(string text)
 		{
 			int i = texts.IndexOf(text);
-			if (i >= 0)
+			if (i >= 0) {
 				return i;
+			}
+
 			texts.Add(text);
 			return texts.Count - 1;
 		}
@@ -122,11 +124,16 @@ namespace Lime.Text
 			return s.Length > 0 ? s[s.Length - 1] : char.MinValue;
 		}
 
-		float CalcWordWidth(Word word)
+		private float CalcWordWidth(Word word)
 		{
 			var style = Styles[word.Style];
 			Vector2 size = style.Font.MeasureTextLine(
-				texts[word.TextIndex], ScaleSize(style.Size), word.Start, word.Length, style.LetterSpacing + style.Font.Spacing);
+				texts[word.TextIndex],
+				ScaleSize(style.Size),
+				word.Start,
+				word.Length,
+				style.LetterSpacing + style.Font.Spacing
+			);
 			return size.X + (IsBullet(word) ? ScaleSize(style.ImageSize.X) : 0);
 		}
 
@@ -135,8 +142,9 @@ namespace Lime.Text
 			return (size * scaleFactor).Floor();
 		}
 
-		public void Render(SpriteList[] spriteLists, Vector2 area, HAlignment hAlign, VAlignment vAlign, int maxCharacters = -1)
-		{
+		public void Render(
+			SpriteList[] spriteLists, Vector2 area, HAlignment hAlign, VAlignment vAlign, int maxCharacters = -1
+		) {
 			if (overflowMode == TextOverflowMode.Minify) {
 				FitTextInsideArea(area);
 			}
@@ -166,15 +174,17 @@ namespace Lime.Text
 				}
 				// Calculate offset for horizontal alignment.
 				var offset = new Vector2();
-				if (hAlign == HAlignment.Right)
+				if (hAlign == HAlignment.Right) {
 					offset.X = area.X - totalWidth;
-				else if (hAlign == HAlignment.Center)
+				} else if (hAlign == HAlignment.Center) {
 					offset.X = ((area.X - totalWidth) * 0.5f).Round();
+				}
 				// Calculate offset for vertical alignment.
-				if (vAlign == VAlignment.Bottom)
+				if (vAlign == VAlignment.Bottom) {
 					offset.Y = area.Y - totalHeight;
-				else if (vAlign == VAlignment.Center)
+				} else if (vAlign == VAlignment.Center) {
 					offset.Y = ((area.Y - totalHeight) * 0.5f).Round();
+				}
 				// Draw string.
 				for (int j = 0; j < count; j++) {
 					var word = fittedWords[b + j];
@@ -187,8 +197,14 @@ namespace Lime.Text
 						}
 						var sz = style.ImageSize * scaleFactor;
 						spriteLists[word.Style].Add(
-							style.ImageTexture, Color4.White, position + new Vector2(0, (maxHeight - sz.Y) * 0.5f),
-							sz, Vector2.Zero, Vector2.One, tag: word.Style);
+							texture: style.ImageTexture,
+							color: Color4.White,
+							position: position + new Vector2(0, (maxHeight - sz.Y) * 0.5f),
+							size: sz,
+							uv0t1: Vector2.Zero,
+							uv1t1: Vector2.One,
+							tag: word.Style
+						);
 						position.X += sz.X;
 						c++;
 					}
@@ -197,8 +213,16 @@ namespace Lime.Text
 					if (style.CastShadow) {
 						for (int k = 0; k < (style.Bold ? 2 : 1); k++) {
 							Renderer.DrawTextLine(
-								font, position + style.ShadowOffset + yOffset, t, style.ShadowColor, ScaleSize(style.Size),
-								word.Start, word.Length, font.Spacing + style.LetterSpacing, spriteLists[word.Style], tag: word.Style
+								font: font,
+								position: position + style.ShadowOffset + yOffset,
+								text: t,
+								color: style.ShadowColor,
+								fontHeight: ScaleSize(style.Size),
+								start: word.Start,
+								length: word.Length,
+								letterSpacing: font.Spacing + style.LetterSpacing,
+								list: spriteLists[word.Style],
+								tag: word.Style
 							);
 						}
 					}
@@ -211,8 +235,16 @@ namespace Lime.Text
 					}
 					for (int k = 0; k < (style.Bold ? 2 : 1); k++) {
 						Renderer.DrawTextLine(
-							font, position + yOffset, t, style.TextColor, ScaleSize(style.Size),
-							word.Start, wordLength, font.Spacing + style.LetterSpacing, spriteLists[word.Style], tag: word.Style
+							font: font,
+							position: position + yOffset,
+							text: t,
+							color: style.TextColor,
+							fontHeight: ScaleSize(style.Size),
+							start: word.Start,
+							length: wordLength,
+							letterSpacing: font.Spacing + style.LetterSpacing,
+							list: spriteLists[word.Style],
+							tag: word.Style
 						);
 					}
 					c += wordLength;
@@ -224,8 +256,9 @@ namespace Lime.Text
 					if (IsOverlay(word)) {
 						int k = j + 1;
 						for (; k < count; k++) {
-							if (fittedWords[b + k].IsTagBegin)
+							if (fittedWords[b + k].IsTagBegin) {
 								break;
+							}
 						}
 						k -= 1;
 						var font = Styles[word.Style].Font;
@@ -235,12 +268,24 @@ namespace Lime.Text
 							continue;
 						}
 						float scale = fontChar.Height != 0.0f ? fontHeight / fontChar.Height : 0.0f;
-						Vector2 lt = new Vector2(word.X + (word.X > 0 ? scale * Styles[word.Style].LetterSpacing : 0.0f), y) + offset;
-						Vector2 rb = new Vector2(fittedWords[b + k].X + fittedWords[b + k].Width, y) + offset;
+						Vector2 lt = new Vector2(
+							word.X + (word.X > 0 ? scale * Styles[word.Style].LetterSpacing : 0.0f),
+							y
+						) + offset;
+						Vector2 rb = new Vector2(
+							fittedWords[b + k].X + fittedWords[b + k].Width,
+							y
+						) + offset;
 						float yOffset = (maxHeight - ScaleSize(style.ImageSize.Y)) * 0.5f;
-						spriteLists[word.Style].Add(style.ImageTexture, Color4.White, lt + new Vector2(0, yOffset),
-							rb - lt + new Vector2(0, style.ImageSize.Y),
-							Vector2.Zero, Vector2.One, tag: word.Style);
+						spriteLists[word.Style].Add(
+							texture: style.ImageTexture,
+							color: Color4.White,
+							position: lt + new Vector2(0, yOffset),
+							size: rb - lt + new Vector2(0, style.ImageSize.Y),
+							uv0t1: Vector2.Zero,
+							uv1t1: Vector2.One,
+							tag: word.Style
+						);
 						j = k;
 					}
 				}
@@ -257,7 +302,7 @@ namespace Lime.Text
 			float bestScaleFactor = minScale;
 			while (maxScale - minScale >= 0.1f) {
 				var textSize = MeasureText(size.X, size.Y);
-				var fit = (textSize.X <= size.X && textSize.Y <= size.Y);
+				var fit = textSize.X <= size.X && textSize.Y <= size.Y;
 				if (fit) {
 					minScale = scaleFactor;
 					bestScaleFactor = Mathf.Max(bestScaleFactor, scaleFactor);
@@ -355,12 +400,18 @@ namespace Lime.Text
 				var style = Styles[word.Style];
 				var font = style.Font;
 				var t = texts[word.TextIndex];
-				float dotsWidth = font.MeasureTextLine("...", ScaleSize(style.Size), style.LetterSpacing + font.Spacing).X;
+				float dotsWidth = font.MeasureTextLine(
+					"...", ScaleSize(style.Size), style.LetterSpacing + font.Spacing
+				).X;
 				if (
 					lastWordInLastLine > firstWordInLastLineIndex
 					&& (
 						word.X + font.MeasureTextLine(
-							word.Length > 0 ? t.Substring(word.Start, 1) : string.Empty, ScaleSize(style.Size), style.LetterSpacing + font.Spacing).X + dotsWidth > maxWidth
+							word.Length > 0 ? t.Substring(word.Start, 1) : string.Empty,
+							ScaleSize(style.Size),
+							style.LetterSpacing + font.Spacing
+						).X + dotsWidth
+						> maxWidth
 						|| (word.Length == 1 && t[word.Start] == ' ')
 					)
 				) {
@@ -399,8 +450,10 @@ namespace Lime.Text
 						if (fittedCharsCount > 0) {
 							var wordEnd = word.Start + fittedCharsCount;
 							TextLineSplitter.AdjustLineBreakPosition(t, ref wordEnd, word.Start + word.Length - 1);
-							if (wordEnd > word.Start)
+							if (wordEnd > word.Start) {
 								fittedCharsCount = wordEnd - word.Start;
+							}
+
 							var newWord = word.Clone();
 							newWord.IsTagBegin = false;
 							newWord.Start = word.Start + fittedCharsCount;
@@ -453,7 +506,9 @@ namespace Lime.Text
 						ClipWordWithEllipsis(word, maxWidth);
 					}
 				}
-				if (isTextOrBullet) { // buz: при автопереносе на концах строк остаются пробелы, они не должны влиять на значение длины строки
+				if (isTextOrBullet) {
+					// buz: при автопереносе на концах строк остаются пробелы,
+					// они не должны влиять на значение длины строки
 					longestLineWidth = Math.Max(longestLineWidth, word.X + word.Width);
 				}
 				fittedWords[i] = word;
@@ -471,7 +526,9 @@ namespace Lime.Text
 			var t = texts[word.TextIndex];
 			do {
 				mid = min + ((max - min) / 2);
-				var w = font.MeasureTextLine(t, ScaleSize(style.Size), word.Start, mid, style.LetterSpacing + font.Spacing).X + (IsBullet(word) ? style.ImageSize.X : 0);
+				var w = font.MeasureTextLine(
+					t, ScaleSize(style.Size), word.Start, mid, style.LetterSpacing + font.Spacing
+				).X + (IsBullet(word) ? style.ImageSize.X : 0);
 				isLineLonger = word.X + w > maxWidth;
 				if (isLineLonger) {
 					max = mid;
@@ -487,7 +544,9 @@ namespace Lime.Text
 		private void ClipWordWithEllipsis(Word word, float maxWidth)
 		{
 			var style = Styles[word.Style];
-			float dotsWidth = style.Font.MeasureTextLine("...", ScaleSize(style.Size), style.LetterSpacing + style.Font.Spacing).X;
+			float dotsWidth = style.Font.MeasureTextLine(
+				"...", ScaleSize(style.Size), style.LetterSpacing + style.Font.Spacing
+			).X;
 			while (word.Length > 1 && word.X + word.Width + dotsWidth > maxWidth) {
 				word.Length--;
 				word.Width = CalcWordWidth(word);
@@ -498,6 +557,5 @@ namespace Lime.Text
 			word.Start = 0;
 			word.Length = newText.Length;
 		}
-
 	}
 }

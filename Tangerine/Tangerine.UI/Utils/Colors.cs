@@ -337,7 +337,7 @@ namespace Tangerine.UI
 		public AnimationsColors Animations { get; set; }
 		[YuzuOptional]
 		public RemoteScriptingColors RemoteScripting { get; set; }
-		
+
 		public ColorTheme Clone()
 		{
 			var clone = (ColorTheme)this.MemberwiseClone();
@@ -464,7 +464,6 @@ namespace Tangerine.UI
 				TabBarBackground = basic.GrayBackground,
 				TabHighlighted = basic.TabNormal,
 				TabOutline = basic.TabNormal,
-
 			};
 			var inspector = new InspectorColors {
 				BorderAroundKeyframeColorbox = basic.ControlBorder,
@@ -498,7 +497,7 @@ namespace Tangerine.UI
 				PanelBackground = hierarchy.DefaultBackground,
 				NodeBackground = new Color4(68, 68, 68),
 				CurrentAnimationText = basic.BlackText,
-				CurrentAnimationBackground =  inspector.StripeBackground2,
+				CurrentAnimationBackground = inspector.StripeBackground2,
 				CurrentAnimationMarker = new Color4(76, 175, 80),
 				RootText = basic.BlackText,
 				RootNodeMarker = new Color4(253, 131, 0),

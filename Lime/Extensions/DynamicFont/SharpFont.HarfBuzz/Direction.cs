@@ -1,5 +1,5 @@
-﻿//Copyright (c) 2014-2015 Robert Rouhani <robert.rouhani@gmail.com> and other contributors (see CONTRIBUTORS file).
-//Licensed under the MIT License - https://raw.github.com/Robmaister/SharpFont.HarfBuzz/master/LICENSE
+// Copyright (c) 2014-2015 Robert Rouhani <robert.rouhani@gmail.com> and other contributors (see CONTRIBUTORS file).
+// Licensed under the MIT License - https://raw.github.com/Robmaister/SharpFont.HarfBuzz/master/LICENSE
 
 namespace SharpFont.HarfBuzz
 {
@@ -9,14 +9,14 @@ namespace SharpFont.HarfBuzz
 		LeftToRight = 4,
 		RightToLeft,
 		TopToBottom,
-		BottomToTop
+		BottomToTop,
 	}
 
 	public static class DirectionExtensions
 	{
 		public static string ToString(this Direction dir)
 		{
-			return "";
+			return string.Empty;
 		}
 
 		public static bool IsHorizontal(this Direction dir)

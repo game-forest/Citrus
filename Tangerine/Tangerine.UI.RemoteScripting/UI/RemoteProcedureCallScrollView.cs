@@ -42,7 +42,7 @@ namespace Tangerine.UI.RemoteScripting
 					Enabled = ItemsEnabled,
 					Clicked = () => {
 						RemoteProcedureCalled?.Invoke(assembly, entryPoint);
-					}
+					},
 				};
 				Content.AddNode(button);
 				buttons.Add(button);

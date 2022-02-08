@@ -63,8 +63,9 @@ namespace Lime
 			public bool Antialiased;
 
 			public Line() { }
-			public Line(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, bool antialiased = true)
-			{
+			public Line(
+				float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, bool antialiased = true
+			) {
 				A = new Vector2(x0, y0);
 				B = new Vector2(x1, y1);
 				Color = color;
@@ -84,4 +85,3 @@ namespace Lime
 		}
 	}
 }
-

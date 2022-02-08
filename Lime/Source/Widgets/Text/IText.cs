@@ -47,7 +47,7 @@ namespace Lime
 		/// <summary>
 		/// Ignore text overflowing.
 		/// </summary>
-		Ignore
+		Ignore,
 	}
 
 	public interface ICaretPosition
@@ -76,6 +76,7 @@ namespace Lime
 	public interface IText
 	{
 		event Action<string> Submitted;
+
 		/// <summary>
 		/// Returns the text's bounding box.
 		/// </summary>
@@ -96,6 +97,7 @@ namespace Lime
 		bool WordSplitAllowed { get; set; }
 		bool TrimWhitespaces { get; set; }
 		bool GetCharPair(Vector2 point, out Tuple<SpriteList.CharDef, SpriteList.CharDef> pair);
+
 		/// <summary>
 		/// Arguments that will be passed into Text.Localize(...)
 		/// </summary>

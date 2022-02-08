@@ -79,7 +79,10 @@ namespace Lime
 		private double maxTime;
 		private KeyframeParams @params;
 		private int keyIndex;
-		protected T Value1, Value2, Value3, Value4;
+		protected T value1;
+		protected T value2;
+		protected T value3;
+		protected T value4;
 		private bool isTriggerable;
 		public bool IsTriggerable
 		{
@@ -184,7 +187,7 @@ namespace Lime
 			}
 		}
 
-		IKeyframeList boxedKeys;
+		private IKeyframeList boxedKeys;
 
 		IKeyframeList IAnimator.ReadonlyKeys
 		{
@@ -213,7 +216,7 @@ namespace Lime
 
 		public int Duration => (ReadonlyKeys.Count == 0) ? 0 : ReadonlyKeys[ReadonlyKeys.Count - 1].Frame;
 
-		protected virtual T InterpolateLinear(float t) => Value2;
+		protected virtual T InterpolateLinear(float t) => value2;
 		protected virtual T InterpolateSplined(float t) => InterpolateLinear(t);
 
 		public void Clear()
@@ -277,7 +280,12 @@ namespace Lime
 		{
 			var (p, a, index) = AnimationUtils.GetPropertyByPath(Owner, TargetPropertyPath);
 			var mi = p.Info?.GetSetMethod();
-			IsZombie = a == null || mi == null || p.Info.PropertyType != typeof(T) || a is IList list && index >= list.Count;
+			IsZombie =
+				a == null
+				|| mi == null
+				|| p.Info.PropertyType != typeof(T)
+				|| a is IList list
+					&& index >= list.Count;
 			if (IsZombie) {
 				return;
 			}
@@ -286,7 +294,9 @@ namespace Lime
 			if (index == -1) {
 				setter = (SetterDelegate)Delegate.CreateDelegate(typeof(SetterDelegate), a, mi);
 			} else {
-				var indexedSetter = (IndexedSetterDelegate)Delegate.CreateDelegate(typeof(IndexedSetterDelegate), a, mi);
+				var indexedSetter = (IndexedSetterDelegate)Delegate.CreateDelegate(
+					typeof(IndexedSetterDelegate), a, mi
+				);
 				setter = (v) => {
 					indexedSetter(index, v);
 				};
@@ -305,7 +315,7 @@ namespace Lime
 				CacheInterpolationParameters(time);
 			}
 			if (@params.Function == KeyFunction.Step) {
-				return Value2;
+				return value2;
 			}
 			var t = (float)((time - minTime) / (maxTime - minTime));
 			if (@params.EasingFunction != Mathf.EasingFunction.Linear) {
@@ -322,14 +332,14 @@ namespace Lime
 
 		private static KeyframeParams defaultKeyframeParams = new KeyframeParams {
 			Function = KeyFunction.Step,
-			EasingFunction = Mathf.EasingFunction.Linear
+			EasingFunction = Mathf.EasingFunction.Linear,
 		};
 
 		private void CacheInterpolationParameters(double time)
 		{
 			int count = ReadonlyKeys.Count;
 			if (count == 0) {
-				Value2 = default(T);
+				value2 = default(T);
 				minTime = -double.MaxValue;
 				maxTime = double.MaxValue;
 				@params = defaultKeyframeParams;
@@ -352,27 +362,27 @@ namespace Lime
 				keyIndex = 0;
 				maxTime = ReadonlyKeys[0].Frame * AnimationUtils.SecondsPerFrame;
 				minTime = double.MinValue;
-				Value2 = ReadonlyKeys[0].Value;
+				value2 = ReadonlyKeys[0].Value;
 				@params = defaultKeyframeParams;
 			} else if (i == count - 1) {
 				minTime = ReadonlyKeys[i].Frame * AnimationUtils.SecondsPerFrame;
 				maxTime = double.MaxValue;
-				Value2 = ReadonlyKeys[i].Value;
+				value2 = ReadonlyKeys[i].Value;
 				@params = defaultKeyframeParams;
 			} else {
 				var key1 = ReadonlyKeys[i];
 				var key2 = ReadonlyKeys[i + 1];
 				minTime = key1.Frame * AnimationUtils.SecondsPerFrame;
 				maxTime = key2.Frame * AnimationUtils.SecondsPerFrame;
-				Value2 = key1.Value;
-				Value3 = key2.Value;
+				value2 = key1.Value;
+				value3 = key2.Value;
 				@params = key1.Params;
 				if (@params.Function == KeyFunction.Spline) {
-					Value1 = ReadonlyKeys[i < 1 ? 0 : i - 1].Value;
-					Value4 = ReadonlyKeys[i + 1 >= count - 1 ? count - 1 : i + 2].Value;
+					value1 = ReadonlyKeys[i < 1 ? 0 : i - 1].Value;
+					value4 = ReadonlyKeys[i + 1 >= count - 1 ? count - 1 : i + 2].Value;
 				} else if (@params.Function == KeyFunction.ClosedSpline) {
-					Value1 = ReadonlyKeys[i < 1 ? count - 2 : i - 1].Value;
-					Value4 = ReadonlyKeys[i + 1 >= count - 1 ? 1 : i + 2].Value;
+					value1 = ReadonlyKeys[i < 1 ? count - 2 : i - 1].Value;
+					value4 = ReadonlyKeys[i + 1 >= count - 1 ? 1 : i + 2].Value;
 				}
 			}
 		}
@@ -383,16 +393,16 @@ namespace Lime
 		protected override Vector2 InterpolateLinear(float t)
 		{
 			Vector2 r;
-			r.X = Value2.X + (Value3.X - Value2.X) * t;
-			r.Y = Value2.Y + (Value3.Y - Value2.Y) * t;
+			r.X = value2.X + (value3.X - value2.X) * t;
+			r.Y = value2.Y + (value3.Y - value2.Y) * t;
 			return r;
 		}
 
 		protected override Vector2 InterpolateSplined(float t)
 		{
 			return new Vector2(
-				Mathf.CatmullRomSpline(t, Value1.X, Value2.X, Value3.X, Value4.X),
-				Mathf.CatmullRomSpline(t, Value1.Y, Value2.Y, Value3.Y, Value4.Y)
+				Mathf.CatmullRomSpline(t, value1.X, value2.X, value3.X, value4.X),
+				Mathf.CatmullRomSpline(t, value1.Y, value2.Y, value3.Y, value4.Y)
 			);
 		}
 	}
@@ -401,12 +411,12 @@ namespace Lime
 	{
 		protected override Vector3 InterpolateLinear(float t)
 		{
-			return Vector3.Lerp(t, Value2, Value3);
+			return Vector3.Lerp(t, value2, value3);
 		}
 
 		protected override Vector3 InterpolateSplined(float t)
 		{
-			return Mathf.CatmullRomSpline(t, Value1, Value2, Value3, Value4);
+			return Mathf.CatmullRomSpline(t, value1, value2, value3, value4);
 		}
 	}
 
@@ -414,12 +424,12 @@ namespace Lime
 	{
 		protected override float InterpolateLinear(float t)
 		{
-			return t * (Value3 - Value2) + Value2;
+			return t * (value3 - value2) + value2;
 		}
 
 		protected override float InterpolateSplined(float t)
 		{
-			return Mathf.CatmullRomSpline(t, Value1, Value2, Value3, Value4);
+			return Mathf.CatmullRomSpline(t, value1, value2, value3, value4);
 		}
 	}
 
@@ -427,12 +437,12 @@ namespace Lime
 	{
 		protected override int InterpolateLinear(float t)
 		{
-			return (t * (Value3 - Value2) + Value2).Round();
+			return (t * (value3 - value2) + value2).Round();
 		}
 
 		protected override int InterpolateSplined(float t)
 		{
-			return Mathf.CatmullRomSpline(t, Value1, Value2, Value3, Value4).Round();
+			return Mathf.CatmullRomSpline(t, value1, value2, value3, value4).Round();
 		}
 	}
 
@@ -440,7 +450,7 @@ namespace Lime
 	{
 		protected override Color4 InterpolateLinear(float t)
 		{
-			return Color4.Lerp(t, Value2, Value3);
+			return Color4.Lerp(t, value2, value3);
 		}
 	}
 
@@ -449,12 +459,12 @@ namespace Lime
 		protected override Quaternion InterpolateLinear(float t)
 		{
 			var a = 1.0f - t;
-			var b = Quaternion.Dot(Value2, Value3) > 0.0f ? t : -t;
+			var b = Quaternion.Dot(value2, value3) > 0.0f ? t : -t;
 			Quaternion q;
-			q.X = a * Value2.X + b * Value3.X;
-			q.Y = a * Value2.Y + b * Value3.Y;
-			q.Z = a * Value2.Z + b * Value3.Z;
-			q.W = a * Value2.W + b * Value3.W;
+			q.X = a * value2.X + b * value3.X;
+			q.Y = a * value2.Y + b * value3.Y;
+			q.Z = a * value2.Z + b * value3.Z;
+			q.W = a * value2.W + b * value3.W;
 			var invl = Mathf.FastInverseSqrt(q.LengthSquared());
 			q.X *= invl;
 			q.Y *= invl;
@@ -468,7 +478,7 @@ namespace Lime
 	{
 		protected override Matrix44 InterpolateLinear(float t)
 		{
-			return Matrix44.Lerp(Value2, Value3, t);
+			return Matrix44.Lerp(value2, value3, t);
 		}
 	}
 
@@ -477,20 +487,20 @@ namespace Lime
 		protected override Thickness InterpolateLinear(float t)
 		{
 			Thickness r;
-			r.Left = Value2.Left + (Value3.Left - Value2.Left) * t;
-			r.Right = Value2.Right + (Value3.Right - Value2.Right) * t;
-			r.Top = Value2.Top + (Value3.Top - Value2.Top) * t;
-			r.Bottom = Value2.Bottom + (Value3.Bottom - Value2.Bottom) * t;
+			r.Left = value2.Left + (value3.Left - value2.Left) * t;
+			r.Right = value2.Right + (value3.Right - value2.Right) * t;
+			r.Top = value2.Top + (value3.Top - value2.Top) * t;
+			r.Bottom = value2.Bottom + (value3.Bottom - value2.Bottom) * t;
 			return r;
 		}
 
 		protected override Thickness InterpolateSplined(float t)
 		{
 			return new Thickness(
-				Mathf.CatmullRomSpline(t, Value1.Left, Value2.Left, Value3.Left, Value4.Left),
-				Mathf.CatmullRomSpline(t, Value1.Right, Value2.Right, Value3.Right, Value4.Right),
-				Mathf.CatmullRomSpline(t, Value1.Top, Value2.Top, Value3.Top, Value4.Top),
-				Mathf.CatmullRomSpline(t, Value1.Bottom, Value2.Bottom, Value3.Bottom, Value4.Bottom)
+				Mathf.CatmullRomSpline(t, value1.Left, value2.Left, value3.Left, value4.Left),
+				Mathf.CatmullRomSpline(t, value1.Right, value2.Right, value3.Right, value4.Right),
+				Mathf.CatmullRomSpline(t, value1.Top, value2.Top, value3.Top, value4.Top),
+				Mathf.CatmullRomSpline(t, value1.Bottom, value2.Bottom, value3.Bottom, value4.Bottom)
 			);
 		}
 	}
@@ -500,16 +510,16 @@ namespace Lime
 		protected override NumericRange InterpolateLinear(float t)
 		{
 			NumericRange r;
-			r.Median = Value2.Median + (Value3.Median - Value2.Median) * t;
-			r.Dispersion = Value2.Dispersion + (Value3.Dispersion - Value2.Dispersion) * t;
+			r.Median = value2.Median + (value3.Median - value2.Median) * t;
+			r.Dispersion = value2.Dispersion + (value3.Dispersion - value2.Dispersion) * t;
 			return r;
 		}
 
 		protected override NumericRange InterpolateSplined(float t)
 		{
 			return new NumericRange(
-				Mathf.CatmullRomSpline(t, Value1.Median, Value2.Median, Value3.Median, Value4.Median),
-				Mathf.CatmullRomSpline(t, Value1.Dispersion, Value2.Dispersion, Value3.Dispersion, Value4.Dispersion)
+				Mathf.CatmullRomSpline(t, value1.Median, value2.Median, value3.Median, value4.Median),
+				Mathf.CatmullRomSpline(t, value1.Dispersion, value2.Dispersion, value3.Dispersion, value4.Dispersion)
 			);
 		}
 	}
@@ -520,18 +530,18 @@ namespace Lime
 		{
 #if TANGERINE
 			var r = new List<SkinnedVertex>();
-			for (var i = 0; i < Math.Min(Value2.Count, Value3.Count); ++i) {
+			for (var i = 0; i < Math.Min(value2.Count, value3.Count); ++i) {
 				r.Add(new SkinnedVertex {
-					Pos = Mathf.Lerp(t, Value2[i].Pos, Value3[i].Pos),
-					UV1 = Mathf.Lerp(t, Value2[i].UV1, Value3[i].UV1),
-					Color = Color4.Lerp(t, Value2[i].Color, Value3[i].Color),
-					BlendIndices = Value2[i].BlendIndices,
-					BlendWeights = Value2[i].BlendWeights
+					Pos = Mathf.Lerp(t, value2[i].Pos, value3[i].Pos),
+					UV1 = Mathf.Lerp(t, value2[i].UV1, value3[i].UV1),
+					Color = Color4.Lerp(t, value2[i].Color, value3[i].Color),
+					BlendIndices = value2[i].BlendIndices,
+					BlendWeights = value2[i].BlendWeights,
 				});
 			}
 			return r;
 #else
-			return Value2;
+			return value2;
 #endif
 		}
 	}

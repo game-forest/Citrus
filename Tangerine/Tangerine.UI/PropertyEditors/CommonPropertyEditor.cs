@@ -31,13 +31,13 @@ namespace Tangerine.UI
 			EditorParams = editorParams;
 			ContainerWidget = new Widget {
 				Layout = new VBoxLayout(),
-				LayoutCell = new LayoutCell { StretchY = 0f }
+				LayoutCell = new LayoutCell { StretchY = 0f },
 			};
 			ContainerWidget.Components.Add(new PropertyEditorComponent(this));
 
 			PropertyContainerWidget = new Widget {
 				Layout = new HBoxLayout { IgnoreHidden = false },
-				LayoutCell = new LayoutCell { StretchY = 0f }
+				LayoutCell = new LayoutCell { StretchY = 0f },
 			};
 
 			ContainerWidget.AddNode(PropertyContainerWidget);
@@ -54,10 +54,10 @@ namespace Tangerine.UI
 							Padding = new Thickness(left: 5.0f),
 							HitTestTarget = true,
 							AutoMaxSize = true,
-							TabTravesable = new TabTraversable()
+							TabTravesable = new TabTraversable(),
 						}),
-						Spacer.HStretch()
-					}
+						Spacer.HStretch(),
+					},
 				};
 				PropertyLabel.Tasks.Add(ManageLabelTask());
 				var tooltip = PropertyAttributes<TangerineTooltipAttribute>.Get(
@@ -100,7 +100,7 @@ namespace Tangerine.UI
 			WarningsContainer.Nodes.Clear();
 		}
 
-		IEnumerator<object> ManageLabelTask()
+		private IEnumerator<object> ManageLabelTask()
 		{
 			var clickGesture0 = new ClickGesture(0, () => {
 				PropertyLabel.SetFocus();
@@ -113,8 +113,9 @@ namespace Tangerine.UI
 				PropertyLabel.SetFocus();
 				resetToDefault.Consume();
 				var defaultValue = EditorParams.DefaultValueGetter();
-				if (defaultValue != null)
+				if (defaultValue != null) {
 					SetProperty(defaultValue);
+				}
 			});
 			PropertyLabel.Gestures.Add(clickGesture0);
 			PropertyLabel.Gestures.Add(clickGesture1);
@@ -135,8 +136,9 @@ namespace Tangerine.UI
 					if (resetToDefault.WasIssued()) {
 						resetToDefault.Consume();
 						var defaultValue = EditorParams.DefaultValueGetter();
-						if (defaultValue != null)
+						if (defaultValue != null) {
 							SetProperty(defaultValue);
+						}
 					}
 				}
 				PropertyLabel.Text = EditorParams.DisplayName ?? EditorParams.PropertyName;
@@ -144,17 +146,17 @@ namespace Tangerine.UI
 			}
 		}
 
-		static readonly Yuzu.Json.JsonSerializer serializer = new Yuzu.Json.JsonSerializer {
+		private static readonly Yuzu.Json.JsonSerializer serializer = new Yuzu.Json.JsonSerializer {
 			JsonOptions = new Yuzu.Json.JsonSerializeOptions {
 				FieldSeparator = " ",
-				Indent = "",
+				Indent = string.Empty,
 				EnumAsString = true,
 				SaveRootClass = true,
-			}
+			},
 		};
 
-		static readonly Yuzu.Json.JsonDeserializer deserializer = new Yuzu.Json.JsonDeserializer {
-			JsonOptions = new Yuzu.Json.JsonSerializeOptions { EnumAsString = true }
+		private static readonly Yuzu.Json.JsonDeserializer deserializer = new Yuzu.Json.JsonDeserializer {
+			JsonOptions = new Yuzu.Json.JsonSerializeOptions { EnumAsString = true },
 		};
 
 		protected virtual void Copy()
@@ -162,7 +164,8 @@ namespace Tangerine.UI
 			var v = CoalescedPropertyValue().GetValue();
 			try {
 				Clipboard.Text = Serialize(v.Value);
-			} catch (System.Exception) { }
+			} catch (System.Exception) {
+			}
 		}
 
 		protected virtual void Paste()
@@ -170,7 +173,8 @@ namespace Tangerine.UI
 			try {
 				var v = Deserialize(Clipboard.Text);
 				SetProperty(v);
-			} catch (System.Exception) { }
+			} catch (System.Exception) {
+			}
 		}
 
 		protected virtual string Serialize(T value) => serializer.ToString(value);
@@ -203,9 +207,9 @@ namespace Tangerine.UI
 			menu.AddRange(commands);
 		}
 
-		void ShowPropertyContextMenu()
+		private void ShowPropertyContextMenu()
 		{
-			var menu = new Menu {};
+			var menu = new Menu { };
 			FillContextMenuItems(menu);
 			menu.Popup();
 		}
@@ -220,7 +224,9 @@ namespace Tangerine.UI
 				case 0:
 					return new PropertyDataflowProvider<T>(o, EditorParams.PropertyName);
 				case 1 when indexParameters[0].ParameterType == typeof(int):
-					return new IndexedPropertyDataflowProvider<T>(o, EditorParams.PropertyName, EditorParams.IndexInList);
+					return new IndexedPropertyDataflowProvider<T>(
+						o, EditorParams.PropertyName, EditorParams.IndexInList
+					);
 				default:
 					throw new NotSupportedException();
 			}
@@ -241,7 +247,9 @@ namespace Tangerine.UI
 				case 1 when indexParameters[0].ParameterType == typeof(int):
 					foreach (var o in EditorParams.Objects) {
 						dataflow.AddDataflow(
-							new IndexedPropertyDataflowProvider<T>(o, EditorParams.PropertyName, EditorParams.IndexInList)
+							new IndexedPropertyDataflowProvider<T>(
+								o, EditorParams.PropertyName, EditorParams.IndexInList
+							)
 						);
 					}
 					return new DataflowProvider<CoalescedValue<T>>(() => dataflow);
@@ -259,14 +267,20 @@ namespace Tangerine.UI
 			switch (indexParameters.Length) {
 				case 0:
 					foreach (var o in EditorParams.Objects) {
-						dataflow.AddDataflow(new PropertyDataflowProvider<T>(o, EditorParams.PropertyName).Select(selector));
+						dataflow.AddDataflow(
+							new PropertyDataflowProvider<T>(o, EditorParams.PropertyName).Select(selector))
+						;
 					}
 					return new DataflowProvider<CoalescedValue<ComponentValue>>(() => dataflow);
 				case 1 when indexParameters[0].ParameterType == typeof(int):
 					foreach (var o in EditorParams.Objects) {
 						dataflow.AddDataflow(
-							new IndexedPropertyDataflowProvider<T>(o, EditorParams.PropertyName, EditorParams.IndexInList
-						).Select(selector));
+							new IndexedPropertyDataflowProvider<T>(
+								o,
+								EditorParams.PropertyName,
+								EditorParams.IndexInList
+							).Select(selector)
+						);
 					}
 					return new DataflowProvider<CoalescedValue<ComponentValue>>(() => dataflow);
 				default:
@@ -285,7 +299,8 @@ namespace Tangerine.UI
 				case 1 when indexParameters[0].ParameterType == typeof(int):
 					return new IndexedPropertyDataflowProvider<T>(
 						o,
-						EditorParams.PropertyName, EditorParams.IndexInList
+						EditorParams.PropertyName,
+						EditorParams.IndexInList
 					).Select(selector);
 				default:
 					throw new NotSupportedException();
@@ -356,8 +371,13 @@ namespace Tangerine.UI
 				if (errorExist) {
 					return;
 				}
-				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(o,
-					EditorParams.IsAnimable ? EditorParams.PropertyPath : EditorParams.PropertyName, next);
+				((IPropertyEditorParamsInternal)EditorParams).PropertySetter(
+					o,
+					EditorParams.IsAnimable
+						? EditorParams.PropertyPath
+						: EditorParams.PropertyName,
+					next
+				);
 			}
 			DoTransaction(() => {
 				if (EditorParams.IsAnimable) {
@@ -369,8 +389,8 @@ namespace Tangerine.UI
 				} else {
 					foreach (var o in EditorParams.Objects) {
 						var current = EditorParams.IndexInList != -1
-							? (new IndexedProperty(o, EditorParams.PropertyName, EditorParams.IndexInList)).Value
-							: (new Property(o, EditorParams.PropertyName).Value);
+							? new IndexedProperty(o, EditorParams.PropertyName, EditorParams.IndexInList).Value
+							: new Property(o, EditorParams.PropertyName).Value;
 						ValidateAndApply(o, (ValueType)current);
 					}
 				}
@@ -386,8 +406,10 @@ namespace Tangerine.UI
 				return true;
 			}
 			var first = PropertyValue(EditorParams.Objects.First()).GetValue();
-			return EditorParams.Objects.Aggregate(true,
-				(current, o) => current && EqualityComparer<T>.Default.Equals(first, PropertyValue(o).GetValue()));
+			return EditorParams.Objects.Aggregate(
+				true,
+				(current, o) => current && EqualityComparer<T>.Default.Equals(first, PropertyValue(o).GetValue())
+			);
 		}
 
 		protected bool SameComponentValues<ComponentType>(Func<T, ComponentType> selector)
@@ -396,9 +418,12 @@ namespace Tangerine.UI
 				return false;
 			}
 			var first = PropertyComponentValue(EditorParams.Objects.First(), selector).GetValue();
-			return EditorParams.Objects.Aggregate(true,
-				(current, o) => current && EqualityComparer<ComponentType>.Default
-					.Equals(first, PropertyComponentValue(o, selector).GetValue()));
+			return EditorParams.Objects.Aggregate(
+				true,
+				(current, o) => current
+					&& EqualityComparer<ComponentType>.Default
+						.Equals(first, PropertyComponentValue(o, selector).GetValue())
+			);
 		}
 
 		protected void ManageManyValuesOnFocusChange<U>(
@@ -415,7 +440,7 @@ namespace Tangerine.UI
 				if (!focused && !current.GetValue().IsDefined) {
 					editBox.Editor.Text.Invalidate();
 				} else if (focused && !current.GetValue().IsDefined) {
-					editBox.Text = "";
+					editBox.Text = string.Empty;
 					editBox.Editor.Text.Invalidate();
 				}
 			});
@@ -466,7 +491,7 @@ namespace Tangerine.UI
 				Nodes = {
 					new Image(IconPool.GetTexture($"Inspector.{validationResult}")) {
 						MinMaxSize = new Vector2(16, 16),
-						LayoutCell = new LayoutCell(Alignment.LeftCenter)
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 					},
 					new ThemedSimpleText {
 						Text = message,
@@ -475,9 +500,9 @@ namespace Tangerine.UI
 						ForceUncutText = false,
 						Padding = new Thickness(left: 5.0f),
 						HitTestTarget = true,
-						TabTravesable = new TabTraversable()
-					}
-				}
+						TabTravesable = new TabTraversable(),
+					},
+				},
 			};
 		}
 	}

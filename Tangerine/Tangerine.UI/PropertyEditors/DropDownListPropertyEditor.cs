@@ -9,7 +9,8 @@ namespace Tangerine.UI
 	{
 		protected DropDownList Selector { get; }
 
-		public DropDownListPropertyEditor(IPropertyEditorParams editorParams, IEnumerable<(string, object)> itemLister) : base(editorParams)
+		public DropDownListPropertyEditor(IPropertyEditorParams editorParams, IEnumerable<(string, object)> itemLister)
+			: base(editorParams)
 		{
 			Selector = editorParams.DropDownListFactory();
 			Selector.LayoutCell = new LayoutCell(Alignment.Center);

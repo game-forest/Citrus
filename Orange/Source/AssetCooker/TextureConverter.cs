@@ -10,13 +10,20 @@ namespace Orange
 {
 	public static class TextureConverter
 	{
-		public static void RunEtcTool(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, bool mipMaps, bool highQualityCompression, SHA256 cookingUnitHash)
-		{
+		public static void RunEtcTool(
+			Bitmap bitmap,
+			AssetBundle bundle,
+			string path,
+			AssetAttributes attributes,
+			bool mipMaps,
+			bool highQualityCompression,
+			SHA256 cookingUnitHash
+		) {
 			var hasAlpha = bitmap.HasAlpha;
 			var bledBitmap = hasAlpha ? TextureConverterUtils.BleedAlpha(bitmap) : null;
 			var args = "{0} -format " + (hasAlpha ? "RGBA8" : "RGB8") + " -jobs {1} " +
-			           " -effort " + (highQualityCompression ? "60" : "40") +
-			           (mipMaps ? " -mipmaps 4" : "") + " -output {2}";
+					   " -effort " + (highQualityCompression ? "60" : "40") +
+					   (mipMaps ? " -mipmaps 4" : string.Empty) + " -output {2}";
 			var hashString = GetTextureHashString(bledBitmap ?? bitmap, ".etc", args);
 			var cachePath = AssetCache.Instance.Load(hashString);
 			if (cachePath != null) {
@@ -40,9 +47,16 @@ namespace Orange
 			}
 		}
 
-		public static void RunPVRTexTool(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, bool mipMaps, bool highQualityCompression,
-			PVRFormat pvrFormat, SHA256 cookingUnitHash)
-		{
+		public static void RunPVRTexTool(
+			Bitmap bitmap,
+			AssetBundle bundle,
+			string path,
+			AssetAttributes attributes,
+			bool mipMaps,
+			bool highQualityCompression,
+			PVRFormat pvrFormat,
+			SHA256 cookingUnitHash
+		) {
 			int width = bitmap.Width;
 			int height = bitmap.Height;
 			bool hasAlpha = bitmap.HasAlpha;
@@ -72,7 +86,7 @@ namespace Orange
 				case PVRFormat.RGB565:
 					if (hasAlpha) {
 						Console.WriteLine("WARNING: texture has alpha channel. " +
-						                  "Used 'RGBA4444' format instead of 'RGB565'.");
+										  "Used 'RGBA4444' format instead of 'RGB565'.");
 						args.Append(" -f r4g4b4a4 -dither");
 					} else {
 						args.Append(" -f r5g6b5");
@@ -85,7 +99,10 @@ namespace Orange
 					args.Append(" -f r8g8b8a8");
 					break;
 			}
-			if (highQualityCompression && (new[] { PVRFormat.PVRTC2, PVRFormat.PVRTC4, PVRFormat.PVRTC4_Forced }.Contains(pvrFormat))) {
+			if (
+				highQualityCompression
+				&& new[] { PVRFormat.PVRTC2, PVRFormat.PVRTC4, PVRFormat.PVRTC4_Forced }.Contains(pvrFormat)
+			) {
 				args.Append(" -q pvrtcbest");
 			}
 			Bitmap bledBitmap = null;
@@ -126,8 +143,15 @@ namespace Orange
 			}
 		}
 
-		public static void RunNVCompress(Bitmap bitmap, AssetBundle bundle, string path, AssetAttributes attributes, DDSFormat format, bool mipMaps, SHA256 cookingUnitHash)
-		{
+		public static void RunNVCompress(
+			Bitmap bitmap,
+			AssetBundle bundle,
+			string path,
+			AssetAttributes attributes,
+			DDSFormat format,
+			bool mipMaps,
+			SHA256 cookingUnitHash
+		) {
 			bool compressed = format == DDSFormat.DXTi;
 			Bitmap bledBitmap = null;
 			if (bitmap.HasAlpha) {
@@ -163,7 +187,13 @@ namespace Orange
 					bledBitmap.Dispose();
 				}
 				args += $" \"{srcPath}\" \"{dstPath}\"";
-				if (Process.Start(nvcompress, args.Format(mipsFlag, compressionMethod, srcPath, dstPath), options: Process.Options.RedirectErrors) != 0) {
+				if (
+					Process.Start(
+						nvcompress,
+						args.Format(mipsFlag, compressionMethod, srcPath, dstPath),
+						options: Process.Options.RedirectErrors
+					) != 0
+				) {
 					throw new Lime.Exception($"NVCompress error\nCommand line: {nvcompress} {args}\"");
 				}
 				bundle.ImportFile(ddsPath, path, cookingUnitHash, attributes);
@@ -199,8 +229,7 @@ namespace Orange
 			while (true) {
 				try {
 					File.Delete(file);
-				}
-				catch (System.Exception) {
+				} catch (System.Exception) {
 					System.Threading.Thread.Sleep(100);
 					continue;
 				}
@@ -226,7 +255,8 @@ namespace Orange
 			return toolPath;
 		}
 
-		private static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
+		private static readonly System.Security.Cryptography.SHA256 sha256 =
+			System.Security.Cryptography.SHA256.Create();
 		private static string GetTextureHashString(Bitmap bitmap, string extension, string commandLineArgs)
 		{
 			using var stream = new MemoryStream();

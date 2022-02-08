@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +21,7 @@ namespace Kumquat
 		public CodeFormatter(string code)
 		{
 			lines = code
-			        .Split('\n')
+					.Split('\n')
 					.ToList();
 		}
 
@@ -72,7 +72,7 @@ namespace Kumquat
 			for (var i = 0; i < lines.Count; i++) {
 				var indentOff = MatchesCountInARow(lines[i], "}");
 				var tabsCount = indent - indentOff;
-				var tabs = "";
+				var tabs = string.Empty;
 				for (var j = 0; j < tabsCount; j++) {
 					tabs += '\t';
 				}
@@ -86,7 +86,7 @@ namespace Kumquat
 
 		private string GetCode()
 		{
-			return lines.Aggregate("", (current, line) => current + (line + '\n'));
+			return lines.Aggregate(string.Empty, (current, line) => current + line + '\n');
 		}
 
 		private static int MatchesCount(string source, string substring)

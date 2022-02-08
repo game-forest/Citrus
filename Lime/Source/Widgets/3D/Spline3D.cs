@@ -5,7 +5,7 @@ namespace Lime
 	public enum SplineInterpolation
 	{
 		Linear,
-		Bezier
+		Bezier,
 	}
 
 	[TangerineRegisterNode(Order = 25)]

@@ -76,8 +76,9 @@ namespace Tangerine.UI.Timeline
 
 		public Widget Widget { get; }
 
-		public TreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options)
-		{
+		public TreeViewItemPresentation(
+			TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options
+		) {
 			TreeView = treeView;
 			Item = item;
 			SceneItem = sceneItem;
@@ -85,9 +86,10 @@ namespace Tangerine.UI.Timeline
 			Widget = new Widget {
 				MinMaxHeight = TimelineMetrics.DefaultRowHeight,
 				Layout = new HBoxLayout {
-					DefaultCell = new DefaultLayoutCell { VerticalAlignment = VAlignment.Center }
+					DefaultCell = new DefaultLayoutCell { VerticalAlignment = VAlignment.Center },
 				},
-				Padding = new Thickness { Right = 10 },	// Add padding for the scrollbar.
+				// Add padding for the scrollbar.
+				Padding = new Thickness { Right = 10 },
 				Presenter = new SyncDelegatePresenter<Widget>(w => {
 					w.PrepareRendererState();
 					Renderer.DrawRect(Vector2.Zero, w.Size, ColorTheme.Current.Hierarchy.DefaultBackground);
@@ -108,7 +110,7 @@ namespace Tangerine.UI.Timeline
 						Renderer.PopState();
 					}
 					HighlightLabel(options.SearchStringGetter());
-				})
+				}),
 			};
 			Label = CreateLabel(Item);
 			ExpandButton = CreateExpandButton();
@@ -136,7 +138,7 @@ namespace Tangerine.UI.Timeline
 			Widget.Nodes.Add(IndentationSpacer);
 			ExpandButtonContainer = new Widget {
 				MinMaxSize = Theme.Metrics.DefaultToolbarButtonSize,
-				Nodes = { ExpandButton }
+				Nodes = { ExpandButton },
 			};
 			Widget.Nodes.Add(ExpandButtonContainer);
 			Widget.Nodes.Add(Spacer.HSpacer(3));
@@ -159,8 +161,13 @@ namespace Tangerine.UI.Timeline
 				var searchStringSize = Label.Font.MeasureTextLine(
 					Label.Text, Label.FontHeight, index, searchString.Length, Label.LetterSpacing);
 				pos.X += skipSize.X;
-				Renderer.DrawRect(pos.X, 0, pos.X + searchStringSize.X, Widget.Height,
-					ColorTheme.Current.Hierarchy.MatchColor);
+				Renderer.DrawRect(
+					x0: pos.X,
+					y0: 0,
+					x1: pos.X + searchStringSize.X,
+					y1: Widget.Height,
+					color: ColorTheme.Current.Hierarchy.MatchColor
+				);
 				pos.X += searchStringSize.X;
 				previousIndex = index + searchString.Length;
 			}
@@ -192,17 +199,17 @@ namespace Tangerine.UI.Timeline
 			if (!Label.Visible) {
 				return;
 			}
-			((WindowWidget) Label.GetRoot()).Window.Activate();
+			((WindowWidget)Label.GetRoot()).Window.Activate();
 			Label.Visible = false;
 			var idx = Label.Parent.Nodes.IndexOf(Label);
 			var editBoxContainer = new Widget {
 				Layout = new HBoxLayout(),
-				LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue)
+				LayoutCell = new LayoutCell(Alignment.LeftCenter, float.MaxValue),
 			};
 			Label.Parent.Nodes.Insert(idx, editBoxContainer);
 			var editBox = new ThemedEditBox {
 				LayoutCell = new LayoutCell(Alignment.Center),
-				Text = Item.Label
+				Text = Item.Label,
 			};
 			editBoxContainer.AddNode(editBox);
 			editBox.Tasks.Add(EditObjectIdTask(editBoxContainer, editBox, Label));
@@ -250,8 +257,9 @@ namespace Tangerine.UI.Timeline
 
 	public class FolderTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public FolderTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options)
-			: base(treeView, item, sceneItem, options)
+		public FolderTreeViewItemPresentation(
+			TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options
+		) : base(treeView, item, sceneItem, options)
 		{
 			if (!options.Minimalistic) {
 				Widget.Nodes.Add(CreateEyeButton());
@@ -280,7 +288,7 @@ namespace Tangerine.UI.Timeline
 		{
 			var button = new ToolbarButton {
 				Highlightable = false,
-				Texture = IconPool.GetTexture("Timeline.Eye")
+				Texture = IconPool.GetTexture("Timeline.Eye"),
 			};
 			button.AddTransactionClickHandler(
 				() => {
@@ -303,7 +311,7 @@ namespace Tangerine.UI.Timeline
 		{
 			var button = new ToolbarButton {
 				Highlightable = false,
-				Texture = IconPool.GetTexture("Timeline.Lock")
+				Texture = IconPool.GetTexture("Timeline.Lock"),
 			};
 			button.AddTransactionClickHandler(() => {
 				var locked = InnerNodes(SceneItem).All(i => !i.EditorState().Locked);
@@ -315,7 +323,7 @@ namespace Tangerine.UI.Timeline
 			return button;
 		}
 
-		IEnumerable<Node> InnerNodes(SceneItem item)
+		private IEnumerable<Node> InnerNodes(SceneItem item)
 		{
 			foreach (var i in item.SceneItems) {
 				if (i.TryGetNode(out var node)) {
@@ -347,8 +355,13 @@ namespace Tangerine.UI.Timeline
 			ColorTheme.Current.TimelineRoll.GrayMark,
 		};
 
-		public NodeTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem, Node node, TreeViewItemPresentationOptions options)
-			: base(treeView, item, sceneItem, options)
+		public NodeTreeViewItemPresentation(
+			TreeView treeView,
+			TreeViewItem item,
+			SceneItem sceneItem,
+			Node node,
+			TreeViewItemPresentationOptions options
+		) : base(treeView, item, sceneItem, options)
 		{
 			Node = node;
 			if (!options.Minimalistic) {
@@ -359,7 +372,7 @@ namespace Tangerine.UI.Timeline
 				var lockAnimationButton = CreateLockAnimationButton();
 				LinkIndicatorButtonContainer = new LinkIndicatorButtonContainer();
 				Widget.Nodes.Add(LinkIndicatorButtonContainer.Container);
-				Widget.Nodes.Add((Widget) enterButton ?? Spacer.HSpacer(Theme.Metrics.DefaultToolbarButtonSize.X));
+				Widget.Nodes.Add((Widget)enterButton ?? Spacer.HSpacer(Theme.Metrics.DefaultToolbarButtonSize.X));
 				Widget.Nodes.Add(showAnimatorsButton);
 				Widget.Nodes.Add(lockAnimationButton);
 				Widget.Nodes.Add(eyeButton);
@@ -430,7 +443,8 @@ namespace Tangerine.UI.Timeline
 				Command.Delete,
 				Command.MenuSeparator,
 				new Command("Rename", Rename),
-				new Command("Color mark",
+				new Command(
+					"Color mark",
 					new Menu {
 						CreateSetColorMarkCommand("No Color", 0),
 						CreateSetColorMarkCommand("Red", 1),
@@ -440,8 +454,9 @@ namespace Tangerine.UI.Timeline
 						CreateSetColorMarkCommand("Green", 5),
 						CreateSetColorMarkCommand("Violet", 6),
 						CreateSetColorMarkCommand("Gray", 7),
-					}),
-				GenericCommands.ConvertTo
+					}
+				),
+				GenericCommands.ConvertTo,
 			};
 			if (NodeCompositionValidator.CanHaveChildren(Node.GetType())) {
 				menu.Insert(8, new Command("Propagate Markers", () => {
@@ -456,21 +471,23 @@ namespace Tangerine.UI.Timeline
 
 		private ICommand CreateSetColorMarkCommand(string title, int index)
 		{
-			return new Command(title,
+			return new Command(
+				title,
 				() => {
 					Document.Current.History.DoTransaction(() => {
 						foreach (var n in Document.Current.SelectedNodes()) {
 							SetProperty.Perform(n.EditorState(), nameof(NodeEditorState.ColorIndex), index);
 						}
 					});
-				}) { Checked = Node.EditorState().ColorIndex == index };
+				}
+			) { Checked = Node.EditorState().ColorIndex == index };
 		}
 
 		private ToolbarButton CreateEnterButton()
 		{
 			var button = new ToolbarButton {
 				Texture = IconPool.GetTexture("Timeline.EnterContainer"),
-				Highlightable = false
+				Highlightable = false,
 			};
 			button.AddTransactionClickHandler(() => EnterNode.Perform(Node));
 			button.Components.Add(new DisableAncestralGesturesComponent());
@@ -481,15 +498,23 @@ namespace Tangerine.UI.Timeline
 		{
 			var button = new ToolbarButton {
 				Highlightable = false,
-				Texture = IconPool.GetTexture("Timeline.Animator")
+				Texture = IconPool.GetTexture("Timeline.Animator"),
 			};
 			button.AddChangeWatcher(
-				() => (HasAnimators: SceneItem.GetTimelineSceneItemState().AnimatorsExpandable, Document.Current.ShowAnimators),
-				i => button.Enabled = SceneItem.GetTimelineSceneItemState().AnimatorsExpandable && !Document.Current.ShowAnimators
+				() => (
+					HasAnimators: SceneItem.GetTimelineSceneItemState().AnimatorsExpandable,
+					Document.Current.ShowAnimators
+				),
+				i => button.Enabled = SceneItem.GetTimelineSceneItemState().AnimatorsExpandable
+					&& !Document.Current.ShowAnimators
 			);
 			button.AddChangeWatcher(
-				() => (ShowAnimators: SceneItem.GetTimelineSceneItemState().AnimatorsExpanded, Document.Current.ShowAnimators),
-				i => button.Checked = SceneItem.GetTimelineSceneItemState().AnimatorsExpanded || Document.Current.ShowAnimators
+				() => (
+					ShowAnimators: SceneItem.GetTimelineSceneItemState().AnimatorsExpanded,
+					Document.Current.ShowAnimators
+				),
+				i => button.Checked = SceneItem.GetTimelineSceneItemState().AnimatorsExpanded
+					|| Document.Current.ShowAnimators
 			);
 			button.AddTransactionClickHandler(
 				() => {
@@ -627,7 +652,7 @@ namespace Tangerine.UI.Timeline
 			None,
 			Enabled,
 			PartiallyEnabled,
-			Disabled
+			Disabled,
 		}
 
 		private sealed class ComponentIcon : ToolbarButton
@@ -660,9 +685,12 @@ namespace Tangerine.UI.Timeline
 
 	public class AnimationTrackTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public AnimationTrackTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem,
-			TreeViewItemPresentationOptions options)
-			: base(treeView, item, sceneItem, options)
+		public AnimationTrackTreeViewItemPresentation(
+			TreeView treeView,
+			TreeViewItem item,
+			SceneItem sceneItem,
+			TreeViewItemPresentationOptions options
+		) : base(treeView, item, sceneItem, options)
 		{
 		}
 
@@ -697,9 +725,12 @@ namespace Tangerine.UI.Timeline
 
 	public class AnimatorTreeViewItemPresentation : TreeViewItemPresentation
 	{
-		public AnimatorTreeViewItemPresentation(TreeView treeView, TreeViewItem item, SceneItem sceneItem,
-			TreeViewItemPresentationOptions options)
-			: base(treeView, item, sceneItem, options)
+		public AnimatorTreeViewItemPresentation(
+			TreeView treeView,
+			TreeViewItem item,
+			SceneItem sceneItem,
+			TreeViewItemPresentationOptions options
+		) : base(treeView, item, sceneItem, options)
 		{
 			Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
 		}
@@ -716,7 +747,7 @@ namespace Tangerine.UI.Timeline
 				Command.Cut,
 				Command.Copy,
 				Command.Paste,
-				Command.Delete
+				Command.Delete,
 			};
 			menu.Popup();
 		}
@@ -741,7 +772,7 @@ namespace Tangerine.UI.Timeline
 				new ImageCombinerLinkIndicationProcessor(),
 				new BoneLinkIndicationProcessor(),
 				new SplineGearLinkIndicationProcessor(),
-				new SplineGear3DLinkIndicationProcessor()
+				new SplineGear3DLinkIndicationProcessor(),
 			};
 		}
 
@@ -768,7 +799,14 @@ namespace Tangerine.UI.Timeline
 			if (dragInto) {
 				var x = (CalcIndent(parent) + 1) * IndentWidth;
 				var y = parent.Presentation.Widget.Top();
-				Renderer.DrawRectOutline(x, y - 0.5f, scrollWidget.Width, y + TimelineMetrics.DefaultRowHeight + 0.5f, Theme.Colors.SeparatorDragColor, 2);
+				Renderer.DrawRectOutline(
+					x0: x,
+					y0: y - 0.5f,
+					x1: scrollWidget.Width,
+					y1: y + TimelineMetrics.DefaultRowHeight + 0.5f,
+					color: Theme.Colors.SeparatorDragColor,
+					thickness: 2
+				);
 			} else {
 				var x = (CalcIndent(parent) + 2) * IndentWidth;
 				var y = CalcDragCursorY(parent, childIndex);

@@ -8,8 +8,9 @@ using Tangerine.Core.Operations;
 
 namespace Tangerine.UI.PropertyEditors
 {
-	public class DictionaryPropertyEditor<TDictionary, TValue> :
-		ExpandablePropertyEditor<TDictionary> where TDictionary : IDictionary<string, TValue>, IDictionary
+	public class DictionaryPropertyEditor<TDictionary, TValue>
+		: ExpandablePropertyEditor<TDictionary>
+		where TDictionary : IDictionary<string, TValue>, IDictionary
 	{
 		private readonly Func<PropertyEditorParams, Widget> populateEditors;
 		private static TValue DefaultValue => typeof(TValue) == typeof(string)
@@ -17,7 +18,7 @@ namespace Tangerine.UI.PropertyEditors
 			: typeof(TValue).IsInterface || typeof(TValue).IsAbstract
 				? default
 				: Activator.CreateInstance<TValue>();
-		private readonly KeyValuePair keyValueToAdd = new KeyValuePair { Key = "", Value = DefaultValue, };
+		private readonly KeyValuePair keyValueToAdd = new KeyValuePair { Key = string.Empty, Value = DefaultValue, };
 		private TDictionary dictionary;
 		private readonly HashSet<KeyValuePair> pairs = new HashSet<KeyValuePair>();
 
@@ -37,9 +38,9 @@ namespace Tangerine.UI.PropertyEditors
 					Layout = new HBoxLayout(),
 					Nodes = { new ThemedSimpleText {
 						Text = "Edit of dictionary properties isn't supported for multiple selection.",
-						ForceUncutText = false
-					} },
-					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
+						ForceUncutText = false,
+					}, },
+					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground),
 				});
 				return;
 			}
@@ -62,10 +63,15 @@ namespace Tangerine.UI.PropertyEditors
 						return;
 					}
 					using (Document.Current.History.BeginTransaction()) {
-						InsertIntoDictionary<TDictionary, string, TValue>.Perform(dictionary, keyValueToAdd.Key,
-							keyValueToAdd.Value);
-						ExpandableContent.Nodes.Add(CreateDefaultKeyValueEditor(keyValueToAdd.Key,
-							keyValueToAdd.Value));
+						InsertIntoDictionary<TDictionary, string, TValue>.Perform(
+							dictionary,
+							keyValueToAdd.Key,
+							keyValueToAdd.Value
+						);
+						ExpandableContent.Nodes.Add(CreateDefaultKeyValueEditor(
+							keyValueToAdd.Key,
+							keyValueToAdd.Value)
+						);
 						Document.Current.History.CommitTransaction();
 					}
 					keyValueToAdd.Value = DefaultValue;
@@ -116,7 +122,8 @@ namespace Tangerine.UI.PropertyEditors
 				Nodes = {
 					(keyEditorContainer = CreateKeyEditor(
 						editorParams: EditorParams,
-						keyValue: keyValue, submitted: s => SetKey(keyValue, s),
+						keyValue: keyValue,
+						submitted: s => SetKey(keyValue, s),
 						button: deleteButton
 					)),
 					CreateValueEditor(
@@ -125,7 +132,7 @@ namespace Tangerine.UI.PropertyEditors
 						populateEditors: populateEditors,
 						setter: (o, name, v) => SetValue(keyValue, (TValue)v)
 					),
-				}
+				},
 			};
 			keyEditorContainer.Tasks.AddLoop(() => {
 				if (dictionary.TryGetValue(keyValue.Key, out value)) {

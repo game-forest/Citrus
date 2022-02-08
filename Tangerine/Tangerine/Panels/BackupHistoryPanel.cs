@@ -35,7 +35,7 @@ namespace Tangerine.Panels
 				Id = "BackupHistoryPanel",
 				Padding = new Thickness(4),
 				Layout = new VBoxLayout { Spacing = 4 },
-				Nodes = { scrollView }
+				Nodes = { scrollView },
 			};
 			resultPane = scrollView.Content;
 			resultPane.CompoundPresenter.Insert(0, new SyncDelegatePresenter<Widget>(w => {
@@ -43,17 +43,23 @@ namespace Tangerine.Panels
 				if (selectedIndex == 0) {
 					if (history?.Count > 0) {
 						Renderer.DrawRect(
-							0, rowHeight * selectedIndex,
-							w.Width, (selectedIndex + 1) * rowHeight,
-							Theme.Colors.SelectedBackground);
+							x0: 0,
+							y0: rowHeight * selectedIndex,
+							x1: w.Width,
+							y1: (selectedIndex + 1) * rowHeight,
+							color: Theme.Colors.SelectedBackground
+						);
 					}
 				}
 
 				if (history?.Count > 0) {
 					Renderer.DrawRect(
-						0, rowHeight * selectedIndex,
-						w.Width, (selectedIndex + 1) * rowHeight,
-						Theme.Colors.SelectedBackground);
+						x0: 0,
+						y0: rowHeight * selectedIndex,
+						x1: w.Width,
+						y1: (selectedIndex + 1) * rowHeight,
+						color: Theme.Colors.SelectedBackground
+					);
 				}
 			}));
 			scrollView.LateTasks.Add(new KeyRepeatHandler(ScrollView_KeyRepeated));
@@ -120,11 +126,15 @@ namespace Tangerine.Panels
 				ColumnCount = 1,
 				ColumnSpacing = 8,
 				RowCount = history.Count,
-				ColumnDefaults = new List<DefaultLayoutCell> { new DefaultLayoutCell { StretchY = 0 } }
+				ColumnDefaults = new List<DefaultLayoutCell> { new DefaultLayoutCell { StretchY = 0 } },
 			};
 
 			for (int i = history.Count - 1; i >= 0; i--) {
-				resultPane.Nodes.Add(new ThemedSimpleText(history[i].DateTime.ToString() + (history[i].IsActual ? "(Latest)" : "")));
+				resultPane.Nodes.Add(
+					new ThemedSimpleText(
+						history[i].DateTime.ToString() + (history[i].IsActual ? "(Latest)" : string.Empty)
+					)
+				);
 				if (currentBackup != null && currentBackup.DateTime.Equals(history[i].DateTime)) {
 					selectedIndex = history.Count - i - 1;
 				}

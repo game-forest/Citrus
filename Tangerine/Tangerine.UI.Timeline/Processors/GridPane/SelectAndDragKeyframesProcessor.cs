@@ -63,12 +63,12 @@ namespace Tangerine.UI.Timeline
 			var r = new IntRectangle {
 				A = {
 					X = Math.Min(a.X, b.X),
-					Y = Math.Min(a.Y, b.Y)
+					Y = Math.Min(a.Y, b.Y),
 				},
 				B = {
 					X = Math.Max(a.X, b.X),
-					Y = Math.Max(a.Y, b.Y)
-				}
+					Y = Math.Max(a.Y, b.Y),
+				},
 			};
 			if (selectKeyframes) {
 				SelectKeyframes(r);
@@ -83,13 +83,16 @@ namespace Tangerine.UI.Timeline
 		{
 			foreach (var i in Document.Current.VisibleSceneItems) {
 				if (
-					i.GetTimelineSceneItemState().Index >= bounds.A.Y && i.GetTimelineSceneItemState().Index <= bounds.B.Y &&
-					i.Components.Get<NodeSceneItem>() is NodeSceneItem nodeRow
+					i.GetTimelineSceneItemState().Index >= bounds.A.Y
+					&& i.GetTimelineSceneItemState().Index <= bounds.B.Y
+					&& i.Components.Get<NodeSceneItem>() is NodeSceneItem nodeRow
 				) {
 					foreach (var animator in nodeRow.Node.Animators) {
 						foreach (var key in animator.ReadonlyKeys) {
 							if (key.Frame >= bounds.A.X && key.Frame <= bounds.B.X) {
-								Operations.SelectGridSpan.Perform(i.GetTimelineSceneItemState().Index, key.Frame, key.Frame + 1);
+								Operations.SelectGridSpan.Perform(
+									i.GetTimelineSceneItemState().Index, key.Frame, key.Frame + 1
+								);
 							}
 						}
 					}
@@ -99,7 +102,10 @@ namespace Tangerine.UI.Timeline
 
 		private static bool IsCellSelected(IntVector2 cell)
 		{
-			return Document.Current.VisibleSceneItems[cell.Y].Components.GetOrAdd<GridSpanListComponent>().Spans.IsCellSelected(cell.X);
+			return Document.Current.VisibleSceneItems[cell.Y].Components
+				.GetOrAdd<GridSpanListComponent>()
+				.Spans
+				.IsCellSelected(cell.X);
 		}
 
 		private IEnumerator<object> DragSelectionTask(IntVector2 initialCell)

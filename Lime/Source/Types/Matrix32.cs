@@ -46,7 +46,11 @@ namespace Lime
 		/// <summary>
 		/// Returns the identity matrix. It doesn't move the points at all.
 		/// </summary>
-		public static readonly Matrix32 Identity = new Matrix32(new Vector2(1, 0), new Vector2(0, 1), new Vector2(0, 0));
+		public static readonly Matrix32 Identity = new Matrix32(
+			u: new Vector2(1, 0),
+			v: new Vector2(0, 1),
+			t: new Vector2(0, 0)
+		);
 
 		public Matrix32(Vector2 u, Vector2 v, Vector2 t)
 		{
@@ -80,8 +84,10 @@ namespace Lime
 		{
 			var m = new Matrix32();
 			float invDet = 1.0f / CalcDeterminant();
-			m.UX = invDet * VY; m.UY = -invDet * UY;
-			m.VX = -invDet * VX; m.VY = invDet * UX;
+			m.UX = invDet * VY;
+			m.UY = -invDet * UY;
+			m.VX = -invDet * VX;
+			m.VY = invDet * UX;
 			m.TX = invDet * (VX * TY - VY * TX);
 			m.TY = invDet * (UY * TX - UX * TY);
 			return m;
@@ -97,7 +103,7 @@ namespace Lime
 				UX = cs.X,
 				UY = cs.Y,
 				VX = -cs.Y,
-				VY = cs.X
+				VY = cs.X,
 			};
 		}
 
@@ -111,7 +117,7 @@ namespace Lime
 				UX = cs.X,
 				UY = cs.Y,
 				VX = -cs.Y,
-				VY = cs.X
+				VY = cs.X,
 			};
 		}
 
@@ -201,7 +207,7 @@ namespace Lime
 				VX = a.VX * b.UX + a.VY * b.VX,
 				VY = a.VX * b.UY + a.VY * b.VY,
 				TX = a.TX * b.UX + a.TY * b.VX + b.TX,
-				TY = a.TX * b.UY + a.TY * b.VY + b.TY
+				TY = a.TX * b.UY + a.TY * b.VY + b.TY,
 			};
 		}
 
@@ -217,7 +223,7 @@ namespace Lime
 				VX = a.VX * b.UX + a.VY * b.VX,
 				VY = a.VX * b.UY + a.VY * b.VY,
 				TX = a.TX * b.UX + a.TY * b.VX + b.TX,
-				TY = a.TX * b.UY + a.TY * b.VY + b.TY
+				TY = a.TX * b.UY + a.TY * b.VY + b.TY,
 			};
 		}
 
@@ -228,7 +234,7 @@ namespace Lime
 		{
 			return new Vector2 {
 				X = b.X * a.UX + b.Y * a.VX + a.TX,
-				Y = b.X * a.UY + b.Y * a.VY + a.TY
+				Y = b.X * a.UY + b.Y * a.VY + a.TY,
 			};
 		}
 
@@ -236,7 +242,7 @@ namespace Lime
 		{
 			return new Vector2 {
 				X = a.X * UX + a.Y * VX + TX,
-				Y = a.X * UY + a.Y * VY + TY
+				Y = a.X * UY + a.Y * VY + TY,
 			};
 		}
 
@@ -244,7 +250,7 @@ namespace Lime
 		{
 			return new Vector2 {
 				X = x * UX + y * VX + TX,
-				Y = x * UY + y * VY + TY
+				Y = x * UY + y * VY + TY,
 			};
 		}
 
@@ -254,7 +260,7 @@ namespace Lime
 			return new Transform2 {
 				Translation = T,
 				Scale = new Vector2(U.Length, V.Length * vSign),
-				Rotation = U.Atan2Deg
+				Rotation = U.Atan2Deg,
 			};
 		}
 

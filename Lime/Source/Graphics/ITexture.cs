@@ -22,7 +22,7 @@ namespace Lime
 	public enum TextureMipmapMode
 	{
 		Linear,
-		Nearest
+		Nearest,
 	}
 
 	public class TextureParams : IEquatable<TextureParams>

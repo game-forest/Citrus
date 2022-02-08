@@ -333,8 +333,9 @@ namespace Lime
 			keyboardHandler.ProcessTextInput();
 		}
 
-		void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
-		{
+		void ISurfaceHolderCallback.SurfaceChanged(
+			ISurfaceHolder holder, Android.Graphics.Format format, int width, int height
+		) {
 			var surfaceRect = holder.SurfaceFrame;
 			Size = new System.Drawing.Size(surfaceRect.Right - surfaceRect.Left, surfaceRect.Bottom - surfaceRect.Top);
 			var orientation = Size.Width < Size.Height ? DeviceOrientation.Portrait : DeviceOrientation.LandscapeLeft;
@@ -401,7 +402,9 @@ namespace Lime
 			public abstract void MakeCurrent();
 			public abstract void SwapBuffers();
 			public abstract void Unbind();
-			public abstract void OnSurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height);
+			public abstract void OnSurfaceChanged(
+				ISurfaceHolder holder, Android.Graphics.Format format, int width, int height
+			);
 			public abstract void OnSurfaceCreated(ISurfaceHolder holder);
 			public abstract void OnSurfaceDestroyed(ISurfaceHolder holder);
 		}
@@ -464,7 +467,9 @@ namespace Lime
 			{
 				EnsureEglDisplayCreated();
 				const int EglContextClientVersion = 0x3098;
-				var context = egl.EglCreateContext(eglDisplay, eglConfig, EGL10.EglNoContext, new[] { EglContextClientVersion, 2, EGL10.EglNone });
+				var context = egl.EglCreateContext(
+					eglDisplay, eglConfig, EGL10.EglNoContext, new[] { EglContextClientVersion, 2, EGL10.EglNone }
+				);
 				if (context == null || context == EGL10.EglNoContext) {
 					throw new System.Exception($"Could not create EGL context, error {GetEglErrorString()}");
 				}
@@ -509,8 +514,9 @@ namespace Lime
 				eglConfig = configs[0];
 			}
 
-			private static int[] BuildEglConfigAttribs(int red = 0, int green = 0, int blue = 0, int alpha = 0, int depth = 0, int stencil = 0)
-			{
+			private static int[] BuildEglConfigAttribs(
+				int red = 0, int green = 0, int blue = 0, int alpha = 0, int depth = 0, int stencil = 0
+			) {
 				var attribs = new List<int>();
 				if (red != 0) {
 					attribs.Add(EGL10.EglRedSize);
@@ -629,7 +635,9 @@ namespace Lime
 				DestroyEglContext();
 				CreateEglContext();
 				if (!EglTryMakeCurrent()) {
-					throw new System.Exception($"Could not make current EGL context, error {GetEglErrorString(egl.EglGetError())}");
+					throw new System.Exception(
+						$"Could not make current EGL context, error {GetEglErrorString(egl.EglGetError())}"
+					);
 				}
 				PlatformRenderer.RaiseContextLost();
 			}
@@ -661,7 +669,9 @@ namespace Lime
 				}
 			}
 
-			public override void OnSurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height) { }
+			public override void OnSurfaceChanged(
+				ISurfaceHolder holder, Android.Graphics.Format format, int width, int height
+			) { }
 
 			public override void OnSurfaceCreated(ISurfaceHolder holder)
 			{
@@ -707,8 +717,9 @@ namespace Lime
 			{
 			}
 
-			public override void OnSurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)
-			{
+			public override void OnSurfaceChanged(
+				ISurfaceHolder holder, Android.Graphics.Format format, int width, int height
+			) {
 				UpdateSwapchain(holder);
 			}
 
@@ -733,7 +744,9 @@ namespace Lime
 				if (aNativeWindow != IntPtr.Zero) {
 					ANativeWindow_release(aNativeWindow);
 				}
-				aNativeWindow = ANativeWindow_fromSurface(Java.Interop.JniEnvironment.EnvironmentPointer, holder.Surface.Handle);
+				aNativeWindow = ANativeWindow_fromSurface(
+					Java.Interop.JniEnvironment.EnvironmentPointer, holder.Surface.Handle
+				);
 			}
 
 			private void ReleaseNativeWindow()

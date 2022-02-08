@@ -13,24 +13,24 @@ namespace Lime
 {
 	public class WaveIMA4Decoder : IAudioDecoder
 	{
-		enum WaveFormat
+		private enum WaveFormat
 		{
 			Unknown,
 			PCM,
 			ADPCM,
-			IMA_ADPCM = 0x11
+			IMA_ADPCM = 0x11,
 		}
 
-		Stream stream;
-		ushort channels;
-		int samplesPerSec;
-		int blockSize;
-		ushort origBlockSize;
-		int dataPosition;
-		int dataSize;
-		int currentBlock;
-		int totalBlocks;
-		byte[] origBlockBuffer;
+		private Stream stream;
+		private ushort channels;
+		private int samplesPerSec;
+		private int blockSize;
+		private ushort origBlockSize;
+		private int dataPosition;
+		private int dataSize;
+		private int currentBlock;
+		private int totalBlocks;
+		private byte[] origBlockBuffer;
 
 		public static bool IsWaveStream(Stream stream)
 		{
@@ -46,43 +46,53 @@ namespace Lime
 		public WaveIMA4Decoder(Stream stream)
 		{
 			this.stream = stream;
-			if (ReadID() != "RIFF")
+			if (ReadID() != "RIFF") {
 				throw Abort("Invalid RIFF header");
+			}
+
 			ReadInt32();
-			if (ReadID() != "WAVE")
+			if (ReadID() != "WAVE") {
 				throw Abort("Wave type is expected");
+			}
+
 			int fmtSize = 0;
 			dataSize = 0;
 			while (stream.Position < stream.Length) {
-				switch(ReadID()) {
-				case "fmt ":
-					fmtSize = ReadInt32();
-					uint fmt = ReadUInt16();
-					if (fmt != (ushort)WaveFormat.IMA_ADPCM)
-						throw Abort("Not IMA ADPCM");
-					channels = ReadUInt16();
-					samplesPerSec = ReadInt32();
-					ReadInt32();
-					origBlockSize = ReadUInt16();
-					if (ReadUInt16() != 4)
-						throw Abort("Not 4-bit format");
-					ReadBytes(fmtSize - 16);
-					break;
-				case "data":
-					dataSize = ReadInt32();
-					dataPosition = (int)stream.Position;
-					stream.Position += dataSize;
-					break;
-				default:
-					var size = ReadInt32();
-					stream.Position += size;
-					break;
+				switch (ReadID()) {
+					case "fmt ":
+						fmtSize = ReadInt32();
+						uint fmt = ReadUInt16();
+						if (fmt != (ushort)WaveFormat.IMA_ADPCM) {
+							throw Abort("Not IMA ADPCM");
+						}
+
+						channels = ReadUInt16();
+						samplesPerSec = ReadInt32();
+						ReadInt32();
+						origBlockSize = ReadUInt16();
+						if (ReadUInt16() != 4) {
+							throw Abort("Not 4-bit format");
+						}
+
+						ReadBytes(fmtSize - 16);
+						break;
+					case "data":
+						dataSize = ReadInt32();
+						dataPosition = (int)stream.Position;
+						stream.Position += dataSize;
+						break;
+					default:
+						var size = ReadInt32();
+						stream.Position += size;
+						break;
 				}
 			}
-			if (fmtSize == 0)
+			if (fmtSize == 0) {
 				throw Abort("No format information");
-			else if (dataSize == 0)
+			} else if (dataSize == 0) {
 				throw Abort("No data");
+			}
+
 			totalBlocks = (int)(dataSize / origBlockSize);
 			blockSize = (origBlockSize - channels * 4) * 4 + channels * 2;
 			origBlockBuffer = new byte[origBlockSize];
@@ -105,7 +115,7 @@ namespace Lime
 				}
 				if (channels == 2) {
 					DecodeStereoBlock(buffer);
-				}  else if (channels == 1) {
+				} else if (channels == 1) {
 					DecodeMonoBlock(buffer);
 				} else {
 					throw Abort("Unsupported number of channels");
@@ -144,7 +154,7 @@ namespace Lime
 			}
 		}
 
-		void DecodeMonoBlock (IntPtr buffer)
+		private void DecodeMonoBlock(IntPtr buffer)
 		{
 			unsafe {
 				short* pBuffer = (short*)buffer;
@@ -158,7 +168,7 @@ namespace Lime
 			}
 		}
 
-		void DecodeStereoBlock(IntPtr buffer)
+		private void DecodeStereoBlock(IntPtr buffer)
 		{
 			unsafe {
 				short* pBuffer = (short*)buffer;
@@ -179,42 +189,44 @@ namespace Lime
 			}
 		}
 
-		Lime.Exception Abort(string message)
+		private Lime.Exception Abort(string message)
 		{
 			Dispose();
 			return new Lime.Exception(message);
 		}
 
-		byte[] ReadBytes(int length)
+		private byte[] ReadBytes(int length)
 		{
 			var ret = new byte[length];
-			if (length > 0)
+			if (length > 0) {
 				stream.Read(ret, 0, length);
+			}
+
 			return ret;
 		}
 
-		string ReadID()
+		private string ReadID()
 		{
 			return Encoding.UTF8.GetString(ReadBytes(4), 0, 4);
 		}
 
-		int ReadInt32()
+		private int ReadInt32()
 		{
 			return BitConverter.ToInt32(ReadBytes(4), 0);
 		}
 
-		uint ReadUInt32()
+		private uint ReadUInt32()
 		{
 			return BitConverter.ToUInt32(ReadBytes(4), 0);
 		}
 
-		ushort ReadUInt16()
+		private ushort ReadUInt16()
 		{
 			return BitConverter.ToUInt16(ReadBytes(2), 0);
 		}
 	}
 
-	struct DecoderState
+	internal struct DecoderState
 	{
 		public short Value;
 		public int Index;
@@ -225,7 +237,7 @@ namespace Lime
 			Index = value[startIndex + 2];
 		}
 
-		static int[] StepTable = new[]
+		private static int[] stepTable = new[]
 		{
 			7, 8, 9, 10, 11, 12, 13, 14,
 			16, 17, 19, 21, 23, 25, 28, 31,
@@ -238,42 +250,54 @@ namespace Lime
 			3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484,
 			7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899,
 			15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794,
-			32767
+			32767,
 		};
-			
-		static int[] IndexTable = new[]
+
+		private static int[] indexTable = new[]
 		{
 			-1, -1, -1, -1, 2, 4, 6, 8,
-			-1, -1, -1, -1, 2, 4, 6, 8
+			-1, -1, -1, -1, 2, 4, 6, 8,
 		};
 
 		public short Next(int v)
 		{
-			int s = StepTable[Index];
+			int s = stepTable[Index];
 			int d = 0;
-			if ((v & 4) != 0)
+			if ((v & 4) != 0) {
 				d += s;
-			if ((v & 2) != 0)
+			}
+
+			if ((v & 2) != 0) {
 				d += s >> 1;
-			if ((v & 1) != 0)
+			}
+
+			if ((v & 1) != 0) {
 				d += s >> 2;
+			}
+
 			d += s >> 3;
-			if ((v & 8) != 0)
+			if ((v & 8) != 0) {
 				d = -d;
+			}
 			// Another version, uses integer multiplication. Perhaps faster on modern CPU.
 			// d = (s * (v & 7) / 4) + (s / 8);
-			// if ((v & 8) != 0)
-			//	d = -d;
+			// if ((v & 8) != 0) d = -d;
 			int val = ((int)Value) + d;
-			if (val > short.MaxValue)
+			if (val > short.MaxValue) {
 				val = short.MaxValue;
-			if (val < short.MinValue)
+			}
+
+			if (val < short.MinValue) {
 				val = short.MinValue;
-			int idx = Index + IndexTable[v];
-			if (idx > 88)
+			}
+
+			int idx = Index + indexTable[v];
+			if (idx > 88) {
 				idx = 88;
-			else if (idx < 0)
+			} else if (idx < 0) {
 				idx = 0;
+			}
+
 			Value = (short)val;
 			Index = idx;
 			return Value;

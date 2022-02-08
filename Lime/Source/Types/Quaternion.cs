@@ -64,21 +64,18 @@ namespace Lime
 		/// Constructs a quaternion from <see cref="Vector4"/>.
 		/// </summary>
 		/// <param name="value">The x, y, z coordinates in 3d-space and the rotation component.</param>
-		//public Quaternion(Vector4 value)
-		//{
-		//	this.X = value.X;
-		//	this.Y = value.Y;
-		//	this.Z = value.Z;
-		//	this.W = value.W;
-		//}
+		// public Quaternion(Vector4 value)
+		// {
+		//     this.X = value.X;
+		//     this.Y = value.Y;
+		//     this.Z = value.Z;
+		//     this.W = value.W;
+		// }
 
 		/// <summary>
 		/// Returns a quaternion representing no rotation.
 		/// </summary>
-		public static Quaternion Identity
-		{
-			get{ return _identity; }
-		}
+		public static Quaternion Identity => _identity;
 
 		/// <summary>
 		/// Gets the angle of the quaternion.
@@ -89,8 +86,9 @@ namespace Lime
 			get
 			{
 				float length = (X * X) + (Y * Y) + (Z * Z);
-				if (length < Mathf.ZeroTolerance)
+				if (length < Mathf.ZeroTolerance) {
 					return 0.0f;
+				}
 
 				return (float)(2.0 * Math.Acos(W));
 			}
@@ -105,8 +103,9 @@ namespace Lime
 			get
 			{
 				float length = (X * X) + (Y * Y) + (Z * Z);
-				if (length < Mathf.ZeroTolerance)
+				if (length < Mathf.ZeroTolerance) {
 					return new Vector3(1, 0, 0);
+				}
 
 				float inv = 1.0f / length;
 				return new Vector3(X * inv, Y * inv, Z * inv);
@@ -128,9 +127,12 @@ namespace Lime
 				}
 
 				return string.Concat(
-					this.X.ToString(), " ",
-					this.Y.ToString(), " ",
-					this.Z.ToString(), " ",
+					this.X.ToString(),
+					" ",
+					this.Y.ToString(),
+					" ",
+					this.Z.ToString(),
+					" ",
 					this.W.ToString()
 				);
 			}
@@ -171,7 +173,9 @@ namespace Lime
 		/// </summary>
 		/// <param name="value1">The first <see cref="Quaternion"/> to concatenate.</param>
 		/// <param name="value2">The second <see cref="Quaternion"/> to concatenate.</param>
-		/// <returns>The result of rotation of <paramref name="value1"/> followed by <paramref name="value2"/> rotation.</returns>
+		/// <returns>
+		/// The result of rotation of <paramref name="value1"/> followed by <paramref name="value2"/> rotation.
+		/// </returns>
 		public static Quaternion Concatenate(Quaternion value1, Quaternion value2)
 		{
 			Quaternion quaternion;
@@ -186,10 +190,10 @@ namespace Lime
 			float z2 = value2.Z;
 			float w2 = value2.W;
 
-			quaternion.X = ((x2 * w1) + (x1 * w2)) + ((y2 * z1) - (z2 * y1));
-			quaternion.Y = ((y2 * w1) + (y1 * w2)) + ((z2 * x1) - (x2 * z1));
-			quaternion.Z = ((z2 * w1) + (z1 * w2)) + ((x2 * y1) - (y2 * x1));
-			quaternion.W = (w2 * w1) - (((x2 * x1) + (y2 * y1)) + (z2 * z1));
+			quaternion.X = (x2 * w1) + (x1 * w2) + ((y2 * z1) - (z2 * y1));
+			quaternion.Y = (y2 * w1) + (y1 * w2) + ((z2 * x1) - (x2 * z1));
+			quaternion.Z = (z2 * w1) + (z1 * w2) + ((x2 * y1) - (y2 * x1));
+			quaternion.W = (w2 * w1) - ((x2 * x1) + (y2 * y1) + (z2 * z1));
 
 			return quaternion;
 		}
@@ -199,7 +203,10 @@ namespace Lime
 		/// </summary>
 		/// <param name="value1">The first <see cref="Quaternion"/> to concatenate.</param>
 		/// <param name="value2">The second <see cref="Quaternion"/> to concatenate.</param>
-		/// <param name="result">The result of rotation of <paramref name="value1"/> followed by <paramref name="value2"/> rotation as an output parameter.</param>
+		/// <param name="result">
+		/// The result of rotation of <paramref name="value1"/> followed by
+		/// <paramref name="value2"/> rotation as an output parameter.
+		/// </param>
 		public static void Concatenate(ref Quaternion value1, ref Quaternion value2, out Quaternion result)
 		{
 			float x1 = value1.X;
@@ -212,10 +219,10 @@ namespace Lime
 			float z2 = value2.Z;
 			float w2 = value2.W;
 
-			result.X = ((x2 * w1) + (x1 * w2)) + ((y2 * z1) - (z2 * y1));
-			result.Y = ((y2 * w1) + (y1 * w2)) + ((z2 * x1) - (x2 * z1));
-			result.Z = ((z2 * w1) + (z1 * w2)) + ((x2 * y1) - (y2 * x1));
-			result.W = (w2 * w1) - (((x2 * x1) + (y2 * y1)) + (z2 * z1));
+			result.X = (x2 * w1) + (x1 * w2) + ((y2 * z1) - (z2 * y1));
+			result.Y = (y2 * w1) + (y1 * w2) + ((z2 * x1) - (x2 * z1));
+			result.Z = (z2 * w1) + (z1 * w2) + ((x2 * y1) - (y2 * x1));
+			result.W = (w2 * w1) - ((x2 * x1) + (y2 * y1) + (z2 * z1));
 		}
 
 		/// <summary>
@@ -235,7 +242,7 @@ namespace Lime
 		/// <returns>The conjugate version of the specified quaternion.</returns>
 		public static Quaternion Conjugate(Quaternion value)
 		{
-			return new Quaternion(-value.X,-value.Y,-value.Z,value.W);
+			return new Quaternion(-value.X, -value.Y, -value.Z, value.W);
 		}
 
 		/// <summary>
@@ -308,7 +315,7 @@ namespace Lime
 			}
 			if ((matrix.M11 >= matrix.M22) && (matrix.M11 >= matrix.M33))
 			{
-				sqrt = (float) Math.Sqrt(1.0f + matrix.M11 - matrix.M22 - matrix.M33);
+				sqrt = (float)Math.Sqrt(1.0f + matrix.M11 - matrix.M22 - matrix.M33);
 				half = 0.5f / sqrt;
 
 				quaternion.X = 0.5f * sqrt;
@@ -320,7 +327,7 @@ namespace Lime
 			}
 			if (matrix.M22 > matrix.M33)
 			{
-				sqrt = (float) Math.Sqrt(1.0f + matrix.M22 - matrix.M11 - matrix.M33);
+				sqrt = (float)Math.Sqrt(1.0f + matrix.M22 - matrix.M11 - matrix.M33);
 				half = 0.5f / sqrt;
 
 				quaternion.X = (matrix.M21 + matrix.M12) * half;
@@ -330,7 +337,7 @@ namespace Lime
 
 				return quaternion;
 			}
-			sqrt = (float) Math.Sqrt(1.0f + matrix.M33 - matrix.M11 - matrix.M22);
+			sqrt = (float)Math.Sqrt(1.0f + matrix.M33 - matrix.M11 - matrix.M22);
 			half = 0.5f / sqrt;
 
 			quaternion.X = (matrix.M31 + matrix.M13) * half;
@@ -345,7 +352,9 @@ namespace Lime
 		/// Fills existing <see cref="Quaternion"/> from the specified <see cref="Matrix44"/>.
 		/// </summary>
 		/// <param name="matrix">The rotation matrix.</param>
-		/// <param name="result">A quaternion composed from the rotation part of the matrix as an output parameter.</param>
+		/// <param name="result">
+		/// A quaternion composed from the rotation part of the matrix as an output parameter.
+		/// </param>
 		public static void CreateFromRotationMatrix(ref Matrix44 matrix, out Quaternion result)
 		{
 			float sqrt;
@@ -415,17 +424,21 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Returns a rotation that rotates z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis (in that order).
+		/// Returns a rotation that rotates z degrees around the z axis, x degrees
+		/// around the x axis, and y degrees around the y axis (in that order).
 		/// </summary>
 		public static Quaternion CreateFromEulerAngles(Vector3 angles)
 		{
 			return CreateFromYawPitchRoll(angles.Y, angles.X, angles.Z);
 		}
 
+#pragma warning disable MEN002 // Line is too long
 		/// <summary>
-		/// Returns the x, y, and z angles represent a rotation z degrees around the z axis, x degrees around the x axis, and y degrees around the y axis (in that order).
+		/// Returns the x, y, and z angles represent a rotation z degrees around the z axis,
+		/// x degrees around the x axis, and y degrees around the y axis (in that order).
 		/// Original code taken from: https://raw.githubusercontent.com/dfelinto/blender/0a446d7276e74e3c8472453948204ca6463d158e/source/blender/blenlib/intern/math_rotation.c
 		/// </summary>
+#pragma warning restore MEN002 // Line is too long
 		public Vector3 ToEulerAngles()
 		{
 			var qxx = X * X;
@@ -471,7 +484,11 @@ namespace Lime
 			float y = quaternion1.Y;
 			float z = quaternion1.Z;
 			float w = quaternion1.W;
-			float num14 = (((quaternion2.X * quaternion2.X) + (quaternion2.Y * quaternion2.Y)) + (quaternion2.Z * quaternion2.Z)) + (quaternion2.W * quaternion2.W);
+			float num14 =
+				(quaternion2.X * quaternion2.X)
+				+ (quaternion2.Y * quaternion2.Y)
+				+ (quaternion2.Z * quaternion2.Z)
+				+ (quaternion2.W * quaternion2.W);
 			float num5 = 1f / num14;
 			float num4 = -quaternion2.X * num5;
 			float num3 = -quaternion2.Y * num5;
@@ -480,10 +497,10 @@ namespace Lime
 			float num13 = (y * num2) - (z * num3);
 			float num12 = (z * num4) - (x * num2);
 			float num11 = (x * num3) - (y * num4);
-			float num10 = ((x * num4) + (y * num3)) + (z * num2);
-			quaternion.X = ((x * num) + (num4 * w)) + num13;
-			quaternion.Y = ((y * num) + (num3 * w)) + num12;
-			quaternion.Z = ((z * num) + (num2 * w)) + num11;
+			float num10 = (x * num4) + (y * num3) + (z * num2);
+			quaternion.X = (x * num) + (num4 * w) + num13;
+			quaternion.Y = (y * num) + (num3 * w) + num12;
+			quaternion.Z = (z * num) + (num2 * w) + num11;
 			quaternion.W = (w * num) - num10;
 			return quaternion;
 		}
@@ -500,7 +517,11 @@ namespace Lime
 			float y = quaternion1.Y;
 			float z = quaternion1.Z;
 			float w = quaternion1.W;
-			float num14 = (((quaternion2.X * quaternion2.X) + (quaternion2.Y * quaternion2.Y)) + (quaternion2.Z * quaternion2.Z)) + (quaternion2.W * quaternion2.W);
+			float num14 =
+				(quaternion2.X * quaternion2.X)
+				+ (quaternion2.Y * quaternion2.Y)
+				+ (quaternion2.Z * quaternion2.Z)
+				+ (quaternion2.W * quaternion2.W);
 			float num5 = 1f / num14;
 			float num4 = -quaternion2.X * num5;
 			float num3 = -quaternion2.Y * num5;
@@ -509,10 +530,10 @@ namespace Lime
 			float num13 = (y * num2) - (z * num3);
 			float num12 = (z * num4) - (x * num2);
 			float num11 = (x * num3) - (y * num4);
-			float num10 = ((x * num4) + (y * num3)) + (z * num2);
-			result.X = ((x * num) + (num4 * w)) + num13;
-			result.Y = ((y * num) + (num3 * w)) + num12;
-			result.Z = ((z * num) + (num2 * w)) + num11;
+			float num10 = (x * num4) + (y * num3) + (z * num2);
+			result.X = (x * num) + (num4 * w) + num13;
+			result.Y = (y * num) + (num3 * w) + num12;
+			result.Z = (z * num) + (num2 * w) + num11;
 			result.W = (w * num) - num10;
 		}
 
@@ -524,7 +545,11 @@ namespace Lime
 		/// <returns>The dot product of two quaternions.</returns>
 		public static float Dot(Quaternion quaternion1, Quaternion quaternion2)
 		{
-			return ((((quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y)) + (quaternion1.Z * quaternion2.Z)) + (quaternion1.W * quaternion2.W));
+			return
+				(quaternion1.X * quaternion2.X)
+				+ (quaternion1.Y * quaternion2.Y)
+				+ (quaternion1.Z * quaternion2.Z)
+				+ (quaternion1.W * quaternion2.W);
 		}
 
 		/// <summary>
@@ -535,13 +560,17 @@ namespace Lime
 		/// <param name="result">The dot product of two quaternions as an output parameter.</param>
 		public static void Dot(ref Quaternion quaternion1, ref Quaternion quaternion2, out float result)
 		{
-			result = (((quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y)) + (quaternion1.Z * quaternion2.Z)) + (quaternion1.W * quaternion2.W);
+			result =
+				(quaternion1.X * quaternion2.X)
+				+ (quaternion1.Y * quaternion2.Y)
+				+ (quaternion1.Z * quaternion2.Z)
+				+ (quaternion1.W * quaternion2.W);
 		}
 
 		/// <summary>
-		/// Compares whether current instance is equal to specified <see cref="Object"/>.
+		/// Compares whether current instance is equal to specified <see cref="object"/>.
 		/// </summary>
-		/// <param name="obj">The <see cref="Object"/> to compare.</param>
+		/// <param name="obj">The <see cref="object"/> to compare.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public override bool Equals(object obj)
 		{
@@ -581,7 +610,11 @@ namespace Lime
 		public static Quaternion Inverse(Quaternion quaternion)
 		{
 			Quaternion quaternion2;
-			float num2 = (((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y)) + (quaternion.Z * quaternion.Z)) + (quaternion.W * quaternion.W);
+			float num2 =
+				(quaternion.X * quaternion.X)
+				+ (quaternion.Y * quaternion.Y)
+				+ (quaternion.Z * quaternion.Z)
+				+ (quaternion.W * quaternion.W);
 			float num = 1f / num2;
 			quaternion2.X = -quaternion.X * num;
 			quaternion2.Y = -quaternion.Y * num;
@@ -597,7 +630,11 @@ namespace Lime
 		/// <param name="result">The inverse quaternion as an output parameter.</param>
 		public static void Inverse(ref Quaternion quaternion, out Quaternion result)
 		{
-			float num2 = (((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y)) + (quaternion.Z * quaternion.Z)) + (quaternion.W * quaternion.W);
+			float num2 =
+				(quaternion.X * quaternion.X)
+				+ (quaternion.Y * quaternion.Y)
+				+ (quaternion.Z * quaternion.Z)
+				+ (quaternion.W * quaternion.W);
 			float num = 1f / num2;
 			result.X = -quaternion.X * num;
 			result.Y = -quaternion.Y * num;
@@ -611,7 +648,7 @@ namespace Lime
 		/// <returns>The magnitude of the quaternion components.</returns>
 		public float Length()
 		{
-			return (float) Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W));
+			return (float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W));
 		}
 
 		/// <summary>
@@ -628,14 +665,16 @@ namespace Lime
 		/// </summary>
 		/// <param name="value1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="value2">Source <see cref="Quaternion"/>.</param>
-		/// <param name="amount">The blend amount where 0 returns <paramref name="value1"/> and 1 <paramref name="value2"/>.</param>
+		/// <param name="amount">
+		/// The blend amount where 0 returns <paramref name="value1"/> and 1 <paramref name="value2"/>.
+		/// </param>
 		/// <returns>The result of linear blending between two quaternions.</returns>
 		public static Quaternion Lerp(Quaternion value1, Quaternion value2, float amount)
 		{
 			float num = amount;
 			float num2 = 1f - num;
 			Quaternion quaternion = new Quaternion();
-			float num5 = (((value1.X * value2.X) + (value1.Y * value2.Y)) + (value1.Z * value2.Z)) + (value1.W * value2.W);
+			float num5 = (value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z) + (value1.W * value2.W);
 			if (num5 >= 0f)
 			{
 				quaternion.X = (num2 * value1.X) + (num * value2.X);
@@ -650,8 +689,12 @@ namespace Lime
 				quaternion.Z = (num2 * value1.Z) - (num * value2.Z);
 				quaternion.W = (num2 * value1.W) - (num * value2.W);
 			}
-			float num4 = (((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y)) + (quaternion.Z * quaternion.Z)) + (quaternion.W * quaternion.W);
-			float num3 = 1f / ((float) Math.Sqrt((double) num4));
+			float num4 =
+				(quaternion.X * quaternion.X)
+				+ (quaternion.Y * quaternion.Y)
+				+ (quaternion.Z * quaternion.Z)
+				+ (quaternion.W * quaternion.W);
+			float num3 = 1f / ((float)Math.Sqrt((double)num4));
 			quaternion.X *= num3;
 			quaternion.Y *= num3;
 			quaternion.Z *= num3;
@@ -664,13 +707,15 @@ namespace Lime
 		/// </summary>
 		/// <param name="value1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="value2">Source <see cref="Quaternion"/>.</param>
-		/// <param name="amount">The blend amount where 0 returns <paramref name="value1"/> and 1 <paramref name="value2"/>.</param>
+		/// <param name="amount">
+		/// The blend amount where 0 returns <paramref name="value1"/> and 1 <paramref name="value2"/>.
+		/// </param>
 		/// <param name="result">The result of linear blending between two quaternions as an output parameter.</param>
 		public static void Lerp(ref Quaternion value1, ref Quaternion value2, float amount, out Quaternion result)
 		{
 			float num = amount;
 			float num2 = 1f - num;
-			float num5 = (((value1.X * value2.X) + (value1.Y * value2.Y)) + (value1.Z * value2.Z)) + (value1.W * value2.W);
+			float num5 = (value1.X * value2.X) + (value1.Y * value2.Y) + (value1.Z * value2.Z) + (value1.W * value2.W);
 			if (num5 >= 0f)
 			{
 				result.X = (num2 * value1.X) + (num * value2.X);
@@ -685,13 +730,12 @@ namespace Lime
 				result.Z = (num2 * value1.Z) - (num * value2.Z);
 				result.W = (num2 * value1.W) - (num * value2.W);
 			}
-			float num4 = (((result.X * result.X) + (result.Y * result.Y)) + (result.Z * result.Z)) + (result.W * result.W);
-			float num3 = 1f / ((float) Math.Sqrt((double) num4));
+			float num4 = (result.X * result.X) + (result.Y * result.Y) + (result.Z * result.Z) + (result.W * result.W);
+			float num3 = 1f / ((float)Math.Sqrt((double)num4));
 			result.X *= num3;
 			result.Y *= num3;
 			result.Z *= num3;
 			result.W *= num3;
-
 		}
 
 		/// <summary>
@@ -699,7 +743,9 @@ namespace Lime
 		/// </summary>
 		/// <param name="quaternion1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="quaternion2">Source <see cref="Quaternion"/>.</param>
-		/// <param name="amount">The blend amount where 0 returns <paramref name="quaternion1"/> and 1 <paramref name="quaternion2"/>.</param>
+		/// <param name="amount">
+		/// The blend amount where 0 returns <paramref name="quaternion1"/> and 1 <paramref name="quaternion2"/>.
+		/// </param>
 		/// <returns>The result of spherical linear blending between two quaternions.</returns>
 		public static Quaternion Slerp(Quaternion quaternion1, Quaternion quaternion2, float amount)
 		{
@@ -707,7 +753,11 @@ namespace Lime
 			float num3;
 			Quaternion quaternion;
 			float num = amount;
-			float num4 = (((quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y)) + (quaternion1.Z * quaternion2.Z)) + (quaternion1.W * quaternion2.W);
+			float num4 =
+				(quaternion1.X * quaternion2.X)
+				+ (quaternion1.Y * quaternion2.Y)
+				+ (quaternion1.Z * quaternion2.Z)
+				+ (quaternion1.W * quaternion2.W);
 			bool flag = false;
 			if (num4 < 0f)
 			{
@@ -721,10 +771,12 @@ namespace Lime
 			}
 			else
 			{
-				float num5 = (float) Math.Acos((double) num4);
-				float num6 = (float) (1.0 / Math.Sin((double) num5));
-				num3 = ((float) Math.Sin((double) ((1f - num) * num5))) * num6;
-				num2 = flag ? (((float) -Math.Sin((double) (num * num5))) * num6) : (((float) Math.Sin((double) (num * num5))) * num6);
+				float num5 = (float)Math.Acos((double)num4);
+				float num6 = (float)(1.0 / Math.Sin((double)num5));
+				num3 = ((float)Math.Sin((double)((1f - num) * num5))) * num6;
+				num2 = flag
+					? (((float)-Math.Sin((double)(num * num5))) * num6)
+					: (((float)Math.Sin((double)(num * num5))) * num6);
 			}
 			quaternion.X = (num3 * quaternion1.X) + (num2 * quaternion2.X);
 			quaternion.Y = (num3 * quaternion1.Y) + (num2 * quaternion2.Y);
@@ -738,14 +790,26 @@ namespace Lime
 		/// </summary>
 		/// <param name="quaternion1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="quaternion2">Source <see cref="Quaternion"/>.</param>
-		/// <param name="amount">The blend amount where 0 returns <paramref name="quaternion1"/> and 1 <paramref name="quaternion2"/>.</param>
-		/// <param name="result">The result of spherical linear blending between two quaternions as an output parameter.</param>
-		public static void Slerp(ref Quaternion quaternion1, ref Quaternion quaternion2, float amount, out Quaternion result)
-		{
+		/// <param name="amount">
+		/// The blend amount where 0 returns <paramref name="quaternion1"/> and 1 <paramref name="quaternion2"/>.
+		/// </param>
+		/// <param name="result">
+		/// The result of spherical linear blending between two quaternions as an output parameter.
+		/// </param>
+		public static void Slerp(
+			ref Quaternion quaternion1,
+			ref Quaternion quaternion2,
+			float amount,
+			out Quaternion result
+		) {
 			float num2;
 			float num3;
 			float num = amount;
-			float num4 = (((quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y)) + (quaternion1.Z * quaternion2.Z)) + (quaternion1.W * quaternion2.W);
+			float num4 =
+				(quaternion1.X * quaternion2.X)
+				+ (quaternion1.Y * quaternion2.Y)
+				+ (quaternion1.Z * quaternion2.Z)
+				+ (quaternion1.W * quaternion2.W);
 			bool flag = false;
 			if (num4 < 0f)
 			{
@@ -759,10 +823,12 @@ namespace Lime
 			}
 			else
 			{
-				float num5 = (float) Math.Acos((double) num4);
-				float num6 = (float) (1.0 / Math.Sin((double) num5));
-				num3 = ((float) Math.Sin((double) ((1f - num) * num5))) * num6;
-				num2 = flag ? (((float) -Math.Sin((double) (num * num5))) * num6) : (((float) Math.Sin((double) (num * num5))) * num6);
+				float num5 = (float)Math.Acos((double)num4);
+				float num6 = (float)(1.0 / Math.Sin((double)num5));
+				num3 = ((float)Math.Sin((double)((1f - num) * num5))) * num6;
+				num2 = flag
+					? (((float)-Math.Sin((double)(num * num5))) * num6)
+					: (((float)Math.Sin((double)(num * num5))) * num6);
 			}
 			result.X = (num3 * quaternion1.X) + (num2 * quaternion2.X);
 			result.Y = (num3 * quaternion1.Y) + (num2 * quaternion2.Y);
@@ -771,7 +837,8 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Quaternion"/> that contains subtraction of one <see cref="Quaternion"/> from another.
+		/// Creates a new <see cref="Quaternion"/> that contains
+		/// subtraction of one <see cref="Quaternion"/> from another.
 		/// </summary>
 		/// <param name="quaternion1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="quaternion2">Source <see cref="Quaternion"/>.</param>
@@ -787,7 +854,8 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Quaternion"/> that contains subtraction of one <see cref="Quaternion"/> from another.
+		/// Creates a new <see cref="Quaternion"/> that contains
+		/// subtraction of one <see cref="Quaternion"/> from another.
 		/// </summary>
 		/// <param name="quaternion1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="quaternion2">Source <see cref="Quaternion"/>.</param>
@@ -820,16 +888,17 @@ namespace Lime
 			float num12 = (y * num2) - (z * num3);
 			float num11 = (z * num4) - (x * num2);
 			float num10 = (x * num3) - (y * num4);
-			float num9 = ((x * num4) + (y * num3)) + (z * num2);
-			quaternion.X = ((x * num) + (num4 * w)) + num12;
-			quaternion.Y = ((y * num) + (num3 * w)) + num11;
-			quaternion.Z = ((z * num) + (num2 * w)) + num10;
+			float num9 = (x * num4) + (y * num3) + (z * num2);
+			quaternion.X = (x * num) + (num4 * w) + num12;
+			quaternion.Y = (y * num) + (num3 * w) + num11;
+			quaternion.Z = (z * num) + (num2 * w) + num10;
 			quaternion.W = (w * num) - num9;
 			return quaternion;
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Quaternion"/> that contains a multiplication of <see cref="Quaternion"/> and a scalar.
+		/// Creates a new <see cref="Quaternion"/> that contains
+		/// a multiplication of <see cref="Quaternion"/> and a scalar.
 		/// </summary>
 		/// <param name="quaternion1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="scaleFactor">Scalar value.</param>
@@ -845,11 +914,14 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Quaternion"/> that contains a multiplication of <see cref="Quaternion"/> and a scalar.
+		/// Creates a new <see cref="Quaternion"/> that contains
+		/// a multiplication of <see cref="Quaternion"/> and a scalar.
 		/// </summary>
 		/// <param name="quaternion1">Source <see cref="Quaternion"/>.</param>
 		/// <param name="scaleFactor">Scalar value.</param>
-		/// <param name="result">The result of the quaternion multiplication with a scalar as an output parameter.</param>
+		/// <param name="result">
+		/// The result of the quaternion multiplication with a scalar as an output parameter.
+		/// </param>
 		public static void Multiply(ref Quaternion quaternion1, float scaleFactor, out Quaternion result)
 		{
 			result.X = quaternion1.X * scaleFactor;
@@ -877,10 +949,10 @@ namespace Lime
 			float num12 = (y * num2) - (z * num3);
 			float num11 = (z * num4) - (x * num2);
 			float num10 = (x * num3) - (y * num4);
-			float num9 = ((x * num4) + (y * num3)) + (z * num2);
-			result.X = ((x * num) + (num4 * w)) + num12;
-			result.Y = ((y * num) + (num3 * w)) + num11;
-			result.Z = ((z * num) + (num2 * w)) + num10;
+			float num9 = (x * num4) + (y * num3) + (z * num2);
+			result.X = (x * num) + (num4 * w) + num12;
+			result.Y = (y * num) + (num3 * w) + num11;
+			result.Z = (z * num) + (num2 * w) + num10;
 			result.W = (w * num) - num9;
 		}
 
@@ -912,7 +984,7 @@ namespace Lime
 		/// </summary>
 		public void Normalize()
 		{
-			float num = 1f / ((float) Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)));
+			float num = 1f / ((float)Math.Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W)));
 			X *= num;
 			Y *= num;
 			Z *= num;
@@ -927,7 +999,12 @@ namespace Lime
 		public static Quaternion Normalize(Quaternion quaternion)
 		{
 			Quaternion result;
-			float num = 1f / ((float) Math.Sqrt((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y) + (quaternion.Z * quaternion.Z) + (quaternion.W * quaternion.W)));
+			float num = 1f / ((float)Math.Sqrt(
+				(quaternion.X * quaternion.X)
+				+ (quaternion.Y * quaternion.Y)
+				+ (quaternion.Z * quaternion.Z)
+				+ (quaternion.W * quaternion.W))
+			);
 			result.X = quaternion.X * num;
 			result.Y = quaternion.Y * num;
 			result.Z = quaternion.Z * num;
@@ -942,7 +1019,12 @@ namespace Lime
 		/// <param name="result">The unit length quaternion an output parameter.</param>
 		public static void Normalize(ref Quaternion quaternion, out Quaternion result)
 		{
-			float num = 1f / ((float) Math.Sqrt((quaternion.X * quaternion.X) + (quaternion.Y * quaternion.Y) + (quaternion.Z * quaternion.Z) + (quaternion.W * quaternion.W)));
+			float num = 1f / ((float)Math.Sqrt(
+				(quaternion.X * quaternion.X)
+				+ (quaternion.Y * quaternion.Y)
+				+ (quaternion.Z * quaternion.Z)
+				+ (quaternion.W * quaternion.W))
+			);
 			result.X = quaternion.X * num;
 			result.Y = quaternion.Y * num;
 			result.Z = quaternion.Z * num;
@@ -950,10 +1032,10 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Returns a <see cref="String"/> representation of this <see cref="Quaternion"/> in the format:
+		/// Returns a <see cref="string"/> representation of this <see cref="Quaternion"/> in the format:
 		/// {X:[<see cref="X"/>] Y:[<see cref="Y"/>] Z:[<see cref="Z"/>] W:[<see cref="W"/>]}
 		/// </summary>
-		/// <returns>A <see cref="String"/> representation of this <see cref="Quaternion"/>.</returns>
+		/// <returns>A <see cref="string"/> representation of this <see cref="Quaternion"/>.</returns>
 		public override string ToString()
 		{
 			return FormattableString.Invariant($"{{X:{X} Y:{Y} Z:{Z} W:{W}}}");
@@ -963,10 +1045,10 @@ namespace Lime
 		/// Gets a <see cref="Vector4"/> representation for this object.
 		/// </summary>
 		/// <returns>A <see cref="Vector4"/> representation for this object.</returns>
-		//public Vector4 ToVector4()
-		//{
-		//	return new Vector4(X,Y,Z,W);
-		//}
+		// public Vector4 ToVector4()
+		// {
+		//     return new Vector4(X,Y,Z,W);
+		// }
 
 		/// <summary>
 		/// Adds two quaternions.
@@ -997,7 +1079,11 @@ namespace Lime
 			float y = quaternion1.Y;
 			float z = quaternion1.Z;
 			float w = quaternion1.W;
-			float num14 = (((quaternion2.X * quaternion2.X) + (quaternion2.Y * quaternion2.Y)) + (quaternion2.Z * quaternion2.Z)) + (quaternion2.W * quaternion2.W);
+			float num14 =
+				(quaternion2.X * quaternion2.X)
+				+ (quaternion2.Y * quaternion2.Y)
+				+ (quaternion2.Z * quaternion2.Z)
+				+ (quaternion2.W * quaternion2.W);
 			float num5 = 1f / num14;
 			float num4 = -quaternion2.X * num5;
 			float num3 = -quaternion2.Y * num5;
@@ -1006,10 +1092,10 @@ namespace Lime
 			float num13 = (y * num2) - (z * num3);
 			float num12 = (z * num4) - (x * num2);
 			float num11 = (x * num3) - (y * num4);
-			float num10 = ((x * num4) + (y * num3)) + (z * num2);
-			quaternion.X = ((x * num) + (num4 * w)) + num13;
-			quaternion.Y = ((y * num) + (num3 * w)) + num12;
-			quaternion.Z = ((z * num) + (num2 * w)) + num11;
+			float num10 = (x * num4) + (y * num3) + (z * num2);
+			quaternion.X = (x * num) + (num4 * w) + num13;
+			quaternion.Y = (y * num) + (num3 * w) + num12;
+			quaternion.Z = (z * num) + (num2 * w) + num11;
 			quaternion.W = (w * num) - num10;
 			return quaternion;
 		}
@@ -1022,7 +1108,11 @@ namespace Lime
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==(Quaternion quaternion1, Quaternion quaternion2)
 		{
-			return ((((quaternion1.X == quaternion2.X) && (quaternion1.Y == quaternion2.Y)) && (quaternion1.Z == quaternion2.Z)) && (quaternion1.W == quaternion2.W));
+			return
+				(quaternion1.X == quaternion2.X)
+				&& (quaternion1.Y == quaternion2.Y)
+				&& (quaternion1.Z == quaternion2.Z)
+				&& (quaternion1.W == quaternion2.W);
 		}
 
 		/// <summary>
@@ -1033,9 +1123,12 @@ namespace Lime
 		/// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>
 		public static bool operator !=(Quaternion quaternion1, Quaternion quaternion2)
 		{
-			if (((quaternion1.X == quaternion2.X) && (quaternion1.Y == quaternion2.Y)) && (quaternion1.Z == quaternion2.Z))
-			{
-				return (quaternion1.W != quaternion2.W);
+			if (
+				(quaternion1.X == quaternion2.X)
+				&& (quaternion1.Y == quaternion2.Y)
+				&& (quaternion1.Z == quaternion2.Z)
+			) {
+				return quaternion1.W != quaternion2.W;
 			}
 			return true;
 		}
@@ -1060,10 +1153,10 @@ namespace Lime
 			float num12 = (y * num2) - (z * num3);
 			float num11 = (z * num4) - (x * num2);
 			float num10 = (x * num3) - (y * num4);
-			float num9 = ((x * num4) + (y * num3)) + (z * num2);
-			quaternion.X = ((x * num) + (num4 * w)) + num12;
-			quaternion.Y = ((y * num) + (num3 * w)) + num11;
-			quaternion.Z = ((z * num) + (num2 * w)) + num10;
+			float num9 = (x * num4) + (y * num3) + (z * num2);
+			quaternion.X = (x * num) + (num4 * w) + num12;
+			quaternion.Y = (y * num) + (num3 * w) + num11;
+			quaternion.Z = (z * num) + (num2 * w) + num10;
 			quaternion.W = (w * num) - num9;
 			return quaternion;
 		}
@@ -1103,7 +1196,6 @@ namespace Lime
 			quaternion.Z = quaternion1.Z - quaternion2.Z;
 			quaternion.W = quaternion1.W - quaternion2.W;
 			return quaternion;
-
 		}
 
 		/// <summary>
@@ -1129,9 +1221,8 @@ namespace Lime
 			return new Vector3 {
 				X = value.X + x * W + (Y * z - Z * y),
 				Y = value.Y + y * W + (Z * x - X * z),
-				Z = value.Z + z * W + (X * y - Y * x)
+				Z = value.Z + z * W + (X * y - Y * x),
 			};
 		}
 	}
 }
-

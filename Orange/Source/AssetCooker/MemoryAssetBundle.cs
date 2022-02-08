@@ -18,7 +18,8 @@ namespace Orange
 			public byte[] Data;
 		}
 
-		private readonly SortedDictionary<string, Asset> assets = new SortedDictionary<string, Asset>(StringComparer.OrdinalIgnoreCase);
+		private readonly SortedDictionary<string, Asset> assets =
+			new SortedDictionary<string, Asset>(StringComparer.OrdinalIgnoreCase);
 
 		public static MemoryAssetBundle ReadFromBundle(AssetBundle source)
 		{
@@ -38,7 +39,7 @@ namespace Orange
 					Attributes = source.GetFileAttributes(path),
 					Hash = source.GetFileContentsHash(path),
 					CookingUnitHash = source.GetFileCookingUnitHash(path),
-					Data = buffer
+					Data = buffer,
 				};
 			}
 			return result;
@@ -88,8 +89,9 @@ namespace Orange
 
 		public override bool FileExists(string path) => assets.ContainsKey(path);
 
-		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
-		{
+		public override void ImportFile(
+			string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+		) {
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
 			try {
@@ -107,8 +109,14 @@ namespace Orange
 			}
 		}
 
-		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
-		{
+		public override void ImportFileRaw(
+			string destinationPath,
+			Stream stream,
+			int unpackedSize,
+			SHA256 hash,
+			SHA256 cookingUnitHash,
+			AssetAttributes attributes
+		) {
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
 			if (stream.Read(buffer, 0, length) != length) {
@@ -120,7 +128,7 @@ namespace Orange
 				Attributes = attributes,
 				Hash = hash,
 				CookingUnitHash = cookingUnitHash,
-				Data = buffer
+				Data = buffer,
 			};
 		}
 

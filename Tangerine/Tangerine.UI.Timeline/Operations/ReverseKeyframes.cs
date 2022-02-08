@@ -1,6 +1,6 @@
-using Lime;
 using System;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
@@ -19,25 +19,34 @@ namespace Tangerine.UI.Timeline.Operations
 
 		public static void Perform()
 		{
-			var Boundaries = GetSelectionBoundaries();
-			if (Boundaries == null) {
-				AlertDialog.Show("Can't invert animation in a non-rectangular selection. The selection must be a single rectangle.");
+			var boundaries = GetSelectionBoundaries();
+			if (boundaries == null) {
+				AlertDialog.Show(
+					"Can't invert animation in a non-rectangular selection. The selection must be a single rectangle."
+				);
 				return;
 			}
 			using (Document.Current.History.BeginTransaction()) {
-				for (int i = Boundaries.Value.Top; i <= Boundaries.Value.Bottom; ++i) {
-					if (!(Document.Current.VisibleSceneItems[i].Components.Get<NodeSceneItem>()?.Node is IAnimationHost animable)) {
+				for (int i = boundaries.Value.Top; i <= boundaries.Value.Bottom; ++i) {
+					if (
+						!(Document.Current.VisibleSceneItems[i].Components
+							.Get<NodeSceneItem>()?.Node is IAnimationHost animable)
+					) {
 						continue;
 					}
 					foreach (var animator in animable.Animators.ToList()) {
 						var saved = animator.Keys.Where(k =>
-							Boundaries.Value.Left <= k.Frame &&
-							k.Frame < Boundaries.Value.Right).ToList();
+							boundaries.Value.Left <= k.Frame &&
+							k.Frame < boundaries.Value.Right).ToList();
 						foreach (var key in saved) {
 							RemoveKeyframe.Perform(animator, key.Frame);
 						}
 						foreach (var key in saved) {
-							SetProperty.Perform(key, nameof(IKeyframe.Frame), Boundaries.Value.Left + Boundaries.Value.Right - key.Frame - 1);
+							SetProperty.Perform(
+								obj: key,
+								propertyName: nameof(IKeyframe.Frame),
+								value: boundaries.Value.Left + boundaries.Value.Right - key.Frame - 1
+							);
 							SetKeyframe.Perform(animable, animator.TargetPropertyPath, Document.Current.Animation, key);
 						}
 					}
@@ -77,7 +86,7 @@ namespace Tangerine.UI.Timeline.Operations
 				Left = span.Value.A,
 				Right = span.Value.B,
 				Top = items[0].GetTimelineSceneItemState().Index,
-				Bottom = index
+				Bottom = index,
 			};
 		}
 
@@ -107,7 +116,7 @@ namespace Tangerine.UI.Timeline.Operations
 				Left = 0,
 				Right = right,
 				Top = 0,
-				Bottom = Document.Current.VisibleSceneItems.Last().GetTimelineSceneItemState().Index
+				Bottom = Document.Current.VisibleSceneItems.Last().GetTimelineSceneItemState().Index,
 			};
 		}
 	}

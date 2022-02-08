@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -46,14 +44,8 @@ namespace SharpFont
 	/// </para></remarks>
 	public sealed class BitmapSize
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private BitmapSizeRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal BitmapSize(IntPtr reference)
 		{
@@ -64,10 +56,6 @@ namespace SharpFont
 		{
 			this.rec = bmpSizeInt;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the vertical distance, in pixels, between two consecutive
@@ -139,7 +127,5 @@ namespace SharpFont
 				rec = PInvokeHelper.PtrToStructure<BitmapSizeRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

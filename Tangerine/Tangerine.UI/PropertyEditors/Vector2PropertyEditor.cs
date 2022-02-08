@@ -15,25 +15,30 @@ namespace Tangerine.UI
 			EditorContainer.AddNode(new Widget {
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 },
 				Nodes = {
-					//new SimpleText { Text = "X" },
+					// new SimpleText { Text = "X" },
 					(editorX = editorParams.NumericEditBoxFactory()),
 					// new SimpleText { Text = "Y" },
 					(editorY = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
-				}
+				},
 			});
 			var currentX = CoalescedPropertyComponentValue(v => v.X);
 			var currentY = CoalescedPropertyComponentValue(v => v.Y);
 			editorX.Submitted += text => SetComponent(editorParams, 0, editorX, currentX.GetValue());
 			editorY.Submitted += text => SetComponent(editorParams, 1, editorY, currentY.GetValue());
-			editorX.AddLateChangeWatcher(currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			editorY.AddLateChangeWatcher(currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			editorX.AddLateChangeWatcher(
+				currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			editorY.AddLateChangeWatcher(
+				currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(editorX, currentX);
 			ManageManyValuesOnFocusChange(editorY, currentY);
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, int component, CommonEditBox editor, CoalescedValue<float> currentValue)
-		{
+		private void SetComponent(
+			IPropertyEditorParams editorParams, int component, CommonEditBox editor, CoalescedValue<float> currentValue
+		) {
 			if (Parser.TryParse(editor.Text, out double newValue)) {
 				DoTransaction(() => {
 					SetProperty<Vector2>(current => {

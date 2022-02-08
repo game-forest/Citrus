@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2015 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -40,14 +38,10 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FTMatrix : IEquatable<FTMatrix>
 	{
-		#region Fields
-
-		private IntPtr xx, xy;
-		private IntPtr yx, yy;
-
-		#endregion
-
-		#region Constructors
+		private IntPtr xx;
+		private IntPtr xy;
+		private IntPtr yx;
+		private IntPtr yy;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FTMatrix"/> struct.
@@ -74,10 +68,6 @@ namespace SharpFont
 			: this(row0.X.Value, row0.Y.Value, row1.X.Value, row1.Y.Value)
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the matrix coefficient.
@@ -143,10 +133,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Operators
-
 		/// <summary>
 		/// Compares two instances of <see cref="FTMatrix"/> for equality.
 		/// </summary>
@@ -168,10 +154,6 @@ namespace SharpFont
 		{
 			return !left.Equals(right);
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Perform the matrix operation ‘b = a*b’.
@@ -205,8 +187,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Matrix_Invert(ref this);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -230,10 +213,11 @@ namespace SharpFont
 		/// <returns>A value indicating equality.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is FTMatrix)
+			if (obj is FTMatrix) {
 				return this.Equals((FTMatrix)obj);
-			else
+			} else {
 				return false;
+			}
 		}
 
 		/// <summary>
@@ -244,7 +228,5 @@ namespace SharpFont
 		{
 			return xx.GetHashCode() ^ xy.GetHashCode() ^ yx.GetHashCode() ^ yy.GetHashCode();
 		}
-
-		#endregion
 	}
 }

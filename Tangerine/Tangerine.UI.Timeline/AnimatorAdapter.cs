@@ -22,7 +22,7 @@ namespace Tangerine.UI.Timeline
 
 	public class Vector2AnimatorAdapter : IAnimatorAdapter
 	{
-		static string[] names = { "X", "Y" };
+		private static string[] names = { "X", "Y" };
 		public int ComponentCount => 2;
 		public string GetComponentName(int component) => names[component];
 

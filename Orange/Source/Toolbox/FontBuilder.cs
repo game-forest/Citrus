@@ -31,7 +31,9 @@ namespace Orange
 		{
 			var font = new Font();
 			using (var library = new Library()) {
-				var fontData = new EmbeddedResource("Orange.Source.UI.NewUI.Fonts." + FontPath, "Orange").GetResourceBytes();
+				var fontData = new EmbeddedResource(
+					"Orange.Source.UI.NewUI.Fonts." + FontPath, "Orange"
+				).GetResourceBytes();
 				var face = library.NewMemoryFace(fontData, 0);
 				var pixelSize = (uint)CalcPixelSize(face, Height).Round();
 				face.SetPixelSizes(pixelSize, pixelSize);
@@ -44,7 +46,8 @@ namespace Orange
 		{
 			// See http://www.freetype.org/freetype2/docs/tutorial/step2.html
 			// Chapter: Scaling Distances to Device Space
-			// BBox suits better than Height (baseline-to-baseline distance), because it can enclose all the glyphs in the font face.
+			// BBox suits better than Height (baseline-to-baseline distance),
+			// because it can enclose all the glyphs in the font face.
 			var designHeight = (float)face.BBox.Top - (float)face.BBox.Bottom;
 			var scale = height / designHeight;
 			var pixelSize = scale * face.UnitsPerEM;
@@ -85,7 +88,11 @@ namespace Orange
 					TextureIndex = font.Textures.Count,
 					ACWidths = new Vector2(
 						bearingX.Round(),
-						((float)face.Glyph.Metrics.HorizontalAdvance - (float)face.Glyph.Metrics.Width - bearingX).Round()
+						(
+							(float)face.Glyph.Metrics.HorizontalAdvance
+							- (float)face.Glyph.Metrics.Width
+							- bearingX
+						).Round()
 					),
 					UV0 = uv0,
 					UV1 = uv1,

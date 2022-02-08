@@ -1,26 +1,26 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using Lime;
-using Tangerine.UI;
 using Tangerine.Core;
-using System;
-using System.IO;
 using Tangerine.Dialogs;
+using Tangerine.UI;
 using Tangerine.UI.SceneView;
 
 namespace Tangerine
 {
 	public class PreferencesDialog
 	{
-		readonly Window window;
-		readonly WindowWidget rootWidget;
-		readonly Button okButton;
-		readonly Button cancelButton;
-		readonly Button resetButton;
-		readonly Frame Frame;
-		readonly ThemedTabbedWidget Content;
-		readonly ToolbarModelEditor toolbarModelEditor;
+		private readonly Window window;
+		private readonly WindowWidget rootWidget;
+		private readonly Button okButton;
+		private readonly Button cancelButton;
+		private readonly Button resetButton;
+		private readonly Frame frame;
+		private readonly ThemedTabbedWidget content;
+		private readonly ToolbarModelEditor toolbarModelEditor;
 
 		private List<IPropertyEditor> editors = new List<IPropertyEditor>();
 
@@ -43,25 +43,25 @@ namespace Tangerine
 				FixedSize = false,
 				Title = "Preferences",
 				MinimumDecoratedSize = new Vector2(400, 300),
-				Visible = false
+				Visible = false,
 			});
-			Frame = new ThemedFrame {
+			frame = new ThemedFrame {
 				Padding = new Thickness(8),
 				LayoutCell = new LayoutCell { StretchY = float.MaxValue },
 				Layout = new StackLayout(),
 			};
-			Content = new ThemedTabbedWidget();
-			Content.AddTab("General", CreateGeneralPane(), true);
-			Content.AddTab("Appearance", CreateColorsPane());
-			Content.AddTab("Theme", CreateThemePane());
-			Content.AddTab("Keyboard shortcuts", CreateKeyboardPane());
-			Content.AddTab("Toolbar", toolbarModelEditor = new ToolbarModelEditor());
+			content = new ThemedTabbedWidget();
+			content.AddTab("General", CreateGeneralPane(), true);
+			content.AddTab("Appearance", CreateColorsPane());
+			content.AddTab("Theme", CreateThemePane());
+			content.AddTab("Keyboard shortcuts", CreateKeyboardPane());
+			content.AddTab("Toolbar", toolbarModelEditor = new ToolbarModelEditor());
 
 			rootWidget = new ThemedInvalidableWindowWidget(window) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
 				Nodes = {
-					Content,
+					content,
 					new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
@@ -71,9 +71,9 @@ namespace Tangerine
 							new Widget { MinMaxHeight = 0 },
 							(okButton = new ThemedButton { Text = "Ok" }),
 							(cancelButton = new ThemedButton { Text = "Cancel" }),
-						}
-					}
-				}
+						},
+					},
+				},
 			};
 			HotkeyRegistry.CurrentProfile.Save();
 			okButton.Clicked += () => {
@@ -209,7 +209,7 @@ namespace Tangerine
 			var pane = new Widget {
 				Layout = new VBoxLayout { Spacing = 10 },
 				Padding = contentPadding,
-				Nodes = { CreateThemeEditor() }
+				Nodes = { CreateThemeEditor() },
 			};
 			return pane;
 		}
@@ -228,11 +228,11 @@ namespace Tangerine
 		{
 			var pane = new Widget {
 				Layout = new VBoxLayout { Spacing = 10 },
-				Padding = contentPadding
+				Padding = contentPadding,
 			};
 			var themeEditor = new ColorThemeEditor() {
 				Layout = new VBoxLayout { Spacing = 10 },
-				Padding = contentPadding
+				Padding = contentPadding,
 			};
 			bool firstCall = true;
 			pane.AddChangeWatcher(() => themeEditor.Version, _ => {
@@ -252,7 +252,7 @@ namespace Tangerine
 					AppUserPreferences.Instance.ColorTheme = ColorTheme.CreateDarkTheme();
 					themeEditor.Rebuild();
 					themeChanged = true;
-				}
+				},
 			};
 			var loadLightButton = new ThemedButton("Light preset") {
 				Clicked = () => {
@@ -261,13 +261,13 @@ namespace Tangerine
 					AppUserPreferences.Instance.ColorTheme = ColorTheme.CreateLightTheme();
 					themeEditor.Rebuild();
 					themeChanged = true;
-				}
+				},
 			};
 			var saveButton = new ThemedButton("Save theme") {
 				Clicked = () => {
 					var dlg = new FileDialog {
 						AllowedFileTypes = new string[] { "theme" },
-						Mode = FileDialogMode.Save
+						Mode = FileDialogMode.Save,
 					};
 					if (dlg.RunModal()) {
 						string path = dlg.FileName;
@@ -282,13 +282,13 @@ namespace Tangerine
 							AlertDialog.Show(e.Message);
 						}
 					}
-				}
+				},
 			};
 			var loadButton = new ThemedButton("Load theme") {
 				Clicked = () => {
 					var dlg = new FileDialog {
 						AllowedFileTypes = new string[] { "theme" },
-						Mode = FileDialogMode.Open
+						Mode = FileDialogMode.Open,
 					};
 					if (dlg.RunModal()) {
 						string path = dlg.FileName;
@@ -306,11 +306,11 @@ namespace Tangerine
 					}
 					themeEditor.Rebuild();
 					themeChanged = true;
-				}
+				},
 			};
 			var buttons = new Widget {
 				Layout = new HBoxLayout { Spacing = 4 },
-				Nodes = { loadDarkButton, loadLightButton, saveButton, loadButton }
+				Nodes = { loadDarkButton, loadLightButton, saveButton, loadButton },
 			};
 			pane.AddNode(buttons);
 			pane.AddNode(themeEditor);
@@ -339,7 +339,7 @@ namespace Tangerine
 					propertyName: targetProperty,
 					displayName: text
 				) {
-					DefaultValueGetter = valueGetter
+					DefaultValueGetter = valueGetter,
 				}
 			);
 			container.Content.AddNode(tmp.ContainerWidget);
@@ -349,7 +349,7 @@ namespace Tangerine
 			editors.Add(tmp);
 		}
 
-		Widget CreateGeneralPane()
+		private Widget CreateGeneralPane()
 		{
 			var parent = new Widget();
 			parent.Layout = new VBoxLayout { Spacing = 0 };
@@ -517,14 +517,14 @@ namespace Tangerine
 			var hotkeyEditor = new HotkeyEditor();
 			var pane = new Widget {
 				Layout = new VBoxLayout { Spacing = 10 },
-				Padding = contentPadding
+				Padding = contentPadding,
 			};
 			pane.Awoke += node => hotkeyEditor.SetFocus();
 
 			var profileLabel = new ThemedSimpleText("Profile: ") {
 				VAlignment = VAlignment.Center,
 				HAlignment = HAlignment.Right,
-				LayoutCell = new LayoutCell(Alignment.RightCenter, 0)
+				LayoutCell = new LayoutCell(Alignment.RightCenter, 0),
 			};
 			var profilePicker = new ThemedDropDownList();
 			profilePicker.TextWidget.Padding = new Thickness(3, 0);
@@ -533,7 +533,7 @@ namespace Tangerine
 			exportButton.Clicked = () => {
 				var dlg = new FileDialog {
 					Mode = FileDialogMode.Save,
-					InitialFileName = currentProfile.Name
+					InitialFileName = currentProfile.Name,
 				};
 				if (dlg.RunModal()) {
 					currentProfile.Save(dlg.FileName);
@@ -547,8 +547,9 @@ namespace Tangerine
 					if (HotkeyRegistry.Profiles.Any(i => i.Name == name)) {
 						if (
 							new AlertDialog(
-								$"Profile with name \"{name}\" already exists. "
-								+ $"Do you want to rewrite it?", "Yes", "Cancel"
+								$"Profile with name \"{name}\" already exists. " + $"Do you want to rewrite it?",
+								"Yes",
+								"Cancel"
 							).Show() != 0
 						) {
 							return;
@@ -584,7 +585,7 @@ namespace Tangerine
 			var categoryLabel = new ThemedSimpleText("Commands: ") {
 				VAlignment = VAlignment.Center,
 				HAlignment = HAlignment.Right,
-				LayoutCell = new LayoutCell(Alignment.RightCenter, 0)
+				LayoutCell = new LayoutCell(Alignment.RightCenter, 0),
 			};
 			var categoryPicker = new ThemedDropDownList();
 			categoryPicker.TextWidget.Padding = new Thickness(3, 0);
@@ -604,18 +605,18 @@ namespace Tangerine
 					selectedShortcutsView.Content.AddNode(new ThemedSimpleText {
 						Text = category.Key.Title,
 						VAlignment = VAlignment.Center,
-						Color = Theme.Colors.GrayText
+						Color = Theme.Colors.GrayText,
 					});
 					foreach (var command in category) {
 						var shortcut = new ThemedSimpleText {
 							Text = command.Shortcut.ToString(),
 							VAlignment = VAlignment.Center,
-							LayoutCell = new LayoutCell(Alignment.LeftCenter, 1)
+							LayoutCell = new LayoutCell(Alignment.LeftCenter, 1),
 						};
 						var name = new ThemedSimpleText {
 							Text = command.Title,
 							VAlignment = VAlignment.Center,
-							LayoutCell = new LayoutCell(Alignment.LeftCenter, 2)
+							LayoutCell = new LayoutCell(Alignment.LeftCenter, 2),
 						};
 						var deleteShortcutButton = new ThemedTabCloseButton {
 							LayoutCell = new LayoutCell(Alignment.LeftCenter, 0),
@@ -623,12 +624,12 @@ namespace Tangerine
 								command.Shortcut = new Shortcut();
 								hotkeyEditor.UpdateButtonCommands();
 								hotkeyEditor.UpdateShortcuts();
-							}
+							},
 						};
 						selectedShortcutsView.Content.AddNode(new Widget {
 							Layout = new TableLayout { Spacing = 4, RowCount = 1, ColumnCount = 3 },
 							Nodes = { shortcut, name, deleteShortcutButton },
-							Padding = new Thickness(15, 0)
+							Padding = new Thickness(15, 0),
 						});
 					}
 				}
@@ -636,7 +637,7 @@ namespace Tangerine
 			};
 
 			var filterBox = new ThemedEditBox {
-				MaxWidth = 200
+				MaxWidth = 200,
 			};
 			filterBox.AddChangeWatcher(() => filterBox.Text, text => {
 				UpdateAllShortcutsView(allShortcutsView, selectedShortcutsView, hotkeyEditor, text.ToLower());
@@ -644,7 +645,7 @@ namespace Tangerine
 			});
 
 			categoryPicker.Changed += args => {
-				hotkeyEditor.Category = (args.Value as CommandCategoryInfo);
+				hotkeyEditor.Category = args.Value as CommandCategoryInfo;
 				hotkeyEditor.SetFocus();
 				int index = -1;
 				foreach (var node in allShortcutsView.Content.Nodes.SelectMany(i => i.Nodes)) {
@@ -690,11 +691,11 @@ namespace Tangerine
 					profileLabel, profilePicker,
 					new Widget {
 						Layout = new HBoxLayout { Spacing = 4 },
-						Nodes = { exportButton, importButton, deleteButton }
+						Nodes = { exportButton, importButton, deleteButton },
 					},
-					categoryLabel, categoryPicker
+					categoryLabel, categoryPicker,
 				},
-				LayoutCell = new LayoutCell { StretchY = 0 }
+				LayoutCell = new LayoutCell { StretchY = 0 },
 			});
 
 			pane.AddNode(hotkeyEditor);
@@ -702,36 +703,36 @@ namespace Tangerine
 				Layout = new HBoxLayout { Spacing = 12 },
 				Nodes = {
 					new Widget {
-						Layout = new VBoxLayout {Spacing = 4 },
+						Layout = new VBoxLayout { Spacing = 4 },
 						Nodes = {
-							new Widget{
-								Layout = new HBoxLayout {Spacing = 8 },
+							new Widget {
+								Layout = new HBoxLayout { Spacing = 8 },
 								Nodes = {
 									new ThemedSimpleText("Search: ") {
 										VAlignment = VAlignment.Center,
-										LayoutCell = new LayoutCell(Alignment.LeftCenter, 0)
+										LayoutCell = new LayoutCell(Alignment.LeftCenter, 0),
 									},
-									filterBox
+									filterBox,
 								},
-								LayoutCell = new LayoutCell { StretchY = 0 }
+								LayoutCell = new LayoutCell { StretchY = 0 },
 							},
 							new ThemedFrame {
 								Nodes = { allShortcutsView },
-								Layout = new VBoxLayout()
-							}
-						}
+								Layout = new VBoxLayout(),
+							},
+						},
 					},
 					new Widget {
-						Layout = new VBoxLayout {Spacing = 4 },
+						Layout = new VBoxLayout { Spacing = 4 },
 						Nodes = {
 							new ThemedSimpleText("Selected commands:") { LayoutCell = new LayoutCell { StretchY = 0 } },
 							new ThemedFrame {
 								Nodes = { selectedShortcutsView },
-								Layout = new VBoxLayout()
-							}
-						}
-					}
-				}
+								Layout = new VBoxLayout(),
+							},
+						},
+					},
+				},
 			});
 
 			return pane;
@@ -750,17 +751,17 @@ namespace Tangerine
 			foreach (var category in hotkeyEditor.Profile.Categories) {
 				var expandableContent = new Frame {
 					Layout = new VBoxLayout { Spacing = 4 },
-					Visible = true
+					Visible = true,
 				};
 				var expandButton = new ThemedExpandButton {
 					Anchors = Anchors.Left,
 					MinMaxSize = Vector2.One * 20f,
-					Expanded = expandableContent.Visible
+					Expanded = expandableContent.Visible,
 				};
 				var title = new ThemedSimpleText {
 					Text = category.Title,
 					VAlignment = VAlignment.Center,
-					LayoutCell = new LayoutCell(Alignment.LeftCenter, stretchX: 0)
+					LayoutCell = new LayoutCell(Alignment.LeftCenter, stretchX: 0),
 				};
 				expandButton.Clicked += () => {
 					expandableContent.Visible = !expandableContent.Visible;
@@ -768,11 +769,11 @@ namespace Tangerine
 				};
 				var header = new Widget {
 					Layout = new HBoxLayout(),
-					Nodes = { expandButton, title }
+					Nodes = { expandButton, title },
 				};
 				allShortcutsView.Content.AddNode(header);
 				allShortcutsView.Content.AddNode(expandableContent);
-				var filteredCommands = String.IsNullOrEmpty(filter) ?
+				var filteredCommands = string.IsNullOrEmpty(filter) ?
 					category.Commands.Values : category.Commands.Values.Where(i => i.Title.ToLower().Contains(filter));
 				title.Color = filteredCommands.Any() ? Theme.Colors.BlackText : Theme.Colors.GrayText;
 				expandButton.Enabled = filteredCommands.Any();
@@ -790,7 +791,7 @@ namespace Tangerine
 					editor.PropertyLabel.CompoundPresenter.RemoveAll(i => i as SelectionPresenter != null);
 					editor.PropertyLabel.Caret = new CaretPosition();
 
-					if (!String.IsNullOrEmpty(filter)) {
+					if (!string.IsNullOrEmpty(filter)) {
 						var mc = new MultiCaretPosition();
 						var start = new CaretPosition { IsVisible = true, WorldPos = new Vector2(1, 1) };
 						var finish = new CaretPosition { IsVisible = true, WorldPos = new Vector2(1, 1) };
@@ -801,7 +802,7 @@ namespace Tangerine
 						finish.TextPos = start.TextPos + filter.Length;
 						new SelectionPresenter(editor.PropertyLabel, start, finish, new SelectionParams() {
 							Color = Theme.Colors.TextSelection,
-							OutlineThickness = 0
+							OutlineThickness = 0,
 						});
 					}
 
@@ -817,8 +818,10 @@ namespace Tangerine
 							}
 							var dialog = new AlertDialog(
 								$"Shortcut {shortcut} is already assigned to following commands:\n"
-								+ commandsText + "\nRemove old shortcuts?",
-								"Remove", "Don't Remove", "Cancel"
+									+ commandsText + "\nRemove old shortcuts?",
+								"Remove",
+								"Don't Remove",
+								"Cancel"
 							);
 							switch (dialog.Show()) {
 								case 0:
@@ -868,7 +871,7 @@ namespace Tangerine
 			}
 		}
 
-		IEnumerator<object> UpdateDragCursor(ThemedScrollView selectedShortcutsView, HotkeyEditor hotkeyEditor)
+		private IEnumerator<object> UpdateDragCursor(ThemedScrollView selectedShortcutsView, HotkeyEditor hotkeyEditor)
 		{
 			while (true) {
 				var nodeUnderMouse = WidgetContext.Current.NodeUnderMouse;

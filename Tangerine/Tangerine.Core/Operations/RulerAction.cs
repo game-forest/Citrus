@@ -26,7 +26,6 @@ namespace Tangerine.Core.Operations
 
 		public sealed class Processor : OperationProcessor<DeleteRuler>
 		{
-
 			protected override void InternalRedo(DeleteRuler op)
 			{
 				op.ruler.DeleteLine(op.rulerLine);
@@ -37,7 +36,6 @@ namespace Tangerine.Core.Operations
 				op.ruler.Lines.Add(op.rulerLine);
 			}
 		}
-
 	}
 
 	public sealed class CreateRuler : Operation
@@ -60,7 +58,6 @@ namespace Tangerine.Core.Operations
 
 		public sealed class Processor : OperationProcessor<CreateRuler>
 		{
-
 			protected override void InternalRedo(CreateRuler op)
 			{
 				op.ruler.Lines.Add(op.rulerLine);
@@ -71,6 +68,5 @@ namespace Tangerine.Core.Operations
 				op.ruler.DeleteLine(op.rulerLine);
 			}
 		}
-
 	}
 }

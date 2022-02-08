@@ -38,44 +38,61 @@ namespace Lime.Graphics.Platform.Vulkan
 			}
 		}
 
-		public MemoryAlloc Allocate(SharpVulkan.Image image, SharpVulkan.MemoryPropertyFlags propertyFlags, SharpVulkan.ImageTiling tiling)
-		{
-			GetImageMemoryRequirements(image,
+		public MemoryAlloc Allocate(
+			SharpVulkan.Image image, SharpVulkan.MemoryPropertyFlags propertyFlags, SharpVulkan.ImageTiling tiling
+		) {
+			GetImageMemoryRequirements(
+				image,
 				out var requirements,
 				out var prefersDedicated,
 				out bool requiresDedicated);
 			var dedicatedAllocateInfo = new SharpVulkan.Ext.MemoryDedicatedAllocateInfo {
 				StructureType = SharpVulkan.Ext.StructureType.MemoryDedicatedAllocateInfo,
-				Image = image
+				Image = image,
 			};
 			var alloc = Allocate(
-				requirements, &dedicatedAllocateInfo, prefersDedicated, requiresDedicated,
-				propertyFlags, tiling == SharpVulkan.ImageTiling.Linear);
+				requirements,
+				&dedicatedAllocateInfo,
+				prefersDedicated,
+				requiresDedicated,
+				propertyFlags,
+				linear: tiling == SharpVulkan.ImageTiling.Linear
+			);
 			Context.Device.BindImageMemory(image, alloc.Memory.Memory, alloc.Offset);
 			return alloc;
 		}
 
 		public MemoryAlloc Allocate(SharpVulkan.Buffer buffer, SharpVulkan.MemoryPropertyFlags propertyFlags)
 		{
-			GetBufferMemoryRequirements(buffer,
+			GetBufferMemoryRequirements(
+				buffer,
 				out var requirements,
 				out var prefersDedicated,
 				out bool requiresDedicated);
 			var dedicatedAllocateInfo = new SharpVulkan.Ext.MemoryDedicatedAllocateInfo {
 				StructureType = SharpVulkan.Ext.StructureType.MemoryDedicatedAllocateInfo,
-				Buffer = buffer
+				Buffer = buffer,
 			};
 			var alloc = Allocate(
-				requirements, &dedicatedAllocateInfo, prefersDedicated, requiresDedicated,
-				propertyFlags, true);
+				requirements,
+				&dedicatedAllocateInfo,
+				prefersDedicated,
+				requiresDedicated,
+				propertyFlags,
+				linear: true
+			);
 			Context.Device.BindBufferMemory(buffer, alloc.Memory.Memory, alloc.Offset);
 			return alloc;
 		}
 
 		private MemoryAlloc Allocate(
-			SharpVulkan.MemoryRequirements requirements, SharpVulkan.Ext.MemoryDedicatedAllocateInfo* dedicatedAllocateInfo,
-			bool prefersDedicated, bool requiresDedicated, SharpVulkan.MemoryPropertyFlags propertyFlags, bool linear)
-		{
+			SharpVulkan.MemoryRequirements requirements,
+			SharpVulkan.Ext.MemoryDedicatedAllocateInfo* dedicatedAllocateInfo,
+			bool prefersDedicated,
+			bool requiresDedicated,
+			SharpVulkan.MemoryPropertyFlags propertyFlags,
+			bool linear
+		) {
 			var type = TryFindMemoryType(requirements.MemoryTypeBits, propertyFlags);
 			if (type == null) {
 				throw new InvalidOperationException();
@@ -95,13 +112,16 @@ namespace Lime.Graphics.Platform.Vulkan
 			return AllocateFromPool(type, requirements.Size, requirements.Alignment, linear);
 		}
 
-		private DeviceMemory TryAllocateDeviceMemory(MemoryType type, ulong size, SharpVulkan.Ext.MemoryDedicatedAllocateInfo* dedicatedAllocateInfo)
-		{
+		private DeviceMemory TryAllocateDeviceMemory(
+			MemoryType type,
+			ulong size,
+			SharpVulkan.Ext.MemoryDedicatedAllocateInfo* dedicatedAllocateInfo
+		) {
 			var allocateInfo = new SharpVulkan.MemoryAllocateInfo {
 				StructureType = SharpVulkan.StructureType.MemoryAllocateInfo,
 				MemoryTypeIndex = type.Index,
 				AllocationSize = size,
-				Next = new IntPtr(dedicatedAllocateInfo)
+				Next = new IntPtr(dedicatedAllocateInfo),
 			};
 			DeviceMemory memory;
 			try {
@@ -207,7 +227,9 @@ namespace Lime.Graphics.Platform.Vulkan
 			lock (memory) {
 				memory.MapCounter++;
 				if (memory.MapCounter == 1) {
-					memory.MappedMemory = Context.Device.MapMemory(memory.Memory, 0, memory.Size, SharpVulkan.MemoryMapFlags.None);
+					memory.MappedMemory = Context.Device.MapMemory(
+						memory.Memory, 0, memory.Size, SharpVulkan.MemoryMapFlags.None
+					);
 				}
 				return memory.MappedMemory;
 			}
@@ -262,7 +284,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				StructureType = SharpVulkan.StructureType.MappedMemoryRange,
 				Memory = alloc.Memory.Memory,
 				Offset = rangeStart,
-				Size = rangeEnd - rangeStart
+				Size = rangeEnd - rangeStart,
 			};
 			if (flush) {
 				Context.Device.FlushMappedMemoryRanges(1, &range);
@@ -280,14 +302,14 @@ namespace Lime.Graphics.Platform.Vulkan
 			if (Context.SupportsDedicatedAllocation) {
 				var requirementsInfo = new SharpVulkan.Ext.ImageMemoryRequirementsInfo2 {
 					StructureType = SharpVulkan.Ext.StructureType.ImageMemoryRequirementsInfo2,
-					Image = image
+					Image = image,
 				};
 				var dedicatedRequirements = new SharpVulkan.Ext.MemoryDedicatedRequirements {
-					StructureType = SharpVulkan.Ext.StructureType.MemoryDedicatedRequirements
+					StructureType = SharpVulkan.Ext.StructureType.MemoryDedicatedRequirements,
 				};
 				var requirements2 = new SharpVulkan.Ext.MemoryRequirements2 {
 					StructureType = SharpVulkan.Ext.StructureType.MemoryRequirements2,
-					Next = new IntPtr(&dedicatedRequirements)
+					Next = new IntPtr(&dedicatedRequirements),
 				};
 				Context.VKExt.GetImageMemoryRequirements2(Context.Device, ref requirementsInfo, ref requirements2);
 				requirements = requirements2.MemoryRequirements;
@@ -309,14 +331,14 @@ namespace Lime.Graphics.Platform.Vulkan
 			if (Context.SupportsDedicatedAllocation) {
 				var requirementsInfo = new SharpVulkan.Ext.BufferMemoryRequirementsInfo2 {
 					StructureType = SharpVulkan.Ext.StructureType.BufferMemoryRequirementsInfo2,
-					Buffer = buffer
+					Buffer = buffer,
 				};
 				var dedicatedRequirements = new SharpVulkan.Ext.MemoryDedicatedRequirements {
-					StructureType = SharpVulkan.Ext.StructureType.MemoryDedicatedRequirements
+					StructureType = SharpVulkan.Ext.StructureType.MemoryDedicatedRequirements,
 				};
 				var requirements2 = new SharpVulkan.Ext.MemoryRequirements2 {
 					StructureType = SharpVulkan.Ext.StructureType.MemoryRequirements2,
-					Next = new IntPtr(&dedicatedRequirements)
+					Next = new IntPtr(&dedicatedRequirements),
 				};
 				Context.VKExt.GetBufferMemoryRequirements2(Context.Device, ref requirementsInfo, ref requirements2);
 				requirements = requirements2.MemoryRequirements;
@@ -355,8 +377,9 @@ namespace Lime.Graphics.Platform.Vulkan
 		public readonly ulong BlockSize;
 		public readonly ulong MinAlignment;
 
-		public MemoryType(uint index, SharpVulkan.MemoryPropertyFlags propertyFlags, ulong blockSize, ulong minAlignment)
-		{
+		public MemoryType(
+			uint index, SharpVulkan.MemoryPropertyFlags propertyFlags, ulong blockSize, ulong minAlignment
+		) {
 			Index = index;
 			PropertyFlags = propertyFlags;
 			BlockSize = blockSize;
@@ -375,7 +398,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			Memory = memory;
 			freeList.AddLast(new FreeSlice {
 				Offset = 0,
-				Size = memory.Size
+				Size = memory.Size,
 			});
 		}
 
@@ -409,13 +432,13 @@ namespace Lime.Graphics.Platform.Vulkan
 				if (offset > bestNode.Value.Offset) {
 					freeList.AddLast(new FreeSlice {
 						Offset = bestNode.Value.Offset,
-						Size = offset - bestNode.Value.Offset
+						Size = offset - bestNode.Value.Offset,
 					});
 				}
 				if (offset + size < bestNode.Value.Offset + bestNode.Value.Size) {
 					freeList.AddLast(new FreeSlice {
 						Offset = offset + size,
-						Size = bestNode.Value.Offset + bestNode.Value.Size - offset - size
+						Size = bestNode.Value.Offset + bestNode.Value.Size - offset - size,
 					});
 				}
 				freeList.Remove(bestNode);
@@ -442,7 +465,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			}
 			freeList.AddLast(new FreeSlice {
 				Offset = offset,
-				Size = size
+				Size = size,
 			});
 		}
 

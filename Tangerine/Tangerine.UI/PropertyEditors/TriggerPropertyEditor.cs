@@ -20,7 +20,7 @@ namespace Tangerine.UI
 			var button = new ThemedButton {
 				Text = "...",
 				MinMaxWidth = 20,
-				LayoutCell = new LayoutCell(Alignment.Center)
+				LayoutCell = new LayoutCell(Alignment.Center),
 			};
 			EditorContainer.AddNode(editBox = editorParams.EditBoxFactory());
 			EditorContainer.AddNode(Spacer.HSpacer(4));
@@ -64,7 +64,7 @@ namespace Tangerine.UI
 			foreach (var a in node.Animations) {
 				foreach (var m in a.Markers.Where(i => !string.IsNullOrEmpty(i.Id))) {
 					var id = a.Id != null ? m.Id + '@' + a.Id : m.Id;
-					var key = a.Id ?? "";
+					var key = a.Id ?? string.Empty;
 					if (!triggers.Keys.Contains(key)) {
 						triggers[key] = new HashSet<string>();
 					}
@@ -86,16 +86,16 @@ namespace Tangerine.UI
 						Padding = Theme.Metrics.ControlsPadding,
 						LayoutCell = new LayoutCell(Alignment.Center),
 						VAlignment = VAlignment.Center,
-						ForceUncutText = false
-					}
+						ForceUncutText = false,
+					},
 				},
-				Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
+				Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground),
 			};
 		}
 
 		private string FilterTriggers(string text)
 		{
-			var newValue = "";
+			var newValue = string.Empty;
 			if (!string.IsNullOrEmpty(text)) {
 				var triggersToSet = text.Split(',').ToList();
 				var triggers = GetAvailableTriggers();

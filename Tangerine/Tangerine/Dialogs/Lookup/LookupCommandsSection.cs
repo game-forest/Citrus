@@ -10,7 +10,8 @@ namespace Tangerine
 
 		public override string Breadcrumb { get; } = "Search Command";
 		public override string Prefix { get; } = PrefixConst;
-		public override string HelpText { get; } = $"Type '{PrefixConst}' to search for command in the current workspace";
+		public override string HelpText { get; } =
+			$"Type '{PrefixConst}' to search for command in the current workspace";
 
 		private readonly IMenu startMenu;
 

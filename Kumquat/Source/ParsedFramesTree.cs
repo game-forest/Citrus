@@ -48,12 +48,14 @@ namespace Kumquat
 
 		private string GenerateCommonBase()
 		{
-			return !BaseClassName.IsNullOrWhiteSpace() ? $"\npublic Common.{BaseClassName} {BaseClassName};" : "";
+			return !BaseClassName.IsNullOrWhiteSpace()
+				? $"\npublic Common.{BaseClassName} {BaseClassName};"
+				: string.Empty;
 		}
 
 		private string GenerateInnerClasses(ScenesCodeCooker scenesCodeCooker)
 		{
-			var result = "";
+			var result = string.Empty;
 
 			var checkedNodes = new List<ParsedNode>();
 			var checkedClasses = new List<ParsedFramesTree>();
@@ -79,7 +81,7 @@ namespace Kumquat
 
 		private string GenerateFieldsInitialization(ScenesCodeCooker scenesCodeCooker)
 		{
-			var result = "";
+			var result = string.Empty;
 			if (!BaseClassName.IsNullOrWhiteSpace()) {
 				result += $"{BaseClassName} = new Common.{BaseClassName}(Node);\n";
 			}
@@ -99,12 +101,11 @@ namespace Kumquat
 
 					result += string.Format(
 						"@{2} = Node.Descendants.Where(nodeEl => nodeEl.Id == \"{1}\")" +
-						".Select(nodeEl => new {0} (nodeEl)).ToList();"  + "\n",
+						".Select(nodeEl => new {0} (nodeEl)).ToList();" + "\n",
 						scenesCodeCooker.GetFullTypeOf(node),
 						node.Id,
 						node.FieldName
 					);
-
 				} else {
 					result += string.Format(
 						"@{2} = new {0}(Node.Find<Node>(\"{1}\"));" + "\n",
@@ -127,7 +128,7 @@ namespace Kumquat
 
 					result += string.Format(
 						"@{2} = Node.Descendants.Where(nodeEl => nodeEl.Id == \"{1}\")" +
-						".Select(nodeEl => new {0} (nodeEl)).ToList();"  + "\n",
+						".Select(nodeEl => new {0} (nodeEl)).ToList();" + "\n",
 						scenesCodeCooker.GetFullTypeOf(pft),
 						pft.ParsedNode.Id,
 						pft.FieldName
@@ -147,7 +148,7 @@ namespace Kumquat
 
 		private string GenerateFields(ScenesCodeCooker scenesCodeCooker)
 		{
-			var result = "";
+			var result = string.Empty;
 			var multiFields = new List<ParsedNode>();
 			var multiClasses = new List<ParsedFramesTree>();
 
@@ -190,7 +191,7 @@ namespace Kumquat
 			string result = "using Lime;" + "\n";
 
 			if (scene.Contains("List<")) {
-				result += "using System.Collections.Generic;"+ "\n";
+				result += "using System.Collections.Generic;" + "\n";
 			}
 
 			if (scene.Contains(".Where") || scene.Contains(".Select")) {

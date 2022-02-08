@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -42,22 +40,12 @@ namespace SharpFont.TrueType
 	/// <see cref="MicrosoftEncodingId"/>
 	public class SfntName
 	{
-		#region Fields
-
 		private SfntNameRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal SfntName(SfntNameRec rec)
 		{
 			this.rec = rec;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the platform ID for ‘string’.
@@ -114,10 +102,10 @@ namespace SharpFont.TrueType
 		{
 			get
 			{
-				//TODO it may be possible to consolidate all of these properties
-				//if the strings follow some sane structure. Otherwise, leave
-				//them or add more overloads for common encodings like UTF-8.
-				return Marshal.PtrToStringUni(rec.@string, (int) Math.Ceiling(rec.string_len/2.0));
+				// TODO it may be possible to consolidate all of these properties
+				// if the strings follow some sane structure. Otherwise, leave
+				// them or add more overloads for common encodings like UTF-8.
+				return Marshal.PtrToStringUni(rec.@string, (int)Math.Ceiling(rec.string_len / 2.0));
 			}
 		}
 
@@ -146,7 +134,5 @@ namespace SharpFont.TrueType
 				return rec.@string;
 			}
 		}
-
-		#endregion
 	}
 }

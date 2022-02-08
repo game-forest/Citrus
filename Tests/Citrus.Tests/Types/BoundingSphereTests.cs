@@ -46,7 +46,7 @@ namespace Citrus.Tests.Types
 		public void CreateFromPointsTest()
 		{
 			Assert.ThrowsException<ArgumentNullException>(() => BoundingSphere.CreateFromPoints(null));
-			var actualPoints = new List<Vector3> ();
+			var actualPoints = new List<Vector3>();
 			Assert.ThrowsException<ArgumentException>(() => BoundingSphere.CreateFromPoints(actualPoints));
 			actualPoints = new List<Vector3> { Vector3.Zero };
 			var actual = BoundingSphere.CreateFromPoints(actualPoints);
@@ -65,7 +65,7 @@ namespace Citrus.Tests.Types
 			Assert.That.AreEqual(unitSphere, actual);
 			actualPoints = new List<Vector3> {
 				new Vector3(0, 0, 1),
-				new Vector3(0, 0, -1)
+				new Vector3(0, 0, -1),
 			};
 			actual = BoundingSphere.CreateFromPoints(actualPoints);
 			Assert.That.AreEqual(unitSphere, actual);

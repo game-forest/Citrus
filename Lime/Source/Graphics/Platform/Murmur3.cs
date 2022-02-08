@@ -150,7 +150,7 @@ namespace Lime.Graphics.Platform
 						k1 *= c2;
 						h1 ^= k1;
 						break;
-				};
+				}
 
 				h1 ^= (uint)length;
 				h2 ^= (uint)length;
@@ -283,7 +283,7 @@ namespace Lime.Graphics.Platform
 						k1 *= c2;
 						h1 ^= k1;
 						break;
-				};
+				}
 
 				h1 ^= (ulong)length;
 				h2 ^= (ulong)length;

@@ -21,14 +21,22 @@ namespace Lime
 
 		public Vector2 LeftTop
 		{
-			get { return new Vector2(Left, Top); }
-			set { Left = value.X; Top = value.Y; }
+			get => new Vector2(Left, Top);
+			set
+			{
+				Left = value.X;
+				Top = value.Y;
+			}
 		}
 
 		public Vector2 RightBottom
 		{
-			get { return new Vector2(Right, Bottom); }
-			set { Right = value.X; Bottom = value.Y; }
+			get => new Vector2(Right, Bottom);
+			set
+			{
+				Right = value.X;
+				Bottom = value.Y;
+			}
 		}
 
 		public static Thickness Zero = new Thickness(0);
@@ -52,28 +60,39 @@ namespace Lime
 			Bottom = bottom;
 		}
 
-		public static Thickness operator + (Thickness lhs, Thickness rhs)
+		public static Thickness operator +(Thickness lhs, Thickness rhs)
 		{
-			return new Thickness(lhs.Left + rhs.Left, lhs.Right + rhs.Right, lhs.Top + rhs.Top, lhs.Bottom + rhs.Bottom);
+			return new Thickness(
+				lhs.Left + rhs.Left, lhs.Right + rhs.Right, lhs.Top + rhs.Top, lhs.Bottom + rhs.Bottom
+			);
 		}
 
-		public static Thickness operator - (Thickness lhs, Thickness rhs)
+		public static Thickness operator -(Thickness lhs, Thickness rhs)
 		{
-			return new Thickness(lhs.Left - rhs.Left, lhs.Right - rhs.Right, lhs.Top - rhs.Top, lhs.Bottom - rhs.Bottom);
+			return new Thickness(
+				lhs.Left - rhs.Left, lhs.Right - rhs.Right, lhs.Top - rhs.Top, lhs.Bottom - rhs.Bottom
+			);
 		}
 
-		public static Vector2 operator + (Vector2 size, Thickness padding)
+		public static Vector2 operator +(Vector2 size, Thickness padding)
 		{
 			return size + padding.LeftTop + padding.RightBottom;
 		}
 
-		public static Vector2 operator - (Vector2 size, Thickness padding)
+		public static Vector2 operator -(Vector2 size, Thickness padding)
 		{
 			return size - padding.LeftTop - padding.RightBottom;
 		}
 
-		public static bool operator ==(Thickness lhs, Thickness rhs) => lhs.Left == rhs.Left && lhs.Right == rhs.Right && lhs.Top == rhs.Right && lhs.Bottom == rhs.Bottom;
-		public static bool operator !=(Thickness lhs, Thickness rhs) => lhs.Left != rhs.Left || lhs.Right != rhs.Right || lhs.Top != rhs.Top || lhs.Bottom != rhs.Bottom;
+		public static bool operator ==(Thickness lhs, Thickness rhs)
+		{
+			return lhs.Left == rhs.Left && lhs.Right == rhs.Right && lhs.Top == rhs.Right && lhs.Bottom == rhs.Bottom;
+		}
+
+		public static bool operator !=(Thickness lhs, Thickness rhs)
+		{
+			return lhs.Left != rhs.Left || lhs.Right != rhs.Right || lhs.Top != rhs.Top || lhs.Bottom != rhs.Bottom;
+		}
 
 		public override string ToString()
 		{

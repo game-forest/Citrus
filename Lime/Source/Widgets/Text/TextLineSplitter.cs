@@ -44,12 +44,11 @@ namespace Lime
 				koreanCharactersNotAllowedAtTheEnd +
 				otherCharactersNotAllowedAtTheEnd
 			);
-
 		}
 
 		public static readonly HashSet<char> NotAllowedAtTheStart;
 		public static readonly HashSet<char> NotAllowedAtTheEnd;
-		const string NotAllowedToSplit = "0123456789-—‥〳〴〵";
+		private const string NotAllowedToSplit = "0123456789-—‥〳〴〵";
 
 		internal static void AdjustLineBreakPosition(string text, ref int position) =>
 			AdjustLineBreakPosition(text, ref position, text.Length - 1);
@@ -69,7 +68,11 @@ namespace Lime
 				oldPosition = position;
 				SkipNotAllowedToWrapStringCharacters(text, ref position);
 				if (endPosition + 1 >= PreferredNumberOfCarriedLetters * 2) {
-					while (position > 1 && lettersNumber < PreferredNumberOfCarriedLetters && char.IsLetter(text[position])) {
+					while (
+						position > 1
+						&& lettersNumber < PreferredNumberOfCarriedLetters
+						&& char.IsLetter(text[position])
+					) {
 						position--;
 						lettersNumber++;
 					}
@@ -77,14 +80,14 @@ namespace Lime
 			} while (oldPosition != position);
 		}
 
-		private static bool IsNotAllowedAtTheStartOfNewLine(char c) =>
-			char.IsPunctuation(c) || NotAllowedAtTheStart.Contains(c);
+		private static bool IsNotAllowedAtTheStartOfNewLine(char c)
+		{
+			return char.IsPunctuation(c) || NotAllowedAtTheStart.Contains(c);
+		}
 
-		private static bool IsNotAllowedAtTheEndOfWrappedLine(char c) =>
-			NotAllowedAtTheEnd.Contains(c);
+		private static bool IsNotAllowedAtTheEndOfWrappedLine(char c) => NotAllowedAtTheEnd.Contains(c);
 
-		private static bool IsNotAllowedToSplitLine(char c) =>
-			NotAllowedToSplit.IndexOf(c) >= 0;
+		private static bool IsNotAllowedToSplitLine(char c) => NotAllowedToSplit.IndexOf(c) >= 0;
 
 		internal static void SkipNotAllowedToWrapStringCharacters(string text, ref int position)
 		{
@@ -95,19 +98,26 @@ namespace Lime
 					position -= 2;
 				}
 				if (
-					position > 1 && (IsNotAllowedAtTheStartOfNewLine(text[position]) ||
-									 IsNotAllowedToSplitLine(text[position]) && IsNotAllowedToSplitLine(text[position - 1]))
+					position > 1
+					&& (
+						IsNotAllowedAtTheStartOfNewLine(text[position])
+						|| IsNotAllowedToSplitLine(text[position])
+						&& IsNotAllowedToSplitLine(text[position - 1])
+					)
 				) {
 					position--;
 				}
 			} while (oldPosition != position);
 		}
 
-		public static bool CarryLastWordToNextLine(List<string> strings, int line, bool isWordSplitAllowed, MeasureTextLineWidthDelegate measureHandler)
-		{
+		public static bool CarryLastWordToNextLine(
+			List<string> strings, int line, bool isWordSplitAllowed, MeasureTextLineWidthDelegate measureHandler
+		) {
 			string lastWord;
 			string lineWithoutLastWord;
-			if (TrySplitLine(strings[line], isWordSplitAllowed, measureHandler, out lineWithoutLastWord, out lastWord)) {
+			if (
+				TrySplitLine(strings[line], isWordSplitAllowed, measureHandler, out lineWithoutLastWord, out lastWord)
+			) {
 				PushWordToLine(lastWord, strings, line + 1);
 				strings[line] = lineWithoutLastWord;
 				return true;
@@ -116,8 +126,13 @@ namespace Lime
 			}
 		}
 
-		private static bool TrySplitLine(string line, bool isWordSplitAllowed, MeasureTextLineWidthDelegate measureHandler, out string lineWithoutLastWord, out string lastWord)
-		{
+		private static bool TrySplitLine(
+			string line,
+			bool isWordSplitAllowed,
+			MeasureTextLineWidthDelegate measureHandler,
+			out string lineWithoutLastWord,
+			out string lastWord
+		) {
 			return
 				TryCutLastWord(line, out lineWithoutLastWord, out lastWord)
 				|| (
@@ -146,8 +161,12 @@ namespace Lime
 			return true;
 		}
 
-		private static bool TryCutWordTail(string textLine, MeasureTextLineWidthDelegate measureHandler, out string currentLinePart, out string nextLinePart)
-		{
+		private static bool TryCutWordTail(
+			string textLine,
+			MeasureTextLineWidthDelegate measureHandler,
+			out string currentLinePart,
+			out string nextLinePart
+		) {
 			currentLinePart = null;
 			nextLinePart = null;
 			var cutFrom = CalcFittedCharactersCount(textLine, measureHandler);

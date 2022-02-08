@@ -1,25 +1,30 @@
 using System;
+using System.CodeDom.Compiler;
 
 namespace Lime.Source.Widgets.Animesh
 {
 	using EA = ExactArithmetic;
 
+	[GeneratedCode(
+		"https://github.com/Geri-Borbas/Triangle.NET/blob/master/Triangle.NET/Triangle/RobustPredicates.cs",
+		"0e920cdce3c638e3f71df6de43df50a10228f18f"
+	)]
 	[System.Diagnostics.DebuggerStepThrough]
 	public static unsafe class GeometricPredicates
 	{
 		// epsilon is equal to Math.Pow(2.0, -53) and is the largest power of
 		// two that 1.0 + epsilon = 1.0.
 		// NOTE: Don't confuse this with double.Epsilon.
-		const double epsilon = 1.1102230246251565E-16;
+		private const double Epsilon = 1.1102230246251565E-16;
 
 		// Error bounds for orientation and incircle tests.
-		const double resulterrbound = (3.0 + 8.0 * epsilon) * epsilon;
-		const double ccwerrboundA = (3.0 + 16.0 * epsilon) * epsilon;
-		const double ccwerrboundB = (2.0 + 12.0 * epsilon) * epsilon;
-		const double ccwerrboundC = (9.0 + 64.0 * epsilon) * epsilon * epsilon;
-		const double iccerrboundA = (10.0 + 96.0 * epsilon) * epsilon;
-		const double iccerrboundB = (4.0 + 48.0 * epsilon) * epsilon;
-		const double iccerrboundC = (44.0 + 576.0 * epsilon) * epsilon * epsilon;
+		private const double Resulterrbound = (3.0 + 8.0 * Epsilon) * Epsilon;
+		private const double CcwerrboundA = (3.0 + 16.0 * Epsilon) * Epsilon;
+		private const double ccwerrboundB = (2.0 + 12.0 * Epsilon) * Epsilon;
+		private const double ccwerrboundC = (9.0 + 64.0 * Epsilon) * Epsilon * Epsilon;
+		private const double iccerrboundA = (10.0 + 96.0 * Epsilon) * Epsilon;
+		private const double iccerrboundB = (4.0 + 48.0 * Epsilon) * Epsilon;
+		private const double iccerrboundC = (44.0 + 576.0 * Epsilon) * Epsilon * Epsilon;
 
 		/// <summary>
 		/// Non-robust approximate 2D orientation test.
@@ -128,8 +133,7 @@ namespace Lime.Source.Widgets.Animesh
 				} else {
 					detsum = detleft + detright;
 				}
-			}
-			else if (detleft < 0.0) {
+			} else if (detleft < 0.0) {
 				if (detright >= 0.0) {
 					return det;
 				} else {
@@ -139,7 +143,7 @@ namespace Lime.Source.Widgets.Animesh
 				return det;
 			}
 
-			errbound = ccwerrboundA * detsum;
+			errbound = CcwerrboundA * detsum;
 			if ((det >= errbound) || (-det >= errbound)) {
 				return det;
 			}
@@ -155,9 +159,9 @@ namespace Lime.Source.Widgets.Animesh
 			double detleft, detright;
 			double detlefttail, detrighttail;
 			double det, errbound;
-			double* B = stackalloc double[4];
-			double* C1 = stackalloc double[8];
-			double* C2 = stackalloc double[12];
+			double* b = stackalloc double[4];
+			double* c1 = stackalloc double[8];
+			double* c2 = stackalloc double[12];
 			double* D = stackalloc double[16];
 			double B3;
 			int C1length, C2length, Dlength;
@@ -175,10 +179,10 @@ namespace Lime.Source.Widgets.Animesh
 			EA.TwoProduct(acy, bcx, out detright, out detrighttail);
 
 			EA.TwoTwoDiff(detleft, detlefttail, detright, detrighttail,
-						out B3, out B[2], out B[1], out B[0]);
-			B[3] = B3;
+						out B3, out b[2], out b[1], out b[0]);
+			b[3] = B3;
 
-			det = EA.Estimate(4, B);
+			det = EA.Estimate(4, b);
 			errbound = ccwerrboundB * detsum;
 			if ((det >= errbound) || (-det >= errbound)) {
 				return det;
@@ -194,8 +198,8 @@ namespace Lime.Source.Widgets.Animesh
 				return det;
 			}
 
-			errbound = ccwerrboundC * detsum + resulterrbound * Math.Abs(det);
-			det += (acx * bcytail + bcy * acxtail)
+			errbound = ccwerrboundC * detsum + Resulterrbound * Math.Abs(det);
+			det += acx * bcytail + bcy * acxtail
 				- (acy * bcxtail + bcx * acytail);
 			if ((det >= errbound) || (-det >= errbound)) {
 				return det;
@@ -205,27 +209,28 @@ namespace Lime.Source.Widgets.Animesh
 			EA.TwoProduct(acytail, bcx, out t1, out t0);
 			EA.TwoTwoDiff(s1, s0, t1, t0, out u3, out u[2], out u[1], out u[0]);
 			u[3] = u3;
-			C1length = EA.FastExpansionSumZeroElim(4, B, 4, u, C1);
+			C1length = EA.FastExpansionSumZeroElim(4, b, 4, u, c1);
 
 			EA.TwoProduct(acx, bcytail, out s1, out s0);
 			EA.TwoProduct(acy, bcxtail, out t1, out t0);
 			EA.TwoTwoDiff(s1, s0, t1, t0, out u3, out u[2], out u[1], out u[0]);
 			u[3] = u3;
-			C2length = EA.FastExpansionSumZeroElim(C1length, C1, 4, u, C2);
+			C2length = EA.FastExpansionSumZeroElim(C1length, c1, 4, u, c2);
 
 			EA.TwoProduct(acxtail, bcytail, out s1, out s0);
 			EA.TwoProduct(acytail, bcxtail, out t1, out t0);
 			EA.TwoTwoDiff(s1, s0, t1, t0, out u3, out u[2], out u[1], out u[0]);
 			u[3] = u3;
-			Dlength = EA.FastExpansionSumZeroElim(C2length, C2, 4, u, D);
+			Dlength = EA.FastExpansionSumZeroElim(C2length, c2, 4, u, D);
 
-			return (D[Dlength - 1]);
+			return D[Dlength - 1];
 		}
 
 		// |pax pay pax^2+pay^2 1|
 		// |pbx pby pbx^2+pby^2 1|
 		// |pcx pcy pcx^2+pcy^2 1|
 		// |pdx pdy pdx^2+pdy^2 1|
+
 		/// <summary>
 		/// Non-robust in circle test.
 		/// </summary>
@@ -450,7 +455,7 @@ namespace Lime.Source.Widgets.Animesh
 				return det;
 			}
 
-			return InternalAdaptiveInCircle( pax,  pay,  pbx,  pby,  pcx,  pcy,  pdx,  pdy, permanent);
+			return InternalAdaptiveInCircle(pax, pay, pbx, pby, pcx, pcy, pdx, pdy, permanent);
 		}
 
 		// Adaptive continuation of AdaptiveInCircle
@@ -625,14 +630,14 @@ namespace Lime.Source.Widgets.Animesh
 				return det;
 			}
 
-			errbound = iccerrboundC * permanent + resulterrbound * Math.Abs(det);
-			det += ((adx * adx + ady * ady) * ((bdx * cdytail + cdy * bdxtail)
+			errbound = iccerrboundC * permanent + Resulterrbound * Math.Abs(det);
+			det += (adx * adx + ady * ady) * (bdx * cdytail + cdy * bdxtail
 												- (bdy * cdxtail + cdx * bdytail))
-					+ 2.0 * (adx * adxtail + ady * adytail) * (bdx * cdy - bdy * cdx))
-				+ ((bdx * bdx + bdy * bdy) * ((cdx * adytail + ady * cdxtail)
+					+ 2.0 * (adx * adxtail + ady * adytail) * (bdx * cdy - bdy * cdx)
+				+ ((bdx * bdx + bdy * bdy) * (cdx * adytail + ady * cdxtail
 												- (cdy * adxtail + adx * cdytail))
 					+ 2.0 * (bdx * bdxtail + bdy * bdytail) * (cdx * ady - cdy * adx))
-				+ ((cdx * cdx + cdy * cdy) * ((adx * bdytail + bdy * adxtail)
+				+ ((cdx * cdx + cdy * cdy) * (adx * bdytail + bdy * adxtail
 												- (ady * bdxtail + bdx * adytail))
 					+ 2.0 * (cdx * cdxtail + cdy * cdytail) * (adx * bdy - ady * bdx));
 			if ((det >= errbound) || (-det >= errbound)) {
@@ -819,7 +824,6 @@ namespace Lime.Source.Widgets.Animesh
 					finlength = EA.FastExpansionSumZeroElim(finlength, finnow, temp48len, temp48, finother);
 					finswap = finnow; finnow = finother; finother = finswap;
 
-
 					temp32alen = EA.ScaleExpansionZeroElim(aytbctlen, aytbct, adytail, temp32a);
 					aytbcttlen = EA.ScaleExpansionZeroElim(bcttlen, bctt, adytail, aytbctt);
 					temp16alen = EA.ScaleExpansionZeroElim(aytbcttlen, aytbctt, 2.0 * ady, temp16a);
@@ -894,7 +898,6 @@ namespace Lime.Source.Widgets.Animesh
 					finlength = EA.FastExpansionSumZeroElim(finlength, finnow, temp48len, temp48, finother);
 					finswap = finnow; finnow = finother; finother = finswap;
 
-
 					temp32alen = EA.ScaleExpansionZeroElim(bytcatlen, bytcat, bdytail, temp32a);
 					bytcattlen = EA.ScaleExpansionZeroElim(cattlen, catt, bdytail, bytcatt);
 					temp16alen = EA.ScaleExpansionZeroElim(bytcattlen, bytcatt, 2.0 * bdy, temp16a);
@@ -925,8 +928,7 @@ namespace Lime.Source.Widgets.Animesh
 					EA.TwoTwoDiff(ti1, ti0, tj1, tj0, out abtt3, out abtt[2], out abtt[1], out abtt[0]);
 					abtt[3] = abtt3;
 					abttlen = 4;
-				}
-				else {
+				} else {
 					abt[0] = 0.0;
 					abtlen = 1;
 					abtt[0] = 0.0;
@@ -969,7 +971,6 @@ namespace Lime.Source.Widgets.Animesh
 					temp48len = EA.FastExpansionSumZeroElim(temp16alen, temp16a, temp32alen, temp32a, temp48);
 					finlength = EA.FastExpansionSumZeroElim(finlength, finnow, temp48len, temp48, finother);
 					finswap = finnow; finnow = finother; finother = finswap;
-
 
 					temp32alen = EA.ScaleExpansionZeroElim(cytabtlen, cytabt, cdytail, temp32a);
 					cytabttlen = EA.ScaleExpansionZeroElim(abttlen, abtt, cdytail, cytabtt);

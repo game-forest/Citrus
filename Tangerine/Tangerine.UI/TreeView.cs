@@ -159,7 +159,7 @@ namespace Tangerine.UI
 		public enum ActivationMethod
 		{
 			Mouse,
-			Keyboard
+			Keyboard,
 		}
 
 		public class ActivateItemEventArgs : EventArgs
@@ -286,18 +286,21 @@ namespace Tangerine.UI
 				scrollContent.CompoundPostPresenter.Remove(dragCursorPresenter);
 				if (TryCalcDragDestination(out var parent, out var childIndex, out _)) {
 					parent.Expanded = true;
-					OnDragEnd?.Invoke(this,
+					OnDragEnd?.Invoke(
+						this,
 						new DragEventArgs {
 							Items = SelectedItems,
 							Parent = parent,
-							Index = childIndex
-						});
+							Index = childIndex,
+						}
+					);
 				}
 			};
 			// Click gesture is required to select a single item under the mouse that is already part of a group of
 			// selected items (and unselect other items from this group). This logic can not be implemented in the drag
-			// gesture because it's impossible to determine in that gesture if we just clicked on the item or we are trying to drag it.
-			// So implementing it in the drag gesture will lead to not being able to drag a group of selected items.
+			// gesture because it's impossible to determine in that gesture if we just clicked on the item or we are
+			// trying to drag it. So implementing it in the drag gesture will lead to not being able to
+			// drag a group of selected items.
 			scrollContent.Gestures.Add(new ClickGesture(() => {
 				var itemUnderMouse = GetItemUnderMouse();
 				if (
@@ -423,9 +426,12 @@ namespace Tangerine.UI
 			}
 		}
 
-		public void SelectItem(TreeViewItem item,
-			bool select = true, bool clearSelection = true, bool activateIfNeeded = true)
-		{
+		public void SelectItem(
+			TreeViewItem item,
+			bool select = true,
+			bool clearSelection = true,
+			bool activateIfNeeded = true
+		) {
 			if (clearSelection) {
 				ClearSelection();
 			}
@@ -616,7 +622,7 @@ namespace Tangerine.UI
 				}
 				if (Command.Delete.Consume()) {
 					OnDelete?.Invoke(this, new CopyEventArgs {
-						Items = SelectedItems.OrderBy(i => i.SelectionOrder)
+						Items = SelectedItems.OrderBy(i => i.SelectionOrder),
 					});
 				}
 				if (Command.Paste.Consume()) {
@@ -624,7 +630,7 @@ namespace Tangerine.UI
 					if (focused?.Parent != null) {
 						OnPaste?.Invoke(this, new PasteEventArgs {
 							Parent = focused.Parent,
-							Index = focused.Parent.Items.IndexOf(focused)
+							Index = focused.Parent.Items.IndexOf(focused),
 						});
 					}
 				}

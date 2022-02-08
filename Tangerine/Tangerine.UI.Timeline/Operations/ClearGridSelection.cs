@@ -16,11 +16,11 @@ namespace Tangerine.UI.Timeline.Operations
 			DocumentHistory.Current.Perform(new ClearGridSelection());
 		}
 
-		private ClearGridSelection() {}
+		private ClearGridSelection() { }
 
 		public sealed class Processor : OperationProcessor<ClearGridSelection>
 		{
-			class Backup { public List<Core.Components.GridSpanList> Spans; }
+			private class Backup { public List<Core.Components.GridSpanList> Spans; }
 
 			protected override void InternalRedo(ClearGridSelection op)
 			{
@@ -28,7 +28,7 @@ namespace Tangerine.UI.Timeline.Operations
 					new Backup {
 						Spans = Document.Current.VisibleSceneItems
 							.Select(r => r.Components.GetOrAdd<GridSpanListComponent>().Spans)
-							.ToList()
+							.ToList(),
 					}
 				);
 				foreach (var i in Document.Current.VisibleSceneItems) {

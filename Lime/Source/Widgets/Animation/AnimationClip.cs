@@ -11,7 +11,7 @@ namespace Lime
 		None,
 		Hold,
 		Repeat,
-		PingPong
+		PingPong,
 	}
 
 	public class AnimationClip
@@ -37,7 +37,8 @@ namespace Lime
 		public string AnimationId
 		{
 			get => animationId;
-			set {
+			set
+			{
 				if (animationId != value) {
 					animationId = value;
 					AnimationIdComparisonCode = Toolbox.StringUniqueCodeGenerator.Generate(value);
@@ -54,7 +55,8 @@ namespace Lime
 		public int BeginFrame
 		{
 			get => beginFrame;
-			set {
+			set
+			{
 				if (beginFrame != value) {
 					beginFrame = value;
 					BeginTime = value * AnimationUtils.SecondsPerFrame;
@@ -70,7 +72,8 @@ namespace Lime
 		public int EndFrame
 		{
 			get => endFrame;
-			set {
+			set
+			{
 				if (endFrame != value) {
 					endFrame = value;
 					EndTime = value * AnimationUtils.SecondsPerFrame;
@@ -85,7 +88,8 @@ namespace Lime
 		public int InFrame
 		{
 			get => inFrame;
-			set {
+			set
+			{
 				if (inFrame != value) {
 					inFrame = value;
 					InTime = value * AnimationUtils.SecondsPerFrame;
@@ -99,7 +103,8 @@ namespace Lime
 		public bool Reversed
 		{
 			get => reversed;
-			set {
+			set
+			{
 				if (reversed != value) {
 					reversed = value;
 					Owner?.InvalidateCache();
@@ -112,7 +117,8 @@ namespace Lime
 		public AnimationClipExtrapolation PostExtrapolation
 		{
 			get => postExtrapolation;
-			set {
+			set
+			{
 				if (postExtrapolation != value) {
 					postExtrapolation = value;
 					Owner?.InvalidateCache();
@@ -126,7 +132,8 @@ namespace Lime
 		public float Speed
 		{
 			get => speed;
-			set {
+			set
+			{
 				if (speed != value) {
 					speed = value;
 					Owner?.InvalidateCache();
@@ -332,5 +339,4 @@ namespace Lime
 			owner?.InvalidateCache();
 		}
 	}
-
 }

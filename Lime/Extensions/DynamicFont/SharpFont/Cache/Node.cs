@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -38,22 +36,12 @@ namespace SharpFont.Cache
 	/// <seealso cref="ImageCache.Lookup"/>
 	public class Node
 	{
-		#region Fields
-
 		private IntPtr reference;
-
-		#endregion
-
-		#region Constructors
 
 		internal Node(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		internal IntPtr Reference
 		{
@@ -68,10 +56,6 @@ namespace SharpFont.Cache
 			}
 		}
 
-		#endregion
-
-		#region Public Methods
-
 		/// <summary>
 		/// Decrement a cache node's internal reference count. When the count reaches 0, it is not destroyed but
 		/// becomes eligible for subsequent cache flushes.
@@ -81,7 +65,5 @@ namespace SharpFont.Cache
 		{
 			FT.FTC_Node_Unref(Reference, manager.Reference);
 		}
-
-		#endregion
 	}
 }

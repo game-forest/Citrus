@@ -5,7 +5,6 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 {
 	public class WidgetZeroScalePreserver
 	{
-
 		private readonly Widget widget;
 		private float? savedScaleX;
 		private float? savedScaleY;
@@ -17,7 +16,9 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 
 		internal Vector2 AdjustToScale(Vector2 scale)
 		{
-			if (savedScaleX == null && savedScaleY == null) return scale;
+			if (savedScaleX == null && savedScaleY == null) {
+				return scale;
+			}
 
 			return new Vector2(savedScaleX ?? scale.X, savedScaleY ?? scale.Y);
 		}
@@ -47,7 +48,5 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			savedScaleX = null;
 			savedScaleY = null;
 		}
-
 	}
-
 }

@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -44,19 +42,14 @@ namespace SharpFont
 	/// </para></remarks>
 	public class OutlineGlyph : IDisposable
 	{
-		#region Fields
-
 		private Glyph original;
 		private OutlineGlyphRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal OutlineGlyph(Glyph original)
 		{
 			this.original = original;
-			Reference = original.Reference; //sets the rec
+			// sets the rec
+			Reference = original.Reference;
 		}
 
 		/// <summary>
@@ -66,10 +59,6 @@ namespace SharpFont
 		{
 			Dispose(false);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a value indicating whether the object has been disposed.
@@ -89,8 +78,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Bitmap", "Cannot access a disposed object.");
+				}
 
 				return original;
 			}
@@ -103,8 +93,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Bitmap", "Cannot access a disposed object.");
+				}
 
 				return new Outline(PInvokeHelper.AbsoluteOffsetOf<OutlineGlyphRec>(Reference, "outline"), rec.outline);
 			}
@@ -114,24 +105,22 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Bitmap", "Cannot access a disposed object.");
+				}
 
 				return original.Reference;
 			}
 
 			set
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Bitmap", "Cannot access a disposed object.");
+				}
 
 				rec = PInvokeHelper.PtrToStructure<OutlineGlyphRec>(original.Reference);
 			}
 		}
-
-		#endregion
-
-		#region Operators
 
 		/// <summary>
 		/// Casts a <see cref="OutlineGlyph"/> back up to a <see cref="Glyph"/>. The eqivalent of
@@ -143,10 +132,6 @@ namespace SharpFont
 		{
 			return g.original;
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// A CLS-compliant version of the implicit cast to <see cref="Glyph"/>.
@@ -168,10 +153,9 @@ namespace SharpFont
 
 		private void Dispose(bool disposing)
 		{
-			if (disposing)
+			if (disposing) {
 				original.Dispose();
+			}
 		}
-
-		#endregion
 	}
 }

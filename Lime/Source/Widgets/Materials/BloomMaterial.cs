@@ -82,11 +82,13 @@ namespace Lime
 
 		public static BloomShaderProgram GetInstance() => instance ?? (instance = new BloomShaderProgram());
 
-		private BloomShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private BloomShaderProgram()
+			: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders() => new Shader[] {
 			new VertexShader(VertexShader),
-			new FragmentShader(FragmentShader)
+			new FragmentShader(FragmentShader),
 		};
 	}
 }

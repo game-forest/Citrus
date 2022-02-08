@@ -31,8 +31,9 @@ namespace Tangerine.UI
 				Selector.Items.Add(new CommonDropDownList.Item(field.Name, field.GetValue(null)));
 			}
 			Selector.Changed += a => {
-				if (a.ChangedByUser)
+				if (a.ChangedByUser) {
 					SetProperty((T)Selector.Items[a.Index].Value);
+				}
 			};
 			Selector.AddLateChangeWatcher(CoalescedPropertyValue(), v => {
 				if (v.IsDefined) {

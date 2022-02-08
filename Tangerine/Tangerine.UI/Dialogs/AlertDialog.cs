@@ -6,10 +6,10 @@ namespace Tangerine.UI
 {
 	public class AlertDialog
 	{
-		readonly Window window;
-		readonly WindowWidget rootWidget;
-		readonly Widget buttonsPanel;
-		int result = -1;
+		private readonly Window window;
+		private readonly WindowWidget rootWidget;
+		private readonly Widget buttonsPanel;
+		private int result = -1;
 
 		public AlertDialog(string text, params string[] buttons)
 		{
@@ -20,7 +20,7 @@ namespace Tangerine.UI
 				FixedSize = true,
 				Title = "Tangerine",
 				Visible = false,
-				Style = WindowStyle.Dialog
+				Style = WindowStyle.Dialog,
 			});
 			rootWidget = new ThemedInvalidableWindowWidget(window) {
 				LayoutBasedWindowSize = true,
@@ -28,13 +28,13 @@ namespace Tangerine.UI
 				Layout = new VBoxLayout { Spacing = 16 },
 				Nodes = {
 					new ThemedSimpleText(text) {
-						Padding = new Thickness(4)
+						Padding = new Thickness(4),
 					},
 					(buttonsPanel = new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
 						LayoutCell = new LayoutCell(Alignment.RightCenter, 1, 0),
-					})
-				}
+					}),
+				},
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
 			rootWidget.FocusScope.FocusNext.Add(Key.MapShortcut(Key.Right));
@@ -53,13 +53,13 @@ namespace Tangerine.UI
 				int j = i;
 				button.Clicked += () => Close(j);
 				buttonsPanel.AddNode(button);
-				if(i == 0) {
+				if (i == 0) {
 					button.SetFocus();
 				}
 			}
 		}
 
-		void Close(int result)
+		private void Close(int result)
 		{
 			this.result = result;
 			window.Close();

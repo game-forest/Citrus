@@ -3,7 +3,6 @@ using Yuzu;
 
 namespace Lime.SignedDistanceField
 {
-
 	public class SDFShadowMaterial : IMaterial
 	{
 		private static readonly BlendState disabledBlendingState = new BlendState { Enable = false };
@@ -59,7 +58,7 @@ namespace Lime.SignedDistanceField
 		public IMaterial GetMaterial(int tag) => Material;
 
 		public Sprite.IMaterialProvider Clone() => new SDFShadowMaterialProvider() {
-			Material = Material
+			Material = Material,
 		};
 
 		public Sprite ProcessSprite(Sprite s) => s;
@@ -97,7 +96,11 @@ namespace Lime.SignedDistanceField
 			void main() {
 				lowp float shadowDistance = texture2D(tex1, texCoords1).r;
 				lowp float smoothing = clamp(abs(dFdx(shadowDistance)) + abs(dFdy(shadowDistance)), 0.0001, 0.05);
-				lowp float shadowAlpha = smoothstep(dilate - softness - smoothing, dilate + softness + smoothing, shadowDistance);
+				lowp float shadowAlpha = smoothstep(
+					dilate - softness - smoothing,
+					dilate + softness + smoothing,
+					shadowDistance
+				);
 				lowp vec4 c = color * global_color;
 				gl_FragColor = vec4(c.rgb, c.a * shadowAlpha);
 			}";
@@ -106,13 +109,15 @@ namespace Lime.SignedDistanceField
 
 		public static SDFShadowShaderProgram GetInstance() => instance ??= new SDFShadowShaderProgram();
 
-		private SDFShadowShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private SDFShadowShaderProgram()
+			: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders()
 		{
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(FragmentShader)
+				new FragmentShader(FragmentShader),
 			};
 		}
 	}

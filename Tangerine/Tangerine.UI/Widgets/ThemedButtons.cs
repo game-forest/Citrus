@@ -44,7 +44,7 @@ namespace Tangerine.UI
 				OnRunAnimation = (animation, markerId, animationTimeCorrection) => {
 					presenter.SetState(markerId);
 					return true;
-				}
+				},
 			};
 		}
 	}
@@ -66,7 +66,7 @@ namespace Tangerine.UI
 				OnRunAnimation = (animation, markerId, animationTimeCorrection) => {
 					presenter.SetState(markerId);
 					return true;
-				}
+				},
 			};
 		}
 	}
@@ -96,7 +96,7 @@ namespace Tangerine.UI
 				Color4.White.ToVector4() :
 				Color4.Black.ToVector4();
 			material = new RedChannelToColorMaterial {
-				Color = defaultColor
+				Color = defaultColor,
 			};
 			AddNode(new Image(IconPool.GetTexture(icon)) {
 				MinMaxSize = size,

@@ -56,14 +56,20 @@ namespace Tangerine.Core.Operations
 			return new SceneTreeIndex(animationTrackIndex + sceneTree.SceneItems.Count(i => i.TryGetMarker(out _)));
 		}
 
-		public int ToAnimationTrackIndex(SceneItem sceneTree) => Value - sceneTree.SceneItems.Count(i => i.TryGetMarker(out _));
+		public int ToAnimationTrackIndex(SceneItem sceneTree)
+		{
+			return Value - sceneTree.SceneItems.Count(i => i.TryGetMarker(out _));
+		}
 
 		public static SceneTreeIndex FromAnimatorIndex(SceneItem sceneTree, int animatorIndex)
 		{
 			return new SceneTreeIndex(animatorIndex + sceneTree.SceneItems.Count(i => i.TryGetAnimation(out _)));
 		}
 
-		public int ToAnimatorIndex(SceneItem sceneTree) => Value - sceneTree.SceneItems.Count(i => i.TryGetAnimation(out _));
+		public int ToAnimatorIndex(SceneItem sceneTree)
+		{
+			return Value - sceneTree.SceneItems.Count(i => i.TryGetAnimation(out _));
+		}
 
 		public static SceneTreeIndex FromNodeOrFolderIndex(SceneItem sceneTree, int nodeIndex)
 		{
@@ -88,7 +94,9 @@ namespace Tangerine.Core.Operations
 				return;
 			}
 			PerformHelper(item);
-			RemoveFromList<SceneItemList, SceneItem>.Perform(item.Parent.SceneItems, item.Parent.SceneItems.IndexOf(item));
+			RemoveFromList<SceneItemList, SceneItem>.Perform(
+				item.Parent.SceneItems, item.Parent.SceneItems.IndexOf(item)
+			);
 		}
 
 		private static void PerformHelper(SceneItem item)
@@ -134,9 +142,13 @@ namespace Tangerine.Core.Operations
 				var owner = (Node)animator.Owner;
 				RemoveFromList<AnimatorList, IAnimator>.Perform(owner.Animators, animator);
 			} else if (item.TryGetAnimation(out var animation)) {
-				RemoveFromList<AnimationCollection, Animation>.Perform(animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation));
+				RemoveFromList<AnimationCollection, Animation>.Perform(
+					animation.Owner.Animations, animation.Owner.Animations.IndexOf(animation)
+				);
 			} else if (item.TryGetAnimationTrack(out var track)) {
-				RemoveFromList<AnimationTrackList, AnimationTrack>.Perform(track.Owner.Tracks, track.Owner.Tracks.IndexOf(track));
+				RemoveFromList<AnimationTrackList, AnimationTrack>.Perform(
+					track.Owner.Tracks, track.Owner.Tracks.IndexOf(track)
+				);
 			} else if (item.TryGetMarker(out var marker)) {
 				RemoveFromList<MarkerList, Marker>.Perform(marker.Owner.Markers, marker.Owner.Markers.IndexOf(marker));
 			} else {
@@ -234,8 +246,8 @@ namespace Tangerine.Core.Operations
 				return CanLink(parent, node);
 			}
 			if (item.TryGetFolder(out var folder)) {
-				return CanLink(parent, folder) &&
-				       EnumerateClosestDescendantNodes(item).All(n => CanLink(parent, n));
+				return CanLink(parent, folder)
+					&& EnumerateClosestDescendantNodes(item).All(n => CanLink(parent, n));
 			}
 			if (item.TryGetAnimation(out var animation)) {
 				return CanLink(parent, animation);
@@ -337,29 +349,33 @@ namespace Tangerine.Core.Operations
 			return item;
 		}
 
-		public static SceneItem Perform(SceneItem parent, SceneTreeIndex index, Folder.Descriptor folder, bool clampIndex = true)
-		{
+		public static SceneItem Perform(
+			SceneItem parent, SceneTreeIndex index, Folder.Descriptor folder, bool clampIndex = true
+		) {
 			var item = Document.Current.SceneTreeBuilder.BuildFolderSceneItem(folder);
 			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		private static SceneItem Perform(SceneItem parent, SceneTreeIndex index, IAnimator animator, bool clampIndex = true)
-		{
+		private static SceneItem Perform(
+			SceneItem parent, SceneTreeIndex index, IAnimator animator, bool clampIndex = true
+		) {
 			var item = Document.Current.SceneTreeBuilder.BuildAnimatorSceneItem(animator);
 			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		public static SceneItem Perform(SceneItem parent, SceneTreeIndex index, Animation animation, bool clampIndex = true)
-		{
+		public static SceneItem Perform(
+			SceneItem parent, SceneTreeIndex index, Animation animation, bool clampIndex = true
+		) {
 			var item = Document.Current.SceneTreeBuilder.BuildAnimationSceneItem(animation);
 			Perform(parent, index, item, clampIndex);
 			return item;
 		}
 
-		public static SceneItem Perform(SceneItem parent, SceneTreeIndex index, AnimationTrack track, bool clampIndex = true)
-		{
+		public static SceneItem Perform(
+			SceneItem parent, SceneTreeIndex index, AnimationTrack track, bool clampIndex = true
+		) {
 			var item = Document.Current.SceneTreeBuilder.BuildAnimationTrackSceneItem(track);
 			Perform(parent, index, item, clampIndex);
 			return item;
@@ -370,8 +386,9 @@ namespace Tangerine.Core.Operations
 			PerformHelper(parent, index, item, addToSceneTree: true, clampIndex);
 		}
 
-		private static void PerformHelper(SceneItem parent, SceneTreeIndex index, SceneItem item, bool addToSceneTree, bool clampIndex)
-		{
+		private static void PerformHelper(
+			SceneItem parent, SceneTreeIndex index, SceneItem item, bool addToSceneTree, bool clampIndex
+		) {
 			if (clampIndex) {
 				index = SceneTreeIndex.ClampIndex(parent, item, index);
 			} else if (SceneTreeIndex.ClampIndex(parent, item, index).Value != index.Value) {
@@ -415,8 +432,9 @@ namespace Tangerine.Core.Operations
 			}
 		}
 
-		private static void LinkFolderItem(SceneItem parent, SceneTreeIndex index, SceneItem folderItem, bool addToSceneTree)
-		{
+		private static void LinkFolderItem(
+			SceneItem parent, SceneTreeIndex index, SceneItem folderItem, bool addToSceneTree
+		) {
 			var folder = folderItem.GetFolder();
 			if (!CanLink(parent, folder)) {
 				throw new InvalidOperationException();
@@ -440,15 +458,18 @@ namespace Tangerine.Core.Operations
 					.LastOrDefault(i => i.TryGetFolder(out var f) && f.Owner == ownerNode)
 					?.GetFolder().CollectionIndex() + 1 ?? 0;
 
-			InsertIntoList<FolderList, Folder.Descriptor>.Perform(ownerNode.Folders, folderIndex, folderItem.GetFolder());
+			InsertIntoList<FolderList, Folder.Descriptor>.Perform(
+				ownerNode.Folders, folderIndex, folderItem.GetFolder()
+			);
 
 			if (parent.TryGetFolder(out var parentFolder)) {
 				SetProperty.Perform(parentFolder, nameof(Folder.Descriptor.ItemCount), parentFolder.ItemCount + 1);
 			}
 		}
 
-		private static void LinkNodeItem(SceneItem parent, SceneTreeIndex index, SceneItem nodeItem, bool addToSceneTree)
-		{
+		private static void LinkNodeItem(
+			SceneItem parent, SceneTreeIndex index, SceneItem nodeItem, bool addToSceneTree
+		) {
 			var node = nodeItem.GetNode();
 			if (!CanLink(parent, node)) {
 				throw new InvalidOperationException();
@@ -546,7 +567,9 @@ namespace Tangerine.Core.Operations
 			if (hasLowPriorityAnimation) {
 				DelegateOperation.Perform(redo: null, undo: AnimatorCollectionChanged, isChangingDocument: false);
 			}
-			InsertIntoList<AnimationCollection, Animation>.Perform(node.Animations, index.ToAnimationIndex(parent), animation);
+			InsertIntoList<AnimationCollection, Animation>.Perform(
+				node.Animations, index.ToAnimationIndex(parent), animation
+			);
 			InsertIntoList<SceneItemList, SceneItem>.Perform(parent.SceneItems, index.Value, item);
 			if (hasLowPriorityAnimation) {
 				DelegateOperation.Perform(redo: AnimatorCollectionChanged, undo: null, isChangingDocument: false);
@@ -665,7 +688,7 @@ namespace Tangerine.Core.Operations
 			} else if (item.TryGetFolder(out var folder)) {
 				ownerNode = folder.Owner;
 			} else if (item.TryGetAnimator(out var animator)) {
-				ownerNode = (Node) animator.Owner;
+				ownerNode = (Node)animator.Owner;
 			} else {
 				throw new InvalidOperationException();
 			}

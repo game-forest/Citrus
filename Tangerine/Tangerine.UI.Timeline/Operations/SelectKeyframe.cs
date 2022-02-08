@@ -73,7 +73,10 @@ namespace Tangerine.UI.Timeline.Operations
 			}
 			var timeline = Timeline.Instance;
 			Document.Current.History.DoTransaction(() => {
-				timeline.OffsetX = Mathf.Max(0, (adjacentFrame + 1) * TimelineMetrics.ColWidth - timeline.Grid.RootWidget.Width / 2);
+				timeline.OffsetX = Mathf.Max(
+					0,
+					(adjacentFrame + 1) * TimelineMetrics.ColWidth - timeline.Grid.RootWidget.Width / 2
+				);
 				SetCurrentColumn.Perform(adjacentFrame);
 				var timelineOffset = Document.Current.Container.Components.GetOrAdd<TimelineOffset>();
 				timelineOffset.Offset = timeline.Offset;

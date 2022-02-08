@@ -6,12 +6,13 @@ namespace Tangerine.UI.Inspector
 {
 	public class EasingIcons
 	{
-		const int Width = 22;
-		const int Height = 22;
+		private const int Width = 22;
+		private const int Height = 22;
 
 		public static readonly EasingIcons Instance = new EasingIcons();
 
-		private Dictionary<(Mathf.EasingFunction, Mathf.EasingType), Texture2D> textures = new Dictionary<(Mathf.EasingFunction, Mathf.EasingType), Texture2D>();
+		private Dictionary<(Mathf.EasingFunction, Mathf.EasingType), Texture2D> textures =
+			new Dictionary<(Mathf.EasingFunction, Mathf.EasingType), Texture2D>();
 
 		public ITexture Get(Mathf.EasingFunction function, Mathf.EasingType type)
 		{
@@ -53,8 +54,9 @@ namespace Tangerine.UI.Inspector
 			return pixels;
 		}
 
-		private static void DrawPoint(int px, int py, float rx, float ry, bool majorXAxis, float[] image, int width, int height)
-		{
+		private static void DrawPoint(
+			int px, int py, float rx, float ry, bool majorXAxis, float[] image, int width, int height
+		) {
 			if (py >= 0 && py < height) {
 				float t = majorXAxis ? (ry - (py + 0.5f)).Abs() : (rx - (px + 0.5f)).Abs();
 				var i = px + py * width;

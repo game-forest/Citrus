@@ -14,7 +14,9 @@ namespace Lime
 	public interface ITopology
 	{
 		List<Animesh.SkinnedVertex> Vertices { get; }
-		void ConstructFrom(List<Animesh.SkinnedVertex> vertices, List<TopologyEdge> constrainedEdges, List<TopologyFace> faces);
+		void ConstructFrom(
+			List<Animesh.SkinnedVertex> vertices, List<TopologyEdge> constrainedEdges, List<TopologyFace> faces
+		);
 		IEnumerable<TopologyFace> Faces { get; }
 
 		/// <summary>

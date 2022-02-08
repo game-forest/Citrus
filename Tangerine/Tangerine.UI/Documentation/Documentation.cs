@@ -1,8 +1,8 @@
-using Markdig;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Markdig;
 
 namespace Tangerine.UI
 {
@@ -11,18 +11,26 @@ namespace Tangerine.UI
 		public static bool IsHelpModeOn { get; set; } = false;
 
 		public static string MarkdownDocumentationPath { get; set; } =
-			Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "Documentation");
+			Path.Combine(
+				Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "Documentation"
+			);
 		public static string ImagesPath { get; set; } =
-			Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "Documentation", "Images");
+			Path.Combine(
+				Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName,
+				"Documentation",
+				"Images"
+			);
 		public static string HtmlDocumentationPath { get; set; } =
 			Lime.Environment.GetPathInsideDataDirectory("Tangerine", "DocumentationCache");
-		public static string StyleSheetPath { get; set; } = "file:///" + Path.Combine(MarkdownDocumentationPath, "stylesheet.css");
+		public static string StyleSheetPath { get; set; } = "file:///"
+			+ Path.Combine(MarkdownDocumentationPath, "stylesheet.css");
 
 		public static string PageExtension { get; set; } = ".md";
 		public static string DocExtension { get; set; } = ".html";
 		public static string StartPageName { get; set; } = "https://game-forest.github.io/Citrus/articles/intro.html";
 		public static string ErrorPageName { get; set; } = "ErrorPage";
-		public static string ChangelogPageName { get; set; } = "https://game-forest.github.io/Citrus/articles/tangerine/changelog.html";
+		public static string ChangelogPageName { get; set; } =
+			"https://game-forest.github.io/Citrus/articles/tangerine/changelog.html";
 
 		public static string GetPagePath(string pageName)
 		{
@@ -36,8 +44,8 @@ namespace Tangerine.UI
 			return path + DocExtension;
 		}
 
-		public static string GetImagePath(string ImageName) =>
-			Path.Combine(ImagesPath, ImageName).Replace('\\', '/');
+		public static string GetImagePath(string imageName) =>
+			Path.Combine(ImagesPath, imageName).Replace('\\', '/');
 
 		public static void Init()
 		{
@@ -88,7 +96,10 @@ namespace Tangerine.UI
 			}
 			foreach (var file in sourceDirectory.GetFiles($"*{PageExtension}")) {
 				string destPath = Path.Combine(destination, Path.ChangeExtension(file.Name, DocExtension));
-				if (!File.Exists(destPath) || File.GetLastWriteTimeUtc(destPath) <= File.GetLastWriteTimeUtc(file.FullName)) {
+				if (
+					!File.Exists(destPath)
+					|| File.GetLastWriteTimeUtc(destPath) <= File.GetLastWriteTimeUtc(file.FullName)
+				) {
 					using (StreamReader sr = new StreamReader(file.FullName))
 					using (StreamWriter sw = new StreamWriter(destPath, false, Encoding.UTF8)) {
 						sw.WriteLine(

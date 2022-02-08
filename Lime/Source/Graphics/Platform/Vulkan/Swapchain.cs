@@ -102,7 +102,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			var createInfo = new SharpVulkan.Win32SurfaceCreateInfo {
 				StructureType = SharpVulkan.StructureType.Win32SurfaceCreateInfo,
 				InstanceHandle = Process.GetCurrentProcess().Handle,
-				WindowHandle = windowHandle
+				WindowHandle = windowHandle,
 			};
 			surface = context.Instance.CreateWin32Surface(createInfo);
 #elif MAC
@@ -131,7 +131,7 @@ namespace Lime.Graphics.Platform.Vulkan
 
 		private void CreateSwapchain()
 		{
-			DestroySwapchain();	
+			DestroySwapchain();
 			var surfaceFormats = context.PhysicalDevice.GetSurfaceFormats(surface);
 			if (surfaceFormats.Length == 1 && surfaceFormats[0].Format == SharpVulkan.Format.Undefined) {
 				backbufferFormat = SharpVulkan.Format.B8G8R8A8UNorm;
@@ -139,15 +139,20 @@ namespace Lime.Graphics.Platform.Vulkan
 				backbufferFormat = surfaceFormats[0].Format;
 			}
 			context.PhysicalDevice.GetSurfaceCapabilities(surface, out var surfaceCapabilities);
-			if (width < surfaceCapabilities.MinImageExtent.Width || height < surfaceCapabilities.MinImageExtent.Height ||
-				width > surfaceCapabilities.MaxImageExtent.Width || height > surfaceCapabilities.MaxImageExtent.Height
+			if (
+				width < surfaceCapabilities.MinImageExtent.Width
+				|| height < surfaceCapabilities.MinImageExtent.Height
+				|| width > surfaceCapabilities.MaxImageExtent.Width
+				|| height > surfaceCapabilities.MaxImageExtent.Height
 			) {
 				throw new InvalidOperationException();
-			}			
+			}
 			var desiredBufferCount = 3U;
 			if (desiredBufferCount < surfaceCapabilities.MinImageCount) {
 				desiredBufferCount = surfaceCapabilities.MinImageCount;
-			} else if (surfaceCapabilities.MaxImageCount > 0 && desiredBufferCount > surfaceCapabilities.MaxImageCount) {
+			} else if (
+				surfaceCapabilities.MaxImageCount > 0 && desiredBufferCount > surfaceCapabilities.MaxImageCount
+			) {
 				desiredBufferCount = surfaceCapabilities.MaxImageCount;
 			}
 			var preTransform = SharpVulkan.SurfaceTransformFlags.Identity;
@@ -158,7 +163,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				SharpVulkan.CompositeAlphaFlags.Opaque,
 				SharpVulkan.CompositeAlphaFlags.PreMultiplied,
 				SharpVulkan.CompositeAlphaFlags.PostMultiplied,
-				SharpVulkan.CompositeAlphaFlags.Inherit
+				SharpVulkan.CompositeAlphaFlags.Inherit,
 			};
 			var compositeAlpha = compositeAlphaModes.First(i => (surfaceCapabilities.SupportedCompositeAlpha & i) != 0);
 			var backbufferUsage = SharpVulkan.ImageUsageFlags.ColorAttachment;
@@ -208,14 +213,14 @@ namespace Lime.Graphics.Platform.Vulkan
 					Image = backbuffers[i],
 					Format = backbufferFormat,
 					Components = SharpVulkan.ComponentMapping.Identity,
-					SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color)
+					SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color),
 				};
 				backbufferViews[i] = context.Device.CreateImageView(ref viewCreateInfo);
 			}
 			acquirementSemaphores = new SharpVulkan.Semaphore[backbuffers.Length + 1];
 			for (var i = 0; i < backbuffers.Length + 1; i++) {
 				var semaphoreCreateInfo = new SharpVulkan.SemaphoreCreateInfo {
-					StructureType = SharpVulkan.StructureType.SemaphoreCreateInfo
+					StructureType = SharpVulkan.StructureType.SemaphoreCreateInfo,
 				};
 				acquirementSemaphores[i] = context.Device.CreateSemaphore(ref semaphoreCreateInfo);
 			}
@@ -226,11 +231,14 @@ namespace Lime.Graphics.Platform.Vulkan
 			var formats = new[] {
 				SharpVulkan.Format.D32SFloatS8UInt,
 				SharpVulkan.Format.D24UNormS8UInt,
-				SharpVulkan.Format.D16UNormS8UInt
+				SharpVulkan.Format.D16UNormS8UInt,
 			};
 			depthStencilFormat = formats.First(format => {
 				context.PhysicalDevice.GetFormatProperties(format, out var formatProperties);
-				return (formatProperties.OptimalTilingFeatures & SharpVulkan.FormatFeatureFlags.DepthStencilAttachment) != 0;
+				return (
+					formatProperties.OptimalTilingFeatures
+					& SharpVulkan.FormatFeatureFlags.DepthStencilAttachment
+				) != 0;
 			});
 			var tiling = SharpVulkan.ImageTiling.Optimal;
 			var createInfo = new SharpVulkan.ImageCreateInfo {
@@ -244,10 +252,12 @@ namespace Lime.Graphics.Platform.Vulkan
 				Samples = SharpVulkan.SampleCountFlags.Sample1,
 				SharingMode = SharpVulkan.SharingMode.Exclusive,
 				Tiling = tiling,
-				InitialLayout = SharpVulkan.ImageLayout.Undefined
+				InitialLayout = SharpVulkan.ImageLayout.Undefined,
 			};
 			depthStencilBuffer = context.Device.CreateImage(ref createInfo);
-			depthStencilMemory = context.MemoryAllocator.Allocate(depthStencilBuffer, SharpVulkan.MemoryPropertyFlags.DeviceLocal, tiling);
+			depthStencilMemory = context.MemoryAllocator.Allocate(
+				depthStencilBuffer, SharpVulkan.MemoryPropertyFlags.DeviceLocal, tiling
+			);
 			var viewCreateInfo = new SharpVulkan.ImageViewCreateInfo {
 				StructureType = SharpVulkan.StructureType.ImageViewCreateInfo,
 				ViewType = SharpVulkan.ImageViewType.Image2D,
@@ -256,7 +266,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				Components = SharpVulkan.ComponentMapping.Identity,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(
 					SharpVulkan.ImageAspectFlags.Depth |
-					SharpVulkan.ImageAspectFlags.Stencil)
+					SharpVulkan.ImageAspectFlags.Stencil),
 			};
 			depthStencilView = context.Device.CreateImageView(ref viewCreateInfo);
 			var memoryBarrier = new SharpVulkan.ImageMemoryBarrier {
@@ -266,17 +276,27 @@ namespace Lime.Graphics.Platform.Vulkan
 				NewLayout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.None,
 				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				DestinationAccessMask = SharpVulkan.AccessFlags.DepthStencilAttachmentRead | SharpVulkan.AccessFlags.DepthStencilAttachmentWrite,
+				DestinationAccessMask = SharpVulkan.AccessFlags.DepthStencilAttachmentRead
+					| SharpVulkan.AccessFlags.DepthStencilAttachmentWrite,
 				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				SubresourceRange = new SharpVulkan.ImageSubresourceRange(
 					SharpVulkan.ImageAspectFlags.Depth |
-					SharpVulkan.ImageAspectFlags.Stencil)
+					SharpVulkan.ImageAspectFlags.Stencil),
 			};
 			context.EndRenderPass();
 			context.EnsureCommandBuffer();
-			context.CommandBuffer.PipelineBarrier(SharpVulkan.PipelineStageFlags.TopOfPipe,
-				SharpVulkan.PipelineStageFlags.EarlyFragmentTests | SharpVulkan.PipelineStageFlags.LateFragmentTests,
-				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &memoryBarrier);
+			context.CommandBuffer.PipelineBarrier(
+				sourceStageMask: SharpVulkan.PipelineStageFlags.TopOfPipe,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.EarlyFragmentTests
+					| SharpVulkan.PipelineStageFlags.LateFragmentTests,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 1,
+				imageMemoryBarriers: &memoryBarrier
+			);
 		}
 
 		private void CreateRenderPass()
@@ -288,7 +308,7 @@ namespace Lime.Graphics.Platform.Vulkan
 					LoadOperation = SharpVulkan.AttachmentLoadOperation.Load,
 					StoreOperation = SharpVulkan.AttachmentStoreOperation.Store,
 					InitialLayout = SharpVulkan.ImageLayout.ColorAttachmentOptimal,
-					FinalLayout = SharpVulkan.ImageLayout.ColorAttachmentOptimal
+					FinalLayout = SharpVulkan.ImageLayout.ColorAttachmentOptimal,
 				},
 				new SharpVulkan.AttachmentDescription {
 					Format = depthStencilFormat,
@@ -298,30 +318,30 @@ namespace Lime.Graphics.Platform.Vulkan
 					StencilLoadOperation = SharpVulkan.AttachmentLoadOperation.Load,
 					StencilStoreOperation = SharpVulkan.AttachmentStoreOperation.Store,
 					InitialLayout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal,
-					FinalLayout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal
-				}
+					FinalLayout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal,
+				},
 			};
 			var colorAttachmentRef = new SharpVulkan.AttachmentReference {
 				Attachment = 0,
-				Layout = SharpVulkan.ImageLayout.ColorAttachmentOptimal
+				Layout = SharpVulkan.ImageLayout.ColorAttachmentOptimal,
 			};
 			var depthStencilAttachmentRef = new SharpVulkan.AttachmentReference {
 				Attachment = 1,
-				Layout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal
+				Layout = SharpVulkan.ImageLayout.DepthStencilAttachmentOptimal,
 			};
 			fixed (SharpVulkan.AttachmentDescription* attachmentDescsPtr = attachmentDescs) {
 				var subpass = new SharpVulkan.SubpassDescription {
 					PipelineBindPoint = SharpVulkan.PipelineBindPoint.Graphics,
 					ColorAttachmentCount = 1,
 					ColorAttachments = new IntPtr(&colorAttachmentRef),
-					DepthStencilAttachment = new IntPtr(&depthStencilAttachmentRef)
+					DepthStencilAttachment = new IntPtr(&depthStencilAttachmentRef),
 				};
 				var createInfo = new SharpVulkan.RenderPassCreateInfo {
 					StructureType = SharpVulkan.StructureType.RenderPassCreateInfo,
 					AttachmentCount = (uint)attachmentDescs.Length,
 					Attachments = new IntPtr(attachmentDescsPtr),
 					SubpassCount = 1,
-					Subpasses = new IntPtr(&subpass)
+					Subpasses = new IntPtr(&subpass),
 				};
 				renderPass = context.Device.CreateRenderPass(ref createInfo);
 			}
@@ -340,7 +360,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						Width = (uint)width,
 						Height = (uint)height,
 						Layers = 1,
-						RenderPass = renderPass
+						RenderPass = renderPass,
 					};
 					framebuffers[i] = context.Device.CreateFramebuffer(ref createInfo);
 				}
@@ -352,7 +372,9 @@ namespace Lime.Graphics.Platform.Vulkan
 			acquirementSemaphore = acquirementSemaphores[nextAcquirementSemaphoreIndex];
 			nextAcquirementSemaphoreIndex += 1;
 			nextAcquirementSemaphoreIndex %= acquirementSemaphores.Length;
-			backbufferIndex = context.Device.AcquireNextImage(swapchain, ulong.MaxValue, acquirementSemaphore, SharpVulkan.Fence.Null);
+			backbufferIndex = context.Device.AcquireNextImage(
+				swapchain, ulong.MaxValue, acquirementSemaphore, SharpVulkan.Fence.Null
+			);
 		}
 
 		internal SharpVulkan.Semaphore ReleaseAcquirementSemaphore()
@@ -372,7 +394,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				WaitSemaphores = new IntPtr(&waitSemaphore),
 				SwapchainCount = 1,
 				Swapchains = new IntPtr(&swapchainCopy),
-				ImageIndices = new IntPtr(&backbufferIndexCopy)
+				ImageIndices = new IntPtr(&backbufferIndexCopy),
 			};
 			context.Queue.Present(ref presentInfo);
 			AcquireNextImage();

@@ -91,6 +91,5 @@ namespace Tangerine.Core
 			ActiveRuler = new Ruler();
 			UserPreferences.Instance.Save();
 		}
-
 	}
 }

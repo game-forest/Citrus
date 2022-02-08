@@ -36,7 +36,13 @@ namespace Tangerine.UI.SceneView
 				RenderState.Projection |
 				RenderState.DepthState);
 			Renderer.View = vp.Camera.View;
-			Renderer.Projection = Viewport3D.MakeProjection(vp.Width, vp.Height, vp.LocalToWorldTransform * SceneView.Instance.Scene.LocalToWorldTransform, cameraProjection, Renderer.Projection);
+			Renderer.Projection = Viewport3D.MakeProjection(
+				width: vp.Width,
+				height: vp.Height,
+				transform: vp.LocalToWorldTransform * SceneView.Instance.Scene.LocalToWorldTransform,
+				cameraProjection: cameraProjection,
+				orthoProjection: Renderer.Projection
+			);
 			Renderer.DepthState = DepthState.DepthReadWrite;
 			Renderer.Clear(ClearOptions.DepthBuffer);
 			foreach (var node in nodes) {
@@ -45,7 +51,7 @@ namespace Tangerine.UI.SceneView
 			Renderer.PopState();
 		}
 
-		Viewport3D GetCurrentViewport3D()
+		private Viewport3D GetCurrentViewport3D()
 		{
 			for (var p = Document.Current.Container; p != null; p = p.Parent) {
 				if (p is Viewport3D) {
@@ -55,7 +61,7 @@ namespace Tangerine.UI.SceneView
 			return null;
 		}
 
-		void RenderGizmo(Node3D node)
+		private void RenderGizmo(Node3D node)
 		{
 			Renderer.Flush();
 			Renderer.World = CalcGizmoTransform(node.GlobalTransform, 100);
@@ -64,7 +70,7 @@ namespace Tangerine.UI.SceneView
 			gizmo.DrawIndexed(0, gizmo.Indices.Length);
 		}
 
-		Matrix44 CalcGizmoTransform(Matrix44 modelGlobalTransform, float gizmoRadiusInPixels)
+		private Matrix44 CalcGizmoTransform(Matrix44 modelGlobalTransform, float gizmoRadiusInPixels)
 		{
 			var viewport = GetCurrentViewport3D();
 			var camera = viewport.Camera;
@@ -73,13 +79,15 @@ namespace Tangerine.UI.SceneView
 			modelGlobalTransform.Decompose(out scale, out rotation, out translation);
 			float distance = (camera.Position - translation).Length;
 			var vfov = camera.FieldOfView / camera.AspectRatio;
-			float s = gizmoRadiusInPixels * distance  * (2 * (float)Math.Tan(vfov / 2) / viewport.Height);
-			return Matrix44.CreateRotation(rotation) * Matrix44.CreateScale(s, s, s) * Matrix44.CreateTranslation(translation);
+			float s = gizmoRadiusInPixels * distance * (2 * (float)Math.Tan(vfov / 2) / viewport.Height);
+			return Matrix44.CreateRotation(rotation)
+				* Matrix44.CreateScale(s, s, s)
+				* Matrix44.CreateTranslation(translation);
 		}
 
-		static Mesh<VertexPositionColor> gizmo = CreateTranslationGizmo();
+		private static Mesh<VertexPositionColor> gizmo = CreateTranslationGizmo();
 
-		static Mesh<VertexPositionColor> CreateTranslationGizmo()
+		private static Mesh<VertexPositionColor> CreateTranslationGizmo()
 		{
 			var axisX = CreateArrow(Matrix44.CreateRotationZ(-Mathf.HalfPi), Color4.Red);
 			var axisY = CreateArrow(Matrix44.Identity, Color4.Green);
@@ -87,7 +95,7 @@ namespace Tangerine.UI.SceneView
 			return MeshUtils.Combine(axisX, axisY, axisZ);
 		}
 
-		static Mesh<VertexPositionColor> CreateArrow(Matrix44 matrix, Color4 color)
+		private static Mesh<VertexPositionColor> CreateArrow(Matrix44 matrix, Color4 color)
 		{
 			const float tipHeight = 0.25f;
 			const float tipRadius = 0.06f;
@@ -101,9 +109,11 @@ namespace Tangerine.UI.SceneView
 			return arrow;
 		}
 
-		static void TransformMesh(Mesh<VertexPositionColor> mesh, Matrix44 matrix)
+		private static void TransformMesh(Mesh<VertexPositionColor> mesh, Matrix44 matrix)
 		{
-			MeshUtils.TransformVertices(mesh, (ref VertexPositionColor v) => v.Position = matrix.TransformVector(v.Position));
+			MeshUtils.TransformVertices(
+				mesh, (ref VertexPositionColor v) => v.Position = matrix.TransformVector(v.Position)
+			);
 		}
 	}
 }

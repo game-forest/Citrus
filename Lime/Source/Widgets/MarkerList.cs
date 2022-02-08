@@ -117,7 +117,6 @@ namespace Lime
 			return index >= 0 ? markers[index] : null;
 		}
 
-
 		/// <summary>
 		/// Returns index for insertion of a marker given the frame of the marker preserving frame sort order.
 		/// </summary>

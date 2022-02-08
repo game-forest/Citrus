@@ -10,7 +10,7 @@ namespace Lime.Graphics.Platform.Vulkan
 {
 	public unsafe class PlatformRenderContext : IPlatformRenderContext
 	{
-		private const bool validation = false;
+		private const bool Validation = false;
 
 		private SharpVulkan.Instance instance;
 		private SharpVulkan.PhysicalDevice physicalDevice;
@@ -46,7 +46,8 @@ namespace Lime.Graphics.Platform.Vulkan
 		private FrontFace frontFace;
 		private PrimitiveTopology primitiveTopology;
 		private PlatformVertexInputLayout vertexInputLayout;
-		private LruCache<Hash128, SharpVulkan.Pipeline> pipelineLruCache = new LruCache<Hash128, SharpVulkan.Pipeline>();
+		private LruCache<Hash128, SharpVulkan.Pipeline> pipelineLruCache =
+			new LruCache<Hash128, SharpVulkan.Pipeline>();
 		private UploadBufferAllocator uploadBufferSuballocator;
 		private DescriptorAllocator descriptorAllocator;
 		private PlatformBuffer[] vertexBuffers;
@@ -91,7 +92,7 @@ namespace Lime.Graphics.Platform.Vulkan
 		public PlatformRenderContext()
 		{
 			CreateInstance();
-			if (validation) {
+			if (Validation) {
 				CreateDebugReportCallback();
 			}
 			CreateDevice();
@@ -112,7 +113,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			descriptorAllocator = new DescriptorAllocator(this, new DescriptorPoolLimits {
 				MaxSets = 512,
 				MaxCombinedImageSamplers = 1024,
-				MaxUniformBuffers = 1024
+				MaxUniformBuffers = 1024,
 			});
 			samplerCache = new SamplerCache(this);
 			placeholderTexture = new PlatformTexture2D(this, Format.R8G8B8A8_UNorm, 1, 1, false, TextureParams.Default);
@@ -138,10 +139,10 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			var applicationInfo = new SharpVulkan.ApplicationInfo {
 				StructureType = SharpVulkan.StructureType.ApplicationInfo,
-				ApiVersion = new SharpVulkan.Version(1, 0, 0)
+				ApiVersion = new SharpVulkan.Version(1, 0, 0),
 			};
 			var enabledLayerNames = new List<IntPtr>();
-			if (validation) {
+			if (Validation) {
 				enabledLayerNames.Add(Marshal.StringToHGlobalAnsi("VK_LAYER_LUNARG_standard_validation"));
 			}
 			var enabledExtensionNames = new List<IntPtr>();
@@ -156,7 +157,7 @@ namespace Lime.Graphics.Platform.Vulkan
 #elif ANDROID
 			enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_KHR_android_surface"));
 #endif
-			if (validation) {
+			if (Validation) {
 				enabledExtensionNames.Add(Marshal.StringToHGlobalAnsi("VK_EXT_debug_report"));
 			}
 			try {
@@ -167,7 +168,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						EnabledLayerCount = (uint)enabledLayerNames.Count,
 						EnabledLayerNames = new IntPtr(enabledLayerNamesPtr),
 						EnabledExtensionCount = (uint)enabledExtensionNames.Count,
-						EnabledExtensionNames = new IntPtr(enabledExtensionNamesPtr)
+						EnabledExtensionNames = new IntPtr(enabledExtensionNamesPtr),
 					};
 					instance = SharpVulkan.Vulkan.CreateInstance(ref createInfo);
 				}
@@ -202,15 +203,15 @@ namespace Lime.Graphics.Platform.Vulkan
 				fixed (IntPtr* enabledExtensionNamesPtr = enabledExtensionNames.ToArray()) {
 					var createInfo = new SharpVulkan.InstanceCreateInfo {
 						StructureType = SharpVulkan.StructureType.InstanceCreateInfo,
-						EnabledLayerCount = (uint) enabledLayerNames.Count,
+						EnabledLayerCount = (uint)enabledLayerNames.Count,
 						EnabledLayerNames = new IntPtr(enabledLayerNamesPtr),
-						EnabledExtensionCount = (uint) enabledExtensionNames.Count,
-						EnabledExtensionNames = new IntPtr(enabledExtensionNamesPtr)
+						EnabledExtensionCount = (uint)enabledExtensionNames.Count,
+						EnabledExtensionNames = new IntPtr(enabledExtensionNamesPtr),
 					};
 					instance = SharpVulkan.Vulkan.CreateInstance(ref createInfo);
 				}
-				SharpVulkan.Ext.VulkanExt VKExt = new SharpVulkan.Ext.VulkanExt();
-				VKExt.LoadInstanceEntryPoints(instance);
+				SharpVulkan.Ext.VulkanExt vKExt = new SharpVulkan.Ext.VulkanExt();
+				vKExt.LoadInstanceEntryPoints(instance);
 				var physicalDevice = instance.PhysicalDevices[0];
 			} catch {
 				return false;
@@ -231,13 +232,17 @@ namespace Lime.Graphics.Platform.Vulkan
 			var createInfo = new SharpVulkan.DebugReportCallbackCreateInfo {
 				StructureType = SharpVulkan.StructureType.DebugReportCallbackCreateInfo,
 				Callback = Marshal.GetFunctionPointerForDelegate(debugReport),
+#pragma warning disable SA1005 // Single line comments should begin with single space
+#pragma warning disable SA1027 // Use tabs correctly
 				//Flags = (uint)(
 				//	SharpVulkan.DebugReportFlags.Error |
 				//	SharpVulkan.DebugReportFlags.Warning |
 				//	SharpVulkan.DebugReportFlags.PerformanceWarning)
+#pragma warning restore SA1027 // Use tabs correctly
+#pragma warning restore SA1005 // Single line comments should begin with single space
 				Flags = (uint)(
 					SharpVulkan.DebugReportFlags.Error |
-					SharpVulkan.DebugReportFlags.Warning)
+					SharpVulkan.DebugReportFlags.Warning),
 			};
 			VKExt.CreateDebugReportCallback(instance, ref createInfo, null, out debugReportCallback).CheckError();
 		}
@@ -253,7 +258,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				StructureType = SharpVulkan.StructureType.DeviceQueueCreateInfo,
 				QueueCount = 1,
 				QueuePriorities = new IntPtr(&queuePriority),
-				QueueFamilyIndex = queueFamilyIndex
+				QueueFamilyIndex = queueFamilyIndex,
 			};
 			var presentedExtensionNames = new HashSet<string>();
 			foreach (var i in physicalDevice.GetDeviceExtensionProperties()) {
@@ -274,7 +279,7 @@ namespace Lime.Graphics.Platform.Vulkan
 					physicalDevice.GetFeatures(out var deviceFeatures);
 					var enabledDeviceFeatures = new SharpVulkan.PhysicalDeviceFeatures {
 						TextureCompressionBc = deviceFeatures.TextureCompressionBc,
-						TextureCompressionEtc2 = deviceFeatures.TextureCompressionEtc2
+						TextureCompressionEtc2 = deviceFeatures.TextureCompressionEtc2,
 					};
 					var createInfo = new SharpVulkan.DeviceCreateInfo {
 						StructureType = SharpVulkan.StructureType.DeviceCreateInfo,
@@ -282,7 +287,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						EnabledExtensionNames = new IntPtr(enabledExtensionNamesPtr),
 						EnabledFeatures = new IntPtr(&enabledDeviceFeatures),
 						QueueCreateInfoCount = 1,
-						QueueCreateInfos = new IntPtr(&queueCreateInfo)
+						QueueCreateInfos = new IntPtr(&queueCreateInfo),
 					};
 					device = physicalDevice.CreateDevice(ref createInfo);
 				}
@@ -294,7 +299,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			VKExt.LoadDeviceEntryPoints(device);
 			queue = device.GetQueue(queueFamilyIndex, 0);
 			var renderCompletedSemaphoreCreateInfo = new SharpVulkan.SemaphoreCreateInfo {
-				StructureType = SharpVulkan.StructureType.SemaphoreCreateInfo
+				StructureType = SharpVulkan.StructureType.SemaphoreCreateInfo,
 			};
 			renderCompletedSemaphore = device.CreateSemaphore(ref renderCompletedSemaphoreCreateInfo);
 		}
@@ -304,7 +309,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			var createInfo = new SharpVulkan.CommandPoolCreateInfo {
 				StructureType = SharpVulkan.StructureType.CommandPoolCreateInfo,
 				Flags = SharpVulkan.CommandPoolCreateFlags.ResetCommandBuffer,
-				QueueFamilyIndex = queueFamilyIndex
+				QueueFamilyIndex = queueFamilyIndex,
 			};
 			commandPool = device.CreateCommandPool(ref createInfo);
 		}
@@ -323,10 +328,11 @@ namespace Lime.Graphics.Platform.Vulkan
 					StructureType = SharpVulkan.StructureType.BufferCreateInfo,
 					Size = readbackBufferSize,
 					SharingMode = SharpVulkan.SharingMode.Exclusive,
-					Usage = SharpVulkan.BufferUsageFlags.TransferDestination
+					Usage = SharpVulkan.BufferUsageFlags.TransferDestination,
 				};
 				readbackBuffer = device.CreateBuffer(ref createInfo);
-				readbackBufferMemory = MemoryAllocator.Allocate(readbackBuffer,
+				readbackBufferMemory = MemoryAllocator.Allocate(
+					readbackBuffer,
 					SharpVulkan.MemoryPropertyFlags.HostVisible | SharpVulkan.MemoryPropertyFlags.HostCached);
 			}
 		}
@@ -354,13 +360,22 @@ namespace Lime.Graphics.Platform.Vulkan
 				NewLayout = SharpVulkan.ImageLayout.ColorAttachmentOptimal,
 				SourceAccessMask = SharpVulkan.AccessFlags.None,
 				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				DestinationAccessMask = SharpVulkan.AccessFlags.ColorAttachmentRead | SharpVulkan.AccessFlags.ColorAttachmentWrite,
+				DestinationAccessMask = SharpVulkan.AccessFlags.ColorAttachmentRead
+					| SharpVulkan.AccessFlags.ColorAttachmentWrite,
 				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color)
+				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color),
 			};
 			commandBuffer.PipelineBarrier(
-				SharpVulkan.PipelineStageFlags.TopOfPipe, SharpVulkan.PipelineStageFlags.ColorAttachmentOutput,
-				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &memoryBarrier);
+				sourceStageMask: SharpVulkan.PipelineStageFlags.TopOfPipe,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.ColorAttachmentOutput,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 1,
+				imageMemoryBarriers: &memoryBarrier
+			);
 		}
 
 		public void Present()
@@ -375,15 +390,24 @@ namespace Lime.Graphics.Platform.Vulkan
 				Image = swapchain.Backbuffer,
 				OldLayout = SharpVulkan.ImageLayout.ColorAttachmentOptimal,
 				NewLayout = SharpVulkan.ImageLayout.PresentSource,
-				SourceAccessMask = SharpVulkan.AccessFlags.ColorAttachmentRead | SharpVulkan.AccessFlags.ColorAttachmentWrite,
+				SourceAccessMask = SharpVulkan.AccessFlags.ColorAttachmentRead
+					| SharpVulkan.AccessFlags.ColorAttachmentWrite,
 				SourceQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
 				DestinationAccessMask = SharpVulkan.AccessFlags.MemoryRead,
 				DestinationQueueFamilyIndex = SharpVulkan.Vulkan.QueueFamilyIgnored,
-				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color)
+				SubresourceRange = new SharpVulkan.ImageSubresourceRange(SharpVulkan.ImageAspectFlags.Color),
 			};
 			commandBuffer.PipelineBarrier(
-				SharpVulkan.PipelineStageFlags.ColorAttachmentOutput, SharpVulkan.PipelineStageFlags.BottomOfPipe,
-				SharpVulkan.DependencyFlags.None, 0, null, 0, null, 1, &memoryBarrier);
+				sourceStageMask: SharpVulkan.PipelineStageFlags.ColorAttachmentOutput,
+				destinationStageMask: SharpVulkan.PipelineStageFlags.BottomOfPipe,
+				dependencyFlags: SharpVulkan.DependencyFlags.None,
+				memoryBarrierCount: 0,
+				memoryBarriers: null,
+				bufferMemoryBarrierCount: 0,
+				bufferMemoryBarriers: null,
+				imageMemoryBarrierCount: 1,
+				imageMemoryBarriers: &memoryBarrier
+			);
 			Flush(renderCompletedSemaphore);
 			swapchain.Present(renderCompletedSemaphore);
 			swapchain = null;
@@ -483,8 +507,13 @@ namespace Lime.Graphics.Platform.Vulkan
 			commandBuffer.SetStencilReference(SharpVulkan.StencilFaceFlags.FrontAndBack, stencilState.ReferenceValue);
 			// FIXME: Update blend constants
 			var vkViewport = new SharpVulkan.Viewport(
-				viewport.X, viewport.Y, viewport.Width, viewport.Height,
-				viewport.MinDepth, viewport.MaxDepth);
+				viewport.X,
+				viewport.Y,
+				viewport.Width,
+				viewport.Height,
+				viewport.MinDepth,
+				viewport.MaxDepth
+			);
 			commandBuffer.SetViewport(0, 1, &vkViewport);
 			var scissorBounds = viewport.Bounds;
 			if (scissorState.Enable) {
@@ -531,7 +560,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						boundVertexBuffers[slot] = new BoundVertexBuffer {
 							Buffer = buffer,
 							Generation = backingBuffer.Generation,
-							Offset = offset
+							Offset = offset,
 						};
 					}
 				}
@@ -549,12 +578,16 @@ namespace Lime.Graphics.Platform.Vulkan
 					boundIndexBuffer.Offset != offset ||
 					boundIndexBuffer.Format != indexFormat
 				) {
-					commandBuffer.BindIndexBuffer(backingBuffer.Buffer, offset, VulkanHelper.GetVKIndexType(indexFormat));
+					commandBuffer.BindIndexBuffer(
+						backingBuffer.Buffer,
+						offset,
+						VulkanHelper.GetVKIndexType(indexFormat)
+					);
 					boundIndexBuffer = new BoundIndexBuffer {
 						Buffer = indexBuffer,
 						Generation = backingBuffer.Generation,
 						Offset = offset,
-						Format = indexFormat
+						Format = indexFormat,
 					};
 				}
 			}
@@ -576,7 +609,7 @@ namespace Lime.Graphics.Platform.Vulkan
 					DescriptorType = templateEntry.DescriptorType,
 					DescriptorCount = 1,
 					ImageInfo = new IntPtr(&imageInfos[writeCount]),
-					BufferInfo = new IntPtr(&bufferInfos[writeCount])
+					BufferInfo = new IntPtr(&bufferInfos[writeCount]),
 				};
 				switch (templateEntry.DescriptorType) {
 					case SharpVulkan.DescriptorType.CombinedImageSampler:
@@ -602,7 +635,15 @@ namespace Lime.Graphics.Platform.Vulkan
 			}
 			device.UpdateDescriptorSets((uint)writeCount, writes, 0, null);
 			EnsureCommandBuffer();
-			commandBuffer.BindDescriptorSets(SharpVulkan.PipelineBindPoint.Graphics, shaderProgram.PipelineLayout, 0, 1, &descriptorSet, 0, null);
+			commandBuffer.BindDescriptorSets(
+				pipelineBindPoint: SharpVulkan.PipelineBindPoint.Graphics,
+				layout: shaderProgram.PipelineLayout,
+				firstSet: 0,
+				descriptorSetCount: 1,
+				descriptorSets: &descriptorSet,
+				dynamicOffsetCount: 0,
+				dynamicOffsets: null
+			);
 		}
 
 		private SharpVulkan.Pipeline GetOrCreatePipeline()
@@ -702,7 +743,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				var vertexBindings = vertexInputLayout.Bindings
 					.Select(binding => new SharpVulkan.VertexInputBindingDescription {
 						Binding = (uint)binding.Slot,
-						Stride = (uint)binding.Stride
+						Stride = (uint)binding.Stride,
 					}).ToArray();
 
 				var vertexAttributes = vertexInputLayout.Attributes
@@ -710,12 +751,12 @@ namespace Lime.Graphics.Platform.Vulkan
 						Binding = (uint)attrib.Slot,
 						Location = (uint)attrib.Location,
 						Offset = (uint)attrib.Offset,
-						Format = VulkanHelper.GetVKFormat(attrib.Format)
+						Format = VulkanHelper.GetVKFormat(attrib.Format),
 					}).ToArray();
 
 				var inputAssemblyState = new SharpVulkan.PipelineInputAssemblyStateCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineInputAssemblyStateCreateInfo,
-					Topology = VulkanHelper.GetVKPrimitiveTopology(primitiveTopology)
+					Topology = VulkanHelper.GetVKPrimitiveTopology(primitiveTopology),
 				};
 				var rasterState = new SharpVulkan.PipelineRasterizationStateCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineRasterizationStateCreateInfo,
@@ -725,7 +766,7 @@ namespace Lime.Graphics.Platform.Vulkan
 					DepthBiasEnable = false,
 					DepthClampEnable = false,
 					RasterizerDiscardEnable = false,
-					LineWidth = 1.0f
+					LineWidth = 1.0f,
 				};
 				var depthStencilState = new SharpVulkan.PipelineDepthStencilStateCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineDepthStencilStateCreateInfo,
@@ -740,7 +781,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						FailOperation = VulkanHelper.GetVKStencilOp(stencilState.FrontFaceFail),
 						PassOperation = VulkanHelper.GetVKStencilOp(stencilState.FrontFacePass),
 						CompareMask = stencilState.ReadMask,
-						WriteMask = stencilState.WriteMask
+						WriteMask = stencilState.WriteMask,
 					},
 					Back = new SharpVulkan.StencilOperationState {
 						CompareOperation = VulkanHelper.GetVKCompareOp(stencilState.BackFaceComparison),
@@ -748,8 +789,8 @@ namespace Lime.Graphics.Platform.Vulkan
 						FailOperation = VulkanHelper.GetVKStencilOp(stencilState.BackFaceFail),
 						PassOperation = VulkanHelper.GetVKStencilOp(stencilState.BackFacePass),
 						CompareMask = stencilState.ReadMask,
-						WriteMask = stencilState.WriteMask
-					}
+						WriteMask = stencilState.WriteMask,
+					},
 				};
 				var colorBlendAttachment = new SharpVulkan.PipelineColorBlendAttachmentState {
 					BlendEnable = blendState.Enable,
@@ -759,44 +800,44 @@ namespace Lime.Graphics.Platform.Vulkan
 					SourceAlphaBlendFactor = VulkanHelper.GetVKBlendFactor(blendState.AlphaSrcBlend),
 					DestinationColorBlendFactor = VulkanHelper.GetVKBlendFactor(blendState.ColorDstBlend),
 					DestinationAlphaBlendFactor = VulkanHelper.GetVKBlendFactor(blendState.AlphaDstBlend),
-					ColorWriteMask = VulkanHelper.GetVKColorComponentFlags(colorWriteMask)
+					ColorWriteMask = VulkanHelper.GetVKColorComponentFlags(colorWriteMask),
 				};
 				var colorBlendState = new SharpVulkan.PipelineColorBlendStateCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineColorBlendStateCreateInfo,
 					AttachmentCount = 1,
-					Attachments = new IntPtr(&colorBlendAttachment)
+					Attachments = new IntPtr(&colorBlendAttachment),
 				};
 				var viewportState = new SharpVulkan.PipelineViewportStateCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineViewportStateCreateInfo,
 					ViewportCount = 1,
-					ScissorCount = 1
+					ScissorCount = 1,
 				};
 				var stages = new[] {
 					new SharpVulkan.PipelineShaderStageCreateInfo {
 						StructureType = SharpVulkan.StructureType.PipelineShaderStageCreateInfo,
 						Stage = SharpVulkan.ShaderStageFlags.Vertex,
 						Module = shaderProgram.VSModule,
-						Name = shaderEntryPointNamePtr
+						Name = shaderEntryPointNamePtr,
 					},
 					new SharpVulkan.PipelineShaderStageCreateInfo {
 						StructureType = SharpVulkan.StructureType.PipelineShaderStageCreateInfo,
 						Stage = SharpVulkan.ShaderStageFlags.Fragment,
 						Module = shaderProgram.FSModule,
-						Name = shaderEntryPointNamePtr
-					}
+						Name = shaderEntryPointNamePtr,
+					},
 				};
 				var dynamicStates = new[] {
 					SharpVulkan.DynamicState.Viewport,
 					SharpVulkan.DynamicState.StencilReference,
 					SharpVulkan.DynamicState.BlendConstants,
-					SharpVulkan.DynamicState.Scissor
+					SharpVulkan.DynamicState.Scissor,
 				};
 				var multisampleState = new SharpVulkan.PipelineMultisampleStateCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineMultisampleStateCreateInfo,
 					RasterizationSamples = SharpVulkan.SampleCountFlags.Sample1,
 				};
 				var tessellationState = new SharpVulkan.PipelineTessellationStateCreateInfo {
-					StructureType = SharpVulkan.StructureType.PipelineTessellationStateCreateInfo
+					StructureType = SharpVulkan.StructureType.PipelineTessellationStateCreateInfo,
 				};
 				fixed (SharpVulkan.VertexInputBindingDescription* vertexBindingsPtr = vertexBindings)
 				fixed (SharpVulkan.VertexInputAttributeDescription* vertexAttributesPtr = vertexAttributes)
@@ -807,12 +848,12 @@ namespace Lime.Graphics.Platform.Vulkan
 						VertexBindingDescriptionCount = (uint)vertexBindings.Length,
 						VertexBindingDescriptions = new IntPtr(vertexBindingsPtr),
 						VertexAttributeDescriptionCount = (uint)vertexAttributes.Length,
-						VertexAttributeDescriptions = new IntPtr(vertexAttributesPtr)
+						VertexAttributeDescriptions = new IntPtr(vertexAttributesPtr),
 					};
 					var dynamicState = new SharpVulkan.PipelineDynamicStateCreateInfo {
 						StructureType = SharpVulkan.StructureType.PipelineDynamicStateCreateInfo,
 						DynamicStateCount = (uint)dynamicStates.Length,
-						DynamicStates = new IntPtr(dynamicStatesPtr)
+						DynamicStates = new IntPtr(dynamicStatesPtr),
 					};
 					var createInfo = new SharpVulkan.GraphicsPipelineCreateInfo {
 						StructureType = SharpVulkan.StructureType.GraphicsPipelineCreateInfo,
@@ -829,7 +870,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						DynamicState = new IntPtr(&dynamicState),
 						RenderPass = activeRenderPass,
 						Layout = shaderProgram.PipelineLayout,
-						Subpass = 0
+						Subpass = 0,
 					};
 					return device.CreateGraphicsPipelines(PipelineCache.NativePipelineCache, 1, &createInfo);
 				}
@@ -849,7 +890,8 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			return PipelineCache.SetData(data);
 		}
-
+#pragma warning disable SA1005 // Single line comments should begin with single space
+#pragma warning disable SA1027 // Use tabs correctly
 		//public void Clear(ClearOptions options, float r, float g, float b, float a, float depth, byte stencil)
 		//{
 		//	EnsureRenderPass();
@@ -887,7 +929,8 @@ namespace Lime.Graphics.Platform.Vulkan
 		//	};
 		//	commandBuffer.ClearAttachments(attachmentCount, ref attachments[0], 1, &clearRect);
 		//}
-
+#pragma warning restore SA1027 // Use tabs correctly
+#pragma warning restore SA1005 // Single line comments should begin with single space
 		private Vector4[] clearVertices = new Vector4[4];
 		private PlatformBuffer clearVertexBuffer;
 		private PlatformShaderProgram clearProgram;
@@ -914,29 +957,34 @@ namespace Lime.Graphics.Platform.Vulkan
 			");
 			const int positionLocation = 0;
 			var attribLocations = new[] {
-				new ShaderProgram.AttribLocation { Name = "in_Position", Index = positionLocation }
+				new ShaderProgram.AttribLocation { Name = "in_Position", Index = positionLocation },
 			};
-			clearProgram = new PlatformShaderProgram(this, new[] { vs, fs }, attribLocations, new ShaderProgram.Sampler[0]);
+			clearProgram = new PlatformShaderProgram(
+				this, new[] { vs, fs }, attribLocations, new ShaderProgram.Sampler[0]
+			);
 			clearColorUniformIndex = clearProgram.GetUniformDescriptions()
 				.Where(desc => desc.Name == "clearColor")
 				.Select((desc, index) => index)
 				.First();
-			clearVertexInputLayout = new PlatformVertexInputLayout(this,
+			clearVertexInputLayout = new PlatformVertexInputLayout(
+				this,
 				new[] {
 					new VertexInputLayoutBinding {
 						Slot = 0,
-						Stride = sizeof(Vector4)
-					}
+						Stride = sizeof(Vector4),
+					},
 				},
 				new[] {
 					new VertexInputLayoutAttribute {
 						Slot = 0,
 						Location = positionLocation,
-						Offset =0,
-						Format = Format.R32G32B32A32_SFloat
-					}
+						Offset = 0,
+						Format = Format.R32G32B32A32_SFloat,
+					},
 				});
-			clearVertexBuffer = new PlatformBuffer(this, BufferType.Vertex, clearVertices.Length * sizeof(Vector4), true);
+			clearVertexBuffer = new PlatformBuffer(
+				this, BufferType.Vertex, clearVertices.Length * sizeof(Vector4), true
+			);
 		}
 
 		public void Clear(ClearOptions options, Color4 color, float depth, byte stencil)
@@ -1045,7 +1093,9 @@ namespace Lime.Graphics.Platform.Vulkan
 					StructureType = SharpVulkan.StructureType.RenderPassBeginInfo,
 					RenderPass = activeRenderPass,
 					Framebuffer = fb,
-					RenderArea = new SharpVulkan.Rect2D(0, 0, (uint)activeRenderPassWidth, (uint)activeRenderPassHeight)
+					RenderArea = new SharpVulkan.Rect2D(
+						0, 0, (uint)activeRenderPassWidth, (uint)activeRenderPassHeight
+					),
 				};
 				commandBuffer.BeginRenderPass(ref rpBeginInfo, SharpVulkan.SubpassContents.Inline);
 			}
@@ -1087,14 +1137,14 @@ namespace Lime.Graphics.Platform.Vulkan
 				WaitSemaphores = new IntPtr(&waitSemaphore),
 				WaitDstStageMask = new IntPtr(&waitDstStageMask),
 				SignalSemaphoreCount = signalSemaphore != SharpVulkan.Semaphore.Null ? 1U : 0U,
-				SignalSemaphores = new IntPtr(&signalSemaphore)
+				SignalSemaphores = new IntPtr(&signalSemaphore),
 			};
 			var fence = AcquireFence();
 			queue.Submit(1, &vkSubmitInfo, fence);
 			submitInfos.Enqueue(new SubmitInfo {
 				CommandBuffer = commandBuffer,
 				Fence = fence,
-				FenceValue = nextFenceValue++
+				FenceValue = nextFenceValue++,
 			});
 			commandBuffer = SharpVulkan.CommandBuffer.Null;
 		}
@@ -1134,7 +1184,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				commandBuffer = AcquireCommandBuffer();
 				var beginInfo = new SharpVulkan.CommandBufferBeginInfo {
 					StructureType = SharpVulkan.StructureType.CommandBufferBeginInfo,
-					Flags = SharpVulkan.CommandBufferUsageFlags.OneTimeSubmit
+					Flags = SharpVulkan.CommandBufferUsageFlags.OneTimeSubmit,
 				};
 				commandBuffer.Begin(ref beginInfo);
 			}
@@ -1147,7 +1197,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				commandBuffer = AcquireCommandBuffer();
 				var beginInfo = new SharpVulkan.CommandBufferBeginInfo {
 					StructureType = SharpVulkan.StructureType.CommandBufferBeginInfo,
-					Flags = SharpVulkan.CommandBufferUsageFlags.OneTimeSubmit
+					Flags = SharpVulkan.CommandBufferUsageFlags.OneTimeSubmit,
 				};
 				commandBuffer.Begin(ref beginInfo);
 				InvalidateState();
@@ -1163,7 +1213,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			var allocateInfo = new SharpVulkan.CommandBufferAllocateInfo {
 				StructureType = SharpVulkan.StructureType.CommandBufferAllocateInfo,
 				CommandPool = commandPool,
-				CommandBufferCount = 1
+				CommandBufferCount = 1,
 			};
 			SharpVulkan.CommandBuffer cb;
 			device.AllocateCommandBuffers(ref allocateInfo, &cb);
@@ -1179,7 +1229,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				return fence;
 			}
 			var createInfo = new SharpVulkan.FenceCreateInfo {
-				StructureType = SharpVulkan.StructureType.FenceCreateInfo
+				StructureType = SharpVulkan.StructureType.FenceCreateInfo,
 			};
 			return device.CreateFence(ref createInfo);
 		}
@@ -1319,7 +1369,9 @@ namespace Lime.Graphics.Platform.Vulkan
 				if ((formatProperties.OptimalTilingFeatures & SharpVulkan.FormatFeatureFlags.SampledImage) != 0) {
 					features |= FormatFeatures.Sample;
 				}
-				if ((formatProperties.OptimalTilingFeatures & SharpVulkan.FormatFeatureFlags.ColorAttachmentBlend) != 0) {
+				if (
+					(formatProperties.OptimalTilingFeatures & SharpVulkan.FormatFeatureFlags.ColorAttachmentBlend) != 0
+				) {
 					features |= FormatFeatures.RenderTarget;
 				}
 				if ((formatProperties.BufferFeatures & SharpVulkan.FormatFeatureFlags.VertexBuffer) != 0) {
@@ -1340,13 +1392,15 @@ namespace Lime.Graphics.Platform.Vulkan
 			return new Swapchain(this, windowHandle, width, height);
 		}
 
-		public IPlatformTexture2D CreateTexture2D(Format format, int width, int height, bool mipmaps, TextureParams textureParams)
-		{
+		public IPlatformTexture2D CreateTexture2D(
+			Format format, int width, int height, bool mipmaps, TextureParams textureParams
+		) {
 			return new PlatformTexture2D(this, format, width, height, mipmaps, textureParams);
 		}
 
-		public IPlatformRenderTexture2D CreateRenderTexture2D(Format format, int width, int height, TextureParams textureParams)
-		{
+		public IPlatformRenderTexture2D CreateRenderTexture2D(
+			Format format, int width, int height, TextureParams textureParams
+		) {
 			return new PlatformRenderTexture2D(this, format, width, height, textureParams);
 		}
 
@@ -1376,9 +1430,15 @@ namespace Lime.Graphics.Platform.Vulkan
 		}
 
 		private static SharpVulkan.RawBool DebugReport(
-			SharpVulkan.DebugReportFlags flags, SharpVulkan.DebugReportObjectType objectType, ulong @object,
-			SharpVulkan.PointerSize location, int messageCode, string layerPrefix, string message, IntPtr userData)
-		{
+			SharpVulkan.DebugReportFlags flags,
+			SharpVulkan.DebugReportObjectType objectType,
+			ulong @object,
+			SharpVulkan.PointerSize location,
+			int messageCode,
+			string layerPrefix,
+			string message,
+			IntPtr userData
+		) {
 			Logger.Write($"{flags}: {message} ([{messageCode}] {layerPrefix})");
 			return false;
 		}

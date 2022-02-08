@@ -36,7 +36,11 @@ namespace Tangerine.UI
 			editor.LayoutCell = new LayoutCell(Alignment.Center);
 			editor.AddLateChangeWatcher(CoalescedPropertyValue(), v => {
 				var text = v.Value.ToString();
-				editor.Text = v.IsDefined ? v.Value.Main != Key.Unknown ? text : text.Replace("Unknown", "") : ManyValuesText;
+				editor.Text = v.IsDefined
+					? v.Value.Main != Key.Unknown
+						? text
+						: text.Replace("Unknown", string.Empty)
+					: ManyValuesText;
 			});
 			editor.IsReadOnly = true;
 			editor.TextWidget.Tasks.Clear();
@@ -69,7 +73,7 @@ namespace Tangerine.UI
 			}
 		}
 
-		IEnumerator<object> ManageLabelFocus()
+		private IEnumerator<object> ManageLabelFocus()
 		{
 			while (true) {
 				if (PropertyLabel.Input.WasMousePressed()) {
@@ -79,25 +83,31 @@ namespace Tangerine.UI
 			}
 		}
 
-		IEnumerator<object> ManageFocusTask()
+		private IEnumerator<object> ManageFocusTask()
 		{
 			while (true) {
 				if (PropertyLabel.IsFocused()) {
 					editor.SetFocus();
 				}
-				flatFillPresenter.Color = editor.IsFocused() ? Theme.Colors.SelectedBackground : Theme.Colors.GrayBackground;
+				flatFillPresenter.Color = editor.IsFocused()
+					? Theme.Colors.SelectedBackground
+					: Theme.Colors.GrayBackground;
 				yield return null;
 			}
 		}
 
 		private void Updating(float dt)
 		{
-			if (!editor.IsFocused())
+			if (!editor.IsFocused()) {
 				return;
+			}
+
 			var input = editor.Input;
 			var keys = Key.Enumerate().Where(k => input.WasKeyPressed(k));
-			if (!keys.Any())
+			if (!keys.Any()) {
 				return;
+			}
+
 			modifiers = Modifiers.None;
 
 			PressModifier(Modifiers.Alt, Key.Alt);
@@ -115,8 +125,10 @@ namespace Tangerine.UI
 
 		private void Updated(float dt)
 		{
-			if (!editor.IsFocused())
+			if (!editor.IsFocused()) {
 				return;
+			}
+
 			var input = editor.Input;
 			input.ConsumeKeys(Key.Enumerate().Where(
 				k => input.WasKeyRepeated(k) || input.WasKeyPressed(k) || input.WasKeyReleased(k)));

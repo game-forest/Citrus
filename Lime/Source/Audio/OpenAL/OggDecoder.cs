@@ -17,12 +17,12 @@ namespace Lime
 {
 	public class OggDecoder : IAudioDecoder
 	{
-		Stream stream;
-		IntPtr oggFile;
-		int bitstream;
-		int handle;
-		readonly Lemon.Api.FileSystem fileSystem;
-		static readonly StreamMap streamMap = new StreamMap();
+		private Stream stream;
+		private IntPtr oggFile;
+		private int bitstream;
+		private int handle;
+		private readonly Lemon.Api.FileSystem fileSystem;
+		private static readonly StreamMap streamMap = new StreamMap();
 
 		public static int GetCurrentStreamsCount()
 		{
@@ -33,8 +33,10 @@ namespace Lime
 		{
 			this.stream = stream;
 			fileSystem = new Lemon.Api.FileSystem {
-				ReadFunc = OggRead, CloseFunc = OggClose,
-				SeekFunc = OggSeek, TellFunc = OggTell
+				ReadFunc = OggRead,
+				CloseFunc = OggClose,
+				SeekFunc = OggSeek,
+				TellFunc = OggTell,
 			};
 			handle = streamMap.Allocate(stream);
 			oggFile = Lemon.Api.OggCreate();
@@ -83,7 +85,7 @@ namespace Lime
 
 		public int GetBlockSize() => 1;
 
-		public int ReadBlocks(IntPtr buffer,int startIndex,int blockCount)
+		public int ReadBlocks(IntPtr buffer, int startIndex, int blockCount)
 		{
 			ThrowIfDisposed();
 			int actualCount = 0;
@@ -102,7 +104,7 @@ namespace Lime
 		}
 
 		[ThreadStatic]
-		static byte[] block;
+		private static byte[] block;
 
 #if iOS
 		[MonoPInvokeCallback(typeof(Lemon.Api.ReadCallback))]
@@ -117,8 +119,10 @@ namespace Lime
 			while (true) {
 				var stream = streamMap[handle];
 				int read = stream.Read(block, 0, Math.Min(block.Length, requestCount - actualCount));
-				if (read == 0)
+				if (read == 0) {
 					break;
+				}
+
 				Marshal.Copy(block, 0, (IntPtr)(buffer.ToInt64() + actualCount), read);
 				actualCount += read;
 			}
@@ -137,7 +141,7 @@ namespace Lime
 #if iOS
 		[MonoPInvokeCallback(typeof(Lemon.Api.SeekCallback))]
 #endif
-		public static int OggSeek(int handle, long offset,SeekOrigin whence)
+		public static int OggSeek(int handle, long offset, SeekOrigin whence)
 		{
 			var stream = streamMap[handle];
 			return (int)stream.Seek(offset, whence);
@@ -153,7 +157,6 @@ namespace Lime
 			return 0;
 		}
 
-		#region IDisposable Support
 		private bool disposedValue = false;
 
 		protected virtual void Dispose(bool disposing)
@@ -195,12 +198,11 @@ namespace Lime
 				throw new ObjectDisposedException(GetType().Name);
 			}
 		}
-		#endregion
 	}
 
-	class StreamMap
+	internal class StreamMap
 	{
-		Stream[] map = new Stream[64];
+		private Stream[] map = new Stream[64];
 
 		public int Allocate(Stream stream)
 		{
@@ -235,8 +237,10 @@ namespace Lime
 			return count;
 		}
 
-		public Stream this[int slot] {
-			get {
+		public Stream this[int slot]
+		{
+			get
+			{
 				lock (map) {
 					return map[slot];
 				}

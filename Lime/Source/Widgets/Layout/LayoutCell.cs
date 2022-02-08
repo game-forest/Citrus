@@ -34,7 +34,8 @@ namespace Lime
 		public Alignment Alignment
 		{
 			get => alignment;
-			set {
+			set
+			{
 				if (alignment != value) {
 					alignment = value;
 					Owner?.InvalidateConstraintsAndArrangement();
@@ -58,12 +59,12 @@ namespace Lime
 			set { Alignment = new Alignment { X = Alignment.X, Y = value }; }
 		}
 
-
 		[YuzuMember]
 		public int ColumnSpan
 		{
 			get => columnSpan;
-			set {
+			set
+			{
 				if (columnSpan != value) {
 					columnSpan = value;
 					Owner?.InvalidateConstraintsAndArrangement();
@@ -77,7 +78,8 @@ namespace Lime
 		public int RowSpan
 		{
 			get => rowSpan;
-			set {
+			set
+			{
 				if (rowSpan != value) {
 					rowSpan = value;
 					Owner?.InvalidateConstraintsAndArrangement();
@@ -91,7 +93,8 @@ namespace Lime
 		public Vector2 Stretch
 		{
 			get => stretch;
-			set {
+			set
+			{
 				if (stretch != value) {
 					stretch = value;
 					Owner?.InvalidateConstraintsAndArrangement();
@@ -108,7 +111,8 @@ namespace Lime
 		public bool Ignore
 		{
 			get => ignore;
-			set {
+			set
+			{
 				if (ignore != value) {
 					ignore = value;
 					Owner?.InvalidateConstraintsAndArrangement();
@@ -167,7 +171,6 @@ namespace Lime
 			get => Alignment.Y;
 			set { Alignment = new Alignment { X = Alignment.X, Y = value }; }
 		}
-
 
 		[YuzuMember]
 		public int ColumnSpan
@@ -267,9 +270,8 @@ namespace Lime
 		public static readonly Alignment LeftCenter = new Alignment { X = HAlignment.Left, Y = VAlignment.Center };
 		public static readonly Alignment RightCenter = new Alignment { X = HAlignment.Right, Y = VAlignment.Center };
 
-		public static bool operator == (Alignment lhs, Alignment rhs) => lhs.X == rhs.X && lhs.Y == rhs.Y;
+		public static bool operator ==(Alignment lhs, Alignment rhs) => lhs.X == rhs.X && lhs.Y == rhs.Y;
 		public static bool operator !=(Alignment lhs, Alignment rhs) => lhs.X != rhs.X || lhs.Y != rhs.Y;
 	}
 #pragma warning restore CS0660, CS0661
 }
-

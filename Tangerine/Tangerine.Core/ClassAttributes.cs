@@ -4,9 +4,10 @@ using System;
 
 namespace Tangerine.Core
 {
-	public static class ClassAttributes<T> where T: Attribute
+	public static class ClassAttributes<T>
+		where T : Attribute
 	{
-		static readonly Dictionary<(Type, bool), T> map = new Dictionary<(Type, bool), T>();
+		private static readonly Dictionary<(Type, bool), T> map = new Dictionary<(Type, bool), T>();
 
 		public static T Get(Type type, bool inherit = false)
 		{

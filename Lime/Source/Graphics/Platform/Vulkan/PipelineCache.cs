@@ -38,7 +38,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				var createInfo = new SharpVulkan.PipelineCacheCreateInfo {
 					StructureType = SharpVulkan.StructureType.PipelineCacheCreateInfo,
 					InitialData = new IntPtr(initialDataPtr),
-					InitialDataSize = initialData.Length
+					InitialDataSize = initialData.Length,
 				};
 				return Context.Device.CreatePipelineCache(ref createInfo);
 			}

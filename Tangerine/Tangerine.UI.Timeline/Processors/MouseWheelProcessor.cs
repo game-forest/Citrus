@@ -7,7 +7,7 @@ namespace Tangerine.UI.Timeline
 {
 	public class MouseWheelProcessor : Core.ITaskProvider
 	{
-		readonly Timeline timeline;
+		private readonly Timeline timeline;
 
 		public MouseWheelProcessor(Timeline timeline) { this.timeline = timeline; }
 
@@ -46,21 +46,22 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		void HandleCellsMagnification(WidgetInput input)
+		private void HandleCellsMagnification(WidgetInput input)
 		{
 			var delta = GetWheelDelta(input);
 			if (delta != 0 && input.IsKeyPressed(Key.Alt)) {
 				var prevColWidth = TimelineMetrics.ColWidth;
 				TimelineMetrics.ColWidth = (TimelineMetrics.ColWidth + delta).Clamp(5, 30);
 				if (prevColWidth != TimelineMetrics.ColWidth) {
-					timeline.ClampAndSetOffset(new Vector2(timeline.OffsetX + timeline.CurrentColumn * delta,
+					timeline.ClampAndSetOffset(new Vector2(
+						timeline.OffsetX + timeline.CurrentColumn * delta,
 						timeline.OffsetY));
 					Core.Operations.Dummy.Perform(Document.Current.History);
 				}
 			}
 		}
 
-		int GetWheelDelta(WidgetInput input)
+		private int GetWheelDelta(WidgetInput input)
 		{
 			if (input.WasKeyPressed(Key.MouseWheelDown)) {
 				return 1;
@@ -72,4 +73,3 @@ namespace Tangerine.UI.Timeline
 		}
 	}
 }
-

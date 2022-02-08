@@ -25,13 +25,15 @@ namespace Lime
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Write<T>(T[] data) where T : unmanaged
+		public void Write<T>(T[] data)
+			where T : unmanaged
 		{
 			Write(data, 0, data.Length);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Write<T>(T[] data, int index, int count) where T : unmanaged
+		public void Write<T>(T[] data, int index, int count)
+			where T : unmanaged
 		{
 			fixed (T* p = &data[index]) {
 				WriteInternal((byte*)p, sizeof(T) * count);
@@ -39,7 +41,8 @@ namespace Lime
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Write<T>(ref T data) where T : unmanaged
+		public void Write<T>(ref T data)
+			where T : unmanaged
 		{
 			fixed (T* p = &data) {
 				WriteInternal((byte*)p, sizeof(T));
@@ -47,7 +50,8 @@ namespace Lime
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public void Write<T>(T data) where T : unmanaged
+		public void Write<T>(T data)
+			where T : unmanaged
 		{
 			WriteInternal((byte*)&data, sizeof(T));
 		}

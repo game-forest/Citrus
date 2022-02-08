@@ -8,7 +8,7 @@ using Lime;
 
 namespace Orange
 {
-	class MainClass
+	internal class MainClass
 	{
 #if WIN
 		[STAThread]
@@ -25,7 +25,7 @@ namespace Orange
 				renderingBackend = RenderingBackend.Vulkan;
 			}
 			Application.Initialize(new ApplicationOptions {
-				RenderingBackend = renderingBackend
+				RenderingBackend = renderingBackend,
 			});
 			OrangeApp.Initialize();
 			Application.Run();

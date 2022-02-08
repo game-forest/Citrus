@@ -42,7 +42,11 @@ namespace Tangerine.UI.Timeline.Components
 				}
 				for (var j = 0; j < animator.ReadonlyKeys.Count; j++) {
 					var key = animator.ReadonlyKeys[j];
-					var colorIndex = PropertyAttributes<TangerineKeyframeColorAttribute>.Get(animator.Animable.GetType(), animator.TargetPropertyPath)?.ColorIndex ?? 0;
+					var colorIndex = PropertyAttributes<TangerineKeyframeColorAttribute>
+							.Get(
+								animator.Animable.GetType(), animator.TargetPropertyPath
+							)?.ColorIndex
+						?? 0;
 					if (!cells.TryGetValue(key.Frame, out var cell)) {
 						cell = cellPool.Count == 0 ? new Cell() : cellPool.Pop();
 						cells.Add(key.Frame, cell);
@@ -133,7 +137,10 @@ namespace Tangerine.UI.Timeline.Components
 							var b = a + new Vector2(TimelineMetrics.ColWidth - 1, stripHeight);
 							Renderer.DrawRect(a, b, KeyframePalette.Colors[colorIndex]);
 							drawnStripCount++;
-							if (drawnStripCount == cell.StripCount) break;
+							if (drawnStripCount == cell.StripCount) {
+								break;
+							}
+
 							a.Y += stripHeight;
 						}
 					}
@@ -141,7 +148,9 @@ namespace Tangerine.UI.Timeline.Components
 					if (drawnStripCount < cell.StripCount) {
 						int colorIndex;
 						for (colorIndex = 0; colorIndex < cell.Strips.Count; colorIndex++) {
-							if (cell.Strips[colorIndex]) break;
+							if (cell.Strips[colorIndex]) {
+								break;
+							}
 						}
 						for (var j = drawnStripCount; j != cell.StripCount; j++) {
 							var b = a + new Vector2(TimelineMetrics.ColWidth - 1, stripHeight);

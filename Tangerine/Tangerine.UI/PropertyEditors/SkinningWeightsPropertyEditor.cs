@@ -27,39 +27,46 @@ namespace Tangerine.UI
 				weightsSliders[i] = new ThemedAreaSlider(range: new Vector2(0, 1), labelFormat: "0.00000");
 				var wrapper = new Widget {
 					Layout = new HBoxLayout(),
-					LayoutCell = new LayoutCell { StretchY = 0 }
+					LayoutCell = new LayoutCell { StretchY = 0 },
 				};
 				var propertyLabel = new ThemedSimpleText {
-					Text = $"Bone { char.ConvertFromUtf32(65 + i) }",
+					Text = $"Bone {char.ConvertFromUtf32(65 + i)}",
 					VAlignment = VAlignment.Center,
 					Padding = new Thickness { Left = 20 },
 					LayoutCell = new LayoutCell { StretchX = 1.0f },
 					ForceUncutText = false,
 					OverflowMode = TextOverflowMode.Minify,
-					HitTestTarget = false
+					HitTestTarget = false,
 				};
 				wrapper.AddNode(propertyLabel);
 				wrapper.AddNode(new Widget {
 					Layout = new HBoxLayout { Spacing = 4 },
 					LayoutCell = new LayoutCell { StretchX = 2.0f },
 					Nodes = {
-						indexEditors[i] ,
-						weightsSliders[i]
-					}
+						indexEditors[i],
+						weightsSliders[i],
+					},
 				});
 				ExpandableContent.AddNode(wrapper);
 				customWarningsContainer = new Widget {
-					Layout = new VBoxLayout()
+					Layout = new VBoxLayout(),
 				};
 				ContainerWidget.AddNode(customWarningsContainer);
 				var j = i;
-				SetLink(i, CoalescedPropertyComponentValue(sw => sw[j].Index), CoalescedPropertyComponentValue(sw => sw[j].Weight));
+				SetLink(
+					index: i,
+					indexProvider: CoalescedPropertyComponentValue(sw => sw[j].Index),
+					weightProvider: CoalescedPropertyComponentValue(sw => sw[j].Weight)
+				);
 			}
 			CheckWarnings();
 		}
 
-		private void SetLink(int index, IDataflowProvider<CoalescedValue<int>> indexProvider, IDataflowProvider<CoalescedValue<float>> weightProvider)
-		{
+		private void SetLink(
+			int index,
+			IDataflowProvider<CoalescedValue<int>> indexProvider,
+			IDataflowProvider<CoalescedValue<float>> weightProvider
+		) {
 			var currentIndexValue = indexProvider.GetValue();
 			var currentWeightValue = weightProvider.GetValue();
 			var indexEditor = indexEditors[index];
@@ -67,9 +74,11 @@ namespace Tangerine.UI
 			indexEditor.Submitted += text => SetIndexValue(index, indexEditor, currentIndexValue);
 			weightEditor.Changed += () => SetWeightValue(index, weightEditor);
 			weightEditor.Value = currentWeightValue.IsDefined ? currentWeightValue.Value : 0;
-			indexEditor.AddLateChangeWatcher(indexProvider,
+			indexEditor.AddLateChangeWatcher(
+				indexProvider,
 				v => indexEditor.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
-			weightEditor.AddLateChangeWatcher(weightProvider,
+			weightEditor.AddLateChangeWatcher(
+				weightProvider,
 				v => {
 					weightEditor.Value = v.IsDefined ? v.Value : 0;
 					if (!v.IsDefined) {
@@ -98,7 +107,7 @@ namespace Tangerine.UI
 						var clone = current.Clone();
 						clone[index] = new BoneWeight {
 							Index = (int)newValue,
-							Weight = current[index].Weight
+							Weight = current[index].Weight,
 						};
 						CheckWarnings();
 						return clone;
@@ -117,7 +126,7 @@ namespace Tangerine.UI
 					var clone = current.Clone();
 					clone[index] = new BoneWeight {
 						Index = current[index].Index,
-						Weight = slider.Value
+						Weight = slider.Value,
 					};
 					return clone;
 				});

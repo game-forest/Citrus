@@ -14,7 +14,7 @@ namespace Tangerine.UI.SceneView
 		{
 			Any,
 			Horizontal,
-			Vertical
+			Vertical,
 		}
 
 		private const float Threshold = 10f;
@@ -83,7 +83,12 @@ namespace Tangerine.UI.SceneView
 				var transform = containerWidget.LocalToWorldTransform.CalcInversed();
 				var dragDelta = transform * delta - transform * Vector2.Zero;
 				foreach (var widget in Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>()) {
-					SetAnimableProperty.Perform(widget, nameof(Widget.Position), widget.Position + dragDelta, CoreUserPreferences.Instance.AutoKeyframes);
+					SetAnimableProperty.Perform(
+						widget,
+						nameof(Widget.Position),
+						widget.Position + dragDelta,
+						CoreUserPreferences.Instance.AutoKeyframes
+					);
 				}
 			}
 		}
@@ -91,14 +96,24 @@ namespace Tangerine.UI.SceneView
 		private static void DragNodes3D(Vector2 delta)
 		{
 			foreach (var node3D in Document.Current.TopLevelSelectedNodes().Editable().OfType<Node3D>()) {
-				SetAnimableProperty.Perform(node3D, nameof(Widget.Position), node3D.Position + (Vector3)delta / 100, CoreUserPreferences.Instance.AutoKeyframes);
+				SetAnimableProperty.Perform(
+					node3D,
+					nameof(Widget.Position),
+					node3D.Position + (Vector3)delta / 100,
+					CoreUserPreferences.Instance.AutoKeyframes
+				);
 			}
 		}
 
-		static void DragSplinePoints3D(Vector2 delta)
+		private static void DragSplinePoints3D(Vector2 delta)
 		{
 			foreach (var point in Document.Current.SelectedNodes().Editable().OfType<SplinePoint3D>()) {
-				SetAnimableProperty.Perform(point, nameof(Widget.Position), point.Position + (Vector3)delta / 100, CoreUserPreferences.Instance.AutoKeyframes);
+				SetAnimableProperty.Perform(
+					point,
+					nameof(Widget.Position),
+					point.Position + (Vector3)delta / 100,
+					CoreUserPreferences.Instance.AutoKeyframes
+				);
 			}
 		}
 
@@ -108,8 +123,7 @@ namespace Tangerine.UI.SceneView
 			while (
 				SceneView.Input.IsKeyPressed(Key.Alt) &&
 				(SceneView.MousePosition - initialMousePos).Length <= Threshold &&
-				SceneView.Input.IsMousePressed()
-			) {
+				SceneView.Input.IsMousePressed()) {
 				Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				yield return null;
 			}
@@ -138,7 +152,9 @@ namespace Tangerine.UI.SceneView
 							default:
 								if ((curMousePos - initialMousePos).Length > 5 / SceneView.Scene.Scale.X) {
 									var d = curMousePos - initialMousePos;
-									dragDirection = d.X.Abs() > d.Y.Abs() ? DragDirection.Horizontal : DragDirection.Vertical;
+									dragDirection = d.X.Abs() > d.Y.Abs()
+										? DragDirection.Horizontal
+										: DragDirection.Vertical;
 								}
 								break;
 						}
@@ -155,8 +171,7 @@ namespace Tangerine.UI.SceneView
 		}
 
 		public static void DragWidgets(
-			List<Widget> widgets, Vector2 curMousePos, Vector2 initialMousePos, bool isRoundingMode
-		) {
+			List<Widget> widgets, Vector2 curMousePos, Vector2 initialMousePos, bool isRoundingMode) {
 			var mouseDelta = curMousePos - initialMousePos;
 
 			Utils.CalcHullAndPivot(widgets, out _, out var pivot);
@@ -164,8 +179,8 @@ namespace Tangerine.UI.SceneView
 
 			mouseDelta = mouseDelta.Snap(Vector2.Zero);
 
-			var requiredSnap = SceneViewCommands.SnapWidgetPivotToRuler.Checked ||
-			                   SceneViewCommands.SnapWidgetBorderToRuler.Checked;
+			var requiredSnap = SceneViewCommands.SnapWidgetPivotToRuler.Checked
+				|| SceneViewCommands.SnapWidgetBorderToRuler.Checked;
 			if (mouseDelta != Vector2.Zero && requiredSnap) {
 				var rulers = GetRulers();
 				foreach (var widget in widgets) {
@@ -186,17 +201,15 @@ namespace Tangerine.UI.SceneView
 
 			static Transform2d OnCalculateTransformation(
 				Vector2d originalVectorInObbSpace,
-				Vector2d deformedVectorInObbSpace
-			) {
+				Vector2d deformedVectorInObbSpace) {
 				return new Transform2d(
 					(deformedVectorInObbSpace - originalVectorInObbSpace).Snap(Vector2d.Zero), Vector2d.One, 0
 				);
 			}
 
-
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
 				widgetsInParentSpace: widgets,
-				overridePivotInSceneSpace: widgets.Count <= 1 ? (Vector2?) null : pivot,
+				overridePivotInSceneSpace: widgets.Count <= 1 ? (Vector2?)null : pivot,
 				obbInFirstWidgetSpace: widgets.Count <= 1,
 				currentMousePosInSceneSpace: initialMousePos + mouseDelta,
 				previousMousePosSceneSpace: initialMousePos,
@@ -242,8 +255,7 @@ namespace Tangerine.UI.SceneView
 		}
 
 		private static bool TrySnapPoint(
-			Vector2 pos, List<Ruler> rulers, RulerOrientation orientationFilter, out Vector2 snappedPoint
-		) {
+			Vector2 pos, List<Ruler> rulers, RulerOrientation orientationFilter, out Vector2 snappedPoint) {
 			var sceneZoom = SceneView.Instance.Scene.Scale.X;
 			foreach (var ruler in rulers) {
 				foreach (var line in ruler.Lines) {
@@ -251,7 +263,8 @@ namespace Tangerine.UI.SceneView
 						continue;
 					}
 					var mask = orientationFilter == RulerOrientation.Vertical ? Vector2.Right : Vector2.Down;
-					var transformedPosition = pos * Document.Current.RootNode.AsWidget.LocalToWorldTransform.CalcInversed();
+					var transformedPosition = pos
+						* Document.Current.RootNode.AsWidget.LocalToWorldTransform.CalcInversed();
 					var lineVector = LineToVector(line, ruler.AnchorToRoot);
 					if ((transformedPosition * mask - lineVector).Length < Threshold / sceneZoom) {
 						snappedPoint = transformedPosition * (Vector2.One - mask) + lineVector;

@@ -102,7 +102,8 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Returns true during the frame the user starts pressing down the key identified by name or key event was repeated.
+		/// Returns true during the frame the user starts pressing down
+		/// the key identified by name or key event was repeated.
 		/// </summary>
 		public bool WasKeyRepeated(Key key) => keys[key.Code].Repeated;
 		public bool WasMousePressed() => WasKeyPressed(GetMouseButtonByIndex(0));
@@ -127,8 +128,12 @@ namespace Lime
 			switch (button) {
 				case 0: return Key.Mouse0DoubleClick;
 				case 1: return Key.Mouse1DoubleClick;
-				case 2: throw new NotImplementedException($"DoubleClick Key not implemented for mouse button index {button}");
-				default: throw new NotImplementedException($"DoubleClick Key not implemented for mouse button index {button}");
+				case 2: throw new NotImplementedException(
+					$"DoubleClick Key not implemented for mouse button index {button}"
+				);
+				default: throw new NotImplementedException(
+					$"DoubleClick Key not implemented for mouse button index {button}"
+				);
 			}
 		}
 
@@ -246,7 +251,8 @@ namespace Lime
 				SetKeyStateInternal(currentShortcut, true);
 				if (previousCurrentShortcut == currentShortcut) {
 					// Prevent setting Repeated = true before key repeat timeout for given key in case
-					// we're here because another key has been released. e.g. releasing key "3" while still holding "Enter" key in edit box (see CIT-783)
+					// we're here because another key has been released. e.g. releasing key "3" while
+					// still holding "Enter" key in edit box (see CIT-783)
 					keys[currentShortcut].Repeated = false;
 				}
 			}
@@ -296,7 +302,7 @@ namespace Lime
 
 		public class InputSimulator
 		{
-			readonly Input input;
+			private readonly Input input;
 			private int activeRunners;
 
 			public InputSimulator(Input input)

@@ -6,14 +6,14 @@ using Tangerine.UI;
 
 namespace Tangerine.MainMenu
 {
-	class ForceUpdate : CommandHandler
+	internal class ForceUpdate : CommandHandler
 	{
 		public override void Execute()
 		{
 			var result = new AlertDialog("Are you sure? This operation will discard you changes", "Yes", "No").Show();
 			if (result == 0) {
-				var directory = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
-				if (directory == "") {
+				var directory = Path.GetDirectoryName(Project.Current?.CitprojPath ?? string.Empty);
+				if (directory == string.Empty) {
 					return;
 				}
 				Git.ForceUpdate(directory);
@@ -21,12 +21,12 @@ namespace Tangerine.MainMenu
 		}
 	}
 
-	class Update : CommandHandler
+	internal class Update : CommandHandler
 	{
 		public override void Execute()
 		{
-			var directory = Path.GetDirectoryName(Project.Current?.CitprojPath ?? "");
-			if (directory == "") {
+			var directory = Path.GetDirectoryName(Project.Current?.CitprojPath ?? string.Empty);
+			if (directory == string.Empty) {
 				return;
 			}
 			Git.Update(directory);

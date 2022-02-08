@@ -33,14 +33,14 @@ namespace Lime
 
 		public static string Combine(string path1, string path2) => CorrectSlashes(Path.Combine(path1, path2));
 
-		public static string Combine(params string[] paths) => paths.Aggregate("", Combine);
+		public static string Combine(params string[] paths) => paths.Aggregate(string.Empty, Combine);
 
 		public static string CorrectSlashes(string path) => path.IndexOf('\\') >= 0 ? path.Replace('\\', '/') : path;
 	}
 
 	public sealed class AssetStream : Stream
 	{
-		readonly PackedAssetBundle bundle;
+		private readonly PackedAssetBundle bundle;
 		internal AssetDescriptor descriptor;
 		private int position;
 		private Stream stream;
@@ -75,8 +75,10 @@ namespace Lime
 			count = Math.Min(count, descriptor.Size - position);
 			if (count > 0) {
 				count = stream.Read(buffer, offset, count);
-				if (count < 0)
+				if (count < 0) {
 					return count;
+				}
+
 				position += count;
 			} else {
 				count = 0;
@@ -401,8 +403,9 @@ namespace Lime
 
 		public override AssetAttributes GetFileAttributes(string path) => GetDescriptor(path).Attributes;
 
-		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
-		{
+		public override void ImportFile(
+			string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+		) {
 			var length = (int)stream.Length;
 			var buffer = ArrayPool<byte>.Shared.Rent(length);
 			try {
@@ -420,8 +423,14 @@ namespace Lime
 			}
 		}
 
-		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
-		{
+		public override void ImportFileRaw(
+			string destinationPath,
+			Stream stream,
+			int unpackedSize,
+			SHA256 hash,
+			SHA256 cookingUnitHash,
+			AssetAttributes attributes
+		) {
 			var reuseExistingDescriptor =
 				index.TryGetValue(AssetPath.CorrectSlashes(destinationPath), out AssetDescriptor d) &&
 				d.AllocatedSize == stream.Length;
@@ -495,7 +504,7 @@ namespace Lime
 			if (version != Version.GetBundleFormatVersion()) {
 				throw new InvalidBundleVersionException(
 					$"The bundle format has been changed. Please update Citrus and rebuild game.\n" +
-				            $"Bundle format version: {version}, but expected: {Version.GetBundleFormatVersion()}");
+							$"Bundle format version: {version}, but expected: {Version.GetBundleFormatVersion()}");
 			}
 			indexOffset = reader.ReadInt32();
 			stream.Seek(indexOffset, SeekOrigin.Begin);
@@ -552,8 +561,11 @@ namespace Lime
 			if (resourcesAssembly != null) {
 				var stream = resourcesAssembly.GetManifestResourceStream(Path);
 				if (stream == null) {
-					throw new Lime.Exception("Resource '{0}' doesn't exist. Available resources: {1}", Path,
-						string.Join(", ", resourcesAssembly.GetManifestResourceNames()));
+					throw new Lime.Exception(
+						"Resource '{0}' doesn't exist. Available resources: {1}",
+						Path,
+						string.Join(", ", resourcesAssembly.GetManifestResourceNames())
+					);
 				}
 				return stream;
 			} else {

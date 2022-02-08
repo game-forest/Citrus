@@ -30,8 +30,8 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 					LayoutCell = new LayoutCell(Alignment.LeftCenter),
 					Nodes = {
 						GlobalCheckBox,
-						new ThemedCaption("Global")
-					}
+						new ThemedCaption("Global"),
+					},
 				});
 				AddNode(Spacer.HFill());
 				AddNode(sceneCaption);

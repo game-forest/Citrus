@@ -38,22 +38,22 @@ namespace Tangerine.Common.Operations
 				return false;
 			}
 			var markerContainerAnimation = container.Animations.FirstOrDefault(i => i.Id == MarkerContainerAnimationId);
-		    if (markerContainerAnimation == null) {
-		        return false;
-		    }
-		    var markersToPaste = markerContainerAnimation.Markers
-			    .Select(i => i.Clone())
-			    .OrderBy(i => i.Frame)
-			    .ToList();
-		    if (markersToPaste.Count == 0) {
-			    return true;
-		    }
-		    pasteAtFrame ??= markersToPaste[0].Frame;
+			if (markerContainerAnimation == null) {
+				return false;
+			}
+			var markersToPaste = markerContainerAnimation.Markers
+				.Select(i => i.Clone())
+				.OrderBy(i => i.Frame)
+				.ToList();
+			if (markersToPaste.Count == 0) {
+				return true;
+			}
+			pasteAtFrame ??= markersToPaste[0].Frame;
 			var range = markersToPaste[^1].Frame - markersToPaste[0].Frame + 1;
 			if (expandAnimation) {
-			    ShiftMarkersAndKeyframes(animation, pasteAtFrame.Value, range);
-		    }
-		    var d = pasteAtFrame.Value - markersToPaste[0].Frame;
+				ShiftMarkersAndKeyframes(animation, pasteAtFrame.Value, range);
+			}
+			var d = pasteAtFrame.Value - markersToPaste[0].Frame;
 			// Firstly insert all non-Jump markers in order to correctly resolve Jump markers dependencies.
 			// It doesn't fix a case when Jump marker jumps to Jump marker because
 			// it doesn't make any sense and will clutter the code.

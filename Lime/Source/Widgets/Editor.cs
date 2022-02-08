@@ -22,8 +22,8 @@ namespace Lime
 		public bool OverwriteMode { get; private set; }
 		public bool ProcessInput { get; set; } = true;
 		public bool Enabled => DisplayWidget.GloballyEnabled &&
-		                       FocusableWidget.GloballyEnabled &&
-		                       ClickableWidget.GloballyEnabled;
+							   FocusableWidget.GloballyEnabled &&
+							   ClickableWidget.GloballyEnabled;
 
 		public ICaretPosition CaretPos { get; } = new CaretPosition();
 		public ICaretPosition SelectionStart { get; } = new CaretPosition();
@@ -39,8 +39,12 @@ namespace Lime
 
 		public UndoHistory<UndoItem> History = new UndoHistory<UndoItem>();
 
-		public Editor(Widget displayWidget, IEditorParams editorParams, Widget focusableWidget = null, Widget clickableWidget = null)
-		{
+		public Editor(
+			Widget displayWidget,
+			IEditorParams editorParams,
+			Widget focusableWidget = null,
+			Widget clickableWidget = null
+		) {
 			DisplayWidget = displayWidget;
 			FocusableWidget = focusableWidget ?? displayWidget;
 			ClickableWidget = clickableWidget ?? displayWidget;
@@ -76,7 +80,8 @@ namespace Lime
 			displayWidget.Tasks.Add(HandleInputTask(), this);
 		}
 
-		public static class Cmds {
+		public static class Cmds
+		{
 #if MAC
 			private const Modifiers WordModifier = Modifiers.Alt;
 #else
@@ -119,7 +124,7 @@ namespace Lime
 			public static ICommand ContextMenu = new Command(Key.Menu);
 		}
 
-		bool IsTextReadable => !EditorParams.UseSecureString && !EditorParams.PasswordChar.HasValue;
+		private bool IsTextReadable => !EditorParams.UseSecureString && !EditorParams.PasswordChar.HasValue;
 		private int TextLength => EditorParams.UseSecureString ? Password.Length : Text.Text.Length;
 
 		private struct LastChar
@@ -137,7 +142,7 @@ namespace Lime
 		private static string Unsecure(SecureString s)
 		{
 			if (s.Length == 0) {
-				return "";
+				return string.Empty;
 			}
 			var bstr = Marshal.SecureStringToBSTR(s);
 			try {
@@ -188,29 +193,41 @@ namespace Lime
 			return height;
 		}
 
-		static readonly List<ICommand> consumingCommands =
+		private static readonly List<ICommand> consumingCommands =
 			Command.Editing.Union(
-			Key.Enumerate().Where(k => k.IsPrintable() || k.IsTextEditing()).Select(i => new Command(i)).Union(
-			Key.Enumerate().Where(k => k.IsPrintable()).Select(i => new Command(new Shortcut(Modifiers.Shift, i)))).Union(
-			new [] {
-				Cmds.MoveCharPrev, Cmds.MoveCharNext,
-				Cmds.MoveWordPrev, Cmds.MoveWordNext,
-				Cmds.MoveLineStart, Cmds.MoveLineEnd,
-				Cmds.SelectCharPrev, Cmds.SelectCharNext,
-				Cmds.SelectWordPrev, Cmds.SelectWordNext,
-				Cmds.SelectLineStart, Cmds.SelectLineEnd,
-				Cmds.SelectCurrentWord,
-				Cmds.DeleteWordPrev, Cmds.DeleteWordNext,
-				Cmds.Submit, Cmds.Cancel,
-				Cmds.BackSpace, Cmds.ToggleOverwrite,
-				Cmds.ContextMenu,
-		})).ToList();
+				Key.Enumerate().Where(
+					k => k.IsPrintable() || k.IsTextEditing()
+				).Select(i => new Command(i))
+				.Union(
+					Key.Enumerate().Where(
+						k => k.IsPrintable()
+					).Select(i => new Command(new Shortcut(Modifiers.Shift, i)))
+				).Union(
+					new[] {
+						Cmds.MoveCharPrev, Cmds.MoveCharNext,
+						Cmds.MoveWordPrev, Cmds.MoveWordNext,
+						Cmds.MoveLineStart, Cmds.MoveLineEnd,
+						Cmds.SelectCharPrev, Cmds.SelectCharNext,
+						Cmds.SelectWordPrev, Cmds.SelectWordNext,
+						Cmds.SelectLineStart, Cmds.SelectLineEnd,
+						Cmds.SelectCurrentWord,
+						Cmds.DeleteWordPrev, Cmds.DeleteWordNext,
+						Cmds.Submit, Cmds.Cancel,
+						Cmds.BackSpace, Cmds.ToggleOverwrite,
+						Cmds.ContextMenu,
+					}
+				)
+			).ToList();
 
 		private bool IsMultiline() => EditorParams.IsAcceptableLines(2);
 
-		public bool HasSelection() =>
-			SelectionStart.IsVisible && SelectionStart.IsValid && SelectionEnd.IsValid &&
-			SelectionStart.TextPos != SelectionEnd.TextPos;
+		public bool HasSelection()
+		{
+			return SelectionStart.IsVisible
+				&& SelectionStart.IsValid
+				&& SelectionEnd.IsValid
+				&& SelectionStart.TextPos != SelectionEnd.TextPos;
+		}
 
 		private void EnsureSelection()
 		{
@@ -322,11 +339,13 @@ namespace Lime
 			public int Length;
 		}
 
-		private SelectionRange GetSelectionRange() =>
-			new SelectionRange {
+		private SelectionRange GetSelectionRange()
+		{
+			return new SelectionRange {
 				Start = Math.Min(SelectionStart.TextPos, SelectionEnd.TextPos),
-				Length = Math.Abs(SelectionStart.TextPos - SelectionEnd.TextPos)
+				Length = Math.Abs(SelectionStart.TextPos - SelectionEnd.TextPos),
 			};
+		}
 
 		private void DeleteSelection()
 		{
@@ -336,7 +355,7 @@ namespace Lime
 
 		private void SelectWord()
 		{
-			if (Text.Text == "") {
+			if (Text.Text == string.Empty) {
 				return;
 			}
 			EnsureSelection();
@@ -551,8 +570,13 @@ namespace Lime
 				return;
 			}
 			s.ScrollTo(
-				s.PositionToView(s.ProjectToScrollAxis(CaretPos.WorldPos),
-				DisplayWidget.Padding.Left, DisplayWidget.Padding.Right), instantly: true);
+				s.PositionToView(
+					s.ProjectToScrollAxis(CaretPos.WorldPos),
+					DisplayWidget.Padding.Left,
+					DisplayWidget.Padding.Right
+				),
+				instantly: true
+			);
 		}
 
 		private IEnumerator<object> HandleInputTask()
@@ -562,7 +586,9 @@ namespace Lime
 			var rightClickGesture = new ClickGesture(1);
 			var clickGesture = new ClickGesture();
 			var doubleClickGesture = new DoubleClickGesture();
-			var dragGesture = new DragGesture(0, DragDirection.Any, dragThreshold: EditorParams.MouseSelectionThreshold);
+			var dragGesture = new DragGesture(
+				0, DragDirection.Any, dragThreshold: EditorParams.MouseSelectionThreshold
+			);
 			ClickableWidget.Gestures.Add(rightClickGesture);
 			ClickableWidget.Gestures.Add(clickGesture);
 			ClickableWidget.Gestures.Add(doubleClickGesture);

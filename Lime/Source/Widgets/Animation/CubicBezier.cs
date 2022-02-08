@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 // Code source: https://chromium.googlesource.com/chromium/src/+/master/ui/gfx/geometry/cubic_bezier.cc
-
 namespace Lime
 {
 	public class CubicBezier
 	{
-		const double Epsilon = 1e-7;
+		private const double Epsilon = 1e-7;
 
 		private double ax;
 		private double bx;

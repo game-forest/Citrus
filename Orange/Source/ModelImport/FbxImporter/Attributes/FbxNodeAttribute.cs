@@ -16,8 +16,8 @@ namespace Orange.FbxImporter
 		{
 			None,
 			Mesh,
-			Camera
-		};
+			Camera,
+		}
 
 		public static FbxNodeAttribute GetFromNode(IntPtr ptr)
 		{
@@ -30,7 +30,9 @@ namespace Orange.FbxImporter
 					var meshAttribute = new FbxMeshAttribute(attribute);
 					var count = FbxNodeGetAttributeCount(ptr);
 					for (var i = 1; i < count; i++) {
-						meshAttribute = FbxMeshAttribute.Combine(meshAttribute, new FbxMeshAttribute(FbxNodeGetAttribute(ptr, i)));
+						meshAttribute = FbxMeshAttribute.Combine(
+							meshAttribute, new FbxMeshAttribute(FbxNodeGetAttribute(ptr, i))
+						);
 					}
 					return meshAttribute;
 				case FbxNodeType.Camera:
@@ -40,8 +42,6 @@ namespace Orange.FbxImporter
 			}
 		}
 
-		#region Pinvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern FbxNodeType FbxNodeGetAttributeType(IntPtr node, int idx = 0);
 
@@ -50,7 +50,5 @@ namespace Orange.FbxImporter
 
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern int FbxNodeGetAttributeCount(IntPtr node);
-
-		#endregion
 	}
 }

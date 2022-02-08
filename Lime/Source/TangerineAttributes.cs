@@ -105,7 +105,9 @@ namespace Lime
 		public bool Check(object obj)
 		{
 			if (checker == null) {
-				var fn = obj.GetType().GetMethod(Method, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				var fn = obj.GetType().GetMethod(
+					Method, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
+				);
 				if (fn == null) {
 					throw new System.Exception("Couldn't find method " + Method);
 				}
@@ -134,7 +136,7 @@ namespace Lime
 
 		public TangerineGroupAttribute(string name)
 		{
-			Name = name ?? String.Empty;
+			Name = name ?? string.Empty;
 		}
 	}
 
@@ -182,17 +184,17 @@ namespace Lime
 		private readonly object[] parameters = new object[1];
 
 		public TangerineFilePropertyAttribute(
-			string[] allowedFileTypes, string ValueToStringMethodName = null, string StringToValueMethodName = null
+			string[] allowedFileTypes, string valueToStringMethodName = null, string stringToValueMethodName = null
 		) {
 			AllowedFileTypes = allowedFileTypes;
-			stringToValueMethodName = StringToValueMethodName;
-			valueToStringMethodName = ValueToStringMethodName;
+			this.stringToValueMethodName = stringToValueMethodName;
+			this.valueToStringMethodName = valueToStringMethodName;
 		}
 
 		public T StringToValueConverter<T>(Type type, string s)
 		{
 			if (string.IsNullOrEmpty(stringToValueMethodName)) {
-				return (T)(object)(s ?? "");
+				return (T)(object)(s ?? string.Empty);
 			} else {
 				parameters[0] = s;
 				stringToValueMethod ??= type.GetMethod(stringToValueMethodName);
@@ -203,7 +205,7 @@ namespace Lime
 		public string ValueToStringConverter<T>(Type type, T v)
 		{
 			if (string.IsNullOrEmpty(valueToStringMethodName)) {
-				return (string)(object)(v == null ? (T)(object)"" : v);
+				return (string)(object)(v == null ? (T)(object)string.Empty : v);
 			} else {
 				parameters[0] = v;
 				valueToStringMethod ??= type.GetMethod(valueToStringMethodName);
@@ -287,7 +289,7 @@ namespace Lime
 				var texture = getTextureMethods[index].Invoke(owner, new object[0]) as ITexture;
 				return Validate(texture, value, out message);
 			}
-			message = "";
+			message = string.Empty;
 			return ValidationResult.Ok;
 		}
 	}
@@ -304,11 +306,12 @@ namespace Lime
 				var imageSize = texture.ImageSize;
 				var accuracy = Mathf.ZeroTolerance;
 				if (Math.Abs(imageSize.Height - size.Y) > accuracy || Math.Abs(imageSize.Width - size.X) > accuracy) {
-					message = $"The size is different from the size of the original image ({imageSize.Width}x{imageSize.Height})";
+					message = $"The size is different from the size of the " +
+						$"original image ({imageSize.Width}x{imageSize.Height})";
 					return ValidationResult.Info;
 				}
 			}
-			message = "";
+			message = string.Empty;
 			return ValidationResult.Ok;
 		}
 	}
@@ -327,11 +330,12 @@ namespace Lime
 				var originalAspectRatio = (float)imageSize.Width / (float)imageSize.Height;
 				var currentAspectRatio = size.X / size.Y;
 				if (Math.Abs(currentAspectRatio - originalAspectRatio) > accuracy) {
-					message = $"Aspect ratio ({currentAspectRatio}) is different from the aspect ratio of the original image ({originalAspectRatio})";
+					message = $"Aspect ratio ({currentAspectRatio}) is different from " +
+						$"the aspect ratio of the original image ({originalAspectRatio})";
 					return ValidationResult.Info;
 				}
 			}
-			message = "";
+			message = string.Empty;
 			return ValidationResult.Ok;
 		}
 	}
@@ -393,10 +397,17 @@ namespace Lime
 	{
 		public override ValidationResult IsValid(object owner, object value, out string message)
 		{
-			var res = value is ITexture texture && (texture.IsStubTexture ||
-			                                        !(texture.TextureParams.WrapModeU == TextureWrapMode.Clamp ||
-			                                          texture.TextureParams.WrapModeV == TextureWrapMode.Clamp));
-			message = res ? null : $"Texture of TiledImage should have WrapMode set to either Repeat or MirroredRepeat.";
+			var res = value is ITexture texture
+				&& (
+					texture.IsStubTexture
+					|| !(
+						texture.TextureParams.WrapModeU == TextureWrapMode.Clamp
+						|| texture.TextureParams.WrapModeV == TextureWrapMode.Clamp
+					)
+				);
+			message = res
+				? null
+				: $"Texture of TiledImage should have WrapMode set to either Repeat or MirroredRepeat.";
 			return res ? ValidationResult.Ok : ValidationResult.Warning;
 		}
 	}
@@ -404,25 +415,25 @@ namespace Lime
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 	public class TangerinePropertyDefaultValueAttribute : Attribute
 	{
-		private readonly Type Type;
-		private readonly string Method;
+		private readonly Type type;
+		private readonly string method;
 
 		private Func<object> getDefaultValue;
 
 		public TangerinePropertyDefaultValueAttribute(Type type, string method)
 		{
-			Type = type;
-			Method = method;
+			this.type = type;
+			this.method = method;
 		}
 
 		public object GetValue()
 		{
 			if (getDefaultValue == null) {
-				var fn = Type.GetMethod(Method);
+				var fn = type.GetMethod(method);
 				if (fn == null) {
 					throw new System.Exception();
 				}
-				getDefaultValue = () => fn.Invoke(Type,null);
+				getDefaultValue = () => fn.Invoke(type, null);
 			}
 			return getDefaultValue();
 		}
@@ -496,20 +507,23 @@ namespace Lime
 			Abbreviation = abbreviation;
 		}
 
-		public TangerineIconGenerationAttribute(string commonColor, string secondaryColor, int priority = 0) : base(priority)
+		public TangerineIconGenerationAttribute(
+			string commonColor, string secondaryColor, int priority = 0
+		) : base(priority)
 		{
 			CommonColor = Color4.Parse(commonColor);
 			SecondaryColor = Color4.Parse(secondaryColor);
 		}
 
-		public TangerineIconGenerationAttribute(string abbreviation, string commonColor, string secondaryColor, int priority = 0) : base(priority)
+		public TangerineIconGenerationAttribute(
+			string abbreviation, string commonColor, string secondaryColor, int priority = 0
+		) : base(priority)
 		{
 			Abbreviation = abbreviation;
 			CommonColor = Color4.Parse(commonColor);
 			SecondaryColor = Color4.Parse(secondaryColor);
 		}
 	}
-
 
 	/// <summary>
 	/// '/' Separated path to either component or node create command in menu.
@@ -564,5 +578,4 @@ namespace Lime
 			return idGetter(obj);
 		}
 	}
-
 }

@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -51,7 +49,7 @@ namespace SharpFont
 		/// to the right of the drawing direction of a contour must be filled.
 		/// </summary>
 		FillRight = TrueType,
-		
+
 		/// <summary>
 		/// This is identical to <see cref="PostScript"/>, but is used to remember that in PostScript, everything that
 		/// is to the left of the drawing direction of a contour must be filled.
@@ -61,6 +59,6 @@ namespace SharpFont
 		/// <summary>
 		/// The orientation cannot be determined. That is, different parts of the glyph have different orientation.
 		/// </summary>
-		None
+		None,
 	}
 }

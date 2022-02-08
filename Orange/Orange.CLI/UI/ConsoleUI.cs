@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Orange.Source;
-using System.Linq;
 
 namespace Orange
 {
@@ -61,8 +61,9 @@ namespace Orange
 			}
 		}
 
-		void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
-		{
+		private void CurrentDomain_FirstChanceException(
+			object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e
+		) {
 			if (e.Exception is TerminateException te) {
 				System.Environment.Exit(te.Code);
 			}
@@ -99,7 +100,8 @@ namespace Orange
 #if MAC
 				$" --disable-filesystem-watcher" +
 #endif // MAC
-				$" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> --testscript:<testscript.txt>\"]"
+				$" [{Actions.ConsoleCommandPassArguments}:\"--statfile:<statistics.tsv> " +
+				$"--testscript:<testscript.txt>\"]"
 			);
 			var commands = The.MenuController.GetVisibleAndSortedItems();
 			if (commands.Count > 0) {
@@ -177,11 +179,11 @@ namespace Orange
 		{
 			var specifiedTarget = Toolbox.GetCommandLineArg("--target");
 			if (specifiedTarget == null) {
-	#if MAC
+#if MAC
 				specifiedTarget = "Mac";
-	#else
+#else
 				specifiedTarget = "Win";
-	#endif
+#endif
 			}
 			foreach (var target in The.Workspace.Targets) {
 				if (string.Equals(specifiedTarget, target.Name, StringComparison.OrdinalIgnoreCase)) {
@@ -189,7 +191,9 @@ namespace Orange
 				}
 			}
 			var validTargetsText = string.Join(", ", The.Workspace.Targets.Select(t => $"\"{t.Name}\""));
-			throw new System.ArgumentException($"target with name \"{specifiedTarget}\" not found. Valid targets are: {validTargetsText}", "--target");
+			throw new System.ArgumentException(
+				$"target with name \"{specifiedTarget}\" not found. Valid targets are: {validTargetsText}", "--target"
+			);
 		}
 
 		public override void SetActiveTarget(Target target)

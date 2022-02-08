@@ -116,8 +116,8 @@ namespace Tangerine.UI
 			this.panel = panel;
 			RootWidget = new Widget {
 				Layout = new VBoxLayout {
-					Spacing = 6
-				}
+					Spacing = 6,
+				},
 			};
 			panel.ContentWidget.AddNode(RootWidget);
 			RootWidget.AddNode(CreateTextView());
@@ -126,7 +126,7 @@ namespace Tangerine.UI
 		private Widget CreateTextView()
 		{
 			textView = new ThemedTextView {
-				SquashDuplicateLines = true
+				SquashDuplicateLines = true,
 			};
 			textWriter = new TextViewWriter(textView) {
 				SystemOut = System.Console.Out,
@@ -155,7 +155,7 @@ namespace Tangerine.UI
 				new Command("Clear", () => {
 					textView.Clear();
 				}),
-				Command.Copy
+				Command.Copy,
 			};
 			textView.Gestures.Add(
 				new ClickGesture(0, () => {
@@ -180,7 +180,9 @@ namespace Tangerine.UI
 					}
 				}
 				if (textView.Content.Nodes.Count > TextViewWriter.MaxMessages) {
-					textView.Content.Nodes.RemoveRange(0, textView.Content.Nodes.Count - TextViewWriter.MaxMessages / 2);
+					textView.Content.Nodes.RemoveRange(
+						0, textView.Content.Nodes.Count - TextViewWriter.MaxMessages / 2
+					);
 				}
 				textWriter.ProcessPendingMessages();
 				yield return null;

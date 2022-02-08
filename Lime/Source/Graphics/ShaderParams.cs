@@ -5,7 +5,8 @@ namespace Lime
 {
 	public class ShaderParams
 	{
-		private static Dictionary<ShaderParamSortingKeyInfo, int> orderKeyLookup = new Dictionary<ShaderParamSortingKeyInfo, int>();
+		private static Dictionary<ShaderParamSortingKeyInfo, int> orderKeyLookup =
+			new Dictionary<ShaderParamSortingKeyInfo, int>();
 
 		internal int Count => Items.Count;
 		internal List<int> SortingKeys = new List<int>();

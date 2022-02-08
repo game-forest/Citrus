@@ -27,17 +27,19 @@ namespace Orange
 				return new BitmapInfo {
 					Width = bitmap.Width,
 					Height = bitmap.Height,
-					HasAlpha = bitmap.HasAlpha
+					HasAlpha = bitmap.HasAlpha,
 				};
 			}
 
 			public static BitmapInfo FromFile(AssetBundle bundle, string path)
 			{
-				if (TextureConverterUtils.GetPngFileInfo(bundle, path, out var width, out var height, out var hasAlpha)) {
+				if (
+					TextureConverterUtils.GetPngFileInfo(bundle, path, out var width, out var height, out var hasAlpha)
+				) {
 					return new BitmapInfo {
 						Width = width,
 						Height = height,
-						HasAlpha = hasAlpha
+						HasAlpha = hasAlpha,
 					};
 				}
 				Debug.Write($"Failed to read image info {path}");
@@ -77,16 +79,23 @@ namespace Orange
 			return ShouldDownscaleHelper(platform, textureInfo.Width, textureInfo.Height, rules);
 		}
 
-		public static void DownscaleTextureInfo(TargetPlatform platform, BitmapInfo textureInfo, string path, CookingRules rules)
-		{
-			DownscaleTextureHelper(platform, textureInfo.Width, textureInfo.Height, path, rules, out int newWidth, out int newHeight);
+		public static void DownscaleTextureInfo(
+			TargetPlatform platform, BitmapInfo textureInfo, string path, CookingRules rules
+		) {
+			DownscaleTextureHelper(
+				platform, textureInfo.Width, textureInfo.Height, path, rules, out int newWidth, out int newHeight
+			);
 			textureInfo.Height = newHeight;
 			textureInfo.Width = newWidth;
 		}
 
 		public static void DownscaleTextureToFitAtlas(ref Bitmap bitmap, string path, int maxAtlasSize)
 		{
-			if (DownscaleTextureToFitAtlasHelper(bitmap.Width, bitmap.Height, path, maxAtlasSize, out int newWidth, out int newHeight)) {
+			if (
+				DownscaleTextureToFitAtlasHelper(
+					bitmap.Width, bitmap.Height, path, maxAtlasSize, out int newWidth, out int newHeight
+				)
+			) {
 				var scaledBitmap = bitmap.Rescale(newWidth, newHeight);
 				bitmap.Dispose();
 				bitmap = scaledBitmap;
@@ -95,7 +104,11 @@ namespace Orange
 
 		public static void DownscaleTextureToFitAtlas(BitmapInfo textureInfo, string path, int maxAtlasSize)
 		{
-			if (DownscaleTextureToFitAtlasHelper(textureInfo.Width, textureInfo.Height, path, maxAtlasSize, out int newWidth, out int newHeight)) {
+			if (
+				DownscaleTextureToFitAtlasHelper(
+					textureInfo.Width, textureInfo.Height, path, maxAtlasSize, out int newWidth, out int newHeight
+				)
+			) {
 				textureInfo.Width = newWidth;
 				textureInfo.Height = newHeight;
 			}
@@ -103,7 +116,9 @@ namespace Orange
 
 		public static Bitmap DownscaleTexture(TargetPlatform platform, Bitmap texture, string path, CookingRules rules)
 		{
-			DownscaleTextureHelper(platform, texture.Width, texture.Height, path, rules, out int newWidth, out int newHeight);
+			DownscaleTextureHelper(
+				platform, texture.Width, texture.Height, path, rules, out int newWidth, out int newHeight
+			);
 			return texture.Rescale(newWidth, newHeight);
 		}
 
@@ -125,8 +140,9 @@ namespace Orange
 			texture = newTexture;
 		}
 
-		private static bool DownscaleTextureToFitAtlasHelper(int width, int height, string path, int maxAtlasSize, out int newWidth, out int newHeight)
-		{
+		private static bool DownscaleTextureToFitAtlasHelper(
+			int width, int height, string path, int maxAtlasSize, out int newWidth, out int newHeight
+		) {
 			var maxWidth = maxAtlasSize;
 			var maxHeight = maxAtlasSize;
 			if (width <= maxWidth && height <= maxHeight) {
@@ -136,28 +152,40 @@ namespace Orange
 			}
 			newWidth = Math.Min(width, maxWidth);
 			newHeight = Math.Min(height, maxHeight);
-			Console.WriteLine($"WARNING: '{path}' downscaled: {width}x{height} => {newWidth}x{newHeight} to fit atlas.");
+			Console.WriteLine(
+				$"WARNING: '{path}' downscaled: {width}x{height} => {newWidth}x{newHeight} to fit atlas."
+			);
 			return true;
 		}
 
-		private static void DownscaleTextureHelper(TargetPlatform platform, int width, int height, string path, CookingRules rules, out int newWidth, out int newHeight)
-		{
-			int MaxSize = rules.MaxAtlasSize;
+		private static void DownscaleTextureHelper(
+			TargetPlatform platform,
+			int width,
+			int height,
+			string path,
+			CookingRules rules,
+			out int newWidth,
+			out int newHeight
+		) {
+			int maxSize = rules.MaxAtlasSize;
 			int scaleThreshold = platform == TargetPlatform.Android ? 32 : 256;
 			var ratio = rules.TextureScaleFactor;
-			if (width > MaxSize || height > MaxSize) {
+			if (width > maxSize || height > maxSize) {
 				var max = (float)Math.Max(width, height);
-				ratio *= MaxSize / max;
+				ratio *= maxSize / max;
 			}
 			newWidth = width;
 			newHeight = height;
 			if (width > scaleThreshold) {
-				newWidth = Math.Min((width * ratio).Round(), MaxSize);
+				newWidth = Math.Min((width * ratio).Round(), maxSize);
 			}
 			if (height > scaleThreshold) {
-				newHeight = Math.Min((height * ratio).Round(), MaxSize);
+				newHeight = Math.Min((height * ratio).Round(), maxSize);
 			}
-			Console.WriteLine("{0} downscaled: {1}x{2} => {3}x{4}, scale factor: {5}", path, width, height, newWidth, newHeight, rules.TextureScaleFactor);
+			Console.WriteLine(
+				$"{path} downscaled: {width}x{height} => {newWidth}x{newHeight}, " +
+				$"scale factor: {rules.TextureScaleFactor}"
+			);
 		}
 
 		private static bool ShouldDownscaleHelper(TargetPlatform platform, int width, int height, CookingRules rules)

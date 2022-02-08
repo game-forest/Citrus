@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Lime
 {
-	class Sdl2
+	internal class Sdl2
 	{
 		[Flags]
 		public enum SystemFlags : uint
@@ -22,7 +22,7 @@ namespace Lime
 			GAMECONTROLLER = 0x00002000,
 			NOPARACHUTE = 0x00100000,
 			EVERYTHING = TIMER | AUDIO | VIDEO |
-				JOYSTICK | HAPTIC | GAMECONTROLLER
+				JOYSTICK | HAPTIC | GAMECONTROLLER,
 		}
 
 		public enum ContextAttribute
@@ -49,18 +49,20 @@ namespace Lime
 			CONTEXT_EGL,
 			CONTEXT_FLAGS,
 			CONTEXT_PROFILE_MASK,
-			SHARE_WITH_CURRENT_CONTEXT
+			SHARE_WITH_CURRENT_CONTEXT,
 		}
 
-		const string lib = "SDL2.dll";
+		private const string Lib = "SDL2.dll";
 
 		// Fix me, Kostya
-		//[SuppressUnmanagedCodeSecurity]
-		[DllImport(lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_Init", ExactSpelling = true)]
+		// [SuppressUnmanagedCodeSecurity]
+		[DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_Init", ExactSpelling = true)]
 		public static extern int Init(SystemFlags flags);
 
-		//[SuppressUnmanagedCodeSecurity]
-		[DllImport(lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GL_SetAttribute", ExactSpelling = true)]
+		// [SuppressUnmanagedCodeSecurity]
+		[DllImport(
+			Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GL_SetAttribute", ExactSpelling = true
+		)]
 		public static extern int SetAttribute(ContextAttribute attr, int value);
 	}
 }

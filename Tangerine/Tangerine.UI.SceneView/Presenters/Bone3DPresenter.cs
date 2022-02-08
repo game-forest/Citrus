@@ -1,13 +1,17 @@
-using Lime;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
-	class Bone3DPresenter : SyncCustomPresenter<Node3D>
+	internal class Bone3DPresenter : SyncCustomPresenter<Node3D>
 	{
 		private readonly VisualHint bone3DHint =
-			VisualHintsRegistry.Instance.Register("/All/Nodes/Bones/Bone3D", SceneViewCommands.ShowBone3DVisualHint, VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+			VisualHintsRegistry.Instance.Register(
+				"/All/Nodes/Bones/Bone3D",
+				SceneViewCommands.ShowBone3DVisualHint,
+				VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		public Bone3DPresenter(SceneView sceneView)
 		{
@@ -33,9 +37,14 @@ namespace Tangerine.UI.SceneView
 					foreach (var bone in sm.Bones) {
 						Renderer.Flush();
 						var sv = SceneView.Instance;
-						var viewportToSceneFrame = GetCurrentViewport3D().LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
-						var a = (Vector2)GetCurrentViewport3D().WorldToViewportPoint(bone.GlobalTransform.Translation) * viewportToSceneFrame;
-						var b = (Vector2)GetCurrentViewport3D().WorldToViewportPoint((bone.Parent as Node3D).GlobalTransform.Translation) * viewportToSceneFrame;
+						var viewportToSceneFrame = GetCurrentViewport3D().LocalToWorldTransform
+							* sv.CalcTransitionFromSceneSpace(sv.Frame);
+						var a = (Vector2)GetCurrentViewport3D().WorldToViewportPoint(bone.GlobalTransform.Translation)
+							* viewportToSceneFrame;
+						var b = (Vector2)GetCurrentViewport3D()
+								.WorldToViewportPoint((bone.Parent as Node3D)
+								.GlobalTransform.Translation)
+							* viewportToSceneFrame;
 						Renderer.DrawRound(a, 3, 10, Color4.Green);
 						Renderer.DrawRound(b, 3, 10, Color4.Green);
 						Renderer.DrawLine(a, b, Color4.Yellow);

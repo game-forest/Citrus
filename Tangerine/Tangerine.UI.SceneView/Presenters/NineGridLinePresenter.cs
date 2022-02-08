@@ -45,35 +45,35 @@ namespace Tangerine.UI.SceneView
 			Tuple.Create(5, 2),
 			Tuple.Create(7, 1),
 			Tuple.Create(1, 6),
-			Tuple.Create(2, 8)
+			Tuple.Create(2, 8),
 		};
 		private static readonly string[] propertyNames = {
 			nameof(NineGrid.LeftOffset),
 			nameof(NineGrid.TopOffset),
 			nameof(NineGrid.RightOffset),
-			nameof(NineGrid.BottomOffset)
+			nameof(NineGrid.BottomOffset),
 		};
 		private static readonly Func<NineGrid, float>[] propertyGetters = {
 			g => g.LeftOffset,
 			g => g.TopOffset,
 			g => g.RightOffset,
-			g => g.BottomOffset
+			g => g.BottomOffset,
 		};
 		private static readonly Func<NineGrid, float>[] textureSizeGetters = {
 			g => g.Texture.ImageSize.Width,
-			g => g.Texture.ImageSize.Height
+			g => g.Texture.ImageSize.Height,
 		};
 		private static readonly Func<NineGrid, float>[] nineGridSizeGetters = {
 			g => g.Size.X,
-			g => g.Size.Y
+			g => g.Size.Y,
 		};
 		private static readonly Func<NineGrid, float>[] nineGridScaleGetters = {
 			g => g.Scale.X,
-			g => g.Scale.Y
+			g => g.Scale.Y,
 		};
 		private static readonly Vector2[] directions = {
 			new Vector2(1, 0), new Vector2(0, 1),
-			new Vector2(-1, 0), new Vector2(0, -1)
+			new Vector2(-1, 0), new Vector2(0, -1),
 		};
 
 		public NineGridLine(int index, NineGrid nineGrid)
@@ -86,8 +86,15 @@ namespace Tangerine.UI.SceneView
 
 		private void CalcGeometry(Matrix32 matrix, out Vector2 a, out Vector2 b)
 		{
-			NineGrid.BuildLayout(parts, (Vector2)Owner.Texture.ImageSize, Owner.LeftOffset,
-				Owner.RightOffset, Owner.TopOffset, Owner.BottomOffset, Owner.Size);
+			NineGrid.BuildLayout(
+				layout: parts,
+				textureSize: (Vector2)Owner.Texture.ImageSize,
+				leftOffset: Owner.LeftOffset,
+				rightOffset: Owner.RightOffset,
+				topOffset: Owner.TopOffset,
+				bottomOffset: Owner.BottomOffset,
+				size: Owner.Size
+			);
 			a = matrix.TransformVector(parts[IndexA].Rect.A);
 			b = matrix.TransformVector(parts[IndexB].Rect.B);
 		}

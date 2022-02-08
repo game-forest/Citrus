@@ -6,7 +6,7 @@ namespace Tangerine.UI.Timeline
 {
 	public class CurveEditorVerticalZoomProcessor : Core.ITaskProvider
 	{
-		readonly CurveEditorPane curveEditor;
+		private readonly CurveEditorPane curveEditor;
 
 		public CurveEditorVerticalZoomProcessor(CurveEditorPane curveEditor) { this.curveEditor = curveEditor; }
 
@@ -28,7 +28,7 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		void ZoomCurveEditor(bool zoomIn)
+		private void ZoomCurveEditor(bool zoomIn)
 		{
 			var d = curveEditor.MaxValue - curveEditor.MinValue;
 			if (d < 0.1f && zoomIn || d > 100000 && !zoomIn) {

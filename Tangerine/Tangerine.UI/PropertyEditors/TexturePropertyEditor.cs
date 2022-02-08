@@ -2,7 +2,9 @@ using Lime;
 
 namespace Tangerine.UI
 {
-	public class TexturePropertyEditor<T> : FilePropertyEditor<T> where T: ITexture
+	public class TexturePropertyEditor<T>
+		: FilePropertyEditor<T>
+		where T : ITexture
 	{
 		public TexturePropertyEditor(IPropertyEditorParams editorParams) : base(editorParams, new string[] { "png" })
 		{ }
@@ -14,7 +16,7 @@ namespace Tangerine.UI
 
 		protected override string ValueToStringConverter(T obj)
 		{
-			return (obj as SerializableTexture)?.SerializationPath ?? "";
+			return (obj as SerializableTexture)?.SerializationPath ?? string.Empty;
 		}
 
 		protected override T StringToValueConverter(string path)

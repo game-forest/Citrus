@@ -72,14 +72,14 @@ namespace Tangerine.Core
 
 		public RulerLine Clone()
 		{
-			return (RulerLine) this.MemberwiseClone();
+			return (RulerLine)this.MemberwiseClone();
 		}
 	}
 
 	public enum RulerOrientation
 	{
 		Horizontal,
-		Vertical
+		Vertical,
 	}
 
 	public static class RulerOrientationExtensions

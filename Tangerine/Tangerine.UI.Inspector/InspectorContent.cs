@@ -1,13 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
-using System.Collections;
-using System.Collections.ObjectModel;
 using Tangerine.UI.PropertyEditors;
 
 namespace Tangerine.UI.Inspector
@@ -78,7 +78,6 @@ namespace Tangerine.UI.Inspector
 							}
 						}
 						maxCount = Math.Max(nodeComponents.Count, maxCount);
-
 					}
 					for (int i = 0; i < maxCount; i++) {
 						// Column slice
@@ -150,7 +149,7 @@ namespace Tangerine.UI.Inspector
 				var expandButton = new ThemedExpandButton {
 					MinMaxSize = Vector2.One * 20f,
 					LayoutCell = new LayoutCell(Alignment.LeftCenter),
-					Expanded = storedExpansionValue
+					Expanded = storedExpansionValue,
 				};
 				expandButton.Clicked = () => {
 					widget.Visible = expandButton.Expanded = !expandButton.Expanded;
@@ -193,7 +192,7 @@ namespace Tangerine.UI.Inspector
 					new PropertyEditorParams(marker, nameof(Marker.BezierEasing)) {
 						ShowLabel = false,
 						History = History,
-						PropertySetter = SetProperty
+						PropertySetter = SetProperty,
 					}
 				);
 				rootWidget.Nodes.Add(editor.ContainerWidget);
@@ -428,9 +427,9 @@ namespace Tangerine.UI.Inspector
 								foreach (var component in objects) {
 									method.Invoke(component, null);
 								}
-							}
-						}
-					}
+							},
+						},
+					},
 				};
 				buttonWidget.Components.Add(new WidgetElementComponent());
 				yield return buttonWidget;
@@ -454,9 +453,10 @@ namespace Tangerine.UI.Inspector
 			}
 			if (objects.Any(obj =>
 				obj is IPropertyLocker propertyLocker &&
-				propertyLocker.IsPropertyLocked(property.Name,
-					(obj is Node node && !string.IsNullOrEmpty(node.ContentsPath)) ||
-					(obj is NodeComponent component && !string.IsNullOrEmpty(component.Owner?.ContentsPath))
+				propertyLocker.IsPropertyLocked(
+					propertyName: property.Name,
+					isExternal: (obj is Node node && !string.IsNullOrEmpty(node.ContentsPath))
+					|| (obj is NodeComponent component && !string.IsNullOrEmpty(component.Owner?.ContentsPath))
 				)
 			)) {
 				return false;
@@ -543,7 +543,7 @@ namespace Tangerine.UI.Inspector
 			var editor = Activator.CreateInstance(
 				specializedEditorType,
 				param,
-				(Func<PropertyEditorParams, Widget>) OnAdd
+				(Func<PropertyEditorParams, Widget>)OnAdd
 			);
 			return (IPropertyEditor)editor;
 		}
@@ -634,7 +634,7 @@ namespace Tangerine.UI.Inspector
 					var tooltipText = ClassAttributes<TangerineTooltipAttribute>.Get(type, true)?.Text;
 					var menuPath = ClassAttributes<TangerineMenuPathAttribute>.Get(type, true)?.Path;
 					ICommand command = new Command(CamelCaseToLabel(type.Name), () => CreateComponent(type, nodes)) {
-						TooltipText = tooltipText
+						TooltipText = tooltipText,
 					};
 					if (menuPath != null) {
 						menu.InsertCommandAlongPath(command, menuPath);
@@ -646,7 +646,8 @@ namespace Tangerine.UI.Inspector
 				NodeComponent CreateComponentFromClipboard() {
 					var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(Clipboard.Text));
 					try {
-						return InternalPersistence.Instance.ReadFromStream<NodeComponent>(Document.Current.Path, stream);
+						return InternalPersistence.Instance
+							.ReadFromStream<NodeComponent>(Document.Current.Path, stream);
 					} catch {
 						return null;
 					}
@@ -694,7 +695,7 @@ namespace Tangerine.UI.Inspector
 				Nodes = {
 					new ThemedAddButton {
 						Clicked = () => CreateAddComponentsMenu(validateClipboard: true).Popup(),
-						Enabled = componentTypes.Count > 0
+						Enabled = componentTypes.Count > 0,
 					},
 					new IconRedChannelToColorButton("Universal.ZoomIn", 20 * Vector2.One, Thickness.Zero) {
 						DefaultColor = ColorTheme.Current.IsDark ?
@@ -710,15 +711,15 @@ namespace Tangerine.UI.Inspector
 							}
 							CreateLookupForAddComponent.Invoke();
 						},
-						Enabled = componentTypes.Count > 0
+						Enabled = componentTypes.Count > 0,
 					},
 					new ThemedSimpleText {
 						Text = "Add Component",
 						Padding = new Thickness(4, 0),
 						VAlignment = VAlignment.Center,
 						ForceUncutText = false,
-					}
-				}
+					},
+				},
 			};
 			label.CompoundPresenter.Add(
 				new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground)
@@ -782,7 +783,7 @@ namespace Tangerine.UI.Inspector
 					}
 					menu.Add(new Command("Remove", () => RemoveComponents(components)));
 					menu.Popup();
-				}
+				},
 			});
 			return label;
 		}
@@ -804,8 +805,8 @@ namespace Tangerine.UI.Inspector
 						Padding = new Thickness(4, 0),
 						VAlignment = VAlignment.Center,
 						ForceUncutText = false,
-					}
-				}
+					},
+				},
 			};
 			label.CompoundPresenter.Add(new WidgetFlatFillPresenter(color));
 			if (tooltipText != null) {
@@ -826,7 +827,7 @@ namespace Tangerine.UI.Inspector
 						Padding = new Thickness(12, 0),
 						VAlignment = VAlignment.Center,
 						ForceUncutText = false,
-					}
+					},
 				},
 			};
 			header.CompoundPresenter.Add(
@@ -876,7 +877,9 @@ namespace Tangerine.UI.Inspector
 				};
 				keyframeButton.Clicked += editor.PropertyLabel.SetFocus;
 				editor.LabelContainer.Nodes.Insert(index++, keyframeButton);
-				editor.ContainerWidget.Tasks.Add(new KeyframeButtonBinding(editor.EditorParams, keyframeButton, editor));
+				editor.ContainerWidget.Tasks.Add(
+					new KeyframeButtonBinding(editor.EditorParams, keyframeButton, editor)
+				);
 				if (editor.EditorParams.IsAnimableWithEasing) {
 					editor.LabelContainer.Nodes.Insert(index++, Spacer.HSpacer(2));
 					var easingButton = new EasingButton {
@@ -892,7 +895,7 @@ namespace Tangerine.UI.Inspector
 				ColorTheme.Current.Inspector.StripeBackground1 :
 				ColorTheme.Current.Inspector.StripeBackground2
 			) {
-				IgnorePadding = true
+				IgnorePadding = true,
 			});
 			editor.ContainerWidget.Components.Add(
 				new DocumentationComponent(
@@ -1002,7 +1005,6 @@ namespace Tangerine.UI.Inspector
 		{
 			public ContainerElementComponent()
 			{
-
 			}
 		}
 	}

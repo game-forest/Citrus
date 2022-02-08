@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,8 +33,6 @@ namespace SharpFont
 	/// </summary>
 	public static partial class FT
 	{
-		#region Computations
-
 		/// <summary><para>
 		/// A very simple function used to perform the computation ‘(a*b)/c’ with maximal accuracy (it uses a 64-bit
 		/// intermediate integer whenever necessary).
@@ -191,10 +187,6 @@ namespace SharpFont
 			return Fixed16Dot16.FromRawValue((int)FT.FT_Angle_Diff((IntPtr)angle1.Value, (IntPtr)angle2.Value));
 		}
 
-		#endregion
-
-		#region Mac Specific Interface
-
 		/// <summary>
 		/// Return an FSSpec for the disk file containing the named font.
 		/// </summary>
@@ -203,16 +195,18 @@ namespace SharpFont
 		/// <returns>FSSpec to the file. For passing to <see cref="Library.NewFaceFromFSSpec"/>.</returns>
 		public static IntPtr GetFileFromMacName(string fontName, out int faceIndex)
 		{
-			if (!IsMacOS)
+			if (!IsMacOS) {
 				throw new InvalidOperationException(
 					$"{nameof(GetFileFromMacName)} can only be called on macOS.");
+			}
 
 			IntPtr fsspec;
 
 			Error err = FT_GetFile_From_Mac_Name(fontName, out fsspec, out faceIndex);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return fsspec;
 		}
@@ -225,16 +219,18 @@ namespace SharpFont
 		/// <returns>FSSpec to the file. For passing to <see cref="Library.NewFaceFromFSSpec"/>.</returns>
 		public static IntPtr GetFileFromMacAtsName(string fontName, out int faceIndex)
 		{
-			if (!IsMacOS)
+			if (!IsMacOS) {
 				throw new InvalidOperationException(
 					$"{nameof(GetFileFromMacAtsName)} can only be called on macOS.");
+			}
 
 			IntPtr fsspec;
 
 			Error err = FT_GetFile_From_Mac_ATS_Name(fontName, out fsspec, out faceIndex);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return fsspec;
 		}
@@ -250,23 +246,22 @@ namespace SharpFont
 		/// <returns>Index of the face. For passing to <see cref="Library.NewFace"/>.</returns>
 		public static unsafe int GetFilePathFromMacAtsName(string fontName, byte[] path)
 		{
-			if (!IsMacOS)
+			if (!IsMacOS) {
 				throw new InvalidOperationException(
 					$"{nameof(GetFilePathFromMacAtsName)} can only be called on macOS.");
+			}
 
 			int faceIndex;
 
-			fixed (void* ptr = path)
-			{
+			fixed (void* ptr = path) {
 				Error err = FT_GetFilePath_From_Mac_ATS_Name(fontName, (IntPtr)ptr, path.Length, out faceIndex);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 			}
 
 			return faceIndex;
 		}
-
-		#endregion
 	}
 }

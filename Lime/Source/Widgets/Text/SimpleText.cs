@@ -1,6 +1,6 @@
-using Lime.SignedDistanceField;
 using System;
 using System.Collections.Generic;
+using Lime.SignedDistanceField;
 using Yuzu;
 
 namespace Lime
@@ -68,7 +68,7 @@ namespace Lime
 		[TangerineKeyframeColor(30)]
 		public override string Text
 		{
-			get { return text ?? ""; }
+			get { return text ?? string.Empty; }
 			set
 			{
 				if (value != text) {
@@ -82,7 +82,10 @@ namespace Lime
 		{
 			get
 			{
-				if (displayText != null) return displayText;
+				if (displayText != null) {
+					return displayText;
+				}
+
 				if (Localizable) {
 					if (localizeArguments != null) {
 						displayText = Text.Localize(localizeArguments);
@@ -224,16 +227,36 @@ namespace Lime
 
 		internal bool AutoMaxSize { get; set; }
 
-		public TextRenderingMode RenderMode{ get; set; }
+		public TextRenderingMode RenderMode { get; set; }
 
-		public override Vector2 EffectiveMinSize =>
-			Vector2.Max(MeasuredMinSize, (ForceUncutText || AutoMinSize) ? Vector2.Max(MinSize, MeasureUncutText() + Padding) : MinSize);
+		public override Vector2 EffectiveMinSize
+		{
+			get
+			{
+				return Vector2.Max(
+					MeasuredMinSize,
+					(ForceUncutText || AutoMinSize)
+						? Vector2.Max(MinSize, MeasureUncutText() + Padding)
+						: MinSize
+				);
+			}
+		}
 
-		public override Vector2 EffectiveMaxSize =>
-			Vector2.Max(
-				EffectiveMinSize,
-				Vector2.Min(MeasuredMaxSize, (ForceUncutText || AutoMaxSize) ? Vector2.Min(MaxSize, MeasureUncutText() + Padding) : MaxSize)
-			);
+		public override Vector2 EffectiveMaxSize
+		{
+			get
+			{
+				return Vector2.Max(
+					EffectiveMinSize,
+					Vector2.Min(
+						MeasuredMaxSize,
+						(ForceUncutText || AutoMaxSize)
+							? Vector2.Min(MaxSize, MeasureUncutText() + Padding)
+							: MaxSize
+					)
+				);
+			}
+		}
 
 		public bool TrimWhitespaces { get; set; }
 
@@ -252,7 +275,7 @@ namespace Lime
 			ForceUncutText = true;
 			Localizable = true;
 			TrimWhitespaces = true;
-			Text = "";
+			Text = string.Empty;
 			RenderMode = TextRenderingMode.TwoPasses;
 		}
 
@@ -380,7 +403,7 @@ namespace Lime
 			var spacingKoeff = Spacing / FontHeight;
 			while (maxH - minH > 1) {
 				var rect = RenderHelper(null, dummyCaret);
-				var fit = (rect.Width <= ContentWidth && rect.Height <= ContentHeight);
+				var fit = rect.Width <= ContentWidth && rect.Height <= ContentHeight;
 				if (fit) {
 					minH = FontHeight;
 					bestHeight = Mathf.Max(bestHeight, FontHeight);
@@ -402,7 +425,7 @@ namespace Lime
 			}
 			var pos = new Vector2(0, Padding.Top + CalcVerticalTextPosition(lines));
 			caret.StartSync();
-			if (String.IsNullOrEmpty(DisplayText)) {
+			if (string.IsNullOrEmpty(DisplayText)) {
 				pos.X = CalcXByAlignment(lineWidth: 0);
 				caret.EmptyText(pos);
 				return Rectangle.Empty;
@@ -418,8 +441,18 @@ namespace Lime
 				pos.X = CalcXByAlignment(lineWidth);
 				if (spriteList != null) {
 					Renderer.DrawTextLine(
-						Font, pos, line, Color4.White, FontHeight, 0, line.Length,
-						font.Spacing + letterSpacing, spriteList, caret.Sync, -1);
+						font: Font,
+						position: pos,
+						text: line,
+						color: Color4.White,
+						fontHeight: FontHeight,
+						start: 0,
+						length: line.Length,
+						letterSpacing: font.Spacing + letterSpacing,
+						list: spriteList,
+						onDrawChar: caret.Sync,
+						tag: -1
+					);
 				}
 				var lineRect = new Rectangle(pos.X, pos.Y, pos.X + lineWidth, pos.Y + FontHeight);
 				if (lastLine) {
@@ -494,7 +527,11 @@ namespace Lime
 				}
 				// Trying to split long lines. If a line can't be split it gets clipped.
 				while (MeasureTextLine(strings[i]).X > Math.Abs(ContentWidth)) {
-					if (!TextLineSplitter.CarryLastWordToNextLine(strings, i, WordSplitAllowed, IsTextLinePartFitToWidth)) {
+					if (
+						!TextLineSplitter.CarryLastWordToNextLine(
+							strings, i, WordSplitAllowed, IsTextLinePartFitToWidth
+						)
+					) {
 						if (OverflowMode == TextOverflowMode.Ellipsis) {
 							strings[i] = ClipLineWithEllipsis(strings[i]);
 						}

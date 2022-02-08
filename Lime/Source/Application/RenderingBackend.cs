@@ -9,6 +9,6 @@ namespace Lime
 	{
 		OpenGL,
 		ES20,
-		Vulkan
+		Vulkan,
 	}
 }

@@ -30,56 +30,62 @@ namespace Lime
 
 	public partial class ParticleEmitter : Widget
 	{
-		struct MagnetData
+		private struct MagnetData
 		{
 			public ParticlesMagnet Magnet;
 			public Matrix32 PrecalcTransitionMatrix;
 			public Matrix32 PrecalcInvTransitionMatrix;
 		}
 
-		const int MaxMagnets = 20;
-		int numMagnets;
-		static MagnetData[] magnets = new MagnetData[MaxMagnets];
+		private const int MaxMagnets = 20;
+		private int numMagnets;
+		private static MagnetData[] magnets = new MagnetData[MaxMagnets];
 
-		void EnumerateMagnets()
+		private void EnumerateMagnets()
 		{
 			numMagnets = 0;
-			if (Parent == null)
+			if (Parent == null) {
 				return;
+			}
+
 			foreach (Node node in Parent.Nodes) {
 				ParticlesMagnet magnet = node as ParticlesMagnet;
 				if (magnet != null) {
-					if (numMagnets >= MaxMagnets)
+					if (numMagnets >= MaxMagnets) {
 						break;
+					}
+
 					Matrix32 transform = magnet.CalcLocalToParentTransform();
 					Widget linkageWidget = GetLinkageWidget();
 					if (linkageWidget != null) {
 						for (Node n = Parent; n != linkageWidget; n = n.Parent) {
-							if (n.AsWidget != null)
+							if (n.AsWidget != null) {
 								transform *= n.AsWidget.CalcLocalToParentTransform();
+							}
 						}
 					}
 					magnets[numMagnets++] = new MagnetData {
 						Magnet = magnet,
 						PrecalcTransitionMatrix = transform.CalcInversed(),
-						PrecalcInvTransitionMatrix = transform
+						PrecalcInvTransitionMatrix = transform,
 					};
 				}
 			}
 		}
 
-		void ApplyMagnetsToParticle(Particle p, float delta)
+		private void ApplyMagnetsToParticle(Particle p, float delta)
 		{
-			for (int i = 0; i < numMagnets; i++)
+			for (int i = 0; i < numMagnets; i++) {
 				ApplyMagnetToParticle(p, magnets[i], delta);
+			}
 		}
 
-		void ApplyMagnetToParticle(Particle p, MagnetData magnetData, float delta)
+		private void ApplyMagnetToParticle(Particle p, MagnetData magnetData, float delta)
 		{
 			ParticlesMagnet magnet = magnetData.Magnet;
 			Vector2 targetPosition = p.RegularPosition;
 			targetPosition = magnetData.PrecalcTransitionMatrix.TransformVector(targetPosition);
-			switch(magnet.Shape) {
+			switch (magnet.Shape) {
 			case EmitterShape.Area:
 				// Looking for point of magnet's edge, in the direction of particle is moving.
 				if (targetPosition.X > 0 && targetPosition.X < magnet.Size.X &&
@@ -89,15 +95,16 @@ namespace Lime
 					float d1 = targetPosition.Y;
 					float d2 = magnet.Size.X - targetPosition.X;
 					float d3 = magnet.Size.Y - targetPosition.Y;
-					if (d0 < d1 && d0 < d2 && d0 < d3)
-						targetPosition.X = 0;
-					else if (d1 < d0 && d1 < d2 && d1 < d3)
-						targetPosition.Y = 0;
-					else if (d2 < d0 && d2 < d1 && d2 < d3)
-						targetPosition.X = magnet.Size.X;
-					else
-						targetPosition.Y = magnet.Size.Y;
-				} else {
+					if (d0 < d1 && d0 < d2 && d0 < d3) {
+							targetPosition.X = 0;
+						} else if (d1 < d0 && d1 < d2 && d1 < d3) {
+							targetPosition.Y = 0;
+						} else if (d2 < d0 && d2 < d1 && d2 < d3) {
+							targetPosition.X = magnet.Size.X;
+						} else {
+							targetPosition.Y = magnet.Size.Y;
+						}
+					} else {
 					targetPosition.X = Mathf.Clamp(targetPosition.X, 0, magnet.Size.X);
 					targetPosition.Y = Mathf.Clamp(targetPosition.Y, 0, magnet.Size.Y);
 				}
@@ -112,16 +119,19 @@ namespace Lime
 					targetPosition *= magnet.Size.X * 0.5f;
 					targetPosition.Y /= k;
 					targetPosition += center;
-				} else
+				} else {
 					targetPosition = 0.5f * magnet.Size;
+				}
 				break;
 			case EmitterShape.Line:
 				targetPosition.Y = 0.5f * magnet.Size.Y;
-				if (targetPosition.X < 0.0f)
-					targetPosition.X = 0.0f;
-				else if (targetPosition.X > magnet.Size.X)
-					targetPosition.X = magnet.Size.X;
-				break;
+				if (targetPosition.X < 0.0f) {
+						targetPosition.X = 0.0f;
+					} else if (targetPosition.X > magnet.Size.X) {
+						targetPosition.X = magnet.Size.X;
+					}
+
+					break;
 			case EmitterShape.Point:
 				targetPosition = 0.5f * magnet.Size;
 				break;

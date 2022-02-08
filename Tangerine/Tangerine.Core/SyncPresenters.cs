@@ -33,7 +33,8 @@ namespace Tangerine.Core
 		public virtual IPresenter Clone() { return (SyncCustomPresenter)MemberwiseClone(); }
 	}
 
-	public class SyncCustomPresenter<T> : SyncCustomPresenter where T : Node
+	public class SyncCustomPresenter<T> : SyncCustomPresenter
+		where T : Node
 	{
 		public override sealed void Render(Node node)
 		{
@@ -49,11 +50,12 @@ namespace Tangerine.Core
 		protected virtual bool InternalPartialHitTest(T node, ref HitTestArgs args) => false;
 	}
 
-	public class SyncDelegatePresenter<T> : SyncCustomPresenter where T : Node
+	public class SyncDelegatePresenter<T> : SyncCustomPresenter
+		where T : Node
 	{
 		public delegate bool HitTestDelegate(T node, ref HitTestArgs args);
-		readonly Action<T> render;
-		readonly HitTestDelegate hitTest;
+		private readonly Action<T> render;
+		private readonly HitTestDelegate hitTest;
 
 		public SyncDelegatePresenter(Action<T> render)
 		{

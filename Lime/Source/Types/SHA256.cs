@@ -46,7 +46,7 @@ namespace Lime
 				var result = new SHA256();
 				if (
 					!sha256.Value.TryComputeHash(
-						buffer, new Span<byte>((byte*) &result, sizeof(SHA256)), out var written
+						buffer, new Span<byte>((byte*)&result, sizeof(SHA256)), out var written
 					) || written != sizeof(SHA256)
 				) {
 					throw new InvalidOperationException();
@@ -59,7 +59,8 @@ namespace Lime
 			}
 		}
 
-		public static unsafe SHA256 Compute<T>(T[] source, int start, int length) where T: unmanaged
+		public static unsafe SHA256 Compute<T>(T[] source, int start, int length)
+			where T : unmanaged
 		{
 			var result = new SHA256();
 			if (!sha256.Value.TryComputeHash(
@@ -73,7 +74,8 @@ namespace Lime
 			return result;
 		}
 
-		public static unsafe SHA256 Compute<T>(params T[] source) where T: unmanaged
+		public static unsafe SHA256 Compute<T>(params T[] source)
+			where T : unmanaged
 		{
 			var result = new SHA256();
 			if (!sha256.Value.TryComputeHash(
@@ -119,8 +121,8 @@ namespace Lime
 
 		public override string ToString()
 		{
-			var SHA256Span = MemoryMarshal.CreateSpan(ref this, 1);
-			var byteSpan = MemoryMarshal.Cast<SHA256, byte>(SHA256Span);
+			var sha256Span = MemoryMarshal.CreateSpan(ref this, 1);
+			var byteSpan = MemoryMarshal.Cast<SHA256, byte>(sha256Span);
 			StringBuilder hexString = new StringBuilder(byteSpan.Length * 2);
 			foreach (byte b in byteSpan) {
 				hexString.AppendFormat("{0:x2}", b);

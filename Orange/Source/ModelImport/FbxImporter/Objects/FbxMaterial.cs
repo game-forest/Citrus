@@ -1,6 +1,6 @@
-using Lime;
 using System;
 using System.Runtime.InteropServices;
+using Lime;
 
 namespace Orange.FbxImporter
 {
@@ -31,7 +31,10 @@ namespace Orange.FbxImporter
 				MaterialDescriptor = new FbxMaterialDescriptor { DiffuseColor = Color4.White };
 			} else {
 				var matPtr = FbxNodeSerializeMaterial(NativePtr);
-				if (matPtr == IntPtr.Zero) return;
+				if (matPtr == IntPtr.Zero) {
+					return;
+				}
+
 				var material = matPtr.ToStruct<Texture>();
 				MaterialDescriptor = new FbxMaterialDescriptor {
 					Path = material.TexturePath,
@@ -41,22 +44,15 @@ namespace Orange.FbxImporter
 					DiffuseColor = material.ColorDiffuse.ToStruct<Vec4>().ToLimeColor(),
 				};
 			}
-
 		}
-
-		#region Pinvokes
 
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxNodeSerializeMaterial(IntPtr node);
 
-		#endregion
-
-		#region MarshalingStructures
-
 		private enum TextureWrapMode
 		{
 			Clamp,
-			Repeat
+			Repeat,
 		}
 
 		[StructLayout(LayoutKind.Sequential, CharSet = ImportConfig.Charset)]
@@ -72,7 +68,5 @@ namespace Orange.FbxImporter
 
 			public IntPtr ColorDiffuse;
 		}
-
-		#endregion
 	}
 }

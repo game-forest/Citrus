@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Lime;
 using System.Text;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline
@@ -24,10 +24,10 @@ namespace Tangerine.UI.Timeline
 				if (p.Minimalistic) {
 				} else if (ic.GetArgs(out var a1, out var a2)) {
 					p.LinkIndicatorButtonContainer.GetOrAdd<ImageCombinerLinkIndicatorButton>().ShowNormal();
-					var p1 = (NodeTreeViewItemPresentation) TreeViewComponent
+					var p1 = (NodeTreeViewItemPresentation)TreeViewComponent
 						.GetTreeViewItem(Document.Current.GetSceneItemForObject(a1)).Presentation;
 					p1.LinkIndicatorButtonContainer.GetOrAdd<ImageCombinerLinkIndicatorButton>();
-					var p2 = (NodeTreeViewItemPresentation) TreeViewComponent
+					var p2 = (NodeTreeViewItemPresentation)TreeViewComponent
 						.GetTreeViewItem(Document.Current.GetSceneItemForObject(a2)).Presentation;
 					p2.LinkIndicatorButtonContainer.GetOrAdd<ImageCombinerLinkIndicatorButton>();
 				} else {
@@ -99,7 +99,7 @@ namespace Tangerine.UI.Timeline
 		{
 			foreach (var node in bone.Parent.Nodes) {
 				if (node is DistortionMesh mesh) {
-					if (mesh.Nodes.Any(n => IsBoneBound(bone, ((DistortionMeshPoint) n).SkinningWeights))) {
+					if (mesh.Nodes.Any(n => IsBoneBound(bone, ((DistortionMeshPoint)n).SkinningWeights))) {
 						yield return mesh;
 					}
 				} else if (node is Animesh animesh) {
@@ -139,7 +139,7 @@ namespace Tangerine.UI.Timeline
 				foreach (var n in node.Parent.Nodes) {
 					if (n is Bone bone) {
 						foreach (var p in mesh.Nodes) {
-							if (IsBoneBound(bone, ((DistortionMeshPoint) p).SkinningWeights)) {
+							if (IsBoneBound(bone, ((DistortionMeshPoint)p).SkinningWeights)) {
 								yield return bone;
 								break;
 							}
@@ -185,10 +185,14 @@ namespace Tangerine.UI.Timeline
 				}
 				if (p.Node is SplineGear sg1) {
 					if (sg1.Spline != null) {
-						p.LinkIndicatorButtonContainer.GetOrAdd<SplineGearLinkIndicatorButton>().AddLinkedNode(sg1.Spline);
+						p.LinkIndicatorButtonContainer
+							.GetOrAdd<SplineGearLinkIndicatorButton>()
+							.AddLinkedNode(sg1.Spline);
 					}
 					if (sg1.Widget != null) {
-						p.LinkIndicatorButtonContainer.GetOrAdd<SplineGearLinkIndicatorButton>().AddLinkedNode(sg1.Widget);
+						p.LinkIndicatorButtonContainer
+							.GetOrAdd<SplineGearLinkIndicatorButton>()
+							.AddLinkedNode(sg1.Widget);
 					}
 				} else {
 					foreach (var sibling in p.Node.Parent.Nodes) {
@@ -220,10 +224,14 @@ namespace Tangerine.UI.Timeline
 				}
 				if (p.Node is SplineGear3D sg1) {
 					if (sg1.Spline != null) {
-						p.LinkIndicatorButtonContainer.GetOrAdd<SplineGear3DLinkIndicatorButton>().AddLinkedNode(sg1.Spline);
+						p.LinkIndicatorButtonContainer
+							.GetOrAdd<SplineGear3DLinkIndicatorButton>()
+							.AddLinkedNode(sg1.Spline);
 					}
 					if (sg1.Node != null) {
-						p.LinkIndicatorButtonContainer.GetOrAdd<SplineGear3DLinkIndicatorButton>().AddLinkedNode(sg1.Node);
+						p.LinkIndicatorButtonContainer
+							.GetOrAdd<SplineGear3DLinkIndicatorButton>()
+							.AddLinkedNode(sg1.Node);
 					}
 				} else {
 					foreach (var sibling in p.Node.Parent.Nodes) {

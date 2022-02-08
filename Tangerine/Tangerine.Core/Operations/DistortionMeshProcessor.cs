@@ -34,7 +34,7 @@ namespace Tangerine.Core.Operations
 						Id = $"{i};{j}",
 						Color = Color4.White,
 						UV = pos,
-						Position = pos
+						Position = pos,
 					};
 					LinkSceneItem.Perform(
 						Document.Current.GetSceneItemForObject(mesh),

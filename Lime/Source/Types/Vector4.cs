@@ -86,7 +86,7 @@ namespace Lime
 		/// <summary>
 		/// Gets or sets the vector component by its index.
 		/// </summary>
-		public float this [int component]
+		public float this[int component]
 		{
 			get
 			{

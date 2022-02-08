@@ -14,8 +14,7 @@ namespace Tangerine.UI.SceneView
 					!SceneView.Instance.InputArea.IsFocused() &&
 					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() &&
 					!Docking.WindowDragBehaviour.IsActive &&
-					!(Widget.Focused is CommonEditBox))
-				{
+					!(Widget.Focused is CommonEditBox)) {
 					var ww = SceneView.Instance.InputArea.GetRoot() as WindowWidget;
 					ww.Window.Activate();
 					SceneView.Instance.InputArea.SetFocus();
@@ -28,7 +27,10 @@ namespace Tangerine.UI.SceneView
 		{
 			var borderWidth = (window.DecoratedSize.X - window.ClientSize.X) * 0.5f;
 			var titleBarHeight = window.DecoratedSize.Y - window.ClientSize.Y - borderWidth * 2f;
-			return new Rectangle(new Vector2(-borderWidth, -titleBarHeight - borderWidth), window.ClientSize + new Vector2(borderWidth));
+			return new Rectangle(
+				new Vector2(-borderWidth, -titleBarHeight - borderWidth),
+				window.ClientSize + new Vector2(borderWidth)
+			);
 		}
 	}
 }

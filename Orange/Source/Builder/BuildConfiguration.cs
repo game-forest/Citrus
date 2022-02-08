@@ -8,6 +8,6 @@ namespace Orange
 	public static class BuildConfiguration
 	{
 		public const string Release = "Release";
-		public const string Debug   = "Debug";
+		public const string Debug = "Debug";
 	}
 }

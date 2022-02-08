@@ -9,7 +9,8 @@ namespace Lime
 	[YuzuSpecializeWith(typeof(Lime.Camera3D))]
 	[YuzuSpecializeWith(typeof(Lime.Spline))]
 	[YuzuSpecializeWith(typeof(Lime.Widget))]
-	public class NodeReference<T> where T: Node
+	public class NodeReference<T>
+		where T : Node
 	{
 		private string id;
 		private Node cachedRoot;

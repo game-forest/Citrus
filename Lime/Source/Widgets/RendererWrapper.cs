@@ -6,7 +6,8 @@ namespace Lime
 {
 	public abstract class RendererWrapper
 	{
-		private static ThreadLocal<RendererWrapper> current = new ThreadLocal<RendererWrapper>(() => ImmediateRendererWrapper.Instance);
+		private static ThreadLocal<RendererWrapper> current =
+			new ThreadLocal<RendererWrapper>(() => ImmediateRendererWrapper.Instance);
 
 		public static RendererWrapper Current
 		{
@@ -34,10 +35,41 @@ namespace Lime
 		public abstract void MultiplyTransform1(Matrix32 transform);
 		public abstract void MultiplyTransform2(Matrix32 transform);
 		public abstract void DrawRectOutline(Vector2 a, Vector2 b, Color4 color, float thickness = 1);
-		public abstract void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1);
-		public abstract void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1);
-		public abstract void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2);
-		public abstract void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2);
+		public abstract void DrawSprite(
+			ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1
+		);
+		public abstract void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0,
+			Vector2 uv1
+		);
+		public abstract void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		);
+		public abstract void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		);
 
 		public abstract void DrawCircle(Vector2 center, float radius, int numSegments, Color4 color);
 
@@ -46,7 +78,9 @@ namespace Lime
 			DrawCircle(new Vector2(x, y), radius, numSegments, color);
 		}
 
-		public abstract void DrawRound(Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor);
+		public abstract void DrawRound(
+			Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor
+		);
 
 		public void DrawRound(Vector2 center, float radius, int numSegments, Color4 color)
 		{
@@ -57,7 +91,7 @@ namespace Lime
 		{
 			DrawRound(new Vector2(x, y), radius, numSegments, color, color);
 		}
-		
+
 		public void DrawTriangleFan(Vertex[] vertices, int numVertices)
 		{
 			DrawTriangleFan(null, null, vertices, numVertices);
@@ -68,7 +102,9 @@ namespace Lime
 			DrawTriangleFan(texture1, null, vertices, numVertices);
 		}
 
-		public abstract void DrawTriangleFan(ITexture texture1, ITexture texture2, Vertex[] vertices, int numVertices);
+		public abstract void DrawTriangleFan(
+			ITexture texture1, ITexture texture2, Vertex[] vertices, int numVertices
+		);
 
 		public void DrawRect(float x0, float y0, float x1, float y1, Color4 color)
 		{
@@ -87,21 +123,34 @@ namespace Lime
 			DrawTextLine(FontPool.Instance[null], position, text, fontHeight, color, letterSpacing);
 		}
 
-		public void DrawTextLine(IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing)
-		{
+		public void DrawTextLine(
+			IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing
+		) {
 			DrawTextLine(font, position, text, color, fontHeight, 0, text.Length, letterSpacing);
 		}
 
-		public abstract void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing);
+		public abstract void DrawTextLine(
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing
+		);
 		public abstract void DrawRenderChain(RenderChain renderChain);
 		public abstract void DrawRenderObjects(RenderObjectList renderObjects);
 
-		public void DrawLine(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
-		{
+		public void DrawLine(
+			float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt
+		) {
 			DrawLine(new Vector2(x0, y0), new Vector2(x1, y1), color, thickness, cap);
 		}
 
-		public abstract void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt);
+		public abstract void DrawLine(
+			Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt
+		);
 
 		public abstract void DrawDashedLine(Vector2 a, Vector2 b, Color4 color, Vector2 dashSize);
 
@@ -130,8 +179,14 @@ namespace Lime
 		public abstract void PopRenderTarget();
 		public abstract void Callback(Action callback);
 
-		public void RenderToTexture(RenderChain renderChain, ITexture texture, float width, float height, Matrix32 viewMatrix, bool clearRenderTarget = true)
-		{
+		public void RenderToTexture(
+			RenderChain renderChain,
+			ITexture texture,
+			float width,
+			float height,
+			Matrix32 viewMatrix,
+			bool clearRenderTarget = true
+		) {
 			if (width > 0 && height > 0) {
 				PushRenderTarget(texture);
 				PushState(
@@ -160,13 +215,21 @@ namespace Lime
 			}
 		}
 
-		public void RenderToTexture(Widget widget, ITexture texture, RenderChain renderChain, bool clearRenderTarget = true)
-		{
+		public void RenderToTexture(
+			Widget widget, ITexture texture, RenderChain renderChain, bool clearRenderTarget = true
+		) {
 			try {
 				for (var node = widget.FirstChild; node != null; node = node.NextSibling) {
 					node.RenderChainBuilder?.AddToRenderChain(renderChain);
 				}
-				RenderToTexture(renderChain, texture, widget.Width, widget.Height, widget.LocalToWorldTransform.CalcInversed(), clearRenderTarget);
+				RenderToTexture(
+					renderChain,
+					texture,
+					widget.Width,
+					widget.Height,
+					widget.LocalToWorldTransform.CalcInversed(),
+					clearRenderTarget
+				);
 			} finally {
 				renderChain.Clear();
 			}
@@ -249,8 +312,9 @@ namespace Lime
 			Renderer.DrawCircle(center, radius, numSegments, color);
 		}
 
-		public override void DrawRound(Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor)
-		{
+		public override void DrawRound(
+			Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor
+		) {
 			Renderer.DrawRound(center, radius, numSegments, innerColor, outerColor);
 		}
 
@@ -259,23 +323,44 @@ namespace Lime
 			Renderer.DrawRectOutline(a, b, color, thickness);
 		}
 
-		public override void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)
-		{
+		public override void DrawSprite(
+			ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1
+		) {
 			Renderer.DrawSprite(texture1, color, position, size, uv0, uv1);
 		}
 
-		public override void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)
-		{
+		public override void DrawSprite(
+			ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1
+		) {
 			Renderer.DrawSprite(texture1, texture2, color, position, size, uv0, uv1);
 		}
 
-		public override void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)
-		{
+		public override void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		) {
 			Renderer.DrawSprite(texture1, texture2, color, position, size, uv0t1, uv1t1, uv0t2, uv1t2);
 		}
 
-		public override void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)
-		{
+		public override void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		) {
 			Renderer.DrawSprite(texture1, texture2, material, color, position, size, uv0t1, uv1t1, uv0t2, uv1t2);
 		}
 
@@ -289,13 +374,22 @@ namespace Lime
 			Renderer.DrawRect(a, b, color);
 		}
 
-		public override void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing)
-		{
+		public override void DrawTextLine(
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing
+		) {
 			Renderer.DrawTextLine(font, position, text, color, fontHeight, start, length, letterSpacing);
 		}
 
-		public override void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
-		{
+		public override void DrawLine(
+			Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt
+		) {
 			Renderer.DrawLine(a, b, color, thickness, cap);
 		}
 
@@ -356,7 +450,8 @@ namespace Lime
 
 		public override Blending Blending
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetBlendingCommand>();
 				cmd.Value = value;
 			}
@@ -364,7 +459,8 @@ namespace Lime
 
 		public override ShaderId Shader
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetShaderCommand>();
 				cmd.Value = value;
 			}
@@ -372,7 +468,8 @@ namespace Lime
 
 		public override Matrix32 Transform1
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetTransform1Command>();
 				cmd.Value = value;
 			}
@@ -380,7 +477,8 @@ namespace Lime
 
 		public override Matrix32 Transform2
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetTransform2Command>();
 				cmd.Value = value;
 			}
@@ -388,7 +486,8 @@ namespace Lime
 
 		public override ColorWriteMask ColorWriteEnabled
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetColorWriteEnabledCommand>();
 				cmd.Value = value;
 			}
@@ -396,7 +495,8 @@ namespace Lime
 
 		public override StencilState StencilState
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetStencilStateCommand>();
 				cmd.Value = value;
 			}
@@ -404,7 +504,8 @@ namespace Lime
 
 		public override Viewport Viewport
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetViewportCommand>();
 				cmd.Value = value;
 			}
@@ -412,7 +513,8 @@ namespace Lime
 
 		public override DepthState DepthState
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetDepthStateCommand>();
 				cmd.Value = value;
 			}
@@ -420,7 +522,8 @@ namespace Lime
 
 		public override ScissorState ScissorState
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetScissorStateCommand>();
 				cmd.Value = value;
 			}
@@ -428,7 +531,8 @@ namespace Lime
 
 		public override Matrix44 World
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetWorldCommand>();
 				cmd.Value = value;
 			}
@@ -436,7 +540,8 @@ namespace Lime
 
 		public override Matrix44 View
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetViewCommand>();
 				cmd.Value = value;
 			}
@@ -444,7 +549,8 @@ namespace Lime
 
 		public override Matrix44 Projection
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetProjectionCommand>();
 				cmd.Value = value;
 			}
@@ -452,7 +558,8 @@ namespace Lime
 
 		public override CullMode CullMode
 		{
-			set {
+			set
+			{
 				var cmd = AddCommand<SetCullModeCommand>();
 				cmd.Value = value;
 			}
@@ -494,8 +601,9 @@ namespace Lime
 			cmd.Color = color;
 		}
 
-		public override void DrawRound(Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor)
-		{
+		public override void DrawRound(
+			Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor
+		) {
 			var cmd = AddCommand<DrawRoundCommand>();
 			cmd.Center = center;
 			cmd.Radius = radius;
@@ -513,8 +621,9 @@ namespace Lime
 			cmd.Thickness = thickness;
 		}
 
-		public override void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)
-		{
+		public override void DrawSprite(
+			ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1
+		) {
 			var cmd = AddCommand<DrawSpriteCommand>();
 			cmd.Texture1 = texture1;
 			cmd.Texture2 = null;
@@ -528,8 +637,15 @@ namespace Lime
 			cmd.UV1T2 = uv1;
 		}
 
-		public override void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)
-		{
+		public override void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0,
+			Vector2 uv1
+		) {
 			var cmd = AddCommand<DrawSpriteCommand>();
 			cmd.Texture1 = texture1;
 			cmd.Texture2 = texture2;
@@ -543,8 +659,17 @@ namespace Lime
 			cmd.UV1T2 = uv1;
 		}
 
-		public override void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)
-		{
+		public override void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		) {
 			var cmd = AddCommand<DrawSpriteCommand>();
 			cmd.Texture1 = texture1;
 			cmd.Texture2 = texture2;
@@ -558,8 +683,18 @@ namespace Lime
 			cmd.UV1T2 = uv1t2;
 		}
 
-		public override void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)
-		{
+		public override void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		) {
 			var cmd = AddCommand<DrawSpriteCommand>();
 			cmd.Texture1 = texture1;
 			cmd.Texture2 = texture2;
@@ -589,8 +724,16 @@ namespace Lime
 			cmd.Color = color;
 		}
 
-		public override void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing)
-		{
+		public override void DrawTextLine(
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing
+		) {
 			var cmd = AddCommand<DrawTextLineCommand>();
 			cmd.Font = font;
 			cmd.Position = position;
@@ -602,8 +745,9 @@ namespace Lime
 			cmd.LetterSpacing = letterSpacing;
 		}
 
-		public override void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
-		{
+		public override void DrawLine(
+			Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt
+		) {
 			var cmd = AddCommand<DrawLineCommand>();
 			cmd.A = a;
 			cmd.B = b;
@@ -691,7 +835,8 @@ namespace Lime
 			}
 		}
 
-		private T AddCommand<T>() where T : Command, new()
+		private T AddCommand<T>()
+			where T : Command, new()
 		{
 			var cmd = AcquireCommand<T>();
 			commands.Add(cmd);
@@ -956,7 +1101,9 @@ namespace Lime
 			public override void Execute(RendererWrapper renderer)
 			{
 				if (Material != null) {
-					renderer.DrawSprite(Texture1, Texture2, Material, Color, Position, Size, UV0T1, UV1T1, UV0T2, UV1T2);
+					renderer.DrawSprite(
+						Texture1, Texture2, Material, Color, Position, Size, UV0T1, UV1T1, UV0T2, UV1T2
+					);
 				} else {
 					renderer.DrawSprite(Texture1, Texture2, Color, Position, Size, UV0T1, UV1T1, UV0T2, UV1T2);
 				}
@@ -1183,17 +1330,20 @@ namespace Lime
 			}
 		}
 
-		private static T AcquireCommand<T>() where T : Command, new()
+		private static T AcquireCommand<T>()
+			where T : Command, new()
 		{
 			return CommandPool<T>.Acquire();
 		}
 
-		private static void ReleaseCommand<T>(T command) where T : Command, new()
+		private static void ReleaseCommand<T>(T command)
+			where T : Command, new()
 		{
 			CommandPool<T>.Release(command);
 		}
 
-		private static class CommandPool<T> where T : Command, new()
+		private static class CommandPool<T>
+			where T : Command, new()
 		{
 			private static Stack<T> freeCommands = new Stack<T>();
 

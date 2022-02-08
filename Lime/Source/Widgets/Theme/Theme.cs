@@ -223,7 +223,6 @@ namespace Lime
 					AnimeshHoverColor = Color4.White,
 					AnimeshRemovalColor = Color4.Red.Lighten(0.2f),
 				};
-
 			}
 
 			public static ColorTheme CreateLightTheme()

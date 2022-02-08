@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -42,17 +40,11 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential)]
 	public struct SizeRequest : IEquatable<SizeRequest>
 	{
-		#region Fields
-
 		private SizeRequestType requestType;
 		private FT_Long width;
 		private FT_Long height;
 		private uint horiResolution;
 		private uint vertResolution;
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the type of request. See <see cref="SizeRequestType"/>.
@@ -103,8 +95,8 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Gets or sets the horizontal resolution. If set to zero, <see cref="Width"/> is treated as a 26.6 fractional pixel
-		/// value.
+		/// Gets or sets the horizontal resolution. If set to zero, <see cref="Width"/>
+		/// is treated as a 26.6 fractional pixel value.
 		/// </summary>
 		[CLSCompliant(false)]
 		public uint HorizontalResolution
@@ -121,8 +113,8 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Gets or sets the horizontal resolution. If set to zero, <see cref="Height"/> is treated as a 26.6 fractional pixel
-		/// value.
+		/// Gets or sets the horizontal resolution. If set to zero, <see cref="Height"/>
+		/// is treated as a 26.6 fractional pixel value.
 		/// </summary>
 		[CLSCompliant(false)]
 		public uint VerticalResolution
@@ -137,10 +129,6 @@ namespace SharpFont
 				vertResolution = value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Compares two <see cref="SizeRequest"/>s for equality.
@@ -185,10 +173,11 @@ namespace SharpFont
 		/// <returns>A value indicating equality.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is SizeRequest)
+			if (obj is SizeRequest) {
 				return this.Equals((SizeRequest)obj);
-			else
+			} else {
 				return false;
+			}
 		}
 
 		/// <summary>
@@ -197,9 +186,11 @@ namespace SharpFont
 		/// <returns>A unique hash code.</returns>
 		public override int GetHashCode()
 		{
-			return requestType.GetHashCode() ^ width.GetHashCode() ^ height.GetHashCode() ^ horiResolution.GetHashCode() ^ vertResolution.GetHashCode();
+			return requestType.GetHashCode()
+				^ width.GetHashCode()
+				^ height.GetHashCode()
+				^ horiResolution.GetHashCode()
+				^ vertResolution.GetHashCode();
 		}
-
-		#endregion
 	}
 }

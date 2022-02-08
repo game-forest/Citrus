@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -34,14 +32,8 @@ namespace SharpFont.Cache
 	/// </summary>
 	public class SBitCache
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private Manager parentManager;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SBitCache"/> class.
@@ -49,22 +41,20 @@ namespace SharpFont.Cache
 		/// <param name="manager">A handle to the source cache manager.</param>
 		public SBitCache(Manager manager)
 		{
-			if (manager == null)
+			if (manager == null) {
 				throw new ArgumentNullException("manager");
+			}
 
 			IntPtr cacheRef;
 			Error err = FT.FTC_SBitCache_New(manager.Reference, out cacheRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = cacheRef;
 			parentManager = manager;
 		}
-
-		#endregion
-
-		#region Properties
 
 		internal IntPtr Reference
 		{
@@ -78,10 +68,6 @@ namespace SharpFont.Cache
 				reference = value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Look up a given small glyph bitmap in a given sbit cache and ‘lock’ it to prevent its flushing from the
@@ -112,14 +98,16 @@ namespace SharpFont.Cache
 		[CLSCompliant(false)]
 		public SBit Lookup(ImageType type, uint gIndex, out Node node)
 		{
-			if (parentManager.IsDisposed)
+			if (parentManager.IsDisposed) {
 				throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+			}
 
 			IntPtr sbitRef, nodeRef;
 			Error err = FT.FTC_SBitCache_Lookup(Reference, type.Reference, gIndex, out sbitRef, out nodeRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			node = new Node(nodeRef);
 			return new SBit(sbitRef);
@@ -155,19 +143,21 @@ namespace SharpFont.Cache
 		[CLSCompliant(false)]
 		public SBit LookupScaler(Scaler scaler, LoadFlags loadFlags, uint gIndex, out Node node)
 		{
-			if (parentManager.IsDisposed)
+			if (parentManager.IsDisposed) {
 				throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+			}
 
 			IntPtr sbitRef, nodeRef;
-			Error err = FT.FTC_SBitCache_LookupScaler(Reference, scaler.Reference, loadFlags, gIndex, out sbitRef, out nodeRef);
+			Error err = FT.FTC_SBitCache_LookupScaler(
+				Reference, scaler.Reference, loadFlags, gIndex, out sbitRef, out nodeRef
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			node = new Node(nodeRef);
 			return new SBit(sbitRef);
 		}
-
-		#endregion
 	}
 }

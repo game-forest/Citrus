@@ -9,9 +9,9 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 	public class SectionItemWidget : Widget
 	{
 		private readonly ConflictInfo conflict;
-		
+
 		private Node cache;
-		
+
 		private Node Cache
 		{
 			get
@@ -102,6 +102,9 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			return caption;
 		}
 
-		private static string StylizeProperty(string text) => ThemedCaption.Stylize(text, TextStyleIdentifiers.PropertyColor);
+		private static string StylizeProperty(string text)
+		{
+			return ThemedCaption.Stylize(text, TextStyleIdentifiers.PropertyColor);
+		}
 	}
 }

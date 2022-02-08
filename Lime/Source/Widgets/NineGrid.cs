@@ -31,7 +31,7 @@ namespace Lime
 		{
 			public Rectangle Rect;
 			public Rectangle UV;
-		};
+		}
 
 		public NineGrid()
 		{
@@ -40,8 +40,15 @@ namespace Lime
 			Texture = new SerializableTexture();
 		}
 
-		public static void BuildLayout(Part[] layout, Vector2 textureSize, float leftOffset, float rightOffset, float topOffset, float bottomOffset, Vector2 size)
-		{
+		public static void BuildLayout(
+			Part[] layout,
+			Vector2 textureSize,
+			float leftOffset,
+			float rightOffset,
+			float topOffset,
+			float bottomOffset,
+			Vector2 size
+		) {
 			float leftPart = leftOffset * textureSize.X;
 			float topPart = topOffset * textureSize.Y;
 			float rightPart = rightOffset * textureSize.X;
@@ -136,18 +143,19 @@ namespace Lime
 
 		private Part[] parts;
 
-		internal protected override bool PartialHitTestByContents(ref HitTestArgs args)
+		protected internal override bool PartialHitTestByContents(ref HitTestArgs args)
 		{
 			parts = parts ?? new Part[9];
 			BuildLayout(parts, (Vector2)Texture.ImageSize, LeftOffset, RightOffset, TopOffset, BottomOffset, Size);
 			for (int i = 0; i < parts.Length; i++) {
-				if (PartHitTest(parts[i], args.Point))
+				if (PartHitTest(parts[i], args.Point)) {
 					return true;
+				}
 			}
 			return false;
 		}
 
-		bool PartHitTest(Part part, Vector2 point)
+		private bool PartHitTest(Part part, Vector2 point)
 		{
 			point = LocalToWorldTransform.CalcInversed().TransformVector(point);
 			if (part.Rect.BX < part.Rect.AX) {
@@ -160,7 +168,9 @@ namespace Lime
 				part.Rect.BY = -part.Rect.BY;
 				point.Y = -point.Y;
 			}
-			if (point.X >= part.Rect.AX && point.Y >= part.Rect.AY && point.X < part.Rect.BX && point.Y < part.Rect.BY) {
+			if (
+				point.X >= part.Rect.AX && point.Y >= part.Rect.AY && point.X < part.Rect.BX && point.Y < part.Rect.BY
+			) {
 				float uf = (point.X - part.Rect.AX) / part.Rect.Width * part.UV.Width + part.UV.AX;
 				float vf = (point.Y - part.Rect.AY) / part.Rect.Height * part.UV.Height + part.UV.AY;
 				int ui = (int)(Texture.ImageSize.Width * uf);

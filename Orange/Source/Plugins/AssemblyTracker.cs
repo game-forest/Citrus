@@ -55,7 +55,6 @@ namespace Orange
 			return (assembly = assemblies.SingleOrDefault(e => e.Name == assemblyName).Assembly) != null;
 		}
 
-
 		public IEnumerator<(string Name, Assembly Assembly)> GetEnumerator()
 		{
 			// Assemblies may be loaded while being enumerated.

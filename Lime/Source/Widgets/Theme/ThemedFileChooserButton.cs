@@ -29,12 +29,12 @@ namespace Lime
 				ForceUncutText = false,
 				MinMaxHeight = Theme.Metrics.DefaultButtonSize.Y,
 				Padding = Theme.Metrics.ControlsPadding,
-				LayoutCell = new LayoutCell { StretchX = float.MaxValue }
+				LayoutCell = new LayoutCell { StretchX = float.MaxValue },
 			};
 			button = new ThemedButton {
 				Id = "Button",
 				Text = "...",
-				MinMaxWidth = 20
+				MinMaxWidth = 20,
 			};
 			button.Clicked += HandleButtonClick;
 			PostPresenter = new ThemedFramePresenter(Theme.Colors.GrayBackground, Theme.Colors.ControlBorder);

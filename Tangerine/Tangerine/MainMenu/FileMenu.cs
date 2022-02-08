@@ -38,7 +38,6 @@ namespace Tangerine
 		}
 	}
 
-
 	public class ProjectNew : CommandHandler
 	{
 		public override void Execute()
@@ -123,8 +122,7 @@ namespace Tangerine
 		{
 			try {
 				Document.Current.Save();
-			}
-			catch (System.Exception e) {
+			} catch (System.Exception e) {
 				ShowErrorMessageBox(e);
 			}
 		}
@@ -170,7 +168,11 @@ namespace Tangerine
 	{
 		public override void ExecuteTransaction()
 		{
-			if (new AlertDialog($"Are you sure you want to revert \"{Document.Current.Path}\"?", "Yes", "Cancel").Show() == 0) {
+			if (
+				new AlertDialog(
+					$"Are you sure you want to revert \"{Document.Current.Path}\"?", "Yes", "Cancel"
+				).Show() == 0
+			) {
 				Project.Current.RevertDocument(Document.Current);
 			}
 		}
@@ -189,7 +191,7 @@ namespace Tangerine
 				AllowedFileTypes = new string[] { Document.Current.GetFileExtension() },
 				Mode = FileDialogMode.Save,
 				InitialDirectory = Path.GetDirectoryName(Document.Current.FullPath),
-				InitialFileName = Path.GetFileNameWithoutExtension(Document.Current.Path)
+				InitialFileName = Path.GetFileNameWithoutExtension(Document.Current.Path),
 			};
 			if (dlg.RunModal()) {
 				string assetPath;
@@ -198,8 +200,7 @@ namespace Tangerine
 				} else {
 					try {
 						Document.Current.SaveAs(assetPath);
-					}
-					catch (System.Exception e) {
+					} catch (System.Exception e) {
 						FileSave.ShowErrorMessageBox(e);
 					}
 				}

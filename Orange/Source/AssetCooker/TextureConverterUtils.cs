@@ -36,7 +36,7 @@ namespace Orange
 						int hOffset = hOffsets[j];
 						int vOffset = vOffsets[j];
 						if (x + hOffset >= 0 && x + hOffset < width && y + vOffset >= 0 && y + vOffset < height) {
-							int index = i + (vOffset * width + hOffset);
+							int index = i + vOffset * width + hOffset;
 							if (image[index].A != 0) {
 								pending.Add(i);
 								break;
@@ -58,7 +58,7 @@ namespace Orange
 							int hOffset = hOffsets[j];
 							int vOffset = vOffsets[j];
 							if (x + hOffset >= 0 && x + hOffset < width && y + vOffset >= 0 && y + vOffset < height) {
-								int index = i + (vOffset * width + hOffset);
+								int index = i + vOffset * width + hOffset;
 								if (processed[index]) {
 									Color4 color = image[index];
 									r += color.R;
@@ -76,7 +76,7 @@ namespace Orange
 							);
 						}
 						if (radius > 0) {
-							image[i] = new Color4((byte) (r / count), (byte) (g / count), (byte) (b / count), 0);
+							image[i] = new Color4((byte)(r / count), (byte)(g / count), (byte)(b / count), 0);
 						} else {
 							image[i] = Color4.Zero;
 						}
@@ -142,8 +142,9 @@ namespace Orange
 			writer.Write(bytes, 0, bytes.Length);
 		}
 
-		public static bool GetPngFileInfo(AssetBundle bundle, string path, out int width, out int height, out bool hasAlpha)
-		{
+		public static bool GetPngFileInfo(
+			AssetBundle bundle, string path, out int width, out int height, out bool hasAlpha
+		) {
 			width = height = 0;
 			hasAlpha = false;
 			using var stream = bundle.OpenFile(path);

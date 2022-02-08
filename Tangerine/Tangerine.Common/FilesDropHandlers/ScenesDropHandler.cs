@@ -55,8 +55,7 @@ namespace Tangerine.Common.FilesDropHandlers
 					foreach (var (path, _) in assets) {
 						try {
 							Project.Current.OpenDocument(path);
-						}
-						catch (InvalidOperationException e) {
+						} catch (InvalidOperationException e) {
 							AlertDialog.Show(e.Message);
 						}
 					}
@@ -67,20 +66,26 @@ namespace Tangerine.Common.FilesDropHandlers
 		public void CreateContextMenu(List<(string assetPath, string assetType)> assets)
 		{
 			var menu = new Menu {
-				new Command("Open in New Tab", () => assets.ForEach(asset => Project.Current.OpenDocument(asset.assetPath))),
-				new Command("Add As External Scene", () => Document.Current.History.DoTransaction(() => {
-					foreach (var (assetPath, _) in assets) {
-						try {
-							var node = CreateNodeFromAsset.Perform(assetPath);
-							postProcessNode?.Invoke(node);
-							Document.Current.RefreshSceneTree();
-						} catch (System.Exception exception) {
-							AlertDialog.Show(exception.Message);
-							break;
+				new Command(
+					"Open in New Tab",
+					() => assets.ForEach(asset => Project.Current.OpenDocument(asset.assetPath))
+				),
+				new Command(
+					"Add As External Scene",
+					() => Document.Current.History.DoTransaction(() => {
+						foreach (var (assetPath, _) in assets) {
+							try {
+								var node = CreateNodeFromAsset.Perform(assetPath);
+								postProcessNode?.Invoke(node);
+								Document.Current.RefreshSceneTree();
+							} catch (System.Exception exception) {
+								AlertDialog.Show(exception.Message);
+								break;
+							}
 						}
-					}
-				})),
-				new Command("Cancel")
+					})
+				),
+				new Command("Cancel"),
 			};
 			menu[0].Enabled = assets.All(asset => asset.assetType != ".model");
 			menu.Popup();

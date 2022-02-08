@@ -12,7 +12,7 @@ namespace Lime.Graphics.Platform.OpenGL
 		internal GLVertexInputLayoutBinding[] GLBindings;
 		internal long BindingMask;
 		internal long AttributeMask;
-		
+
 		public PlatformRenderContext Context { get; }
 
 		internal PlatformVertexInputLayout(
@@ -41,7 +41,7 @@ namespace Lime.Graphics.Platform.OpenGL
 					Offset = attrib.Offset,
 					Type = glType,
 					Size = glSize,
-					Normalized = glNormalized
+					Normalized = glNormalized,
 				});
 			}
 			var glBindings = new List<GLVertexInputLayoutBinding>();
@@ -51,7 +51,7 @@ namespace Lime.Graphics.Platform.OpenGL
 					glBindings.Add(new GLVertexInputLayoutBinding {
 						Slot = bindings[i].Slot,
 						Stride = bindings[i].Stride,
-						Attributes = glAttribs.ToArray()
+						Attributes = glAttribs.ToArray(),
 					});
 				}
 			}

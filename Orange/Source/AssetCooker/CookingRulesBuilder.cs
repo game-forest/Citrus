@@ -1,14 +1,14 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using Lime;
 using Yuzu;
 using Yuzu.Json;
 using Yuzu.Metadata;
-using System.Threading;
 
 namespace Orange
 {
@@ -28,13 +28,13 @@ namespace Orange
 	public enum DDSFormat
 	{
 		DXTi,
-		Uncompressed
+		Uncompressed,
 	}
 
 	public enum AtlasOptimization
 	{
 		Memory,
-		DrawCalls
+		DrawCalls,
 	}
 
 	public enum ModelCompression
@@ -49,9 +49,9 @@ namespace Orange
 	{
 		public readonly TargetPlatform[] TargetPlatforms;
 
-		public TargetPlatformsAttribute(params TargetPlatform []TargetPlatforms)
+		public TargetPlatformsAttribute(params TargetPlatform[] targetPlatforms)
 		{
-			this.TargetPlatforms = TargetPlatforms;
+			this.TargetPlatforms = targetPlatforms;
 		}
 	}
 
@@ -95,7 +95,6 @@ namespace Orange
 		// NOTE: function `Override` uses the fact that rule name being parsed matches the field name
 		// for all fields marked with `YuzuMember`. So don't rename them or do so with cautiousness.
 		// e.g. don't rename `Bundle` to `Bundles`
-
 		[YuzuMember]
 		public string TextureAtlas { get; set; }
 
@@ -195,9 +194,9 @@ namespace Orange
 			TimeSpanFormat = "c",
 			DecimalAsString = false,
 			EnumAsString = false,
-			FieldSeparator = "",
+			FieldSeparator = string.Empty,
 			IgnoreCompact = false,
-			Indent = "",
+			Indent = string.Empty,
 			Int64AsString = false,
 			MaxOnelineFields = 0,
 			SaveClass = JsonSaveClass.None,
@@ -269,7 +268,8 @@ namespace Orange
 			set => SourcePath = AssetBundle.Current.FromSystemPath(value);
 		}
 
-		public readonly Dictionary<Target, ParticularCookingRules> TargetRules = new Dictionary<Target, ParticularCookingRules>();
+		public readonly Dictionary<Target, ParticularCookingRules> TargetRules =
+			new Dictionary<Target, ParticularCookingRules>();
 		public ParticularCookingRules CommonRules;
 		public CookingRules Parent;
 		public string TextureAtlas => EffectiveRules.TextureAtlas;
@@ -363,8 +363,10 @@ namespace Orange
 		public string FieldValueToString(Meta.Item yi, object value)
 		{
 			if (value == null) {
-				return "";
-			} if (yi.Name == "Bundles") {
+				return string.Empty;
+			}
+
+			if (yi.Name == "Bundles") {
 				var vlist = (string[])value;
 				return string.Join(",", vlist);
 			} else if (value is bool) {
@@ -390,7 +392,7 @@ namespace Orange
 
 		private void SaveCookingRules(StreamWriter sw, ParticularCookingRules rules, Target target)
 		{
-			var targetString = target == null ? "" : $"({target.Name})";
+			var targetString = target == null ? string.Empty : $"({target.Name})";
 			foreach (var yi in rules.FieldOverrides) {
 				var value = yi.GetValue(rules);
 				var valueString = FieldValueToString(yi, value);
@@ -469,7 +471,10 @@ namespace Orange
 				watcher.Renamed += (_, p) => OnChanged(p);
 				void OnChanged(string p)
 				{
-					if (!Path.GetFileName(p)?.Equals(UnpackedAssetBundle.IndexFile, StringComparison.Ordinal) ?? false) {
+					if (
+						!Path.GetFileName(p)?.Equals(UnpackedAssetBundle.IndexFile, StringComparison.Ordinal)
+						?? false
+					) {
 						Dirty = true;
 					}
 				}
@@ -499,7 +504,7 @@ namespace Orange
 			var pathStack = new Stack<string>();
 			var rulesStack = new Stack<CookingRules>();
 			var map = cacheRecord?.Map ?? new Dictionary<string, CookingRules>(StringComparer.Ordinal);
-			pathStack.Push("");
+			pathStack.Push(string.Empty);
 			var rootRules = new CookingRules();
 			rootRules.DeduceEffectiveRules(target);
 			rulesStack.Push(rootRules);
@@ -512,7 +517,7 @@ namespace Orange
 				}
 				if (Path.GetFileName(filePath) == CookingRulesFilename) {
 					var dirName = AssetPath.GetDirectoryName(filePath);
-					pathStack.Push(dirName == string.Empty ? "" : dirName + "/");
+					pathStack.Push(dirName == string.Empty ? string.Empty : dirName + "/");
 					var rules = ParseCookingRules(bundle, rulesStack.Peek(), filePath, target);
 					rules.SourcePath = filePath;
 					rulesStack.Push(rules);
@@ -523,12 +528,13 @@ namespace Orange
 					var directoryName = pathStack.Peek();
 					if (!string.IsNullOrEmpty(directoryName)) {
 						directoryName = directoryName.Remove(directoryName.Length - 1);
-						// it is possible for map to not contain this directoryName since not every IFileEnumerator enumerates directories
+						// it is possible for map to not contain this directoryName
+						// since not every IFileEnumerator enumerates directories
 						if (map.ContainsKey(directoryName)) {
 							map[directoryName] = rules;
 						}
 					}
-				} else  {
+				} else {
 					if (filePath.EndsWith(".txt", StringComparison.Ordinal)) {
 						var filename = filePath.Remove(filePath.Length - 4);
 						if (bundle.FileExists(filename)) {
@@ -594,7 +600,8 @@ namespace Orange
 					return PVRFormat.ARGB8;
 				default:
 					throw new Lime.Exception(
-						"Error parsing PVR format. Must be one of: PVRTC4, PVRTC4_Forced, PVRTC2, RGBA4, RGB565, ARGB8");
+						"Error parsing PVR format. Must be one of: PVRTC4, PVRTC4_Forced, PVRTC2, RGBA4, RGB565, ARGB8"
+					);
 			}
 		}
 
@@ -632,49 +639,50 @@ namespace Orange
 			var rules = basicRules.InheritClone();
 			var currentRules = rules.CommonRules;
 			try {
-				using (var s = bundle.OpenFile(path)) {
-					TextReader r = new StreamReader(s);
-					string line;
-					while ((line = r.ReadLine()) != null) {
-						line = line.Trim();
-						if (line == "") {
-							continue;
-						}
-						var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-						if (words.Length < 2) {
-							throw new Lime.Exception("Invalid rule format");
-						}
-						foreach (ref var word in words.AsSpan()) {
-							word = word.Trim();
-						}
-						// target-specific cooking rules
-						if (words[0].EndsWith(")")) {
-							int cut = words[0].IndexOf('(');
-							if (cut >= 0) {
-								string targetName = words[0].Substring(cut + 1, words[0].Length - cut - 2);
-								words[0] = words[0].Substring(0, cut);
-								currentRules = null;
-								Target currentTarget = null;
-								foreach (var t in The.Workspace.Targets) {
-									if (targetName == t.Name) {
-										currentTarget = t;
-									}
-								}
-								if (currentTarget == null) {
-									throw new Lime.Exception($"Invalid target: {targetName}");
-								}
-								currentRules = rules.TargetRules[currentTarget];
-								{
-									if (!CanSetRulePerTarget(words[0], currentTarget)) {
-										throw new Lime.Exception($"Invalid platform {target.Platform} for cooking rule {words[0]}");
-									}
+				using var s = bundle.OpenFile(path);
+				TextReader r = new StreamReader(s);
+				string line;
+				while ((line = r.ReadLine()) != null) {
+					line = line.Trim();
+					if (line == string.Empty) {
+						continue;
+					}
+					var words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+					if (words.Length < 2) {
+						throw new Lime.Exception("Invalid rule format");
+					}
+					foreach (ref var word in words.AsSpan()) {
+						word = word.Trim();
+					}
+					// target-specific cooking rules
+					if (words[0].EndsWith(")")) {
+						int cut = words[0].IndexOf('(');
+						if (cut >= 0) {
+							string targetName = words[0].Substring(cut + 1, words[0].Length - cut - 2);
+							words[0] = words[0].Substring(0, cut);
+							currentRules = null;
+							Target currentTarget = null;
+							foreach (var t in The.Workspace.Targets) {
+								if (targetName == t.Name) {
+									currentTarget = t;
 								}
 							}
-						} else {
-							currentRules = rules.CommonRules;
+							if (currentTarget == null) {
+								throw new Lime.Exception($"Invalid target: {targetName}");
+							}
+							currentRules = rules.TargetRules[currentTarget];
+							{
+								if (!CanSetRulePerTarget(words[0], currentTarget)) {
+									throw new Lime.Exception(
+										$"Invalid platform {target.Platform} for cooking rule {words[0]}"
+									);
+								}
+							}
 						}
-						ParseRule(currentRules, words, path, bundle);
+					} else {
+						currentRules = rules.CommonRules;
 					}
+					ParseRule(currentRules, words, path, bundle);
 				}
 			} catch (Lime.Exception e) {
 				if (!Path.IsPathRooted(path)) {
@@ -828,4 +836,3 @@ namespace Orange
 		}
 	}
 }
-

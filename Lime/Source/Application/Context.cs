@@ -21,7 +21,7 @@ namespace Lime
 
 	public class Context : IContext
 	{
-		struct ActivationRecord
+		private struct ActivationRecord
 		{
 			public Context Context;
 			public object OldValue;

@@ -1,4 +1,6 @@
-﻿//using System;
+#pragma warning disable SA1005 // Single line comments should begin with single space
+#pragma warning disable SA1027 // Use tabs correctly
+//using System;
 //using System.Linq;
 //using System.Collections.Generic;
 //using Yuzu;
@@ -213,3 +215,5 @@
 //		}
 //	}
 //}
+#pragma warning restore SA1027 // Use tabs correctly
+#pragma warning restore SA1005 // Single line comments should begin with single space

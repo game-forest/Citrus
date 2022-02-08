@@ -12,7 +12,8 @@ namespace Tangerine
 
 		public override string Breadcrumb { get; } = "Search Component";
 		public override string Prefix { get; } = $"{PrefixConst}:";
-		public override string HelpText { get; } = $"Type '{PrefixConst}:' to search for components in current document";
+		public override string HelpText { get; } =
+			$"Type '{PrefixConst}:' to search for components in current document";
 
 		public LookupComponentsSection(LookupSections sections) : base(sections) { }
 
@@ -37,7 +38,9 @@ namespace Tangerine
 						$"Node: {node}",
 						() => {
 							try {
-								NavigateToNode.Perform(nodeClosed, enterInto: false, turnOnInspectRootNodeIfNeeded: true);
+								NavigateToNode.Perform(
+									nodeClosed, enterInto: false, turnOnInspectRootNodeIfNeeded: true
+								);
 							} catch (System.Exception exception) {
 								AlertDialog.Show(exception.Message);
 							}

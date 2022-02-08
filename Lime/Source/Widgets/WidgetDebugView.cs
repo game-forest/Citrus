@@ -20,8 +20,12 @@ namespace Lime
 
 			public override string ToString()
 			{
-				return string.Format("Position: {0}; Scale: {1}; Rotation: {2}",
-					Position, Scale, Rotation);
+				return string.Format(
+					"Position: {0}; Scale: {1}; Rotation: {2}",
+					Position,
+					Scale,
+					Rotation
+				);
 			}
 		}
 
@@ -75,7 +79,7 @@ namespace Lime
 				return new WidgetPainting {
 					Visible = widget.Visible,
 					Color = widget.Color,
-					Blending = widget.Blending
+					Blending = widget.Blending,
 				};
 			}
 		}
@@ -100,7 +104,7 @@ namespace Lime
 				return new WidgetPainting {
 					Visible = widget.GloballyVisible,
 					Color = widget.GlobalColor,
-					Blending = widget.GlobalBlending
+					Blending = widget.GlobalBlending,
 				};
 			}
 		}
@@ -109,7 +113,8 @@ namespace Lime
 
 		public string[] VisibilityIssues
 		{
-			get {
+			get
+			{
 				return widget.GetVisibilityIssues().ToArray();
 			}
 		}

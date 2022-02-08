@@ -16,7 +16,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 			AddNode(new Image {
 				LayoutCell = new LayoutCell {
 					Stretch = Vector2.Zero,
-					Alignment = Alignment.Center
+					Alignment = Alignment.Center,
 				},
 				Padding = new Thickness(right: IconRightPadding),
 				MinMaxSize = new Vector2(IconSize + IconRightPadding, IconSize),

@@ -4,22 +4,29 @@ using Lime;
 namespace Citrus.Tests.Types
 {
 	[TestClass]
-	class IntRectangleTests
+	internal class IntRectangleTests
 	{
 		[TestMethod]
 		public void RectangleCastTest()
 		{
 			Assert.That.AreEqual(Rectangle.Empty, (Rectangle)IntRectangle.Empty);
 			Assert.That.AreEqual(new Rectangle(0, 0, 1, 1), (Rectangle)new IntRectangle(0, 0, 1, 1));
-			Assert.That.AreEqual(new Rectangle(Vector2.Zero, Vector2.One), (Rectangle)new IntRectangle(IntVector2.Zero, IntVector2.One));
+			Assert.That.AreEqual(
+				new Rectangle(Vector2.Zero, Vector2.One), (Rectangle)new IntRectangle(IntVector2.Zero, IntVector2.One)
+			);
 		}
 
 		[TestMethod]
 		public void WindowRectCastTest()
 		{
 			Assert.That.AreEqual(new WindowRect(), (WindowRect)IntRectangle.Empty);
-			Assert.That.AreEqual(new WindowRect {X = 0, Y = 0, Height = 1, Width = 1}, (WindowRect)new IntRectangle(0, 0, 1, 1));
-			Assert.That.AreEqual(new WindowRect { X = 0, Y = 0, Height = 1, Width = 1 }, (WindowRect)new IntRectangle(IntVector2.Zero, IntVector2.One));
+			Assert.That.AreEqual(
+				new WindowRect { X = 0, Y = 0, Height = 1, Width = 1 }, (WindowRect)new IntRectangle(0, 0, 1, 1)
+			);
+			Assert.That.AreEqual(
+				new WindowRect { X = 0, Y = 0, Height = 1, Width = 1 },
+				(WindowRect)new IntRectangle(IntVector2.Zero, IntVector2.One)
+			);
 		}
 
 		[TestMethod]

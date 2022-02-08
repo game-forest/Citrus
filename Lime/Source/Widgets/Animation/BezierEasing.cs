@@ -18,8 +18,24 @@ namespace Lime
 		[YuzuMember]
 		public float P2Y { get; set; }
 
-		public Vector2 P1 { get => new Vector2(P1X, P1Y); set { P1X = value.X; P1Y = value.Y; } }
-		public Vector2 P2 { get => new Vector2(P2X, P2Y); set { P2X = value.X; P2Y = value.Y; } }
+		public Vector2 P1
+		{
+			get => new Vector2(P1X, P1Y);
+			set
+			{
+				P1X = value.X;
+				P1Y = value.Y;
+			}
+		}
+		public Vector2 P2
+		{
+			get => new Vector2(P2X, P2Y);
+			set
+			{
+				P2X = value.X;
+				P2Y = value.Y;
+			}
+		}
 
 		public bool IsDefault() => P1X == 0 && P1Y == 0 && P2X == 1 && P2Y == 1;
 
@@ -37,7 +53,8 @@ namespace Lime
 
 		public float this[int component]
 		{
-			get {
+			get
+			{
 				if (component == 0) {
 					return P1X;
 				} else if (component == 1) {
@@ -50,7 +67,8 @@ namespace Lime
 					throw new IndexOutOfRangeException();
 				}
 			}
-			set {
+			set
+			{
 				if (component == 0) {
 					P1X = value;
 				} else if (component == 1) {

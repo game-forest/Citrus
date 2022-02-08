@@ -9,7 +9,8 @@ using Tangerine.Core.Operations;
 namespace Tangerine.UI
 {
 	public class ListPropertyEditor<TList, TElement>
-		: ExpandablePropertyEditor<TList> where TList : IList<TElement>, IList
+		: ExpandablePropertyEditor<TList>
+		where TList : IList<TElement>, IList
 	{
 		private readonly Func<PropertyEditorParams, Widget> onAdd;
 		private IList list;
@@ -29,9 +30,9 @@ namespace Tangerine.UI
 					Layout = new HBoxLayout(),
 					Nodes = { new ThemedSimpleText {
 						Text = "Editing of list properties isn't supported when multiple nodes are selected.",
-						ForceUncutText = false
-					} },
-					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
+						ForceUncutText = false,
+					}, },
+					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground),
 				});
 				return;
 			}
@@ -56,13 +57,13 @@ namespace Tangerine.UI
 							? (TElement)(object)string.Empty
 							: typeof(TElement).IsInterface || typeof(TElement).IsAbstract
 								? default
-								:  Activator.CreateInstance<TElement>();
+								: Activator.CreateInstance<TElement>();
 						using (Document.Current.History.BeginTransaction()) {
 							int newIndex = list.Count;
 							InsertIntoList.Perform(list, newIndex, newElement);
 							Document.Current.History.CommitTransaction();
 						}
-					}
+					},
 				}
 			);
 			var current = PropertyValue(EditorParams.Objects.First());
@@ -127,7 +128,9 @@ namespace Tangerine.UI
 								var tpp = animator.TargetPropertyPath;
 								if (tpp.StartsWith(from)) {
 									var closingBracketIndex = tpp.IndexOf(']', from.Length);
-									var index = int.Parse(tpp.Substring(from.Length, closingBracketIndex - from.Length));
+									var index = int.Parse(
+										tpp.Substring(from.Length, closingBracketIndex - from.Length)
+									);
 									var offset = ~pendingRemovals.BinarySearch(index);
 									if (offset == 0) {
 										continue;
@@ -168,7 +171,7 @@ namespace Tangerine.UI
 				DefaultValueGetter = () => default,
 				IndexInList = index,
 				IsAnimableByPath = EditorParams.IsAnimableByPath && list is IAnimable,
-				DisplayName = $"{index}:"
+				DisplayName = $"{index}:",
 			};
 			p.PropertySetter = p.IsAnimable
 				? (PropertySetterDelegate)((@object, name, value) =>

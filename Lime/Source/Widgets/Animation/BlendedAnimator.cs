@@ -168,11 +168,11 @@ namespace Lime
 			for (var i = 0; i < value1.Count; ++i) {
 				var pos = Mathf.Lerp(blendFactor, value1[i].Pos, value2[i].Pos);
 				var uv1 = Mathf.Lerp(blendFactor, value1[i].UV1, value2[i].UV1);
-				var A = Mathf.Lerp(blendFactor, value1[i].Color.A, value2[i].Color.A);
-				var R = Mathf.Lerp(blendFactor, value1[i].Color.R, value2[i].Color.R);
-				var G = Mathf.Lerp(blendFactor, value1[i].Color.G, value2[i].Color.G);
-				var B = Mathf.Lerp(blendFactor, value1[i].Color.B, value2[i].Color.B);
-				var color = new Color4((byte)R, (byte)G, (byte)B, (byte)A);
+				var a = Mathf.Lerp(blendFactor, value1[i].Color.A, value2[i].Color.A);
+				var r = Mathf.Lerp(blendFactor, value1[i].Color.R, value2[i].Color.R);
+				var g = Mathf.Lerp(blendFactor, value1[i].Color.G, value2[i].Color.G);
+				var b = Mathf.Lerp(blendFactor, value1[i].Color.B, value2[i].Color.B);
+				var color = new Color4((byte)r, (byte)g, (byte)b, (byte)a);
 				value1[i] = new SkinnedVertex() { Pos = pos, UV1 = uv1, Color = color };
 			}
 		}

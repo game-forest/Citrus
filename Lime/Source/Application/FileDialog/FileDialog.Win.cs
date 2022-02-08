@@ -118,7 +118,7 @@ namespace Lime
 			}
 			openFileDialog.RestoreDirectory = true;
 			openFileDialog.Multiselect = AllowsMultipleSelection;
-			openFileDialog.FileName = InitialFileName ?? System.String.Empty;
+			openFileDialog.FileName = InitialFileName ?? string.Empty;
 			return ShowFileDialog(openFileDialog);
 		}
 

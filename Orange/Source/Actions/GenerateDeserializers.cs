@@ -42,14 +42,26 @@ namespace Orange
 			if (token != null) {
 				generatedDeserializersPath = Path.Combine(generatedDeserializersPath, token.ToString());
 			}
-			Generate(Path.Combine(generatedDeserializersPath, "YuzuGeneratedBinaryDeserializer.cs"),
-				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuOptions, $"{The.Workspace.ProjectName}Deserializer", "LimeDeserializer") {
+			Generate(
+				Path.Combine(generatedDeserializersPath, "YuzuGeneratedBinaryDeserializer.cs"),
+				new BinaryDeserializerGenerator(
+					"YuzuGenerated",
+					InternalPersistence.Instance.YuzuOptions,
+					$"{The.Workspace.ProjectName}Deserializer",
+					"LimeDeserializer"
+				) {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(PluginLoader.EnumerateOrangeAndTangerinePluginAssemblies())
 			);
-			Generate(Path.Combine(generatedDeserializersPath, "YuzuGeneratedCloners.cs"),
-				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuOptions, $"{The.Workspace.ProjectName}Cloner", "LimeCloner") {
+			Generate(
+				Path.Combine(generatedDeserializersPath, "YuzuGeneratedCloners.cs"),
+				new ClonerGenerator(
+					"YuzuGenerated",
+					InternalPersistence.Instance.YuzuOptions,
+					$"{The.Workspace.ProjectName}Cloner",
+					"LimeCloner"
+				) {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(PluginLoader.EnumerateOrangeAndTangerinePluginAssemblies())
@@ -58,14 +70,21 @@ namespace Orange
 
 		public static void GenerateBinaryDeserializersAndCloners()
 		{
-			var assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("Lime", StringComparison.OrdinalIgnoreCase)).First();
-			Generate(Path.Combine(Toolbox.FindCitrusDirectory(), "Lime", "Source", "YuzuGeneratedBinaryDeserializer.cs"),
-				new BinaryDeserializerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuOptions, "LimeDeserializer") {
+			var assembly = AppDomain.CurrentDomain
+				.GetAssemblies()
+				.Where(a => a.FullName.StartsWith("Lime", StringComparison.OrdinalIgnoreCase))
+				.First();
+			Generate(
+				Path.Combine(Toolbox.FindCitrusDirectory(), "Lime", "Source", "YuzuGeneratedBinaryDeserializer.cs"),
+				new BinaryDeserializerGenerator(
+					"YuzuGenerated", InternalPersistence.Instance.YuzuOptions, "LimeDeserializer"
+				) {
 					LineSeparator = "\n",
 				},
 				GenerateForAssemblies(new[] { assembly })
 			);
-			Generate(Path.Combine(Toolbox.FindCitrusDirectory(), "Lime", "Source", "YuzuGeneratedCloners.cs"),
+			Generate(
+				Path.Combine(Toolbox.FindCitrusDirectory(), "Lime", "Source", "YuzuGeneratedCloners.cs"),
 				new ClonerGenerator("YuzuGenerated", InternalPersistence.Instance.YuzuOptions, "LimeCloner") {
 					LineSeparator = "\n",
 				},
@@ -87,10 +106,15 @@ namespace Orange
 						}
 						if (t.IsGenericType) {
 							if (t == typeof(Keyframe<>) || t == typeof(Animator<>)) {
-								foreach (var specializationType in AnimatorRegistry.Instance.EnumerateRegisteredTypes()) {
+								foreach (
+									var specializationType
+									in AnimatorRegistry.Instance.EnumerateRegisteredTypes()
+								) {
 									if (
-										specializationType.Assembly != assembly &&
-										!specializationType.Namespace.StartsWith("System", StringComparison.OrdinalIgnoreCase)
+										specializationType.Assembly != assembly
+										&& !specializationType.Namespace.StartsWith(
+											"System", StringComparison.OrdinalIgnoreCase
+										)
 									) {
 										continue;
 									}
@@ -98,7 +122,10 @@ namespace Orange
 									types.Add(specializedType);
 								}
 							} else {
-								foreach (var specializationType in t.GetCustomAttributes<YuzuSpecializeWithAttribute>().Select(a => a.Type)) {
+								foreach (
+									var specializationType
+									in t.GetCustomAttributes<YuzuSpecializeWithAttribute>().Select(a => a.Type)
+								) {
 									var specializedType = t.MakeGenericType(new[] { specializationType });
 									types.Add(specializedType);
 								}

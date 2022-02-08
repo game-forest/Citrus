@@ -45,7 +45,7 @@ namespace Lime
 			};
 			slider.DefaultAnimation.AnimationEngine = ae;
 			Behaviour = new ScrollViewWithSlider(this, slider, scrollDirection) {
-				ScrollBySlider = true
+				ScrollBySlider = true,
 			};
 		}
 
@@ -98,9 +98,13 @@ namespace Lime
 					Renderer.Blending = ScrollViewBlending;
 					Renderer.Shader = ScrollViewShader;
 					if (Direction == ScrollDirection.Vertical) {
-						Renderer.DrawRect(new Vector2(ScrollViewSize.X - SliderSize.X, 0), ScrollViewSize, BackgroundColor);
+						Renderer.DrawRect(
+							new Vector2(ScrollViewSize.X - SliderSize.X, 0), ScrollViewSize, BackgroundColor
+						);
 					} else {
-						Renderer.DrawRect(new Vector2(0, ScrollViewSize.Y - SliderSize.Y), ScrollViewSize, BackgroundColor);
+						Renderer.DrawRect(
+							new Vector2(0, ScrollViewSize.Y - SliderSize.Y), ScrollViewSize, BackgroundColor
+						);
 					}
 					Renderer.Transform1 = SliderTransform;
 					Renderer.Blending = SliderBlending;

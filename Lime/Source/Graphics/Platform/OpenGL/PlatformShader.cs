@@ -49,9 +49,9 @@ namespace Lime.Graphics.Platform.OpenGL
 		{
 			if (!Context.ESProfile) {
 				source = source
-					.Replace("lowp", "")
-					.Replace("mediump", "")
-					.Replace("highp", "");
+					.Replace("lowp", string.Empty)
+					.Replace("mediump", string.Empty)
+					.Replace("highp", string.Empty);
 			}
 			return source;
 		}

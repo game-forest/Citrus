@@ -52,7 +52,7 @@ namespace Tangerine.Core
 				Left = Math.Max(span.Value.A, 0),
 				Right = span.Value.B,
 				Top = items[0].GetTimelineSceneItemState().Index,
-				Bottom = index
+				Bottom = index,
 			};
 			return true;
 		}

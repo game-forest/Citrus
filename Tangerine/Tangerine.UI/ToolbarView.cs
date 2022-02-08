@@ -14,7 +14,7 @@ namespace Tangerine.UI
 			this.toolbarModel = toolbarModel;
 			widget = new Widget {
 				Layout = new VBoxLayout(),
-				LayoutCell = new LayoutCell { StretchY = 0 }
+				LayoutCell = new LayoutCell { StretchY = 0 },
 			};
 			container.Nodes.Add(widget);
 			DecorateToolbar(widget);
@@ -34,12 +34,15 @@ namespace Tangerine.UI
 				var rowWidget = new Widget {
 					MinMaxHeight = Metrics.ToolbarHeight,
 					LayoutCell = new LayoutCell { StretchY = 0 },
-					Layout = new HBoxLayout()
+					Layout = new HBoxLayout(),
 				};
 				for (var j = 0; j < row.Panels.Count; ++j) {
 					var panel = row.Panels[j];
 					var panelWidget = new Widget {
-						Layout = new HBoxLayout { Spacing = 1, DefaultCell = new DefaultLayoutCell(Alignment.LeftCenter) },
+						Layout = new HBoxLayout {
+							Spacing = 1,
+							DefaultCell = new DefaultLayoutCell(Alignment.LeftCenter),
+						},
 						LayoutCell = new LayoutCell(Alignment.LeftCenter) { StretchY = 0 },
 					};
 					if (panel.Draggable) {
@@ -55,7 +58,7 @@ namespace Tangerine.UI
 								panelWidget.AddNode(new Widget {
 									LayoutCell = new LayoutCell(Alignment.Center),
 									MinMaxSize = new Vector2(16),
-									HitTestTarget = false
+									HitTestTarget = false,
 								});
 							}
 							continue;
@@ -87,7 +90,7 @@ namespace Tangerine.UI
 				Texture = IconPool.GetTexture("Tools.ToolbarSeparator"),
 				LayoutCell = new LayoutCell(Alignment.Center),
 				MinMaxSize = new Vector2(16),
-				HitTestTarget = true
+				HitTestTarget = true,
 			};
 			node.Tasks.Add(() => DragTask(node.AsWidget, drag.Input, rowIndex, panelIndex));
 			node.Nodes.Insert(0, drag);
@@ -126,7 +129,10 @@ namespace Tangerine.UI
 							if (!IsMouseOver(panelWidget, out pos)) {
 								continue;
 							}
-							if ((newRowIndex != i || newPanelIndex != j) && (rowIndex != i || j != rowWidget.Nodes.Count - 1)) {
+							if (
+								(newRowIndex != i || newPanelIndex != j)
+								&& (rowIndex != i || j != rowWidget.Nodes.Count - 1)
+							) {
 								panelContainer = panelWidget;
 								newRowIndex = i;
 								newPanelIndex = j;
@@ -145,7 +151,7 @@ namespace Tangerine.UI
 							newRowIndex = toolbarModel.Rows.Count;
 						}
 					}
-					Next:
+				Next:
 					yield return null;
 				}
 				rootWidget.CompoundPostPresenter.Remove(presenter);

@@ -19,7 +19,10 @@ namespace Lime
 
 		public void Release()
 		{
-			if (Free) return;
+			if (Free) {
+				return;
+			}
+
 			try {
 				OnRelease();
 			} finally {
@@ -95,7 +98,8 @@ namespace Lime
 		}
 	}
 
-	public static class RenderObjectPool<T> where T: RenderObject, new()
+	public static class RenderObjectPool<T>
+		where T : RenderObject, new()
 	{
 		private static T[] items = new T[1] { new T() };
 		private static int index;
@@ -104,8 +108,10 @@ namespace Lime
 		{
 			for (int i = 0; i < items.Length; i++) {
 				var item = items[index++];
-				if (index == items.Length)
+				if (index == items.Length) {
 					index = 0;
+				}
+
 				if (item.Free) {
 					item.Free = false;
 #if PROFILER

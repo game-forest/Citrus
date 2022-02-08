@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
@@ -36,7 +36,7 @@ namespace Tangerine.UI.Timeline
 					new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
 						LayoutCell = new LayoutCell {
-							StretchY = 0
+							StretchY = 0,
 						},
 						Padding = new Thickness { Top = 5 },
 						Nodes = {
@@ -44,8 +44,8 @@ namespace Tangerine.UI.Timeline
 							(okButton = new ThemedButton { Text = "Ok" }),
 							(cancelButton = new ThemedButton { Text = "Cancel" }),
 						},
-					}
-				}
+					},
+				},
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
 			Scale = 1;
@@ -95,17 +95,21 @@ namespace Tangerine.UI.Timeline
 						var newKey = key.Clone();
 						newKey.Frame = newFrame;
 						SetAnimableProperty.Perform(
-							host, animator.TargetPropertyPath, newKey.Value,
+							@object: host,
+							propertyPath: animator.TargetPropertyPath,
+							value: newKey.Value,
 							createAnimatorIfNeeded: true,
 							createInitialKeyframeForNewAnimator: false,
-							newKey.Frame
+							atFrame: newKey.Frame
 						);
 						SetKeyframe.Perform(host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
 					}
 				}
 				ClearGridSelection.Perform();
 				for (int i = boundaries.Top; i <= boundaries.Bottom; ++i) {
-					SelectGridSpan.Perform(i, boundaries.Left, (int)(boundaries.Left + (boundaries.Right - boundaries.Left) * Scale));
+					SelectGridSpan.Perform(
+						i, boundaries.Left, (int)(boundaries.Left + (boundaries.Right - boundaries.Left) * Scale)
+					);
 				}
 			} else {
 				Document.Current.History.RollbackTransaction();

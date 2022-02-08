@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -65,7 +63,7 @@ namespace SharpFont
 	/// <param name="x">The pixel's x coordinate.</param>
 	/// <param name="user">User-supplied data that is passed to the callback.</param>
 	/// <returns>1 if the pixel is ‘set’, 0 otherwise.</returns>
-    [Obsolete("This type is deprecated. Do not use it. See FreeType docuementation.")]
+	[Obsolete("This type is deprecated. Do not use it. See FreeType docuementation.")]
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate int RasterBitTestFunc(int y, int x, IntPtr user);
 
@@ -78,7 +76,7 @@ namespace SharpFont
 	/// <param name="y">The pixel's y coordinate.</param>
 	/// <param name="x">The pixel's x coordinate.</param>
 	/// <param name="user">User-supplied data that is passed to the callback.</param>
-    [Obsolete("This type is deprecated. Do not use it. See FreeType docuementation.")]
+	[Obsolete("This type is deprecated. Do not use it. See FreeType docuementation.")]
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate void RasterBitSetFunc(int y, int x, IntPtr user);
 
@@ -99,21 +97,11 @@ namespace SharpFont
 	/// </para></remarks>
 	public class RasterParams : NativeObject
 	{
-		#region Fields
-
 		private RasterParamsRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal RasterParams(IntPtr reference) : base(reference)
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the target bitmap.
@@ -162,7 +150,7 @@ namespace SharpFont
 		/// <summary>
 		/// Gets the black span drawing callback. UNIMPLEMENTED!
 		/// </summary>
-        [Obsolete]
+		[Obsolete]
 		public RasterSpanFunc BlackSpans
 		{
 			get
@@ -174,7 +162,7 @@ namespace SharpFont
 		/// <summary>
 		/// Gets the bit test callback. UNIMPLEMENTED!
 		/// </summary>
-        [Obsolete]
+		[Obsolete]
 		public RasterBitTestFunc BitTest
 		{
 			get
@@ -186,7 +174,7 @@ namespace SharpFont
 		/// <summary>
 		/// Gets the bit set callback. UNIMPLEMENTED!
 		/// </summary>
-        [Obsolete]
+		[Obsolete]
 		public RasterBitSetFunc BitSet
 		{
 			get
@@ -231,7 +219,5 @@ namespace SharpFont
 				rec = PInvokeHelper.PtrToStructure<RasterParamsRec>(value);
 			}
 		}
-
-		#endregion
 	}
 }

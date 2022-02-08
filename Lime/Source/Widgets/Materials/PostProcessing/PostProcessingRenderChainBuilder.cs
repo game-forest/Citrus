@@ -6,7 +6,13 @@ namespace Lime
 
 		public void AddToRenderChain(RenderChain chain)
 		{
-			if (Owner == null || Owner.Width <= 0 || Owner.Height <= 0 || !Owner.GloballyVisible || !Owner.ClipRegionTest(chain.ClipRegion)) {
+			if (
+				Owner == null
+				|| Owner.Width <= 0
+				|| Owner.Height <= 0
+				|| !Owner.GloballyVisible
+				|| !Owner.ClipRegionTest(chain.ClipRegion)
+			) {
 				return;
 			}
 			if (Owner.PostPresenter != null) {

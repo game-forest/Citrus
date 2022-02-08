@@ -66,7 +66,15 @@ namespace Lime
 
 		[YuzuMember]
 		[TangerineKeyframeColor(27)]
-		public ITexture Texture { get { return texture; } set { texture = value; textures = null; } }
+		public ITexture Texture
+		{
+			get => texture;
+			set
+			{
+				texture = value;
+				textures = null;
+			}
+		}
 
 		public ParticleModifier()
 		{
@@ -88,14 +96,16 @@ namespace Lime
 
 		private static bool ChangeTextureFrameIndex(ref string path, int frame)
 		{
-			if (frame < 0 || frame > 99)
+			if (frame < 0 || frame > 99) {
 				return false;
+			}
+
 			int i = path.Length;
-			//for (; i >= 0; i--)
-			//	if (path[i] == '.')
-			//		break;
-			if (i < 2)
+			// for (; i >= 0; i--) if (path[i] == '.') break;
+			if (i < 2) {
 				return false;
+			}
+
 			if (char.IsDigit(path, i - 1) && char.IsDigit(path, i - 2)) {
 				var s = new StringBuilder(path);
 				s[i - 1] = (char)(frame % 10 + '0');
@@ -117,19 +127,24 @@ namespace Lime
 				textures = new List<SerializableTexture>();
 				var path = st.SerializationPath;
 				for (int i = 0; i < 100; i++) {
-					if (!ChangeTextureFrameIndex(ref path, i))
+					if (!ChangeTextureFrameIndex(ref path, i)) {
 						break;
+					}
+
 					if (AssetBundle.Current.FileExists(path + ".atlasPart") ||
 						AssetBundle.Current.FileExists(path + ".png")
 					) {
 						var t = new SerializableTexture(path);
 						textures.Add(t);
-					} else if (i > 0)
+					} else if (i > 0) {
 						break;
+					}
 				}
 			}
-			if (textures.Count == 0)
+			if (textures.Count == 0) {
 				return texture;
+			}
+
 			index = Mathf.Clamp(index, 0, textures.Count - 1);
 			return textures[index];
 		}

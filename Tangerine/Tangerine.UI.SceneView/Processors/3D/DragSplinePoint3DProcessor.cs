@@ -17,8 +17,10 @@ namespace Tangerine.UI.SceneView
 				}
 				yield return null;
 				var spline = Document.Current.Container as Spline3D;
-				if (spline == null)
+				if (spline == null) {
 					continue;
+				}
+
 				var points = Document.Current.SelectedNodes().Editable().OfType<SplinePoint3D>();
 				foreach (var point in points) {
 					if (HitTestControlPoint(spline, point.Position)) {
@@ -40,18 +42,19 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		Vector3 GetTangent(SplinePoint3D point, int index) => index == 0 ? point.TangentA : point.TangentB;
+		private Vector3 GetTangent(SplinePoint3D point, int index) => index == 0 ? point.TangentA : point.TangentB;
 
-		bool HitTestControlPoint(Spline3D spline, Vector3 pointInSplineCoordinates)
+		private bool HitTestControlPoint(Spline3D spline, Vector3 pointInSplineCoordinates)
 		{
 			var viewport = spline.Viewport;
 			var sv = SceneView.Instance;
 			var viewportToScene = viewport.LocalToWorldTransform;
-			var screenPoint = (Vector2)viewport.WorldToViewportPoint(pointInSplineCoordinates * spline.GlobalTransform) * viewportToScene;
+			var screenPoint = (Vector2)viewport.WorldToViewportPoint(pointInSplineCoordinates * spline.GlobalTransform)
+				* viewportToScene;
 			return sv.HitTestControlPoint(screenPoint);
 		}
 
-		IEnumerator<object> DragPoints(IEnumerable<SplinePoint3D> points)
+		private IEnumerator<object> DragPoints(IEnumerable<SplinePoint3D> points)
 		{
 			var input = SceneView.Instance.Input;
 			var offsets = new Vector3?[points.Count()];
@@ -73,7 +76,9 @@ namespace Tangerine.UI.SceneView
 							currentMouse.X = initialMouse.X;
 						}
 					}
-					var ray = viewport.ScreenPointToRay(currentMouse * SceneView.Instance.Scene.LocalToWorldTransform.CalcInversed());
+					var ray = viewport.ScreenPointToRay(
+						currentMouse * SceneView.Instance.Scene.LocalToWorldTransform.CalcInversed()
+					);
 					if (shiftPressed && dragDirection == DragDirection.Any) {
 						if ((currentMouse - initialMouse).Length > 5 / SceneView.Instance.Scene.Scale.X) {
 							var mouseDelta = currentMouse - initialMouse;
@@ -86,9 +91,15 @@ namespace Tangerine.UI.SceneView
 						var plane = CalcPlane(spline, p.Position);
 						var distance = ray.Intersects(plane);
 						if (distance.HasValue) {
-							var pos = (ray.Position + ray.Direction * distance.Value) * spline.GlobalTransform.CalcInverted();
+							var pos = (ray.Position + ray.Direction * distance.Value)
+								* spline.GlobalTransform.CalcInverted();
 							offsets[i] = offsets[i] ?? p.Position - pos;
-							Core.Operations.SetAnimableProperty.Perform(p, nameof(SplinePoint3D.Position), pos + offsets[i].Value, CoreUserPreferences.Instance.AutoKeyframes);
+							Core.Operations.SetAnimableProperty.Perform(
+								@object: p,
+								propertyPath: nameof(SplinePoint3D.Position),
+								value: pos + offsets[i].Value,
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+							);
 							i++;
 						}
 					}
@@ -98,7 +109,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		IEnumerator<object> DragTangent(SplinePoint3D point, int tangentIndex)
+		private IEnumerator<object> DragTangent(SplinePoint3D point, int tangentIndex)
 		{
 			var input = SceneView.Instance.Input;
 			Vector3? posCorrection = null;
@@ -111,14 +122,28 @@ namespace Tangerine.UI.SceneView
 					Document.Current.History.RollbackTransaction();
 
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var ray = viewport.ScreenPointToRay(input.MousePosition * SceneView.Instance.Scene.LocalToWorldTransform.CalcInversed());
+					var ray = viewport.ScreenPointToRay(
+						input.MousePosition * SceneView.Instance.Scene.LocalToWorldTransform.CalcInversed()
+					);
 					var distance = ray.Intersects(plane);
 					if (distance.HasValue) {
-						var pos = (ray.Position + ray.Direction * distance.Value) * spline.GlobalTransform.CalcInverted() - point.Position;
-						posCorrection = posCorrection ?? GetTangent(point, tangentIndex) - pos;
-						Core.Operations.SetAnimableProperty.Perform(point, GetTangentPropertyName(tangentIndex), pos + posCorrection.Value, CoreUserPreferences.Instance.AutoKeyframes);
+						var pos = (ray.Position + ray.Direction * distance.Value)
+								* spline.GlobalTransform.CalcInverted()
+							- point.Position;
+						posCorrection ??= GetTangent(point, tangentIndex) - pos;
+						Core.Operations.SetAnimableProperty.Perform(
+							@object: point,
+							propertyPath: GetTangentPropertyName(tangentIndex),
+							value: pos + posCorrection.Value,
+							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+						);
 						if (input.IsKeyPressed(Key.Shift) ^ tangentsAreEqual) {
-							Core.Operations.SetAnimableProperty.Perform(point, GetTangentPropertyName(1 - tangentIndex), -(pos + posCorrection.Value), CoreUserPreferences.Instance.AutoKeyframes);
+							Core.Operations.SetAnimableProperty.Perform(
+								@object: point,
+								propertyPath: GetTangentPropertyName(1 - tangentIndex),
+								value: -(pos + posCorrection.Value),
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
+							);
 						}
 					}
 					yield return null;
@@ -127,9 +152,12 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		static string GetTangentPropertyName(int index) => index == 0 ? nameof(SplinePoint3D.TangentA) : nameof(SplinePoint3D.TangentB);
+		private static string GetTangentPropertyName(int index)
+		{
+			return index == 0 ? nameof(SplinePoint3D.TangentA) : nameof(SplinePoint3D.TangentB);
+		}
 
-		static Plane CalcPlane(Spline3D spline, Vector3 point)
+		private static Plane CalcPlane(Spline3D spline, Vector3 point)
 		{
 			var m = spline.GlobalTransform;
 			var normal = m.TransformNormal(new Vector3(0, 0, 1)).Normalized;
@@ -137,9 +165,9 @@ namespace Tangerine.UI.SceneView
 			return new Plane(normal, d);
 		}
 
-		enum DragDirection
+		private enum DragDirection
 		{
-			Any, Horizontal, Vertical
+			Any, Horizontal, Vertical,
 		}
 	}
 }

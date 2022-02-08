@@ -30,7 +30,7 @@ namespace Tangerine.UI.FilesystemView
 		private const float RowHeight = 16.0f;
 		private Action<string> navigateAndSelect;
 		private Dictionary<Yuzu.Metadata.Meta.Item, bool> cookingRulesFoldState = new Dictionary<Meta.Item, bool>();
-		Texture2D cachedZebraTexture = null;
+		private Texture2D cachedZebraTexture = null;
 
 		public CookingRulesEditor(Action<string> navigateAndSelect)
 		{
@@ -41,7 +41,7 @@ namespace Tangerine.UI.FilesystemView
 			toolbar = new Toolbar();
 			toolbar.Nodes.AddRange(
 				targetSelector = new ThemedDropDownList {
-					LayoutCell = new LayoutCell(Alignment.Center)
+					LayoutCell = new LayoutCell(Alignment.Center),
 				}
 			);
 			targetSelector.Items.Add(new CommonDropDownList.Item("None", null));
@@ -60,8 +60,8 @@ namespace Tangerine.UI.FilesystemView
 				Layout = new VBoxLayout(),
 				Nodes = {
 					toolbar,
-					scrollView
-				}
+					scrollView,
+				},
 			};
 		}
 
@@ -76,7 +76,10 @@ namespace Tangerine.UI.FilesystemView
 				return;
 			}
 			var targetDir = Path.GetDirectoryName(filesystemSelection.First());
-			if (Orange.The.Workspace.AssetsDirectory == null || !targetDir.StartsWith(Orange.The.Workspace.AssetsDirectory)) {
+			if (
+				Orange.The.Workspace.AssetsDirectory == null
+				|| !targetDir.StartsWith(Orange.The.Workspace.AssetsDirectory)
+			) {
 				// We're somewhere outside the project directory
 				return;
 			}
@@ -93,11 +96,18 @@ namespace Tangerine.UI.FilesystemView
 					cachedZebraTexture.LoadImage(new[] { Theme.Colors.ZebraColor1, Theme.Colors.ZebraColor2 }, 1, 2);
 					cachedZebraTexture.TextureParams = new TextureParams {
 						WrapMode = TextureWrapMode.Repeat,
-						MinMagFilter = TextureFilter.Nearest
+						MinMagFilter = TextureFilter.Nearest,
 					};
 				}
 				w.PrepareRendererState();
-				Renderer.DrawSprite(cachedZebraTexture, Color4.White, Vector2.Zero, w.Size, Vector2.Zero, w.Size / (Vector2)cachedZebraTexture.ImageSize / RowHeight);
+				Renderer.DrawSprite(
+					texture1: cachedZebraTexture,
+					color: Color4.White,
+					position: Vector2.Zero,
+					size: w.Size,
+					uv0: Vector2.Zero,
+					uv1: w.Size / (Vector2)cachedZebraTexture.ImageSize / RowHeight
+				);
 			});
 		}
 
@@ -121,11 +131,11 @@ namespace Tangerine.UI.FilesystemView
 					new ThemedSimpleText {
 						Text = path,
 						OverflowMode = TextOverflowMode.Ignore,
-					}
+					},
 				},
 				MinHeight = RowHeight,
 				MinWidth = 100,
-				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground)
+				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.CategoryLabelBackground),
 			};
 		}
 
@@ -140,17 +150,18 @@ namespace Tangerine.UI.FilesystemView
 						Layout = new HBoxLayout {
 							IgnoreHidden = false,
 						},
-						// TODO: maybe some Metrics.ScrollView.SliderWidth ? (though ScrollView is decorated in DesktopTheme which is inside Lime)
+						// TODO: maybe some Metrics.ScrollView.SliderWidth ?
+						// (though ScrollView is decorated in DesktopTheme which is inside Lime)
 						Padding = new Thickness { Right = 10.0f },
 					}),
 					(overridesWidget = new Widget {
 						Visible = cookingRulesFoldState.TryGetValue(yi, out bool v) ? v : false,
 						Layout = new VBoxLayout(),
 						Padding = new Thickness {
-							Left = 30.0f
-						}
+							Left = 30.0f,
+						},
 					}),
-				}
+				},
 			};
 			fieldRootWidget.AddChangeWatcher(() => WidgetContext.Current.NodeUnderMouse, (value) => {
 				if (value != null && value.Parent == fieldRootWidget) {
@@ -190,7 +201,10 @@ namespace Tangerine.UI.FilesystemView
 			var rules = topmostRules;
 			while (rules != null) {
 				foreach (var t in targets) {
-					if (rules.TargetRules.TryGetValue(t, out ParticularCookingRules targetRules) && targetRules.FieldOverrides.Contains(yi)) {
+					if (
+						rules.TargetRules.TryGetValue(t, out ParticularCookingRules targetRules)
+						&& targetRules.FieldOverrides.Contains(yi)
+					) {
 						return targetRules;
 					}
 				}
@@ -202,9 +216,14 @@ namespace Tangerine.UI.FilesystemView
 			return null;
 		}
 
-		private void CreateHeaderWidgets(CookingRulesMap rulesMap, string path, Meta.Item yi,
-			Widget headerWidget, Widget overridesWidget, CookingRules rules)
-		{
+		private void CreateHeaderWidgets(
+			CookingRulesMap rulesMap,
+			string path,
+			Meta.Item yi,
+			Widget headerWidget,
+			Widget overridesWidget,
+			CookingRules rules
+		) {
 			SimpleText computedValueText;
 			Button createOrDestroyOverride = null;
 			headerWidget.HitTestTarget = true;
@@ -244,9 +263,11 @@ namespace Tangerine.UI.FilesystemView
 				},
 				createOrDestroyOverride = new ToolbarButton {
 					Texture = btnTexture(),
-					Clicked = () => CreateOrDestroyFieldOverride(rulesMap, path, yi, overridesWidget, createOrDestroyOverride),
+					Clicked = () => CreateOrDestroyFieldOverride(
+						rulesMap, path, yi, overridesWidget, createOrDestroyOverride
+					),
 					Enabled = CookingRulesBuilder.CanSetRulePerTarget(yi.Name, ActiveTarget),
-			}
+				}
 			);
 			headerWidget.Clicked = foldButton.Clicked;
 			createOrDestroyOverride.Padding = Thickness.Zero;
@@ -254,7 +275,8 @@ namespace Tangerine.UI.FilesystemView
 			if (IsCookingRulesFileItself(path)) {
 				rules = GetAssociatedCookingRules(rulesMap, path);
 			}
-			computedValueText.AddChangeWatcher(() => yi.GetValue(rules.EffectiveRules),
+			computedValueText.AddChangeWatcher(
+				() => yi.GetValue(rules.EffectiveRules),
 				(o) => computedValueText.Text = rules.FieldValueToString(yi, yi.GetValue(rules.EffectiveRules)));
 		}
 
@@ -287,9 +309,13 @@ namespace Tangerine.UI.FilesystemView
 			return isPerDirectory || isPerFile;
 		}
 
-
-		private void CreateOrDestroyFieldOverride(CookingRulesMap rulesMap, string path, Meta.Item yi, Widget overridesWidget, Button addRemoveField)
-		{
+		private void CreateOrDestroyFieldOverride(
+			CookingRulesMap rulesMap,
+			string path,
+			Meta.Item yi,
+			Widget overridesWidget,
+			Button addRemoveField
+		) {
 			var overrided = IsOverridedByAssociatedCookingRules(rulesMap, path, yi);
 			var key = NormalizePath(path);
 			if (overrided) {
@@ -329,24 +355,24 @@ namespace Tangerine.UI.FilesystemView
 		private Widget CreateOverridesWidgets(Target target, Meta.Item yi, CookingRules rules, bool affectsActiveTarget)
 		{
 			Widget innerContainer;
-			var SystemSourcePathText = string.IsNullOrEmpty(rules.SystemSourcePath)
+			var systemSourcePathText = string.IsNullOrEmpty(rules.SystemSourcePath)
 				? "Default"
 				: rules.SystemSourcePath.Substring(The.Workspace.AssetsDirectory.Length);
-			var targetName = target == null ? "" : $" ({target.Name})";
+			var targetName = target == null ? string.Empty : $" ({target.Name})";
 			var container = new Widget {
 				Padding = new Thickness { Right = 30 },
 				Nodes = {
 					(innerContainer = new Widget {
 						Layout = new HBoxLayout(),
 					}),
-					new ThemedSimpleText(SystemSourcePathText + targetName) {
+					new ThemedSimpleText(systemSourcePathText + targetName) {
 						FontHeight = 16,
 						ForceUncutText = false,
 						OverflowMode = TextOverflowMode.Ellipsis,
 						HAlignment = HAlignment.Right,
 						VAlignment = VAlignment.Center,
 						MinSize = new Vector2(100, RowHeight),
-						MaxSize = new Vector2(500, RowHeight)
+						MaxSize = new Vector2(500, RowHeight),
 					},
 					new ToolbarButton {
 						Texture = IconPool.GetTexture("Filesystem.ArrowRight"),
@@ -354,7 +380,7 @@ namespace Tangerine.UI.FilesystemView
 						Size = RowHeight * Vector2.One,
 						MinMaxSize = RowHeight * Vector2.One,
 						Clicked = () => navigateAndSelect(rules.SystemSourcePath),
-					}
+					},
 				},
 				Layout = new HBoxLayout(),
 			};
@@ -363,7 +389,14 @@ namespace Tangerine.UI.FilesystemView
 				if (affectsActiveTarget) {
 					Renderer.DrawRect(Vector2.Right * -20.0f, w.Size, Color4.Green.Lighten(0.5f).Transparentify(0.5f));
 				} else {
-					Renderer.DrawLine(10.0f - 30.0f, w.Height * 0.6f, w.Width - 10.0f, w.Height * 0.6f, Color4.Black.Transparentify(0.5f), 1.0f);
+					Renderer.DrawLine(
+						x0: 10.0f - 30.0f,
+						y0: w.Height * 0.6f,
+						x1: w.Width - 10.0f,
+						y1: w.Height * 0.6f,
+						color: Color4.Black.Transparentify(0.5f),
+						thickness: 1.0f
+					);
 				}
 			}));
 			container.Components.Add(new PropertyOverrideComponent {
@@ -408,7 +441,9 @@ namespace Tangerine.UI.FilesystemView
 		private static IPropertyEditor CreatePropertyEditorForType(Meta.Item yi, IPropertyEditorParams editorParams)
 		{
 			if (yi.Type.IsEnum) {
-				return (IPropertyEditor)Activator.CreateInstance(typeof(EnumPropertyEditor<>).MakeGenericType(yi.Type), editorParams);
+				return (IPropertyEditor)Activator.CreateInstance(
+					typeof(EnumPropertyEditor<>).MakeGenericType(yi.Type), editorParams
+				);
 			} else if (yi.Type == typeof(string)) {
 				return new StringPropertyEditor(editorParams);
 			} else if (yi.Type == typeof(int)) {
@@ -428,18 +463,19 @@ namespace Tangerine.UI.FilesystemView
 			return rules != null && RulesForActiveTarget(rules).FieldOverrides.Contains(yi);
 		}
 
-		private ParticularCookingRules RulesForActiveTarget(CookingRules CookingRules)
+		private ParticularCookingRules RulesForActiveTarget(CookingRules cookingRules)
 		{
-			return RulesForTarget(CookingRules, ActiveTarget);
+			return RulesForTarget(cookingRules, ActiveTarget);
 		}
 
-		private static ParticularCookingRules RulesForTarget(CookingRules CookingRules, Target target)
+		private static ParticularCookingRules RulesForTarget(CookingRules cookingRules, Target target)
 		{
-			return target == null ? CookingRules.CommonRules : CookingRules.TargetRules[target];
+			return target == null ? cookingRules.CommonRules : cookingRules.TargetRules[target];
 		}
 
-		private static CookingRules GetAssociatedCookingRules(CookingRulesMap rulesMap, string path, bool createIfNotExists = false)
-		{
+		private static CookingRules GetAssociatedCookingRules(
+			CookingRulesMap rulesMap, string path, bool createIfNotExists = false
+		) {
 			Action<string, CookingRules> ignoreRules = (p, r) => {
 				r = r.InheritClone();
 				r.Ignore = true;
@@ -463,7 +499,9 @@ namespace Tangerine.UI.FilesystemView
 						}
 					}
 				} else {
-					throw new Lime.Exception("CookingRules record for directory should already be present in collection.");
+					throw new Lime.Exception(
+						"CookingRules record for directory should already be present in collection."
+					);
 				}
 				cookingRules.SystemSourcePath = rulesPath;
 			} else {
@@ -476,7 +514,9 @@ namespace Tangerine.UI.FilesystemView
 					if (rulesMap.ContainsKey(key)) {
 						cookingRules = rulesMap[key].Parent;
 					} else {
-						throw new Lime.Exception("CookingRules record for cooking rules file itself should already be present in collection.");
+						throw new Lime.Exception(
+							"CookingRules record for cooking rules file itself should already be present in collection."
+						);
 					}
 				} else {
 					// Regular File
@@ -492,7 +532,9 @@ namespace Tangerine.UI.FilesystemView
 						ignoreRules(rulesPath, cookingRules);
 						rulesMap[key] = cookingRules;
 					} else {
-						throw new Lime.Exception("CookingRules record for any regular file should already be present in collection.");
+						throw new Lime.Exception(
+							"CookingRules record for any regular file should already be present in collection."
+						);
 					}
 				}
 			}

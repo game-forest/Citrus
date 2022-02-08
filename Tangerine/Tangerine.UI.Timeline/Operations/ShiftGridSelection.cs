@@ -57,14 +57,18 @@ namespace Tangerine.UI.Timeline.Operations
 				var b = new Backup {
 					Spans = Document.Current.VisibleSceneItems
 						.Select(i => i.Components.GetOrAdd<GridSpanListComponent>().Spans)
-						.ToList()
+						.ToList(),
 				};
 				op.Save(b);
 				if (op.Offset.Y != 0) {
 					foreach (var item in Document.Current.VisibleSceneItems) {
 						var i = item.GetTimelineSceneItemState().Index - op.Offset.Y;
 						item.Components.Remove<GridSpanListComponent>();
-						item.Components.Add(i >= 0 && i < Document.Current.VisibleSceneItems.Count ? new GridSpanListComponent(b.Spans[i]) : new GridSpanListComponent());
+						item.Components.Add(
+							i >= 0 && i < Document.Current.VisibleSceneItems.Count
+								? new GridSpanListComponent(b.Spans[i])
+								: new GridSpanListComponent()
+							);
 					}
 				}
 			}

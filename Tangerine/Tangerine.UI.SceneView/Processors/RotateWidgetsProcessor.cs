@@ -11,7 +11,7 @@ namespace Tangerine.UI.SceneView
 {
 	public class RotateWidgetsProcessor : ITaskProvider
 	{
-		private SceneView sv => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
@@ -27,9 +27,9 @@ namespace Tangerine.UI.SceneView
 				}
 				if (Utils.CalcHullAndPivot(widgets, out var hull, out var pivot)) {
 					for (int i = 0; i < 4; i++) {
-						if (sv.HitTestControlPoint(hull[i])) {
+						if (SceneView.HitTestControlPoint(hull[i])) {
 							Utils.ChangeCursorIfDefault(Cursors.Rotate);
-							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+							if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Rotate(pivot);
 							}
 						}
@@ -43,31 +43,30 @@ namespace Tangerine.UI.SceneView
 		{
 			using (Document.Current.History.BeginTransaction()) {
 				var widgets = Document.Current.TopLevelSelectedNodes().Editable().OfType<Widget>().ToList();
-				var mouseStartPos = sv.MousePosition;
+				var mouseStartPos = SceneView.MousePosition;
 
 				List<(Widget, AccumulativeRotationHelper)> accumulateRotationHelpers =
 					widgets.Select(widget =>
-						(widget, new AccumulativeRotationHelper(widget.Rotation, 0))
-					).ToList();
+						(widget, new AccumulativeRotationHelper(widget.Rotation, 0)))
+					.ToList();
 
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					Utils.ChangeCursorIfDefault(Cursors.Rotate);
-					var isRoundingMode = sv.Input.IsKeyPressed(Key.C);
+					var isRoundingMode = SceneView.Input.IsKeyPressed(Key.C);
 					Document.Current.History.RollbackTransaction();
 					RotateWidgets(
 						pivotPoint: pivot,
 						widgets: widgets,
-						curMousePos: sv.MousePosition,
+						curMousePos: SceneView.MousePosition,
 						prevMousePos: mouseStartPos,
-						snapped: sv.Input.IsKeyPressed(Key.Shift),
+						snapped: SceneView.Input.IsKeyPressed(Key.Shift),
 						accumulativeRotationHelpers: accumulateRotationHelpers,
-						isRoundingMode: isRoundingMode
-					);
+						isRoundingMode: isRoundingMode);
 					yield return null;
 				}
 				Document.Current.History.CommitTransaction();
 			}
-			sv.Input.ConsumeKey(Key.Mouse0);
+			SceneView.Input.ConsumeKey(Key.Mouse0);
 		}
 
 		private static void RotateWidgets(
@@ -77,12 +76,11 @@ namespace Tangerine.UI.SceneView
 			Vector2 prevMousePos,
 			bool snapped,
 			List<(Widget, AccumulativeRotationHelper)> accumulativeRotationHelpers,
-			bool isRoundingMode
-		) {
+			bool isRoundingMode) {
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
 				widgetsInParentSpace: widgets,
 				overridePivotInSceneSpace: widgets.Count <= 1
-					? (Vector2?) null
+					? (Vector2?)null
 					: pivotPoint,
 				obbInFirstWidgetSpace: widgets.Count <= 1,
 				currentMousePosInSceneSpace: curMousePos,
@@ -99,11 +97,10 @@ namespace Tangerine.UI.SceneView
 						rotation = WidgetTransformsHelper.RoundTo(rotation, 15);
 					}
 					foreach (var (widget, newRotation) in accumulativeRotationHelpers) {
-						newRotation.Rotate((float) rotation);
+						newRotation.Rotate((float)rotation);
 					}
 					return new Transform2d(Vector2d.Zero, Vector2d.One, rotation);
-				}
-			);
+				});
 
 			foreach ((Widget, AccumulativeRotationHelper) tuple in accumulativeRotationHelpers) {
 				var newRotation = tuple.Item2.Rotation;
@@ -114,10 +111,8 @@ namespace Tangerine.UI.SceneView
 					@object: tuple.Item1,
 					propertyPath: nameof(Widget.Rotation),
 					value: newRotation,
-					createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
-				);
+					createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes);
 			}
 		}
-
 	}
 }

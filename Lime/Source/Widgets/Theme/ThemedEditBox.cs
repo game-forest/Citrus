@@ -28,11 +28,17 @@ namespace Lime
 			tw.VAlignment = VAlignment.Center;
 
 			var editorParams = new EditorParams {
-				MaxLines = 1, Scroll = eb.ScrollView,
+				MaxLines = 1,
+				Scroll = eb.ScrollView,
 				OffsetContextMenu = p => p + new Vector2(1f, tw.FontHeight + 1f),
-				SelectAllOnFocus = true
+				SelectAllOnFocus = true,
 			};
-			eb.Editor = new Editor(displayWidget: tw, editorParams: editorParams, focusableWidget: eb, clickableWidget: eb.ScrollWidget);
+			eb.Editor = new Editor(
+				displayWidget: tw,
+				editorParams: editorParams,
+				focusableWidget: eb,
+				clickableWidget: eb.ScrollWidget
+			);
 			var vc = new VerticalLineCaret { Color = Theme.Colors.TextCaret };
 			eb.Updated += delta => {
 				vc.Width = eb.Editor.OverwriteMode && !eb.Editor.HasSelection() ?
@@ -42,17 +48,22 @@ namespace Lime
 				}
 			};
 			new CaretDisplay(
-				tw, eb.Editor.CaretPos, new CaretParams { CaretPresenter = vc });
+				tw, eb.Editor.CaretPos, new CaretParams { CaretPresenter = vc }
+			);
 			new SelectionPresenter(
-				tw, eb.Editor.SelectionStart, eb.Editor.SelectionEnd,
-				new SelectionParams {
+				container: tw,
+				selectionStart: eb.Editor.SelectionStart,
+				selectionEnd: eb.Editor.SelectionEnd,
+				selectionParams: new SelectionParams {
 					Padding = Thickness.Zero,
 					OutlineColor = Theme.Colors.TextSelection,
-					Color = Theme.Colors.TextSelection
+					Color = Theme.Colors.TextSelection,
 				});
 
 			eb.TabTravesable = new TabTraversable();
-			eb.CompoundPresenter.Add(new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder));
+			eb.CompoundPresenter.Add(new ThemedFramePresenter(
+				Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder)
+			);
 			eb.CompoundPostPresenter.Add(new Theme.KeyboardFocusBorderPresenter());
 			eb.CompoundPostPresenter.Add(new Theme.MouseHoverBorderPresenter());
 			eb.LateTasks.Add(Theme.MouseHoverInvalidationTask(eb));
@@ -73,8 +84,8 @@ namespace Lime
 			TextWidget.Padding = new Thickness(left: 5.0f, right: 5.0f, top: 2.0f, bottom: 2.0f);
 			Layout = new HBoxLayout();
 			// Lime.EditorParams.MouseSelectionThreshold is 3 by default and this gesture should be recognized first.
-			// To achieve that we're setting its drag threshold to 2.0f, add it to Editor.ClickableWidget (same collection
-			// editor adds its widgets to) and do it in LateTasks.
+			// To achieve that we're setting its drag threshold to 2.0f, add it to Editor.ClickableWidget
+			// (same collection editor adds its widgets to) and do it in LateTasks.
 			var dragGesture = new DragGesture(exclusive: true, dragThreshold: 2.0f);
 			Updated += (delta) => {
 				if (Editor.FocusableWidget.IsFocused()) {
@@ -123,7 +134,9 @@ namespace Lime
 						wrapped = true;
 					}
 					if (wrapped) {
-						Application.DesktopMousePosition = new Vector2(mousePosition.X, Application.DesktopMousePosition.Y);
+						Application.DesktopMousePosition = new Vector2(
+							mousePosition.X, Application.DesktopMousePosition.Y
+						);
 					}
 					var delta = (mousePosition.X - startMousePosition.X + accumulator).Round() * Step;
 					if (Input.IsKeyPressed(Key.Shift)) {

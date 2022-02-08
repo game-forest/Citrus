@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Lime;
 using System.Linq;
+using Lime;
 
 namespace Tangerine.Core.Operations
 {
@@ -51,7 +51,12 @@ namespace Tangerine.Core.Operations
 				// Ensure TangerineFlags.DisplayContent set by EnterNode is cleared
 				var container = Document.Current.Container;
 				Document.Current.History.DoTransaction(() => {
-					SetProperty.Perform(container, nameof(Node.TangerineFlags), container.TangerineFlags & ~TangerineFlags.DisplayContent, isChangingDocument: false);
+					SetProperty.Perform(
+						obj: container,
+						propertyName: nameof(Node.TangerineFlags),
+						value: container.TangerineFlags & ~TangerineFlags.DisplayContent,
+						isChangingDocument: false
+					);
 				});
 			}
 
@@ -97,7 +102,12 @@ namespace Tangerine.Core.Operations
 				}
 			} else {
 				ChangeContainer(container, selectFirstNode);
-				SetProperty.Perform(container, nameof(Node.TangerineFlags), container.TangerineFlags | TangerineFlags.DisplayContent, isChangingDocument: false);
+				SetProperty.Perform(
+					obj: container,
+					propertyName: nameof(Node.TangerineFlags),
+					value: container.TangerineFlags | TangerineFlags.DisplayContent,
+					isChangingDocument: false
+				);
 			}
 			return true;
 		}
@@ -138,7 +148,12 @@ namespace Tangerine.Core.Operations
 				}
 			} else {
 				var container = doc.Container;
-				SetProperty.Perform(container, nameof(Node.TangerineFlags), container.TangerineFlags & ~TangerineFlags.DisplayContent, isChangingDocument: false);
+				SetProperty.Perform(
+					obj: container,
+					propertyName: nameof(Node.TangerineFlags),
+					value: container.TangerineFlags & ~TangerineFlags.DisplayContent,
+					isChangingDocument: false
+				);
 				var node = container;
 				EnterNode.Perform(container.Parent, false);
 				SelectNode.Perform(node, true);
@@ -160,7 +175,9 @@ namespace Tangerine.Core.Operations
 				animation.IsLegacy && Document.Current.Container != animation.OwnerNode ||
 				!animation.IsLegacy && !Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
 			) {
-				var node = NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false);
+				var node = NavigateToNode.Perform(
+					animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false
+				);
 				// Remap animation in case of external scene.
 				animation = node.Animations.Find(animation.Id);
 			}

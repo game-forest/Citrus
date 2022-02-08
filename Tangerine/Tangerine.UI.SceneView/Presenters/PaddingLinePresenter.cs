@@ -1,7 +1,7 @@
 using System;
-using Tangerine.Core;
-using Lime;
 using System.Collections.Generic;
+using Lime;
+using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
@@ -10,7 +10,9 @@ namespace Tangerine.UI.SceneView
 		private readonly SceneView sv;
 
 		private readonly VisualHint paddingVisualHint =
-			VisualHintsRegistry.Instance.Register("/All/Padding", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+			VisualHintsRegistry.Instance.Register(
+				"/All/Padding", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		public PaddingLinePresenter(SceneView sceneView)
 		{
@@ -45,7 +47,7 @@ namespace Tangerine.UI.SceneView
 			Left,
 			Bottom,
 			Right,
-			Top
+			Top,
 		}
 
 		public Widget Owner { get; }
@@ -65,7 +67,7 @@ namespace Tangerine.UI.SceneView
 			new Vector2(1, 0),
 			new Vector2(0, -1),
 			new Vector2(-1, 0),
-			new Vector2(0, 1)
+			new Vector2(0, 1),
 		};
 
 		private static readonly ThicknessProperty[] propertyNames = {
@@ -79,15 +81,15 @@ namespace Tangerine.UI.SceneView
 			g => g.Padding.Left,
 			g => g.Padding.Bottom,
 			g => g.Padding.Right,
-			g => g.Padding.Top
+			g => g.Padding.Top,
 		};
 
-		public PaddingLine(int index, Tuple<Vector2, Vector2> AB, Widget widget)
+		public PaddingLine(int index, Tuple<Vector2, Vector2> aB, Widget widget)
 		{
 			this.index = index;
 			Owner = widget;
-			A = AB.Item1;
-			B = AB.Item2;
+			A = aB.Item1;
+			B = aB.Item2;
 		}
 
 		public void Render(Widget canvas, Matrix32 matrix)
@@ -112,8 +114,7 @@ namespace Tangerine.UI.SceneView
 				label,
 				FontHeight,
 				ColorTheme.Current.SceneView.PaddingEditorText,
-				0
-			);
+				0);
 			Renderer.PopState();
 			Renderer.PopState();
 		}
@@ -130,25 +131,21 @@ namespace Tangerine.UI.SceneView
 				widget.Padding.Left,
 				widget.Padding.Bottom,
 				widget.Padding.Right,
-				widget.Padding.Top
+				widget.Padding.Top,
 			};
 			var lines = new[] {
 				Tuple.Create(
 					new Vector2(aabb.AX + paddings[0], aabb.AY + paddings[3]),
-					new Vector2(aabb.AX + paddings[0], aabb.BY - paddings[1])
-				),
+					new Vector2(aabb.AX + paddings[0], aabb.BY - paddings[1])),
 				Tuple.Create(
 					new Vector2(aabb.AX + paddings[0], aabb.BY - paddings[1]),
-					new Vector2(aabb.BX - paddings[2], aabb.BY - paddings[1])
-				),
+					new Vector2(aabb.BX - paddings[2], aabb.BY - paddings[1])),
 				Tuple.Create(
 					new Vector2(aabb.BX - paddings[2], aabb.AY + paddings[3]),
-					new Vector2(aabb.BX - paddings[2], aabb.BY - paddings[1])
-				),
+					new Vector2(aabb.BX - paddings[2], aabb.BY - paddings[1])),
 				Tuple.Create(
 					new Vector2(aabb.AX + paddings[0], aabb.AY + paddings[3]),
-					new Vector2(aabb.BX - paddings[2], aabb.AY + paddings[3])
-				)
+					new Vector2(aabb.BX - paddings[2], aabb.AY + paddings[3])),
 			};
 			for (var i = 0; i < 4; ++i) {
 				yield return new PaddingLine(i, lines[i], widget);

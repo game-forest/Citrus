@@ -42,7 +42,15 @@ namespace Lime
 
 		public void Apply(int pass)
 		{
-			shaderParams.Set(amountKey, new Vector4(ChromaticAberration * Red, ChromaticAberration * Green, ChromaticAberration * Blue, BarrelPincushion));
+			shaderParams.Set(
+				amountKey,
+				new Vector4(
+					ChromaticAberration * Red,
+					ChromaticAberration * Green,
+					ChromaticAberration * Blue,
+					BarrelPincushion
+				)
+			);
 			PlatformRenderer.SetBlendState(!Opaque ? Blending.GetBlendState() : disabledBlendingState);
 			PlatformRenderer.SetShaderProgram(DistortionShaderProgram.GetInstance(Opaque));
 			PlatformRenderer.SetShaderParams(shaderParamsArray);
@@ -97,27 +105,33 @@ namespace Lime
 				gl_FragColor = vec4(color.rgb * c.rgb, 1.0);
 			}";
 
-		private static readonly Dictionary<int, DistortionShaderProgram> instances = new Dictionary<int, DistortionShaderProgram>();
+		private static readonly Dictionary<int, DistortionShaderProgram> instances =
+			new Dictionary<int, DistortionShaderProgram>();
 
 		private static int GetInstanceKey(bool opaque) => opaque ? 1 : 0;
 
 		public static DistortionShaderProgram GetInstance(bool opaque = false)
 		{
 			var key = GetInstanceKey(false);
-			return instances.TryGetValue(key, out var shaderProgram) ? shaderProgram : (instances[key] = new DistortionShaderProgram(opaque));
+			return instances.TryGetValue(key, out var shaderProgram)
+				? shaderProgram
+				: (instances[key] = new DistortionShaderProgram(opaque));
 		}
 
-		private DistortionShaderProgram(bool opaque) : base(CreateShaders(opaque), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private DistortionShaderProgram(bool opaque)
+			: base(CreateShaders(opaque), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders(bool opaque)
 		{
-			var length = FragmentShaderPart1.Length + (!opaque ? FragmentShaderPart2.Length : FragmentShaderPart2Opaque.Length);
+			var length = FragmentShaderPart1.Length
+				+ (!opaque ? FragmentShaderPart2.Length : FragmentShaderPart2Opaque.Length);
 			var fragmentShader = new StringBuilder(length);
 			fragmentShader.Append(FragmentShaderPart1);
 			fragmentShader.Append(!opaque ? FragmentShaderPart2 : FragmentShaderPart2Opaque);
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

@@ -114,7 +114,7 @@ namespace Lime
 									Nodes.Move(currentIndex, indexTo);
 									OnReordering?.Invoke(new ReorderEventArgs {
 										IndexFrom = currentIndex,
-										IndexTo = indexTo
+										IndexTo = indexTo,
 									});
 								}
 							}
@@ -122,7 +122,7 @@ namespace Lime
 						}
 						OnReordered?.Invoke(new ReorderEventArgs {
 							IndexFrom = indexFrom,
-							IndexTo = indexTo
+							IndexTo = indexTo,
 						});
 					}
 				}

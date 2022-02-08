@@ -4,7 +4,7 @@ using Lime;
 namespace Citrus.Tests.Types
 {
 	[TestClass]
-	class IntVector2Tests
+	internal class IntVector2Tests
 	{
 		[TestMethod]
 		public void Vector2CastTest()

@@ -127,7 +127,7 @@ namespace Lime
 			TaskList savedCurrent = Current;
 			Current = this;
 			try {
-				for (int i = 0; i < Count; ) {
+				for (int i = 0; i < Count;) {
 					var task = this[i];
 					if (task.Completed) {
 						Remove(task);

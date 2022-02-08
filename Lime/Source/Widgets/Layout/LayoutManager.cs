@@ -7,7 +7,8 @@ namespace Lime
 	{
 		// ArrangeQueue has root-nodes first order to minimize ArrangeChildren calls.
 		private readonly DepthOrderedQueue arrangeQueue = new DepthOrderedQueue(rootToLeavesOrder: true);
-		// MeasureQueue has leaf-nodes first order, because widget size constraints depends only on the widget's children constraints.
+		// MeasureQueue has leaf-nodes first order, because widget size constraints
+		// depends only on the widget's children constraints.
 		private readonly DepthOrderedQueue measureQueue = new DepthOrderedQueue(rootToLeavesOrder: false);
 
 		public void AddToArrangeQueue(ILayout layout)
@@ -27,7 +28,8 @@ namespace Lime
 				if (l == null) {
 					break;
 				}
-				// Ignore this layout in case its orphaned now. This may happen when we somehow trigger Layout.InvalidateConstraintsAndArrangement
+				// Ignore this layout in case its orphaned now.
+				// This may happen when we somehow trigger Layout.InvalidateConstraintsAndArrangement
 				// and replace given layout on the same frame.
 				if (l.Owner == null) {
 					continue;
@@ -51,9 +53,9 @@ namespace Lime
 			}
 		}
 
-		class DepthOrderedQueue
+		private class DepthOrderedQueue
 		{
-			const int MaxDepth = 20;
+			private const int MaxDepth = 20;
 			private List<ILayout>[] buckets = new List<ILayout>[MaxDepth];
 			private readonly bool rootToLeavesOrder;
 
@@ -78,8 +80,10 @@ namespace Lime
 			{
 				for (int i = 0; i < MaxDepth; i++) {
 					var bucket = buckets[i];
-					if (bucket == null)
+					if (bucket == null) {
 						continue;
+					}
+
 					int c = bucket.Count;
 					if (c > 0) {
 						var layout = bucket[c - 1];

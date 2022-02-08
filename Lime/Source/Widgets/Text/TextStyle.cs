@@ -24,12 +24,13 @@ namespace Lime
 		public enum ImageUsageEnum
 		{
 			Bullet,
-			Overlay
+			Overlay,
 		}
 
 		[YuzuMember]
 		[TangerineKeyframeColor(28)]
-		public ITexture ImageTexture {
+		public ITexture ImageTexture
+		{
 			get { return imageTexture; }
 			set
 			{

@@ -73,18 +73,29 @@ namespace Lime
 			var numPoints = 0;
 			foreach (var pt in points) {
 				++numPoints;
-				if (pt.X < minx.X)
+				if (pt.X < minx.X) {
 					minx = pt;
-				if (pt.X > maxx.X)
+				}
+
+				if (pt.X > maxx.X) {
 					maxx = pt;
-				if (pt.Y < miny.Y)
+				}
+
+				if (pt.Y < miny.Y) {
 					miny = pt;
-				if (pt.Y > maxy.Y)
+				}
+
+				if (pt.Y > maxy.Y) {
 					maxy = pt;
-				if (pt.Z < minz.Z)
+				}
+
+				if (pt.Z < minz.Z) {
 					minz = pt;
-				if (pt.Z > maxz.Z)
+				}
+
+				if (pt.Z > maxz.Z) {
 					maxz = pt;
+				}
 			}
 
 			if (numPoints == 0) {
@@ -116,13 +127,13 @@ namespace Lime
 			// Page 218
 			float sqRadius = radius * radius;
 			foreach (var pt in points) {
-				var diff = (pt - center);
+				var diff = pt - center;
 				float sqDist = diff.SqrLength;
 				if (sqDist > sqRadius) {
 					float distance = Mathf.Sqrt(sqDist);
 					var direction = diff / distance;
-					var G = center - radius * direction;
-					center = (G + pt) / 2;
+					var g = center - radius * direction;
+					center = (g + pt) / 2;
 					radius = (pt - center).Length;
 					sqRadius = radius * radius;
 				}
@@ -154,15 +165,17 @@ namespace Lime
 		/// </summary>
 		public BoundingSphere Transform(Matrix44 matrix)
 		{
-			return new BoundingSphere
-			{
+			return new BoundingSphere {
 				Center = matrix.TransformVector(Center),
 				Radius =
 					Radius *
-					((float)
-						Math.Sqrt(Math.Max(((matrix.M11 * matrix.M11) + (matrix.M12 * matrix.M12)) + (matrix.M13 * matrix.M13),
-							Math.Max(((matrix.M21 * matrix.M21) + (matrix.M22 * matrix.M22)) + (matrix.M23 * matrix.M23),
-								((matrix.M31 * matrix.M31) + (matrix.M32 * matrix.M32)) + (matrix.M33 * matrix.M33)))))
+					((float)Math.Sqrt(Math.Max(
+							(matrix.M11 * matrix.M11) + (matrix.M12 * matrix.M12) + (matrix.M13 * matrix.M13),
+							Math.Max(
+								(matrix.M21 * matrix.M21) + (matrix.M22 * matrix.M22) + (matrix.M23 * matrix.M23),
+								(matrix.M31 * matrix.M31) + (matrix.M32 * matrix.M32) + (matrix.M33 * matrix.M33)
+							)
+					))),
 			};
 		}
 

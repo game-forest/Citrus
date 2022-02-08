@@ -8,8 +8,7 @@ namespace Tangerine.UI.SceneView
 {
 	public class RotateBoneProcessor : ITaskProvider
 	{
-		SceneView sv => SceneView.Instance;
-
+		private SceneView SceneView => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
@@ -23,9 +22,9 @@ namespace Tangerine.UI.SceneView
 					var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
 					var t = Document.Current.Container.AsWidget.LocalToWorldTransform;
 					var hull = BonePresenter.CalcRect(bone) * t;
-					if (hull.Contains(sv.MousePosition) && !sv.Input.IsKeyPressed(Key.Control)) {
+					if (hull.Contains(SceneView.MousePosition) && !SceneView.Input.IsKeyPressed(Key.Control)) {
 						Utils.ChangeCursorIfDefault(Cursors.Rotate);
-						if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+						if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 							yield return Rotate(bone, entry);
 						}
 					}
@@ -34,30 +33,31 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-
-		IEnumerator<object> Rotate(Bone bone, BoneArray.Entry entry)
+		private IEnumerator<object> Rotate(Bone bone, BoneArray.Entry entry)
 		{
 			using (Document.Current.History.BeginTransaction()) {
 				float rotation = 0;
-				var mousePos = sv.MousePosition;
+				var mousePos = SceneView.MousePosition;
 				var initRotation = bone.Rotation;
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 
 					var t = Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 					Utils.ChangeCursorIfDefault(Cursors.Rotate);
 					var a = mousePos * t - entry.Joint;
-					var b = sv.MousePosition * t - entry.Joint;
-					mousePos = sv.MousePosition;
+					var b = SceneView.MousePosition * t - entry.Joint;
+					mousePos = SceneView.MousePosition;
 					if (a.Length > Mathf.ZeroTolerance && b.Length > Mathf.ZeroTolerance) {
 						rotation += Mathf.Wrap180(b.Atan2Deg - a.Atan2Deg);
 					}
-					Core.Operations.SetAnimableProperty.Perform(bone, nameof(Bone.Rotation), initRotation + rotation, CoreUserPreferences.Instance.AutoKeyframes);
+					Core.Operations.SetAnimableProperty.Perform(
+						bone, nameof(Bone.Rotation), initRotation + rotation, CoreUserPreferences.Instance.AutoKeyframes
+					);
 					bone.Parent.Update(0);
 					yield return null;
 				}
 				yield return null;
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 			yield return null;

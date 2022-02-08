@@ -5,7 +5,8 @@ namespace Tangerine.UI
 {
 	public class AudioSamplePropertyEditor : FilePropertyEditor<SerializableSample>
 	{
-		public AudioSamplePropertyEditor(IPropertyEditorParams editorParams) : base(editorParams, new string[] { "ogg" })
+		public AudioSamplePropertyEditor(IPropertyEditorParams editorParams)
+			: base(editorParams, new string[] { "ogg" })
 		{ }
 
 		protected override void AssignAsset(string path)
@@ -15,7 +16,7 @@ namespace Tangerine.UI
 
 		protected override string ValueToStringConverter(SerializableSample obj)
 		{
-			return obj?.SerializationPath ?? "";
+			return obj?.SerializationPath ?? string.Empty;
 		}
 
 		protected override SerializableSample StringToValueConverter(string path)

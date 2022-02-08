@@ -36,7 +36,8 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 
 		public static void RemoveClip(AnimationTrack track, AnimationClip clip)
 		{
-			Core.Operations.RemoveFromList<AnimationClipList, AnimationClip>.Perform(track.Clips, track.Clips.IndexOf(clip));
+			Core.Operations.RemoveFromList<AnimationClipList, AnimationClip>
+				.Perform(track.Clips, track.Clips.IndexOf(clip));
 		}
 
 		public static void SplitClip(AnimationTrack track, AnimationClip clip, int frame)

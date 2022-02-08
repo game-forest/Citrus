@@ -12,7 +12,7 @@ namespace Lime
 		ZippedDeflate = 1 << 0,
 		NonPowerOf2Texture = 1 << 1,
 		ZippedLZMA = 1 << 2,
-		Zipped = ZippedDeflate | ZippedLZMA
+		Zipped = ZippedDeflate | ZippedLZMA,
 	}
 
 	public abstract class AssetBundle : IDisposable
@@ -82,12 +82,21 @@ namespace Lime
 
 		public abstract bool FileExists(string path);
 
-		public abstract void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes);
+		public abstract void ImportFile(
+			string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+		);
 
 		/// <summary>
 		/// Imports a file assuming that the input stream is already compressed.
 		/// </summary>
-		public abstract void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes);
+		public abstract void ImportFileRaw(
+			string destinationPath,
+			Stream stream,
+			int unpackedSize,
+			SHA256 hash,
+			SHA256 cookingUnitHash,
+			AssetAttributes attributes
+		);
 
 		/// <summary>
 		/// Enumerates all files by given path and having the given extension.

@@ -9,7 +9,10 @@ namespace Tangerine.UI.SceneView
 	{
 		public override bool GetChecked() => Document.Current.ResolutionPreview.Enabled;
 
-		public override void ExecuteTransaction() => Execute(Document.Current, !Document.Current.ResolutionPreview.Enabled);
+		public override void ExecuteTransaction()
+		{
+			Execute(Document.Current, !Document.Current.ResolutionPreview.Enabled);
+		}
 
 		public static void Execute(Document document, bool enable)
 		{
@@ -46,8 +49,9 @@ namespace Tangerine.UI.SceneView
 			Application.InvalidateWindows();
 		}
 
-		private static void PerformResolutionPreviewOperation(ResolutionPreview resolutionPreview, bool requiredSave = true)
-		{
+		private static void PerformResolutionPreviewOperation(
+			ResolutionPreview resolutionPreview, bool requiredSave = true
+		) {
 			using (Document.Current.History.BeginTransaction()) {
 				ResolutionPreviewOperation.Perform(resolutionPreview, requiredSave);
 				Document.Current.History.CommitTransaction();
@@ -150,7 +154,7 @@ namespace Tangerine.UI.SceneView
 		private static ResolutionPreview DisabledResolutionPreview => new ResolutionPreview {
 			Enabled = false,
 			Preset = ProjectPreferences.Instance.Resolutions.First(),
-			IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault
+			IsPortrait = !ProjectPreferences.Instance.IsLandscapeDefault,
 		};
 
 		private readonly ResolutionPreview resolutionPreview;
@@ -177,8 +181,15 @@ namespace Tangerine.UI.SceneView
 
 		public sealed class Processor : OperationProcessor<ResolutionPreviewOperation>
 		{
-			protected override void InternalRedo(ResolutionPreviewOperation op) => ApplyResolutionPreset(op.resolutionPreview, op.requiredSave);
-			protected override void InternalUndo(ResolutionPreviewOperation op) => ApplyResolutionPreset(DisabledResolutionPreview, requiredSave: false);
+			protected override void InternalRedo(ResolutionPreviewOperation op)
+			{
+				ApplyResolutionPreset(op.resolutionPreview, op.requiredSave);
+			}
+
+			protected override void InternalUndo(ResolutionPreviewOperation op)
+			{
+				ApplyResolutionPreset(DisabledResolutionPreview, requiredSave: false);
+			}
 
 			private static void ApplyResolutionPreset(ResolutionPreview resolutionPreview, bool requiredSave)
 			{
@@ -199,11 +210,13 @@ namespace Tangerine.UI.SceneView
 				if (resolutionPreview.IsPortrait) {
 					resolution = new Vector2(
 						defaultResolution.LandscapeValue.Y,
-						defaultResolution.LandscapeValue.Y * (resolutionPreview.Preset.LandscapeValue.X / resolutionPreview.Preset.LandscapeValue.Y)
+						defaultResolution.LandscapeValue.Y
+							* (resolutionPreview.Preset.LandscapeValue.X / resolutionPreview.Preset.LandscapeValue.Y)
 					);
 				} else {
 					resolution = new Vector2(
-						defaultResolution.LandscapeValue.Y * (resolutionPreview.Preset.LandscapeValue.X / resolutionPreview.Preset.LandscapeValue.Y),
+						defaultResolution.LandscapeValue.Y
+							* (resolutionPreview.Preset.LandscapeValue.X / resolutionPreview.Preset.LandscapeValue.Y),
 						defaultResolution.LandscapeValue.Y
 					);
 				}
@@ -212,8 +225,9 @@ namespace Tangerine.UI.SceneView
 				ApplyLocalizationMarkers(rootNode);
 			}
 
-			private static void ApplyResolutionMarkers(Node rootNode, ResolutionPreset resolutionPreset, bool isPortrait)
-			{
+			private static void ApplyResolutionMarkers(
+				Node rootNode, ResolutionPreset resolutionPreset, bool isPortrait
+			) {
 				var markers = resolutionPreset.GetMarkers(isPortrait);
 
 				void ApplyResolutionMarkerToNode(Node node)

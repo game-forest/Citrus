@@ -19,10 +19,12 @@ namespace Lime
 			var menuType = NativeContextMenu.GetType();
 			var scroll =
 				menuType.GetMethod("ScrollInternal", flags, null, new[] { typeof(bool) }, null);
-			var btnUp = (ToolStripControlHost)
-				menuType.BaseType.GetProperty("UpScrollButton", flags).GetValue(NativeContextMenu);
-			var btnDown = (ToolStripControlHost)
-				menuType.BaseType.GetProperty("DownScrollButton", flags).GetValue(NativeContextMenu);
+			var btnUp = (ToolStripControlHost)menuType.BaseType
+				.GetProperty("UpScrollButton", flags)
+				.GetValue(NativeContextMenu);
+			var btnDown = (ToolStripControlHost)menuType.BaseType
+				.GetProperty("DownScrollButton", flags)
+				.GetValue(NativeContextMenu);
 			NativeContextMenu.MouseWheel += (s, e) => {
 				bool canScrollUp = btnUp.Visible && btnUp.Enabled && e.Delta > 0;
 				bool canScrollDown = btnDown.Visible && btnDown.Enabled && e.Delta < 0;
@@ -67,7 +69,8 @@ namespace Lime
 		public bool ShowImageMargin
 		{
 			get => showImageMargin;
-			set {
+			set
+			{
 				if (value == showImageMargin) {
 					return;
 				}
@@ -250,7 +253,7 @@ namespace Lime
 					checkMark = new[] {
 						new PointF(px + 0.3f * sizeX, py + 0.5f * sizeY),
 						new PointF(px + 0.5f * sizeX, py + 0.7f * sizeY),
-						new PointF(px + 0.7f * sizeX, py + 0.2f * sizeY)
+						new PointF(px + 0.7f * sizeX, py + 0.2f * sizeY),
 					};
 				}
 				e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
@@ -269,14 +272,14 @@ namespace Lime
 				PointF[] arrow = new[] {
 					new PointF(px + 0.3f * sizeX, py + 0.3f * sizeY),
 					new PointF(px + 0.3f * sizeX, py + 0.7f * sizeY),
-					new PointF(px + 0.7f * sizeX, py + 0.5f * sizeY)
+					new PointF(px + 0.7f * sizeX, py + 0.5f * sizeY),
 				};
 				e.Graphics.FillPolygon(brush, arrow);
 			}
 		}
 	}
 
-	class MenuItem
+	internal class MenuItem
 	{
 		private int commandVersion;
 		public readonly ICommand Command;
@@ -301,7 +304,7 @@ namespace Lime
 				Command.Menu.Refresh();
 				var e = false;
 				foreach (var c in Command.Menu) {
-					e |= (c != Lime.Command.MenuSeparator && c.Enabled);
+					e |= c != Lime.Command.MenuSeparator && c.Enabled;
 				}
 				NativeItem.Enabled = e;
 			} else {
@@ -317,8 +320,10 @@ namespace Lime
 				NativeItem.Image = (System.Drawing.Image)Command.Icon.AsNativeIcon;
 			}
 			var mi = NativeItem as ToolStripMenuItem;
-			if (mi == null)
+			if (mi == null) {
 				return;
+			}
+
 			mi.ShortcutKeys = ToNativeKeys(Command.Shortcut);
 			mi.Checked = Command.Checked;
 			mi.DropDown = ((Menu)Command.Menu)?.NativeContextMenu;

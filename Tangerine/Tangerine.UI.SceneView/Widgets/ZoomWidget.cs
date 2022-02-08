@@ -1,5 +1,5 @@
-using Lime;
 using System.Collections.Generic;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
@@ -12,7 +12,7 @@ namespace Tangerine.UI.SceneView
 			0.001f, 0.0025f, 0.005f, 0.01f, 0.025f, 0.05f, 0.10f,
 			0.15f, 0.25f, 0.5f, 0.75f, 1f, 1.5f, 2f, 3f,
 			4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f,
-			12f, 13f, 14f, 15f, 16f
+			12f, 13f, 14f, 15f, 16f,
 		};
 		private readonly Slider slider;
 
@@ -36,9 +36,11 @@ namespace Tangerine.UI.SceneView
 				Anchors = Anchors.Right,
 				RangeMin = 0,
 				RangeMax = zoomTable.Count - 1,
-				Step = 1
+				Step = 1,
 			};
-			slider.CompoundPresenter.Add(new SliderCenterPresenter(FindNearest(1f, 0, zoomTable.Count), zoomTable.Count));
+			slider.CompoundPresenter.Add(
+				new SliderCenterPresenter(FindNearest(1f, 0, zoomTable.Count), zoomTable.Count)
+			);
 
 			var zoomInButton = new ToolbarButton {
 				MinMaxSize = new Vector2(FrameHeight),
@@ -70,7 +72,7 @@ namespace Tangerine.UI.SceneView
 			var zoomEditor = new ThemedEditBox {
 				LayoutCell = new LayoutCell(Alignment.RightCenter),
 				Anchors = Anchors.Right,
-				MinMaxWidth = 50
+				MinMaxWidth = 50,
 			};
 			zoomEditor.Submitted += value => {
 				var success = float.TryParse(value.TrimEnd('%'), out var zoom) && zoomTable.Count > 0;
@@ -130,7 +132,7 @@ namespace Tangerine.UI.SceneView
 			{
 				var widget = node.AsWidget;
 				widget.PrepareRendererState();
-				var xPos = (widget.Width / partsCount) * middleIndex;
+				var xPos = widget.Width / partsCount * middleIndex;
 				Renderer.DrawRect(new Vector2(xPos - 1f, -5), new Vector2(xPos + 1f, 7), Theme.Colors.ControlBorder);
 			}
 		}

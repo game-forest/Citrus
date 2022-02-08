@@ -87,7 +87,8 @@ namespace Orange
 			return configPath;
 		}
 
-		private static readonly Lime.Persistence persistence = new Lime.Persistence(new CommonOptions { AllowUnknownFields = true }, null);
+		private static readonly Lime.Persistence persistence =
+			new Lime.Persistence(new CommonOptions { AllowUnknownFields = true }, null);
 
 		public static WorkspaceConfig Load()
 		{
@@ -98,7 +99,10 @@ namespace Orange
 			}
 		}
 
-		public static void Save(WorkspaceConfig config) => persistence.WriteToFile(GetConfigPath(), config, Persistence.Format.Json);
+		public static void Save(WorkspaceConfig config)
+		{
+			persistence.WriteToFile(GetConfigPath(), config, Persistence.Format.Json);
+		}
 
 		public void RemoveRecentProject(string projectPath)
 		{

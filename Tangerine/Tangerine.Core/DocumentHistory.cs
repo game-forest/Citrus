@@ -150,7 +150,9 @@ namespace Tangerine.Core
 		private void AssertTransaction()
 		{
 			if (!IsTransactionActive) {
-				throw new InvalidOperationException("Can't perform an operation, commit or rollback outside the transaction");
+				throw new InvalidOperationException(
+					"Can't perform an operation, commit or rollback outside the transaction"
+				);
 			}
 		}
 
@@ -249,16 +251,19 @@ namespace Tangerine.Core
 		private bool AnyChangingOperationWithinRange(int start, int end)
 		{
 			for (int i = start; i < end; i++) {
-				if (operations[i].IsChangingDocument)
+				if (operations[i].IsChangingDocument) {
 					return true;
+				}
 			}
 			return false;
 		}
 
 		private static class Processors
 		{
-			private static readonly Dictionary<Type, List<IOperationProcessor>> operationTypeToProcessorList = new Dictionary<Type, List<IOperationProcessor>>();
-			private static readonly Dictionary<Type, IOperationProcessor> processorInstances = new Dictionary<Type, IOperationProcessor>();
+			private static readonly Dictionary<Type, List<IOperationProcessor>> operationTypeToProcessorList =
+				new Dictionary<Type, List<IOperationProcessor>>();
+			private static readonly Dictionary<Type, IOperationProcessor> processorInstances =
+				new Dictionary<Type, IOperationProcessor>();
 			public static readonly List<Type> OperationProcessorTypes = new List<Type>();
 
 			private static IOperationProcessor GetProcessor(Type t)
@@ -294,7 +299,11 @@ namespace Tangerine.Core
 			private static IEnumerable<IOperationProcessor> EnumerateProcessors(IOperation operation)
 			{
 				var operationType = operation.GetType();
-				if (operationTypeToProcessorList.TryGetValue(operationType, out List<IOperationProcessor> cachedProcessorList)) {
+				if (
+					operationTypeToProcessorList.TryGetValue(
+						operationType, out List<IOperationProcessor> cachedProcessorList
+					)
+				) {
 					foreach (var processor in cachedProcessorList) {
 						yield return processor;
 					}
@@ -319,8 +328,9 @@ namespace Tangerine.Core
 						if (operationType.IsGenericType) {
 							var operationGenericArguments = operationType.GetGenericArguments();
 							if (
-								operationTypeOfProcessor.IsGenericType &&
-								operationTypeOfProcessor.GetGenericTypeDefinition().IsAssignableFrom(operationType.GetGenericTypeDefinition())
+								operationTypeOfProcessor.IsGenericType
+								&& operationTypeOfProcessor.GetGenericTypeDefinition()
+									.IsAssignableFrom(operationType.GetGenericTypeDefinition())
 							) {
 								if (!processorType.IsGenericTypeDefinition) {
 									if (!operationTypeOfProcessor.IsAssignableFrom(operationType)) {

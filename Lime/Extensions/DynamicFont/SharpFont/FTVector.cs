@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2016 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -35,14 +33,8 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FTVector : IEquatable<FTVector>
 	{
-		#region Fields
-
 		private IntPtr x;
 		private IntPtr y;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FTVector"/> struct.
@@ -62,10 +54,6 @@ namespace SharpFont
 			this.x = Marshal.ReadIntPtr(reference);
 			this.y = Marshal.ReadIntPtr(reference, IntPtr.Size);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the horizontal coordinate.
@@ -99,10 +87,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Operators
-
 		/// <summary>
 		/// Compares two instances of <see cref="FTVector"/> for equality.
 		/// </summary>
@@ -124,10 +108,6 @@ namespace SharpFont
 		{
 			return !left.Equals(right);
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary><para>
 		/// Return the unit vector corresponding to a given angle. After the call, the value of ‘vec.x’ will be
@@ -220,10 +200,11 @@ namespace SharpFont
 		/// <returns>A value indicating equality.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is FTVector)
+			if (obj is FTVector) {
 				return this.Equals((FTVector)obj);
-			else
+			} else {
 				return false;
+			}
 		}
 
 		/// <summary>
@@ -232,9 +213,7 @@ namespace SharpFont
 		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
-			 return x.GetHashCode() ^ y.GetHashCode();
+			return x.GetHashCode() ^ y.GetHashCode();
 		}
-
-		#endregion
 	}
 }

@@ -11,7 +11,7 @@ namespace Tangerine.Core
 
 	public class AnimationTrackEditorState
 	{
-		readonly AnimationTrack track;
+		private readonly AnimationTrack track;
 
 		public AnimationTrackVisibility Visibility
 		{

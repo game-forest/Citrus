@@ -6,7 +6,7 @@ namespace Tangerine.UI.PropertyEditors
 {
 	public class FolderPropertyEditor : FilePropertyEditor<string>
 	{
-		public FolderPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams, new string []{})
+		public FolderPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams, new string[] { })
 		{ }
 
 		protected override string ValueToStringConverter(string obj)
@@ -37,14 +37,15 @@ namespace Tangerine.UI.PropertyEditors
 			var dlg = new FileDialog {
 				Mode = FileDialogMode.SelectFolder,
 				InitialDirectory =
-					current.GotValue && value.IsDefined && !string.IsNullOrEmpty(value.Value) && TryGetClosestAvailableDirectory(
+					current.GotValue && value.IsDefined
+					&& !string.IsNullOrEmpty(value.Value) && TryGetClosestAvailableDirectory(
 						AssetPath.Combine(Project.Current.AssetsDirectory, value.Value), out var dir) ?
-						dir : Directory.Exists(LastOpenedDirectory) ?
-							LastOpenedDirectory : Project.Current.AssetsDirectory
+						dir : Directory.Exists(lastOpenedDirectory) ?
+							lastOpenedDirectory : Project.Current.AssetsDirectory,
 			};
 			if (dlg.RunModal()) {
 				SetProperty(dlg.FileName);
-				LastOpenedDirectory = Path.GetDirectoryName(dlg.FileName);
+				lastOpenedDirectory = Path.GetDirectoryName(dlg.FileName);
 			}
 		}
 	}

@@ -97,7 +97,7 @@ namespace Lime
 			get { return new Matrix32(new Vector2(UV1.X - UV0.X, 0), new Vector2(0, UV1.Y - UV0.Y), UV0); }
 		}
 
-		internal protected override bool PartialHitTestByContents(ref HitTestArgs args)
+		protected internal override bool PartialHitTestByContents(ref HitTestArgs args)
 		{
 			Vector2 localPoint = LocalToWorldTransform.CalcInversed().TransformVector(args.Point);
 			Vector2 size = Size;
@@ -125,7 +125,8 @@ namespace Lime
 			return !(texture is RenderTexture);
 		}
 
-		protected internal virtual Lime.RenderObject GetRenderObject<TRenderObject>() where TRenderObject : RenderObject, new()
+		protected internal virtual Lime.RenderObject GetRenderObject<TRenderObject>()
+			where TRenderObject : RenderObject, new()
 		{
 			var ro = RenderObjectPool<TRenderObject>.Acquire();
 			ro.Texture = Texture;
@@ -158,7 +159,9 @@ namespace Lime
 			public override void Render()
 			{
 				Renderer.Transform1 = LocalToWorldTransform;
-				Renderer.DrawSprite(Texture, null, Material, Color, Position, Size, UV0, UV1, Vector2.Zero, Vector2.One);
+				Renderer.DrawSprite(
+					Texture, null, Material, Color, Position, Size, UV0, UV1, Vector2.Zero, Vector2.One
+				);
 			}
 
 			protected override void OnRelease()

@@ -1,8 +1,8 @@
-using Lime;
-using Tangerine.UI;
 using System.IO;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Panels;
+using Tangerine.UI;
 using Console = System.Console;
 using Environment = Lime.Environment;
 
@@ -13,8 +13,11 @@ namespace Tangerine.MainMenu
 		public override void Execute()
 		{
 			if (new AlertDialog("Are you sure you want to purge all backups?", "Yes", "Cancel").Show() == 0) {
-				var path = Path.Combine(Environment.GetDataDirectory("Tangerine"), "Backups",
-					Path.GetFileNameWithoutExtension(Project.Current?.CitprojPath ?? ""));
+				var path = Path.Combine(
+					Environment.GetDataDirectory("Tangerine"),
+					"Backups",
+					Path.GetFileNameWithoutExtension(Project.Current?.CitprojPath ?? string.Empty)
+				);
 				if (Directory.Exists(path)) {
 					Directory.Delete(path, true);
 					BackupHistoryPanel.Instance?.RefreshHistory();

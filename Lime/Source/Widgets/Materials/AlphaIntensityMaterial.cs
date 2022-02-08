@@ -50,7 +50,7 @@ namespace Lime
 		public class AlphaIntensityShaderProgram : ShaderProgram
 		{
 			private static AlphaIntensityShaderProgram instance;
-			public static AlphaIntensityShaderProgram Instance => instance ?? (instance = new AlphaIntensityShaderProgram());
+			public static AlphaIntensityShaderProgram Instance => instance ??= new AlphaIntensityShaderProgram();
 
 			private const string VertexShader = @"
 				attribute vec4 inPos;
@@ -88,13 +88,15 @@ namespace Lime
 								 + outColor * color * color.a;
 				}";
 
-			private AlphaIntensityShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+			private AlphaIntensityShaderProgram()
+				: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+			{ }
 
 			private static Shader[] CreateShaders()
 			{
 				return new Shader[] {
 					new VertexShader(VertexShader),
-					new FragmentShader(FragmentShader)
+					new FragmentShader(FragmentShader),
 				};
 			}
 		}

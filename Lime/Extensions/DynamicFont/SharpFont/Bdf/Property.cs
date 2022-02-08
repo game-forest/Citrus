@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -34,23 +32,13 @@ namespace SharpFont.Bdf
 	/// </summary>
 	public class Property
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private PropertyRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal Property(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the property type.
@@ -72,8 +60,9 @@ namespace SharpFont.Bdf
 			{
 				// only this property throws an exception because the pointer could be to unmanaged memory not owned by
 				// the process.
-				if (rec.type != PropertyType.Atom)
+				if (rec.type != PropertyType.Atom) {
 					throw new InvalidOperationException("The property type is not Atom.");
+				}
 
 				return Marshal.PtrToStringAnsi(rec.atom);
 			}
@@ -115,7 +104,5 @@ namespace SharpFont.Bdf
 				rec = PInvokeHelper.PtrToStructure<PropertyRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

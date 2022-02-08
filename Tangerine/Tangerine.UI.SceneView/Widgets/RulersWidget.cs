@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tangerine.Core;
 using Lime;
-using System;
+using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
@@ -13,8 +13,8 @@ namespace Tangerine.UI.SceneView
 		public const int Tesselation = 5;
 		public const int RulerHeight = 20;
 
-		private static SceneView sv => SceneView.Instance;
-		private static Widget container => Document.Current.RootNode.AsWidget;
+		private static SceneView SceneView => SceneView.Instance;
+		private static Widget Container => Document.Current.RootNode.AsWidget;
 		private static Ruler Ruler => ProjectUserPreferences.Instance.ActiveRuler;
 		private readonly Widget topRulerBar;
 		private readonly Widget leftRulerBar;
@@ -48,25 +48,27 @@ namespace Tangerine.UI.SceneView
 			leftRulerBar.CompoundPostPresenter.Push(new RulerBarPresenter(RulerOrientation.Vertical));
 			CompoundPostPresenter.Push(new RulerLinesPresenter(leftRulerBar, topRulerBar));
 			this.AddChangeWatcher(LocalMousePosition, _ => {
-				if (sv.Panel.IsMouseOverThisOrDescendant()) {
+				if (SceneView.Panel.IsMouseOverThisOrDescendant()) {
 					Window.Current.Invalidate();
 				}
 			});
-			this.AddChangeWatcher(() => ProjectUserPreferences.Instance.RulerVisible,
+			this.AddChangeWatcher(
+				() => ProjectUserPreferences.Instance.RulerVisible,
 				v => {
 					topRulerBar.Visible = v;
 					leftRulerBar.Visible = v;
 				});
 		}
 
-		private static IEnumerator<object> CreateLineTask(Widget widget, RulerOrientation lineRulerOrientation = RulerOrientation.Horizontal)
-		{
+		private static IEnumerator<object> CreateLineTask(
+			Widget widget, RulerOrientation lineRulerOrientation = RulerOrientation.Horizontal
+		) {
 			while (true) {
 				if (widget.Input.WasMousePressed() && !Document.Current.PreviewScene) {
 					var rect = new Rectangle(Vector2.Zero, widget.Size);
-					sv.Components.Add(new CreateLineRequestComponent {
+					SceneView.Components.Add(new CreateLineRequestComponent {
 						Orientation = lineRulerOrientation,
-						IsHovered = () => rect.Contains(widget.LocalMousePosition())
+						IsHovered = () => rect.Contains(widget.LocalMousePosition()),
 					});
 				}
 				yield return null;
@@ -87,15 +89,26 @@ namespace Tangerine.UI.SceneView
 
 			protected override void InternalRender(Widget widget)
 			{
-				if (Document.Current.PreviewScene || !ProjectUserPreferences.Instance.RulerVisible)
+				if (Document.Current.PreviewScene || !ProjectUserPreferences.Instance.RulerVisible) {
 					return;
+				}
 
 				widget.PrepareRendererState();
-				var t = container.LocalToWorldTransform * sv.Scene.LocalToWorldTransform * widget.LocalToWorldTransform.CalcInversed();
-				var lineComponent = sv.Components.Get<LineSelectionComponent>();
+				var t = Container.LocalToWorldTransform
+					* SceneView.Scene.LocalToWorldTransform
+					* widget.LocalToWorldTransform.CalcInversed();
+				var lineComponent = SceneView.Components.Get<LineSelectionComponent>();
 				foreach (var line in Ruler.Lines) {
-					if (line == lineComponent?.Line) continue;
-					DrawLine(widget.Size, (line.GetClosestPointToOrigin()) * t, line.RulerOrientation, ColorTheme.Current.SceneView.RulerEditable);
+					if (line == lineComponent?.Line) {
+						continue;
+					}
+
+					DrawLine(
+						widget.Size,
+						line.GetClosestPointToOrigin() * t,
+						line.RulerOrientation,
+						ColorTheme.Current.SceneView.RulerEditable
+					);
 				}
 
 				var mousePos = widget.LocalMousePosition();
@@ -104,19 +117,26 @@ namespace Tangerine.UI.SceneView
 					guidesColor = ColorTheme.Current.SceneView.RulerEditableActiveDraging;
 				}
 
-				if (sv.Panel.IsMouseOverThisOrDescendant()) {
+				if (SceneView.Panel.IsMouseOverThisOrDescendant()) {
 					guidesPosition = mousePos;
 					if (lineComponent != null) {
 						var mask = lineComponent.Line.RulerOrientation.GetDirection();
-						guidesPosition = lineComponent.Line.GetClosestPointToOrigin() * t * mask + mousePos * (Vector2.One - mask);
+						guidesPosition =
+							lineComponent.Line.GetClosestPointToOrigin() * t * mask + mousePos * (Vector2.One - mask);
 					}
 				}
 
 				if (guidesPosition.X > RulerHeight) {
-					Renderer.DrawLine(new Vector2(guidesPosition.X, 0), new Vector2(guidesPosition.X, topRulerBar.Size.Y), guidesColor);
+					Renderer.DrawLine(
+						new Vector2(guidesPosition.X, 0), new Vector2(guidesPosition.X, topRulerBar.Size.Y), guidesColor
+					);
 				}
 				if (guidesPosition.Y > RulerHeight) {
-					Renderer.DrawLine(new Vector2(0, guidesPosition.Y), new Vector2(leftRulerBar.Size.X, guidesPosition.Y), guidesColor);
+					Renderer.DrawLine(
+						new Vector2(0, guidesPosition.Y),
+						new Vector2(leftRulerBar.Size.X, guidesPosition.Y),
+						guidesColor
+					);
 				}
 
 				if (lineComponent != null) {
@@ -126,20 +146,33 @@ namespace Tangerine.UI.SceneView
 					var isVertical = lineComponent.Line.RulerOrientation == RulerOrientation.Vertical;
 					var value = lineComponent.Line.GetClosestPointToOrigin();
 					var text = $"{(isVertical ? "X:" : "Y:")} {(isVertical ? value.X : value.Y).ToString("G")}";
-					var size = FontPool.Instance.DefaultFont.MeasureTextLine(text, fontSize, letterspacing) + 2 * padding;
+					var size = FontPool.Instance.DefaultFont.MeasureTextLine(
+						text, fontSize, letterspacing
+					) + 2 * padding;
 					var textPos = mousePos + Vector2.One * 10f;
-					DrawLine(widget.Size, value * t, lineComponent.Line.RulerOrientation, ColorTheme.Current.SceneView.RulerEditableActiveDraging);
+					DrawLine(
+						widget.Size,
+						value * t,
+						lineComponent.Line.RulerOrientation,
+						ColorTheme.Current.SceneView.RulerEditableActiveDraging
+					);
 					Renderer.DrawRect(textPos, textPos + size, ColorTheme.Current.SceneView.RulerBackground);
 					Renderer.DrawRectOutline(textPos, textPos + size, ColorTheme.Current.SceneView.RulerTextColor);
-					Renderer.DrawTextLine(textPos + new Vector2(padding.X, (size.Y - fontSize) / 2), text, fontSize, ColorTheme.Current.SceneView.RulerTextColor, letterspacing);
+					Renderer.DrawTextLine(
+						position: textPos + new Vector2(padding.X, (size.Y - fontSize) / 2),
+						text: text,
+						fontHeight: fontSize,
+						color: ColorTheme.Current.SceneView.RulerTextColor,
+						letterSpacing: letterspacing
+					);
 				}
 			}
 
-			private static void DrawLine(Vector2 containerSize, Vector2 value, RulerOrientation orientation, Color4 color)
-			{
+			private static void DrawLine(
+				Vector2 containerSize, Vector2 value, RulerOrientation orientation, Color4 color
+			) {
 				if (value.Y <= RulerHeight && orientation == RulerOrientation.Horizontal ||
-					value.X <= RulerHeight && orientation == RulerOrientation.Vertical
-				) {
+					value.X <= RulerHeight && orientation == RulerOrientation.Vertical) {
 					return;
 				}
 				var mask = orientation.GetDirection();
@@ -153,7 +186,7 @@ namespace Tangerine.UI.SceneView
 		{
 			var step = SegmentDeltaMax;
 			while (true) {
-				var value = step * sv.Scene.Scale.X;
+				var value = step * SceneView.Scene.Scale.X;
 				if (value <= SegmentDeltaMax && value >= SegmentDeltaMin) {
 					break;
 				}
@@ -185,16 +218,31 @@ namespace Tangerine.UI.SceneView
 
 			protected override void InternalRender(Widget canvas)
 			{
-				if (Document.Current.ExpositionMode || !ProjectUserPreferences.Instance.RulerVisible)
+				if (Document.Current.ExpositionMode || !ProjectUserPreferences.Instance.RulerVisible) {
 					return;
+				}
 
-				var containerHull = Document.Current.RootNode.AsWidget.CalcHull().Transform(sv.CalcTransitionFromSceneSpace(canvas));
+				var containerHull =
+					Document.Current.RootNode.AsWidget.CalcHull()
+						.Transform(SceneView.CalcTransitionFromSceneSpace(canvas));
 				canvas.PrepareRendererState();
 				Renderer.DrawRect(Vector2.Zero, canvas.Size, ColorTheme.Current.SceneView.RulerBackground);
-				var start = (RulerOrientation == RulerOrientation.Horizontal ? canvas.Size.Y : canvas.Size.X) * Vector2.One;
+				var start = (
+					RulerOrientation == RulerOrientation.Horizontal ? canvas.Size.Y : canvas.Size.X
+				) * Vector2.One;
 				Renderer.DrawLine(start, canvas.Size, ColorTheme.Current.SceneView.RulerTextColor);
-				DrawSegments(new RulerData(containerHull.V1, 0, RulerOrientation == RulerOrientation.Horizontal ?
-					canvas.Size.X : canvas.Size.Y, RulerHeight, RulerOrientation), RulerHeight);
+				DrawSegments(
+					new RulerData(
+						containerHull.V1,
+						0,
+						RulerOrientation == RulerOrientation.Horizontal
+							? canvas.Size.X
+							: canvas.Size.Y,
+						RulerHeight,
+						RulerOrientation
+					),
+					RulerHeight
+				);
 			}
 
 			private static float GetVectorComponentForOrientation(Vector2 value, RulerOrientation orientation)
@@ -202,10 +250,11 @@ namespace Tangerine.UI.SceneView
 				return orientation == RulerOrientation.Horizontal ? value.X : value.Y;
 			}
 
-			private void DrawSegments(RulerData rulerData, float strokeDelta, float strokeLength, float? strokeValue = null)
-			{
+			private void DrawSegments(
+				RulerData rulerData, float strokeDelta, float strokeLength, float? strokeValue = null
+			) {
 				var maskInverted = rulerData.RulerOrientation.GetDirection();
-				var mask = (Vector2.One - maskInverted);
+				var mask = Vector2.One - maskInverted;
 				var delta = mask * strokeDelta;
 				var j = -(int)Math.Round(((rulerData.Origin * mask).Length - rulerData.LeftStoper) / strokeDelta);
 				var b = maskInverted * rulerData.Offset + rulerData.Origin * mask + j * strokeDelta * mask;
@@ -218,17 +267,27 @@ namespace Tangerine.UI.SceneView
 						Renderer.DrawLine(a, b, ColorTheme.Current.SceneView.RulerTextColor);
 						if (strokeValue != null) {
 							var lengthMarkerText = ((int)(j * strokeValue.Value)).ToString();
-							var textLength = FontPool.Instance.DefaultFont.MeasureTextLine(lengthMarkerText, fontHeight, letterspacing);
+							var textLength = FontPool.Instance.DefaultFont.MeasureTextLine(
+								lengthMarkerText, fontHeight, letterspacing
+							);
 							var lengthMarkerPosition = a + textOffset;
 							Renderer.PushState(RenderState.Transform1);
-							Renderer.MultiplyTransform1(Matrix32.Translation(lengthMarkerPosition.X.Round(), lengthMarkerPosition.Y.Round()));
+							Renderer.MultiplyTransform1(
+								Matrix32.Translation(lengthMarkerPosition.X.Round(), lengthMarkerPosition.Y.Round())
+							);
 							if (rulerData.RulerOrientation == RulerOrientation.Vertical) {
 								Renderer.MultiplyTransform1(Matrix32.Rotation(-Mathf.HalfPi));
 								textOffset = Vector2.Down * (5 + textLength.X);
 							} else {
 								textOffset = Vector2.Right * 5;
 							}
-							Renderer.DrawTextLine(Vector2.Zero, lengthMarkerText, fontHeight, ColorTheme.Current.SceneView.RulerTextColor, letterspacing);
+							Renderer.DrawTextLine(
+								Vector2.Zero,
+								lengthMarkerText,
+								fontHeight,
+								ColorTheme.Current.SceneView.RulerTextColor,
+								letterspacing
+							);
 							Renderer.PopState();
 						}
 					}
@@ -241,7 +300,7 @@ namespace Tangerine.UI.SceneView
 			private void DrawSegments(RulerData rulerData, float strokeLength)
 			{
 				var step = (float)Math.Truncate(CalculateEffectiveStep());
-				var delta = step * sv.Scene.Scale.X;
+				var delta = step * SceneView.Scene.Scale.X;
 				DrawSegments(rulerData, delta, strokeLength, step);
 				var reduceFactor = 1f / Tesselation;
 				DrawSegments(rulerData, delta * reduceFactor, strokeLength * reduceFactor);
@@ -255,8 +314,9 @@ namespace Tangerine.UI.SceneView
 				public float Offset;
 				public RulerOrientation RulerOrientation;
 
-				public RulerData(Vector2 origin, float leftStoper, float rightStoper, float offset, RulerOrientation rulerOrientation)
-				{
+				public RulerData(
+					Vector2 origin, float leftStoper, float rightStoper, float offset, RulerOrientation rulerOrientation
+				) {
 					Origin = origin;
 					LeftStoper = leftStoper;
 					RightStoper = rightStoper;

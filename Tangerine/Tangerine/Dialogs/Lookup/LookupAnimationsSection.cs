@@ -9,8 +9,12 @@ namespace Tangerine
 {
 	public static class LookupAnimationsSection
 	{
-		public static void FillLookupByAnimations(LookupSections sections, List<LookupItem> items, IEnumerable<Animation> animations, bool navigateToNode = false)
-		{
+		public static void FillLookupByAnimations(
+			LookupSections sections,
+			List<LookupItem> items,
+			IEnumerable<Animation> animations,
+			bool navigateToNode = false
+		) {
 			foreach (var animation in animations) {
 				var aClosed = animation;
 				var navigateToNodeClosed = navigateToNode && animation.OwnerNode != Document.Current.Container;
@@ -93,7 +97,7 @@ namespace Tangerine
 			}
 		}
 
-		class AnimationsComparer : IComparer<Animation>
+		private class AnimationsComparer : IComparer<Animation>
 		{
 			public static readonly AnimationsComparer Instance = new AnimationsComparer();
 

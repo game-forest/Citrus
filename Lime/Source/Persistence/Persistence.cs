@@ -12,7 +12,7 @@ namespace Lime
 		public enum Format
 		{
 			Json,
-			Binary
+			Binary,
 		}
 
 		private Yuzu.Clone.AbstractCloner cloner;
@@ -20,7 +20,8 @@ namespace Lime
 		public readonly CommonOptions YuzuOptions = NewDefaultYuzuOptions();
 		public readonly Yuzu.Json.JsonSerializeOptions YuzuJsonOptions = NewDefaultYuzuJsonOptions();
 
-		// used internally to get same defaults as persistence and slightly modify (e.g. for migrations or schema generation)
+		// used internally to get same defaults as persistence and slightly modify
+		// (e.g. for migrations or schema generation)
 		internal static CommonOptions NewDefaultYuzuOptions() =>
 			new CommonOptions {
 				AllowEmptyTypes = true,
@@ -30,7 +31,8 @@ namespace Lime
 #endif // TANGERINE || DEBUG
 			};
 
-		// used internally to get same defaults as persistence and slightly modify (e.g. for migrations or schema generation)
+		// used internally to get same defaults as persistence and
+		// slightly modify (e.g. for migrations or schema generation)
 		internal static Yuzu.Json.JsonSerializeOptions NewDefaultYuzuJsonOptions() =>
 			new Yuzu.Json.JsonSerializeOptions {
 				SaveClass = Yuzu.Json.JsonSaveClass.UnknownOrRoot | Yuzu.Json.JsonSaveClass.UnknownPrimitive,
@@ -47,8 +49,7 @@ namespace Lime
 			};
 
 		public Persistence()
-		{
-		}
+		{ }
 
 		public Persistence(
 			CommonOptions yuzuOptions,
@@ -94,7 +95,7 @@ namespace Lime
 			} else if (format == Format.Json) {
 				ys = new global::Yuzu.Json.JsonSerializer {
 					Options = YuzuOptions,
-					JsonOptions = YuzuJsonOptions
+					JsonOptions = YuzuJsonOptions,
 				};
 			}
 			ys.ToStream(@object, stream);
@@ -155,7 +156,7 @@ namespace Lime
 		{
 			return format switch {
 				Format.Binary => new YuzuGenerated.LimeDeserializer {
-					Options = YuzuOptions
+					Options = YuzuOptions,
 				},
 				Format.Json => new Yuzu.Json.JsonDeserializer {
 					JsonOptions = YuzuJsonOptions,
@@ -180,7 +181,7 @@ namespace Lime
 
 		protected static bool CheckBinarySignature(Stream stream)
 		{
-			UInt32 signature;
+			uint signature;
 			try {
 				stream.Seek(0, SeekOrigin.Begin);
 				using var reader = new BinaryReader(stream, Encoding.UTF8, leaveOpen: true);

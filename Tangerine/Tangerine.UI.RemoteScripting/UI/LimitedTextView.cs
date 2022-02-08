@@ -46,7 +46,7 @@ namespace Tangerine.UI.RemoteScripting
 				(viewInExternalEditorCommand = new Command("View in External Editor")),
 				Command.MenuSeparator,
 				(commandCopy = new Command("Copy")),
-				(commandClear = new Command("Clear"))
+				(commandClear = new Command("Clear")),
 			};
 			Updated += _ => {
 				if (Input.WasKeyPressed(Key.Mouse0) || Input.WasKeyPressed(Key.Mouse1)) {
@@ -88,7 +88,8 @@ namespace Tangerine.UI.RemoteScripting
 			if (text == null) {
 				return;
 			}
-			var isScrolledToEnd = Mathf.Abs(Behaviour.ScrollPosition - Behaviour.MaxScrollPosition) < Mathf.ZeroTolerance;
+			var isScrolledToEnd =
+				Mathf.Abs(Behaviour.ScrollPosition - Behaviour.MaxScrollPosition) < Mathf.ZeroTolerance;
 			if (text.Length == 0 || text[^1] != '\n') {
 				text += '\n';
 			}

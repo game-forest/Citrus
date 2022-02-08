@@ -14,7 +14,7 @@ namespace Tangerine
 						sections,
 						menu: SceneViewCommands.AddComponentToSelection.Menu,
 						breadcrumb: $"Edit\\{SceneViewCommands.AddComponentToSelection.Text}"
-					)
+					),
 				});
 			};
 		}

@@ -23,7 +23,7 @@ namespace Tangerine.Core
 		public bool StopAnimationOnCurrentFrame { get; set; }
 
 		[YuzuOptional]
-		public bool ShowSceneThumbnail  { get; set; }
+		public bool ShowSceneThumbnail { get; set; }
 
 		[YuzuOptional]
 		public bool ShowSplinesGlobally { get; set; }
@@ -98,7 +98,7 @@ namespace Tangerine.Core
 		VisibleInInspector,
 		ProvidingTimelineIcon,
 		None,
-		All
+		All,
 	}
 
 	public struct ColorPickerState
@@ -119,7 +119,7 @@ namespace Tangerine.Core
 			AlphaSlider = new EditorState { Visible = false, Position = 1 },
 			HsvSliders = new EditorState { Visible = false, Position = 2 },
 			LabSliders = new EditorState { Visible = false, Position = 3 },
-			RgbSliders = new EditorState { Visible = false, Position = 4 }
+			RgbSliders = new EditorState { Visible = false, Position = 4 },
 		};
 
 		public ColorPickerState(EditorState[] states)

@@ -17,7 +17,7 @@ namespace Citrus.Tests.Widgets.Tasks
 			var nestingEnumerator = ToStringTask();
 			var nestingToString = nestingEnumerator.GetType().ToString();
 			nestingEnumerator.MoveNext();
-			var nestedEnumerator = (IEnumerator<object>) nestingEnumerator.Current;
+			var nestedEnumerator = (IEnumerator<object>)nestingEnumerator.Current;
 			var nestedToString = nestedEnumerator.GetType().ToString();
 			var task = new Task(ToStringTask());
 			Assert.AreEqual(nestingToString, task.ToString());
@@ -177,7 +177,10 @@ namespace Citrus.Tests.Widgets.Tasks
 		}
 
 		[TestMethod]
-		[Ignore("This is clearly a bug though. It did pass before because animatino engine was slicing 1 second into frame sized advances.")]
+		[Ignore(
+			"This is clearly a bug though. " +
+			"It did pass before because animatino engine was slicing 1 second into frame sized advances."
+		)]
 		public void AdvanceYieldReturnNodeTest()
 		{
 			var node = new TestNode();
@@ -199,7 +202,10 @@ namespace Citrus.Tests.Widgets.Tasks
 		}
 
 		[TestMethod]
-		[Ignore("Investigate why author of this test though current behavior is wrong and yielding nested enumerable should take one more frame.")]
+		[Ignore(
+			"Investigate why author of this test though current behavior is wrong and " +
+			"yielding nested enumerable should take one more frame."
+		)]
 		public void AdvanceYieldReturnIEnumerableTest()
 		{
 			var task = new Task(AdvanceYieldReturnIEnumerableTestTask());
@@ -269,7 +275,10 @@ namespace Citrus.Tests.Widgets.Tasks
 		}
 
 		[TestMethod]
-		[Ignore("Investigate why author of this test though current behavior is wrong and yielding nested enumerable should take one more frame.")]
+		[Ignore("" +
+			"Investigate why author of this test though current behavior is wrong and " +
+			"yielding nested enumerable should take one more frame."
+		)]
 		public void WaitForAnimationTest()
 		{
 			var node = new TestNode();

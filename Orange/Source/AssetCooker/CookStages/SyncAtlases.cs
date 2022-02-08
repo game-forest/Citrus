@@ -6,7 +6,7 @@ using Lime;
 
 namespace Orange
 {
-	class SyncAtlases : ICookingStage
+	internal class SyncAtlases : ICookingStage
 	{
 		private const int MaxAtlasChainLength = 1000;
 		private readonly string atlasPartExtension = ".atlasPart";
@@ -57,7 +57,7 @@ namespace Orange
 				var item = new TextureTools.AtlasItem {
 					Path = Path.ChangeExtension(file, atlasPartExtension),
 					CookingRules = cookingRules,
-					SourceExtension = Path.GetExtension(file)
+					SourceExtension = Path.GetExtension(file),
 				};
 				var bitmapInfo = TextureTools.BitmapInfo.FromFile(assetCooker.InputBundle, file);
 				if (bitmapInfo == null) {
@@ -175,7 +175,7 @@ namespace Orange
 				}
 				var bestSize = new Size(0, 0);
 				double bestPackRate = 0;
-				int minItemsLeft = Int32.MaxValue;
+				int minItemsLeft = int.MaxValue;
 
 				// TODO: Fix for non-square atlases
 				var maxTextureSize = items.Max(item => Math.Max(item.BitmapInfo.Height, item.BitmapInfo.Width));
@@ -211,7 +211,7 @@ namespace Orange
 							}
 					}
 				}
-				end:
+			end:
 				if (atlasOptimization == AtlasOptimization.Memory && bestPackRate == 0) {
 					throw new Lime.Exception("Failed to create atlas '{0}'", atlasName);
 				}
@@ -300,7 +300,9 @@ namespace Orange
 			foreach (var item in items.Where(i => i.Allocated)) {
 				try {
 					var atlasRect = item.AtlasRect;
-					using (var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item)) {
+					using (
+						var bitmap = TextureTools.OpenAtlasItemBitmapAndRescaleIfNeeded(assetCooker.Platform, item)
+					) {
 						CopyPixels(
 							bitmap,
 							atlasPixels,
@@ -314,7 +316,7 @@ namespace Orange
 					}
 					var atlasPart = new TextureAtlasElement.Params {
 						AtlasRect = atlasRect,
-						AtlasPath = Path.ChangeExtension(atlasPath, null)
+						AtlasPath = Path.ChangeExtension(atlasPath, null),
 					};
 					InternalPersistence.Instance.WriteToBundle(
 						bundle: assetCooker.OutputBundle,
@@ -336,7 +338,7 @@ namespace Orange
 		private string GetAtlasPath(string atlasName, int index)
 		{
 			// Every asset bundle must have its own atlases folder, so they aren't conflict with each other
-			var postfix = assetCooker.BundleBeingCookedName ?? "";
+			var postfix = assetCooker.BundleBeingCookedName ?? string.Empty;
 			var path = AssetPath.Combine(
 				"Atlases_" + postfix,
 				atlasName + '.' + index.ToString("000") + SyncTextures.GetPlatformTextureExtension(assetCooker.Platform)
@@ -423,7 +425,7 @@ namespace Orange
 
 				Color4 GetColor(int p)
 				{
-					return (p / 4) % 2 == 0 ? Color4.Red : Color4.Blue;
+					return p / 4 % 2 == 0 ? Color4.Red : Color4.Blue;
 				}
 			}
 		}

@@ -33,32 +33,88 @@ namespace Lime
 		void Flush();
 		void DrawTextLine(float x, float y, string text, float fontHeight, Color4 color, float letterSpacing);
 		void DrawTextLine(Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing);
-		void DrawTextLine(IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing);
+		void DrawTextLine(
+			IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing
+		);
 		Vector2 MeasureTextLine(string text, float fontHeight, float letterSpacing);
 		Vector2 MeasureTextLine(IFont font, string text, float fontHeight, float letterSpacing);
 		Vector2 MeasureTextLine(IFont font, string text, float fontHeight, int start, int length, float letterSpacing);
-		void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing);
 		void DrawTextLine(
-			IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing,
-			SpriteList list, Action<int, Vector2, Vector2> onDrawChar = null, int tag = -1);
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing
+		);
+		void DrawTextLine(
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing,
+			SpriteList list,
+			Action<int, Vector2, Vector2> onDrawChar = null,
+			int tag = -1
+		);
 		void DrawTriangleFan(Vertex[] vertices, int numVertices);
 		void DrawTriangleFan(ITexture texture1, Vertex[] vertices, int numVertices);
 		void DrawTriangleFan(ITexture texture1, ITexture texture2, Vertex[] vertices, int numVertices);
-		RenderBatch<Vertex> DrawTriangleFan(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices);
+		RenderBatch<Vertex> DrawTriangleFan(
+			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+		);
 		void DrawTriangleStrip(Vertex[] vertices, int numVertices);
 		void DrawTriangleStrip(ITexture texture1, Vertex[] vertices, int numVertices);
 		void DrawTriangleStrip(ITexture texture1, ITexture texture2, Vertex[] vertices, int numVertices);
-		RenderBatch<Vertex> DrawTriangleStrip(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices);
+		RenderBatch<Vertex> DrawTriangleStrip(
+			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+		);
 		void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1);
-		void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1);
-		void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2);
-		void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2);
+		void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0,
+			Vector2 uv1
+		);
+		void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		);
+		void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		);
 		void Clear(Color4 color);
 		void Clear(ClearOptions options);
 		void Clear(ClearOptions options, Color4 color);
 		void Clear(ClearOptions options, Color4 color, float depth, byte stencil);
 		void DrawSpriteList(List<Sprite> spriteList, Color4 color);
-		void DrawLine(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt);
+		void DrawLine(
+			float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt
+		);
 		void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt);
 		void DrawRect(Vector2 a, Vector2 b, Color4 color);
 		void DrawRect(float x0, float y0, float x1, float y1, Color4 color);

@@ -28,7 +28,10 @@ namespace Orange
 			int result = 0;
 			var animators = self.Animators.ToList();
 			foreach (var animator in animators) {
-				if (animator.AnimationId == null || scope.TryGetValue(animator.AnimationId, out var count) && count > 0) {
+				if (
+					animator.AnimationId == null
+					|| scope.TryGetValue(animator.AnimationId, out var count) && count > 0
+				) {
 					continue;
 				}
 				self.Animators.Remove(animator);

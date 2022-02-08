@@ -1,12 +1,12 @@
 using System;
-using Lime;
 using System.IO;
+using Lime;
 
 namespace Orange
 {
-	static class OpacityMaskCreator
+	internal static class OpacityMaskCreator
 	{
-		const byte OpacityTheshold = 12;
+		private const byte OpacityTheshold = 12;
 
 		public static void CreateMask(AssetBundle assetBundle, string srcPath, string maskPath, SHA256 cookingUnitHash)
 		{

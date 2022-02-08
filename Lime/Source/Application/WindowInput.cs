@@ -50,17 +50,25 @@ namespace Lime
 		/// <summary>
 		/// Converts transformed local mouse coordinates into desktop mouse coordinates.
 		/// </summary>
-		public Vector2 MouseLocalToDesktop(Vector2 localMousePosition) => ownerWindow.LocalToDesktop(localMousePosition * MousePositionTransform.CalcInversed());
+		public Vector2 MouseLocalToDesktop(Vector2 localMousePosition)
+		{
+			return ownerWindow.LocalToDesktop(localMousePosition * MousePositionTransform.CalcInversed());
+		}
 
 		/// <summary>
 		/// Converts desktop mouse coordinates into transformed local mouse coordinates.
 		/// </summary>
-		public Vector2 MouseDesktopToLocal(Vector2 desktopMousePosition) => ownerWindow.DesktopToLocal(desktopMousePosition) * MousePositionTransform;
+		public Vector2 MouseDesktopToLocal(Vector2 desktopMousePosition)
+		{
+			return ownerWindow.DesktopToLocal(desktopMousePosition) * MousePositionTransform;
+		}
 
 		/// <summary>
 		/// Indicates how much the mouse wheel was moved
 		/// </summary>
-		public float WheelScrollAmount => (ownerWindow == Application.WindowUnderMouse) ? Application.Input.WheelScrollAmount : 0;
+		public float WheelScrollAmount => (ownerWindow == Application.WindowUnderMouse)
+			? Application.Input.WheelScrollAmount
+			: 0;
 
 		/// <summary>
 		/// Returns true while the user holds down the key identified by name. Think auto fire.
@@ -82,7 +90,8 @@ namespace Lime
 		public void ConsumeKey(Key key) => Application.Input.ConsumeKey(key);
 
 		/// <summary>
-		/// Returns true during the frame the user starts pressing down the key identified by name or key event was repeated.
+		/// Returns true during the frame the user starts pressing down the key
+		/// identified by name or key event was repeated.
 		/// </summary>
 		public bool WasKeyRepeated(Key key) => ValidateKey(key) && Application.Input.WasKeyRepeated(key);
 		public bool WasMousePressed() => WasKeyPressed(Input.GetMouseButtonByIndex(0));
@@ -121,7 +130,11 @@ namespace Lime
 		internal void ProcessPendingKeyEvents(float delta) => Application.Input.ProcessPendingKeyEvents(delta);
 		internal void ProcessPendingInputEvents(float delta) => Application.Input.ProcessPendingInputEvents(delta);
 		internal void CopyKeysState() => Application.Input.CopyKeysState();
-		internal void ClearKeyState(bool clearMouseButtons = true) => Application.Input.ClearKeyState(clearMouseButtons);
+		internal void ClearKeyState(bool clearMouseButtons = true)
+		{
+			Application.Input.ClearKeyState(clearMouseButtons);
+		}
+
 		internal void SetWheelScrollAmount(float delta) => Application.Input.SetWheelScrollAmount(delta);
 
 		private bool ValidateKey(Key key)
@@ -129,7 +142,7 @@ namespace Lime
 			if (IsSimulationRunning) {
 				return true;
 			}
-			return (key.IsMouseKey())
+			return key.IsMouseKey()
 				? ownerWindow == Application.WindowUnderMouse
 				: ownerWindow.Active;
 		}

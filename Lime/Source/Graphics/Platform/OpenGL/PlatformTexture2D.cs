@@ -22,8 +22,14 @@ namespace Lime.Graphics.Platform.OpenGL
 		public int LevelCount { get; }
 		public bool Disposed { get; private set; }
 
-		internal PlatformTexture2D(PlatformRenderContext context, Format format, int width, int height, bool mipmaps, TextureParams textureParams)
-		{
+		internal PlatformTexture2D(
+			PlatformRenderContext context,
+			Format format,
+			int width,
+			int height,
+			bool mipmaps,
+			TextureParams textureParams
+		) {
 			Context = context;
 			Format = format;
 			Width = width;
@@ -56,12 +62,29 @@ namespace Lime.Graphics.Platform.OpenGL
 				GraphicsUtility.CalculateMipLevelSize(level, Width, Height, out var levelWidth, out var levelHeight);
 				if (compressed) {
 					var imageSize = GraphicsUtility.CalculateImageDataSize(Format, levelWidth, levelHeight);
-					GL.CompressedTexImage2D(TextureTarget.Texture2D, level, (PixelInternalFormat)GLInternalFormat,
-						levelWidth, levelHeight, 0, imageSize, IntPtr.Zero);
+					GL.CompressedTexImage2D(
+						target: TextureTarget.Texture2D,
+						level: level,
+						internalformat: (PixelInternalFormat)GLInternalFormat,
+						width: levelWidth,
+						height: levelHeight,
+						border: 0,
+						imageSize: imageSize,
+						data: IntPtr.Zero
+					);
 					GLHelper.CheckGLErrors();
 				} else {
-					GL.TexImage2D(TextureTarget.Texture2D, level, (PixelInternalFormat)GLInternalFormat,
-						levelWidth, levelHeight, 0, (PixelFormat)GLFormat, (PixelType)GLPixelType, IntPtr.Zero);
+					GL.TexImage2D(
+						target: TextureTarget.Texture2D,
+						level: level,
+						internalformat: (PixelInternalFormat)GLInternalFormat,
+						width: levelWidth,
+						height: levelHeight,
+						border: 0,
+						format: (PixelFormat)GLFormat,
+						type: (PixelType)GLPixelType,
+						pixels: IntPtr.Zero
+					);
 					GLHelper.CheckGLErrors();
 				}
 			}
@@ -77,12 +100,30 @@ namespace Lime.Graphics.Platform.OpenGL
 			GLHelper.CheckGLErrors();
 			if (compressed) {
 				var imageSize = GraphicsUtility.CalculateImageDataSize(Format, width, height);
-				GL.CompressedTexSubImage2D(TextureTarget.Texture2D, level, x, y, width, height,
-					(PixelFormat)GLInternalFormat, imageSize, data);
+				GL.CompressedTexSubImage2D(
+					target: TextureTarget.Texture2D,
+					level: level,
+					xoffset: x,
+					yoffset: y,
+					width: width,
+					height: height,
+					format: (PixelFormat)GLInternalFormat,
+					imageSize: imageSize,
+					data: data
+				);
 				GLHelper.CheckGLErrors();
 			} else {
-				GL.TexSubImage2D(TextureTarget.Texture2D, level, x, y, width, height,
-					(PixelFormat)GLFormat, (PixelType)GLPixelType, data);
+				GL.TexSubImage2D(
+					target: TextureTarget.Texture2D,
+					level: level,
+					xoffset: x,
+					yoffset: y,
+					width: width,
+					height: height,
+					format: (PixelFormat)GLFormat,
+					type: (PixelType)GLPixelType,
+					pixels: data
+				);
 				GLHelper.CheckGLErrors();
 			}
 			Context.InvalidateTextureBinding(0);
@@ -106,14 +147,23 @@ namespace Lime.Graphics.Platform.OpenGL
 				: GLHelper.GetGLTextureFilter(textureParams.MinFilter);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)glMinFilter);
 			GLHelper.CheckGLErrors();
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-				(int)GLHelper.GetGLTextureFilter(textureParams.MagFilter));
+			GL.TexParameter(
+				TextureTarget.Texture2D,
+				TextureParameterName.TextureMagFilter,
+				(int)GLHelper.GetGLTextureFilter(textureParams.MagFilter)
+			);
 			GLHelper.CheckGLErrors();
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
-				(int)GLHelper.GetGLTextureWrapMode(textureParams.WrapModeU));
+			GL.TexParameter(
+				TextureTarget.Texture2D,
+				TextureParameterName.TextureWrapS,
+				(int)GLHelper.GetGLTextureWrapMode(textureParams.WrapModeU)
+			);
 			GLHelper.CheckGLErrors();
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,
-				(int)GLHelper.GetGLTextureWrapMode(textureParams.WrapModeV));
+			GL.TexParameter(
+				TextureTarget.Texture2D,
+				TextureParameterName.TextureWrapT,
+				(int)GLHelper.GetGLTextureWrapMode(textureParams.WrapModeV)
+			);
 			GLHelper.CheckGLErrors();
 		}
 	}

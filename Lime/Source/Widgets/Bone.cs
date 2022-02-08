@@ -40,10 +40,22 @@ namespace Lime
 		{
 			get
 			{
-				if (index == 0) return Bone0;
-				if (index == 1) return Bone1;
-				if (index == 2) return Bone2;
-				if (index == 3) return Bone3;
+				if (index == 0) {
+					return Bone0;
+				}
+
+				if (index == 1) {
+					return Bone1;
+				}
+
+				if (index == 2) {
+					return Bone2;
+				}
+
+				if (index == 3) {
+					return Bone3;
+				}
+
 				throw new IndexOutOfRangeException();
 			}
 			set
@@ -162,14 +174,14 @@ namespace Lime
 
 		public Matrix32 CalcLocalToParentWidgetTransform()
 		{
-				if (BaseIndex == 0) {
-					return Matrix32.Identity;
-				}
-				BoneArray.Entry b = Parent.AsWidget.BoneArray[BaseIndex];
-				var l = ClipAboutZero(b.Length);
-				Vector2 u = b.Tip - b.Joint;
-				Vector2 v = new Vector2(-u.Y / l, u.X / l);
-				return new Matrix32(u, v, b.Tip);
+			if (BaseIndex == 0) {
+				return Matrix32.Identity;
+			}
+			BoneArray.Entry b = Parent.AsWidget.BoneArray[BaseIndex];
+			var l = ClipAboutZero(b.Length);
+			Vector2 u = b.Tip - b.Joint;
+			Vector2 v = new Vector2(-u.Y / l, u.X / l);
+			return new Matrix32(u, v, b.Tip);
 		}
 
 		public Bone()
@@ -204,11 +216,17 @@ namespace Lime
 					float relativeScaling = Length / ClipAboutZero(RefLength);
 					// Calculating the matrix of relative transformation.
 					Matrix32 m1, m2;
-					m1 = Matrix32.TransformationRough(Vector2.Zero, Vector2.One, RefRotation * Mathf.DegToRad, RefPosition);
-					m2 = Matrix32.TransformationRough(Vector2.Zero, new Vector2(relativeScaling, 1), e.Rotation * Mathf.DegToRad, e.Joint);
+					m1 = Matrix32.TransformationRough(
+						Vector2.Zero, Vector2.One, RefRotation * Mathf.DegToRad, RefPosition
+					);
+					m2 = Matrix32.TransformationRough(
+						Vector2.Zero, new Vector2(relativeScaling, 1), e.Rotation * Mathf.DegToRad, e.Joint
+					);
 					e.RelativeTransform = m1.CalcInversed() * m2;
-				} else
+				} else {
 					e.RelativeTransform = Matrix32.Identity;
+				}
+
 				Parent.AsWidget.BoneArray[Index] = e;
 				Parent.PropagateDirtyFlags(DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse);
 				PropagateParentBoundsChangedHelper();
@@ -222,12 +240,13 @@ namespace Lime
 		{
 		}
 
-		static float ClipAboutZero(float value, float eps = 0.0001f)
+		private static float ClipAboutZero(float value, float eps = 0.0001f)
 		{
-			if (value > -eps && value < eps)
+			if (value > -eps && value < eps) {
 				return eps < 0 ? -eps : eps;
-			else
+			} else {
 				return value;
+			}
 		}
 
 		public float CalcWeightForPoint(Vector2 point)
@@ -250,7 +269,7 @@ namespace Lime
 		public static int GenerateNewBoneIndex(Node hostNode)
 		{
 			var bones = hostNode.Nodes.OfType<Bone>().ToList();
-			for (var i = 1;; i++) {
+			for (var i = 1; ; i++) {
 				if (bones.All(b => b.Index != i)) {
 					return i;
 				}
@@ -277,7 +296,8 @@ namespace Lime
 
 		// This method utilizes a simple sort: O(n) complexity if bones are in the correct order,
 		// O(n^2) in the worst case. This fits to our needs, since bones are already sorted in almost all cases.
-		private static void SortBones<T>(IList<T> nodes) where T: Node
+		private static void SortBones<T>(IList<T> nodes)
+			where T : Node
 		{
 			bool done;
 			do {
@@ -344,8 +364,9 @@ namespace Lime
 			return true;
 		}
 
-		public static SkinningWeights CalcSkinningWeight(SkinningWeights oldSkinningWeights, Vector2 position, List<Bone> bones)
-		{
+		public static SkinningWeights CalcSkinningWeight(
+			SkinningWeights oldSkinningWeights, Vector2 position, List<Bone> bones
+		) {
 			var skinningWeights = new SkinningWeights();
 			var i = 0;
 			var overallWeight = 0f;
@@ -360,7 +381,7 @@ namespace Lime
 				if (Mathf.Abs(weight) > Mathf.ZeroTolerance) {
 					skinningWeights[i] = new BoneWeight {
 						Weight = weight,
-						Index = bones[j].Index
+						Index = bones[j].Index,
 					};
 					overallWeight += skinningWeights[i].Weight;
 					i++;

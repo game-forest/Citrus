@@ -68,8 +68,9 @@ namespace Lime
 			return GetValueOrDefault(d, key, default(TValue));
 		}
 
-		internal static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> d, TKey key, TValue defaultValue)
-		{
+		internal static TValue GetValueOrDefault<TKey, TValue>(
+			this IDictionary<TKey, TValue> d, TKey key, TValue defaultValue
+		) {
 			TValue value;
 			return d.TryGetValue(key, out value) ? value : defaultValue;
 		}
@@ -87,7 +88,8 @@ namespace Lime
 			value = tuple.Value;
 		}
 
-		public static void ResetEnumerator<T>(ref T enumerator) where T : IEnumerator
+		public static void ResetEnumerator<T>(ref T enumerator)
+			where T : IEnumerator
 		{
 			enumerator.Reset();
 		}
@@ -98,7 +100,9 @@ namespace Lime
 			return true;
 #endif
 #if ANDROID
-			return ActivityDelegate.Instance.Activity.PackageManager.HasSystemFeature("org.chromium.arc.device_management");
+			return ActivityDelegate.Instance.Activity.PackageManager.HasSystemFeature(
+				"org.chromium.arc.device_management"
+			);
 #endif
 			return false;
 		}
@@ -114,7 +118,8 @@ namespace Lime
 
 	public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>
 	{
-		public static readonly ArrayEqualityComparer<T> Default = new ArrayEqualityComparer<T>(EqualityComparer<T>.Default);
+		public static readonly ArrayEqualityComparer<T> Default =
+			new ArrayEqualityComparer<T>(EqualityComparer<T>.Default);
 
 		private IEqualityComparer<T> elementComparer;
 

@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Lime;
 
 namespace Tangerine.UI
 {
@@ -64,11 +64,12 @@ namespace Tangerine.UI
 			}
 			var categoryInfo = categories[categoryId];
 			var commandInfo = new CommandInfo(command, categoryInfo, commandId) {
-				IsProjectSpecific = isProjectSpecific
+				IsProjectSpecific = isProjectSpecific,
 			};
 			if (AllCommands.Commands.ContainsKey(commandId)) {
 				if (!@override) {
-					throw new ArgumentException($"Command with id:'{commandId}' has already been registered. " +
+					throw new ArgumentException(
+						$"Command with id:'{commandId}' has already been registered. " +
 						$"Use @override=true to override previous command", nameof(commandId));
 				}
 				if (categoryInfo.Commands.ContainsKey(commandId)) {

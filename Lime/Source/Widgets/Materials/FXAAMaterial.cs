@@ -106,10 +106,18 @@ namespace Lime
 					return;
 				}
 
-				lowp vec2 samplingDirection = vec2(-lumaNW - lumaNE + lumaSW + lumaSE, lumaNW + lumaSW - lumaNE - lumaSE);
+				lowp vec2 samplingDirection = vec2(
+					-lumaNW - lumaNE + lumaSW + lumaSE,
+					lumaNW + lumaSW - lumaNE - lumaSE
+				);
 				lowp float samplingDirectionReduce = max((lumaNW + lumaNE + lumaSW + lumaSE) * uAmount.y, uAmount.z);
-				lowp float minSamplingDirectionFactor = 1.0 / (min(abs(samplingDirection.x), abs(samplingDirection.y)) + samplingDirectionReduce);
-				samplingDirection = clamp(samplingDirection * minSamplingDirectionFactor, vec2(-uAmount.w), vec2(uAmount.w)) * uTexelStep;
+				lowp float minSamplingDirectionFactor = 1.0
+					/ (min(abs(samplingDirection.x), abs(samplingDirection.y)) + samplingDirectionReduce);
+				samplingDirection = clamp(
+					samplingDirection * minSamplingDirectionFactor,
+					vec2(-uAmount.w),
+					vec2(uAmount.w)
+				) * uTexelStep;
 
 				lowp vec3 rgbSampleNeg = texture2D(tex1, texCoords1 + samplingDirection * -0.166666667).rgb;
 				lowp vec3 rgbSamplePos = texture2D(tex1, texCoords1 + samplingDirection * 0.166666667).rgb;
@@ -144,10 +152,14 @@ namespace Lime
 		public static FXAAShaderProgram GetInstance(bool opaque = false)
 		{
 			var key = GetInstanceKey(false);
-			return instances.TryGetValue(key, out var shaderProgram) ? shaderProgram : (instances[key] = new FXAAShaderProgram(opaque));
+			return instances.TryGetValue(key, out var shaderProgram)
+				? shaderProgram
+				: (instances[key] = new FXAAShaderProgram(opaque));
 		}
 
-		private FXAAShaderProgram(bool opaque) : base(CreateShaders(opaque), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private FXAAShaderProgram(bool opaque)
+			: base(CreateShaders(opaque), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders(bool opaque)
 		{
@@ -163,7 +175,7 @@ namespace Lime
 			fragmentShader.Append(!opaque ? FragmentShaderPart4 : FragmentShaderPart4Opaque);
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

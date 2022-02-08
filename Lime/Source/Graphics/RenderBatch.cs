@@ -24,7 +24,8 @@ namespace Lime
 		public static int MaxIndices = 600;
 	}
 
-	public class RenderBatch<TVertex> : IRenderBatch where TVertex : unmanaged
+	public class RenderBatch<TVertex> : IRenderBatch
+		where TVertex : unmanaged
 	{
 		private static Stack<RenderBatch<TVertex>> batchPool = new Stack<RenderBatch<TVertex>>();
 		private static Stack<Mesh<TVertex>> meshPool = new Stack<Mesh<TVertex>>();
@@ -114,8 +115,8 @@ namespace Lime
 						ShaderPrograms.Attributes.Pos1,
 						ShaderPrograms.Attributes.Color1,
 						ShaderPrograms.Attributes.UV1,
-						ShaderPrograms.Attributes.UV2
-					}
+						ShaderPrograms.Attributes.UV2,
+					},
 				};
 			}
 			mesh.VertexCount = 0;

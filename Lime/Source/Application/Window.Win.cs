@@ -20,7 +20,7 @@ namespace Lime
 		private readonly CancellationToken renderThreadToken;
 
 		// This line only suppresses warning: "Window.Current: a name can be simplified".
-		public new static IWindow Current => CommonWindow.Current;
+		public static new IWindow Current => CommonWindow.Current;
 
 		// We must perform no more than single render per update.
 		// So we defer Invalidate() calls until next Update().
@@ -186,7 +186,7 @@ namespace Lime
 
 		public float UnclampedDelta { get; private set; }
 
-		readonly FPSCounter fpsCounter = new FPSCounter();
+		private readonly FPSCounter fpsCounter = new FPSCounter();
 		public float FPS { get { return fpsCounter.FPS; } }
 
 		[Obsolete("Use FPS property instead", true)]
@@ -415,7 +415,8 @@ namespace Lime
 
 			protected override CreateParams CreateParams
 			{
-				get {
+				get
+				{
 					const int CS_VREDRAW = 0x1;
 					const int CS_HREDRAW = 0x2;
 					const int CS_OWNDC = 0x20;
@@ -461,7 +462,7 @@ namespace Lime
 		{
 		}
 
-		FormBorderStyle borderStyle;
+		private FormBorderStyle borderStyle;
 		private WindowState prevWindowState;
 
 		public Window(WindowOptions options)
@@ -482,7 +483,7 @@ namespace Lime
 			} else {
 				form = new Form();
 			}
-			Input  = new WindowInput(this);
+			Input = new WindowInput(this);
 			using (var graphics = form.CreateGraphics()) {
 				PixelScale = CalcPixelScale(graphics.DpiX);
 			}
@@ -607,7 +608,7 @@ namespace Lime
 				RaiseVisibleChanging(true, true);
 				form.ShowDialog();
 				RaiseVisibleChanging(false, true);
-			};
+			}
 		}
 
 		public void Activate()
@@ -1212,7 +1213,7 @@ namespace Lime
 
 		private void Form_DragDrop(object sender, DragEventArgs e)
 		{
-			var files = ((string[])e.Data.GetData(DataFormats.FileDrop, false));
+			var files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 			using (Context.Activate().Scoped()) {
 				Application.WindowUnderMouse = this;
 				FilesDropped?.Invoke(files);
@@ -1280,7 +1281,7 @@ namespace Lime
 		}
 	}
 
-	static class SDToLime
+	internal static class SDToLime
 	{
 		public static Vector2 Convert(Point p, float pixelScale)
 		{
@@ -1292,7 +1293,7 @@ namespace Lime
 		}
 	}
 
-	static class LimeToSD
+	internal static class LimeToSD
 	{
 		public static Point ConvertToPoint(Vector2 p, float pixelScale)
 		{
@@ -1314,7 +1315,8 @@ namespace Lime
 
 		protected override CreateParams CreateParams
 		{
-			get {
+			get
+			{
 				CreateParams cp = base.CreateParams;
 				cp.Style &= ~0x20000;
 				return cp;

@@ -89,18 +89,17 @@ namespace Lime
 		/// <returns>The result of linear interpolation of the specified vectors.</returns>
 		public static Vector3 Lerp(float amount, Vector3 value1, Vector3 value2)
 		{
-			return new Vector3
-			{
+			return new Vector3 {
 				X = Mathf.Lerp(amount, value1.X, value2.X),
 				Y = Mathf.Lerp(amount, value1.Y, value2.Y),
-				Z = Mathf.Lerp(amount, value1.Z, value2.Z)
+				Z = Mathf.Lerp(amount, value1.Z, value2.Z),
 			};
 		}
 
 		/// <summary>
 		/// Gets or sets the vector component by its index.
 		/// </summary>
-		public float this [int component]
+		public float this[int component]
 		{
 			get
 			{
@@ -203,8 +202,7 @@ namespace Lime
 			{
 				var v = new Vector3(X, Y, Z);
 				var length = Length;
-				if (length > 0)
-				{
+				if (length > 0) {
 					v.X /= length;
 					v.Y /= length;
 					v.Z /= length;
@@ -254,7 +252,7 @@ namespace Lime
 				return false;
 			}
 
-			var parts = s.Split(new [] {", "}, StringSplitOptions.None);
+			var parts = s.Split(new[] { ", " }, StringSplitOptions.None);
 			if (parts.Length != 3 || parts.Any(i => i.IsNullOrWhiteSpace())) {
 				return false;
 			}

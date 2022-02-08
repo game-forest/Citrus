@@ -1,6 +1,6 @@
 using System;
-using Lime;
 using System.Collections.Generic;
+using Lime;
 
 namespace Tangerine.Core
 {
@@ -37,4 +37,3 @@ namespace Tangerine.Core
 		}
 	}
 }
-

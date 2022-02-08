@@ -8,7 +8,7 @@ namespace Lime
 		public abstract bool Evaluate();
 	}
 
-	class AnimationWaitPredicate : WaitPredicate
+	internal class AnimationWaitPredicate : WaitPredicate
 	{
 		private Animation animation;
 
@@ -16,7 +16,7 @@ namespace Lime
 		public override bool Evaluate() { return animation.IsRunning; }
 	}
 
-	class InputWaitPredicate : WaitPredicate
+	internal class InputWaitPredicate : WaitPredicate
 	{
 		public static readonly InputWaitPredicate Instance = new InputWaitPredicate();
 
@@ -24,7 +24,7 @@ namespace Lime
 		public override bool Evaluate() { return !Window.Current.Input.Changed; }
 	}
 
-	class BooleanWaitPredicate : WaitPredicate
+	internal class BooleanWaitPredicate : WaitPredicate
 	{
 		private Func<bool> predicate;
 
@@ -32,7 +32,7 @@ namespace Lime
 		public override bool Evaluate() { return predicate(); }
 	}
 
-	class TimeWaitPredicate : WaitPredicate
+	internal class TimeWaitPredicate : WaitPredicate
 	{
 		private Func<float, bool> predicate;
 

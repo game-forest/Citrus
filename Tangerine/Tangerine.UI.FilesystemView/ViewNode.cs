@@ -9,7 +9,7 @@ namespace Tangerine.UI.FilesystemView
 	public enum SplitterType
 	{
 		Horizontal,
-		Vertical
+		Vertical,
 	}
 
 	public class ViewNodeComponent : Lime.NodeComponent
@@ -39,7 +39,8 @@ namespace Tangerine.UI.FilesystemView
 	public class FSViewNode : ViewNode
 	{
 		[YuzuOptional]
-		public string Path = Project.Current.AssetsDirectory ?? Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
+		public string Path = Project.Current.AssetsDirectory
+			?? Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
 
 		[YuzuOptional]
 		public bool ShowCookingRulesEditor = false;

@@ -33,13 +33,13 @@ namespace Tangerine.UI
 							(editor = new ThemedEditBox {
 								Anchors = Anchors.LeftRightTopBottom,
 								Text = text,
-							})
+							}),
 						},
 					},
 					new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
 						LayoutCell = new LayoutCell {
-							StretchY = 0
+							StretchY = 0,
 						},
 						Padding = new Thickness { Top = 5 },
 						Nodes = {
@@ -47,8 +47,8 @@ namespace Tangerine.UI
 							(okButton = new ThemedButton { Text = "Ok" }),
 							(cancelButton = new ThemedButton { Text = "Cancel" }),
 						},
-					}
-				}
+					},
+				},
 			};
 			// TODO: implement multiline scrollable text editor.
 			const int maxLines = 640;

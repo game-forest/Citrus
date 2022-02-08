@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Orange.FbxImporter
 {
@@ -11,11 +11,12 @@ namespace Orange.FbxImporter
 
 	public class FbxAtributeImportException : FbxImportException
 	{
-		private const string messageTemplate = "An error has occured when parsing a node of a type {0} in native library";
+		private const string MessageTemplate =
+			"An error has occured when parsing a node of a type {0} in native library";
 
-		public FbxAtributeImportException(FbxNodeAttribute.FbxNodeType type) : base(string.Format(messageTemplate, type))
+		public FbxAtributeImportException(FbxNodeAttribute.FbxNodeType type)
+			: base(string.Format(MessageTemplate, type))
 		{
-
 		}
 	}
 }

@@ -74,7 +74,7 @@ namespace Tangerine.UI.FilesystemView
 
 	public class FilesystemModel
 	{
-		enum ItemType
+		private enum ItemType
 		{
 			File,
 			Directory,
@@ -84,7 +84,8 @@ namespace Tangerine.UI.FilesystemView
 		public string CurrentPath
 		{
 			get => currentPath;
-			set {
+			set
+			{
 				try {
 					Directory.EnumerateFileSystemEntries(value).ToList();
 					currentPath = value;
@@ -122,7 +123,10 @@ namespace Tangerine.UI.FilesystemView
 		public IEnumerable<string> EnumerateItems(SortType sortType, OrderType orderType)
 		{
 			CurrentPath = GetFirstExistentParentPath(CurrentPath);
-			foreach (var i in SortItems(Directory.EnumerateDirectories(CurrentPath), sortType, orderType, ItemType.Directory)) {
+			foreach (
+				var i
+				in SortItems(Directory.EnumerateDirectories(CurrentPath), sortType, orderType, ItemType.Directory)
+			) {
 				if ((!File.Exists(i) && !Directory.Exists(i)) || (File.GetAttributes(i) & FileAttributes.Hidden) != 0) {
 					continue;
 				}
@@ -136,8 +140,9 @@ namespace Tangerine.UI.FilesystemView
 			}
 		}
 
-		private IEnumerable<string> SortItems(IEnumerable<string> items, SortType sortType, OrderType orderType, ItemType itemType)
-		{
+		private IEnumerable<string> SortItems(
+			IEnumerable<string> items, SortType sortType, OrderType orderType, ItemType itemType
+		) {
 			switch (sortType) {
 				case SortType.Name:
 					if (orderType == OrderType.Ascending) {
@@ -159,15 +164,17 @@ namespace Tangerine.UI.FilesystemView
 					}
 				case SortType.Size:
 					if (orderType == OrderType.Ascending) {
-						if (itemType == ItemType.Directory)
-							return items.OrderBy( f => f.Length);
-						else
+						if (itemType == ItemType.Directory) {
+							return items.OrderBy(f => f.Length);
+						} else {
 							return items.OrderBy(f => new FileInfo(f).Length);
+						}
 					} else {
-						if (itemType == ItemType.Directory)
+						if (itemType == ItemType.Directory) {
 							return items.OrderByDescending(f => f.Length);
-						else
+						} else {
 							return items.OrderByDescending(f => new FileInfo(f).Length);
+						}
 					}
 				default:
 					throw new ArgumentException();

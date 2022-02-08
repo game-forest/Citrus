@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using Yuzu;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Yuzu;
 #if PROFILER
 using Lime.Profiler.Graphics;
 #endif // PROFILER
@@ -60,7 +60,7 @@ namespace Lime
 				NearClipPlane = 0.001f,
 				FieldOfView = 1.0f,
 				AspectRatio = 1.3f,
-				OrthographicSize = 1.0f
+				OrthographicSize = 1.0f,
 			};
 			Nodes.Add(camera);
 			CameraRef = new NodeReference<Camera3D>(camera.Id);
@@ -94,7 +94,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override bool PartialHitTest(ref HitTestArgs args)
+		protected internal override bool PartialHitTest(ref HitTestArgs args)
 		{
 			try {
 				if (Camera == null) {
@@ -175,7 +175,7 @@ namespace Lime
 			var b = invViewProj.ProjectVector(ViewportToNDCPoint(new Vector3(xy, Camera.FarClipPlane)));
 			return new Ray {
 				Position = a,
-				Direction = (a - b).Normalized
+				Direction = (a - b).Normalized,
 			};
 		}
 
@@ -219,7 +219,7 @@ namespace Lime
 					}
 					ro.Layers.Add(new RenderLayer {
 						FirstObject = first,
-						ObjectCount = ro.Objects.Count - first
+						ObjectCount = ro.Objects.Count - first,
 					});
 				}
 			} finally {
@@ -257,7 +257,9 @@ namespace Lime
 					RenderState.DepthState |
 					RenderState.CullMode);
 				Renderer.View = View;
-				Renderer.Projection = MakeProjection(Width, Height, Transform * Renderer.Transform2, Projection, Renderer.Projection);
+				Renderer.Projection = MakeProjection(
+					Width, Height, Transform * Renderer.Transform2, Projection, Renderer.Projection
+				);
 				Renderer.Clear(ClearOptions.DepthBuffer);
 				foreach (var layer in Layers) {
 					try {
@@ -309,9 +311,12 @@ namespace Lime
 		}
 
 		public static Matrix44 MakeProjection(
-			float width, float height, Matrix32 transform,
-			Matrix44 cameraProjection, Matrix44 orthoProjection)
-		{
+			float width,
+			float height,
+			Matrix32 transform,
+			Matrix44 cameraProjection,
+			Matrix44 orthoProjection
+		) {
 			orthoProjection.M33 = 1; // Discard Z normalization, since it comes from the camera projection matrix
 			orthoProjection.M43 = 0;
 			return cameraProjection *

@@ -66,8 +66,9 @@ namespace Lime
 		{
 			if (thumb == null) {
 				thumb = Nodes.TryFind(name) as Widget;
-				if (thumb != null)
+				if (thumb != null) {
 					thumb.HitTestTarget = true;
+				}
 			}
 			return thumb;
 		}
@@ -84,7 +85,7 @@ namespace Lime
 			}
 		}
 
-		void Advance()
+		private void Advance()
 		{
 			if (Thumb == null) {
 				return;
@@ -221,7 +222,10 @@ namespace Lime
 
 		public void SetValue(float newValue)
 		{
-			if (Value == newValue) return;
+			if (Value == newValue) {
+				return;
+			}
+
 			value = newValue;
 			RaiseChanged();
 		}

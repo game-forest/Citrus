@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -36,23 +34,13 @@ namespace SharpFont.TrueType
 	/// </summary>
 	public class Postscript
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private PostscriptRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal Postscript(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the version of the table information.
@@ -64,7 +52,7 @@ namespace SharpFont.TrueType
 				return (int)rec.FormatType;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the angle of italics, in degrees, counter-clockwise from vertical.
 		/// </summary>
@@ -75,7 +63,7 @@ namespace SharpFont.TrueType
 				return (int)rec.italicAngle;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the recommended position of the underline.
 		/// </summary>
@@ -86,7 +74,7 @@ namespace SharpFont.TrueType
 				return rec.underlinePosition;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the recommended thickness of the underline.
 		/// </summary>
@@ -173,7 +161,5 @@ namespace SharpFont.TrueType
 				rec = PInvokeHelper.PtrToStructure<PostscriptRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

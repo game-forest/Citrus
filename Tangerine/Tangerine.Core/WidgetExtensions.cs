@@ -34,8 +34,9 @@ namespace Tangerine.Core
 			Renderer.Shader = widget.GlobalShader;
 		}
 
-		public static void RenderToTexture(this Widget widget, ITexture texture, RenderChain renderChain, bool clearRenderTarget = true)
-		{
+		public static void RenderToTexture(
+			this Widget widget, ITexture texture, RenderChain renderChain, bool clearRenderTarget = true
+		) {
 			if (widget.Width > 0 && widget.Height > 0) {
 				texture.SetAsRenderTarget();
 				Renderer.PushState(

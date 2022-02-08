@@ -6,9 +6,11 @@ namespace Lime
 	{
 		private readonly PostProcessingAction[] postProcessingActions;
 		private readonly RenderChain renderChain = new RenderChain();
-		private readonly IMaterial alphaDiffuseMaterial = WidgetMaterial.GetInstance(Blending.Alpha, ShaderId.Diffuse, 1);
+		private readonly IMaterial alphaDiffuseMaterial =
+			WidgetMaterial.GetInstance(Blending.Alpha, ShaderId.Diffuse, 1);
 		private readonly IMaterial addDiffuseMaterial = WidgetMaterial.GetInstance(Blending.Add, ShaderId.Diffuse, 1);
-		private readonly IMaterial opaqueDiffuseMaterial = WidgetMaterial.GetInstance(Blending.Opaque, ShaderId.Diffuse, 1);
+		private readonly IMaterial opaqueDiffuseMaterial =
+			WidgetMaterial.GetInstance(Blending.Opaque, ShaderId.Diffuse, 1);
 		private readonly Texture2D transparentTexture;
 		private IMaterial material;
 		private Blending blending;
@@ -37,7 +39,7 @@ namespace Lime
 				new PostProcessingActionFXAA(),
 				new PostProcessingActionNoise(),
 				new PostProcessingActionTextureRender(),
-				new PostProcessingActionVignette()
+				new PostProcessingActionVignette(),
 			};
 			transparentTexture = new Texture2D();
 			transparentTexture.LoadImage(new[] { Color4.Zero }, 1, 1);
@@ -111,7 +113,11 @@ namespace Lime
 			ro.ColorCorrectionBuffer = colorCorrectionBuffer;
 			ro.ColorCorrectionMaterial = component.ColorCorrectionMaterial;
 			ro.HSLEnabled = component.HSLEnabled;
-			ro.HSL = new Vector3(component.HSL.X * (1f / 360f), component.HSL.Y * 0.01f + 1f, component.HSL.Z * 0.01f + 1f);
+			ro.HSL = new Vector3(
+				component.HSL.X * (1f / 360f),
+				component.HSL.Y * 0.01f + 1f,
+				component.HSL.Z * 0.01f + 1f
+			);
 			ro.Brightness = component.Brightness * 0.01f;
 			ro.Contrast = component.Contrast * 0.01f + 1f;
 			ro.BlurBuffer = blurBuffer;
@@ -146,7 +152,9 @@ namespace Lime
 			ro.SharpenStep = component.SharpenStep;
 			ro.NoiseBuffer = noiseBuffer;
 			ro.NoiseMaterial = component.NoiseMaterial;
-			ro.NoiseEnabled = component.NoiseEnabled && component.NoiseTexture != null && !component.NoiseTexture.IsStubTexture;
+			ro.NoiseEnabled = component.NoiseEnabled
+				&& component.NoiseTexture != null
+				&& !component.NoiseTexture.IsStubTexture;
 			ro.NoiseBrightThreshold = component.NoiseBrightThreshold * 0.01f;
 			ro.NoiseDarkThreshold = component.NoiseDarkThreshold * 0.01f;
 			ro.NoiseSoftLight = component.NoiseSoftLight * 0.01f;
@@ -238,7 +246,7 @@ namespace Lime
 		{
 			None,
 			Original,
-			Bloom
+			Bloom,
 		}
 	}
 }

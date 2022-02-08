@@ -65,27 +65,27 @@ namespace Tangerine.UI
 				rgbEditor.BSlider,
 				labEditor.LSlider,
 				labEditor.ASlider,
-				labEditor.BSlider
+				labEditor.BSlider,
 			});
 			hsvColorPicker.Widget.LayoutCell = new LayoutCell(Alignment.Center);
 			components = new (ToolbarButton, Widget)[] {
-				( CreateIcon("Universal.HSV.Wheel"), hsvColorPicker.Widget ),
-				( CreateIcon("Universal.Alpha.Slider"), alphaEditor ),
-				( CreateIcon("Universal.HSV.Sliders"), hsvEditor ),
-				( CreateIcon("Universal.LAB.Sliders"), labEditor ),
-				( CreateIcon("Universal.RGB.Sliders"), rgbEditor ),
+				(CreateIcon("Universal.HSV.Wheel"), hsvColorPicker.Widget ),
+				(CreateIcon("Universal.Alpha.Slider"), alphaEditor ),
+				(CreateIcon("Universal.HSV.Sliders"), hsvEditor ),
+				(CreateIcon("Universal.LAB.Sliders"), labEditor ),
+				(CreateIcon("Universal.RGB.Sliders"), rgbEditor ),
 			};
 			EditorsWidget = new Widget {
 				Padding = new Thickness(horizontal: 0, vertical: 0),
 				Layout = new VBoxLayout { Spacing = 8 },
-				Nodes = { Spacer.HStretch() }
+				Nodes = { Spacer.HStretch() },
 			};
 			ButtonsWidget = new Widget {
 				Layout = new HBoxLayout {
 					DefaultCell = new DefaultLayoutCell(Alignment.Center),
-					Spacing = 2f
+					Spacing = 2f,
 				},
-				Padding = new Thickness(0, 0)
+				Padding = new Thickness(0, 0),
 			};
 			foreach (var (button, component) in components) {
 				ButtonsWidget.AddNode(button);
@@ -144,10 +144,10 @@ namespace Tangerine.UI
 					Size = new Vector2(20),
 					MinMaxSize = new Vector2(20),
 					Padding = Thickness.Zero,
-					Text = ""
+					Text = string.Empty,
 				};
 				button.AddNode(new Image(IconPool.GetTexture(icon)) {
-					Padding = new Thickness(1)
+					Padding = new Thickness(1),
 				});
 				return button;
 			}
@@ -160,7 +160,7 @@ namespace Tangerine.UI
 				var (_, editor) = components[i];
 				states[i] = new ColorPickerState.EditorState {
 					Visible = editor.Visible,
-					Position = EditorsWidget.Nodes.IndexOf(editor) - EditorsLocationOffset
+					Position = EditorsWidget.Nodes.IndexOf(editor) - EditorsLocationOffset,
 				};
 			}
 			return new ColorPickerState(states);
@@ -195,7 +195,7 @@ namespace Tangerine.UI
 				Widget = new Widget {
 					HitTestTarget = true,
 					MinMaxSize = OuterRadius * 2 * Vector2.One,
-					PostPresenter = new SyncDelegatePresenter<Widget>(Render)
+					PostPresenter = new SyncDelegatePresenter<Widget>(Render),
 				};
 				Widget.Tasks.Add(SelectTask());
 				Widget.AddChangeWatcher(() => color.Value.H, _ => wasHueChanged = true);
@@ -243,14 +243,18 @@ namespace Tangerine.UI
 							} else if (pick.Area == Area.Wheel) {
 								image[y * size + x] = new ColorHsva(pick.H.Value, 1, 1).HsvaToRgb();
 							} else {
-								image[y * size + x] = new ColorHsva(color.Value.H, pick.S.Value, pick.V.Value).HsvaToRgb();
+								image[y * size + x] = new ColorHsva(
+									color.Value.H, pick.S.Value, pick.V.Value
+								).HsvaToRgb();
 							}
 						}
 					}
 					texture.LoadImage(image, size, size);
 					wasHueChanged = false;
 				}
-				Renderer.DrawSprite(texture, Color4.White, Vector2.Zero, Vector2.One * size, new Vector2(1, 0), new Vector2(0, 1));
+				Renderer.DrawSprite(
+					texture, Color4.White, Vector2.Zero, Vector2.One * size, new Vector2(1, 0), new Vector2(0, 1)
+				);
 			}
 
 			private static void ShiftedCoordinates(float x, float y, out float nx, out float ny)
@@ -313,14 +317,16 @@ namespace Tangerine.UI
 								ShiftedCoordinates(
 									Widget.Input.MousePosition.X - Widget.GlobalPosition.X,
 									Widget.Input.MousePosition.Y - Widget.GlobalPosition.Y,
-									out float nx, out float ny);
+									out float nx,
+									out float ny
+								);
 								if (pick.Area == Area.Triangle) {
 									var newPick = PositionToSV(nx, ny, ignoreBounds: true);
 									color.Value = new ColorHsva {
 										H = color.Value.H,
 										S = Mathf.Min(Mathf.Max(newPick.S.Value, 0), 1),
 										V = Mathf.Min(Mathf.Max(newPick.V.Value, 0), 1),
-										A = color.Value.A
+										A = color.Value.A,
 									};
 								} else {
 									var newPick = PositionToHue(nx, ny);
@@ -328,7 +334,7 @@ namespace Tangerine.UI
 										H = Mathf.Min(Mathf.Max(newPick.H.Value, 0), 360),
 										S = color.Value.S,
 										V = color.Value.V,
-										A = color.Value.A
+										A = color.Value.A,
 									};
 								}
 								Window.Current.Invalidate();
@@ -346,7 +352,7 @@ namespace Tangerine.UI
 			{
 				Outside,
 				Wheel,
-				Triangle
+				Triangle,
 			}
 
 			private struct Result
@@ -372,7 +378,7 @@ namespace Tangerine.UI
 					RangeMin = min,
 					RangeMax = max,
 					MinSize = new Vector2(30, 16),
-					MaxHeight = 16
+					MaxHeight = 16,
 				};
 				var value = new ThemedSimpleText {
 					HitTestTarget = false,
@@ -380,7 +386,7 @@ namespace Tangerine.UI
 					VAlignment = VAlignment.Center,
 					Padding = new Thickness { Left = 5, Top = 0 },
 					MinSize = new Vector2(36, Slider.MinHeight),
-					Text = Slider.Value.ToString(format)
+					Text = Slider.Value.ToString(format),
 				};
 				Slider.Updating += _ => {
 					value.Text = Slider.Value.ToString(format);
@@ -539,8 +545,8 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 100;
 
-				public AlphaSlider(Property<ColorHsva> color) :
-					base(color, name: "A", min: 0, max: 255, PixelCount, format: "0.")
+				public AlphaSlider(Property<ColorHsva> color)
+					: base(color, name: "A", min: 0, max: 255, PixelCount, format: "0.")
 				{
 					Slider.CompoundPresenter.Insert(1, new BackgroundPresenter());
 				}
@@ -601,8 +607,8 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 360;
 
-				public HueSlider(Property<ColorHsva> color) :
-					base(color, name: "H", min: 0, max: 360, PixelCount, format: "0.#")
+				public HueSlider(Property<ColorHsva> color)
+					: base(color, name: "H", min: 0, max: 360, PixelCount, format: "0.#")
 				{
 					for (var i = 0; i < PixelCount; i++) {
 						Pixels[PixelCount - i - 1] = new ColorHsva(hue: i, saturation: 1, value: 1).HsvaToRgb();
@@ -626,8 +632,9 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 100;
 
-				public SaturationSlider(Property<ColorHsva> color) :
-					base(color, name: "S", min: 0, max: 1, PixelCount, format: "0.###") { }
+				public SaturationSlider(Property<ColorHsva> color)
+					: base(color, name: "S", min: 0, max: 1, PixelCount, format: "0.###")
+				{ }
 
 				protected override void OnSliderValueChange()
 				{
@@ -657,8 +664,9 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 100;
 
-				public ValueSlider(Property<ColorHsva> color) :
-					base(color, name: "V", min: 0, max: 1, PixelCount, format: "0.###") { }
+				public ValueSlider(Property<ColorHsva> color)
+					: base(color, name: "V", min: 0, max: 1, PixelCount, format: "0.###")
+				{ }
 
 				protected override void OnSliderValueChange()
 				{
@@ -771,8 +779,9 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 100;
 
-				public LChanneSlider(Property<ColorHsva> color) :
-					base(color, name: "L", min: 0, max: 100, PixelCount, format: "0.#") { }
+				public LChanneSlider(Property<ColorHsva> color)
+					: base(color, name: "L", min: 0, max: 100, PixelCount, format: "0.#")
+				{ }
 
 				protected override void OnColorValueChange()
 				{
@@ -799,8 +808,9 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 256;
 
-				public AChanneSlider(Property<ColorHsva> color) :
-					base(color, name: "A", min: -128, max: 128, PixelCount, format: "0.#") { }
+				public AChanneSlider(Property<ColorHsva> color)
+					: base(color, name: "A", min: -128, max: 128, PixelCount, format: "0.#")
+				{ }
 
 				protected override void OnColorValueChange()
 				{
@@ -826,8 +836,9 @@ namespace Tangerine.UI
 			{
 				private const int PixelCount = 256;
 
-				public BChanneSlider(Property<ColorHsva> color) :
-					base(color, name: "B", min: -128, max: 128, PixelCount, format: "0.#") { }
+				public BChanneSlider(Property<ColorHsva> color)
+					: base(color, name: "B", min: -128, max: 128, PixelCount, format: "0.#")
+				{ }
 
 				protected override void OnColorValueChange()
 				{
@@ -857,7 +868,7 @@ namespace Tangerine.UI
 				Layout = new VBoxLayout { Spacing = 4 };
 				Padding = new Thickness(left: 0, right: 0, top: 4, bottom: 4);
 				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Inspector.StripeBackground2) {
-					IgnorePadding = true
+					IgnorePadding = true,
 				};
 			}
 		}
@@ -952,33 +963,33 @@ namespace Tangerine.UI
 			public readonly double Z;
 			public readonly float alpha;
 
-			public ColorXyz(double X, double Y, double Z, float alpha)
+			public ColorXyz(double x, double y, double z, float alpha)
 			{
-				this.X = X;
-				this.Y = Y;
-				this.Z = Z;
+				this.X = x;
+				this.Y = y;
+				this.Z = z;
 				this.alpha = alpha;
 			}
-		};
+		}
 
 		private class ColorLab
 		{
 			// Bradford-adapted D50 white point
 			private static readonly (double X, double Y, double Z) whitePoint = (0.964212, 1, 0.825188);
-			private const double kE = 216.0 / 24389.0;
-			private const double kK = 24389.0 / 27.0;
-			private const double kKE = 8.0;
+			private const double KE = 216.0 / 24389.0;
+			private const double KK = 24389.0 / 27.0;
+			private const double KKE = 8.0;
 
 			public double L;
 			public double A;
 			public double B;
 			public float Alpha;
 
-			public ColorLab(double L, double A, double B, float alpha)
+			public ColorLab(double l, double a, double b, float alpha)
 			{
-				this.L = L;
-				this.A = A;
-				this.B = B;
+				this.L = l;
+				this.A = a;
+				this.B = b;
 				Alpha = alpha;
 			}
 
@@ -991,9 +1002,9 @@ namespace Tangerine.UI
 				var b = InverseCompand(rgb.B / 255.0);
 				// Constants for D50 white point
 				return new ColorXyz(
-					X: r * 0.4360747 + g * 0.3850649 + b * 0.1430804,
-					Y: r * 0.2225045 + g * 0.7168786 + b * 0.0606169,
-					Z: r * 0.0139322 + g * 0.0971045 + b * 0.7141733,
+					x: r * 0.4360747 + g * 0.3850649 + b * 0.1430804,
+					y: r * 0.2225045 + g * 0.7168786 + b * 0.0606169,
+					z: r * 0.0139322 + g * 0.0971045 + b * 0.7141733,
 					alpha: rgb.A
 				);
 
@@ -1021,7 +1032,7 @@ namespace Tangerine.UI
 				return new ColorLab(Math.Round(l), Math.Round(a), Math.Round(b), xyz.alpha);
 
 				double ConvertXyzToLab(double colorPart) =>
-					colorPart > kE ? Math.Pow(colorPart, 1.0 / 3.0) : (kK * colorPart + 16.0) / 116.0;
+					colorPart > KE ? Math.Pow(colorPart, 1.0 / 3.0) : (KK * colorPart + 16.0) / 116.0;
 			}
 
 			public Color4 LabToRgb() => XyzToRgb(LabToXyz());
@@ -1031,9 +1042,9 @@ namespace Tangerine.UI
 				double y = (L + 16.0) / 116.0;
 				double x = A * 0.002 + y;
 				double z = y - B * 0.005;
-				x = (Math.Pow(x, 3) > kE) ? Math.Pow(x, 3) : (116.0 * x - 16.0) / kK;
-				y = (L > kKE) ? Math.Pow((L + 16.0) / 116.0, 3.0) : (L / kK);
-				z = (Math.Pow(z, 3) > kE) ? Math.Pow(z, 3) : (116.0 * z - 16.0) / kK;
+				x = (Math.Pow(x, 3) > KE) ? Math.Pow(x, 3) : (116.0 * x - 16.0) / KK;
+				y = (L > KKE) ? Math.Pow((L + 16.0) / 116.0, 3.0) : (L / KK);
+				z = (Math.Pow(z, 3) > KE) ? Math.Pow(z, 3) : (116.0 * z - 16.0) / KK;
 				return new ColorXyz(x * whitePoint.X, y * whitePoint.Y, z * whitePoint.Z, Alpha);
 			}
 

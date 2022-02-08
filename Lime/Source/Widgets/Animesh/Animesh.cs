@@ -182,7 +182,7 @@ namespace Lime
 				}
 				if (animatorWasFound) {
 					foreach (var key in animator.Keys) {
-						var vertices = ((List<SkinnedVertex>)key.Value);
+						var vertices = (List<SkinnedVertex>)key.Value;
 						foreach (var vertex in vertices) {
 							var v = vertex;
 							Texture?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
@@ -318,7 +318,8 @@ namespace Lime
 						{{
 							color = u_WidgetColor * ((1.0 - u_BlendFactor) * in_Color1 + u_BlendFactor * in_Color2);
 							texCoords = (1.0 - u_BlendFactor) * in_UV1 + u_BlendFactor * in_UV2;
-							vec4 position = u_LocalToParentTransform * ((1.0 - u_BlendFactor) * in_Pos1 + u_BlendFactor * in_Pos2);
+							vec4 position = u_LocalToParentTransform
+								* ((1.0 - u_BlendFactor) * in_Pos1 + u_BlendFactor * in_Pos2);
 							mat4 skinTransform =
 								u_Bones[int(in_BlendIndices.x)] * in_BlendWeights.x +
 								u_Bones[int(in_BlendIndices.y)] * in_BlendWeights.y +
@@ -343,7 +344,7 @@ namespace Lime
 								texCoords.y <= u_RightBottomCorner.y && texCoords.y >= u_LeftUpperCorner.y ?
 									gl_FragColor : vec4(0.0);
 						}
-					")
+					"),
 				};
 				var layoutAttribs = new[] {
 					// in_Pos1
@@ -408,7 +409,7 @@ namespace Lime
 						Slot = 0,
 						Location = 7,
 						Offset = 2 * sizeof(Vector4) + sizeof(Color4) + sizeof(Vector2),
-					}
+					},
 				};
 				var layoutBindings = new[] {
 					new VertexInputLayoutBinding {
@@ -428,7 +429,7 @@ namespace Lime
 					},
 					new ShaderProgram.AttribLocation {
 						Name = "in_Pos2",
-						Index = 1
+						Index = 1,
 					},
 					new ShaderProgram.AttribLocation {
 						Name = "in_Color1",
@@ -453,13 +454,13 @@ namespace Lime
 					new ShaderProgram.AttribLocation {
 						Name = "in_BlendWeights",
 						Index = 7,
-					}
+					},
 				};
 				var samplers = new[] {
 					new ShaderProgram.Sampler {
 						Name = "u_Tex",
 						Stage = 0,
-					}
+					},
 				};
 				program = new ShaderProgram(shaders, attribLocations, samplers);
 			}

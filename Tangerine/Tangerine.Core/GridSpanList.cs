@@ -39,11 +39,11 @@ namespace Tangerine.Core.Components
 						reversed ?
 						span.B >= result[last].A :
 						result[last].B >= span.A;
-				};
+				}
 				if (result.Count > 0 && isOverlapping) {
 					result[last] = new GridSpan {
 						A = reversed ? Math.Min(result[last].A, span.A) : result[last].A,
-						B = reversed ? result[last].B : Math.Max(result[last].B, span.B)
+						B = reversed ? result[last].B : Math.Max(result[last].B, span.B),
 					};
 				} else {
 					result.Add(span);

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Lime;
 using System.IO;
+using Lime;
 
 namespace Orange
 {
@@ -39,7 +39,9 @@ namespace Orange
 			};
 			foreach (var resource in fontResourcePaths) {
 				try {
-					defaultFonts.Add(new DynamicFont(new EmbeddedResource(resource, "Orange.GUI").GetResourceBytes()));
+					defaultFonts.Add(
+						new Lime.DynamicFont(new EmbeddedResource(resource, "Orange.GUI").GetResourceBytes())
+					);
 				} catch (SystemException e) {
 					System.Console.WriteLine($"Couldn't load font {resource}: {e}");
 				}
