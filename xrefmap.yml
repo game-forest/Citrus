@@ -48402,12 +48402,12 @@ references:
   isSpec: "True"
   fullName: Lime.Persistence.Persistence
   nameWithType: Persistence.Persistence
-- uid: Lime.Persistence.BinarySignature
-  name: BinarySignature
-  href: api/Lime.Persistence.html#Lime_Persistence_BinarySignature
-  commentId: F:Lime.Persistence.BinarySignature
-  fullName: Lime.Persistence.BinarySignature
-  nameWithType: Persistence.BinarySignature
+- uid: Lime.Persistence.CalcObjectCheckSum(System.Object)
+  name: CalcObjectCheckSum(Object)
+  href: api/Lime.Persistence.html#Lime_Persistence_CalcObjectCheckSum_System_Object_
+  commentId: M:Lime.Persistence.CalcObjectCheckSum(System.Object)
+  fullName: Lime.Persistence.CalcObjectCheckSum(System.Object)
+  nameWithType: Persistence.CalcObjectCheckSum(Object)
 - uid: Lime.Persistence.CalcObjectCheckSum*
   name: CalcObjectCheckSum
   href: api/Lime.Persistence.html#Lime_Persistence_CalcObjectCheckSum_
@@ -48415,15 +48415,6 @@ references:
   isSpec: "True"
   fullName: Lime.Persistence.CalcObjectCheckSum
   nameWithType: Persistence.CalcObjectCheckSum
-- uid: Lime.Persistence.CalcObjectCheckSum``1(System.String,``0)
-  name: CalcObjectCheckSum<T>(String, T)
-  href: api/Lime.Persistence.html#Lime_Persistence_CalcObjectCheckSum__1_System_String___0_
-  commentId: M:Lime.Persistence.CalcObjectCheckSum``1(System.String,``0)
-  name.vb: CalcObjectCheckSum(Of T)(String, T)
-  fullName: Lime.Persistence.CalcObjectCheckSum<T>(System.String, T)
-  fullName.vb: Lime.Persistence.CalcObjectCheckSum(Of T)(System.String, T)
-  nameWithType: Persistence.CalcObjectCheckSum<T>(String, T)
-  nameWithType.vb: Persistence.CalcObjectCheckSum(Of T)(String, T)
 - uid: Lime.Persistence.CheckBinarySignature(System.IO.Stream)
   name: CheckBinarySignature(Stream)
   href: api/Lime.Persistence.html#Lime_Persistence_CheckBinarySignature_System_IO_Stream_
@@ -48459,18 +48450,6 @@ references:
   fullName.vb: Lime.Persistence.Clone(Of T)(T)
   nameWithType: Persistence.Clone<T>(T)
   nameWithType.vb: Persistence.Clone(Of T)(T)
-- uid: Lime.Persistence.ClonerFactory
-  name: ClonerFactory
-  href: api/Lime.Persistence.html#Lime_Persistence_ClonerFactory
-  commentId: F:Lime.Persistence.ClonerFactory
-  fullName: Lime.Persistence.ClonerFactory
-  nameWithType: Persistence.ClonerFactory
-- uid: Lime.Persistence.DeserializerBuilder
-  name: Persistence.DeserializerBuilder
-  href: api/Lime.Persistence.DeserializerBuilder.html
-  commentId: T:Lime.Persistence.DeserializerBuilder
-  fullName: Lime.Persistence.DeserializerBuilder
-  nameWithType: Persistence.DeserializerBuilder
 - uid: Lime.Persistence.Format
   name: Persistence.Format
   href: api/Lime.Persistence.Format.html
@@ -48489,116 +48468,150 @@ references:
   commentId: F:Lime.Persistence.Format.Json
   fullName: Lime.Persistence.Format.Json
   nameWithType: Persistence.Format.Json
-- uid: Lime.Persistence.ReadObject*
-  name: ReadObject
-  href: api/Lime.Persistence.html#Lime_Persistence_ReadObject_
-  commentId: Overload:Lime.Persistence.ReadObject
+- uid: Lime.Persistence.ReadFromBundle*
+  name: ReadFromBundle
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromBundle_
+  commentId: Overload:Lime.Persistence.ReadFromBundle
   isSpec: "True"
-  fullName: Lime.Persistence.ReadObject
-  nameWithType: Persistence.ReadObject
-- uid: Lime.Persistence.ReadObject``1(System.String,System.IO.Stream,System.Object)
-  name: ReadObject<T>(String, Stream, Object)
-  href: api/Lime.Persistence.html#Lime_Persistence_ReadObject__1_System_String_System_IO_Stream_System_Object_
-  commentId: M:Lime.Persistence.ReadObject``1(System.String,System.IO.Stream,System.Object)
-  name.vb: ReadObject(Of T)(String, Stream, Object)
-  fullName: Lime.Persistence.ReadObject<T>(System.String, System.IO.Stream, System.Object)
-  fullName.vb: Lime.Persistence.ReadObject(Of T)(System.String, System.IO.Stream, System.Object)
-  nameWithType: Persistence.ReadObject<T>(String, Stream, Object)
-  nameWithType.vb: Persistence.ReadObject(Of T)(String, Stream, Object)
-- uid: Lime.Persistence.ReadObject``1(System.String,System.Object)
-  name: ReadObject<T>(String, Object)
-  href: api/Lime.Persistence.html#Lime_Persistence_ReadObject__1_System_String_System_Object_
-  commentId: M:Lime.Persistence.ReadObject``1(System.String,System.Object)
-  name.vb: ReadObject(Of T)(String, Object)
-  fullName: Lime.Persistence.ReadObject<T>(System.String, System.Object)
-  fullName.vb: Lime.Persistence.ReadObject(Of T)(System.String, System.Object)
-  nameWithType: Persistence.ReadObject<T>(String, Object)
-  nameWithType.vb: Persistence.ReadObject(Of T)(String, Object)
-- uid: Lime.Persistence.ReadObjectFromFile*
-  name: ReadObjectFromFile
-  href: api/Lime.Persistence.html#Lime_Persistence_ReadObjectFromFile_
-  commentId: Overload:Lime.Persistence.ReadObjectFromFile
+  fullName: Lime.Persistence.ReadFromBundle
+  nameWithType: Persistence.ReadFromBundle
+- uid: Lime.Persistence.ReadFromBundle``1(Lime.AssetBundle,System.String,System.Object)
+  name: ReadFromBundle<T>(AssetBundle, String, Object)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromBundle__1_Lime_AssetBundle_System_String_System_Object_
+  commentId: M:Lime.Persistence.ReadFromBundle``1(Lime.AssetBundle,System.String,System.Object)
+  name.vb: ReadFromBundle(Of T)(AssetBundle, String, Object)
+  fullName: Lime.Persistence.ReadFromBundle<T>(Lime.AssetBundle, System.String, System.Object)
+  fullName.vb: Lime.Persistence.ReadFromBundle(Of T)(Lime.AssetBundle, System.String, System.Object)
+  nameWithType: Persistence.ReadFromBundle<T>(AssetBundle, String, Object)
+  nameWithType.vb: Persistence.ReadFromBundle(Of T)(AssetBundle, String, Object)
+- uid: Lime.Persistence.ReadFromCurrentBundle*
+  name: ReadFromCurrentBundle
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromCurrentBundle_
+  commentId: Overload:Lime.Persistence.ReadFromCurrentBundle
   isSpec: "True"
-  fullName: Lime.Persistence.ReadObjectFromFile
-  nameWithType: Persistence.ReadObjectFromFile
-- uid: Lime.Persistence.ReadObjectFromFile``1(System.String,System.Object)
-  name: ReadObjectFromFile<T>(String, Object)
-  href: api/Lime.Persistence.html#Lime_Persistence_ReadObjectFromFile__1_System_String_System_Object_
-  commentId: M:Lime.Persistence.ReadObjectFromFile``1(System.String,System.Object)
-  name.vb: ReadObjectFromFile(Of T)(String, Object)
-  fullName: Lime.Persistence.ReadObjectFromFile<T>(System.String, System.Object)
-  fullName.vb: Lime.Persistence.ReadObjectFromFile(Of T)(System.String, System.Object)
-  nameWithType: Persistence.ReadObjectFromFile<T>(String, Object)
-  nameWithType.vb: Persistence.ReadObjectFromFile(Of T)(String, Object)
-- uid: Lime.Persistence.WriteObject*
-  name: WriteObject
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObject_
-  commentId: Overload:Lime.Persistence.WriteObject
+  fullName: Lime.Persistence.ReadFromCurrentBundle
+  nameWithType: Persistence.ReadFromCurrentBundle
+- uid: Lime.Persistence.ReadFromCurrentBundle``1(System.String,System.Object)
+  name: ReadFromCurrentBundle<T>(String, Object)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromCurrentBundle__1_System_String_System_Object_
+  commentId: M:Lime.Persistence.ReadFromCurrentBundle``1(System.String,System.Object)
+  name.vb: ReadFromCurrentBundle(Of T)(String, Object)
+  fullName: Lime.Persistence.ReadFromCurrentBundle<T>(System.String, System.Object)
+  fullName.vb: Lime.Persistence.ReadFromCurrentBundle(Of T)(System.String, System.Object)
+  nameWithType: Persistence.ReadFromCurrentBundle<T>(String, Object)
+  nameWithType.vb: Persistence.ReadFromCurrentBundle(Of T)(String, Object)
+- uid: Lime.Persistence.ReadFromFile*
+  name: ReadFromFile
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromFile_
+  commentId: Overload:Lime.Persistence.ReadFromFile
   isSpec: "True"
-  fullName: Lime.Persistence.WriteObject
-  nameWithType: Persistence.WriteObject
-- uid: Lime.Persistence.WriteObject``1(System.String,System.IO.Stream,``0,Lime.Persistence.Format)
-  name: WriteObject<T>(String, Stream, T, Persistence.Format)
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObject__1_System_String_System_IO_Stream___0_Lime_Persistence_Format_
-  commentId: M:Lime.Persistence.WriteObject``1(System.String,System.IO.Stream,``0,Lime.Persistence.Format)
-  name.vb: WriteObject(Of T)(String, Stream, T, Persistence.Format)
-  fullName: Lime.Persistence.WriteObject<T>(System.String, System.IO.Stream, T, Lime.Persistence.Format)
-  fullName.vb: Lime.Persistence.WriteObject(Of T)(System.String, System.IO.Stream, T, Lime.Persistence.Format)
-  nameWithType: Persistence.WriteObject<T>(String, Stream, T, Persistence.Format)
-  nameWithType.vb: Persistence.WriteObject(Of T)(String, Stream, T, Persistence.Format)
-- uid: Lime.Persistence.WriteObject``1(System.String,System.IO.Stream,``0,Yuzu.AbstractSerializer)
-  name: WriteObject<T>(String, Stream, T, AbstractSerializer)
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObject__1_System_String_System_IO_Stream___0_Yuzu_AbstractSerializer_
-  commentId: M:Lime.Persistence.WriteObject``1(System.String,System.IO.Stream,``0,Yuzu.AbstractSerializer)
-  name.vb: WriteObject(Of T)(String, Stream, T, AbstractSerializer)
-  fullName: Lime.Persistence.WriteObject<T>(System.String, System.IO.Stream, T, Yuzu.AbstractSerializer)
-  fullName.vb: Lime.Persistence.WriteObject(Of T)(System.String, System.IO.Stream, T, Yuzu.AbstractSerializer)
-  nameWithType: Persistence.WriteObject<T>(String, Stream, T, AbstractSerializer)
-  nameWithType.vb: Persistence.WriteObject(Of T)(String, Stream, T, AbstractSerializer)
-- uid: Lime.Persistence.WriteObjectToBundle*
-  name: WriteObjectToBundle
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObjectToBundle_
-  commentId: Overload:Lime.Persistence.WriteObjectToBundle
+  fullName: Lime.Persistence.ReadFromFile
+  nameWithType: Persistence.ReadFromFile
+- uid: Lime.Persistence.ReadFromFile``1(System.String,System.Object)
+  name: ReadFromFile<T>(String, Object)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromFile__1_System_String_System_Object_
+  commentId: M:Lime.Persistence.ReadFromFile``1(System.String,System.Object)
+  name.vb: ReadFromFile(Of T)(String, Object)
+  fullName: Lime.Persistence.ReadFromFile<T>(System.String, System.Object)
+  fullName.vb: Lime.Persistence.ReadFromFile(Of T)(System.String, System.Object)
+  nameWithType: Persistence.ReadFromFile<T>(String, Object)
+  nameWithType.vb: Persistence.ReadFromFile(Of T)(String, Object)
+- uid: Lime.Persistence.ReadFromStream*
+  name: ReadFromStream
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromStream_
+  commentId: Overload:Lime.Persistence.ReadFromStream
   isSpec: "True"
-  fullName: Lime.Persistence.WriteObjectToBundle
-  nameWithType: Persistence.WriteObjectToBundle
-- uid: Lime.Persistence.WriteObjectToBundle``1(Lime.AssetBundle,System.String,``0,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)
-  name: WriteObjectToBundle<T>(AssetBundle, String, T, Persistence.Format, SHA256, AssetAttributes)
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObjectToBundle__1_Lime_AssetBundle_System_String___0_Lime_Persistence_Format_Lime_SHA256_Lime_AssetAttributes_
-  commentId: M:Lime.Persistence.WriteObjectToBundle``1(Lime.AssetBundle,System.String,``0,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)
-  name.vb: WriteObjectToBundle(Of T)(AssetBundle, String, T, Persistence.Format, SHA256, AssetAttributes)
-  fullName: Lime.Persistence.WriteObjectToBundle<T>(Lime.AssetBundle, System.String, T, Lime.Persistence.Format, Lime.SHA256, Lime.AssetAttributes)
-  fullName.vb: Lime.Persistence.WriteObjectToBundle(Of T)(Lime.AssetBundle, System.String, T, Lime.Persistence.Format, Lime.SHA256, Lime.AssetAttributes)
-  nameWithType: Persistence.WriteObjectToBundle<T>(AssetBundle, String, T, Persistence.Format, SHA256, AssetAttributes)
-  nameWithType.vb: Persistence.WriteObjectToBundle(Of T)(AssetBundle, String, T, Persistence.Format, SHA256, AssetAttributes)
-- uid: Lime.Persistence.WriteObjectToFile*
-  name: WriteObjectToFile
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObjectToFile_
-  commentId: Overload:Lime.Persistence.WriteObjectToFile
+  fullName: Lime.Persistence.ReadFromStream
+  nameWithType: Persistence.ReadFromStream
+- uid: Lime.Persistence.ReadFromStream``1(System.IO.Stream,System.Object)
+  name: ReadFromStream<T>(Stream, Object)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromStream__1_System_IO_Stream_System_Object_
+  commentId: M:Lime.Persistence.ReadFromStream``1(System.IO.Stream,System.Object)
+  name.vb: ReadFromStream(Of T)(Stream, Object)
+  fullName: Lime.Persistence.ReadFromStream<T>(System.IO.Stream, System.Object)
+  fullName.vb: Lime.Persistence.ReadFromStream(Of T)(System.IO.Stream, System.Object)
+  nameWithType: Persistence.ReadFromStream<T>(Stream, Object)
+  nameWithType.vb: Persistence.ReadFromStream(Of T)(Stream, Object)
+- uid: Lime.Persistence.ReadFromString*
+  name: ReadFromString
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromString_
+  commentId: Overload:Lime.Persistence.ReadFromString
   isSpec: "True"
-  fullName: Lime.Persistence.WriteObjectToFile
-  nameWithType: Persistence.WriteObjectToFile
-- uid: Lime.Persistence.WriteObjectToFile``1(System.String,``0,Lime.Persistence.Format)
-  name: WriteObjectToFile<T>(String, T, Persistence.Format)
-  href: api/Lime.Persistence.html#Lime_Persistence_WriteObjectToFile__1_System_String___0_Lime_Persistence_Format_
-  commentId: M:Lime.Persistence.WriteObjectToFile``1(System.String,``0,Lime.Persistence.Format)
-  name.vb: WriteObjectToFile(Of T)(String, T, Persistence.Format)
-  fullName: Lime.Persistence.WriteObjectToFile<T>(System.String, T, Lime.Persistence.Format)
-  fullName.vb: Lime.Persistence.WriteObjectToFile(Of T)(System.String, T, Lime.Persistence.Format)
-  nameWithType: Persistence.WriteObjectToFile<T>(String, T, Persistence.Format)
-  nameWithType.vb: Persistence.WriteObjectToFile(Of T)(String, T, Persistence.Format)
-- uid: Lime.Persistence.YuzuCommonOptions
-  name: YuzuCommonOptions
-  href: api/Lime.Persistence.html#Lime_Persistence_YuzuCommonOptions
-  commentId: F:Lime.Persistence.YuzuCommonOptions
-  fullName: Lime.Persistence.YuzuCommonOptions
-  nameWithType: Persistence.YuzuCommonOptions
+  fullName: Lime.Persistence.ReadFromString
+  nameWithType: Persistence.ReadFromString
+- uid: Lime.Persistence.ReadFromString``1(System.String,System.Object)
+  name: ReadFromString<T>(String, Object)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadFromString__1_System_String_System_Object_
+  commentId: M:Lime.Persistence.ReadFromString``1(System.String,System.Object)
+  name.vb: ReadFromString(Of T)(String, Object)
+  fullName: Lime.Persistence.ReadFromString<T>(System.String, System.Object)
+  fullName.vb: Lime.Persistence.ReadFromString(Of T)(System.String, System.Object)
+  nameWithType: Persistence.ReadFromString<T>(String, Object)
+  nameWithType.vb: Persistence.ReadFromString(Of T)(String, Object)
+- uid: Lime.Persistence.WriteToBundle(Lime.AssetBundle,System.String,System.Object,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)
+  name: WriteToBundle(AssetBundle, String, Object, Persistence.Format, SHA256, AssetAttributes)
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToBundle_Lime_AssetBundle_System_String_System_Object_Lime_Persistence_Format_Lime_SHA256_Lime_AssetAttributes_
+  commentId: M:Lime.Persistence.WriteToBundle(Lime.AssetBundle,System.String,System.Object,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)
+  fullName: Lime.Persistence.WriteToBundle(Lime.AssetBundle, System.String, System.Object, Lime.Persistence.Format, Lime.SHA256, Lime.AssetAttributes)
+  nameWithType: Persistence.WriteToBundle(AssetBundle, String, Object, Persistence.Format, SHA256, AssetAttributes)
+- uid: Lime.Persistence.WriteToBundle*
+  name: WriteToBundle
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToBundle_
+  commentId: Overload:Lime.Persistence.WriteToBundle
+  isSpec: "True"
+  fullName: Lime.Persistence.WriteToBundle
+  nameWithType: Persistence.WriteToBundle
+- uid: Lime.Persistence.WriteToFile(System.String,System.Object,Lime.Persistence.Format)
+  name: WriteToFile(String, Object, Persistence.Format)
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToFile_System_String_System_Object_Lime_Persistence_Format_
+  commentId: M:Lime.Persistence.WriteToFile(System.String,System.Object,Lime.Persistence.Format)
+  fullName: Lime.Persistence.WriteToFile(System.String, System.Object, Lime.Persistence.Format)
+  nameWithType: Persistence.WriteToFile(String, Object, Persistence.Format)
+- uid: Lime.Persistence.WriteToFile*
+  name: WriteToFile
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToFile_
+  commentId: Overload:Lime.Persistence.WriteToFile
+  isSpec: "True"
+  fullName: Lime.Persistence.WriteToFile
+  nameWithType: Persistence.WriteToFile
+- uid: Lime.Persistence.WriteToStream(System.IO.Stream,System.Object,Lime.Persistence.Format)
+  name: WriteToStream(Stream, Object, Persistence.Format)
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToStream_System_IO_Stream_System_Object_Lime_Persistence_Format_
+  commentId: M:Lime.Persistence.WriteToStream(System.IO.Stream,System.Object,Lime.Persistence.Format)
+  fullName: Lime.Persistence.WriteToStream(System.IO.Stream, System.Object, Lime.Persistence.Format)
+  nameWithType: Persistence.WriteToStream(Stream, Object, Persistence.Format)
+- uid: Lime.Persistence.WriteToStream*
+  name: WriteToStream
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToStream_
+  commentId: Overload:Lime.Persistence.WriteToStream
+  isSpec: "True"
+  fullName: Lime.Persistence.WriteToStream
+  nameWithType: Persistence.WriteToStream
+- uid: Lime.Persistence.WriteToString(System.Object,Lime.Persistence.Format)
+  name: WriteToString(Object, Persistence.Format)
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToString_System_Object_Lime_Persistence_Format_
+  commentId: M:Lime.Persistence.WriteToString(System.Object,Lime.Persistence.Format)
+  fullName: Lime.Persistence.WriteToString(System.Object, Lime.Persistence.Format)
+  nameWithType: Persistence.WriteToString(Object, Persistence.Format)
+- uid: Lime.Persistence.WriteToString*
+  name: WriteToString
+  href: api/Lime.Persistence.html#Lime_Persistence_WriteToString_
+  commentId: Overload:Lime.Persistence.WriteToString
+  isSpec: "True"
+  fullName: Lime.Persistence.WriteToString
+  nameWithType: Persistence.WriteToString
 - uid: Lime.Persistence.YuzuJsonOptions
   name: YuzuJsonOptions
   href: api/Lime.Persistence.html#Lime_Persistence_YuzuJsonOptions
   commentId: F:Lime.Persistence.YuzuJsonOptions
   fullName: Lime.Persistence.YuzuJsonOptions
   nameWithType: Persistence.YuzuJsonOptions
+- uid: Lime.Persistence.YuzuOptions
+  name: YuzuOptions
+  href: api/Lime.Persistence.html#Lime_Persistence_YuzuOptions
+  commentId: F:Lime.Persistence.YuzuOptions
+  fullName: Lime.Persistence.YuzuOptions
+  nameWithType: Persistence.YuzuOptions
 - uid: Lime.PinchGesture
   name: PinchGesture
   href: api/Lime.PinchGesture.html

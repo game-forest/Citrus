@@ -140,7 +140,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Persistence(CommonOptions yuzuCommonOptions, JsonSerializeOptions yuzuJsonOptions)</code></pre>
+    <pre><code class="lang-csharp hljs">public Persistence(CommonOptions yuzuOptions, JsonSerializeOptions yuzuJsonOptions)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -154,7 +154,7 @@
     <tbody>
       <tr>
         <td><span class="xref">Yuzu.CommonOptions</span></td>
-        <td><span class="parametername">yuzuCommonOptions</span></td>
+        <td><span class="parametername">yuzuOptions</span></td>
         <td></td>
       </tr>
       <tr>
@@ -166,78 +166,6 @@
   </table>
   <h3 id="fields">Fields
   </h3>
-  
-  
-  <h4 id="Lime_Persistence_BinarySignature" data-uid="Lime.Persistence.BinarySignature">BinarySignature</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public uint BinarySignature</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.UInt32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Persistence_ClonerFactory" data-uid="Lime.Persistence.ClonerFactory">ClonerFactory</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Func&lt;Persistence, AbstractCloner&gt; ClonerFactory</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Lime.Persistence.html">Persistence</a>, <span class="xref">Yuzu.Clone.AbstractCloner</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="Lime_Persistence_YuzuCommonOptions" data-uid="Lime.Persistence.YuzuCommonOptions">YuzuCommonOptions</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly CommonOptions YuzuCommonOptions</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Yuzu.CommonOptions</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="Lime_Persistence_YuzuJsonOptions" data-uid="Lime.Persistence.YuzuJsonOptions">YuzuJsonOptions</h4>
@@ -262,17 +190,41 @@
       </tr>
     </tbody>
   </table>
+  
+  
+  <h4 id="Lime_Persistence_YuzuOptions" data-uid="Lime.Persistence.YuzuOptions">YuzuOptions</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly CommonOptions YuzuOptions</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Yuzu.CommonOptions</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   
   
   <a id="Lime_Persistence_CalcObjectCheckSum_" data-uid="Lime.Persistence.CalcObjectCheckSum*"></a>
-  <h4 id="Lime_Persistence_CalcObjectCheckSum__1_System_String___0_" data-uid="Lime.Persistence.CalcObjectCheckSum``1(System.String,``0)">CalcObjectCheckSum&lt;T&gt;(String, T)</h4>
+  <h4 id="Lime_Persistence_CalcObjectCheckSum_System_Object_" data-uid="Lime.Persistence.CalcObjectCheckSum(System.Object)">CalcObjectCheckSum(Object)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int CalcObjectCheckSum&lt;T&gt;(string path, T obj)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual int CalcObjectCheckSum(object object)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -285,13 +237,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">obj</span></td>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -311,21 +258,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="Lime_Persistence_CheckBinarySignature_" data-uid="Lime.Persistence.CheckBinarySignature*"></a>
@@ -334,7 +266,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool CheckBinarySignature(Stream s)</code></pre>
+    <pre><code class="lang-csharp hljs">protected static bool CheckBinarySignature(Stream stream)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -348,7 +280,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">s</span></td>
+        <td><span class="parametername">stream</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -474,318 +406,13 @@
   </table>
   
   
-  <a id="Lime_Persistence_ReadObject_" data-uid="Lime.Persistence.ReadObject*"></a>
-  <h4 id="Lime_Persistence_ReadObject__1_System_String_System_IO_Stream_System_Object_" data-uid="Lime.Persistence.ReadObject``1(System.String,System.IO.Stream,System.Object)">ReadObject&lt;T&gt;(String, Stream, Object)</h4>
+  <a id="Lime_Persistence_ReadFromBundle_" data-uid="Lime.Persistence.ReadFromBundle*"></a>
+  <h4 id="Lime_Persistence_ReadFromBundle__1_Lime_AssetBundle_System_String_System_Object_" data-uid="Lime.Persistence.ReadFromBundle``1(Lime.AssetBundle,System.String,System.Object)">ReadFromBundle&lt;T&gt;(AssetBundle, String, Object)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual T ReadObject&lt;T&gt;(string path, Stream stream, object obj = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">stream</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">obj</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Persistence_ReadObject_" data-uid="Lime.Persistence.ReadObject*"></a>
-  <h4 id="Lime_Persistence_ReadObject__1_System_String_System_Object_" data-uid="Lime.Persistence.ReadObject``1(System.String,System.Object)">ReadObject&lt;T&gt;(String, Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public T ReadObject&lt;T&gt;(string path, object obj = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">obj</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Persistence_ReadObjectFromFile_" data-uid="Lime.Persistence.ReadObjectFromFile*"></a>
-  <h4 id="Lime_Persistence_ReadObjectFromFile__1_System_String_System_Object_" data-uid="Lime.Persistence.ReadObjectFromFile``1(System.String,System.Object)">ReadObjectFromFile&lt;T&gt;(String, Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public T ReadObjectFromFile&lt;T&gt;(string path, object obj = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">obj</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Persistence_WriteObject_" data-uid="Lime.Persistence.WriteObject*"></a>
-  <h4 id="Lime_Persistence_WriteObject__1_System_String_System_IO_Stream___0_Lime_Persistence_Format_" data-uid="Lime.Persistence.WriteObject``1(System.String,System.IO.Stream,``0,Lime.Persistence.Format)">WriteObject&lt;T&gt;(String, Stream, T, Persistence.Format)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void WriteObject&lt;T&gt;(string path, Stream stream, T instance, Persistence.Format format)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">stream</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">instance</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Lime.Persistence.Format.html">Persistence.Format</a></td>
-        <td><span class="parametername">format</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Persistence_WriteObject_" data-uid="Lime.Persistence.WriteObject*"></a>
-  <h4 id="Lime_Persistence_WriteObject__1_System_String_System_IO_Stream___0_Yuzu_AbstractSerializer_" data-uid="Lime.Persistence.WriteObject``1(System.String,System.IO.Stream,``0,Yuzu.AbstractSerializer)">WriteObject&lt;T&gt;(String, Stream, T, AbstractSerializer)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void WriteObject&lt;T&gt;(string path, Stream stream, T instance, AbstractSerializer serializer)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">path</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">stream</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">instance</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">Yuzu.AbstractSerializer</span></td>
-        <td><span class="parametername">serializer</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_Persistence_WriteObjectToBundle_" data-uid="Lime.Persistence.WriteObjectToBundle*"></a>
-  <h4 id="Lime_Persistence_WriteObjectToBundle__1_Lime_AssetBundle_System_String___0_Lime_Persistence_Format_Lime_SHA256_Lime_AssetAttributes_" data-uid="Lime.Persistence.WriteObjectToBundle``1(Lime.AssetBundle,System.String,``0,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)">WriteObjectToBundle&lt;T&gt;(AssetBundle, String, T, Persistence.Format, SHA256, AssetAttributes)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void WriteObjectToBundle&lt;T&gt;(AssetBundle bundle, string path, T instance, Persistence.Format format, SHA256 cookingUnitHash, AssetAttributes attributes)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual T ReadFromBundle&lt;T&gt;(AssetBundle bundle, string path, object object = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -808,8 +435,323 @@
         <td></td>
       </tr>
       <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
         <td><span class="xref">T</span></td>
-        <td><span class="parametername">instance</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadFromCurrentBundle_" data-uid="Lime.Persistence.ReadFromCurrentBundle*"></a>
+  <h4 id="Lime_Persistence_ReadFromCurrentBundle__1_System_String_System_Object_" data-uid="Lime.Persistence.ReadFromCurrentBundle``1(System.String,System.Object)">ReadFromCurrentBundle&lt;T&gt;(String, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T ReadFromCurrentBundle&lt;T&gt;(string path, object object = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadFromFile_" data-uid="Lime.Persistence.ReadFromFile*"></a>
+  <h4 id="Lime_Persistence_ReadFromFile__1_System_String_System_Object_" data-uid="Lime.Persistence.ReadFromFile``1(System.String,System.Object)">ReadFromFile&lt;T&gt;(String, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual T ReadFromFile&lt;T&gt;(string path, object object = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadFromStream_" data-uid="Lime.Persistence.ReadFromStream*"></a>
+  <h4 id="Lime_Persistence_ReadFromStream__1_System_IO_Stream_System_Object_" data-uid="Lime.Persistence.ReadFromStream``1(System.IO.Stream,System.Object)">ReadFromStream&lt;T&gt;(Stream, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual T ReadFromStream&lt;T&gt;(Stream stream, object object = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadFromString_" data-uid="Lime.Persistence.ReadFromString*"></a>
+  <h4 id="Lime_Persistence_ReadFromString__1_System_String_System_Object_" data-uid="Lime.Persistence.ReadFromString``1(System.String,System.Object)">ReadFromString&lt;T&gt;(String, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual T ReadFromString&lt;T&gt;(string source, object object = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">source</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_WriteToBundle_" data-uid="Lime.Persistence.WriteToBundle*"></a>
+  <h4 id="Lime_Persistence_WriteToBundle_Lime_AssetBundle_System_String_System_Object_Lime_Persistence_Format_Lime_SHA256_Lime_AssetAttributes_" data-uid="Lime.Persistence.WriteToBundle(Lime.AssetBundle,System.String,System.Object,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)">WriteToBundle(AssetBundle, String, Object, Persistence.Format, SHA256, AssetAttributes)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void WriteToBundle(AssetBundle bundle, string path, object object, Persistence.Format format, SHA256 cookingUnitHash, AssetAttributes attributes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.AssetBundle.html">AssetBundle</a></td>
+        <td><span class="parametername">bundle</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
         <td></td>
       </tr>
       <tr>
@@ -829,30 +771,15 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
-  <a id="Lime_Persistence_WriteObjectToFile_" data-uid="Lime.Persistence.WriteObjectToFile*"></a>
-  <h4 id="Lime_Persistence_WriteObjectToFile__1_System_String___0_Lime_Persistence_Format_" data-uid="Lime.Persistence.WriteObjectToFile``1(System.String,``0,Lime.Persistence.Format)">WriteObjectToFile&lt;T&gt;(String, T, Persistence.Format)</h4>
+  <a id="Lime_Persistence_WriteToFile_" data-uid="Lime.Persistence.WriteToFile*"></a>
+  <h4 id="Lime_Persistence_WriteToFile_System_String_System_Object_Lime_Persistence_Format_" data-uid="Lime.Persistence.WriteToFile(System.String,System.Object,Lime.Persistence.Format)">WriteToFile(String, Object, Persistence.Format)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void WriteObjectToFile&lt;T&gt;(string path, T instance, Persistence.Format format)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void WriteToFile(string path, object object, Persistence.Format format)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -870,8 +797,8 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">instance</span></td>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
         <td></td>
       </tr>
       <tr>
@@ -881,17 +808,86 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="typeParameters">Type Parameters</h5>
+  
+  
+  <a id="Lime_Persistence_WriteToStream_" data-uid="Lime.Persistence.WriteToStream*"></a>
+  <h4 id="Lime_Persistence_WriteToStream_System_IO_Stream_System_Object_Lime_Persistence_Format_" data-uid="Lime.Persistence.WriteToStream(System.IO.Stream,System.Object,Lime.Persistence.Format)">WriteToStream(Stream, Object, Persistence.Format)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void WriteToStream(Stream stream, object object, Persistence.Format format)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
+        <th>Type</th>
         <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="parametername">T</span></td>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Persistence.Format.html">Persistence.Format</a></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_WriteToString_" data-uid="Lime.Persistence.WriteToString*"></a>
+  <h4 id="Lime_Persistence_WriteToString_System_Object_Lime_Persistence_Format_" data-uid="Lime.Persistence.WriteToString(System.Object,Lime.Persistence.Format)">WriteToString(Object, Persistence.Format)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string WriteToString(object object, Persistence.Format format)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lime.Persistence.Format.html">Persistence.Format</a></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>

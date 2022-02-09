@@ -5402,18 +5402,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.Persistence.DeserializerBuilder.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.Persistence.DeserializerBuilder.html",
-          "hash": "m5iL3/0bFaRy1mL4noUDGjiiqcL85PL8GfBmX3RIxwI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Lime.Persistence.Format.yml",
       "output": {
         ".html": {
@@ -5430,7 +5418,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Persistence.html",
-          "hash": "upHyOjZOQedIeYFkAuLAOiwgkqJjEw/7BugZ0btwgZI="
+          "hash": "WMaCYUyv89eCBkk2tJlxbV2TeZR5tcFj+HxQOnz4tYk="
         }
       },
       "is_incremental": false,
@@ -9378,7 +9366,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "2pw8rurH+2JfeFz2dIUyyWlgI5a16eJjWPhOIWOHSn0="
+          "hash": "D8jrBvMGBDeIbhUfJ/DhSP7z9921fqW89cAnl6b0LJg="
         }
       },
       "is_incremental": false,
@@ -9426,7 +9414,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "jtr63Gr0ckBxGtDpVuVvvQ4PB0RdZGLx7qoPem2YVMQ="
+          "hash": "uk4mSNVtuv1UV+mv4MkvxDwsf2Nt5x5O8inm70HyKeE="
         }
       },
       "is_incremental": false,
@@ -11995,7 +11983,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 784,
+          "total_file_count": 783,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
