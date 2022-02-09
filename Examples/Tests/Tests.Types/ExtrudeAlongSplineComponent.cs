@@ -18,11 +18,11 @@ namespace Tests.Types
 		public class ExtrudeShape
 		{
 			[YuzuMember]
-			public List<Vector2> Vertices { get; set; }
+			public List<Vector2> Vertices { get; set; } = new List<Vector2>();
 			[YuzuMember]
-			public List<int> Lines { get; set; }
+			public List<int> Lines { get; set; } = new List<int>();
 			[YuzuMember]
-			public List<float> Us { get; set; }
+			public List<float> Us { get; set; } = new List<float>();
 		}
 
 		private static Queue<Mesh<Mesh3D.Vertex>> meshPool = new Queue<Mesh<Mesh3D.Vertex>>();
