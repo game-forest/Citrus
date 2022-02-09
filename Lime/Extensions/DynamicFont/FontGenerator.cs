@@ -18,9 +18,9 @@ namespace Lime
 		/// <param name="assetDirectory"> Path to asset directory. </param>
 		public static void UpdateCharSetsAndGenerateFont(string configPath, string assetDirectory)
 		{
-			var config = InternalPersistence.Instance.ReadObjectFromFile<TftConfig>(AssetPath.Combine(assetDirectory, configPath));
+			var config = InternalPersistence.Instance.ReadFromFile<TftConfig>(AssetPath.Combine(assetDirectory, configPath));
 			UpdateCharsets(config, assetDirectory);
-			InternalPersistence.Instance.WriteObjectToFile(AssetPath.Combine(assetDirectory, configPath), config, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToFile(AssetPath.Combine(assetDirectory, configPath), config, Persistence.Format.Json);
 			GenerateFont(config, assetDirectory, Path.ChangeExtension(configPath, null));
 		}
 
@@ -31,7 +31,7 @@ namespace Lime
 		/// <param name="assetDirectory"> Path to asset directory. </param>
 		public static void GenerateFont(string configPath, string assetDirectory)
 		{
-			var config = InternalPersistence.Instance.ReadObjectFromFile<TftConfig>(AssetPath.Combine(assetDirectory, configPath));
+			var config = InternalPersistence.Instance.ReadFromFile<TftConfig>(AssetPath.Combine(assetDirectory, configPath));
 			GenerateFont(config, assetDirectory, Path.ChangeExtension(configPath, null));
 		}
 
@@ -249,7 +249,7 @@ namespace Lime
 				}
 				font.Textures[i] = new SerializableTexture(basePath + (i > 0 ? $"{i:00}" : ""));
 			}
-			InternalPersistence.Instance.WriteObjectToFile(Path.ChangeExtension(absolutePath, "tft"), font, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToFile(Path.ChangeExtension(absolutePath, "tft"), font, Persistence.Format.Json);
 		}
 	}
 }

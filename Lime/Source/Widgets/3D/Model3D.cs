@@ -56,7 +56,7 @@ namespace Lime
 			// path. In the near future we'll migrate to absolute paths only model.
 			attachmentPath = InternalPersistence.Current?.ExpandPath(attachmentPath) ?? attachmentPath;
 			if (AssetBundle.Current.FileExists(attachmentPath)) {
-				var attachment = InternalPersistence.Instance.ReadObjectFromBundle<Model3DAttachmentParser.ModelAttachmentFormat>(AssetBundle.Current, attachmentPath);
+				var attachment = InternalPersistence.Instance.ReadFromBundle<Model3DAttachmentParser.ModelAttachmentFormat>(AssetBundle.Current, attachmentPath);
 				if (string.IsNullOrEmpty(attachment.EntryTrigger)) {
 					return;
 				}
@@ -90,7 +90,7 @@ namespace Lime
 		public class MeshData
 		{
 			private static readonly WeakReferencePool<string, MeshData> weakReferencePool =
-				new WeakReferencePool<string, MeshData>(path => InternalPersistence.Instance.ReadObject<MeshData>(path));
+				new WeakReferencePool<string, MeshData>(path => InternalPersistence.Instance.ReadFromCurrentBundle<MeshData>(path));
 
 			[YuzuMember]
 			public List<Mesh<Mesh3D.Vertex>> Meshes { get; private set; } = new List<Mesh<Mesh3D.Vertex>>();

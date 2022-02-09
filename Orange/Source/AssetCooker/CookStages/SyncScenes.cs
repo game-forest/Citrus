@@ -27,12 +27,12 @@ namespace Orange
 
 		public void Cook(string scenePath, SHA256 cookingUnitHash)
 		{
-			var node = InternalPersistence.Instance.ReadObjectFromBundle<Node>(assetCooker.InputBundle, scenePath);
+			var node = InternalPersistence.Instance.ReadFromBundle<Node>(assetCooker.InputBundle, scenePath);
 			DeleteNodesAndComponentsWithRemoveOnAssetCookAttribute(node);
-			InternalPersistence.Instance.WriteObjectToBundle(
+			InternalPersistence.Instance.WriteToBundle(
 				bundle: assetCooker.OutputBundle,
 				path: scenePath,
-				instance: node,
+				@object: node,
 				format: Persistence.Format.Binary,
 				cookingUnitHash: cookingUnitHash,
 				attributes: AssetAttributes.None

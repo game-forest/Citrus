@@ -789,7 +789,7 @@ namespace Lime
 		public static Model3DAttachment GetModel3DAttachment(string modelPath)
 		{
 			return GetModel3DAttachment(
-				InternalPersistence.Instance.ReadObjectFromBundle<ModelAttachmentFormat>(AssetBundle.Current, GetAttachmentPath(modelPath)),
+				InternalPersistence.Instance.ReadFromBundle<ModelAttachmentFormat>(AssetBundle.Current, GetAttachmentPath(modelPath)),
 				modelPath);
 		}
 
@@ -928,7 +928,7 @@ namespace Lime
 		public static void Save(Model3DAttachment attachment, string path)
 		{
 			var attachmentPath = path + ".Attachment.txt";
-			InternalPersistence.Instance.WriteObjectToFile(attachmentPath, ConvertToModelAttachmentFormat(attachment), Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToFile(attachmentPath, ConvertToModelAttachmentFormat(attachment), Persistence.Format.Json);
 		}
 
 		public static ModelAttachmentFormat ConvertToModelAttachmentFormat(Model3DAttachment attachment)

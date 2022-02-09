@@ -46,7 +46,7 @@ namespace Lime
 				try {
 					lock (syncAccessIndex) {
 						using var fs = File.OpenRead(indexPath);
-						InternalPersistence.Instance.ReadObject<SortedDictionary<string, FileInfo>>(
+						InternalPersistence.Instance.ReadFromStream<SortedDictionary<string, FileInfo>>(
 							indexPath, fs, index);
 					}
 				} catch {
@@ -61,7 +61,7 @@ namespace Lime
 			watcher?.Dispose();
 			watcher = null;
 			lock (syncAccessIndex) {
-				InternalPersistence.Instance.WriteObjectToFile(indexPath, index, Persistence.Format.Binary);
+				InternalPersistence.Instance.WriteToFile(indexPath, index, Persistence.Format.Binary);
 			}
 			base.Dispose();
 		}

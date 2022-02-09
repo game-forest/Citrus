@@ -42,7 +42,7 @@ namespace Tangerine.Core.Operations
 		private static bool CanPaste(MemoryStream stream, SceneItem parent)
 		{
 			try {
-				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
+				var container = InternalPersistence.Instance.ReadFromStream<Frame>(null, stream);
 				foreach (var a in container.Animators) {
 					a.AnimationId = Document.Current.AnimationId;
 				}
@@ -82,7 +82,7 @@ namespace Tangerine.Core.Operations
 			var result = new List<SceneItem>();
 			if (!string.IsNullOrEmpty(data)) {
 				var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(data));
-				var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
+				var container = InternalPersistence.Instance.ReadFromStream<Frame>(null, stream);
 				// To explicitly determine if animators are selected to paste or not
 				if (container.Animators.Count > 0) {
 					SceneTreeUtils.TryGetSceneItemLinkLocation(out parent, out index, typeof(IAnimator));
@@ -106,7 +106,7 @@ namespace Tangerine.Core.Operations
 			if (!CanPaste(stream, parent)) {
 				return false;
 			}
-			var container = InternalPersistence.Instance.ReadObject<Frame>(null, stream);
+			var container = InternalPersistence.Instance.ReadFromStream<Frame>(null, stream);
 			container.LoadExternalScenes();
 			foreach (var n in container.Nodes) {
 				Document.Decorate(n);

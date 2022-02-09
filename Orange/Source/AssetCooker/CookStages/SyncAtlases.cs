@@ -315,10 +315,10 @@ namespace Orange
 					AtlasRect = atlasRect,
 					AtlasPath = Path.ChangeExtension(atlasPath, null)
 				};
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					bundle: assetCooker.OutputBundle,
 					path: item.Path,
-					instance: atlasPart,
+					@object: atlasPart,
 					format: Persistence.Format.Binary,
 					cookingUnitHash: cookingUnitHash,
 					attributes: AssetAttributes.None

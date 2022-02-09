@@ -35,7 +35,7 @@ namespace Tangerine.Core
 					}
 					try {
 						using var stream = cacheBundle.OpenFile(VersionFile);
-						var cacheMeta = TangerinePersistence.Instance.ReadObject<CacheMeta>(VersionFile, stream);
+						var cacheMeta = InternalPersistence.Instance.ReadFromStream<CacheMeta>(VersionFile, stream);
 						if (!cacheMeta.IsActual) {
 							return false;
 						}
@@ -56,10 +56,10 @@ namespace Tangerine.Core
 				foreach (var path in cacheBundle.EnumerateFiles().ToList()) {
 					cacheBundle.DeleteFile(path);
 				}
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					bundle: cacheBundle,
 					path: VersionFile,
-					instance: new CacheMeta(),
+					@object: new CacheMeta(),
 					format: Persistence.Format.Binary,
 					default,
 					attributes: AssetAttributes.None
@@ -161,10 +161,10 @@ namespace Tangerine.Core
 						}
 					}
 				}
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					bundle: cacheBundle,
 					path: attachmentMetaPath,
-					instance: meta,
+					@object: meta,
 					format: Persistence.Format.Binary,
 					cookingUnitHash: cookingUnitHash,
 					attributes: AssetAttributes.None
@@ -209,13 +209,13 @@ namespace Tangerine.Core
 					animationPathWithoutExt = Animation.FixAntPath(animationPathWithoutExt);
 					var animationPath = animationPathWithoutExt + ".ant";
 					animation.ContentsPath = animationPathWithoutExt;
-					InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary,
+					InternalPersistence.Instance.WriteToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary,
 						cookingUnitHash, AssetAttributes.None);
 					foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 						animator.Owner.Animators.Remove(animator);
 					}
 				}
-				InternalPersistence.Instance.WriteObjectToBundle(cacheBundle, path, model, Persistence.Format.Binary,
+				InternalPersistence.Instance.WriteToBundle(cacheBundle, path, model, Persistence.Format.Binary,
 					cookingUnitHash, AssetAttributes.None);
 
 			} else if (fbxCached) {
@@ -224,7 +224,7 @@ namespace Tangerine.Core
 			}
 
 			if (attachmentExists) {
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					cacheBundle,
 					attachmentPath,
 					Model3DAttachmentParser.ConvertToModelAttachmentFormat(attachment), Persistence.Format.Binary,

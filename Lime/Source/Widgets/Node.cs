@@ -1261,7 +1261,7 @@ namespace Lime
 		/// <param name="format"><see cref="Persistence.Format"/></param>
 		public void Save(string path, Persistence.Format format)
 		{
-			InternalPersistence.Instance.WriteObjectToFile(path, this, format);
+			InternalPersistence.Instance.WriteToFile(path, this, format);
 		}
 
 		/// <summary>
@@ -1272,7 +1272,7 @@ namespace Lime
 		/// <param name="format"><see cref="Persistence.Format"/></param>
 		public void Save(string path, Stream stream, Persistence.Format format)
 		{
-			InternalPersistence.Instance.WriteObject(path, stream, this, format);
+			InternalPersistence.Instance.WriteToStream(path, stream, this, format);
 		}
 
 		/// <summary>
@@ -1364,10 +1364,10 @@ namespace Lime
 			scenesBeingLoaded.Value.Add(fullPath);
 			try {
 				if (stream != null) {
-					instance = InternalPersistence.Instance.ReadObject<Node>(fullPath, stream, instance);
+					instance = InternalPersistence.Instance.ReadFromStream<Node>(fullPath, stream, instance);
 				} else {
 					using (stream = AssetBundle.Current.OpenFileLocalized(fullPath)) {
-						instance = InternalPersistence.Instance.ReadObject<Node>(fullPath, stream, instance);
+						instance = InternalPersistence.Instance.ReadFromStream<Node>(fullPath, stream, instance);
 					}
 				}
 				instance.Components.Add(new AssetBundlePathComponent(fullPath));

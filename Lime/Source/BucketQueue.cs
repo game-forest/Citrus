@@ -5,12 +5,10 @@ namespace Lime
 {
 	internal class BucketQueue<T>
 	{
-		private Bucket[] buckets;
+		private readonly Bucket[] buckets;
 		private int lastNearestBucketIndex;
-		private int count;
-
 		public int BucketCount => buckets.Length;
-		public int Count => count;
+		public int Count { get; private set; }
 
 		public BucketQueue(int bucketCount)
 		{
@@ -47,7 +45,7 @@ namespace Lime
 			if (lastNearestBucketIndex > bucketIndex) {
 				lastNearestBucketIndex = bucketIndex;
 			}
-			count++;
+			Count++;
 		}
 
 		public BucketQueueNode<T> Peek()
@@ -68,7 +66,7 @@ namespace Lime
 			node.Queue = null;
 			node.BucketIndex = -1;
 			node.Prev = node.Next = null;
-			count--;
+			Count--;
 			return node;
 		}
 
@@ -90,7 +88,7 @@ namespace Lime
 			node.Queue = null;
 			node.BucketIndex = -1;
 			node.Prev = node.Next = null;
-			count--;
+			Count--;
 			return true;
 		}
 
@@ -104,7 +102,7 @@ namespace Lime
 
 		public void Clear()
 		{
-			count = 0;
+			Count = 0;
 			lastNearestBucketIndex = buckets.Length;
 			for (var i = 0; i < buckets.Length; i++) {
 				ClearBucket(buckets[i]);

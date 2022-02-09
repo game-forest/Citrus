@@ -182,7 +182,7 @@ namespace Tangerine.Core.Operations
 					animation.Tracks.Add(Cloner.Clone(t));
 				}
 			}
-			InternalPersistence.Instance.WriteObject(null, stream, container, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToStream(null, stream, container, Persistence.Format.Json);
 		}
 
 		private static void CloneFolder(Frame container, SceneItem item, int indexDelta)

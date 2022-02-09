@@ -22,7 +22,7 @@ namespace Lime
 
 			public static Params Load(string path)
 			{
-				return InternalPersistence.Instance.ReadObject<Params>(path);
+				return InternalPersistence.Instance.ReadFromCurrentBundle<Params>(path);
 			}
 		}
 

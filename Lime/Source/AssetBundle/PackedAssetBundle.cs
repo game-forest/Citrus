@@ -152,17 +152,17 @@ namespace Lime
 			public static Manifest Create(AssetBundle bundle)
 			{
 				if (bundle.FileExists(FileName)) {
-					return InternalPersistence.Instance.ReadObjectFromBundle<Manifest>(bundle, FileName);
+					return InternalPersistence.Instance.ReadFromBundle<Manifest>(bundle, FileName);
 				}
 				return new Manifest();
 			}
 
 			public void Save(AssetBundle bundle)
 			{
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					bundle: bundle,
 					path: FileName,
-					instance: this,
+					@object: this,
 					format: Persistence.Format.Binary,
 					cookingUnitHash: default,
 					attributes: AssetAttributes.None

@@ -63,10 +63,10 @@ namespace Orange
 			};
 			if (!AreTextureParamsDefault()) {
 				TextureTools.UpscaleTextureIfNeeded(ref texture, rules, false);
-				InternalPersistence.Instance.WriteObjectToBundle(
+				InternalPersistence.Instance.WriteToBundle(
 					bundle: assetCooker.OutputBundle,
 					path: textureParamsPath,
-					instance: textureParams,
+					@object: textureParams,
 					format: Persistence.Format.Binary,
 					cookingUnitHash: cookingUnitHash,
 					attributes: AssetAttributes.None

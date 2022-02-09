@@ -314,7 +314,7 @@ namespace Lime
 		public class AnimationData
 		{
 			private static readonly WeakReferencePool<string, AnimationData> weakReferencePool =
-				new WeakReferencePool<string, AnimationData>(path => InternalPersistence.Instance.ReadObject<AnimationData>(path));
+				new WeakReferencePool<string, AnimationData>(path => InternalPersistence.Instance.ReadFromCurrentBundle<AnimationData>(path));
 
 			public delegate bool LoadingDelegate(string path, ref AnimationData instance);
 			public delegate void LoadedDelegate(string path, AnimationData instance);

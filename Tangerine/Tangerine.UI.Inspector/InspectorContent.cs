@@ -447,7 +447,7 @@ namespace Tangerine.UI.Inspector
 				// we don't inspect indexers (they have "Item" name by default
 				return false;
 			}
-			var yuzuItem = Yuzu.Metadata.Meta.Get(type, InternalPersistence.Instance.YuzuCommonOptions)
+			var yuzuItem = Yuzu.Metadata.Meta.Get(type, InternalPersistence.Instance.YuzuOptions)
 				.Items
 				.Find(i => i.PropInfo == property);
 			var hasKeyframeColor = PropertyAttributes<TangerineKeyframeColorAttribute>
@@ -659,7 +659,7 @@ namespace Tangerine.UI.Inspector
 				NodeComponent CreateComponentFromClipboard() {
 					var stream = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(Clipboard.Text));
 					try {
-						return InternalPersistence.Instance.ReadObject<NodeComponent>(Document.Current.Path, stream);
+						return InternalPersistence.Instance.ReadFromStream<NodeComponent>(Document.Current.Path, stream);
 					} catch {
 						return null;
 					}
@@ -773,7 +773,7 @@ namespace Tangerine.UI.Inspector
 					if (componentsCount == 1) {
 						menu.Add(new Command("Cut", () => {
 							var stream = new System.IO.MemoryStream();
-							InternalPersistence.Instance.WriteObject(
+							InternalPersistence.Instance.WriteToStream(
 								Document.Current.Path,
 								stream,
 								Cloner.Clone(components.First()),
@@ -784,7 +784,7 @@ namespace Tangerine.UI.Inspector
 						}));
 						menu.Add(new Command("Copy", () => {
 							var stream = new System.IO.MemoryStream();
-							InternalPersistence.Instance.WriteObject(
+							InternalPersistence.Instance.WriteToStream(
 								Document.Current.Path,
 								stream,
 								Cloner.Clone(components.First()),

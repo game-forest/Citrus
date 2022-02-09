@@ -67,7 +67,7 @@ namespace Lime
 					return (result, null, -1);
 				}
 				var	componentTypeName = propertyPath.Substring(prevIndex + 1, index - prevIndex - 1);
-				var type = global::Yuzu.Metadata.Meta.GetTypeByReadAlias(componentTypeName, InternalPersistence.Instance.YuzuCommonOptions)
+				var type = global::Yuzu.Metadata.Meta.GetTypeByReadAlias(componentTypeName, InternalPersistence.Instance.YuzuOptions)
 				           ?? global::Yuzu.Util.TypeSerializer.Deserialize(componentTypeName);
 				o = host.GetComponent(type);
 				if (o == null) {

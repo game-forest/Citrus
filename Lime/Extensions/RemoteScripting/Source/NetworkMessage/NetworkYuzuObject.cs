@@ -18,14 +18,14 @@ namespace RemoteScripting
 		protected NetworkYuzuObject(byte[] body)
 		{
 			using (var memoryStream = new MemoryStream(body)) {
-				Data = persistence.Value.ReadObject<T>(string.Empty, memoryStream);
+				Data = persistence.Value.ReadFromStream<T>(memoryStream);
 			}
 		}
 
 		public override byte[] Serialize()
 		{
 			using (var memoryStream = new MemoryStream()) {
-				persistence.Value.WriteObject(string.Empty, memoryStream, Data, Persistence.Format.Binary);
+				persistence.Value.WriteToStream(memoryStream, Data, Persistence.Format.Binary);
 				return memoryStream.ToArray();
 			}
 		}
