@@ -96,8 +96,13 @@ namespace Tangerine.UI.SceneView
 		{
 			var a = matrix.TransformVector(A);
 			var b = matrix.TransformVector(B);
-			Renderer.DrawLine(a, b, ColorTheme.Current.SceneView.PaddingEditorBorder, 2);
-
+			var nvg = Lime.NanoVG.Context.Instance;
+			nvg.BeginPath();
+			nvg.StrokeColor(ColorTheme.Current.SceneView.PaddingEditorBorder);
+			nvg.StrokeWidth(2);
+			nvg.MoveTo(a);
+			nvg.LineTo(b);
+			nvg.Stroke();
 			Center = matrix.TransformVector((A + B) / 2);
 			var label = propertyNames[index].ToString()[0].ToString();
 			var angle = Owner.LocalToWorldTransform.U.Atan2Rad;

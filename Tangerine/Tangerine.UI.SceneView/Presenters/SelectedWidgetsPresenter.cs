@@ -50,10 +50,15 @@ namespace Tangerine.UI.SceneView
 				AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
 				return;
 			}
+			var nvg = Lime.NanoVG.Context.Instance;
+			nvg.BeginPath();
+			nvg.StrokeWidth(2);
+			nvg.StrokeColor(color);
 			for (int i = 0; i < 4; i++) {
 				var a = hull[i];
 				var b = hull[(i + 1) % 4];
-				Renderer.DrawLine(a, b, color);
+				nvg.MoveTo(a);
+				nvg.LineTo(b);
 				DrawStretchMark(a);
 
 				if (i < 2) {
@@ -61,11 +66,13 @@ namespace Tangerine.UI.SceneView
 					var d = hull[(i + 3) % 4];
 					var abCenter = (a + b) * 0.5f;
 					var cdCenter = (c + d) * 0.5f;
-					Renderer.DrawLine(abCenter, cdCenter, color);
+					nvg.MoveTo(abCenter);
+					nvg.LineTo(cdCenter);
 					DrawStretchMark(abCenter);
 					DrawStretchMark(cdCenter);
 				}
 			}
+			nvg.Stroke();
 			// Render border and icon for widgets.
 			var iconSize = new Vector2(16, 16);
 			foreach (var widget in widgets) {
@@ -74,11 +81,17 @@ namespace Tangerine.UI.SceneView
 				}
 				var t = NodeIconPool.GetTexture(widget);
 				var h = widget.CalcHull().Transform(sceneView.CalcTransitionFromSceneSpace(canvas));
+				nvg.StrokeColor(ColorTheme.Current.SceneView.SelectedWidget);
+				nvg.BeginPath();
 				for (int i = 0; i < 4; i++) {
 					var a = h[i];
 					var b = h[(i + 1) % 4];
-					Renderer.DrawLine(a, b, ColorTheme.Current.SceneView.SelectedWidget, 1);
+					if (i == 0) {
+						nvg.MoveTo(a.X, a.Y);
+					}
+					nvg.LineTo(b.X, b.Y);
 				}
+				nvg.Stroke();
 				var p = widget.GlobalPivotPosition * sceneView.CalcTransitionFromSceneSpace(canvas);
 				Renderer.DrawSprite(
 					texture1: t,
