@@ -314,6 +314,8 @@ namespace Lime.NanoVG
 			ClearPathCache();
 		}
 
+		public void MoveTo(Vector2 v) => MoveTo(v.X, v.Y);
+
 		public void MoveTo(float x, float y)
 		{
 			var vals = stackalloc float[3];
@@ -322,6 +324,8 @@ namespace Lime.NanoVG
 			vals[2] = y;
 			AppendCommands(vals, 3);
 		}
+
+		public void LineTo(Vector2 v) => LineTo(v.X, v.Y);
 
 		public void LineTo(float x, float y)
 		{
@@ -584,6 +588,8 @@ namespace Lime.NanoVG
 			}
 		}
 
+		public void Ellipse(Vector2 v, float rx, float ry) => Ellipse(v.X, v.Y, rx, ry);
+
 		public void Ellipse(float cx, float cy, float rx, float ry)
 		{
 			var vals = stackalloc float[32];
@@ -621,6 +627,8 @@ namespace Lime.NanoVG
 			vals[31] = (int)CommandType.Close;
 			AppendCommands(vals, 32);
 		}
+
+		public void Circle(Vector2 v, float r) => Circle(v.X, v.Y, r);
 
 		public void Circle(float cx, float cy, float r)
 		{
