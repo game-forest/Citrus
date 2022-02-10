@@ -828,7 +828,7 @@ namespace Lime.Graphics.Platform.OpenGL
 				int border,
 				PixelFormat format,
 				PixelType type,
-				IntPtr pixels
+				IntPtr data
 			);
 
 			[DllImport(library, EntryPoint = "glTexParameterf", ExactSpelling = true)]
@@ -1470,9 +1470,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			int height,
 			PixelFormat format,
 			int imageSize,
-			IntPtr pixels
+			IntPtr data
 		) {
-			Core.CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, pixels);
+			Core.CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
 		}
 
 		public static void TexSubImage2D(
