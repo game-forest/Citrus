@@ -18,7 +18,7 @@ namespace Lime
 				VAlignment = VAlignment.Center,
 			};
 			CompoundPresenter.Add(new DropDownListPresenter());
-			PostPresenter = new Theme.MouseHoverBorderPresenter();
+			PostPresenter = new Theme.MouseHoverBorderPresenter { Rounded = true };
 			LateTasks.Add(Theme.MouseHoverInvalidationTask(this));
 			Padding = Theme.Metrics.ControlsPadding;
 			AddNode(text);
@@ -65,8 +65,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawVerticalGradientRect(Vector2.Zero, Size, Gradient);
-					Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+					ThemeToolbox.DrawRoundedRect(Vector2.Zero, Size, Gradient, BorderColor, 4.0f);
 					var transform = Matrix32.Scaling(IconWidth, Size.Y) * Matrix32.Translation(Size.X - IconWidth, 0);
 					separator.Draw(transform);
 					icon.Draw(transform, IconColor);

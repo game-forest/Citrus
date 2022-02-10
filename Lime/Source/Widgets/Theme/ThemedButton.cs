@@ -21,7 +21,7 @@ namespace Lime
 			Size = MinSize;
 			Padding = Theme.Metrics.ControlsPadding;
 			Presenter = presenter;
-			PostPresenter = new Theme.KeyboardFocusBorderPresenter(2.0f);
+			PostPresenter = new Theme.KeyboardFocusBorderPresenter(2.0f, rounded: true);
 			DefaultAnimation.AnimationEngine = new AnimationEngineDelegate {
 				OnRunAnimation = (animation, markerId, animationTimeCorrection) => {
 					presenter.SetState(markerId);
@@ -99,8 +99,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawVerticalGradientRect(Vector2.Zero, Size, Gradient);
-					Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+					ThemeToolbox.DrawRoundedRect(Vector2.Zero, Size, Gradient, BorderColor, 4.0f);
 				}
 			}
 		}

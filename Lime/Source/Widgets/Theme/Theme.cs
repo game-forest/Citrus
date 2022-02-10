@@ -300,10 +300,12 @@ namespace Lime
 		public class KeyboardFocusBorderPresenter : IPresenter
 		{
 			private float thickness = 1.0f;
+			private bool rounded;
 
-			public KeyboardFocusBorderPresenter(float thikness = 1.0f)
+			public KeyboardFocusBorderPresenter(float thikness = 1.0f, bool rounded = false)
 			{
 				this.thickness = thikness;
+				this.rounded = rounded;
 			}
 
 			public Lime.RenderObject GetRenderObject(Node node)
@@ -314,6 +316,7 @@ namespace Lime
 					ro.CaptureRenderState(widget);
 					ro.Size = widget.Size;
 					ro.Thickness = thickness;
+					ro.Rounded = rounded;
 					ro.Color = Colors.KeyboardFocusBorder;
 					return ro;
 				}
@@ -326,18 +329,21 @@ namespace Lime
 			{
 				public Vector2 Size;
 				public float Thickness;
+				public bool Rounded;
 				public Color4 Color;
 
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawRectOutline(Vector2.Zero, Size, Color, Thickness);
+					ThemeToolbox.DrawRoundedRectOutline(Vector2.Zero, Size, Color, Thickness, Rounded ? 4.0f : 1.0f);
 				}
 			}
 		}
 
 		internal class MouseHoverBorderPresenter : IPresenter
 		{
+			public bool Rounded { get; set; }
+			
 			public Lime.RenderObject GetRenderObject(Node node)
 			{
 				var widget = (Widget)node;
@@ -346,6 +352,7 @@ namespace Lime
 					ro.CaptureRenderState(widget);
 					ro.Size = widget.Size;
 					ro.Color = Colors.KeyboardFocusBorder;
+					ro.Rounded = Rounded;
 					return ro;
 				}
 				return null;
@@ -357,11 +364,12 @@ namespace Lime
 			{
 				public Vector2 Size;
 				public Color4 Color;
+				public bool Rounded;
 
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawRectOutline(Vector2.Zero, Size, Color, 1);
+					ThemeToolbox.DrawRoundedRectOutline(Vector2.Zero, Size, Color, 1.0f, Rounded ? 4.0f : 2.0f);
 				}
 			}
 		}

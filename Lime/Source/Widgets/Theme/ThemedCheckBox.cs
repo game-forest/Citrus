@@ -19,7 +19,7 @@ namespace Lime
 				TabTravesable = null,
 			});
 			TabTravesable = new TabTraversable();
-			CompoundPostPresenter.Add(new Theme.MouseHoverBorderPresenter());
+			CompoundPostPresenter.Add(new Theme.MouseHoverBorderPresenter { Rounded = true });
 			LateTasks.Add(Theme.MouseHoverInvalidationTask(this));
 		}
 
@@ -68,8 +68,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawRect(Vector2.Zero, Size, BackgroundColor);
-					Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+					ThemeToolbox.DrawRoundedRect(Vector2.Zero, Size, BackgroundColor, BorderColor, 4.0f);
 					if (State == CheckBoxState.Checked) {
 						var transform = Matrix32.Scaling(Theme.Metrics.CheckBoxSize);
 						checkedIcon.Draw(transform);
