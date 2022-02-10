@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
 	[StructLayout(LayoutKind.Sequential)]
-	internal class NvgContextState
+	internal class ContextState
 	{
 		public int ShapeAntiAlias;
 		public Paint Fill;
@@ -15,17 +15,10 @@ namespace NanoVG
 		public float Alpha;
 		public Transform Transform;
 		public Scissor Scissor;
-		public float FontSize;
-		public float LetterSpacing;
-		public float LineHeight;
-		public float FontBlur;
-		public Alignment TextAlign;
-		public int FontId;
 
-		public NvgContextState Clone()
+		public ContextState Clone()
 		{
-			return new NvgContextState
-			{
+			return new ContextState {
 				ShapeAntiAlias = ShapeAntiAlias,
 				Fill = Fill,
 				Stroke = Stroke,
@@ -36,12 +29,6 @@ namespace NanoVG
 				Alpha = Alpha,
 				Transform = Transform,
 				Scissor = Scissor,
-				FontSize = FontSize,
-				LetterSpacing = LetterSpacing,
-				LineHeight = LineHeight,
-				FontBlur = FontBlur,
-				TextAlign = TextAlign,
-				FontId = FontId
 			};
 		}
 	}

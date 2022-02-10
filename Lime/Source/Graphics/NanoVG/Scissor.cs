@@ -1,7 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using Lime;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct Scissor

@@ -1,13 +1,10 @@
 ﻿using System;
-using Lime;
-using Bounds = FontStashSharp.Bounds;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
 	internal class Renderer : IRenderer
 	{
-		private int textureCount;
-		private readonly NvgMaterial material = new NvgMaterial();
+		private readonly Material material = new Material();
 		
 		private readonly StencilState fillStencilState = new StencilState()
 		{
@@ -51,30 +48,31 @@ namespace NanoVG
 		
 		public int CreateTexture(TextureType type, int w, int h, ImageFlags imageFlags, byte[] data)
 		{
-			return textureCount++;
+			throw new NotSupportedException();
 		}
 
 		public void DeleteTexture(int image)
 		{
+			throw new NotSupportedException();
 		}
 
 		public void UpdateTexture(int image, int x, int y, int w, int h, byte[] data)
 		{
+			throw new NotSupportedException();
 		}
 
 		public void GetTextureSize(int image, out int w, out int h)
 		{
-			w = 1;
-			h = 1;
+			throw new NotSupportedException();
 		}
 
 		public void Viewport(float width, float height, float devicePixelRatio)
 		{
 		}
-		
+
 		private readonly Vertex[] quad = new Vertex[4];
 
-		public void RenderFill(ref Paint paint, ref Scissor scissor, float fringe, Bounds bounds,
+		public void RenderFill(ref Paint paint, ref Scissor scissor, float fringe, Rectangle bounds,
 			ArraySegment<Path> paths)
 		{
 			var isConvex = paths.Count == 1 && paths.Array[paths.Offset].Convex == 1;
@@ -103,10 +101,10 @@ namespace NanoVG
 			if (!isConvex) {
 				Lime.Renderer.ColorWriteEnabled = ColorWriteMask.All;
 				Lime.Renderer.StencilState = applyStencilState;
-				quad[0].Pos = new Vector2(bounds.b3, bounds.b4);
-				quad[1].Pos = new Vector2(bounds.b3, bounds.b2);
-				quad[2].Pos = new Vector2(bounds.b1, bounds.b4);
-				quad[3].Pos = new Vector2(bounds.b1, bounds.b2);
+				quad[0].Pos = new Vector2(bounds.BX, bounds.BY);
+				quad[1].Pos = new Vector2(bounds.BX, bounds.AY);
+				quad[2].Pos = new Vector2(bounds.AX, bounds.BY);
+				quad[3].Pos = new Vector2(bounds.AX, bounds.AY);
 				quad[0].UV1 = quad[1].UV1 = quad[2].UV1 = quad[3].UV1 = new Vector2(0.5f, 1.0f);
 				RenderTriangles(
 					ref paint, 
@@ -155,11 +153,6 @@ namespace NanoVG
 				}
 			}
 			Lime.Renderer.Flush();
-		}
-
-		public void RenderTriangles(ref Paint paint, ref Scissor scissor, ArraySegment<Vertex> verts)
-		{
-			throw new NotImplementedException();
 		}
 
 		private enum RenderingType

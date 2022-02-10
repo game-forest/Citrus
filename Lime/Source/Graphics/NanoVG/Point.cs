@@ -1,23 +1,23 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct NvgPoint
+	internal struct Point
 	{
 		public float X;
 		public float Y;
 		public float DeltaX;
 		public float DeltaY;
 		public float Length;
-		public float dmx;
-		public float dmy;
-		public byte flags;
+		public float Dmx;
+		public float Dmy;
+		public byte Flags;
 
 		public void Reset()
 		{
-			X = Y = DeltaX = DeltaY = Length = dmx = dmy = 0;
-			flags = 0;
+			X = Y = DeltaX = DeltaY = Length = Dmx = Dmy = 0;
+			Flags = 0;
 		}
 	}
 }

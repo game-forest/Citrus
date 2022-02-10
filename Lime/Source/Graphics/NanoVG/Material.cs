@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using Lime;
+using System.Runtime.InteropServices;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct FillParams
 	{
 		public Vector4 ScissorU;
@@ -24,7 +25,7 @@ namespace NanoVG
 		public float Type;
 	}
 
-	public unsafe class NvgMaterial : IMaterial
+	public unsafe class Material : IMaterial
 	{
 		private readonly ShaderParams[] shaderParamsArray;
 		private readonly ShaderParams shaderParams;
@@ -35,7 +36,7 @@ namespace NanoVG
 
 		public FillParams FillParams;
 
-		public NvgMaterial()
+		public Material()
 		{
 			shaderParams = new ShaderParams();
 			shaderParamsArray = new[] { Lime.Renderer.GlobalShaderParams, shaderParams }; 
@@ -48,7 +49,7 @@ namespace NanoVG
 				shaderParams.Set(paramArrayKey, (Vector4*)p, 11);
 			}
 			PlatformRenderer.SetBlendState(Blending.PremultipliedAlpha.GetBlendState());
-			PlatformRenderer.SetShaderProgram(NvgShaderProgram.GetInstance()); 
+			PlatformRenderer.SetShaderProgram(ShaderProgram.GetInstance());
 			PlatformRenderer.SetShaderParams(shaderParamsArray);
 		}
 
@@ -57,7 +58,7 @@ namespace NanoVG
 		}
 	}
 	
-	public class NvgShaderProgram : ShaderProgram
+	public class ShaderProgram : Lime.ShaderProgram
 	{
 		private static string vertexShaderText = @"
 			attribute vec4 inPos;
@@ -98,7 +99,7 @@ namespace NanoVG
 
 			float sdroundrect(vec2 pt, vec2 ext, float rad)
 			{
-				vec2 ext2 = ext - vec2(rad,rad);
+				vec2 ext2 = ext - vec2(rad, rad);
 				vec2 d = abs(pt) - ext2;
 				return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - rad;
 			}
@@ -106,9 +107,9 @@ namespace NanoVG
 			// Scissoring
 			float scissorMask(vec2 p)
 			{
-				vec2 sc = (abs((scissorMat * vec3(p,1.0)).xy) - scissorExt);
-				sc = vec2(0.5,0.5) - sc * scissorScale;
-				return clamp(sc.x,0.0,1.0) * clamp(sc.y,0.0,1.0);
+				vec2 sc = (abs((scissorMat * vec3(p, 1.0)).xy) - scissorExt);
+				sc = vec2(0.5, 0.5) - sc * scissorScale;
+				return clamp(sc.x, 0.0, 1.0) * clamp(sc.y, 0.0, 1.0);
 			}
 
 			// Stroke - from [0..1] to clipped pyramid, where the slope is 1px.
@@ -164,14 +165,14 @@ namespace NanoVG
 				gl_FragColor = result;
 			}";
 
-		private NvgShaderProgram()
+		private ShaderProgram()
 			: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), GetSamplers())
 		{
 		}
 
-		private static NvgShaderProgram instance;
+		private static ShaderProgram instance;
 
-		public static NvgShaderProgram GetInstance() => instance ??= new NvgShaderProgram();
+		public static ShaderProgram GetInstance() => instance ??= new ShaderProgram();
 		
 		private static IEnumerable<Sampler> GetSamplers()
 		{

@@ -1,8 +1,9 @@
-﻿using System.Runtime.InteropServices;
-using Lime;
+﻿using System;
+using System.Runtime.InteropServices;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
+	// TODO: Replace with Matrix32
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Transform
 	{
@@ -55,8 +56,8 @@ namespace NanoVG
 
 		public void SetRotate(float a)
 		{
-			var cs = NvgUtility.cosf(a);
-			var sn = NvgUtility.sinf(a);
+			var cs = MathF.Cos(a);
+			var sn = MathF.Sin(a);
 			T1 = cs;
 			T2 = sn;
 			T3 = -sn;
@@ -69,7 +70,7 @@ namespace NanoVG
 		{
 			T1 = 1.0f;
 			T2 = 0.0f;
-			T3 = NvgUtility.tanf(a);
+			T3 = MathF.Tan(a);
 			T4 = 1.0f;
 			T5 = 0.0f;
 			T6 = 0.0f;
@@ -78,7 +79,7 @@ namespace NanoVG
 		public void SetSkewY(float a)
 		{
 			T1 = 1.0f;
-			T2 = NvgUtility.tanf(a);
+			T2 = MathF.Tan(a);
 			T3 = 0.0f;
 			T4 = 1.0f;
 			T5 = 0.0f;
@@ -109,12 +110,10 @@ namespace NanoVG
 		{
 			var det = T1 * T4 - T3 * T2;
 			var inv = new Transform();
-			if (det > -1e-6 && det < 1e-6)
-			{
+			if (det > -1e-6 && det < 1e-6) {
 				inv.SetIdentity();
 				return inv;
 			}
-
 			var inverseDeterminant = 1.0f / det;
 			inv.T1 = T4 * inverseDeterminant;
 			inv.T3 = -T3 * inverseDeterminant;
@@ -122,7 +121,6 @@ namespace NanoVG
 			inv.T2 = -T2 * inverseDeterminant;
 			inv.T4 = T1 * inverseDeterminant;
 			inv.T6 = (T2 * T5 - T1 * T6) * inverseDeterminant;
-
 			return inv;
 		}
 
@@ -130,11 +128,6 @@ namespace NanoVG
 		{
 			dx = sx * T1 + sy * T3 + T5;
 			dy = sx * T2 + sy * T4 + T6;
-		}
-
-		public void TransformVector(out Vector2 v, Vector2 s)
-		{
-			TransformPoint(out v.X, out v.Y, s.X, s.Y);
 		}
 	}
 }

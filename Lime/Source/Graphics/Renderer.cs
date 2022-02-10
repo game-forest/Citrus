@@ -499,12 +499,17 @@ namespace Lime
 		}
 
 		public static void DrawTriangleFan(
-			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Vertex[] vertices,
+			int numVertices,
+			int offset = 0
 		) {
 			if (numVertices == 0) {
 				return;
 			}
-			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices);
+			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices, offset);
 			var baseVertex = batch.LastVertex;
 			int j = batch.LastIndex;
 			var indices = batch.Mesh.Indices;
@@ -535,12 +540,17 @@ namespace Lime
 		}
 
 		public static void DrawTriangleStrip(
-			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Vertex[] vertices,
+			int numVertices,
+			int offset = 0
 		) {
 			if (numVertices == 0) {
 				return;
 			}
-			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices);
+			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices, offset);
 			var vertex = batch.LastVertex;
 			int j = batch.LastIndex;
 			var indices = batch.Mesh.Indices;
@@ -556,7 +566,12 @@ namespace Lime
 		}
 
 		private static RenderBatch<Vertex> DrawTrianglesHelper(
-			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Vertex[] vertices,
+			int numVertices,
+			int offset = 0
 		) {
 			var batch = RenderList.GetBatch<Vertex>(texture1, texture2, material, numVertices, (numVertices - 2) * 3);
 			var transform = GetEffectiveTransform();
@@ -564,7 +579,7 @@ namespace Lime
 			batch.Mesh.DirtyFlags |= MeshDirtyFlags.Vertices;
 			int j = batch.LastVertex;
 			for (int i = 0; i < numVertices; i++, j++) {
-				var v = vertices[i];
+				var v = vertices[i + offset];
 				v.Pos = transform * v.Pos;
 				texture1?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
 				texture2?.TransformUVCoordinatesToAtlasSpace(ref v.UV2);
@@ -667,7 +682,7 @@ namespace Lime
 			vertices[v].UV2 = uv1t2;
 		}
 
-		private static Matrix32 GetEffectiveTransform()
+		internal static Matrix32 GetEffectiveTransform()
 		{
 			if (transform2Active) {
 				return Transform1 * Transform2;

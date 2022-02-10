@@ -1,16 +1,15 @@
 ﻿using System;
-using StbSharp;
-using Lime;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
 	internal unsafe class PathCache : IDisposable
 	{
 		public readonly Buffer<Path> Paths = new Buffer<Path>(16);
-		public readonly Buffer<Vertex> Vertexes = new Buffer<Vertex>(256);
-		public FontStashSharp.Bounds Bounds = new FontStashSharp.Bounds();
-		public NvgPoint* Points = (NvgPoint*)CRuntime.malloc((ulong)(sizeof(NvgPoint) * 128));
-		public int PointsNumber, PointsCount;
+		public readonly Buffer<Vertex> Vertices = new Buffer<Vertex>(256);
+		public Rectangle Bounds;
+		public Point* Points = (Point*)RawMemory.Allocate(sizeof(Point) * 128);
+		public int PointsNumber;
+		public int PointsCount;
 
 		public PathCache()
 		{
@@ -20,9 +19,8 @@ namespace NanoVG
 
 		public void Dispose()
 		{
-			if (Points != null)
-			{
-				CRuntime.free(Points);
+			if (Points != null) {
+				RawMemory.Free(Points);
 				Points = null;
 			}
 		}

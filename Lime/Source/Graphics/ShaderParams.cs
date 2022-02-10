@@ -59,6 +59,19 @@ namespace Lime
 				p.Version++;
 			}
 		}
+		
+		public unsafe void Set<T>(ShaderParamKey<T> key, T* value, int count) where T : unmanaged
+		{
+			var p = GetParameter(key, count);
+			for (int i = 0; i < count; i++) {
+				p.Data[i] = *value++;
+			}
+			p.Count = count;
+			unchecked {
+				p.Version++;
+			}
+		}
+
 
 		private ShaderParam<T> GetParameter<T>(ShaderParamKey<T> key, int capacity)
 		{

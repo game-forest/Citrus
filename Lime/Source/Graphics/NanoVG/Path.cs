@@ -1,7 +1,6 @@
 ﻿using System;
-using Lime;
 
-namespace NanoVG
+namespace Lime.NanoVG
 {
 	internal class Path
 	{
