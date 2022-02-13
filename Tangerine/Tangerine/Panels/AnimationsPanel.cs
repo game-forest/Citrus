@@ -441,7 +441,6 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private readonly List<TreeViewItem> nodeItems = new List<TreeViewItem>();
 		private Node previousContainer;
 
 		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider)
@@ -450,7 +449,7 @@ namespace Tangerine.Panels
 				DestroyTree(treeView.RootItem);
 			}
 
-			nodeItems.Clear();
+			var nodeItems = new List<TreeViewItem>();
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
 			if (mode == TreeViewMode.CurrentBranch) {
@@ -463,7 +462,7 @@ namespace Tangerine.Panels
 			if (mode == TreeViewMode.AllHierarchy) {
 				nodeItems.Sort((a, b) =>
 					string.Compare(a.Label, b.Label, StringComparison.Ordinal));
-			} else if (!CoreUserPreferences.Instance.AnimationPanelReversedOrder) {
+			} else if (!CoreUserPreferences.Instance.AnimationsPanelDisplayRootAtTheEnd) {
 				nodeItems.Reverse();
 			}
 			foreach (var item in nodeItems) {
@@ -477,11 +476,12 @@ namespace Tangerine.Panels
 			// Animated (dis)appearance of list header.
 			if (animated && mode == TreeViewMode.CurrentBranch && scrollView.LayoutManager != null) {
 				scrollView.LayoutManager.Layout();
-				var reversed = CoreUserPreferences.Instance.AnimationPanelReversedOrder;
+				var rootAtTheBottom = CoreUserPreferences.Instance.AnimationsPanelDisplayRootAtTheEnd;
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
-				var savedScrollPosition = reversed ?
-					scrollView.Behaviour.ScrollPosition : scrollView.Content.Height - scrollView.Height;
-				scrollView.Behaviour.ScrollPosition += reversed ? treeViewHeightDelta : 0;
+				var savedScrollPosition = rootAtTheBottom
+						? scrollView.Behaviour.ScrollPosition
+						: scrollView.Content.Height - scrollView.Height;
+				scrollView.Behaviour.ScrollPosition += rootAtTheBottom ? treeViewHeightDelta : 0;
 				scrollView.Behaviour.ScrollToItemVelocity = Math.Abs(treeViewHeightDelta * 5);
 				scrollView.Behaviour.ScrollTo(savedScrollPosition);
 			}
@@ -1156,49 +1156,53 @@ namespace Tangerine.Panels
 			public static void UpdateWarnings(TreeView treeView, TreeViewMode mode)
 			{
 				var activeAnimation = Document.Current.Animation;
-				AnimationTreeViewItemPresentation topmostPresentation = null;
+				AnimationTreeViewItemPresentation highestPriorityPresentation = null;
 				AnimationTreeViewItemPresentation activePresentation = null;
-				var nodeItems = treeView.RootItem.Items;
-				foreach (var nodeItem in NodeItemsFromRootToLeaves(nodeItems)) {
+				// Order doesn't matter for all hierarchy mode since it only clears warnings in that mode.
+				var nodeItems = mode == TreeViewMode.AllHierarchy
+					? treeView.RootItem.Items
+					: NodeItemsFromRootToLeaves(treeView.RootItem.Items);
+				foreach (var nodeItem in nodeItems) {
 					foreach (var item in nodeItem.Items) {
-						if (item is AnimationTreeViewItem animationItem) {
-							if (animationItem.Presentation == null) {
-								continue;
+						if (!(item is AnimationTreeViewItem animationItem)) {
+							continue;
+						}
+						if (animationItem.Presentation == null) {
+							continue;
+						}
+						var animation = animationItem.Animation;
+						var presentation = (AnimationTreeViewItemPresentation)animationItem.Presentation;
+						if (activeAnimation == null || activeAnimation.IsLegacy || mode == TreeViewMode.AllHierarchy) {
+							ClearWarning(presentation);
+						} else {
+							var rootOwner = animation.OwnerNode;
+							var activeRootOwner = activeAnimation.OwnerNode;
+							while (rootOwner.Parent != null && rootOwner != activeAnimation.OwnerNode) {
+								rootOwner = rootOwner.Parent;
 							}
-							var animation = animationItem.Animation;
-							var presentation = (AnimationTreeViewItemPresentation)animationItem.Presentation;
-							if (activeAnimation == null || activeAnimation.IsLegacy || mode == TreeViewMode.AllHierarchy) {
-								ClearWarning(presentation);
+							while (activeRootOwner.Parent != null && activeRootOwner != animation.OwnerNode) {
+								activeRootOwner = activeRootOwner.Parent;
+							}
+							if (animation == activeAnimation) {
+								activePresentation = presentation;
+								highestPriorityPresentation = presentation;
+							} else if (
+								animation.Id == activeAnimation.Id &&
+								(rootOwner == activeAnimation.OwnerNode || activeRootOwner == animation.OwnerNode)
+							) {
+								highestPriorityPresentation = presentation;
+								SetWarning(presentation, insufficientPriorityWarning);
 							} else {
-								var rootOwner = animation.OwnerNode;
-								var activeRootOwner = activeAnimation.OwnerNode;
-								while (rootOwner.Parent != null && rootOwner != activeAnimation.OwnerNode) {
-									rootOwner = rootOwner.Parent;
-								}
-								while (activeRootOwner.Parent != null && activeRootOwner != animation.OwnerNode) {
-									activeRootOwner = activeRootOwner.Parent;
-								}
-								if (animation == activeAnimation) {
-									activePresentation = presentation;
-									topmostPresentation = presentation;
-								} else if (
-									animation.Id == activeAnimation.Id &&
-									(rootOwner == activeAnimation.OwnerNode || activeRootOwner == animation.OwnerNode)
-								) {
-									topmostPresentation = presentation;
-									SetWarning(presentation, insufficientPriorityWarning);
-								} else {
-									ClearWarning(presentation);
-								}
+								ClearWarning(presentation);
 							}
 						}
 					}
 				}
 				if (activePresentation != null) {
-					if (activePresentation == topmostPresentation) {
+					if (activePresentation == highestPriorityPresentation) {
 						ClearWarning(activePresentation);
 					} else {
-						SetWarning(topmostPresentation, higherPriorityWarning);
+						SetWarning(highestPriorityPresentation, higherPriorityWarning);
 						SetWarning(activePresentation, insufficientPriorityWarning);
 					}
 				}
@@ -1216,9 +1220,14 @@ namespace Tangerine.Panels
 					presentation.warningWidget.Visible = true;
 				}
 
-				IEnumerable<TreeViewItem> NodeItemsFromRootToLeaves(TreeViewItemList nodeItems) =>
-					nodeItems.Count > 0 ? ((NodeTreeViewItem)nodeItems[0]).Node == Document.Current.RootNode ?
-						nodeItems : nodeItems.Reverse() : Enumerable.Empty<TreeViewItem>();
+				IEnumerable<TreeViewItem> NodeItemsFromRootToLeaves(TreeViewItemList nodeItems)
+				{
+					if (CoreUserPreferences.Instance.AnimationsPanelDisplayRootAtTheEnd) {
+						return nodeItems.Reverse<TreeViewItem>();
+					} else {
+						return nodeItems;
+					}
+				}
 			}
 
 			private struct Warning

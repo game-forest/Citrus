@@ -467,8 +467,8 @@ namespace Tangerine
 				new BooleanPropertyEditor(
 					new PreferencesPropertyEditorParams(
 						CoreUserPreferences.Instance,
-						propertyName: nameof(CoreUserPreferences.AnimationPanelReversedOrder),
-						displayName: "Animation panel reversed order"
+						propertyName: nameof(CoreUserPreferences.AnimationsPanelDisplayRootAtTheEnd),
+						displayName: "Display animations applicable to current node scope with the root at the bottom."
 					)
 				),
 				new EnumPropertyEditor<TimelineComponentIconsShowMode>(
