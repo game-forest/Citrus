@@ -185,6 +185,12 @@ namespace Lime
 		[TangerineKeyframeColor(12)]
 		public string LinkageWidgetName { get; set; }
 		/// <summary>
+		/// Number of pixel to generate particles.
+		/// </summary>
+		[YuzuMember]
+		[TangerineKeyframeColor(7)]
+		public float BurstDistance { get; set; }
+		/// <summary>
 		/// Number of particles generated per second.
 		/// </summary>
 		[YuzuMember]
@@ -316,11 +322,14 @@ namespace Lime
 
 		private Matrix32 previousTransform;
 
+		private Vector2 previousPosition;
+
 		/// <summary>
 		/// Number of particles to generate on Update. Used to make particle count FPS independent
 		/// by accumulating fractional part of number of particles to spawn on given frame.
 		/// </summary>
 		private float particlesToSpawn;
+		private float cumulativeDistance;
 		public List<Particle> particles = new List<Particle>();
 		private static readonly Stack<Particle> particlePool = new Stack<Particle>();
 		private static readonly object particlePoolSync = new object();
@@ -342,6 +351,7 @@ namespace Lime
 			Shape = EmitterShape.Point;
 			EmissionType = EmissionType.Outer;
 			ParticlesLinkage = ParticlesLinkage.Parent;
+			BurstDistance = 0;
 			Number = 100;
 			Speed = 1;
 			Orientation = new NumericRange(0, 360);
@@ -490,6 +500,8 @@ namespace Lime
 				RefreshCustomShape();
 			}
 			delta *= Speed;
+			var deltaDistance = previousPosition - Position;
+			previousPosition = Position;
 			if (NumberPerBurst) {
 				// Spawn this.Number of particles each time Action.Burst is triggered
 				if (burstOnUpdateOnce) {
@@ -505,6 +517,13 @@ namespace Lime
 				}
 				particlesToSpawn = Math.Min(particlesToSpawn, Number - particles.Count);
 				FreeLastParticles(particles.Count - (int)Number);
+			} else if (BurstDistance > 0f) {
+				cumulativeDistance += deltaDistance.Length;
+				if (cumulativeDistance >= BurstDistance) {
+					int n = (int)(cumulativeDistance / BurstDistance);
+					particlesToSpawn += Number * n;
+					cumulativeDistance -= n * BurstDistance;
+				}
 			} else {
 				// this.Number per second
 				particlesToSpawn += Number * delta;
@@ -751,6 +770,7 @@ namespace Lime
 			}
 			if (firstUpdate) {
 				firstUpdate = false;
+				previousPosition = Position;
 				CalcInitialTransform(out previousTransform);
 				const float ModellingStep = 0.04f;
 				delta = Math.Max(delta, TimeShift);
