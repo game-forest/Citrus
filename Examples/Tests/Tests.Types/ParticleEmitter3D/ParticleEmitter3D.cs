@@ -310,7 +310,7 @@ namespace Tests.Types
 		{
 			switch (ParticlesLinkage) {
 				case ParticlesLinkage.Parent:
-					return Parent.AsNode3D == null ? this : Parent;
+					return Parent;
 				case ParticlesLinkage.Other: {
 					var node = Parent;
 					while (node != null) {
@@ -474,7 +474,6 @@ namespace Tests.Types
 			CalcInitialTransform(out var transform);
 			transform.Decompose(out var scale, out Quaternion rotation, out var translation);
 			var angles = rotation.ToEulerAngles();
-			float emitterScaleAmount = scale.Z;
 			float emitterAngle = angles.Z;
 			NumericRange aspectRatioVariationPair = new NumericRange(0, Math.Max(0.0f, AspectRatio.Dispersion));
 			float zoom = Zoom.NormalRandomNumber(Rng);
@@ -482,14 +481,14 @@ namespace Tests.Types
 				(1 + Math.Abs(aspectRatioVariationPair.NormalRandomNumber(Rng))) /
 				(1 + Math.Abs(aspectRatioVariationPair.NormalRandomNumber(Rng)));
 			p.TextureIndex = 0.0f;
-			p.Velocity = Velocity.NormalRandomNumber(Rng) * emitterScaleAmount;
+			p.Velocity = Velocity.NormalRandomNumber(Rng);
 			p.ScaleInitial = scale * ApplyAspectRatio(zoom, aspectRatio);
 			p.ScaleCurrent = p.ScaleInitial;
 			p.WindDirection = GetRandomDirection(WindDirection, WindDirectionSpread);
-			p.WindAmount = WindAmount.NormalRandomNumber(Rng) * emitterScaleAmount;
+			p.WindAmount = WindAmount.NormalRandomNumber(Rng);
 			p.GravityVelocity = 0.0f;
 			p.GravityAcceleration = 0.0f;
-			p.GravityAmount = GravityAmount.NormalRandomNumber(Rng) * emitterScaleAmount;
+			p.GravityAmount = GravityAmount.NormalRandomNumber(Rng);
 			p.GravityDirection = GetRandomDirection(GravityDirection, GravityDirectionSpread);
 			p.Lifetime = Math.Max(Lifetime.NormalRandomNumber(Rng), 0.1f);
 			p.Age = 0.0f;
@@ -605,16 +604,16 @@ namespace Tests.Types
 			// Updating other properties of a particle.
 			float windVelocity = p.WindAmount * p.Modifier.WindAmount;
 			if (windVelocity != 0) {
-				p.RegularPosition += windVelocity * delta * p.WindDirection;
+				p.RegularPosition += p.ScaleInitial * windVelocity * delta * p.WindDirection;
 			}
 			if (p.GravityVelocity != 0) {
-				p.RegularPosition += p.GravityVelocity * delta * p.GravityDirection;
+				p.RegularPosition += p.ScaleInitial * p.GravityVelocity * delta * p.GravityDirection;
 			}
 			var direction = p.RegularDirection.Normalized;
 			float velocity = p.Velocity * p.Modifier.Velocity;
 			p.GravityAcceleration += p.GravityAmount * p.Modifier.GravityAmount * delta;
 			p.GravityVelocity += p.GravityAcceleration * delta;
-			p.RegularPosition += velocity * delta * direction;
+			p.RegularPosition += p.ScaleInitial * velocity * delta * direction;
 			p.Angle += p.Spin * p.Modifier.Spin * delta;
 			p.ScaleCurrent = p.ScaleInitial * new Vector3(p.Modifier.Scale, 1);
 			p.CurrentColor = p.InitialColor * p.Modifier.Color;
@@ -706,7 +705,6 @@ namespace Tests.Types
 					);
 					break;
 			}
-			ro.Color = GlobalColor;
 			foreach (var mesh in meshes) {
 				ReleaseMesh(mesh);
 			}
@@ -724,9 +722,8 @@ namespace Tests.Types
 				if (BillboardMode == BillboardMode.ViewPointOriented) {
 					billboardingMatrix = Matrix44.CreateLookAtRotation(cameraPosition, p.FullPosition, Vector3.UnitY);
 				}
-				var scale = p.ScaleCurrent * new Vector3(p.Modifier.Size, 1);
 				var transform =
-					Matrix44.CreateScale(scale)
+					Matrix44.CreateScale(p.ScaleCurrent * new Vector3(p.Modifier.Size, 1))
 					* Matrix44.CreateRotationZ(p.Angle * Mathf.DegToRad)
 					* billboardingMatrix
 					* Matrix44.CreateTranslation(p.FullPosition);
@@ -792,7 +789,6 @@ namespace Tests.Types
 				currentMesh.DirtyFlags |= MeshDirtyFlags.VerticesIndices;
 				ro.RenderData.Add((currentMesh, currentMaterial));
 			}
-			ro.Color = GlobalColor;
 			return ro;
 		}
 
