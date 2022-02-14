@@ -265,6 +265,31 @@ namespace Lime
 			result.M44 = 1f;
 		}
 
+		public static Matrix44 CreateLookAtRotation(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
+		{
+			Vector3 vector3_1 = (cameraPosition - cameraTarget).Normalized;
+			Vector3 vector3_2 = Vector3.CrossProduct(cameraUpVector, vector3_1).Normalized;
+			Vector3 vector1 = Vector3.CrossProduct(vector3_1, vector3_2);
+			Matrix44 matrix;
+			matrix.M11 = vector3_2.X;
+			matrix.M12 = vector3_2.Y;
+			matrix.M13 = vector3_2.Z;
+			matrix.M14 = 0.0f;
+			matrix.M21 = vector1.X;
+			matrix.M22 = vector1.Y;
+			matrix.M23 = vector1.Z;
+			matrix.M24 = 0.0f;
+			matrix.M31 = vector3_1.X;
+			matrix.M32 = vector3_1.Y;
+			matrix.M33 = vector3_1.Z;
+			matrix.M34 = 0.0f;
+			matrix.M41 = 0;
+			matrix.M42 = 0;
+			matrix.M43 = 0;
+			matrix.M44 = 1f;
+			return matrix;
+		}
+
 		public static Matrix44 CreateLookAt(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
 		{
 			Vector3 vector3_1 = (cameraPosition - cameraTarget).Normalized;
@@ -272,15 +297,15 @@ namespace Lime
 			Vector3 vector1 = Vector3.CrossProduct(vector3_1, vector3_2);
 			Matrix44 matrix;
 			matrix.M11 = vector3_2.X;
-			matrix.M12 = vector1.X;
-			matrix.M13 = vector3_1.X;
+			matrix.M12 = vector3_2.Y;
+			matrix.M13 = vector3_2.Z;
 			matrix.M14 = 0.0f;
-			matrix.M21 = vector3_2.Y;
+			matrix.M21 = vector1.X;
 			matrix.M22 = vector1.Y;
-			matrix.M23 = vector3_1.Y;
+			matrix.M23 = vector1.Z;
 			matrix.M24 = 0.0f;
-			matrix.M31 = vector3_2.Z;
-			matrix.M32 = vector1.Z;
+			matrix.M31 = vector3_1.X;
+			matrix.M32 = vector3_1.Y;
 			matrix.M33 = vector3_1.Z;
 			matrix.M34 = 0.0f;
 			matrix.M41 = -Vector3.DotProduct(vector3_2, cameraPosition);
