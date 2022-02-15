@@ -325,7 +325,7 @@ namespace Orange
 						attributes: AssetAttributes.None
 					);
 				} catch (System.Exception e) {
-					throw new System.Exception($"{Path.ChangeExtension(item.Path, item.SourceExtension)}: {e}");
+					throw new System.Exception($"{Path.ChangeExtension(item.Path, item.SourceExtension)}: {e}", e);
 				}
 			}
 			var firstItem = items.First(i => i.Allocated);
