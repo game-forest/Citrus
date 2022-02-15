@@ -7,18 +7,18 @@ namespace Tangerine.Core
 {
 	public static class PropertyInspection
 	{
-		private static readonly Dictionary<(Type, PropertyInfo), bool> CanAnimatePropertyCache
+		private static readonly Dictionary<(Type, PropertyInfo), bool> canAnimatePropertyCache
 			= new Dictionary<(Type, PropertyInfo), bool>();
-		private static readonly Dictionary<(Type, PropertyInfo), bool> CanInspectPropertyCache
+		private static readonly Dictionary<(Type, PropertyInfo), bool> canInspectPropertyCache
 			= new Dictionary<(Type, PropertyInfo), bool>();
 
 		public static bool CanInspectProperty(Type type, PropertyInfo property)
 		{
-			if (CanInspectPropertyCache.ContainsKey((type, property))) {
-				return CanInspectPropertyCache[(type, property)];
+			if (canInspectPropertyCache.ContainsKey((type, property))) {
+				return canInspectPropertyCache[(type, property)];
 			}
 			bool result = CanInspectPropertyHelper(type, property);
-			CanInspectPropertyCache[(type, property)] = result;
+			canInspectPropertyCache[(type, property)] = result;
 			return result;
 		}
 
@@ -48,15 +48,15 @@ namespace Tangerine.Core
 
 		public static bool CanAnimateProperty(Type type, PropertyInfo property)
 		{
-			if (CanAnimatePropertyCache.ContainsKey((type, property))) {
-				return CanAnimatePropertyCache[(type, property)];
+			if (canAnimatePropertyCache.ContainsKey((type, property))) {
+				return canAnimatePropertyCache[(type, property)];
 			}
 			bool canInspect = CanInspectProperty(type, property);
 			bool isIanimationHost = typeof(IAnimationHost).IsAssignableFrom(type);
 			bool isTangerineStatic = PropertyAttributes<TangerineStaticPropertyAttribute>.Get(property) != null;
 			bool isInAnimatorRegistry = AnimatorRegistry.Instance.Contains(property.PropertyType);
 			bool result = canInspect && isIanimationHost && !isTangerineStatic && isInAnimatorRegistry;
-			CanAnimatePropertyCache[(type, property)] = result;
+			canAnimatePropertyCache[(type, property)] = result;
 			return result;
 		}
 	}
