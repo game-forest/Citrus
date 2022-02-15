@@ -12,15 +12,6 @@ namespace Lime.NanoVG
 		Hole = 2, // CW
 	};
 
-	public enum LineCap
-	{
-		Butt,
-		Round,
-		Square,
-		Bevel,
-		Miter,
-	};
-
 	public enum ImageFlags
 	{
 		GenerateMipMaps = 1 << 0, // Generate mipmaps during creation of the image.

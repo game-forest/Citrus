@@ -37,6 +37,8 @@ namespace Lime
 		Butt,
 		Round,
 		Square,
+		Bevel,
+		Miter,
 	}
 
 #pragma warning disable CS0660, CS0661
@@ -839,8 +841,8 @@ namespace Lime
 
 		public static void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
 		{
-			if (cap == LineCap.Round) {
-				throw new NotImplementedException();
+			if (cap == LineCap.Round || cap == LineCap.Bevel || cap == LineCap.Miter) {
+				throw new NotImplementedException("Use RendererNvg.DrawLine() with the given LineCap");
 			}
 			var d = (b - a).Normalized * thickness * 0.5f;
 			Vector2 n = GetVectorNormal(d);

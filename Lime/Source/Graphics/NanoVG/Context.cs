@@ -74,8 +74,8 @@ namespace Lime.NanoVG
 			state.ShapeAntiAlias = 1;
 			state.StrokeWidth = 1.0f;
 			state.MiterLimit = 10.0f;
-			state.LineCap = NanoVG.LineCap.Butt;
-			state.LineJoin = NanoVG.LineCap.Miter;
+			state.LineCap = Lime.LineCap.Butt;
+			state.LineJoin = Lime.LineCap.Miter;
 			state.Alpha = 1.0f;
 			state.Transform.SetIdentity();
 			state.Scissor.Extent.X = -1.0f;
@@ -482,6 +482,11 @@ namespace Lime.NanoVG
 			AppendCommands(vals, nvals);
 		}
 
+		public void Rect(Vector2 position, Vector2 size)
+		{
+			Rect(position.X, position.Y, size.X, size.Y);
+		}
+
 		public void Rect(float x, float y, float w, float h)
 		{
 			var vals = stackalloc float[13];
@@ -501,6 +506,11 @@ namespace Lime.NanoVG
 			AppendCommands(vals, 13);
 		}
 
+		public void RoundedRect(Vector2 position, Vector2 size, float r)
+		{
+			RoundedRectVarying(position.X, position.Y, size.X, size.Y, r, r, r, r);
+		}
+
 		public void RoundedRect(float x, float y, float w, float h, float r)
 		{
 			RoundedRectVarying(x, y, w, h, r, r, r, r);
@@ -509,59 +519,59 @@ namespace Lime.NanoVG
 		public void RoundedRectVarying(
 			float x,
 			float y,
-			float w,
-			float h,
+			float width,
+			float height,
 			float radTopLeft,
 			float radTopRight,
 			float radBottomRight,
 			float radBottomLeft
 		) {
 			if (radTopLeft < 0.1f && radTopRight < 0.1f && radBottomRight < 0.1f && radBottomLeft < 0.1f) {
-				Rect(x, y, w, h);
+				Rect(x, y, width, height);
 			} else {
-				var halfw = Math.Abs(w) * 0.5f;
-				var halfh = Math.Abs(h) * 0.5f;
-				var rxBL = Math.Min(radBottomLeft, halfw) * Math.Sign(w);
-				var ryBL = Math.Min(radBottomLeft, halfh) * Math.Sign(h);
-				var rxBR = Math.Min(radBottomRight, halfw) * Math.Sign(w);
-				var ryBR = Math.Min(radBottomRight, halfh) * Math.Sign(h);
-				var rxTR = Math.Min(radTopRight, halfw) * Math.Sign(w);
-				var ryTR = Math.Min(radTopRight, halfh) * Math.Sign(h);
-				var rxTL = Math.Min(radTopLeft, halfw) * Math.Sign(w);
-				var ryTL = Math.Min(radTopLeft, halfh) * Math.Sign(h);
+				var halfw = Math.Abs(width) * 0.5f;
+				var halfh = Math.Abs(height) * 0.5f;
+				var rxBL = Math.Min(radBottomLeft, halfw) * Math.Sign(width);
+				var ryBL = Math.Min(radBottomLeft, halfh) * Math.Sign(height);
+				var rxBR = Math.Min(radBottomRight, halfw) * Math.Sign(width);
+				var ryBR = Math.Min(radBottomRight, halfh) * Math.Sign(height);
+				var rxTR = Math.Min(radTopRight, halfw) * Math.Sign(width);
+				var ryTR = Math.Min(radTopRight, halfh) * Math.Sign(height);
+				var rxTL = Math.Min(radTopLeft, halfw) * Math.Sign(width);
+				var ryTL = Math.Min(radTopLeft, halfh) * Math.Sign(height);
 				var vals = stackalloc float[44];
 				vals[0] = (int)CommandType.MoveTo;
 				vals[1] = x;
 				vals[2] = y + ryTL;
 				vals[3] = (int)CommandType.LineTo;
 				vals[4] = x;
-				vals[5] = y + h - ryBL;
+				vals[5] = y + height - ryBL;
 				vals[6] = (int)CommandType.BezierTo;
 				vals[7] = x;
-				vals[8] = y + h - ryBL * (1 - 0.5522847493f);
+				vals[8] = y + height - ryBL * (1 - 0.5522847493f);
 				vals[9] = x + rxBL * (1 - 0.5522847493f);
-				vals[10] = y + h;
+				vals[10] = y + height;
 				vals[11] = x + rxBL;
-				vals[12] = y + h;
+				vals[12] = y + height;
 				vals[13] = (int)CommandType.LineTo;
-				vals[14] = x + w - rxBR;
-				vals[15] = y + h;
+				vals[14] = x + width - rxBR;
+				vals[15] = y + height;
 				vals[16] = (int)CommandType.BezierTo;
-				vals[17] = x + w - rxBR * (1 - 0.5522847493f);
-				vals[18] = y + h;
-				vals[19] = x + w;
-				vals[20] = y + h - ryBR * (1 - 0.5522847493f);
-				vals[21] = x + w;
-				vals[22] = y + h - ryBR;
+				vals[17] = x + width - rxBR * (1 - 0.5522847493f);
+				vals[18] = y + height;
+				vals[19] = x + width;
+				vals[20] = y + height - ryBR * (1 - 0.5522847493f);
+				vals[21] = x + width;
+				vals[22] = y + height - ryBR;
 				vals[23] = (int)CommandType.LineTo;
-				vals[24] = x + w;
+				vals[24] = x + width;
 				vals[25] = y + ryTR;
 				vals[26] = (int)CommandType.BezierTo;
-				vals[27] = x + w;
+				vals[27] = x + width;
 				vals[28] = y + ryTR * (1 - 0.5522847493f);
-				vals[29] = x + w - rxTR * (1 - 0.5522847493f);
+				vals[29] = x + width - rxTR * (1 - 0.5522847493f);
 				vals[30] = y;
-				vals[31] = x + w - rxTR;
+				vals[31] = x + width - rxTR;
 				vals[32] = y;
 				vals[33] = (int)CommandType.LineTo;
 				vals[34] = x + rxTL;
@@ -637,9 +647,9 @@ namespace Lime.NanoVG
 			var fillPaint = state.Fill;
 			FlattenPaths();
 			if (edgeAntiAlias && state.ShapeAntiAlias != 0) {
-				ExpandFill(fringeWidth, NanoVG.LineCap.Miter, 2.4f);
+				ExpandFill(fringeWidth, Lime.LineCap.Miter, 2.4f);
 			} else {
-				ExpandFill(0.0f, NanoVG.LineCap.Miter, 2.4f);
+				ExpandFill(0.0f, Lime.LineCap.Miter, 2.4f);
 			}
 			MultiplyAlpha(ref fillPaint.InnerColor, state.Alpha);
 			MultiplyAlpha(ref fillPaint.OuterColor, state.Alpha);
@@ -989,8 +999,8 @@ namespace Lime.NanoVG
 					if ((p1->Flags & (byte) PointFlags.Corner) != 0) {
 						if (
 							dmr2 * miterLimit * miterLimit < 1.0f
-							|| lineJoin == NanoVG.LineCap.Bevel
-							|| lineJoin == NanoVG.LineCap.Round
+							|| lineJoin == Lime.LineCap.Bevel
+							|| lineJoin == Lime.LineCap.Round
 						) {
 							p1->Flags |= (byte) PointFlags.Bevel;
 						}
@@ -1023,13 +1033,13 @@ namespace Lime.NanoVG
 			for (i = 0; i < cache.Paths.Count; i++) {
 				var path = cache.Paths[i];
 				var loop = path.Closed == 0 ? 0 : 1;
-				if (lineJoin == NanoVG.LineCap.Round) {
+				if (lineJoin == Lime.LineCap.Round) {
 					cverts += (path.Count + path.BevelCount * (ncap + 2) + 1) * 2;
 				} else {
 					cverts += (path.Count + path.BevelCount * 5 + 1) * 2;
 				}
 				if (loop == 0) {
-					if (lineCap == NanoVG.LineCap.Round) {
+					if (lineCap == Lime.LineCap.Round) {
 						cverts += (ncap * 2 + 2) * 2;
 					} else {
 						cverts += (3 + 3) * 2;
@@ -1066,17 +1076,17 @@ namespace Lime.NanoVG
 						dx = p1->X - p0->X;
 						dy = p1->Y - p0->Y;
 						Normalize(ref dx, ref dy);
-						if (lineCap == NanoVG.LineCap.Butt) {
+						if (lineCap == Lime.LineCap.Butt) {
 							dst = ButtCapStart(dst, p0, dx, dy, w, -aa * 0.5f, aa, u0, u1);
-						} else if (lineCap == NanoVG.LineCap.Butt || lineCap == NanoVG.LineCap.Square) {
+						} else if (lineCap == Lime.LineCap.Butt || lineCap == Lime.LineCap.Square) {
 							dst = ButtCapStart(dst, p0, dx, dy, w, w - aa, aa, u0, u1);
-						} else if (lineCap == NanoVG.LineCap.Round) {
+						} else if (lineCap == Lime.LineCap.Round) {
 							dst = RoundCapStart(dst, p0, dx, dy, w, ncap, aa, u0, u1);
 						}
 					}
 					for (j = s; j < e; ++j) {
 						if ((p1->Flags & (byte)(PointFlags.Bevel | PointFlags.InnerBevel)) != 0) {
-							if (lineJoin == NanoVG.LineCap.Round) {
+							if (lineJoin == Lime.LineCap.Round) {
 								dst = RoundJoin(dst, p0, p1, w, w, u0, u1, ncap, aa);
 							} else {
 								dst = BevelJoin(dst, p0, p1, w, w, u0, u1, aa);
@@ -1098,11 +1108,11 @@ namespace Lime.NanoVG
 						dx = p1->X - p0->X;
 						dy = p1->Y - p0->Y;
 						Normalize(ref dx, ref dy);
-						if (lineCap == NanoVG.LineCap.Butt) {
+						if (lineCap == Lime.LineCap.Butt) {
 							dst = ButtCapEnd(dst, p1, dx, dy, w, -aa * 0.5f, aa, u0, u1);
-						} else if (lineCap == NanoVG.LineCap.Butt || lineCap == NanoVG.LineCap.Square) {
+						} else if (lineCap == Lime.LineCap.Butt || lineCap == Lime.LineCap.Square) {
 							dst = ButtCapEnd(dst, p1, dx, dy, w, w - aa, aa, u0, u1);
-						} else if (lineCap == NanoVG.LineCap.Round) {
+						} else if (lineCap == Lime.LineCap.Round) {
 							dst = RoundCapEnd(dst, p1, dx, dy, w, ncap, aa, u0, u1);
 						}
 					}

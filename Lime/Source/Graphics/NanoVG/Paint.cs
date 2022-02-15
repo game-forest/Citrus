@@ -26,6 +26,11 @@ namespace Lime.NanoVG
 			Image = 0;
 		}
 
+		public static implicit operator Paint(Color4 color)
+		{
+			return new Paint(color);
+		}
+
 		public static Paint LinearGradient(
 			float startX,
 			float startY,
