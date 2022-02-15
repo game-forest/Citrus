@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -30,32 +31,45 @@ namespace Tangerine.Core
 		void Generate(RenderTexture texture, Action callback);
 	}
 
-	public class ViewportState
+	public class PreservedDocumentState
 	{
-		public Vector2 Position;
-		public Vector2 Scale;
-		public string AnimationId;
-		public string AnimationPath;
-		public string ContainerPath;
-		public bool InspectRootNode;
-		public HashSet<string> SelectedItems;
+		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
 
-		public static readonly ViewportState Null = new ViewportState();
+		public readonly HashSet<string> SelectedItems = new HashSet<string>();
 
-		public ViewportState()
+		public readonly HashSet<string> ExpandedItems = new HashSet<string>();
+
+		public static string GetSceneItemIndexPath(SceneItem item)
 		{
-			Position = Vector2.Zero;
-			Scale = Vector2.One;
-			AnimationId = null;
-			AnimationPath = null;
-			ContainerPath = null;
-			InspectRootNode = false;
-			SelectedItems = new HashSet<string>();
+			var builder = new StringBuilder(item.Id);
+			for (var i = item; i != null; i = i.Parent) {
+				builder.Append('/');
+				builder.Append(i.Parent == null ? -1 : i.Parent.SceneItems.IndexOf(i));
+			}
+			return builder.ToString();
+		}
+
+		public static string GetNodeIndexPath(Node node)
+		{
+			var builder = new StringBuilder(node.Id);
+			for (var p = node; p != null; p = p.Parent) {
+				builder.Append('/');
+				builder.Append(p.CollectionIndex());
+			}
+			return builder.ToString();
 		}
 	}
 
 	public sealed class Document
 	{
+		private class GeneralDocumentStateComponent : Component
+		{
+			public string AnimationId = null;
+			public string AnimationOwnerNodePath = null;
+			public string ContainerPath = null;
+			public bool InspectRootNode = false;
+		}
+
 		public enum CloseAction
 		{
 			Cancel,
@@ -88,6 +102,9 @@ namespace Tangerine.Core
 		public static Document Current { get; private set; }
 
 		public readonly DocumentHistory History = new DocumentHistory();
+
+		public readonly ComponentCollection<Component> DocumentViewStateComponents =
+			new ComponentCollection<Component>();
 		public bool IsModified => History.IsDocumentModified;
 
 		/// <summary>
@@ -137,6 +154,8 @@ namespace Tangerine.Core
 			{
 				if (container != value) {
 					container = value;
+					var component = DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>();
+					component.ContainerPath = PreservedDocumentState.GetNodeIndexPath(container);
 					BumpSceneTreeVersion();
 				}
 			}
@@ -257,8 +276,11 @@ namespace Tangerine.Core
 		public Node PreviewAnimationContainer { get; set; }
 		public bool ExpositionMode { get; set; }
 		public ResolutionPreview ResolutionPreview { get; set; } = new ResolutionPreview();
-		public ViewportState PreservedViewportState = ViewportState.Null;
-		public bool InspectRootNode { get; set; }
+		public bool InspectRootNode
+		{
+			get => DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>().InspectRootNode;
+			set => DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>().InspectRootNode = value;
+		}
 
 		public Animation Animation
 		{
@@ -267,8 +289,14 @@ namespace Tangerine.Core
 			{
 				if (animation != value) {
 					animation = value;
+					var component = DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>();
 					if (animation != null) {
+						component.AnimationId = animation.Id;
+						component.AnimationOwnerNodePath = PreservedDocumentState.GetNodeIndexPath(animation.OwnerNode);
 						animationFastForwarder.FastForwardSafe(animation, value.Frame, true);
+					} else {
+						component.AnimationId = null;
+						component.AnimationOwnerNodePath = null;
 					}
 					BumpSceneTreeVersion();
 				}
@@ -678,27 +706,29 @@ namespace Tangerine.Core
 			}
 		}
 
-		public void RestoreState()
+		public void RestoreState(PreservedDocumentState preservedState)
 		{
-			if (PreservedViewportState == ViewportState.Null) {
-				return;
-			}
 			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
 				Load();
 			}
-			if (PreservedViewportState.InspectRootNode) {
-				InspectRootNode = true;
-				PreservedViewportState.InspectRootNode = false;
+			DocumentViewStateComponents.Clear();
+			foreach (var component in preservedState.Components) {
+				DocumentViewStateComponents.Add(component);
 			}
-			if (PreservedViewportState.SelectedItems.Count > 0 ||
-				PreservedViewportState.AnimationPath != null ||
-				PreservedViewportState.ContainerPath != null
+			var docState = preservedState.Components.GetOrAdd<GeneralDocumentStateComponent>();
+			InspectRootNode = docState.InspectRootNode;
+			if (preservedState.SelectedItems.Count > 0 ||
+				preservedState.ExpandedItems.Count > 0 ||
+				docState.AnimationOwnerNodePath != null ||
+				docState.ContainerPath != null
 			) {
 				bool containerWasUpdated = false;
 				var states = new List<TimelineSceneItemStateComponent>();
 				foreach (var item in SceneTree.SelfAndDescendants()) {
 					var state = item.GetTimelineSceneItemState();
-					state.Selected = PreservedViewportState.SelectedItems.Contains(item.GetIndexPath());
+					string itemPath = PreservedDocumentState.GetSceneItemIndexPath(item);
+					state.Selected = preservedState.SelectedItems.Contains(itemPath);
+					state.NodesExpanded = preservedState.ExpandedItems.Contains(itemPath);
 					if (state.Selected) {
 						states.Add(state);
 					}
@@ -706,47 +736,43 @@ namespace Tangerine.Core
 					if (node == null) {
 						continue;
 					}
-					string path = node.GetNodeIndexPath();
-					if (path == PreservedViewportState.ContainerPath) {
+					string nodePath = PreservedDocumentState.GetNodeIndexPath(node);
+					if (nodePath == docState.ContainerPath) {
 						Container = node;
 						containerWasUpdated = true;
 					}
-					if (path == PreservedViewportState.AnimationPath) {
-						if (node.Animations.TryFind(PreservedViewportState.AnimationId, out var animation)) {
+					if (nodePath == docState.AnimationOwnerNodePath) {
+						if (node.Animations.TryFind(docState.AnimationId, out var animation)) {
 							Animation = animation;
 						} else {
 							Animation = node.DefaultAnimation;
 						}
 					}
 				}
-				if (states.Count != PreservedViewportState.SelectedItems.Count || !containerWasUpdated) {
+				if (states.Count != preservedState.SelectedItems.Count || !containerWasUpdated) {
 					foreach (var state in states) {
 						state.Selected = false;
 					}
 				}
-				PreservedViewportState.SelectedItems.Clear();
 			}
 		}
 
-		public void PreserveState()
+		public PreservedDocumentState PreserveState()
 		{
-			var state = new ViewportState {
-				AnimationId = Animation.Id,
-				AnimationPath = Animation.OwnerNode.GetNodeIndexPath(),
-				ContainerPath = Container.GetNodeIndexPath(),
-				InspectRootNode = InspectRootNode
-			};
-			foreach (var view in Views) {
-				if (view is ISceneView sv) {
-					state.Position = sv.Scene.Position;
-					state.Scale = sv.Scene.Scale;
-					break;
+			var state = new PreservedDocumentState();
+			foreach (var component in DocumentViewStateComponents) {
+				state.Components.Add(component);
+			}
+			foreach (var item in SceneTree.SelfAndDescendants()) {
+				string itemPath = PreservedDocumentState.GetSceneItemIndexPath(item);
+				if (item.GetTimelineSceneItemState().Selected) {
+					state.SelectedItems.Add(itemPath);
+				}
+				if (item.GetTimelineSceneItemState().NodesExpanded) {
+					state.ExpandedItems.Add(itemPath);
 				}
 			}
-			foreach (var item in SceneTree.SelfAndDescendants().Where(i => i.GetTimelineSceneItemState().Selected)) {
-				state.SelectedItems.Add(item.GetIndexPath());
-			}
-			PreservedViewportState = state;
+			return state;
 		}
 
 		private void AttachViews()

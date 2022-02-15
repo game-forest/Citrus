@@ -13,6 +13,12 @@ namespace Tangerine.UI.Timeline
 {
 	public class Timeline : IDocumentView
 	{
+		private class TimelineStateComponent : Component
+		{
+			public Vector2 Offset = Vector2.Zero;
+			public int CurrentColumn;
+		}
+
 		public static Timeline Instance { get; private set; }
 		public static Action<Timeline> OnCreate;
 
@@ -106,6 +112,8 @@ namespace Tangerine.UI.Timeline
 			typeof(EnsureSceneItemVisibleIfSelected),
 		};
 
+		private bool skipNextTimelineCentrify = false;
+
 		public Timeline(Panel panel)
 		{
 			RootWidget = new Widget();
@@ -131,14 +139,41 @@ namespace Tangerine.UI.Timeline
 					offset.Offset = value;
 				}
 			});
+			RootWidget.AddChangeWatcher(
+				() => CurrentColumn,
+				v => Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>().CurrentColumn = v
+			);
+			RootWidget.AddChangeWatcher(
+				() => offsetX,
+				v => Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>().Offset[0] = v
+			);
+			RootWidget.AddChangeWatcher(
+				() => Roll.ScrollView.ScrollPosition,
+				v => Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>().Offset[1] = v
+			);
 			RootWidget.Gestures.Add(DropFilesGesture = new DropFilesGesture());
 			CreateFilesDropHandlers();
 			RootWidget.AddChangeWatcher(() => Document.Current?.Animation, _ => {
 				columnCount = 0;
-				CenterTimelineOnCurrentColumn.Perform();
+				if (skipNextTimelineCentrify) {
+					skipNextTimelineCentrify = false;
+				} else {
+					CenterTimelineOnCurrentColumn.Perform();
+				}
 			});
 			Document.Current.History.DocumentChanged += () => columnCount = 0;
+			RootWidget.Awoke += RestoreStateFromDocument;
 			OnCreate?.Invoke(this);
+		}
+
+		private void RestoreStateFromDocument(Node node)
+		{
+			var state = Document.Current.DocumentViewStateComponents.Get<TimelineStateComponent>();
+			if (state != null) {
+				skipNextTimelineCentrify = true;
+				Offset = state.Offset;
+				Document.Current.AnimationFrame = state.CurrentColumn;
+			}
 		}
 
 		private void DecorateSceneTree(SceneItem sceneTree)

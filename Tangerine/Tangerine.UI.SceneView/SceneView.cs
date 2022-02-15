@@ -16,6 +16,12 @@ namespace Tangerine.UI.SceneView
 {
 	public class SceneView : IDocumentView, ISceneView
 	{
+		private class SceneViewStateComponent : Component
+		{
+			public Vector2 Position;
+			public Vector2 Scale;
+		}
+
 		private Vector2 mousePositionOnFilesDrop;
 
 		// Given panel.
@@ -296,6 +302,14 @@ namespace Tangerine.UI.SceneView
 			CreateProcessors();
 			CreatePresenters();
 			CreateFilesDropHandlers();
+			Scene.AddChangeWatcher(
+				() => Scene.Scale,
+				v => Document.Current.DocumentViewStateComponents.GetOrAdd<SceneViewStateComponent>().Scale = v
+			);
+			Scene.AddChangeWatcher(
+				() => Scene.Position,
+				v => Document.Current.DocumentViewStateComponents.GetOrAdd<SceneViewStateComponent>().Position = v
+			);
 			Frame.Awoke += ArrangeDocumentRoot;
 			OnCreate?.Invoke(this);
 		}
@@ -315,26 +329,29 @@ namespace Tangerine.UI.SceneView
 			// enough to change Frame Size on LayoutManager.Layout()
 			// which will come at the end of the frame. Force it now to get accurate Frame.Size;
 			WidgetContext.Current.Root.LayoutManager.Layout();
-			if (Document.Current.PreservedViewportState != ViewportState.Null) {
-				Scene.Scale = Document.Current.PreservedViewportState.Scale;
-				Scene.Position = Document.Current.PreservedViewportState.Position;
+			if (!Document.Current.DocumentViewStateComponents.Contains<SceneViewStateComponent>()) {
+				var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
+				var widget = Document.Current.RootNode.AsWidget;
+				var frameWidth = Frame.Width - rulerSize;
+				var frameHeight = Frame.Height - ZoomWidget.FrameHeight - rulerSize;
+				var wantedZoom = Mathf.Clamp(
+					Mathf.Min(
+						frameWidth / (widget.Width * widget.Scale.X),
+						frameHeight / (widget.Height * widget.Scale.Y)
+					),
+					0.0f,
+					1.0f
+				);
+				var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
+				Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
+				Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
+					+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
+					+ Vector2.One * rulerSize;
 				return;
 			}
-			var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
-			var widget = Document.Current.RootNode.AsWidget;
-			var frameWidth = Frame.Width - rulerSize;
-			var frameHeight = Frame.Height - ZoomWidget.FrameHeight - rulerSize;
-			var wantedZoom = Mathf.Clamp(
-				Mathf.Min(
-					frameWidth / (widget.Width * widget.Scale.X),
-					frameHeight / (widget.Height * widget.Scale.Y)),
-				0.0f,
-				1.0f);
-			var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
-			Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
-			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
-				+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
-				+ Vector2.One * rulerSize;
+			var state = Document.Current.DocumentViewStateComponents.Get<SceneViewStateComponent>();
+			Scene.Scale = state.Scale;
+			Scene.Position = state.Position;
 		}
 
 		private void OnBeforeFilesDrop()

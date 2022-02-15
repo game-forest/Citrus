@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Lime;
 
 namespace Tangerine.Core
@@ -33,16 +32,6 @@ namespace Tangerine.Core
 				nodePath == null ?
 					(root == node ? bundlePath : $"{bundlePath} [{node.ToString()}]") :
 					$"{nodePath} [{node.ToString()}]";
-		}
-
-		public static string GetNodeIndexPath(this Node node)
-		{
-			var builder = new StringBuilder(node.Id);
-			for (var p = node; p != null; p = p.Parent) {
-				builder.Append('/');
-				builder.Append(p.CollectionIndex());
-			}
-			return builder.ToString();
 		}
 	}
 }
