@@ -524,14 +524,11 @@ namespace Lime
 			if (linkageWidget != null) {
 				// AABB for particles is calculated in space of linked widget,
 				// so we need to transform it to local coordinates.
-				currentBoundingRect = currentBoundingRect.Transform(linkageWidget.CalcTransitionToSpaceOf(this));
 				// Ensure bounding rect orientation because rotation and scale can alter it.
-				currentBoundingRect = new Rectangle(
-					Mathf.Min(currentBoundingRect.Left, currentBoundingRect.Right),
-					Mathf.Min(currentBoundingRect.Top, currentBoundingRect.Bottom),
-					Mathf.Max(currentBoundingRect.Left, currentBoundingRect.Right),
-					Mathf.Max(currentBoundingRect.Top, currentBoundingRect.Bottom)
-				);
+				currentBoundingRect = currentBoundingRect
+				  .ToQuadrangle()
+				  .Transform(linkageWidget.CalcTransitionToSpaceOf(this))
+				  .ToAABB();
 			}
 			// We do not narrow bounding rects anywhere.
 			ExpandBoundingRect(currentBoundingRect);
