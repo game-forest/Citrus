@@ -1,6 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL;
-
-namespace Lime
+﻿namespace Lime
 {
 	public static class RendererNvg
 	{
