@@ -2,11 +2,11 @@
 
 namespace Lime.NanoVG
 {
-	internal class Renderer : IRenderer
+	internal class RenderingBackend : IRenderingBackend
 	{
 		private readonly Material material = new Material();
 		
-		private readonly StencilState fillStencilState = new StencilState()
+		private readonly StencilState fillStencilState = new StencilState
 		{
 			Enable = true,
 			WriteMask = 0xff,
@@ -22,7 +22,7 @@ namespace Lime.NanoVG
 			BackFacePass = StencilOp.Decrement
 		};
 		
-		private readonly StencilState applyStencilState = new StencilState()
+		private readonly StencilState applyStencilState = new StencilState
 		{
 			Enable = true,
 			WriteMask = 0xff,
@@ -37,16 +37,8 @@ namespace Lime.NanoVG
 			BackFaceDepthFail = StencilOp.Zero,
 			BackFacePass = StencilOp.Zero
 		};
-		
-		public void Begin()
-		{
-		}
 
-		public void End()
-		{
-		}
-		
-		public int CreateTexture(TextureType type, int w, int h, ImageFlags imageFlags, byte[] data)
+		public int CreateTexture(TextureType type, int width, int height, ImageFlags imageFlags, byte[] data)
 		{
 			throw new NotSupportedException();
 		}
@@ -56,18 +48,14 @@ namespace Lime.NanoVG
 			throw new NotSupportedException();
 		}
 
-		public void UpdateTexture(int image, int x, int y, int w, int h, byte[] data)
+		public void UpdateTexture(int image, int x, int y, int width, int height, byte[] data)
 		{
 			throw new NotSupportedException();
 		}
 
-		public void GetTextureSize(int image, out int w, out int h)
+		public void GetTextureSize(int image, out int width, out int height)
 		{
 			throw new NotSupportedException();
-		}
-
-		public void Viewport(float width, float height, float devicePixelRatio)
-		{
 		}
 
 		private readonly Vertex[] quad = new Vertex[4];
@@ -80,8 +68,8 @@ namespace Lime.NanoVG
 			if (isConvex) {
 				renderingType = paint.Image != 0 ? RenderingType.FillImage : RenderingType.FillGradient;
 			} else {
-				Lime.Renderer.ColorWriteEnabled = ColorWriteMask.None;
-				Lime.Renderer.StencilState = fillStencilState;
+				Renderer.ColorWriteEnabled = ColorWriteMask.None;
+				Renderer.StencilState = fillStencilState;
 				renderingType = RenderingType.FillStencil;
 			}
 			for (var i = 0; i < paths.Count; ++i) {
@@ -99,8 +87,8 @@ namespace Lime.NanoVG
 				}
 			}
 			if (!isConvex) {
-				Lime.Renderer.ColorWriteEnabled = ColorWriteMask.All;
-				Lime.Renderer.StencilState = applyStencilState;
+				Renderer.ColorWriteEnabled = ColorWriteMask.All;
+				Renderer.StencilState = applyStencilState;
 				quad[0].Pos = new Vector2(bounds.BX, bounds.BY);
 				quad[1].Pos = new Vector2(bounds.BX, bounds.AY);
 				quad[2].Pos = new Vector2(bounds.AX, bounds.BY);
@@ -115,7 +103,7 @@ namespace Lime.NanoVG
 					new ArraySegment<Vertex>(quad), 
 					PrimitiveType.TriangleStrip
 				);
-				Lime.Renderer.StencilState = StencilState.Default;
+				Renderer.StencilState = StencilState.Default;
 			}
 			// Render antialiased outline
 			renderingType = paint.Image != 0 ? RenderingType.FillImage : RenderingType.FillGradient;
@@ -133,7 +121,7 @@ namespace Lime.NanoVG
 					);
 				}
 			}
-			Lime.Renderer.Flush();
+			Renderer.Flush();
 		}
 
 		public void RenderStroke(ref Paint paint, ref Scissor scissor, float fringe, float strokeWidth, ArraySegment<Path> paths)
@@ -152,7 +140,7 @@ namespace Lime.NanoVG
 					);
 				}
 			}
-			Lime.Renderer.Flush();
+			Renderer.Flush();
 		}
 
 		private enum RenderingType
@@ -178,7 +166,7 @@ namespace Lime.NanoVG
 			ArraySegment<Vertex> vertices,
 			PrimitiveType primitiveType
 		) {
-			if (vertices.Count <= 0) {
+			if (vertices.Count < 3) {
 				return;
 			}
 			var innerColor = Color4.PremulAlpha(paint.InnerColor);
@@ -235,9 +223,9 @@ namespace Lime.NanoVG
 			p.Type = (float)renderingType;
 			material.FillParams = p;
 			if (primitiveType == PrimitiveType.TriangleFan) {
-				Lime.Renderer.DrawTriangleFan(null, null, material, vertices.Array,vertices.Count, vertices.Offset);
+				Renderer.DrawTriangleFan(null, null, material, vertices.Array, vertices.Count, vertices.Offset);
 			} else {
-				Lime.Renderer.DrawTriangleStrip(null, null, material, vertices.Array, vertices.Count, vertices.Offset);
+				Renderer.DrawTriangleStrip(null, null, material, vertices.Array, vertices.Count, vertices.Offset);
 			}
 		}
 	}

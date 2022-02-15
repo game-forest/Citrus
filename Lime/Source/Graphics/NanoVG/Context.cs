@@ -6,27 +6,23 @@ namespace Lime.NanoVG
 	{
 		public static readonly Context Instance = new Context();
 		
-		private readonly IRenderer renderer;
+		private readonly IRenderingBackend renderingBackend;
 		private PathCache cache;
 		private float* commands;
 		private int commandsCount;
 		private int commandsNumber;
 		private float commandX;
 		private float commandY;
-		private float devicePixelRatio;
 		private float distTol;
-		private int drawCallCount;
 		private readonly bool edgeAntiAlias;
-		private int fillTriCount;
 		private float fringeWidth;
 		private readonly ContextState[] states = new ContextState[32];
 		private int statesNumber;
-		private int strokeTriCount;
 		private float tessTol;
 
 		public Context(bool edgeAntiAlias = true)
 		{
-			renderer = new Renderer();
+			renderingBackend = new RenderingBackend();
 			this.edgeAntiAlias = edgeAntiAlias;
 			commands = (float*)RawMemory.Allocate(sizeof(float) * 256);
 			commandsNumber = 0;
@@ -47,24 +43,6 @@ namespace Lime.NanoVG
 				cache.Dispose();
 				cache = null;
 			}
-		}
-
-		public void BeginFrame(float windowWidth, float windowHeight, float devicePixelRatio)
-		{
-			statesNumber = 0;
-			Save();
-			Reset();
-			SetDevicePixelRatio(devicePixelRatio);
-			renderer.Begin();
-			renderer.Viewport(windowWidth, windowHeight, devicePixelRatio);
-			drawCallCount = 0;
-			fillTriCount = 0;
-			strokeTriCount = 0;
-		}
-
-		public void EndFrame()
-		{
-			renderer.End();
 		}
 
 		public void Save()
@@ -243,23 +221,23 @@ namespace Lime.NanoVG
 
 		public int CreateImageRGBA(int w, int h, ImageFlags imageFlags, byte[] data)
 		{
-			return renderer.CreateTexture(TextureType.RGBA, w, h, imageFlags, data);
+			return renderingBackend.CreateTexture(TextureType.RGBA, w, h, imageFlags, data);
 		}
 
 		public void UpdateImage(int image, byte[] data)
 		{
-			renderer.GetTextureSize(image, out var w, out var h);
-			renderer.UpdateTexture(image, 0, 0, w, h, data);
+			renderingBackend.GetTextureSize(image, out var w, out var h);
+			renderingBackend.UpdateTexture(image, 0, 0, w, h, data);
 		}
 
 		public void ImageSize(int image, out int w, out int h)
 		{
-			renderer.GetTextureSize(image, out w, out h);
+			renderingBackend.GetTextureSize(image, out w, out h);
 		}
 
 		public void DeleteImage(int image)
 		{
-			renderer.DeleteTexture(image);
+			renderingBackend.DeleteTexture(image);
 		}
 
 		public void Scissor(float x, float y, float w, float h)
@@ -334,6 +312,18 @@ namespace Lime.NanoVG
 			vals[1] = x;
 			vals[2] = y;
 			AppendCommands(vals, 3);
+		}
+
+		public void Line(Vector2 a, Vector2 b)
+		{
+			MoveTo(a.X, a.Y);
+			LineTo(b.X, b.Y);
+		}
+
+		public void Line(float ax, float ay, float bx, float by)
+		{
+			MoveTo(ax, ay);
+			LineTo(bx, by);
 		}
 
 		public void BezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
@@ -653,17 +643,8 @@ namespace Lime.NanoVG
 			}
 			MultiplyAlpha(ref fillPaint.InnerColor, state.Alpha);
 			MultiplyAlpha(ref fillPaint.OuterColor, state.Alpha);
-			renderer.RenderFill(ref fillPaint, ref state.Scissor, fringeWidth, cache.Bounds,
-			cache.Paths.ToArraySegment());
-			for (var i = 0; i < cache.Paths.Count; i++) {
-				path = cache.Paths[i];
-				if (path.Fill != null)
-					fillTriCount += path.Fill.Value.Count - 2;
-
-				if (path.Stroke != null)
-					fillTriCount += path.Stroke.Value.Count - 2;
-				drawCallCount += 2;
-			}
+			renderingBackend.RenderFill(
+				ref fillPaint, ref state.Scissor, fringeWidth, cache.Bounds, cache.Paths.ToArraySegment());
 		}
 
 		public void Stroke()
@@ -688,12 +669,7 @@ namespace Lime.NanoVG
 			} else {
 				ExpandStroke(strokeWidth * 0.5f, 0.0f, state.LineCap, state.LineJoin, state.MiterLimit);
 			}
-			renderer.RenderStroke(ref strokePaint, ref state.Scissor, fringeWidth, strokeWidth, cache.Paths.ToArraySegment());
-			for (i = 0; i < cache.Paths.Count; i++) {
-				path = cache.Paths[i];
-				strokeTriCount += path.Stroke.Value.Count - 2;
-				drawCallCount++;
-			}
+			renderingBackend.RenderStroke(ref strokePaint, ref state.Scissor, fringeWidth, strokeWidth, cache.Paths.ToArraySegment());
 		}
 
 		private void SetDevicePixelRatio(float ratio)
@@ -701,7 +677,6 @@ namespace Lime.NanoVG
 			tessTol = 0.25f / ratio;
 			distTol = 0.01f / ratio;
 			fringeWidth = 1.0f / ratio;
-			devicePixelRatio = ratio;
 		}
 
 		private ContextState GetState()
