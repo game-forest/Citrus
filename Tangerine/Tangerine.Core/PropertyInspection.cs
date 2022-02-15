@@ -28,7 +28,7 @@ namespace Tangerine.Core
 				// we don't inspect indexers (they have "Item" name by default)
 				return false;
 			}
-			var yuzuItem = Yuzu.Metadata.Meta.Get(type, InternalPersistence.Instance.YuzuCommonOptions)
+			var yuzuItem = Yuzu.Metadata.Meta.Get(type, InternalPersistence.Instance.YuzuOptions)
 				.Items
 				.Find(i => i.PropInfo == property);
 			var hasKeyframeColor = PropertyAttributes<TangerineKeyframeColorAttribute>
