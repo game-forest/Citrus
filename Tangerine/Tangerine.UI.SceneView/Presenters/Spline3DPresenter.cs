@@ -37,7 +37,6 @@ namespace Tangerine.UI.SceneView
 							);
 						}
 					}
-
 					Renderer.Flush();
 				} finally {
 					Renderer.PopState();
@@ -52,13 +51,16 @@ namespace Tangerine.UI.SceneView
 			var sv = SceneView.Instance;
 			var viewportToSceneFrame = viewport.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
 			var a = (Vector2)viewport.WorldToViewportPoint(point.Position * splineWorldMatrix) * viewportToSceneFrame;
-			Renderer.DrawRect(a - Vector2.One * 3, a + Vector2.One * 3, color);
+			RendererNvg.DrawRound(a, 6, color);
+			RendererNvg.DrawRound(a, 4, Color4.White);
 			for (int i = 0; i < 2; i++) {
 				var t = i == 0 ? point.TangentA : point.TangentB;
-				var b = (Vector2)viewport.WorldToViewportPoint((point.Position + t) * splineWorldMatrix)
+				var b =
+					(Vector2)viewport.WorldToViewportPoint((point.Position + t) * splineWorldMatrix)
 					* viewportToSceneFrame;
-				Renderer.DrawLine(a, b, color, 1);
-				Renderer.DrawRect(b - Vector2.One * 1.5f, b + Vector2.One * 1.5f, color);
+				RendererNvg.DrawLine(a, b, color, 1);
+				RendererNvg.DrawRound(b, 5, color);
+				RendererNvg.DrawRound(b, 3, Color4.White);
 			}
 		}
 
@@ -89,14 +91,22 @@ namespace Tangerine.UI.SceneView
 					points: splineApproximation
 				);
 				splineApproximation.Add(n2.Position);
-				var start = Vector2.Zero;
-				for (var j = 0; j < splineApproximation.Count; j++) {
-					var end = (Vector2)viewport.WorldToViewportPoint(splineApproximation[j] * spline.GlobalTransform)
-						* viewportToSceneFrame;
-					if (j > 0) {
-						SplinePresenter.DrawColoredLine(start, end, Color4.White, Color4.Black);
+				var nvg = Lime.NanoVG.Context.Instance;
+				for (int t = 0; t < 2; t++) {
+					nvg.StrokeWidth(t == 1 ? 1 : 2);
+					nvg.StrokeColor(t == 0 ? Color4.White : Color4.Black);
+					nvg.BeginPath();
+					for (var j = 0; j < splineApproximation.Count; j++) {
+						var v =
+							(Vector2) viewport.WorldToViewportPoint(splineApproximation[j] * spline.GlobalTransform)
+							* viewportToSceneFrame;
+						if (j == 0) {
+							nvg.MoveTo(v);
+						} else {
+							nvg.LineTo(v);
+						}
 					}
-					start = end;
+					nvg.Stroke();
 				}
 			}
 		}

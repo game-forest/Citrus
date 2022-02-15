@@ -52,22 +52,19 @@ namespace Tangerine.UI.SceneView
 			}
 			var nvg = Lime.NanoVG.Context.Instance;
 			nvg.BeginPath();
-			nvg.StrokeWidth(2);
+			nvg.StrokeWidth(1);
 			nvg.StrokeColor(color);
 			for (int i = 0; i < 4; i++) {
 				var a = hull[i];
 				var b = hull[(i + 1) % 4];
-				nvg.MoveTo(a);
-				nvg.LineTo(b);
+				nvg.Line(a, b);
 				DrawStretchMark(a);
-
 				if (i < 2) {
 					var c = hull[(i + 2) % 4];
 					var d = hull[(i + 3) % 4];
 					var abCenter = (a + b) * 0.5f;
 					var cdCenter = (c + d) * 0.5f;
-					nvg.MoveTo(abCenter);
-					nvg.LineTo(cdCenter);
+					nvg.Line(abCenter, cdCenter);
 					DrawStretchMark(abCenter);
 					DrawStretchMark(cdCenter);
 				}
