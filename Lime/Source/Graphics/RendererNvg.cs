@@ -1,12 +1,13 @@
 ﻿namespace Lime
 {
-	public static class ThemeToolbox
+	public static class RendererNvg
 	{
 		public static void DrawRoundedRect(
 			Vector2 position,
 			Vector2 size,
 			ColorGradient verticalGradient,
 			Color4 border,
+			float thickness,
 			float cornerRadius
 		) {
 			var x = position.X;
@@ -30,11 +31,18 @@
 			nvg.BeginPath();
 			nvg.RoundedRect(x + 0.5f, y + 0.5f, w - 1, h - 1, cornerRadius - 0.5f);
 			nvg.StrokeColor(border);
+			nvg.StrokeWidth(thickness);
 			nvg.Stroke();
 		}
 		
-		public static void DrawRoundedRect(Vector2 position, Vector2 size, Color4 inner, Color4 border, float cornerRadius)
-		{
+		public static void DrawRoundedRect(
+			Vector2 position,
+			Vector2 size,
+			Color4 inner,
+			Color4 border,
+			float thickness,
+			float cornerRadius
+		) {
 			var x = position.X;
 			var y = position.Y;
 			var w = size.X;
@@ -47,6 +55,7 @@
 			nvg.BeginPath();
 			nvg.RoundedRect(x + 0.5f, y + 0.5f, w - 1, h - 1, cornerRadius - 0.5f);
 			nvg.StrokeColor(border);
+			nvg.StrokeWidth(thickness);
 			nvg.Stroke();
 		}
 		
@@ -67,7 +76,19 @@
 			nvg.StrokeWidth(thickness);
 			nvg.StrokeColor(color);
 			nvg.Stroke();
-			nvg.StrokeWidth(1);
+		}
+
+		public static void DrawQuadrangleOutline(Quadrangle q, Color4 color, float thickness = 1)
+		{
+			var nvg = NanoVG.Context.Instance;
+			nvg.BeginPath();
+			nvg.StrokeWidth(thickness);
+			nvg.StrokeColor(color);
+			nvg.MoveTo(q[0]);
+			for (int i = 0; i < 4; i++) {
+				nvg.LineTo(q[(i + 1) % 4]);
+			}
+			nvg.Stroke();
 		}
 	}
 }

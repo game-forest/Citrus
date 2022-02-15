@@ -65,7 +65,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					ThemeToolbox.DrawRoundedRect(Vector2.Zero, Size, Gradient, BorderColor, 4.0f);
+					RendererNvg.DrawRoundedRect(Vector2.Zero, Size, Gradient, BorderColor, 1, 4);
 					var transform = Matrix32.Scaling(IconWidth, Size.Y) * Matrix32.Translation(Size.X - IconWidth, 0);
 					separator.Draw(transform);
 					icon.Draw(transform, IconColor);

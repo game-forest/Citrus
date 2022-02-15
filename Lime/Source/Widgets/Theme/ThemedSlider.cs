@@ -81,7 +81,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					ThemeToolbox.DrawRoundedRect(Vector2.Zero, Size, Color, BorderColor, 4.0f);
+					RendererNvg.DrawRoundedRect(Vector2.Zero, Size, Color, BorderColor, 1, 4);
 				}
 			}
 		}

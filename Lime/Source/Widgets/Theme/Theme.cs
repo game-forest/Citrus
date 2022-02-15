@@ -335,7 +335,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					ThemeToolbox.DrawRoundedRectOutline(Vector2.Zero, Size, Color, Thickness, Rounded ? 4.0f : 1.0f);
+					RendererNvg.DrawRoundedRectOutline(Vector2.Zero, Size, Color, Thickness, Rounded ? 4.0f : 1.0f);
 				}
 			}
 		}
@@ -369,7 +369,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					ThemeToolbox.DrawRoundedRectOutline(Vector2.Zero, Size, Color, 1.0f, Rounded ? 4.0f : 2.0f);
+					RendererNvg.DrawRoundedRectOutline(Vector2.Zero, Size, Color, 1.0f, Rounded ? 4.0f : 2.0f);
 				}
 			}
 		}

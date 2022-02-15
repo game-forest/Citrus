@@ -129,7 +129,7 @@ namespace Lime
 				if (CornerRadius == 0) {
 					Renderer.DrawRectOutline(Position, Position + Size, Color, Thickness);
 				} else {
-					ThemeToolbox.DrawRoundedRectOutline(Position, Position + Size, Color, Thickness, CornerRadius);
+					RendererNvg.DrawRoundedRectOutline(Position, Position + Size, Color, Thickness, CornerRadius);
 				}
 			}
 		}

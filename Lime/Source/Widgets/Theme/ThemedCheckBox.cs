@@ -68,7 +68,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					ThemeToolbox.DrawRoundedRect(Vector2.Zero, Size, BackgroundColor, BorderColor, 4.0f);
+					RendererNvg.DrawRoundedRect(Vector2.Zero, Size, BackgroundColor, BorderColor, 1, 4);
 					if (State == CheckBoxState.Checked) {
 						var transform = Matrix32.Scaling(Theme.Metrics.CheckBoxSize);
 						checkedIcon.Draw(transform);

@@ -112,7 +112,7 @@ namespace Tangerine.UI
 					caption.Color = Enabled ? Theme.Colors.BlackText : Theme.Colors.GrayText;
 				}
 				if (borderColor != Color4.Transparent) {
-					ThemeToolbox.DrawRoundedRectOutline(Vector2.Zero, Size, borderColor, 1.0f, 2.0f);
+					RendererNvg.DrawRoundedRectOutline(Vector2.Zero, Size, borderColor, 1.0f, 2.0f);
 				}
 			}));
 			Awoke += Awake;
