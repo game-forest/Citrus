@@ -206,7 +206,7 @@ namespace Tests.Types
 		[TangerineKeyframeColor(1)]
 		public EmitterAction Action { get; set; }
 
-		internal static Dictionary<ITexture, CommonMaterial> materialCache
+		private Dictionary<ITexture, CommonMaterial> materialCache
 			= new Dictionary<ITexture, CommonMaterial>();
 
 		private static CommonMaterial noTextureMaterial = new CommonMaterial() { DiffuseTexture = null, };
