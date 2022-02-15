@@ -736,8 +736,7 @@ namespace Lime
 					batchLength < batchedSprites.Length &&
 					s.Texture1 == batchedSprites[0].Texture1 && s.Texture2 == batchedSprites[0].Texture2 &&
 					s.Material == batchedSprites[0].Material &&
-					4 * (batchLength + 1) <= RenderBatchLimits.MaxVertices &&
-					6 * (batchLength + 1) <= RenderBatchLimits.MaxIndices
+					6 * (batchLength + 1) <= RenderBatch<Vertex>.MaxIndices
 				) {
 					batchedSprites[batchLength++] = s;
 					continue;

@@ -10,7 +10,7 @@ namespace Lime
 		public readonly List<IRenderBatch> Batches = new List<IRenderBatch>();
 		private IRenderBatch lastBatch;
 
-		public bool Empty { get { return lastBatch == null; } }
+		public bool Empty => lastBatch == null;
 
 		public RenderBatch<TVertex> GetBatch<TVertex>(
 			ITexture texture1, ITexture texture2, IMaterial material, int vertexCount, int indexCount
@@ -19,30 +19,30 @@ namespace Lime
 		{
 			var atlas1 = texture1?.AtlasTexture;
 			var atlas2 = texture2?.AtlasTexture;
-			var typedLastBatch = lastBatch as RenderBatch<TVertex>;
-			var needMesh = typedLastBatch == null ||
-				typedLastBatch.LastVertex + vertexCount > RenderBatchLimits.MaxVertices ||
-				typedLastBatch.LastIndex + indexCount > RenderBatchLimits.MaxIndices;
-			if (needMesh ||
-				typedLastBatch.Texture1 != atlas1 ||
-				typedLastBatch.Texture2 != atlas2 ||
-				typedLastBatch.Material != material ||
-				typedLastBatch.Material.PassCount != 1
+			var b = lastBatch as RenderBatch<TVertex>;
+			if (
+				b == null
+				|| b.Texture1 != atlas1
+			    || b.Texture2 != atlas2
+			    || b.Material != material
+			    || b.Material.PassCount != 1
+				|| b.LastVertex + vertexCount > b.Mesh.Vertices.Length
+				|| b.LastIndex + indexCount > b.Mesh.Indices.Length
 			) {
-				typedLastBatch = RenderBatch<TVertex>.Acquire(needMesh ? null : typedLastBatch);
-				typedLastBatch.Texture1 = atlas1;
-				typedLastBatch.Texture2 = atlas2;
-				typedLastBatch.Material = material;
-				Batches.Add(typedLastBatch);
-				lastBatch = typedLastBatch;
+				b = RenderBatch<TVertex>.Acquire(b, vertexCount, indexCount);
+				b.Texture1 = atlas1;
+				b.Texture2 = atlas2;
+				b.Material = material;
+				Batches.Add(b);
+				lastBatch = b;
 			}
-			var mesh = typedLastBatch.Mesh;
+			var mesh = b.Mesh;
 			mesh.VertexCount += vertexCount;
 			mesh.IndexCount += indexCount;
 #if PROFILER
-			typedLastBatch.ProfilingInfo.ProcessNode(RenderObjectOwnerInfo.CurrentNode);
+			b.ProfilingInfo.ProcessNode(RenderObjectOwnerInfo.CurrentNode);
 #endif // PROFILER
-			return typedLastBatch;
+			return b;
 		}
 
 		public void Render()

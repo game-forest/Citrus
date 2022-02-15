@@ -18,17 +18,15 @@ namespace Lime
 		void Release();
 	}
 
-	public static class RenderBatchLimits
-	{
-		public static int MaxVertices = 400;
-		public static int MaxIndices = 600;
-	}
-
 	public class RenderBatch<TVertex> : IRenderBatch
 		where TVertex : unmanaged
 	{
+		public const int MinVertices = 400;
+		public const int MinIndices = 600;
+		public const int MaxIndices = ushort.MaxValue;
+
 		private static Stack<RenderBatch<TVertex>> batchPool = new Stack<RenderBatch<TVertex>>();
-		private static Stack<Mesh<TVertex>> meshPool = new Stack<Mesh<TVertex>>();
+		private static List<Mesh<TVertex>> meshPool = new List<Mesh<TVertex>>();
 		private bool ownsMesh;
 
 		public ITexture Texture1 { get; set; }
@@ -78,17 +76,21 @@ namespace Lime
 #endif // PROFILER
 		}
 
-		public static RenderBatch<TVertex> Acquire(RenderBatch<TVertex> origin)
+		public static RenderBatch<TVertex> Acquire(RenderBatch<TVertex> origin, int vertexCount, int indexCount)
 		{
 			var batch = batchPool.Count == 0 ? new RenderBatch<TVertex>() : batchPool.Pop();
-			if (origin != null) {
+			if (
+				origin != null
+				&& origin.LastVertex + vertexCount <= origin.Mesh.Vertices.Length
+				&& origin.LastIndex + indexCount <= origin.Mesh.Indices.Length
+			) {
 				batch.Mesh = origin.Mesh;
 				batch.StartIndex = origin.LastIndex;
 				batch.LastVertex = origin.LastVertex;
 				batch.LastIndex = origin.LastIndex;
 			} else {
 				batch.ownsMesh = true;
-				batch.Mesh = AcquireMesh();
+				batch.Mesh = AcquireMesh(vertexCount, indexCount);
 			}
 #if PROFILER
 			batch.ProfilingInfo.Initialize();
@@ -102,31 +104,42 @@ namespace Lime
 			batchPool.Push(this);
 		}
 
-		private static Mesh<TVertex> AcquireMesh()
+		private static Mesh<TVertex> AcquireMesh(int vertexCount, int indexCount)
 		{
-			Mesh<TVertex> mesh;
-			if (meshPool.Count > 0) {
-				mesh = meshPool.Pop();
-			} else {
-				mesh = new Mesh<TVertex> {
-					Vertices = new TVertex[RenderBatchLimits.MaxVertices],
-					Indices = new ushort[RenderBatchLimits.MaxIndices],
-					AttributeLocations = new int[] {
-						ShaderPrograms.Attributes.Pos1,
-						ShaderPrograms.Attributes.Color1,
-						ShaderPrograms.Attributes.UV1,
-						ShaderPrograms.Attributes.UV2,
-					},
-				};
+			if (indexCount > MaxIndices) {
+				throw new InvalidOperationException("Too many indices");
 			}
-			mesh.VertexCount = 0;
-			mesh.IndexCount = 0;
+			Mesh<TVertex> mesh;
+			for (int i = meshPool.Count - 1; i >= 0; i--) {
+				mesh = meshPool[i];
+				if (mesh.Vertices.Length >= vertexCount && mesh.Indices.Length >= indexCount) {
+					Toolbox.Swap(meshPool, i, meshPool.Count - 1);
+					meshPool.RemoveAt(meshPool.Count - 1);
+					mesh.VertexCount = 0;
+					mesh.IndexCount = 0;
+					return mesh;
+				}
+			}
+			vertexCount = Math.Max(vertexCount * 2, MinVertices);
+			indexCount = Math.Clamp(indexCount * 2, MinIndices, ushort.MaxValue);
+			mesh = new Mesh<TVertex> {
+				Vertices = new TVertex[vertexCount],
+				Indices = new ushort[indexCount],
+				AttributeLocations = new int[] {
+					ShaderPrograms.Attributes.Pos1,
+					ShaderPrograms.Attributes.Color1,
+					ShaderPrograms.Attributes.UV1,
+					ShaderPrograms.Attributes.UV2,
+				},
+				VertexCount = 0,
+				IndexCount = 0,
+			};
 			return mesh;
 		}
 
 		private static void ReleaseMesh(Mesh<TVertex> item)
 		{
-			meshPool.Push(item);
+			meshPool.Add(item);
 		}
 	}
 }
