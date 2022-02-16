@@ -73346,6 +73346,23 @@ references:
   fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).GetItem
   nameWithType: WeakReferencePool<TKey, TValue>.GetItem
   nameWithType.vb: WeakReferencePool(Of TKey, TValue).GetItem
+- uid: Lime.WeakReferencePool`2.TryRemoveItem(`0)
+  name: TryRemoveItem(TKey)
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2_TryRemoveItem__0_
+  commentId: M:Lime.WeakReferencePool`2.TryRemoveItem(`0)
+  fullName: Lime.WeakReferencePool<TKey, TValue>.TryRemoveItem(TKey)
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).TryRemoveItem(TKey)
+  nameWithType: WeakReferencePool<TKey, TValue>.TryRemoveItem(TKey)
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).TryRemoveItem(TKey)
+- uid: Lime.WeakReferencePool`2.TryRemoveItem*
+  name: TryRemoveItem
+  href: api/Lime.WeakReferencePool-2.html#Lime_WeakReferencePool_2_TryRemoveItem_
+  commentId: Overload:Lime.WeakReferencePool`2.TryRemoveItem
+  isSpec: "True"
+  fullName: Lime.WeakReferencePool<TKey, TValue>.TryRemoveItem
+  fullName.vb: Lime.WeakReferencePool(Of TKey, TValue).TryRemoveItem
+  nameWithType: WeakReferencePool<TKey, TValue>.TryRemoveItem
+  nameWithType.vb: WeakReferencePool(Of TKey, TValue).TryRemoveItem
 - uid: Lime.WebBrowser
   name: WebBrowser
   href: api/Lime.WebBrowser.html
