@@ -219,19 +219,21 @@ namespace Tangerine.Core.Operations
 		public readonly int Frame;
 		public readonly IAnimator Animator;
 		public readonly IAnimationHost AnimationHost;
+		public readonly bool RemoveEmptyAnimator;
 
 		public override bool IsChangingDocument => true;
 
-		public static void Perform(IAnimator animator, int frame)
+		public static void Perform(IAnimator animator, int frame, bool removeEmptyAnimator = true)
 		{
-			DocumentHistory.Current.Perform(new RemoveKeyframe(animator, frame));
+			DocumentHistory.Current.Perform(new RemoveKeyframe(animator, frame, removeEmptyAnimator));
 		}
 
-		private RemoveKeyframe(IAnimator animator, int frame)
+		private RemoveKeyframe(IAnimator animator, int frame, bool removeEmptyAnimator)
 		{
 			Frame = frame;
 			Animator = animator;
 			AnimationHost = Animator.Owner;
+			RemoveEmptyAnimator = removeEmptyAnimator;
 		}
 
 		public sealed class Processor : OperationProcessor<RemoveKeyframe>
@@ -243,7 +245,7 @@ namespace Tangerine.Core.Operations
 				var kf = op.Animator.Keys.GetByFrame(op.Frame);
 				op.Save(new Backup { Keyframe = kf });
 				op.Animator.Keys.Remove(kf);
-				if (op.Animator.Keys.Count == 0) {
+				if (op.RemoveEmptyAnimator && op.Animator.Keys.Count == 0) {
 					op.AnimationHost.Animators.Remove(op.Animator);
 					Document.Current.RefreshSceneTree();
 				} else {

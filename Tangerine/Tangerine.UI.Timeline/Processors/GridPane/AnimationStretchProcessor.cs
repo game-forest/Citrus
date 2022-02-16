@@ -120,7 +120,9 @@ namespace Tangerine.UI.Timeline
 					saved = saved.Reverse();
 				}
 				foreach (var key in saved) {
-					RemoveKeyframe.Perform(animator, key.Frame);
+					// Keyframes will be added back so animator doesn't need to be removed even if it is empty.
+					// Also, foreach is iterating over collection of animators and removing animator will cause "collection was modified" error.
+					RemoveKeyframe.Perform(animator, key.Frame, removeEmptyAnimator: false);
 				}
 				foreach (var key in saved) {
 					double relpos = savedPositions[key];
