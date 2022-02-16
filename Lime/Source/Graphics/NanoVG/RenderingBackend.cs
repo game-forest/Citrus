@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Lime.NanoVG
 {
 	internal class RenderingBackend : IRenderingBackend
 	{
 		private readonly Material material = new Material();
-		
+
 		private readonly StencilState fillStencilState = new StencilState
 		{
 			Enable = true,
@@ -140,7 +141,6 @@ namespace Lime.NanoVG
 					);
 				}
 			}
-			Renderer.Flush();
 		}
 
 		private enum RenderingType
@@ -148,7 +148,6 @@ namespace Lime.NanoVG
 			FillGradient,
 			FillImage,
 			FillStencil,
-			Triangles
 		}
 
 		enum PrimitiveType
@@ -157,7 +156,7 @@ namespace Lime.NanoVG
 			TriangleStrip
 		}
 		
-		private void RenderTriangles(
+		private unsafe void RenderTriangles(
 			ref Paint paint,
 			ref Scissor scissor,
 			float width, 
@@ -221,6 +220,18 @@ namespace Lime.NanoVG
 			p.StrokeThr = -1;
 			p.TexType = 0;
 			p.Type = (float)renderingType;
+			var paramsChanged = false;
+			var p1 = (long*)Unsafe.AsPointer(ref material.FillParams);
+			var p2 = (long*)&p;
+			for (int i = sizeof(FillParams) / 8; i > 0; i--) {
+				if (*p1++ != *p2++) {
+					paramsChanged = true;
+					break;
+				}
+			}
+			if (paramsChanged) {
+				Renderer.Flush();
+			}
 			material.FillParams = p;
 			if (primitiveType == PrimitiveType.TriangleFan) {
 				Renderer.DrawTriangleFan(null, null, material, vertices.Array, vertices.Count, vertices.Offset);
