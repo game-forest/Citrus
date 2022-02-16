@@ -310,7 +310,7 @@ namespace Lime
 			}
 			return hasEasings.Value;
 		}
-
+		
 		public class AnimationData
 		{
 			private static readonly WeakReferencePool<string, AnimationData> weakReferencePool =
@@ -329,13 +329,19 @@ namespace Lime
 				AnimationData instance = null;
 				path = FixAntPath(path);
 				path += ".ant";
-				if (Loading?.Value?.Invoke(path, ref instance) ?? false) {
-					Loaded?.Value?.Invoke(path, instance);
-					return instance;
+				bool loaded = Loading?.Value?.Invoke(path, ref instance) ?? false;
+				if (!loaded) {
+					instance = weakReferencePool.GetItem(path);
 				}
-				instance = weakReferencePool.GetItem(path);
 				Loaded?.Value?.Invoke(path, instance);
 				return instance;
+			}
+
+			internal static void InvalidateCache(string path)
+			{
+				path = FixAntPath(path);
+				path += ".ant";
+				weakReferencePool.TryRemoveItem(path);
 			}
 		}
 

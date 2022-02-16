@@ -214,6 +214,7 @@ namespace Tangerine.Core
 					foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 						animator.Owner.Animators.Remove(animator);
 					}
+					Animation.AnimationData.InvalidateCache(animationPathWithoutExt);
 				}
 				InternalPersistence.Instance.WriteToBundle(cacheBundle, path, model, Persistence.Format.Binary,
 					cookingUnitHash, AssetAttributes.None);
