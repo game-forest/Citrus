@@ -80,6 +80,7 @@
     <Compile Include="Operations\SelectSceneItem.cs" />
     <Compile Include="Operations\SelectSceneItemRange.cs" />
     <Compile Include="Operations\SetAnimatorTargetPropertyPath.cs" />
+    <Compile Include="PropertyInspection.cs" />
     <Compile Include="PropertyValidator.cs" />
     <Compile Include="SceneItem.cs" />
     <Compile Include="SceneTreeBuilder.cs" />

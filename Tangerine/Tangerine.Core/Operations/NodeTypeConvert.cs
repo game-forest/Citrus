@@ -129,6 +129,17 @@ namespace Tangerine.Core.Operations
 						$"{animator.TargetPropertyPath}, which doesn't exist in {destType}, skipping.");
 					continue;
 				}
+				var property = Lime.AnimationUtils.GetPropertyByPath(to, animator.TargetPropertyPath);
+				if (!PropertyInspection.CanAnimateProperty(destType, property.PropertyData.Info)) {
+					Console.WriteLine($"[Warning] Node {from} has animator on property " +
+						$"{animator.TargetPropertyPath}, which is not animable in {destType}, skipping.");
+					continue;
+				}
+				if (animator.TargetPropertyPath == nameof(Node.Trigger) && !NodeCompositionValidator.CanHaveChildren(destType)) {
+					Console.WriteLine($"[Warning] Node {from} has animator on property " +
+						$"{nameof(Node.Trigger)}, but {destType} cannot have children nodes, skipping.");
+					continue;
+				}
 				to.Animators.Add(Cloner.Clone(animator));
 			}
 			if (NodeCompositionValidator.CanHaveChildren(destType)) {
