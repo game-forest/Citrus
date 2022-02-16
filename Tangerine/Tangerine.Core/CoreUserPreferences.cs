@@ -65,7 +65,7 @@ namespace Tangerine.Core
 		public bool LockLayout { get; set; }
 
 		[YuzuOptional]
-		public bool AnimationPanelReversedOrder { get; set; }
+		public bool AnimationsPanelDisplayRootAtTheEnd { get; set; }
 
 		[YuzuOptional]
 		public Vector2 ConflictingAnimatorsWindowSize { get; set; }
