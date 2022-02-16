@@ -659,6 +659,9 @@ namespace Tests.Types
 
 		protected override Lime.RenderObject GetRenderObject()
 		{
+			if (particles.Count == 0) {
+				return null;
+			}
 			var ro = RenderObjectPool<RenderObject>.Acquire();
 			var linkageNode = GetLinkageNode();
 			var (world, worldInverse) = linkageNode?.AsNode3D != null
@@ -711,8 +714,6 @@ namespace Tests.Types
 			meshes.Clear();
 			Mesh<Mesh3D.Vertex> currentMesh = null;
 			IMaterial currentMaterial = null;
-			var vertices = new List<Mesh3D.Vertex>();
-			var indicies = new List<ushort>();
 			foreach (var p in particles) {
 				if (p.CurrentColor.A <= 0) {
 					continue;
@@ -738,55 +739,46 @@ namespace Tests.Types
 				if (currentMaterial == null) {
 					currentMaterial = material;
 					currentMesh = AcquireMesh();
-				} else if (currentMaterial != material) {
-					currentMesh.Vertices = vertices.ToArray();
-					currentMesh.Indices = indicies.ToArray();
-					currentMesh.DirtyFlags |= MeshDirtyFlags.VerticesIndices;
+				} else if (
+					currentMaterial != material
+					|| currentMesh.VertexCount + 4 > currentMesh.Vertices.Length
+				) {
+					currentMesh.DirtyFlags |= MeshDirtyFlags.Vertices;
 					ro.RenderData.Add((currentMesh, currentMaterial));
 					currentMaterial = material;
 					currentMesh = AcquireMesh();
 					meshes.Add(currentMesh);
-					vertices.Clear();
-					indicies.Clear();
 				}
 				var position = new Vector3(-Vector2.Half, 0);
 				var size = Vector2.One;
-				var index = (ushort)vertices.Count;
 				var v0 = position * transform;
 				var v1 = (position + new Vector3(size.X, 0, 0)) * transform;
 				var v2 = (position + new Vector3(size.X, size.Y, 0)) * transform;
 				var v3 = (position + new Vector3(0, size.Y, 0)) * transform;
-				vertices.Add(new Mesh3D.Vertex {
+				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v0,
 					Color = color,
 					UV1 = Vector2.Zero,
-				});
-				vertices.Add(new Mesh3D.Vertex {
+				};
+				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v1,
 					Color = color,
 					UV1 = new Vector2(1, 0),
-				});
-				vertices.Add(new Mesh3D.Vertex {
+				};
+				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v2,
 					Color = color,
 					UV1 = Vector2.One,
-				});
-				vertices.Add(new Mesh3D.Vertex {
+				};
+				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v3,
 					Color = color,
 					UV1 = new Vector2(0, 1),
-				});
-				indicies.Add(index);
-				indicies.Add((ushort)(index + 1));
-				indicies.Add((ushort)(index + 3));
-				indicies.Add((ushort)(index + 1));
-				indicies.Add((ushort)(index + 2));
-				indicies.Add((ushort)(index + 3));
+				};
 			}
-			if (vertices.Count > 0) {
-				currentMesh.Vertices = vertices.ToArray();
-				currentMesh.Indices = indicies.ToArray();
-				currentMesh.DirtyFlags |= MeshDirtyFlags.VerticesIndices;
+			if (currentMesh != null && currentMesh.VertexCount > 0) {
+				currentMesh.DirtyFlags |= MeshDirtyFlags.Vertices;
+				meshes.Add(currentMesh);
 				ro.RenderData.Add((currentMesh, currentMaterial));
 			}
 			return ro;
@@ -810,22 +802,28 @@ namespace Tests.Types
 						},
 						Topology = PrimitiveTopology.TriangleList,
 						DirtyFlags = MeshDirtyFlags.All,
+						Vertices = new Mesh3D.Vertex[400],
+						Indices = new ushort[600],
 					};
+					for (ushort i = 0, index = 0; i < mesh.Indices.Length; i += 6, index += 4) {
+						mesh.Indices[i] = index;
+						mesh.Indices[i + 1] = (ushort)(index + 1);
+						mesh.Indices[i + 2] = (ushort)(index + 3);
+						mesh.Indices[i + 3] = (ushort)(index + 1);
+						mesh.Indices[i + 4] = (ushort)(index + 2);
+						mesh.Indices[i + 5] = (ushort)(index + 3);
+					}
 				}
 			}
-			mesh.VertexCount = -1;
-			mesh.IndexCount = -1;
+			mesh.VertexCount = 0;
 			return mesh;
 		}
 
 		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> mesh)
 		{
-			mesh.Vertices = null;
-			mesh.Indices = null;
-			mesh.IndexCount = -1;
-			mesh.VertexCount = -1;
 			Window.Current.InvokeOnRendering(() => {
 				lock (meshPool) {
+					mesh.VertexCount = -1;
 					meshPool.Enqueue(mesh);
 				}
 			});
@@ -869,7 +867,6 @@ namespace Tests.Types
 		private class RenderObject : Lime.RenderObject3D
 		{
 			public Matrix44 World;
-			public Color4 Color;
 			public List<(Mesh<Mesh3D.Vertex>, IMaterial)> RenderData =
 				new List<(Mesh<Mesh3D.Vertex>, IMaterial)>();
 
@@ -881,7 +878,7 @@ namespace Tests.Types
 				Renderer.World = World;
 				foreach (var (mesh, material) in RenderData) {
 					material.Apply(0);
-					mesh.DrawIndexed(0, mesh.Indices.Length);
+					mesh.DrawIndexed(0, mesh.VertexCount / 4 * 6);
 				}
 				Renderer.PopState();
 			}
@@ -890,14 +887,6 @@ namespace Tests.Types
 			{
 				RenderData.Clear();
 			}
-		}
-
-		private struct ParticleRenderData
-		{
-			public ITexture Texture;
-			public Matrix32 Transform;
-			public Color4 Color;
-			public float Angle;
 		}
 	}
 }
