@@ -12,6 +12,8 @@ using Node = Lime.Node;
 
 namespace Tangerine
 {
+	using TimelineAnimationCommandData = Tuple<Node, Action<SceneItem, SceneItem>>;
+
 	public class GroupNodes : DocumentCommandHandler
 	{
 		public override void ExecuteTransaction()
@@ -71,19 +73,37 @@ namespace Tangerine
 
 		private AnimationType type;
 
-		private Node Node =>
-			type == AnimationType.ZeroPose ?
-				(TimelineCommands.AddZeroPoseAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item1 :
-			type == AnimationType.Compound ?
-				(TimelineCommands.AddCompoundAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item1 :
-			(TimelineCommands.AddAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item1;
+		private Node Node
+		{
+			get
+			{
+				switch (type) {
+					case AnimationType.ZeroPose:
+						return (TimelineCommands.AddZeroPoseAnimation.UserData as TimelineAnimationCommandData)?.Item1;
+					case AnimationType.Compound:
+						return (TimelineCommands.AddCompoundAnimation.UserData as TimelineAnimationCommandData)?.Item1;
+					case AnimationType.Default:
+						return (TimelineCommands.AddAnimation.UserData as TimelineAnimationCommandData)?.Item1;
+				}
+				throw new InvalidDataException();
+			}
+		}
 
-		private Action<SceneItem, SceneItem> Callback =>
-			type == AnimationType.ZeroPose ?
-				(TimelineCommands.AddZeroPoseAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item2 :
-			type == AnimationType.Compound ?
-				(TimelineCommands.AddCompoundAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item2 :
-			(TimelineCommands.AddAnimation.UserData as Tuple<Node, Action<SceneItem, SceneItem>>)?.Item2;
+		private Action<SceneItem, SceneItem> Callback
+		{
+			get
+			{
+				switch (type) {
+					case AnimationType.ZeroPose:
+						return (TimelineCommands.AddZeroPoseAnimation.UserData as TimelineAnimationCommandData)?.Item2;
+					case AnimationType.Compound:
+						return (TimelineCommands.AddCompoundAnimation.UserData as TimelineAnimationCommandData)?.Item2;
+					case AnimationType.Default:
+						return (TimelineCommands.AddAnimation.UserData as TimelineAnimationCommandData)?.Item2;
+				}
+				throw new InvalidDataException();
+			}
+		}
 
 		public override bool GetEnabled() =>
 			Node != null &&
