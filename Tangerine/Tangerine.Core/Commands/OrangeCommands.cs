@@ -39,7 +39,7 @@ namespace Tangerine.Core.Commands
 				}
 				return null;
 			}
-			_ = ExecuteAsync(WrappedAction);
+			_ = InternalExecuteAsync(WrappedAction);
 		}
 
 		protected async System.Threading.Tasks.Task<T> ExecuteAsync<T>(Func<T> function)
@@ -56,7 +56,11 @@ namespace Tangerine.Core.Commands
 					AssetBundle.SetCurrent(savedAssetBundle);
 				}
 			}
+			return await InternalExecuteAsync(WrappedFunction);
+		}
 
+		private async System.Threading.Tasks.Task<T> InternalExecuteAsync<T>(Func<T> function)
+		{
 			var result = default(T);
 			try {
 				if (isExecuting) {
@@ -65,7 +69,7 @@ namespace Tangerine.Core.Commands
 				}
 				isExecuting = true;
 				Executing?.Invoke();
-				result = await System.Threading.Tasks.Task<T>.Factory.StartNew(WrappedFunction);
+				result = await System.Threading.Tasks.Task<T>.Factory.StartNew(function);
 				await System.Threading.Tasks.Task.Delay(500);
 			} catch (System.Exception e) {
 				Console.WriteLine(e);
