@@ -4314,38 +4314,38 @@ references:
   fullName.vb: Lime.Animator(Of T).UserData
   nameWithType: Animator<T>.UserData
   nameWithType.vb: Animator(Of T).UserData
-- uid: Lime.Animator`1.Value1
-  name: Value1
-  href: api/Lime.Animator-1.html#Lime_Animator_1_Value1
-  commentId: F:Lime.Animator`1.Value1
-  fullName: Lime.Animator<T>.Value1
-  fullName.vb: Lime.Animator(Of T).Value1
-  nameWithType: Animator<T>.Value1
-  nameWithType.vb: Animator(Of T).Value1
-- uid: Lime.Animator`1.Value2
-  name: Value2
-  href: api/Lime.Animator-1.html#Lime_Animator_1_Value2
-  commentId: F:Lime.Animator`1.Value2
-  fullName: Lime.Animator<T>.Value2
-  fullName.vb: Lime.Animator(Of T).Value2
-  nameWithType: Animator<T>.Value2
-  nameWithType.vb: Animator(Of T).Value2
-- uid: Lime.Animator`1.Value3
-  name: Value3
-  href: api/Lime.Animator-1.html#Lime_Animator_1_Value3
-  commentId: F:Lime.Animator`1.Value3
-  fullName: Lime.Animator<T>.Value3
-  fullName.vb: Lime.Animator(Of T).Value3
-  nameWithType: Animator<T>.Value3
-  nameWithType.vb: Animator(Of T).Value3
-- uid: Lime.Animator`1.Value4
-  name: Value4
-  href: api/Lime.Animator-1.html#Lime_Animator_1_Value4
-  commentId: F:Lime.Animator`1.Value4
-  fullName: Lime.Animator<T>.Value4
-  fullName.vb: Lime.Animator(Of T).Value4
-  nameWithType: Animator<T>.Value4
-  nameWithType.vb: Animator(Of T).Value4
+- uid: Lime.Animator`1.value1
+  name: value1
+  href: api/Lime.Animator-1.html#Lime_Animator_1_value1
+  commentId: F:Lime.Animator`1.value1
+  fullName: Lime.Animator<T>.value1
+  fullName.vb: Lime.Animator(Of T).value1
+  nameWithType: Animator<T>.value1
+  nameWithType.vb: Animator(Of T).value1
+- uid: Lime.Animator`1.value2
+  name: value2
+  href: api/Lime.Animator-1.html#Lime_Animator_1_value2
+  commentId: F:Lime.Animator`1.value2
+  fullName: Lime.Animator<T>.value2
+  fullName.vb: Lime.Animator(Of T).value2
+  nameWithType: Animator<T>.value2
+  nameWithType.vb: Animator(Of T).value2
+- uid: Lime.Animator`1.value3
+  name: value3
+  href: api/Lime.Animator-1.html#Lime_Animator_1_value3
+  commentId: F:Lime.Animator`1.value3
+  fullName: Lime.Animator<T>.value3
+  fullName.vb: Lime.Animator(Of T).value3
+  nameWithType: Animator<T>.value3
+  nameWithType.vb: Animator(Of T).value3
+- uid: Lime.Animator`1.value4
+  name: value4
+  href: api/Lime.Animator-1.html#Lime_Animator_1_value4
+  commentId: F:Lime.Animator`1.value4
+  fullName: Lime.Animator<T>.value4
+  fullName.vb: Lime.Animator(Of T).value4
+  nameWithType: Animator<T>.value4
+  nameWithType.vb: Animator(Of T).value4
 - uid: Lime.Animator`1.ValueType
   name: ValueType
   href: api/Lime.Animator-1.html#Lime_Animator_1_ValueType
@@ -18675,12 +18675,12 @@ references:
   isSpec: "True"
   fullName: Lime.EditorParams.MouseSelectionThreshold
   nameWithType: EditorParams.MouseSelectionThreshold
-- uid: Lime.EditorParams.numberStyle
-  name: numberStyle
-  href: api/Lime.EditorParams.html#Lime_EditorParams_numberStyle
-  commentId: F:Lime.EditorParams.numberStyle
-  fullName: Lime.EditorParams.numberStyle
-  nameWithType: EditorParams.numberStyle
+- uid: Lime.EditorParams.NumberStyle
+  name: NumberStyle
+  href: api/Lime.EditorParams.html#Lime_EditorParams_NumberStyle
+  commentId: F:Lime.EditorParams.NumberStyle
+  fullName: Lime.EditorParams.NumberStyle
+  nameWithType: EditorParams.NumberStyle
 - uid: Lime.EditorParams.OffsetContextMenu
   name: OffsetContextMenu
   href: api/Lime.EditorParams.html#Lime_EditorParams_OffsetContextMenu
