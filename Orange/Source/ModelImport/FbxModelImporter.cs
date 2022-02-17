@@ -168,7 +168,9 @@ namespace Orange.FbxImporter
 					if (cookingRules.TargetRules[Target.RootTarget].WrapMode != mode) {
 						cookingRules.TargetRules[Target.RootTarget].WrapMode = mode;
 						cookingRules.SourcePath = rulesPath + ".txt";
-						cookingRules.TargetRules[Target.RootTarget].Override(nameof(ParticularCookingRules.WrapMode));
+						cookingRules.TargetRules[Target.RootTarget].Override(
+							nameof(ParticularCookingRules.WrapMode), propagate: false, rules
+						);
 						cookingRules.DeduceEffectiveRules(options.Target);
 						cookingRules.Save();
 					}

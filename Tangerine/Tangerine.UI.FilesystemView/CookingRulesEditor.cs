@@ -179,7 +179,7 @@ namespace Tangerine.UI.FilesystemView
 						rootAdded = true;
 						CreateHeaderWidgets(rulesMap, path, yi, headerWidget, overridesWidget, parent);
 					}
-					if (rules.FieldOverrides.Contains(yi)) {
+					if (rules.FieldOverrides.ContainsKey(yi)) {
 						overridesWidget.AddNode(CreateOverridesWidgets(target, yi, parent, rules == affectingRules));
 					}
 				}
@@ -202,7 +202,7 @@ namespace Tangerine.UI.FilesystemView
 				foreach (var t in targets) {
 					if (
 						rules.TargetRules.TryGetValue(t, out ParticularCookingRules targetRules)
-						&& targetRules.FieldOverrides.Contains(yi)
+						&& targetRules.FieldOverrides.ContainsKey(yi)
 					) {
 						return targetRules;
 					}
@@ -319,7 +319,7 @@ namespace Tangerine.UI.FilesystemView
 				var targetRules = RulesForActiveTarget(rules);
 				targetRules.FieldOverrides.Remove(yi);
 				rules.Save();
-				if (!rules.HasOverrides()) {
+				if (!rules.HasOwnOverrides()) {
 					var acr = GetAssociatedCookingRules(rulesMap, rules.SystemSourcePath);
 					if (!acr.SystemSourcePath.EndsWith(key)) {
 						rulesMap[key] = rules.Parent;
@@ -341,7 +341,7 @@ namespace Tangerine.UI.FilesystemView
 			} else {
 				var associatedRules = GetAssociatedCookingRules(rulesMap, path, true);
 				var targetRules = RulesForActiveTarget(associatedRules);
-				targetRules.Override(yi.Name);
+				targetRules.Override(yi.Name, false);
 				associatedRules.Save();
 				addRemoveField.Texture = IconPool.GetTexture("Filesystem.Cross");
 				overridesWidget.AddNode(CreateOverridesWidgets(ActiveTarget, yi, associatedRules, true));
@@ -404,7 +404,7 @@ namespace Tangerine.UI.FilesystemView
 				ShowLabel = false,
 				PropertySetter = (owner, name, value) => {
 					yi.SetValue(owner, value);
-					targetRules.Override(name);
+					targetRules.Override(name, false);
 					rules.DeduceEffectiveRules(target);
 					rules.Save();
 				},
@@ -456,7 +456,7 @@ namespace Tangerine.UI.FilesystemView
 		private bool IsOverridedByAssociatedCookingRules(CookingRulesMap rulesMap, string path, Meta.Item yi)
 		{
 			var rules = GetAssociatedCookingRules(rulesMap, path);
-			return rules != null && RulesForActiveTarget(rules).FieldOverrides.Contains(yi);
+			return rules != null && RulesForActiveTarget(rules).FieldOverrides.ContainsKey(yi);
 		}
 
 		private ParticularCookingRules RulesForActiveTarget(CookingRules cookingRules)

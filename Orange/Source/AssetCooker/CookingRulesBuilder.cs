@@ -175,7 +175,8 @@ namespace Orange
 
 		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.Value.ToString(this)));
 
-		public HashSet<Meta.Item> FieldOverrides;
+		// Yuzu.Meta.Item for the field and flag if override should be propagated down the directory hierarchy
+		public Dictionary<Meta.Item, (bool Propagate, ParticularCookingRules Source)> FieldOverrides;
 
 		public ParticularCookingRules Parent;
 
@@ -210,9 +211,9 @@ namespace Orange
 			}
 		}
 
-		public void Override(string fieldName)
+		public void Override(string fieldName, bool propagate, ParticularCookingRules source)
 		{
-			FieldOverrides.Add(fieldNameToYuzuMetaItemCache[fieldName]);
+			FieldOverrides[fieldNameToYuzuMetaItemCache[fieldName]] = (propagate, source);
 		}
 
 		public static ParticularCookingRules GetDefault(TargetPlatform platform)
@@ -235,7 +236,7 @@ namespace Orange
 				ADPCMLimit = 100,
 				AtlasOptimization = AtlasOptimization.Memory,
 				ModelCompression = ModelCompression.Deflate,
-				FieldOverrides = new HashSet<Meta.Item>(),
+				FieldOverrides = new Dictionary<Meta.Item, (bool, ParticularCookingRules)>(),
 				AtlasItemPadding = 1,
 				AtlasDebug = false,
 				MaxAtlasSize = 2048,
@@ -246,7 +247,12 @@ namespace Orange
 		public ParticularCookingRules InheritClone()
 		{
 			var r = (ParticularCookingRules)MemberwiseClone();
-			r.FieldOverrides = new HashSet<Meta.Item>();
+			r.FieldOverrides = new Dictionary<Meta.Item, (bool, ParticularCookingRules)>();
+			foreach (var (k, v) in FieldOverrides) {
+				if (v.Propagate) {
+					r.FieldOverrides.Add(k, v);
+				}
+			}
 			r.Parent = this;
 			return r;
 		}
@@ -387,11 +393,11 @@ namespace Orange
 		private void SaveCookingRules(StreamWriter sw, ParticularCookingRules rules, Target target)
 		{
 			var targetString = target == Target.RootTarget ? string.Empty : $"({target.Name})";
-			foreach (var yi in rules.FieldOverrides) {
+			foreach (var (yi, (propagate, source)) in rules.FieldOverrides) {
 				var value = yi.GetValue(rules);
 				var valueString = FieldValueToString(yi, value);
-				if (!string.IsNullOrEmpty(valueString)) {
-					sw.Write($"{yi.Name}{targetString} {valueString}\n");
+				if (!string.IsNullOrEmpty(valueString) && source == rules) {
+					sw.Write($"{(propagate ? "!" : string.Empty)}{yi.Name}{targetString} {valueString}\n");
 				}
 			}
 		}
@@ -409,7 +415,7 @@ namespace Orange
 				while (targetStack.Count != 0) {
 					t = targetStack.Pop();
 					var targetRules = TargetRules[t];
-					foreach (var i in targetRules.FieldOverrides) {
+					foreach (var (i, propagate) in targetRules.FieldOverrides) {
 						i.SetValue(EffectiveRules, i.GetValue(targetRules));
 					}
 					// TODO: implement this workaround in a general way
@@ -432,11 +438,11 @@ namespace Orange
 			}
 		}
 
-		public bool HasOverrides()
+		public bool HasOwnOverrides()
 		{
 			var r = false;
 			foreach (var cr in TargetRules) {
-				r = r || cr.Value.FieldOverrides.Count > 0;
+				r = r || cr.Value.FieldOverrides.Any(o => !o.Value.Propagate || o.Value.Source == cr.Value);
 			}
 			return r;
 		}
@@ -647,6 +653,11 @@ namespace Orange
 						word = word.Trim();
 					}
 					var ruleTarget = Target.RootTarget;
+					bool propagateRule = false;
+					if (words[0].StartsWith("!")) {
+						words[0] = words[0][1..];
+						propagateRule = true;
+					}
 					if (words[0].EndsWith(")")) {
 						int cut = words[0].IndexOf('(');
 						if (cut >= 0) {
@@ -667,7 +678,7 @@ namespace Orange
 					if (ruleTarget != Target.RootTarget && !CanSetRulePerTarget(words[0], ruleTarget)) {
 						throw new Lime.Exception($"Invalid platform {target.Platform} for cooking rule {words[0]}");
 					}
-					ParseRule(targetRules, words, path, bundle);
+					ParseRule(targetRules, words, path, bundle, propagateRule);
 				}
 			} catch (Lime.Exception e) {
 				if (!Path.IsPathRooted(path)) {
@@ -694,7 +705,11 @@ namespace Orange
 		}
 
 		private static void ParseRule(
-			ParticularCookingRules rules, IReadOnlyList<string> words, string path, AssetBundle bundle
+			ParticularCookingRules rules,
+			IReadOnlyList<string> words,
+			string path,
+			AssetBundle bundle,
+			bool propagateRule
 		) {
 			try {
 				switch (words[0]) {
@@ -785,7 +800,7 @@ namespace Orange
 				default:
 					throw new Lime.Exception("Unknown attribute {0}", words[0]);
 				}
-				rules.Override(words[0]);
+				rules.Override(words[0], propagateRule, rules);
 			} catch (System.Exception e) {
 				Debug.Write("Failed to parse cooking rules: {0} {1} {2}", string.Join(",", words), path, e);
 				throw;
