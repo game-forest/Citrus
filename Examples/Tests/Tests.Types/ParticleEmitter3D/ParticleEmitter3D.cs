@@ -507,7 +507,7 @@ namespace Tests.Types
 			switch (Shape) {
 				case EmitterShape3D.Point:
 					position = Vector3.Zero;
-					p.RegularDirection = GetRandomDirection(Direction, DirectionSpread);
+					p.RegularDirection = GetRandomDirection(Direction * rotation, DirectionSpread);
 					break;
 				default:
 					throw new Lime.Exception("Invalid particle emitter shape");
