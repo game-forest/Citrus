@@ -522,11 +522,15 @@ namespace Lime
 			}
 			var linkageWidget = GetLinkageWidget();
 			if (linkageWidget != null) {
-				// AABB for particles is calculated in space of linked widget (and it's ok)
-				// But ParticleEmitter is responsible of drawing particles
-				// So we should expand its bounding box to pass ClipRegionTest
-				currentBoundingRect = currentBoundingRect.Transform(linkageWidget.CalcTransitionToSpaceOf(this));
+				// AABB for particles is calculated in space of linked widget,
+				// so we need to transform it to local coordinates.
+				// Ensure bounding rect orientation because rotation and scale can alter it.
+				currentBoundingRect = currentBoundingRect
+				  .ToQuadrangle()
+				  .Transform(linkageWidget.CalcTransitionToSpaceOf(this))
+				  .ToAABB();
 			}
+			// We do not narrow bounding rects anywhere.
 			ExpandBoundingRect(currentBoundingRect);
 		}
 
