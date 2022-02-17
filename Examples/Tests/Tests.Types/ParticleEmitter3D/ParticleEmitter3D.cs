@@ -721,10 +721,16 @@ namespace Tests.Types
 				var texture = p.Modifier.GetTexture((int)p.TextureIndex - 1);
 				var color = p.CurrentColor;
 				if (BillboardMode == BillboardMode.ViewPointOriented) {
-					billboardingMatrix = Matrix44.CreateLookAtRotation(cameraPosition, p.FullPosition, Vector3.UnitY);
+					n = (cameraPosition - p.FullPosition).Normalized;
+					r = Vector3.CrossProduct(Vector3.UnitY, n).Normalized;
+					u = Vector3.CrossProduct(n, r);
+					// Because Forward is incorrect.
+					billboardingMatrix.Backward = n;
+					billboardingMatrix.Up = u;
+					billboardingMatrix.Right = r;
 				}
 				var transform =
-					Matrix44.CreateScale(p.ScaleCurrent * new Vector3(p.Modifier.Size, 1))
+					Matrix44.CreateScale(p.ScaleCurrent * new Vector3(p.Modifier.Size.X, -p.Modifier.Size.Y, 1))
 					* Matrix44.CreateRotationZ(p.Angle * Mathf.DegToRad)
 					* billboardingMatrix
 					* Matrix44.CreateTranslation(p.FullPosition);
