@@ -36,7 +36,7 @@ namespace Lime
 			var root = new Frame {
 				Id = "Root",
 				Pivot = Vector2.Half,
-				Size = Vector2.One
+				Size = Vector2.One,
 			};
 			Nodes.Add(root);
 		}
@@ -62,7 +62,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override bool PartialHitTest(ref HitTestArgs args)
+		protected internal override bool PartialHitTest(ref HitTestArgs args)
 		{
 			if (Widget == null) {
 				return false;
@@ -73,7 +73,9 @@ namespace Lime
 			if (distance.HasValue && distance <= args.Distance) {
 				var oldPoint = args.Point;
 				try {
-					args.Point = (Vector2)GlobalTransformInverse.TransformVector(ray.Position + ray.Direction * distance.Value) * new Vector2(1, -1);
+					args.Point = (Vector2)GlobalTransformInverse.TransformVector(
+						ray.Position + ray.Direction * distance.Value
+					) * new Vector2(1, -1);
 					Widget.RenderChainBuilder?.AddToRenderChain(renderChain);
 					if (renderChain.HitTest(ref args)) {
 						args.Distance = distance.Value;

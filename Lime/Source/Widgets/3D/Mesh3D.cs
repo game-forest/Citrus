@@ -159,7 +159,8 @@ namespace Lime
 		public SkinningMode SkinningMode
 		{
 			get => skinningMode;
-			set {
+			set
+			{
 				if (skinningMode != value) {
 					skinningMode = value;
 				}
@@ -187,7 +188,7 @@ namespace Lime
 			Components.Add(new UpdatableNodeBehavior());
 		}
 
-		internal protected override bool PartialHitTest (ref HitTestArgs args)
+		protected internal override bool PartialHitTest(ref HitTestArgs args)
 		{
 			float distance;
 			if (!HitTestTarget) {
@@ -327,7 +328,7 @@ namespace Lime
 					Mesh = ro.Meshes.Count - 1,
 					Material = ro.Materials.Count - 1,
 					FirstBone = firstBone,
-					BoneCount = submesh.Bones.Count
+					BoneCount = submesh.Bones.Count,
 				});
 				firstBone += submesh.Bones.Count;
 			}
@@ -360,7 +361,6 @@ namespace Lime
 			public List<IMaterial> Materials = new List<IMaterial>();
 			public List<SubmeshRenderData> Submeshes = new List<SubmeshRenderData>();
 
-
 			protected override void OnRelease()
 			{
 				Meshes.Clear();
@@ -384,7 +384,7 @@ namespace Lime
 						var skin = material as IMaterialSkin;
 						if (skin != null) {
 							if (boneTransforms.Length < submesh.BoneCount ||
-							    boneTransforms.Length < submesh.BoneCount) {
+								boneTransforms.Length < submesh.BoneCount) {
 								boneTransforms = new Matrix44[submesh.BoneCount];
 							}
 							for (var i = 0; i < submesh.BoneCount; i++) {
@@ -414,8 +414,11 @@ namespace Lime
 							}
 							for (var i = 0; i < submesh.BoneCount; i++) {
 								var bone = submesh.FirstBone + i;
-								DecomposeToDoubleQuaternions(BoneBindPoses[bone] * Bones[bone] * WorldInverse,
-									out dualQuaternionPartA[i], out dualQuaternionPartB[i]);
+								DecomposeToDoubleQuaternions(
+									BoneBindPoses[bone] * Bones[bone] * WorldInverse,
+									out dualQuaternionPartA[i],
+									out dualQuaternionPartB[i]
+								);
 							}
 							skin.SkinEnabled = submesh.BoneCount > 0;
 							skin.SkinningMode = SkinningMode;

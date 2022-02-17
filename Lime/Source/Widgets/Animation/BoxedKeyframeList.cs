@@ -31,7 +31,7 @@ namespace Lime
 			Add(new Keyframe<T> {
 				Frame = frame,
 				Value = (T)value,
-				Function = function
+				Function = function,
 			});
 		}
 
@@ -45,7 +45,7 @@ namespace Lime
 			AddOrdered(new Keyframe<T> {
 				Frame = frame,
 				Value = (T)value,
-				Function = function
+				Function = function,
 			});
 		}
 

@@ -29,8 +29,9 @@ namespace Tangerine.UI.AnimeshEditor
 				(p2.X - p3.X) * (p1.Y - p3.Y);
 		}
 
-		public static float DistanceFromPointToLine(Vector2 point, Vector2 p1, Vector2 p2, out Vector2 intersectionPoint)
-		{
+		public static float DistanceFromPointToLine(
+			Vector2 point, Vector2 p1, Vector2 p2, out Vector2 intersectionPoint
+		) {
 			var d = Vector2.Distance(p1, p2);
 			if (d <= 1.0f) {
 				intersectionPoint = p1;
@@ -59,8 +60,9 @@ namespace Tangerine.UI.AnimeshEditor
 			return distance <= threshold;
 		}
 
-		public static bool PointLineIntersection(Vector2 point, Vector2 p1, Vector2 p2, float threshold, out float distance)
-		{
+		public static bool PointLineIntersection(
+			Vector2 point, Vector2 p1, Vector2 p2, float threshold, out float distance
+		) {
 			var len = Vector2.Distance(p1, p2);
 			distance = DistanceFromPointToLine(point, p1, p2, out var intersectionPoint);
 			return
@@ -81,11 +83,12 @@ namespace Tangerine.UI.AnimeshEditor
 			);
 		}
 
-		public static bool LineLineIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
-		{
+		public static bool LineLineIntersection(
+			Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint
+		) {
 			intersectionPoint = new Vector2(float.NaN, float.NaN);
 			var d = (a1.X - b1.X) * (a2.Y - b2.Y) - (a1.Y - b1.Y) * (a2.X - b2.X);
-			var uNumerator = ((a1.Y - b1.Y) * (a1.X - a2.X) - (a1.X - b1.X) * (a1.Y - a2.Y));
+			var uNumerator = (a1.Y - b1.Y) * (a1.X - a2.X) - (a1.X - b1.X) * (a1.Y - a2.Y);
 			if (Mathf.Abs(d) <= Mathf.ZeroTolerance) {
 				return uNumerator == 0;
 			}
@@ -117,11 +120,16 @@ namespace Tangerine.UI.AnimeshEditor
 			return intersectionPoints.Count % 2 == 1;
 		}
 
-		public static bool LinePolygonIntersection(Vector2 p1, Vector2 p2, Vector2[] polygon, out List<Vector2> intersectionPoints)
-		{
+		public static bool LinePolygonIntersection(
+			Vector2 p1, Vector2 p2, Vector2[] polygon, out List<Vector2> intersectionPoints
+		) {
 			intersectionPoints = new List<Vector2>();
 			for (var i = 0; i < polygon.Length; ++i) {
-				if (LineLineIntersection(p1, p2, polygon[i], polygon[i + 1 == polygon.Length ? 0 : i + 1], out var point)) {
+				if (
+					LineLineIntersection(
+						p1, p2, polygon[i], polygon[i + 1 == polygon.Length ? 0 : i + 1], out var point
+					)
+				) {
 					intersectionPoints.Add(point);
 				}
 			}
@@ -129,8 +137,9 @@ namespace Tangerine.UI.AnimeshEditor
 			return intersectionPoints.Count > 0;
 		}
 
-		public static bool PolylinePolygonIntersection(Vector2[] polyline, Vector2[] polygon, out List<Vector2> intersectionPoints)
-		{
+		public static bool PolylinePolygonIntersection(
+			Vector2[] polyline, Vector2[] polygon, out List<Vector2> intersectionPoints
+		) {
 			intersectionPoints = new List<Vector2>();
 			for (var i = 0; i < polyline.Length - 1; ++i) {
 				if (LinePolygonIntersection(polyline[i], polyline[i + 1], polygon, out var points)) {
@@ -150,8 +159,9 @@ namespace Tangerine.UI.AnimeshEditor
 			return new[] { w1, w2 };
 		}
 
-		public static float[] CalcTriangleRelativeBarycentricCoordinates(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3)
-		{
+		public static float[] CalcTriangleRelativeBarycentricCoordinates(
+			Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3
+		) {
 			var w1 =
 				((p2.Y - p3.Y) * (point.X - p3.X) + (p3.X - p2.X) * (point.Y - p3.Y)) /
 				((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
@@ -196,8 +206,14 @@ namespace Tangerine.UI.AnimeshEditor
 		}
 
 		public static void RenderLine(
-			Vector2 p1, Vector2 p2, Vector2 backgroundSize, Vector2 foregroundSize, Color4 backgroundColor, Color4 foregroundColor, bool isDashed = false)
-		{
+			Vector2 p1,
+			Vector2 p2,
+			Vector2 backgroundSize,
+			Vector2 foregroundSize,
+			Color4 backgroundColor,
+			Color4 foregroundColor,
+			bool isDashed = false
+		) {
 			if (isDashed) {
 				Renderer.DrawDashedLine(
 					p1,

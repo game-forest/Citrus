@@ -10,7 +10,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		{
 			private const int StageCount = 5;
 			private const float IconLengthInTextureCoordinates = 1f / StageCount;
-			
+
 			public ConflictFinder.WorkProgress WorkProgress { get; set; }
 
 			public WorkIndicator()
@@ -21,11 +21,11 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 					Size = new Vector2(16),
 					UV0 = new Vector2(1 * IconLengthInTextureCoordinates, 0),
 					UV1 = new Vector2(2 * IconLengthInTextureCoordinates, 1),
-					Material = new RedChannelToColorMaterial()
+					Material = new RedChannelToColorMaterial(),
 				};
 				var textWidget = new ThemedSimpleText {
 					Padding = new Thickness(left: 4),
-					Color = Color4.White
+					Color = Color4.White,
 				};
 				var backgroundPresenter = new WidgetFlatFillPresenter(new Color4(76, 175, 80));
 				Layout = new HBoxLayout();

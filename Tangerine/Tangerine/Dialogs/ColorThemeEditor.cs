@@ -6,7 +6,7 @@ using Tangerine.UI;
 
 namespace Tangerine.Dialogs
 {
-	public class ColorThemeEditor: Widget
+	public class ColorThemeEditor : Widget
 	{
 		private ThemedScrollView pane;
 		private ThemedEditBox searchBox;
@@ -34,10 +34,11 @@ namespace Tangerine.Dialogs
 					continue;
 				}
 				CreateColorEditor(
-					pane, AppUserPreferences.Instance.LimeColorTheme,
-					color.Name,
-					$"Basic {color.Name}",
-					() => color.GetValue(Theme.Colors)
+					container: pane,
+					source: AppUserPreferences.Instance.LimeColorTheme,
+					propertyName: color.Name,
+					displayName: $"Basic {color.Name}",
+					valueGetter: () => color.GetValue(Theme.Colors)
 				);
 			}
 			foreach (var category in typeof(ColorTheme).GetProperties(flags)) {
@@ -49,10 +50,11 @@ namespace Tangerine.Dialogs
 						continue;
 					}
 					CreateColorEditor(
-						pane, category.GetValue(AppUserPreferences.Instance.ColorTheme),
-						color.Name,
-						$"{category.Name} {color.Name}",
-						() => color.GetValue(category.GetValue(AppUserPreferences.Instance.ColorTheme))
+						container: pane,
+						source: category.GetValue(AppUserPreferences.Instance.ColorTheme),
+						propertyName: color.Name,
+						displayName: $"{category.Name} {color.Name}",
+						valueGetter: () => color.GetValue(category.GetValue(AppUserPreferences.Instance.ColorTheme))
 					);
 				}
 			}
@@ -72,22 +74,23 @@ namespace Tangerine.Dialogs
 				LayoutCell = new LayoutCell { StretchX = 2 },
 				Nodes = {
 					new ThemedSimpleText("Search: ") {
-						LayoutCell = new LayoutCell(Alignment.LeftCenter)
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 					},
-					searchBox
-				}
+					searchBox,
+				},
 			};
 		}
 
-		private void CreateColorEditor(ThemedScrollView container, object source, string propertyName, string displayName, Func<object> valueGetter)
-		{
+		private void CreateColorEditor(
+			ThemedScrollView container, object source, string propertyName, string displayName, Func<object> valueGetter
+		) {
 			var e = new Color4PropertyEditor(
 				new PreferencesPropertyEditorParams(
 					source,
 					propertyName: propertyName,
 					displayName: displayName
 				) {
-					DefaultValueGetter = valueGetter
+					DefaultValueGetter = valueGetter,
 				}
 			);
 			container.Content.AddNode(e.ContainerWidget);

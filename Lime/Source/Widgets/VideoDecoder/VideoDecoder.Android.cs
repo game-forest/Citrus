@@ -131,7 +131,9 @@ namespace Lime
 					var sampleRate = audioFormat.GetInteger(MediaFormat.KeySampleRate);
 					audioCodec = MediaCodec.CreateDecoderByType(audioFormat.GetString(MediaFormat.KeyMime));
 					audioCodec.Configure(audioFormat, null, null, MediaCodecConfigFlags.None);
-					var bufferSize = AudioTrack.GetMinBufferSize(sampleRate, ChannelOut.Stereo, Android.Media.Encoding.Pcm16bit);
+					var bufferSize = AudioTrack.GetMinBufferSize(
+						sampleRate, ChannelOut.Stereo, Android.Media.Encoding.Pcm16bit
+					);
 					audio = new AudioTrack(
 						global::Android.Media.Stream.Music,
 						sampleRate,
@@ -163,7 +165,9 @@ namespace Lime
 					var sampleSize = extractor.ReadSampleData(inputBuffer, 0);
 					
 					if (sampleSize > 0) {
-						codec.QueueInputBuffer(inputIndex, 0, sampleSize, extractor.SampleTime, MediaCodecBufferFlags.None);
+						codec.QueueInputBuffer(
+							inputIndex, 0, sampleSize, extractor.SampleTime, MediaCodecBufferFlags.None
+						);
 					}
 					if (!extractor.Advance() || sampleSize == 0) {
 						codec.QueueInputBuffer(inputIndex, 0, 0, 0, MediaCodecBufferFlags.EndOfStream);
@@ -212,7 +216,9 @@ namespace Lime
 				Tasks.TaskCreationOptions.LongRunning,
 				Tasks.TaskScheduler.Default
 			);
-			processVideo.ContinueWith(failedTask => HandleError(failedTask), Tasks.TaskContinuationOptions.OnlyOnFaulted);
+			processVideo.ContinueWith(
+				failedTask => HandleError(failedTask), Tasks.TaskContinuationOptions.OnlyOnFaulted
+			);
 
 			processAudio = factory.StartNew(
 				ProcessAudio,
@@ -220,7 +226,9 @@ namespace Lime
 				Tasks.TaskCreationOptions.LongRunning,
 				Tasks.TaskScheduler.Default
 			);
-			processAudio.ContinueWith(failedTask => HandleError(failedTask), Tasks.TaskContinuationOptions.OnlyOnFaulted);
+			processAudio.ContinueWith(
+				failedTask => HandleError(failedTask), Tasks.TaskContinuationOptions.OnlyOnFaulted
+			);
 		}
 
 		private void HandleError(Tasks.Task task)
@@ -358,7 +366,12 @@ namespace Lime
 
 		public void Stop()
 		{
-			if (state == State.Stoped || state == State.Finished || state == State.Initialized || state == State.Initializing) {
+			if (
+				state == State.Stoped
+				|| state == State.Finished
+				|| state == State.Initialized
+				|| state == State.Initializing
+			) {
 				return;
 			}
 			Pause();
@@ -500,7 +513,10 @@ namespace Lime
 
 				private static SurfaceTextureProgram instance;
 
-				public static SurfaceTextureProgram GetInstance() => instance ?? (instance = new SurfaceTextureProgram());
+				public static SurfaceTextureProgram GetInstance()
+				{
+					return instance ?? (instance = new SurfaceTextureProgram());
+				}
 
 				public SurfaceTextureProgram() : base(GetShaders(), GetAttribLocations(), GetSamplers())
 				{
@@ -537,8 +553,9 @@ namespace Lime
 			private SurfaceTexture surfaceTexture;
 			public Surface Surface { get; private set; }
 
-			//https://developer.android.com/reference/android/graphics/SurfaceTexture.html
-			private const TextureTarget TextureTarget = (TextureTarget)All.TextureExternalOes; //<- IMPORTANT for surface texture!!!
+			// https://developer.android.com/reference/android/graphics/SurfaceTexture.html
+			// <- IMPORTANT for surface texture!!!
+			private const TextureTarget TextureTarget = (TextureTarget)All.TextureExternalOes;
 
 			private static VertexPosUV[] meshVertexes = new VertexPosUV[] {
 					new VertexPosUV() { UV1 = new Vector2(0, 0), Pos = new Vector2(-1, 1) },
@@ -607,7 +624,9 @@ namespace Lime
 			{
 				if (target != null) {
 					RendererWrapper.Current.PushState(RenderState.Viewport | RenderState.Shader | RenderState.Blending);
-					RendererWrapper.Current.Viewport = new Viewport(0, 0, target.ImageSize.Width, target.ImageSize.Height);
+					RendererWrapper.Current.Viewport = new Viewport(
+						0, 0, target.ImageSize.Width, target.ImageSize.Height
+					);
 					RendererWrapper.Current.PushRenderTarget(target);
 					Render();
 					RendererWrapper.Current.PopRenderTarget();

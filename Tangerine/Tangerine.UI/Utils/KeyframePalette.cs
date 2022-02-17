@@ -29,7 +29,7 @@ namespace Tangerine.UI
 			new Color4(0, 255, 0),
 			new Color4(64, 64, 255),
 			new Color4(32, 32, 255),
-			new Color4(255,64,255),
+			new Color4(255, 64, 255),
 			new Color4(0, 255, 255),
 			new Color4(128, 128, 255),
 			new Color4(204, 38, 82),

@@ -1,7 +1,7 @@
-using Lime;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
@@ -17,7 +17,7 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 			}
 		}
 
-		class AddAnimationClipDialog
+		private class AddAnimationClipDialog
 		{
 			private readonly Window window;
 			private readonly WindowWidget rootWidget;
@@ -47,7 +47,7 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 								ColumnDefaults = new List<DefaultLayoutCell> {
 									new DefaultLayoutCell(Alignment.RightCenter) { StretchX = 1 },
 									new DefaultLayoutCell(Alignment.LeftCenter) { StretchX = 2 },
-								}
+								},
 							},
 							LayoutCell = new LayoutCell { StretchY = 0 },
 							Nodes = {
@@ -56,8 +56,8 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 								new ThemedSimpleText("Begin Marker"),
 								(beginMarkerSelector = new ThemedDropDownList()),
 								new ThemedSimpleText("End Marker"),
-								(endMarkerSelector = new ThemedDropDownList())
-							}
+								(endMarkerSelector = new ThemedDropDownList()),
+							},
 						},
 						new Widget {
 							// Vertical stretcher
@@ -65,7 +65,7 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 						new Widget {
 							Layout = new HBoxLayout { Spacing = 8 },
 							LayoutCell = new LayoutCell {
-								StretchY = 0
+								StretchY = 0,
 							},
 							Padding = new Thickness { Top = 5 },
 							Nodes = {
@@ -73,8 +73,8 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 								(okButton = new ThemedButton { Text = "Ok" }),
 								(cancelButton = new ThemedButton { Text = "Cancel" }),
 							},
-						}
-					}
+						},
+					},
 				};
 				rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
 				foreach (var a in EnumerateAnimations()) {
@@ -82,7 +82,10 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 				}
 				animationSelector.Index = 0;
 				if (selectedAnimationId != null) {
-					animationSelector.Index = animationSelector.Items.Select(i => i.Value).ToList().IndexOf(selectedAnimationId);
+					animationSelector.Index = animationSelector.Items
+						.Select(i => i.Value)
+						.ToList()
+						.IndexOf(selectedAnimationId);
 				}
 				animationSelector.Changed += _ => RefreshMarkers();
 				RefreshMarkers();
@@ -103,13 +106,15 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 						AlertDialog.Show("Please select markers in ascending order", "Ok");
 						return;
 					}
-					var track = Document.Current.VisibleSceneItems[cell.Y].Components.Get<Core.Components.AnimationTrackSceneItem>().Track;
+					var track = Document.Current.VisibleSceneItems[cell.Y].Components
+						.Get<Core.Components.AnimationTrackSceneItem>()
+						.Track;
 					Document.Current.History.DoTransaction(() => {
 						var clip = new AnimationClip {
 							AnimationId = animationSelector.Text,
 							BeginFrame = cell.X,
 							InFrame = beginFrame,
-							DurationInFrames = endFrame - beginFrame
+							DurationInFrames = endFrame - beginFrame,
 						};
 						AnimationClipToolbox.InsertClip(track, clip);
 						Core.Operations.SetProperty.Perform(clip, nameof(AnimationClip.IsSelected), true);

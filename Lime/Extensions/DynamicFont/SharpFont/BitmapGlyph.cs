@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -41,19 +39,14 @@ namespace SharpFont
 	/// </para></remarks>
 	public sealed class BitmapGlyph : IDisposable
 	{
-		#region Fields
-
 		private Glyph original;
 		private BitmapGlyphRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal BitmapGlyph(Glyph original)
 		{
 			this.original = original;
-			Reference = original.Reference; //generates the rec.
+			// generates the rec.
+			Reference = original.Reference;
 		}
 
 		/// <summary>
@@ -63,10 +56,6 @@ namespace SharpFont
 		{
 			Dispose(false);
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a value indicating whether the object has been disposed.
@@ -86,8 +75,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Root", "Cannot access a disposed object.");
+				}
 
 				return original;
 			}
@@ -101,8 +91,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Left", "Cannot access a disposed object.");
+				}
 
 				return rec.left;
 			}
@@ -116,8 +107,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Top", "Cannot access a disposed object.");
+				}
 
 				return rec.top;
 			}
@@ -130,10 +122,15 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Bitmap", "Cannot access a disposed object.");
+				}
 
-				return new FTBitmap(PInvokeHelper.AbsoluteOffsetOf<BitmapGlyphRec>(Reference, "bitmap"), rec.bitmap, null);
+				return new FTBitmap(
+					PInvokeHelper.AbsoluteOffsetOf<BitmapGlyphRec>(Reference, "bitmap"),
+					rec.bitmap,
+					null
+				);
 			}
 		}
 
@@ -141,24 +138,22 @@ namespace SharpFont
 		{
 			get
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				return original.Reference;
 			}
 
 			set
 			{
-				if (IsDisposed)
+				if (IsDisposed) {
 					throw new ObjectDisposedException("Reference", "Cannot modify a disposed object.");
+				}
 
 				rec = PInvokeHelper.PtrToStructure<BitmapGlyphRec>(original.Reference);
 			}
 		}
-
-		#endregion
-
-		#region Operators
 
 		/// <summary>
 		/// Casts a <see cref="BitmapGlyph"/> back up to a <see cref="Glyph"/>. The eqivalent of
@@ -170,10 +165,6 @@ namespace SharpFont
 		{
 			return g.original;
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// A CLS-compliant version of the implicit cast to <see cref="Glyph"/>.
@@ -195,13 +186,10 @@ namespace SharpFont
 
 		private void Dispose(bool disposing)
 		{
-			if (disposing)
-			{
+			if (disposing) {
 				original.Dispose();
 				original = null;
 			}
 		}
-
-		#endregion
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace Lime.RenderOptimizer
+namespace Lime.RenderOptimizer
 {
 	public abstract class ViewProjector
 	{
@@ -6,8 +6,9 @@
 
 		public abstract ContentSize Project(Node node, ContentSize size);
 
-		protected static Rectangle CalcAABBInContainer(Matrix32 containerWorldToLocal, Matrix32 contentLocalToWorld, Rectangle contentAABB)
-		{
+		protected static Rectangle CalcAABBInContainer(
+			Matrix32 containerWorldToLocal, Matrix32 contentLocalToWorld, Rectangle contentAABB
+		) {
 			return CalcAABBInContainer(contentLocalToWorld * containerWorldToLocal, contentAABB);
 		}
 
@@ -78,7 +79,9 @@
 			var plane = size as ContentPlane;
 			var box = size as ContentBox;
 			if (plane == null && box == null) {
-				throw new Exception($"{nameof(Viewport3DProjector)} can project only {nameof(ContentPlane)} or {nameof(ContentBox)}");
+				throw new Exception(
+					$"{nameof(Viewport3DProjector)} can project only {nameof(ContentPlane)} or {nameof(ContentBox)}"
+				);
 			}
 
 			Vector3[] points;
@@ -93,7 +96,7 @@
 					new Vector3(box.Data.A.X, box.Data.B.Y, box.Data.A.Z),
 					new Vector3(box.Data.B.X, box.Data.B.Y, box.Data.A.Z),
 					box.Data.B,
-					new Vector3(box.Data.A.X, box.Data.B.Y, box.Data.B.Z)
+					new Vector3(box.Data.A.X, box.Data.B.Y, box.Data.B.Z),
 				};
 			}
 

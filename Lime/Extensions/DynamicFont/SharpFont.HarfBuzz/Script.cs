@@ -1,5 +1,5 @@
-﻿//Copyright (c) 2014-2015 Robert Rouhani <robert.rouhani@gmail.com> and other contributors (see CONTRIBUTORS file).
-//Licensed under the MIT License - https://raw.github.com/Robmaister/SharpFont.HarfBuzz/master/LICENSE
+// Copyright (c) 2014-2015 Robert Rouhani <robert.rouhani@gmail.com> and other contributors (see CONTRIBUTORS file).
+// Licensed under the MIT License - https://raw.github.com/Robmaister/SharpFont.HarfBuzz/master/LICENSE
 
 namespace SharpFont.HarfBuzz
 {
@@ -109,6 +109,6 @@ namespace SharpFont.HarfBuzz
 		Yi = 1500080489,
 		Inherited = 1516858984,
 		Common = 1517910393,
-		Unknown = 1517976186
+		Unknown = 1517976186,
 	}
 }

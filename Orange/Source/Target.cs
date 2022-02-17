@@ -7,7 +7,8 @@ namespace Orange
 	{
 		/// <summary>
 		/// Target name.
-		/// Can be used to specify cooking rule only for this target in form <c><CookingRuleName>(TargetName) <CookingRuleValue></c>
+		/// Can be used to specify cooking rule only for this target in form
+		/// <c><CookingRuleName>(TargetName) <CookingRuleValue></c>
 		/// Names for default targets correspond to default target platforms: "Win", "Mac", "iOS", "Android".
 		/// </summary>
 		public readonly string Name;
@@ -38,8 +39,10 @@ namespace Orange
 		public IEnumerable<string> Bundles => bundles.Any() || BaseTarget == null ? bundles : BaseTarget.Bundles;
 
 		/// <summary>
-		/// If any property but name is initialized to null, then it's redirected to corresponding property of base target.
-		/// Also affects application of cooking rules. Cooking rules applied to the base target are also applied to this target.
+		/// If any property but name is initialized to null, then
+		/// it's redirected to corresponding property of base target.
+		/// Also affects application of cooking rules. Cooking rules
+		/// applied to the base target are also applied to this target.
 		/// CookingRules related to derived target take priority.
 		/// </summary>
 		public Target BaseTarget;

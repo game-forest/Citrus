@@ -157,8 +157,7 @@ namespace Lime
 		}
 
 		private static readonly NumberFormatInfo brFormat = new NumberFormatInfo { NumberGroupSeparator = "." };
-		private static readonly NumberFormatInfo defaultFormat = new NumberFormatInfo
-		{
+		private static readonly NumberFormatInfo defaultFormat = new NumberFormatInfo {
 			// no-break space separator
 			NumberGroupSeparator = "\u00A0",
 		};

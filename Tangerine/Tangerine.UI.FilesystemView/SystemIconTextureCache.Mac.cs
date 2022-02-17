@@ -31,11 +31,14 @@ namespace Tangerine.UI.FilesystemView
 			if (textureCache.ContainsKey(ext)) {
 				return textureCache[ext];
 			}
-			var icon = NSWorkspace.SharedWorkspace.IconForFileType(isDirectory ? NSFileTypeForHFSTypeCode.FinderIcon : ext);
+			var icon = NSWorkspace.SharedWorkspace.IconForFileType(
+				isDirectory ? NSFileTypeForHFSTypeCode.FinderIcon : ext
+			);
 			using (var stream = new MemoryStream())
 			using (var representation = new NSBitmapImageRep(icon.CGImage)) {
 				NSData data = null;
-				data = representation.RepresentationUsingTypeProperties(NSBitmapImageFileType.Png);//, new NSDictionary());
+				//, new NSDictionary());
+				data = representation.RepresentationUsingTypeProperties(NSBitmapImageFileType.Png);
 				using (var bitmapStream = data.AsStream()) {
 					bitmapStream.CopyTo(stream);
 				}

@@ -33,7 +33,11 @@ namespace Lime
 		public Vector2 A
 		{
 			get => new Vector2(AX, AY);
-			set { AX = value.X; AY = value.Y; }
+			set
+			{
+				AX = value.X;
+				AY = value.Y;
+			}
 		}
 
 		/// <summary>
@@ -42,7 +46,11 @@ namespace Lime
 		public Vector2 B
 		{
 			get => new Vector2(BX, BY);
-			set { BX = value.X; BY = value.Y; }
+			set
+			{
+				BX = value.X;
+				BY = value.Y;
+			}
 		}
 
 		public Rectangle(float left, float top, float right, float bottom)
@@ -61,7 +69,10 @@ namespace Lime
 			BY = b.Y;
 		}
 
-		public static explicit operator IntRectangle(Rectangle value) => new IntRectangle((int)value.Left, (int)value.Top, (int)value.Right, (int)value.Bottom);
+		public static explicit operator IntRectangle(Rectangle value)
+		{
+			return new IntRectangle((int)value.Left, (int)value.Top, (int)value.Right, (int)value.Bottom);
+		}
 
 		public override bool Equals(object obj) => obj is Rectangle rectangle && Equals(rectangle);
 
@@ -272,7 +283,7 @@ namespace Lime
 			V1 = A,
 			V2 = new Vector2(BX, AY),
 			V3 = B,
-			V4 = new Vector2(AX, BY)
+			V4 = new Vector2(AX, BY),
 		};
 	}
 }

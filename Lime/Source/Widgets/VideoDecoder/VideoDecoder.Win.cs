@@ -1,5 +1,4 @@
 #if WIN
-using MFDecoder;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MFDecoder;
 using Yuzu;
 
 namespace Lime
@@ -25,7 +25,7 @@ namespace Lime
 
 		public void Bump()
 		{
-			//sound.Bump();
+			// sound.Bump();
 		}
 
 		public void Write(byte[] pcm)
@@ -80,7 +80,7 @@ namespace Lime
 			Started,
 			Stoped,
 			Paused,
-			Finished
+			Finished,
 		}
 
 		private class Initializer
@@ -116,12 +116,12 @@ namespace Lime
 				material = new YUVtoRGBMaterial();
 				mesh = new Mesh<VertexPosUV>();
 				mesh.Indices = new ushort[] {
-					0, 1, 2, 2, 3, 0
+					0, 1, 2, 2, 3, 0,
 				};
 				mesh.Vertices = new VertexPosUV[] {
-					new VertexPosUV() { UV1 = new Vector2(0, 0), Pos = new Vector2(-1,  1) },
-					new VertexPosUV() { UV1 = new Vector2(1, 0), Pos = new Vector2( 1,  1) },
-					new VertexPosUV() { UV1 = new Vector2(1, 1), Pos = new Vector2( 1, -1) },
+					new VertexPosUV() { UV1 = new Vector2(0, 0), Pos = new Vector2(-1, 1) },
+					new VertexPosUV() { UV1 = new Vector2(1, 0), Pos = new Vector2(1, 1) },
+					new VertexPosUV() { UV1 = new Vector2(1, 1), Pos = new Vector2(1, -1) },
 					new VertexPosUV() { UV1 = new Vector2(0, 1), Pos = new Vector2(-1, -1) },
 				};
 				mesh.AttributeLocations = new[] { ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.UV1 };
@@ -161,7 +161,8 @@ namespace Lime
 				state = State.Started;
 				bool queueTaskCompleted = false;
 
-				var queueTask = System.Threading.Tasks.Task.Run(() => {
+				var queueTask = System.Threading.Tasks.Task.Run(
+					() => {
 					try {
 						var audioIsEnded = false;
 						var videoIsEnded = false;
@@ -206,7 +207,8 @@ namespace Lime
 					}
 				}, token);
 
-				var videoTask = System.Threading.Tasks.Task.Run(() => {
+				var videoTask = System.Threading.Tasks.Task.Run(
+					() => {
 					while (!queueTaskCompleted || videoQueue.Count > 0) {
 						while (videoQueue.Count > 0) {
 							var sample = videoQueue.Dequeue();
@@ -224,7 +226,8 @@ namespace Lime
 					}
 				}, token);
 
-				var audioTask = System.Threading.Tasks.Task.Run(() => {
+				var audioTask = System.Threading.Tasks.Task.Run(
+					() => {
 					while (!queueTaskCompleted || audioQueue.Count > 0) {
 						while (audioQueue.Count > 0) {
 							var sample = audioQueue.Dequeue();
@@ -235,7 +238,7 @@ namespace Lime
 									return;
 								}
 							}
-							//currentVideoSample = sample;
+							// currentVideoSample = sample;
 							if (!sample.IsEos) {
 								audioPlayer.Write(sample.Data);
 							}
@@ -312,7 +315,9 @@ namespace Lime
 				pinnedArray.Free();
 
 				RendererWrapper.Current.PushState(RenderState.Viewport | RenderState.Shader | RenderState.Blending);
-				RendererWrapper.Current.Viewport = new Viewport(0, 0, texture.ImageSize.Width, texture.ImageSize.Height);
+				RendererWrapper.Current.Viewport = new Viewport(
+					0, 0, texture.ImageSize.Width, texture.ImageSize.Height
+				);
 				RendererWrapper.Current.PushRenderTarget(texture);
 				PlatformRenderer.SetTexture(0, lumaTexture);
 				PlatformRenderer.SetTexture(1, chromaTexture);
@@ -328,8 +333,6 @@ namespace Lime
 			Stop();
 			texture.Dispose();
 		}
-
-
 
 		public class YUVtoRGBMaterial : IMaterial
 		{
@@ -410,7 +413,7 @@ namespace Lime
 			{
 				return new Shader[] {
 					new VertexShader(VertexShader),
-					new FragmentShader(FragmentShader)
+					new FragmentShader(FragmentShader),
 				};
 			}
 
@@ -418,7 +421,7 @@ namespace Lime
 			{
 				return new AttribLocation[] {
 					new AttribLocation { Name = "a_Position", Index = ShaderPrograms.Attributes.Pos1 },
-					new AttribLocation { Name = "a_UV", Index = ShaderPrograms.Attributes.UV1 }
+					new AttribLocation { Name = "a_UV", Index = ShaderPrograms.Attributes.UV1 },
 				};
 			}
 
@@ -426,7 +429,7 @@ namespace Lime
 			{
 				return new Sampler[] {
 					new Sampler { Name = "u_SamplerY", Stage = LumaTextureStage },
-					new Sampler { Name = "u_SamplerUV", Stage = ChromaTextureStage }
+					new Sampler { Name = "u_SamplerUV", Stage = ChromaTextureStage },
 				};
 			}
 		}

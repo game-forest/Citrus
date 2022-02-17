@@ -1,4 +1,3 @@
-#region MIT License
 /*Copyright (c) 2012-2013, 2015-2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -49,20 +47,20 @@ namespace SharpFont
 	/// </para></remarks>
 	/// <example>
 	/// <code>
-	/// FT_Pos  origin_x	   = 0;
-	///	FT_Pos  prev_rsb_delta = 0;
+	/// FT_Pos  origin_x = 0;
+	/// FT_Pos  prev_rsb_delta = 0;
 	///
 	///
-	///	for all glyphs do
-	///	&lt;compute kern between current and previous glyph and add it to
-	///		`origin_x'&gt;
+	/// for all glyphs do
+	/// &lt;compute kern between current and previous glyph and add it to
+	///     `origin_x'&gt;
 	///
-	///	&lt;load glyph with `FT_Load_Glyph'&gt;
+	/// &lt;load glyph with `FT_Load_Glyph'&gt;
 	///
 	/// if ( prev_rsb_delta - face-&gt;glyph-&gt;lsb_delta &gt;= 32 )
-	/// 	origin_x -= 64;
+	///   origin_x -= 64;
 	/// else if ( prev_rsb_delta - face->glyph-&gt;lsb_delta &lt; -32 )
-	/// 	origin_x += 64;
+	///     origin_x += 64;
 	///
 	/// prev_rsb_delta = face-&gt;glyph->rsb_delta;
 	///
@@ -74,17 +72,11 @@ namespace SharpFont
 	/// </example>
 	public sealed class GlyphSlot
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private GlyphSlotRec rec;
 
 		private Face parentFace;
 		private Library parentLibrary;
-
-		#endregion
-
-		#region Constructors
 
 		internal GlyphSlot(IntPtr reference, Face parentFace, Library parentLibrary)
 		{
@@ -92,10 +84,6 @@ namespace SharpFont
 			this.parentFace = parentFace;
 			this.parentLibrary = parentLibrary;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a handle to the FreeType library instance this slot belongs to.
@@ -223,7 +211,9 @@ namespace SharpFont
 		{
 			get
 			{
-				return new FTBitmap(PInvokeHelper.AbsoluteOffsetOf<GlyphSlotRec>(Reference, "bitmap"), rec.bitmap, parentLibrary);
+				return new FTBitmap(
+					PInvokeHelper.AbsoluteOffsetOf<GlyphSlotRec>(Reference, "bitmap"), rec.bitmap, parentLibrary
+				);
 			}
 		}
 
@@ -288,14 +278,14 @@ namespace SharpFont
 			{
 				int count = (int)SubglyphsCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				SubGlyph[] subglyphs = new SubGlyph[count];
 				IntPtr array = rec.subglyphs;
 
-				for (int i = 0; i < count; i++)
-				{
+				for (int i = 0; i < count; i++) {
 					subglyphs[i] = new SubGlyph((IntPtr)(array.ToInt64() + IntPtr.Size * i));
 				}
 
@@ -386,12 +376,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Public Methods
-
-		#region Base Interface
-
 		/// <summary>
 		/// Convert a given glyph image to a bitmap. It does so by inspecting the glyph image format, finding the
 		/// relevant renderer, and invoking it.
@@ -401,8 +385,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Render_Glyph(Reference, mode);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -422,17 +407,17 @@ namespace SharpFont
 		/// <param name="arg2">The subglyph's second argument (if any).</param>
 		/// <param name="transform">The subglyph transformation (if any).</param>
 		[CLSCompliant(false)]
-		public void GetSubGlyphInfo(uint subIndex, out int index, out SubGlyphFlags flags, out int arg1, out int arg2, out FTMatrix transform)
-		{
-			Error err = FT.FT_Get_SubGlyph_Info(Reference, subIndex, out index, out flags, out arg1, out arg2, out transform);
+		public void GetSubGlyphInfo(
+			uint subIndex, out int index, out SubGlyphFlags flags, out int arg1, out int arg2, out FTMatrix transform
+		) {
+			Error err = FT.FT_Get_SubGlyph_Info(
+				Reference, subIndex, out index, out flags, out arg1, out arg2, out transform
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
-
-		#endregion
-
-		#region Glyph Management
 
 		/// <summary>
 		/// A function used to extract a glyph image from a slot. Note that the created <see cref="Glyph"/> object must
@@ -444,15 +429,12 @@ namespace SharpFont
 			IntPtr glyphRef;
 			Error err = FT.FT_Get_Glyph(Reference, out glyphRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new Glyph(glyphRef, Library);
 		}
-
-		#endregion
-
-		#region Bitmap Handling
 
 		/// <summary>
 		/// Make sure that a glyph slot owns ‘slot->bitmap’.
@@ -464,12 +446,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_GlyphSlot_Own_Bitmap(Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

@@ -8,7 +8,8 @@ namespace Lime
 	public static class Cloner
 	{
 		/// <summary>
-		/// Clone the object. If source object implements ICloneable then the method will return object produced by ICloneable.Clone().
+		/// Clone the object. If source object implements ICloneable then
+		/// the method will return object produced by ICloneable.Clone().
 		/// Otherwise Serialization.Clone() will be used.
 		/// </summary>
 		/// <typeparam name="T">A type of object that need to be returned.</typeparam>
@@ -17,7 +18,8 @@ namespace Lime
 		public static T Clone<T>(T obj) => (T)Clone((object)obj);
 
 		/// <summary>
-		/// Clone the object. If source object implements ICloneable then the method will return object produced by ICloneable.Clone().
+		/// Clone the object. If source object implements ICloneable then
+		/// the method will return object produced by ICloneable.Clone().
 		/// Otherwise Serialization.Clone() will be used.
 		/// </summary>
 		/// <param name="obj">A source object to clone.</param>

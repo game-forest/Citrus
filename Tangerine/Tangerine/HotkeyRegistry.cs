@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Lime;
 using Tangerine.Core;
 using Tangerine.UI;
 
@@ -22,9 +22,11 @@ namespace Tangerine
 		private static readonly List<ShortcutBinding> defaults = new List<ShortcutBinding>();
 
 		private static HotkeyProfile currentProfile;
-		public static HotkeyProfile CurrentProfile {
+		public static HotkeyProfile CurrentProfile
+		{
 			get { return currentProfile; }
-			set {
+			set
+			{
 				if (currentProfile != null) {
 					foreach (var command in currentProfile.Commands) {
 						command.Command.Shortcut = new Shortcut();
@@ -39,7 +41,14 @@ namespace Tangerine
 		}
 
 		public static List<HotkeyProfile> Profiles { get; private set; } = new List<HotkeyProfile>();
-		public static string ProfilesDirectory => Lime.Environment.GetPathInsideDataDirectory("Tangerine", "HotkeyProfiles");
+		public static string ProfilesDirectory
+		{
+			get
+			{
+				return Lime.Environment.GetPathInsideDataDirectory("Tangerine", "HotkeyProfiles");
+			}
+		}
+
 		public static string DefaultProfileName { get; set; } = "Default";
 		public static string CurrentProjectName { get; set; } = null;
 		public static Action Reseted { get; set; }
@@ -50,7 +59,7 @@ namespace Tangerine
 			foreach (var command in CommandRegistry.RegisteredCommands()) {
 				defaults.Add(new ShortcutBinding {
 					Command = command,
-					Shortcut = command.Shortcut
+					Shortcut = command.Shortcut,
 				});
 			}
 		}
@@ -123,7 +132,7 @@ namespace Tangerine
 				foreach (var commandInfo in categoryInfo.Commands.Values) {
 					var newCommandInfo = new CommandInfo(commandInfo.Command, newCategoryInfo, commandInfo.Id) {
 						Shortcut = commandInfo.Command.Shortcut,
-						IsProjectSpecific = commandInfo.IsProjectSpecific
+						IsProjectSpecific = commandInfo.IsProjectSpecific,
 					};
 					newCategoryInfo.Commands.Add(newCommandInfo.Id, newCommandInfo);
 				}

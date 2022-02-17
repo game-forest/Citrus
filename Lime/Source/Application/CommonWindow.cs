@@ -178,6 +178,5 @@ namespace Lime
 			}
 			usePendingActionsOnRendering?.Invoke();
 		}
-
 	}
 }

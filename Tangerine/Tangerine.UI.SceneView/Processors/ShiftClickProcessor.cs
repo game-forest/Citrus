@@ -18,8 +18,7 @@ namespace Tangerine.UI.SceneView
 				if (
 					sv.Input.WasMouseReleased() &&
 					sv.Input.IsKeyPressed(Key.Shift) &&
-					(mouseDownPosition - sv.Input.MousePosition).Length < 5
-				) {
+					(mouseDownPosition - sv.Input.MousePosition).Length < 5) {
 					sv.Input.ConsumeKey(Key.Mouse0);
 					Core.Document.Current.History.DoTransaction(() => HandleClick(sv));
 				}
@@ -27,16 +26,19 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		static void HandleClick(SceneView sv)
+		private static void HandleClick(SceneView sv)
 		{
 			var node = Core.Document.Current.SelectedNodes().OfType<Widget>().FirstOrDefault();
 			if (node?.CalcHull().Contains(sv.MousePosition) ?? false) {
-				if (Core.Operations.EnterNode.Perform(node))
+				if (Core.Operations.EnterNode.Perform(node)) {
 					return;
+				}
 			}
 			var ctr = Core.Document.Current.Container as Widget;
-			if (ctr == null)
+			if (ctr == null) {
 				return;
+			}
+
 			if (ctr.CalcHull().Contains(sv.MousePosition)) {
 				foreach (var widget in ctr.Nodes.Editable().OfType<Widget>()) {
 					if (widget.GloballyVisible && widget.CalcHull().Contains(sv.MousePosition)) {

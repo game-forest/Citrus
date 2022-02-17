@@ -35,7 +35,7 @@ namespace Tangerine
 				Nodes = {
 					(lookupWidget = new LookupWidget {
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
-					})
+					}),
 				},
 			};
 			windowWidget.FocusScope = new KeyboardFocusScope(windowWidget);
@@ -68,7 +68,7 @@ namespace Tangerine
 			lookupWidget.Canceled += LookupCanceled;
 			windowWidget.FocusScope.SetDefaultFocus();
 		}
-		
+
 		public LookupDialog(LookupSections.SectionType? sectionType = null) : this(out var sections)
 		{
 			sections.Initialize(sectionType);

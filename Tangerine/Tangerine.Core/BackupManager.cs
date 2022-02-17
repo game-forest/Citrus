@@ -48,7 +48,7 @@ namespace Tangerine.Core
 
 		private static readonly int[] intervalsOfPreservation = {
 			10, 10, 10, 10, 10, 10, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-			60,	60, 60, 60, 1440, 1440, 1440, 1440, 1440, 1440, 1440, 43800, 43800
+			60, 60, 60, 60, 1440, 1440, 1440, 1440, 1440, 1440, 1440, 43800, 43800,
 		};
 
 		private static int periodOfConservation = 60;
@@ -62,11 +62,11 @@ namespace Tangerine.Core
 
 		private string projectName;
 
-		enum Mode
+		private enum Mode
 		{
 			Normal,
 			SaveOriginal,
-			Scan
+			Scan,
 		}
 
 		public event Action BackupSaved;
@@ -88,7 +88,6 @@ namespace Tangerine.Core
 		public List<Backup> GetHistory(Document document)
 		{
 			if (Document.Current != null) {
-
 				var path = GetTemporaryPath(document.Path);
 				var history = GetHistory(path);
 				if (mode != Mode.Normal) {
@@ -115,8 +114,11 @@ namespace Tangerine.Core
 			foreach (var file in files) {
 				var name = Path.GetFileNameWithoutExtension(file);
 				try {
-					var dataTime = DateTime.ParseExact(name, "yyyy-MM-dd-HH-mm-ss",
-						System.Globalization.CultureInfo.InvariantCulture);
+					var dataTime = DateTime.ParseExact(
+						name,
+						"yyyy-MM-dd-HH-mm-ss",
+						System.Globalization.CultureInfo.InvariantCulture
+					);
 					history.Add(new Backup(dataTime, file, false));
 				} catch (Exception e) {
 					Console.WriteLine($"Invalid file name '{file}':\n{e}");
@@ -157,7 +159,8 @@ namespace Tangerine.Core
 			var directory = GetTemporaryPath(document.Path);
 			Directory.CreateDirectory(directory);
 			try {
-				var filePath = Path.Combine(directory,
+				var filePath = Path.Combine(
+					directory,
 					$"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.{document.GetFileExtension()}");
 				document.ExportToFile(filePath, document.Path);
 			} catch (Exception e) {
@@ -192,16 +195,16 @@ namespace Tangerine.Core
 		{
 			switch (mode) {
 				case Mode.Normal: {
-					mode = Mode.SaveOriginal;
-					Document.Current.Save();
-					RestoreBackup(backup);
-					mode = Mode.Scan;
-				}
-				break;
+						mode = Mode.SaveOriginal;
+						Document.Current.Save();
+						RestoreBackup(backup);
+						mode = Mode.Scan;
+					}
+					break;
 				case Mode.Scan: {
-					RestoreBackup(backup);
-				}
-				break;
+						RestoreBackup(backup);
+					}
+					break;
 			}
 		}
 

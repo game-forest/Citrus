@@ -9,7 +9,7 @@ using Widget = Lime.Widget;
 
 namespace Orange
 {
-	static class AnalyzeResources
+	internal static class AnalyzeResources
 	{
 		internal struct PathRequestRecord
 		{
@@ -34,15 +34,35 @@ namespace Orange
 			var cookingRulesMap = CookingRulesBuilder.Build(AssetBundle.Current, target);
 			foreach (var i in cookingRulesMap) {
 				if (i.Key.EndsWith(".png", StringComparison.OrdinalIgnoreCase)) {
-					if (i.Value.TextureAtlas == null && i.Value.PVRFormat != PVRFormat.PVRTC4 && i.Value.PVRFormat != PVRFormat.PVRTC4_Forced) {
-						suspiciousTexturesReport.Add(string.Format("{0}: {1}, atlas: none",
-							i.Key, i.Value.PVRFormat));
+					if (
+						i.Value.TextureAtlas == null
+						&& i.Value.PVRFormat != PVRFormat.PVRTC4
+						&& i.Value.PVRFormat != PVRFormat.PVRTC4_Forced
+					) {
+						suspiciousTexturesReport.Add(string.Format(
+							"{0}: {1}, atlas: none",
+							i.Key,
+							i.Value.PVRFormat
+						));
 					}
-					if (i.Value.PVRFormat != PVRFormat.PVRTC4 && i.Value.PVRFormat != PVRFormat.PVRTC4_Forced && i.Value.PVRFormat != PVRFormat.PVRTC2) {
-						TextureConverterUtils.GetPngFileInfo(AssetBundle.Current, i.Key, out int w, out int h, out bool hasAlpha);
+					if (
+						i.Value.PVRFormat != PVRFormat.PVRTC4
+						&& i.Value.PVRFormat != PVRFormat.PVRTC4_Forced
+						&& i.Value.PVRFormat != PVRFormat.PVRTC2
+					) {
+						TextureConverterUtils.GetPngFileInfo(
+							AssetBundle.Current, i.Key, out int w, out int h, out bool hasAlpha
+						);
 						if (w >= 1024 || h >= 1024) {
-							suspiciousTexturesReport.Add(string.Format("{3}: {0}, {1}, {2}, {4}, atlas: {5}",
-								w, h, hasAlpha, i.Key, i.Value.PVRFormat, i.Value.TextureAtlas));
+							suspiciousTexturesReport.Add(string.Format(
+								"{3}: {0}, {1}, {2}, {4}, atlas: {5}",
+								w,
+								h,
+								hasAlpha,
+								i.Key,
+								i.Value.PVRFormat,
+								i.Value.TextureAtlas
+							));
 						}
 					}
 				}
@@ -56,7 +76,8 @@ namespace Orange
 					new AggregateAssetBundle(
 					bundles.Select(
 						i => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, i))).ToArray());
-				AssetBundle.Current = new CustomSetAssetBundle(aggregateBundle,
+				AssetBundle.Current = new CustomSetAssetBundle(
+					aggregateBundle,
 					aggregateBundle.EnumerateFiles().Where(i => {
 						if (cookingRulesMap.TryGetValue(i, out CookingRules rules)) {
 							if (rules.Ignore) {
@@ -64,7 +85,7 @@ namespace Orange
 							}
 						}
 						return true;
-				}));
+					}));
 				var usedImages = new HashSet<string>();
 				var usedSounds = new HashSet<string>();
 				foreach (var srcPath in AssetBundle.Current.EnumerateFiles(null, ".tan")) {
@@ -85,10 +106,18 @@ namespace Orange
 								}
 								if (texPath.Length == 2 && texPath[0] == '#') {
 									switch (texPath[1]) {
-										case 'a': case'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+										case 'a':
+										case 'b':
+										case 'c':
+										case 'd':
+										case 'e':
+										case 'f':
+										case 'g':
 											return;
 										default:
-											suspiciousTexturesReport.Add(string.Format("wrong render target: {0}, {1}", texPath, j.ToString()));
+											suspiciousTexturesReport.Add(
+												string.Format("wrong render target: {0}, {1}", texPath, j.ToString())
+											);
 											return;
 									}
 								}
@@ -109,8 +138,11 @@ namespace Orange
 										return;
 									}
 								}
-								missingResourcesReport.Add(string.Format("texture missing:\n\ttexture path: {0}\n\tscene path: {1}\n",
-									t.SerializationPath, j.ToString()));
+								missingResourcesReport.Add(string.Format(
+									"texture missing:\n\ttexture path: {0}\n\tscene path: {1}\n",
+									t.SerializationPath,
+									j.ToString()
+								));
 							});
 							var checkAnimators = new Action<Node>((Node n) => {
 								if (n.Animators.TryFind<SerializableTexture>("Texture", out var ta)) {
@@ -138,11 +170,13 @@ namespace Orange
 								var path = au.Sample.SerializationPath + ".sound";
 								usedSounds.Add(au.Sample.SerializationPath.Replace('\\', '/'));
 								if (!Lime.AssetBundle.Current.FileExists(path)) {
-									missingResourcesReport.Add(string.Format("audio missing:\n\taudio path: {0}\n\tscene path: {1}\n",
-										path, j.ToString()));
+									missingResourcesReport.Add(string.Format(
+										"audio missing:\n\taudio path: {0}\n\tscene path: {1}\n",
+										path,
+										j.ToString()
+									));
 								} else {
 									using (var tempStream = Lime.AssetBundle.Current.OpenFile(path)) {
-
 									}
 								}
 								// FIXME: should we check for audio:Sample animators too?
@@ -151,15 +185,19 @@ namespace Orange
 					}
 					var reportList = new List<string>();
 					foreach (var rpr in requestedPaths) {
-						string pattern = String.Format(@".*[/\\](.*)\.{0}", target.Platform.ToString());
-						string bundle = "";
+						string pattern = string.Format(@".*[/\\](.*)\.{0}", target.Platform.ToString());
+						string bundle = string.Empty;
 						foreach (Match m in Regex.Matches(rpr.bundle, pattern, RegexOptions.IgnoreCase)) {
 							bundle = m.Groups[1].Value;
 						}
 						int index = Array.IndexOf(cookingRulesMap[srcPath].Bundles, bundle);
 						if (index == -1) {
-							reportList.Add(string.Format("\t[{0}]=>[{2}]: {1}",
-								string.Join(", ", cookingRulesMap[srcPath].Bundles), rpr.path, bundle));
+							reportList.Add(string.Format(
+								"\t[{0}]=>[{2}]: {1}",
+								string.Join(", ", cookingRulesMap[srcPath].Bundles),
+								rpr.path,
+								bundle
+							));
 						}
 					}
 					requestedPaths.Clear();
@@ -171,7 +209,10 @@ namespace Orange
 
 				var allImages = new Dictionary<string, bool>();
 				foreach (var img in AssetBundle.Current.EnumerateFiles(null, ".png")) {
-					var key = Path.Combine(Path.GetDirectoryName(img), Path.GetFileNameWithoutExtension(img)).Replace('\\', '/');
+					var key = Path.Combine(
+						Path.GetDirectoryName(img),
+						Path.GetFileNameWithoutExtension(img)
+					).Replace('\\', '/');
 					if (!key.StartsWith("Fonts")) {
 						allImages[key] = false;
 					}
@@ -194,8 +235,8 @@ namespace Orange
 
 				Action<string> writeHeader = (s) => {
 					int n0 = (80 - s.Length) / 2;
-					int n1 = (80 - s.Length)%2 == 0 ? n0 : n0 - 1;
-					Console.WriteLine("\n" + new String('=', n0) + " " + s + " " + new String('=', n1));
+					int n1 = (80 - s.Length) % 2 == 0 ? n0 : n0 - 1;
+					Console.WriteLine("\n" + new string('=', n0) + " " + s + " " + new string('=', n1));
 				};
 				writeHeader("Cross Bundle Dependencies");
 				foreach (var scenePath in crossRefReport) {
@@ -227,7 +268,6 @@ namespace Orange
 
 		[Export(nameof(OrangePlugin.MenuItems))]
 		[ExportMetadata("Label", "Show Duplicate Assets in Assets Directory")]
-		//[ExportMetadata("Priority", 4)]
 		public static void ShowDuplicateAssetsInAssetsDirectory()
 		{
 			PrintDuplicates(AssetBundle.Current);
@@ -235,7 +275,6 @@ namespace Orange
 
 		[Export(nameof(OrangePlugin.MenuItemsWithErrorDetails))]
 		[ExportMetadata("Label", "Show Duplicate Assets in Bundles")]
-		//[ExportMetadata("Priority", 4)]
 		[ExportMetadata("ApplicableToBundleSubset", true)]
 		public static string ShowDuplicateAssetsInBundles()
 		{
@@ -288,6 +327,5 @@ namespace Orange
 				Console.WriteLine($"Total size overhead of duplicates: {totalOverhead}");
 			}
 		}
-
 	}
 }

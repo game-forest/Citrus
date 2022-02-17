@@ -10,7 +10,12 @@ namespace Tangerine.UI
 
 		public AnchorsPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			group = new Widget { Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 } };
+			group = new Widget {
+				Layout = new HBoxLayout {
+					DefaultCell = new DefaultLayoutCell(Alignment.Center),
+					Spacing = 4,
+				},
+			};
 			EditorContainer.AddNode(group);
 			firstButton = AddButton(Anchors.Left, "Anchor to the left");
 			AddButton(Anchors.Right, "Anchor to the right");
@@ -49,17 +54,25 @@ namespace Tangerine.UI
 			var w = button.Width;
 			var h = button.Height;
 			Renderer.DrawLine(
-				Scale(a[t * 2], w), Scale(a[t * 2 + 1], h),
-				Scale(b[t * 2], w), Scale(b[t * 2 + 1], h),
-				Theme.Colors.BlackText
+				x0: Scale(a[t * 2], w),
+				y0: Scale(a[t * 2 + 1], h),
+				x1: Scale(b[t * 2], w),
+				y1: Scale(b[t * 2 + 1], h),
+				color: Theme.Colors.BlackText
 			);
 		}
 
 		private static float Scale(float x, float s)
 		{
 			x *= s;
-			if (x == 0) x += 4;
-			if (x == s) x -= 4;
+			if (x == 0) {
+				x += 4;
+			}
+
+			if (x == s) {
+				x -= 4;
+			}
+
 			return x;
 		}
 

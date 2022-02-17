@@ -11,7 +11,7 @@ namespace Tangerine
 		public override bool GetEnabled()
 		{
 			return SceneViewCommands.ToggleDisplayRuler.Checked &&
-			       ProjectUserPreferences.Instance.ActiveRuler.Lines.Count > 0;
+				   ProjectUserPreferences.Instance.ActiveRuler.Lines.Count > 0;
 		}
 
 		public override void ExecuteTransaction()
@@ -28,7 +28,7 @@ namespace Tangerine
 				if (ruler.AnchorToRoot) {
 					var size = Document.Current.Container.AsWidget.Size / 2;
 					foreach (var l in ruler.Lines) {
-						l.Value -= (l.RulerOrientation == RulerOrientation.Horizontal ? size.Y : size.X);
+						l.Value -= l.RulerOrientation == RulerOrientation.Horizontal ? size.Y : size.X;
 					}
 				}
 				ProjectUserPreferences.Instance.SaveActiveRuler();
@@ -79,11 +79,11 @@ namespace Tangerine
 	public class PanelCommandHandler : CommandHandler
 	{
 		private readonly string panelId;
-		private PanelPlacement placement => DockManager.Instance.Model.FindPanelPlacement(panelId);
+		private PanelPlacement Placement => DockManager.Instance.Model.FindPanelPlacement(panelId);
 
 		public override void RefreshCommand(ICommand command)
 		{
-			command.Checked = !placement.Hidden;
+			command.Checked = !Placement.Hidden;
 		}
 
 		public PanelCommandHandler(string panelId)
@@ -93,7 +93,7 @@ namespace Tangerine
 
 		public override void Execute()
 		{
-			placement.Hidden = !placement.Hidden;
+			Placement.Hidden = !Placement.Hidden;
 			DockManager.Instance.Refresh();
 		}
 	}

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using Lime;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using Lime;
 
 namespace Orange
 {
@@ -15,7 +15,7 @@ namespace Orange
 			Unknown,
 			PCM,
 			ADPCM,
-			IMA_ADPCM = 0x11
+			IMA_ADPCM = 0x11,
 		}
 
 		public static byte[] Decode(IAudioDecoder input)
@@ -36,7 +36,9 @@ namespace Orange
 					if (totalRead * blockSize > decodedSound.Length) {
 						Array.Resize(ref decodedSound, totalRead * blockSize * 3 / 2);
 					}
-					Marshal.Copy(buffer, decodedSound, (totalRead - actuallyRead) * blockSize, actuallyRead * blockSize);
+					Marshal.Copy(
+						buffer, decodedSound, (totalRead - actuallyRead) * blockSize, actuallyRead * blockSize
+					);
 				}
 				Array.Resize(ref decodedSound, totalRead * blockSize);
 			} finally {
@@ -52,10 +54,10 @@ namespace Orange
 			int blockSize = channels * 1024;
 			var ima4Encoder = new Ima4Encoder();
 			var adpcmSound = ima4Encoder.Encode(decodedSound, channels, blockSize);
-			long numFrames = (decodedSound.Length / channels / 2);
+			long numFrames = decodedSound.Length / channels / 2;
 			int frequency = input.GetFrequency();
 			int averageBytesPerSecond = (int)(adpcmSound.Length * (long)frequency / numFrames);
-			int framesPerBlock = (blockSize - 4 * channels) * 8 /(4 * channels) + 1;
+			int framesPerBlock = (blockSize - 4 * channels) * 8 / (4 * channels) + 1;
 			var bw = new BinaryWriter(output);
 			// RIFF chunk
 			bw.Write(Encoding.UTF8.GetBytes("RIFF"));
@@ -68,7 +70,7 @@ namespace Orange
 			bw.Write((ushort)channels);
 			bw.Write(frequency);
 			bw.Write(averageBytesPerSecond); // average bytes per seconds
-			bw.Write((ushort)(blockSize)); // block align
+			bw.Write((ushort)blockSize); // block align
 			bw.Write((ushort)4); // bits per sample
 			bw.Write((ushort)channels);
 			bw.Write((ushort)framesPerBlock);
@@ -79,16 +81,16 @@ namespace Orange
 			output.Write(adpcmSound, 0, adpcmSound.Length);
 		}
 
-		struct Ima4Encoder
+		private struct Ima4Encoder
 		{
-			byte[] input;
-			byte[] output;
-			int inputPosition;
-			int outputPosition;
-			int framesPerBlock;
-			int blockSize;
-			int channels;
-			EncoderState[] states;
+			private byte[] input;
+			private byte[] output;
+			private int inputPosition;
+			private int outputPosition;
+			private int framesPerBlock;
+			private int blockSize;
+			private int channels;
+			private EncoderState[] states;
 
 			public byte[] Encode(byte[] input, int channels, int blockSize)
 			{
@@ -106,7 +108,7 @@ namespace Orange
 				return output;
 			}
 
-			short ReadSample()
+			private short ReadSample()
 			{
 				if (inputPosition >= input.Length) {
 					return 0;
@@ -115,14 +117,14 @@ namespace Orange
 				}
 			}
 
-			void EncodeBlock()
+			private void EncodeBlock()
 			{
 				int p = outputPosition;
 				for (int i = 0; i < channels; i++) {
 					short sample0 = ReadSample();
 					inputPosition += (channels - 1) * 2;
 					short sample1 = ReadSample();
-					inputPosition -= ((channels - 1) * 2 + 2);
+					inputPosition -= (channels - 1) * 2 + 2;
 					// Using number of iterations to calculate initial stepIndex
 					var state = states[i];
 					state.StepIndex = 0;
@@ -156,12 +158,12 @@ namespace Orange
 			}
 		}
 
-		struct EncoderState
+		private struct EncoderState
 		{
 			public int StepIndex;
 			public int PrevSample;
 
-			static int[] StepTable = new[]
+			private static int[] stepTable = new[]
 			{
 				7, 8, 9, 10, 11, 12, 13, 14,
 				16, 17, 19, 21, 23, 25, 28, 31,
@@ -174,13 +176,13 @@ namespace Orange
 				3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484,
 				7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899,
 				15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794,
-				32767
+				32767,
 			};
-			
-			static int[] IndexTable = new[]
+
+			private static int[] indexTable = new[]
 			{
 				-1, -1, -1, -1, 2, 4, 6, 8,
-				-1, -1, -1, -1, 2, 4, 6, 8
+				-1, -1, -1, -1, 2, 4, 6, 8,
 			};
 
 			public byte CompressSample(short sample)
@@ -192,24 +194,35 @@ namespace Orange
 					delta = -delta;
 				}
 				int stepIndex = StepIndex;
-				int nibble = (delta * 4) / StepTable[stepIndex];
-				if (nibble > 7)
+				int nibble = delta * 4 / stepTable[stepIndex];
+				if (nibble > 7) {
 					nibble = 7;
-				int predictedDelta = ((StepTable[stepIndex] * nibble) / 4) + (StepTable[stepIndex] / 8);
-				if (sign != 0)
+				}
+
+				int predictedDelta = (stepTable[stepIndex] * nibble / 4) + (stepTable[stepIndex] / 8);
+				if (sign != 0) {
 					PrevSample -= predictedDelta;
-				else
+				} else {
 					PrevSample += predictedDelta;
-				stepIndex += IndexTable[nibble];
-				if (stepIndex < 0)
+				}
+
+				stepIndex += indexTable[nibble];
+				if (stepIndex < 0) {
 					stepIndex = 0;
-				if (stepIndex > 88)
+				}
+
+				if (stepIndex > 88) {
 					stepIndex = 88;
+				}
 				// what the decoder will find
-				if (PrevSample > short.MaxValue)
+				if (PrevSample > short.MaxValue) {
 					PrevSample = short.MaxValue;
-				if (PrevSample < short.MinValue)
+				}
+
+				if (PrevSample < short.MinValue) {
 					PrevSample = short.MinValue;
+				}
+
 				nibble += sign * 8;
 				// save back
 				StepIndex = stepIndex;

@@ -36,9 +36,9 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 					Padding = new Thickness(8),
 					Nodes = {
 						(resultsView = new ResultsView()),
-						(controls = new Controls())
+						(controls = new Controls()),
 					},
-					FocusScope = new KeyboardFocusScope(this)
+					FocusScope = new KeyboardFocusScope(this),
 				};
 				workIndicator = new WorkIndicator();
 				Layout = new VBoxLayout { Spacing = 0 };
@@ -61,12 +61,15 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 					controls.WorkProgress = workProgress;
 					workIndicator.WorkProgress = workProgress;
 					Thread.MemoryBarrier();
-					currentSearchTask = Task.Run(() => {
-						foreach (var conflict in conflicts) {
-							cancellationToken.ThrowIfCancellationRequested();
-							resultsView.Enqueue(conflict);
-						}
-					}, searchCancellation.Token);
+					currentSearchTask = Task.Run(
+						() => {
+							foreach (var conflict in conflicts) {
+								cancellationToken.ThrowIfCancellationRequested();
+								resultsView.Enqueue(conflict);
+							}
+						},
+						searchCancellation.Token
+					);
 					await currentSearchTask;
 				} catch (OperationCanceledException) {
 					// Suppress

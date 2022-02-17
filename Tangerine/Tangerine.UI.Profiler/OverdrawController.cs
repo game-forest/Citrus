@@ -28,7 +28,7 @@ namespace Tangerine.UI
 			gradientControlWidget = new GradientControlWidget() {
 				Anchors = Anchors.LeftRight,
 				Padding = new Thickness(8),
-				MinMaxHeight = 64
+				MinMaxHeight = 64,
 			};
 			Widget UnclampWidgetSize(Widget widget)
 			{
@@ -50,18 +50,18 @@ namespace Tangerine.UI
 								Nodes = {
 									UnclampWidgetSize(new ThemedButton("Overdraw [0-255]") { Enabled = false }),
 									UnclampWidgetSize(positionInput = new ThemedNumericEditBox()),
-								}
+								},
 							},
 							new Widget {
 								Layout = new HBoxLayout(),
 								Nodes = {
 									UnclampWidgetSize(new ThemedButton("Color") { Enabled = false }),
-									UnclampWidgetSize(colorInput = new ThemedEditBox())
-								}
-							}
-						}
-					}
-				}
+									UnclampWidgetSize(colorInput = new ThemedEditBox()),
+								},
+							},
+						},
+					},
+				},
 			};
 			var presetsGroup = new Widget {
 				Layout = new VBoxLayout(),
@@ -76,35 +76,40 @@ namespace Tangerine.UI
 								Layout = new HBoxLayout { Spacing = 4 },
 								Nodes = {
 									UnclampWidgetSize(new ThemedButton("Default") {
-										Clicked = () => SetPalette(defaultGradientClone) }),
+										Clicked = () => SetPalette(defaultGradientClone),
+									}),
 									new ThemedButton("Reset") {
-										Clicked = () => SetPalette(defaultGradientClone = GetDefaultPreset())
-									}
-								}
+										Clicked = () => SetPalette(defaultGradientClone = GetDefaultPreset()),
+									},
+								},
 							},
 							new Widget {
 								Layout = new HBoxLayout { Spacing = 4 },
 								Nodes = {
 									UnclampWidgetSize(new ThemedButton("Green-Red-White") {
-										Clicked = () => SetPalette(greenRedWhiteGradientClone) }),
+										Clicked = () => SetPalette(greenRedWhiteGradientClone),
+									}),
 									new ThemedButton("Reset") {
-										Clicked = () => SetPalette(greenRedWhiteGradientClone = GetGreenRedWhitePreset())
-									}
-								}
+										Clicked = () =>
+											SetPalette(greenRedWhiteGradientClone = GetGreenRedWhitePreset()),
+									},
+								},
 							},
 							new Widget {
 								Layout = new HBoxLayout { Spacing = 4 },
 								Nodes = {
 									UnclampWidgetSize(new ThemedButton("Green-Yellow-Red") {
-										Clicked = () => SetPalette(greenYellowRedGradientClone) }),
+										Clicked = () => SetPalette(greenYellowRedGradientClone),
+									}),
 									new ThemedButton("Reset") {
-										Clicked = () => SetPalette(greenYellowRedGradientClone = GetGreenYellowRedPreset())
-									}
-								}
-							}
-						}
-					}
-				}
+										Clicked = () =>
+											SetPalette(greenYellowRedGradientClone = GetGreenYellowRedPreset()),
+									},
+								},
+							},
+						},
+					},
+				},
 			};
 			AddNode(gradientControlWidget);
 			colorPickerPanel = new ColorPickerPanel(ColorPickerState.Default);
@@ -116,7 +121,7 @@ namespace Tangerine.UI
 			var toggleOverdrawButton = UnclampWidgetSize(new ThemedButton());
 			toggleOverdrawButton.Clicked = () => Overdraw.Enabled = !Overdraw.Enabled;
 			toggleOverdrawButton.Updating = (d) => toggleOverdrawButton.Text =
-				(Overdraw.EnabledAtUpdateThread ? "Disable Overdraw Mode" : "Enable Overdraw Mode");
+				Overdraw.EnabledAtUpdateThread ? "Disable Overdraw Mode" : "Enable Overdraw Mode";
 			AddNode(new Widget {
 				Layout = new HBoxLayout { Spacing = 4 },
 				Padding = new Thickness(8),
@@ -127,10 +132,10 @@ namespace Tangerine.UI
 							gradientGroup,
 							presetsGroup,
 							toggleOverdrawButton,
-						}
+						},
 					},
-					colorPickerPanel.EditorsWidget
-				}
+					colorPickerPanel.EditorsWidget,
+				},
 			});
 			void NoPointSelected()
 			{
@@ -147,7 +152,7 @@ namespace Tangerine.UI
 			void UpdateGradient() => OverdrawInterpreter.Gradient = gradientControlWidget.Gradient;
 			gradientControlWidget.ControlPointCreated += (f, i) => UpdateGradient();
 			gradientControlWidget.ControlPointRemoved += (i) => UpdateGradient();
-			gradientControlWidget.ControlPointPositionChanged += (f,i) => UpdateGradient();
+			gradientControlWidget.ControlPointPositionChanged += (f, i) => UpdateGradient();
 			positionInput.Step = 1;
 			positionInput.Submitted += (text) => {
 				if (currentPoint != null) {

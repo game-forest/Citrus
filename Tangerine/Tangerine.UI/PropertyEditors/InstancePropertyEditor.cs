@@ -32,7 +32,7 @@ namespace Tangerine.UI
 							SetProperty<object>((_) => type != null ? Activator.CreateInstance(type) : null);
 						}
 					) {
-						TooltipText = tooltipText
+						TooltipText = tooltipText,
 					};
 					if (menuPath != null) {
 						menu.InsertCommandAlongPath(command, menuPath);
@@ -76,7 +76,7 @@ namespace Tangerine.UI
 				defaultValue = propertyMetaItem?.GetValue(meta.Default);
 			}
 			var resetToDefaultButton = new ToolbarButton(IconPool.GetTexture("Tools.Revert")) {
-				Clicked = () => SetProperty(Cloner.Clone(defaultValue))
+				Clicked = () => SetProperty(Cloner.Clone(defaultValue)),
 			};
 			if (!GetPossibleTypes(propertyType).Skip(1).Any()) {
 				var t = GetPossibleTypes(propertyType).First();
@@ -86,7 +86,7 @@ namespace Tangerine.UI
 					Padding = new Thickness(left: 5.0f),
 					HitTestTarget = true,
 					MinWidth = 0,
-					MaxWidth = float.PositiveInfinity
+					MaxWidth = float.PositiveInfinity,
 				};
 				createButton.Clicked = () => {
 					createButton.Visible = false;

@@ -1,5 +1,5 @@
-using Lime;
 using System;
+using Lime;
 
 namespace Tangerine.UI
 {
@@ -20,11 +20,35 @@ namespace Tangerine.UI
 			return new MouseCursor(icon, hotSpot);
 		}
 
-		public static MouseCursor Rotate { get; } = CreateCursorFromEmbededResource("Cursors.Rotate", new IntVector2(8, 8));
-		public static MouseCursor Pipette { get; } = CreateCursorFromEmbededResource("Tools.Pipette", new IntVector2(0, 23));
-		public static MouseCursor DragHandClosed { get; } = CreateCursorFromEmbededResource("Cursors.DragHandClosed", new IntVector2(11, 1));
-		public static MouseCursor DragHandOpen { get; } = CreateCursorFromEmbededResource("Cursors.DragHandOpen", new IntVector2(11, 8));
-		public static MouseCursor EnabledHelp { get; } = CreateCursorFromEmbededResource("Cursors.EnabledHelp", new IntVector2(0, 0));
-		public static MouseCursor DisabledHelp { get; } = CreateCursorFromEmbededResource("Cursors.DisabledHelp", new IntVector2(0, 0));
+		public static MouseCursor Rotate { get; } =
+			CreateCursorFromEmbededResource(
+				"Cursors.Rotate",
+				new IntVector2(8, 8)
+			);
+		public static MouseCursor Pipette { get; } =
+			CreateCursorFromEmbededResource(
+				"Tools.Pipette",
+				new IntVector2(0, 23)
+			);
+		public static MouseCursor DragHandClosed { get; } =
+			CreateCursorFromEmbededResource(
+				"Cursors.DragHandClosed",
+				new IntVector2(11, 1)
+			);
+		public static MouseCursor DragHandOpen { get; } =
+			CreateCursorFromEmbededResource(
+				"Cursors.DragHandOpen",
+				new IntVector2(11, 8)
+			);
+		public static MouseCursor EnabledHelp { get; } =
+			CreateCursorFromEmbededResource(
+				"Cursors.EnabledHelp",
+				new IntVector2(0, 0)
+			);
+		public static MouseCursor DisabledHelp { get; } =
+			CreateCursorFromEmbededResource(
+				"Cursors.DisabledHelp",
+				new IntVector2(0, 0)
+			);
 	}
 }

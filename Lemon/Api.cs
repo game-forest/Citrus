@@ -11,7 +11,7 @@ namespace Lemon
 #if iOS
 		const string Dll = "__Internal";
 #else
-		const string Dll = "LemonNative";
+		private const string Dll = "LemonNative";
 #endif
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -89,6 +89,17 @@ namespace Lemon
 		public static extern double OgvGetPlaybackTime(IntPtr ogv);
 
 		[DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void DecodeRGBX8(IntPtr dst_ptr, IntPtr y_ptr, IntPtr u_ptr, IntPtr v_ptr, int width, int height, int y_span, int uv_span, int dst_span, int dither);
+		public static extern void DecodeRGBX8(
+			IntPtr dst_ptr,
+			IntPtr y_ptr,
+			IntPtr u_ptr,
+			IntPtr v_ptr,
+			int width,
+			int height,
+			int y_span,
+			int uv_span,
+			int dst_span,
+			int dither
+		);
 	}
 }

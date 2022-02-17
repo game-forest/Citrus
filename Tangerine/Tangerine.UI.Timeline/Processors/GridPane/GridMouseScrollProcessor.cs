@@ -6,20 +6,20 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline
 {
-	class GridMouseScrollProcessor : Core.ITaskProvider
+	internal class GridMouseScrollProcessor : Core.ITaskProvider
 	{
-		Timeline timeline => Timeline.Instance;
+		private Timeline Timeline => Timeline.Instance;
 
 		public IEnumerator<object> Task()
 		{
-			var widget = timeline.Grid.RootWidget;
+			var widget = Timeline.Grid.RootWidget;
 			var userPreferences = CoreUserPreferences.Instance;
 			while (true) {
 				if (widget.Input.IsMousePressed()) {
 					yield return null;
 					var cw = TimelineMetrics.ColWidth;
 					var p = widget.LocalMousePosition();
-					var offset = timeline.Offset;
+					var offset = Timeline.Offset;
 					if (p.X > widget.Width - cw / 2) {
 						offset.X += cw;
 					} else if (p.X < cw / 2) {
@@ -27,7 +27,7 @@ namespace Tangerine.UI.Timeline
 					}
 					if (!userPreferences.LockTimelineCursor) {
 						Core.Document.Current.History.DoTransaction(() => {
-							Operations.SetCurrentColumn.Perform(timeline.Ruler.CalcColumnUnderMouse());
+							Operations.SetCurrentColumn.Perform(Timeline.Ruler.CalcColumnUnderMouse());
 						});
 					}
 					var rh = TimelineMetrics.DefaultRowHeight;
@@ -36,7 +36,7 @@ namespace Tangerine.UI.Timeline
 					} else if (p.Y < rh / 2) {
 						offset.Y -= rh;
 					}
-					timeline.ClampAndSetOffset(offset);
+					Timeline.ClampAndSetOffset(offset);
 					Window.Current.Invalidate();
 				}
 				yield return null;

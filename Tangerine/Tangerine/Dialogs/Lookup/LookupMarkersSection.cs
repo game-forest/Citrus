@@ -20,21 +20,26 @@ namespace Tangerine
 			};
 		}
 
-		public static void FillLookupItemsListByAnimationMarkers(LookupSections sections, List<LookupItem> items, Animation animation, bool navigateToNode = true)
-		{
+		public static void FillLookupItemsListByAnimationMarkers(
+			LookupSections sections, List<LookupItem> items, Animation animation, bool navigateToNode = true
+		) {
 			foreach (var m in animation.Markers) {
 				var mClosed = m;
 				var item = new LookupDialogItem(
-					m.Id,
-					$"{m.Action} Marker at Frame: {m.Frame}; Animation: {(animation.IsLegacy ? "[Legacy]" : animation.Id)}; Node: {animation.OwnerNode}",
-					markerActionsIcons[m.Action].AsTexture,
-					() => {
+					headerText: m.Id,
+					text: $"{m.Action} Marker at Frame: {m.Frame}; "
+						+ $"Animation: {(animation.IsLegacy ? "[Legacy]" : animation.Id)}; "
+						+ $"Node: {animation.OwnerNode}",
+					iconTexture: markerActionsIcons[m.Action].AsTexture,
+					action: () => {
 						var a = animation;
 						if (navigateToNode) {
 							var animationIndex = animation.OwnerNode.Animations.IndexOf(animation);
 							Node node;
 							try {
-								node = NavigateToNode.Perform(animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: true);
+								node = NavigateToNode.Perform(
+									animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: true
+								);
 							} catch (System.Exception exception) {
 								AlertDialog.Show(exception.Message);
 								return;
@@ -75,14 +80,18 @@ namespace Tangerine
 		public override void FillLookup(LookupWidget lookupWidget)
 		{
 			if (
-				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Marker function") ||
-				!RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Marker function") ||
-				!RequireAnimationWithMarkersOrAddAlertItem(lookupWidget, "Select any node with markers to use Go To Marker function")
+				!RequireProjectOrAddAlertItem(lookupWidget, "Open any project to use Go To Marker function")
+				|| !RequireDocumentOrAddAlertItem(lookupWidget, "Open any document to use Go To Marker function")
+				|| !RequireAnimationWithMarkersOrAddAlertItem(
+					lookupWidget, "Select any node with markers to use Go To Marker function"
+				)
 			) {
 				return;
 			}
 			var items = new List<LookupItem>(0);
-			LookupMarkersSection.FillLookupItemsListByAnimationMarkers(Sections, items, Document.Current.Animation, navigateToNode: false);
+			LookupMarkersSection.FillLookupItemsListByAnimationMarkers(
+				Sections, items, Document.Current.Animation, navigateToNode: false
+			);
 			lookupWidget.AddRange(items);
 		}
 
@@ -121,7 +130,12 @@ namespace Tangerine
 			var items = new List<LookupItem>(0);
 			foreach (var node in Document.Current.RootNodeUnwrapped.SelfAndDescendants) {
 				foreach (var animation in node.Animations) {
-					LookupMarkersSection.FillLookupItemsListByAnimationMarkers(Sections, items, animation, navigateToNode: node != Document.Current.Container);
+					LookupMarkersSection.FillLookupItemsListByAnimationMarkers(
+						Sections,
+						items,
+						animation,
+						navigateToNode: node != Document.Current.Container
+					);
 				}
 			}
 			MutableItemList = items;

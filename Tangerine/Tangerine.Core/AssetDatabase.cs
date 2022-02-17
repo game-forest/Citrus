@@ -22,7 +22,9 @@ namespace Tangerine.Core
 			scanningCancellationSource = new CancellationTokenSource();
 			try {
 				var cancellationToken = scanningCancellationSource.Token;
-				items = await System.Threading.Tasks.Task.Run(() => GetAssetsDictionary(cancellationToken), cancellationToken);
+				items = await System.Threading.Tasks.Task.Run(
+					() => GetAssetsDictionary(cancellationToken), cancellationToken
+				);
 				scanningCancellationSource = null;
 			} catch (OperationCanceledException) {
 				// Suppress

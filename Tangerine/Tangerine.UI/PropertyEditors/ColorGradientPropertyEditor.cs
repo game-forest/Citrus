@@ -15,15 +15,16 @@ namespace Tangerine.UI
 		private IDataflowProvider<string> currentColorString;
 		private readonly EditBox colorEditor;
 		private readonly NumericEditBox positionEditor;
-		private GradientControlPoint selectedControlPoint => gradientControlWidget.SelectedControlPoint;
+		private GradientControlPoint SelectedControlPoint => gradientControlWidget.SelectedControlPoint;
 		private ToolbarButton pipetteButton;
 
 		private bool enabled = true;
-		
+
 		public bool Enabled
 		{
 			get => enabled;
-			set {
+			set
+			{
 				if (enabled != value) {
 					enabled = value;
 					colorEditor.Enabled = enabled;
@@ -50,9 +51,11 @@ namespace Tangerine.UI
 				MinMaxHeight = 35f,
 				Height = 35f,
 				LayoutCell = new LayoutCell(Alignment.LeftCenter),
-				Padding = new Thickness { Right = 5f, Bottom = 5f}
+				Padding = new Thickness { Right = 5f, Bottom = 5f },
 			};
-			var gradientProperty = CoalescedPropertyValue(new ColorGradient(Color4.White, Color4.Black)).DistinctUntilChanged();
+			var gradientProperty = CoalescedPropertyValue(
+				new ColorGradient(Color4.White, Color4.Black)
+			).DistinctUntilChanged();
 			gradientControlWidget.Gradient = gradientProperty.GetValue().Value;
 			ContainerWidget.AddLateChangeWatcher(gradientProperty, g => gradientControlWidget.Gradient = g.Value);
 			gradientControlWidget.SelectionChanged += SelectPoint;
@@ -63,17 +66,17 @@ namespace Tangerine.UI
 				Layout = new HBoxLayout { Spacing = 10f },
 				Nodes = {
 					new ThemedSimpleText { Text = nameof(GradientControlPoint.Position), MinWidth = 150 },
-					(positionEditor = EditorParams.NumericEditBoxFactory())
+					(positionEditor = EditorParams.NumericEditBoxFactory()),
 				},
-				Padding = new Thickness(0, 3f)
+				Padding = new Thickness(0, 3f),
 			});
 			ExpandableContent.AddNode(new Widget {
 				Layout = new HBoxLayout { Spacing = 10f },
 				Nodes = {
 					new ThemedSimpleText { Text = nameof(GradientControlPoint.Color), MinWidth = 150 },
-					(colorEditor = EditorParams.EditBoxFactory())
+					(colorEditor = EditorParams.EditBoxFactory()),
 				},
-				Padding = new Thickness(0, 3f)
+				Padding = new Thickness(0, 3f),
 			});
 			positionEditor.Step = 0.005f;
 			colorEditor.Submitted += SetColor;
@@ -108,14 +111,16 @@ namespace Tangerine.UI
 			};
 			colorPanel.Changed += () => {
 				EditorParams.History?.RollbackTransaction();
-				Core.Operations.SetProperty.Perform(selectedControlPoint, nameof(GradientControlPoint.Color), colorPanel.Color);
+				Core.Operations.SetProperty.Perform(
+					SelectedControlPoint, nameof(GradientControlPoint.Color), colorPanel.Color
+				);
 			};
-			SelectPoint(selectedControlPoint);
+			SelectPoint(SelectedControlPoint);
 		}
 
 		private void SetControlPointProperty(string propertyName, object value)
 		{
-			DoTransaction(() => Core.Operations.SetProperty.Perform(selectedControlPoint, propertyName, value));
+			DoTransaction(() => Core.Operations.SetProperty.Perform(SelectedControlPoint, propertyName, value));
 		}
 
 		private Node CreatePipetteButton()
@@ -125,7 +130,7 @@ namespace Tangerine.UI
 			};
 			pipetteButton.Tasks.Add(Color4PropertyEditor.PickColorProcessor(
 				pipetteButton, v => {
-					v.A = selectedControlPoint.Color.A;
+					v.A = SelectedControlPoint.Color.A;
 					SetControlPointProperty(nameof(GradientControlPoint.Color), v);
 				}));
 			return pipetteButton;
@@ -152,17 +157,29 @@ namespace Tangerine.UI
 		{
 			colorEditor.Tasks.Clear();
 			positionEditor.Tasks.Clear();
-			selectedPointColorProperty = new PropertyDataflowProvider<Color4>(point, nameof(GradientControlPoint.Color));
-			selectedPointPositionProperty = new PropertyDataflowProvider<float>(point, nameof(GradientControlPoint.Position));
-			currentColorString = selectedPointColorProperty.DistinctUntilChanged().Select(i => i.ToString(Color4.StringPresentation.Dec));
-			colorEditor.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColorString.Consume(v => colorEditor.Text = v));
+			selectedPointColorProperty = new PropertyDataflowProvider<Color4>(
+				point, nameof(GradientControlPoint.Color)
+			);
+			selectedPointPositionProperty = new PropertyDataflowProvider<float>(
+				point, nameof(GradientControlPoint.Position)
+			);
+			currentColorString = selectedPointColorProperty
+				.DistinctUntilChanged()
+				.Select(i => i.ToString(Color4.StringPresentation.Dec));
+			colorEditor.Components.GetOrAdd<LateConsumeBehaviour>()
+				.Add(currentColorString.Consume(v => colorEditor.Text = v));
 			colorPanel.Color = selectedPointColorProperty.GetValue();
 			colorEditor.AddLateChangeWatcher(selectedPointColorProperty, v => {
 				if (colorPanel.Color != v) {
 					colorPanel.Color = v;
 				}
 			});
-			positionEditor.Components.GetOrAdd<EarlyConsumeBehaviour>().Add(selectedPointPositionProperty.DistinctUntilChanged().Consume(v => positionEditor.Text = v.ToString()));
+			positionEditor.Components.GetOrAdd<EarlyConsumeBehaviour>()
+				.Add(
+					selectedPointPositionProperty
+						.DistinctUntilChanged()
+						.Consume(v => positionEditor.Text = v.ToString())
+				);
 		}
 	}
 
@@ -180,7 +197,8 @@ namespace Tangerine.UI
 		public ColorGradient Gradient
 		{
 			get => gradient;
-			set {
+			set
+			{
 				if (value == null) {
 					throw new ArgumentNullException();
 				}
@@ -226,7 +244,9 @@ namespace Tangerine.UI
 			var chessTexture = PrepareChessTexture(Color4.White, Color4.Black);
 			gradientPane.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
 				w.PrepareRendererState();
-				Renderer.DrawSprite(chessTexture, Color4.White, Vector2.Zero, w.Size, Vector2.Zero, new Vector2(w.Size.X / w.Size.Y, 1));
+				Renderer.DrawSprite(
+					chessTexture, Color4.White, Vector2.Zero, w.Size, Vector2.Zero, new Vector2(w.Size.X / w.Size.Y, 1)
+				);
 			}));
 			gradientComponent = new GradientComponent();
 			gradientPane.Components.Add(gradientComponent);
@@ -262,7 +282,9 @@ namespace Tangerine.UI
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 					if (clickGesture.WasBegan()) {
 						var pos = createPointsPane.LocalMousePosition().X / createPointsPane.Size.X;
-						var point = new GradientControlPoint(Gradient.GetNearestPointTo(pos)?.Color ?? Color4.White, pos);
+						var point = new GradientControlPoint(
+							Gradient.GetNearestPointTo(pos)?.Color ?? Color4.White, pos
+						);
 						AddPoint(point);
 						CreatePoint(point, Gradient, gradientPaneContainer);
 					}
@@ -309,7 +331,7 @@ namespace Tangerine.UI
 				Position = new Vector2(controlPoint.Position * container.Size.X, container.Size.Y),
 				MinMaxHeight = 15f,
 				MinMaxWidth = 10f,
-				Size = new Vector2(10, 15f)
+				Size = new Vector2(10, 15f),
 			};
 			w.Gestures.Add(new ClickGesture(1, () => {
 				if (gradient.Count > 1) {
@@ -325,8 +347,9 @@ namespace Tangerine.UI
 			SelectPoint(w);
 		}
 
-		private IEnumerator<object> DragTask(GradientControlPointWidget w, GradientControlPoint point, DragGesture dragGesture)
-		{
+		private IEnumerator<object> DragTask(
+			GradientControlPointWidget w, GradientControlPoint point, DragGesture dragGesture
+		) {
 			while (true) {
 				if (dragGesture.WasBegan()) {
 					var prevPos = LocalMousePosition();
@@ -386,7 +409,7 @@ namespace Tangerine.UI
 				Core.Operations.RemoveFromList.Perform(gradient, gradient.IndexOf(controlPoint));
 				InvokeRemovePoint(idx);
 				history.CommitTransaction();
-			};
+			}
 		}
 
 		protected override void SetPointPosition(GradientControlPoint point, float position)
@@ -401,7 +424,7 @@ namespace Tangerine.UI
 		private readonly Vertex[] vertices = { new Vertex(), new Vertex(), new Vertex() };
 		public GradientControlPoint ControlPoint { get; set; }
 		private readonly ITexture chessTexture;
-		public const float tipBodyRatio = 1f / 3f;
+		public const float TipBodyRatio = 1f / 3f;
 
 		public GradientControlPointWidget()
 		{
@@ -426,7 +449,7 @@ namespace Tangerine.UI
 		public static ITexture PrepareChessTexture(Color4 color1, Color4 color2)
 		{
 			var chessTexture = new Texture2D();
-			chessTexture.LoadImage(new[] { color1, color2}, 1, 2);
+			chessTexture.LoadImage(new[] { color1, color2 }, 1, 2);
 			chessTexture.TextureParams = new TextureParams {
 				WrapMode = TextureWrapMode.Repeat,
 				MinMagFilter = TextureFilter.Nearest,
@@ -437,18 +460,26 @@ namespace Tangerine.UI
 		private void Render(Widget w)
 		{
 			w.PrepareRendererState();
-			Renderer.DrawRect(new Vector2(0, w.Size.Y * tipBodyRatio), w.Size,
-				new Color4(ControlPoint.Color.R, ControlPoint.Color.G, ControlPoint.Color.B));
+			Renderer.DrawRect(
+				a: new Vector2(0, w.Size.Y * TipBodyRatio),
+				b: w.Size,
+				color: new Color4(ControlPoint.Color.R, ControlPoint.Color.G, ControlPoint.Color.B)
+			);
 			var spriteColor = Color4.White.Transparentify(ControlPoint.Color.A / 255f);
-			Renderer.DrawSprite(chessTexture, spriteColor,
-				new Vector2(w.Size.X / 2, w.Size.Y * tipBodyRatio),
-				new Vector2(w.Size.X / 2, w.Size.Y * (1 - tipBodyRatio)), Vector2.Zero, Vector2.One);
-			Renderer.DrawRectOutline(new Vector2(0, w.Size.Y * tipBodyRatio), w.Size, Color4.Black);
+			Renderer.DrawSprite(
+				texture1: chessTexture,
+				color: spriteColor,
+				position: new Vector2(w.Size.X / 2, w.Size.Y * TipBodyRatio),
+				size: new Vector2(w.Size.X / 2, w.Size.Y * (1 - TipBodyRatio)),
+				uv0: Vector2.Zero,
+				uv1: Vector2.One
+			);
+			Renderer.DrawRectOutline(new Vector2(0, w.Size.Y * TipBodyRatio), w.Size, Color4.Black);
 			vertices[0].Pos = new Vector2(w.Size.X / 2, 0);
 			vertices[0].Color = Color;
-			vertices[1].Pos = new Vector2(w.Size.X, w.Size.Y * tipBodyRatio);
+			vertices[1].Pos = new Vector2(w.Size.X, w.Size.Y * TipBodyRatio);
 			vertices[1].Color = Color;
-			vertices[2].Pos = new Vector2(0, w.Size.Y * tipBodyRatio);
+			vertices[2].Pos = new Vector2(0, w.Size.Y * TipBodyRatio);
 			vertices[2].Color = Color;
 			Renderer.DrawTriangleFan(vertices, 3);
 			Renderer.DrawLine(vertices[0].Pos, vertices[1].Pos, Color4.Black);

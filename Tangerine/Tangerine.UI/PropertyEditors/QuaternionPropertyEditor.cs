@@ -6,7 +6,9 @@ namespace Tangerine.UI
 {
 	public class QuaternionPropertyEditor : CommonPropertyEditor<Quaternion>
 	{
-		private NumericEditBox editorX, editorY, editorZ;
+		private NumericEditBox editorX;
+		private NumericEditBox editorY;
+		private NumericEditBox editorZ;
 
 		public QuaternionPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
@@ -17,24 +19,38 @@ namespace Tangerine.UI
 					(editorY = editorParams.NumericEditBoxFactory()),
 					(editorZ = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
-				}
+				},
 			});
 			var current = CoalescedPropertyValue();
-			editorX.Submitted += text => SetComponent(editorParams, 0, editorX, current.GetValue().Value, q => q.ToEulerAngles().X);
-			editorY.Submitted += text => SetComponent(editorParams, 1, editorY, current.GetValue().Value, q => q.ToEulerAngles().Y);
-			editorZ.Submitted += text => SetComponent(editorParams, 2, editorZ, current.GetValue().Value, q => q.ToEulerAngles().Z);
+			editorX.Submitted += text =>
+				SetComponent(editorParams, 0, editorX, current.GetValue().Value, q => q.ToEulerAngles().X);
+			editorY.Submitted += text =>
+				SetComponent(editorParams, 1, editorY, current.GetValue().Value, q => q.ToEulerAngles().Y);
+			editorZ.Submitted += text =>
+				SetComponent(editorParams, 2, editorZ, current.GetValue().Value, q => q.ToEulerAngles().Z);
 			editorX.AddLateChangeWatcher(current, v => {
 				var ea = v.Value.ToEulerAngles() * Mathf.RadToDeg;
-				editorX.Text = SameComponentValues(q => q.ToEulerAngles().X) ? RoundAngle(ea.X).ToString("0.###") : ManyValuesText;
-				editorY.Text = SameComponentValues(q => q.ToEulerAngles().Y) ? RoundAngle(ea.Y).ToString("0.###") : ManyValuesText;
-				editorZ.Text = SameComponentValues(q => q.ToEulerAngles().Z) ? RoundAngle(ea.Z).ToString("0.###") : ManyValuesText;
+				editorX.Text = SameComponentValues(q => q.ToEulerAngles().X)
+					? RoundAngle(ea.X).ToString("0.###")
+					: ManyValuesText;
+				editorY.Text = SameComponentValues(q => q.ToEulerAngles().Y)
+					? RoundAngle(ea.Y).ToString("0.###")
+					: ManyValuesText;
+				editorZ.Text = SameComponentValues(q => q.ToEulerAngles().Z)
+					? RoundAngle(ea.Z).ToString("0.###")
+					: ManyValuesText;
 			});
 		}
 
-		float RoundAngle(float value) => (value * 1000f).Round() / 1000f;
+		private float RoundAngle(float value) => (value * 1000f).Round() / 1000f;
 
-		void SetComponent(IPropertyEditorParams editorParams, int component, NumericEditBox editor, Quaternion currentValue, Func<Quaternion, float> selector)
-		{
+		private void SetComponent(
+			IPropertyEditorParams editorParams,
+			int component,
+			NumericEditBox editor,
+			Quaternion currentValue,
+			Func<Quaternion, float> selector
+		) {
 			float newValue;
 			if (float.TryParse(editor.Text, out newValue)) {
 				DoTransaction(() => {

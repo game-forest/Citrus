@@ -102,17 +102,20 @@ namespace Lime
 			}
 		}
 
-		public int Width {
+		public int Width
+		{
 			get { return B.X - A.X; }
 			set { B.X = A.X + value; }
 		}
 
-		public int Height {
+		public int Height
+		{
 			get { return B.Y - A.Y; }
 			set { B.Y = A.Y + value; }
 		}
 
-		public IntVector2 Size {
+		public IntVector2 Size
+		{
 			get { return B - A; }
 		}
 

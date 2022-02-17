@@ -9,7 +9,7 @@ namespace Tangerine.UI.Timeline.Components
 {
 	public class GridAudioView : GridNodeView
 	{
-		readonly Audio audio;
+		private readonly Audio audio;
 
 		public GridAudioView(Audio audio) : base(audio)
 		{
@@ -32,16 +32,26 @@ namespace Tangerine.UI.Timeline.Components
 					var waveform = Timeline.Instance.WaveformCache.GetWaveform(sample.Path);
 					var pos = new Vector2(key.Frame * TimelineMetrics.ColWidth + 1, 0);
 					foreach (var p in waveform.Parts) {
-						var size = new Vector2(p.Width * TimelineMetrics.ColWidth / WaveformCache.PixelsPerFrame, widget.Height);
+						var size = new Vector2(
+							p.Width * TimelineMetrics.ColWidth / WaveformCache.PixelsPerFrame,
+							widget.Height
+						);
 						Renderer.DrawRect(pos, pos + size, ColorTheme.Current.TimelineGrid.WaveformBackground);
-						Renderer.DrawSprite(p.Texture, ColorTheme.Current.TimelineGrid.WaveformColor, pos, size, Vector2.Zero, Vector2.One);
+						Renderer.DrawSprite(
+							texture1: p.Texture,
+							color: ColorTheme.Current.TimelineGrid.WaveformColor,
+							position: pos,
+							size: size,
+							uv0: Vector2.Zero,
+							uv1: Vector2.One
+						);
 						pos.X += size.X;
 					}
 				}
 			}
 		}
 
-		SerializableSample GetSampleAtFrame(int frame)
+		private SerializableSample GetSampleAtFrame(int frame)
 		{
 			Animator<SerializableSample> sampleAnimator;
 			if (!audio.Animators.TryFind(nameof(Audio.Sample), out sampleAnimator, Document.Current.AnimationId)) {
@@ -121,10 +131,37 @@ namespace Tangerine.UI.Timeline.Components
 								var pixels = new Color4[textureWidth * textureHeight];
 								int width = numSamples * textureWidth / maxPartSamples;
 								if (stereo) {
-									BuildMonoWaveform((short*)samples, 2, numSamples, pixels, textureWidth, width, 0, textureHeight / 2 - 1);
-									BuildMonoWaveform(((short*)samples + 1), 2, numSamples, pixels, textureWidth, width, textureHeight / 2 + 1, textureHeight - 1);
+									BuildMonoWaveform(
+										samples: (short*)samples,
+										stride: 2,
+										numSamples: numSamples,
+										pixels: pixels,
+										textureWidth: textureWidth,
+										width: width,
+										top: 0,
+										bottom: textureHeight / 2 - 1
+									);
+									BuildMonoWaveform(
+										samples: (short*)samples + 1,
+										stride: 2,
+										numSamples: numSamples,
+										pixels: pixels,
+										textureWidth: textureWidth,
+										width: width,
+										top: textureHeight / 2 + 1,
+										bottom: textureHeight - 1
+									);
 								} else {
-									BuildMonoWaveform((short*)samples, 1, numSamples, pixels, textureWidth, width, 0, textureHeight - 1);
+									BuildMonoWaveform(
+										samples: (short*)samples,
+										stride: 1,
+										numSamples: numSamples,
+										pixels: pixels,
+										textureWidth: textureWidth,
+										width: width,
+										top: 0,
+										bottom: textureHeight - 1
+									);
 								}
 								var texture = new Texture2D();
 								texture.LoadImage(pixels, textureWidth, textureHeight);
@@ -144,8 +181,16 @@ namespace Tangerine.UI.Timeline.Components
 			return waveform;
 		}
 
-		private unsafe static void BuildMonoWaveform(short* samples, int stride, int numSamples, Color4[] pixels, int textureWidth, int width, int top, int bottom)
-		{
+		private static unsafe void BuildMonoWaveform(
+			short* samples,
+			int stride,
+			int numSamples,
+			Color4[] pixels,
+			int textureWidth,
+			int width,
+			int top,
+			int bottom
+		) {
 			int currentSample = 0;
 			int accumulator = 0;
 			for (int i = 0; i < width && currentSample < numSamples; i++) {
@@ -158,8 +203,14 @@ namespace Tangerine.UI.Timeline.Components
 						int s = *samples;
 						samples += stride;
 						currentSample++;
-						if (s < rangeMin) rangeMin = s;
-						if (s > rangeMax) rangeMax = s;
+						if (s < rangeMin) {
+							rangeMin = s;
+						}
+
+						if (s > rangeMax) {
+							rangeMax = s;
+						}
+
 						accumulator += width;
 					}
 					accumulator -= numSamples;

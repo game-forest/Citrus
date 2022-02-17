@@ -1,11 +1,10 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
-
 using Cmds = Tangerine.UI.FilesystemCommands;
 
 namespace Tangerine.UI.FilesystemView
@@ -31,7 +30,8 @@ namespace Tangerine.UI.FilesystemView
 		private Lime.FileSystemWatcher fsWatcher;
 		private CookingRulesEditor crEditor;
 		private Preview preview;
-		private List<(string Path, FilesystemSelection Selection)> navigationHistory = new List<(string, FilesystemSelection)>();
+		private List<(string Path, FilesystemSelection Selection)> navigationHistory =
+			new List<(string, FilesystemSelection)>();
 		private int navigationHistoryIndex = -1;
 		private NodeToggler toggleCookingRules;
 		private NodeToggler togglePreview;
@@ -45,7 +45,8 @@ namespace Tangerine.UI.FilesystemView
 		private FilesystemSelection savedFilesystemSelection;
 
 		private SortType sortType = SortType.Name;
-		public SortType SortType {
+		public SortType SortType
+		{
 			get
 			{
 				return sortType;
@@ -53,7 +54,8 @@ namespace Tangerine.UI.FilesystemView
 		}
 
 		private OrderType orderType = OrderType.Ascending;
-		public OrderType OrderType {
+		public OrderType OrderType
+		{
 			get
 			{
 				return orderType;
@@ -146,7 +148,7 @@ namespace Tangerine.UI.FilesystemView
 			}
 			fsWatcher?.Dispose();
 			fsWatcher = new Lime.FileSystemWatcher(path, includeSubdirectories: false);
-			Action<string> OnFsWatcherChanged = p => {
+			Action<string> onFsWatcherChanged = p => {
 				if (fsWatcherInvalidationTask != null) {
 					RootWidget.Tasks.Remove(fsWatcherInvalidationTask);
 				}
@@ -158,11 +160,11 @@ namespace Tangerine.UI.FilesystemView
 			};
 			fsWatcher.Deleted += p => {
 				filesystemSelection.Deselect(p);
-				OnFsWatcherChanged(p);
+				onFsWatcherChanged(p);
 			};
-			fsWatcher.Created += OnFsWatcherChanged;
-			fsWatcher.Renamed += (prevFullPath, fullPath) => OnFsWatcherChanged(fullPath);
-			fsWatcher.Changed += OnFsWatcherChanged;
+			fsWatcher.Created += onFsWatcherChanged;
+			fsWatcher.Renamed += (prevFullPath, fullPath) => onFsWatcherChanged(fullPath);
+			fsWatcher.Changed += onFsWatcherChanged;
 		}
 
 		public FilesystemView()
@@ -188,7 +190,9 @@ namespace Tangerine.UI.FilesystemView
 			InitializeWidgets();
 			selectionPreviewSplitter.Stretches = Splitter.GetStretchesList(up.SelectionPreviewSplitterStretches, 1, 1);
 			cookingRulesSplitter.Stretches = Splitter.GetStretchesList(up.CookingRulesSplitterStretches, 1, 1);
-			toggleCookingRules = new NodeToggler(crEditor.RootWidget, () => { crEditor.Invalidate(filesystemSelection); });
+			toggleCookingRules = new NodeToggler(
+				crEditor.RootWidget, () => { crEditor.Invalidate(filesystemSelection); }
+			);
 			togglePreview = new NodeToggler(preview.RootWidget, () => { preview.Invalidate(filesystemSelection); });
 			if (!up.ShowCookingRulesEditor) {
 				toggleCookingRules.Toggle();
@@ -219,19 +223,24 @@ namespace Tangerine.UI.FilesystemView
 			filesystemSelection.Select(filename);
 		}
 
-		void InitializeWidgets()
+		private void InitializeWidgets()
 		{
 			RootWidget.AddChangeWatcher(() => filesystemSelection.Version, Selection_Changed);
 			scrollView.Content.Layout = new FlowLayout(LayoutDirection.TopToBottom) { Spacing = 1.0f };
 			scrollView.Content.Padding = new Thickness(5.0f);
-			scrollView.Content.CompoundPostPresenter.Insert(0, new SyncDelegatePresenter<Widget>(RenderFilesWidgetRectSelection));
+			scrollView.Content.CompoundPostPresenter.Insert(
+				0, new SyncDelegatePresenter<Widget>(RenderFilesWidgetRectSelection)
+			);
 			scrollView.Updating += ScrollViewUpdating;
 			scrollView.Content.Presenter = new SyncDelegatePresenter<Widget>((w) => {
 				w.PrepareRendererState();
 				var wp = w.ParentWidget;
 				var p = wp.Padding;
-				Renderer.DrawRect(-w.Position + Vector2.Zero - new Vector2(p.Left, p.Top),
-					-w.Position + wp.Size + new Vector2(p.Right, p.Bottom), Theme.Colors.WhiteBackground);
+				Renderer.DrawRect(
+					a: -w.Position + Vector2.Zero - new Vector2(p.Left, p.Top),
+					b: -w.Position + wp.Size + new Vector2(p.Right, p.Bottom),
+					color: Theme.Colors.WhiteBackground
+				);
 			});
 			RootWidget.AddChangeWatcher(() => dragState, (ds) => Window.Current.Invalidate());
 			RootWidget.AddChangeWatcher(() => dragEndPosition, WhenSelectionRectChanged);
@@ -254,22 +263,25 @@ namespace Tangerine.UI.FilesystemView
 				lastKeyboardSelectedFilesystemItem = scrollView.Content.FirstChild as FilesystemItem;
 			});
 			RootWidget.Layout = new VBoxLayout();
-			RootWidget.AddNode((cookingRulesSplitter = new ThemedHSplitter {
-				Nodes = {
-					(new Widget {
-						Layout = new VBoxLayout(),
-						Nodes = {
-							toolbar,
-							(selectionPreviewSplitter = new ThemedVSplitter {
-								Nodes = {
-									scrollView,
-									preview.RootWidget,
-								}
-							})
-						}}),
+			RootWidget.AddNode(
+				cookingRulesSplitter = new ThemedHSplitter {
+					Nodes = {
+						new Widget {
+							Layout = new VBoxLayout(),
+							Nodes = {
+								toolbar,
+								(selectionPreviewSplitter = new ThemedVSplitter {
+									Nodes = {
+										scrollView,
+										preview.RootWidget,
+									},
+								}),
+							},
+						},
 						crEditor.RootWidget,
+					},
 				}
-			}));
+			);
 		}
 
 		private void Selection_Changed(int version)
@@ -315,7 +327,10 @@ namespace Tangerine.UI.FilesystemView
 			} catch (FileNotFoundException) {
 				AlertDialog.Show($"Tangerine can not find \"{path}\".\nCheck the spelling and try again.");
 			} catch (DirectoryNotFoundException) {
-				AlertDialog.Show("The path represents a directory and is invalid, such as being on an unmapped drive, or the directory cannot be found.");
+				AlertDialog.Show(
+					"The path represents a directory and is invalid, such as being on an unmapped drive, " +
+					"or the directory cannot be found."
+				);
 			} catch (IOException) {
 				AlertDialog.Show("This file is being used by another process.");
 			} catch (UnauthorizedAccessException) {
@@ -354,7 +369,8 @@ namespace Tangerine.UI.FilesystemView
 			}
 			var p0 = dragStartPosition;
 			var p1 = dragEndPosition;
-			var r0 = new Rectangle(new Vector2(Mathf.Min(p0.X, p1.X), Mathf.Min(p0.Y, p1.Y)),
+			var r0 = new Rectangle(
+				new Vector2(Mathf.Min(p0.X, p1.X), Mathf.Min(p0.Y, p1.Y)),
 				new Vector2(Mathf.Max(p0.X, p1.X), Mathf.Max(p0.Y, p1.Y)));
 			foreach (var n in scrollView.Content.Nodes) {
 				var ic = n as FilesystemItem;
@@ -376,14 +392,17 @@ namespace Tangerine.UI.FilesystemView
 						} else {
 							filesystemSelection.Deselect(ic.FilesystemPath);
 						}
-					} else if (filesystemSelection.Contains(ic.FilesystemPath) && !scrollView.Input.IsKeyPressed(Key.Shift)) {
+					} else if (
+						filesystemSelection.Contains(ic.FilesystemPath)
+						&& !scrollView.Input.IsKeyPressed(Key.Shift)
+					) {
 						filesystemSelection.Deselect(ic.FilesystemPath);
 					}
 				}
 			}
 		}
 
-		private const float typeNavigationInterval = 0.5f;
+		private const float TypeNavigationInterval = 0.5f;
 		private float typeNavigationTimeout = 0.0f;
 		private string typeNavigationPrefix = string.Empty;
 
@@ -423,14 +442,19 @@ namespace Tangerine.UI.FilesystemView
 				}
 
 				scrollView.Content.Padding = new Thickness(5.0f);
-				scrollView.Content.CompoundPostPresenter.Insert(0, new SyncDelegatePresenter<Widget>(RenderFilesWidgetRectSelection));
+				scrollView.Content.CompoundPostPresenter.Insert(
+					0, new SyncDelegatePresenter<Widget>(RenderFilesWidgetRectSelection)
+				);
 				scrollView.Updated += ScrollViewUpdating;
 				scrollView.Content.Presenter = new SyncDelegatePresenter<Widget>((w) => {
 					w.PrepareRendererState();
 					var wp = w.ParentWidget;
 					var p = wp.Padding;
-					Renderer.DrawRect(-w.Position + Vector2.Zero - new Vector2(p.Left, p.Top),
-						-w.Position + wp.Size + new Vector2(p.Right, p.Bottom), Theme.Colors.WhiteBackground);
+					Renderer.DrawRect(
+						a: -w.Position + Vector2.Zero - new Vector2(p.Left, p.Top),
+						b: -w.Position + wp.Size + new Vector2(p.Right, p.Bottom),
+						color: Theme.Colors.WhiteBackground
+					);
 				});
 
 				InvalidateView(filesystemModel.CurrentPath);
@@ -440,9 +464,14 @@ namespace Tangerine.UI.FilesystemView
 			}
 		}
 
-		private static readonly List<Command> printableKeysCommands =
-				Key.Enumerate().Where(k => k.IsPrintable()).Select(i => new Command(i)).Union(
-					Key.Enumerate().Where(k => k.IsPrintable()).Select(i => new Command(new Shortcut(Modifiers.Shift, i)))).ToList();
+		private static readonly List<Command> printableKeysCommands = Key.Enumerate()
+			.Where(k => k.IsPrintable())
+			.Select(i => new Command(i))
+			.Union(
+				Key.Enumerate()
+					.Where(k => k.IsPrintable())
+					.Select(i => new Command(new Shortcut(Modifiers.Shift, i)))
+			).ToList();
 
 		private void ProcessOtherCommands()
 		{
@@ -451,12 +480,14 @@ namespace Tangerine.UI.FilesystemView
 			}
 
 			if (Cmds.Cancel.Consume()) {
-				typeNavigationTimeout = typeNavigationInterval;
+				typeNavigationTimeout = TypeNavigationInterval;
 				typeNavigationPrefix = string.Empty;
 			} else if (Window.Current.Input.WasKeyReleased(Key.Menu)) {
 				if (!filesystemSelection.Empty) {
 					Window.Current.Input.ConsumeKey(Key.Menu);
-					SystemShellContextMenu.Instance.Show(filesystemSelection.ToArray(), lastKeyboardSelectedFilesystemItem.GlobalPosition);
+					SystemShellContextMenu.Instance.Show(
+						filesystemSelection.ToArray(), lastKeyboardSelectedFilesystemItem.GlobalPosition
+					);
 				}
 			} else if (Cmds.GoBack.Consume()) {
 				GoBackward();
@@ -474,7 +505,9 @@ namespace Tangerine.UI.FilesystemView
 				}
 			} else if (Command.SelectAll.Consume()) {
 				filesystemSelection.Clear();
-				filesystemSelection.SelectRange(scrollView.Content.Nodes.Select(n => (n as FilesystemItem).FilesystemPath));
+				filesystemSelection.SelectRange(
+					scrollView.Content.Nodes.Select(n => (n as FilesystemItem).FilesystemPath)
+				);
 			} else if (Cmds.ToggleSelection.Consume()) {
 				if (lastKeyboardRangeSelectionEndFilesystemItem != null) {
 					var path = lastKeyboardRangeSelectionEndFilesystemItem.FilesystemPath;
@@ -492,85 +525,87 @@ namespace Tangerine.UI.FilesystemView
 			var input = scrollView.Input;
 
 			switch (dragState) {
-			case DragState.None: {
-					if (scrollView.IsMouseOver()) {
-						if (input.ConsumeKeyPress(Key.Mouse0)) {
-							dragEndPosition = dragStartPosition = scrollView.Content.LocalMousePosition();
-							dragState = DragState.WaitingForSelecting;
+				case DragState.None: {
+						if (scrollView.IsMouseOver()) {
+							if (input.ConsumeKeyPress(Key.Mouse0)) {
+								dragEndPosition = dragStartPosition = scrollView.Content.LocalMousePosition();
+								dragState = DragState.WaitingForSelecting;
+							}
+							if (input.ConsumeKeyRelease(Key.Mouse1)) {
+								dragState = DragState.None;
+								filesystemSelection.Clear();
+								SystemShellContextMenu.Instance.Show(filesystemModel.CurrentPath);
+							}
 						}
-						if (input.ConsumeKeyRelease(Key.Mouse1)) {
+						break;
+					}
+				case DragState.Selecting: {
+						if (Application.Input.WasKeyReleased(Key.Mouse0)) {
+							Application.Input.ConsumeKey(Key.Mouse0);
+							scrollView.SetFocus();
 							dragState = DragState.None;
+						}
+						dragEndPosition = scrollView.Content.LocalMousePosition();
+						var scrollOffset = 0.0f;
+						var pos = scrollView.LocalMousePosition();
+						if (scrollView.Direction == ScrollDirection.Vertical) {
+							if (pos.Y < 0) {
+								scrollOffset = pos.Y;
+							} else if (pos.Y > scrollView.Height) {
+								scrollOffset = pos.Y - scrollView.Height;
+							}
+						} else if (scrollView.Direction == ScrollDirection.Horizontal) {
+							if (pos.X < 0) {
+								scrollOffset = pos.X;
+							} else if (pos.X > scrollView.Width) {
+								scrollOffset = pos.X - scrollView.Width;
+							}
+						}
+						scrollView.ScrollPosition += Math.Sign(scrollOffset) * Mathf.Sqr(scrollOffset) * 0.1f * dt;
+						scrollView.ScrollPosition = Mathf.Clamp(
+							scrollView.ScrollPosition,
+							scrollView.MinScrollPosition,
+							scrollView.MaxScrollPosition
+						);
+						Window.Current.Invalidate();
+					}
+					break;
+				case DragState.WaitingForDragging:
+					if ((dragStartPosition - Window.Current.Input.MousePosition).Length > 5.0f) {
+						dragState = DragState.Dragging;
+						CommonWindow.Current.DragFiles(filesystemSelection.ToArray());
+					}
+					if (
+						Window.Current.Input.WasKeyReleased(Key.Mouse0) ||
+						Window.Current.Input.WasKeyReleased(Key.Mouse0DoubleClick)
+					) {
+						dragState = DragState.None;
+						Window.Current.Input.ConsumeKey(Key.Mouse0);
+					}
+					break;
+				case DragState.WaitingForSelecting:
+					if (input.ConsumeKeyRelease(Key.Mouse0)) {
+						dragState = DragState.None;
+						if (!input.IsKeyPressed(Key.Control) && !input.IsKeyPressed(Key.Shift)) {
 							filesystemSelection.Clear();
-							SystemShellContextMenu.Instance.Show(filesystemModel.CurrentPath);
+						}
+					} else if (input.IsKeyPressed(Key.Mouse0)) {
+						if ((scrollView.Content.LocalMousePosition() - dragStartPosition).Length > 6.0f) {
+							dragState = DragState.Selecting;
+							if (input.IsKeyPressed(Key.Control)) {
+								savedFilesystemSelection = filesystemSelection.Clone();
+							} else {
+								savedFilesystemSelection = null;
+							}
 						}
 					}
 					break;
-				}
-			case DragState.Selecting: {
-					if (Application.Input.WasKeyReleased(Key.Mouse0)) {
-						Application.Input.ConsumeKey(Key.Mouse0);
-						scrollView.SetFocus();
+				case DragState.Dragging:
+					if (Window.Current.Input.WasKeyReleased(Key.Mouse0)) {
+						Window.Current.Input.ConsumeKey(Key.Mouse0);
 						dragState = DragState.None;
 					}
-					dragEndPosition = scrollView.Content.LocalMousePosition();
-					var scrollOffset = 0.0f;
-					var pos = scrollView.LocalMousePosition();
-					if (scrollView.Direction == ScrollDirection.Vertical) {
-						if (pos.Y < 0) {
-							scrollOffset = pos.Y;
-
-						} else if (pos.Y > scrollView.Height) {
-							scrollOffset = pos.Y - scrollView.Height;
-						}
-					} else if (scrollView.Direction == ScrollDirection.Horizontal) {
-						if (pos.X < 0) {
-							scrollOffset = pos.X;
-
-						} else if (pos.X > scrollView.Width) {
-							scrollOffset = pos.X - scrollView.Width;
-						}
-					}
-					scrollView.ScrollPosition += Math.Sign(scrollOffset) * Mathf.Sqr(scrollOffset) * 0.1f * dt;
-					scrollView.ScrollPosition = Mathf.Clamp(scrollView.ScrollPosition, scrollView.MinScrollPosition, scrollView.MaxScrollPosition);
-					Window.Current.Invalidate();
-				}
-				break;
-			case DragState.WaitingForDragging:
-				if ((dragStartPosition - Window.Current.Input.MousePosition).Length > 5.0f) {
-					dragState = DragState.Dragging;
-					CommonWindow.Current.DragFiles(filesystemSelection.ToArray());
-				}
-				if (
-					Window.Current.Input.WasKeyReleased(Key.Mouse0) ||
-					Window.Current.Input.WasKeyReleased(Key.Mouse0DoubleClick)
-				) {
-					dragState = DragState.None;
-					Window.Current.Input.ConsumeKey(Key.Mouse0);
-				}
-				break;
-			case DragState.WaitingForSelecting:
-				if (input.ConsumeKeyRelease(Key.Mouse0)) {
-					dragState = DragState.None;
-					if (!input.IsKeyPressed(Key.Control) && !input.IsKeyPressed(Key.Shift)) {
-						filesystemSelection.Clear();
-					}
-				} else if (input.IsKeyPressed(Key.Mouse0)) {
-					if ((scrollView.Content.LocalMousePosition() - dragStartPosition).Length > 6.0f) {
-						dragState = DragState.Selecting;
-						if (input.IsKeyPressed(Key.Control)) {
-							savedFilesystemSelection = filesystemSelection.Clone();
-						} else {
-							savedFilesystemSelection = null;
-						}
-					}
-				}
-				break;
-			case DragState.Dragging:
-				if (Window.Current.Input.WasKeyReleased(Key.Mouse0)) {
-					Window.Current.Input.ConsumeKey(Key.Mouse0);
-					dragState = DragState.None;
-				}
-				break;
+					break;
 			}
 		}
 
@@ -599,7 +634,8 @@ namespace Tangerine.UI.FilesystemView
 				Open(path);
 				// it's important to return here since Open(path) may take a lot of time
 				// and since it's synchronous we want to cease Mouse0 down handling below
-				// or it will lead to drag behaviour. i.e. if there's a doubleclick event -- dont handle click event, they come both at same frame.
+				// or it will lead to drag behaviour. i.e. if there's a
+				// doubleclick event -- dont handle click event, they come both at same frame.
 				return;
 			}
 			if (fsItem.Input.ConsumeKeyRelease(Key.Mouse1)) {
@@ -692,7 +728,7 @@ namespace Tangerine.UI.FilesystemView
 			if (typeNavigationTimeout <= 0.0f) {
 				typeNavigationPrefix = string.Empty;
 			}
-			typeNavigationTimeout = typeNavigationInterval;
+			typeNavigationTimeout = TypeNavigationInterval;
 			var prevPrefix = typeNavigationPrefix;
 			bool offset = false;
 			if (prevPrefix == input.TextInput) {
@@ -737,7 +773,7 @@ namespace Tangerine.UI.FilesystemView
 			if (lastKeyboardRangeSelectionEndFilesystemItem != null) {
 				rangeSelectionIndex = scrollView.Content.Nodes.IndexOf(lastKeyboardRangeSelectionEndFilesystemItem);
 			}
-			var flowLayout = (scrollView.Content.Layout as FlowLayout);
+			var flowLayout = scrollView.Content.Layout as FlowLayout;
 			int columnCount = flowLayout.ColumnCount(0);
 			int rowCount = flowLayout.RowCount(0);
 			float rowHeight = FilesystemItem.ItemPadding * 2 + FilesystemItem.IconSize;
@@ -745,9 +781,9 @@ namespace Tangerine.UI.FilesystemView
 				for (int navOffset = 0; navOffset < navCommands[navType].Count; navOffset++) {
 					var cmd = navCommands[navType][navOffset];
 					if (cmd.Consume()) {
-							select = navType == 1;
-							toggle = navType == 2;
-							var sign = (navOffset % 2 == 0 ? -1 : 1);
+						select = navType == 1;
+						toggle = navType == 2;
+						var sign = navOffset % 2 == 0 ? -1 : 1;
 						if (scrollView.Direction == ScrollDirection.Vertical) {
 							switch (navOffset) {
 								// Left, Right
@@ -755,15 +791,21 @@ namespace Tangerine.UI.FilesystemView
 								// Up,  Down
 								case 2: case 3: indexDelta = sign * columnCount; break;
 								// PageUp, PageDown
-								case 4: case 5:
+								case 4:
+								case 5:
 									int currentColumn = index % columnCount;
 									int count = scrollView.Content.Nodes.Count;
 									bool lastRow = currentColumn < count % columnCount;
 									indexDelta =
-										(sign * columnCount * ((int)(scrollView.Size.Y / (rowHeight + flowLayout.Spacing)) - 1))
-										.Clamp(
+										(
+											sign
+											* columnCount
+											* ((int)(scrollView.Size.Y / (rowHeight + flowLayout.Spacing)) - 1)
+										).Clamp(
 											currentColumn - index,
-											currentColumn + columnCount * (count / columnCount - (lastRow ? 0 : 1)) - index
+											currentColumn
+											+ columnCount * (count / columnCount - (lastRow ? 0 : 1))
+											- index
 										);
 									if (indexDelta == 0) {
 										indexDelta = sign < 0 ? -index : count - index - 1;
@@ -781,8 +823,10 @@ namespace Tangerine.UI.FilesystemView
 								// Up,  Down
 								case 2: case 3: indexDelta = sign * 1; break;
 								// PageUp, PageDown
-								case 4: case 5:
-									indexDelta = (sign * rowCount).Clamp(-index, scrollView.Content.Nodes.Count - index - 1);
+								case 4:
+								case 5:
+									indexDelta = (sign * rowCount)
+										.Clamp(-index, scrollView.Content.Nodes.Count - index - 1);
 									break;
 								// Home
 								case 6: indexDelta = -rangeSelectionIndex; break;
@@ -805,14 +849,14 @@ namespace Tangerine.UI.FilesystemView
 							var path = (scrollView.Content.Nodes[i] as FilesystemItem).FilesystemPath;
 							filesystemSelection.Select(path);
 						}
-						lastKeyboardRangeSelectionEndFilesystemItem = scrollView.Content.Nodes[newIndex] as FilesystemItem;
+						lastKeyboardRangeSelectionEndFilesystemItem =
+							scrollView.Content.Nodes[newIndex] as FilesystemItem;
 						EnsureFSItemVisible(lastKeyboardRangeSelectionEndFilesystemItem);
 					}
 				} else {
 					if (!toggle) {
 						int newIndex = index + indexDelta;
 						if (newIndex >= 0 && newIndex <= maxIndex) {
-
 							lastKeyboardSelectedFilesystemItem = scrollView.Content.Nodes[newIndex] as FilesystemItem;
 							var path = lastKeyboardSelectedFilesystemItem.FilesystemPath;
 							filesystemSelection.Clear();
@@ -826,7 +870,8 @@ namespace Tangerine.UI.FilesystemView
 							: index;
 						int newIndex = selectionEndIndex + indexDelta;
 						if (newIndex >= 0 && newIndex <= maxIndex) {
-							lastKeyboardRangeSelectionEndFilesystemItem = scrollView.Content.Nodes[newIndex] as FilesystemItem;
+							lastKeyboardRangeSelectionEndFilesystemItem =
+								scrollView.Content.Nodes[newIndex] as FilesystemItem;
 							EnsureFSItemVisible(lastKeyboardRangeSelectionEndFilesystemItem);
 							Window.Current.Invalidate();
 						}
@@ -879,10 +924,12 @@ namespace Tangerine.UI.FilesystemView
 			if (min < 0.0f) {
 				scrollView.ScrollPosition += min;
 			}
-			scrollView.ScrollPosition = Mathf.Clamp(scrollView.ScrollPosition, scrollView.MinScrollPosition, scrollView.MaxScrollPosition);
+			scrollView.ScrollPosition = Mathf.Clamp(
+				scrollView.ScrollPosition, scrollView.MinScrollPosition, scrollView.MaxScrollPosition
+			);
 		}
 
-		static readonly List<List<ICommand>> navCommands = new List<List<ICommand>> {
+		private static readonly List<List<ICommand>> navCommands = new List<List<ICommand>> {
 			// simple navigation
 			new List<ICommand> {
 				Cmds.Left,
@@ -920,12 +967,12 @@ namespace Tangerine.UI.FilesystemView
 
 		private void RenderFilesWidgetRectSelection(Widget canvas)
 		{
-				if (dragState != DragState.Selecting) {
-					return;
-				}
-				canvas.PrepareRendererState();
-				Renderer.DrawRect(dragStartPosition, dragEndPosition, new Color4(150, 180, 230, 128));
-				Renderer.DrawRectOutline(dragStartPosition, dragEndPosition, Theme.Colors.KeyboardFocusBorder);
+			if (dragState != DragState.Selecting) {
+				return;
+			}
+			canvas.PrepareRendererState();
+			Renderer.DrawRect(dragStartPosition, dragEndPosition, new Color4(150, 180, 230, 128));
+			Renderer.DrawRectOutline(dragStartPosition, dragEndPosition, Theme.Colors.KeyboardFocusBorder);
 		}
 
 		public void GoUp()

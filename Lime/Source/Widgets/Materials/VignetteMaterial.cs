@@ -101,11 +101,13 @@ namespace Lime
 
 		public static VignetteShaderProgram GetInstance() => instance ?? (instance = new VignetteShaderProgram());
 
-		private VignetteShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private VignetteShaderProgram()
+			: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders() => new Shader[] {
 			new VertexShader(VertexShader),
-			new FragmentShader(FragmentShader)
+			new FragmentShader(FragmentShader),
 		};
 	}
 }

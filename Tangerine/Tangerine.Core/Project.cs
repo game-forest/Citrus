@@ -12,7 +12,7 @@ namespace Tangerine.Core
 {
 	public class Project
 	{
-		readonly VersionedCollection<Document> documents = new VersionedCollection<Document>();
+		private readonly VersionedCollection<Document> documents = new VersionedCollection<Document>();
 		public IReadOnlyVersionedCollection<Document> Documents => documents;
 
 		private readonly object aggregateModifiedAssetsTaskTag = new object();
@@ -87,7 +87,8 @@ namespace Tangerine.Core
 			FileSystemWatcher = new FileSystemWatcher(AssetsDirectory, includeSubdirectories: true);
 			if (File.Exists(UserprefsPath)) {
 				try {
-					UserPreferences = TangerinePersistence.Instance.ReadFromFile<ProjectUserPreferences>(UserprefsPath);
+					UserPreferences = TangerinePersistence.Instance
+						.ReadFromFile<ProjectUserPreferences>(UserprefsPath);
 					foreach (var path in UserPreferences.Documents) {
 						try {
 							if (GetFullPath(path, out string fullPath)) {
@@ -97,7 +98,8 @@ namespace Tangerine.Core
 							Debug.Write($"Failed to open document '{path}': {e.Message}");
 						}
 					}
-					var currentDoc = documents.FirstOrDefault(d => d.Path == UserPreferences.CurrentDocument) ?? documents.FirstOrDefault();
+					var currentDoc = documents.FirstOrDefault(d => d.Path == UserPreferences.CurrentDocument)
+						?? documents.FirstOrDefault();
 					try {
 						Document.SetCurrent(currentDoc);
 					} catch (Exception e) {
@@ -139,8 +141,10 @@ namespace Tangerine.Core
 			};
 			if (Directory.Exists(AssetBundle.Current.ToSystemPath("Overlays"))) {
 				foreach (var file in AssetBundle.Current.EnumerateFiles("Overlays", ".tan")) {
-					Current.Overlays.Add(Path.GetFileNameWithoutExtension(file),
-						Node.Load<Widget>(Path.ChangeExtension(file, null), null));
+					Current.Overlays.Add(
+						Path.GetFileNameWithoutExtension(file),
+						Node.Load<Widget>(Path.ChangeExtension(file, null), null)
+					);
 				}
 			}
 			registeredNodeTypes.AddRange(GetNodeTypesOrdered("Lime"));
@@ -156,7 +160,7 @@ namespace Tangerine.Core
 			MenuExtensions.SortTypesByMenuPath(registeredNodeTypes);
 			MenuExtensions.SortTypesByMenuPath(registeredComponentTypes);
 			if (PluginLoader.CurrentPlugin != null) {
-				foreach(var action in PluginLoader.CurrentPlugin.TangerineProjectOpened) {
+				foreach (var action in PluginLoader.CurrentPlugin.TangerineProjectOpened) {
 					action?.Invoke();
 				}
 			}
@@ -174,13 +178,14 @@ namespace Tangerine.Core
 			}
 			Closing?.Invoke();
 			if (PluginLoader.CurrentPlugin != null) {
-				foreach(var action in PluginLoader.CurrentPlugin.TangerineProjectClosing) {
+				foreach (var action in PluginLoader.CurrentPlugin.TangerineProjectClosing) {
 					action?.Invoke();
 				}
 			}
 			var modifiedDocuments = documents.Where(d => d.IsModified).ToList();
 			foreach (var d in modifiedDocuments) {
-				// Call Document.Close() instead of CloseDocument, since latter invokes Document.SetCurrent() and forces document loading.
+				// Call Document.Close() instead of CloseDocument,
+				// since latter invokes Document.SetCurrent() and forces document loading.
 				// All this stuff for the sake of performance.
 				if (!d.Close(false)) {
 					return false;
@@ -202,8 +207,11 @@ namespace Tangerine.Core
 				}
 			}
 			try {
-				TangerinePersistence.Instance.WriteToFile(UserprefsPath, UserPreferences, Persistence.Format.Json);
-			} catch (System.Exception) { }
+				TangerinePersistence.Instance.WriteToFile(
+					UserprefsPath, UserPreferences, Persistence.Format.Json
+				);
+			} catch (System.Exception) {
+			}
 			AssetBundle.Current = null;
 			FileSystemWatcher?.Dispose();
 			FileSystemWatcher = null;
@@ -221,10 +229,20 @@ namespace Tangerine.Core
 
 			void LoadDictionary()
 			{
-				var legacyDictionaryPath = Path.Combine(AssetsDirectory, $"Dictionary{(locale != ProjectUserPreferences.DefaultLocale ? '.' + locale : "")}.txt");
-				var dictionaryPath = Path.Combine(AssetsDirectory, Localization.DictionariesPath, $"Dictionary{(locale != ProjectUserPreferences.DefaultLocale ? '.' + locale : "")}.txt");
+				var legacyDictionaryPath = Path.Combine(
+					AssetsDirectory,
+					$"Dictionary{(locale != ProjectUserPreferences.DefaultLocale ? '.' + locale : string.Empty)}.txt"
+				);
+				var dictionaryPath = Path.Combine(
+					AssetsDirectory,
+					Localization.DictionariesPath,
+					$"Dictionary{(locale != ProjectUserPreferences.DefaultLocale ? '.' + locale : string.Empty)}.txt"
+				);
 				if (!File.Exists(dictionaryPath)) {
-					Console.WriteLine($"Using legacy dictionary path: \"{legacyDictionaryPath}\". Consider moving dictionary to \"{dictionaryPath}\".");
+					Console.WriteLine(
+						$"Using legacy dictionary path: \"{legacyDictionaryPath}\". " +
+						$"Consider moving dictionary to \"{dictionaryPath}\"."
+					);
 					dictionaryPath = legacyDictionaryPath;
 				}
 				Localization.Dictionary.Clear();
@@ -313,7 +331,7 @@ namespace Tangerine.Core
 				recentDocuments.RemoveTail(startIndex: CoreUserPreferences.Instance.RecentDocumentCount);
 			}
 		}
-		
+
 		public bool CloseDocument(Document doc, bool force = false)
 		{
 			int currentIndex = documents.IndexOf(Document.Current);
@@ -397,13 +415,18 @@ namespace Tangerine.Core
 			string modifiedAsset = null;
 			if (path.EndsWith(".png")) {
 				TexturePool.Instance.DiscardAllTextures();
-			} else if (path == "#CookingRules.txt" || (path.EndsWith(".png.txt") && File.Exists(Path.ChangeExtension(path, null)))) {
+			} else if (
+				path == "#CookingRules.txt"
+				|| (path.EndsWith(".png.txt") && File.Exists(Path.ChangeExtension(path, null)))
+			) {
 				UpdateTextureParams();
 				TexturePool.Instance.DiscardAllTextures();
 			} else if (Document.AllowedFileTypes.Any(ext => path.EndsWith($".{ext}"))) {
 				modifiedAsset = path;
 			} else if (path.EndsWith(Model3DAttachment.FileExtension)) {
-				var modelFileName = path.Remove(path.LastIndexOf(Model3DAttachment.FileExtension, StringComparison.InvariantCulture)) + ".fbx";
+				var modelFileName = path.Remove(
+					path.LastIndexOf(Model3DAttachment.FileExtension, StringComparison.InvariantCulture)
+				) + ".fbx";
 				if (File.Exists(modelFileName)) {
 					modifiedAsset = modelFileName;
 				}
@@ -486,20 +509,23 @@ namespace Tangerine.Core
 			var rules = CookingRulesBuilder.Build(AssetBundle.Current, null);
 			foreach (var (path, rule) in rules) {
 				if (path.EndsWith(".png")) {
-					var textureParamsPath = Path.Combine(The.Workspace.AssetsDirectory, Path.ChangeExtension(path, ".texture"));
+					var textureParamsPath = Path.Combine(
+						The.Workspace.AssetsDirectory, Path.ChangeExtension(path, ".texture")
+					);
 					if (!AreTextureParamsDefault(rule)) {
 						var textureParams = new TextureParams {
 							WrapMode = rule.WrapMode,
 							MinFilter = rule.MinFilter,
 							MagFilter = rule.MagFilter,
 						};
-						// buz: перед тем, как сохранять файл, надо убедиться, что там ещё не создан файл с точно такими же параметрами.
-						// Потому что в зависимости от настроек системы/гита/Аллаха у сохраняемых файлов получаются разные line endings,
-						// и если их постоянно перезаписывать, то они вечно будут показываться как изменённые в git, что жутко бесит,
-						// и мешает работать.
+						// buz: перед тем, как сохранять файл, надо убедиться, что там ещё не создан файл с точно
+						// такими же параметрами. Потому что в зависимости от настроек системы/гита/Аллаха у
+						// сохраняемых файлов получаются разные line endings, и если их постоянно перезаписывать, то
+						// они вечно будут показываться как изменённые в git, что жутко бесит,  и мешает работать.
 						if (File.Exists(textureParamsPath)) {
 							try {
-								var existingParams = InternalPersistence.Instance.ReadFromFile<TextureParams>(textureParamsPath);
+								var existingParams = InternalPersistence.Instance
+									.ReadFromFile<TextureParams>(textureParamsPath);
 								if (existingParams.Equals(textureParams)) {
 									continue;
 								}
@@ -508,11 +534,16 @@ namespace Tangerine.Core
 								// этот костыль ещё и валил Танжерин по хз какому поводу.
 							}
 						}
-						InternalPersistence.Instance.WriteToFile(textureParamsPath, textureParams, Persistence.Format.Json);
+						InternalPersistence.Instance.WriteToFile(
+							textureParamsPath, textureParams, Persistence.Format.Json
+						);
 					} else if (File.Exists(textureParamsPath)) {
 						File.Delete(textureParamsPath);
 					}
-				} else if (path.EndsWith(".texture") && !File.Exists(Path.Combine(AssetsDirectory, Path.ChangeExtension(path, ".png")))) {
+				} else if (
+					path.EndsWith(".texture")
+					&& !File.Exists(Path.Combine(AssetsDirectory, Path.ChangeExtension(path, ".png")))
+				) {
 					File.Delete(Path.Combine(AssetsDirectory, path));
 				}
 			}

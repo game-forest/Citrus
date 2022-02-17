@@ -16,16 +16,16 @@ namespace Lime
 				Presenter = new CheckBoxPresenter(this),
 				LayoutCell = new LayoutCell(Alignment.Center),
 				MinMaxSize = Theme.Metrics.CheckBoxSize,
-				TabTravesable = null
+				TabTravesable = null,
 			});
 			TabTravesable = new TabTraversable();
 			CompoundPostPresenter.Add(new Theme.MouseHoverBorderPresenter());
 			LateTasks.Add(Theme.MouseHoverInvalidationTask(this));
 		}
 
-		class CheckBoxPresenter : IPresenter
+		private class CheckBoxPresenter : IPresenter
 		{
-			readonly CheckBox checkBox;
+			private readonly CheckBox checkBox;
 
 			private static readonly VectorShape checkedIcon = new VectorShape {
 				new VectorShape.Line(0.2f, 0.5f, 0.4f, 0.8f, Theme.Colors.BlackText, 0.1f),
@@ -33,7 +33,7 @@ namespace Lime
 			};
 
 			private static readonly VectorShape indeterminateIcon = new VectorShape {
-				new VectorShape.Line(0.2f, 0.5f, 0.8f, 0.5f, Theme.Colors.BlackText, 0.6f, antialiased: false)
+				new VectorShape.Line(0.2f, 0.5f, 0.8f, 0.5f, Theme.Colors.BlackText, 0.6f, antialiased: false),
 			};
 
 			public CheckBoxPresenter(CheckBox checkBox)

@@ -6,7 +6,7 @@ using Lime;
 
 namespace Orange
 {
-	class SyncTextures : ICookingStage
+	internal class SyncTextures : ICookingStage
 	{
 		private readonly string originalTextureExtension = ".png";
 		private readonly AssetCooker assetCooker;
@@ -53,8 +53,9 @@ namespace Orange
 			}
 		}
 
-		public static void ImportTexture(AssetCooker assetCooker, string path, Bitmap texture, ICookingRules rules, SHA256 cookingUnitHash)
-		{
+		public static void ImportTexture(
+			AssetCooker assetCooker, string path, Bitmap texture, ICookingRules rules, SHA256 cookingUnitHash
+		) {
 			var textureParamsPath = Path.ChangeExtension(path, ".texture");
 			var textureParams = new TextureParams {
 				WrapMode = rules.WrapMode,
@@ -82,7 +83,7 @@ namespace Orange
 			}
 			switch (assetCooker.Target.Platform) {
 				case TargetPlatform.Android:
-				//case TargetPlatform.iOS:
+					// case TargetPlatform.iOS:
 					var f = rules.PVRFormat;
 					if (f == PVRFormat.ARGB8 || f == PVRFormat.RGB565 || f == PVRFormat.RGBA4) {
 						TextureConverter.RunPVRTexTool(

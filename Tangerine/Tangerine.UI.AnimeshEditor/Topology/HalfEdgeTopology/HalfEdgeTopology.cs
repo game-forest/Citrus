@@ -144,19 +144,28 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			private readonly List<Animesh.SkinnedVertex> boundingFigureVertices;
 			private readonly List<Animesh.SkinnedVertex> vertices;
 
-			public VerticesIndexer(List<Animesh.SkinnedVertex> boundingFigureVertices, List<Animesh.SkinnedVertex> vertices)
-			{
+			public VerticesIndexer(
+				List<Animesh.SkinnedVertex> boundingFigureVertices,
+				List<Animesh.SkinnedVertex> vertices
+			) {
 				this.boundingFigureVertices = boundingFigureVertices;
 				this.vertices = vertices;
 			}
 
-			public Animesh.SkinnedVertex this[int index] => index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
+			public Animesh.SkinnedVertex this[int index]
+			{
+				get
+				{
+					return index < 0 ? boundingFigureVertices[index * -1] : vertices[index];
+				}
+			}
 		}
 
 		private class Boundary : IEnumerable<int>
 		{
 			private readonly LinkedList<int> boundary = new LinkedList<int>();
-			private readonly Dictionary<int, LinkedListNode<int>> vertexIndexToBoundaryIndex = new Dictionary<int, LinkedListNode<int>>();
+			private readonly Dictionary<int, LinkedListNode<int>> vertexIndexToBoundaryIndex =
+				new Dictionary<int, LinkedListNode<int>>();
 
 			public int Count => boundary.Count;
 
@@ -198,11 +207,19 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 
 			public bool ContainsEdge(int index0, int index1) => Contains(index0) && Next(index0) == index1;
 
-			public int Next(int boundaryVertexIndex) =>
-				vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n) ? (n.Next ?? boundary.First).Value : -1;
+			public int Next(int boundaryVertexIndex)
+			{
+				return vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n)
+					? (n.Next ?? boundary.First).Value
+					: -1;
+			}
 
-			public int Prev(int boundaryVertexIndex) =>
-				vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n) ? (n.Previous ?? boundary.Last).Value : -1;
+			public int Prev(int boundaryVertexIndex)
+			{
+				return vertexIndexToBoundaryIndex.TryGetValue(boundaryVertexIndex, out var n)
+					? (n.Previous ?? boundary.Last).Value
+					: -1;
+			}
 
 			public void Remap(List<int> map)
 			{
@@ -331,11 +348,14 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 							var s2 = Vertices[edgeToCheck.Next.Origin].Pos;
 							if (PointToSegmentSqrDistance(s1, s2, position) <= edgeHitRadius * edgeHitRadius) {
 								result = new TopologyHitTestResult {
-									Target = new TopologyEdge((ushort)edgeToCheck.Origin, (ushort)edgeToCheck.Next.Origin),
+									Target = new TopologyEdge(
+										(ushort)edgeToCheck.Origin, (ushort)edgeToCheck.Next.Origin
+									),
 									Info = new TopologyEdge.EdgeInfo {
 										IsConstrained = edgeToCheck.Constrained,
-										IsFraming = edgeToCheck.Twin == null || InnerBoundary.Contains(edgeToCheck.Origin) &&
-													InnerBoundary.Next(edgeToCheck.Origin) == edgeToCheck.Next.Origin,
+										IsFraming = edgeToCheck.Twin == null
+											|| InnerBoundary.Contains(edgeToCheck.Origin)
+												&& InnerBoundary.Next(edgeToCheck.Origin) == edgeToCheck.Next.Origin,
 									},
 								};
 								return true;
@@ -345,7 +365,9 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					} while (edge != start);
 					if (belongsToTriangulation) {
 						result = new TopologyHitTestResult {
-							Target = new TopologyFace((ushort)edge.Origin, (ushort)edge.Next.Origin, (ushort)edge.Prev.Origin),
+							Target = new TopologyFace(
+								(ushort)edge.Origin, (ushort)edge.Next.Origin, (ushort)edge.Prev.Origin
+							),
 							Info = CreateFaceInfo(edge),
 						};
 					}
@@ -355,8 +377,11 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			}
 			bool HitVertex(int index, out TopologyHitTestResult r)
 			{
-				var didHit = index >= 0 && (Vertices[index].Pos - position).SqrLength <= vertexHitRadius * vertexHitRadius;
-				r = didHit ? new TopologyHitTestResult { Target = new TopologyVertex { Index = (ushort)index, }, } : null;
+				var didHit = index >= 0
+					&& (Vertices[index].Pos - position).SqrLength <= vertexHitRadius * vertexHitRadius;
+				r = didHit
+					? new TopologyHitTestResult { Target = new TopologyVertex { Index = (ushort)index, }, }
+					: null;
 				return didHit;
 			}
 			return result != null;
@@ -447,7 +472,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 		private float savedVertexHitTestRadius;
 		private float savedEdgeHitTestDistance;
 
-
 		public List<Animesh.SkinnedVertex> Vertices { get; private set; }
 		public float VertexHitTestRadius { get; set; }
 		public float EdgeHitTestDistance { get; set; }
@@ -493,8 +517,9 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 #endif
 		}
 
-		public void ConstructFrom(List<Animesh.SkinnedVertex> vertices, List<TopologyEdge> constrainedEdges, List<TopologyFace> faces)
-		{
+		public void ConstructFrom(
+			List<Animesh.SkinnedVertex> vertices, List<TopologyEdge> constrainedEdges, List<TopologyFace> faces
+		) {
 			Vertices = vertices;
 			// (vertex, vertex) -> HalfEdge
 			// Used to restore connection between half edges.
@@ -558,7 +583,11 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			{
 				foreach (var (e1, e2, e3) in InnerTriangles()) {
 					System.Diagnostics.Debug.Assert(e1.Origin >= 0 && e2.Origin >= 0 && e3.Origin >= 0);
-					yield return new TopologyFace { Index0 = (ushort)e1.Origin, Index1 = (ushort)e2.Origin, Index2 = (ushort)e3.Origin, };
+					yield return new TopologyFace {
+						Index0 = (ushort)e1.Origin,
+						Index1 = (ushort)e2.Origin,
+						Index2 = (ushort)e3.Origin,
+					};
 				}
 			}
 		}
@@ -580,18 +609,25 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			}
 		}
 
-		private TopologyFace.FaceInfo CreateFaceInfo(HalfEdge triangle) =>
-			CreateFaceInfo(triangle, triangle.Next, triangle.Prev);
+		private TopologyFace.FaceInfo CreateFaceInfo(HalfEdge triangle)
+		{
+			return CreateFaceInfo(triangle, triangle.Next, triangle.Prev);
+		}
 
-		private TopologyFace.FaceInfo CreateFaceInfo(HalfEdge e1, HalfEdge e2, HalfEdge e3) =>
-			new TopologyFace.FaceInfo {
+		private TopologyFace.FaceInfo CreateFaceInfo(HalfEdge e1, HalfEdge e2, HalfEdge e3)
+		{
+			return new TopologyFace.FaceInfo {
 				IsConstrained0 = e1.Constrained,
 				IsConstrained1 = e2.Constrained,
 				IsConstrained2 = e3.Constrained,
-				IsFraming0 = e1.Twin == null || InnerBoundary.Contains(e1.Origin) && InnerBoundary.Next(e1.Origin) == e2.Origin,
-				IsFraming1 = e2.Twin == null || InnerBoundary.Contains(e2.Origin) && InnerBoundary.Next(e2.Origin) == e3.Origin,
-				IsFraming2 = e3.Twin == null || InnerBoundary.Contains(e3.Origin) && InnerBoundary.Next(e3.Origin) == e1.Origin,
+				IsFraming0 = e1.Twin == null
+					|| InnerBoundary.Contains(e1.Origin) && InnerBoundary.Next(e1.Origin) == e2.Origin,
+				IsFraming1 = e2.Twin == null
+					|| InnerBoundary.Contains(e2.Origin) && InnerBoundary.Next(e2.Origin) == e3.Origin,
+				IsFraming2 = e3.Twin == null
+					|| InnerBoundary.Contains(e3.Origin) && InnerBoundary.Next(e3.Origin) == e1.Origin,
 			};
+		}
 
 		public event Action<ITopology> TopologyChanged;
 
@@ -659,7 +695,9 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			var prevBorderVertex = InnerVertices[prev].Pos;
 			var next = InnerBoundary.Next(vertexIndex);
 			var last = next;
-			var areCwOrdered = AreClockwiseOrdered(InnerVertices[prev].Pos, InnerVertices[vertexIndex].Pos, InnerVertices[next].Pos);
+			var areCwOrdered = AreClockwiseOrdered(
+				InnerVertices[prev].Pos, InnerVertices[vertexIndex].Pos, InnerVertices[next].Pos
+			);
 			if (AreClockwiseOrdered(InnerVertices[prev].Pos, InnerVertices[vertexIndex].Pos, InnerVertices[next].Pos)) {
 				// Ensure that `incidentEdge` connects with next.
 				foreach (var incident in IncidentEdges(incidentEdge)) {
@@ -668,14 +706,20 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 						break;
 					}
 				}
-				// Then we iterate from next to prev cw (that will ensure that only vertices inside `true` triangulation will be chosen)
+				// Then we iterate from next to prev cw (that will ensure that only
+				// vertices inside `true` triangulation will be chosen)
 				foreach (var incident in IncidentEdges(incidentEdge)) {
 					if (incident.Next.Origin == prev) {
 						break;
 					}
 					if (
-						areCwOrdered && incident.Next.Origin != next && incident.Origin != prev && incident.Next.Origin >= 0 &&
-						AreClockwiseOrdered(prevBorderVertex, InnerVertices[incident.Next.Origin].Pos, InnerVertices[last].Pos)
+						areCwOrdered
+						&& incident.Next.Origin != next
+						&& incident.Origin != prev
+						&& incident.Next.Origin >= 0
+						&& AreClockwiseOrdered(
+							prevBorderVertex, InnerVertices[incident.Next.Origin].Pos, InnerVertices[last].Pos
+						)
 					) {
 						InnerBoundary.Insert(vertexIndex, incident.Next.Origin);
 						last = incident.Next.Origin;
@@ -766,7 +810,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					foreach (var (s, e) in InnerBoundary.Edges()) {
 						var sp = Vertices[s].Pos;
 						var ep = Vertices[e].Pos;
-						area += ((double)sp.X * ep.Y - (double)sp.Y * ep.X);
+						area += (double)sp.X * ep.Y - (double)sp.Y * ep.X;
 					}
 					Vertices[index] = original;
 					if (Math.Sign(area) <= 0) {
@@ -822,7 +866,8 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				var endVertex = Vertices[edgeToProjectOn.Item2].Pos;
 				var n = (endVertex - startVertex).Normalized;
 				var projectedPos = startVertex + n * Vector2.DotProduct(translatedPos - startVertex, n);
-				translatedPos = Vector2.Clamp(projectedPos,
+				translatedPos = Vector2.Clamp(
+					projectedPos,
 					new Vector2(Mathf.Min(startVertex.X, endVertex.X), Mathf.Min(startVertex.Y, endVertex.Y)),
 					new Vector2(Mathf.Max(startVertex.X, endVertex.X), Mathf.Max(startVertex.Y, endVertex.Y))
 				);
@@ -884,7 +929,11 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 
 		public void RemoveConstrainedEdge(int index0, int index1)
 		{
-			if (index0 == index1 || InnerBoundary.ContainsEdge(index0, index1) || InnerBoundary.ContainsEdge(index1, index0)) {
+			if (
+				index0 == index1
+				|| InnerBoundary.ContainsEdge(index0, index1)
+				|| InnerBoundary.ContainsEdge(index1, index0)
+			) {
 				return;
 			}
 			var location = LocateClosestTriangle(index0, out var start);
@@ -930,7 +979,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 						en.Dispose();
 						en = IncidentEdges(next).GetEnumerator();
 					}
-
 				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
 					var ed = d - e;
 					if (Mathf.Sign(ed.X) == signab.X && Mathf.Sign(ed.Y) == signab.Y) {
@@ -1035,8 +1083,9 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				for (int i = 1; i < BoundingFigureVertices.Count; i++) {
 					if (BoundingFigureVertices[i].Pos != newVertices[i].Pos) {
 						if (
-							LocateClosestTriangle(BoundingFigureVertices[i].Pos, out var edge) == LocationResult.SameVertex &&
-							edge.Origin < 0
+							LocateClosestTriangle(BoundingFigureVertices[i].Pos, out var edge)
+								== LocationResult.SameVertex
+							&& edge.Origin < 0
 						) {
 							InnerRemoveVertex(edge.Origin);
 						}

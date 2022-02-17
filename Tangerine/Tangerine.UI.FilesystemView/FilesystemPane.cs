@@ -24,7 +24,9 @@ namespace Tangerine.UI.FilesystemView
 			this.panel = panel;
 			dockPanelWidget = panel.ContentWidget;
 			CommandHandlerList.Global.Connect(FilesystemCommands.NavigateTo, HandleHavigateTo);
-			CommandHandlerList.Global.Connect(FilesystemCommands.OpenInSystemFileManager, HandleOpenInSystemFileManager);
+			CommandHandlerList.Global.Connect(
+				FilesystemCommands.OpenInSystemFileManager, HandleOpenInSystemFileManager
+			);
 		}
 
 		public void Initialize()
@@ -73,8 +75,8 @@ namespace Tangerine.UI.FilesystemView
 
 		public void Split(FilesystemView fsView, SplitterType type)
 		{
-			var RootWidget = fsView.RootWidget;
-			FSViewNode vn = RootWidget.Components.Get<ViewNodeComponent>().ViewNode as FSViewNode;
+			var rootWidget = fsView.RootWidget;
+			FSViewNode vn = rootWidget.Components.Get<ViewNodeComponent>().ViewNode as FSViewNode;
 
 			var newFsView = new FilesystemView();
 			views.Add(newFsView);
@@ -94,16 +96,16 @@ namespace Tangerine.UI.FilesystemView
 				var up = FilesystemUserPreferences.Instance;
 				var sn = new SplitterNode {
 					Widget = s,
-					Type = type
+					Type = type,
 				};
 				up.ViewRoot = sn;
 				newVn.Parent = sn;
 				s.Stretches = Splitter.GetStretchesList(sn.Stretches, 1, 1);
 				sn.Children.Add(vn);
 				sn.Children.Add(newVn);
-				var thisParent = RootWidget.ParentWidget;
-				RootWidget.Unlink();
-				s.AddNode(RootWidget);
+				var thisParent = rootWidget.ParentWidget;
+				rootWidget.Unlink();
+				s.AddNode(rootWidget);
 				s.AddNode(newFsView.RootWidget);
 				s.Components.Add(new ViewNodeComponent { ViewNode = sn });
 				vn.Parent = sn;
@@ -114,14 +116,14 @@ namespace Tangerine.UI.FilesystemView
 				if ((vn.Parent as SplitterNode).Type == type) {
 					var sn = vn.Parent as SplitterNode;
 					var s = sn.Widget;
-					s.Nodes.Insert(s.Nodes.IndexOf(RootWidget), newFsView.RootWidget);
+					s.Nodes.Insert(s.Nodes.IndexOf(rootWidget), newFsView.RootWidget);
 					newVn.Parent = sn;
 					sn.Children.Insert(sn.Children.IndexOf(vn), newVn);
 				} else {
 					Splitter s = type.MakeSplitter();
 					var sn = new SplitterNode {
 						Widget = s,
-						Type = type
+						Type = type,
 					};
 					s.Components.Add(new ViewNodeComponent { ViewNode = sn });
 					s.Stretches = Splitter.GetStretchesList(sn.Stretches);
@@ -129,17 +131,16 @@ namespace Tangerine.UI.FilesystemView
 					var psn = vn.Parent as SplitterNode;
 
 					// or vn.Parent.Widget
-					int thisIndex = RootWidget.ParentWidget.Nodes.IndexOf(RootWidget);
-					var thisParent = RootWidget.ParentWidget;
-					RootWidget.Unlink();
-					s.AddNode(RootWidget);
+					int thisIndex = rootWidget.ParentWidget.Nodes.IndexOf(rootWidget);
+					var thisParent = rootWidget.ParentWidget;
+					rootWidget.Unlink();
+					s.AddNode(rootWidget);
 					s.AddNode(newFsView.RootWidget);
 					sn.Children.Add(vn);
 					sn.Children.Add(newVn);
 					vn.Parent = sn;
 					newVn.Parent = sn;
 					thisParent.Nodes.Insert(thisIndex, s);
-
 
 					var ps = psn.Widget;
 					sn.Parent = psn;
@@ -149,14 +150,13 @@ namespace Tangerine.UI.FilesystemView
 			} else if (vn.Parent is FSViewNode) {
 				// wat
 			}
-
 		}
 
 		public void Close(FilesystemView fsView)
 		{
 			views.Remove(fsView);
-			var RootWidget = fsView.RootWidget;
-			ViewNode vn = RootWidget.Components.Get<ViewNodeComponent>().ViewNode;
+			var rootWidget = fsView.RootWidget;
+			ViewNode vn = rootWidget.Components.Get<ViewNodeComponent>().ViewNode;
 
 			if (vn.Parent == null) {
 				// oh noes can't close root!
@@ -167,7 +167,7 @@ namespace Tangerine.UI.FilesystemView
 				var sn = vn.Parent as SplitterNode;
 				vn.Widget = null; // just in case?
 				sn.Children.Remove(vn);
-				RootWidget.UnlinkAndDispose();
+				rootWidget.UnlinkAndDispose();
 				if (sn.Children.Count == 1) {
 					var ovn = sn.Children.First();
 					if (sn.Parent == null) {

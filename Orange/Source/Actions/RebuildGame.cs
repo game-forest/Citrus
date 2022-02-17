@@ -44,7 +44,10 @@ namespace Orange
 		private static void DeleteAllBundlesReferredInCookingRules(Target target)
 		{
 			var bundles = Toolbox.GetListOfAllBundles(target);
-			foreach (var path in bundles.Select(bundle => The.Workspace.GetBundlePath(target.Platform, bundle)).Where(File.Exists)) {
+			foreach (
+				var path
+				in bundles.Select(bundle => The.Workspace.GetBundlePath(target.Platform, bundle)).Where(File.Exists)
+			) {
 				try {
 					Console.WriteLine("Deleting {0}", path);
 					File.Delete(path);

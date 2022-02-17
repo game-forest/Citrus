@@ -8,7 +8,7 @@ namespace Tangerine.UI
 	public static class ColorPicker
 	{
 		[DllImport("gdi32")]
-		private static extern uint GetPixel(IntPtr hDC, int XPos, int YPos);
+		private static extern uint GetPixel(IntPtr hDC, int xPos, int yPos);
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto)]
 		private static extern bool GetCursorPos(out Point pt);
@@ -27,7 +27,7 @@ namespace Tangerine.UI
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
-		struct Point
+		private struct Point
 		{
 			public int X;
 			public int Y;

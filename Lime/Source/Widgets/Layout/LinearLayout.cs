@@ -39,10 +39,12 @@ namespace Lime
 		[YuzuMember]
 		public LayoutDirection Direction
 		{
-			get {
+			get
+			{
 				return direction;
 			}
-			set {
+			set
+			{
 				if (direction != value) {
 					direction = value;
 					InvalidateConstraintsAndArrangement();
@@ -77,7 +79,7 @@ namespace Lime
 					constraints[i++] = new LinearAllocator.Constraints {
 						MinSize = child.EffectiveMinSize.X,
 						MaxSize = child.EffectiveMaxSize.X,
-						Stretch = EffectiveLayoutCell(child).StretchX
+						Stretch = EffectiveLayoutCell(child).StretchX,
 					};
 				}
 				var availableWidth = Math.Max(0, Owner.ContentWidth - (widgets.Count - 1) * Spacing);
@@ -97,7 +99,7 @@ namespace Lime
 					constraints[i++] = new LinearAllocator.Constraints {
 						MinSize = w.EffectiveMinSize.Y,
 						MaxSize = w.EffectiveMaxSize.Y,
-						Stretch = EffectiveLayoutCell(w).StretchY
+						Stretch = EffectiveLayoutCell(w).StretchY,
 					};
 				}
 				var availableHeight = Math.Max(0, Owner.ContentHeight - (widgets.Count - 1) * Spacing);

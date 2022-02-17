@@ -1,6 +1,6 @@
 ﻿namespace Lime
 {
-	interface IClipboardImplementation
+	internal interface IClipboardImplementation
 	{
 		string Text { get; set; }
 	}

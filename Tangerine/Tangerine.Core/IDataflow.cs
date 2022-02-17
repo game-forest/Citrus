@@ -250,7 +250,7 @@ namespace Tangerine.Core
 			public void Poll()
 			{
 				arg.Poll();
-				if ((GotValue = arg.GotValue)) {
+				if (GotValue = arg.GotValue) {
 					Value = selector(arg.Value);
 				}
 			}
@@ -273,7 +273,7 @@ namespace Tangerine.Core
 			public void Poll()
 			{
 				arg.Poll();
-				if ((GotValue = arg.GotValue && predicate(arg.Value))) {
+				if (GotValue = arg.GotValue && predicate(arg.Value)) {
 					Value = arg.Value;
 				}
 			}
@@ -296,9 +296,9 @@ namespace Tangerine.Core
 			public void Poll()
 			{
 				arg.Poll();
-				if ((GotValue = arg.GotValue)) {
+				if (GotValue = arg.GotValue) {
 					var current = arg.Value;
-					if ((GotValue = !hasValue || !EqualityComparer<T>.Default.Equals(current, previous))) {
+					if (GotValue = !hasValue || !EqualityComparer<T>.Default.Equals(current, previous)) {
 						Value = current;
 						hasValue = true;
 						previous = current;
@@ -325,7 +325,7 @@ namespace Tangerine.Core
 			public void Poll()
 			{
 				arg.Poll();
-				if ((GotValue = arg.GotValue && (done || countdown-- <= 0))) {
+				if (GotValue = arg.GotValue && (done || countdown-- <= 0)) {
 					done = true;
 					Value = arg.Value;
 				}
@@ -352,7 +352,7 @@ namespace Tangerine.Core
 			{
 				arg1.Poll();
 				arg2.Poll();
-				if ((GotValue = arg1.GotValue || arg2.GotValue)) {
+				if (GotValue = arg1.GotValue || arg2.GotValue) {
 					Value = EqualityComparer<T>.Default.Equals(arg1.Value, arg2.Value) ? arg1.Value : defaultValue;
 				}
 			}

@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -64,23 +62,13 @@ namespace SharpFont
 	/// </remarks>
 	public sealed class OpenArgs
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private OpenArgsRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal OpenArgs(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a set of bit flags indicating how to use the structure.
@@ -170,14 +158,14 @@ namespace SharpFont
 			{
 				int count = ParamsCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				Parameter[] parameters = new Parameter[count];
 				IntPtr array = rec.@params;
 
-				for (int i = 0; i < count; i++)
-				{
+				for (int i = 0; i < count; i++) {
 					parameters[i] = new Parameter(new IntPtr(array.ToInt64() + ParameterRec.SizeInBytes * i));
 				}
 
@@ -198,7 +186,5 @@ namespace SharpFont
 				rec = PInvokeHelper.PtrToStructure<OpenArgsRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

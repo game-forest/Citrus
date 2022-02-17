@@ -37,4 +37,6 @@
     <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
 
+  <Import Project="..\..\Analyzers.targets" />
+
 </Project>

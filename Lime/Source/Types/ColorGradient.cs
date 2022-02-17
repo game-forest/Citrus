@@ -27,7 +27,10 @@ namespace Lime
 			GradientControlPoint previousPoint = null;
 			foreach (var controlPoint in Ordered()) {
 				if (position <= controlPoint.Position) {
-					if (i <= 0) return controlPoint;
+					if (i <= 0) {
+						return controlPoint;
+					}
+
 					var d1 = controlPoint.Position - position;
 					var d2 = position - previousPoint.Position;
 					return d1 < d2 ? controlPoint : previousPoint;

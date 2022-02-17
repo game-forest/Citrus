@@ -17,7 +17,7 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			queue.Enqueue(new Entry {
 				FenceValue = fenceValue,
-				Action = action
+				Action = action,
 			});
 		}
 

@@ -5,7 +5,7 @@ using Yuzu.Json;
 
 namespace Orange
 {
-	class CitrusVersion
+	internal class CitrusVersion
 	{
 		public const string Filename = "citrus_version.json";
 

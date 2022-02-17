@@ -1,16 +1,16 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
 	public class RescalePointObjectSelectionProcessor : ITaskProvider
 	{
-		private SceneView sv => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 		private Quadrangle hullNormalized;
 		private Vector2 initialMousePosition;
 
@@ -27,13 +27,16 @@ namespace Tangerine.UI.SceneView
 					hull = hull.Transform(Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed());
 					var hullSize = hull.V3 - hull.V1;
 					hullNormalized = hull * Matrix32.Scaling(Vector2.One / Document.Current.Container.AsWidget.Size);
-					var expandedHullInSceneCoords = PointObjectsPresenter.ExpandAndTranslateToSpaceOf(hull, Document.Current.Container.AsWidget, sv) *
-						sv.Frame.CalcTransitionToSpaceOf(sv.Scene);
+					var expandedHullInSceneCoords = PointObjectsPresenter.ExpandAndTranslateToSpaceOf(
+						hull, Document.Current.Container.AsWidget, SceneView
+					) * SceneView.Frame.CalcTransitionToSpaceOf(SceneView.Scene);
 					for (int i = 0; i < 4; i++) {
-						if (Mathf.Abs(hullSize.X) > Mathf.ZeroTolerance && Mathf.Abs(hullSize.Y) > Mathf.ZeroTolerance) {
-							if (sv.HitTestResizeControlPoint(expandedHullInSceneCoords[i])) {
+						if (
+							Mathf.Abs(hullSize.X) > Mathf.ZeroTolerance && Mathf.Abs(hullSize.Y) > Mathf.ZeroTolerance
+						) {
+							if (SceneView.HitTestResizeControlPoint(expandedHullInSceneCoords[i])) {
 								Utils.ChangeCursorIfDefault(MouseCursor.SizeNS);
-								if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+								if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 									yield return Rescale(i * 2, MouseCursor.SizeNS, points);
 								}
 							}
@@ -41,23 +44,24 @@ namespace Tangerine.UI.SceneView
 					}
 					for (int i = 0; i < 4; i++) {
 						if (Mathf.Abs(hullSize.X) < Mathf.ZeroTolerance && i % 2 == 1 ||
-						    Mathf.Abs(hullSize.Y) < Mathf.ZeroTolerance && i % 2 == 0
-						) {
+							Mathf.Abs(hullSize.Y) < Mathf.ZeroTolerance && i % 2 == 0) {
 							continue;
 						}
 						var a = expandedHullInSceneCoords[i];
 						var b = expandedHullInSceneCoords[(i + 1) % 4];
-						if (sv.HitTestResizeControlPoint((a + b) / 2)) {
+						if (SceneView.HitTestResizeControlPoint((a + b) / 2)) {
 							var cursor = MouseCursor.Default;
 							if (Mathf.Abs(hullSize.X) < Mathf.ZeroTolerance) {
 								cursor = MouseCursor.SizeNS;
 							} else if (Mathf.Abs(hullSize.Y) < Mathf.ZeroTolerance) {
 								cursor = MouseCursor.SizeWE;
 							} else {
-								cursor = (b.X - a.X).Abs() > (b.Y - a.Y).Abs() ? MouseCursor.SizeNS : MouseCursor.SizeWE;
+								cursor = (b.X - a.X).Abs() > (b.Y - a.Y).Abs()
+									? MouseCursor.SizeNS
+									: MouseCursor.SizeWE;
 							}
 							Utils.ChangeCursorIfDefault(cursor);
-							if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+							if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Rescale(i * 2 + 1, cursor, points);
 							}
 						}
@@ -67,32 +71,34 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		IEnumerator<object> Rescale(int controlPointIndex, MouseCursor cursor, List<PointObject> points)
+		private IEnumerator<object> Rescale(int controlPointIndex, MouseCursor cursor, List<PointObject> points)
 		{
 			var t = Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 			using (Document.Current.History.BeginTransaction()) {
 				Utils.ChangeCursorIfDefault(cursor);
-				initialMousePosition = sv.MousePosition;
-				while (sv.Input.IsMousePressed()) {
+				initialMousePosition = SceneView.MousePosition;
+				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(cursor);
 					RescaleHelper(
 						points,
 						controlPointIndex,
-						sv.Input.IsKeyPressed(Key.Shift),
-						sv.Input.IsKeyPressed(Key.Control));
+						SceneView.Input.IsKeyPressed(Key.Shift),
+						SceneView.Input.IsKeyPressed(Key.Control));
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 		}
 
-		void RescaleHelper(List<PointObject> points, int controlPointIndex, bool proportional, bool centerProportional)
-		{
+		private void RescaleHelper(
+			List<PointObject> points, int controlPointIndex, bool proportional, bool centerProportional
+		) {
 			var t = Document.Current.Container.AsWidget.LocalToWorldTransform.CalcInversed();
 			t.T = Vector2.Zero;
-			var transformedMouseDelta = (sv.MousePosition - initialMousePosition) * t / Document.Current.Container.AsWidget.Size;
+			var transformedMouseDelta =
+				(SceneView.MousePosition - initialMousePosition) * t / Document.Current.Container.AsWidget.Size;
 			Vector2 origin;
 			var idx = (controlPointIndex + 4) % 8 / 2;
 			var next = (idx + 1) % 4;
@@ -112,7 +118,9 @@ namespace Tangerine.UI.SceneView
 			if (axisY == Vector2.Zero) {
 				axisY = new Vector2(-axisX.Y, axisX.X);
 			}
-			var basis = new Matrix32(axisX, axisY, centerProportional ? (hullNormalized.V1 + hullNormalized.V3) / 2 : origin);
+			var basis = new Matrix32(
+				axisX, axisY, centerProportional ? (hullNormalized.V1 + hullNormalized.V3) / 2 : origin
+			);
 			var basisInversed = basis.CalcInversed();
 			var deltaSize = basisInversed * transformedMouseDelta - Vector2.Zero * basisInversed;
 			deltaSize = (deltaSize * (controlPointIndex % 2 == 0 ? Vector2.One : Vector2.Down)).Snap(Vector2.Zero);
@@ -121,7 +129,9 @@ namespace Tangerine.UI.SceneView
 			}
 			var avSize = 0.5f * (deltaSize.X + deltaSize.Y);
 			if (proportional) {
-				if (controlPointIndex == 7 || controlPointIndex == 3 || controlPointIndex == 1 || controlPointIndex == 5) {
+				if (
+					controlPointIndex == 7 || controlPointIndex == 3 || controlPointIndex == 1 || controlPointIndex == 5
+				) {
 					deltaSize.X = deltaSize.Y;
 				} else {
 					deltaSize.X = avSize;
@@ -130,7 +140,12 @@ namespace Tangerine.UI.SceneView
 			}
 			for (var i = 0; i < points.Count; i++) {
 				var deltaPos = basisInversed * points[i].Position * deltaSize * basis - Vector2.Zero * basis;
-				Core.Operations.SetAnimableProperty.Perform(points[i], nameof(PointObject.Position), points[i].Position + deltaPos, CoreUserPreferences.Instance.AutoKeyframes);
+				Core.Operations.SetAnimableProperty.Perform(
+					points[i],
+					nameof(PointObject.Position),
+					points[i].Position + deltaPos,
+					CoreUserPreferences.Instance.AutoKeyframes
+				);
 			}
 		}
 	}

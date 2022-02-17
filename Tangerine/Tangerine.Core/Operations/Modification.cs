@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
-using Lime;
+using System.Linq;
 using System.Reflection;
+using Lime;
 
 namespace Tangerine.Core.Operations
 {
@@ -63,14 +63,16 @@ namespace Tangerine.Core.Operations
 			{
 				op.Save(new Backup { Value = op.Property.GetValue(op.Obj, null) });
 				op.Property.SetValue(op.Obj, op.Value, null);
-				PropertyAttributes<TangerineOnPropertySetAttribute>.Get(op.Obj.GetType(), op.Property.Name)?.Invoke(op.Obj);
+				PropertyAttributes<TangerineOnPropertySetAttribute>
+					.Get(op.Obj.GetType(), op.Property.Name)?.Invoke(op.Obj);
 			}
 
 			protected override void InternalUndo(SetProperty op)
 			{
 				var v = op.Restore<Backup>().Value;
 				op.Property.SetValue(op.Obj, v, null);
-				PropertyAttributes<TangerineOnPropertySetAttribute>.Get(op.Obj.GetType(), op.Property.Name)?.Invoke(op.Obj);
+				PropertyAttributes<TangerineOnPropertySetAttribute>
+					.Get(op.Obj.GetType(), op.Property.Name)?.Invoke(op.Obj);
 			}
 		}
 	}
@@ -84,14 +86,20 @@ namespace Tangerine.Core.Operations
 		public readonly Type Type;
 		public override bool IsChangingDocument { get; }
 
-		public static void Perform(object obj, string propertyName, int index, object value, bool isChangingDocument = true)
-		{
-			DocumentHistory.Current.Perform(new SetIndexedProperty(obj, propertyName, index, value, isChangingDocument));
+		public static void Perform(
+			object obj, string propertyName, int index, object value, bool isChangingDocument = true
+		) {
+			DocumentHistory.Current.Perform(
+				new SetIndexedProperty(obj, propertyName, index, value, isChangingDocument)
+			);
 		}
 
-		public static void Perform(Type type, object obj, string propertyName, int indexProvider, object value, bool isChangingDocument = true)
-		{
-			DocumentHistory.Current.Perform(new SetIndexedProperty(type, obj, propertyName, indexProvider, value, isChangingDocument));
+		public static void Perform(
+			Type type, object obj, string propertyName, int indexProvider, object value, bool isChangingDocument = true
+		) {
+			DocumentHistory.Current.Perform(
+				new SetIndexedProperty(type, obj, propertyName, indexProvider, value, isChangingDocument)
+			);
 		}
 
 		private SetIndexedProperty(object obj, string propertyName, int index, object value, bool isChangingDocument)
@@ -104,8 +112,9 @@ namespace Tangerine.Core.Operations
 			IsChangingDocument = isChangingDocument;
 		}
 
-		private SetIndexedProperty(Type type, object obj, string propertyName, int index, object value, bool isChangingDocument)
-		{
+		private SetIndexedProperty(
+			Type type, object obj, string propertyName, int index, object value, bool isChangingDocument
+		) {
 			Type = type;
 			Obj = obj;
 			Index = index;
@@ -121,7 +130,7 @@ namespace Tangerine.Core.Operations
 			protected override void InternalRedo(SetIndexedProperty op)
 			{
 				op.Save(new Backup { Value = op.Property.GetGetMethod().Invoke(op.Obj, new object[] { op.Index }) });
-				op.Property.GetSetMethod().Invoke(op.Obj, new [] { op.Index, op.Value });
+				op.Property.GetSetMethod().Invoke(op.Obj, new[] { op.Index, op.Value });
 			}
 
 			protected override void InternalUndo(SetIndexedProperty op)
@@ -134,8 +143,14 @@ namespace Tangerine.Core.Operations
 
 	public static class SetAnimableProperty
 	{
-		public static void Perform(object @object, string propertyPath, object value, bool createAnimatorIfNeeded = false, bool createInitialKeyframeForNewAnimator = true, int atFrame = -1)
-		{
+		public static void Perform(
+			object @object,
+			string propertyPath,
+			object value,
+			bool createAnimatorIfNeeded = false,
+			bool createInitialKeyframeForNewAnimator = true,
+			int atFrame = -1
+		) {
 			var animationHost = @object as IAnimationHost;
 			object owner = @object;
 			int index = -1;
@@ -144,18 +159,26 @@ namespace Tangerine.Core.Operations
 				(propertyData, owner, index) = AnimationUtils.GetPropertyByPath(animationHost, propertyPath);
 			}
 			// Discard further work if the property is not editable and subject for inspection.
-			var tangerineIgnoreIf = PropertyAttributes<TangerineIgnoreIfAttribute>.Get(propertyData.OwnerType, propertyData.Info.Name);
+			var tangerineIgnoreIf = PropertyAttributes<TangerineIgnoreIfAttribute>
+				.Get(propertyData.OwnerType, propertyData.Info.Name);
 			if (tangerineIgnoreIf?.Check(owner) ?? false) {
 				return;
 			}
-			if (animationHost is Node && animationHost.Animators.TryFind(propertyPath, out var zeroPoseAnimator, Animation.ZeroPoseId)) {
+			if (
+				animationHost is Node
+				&& animationHost.Animators.TryFind(propertyPath, out var zeroPoseAnimator, Animation.ZeroPoseId)
+			) {
 				// Force create a property animator if there is a zero pose animator
 				createAnimatorIfNeeded = true;
 			}
 			if (
 				animationHost != null &&
-				SetKeyframe.CheckAnimationScope(Document.Current.Animation, animationHost) &&
-				(animationHost.Animators.TryFind(propertyPath, out var animator, Document.Current.AnimationId) || createAnimatorIfNeeded)
+				SetKeyframe.CheckAnimationScope(
+					Document.Current.Animation, animationHost)
+					&& (
+						animationHost.Animators.TryFind(propertyPath, out var animator, Document.Current.AnimationId)
+						|| createAnimatorIfNeeded
+					)
 			) {
 				if (animator == null && createInitialKeyframeForNewAnimator) {
 					var propertyValue = propertyData.Info.GetValue(owner);
@@ -181,17 +204,17 @@ namespace Tangerine.Core.Operations
 
 	public static class ProcessAnimableProperty
 	{
-
 		public delegate bool AnimablePropertyProcessor<T>(T value, out T newValue);
 
-		public static void Perform<T>(object @object, string propertyPath, AnimablePropertyProcessor<T> propertyProcessor)
-		{
+		public static void Perform<T>(
+			object @object, string propertyPath, AnimablePropertyProcessor<T> propertyProcessor
+		) {
 			var propertyInfo = @object.GetType().GetProperty(propertyPath);
 			if (propertyInfo != null) {
 				var value = propertyInfo.GetValue(@object);
 				if (value is T) {
 					T processedValue;
-					if (propertyProcessor((T) value, out processedValue)) {
+					if (propertyProcessor((T)value, out processedValue)) {
 						SetProperty.Perform(@object, propertyPath, processedValue);
 					}
 				}
@@ -199,12 +222,16 @@ namespace Tangerine.Core.Operations
 
 			IAnimator animator;
 			var animable = @object as IAnimationHost;
-			if (animable != null && animable.Animators.TryFind(propertyPath, out animator, Document.Current.AnimationId)) {
+			if (
+				animable != null && animable.Animators.TryFind(propertyPath, out animator, Document.Current.AnimationId)
+			) {
 				foreach (var keyframe in animator.ReadonlyKeys.ToList()) {
-					if (!(keyframe.Value is T)) continue;
+					if (!(keyframe.Value is T)) {
+						continue;
+					}
 
 					T processedValue;
-					if (propertyProcessor((T) keyframe.Value, out processedValue)) {
+					if (propertyProcessor((T)keyframe.Value, out processedValue)) {
 						var keyframeClone = keyframe.Clone();
 						keyframeClone.Value = processedValue;
 						SetKeyframe.Perform(animator, Document.Current.Animation, keyframeClone);
@@ -238,7 +265,7 @@ namespace Tangerine.Core.Operations
 
 		public sealed class Processor : OperationProcessor<RemoveKeyframe>
 		{
-			class Backup { public IKeyframe Keyframe; }
+			private class Backup { public IKeyframe Keyframe; }
 
 			protected override void InternalRedo(RemoveKeyframe op)
 			{
@@ -284,8 +311,9 @@ namespace Tangerine.Core.Operations
 
 		public override bool IsChangingDocument => true;
 
-		public static void Perform(IAnimationHost animationHost, string propertyPath, Animation animation, IKeyframe keyframe)
-		{
+		public static void Perform(
+			IAnimationHost animationHost, string propertyPath, Animation animation, IKeyframe keyframe
+		) {
 			if (!animation.IsLegacy && animation.Id != Animation.ZeroPoseId) {
 				var animations = animation.Owner.Animations;
 				// If there is a zero pose animation without corresponding keyframe -- create one.
@@ -295,9 +323,13 @@ namespace Tangerine.Core.Operations
 				) {
 					var (propertyData, animable, index) = AnimationUtils.GetPropertyByPath(animationHost, propertyPath);
 					var zeroPoseKey = Lime.Keyframe.CreateForType(propertyData.Info.PropertyType);
-					zeroPoseKey.Value = index == -1 ? propertyData.Info.GetValue(animable) : propertyData.Info.GetValue(animable, new object [] { index });
+					zeroPoseKey.Value = index == -1
+						? propertyData.Info.GetValue(animable)
+						: propertyData.Info.GetValue(animable, new object[] { index });
 					zeroPoseKey.Function = KeyFunction.Step;
-					DocumentHistory.Current.Perform(new SetKeyframe(animationHost, propertyPath, Animation.ZeroPoseId, keyframe));
+					DocumentHistory.Current.Perform(
+						new SetKeyframe(animationHost, propertyPath, Animation.ZeroPoseId, keyframe)
+					);
 				}
 			}
 			if (!animation.IsLegacy && !CheckAnimationScope(animation, animationHost)) {
@@ -337,7 +369,7 @@ namespace Tangerine.Core.Operations
 
 		public sealed class Processor : OperationProcessor<SetKeyframe>
 		{
-			class Backup
+			private class Backup
 			{
 				public IKeyframe Keyframe;
 				public bool AnimatorExists;
@@ -352,10 +384,15 @@ namespace Tangerine.Core.Operations
 
 				if (!op.Find(out backup)) {
 					bool animatorExists =
-						op.AnimationHost.Animators.Any(a => a.TargetPropertyPath == op.PropertyPath && a.AnimationId == op.AnimationId);
+						op.AnimationHost.Animators.Any(
+							a => a.TargetPropertyPath == op.PropertyPath && a.AnimationId == op.AnimationId
+						);
 					animator = op.AnimationHost.Animators[op.PropertyPath, op.AnimationId];
-					var (propertyData, animable, index) = AnimationUtils.GetPropertyByPath(op.AnimationHost, op.PropertyPath);
-					var value = index == -1 ? propertyData.Info.GetValue(animable) : propertyData.Info.GetValue(animable, new object [] { index });
+					var (propertyData, animable, index) =
+						AnimationUtils.GetPropertyByPath(op.AnimationHost, op.PropertyPath);
+					var value = index == -1
+						? propertyData.Info.GetValue(animable)
+						: propertyData.Info.GetValue(animable, new object[] { index });
 					op.Save(new Backup {
 						AnimatorExists = animatorExists,
 						Animator = animator,
@@ -394,11 +431,12 @@ namespace Tangerine.Core.Operations
 				if (!b.AnimatorExists || b.Animator.Keys.Count == 0) {
 					op.AnimationHost.Animators.Remove(b.Animator);
 					Document.Current.RefreshSceneTree();
-					var (propertyData, animable, index) = AnimationUtils.GetPropertyByPath(op.AnimationHost, op.PropertyPath);
+					var (propertyData, animable, index) =
+						AnimationUtils.GetPropertyByPath(op.AnimationHost, op.PropertyPath);
 					if (index == -1) {
 						propertyData.Info.SetValue(animable, b.ValueWhenNoAnimator);
 					} else {
-						propertyData.Info.SetValue(animable, b.ValueWhenNoAnimator, new object[] {index});
+						propertyData.Info.SetValue(animable, b.ValueWhenNoAnimator, new object[] { index });
 					}
 				}
 				b.Animator.ResetCache();
@@ -424,7 +462,10 @@ namespace Tangerine.Core.Operations
 			Element = element;
 		}
 
-		public static void Perform(IList list, int index, object element) => DocumentHistory.Current.Perform(new InsertIntoList(list, index, element));
+		public static void Perform(IList list, int index, object element)
+		{
+			DocumentHistory.Current.Perform(new InsertIntoList(list, index, element));
+		}
 
 		public sealed class Processor : OperationProcessor<InsertIntoList>
 		{
@@ -447,7 +488,10 @@ namespace Tangerine.Core.Operations
 			Index = index;
 		}
 
-		public static void Perform(IList list, int index) => DocumentHistory.Current.Perform(new RemoveFromList(list, index));
+		public static void Perform(IList list, int index)
+		{
+			DocumentHistory.Current.Perform(new RemoveFromList(list, index));
+		}
 
 		public sealed class Processor : OperationProcessor<RemoveFromList>
 		{
@@ -461,7 +505,9 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public sealed class InsertIntoList<TList, TElement> : Operation where TList : IList<TElement>
+	public sealed class InsertIntoList<TList, TElement>
+		: Operation
+		where TList : IList<TElement>
 	{
 		public readonly TList List;
 		public readonly int Index;
@@ -476,16 +522,28 @@ namespace Tangerine.Core.Operations
 			Element = element;
 		}
 
-		public static void Perform(TList list, int index, TElement element) => DocumentHistory.Current.Perform(new InsertIntoList<TList, TElement>(list, index, element));
+		public static void Perform(TList list, int index, TElement element)
+		{
+			DocumentHistory.Current.Perform(new InsertIntoList<TList, TElement>(list, index, element));
+		}
 
 		public sealed class Processor : OperationProcessor<InsertIntoList<TList, TElement>>
 		{
-			protected override void InternalRedo(InsertIntoList<TList, TElement> op) => op.List.Insert(op.Index, op.Element);
-			protected override void InternalUndo(InsertIntoList<TList, TElement> op) => op.List.RemoveAt(op.Index);
+			protected override void InternalRedo(InsertIntoList<TList, TElement> op)
+			{
+				op.List.Insert(op.Index, op.Element);
+			}
+
+			protected override void InternalUndo(InsertIntoList<TList, TElement> op)
+			{
+				op.List.RemoveAt(op.Index);
+			}
 		}
 	}
 
-	public sealed class RemoveFromList<TList, TElement> : Operation where TList : IList<TElement>
+	public sealed class RemoveFromList<TList, TElement>
+		: Operation
+		where TList : IList<TElement>
 	{
 		public readonly TList List;
 		public readonly int Index;
@@ -501,7 +559,10 @@ namespace Tangerine.Core.Operations
 
 		public static void Perform(TList list, TElement item) => Perform(list, list.IndexOf(item));
 
-		public static void Perform(TList list, int index) => DocumentHistory.Current.Perform(new RemoveFromList<TList, TElement>(list, index));
+		public static void Perform(TList list, int index)
+		{
+			DocumentHistory.Current.Perform(new RemoveFromList<TList, TElement>(list, index));
+		}
 
 		public sealed class Processor : OperationProcessor<RemoveFromList<TList, TElement>>
 		{
@@ -511,11 +572,16 @@ namespace Tangerine.Core.Operations
 				op.List.RemoveAt(op.Index);
 			}
 
-			protected override void InternalUndo(RemoveFromList<TList, TElement> op) => op.List.Insert(op.Index, op.backup);
+			protected override void InternalUndo(RemoveFromList<TList, TElement> op)
+			{
+				op.List.Insert(op.Index, op.backup);
+			}
 		}
 	}
 
-	public sealed class AddIntoCollection<TCollection, TElement> : Operation where TCollection : ICollection<TElement>
+	public sealed class AddIntoCollection<TCollection, TElement>
+		: Operation
+		where TCollection : ICollection<TElement>
 	{
 		public readonly TCollection Collection;
 		public readonly TElement Element;
@@ -533,12 +599,21 @@ namespace Tangerine.Core.Operations
 
 		public sealed class Processor : OperationProcessor<AddIntoCollection<TCollection, TElement>>
 		{
-			protected override void InternalRedo(AddIntoCollection<TCollection, TElement> op) => op.Collection.Add(op.Element);
-			protected override void InternalUndo(AddIntoCollection<TCollection, TElement> op) => op.Collection.Remove(op.Element);
+			protected override void InternalRedo(AddIntoCollection<TCollection, TElement> op)
+			{
+				op.Collection.Add(op.Element);
+			}
+
+			protected override void InternalUndo(AddIntoCollection<TCollection, TElement> op)
+			{
+				op.Collection.Remove(op.Element);
+			}
 		}
 	}
 
-	public sealed class RemoveFromCollection<TCollection, TElement> : Operation where TCollection : ICollection<TElement>
+	public sealed class RemoveFromCollection<TCollection, TElement>
+		: Operation
+		where TCollection : ICollection<TElement>
 	{
 		public readonly TCollection Collection;
 		public readonly TElement Element;
@@ -551,17 +626,28 @@ namespace Tangerine.Core.Operations
 			Element = element;
 		}
 
-		public static void Perform(TCollection collection, TElement element) =>
+		public static void Perform(TCollection collection, TElement element)
+		{
 			DocumentHistory.Current.Perform(new RemoveFromCollection<TCollection, TElement>(collection, element));
+		}
 
 		public sealed class Processor : OperationProcessor<RemoveFromCollection<TCollection, TElement>>
 		{
-			protected override void InternalRedo(RemoveFromCollection<TCollection, TElement> op) => op.Collection.Remove(op.Element);
-			protected override void InternalUndo(RemoveFromCollection<TCollection, TElement> op) => op.Collection.Add(op.Element);
+			protected override void InternalRedo(RemoveFromCollection<TCollection, TElement> op)
+			{
+				op.Collection.Remove(op.Element);
+			}
+
+			protected override void InternalUndo(RemoveFromCollection<TCollection, TElement> op)
+			{
+				op.Collection.Add(op.Element);
+			}
 		}
 	}
 
-	public sealed class InsertIntoDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
+	public sealed class InsertIntoDictionary<TDictionary, TKey, TValue>
+		: Operation
+		where TDictionary : IDictionary<TKey, TValue>, IDictionary
 	{
 		public readonly TDictionary Dictionary;
 		public readonly TKey Key;
@@ -579,13 +665,19 @@ namespace Tangerine.Core.Operations
 			HadValue = dictionary.TryGetValue(key, out OldValue);
 		}
 
-		public static void Perform(TDictionary dictionary, TKey key, TValue value) =>
-			DocumentHistory.Current.Perform(new InsertIntoDictionary<TDictionary, TKey, TValue>(dictionary, key, value));
+		public static void Perform(TDictionary dictionary, TKey key, TValue value)
+		{
+			DocumentHistory.Current.Perform(
+				new InsertIntoDictionary<TDictionary, TKey, TValue>(dictionary, key, value)
+			);
+		}
 
 		public sealed class Processor : OperationProcessor<InsertIntoDictionary<TDictionary, TKey, TValue>>
 		{
-			protected override void InternalRedo(InsertIntoDictionary<TDictionary, TKey, TValue> op) =>
+			protected override void InternalRedo(InsertIntoDictionary<TDictionary, TKey, TValue> op)
+			{
 				op.Dictionary[op.Key] = op.Value;
+			}
 
 			protected override void InternalUndo(InsertIntoDictionary<TDictionary, TKey, TValue> op)
 			{
@@ -598,7 +690,9 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public sealed class RemoveFromDictionary<TDictionary, TKey, TValue> : Operation where TDictionary : IDictionary<TKey, TValue>, IDictionary
+	public sealed class RemoveFromDictionary<TDictionary, TKey, TValue>
+		: Operation
+		where TDictionary : IDictionary<TKey, TValue>, IDictionary
 	{
 		public readonly TDictionary Dictionary;
 		public readonly TKey Key;
@@ -731,7 +825,7 @@ namespace Tangerine.Core.Operations
 				SetProperty.Perform(node, nameof(Audio.Volume), 1);
 				var key = new Keyframe<AudioAction> {
 					Frame = Document.Current.AnimationFrame,
-					Value = AudioAction.Play
+					Value = AudioAction.Play,
 				};
 				SetKeyframe.Perform(node, nameof(Audio.Action), Document.Current.Animation, key);
 				SelectNode.Perform(node);
@@ -792,7 +886,7 @@ namespace Tangerine.Core.Operations
 			return node;
 		}
 
-		static string GenerateNodeId(Node container, Type nodeType)
+		private static string GenerateNodeId(Node container, Type nodeType)
 		{
 			int c = 1;
 			var id = nodeType.Name;
@@ -827,14 +921,15 @@ namespace Tangerine.Core.Operations
 				// Detect if a previous marker id is unique then rename it in triggers and markers.
 				if (previousMarker != null && previousMarker.Id != marker.Id &&
 					Document.Current.Animation.Markers.All(markerEl => markerEl.Id != previousMarker.Id)) {
-
 					foreach (var markerEl in Document.Current.Animation.Markers.ToList()) {
 						if (markerEl.Action == MarkerAction.Jump && markerEl.JumpTo == previousMarker.Id) {
 							SetProperty.Perform(markerEl, nameof(markerEl.JumpTo), marker.Id);
 						}
 					}
 
-					ProcessAnimableProperty.Perform(Document.Current.Container, nameof(Node.Trigger),
+					ProcessAnimableProperty.Perform(
+						Document.Current.Container,
+						nameof(Node.Trigger),
 						(string value, out string newValue) => {
 							return TriggersValidation.TryRenameMarkerInTrigger(
 								previousMarker.Id, marker.Id, value, out newValue
@@ -856,7 +951,7 @@ namespace Tangerine.Core.Operations
 			protected override void InternalRedo(SetMarker op)
 			{
 				var backup = new Backup {
-					Marker = Document.Current.Animation.Markers.GetByFrame(op.marker.Frame)
+					Marker = Document.Current.Animation.Markers.GetByFrame(op.marker.Frame),
 				};
 				if (backup.Marker != null) {
 					Document.Current.Animation.Markers.Remove(backup.Marker);
@@ -868,7 +963,7 @@ namespace Tangerine.Core.Operations
 					backup.SavedJumpTo = op.marker.JumpTo;
 					if (op.marker.Action == MarkerAction.Jump &&
 						Document.Current.Animation.Markers.All(markerEl => markerEl.Id != op.marker.JumpTo)) {
-						op.marker.JumpTo = "";
+						op.marker.JumpTo = string.Empty;
 					}
 				}
 				Document.Current.RefreshSceneTree();
@@ -888,7 +983,6 @@ namespace Tangerine.Core.Operations
 				Document.Current.RefreshSceneTree();
 			}
 		}
-
 	}
 
 	public sealed class DeleteMarker : Operation
@@ -903,7 +997,9 @@ namespace Tangerine.Core.Operations
 			DocumentHistory.Current.Perform(new DeleteMarker(marker, removeDependencies));
 
 			if (removeDependencies) {
-				ProcessAnimableProperty.Perform(Document.Current.Container, nameof(Node.Trigger),
+				ProcessAnimableProperty.Perform(
+					Document.Current.Container,
+					nameof(Node.Trigger),
 					(string value, out string newValue) => {
 						return TriggersValidation.TryRemoveMarkerFromTrigger(marker.Id, value, out newValue);
 					}
@@ -961,7 +1057,6 @@ namespace Tangerine.Core.Operations
 				}
 				Document.Current.RefreshSceneTree();
 			}
-
 		}
 	}
 
@@ -978,14 +1073,16 @@ namespace Tangerine.Core.Operations
 			this.component = component;
 		}
 
-		public static void Perform(Node node, NodeComponent component) => DocumentHistory.Current.Perform(new SetComponent(node, component));
+		public static void Perform(Node node, NodeComponent component)
+		{
+			DocumentHistory.Current.Perform(new SetComponent(node, component));
+		}
 
 		public sealed class Processor : OperationProcessor<SetComponent>
 		{
 			protected override void InternalRedo(SetComponent op) => op.node.Components.Add(op.component);
 			protected override void InternalUndo(SetComponent op) => op.node.Components.Remove(op.component);
 		}
-
 	}
 
 	public sealed class DeleteComponent : Operation
@@ -1034,7 +1131,10 @@ namespace Tangerine.Core.Operations
 			if (!widgets.Any() || !sortedBones.Any()) {
 				return;
 			}
-			if (!CheckConsistency(bones, widgets)) throw new InvalidOperationException("Not all bones and widgets have the same parent");
+			if (!CheckConsistency(bones, widgets)) {
+				throw new InvalidOperationException("Not all bones and widgets have the same parent");
+			}
+
 			foreach (var widget in widgets.ToList()) {
 				if (widget is DistortionMesh) {
 					foreach (PointObject point in widget.Nodes) {
@@ -1068,7 +1168,7 @@ namespace Tangerine.Core.Operations
 							}
 						}
 					}
-				}  else {
+				} else {
 					UntieBonesFromNode(widget, nameof(Widget.SkinningWeights), sortedBones);
 				}
 			}
@@ -1078,11 +1178,15 @@ namespace Tangerine.Core.Operations
 		{
 			var container = bones.First().Parent.AsWidget;
 			foreach (var bone in bones) {
-				if (bone.Parent == null || bone.Parent != container) return false;
+				if (bone.Parent == null || bone.Parent != container) {
+					return false;
+				}
 			}
 
 			foreach (var widget in widgets) {
-				if (widget.Parent == null || widget.Parent != container) return false;
+				if (widget.Parent == null || widget.Parent != container) {
+					return false;
+				}
 			}
 			return true;
 		}
@@ -1107,19 +1211,24 @@ namespace Tangerine.Core.Operations
 		private static void BakeSkinningTransform(SkinningWeights newSkinningWeights, Node node)
 		{
 			if (node is PointObject) {
-				var point = (PointObject) node;
+				var point = (PointObject)node;
 				var originTranslation = point.TransformedPosition;
 				var boneArray = node.Parent.Parent.AsWidget.BoneArray;
 				var localToParentTransform = node.Parent.AsWidget.CalcLocalToParentTransform();
-				var transformedPosition = originTranslation * localToParentTransform  *
-					boneArray.CalcWeightedRelativeTransform(newSkinningWeights).CalcInversed() * localToParentTransform.CalcInversed();
+				var transformedPosition =
+					originTranslation
+					* localToParentTransform
+					* boneArray.CalcWeightedRelativeTransform(newSkinningWeights).CalcInversed()
+					* localToParentTransform.CalcInversed();
 				var translation = (transformedPosition - point.Offset) / point.Parent.AsWidget.Size;
 				SetAnimableProperty.Perform(node, nameof(PointObject.Position), translation);
 			} else {
 				var widget = node.AsWidget;
 				var originLocalToParent = node.AsWidget.CalcLocalToParentTransform();
-				var transform = (originLocalToParent *
-					widget.Parent.AsWidget.BoneArray.CalcWeightedRelativeTransform(newSkinningWeights).CalcInversed()).ToTransform2();
+				var transform = (
+					originLocalToParent
+					* widget.Parent.AsWidget.BoneArray.CalcWeightedRelativeTransform(newSkinningWeights).CalcInversed()
+				).ToTransform2();
 				SetAnimableProperty.Perform(node, nameof(Widget.Rotation), transform.Rotation);
 				var localToParentTransform =
 					Matrix32.Translation(-(widget.Pivot * widget.Size)) *
@@ -1128,12 +1237,15 @@ namespace Tangerine.Core.Operations
 						widget.Scale,
 						widget.Rotation * Mathf.Pi / 180f,
 						Vector2.Zero);
-				SetAnimableProperty.Perform(node, nameof(Widget.Position), transform.Translation - localToParentTransform.T);
+				SetAnimableProperty.Perform(
+					node, nameof(Widget.Position), transform.Translation - localToParentTransform.T
+				);
 			}
 		}
 
-		private static SkinningWeights ResetSkinningWeights(List<int> bonesIndices, SkinningWeights originSkinningWeights)
-		{
+		private static SkinningWeights ResetSkinningWeights(
+			List<int> bonesIndices, SkinningWeights originSkinningWeights
+		) {
 			var skinningWeights = new SkinningWeights();
 			var overallWeight = 0f;
 			var newOverallWeight = 0f;
@@ -1185,8 +1297,13 @@ namespace Tangerine.Core.Operations
 						if (!CanApplyBone(point.SkinningWeights)) {
 							throw new TieWidgetsWithBonesException(point);
 						}
-						SetProperty.Perform(point, nameof(PointObject.SkinningWeights),
-							BoneUtils.CalcSkinningWeight(point.SkinningWeights, point.CalcPositionInSpaceOf(mesh.ParentWidget), boneList));
+						SetProperty.Perform(
+							point,
+							nameof(PointObject.SkinningWeights),
+							BoneUtils.CalcSkinningWeight(
+								point.SkinningWeights, point.CalcPositionInSpaceOf(mesh.ParentWidget), boneList
+							)
+						);
 					}
 				} else if (widget is Animesh animesh) {
 					var localToParent = animesh.CalcLocalToParentTransform();
@@ -1197,7 +1314,9 @@ namespace Tangerine.Core.Operations
 							throw new TieWidgetsWithBonesException(animesh);
 						}
 						vertex.SkinningWeights =
-							BoneUtils.CalcSkinningWeight(vertex.SkinningWeights, localToParent.TransformVector(vertex.Pos), boneList);
+							BoneUtils.CalcSkinningWeight(
+								vertex.SkinningWeights, localToParent.TransformVector(vertex.Pos), boneList
+							);
 						if (vertex.SkinningWeights.IsEmpty()) {
 							vertex.BlendWeights.Weight0 = 1f;
 						}
@@ -1224,15 +1343,24 @@ namespace Tangerine.Core.Operations
 					if (!CanApplyBone(widget.SkinningWeights)) {
 						throw new TieWidgetsWithBonesException(widget);
 					}
-					SetProperty.Perform(widget, nameof(Widget.SkinningWeights),
-						BoneUtils.CalcSkinningWeight(widget.SkinningWeights, widget.Position, boneList));
+					SetProperty.Perform(
+						widget,
+						nameof(Widget.SkinningWeights),
+						BoneUtils.CalcSkinningWeight(widget.SkinningWeights, widget.Position, boneList)
+					);
 				}
 			}
 			foreach (var bone in bones.ToList()) {
 				var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
-				SetAnimableProperty.Perform(bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes);
-				SetAnimableProperty.Perform(bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes);
-				SetAnimableProperty.Perform(bone, nameof(Bone.RefRotation), entry.Rotation, CoreUserPreferences.Instance.AutoKeyframes);
+				SetAnimableProperty.Perform(
+					bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes
+				);
+				SetAnimableProperty.Perform(
+					bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes
+				);
+				SetAnimableProperty.Perform(
+					bone, nameof(Bone.RefRotation), entry.Rotation, CoreUserPreferences.Instance.AutoKeyframes
+				);
 			}
 		}
 
@@ -1287,9 +1415,15 @@ namespace Tangerine.Core.Operations
 
 			foreach (var bone in appliedBones) {
 				var entry = bone.Parent.AsWidget.BoneArray[bone.Index];
-				SetAnimableProperty.Perform(bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes);
-				SetAnimableProperty.Perform(bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes);
-				SetAnimableProperty.Perform(bone, nameof(Bone.RefRotation), entry.Rotation, CoreUserPreferences.Instance.AutoKeyframes);
+				SetAnimableProperty.Perform(
+					bone, nameof(Bone.RefPosition), entry.Joint, CoreUserPreferences.Instance.AutoKeyframes
+				);
+				SetAnimableProperty.Perform(
+					bone, nameof(Bone.RefLength), entry.Length, CoreUserPreferences.Instance.AutoKeyframes
+				);
+				SetAnimableProperty.Perform(
+					bone, nameof(Bone.RefRotation), entry.Rotation, CoreUserPreferences.Instance.AutoKeyframes
+				);
 			}
 		}
 	}
@@ -1352,7 +1486,7 @@ namespace Tangerine.Core.Operations
 				SetKeyframe.Perform(node, nameof(Node.Trigger), null, new Keyframe<string> {
 					Frame = m.Frame,
 					Value = m.Id,
-					Function = KeyFunction.Linear
+					Function = KeyFunction.Linear,
 				});
 			}
 			LeaveNode.Perform();
@@ -1363,7 +1497,10 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Node> nodes, Widget container, bool flipX, bool flipY)
 		{
-			if (!flipX && !flipY) return;
+			if (!flipX && !flipY) {
+				return;
+			}
+
 			foreach (var widget in nodes.OfType<Widget>()) {
 				var s = widget.Scale;
 				if (flipX) {
@@ -1382,7 +1519,10 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(IEnumerable<Node> nodes, Widget container, bool flipX, bool flipY)
 		{
-			if (!flipX && !flipY) return;
+			if (!flipX && !flipY) {
+				return;
+			}
+
 			var roots = new List<Bone>();
 			foreach (var bone in nodes.OfType<Bone>()) {
 				var root = BoneUtils.FindBoneRoot(bone, container.Nodes);

@@ -14,6 +14,7 @@ namespace Lime
 		/// Allow to render a PlaceHolderCharacter when character is missing (used in QA testing)
 		/// </summary>
 		public static bool UsePlaceholders = false;
+
 		/// <summary>
 		/// Character that is used as a placeholder for missing character (used in QA testing)
 		/// </summary>

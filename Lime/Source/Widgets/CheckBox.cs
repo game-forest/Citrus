@@ -7,7 +7,7 @@ namespace Lime
 	{
 		Unchecked,
 		Checked,
-		Indeterminate
+		Indeterminate,
 	}
 
 	[YuzuDontGenerateDeserializer]

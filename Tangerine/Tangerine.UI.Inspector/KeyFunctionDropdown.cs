@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Inspector
@@ -23,7 +23,7 @@ namespace Tangerine.UI.Inspector
 			KeyFunction.Linear,
 			KeyFunction.Spline,
 			KeyFunction.Step,
-			KeyFunction.ClosedSpline
+			KeyFunction.ClosedSpline,
 		};
 
 		private static KeyFunctionDropdown instance;
@@ -55,11 +55,16 @@ namespace Tangerine.UI.Inspector
 				Presenter = new ThemedFramePresenter(Theme.Colors.WhiteBackground, Color4.Transparent),
 			};
 			content.CompoundPresenter.Push(new SyncDelegatePresenter<Widget>(w => {
-				Renderer.DrawRectOutline(Vector2.Zero, w.Size, ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox, borderThickness);
+				Renderer.DrawRectOutline(
+					Vector2.Zero,
+					w.Size,
+					ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox,
+					borderThickness
+				);
 			}));
 			content.Tasks.AddLoop(() => {
 				if (window.Visible) {
-					var hoverImage = (Image) content.Nodes.FirstOrDefault(node => {
+					var hoverImage = (Image)content.Nodes.FirstOrDefault(node => {
 						var image = node as Image;
 						return lastHoverImage != image && IsMouseOverImage(image);
 					});
@@ -74,14 +79,14 @@ namespace Tangerine.UI.Inspector
 			});
 			rootWidget = new ThemedInvalidableWindowWidget(window) {
 				Nodes = {
-					content
+					content,
 				},
 			};
 			cancelImage = new Image {
 				Padding = new Thickness(1.5f),
 				Shader = ShaderId.Silhouette,
 				Texture = new SerializableTexture(),
-				Color = Color4.White
+				Color = Color4.White,
 			};
 			cancelImage.CompoundPresenter.Push(new SyncDelegatePresenter<Widget>(w => {
 				DrawBorderForImage((Image)w, ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox);
@@ -167,7 +172,7 @@ namespace Tangerine.UI.Inspector
 				Texture = texture,
 				MinMaxSize = keyframeButton.Size,
 				Color = keyframeButton.KeyColor,
-				Padding = new Thickness(1)
+				Padding = new Thickness(1),
 			};
 			image.CompoundPresenter.Push(new SyncDelegatePresenter<Widget>(w => {
 				DrawBorderForImage((Image)w, ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox);

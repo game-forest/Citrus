@@ -250,7 +250,7 @@ namespace Lime
 		public override bool Contains(NodeComponent component) => component != null && component.Owner == owner;
 
 		[global::Yuzu.YuzuSerializeItemIf]
-		public bool SerializeItemIf(int index, Object component)
+		public bool SerializeItemIf(int index, object component)
 		{
 			return NodeComponent.IsSerializable(component.GetType());
 		}

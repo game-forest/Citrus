@@ -5,7 +5,8 @@ using System.Reflection;
 
 namespace Tangerine.Core
 {
-	public static class PropertyAttributes<T> where T: Attribute
+	public static class PropertyAttributes<T>
+		where T : Attribute
 	{
 		private static readonly Dictionary<(Type, string, bool), T[]> map =
 			new Dictionary<(Type, string, bool), T[]>();

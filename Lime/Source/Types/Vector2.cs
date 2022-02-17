@@ -132,12 +132,12 @@ namespace Lime
 			}
 		}
 
-		public static bool operator == (Vector2 lhs, Vector2 rhs)
+		public static bool operator ==(Vector2 lhs, Vector2 rhs)
 		{
 			return lhs.X == rhs.X && lhs.Y == rhs.Y;
 		}
 
-		public static bool operator != (Vector2 lhs, Vector2 rhs)
+		public static bool operator !=(Vector2 lhs, Vector2 rhs)
 		{
 			return lhs.X != rhs.X || lhs.Y != rhs.Y;
 		}
@@ -169,17 +169,16 @@ namespace Lime
 		/// <param name="value2">The second vector.</param>
 		public static Vector2 Lerp(float amount, Vector2 value1, Vector2 value2)
 		{
-			return new Vector2
-			{
+			return new Vector2 {
 				X = Mathf.Lerp(amount, value1.X, value2.X),
-				Y = Mathf.Lerp(amount, value1.Y, value2.Y)
+				Y = Mathf.Lerp(amount, value1.Y, value2.Y),
 			};
 		}
 
 		/// <summary>
 		/// Gets or sets the vector component by its index.
 		/// </summary>
-		public float this [int component]
+		public float this[int component]
 		{
 			get
 			{
@@ -354,10 +353,9 @@ namespace Lime
 		public static Vector2 RotateRad(Vector2 value, float radians)
 		{
 			var cosSin = CosSin(radians);
-			return new Vector2
-			{
+			return new Vector2 {
 				X = value.X * cosSin.X - value.Y * cosSin.Y,
-				Y = value.X * cosSin.Y + value.Y * cosSin.X
+				Y = value.X * cosSin.Y + value.Y * cosSin.X,
 			};
 		}
 
@@ -369,10 +367,9 @@ namespace Lime
 		public static Vector2 RotateRadRough(Vector2 value, float radians)
 		{
 			var cosSin = CosSinRough(radians);
-			return new Vector2
-			{
+			return new Vector2 {
 				X = value.X * cosSin.X - value.Y * cosSin.Y,
-				Y = value.X * cosSin.Y + value.Y * cosSin.X
+				Y = value.X * cosSin.Y + value.Y * cosSin.X,
 			};
 		}
 
@@ -406,8 +403,7 @@ namespace Lime
 			{
 				var v = new Vector2(X, Y);
 				var length = Length;
-				if (length > 0)
-				{
+				if (length > 0) {
 					v.X /= length;
 					v.Y /= length;
 				}
@@ -453,7 +449,7 @@ namespace Lime
 				return false;
 			}
 
-			var parts = s.Split(new [] {", "}, StringSplitOptions.None);
+			var parts = s.Split(new[] { ", " }, StringSplitOptions.None);
 			if (parts.Length != 2 || parts.Any(i => i.IsNullOrWhiteSpace())) {
 				return false;
 			}

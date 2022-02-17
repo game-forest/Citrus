@@ -66,7 +66,8 @@ namespace Lime
 		public bool IgnoreHidden
 		{
 			get => ignoreHidden;
-			set {
+			set
+			{
 				if (ignoreHidden != value) {
 					ignoreHidden = value;
 					InvalidateConstraintsAndArrangement();
@@ -124,8 +125,9 @@ namespace Lime
 			).ToList();
 		}
 
-		protected static void LayoutWidgetWithinCell(Widget widget, Vector2 position, Vector2 size, Alignment alignment, List<Rectangle> debugRectangles = null)
-		{
+		protected static void LayoutWidgetWithinCell(
+			Widget widget, Vector2 position, Vector2 size, Alignment alignment, List<Rectangle> debugRectangles = null
+		) {
 			if (debugRectangles != null) {
 				debugRectangles.Add(new Rectangle { A = position, B = position + size });
 			}
@@ -158,7 +160,7 @@ namespace Lime
 			}
 			if (oldOwner != null) {
 				var w = (Widget)oldOwner;
-				(w).Layout.InvalidateConstraintsAndArrangement();
+				w.Layout.InvalidateConstraintsAndArrangement();
 			}
 			if (defaultCell != null) {
 				defaultCell.Owner = this;
@@ -173,7 +175,8 @@ namespace Lime
 		public Vector2 MeasuredMinSize
 		{
 			get => measuredMinSize;
-			set {
+			set
+			{
 				if (measuredMinSize != value) {
 					measuredMinSize = value;
 					Owner?.InvalidateParentConstraintsAndArrangement();
@@ -186,7 +189,8 @@ namespace Lime
 		public Vector2 MeasuredMaxSize
 		{
 			get => measuredMaxSize;
-			set {
+			set
+			{
 				if (measuredMaxSize != value) {
 					measuredMaxSize = value;
 					Owner?.InvalidateParentConstraintsAndArrangement();
@@ -222,7 +226,8 @@ namespace Lime
 		public Vector2 MinSize
 		{
 			get => minSize;
-			set {
+			set
+			{
 				if (minSize != value) {
 					minSize = value;
 					Owner?.InvalidateParentConstraintsAndArrangement();
@@ -236,7 +241,8 @@ namespace Lime
 		public Vector2 MaxSize
 		{
 			get => maxSize;
-			set {
+			set
+			{
 				if (maxSize != value) {
 					maxSize = value;
 					Owner?.InvalidateParentConstraintsAndArrangement();

@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Lime;
 
 namespace Lime
 {
@@ -120,8 +120,10 @@ namespace Lime
 			subContainer.Visible = true;
 			StackWidgets(subContainer);
 			yield return ResizeSubContainerTask(
-				0, ProjectedSize(subContainer),
-				() => ListView.ScrollTo(ListView.PositionToViewFully(this)));
+				0,
+				ProjectedSize(subContainer),
+				() => ListView.ScrollTo(ListView.PositionToViewFully(this))
+			);
 			if (onAnimationFinished != null) {
 				onAnimationFinished();
 			}
@@ -147,8 +149,9 @@ namespace Lime
 
 		public void DisposeContent()
 		{
-			foreach (var w in subContainer.Nodes.ToList())
+			foreach (var w in subContainer.Nodes.ToList()) {
 				w.AsWidget.UnlinkAndDispose();
+			}
 		}
 
 		public void SetExpanded(bool value, bool animated, Action onAnimationFinished = null)

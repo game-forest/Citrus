@@ -12,8 +12,9 @@ namespace Orange
 		public bool ApplicableToBundleSubset;
 		public bool UsesTargetBundles;
 
-		public MenuItem(Func<string> action, string label, int priority, bool applicableToBundleSubset, bool usesTargetBundles)
-		{
+		public MenuItem(
+			Func<string> action, string label, int priority, bool applicableToBundleSubset, bool usesTargetBundles
+		) {
 			Label = label;
 			Action = action;
 			Priority = priority;
@@ -42,10 +43,11 @@ namespace Orange
 				return;
 			}
 			foreach (var menuItem in PluginLoader.CurrentPlugin?.MenuItems) {
-				Items.Add(new MenuItem(() => {
-						menuItem.Value();
-						return null;
-					}, menuItem.Metadata.Label,
+				Items.Add(new MenuItem(
+					() => {
+					menuItem.Value();
+					return null;
+				}, menuItem.Metadata.Label,
 					menuItem.Metadata.Priority,
 					menuItem.Metadata.ApplicableToBundleSubset,
 					menuItem.Metadata.UsesTargetBundles)

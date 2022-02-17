@@ -30,7 +30,7 @@ namespace Tangerine.UI.Timeline
 					new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
 						LayoutCell = new LayoutCell {
-							StretchY = 0
+							StretchY = 0,
 						},
 						Padding = new Thickness { Top = 5 },
 						Nodes = {
@@ -38,8 +38,8 @@ namespace Tangerine.UI.Timeline
 							(okButton = new ThemedButton { Text = "Ok" }),
 							(cancelButton = new ThemedButton { Text = "Cancel" }),
 						},
-					}
-				}
+					},
+				},
 			};
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
 			var editor = new IntPropertyEditor(new PropertyEditorParams(this, nameof(Shift), "Shift"));

@@ -4,14 +4,15 @@ using Lime;
 
 namespace Orange
 {
-	class SyncRawAssets : ICookingStage
+	internal class SyncRawAssets : ICookingStage
 	{
 		private readonly string extension;
 		private readonly AssetAttributes attributes;
 		private readonly AssetCooker assetCooker;
 
-		public SyncRawAssets(AssetCooker assetCooker, string extension, AssetAttributes attributes = AssetAttributes.None)
-		{
+		public SyncRawAssets(
+			AssetCooker assetCooker, string extension, AssetAttributes attributes = AssetAttributes.None
+		) {
 			this.assetCooker = assetCooker;
 			this.extension = extension;
 			this.attributes = attributes;

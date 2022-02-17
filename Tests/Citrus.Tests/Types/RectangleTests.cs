@@ -1,6 +1,6 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
 using Lime;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Citrus.Tests.Types
 {
@@ -12,8 +12,13 @@ namespace Citrus.Tests.Types
 		{
 			Assert.That.AreEqual(IntRectangle.Empty, (IntRectangle)Rectangle.Empty);
 			Assert.That.AreEqual(new IntRectangle(0, 0, 1, 1), (IntRectangle)new Rectangle(0, 0, 1, 1));
-			Assert.That.AreEqual(new IntRectangle(IntVector2.Zero, IntVector2.One), (IntRectangle)new Rectangle(Vector2.Zero, Vector2.One));
-			Assert.That.AreEqual(new IntRectangle(IntVector2.Zero, IntVector2.One), (IntRectangle)new Rectangle(0, 0, 1.5f, 1.5f));
+			Assert.That.AreEqual(
+				new IntRectangle(IntVector2.Zero, IntVector2.One),
+				(IntRectangle)new Rectangle(Vector2.Zero, Vector2.One)
+			);
+			Assert.That.AreEqual(
+				new IntRectangle(IntVector2.Zero, IntVector2.One), (IntRectangle)new Rectangle(0, 0, 1.5f, 1.5f)
+			);
 		}
 
 		[TestMethod]

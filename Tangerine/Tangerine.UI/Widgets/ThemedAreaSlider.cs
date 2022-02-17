@@ -29,7 +29,8 @@ namespace Tangerine.UI
 		public float Value
 		{
 			get { return value; }
-			set {
+			set
+			{
 				if (this.value != value) {
 					slider.Value = this.value = value;
 					UpdateTextWidgets();
@@ -89,12 +90,12 @@ namespace Tangerine.UI
 				HAlignment = HAlignment.Left,
 				VAlignment = VAlignment.Bottom,
 				Anchors = Anchors.LeftRightTopBottom,
-				Padding = new Thickness { Left = 4, Top = 2 }
+				Padding = new Thickness { Left = 4, Top = 2 },
 			};
 			Editor = new ThemedNumericEditBox {
 				Visible = false,
 				HitTestTarget = true,
-				MaxWidth = int.MaxValue
+				MaxWidth = int.MaxValue,
 			};
 			slider = new ThemedSlider {
 				RangeMin = range.X,

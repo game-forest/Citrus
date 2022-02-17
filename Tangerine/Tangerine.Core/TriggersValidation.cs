@@ -18,12 +18,10 @@ namespace Tangerine.Core
 		}
 
 		protected override void InternalUndo(SetProperty op) { }
-
 	}
 
 	public sealed class TriggersValidatorOnSetKeyframe : TriggersValidatorProcessor<SetKeyframe>
 	{
-
 		private class Backup
 		{
 			internal readonly object KeyframeValue;
@@ -54,27 +52,34 @@ namespace Tangerine.Core
 			}
 			op.Keyframe.Value = op.Restore<Backup>().KeyframeValue;
 		}
-
 	}
 
-	public abstract class TriggersValidatorProcessor<T> : OperationProcessor<T> where T : IOperation
+	public abstract class TriggersValidatorProcessor<T> : OperationProcessor<T>
+		where T : IOperation
 	{
-
-		protected bool TryRefineTrigger(string propertyName, object container, object triggerValue,
-			out string refinedTriggerValue)
-		{
+		protected bool TryRefineTrigger(
+			string propertyName, object container, object triggerValue, out string refinedTriggerValue
+		) {
 			refinedTriggerValue = null;
 
 			if (propertyName != nameof(Node.Trigger) || !(container is Node) || triggerValue == null) {
 				return false;
 			}
 
-			var node = (Node) container;
+			var node = (Node)container;
 
-			var trigger = TriggersValidation.Trigger.TryParse((string) triggerValue);
+			var trigger = TriggersValidation.Trigger.TryParse((string)triggerValue);
 
-			if (trigger.Elements.RemoveAll(element => node.Animations.All(animation => animation.Id != element.AnimationId)) == 0 &&
-				trigger.Elements.RemoveAll(element => node.Animations.Find(element.AnimationId).Markers.All(marker => marker.Id != element.MarkerId)) == 0
+			if (
+				trigger.Elements.RemoveAll(
+					element => node.Animations
+						.All(animation => animation.Id != element.AnimationId)
+				) == 0
+				&& trigger.Elements.RemoveAll(
+					element => node.Animations.Find(element.AnimationId)
+						.Markers
+						.All(marker => marker.Id != element.MarkerId)
+				) == 0
 			) {
 				return false;
 			}
@@ -83,25 +88,26 @@ namespace Tangerine.Core
 
 			return true;
 		}
-
 	}
 
 	public static class TriggersValidation
 	{
-
 		public static bool TryRemoveMarkerFromTrigger(string markerId, string trigger, out string newTrigger)
 		{
 			newTrigger = trigger;
 			var triggerParsed = Trigger.TryParse(trigger);
-			if (triggerParsed == null || triggerParsed.Elements.RemoveAll(element => element.MarkerId == markerId) == 0) {
+			if (
+				triggerParsed == null || triggerParsed.Elements.RemoveAll(element => element.MarkerId == markerId) == 0
+			) {
 				return false;
 			}
 			newTrigger = triggerParsed.Compose();
 			return true;
 		}
 
-		public static bool TryRenameMarkerInTrigger(string searchMarkerId, string replaceMarkerId, string trigger, out string newTrigger)
-		{
+		public static bool TryRenameMarkerInTrigger(
+			string searchMarkerId, string replaceMarkerId, string trigger, out string newTrigger
+		) {
 			newTrigger = trigger;
 			var triggerParsed = Trigger.TryParse(trigger);
 			if (triggerParsed == null) {
@@ -109,7 +115,10 @@ namespace Tangerine.Core
 			}
 			bool changed = false;
 			foreach (var element in triggerParsed.Elements) {
-				if (element.MarkerId != searchMarkerId) continue;
+				if (element.MarkerId != searchMarkerId) {
+					continue;
+				}
+
 				element.MarkerId = replaceMarkerId;
 				changed = true;
 			}
@@ -123,7 +132,6 @@ namespace Tangerine.Core
 
 		public class Trigger
 		{
-
 			public class Element
 			{
 				public string MarkerId;
@@ -145,7 +153,10 @@ namespace Tangerine.Core
 
 			public string Compose()
 			{
-				if (Elements.Count == 0) return null;
+				if (Elements.Count == 0) {
+					return null;
+				}
+
 				return string.Join(",", Elements.Select(el => {
 					if (el.AnimationId != null) {
 						return el.MarkerId + "@" + el.AnimationId;
@@ -156,21 +167,23 @@ namespace Tangerine.Core
 
 			public static Trigger TryParse(string value)
 			{
-				if (value == null) return null;
-				if (value.Length == 0) return new Trigger(Enumerable.Empty<Element>());
+				if (value == null) {
+					return null;
+				}
+
+				if (value.Length == 0) {
+					return new Trigger(Enumerable.Empty<Element>());
+				}
 
 				return new Trigger(
 					value.Split(',').
 						Select(el => {
 							string elTrimmed = el.Trim();
-							var arr = elTrimmed.Split(new[] {'@'}, 2);
+							var arr = elTrimmed.Split(new[] { '@' }, 2);
 							return new Element(arr[0], arr.Length > 1 ? arr[1] : null);
 						})
 				);
 			}
-
 		}
-
 	}
-
 }

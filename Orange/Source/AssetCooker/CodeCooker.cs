@@ -46,7 +46,7 @@ namespace Orange
 						}
 						cache.SceneFiles.Add(scenePath, new SceneRecord {
 							Bundle = bundles.First(),
-							CookingUnitHash = sourceHash
+							CookingUnitHash = sourceHash,
 						});
 					} else {
 						var cacheRecord = cache.SceneFiles[scenePath];
@@ -103,13 +103,19 @@ namespace Orange
 
 		public static string GetCodeCachePath()
 		{
-			var name = string.Join("_", The.Workspace.ProjectFilePath.Split(new string[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries)).ToLower(CultureInfo.InvariantCulture);
+			var name = string.Join(
+				"_",
+				The.Workspace.ProjectFilePath.Split(
+					new string[] { "\\", "/", ":" }, StringSplitOptions.RemoveEmptyEntries
+				)
+			).ToLower(CultureInfo.InvariantCulture);
 			return Path.Combine(WorkspaceConfig.GetDataPath(), name, "code_cooker_cache.json");
 		}
 
 		public static CodeCookerCache LoadCodeCookerCache()
 		{
-			var scenesPath = $@"{The.Workspace.ProjectDirectory}/{The.Workspace.ProjectName}.{The.Workspace.GeneratedScenesPath}/Scenes";
+			var scenesPath = $"{The.Workspace.ProjectDirectory}/" +
+				$"{The.Workspace.ProjectName}.{The.Workspace.GeneratedScenesPath}/Scenes";
 			var codeCachePath = GetCodeCachePath();
 			if (!File.Exists(codeCachePath)) {
 				return InvalidateCache(scenesPath);
@@ -118,7 +124,11 @@ namespace Orange
 			} else {
 				try {
 					CodeCookerCache cache;
-					using (FileStream stream = new FileStream(codeCachePath, FileMode.Open, FileAccess.Read, FileShare.None)) {
+					using (
+						FileStream stream = new FileStream(
+							codeCachePath, FileMode.Open, FileAccess.Read, FileShare.None
+						)
+					) {
 						var jd = new Yuzu.Json.JsonDeserializer();
 						cache = (CodeCookerCache)jd.FromStream(new CodeCookerCache(), stream);
 					}
@@ -129,10 +139,14 @@ namespace Orange
 						var projectName = The.Workspace.ProjectName;
 						foreach (var platform in Enum.GetValues(typeof(TargetPlatform))) {
 							var platformName = Enum.GetName(typeof(TargetPlatform), platform);
-							var projectPath = $"{projectName}.{The.Workspace.GeneratedScenesPath}/{projectName}.GeneratedScenes.{platformName}.csproj";
+							var projectPath = $"{projectName}.{The.Workspace.GeneratedScenesPath}/" +
+								$"{projectName}.GeneratedScenes.{platformName}.csproj";
 							if (File.Exists(projectPath)) {
 								var projectFilesCache = cache.GeneratedProjectFileToModificationDate;
-								if (!projectFilesCache.ContainsKey(projectPath) || File.GetLastWriteTime(projectPath) > projectFilesCache[projectPath]) {
+								if (
+									!projectFilesCache.ContainsKey(projectPath)
+									|| File.GetLastWriteTime(projectPath) > projectFilesCache[projectPath]
+								) {
 									// Consider cache inconsistent if generated project files were modified from outside
 									return InvalidateCache(scenesPath);
 								}
@@ -153,16 +167,21 @@ namespace Orange
 				var projectName = The.Workspace.ProjectName;
 				foreach (var platform in Enum.GetValues(typeof(TargetPlatform))) {
 					var platformName = Enum.GetName(typeof(TargetPlatform), platform);
-					var projectPath = $"{projectName}.{The.Workspace.GeneratedScenesPath}/{projectName}.GeneratedScenes.{platformName}.csproj";
+					var projectPath = $"{projectName}.{The.Workspace.GeneratedScenesPath}/" +
+						$"{projectName}.GeneratedScenes.{platformName}.csproj";
 					if (File.Exists(projectPath)) {
 						CsprojSynchronization.SynchronizeProject(projectPath);
-						codeCookerCache.GeneratedProjectFileToModificationDate.Add(projectPath, File.GetLastWriteTime(projectPath));
+						codeCookerCache.GeneratedProjectFileToModificationDate.Add(
+							projectPath, File.GetLastWriteTime(projectPath)
+						);
 					}
 				}
 			}
 			var codeCookerCachePath = GetCodeCachePath();
 			Directory.CreateDirectory(Path.GetDirectoryName(codeCookerCachePath));
-			using FileStream stream = new FileStream(codeCookerCachePath, FileMode.Create, FileAccess.Write, FileShare.None);
+			using FileStream stream = new FileStream(
+				codeCookerCachePath, FileMode.Create, FileAccess.Write, FileShare.None
+			);
 			var js = new Yuzu.Json.JsonSerializer();
 			js.ToStream(codeCookerCache, stream);
 		}

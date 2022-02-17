@@ -14,13 +14,13 @@ namespace Orange
 		{
 			Layout = new HBoxLayout { Spacing = 4 };
 			editor = new ThemedEditBox {
-				LayoutCell = new LayoutCell(Alignment.Center)
+				LayoutCell = new LayoutCell(Alignment.Center),
 			};
 			AddNode(editor);
 			var button = new ThemedButton {
 				Text = "...",
 				MinMaxWidth = 20,
-				LayoutCell = new LayoutCell(Alignment.Center)
+				LayoutCell = new LayoutCell(Alignment.Center),
 			};
 			AddNode(button);
 			editor.Submitted += ChooseFileByUser;
@@ -33,15 +33,15 @@ namespace Orange
 			FileChosenByUser?.Invoke(file);
 		}
 
-		public static void ShowOpenCitrusProjectDialog(Action<string> OnChoose, string initialDirectory)
+		public static void ShowOpenCitrusProjectDialog(Action<string> onChoose, string initialDirectory)
 		{
 			var dialog = new FileDialog {
 				AllowedFileTypes = new[] { "citproj" },
 				Mode = FileDialogMode.Open,
-				InitialDirectory = initialDirectory
+				InitialDirectory = initialDirectory,
 			};
 			if (dialog.RunModal()) {
-				OnChoose(dialog.FileName);
+				onChoose(dialog.FileName);
 			}
 		}
 

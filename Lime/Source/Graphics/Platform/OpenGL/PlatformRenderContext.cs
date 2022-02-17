@@ -139,13 +139,15 @@ namespace Lime.Graphics.Platform.OpenGL
 			return new PlatformBuffer(this, bufferType, size, dynamic);
 		}
 
-		public IPlatformTexture2D CreateTexture2D(Format format, int width, int height, bool mipmaps, TextureParams textureParams)
-		{
+		public IPlatformTexture2D CreateTexture2D(
+			Format format, int width, int height, bool mipmaps, TextureParams textureParams
+		) {
 			return new PlatformTexture2D(this, format, width, height, mipmaps, textureParams);
 		}
 
-		public IPlatformRenderTexture2D CreateRenderTexture2D(Format format, int width, int height, TextureParams textureParams)
-		{
+		public IPlatformRenderTexture2D CreateRenderTexture2D(
+			Format format, int width, int height, TextureParams textureParams
+		) {
 			return new PlatformRenderTexture2D(this, format, width, height, textureParams);
 		}
 
@@ -177,7 +179,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			GLMinorVersion = minor;
 			var glExtensions = new HashSet<string>(GL.GetString(StringName.Extensions).Split(' '));
 			SupportsTextureRG = !ESProfile || GLMajorVersion >= 3 || glExtensions.Contains("GL_EXT_texture_rg");
-			SupportsPackedDepth24Stencil8 = !ESProfile || GLMajorVersion >= 3 || glExtensions.Contains("GL_OES_packed_depth_stencil");
+			SupportsPackedDepth24Stencil8 = !ESProfile
+				|| GLMajorVersion >= 3
+				|| glExtensions.Contains("GL_OES_packed_depth_stencil");
 			SupportsDepth24 = !ESProfile || GLMajorVersion >= 3 || glExtensions.Contains("GL_OES_depth24");
 			var supportsS3tc = glExtensions.Contains("GL_EXT_texture_compression_s3tc");
 			SupportsDxt1 = supportsS3tc || glExtensions.Contains("GL_EXT_texture_compression_dxt1");
@@ -188,7 +192,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			SupportsEtc1 = glExtensions.Contains("GL_OES_compressed_ETC1_RGB8_texture");
 			SupportsEtc2 = (ESProfile && GLMajorVersion >= 3) || glExtensions.Contains("GL_ARB_ES3_compatibility");
 			SupportsInternalFormatBgra8 = ESProfile && glExtensions.Contains("GL_EXT_texture_format_BGRA8888");
-			SupportsExternalFormatBgra8 = SupportsInternalFormatBgra8 || !ESProfile || glExtensions.Contains("GL_APPLE_texture_format_BGRA8888");
+			SupportsExternalFormatBgra8 = SupportsInternalFormatBgra8
+				|| !ESProfile
+				|| glExtensions.Contains("GL_APPLE_texture_format_BGRA8888");
 			GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out var maxTextureSlots);
 			GL.GetInteger(GetPName.MaxVertexAttribs, out var maxVertexAttributes);
 			MaxTextureSlots = Math.Min(maxTextureSlots, 32);
@@ -378,8 +384,11 @@ namespace Lime.Graphics.Platform.OpenGL
 			PreDraw(baseVertex);
 			var effectiveOffset = indexOffset + startIndex * indexFormat.GetSize();
 			GL.DrawElements(
-				(PrimitiveType)GLHelper.GetGLPrimitiveType(primitiveTopology), indexCount,
-				(DrawElementsType)GLHelper.GetGLDrawElementsType(indexFormat), new IntPtr(effectiveOffset));
+				(PrimitiveType)GLHelper.GetGLPrimitiveType(primitiveTopology),
+				indexCount,
+				(DrawElementsType)GLHelper.GetGLDrawElementsType(indexFormat),
+				new IntPtr(effectiveOffset)
+			);
 			GLHelper.CheckGLErrors();
 		}
 
@@ -462,8 +471,11 @@ namespace Lime.Graphics.Platform.OpenGL
 					blendState.AlphaDstBlend != boundBlendState.AlphaDstBlend
 				) {
 					GL.BlendFuncSeparate(
-						(BlendingFactorSrc)GLHelper.GetGLBlendFactor(blendState.ColorSrcBlend), (BlendingFactorDest)GLHelper.GetGLBlendFactor(blendState.ColorDstBlend),
-						(BlendingFactorSrc)GLHelper.GetGLBlendFactor(blendState.AlphaSrcBlend), (BlendingFactorDest)GLHelper.GetGLBlendFactor(blendState.AlphaDstBlend));
+						(BlendingFactorSrc)GLHelper.GetGLBlendFactor(blendState.ColorSrcBlend),
+						(BlendingFactorDest)GLHelper.GetGLBlendFactor(blendState.ColorDstBlend),
+						(BlendingFactorSrc)GLHelper.GetGLBlendFactor(blendState.AlphaSrcBlend),
+						(BlendingFactorDest)GLHelper.GetGLBlendFactor(blendState.AlphaDstBlend)
+					);
 					GLHelper.CheckGLErrors();
 					boundBlendState.ColorSrcBlend = blendState.ColorSrcBlend;
 					boundBlendState.ColorDstBlend = blendState.ColorDstBlend;
@@ -553,14 +565,22 @@ namespace Lime.Graphics.Platform.OpenGL
 					stencilState.ReferenceValue != boundStencilState.ReferenceValue ||
 					stencilState.ReadMask != boundStencilState.ReadMask;
 				if (funcDirty || stencilState.FrontFaceComparison != boundStencilState.FrontFaceComparison) {
-					GL.StencilFuncSeparate(StencilFace.Front,
-						(StencilFunction)GLHelper.GetGLCompareFunc(stencilState.FrontFaceComparison), stencilState.ReferenceValue, stencilState.ReadMask);
+					GL.StencilFuncSeparate(
+						StencilFace.Front,
+						(StencilFunction)GLHelper.GetGLCompareFunc(stencilState.FrontFaceComparison),
+						stencilState.ReferenceValue,
+						stencilState.ReadMask
+					);
 					GLHelper.CheckGLErrors();
 					boundStencilState.FrontFaceComparison = stencilState.FrontFaceComparison;
 				}
 				if (funcDirty || stencilState.BackFaceComparison != boundStencilState.BackFaceComparison) {
-					GL.StencilFuncSeparate(StencilFace.Back,
-						(StencilFunction)GLHelper.GetGLCompareFunc(stencilState.BackFaceComparison), stencilState.ReferenceValue, stencilState.ReadMask);
+					GL.StencilFuncSeparate(
+						StencilFace.Back,
+						(StencilFunction)GLHelper.GetGLCompareFunc(stencilState.BackFaceComparison),
+						stencilState.ReferenceValue,
+						stencilState.ReadMask
+					);
 					GLHelper.CheckGLErrors();
 					boundStencilState.BackFaceComparison = stencilState.BackFaceComparison;
 				}
@@ -571,7 +591,8 @@ namespace Lime.Graphics.Platform.OpenGL
 					stencilState.FrontFaceDepthFail != boundStencilState.FrontFaceDepthFail ||
 					stencilState.FrontFacePass != boundStencilState.FrontFacePass
 				) {
-					GL.StencilOpSeparate(StencilFace.Front,
+					GL.StencilOpSeparate(
+						StencilFace.Front,
 						(GLStencilOp)GLHelper.GetGLStencilOp(stencilState.FrontFaceFail),
 						(GLStencilOp)GLHelper.GetGLStencilOp(stencilState.FrontFaceDepthFail),
 						(GLStencilOp)GLHelper.GetGLStencilOp(stencilState.FrontFacePass));
@@ -585,7 +606,8 @@ namespace Lime.Graphics.Platform.OpenGL
 					stencilState.BackFaceDepthFail != boundStencilState.BackFaceDepthFail ||
 					stencilState.BackFacePass != boundStencilState.BackFacePass
 				) {
-					GL.StencilOpSeparate(StencilFace.Back,
+					GL.StencilOpSeparate(
+						StencilFace.Back,
 						(GLStencilOp)GLHelper.GetGLStencilOp(stencilState.BackFaceFail),
 						(GLStencilOp)GLHelper.GetGLStencilOp(stencilState.BackFaceDepthFail),
 						(GLStencilOp)GLHelper.GetGLStencilOp(stencilState.BackFacePass));
@@ -728,8 +750,13 @@ namespace Lime.Graphics.Platform.OpenGL
 						foreach (var attrib in binding.Attributes) {
 							var effectiveOffset = offset + attrib.Offset;
 							GL.VertexAttribPointer(
-								attrib.Index, attrib.Size, (VertexAttribPointerType)attrib.Type,
-								attrib.Normalized, binding.Stride, effectiveOffset);
+								attrib.Index,
+								attrib.Size,
+								(VertexAttribPointerType)attrib.Type,
+								attrib.Normalized,
+								binding.Stride,
+								effectiveOffset
+							);
 							GLHelper.CheckGLErrors();
 						}
 						dirtyBindingMask &= ~bindingMask;
@@ -760,7 +787,7 @@ namespace Lime.Graphics.Platform.OpenGL
 			}
 			vertexBuffersDirtyMask &= ~vertexInputLayout.BindingMask;
 			vertexInputLayoutDirty = false;
-			boundBaseVertex = baseVertex;	
+			boundBaseVertex = baseVertex;
 		}
 
 		private void BindIndexBuffer()

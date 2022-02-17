@@ -9,7 +9,7 @@ namespace Lime
 		Common,
 		OnePassWithoutOutline,
 		OnePassWithOutline,
-		TwoPasses
+		TwoPasses,
 	}
 
 	public class TextRenderObject : WidgetRenderObject
@@ -30,9 +30,14 @@ namespace Lime
 					SpriteList.Render(Color, ColorfulMaterialProvider.Instance);
 				}
 
-				if (RenderMode == TextRenderingMode.OnePassWithoutOutline || RenderMode == TextRenderingMode.TwoPasses) {
+				if (
+					RenderMode == TextRenderingMode.OnePassWithoutOutline
+					|| RenderMode == TextRenderingMode.TwoPasses
+				) {
 					ColorfulMaterialProvider.Instance.Init(
-						Blending, ShaderPrograms.ColorfulTextShaderProgram.GradientMapTextureSize - GradientMapIndex - 1);
+						Blending,
+						ShaderPrograms.ColorfulTextShaderProgram.GradientMapTextureSize - GradientMapIndex - 1
+					);
 					SpriteList.Render(Color, ColorfulMaterialProvider.Instance);
 				}
 			}
@@ -43,7 +48,6 @@ namespace Lime
 			SpriteList = null;
 			base.OnRelease();
 		}
-
 
 		private class ColorfulMaterialProvider : Sprite.IMaterialProvider
 		{

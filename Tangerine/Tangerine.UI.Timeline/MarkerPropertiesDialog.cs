@@ -12,7 +12,7 @@ namespace Tangerine.UI.Timeline
 		{
 			Ok,
 			Cancel,
-			Delete
+			Delete,
 		}
 
 		public Result Show(Marker marker, bool canDelete)
@@ -25,7 +25,12 @@ namespace Tangerine.UI.Timeline
 			EditBox markerIdEditor;
 			ThemedDropDownList jumpToSelector;
 			Result result;
-			var window = new Window(new WindowOptions { FixedSize = true, Title = "Marker properties", Visible = false, Style = WindowStyle.Dialog });
+			var window = new Window(new WindowOptions {
+				FixedSize = true,
+				Title = "Marker properties",
+				Visible = false,
+				Style = WindowStyle.Dialog,
+			});
 			jumpToSelector = new ThemedDropDownList();
 			jumpToSelector.Items.Add(new ThemedDropDownList.Item(string.Empty, null));
 			foreach (var m in Document.Current.Animation.Markers.Where(m => !string.IsNullOrEmpty(m.Id))) {
@@ -44,12 +49,15 @@ namespace Tangerine.UI.Timeline
 							Spacing = 8,
 							ColumnDefaults = {
 								new DefaultLayoutCell(Alignment.RightCenter, 0.5f, 0),
-								new DefaultLayoutCell(Alignment.LeftCenter, 1, 0)
-							}
+								new DefaultLayoutCell(Alignment.LeftCenter, 1, 0),
+							},
 						},
 						Nodes = {
 							new ThemedSimpleText("Marker Id"),
-							(markerIdEditor = new ThemedEditBox { Text = marker.Id, MinSize = Theme.Metrics.DefaultEditBoxSize * new Vector2(2, 1) }),
+							(markerIdEditor = new ThemedEditBox {
+								Text = marker.Id,
+								MinSize = Theme.Metrics.DefaultEditBoxSize * new Vector2(2, 1),
+							}),
 							new ThemedSimpleText("Action"),
 							(actionSelector = new ThemedDropDownList {
 								Items = {
@@ -57,7 +65,7 @@ namespace Tangerine.UI.Timeline
 									new DropDownList.Item("Jump", MarkerAction.Jump),
 									new DropDownList.Item("Stop", MarkerAction.Stop),
 								},
-								Value = marker.Action
+								Value = marker.Action,
 							}),
 							new ThemedSimpleText("Jump to"),
 							jumpToSelector,
@@ -66,10 +74,11 @@ namespace Tangerine.UI.Timeline
 								new PropertyEditorParams(marker, nameof(Marker.BezierEasing)) {
 									ShowLabel = false,
 									History = Document.Current.History,
-									PropertySetter = (obj, propertyName, value) => Core.Operations.SetProperty.Perform(obj, propertyName, value)
+									PropertySetter = (obj, propertyName, value) =>
+										Core.Operations.SetProperty.Perform(obj, propertyName, value),
 								}
 							).ContainerWidget,
-						}
+						},
 					},
 					(buttonsPanel = new Widget {
 						Layout = new HBoxLayout { Spacing = 8 },
@@ -77,9 +86,9 @@ namespace Tangerine.UI.Timeline
 						Nodes = {
 							(okButton = new ThemedButton("Ok")),
 							(cancelButton = new ThemedButton("Cancel")),
-						}
-					})
-				}
+						},
+					}),
+				},
 			};
 			if (canDelete) {
 				deleteButton = new ThemedButton("Delete");
@@ -90,17 +99,21 @@ namespace Tangerine.UI.Timeline
 				};
 			}
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
-			rootWidget.LateTasks.Add(new KeyPressHandler(Key.Escape,
+			rootWidget.LateTasks.Add(new KeyPressHandler(
+				Key.Escape,
 				(input, key) => {
 					input.ConsumeKey(key);
 					window.Close();
-				}));
-			rootWidget.LateTasks.Add(new KeyPressHandler(Key.Enter,
+				})
+			);
+			rootWidget.LateTasks.Add(new KeyPressHandler(
+				Key.Enter,
 				(input, key) => {
 					input.ConsumeKey(key);
 					result = Result.Ok;
 					window.Close();
-				}));
+				})
+			);
 			okButton.Clicked += () => {
 				result = Result.Ok;
 				window.Close();

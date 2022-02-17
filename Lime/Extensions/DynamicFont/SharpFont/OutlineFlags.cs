@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -83,20 +81,20 @@ namespace SharpFont
 		/// If set, turn pixels on for ‘stubs’, otherwise exclude them. Ignored if
 		/// <see cref="OutlineFlags.IgnoreDropouts"/> is set. See below for more information.
 		/// </summary>
-		IncludeStubs =		0x0020,
+		IncludeStubs = 0x0020,
 
 		/// <summary>
 		/// This flag indicates that the scan-line converter should try to convert this outline to bitmaps with the
 		/// highest possible quality. It is typically set for small character sizes. Note that this is only a hint that
 		/// might be completely ignored by a given scan-converter.
 		/// </summary>
-		HighPrecision =		0x0100,
+		HighPrecision = 0x0100,
 
 		/// <summary>
 		/// This flag is set to force a given scan-converter to only use a single pass over the outline to render a
 		/// bitmap glyph image. Normally, it is set for very large character sizes. It is only a hint that might be
 		/// completely ignored by a given scan-converter.
 		/// </summary>
-		SinglePass =		0x0200
+		SinglePass = 0x0200,
 	}
 }

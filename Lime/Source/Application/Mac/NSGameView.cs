@@ -1,4 +1,4 @@
-﻿#if MAC
+#if MAC
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,7 +60,9 @@ namespace Lime.Platform
 			this.WantsBestResolutionOpenGLSurface = true;
 			pixelFormat = SelectPixelFormat(mode, 1, 0);
 			if (pixelFormat == null) {
-				throw new InvalidOperationException(string.Format("Failed to contruct NSOpenGLPixelFormat for GraphicsMode {0}", mode));
+				throw new InvalidOperationException(
+					string.Format("Failed to contruct NSOpenGLPixelFormat for GraphicsMode {0}", mode)
+				);
 			}
 			if (openGLContext == null) {
 				openGLContext = new NSOpenGLContext(pixelFormat, null);
@@ -192,16 +194,17 @@ namespace Lime.Platform
 			}
 		}
 
-		private readonly static Dictionary<MacKeyModifiers, Key> modifiersToKeys = new Dictionary<MacKeyModifiers, Key> {
-			{ MacKeyModifiers.LShiftFlag, Key.Shift },
-			{ MacKeyModifiers.RShiftFlag, Key.Shift },
-			{ MacKeyModifiers.LCtrlFlag, Key.Control },
-			{ MacKeyModifiers.RCtrlFlag, Key.Control },
-			{ MacKeyModifiers.LAltFlag, Key.Alt },
-			{ MacKeyModifiers.RAltFlag, Key.Alt },
-			{ MacKeyModifiers.LWinFlag, Key.Win },
-			{ MacKeyModifiers.RWinFlag, Key.Win },
-		};
+		private readonly static Dictionary<MacKeyModifiers, Key> modifiersToKeys =
+			new Dictionary<MacKeyModifiers, Key> {
+				{ MacKeyModifiers.LShiftFlag, Key.Shift },
+				{ MacKeyModifiers.RShiftFlag, Key.Shift },
+				{ MacKeyModifiers.LCtrlFlag, Key.Control },
+				{ MacKeyModifiers.RCtrlFlag, Key.Control },
+				{ MacKeyModifiers.LAltFlag, Key.Alt },
+				{ MacKeyModifiers.RAltFlag, Key.Alt },
+				{ MacKeyModifiers.LWinFlag, Key.Win },
+				{ MacKeyModifiers.RWinFlag, Key.Win },
+			};
 
 		public override void FlagsChanged(NSEvent theEvent)
 		{
@@ -338,7 +341,9 @@ namespace Lime.Platform
 		private void AssertContext()
 		{
 			if (openGLContext == null)
-				throw new InvalidOperationException("Operation requires an OpenGLContext, which hasn't been created yet.");
+				throw new InvalidOperationException(
+					"Operation requires an OpenGLContext, which hasn't been created yet."
+				);
 		}
 
 		private void OnUpdate()

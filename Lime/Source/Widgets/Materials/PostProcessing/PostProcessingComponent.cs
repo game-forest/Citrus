@@ -362,7 +362,8 @@ namespace Lime
 		public ITexture NoiseTexture
 		{
 			get => noiseTexture;
-			set {
+			set
+			{
 				if (noiseTexture != value) {
 					noiseTexture = value;
 					Window.Current?.Invalidate();
@@ -457,7 +458,8 @@ namespace Lime
 		public bool ApplyPostProcessing
 		{
 			get => applyPostProcessing;
-			set {
+			set
+			{
 				if (applyPostProcessing != value) {
 					applyPostProcessing = value;
 					if (applyPostProcessing) {
@@ -476,7 +478,8 @@ namespace Lime
 		public int SourceTextureWidth
 		{
 			get => textureSizeLimit.Width;
-			set {
+			set
+			{
 				textureSizeLimit.Width = Mathf.Clamp(value, MinimumTextureSize, MaximumTextureSize);
 				RequiredRefreshSource = true;
 			}
@@ -488,7 +491,8 @@ namespace Lime
 		public int SourceTextureHeight
 		{
 			get => textureSizeLimit.Height;
-			set {
+			set
+			{
 				textureSizeLimit.Height = Mathf.Clamp(value, MinimumTextureSize, MaximumTextureSize);
 				RequiredRefreshSource = true;
 			}
@@ -499,7 +503,8 @@ namespace Lime
 		public Size TextureSizeLimit
 		{
 			get => textureSizeLimit;
-			set {
+			set
+			{
 				SourceTextureWidth = value.Width;
 				SourceTextureHeight = value.Height;
 			}
@@ -519,7 +524,8 @@ namespace Lime
 		public bool RefreshSourceTexture
 		{
 			get => refreshSourceTexture;
-			set {
+			set
+			{
 				if (refreshSourceTexture != value) {
 					refreshSourceTexture = value;
 					if (value) {
@@ -534,7 +540,8 @@ namespace Lime
 		public int RefreshSourceRate
 		{
 			get => refreshSourceRate;
-			set {
+			set
+			{
 				value = Mathf.Clamp(value, 0, int.MaxValue);
 				if (refreshSourceRate != value) {
 					refreshSourceRate = value;
@@ -551,7 +558,8 @@ namespace Lime
 
 		[TangerineGroup(GroupDebugView)]
 		[TangerineInspect]
-		public PostProcessingPresenter.DebugViewMode DebugViewMode { get; set; } = PostProcessingPresenter.DebugViewMode.None;
+		public PostProcessingPresenter.DebugViewMode DebugViewMode { get; set; } =
+			PostProcessingPresenter.DebugViewMode.None;
 
 		public bool RequiredSerializeNoiseTexture() => noiseTexture != null && !(noiseTexture is RenderTexture);
 

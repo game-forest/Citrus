@@ -10,7 +10,8 @@ namespace Lime
 	{
 		/// <summary>
 		/// Gets or sets the command's descriptive text.
-		/// If the command is added to a menu, the menu option will consist of the text and the shortcut (if there is one).
+		/// If the command is added to a menu, the menu option will
+		/// consist of the text and the shortcut (if there is one).
 		/// </summary>
 		string Text { get; set; }
 
@@ -42,7 +43,8 @@ namespace Lime
 		bool Visible { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the command will auto repeat when the keyboard shortcut combination is held down.
+		/// Gets or sets a value indicating whether the command will auto repeat when
+		/// the keyboard shortcut combination is held down.
 		/// Commands used in the main menu are always repeatable. The default value is true.
 		/// </summary>
 		bool Repeatable { get; set; }
@@ -74,7 +76,8 @@ namespace Lime
 		bool Consume();
 
 		/// <summary>
-		/// Gets a value indicating whether the command has been consumed. The command should not be consumed before changing its Enabled property.
+		/// Gets a value indicating whether the command has been consumed.
+		/// The command should not be consumed before changing its Enabled property.
 		/// </summary>
 		bool IsConsumed();
 
@@ -92,7 +95,9 @@ namespace Lime
 	public class Command : ICommand
 	{
 		public static readonly ICommand Undo = new Command("Undo", new Shortcut(Modifiers.Command, Key.Z));
-		public static readonly ICommand Redo = new Command("Redo", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.Z));
+		public static readonly ICommand Redo = new Command(
+			"Redo", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.Z)
+		);
 		public static readonly ICommand SelectAll = new Command("Select All", new Shortcut(Modifiers.Command, Key.A));
 		public static readonly ICommand Cut = new Command("Cut", new Shortcut(Modifiers.Command, Key.X));
 		public static readonly ICommand Copy = new Command("Copy", new Shortcut(Modifiers.Command, Key.C));
@@ -100,7 +105,7 @@ namespace Lime
 		public static readonly ICommand Delete = new Command("Delete", new Shortcut(Key.Delete));
 
 		public static readonly List<ICommand> Editing = new List<ICommand> {
-			Undo, Redo, SelectAll, Cut, Copy, Paste, Delete
+			Undo, Redo, SelectAll, Cut, Copy, Paste, Delete,
 		};
 
 		private static long consumeGeneration = 1;
@@ -276,9 +281,12 @@ namespace Lime
 				return false;
 			}
 			var input = Window.Current.Input;
-			return wasIssued ||
-				mappedShortcut != Key.Unknown &&
-				(Repeatable && input.WasKeyRepeated(mappedShortcut) || !Repeatable && input.WasKeyPressed(mappedShortcut));
+			return wasIssued
+				|| mappedShortcut != Key.Unknown
+					&& (
+						Repeatable && input.WasKeyRepeated(mappedShortcut)
+						|| !Repeatable && input.WasKeyPressed(mappedShortcut)
+					);
 		}
 
 		public bool IsConsumed() => consumedAt == consumeGeneration;

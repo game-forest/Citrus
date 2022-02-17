@@ -25,10 +25,12 @@ namespace Tangerine
 				return;
 			}
 			var animation = Document.Current.Animation;
-			var description = $"Animation:{(animation.IsLegacy ? "[Legacy]" : animation.Id)}; Node: {animation.OwnerNode}";
+			var description = $"Animation:{(animation.IsLegacy ? "[Legacy]" : animation.Id)};" +
+				$" Node: {animation.OwnerNode}";
 			var lastFrameIndex = GetLastAnimationFrame();
 			lookupWidget.AddItem(new LookupDialogItem(
-				$"Type the frame number to go to a particular frame on timeline{(lastFrameIndex > 0 ? $" (last animation frame is {lastFrameIndex})" : null)}",
+				$"Type the frame number to go to a particular frame "
+					+ $"on timeline{(lastFrameIndex > 0 ? $" (last animation frame is {lastFrameIndex})" : null)}",
 				description,
 				() => {
 					if (!int.TryParse(lookupWidget.FilterText, out var frame) || frame < 0) {
@@ -44,7 +46,10 @@ namespace Tangerine
 			));
 		}
 
-		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) => items;
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items)
+		{
+			return items;
+		}
 
 		private static int GetLastAnimationFrame()
 		{

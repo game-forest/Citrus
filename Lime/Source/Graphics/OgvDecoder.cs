@@ -12,15 +12,15 @@ namespace Lime
 {
 	public class OgvDecoder : IDisposable
 	{
-		const byte MinAlphaThreshold = 45;
-		const byte MaxAlphaThreshold = 250;
+		private const byte MinAlphaThreshold = 45;
+		private const byte MaxAlphaThreshold = 250;
 
 #pragma warning disable 414
-		Stream stream;
-		int streamHandle;
-		Lemon.Api.FileSystem fileSystem;
-		IntPtr ogvHandle;
-		static readonly StreamMap streamMap = new StreamMap();
+		private Stream stream;
+		private int streamHandle;
+		private Lemon.Api.FileSystem fileSystem;
+		private IntPtr ogvHandle;
+		private static readonly StreamMap streamMap = new StreamMap();
 
 		public Size FrameSize { get; private set; }
 
@@ -28,8 +28,10 @@ namespace Lime
 		{
 			this.stream = stream;
 			fileSystem = new Lemon.Api.FileSystem {
-				ReadFunc = OgvRead, CloseFunc = OgvClose,
-				SeekFunc = OgvSeek, TellFunc = OgvTell
+				ReadFunc = OgvRead,
+				CloseFunc = OgvClose,
+				SeekFunc = OgvSeek,
+				TellFunc = OgvTell,
 			};
 			streamHandle = streamMap.Allocate(stream);
 
@@ -37,7 +39,8 @@ namespace Lime
 			if (ogvHandle.ToInt64() == 0) {
 				throw new Lime.Exception("Failed to open Ogv/Theora file");
 			}
-			FrameSize = new Size(Lemon.Api.OgvGetVideoWidth(ogvHandle),
+			FrameSize = new Size(
+				Lemon.Api.OgvGetVideoWidth(ogvHandle),
 				Lemon.Api.OgvGetVideoHeight(ogvHandle));
 		}
 
@@ -71,15 +74,23 @@ namespace Lime
 			var vPlane = Lemon.Api.OgvGetBuffer(ogvHandle, 2);
 			unsafe {
 				fixed (Color4* p = &pixels[0]) {
-					Lemon.Api.DecodeRGBX8((IntPtr)p,
-						yPlane.Data, uPlane.Data, vPlane.Data,
-						yPlane.Width, yPlane.Height, yPlane.Stride, uPlane.Stride,
-						width * 4, 0);
+					Lemon.Api.DecodeRGBX8(
+						dst_ptr: (IntPtr)p,
+						y_ptr: yPlane.Data,
+						u_ptr: uPlane.Data,
+						v_ptr: vPlane.Data,
+						width: yPlane.Width,
+						height: yPlane.Height,
+						y_span: yPlane.Stride,
+						uv_span: uPlane.Stride,
+						dst_span: width * 4,
+						dither: 0
+					);
 				}
 			}
 		}
 
-		static readonly byte[] alphaSaturateTable = InitAlphaTable();
+		private static readonly byte[] alphaSaturateTable = InitAlphaTable();
 
 		private static byte[] InitAlphaTable()
 		{
@@ -101,7 +112,9 @@ namespace Lime
 			var yPlane = Lemon.Api.OgvGetBuffer(ogvHandle, 0);
 			if (yPlane.Width != width || yPlane.Height != height) {
 				throw new ArgumentException(
-					string.Format("YPlane size: {0}x{1}; Texture size: {2}x{3}", yPlane.Width, yPlane.Height, width, height));
+					string.Format(
+						"YPlane size: {0}x{1}; Texture size: {2}x{3}", yPlane.Width, yPlane.Height, width, height)
+					);
 			}
 			unsafe {
 				fixed (byte* alphaTablePtr = &alphaSaturateTable[0])
@@ -129,8 +142,10 @@ namespace Lime
 			while (true) {
 				var stream = streamMap[handle];
 				int read = stream.Read(block, 0, Math.Min(block.Length, requestCount - actualCount));
-				if (read == 0)
+				if (read == 0) {
 					break;
+				}
+
 				Marshal.Copy(block, 0, (IntPtr)(buffer.ToInt64() + actualCount), read);
 				actualCount += read;
 			}

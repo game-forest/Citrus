@@ -66,7 +66,10 @@ namespace Tangerine
 		{
 			IEnumerable<string> GetCommandIds(Type type)
 			{
-				foreach (var field in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)) {
+				foreach (
+					var field
+					in type.GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
+				) {
 					var fieldType = field.FieldType;
 					if (fieldType == typeof(ICommand) || fieldType.IsSubclassOf(typeof(ICommand))) {
 						yield return field.Name;
@@ -107,7 +110,7 @@ namespace Tangerine
 				"LightSource",
 				"Polyline",
 				"PolylinePoint",
-				"TiledImage"
+				"TiledImage",
 			}.Select(i => "Create" + i));
 
 			var toolsToolbarPanel = new ToolbarModel.ToolbarPanel { Title = "Tools" };
@@ -123,13 +126,13 @@ namespace Tangerine
 									"Undo",
 									"Redo",
 									nameof(GenericCommands.Revert),
-								}
+								},
 							},
 							createToolbarPanel,
 							toolsToolbarPanel,
-						}
+						},
 					},
-				}
+				},
 			};
 		}
 	}

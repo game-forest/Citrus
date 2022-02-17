@@ -43,10 +43,10 @@ namespace Lime
 			if (!Enabled) {
 				return;
 			}
-			blendings.Remove(animation.Id ?? "");
+			blendings.Remove(animation.Id ?? string.Empty);
 
 			BlendingOption blendingOption = null;
-			Options.TryGetValue(animation.Id ?? "", out var animationBlending);
+			Options.TryGetValue(animation.Id ?? string.Empty, out var animationBlending);
 			if (animationBlending != null) {
 				if (animationBlending.Option != null) {
 					blendingOption = animationBlending.Option;
@@ -71,26 +71,26 @@ namespace Lime
 
 			var blending = new BlendingProcess(Owner, animation, blendingOption.Duration);
 			if (blending.HasNodes) {
-				blendings.Add(animation.Id ?? "", blending);
+				blendings.Add(animation.Id ?? string.Empty, blending);
 			}
 		}
 
 		public void UpdateWantedState(Animation animation)
 		{
-			blendings.TryGetValue(animation.Id ?? "", out var blending);
+			blendings.TryGetValue(animation.Id ?? string.Empty, out var blending);
 			blending?.SaveWantedState();
 		}
 
 		public void Update(Animation animation, double delta)
 		{
-			blendings.TryGetValue(animation.Id ?? "", out var blending);
+			blendings.TryGetValue(animation.Id ?? string.Empty, out var blending);
 			if (blending == null) {
 				return;
 			}
 
 			blending.Update(delta);
 			if (blending.WasFinished) {
-				blendings.Remove(animation.Id ?? "");
+				blendings.Remove(animation.Id ?? string.Empty);
 			}
 		}
 

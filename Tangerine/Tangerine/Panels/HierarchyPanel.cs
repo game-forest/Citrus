@@ -31,13 +31,13 @@ namespace Tangerine.Panels
 				Layout = new VBoxLayout { Spacing = 5 },
 				Nodes = {
 					(searchStringEditor = new ThemedEditBox()),
-					(scrollView = new ThemedScrollView())
-				}
+					(scrollView = new ThemedScrollView()),
+				},
 			};
 			var presentation = new TreeViewPresentation(
 				new TreeViewItemPresentationOptions {
 					Minimalistic = true,
-					SearchStringGetter = () => searchStringEditor.Text
+					SearchStringGetter = () => searchStringEditor.Text,
 				}
 			);
 			treeView = new TreeView(scrollView, presentation, new TreeViewOptions { ShowRoot = false });
@@ -49,13 +49,17 @@ namespace Tangerine.Panels
 			treeView.OnDelete += TreeView_OnDelete;
 			treeView.OnPaste += TreeView_OnPaste;
 			contentWidget.AddChangeWatcher(
-				() => Document.Current?.SceneTreeVersion ?? 0,_ => RebuildTreeView());
+				() => Document.Current?.SceneTreeVersion ?? 0, _ => RebuildTreeView()
+			);
 			RebuildTreeView();
 			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(w => {
 				if (treeView.RootItem?.Items.Count > 0) {
 					w.PrepareRendererState();
-					Renderer.DrawRect(w.ContentPosition, w.ContentSize + w.ContentPosition,
-						Theme.Colors.WhiteBackground);
+					Renderer.DrawRect(
+						a: w.ContentPosition,
+						b: w.ContentSize + w.ContentPosition,
+						color: Theme.Colors.WhiteBackground
+					);
 				}
 			}));
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask());
@@ -206,7 +210,7 @@ namespace Tangerine.Panels
 			return c.TreeViewItem;
 		}
 
-		private static SceneItem GetSceneItem(TreeViewItem item) => ((ISceneItemHolder) item).SceneItem;
+		private static SceneItem GetSceneItem(TreeViewItem item) => ((ISceneItemHolder)item).SceneItem;
 
 		private void TreeViewOnActivateItem(object sender, TreeView.ActivateItemEventArgs args)
 		{
@@ -328,7 +332,10 @@ namespace Tangerine.Panels
 					Document.Current.History.DoTransaction(() => {
 						SetProperty.Perform(
 							SceneItem.Components.Get<TreeViewComponent>(),
-							nameof(TreeViewComponent.Selected), value, false);
+							nameof(TreeViewComponent.Selected),
+							value,
+							false
+						);
 					});
 				}
 			}

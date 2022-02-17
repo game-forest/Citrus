@@ -15,16 +15,16 @@ namespace Tangerine.UI.RemoteScripting
 			Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background);
 			Layout = new HBoxLayout {
 				Spacing = 2,
-				DefaultCell = new DefaultLayoutCell(Alignment.Center)
+				DefaultCell = new DefaultLayoutCell(Alignment.Center),
 			};
 			Nodes.AddRange(
 				new Widget {
 					Layout = new VBoxLayout(),
 					Nodes = {
 						(Content = new Widget {
-							Layout = new HBoxLayout { Spacing = 2 }
-						})
-					}
+							Layout = new HBoxLayout { Spacing = 2 },
+						}),
+					},
 				}
 			);
 		}
@@ -32,7 +32,7 @@ namespace Tangerine.UI.RemoteScripting
 		public ToolbarButton AddButton(string title, Action action)
 		{
 			var button = new ToolbarButton(title) {
-				Clicked = action
+				Clicked = action,
 			};
 			Content.Nodes.Add(button);
 			return button;

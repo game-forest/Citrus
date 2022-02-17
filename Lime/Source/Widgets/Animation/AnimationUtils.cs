@@ -55,7 +55,11 @@ namespace Lime
 			return (host, prevIndex);
 		}
 
-		public static (PropertyData PropertyData, IAnimable Animable, int Index) GetPropertyByPath(IAnimationHost host, string propertyPath)
+		public static (
+			PropertyData PropertyData,
+			IAnimable Animable,
+			int Index
+		) GetPropertyByPath(IAnimationHost host, string propertyPath)
 		{
 			PropertyData result = PropertyData.Empty;
 			int prevIndex;
@@ -66,9 +70,10 @@ namespace Lime
 				if (index < 0) {
 					return (result, null, -1);
 				}
-				var	componentTypeName = propertyPath.Substring(prevIndex + 1, index - prevIndex - 1);
-				var type = global::Yuzu.Metadata.Meta.GetTypeByReadAlias(componentTypeName, InternalPersistence.Instance.YuzuOptions)
-				           ?? global::Yuzu.Util.TypeSerializer.Deserialize(componentTypeName);
+				var componentTypeName = propertyPath.Substring(prevIndex + 1, index - prevIndex - 1);
+				var type = global::Yuzu.Metadata.Meta.GetTypeByReadAlias(
+					componentTypeName, InternalPersistence.Instance.YuzuOptions
+				) ?? global::Yuzu.Util.TypeSerializer.Deserialize(componentTypeName);
 				o = host.GetComponent(type);
 				if (o == null) {
 					return (result, null, -1);

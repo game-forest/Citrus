@@ -62,7 +62,7 @@ namespace Tangerine.UI.Timeline
 				VSync = false,
 				Visible = false,
 				Centered = false,
-				Type = WindowType.ToolTip
+				Type = WindowType.ToolTip,
 			});
 			root = new ThemedFrame {
 				Layout = new StackLayout(),
@@ -71,19 +71,19 @@ namespace Tangerine.UI.Timeline
 						Layout = new VBoxLayout(),
 						Nodes = {
 							new Widget { LayoutCell = new LayoutCell { StretchY = 1 } },
-							(label = new ThemedSimpleText { Padding = new Thickness(2) })
-						}
+							(label = new ThemedSimpleText { Padding = new Thickness(2) }),
+						},
 					},
 					(thumbnailImage = new Image { Padding = new Thickness(1) }),
 				},
-				Presenter = new ThemedFramePresenter(Color4.Black, Color4.Black)
+				Presenter = new ThemedFramePresenter(Color4.Black, Color4.Black),
 			};
 			new ThemedInvalidableWindowWidget(window) {
 				LayoutBasedWindowSize = true,
 				Layout = new VBoxLayout(),
 				Nodes = {
-					root
-				}
+					root,
+				},
 			};
 		}
 

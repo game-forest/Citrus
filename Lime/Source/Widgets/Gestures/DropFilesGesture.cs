@@ -11,7 +11,7 @@ namespace Lime
 		/// </summary>
 		public event Action<List<string>> Recognized;
 
-		internal protected override bool OnUpdate()
+		protected internal override bool OnUpdate()
 		{
 			if (Input.DroppedFiles.Count > 0) {
 				Recognized?.Invoke(Input.DroppedFiles);

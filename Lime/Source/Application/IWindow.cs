@@ -44,18 +44,21 @@ namespace Lime
 		/// The window is in its normal state.
 		/// </summary>
 		Normal = 0,
+
 		/// <summary>
 		/// The window is minimized to the taskbar (also known as 'iconified').
 		/// </summary>
 		Minimized,
+
 		/// <summary>
 		/// The window covers the whole working area, which includes the desktop but not the taskbar and/or panels.
 		/// </summary>
 		Maximized,
+
 		/// <summary>
 		/// The window covers the whole screen, including all taskbars and/or panels.
 		/// </summary>
-		Fullscreen
+		Fullscreen,
 	}
 
 	/// <summary>
@@ -67,14 +70,16 @@ namespace Lime
 		/// The cause if the closure was not defined or could not be determined.
 		/// </summary>
 		Unknown,
+
 		/// <summary>
 		/// The user has closed the window from UI.
 		/// </summary>
 		UserClosing,
+
 		/// <summary>
 		/// A window is closing because main window is closing.
 		/// </summary>
-		MainWindowClosing
+		MainWindowClosing,
 	}
 
 	/// <summary>
@@ -238,7 +243,8 @@ namespace Lime
 		event Action Rendering;
 
 		/// <summary>
-		/// Occurs after update and before render. One can use this event to perform thread unsafe operations with the window.
+		/// Occurs after update and before render.
+		/// One can use this event to perform thread unsafe operations with the window.
 		/// </summary>
 		event Action Sync;
 
@@ -259,6 +265,7 @@ namespace Lime
 #elif WIN
 		System.Windows.Forms.Form Form { get; }
 #endif
+
 		/// <summary>
 		/// Gets the scale factor which translates virtual units to the physical pixels.
 		/// </summary>

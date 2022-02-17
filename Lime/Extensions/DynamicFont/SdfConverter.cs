@@ -13,13 +13,13 @@ namespace Lime
 			public static Pixel Empty => new Pixel {
 				Dx = 9999,
 				Dy = 9999,
-				Distance = 9999 * 9999
+				Distance = 9999 * 9999,
 			};
 
 			public static Pixel Inside => new Pixel {
 				Dx = 0,
 				Dy = 0,
-				Distance = 0
+				Distance = 0,
 			};
 		}
 

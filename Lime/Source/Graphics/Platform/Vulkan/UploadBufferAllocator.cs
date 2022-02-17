@@ -45,10 +45,11 @@ namespace Lime.Graphics.Platform.Vulkan
 				StructureType = SharpVulkan.StructureType.BufferCreateInfo,
 				Size = size,
 				SharingMode = SharpVulkan.SharingMode.Exclusive,
-				Usage = SharpVulkan.BufferUsageFlags.TransferSource
+				Usage = SharpVulkan.BufferUsageFlags.TransferSource,
 			};
 			buffer = context.Device.CreateBuffer(ref createInfo);
-			memory = context.MemoryAllocator.Allocate(buffer,
+			memory = context.MemoryAllocator.Allocate(
+				buffer,
 				SharpVulkan.MemoryPropertyFlags.HostVisible | SharpVulkan.MemoryPropertyFlags.HostCoherent);
 			mappedMemory = context.MemoryAllocator.Map(memory);
 			bufferSize = size;

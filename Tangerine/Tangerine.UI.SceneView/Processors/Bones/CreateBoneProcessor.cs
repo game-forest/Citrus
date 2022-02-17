@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 
@@ -11,7 +11,7 @@ namespace Tangerine.UI.SceneView
 {
 	public class CreateBoneProcessor : ITaskProvider
 	{
-		SceneView sv => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 		private ICommand command;
 
 		public IEnumerator<object> Task()
@@ -24,26 +24,25 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		IEnumerator<object> CreateBoneTask()
+		private IEnumerator<object> CreateBoneTask()
 		{
 			command.Checked = true;
 			while (true) {
 				Bone bone = null;
 				if (!SceneTreeUtils.TryGetSceneItemLinkLocation(
-					out var containerSceneItem, out _, typeof(Bone), aboveFocused: true
-				)) {
+					out var containerSceneItem, out _, typeof(Bone), aboveFocused: true)) {
 					throw new InvalidOperationException();
 				}
 				var container = (Widget)SceneTreeUtils.GetOwnerNodeSceneItem(containerSceneItem).GetNode();
 				var transform = container.LocalToWorldTransform;
-				if (sv.InputArea.IsMouseOver()) {
+				if (SceneView.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
 				var items = container.BoneArray.items;
 				var baseBoneIndex = 0;
 				if (items != null) {
 					for (var i = 1; i < items.Length; i++) {
-						if (sv.HitTestControlPoint(transform * items[i].Tip)) {
+						if (SceneView.HitTestControlPoint(transform * items[i].Tip)) {
 							baseBoneIndex = i;
 							break;
 						}
@@ -53,16 +52,15 @@ namespace Tangerine.UI.SceneView
 				}
 
 				Window.Current.Invalidate();
-				CreateNodeRequestComponent.Consume<Node>(sv.Components);
-				if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+				CreateNodeRequestComponent.Consume<Node>(SceneView.Components);
+				if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 					var worldToLocal = container.LocalToWorldTransform.CalcInversed();
-					var initialPosition = sv.MousePosition * worldToLocal;
+					var initialPosition = SceneView.MousePosition * worldToLocal;
 					var pos = Vector2.Zero;
 					if (
 						baseBoneIndex == 0 &&
 						container.Width.Abs() > Mathf.ZeroTolerance &&
-						container.Height.Abs() > Mathf.ZeroTolerance
-					) {
+						container.Height.Abs() > Mathf.ZeroTolerance) {
 						pos = initialPosition;
 					}
 					using (Document.Current.History.BeginTransaction()) {
@@ -73,9 +71,14 @@ namespace Tangerine.UI.SceneView
 								var baseBoneItem = Document.Current.GetSceneItemForObject(baseBone);
 								bone = (Bone)CreateNode.Perform(baseBoneItem, new SceneTreeIndex(0), typeof(Bone));
 							} else {
-								if (!SceneTreeUtils.TryGetSceneItemLinkLocation(
-									out var parent, out var index, typeof(Bone), true,
-									raiseThroughHierarchyPredicate: i => i.GetNode() is Bone)
+								if (
+									!SceneTreeUtils.TryGetSceneItemLinkLocation(
+										parent: out var parent,
+										index: out var index,
+										insertingType: typeof(Bone),
+										aboveFocused: true,
+										raiseThroughHierarchyPredicate: i => i.GetNode() is Bone
+									)
 								) {
 									throw new InvalidOperationException();
 								}
@@ -88,10 +91,12 @@ namespace Tangerine.UI.SceneView
 						SetProperty.Perform(bone, nameof(Bone.Position), pos);
 						SelectNode.Perform(bone);
 						using (Document.Current.History.BeginTransaction()) {
-							while (sv.Input.IsMousePressed()) {
+							while (SceneView.Input.IsMousePressed()) {
 								Document.Current.History.RollbackTransaction();
 
-								var direction = (sv.MousePosition * worldToLocal - initialPosition).Snap(Vector2.Zero);
+								var direction = (
+									SceneView.MousePosition * worldToLocal - initialPosition
+								).Snap(Vector2.Zero);
 								var angle = direction.Atan2Deg;
 								if (baseBoneIndex != 0) {
 									var prentDir = items[baseBoneIndex].Tip - items[baseBoneIndex].Joint;
@@ -117,7 +122,7 @@ namespace Tangerine.UI.SceneView
 				if (bone != null && bone.Length == 0) {
 					break;
 				}
-				if (sv.Input.WasMousePressed(1) || sv.Input.WasKeyPressed(Key.Escape)) {
+				if (SceneView.Input.WasMousePressed(1) || SceneView.Input.WasKeyPressed(Key.Escape)) {
 					break;
 				}
 				yield return null;

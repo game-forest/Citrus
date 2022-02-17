@@ -157,7 +157,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			if ((mask & ColorWriteMask.Red) != 0) {
 				result |= SharpVulkan.ColorComponentFlags.R;
 			}
-			if ((mask & ColorWriteMask.Green) != 0){
+			if ((mask & ColorWriteMask.Green) != 0) {
 				result |= SharpVulkan.ColorComponentFlags.G;
 			}
 			if ((mask & ColorWriteMask.Blue) != 0) {

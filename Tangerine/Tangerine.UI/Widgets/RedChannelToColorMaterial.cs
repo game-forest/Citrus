@@ -1,4 +1,4 @@
-﻿using Lime;
+using Lime;
 
 namespace Tangerine.UI
 {
@@ -65,13 +65,15 @@ namespace Tangerine.UI
 					gl_FragColor = vec4(color.rgb, texture2D(tex1, texCoords1).r);
 				}";
 
-			private IconShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+			private IconShaderProgram()
+				: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+			{ }
 
 			private static Shader[] CreateShaders()
 			{
 				return new Shader[] {
 					new VertexShader(VertexShader),
-					new FragmentShader(FragmentShader)
+					new FragmentShader(FragmentShader),
 				};
 			}
 		}

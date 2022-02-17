@@ -7,7 +7,7 @@ namespace Tangerine.UI
 	{
 		public ThemedIconResource(string iconId, string assemblyName)
 			: base(iconId, assemblyName)
-		{}
+		{ }
 
 		public override Stream GetResourceStream()
 		{

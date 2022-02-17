@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -37,14 +35,10 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential)]
 	public struct BBox : IEquatable<BBox>
 	{
-		#region Fields
-
-		private FT_Long xMin, yMin;
-		private FT_Long xMax, yMax;
-
-		#endregion
-
-		#region Constructors
+		private FT_Long xMin;
+		private FT_Long yMin;
+		private FT_Long xMax;
+		private FT_Long yMax;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BBox"/> struct.
@@ -60,10 +54,6 @@ namespace SharpFont
 			xMax = (IntPtr)right;
 			yMax = (IntPtr)top;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the horizontal minimum (left-most).
@@ -109,10 +99,6 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-		#region Operators
-
 		/// <summary>
 		/// Compares two instances of <see cref="BBox"/> for equality.
 		/// </summary>
@@ -135,10 +121,6 @@ namespace SharpFont
 			return !left.Equals(right);
 		}
 
-		#endregion
-
-		#region Methods
-
 		/// <summary>
 		/// Compares this instance of <see cref="BBox"/> to another for equality.
 		/// </summary>
@@ -160,8 +142,9 @@ namespace SharpFont
 		/// <returns>A value indicating equality.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is BBox)
+			if (obj is BBox) {
 				return this.Equals((BBox)obj);
+			}
 
 			return false;
 		}
@@ -172,7 +155,7 @@ namespace SharpFont
 		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
-			//TODO better hash algo
+			// TODO better hash algo
 			return xMin.GetHashCode() ^ yMin.GetHashCode() ^ xMax.GetHashCode() ^ yMax.GetHashCode();
 		}
 
@@ -184,7 +167,5 @@ namespace SharpFont
 		{
 			return "Min: (" + (int)xMin + ", " + (int)yMin + "), Max: (" + (int)xMax + ", " + (int)yMax + ")";
 		}
-
-		#endregion
 	}
 }

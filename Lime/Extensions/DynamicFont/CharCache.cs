@@ -4,7 +4,7 @@ using Lime.Graphics.Platform;
 
 namespace Lime
 {
-	class CharCache
+	internal class CharCache
 	{
 		private DynamicTexture texture;
 		private IntVector2 position;
@@ -24,7 +24,6 @@ namespace Lime
 		/// Padding affects UVs (glyph is rendered with padding).
 		/// </summary>
 		public int Padding { get; set; } = 1;
-
 
 		public CharCache(int fontHeight, FontRenderer fontRenderer, List<ITexture> textures)
 		{
@@ -56,8 +55,9 @@ namespace Lime
 			if (texture == null) {
 				CreateNewFontTexture();
 			}
-			if (glyph == null)
+			if (glyph == null) {
 				return null;
+			}
 			// Space between characters on the texture
 			const int spacing = 1;
 			var paddedWidth = glyph.Width + Padding * 2;
@@ -115,8 +115,9 @@ namespace Lime
 		private static void CopyGlyphToTexture(FontRenderer.Glyph glyph, DynamicTexture texture, IntVector2 position)
 		{
 			var srcPixels = glyph.Pixels;
-			if (srcPixels == null)
+			if (srcPixels == null) {
 				return; // Invisible glyph
+			}
 
 			int si;
 			Color4 color = Color4.Black;
@@ -124,12 +125,14 @@ namespace Lime
 			int bytesPerPixel = glyph.RgbIntensity ? 3 : 1;
 
 			for (int i = 0; i < glyph.Height; i++) {
-				// Sometimes glyph.VerticalOffset could be negative for symbols with diacritics and this results the symbols
-				// get overlapped or run out of the texture bounds. We shift the glyph down and increase the current line
-				// height to fix the issue. Also we store the shift amount in FontChar.VerticalOffset property.
+				// Sometimes glyph.VerticalOffset could be negative for symbols with diacritics and
+				// this results the symbols get overlapped or run out of the texture bounds.
+				// We shift the glyph down and increase the current line height to fix the issue.
+				// Also we store the shift amount in FontChar.VerticalOffset property.
 				int verticalOffsetCorrection = -Math.Min(0, glyph.VerticalOffset);
 
-				var di = (position.Y + glyph.VerticalOffset + i + verticalOffsetCorrection) * texture.ImageSize.Width + position.X;
+				var di = texture.ImageSize.Width * (position.Y + glyph.VerticalOffset + i + verticalOffsetCorrection)
+					+ position.X;
 				for (int j = 0; j < glyph.Width; j++) {
 					si = i * glyph.Pitch + j * bytesPerPixel;
 					if (glyph.RgbIntensity) {

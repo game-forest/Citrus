@@ -109,11 +109,16 @@ namespace Lime.SignedDistanceField
 
 	internal class SDFMaterialProviderPool
 	{
-		private readonly Dictionary<SDFMaterialKey, SDFMaterialProvider> mainMaterialsCache = new Dictionary<SDFMaterialKey, SDFMaterialProvider>();
-		private readonly Dictionary<SDFShadowMaterialKey, SDFShadowMaterialProvider> shadowMaterialsCache = new Dictionary<SDFShadowMaterialKey, SDFShadowMaterialProvider>();
-		private readonly Dictionary<SDFInnerShadowMaterialKey, SDFInnerShadowMaterialProvider> innerShadowMaterialsCache = new Dictionary<SDFInnerShadowMaterialKey, SDFInnerShadowMaterialProvider>();
+		private readonly Dictionary<SDFMaterialKey, SDFMaterialProvider> mainMaterialsCache =
+			new Dictionary<SDFMaterialKey, SDFMaterialProvider>();
+		private readonly Dictionary<SDFShadowMaterialKey, SDFShadowMaterialProvider> shadowMaterialsCache =
+			new Dictionary<SDFShadowMaterialKey, SDFShadowMaterialProvider>();
+		private readonly Dictionary<
+			SDFInnerShadowMaterialKey, SDFInnerShadowMaterialProvider
+		> innerShadowMaterialsCache =
+			new Dictionary<SDFInnerShadowMaterialKey, SDFInnerShadowMaterialProvider>();
 
-		public readonly static SDFMaterialProviderPool Instance = new SDFMaterialProviderPool();
+		public static readonly SDFMaterialProviderPool Instance = new SDFMaterialProviderPool();
 
 		internal SDFMaterialProvider GetProvider(SDFMaterialKey key)
 		{

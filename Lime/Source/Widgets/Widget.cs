@@ -29,7 +29,7 @@ namespace Lime
 	{
 		BoundingRect,
 		Contents,
-		Skip
+		Skip,
 	}
 
 	/// <summary>
@@ -52,6 +52,7 @@ namespace Lime
 		private Vector2 pivot;
 		private Vector2 scale;
 		private WidgetInput input;
+
 		/// <summary>
 		/// <code>
 		/// Transition matrix from the local basis to the parent basis:
@@ -77,8 +78,6 @@ namespace Lime
 		public static readonly Vector2 DefaultWidgetSize = new Vector2(100);
 		public static bool RenderTransparentWidgets;
 		public static bool EnableViewCulling = true;
-
-		#region Layout properties
 		private LayoutManager layoutManager;
 		public LayoutManager LayoutManager
 		{
@@ -158,7 +157,16 @@ namespace Lime
 
 		public virtual Vector2 EffectiveMinSize => Vector2.Max(LayoutConstraints.MinSize, MeasuredSize.MeasuredMinSize);
 
-		public virtual Vector2 EffectiveMaxSize => Vector2.Max(Vector2.Min(LayoutConstraints.MaxSize, MeasuredSize.MeasuredMaxSize), EffectiveMinSize);
+		public virtual Vector2 EffectiveMaxSize
+		{
+			get
+			{
+				return Vector2.Max(
+					Vector2.Min(LayoutConstraints.MaxSize, MeasuredSize.MeasuredMaxSize),
+					EffectiveMinSize
+				);
+			}
+		}
 
 		public Vector2 MinSize
 		{
@@ -211,9 +219,6 @@ namespace Lime
 			set { MinHeight = MaxHeight = value; }
 		}
 
-#endregion
-
-#region Transformation properties
 		/// <summary>
 		/// Parent-relative position.
 		/// </summary>
@@ -299,7 +304,8 @@ namespace Lime
 		[YuzuMember]
 		[TangerineKeyframeColor(3)]
 		[TangerineNumericEditBoxStep(1f)]
-		public float Rotation {
+		public float Rotation
+		{
 			get { return rotation; }
 			set
 			{
@@ -336,10 +342,26 @@ namespace Lime
 					var sizeDelta = value - size;
 					size = value;
 					var t = false;
-					if (boundingRect.BX < value.X) { boundingRect.BX = value.X; t = true; }
-					if (boundingRect.BY < value.Y) { boundingRect.BY = value.Y; t = true; }
-					if (boundingRect.AX > value.X) { boundingRect.AX = value.X; t = true; }
-					if (boundingRect.AY > value.Y) { boundingRect.AY = value.Y; t = true; }
+					if (boundingRect.BX < value.X)
+					{
+						boundingRect.BX = value.X;
+						t = true;
+					}
+					if (boundingRect.BY < value.Y)
+					{
+						boundingRect.BY = value.Y;
+						t = true;
+					}
+					if (boundingRect.AX > value.X)
+					{
+						boundingRect.AX = value.X;
+						t = true;
+					}
+					if (boundingRect.AY > value.Y)
+					{
+						boundingRect.AY = value.Y;
+						t = true;
+					}
 					if (t) {
 						PropagateParentBoundsChanged();
 					}
@@ -364,10 +386,26 @@ namespace Lime
 				size = value;
 				DirtyMask |= DirtyFlags.LocalTransform;
 				var t = false;
-				if (boundingRect.BX < value.X) { boundingRect.BX = value.X; t = true; }
-				if (boundingRect.BY < value.Y) { boundingRect.BY = value.Y; t = true; }
-				if (boundingRect.AX > value.X) { boundingRect.AX = value.X; t = true; }
-				if (boundingRect.AY > value.Y) { boundingRect.AY = value.Y; t = true; }
+				if (boundingRect.BX < value.X)
+				{
+					boundingRect.BX = value.X;
+					t = true;
+				}
+				if (boundingRect.BY < value.Y)
+				{
+					boundingRect.BY = value.Y;
+					t = true;
+				}
+				if (boundingRect.AX > value.X)
+				{
+					boundingRect.AX = value.X;
+					t = true;
+				}
+				if (boundingRect.AY > value.Y)
+				{
+					boundingRect.AY = value.Y;
+					t = true;
+				}
 				if (t) {
 					PropagateParentBoundsChanged();
 				}
@@ -422,7 +460,8 @@ namespace Lime
 		public static object GetPivotDefaultValue() => Vector2.Half;
 
 		/// <summary>
-		/// Gets or sets the widget padding. Padding defines the white space between the widget content and the widget border.
+		/// Gets or sets the widget padding.
+		/// Padding defines the white space between the widget content and the widget border.
 		/// The widget presenter and layout should respect the padding.
 		/// </summary>
 		[YuzuMember]
@@ -441,7 +480,16 @@ namespace Lime
 		private Thickness padding;
 
 		public Vector2 ContentPosition => new Vector2(Padding.Left, Padding.Top);
-		public Vector2 ContentSize => new Vector2(Size.X - Padding.Left - Padding.Right, Size.Y - Padding.Top - Padding.Bottom);
+		public Vector2 ContentSize
+		{
+			get
+			{
+				return new Vector2(
+					Size.X - Padding.Left - Padding.Right,
+					Size.Y - Padding.Top - Padding.Bottom
+				);
+			}
+		}
 
 		public float ContentWidth => Size.X - Padding.Left - Padding.Right;
 		public float ContentHeight => Size.Y - Padding.Top - Padding.Bottom;
@@ -452,6 +500,7 @@ namespace Lime
 		public Vector2 GlobalPosition => LocalToWorldTransform.T;
 
 		public Vector2 GlobalPivotPosition => LocalToWorldTransform * (Pivot * Size);
+
 		/// <summary>
 		/// Gets position of this widget's center in the root widget space.
 		/// </summary>
@@ -461,9 +510,7 @@ namespace Lime
 		/// Parent-relative position of center of this widget.
 		/// </summary>
 		public Vector2 Center => Position + (Vector2.Half - Pivot) * Size;
-#endregion
 
-#region Misc properties
 		public Widget ParentWidget => Parent?.AsWidget;
 		public TabTraversable TabTravesable { get; set; }
 		public KeyboardFocusScope FocusScope { get; set; }
@@ -480,7 +527,7 @@ namespace Lime
 			set
 			{
 				if (color.ABGR != value.ABGR) {
-					var visibilityChanged = (color.A == 0) != (value.A == 0);
+					var visibilityChanged = color.A == 0 != (value.A == 0);
 					color = value;
 					if (visibilityChanged) {
 						PropagateDirtyFlags(DirtyFlags.Color | DirtyFlags.Visible | DirtyFlags.Frozen);
@@ -824,22 +871,56 @@ namespace Lime
 			v4y = v2y + v3y - v1y;
 			// Now build an aabb.
 			var r = new Rectangle(v1x, v1y, v1x, v1y);
-			if (v2x < r.AX) r.AX = v2x;
-			if (v2x > r.BX) r.BX = v2x;
-			if (v2y < r.AY) r.AY = v2y;
-			if (v2y > r.BY) r.BY = v2y;
-			if (v3x < r.AX) r.AX = v3x;
-			if (v3x > r.BX) r.BX = v3x;
-			if (v3y < r.AY) r.AY = v3y;
-			if (v3y > r.BY) r.BY = v3y;
-			if (v4x < r.AX) r.AX = v4x;
-			if (v4x > r.BX) r.BX = v4x;
-			if (v4y < r.AY) r.AY = v4y;
-			if (v4y > r.BY) r.BY = v4y;
+			if (v2x < r.AX) {
+				r.AX = v2x;
+			}
+
+			if (v2x > r.BX) {
+				r.BX = v2x;
+			}
+
+			if (v2y < r.AY) {
+				r.AY = v2y;
+			}
+
+			if (v2y > r.BY) {
+				r.BY = v2y;
+			}
+
+			if (v3x < r.AX) {
+				r.AX = v3x;
+			}
+
+			if (v3x > r.BX) {
+				r.BX = v3x;
+			}
+
+			if (v3y < r.AY) {
+				r.AY = v3y;
+			}
+
+			if (v3y > r.BY) {
+				r.BY = v3y;
+			}
+
+			if (v4x < r.AX) {
+				r.AX = v4x;
+			}
+
+			if (v4x > r.BX) {
+				r.BX = v4x;
+			}
+
+			if (v4y < r.AY) {
+				r.AY = v4y;
+			}
+
+			if (v4y > r.BY) {
+				r.BY = v4y;
+			}
+
 			return r;
 		}
-
-#endregion
 
 		public Widget()
 		{
@@ -862,7 +943,7 @@ namespace Lime
 			base.Dispose();
 		}
 
-		internal protected virtual bool IsRenderedToTexture() => false;
+		protected internal virtual bool IsRenderedToTexture() => false;
 
 		public virtual Action Clicked
 		{
@@ -1042,6 +1123,7 @@ namespace Lime
 
 		private void RecalcLocalToParentTransform()
 		{
+#pragma warning disable SA1027 // Use tabs correctly
 			// WARNING: Synchronize this code with ComplexTransformationsHelper.CalcLocalToParentTransformDouble
 			// after changes.
 			// This is an optimized version (after profiling) of the code:
@@ -1057,7 +1139,7 @@ namespace Lime
 			// 	localToParentTransform = localToParentTransform *
 			// 		Parent.AsWidget.BoneArray.CalcWeightedRelativeTransform(SkinningWeights);
 			// }
-
+#pragma warning restore SA1027 // Use tabs correctly
 			var centerX = size.X * pivot.X;
 			var centerY = size.Y * pivot.Y;
 			if (rotation == 0 && SkinningWeights == null) {
@@ -1090,10 +1172,22 @@ namespace Lime
 		internal void ExpandBoundingRect(Rectangle newBounds, bool propagate = true)
 		{
 			var t = false;
-			if (boundingRect.AX > newBounds.AX) { boundingRect.AX = newBounds.AX; t = true; }
-			if (boundingRect.AY > newBounds.AY) { boundingRect.AY = newBounds.AY; t = true; }
-			if (boundingRect.BX < newBounds.BX) { boundingRect.BX = newBounds.BX; t = true; }
-			if (boundingRect.BY < newBounds.BY) { boundingRect.BY = newBounds.BY; t = true; }
+			if (boundingRect.AX > newBounds.AX) {
+				boundingRect.AX = newBounds.AX;
+				t = true;
+			}
+			if (boundingRect.AY > newBounds.AY) {
+				boundingRect.AY = newBounds.AY;
+				t = true;
+			}
+			if (boundingRect.BX < newBounds.BX) {
+				boundingRect.BX = newBounds.BX;
+				t = true;
+			}
+			if (boundingRect.BY < newBounds.BY) {
+				boundingRect.BY = newBounds.BY;
+				t = true;
+			}
 			if (propagate && t) {
 				PropagateParentBoundsChanged();
 			}
@@ -1102,10 +1196,22 @@ namespace Lime
 		internal void ExpandBoundingRect(Vector2 point, bool propagate = true)
 		{
 			var t = false;
-			if (boundingRect.AX > point.X) { boundingRect.AX = point.X; t = true; }
-			if (boundingRect.AY > point.Y) { boundingRect.AY = point.Y; t = true; }
-			if (boundingRect.BX < point.X) { boundingRect.BX = point.X; t = true; }
-			if (boundingRect.BY < point.Y) { boundingRect.BY = point.Y; t = true; }
+			if (boundingRect.AX > point.X) {
+				boundingRect.AX = point.X;
+				t = true;
+			}
+			if (boundingRect.AY > point.Y) {
+				boundingRect.AY = point.Y;
+				t = true;
+			}
+			if (boundingRect.BX < point.X) {
+				boundingRect.BX = point.X;
+				t = true;
+			}
+			if (boundingRect.BY < point.Y) {
+				boundingRect.BY = point.Y;
+				t = true;
+			}
 			if (propagate && t) {
 				PropagateParentBoundsChanged();
 			}
@@ -1129,6 +1235,7 @@ namespace Lime
 			var v3 = transition.TransformVector(ownBounds.AX, ownBounds.BY);
 			var v4 = v2 + v3 - v1;
 			ref var r = ref ancestor.boundingRect;
+#pragma warning disable SA1501 // Statement should not be on a single line
 			if (v1.X < r.AX) { r.AX = v1.X; }
 			if (v1.X > r.BX) { r.BX = v1.X; }
 			if (v1.Y < r.AY) { r.AY = v1.Y; }
@@ -1145,6 +1252,7 @@ namespace Lime
 			if (v4.X > r.BX) { r.BX = v4.X; }
 			if (v4.Y < r.AY) { r.AY = v4.Y; }
 			if (v4.Y > r.BY) { r.BY = v4.Y; }
+#pragma warning restore SA1501 // Statement should not be on a single line
 		}
 
 		/// <summary>
@@ -1206,7 +1314,7 @@ namespace Lime
 			p1 = RoundVectorIf(p1 * ratio, round);
 			size = RoundVectorIf(size * ratio, round);
 			var p2 = CalcLocalToParentTransform() * Vector2.Zero;
-			position += (p1 - p2);
+			position += p1 - p2;
 		}
 
 		/// <summary>
@@ -1219,8 +1327,15 @@ namespace Lime
 			}
 		}
 
-		public Vector2 ToLocalMousePosition(Vector2 mousePosition) => mousePosition * LocalToWorldTransform.CalcInversed();
-		public Vector2 LocalMousePosition() => Window.Current.Input.MousePosition * LocalToWorldTransform.CalcInversed();
+		public Vector2 ToLocalMousePosition(Vector2 mousePosition)
+		{
+			return mousePosition * LocalToWorldTransform.CalcInversed();
+		}
+
+		public Vector2 LocalMousePosition()
+		{
+			return Window.Current.Input.MousePosition * LocalToWorldTransform.CalcInversed();
+		}
 
 		public int GetEffectiveLayer()
 		{
@@ -1235,7 +1350,8 @@ namespace Lime
 		private static RenderChain renderChain = new RenderChain();
 
 		/// <summary>
-		/// Performs hit test only for this widget and its descendants. Returns true if the widget or one of its decendants contains the given point.
+		/// Performs hit test only for this widget and its descendants.
+		/// Returns true if the widget or one of its decendants contains the given point.
 		/// This method doesn't take in account if one of the widget's ancestors overlaps the widget.
 		/// </summary>
 		public bool LocalHitTest(ref HitTestArgs args)
@@ -1266,7 +1382,7 @@ namespace Lime
 		/// <summary>
 		/// Checks whether this widget contains the given point.
 		/// </summary>
-		internal protected override bool PartialHitTest(ref HitTestArgs args)
+		protected internal override bool PartialHitTest(ref HitTestArgs args)
 		{
 			Node targetNode;
 			for (targetNode = this; targetNode != null; targetNode = targetNode.Parent) {
@@ -1291,7 +1407,7 @@ namespace Lime
 			return false;
 		}
 
-		internal protected virtual bool PartialHitTestByContents(ref HitTestArgs args)
+		protected internal virtual bool PartialHitTestByContents(ref HitTestArgs args)
 		{
 			return false;
 		}
@@ -1338,7 +1454,7 @@ namespace Lime
 				V1 = t * Vector2.Zero,
 				V2 = t * new Vector2(Width, 0),
 				V3 = t * Size,
-				V4 = t * new Vector2(0, Height)
+				V4 = t * new Vector2(0, Height),
 			};
 		}
 
@@ -1363,7 +1479,7 @@ namespace Lime
 				V1 = t * Vector2.Zero,
 				V2 = t * new Vector2(Width, 0),
 				V3 = t * Size,
-				V4 = t * new Vector2(0, Height)
+				V4 = t * new Vector2(0, Height),
 			};
 		}
 
@@ -1390,7 +1506,7 @@ namespace Lime
 				B = new IntVector2(
 					Mathf.Lerp(aabb.Right, min.X, max.X).Round(),
 					Mathf.Lerp(aabb.Top, min.Y, max.Y).Round()
-				)
+				),
 			};
 		}
 
@@ -1480,7 +1596,11 @@ namespace Lime
 		protected override void RecalcGloballyFrozen()
 		{
 			base.RecalcGloballyFrozen();
-			globallyFrozen |= FreezeInvisible && !((Visible && (color.A != 0 || RenderTransparentWidgets)) || GetTangerineFlag(TangerineFlags.DisplayContent));
+			globallyFrozen |= FreezeInvisible
+				&& !(
+					(Visible && (color.A != 0 || RenderTransparentWidgets))
+					|| GetTangerineFlag(TangerineFlags.DisplayContent)
+				);
 		}
 	}
 }

@@ -15,7 +15,14 @@ namespace Orange
 		/// <c>null</c> when no project is opened.
 		/// </summary>
 		public string ProjectFilePath { get; private set; }
-		public string ProjectDirectory => !string.IsNullOrEmpty(ProjectFilePath) ? Path.GetDirectoryName(ProjectFilePath) : null;
+		public string ProjectDirectory
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(ProjectFilePath) ? Path.GetDirectoryName(ProjectFilePath) : null;
+			}
+		}
+
 		public string AssetsDirectory { get; private set; }
 		public string ProjectName { get; private set; }
 		public string GeneratedScenesPath { get; private set; }
@@ -27,7 +34,8 @@ namespace Orange
 		public string UnresolvedAssembliesDirectory { get; private set; }
 
 		/// <summary>
-		/// Absolute path to directory of Citrus used by loaded project which is not necessarily a location of running Citrus.
+		/// Absolute path to directory of Citrus used by loaded project which
+		/// is not necessarily a location of running Citrus.
 		/// </summary>
 		private string projectRelatedCitrusDirectory;
 
@@ -70,7 +78,9 @@ namespace Orange
 		public string GetDefaultProjectSolutionPath(TargetPlatform platform)
 		{
 			if (string.IsNullOrEmpty(ProjectDirectory)) {
-				throw new InvalidOperationException("Can't generate default solution path for project when there's no project loaded.");
+				throw new InvalidOperationException(
+					"Can't generate default solution path for project when there's no project loaded."
+				);
 			}
 			string platformProjectName = ProjectName + GetPlatformSuffix(platform);
 			return Path.Combine(ProjectDirectory, platformProjectName, platformProjectName + ".sln");
@@ -81,7 +91,9 @@ namespace Orange
 		/// </summary>
 		public string GetProjectRelatedLimeCsprojFilePath(TargetPlatform platform)
 		{
-			return Path.Combine(projectRelatedCitrusDirectory, "Lime", "Lime" + GetPlatformSuffix(platform) + ".csproj");
+			return Path.Combine(
+				projectRelatedCitrusDirectory, "Lime", "Lime" + GetPlatformSuffix(platform) + ".csproj"
+			);
 		}
 
 		public static readonly Workspace Instance = new Workspace();
@@ -101,7 +113,9 @@ namespace Orange
 			The.UI.LoadFromWorkspaceConfig(config, projectConfig);
 			var citrusVersion = CitrusVersion.Load();
 			if (citrusVersion.IsStandalone) {
-				Console.WriteLine($"Welcome to Citrus. Version {citrusVersion.Version}, build number: {citrusVersion.BuildNumber}");
+				Console.WriteLine(
+					$"Welcome to Citrus. Version {citrusVersion.Version}, build number: {citrusVersion.BuildNumber}"
+				);
 			}
 			BenchmarkEnabled = config.BenchmarkEnabled;
 			if (projectConfig != null) {
@@ -164,10 +178,12 @@ namespace Orange
 				Lime.AssetBundle.Current = tangerineAssetBundle;
 				PluginLoader.ScanForPlugins();
 				if (defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate == null) {
-					defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate = CsprojSynchronization.SkipUnwantedDirectoriesPredicate;
+					defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate =
+						CsprojSynchronization.SkipUnwantedDirectoriesPredicate;
 				}
 				CsprojSynchronization.SkipUnwantedDirectoriesPredicate = (di) => {
-					return defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate(di) && !di.FullName.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase);
+					return defaultCsprojSynchronizationSkipUnwantedDirectoriesPredicate(di)
+						&& !di.FullName.StartsWith(AssetsDirectory, StringComparison.OrdinalIgnoreCase);
 				};
 				AssetFiles = new FileEnumerator(AssetsDirectory);
 				LoadCacheSettings();
@@ -215,17 +231,24 @@ namespace Orange
 				throw new Lime.Exception("Assets directory \"{0}\" doesn't exist", AssetsDirectory);
 			}
 
-			bundlesOutputDirectory = Path.Combine(ProjectDirectory, ProjectJson.GetValue("BundlesOutputDirectory", "Bundles"));
+			bundlesOutputDirectory = Path.Combine(
+				ProjectDirectory, ProjectJson.GetValue("BundlesOutputDirectory", "Bundles")
+			);
 
-			UnresolvedAssembliesDirectory = Path.Combine(ProjectDirectory,
-				ProjectJson.GetValue("UnresolvedAssembliesDirectory", $"{ProjectName}.OrangePlugin/bin/$(CONFIGURATION)/"));
+			UnresolvedAssembliesDirectory = Path.Combine(
+				ProjectDirectory,
+				ProjectJson.GetValue(
+					"UnresolvedAssembliesDirectory", $"{ProjectName}.OrangePlugin/bin/$(CONFIGURATION)/")
+				);
 
 			GeneratedScenesPath = ProjectJson.GetValue("GeneratedScenesPath", "GeneratedScenes");
 
-			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null) ?? Lime.Localization.DictionariesPath;
+			Lime.Localization.DictionariesPath = ProjectJson.GetValue<string>("DictionariesPath", null)
+				?? Lime.Localization.DictionariesPath;
 
 			// Standard Citrus locations are beside the project directory or inside it.
-			// If the location deviates from the standard, it should be specified through "CitrusDirectory" in citproj file.
+			// If the location deviates from the standard,
+			// it should be specified through "CitrusDirectory" in citproj file.
 			projectRelatedCitrusDirectory = ProjectJson.GetValue("CitrusDirectory", string.Empty);
 			if (!string.IsNullOrEmpty(projectRelatedCitrusDirectory)) {
 				if (!System.IO.Path.IsPathRooted(projectRelatedCitrusDirectory)) {
@@ -233,14 +256,18 @@ namespace Orange
 				}
 			} else {
 				// If Citrus Directory is not set via citproj file, try default values from past precedents
-				// first a Citrus directory inside project directory, second Citrus directory one level above project directory
+				// first a Citrus directory inside project directory,
+				// second Citrus directory one level above project directory
 				projectRelatedCitrusDirectory = Path.Combine(ProjectDirectory, "Citrus");
 				if (!Directory.Exists(projectRelatedCitrusDirectory)) {
 					projectRelatedCitrusDirectory = Path.Combine(Path.GetDirectoryName(ProjectDirectory), "Citrus");
 				}
 			}
 			if (!File.Exists(Path.Combine(projectRelatedCitrusDirectory, CitrusVersion.Filename))) {
-				throw new InvalidOperationException($"Unable to locate project related Citrus directory at \"{projectRelatedCitrusDirectory}\", check value of \"CitrusDirectory\" in \"{ProjectFilePath}\"");
+				throw new InvalidOperationException(
+					$"Unable to locate project related Citrus directory at \"{projectRelatedCitrusDirectory}\", " +
+					$"check value of \"CitrusDirectory\" in \"{ProjectFilePath}\""
+				);
 			}
 
 			// Initialize default and parse project specific targets.
@@ -346,7 +373,7 @@ namespace Orange
 		private static TargetPlatform GetPlaformByName(string name)
 		{
 			try {
-				return (TargetPlatform) Enum.Parse(typeof(TargetPlatform), name, true);
+				return (TargetPlatform)Enum.Parse(typeof(TargetPlatform), name, true);
 			} catch (ArgumentException) {
 				throw new Lime.Exception($"Unknown sub-target platform name: {name}");
 			}

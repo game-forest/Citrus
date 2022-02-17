@@ -20,16 +20,16 @@ namespace Tangerine
 {
 	public class NavigatorDialog
 	{
-		private static NavigatorDialog Instance;
+		private static NavigatorDialog instance;
 
 		private readonly Window navigatorWindow;
 		private readonly NavigatorWidget navigatorWidget;
 		private readonly KeyboardFocusScope panelsFocusScope;
 		private readonly KeyboardFocusScope filesFocusScope;
-		
+
 		private NavigatorDialog(KeyboardFocusScope.Direction direction)
 		{
-			Instance = this;
+			instance = this;
 			Vector2? displayCenter = null;
 			try {
 				var display = CommonWindow.Current.Display;
@@ -49,7 +49,7 @@ namespace Tangerine
 				// responsible for closing the window is interrupted somewhere. 
 				Style = WindowStyle.Regular,
 #endif
-				ClientSize = navigatorWidget.EffectiveMinSize
+				ClientSize = navigatorWidget.EffectiveMinSize,
 			});
 			if (!displayCenter.HasValue) {
 				var display = DockManager.Instance.MainWindowWidget.Window.Display;
@@ -72,14 +72,14 @@ namespace Tangerine
 			panelsFocusScope.FocusPrevious.Clear();
 			panelsFocusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control, Key.Up));
 			navigatorWidget.PanelsView.FocusScope = panelsFocusScope;
-			
+
 			filesFocusScope = new KeyboardFocusScope(navigatorWidget.FilesView.Content);
 			filesFocusScope.FocusNext.Clear();
 			filesFocusScope.FocusNext.Add(Key.MapShortcut(Modifiers.Control, Key.Down));
 			filesFocusScope.FocusPrevious.Clear();
 			filesFocusScope.FocusPrevious.Add(Key.MapShortcut(Modifiers.Control, Key.Up));
 			navigatorWidget.FilesView.Content.FocusScope = filesFocusScope;
-			
+
 			if (navigatorWidget.FocusedLabel == null) {
 				filesFocusScope.SetDefaultFocus();
 			}
@@ -95,19 +95,19 @@ namespace Tangerine
 #endif
 			navigatorWindow.ShowModal();
 		}
-		
+
 		public static void ShowOrAdvanceFocus(KeyboardFocusScope.Direction direction)
 		{
-			if (Instance == null) {
+			if (instance == null) {
 				new NavigatorDialog(direction);
 			} else {
 				// Since NSView, which is not the main window,
 				// will not receive the Ctrl+Tab (Ctrl+Shift+Tab) event,
 				// we forward this event from the main window.
-				if (Widget.Focused.DescendantOf(Instance.navigatorWidget.PanelsView)) {
-					Instance.panelsFocusScope.AdvanceFocus(direction);
+				if (Widget.Focused.DescendantOf(instance.navigatorWidget.PanelsView)) {
+					instance.panelsFocusScope.AdvanceFocus(direction);
 				} else {
-					Instance.filesFocusScope.AdvanceFocus(direction);
+					instance.filesFocusScope.AdvanceFocus(direction);
 				}
 			}
 		}
@@ -130,7 +130,7 @@ namespace Tangerine
 					yield break;
 				}
 			}
-			
+
 			void CloseWindow(NavigatorWidget.LabelBase selectedLabel)
 			{
 				switch (selectedLabel) {
@@ -142,10 +142,10 @@ namespace Tangerine
 						break;
 				}
 				navigatorWindow.Close();
-				Instance = null;
+				instance = null;
 			}
 		}
-		
+
 		private class NavigatorWidget : Widget
 		{
 			private const float WindowSpacing = 8;
@@ -153,16 +153,16 @@ namespace Tangerine
 			private const float LabelsListSpacing = 0;
 			private const int LabelsListLength = 16;
 			private const string AccentTextId = "at";
-			
+
 			private readonly RichText pathCaption;
 			private readonly Vector2 windowSize;
-			
+
 			public readonly Widget PanelsView;
 			public readonly ThemedScrollView FilesView;
 
 			private static float PathCaptionTextHeight => Theme.Metrics.TextHeight;
-			
-			private static Thickness PathCaptionPadding => 
+
+			private static Thickness PathCaptionPadding =>
 				new Thickness(left: 16, right: 16, top: 8, bottom: 4);
 
 			private static float PathCaptionHeight
@@ -175,8 +175,8 @@ namespace Tangerine
 			}
 
 			private static float LabelTextHeight => Theme.Metrics.TextHeight;
-			
-			private static Thickness LabelPadding => 
+
+			private static Thickness LabelPadding =>
 				new Thickness(horizontal: 2, vertical: 1);
 
 			private static Vector2 LabelSize
@@ -190,9 +190,9 @@ namespace Tangerine
 					return CalculateSize(LabelPadding, contentSize);
 				}
 			}
-			
+
 			private static Thickness LabelsListPadding => new Thickness();
-			
+
 			private static Vector2 LabelsListSize
 			{
 				get
@@ -206,7 +206,7 @@ namespace Tangerine
 				}
 			}
 
-			private static Thickness SeparationLinePadding => 
+			private static Thickness SeparationLinePadding =>
 				new Thickness(left: 6, right: 6, top: 0, bottom: 4);
 
 			private static float SeparationLineHeight
@@ -219,9 +219,9 @@ namespace Tangerine
 			}
 
 			private static float PanelCaptionTextHeight => 1.30f * Theme.Metrics.TextHeight;
-			
+
 			private static Thickness PanelCaptionPadding => new Thickness(horizontal: 0, vertical: 4);
-			
+
 			private static float PanelCaptionHeight
 			{
 				get
@@ -232,7 +232,7 @@ namespace Tangerine
 			}
 
 			private static Thickness WindowPadding => new Thickness(left: 16, right: 16, top: 0, bottom: 12);
-			
+
 			private static Vector2 WindowSize
 			{
 				get
@@ -247,9 +247,9 @@ namespace Tangerine
 			}
 
 			public LabelBase FocusedLabel { get; private set; }
-			
+
 			public LabelBase HoveredLabel { get; private set; }
-			
+
 			public NavigatorWidget(KeyboardFocusScope.Direction direction)
 			{
 				windowSize = WindowSize;
@@ -268,7 +268,7 @@ namespace Tangerine
 						new TextStyle {
 							Id = AccentTextId,
 							Size = PathCaptionTextHeight,
-							TextColor = Theme.Colors.KeyboardFocusBorder
+							TextColor = Theme.Colors.KeyboardFocusBorder,
 						},
 					},
 				};
@@ -278,16 +278,18 @@ namespace Tangerine
 				var labelsListSize = LabelsListSize;
 				PanelsView = new Widget {
 					Layout = new VBoxLayout(),
-					MinMaxSize = labelsListSize
+					MinMaxSize = labelsListSize,
 				};
 				FilesView = new ThemedScrollView(ScrollDirection.Horizontal) {
-					MinMaxSize = new Vector2(3 * labelsListSize.X, labelsListSize.Y)
+					MinMaxSize = new Vector2(3 * labelsListSize.X, labelsListSize.Y),
 				};
 				var alternativeWhiteBackground = Theme.Colors.WhiteBackground.Darken(0.03f);
 				FilesView.CompoundPresenter.Add(
 					new WidgetFlatFillPresenter(alternativeWhiteBackground)
 				);
-				var hoveredItemBackground = alternativeWhiteBackground.Darken(ColorTheme.Current.IsDark ? 0.17f : 0.05f);
+				var hoveredItemBackground = alternativeWhiteBackground.Darken(
+					ColorTheme.Current.IsDark ? 0.17f : 0.05f
+				);
 				FilesView.Content.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 					if (FocusedLabel is DocumentLabel label) {
 						label.PrepareRendererState();
@@ -319,7 +321,7 @@ namespace Tangerine
 				var windowPadding = WindowPadding;
 				AddNode(new Widget {
 					Layout = new HBoxLayout {
-						Spacing = WindowSpacing
+						Spacing = WindowSpacing,
 					},
 					MinMaxWidth = Width = windowSize.X,
 					Padding = windowPadding,
@@ -329,22 +331,22 @@ namespace Tangerine
 							Nodes = {
 								new ThemedSimpleText("Active Panels") {
 									FontHeight = PanelCaptionTextHeight,
-									MinMaxHeight = PanelCaptionHeight
+									MinMaxHeight = PanelCaptionHeight,
 								},
 								PanelsView,
-							}
+							},
 						},
 						new Widget {
 							Layout = new VBoxLayout(),
 							Nodes = {
 								new ThemedSimpleText("Active Documents") {
 									FontHeight = PanelCaptionTextHeight,
-									MinMaxHeight = PanelCaptionHeight
+									MinMaxHeight = PanelCaptionHeight,
 								},
 								FilesView,
-							}
-						}
-					}
+							},
+						},
+					},
 				});
 				var documents = Project.Current.Documents.ToArray();
 				FillContents(documents);
@@ -364,7 +366,7 @@ namespace Tangerine
 						PanelsView.AddNode(new PanelLabel(panel) {
 							FontHeight = fontHeight,
 							Padding = labelPadding,
-							MinMaxSize = labelSize
+							MinMaxSize = labelSize,
 						});
 					}
 				}
@@ -373,7 +375,7 @@ namespace Tangerine
 					int segmentLength = Math.Min(LabelsListLength, documents.Length - i);
 					var segment = new ArraySegment<Document>(documents, offset: i, count: segmentLength);
 					var labelList = CreateLabelList(segment);
-					labelList.Position = new Vector2((i / LabelsListLength) * labelsListSize.X, 0);
+					labelList.Position = new Vector2(i / LabelsListLength * labelsListSize.X, 0);
 					FilesView.Content.AddNode(labelList);
 				}
 			}
@@ -390,7 +392,7 @@ namespace Tangerine
 					FocusedLabel.SetFocus();
 				}
 			}
-			
+
 			private void HoverTask()
 			{
 				var nodeUnderMouse = WidgetContext.Current?.NodeUnderMouse;
@@ -438,7 +440,7 @@ namespace Tangerine
 						}
 					}
 				}
-				
+
 				void NavigateLeftOrRight(ref LabelBase focusedLabel)
 				{
 					if (focusedLabel == null) {
@@ -523,7 +525,7 @@ namespace Tangerine
 			{
 				pathCaption.Text = $"Navigate to <{AccentTextId}>{panel.Title}</{AccentTextId}> panel";
 			}
-			
+
 			private void SetFilePathCaption(string text)
 			{
 				string path = GetClampedPath(text);
@@ -531,7 +533,7 @@ namespace Tangerine
 				string directory = path.Substring(0, path.Length - file.Length - 1);
 				pathCaption.Text = $"{directory}\\<{AccentTextId}>{file}</{AccentTextId}>";
 			}
-			
+
 			private string GetClampedPath(string path)
 			{
 				var originalPath = path;
@@ -547,7 +549,7 @@ namespace Tangerine
 				}
 				return path;
 			}
-			
+
 			private Widget CreateLabelList(ArraySegment<Document> documents)
 			{
 				var labelList = new Widget {
@@ -562,24 +564,25 @@ namespace Tangerine
 					labelList.AddNode(new DocumentLabel(document) {
 						FontHeight = fontHeight,
 						Padding = labelPadding,
-						MinMaxSize = labelSize
+						MinMaxSize = labelSize,
 					});
 				}
 				return labelList;
 			}
-			
-			private static Vector2 CalculateSize(Thickness padding, Vector2 contentSize) => 
+
+			private static Vector2 CalculateSize(Thickness padding, Vector2 contentSize) =>
 				contentSize + new Vector2(x: padding.Left + padding.Right, y: padding.Bottom + padding.Top);
 
 			public class LabelBase : ThemedSimpleText
 			{
-				protected LabelBase(string text) : base(text) {}
+				protected LabelBase(string text) : base(text)
+				{ }
 			}
-			
+
 			public class PanelLabel : LabelBase
 			{
 				public readonly Panel Panel;
-				
+
 				public PanelLabel(Panel panel) : base(panel.Title)
 				{
 					TabTravesable = new TabTraversable();
@@ -587,11 +590,11 @@ namespace Tangerine
 					Panel = panel;
 				}
 			}
-			
+
 			public class DocumentLabel : LabelBase
 			{
 				public readonly Document Document;
-				
+
 				public DocumentLabel(Document document) : base(document.DisplayName)
 				{
 					TabTravesable = new TabTraversable();

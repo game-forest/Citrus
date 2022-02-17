@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -97,8 +95,6 @@ namespace SharpFont
 	/// </remarks>
 	public class OutlineFuncs : IDisposable
 	{
-		#region Fields
-
 		private bool isDisposed;
 
 		private MoveToFunc moveToFunc;
@@ -119,11 +115,6 @@ namespace SharpFont
 		private int shift;
 		private IntPtr delta;
 
-
-		#endregion
-
-		#region Constructors
-
 		/// <summary>
 		/// Initializes a new instance of the OutlineFuncs class.
 		/// </summary>
@@ -142,22 +133,19 @@ namespace SharpFont
 		/// <param name="delta">A delta to transform by.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="moveTo"/>, <paramref name="lineTo"/>,
 		/// <paramref name="conicTo"/>, or <paramref name="cubicTo"/> is <see langword="null" />.</exception>
-		public OutlineFuncs(MoveToFunc moveTo, LineToFunc lineTo, ConicToFunc conicTo, CubicToFunc cubicTo, int shift, int delta)
-		{
-			if (moveTo == null)
-			{
+		public OutlineFuncs(
+			MoveToFunc moveTo, LineToFunc lineTo, ConicToFunc conicTo, CubicToFunc cubicTo, int shift, int delta
+		) {
+			if (moveTo == null) {
 				throw new ArgumentNullException(nameof(moveTo));
 			}
-			if (lineTo == null)
-			{
+			if (lineTo == null) {
 				throw new ArgumentNullException(nameof(lineTo));
 			}
-			if (conicTo == null)
-			{
+			if (conicTo == null) {
 				throw new ArgumentNullException(nameof(conicTo));
 			}
-			if (cubicTo == null)
-			{
+			if (cubicTo == null) {
 				throw new ArgumentNullException(nameof(cubicTo));
 			}
 
@@ -172,12 +160,8 @@ namespace SharpFont
 			cubicToPtr = Marshal.GetFunctionPointerForDelegate(cubicToFunc);
 
 			this.shift = shift;
-			this.delta = (IntPtr) delta;
+			this.delta = (IntPtr)delta;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the ‘move to’ emitter.
@@ -192,8 +176,7 @@ namespace SharpFont
 			set
 			{
 				ThrowIfDisposed();
-				if (moveToPin.IsAllocated)
-				{
+				if (moveToPin.IsAllocated) {
 					moveToPin.Free();
 				}
 				moveToFunc = value;
@@ -207,7 +190,6 @@ namespace SharpFont
 		/// </summary>
 		public LineToFunc LineFunction
 		{
-
 			get
 			{
 				ThrowIfDisposed();
@@ -216,8 +198,7 @@ namespace SharpFont
 			set
 			{
 				ThrowIfDisposed();
-				if (lineToPin.IsAllocated)
-				{
+				if (lineToPin.IsAllocated) {
 					lineToPin.Free();
 				}
 				lineToFunc = value;
@@ -231,7 +212,6 @@ namespace SharpFont
 		/// </summary>
 		public ConicToFunc ConicFunction
 		{
-
 			get
 			{
 				ThrowIfDisposed();
@@ -240,8 +220,7 @@ namespace SharpFont
 			set
 			{
 				ThrowIfDisposed();
-				if (conicToPin.IsAllocated)
-				{
+				if (conicToPin.IsAllocated) {
 					conicToPin.Free();
 				}
 				conicToFunc = value;
@@ -255,7 +234,6 @@ namespace SharpFont
 		/// </summary>
 		public CubicToFunc CubicFunction
 		{
-
 			get
 			{
 				ThrowIfDisposed();
@@ -264,8 +242,7 @@ namespace SharpFont
 			set
 			{
 				ThrowIfDisposed();
-				if (cubicToPin.IsAllocated)
-				{
+				if (cubicToPin.IsAllocated) {
 					cubicToPin.Free();
 				}
 				cubicToFunc = value;
@@ -301,7 +278,7 @@ namespace SharpFont
 			get
 			{
 				ThrowIfDisposed();
-				return (int) delta;
+				return (int)delta;
 			}
 
 			/*set
@@ -310,8 +287,8 @@ namespace SharpFont
 			}*/
 		}
 
-		//TODO make a reference parameter instead?
-		//HACK this copies the struct
+		// TODO make a reference parameter instead?
+		// HACK this copies the struct
 		internal OutlineFuncsRec Record
 		{
 			get
@@ -326,19 +303,13 @@ namespace SharpFont
 			}
 		}
 
-		#endregion
-
-
-		#region IDisposable
-
 		/// <summary>
 		/// Helper method to throw an exception if the object is disposed.
 		/// </summary>
 		/// <exception cref="ObjectDisposedException">If the object is already disposed</exception>
 		private void ThrowIfDisposed()
 		{
-			if (isDisposed)
-			{
+			if (isDisposed) {
 				throw new ObjectDisposedException("OutlineFuncs", "The outline funcs has already been disposed.");
 			}
 		}
@@ -352,38 +323,31 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		///		Disposes this outline funcs, releasing any of the resources held by it.
+		/// Disposes this outline funcs, releasing any of the resources held by it.
 		/// </summary>
 		/// <param name="disposing"></param>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (isDisposed)
-			{
+			if (isDisposed) {
 				return;
 			}
 
-			if (disposing)
-			{
+			if (disposing) {
 				// If this class later needs any managed resources, they should be included here.
 			}
-			if (moveToPin.IsAllocated)
-			{
+			if (moveToPin.IsAllocated) {
 				moveToPin.Free();
 			}
-			if (lineToPin.IsAllocated)
-			{
+			if (lineToPin.IsAllocated) {
 				lineToPin.Free();
 			}
-			if (cubicToPin.IsAllocated)
-			{
+			if (cubicToPin.IsAllocated) {
 				cubicToPin.Free();
 			}
-			if (conicToPin.IsAllocated)
-			{
+			if (conicToPin.IsAllocated) {
 				conicToPin.Free();
 			}
 			isDisposed = true;
-
 		}
 
 		/// <summary>
@@ -394,11 +358,5 @@ namespace SharpFont
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
-
-
-		#endregion
-
-
-
 	}
 }

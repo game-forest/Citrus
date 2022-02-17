@@ -7,7 +7,8 @@ namespace Tangerine.UI
 {
 	public class NumericRangePropertyEditor : CommonPropertyEditor<NumericRange>
 	{
-		private NumericEditBox medEditor, dispEditor;
+		private NumericEditBox medEditor;
+		private NumericEditBox dispEditor;
 
 		public NumericRangePropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
@@ -17,20 +18,28 @@ namespace Tangerine.UI
 					(medEditor = editorParams.NumericEditBoxFactory()),
 					(dispEditor = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
-				}
+				},
 			});
 			var currentMed = CoalescedPropertyComponentValue(v => v.Median);
 			var currentDisp = CoalescedPropertyComponentValue(v => v.Dispersion);
 			medEditor.Submitted += text => SetComponent(editorParams, 0, medEditor, currentMed.GetValue());
 			dispEditor.Submitted += text => SetComponent(editorParams, 1, dispEditor, currentDisp.GetValue());
-			medEditor.AddLateChangeWatcher(currentMed, v => medEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
-			dispEditor.AddLateChangeWatcher(currentDisp, v => dispEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText);
+			medEditor.AddLateChangeWatcher(
+				currentMed, v => medEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
+			dispEditor.AddLateChangeWatcher(
+				currentDisp, v => dispEditor.Text = v.IsDefined ? v.Value.ToString("0.###") : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(medEditor, currentMed);
 			ManageManyValuesOnFocusChange(dispEditor, currentDisp);
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, int component, NumericEditBox editor, CoalescedValue<float> currentValue)
-		{
+		private void SetComponent(
+			IPropertyEditorParams editorParams,
+			int component,
+			NumericEditBox editor,
+			CoalescedValue<float> currentValue
+		) {
 			if (Parser.TryParse(editor.Text, out double newValue)) {
 				DoTransaction(() => {
 					SetProperty<NumericRange>(current => {

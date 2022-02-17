@@ -29,7 +29,8 @@ namespace Lime
 		protected internal virtual void InternalOnOwnerFrozenChanged(NodeComponent component, Node owner) { }
 	}
 
-	public class NodeComponentProcessor<TComponent> : NodeComponentProcessor where TComponent : class
+	public class NodeComponentProcessor<TComponent> : NodeComponentProcessor
+		where TComponent : class
 	{
 		protected NodeComponentProcessor() : base(typeof(TComponent)) { }
 

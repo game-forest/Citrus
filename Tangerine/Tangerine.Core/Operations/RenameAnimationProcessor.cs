@@ -28,7 +28,7 @@ namespace Tangerine.Core.Operations
 					SetProperty.Perform(animator, nameof(IAnimator.AnimationId), newAnimationName);
 				}
 				DelegateOperation.Perform(redo: UpdateAnimatorCollection, undo: null, isChangingDocument: false);
-				
+
 				void UpdateAnimatorCollection()
 				{
 					var host = animation.OwnerNode.FirstChild ?? animation.OwnerNode;

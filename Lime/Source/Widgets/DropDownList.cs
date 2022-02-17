@@ -62,7 +62,7 @@ namespace Lime
 			Awoke += owner => owner.Tasks.Add(((CommonDropDownList)owner).Loop());
 		}
 
-		IEnumerator<object> Loop()
+		private IEnumerator<object> Loop()
 		{
 			RefreshTextWidget();
 			while (true) {
@@ -77,8 +77,7 @@ namespace Lime
 				if (
 					ShouldHandleSpacebar() && Input.ConsumeKeyPress(Key.Space) ||
 					Input.ConsumeKeyPress(Key.Up) ||
-					Input.ConsumeKeyPress(Key.Down))
-				{
+					Input.ConsumeKeyPress(Key.Down)) {
 					ShowDropDownList();
 				} else if (Input.ConsumeKeyPress(Key.Escape) || Input.ConsumeKeyPress(Key.Enter)) {
 					RevokeFocus();
@@ -89,7 +88,7 @@ namespace Lime
 
 		protected abstract bool ShouldHandleSpacebar();
 
-		IEnumerator<object> ShowDropDownListTask()
+		private IEnumerator<object> ShowDropDownListTask()
 		{
 			yield return null;
 			ShowDropDownList();
@@ -108,7 +107,7 @@ namespace Lime
 			ICommand selectedCommand = null;
 			foreach (var i in Items) {
 				var command = new Command(i.Text) {
-					TooltipText = i.TooltipText
+					TooltipText = i.TooltipText,
 				};
 				if (j == Index) {
 					selectedCommand = command;

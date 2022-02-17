@@ -70,7 +70,13 @@ namespace Tangerine.UI
 			}
 		}
 
-		public LookupItem SelectedItem => selectedIndex >= 0 && selectedIndex < filteredItems.Count ? filteredItems[selectedIndex] : null;
+		public LookupItem SelectedItem
+		{
+			get
+			{
+				return selectedIndex >= 0 && selectedIndex < filteredItems.Count ? filteredItems[selectedIndex] : null;
+			}
+		}
 
 		public LookupWidget()
 		{
@@ -85,7 +91,7 @@ namespace Tangerine.UI
 						Padding = new Thickness(right: Theme.Metrics.ControlsPadding.Right),
 					}),
 					(FilterEditBox = new ThemedEditBox()),
-				}
+				},
 			});
 			HintSimpleText = new ThemedSimpleText {
 				Layout = new VBoxLayout(),
@@ -101,7 +107,7 @@ namespace Tangerine.UI
 			});
 
 			ScrollView = new ThemedScrollView {
-				Content = { Layout = new VBoxLayout() }
+				Content = { Layout = new VBoxLayout() },
 			};
 			AddNode(ScrollView);
 
@@ -160,7 +166,10 @@ namespace Tangerine.UI
 
 		public void MarkFilterAsDirty() => isFilterDirty = true;
 
-		public void SetBreadcrumbsNavigation(params string[] breadcrumbs) => SetBreadcrumbsNavigation((IEnumerable<string>)breadcrumbs);
+		public void SetBreadcrumbsNavigation(params string[] breadcrumbs)
+		{
+			SetBreadcrumbsNavigation((IEnumerable<string>)breadcrumbs);
+		}
 
 		public void SetBreadcrumbsNavigation(IEnumerable<string> breadcrumbs)
 		{

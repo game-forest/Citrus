@@ -14,7 +14,9 @@ namespace Tangerine
 	{
 		public override void Execute()
 		{
-			DockManager.Instance.ImportState(TangerineApp.Instance.DockManagerInitialState.Clone(), resizeMainWindow: false);
+			DockManager.Instance.ImportState(
+				TangerineApp.Instance.DockManagerInitialState.Clone(), resizeMainWindow: false
+			);
 		}
 	}
 
@@ -26,7 +28,7 @@ namespace Tangerine
 		{
 			var dlg = new FileDialog {
 				AllowedFileTypes = new string[] { "layout" },
-				Mode = FileDialogMode.Save
+				Mode = FileDialogMode.Save,
 			};
 			if (dlg.RunModal()) {
 				string path = dlg.FileName;
@@ -35,8 +37,7 @@ namespace Tangerine
 					using (var fileStream = new FileStream(path, FileMode.OpenOrCreate)) {
 						serializer.ToStream(state, fileStream);
 					}
-				}
-				catch (System.Exception e) {
+				} catch (System.Exception e) {
 					AlertDialog.Show(e.Message);
 				}
 			}
@@ -64,7 +65,7 @@ namespace Tangerine
 		{
 			var dlg = new FileDialog {
 				AllowedFileTypes = new string[] { "layout" },
-				Mode = FileDialogMode.Open
+				Mode = FileDialogMode.Open,
 			};
 			if (dlg.RunModal()) {
 				string path = dlg.FileName;
@@ -75,8 +76,7 @@ namespace Tangerine
 						) as DockManager.State;
 						DockManager.Instance.ImportState(state);
 					}
-				}
-				catch (System.Exception e) {
+				} catch (System.Exception e) {
 					AlertDialog.Show(e.Message);
 				}
 			}
@@ -145,14 +145,17 @@ namespace Tangerine
 			if (Project.Current == Project.Null) {
 				yield break;
 			}
-			// enumerate dictionaries in legacy location (./Data/Dictionary.*.txt) as well as new location (./Data/Localization.*.txt)
-			var files = Directory.EnumerateFiles(Project.Current.AssetsDirectory, $"Dictionary*.txt", SearchOption.TopDirectoryOnly)
-				.Select(i => Path.GetFileName(i));
+			// enumerate dictionaries in legacy location (./Data/Dictionary.*.txt)
+			// as well as new location (./Data/Localization.*.txt)
+			var files = Directory.EnumerateFiles(
+				Project.Current.AssetsDirectory, $"Dictionary*.txt", SearchOption.TopDirectoryOnly
+			).Select(i => Path.GetFileName(i));
 			var absoluteDictionariesPath = Path.Combine(Project.Current.AssetsDirectory, Localization.DictionariesPath);
 			if (Directory.Exists(absoluteDictionariesPath)) {
 				files = files.Union(
-					Directory.EnumerateFiles(absoluteDictionariesPath, $"Dictionary*.txt", SearchOption.TopDirectoryOnly)
-					.Select(i => Path.GetFileName(i))
+					Directory.EnumerateFiles(
+						absoluteDictionariesPath, $"Dictionary*.txt", SearchOption.TopDirectoryOnly
+					).Select(i => Path.GetFileName(i))
 				);
 			}
 			foreach (var file in files.Select(i => Path.GetFileNameWithoutExtension(i))) {

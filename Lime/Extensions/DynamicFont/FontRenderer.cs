@@ -21,7 +21,10 @@ namespace Lime
 
 		public static List<HashSet<char>> KerningPairCharsets = new List<HashSet<char>> {
 			new HashSet<char>("0123456789"),
-			new HashSet<char>("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅĀÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝabcdefghijklmnopqrstuvwxyzàáâãäåāæçèéêëìíîïðñòóôõöøùúûüýþÿšœž,.¿!?¡"),
+			new HashSet<char>(
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅĀÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝ" +
+				"abcdefghijklmnopqrstuvwxyzàáâãäåāæçèéêëìíîïðñòóôõöøùúûüýþÿšœž,.¿!?¡"
+			),
 			new HashSet<char>("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХШЩЧЦЪЬЫЭЮЯабвгдеёжзийклмнопрстуфхшщчцъьыэюя,.!?"),
 		};
 
@@ -29,6 +32,7 @@ namespace Lime
 		private int lastHeight;
 		public bool LcdSupported { get; set; } = true;
 		public Face Face { get; internal set; }
+
 		/// <summary>
 		/// Workaround. DynamicFont incorrectly applies fontHeight when rasterizing the font,
 		/// so the visual font height for the same fontHeight will be different for different ttf files.
@@ -59,20 +63,21 @@ namespace Lime
 		{
 			// See http://www.freetype.org/freetype2/docs/tutorial/step2.html
 			// Chapter: Scaling Distances to Device Space
-			// BBox suits better than Height (baseline-to-baseline distance), because it can enclose all the glyphs in the font face.
+			// BBox suits better than Height (baseline-to-baseline distance),
+			// because it can enclose all the glyphs in the font face.
 			var scale = height / (float)face.Height;
 			var pixelSize = scale * face.UnitsPerEM;
 			return pixelSize;
 		}
 
 		/// <summary>
-		/// Renders a glyph with a given height, measured as a distance between two text lines in the device pixels.</param>
+		/// Renders a glyph with a given height, measured as a distance between two text lines in the device pixels.
 		/// </summary>
 		public Glyph Render(char @char, int height)
 		{
 			if (lastHeight != height) {
 				lastHeight = height;
-				var pixelSize = (uint) Math.Abs(
+				var pixelSize = (uint)Math.Abs(
 					CalcPixelSize(Face, height).Round()
 				);
 				Face.SetPixelSizes(pixelSize, pixelSize);
@@ -88,7 +93,7 @@ namespace Lime
 			FTBitmap bitmap = Face.Glyph.Bitmap;
 
 			var verticalOffset = height - Face.Glyph.BitmapTop + Face.Size.Metrics.Descender.Round();
-			var bearingX = (float) Face.Glyph.Metrics.HorizontalBearingX;
+			var bearingX = (float)Face.Glyph.Metrics.HorizontalBearingX;
 			bool rgbIntensity = bitmap.PixelMode == PixelMode.Lcd || bitmap.PixelMode == PixelMode.VerticalLcd;
 			var glyph = new Glyph {
 				Pixels = bitmap.Buffer != IntPtr.Zero ? bitmap.BufferData : null,
@@ -99,7 +104,7 @@ namespace Lime
 				VerticalOffset = verticalOffset,
 				ACWidths = new Vector2(
 					bearingX,
-					(float) Face.Glyph.Metrics.HorizontalAdvance - (float) Face.Glyph.Metrics.Width - bearingX
+					(float)Face.Glyph.Metrics.HorizontalAdvance - (float)Face.Glyph.Metrics.Width - bearingX
 				),
 			};
 			// Iterate through kerning pairs

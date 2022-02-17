@@ -1,19 +1,22 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI
 {
 	public static class Utils
 	{
-
-		public static IEnumerable<T> Editable<T>(this IEnumerable<T> nodes) where T : Node
+		public static IEnumerable<T> Editable<T>(this IEnumerable<T> nodes)
+			where T : Node
 		{
-			return nodes.Where(n => !n.GetTangerineFlag(TangerineFlags.Locked) && !n.GetTangerineFlag(TangerineFlags.Hidden));
+			return nodes.Where(
+				n => !n.GetTangerineFlag(TangerineFlags.Locked)
+				&& !n.GetTangerineFlag(TangerineFlags.Hidden)
+			);
 		}
 
 		public static void ChangeCursorIfDefault(MouseCursor cursor)
@@ -47,8 +50,10 @@ namespace Tangerine.UI
 			hull = new Quadrangle();
 			float pivotTolerance = 1e-1f;
 			foreach (var node in nodes) {
-				if (!CalcHullAndPivot(node, out var currentHull, out var currentPivot))
+				if (!CalcHullAndPivot(node, out var currentHull, out var currentPivot)) {
 					continue;
+				}
+
 				var currentAABB = currentHull.ToAABB();
 				if (first == null) {
 					hull = currentHull;
@@ -91,11 +96,13 @@ namespace Tangerine.UI
 			return false;
 		}
 
-		public static Quadrangle CalcAABB(IEnumerable<PointObject> points, bool IncludeOffset = false)
+		public static Quadrangle CalcAABB(IEnumerable<PointObject> points, bool includeOffset = false)
 		{
 			var aabb = new Rectangle(new Vector2(float.MaxValue), new Vector2(float.MinValue));
 			foreach (var point in points) {
-				aabb = aabb.IncludingPoint(point.Position + (IncludeOffset ? point.Offset / point.Parent.AsWidget.Size : Vector2.Zero));
+				aabb = aabb.IncludingPoint(
+					point.Position + (includeOffset ? point.Offset / point.Parent.AsWidget.Size : Vector2.Zero)
+				);
 			}
 			return aabb.ToQuadrangle();
 		}
@@ -157,7 +164,7 @@ namespace Tangerine.UI
 			var k = b.Y * a.X - a.Y * b.X;
 			point = new Vector2 {
 				X = j * (j * p.X - i * p.Y) - i * k,
-				Y = i * (-j * p.X + i * p.Y) - j * k
+				Y = i * (-j * p.X + i * p.Y) - j * k,
 			};
 			if (Vector2.Distance(new Vector2(i, j), Vector2.Zero) <= Mathf.ZeroTolerance) {
 				return Vector2.Distance(a, p);

@@ -5,9 +5,9 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView.Presenters
 {
-	class FrameProgressionProcessor: ITaskProvider
+	internal class FrameProgressionProcessor : ITaskProvider
 	{
-		private SceneView sceneView => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 		private List<Widget> widgets = new List<Widget>();
 		private int widgetsHashCode;
 		private readonly List<IPresenter> presenters = new List<IPresenter>();
@@ -43,7 +43,7 @@ namespace Tangerine.UI.SceneView.Presenters
 			hasher.Write(SceneView.Instance.Scene.LocalToWorldTransform);
 			var hash = hasher.End();
 			if (cache.TryGetValue(widget, out var cacheEntry) && hash == cacheEntry.HashCode) {
-				DrawHulls(cacheEntry.Hulls, min, max, sceneView.Scene.Scale.X);
+				DrawHulls(cacheEntry.Hulls, min, max, SceneView.Scene.Scale.X);
 				return;
 			}
 			var hulls = cacheEntry.Hulls ?? new List<Quadrangle>();
@@ -62,7 +62,7 @@ namespace Tangerine.UI.SceneView.Presenters
 					animator.Apply(AnimationUtils.FramesToSeconds(savedAnimationFrame));
 				}
 			}
-			DrawHulls(hulls, min, max, sceneView.Scene.Scale.X);
+			DrawHulls(hulls, min, max, SceneView.Scene.Scale.X);
 		}
 
 		private static void DrawHulls(List<Quadrangle> hulls, int min, int max, float scale)
@@ -72,8 +72,7 @@ namespace Tangerine.UI.SceneView.Presenters
 				var color = Color4.Lerp(
 					((float)i - min) / (max - min),
 					ColorTheme.Current.SceneView.FrameProgressionBeginColor,
-					ColorTheme.Current.SceneView.FrameProgressionEndColor
-				);
+					ColorTheme.Current.SceneView.FrameProgressionEndColor);
 				for (int j = 0; j < 4; j++) {
 					var a = hull[j];
 					var b = hull[(j + 1) % 4];

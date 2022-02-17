@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -47,26 +45,16 @@ namespace SharpFont
 	/// </para></remarks>
 	public sealed class SizeMetrics
 	{
-		#region Fields
-
 		private SizeMetricsRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal SizeMetrics(SizeMetricsRec metricsInternal)
 		{
 			rec = metricsInternal;
 		}
 
-		#endregion
-
-		#region Properties
-
 		/// <summary>
-		/// Gets the width of the scaled EM square in pixels, hence the term ‘ppem’ (pixels per EM). It is also referred to
-		/// as ‘nominal width’.
+		/// Gets the width of the scaled EM square in pixels, hence the term ‘ppem’ (pixels per EM).
+		/// It is also referred to as ‘nominal width’.
 		/// </summary>
 		[CLSCompliant(false)]
 		public ushort NominalWidth
@@ -78,8 +66,8 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Gets the height of the scaled EM square in pixels, hence the term ‘ppem’ (pixels per EM). It is also referred to
-		/// as ‘nominal height’.
+		/// Gets the height of the scaled EM square in pixels, hence the term ‘ppem’ (pixels per EM).
+		/// It is also referred to as ‘nominal height’.
 		/// </summary>
 		[CLSCompliant(false)]
 		public ushort NominalHeight
@@ -161,7 +149,5 @@ namespace SharpFont
 				return Fixed26Dot6.FromRawValue((int)rec.max_advance);
 			}
 		}
-
-		#endregion
 	}
 }

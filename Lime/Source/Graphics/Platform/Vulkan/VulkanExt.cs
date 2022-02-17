@@ -47,7 +47,7 @@ namespace SharpVulkan.Ext
 		MemoryDedicatedAllocateInfo = 1000127001,
 		BufferMemoryRequirementsInfo2 = 1000146000,
 		ImageMemoryRequirementsInfo2 = 1000146001,
-		MemoryRequirements2 = 1000146003
+		MemoryRequirements2 = 1000146003,
 	}
 
 	internal struct MVKConfiguration
@@ -68,30 +68,50 @@ namespace SharpVulkan.Ext
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi)]
 	internal unsafe delegate RawBool DebugReportCallbackDelegate(
-			DebugReportFlags flags, DebugReportObjectType objectType, ulong @object,
-			PointerSize location, int messageCode, string layerPrefix, string message, IntPtr userData);
+		DebugReportFlags flags,
+		DebugReportObjectType objectType,
+		ulong @object,
+		PointerSize location,
+		int messageCode,
+		string layerPrefix,
+		string message,
+		IntPtr userData
+	);
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 	internal unsafe delegate Result CreateDebugReportCallbackDelegate(
-		Instance instance, ref DebugReportCallbackCreateInfo createInfo,
-		AllocationCallbacks* allocator, out DebugReportCallback callback);
+		Instance instance,
+		ref DebugReportCallbackCreateInfo createInfo,
+		AllocationCallbacks* allocator,
+		out DebugReportCallback callback
+	);
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 	internal unsafe delegate Result DestroyDebugReportCallbackDelegate(
-		Instance instance, DebugReportCallback debugReportCallback,
-		AllocationCallbacks* allocator);
+		Instance instance,
+		DebugReportCallback debugReportCallback,
+		AllocationCallbacks* allocator
+	);
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-	internal delegate void GetImageMemoryRequirements2Delegate(Device device, ref ImageMemoryRequirementsInfo2 info, ref MemoryRequirements2 memoryRequirements);
+	internal delegate void GetImageMemoryRequirements2Delegate(
+		Device device, ref ImageMemoryRequirementsInfo2 info, ref MemoryRequirements2 memoryRequirements
+	);
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-	internal delegate void GetBufferMemoryRequirements2Delegate(Device device, ref BufferMemoryRequirementsInfo2 info, ref MemoryRequirements2 memoryRequirements);
+	internal delegate void GetBufferMemoryRequirements2Delegate(
+		Device device, ref BufferMemoryRequirementsInfo2 info, ref MemoryRequirements2 memoryRequirements
+	);
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-	internal delegate SharpVulkan.Result GetMoltenVKConfigurationDelegate(SharpVulkan.Instance instance, ref MVKConfiguration pConfiguration, ref UIntPtr pConfigurationSize);
+	internal delegate SharpVulkan.Result GetMoltenVKConfigurationDelegate(
+		SharpVulkan.Instance instance, ref MVKConfiguration pConfiguration, ref UIntPtr pConfigurationSize
+	);
 
 	[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-	internal delegate SharpVulkan.Result SetMoltenVKConfigurationDelegate(SharpVulkan.Instance instance, ref MVKConfiguration pConfiguration, ref UIntPtr pConfigurationSize);
+	internal delegate SharpVulkan.Result SetMoltenVKConfigurationDelegate(
+		SharpVulkan.Instance instance, ref MVKConfiguration pConfiguration, ref UIntPtr pConfigurationSize
+	);
 
 	internal unsafe class VulkanExt
 	{
@@ -105,8 +125,10 @@ namespace SharpVulkan.Ext
 		public void LoadInstanceEntryPoints(Instance instance)
 		{
 			var loader = new InstanceEntryPointLoader(instance);
-			CreateDebugReportCallback = loader.Load<CreateDebugReportCallbackDelegate>("vkCreateDebugReportCallbackEXT");
-			DestroyDebugReportCallback = loader.Load<DestroyDebugReportCallbackDelegate>("vkDestroyDebugReportCallbackEXT");
+			CreateDebugReportCallback =
+				loader.Load<CreateDebugReportCallbackDelegate>("vkCreateDebugReportCallbackEXT");
+			DestroyDebugReportCallback =
+				loader.Load<DestroyDebugReportCallbackDelegate>("vkDestroyDebugReportCallbackEXT");
 			GetMoltenVKConfiguration = loader.Load<GetMoltenVKConfigurationDelegate>("vkGetMoltenVKConfigurationMVK");
 			SetMoltenVKConfiguration = loader.Load<SetMoltenVKConfigurationDelegate>("vkSetMoltenVKConfigurationMVK");
 		}
@@ -114,8 +136,10 @@ namespace SharpVulkan.Ext
 		public void LoadDeviceEntryPoints(Device device)
 		{
 			var loader = new DeviceEntryPointLoader(device);
-			GetImageMemoryRequirements2 = loader.Load<GetImageMemoryRequirements2Delegate>("vkGetImageMemoryRequirements2KHR");
-			GetBufferMemoryRequirements2 = loader.Load<GetBufferMemoryRequirements2Delegate>("vkGetBufferMemoryRequirements2KHR");
+			GetImageMemoryRequirements2 =
+				loader.Load<GetImageMemoryRequirements2Delegate>("vkGetImageMemoryRequirements2KHR");
+			GetBufferMemoryRequirements2 =
+				loader.Load<GetBufferMemoryRequirements2Delegate>("vkGetBufferMemoryRequirements2KHR");
 		}
 
 		private class InstanceEntryPointLoader : EntryPointLoader
@@ -150,7 +174,8 @@ namespace SharpVulkan.Ext
 
 		private abstract class EntryPointLoader
 		{
-			public T Load<T>(string name) where T : Delegate
+			public T Load<T>(string name)
+				where T : Delegate
 			{
 				var namePtr = Marshal.StringToHGlobalAnsi(name);
 				try {

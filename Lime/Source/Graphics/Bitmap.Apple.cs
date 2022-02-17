@@ -133,7 +133,9 @@ namespace Lime
 			var isMonochrome = cgImage.ColorSpace.Model == CGColorSpaceModel.Monochrome;
 			var bpp = cgImage.BitsPerPixel;
 			if (!((isColorSpaceRGB && (bpp == 32 || bpp == 64)) || (isMonochrome && (bpp == 8 || bpp == 16)))) {
-				throw new FormatException("Can not return array of pixels: bitmap should be either 32/64 bpp RGBA or 8/16 bpp monochrome");
+				throw new FormatException(
+					"Can not return array of pixels: bitmap should be either 32/64 bpp RGBA or 8/16 bpp monochrome"
+				);
 			}
 
 			var doSwap = cgImage.BitmapInfo.HasFlag(CGBitmapFlags.ByteOrder32Little);
@@ -188,8 +190,11 @@ namespace Lime
 										g = (ushort)(65535 * g / a);
 										b = (ushort)(65535 * b / a);
 									}
-									pixels[index++] = doSwap ? new Color4((byte)(b / 255), (byte)(g / 255), (byte)(r / 255), (byte)(a / 255))
-										: new Color4((byte)(r / 255), (byte)(g / 255), (byte)(b / 255), (byte)(a / 255));
+									pixels[index++] = doSwap
+										? new Color4((byte)(b / 255), (byte)(g / 255), (byte)(r / 255), (byte)(a / 255))
+										: new Color4(
+											(byte)(r / 255), (byte)(g / 255), (byte)(b / 255), (byte)(a / 255)
+										);
 								}
 								// Sometimes Width can be smaller then length of a row due to byte alignment.
 								// It's just an empty bytes at the end of each row, so we can skip them here.

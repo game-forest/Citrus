@@ -69,7 +69,8 @@ namespace Lime
 				}
 				if (currentItem != null) {
 					currentClipBegin = currentItem.Clip.BeginTime - AnimationUtils.Threshold;
-					nextClipBegin = currentItem.Next?.Clip.BeginTime - AnimationUtils.Threshold ?? double.PositiveInfinity;
+					nextClipBegin = currentItem.Next?.Clip.BeginTime - AnimationUtils.Threshold
+						?? double.PositiveInfinity;
 				} else {
 					currentItem = listHead;
 					currentClipBegin = 0;

@@ -34,7 +34,7 @@ namespace Tangerine.UI.SceneView
 			Tooltip = "Node decorations",
 			Texture = IconPool.GetTexture("SceneView.ShowPanel"),
 			MinMaxSize = new Vector2(24),
-			LayoutCell = new LayoutCell(new Alignment { X = HAlignment.Left, Y = VAlignment.Bottom } )
+			LayoutCell = new LayoutCell(new Alignment { X = HAlignment.Left, Y = VAlignment.Bottom }),
 		};
 		public static readonly AnimeshContextualPanel AnimeshPanel = new AnimeshContextualPanel();
 		public static Action<SceneView> OnCreate;
@@ -142,7 +142,7 @@ namespace Tangerine.UI.SceneView
 				ro.IsThumbnailOwner = SceneViewSnapshotProvider.IsGettingRenderObjects;
 				ro.Frame = new RenderObject.FrameInfo {
 					Transform = node.Parent.AsWidget.LocalToWorldTransform,
-					Size = (Size)node.Parent.AsWidget.Size
+					Size = (Size)node.Parent.AsWidget.Size,
 				};
 #endif // PROFILER
 				ro.LocalToWorldTransform = w.LocalToWorldTransform;
@@ -290,7 +290,7 @@ namespace Tangerine.UI.SceneView
 			Scene.PostPresenter = new ScenePresenter(Document.Current.RootNode);
 			Frame = new Widget {
 				Id = "SceneView",
-				Nodes = { InputArea, Scene }
+				Nodes = { InputArea, Scene },
 			};
 			CreateComponents();
 			CreateProcessors();
@@ -322,11 +322,9 @@ namespace Tangerine.UI.SceneView
 			var wantedZoom = Mathf.Clamp(
 				Mathf.Min(
 					frameWidth / (widget.Width * widget.Scale.X),
-					frameHeight / (widget.Height * widget.Scale.Y)
-				),
+					frameHeight / (widget.Height * widget.Scale.Y)),
 				0.0f,
-				1.0f
-			);
+				1.0f);
 			var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
 			Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
 			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
@@ -388,9 +386,9 @@ namespace Tangerine.UI.SceneView
 			return HitTestControlPoint(controlPoint, 6);
 		}
 
-		void CreateComponents() { }
+		private void CreateComponents() { }
 
-		void CreateProcessors()
+		private void CreateProcessors()
 		{
 			Frame.Tasks.Add(
 				new ActivateOnMouseOverProcessor(),
@@ -425,11 +423,10 @@ namespace Tangerine.UI.SceneView
 				new PreviewAnimationProcessor(),
 				new ResolutionPreviewProcessor(),
 				new FrameProgressionProcessor(),
-				new AnimeshContextualPanelProcessor(AnimeshPanel)
-			);
+				new AnimeshContextualPanelProcessor(AnimeshPanel));
 		}
 
-		void CreatePresenters()
+		private void CreatePresenters()
 		{
 			new Bone3DPresenter(this);
 			new ContainerAreaPresenter(this);
@@ -468,7 +465,9 @@ namespace Tangerine.UI.SceneView
 
 		public static bool Consume<T>(
 			ComponentCollection<Component> components, out Type nodeType, out ICommand command
-		) where T : Node {
+		)
+			where T : Node
+		{
 			var c = components.Get<CreateNodeRequestComponent>();
 			if (c != null && (c.NodeType.IsSubclassOf(typeof(T)) || c.NodeType == typeof(T))) {
 				components.Remove<CreateNodeRequestComponent>();
@@ -481,12 +480,14 @@ namespace Tangerine.UI.SceneView
 			return false;
 		}
 
-		public static bool Consume<T>(ComponentCollection<Component> components) where T : Node
+		public static bool Consume<T>(ComponentCollection<Component> components)
+			where T : Node
 		{
 			return Consume<T>(components, out Type type, out ICommand command);
 		}
 
-		public static bool Consume<T>(ComponentCollection<Component> components, out ICommand command) where T : Node
+		public static bool Consume<T>(ComponentCollection<Component> components, out ICommand command)
+			where T : Node
 		{
 			return Consume<T>(components, out Type type, out command);
 		}

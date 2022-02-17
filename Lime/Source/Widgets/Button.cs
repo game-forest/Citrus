@@ -41,7 +41,8 @@ namespace Lime
 		public override bool Enabled
 		{
 			get => EnableMask[0];
-			set {
+			set
+			{
 				if (EnableMask[0] != value) {
 					EnableMask[0] = value;
 					PropagateDirtyFlags(DirtyFlags.Enabled);
@@ -226,7 +227,7 @@ namespace Lime
 
 		private void BuildForTangerine()
 		{
-			int[] markerFrames = { 0, 10, 20, 30, 40};
+			int[] markerFrames = { 0, 10, 20, 30, 40 };
 			string[] makerIds = { "Normal", "Focus", "Press", "Release", "Disable" };
 			for (var i = 0; i < 5; i++) {
 				DefaultAnimation.Markers.Add(new Marker(makerIds[i], markerFrames[i], MarkerAction.Stop));
@@ -276,7 +277,7 @@ namespace Lime
 			textPresenters.Clear();
 			textPresenters.AddRange(widget.Descendants.OfType<Widget>().Where(i => i.Id == TextPresenterId));
 #else
-			textPresenters = textPresenters ?? widget.Descendants.OfType<Widget>().Where(i => i.Id == "TextPresenter").ToList();
+			textPresenters ??= widget.Descendants.OfType<Widget>().Where(i => i.Id == "TextPresenter").ToList();
 #endif
 
 			foreach (var i in textPresenters) {

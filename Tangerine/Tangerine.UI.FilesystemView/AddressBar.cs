@@ -1,8 +1,8 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.FilesystemView
@@ -12,7 +12,7 @@ namespace Tangerine.UI.FilesystemView
 		public enum AddressBarState
 		{
 			PathBar,
-			Editor
+			Editor,
 		}
 		private FilesystemModel filesystemModel;
 		private AddressBarState state;
@@ -71,14 +71,13 @@ namespace Tangerine.UI.FilesystemView
 				}
 
 				if (amountOfCharacters != 0) {
-
 					if (new DirectoryInfo(path.Remove(path.Length - amountOfCharacters)).Parent == null) {
 						path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
 					} else if (amountOfCharacters == 2) {
 						// Uri does not work with two dots
 						path = Path.GetDirectoryName(path.Remove(path.Length - amountOfCharacters));
 					} else {
-						path = Path.GetFullPath((new Uri(path)).LocalPath);
+						path = Path.GetFullPath(new Uri(path).LocalPath);
 					}
 				}
 			}
@@ -88,7 +87,7 @@ namespace Tangerine.UI.FilesystemView
 
 			path = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
-			//If the user added many slashes
+			// If the user added many slashes
 			string doubleDirectorySeparator = string.Empty;
 			doubleDirectorySeparator += Path.DirectorySeparatorChar;
 			doubleDirectorySeparator += Path.DirectorySeparatorChar;
@@ -119,7 +118,7 @@ namespace Tangerine.UI.FilesystemView
 		{
 			if (state == AddressBarState.Editor) {
 				state = AddressBarState.PathBar;
-				editor.Text = "";
+				editor.Text = string.Empty;
 				CreatePathBar();
 			} else {
 				state = AddressBarState.Editor;
@@ -292,7 +291,7 @@ namespace Tangerine.UI.FilesystemView
 	{
 		Normal,
 		Hover,
-		Press
+		Press,
 	}
 
 	public class PathBarButton : Widget
@@ -396,15 +395,15 @@ namespace Tangerine.UI.FilesystemView
 
 	public class PathFolderButton : ThemedButton
 	{
-		private new PathButtonPresenter Presenter;
+		private new PathButtonPresenter presenter;
 		public PathBarButtonState State;
 		public float TargetWidth { get; }
 
 		public PathFolderButton(Func<string, bool> openPath, string path) : base()
 		{
 			Text = GetName(path);
-			Presenter = new PathButtonPresenter();
-			base.Presenter = Presenter;
+			presenter = new PathButtonPresenter();
+			base.Presenter = presenter;
 			TargetWidth = FontPool.Instance.DefaultFont.MeasureTextLine(Text, Theme.Metrics.TextHeight, 0).X + 7;
 			MinMaxHeight = 20;
 			MinMaxWidth = TargetWidth;
@@ -422,7 +421,7 @@ namespace Tangerine.UI.FilesystemView
 
 		public void SetState(PathBarButtonState state)
 		{
-			Presenter.SetState(state);
+			presenter.SetState(state);
 		}
 
 		private static string GetName(string path)
@@ -455,7 +454,7 @@ namespace Tangerine.UI.FilesystemView
 		private string path;
 		private DirectoryPicker picker;
 		private Func<string, bool> openPath;
-		private new PathButtonPresenter Presenter;
+		private new PathButtonPresenter presenter;
 		private Image icon;
 		public bool Expanded { get; private set; }
 		public float TargetWidth { get; }
@@ -467,8 +466,8 @@ namespace Tangerine.UI.FilesystemView
 			this.path = path;
 			this.openPath = openPath;
 			MinMaxHeight = 20;
-			Presenter = new PathButtonPresenter();
-			base.Presenter = Presenter;
+			presenter = new PathButtonPresenter();
+			base.Presenter = presenter;
 			if (path == null) {
 				Updating += (float delta) => {
 					var prevState = State;
@@ -486,7 +485,7 @@ namespace Tangerine.UI.FilesystemView
 						}
 					}
 					if (prevState != State) {
-						Presenter.SetState(State);
+						presenter.SetState(State);
 					}
 				};
 			}
@@ -495,10 +494,10 @@ namespace Tangerine.UI.FilesystemView
 			MinMaxSize = new Vector2(TargetWidth = 15, 20);
 			Nodes.Add(icon = new Image {
 				LayoutCell = new LayoutCell {
-					Alignment = new Alignment { X = HAlignment.Center, Y = VAlignment.Center }
+					Alignment = new Alignment { X = HAlignment.Center, Y = VAlignment.Center },
 				},
 				MinMaxSize = new Vector2(11, 6),
-				Texture = IconPool.GetTexture("Filesystem.PathSeparatorCollapsed")
+				Texture = IconPool.GetTexture("Filesystem.PathSeparatorCollapsed"),
 			});
 
 			Expanded = false;
@@ -506,7 +505,7 @@ namespace Tangerine.UI.FilesystemView
 
 		public void SetState(PathBarButtonState state)
 		{
-			Presenter.SetState(state);
+			presenter.SetState(state);
 		}
 
 		private void FlipState()
@@ -535,8 +534,12 @@ namespace Tangerine.UI.FilesystemView
 		private bool closed;
 		public event Action Closing;
 
-		public DirectoryPicker(Func<string, bool> openPath, Vector2 globalPosition, string path = null, IEnumerable<string> subpaths = null)
-		{
+		public DirectoryPicker(
+			Func<string, bool> openPath,
+			Vector2 globalPosition,
+			string path = null,
+			IEnumerable<string> subpaths = null
+		) {
 			this.openPath = openPath;
 			List<FilesystemItem> filesystemItems = new List<FilesystemItem>();
 			if (subpaths != null) {
@@ -560,7 +563,8 @@ namespace Tangerine.UI.FilesystemView
 			var itemsCount = Math.Min(filesystemItems.Count, MaxItemsOnPicker);
 			var clientSize = new Vector2(
 				FilesystemItem.ItemWidth,
-				(FilesystemItem.IconSize + 2 * FilesystemItem.ItemPadding) * itemsCount) + new Vector2(scrollView.Content.Padding.Left * 2);
+				(FilesystemItem.IconSize + 2 * FilesystemItem.ItemPadding) * itemsCount
+			) + new Vector2(scrollView.Content.Padding.Left * 2);
 			scrollView.MinMaxSize = clientSize;
 
 			var windowOptions = new WindowOptions {
@@ -578,12 +582,14 @@ namespace Tangerine.UI.FilesystemView
 				Layout = new VBoxLayout(),
 				LayoutBasedWindowSize = true,
 				Nodes = {
-					scrollView
-				}
+					scrollView,
+				},
 			};
 
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
-			rootWidget.AddChangeWatcher(() => WidgetContext.Current.NodeUnderMouse, (value) => Window.Current.Invalidate());
+			rootWidget.AddChangeWatcher(
+				() => WidgetContext.Current.NodeUnderMouse, (value) => Window.Current.Invalidate()
+			);
 
 			rootWidget.Presenter = new SyncDelegatePresenter<Widget>(_ => {
 				rootWidget.PrepareRendererState();
@@ -591,7 +597,9 @@ namespace Tangerine.UI.FilesystemView
 			});
 			rootWidget.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(_ => {
 				rootWidget.PrepareRendererState();
-				Renderer.DrawRectOutline(Vector2.Zero, rootWidget.ContentSize, Theme.Colors.DirectoryPickerOutline, thickness: 1);
+				Renderer.DrawRectOutline(
+					Vector2.Zero, rootWidget.ContentSize, Theme.Colors.DirectoryPickerOutline, thickness: 1
+				);
 			}));
 
 			window.Visible = true;
@@ -656,7 +664,9 @@ namespace Tangerine.UI.FilesystemView
 				if (Directory.Exists(root)) {
 					availableRoots.Add(root);
 					i++;
-					if (i == realRootsCount) break;
+					if (i == realRootsCount) {
+						break;
+					}
 				}
 			}
 			return availableRoots;

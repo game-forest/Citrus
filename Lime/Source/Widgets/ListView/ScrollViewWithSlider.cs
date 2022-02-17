@@ -1,8 +1,8 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Lime;
 
 namespace Lime
 {
@@ -14,7 +14,12 @@ namespace Lime
 
 		public bool SliderIsDragging;
 
-		public ScrollViewWithSlider(Frame frame, Widget slider = null, ScrollDirection scrollDirection = ScrollDirection.Vertical, bool processChildrenFirst = false)
+		public ScrollViewWithSlider(
+			Frame frame,
+			Widget slider = null,
+			ScrollDirection scrollDirection = ScrollDirection.Vertical,
+			bool processChildrenFirst = false
+		)
 			: base(frame, scrollDirection, processChildrenFirst)
 		{
 			this.slider = slider;
@@ -29,10 +34,9 @@ namespace Lime
 			Content.LateTasks.Add(ShowSliderWhenScrollingTask());
 			Content.LateTasks.Add(AdjustSliderTask());
 			Content.LateTasks.Add(DragSliderTask());
-
 		}
 
-		IEnumerator<object> DragSliderTask()
+		private IEnumerator<object> DragSliderTask()
 		{
 			while (true) {
 				SliderIsDragging = false;
@@ -46,8 +50,11 @@ namespace Lime
 						while (input.IsMousePressed()) {
 							var projectedFrameSize = ProjectToScrollAxis(Frame.Size);
 							if (projectedFrameSize > Mathf.ZeroTolerance) {
-								var d = ProjectToScrollAxis(input.MousePosition - iniMousePos) * ContentLength / projectedFrameSize;
-								ScrollPosition = Mathf.Clamp(((iniScrollPos + d).Round()), MinScrollPosition, MaxScrollPosition);
+								var d = ProjectToScrollAxis(input.MousePosition - iniMousePos)
+									* ContentLength / projectedFrameSize;
+								ScrollPosition = Mathf.Clamp(
+									(iniScrollPos + d).Round(), MinScrollPosition, MaxScrollPosition
+								);
 							}
 							yield return null;
 						}
@@ -149,9 +156,9 @@ namespace Lime
 		}
 
 		[YuzuDontGenerateDeserializer]
-		new class Layout : ScrollView.Layout
+		private new class Layout : ScrollView.Layout
 		{
-			readonly Widget slider;
+			private readonly Widget slider;
 
 			public Layout(ScrollDirection direction, Widget content, Widget slider) : base(direction, content)
 			{

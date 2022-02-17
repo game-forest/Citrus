@@ -11,7 +11,7 @@ using Tangerine.UI.Timeline;
 
 namespace Tangerine.MainMenu
 {
-	class RenderToPngSequence : CommandHandler
+	internal class RenderToPngSequence : CommandHandler
 	{
 		public override void RefreshCommand(ICommand command)
 		{
@@ -35,8 +35,12 @@ namespace Tangerine.MainMenu
 			WidgetContext.Current.Root.Tasks.Add(RenderPngSequenceTask(currentWindow, options, gs.Left, gs.Right));
 		}
 
-		private static IEnumerator<object> RenderPngSequenceTask(IWindow currentWindow, RenderToPngSequenceDialog.RenderToPngSequenceOptions options, int min, int max)
-		{
+		private static IEnumerator<object> RenderPngSequenceTask(
+			IWindow currentWindow,
+			RenderToPngSequenceDialog.RenderToPngSequenceOptions options,
+			int min,
+			int max
+		) {
 			var start = AnimationUtils.FramesToSeconds(min);
 			Document.Current.AnimationFrame = min;
 			var end = AnimationUtils.FramesToSeconds(max);

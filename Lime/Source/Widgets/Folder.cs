@@ -50,7 +50,7 @@ namespace Lime
 		public void Insert(int index, Folder.Descriptor item)
 		{
 			if (item.Owner != null) {
-				throw  new InvalidOperationException();
+				throw new InvalidOperationException();
 			}
 			item.Owner = owner;
 			items.Insert(index, item);

@@ -20,7 +20,8 @@ namespace Lime
 		public bool Suspended => suspendCounter > 0;
 
 		/// <summary>
-		/// Start is called on the frame in which the component had added just before Update method is called first time.
+		/// Start is called on the frame in which the component had added
+		/// just before Update method is called first time.
 		/// Note: Start doesn't called immediately at the time it is adding.
 		/// </summary>
 		protected internal virtual void Start() { }

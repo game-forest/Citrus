@@ -8,10 +8,10 @@ namespace Tangerine.UI.SceneView
 {
 	public class CreateSplinePoint3DProcessor : ITaskProvider
 	{
-		private SceneView sv => SceneView.Instance;
-		private DocumentHistory history => Document.Current.History;
-		private WidgetInput input => SceneView.Instance.Input;
-		ICommand command;
+		private SceneView SceneView => SceneView.Instance;
+		private DocumentHistory History => Document.Current.History;
+		private WidgetInput Input => SceneView.Instance.Input;
+		private ICommand command;
 
 		public IEnumerator<object> Task()
 		{
@@ -23,35 +23,35 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		IEnumerator<object> CreateSplinePoint3DTask()
+		private IEnumerator<object> CreateSplinePoint3DTask()
 		{
 			command.Checked = true;
 			while (true) {
-				if (sv.InputArea.IsMouseOver()) {
+				if (SceneView.InputArea.IsMouseOver()) {
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
 				}
-				CreateNodeRequestComponent.Consume<Node>(sv.Components);
-				if (input.ConsumeKeyPress(Key.Mouse0)) {
-					using (history.BeginTransaction()) {
+				CreateNodeRequestComponent.Consume<Node>(SceneView.Components);
+				if (Input.ConsumeKeyPress(Key.Mouse0)) {
+					using (History.BeginTransaction()) {
 						SplinePoint3D point;
 						try {
-							point = (SplinePoint3D) CreateNode.Perform(typeof(SplinePoint3D), aboveSelected: false);
+							point = (SplinePoint3D)CreateNode.Perform(typeof(SplinePoint3D), aboveSelected: false);
 						} catch (InvalidOperationException e) {
 							AlertDialog.Show(e.Message);
 							yield break;
 						}
-						var spline = (Spline3D) Document.Current.Container;
+						var spline = (Spline3D)Document.Current.Container;
 						var vp = spline.Viewport;
-						var ray = vp.ScreenPointToRay(sv.MousePosition);
+						var ray = vp.ScreenPointToRay(SceneView.MousePosition);
 						var xyPlane = new Plane(new Vector3(0, 0, 1), 0).Transform(spline.GlobalTransform);
 						var d = ray.Intersects(xyPlane);
 						if (d.HasValue) {
 							var pos = (ray.Position + ray.Direction * d.Value) * spline.GlobalTransform.CalcInverted();
 							SetProperty.Perform(point, nameof(SplinePoint3D.Position), pos);
-							using (history.BeginTransaction()) {
-								while (input.IsMousePressed()) {
-									history.RollbackTransaction();
-									ray = vp.ScreenPointToRay(sv.MousePosition);
+							using (History.BeginTransaction()) {
+								while (Input.IsMousePressed()) {
+									History.RollbackTransaction();
+									ray = vp.ScreenPointToRay(SceneView.MousePosition);
 									d = ray.Intersects(xyPlane);
 									if (d.HasValue) {
 										var tangent = (ray.Position + ray.Direction * d.Value) *
@@ -59,7 +59,7 @@ namespace Tangerine.UI.SceneView
 										SetProperty.Perform(point, nameof(SplinePoint3D.TangentA), tangent);
 										SetProperty.Perform(point, nameof(SplinePoint3D.TangentB), -tangent);
 									}
-									history.CommitTransaction();
+									History.CommitTransaction();
 									yield return null;
 								}
 
@@ -69,10 +69,10 @@ namespace Tangerine.UI.SceneView
 								}
 							}
 						}
-						history.CommitTransaction();
+						History.CommitTransaction();
 					}
 				}
-				if (input.WasMousePressed(1) || input.WasKeyPressed(Key.Escape)) {
+				if (Input.WasMousePressed(1) || Input.WasKeyPressed(Key.Escape)) {
 					break;
 				}
 				yield return null;

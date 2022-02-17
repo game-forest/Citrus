@@ -1,4 +1,4 @@
-﻿#if WIN
+#if WIN
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace Lime
 {
-	class WinFormsWebBrowser: IWebBrowserImplementation
+	internal class WinFormsWebBrowser : IWebBrowserImplementation
 	{
 		private System.Windows.Forms.WebBrowser browser;
 		private Widget widget;
@@ -18,7 +18,7 @@ namespace Lime
 			this.widget = widget;
 			browser = new System.Windows.Forms.WebBrowser {
 				Parent = Form.ActiveForm,
-				ScriptErrorsSuppressed = true
+				ScriptErrorsSuppressed = true,
 			};
 		}
 
@@ -31,8 +31,7 @@ namespace Lime
 				FitBrowserInWidget();
 				browser.Show();
 				browser.BringToFront();
-			}
-			else {
+			} else {
 				browser.Hide();
 			}
 		}
@@ -55,26 +54,31 @@ namespace Lime
 
 		public void Dispose()
 		{
-			if (browser == null)
+			if (browser == null) {
 				return;
+			}
+
 			Application.InvokeOnMainThread(browser.Dispose);
 			browser = null;
 		}
 
-		public Uri Url {
+		public Uri Url
+		{
 			get { return browser.Url; }
 			set { browser.Url = value; }
 		}
 
 		static WinFormsWebBrowser()
 		{
-			// By default embedded IE emulates version 7.0. We need to add ourselves to registry to enable more recent versiion.
+			// By default embedded IE emulates version 7.0.
+			// We need to add ourselves to registry to enable more recent versiion.
 			// http://msdn.microsoft.com/en-us/library/ee330720(v=vs.85).aspx
-
 			var fileName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
 			var ideNames = new[] { "devenv.exe", "xdesproc.exe" };
-			if (ideNames.Any(s => string.Equals(fileName, s, StringComparison.InvariantCultureIgnoreCase)))
+			if (ideNames.Any(s => string.Equals(fileName, s, StringComparison.InvariantCultureIgnoreCase))) {
 				return;
+			}
+
 			SetBrowserFeatureControlKey("FEATURE_BROWSER_EMULATION", fileName, GetBrowserEmulationMode());
 		}
 
@@ -90,7 +94,8 @@ namespace Lime
 
 		private static uint GetIEVersion()
 		{
-			using (var ieKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer",
+			using (var ieKey = Registry.LocalMachine.OpenSubKey(
+				@"SOFTWARE\Microsoft\Internet Explorer",
 				RegistryKeyPermissionCheck.ReadSubTree,
 				System.Security.AccessControl.RegistryRights.QueryValues)
 			) {

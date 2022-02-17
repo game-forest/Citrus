@@ -88,30 +88,30 @@ namespace Citrus.Tests.Types
 			Assert.AreEqual(0, Vector2.CrossProduct(Vector2.Half, Vector2.Half));
 		}
 
-		const float delta = 0.0001f;
+		private const float Delta = 0.0001f;
 
 		[TestMethod]
 		public void CosSinRoughTest()
 		{
-			Assert.That.AreEqual(Vector2.Right, Vector2.CosSinRough(0), delta);
-			Assert.That.AreEqual(Vector2.Left, Vector2.CosSinRough(Mathf.Pi), delta);
-			Assert.That.AreEqual(Vector2.Down, Vector2.CosSinRough(Mathf.HalfPi), delta);
+			Assert.That.AreEqual(Vector2.Right, Vector2.CosSinRough(0), Delta);
+			Assert.That.AreEqual(Vector2.Left, Vector2.CosSinRough(Mathf.Pi), Delta);
+			Assert.That.AreEqual(Vector2.Down, Vector2.CosSinRough(Mathf.HalfPi), Delta);
 		}
 
 		[TestMethod]
 		public void RotateDegTest()
 		{
-			Assert.That.AreEqual(Vector2.Right, Vector2.RotateDeg(Vector2.Right, 0), delta);
-			Assert.That.AreEqual(Vector2.Left, Vector2.RotateDeg(Vector2.Right, 180), delta);
-			Assert.That.AreEqual(Vector2.Down, Vector2.RotateDeg(Vector2.Right, 90), delta);
+			Assert.That.AreEqual(Vector2.Right, Vector2.RotateDeg(Vector2.Right, 0), Delta);
+			Assert.That.AreEqual(Vector2.Left, Vector2.RotateDeg(Vector2.Right, 180), Delta);
+			Assert.That.AreEqual(Vector2.Down, Vector2.RotateDeg(Vector2.Right, 90), Delta);
 		}
 
 		[TestMethod]
 		public void RotateRadTest()
 		{
-			Assert.That.AreEqual(Vector2.Right, Vector2.RotateRad(Vector2.Right, 0), delta);
-			Assert.That.AreEqual(Vector2.Left, Vector2.RotateRad(Vector2.Right, Mathf.Pi), delta);
-			Assert.That.AreEqual(Vector2.Down, Vector2.RotateRad(Vector2.Right, Mathf.HalfPi), delta);
+			Assert.That.AreEqual(Vector2.Right, Vector2.RotateRad(Vector2.Right, 0), Delta);
+			Assert.That.AreEqual(Vector2.Left, Vector2.RotateRad(Vector2.Right, Mathf.Pi), Delta);
+			Assert.That.AreEqual(Vector2.Down, Vector2.RotateRad(Vector2.Right, Mathf.HalfPi), Delta);
 		}
 
 		[TestMethod]
@@ -167,7 +167,7 @@ namespace Citrus.Tests.Types
 		public void TryParseTest()
 		{
 			Vector2 vector;
-			Assert.IsFalse(Vector2.TryParse("", out vector));
+			Assert.IsFalse(Vector2.TryParse(string.Empty, out vector));
 			Assert.IsFalse(Vector2.TryParse("1, 2, 3", out vector));
 			Assert.IsFalse(Vector2.TryParse("1, ", out vector));
 			Assert.IsTrue(Vector2.TryParse("1.5, 1.5", out vector));
@@ -178,7 +178,7 @@ namespace Citrus.Tests.Types
 		public void ParseTest()
 		{
 			Assert.ThrowsException<ArgumentNullException>(() => Vector2.Parse(null));
-			Assert.ThrowsException<FormatException>(() => Vector2.Parse(""));
+			Assert.ThrowsException<FormatException>(() => Vector2.Parse(string.Empty));
 			Assert.ThrowsException<FormatException>(() => Vector2.Parse("1, 2, 3"));
 			Assert.ThrowsException<FormatException>(() => Vector2.Parse("1, "));
 			Assert.That.AreEqual(new Vector2(1.5f), Vector2.Parse("1.5, 1.5"));

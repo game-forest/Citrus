@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace Launcher
@@ -34,7 +34,6 @@ namespace Launcher
 			else {
 				action(arg);
 			}
-
 		}
 
 		private void CopyButton_Click(object sender, EventArgs e)

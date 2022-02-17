@@ -64,17 +64,20 @@ namespace Tangerine.UI.RemoteScripting
 			Content = new Widget {
 				Layout = new VBoxLayout(),
 				Nodes = {
-					(textView = new LimitedTextView(maxRowCount: 1500))
-				}
+					(textView = new LimitedTextView(maxRowCount: 1500)),
+				},
 			};
 			Updating += UpdateIconState;
 			Updating += AutoRebuildAssemblyMonitoring;
 			NameChanged();
 
 			var configurationDropDownList = new ThemedDropDownList {
-				MaxWidth = 200f
+				MaxWidth = 200f,
 			};
-			foreach (var (configurationName, configuration) in ProjectPreferences.Instance.RemoteScriptingConfigurations) {
+			foreach (
+				var (configurationName, configuration)
+				in ProjectPreferences.Instance.RemoteScriptingConfigurations
+			) {
 				configurationDropDownList.Items.Add(new CommonDropDownList.Item(configurationName, configuration));
 			}
 			configurationDropDownList.Changed += args => {
@@ -118,8 +121,9 @@ namespace Tangerine.UI.RemoteScripting
 		}
 
 #if WIN
-		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true)
-		{
+		private void BuildAssembly(
+			ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true
+		) {
 			if (isBuildingInProgress) {
 				return;
 			}
@@ -133,11 +137,12 @@ namespace Tangerine.UI.RemoteScripting
 				var buttons = new[] {
 					"Assembly",
 					"Game and Assembly",
-					"Cancel"
+					"Cancel",
 				};
 				var result = AlertDialog.Show(
 					"You are trying to build assembly for the first time.\n" +
-					"Assembly may require game binaries and it strongly recommended to build the game before building the scripts assembly.\n" +
+					"Assembly may require game binaries and it strongly recommended to build " +
+					"the game before building the scripts assembly.\n" +
 					"Please select the most relevant option.",
 					buttons
 				);
@@ -179,11 +184,16 @@ namespace Tangerine.UI.RemoteScripting
 					var csFiles = csAnalyzer.GetCompileItems().ToList();
 					await Task.Delay(DelayBetweenOperations);
 
-					Log($"Compile code in {configuration.ScriptsProjectPath} to assembly {configuration.ScriptsAssemblyName}..");
+					Log(
+						$"Compile code in {configuration.ScriptsProjectPath} " +
+						$"to assembly {configuration.ScriptsAssemblyName}.."
+					);
 					var compiler = new CSharpCodeCompiler {
-						ProjectReferences = configuration.FrameworkReferences.Concat(configuration.ProjectReferences)
+						ProjectReferences = configuration.FrameworkReferences.Concat(configuration.ProjectReferences),
 					};
-					var result = await compiler.CompileAssemblyToRawBytesAsync(configuration.ScriptsAssemblyName, csFiles);
+					var result = await compiler.CompileAssemblyToRawBytesAsync(
+						configuration.ScriptsAssemblyName, csFiles
+					);
 					foreach (var diagnostic in result.Diagnostics) {
 						Log(diagnostic.ToString());
 					}
@@ -196,7 +206,7 @@ namespace Tangerine.UI.RemoteScripting
 							var compiledAssembly = new CompiledAssembly {
 								RawBytes = result.AssemblyRawBytes,
 								PdbRawBytes = result.PdbRawBytes,
-								PortableAssembly = portableAssembly
+								PortableAssembly = portableAssembly,
 							};
 							AssemblyBuilt?.Invoke(compiledAssembly);
 							success = true;
@@ -223,15 +233,22 @@ namespace Tangerine.UI.RemoteScripting
 						autoRebuildAssemblyAllowed = false;
 						AssemblyBuildFailed?.Invoke();
 					}
-					TransitIconStateTo(success ? (AssemblyBuilderIcon)AssemblyBuilderBuildSucceededIcon.Instance : AssemblyBuilderBuildFailedIcon.Instance);
+					TransitIconStateTo(
+						success
+							? (AssemblyBuilderIcon)AssemblyBuilderBuildSucceededIcon.Instance
+							: AssemblyBuilderBuildFailedIcon.Instance
+					);
 					Log(success ? "Assembly was build." : "Assembly wasn't build due to errors in the code.");
 					Log(string.Empty);
 				}
 			}
 		}
 #else
-		private void BuildAssembly(ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true) =>
+		private void BuildAssembly(
+			ProjectPreferences.RemoteScriptingConfiguration configuration, bool requiredBuildGame = true
+		) {
 			Log($"Building assembly is not supported on {Application.Platform}");
+		}
 #endif // WIN
 
 		private void NameChanged()
@@ -296,7 +313,11 @@ namespace Tangerine.UI.RemoteScripting
 		private void Log(string message)
 		{
 			if (message != null) {
-				textView.AppendLine(!string.IsNullOrWhiteSpace(message) ? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {message}" : message);
+				textView.AppendLine(
+					!string.IsNullOrWhiteSpace(message)
+						? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {message}"
+						: message
+				);
 			}
 		}
 

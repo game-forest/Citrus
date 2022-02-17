@@ -19,7 +19,7 @@ namespace Lime
 	{
 		public readonly List<Key> FocusNext = new List<Key> { Key.MapShortcut(Key.Tab) };
 		public readonly List<Key> FocusPrevious = new List<Key> {
-			Key.MapShortcut(new Shortcut(Modifiers.Shift, Key.Tab))
+			Key.MapShortcut(new Shortcut(Modifiers.Shift, Key.Tab)),
 		};
 		private Widget lastFocused;
 
@@ -128,7 +128,7 @@ namespace Lime
 		public enum Direction : int
 		{
 			Forward = 1,
-			Backward = -1
+			Backward = -1,
 		}
 	}
 }

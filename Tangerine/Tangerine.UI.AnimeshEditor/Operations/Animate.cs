@@ -14,8 +14,15 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 
 			public sealed class Processor : OperationProcessor<Animate>
 			{
-				protected override void InternalRedo(Animate op) => AnimeshTools.State = AnimeshTools.ModificationState.Animation;
-				protected override void InternalUndo(Animate op) => AnimeshTools.State = AnimeshTools.ModificationState.Animation;
+				protected override void InternalRedo(Animate op)
+				{
+					AnimeshTools.State = AnimeshTools.ModificationState.Animation;
+				}
+
+				protected override void InternalUndo(Animate op)
+				{
+					AnimeshTools.State = AnimeshTools.ModificationState.Animation;
+				}
 			}
 		}
 	}

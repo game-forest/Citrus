@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline
@@ -32,49 +32,49 @@ namespace Tangerine.UI.Timeline
 		}
 
 		private static class LinkIndicationContextMenu
-        {
-            public static void Create(List<Node> nodes)
-            {
-                var menu = new Menu();
-                var isSameParent = true;
-                var parent = nodes.FirstOrDefault()?.Parent;
-                foreach (var node in nodes) {
-                	menu.Add(new Command(node.Id, new ShowLinkedNodes(node).Execute));
-                	isSameParent &= node.Parent == parent;
-                }
-                if (nodes.Count > 0) {
-                	if (isSameParent && nodes.Count() > 1) {
-                		menu.Add(Command.MenuSeparator);
-                		menu.Add(new Command("Show All", new ShowLinkedNodes(nodes.ToArray()).Execute));
-                	}
-                	menu.Popup();
-                }
-            }
+		{
+			public static void Create(List<Node> nodes)
+			{
+				var menu = new Menu();
+				var isSameParent = true;
+				var parent = nodes.FirstOrDefault()?.Parent;
+				foreach (var node in nodes) {
+					menu.Add(new Command(node.Id, new ShowLinkedNodes(node).Execute));
+					isSameParent &= node.Parent == parent;
+				}
+				if (nodes.Count > 0) {
+					if (isSameParent && nodes.Count() > 1) {
+						menu.Add(Command.MenuSeparator);
+						menu.Add(new Command("Show All", new ShowLinkedNodes(nodes.ToArray()).Execute));
+					}
+					menu.Popup();
+				}
+			}
 
-            private class ShowLinkedNodes : CommandHandler
-            {
-                private readonly Node[] nodes;
+			private class ShowLinkedNodes : CommandHandler
+			{
+				private readonly Node[] nodes;
 
-                public ShowLinkedNodes(params Node[] nodes)
-                {
-                	this.nodes = nodes;
-                }
+				public ShowLinkedNodes(params Node[] nodes)
+				{
+					this.nodes = nodes;
+				}
 
-                public override void Execute()
-                {
-                	Document.Current.History.DoTransaction(() => {
-                		var parent = nodes.First().Parent;
-                		if (parent != Document.Current.Container) {
-                			Core.Operations.EnterNode.Perform(parent, false);
-                		}
-                		Core.Operations.ClearSceneItemSelection.Perform();
-                		foreach (var node in nodes) {
-                			Core.Operations.SelectNode.Perform(node);
-                		}
-                	});
-                }
-            }
-        }
+				public override void Execute()
+				{
+					Document.Current.History.DoTransaction(() => {
+						var parent = nodes.First().Parent;
+						if (parent != Document.Current.Container) {
+							Core.Operations.EnterNode.Perform(parent, false);
+						}
+						Core.Operations.ClearSceneItemSelection.Perform();
+						foreach (var node in nodes) {
+							Core.Operations.SelectNode.Perform(node);
+						}
+					});
+				}
+			}
+		}
 	}
 
 	public class LinkIndicatorButtonContainer
@@ -91,7 +91,8 @@ namespace Tangerine.UI.Timeline
 			Container.Nodes.Clear();
 		}
 
-		public TLinkIndicatorButton GetOrAdd<TLinkIndicatorButton>() where TLinkIndicatorButton : LinkIndicatorButton, new()
+		public TLinkIndicatorButton GetOrAdd<TLinkIndicatorButton>()
+			where TLinkIndicatorButton : LinkIndicatorButton, new()
 		{
 			foreach (var node in Container.Nodes) {
 				if (node is TLinkIndicatorButton button) {

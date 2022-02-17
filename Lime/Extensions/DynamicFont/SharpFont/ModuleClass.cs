@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -51,28 +49,20 @@ namespace SharpFont
 	/// <param name="name">The name of the interface in the module.</param>
 	/// <returns>The interface.</returns>
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate IntPtr ModuleRequester(NativeReference<Module> module, [MarshalAs(UnmanagedType.LPStr)] string name);
+	public delegate IntPtr ModuleRequester(
+		NativeReference<Module> module, [MarshalAs(UnmanagedType.LPStr)] string name
+	);
 
 	/// <summary>
 	/// The module class descriptor.
 	/// </summary>
 	public class ModuleClass : NativeObject
 	{
-		#region Fields
-
 		private ModuleClassRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal ModuleClass(IntPtr reference) : base(reference)
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets bit flags describing the module.
@@ -188,7 +178,5 @@ namespace SharpFont
 				rec = PInvokeHelper.PtrToStructure<ModuleClassRec>(value);
 			}
 		}
-
-		#endregion
 	}
 }

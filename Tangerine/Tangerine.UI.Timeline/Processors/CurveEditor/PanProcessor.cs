@@ -7,7 +7,7 @@ namespace Tangerine.UI.Timeline
 {
 	public class CurveEditorPanProcessor : Core.ITaskProvider
 	{
-		readonly Timeline timeline;
+		private readonly Timeline timeline;
 
 		public CurveEditorPanProcessor(Timeline timeline) { this.timeline = timeline; }
 
@@ -16,7 +16,10 @@ namespace Tangerine.UI.Timeline
 			var curveEditor = timeline.CurveEditor;
 			var input = curveEditor.MainAreaWidget.Input;
 			while (true) {
-				if (input.IsMousePressed(2) || (input.IsMousePressed(0) && CommonWindow.Current.Input.IsKeyPressed(Key.Space))) {
+				if (
+					input.IsMousePressed(2)
+					|| (input.IsMousePressed(0) && CommonWindow.Current.Input.IsKeyPressed(Key.Space))
+				) {
 					var prevPosition = input.MousePosition;
 					while (input.IsMousePressed(0) || input.IsMousePressed(2)) {
 						var delta = input.MousePosition - prevPosition;

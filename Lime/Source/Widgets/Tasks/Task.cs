@@ -119,21 +119,23 @@ namespace Lime
 					waitPredicate = predicate;
 					break;
 				case Node3D node3D: {
-					var ac = node3D.Components.Get<AnimationComponent>();
-					var firstAnimation = ac != null && ac.Animations.Count > 0 ? ac.Animations[0] : null;
-					waitPredicate = firstAnimation != null ? WaitForAnimation(firstAnimation) : null;
-					break;
-				}
+						var ac = node3D.Components.Get<AnimationComponent>();
+						var firstAnimation = ac != null && ac.Animations.Count > 0 ? ac.Animations[0] : null;
+						waitPredicate = firstAnimation != null ? WaitForAnimation(firstAnimation) : null;
+						break;
+					}
 				case Animation animation:
 					waitPredicate = WaitForAnimation(animation);
 					break;
 				case Node node: {
-					var defaultAnimation = node.Components.Get<AnimationComponent>()?.DefaultAnimation;
-					waitPredicate = defaultAnimation != null ? WaitForAnimation(defaultAnimation) : null;
-					break;
-				}
+						var defaultAnimation = node.Components.Get<AnimationComponent>()?.DefaultAnimation;
+						waitPredicate = defaultAnimation != null ? WaitForAnimation(defaultAnimation) : null;
+						break;
+					}
 				case IEnumerable<object> _:
-					throw new InvalidOperationException("Use IEnumerator<object> instead of IEnumerable<object> for " + result);
+					throw new InvalidOperationException(
+						"Use IEnumerator<object> instead of IEnumerable<object> for " + result
+					);
 				default:
 					throw new InvalidOperationException("Invalid object yielded " + result);
 			}

@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -32,14 +30,8 @@ namespace SharpFont.Cache
 	/// </summary>
 	public class ImageCache
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private Manager parentManager;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ImageCache"/> class.
@@ -47,45 +39,41 @@ namespace SharpFont.Cache
 		/// <param name="manager">The parent manager for the image cache.</param>
 		public ImageCache(Manager manager)
 		{
-			if (manager == null)
+			if (manager == null) {
 				throw new ArgumentNullException("manager");
+			}
 
 			IntPtr cacheRef;
 			Error err = FT.FTC_ImageCache_New(manager.Reference, out cacheRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			parentManager = manager;
 			Reference = cacheRef;
 		}
 
-		#endregion
-
-		#region Properties
-
 		internal IntPtr Reference
 		{
 			get
 			{
-				if (parentManager.IsDisposed)
+				if (parentManager.IsDisposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				return reference;
 			}
 
 			set
 			{
-				if (parentManager.IsDisposed)
+				if (parentManager.IsDisposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				reference = value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Retrieve a given glyph image from a glyph image cache.
@@ -112,14 +100,16 @@ namespace SharpFont.Cache
 		[CLSCompliant(false)]
 		public Glyph Lookup(ImageType type, uint gIndex, out Node node)
 		{
-			if (parentManager.IsDisposed)
+			if (parentManager.IsDisposed) {
 				throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+			}
 
 			IntPtr glyphRef, nodeRef;
 			Error err = FT.FTC_ImageCache_Lookup(Reference, type.Reference, gIndex, out glyphRef, out nodeRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			node = new Node(nodeRef);
 			return new Glyph(glyphRef, null);
@@ -155,19 +145,21 @@ namespace SharpFont.Cache
 		[CLSCompliant(false)]
 		public Glyph LookupScaler(Scaler scaler, LoadFlags loadFlags, uint gIndex, out Node node)
 		{
-			if (parentManager.IsDisposed)
+			if (parentManager.IsDisposed) {
 				throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+			}
 
 			IntPtr glyphRef, nodeRef;
-			Error err = FT.FTC_ImageCache_LookupScaler(Reference, scaler.Reference, loadFlags, gIndex, out glyphRef, out nodeRef);
+			Error err = FT.FTC_ImageCache_LookupScaler(
+				Reference, scaler.Reference, loadFlags, gIndex, out glyphRef, out nodeRef
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			node = new Node(nodeRef);
 			return new Glyph(glyphRef, null);
 		}
-
-		#endregion
 	}
 }

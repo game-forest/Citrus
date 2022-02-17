@@ -50,7 +50,7 @@ namespace Lime
 		public class DissolveMaterialShaderProgram : ShaderProgram
 		{
 			private static DissolveMaterialShaderProgram instance;
-			public static DissolveMaterialShaderProgram Instance => instance ?? (instance = new DissolveMaterialShaderProgram());
+			public static DissolveMaterialShaderProgram Instance => instance ??= new DissolveMaterialShaderProgram();
 
 			private const string VertexShader = @"
 				attribute vec4 inPos;
@@ -90,13 +90,15 @@ namespace Lime
 								 * vec4(brightness * (glowColor.rgb + vec3(glow, glow, glow)), glow);
 				}";
 
-			private DissolveMaterialShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+			private DissolveMaterialShaderProgram()
+				: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+			{ }
 
 			private static Shader[] CreateShaders()
 			{
 				return new Shader[] {
 					new VertexShader(VertexShader),
-					new FragmentShader(FragmentShader)
+					new FragmentShader(FragmentShader),
 				};
 			}
 		}

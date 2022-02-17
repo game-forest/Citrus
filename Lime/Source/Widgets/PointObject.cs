@@ -32,7 +32,8 @@ namespace Lime
 		public float X
 		{
 			get => position.X;
-			set {
+			set
+			{
 				if (position.X != value) {
 					DirtyMask |= DirtyFlags.LocalTransform;
 					position.X = value;
@@ -42,7 +43,8 @@ namespace Lime
 		public float Y
 		{
 			get => position.Y;
-			set {
+			set
+			{
 				if (position.Y != value) {
 					DirtyMask |= DirtyFlags.LocalTransform;
 					position.Y = value;
@@ -64,7 +66,6 @@ namespace Lime
 					offset = value;
 				}
 			}
-
 		}
 
 		public Vector2 TransformedPosition
@@ -78,7 +79,11 @@ namespace Lime
 
 		public void RecalcTransformedPositionIfNeeded()
 		{
-			if (CleanDirtyFlags(DirtyFlags.LocalTransform | DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse)) {
+			if (
+				CleanDirtyFlags(
+					DirtyFlags.LocalTransform | DirtyFlags.GlobalTransform | DirtyFlags.GlobalTransformInverse
+				)
+			) {
 				RecalcTransformedPosition();
 			}
 		}
@@ -95,10 +100,12 @@ namespace Lime
 				BoneArray a = Parent.Parent.AsWidget.BoneArray;
 				Matrix32 m1 = parentWidget.CalcLocalToParentTransform();
 				Matrix32 m2 = m1.CalcInversed();
-				transformedPosition = m2.TransformVector(a.ApplySkinningToVector(m1.TransformVector(transformedPosition), SkinningWeights));
+				transformedPosition = m2.TransformVector(
+					a.ApplySkinningToVector(m1.TransformVector(transformedPosition), SkinningWeights)
+				);
 			}
 			if (transformedPosition != prevTransformedPosition) {
-			 	parentWidget.ExpandBoundingRect(transformedPosition);
+				parentWidget.ExpandBoundingRect(transformedPosition);
 			}
 		}
 

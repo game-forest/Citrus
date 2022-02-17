@@ -23,7 +23,7 @@ namespace Lime
 			return new Matrix32 {
 				U = v.X * new Vector2(1, 0) + v.Y * new Vector2(0, 1),
 				V = v.X * new Vector2(0, 1) - v.Y * new Vector2(1, 0),
-				T = Translation
+				T = Translation,
 			};
 		}
 	}

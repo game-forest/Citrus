@@ -26,4 +26,6 @@
 
   <PropertyGroup />
 
+  <Import Project="..\..\..\Analyzers.targets" />
+
 </Project>

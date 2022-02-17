@@ -56,12 +56,12 @@ namespace Lime
 
 		private float columnSpacing;
 
-
 		[YuzuMember]
 		public float RowSpacing
 		{
 			get => rowSpacing;
-			set {
+			set
+			{
 				if (rowSpacing != value) {
 					rowSpacing = value;
 					InvalidateConstraintsAndArrangement();
@@ -153,11 +153,11 @@ namespace Lime
 		private ILayoutCell EffectiveLayoutCell(Widget cell, int row, int column)
 		{
 			return (ILayoutCell)cell.LayoutCell
-			       ?? (ColumnDefaults.Count > column
-				       ? ColumnDefaults[column]
-				       : (RowDefaults.Count > row
-					       ? RowDefaults[row]
-					       : (DefaultCell ?? DefaultLayoutCell.Default)));
+				   ?? (ColumnDefaults.Count > column
+					   ? ColumnDefaults[column]
+					   : (RowDefaults.Count > row
+						   ? RowDefaults[row]
+						   : (DefaultCell ?? DefaultLayoutCell.Default)));
 		}
 
 		private LinearAllocator.Constraints[] CalcColConstraints(Widget widget, Widget[,] cells)
@@ -225,12 +225,16 @@ namespace Lime
 			int t = 0;
 			for (int i = 0; i < RowCount; i++) {
 				for (int j = 0; j < ColumnCount; j++) {
-					if (occupied[i, j])
+					if (occupied[i, j]) {
 						continue;
+					}
+
 					Widget c = null;
 					while (c == null) {
-						if (t >= nodes.Count)
+						if (t >= nodes.Count) {
 							return cells;
+						}
+
 						c = nodes[t++].AsWidget;
 					}
 					if (cells == null && c != null) {

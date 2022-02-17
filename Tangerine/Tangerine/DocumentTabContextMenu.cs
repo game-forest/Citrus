@@ -56,7 +56,7 @@ namespace Tangerine
 				var dlg = new FileDialog {
 					AllowedFileTypes = new string[] { Document.Current.GetFileExtension() },
 					Mode = FileDialogMode.Save,
-					InitialDirectory = Path.GetDirectoryName(Document.Current.FullPath)
+					InitialDirectory = Path.GetDirectoryName(Document.Current.FullPath),
 				};
 				path = null;
 				if (!dlg.RunModal()) {

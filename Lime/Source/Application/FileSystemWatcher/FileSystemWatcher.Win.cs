@@ -22,7 +22,9 @@ namespace Lime
 			fsWatcher.Changed += (sender, e) => Application.InvokeOnMainThread(() => Changed?.Invoke(e.FullPath));
 			fsWatcher.Created += (sender, e) => Application.InvokeOnMainThread(() => Created?.Invoke(e.FullPath));
 			fsWatcher.Deleted += (sender, e) => Application.InvokeOnMainThread(() => Deleted?.Invoke(e.FullPath));
-			fsWatcher.Renamed += (sender, e) => Application.InvokeOnMainThread(() => Renamed?.Invoke(e.OldFullPath, e.FullPath));
+			fsWatcher.Renamed += (sender, e) => Application.InvokeOnMainThread(
+				() => Renamed?.Invoke(e.OldFullPath, e.FullPath)
+			);
 			fsWatcher.EnableRaisingEvents = true;
 		}
 

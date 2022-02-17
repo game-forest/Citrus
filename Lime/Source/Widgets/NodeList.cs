@@ -343,14 +343,13 @@ namespace Lime
 			if (index2 > 0) {
 				list[index2 - 1].NextSibling = list[index2];
 			}
- 			RefreshFirstChild();
- 			Node.InvalidateNodeReferenceCache();
- 			owner.AsWidget?.Layout.InvalidateConstraintsAndArrangement();
+			RefreshFirstChild();
+			Node.InvalidateNodeReferenceCache();
+			owner.AsWidget?.Layout.InvalidateConstraintsAndArrangement();
 #if TANGERINE
- 			Version++;
+			Version++;
 #endif // TANGERINE
 		}
-
 
 		private void RefreshFirstChild()
 		{

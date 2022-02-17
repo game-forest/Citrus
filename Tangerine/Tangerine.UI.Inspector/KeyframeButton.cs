@@ -12,7 +12,7 @@ namespace Tangerine.UI.Inspector
 		private readonly Image image;
 		private readonly Image fillImage;
 		private readonly Image outlineImage;
-		private static KeyFunctionDropdown dropdown => KeyFunctionDropdown.Instance;
+		private static KeyFunctionDropdown Dropdown => KeyFunctionDropdown.Instance;
 		private static readonly string[] iconNames = new[] { "Linear", "Step", "Catmullrom", "Loop" };
 		private readonly List<ITexture> fillTextures = new List<ITexture>();
 		private readonly List<ITexture> outlineTextures = new List<ITexture>();
@@ -45,9 +45,9 @@ namespace Tangerine.UI.Inspector
 			outlineImage.Texture = outlineTextures[(int)function];
 		}
 
-		public void ShowDropdown() => dropdown.ShowWindow(this, fillTextures, function);
+		public void ShowDropdown() => Dropdown.ShowWindow(this, fillTextures, function);
 
-		public void HideDropdown() => dropdown.HideWindow();
+		public void HideDropdown() => Dropdown.HideWindow();
 
 		private static void Awake(Node owner)
 		{
@@ -72,7 +72,7 @@ namespace Tangerine.UI.Inspector
 
 		public bool TryGetKeyFunctionFromDropdown(out KeyFunction? kf)
 		{
-			return dropdown.TryGetKeyFunction(out kf);
+			return Dropdown.TryGetKeyFunction(out kf);
 		}
 
 		public KeyframeButton()
@@ -83,7 +83,12 @@ namespace Tangerine.UI.Inspector
 			}
 			Nodes.Clear();
 			Size = MinMaxSize = new Vector2(22, 22);
-			image = new Image { Size = Size, Shader = ShaderId.Silhouette, Texture = new SerializableTexture(), Color = Theme.Colors.WhiteBackground };
+			image = new Image {
+				Size = Size,
+				Shader = ShaderId.Silhouette,
+				Texture = new SerializableTexture(),
+				Color = Theme.Colors.WhiteBackground,
+			};
 			fillImage = new Image { Size = Size, Visible = false };
 			outlineImage = new Image { Size = Size, Visible = false };
 			Nodes.Add(outlineImage);
@@ -110,7 +115,9 @@ namespace Tangerine.UI.Inspector
 
 		public IEnumerator<object> Task()
 		{
-			var keyFunctionFlow = KeyframeDataflow.GetProvider(editorParams, i => i?.Function).DistinctUntilChanged().GetDataflow();
+			var keyFunctionFlow = KeyframeDataflow.GetProvider(editorParams, i => i?.Function)
+				.DistinctUntilChanged()
+				.GetDataflow();
 			while (true) {
 				keyFunctionFlow.Poll(out var kf);
 				button.Checked = kf.HasValue;
@@ -187,13 +194,17 @@ namespace Tangerine.UI.Inspector
 
 		private static readonly KeyFunction[] nextKeyFunction = {
 			KeyFunction.Spline, KeyFunction.ClosedSpline,
-			KeyFunction.Step, KeyFunction.Linear
+			KeyFunction.Step, KeyFunction.Linear,
 		};
 
 		internal void SetKeyFunction(KeyFunction value)
 		{
 			foreach (var animable in editorParams.RootObjects.OfType<IAnimationHost>()) {
-				if (animable.Animators.TryFind(editorParams.PropertyPath, out var animator, Document.Current.AnimationId)) {
+				if (
+					animable.Animators.TryFind(
+						editorParams.PropertyPath, out var animator, Document.Current.AnimationId
+					)
+				) {
 					var spans = GetAnimableSpans(animable, animator);
 					var keyframeClones = animator
 						.ReadonlyKeys
@@ -202,7 +213,9 @@ namespace Tangerine.UI.Inspector
 						.ToList();
 					foreach (var keyframe in keyframeClones) {
 						keyframe.Function = value;
-						Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.Animation, keyframe);
+						Core.Operations.SetKeyframe.Perform(
+							animable, editorParams.PropertyPath, Document.Current.Animation, keyframe
+						);
 					}
 				}
 			}
@@ -212,9 +225,16 @@ namespace Tangerine.UI.Inspector
 		{
 			int currentFrame = Document.Current.AnimationFrame;
 
-			foreach (var (animable, owner) in editorParams.RootObjects.Zip(editorParams.Objects, (ro, o) => (ro as IAnimationHost, o))) {
+			foreach (
+				var (animable, owner)
+				in editorParams.RootObjects.Zip(editorParams.Objects, (ro, o) => (ro as IAnimationHost, o))
+			) {
 				bool hasKey = false;
-				if (animable.Animators.TryFind(editorParams.PropertyPath, out IAnimator animator, Document.Current.AnimationId)) {
+				if (
+					animable.Animators.TryFind(
+						editorParams.PropertyPath, out IAnimator animator, Document.Current.AnimationId
+					)
+				) {
 					hasKey = animator.ReadonlyKeys.Any(i => i.Frame == currentFrame);
 					if (hasKey && !value) {
 						Core.Operations.RemoveKeyframe.Perform(animator, currentFrame);
@@ -227,8 +247,12 @@ namespace Tangerine.UI.Inspector
 						: new IndexedProperty(owner, editorParams.PropertyName, editorParams.IndexInList).Getter();
 					var keyFunction = animator?.Keys.LastOrDefault(k => k.Frame <= currentFrame)?.Function ??
 						CoreUserPreferences.Instance.DefaultKeyFunction;
-					IKeyframe keyframe = Keyframe.CreateForType(editorParams.PropertyInfo.PropertyType, currentFrame, propValue, keyFunction);
-					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.Animation, keyframe);
+					IKeyframe keyframe = Keyframe.CreateForType(
+						editorParams.PropertyInfo.PropertyType, currentFrame, propValue, keyFunction
+					);
+					Core.Operations.SetKeyframe.Perform(
+						animable, editorParams.PropertyPath, Document.Current.Animation, keyframe
+					);
 				}
 			}
 		}
@@ -237,10 +261,12 @@ namespace Tangerine.UI.Inspector
 		{
 			var items = Document.Current
 				.SelectedSceneItems()
-				.Where(r => animable == r.Components.Get<NodeSceneItem>()?.Node || animator != null && r.Components.Get<AnimatorSceneItem>()?.Animator == animator)
-				.ToList();
+				.Where(
+					r => animable == r.Components.Get<NodeSceneItem>()?.Node
+					|| animator != null && r.Components.Get<AnimatorSceneItem>()?.Animator == animator
+				) .ToList();
 			var spans = new GridSpanList {
-				new GridSpan(Document.Current.AnimationFrame, Document.Current.AnimationFrame + 1)
+				new GridSpan(Document.Current.AnimationFrame, Document.Current.AnimationFrame + 1),
 			};
 			foreach (var i in items) {
 				var rowSpans = i.Components.Get<GridSpanListComponent>()?.Spans;

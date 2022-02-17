@@ -80,11 +80,18 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glBlendFuncSeparate", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void BlendFuncSeparate(BlendingFactorSrc srcRGB, BlendingFactorDest dstRGB, BlendingFactorSrc srcAlpha, BlendingFactorDest dstAlpha);
+			internal static extern void BlendFuncSeparate(
+				BlendingFactorSrc srcRGB,
+				BlendingFactorDest dstRGB,
+				BlendingFactorSrc srcAlpha,
+				BlendingFactorDest dstAlpha
+			);
 
 			[DllImport(library, EntryPoint = "glBufferData", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void BufferData(BufferTarget target, IntPtr size, IntPtr data, BufferUsageHint usage);
+			internal static extern void BufferData(
+				BufferTarget target, IntPtr size, IntPtr data, BufferUsageHint usage
+			);
 
 			[DllImport(library, EntryPoint = "glBufferSubData", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -130,23 +137,55 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glCompressedTexImage2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void CompressedTexImage2D(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, int imageSize, IntPtr data);
+			internal static extern void CompressedTexImage2D(
+				TextureTarget target,
+				int level,
+				PixelInternalFormat internalformat,
+				int width,
+				int height,
+				int border,
+				int imageSize,
+				IntPtr data
+			);
 
 			[DllImport(library, EntryPoint = "glCompressedTexSubImage2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void CompressedTexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, int imageSize, IntPtr data);
+			internal static extern void CompressedTexSubImage2D(
+				TextureTarget target,
+				int level,
+				int xoffset,
+				int yoffset,
+				int width,
+				int height,
+				PixelFormat format,
+				int imageSize,
+				IntPtr data
+			);
 
 			[DllImport(library, EntryPoint = "glCopyTexImage2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void CopyTexImage2D(TextureTarget target, int level, PixelInternalFormat internalformat, int x, int y, int width, int height, int border);
+			internal static extern void CopyTexImage2D(
+				TextureTarget target,
+				int level,
+				PixelInternalFormat internalformat,
+				int x,
+				int y,
+				int width,
+				int height,
+				int border
+			);
 
 			[DllImport(library, EntryPoint = "glCopyTexSubImage2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void CopyTexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int x, int y, int width, int height);
+			internal static extern void CopyTexSubImage2D(
+				TextureTarget target, int level, int xoffset, int yoffset, int x, int y, int width, int height
+			);
 
 			[DllImport(library, EntryPoint = "glCopyTextureLevelsAPPLE", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void CopyTextureLevelsAPPLE(uint destinationTexture, uint sourceTexture, int sourceBaseLevel, int sourceLevelCount);
+			internal static extern void CopyTextureLevelsAPPLE(
+				uint destinationTexture, uint sourceTexture, int sourceBaseLevel, int sourceLevelCount
+			);
 
 			[DllImport(library, EntryPoint = "glCreateProgram", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -248,11 +287,15 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glDrawElements", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void DrawElements(PrimitiveType mode, int count, DrawElementsType type, IntPtr indices);
+			internal static extern void DrawElements(
+				PrimitiveType mode, int count, DrawElementsType type, IntPtr indices
+			);
 
 			[DllImport(library, EntryPoint = "glDrawElementsInstancedEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void DrawElementsInstancedEXT(All mode, int count, All type, IntPtr indices, int instanceCount);
+			internal static extern void DrawElementsInstancedEXT(
+				All mode, int count, All type, IntPtr indices, int instanceCount
+			);
 
 			[DllImport(library, EntryPoint = "glEnable", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -284,11 +327,22 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glFramebufferRenderbuffer", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void FramebufferRenderbuffer(FramebufferTarget target, FramebufferSlot attachment, RenderbufferTarget renderbuffertarget, uint renderbuffer);
+			internal static extern void FramebufferRenderbuffer(
+				FramebufferTarget target,
+				FramebufferSlot attachment,
+				RenderbufferTarget renderbuffertarget,
+				uint renderbuffer
+			);
 
 			[DllImport(library, EntryPoint = "glFramebufferTexture2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void FramebufferTexture2D(FramebufferTarget target, FramebufferSlot attachment, TextureTarget textarget, int texture, int level);
+			internal static extern void FramebufferTexture2D(
+				FramebufferTarget target,
+				FramebufferSlot attachment,
+				TextureTarget textarget,
+				int texture,
+				int level
+			);
 
 			[DllImport(library, EntryPoint = "glFrontFace", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -328,15 +382,33 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetActiveAttrib", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetActiveAttrib(uint program, uint index, int bufsize, [Out] int* length, [Out] int* size, [Out] ActiveAttribType* type, [Out] StringBuilder name);
+			internal unsafe static extern void GetActiveAttrib(
+				uint program,
+				uint index,
+				int bufsize,
+				[Out] int* length,
+				[Out] int* size,
+				[Out] ActiveAttribType* type,
+				[Out] StringBuilder name
+			);
 
 			[DllImport(library, EntryPoint = "glGetActiveUniform", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetActiveUniform(uint program, uint index, int bufsize, [Out] int* length, [Out] int* size, [Out] ActiveUniformType* type, [Out] StringBuilder name);
+			internal unsafe static extern void GetActiveUniform(
+				uint program,
+				uint index,
+				int bufsize,
+				[Out] int* length,
+				[Out] int* size,
+				[Out] ActiveUniformType* type,
+				[Out] StringBuilder name
+			);
 
 			[DllImport(library, EntryPoint = "glGetAttachedShaders", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetAttachedShaders(uint program, int maxcount, [Out] int* count, [Out] uint* shaders);
+			internal unsafe static extern void GetAttachedShaders(
+				uint program, int maxcount, [Out] int* count, [Out] uint* shaders
+			);
 
 			[DllImport(library, EntryPoint = "glGetAttribLocation", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -348,7 +420,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetBufferParameteriv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetBufferParameteriv(BufferTarget target, BufferParameterName pname, [Out] int* @params);
+			internal unsafe static extern void GetBufferParameteriv(
+				BufferTarget target, BufferParameterName pname, [Out] int* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetBufferPointervOES", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -364,7 +438,12 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetFramebufferAttachmentParameteriv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetFramebufferAttachmentParameteriv(FramebufferTarget target, FramebufferSlot attachment, FramebufferParameterName pname, [Out] int* @params);
+			internal unsafe static extern void GetFramebufferAttachmentParameteriv(
+				FramebufferTarget target,
+				FramebufferSlot attachment,
+				FramebufferParameterName pname,
+				[Out] int* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetInteger64vAPPLE", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -376,11 +455,15 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetObjectLabelEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetObjectLabelEXT(All type, uint @object, int bufSize, [Out] int* length, [Out] StringBuilder label);
+			internal unsafe static extern void GetObjectLabelEXT(
+				All type, uint @object, int bufSize, [Out] int* length, [Out] StringBuilder label
+			);
 
 			[DllImport(library, EntryPoint = "glGetProgramInfoLog", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetProgramInfoLog(int program, int bufsize, [Out] int* length, [Out] StringBuilder infolog);
+			internal unsafe static extern void GetProgramInfoLog(
+				int program, int bufsize, [Out] int* length, [Out] StringBuilder infolog
+			);
 
 			[DllImport(library, EntryPoint = "glGetProgramiv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -388,7 +471,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetProgramPipelineInfoLogEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetProgramPipelineInfoLogEXT(uint pipeline, int bufSize, [Out] int* length, [Out] StringBuilder infoLog);
+			internal unsafe static extern void GetProgramPipelineInfoLogEXT(
+				uint pipeline, int bufSize, [Out] int* length, [Out] StringBuilder infoLog
+			);
 
 			[DllImport(library, EntryPoint = "glGetProgramPipelineivEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -404,11 +489,15 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetRenderbufferParameteriv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetRenderbufferParameteriv(RenderbufferTarget target, RenderbufferParameterName pname, [Out] int* @params);
+			internal unsafe static extern void GetRenderbufferParameteriv(
+				RenderbufferTarget target, RenderbufferParameterName pname, [Out] int* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetShaderInfoLog", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetShaderInfoLog(int shader, int bufsize, [Out] int* length, [Out] StringBuilder infolog);
+			internal unsafe static extern void GetShaderInfoLog(
+				int shader, int bufsize, [Out] int* length, [Out] StringBuilder infolog
+			);
 
 			[DllImport(library, EntryPoint = "glGetShaderiv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -416,11 +505,15 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetShaderPrecisionFormat", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetShaderPrecisionFormat(ShaderType shadertype, ShaderPrecision precisiontype, [Out] int* range, [Out] int* precision);
+			internal unsafe static extern void GetShaderPrecisionFormat(
+				ShaderType shadertype, ShaderPrecision precisiontype, [Out] int* range, [Out] int* precision
+			);
 
 			[DllImport(library, EntryPoint = "glGetShaderSource", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetShaderSource(uint shader, int bufsize, [Out] int* length, [Out] StringBuilder source);
+			internal unsafe static extern void GetShaderSource(
+				uint shader, int bufsize, [Out] int* length, [Out] StringBuilder source
+			);
 
 			[DllImport(library, EntryPoint = "glGetString", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -428,15 +521,21 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetSyncivAPPLE", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetSyncivAPPLE(IntPtr sync, All pname, int bufSize, [Out] int* length, [Out] int* values);
+			internal unsafe static extern void GetSyncivAPPLE(
+				IntPtr sync, All pname, int bufSize, [Out] int* length, [Out] int* values
+			);
 
 			[DllImport(library, EntryPoint = "glGetTexParameterfv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetTexParameterfv(TextureTarget target, GetTextureParameter pname, [Out] float* @params);
+			internal unsafe static extern void GetTexParameterfv(
+				TextureTarget target, GetTextureParameter pname, [Out] float* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetTexParameteriv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetTexParameteriv(TextureTarget target, GetTextureParameter pname, [Out] int* @params);
+			internal unsafe static extern void GetTexParameteriv(
+				TextureTarget target, GetTextureParameter pname, [Out] int* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetUniformfv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -452,15 +551,21 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glGetVertexAttribfv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetVertexAttribfv(uint index, VertexAttribParameter pname, [Out] float* @params);
+			internal unsafe static extern void GetVertexAttribfv(
+				uint index, VertexAttribParameter pname, [Out] float* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetVertexAttribiv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void GetVertexAttribiv(uint index, VertexAttribParameter pname, [Out] int* @params);
+			internal unsafe static extern void GetVertexAttribiv(
+				uint index, VertexAttribParameter pname, [Out] int* @params
+			);
 
 			[DllImport(library, EntryPoint = "glGetVertexAttribPointerv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void GetVertexAttribPointerv(uint index, VertexAttribPointerParameter pname, [Out] IntPtr pointer);
+			internal static extern void GetVertexAttribPointerv(
+				uint index, VertexAttribPointerParameter pname, [Out] IntPtr pointer
+			);
 
 			[DllImport(library, EntryPoint = "glHint", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -556,7 +661,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glProgramUniform1fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniform1fvEXT(uint program, int location, int count, float* value);
+			internal unsafe static extern void ProgramUniform1fvEXT(
+				uint program, int location, int count, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniform1iEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -572,7 +679,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glProgramUniform2fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniform2fvEXT(uint program, int location, int count, float* value);
+			internal unsafe static extern void ProgramUniform2fvEXT(
+				uint program, int location, int count, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniform2iEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -588,7 +697,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glProgramUniform3fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniform3fvEXT(uint program, int location, int count, float* value);
+			internal unsafe static extern void ProgramUniform3fvEXT(
+				uint program, int location, int count, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniform3iEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -600,11 +711,15 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glProgramUniform4fEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void ProgramUniform4fEXT(uint program, int location, float x, float y, float z, float w);
+			internal static extern void ProgramUniform4fEXT(
+				uint program, int location, float x, float y, float z, float w
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniform4fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniform4fvEXT(uint program, int location, int count, float* value);
+			internal unsafe static extern void ProgramUniform4fvEXT(
+				uint program, int location, int count, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniform4iEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -616,15 +731,21 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glProgramUniformMatrix2fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniformMatrix2fvEXT(uint program, int location, int count, bool transpose, float* value);
+			internal unsafe static extern void ProgramUniformMatrix2fvEXT(
+				uint program, int location, int count, bool transpose, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniformMatrix3fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniformMatrix3fvEXT(uint program, int location, int count, bool transpose, float* value);
+			internal unsafe static extern void ProgramUniformMatrix3fvEXT(
+				uint program, int location, int count, bool transpose, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glProgramUniformMatrix4fvEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void ProgramUniformMatrix4fvEXT(uint program, int location, int count, bool transpose, float* value);
+			internal unsafe static extern void ProgramUniformMatrix4fvEXT(
+				uint program, int location, int count, bool transpose, float* value
+			);
 
 			[DllImport(library, EntryPoint = "glPushGroupMarkerEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -632,7 +753,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glReadPixels", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void ReadPixels(int x, int y, int width, int height, PixelFormat format, PixelType type, IntPtr pixels);
+			internal static extern void ReadPixels(
+				int x, int y, int width, int height, PixelFormat format, PixelType type, IntPtr pixels
+			);
 
 			[DllImport(library, EntryPoint = "glReleaseShaderCompiler", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -640,11 +763,15 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glRenderbufferStorage", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void RenderbufferStorage(RenderbufferTarget target, RenderbufferInternalFormat internalformat, int width, int height);
+			internal static extern void RenderbufferStorage(
+				RenderbufferTarget target, RenderbufferInternalFormat internalformat, int width, int height
+			);
 
 			[DllImport(library, EntryPoint = "glRenderbufferStorageMultisampleAPPLE", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void RenderbufferStorageMultisampleAPPLE(All target, int samples, All internalformat, int width, int height);
+			internal static extern void RenderbufferStorageMultisampleAPPLE(
+				All target, int samples, All internalformat, int width, int height
+			);
 
 			[DllImport(library, EntryPoint = "glResolveMultisampleFramebufferAPPLE", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -668,7 +795,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glStencilFuncSeparate", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void StencilFuncSeparate(StencilFace face, StencilFunction func, int @ref, uint mask);
+			internal static extern void StencilFuncSeparate(
+				StencilFace face, StencilFunction func, int @ref, uint mask
+			);
 
 			[DllImport(library, EntryPoint = "glStencilMask", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -684,11 +813,23 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glStencilOpSeparate", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void StencilOpSeparate(StencilFace face, StencilOp fail, StencilOp zfail, StencilOp zpass);
+			internal static extern void StencilOpSeparate(
+				StencilFace face, StencilOp fail, StencilOp zfail, StencilOp zpass
+			);
 
 			[DllImport(library, EntryPoint = "glTexImage2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void TexImage2D(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels);
+			internal static extern void TexImage2D(
+				TextureTarget target,
+				int level,
+				PixelInternalFormat internalformat,
+				int width,
+				int height,
+				int border,
+				PixelFormat format,
+				PixelType type,
+				IntPtr data
+			);
 
 			[DllImport(library, EntryPoint = "glTexParameterf", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -696,7 +837,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glTexParameterfv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void TexParameterfv(TextureTarget target, TextureParameterName pname, float* @params);
+			internal unsafe static extern void TexParameterfv(
+				TextureTarget target, TextureParameterName pname, float* @params
+			);
 
 			[DllImport(library, EntryPoint = "glTexParameteri", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -704,15 +847,29 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glTexParameteriv", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal unsafe static extern void TexParameteriv(TextureTarget target, TextureParameterName pname, int* @params);
+			internal unsafe static extern void TexParameteriv(
+				TextureTarget target, TextureParameterName pname, int* @params
+			);
 
 			[DllImport(library, EntryPoint = "glTexStorage2DEXT", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void TexStorage2DEXT(All target, int levels, All internalformat, int width, int height);
+			internal static extern void TexStorage2DEXT(
+				All target, int levels, All internalformat, int width, int height
+			);
 
 			[DllImport(library, EntryPoint = "glTexSubImage2D", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void TexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, PixelType type, IntPtr pixels);
+			internal static extern void TexSubImage2D(
+				TextureTarget target,
+				int level,
+				int xoffset,
+				int yoffset,
+				int width,
+				int height,
+				PixelFormat format,
+				PixelType type,
+				IntPtr pixels
+			);
 
 			[DllImport(library, EntryPoint = "glUniform1f", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -848,7 +1005,9 @@ namespace Lime.Graphics.Platform.OpenGL
 
 			[DllImport(library, EntryPoint = "glVertexAttribPointer", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
-			internal static extern void VertexAttribPointer(int indx, int size, VertexAttribPointerType type, bool normalized, int stride, IntPtr ptr);
+			internal static extern void VertexAttribPointer(
+				int indx, int size, VertexAttribPointerType type, bool normalized, int stride, IntPtr ptr
+			);
 
 			[DllImport(library, EntryPoint = "glViewport", ExactSpelling = true)]
 			[SuppressUnmanagedCodeSecurity]
@@ -941,8 +1100,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.BlendColor(red, green, blue, alpha);
 		}
 
-		public static void BlendFuncSeparate(BlendingFactorSrc srcRGB, BlendingFactorDest dstRGB, BlendingFactorSrc srcAlpha, BlendingFactorDest dstAlpha)
-		{
+		public static void BlendFuncSeparate(
+			BlendingFactorSrc srcRGB, BlendingFactorDest dstRGB, BlendingFactorSrc srcAlpha, BlendingFactorDest dstAlpha
+		) {
 			Core.BlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 		}
 
@@ -986,8 +1146,16 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.CompileShader((uint)shader);
 		}
 
-		public static void CompressedTexImage2D(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, int imageSize, IntPtr data)
-		{
+		public static void CompressedTexImage2D(
+			TextureTarget target,
+			int level,
+			PixelInternalFormat internalformat,
+			int width,
+			int height,
+			int border,
+			int imageSize,
+			IntPtr data
+		) {
 			Core.CompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
 		}
 
@@ -1086,18 +1254,27 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.Flush();
 		}
 
-		public static void FramebufferRenderbuffer(FramebufferTarget target, FramebufferSlot attachment, RenderbufferTarget renderbuffertarget, int renderbuffer)
-		{
+		public static void FramebufferRenderbuffer(
+			FramebufferTarget target,
+			FramebufferSlot attachment,
+			RenderbufferTarget renderbuffertarget,
+			int renderbuffer
+		) {
 			Core.FramebufferRenderbuffer(target, attachment, renderbuffertarget,(uint)renderbuffer);
 		}
 
-		public static void FramebufferRenderbuffer(FramebufferTarget target, FramebufferSlot attachment, RenderbufferTarget renderbuffertarget, uint renderbuffer)
-		{
+		public static void FramebufferRenderbuffer(
+			FramebufferTarget target,
+			FramebufferSlot attachment,
+			RenderbufferTarget renderbuffertarget,
+			uint renderbuffer
+		) {
 			Core.FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 		}
 
-		public static void FramebufferTexture2D(FramebufferTarget target, FramebufferSlot attachment, TextureTarget textarget, int texture, int level)
-		{
+		public static void FramebufferTexture2D(
+			FramebufferTarget target, FramebufferSlot attachment, TextureTarget textarget, int texture, int level
+		) {
 			Core.FramebufferTexture2D(target, attachment, textarget, texture, level);
 		}
 
@@ -1134,8 +1311,15 @@ namespace Lime.Graphics.Platform.OpenGL
 			return result;
 		}
 
-		public unsafe static void GetActiveUniform(int program, int index, int bufsize, out int length, out int size, out ActiveUniformType type, [Out] StringBuilder name)
-		{
+		public unsafe static void GetActiveUniform(
+			int program,
+			int index,
+			int bufsize,
+			out int length,
+			out int size,
+			out ActiveUniformType type,
+			[Out] StringBuilder name
+		) {
 			fixed (int* ptr = &length) {
 				int* ptr2 = ptr;
 				fixed (int* ptr3 = &size) {
@@ -1173,8 +1357,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			}
 		}
 
-		public unsafe static void GetRenderbufferParameter(RenderbufferTarget target, RenderbufferParameterName pname, out int @params)
-		{
+		public unsafe static void GetRenderbufferParameter(
+			RenderbufferTarget target, RenderbufferParameterName pname, out int @params
+		) {
 			fixed (int* ptr = &@params) {
 				Core.GetRenderbufferParameteriv(target, pname, ptr);
 				@params = *ptr;
@@ -1219,13 +1404,15 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.PixelStorei(pname, param);
 		}
 
-		public static void ReadPixels(int x, int y, int width, int height, PixelFormat format, PixelType type, IntPtr pixels)
-		{
+		public static void ReadPixels(
+			int x, int y, int width, int height, PixelFormat format, PixelType type, IntPtr pixels
+		) {
 			Core.ReadPixels(x, y, width, height, format, type, pixels);
 		}
 
-		public static void RenderbufferStorage(RenderbufferTarget target, RenderbufferInternalFormat internalformat, int width, int height)
-		{
+		public static void RenderbufferStorage(
+			RenderbufferTarget target, RenderbufferInternalFormat internalformat, int width, int height
+		) {
 			Core.RenderbufferStorage(target, internalformat, width, height);
 		}
 
@@ -1255,8 +1442,17 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.StencilOpSeparate(face, fail, zfail, zpass);
 		}
 
-		public static void TexImage2D(TextureTarget target, int level, PixelInternalFormat internalformat, int width, int height, int border, PixelFormat format, PixelType type, IntPtr pixels)
-		{
+		public static void TexImage2D(
+			TextureTarget target,
+			int level,
+			PixelInternalFormat internalformat,
+			int width,
+			int height,
+			int border,
+			PixelFormat format,
+			PixelType type,
+			IntPtr pixels
+		) {
 			Core.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 		}
 
@@ -1265,13 +1461,31 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.TexParameterf(target, pname, param);
 		}
 
-		public static void CompressedTexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, int imageSize, IntPtr pixels)
-		{
-			Core.CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, pixels);
+		public static void CompressedTexSubImage2D(
+			TextureTarget target,
+			int level,
+			int xoffset,
+			int yoffset,
+			int width,
+			int height,
+			PixelFormat format,
+			int imageSize,
+			IntPtr data
+		) {
+			Core.CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
 		}
 
-		public static void TexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, PixelType type, IntPtr pixels)
-		{
+		public static void TexSubImage2D(
+			TextureTarget target,
+			int level,
+			int xoffset,
+			int yoffset,
+			int width,
+			int height,
+			PixelFormat format,
+			PixelType type,
+			IntPtr pixels
+		) {
 			Core.TexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 		}
 
@@ -1340,8 +1554,9 @@ namespace Lime.Graphics.Platform.OpenGL
 			Core.UseProgram((uint)program);
 		}
 
-		public static void VertexAttribPointer(int indx, int size, VertexAttribPointerType type, bool normalized, int stride, int ptr)
-		{
+		public static void VertexAttribPointer(
+			int indx, int size, VertexAttribPointerType type, bool normalized, int stride, int ptr
+		) {
 			Core.VertexAttribPointer(indx, size, type, normalized, stride, new IntPtr(ptr));
 		}
 

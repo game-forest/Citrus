@@ -14,7 +14,7 @@ namespace Lime
 	public enum AudioFormat
 	{
 		Stereo16,
-		Mono16
+		Mono16,
 	}
 
 	public interface IAudioDecoder : IDisposable
@@ -44,6 +44,6 @@ namespace Lime
 				throw new Lime.Exception("Unsupported audio format");
 			}
 		}
-	};
+	}
 }
 #endif

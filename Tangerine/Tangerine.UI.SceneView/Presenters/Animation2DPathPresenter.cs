@@ -1,10 +1,10 @@
-using Lime;
-using Tangerine.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lime;
+using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
@@ -13,8 +13,10 @@ namespace Tangerine.UI.SceneView
 		private List<Vector2> points = new List<Vector2>();
 		private List<Vector2> approximation = new List<Vector2>();
 
-		private readonly VisualHint AnimationPathHint =
-			VisualHintsRegistry.Instance.Register("/All/Animation Path", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+		private readonly VisualHint animationPathHint =
+			VisualHintsRegistry.Instance.Register(
+				"/All/Animation Path", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		private readonly SceneView sv;
 
@@ -26,7 +28,7 @@ namespace Tangerine.UI.SceneView
 
 		public void Render(Widget canvas)
 		{
-			if (Document.Current.PreviewScene || !AnimationPathHint.Enabled) {
+			if (Document.Current.PreviewScene || !animationPathHint.Enabled) {
 				return;
 			}
 			canvas.PrepareRendererState();
@@ -40,20 +42,19 @@ namespace Tangerine.UI.SceneView
 						}
 						if (
 							animator is Vector2Animator &&
-							animator.TargetPropertyPath == nameof(Widget.Position)
-						) {
+							animator.TargetPropertyPath == nameof(Widget.Position)) {
 							var keys = animator.ReadonlyKeys.ToList();
 							if (keys.Count < 2) {
 								continue;
 							}
 							points.Clear();
-							var transform = node.Parent.AsWidget.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(canvas);
+							var transform = node.Parent.AsWidget.LocalToWorldTransform
+								* sv.CalcTransitionFromSceneSpace(canvas);
 							if (node is Widget) {
 								for (int i = 0; i < keys.Count; ++i) {
 									points.Add((Vector2)keys[i].Value * transform);
 								}
-							}
-							else {
+							} else {
 								continue;
 							}
 							for (int i = 0; i < points.Count - 1; ++i) {
@@ -63,12 +64,21 @@ namespace Tangerine.UI.SceneView
 										approximation[j],
 										approximation[j + 1],
 										ColorTheme.Current.SceneView.PointObject,
-										new Vector2(4, 1)
-									);
+										new Vector2(4, 1));
 								}
-								Renderer.DrawRound(points[i], 3, 10, ColorTheme.Current.SceneView.PointObject.Darken(0.3f));
+								Renderer.DrawRound(
+									center: points[i],
+									radius: 3,
+									numSegments: 10,
+									color: ColorTheme.Current.SceneView.PointObject.Darken(0.3f)
+								);
 							}
-							Renderer.DrawRound(points[points.Count - 1], 3, 10, ColorTheme.Current.SceneView.PointObject.Darken(0.3f));
+							Renderer.DrawRound(
+								center: points[points.Count - 1],
+								radius: 3,
+								numSegments: 10,
+								color: ColorTheme.Current.SceneView.PointObject.Darken(0.3f)
+							);
 						}
 					}
 				}
@@ -99,9 +109,7 @@ namespace Tangerine.UI.SceneView
 						points[index0],
 						points[index1],
 						points[index2],
-						points[index3]
-					)
-				);
+						points[index3]));
 			}
 			approximation.Add(points[index2]);
 		}

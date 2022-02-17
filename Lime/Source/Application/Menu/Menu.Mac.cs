@@ -65,7 +65,8 @@ namespace Lime
 
 		public void Popup()
 		{
-			// Repaint windows since some actions (e.g. selecting a widget) should be taken before showing the context menu.
+			// Repaint windows since some actions (e.g. selecting a widget)
+			// should be taken before showing the context menu.
 			UpdateAndRenderAllWindows();
 			Refresh();
 			var evt = NSApplication.SharedApplication.CurrentEvent;
@@ -80,14 +81,17 @@ namespace Lime
 				(w as Window).HandleRenderFrame();
 			}
 			if (NSApplication.SharedApplication.ModalWindow != null) {
-				// Fixme: When a container dialog is running in the modal mode, showing the menu with PopUpMenu() causes all menu items are disabled.
+				// Fixme: When a container dialog is running in the modal mode,
+				// showing the menu with PopUpMenu() causes all menu items are disabled.
 				// So, use PopUpContextMenu() instead as a workaround.
 				var evt = NSApplication.SharedApplication.CurrentEvent;
 				NSMenu.PopUpContextMenu(NativeMenu, evt, CommonWindow.Current.NSGameView);
 			} else {
 				NativeMenu.MinimumWidth = minimumWidth;
 				NSMenuItem item = command == null ? null : items.Find(i => i.Command == command).NativeMenuItem;
-				NativeMenu.PopUpMenu(item, new CoreGraphics.CGPoint(position.X, window.ClientSize.Y - position.Y), window.NSGameView);
+				NativeMenu.PopUpMenu(
+					item, new CoreGraphics.CGPoint(position.X, window.ClientSize.Y - position.Y), window.NSGameView
+				);
 			}
 		}
 

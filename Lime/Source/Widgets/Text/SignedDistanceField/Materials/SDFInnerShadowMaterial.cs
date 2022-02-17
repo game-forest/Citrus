@@ -67,7 +67,7 @@ namespace Lime.SignedDistanceField
 		public IMaterial GetMaterial(int tag) => Material;
 
 		public Sprite.IMaterialProvider Clone() => new SDFInnerShadowMaterialProvider() {
-			Material = Material
+			Material = Material,
 		};
 
 		public Sprite ProcessSprite(Sprite s) => s;
@@ -107,10 +107,18 @@ namespace Lime.SignedDistanceField
 			void main() {
 				lowp float textDistance = texture2D(tex1, texCoords1).r;
 				lowp float textSmoothing = clamp(abs(dFdx(textDistance)) + abs(dFdy(textDistance)), 0.0001, 0.05);
-				lowp float textFactor = smoothstep(text_dilate - textSmoothing, text_dilate + textSmoothing, textDistance);
+				lowp float textFactor = smoothstep(
+					text_dilate - textSmoothing,
+					text_dilate + textSmoothing,
+					textDistance
+				);
 				lowp float shadowDistance = texture2D(tex1, texCoords1 - offset).r;
 				lowp float smoothing = clamp(abs(dFdx(shadowDistance)) + abs(dFdy(shadowDistance)), 0.0001, 0.05);
-				lowp float shadowFactor = smoothstep(dilate - softness - smoothing, dilate + softness + smoothing, shadowDistance);
+				lowp float shadowFactor = smoothstep(
+					dilate - softness - smoothing,
+					dilate + softness + smoothing,
+					shadowDistance
+				);
 				lowp float innerShadowFactor = textFactor * (1.0 - shadowFactor);
 				lowp vec4 c = color * global_color;
 				gl_FragColor = vec4(c.rgb, c.a * innerShadowFactor);
@@ -120,13 +128,15 @@ namespace Lime.SignedDistanceField
 
 		public static SDFInnerShadowShaderProgram GetInstance() => instance ??= new SDFInnerShadowShaderProgram();
 
-		private SDFInnerShadowShaderProgram() : base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		private SDFInnerShadowShaderProgram()
+			: base(CreateShaders(), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers())
+		{ }
 
 		private static Shader[] CreateShaders()
 		{
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(FragmentShader)
+				new FragmentShader(FragmentShader),
 			};
 		}
 	}

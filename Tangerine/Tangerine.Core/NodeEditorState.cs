@@ -11,7 +11,7 @@ namespace Tangerine.Core
 
 	public class NodeEditorState
 	{
-		readonly Node node;
+		private readonly Node node;
 		public string ThumbnailData { get; set; }
 		public NodeVisibility Visibility
 		{

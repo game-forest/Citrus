@@ -9,10 +9,10 @@ namespace Orange.Source
 	{
 		Clean,
 		Restore,
-		Build
+		Build,
 	}
 
-	abstract class BuildSystem
+	internal abstract class BuildSystem
 	{
 		private readonly List<string> arguments = new List<string>();
 		protected readonly Target target;
@@ -21,7 +21,6 @@ namespace Orange.Source
 
 		public string BinariesDirectory => Path.Combine(
 			Path.GetDirectoryName(target.ProjectPath), "bin", target.Configuration);
-
 
 		public BuildSystem(Target target)
 		{
@@ -33,20 +32,20 @@ namespace Orange.Source
 			arguments.Clear();
 			switch (buildAction) {
 				case BuildAction.Clean: {
-					PrepareForClean();
-					return Execute(output);
-				}
+						PrepareForClean();
+						return Execute(output);
+					}
 				case BuildAction.Restore: {
-					PrepareForRestore();
-					return Execute(output);
-				}
+						PrepareForRestore();
+						return Execute(output);
+					}
 				case BuildAction.Build: {
-					PrepareForBuild();
-					return Execute(output);
-				}
+						PrepareForBuild();
+						return Execute(output);
+					}
 				default: {
-					throw new InvalidOperationException($"Unknown {nameof(buildAction)}: {buildAction}");
-				}
+						throw new InvalidOperationException($"Unknown {nameof(buildAction)}: {buildAction}");
+					}
 			}
 		}
 

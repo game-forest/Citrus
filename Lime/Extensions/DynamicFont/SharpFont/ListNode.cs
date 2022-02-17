@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -32,23 +30,13 @@ namespace SharpFont
 	/// <summary>
 	/// A structure used to hold a single list element.
 	/// </summary>
-	public class ListNode: NativeObject
+	public class ListNode : NativeObject
 	{
-		#region Fields
-
 		private ListNodeRec rec;
 
-		#endregion
-
-		#region Constructors
-
-		internal ListNode(IntPtr reference): base(reference)
+		internal ListNode(IntPtr reference) : base(reference)
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the previous element in the list. NULL if first.
@@ -57,8 +45,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (rec.prev == IntPtr.Zero)
+				if (rec.prev == IntPtr.Zero) {
 					return null;
+				}
 
 				return new ListNode(rec.prev);
 			}
@@ -71,8 +60,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (rec.next == IntPtr.Zero)
+				if (rec.next == IntPtr.Zero) {
 					return null;
+				}
 
 				return new ListNode(rec.next);
 			}
@@ -102,7 +92,5 @@ namespace SharpFont
 				rec = PInvokeHelper.PtrToStructure<ListNodeRec>(value);
 			}
 		}
-
-		#endregion
 	}
 }

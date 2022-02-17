@@ -27,9 +27,9 @@ namespace Tangerine.UI
 					Nodes = {
 						new ThemedSimpleText {
 							Text = "Edit of dictionary properties isn't supported for multiple selection.",
-							ForceUncutText = false
-					} },
-					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground)
+							ForceUncutText = false,
+					}, },
+					Presenter = new WidgetFlatFillPresenter(Theme.Colors.WarningBackground),
 				});
 				return;
 			}
@@ -41,7 +41,7 @@ namespace Tangerine.UI
 						new Widget {
 							Layout = new HBoxLayout {
 								DefaultCell = new DefaultLayoutCell(Alignment.Center),
-								Spacing = Spacing
+								Spacing = Spacing,
 							},
 							Nodes = {
 								new ThemedSimpleText("Animation Id") {
@@ -87,7 +87,7 @@ namespace Tangerine.UI
 			var animationExists = false;
 			foreach (var animationId in GetAnimationIds()) {
 				var (text, value) = animationId == null
-					? (LegacyAnimationName, "") : (animationId, animationId);
+					? (LegacyAnimationName, string.Empty) : (animationId, animationId);
 				animationExists |= value == kv.Key;
 				keyEditor.Items.Add(new CommonDropDownList.Item(text, value));
 			}
@@ -103,7 +103,7 @@ namespace Tangerine.UI
 			var keyValue = new KeyValuePair { Key = kv.Key, Value = valueEditor.Value, };
 			var deleteButton = new ThemedDeleteButton { Clicked = () => DeleteRecord(keyValue.Key), };
 			keyEditor.Changed += (args) => SetKey(keyValue, (string)args.Value);
-			valueEditor.Submitted += ((_) => SetValue(keyValue, valueEditor.Value));
+			valueEditor.Submitted += (_) => SetValue(keyValue, valueEditor.Value);
 			keyEditor.Tasks.AddLoop(() => {
 				if (!dictionary.TryGetValue(keyValue.Key, out var animationBlending)) {
 					Rebuild();
@@ -159,7 +159,7 @@ namespace Tangerine.UI
 			var menu = new Menu();
 			foreach (var animationId in GetAnimationIds()) {
 				var (text, key) = animationId == null
-					? (LegacyAnimationName, "") : (animationId, animationId);
+					? (LegacyAnimationName, string.Empty) : (animationId, animationId);
 				if (!dictionary.ContainsKey(key)) {
 					menu.Add(new Command(text, () => AddAnimationBlending(key)));
 				}

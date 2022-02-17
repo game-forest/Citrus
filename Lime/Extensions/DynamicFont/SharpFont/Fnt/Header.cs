@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 
@@ -61,7 +59,7 @@ namespace SharpFont.Fnt
 		/// <summary>
 		/// The font is decorative.
 		/// </summary>
-		Decorative = 5
+		Decorative = 5,
 	}
 
 	/// <summary>
@@ -109,7 +107,7 @@ namespace SharpFont.Fnt
 		/// <summary>
 		/// Font is RGB color.
 		/// </summary>
-		RgbColor = 1 << 7
+		RgbColor = 1 << 7,
 	}
 
 	/// <summary>
@@ -117,23 +115,13 @@ namespace SharpFont.Fnt
 	/// </summary>
 	public class Header
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private HeaderRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal Header(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the version format of the file (e.g. 0x0200).
@@ -571,8 +559,9 @@ namespace SharpFont.Fnt
 			get
 			{
 				uint[] reserved1 = new uint[rec.reserved1.Length];
-				for (int i = 0; i < reserved1.Length; i++)
+				for (int i = 0; i < reserved1.Length; i++) {
 					reserved1[i] = (uint)rec.reserved1[i];
+				}
 
 				return reserved1;
 			}
@@ -591,7 +580,5 @@ namespace SharpFont.Fnt
 				rec = PInvokeHelper.PtrToStructure<HeaderRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

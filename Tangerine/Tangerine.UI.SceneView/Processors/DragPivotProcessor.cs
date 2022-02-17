@@ -8,7 +8,7 @@ namespace Tangerine.UI.SceneView
 {
 	public class DragPivotProcessor : ITaskProvider
 	{
-		private SceneView sv => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
@@ -16,13 +16,13 @@ namespace Tangerine.UI.SceneView
 				var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>();
 				if (
 					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() &&
-					sv.Input.IsKeyPressed(Key.Control) &&
+					SceneView.Input.IsKeyPressed(Key.Control) &&
 					Utils.CalcHullAndPivot(widgets, out var hull, out var pivot) &&
-					sv.HitTestControlPoint(pivot))
+					SceneView.HitTestControlPoint(pivot))
 				{
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
-						yield return sv.Input.IsKeyPressed(Key.Alt)
+					if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
+						yield return SceneView.Input.IsKeyPressed(Key.Alt)
 							? DragShared(hull)
 							: Drag();
 					}
@@ -35,17 +35,17 @@ namespace Tangerine.UI.SceneView
 		{
 			Any,
 			Horizontal,
-			Vertical
+			Vertical,
 		}
 
 		private IEnumerator<object> DragShared(Quadrangle hull)
 		{
 			var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
 			using (Document.Current.History.BeginTransaction()) {
-				while (sv.Input.IsMousePressed()) {
-					var isRoundingMode = sv.Input.IsKeyPressed(Key.C);
+				while (SceneView.Input.IsMousePressed()) {
+					var isRoundingMode = SceneView.Input.IsKeyPressed(Key.C);
 					Document.Current.History.RollbackTransaction();
-					var curMousePos = SnapMousePosToSpecialPoints(hull, sv.MousePosition, Vector2.Zero);
+					var curMousePos = SnapMousePosToSpecialPoints(hull, SceneView.MousePosition, Vector2.Zero);
 					foreach (var widget in widgets) {
 						var newPosition = curMousePos * widget.ParentWidget.LocalToWorldTransform.CalcInversed();
 						if (isRoundingMode) {
@@ -55,40 +55,38 @@ namespace Tangerine.UI.SceneView
 							@object: widget,
 							propertyPath: nameof(Widget.Position),
 							value: newPosition,
-							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
-						);
+							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes);
 						var transform = widget.LocalToWorldTransform.CalcInversed();
 						var newPivot = curMousePos * transform / widget.Size;
 						Core.Operations.SetAnimableProperty.Perform(
 							@object: widget,
 							propertyPath: nameof(Widget.Pivot),
 							value: newPivot,
-							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
-						);
+							createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes);
 					}
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 		}
 
 		private IEnumerator<object> Drag()
 		{
-			var iniMousePos = sv.MousePosition;
+			var iniMousePos = SceneView.MousePosition;
 			var widgets = Document.Current.SelectedNodes().Editable().OfType<Widget>().ToList();
 			using (Document.Current.History.BeginTransaction()) {
 				var dragDirection = DragDirection.Any;
 				Utils.CalcHullAndPivot(widgets, out var hull, out var iniPivot);
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					// TODO: isRoundingMode is always false because to drag pivot you press Ctrl
 					// and when you also press C to enable rounding mode it seems to be consumed
 					// as Ctrl+C shortcut.
-					var isRoundingMode = sv.Input.IsKeyPressed(Key.C);
+					var isRoundingMode = SceneView.Input.IsKeyPressed(Key.C);
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.Hand);
-					var curMousePos = sv.MousePosition;
-					var shiftPressed = sv.Input.IsKeyPressed(Key.Shift);
+					var curMousePos = SceneView.MousePosition;
+					var shiftPressed = SceneView.Input.IsKeyPressed(Key.Shift);
 					if (shiftPressed && dragDirection != DragDirection.Any) {
 						if (dragDirection == DragDirection.Horizontal) {
 							curMousePos.Y = iniMousePos.Y;
@@ -100,8 +98,7 @@ namespace Tangerine.UI.SceneView
 					if (
 						shiftPressed &&
 						dragDirection == DragDirection.Any &&
-						(curMousePos - iniMousePos).Length > 5
-					) {
+						(curMousePos - iniMousePos).Length > 5) {
 						var d = curMousePos - iniMousePos;
 						dragDirection =
 							d.X.Abs() > d.Y.Abs() ?
@@ -119,8 +116,7 @@ namespace Tangerine.UI.SceneView
 								@object: widget,
 								propertyPath: nameof(Widget.Pivot),
 								value: widget.Pivot + deltaPivot,
-								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
-							);
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes);
 							var newPosition = widget.Position + deltaPos.Snap(Vector2.Zero);
 							if (isRoundingMode) {
 								newPosition = Vector2.Floor(newPosition);
@@ -129,13 +125,12 @@ namespace Tangerine.UI.SceneView
 								@object: widget,
 								propertyPath: nameof(Widget.Position),
 								value: newPosition,
-								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes
-							);
+								createAnimatorIfNeeded: CoreUserPreferences.Instance.AutoKeyframes);
 						}
 					}
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 		}
@@ -152,7 +147,7 @@ namespace Tangerine.UI.SceneView
 				}
 			}
 			const float SnapDistance = 12;
-			var r = Mathf.Min(SnapDistance / sv.Scene.Scale.X, (hull[0] - hull[2]).Length * 0.25f);
+			var r = Mathf.Min(SnapDistance / SceneView.Scene.Scale.X, (hull[0] - hull[2]).Length * 0.25f);
 			if (md < r) {
 				return mp + correction;
 			}

@@ -80,7 +80,8 @@ namespace Lime
 				}
 			};
 
-			// Create Long Press gesture recognizer and make it not to interfere with TouchesBegan (usual way to detect touches)
+			// Create Long Press gesture recognizer and make it
+			// not to interfere with TouchesBegan (usual way to detect touches)
 			var gestureRecognizer = new UILongPressGestureRecognizer(handler) {
 				DelaysTouchesBegan = false,
 				MinimumPressDuration = 0,
@@ -94,7 +95,9 @@ namespace Lime
 		{
 			if (show != textView.IsFirstResponder) {
 				if (show) {
-					textView.KeyboardType = type == SoftKeyboardType.Default ? UIKeyboardType.Default : UIKeyboardType.NumberPad;
+					textView.KeyboardType = type == SoftKeyboardType.Default
+						? UIKeyboardType.Default
+						: UIKeyboardType.NumberPad;
 					textView.BecomeFirstResponder();
 				} else {
 					textView.ResignFirstResponder();
@@ -170,8 +173,9 @@ namespace Lime
 			TouchesEnded(touches, evt);
 		}
 
-		public override void ViewWillTransitionToSize(CoreGraphics.CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
-		{
+		public override void ViewWillTransitionToSize(
+			CoreGraphics.CGSize toSize, IUIViewControllerTransitionCoordinator coordinator
+		) {
 			View.SetNeedsLayout();
 		}
 
@@ -239,8 +243,10 @@ namespace Lime
 
 			keyboardHideNotification = UIKeyboard.Notifications.ObserveDidHide(KeyboardHideCallback);
 			keyboardShowNotification = UIKeyboard.Notifications.ObserveWillShow(KeyboardShowCallback);
-			keyboardWillChangeFrameNotification = UIKeyboard.Notifications.ObserveWillChangeFrame(KeyboardWillChangeFrameCallback);
-			keyboardDidChangeFrameNotification = UIKeyboard.Notifications.ObserveDidChangeFrame(KeyboardDidChangeFrameCallback);
+			keyboardWillChangeFrameNotification = UIKeyboard.Notifications
+				.ObserveWillChangeFrame(KeyboardWillChangeFrameCallback);
+			keyboardDidChangeFrameNotification = UIKeyboard.Notifications
+				.ObserveDidChangeFrame(KeyboardDidChangeFrameCallback);
 		}
 
 		public override void ViewWillDisappear(bool animated)
@@ -442,7 +448,7 @@ namespace Lime
 		{
 			GameController controller;
 
-			#pragma warning disable CS0067
+#pragma warning disable CS0067
 			public event Action Shown;
 			public event Action Hidden;
 

@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -34,23 +32,13 @@ namespace SharpFont.TrueType
 	/// </summary>
 	public class Pclt
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private PCLTRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal Pclt(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// The version number of this table. Version 1.0 is represented as 0x00010000.
@@ -62,7 +50,7 @@ namespace SharpFont.TrueType
 				return (int)rec.Version;
 			}
 		}
-		
+
 		/// <summary>
 		/// A unique identifier for the font. Refer to the specification for the meaning of various bits.
 		/// </summary>
@@ -197,7 +185,7 @@ namespace SharpFont.TrueType
 				return rec.StrokeWeight;
 			}
 		}
-		
+
 		/// <summary>
 		/// Indicates the stroke weight. Valid values are in the range -5 to 5. Length is 1 byte.
 		/// </summary>
@@ -208,7 +196,7 @@ namespace SharpFont.TrueType
 				return rec.WidthType;
 			}
 		}
-		
+
 		/// <summary>
 		/// Encodes the serif style. The top two bits indicate sans serif/monoline or serif/contrasting.
 		/// Valid values for the lower 6 bits are in the range 0 to 12. Length is 1 byte.
@@ -220,7 +208,7 @@ namespace SharpFont.TrueType
 				return rec.SerifStyle;
 			}
 		}
-		
+
 		/// <summary>
 		/// Reserved. Set to 0.
 		/// </summary>
@@ -245,7 +233,5 @@ namespace SharpFont.TrueType
 				rec = PInvokeHelper.PtrToStructure<PCLTRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

@@ -21,28 +21,34 @@ namespace Lime
 			public Matrix32 RelativeTransform;
 		}
 
-		const int InitialSize = 10;
+		private const int InitialSize = 10;
 
-		void EnsureArraySize(int size)
+		private void EnsureArraySize(int size)
 		{
-			if (items == null)
+			if (items == null) {
 				items = new Entry[InitialSize];
-			if (size > items.Length)
+			}
+
+			if (size > items.Length) {
 				Array.Resize<Entry>(ref items, size);
+			}
 		}
 
-		public Entry this[int index] {
-			get {
+		public Entry this[int index]
+		{
+			get
+			{
 				EnsureArraySize(index + 1);
 				return items[index];
 			}
-			set {
+			set
+			{
 				EnsureArraySize(index + 1);
 				items[index] = value;
 			}
 		}
 
-		void ApplyBone(BoneWeight bw, Vector2 sourceVector, ref Vector2 resultVector, ref float overallWeight)
+		private void ApplyBone(BoneWeight bw, Vector2 sourceVector, ref Vector2 resultVector, ref float overallWeight)
 		{
 			if (items != null && bw.Index > 0 && bw.Index < items.Length) {
 				BoneArray.Entry e = items[bw.Index];
@@ -59,11 +65,11 @@ namespace Lime
 			ApplyBone(weights.Bone1, vector, ref result, ref overallWeight);
 			ApplyBone(weights.Bone2, vector, ref result, ref overallWeight);
 			ApplyBone(weights.Bone3, vector, ref result, ref overallWeight);
-			if (overallWeight < 0)
+			if (overallWeight < 0) {
 				result = vector;
-			else if (overallWeight >= 0 && overallWeight < 1)
+			} else if (overallWeight >= 0 && overallWeight < 1) {
 				result += (1 - overallWeight) * vector;
-			else {
+			} else {
 				result.X /= overallWeight;
 				result.Y /= overallWeight;
 			}

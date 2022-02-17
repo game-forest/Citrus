@@ -8,13 +8,13 @@ namespace Tangerine.UI.FilesystemView
 		Name,
 		Size,
 		Date,
-		Extension
+		Extension,
 	}
 
 	public enum OrderType
 	{
 		Ascending,
-		Descending
+		Descending,
 	}
 
 	public class Toolbar : Widget
@@ -28,7 +28,7 @@ namespace Tangerine.UI.FilesystemView
 			Layout = new HBoxLayout { Spacing = 2, DefaultCell = new DefaultLayoutCell(Alignment.Center) };
 		}
 
-		static void Render(Widget widget)
+		private static void Render(Widget widget)
 		{
 			widget.PrepareRendererState();
 			Renderer.DrawRect(Vector2.Zero, widget.Size, ColorTheme.Current.Toolbar.Background);
@@ -37,7 +37,7 @@ namespace Tangerine.UI.FilesystemView
 
 	public class FilesystemToolbar : Toolbar
 	{
-		FilesystemView view;
+		private FilesystemView view;
 		public AddressBar AddressBar;
 
 		public FilesystemToolbar(FilesystemView view, FilesystemModel filesystemModel)
@@ -53,8 +53,8 @@ namespace Tangerine.UI.FilesystemView
 					Nodes = {
 						new Widget {
 							Id = "ToolbarButtonsContainer",
-							Layout = new HBoxLayout(){
-								Spacing = 2
+							Layout = new HBoxLayout() {
+								Spacing = 2,
 							},
 							Nodes = {
 								CreateGotoCurrentProjectDirectoryButton(),
@@ -69,13 +69,13 @@ namespace Tangerine.UI.FilesystemView
 								CreateSortDropDownList(),
 								CreateSortOrderDropDownList(),
 								new Widget {
-									LayoutCell = new LayoutCell { Stretch = new Vector2(9999, 9999)}
+									LayoutCell = new LayoutCell { Stretch = new Vector2(9999, 9999) },
 								},
-								CreateCloseButton()
-							}
+								CreateCloseButton(),
+							},
 						},
 						(AddressBar = new AddressBar(view.Open, filesystemModel)),
-					}
+					},
 				}
 			);
 		}
@@ -97,8 +97,8 @@ namespace Tangerine.UI.FilesystemView
 				Padding = new Thickness {
 					Top = 2,
 					Left = 2,
-					Right = 2
-				}
+					Right = 2,
+				},
 			};
 		}
 
@@ -109,11 +109,12 @@ namespace Tangerine.UI.FilesystemView
 					new ThemedDropDownList.Item("Name", SortType.Name),
 					new ThemedDropDownList.Item("Extension", SortType.Extension),
 					new ThemedDropDownList.Item("Size", SortType.Size),
-					new ThemedDropDownList.Item("Date", SortType.Date)
+					new ThemedDropDownList.Item("Date", SortType.Date),
 				},
-				Index = 0
+				Index = 0,
 			};
-			list.Value = (view.RootWidget.Components.Get<ViewNodeComponent>().ViewNode as FSViewNode)?.SortType ?? SortType.Name;
+			list.Value = (view.RootWidget.Components.Get<ViewNodeComponent>().ViewNode as FSViewNode)?.SortType
+				?? SortType.Name;
 			list.Changed += args => {
 				view.SortByType((SortType)args.Value, view.OrderType);
 				if (view.RootWidget.Components.Get<ViewNodeComponent>().ViewNode is FSViewNode fsViewNode) {
@@ -128,11 +129,13 @@ namespace Tangerine.UI.FilesystemView
 			var list = new ThemedDropDownList {
 				Items = {
 					new ThemedDropDownList.Item("Ascending", OrderType.Ascending),
-					new ThemedDropDownList.Item("Descending", OrderType.Descending)
+					new ThemedDropDownList.Item("Descending", OrderType.Descending),
 				},
 				Layout = new HBoxLayout(),
-				MinMaxWidth = FontPool.Instance.DefaultFont.MeasureTextLine("Descending", Theme.Metrics.TextHeight, 0).X + 30,
-				Index = 0
+				MinMaxWidth = FontPool.Instance.DefaultFont.MeasureTextLine(
+					"Descending", Theme.Metrics.TextHeight, 0
+				).X + 30,
+				Index = 0,
 			};
 			list.Changed += args => {
 				view.SortByType(view.SortType, (OrderType)args.Value);
@@ -157,9 +160,12 @@ namespace Tangerine.UI.FilesystemView
 				Clicked = () => {
 					if (Project.Current != Project.Null) {
 						view.SetFocus();
-						view.GoTo(Project.Current.AssetsDirectory ?? System.IO.Directory.GetDirectoryRoot(System.IO.Directory.GetCurrentDirectory()));
+						view.GoTo(
+							Project.Current.AssetsDirectory
+							?? System.IO.Directory.GetDirectoryRoot(System.IO.Directory.GetCurrentDirectory())
+						);
 					}
-				}
+				},
 			};
 		}
 
@@ -169,7 +175,7 @@ namespace Tangerine.UI.FilesystemView
 				Clicked = () => {
 					view.SetFocus();
 					view.GoUp();
-				}
+				},
 			};
 		}
 
@@ -182,7 +188,7 @@ namespace Tangerine.UI.FilesystemView
 				Clicked = () => {
 					view.ToggleCookingRules();
 					up.ShowCookingRulesEditor = b.Checked = !b.Checked;
-				}
+				},
 			};
 		}
 
@@ -195,7 +201,7 @@ namespace Tangerine.UI.FilesystemView
 				Clicked = () => {
 					view.TogglePreview();
 					up.ShowSelectionPreview = b.Checked = !b.Checked;
-				}
+				},
 			};
 		}
 
@@ -205,7 +211,7 @@ namespace Tangerine.UI.FilesystemView
 			return b = new ToolbarButton(IconPool.GetTexture("Filesystem.SplitH")) {
 				Clicked = () => {
 					view.Split(SplitterType.Horizontal);
-				}
+				},
 			};
 		}
 
@@ -215,7 +221,7 @@ namespace Tangerine.UI.FilesystemView
 			return b = new ToolbarButton(IconPool.GetTexture("Filesystem.SplitV")) {
 				Clicked = () => {
 					view.Split(SplitterType.Vertical);
-				}
+				},
 			};
 		}
 
@@ -224,7 +230,7 @@ namespace Tangerine.UI.FilesystemView
 			return new ToolbarButton(IconPool.GetTexture("Filesystem.Close")) {
 				Clicked = () => {
 					view.Close();
-				}
+				},
 			};
 		}
 	}

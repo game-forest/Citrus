@@ -20,7 +20,7 @@ namespace Tangerine
 				Title = "Manage Rulers",
 				Style = WindowStyle.Dialog,
 				ClientSize = new Vector2(300, 200),
-				Visible = false
+				Visible = false,
 			});
 			var collection = new ObservableCollection<Ruler>(ProjectUserPreferences.Instance.Rulers);
 			var lines = new List<RulerLine>();
@@ -39,13 +39,16 @@ namespace Tangerine
 						Nodes = {
 							(okButton = new ThemedButton { Text = "Ok" }),
 							(cancelButton = new ThemedButton { Text = "Cancel" }),
-						}
-					}
-				}
+						},
+					},
+				},
 			};
 			container.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>(
 				w => {
-					if (w.Parent == null) return;
+					if (w.Parent == null) {
+						return;
+					}
+
 					var listView = (ThemedScrollView)w;
 					w.PrepareRendererState();
 					var i = (int)(listView.ScrollPosition / RowHeight);
@@ -73,18 +76,21 @@ namespace Tangerine
 				Layout = new VBoxLayout(),
 			};
 			container.Content.AddNode(list);
-			list.Components.Add(new WidgetFactoryComponent<Ruler>(ruler => new RulerRowView(ruler,
+			list.Components.Add(new WidgetFactoryComponent<Ruler>(
+				ruler => new RulerRowView(
+				ruler,
 				// Delete button clicked
 				() => {
 					collection.Remove(ruler);
-					container.ScrollPosition = container.ScrollPosition > RowHeight ? container.ScrollPosition - RowHeight : 0;
+					container.ScrollPosition =
+						container.ScrollPosition > RowHeight ? container.ScrollPosition - RowHeight : 0;
 				},
 				// Edit button clicked
 				() => {
 					if (ruler.AnchorToRoot) {
 						var size = Document.Current.Container.AsWidget.Size / 2;
 						foreach (var line in ruler.Lines) {
-							line.Value += (line.RulerOrientation == RulerOrientation.Horizontal ? size.Y : size.X);
+							line.Value += line.RulerOrientation == RulerOrientation.Horizontal ? size.Y : size.X;
 						}
 					}
 					collection.Remove(ruler);
@@ -102,7 +108,6 @@ namespace Tangerine
 				Core.UserPreferences.Instance.Save();
 				Application.InvalidateWindows();
 				window.Close();
-
 			};
 			cancelButton.Clicked += () => window.Close();
 			rootWidget.FocusScope = new KeyboardFocusScope(rootWidget);
@@ -138,7 +143,7 @@ namespace Tangerine
 				});
 				Nodes.Add(deleteButton = new ThemedDeleteButton {
 					Anchors = Anchors.Right,
-					LayoutCell = new LayoutCell(Alignment.LeftTop)
+					LayoutCell = new LayoutCell(Alignment.LeftTop),
 				});
 				deleteButton.Clicked = onDelete;
 				editButton.Clicked = onEdit;

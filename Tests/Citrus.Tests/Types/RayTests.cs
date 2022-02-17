@@ -12,7 +12,7 @@ namespace Citrus.Tests.Types
 		public void EqualsTest()
 		{
 			Assert.IsTrue(unitRay.Equals(unitRay));
-			Assert.IsTrue(unitRay.Equals((object) unitRay));
+			Assert.IsTrue(unitRay.Equals((object)unitRay));
 			Assert.IsTrue(unitRay == unitRay);
 			Assert.IsTrue(unitRay != new Ray(Vector3.Zero, Vector3.Zero));
 			Assert.AreEqual(unitRay.GetHashCode(), unitRay.GetHashCode());

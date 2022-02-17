@@ -1,4 +1,4 @@
-#if (MAC || WIN)
+#if MAC || WIN
 using System;
 using System.IO;
 using Lime.Graphics.Platform;
@@ -7,27 +7,27 @@ namespace Lime
 {
 	partial class Texture2D
 	{
-		enum DDSFourCC
+		private enum DDSFourCC
 		{
-			DXT1 = ('D' | ('X' << 8) | ('T' << 16) | ('1' << 24)),
-			DXT3 = ('D' | ('X' << 8) | ('T' << 16) | ('3' << 24)),
-			DXT5 = ('D' | ('X' << 8) | ('T' << 16) | ('5' << 24)),
+			DXT1 = 'D' | ('X' << 8) | ('T' << 16) | ('1' << 24),
+			DXT3 = 'D' | ('X' << 8) | ('T' << 16) | ('3' << 24),
+			DXT5 = 'D' | ('X' << 8) | ('T' << 16) | ('5' << 24),
 		}
 
 		[Flags]
-		enum DDSPFFlags
+		private enum DDSPFFlags
 		{
 			Alpha = 0x01,
 			FourCC = 0x04,
-			RGB = 0x40
+			RGB = 0x40,
 		}
 
-		const UInt32 DDSMagic = 0x20534444;
+		private const uint DDSMagic = 0x20534444;
 
 		private void InitWithDDSBitmap(BinaryReader reader)
 		{
-			UInt32 magic = reader.ReadUInt32();
-			UInt32 size = reader.ReadUInt32();
+			uint magic = reader.ReadUInt32();
+			uint size = reader.ReadUInt32();
 			if (magic != DDSMagic || size != 124) {
 				throw new InvalidDataException("Invalid DDS file header");
 			}
@@ -38,12 +38,12 @@ namespace Lime
 			int pitchOrLinearSize = (int)reader.ReadUInt32();
 			// UInt32 depth =
 			reader.ReadUInt32();
-			UInt32 mipMapCount = reader.ReadUInt32();
+			uint mipMapCount = reader.ReadUInt32();
 			reader.ReadBytes(11 * 4);
 			// Read pixel format
 			reader.ReadUInt32(); // Structure size (32 bytes)
 			DDSPFFlags pfFlags = (DDSPFFlags)reader.ReadUInt32();
-			UInt32 pfFourCC = reader.ReadUInt32();
+			uint pfFourCC = reader.ReadUInt32();
 			// UInt32 pfRGBBitCount =
 			reader.ReadUInt32();
 			// UInt32 pfRBitMask =

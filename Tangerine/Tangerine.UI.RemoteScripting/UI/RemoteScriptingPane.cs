@@ -62,13 +62,13 @@ namespace Tangerine.UI.RemoteScripting
 					new ThemedHSplitter {
 						SeparatorWidth = 1f,
 						Padding = new Thickness(5f),
-						Stretches = {0.15f, 0.15f, 0.7f},
+						Stretches = { 0.15f, 0.15f, 0.7f },
 						Nodes = {
 							(explorableItems = new ExplorableScrollView {
 								MinWidth = 150,
 								TabTravesable = new TabTraversable(),
 								CompoundPresenter = {
-									new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder)
+									new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder),
 								},
 								Content = { Layout = new VBoxLayout() },
 							}),
@@ -76,7 +76,7 @@ namespace Tangerine.UI.RemoteScripting
 								MinWidth = 150,
 								TabTravesable = new TabTraversable(),
 								CompoundPresenter = {
-									new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder)
+									new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder),
 								},
 								Content = {
 									Layout = new VBoxLayout { Spacing = 2f },
@@ -85,10 +85,10 @@ namespace Tangerine.UI.RemoteScripting
 							(explorableItems.ExploringWidget = new Widget {
 								MinWidth = 300,
 								Layout = new HBoxLayout(),
-							})
-						}
-					}
-				}
+							}),
+						},
+					},
+				},
 			};
 			panel.ContentWidget.PushNode(rootWidget);
 
@@ -138,7 +138,7 @@ namespace Tangerine.UI.RemoteScripting
 			var menu = new Menu {
 				(disconnectCommand = new Command("Disconnect Device")),
 				Command.MenuSeparator,
-				(clearCommand = new Command("Clear Disconnected Devices"))
+				(clearCommand = new Command("Clear Disconnected Devices")),
 			};
 			explorableItems.Updating += _ => {
 				if (explorableItems.Input.WasKeyPressed(Key.Mouse1)) {
@@ -154,10 +154,15 @@ namespace Tangerine.UI.RemoteScripting
 			disconnectCommand.Issued += DeviceDisconnectCommandHandler;
 			clearCommand.Issued += ClearDisconnectedDevicesCommandHandler;
 
-			rpcScrollView.AddChangeWatcher(() => TryGetActiveDevice(out _), value => rpcScrollView.ItemsEnabled = value);
+			rpcScrollView.AddChangeWatcher(
+				getter: () => TryGetActiveDevice(out _),
+				action: value => rpcScrollView.ItemsEnabled = value
+			);
 			rpcScrollView.RemoteProcedureCalled += (assembly, entryPoint) => {
 				if (TryGetActiveDevice(out var device)) {
-					device.RemoteProcedureCall(assembly.RawBytes, assembly.PdbRawBytes, entryPoint.ClassName, entryPoint.MethodName);
+					device.RemoteProcedureCall(
+						assembly.RawBytes, assembly.PdbRawBytes, entryPoint.ClassName, entryPoint.MethodName
+					);
 				}
 			};
 
@@ -199,8 +204,8 @@ namespace Tangerine.UI.RemoteScripting
 			string directory = null;
 			if (!IsSavingDeviceLogs) {
 				var dialog = new FileDialog {
-					AllowedFileTypes = new[] { "" },
-					Mode = FileDialogMode.SelectFolder
+					AllowedFileTypes = new[] { string.Empty },
+					Mode = FileDialogMode.SelectFolder,
 				};
 				if (dialog.RunModal()) {
 					directory = dialog.FileName;

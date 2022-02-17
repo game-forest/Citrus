@@ -27,8 +27,14 @@ namespace Tangerine.UI.Timeline.Operations.CompoundAnimations
 				foreach (var track in Document.Current.Animation.Tracks) {
 					var clips = track.Clips.Where(i => i.IsSelected).ToList();
 					var keys = new List<IKeyframe>();
-					if (track.Animators.TryFind(nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.AnimationId)) {
-						keys = weightAnimator.ReadonlyKeys.Where(k => clips.Any(c => c.BeginFrame <= k.Frame && k.Frame <= c.EndFrame)).ToList();
+					if (
+						track.Animators.TryFind(
+							nameof(AnimationTrack.Weight), out var weightAnimator, Document.Current.AnimationId
+						)
+					) {
+						keys = weightAnimator.ReadonlyKeys
+							.Where(k => clips.Any(c => c.BeginFrame <= k.Frame && k.Frame <= c.EndFrame))
+							.ToList();
 					}
 					foreach (var key in keys) {
 						RemoveKeyframe.Perform(weightAnimator, key.Frame);

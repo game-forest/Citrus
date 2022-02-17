@@ -8,21 +8,21 @@ namespace Tangerine.UI.Timeline
 {
 	public class CurveEditorPane
 	{
-		static Dictionary<Type, IAnimatorAdapter> adapters = new Dictionary<Type, IAnimatorAdapter>();
+		private static Dictionary<Type, IAnimatorAdapter> adapters = new Dictionary<Type, IAnimatorAdapter>();
 
 		public readonly Widget RootWidget;
 		public readonly Widget MainAreaWidget;
 		public readonly Widget ContentWidget;
 
-		readonly Widget toolbar;
+		private readonly Widget toolbar;
 
-		readonly Timeline timeline;
-		AnimatorSceneItem property;
+		private readonly Timeline timeline;
+		private AnimatorSceneItem property;
 
 		public float MinValue { get; set; }
 		public float MaxValue { get; set; }
 
-		List<SimpleText> labels = new List<SimpleText>();
+		private List<SimpleText> labels = new List<SimpleText>();
 
 		public readonly List<Curve> Curves = new List<Curve>();
 
@@ -57,17 +57,22 @@ namespace Tangerine.UI.Timeline
 			toolbar = new Widget {
 				Padding = new Thickness(2, 0),
 				MinMaxHeight = Metrics.ToolbarHeight,
-				Layout = new HBoxLayout { Spacing = 4, DefaultCell = new DefaultLayoutCell { Alignment = Alignment.Center } },
+				Layout = new HBoxLayout {
+					Spacing = 4,
+					DefaultCell = new DefaultLayoutCell { Alignment = Alignment.Center },
+				},
 				Presenter = new WidgetFlatFillPresenter(ColorTheme.Current.Toolbar.Background),
 			};
 			RootWidget = new Widget {
 				Id = nameof(CurveEditorPane),
 				Layout = new VBoxLayout(),
-				Nodes = { MainAreaWidget, toolbar }
+				Nodes = { MainAreaWidget, toolbar },
 			};
-			RootWidget.AddChangeWatcher(() => RootWidget.Size,
+			RootWidget.AddChangeWatcher(
+				() => RootWidget.Size,
 				// Some document operation processors (e.g. ColumnCountUpdater) require up-to-date timeline dimensions.
-				_ => Core.Operations.Dummy.Perform(Document.Current.History));
+				_ => Core.Operations.Dummy.Perform(Document.Current.History)
+			);
 			RootWidget.Tasks.Add(
 				new CurveEditorVerticalZoomProcessor(this),
 				new CurveEditorSelectAndDragKeysProcessor(this),
@@ -132,8 +137,12 @@ namespace Tangerine.UI.Timeline
 			float x = minColumn * TimelineMetrics.ColWidth + 0.5f + TimelineMetrics.ColWidth / 2;
 			for (int i = minColumn; i <= maxColumn; i++) {
 				Renderer.DrawLine(
-					x, 1, x, MainAreaWidget.Height - 2,
-					ColorTheme.Current.TimelineGrid.LinesLight);
+					x0: x,
+					y0: 1,
+					x1: x,
+					y1: MainAreaWidget.Height - 2,
+					color: ColorTheme.Current.TimelineGrid.LinesLight
+				);
 				x += TimelineMetrics.ColWidth;
 			}
 			// Render dark vertical lines below markers.
@@ -165,15 +174,21 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		static void CalcRange(IAnimator animator, IAnimatorAdapter adapter, out float minValue, out float maxValue)
-		{
+		private static void CalcRange(
+			IAnimator animator, IAnimatorAdapter adapter, out float minValue, out float maxValue
+		) {
 			minValue = float.MaxValue;
 			maxValue = -float.MaxValue;
 			for (int i = 0; i < adapter.ComponentCount; i++) {
 				foreach (var k in animator.ReadonlyKeys) {
 					var value = adapter.GetComponentValue(animator, AnimationUtils.FramesToSeconds(k.Frame), i);
-					if (value < minValue) minValue = value;
-					if (value > maxValue) maxValue = value;
+					if (value < minValue) {
+						minValue = value;
+					}
+
+					if (value > maxValue) {
+						maxValue = value;
+					}
 				}
 			}
 			var range = maxValue - minValue;
@@ -184,20 +199,20 @@ namespace Tangerine.UI.Timeline
 			minValue -= range * 0.2f;
 		}
 
-		void DrawHorizontalLine(float value)
+		private void DrawHorizontalLine(float value)
 		{
 			var y = ValueToCoord(value);
 			Renderer.DrawLine(0, y, MainAreaWidget.Width, y, ColorTheme.Current.TimelineGrid.LinesLight);
 		}
 
-		void DrawScaleMark(double value, int precision)
+		private void DrawScaleMark(double value, int precision)
 		{
 			var y = ValueToCoord((float)value);
 			var text = value.ToString($"F{precision}");
 			Renderer.DrawTextLine(2, y - 14, text, 14, Theme.Colors.BlackText, 0);
 		}
 
-		void RenderCurve(Curve curve)
+		private void RenderCurve(Curve curve)
 		{
 			var color = ColorTheme.Current.TimelineCurveEditor.Curves[curve.Component];
 			IKeyframe key = null;
@@ -226,11 +241,13 @@ namespace Tangerine.UI.Timeline
 			}
 		}
 
-		void RenderSelectedKeys(Curve curve)
+		private void RenderSelectedKeys(Curve curve)
 		{
 			foreach (var key in curve.SelectedKeys) {
 				var p = CalcPosition(curve, key.Frame);
-				Renderer.DrawRectOutline(p - new Vector2(4, 4), p + new Vector2(4, 4), ColorTheme.Current.TimelineCurveEditor.Selection);
+				Renderer.DrawRectOutline(
+					p - new Vector2(4, 4), p + new Vector2(4, 4), ColorTheme.Current.TimelineCurveEditor.Selection
+				);
 			}
 		}
 
@@ -250,7 +267,11 @@ namespace Tangerine.UI.Timeline
 		{
 			return new Vector2(
 				(frame + 0.5f) * TimelineMetrics.ColWidth,
-				ValueToCoord(curve.Adapter.GetComponentValue(curve.Animator, AnimationUtils.FramesToSeconds(frame), curve.Component)));
+				ValueToCoord(
+					curve.Adapter.GetComponentValue(
+						curve.Animator, AnimationUtils.FramesToSeconds(frame), curve.Component)
+					)
+				);
 		}
 
 		private void RenderCursor()
@@ -258,13 +279,17 @@ namespace Tangerine.UI.Timeline
 			var x = TimelineMetrics.ColWidth * (timeline.CurrentColumn + 0.5f);
 			ContentWidget.PrepareRendererState();
 			Renderer.DrawLine(
-				x, 0, x, MainAreaWidget.Height - 1,
-				Document.Current.PreviewScene ?
-				ColorTheme.Current.TimelineRuler.RunningCursor :
-				ColorTheme.Current.TimelineRuler.Cursor);
+				x0: x,
+				y0: 0,
+				x1: x,
+				y1: MainAreaWidget.Height - 1,
+				color: Document.Current.PreviewScene
+					? ColorTheme.Current.TimelineRuler.RunningCursor
+					: ColorTheme.Current.TimelineRuler.Cursor
+			);
 		}
 
-		class ColorBoxButton : Button
+		private class ColorBoxButton : Button
 		{
 			public ColorBoxButton(Color4 color)
 			{
@@ -275,11 +300,16 @@ namespace Tangerine.UI.Timeline
 					Renderer.DrawRect(Vector2.Zero, widget.Size, Color4.White);
 					var checkSize = new Vector2(widget.Width / 4, widget.Height / 3);
 					for (int i = 0; i < 3; i++) {
-						var checkPos = new Vector2(widget.Width / 2 + ((i == 1) ? widget.Width / 4 : 0), i * checkSize.Y);
+						var checkPos = new Vector2(
+							widget.Width / 2 + ((i == 1) ? widget.Width / 4 : 0),
+							i * checkSize.Y
+						);
 						Renderer.DrawRect(checkPos, checkPos + checkSize, Color4.Black);
 					}
 					Renderer.DrawRect(Vector2.Zero, widget.Size, color);
-					Renderer.DrawRectOutline(Vector2.Zero, widget.Size, ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox);
+					Renderer.DrawRectOutline(
+						Vector2.Zero, widget.Size, ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox
+					);
 				});
 			}
 		}

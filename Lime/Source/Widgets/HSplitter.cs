@@ -8,7 +8,7 @@ namespace Lime
 	{
 		Default,
 		Highlight,
-		Drag
+		Drag,
 	}
 
 	[YuzuDontGenerateDeserializer]
@@ -74,8 +74,10 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					for (var i = 0; i < Lines.Count; i ++) {
-						Renderer.DrawLine(Lines[i].Start, Lines[i].End, GetColorForState(Lines[i].State), thickness: SeparatorWidth);
+					for (var i = 0; i < Lines.Count; i++) {
+						Renderer.DrawLine(
+							Lines[i].Start, Lines[i].End, GetColorForState(Lines[i].State), thickness: SeparatorWidth
+						);
 					}
 				}
 
@@ -118,7 +120,6 @@ namespace Lime
 			Layout = new HSplitterLayout();
 		}
 
-
 		public override float SeparatorWidth
 		{
 			get
@@ -127,7 +128,7 @@ namespace Lime
 			}
 			set
 			{
-				var l = (Layout as HSplitterLayout);
+				var l = Layout as HSplitterLayout;
 				if (l.Spacing != value) {
 					l.Spacing = value;
 					l.InvalidateArrangement();
@@ -198,7 +199,7 @@ namespace Lime
 			}
 		}
 
-		class SeparatorsRenderPresenter : SeparatorsRenderPresenterBase
+		private class SeparatorsRenderPresenter : SeparatorsRenderPresenterBase
 		{
 			public int SeparatorUnderMouse = -1;
 			public bool isSeparatorUnderMouseDrag;
@@ -212,13 +213,13 @@ namespace Lime
 						Start = new Vector2(x, w.Y),
 						End = new Vector2(x, w.Y + w.Height),
 						State = i == SeparatorUnderMouse ? (isSeparatorUnderMouseDrag ?
-							SplitterLineState.Drag : SplitterLineState.Highlight) : SplitterLineState.Default
+							SplitterLineState.Drag : SplitterLineState.Highlight) : SplitterLineState.Default,
 					});
 				}
 			}
 		}
 
-		class SeparatorsHitTestPresenter : IPresenter
+		private class SeparatorsHitTestPresenter : IPresenter
 		{
 			public int SeparatorUnderMouse { get; private set; } = -1;
 
@@ -231,7 +232,10 @@ namespace Lime
 					var widget = splitter.Nodes[i + 1].AsWidget;
 					var widgetPos = widget.GlobalPosition;
 					var mousePos = Window.Current.Input.MousePosition;
-					if (Mathf.Abs(mousePos.X - (widgetPos.X - splitter.SeparatorWidth * 0.5f)) < splitter.SeparatorActiveAreaWidth * 0.5f) {
+					if (
+						Mathf.Abs(mousePos.X - (widgetPos.X - splitter.SeparatorWidth * 0.5f))
+						< splitter.SeparatorActiveAreaWidth * 0.5f
+					) {
 						if (mousePos.Y > widgetPos.Y && mousePos.Y < widgetPos.Y + widget.Height) {
 							SeparatorUnderMouse = i;
 							args.Node = splitter;
@@ -245,7 +249,7 @@ namespace Lime
 		}
 
 		[YuzuDontGenerateDeserializer]
-		class HSplitterLayout : HBoxLayout
+		private class HSplitterLayout : HBoxLayout
 		{
 			public override void MeasureSizeConstraints()
 			{
@@ -253,7 +257,7 @@ namespace Lime
 				base.MeasureSizeConstraints();
 			}
 
-			void UpdateLayoutCells(Splitter splitter)
+			private void UpdateLayoutCells(Splitter splitter)
 			{
 				for (int i = 0; i < splitter.Nodes.Count; i++) {
 					var widget = (Widget)splitter.Nodes[i];

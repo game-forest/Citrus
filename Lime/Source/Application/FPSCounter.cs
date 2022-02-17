@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lime
 {
-	class FPSCounter
+	internal class FPSCounter
 	{
 		private Stopwatch sw = new Stopwatch();
 		private int countedFrames;

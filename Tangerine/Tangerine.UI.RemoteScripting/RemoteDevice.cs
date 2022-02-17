@@ -32,8 +32,8 @@ namespace Tangerine.UI.RemoteScripting
 			Content = new Widget {
 				Layout = new VBoxLayout(),
 				Nodes = {
-					(textView = new LimitedTextView(maxRowCount: 1500))
-				}
+					(textView = new LimitedTextView(maxRowCount: 1500)),
+				},
 			};
 		}
 
@@ -44,13 +44,14 @@ namespace Tangerine.UI.RemoteScripting
 			UpdateVisual();
 		}
 
-		public void RemoteProcedureCall(byte[] assemblyRawBytes, byte[] pdbRawBytes, string className, string methodName)
-		{
+		public void RemoteProcedureCall(
+			byte[] assemblyRawBytes, byte[] pdbRawBytes, string className, string methodName
+		) {
 			var remoteProcedureCall = new RemoteProcedureCall {
 				AssemblyRawBytes = assemblyRawBytes,
 				PdbRawBytes = pdbRawBytes,
 				ClassName = className,
-				MethodName = methodName
+				MethodName = methodName,
 			};
 			Client.SendMessage(new NetworkRemoteProcedureCall(remoteProcedureCall));
 		}
@@ -92,42 +93,48 @@ namespace Tangerine.UI.RemoteScripting
 						Log(networkText.Text);
 						break;
 					case NetworkMessageType.RemoteFileRequest: {
-						var fileRequest = (NetworkRemoteFileRequest)message;
-						Log($"Remote file request: \"{fileRequest.Data.Path}\"");
-						var remoteStoragePath = ProjectPreferences.Instance.RemoteScriptingCurrentConfiguration?.RemoteStoragePath;
-						if (!string.IsNullOrEmpty(remoteStoragePath)) {
-							var absFilePath = Path.Combine(remoteStoragePath, fileRequest.Data.Path);
-							if (File.Exists(absFilePath)) {
-								SendFileAsync(absFilePath, fileRequest.Data.Path);
-								break;
+							var fileRequest = (NetworkRemoteFileRequest)message;
+							Log($"Remote file request: \"{fileRequest.Data.Path}\"");
+							var remoteStoragePath =
+								ProjectPreferences.Instance.RemoteScriptingCurrentConfiguration?.RemoteStoragePath;
+							if (!string.IsNullOrEmpty(remoteStoragePath)) {
+								var absFilePath = Path.Combine(remoteStoragePath, fileRequest.Data.Path);
+								if (File.Exists(absFilePath)) {
+									SendFileAsync(absFilePath, fileRequest.Data.Path);
+									break;
+								}
 							}
-						}
 
-						var remoteFile = new RemoteFile {
-							Path = fileRequest.Data.Path,
-							Bytes = null
-						};
-						Client.SendMessage(new NetworkRemoteFile(remoteFile));
-						Log(
-							string.IsNullOrEmpty(remoteStoragePath) ?
-							"Can not send requested file: Please, setup remote storage path in project configuration file!" :
-							$"Can not send requested file: \"{fileRequest.Data.Path}\". File not found!"
-						);
-						break;
-					}
-					case NetworkMessageType.RemoteFile: {
-						var remoteFile = ((NetworkRemoteFile)message).Data;
-						var remoteStoragePath = ProjectPreferences.Instance.RemoteScriptingCurrentConfiguration?.RemoteStoragePath;
-						if (remoteFile.Bytes == null || remoteFile.Bytes.Length == 0) {
-							Log($"Can not receive remote file \"{remoteFile.Path}\". File is empty.");
-						} else if (string.IsNullOrEmpty(remoteStoragePath)) {
-							Log($"Can not receive remote file \"{remoteFile.Path}\". Please, setup remote storage path in project configuration file!");
-						} else {
-							var filePath = Path.Combine(remoteStoragePath, remoteFile.Path);
-							SaveFileAsync(filePath, remoteFile);
+							var remoteFile = new RemoteFile {
+								Path = fileRequest.Data.Path,
+								Bytes = null,
+							};
+							Client.SendMessage(new NetworkRemoteFile(remoteFile));
+							Log(
+								string.IsNullOrEmpty(remoteStoragePath)
+									? "Can not send requested file: "
+										+ "Please, setup remote storage path in project configuration file!"
+									: $"Can not send requested file: \"{fileRequest.Data.Path}\". File not found!"
+							);
+							break;
 						}
-						break;
-					}
+					case NetworkMessageType.RemoteFile: {
+							var remoteFile = ((NetworkRemoteFile)message).Data;
+							var remoteStoragePath = ProjectPreferences.Instance
+								.RemoteScriptingCurrentConfiguration?.RemoteStoragePath;
+							if (remoteFile.Bytes == null || remoteFile.Bytes.Length == 0) {
+								Log($"Can not receive remote file \"{remoteFile.Path}\". File is empty.");
+							} else if (string.IsNullOrEmpty(remoteStoragePath)) {
+								Log(
+									$"Can not receive remote file \"{remoteFile.Path}\". " +
+									$"Please, setup remote storage path in project configuration file!"
+								);
+							} else {
+								var filePath = Path.Combine(remoteStoragePath, remoteFile.Path);
+								SaveFileAsync(filePath, remoteFile);
+							}
+							break;
+						}
 					default:
 						throw new NotSupportedException($"Unknown message type: {message.MessageType}");
 				}
@@ -142,7 +149,7 @@ namespace Tangerine.UI.RemoteScripting
 				}
 				var remoteFile = new RemoteFile {
 					Path = requestPath,
-					Bytes = bytes
+					Bytes = bytes,
 				};
 				Client.SendMessage(new NetworkRemoteFile(remoteFile));
 				Log($"Requested file \"{requestPath}\" was sended.");
@@ -175,7 +182,9 @@ namespace Tangerine.UI.RemoteScripting
 		private void Log(string message)
 		{
 			if (message != null) {
-				textView.AppendLine(!string.IsNullOrWhiteSpace(message) ? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {message}" : message);
+				textView.AppendLine(
+					!string.IsNullOrWhiteSpace(message) ? $"[{DateTime.Now:dd.MM.yy H:mm:ss}] {message}" : message
+				);
 			}
 		}
 	}

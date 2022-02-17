@@ -6,7 +6,7 @@ namespace Lime
 {
 	public class CaretPosition : ICaretPosition
 	{
-		public enum ValidState { None, All, LineCol, WorldPos, TextPos, LineWorldX };
+		public enum ValidState { None, All, LineCol, WorldPos, TextPos, LineWorldX }
 		public ValidState Valid { get; private set; }
 
 		private int renderingLineNumber;
@@ -20,11 +20,15 @@ namespace Lime
 
 		public bool IsValid => Valid == ValidState.All;
 
-		public int Line {
+		public int Line
+		{
 			get { return line; }
 			set
 			{
-				if (line == value) return;
+				if (line == value) {
+					return;
+				}
+
 				switch (Valid) {
 					case ValidState.All:
 					case ValidState.WorldPos:
@@ -40,11 +44,15 @@ namespace Lime
 			}
 		}
 
-		public int Col {
+		public int Col
+		{
 			get { return col; }
 			set
 			{
-				if (col == value) return;
+				if (col == value) {
+					return;
+				}
+
 				switch (Valid) {
 					case ValidState.All:
 					case ValidState.LineCol:
@@ -58,27 +66,36 @@ namespace Lime
 			}
 		}
 
-		public int TextPos {
+		public int TextPos
+		{
 			get { return textPos; }
 			set
 			{
-				if (textPos == value) return;
+				if (textPos == value) {
+					return;
+				}
+
 				Valid = ValidState.TextPos;
 				textPos = value;
 			}
 		}
 
-		public Vector2 WorldPos {
+		public Vector2 WorldPos
+		{
 			get { return worldPos; }
 			set
 			{
-				if (worldPos.Equals(value)) return;
+				if (worldPos.Equals(value)) {
+					return;
+				}
+
 				Valid = ValidState.WorldPos;
 				worldPos = value;
 			}
 		}
 
-		public bool IsVisible {
+		public bool IsVisible
+		{
 			get { return isVisible && Valid != ValidState.None; }
 			set { isVisible = value; }
 		}
@@ -130,8 +147,7 @@ namespace Lime
 				case ValidState.LineWorldX:
 					if (
 						Line == renderingLineNumber &&
-						(WorldPos.X - charPos.X).Abs() < (WorldPos.X - nearestCharPos.X).Abs())
-					{
+						(WorldPos.X - charPos.X).Abs() < (WorldPos.X - nearestCharPos.X).Abs()) {
 						col = index;
 						textPos = renderingTextPos;
 						nearestCharPos = charPos;
@@ -143,33 +159,39 @@ namespace Lime
 
 		public void FinishSync()
 		{
-			if (Valid == ValidState.WorldPos || Valid == ValidState.LineWorldX)
+			if (Valid == ValidState.WorldPos || Valid == ValidState.LineWorldX) {
 				worldPos = nearestCharPos;
+			}
+
 			Valid = ValidState.All;
 		}
 
 		public void InvalidatePreservingTextPos()
 		{
-			if (Valid == ValidState.All)
+			if (Valid == ValidState.All) {
 				Valid = ValidState.TextPos;
+			}
 		}
 
 		public void ClampTextPos(int textLength)
 		{
-			if (Valid == ValidState.TextPos)
+			if (Valid == ValidState.TextPos) {
 				textPos = textPos.Clamp(0, textLength);
+			}
 		}
 
 		public void ClampLine(int lineCount)
 		{
-			if (Valid == ValidState.LineCol || Valid == ValidState.LineWorldX)
+			if (Valid == ValidState.LineCol || Valid == ValidState.LineWorldX) {
 				line = line.Clamp(0, lineCount - 1);
+			}
 		}
 
 		public void ClampCol(int maxCol)
 		{
-			if (Valid == ValidState.LineCol && Line == renderingLineNumber)
+			if (Valid == ValidState.LineCol && Line == renderingLineNumber) {
 				Col = Col.Clamp(0, maxCol);
+			}
 		}
 
 		public void NextLine()
@@ -196,7 +218,7 @@ namespace Lime
 		}
 	}
 
-	internal class DummyCaretPosition: ICaretPosition
+	internal class DummyCaretPosition : ICaretPosition
 	{
 		public static DummyCaretPosition Instance = new DummyCaretPosition();
 
@@ -206,19 +228,20 @@ namespace Lime
 		public int Col { get; set; }
 		public int TextPos { get; set; }
 		public Vector2 WorldPos { get; set; }
-		public bool IsVisible {
+		public bool IsVisible
+		{
 			get { return false; }
 			set { }
 		}
-		public void EmptyText(Vector2 pos) {}
-		public void StartSync() {}
-		public void Sync(int index, Vector2 charPos, Vector2 size) {}
-		public void FinishSync() {}
-		public void InvalidatePreservingTextPos() {}
-		public void ClampTextPos(int textLength) {}
-		public void ClampLine(int lineCount) {}
-		public void ClampCol(int maxCol) {}
-		public void NextLine() {}
+		public void EmptyText(Vector2 pos) { }
+		public void StartSync() { }
+		public void Sync(int index, Vector2 charPos, Vector2 size) { }
+		public void FinishSync() { }
+		public void InvalidatePreservingTextPos() { }
+		public void ClampTextPos(int textLength) { }
+		public void ClampLine(int lineCount) { }
+		public void ClampCol(int maxCol) { }
+		public void NextLine() { }
 		public ICaretPosition Clone() { return this; }
 		public void AssignFrom(ICaretPosition c) { }
 	}
@@ -233,7 +256,8 @@ namespace Lime
 		public int Col { get; set; }
 		public int TextPos { get; set; }
 		public Vector2 WorldPos { get; set; }
-		public bool IsVisible {
+		public bool IsVisible
+		{
 			get { return carets.Any(c => c.IsVisible); }
 			set { }
 		}

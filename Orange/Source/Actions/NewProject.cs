@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
-using Lime;
-using System.Reflection;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
+using Lime;
 
 namespace Orange
 {
@@ -29,9 +29,9 @@ namespace Orange
 		{
 			var citrusPath = Toolbox.FindCitrusDirectory();
 			var dialog = new FileDialog {
-				AllowedFileTypes = new [] { "" },
+				AllowedFileTypes = new[] { string.Empty },
 				Mode = FileDialogMode.SelectFolder,
-				Title = "Select source example project"
+				Title = "Select source example project",
 			};
 			bool? dialogCancelled = null;
 			// Showing UI must be executed on the UI thread.
@@ -70,8 +70,8 @@ namespace Orange
 				}
 			}
 			var sourceProjectName = Path.GetFileName(Path.GetDirectoryName(sourceDirectory));
-			var sourceProjectApplicationName = String.Join(" ", Regex.Split(sourceProjectName, @"(?<!^)(?=[A-Z])"));
-			var newProjectApplicationName = String.Join(" ", Regex.Split(projectName, @"(?<!^)(?=[A-Z])"));
+			var sourceProjectApplicationName = string.Join(" ", Regex.Split(sourceProjectName, @"(?<!^)(?=[A-Z])"));
+			var newProjectApplicationName = string.Join(" ", Regex.Split(projectName, @"(?<!^)(?=[A-Z])"));
 			Console.WriteLine($"New project name is \"{projectName}\"");
 			var textfileExtensions = new HashSet<string> {
 				".cs",
@@ -112,7 +112,10 @@ namespace Orange
 						// TODO: apply only to .sln and .csproj file
 						text = text.Replace("..\\..\\..", relativeUri.ToString().Replace('/', '\\'));
 						if (targetPath.EndsWith(".citproj", StringComparison.OrdinalIgnoreCase)) {
-							text = text.Replace("\"CitrusDirectory\": \"../../\",", $"\"CitrusDirectory\": \"{relativeUri}\",");
+							text = text.Replace(
+								"\"CitrusDirectory\": \"../../\",",
+								$"\"CitrusDirectory\": \"{relativeUri}\","
+							);
 							newProjectCitprojPath = targetPath;
 						}
 						if (targetPath.EndsWith(".ps1", StringComparison.OrdinalIgnoreCase)) {

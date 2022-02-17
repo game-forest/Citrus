@@ -7,21 +7,23 @@ namespace Tangerine.UI.SceneView
 	public class FrameBorderPresenter : SyncCustomPresenter<DistortionMesh>
 	{
 		private readonly SceneView sv;
-		private readonly Texture2D DashTexture;
+		private readonly Texture2D dashTexture;
 
 		public FrameBorderPresenter(SceneView sceneView)
 		{
 			this.sv = sceneView;
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
-			DashTexture = new Texture2D();
-			DashTexture.LoadImage(new Bitmap(new ThemedIconResource("SceneView.Dash", "Tangerine").GetResourceStream()));
-			DashTexture.TextureParams = new TextureParams {
+			dashTexture = new Texture2D();
+			dashTexture.LoadImage(
+				new Bitmap(new ThemedIconResource("SceneView.Dash", "Tangerine").GetResourceStream())
+			);
+			dashTexture.TextureParams = new TextureParams {
 				WrapMode = TextureWrapMode.Repeat,
-				MinMagFilter = TextureFilter.Nearest
+				MinMagFilter = TextureFilter.Nearest,
 			};
 		}
 
-		void Render(Widget canvas)
+		private void Render(Widget canvas)
 		{
 			canvas.PrepareRendererState();
 			if (!Document.Current.PreviewScene && SceneUserPreferences.Instance.DrawFrameBorder) {

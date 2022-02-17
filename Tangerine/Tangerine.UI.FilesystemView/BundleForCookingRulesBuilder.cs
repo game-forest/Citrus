@@ -49,15 +49,17 @@ namespace Tangerine.UI.FilesystemView
 					continue;
 				}
 				yield return ProcessPath(file);
-				if (fi.Attributes == FileAttributes.Directory && TryGetCookingRulesForDirectory(fi.FullName, out var p)) {
+				if (
+					fi.Attributes == FileAttributes.Directory && TryGetCookingRulesForDirectory(fi.FullName, out var p)
+				) {
 					yield return p;
 				}
 			}
 		}
 
-		private bool TryGetCookingRulesForDirectory(string FullName, out string path)
+		private bool TryGetCookingRulesForDirectory(string fullName, out string path)
 		{
-			var cookingRulesPath = Path.Combine(FullName, CookingRulesBuilder.CookingRulesFilename);
+			var cookingRulesPath = Path.Combine(fullName, CookingRulesBuilder.CookingRulesFilename);
 			if (File.Exists(cookingRulesPath)) {
 				path = ProcessPath(cookingRulesPath);
 				return true;

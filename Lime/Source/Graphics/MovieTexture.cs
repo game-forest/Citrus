@@ -5,14 +5,14 @@ namespace Lime
 {
 	public class MovieTexture : Texture2D
 	{
-		Stream rgbStream;
-		Stream alphaStream;
-		OgvDecoder rgbDecoder;
-		OgvDecoder alphaDecoder;
-		Color4[] pixels;
-		double gameTime;
-		double videoTime;
-		string path;
+		private Stream rgbStream;
+		private Stream alphaStream;
+		private OgvDecoder rgbDecoder;
+		private OgvDecoder alphaDecoder;
+		private Color4[] pixels;
+		private double gameTime;
+		private double videoTime;
+		private string path;
 
 		public bool Looped { get; set; }
 		public bool Paused { get; private set; }
@@ -114,8 +114,10 @@ namespace Lime
 				return;
 			}
 			gameTime += delta;
-			if (videoTime > gameTime)
+			if (videoTime > gameTime) {
 				return;
+			}
+
 			while (true) {
 				if (!rgbDecoder.DecodeFrame()) {
 					if (Looped) {
@@ -130,8 +132,9 @@ namespace Lime
 					alphaDecoder.DecodeFrame();
 				}
 				videoTime = rgbDecoder.GetPlaybackTime();
-				if (videoTime >= gameTime)
+				if (videoTime >= gameTime) {
 					break;
+				}
 			}
 			rgbDecoder.FillTextureRGBX8(pixels, ImageSize.Width, ImageSize.Height);
 			if (alphaDecoder != null) {

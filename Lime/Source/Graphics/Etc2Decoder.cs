@@ -5,19 +5,23 @@ namespace Lime
 {
 	internal unsafe class Etc2Decoder
 	{
-		const Int32 ETC2_MODE_ALLOWED_ALL = 0x1F;
+		private const int ETC2_MODE_ALLOWED_ALL = 0x1F;
 
 #if iOS
 		const string Dll = "__Internal";
 #else
-		const string Dll = "Etc2Decoder";
+		private const string Dll = "Etc2Decoder";
 #endif
 
 		[DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
-		static extern Int32 draw_block4x4_etc2_eac(byte* bitstring, uint* image_buffer, Int32 flags);
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+		private static extern int draw_block4x4_etc2_eac(byte* bitstring, uint* image_buffer, int flags);
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
 		[DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
-		static extern Int32 draw_block4x4_etc2_rgb8(byte* bitstring, uint* image_buffer, Int32 flags);
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+		private static extern int draw_block4x4_etc2_rgb8(byte* bitstring, uint* image_buffer, int flags);
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 
 		public static void Decode(byte[] etcData, IntPtr rgba8Data, int width, int height, Format format)
 		{

@@ -31,10 +31,10 @@ namespace Lime
 		{
 			public const float IconWidth = 20;
 
-			static readonly VectorShape separator = new VectorShape {
+			private static readonly VectorShape separator = new VectorShape {
 				new VectorShape.Line(0, 0.1f, 0, 0.9f, Theme.Colors.ControlBorder, 0.05f),
 			};
-			static readonly VectorShape icon = new VectorShape {
+			private static readonly VectorShape icon = new VectorShape {
 				new VectorShape.Line(0.5f, 0.6f, 0.7f, 0.4f, Color4.White.Transparentify(0.2f), 0.04f, false),
 				new VectorShape.Line(0.5f, 0.6f, 0.3f, 0.4f, Color4.White.Transparentify(0.2f), 0.04f, false),
 				new VectorShape.Line(0.5f, 0.55f, 0.7f, 0.35f, Color4.White.Transparentify(0.5f), 0.04f, false),

@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
@@ -18,8 +18,7 @@ namespace Tangerine.UI.SceneView
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
 		}
 
-
-		void Render(Widget canvas)
+		private void Render(Widget canvas)
 		{
 			if (Document.Current.PreviewScene) {
 				return;
@@ -57,7 +56,7 @@ namespace Tangerine.UI.SceneView
 				V1 = start,
 				V2 = left,
 				V3 = end,
-				V4 = right
+				V4 = right,
 			};
 		}
 
@@ -98,14 +97,29 @@ namespace Tangerine.UI.SceneView
 				var dir = hull.V3 - hull.V1;
 				var n = new Vector2(-dir.Y, dir.X).Normalized;
 				// Draw effective radius
-				DrawCapsule(hull.V1, hull.V3, n * bone.EffectiveRadius, t, 20, ColorTheme.Current.SceneView.BoneEffectiveRadius);
+				DrawCapsule(
+					a: hull.V1,
+					b: hull.V3,
+					n: n * bone.EffectiveRadius,
+					t: t,
+					numSegments: 20,
+					color: ColorTheme.Current.SceneView.BoneEffectiveRadius
+				);
 				// Draw Fadeout zone
-				DrawCapsule(hull.V1, hull.V3, n * (bone.EffectiveRadius + bone.FadeoutZone), t, 20, ColorTheme.Current.SceneView.BoneFadeoutZone);
+				DrawCapsule(
+					a: hull.V1,
+					b: hull.V3,
+					n: n * (bone.EffectiveRadius + bone.FadeoutZone),
+					t: t,
+					numSegments: 20,
+					color: ColorTheme.Current.SceneView.BoneFadeoutZone
+				);
 			}
 		}
 
-		private static void DrawCapsule(Vector2 a, Vector2 b, Vector2 n, Matrix32 t, int numSegments, Color4 color, float thickness = 1)
-		{
+		private static void DrawCapsule(
+			Vector2 a, Vector2 b, Vector2 n, Matrix32 t, int numSegments, Color4 color, float thickness = 1
+		) {
 			Renderer.DrawLine((a + n) * t, (b + n) * t, color, thickness);
 			Renderer.DrawLine((a - n) * t, (b - n) * t, color, thickness);
 			var step = 180 / numSegments;

@@ -3,7 +3,10 @@ namespace Lime
 	internal class PostProcessingActionDistortion : PostProcessingAction
 	{
 		public override bool EnabledCheck(PostProcessingRenderObject ro) => ro.DistortionEnabled;
-		public override PostProcessingAction.Buffer GetTextureBuffer(PostProcessingRenderObject ro) => ro.DistortionBuffer;
+		public override PostProcessingAction.Buffer GetTextureBuffer(PostProcessingRenderObject ro)
+		{
+			return ro.DistortionBuffer;
+		}
 
 		public override void Do(PostProcessingRenderObject ro)
 		{
@@ -20,7 +23,13 @@ namespace Lime
 			ro.DistortionMaterial.Red = ro.DistortionRed;
 			ro.DistortionMaterial.Green = ro.DistortionGreen;
 			ro.DistortionMaterial.Blue = ro.DistortionBlue;
-			ro.RenderToTexture(ro.DistortionBuffer.Texture, ro.ProcessedTexture, ro.DistortionMaterial, Color4.White, ro.TextureClearingColor);
+			ro.RenderToTexture(
+				ro.DistortionBuffer.Texture,
+				ro.ProcessedTexture,
+				ro.DistortionMaterial,
+				Color4.White,
+				ro.TextureClearingColor
+			);
 			ro.CurrentBufferSize = (Vector2)ro.DistortionBuffer.Size;
 			ro.ProcessedUV1 = (Vector2)ro.ViewportSize / ro.CurrentBufferSize;
 

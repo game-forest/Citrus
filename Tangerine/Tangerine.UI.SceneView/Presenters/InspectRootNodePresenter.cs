@@ -12,7 +12,9 @@ namespace Tangerine.UI.SceneView
 		{
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
 			inspectingRootTexture = new Texture2D();
-			inspectingRootTexture.LoadImage(new Bitmap(new ThemedIconResource("SceneView.InspectingRoot", "Tangerine").GetResourceStream()));
+			inspectingRootTexture.LoadImage(
+				new Bitmap(new ThemedIconResource("SceneView.InspectingRoot", "Tangerine").GetResourceStream())
+			);
 			inspectingRootTextureSize = (Vector2)inspectingRootTexture.ImageSize;
 		}
 
@@ -27,7 +29,9 @@ namespace Tangerine.UI.SceneView
 			if (ProjectUserPreferences.Instance.RulerVisible) {
 				p.Y += RulersWidget.RulerHeight;
 			}
-			Renderer.DrawSprite(inspectingRootTexture, Color4.White, p, inspectingRootTextureSize, Vector2.Zero, Vector2.One);
+			Renderer.DrawSprite(
+				inspectingRootTexture, Color4.White, p, inspectingRootTextureSize, Vector2.Zero, Vector2.One
+			);
 		}
 	}
 }

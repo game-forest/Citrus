@@ -138,7 +138,7 @@ namespace Tangerine.Core
 			var fbxImportOptions = new FbxImportOptions {
 				Path = fbxPath,
 				Target = target,
-				ApplyAttachment = false
+				ApplyAttachment = false,
 			};
 
 			var attachmentMetaPath = Path.ChangeExtension(path, Model3DAttachmentMeta.FileExtension);
@@ -194,7 +194,9 @@ namespace Tangerine.Core
 						foreach (var animation in attachment.Animations) {
 							if (animation.SourceAnimationId == null) {
 								var ac = model.Components.Get<AnimationComponent>();
-								animation.SourceAnimationId = ac != null && ac.Animations.Count > 0 ? ac.Animations[0].Id : null;
+								animation.SourceAnimationId = ac != null && ac.Animations.Count > 0
+									? ac.Animations[0].Id
+									: null;
 							}
 						}
 					}
@@ -209,16 +211,27 @@ namespace Tangerine.Core
 					animationPathWithoutExt = Animation.FixAntPath(animationPathWithoutExt);
 					var animationPath = animationPathWithoutExt + ".ant";
 					animation.ContentsPath = animationPathWithoutExt;
-					InternalPersistence.Instance.WriteToBundle(cacheBundle, animationPath, animation.GetData(), Persistence.Format.Binary,
-						cookingUnitHash, AssetAttributes.None);
+					InternalPersistence.Instance.WriteToBundle(
+						cacheBundle,
+						animationPath,
+						animation.GetData(),
+						Persistence.Format.Binary,
+						cookingUnitHash,
+						AssetAttributes.None
+					);
 					foreach (var animator in animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
 						animator.Owner.Animators.Remove(animator);
 					}
 					Animation.AnimationData.InvalidateCache(animationPathWithoutExt);
 				}
-				InternalPersistence.Instance.WriteToBundle(cacheBundle, path, model, Persistence.Format.Binary,
-					cookingUnitHash, AssetAttributes.None);
-
+				InternalPersistence.Instance.WriteToBundle(
+					cacheBundle,
+					path,
+					model,
+					Persistence.Format.Binary,
+					cookingUnitHash,
+					AssetAttributes.None
+				);
 			} else if (fbxCached) {
 				cacheBundle.DeleteFile(path);
 				cacheBundle.DeleteFile(attachmentMetaPath);
@@ -228,9 +241,11 @@ namespace Tangerine.Core
 				InternalPersistence.Instance.WriteToBundle(
 					cacheBundle,
 					attachmentPath,
-					Model3DAttachmentParser.ConvertToModelAttachmentFormat(attachment), Persistence.Format.Binary,
+					Model3DAttachmentParser.ConvertToModelAttachmentFormat(attachment),
+					Persistence.Format.Binary,
 					cookingUnitHash,
-					AssetAttributes.None);
+					AssetAttributes.None
+				);
 			} else if (attachmentCached) {
 				cacheBundle.DeleteFile(attachmentPath);
 			}

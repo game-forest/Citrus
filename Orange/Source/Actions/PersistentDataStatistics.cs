@@ -4,10 +4,10 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Lime;
 using static System.Math;
-using System.Reflection;
 
 namespace Orange
 {
@@ -147,11 +147,12 @@ namespace Orange
 			private readonly StatisticsRecord t3dTotalStatistics = new StatisticsRecord("t3d total");
 			private readonly StatisticsRecord antTotalStatistics = new StatisticsRecord("ant total");
 			private const int MeasurementCount = 13;
-			private readonly Dictionary<string, StatisticsRecord> statisticsForPath = new Dictionary<string, StatisticsRecord>(StringComparer.OrdinalIgnoreCase);
+			private readonly Dictionary<string, StatisticsRecord> statisticsForPath =
+				new Dictionary<string, StatisticsRecord>(StringComparer.OrdinalIgnoreCase);
 			private readonly Stopwatch antStopwatch = new Stopwatch();
 			private readonly string[] extensions = new[] { ".t3d", ".tan", ".ant" };
 			private readonly (StatisticsRecord Totals, string Extension)[] totalsPerExtension;
-			private readonly string TempNodesDirectory = null;
+			private readonly string tempNodesDirectory = null;
 			private int currentMeasurementIteration;
 			private StatisticsRecord currentStatistics;
 			private long currentTotalBytes;
@@ -164,9 +165,11 @@ namespace Orange
 				totalsPerExtension = new[] {
 					(t3dTotalStatistics, ".t3d"),
 					(tanTotalStatistics, ".tan"),
-					(antTotalStatistics, ".ant")
+					(antTotalStatistics, ".ant"),
 				};
-				TempNodesDirectory = Path.Combine(Workspace.Instance.AssetsDirectory, "..", "nodes_in_bundle_without_animators");
+				tempNodesDirectory = Path.Combine(
+					Workspace.Instance.AssetsDirectory, "..", "nodes_in_bundle_without_animators"
+				);
 			}
 
 			public void Run()
@@ -191,12 +194,14 @@ namespace Orange
 				Node.SceneLoading = new ThreadLocal<Node.SceneLoadingDelegate>(() => OnSceneLoading);
 				Node.SceneLoaded = new ThreadLocal<Node.SceneLoadedDelegate>(() => OnSceneLoaded);
 				// tracking when animation data is loading to add up to total size and time
-				Animation.AnimationData.Loading = new ThreadLocal<Animation.AnimationData.LoadingDelegate>(() => AnimationDataLoading);
-				Animation.AnimationData.Loaded = new ThreadLocal<Animation.AnimationData.LoadedDelegate>(() => OnAnimationDataLoaded);
+				Animation.AnimationData.Loading =
+					new ThreadLocal<Animation.AnimationData.LoadingDelegate>(() => AnimationDataLoading);
+				Animation.AnimationData.Loaded =
+					new ThreadLocal<Animation.AnimationData.LoadedDelegate>(() => OnAnimationDataLoaded);
 
 				// non cached: AssetBundle.Current = new AggregateAssetBundle(
-				// bundles.Select(bundleName => new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName))).ToArray());
-
+				// bundles.Select(bundleName =>
+				// new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName))).ToArray());
 				AssetBundle.Current = new CachingBundle(EnumeratePersistentDataInBundles(target, bundles));
 				benchmarkState = BenchmarkState.WithoutExternals;
 				CollectDeserializationTimes(".t3d");
@@ -205,15 +210,21 @@ namespace Orange
 				CollectDeserializationTimes(".t3d");
 				CollectDeserializationTimes(".tan");
 
-				ResaveProcessedDocuments(new [] { ".tan", ".t3d" }, bundles, target, (node) => {
-					foreach (var animation in node.Animations) {
-						animation.ContentsPath = null;
+				ResaveProcessedDocuments(
+					extensions: new[] { ".tan", ".t3d" },
+					bundles: bundles,
+					target: target,
+					process: (node) => {
+						foreach (var animation in node.Animations) {
+							animation.ContentsPath = null;
+						}
+						node.Animators.Clear();
+					},
+					afterSave: (inputPath, outputPath) => {
+						this[inputPath].SizeWithoutAnimators = new System.IO.FileInfo(outputPath).Length;
 					}
-					node.Animators.Clear();
-				}, (inputPath, outputPath) => {
-					this[inputPath].SizeWithoutAnimators = new System.IO.FileInfo(outputPath).Length;
-				});
-				AssetBundle.Current = new CachingBundle(TempNodesDirectory);
+				);
+				AssetBundle.Current = new CachingBundle(tempNodesDirectory);
 
 				benchmarkState = BenchmarkState.WithoutAnimatorsWithoutExternals;
 				CollectDeserializationTimes(".t3d");
@@ -222,16 +233,22 @@ namespace Orange
 				CollectDeserializationTimes(".t3d");
 				CollectDeserializationTimes(".tan");
 
-				ResaveProcessedDocuments(new[] { ".tan", ".t3d", ".ant" }, bundles, target, (node) => {
-					if (node is Mesh3D mesh3d) {
-						foreach (var submesh in mesh3d.Submeshes) {
-							submesh.Mesh = null;
+				ResaveProcessedDocuments(
+					extensions: new[] { ".tan", ".t3d", ".ant" },
+					bundles: bundles,
+					target: target,
+					process: (node) => {
+						if (node is Mesh3D mesh3d) {
+							foreach (var submesh in mesh3d.Submeshes) {
+								submesh.Mesh = null;
+							}
 						}
+					},
+					afterSave: (inputPath, outputPath) => {
+						this[inputPath].SizeWithoutMeshes = new System.IO.FileInfo(outputPath).Length;
 					}
-				}, (inputPath, outputPath) => {
-					this[inputPath].SizeWithoutMeshes = new System.IO.FileInfo(outputPath).Length;
-				});
-				AssetBundle.Current = new CachingBundle(TempNodesDirectory);
+				);
+				AssetBundle.Current = new CachingBundle(tempNodesDirectory);
 
 				benchmarkState = BenchmarkState.WithoutMeshesWithoutExternals;
 				CollectDeserializationTimes(".t3d");
@@ -240,7 +257,7 @@ namespace Orange
 				CollectDeserializationTimes(".t3d");
 				CollectDeserializationTimes(".tan");
 
-				CalcTotals(totalStatistics, "");
+				CalcTotals(totalStatistics, string.Empty);
 				foreach (var (totals, extension) in totalsPerExtension) {
 					CalcTotals(totals, extension);
 				}
@@ -250,8 +267,8 @@ namespace Orange
 
 				Console.WriteLine($"Statistics saved to {Path.Combine(Directory.GetCurrentDirectory(), filename)}");
 
-				if (Directory.Exists(TempNodesDirectory)) {
-					Directory.Delete(TempNodesDirectory, recursive: true);
+				if (Directory.Exists(tempNodesDirectory)) {
+					Directory.Delete(tempNodesDirectory, recursive: true);
 				}
 				AssetBundle.Current = savedAssetBundle;
 				Node.SceneLoading = savedNodeSceneLoading;
@@ -259,20 +276,20 @@ namespace Orange
 				Animation.AnimationData.Loaded = savedAnimationDataLoaded;
 			}
 
-			private IEnumerable<(string, Stream)> EnumeratePersistentDataInBundles(Target target, IEnumerable<string> bundles)
-			{
+			private IEnumerable<(string, Stream)> EnumeratePersistentDataInBundles(
+				Target target, IEnumerable<string> bundles
+			) {
 				foreach (var bundleName in bundles) {
-					using (var bundle = new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName))) {
-						foreach (var file in bundle.EnumerateFiles()) {
-							bool include = false;
-							foreach (var extension in extensions) {
-								if (file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
-									include = true;
-								}
+					using var bundle = new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName));
+					foreach (var file in bundle.EnumerateFiles()) {
+						bool include = false;
+						foreach (var extension in extensions) {
+							if (file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) {
+								include = true;
 							}
-							if (include) {
-								yield return (file, bundle.OpenFile(file));
-							}
+						}
+						if (include) {
+							yield return (file, bundle.OpenFile(file));
 						}
 					}
 				}
@@ -281,7 +298,9 @@ namespace Orange
 			private void CalcTotals(StatisticsRecord t, string suffixFilter)
 			{
 				t.Filename = suffixFilter + " total:";
-				var filteredRecords = statisticsForPath.Where(i => i.Key.EndsWith(suffixFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+				var filteredRecords = statisticsForPath
+					.Where(i => i.Key.EndsWith(suffixFilter, StringComparison.OrdinalIgnoreCase))
+					.ToList();
 				if (!filteredRecords.Any()) {
 					return;
 				}
@@ -330,37 +349,38 @@ namespace Orange
 					}
 				}
 				nodeTypes.Sort();
-				List<(MemberInfo MemberInfo, CsvColumnNameAttribute CsvColumn)> columns = typeof(StatisticsRecord).GetMembers()
-					.Where(memberInfo => memberInfo.MemberType == System.Reflection.MemberTypes.Property ||
-						memberInfo.MemberType == System.Reflection.MemberTypes.Field)
-					.Select(memberInfo => (memberInfo, memberInfo.GetCustomAttribute<CsvColumnNameAttribute>()))
+				List<(MemberInfo MemberInfo, CsvColumnNameAttribute CsvColumn)> columns = typeof(StatisticsRecord)
+					.GetMembers()
+					.Where(
+						memberInfo => memberInfo.MemberType == System.Reflection.MemberTypes.Property
+						|| memberInfo.MemberType == System.Reflection.MemberTypes.Field
+					).Select(memberInfo => (memberInfo, memberInfo.GetCustomAttribute<CsvColumnNameAttribute>()))
 					.Where(p => p.Item2 != null)
 					.ToList();
 				using (var stream = new FileStream(filepath, FileMode.Create)) {
-					using (var writer = new StreamWriter(stream)) {
-						var headerRow = string.Empty;
-						foreach (var column in columns) {
-							headerRow += (column == columns.First() ? "" : ",") + column.CsvColumn.Name;
+					using var writer = new StreamWriter(stream);
+					var headerRow = string.Empty;
+					foreach (var column in columns) {
+						headerRow += (column == columns.First() ? string.Empty : ",") + column.CsvColumn.Name;
+					}
+					foreach (var nodeType in nodeTypes) {
+						headerRow += $",{nodeType}";
+					}
+					for (var s = BenchmarkState.WithoutExternals; s < BenchmarkState.Last; s++) {
+						var memberInfo = typeof(BenchmarkState).GetMember(s.ToString()).First();
+						var header = memberInfo.GetCustomAttribute<CsvColumnNameAttribute>().Name;
+						for (int i = 1; i <= MeasurementCount; i++) {
+							headerRow += $",{header}_{i}";
 						}
-						foreach (var nodeType in nodeTypes) {
-							headerRow += $",{nodeType}";
-						}
-						for (var s = BenchmarkState.WithoutExternals; s < BenchmarkState.Last; s++) {
-							var memberInfo = typeof(BenchmarkState).GetMember(s.ToString()).First();
-							var header = memberInfo.GetCustomAttribute<CsvColumnNameAttribute>().Name;
-							for (int i = 1; i <= MeasurementCount; i++) {
-								headerRow += $",{header}_{i}";
-							}
-						}
-						headerRow += "\n";
-						writer.Write(headerRow);
-						WriteRecord(totalStatistics, writer);
-						foreach (var (r, _) in totalsPerExtension) {
-							WriteRecord(r, writer);
-						}
-						foreach (var (_, r) in statisticsForPath) {
-							WriteRecord(r, writer);
-						}
+					}
+					headerRow += "\n";
+					writer.Write(headerRow);
+					WriteRecord(totalStatistics, writer);
+					foreach (var (r, _) in totalsPerExtension) {
+						WriteRecord(r, writer);
+					}
+					foreach (var (_, r) in statisticsForPath) {
+						WriteRecord(r, writer);
 					}
 				}
 
@@ -369,7 +389,7 @@ namespace Orange
 					var r = record;
 					var row = string.Empty;
 					foreach (var column in columns) {
-						row += (column == columns.First() ? "" : ",") +
+						row += (column == columns.First() ? string.Empty : ",") +
 							(column.MemberInfo as FieldInfo)?.GetValue(record) ??
 							(column.MemberInfo as PropertyInfo).GetValue(record);
 					}
@@ -386,10 +406,15 @@ namespace Orange
 				}
 			}
 
-			private void ResaveProcessedDocuments(IEnumerable<string> extensions, IEnumerable<string> bundles, Target target, Action<Node> process, Action<string, string> afterSave)
-			{
-				if (Directory.Exists(TempNodesDirectory)) {
-					Directory.Delete(TempNodesDirectory, recursive: true);
+			private void ResaveProcessedDocuments(
+				IEnumerable<string> extensions,
+				IEnumerable<string> bundles,
+				Target target,
+				Action<Node> process,
+				Action<string, string> afterSave
+			) {
+				if (Directory.Exists(tempNodesDirectory)) {
+					Directory.Delete(tempNodesDirectory, recursive: true);
 				}
 				foreach (var bundleName in bundles) {
 					var bundle = new PackedAssetBundle(The.Workspace.GetBundlePath(target.Platform, bundleName));
@@ -398,7 +423,7 @@ namespace Orange
 						if (!extensions.Any(e => f.EndsWith(e, StringComparison.OrdinalIgnoreCase))) {
 							continue;
 						}
-						var path = Path.Combine(TempNodesDirectory, f);
+						var path = Path.Combine(tempNodesDirectory, f);
 						Directory.CreateDirectory(Path.GetDirectoryName(path));
 						if (f.EndsWith(".ant", StringComparison.OrdinalIgnoreCase)) {
 							using (var inputStream = AssetBundle.Current.OpenFile(f))
@@ -479,9 +504,12 @@ namespace Orange
 							if (!string.IsNullOrEmpty(n.ContentsPath)) {
 								var path = n.ContentsPath;
 								if (path.StartsWith("/", StringComparison.OrdinalIgnoreCase)) {
-									path =  Path.GetDirectoryName(f) + path;
+									path = Path.GetDirectoryName(f) + path;
 								}
-								if (statisticsForPath.ContainsKey(path + ".t3d") || statisticsForPath.ContainsKey(path + ".tan")) {
+								if (
+									statisticsForPath.ContainsKey(path + ".t3d")
+									|| statisticsForPath.ContainsKey(path + ".tan")
+								) {
 									r.ExternalSceneCount++;
 								}
 							}
@@ -527,10 +555,13 @@ namespace Orange
 								}
 							}
 						}
-						currentStatistics.LoadingTimes[(int)benchmarkState][currentMeasurementIteration] = sw.Elapsed.TotalMilliseconds;
+						currentStatistics.LoadingTimes[(int)benchmarkState][currentMeasurementIteration] =
+							sw.Elapsed.TotalMilliseconds;
 						time += sw.Elapsed.TotalMilliseconds;
 					}
-					Console.WriteLine($"[{i + 1}/{MeasurementCount}] read {extension} from bundles read time: {time}ms");
+					Console.WriteLine(
+						$"[{i + 1}/{MeasurementCount}] read {extension} from bundles read time: {time}ms"
+					);
 					Console.WriteLine($"[{i + 1}/{MeasurementCount}]: bytes per ms {currentTotalBytes / time}");
 				}
 				System.Diagnostics.Process.GetCurrentProcess().ProcessorAffinity = savedProcessorAffinity;
@@ -564,7 +595,11 @@ namespace Orange
 					currentExternal = null;
 					switch (benchmarkState) {
 						case BenchmarkState.WithExternals:
-							currentStatistics.LoadingTimes[(int)BenchmarkState.Externals][currentMeasurementIteration] += externalStopwatch.Elapsed.TotalMilliseconds;
+							currentStatistics.LoadingTimes[
+								(int)BenchmarkState.Externals
+							][
+								currentMeasurementIteration
+							] += externalStopwatch.Elapsed.TotalMilliseconds;
 							break;
 					}
 				}
@@ -593,16 +628,33 @@ namespace Orange
 				var elapsedMilliseconds = antStopwatch.Elapsed.TotalMilliseconds;
 				if (currentExternal != null) {
 					// if something (like attachment.EntryTrigger) triggered animation loading when loading externals
-					// substitute it from the time consumed by loading externals since external + ant time should be <= total time
-					currentStatistics.LoadingTimes[(int)BenchmarkState.Externals][currentMeasurementIteration] -= elapsedMilliseconds;
+					// substitute it from the time consumed by
+					// loading externals since external + ant time should be <= total time
+					currentStatistics.LoadingTimes[
+						(int)BenchmarkState.Externals
+					][
+						currentMeasurementIteration
+					] -= elapsedMilliseconds;
 				}
 				switch (benchmarkState) {
 					case BenchmarkState.WithoutExternals:
-						value.LoadingTimes[(int)BenchmarkState.WithoutExternals][currentMeasurementIteration] = elapsedMilliseconds;
+						value.LoadingTimes[
+							(int)BenchmarkState.WithoutExternals
+						][
+							currentMeasurementIteration
+						] = elapsedMilliseconds;
 						break;
 					case BenchmarkState.WithExternals:
-						value.LoadingTimes[(int)BenchmarkState.WithExternals][currentMeasurementIteration] = elapsedMilliseconds;
-						currentStatistics.LoadingTimes[(int)BenchmarkState.Ant][currentMeasurementIteration] += elapsedMilliseconds;
+						value.LoadingTimes[
+							(int)BenchmarkState.WithExternals
+						][
+							currentMeasurementIteration
+						] = elapsedMilliseconds;
+						currentStatistics.LoadingTimes[
+							(int)BenchmarkState.Ant
+						][
+							currentMeasurementIteration
+						] += elapsedMilliseconds;
 						break;
 				}
 			}
@@ -627,7 +679,8 @@ namespace Orange
 
 		private class CachingBundle : AssetBundle
 		{
-			private readonly Dictionary<string, UncloseableMemoryStream> files = new Dictionary<string, UncloseableMemoryStream>(StringComparer.OrdinalIgnoreCase);
+			private readonly Dictionary<string, UncloseableMemoryStream> files =
+				new Dictionary<string, UncloseableMemoryStream>(StringComparer.OrdinalIgnoreCase);
 
 			public CachingBundle(string directory)
 			{
@@ -679,9 +732,22 @@ namespace Orange
 
 			public override int GetFileUnpackedSize(string path) => throw new NotSupportedException();
 
-			public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotSupportedException();
+			public override void ImportFile(
+				string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+			) {
+				throw new NotSupportedException();
+			}
 
-			public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes) => throw new NotImplementedException();
+			public override void ImportFileRaw(
+				string destinationPath,
+				Stream stream,
+				int unpackedSize,
+				SHA256 hash,
+				SHA256 cookingUnitHash,
+				AssetAttributes attributes
+			) {
+				throw new NotImplementedException();
+			}
 
 			public override Stream OpenFile(string path, FileMode fileMode = FileMode.Open)
 			{
@@ -690,7 +756,10 @@ namespace Orange
 				return stream;
 			}
 
-			public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open) => OpenFile(path, fileMode);
+			public override Stream OpenFileRaw(string path, FileMode fileMode = FileMode.Open)
+			{
+				return OpenFile(path, fileMode);
+			}
 
 			public override SHA256 GetFileContentsHash(string path) => throw new NotImplementedException();
 

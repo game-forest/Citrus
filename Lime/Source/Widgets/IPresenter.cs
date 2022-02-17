@@ -204,18 +204,23 @@ namespace Lime
 		}
 	}
 
-	public class CustomPresenter<T> : CustomPresenter where T : Node
+	public class CustomPresenter<T> : CustomPresenter
+		where T : Node
 	{
 		public sealed override void Render(Node node) => InternalRender((T)node);
 
-		public sealed override bool PartialHitTest(Node node, ref HitTestArgs args) => InternalPartialHitTest((T)node, ref args);
+		public sealed override bool PartialHitTest(Node node, ref HitTestArgs args)
+		{
+			return InternalPartialHitTest((T)node, ref args);
+		}
 
 		protected virtual void InternalRender(T node) { }
 
 		protected virtual bool InternalPartialHitTest(T node, ref HitTestArgs args) => false;
 	}
 
-	public class DelegatePresenter<T> : CustomPresenter<T> where T : Node
+	public class DelegatePresenter<T> : CustomPresenter<T>
+		where T : Node
 	{
 		public delegate void RenderDelegate(T node);
 		public delegate bool PartialHitTestDelegate(T node, ref HitTestArgs args);

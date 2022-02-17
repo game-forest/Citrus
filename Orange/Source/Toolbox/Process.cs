@@ -13,7 +13,7 @@ namespace Orange
 	{
 #if WIN
 		[DllImport("kernel32.dll")]
-		static extern uint GetOEMCP();
+		private static extern uint GetOEMCP();
 #endif // WIN
 
 		[Flags]
@@ -22,7 +22,7 @@ namespace Orange
 			None = 0,
 			RedirectOutput = 1,
 			RedirectErrors = 2,
-			All = 3
+			All = 3,
 		}
 
 		public static int Start(

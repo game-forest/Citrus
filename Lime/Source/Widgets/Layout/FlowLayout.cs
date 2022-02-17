@@ -47,7 +47,8 @@ namespace Lime
 		public VAlignment ColumnAlignment
 		{
 			get => columnAlignment;
-			set {
+			set
+			{
 				if (columnAlignment != value) {
 					columnAlignment = value;
 					InvalidateConstraintsAndArrangement();
@@ -148,7 +149,7 @@ namespace Lime
 						constraints[i++] = new LinearAllocator.Constraints {
 							MinSize = w.EffectiveMinSize.X,
 							MaxSize = w.EffectiveMaxSize.X,
-							Stretch = (w.LayoutCell ?? LayoutCell.Default).StretchX
+							Stretch = (w.LayoutCell ?? LayoutCell.Default).StretchX,
 						};
 					}
 					var sizes = LinearAllocator.Allocate(availableWidth, constraints, roundSizes: true);
@@ -205,7 +206,7 @@ namespace Lime
 						constraints[i++] = new LinearAllocator.Constraints {
 							MinSize = w.EffectiveMinSize.Y,
 							MaxSize = w.EffectiveMaxSize.Y,
-							Stretch = (w.LayoutCell ?? LayoutCell.Default).StretchY
+							Stretch = (w.LayoutCell ?? LayoutCell.Default).StretchY,
 						};
 					}
 					var sizes = LinearAllocator.Allocate(availableHeight, constraints, roundSizes: true);

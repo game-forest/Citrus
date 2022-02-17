@@ -5,7 +5,7 @@ namespace Tangerine.UI
 {
 	public class TextPropertyEditor : CommonPropertyEditor<string>
 	{
-		const int maxLines = 5;
+		private const int MaxLines = 5;
 		private EditBox editor;
 
 		public TextPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
@@ -19,21 +19,25 @@ namespace Tangerine.UI
 					(button = new ThemedButton {
 						Text = "...",
 						MinMaxWidth = 20,
-						LayoutCell = new LayoutCell(Alignment.Center)
-					})
-				}
+						LayoutCell = new LayoutCell(Alignment.Center),
+					}),
+				},
 			});
 			editor.LayoutCell = new LayoutCell(Alignment.Center);
-			editor.Editor.EditorParams.MaxLines = maxLines;
-			editor.MinHeight += editor.TextWidget.FontHeight * (maxLines - 1);
+			editor.Editor.EditorParams.MaxLines = MaxLines;
+			editor.MinHeight += editor.TextWidget.FontHeight * (MaxLines - 1);
 			var first = true;
 			var submitted = false;
 			var current = CoalescedPropertyValue();
 			editor.AddLateChangeWatcher(current, v => editor.Text = v.IsDefined ? v.Value : ManyValuesText);
 			button.Clicked += () => {
-				var window = new TextEditorDialog(editorParams.DisplayName ?? editorParams.PropertyName, editor.Text, (s) => {
-					SetProperty(s);
-				});
+				var window = new TextEditorDialog(
+					title: editorParams.DisplayName ?? editorParams.PropertyName,
+					text: editor.Text,
+					onSave: (s) => {
+						SetProperty(s);
+					}
+				);
 			};
 			editor.Submitted += text => Submit();
 			editor.AddLateChangeWatcher(() => editor.Text, text => {

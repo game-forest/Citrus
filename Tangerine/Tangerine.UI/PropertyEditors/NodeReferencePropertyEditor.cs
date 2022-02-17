@@ -3,7 +3,8 @@ using Tangerine.Core;
 
 namespace Tangerine.UI
 {
-	public class NodeReferencePropertyEditor<T> : CommonPropertyEditor<NodeReference<T>> where T : Node
+	public class NodeReferencePropertyEditor<T> : CommonPropertyEditor<NodeReference<T>>
+		where T : Node
 	{
 		private EditBox editor;
 
@@ -19,12 +20,12 @@ namespace Tangerine.UI
 			editor.Submitted += SetComponent;
 			var current = CoalescedPropertyValue();
 			editor.AddLateChangeWatcher(current, v => {
-				editor.Text = v.IsDefined ? v.Value?.Id: ManyValuesText;
+				editor.Text = v.IsDefined ? v.Value?.Id : ManyValuesText;
 			});
 			ManageManyValuesOnFocusChange(editor, current);
 		}
 
-		void SetComponent(string text)
+		private void SetComponent(string text)
 		{
 			SetProperty(new NodeReference<T>(text));
 		}

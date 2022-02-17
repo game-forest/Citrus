@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -42,8 +40,6 @@ namespace SharpFont
 	/// </remarks>
 	public sealed class Face : NativeObject, IDisposable
 	{
-		#region Fields
-
 		private FaceRec rec;
 
 		private bool disposed;
@@ -52,10 +48,6 @@ namespace SharpFont
 
 		private Library parentLibrary;
 		private List<FTSize> childSizes;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Face"/> class with a default faceIndex of 0.
@@ -79,13 +71,14 @@ namespace SharpFont
 			IntPtr reference;
 			Error err = FT.FT_New_Face(library.Reference, path, faceIndex, out reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = reference;
 		}
 
-		//TODO make an overload with a FileStream instead of a byte[]
+		// TODO make an overload with a FileStream instead of a byte[]
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Face"/> class from a file that's already loaded into memory.
@@ -98,10 +91,13 @@ namespace SharpFont
 		{
 			IntPtr reference;
 			memoryFaceHandle = GCHandle.Alloc(file, GCHandleType.Pinned);
-			Error err = FT.FT_New_Memory_Face(library.Reference, memoryFaceHandle.AddrOfPinnedObject(), file.Length, faceIndex, out reference);
+			Error err = FT.FT_New_Memory_Face(
+				library.Reference, memoryFaceHandle.AddrOfPinnedObject(), file.Length, faceIndex, out reference
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = reference;
 		}
@@ -110,7 +106,9 @@ namespace SharpFont
 		/// Initializes a new instance of the <see cref="Face"/> class from a file that's already loaded into memory.
 		/// </summary>
 		/// <param name="library">The parent library.</param>
-		/// <param name="bufferPtr">A pointer to a buffer of a loaded file. Must not be freed before <see cref="Dispose()"/>.</param>
+		/// <param name="bufferPtr">
+		/// A pointer to a buffer of a loaded file. Must not be freed before <see cref="Dispose()"/>.
+		/// </param>
 		/// <param name="length">The length of bufferPtr.</param>
 		/// <param name="faceIndex">The index of the face to take from the file.</param>
 		public Face(Library library, IntPtr bufferPtr, int length, int faceIndex)
@@ -119,8 +117,9 @@ namespace SharpFont
 			IntPtr reference;
 			Error err = FT.FT_New_Memory_Face(library.Reference, bufferPtr, length, faceIndex, out reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = reference;
 		}
@@ -136,18 +135,15 @@ namespace SharpFont
 			Reference = reference;
 		}
 
-		private Face(Library parent): base(IntPtr.Zero)
+		private Face(Library parent) : base(IntPtr.Zero)
 		{
 			childSizes = new List<FTSize>();
 
-			if (parent != null)
-			{
+			if (parent != null) {
 				parentLibrary = parent;
 				parentLibrary.AddChildFace(this);
-			}
-			else
-			{
-				//if there's no parent, this is a marshalled duplicate.
+			} else {
+				// if there's no parent, this is a marshalled duplicate.
 				FT.FT_Reference_Face(Reference);
 			}
 		}
@@ -160,18 +156,10 @@ namespace SharpFont
 			Dispose(false);
 		}
 
-		#endregion
-
-		#region Events
-
 		/// <summary>
 		/// Occurs when the face is disposed.
 		/// </summary>
 		public event EventHandler Disposed;
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a value indicating whether the object has been disposed.
@@ -191,8 +179,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("FaceCount", "Cannot access a disposed object.");
+				}
 
 				return (int)rec.num_faces;
 			}
@@ -205,8 +194,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("FaceIndex", "Cannot access a disposed object.");
+				}
 
 				return (int)rec.face_index;
 			}
@@ -220,8 +210,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("FaceFlags", "Cannot access a disposed object.");
+				}
 
 				return (FaceFlags)rec.face_flags;
 			}
@@ -235,8 +226,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("StyleFlags", "Cannot access a disposed object.");
+				}
 
 				return (StyleFlags)rec.style_flags;
 			}
@@ -252,8 +244,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("GlyphCount", "Cannot access a disposed object.");
+				}
 
 				return (int)rec.num_glyphs;
 			}
@@ -270,8 +263,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("FamilyName", "Cannot access a disposed object.");
+				}
 
 				return Marshal.PtrToStringAnsi(rec.family_name);
 			}
@@ -287,8 +281,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("StyleName", "Cannot access a disposed object.");
+				}
 
 				return Marshal.PtrToStringAnsi(rec.style_name);
 			}
@@ -302,8 +297,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("FixedSizesCount", "Cannot access a disposed object.");
+				}
 
 				return rec.num_fixed_sizes;
 			}
@@ -317,19 +313,20 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("AvailableSizes", "Cannot access a disposed object.");
+				}
 
 				int count = FixedSizesCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				BitmapSize[] sizes = new BitmapSize[count];
 				IntPtr array = rec.available_sizes;
 
-				for (int i = 0; i < count; i++)
-				{
+				for (int i = 0; i < count; i++) {
 					sizes[i] = new BitmapSize(new IntPtr(array.ToInt64() + IntPtr.Size * i));
 				}
 
@@ -344,8 +341,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("CharmapsCount", "Cannot access a disposed object.");
+				}
 
 				return rec.num_charmaps;
 			}
@@ -358,22 +356,22 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("CharMaps", "Cannot access a disposed object.");
+				}
 
 				int count = CharmapsCount;
 
-				if (count == 0)
+				if (count == 0) {
 					return null;
+				}
 
 				CharMap[] charmaps = new CharMap[count];
 
-				unsafe
-				{
+				unsafe {
 					IntPtr* array = (IntPtr*)rec.charmaps;
 
-					for (int i = 0; i < count; i++)
-					{
+					for (int i = 0; i < count; i++) {
 						charmaps[i] = new CharMap(*array, this);
 						array++;
 					}
@@ -392,16 +390,18 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Generic", "Cannot access a disposed object.");
+				}
 
 				return new Generic(rec.generic);
 			}
 
 			set
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Generic", "Cannot access a disposed object.");
+				}
 
 				IntPtr reference = Reference;
 				value.WriteToUnmanagedMemory(PInvokeHelper.AbsoluteOffsetOf<FaceRec>(reference, "generic"));
@@ -421,8 +421,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("BBox", "Cannot access a disposed object.");
+				}
 
 				return rec.bbox;
 			}
@@ -437,8 +438,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("UnitsPerEM", "Cannot access a disposed object.");
+				}
 
 				return rec.units_per_EM;
 			}
@@ -452,8 +454,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Ascender", "Cannot access a disposed object.");
+				}
 
 				return rec.ascender;
 			}
@@ -468,8 +471,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Descender", "Cannot access a disposed object.");
+				}
 
 				return rec.descender;
 			}
@@ -483,8 +487,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Height", "Cannot access a disposed object.");
+				}
 
 				return rec.height;
 			}
@@ -498,8 +503,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("MaxAdvanceWidth", "Cannot access a disposed object.");
+				}
 
 				return rec.max_advance_width;
 			}
@@ -514,8 +520,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("MaxAdvanceHeight", "Cannot access a disposed object.");
+				}
 
 				return rec.max_advance_height;
 			}
@@ -529,8 +536,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("UnderlinePosition", "Cannot access a disposed object.");
+				}
 
 				return rec.underline_position;
 			}
@@ -543,8 +551,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("UnderlineThickness", "Cannot access a disposed object.");
+				}
 
 				return rec.underline_thickness;
 			}
@@ -557,8 +566,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Glyph", "Cannot access a disposed object.");
+				}
 
 				return new GlyphSlot(rec.glyph, this, parentLibrary);
 			}
@@ -571,8 +581,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Size", "Cannot access a disposed object.");
+				}
 
 				return new FTSize(rec.size, false, this);
 			}
@@ -585,11 +596,13 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("CharMap", "Cannot access a disposed object.");
+				}
 
-				if (rec.charmap == IntPtr.Zero)
+				if (rec.charmap == IntPtr.Zero) {
 					return null;
+				}
 
 				return new CharMap(rec.charmap, this);
 			}
@@ -755,27 +768,23 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				return base.Reference;
 			}
 
 			set
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				base.Reference = value;
 				rec = PInvokeHelper.PtrToStructure<FaceRec>(value);
 			}
 		}
-
-		#endregion
-
-		#region Methods
-
-		#region FreeType Version
 
 		/// <summary><para>
 		/// Parse all bytecode instructions of a TrueType font file to check whether any of the patented opcodes are
@@ -790,8 +799,9 @@ namespace SharpFont
 		/// <returns>True if this is a TrueType font that uses one of the patented opcodes, false otherwise.</returns>
 		public bool CheckTrueTypePatents()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Face_CheckTrueTypePatents(Reference);
 		}
@@ -811,15 +821,12 @@ namespace SharpFont
 		/// <see cref="CheckTrueTypePatents"/>
 		public bool SetUnpatentedHinting(bool value)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Face_SetUnpatentedHinting(Reference, value);
 		}
-
-		#endregion
-
-		#region Base Interface
 
 		/// <summary>
 		/// This function calls <see cref="AttachStream"/> to attach a file.
@@ -827,13 +834,15 @@ namespace SharpFont
 		/// <param name="path">The pathname.</param>
 		public void AttachFile(string path)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Attach_File(Reference, path);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -851,13 +860,15 @@ namespace SharpFont
 		/// <param name="parameters">A pointer to <see cref="OpenArgs"/> which must be filled by the caller.</param>
 		public void AttachStream(OpenArgs parameters)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Attach_Stream(Reference, parameters.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -869,13 +880,15 @@ namespace SharpFont
 		/// </param>
 		public void SelectSize(int strikeIndex)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Select_Size(Reference, strikeIndex);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -884,13 +897,15 @@ namespace SharpFont
 		/// <param name="request">A pointer to a <see cref="SizeRequest"/>.</param>
 		public unsafe void RequestSize(SizeRequest request)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Request_Size(Reference, (IntPtr)(&request));
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -909,15 +924,20 @@ namespace SharpFont
 		/// <param name="horizontalResolution">The horizontal resolution in dpi.</param>
 		/// <param name="verticalResolution">The vertical resolution in dpi.</param>
 		[CLSCompliant(false)]
-		public void SetCharSize(Fixed26Dot6 width, Fixed26Dot6 height, uint horizontalResolution, uint verticalResolution)
-		{
-			if (disposed)
+		public void SetCharSize(
+			Fixed26Dot6 width, Fixed26Dot6 height, uint horizontalResolution, uint verticalResolution
+		) {
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
-			Error err = FT.FT_Set_Char_Size(Reference, (IntPtr)width.Value, (IntPtr)height.Value, horizontalResolution, verticalResolution);
+			Error err = FT.FT_Set_Char_Size(
+				Reference, (IntPtr)width.Value, (IntPtr)height.Value, horizontalResolution, verticalResolution
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -928,13 +948,15 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public void SetPixelSizes(uint width, uint height)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Set_Pixel_Sizes(Reference, width, height);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -960,13 +982,15 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public void LoadGlyph(uint glyphIndex, LoadFlags flags, LoadTarget target)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Load_Glyph(Reference, glyphIndex, (int)flags | (int)target);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -988,13 +1012,15 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public void LoadChar(uint charCode, LoadFlags flags, LoadTarget target)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Load_Char(Reference, charCode, (int)flags | (int)target);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -1016,8 +1042,9 @@ namespace SharpFont
 		/// </param>
 		public unsafe void SetTransform(FTMatrix matrix, FTVector delta)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Set_Transform(Reference, (IntPtr)(&matrix), (IntPtr)(&delta));
 		}
@@ -1038,8 +1065,9 @@ namespace SharpFont
 		/// </param>
 		public unsafe void SetTransform(FTVector delta)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Set_Transform(Reference, IntPtr.Zero, (IntPtr)(&delta));
 		}
@@ -1060,8 +1088,9 @@ namespace SharpFont
 		/// </param>
 		public unsafe void SetTransform(FTMatrix matrix)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Set_Transform(Reference, (IntPtr)(&matrix), IntPtr.Zero);
 		}
@@ -1079,8 +1108,9 @@ namespace SharpFont
 		/// </para></remarks>
 		public unsafe void SetTransform()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			FT.FT_Set_Transform(Reference, IntPtr.Zero, IntPtr.Zero);
 		}
@@ -1103,14 +1133,16 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public FTVector26Dot6 GetKerning(uint leftGlyph, uint rightGlyph, KerningMode mode)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			FTVector26Dot6 kern;
 			Error err = FT.FT_Get_Kerning(Reference, leftGlyph, rightGlyph, (uint)mode, out kern);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return kern;
 		}
@@ -1123,15 +1155,17 @@ namespace SharpFont
 		/// <returns>The kerning in 16.16 fractional points.</returns>
 		public Fixed16Dot16 GetTrackKerning(Fixed16Dot16 pointSize, int degree)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			IntPtr kerning;
 
 			Error err = FT.FT_Get_Track_Kerning(Reference, (IntPtr)pointSize.Value, degree, out kerning);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return Fixed16Dot16.FromRawValue((int)kerning);
 		}
@@ -1159,8 +1193,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public string GetGlyphName(uint glyphIndex, int bufferSize)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return GetGlyphName(glyphIndex, new byte[bufferSize]);
 		}
@@ -1188,16 +1223,17 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public unsafe string GetGlyphName(uint glyphIndex, byte[] buffer)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
-			fixed (byte* ptr = buffer)
-			{
+			fixed (byte* ptr = buffer) {
 				IntPtr intptr = new IntPtr(ptr);
 				Error err = FT.FT_Get_Glyph_Name(Reference, glyphIndex, intptr, (uint)buffer.Length);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 
 				return Marshal.PtrToStringAnsi(intptr);
 			}
@@ -1213,8 +1249,9 @@ namespace SharpFont
 		/// <returns>A pointer to the face's Postscript name. NULL if unavailable.</returns>
 		public string GetPostscriptName()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return Marshal.PtrToStringAnsi(FT.FT_Get_Postscript_Name(Reference));
 		}
@@ -1233,13 +1270,15 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public void SelectCharmap(Encoding encoding)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Select_Charmap(Reference, encoding);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -1252,13 +1291,15 @@ namespace SharpFont
 		/// <param name="charmap">A handle to the selected charmap.</param>
 		public void SetCharmap(CharMap charmap)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Set_Charmap(Reference, charmap.Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -1274,8 +1315,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint GetCharIndex(uint charCode)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Get_Char_Index(Reference, charCode);
 		}
@@ -1296,8 +1338,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint GetFirstChar(out uint glyphIndex)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Get_First_Char(Reference, out glyphIndex);
 		}
@@ -1318,8 +1361,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint GetNextChar(uint charCode, out uint glyphIndex)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Get_Next_Char(Reference, charCode, out glyphIndex);
 		}
@@ -1333,8 +1377,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint GetNameIndex(string name)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Get_Name_Index(Reference, Marshal.StringToHGlobalAnsi(name));
 		}
@@ -1350,15 +1395,12 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public EmbeddingTypes GetFSTypeFlags()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Get_FSType_Flags(Reference);
 		}
-
-		#endregion
-
-		#region Glyph Variants
 
 		/// <summary>
 		/// Return the glyph index of a given character code as modified by the variation selector.
@@ -1380,8 +1422,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint GetCharVariantIndex(uint charCode, uint variantSelector)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Face_GetCharVariantIndex(Reference, charCode, variantSelector);
 		}
@@ -1401,8 +1444,9 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public int GetCharVariantIsDefault(uint charCode, uint variantSelector)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			return FT.FT_Face_GetCharVariantIsDefault(Reference, charCode, variantSelector);
 		}
@@ -1420,18 +1464,18 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint[] GetVariantSelectors()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			IntPtr ptr = FT.FT_Face_GetVariantSelectors(Reference);
 
 			List<uint> list = new List<uint>();
 
-			//temporary non-zero value to prevent complaining about uninitialized variable.
+			// temporary non-zero value to prevent complaining about uninitialized variable.
 			uint curValue = 1;
 
-			for (int i = 0; curValue != 0; i++)
-			{
+			for (int i = 0; curValue != 0; i++) {
 				curValue = (uint)Marshal.ReadInt32(Reference, sizeof(uint) * i);
 				list.Add(curValue);
 			}
@@ -1454,18 +1498,18 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint[] GetVariantsOfChar(uint charCode)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			IntPtr ptr = FT.FT_Face_GetVariantsOfChar(Reference, charCode);
 
 			List<uint> list = new List<uint>();
 
-			//temporary non-zero value to prevent complaining about uninitialized variable.
+			// temporary non-zero value to prevent complaining about uninitialized variable.
 			uint curValue = 1;
 
-			for (int i = 0; curValue != 0; i++)
-			{
+			for (int i = 0; curValue != 0; i++) {
 				curValue = (uint)Marshal.ReadInt32(Reference, sizeof(uint) * i);
 				list.Add(curValue);
 			}
@@ -1488,28 +1532,24 @@ namespace SharpFont
 		[CLSCompliant(false)]
 		public uint[] GetCharsOfVariant(uint variantSelector)
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("face", "Cannot access a disposed object.");
+			}
 
 			IntPtr ptr = FT.FT_Face_GetCharsOfVariant(Reference, variantSelector);
 
 			List<uint> list = new List<uint>();
 
-			//temporary non-zero value to prevent complaining about uninitialized variable.
+			// temporary non-zero value to prevent complaining about uninitialized variable.
 			uint curValue = 1;
 
-			for (int i = 0; curValue != 0; i++)
-			{
+			for (int i = 0; curValue != 0; i++) {
 				curValue = (uint)Marshal.ReadInt32(Reference, sizeof(uint) * i);
 				list.Add(curValue);
 			}
 
 			return list.ToArray();
 		}
-
-		#endregion
-
-		#region Size Management
 
 		/// <summary>
 		/// Create a new size object from a given face object.
@@ -1525,10 +1565,6 @@ namespace SharpFont
 			return new FTSize(this);
 		}
 
-		#endregion
-
-		#region Multiple Masters
-
 		/// <summary><para>
 		/// Retrieve the Multiple Master descriptor of a given font.
 		/// </para><para>
@@ -1540,8 +1576,9 @@ namespace SharpFont
 			IntPtr masterRef;
 			Error err = FT.FT_Get_Multi_Master(Reference, out masterRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new MultiMaster(masterRef);
 		}
@@ -1558,8 +1595,9 @@ namespace SharpFont
 			IntPtr varRef;
 			Error err = FT.FT_Get_MM_Var(Reference, out varRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new MMVar(varRef);
 		}
@@ -1572,13 +1610,13 @@ namespace SharpFont
 		/// <param name="coords">An array of design coordinates.</param>
 		public unsafe void SetMMDesignCoordinates(long[] coords)
 		{
-			fixed (void* ptr = coords)
-			{
+			fixed (void* ptr = coords) {
 				IntPtr coordsPtr = (IntPtr)ptr;
 				Error err = FT.FT_Set_MM_Design_Coordinates(Reference, (uint)coords.Length, coordsPtr);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 			}
 		}
 
@@ -1588,13 +1626,13 @@ namespace SharpFont
 		/// <param name="coords">An array of design coordinates.</param>
 		public unsafe void SetVarDesignCoordinates(long[] coords)
 		{
-			fixed (void* ptr = coords)
-			{
+			fixed (void* ptr = coords) {
 				IntPtr coordsPtr = (IntPtr)ptr;
 				Error err = FT.FT_Set_Var_Design_Coordinates(Reference, (uint)coords.Length, coordsPtr);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 			}
 		}
 
@@ -1605,13 +1643,13 @@ namespace SharpFont
 		/// <param name="coords">The design coordinates array (each element must be between 0 and 1.0).</param>
 		public unsafe void SetMMBlendCoordinates(long[] coords)
 		{
-			fixed (void* ptr = coords)
-			{
+			fixed (void* ptr = coords) {
 				IntPtr coordsPtr = (IntPtr)ptr;
 				Error err = FT.FT_Set_MM_Blend_Coordinates(Reference, (uint)coords.Length, coordsPtr);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 			}
 		}
 
@@ -1621,19 +1659,15 @@ namespace SharpFont
 		/// <param name="coords">The design coordinates array (each element must be between 0 and 1.0).</param>
 		public unsafe void SetVarBlendCoordinates(long[] coords)
 		{
-			fixed (void* ptr = coords)
-			{
+			fixed (void* ptr = coords) {
 				IntPtr coordsPtr = (IntPtr)ptr;
 				Error err = FT.FT_Set_Var_Blend_Coordinates(Reference, (uint)coords.Length, coordsPtr);
 
-				if (err != Error.Ok)
+				if (err != Error.Ok) {
 					throw new FreeTypeException(err);
+				}
 			}
 		}
-
-		#endregion
-
-		#region TrueType Tables
 
 		/// <summary>
 		/// Return a pointer to a given SFNT table within a face.
@@ -1655,11 +1689,11 @@ namespace SharpFont
 		{
 			IntPtr tableRef = FT.FT_Get_Sfnt_Table(Reference, tag);
 
-			if (tableRef == IntPtr.Zero)
+			if (tableRef == IntPtr.Zero) {
 				return null;
+			}
 
-			switch (tag)
-			{
+			switch (tag) {
 				case SfntTag.Header:
 					return new Header(tableRef);
 				case SfntTag.HorizontalHeader:
@@ -1720,8 +1754,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Load_Sfnt_Table(Reference, tag, offset, buffer, ref length);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -1741,8 +1776,9 @@ namespace SharpFont
 			uint length;
 			Error err = FT.FT_Sfnt_Table_Info(Reference, tableIndex, &tag, out length);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return length;
 		}
@@ -1757,15 +1793,12 @@ namespace SharpFont
 			uint length;
 			Error err = FT.FT_Sfnt_Table_Info(Reference, 0, null, out length);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return length;
 		}
-
-		#endregion
-
-		#region Type 1 Tables
 
 		/// <summary><para>
 		/// Return true if a given face provides reliable PostScript glyph names. This is similar to using the
@@ -1797,8 +1830,9 @@ namespace SharpFont
 			PostScript.Internal.FontInfoRec fontInfoRec;
 			Error err = FT.FT_Get_PS_Font_Info(Reference, out fontInfoRec);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new FontInfo(fontInfoRec);
 		}
@@ -1819,8 +1853,9 @@ namespace SharpFont
 			PostScript.Internal.PrivateRec privateRec;
 			Error err = FT.FT_Get_PS_Font_Private(Reference, out privateRec);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new Private(privateRec);
 		}
@@ -1866,10 +1901,6 @@ namespace SharpFont
 			return FT.FT_Get_PS_Font_Value(Reference, key, idx, ref value, valueLength);
 		}
 
-		#endregion
-
-		#region SFNT Names
-
 		/// <summary>
 		/// Retrieve the number of name strings in the SFNT ‘name’ table.
 		/// </summary>
@@ -1899,15 +1930,12 @@ namespace SharpFont
 
 			Error err = FT.FT_Get_Sfnt_Name(Reference, idx, out nameRec);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new SfntName(nameRec);
 		}
-
-		#endregion
-
-		#region BDF and PCF Files
 
 		/// <summary>
 		/// Retrieve a BDF font character set identity, according to the BDF specification.
@@ -1921,8 +1949,9 @@ namespace SharpFont
 		{
 			Error err = FT.FT_Get_BDF_Charset_ID(Reference, out encoding, out registry);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -1948,15 +1977,12 @@ namespace SharpFont
 
 			Error err = FT.FT_Get_BDF_Property(Reference, propertyName, out propertyRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new Property(propertyRef);
 		}
-
-		#endregion
-
-		#region CID Fonts
 
 		/// <summary>
 		/// Retrieve the Registry/Ordering/Supplement triple (also known as the "R/O/S") from a CID-keyed font.
@@ -1969,10 +1995,13 @@ namespace SharpFont
 		/// <param name="supplement">The supplement.</param>
 		public void GetCidRegistryOrderingSupplement(out string registry, out string ordering, out int supplement)
 		{
-			Error err = FT.FT_Get_CID_Registry_Ordering_Supplement(Reference, out registry, out ordering, out supplement);
+			Error err = FT.FT_Get_CID_Registry_Ordering_Supplement(
+				Reference, out registry, out ordering, out supplement
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -1989,8 +2018,9 @@ namespace SharpFont
 			byte is_cid;
 			Error err = FT.FT_Get_CID_Is_Internally_CID_Keyed(Reference, out is_cid);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return is_cid == 1;
 		}
@@ -2009,15 +2039,12 @@ namespace SharpFont
 			uint cid;
 			Error err = FT.FT_Get_CID_From_Glyph_Index(Reference, glyphIndex, out cid);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return cid;
 		}
-
-		#endregion
-
-		#region PFR Fonts
 
 		/// <summary>
 		/// Return the outline and metrics resolutions of a given PFR face.
@@ -2042,16 +2069,23 @@ namespace SharpFont
 		/// Same as ‘ametrics_x_scale’ but for the vertical direction. optional (parameter can be NULL).
 		/// </param>
 		[CLSCompliant(false)]
-		public void GetPfrMetrics(out uint outlineResolution, out uint metricsResolution, out Fixed16Dot16 metricsXScale, out Fixed16Dot16 metricsYScale)
-		{
+		public void GetPfrMetrics(
+			out uint outlineResolution,
+			out uint metricsResolution,
+			out Fixed16Dot16 metricsXScale,
+			out Fixed16Dot16 metricsYScale
+		) {
 			IntPtr tmpXScale, tmpYScale;
-			Error err = FT.FT_Get_PFR_Metrics(Reference, out outlineResolution, out metricsResolution, out tmpXScale, out tmpYScale);
+			Error err = FT.FT_Get_PFR_Metrics(
+				Reference, out outlineResolution, out metricsResolution, out tmpXScale, out tmpYScale
+			);
 
 			metricsXScale = Fixed16Dot16.FromRawValue((int)tmpXScale);
 			metricsYScale = Fixed16Dot16.FromRawValue((int)tmpYScale);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -2075,8 +2109,9 @@ namespace SharpFont
 			FTVector vector;
 			Error err = FT.FT_Get_PFR_Kerning(Reference, left, right, out vector);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return vector;
 		}
@@ -2096,15 +2131,12 @@ namespace SharpFont
 			int advance;
 			Error err = FT.FT_Get_PFR_Advance(Reference, glyphIndex, out advance);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return advance;
 		}
-
-		#endregion
-
-		#region Windows FNT Files
 
 		/// <summary>
 		/// Retrieve a Windows FNT font info header.
@@ -2118,15 +2150,12 @@ namespace SharpFont
 			IntPtr headerRef;
 			Error err = FT.FT_Get_WinFNT_Header(Reference, out headerRef);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return new Fnt.Header(headerRef);
 		}
-
-		#endregion
-
-		#region Font Formats
 
 		/// <summary>
 		/// Return a string describing the format of a given face, using values which can be used as an X11
@@ -2138,10 +2167,6 @@ namespace SharpFont
 		{
 			return Marshal.PtrToStringAnsi(FT.FT_Get_X11_Font_Format(Reference));
 		}
-
-		#endregion
-
-		#region Gasp Table
 
 		/// <summary>
 		/// Read the ‘gasp’ table from a TrueType or OpenType font file and return the entry corresponding to a given
@@ -2156,10 +2181,6 @@ namespace SharpFont
 		{
 			return FT.FT_Get_Gasp(Reference, ppem);
 		}
-
-		#endregion
-
-		#region Quick retrieval of advance values
 
 		/// <summary>
 		/// Retrieve the advance value of a given glyph outline in a <see cref="Face"/>. By default, the unhinted
@@ -2189,8 +2210,9 @@ namespace SharpFont
 			IntPtr padvance;
 			Error err = FT.FT_Get_Advance(Reference, glyphIndex, flags, out padvance);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			return Fixed16Dot16.FromRawValue((int)padvance);
 		}
@@ -2213,31 +2235,35 @@ namespace SharpFont
 		/// <param name="start">The first glyph index.</param>
 		/// <param name="count">The number of advance values you want to retrieve.</param>
 		/// <param name="flags">A set of bit flags similar to those used when calling <see cref="LoadGlyph"/>.</param>
-		/// <returns><para>The advances, in either font units or 16.16 format. This array must contain at least ‘count’ elements.
-		/// </para><para>
-		/// If <see cref="LoadFlags.VerticalLayout"/> is set, these are the vertical advances corresponding to a vertical layout. Otherwise, they are the horizontal advances in a horizontal layout.</para></returns>
+		/// <returns>
+		/// <para>
+		/// The advances, in either font units or 16.16 format. This array must contain at least ‘count’ elements.
+		/// </para>
+		/// <para>
+		/// If <see cref="LoadFlags.VerticalLayout"/> is set, these are the vertical advances corresponding to
+		/// a vertical layout. Otherwise, they are the horizontal advances in a horizontal layout.
+		/// </para>
+		/// </returns>
 		[CLSCompliant(false)]
 		public unsafe Fixed16Dot16[] GetAdvances(uint start, uint count, LoadFlags flags)
 		{
 			IntPtr advPtr;
 			Error err = FT.FT_Get_Advances(Reference, start, count, flags, out advPtr);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
-			//create a new array and copy the data from the pointer over
+			// create a new array and copy the data from the pointer over
 			Fixed16Dot16[] advances = new Fixed16Dot16[count];
 			IntPtr* ptr = (IntPtr*)advPtr;
 
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < count; i++) {
 				advances[i] = Fixed16Dot16.FromRawValue((int)ptr[i]);
+			}
 
 			return advances;
 		}
-
-		#endregion
-
-		#region OpenType Validation
 
 		/// <summary>
 		/// Validate various OpenType tables to assure that all offsets and indices are valid. The idea is that a
@@ -2257,12 +2283,21 @@ namespace SharpFont
 		/// <param name="gsubTable">A pointer to the GSUB table.</param>
 		/// <param name="jstfTable">A pointer to the JSTF table.</param>
 		[CLSCompliant(false)]
-		public void OpenTypeValidate(OpenTypeValidationFlags flags, out IntPtr baseTable, out IntPtr gdefTable, out IntPtr gposTable, out IntPtr gsubTable, out IntPtr jstfTable)
-		{
-			Error err = FT.FT_OpenType_Validate(Reference, flags, out baseTable, out gdefTable, out gposTable, out gsubTable, out jstfTable);
+		public void OpenTypeValidate(
+			OpenTypeValidationFlags flags,
+			out IntPtr baseTable,
+			out IntPtr gdefTable,
+			out IntPtr gposTable,
+			out IntPtr gsubTable,
+			out IntPtr jstfTable
+		) {
+			Error err = FT.FT_OpenType_Validate(
+				Reference, flags, out baseTable, out gdefTable, out gposTable, out gsubTable, out jstfTable
+			);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -2276,10 +2311,6 @@ namespace SharpFont
 		{
 			FT.FT_OpenType_Free(Reference, table);
 		}
-
-		#endregion
-
-		#region TrueTypeGX/AAT Validation
 
 		/// <summary>
 		/// Validate various TrueTypeGX tables to assure that all offsets and indices are valid. The idea is that a
@@ -2355,8 +2386,6 @@ namespace SharpFont
 			FT.FT_ClassicKern_Free(Reference, table);
 		}
 
-		#endregion
-
 		/// <summary>
 		/// Disposes the Face.
 		/// </summary>
@@ -2378,12 +2407,12 @@ namespace SharpFont
 
 		private void Dispose(bool disposing)
 		{
-			if (!disposed)
-			{
+			if (!disposed) {
 				disposed = true;
 
-				foreach (FTSize s in childSizes)
+				foreach (FTSize s in childSizes) {
 					s.Dispose();
+				}
 
 				childSizes.Clear();
 
@@ -2392,21 +2421,22 @@ namespace SharpFont
 				// removes itself from the parent Library, with a check to prevent this from happening when Library is
 				// being disposed (Library disposes all it's children with a foreach loop, this causes an
 				// InvalidOperationException for modifying a collection during enumeration)
-				if (!parentLibrary.IsDisposed)
+				if (!parentLibrary.IsDisposed) {
 					parentLibrary.RemoveChildFace(this);
+				}
 
 				base.Reference = IntPtr.Zero;
 				rec = new FaceRec();
 
-				if (memoryFaceHandle.IsAllocated)
+				if (memoryFaceHandle.IsAllocated) {
 					memoryFaceHandle.Free();
+				}
 
 				EventHandler handler = Disposed;
-				if (handler != null)
+				if (handler != null) {
 					handler(this, EventArgs.Empty);
+				}
 			}
 		}
-
-		#endregion
 	}
 }

@@ -56,7 +56,7 @@ namespace Lime
 		PVRTC1_2Bpp_UNorm_Block,
 		PVRTC1_4Bpp_UNorm_Block,
 		PVRTC2_2Bpp_UNorm_Block,
-		PVRTC2_4Bpp_UNorm_Block
+		PVRTC2_4Bpp_UNorm_Block,
 	}
 
 	[Flags]
@@ -65,7 +65,7 @@ namespace Lime
 		None = 0,
 		Sample = 1 << 1,
 		RenderTarget = 1 << 2,
-		VertexBuffer = 1 << 3
+		VertexBuffer = 1 << 3,
 	}
 
 	public static class FormatExtensions

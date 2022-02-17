@@ -58,7 +58,7 @@ namespace Orange
 
 		public static string FindCitrusDirectory()
 		{
-			var path = Uri.UnescapeDataString((new Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath);
+			var path = Uri.UnescapeDataString(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath);
 			while (!File.Exists(Path.Combine(path, CitrusVersion.Filename))) {
 				path = Path.GetDirectoryName(path);
 				if (string.IsNullOrEmpty(path)) {
@@ -77,7 +77,10 @@ namespace Orange
 		/// </summary>
 		public static bool TryFindCitrusProjectForExecutingAssembly(out string projectFilePath)
 		{
-			return TryFindCitrusProject(Uri.UnescapeDataString(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath), out projectFilePath);
+			return TryFindCitrusProject(
+				Uri.UnescapeDataString(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath),
+				out projectFilePath
+			);
 		}
 
 		/// <summary>
@@ -88,17 +91,21 @@ namespace Orange
 		/// <param name="startingPath">Path serving as starting point of the search.</param>
 		/// <param name="projectFilePath">Path to <c>*.citproj</c> file if found, or <c>null</c> otherwise.</param>
 		/// <returns><c>true</c> if project has been found <c>false</c> otherwise.</returns>
-		/// <exception cref="InvalidOperationException">If there are multiple <c>*.citproj</c> files in the same directory.</exception>
+		/// <exception cref="InvalidOperationException">
+		/// If there are multiple <c>*.citproj</c> files in the same directory.
+		/// </exception>
 		public static bool TryFindCitrusProject(string startingPath, out string projectFilePath)
 		{
 			projectFilePath = null;
 			var path = startingPath;
-			var directoryInfo = (new DirectoryInfo(path)).Parent;
+			var directoryInfo = new DirectoryInfo(path).Parent;
 			while (directoryInfo != null) {
 				var citprojFiles = directoryInfo.EnumerateFiles("*.citproj");
 				if (citprojFiles.Any()) {
 					if (citprojFiles.Count() > 1) {
-						throw new InvalidOperationException($"Multiple *.citproj files found in the same directory: {string.Join(",", citprojFiles)}");
+						throw new InvalidOperationException(
+							$"Multiple *.citproj files found in the same directory: {string.Join(",", citprojFiles)}"
+						);
 					}
 					projectFilePath = citprojFiles.First().FullName;
 					return true;
@@ -116,7 +123,9 @@ namespace Orange
 		public static IEnumerable<MethodInfo> GetAllMethodsWithAttribute(this Assembly assembly, Type attributeType)
 		{
 			foreach (var type in assembly.GetTypes()) {
-				var allMethods = type.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public);
+				var allMethods = type.GetMethods(
+					BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public
+				);
 				foreach (var method in allMethods
 					.Where(m => m.GetCustomAttributes(attributeType, false).Length > 0)
 					.ToArray()) {
@@ -217,19 +226,22 @@ namespace Orange
 		public static string ReplaceCitrusProjectSubstituteTokens(string @string)
 		{
 			return @string
-				.Replace(ConfigurationSubstituteToken,
+				.Replace(
+					ConfigurationSubstituteToken,
 #if DEBUG
 					BuildConfiguration.Debug)
 #else
 					BuildConfiguration.Release)
 #endif
-				.Replace("$(PLATFORM)",
+				.Replace(
+					"$(PLATFORM)",
 #if WIN
 					"Win")
 #elif MAC
 					"Mac")
 #endif // WIN
-				.Replace("$(HOST_APPLICATION)",
+				.Replace(
+					"$(HOST_APPLICATION)",
 #if TANGERINE
 					"Tangerine");
 #else
@@ -239,11 +251,11 @@ namespace Orange
 
 		public static List<string> GetListOfAllBundles(
 			Target target,
-			AssetBundle InputBundle = null,
+			AssetBundle inputBundle = null,
 			Dictionary<string, CookingRules> cookungRules = null
 		) {
-			InputBundle ??= AssetBundle.Current;
-			cookungRules ??= CookingRulesBuilder.Build(InputBundle, target);
+			inputBundle ??= AssetBundle.Current;
+			cookungRules ??= CookingRulesBuilder.Build(inputBundle, target);
 			var bundles = new HashSet<string>();
 			foreach (var (_, rules) in cookungRules) {
 				foreach (var bundle in rules.Bundles) {

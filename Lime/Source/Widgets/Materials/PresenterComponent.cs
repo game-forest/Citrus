@@ -4,7 +4,8 @@ namespace Lime
 	[AllowedComponentOwnerTypes(typeof(Image))]
 	public class PresenterComponent : NodeComponent { }
 
-	public class PresenterComponent<T> : PresenterComponent where T : IPresenter, new()
+	public class PresenterComponent<T> : PresenterComponent
+		where T : IPresenter, new()
 	{
 		protected T CustomPresenter { get; private set; }
 		private IPresenter savedPresenter;

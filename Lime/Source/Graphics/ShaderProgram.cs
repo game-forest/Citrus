@@ -50,7 +50,8 @@ namespace Lime
 			this.attribLocations = attribLocations.ToArray();
 			this.samplers = samplers.ToArray();
 #if PROFILER
-			ShaderProgram CreateDefaultOverdrawProgram() {
+			ShaderProgram CreateDefaultOverdrawProgram()
+			{
 				var overdrawShaders = shaders.Select(s => new OverdrawShader(s.Stage, s.Source));
 				return new ShaderProgram(overdrawShaders, attribLocations, samplers, overdrawShaderProgram: Empty);
 			}
@@ -157,12 +158,13 @@ namespace Lime
 				}
 				boundParams[i] = new BoundShaderParam {
 					Param = param,
-					Version = param.Version
+					Version = param.Version,
 				};
 			}
 		}
 
-		private unsafe void UpdateUniform<T>(int uniformIndex, ShaderParam<T> p) where T : unmanaged
+		private unsafe void UpdateUniform<T>(int uniformIndex, ShaderParam<T> p)
+			where T : unmanaged
 		{
 			fixed (T* data = p.Data) {
 				platformProgram.SetUniform(uniformIndex, new IntPtr(data), p.Count);
@@ -178,7 +180,7 @@ namespace Lime
 					yield return new Uniform {
 						Type = desc.Type,
 						SortingKey = GetSortingKey(desc.Name, desc.Type),
-						Index = i
+						Index = i,
 					};
 				}
 			}
@@ -211,8 +213,9 @@ namespace Lime
 #if PROFILER
 		private class OverdrawShader : Shader
 		{
-			public OverdrawShader(ShaderStageMask stage, string source) :
-				base(stage, ReplaceShader(stage, source)) { }
+			public OverdrawShader(ShaderStageMask stage, string source)
+				: base(stage, ReplaceShader(stage, source))
+			{ }
 
 			private static string ReplaceShader(ShaderStageMask stage, string source)
 			{

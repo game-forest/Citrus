@@ -98,7 +98,7 @@ namespace Lime
 			if (!index.TryGetValue(path, out var i)) {
 				i = new FileInfo {
 					DateModified = File.GetLastWriteTimeUtc(ToSystemPath(path)),
-					ContentsHash = default
+					ContentsHash = default,
 				};
 				index[path] = i;
 			}
@@ -118,13 +118,20 @@ namespace Lime
 			return File.Exists(ToSystemPath(path));
 		}
 
-		public override void ImportFile(string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes)
-		{
+		public override void ImportFile(
+			string destinationPath, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
+		) {
 			ImportFileRaw(destinationPath, stream, 0, default, cookingUnitHash, attributes);
 		}
 
-		public override void ImportFileRaw(string destinationPath, Stream stream, int unpackedSize, SHA256 hash, SHA256 cookingUnitHash, AssetAttributes attributes)
-		{
+		public override void ImportFileRaw(
+			string destinationPath,
+			Stream stream,
+			int unpackedSize,
+			SHA256 hash,
+			SHA256 cookingUnitHash,
+			AssetAttributes attributes
+		) {
 			var systemPath = ToSystemPath(destinationPath);
 			Directory.CreateDirectory(Path.GetDirectoryName(systemPath));
 			using var fs = new FileStream(systemPath, FileMode.Create, FileAccess.Write, FileShare.Read);
@@ -200,15 +207,20 @@ namespace Lime
 			systemPath = systemPath.Replace('\\', '/');
 			// Check if systemPath starts with BaseDirectory without trailing '/'
 			if (string.Compare(
-				systemPath,0,BaseDirectory, 0, BaseDirectory.Length - 1,
-				StringComparison.OrdinalIgnoreCase) != 0)
-			{
+					strA: systemPath,
+					indexA: 0,
+					strB: BaseDirectory,
+					indexB: 0,
+					length: BaseDirectory.Length - 1,
+					comparisonType: StringComparison.OrdinalIgnoreCase
+				) != 0
+			) {
 				throw new InvalidOperationException(
 					$"'{systemPath}' outside of the bundle directory '{BaseDirectory}'");
 			}
-			return systemPath.Length == BaseDirectory.Length - 1 ?
-				string.Empty :
-				systemPath.Substring(BaseDirectory.Length);
+			return systemPath.Length == BaseDirectory.Length - 1
+				? string.Empty
+				: systemPath.Substring(BaseDirectory.Length);
 		}
 	}
 }

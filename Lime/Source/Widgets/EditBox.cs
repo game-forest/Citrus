@@ -95,4 +95,3 @@ namespace Lime
 		public void RaiseEndSpin() => EndSpin?.Invoke();
 	}
 }
-

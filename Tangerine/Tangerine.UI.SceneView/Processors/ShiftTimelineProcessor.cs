@@ -8,14 +8,14 @@ namespace Tangerine.UI.SceneView
 {
 	public class ShiftTimelineProcessor : ITaskProvider
 	{
-		SceneView sv => SceneView.Instance;
+		private SceneView SceneView => SceneView.Instance;
 
 		public IEnumerator<object> Task()
 		{
-			while(true) {
-				if (sv.InputArea.IsMouseOverThisOrDescendant() && sv.Input.IsKeyPressed(Key.Alt)) {
+			while (true) {
+				if (SceneView.InputArea.IsMouseOverThisOrDescendant() && SceneView.Input.IsKeyPressed(Key.Alt)) {
 					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
-					if (sv.Input.ConsumeKeyPress(Key.Mouse0)) {
+					if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 						yield return Advance();
 					}
 				}
@@ -23,11 +23,11 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		enum DragDirection
+		private enum DragDirection
 		{
 			Left = -1,
 			None,
-			Right
+			Right,
 		}
 
 		private IEnumerator<object> Advance()
@@ -35,18 +35,18 @@ namespace Tangerine.UI.SceneView
 			using (Document.Current.History.BeginTransaction()) {
 				var step = 10;
 				var distance = 0;
-				var matrix = sv.Scene.LocalToWorldTransform;
-				var prevMousPos = sv.MousePosition * matrix;
+				var matrix = SceneView.Scene.LocalToWorldTransform;
+				var prevMousPos = SceneView.MousePosition * matrix;
 				var prevDirection = DragDirection.None;
-				while (sv.Input.IsMousePressed()) {
+				while (SceneView.Input.IsMousePressed()) {
 					Document.Current.History.RollbackTransaction();
 					Utils.ChangeCursorIfDefault(MouseCursor.SizeWE);
-					var curMousePos = sv.MousePosition * matrix;
+					var curMousePos = SceneView.MousePosition * matrix;
 					var curDirection = (DragDirection)Math.Sign(curMousePos.X - prevMousPos.X);
 					if (curDirection != DragDirection.None && curDirection != prevDirection) {
 						distance = step - distance;
 					}
-					distance += (int)Math.Floor(Mathf.Abs((curMousePos.X - prevMousPos.X)));
+					distance += (int)Math.Floor(Mathf.Abs(curMousePos.X - prevMousPos.X));
 					var inc = distance / step;
 					switch (curDirection) {
 						case DragDirection.Left:
@@ -63,7 +63,7 @@ namespace Tangerine.UI.SceneView
 					Document.Current?.ForceAnimationUpdate();
 					yield return null;
 				}
-				sv.Input.ConsumeKey(Key.Mouse0);
+				SceneView.Input.ConsumeKey(Key.Mouse0);
 				Document.Current.History.CommitTransaction();
 			}
 		}

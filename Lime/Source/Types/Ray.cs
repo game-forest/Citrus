@@ -25,12 +25,10 @@ namespace Lime
 			return obj is Ray ray && Equals(ray);
 		}
 
-
 		public bool Equals(Ray other)
 		{
 			return Position.Equals(other.Position) && Direction.Equals(other.Direction);
 		}
-
 
 		public override int GetHashCode()
 		{

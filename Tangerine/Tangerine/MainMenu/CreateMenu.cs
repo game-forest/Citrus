@@ -7,8 +7,8 @@ namespace Tangerine
 {
 	public class CreateNode : DocumentCommandHandler
 	{
-		readonly Type type;
-		readonly ICommand command;
+		private readonly Type type;
+		private readonly ICommand command;
 
 		public CreateNode(Type type, ICommand command)
 		{

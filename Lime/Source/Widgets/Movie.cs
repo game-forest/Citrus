@@ -6,20 +6,20 @@ namespace Lime
 	{
 		Play,
 		Pause,
-		Stop
+		Stop,
 	}
 
 	[TangerineRegisterNode(Order = 4)]
 	[TangerineVisualHintGroup("/All/Nodes/Media")]
 	public sealed class Movie : Widget, IImageCombinerArg, IUpdatableNode
 	{
-		bool skipRender;
-		bool textureInitialized;
-		MovieTexture movieTexture;
+		private bool skipRender;
+		private bool textureInitialized;
+		private MovieTexture movieTexture;
 
 		[YuzuMember]
 		[TangerineKeyframeColor(8)]
-		[TangerineFileProperty(new [] { "ogv" })]
+		[TangerineFileProperty(new[] { "ogv" })]
 		public string Path
 		{
 			get => InternalPersistence.Current?.ShrinkPath(movieTexture.Path) ?? movieTexture.Path;

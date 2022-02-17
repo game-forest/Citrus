@@ -1,4 +1,3 @@
-﻿
 namespace Lime
 {
 	/// <summary>

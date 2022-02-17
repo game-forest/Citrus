@@ -6,7 +6,7 @@ using Lime;
 
 namespace Orange
 {
-	class SyncSounds : ICookingStage
+	internal class SyncSounds : ICookingStage
 	{
 		private readonly AssetCooker assetCooker;
 

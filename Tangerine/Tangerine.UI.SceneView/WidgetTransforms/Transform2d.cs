@@ -21,7 +21,7 @@ namespace Tangerine.UI.SceneView.WidgetTransforms
 			return new Matrix32d {
 				U = new Vector2d(v.X, v.Y) * Scale.X,
 				V = new Vector2d(-v.Y, v.X) * Scale.Y,
-				T = Translation
+				T = Translation,
 			};
 		}
 	}

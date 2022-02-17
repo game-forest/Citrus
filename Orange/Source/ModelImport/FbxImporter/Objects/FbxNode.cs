@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Lime;
 
 namespace Orange.FbxImporter
 {
@@ -37,8 +37,6 @@ namespace Orange.FbxImporter
 			LocalTranform = FbxNodeGetLocalTransform(NativePtr).ToStruct<Mat4x4>().ToLime();
 		}
 
-		#region PInvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxNodeGetChildNode(IntPtr node, int index);
 
@@ -56,7 +54,5 @@ namespace Orange.FbxImporter
 
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern int FbxNodeGetMaterialCount(IntPtr node);
-
-		#endregion
 	}
 }

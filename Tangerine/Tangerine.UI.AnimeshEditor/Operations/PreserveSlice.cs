@@ -15,18 +15,24 @@ namespace Tangerine.UI.AnimeshEditor.Operations
 			// So we skip it in order to ensure mesh operations correctness and to improve performance.
 			private bool skipFirstSync;
 
-			private Slice(Lime.Animesh mesh, AnimeshSlice sliceBefore,
-				AnimeshSlice sliceAfter, bool skipFirstSync)
-			{
+			private Slice(
+				Lime.Animesh mesh,
+				AnimeshSlice sliceBefore,
+				AnimeshSlice sliceAfter,
+				bool skipFirstSync
+			) {
 				this.mesh = mesh;
 				this.sliceBefore = sliceBefore;
 				this.sliceAfter = sliceAfter;
 				this.skipFirstSync = skipFirstSync;
 			}
 
-			public static void Perform(Lime.Animesh mesh, AnimeshSlice sliceBefore,
-				AnimeshSlice sliceAfter, bool skipFirstSync = true)
-			{
+			public static void Perform(
+				Lime.Animesh mesh,
+				AnimeshSlice sliceBefore,
+				AnimeshSlice sliceAfter,
+				bool skipFirstSync = true
+			) {
 				Document.Current.History.Perform(new Slice(mesh, sliceBefore, sliceAfter, skipFirstSync));
 			}
 

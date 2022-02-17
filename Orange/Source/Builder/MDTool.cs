@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Orange.Source
 {
-	class MDTool: BuildSystem
+	internal class MDTool : BuildSystem
 	{
 		private readonly string builderPath;
-
 
 		public MDTool(Target target)
 			: base(target)
@@ -15,7 +14,9 @@ namespace Orange.Source
 #if MAC
 			builderPath = "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild";
 			if (!File.Exists(builderPath)) {
-				throw new System.Exception(@"Please install Visual Studio with Mono framework: https://www.visualstudio.com/ru/downloads/");
+				throw new System.Exception(
+					@"Please install Visual Studio with Mono framework: https://www.visualstudio.com/ru/downloads/"
+				);
 			}
 #elif WIN
 			builderPath = @"C:\Program Files(x86)\MonoDevelop\bin\mdtool.exe";
@@ -47,19 +48,19 @@ namespace Orange.Source
 			string platformSpecification;
 			switch (target.Platform) {
 				case TargetPlatform.iOS: {
-					AddArgument ($"-p:Platform=\"iPhone\"");
-					break;
-				}
+						AddArgument($"-p:Platform=\"iPhone\"");
+						break;
+					}
 				// Need to research strange behaviour due to this string
 				// platformSpecification = "|x86";
 				case TargetPlatform.Win:
 				case TargetPlatform.Mac:
 				case TargetPlatform.Android: {
-					break;
-				}
+						break;
+					}
 				default: {
-					throw new NotSupportedException();
-				}
+						throw new NotSupportedException();
+					}
 			}
 			AddArgument($"-p:Configuration=\"{target.Configuration}\"");
 		}

@@ -1,8 +1,8 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Lime;
 
 namespace Orange.FbxImporter
 {
@@ -26,10 +26,16 @@ namespace Orange.FbxImporter
 		public FbxSceneAnimations(IntPtr scene)
 		{
 			var animationStacksPointer = FbxSceneGetAnimations(scene);
-			if (animationStacksPointer == IntPtr.Zero) return;
+			if (animationStacksPointer == IntPtr.Zero) {
+				return;
+			}
+
 			var strct = animationStacksPointer.ToStruct<SizedArray>();
 			var animationStacks = strct.GetData<AnimationStack>();
-			if (animationStacks.Length == 0) return;
+			if (animationStacks.Length == 0) {
+				return;
+			}
+
 			foreach (var animationStack in animationStacks) {
 				var animations = animationStack.Animations.ToStruct<SizedArray>().GetData<Animation>();
 				foreach (var animation in animations) {
@@ -40,30 +46,36 @@ namespace Orange.FbxImporter
 					data.PositionKeys = animation.PositionKeys
 						.ToStruct<SizedArray>()
 						.GetData<Keyframe>()
-						.Select(key => new Keyframe<Vector3>(AnimationUtils.SecondsToFrames(key.Time), key.Data.ToStruct<Vec3>().ToLime()))
-						.ToList();
+						.Select(
+							key => new Keyframe<Vector3>(
+								frame: AnimationUtils.SecondsToFrames(key.Time),
+								value: key.Data.ToStruct<Vec3>().ToLime()
+							)
+						).ToList();
 					data.RotationKeys = animation.RotationKeys
 						.ToStruct<SizedArray>()
 						.GetData<Keyframe>()
-						.Select(key => new Keyframe<Quaternion>(AnimationUtils.SecondsToFrames(key.Time), key.Data.ToStruct<Vec4>().ToLimeQuaternion()))
-						.ToList();
+						.Select(
+							key => new Keyframe<Quaternion>(
+								frame: AnimationUtils.SecondsToFrames(key.Time),
+								value: key.Data.ToStruct<Vec4>().ToLimeQuaternion()
+							)
+						).ToList();
 					data.ScaleKeys = animation.ScaleKeys
 						.ToStruct<SizedArray>()
 						.GetData<Keyframe>()
-						.Select(key => new Keyframe<Vector3>(AnimationUtils.SecondsToFrames(key.Time), key.Data.ToStruct<Vec3>().ToLime()))
-						.ToList();
+						.Select(
+							key => new Keyframe<Vector3>(
+								frame: AnimationUtils.SecondsToFrames(key.Time),
+								value: key.Data.ToStruct<Vec3>().ToLime()
+							)
+						).ToList();
 				}
 			}
 		}
 
-		#region Pinvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxSceneGetAnimations(IntPtr pScene);
-
-		#endregion
-
-		#region MarshalingStructures
 
 		[StructLayout(LayoutKind.Sequential, CharSet = ImportConfig.Charset)]
 		private class AnimationStack
@@ -92,7 +104,5 @@ namespace Orange.FbxImporter
 
 			public IntPtr Data;
 		}
-
-		#endregion
 	}
 }

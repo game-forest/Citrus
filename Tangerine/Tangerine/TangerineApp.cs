@@ -77,7 +77,6 @@ namespace Tangerine
 					SetColorTheme(AppUserPreferences.Instance.ColorTheme, AppUserPreferences.Instance.LimeColorTheme);
 					break;
 				}
-
 			}
 			Application.InvalidateWindows();
 
@@ -199,8 +198,12 @@ namespace Tangerine
 			};
 			Project.DocumentReloadConfirmation += doc => {
 				if (doc.IsModified) {
-					var modifiedAlert = new AlertDialog($"{doc.Path}\n\nThis file has been modified by another " +
-						$"program and has unsaved changes.\nDo you want to reload it from disk? ", "Yes", "No");
+					var modifiedAlert = new AlertDialog(
+						$"{doc.Path}\n\nThis file has been modified by another "
+							+ $"program and has unsaved changes.\nDo you want to reload it from disk? ",
+						"Yes",
+						"No"
+					);
 					var res = modifiedAlert.Show();
 					if (res == 1 || res == -1) {
 						doc.History.ExternalModification();
@@ -211,8 +214,12 @@ namespace Tangerine
 				if (CoreUserPreferences.Instance.ReloadModifiedFiles) {
 					return true;
 				}
-				var alert = new AlertDialog($"{doc.Path}\n\nThis file has been modified by another program.\n" +
-					$"Do you want to reload it from disk? ", "Yes, always", "Yes", "No");
+				var alert = new AlertDialog(
+					$"{doc.Path}\n\nThis file has been modified by another program.\n"
+						+ $"Do you want to reload it from disk? ", "Yes, always",
+					"Yes",
+					"No"
+				);
 				var r = alert.Show();
 				if (r == 0) {
 					CoreUserPreferences.Instance.ReloadModifiedFiles = true;
@@ -233,8 +240,12 @@ namespace Tangerine
 			Project.OpenFileOutsideProjectAttempt += (string filePath) => {
 				var projectFilePath = SearhForCitproj(filePath);
 				if (projectFilePath != null && Project.Current.CitprojPath != projectFilePath) {
-					var alert = new AlertDialog($"You're trying to open a document outside the project directory. " +
-						$"Change the current project to '{Path.GetFileName(projectFilePath)}'?", "Yes", "No");
+					var alert = new AlertDialog(
+						$"You're trying to open a document outside the project directory. "
+							+ $"Change the current project to '{Path.GetFileName(projectFilePath)}'?",
+						"Yes",
+						"No"
+					);
 					if (alert.Show() == 0) {
 						if (FileOpenProject.Execute(projectFilePath)) {
 							Project.Current.OpenDocument(filePath, true);
@@ -579,7 +590,7 @@ namespace Tangerine
 			var documentViewContainer = new Frame {
 				ClipChildren = ClipMethod.ScissorTest,
 				Layout = new StackLayout(),
-				HitTestTarget = true
+				HitTestTarget = true,
 			};
 			_ = new DocumentTabsProcessor(tabBar);
 			var docArea = dockManager.DocumentArea;
@@ -703,11 +714,11 @@ namespace Tangerine
 			h.Connect(GenericCommands.InsertTimelineColumn, new InsertTimelineColumn());
 			h.Connect(GenericCommands.RemoveTimelineColumn, new RemoveTimelineColumn());
 			h.Connect(
-				GenericCommands.NextDocument, 
+				GenericCommands.NextDocument,
 				() => NavigatorDialog.ShowOrAdvanceFocus(KeyboardFocusScope.Direction.Forward)
 			);
 			h.Connect(
-				GenericCommands.PreviousDocument, 
+				GenericCommands.PreviousDocument,
 				() => NavigatorDialog.ShowOrAdvanceFocus(KeyboardFocusScope.Direction.Backward)
 			);
 			h.Connect(GenericCommands.DefaultLayout, new ViewDefaultLayout());
@@ -758,11 +769,17 @@ namespace Tangerine
 			h.Connect(Command.Cut, new DocumentDelegateCommandHandler(Core.Operations.Cut.Perform));
 			h.Connect(Command.Paste, new DocumentDelegateCommandHandler(() => Paste(), Document.HasCurrent));
 			h.Connect(Command.Delete, new DocumentDelegateCommandHandler(Core.Operations.Delete.Perform));
-			h.Connect(Command.SelectAll, new DocumentDelegateCommandHandler(() => {
-				foreach (var i in Document.Current.VisibleSceneItems) {
-					Core.Operations.SelectSceneItem.Perform(i, true);
-				}
-			}, () => Document.Current?.VisibleSceneItems.Count > 0));
+			h.Connect(
+				Command.SelectAll,
+				new DocumentDelegateCommandHandler(
+					() => {
+						foreach (var i in Document.Current.VisibleSceneItems) {
+							Core.Operations.SelectSceneItem.Perform(i, true);
+						}
+					},
+				() => Document.Current?.VisibleSceneItems.Count > 0
+				)
+			);
 			h.Connect(
 				Command.Undo,
 				() => Document.Current.History.Undo(),
@@ -859,7 +876,7 @@ namespace Tangerine
 				if (
 					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() &&
 					pasteAtMouse &&
-				    !CoreUserPreferences.Instance.DontPasteAtMouse
+					!CoreUserPreferences.Instance.DontPasteAtMouse
 				) {
 					var mousePosition =
 						SceneView.Instance.Scene.LocalMousePosition() *

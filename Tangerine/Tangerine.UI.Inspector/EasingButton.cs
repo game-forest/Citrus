@@ -62,7 +62,9 @@ namespace Tangerine.UI.Inspector
 
 		public IEnumerator<object> Task()
 		{
-			var easingDataflow = KeyframeDataflow.GetProvider(editorParams, i => i?.Params).DistinctUntilChanged().GetDataflow();
+			var easingDataflow = KeyframeDataflow.GetProvider(editorParams, i => i?.Params)
+				.DistinctUntilChanged()
+				.GetDataflow();
 			while (true) {
 				if (easingDataflow.Poll(out var kf)) {
 					if (kf.HasValue) {
@@ -99,10 +101,17 @@ namespace Tangerine.UI.Inspector
 		private void ProcessKeyframe(Action<IKeyframe> processor)
 		{
 			foreach (var animable in editorParams.RootObjects.OfType<IAnimationHost>()) {
-				if (animable.Animators.TryFind(editorParams.PropertyPath, out var animator, Document.Current.AnimationId)) {
-					var keyframe = animator.ReadonlyKeys.FirstOrDefault(i => i.Frame == Document.Current.AnimationFrame).Clone();
+				if (
+					animable.Animators.TryFind(
+						editorParams.PropertyPath, out var animator, Document.Current.AnimationId
+					)
+				) {
+					var keyframe = animator.ReadonlyKeys
+						.FirstOrDefault(i => i.Frame == Document.Current.AnimationFrame).Clone();
 					processor(keyframe);
-					Core.Operations.SetKeyframe.Perform(animable, editorParams.PropertyPath, Document.Current.Animation, keyframe);
+					Core.Operations.SetKeyframe.Perform(
+						animable, editorParams.PropertyPath, Document.Current.Animation, keyframe
+					);
 				}
 			}
 		}

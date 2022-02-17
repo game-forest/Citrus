@@ -14,12 +14,17 @@ namespace Orange.Source.Actions
 		[ExportMetadata("Label", "Invalidate Fonts")]
 		public static string InvalidateFontsAction()
 		{
-			foreach (var configPath in EnumerateFontConfigs(AssetPath.Combine(The.Workspace.AssetsDirectory, "Fonts/"))) {
+			foreach (
+				var configPath
+				in EnumerateFontConfigs(AssetPath.Combine(The.Workspace.AssetsDirectory, "Fonts/"))
+			) {
 				Console.WriteLine($"Processing {configPath}..");
 				try {
 					var tftPath = Path.ChangeExtension(configPath, "tft");
 					FontGenerator.UpdateCharSetsAndGenerateFont(
-						new Uri(The.Workspace.AssetsDirectory + "\\").MakeRelativeUri(new Uri(configPath)).OriginalString,
+						new Uri(The.Workspace.AssetsDirectory + "\\")
+							.MakeRelativeUri(new Uri(configPath))
+							.OriginalString,
 						The.Workspace.AssetsDirectory
 					);
 				} catch (Exception e) {
@@ -41,6 +46,5 @@ namespace Orange.Source.Actions
 				}
 			}
 		}
-
 	}
 }

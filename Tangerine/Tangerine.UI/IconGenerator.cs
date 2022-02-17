@@ -49,7 +49,8 @@ namespace Tangerine.UI
 		};
 
 		private static readonly IFont font;
-		private static readonly Dictionary<Type, (ITexture Texture, Bitmap Bitmap)> map = new Dictionary<Type, (ITexture Texture, Bitmap Bitmap)>();
+		private static readonly Dictionary<Type, (ITexture Texture, Bitmap Bitmap)> map =
+			new Dictionary<Type, (ITexture Texture, Bitmap Bitmap)>();
 
 		private delegate void TextureRenderedDelegate(ITexture texture);
 		public delegate void BitmapCreatedDelegate(Bitmap bitmap);
@@ -57,7 +58,7 @@ namespace Tangerine.UI
 		static IconTextureGenerator()
 		{
 			var fontResource = new EmbeddedResource("Tangerine.Resources.SpicyRice-Regular.ttf", "Tangerine");
-			font = new DynamicFont(fontResource.GetResourceBytes());
+			font = new Lime.DynamicFont(fontResource.GetResourceBytes());
 		}
 
 		public static ITexture GetTexture(Type type, BitmapCreatedDelegate bitmapCreated = null)
@@ -69,7 +70,10 @@ namespace Tangerine.UI
 
 			ITexture texture;
 			var attribute = type.GetCustomAttribute<TangerineCustomIconAttribute>();
-			if (attribute is TangerineBase64IconAttribute base64IconAttribute && !string.IsNullOrEmpty(base64IconAttribute.Base64)) {
+			if (
+				attribute is TangerineBase64IconAttribute base64IconAttribute
+				&& !string.IsNullOrEmpty(base64IconAttribute.Base64)
+			) {
 				var texture2D = new Texture2D();
 				texture = texture2D;
 				Bitmap bitmap;
@@ -95,11 +99,14 @@ namespace Tangerine.UI
 						.Where(@char => char.IsUpper(@char) || char.IsNumber(@char))
 						.Aggregate(string.Empty, (s, @char) => s + @char);
 					iconAbbreviation = typeAbbreviation.Length > 0 ? typeAbbreviation : typeName;
-					iconAbbreviation = iconAbbreviation.Substring(0, Math.Min(IconTextMaxLength, iconAbbreviation.Length)).ToUpperInvariant();
+					iconAbbreviation = iconAbbreviation.Substring(
+						0, Math.Min(IconTextMaxLength, iconAbbreviation.Length)
+					).ToUpperInvariant();
 				}
 				var buffer = new byte[utf8.GetByteCount(type.Name)];
 				utf8.GetBytes(type.Name, buffer);
-				var (commonColor, secondaryColor) = colors[Math.Abs(Toolbox.ComputeHash(buffer, buffer.Length)) % colors.Count];
+				var (commonColor, secondaryColor) =
+					colors[Math.Abs(Toolbox.ComputeHash(buffer, buffer.Length)) % colors.Count];
 				if (iconGenerationAttribute?.CommonColor != null) {
 					commonColor = iconGenerationAttribute.CommonColor.Value;
 				}
@@ -115,8 +122,12 @@ namespace Tangerine.UI
 			return texture;
 		}
 
-		private static RenderTexture CreateIconTexture(string iconAbbreviation, Color4 commonColor, Color4 secondaryColor, TextureRenderedDelegate textureRendered)
-		{
+		private static RenderTexture CreateIconTexture(
+			string iconAbbreviation,
+			Color4 commonColor,
+			Color4 secondaryColor,
+			TextureRenderedDelegate textureRendered
+		) {
 			var texture = new RenderTexture(IconSize, IconSize);
 			Render(() => {
 				Renderer.PushState(
@@ -145,11 +156,15 @@ namespace Tangerine.UI
 
 					if (!string.IsNullOrWhiteSpace(iconAbbreviation)) {
 						var hBorderOffset = Vector2.Right * (IconSize * 0.0625f + BorderSize * 2);
-						var textScale = CalcBestTextScale(iconAbbreviation, FontHeight, Vector2.One * IconSize - hBorderOffset);
+						var textScale = CalcBestTextScale(
+							iconAbbreviation, FontHeight, Vector2.One * IconSize - hBorderOffset
+						);
 						var fontHeight = FontHeight * textScale;
 						var textSize = font.MeasureTextLine(iconAbbreviation, fontHeight, letterSpacing: 0);
 						var textPosition = (Vector2.One * IconSize - textSize) * 0.5f;
-						Renderer.DrawTextLine(font, textPosition, iconAbbreviation, fontHeight, commonColor, letterSpacing: 0);
+						Renderer.DrawTextLine(
+							font, textPosition, iconAbbreviation, fontHeight, commonColor, letterSpacing: 0
+						);
 					}
 				} finally {
 					texture.RestoreRenderTarget();

@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
@@ -62,8 +62,9 @@ namespace Tangerine.UI.SceneView
 			return lst;
 		}
 
-		private static void Prepare(Bone bone, out List<Bone> boneChain, out List<IKPoint> points, out List<float> distances)
-		{
+		private static void Prepare(
+			Bone bone, out List<Bone> boneChain, out List<IKPoint> points, out List<float> distances
+		) {
 			boneChain = new List<Bone>();
 			points = new List<IKPoint>();
 			distances = new List<float>();

@@ -1,18 +1,17 @@
-
 namespace Lime
 {
 	public enum WindowStyle
 	{
 		Regular,
 		Dialog,
-		Borderless
+		Borderless,
 	}
 
 	public enum MacWindowTabbingMode
 	{
 		Automatic,
 		Preferred,
-		Disallowed
+		Disallowed,
 	}
 
 	public enum WindowType
@@ -38,6 +37,7 @@ namespace Lime
 		public bool VSync = true;
 		public bool UseTimer = true;
 		public bool AsyncRendering = false;
+
 		/// <summary>
 		/// System.Drawing.Icon on Windows
 		/// </summary>
@@ -45,4 +45,3 @@ namespace Lime
 		public WindowType Type;
 	}
 }
-

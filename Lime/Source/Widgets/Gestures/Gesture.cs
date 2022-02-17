@@ -7,10 +7,10 @@ namespace Lime
 		public Node Owner { get; internal set; }
 		protected WindowInput Input => CommonWindow.Current.Input;
 
-		internal protected virtual void OnCancel(Gesture sender)
+		protected internal virtual void OnCancel(Gesture sender)
 		{ }
 
-		internal protected abstract bool OnUpdate();
+		protected internal abstract bool OnUpdate();
 
 		protected struct PollableEvent
 		{

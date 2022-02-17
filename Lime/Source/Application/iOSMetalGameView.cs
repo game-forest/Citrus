@@ -69,7 +69,9 @@ namespace Lime
 				drawableSize.Height *= screen.NativeScale;
 				metalLayer.DrawableSize = drawableSize;
 				if (vkSwapChain == null) {
-					vkSwapChain = new Graphics.Platform.Vulkan.Swapchain(vkContext, this.Handle, (int)metalLayer.DrawableSize.Width, (int)metalLayer.DrawableSize.Height);
+					vkSwapChain = new Graphics.Platform.Vulkan.Swapchain(
+						vkContext, this.Handle, (int)metalLayer.DrawableSize.Width, (int)metalLayer.DrawableSize.Height
+					);
 				} else {
 					vkSwapChain.Resize((int)metalLayer.DrawableSize.Width, (int)metalLayer.DrawableSize.Height);
 				}

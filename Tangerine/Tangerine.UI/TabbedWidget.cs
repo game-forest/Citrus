@@ -1,6 +1,6 @@
-using Lime;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI
@@ -134,15 +134,17 @@ namespace Tangerine.UI
 
 		public int IndexOf(Tab tab)
 		{
-			if (TabBar.Nodes.Contains(tab))
+			if (TabBar.Nodes.Contains(tab)) {
 				return TabBar.Nodes.IndexOf(tab);
+			}
+
 			return -1;
 		}
 
 		public enum TabBarPlacement
 		{
 			Top,
-			Bottom
+			Bottom,
 		}
 	}
 
@@ -163,10 +165,14 @@ namespace Tangerine.UI
 
 		public void AddTab(string tabName, Widget content, bool isActive = false, bool canClose = false)
 		{
-			AddTab(new ThemedTab {
-				Text = tabName,
-				Closable = canClose
-			}, content, isActive);
+			AddTab(
+				newTab: new ThemedTab {
+					Text = tabName,
+					Closable = canClose,
+				},
+				content: content,
+				isActive: isActive
+			);
 		}
 	}
 }

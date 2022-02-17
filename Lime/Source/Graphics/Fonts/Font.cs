@@ -62,8 +62,9 @@ namespace Lime
 			return MeasureTextLine(font, text, fontHeight, 0, text.Length, letterSpacing);
 		}
 
-		public static Vector2 MeasureTextLine(this IFont font, string text, float fontHeight, int start, int length, float letterSpacing)
-		{
+		public static Vector2 MeasureTextLine(
+			this IFont font, string text, float fontHeight, int start, int length, float letterSpacing
+		) {
 			FontChar prevChar = null;
 			var size = new Vector2(0, fontHeight);
 			float width = 0;
@@ -80,7 +81,10 @@ namespace Lime
 					continue;
 				}
 				float scale = fontChar.Height != 0.0f ? fontHeight / fontChar.Height : 0.0f;
-				width += scale * (fontChar.ACWidths.X + fontChar.Kerning(prevChar) + fontChar.Width + fontChar.ACWidths.Y + letterSpacing);
+				width += scale * (
+					fontChar.ACWidths.X + fontChar.Kerning(prevChar)
+					+ fontChar.Width + fontChar.ACWidths.Y + letterSpacing
+				);
 				size.X = Math.Max(size.X, width);
 				prevChar = fontChar;
 			}
@@ -163,53 +167,64 @@ namespace Lime
 	{
 		[YuzuMember]
 		public char Char;
+
 		/// <summary>
 		/// The left-top glyph's position in the font texture
 		/// </summary>
 		[YuzuMember]
 		public Vector2 UV0;
+
 		/// <summary>
 		/// The right-bottom glyph's position in the font texture
 		/// </summary>
 		[YuzuMember]
 		public Vector2 UV1;
+
 		/// <summary>
 		/// Width of the glyph in pixels
 		/// </summary>
 		[YuzuMember]
 		public float Width;
+
 		/// <summary>
 		/// Height of the glyph in pixels
 		/// </summary>
 		[YuzuMember]
 		public float Height;
+
 		/// <summary>
 		/// TrueType channels intensity ot grayscale
 		/// </summary>
 		[YuzuMember]
 		public bool RgbIntensity = false;
+
 		/// <summary>
 		/// Contains the A and C spacing of the character.
 		/// The A spacing is the distance to add to the current position before drawing the character glyph.
-		/// The C spacing is the distance to add to the current position to provide white space to the right of the character glyph.
+		/// The C spacing is the distance to add to the current position to
+		/// provide white space to the right of the character glyph.
 		/// </summary>
 		[YuzuMember]
 		public Vector2 ACWidths;
+
 		/// <summary>
 		/// List of kerning pairs, related to this character
 		/// </summary>
 		[YuzuMember]
 		public List<KerningPair> KerningPairs;
+
 		/// <summary>
 		/// Font texture's index which contains the given glyph
 		/// </summary>
 		[YuzuMember]
 		public int TextureIndex;
+
 		/// <summary>
 		/// Mostly stores only negative offset which is useful for chars with diacritics.
 		/// </summary>
 		[YuzuMember]
 		public float VerticalOffset;
+
 		/// <summary>
 		/// The null-character which denotes any missing character in a font
 		/// </summary>
@@ -232,6 +247,7 @@ namespace Lime
 		/// Width including padding from right and left.
 		/// </summary>
 		public float PaddedWidth => Width + 2 * Padding;
+
 		/// <summary>
 		/// Height including padding from bottom and top.
 		/// </summary>
@@ -239,12 +255,14 @@ namespace Lime
 
 		public float Kerning(FontChar prevChar)
 		{
-			if (prevChar?.KerningPairs != null)
+			if (prevChar?.KerningPairs != null) {
 				foreach (var pair in prevChar.KerningPairs) {
 					if (pair.Char == Char) {
 						return pair.Kerning;
 					}
 				}
+			}
+
 			return 0;
 		}
 	}

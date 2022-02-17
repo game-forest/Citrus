@@ -1,6 +1,6 @@
-//Copyright (c) 2014-2015 Robert Rouhani <robert.rouhani@gmail.com> and other contributors (see CONTRIBUTORS file).
-//Licensed under the MIT License - https://raw.github.com/Robmaister/SharpFont.HarfBuzz/master/LICENSE
-
+// Copyright (c) 2014-2015 Robert Rouhani <robert.rouhani@gmail.com> and other contributors (see CONTRIBUTORS file).
+// Licensed under the MIT License - https://raw.github.com/Robmaister/SharpFont.HarfBuzz/master/LICENSE
+#pragma warning disable SA1300 // Element should begin with upper-case letter
 using System;
 using System.Runtime.InteropServices;
 
@@ -15,13 +15,8 @@ namespace SharpFont.HarfBuzz
 #endif
 		private const CallingConvention CallConvention = CallingConvention.Cdecl;
 
-#region hb-ft
 		[DllImport(HarfBuzzDll, CallingConvention = CallConvention)]
 		internal static extern IntPtr hb_ft_font_create(IntPtr ft_face, IntPtr destroy);
-
-#endregion
-
-#region hb-version
 
 		[DllImport(HarfBuzzDll, CallingConvention = CallConvention)]
 		internal static extern void hb_version(out uint major, out uint minor, out uint micro);
@@ -32,12 +27,10 @@ namespace SharpFont.HarfBuzz
 		[DllImport(HarfBuzzDll, CallingConvention = CallConvention)]
 		internal static extern IntPtr hb_version_string();
 
-#endregion
-
-#region Unfinished Entry Points
-
 		[DllImport(HarfBuzzDll, CallingConvention = CallConvention)]
-		internal static extern void hb_buffer_add_utf8(IntPtr buffer, byte[] text, int text_length, int item_offset, int item_length);
+		internal static extern void hb_buffer_add_utf8(
+			IntPtr buffer, byte[] text, int text_length, int item_offset, int item_length
+		);
 
 		[DllImport(HarfBuzzDll, CallingConvention = CallConvention)]
 		internal static extern IntPtr hb_buffer_create();
@@ -62,7 +55,6 @@ namespace SharpFont.HarfBuzz
 
 		[DllImport(HarfBuzzDll, CallingConvention = CallConvention)]
 		internal static extern void hb_shape(IntPtr font, IntPtr buffer, IntPtr features, int num_features);
-
-#endregion
 	}
 }
+#pragma warning restore SA1300 // Element should begin with upper-case letter

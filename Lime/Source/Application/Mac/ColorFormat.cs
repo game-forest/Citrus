@@ -1,4 +1,4 @@
-﻿#if MAC || MONOMAC
+#if MAC || MONOMAC
 using System;
 
 namespace Lime.Platform
@@ -141,7 +141,11 @@ namespace Lime.Platform
 
 		public override string ToString()
 		{
-			return string.Format("{0} ({1})", BitsPerPixel, (IsIndexed ? " indexed" : Red.ToString() + Green.ToString() + Blue.ToString() + Alpha.ToString()));
+			return string.Format(
+				"{0} ({1})",
+				BitsPerPixel,
+				(IsIndexed ? " indexed" : Red.ToString() + Green.ToString() + Blue.ToString() + Alpha.ToString())
+			);
 		}
 	}
 }

@@ -1,11 +1,11 @@
 using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.IO;
-using Microsoft.Win32;
-using System.Text;
 using System.Reflection;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace Launcher
 {
@@ -32,8 +32,8 @@ namespace Launcher
 			var process = new Process {
 				StartInfo = {
 					FileName = ExecutablePath,
-					Arguments = ExecutableArgs
-				}
+					Arguments = ExecutableArgs,
+				},
 			};
 			process.Start();
 		}
@@ -137,7 +137,9 @@ namespace Launcher
 				return true;
 			}
 
-			var buildRequirementsUrlsFile = Path.Combine(citrusDirectory, "Orange", "Launcher", "download_prerequisite_installer_urls.txt");
+			var buildRequirementsUrlsFile = Path.Combine(
+				citrusDirectory, "Orange", "Launcher", "download_prerequisite_installer_urls.txt"
+			);
 			foreach (var line in File.ReadLines(buildRequirementsUrlsFile)) {
 				OpenUrl(line);
 			}
@@ -161,8 +163,9 @@ namespace Launcher
 			process.StartInfo.Arguments =
 				$"\"{solutionPath}\" /t:Build /p:Configuration=Release /p:Platform=\"Any CPU\" /verbosity:minimal";
 			var cp = Encoding.Default.CodePage;
-			if (cp == 1251)
+			if (cp == 1251) {
 				cp = 866;
+			}
 			process.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(cp);
 			process.StartInfo.StandardErrorEncoding = Encoding.GetEncoding(cp);
 #elif MAC

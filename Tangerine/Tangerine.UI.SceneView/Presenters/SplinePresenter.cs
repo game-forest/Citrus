@@ -14,17 +14,19 @@ namespace Tangerine.UI.SceneView
 				(
 					!(Document.Current.Container == spline) &&
 					!Document.Current.SelectedNodes().Contains(spline) &&
-					!VisualHintsRegistry.Instance.DisplayCondition(spline)
-				)
-			) {
+					!VisualHintsRegistry.Instance.DisplayCondition(spline))) {
 				return;
 			}
-			if (Document.Current.Container == spline.Parent || Document.Current.Container == spline || CoreUserPreferences.Instance.ShowSplinesGlobally) {
+			if (
+				Document.Current.Container == spline.Parent
+				|| Document.Current.Container == spline
+				|| CoreUserPreferences.Instance.ShowSplinesGlobally
+			) {
 				DrawSpline(spline);
 			}
 		}
 
-		void DrawSpline(Spline spline)
+		private void DrawSpline(Spline spline)
 		{
 			float step = 7.0f / SceneView.Instance.Scene.Scale.X;
 			spline.PrepareRendererState();
@@ -37,7 +39,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		static Vertex[] v = new Vertex[4];
+		private static Vertex[] v = new Vertex[4];
 
 		public static void DrawColoredLine(Vector2 a, Vector2 b, Color4 color1, Color4 color2)
 		{

@@ -67,10 +67,22 @@ namespace Tangerine
 		protected virtual IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) =>
 			ApplyLookupFilter(text, items, CancellationToken.None);
 
-		protected IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items, CancellationToken cancellationToken)
-		{
-			var itemsTemp = new List<(LookupDialogItem Item, int HeaderDistance, int HeaderGapCount, int NameDistance, int NameGapCount)>();
-			var itemsHighlights = new List<(LookupDialogItem Item, int[] HeaderHighlightSymbolsIndices, int[] NameHighlightSymbolsIndices)>(items.Count);
+		protected IEnumerable<LookupItem> ApplyLookupFilter(
+			string text, IReadOnlyList<LookupItem> items, CancellationToken cancellationToken
+		) {
+			var itemsTemp =
+				new List<(
+					LookupDialogItem Item,
+					int HeaderDistance,
+					int HeaderGapCount,
+					int NameDistance,
+					int NameGapCount
+				)>();
+			var itemsHighlights = new List<(
+				LookupDialogItem Item,
+				int[] HeaderHighlightSymbolsIndices,
+				int[] NameHighlightSymbolsIndices
+			)>(items.Count);
 			if (!string.IsNullOrEmpty(text)) {
 				var headerMatches = new List<int>(text.Length);
 				var nameMatches = new List<int>(text.Length);
@@ -164,7 +176,9 @@ namespace Tangerine
 
 		protected override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
 		{
-			var filteredItemsLimit = CoreUserPreferences.Instance.LookupItemsLimit >= 1 ? CoreUserPreferences.Instance.LookupItemsLimit : 30;
+			var filteredItemsLimit = CoreUserPreferences.Instance.LookupItemsLimit >= 1
+				? CoreUserPreferences.Instance.LookupItemsLimit
+				: 30;
 			var filteredItems = base.ApplyLookupFilter(text, MutableItemList).Take(filteredItemsLimit).ToList();
 			lookupWidget.ClearItems(disposeItems: false);
 
@@ -178,6 +192,9 @@ namespace Tangerine
 			});
 		}
 
-		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) => items;
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items)
+		{
+			return items;
+		}
 	}
 }

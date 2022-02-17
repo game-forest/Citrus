@@ -43,19 +43,18 @@ namespace Lime
 				this == Down;
 		}
 
-
 		public bool IsPrintable() => IsAlphanumeric() || (this >= Tilde && this <= BackSlash) || this == Space;
 
 		public bool IsTextEditing() => this == Delete || this == BackSpace || this == Insert || this == Enter;
 
 		public bool IsFunctional() => this >= F1 && this <= F12;
 
-		public static bool operator == (Key lhs, Key rhs) => lhs.Code == rhs.Code;
-		public static bool operator != (Key lhs, Key rhs) => lhs.Code != rhs.Code;
-		public static bool operator >  (Key lhs, Key rhs) => lhs.Code >  rhs.Code;
-		public static bool operator <  (Key lhs, Key rhs) => lhs.Code <  rhs.Code;
-		public static bool operator >= (Key lhs, Key rhs) => lhs.Code >= rhs.Code;
-		public static bool operator <= (Key lhs, Key rhs) => lhs.Code <= rhs.Code;
+		public static bool operator ==(Key lhs, Key rhs) => lhs.Code == rhs.Code;
+		public static bool operator !=(Key lhs, Key rhs) => lhs.Code != rhs.Code;
+		public static bool operator >(Key lhs, Key rhs) => lhs.Code > rhs.Code;
+		public static bool operator <(Key lhs, Key rhs) => lhs.Code < rhs.Code;
+		public static bool operator >=(Key lhs, Key rhs) => lhs.Code >= rhs.Code;
+		public static bool operator <=(Key lhs, Key rhs) => lhs.Code <= rhs.Code;
 
 		public static IEnumerable<Key> Enumerate()
 		{
@@ -76,8 +75,9 @@ namespace Lime
 			}
 			var sb = new StringBuilder(10);
 			foreach (var kv in ShortcutMap) {
-				if (kv.Value == this)
+				if (kv.Value == this) {
 					sb.Append($"[{kv.Key}]");
+				}
 			}
 			return sb.Length > 0 ? sb.ToString() : Code.ToString();
 		}
@@ -91,8 +91,8 @@ namespace Lime
 				.ToDictionary(i => (Key)i.GetValue(null), i => i.Name);
 		}
 
-		public static implicit operator Key (int code) => new Key(code);
-		public static implicit operator int (Key key) => key.Code;
+		public static implicit operator Key(int code) => new Key(code);
+		public static implicit operator int(Key key) => key.Code;
 
 		public static Key MapShortcut(Key main) => MapShortcut(new Shortcut(Modifiers.None, main));
 
@@ -124,7 +124,6 @@ namespace Lime
 			}
 		}
 
-#region Keyboard
 		public static readonly Key Shift = New();
 		public static readonly Key Control = New();
 		public static readonly Key Alt = New();
@@ -226,9 +225,6 @@ namespace Lime
 		public static readonly Key KeypadDecimal = New();
 		public static readonly Key KeypadDivide = New();
 
-#endregion
-
-#region Mouse
 		/// <summary>
 		/// Left mouse button
 		/// </summary>
@@ -262,11 +258,8 @@ namespace Lime
 		public static readonly Key Touch1 = New();
 		public static readonly Key Touch2 = New();
 		public static readonly Key Touch3 = New();
-#endregion
-
 		public static readonly Key DismissSoftKeyboard = New();
 
 		public static readonly Key LastNormal = Count - 1;
 	}
 }
-

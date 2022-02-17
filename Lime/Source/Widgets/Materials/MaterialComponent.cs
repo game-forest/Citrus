@@ -14,14 +14,13 @@ namespace Lime
 	[AllowOnlyOneComponent]
 	[AllowedComponentOwnerTypes(typeof(IMaterialComponentOwner))]
 	public class MaterialComponent : NodeComponent
-	{
-
-	}
+	{ }
 
 	/// <summary>
 	/// Replace owner material with specified material
 	/// </summary>
-	public class MaterialComponent<T> : MaterialComponent where T : IMaterial, new()
+	public class MaterialComponent<T> : MaterialComponent
+		where T : IMaterial, new()
 	{
 		protected T CustomMaterial { get; private set; }
 

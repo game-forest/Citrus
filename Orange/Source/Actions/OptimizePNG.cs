@@ -27,15 +27,21 @@ namespace Orange
 			ulong totalLengthBefore = 0;
 			using (new DirectoryChanger(The.Workspace.AssetsDirectory)) {
 				foreach (var path in Lime.AssetBundle.Current.EnumerateFiles(null, ".png")) {
-					ulong lengthBefore = (ulong)(new System.IO.FileInfo(path)).Length;
+					ulong lengthBefore = (ulong)new System.IO.FileInfo(path).Length;
 					totalLengthBefore += lengthBefore;
 					TextureConverter.OptimizePNG(path);
-					ulong lengthAfter = (ulong)(new System.IO.FileInfo(path)).Length;
+					ulong lengthAfter = (ulong)new System.IO.FileInfo(path).Length;
 					totalLengthAfter += lengthAfter;
-					Console.WriteLine($"{path} : {f(lengthBefore)} => {f(lengthAfter)}, diff: {f(lengthBefore - lengthAfter)}");
+					Console.WriteLine(
+						$"{path} : {f(lengthBefore)} => {f(lengthAfter)}, " +
+						$"diff: {f(lengthBefore - lengthAfter)}"
+					);
 				}
 			}
-			Console.WriteLine($"Totals: {f(totalLengthBefore)} => {f(totalLengthAfter)}, diff: {f(totalLengthBefore - totalLengthAfter)}");
+			Console.WriteLine(
+				$"Totals: {f(totalLengthBefore)} => {f(totalLengthAfter)}, " +
+				$"diff: {f(totalLengthBefore - totalLengthAfter)}"
+			);
 		}
 	}
 }

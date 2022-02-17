@@ -82,8 +82,12 @@ namespace Tangerine.UI.Timeline.CompoundAnimations
 					}
 					widget.PrepareRendererState();
 					foreach (var clip in track.Clips.Where(i => i.IsSelected)) {
-						var a = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineSceneItemState().Index, offset.X + clip.BeginFrame);
-						var b = Timeline.Instance.Grid.CellToGridCoordinates(offset.Y + i.GetTimelineSceneItemState().Index + 1, offset.X + clip.EndFrame);
+						var a = Timeline.Instance.Grid.CellToGridCoordinates(
+							offset.Y + i.GetTimelineSceneItemState().Index, offset.X + clip.BeginFrame
+						);
+						var b = Timeline.Instance.Grid.CellToGridCoordinates(
+							offset.Y + i.GetTimelineSceneItemState().Index + 1, offset.X + clip.EndFrame
+						);
 						Renderer.DrawRect(a, b, ColorTheme.Current.TimelineGrid.AnimationClip);
 						Renderer.DrawRectOutline(a, b, ColorTheme.Current.TimelineGrid.AnimationClipBorder);
 					}

@@ -12,7 +12,7 @@ namespace Tangerine.Core.ExpressionParser
 		Divide,
 		Number,
 		LParenthesis,
-		RParenthesis
+		RParenthesis,
 	}
 
 	public class Token
@@ -23,7 +23,7 @@ namespace Tangerine.Core.ExpressionParser
 
 	public static class Tokenizer
 	{
-		//TODO: autogenerate pattern based on a dictionary
+		// TODO: autogenerate pattern based on a dictionary
 		private const string Pattern = @"(?xn)
 				(?<Number>((
 					(\d+\.?\d*) |
@@ -72,7 +72,7 @@ namespace Tangerine.Core.ExpressionParser
 						}
 						yield return new Token {
 							Type = type,
-							Value = value
+							Value = value,
 						};
 						position = group.Index + group.Length;
 						break;

@@ -26,7 +26,9 @@ namespace Orange.FbxImporter
 		[HandleProcessCorruptedStateExceptions]
 		public FbxScene LoadScene(FbxImportOptions options)
 		{
-			var native = FbxManagerLoadScene(NativePtr, new StringBuilder(AssetBundle.Current.ToSystemPath(options.Path)));
+			var native = FbxManagerLoadScene(
+				NativePtr, new StringBuilder(AssetBundle.Current.ToSystemPath(options.Path))
+			);
 			if (native == IntPtr.Zero) {
 				throw new FbxImportException("An error has occured while loading scene");
 			}
@@ -40,8 +42,6 @@ namespace Orange.FbxImporter
 			FbxManagerDestroy(NativePtr);
 		}
 
-		#region PInvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxCreateManager();
 
@@ -50,7 +50,5 @@ namespace Orange.FbxImporter
 
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern void FbxManagerDestroy(IntPtr manager);
-
-		#endregion
 	}
 }

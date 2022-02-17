@@ -74,7 +74,10 @@ namespace Lime
 			//var viewport = Renderer.Viewport;
 			//var result = new CGRect();
 			//var min = new Vector2(viewport.X, viewport.Y) / Window.Current.PixelScale;
-			//var max = new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height) / Window.Current.PixelScale;
+			//var max = new Vector2(
+			//	viewport.X + viewport.Width,
+			//	viewport.Y + viewport.Height
+			//) / Window.Current.PixelScale;
 			//result.X = Mathf.Lerp(aabb.Left, min.X, max.X).Round();
 			//result.Width = Mathf.Lerp(aabb.Right, min.X, max.X).Round() - result.X;
 			//result.Y = Mathf.Lerp(aabb.Bottom, min.Y, max.Y).Round();

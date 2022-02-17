@@ -39,16 +39,19 @@ namespace Lime
 
 	public enum PlatformId
 	{
+#pragma warning disable SA1300 // Element should begin with upper-case letter
 		iOS,
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 		Android,
 		Mac,
-		Win
+		Win,
 	}
 
 	public class ApplicationOptions
 	{
 		public bool DecodeAudioInSeparateThread = false;
 		public int NumChannels = 24;
+
 		/// <summary>
 		/// Set to true to use ParticleLimiter service.
 		/// </summary>
@@ -131,9 +134,11 @@ namespace Lime
 
 		private static bool isInputAccelerationListening = true;
 
-		public static bool IsInputAccelerationListening {
+		public static bool IsInputAccelerationListening
+		{
 			get { return isInputAccelerationListening; }
-			set {
+			set
+			{
 #if ANDROID
 				AccelerometerListener.IsActive = value;
 #endif
@@ -144,6 +149,7 @@ namespace Lime
 		internal static bool EnableParticleLimiter = false;
 
 		private static DeviceOrientation supportedDeviceOrientations = DeviceOrientation.All;
+
 		/// <summary>
 		/// Supported device orientations (only for mobile platforms)
 		/// </summary>
@@ -177,14 +183,20 @@ namespace Lime
 
 		public static Vector2 DesktopMousePosition
 		{
-			get { return new Vector2((float)AppKit.NSEvent.CurrentMouseLocation.X, (float)AppKit.NSEvent.CurrentMouseLocation.Y); }
+			get
+			{
+				return new Vector2(
+					(float)AppKit.NSEvent.CurrentMouseLocation.X,
+					(float)AppKit.NSEvent.CurrentMouseLocation.Y
+				);
+			}
 			set { CGWarpMouseCursorPosition(value.X, value.Y); }
 		}
 #elif WIN
 		public static Vector2 DesktopMousePosition
 		{
 			get { return SDToLime.Convert(Cursor.Position, Window.Current.PixelScale); }
-			set {  Cursor.Position = LimeToSD.ConvertToPoint(value, Window.Current.PixelScale); }
+			set { Cursor.Position = LimeToSD.ConvertToPoint(value, Window.Current.PixelScale); }
 		}
 #else
 		public static Vector2 DesktopMousePosition
@@ -281,7 +293,8 @@ namespace Lime
 				return DoExiting() ? NSApplicationTerminateReply.Now : NSApplicationTerminateReply.Cancel;
 			};
 			NSApplication.SharedApplication.WillTerminate += (sender, e) => DoExited();
-			NSApplication.SharedApplication.ApplicationShouldHandleReopen = (sender, hasVisibleWindows) => hasVisibleWindows;
+			NSApplication.SharedApplication.ApplicationShouldHandleReopen =
+				(sender, hasVisibleWindows) => hasVisibleWindows;
 #endif // MAC
 			options ??= new ApplicationOptions();
 			EnableParticleLimiter = options.EnableParticleLimiter;
@@ -423,7 +436,8 @@ namespace Lime
 		/// <summary>
 		/// Gets the current platform
 		/// </summary>
-		public static PlatformId Platform {
+		public static PlatformId Platform
+		{
 			get
 			{
 #if iOS
@@ -496,7 +510,8 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Enumerates rendering backends supported by current device. Only implemented for WIN and MAC and throws NotImplmentedException on other platforms.
+		/// Enumerates rendering backends supported by current device.
+		/// Only implemented for WIN and MAC and throws NotImplmentedException on other platforms.
 		/// </summary>
 		public static IEnumerable<RenderingBackend> EnumerateSupportedRenderingBackends()
 		{
@@ -507,7 +522,9 @@ namespace Lime
 				yield return RenderingBackend.Vulkan;
 			}
 #else
-			throw new NotImplementedException($"{nameof(EnumerateSupportedRenderingBackends)} is not implemented for current platform.");
+			throw new NotImplementedException(
+				$"{nameof(EnumerateSupportedRenderingBackends)} is not implemented for current platform."
+			);
 #endif //  WIN || MAC
 		}
 	}

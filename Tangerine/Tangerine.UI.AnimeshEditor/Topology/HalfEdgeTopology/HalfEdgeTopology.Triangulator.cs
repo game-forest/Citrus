@@ -73,7 +73,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					var twin = new HalfEdge(edge.Next.Origin) {
 						Next = new HalfEdge(edge.Origin) {
 							Next = new HalfEdge(vertexIndex),
-						}
+						},
 					};
 					twin.Prev.Next = twin;
 					edge.TwinWith(twin);
@@ -86,7 +86,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			}
 			return true;
 		}
-
 
 		private LocationResult LocateClosestTriangle(int index, out HalfEdge edge)
 		{
@@ -207,12 +206,16 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				// Find triangle that contains given vertex
 				var result = LocateClosestTriangle(vertexIndex, out start);
 				if (result == LocationResult.OutsideTriangulation) {
-					throw new InvalidOperationException("There is no triangle in triangulation that contains given vertex.");
+					throw new InvalidOperationException(
+						"There is no triangle in triangulation that contains given vertex."
+					);
 				}
 			}
 			var vertex = InnerVertices[vertexIndex].Pos;
 			if (!VertexInsideTriangle(vertex, start)) {
-				throw new InvalidOperationException("There is no triangle in triangulation that contains given vertex.");
+				throw new InvalidOperationException(
+					"There is no triangle in triangulation that contains given vertex."
+				);
 			}
 			// Delete all triangles that contains given vertex in their circumcircle.
 			// Formed polygonal hole P is star-shaped polygon. Inserted vertex is inside
@@ -317,7 +320,7 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 				} while (current.Twin != null);
 			} while (current != start);
 			List<HalfEdge> currentVisibleEdges = null;
-			var visibleBoundary = new List<List<HalfEdge>> {};
+			var visibleBoundary = new List<List<HalfEdge>> { };
 			bool isContinuous = false;
 			foreach (var self in boundary) {
 				a = InnerVertices[self.Origin].Pos;
@@ -371,8 +374,13 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			}
 		}
 
-		private bool IsDelaunay(HalfEdge edge) =>
-			edge.Constrained || edge.Twin == null || edge.Detached || !InCircumcircle(edge.Twin, InnerVertices[edge.Prev.Origin].Pos);
+		private bool IsDelaunay(HalfEdge edge)
+		{
+			return edge.Constrained
+				|| edge.Twin == null
+				|| edge.Detached
+				|| !InCircumcircle(edge.Twin, InnerVertices[edge.Prev.Origin].Pos);
+		}
 
 		private HalfEdge Flip(HalfEdge edge)
 		{
@@ -498,8 +506,10 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 		/// O(Nlog*N) or O(N) (Chazelle algorithm, there is no existing implementation).
 		/// </summary>
 		/// <param name="polygon">Input polygon. </param>
-		/// <param name="restoreDelaunay">If true methods calls RestoreDelaunayProperty on newly created triangles, otherwise
-		/// leaves newly created triangles in <paramref name="polygon"/>.</param>
+		/// <param name="restoreDelaunay">
+		/// If true methods calls RestoreDelaunayProperty on newly created triangles, otherwise
+		/// leaves newly created triangles in <paramref name="polygon"/>.
+		/// </param>
 		private void TriangulatePolygonByEarClipping(List<HalfEdge> polygon, bool restoreDelaunay = true)
 		{
 			// An ear of a polygon is defined as a vertex v such that the line segment between
@@ -588,9 +598,9 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					var ec = c - e;
 					// Check for co-directionality in order to prevent looping
 					if (Mathf.Sign(ec.X) == signab.X && Mathf.Sign(ec.Y) == signab.Y) {
-						return incidentEdge.Constrained = InnerInsertConstrainedEdge(next.Origin, index1, destroyConstrained);
+						return incidentEdge.Constrained =
+							InnerInsertConstrainedEdge(next.Origin, index1, destroyConstrained);
 					}
-
 				} else if (IsVertexOnLine(a, e, d) && IsVertexOnLine(b, e, d)) {
 					var ed = d - e;
 					// Check for co-directionality in order to prevent looping
@@ -644,7 +654,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 					RestoreDelaunayProperty(upperPolygon);
 					RestoreDelaunayProperty(lowerPolygon);
 					return edge.Constrained;
-
 				}
 				if (RobustSegmentSegmentIntersection(a, b, c, d)) {
 					if (next.Constrained && !destroyConstrained) {
@@ -878,10 +887,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			return borderEdge;
 		}
 
-
-
-		#region HelperMethods
-
 		/// <summary>
 		/// Constructs triangles on the side using given vertex.
 		/// </summary>
@@ -895,10 +900,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			next.Next = prev;
 			prev.Next = edge;
 		}
-
-		#endregion
-
-		#region Predicates
 
 		private bool InCircumcircle(HalfEdge triangle, Vector2 vertex)
 		{
@@ -947,7 +948,6 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			GeometricPredicates.AdaptiveOrient2D(s1.X, s1.Y, s2.X, s2.Y, p1.X, p1.Y) *
 			GeometricPredicates.AdaptiveOrient2D(s1.X, s1.Y, s2.X, s2.Y, p2.X, p2.Y) < 0;
 
-
 		/// <summary>
 		/// Checks whether (a, b,c) are clockwise ordered.
 		/// </summary>
@@ -967,11 +967,12 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 			Orient2D(a, b, c) * Orient2D(a, b, d) <= 0 &&
 			Orient2D(c, d, a) * Orient2D(c, d, b) <= 0;
 
-		private static bool SegmentSegmentIntersection(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint)
-		{
+		private static bool SegmentSegmentIntersection(
+			Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2, out Vector2 intersectionPoint
+		) {
 			intersectionPoint = new Vector2(float.NaN, float.NaN);
 			var d = (a1.X - b1.X) * (a2.Y - b2.Y) - (a1.Y - b1.Y) * (a2.X - b2.X);
-			var uNumerator = ((a1.Y - b1.Y) * (a1.X - a2.X) - (a1.X - b1.X) * (a1.Y - a2.Y));
+			var uNumerator = (a1.Y - b1.Y) * (a1.X - a2.X) - (a1.X - b1.X) * (a1.Y - a2.Y);
 			if (Mathf.Abs(d) <= Mathf.ZeroTolerance) {
 				return uNumerator == 0;
 			}
@@ -998,7 +999,5 @@ namespace Tangerine.UI.AnimeshEditor.Topology.HalfEdgeTopology
 
 		private static int Orient2D(Vector2 a, Vector2 b, Vector2 c) =>
 			Math.Sign(GeometricPredicates.AdaptiveOrient2D(a.X, a.Y, b.X, b.Y, c.X, c.Y));
-
-		#endregion
 	}
 }

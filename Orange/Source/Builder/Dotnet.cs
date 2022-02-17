@@ -2,9 +2,8 @@ using System.Text;
 
 namespace Orange.Source
 {
-	class Dotnet : BuildSystem
+	internal class Dotnet : BuildSystem
 	{
-
 		public Dotnet(Target target) : base(target)
 		{
 		}
@@ -31,6 +30,5 @@ namespace Orange.Source
 
 		protected override int Execute(StringBuilder output) =>
 			Process.Start("dotnet", $"{Args} \"{target.ProjectPath}\"", output: output);
-
 	}
 }

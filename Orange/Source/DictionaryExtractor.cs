@@ -66,13 +66,14 @@ namespace Orange
 			var result = new LocalizationDictionary();
 			LoadDictionary(result, path);
 			var addContext = ShouldAddContextToLocalizedDictionary() ||
-			                 path.EndsWith(GetDefaultFileName(), StringComparison.OrdinalIgnoreCase);
+							 path.EndsWith(GetDefaultFileName(), StringComparison.OrdinalIgnoreCase);
 			MergeDictionaries(result, dictionary, addContext);
 			SaveDictionary(result, path);
 		}
 
-		private static void MergeDictionaries(LocalizationDictionary current, LocalizationDictionary modified, bool addContext)
-		{
+		private static void MergeDictionaries(
+			LocalizationDictionary current, LocalizationDictionary modified, bool addContext
+		) {
 			int added = 0;
 			int deleted = 0;
 			int updated = 0;
@@ -82,7 +83,7 @@ namespace Orange
 					added++;
 					current[key] = new LocalizationEntry() {
 						Text = modified[key].Text,
-						Context = modified[key].Context
+						Context = modified[key].Context,
 					};
 				} else {
 					var currentEntry = current[key];
@@ -94,7 +95,7 @@ namespace Orange
 					}
 				}
 				if (!addContext) {
-					current[key].Context = "";
+					current[key].Context = string.Empty;
 				}
 			}
 			foreach (var key in current.Keys.ToList()) {
@@ -117,7 +118,10 @@ namespace Orange
 			}
 		}
 
-		private static ILocalizationDictionarySerializer CreateSerializer() => new LocalizationDictionaryTextSerializer();
+		private static ILocalizationDictionarySerializer CreateSerializer()
+		{
+			return new LocalizationDictionaryTextSerializer();
+		}
 
 		private static void LoadDictionary(LocalizationDictionary dictionary, string path)
 		{
@@ -132,12 +136,30 @@ namespace Orange
 		{
 			bool ScanFilter(DirectoryInfo directoryInfo)
 			{
-				if (directoryInfo.Name == "bin") return false;
-				if (directoryInfo.Name == "obj") return false;
-				if (directoryInfo.Name == ".svn") return false;
-				if (directoryInfo.Name == ".git") return false;
-				if (directoryInfo.Name == ".vs") return false;
-				if (directoryInfo.Name == "Citrus") return false;
+				if (directoryInfo.Name == "bin") {
+					return false;
+				}
+
+				if (directoryInfo.Name == "obj") {
+					return false;
+				}
+
+				if (directoryInfo.Name == ".svn") {
+					return false;
+				}
+
+				if (directoryInfo.Name == ".git") {
+					return false;
+				}
+
+				if (directoryInfo.Name == ".vs") {
+					return false;
+				}
+
+				if (directoryInfo.Name == "Citrus") {
+					return false;
+				}
+
 				return true;
 			}
 

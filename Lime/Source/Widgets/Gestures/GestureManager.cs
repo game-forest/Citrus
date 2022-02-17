@@ -24,15 +24,20 @@ namespace Lime
 			UpdateGestures();
 			if (context.NodeCapturedByMouse != activeNode) {
 				activeNode = context.NodeCapturedByMouse;
-				// We need to continue updating drag gestures with motion strategy currently active even if activeNode has been changed
+				// We need to continue updating drag gestures with motion strategy
+				// currently active even if activeNode has been changed
 				// or they'll stop moving by inertial drag otherwise.
-				var dragGesturesChangingByMotion = activeGestures.Where(g => g is DragGesture gd && gd.IsChangingByMotion()).ToList();
+				var dragGesturesChangingByMotion = activeGestures
+					.Where(g => g is DragGesture gd && gd.IsChangingByMotion())
+					.ToList();
 				CancelGestures();
 				if (activeNode != null) {
 					activeGestures.AddRange(EnumerateGestures(activeNode));
 					UpdateGestures();
 				}
-				dragGesturesChangingByMotion = dragGesturesChangingByMotion.Where(g => !activeGestures.Contains(g)).ToList();
+				dragGesturesChangingByMotion = dragGesturesChangingByMotion
+					.Where(g => !activeGestures.Contains(g))
+					.ToList();
 				activeGestures.AddRange(dragGesturesChangingByMotion);
 			}
 		}
@@ -49,40 +54,40 @@ namespace Lime
 				if (gesture.OnUpdate()) {
 					switch (gesture) {
 						case DragGesture dg: {
-							foreach (var g in activeGestures) {
-								if (g == gesture) {
-									continue;
+								foreach (var g in activeGestures) {
+									if (g == gesture) {
+										continue;
+									}
+									var clickGesture = g as ClickGesture;
+									if (clickGesture?.ButtonIndex == dg.ButtonIndex) {
+										g.OnCancel(dg);
+									}
+									if (dg.Exclusive) {
+										(g as DragGesture)?.OnCancel(dg);
+									}
 								}
-								var clickGesture = g as ClickGesture;
-								if (clickGesture?.ButtonIndex == dg.ButtonIndex) {
-									g.OnCancel(dg);
-								}
-								if (dg.Exclusive) {
-									(g as DragGesture)?.OnCancel(dg);
-								}
+								break;
 							}
-							break;
-						}
 						case DoubleClickGesture dcg: {
-							foreach (var g in activeGestures) {
-								if (g != dcg) {
-									g.OnCancel(dcg);
+								foreach (var g in activeGestures) {
+									if (g != dcg) {
+										g.OnCancel(dcg);
+									}
 								}
+								break;
 							}
-							break;
-						}
 						case LongTapGesture ltg: {
-							foreach (var g in activeGestures) {
-								if (g == gesture) {
-									continue;
+								foreach (var g in activeGestures) {
+									if (g == gesture) {
+										continue;
+									}
+									var longTapGesture = g as LongTapGesture;
+									if (longTapGesture?.ButtonIndex == ltg.ButtonIndex) {
+										g.OnCancel(ltg);
+									}
 								}
-								var longTapGesture = g as LongTapGesture;
-								if (longTapGesture?.ButtonIndex == ltg.ButtonIndex) {
-									g.OnCancel(ltg);
-								}
+								break;
 							}
-							break;
-						}
 					}
 				}
 			}

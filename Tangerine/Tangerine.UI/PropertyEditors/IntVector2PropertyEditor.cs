@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.ExpressionParser;
 
@@ -19,25 +19,30 @@ namespace Tangerine.UI
 			EditorContainer.AddNode(new Widget {
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 },
 				Nodes = {
-					//new SimpleText { Text = "X" },
+					// new SimpleText { Text = "X" },
 					(editorX = editorParams.NumericEditBoxFactory()),
 					// new SimpleText { Text = "Y" },
 					(editorY = editorParams.NumericEditBoxFactory()),
 					Spacer.HStretch(),
-				}
+				},
 			});
 			var currentX = CoalescedPropertyComponentValue(v => v.X);
 			var currentY = CoalescedPropertyComponentValue(v => v.Y);
 			editorX.Submitted += text => SetComponent(editorParams, 0, editorX, currentX.GetValue());
 			editorY.Submitted += text => SetComponent(editorParams, 1, editorY, currentY.GetValue());
-			editorX.AddLateChangeWatcher(currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
-			editorY.AddLateChangeWatcher(currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText);
+			editorX.AddLateChangeWatcher(
+				currentX, v => editorX.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText
+			);
+			editorY.AddLateChangeWatcher(
+				currentY, v => editorY.Text = v.IsDefined ? v.Value.ToString() : ManyValuesText
+			);
 			ManageManyValuesOnFocusChange(editorX, currentX);
 			ManageManyValuesOnFocusChange(editorY, currentY);
 		}
 
-		void SetComponent(IPropertyEditorParams editorParams, int component, CommonEditBox editor, CoalescedValue<int> currentValue)
-		{
+		private void SetComponent(
+			IPropertyEditorParams editorParams, int component, CommonEditBox editor, CoalescedValue<int> currentValue
+		) {
 			if (Parser.TryParse(editor.Text, out double newValue)) {
 				DoTransaction(() => {
 					SetProperty<IntVector2>(current => {

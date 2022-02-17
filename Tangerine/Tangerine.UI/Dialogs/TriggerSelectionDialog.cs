@@ -93,8 +93,8 @@ namespace Tangerine.UI
 						Texture = IconPool.GetTexture("Lookup.MarkerStopAction"),
 						Tooltip = "Show Stop Markers",
 					}),
-					(filter = new ThemedEditBox())
-				}
+					(filter = new ThemedEditBox()),
+				},
 			};
 			togglePreviewButton.AddTransactionClickHandler(() => {
 				showAnimationPreviews = !showAnimationPreviews;
@@ -162,7 +162,7 @@ namespace Tangerine.UI
 			int animationIndex = 0;
 			var previews = new List<AnimationPreview>();
 			var visiblePreviews = new HashSet<AnimationPreview>();
-			var	scenePool = new ScenePool(scene);
+			var scenePool = new ScenePool(scene);
 			if (showAnimationPreviews) {
 				scrollView.Content.LateTasks.Add(AttachPreviewsTask(previews, visiblePreviews));
 			}
@@ -171,14 +171,14 @@ namespace Tangerine.UI
 				var expandButton = new ThemedExpandButton {
 					MinMaxSize = Vector2.One * 20f,
 					LayoutCell = new LayoutCell(Alignment.LeftCenter),
-					Expanded = true
+					Expanded = true,
 				};
 				var groupLabel = new ThemedSimpleText {
 					Text = animation.Id ?? "Legacy",
 					VAlignment = VAlignment.Center,
 					LayoutCell = new LayoutCell(Alignment.Center),
 					ForceUncutText = false,
-					HitTestTarget = true
+					HitTestTarget = true,
 				};
 				var header = new Widget {
 					Layout = new HBoxLayout(),
@@ -186,13 +186,13 @@ namespace Tangerine.UI
 					Padding = new Thickness(4),
 					Nodes = {
 						expandButton,
-						groupLabel
-					}
+						groupLabel,
+					},
 				};
 				var wrapper = new Frame {
 					Padding = new Thickness(4),
 					Layout = new VBoxLayout(),
-					Visible = true
+					Visible = true,
 				};
 				expandButton.Clicked += () => {
 					wrapper.Visible = !wrapper.Visible;
@@ -234,8 +234,8 @@ namespace Tangerine.UI
 					Padding = new Thickness(4),
 					Nodes = {
 						header,
-						wrapper
-					}
+						wrapper,
+					},
 				});
 			}
 
@@ -270,7 +270,7 @@ namespace Tangerine.UI
 		{
 			previewContainer = null;
 			var checkBox = new ThemedCheckBox {
-				Checked = selected.Contains(animation.IsLegacy ? trigger : $"{trigger}@{animation.Id}")
+				Checked = selected.Contains(animation.IsLegacy ? trigger : $"{trigger}@{animation.Id}"),
 			};
 			checkBoxes[animation].Add(trigger, checkBox);
 			var widget = new Widget {
@@ -282,12 +282,12 @@ namespace Tangerine.UI
 						Text = trigger,
 						LayoutCell = new LayoutCell(Alignment.Center),
 						Anchors = Anchors.LeftRight,
-						ForceUncutText = false
+						ForceUncutText = false,
 					},
 					Spacer.HSpacer(5),
-					checkBox
+					checkBox,
 				},
-				HitTestTarget = true
+				HitTestTarget = true,
 			};
 			if (showAnimationPreviews) {
 				previewContainer = new Frame {
@@ -300,7 +300,7 @@ namespace Tangerine.UI
 					Size = previewContainer.Size,
 					Nodes = {
 						previewContainer,
-					}
+					},
 				};
 				previewFrame.CompoundPostPresenter.Add(new WidgetBoundsPresenter(Theme.Colors.ControlBorder));
 				widget.Nodes.Insert(1, Spacer.HSpacer(5));
@@ -323,7 +323,7 @@ namespace Tangerine.UI
 			var okButton = new ThemedButton { Text = "Ok" };
 			var cancelButton = new ThemedButton { Text = "Cancel" };
 			okButton.Clicked += () => {
-				var value = "";
+				var value = string.Empty;
 				foreach (var s in selected) {
 					value += $"{s},";
 				}
@@ -343,7 +343,7 @@ namespace Tangerine.UI
 				Nodes = {
 					new Widget { MinMaxHeight = 0 },
 					okButton,
-					cancelButton
+					cancelButton,
 				},
 			};
 		}
@@ -447,7 +447,10 @@ namespace Tangerine.UI
 				clone.Animations[animationIndex].IsRunning = true;
 			}
 
-			private void AddRestartAnimationOnNextFrameTask() => previewContainer.Tasks.Add(RestartAnimationOnNextFrame());
+			private void AddRestartAnimationOnNextFrameTask()
+			{
+				previewContainer.Tasks.Add(RestartAnimationOnNextFrame());
+			}
 
 			private IEnumerator<object> RestartAnimationOnNextFrame()
 			{
@@ -484,7 +487,7 @@ namespace Tangerine.UI
 				if (pool.Count == 0) {
 					clonedModel = originNode.Clone();
 					foreach (var n in clonedModel.SelfAndDescendants) {
-						var _ = n.DefaultAnimation; // Force create the default animation.
+						_ = n.DefaultAnimation; // Force create the default animation.
 					}
 					var manager = Document.CreateDefaultManager();
 					manager.Processors.Add(new AnimationProcessor());
@@ -497,7 +500,7 @@ namespace Tangerine.UI
 							NearClipPlane = 0.001f,
 							FieldOfView = 1.0f,
 							AspectRatio = 1.3f,
-							OrthographicSize = 1.0f
+							OrthographicSize = 1.0f,
 						};
 						viewport3D.Nodes.Add(camera);
 						viewport3D.CameraRef = new NodeReference<Camera3D>(camera.Id);
@@ -559,7 +562,6 @@ namespace Tangerine.UI
 				}
 			}
 		}
-
 
 		[UpdateStage(typeof(PostLateUpdateStage))]
 		[NodeComponentDontSerialize]

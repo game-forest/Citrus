@@ -7,8 +7,11 @@ namespace Tangerine.UI
 	{
 		public override void RefreshCommand(ICommand command)
 		{
-			command.Enabled = Core.Document.Current != null && GetEnabled() && !Core.Document.Current.History.IsTransactionActive;
-			command.Checked = Core.Document.Current != null && GetChecked();
+			command.Enabled = Core.Document.Current != null
+				&& GetEnabled()
+				&& !Core.Document.Current.History.IsTransactionActive;
+			command.Checked = Core.Document.Current != null
+				&& GetChecked();
 		}
 
 		public sealed override void Execute()

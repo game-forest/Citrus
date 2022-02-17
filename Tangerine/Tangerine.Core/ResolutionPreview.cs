@@ -20,8 +20,9 @@ namespace Tangerine.Core
 		public Vector2 LandscapeValue { get; }
 		public Vector2 PortraitValue { get; }
 
-		public ResolutionPreset(string name, float width, float height, IReadOnlyList<ResolutionMarker> resolutionMarkers)
-		{
+		public ResolutionPreset(
+			string name, float width, float height, IReadOnlyList<ResolutionMarker> resolutionMarkers
+		) {
 			Name = name;
 			LandscapeValue = new Vector2(width, height);
 			PortraitValue = new Vector2(height, width);

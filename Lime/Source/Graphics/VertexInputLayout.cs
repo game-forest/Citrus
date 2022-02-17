@@ -13,9 +13,11 @@ namespace Lime
 		private VertexInputLayoutAttribute[] attributes;
 
 		private VertexInputLayout(
-			VertexInputLayoutBinding[] bindings, int bindingCount,
-			VertexInputLayoutAttribute[] attributes, int attributeCount)
-		{
+			VertexInputLayoutBinding[] bindings,
+			int bindingCount,
+			VertexInputLayoutAttribute[] attributes,
+			int attributeCount
+		) {
 			this.bindings = new VertexInputLayoutBinding[bindingCount];
 			this.attributes = new VertexInputLayoutAttribute[attributeCount];
 			Array.Copy(bindings, this.bindings, bindingCount);
@@ -58,8 +60,9 @@ namespace Lime
 		private static readonly BindingSortComparer bindingSortComparer = new BindingSortComparer();
 		private static readonly AttributeSortComparer attributeSortComparer = new AttributeSortComparer();
 
-		public static VertexInputLayout New(VertexInputLayoutBinding[] bindings, VertexInputLayoutAttribute[] attributes)
-		{
+		public static VertexInputLayout New(
+			VertexInputLayoutBinding[] bindings, VertexInputLayoutAttribute[] attributes
+		) {
 			lock (layoutCache) {
 				if (sortedBindings == null || sortedBindings.Length < bindings.Length) {
 					sortedBindings = new VertexInputLayoutBinding[bindings.Length];
@@ -73,7 +76,9 @@ namespace Lime
 				Array.Sort(sortedAttributes, 0, attributes.Length, attributeSortComparer);
 				var hash = ComputeHash(sortedBindings, bindings.Length, sortedAttributes, attributes.Length);
 				if (!layoutCache.TryGetValue(hash, out var layout)) {
-					layout = new VertexInputLayout(sortedBindings, bindings.Length, sortedAttributes, attributes.Length);
+					layout = new VertexInputLayout(
+						sortedBindings, bindings.Length, sortedAttributes, attributes.Length
+					);
 					layoutCache.Add(hash, layout);
 				}
 				return layout;
@@ -81,9 +86,11 @@ namespace Lime
 		}
 
 		private static long ComputeHash(
-			VertexInputLayoutBinding[] bindings, int bindingCount,
-			VertexInputLayoutAttribute[] attributes, int attributeCount)
-		{
+			VertexInputLayoutBinding[] bindings,
+			int bindingCount,
+			VertexInputLayoutAttribute[] attributes,
+			int attributeCount
+		) {
 			var hasher = new Hasher();
 			hasher.Write(bindings, 0, bindingCount);
 			hasher.Write(attributes, 0, attributeCount);

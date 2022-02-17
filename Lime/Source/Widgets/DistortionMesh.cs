@@ -38,7 +38,7 @@ namespace Lime
 		}
 
 		public Vector2 UV0 { get => Vector2.Zero; }
-		public Vector2 UV1 { get => Vector2.One;}
+		public Vector2 UV1 { get => Vector2.One; }
 
 		public DistortionMesh()
 		{
@@ -50,8 +50,10 @@ namespace Lime
 
 		public DistortionMeshPoint GetPoint(int row, int col)
 		{
-			if (row < 0 || col < 0 || row > NumRows || col > NumCols)
+			if (row < 0 || col < 0 || row > NumRows || col > NumCols) {
 				return null;
+			}
+
 			int i = row * (NumCols + 1) + col;
 			return Nodes[i] as DistortionMeshPoint;
 		}
@@ -63,7 +65,7 @@ namespace Lime
 			if (GloballyVisible) {
 				// Need to recalculate points transformed positions in order to refresh widget's BoundingRect.
 				for (var n = FirstChild; n != null; n = n.NextSibling) {
-					((DistortionMeshPoint) n).RecalcTransformedPositionIfNeeded();
+					((DistortionMeshPoint)n).RecalcTransformedPositionIfNeeded();
 				}
 				if (ClipRegionTest(chain.ClipRegion)) {
 					AddSelfAndChildrenToRenderChain(chain, Layer);
@@ -96,7 +98,12 @@ namespace Lime
 				var v3 = (n3.TransformedPosition, n3.UV);
 				var v4 = (n4.TransformedPosition, n4.UV);
 				var center = (
-					(v1.TransformedPosition + v2.TransformedPosition + v3.TransformedPosition + v4.TransformedPosition) * .25f,
+					(
+						v1.TransformedPosition
+						+ v2.TransformedPosition
+						+ v3.TransformedPosition
+						+ v4.TransformedPosition
+					) * .25f,
 					(v1.UV + v2.UV + v3.UV + v4.UV) * .25f
 				);
 				if (
@@ -109,24 +116,38 @@ namespace Lime
 			return false;
 		}
 
-		private bool HitTest(Vector2 point, (Vector2 Position, Vector2 UV) v1, (Vector2 Position, Vector2 UV) v2, (Vector2 Position, Vector2 UV) v3)
-		{
+		private bool HitTest(
+			Vector2 point,
+			(Vector2 Position, Vector2 UV) v1,
+			(Vector2 Position, Vector2 UV) v2,
+			(Vector2 Position, Vector2 UV) v3
+		) {
 			if (
-				TryCalculateBarycentricCoordinates(point, v1.Position, v2.Position, v3.Position, out var w1, out var w2, out var w3) &&
-				w1 >= 0 && w2 >= 0 && w1 + w2 < 1
+				TryCalculateBarycentricCoordinates(
+					point, v1.Position, v2.Position, v3.Position, out var w1, out var w2, out var w3
+				) && w1 >= 0
+				&& w2 >= 0
+				&& w1 + w2 < 1
 			) {
 				var pointUV = w1 * v1.UV + w2 * v2.UV + w3 * v3.UV;
 				return !Texture.IsTransparentPixel(
-					(int)(Texture.ImageSize.Width * pointUV.X), (int)(Texture.ImageSize.Height * pointUV.Y));
+					(int)(Texture.ImageSize.Width * pointUV.X), (int)(Texture.ImageSize.Height * pointUV.Y)
+				);
 			}
 			return false;
 		}
 
-		private static bool TryCalculateBarycentricCoordinates(Vector2 point, Vector2 v1, Vector2 v2, Vector2 v3,
-			out float w1, out float w2, out float w3)
-		{
+		private static bool TryCalculateBarycentricCoordinates(
+			Vector2 point,
+			Vector2 v1,
+			Vector2 v2,
+			Vector2 v3,
+			out float w1,
+			out float w2,
+			out float w3
+		) {
 			w1 = w2 = w3 = 0;
-			var det = ((v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y));
+			var det = (v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y);
 			if (Math.Abs(det) < float.Epsilon) {
 				return false;
 			}
@@ -147,7 +168,7 @@ namespace Lime
 				ro.Vertices.Add(new Vertex {
 					Pos = p.TransformedPosition,
 					Color = p.Color * GlobalColor,
-					UV1 = p.UV
+					UV1 = p.UV,
 				});
 			}
 			for (int i = 0; i < NumRows; ++i) {

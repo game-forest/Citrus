@@ -36,7 +36,7 @@ namespace Citrus.Tests.Widgets
 		[TestMethod]
 		public void DisposeTest()
 		{
-			var widgets = new List<Widget> {root, child1, child2, grandChild};
+			var widgets = new List<Widget> { root, child1, child2, grandChild };
 			foreach (var widget in widgets) {
 				widget.Tasks.Add(EmptyTask);
 				widget.LateTasks.Add(EmptyTask);

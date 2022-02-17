@@ -19,8 +19,8 @@ namespace Tangerine.UI.Timeline.Operations
 				if (!Timeline.Instance.Grid.RootWidget.DescendantOf(Widget.Focused)) {
 					foreach (var treeViewItem in Timeline.Instance.Roll.TreeView.SelectedItems) {
 						var item = ((ISceneItemHolder)treeViewItem).SceneItem;
-						var node = 
-							item.Components.Get<NodeSceneItem>()?.Node ?? 
+						var node =
+							item.Components.Get<NodeSceneItem>()?.Node ??
 							item.Components.Get<AnimatorSceneItem>()?.Node;
 						if (node == null || node.EditorState().Locked) {
 							continue;
@@ -40,8 +40,8 @@ namespace Tangerine.UI.Timeline.Operations
 					foreach (var item in Document.Current.VisibleSceneItems) {
 						var spans = item.Components.GetOrAdd<GridSpanListComponent>().Spans.GetNonOverlappedSpans();
 						foreach (var span in spans) {
-							var node = 
-								item.Components.Get<NodeSceneItem>()?.Node ?? 
+							var node =
+								item.Components.Get<NodeSceneItem>()?.Node ??
 								item.Components.Get<AnimatorSceneItem>()?.Node;
 							if (node == null || node.EditorState().Locked) {
 								continue;
@@ -86,7 +86,7 @@ namespace Tangerine.UI.Timeline.Operations
 			}
 			return function == null ? KeyFunction.Linear : GetNextKeyFunction(function.Value);
 		}
-		
+
 		private static readonly KeyFunction[] nextKeyFunction = {
 			KeyFunction.Step,
 			KeyFunction.Spline,

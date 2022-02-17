@@ -12,6 +12,6 @@ namespace Lime.Graphics.Platform
 	{
 		None = 0,
 		Vertex = 1 << 0,
-		Fragment = 1 << 1
+		Fragment = 1 << 1,
 	}
 }

@@ -64,7 +64,7 @@ namespace Lime
 		GaussOneDimensionalWith11Samples,
 		GaussOneDimensionalWith13Samples,
 		GaussOneDimensionalWith15Samples,
-		GaussOneDimensionalWith31Samples
+		GaussOneDimensionalWith31Samples,
 	}
 
 	public class BlurShaderProgram : ShaderProgram
@@ -112,7 +112,8 @@ namespace Lime
 			}
 			";
 
-		private static readonly Dictionary<BlurShaderId, float[]> gaussKernelsWeights = new Dictionary<BlurShaderId, float[]> {
+		private static readonly Dictionary<BlurShaderId, float[]> gaussKernelsWeights =
+			new Dictionary<BlurShaderId, float[]> {
 			{
 				BlurShaderId.GaussOneDimensionalWith3Samples,
 				new[] { 0.315423f, 0.369153f, 0.315423f }
@@ -127,40 +128,69 @@ namespace Lime
 			},
 			{
 				BlurShaderId.GaussOneDimensionalWith9Samples,
-				new[] { 0.01824f, 0.054889f, 0.120545f, 0.193244f, 0.226162f, 0.193244f, 0.120545f, 0.054889f, 0.01824f }
+				new[] {
+					0.01824f, 0.054889f, 0.120545f, 0.193244f, 0.226162f, 0.193244f, 0.120545f, 0.054889f, 0.01824f,
+				}
 			},
 			{
 				BlurShaderId.GaussOneDimensionalWith11Samples,
-				new[] { 0.004384f, 0.018081f, 0.054408f, 0.119488f, 0.19155f, 0.224179f, 0.19155f, 0.119488f, 0.054408f, 0.018081f, 0.004384f }
+				new[] {
+					0.004384f, 0.018081f, 0.054408f, 0.119488f, 0.19155f, 0.224179f,
+					0.19155f, 0.119488f, 0.054408f, 0.018081f, 0.004384f,
+				}
 			},
 			{
 				BlurShaderId.GaussOneDimensionalWith13Samples,
-				new[] { 0.000774f, 0.004377f, 0.018053f, 0.054324f, 0.119303f, 0.191254f, 0.223832f, 0.191254f, 0.119303f, 0.054324f, 0.018053f, 0.004377f, 0.000774f }
+				new[] {
+					0.000774f, 0.004377f, 0.018053f, 0.054324f, 0.119303f, 0.191254f, 0.223832f,
+					0.191254f, 0.119303f, 0.054324f, 0.018053f, 0.004377f, 0.000774f,
+				}
 			},
 			{
 				BlurShaderId.GaussOneDimensionalWith15Samples,
-				new[] { 0.0001f, 0.000774f, 0.004376f, 0.018049f, 0.054313f, 0.119279f, 0.191215f, 0.223788f, 0.191215f, 0.119279f, 0.054313f, 0.018049f, 0.004376f, 0.000774f, 0.0001f }
+				new[] {
+					0.0001f, 0.000774f, 0.004376f, 0.018049f, 0.054313f, 0.119279f, 0.191215f, 0.223788f,
+					0.191215f, 0.119279f, 0.054313f, 0.018049f, 0.004376f, 0.000774f, 0.0001f,
+				}
 			},
 			{
 				BlurShaderId.GaussOneDimensionalWith31Samples,
-				new[] { 0.000001f, 0.000009f, 0.0001f, 0.000774f, 0.004376f, 0.018049f, 0.054312f, 0.119277f, 0.191212f, 0.223783f, 0.191212f, 0.119277f, 0.054312f, 0.018049f, 0.004376f, 0.000774f, 0.0001f, 0.000009f, 0.000001f }
-			}
+				new[] {
+					0.000001f, 0.000009f, 0.0001f, 0.000774f, 0.004376f, 0.018049f, 0.054312f, 0.119277f, 0.191212f,
+					0.223783f, 0.191212f, 0.119277f, 0.054312f, 0.018049f, 0.004376f, 0.000774f, 0.0001f, 0.000009f,
+					0.000001f,
+				}
+			},
 		};
-		private static readonly Dictionary<int, BlurShaderProgram> instances = new Dictionary<int, BlurShaderProgram>(gaussKernelsWeights.Count);
+		private static readonly Dictionary<int, BlurShaderProgram> instances =
+			new Dictionary<int, BlurShaderProgram>(gaussKernelsWeights.Count);
 
-		private static int GetInstanceKey(BlurShaderId blurShaderId, bool opaque) => (int)blurShaderId | ((opaque ? 1 : 0) << 8);
-
-		public static BlurShaderProgram GetInstance(BlurShaderId blurShaderId = BlurShaderId.GaussOneDimensionalWith5Samples, bool opaque = false)
+		private static int GetInstanceKey(BlurShaderId blurShaderId, bool opaque)
 		{
-			var key = GetInstanceKey(blurShaderId, false);
-			return instances.TryGetValue(key, out var shaderProgram) ? shaderProgram : (instances[key] = new BlurShaderProgram(blurShaderId, opaque));
+			return (int)blurShaderId | ((opaque ? 1 : 0) << 8);
 		}
 
-		private BlurShaderProgram(BlurShaderId blurShaderId, bool opaque) : base(CreateShaders(blurShaderId, opaque), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		public static BlurShaderProgram GetInstance(
+			BlurShaderId blurShaderId = BlurShaderId.GaussOneDimensionalWith5Samples, bool opaque = false
+		) {
+			var key = GetInstanceKey(blurShaderId, false);
+			return instances.TryGetValue(key, out var shaderProgram)
+				? shaderProgram
+				: (instances[key] = new BlurShaderProgram(blurShaderId, opaque));
+		}
+
+		private BlurShaderProgram(BlurShaderId blurShaderId, bool opaque)
+			: base(
+				  CreateShaders(blurShaderId, opaque),
+				  ShaderPrograms.Attributes.GetLocations(),
+				  ShaderPrograms.GetSamplers()
+			)
+		{ }
 
 		private static Shader[] CreateShaders(BlurShaderId blurShaderId, bool opaque)
 		{
-			var length = FragmentShaderPart1.Length + (!opaque ? FragmentShaderPart2.Length : FragmentShaderPart2Opaque.Length);
+			var length = FragmentShaderPart1.Length
+				+ (!opaque ? FragmentShaderPart2.Length : FragmentShaderPart2Opaque.Length);
 			var fragmentShader = new StringBuilder(length);
 			fragmentShader.Append(FragmentShaderPart1);
 			var kernelWeights = gaussKernelsWeights[blurShaderId];
@@ -173,14 +203,16 @@ namespace Lime
 					var offset = (i - centerKernel) / (float)centerKernel;
 					var sign = offset < 0 ? "- " : "+ ";
 					var absOffset = Mathf.Abs(offset);
-					var offsetStr = Mathf.Abs(absOffset - 1f) > Mathf.ZeroTolerance ? $"{sign}{absOffset.ToString("F6", CultureInfo.InvariantCulture)}*" : sign;
+					var offsetStr = Mathf.Abs(absOffset - 1f) > Mathf.ZeroTolerance
+						? $"{sign}{absOffset.ToString("F6", CultureInfo.InvariantCulture)}*"
+						: sign;
 					fragmentShader.Append(string.Format(FragmentShaderSummNeighborFormat, weight, offsetStr));
 				}
 			}
 			fragmentShader.Append(!opaque ? FragmentShaderPart2 : FragmentShaderPart2Opaque);
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

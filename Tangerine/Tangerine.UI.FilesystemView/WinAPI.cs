@@ -79,7 +79,7 @@ namespace Tangerine.UI.FilesystemView
 			SFGAO_HASSTORAGE = 0x00400000,
 			SFGAO_STREAM = 0x00400000,
 			SFGAO_STORAGEANCESTOR = 0x00800000,
-			SFGAO_STORAGECAPMASK = 0x70C50008
+			SFGAO_STORAGECAPMASK = 0x70C50008,
 		}
 
 		[Flags]
@@ -102,7 +102,7 @@ namespace Tangerine.UI.FilesystemView
 			SHGFI_PIDL = 0x000000008,
 			SHGFI_USEFILEATTRIBUTES = 0x000000010,
 			SHGFI_ADDOVERLAYS = 0x000000020,
-			SHGFI_OVERLAYINDEX = 0x000000040
+			SHGFI_OVERLAYINDEX = 0x000000040,
 		}
 
 		[Flags]
@@ -130,7 +130,7 @@ namespace Tangerine.UI.FilesystemView
 			SHCONTF_FASTITEMS = 0x02000,
 			SHCONTF_FLATLIST = 0x04000,
 			SHCONTF_ENABLE_ASYNC = 0x08000,
-			SHCONTF_INCLUDESUPERHIDDEN = 0x10000
+			SHCONTF_INCLUDESUPERHIDDEN = 0x10000,
 		}
 
 		[ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -138,8 +138,14 @@ namespace Tangerine.UI.FilesystemView
 		public interface IShellFolder
 		{
 			[PreserveSig]
-			int ParseDisplayName(IntPtr hwnd, IntPtr pbc, string pszDisplayName, ref uint pchEaten, out IntPtr ppidl,
-				ref SFGAO pdwAttributes);
+			int ParseDisplayName(
+				IntPtr hwnd,
+				IntPtr pbc,
+				string pszDisplayName,
+				ref uint pchEaten,
+				out IntPtr ppidl,
+				ref SFGAO pdwAttributes
+			);
 
 			[PreserveSig]
 			int EnumObjects(IntPtr hwnd, SHCONTF grfFlags, out IEnumIDList ppenumIDList);
@@ -157,17 +163,18 @@ namespace Tangerine.UI.FilesystemView
 			int CreateViewObject(IntPtr hwndOwner, [In] ref Guid riid, out IntPtr ppv);
 
 			[PreserveSig]
-			int GetAttributesOf(UInt32 cidl, IntPtr apidl, ref SFGAO rgfInOut);
+			int GetAttributesOf(uint cidl, IntPtr apidl, ref SFGAO rgfInOut);
 
 			[PreserveSig]
-			int GetUIObjectOf(IntPtr hwndOwner, UInt32 cidl, ref IntPtr apidl, [In] ref Guid riid, UInt32 rgfReserved,
-				out IntPtr ppv);
+			int GetUIObjectOf(
+				IntPtr hwndOwner, uint cidl, ref IntPtr apidl, [In] ref Guid riid, uint rgfReserved, out IntPtr ppv
+			);
 
 			[PreserveSig]
 			int GetDisplayNameOf(IntPtr pidl, SHGDNF uFlags, out STRRET pName);
 
 			[PreserveSig]
-			int SetNameOf(IntPtr hwnd, IntPtr pidl, String pszName, SHGDNF uFlags, out IntPtr ppidlOut);
+			int SetNameOf(IntPtr hwnd, IntPtr pidl, string pszName, SHGDNF uFlags, out IntPtr ppidlOut);
 		}
 
 		public enum ESFGAO : uint
@@ -192,7 +199,7 @@ namespace Tangerine.UI.FilesystemView
 			SHCONTF_INIT_ON_FIRST_NEXT = 0x0100,
 			SHCONTF_NETPRINTERSRCH = 0x0200,
 			SHCONTF_SHAREABLE = 0x0400,
-			SHCONTF_STORAGE = 0x0800
+			SHCONTF_STORAGE = 0x0800,
 		}
 
 		public enum ESHGDN
@@ -206,9 +213,9 @@ namespace Tangerine.UI.FilesystemView
 
 		public enum ESTRRET : int
 		{
-			eeRRET_WSTR = 0x0000,
+			EERRET_WSTR = 0x0000,
 			STRRET_OFFSET = 0x0001,
-			STRRET_CSTR = 0x0002
+			STRRET_CSTR = 0x0002,
 		}
 
 		[StructLayout(LayoutKind.Explicit, Size = 520)]
@@ -297,7 +304,7 @@ namespace Tangerine.UI.FilesystemView
 			CSIDL_COMMON_MUSIC = 0x0035, // All Users\My Music
 			CSIDL_COMMON_PICTURES = 0x0036, // All Users\My Pictures
 			CSIDL_COMMON_VIDEO = 0x0037, // All Users\My Video
-			CSIDL_CDBURN_AREA = 0x003b // USERPROFILE\Local Settings\Application Data\Microsoft\CD Burning
+			CSIDL_CDBURN_AREA = 0x003b, // USERPROFILE\Local Settings\Application Data\Microsoft\CD Burning
 		}
 
 		[Flags]
@@ -310,7 +317,7 @@ namespace Tangerine.UI.FilesystemView
 			GCS_HELPTEXTW = 0x00000005,
 			GCS_VALIDATEW = 0x00000006,
 			GCS_VERBICONW = 0x00000014,
-			GCS_UNICODE = 0x00000004
+			GCS_UNICODE = 0x00000004,
 		}
 
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -338,7 +345,7 @@ namespace Tangerine.UI.FilesystemView
 			CMF_OPTIMIZEFORINVOKE = 0x00000800,
 			CMF_SYNCCASCADEMENU = 0x00001000,
 			CMF_DONOTPICKDEFAULT = 0x00002000,
-			CMF_RESERVED = 0xFFFF0000
+			CMF_RESERVED = 0xFFFF0000,
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -375,12 +382,8 @@ namespace Tangerine.UI.FilesystemView
 		[Guid("000214f4-0000-0000-c000-000000000046")]
 		public interface IContextMenu2 : IContextMenu
 		{
-			#region IContextMenu overrides
-
 			new int QueryContextMenu(IntPtr hMenu, uint indexMenu, int idCmdFirst, int idCmdLast, CMF uFlags);
 			new int GetCommandString(int idcmd, GCS uflags, int reserved, StringBuilder commandstring, int cch);
-
-			#endregion
 
 			[PreserveSig]
 			int InvokeCommand(IntPtr pici);
@@ -428,7 +431,7 @@ namespace Tangerine.UI.FilesystemView
 			KF_FLAG_DONT_VERIFY = 0x00004000,
 			KF_FLAG_CREATE = 0x00008000,
 			KF_FLAG_NO_APPCONTAINER_REDIRECTION = 0x00010000,
-			KF_FLAG_ALIAS_ONLY = 0x80000000
+			KF_FLAG_ALIAS_ONLY = 0x80000000,
 		}
 
 		public enum WM : uint
@@ -678,7 +681,7 @@ namespace Tangerine.UI.FilesystemView
 			HSHELL_WINDOWCREATED = 1,
 			HSHELL_WINDOWDESTROYED = 2,
 			HSHELL_WINDOWACTIVATED = 4,
-			HSHELL_WINDOWREPLACED = 13
+			HSHELL_WINDOWREPLACED = 13,
 		}
 
 #pragma warning disable CS0649
@@ -716,7 +719,7 @@ namespace Tangerine.UI.FilesystemView
 			OwnDC = 0x20,
 			ParentDC = 0x80,
 			SaveBits = 0x800,
-			VerticalRedraw = 0x1
+			VerticalRedraw = 0x1,
 		}
 
 		public delegate IntPtr WndProc(IntPtr hWnd, WM msg, IntPtr wParam, IntPtr lParam);
@@ -744,7 +747,7 @@ namespace Tangerine.UI.FilesystemView
 		}
 
 		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-		public static extern System.UInt16 RegisterClassW(
+		public static extern ushort RegisterClassW(
 			[System.Runtime.InteropServices.In] ref WNDCLASS lpWndClass
 			);
 
@@ -778,12 +781,20 @@ namespace Tangerine.UI.FilesystemView
 		public static extern int ShellExecuteEx(ref SHELLEXECUTEINFO pExecInfo);
 
 		[DllImport("shell32.dll", SetLastError = true)]
-		public static extern int SHGetKnownFolderIDList([MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-			KNOWN_FOLDER_FLAG dwFlags, IntPtr hToken, out IntPtr ppidl);
+		public static extern int SHGetKnownFolderIDList(
+			[MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
+			KNOWN_FOLDER_FLAG dwFlags,
+			IntPtr hToken,
+			out IntPtr ppidl
+		);
 
 		[DllImport("shell32.dll")]
-		public static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-			KNOWN_FOLDER_FLAG dwFlags, IntPtr hToken, out string pszPath);
+		public static extern int SHGetKnownFolderPath(
+			[MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
+			KNOWN_FOLDER_FLAG dwFlags,
+			IntPtr hToken,
+			out string pszPath
+		);
 
 		[DllImport("shell32.dll")]
 		public static extern void ILFree(IntPtr pidl);
@@ -792,11 +803,19 @@ namespace Tangerine.UI.FilesystemView
 		public static extern int SHGetDesktopFolder(out IShellFolder ppshf);
 
 		[DllImport("shell32.dll")]
-		public static extern int SHGetFolderLocation(IntPtr hwndOwner, CSIDL nFolder, IntPtr hToken, uint dwReserved,
-			out IntPtr ppidl);
+		public static extern int SHGetFolderLocation(
+			IntPtr hwndOwner,
+			CSIDL nFolder,
+			IntPtr hToken,
+			uint dwReserved,
+			out IntPtr ppidl
+		);
 
 		[DllImport("shell32.dll", EntryPoint = "SHGetPathFromIDListW")]
-		public static extern bool SHGetPathFromIDList(IntPtr pidl, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder pszPath);
+		public static extern bool SHGetPathFromIDList(
+			IntPtr pidl,
+			[MarshalAs(UnmanagedType.LPTStr)] StringBuilder pszPath
+		);
 
 		[DllImport("shlwapi.dll", EntryPoint = "SHStrDupW")]
 		public static extern int SHStrDup([MarshalAs(UnmanagedType.LPWStr)] string pszSource, out IntPtr ppwsz);
@@ -811,29 +830,39 @@ namespace Tangerine.UI.FilesystemView
 		public static extern IntPtr ILClone(IntPtr pidl);
 
 		[DllImport("shell32.dll")]
-		public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttribs, out SHFILEINFO psfi, uint cbFileInfo,
-			SHGFI uFlags);
+		public static extern IntPtr SHGetFileInfo(
+			string pszPath,
+			uint dwFileAttribs,
+			out SHFILEINFO psfi,
+			uint cbFileInfo,
+			SHGFI uFlags
+		);
 
 		[DllImport("shell32.dll")]
-		public static extern Int32 SHGetSpecialFolderLocation(IntPtr hwndOwner, CSIDL nFolder, ref IntPtr ppidl);
+		public static extern int SHGetSpecialFolderLocation(IntPtr hwndOwner, CSIDL nFolder, ref IntPtr ppidl);
 
 		[DllImport("shell32.dll")]
-		public static extern int SHCreateDataObject(IntPtr pidlFolder, uint cidl, IntPtr apidl, IDataObject pdtInner,
+		public static extern int SHCreateDataObject(
+			IntPtr pidlFolder,
+			uint cidl,
+			IntPtr apidl,
+			IDataObject pdtInner,
 			Guid riid,
-			out IntPtr ppv);
+			out IntPtr ppv
+		);
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr DefWindowProc(IntPtr hWnd, WM uMsg, IntPtr wParam, IntPtr lParam);
 
 		public enum GWL
 		{
-			GWL_WNDPROC = (-4),
-			GWL_HINSTANCE = (-6),
-			GWL_HWNDPARENT = (-8),
-			GWL_STYLE = (-16),
-			GWL_EXSTYLE = (-20),
-			GWL_USERDATA = (-21),
-			GWL_ID = (-12)
+			GWL_WNDPROC = -4,
+			GWL_HINSTANCE = -6,
+			GWL_HWNDPARENT = -8,
+			GWL_STYLE = -16,
+			GWL_EXSTYLE = -20,
+			GWL_USERDATA = -21,
+			GWL_ID = -12,
 		}
 
 		public abstract class WindowStyles
@@ -864,17 +893,17 @@ namespace Tangerine.UI.FilesystemView
 			public const uint WS_TILEDWINDOW = WS_OVERLAPPEDWINDOW;
 
 			public const uint WS_OVERLAPPEDWINDOW =
-				(WS_OVERLAPPED |
+				WS_OVERLAPPED |
 				 WS_CAPTION |
 				 WS_SYSMENU |
 				 WS_THICKFRAME |
 				 WS_MINIMIZEBOX |
-				 WS_MAXIMIZEBOX);
+				 WS_MAXIMIZEBOX;
 
 			public const uint WS_POPUPWINDOW =
-				(WS_POPUP |
+				WS_POPUP |
 				 WS_BORDER |
-				 WS_SYSMENU);
+				 WS_SYSMENU;
 
 			public const uint WS_CHILDWINDOW = WS_CHILD;
 			public const uint WS_EX_DLGMODALFRAME = 0x00000001;
@@ -896,8 +925,8 @@ namespace Tangerine.UI.FilesystemView
 			public const uint WS_EX_CONTROLPARENT = 0x00010000;
 			public const uint WS_EX_STATICEDGE = 0x00020000;
 			public const uint WS_EX_APPWINDOW = 0x00040000;
-			public const uint WS_EX_OVERLAPPEDWINDOW = (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE);
-			public const uint WS_EX_PALETTEWINDOW = (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST);
+			public const uint WS_EX_OVERLAPPEDWINDOW = WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE;
+			public const uint WS_EX_PALETTEWINDOW = WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
 			public const uint WS_EX_LAYERED = 0x00080000;
 			public const uint WS_EX_NOINHERITLAYOUT = 0x00100000; // Disable inheritence of mirroring by children
 			public const uint WS_EX_LAYOUTRTL = 0x00400000; // Right to left mirroring
@@ -996,14 +1025,14 @@ namespace Tangerine.UI.FilesystemView
 
 		[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
 		public static extern IntPtr CreateWindowEx(
-			UInt32 dwExStyle,
+			uint dwExStyle,
 			string lpClassName,
 			string lpWindowName,
-			UInt32 dwStyle,
-			Int32 x,
-			Int32 y,
-			Int32 nWidth,
-			Int32 nHeight,
+			uint dwStyle,
+			int x,
+			int y,
+			int nWidth,
+			int nHeight,
 			IntPtr hWndParent,
 			IntPtr hMenu,
 			IntPtr hInstance,

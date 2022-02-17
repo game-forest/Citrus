@@ -15,8 +15,13 @@ namespace Lime
 			}
 
 			ro.PrepareOffscreenRendering(ro.Size);
-			if (ro.ProcessedViewport.Width != ro.ViewportSize.Width || ro.ProcessedViewport.Height != ro.ViewportSize.Height) {
-				Renderer.Viewport = ro.ProcessedViewport = new Viewport(0, 0, ro.ViewportSize.Width, ro.ViewportSize.Height);
+			if (
+				ro.ProcessedViewport.Width != ro.ViewportSize.Width
+				|| ro.ProcessedViewport.Height != ro.ViewportSize.Height
+			) {
+				Renderer.Viewport = ro.ProcessedViewport = new Viewport(
+					0, 0, ro.ViewportSize.Width, ro.ViewportSize.Height
+				);
 			}
 			ro.NoiseBuffer.Texture.SetAsRenderTarget();
 			try {

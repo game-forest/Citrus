@@ -54,13 +54,15 @@ namespace Kumquat
 			TypeFullName = node.GetType().FullName;
 			ClassName = name;
 			FieldName = "_" + name;
-			ContentsPath = AssetPath.CorrectSlashes(node.ContentsPath ?? "");
+			ContentsPath = AssetPath.CorrectSlashes(node.ContentsPath ?? string.Empty);
 			IsInExternalScene = isInExternalScene;
 
 			if (IsExternalScene) {
 				string externalName;
 				string externalBaseName;
-				ScenesCodeCooker.ParseCommonName(Path.GetFileNameWithoutExtension(ContentsPath), out externalName, out externalBaseName);
+				ScenesCodeCooker.ParseCommonName(
+					Path.GetFileNameWithoutExtension(ContentsPath), out externalName, out externalBaseName
+				);
 				ClassName = externalName;
 			}
 
@@ -92,13 +94,14 @@ namespace Kumquat
 
 		public string GenerateAnimations(string customType = null)
 		{
-			var result = "";
+			var result = string.Empty;
 			foreach (var marker in NamedMarkers) {
 				var safeMarker = marker.Name;
 				if (safeMarker.StartsWith("@")) {
 					safeMarker = safeMarker.Substring(1);
 				}
-				result += $"public {customType ?? TypeFullName} Run{marker.AnimationId ?? "Animation"}{safeMarker}() \n";
+				result += $"public {customType ?? TypeFullName} " +
+					$"Run{marker.AnimationId ?? "Animation"}{safeMarker}() \n";
 				result += "{ \n";
 				if (marker.AnimationId == null) {
 					result += $"Node.RunAnimation(\"{marker.Name}\");\n";

@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.UI.Docking;
 using Yuzu;
@@ -51,12 +51,13 @@ namespace Tangerine.UI.SceneView
 		public static VisualHintsRegistry Instance = new VisualHintsRegistry();
 
 		[YuzuOptional]
-		public VisualHint RootHint { get; set; } = new VisualHint("");
+		public VisualHint RootHint { get; set; } = new VisualHint(string.Empty);
 
 		private VisualHint displayAll;
 		public VisualHint DisplayAll
 		{
-			get {
+			get
+			{
 				if (displayAll == null) {
 					RegisterDefaultHints();
 				}
@@ -68,7 +69,8 @@ namespace Tangerine.UI.SceneView
 		private VisualHint displayInvisible;
 		public VisualHint DisplayInvisible
 		{
-			get {
+			get
+			{
 				if (displayInvisible == null) {
 					RegisterDefaultHints();
 				}
@@ -79,7 +81,7 @@ namespace Tangerine.UI.SceneView
 
 		private readonly Dictionary<Type, VisualHint> typeHintMap = new Dictionary<Type, VisualHint>();
 
-		public readonly VisualHint EmptyHint = new VisualHint("");
+		public readonly VisualHint EmptyHint = new VisualHint(string.Empty);
 		public readonly HashSet<VisualHint> AlwaysVisible = new HashSet<VisualHint>();
 
 		public static class HideRules
@@ -87,14 +89,20 @@ namespace Tangerine.UI.SceneView
 			public static readonly Func<VisualHint, bool> TypeRule = hint => !Instance.typeHintMap.ContainsValue(hint);
 			public static readonly Func<VisualHint, bool> AlwaysVisible = hint => false;
 			public static readonly Func<VisualHint, bool> AlwaysHidden = hint => true;
-			public static readonly Func<VisualHint, bool> VisibleIfProjectOpened = hint => Project.Current == Project.Null;
+			public static readonly Func<VisualHint, bool> VisibleIfProjectOpened = hint => {
+				return Project.Current == Project.Null;
+			};
 		}
 
 		public void RegisterDefaultHints()
 		{
 			DisplayAll = Register("/All", SceneViewCommands.ShowAllVisualHints, HideRules.VisibleIfProjectOpened);
 			DisplayInvisible =
-				Register("/Invisible", SceneViewCommands.ShowVisualHintsForInvisibleNodes, HideRules.VisibleIfProjectOpened);
+				Register(
+					"/Invisible",
+					SceneViewCommands.ShowVisualHintsForInvisibleNodes,
+					HideRules.VisibleIfProjectOpened
+				);
 		}
 
 		public VisualHint Register(Type type, ICommand command = null)
@@ -108,7 +116,9 @@ namespace Tangerine.UI.SceneView
 			if (!(attribute is TangerineVisualHintGroupAttribute)) {
 				return EmptyHint;
 			}
-			var hint = Register($"{attribute.Group.TrimEnd(' ', '/')}/{attribute.AliasTypeName ?? type.Name}", command, hideRule);
+			var hint = Register(
+				$"{attribute.Group.TrimEnd(' ', '/')}/{attribute.AliasTypeName ?? type.Name}", command, hideRule
+			);
 			if (typeHintMap.ContainsKey(type)) {
 				return typeHintMap[type] = hint;
 			}
@@ -169,7 +179,7 @@ namespace Tangerine.UI.SceneView
 
 		public void Clean()
 		{
-			RootHint = new VisualHint("");
+			RootHint = new VisualHint(string.Empty);
 		}
 
 		public void DoEnforceVisible()
@@ -253,12 +263,14 @@ namespace Tangerine.UI.SceneView
 		{
 			public ThemedCheckBox CheckBox { get; private set; }
 
-			public event Action<CheckBox.ChangedEventArgs> Changed {
+			public event Action<CheckBox.ChangedEventArgs> Changed
+			{
 				add => CheckBox.Changed += value;
 				remove => CheckBox.Changed -= value;
 			}
 
-			public bool Checked {
+			public bool Checked
+			{
 				get => CheckBox.Checked;
 				set => CheckBox.Checked = value;
 			}
@@ -271,21 +283,21 @@ namespace Tangerine.UI.SceneView
 				Padding = new Thickness { Left = 5 };
 				LayoutCell = new LayoutCell(Alignment.LeftCenter, 1);
 				CheckBox = new ThemedCheckBox() {
-					LayoutCell = new LayoutCell(Alignment.LeftCenter)
+					LayoutCell = new LayoutCell(Alignment.LeftCenter),
 				};
 				AddNode(CheckBox);
 				AddNode(new ThemedSimpleText {
 					Text = text,
-					LayoutCell = new LayoutCell(Alignment.LeftCenter)
+					LayoutCell = new LayoutCell(Alignment.LeftCenter),
 				});
 				AddNode(new Widget());
 			}
 
 			public BooleanEditor(ICommand command) : this(command.Text)
 			{
-				AddNode(new ThemedSimpleText(command.Shortcut.ToString().Replace("Unknown", "")) {
+				AddNode(new ThemedSimpleText(command.Shortcut.ToString().Replace("Unknown", string.Empty)) {
 					Padding = new Thickness { Right = 10 },
-					LayoutCell = new LayoutCell(Alignment.RightCenter)
+					LayoutCell = new LayoutCell(Alignment.RightCenter),
 				});
 				Application.InvokeOnNextUpdate(() => {
 					CommandHandlerList.Global.Disconnect(command);
@@ -327,20 +339,20 @@ namespace Tangerine.UI.SceneView
 
 				var rowWidget = new Widget {
 					Layout = new HBoxLayout(),
-					Padding = new Thickness { Left = leftOffset }
+					Padding = new Thickness { Left = leftOffset },
 				};
 				rowWidget.AddNode(hint.SubHints.Count > 0 ? (button = CreateExpandButton()) : offsetWidget.Clone());
 				rowWidget.AddNode(BooleanEditor);
 				AddNode(rowWidget);
 				container = new Widget {
-					Layout = new VBoxLayout()
+					Layout = new VBoxLayout(),
 				};
 				foreach (var subHint in hint.SubHints.Values) {
 					if (subHint.Hidden) {
 						continue;
 					}
 					container.AddNode(new VisualHintEditor(subHint, leftOffset + 23) {
-						parent = this
+						parent = this,
 					});
 				}
 				rowWidget.AddChangeWatcher(() => hint.Expanded, _ => HandleExpanded());
@@ -421,9 +433,9 @@ namespace Tangerine.UI.SceneView
 						Left = 5,
 						Right = 5,
 						Top = 10,
-						Bottom = 10
+						Bottom = 10,
 					},
-					Texture = IconPool.GetTexture("Timeline.plus")
+					Texture = IconPool.GetTexture("Timeline.plus"),
 				};
 				button.Clicked += ToggleExpanded;
 				return button;

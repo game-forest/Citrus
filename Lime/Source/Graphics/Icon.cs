@@ -12,7 +12,8 @@ namespace Lime
 		private object nativeIcon;
 		public object AsNativeIcon
 		{
-			get {
+			get
+			{
 #if WIN
 				return nativeIcon ?? (nativeIcon = AsBitmap.NativeBitmap);
 #else

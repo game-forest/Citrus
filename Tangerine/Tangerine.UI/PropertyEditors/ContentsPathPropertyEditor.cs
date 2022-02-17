@@ -43,7 +43,7 @@ namespace Tangerine.UI
 			}
 		}
 
-		protected override string ValueToStringConverter(string obj) => obj ?? "";
+		protected override string ValueToStringConverter(string obj) => obj ?? string.Empty;
 
 		protected override string StringToValueConverter(string path) => path;
 	}

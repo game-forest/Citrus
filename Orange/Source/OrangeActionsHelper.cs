@@ -10,8 +10,7 @@ namespace Orange.Source
 	{
 		public static async Task<bool> ExecuteOrangeAction(
 			Func<string> action, Action onBegin, Action onEnd, bool background
-		)
-		{
+		) {
 			var startTime = DateTime.Now;
 			onBegin?.Invoke();
 			var executionResult = "Build Failed! Unknown Error.";
@@ -71,6 +70,5 @@ namespace Orange.Source
 				return ex.ToString();
 			}
 		}
-
 	}
 }

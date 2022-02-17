@@ -13,7 +13,10 @@ namespace Tangerine.UI.Timeline
 		public IEnumerator<object> Task()
 		{
 			while (true) {
-				if (!Document.Current.Animation.IsCompound && Timeline.Instance.Grid.RootWidget.Input.WasMouseReleased(1)) {
+				if (
+					!Document.Current.Animation.IsCompound
+					&& Timeline.Instance.Grid.RootWidget.Input.WasMouseReleased(1)
+				) {
 					bool enabled = Document.Current.VisibleSceneItems.Count > 0;
 					if (enabled) {
 						var cell = Timeline.Instance.Grid.CellUnderMouse();
@@ -40,7 +43,7 @@ namespace Tangerine.UI.Timeline
 						TimelineCommands.DeleteKeyframes,
 						Command.MenuSeparator,
 						TimelineCommands.NumericMove,
-						TimelineCommands.NumericScale
+						TimelineCommands.NumericScale,
 					};
 					foreach (var i in menu) {
 						i.Enabled = enabled;

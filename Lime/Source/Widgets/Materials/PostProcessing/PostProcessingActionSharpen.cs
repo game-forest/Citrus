@@ -18,7 +18,13 @@ namespace Lime
 			ro.SharpenMaterial.Strength = ro.SharpenStrength;
 			ro.SharpenMaterial.Limit = ro.SharpenLimit;
 			ro.SharpenMaterial.Step = ro.SharpenStep * (ro.ProcessedUV1 / ro.CurrentBufferSize);
-			ro.RenderToTexture(ro.SharpenBuffer.Texture, ro.ProcessedTexture, ro.SharpenMaterial, Color4.White, ro.TextureClearingColor);
+			ro.RenderToTexture(
+				ro.SharpenBuffer.Texture,
+				ro.ProcessedTexture,
+				ro.SharpenMaterial,
+				Color4.White,
+				ro.TextureClearingColor
+			);
 			ro.CurrentBufferSize = (Vector2)ro.SharpenBuffer.Size;
 			ro.ProcessedUV1 = (Vector2)ro.ViewportSize / ro.CurrentBufferSize;
 

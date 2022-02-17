@@ -35,7 +35,9 @@ namespace Tangerine.Core.Operations
 					animator.ResetCache();
 					animator.IncreaseVersion();
 				}
-				var markers = op.delta > 0 ? Document.Current.Animation.Markers.Reverse() : Document.Current.Animation.Markers;
+				var markers = op.delta > 0
+					? Document.Current.Animation.Markers.Reverse()
+					: Document.Current.Animation.Markers;
 				foreach (var m in markers) {
 					if (m.Frame >= op.column) {
 						m.Frame += op.delta;

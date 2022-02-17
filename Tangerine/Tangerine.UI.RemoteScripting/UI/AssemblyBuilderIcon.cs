@@ -60,7 +60,10 @@ namespace Tangerine.UI.RemoteScripting
 
 			static float GetCornerProgress(float overallProgress, float cornerProgressPoint)
 			{
-				var v = Mathf.Min(Mathf.Abs(overallProgress - cornerProgressPoint), Mathf.Abs(overallProgress - cornerProgressPoint - 1));
+				var v = Mathf.Min(
+					Mathf.Abs(overallProgress - cornerProgressPoint),
+					Mathf.Abs(overallProgress - cornerProgressPoint - 1)
+				);
 				var p = 1 - Mathf.Clamp(v * 4, 0, 1);
 				return Mathf.Sin(p * Mathf.HalfPi);
 			}
@@ -71,14 +74,18 @@ namespace Tangerine.UI.RemoteScripting
 	{
 		public static AssemblyBuilderBuildFailedIcon Instance { get; } = new AssemblyBuilderBuildFailedIcon();
 
-		private AssemblyBuilderBuildFailedIcon() : base(ColorTheme.Current.RemoteScripting.AssemblyBuildFailedIcon) { }
+		private AssemblyBuilderBuildFailedIcon()
+			: base(ColorTheme.Current.RemoteScripting.AssemblyBuildFailedIcon)
+		{ }
 	}
 
 	public class AssemblyBuilderBuildSucceededIcon : AssemblyBuilderIcon
 	{
 		public static AssemblyBuilderBuildSucceededIcon Instance { get; } = new AssemblyBuilderBuildSucceededIcon();
 
-		private AssemblyBuilderBuildSucceededIcon() : base(ColorTheme.Current.RemoteScripting.AssemblyBuildSucceededIcon) { }
+		private AssemblyBuilderBuildSucceededIcon()
+			: base(ColorTheme.Current.RemoteScripting.AssemblyBuildSucceededIcon)
+		{ }
 	}
 
 	public class AssemblyBuilderTransitionIcon : AssemblyBuilderIcon

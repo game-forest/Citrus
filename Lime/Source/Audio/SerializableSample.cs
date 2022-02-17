@@ -6,7 +6,7 @@ namespace Lime
 	{
 		public string Path;
 
-		public SerializableSample() {}
+		public SerializableSample() { }
 
 		public SerializableSample(string path)
 		{

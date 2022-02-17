@@ -6,8 +6,11 @@ namespace Tangerine.UI.SceneView
 	public class DistortionMeshPresenter : SyncCustomPresenter<DistortionMesh>
 	{
 		private readonly SceneView sv;
-		private readonly VisualHint MeshHint =
-			VisualHintsRegistry.Instance.Register("/All/Distortion Mesh Grid", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+		private readonly VisualHint meshHint =
+			VisualHintsRegistry.Instance.Register(
+				"/All/Distortion Mesh Grid",
+				hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		public DistortionMeshPresenter(SceneView sceneView)
 		{
@@ -15,9 +18,9 @@ namespace Tangerine.UI.SceneView
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
 		}
 
-		void Render(Widget canvas)
+		private void Render(Widget canvas)
 		{
-			if (MeshHint.Enabled && !Document.Current.PreviewScene && Document.Current.Container is DistortionMesh) {
+			if (meshHint.Enabled && !Document.Current.PreviewScene && Document.Current.Container is DistortionMesh) {
 				var mesh = Document.Current.Container as DistortionMesh;
 				canvas.PrepareRendererState();
 				var transform = mesh.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
@@ -25,10 +28,18 @@ namespace Tangerine.UI.SceneView
 					for (int j = 0; j <= mesh.NumCols; j++) {
 						var p = mesh.GetPoint(i, j).TransformedPosition * transform;
 						if (i + 1 <= mesh.NumRows) {
-							Renderer.DrawLine(p, mesh.GetPoint(i + 1, j).TransformedPosition * transform, ColorTheme.Current.SceneView.DistortionMeshOutline);
+							Renderer.DrawLine(
+								a: p,
+								b: mesh.GetPoint(i + 1, j).TransformedPosition * transform,
+								color: ColorTheme.Current.SceneView.DistortionMeshOutline
+							);
 						}
 						if (j + 1 <= mesh.NumCols) {
-							Renderer.DrawLine(p, mesh.GetPoint(i, j + 1).TransformedPosition * transform, ColorTheme.Current.SceneView.DistortionMeshOutline);
+							Renderer.DrawLine(
+								a: p,
+								b: mesh.GetPoint(i, j + 1).TransformedPosition * transform,
+								color: ColorTheme.Current.SceneView.DistortionMeshOutline
+							);
 						}
 					}
 				}

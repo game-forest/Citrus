@@ -47,7 +47,7 @@ namespace Tangerine.UI
 			});
 			textWidget = new ThemedSimpleText {
 				Padding = new Thickness(4),
-				OverflowMode = TextOverflowMode.Ellipsis
+				OverflowMode = TextOverflowMode.Ellipsis,
 			};
 			content = new ThemedFrame {
 				LayoutCell = new LayoutCell { Ignore = true },
@@ -58,7 +58,7 @@ namespace Tangerine.UI
 			new ThemedInvalidableWindowWidget(window) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
-				Nodes = { content }
+				Nodes = { content },
 			};
 			regex = new Regex("\x20+", RegexOptions.Compiled);
 		}
@@ -88,7 +88,9 @@ namespace Tangerine.UI
 					var textLine = strings[lineIndex];
 					if (textLine.Length > MaxRowLength + 1) {
 						int spaceIndex = MaxRowLength;
-						while (--spaceIndex > 0 && textLine[spaceIndex] != ' ');
+						while (--spaceIndex > 0 && textLine[spaceIndex] != ' ') {
+						}
+
 						if (spaceIndex == 0) {
 							strings[lineIndex] = textLine.Substring(startIndex: 0, length: MaxRowLength - 3) + "...\n";
 							strings.Insert(index: lineIndex + 1, item: "..." + textLine.Substring(MaxRowLength - 3));
@@ -113,7 +115,7 @@ namespace Tangerine.UI
 			Show();
 			UpdatePosition(position);
 		}
-		
+
 		public void Toggle()
 		{
 			if (window.Visible) {

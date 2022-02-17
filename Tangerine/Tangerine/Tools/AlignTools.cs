@@ -10,7 +10,7 @@ namespace Tangerine
 	{
 		Selection,
 		Root,
-		Parent
+		Parent,
 	}
 
 	public abstract class AlignToHandler : DocumentCommandHandler
@@ -98,9 +98,10 @@ namespace Tangerine
 				var menu = new Menu();
 				var currentAlignObject = alignToHandler.GetAlignTo();
 				foreach (AlignTo alignObject in Enum.GetValues(typeof(AlignTo))) {
-					menu.Add(new Command(GetDisplayedTextForAlign(alignObject, alignToHandler),
+					menu.Add(new Command(
+						GetDisplayedTextForAlign(alignObject, alignToHandler),
 						new ChangeAlignTo(alignObject, alignToHandler).Execute) {
-						Checked = currentAlignObject == alignObject
+						Checked = currentAlignObject == alignObject,
 					});
 				}
 				menu.Popup();
@@ -140,14 +141,14 @@ namespace Tangerine
 						GetDisplayedTextForAlign(AlignTo.Parent, alignToHandler),
 						new ChangeAlignTo(AlignTo.Parent, alignToHandler).Execute
 					) {
-						Checked = alignTo == AlignTo.Parent
+						Checked = alignTo == AlignTo.Parent,
 					},
 					new Command(
 						GetDisplayedTextForAlign(AlignTo.Root, alignToHandler),
 						new ChangeAlignTo(AlignTo.Root, alignToHandler).Execute
 					) {
-						Checked = alignTo == AlignTo.Root
-					}
+						Checked = alignTo == AlignTo.Root,
+					},
 				}.Popup();
 			}
 		}
@@ -160,8 +161,12 @@ namespace Tangerine
 
 		protected static Rectangle NormalizedAABB(Rectangle aabb, Widget container)
 		{
-			return new Rectangle(aabb.Left / container.Width, aabb.Top / container.Height,
-				aabb.Right / container.Width, aabb.Bottom / container.Height);
+			return new Rectangle(
+				left: aabb.Left / container.Width,
+				top: aabb.Top / container.Height,
+				right: aabb.Right / container.Width,
+				bottom: aabb.Bottom / container.Height
+			);
 		}
 
 		protected void ToSelection()
@@ -491,15 +496,15 @@ namespace Tangerine
 			float minY = aabb.Top + widgets.First().CalcAABBInSpaceOf(container).Height / 2;
 			float maxY = aabb.Bottom - widgets.Last().CalcAABBInSpaceOf(container).Height / 2;
 			float step = (maxY - minY) / (widgets.Count() - 1);
-			float Y = minY;
+			float y = minY;
 			foreach (var widget in widgets) {
 				var p = widget.Position;
-				float d = p.Y - Y;
+				float d = p.Y - y;
 				if (Mathf.Abs(d) > Mathf.ZeroTolerance) {
 					p.Y -= d;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), p, false);
 				}
-				Y += step;
+				y += step;
 			}
 		}
 
@@ -507,14 +512,14 @@ namespace Tangerine
 		{
 			var objects = nodes.Editable().OfType<PointObject>().OrderBy(po => po.Position.Y);
 			float step = (aabb.Bottom - aabb.Top) / (objects.Count() - 1);
-			float Y = aabb.Top;
+			float y = aabb.Top;
 			foreach (var obj in objects) {
 				var p = obj.Position;
-				if (Mathf.Abs(p.Y - Y) > Mathf.ZeroTolerance) {
-					p.Y = Y;
+				if (Mathf.Abs(p.Y - y) > Mathf.ZeroTolerance) {
+					p.Y = y;
 					Core.Operations.SetAnimableProperty.Perform(obj, nameof(PointObject.Position), p, false);
 				}
-				Y += step;
+				y += step;
 			}
 		}
 	}
@@ -530,15 +535,15 @@ namespace Tangerine
 			float minX = aabb.Left + widgets.First().CalcAABBInSpaceOf(container).Width / 2;
 			float maxX = aabb.Right - widgets.Last().CalcAABBInSpaceOf(container).Width / 2;
 			float step = (maxX - minX) / (widgets.Count() - 1);
-			float X = minX;
+			float x = minX;
 			foreach (var widget in widgets) {
 				var p = widget.Position;
-				float d = p.X - X;
+				float d = p.X - x;
 				if (Mathf.Abs(d) > Mathf.ZeroTolerance) {
 					p.X -= d;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), p, false);
 				}
-				X += step;
+				x += step;
 			}
 		}
 
@@ -546,14 +551,14 @@ namespace Tangerine
 		{
 			var objects = nodes.Editable().OfType<PointObject>().OrderBy(po => po.Position.X);
 			float step = (aabb.Right - aabb.Left) / (objects.Count() - 1);
-			float X = aabb.Left;
+			float x = aabb.Left;
 			foreach (var obj in objects) {
 				var p = obj.Position;
-				if (Mathf.Abs(p.X - X) > Mathf.ZeroTolerance) {
-					p.X = X;
+				if (Mathf.Abs(p.X - x) > Mathf.ZeroTolerance) {
+					p.X = x;
 					Core.Operations.SetAnimableProperty.Perform(obj, nameof(PointObject.Position), p, false);
 				}
-				X += step;
+				x += step;
 			}
 		}
 	}
@@ -569,15 +574,15 @@ namespace Tangerine
 			float minX = aabb.Left;
 			float maxX = aabb.Right - widgets.Last().CalcAABBInSpaceOf(container).Width;
 			float step = (maxX - minX) / (widgets.Count() - 1);
-			float X = minX;
+			float x = minX;
 			foreach (var widget in widgets) {
 				var p = widget.Position;
-				float d = p.X - widget.CalcAABBInSpaceOf(container).Width / 2 - X;
+				float d = p.X - widget.CalcAABBInSpaceOf(container).Width / 2 - x;
 				if (Mathf.Abs(d) > Mathf.ZeroTolerance) {
 					p.X -= d;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), p, false);
 				}
-				X += step;
+				x += step;
 			}
 		}
 
@@ -585,14 +590,14 @@ namespace Tangerine
 		{
 			var objects = nodes.Editable().OfType<PointObject>().OrderBy(po => po.Position.X);
 			float step = (aabb.Right - aabb.Left) / (objects.Count() - 1);
-			float X = aabb.Left;
+			float x = aabb.Left;
 			foreach (var obj in objects) {
 				var p = obj.Position;
-				if (Mathf.Abs(p.X - X) > Mathf.ZeroTolerance) {
-					p.X = X;
+				if (Mathf.Abs(p.X - x) > Mathf.ZeroTolerance) {
+					p.X = x;
 					Core.Operations.SetAnimableProperty.Perform(obj, nameof(PointObject.Position), p, false);
 				}
-				X += step;
+				x += step;
 			}
 		}
 	}
@@ -608,15 +613,15 @@ namespace Tangerine
 			float minX = aabb.Left + widgets.First().CalcAABBInSpaceOf(container).Width;
 			float maxX = aabb.Right;
 			float step = (maxX - minX) / (widgets.Count() - 1);
-			float X = minX;
+			float x = minX;
 			foreach (var widget in widgets) {
 				var p = widget.Position;
-				float d = p.X + widget.CalcAABBInSpaceOf(container).Width / 2 - X;
+				float d = p.X + widget.CalcAABBInSpaceOf(container).Width / 2 - x;
 				if (Mathf.Abs(d) > Mathf.ZeroTolerance) {
 					p.X -= d;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), p, false);
 				}
-				X += step;
+				x += step;
 			}
 		}
 
@@ -624,14 +629,14 @@ namespace Tangerine
 		{
 			var objects = nodes.Editable().OfType<PointObject>().OrderBy(po => po.Position.X);
 			float step = (aabb.Right - aabb.Left) / (objects.Count() - 1);
-			float X = aabb.Left;
+			float x = aabb.Left;
 			foreach (var obj in objects) {
 				var p = obj.Position;
-				if (Mathf.Abs(p.X - X) > Mathf.ZeroTolerance) {
-					p.X = X;
+				if (Mathf.Abs(p.X - x) > Mathf.ZeroTolerance) {
+					p.X = x;
 					Core.Operations.SetAnimableProperty.Perform(obj, nameof(PointObject.Position), p, false);
 				}
-				X += step;
+				x += step;
 			}
 		}
 	}
@@ -647,15 +652,15 @@ namespace Tangerine
 			float minY = aabb.Top;
 			float maxY = aabb.Bottom - widgets.Last().CalcAABBInSpaceOf(container).Height;
 			float step = (maxY - minY) / (widgets.Count() - 1);
-			float Y = minY;
+			float y = minY;
 			foreach (var widget in widgets) {
 				var p = widget.Position;
-				float d = p.Y - widget.CalcAABBInSpaceOf(container).Height / 2 - Y;
+				float d = p.Y - widget.CalcAABBInSpaceOf(container).Height / 2 - y;
 				if (Mathf.Abs(d) > Mathf.ZeroTolerance) {
 					p.Y -= d;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), p, false);
 				}
-				Y += step;
+				y += step;
 			}
 		}
 
@@ -663,14 +668,14 @@ namespace Tangerine
 		{
 			var objects = nodes.Editable().OfType<PointObject>().OrderBy(po => po.Position.Y);
 			float step = (aabb.Bottom - aabb.Top) / (objects.Count() - 1);
-			float Y = aabb.Top;
+			float y = aabb.Top;
 			foreach (var obj in objects) {
 				var p = obj.Position;
-				if (Mathf.Abs(p.Y - Y) > Mathf.ZeroTolerance) {
-					p.Y = Y;
+				if (Mathf.Abs(p.Y - y) > Mathf.ZeroTolerance) {
+					p.Y = y;
 					Core.Operations.SetAnimableProperty.Perform(obj, nameof(PointObject.Position), p, false);
 				}
-				Y += step;
+				y += step;
 			}
 		}
 	}
@@ -686,15 +691,15 @@ namespace Tangerine
 			float minY = aabb.Top + widgets.First().CalcAABBInSpaceOf(container).Height;
 			float maxY = aabb.Bottom;
 			float step = (maxY - minY) / (widgets.Count() - 1);
-			float Y = minY;
+			float y = minY;
 			foreach (var widget in widgets) {
 				var p = widget.Position;
-				float d = p.Y + widget.CalcAABBInSpaceOf(container).Height / 2 - Y;
+				float d = p.Y + widget.CalcAABBInSpaceOf(container).Height / 2 - y;
 				if (Mathf.Abs(d) > Mathf.ZeroTolerance) {
 					p.Y -= d;
 					Core.Operations.SetAnimableProperty.Perform(widget, nameof(Widget.Position), p, false);
 				}
-				Y += step;
+				y += step;
 			}
 		}
 
@@ -702,14 +707,14 @@ namespace Tangerine
 		{
 			var objects = nodes.Editable().OfType<PointObject>().OrderBy(po => po.Position.Y);
 			float step = (aabb.Bottom - aabb.Top) / (objects.Count() - 1);
-			float Y = aabb.Top;
+			float y = aabb.Top;
 			foreach (var obj in objects) {
 				var p = obj.Position;
-				if (Mathf.Abs(p.Y - Y) > Mathf.ZeroTolerance) {
-					p.Y = Y;
+				if (Mathf.Abs(p.Y - y) > Mathf.ZeroTolerance) {
+					p.Y = y;
 					Core.Operations.SetAnimableProperty.Perform(obj, nameof(PointObject.Position), p, false);
 				}
-				Y += step;
+				y += step;
 			}
 		}
 	}

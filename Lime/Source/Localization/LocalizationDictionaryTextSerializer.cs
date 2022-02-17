@@ -7,7 +7,7 @@ using System.Text;
 namespace Lime
 {
 	/// <summary>
-	/// Сериалайзер, работающий с текстовыми словарями (словари, использующиеся в большинстве проектов)
+	/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 	/// </summary>
 	public class LocalizationDictionaryTextSerializer : ILocalizationDictionarySerializer
 	{
@@ -32,14 +32,16 @@ namespace Lime
 					}
 					var key = Unescape(line.Substring(1, line.Length - 2));
 					string context = null;
-					string text = "";
+					string text = string.Empty;
 					while (true) {
 						line = r.ReadLine();
 						var isCommentAfterValue = line != null && !string.IsNullOrEmpty(text) && ValidateComment(line);
-						if (line == null || ValidateKey(line) || isCommentAfterValue)
+						if (line == null || ValidateKey(line) || isCommentAfterValue) {
 							break;
+						}
+
 						if (ValidateComment(line)) {
-							context = (context ?? "") + line.Substring(1).Trim() + '\n';
+							context = (context ?? string.Empty) + line.Substring(1).Trim() + '\n';
 						} else {
 							text += line + '\n';
 						}
@@ -66,7 +68,7 @@ namespace Lime
 
 		private static bool ValidateSpace(string s)
 		{
-			return s == "";
+			return s == string.Empty;
 		}
 
 		public void Write(LocalizationDictionary dictionary, Stream stream)

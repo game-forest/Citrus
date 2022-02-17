@@ -1,3 +1,4 @@
+#pragma warning disable MEN002 // Line is too long
 #if iOS
 using AVFoundation;
 using CoreMedia;
@@ -75,21 +76,26 @@ namespace Lime
 		{
 			texture = new Texture2D();
 			playerItem = AVPlayerItem.FromUrl(NSUrl.FromString(path));
-			NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, (notification) => {
-				state = State.Finished;
-				Status = VideoPlayerStatus.Finished;
-				stopwatch.Stop();
-				stopDecodeCancelationTokenSource.Cancel();
-				checkVideoEvent.Set();
-				Debug.Write("Play to end");
-			}, playerItem);
+			NSNotificationCenter.DefaultCenter.AddObserver(
+				AVPlayerItem.DidPlayToEndTimeNotification,
+				(notification) => {
+					state = State.Finished;
+					Status = VideoPlayerStatus.Finished;
+					stopwatch.Stop();
+					stopDecodeCancelationTokenSource.Cancel();
+					checkVideoEvent.Set();
+					Debug.Write("Play to end");
+				},
+				playerItem
+			);
 			Debug.Write(string.Format("{0}:\n", playerItem.DebugDescription));
 			player = new AVPlayer(playerItem);
 			Debug.Write(string.Format("DecoderInitialized!"));
 			videoOutput = new AVPlayerItemVideoOutput(new CoreVideo.CVPixelBufferAttributes() {
-				//TODO: change to CoreVideo.CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange to avoid convertation from YUV -> BGRA on processor and move it to GPU
-				//required: changes in fragment shader
-				//example: https://developer.apple.com/library/content/samplecode/GLCameraRipple/Listings/GLCameraRipple_Shaders_Shader_fsh.html#//apple_ref/doc/uid/DTS40011222-GLCameraRipple_Shaders_Shader_fsh-DontLinkElementID_9
+				// TODO: change to CoreVideo.CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange to avoid
+				// convertation from YUV -> BGRA on processor and move it to GPU
+				// required: changes in fragment shader
+				// example: https://developer.apple.com/library/content/samplecode/GLCameraRipple/Listings/GLCameraRipple_Shaders_Shader_fsh.html#//apple_ref/doc/uid/DTS40011222-GLCameraRipple_Shaders_Shader_fsh-DontLinkElementID_9
 				PixelFormatType = CoreVideo.CVPixelFormatType.CV32BGRA,
 			});
 			playerItem.AddOutput(videoOutput);
@@ -224,7 +230,9 @@ namespace Lime
 							texture.LoadImage(tempBuffer, Width, Height, Format.B8G8R8A8_UNorm);
 							Marshal.FreeHGlobal(tempBuffer);
 						} else {
-							GraphicsUtility.EnsureTextureDataSizeValid(Format.B8G8R8A8_UNorm, Width, Height, (int)pb.DataSize);
+							GraphicsUtility.EnsureTextureDataSizeValid(
+								Format.B8G8R8A8_UNorm, Width, Height, (int)pb.DataSize
+							);
 							texture.LoadImage(pb.BaseAddress, Width, Height, Format.B8G8R8A8_UNorm);
 						}
 						pb.Unlock(CVPixelBufferLock.None);
@@ -287,3 +295,4 @@ namespace Lime
 	}
 }
 #endif
+#pragma warning restore MEN002 // Line is too long

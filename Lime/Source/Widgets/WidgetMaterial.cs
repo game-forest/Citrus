@@ -8,7 +8,7 @@ namespace Lime
 	{
 		None,
 		Multiply,
-		CutOut
+		CutOut,
 	}
 
 	[YuzuCopyable]
@@ -27,8 +27,13 @@ namespace Lime
 		public string Id { get; set; }
 		public int PassCount { get; private set; }
 
-		public static WidgetMaterial GetInstance(Blending blending, ShaderId shader, int numTextures, TextureBlending textureBlending = TextureBlending.Multiply, bool premulAlpha = false)
-		{
+		public static WidgetMaterial GetInstance(
+			Blending blending,
+			ShaderId shader,
+			int numTextures,
+			TextureBlending textureBlending = TextureBlending.Multiply,
+			bool premulAlpha = false
+		) {
 			lock (instanceCache) {
 				var instanceKey = GetInstanceKey(blending, shader, numTextures, textureBlending, premulAlpha);
 				WidgetMaterial instance;
@@ -40,14 +45,20 @@ namespace Lime
 			}
 		}
 
-		private static int GetInstanceKey(Blending blending, ShaderId shader, int numTextures, TextureBlending textureBlending, bool premulAlpha)
-		{
+		private static int GetInstanceKey(
+			Blending blending, ShaderId shader, int numTextures, TextureBlending textureBlending, bool premulAlpha
+		) {
 			var premulAlphaFlag = premulAlpha ? 1 : 0;
-			return (int)blending | ((int)shader << 8) | (numTextures << 16) | (premulAlphaFlag << 24) | ((int)textureBlending << 25);
+			return (int)blending
+				| ((int)shader << 8)
+				| (numTextures << 16)
+				| (premulAlphaFlag << 24)
+				| ((int)textureBlending << 25);
 		}
 
-		private WidgetMaterial(Blending blending, ShaderId shader, int numTextures, TextureBlending textureBlending, bool premulAlpha)
-		{
+		private WidgetMaterial(
+			Blending blending, ShaderId shader, int numTextures, TextureBlending textureBlending, bool premulAlpha
+		) {
 			PremulAlpha = premulAlpha || blending == Blending.Burn || blending == Blending.Darken;
 			var options = PremulAlpha ? ShaderOptions.PremultiplyAlpha : ShaderOptions.None;
 			if (textureBlending == TextureBlending.CutOut) {
@@ -80,12 +91,13 @@ namespace Lime
 	[YuzuCopyable]
 	public class ColorfulTextMaterial : IMaterial
 	{
-		private static Dictionary<int, ColorfulTextMaterial> instanceCache = new Dictionary<int, ColorfulTextMaterial>();
+		private static Dictionary<int, ColorfulTextMaterial> instanceCache =
+			new Dictionary<int, ColorfulTextMaterial>();
 
 		private ShaderParams[] shaderParamsArray;
 		private ShaderParams shaderParams;
 		private BlendState blendState;
-		float colorIndex;
+		private float colorIndex;
 		public string Id { get; set; }
 		public int PassCount => 1;
 
@@ -124,7 +136,9 @@ namespace Lime
 		{
 			var texture = ShaderPrograms.ColorfulTextShaderProgram.GradientRampTexture;
 			if (texture == null || texture.IsStubTexture) {
-				var warningText = "GradientMap texture doesnt exist at './Data/Fonts/GradientMap.png' If you want to use it, create it and dont forget cooking rule file to disable texture atlas for it.";
+				var warningText = "GradientMap texture doesnt exist at './Data/Fonts/GradientMap.png' " +
+					"If you want to use it, create it and dont forget cooking rule " +
+					"file to disable texture atlas for it.";
 #if DEBUG
 				throw new Lime.Exception(warningText);
 #else

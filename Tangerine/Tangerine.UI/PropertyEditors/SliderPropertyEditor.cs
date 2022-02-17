@@ -25,7 +25,8 @@ namespace Tangerine.UI
 				}
 				EditorParams.History?.EndTransaction();
 			};
-			slider.AddLateChangeWatcher(current,
+			slider.AddLateChangeWatcher(
+				current,
 				v => {
 					slider.Value = v.IsDefined ? v.Value : slider.RangeMin;
 					if (!v.IsDefined) {

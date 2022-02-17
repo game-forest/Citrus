@@ -14,7 +14,8 @@ namespace Lime.Graphics.Platform
 	public static unsafe class PlatformBufferExtensions
 	{
 		public static void SetData<T>(
-			this IPlatformBuffer buffer, int offset, ref T data, BufferSetDataMode mode) where T : unmanaged
+			this IPlatformBuffer buffer, int offset, ref T data, BufferSetDataMode mode)
+			where T : unmanaged
 		{
 			fixed (T* p = &data) {
 				buffer.SetData(offset, new IntPtr(p), sizeof(T), mode);
@@ -22,13 +23,15 @@ namespace Lime.Graphics.Platform
 		}
 
 		public static void SetData<T>(
-			this IPlatformBuffer buffer, int offset, T[] data, BufferSetDataMode mode) where T : unmanaged
+			this IPlatformBuffer buffer, int offset, T[] data, BufferSetDataMode mode)
+			where T : unmanaged
 		{
 			SetData(buffer, offset, data, 0, data.Length, mode);
 		}
 
 		public static void SetData<T>(
-			this IPlatformBuffer buffer, int offset, T[] data, int startIndex, int count, BufferSetDataMode mode) where T : unmanaged
+			this IPlatformBuffer buffer, int offset, T[] data, int startIndex, int count, BufferSetDataMode mode)
+			where T : unmanaged
 		{
 			fixed (T* p = &data[startIndex]) {
 				buffer.SetData(offset, new IntPtr(p), count * sizeof(T), mode);

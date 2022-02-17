@@ -6,7 +6,8 @@ using FluentFTP;
 namespace Orange
 {
 	/// <summary>
-	/// Used to handle all operations with cache. Able to store data in local and remote cache and to load data from storage.
+	/// Used to handle all operations with cache.
+	/// Able to store data in local and remote cache and to load data from storage.
 	/// This class is not thread safe.
 	/// </summary>
 	public class AssetCache
@@ -96,17 +97,23 @@ namespace Orange
 			}
 			serverAddress = (string)data?.ServerAddress;
 			if (serverAddress == null) {
-				HandleSetupFailure($"'ServerAddress' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
+				HandleSetupFailure(
+					$"'ServerAddress' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}"
+				);
 				return;
 			}
 			serverUsername = (string)data?.ServerUsername;
 			if (serverUsername == null) {
-				HandleSetupFailure($"'ServerUsername' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
+				HandleSetupFailure(
+					$"'ServerUsername' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}"
+				);
 				return;
 			}
 			serverPath = (string)data?.ServerPath;
 			if (serverPath == null) {
-				HandleSetupFailure($"'ServerPath' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}");
+				HandleSetupFailure(
+					$"'ServerPath' field not found in AssetCache settings in {The.Workspace.ProjectFilePath}"
+				);
 				return;
 			}
 			if (Mode == AssetCacheMode.Remote) {
@@ -126,7 +133,7 @@ namespace Orange
 
 			if (IsRemoteEnabled) {
 				ftpClient = new FtpClient(serverAddress) {
-					Credentials = new NetworkCredential(serverUsername, Environment.UserName)
+					Credentials = new NetworkCredential(serverUsername, Environment.UserName),
 				};
 				FtpTrace.EnableTracing = false;
 				ftpClient.SocketPollInterval = 3000;
@@ -213,8 +220,12 @@ namespace Orange
 		/// <param name="hashString">SHA256 of file's binary data</param>
 		private string GetLocalPath(string hashString)
 		{
-			return Path.Combine(The.Workspace.LocalAssetCachePath,
-				hashString.Substring(0, 2), hashString.Substring(2, 2), hashString);
+			return Path.Combine(
+				The.Workspace.LocalAssetCachePath,
+				hashString.Substring(0, 2),
+				hashString.Substring(2, 2),
+				hashString
+			);
 		}
 
 		/// <summary>
@@ -244,7 +255,7 @@ namespace Orange
 			if (IsRemoteEnabled && ftpClient.IsConnected) {
 				try {
 					return ftpClient.FileExists(GetRemotePath(hashString));
-				} catch(System.Exception e) {
+				} catch (System.Exception e) {
 					Console.WriteLine(e.Message);
 					HandleRemoteCacheFailure(hashString, "Can't check existance of file");
 					return false;
@@ -265,8 +276,12 @@ namespace Orange
 					if (ExistsRemote(hashString)) {
 						return true;
 					}
-					FtpStatus status = ftpClient.UploadFile(GetLocalPath(hashString), GetRemotePath(hashString),
-						FtpRemoteExists.Overwrite, true);
+					FtpStatus status = ftpClient.UploadFile(
+						GetLocalPath(hashString),
+						GetRemotePath(hashString),
+						FtpRemoteExists.Overwrite,
+						true
+					);
 					if (status != FtpStatus.Success) {
 						ftpClient.Disconnect();
 						HandleRemoteCacheFailure(hashString, "Upload failed");
@@ -352,7 +367,9 @@ namespace Orange
 				Mode = AssetCacheMode.None;
 				ending = "Cache disabled";
 			}
-			Console.WriteLine($"[Cache] WARNING {serverUsername}@{serverAddress}: {errorMessage} ({hashString}). {ending}");
+			Console.WriteLine(
+				$"[Cache] WARNING {serverUsername}@{serverAddress}: {errorMessage} ({hashString}). {ending}"
+			);
 			if (File.Exists(tempFilePath)) {
 				File.Delete(tempFilePath);
 			}
@@ -367,6 +384,6 @@ namespace Orange
 	{
 		None = 0,
 		Local = 1,
-		Remote = 2
+		Remote = 2,
 	}
 }

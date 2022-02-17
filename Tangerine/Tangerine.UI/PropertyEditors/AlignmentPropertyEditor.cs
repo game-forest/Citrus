@@ -30,12 +30,12 @@ namespace Tangerine.UI
 				Layout = new HBoxLayout { DefaultCell = new DefaultLayoutCell(Alignment.Center), Spacing = 4 },
 				Nodes = {
 					(selectorH = editorParams.DropDownListFactory()),
-					(selectorV = editorParams.DropDownListFactory())
-				}
+					(selectorV = editorParams.DropDownListFactory()),
+				},
 			});
 			var items = new[] {
 				(type: typeof(HAlignment), selector: selectorH),
-				(type: typeof(VAlignment), selector: selectorV)
+				(type: typeof(VAlignment), selector: selectorV),
 			};
 			foreach (var (type, selector) in items) {
 				var fields = allowedFields[type];

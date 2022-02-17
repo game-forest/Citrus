@@ -35,9 +35,11 @@ namespace Lime.Graphics.Platform.Vulkan
 		internal int UniformBufferCount => uniformBufferCount;
 
 		public PlatformShaderProgram(
-			PlatformRenderContext context, IPlatformShader[] shaders,
-			ShaderProgram.AttribLocation[] attribLocations, ShaderProgram.Sampler[] samplers)
-		{
+			PlatformRenderContext context,
+			IPlatformShader[] shaders,
+			ShaderProgram.AttribLocation[] attribLocations,
+			ShaderProgram.Sampler[] samplers
+		) {
 			this.context = context;
 			LinkProgram(shaders, attribLocations, samplers);
 		}
@@ -56,12 +58,13 @@ namespace Lime.Graphics.Platform.Vulkan
 			return uniformInfos.Select(i => new UniformDesc {
 				Name = i.Name,
 				Type = i.Type,
-				ArraySize = i.ArraySize
+				ArraySize = i.ArraySize,
 			}).ToArray();
 		}
 
-		private void LinkProgram(IPlatformShader[] shaders, ShaderProgram.AttribLocation[] attribLocations, ShaderProgram.Sampler[] samplers)
-		{
+		private void LinkProgram(
+			IPlatformShader[] shaders, ShaderProgram.AttribLocation[] attribLocations, ShaderProgram.Sampler[] samplers
+		) {
 			PlatformShader vertexShader = null;
 			PlatformShader fragmentShader = null;
 			foreach (var shader in shaders.Cast<PlatformShader>()) {
@@ -106,7 +109,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			var createInfo = new SharpVulkan.ShaderModuleCreateInfo {
 				StructureType = SharpVulkan.StructureType.ShaderModuleCreateInfo,
 				CodeSize = codeSize,
-				Code = code
+				Code = code,
 			};
 			return context.Device.CreateShaderModule(ref createInfo);
 		}
@@ -116,13 +119,19 @@ namespace Lime.Graphics.Platform.Vulkan
 			uniformBuffers = new BackingBuffer[uniformBufferInfos.Length];
 			for (var i = 0; i < uniformBuffers.Length; i++) {
 				var size = uniformBufferInfos[i].UpdateTemplate.Max(entry => entry.BufferOffset + entry.Size);
-				var memoryPropertyFlags = SharpVulkan.MemoryPropertyFlags.HostVisible | SharpVulkan.MemoryPropertyFlags.HostCoherent;
-				uniformBuffers[i] = new BackingBuffer(context, SharpVulkan.BufferUsageFlags.UniformBuffer, memoryPropertyFlags, (ulong)size);
+				var memoryPropertyFlags = SharpVulkan.MemoryPropertyFlags.HostVisible
+					| SharpVulkan.MemoryPropertyFlags.HostCoherent;
+				uniformBuffers[i] = new BackingBuffer(
+					context, SharpVulkan.BufferUsageFlags.UniformBuffer, memoryPropertyFlags, (ulong)size
+				);
 			}
 			var stagingDataSize = 0;
 			foreach (var ui in uniformInfos) {
 				if (ui.StagingOffset >= 0) {
-					stagingDataSize = Math.Max(stagingDataSize, ui.StagingOffset + ui.ColumnStride * ui.ColumnCount * ui.ArraySize);
+					stagingDataSize = Math.Max(
+						stagingDataSize,
+						ui.StagingOffset + ui.ColumnStride * ui.ColumnCount * ui.ArraySize
+					);
 				}
 			}
 			if (stagingDataSize > 0) {
@@ -228,7 +237,7 @@ namespace Lime.Graphics.Platform.Vulkan
 						ArraySize = arraySize,
 						StageMask = stage,
 						StagingOffset = -1,
-						TextureSlot = -1
+						TextureSlot = -1,
 					});
 				}
 			}
@@ -247,8 +256,9 @@ namespace Lime.Graphics.Platform.Vulkan
 			return infos;
 		}
 
-		private UniformBufferInfo[] BuildUniformBufferUpdateTemplates(IntPtr program, Dictionary<string, UniformInfo> uniformInfoLookup)
-		{
+		private UniformBufferInfo[] BuildUniformBufferUpdateTemplates(
+			IntPtr program, Dictionary<string, UniformInfo> uniformInfoLookup
+		) {
 			var uniformBlockCount = ShaderCompiler.GetActiveUniformBlockCount(program);
 			var uniformCount = ShaderCompiler.GetActiveUniformCount(program);
 			var uniformBufferUpdateTemplates = new List<UniformBufferUpdateTemplateEntry>[uniformBlockCount];
@@ -265,7 +275,7 @@ namespace Lime.Graphics.Platform.Vulkan
 					uniformBufferUpdateTemplates[blockIndex].Add(new UniformBufferUpdateTemplateEntry {
 						StagingOffset = info.StagingOffset,
 						BufferOffset = blockOffset,
-						Size = info.ColumnStride * info.ColumnCount * arraySize
+						Size = info.ColumnStride * info.ColumnCount * arraySize,
 					});
 				}
 			}
@@ -273,7 +283,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			for (var i = 0; i < uniformBlockCount; i++) {
 				uniformBufferInfos[i] = new UniformBufferInfo {
 					Stage = ConvertShaderStage(ShaderCompiler.GetActiveUniformBlockStage(program, i)),
-					UpdateTemplate = uniformBufferUpdateTemplates[i].ToArray()
+					UpdateTemplate = uniformBufferUpdateTemplates[i].ToArray(),
 				};
 			}
 			return uniformBufferInfos;
@@ -290,13 +300,13 @@ namespace Lime.Graphics.Platform.Vulkan
 					Binding = (uint)binding,
 					DescriptorType = SharpVulkan.DescriptorType.UniformBuffer,
 					DescriptorCount = 1,
-					StageFlags = GetVKShaderStageFlags(ShaderCompiler.GetActiveUniformBlockStage(program, i))
+					StageFlags = GetVKShaderStageFlags(ShaderCompiler.GetActiveUniformBlockStage(program, i)),
 				});
 				updateTemplate.Add(new DescriptorSetUpdateTemplateEntry {
 					Binding = binding,
 					DescriptorType = SharpVulkan.DescriptorType.UniformBuffer,
 					BufferSlot = i,
-					TextureSlot = -1
+					TextureSlot = -1,
 				});
 				uniformBufferCount++;
 			}
@@ -310,13 +320,13 @@ namespace Lime.Graphics.Platform.Vulkan
 						Binding = (uint)binding,
 						DescriptorType = SharpVulkan.DescriptorType.CombinedImageSampler,
 						DescriptorCount = 1,
-						StageFlags = GetVKShaderStageFlags(ShaderCompiler.GetActiveUniformStage(program, i))
+						StageFlags = GetVKShaderStageFlags(ShaderCompiler.GetActiveUniformStage(program, i)),
 					});
 					updateTemplate.Add(new DescriptorSetUpdateTemplateEntry {
 						Binding = binding,
 						DescriptorType = SharpVulkan.DescriptorType.CombinedImageSampler,
 						BufferSlot = -1,
-						TextureSlot = info.TextureSlot
+						TextureSlot = info.TextureSlot,
 					});
 					combinedImageSamplerCount++;
 				}
@@ -325,7 +335,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				var layoutCreateInfo = new SharpVulkan.DescriptorSetLayoutCreateInfo {
 					StructureType = SharpVulkan.StructureType.DescriptorSetLayoutCreateInfo,
 					BindingCount = (uint)bindings.Count,
-					Bindings = new IntPtr(bindingsPtr)
+					Bindings = new IntPtr(bindingsPtr),
 				};
 				descriptorSetLayout = context.Device.CreateDescriptorSetLayout(ref layoutCreateInfo);
 				descriptorSetUpdateTemplate = updateTemplate.ToArray();
@@ -338,7 +348,7 @@ namespace Lime.Graphics.Platform.Vulkan
 			var createInfo = new SharpVulkan.PipelineLayoutCreateInfo {
 				StructureType = SharpVulkan.StructureType.PipelineLayoutCreateInfo,
 				SetLayoutCount = 1,
-				SetLayouts = new IntPtr(&setLayout)
+				SetLayouts = new IntPtr(&setLayout),
 			};
 			pipelineLayout = context.Device.CreatePipelineLayout(ref createInfo);
 		}

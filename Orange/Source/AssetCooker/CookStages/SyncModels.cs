@@ -8,7 +8,7 @@ using SHA256 = Lime.SHA256;
 
 namespace Orange
 {
-	class SyncModels : ICookingStage
+	internal class SyncModels : ICookingStage
 	{
 		private readonly AssetCooker assetCooker;
 
@@ -45,7 +45,7 @@ namespace Orange
 			var options = new FbxImportOptions {
 				Path = fbxPath,
 				Target = assetCooker.Target,
-				CookingRulesMap = assetCooker.CookingRulesMap
+				CookingRulesMap = assetCooker.CookingRulesMap,
 			};
 			using (var fbxImporter = new FbxModelImporter(options)) {
 				model = fbxImporter.LoadModel();
@@ -87,8 +87,9 @@ namespace Orange
 			return Toolbox.ToUnixSlashes(Path.ChangeExtension(modelPath, null) + ".msh");
 		}
 
-		private void ExportModelAnimations(Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
-		{
+		private void ExportModelAnimations(
+			Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash
+		) {
 			var pathPrefix = GetModelAnimationPathPrefix(cookingUnit);
 			foreach (var animation in model.Animations) {
 				if (animation.IsLegacy) {
@@ -100,13 +101,19 @@ namespace Orange
 				var data = animation.GetData();
 				animation.ContentsPath = pathWithoutExt;
 				InternalPersistence.Instance.WriteToBundle(
-					assetCooker.OutputBundle, path, data, Persistence.Format.Binary,
-					cookingUnitHash, assetAttributes);
+					assetCooker.OutputBundle,
+					path,
+					data,
+					Persistence.Format.Binary,
+					cookingUnitHash,
+					assetAttributes
+				);
 			}
 		}
 
-		private void ExportModelMeshData(Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash)
-		{
+		private void ExportModelMeshData(
+			Model3D model, string cookingUnit, AssetAttributes assetAttributes, SHA256 cookingUnitHash
+		) {
 			var path = GetModelExternalMeshPath(cookingUnit);
 			var data = new Model3D.MeshData();
 			var submeshes = model.Descendants

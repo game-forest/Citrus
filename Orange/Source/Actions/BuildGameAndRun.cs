@@ -32,7 +32,8 @@ namespace Orange
 		public static bool RunGame(Target target)
 		{
 			var builder = new SolutionBuilder(target);
-			string arguments = string.Join(" ",
+			string arguments = string.Join(
+				" ",
 				PluginLoader.GetCommandLineArguments(),
 				Toolbox.GetCommandLineArg(ConsoleCommandPassArguments));
 			int exitCode = builder.Run(arguments);

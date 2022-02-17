@@ -20,15 +20,18 @@ namespace Lime
 		public bool Looped
 		{
 			get => decoder?.Looped ?? false;
-			set {
+			set
+			{
 				if (decoder != null) {
 					decoder.Looped = value;
 				}
 			}
 		}
-		public bool MuteAudio {
+		public bool MuteAudio
+		{
 			get => decoder?.MuteAudio ?? false;
-			set {
+			set
+			{
 				if (decoder != null) {
 					decoder.MuteAudio = value;
 				}

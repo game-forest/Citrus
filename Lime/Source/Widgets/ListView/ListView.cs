@@ -10,12 +10,19 @@ namespace Lime
 		public bool ManualItemsPositioning;
 		public float Spacing;
 
-		public ListView(Frame frame, ScrollDirection scrollDirection = ScrollDirection.Vertical, bool processChildrenFirst = false)
+		public ListView(
+			Frame frame, ScrollDirection scrollDirection = ScrollDirection.Vertical, bool processChildrenFirst = false
+		)
 			: this(frame, null, scrollDirection, processChildrenFirst)
 		{
 		}
 
-		public ListView(Frame frame, Widget slider, ScrollDirection scrollDirection = ScrollDirection.Vertical, bool processChildrenFirst = false)
+		public ListView(
+			Frame frame,
+			Widget slider,
+			ScrollDirection scrollDirection = ScrollDirection.Vertical,
+			bool processChildrenFirst = false
+		)
 			: base(frame, slider, scrollDirection, processChildrenFirst)
 		{
 			Content.ReverseOrderRendering = true;
@@ -56,8 +63,7 @@ namespace Lime
 				yield return null;
 			}
 		}
-	
-		#region IList<Widget> implementation
+
 		public void Add(Widget item)
 		{
 			PrepareWidgetBeforeInsertion(item);
@@ -171,7 +177,5 @@ namespace Lime
 			get { return Content.Nodes[index].AsWidget; }
 			set { Content.Nodes[index] = value; }
 		}
-
-		#endregion
 	}
 }

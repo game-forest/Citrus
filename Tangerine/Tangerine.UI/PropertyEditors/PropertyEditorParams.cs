@@ -77,7 +77,7 @@ namespace Tangerine.UI
 			PropertyPath = propertyPath;
 			TangerineAttribute = PropertyAttributes<TangerineKeyframeColorAttribute>.Get(Type, PropertyName)
 				?? new TangerineKeyframeColorAttribute(0);
-			Group = PropertyAttributes<TangerineGroupAttribute>.Get(Type, PropertyName)?.Name ?? String.Empty;
+			Group = PropertyAttributes<TangerineGroupAttribute>.Get(Type, PropertyName)?.Name ?? string.Empty;
 			PropertyInfo = Type.GetProperty(PropertyName);
 			NumericEditBoxFactory = () => new ThemedNumericEditBox();
 			DropDownListFactory = () => new ThemedDropDownList();
@@ -89,7 +89,7 @@ namespace Tangerine.UI
 			string propertyName,
 			string propertyPath = null,
 			string displayName = null
-		) : this(new [] { obj }, new [] { obj }, obj.GetType(), propertyName, propertyPath ?? propertyName)
+		) : this(new[] { obj }, new[] { obj }, obj.GetType(), propertyName, propertyPath ?? propertyName)
 		{
 			DisplayName = displayName;
 		}

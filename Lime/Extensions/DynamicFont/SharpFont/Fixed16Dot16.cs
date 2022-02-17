@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -33,8 +31,6 @@ namespace SharpFont
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct Fixed16Dot16 : IEquatable<Fixed16Dot16>, IComparable<Fixed16Dot16>
 	{
-		#region Fields
-
 		/// <summary>
 		/// The angle pi expressed in FT_Angle units.
 		/// </summary>
@@ -59,10 +55,6 @@ namespace SharpFont
 		/// The raw 16.16 integer.
 		/// </summary>
 		private int value;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Fixed16Dot16"/> struct.
@@ -100,10 +92,6 @@ namespace SharpFont
 			this.value = (int)(value * 65536);
 		}
 
-		#endregion
-
-		#region Properties
-
 		/// <summary>
 		/// Gets the raw 16.16 integer.
 		/// </summary>
@@ -114,12 +102,6 @@ namespace SharpFont
 				return value;
 			}
 		}
-
-		#endregion
-
-		#region Methods
-
-		#region Static
 
 		/// <summary>
 		/// Creates a <see cref="Fixed16Dot16"/> from an int containing a 16.16 value.
@@ -134,9 +116,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed16Dot16"/> from a <see cref="System.Int32"/>
+		/// Creates a new <see cref="Fixed16Dot16"/> from a <see cref="int"/>
 		/// </summary>
-		/// <param name="value">A <see cref="System.Int32"/> value.</param>
+		/// <param name="value">A <see cref="int"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed16Dot16"/> value.</returns>
 		public static Fixed16Dot16 FromInt32(int value)
 		{
@@ -144,7 +126,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed16Dot16"/> from <see cref="System.Single"/>.
+		/// Creates a new <see cref="Fixed16Dot16"/> from <see cref="float"/>.
 		/// </summary>
 		/// <param name="value">A floating-point value.</param>
 		/// <returns>A fixed 16.16 value.</returns>
@@ -154,7 +136,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed16Dot16"/> from a <see cref="System.Double"/>.
+		/// Creates a new <see cref="Fixed16Dot16"/> from a <see cref="double"/>.
 		/// </summary>
 		/// <param name="value">A floating-point value.</param>
 		/// <returns>A fixed 16.16 value.</returns>
@@ -164,7 +146,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="Fixed16Dot16"/> from a <see cref="System.Decimal"/>.
+		/// Creates a new <see cref="Fixed16Dot16"/> from a <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="value">A floating-point value.</param>
 		/// <returns>A fixed 16.16 value.</returns>
@@ -252,8 +234,8 @@ namespace SharpFont
 		/// <remarks><para>
 		/// NOTE: This is a native FreeType function.
 		/// </para><para>
-		/// The optimization for <see cref="DivideFix"/> is simple: If (a &lt;&lt; 16) fits in 32 bits, then the division
-		/// is computed directly. Otherwise, we use a specialized version of <see cref="MultiplyDivide"/>.
+		/// The optimization for <see cref="DivideFix"/> is simple: If (a &lt;&lt; 16) fits in 32 bits, then the
+		/// division is computed directly. Otherwise, we use a specialized version of <see cref="MultiplyDivide"/>.
 		/// </para></remarks>
 		/// <param name="a">The first multiplier.</param>
 		/// <param name="b">The second multiplier. Use a 16.16 factor here whenever possible (see note below).</param>
@@ -307,14 +289,10 @@ namespace SharpFont
 			return Fixed16Dot16.FromRawValue((int)FT.FT_Angle_Diff((IntPtr)angle1.Value, (IntPtr)angle2.Value));
 		}
 
-		#endregion
-
-		#region Operators
-
 		/// <summary>
-		/// Casts a <see cref="System.Int16"/> to a <see cref="Fixed16Dot16"/>.
+		/// Casts a <see cref="short"/> to a <see cref="Fixed16Dot16"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Int16"/> value.</param>
+		/// <param name="value">A <see cref="short"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed16Dot16"/> value.</returns>
 		public static implicit operator Fixed16Dot16(short value)
 		{
@@ -322,9 +300,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="System.Int32"/> to a <see cref="Fixed16Dot16"/>.
+		/// Casts a <see cref="int"/> to a <see cref="Fixed16Dot16"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Int32"/> value.</param>
+		/// <param name="value">A <see cref="int"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed16Dot16"/> value.</returns>
 		public static explicit operator Fixed16Dot16(int value)
 		{
@@ -332,9 +310,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="System.Single"/> to a <see cref="Fixed16Dot16"/>.
+		/// Casts a <see cref="float"/> to a <see cref="Fixed16Dot16"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Single"/> value.</param>
+		/// <param name="value">A <see cref="float"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed16Dot16"/> value.</returns>
 		public static explicit operator Fixed16Dot16(float value)
 		{
@@ -342,9 +320,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="System.Double"/> to a <see cref="Fixed16Dot16"/>.
+		/// Casts a <see cref="double"/> to a <see cref="Fixed16Dot16"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Double"/> value.</param>
+		/// <param name="value">A <see cref="double"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed16Dot16"/> value.</returns>
 		public static explicit operator Fixed16Dot16(double value)
 		{
@@ -352,9 +330,9 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="System.Single"/> to a <see cref="Fixed16Dot16"/>.
+		/// Casts a <see cref="float"/> to a <see cref="Fixed16Dot16"/>.
 		/// </summary>
-		/// <param name="value">A <see cref="System.Decimal"/> value.</param>
+		/// <param name="value">A <see cref="decimal"/> value.</param>
 		/// <returns>The equivalent <see cref="Fixed16Dot16"/> value.</returns>
 		public static explicit operator Fixed16Dot16(decimal value)
 		{
@@ -362,46 +340,46 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="System.Int32"/>.
+		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="int"/>.
 		/// </summary>
 		/// <remarks>
 		/// This operation can result in a loss of data.
 		/// </remarks>
 		/// <param name="value">A <see cref="Fixed16Dot16"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Int32"/> value.</returns>
+		/// <returns>The equivalent <see cref="int"/> value.</returns>
 		public static explicit operator int(Fixed16Dot16 value)
 		{
 			return value.ToInt32();
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="System.Single"/>.
+		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="float"/>.
 		/// </summary>
 		/// <remarks>
 		/// This operation can result in a loss of data.
 		/// </remarks>
 		/// <param name="value">A <see cref="Fixed16Dot16"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Single"/> value.</returns>
+		/// <returns>The equivalent <see cref="float"/> value.</returns>
 		public static explicit operator float(Fixed16Dot16 value)
 		{
 			return value.ToSingle();
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="System.Double"/>.
+		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="double"/>.
 		/// </summary>
 		/// <param name="value">A <see cref="Fixed16Dot16"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Double"/> value.</returns>
+		/// <returns>The equivalent <see cref="double"/> value.</returns>
 		public static implicit operator double(Fixed16Dot16 value)
 		{
 			return value.ToDouble();
 		}
 
 		/// <summary>
-		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="System.Decimal"/>.
+		/// Casts a <see cref="Fixed16Dot16"/> to a <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="value">A <see cref="Fixed16Dot16"/> value.</param>
-		/// <returns>The equivalent <see cref="System.Single"/> value.</returns>
+		/// <returns>The equivalent <see cref="float"/> value.</returns>
 		public static implicit operator decimal(Fixed16Dot16 value)
 		{
 			return value.ToDecimal();
@@ -517,10 +495,6 @@ namespace SharpFont
 			return left.CompareTo(right) >= 0;
 		}
 
-		#endregion
-
-		#region Instance
-
 		/// <summary>
 		/// Removes the decimal part of the value.
 		/// </summary>
@@ -537,7 +511,7 @@ namespace SharpFont
 		/// <returns>The result of ‘a &amp; -0x10000’.</returns>
 		public Fixed16Dot16 FloorFix()
 		{
-			//TODO does the P/Invoke overhead make this slower than re-implementing in C#? Test it
+			// TODO does the P/Invoke overhead make this slower than re-implementing in C#? Test it
 			return FromRawValue((int)FT.FT_FloorFix((IntPtr)this.Value));
 		}
 
@@ -547,7 +521,7 @@ namespace SharpFont
 		/// <returns>The nearest whole number.</returns>
 		public int Round()
 		{
-			//add 2^15, rounds the integer part up if the decimal value is >= 0.5
+			// add 2^15, rounds the integer part up if the decimal value is >= 0.5
 			return (value + 32768) >> 16;
 		}
 
@@ -567,7 +541,7 @@ namespace SharpFont
 		/// <returns>The next whole number.</returns>
 		public int Ceiling()
 		{
-			//add 2^16 - 1, rounds the integer part up if there's any decimal value
+			// add 2^16 - 1, rounds the integer part up if there's any decimal value
 			return (value + 65535) >> 16;
 		}
 
@@ -620,7 +594,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Int32"/>. The value is floored.
+		/// Converts the value to a <see cref="int"/>. The value is floored.
 		/// </summary>
 		/// <returns>An integer value.</returns>
 		public int ToInt32()
@@ -629,7 +603,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Single"/>.
+		/// Converts the value to a <see cref="float"/>.
 		/// </summary>
 		/// <returns>A floating-point value.</returns>
 		public float ToSingle()
@@ -638,7 +612,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Double"/>.
+		/// Converts the value to a <see cref="double"/>.
 		/// </summary>
 		/// <returns>A floating-point value.</returns>
 		public double ToDouble()
@@ -647,7 +621,7 @@ namespace SharpFont
 		}
 
 		/// <summary>
-		/// Converts the value to a <see cref="System.Decimal"/>.
+		/// Converts the value to a <see cref="decimal"/>.
 		/// </summary>
 		/// <returns>A decimal value.</returns>
 		public decimal ToDecimal()
@@ -676,10 +650,6 @@ namespace SharpFont
 		{
 			return value.CompareTo(other.value);
 		}
-
-		#endregion
-
-		#region Overrides
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -737,16 +707,13 @@ namespace SharpFont
 		/// <returns>A value indicating equality between the two objects.</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is Fixed16Dot16)
+			if (obj is Fixed16Dot16) {
 				return this.Equals((Fixed16Dot16)obj);
-			else if (obj is int)
+			} else if (obj is int) {
 				return value == ((Fixed16Dot16)obj).value;
-			else
+			} else {
 				return false;
+			}
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

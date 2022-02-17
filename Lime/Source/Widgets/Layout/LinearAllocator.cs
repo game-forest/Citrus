@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lime
 {
-	static class LinearAllocator
+	internal static class LinearAllocator
 	{
 		public static float[] Allocate(float availableSize, Constraints[] constraints, bool roundSizes)
 		{
@@ -25,7 +25,7 @@ namespace Lime
 					var c = constraints[i];
 					var s = availableSize * (c.Stretch / totalStretch);
 					s = Mathf.Clamp(s, c.MinSize, c.MaxSize);
-					allocatedSize += (sizes[i] = s);
+					allocatedSize += sizes[i] = s;
 				}
 				if (Math.Abs(allocatedSize - availableSize) < 0.1f) {
 					// We perfectly fit the items into the designated space.
@@ -77,4 +77,3 @@ namespace Lime
 		}
 	}
 }
-

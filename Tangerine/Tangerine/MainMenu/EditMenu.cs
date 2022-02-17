@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Lime;
-using Tangerine.UI;
+using Orange;
 using Tangerine.Core;
 using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
+using Tangerine.UI;
 using Node = Lime.Node;
-using System.IO;
-using Orange;
 
 namespace Tangerine
 {
@@ -96,7 +96,8 @@ namespace Tangerine
 						int removedAnimatorsCount = clone.RemoveDanglingAnimators();
 						Document.ExportNodeToFile(dlg.FileName, assetPath, clone);
 						if (removedAnimatorsCount != 0) {
-							var message = "Your exported content has references to external animations. It's forbidden.\n";
+							var message =
+								"Your exported content has references to external animations. It's forbidden.\n";
 							if (removedAnimatorsCount == 1) {
 								message += "1 dangling animator has been removed!";
 							} else {
@@ -121,7 +122,13 @@ namespace Tangerine
 				AlertDialog.Show("Please, select a single node");
 				return;
 			}
-			if (!(nodes[0] is Widget w && NodeCompositionValidator.CanHaveChildren(w.GetType()) && Document.Current != null)) {
+			if (
+				!(
+					nodes[0] is Widget w
+					&& NodeCompositionValidator.CanHaveChildren(w.GetType())
+					&& Document.Current != null
+				)
+			) {
 				AlertDialog.Show($"Can't inline {nodes[0].GetType()}");
 				return;
 			}

@@ -1,8 +1,8 @@
 using System;
-using Lime;
-using Tangerine.Core;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
+using Tangerine.Core;
 using Tangerine.Core.Components;
 
 namespace Tangerine.UI.Inspector
@@ -38,7 +38,10 @@ namespace Tangerine.UI.Inspector
 
 		public static void RegisterGlobalCommands()
 		{
-			CommandHandlerList.Global.Connect(InspectorCommands.InspectRootNodeCommand, () => Document.Current.InspectRootNode = !Document.Current.InspectRootNode);
+			CommandHandlerList.Global.Connect(
+				InspectorCommands.InspectRootNodeCommand,
+				() => Document.Current.InspectRootNode = !Document.Current.InspectRootNode
+			);
 			CommandHandlerList.Global.Connect(InspectorCommands.InspectEasing, new InspectEasingCommandHandler());
 			CommandHandlerList.Global.Connect(InspectorCommands.CopyAssetPath, new CopyAssetPathCommandHandler());
 		}
@@ -60,7 +63,8 @@ namespace Tangerine.UI.Inspector
 		{
 			public override void Execute()
 			{
-				var node = (InspectorCommands.CopyAssetPath.UserData as IEnumerable<Node>) ?? Document.Current?.SelectedNodes();
+				var node = (InspectorCommands.CopyAssetPath.UserData as IEnumerable<Node>)
+					?? Document.Current?.SelectedNodes();
 				Clipboard.Text = string.Join("\n", node?.Select((n, i) => n.GetRelativePath()));
 				InspectorCommands.CopyAssetPath.UserData = null;
 			}
@@ -104,20 +108,20 @@ namespace Tangerine.UI.Inspector
 			Objects = new List<object>();
 			content = new InspectorContent(contentWidget.Content) {
 				Footer = new Widget { MinHeight = 300.0f },
-				History = Document.Current.History
+				History = Document.Current.History,
 			};
 			DropFilesGesture.Recognized += content.DropFiles;
 			orangeLineWidget = new Widget {
 				Anchors = Anchors.TopBottom,
 				MinMaxWidth = 4,
-				Presenter = new WidgetFlatFillPresenter(Color4.Orange)
+				Presenter = new WidgetFlatFillPresenter(Color4.Orange),
 			};
 			rootWrapperWidget = new Widget {
 				Layout = new HBoxLayout(),
 				Nodes = {
 					orangeLineWidget,
-					RootWidget
-				}
+					RootWidget,
+				},
 			};
 			CreateWatchersToRebuild();
 			OnCreate?.Invoke(this);
@@ -125,8 +129,7 @@ namespace Tangerine.UI.Inspector
 
 		private static ToolbarModel GetToolbarLayout()
 		{
-			return new ToolbarModel
-			{
+			return new ToolbarModel {
 				Rows = {
 					new ToolbarModel.ToolbarRow {
 						Index = 0,
@@ -135,11 +138,11 @@ namespace Tangerine.UI.Inspector
 								Index = 0,
 								Title = "Inspector Toolbar Panel",
 								Draggable = false,
-								CommandIds = { "InspectRootNodeCommand", "InspectEasing", "CopyAssetPath" }
-							}
-						}
-					}
-				}
+								CommandIds = { "InspectRootNodeCommand", "InspectEasing", "CopyAssetPath" },
+							},
+						},
+					},
+				},
 			};
 		}
 
@@ -190,7 +193,10 @@ namespace Tangerine.UI.Inspector
 						var node = i.Components.Get<NodeSceneItem>()?.Node;
 						if (node != null) {
 							foreach (var component in node.Components) {
-								if (ClassAttributes<NodeComponentDontSerializeAttribute>.Get(component.GetType()) != null) {
+								if (
+									ClassAttributes<NodeComponentDontSerializeAttribute>
+										.Get(component.GetType()) != null
+								) {
 									continue;
 								}
 								r ^= component.GetHashCode();
@@ -255,8 +261,9 @@ namespace Tangerine.UI.Inspector
 
 			var types = new HashSet<Type>(InspectorContent.GetTypes(nodes));
 			var areEqual = types.SetEquals(prevTypes);
-			contentWidget.ScrollPosition = areEqual ?
-				Math.Min(contentWidget.MaxScrollPosition, contentWidget.ScrollPosition) : contentWidget.MinScrollPosition;
+			contentWidget.ScrollPosition = areEqual
+				? Math.Min(contentWidget.MaxScrollPosition, contentWidget.ScrollPosition)
+				: contentWidget.MinScrollPosition;
 			prevTypes = types;
 			yield break;
 		}

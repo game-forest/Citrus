@@ -1,4 +1,4 @@
-﻿using Yuzu;
+using Yuzu;
 
 namespace Lime.RenderOptimizer
 {
@@ -6,8 +6,8 @@ namespace Lime.RenderOptimizer
 	// means RenderOptimizer has never been invoked on this scene
 	public class HasContentSizeComponent : NodeComponent
 	{
-
 	}
+
 	public class ContentSizeComponent : NodeComponent
 	{
 		[YuzuOptional]
@@ -57,10 +57,7 @@ namespace Lime.RenderOptimizer
 		[YuzuOptional]
 		public Vector3[] Data = new Vector3[4];
 
-		public ContentPlane()
-		{
-
-		}
+		public ContentPlane() { }
 
 		public ContentPlane(Rectangle contentAABB)
 		{

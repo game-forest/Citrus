@@ -328,7 +328,7 @@ namespace Orange
 
 		public static string GetCommandLineArguments()
 		{
-			string result = "";
+			string result = string.Empty;
 			if (CurrentPlugin != null) {
 				result = GetPluginCommandLineArgumets();
 			}
@@ -337,7 +337,7 @@ namespace Orange
 
 		private static string GetPluginCommandLineArgumets()
 		{
-			return CurrentPlugin.CommandLineArguments.Aggregate("", (current, i) => current + i());
+			return CurrentPlugin.CommandLineArguments.Aggregate(string.Empty, (current, i) => current + i());
 		}
 
 		private static void ValidateComposition()
@@ -365,7 +365,7 @@ namespace Orange
 					var field = member as FieldInfo;
 					if (field.FieldType.GetInterfaces().Contains(typeof(IEnumerable))) {
 						importedCount += ((ICollection)field.GetValue(CurrentPlugin)).Count;
-					} else if (field.GetValue(CurrentPlugin) != null ){
+					} else if (field.GetValue(CurrentPlugin) != null ) {
 						importedCount++;
 					}
 				}

@@ -38,14 +38,8 @@ namespace Orange.FbxImporter
 			ProjectionMode = cam.ProjectionMode;
 		}
 
-		#region Pinvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxNodeGetCameraAttribute(IntPtr node);
-
-		#endregion
-
-		#region MarshalingStructures
 
 		[StructLayout(LayoutKind.Sequential, CharSet = ImportConfig.Charset)]
 		private class Camera
@@ -69,7 +63,5 @@ namespace Orange.FbxImporter
 
 			public CameraProjectionMode ProjectionMode;
 		}
-
-		#endregion
 	}
 }

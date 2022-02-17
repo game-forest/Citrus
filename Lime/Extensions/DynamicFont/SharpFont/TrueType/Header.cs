@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -167,23 +165,13 @@ namespace SharpFont.TrueType
 	/// </summary>
 	public class Header
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private HeaderRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal Header(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// The version number of this table definition.
@@ -389,7 +377,5 @@ namespace SharpFont.TrueType
 				rec = PInvokeHelper.PtrToStructure<HeaderRec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

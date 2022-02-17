@@ -48,23 +48,17 @@ namespace Lime
 			MemoryUsed = GraphicsUtility.CalculateImageDataSize(format, width, height);
 		}
 
-		public Size ImageSize {
-			get { return size; }
-		}
+		public Size ImageSize => size;
 
-		public Size SurfaceSize {
-			get { return size; }
-		}
+		public Size SurfaceSize => size;
 
 		public ITexture AtlasTexture => this;
 
-		public Rectangle AtlasUVRect {
-			get { return uvRect; }
-		}
+		public Rectangle AtlasUVRect => uvRect;
 
-		public ITexture AlphaTexture { get { return null; } }
+		public ITexture AlphaTexture => null;
 
-		public void TransformUVCoordinatesToAtlasSpace(ref Vector2 uv) {}
+		public void TransformUVCoordinatesToAtlasSpace(ref Vector2 uv) { }
 
 		private void DisposeInternal()
 		{
@@ -92,7 +86,9 @@ namespace Lime
 		public IPlatformRenderTexture2D GetPlatformTexture()
 		{
 			if (platformTexture == null) {
-				platformTexture = PlatformRenderer.Context.CreateRenderTexture2D(Format, size.Width, size.Height, textureParams);
+				platformTexture = PlatformRenderer.Context.CreateRenderTexture2D(
+					Format, size.Width, size.Height, textureParams
+				);
 			}
 			return platformTexture;
 		}
@@ -133,7 +129,14 @@ namespace Lime
 		{
 			var pixels = new Color4[PixelCount];
 			fixed (Color4* pixelsPtr = pixels) {
-				GetPlatformTexture().ReadPixels(Format.R8G8B8A8_UNorm, 0, 0, size.Width, size.Height, new IntPtr(pixelsPtr));
+				GetPlatformTexture().ReadPixels(
+					format: Format.R8G8B8A8_UNorm,
+					x: 0,
+					y: 0,
+					width: size.Width,
+					height: size.Height,
+					pixels: new IntPtr(pixelsPtr)
+				);
 			}
 			return pixels;
 		}
@@ -152,7 +155,14 @@ namespace Lime
 				throw new InvalidOperationException();
 			}
 			fixed (Color4* pixelsPtr = destinationArray) {
-				GetPlatformTexture().ReadPixels(Format.R8G8B8A8_UNorm, 0, 0, size.Width, size.Height, new IntPtr(pixelsPtr));
+				GetPlatformTexture().ReadPixels(
+					format: Format.R8G8B8A8_UNorm,
+					x: 0,
+					y: 0,
+					width: size.Width,
+					height: size.Height,
+					pixels: new IntPtr(pixelsPtr)
+				);
 			}
 		}
 	}

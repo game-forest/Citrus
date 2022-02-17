@@ -13,13 +13,14 @@ namespace Lime
 
 		public readonly ObservableCollection<MeshOption> MeshOptions = new ObservableCollection<MeshOption>();
 		public readonly ObservableCollection<Animation> Animations = new ObservableCollection<Animation>();
-		public readonly ObservableCollection<NodeComponentCollection> NodeComponents = new ObservableCollection<NodeComponentCollection>();
+		public readonly ObservableCollection<NodeComponentCollection> NodeComponents =
+			new ObservableCollection<NodeComponentCollection>();
 		public readonly ObservableCollection<NodeRemoval> NodeRemovals = new ObservableCollection<NodeRemoval>();
 		public readonly ObservableCollection<MaterialRemap> Materials = new ObservableCollection<MaterialRemap>();
 
 		public float ScaleFactor { get; set; }
 
-		public string EntryTrigger{ get; set; }
+		public string EntryTrigger { get; set; }
 
 		public class MeshOption
 		{
@@ -41,7 +42,8 @@ namespace Lime
 			public ObservableCollection<NodeData> Nodes = new ObservableCollection<NodeData>();
 			public ObservableCollection<NodeData> IgnoredNodes = new ObservableCollection<NodeData>();
 			public BlendingOption Blending { get; set; }
-			public readonly ObservableCollection<MarkerBlendingData> MarkersBlendings = new ObservableCollection<MarkerBlendingData>();
+			public readonly ObservableCollection<MarkerBlendingData> MarkersBlendings =
+				new ObservableCollection<MarkerBlendingData>();
 
 			public int GetHashCodeForTrigger()
 			{
@@ -116,7 +118,7 @@ namespace Lime
 		{
 			var meshes = model.Nodes.OfType<Mesh3D>();
 			var map = new Dictionary<int, List<Mesh3D>>();
-			foreach(var mesh in meshes) {
+			foreach (var mesh in meshes) {
 				if (mesh.Animators.Any() ||
 					mesh.Components.Any(c => !(c is UpdatableNodeBehavior)) ||
 					(MeshOptions.FirstOrDefault(m => m.Id == mesh.Id)?.DisableMerging ?? mesh.Nodes.Count != 0) ||
@@ -157,7 +159,10 @@ namespace Lime
 		{
 			const int meshLimit = ushort.MaxValue;
 			const int bonesLimit = 50;
-			if (map.Count == 0) return;
+			if (map.Count == 0) {
+				return;
+			}
+
 			foreach (var pair in map) {
 				var materialsMap = new Dictionary<IMaterial, Dictionary<Mesh3D, List<Submesh3D>>>();
 				foreach (var mesh in pair.Value) {
@@ -179,7 +184,7 @@ namespace Lime
 						Opaque = first.Opaque,
 						CullMode = first.CullMode,
 						SkinningMode = first.SkinningMode,
-						HitTestTarget = first.HitTestTarget
+						HitTestTarget = first.HitTestTarget,
 					};
 					Submesh3D curSubmesh = null;
 					foreach (var meshAndSubmeshes in meshDescriptor) {
@@ -206,7 +211,7 @@ namespace Lime
 								curSubmesh = null;
 							}
 						}
-						newMesh.Id += (newMesh.Id == null ? "" : "|") + meshAndSubmeshes.Key.Id;
+						newMesh.Id += (newMesh.Id == null ? string.Empty : "|") + meshAndSubmeshes.Key.Id;
 					}
 					newMesh.Submeshes.Add(curSubmesh);
 					model.AddNode(newMesh);
@@ -217,12 +222,11 @@ namespace Lime
 			}
 		}
 
-
 		public static Submesh3D Combine(params Submesh3D[] submeshes)
 		{
 			var firstMesh = submeshes.First();
 			var newSubmesh = new Submesh3D {
-				Material = firstMesh.Material
+				Material = firstMesh.Material,
 			};
 			var numVertices = submeshes.Select(sm => sm.Mesh).Sum(m => m.Vertices.Length);
 			var numIndices = submeshes.Select(sm => sm.Mesh).Sum(m => m.Indices.Length);
@@ -259,7 +263,7 @@ namespace Lime
 				Vertices = outVertices,
 				Indices = outIndices,
 				AttributeLocations = firstMesh.Mesh.AttributeLocations,
-				DirtyFlags = MeshDirtyFlags.All
+				DirtyFlags = MeshDirtyFlags.All,
 			};
 			return newSubmesh;
 		}
@@ -334,7 +338,9 @@ namespace Lime
 						}
 						submesh.Mesh.DirtyFlags |= MeshDirtyFlags.Vertices;
 						for (var i = 0; i < submesh.BoneBindPoses.Count; i++) {
-							submesh.BoneBindPoses[i].Decompose(out var scale, out Quaternion rotation, out var tranlation);
+							submesh.BoneBindPoses[i].Decompose(
+								out var scale, out Quaternion rotation, out var tranlation
+							);
 							tranlation *= sf;
 							submesh.BoneBindPoses[i] =
 								Matrix44.CreateRotation(rotation) *
@@ -421,13 +427,18 @@ namespace Lime
 						// Check if the animation has been deleted but attachment hasn't been modified after that.
 						if (srcAnimation == null) {
 #if TANGERINE
-							Console.WriteLine($"Attachment3D Warning: skip '{ animation.Id }' animation applying. Source Fbx file have no animation data.");
+							Console.WriteLine(
+								$"Attachment3D Warning: skip '{animation.Id}' animation applying. " +
+								$"Source Fbx file have no animation data."
+							);
 #endif // TANGERINE
 							continue;
 						}
 					} else {
 #if TANGERINE
-						Console.WriteLine($"Attachment3D Warning: source animation '{ animation.SourceAnimationId }' not found");
+						Console.WriteLine(
+							$"Attachment3D Warning: source animation '{animation.SourceAnimationId}' not found"
+						);
 #endif // TANGERINE
 						continue;
 					}
@@ -442,7 +453,7 @@ namespace Lime
 				var newAnimation = srcAnimation;
 				if (animationId != animation.SourceAnimationId) {
 					newAnimation = new Lime.Animation {
-						Id = animationId
+						Id = animationId,
 					};
 					newAnimations.Add(newAnimation);
 					model.Animations.Add(newAnimation);
@@ -455,7 +466,7 @@ namespace Lime
 								if (newAnimator.Keys.Count > 0) {
 									newAnimators.Add(new NodeAndAnimator {
 										Node = node,
-										Animator = newAnimator
+										Animator = newAnimator,
 									});
 								}
 							}
@@ -466,7 +477,7 @@ namespace Lime
 				}
 
 				var animationBlending = new AnimationBlending() {
-					Option = animation.Blending
+					Option = animation.Blending,
 				};
 
 				foreach (var data in animation.Markers) {
@@ -475,7 +486,7 @@ namespace Lime
 						animationBlending.MarkersOptions.Add(
 							data.Marker.Id,
 							new MarkerBlending {
-								Option = data.Blending
+								Option = data.Blending,
 							});
 					}
 				}
@@ -489,7 +500,8 @@ namespace Lime
 				}
 
 				if (animationBlending.Option != null || animationBlending.MarkersOptions.Count > 0) {
-					model.Components.GetOrAdd<AnimationBlender>().Options.Add(newAnimation.Id ?? "", animationBlending);
+					model.Components.GetOrAdd<AnimationBlender>().Options
+						.Add(newAnimation.Id ?? string.Empty, animationBlending);
 				}
 
 				foreach (var i in newAnimators) {
@@ -501,7 +513,11 @@ namespace Lime
 			foreach (var animation in model.Animations.Except(newAnimations).ToList()) {
 				var srcAnimators = animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList();
 				if (animationsToReduce.Keys.Contains(animation.Id)) {
-					srcAnimators.ForEach(a => ReduceKeys(a, animationsToReduce[animation.Id].Item1, animationsToReduce[animation.Id].Item2));
+					srcAnimators.ForEach(
+						a => ReduceKeys(
+							a, animationsToReduce[animation.Id].Item1, animationsToReduce[animation.Id].Item2
+						)
+					);
 					foreach (var animator in srcAnimators.Where(a => a.Keys.Count == 0)) {
 						animator.Owner.Animators.Remove(animator);
 					}
@@ -516,7 +532,9 @@ namespace Lime
 
 		private static void CopyKeys(IAnimator srcAnimator, IAnimator dstAnimator, int startFrame, int lastFrame)
 		{
-			if (!GetEffectiveKeyRange(srcAnimator, startFrame, lastFrame, out var startKeyIndex, out var lastKeyIndex)) {
+			if (!GetEffectiveKeyRange(
+				srcAnimator, startFrame, lastFrame, out var startKeyIndex, out var lastKeyIndex)
+			) {
 				return;
 			}
 			if (startFrame != srcAnimator.ReadonlyKeys[startKeyIndex].Frame) {
@@ -544,8 +562,9 @@ namespace Lime
 			}
 		}
 
-		private static bool GetEffectiveKeyRange(IAnimator animator, int startFrame, int lastFrame, out int startKeyIndex, out int lastKeyIndex)
-		{
+		private static bool GetEffectiveKeyRange(
+			IAnimator animator, int startFrame, int lastFrame, out int startKeyIndex, out int lastKeyIndex
+		) {
 			startKeyIndex = -1;
 			lastKeyIndex = -1;
 			if (animator.ReadonlyKeys.Count == 0) {
@@ -574,7 +593,9 @@ namespace Lime
 
 		private void ProcessNodeRemovals(Node3D model)
 		{
-			var nodes = NodeRemovals.SelectMany(removal => model.Descendants.Where(node => string.Equals(removal.NodeId, node.Id))).ToList();
+			var nodes = NodeRemovals.SelectMany(
+				removal => model.Descendants.Where(node => string.Equals(removal.NodeId, node.Id))
+			).ToList();
 			foreach (var node in nodes) {
 				node.Unlink();
 			}
@@ -587,7 +608,10 @@ namespace Lime
 				foreach (var attachmentNode in attachmentAnimation.Nodes.Distinct()) {
 					var node = model.TryFindNode(attachmentNode.Id);
 					if (node == null) {
-						Console.WriteLine($"Attachment3D Warning: Undable to add \"{ attachmentNode.Id }\" to the list of animable nodes. Node not found");
+						Console.WriteLine(
+							$"Attachment3D Warning: Undable to add \"{attachmentNode.Id}\" " +
+							$"to the list of animable nodes. Node not found"
+						);
 						continue;
 					}
 					nodeList.Add(node);
@@ -599,7 +623,10 @@ namespace Lime
 				foreach (var nodeData in attachmentAnimation.IgnoredNodes.Distinct()) {
 					var node = model.TryFindNode(nodeData.Id);
 					if (node == null) {
-						Console.WriteLine($"Attachment3D Warning: Undable to add \"{ nodeData.Id }\" to the list ignored for animation nodes. Node not found");
+						Console.WriteLine(
+							$"Attachment3D Warning: Undable to add \"{nodeData.Id}\" to the list " +
+							$"ignored for animation nodes. Node not found"
+						);
 						continue;
 					}
 					nodeList.Add(node);
@@ -626,14 +653,14 @@ namespace Lime
 		public enum UVAnimationType
 		{
 			Rotation,
-			Offset
+			Offset,
 		}
 
 		public enum UVAnimationOverlayBlending
 		{
 			Multiply,
 			Overlay,
-			Add
+			Add,
 		}
 
 		public class ModelAttachmentFormat
@@ -789,12 +816,17 @@ namespace Lime
 		public static Model3DAttachment GetModel3DAttachment(string modelPath)
 		{
 			return GetModel3DAttachment(
-				InternalPersistence.Instance.ReadFromBundle<ModelAttachmentFormat>(AssetBundle.Current, GetAttachmentPath(modelPath)),
-				modelPath);
+				InternalPersistence.Instance.ReadFromBundle<ModelAttachmentFormat>(
+					AssetBundle.Current,
+					GetAttachmentPath(modelPath)
+				),
+				modelPath
+			);
 		}
 
-		public static Model3DAttachment GetModel3DAttachment(ModelAttachmentFormat modelAttachmentFormat, string modelPath)
-		{
+		public static Model3DAttachment GetModel3DAttachment(
+			ModelAttachmentFormat modelAttachmentFormat, string modelPath
+		) {
 			try {
 				var attachment = new Model3DAttachment {
 					ScaleFactor = modelAttachmentFormat.ScaleFactor,
@@ -805,7 +837,7 @@ namespace Lime
 						var meshOption = new Model3DAttachment.MeshOption {
 							Id = meshOptionFormat.Key,
 							HitTestTarget = meshOptionFormat.Value.HitTestTarget,
-							Opaque = meshOptionFormat.Value.Opaque
+							Opaque = meshOptionFormat.Value.Opaque,
 						};
 						if (!string.IsNullOrEmpty(meshOptionFormat.Value.CullMode)) {
 							switch (meshOptionFormat.Value.CullMode) {
@@ -832,7 +864,7 @@ namespace Lime
 						var componentDescr = new Model3DAttachment.NodeComponentCollection {
 							NodeId = nodeComponentFormat.Key,
 							Components = new ObservableCollection<NodeComponent>(nodeComponentFormat.Value.Components),
-							IsRoot = nodeComponentFormat.Value.IsRoot
+							IsRoot = nodeComponentFormat.Value.IsRoot,
 						};
 						attachment.NodeComponents.Add(componentDescr);
 					}
@@ -850,7 +882,7 @@ namespace Lime
 							Id = animationFormat.Key,
 							StartFrame = animationFormat.Value.StartFrame,
 							LastFrame = animationFormat.Value.LastFrame,
-							SourceAnimationId = null
+							SourceAnimationId = null,
 						};
 
 						if (animationFormat.Value.Markers != null) {
@@ -858,8 +890,8 @@ namespace Lime
 								var markerData = new Model3DAttachment.MarkerData {
 									Marker = new Marker {
 										Id = markerFormat.Key,
-										Frame = FixFrame(markerFormat.Value.Frame)
-									}
+										Frame = FixFrame(markerFormat.Value.Frame),
+									},
 								};
 								if (!string.IsNullOrEmpty(markerFormat.Value.Action)) {
 									switch (markerFormat.Value.Action) {
@@ -901,12 +933,18 @@ namespace Lime
 								animationFormat.Value.Nodes.Select(n => new Model3DAttachment.NodeData { Id = n }));
 						}
 						animation.SourceAnimationId = animationFormat.Value.SourceAnimationId;
-						if (animationFormat.Value.IgnoredNodes != null && animationFormat.Value.IgnoredNodes.Count > 0) {
+						if (
+							animationFormat.Value.IgnoredNodes != null && animationFormat.Value.IgnoredNodes.Count > 0
+						) {
 							if (animation.Nodes.Count > 0) {
-								throw new Exception("Conflict between 'Nodes' and 'IgnoredNodes' in animation '{0}", animation.Id);
+								throw new Exception(
+									"Conflict between 'Nodes' and 'IgnoredNodes' in animation '{0}", animation.Id
+								);
 							}
 							animation.IgnoredNodes = new ObservableCollection<Model3DAttachment.NodeData>(
-								animationFormat.Value.IgnoredNodes.Select(n => new Model3DAttachment.NodeData { Id = n }));
+								animationFormat.Value.IgnoredNodes
+									.Select(n => new Model3DAttachment.NodeData { Id = n })
+							);
 						}
 
 						attachment.Animations.Add(animation);
@@ -928,7 +966,9 @@ namespace Lime
 		public static void Save(Model3DAttachment attachment, string path)
 		{
 			var attachmentPath = path + ".Attachment.txt";
-			InternalPersistence.Instance.WriteToFile(attachmentPath, ConvertToModelAttachmentFormat(attachment), Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToFile(
+				attachmentPath, ConvertToModelAttachmentFormat(attachment), Persistence.Format.Json
+			);
 		}
 
 		public static ModelAttachmentFormat ConvertToModelAttachmentFormat(Model3DAttachment attachment)
@@ -954,7 +994,7 @@ namespace Lime
 			foreach (var meshOption in attachment.MeshOptions) {
 				var meshOptionFormat = new MeshOptionFormat {
 					HitTestTarget = meshOption.HitTestTarget,
-					Opaque = meshOption.Opaque
+					Opaque = meshOption.Opaque,
 				};
 				switch (meshOption.CullMode) {
 					case CullMode.None:
@@ -977,7 +1017,7 @@ namespace Lime
 				var componentFormat = new ModelComponentsFormat {
 					Node = component.NodeId,
 					Components = component.Components.ToList(),
-					IsRoot = component.IsRoot
+					IsRoot = component.IsRoot,
 				};
 				origin.NodeComponents.Add(component.NodeId, componentFormat);
 			}
@@ -985,7 +1025,6 @@ namespace Lime
 			foreach (var removal in attachment.NodeRemovals) {
 				origin.NodeRemovals.Add(removal.NodeId);
 			}
-
 
 			foreach (var material in attachment.Materials) {
 				origin.Materials.Add(material);
@@ -995,11 +1034,11 @@ namespace Lime
 					StartFrame = animation.StartFrame,
 					LastFrame = animation.LastFrame,
 					Markers = new Dictionary<string, ModelMarkerFormat>(),
-					SourceAnimationId = animation.SourceAnimationId
+					SourceAnimationId = animation.SourceAnimationId,
 				};
 				foreach (var markerData in animation.Markers) {
 					var markerFormat = new ModelMarkerFormat {
-						Frame = markerData.Marker.Frame
+						Frame = markerData.Marker.Frame,
 					};
 					switch (markerData.Marker.Action) {
 						case MarkerAction.Play:
@@ -1015,8 +1054,13 @@ namespace Lime
 					}
 					if (animation.MarkersBlendings.Count > 0) {
 						markerFormat.SourceMarkersBlending = new Dictionary<string, int>();
-						foreach (var markerBlending in animation.MarkersBlendings.Where(m => m.DestMarkerId == markerData.Marker.Id)) {
-							markerFormat.SourceMarkersBlending.Add(markerBlending.SourceMarkerId, (int)markerBlending.Blending.Frames);
+						foreach (
+							var markerBlending
+							in animation.MarkersBlendings.Where(m => m.DestMarkerId == markerData.Marker.Id)
+						) {
+							markerFormat.SourceMarkersBlending.Add(
+								markerBlending.SourceMarkerId, (int)markerBlending.Blending.Frames
+							);
 						}
 					}
 					if (markerData.Blending != null) {
@@ -1030,7 +1074,9 @@ namespace Lime
 				}
 
 				if (animation.Nodes.Count > 0) {
-					animationFormat.Nodes = animation.Nodes.Count > 0 ? animation.Nodes.Select(n => n.Id).ToList() : null;
+					animationFormat.Nodes = animation.Nodes.Count > 0
+						? animation.Nodes.Select(n => n.Id).ToList()
+						: null;
 				} else if (animation.IgnoredNodes.Count > 0) {
 					animationFormat.IgnoredNodes = animation.IgnoredNodes.Select(n => n.Id).ToList();
 				}
@@ -1043,7 +1089,9 @@ namespace Lime
 		private static string FixPath(string modelPath, string path)
 		{
 			var baseDir = Path.GetDirectoryName(modelPath);
-			return AssetPath.CorrectSlashes(Path.Combine(AssetPath.CorrectSlashes(baseDir), AssetPath.CorrectSlashes(path)));
+			return AssetPath.CorrectSlashes(
+				Path.Combine(AssetPath.CorrectSlashes(baseDir), AssetPath.CorrectSlashes(path))
+			);
 		}
 
 		private static int FixFrame(int frame, double fps = 30)

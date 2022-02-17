@@ -1,6 +1,6 @@
-using Lime;
 using System;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.UI;
 
@@ -33,11 +33,11 @@ namespace Tangerine.Dialogs
 				Layout = new HBoxLayout { Spacing = 10 },
 				Nodes = {
 					CreateCategoryList(),
-					CreateSearchBox()
-				}
+					CreateSearchBox(),
+				},
 			});
 			var widget = new Widget {
-				Layout = new HBoxLayout()
+				Layout = new HBoxLayout(),
 			};
 			AddNode(widget);
 			widget.AddNode(AddLabel(availableCommands, "Available commands:"));
@@ -56,10 +56,10 @@ namespace Tangerine.Dialogs
 				LayoutCell = new LayoutCell { StretchX = 2 },
 				Nodes = {
 					new ThemedSimpleText("Search: ") {
-						LayoutCell = new LayoutCell(Alignment.LeftCenter)
+						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 					},
-					filterEditBox
-				}
+					filterEditBox,
+				},
 			};
 		}
 
@@ -80,16 +80,17 @@ namespace Tangerine.Dialogs
 				Layout = new VBoxLayout { Spacing = 10 },
 				Nodes = {
 					new ThemedSimpleText(label),
-					widget
-				}
+					widget,
+				},
 			};
 		}
 
-		private static ToolbarButton CreateButton(string textureId, string tooltip, Action clicked, params ListBox[] listBoxes)
-		{
+		private static ToolbarButton CreateButton(
+			string textureId, string tooltip, Action clicked, params ListBox[] listBoxes
+		) {
 			var result = new ToolbarButton {
 				Texture = IconPool.GetTexture(textureId),
-				Tooltip = tooltip
+				Tooltip = tooltip,
 			};
 			result.Clicked += () => {
 				clicked();
@@ -150,10 +151,10 @@ namespace Tangerine.Dialogs
 							CreateButton("Preferences.MoveUp", "Move panel up", () => MovePanel(-1), panelList),
 							CreateButton("Preferences.MoveDown", "Move panel down", () => MovePanel(1), panelList),
 							CreateButton("Preferences.AddRow", "Add row", AddRow, panelList),
-						}
+						},
 					},
-					panelList
-				}
+					panelList,
+				},
 			});
 		}
 
@@ -200,7 +201,7 @@ namespace Tangerine.Dialogs
 			var row = panel?.Parent ?? toolbarModel.Rows[0];
 			var newPanel = new ToolbarModel.ToolbarPanel() {
 				Title = "Panel",
-				Index = panel?.Index ?? 0
+				Index = panel?.Index ?? 0,
 			};
 			var panelRow = new PanelItem(newPanel);
 			var index = panelList.SelectedIndex;
@@ -362,10 +363,12 @@ namespace Tangerine.Dialogs
 				Nodes = {
 					CreateButton("Preferences.MoveUp", "Move command up", () => MoveCommand(-1), usedCommands),
 					CreateButton("Preferences.MoveRight", "Add command", AddCommand, usedCommands, availableCommands),
-					CreateButton("Preferences.MoveLeft", "Remove command", RemoveCommand, usedCommands, availableCommands),
+					CreateButton(
+						"Preferences.MoveLeft", "Remove command", RemoveCommand, usedCommands, availableCommands
+					),
 					CreateButton("Preferences.MoveDown", "Move command down", () => MoveCommand(1), usedCommands),
-					CreateButton("Preferences.ToolbarSpacer", "Add spacer", () => AddSpacer(), usedCommands)
-				}
+					CreateButton("Preferences.ToolbarSpacer", "Add spacer", () => AddSpacer(), usedCommands),
+				},
 			};
 		}
 
@@ -373,13 +376,13 @@ namespace Tangerine.Dialogs
 		{
 			var spacer = new Widget {
 				Layout = new HBoxLayout { Spacing = 10 },
-				Padding = new Thickness(5)
+				Padding = new Thickness(5),
 			};
 			spacer.AddNode(Spacer.HSpacer(16));
 			spacer.AddNode(new ThemedSimpleText {
 				Text = "Spacer",
 				LayoutCell = new LayoutCell(Alignment.Center),
-				Padding = new Thickness { Left = 5 }
+				Padding = new Thickness { Left = 5 },
 			});
 			spacer.AddNode(new Widget());
 			return spacer;
@@ -466,7 +469,8 @@ namespace Tangerine.Dialogs
 			public ToolbarModel.ToolbarPanel Panel
 			{
 				get => panel;
-				set {
+				set
+				{
 					panel = value;
 					StopEdit();
 					RefreshTitle();
@@ -539,7 +543,7 @@ namespace Tangerine.Dialogs
 				AddNode(new ThemedSimpleText {
 					Text = commandInfo.Title,
 					LayoutCell = new LayoutCell(Alignment.Center),
-					Padding = new Thickness { Left = 5 }
+					Padding = new Thickness { Left = 5 },
 				});
 				AddNode(new Widget());
 			}
@@ -580,13 +584,15 @@ namespace Tangerine.Dialogs
 			private ListBoxItem selectedItem = null;
 			public ListBoxItem SelectedItem
 			{
-				get {
+				get
+				{
 					if (selectedItem?.Parent == null) {
 						selectedItem = null;
 					}
 					return selectedItem;
 				}
-				set {
+				set
+				{
 					if (value != null && value.parent != this) {
 						throw new ArgumentException();
 					}

@@ -28,10 +28,24 @@ namespace Lime
 		[YuzuMember]
 		public bool Opaque { get; set; }
 
-		private bool RequiredBrightnessContrastProcess =>
-			Mathf.Abs(Brightness - DefaultBrightness) >= Mathf.ZeroTolerance || Mathf.Abs(Contrast - DefaultContrast) >= Mathf.ZeroTolerance;
-		private bool RequiredHSLProcess =>
-			Mathf.Abs(HSL.X - defaultHSL.X) >= Mathf.ZeroTolerance || Mathf.Abs(HSL.Y - defaultHSL.Y) >= Mathf.ZeroTolerance || Mathf.Abs(HSL.Z - defaultHSL.Z) >= Mathf.ZeroTolerance;
+		private bool RequiredBrightnessContrastProcess
+		{
+			get
+			{
+				return Mathf.Abs(Brightness - DefaultBrightness) >= Mathf.ZeroTolerance
+					|| Mathf.Abs(Contrast - DefaultContrast) >= Mathf.ZeroTolerance;
+			}
+		}
+
+		private bool RequiredHSLProcess
+		{
+			get
+			{
+				return Mathf.Abs(HSL.X - defaultHSL.X) >= Mathf.ZeroTolerance
+					|| Mathf.Abs(HSL.Y - defaultHSL.Y) >= Mathf.ZeroTolerance
+					|| Mathf.Abs(HSL.Z - defaultHSL.Z) >= Mathf.ZeroTolerance;
+			}
+		}
 
 		public string Id { get; set; }
 		public int PassCount => 1;
@@ -54,7 +68,9 @@ namespace Lime
 			shaderParams.Set(brightnessKey, Brightness);
 			shaderParams.Set(contrastKey, Contrast);
 			PlatformRenderer.SetBlendState(!Opaque ? Blending.GetBlendState() : disabledBlendingState);
-			PlatformRenderer.SetShaderProgram(ColorCorrectionShaderProgram.GetInstance(RequiredBrightnessContrastProcess, RequiredHSLProcess, Opaque));
+			PlatformRenderer.SetShaderProgram(ColorCorrectionShaderProgram.GetInstance(
+				RequiredBrightnessContrastProcess, RequiredHSLProcess, Opaque)
+			);
 			PlatformRenderer.SetShaderParams(shaderParamsArray);
 		}
 
@@ -157,28 +173,47 @@ namespace Lime
 				gl_FragColor = vec4(color.rgb, 1.0);
 			}";
 
-		private static readonly Dictionary<int, ColorCorrectionShaderProgram> instances = new Dictionary<int, ColorCorrectionShaderProgram>();
+		private static readonly Dictionary<int, ColorCorrectionShaderProgram> instances =
+			new Dictionary<int, ColorCorrectionShaderProgram>();
 
-		private static int GetInstanceKey(bool requiredBrightnessContrast, bool requiredHSL, bool opaque) =>
-			(requiredBrightnessContrast ? 1 : 0) | ((requiredHSL ? 1 : 0) << 1) | ((opaque ? 1 : 0) << 2);
-
-		public static ColorCorrectionShaderProgram GetInstance(bool requiredBrightnessContrast = false, bool requiredHSL = false, bool opaque = false)
+		private static int GetInstanceKey(bool requiredBrightnessContrast, bool requiredHSL, bool opaque)
 		{
-			var key = GetInstanceKey(requiredBrightnessContrast, requiredHSL, opaque);
-			return instances.TryGetValue(key, out var shaderProgram) ? shaderProgram : (instances[key] = new ColorCorrectionShaderProgram(requiredBrightnessContrast, requiredHSL, opaque));
+			return (requiredBrightnessContrast ? 1 : 0)
+				| ((requiredHSL ? 1 : 0) << 1)
+				| ((opaque ? 1 : 0) << 2);
 		}
 
-		private ColorCorrectionShaderProgram(bool requiredBrightnessContrast, bool requiredHSL, bool opaque) :
-			base(CreateShaders(requiredBrightnessContrast, requiredHSL, opaque), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
+		public static ColorCorrectionShaderProgram GetInstance(
+			bool requiredBrightnessContrast = false,
+			bool requiredHSL = false,
+			bool opaque = false
+		) {
+			var key = GetInstanceKey(requiredBrightnessContrast, requiredHSL, opaque);
+			return instances.TryGetValue(key, out var shaderProgram)
+				? shaderProgram
+				: (instances[key] = new ColorCorrectionShaderProgram(requiredBrightnessContrast, requiredHSL, opaque));
+		}
+
+		private ColorCorrectionShaderProgram(bool requiredBrightnessContrast, bool requiredHSL, bool opaque)
+			: base(
+				  CreateShaders(requiredBrightnessContrast, requiredHSL, opaque),
+				  ShaderPrograms.Attributes.GetLocations(),
+				  ShaderPrograms.GetSamplers()
+			)
+		{ }
 
 		private static Shader[] CreateShaders(bool requiredBrightnessContrast, bool requiredHSL, bool opaque)
 		{
 			var length =
-				(requiredBrightnessContrast ? FragmentShaderUniformBrightnessContrast.Length + FragmentShaderBrightnessContrast.Length : 0) +
-				(requiredHSL ? FragmentShaderUniformHSL.Length + FragmentShaderHSLMethods.Length + FragmentShaderHSL.Length : 0) +
-				FragmentShaderUniform.Length +
-				FragmentShaderPart1.Length +
-				(!opaque ? FragmentShaderPart2.Length : FragmentShaderPart2Opaque.Length);
+				(requiredBrightnessContrast
+					? FragmentShaderUniformBrightnessContrast.Length + FragmentShaderBrightnessContrast.Length
+					: 0
+				) + (requiredHSL
+					? FragmentShaderUniformHSL.Length + FragmentShaderHSLMethods.Length + FragmentShaderHSL.Length
+					: 0
+				) + FragmentShaderUniform.Length
+				+ FragmentShaderPart1.Length
+				+ (!opaque ? FragmentShaderPart2.Length : FragmentShaderPart2Opaque.Length);
 			var fragmentShader = new StringBuilder(length);
 			if (requiredBrightnessContrast) {
 				fragmentShader.Append(FragmentShaderUniformBrightnessContrast);
@@ -200,7 +235,7 @@ namespace Lime
 			fragmentShader.Append(!opaque ? FragmentShaderPart2 : FragmentShaderPart2Opaque);
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

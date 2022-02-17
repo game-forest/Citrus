@@ -24,7 +24,10 @@ namespace Tangerine.UI.SceneView
 						float t = 0;
 						float animationSpeed = CalcAnimationSpeed(exposition.ItemCount);
 						while (true) {
-							if ((sv.Input.IsKeyPressed(MainKey) || sv.Input.IsKeyPressed(MultiSelectKey)) && !exposition.Closed()) {
+							if (
+								(sv.Input.IsKeyPressed(MainKey)
+								|| sv.Input.IsKeyPressed(MultiSelectKey)) && !exposition.Closed()
+							) {
 								if (t < animationLength) {
 									t += Lime.Task.Current.Delta * animationSpeed;
 									if (t >= animationLength) {
@@ -49,7 +52,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		static float CalcAnimationSpeed(int itemCount)
+		private static float CalcAnimationSpeed(int itemCount)
 		{
 			if (itemCount < 5) {
 				return 4;
@@ -64,12 +67,12 @@ namespace Tangerine.UI.SceneView
 			return Mathf.Sin(time.Clamp(0, length) / length * Mathf.HalfPi);
 		}
 
-		class Exposition : IDisposable
+		private class Exposition : IDisposable
 		{
-			const float spacing = 20;
-			readonly Widget canvas;
-			readonly List<Item> items;
-			readonly WidgetFlatFillPresenter blackBackgroundPresenter;
+			private const float Spacing = 20;
+			private readonly Widget canvas;
+			private readonly List<Item> items;
+			private readonly WidgetFlatFillPresenter blackBackgroundPresenter;
 
 			public int ItemCount => items.Count;
 
@@ -79,10 +82,18 @@ namespace Tangerine.UI.SceneView
 				canvas = CreateCanvas(container);
 				var cellSize = CalcCellSize(container.Size, GetWidgets().Count());
 				int itemCount = GetWidgets().Count();
-				items = GetWidgets().Select((w, i) => new Item(w, CreateItemFrame(i, canvas, cellSize), input, showLabel: itemCount <= 50)).ToList();
+				items = GetWidgets()
+					.Select(
+						(w, i) => new Item(
+							widget: w,
+							frame: CreateItemFrame(i, canvas, cellSize),
+							input: input,
+							showLabel: itemCount <= 50
+						)
+					).ToList();
 			}
 
-			static Frame CreateItemFrame(int index, Widget canvas, Vector2 cellSize)
+			private static Frame CreateItemFrame(int index, Widget canvas, Vector2 cellSize)
 			{
 				var rect = GetPlacementRect(index, cellSize, canvas.Size);
 				var frame = new Frame { Position = new Vector2(rect.A.X.Round(), rect.A.Y.Round()), Size = cellSize };
@@ -90,20 +101,23 @@ namespace Tangerine.UI.SceneView
 				return frame;
 			}
 
-			static Rectangle GetPlacementRect(int index, Vector2 cellSize, Vector2 canvasSize)
+			private static Rectangle GetPlacementRect(int index, Vector2 cellSize, Vector2 canvasSize)
 			{
-				var stride = cellSize + Vector2.One * spacing;
+				var stride = cellSize + Vector2.One * Spacing;
 				var cellsPerRow = (canvasSize.X / stride.X).Floor();
 				var a = new Vector2(
-					(index % cellsPerRow) * stride.X + spacing / 2,
-					(index / cellsPerRow) * stride.Y + spacing / 2
-				);
+					index % cellsPerRow * stride.X + Spacing / 2,
+					index / cellsPerRow * stride.Y + Spacing / 2);
 				return new Rectangle(a, a + cellSize);
 			}
 
-			Widget CreateCanvas(Widget root)
+			private Widget CreateCanvas(Widget root)
 			{
-				var canvas = new Widget { HitTestTarget = true, Anchors = Anchors.LeftRightTopBottom, Size = root.Size };
+				var canvas = new Widget {
+					HitTestTarget = true,
+					Anchors = Anchors.LeftRightTopBottom,
+					Size = root.Size,
+				};
 				canvas.CompoundPresenter.Add(blackBackgroundPresenter);
 				root.Nodes.Push(canvas);
 				return canvas;
@@ -138,10 +152,10 @@ namespace Tangerine.UI.SceneView
 				return items.Any(i => i.Closed);
 			}
 
-			static Vector2 CalcCellSize(Vector2 canvasSize, int itemCount)
+			private static Vector2 CalcCellSize(Vector2 canvasSize, int itemCount)
 			{
 				if (itemCount == 1) {
-					return canvasSize - spacing * Vector2.One;
+					return canvasSize - Spacing * Vector2.One;
 				}
 				var size = Vector2.Zero;
 				for (float w = 20; w < canvasSize.X; w += 5) {
@@ -153,22 +167,24 @@ namespace Tangerine.UI.SceneView
 					}
 					size = new Vector2(w, h);
 				}
-				return size - spacing * Vector2.One;
+				return size - Spacing * Vector2.One;
 			}
 
-			static IEnumerable<Widget> GetWidgets()
+			private static IEnumerable<Widget> GetWidgets()
 			{
-				return Document.Current.ContainerChildNodes().OfType<Widget>().Where(n => !n.GetTangerineFlag(TangerineFlags.Hidden));
+				return Document.Current.ContainerChildNodes()
+					.OfType<Widget>()
+					.Where(n => !n.GetTangerineFlag(TangerineFlags.Hidden));
 			}
 
-			class Item
+			private class Item
 			{
-				readonly Widget originalWidget;
-				readonly Widget exposedWidget;
-				readonly Transform2 originalTransform;
-				readonly WidgetBoundsPresenter borderPresenter;
-				readonly Frame frame;
-				readonly SimpleText label;
+				private readonly Widget originalWidget;
+				private readonly Widget exposedWidget;
+				private readonly Transform2 originalTransform;
+				private readonly WidgetBoundsPresenter borderPresenter;
+				private readonly Frame frame;
+				private readonly SimpleText label;
 				private double savedTime;
 				public bool Closed { get; private set; }
 
@@ -179,21 +195,29 @@ namespace Tangerine.UI.SceneView
 					originalWidget = widget;
 					exposedWidget = (Widget)widget.Clone();
 					exposedWidget.Animations.Clear();
-					originalTransform = (widget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(frame)).ToTransform2();
+					originalTransform = (
+						widget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(frame)
+					).ToTransform2();
 					originalWidget.SetTangerineFlag(TangerineFlags.HiddenOnExposition, true);
 					frame.HitTestTarget = true;
-					var clickArea = new Widget { Size = frame.Size, Anchors = Anchors.LeftRightTopBottom, HitTestTarget = true };
+					var clickArea = new Widget {
+						Size = frame.Size,
+						Anchors = Anchors.LeftRightTopBottom,
+						HitTestTarget = true,
+					};
 					frame.AddNode(clickArea);
 					label = new ThemedSimpleText {
 						Visible = showLabel,
 						Position = new Vector2(3, 2),
 						Color = ColorTheme.Current.SceneView.Label,
-						Text = (exposedWidget.Id ?? ""),
-						OverflowMode = TextOverflowMode.Ignore
+						Text = exposedWidget.Id ?? string.Empty,
+						OverflowMode = TextOverflowMode.Ignore,
 					};
 					frame.AddNode(label);
 					frame.AddNode(exposedWidget);
-					borderPresenter = new WidgetBoundsPresenter(ColorTheme.Current.SceneView.ExposedItemInactiveBorder, 1);
+					borderPresenter = new WidgetBoundsPresenter(
+						ColorTheme.Current.SceneView.ExposedItemInactiveBorder, 1
+					);
 					frame.CompoundPresenter.Push(borderPresenter);
 					int lastFrame = 0;
 					foreach (var node in exposedWidget.Nodes) {
@@ -244,14 +268,16 @@ namespace Tangerine.UI.SceneView
 					exposedWidget.DefaultAnimation.IsRunning = true;
 				}
 
-				Transform2 CalcExposedTransform(Widget widget, Frame frame)
+				private Transform2 CalcExposedTransform(Widget widget, Frame frame)
 				{
 					var rect = CalcGlobalAABB(widget);
 					var t = widget.LocalToWorldTransform.CalcInversed();
 					rect.A *= t;
 					rect.B *= t;
 					var size = new Vector2(widget.Width.Abs(), widget.Height.Abs());
-					var transform = new Transform2 { Scale = Vector2.One * Mathf.Min(size.X / rect.Width.Abs(), size.Y / rect.Height.Abs()) };
+					var transform = new Transform2 {
+						Scale = Vector2.One * Mathf.Min(size.X / rect.Width.Abs(), size.Y / rect.Height.Abs()),
+					};
 					if (size.X < float.Epsilon || size.Y < float.Epsilon) {
 						return transform;
 					}
@@ -261,8 +287,10 @@ namespace Tangerine.UI.SceneView
 							frame.Height / size.Y;
 						transform.Scale *= scale;
 					}
-					transform.Translation.X = (frame.Size.X - (rect.Width - 2 * rect.AX.Abs()) * transform.Scale.X) / 2;
-					transform.Translation.Y = (frame.Size.Y - (rect.Height - 2 * rect.AY.Abs()) * transform.Scale.Y) / 2;
+					transform.Translation.X = (frame.Size.X - (rect.Width - 2 * rect.AX.Abs()) * transform.Scale.X)
+						/ 2;
+					transform.Translation.Y = (frame.Size.Y - (rect.Height - 2 * rect.AY.Abs()) * transform.Scale.Y)
+						/ 2;
 					return transform;
 				}
 
@@ -281,7 +309,7 @@ namespace Tangerine.UI.SceneView
 							V1 = Vector2.Zero * transform,
 							V2 = new Vector2(widget.Width, 0) * transform,
 							V3 = widget.Size * transform,
-							V4 = new Vector2(0, widget.Height) * transform
+							V4 = new Vector2(0, widget.Height) * transform,
 						}.ToAABB();
 						foreach (var childNode in widget.Nodes) {
 							var aabb = CalcGlobalAABB(childNode);
@@ -298,7 +326,8 @@ namespace Tangerine.UI.SceneView
 				public void Dispose()
 				{
 					originalWidget.SetTangerineFlag(TangerineFlags.HiddenOnExposition, false);
-					// Dispose cloned object to preserve keyframes identity in the original node. See Animator.Dispose().
+					// Dispose cloned object to preserve keyframes
+					// identity in the original node. See Animator.Dispose().
 					exposedWidget.UnlinkAndDispose();
 				}
 

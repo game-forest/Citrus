@@ -33,7 +33,7 @@ namespace Lime
 				HAlignment = HAlignment.Center,
 				VAlignment = VAlignment.Center,
 				OverflowMode = TextOverflowMode.Ellipsis,
-				LayoutCell = new LayoutCell(Alignment.Center)
+				LayoutCell = new LayoutCell(Alignment.Center),
 			};
 			var presenter = new TabPresenter(caption);
 			Presenter = presenter;
@@ -41,7 +41,7 @@ namespace Lime
 				OnRunAnimation = (animation, markerId, animationTimeCorrection) => {
 					presenter.SetState(markerId);
 					return true;
-				}
+				},
 			};
 			var closeButton = new ThemedTabCloseButton { Id = "CloseButton" };
 			AddNode(caption);
@@ -49,7 +49,7 @@ namespace Lime
 			LateTasks.Add(Theme.MouseHoverInvalidationTask(this));
 		}
 
-		class TabPresenter : IPresenter
+		private class TabPresenter : IPresenter
 		{
 			private SimpleText label;
 			private bool active;
@@ -73,7 +73,8 @@ namespace Lime
 				var widget = (Widget)node;
 				var ro = RenderObjectPool<RenderObject>.Acquire();
 				ro.CaptureRenderState(widget);
-				ro.Color = active || widget.IsMouseOverThisOrDescendant() ? Theme.Colors.TabActive : Theme.Colors.TabNormal;
+				ro.Color = active ||
+					widget.IsMouseOverThisOrDescendant() ? Theme.Colors.TabActive : Theme.Colors.TabNormal;
 				ro.Size = widget.Size;
 				return ro;
 			}
@@ -94,14 +95,14 @@ namespace Lime
 
 	public class VectorShapeButtonPresenter : IPresenter
 	{
-		private readonly VectorShape Shape;
+		private readonly VectorShape shape;
 
 		public VectorShapeButtonPresenter(VectorShape shape)
 		{
-			Shape = shape;
+			this.shape = shape;
 		}
 
-		Color4 color;
+		private Color4 color;
 
 		public bool PartialHitTest(Node node, ref HitTestArgs args)
 		{
@@ -127,7 +128,7 @@ namespace Lime
 			ro.CaptureRenderState(widget);
 			ro.Size = widget.Size;
 			ro.Color = color;
-			ro.Shape = Shape;
+			ro.Shape = shape;
 			return ro;
 		}
 
@@ -171,7 +172,7 @@ namespace Lime
 				OnRunAnimation = (animation, markerId, animationTimeCorrection) => {
 					presenter.SetState(markerId);
 					return true;
-				}
+				},
 			};
 			CompoundPresenter.Add(presenter);
 			CompoundPresenter.Add(fill);

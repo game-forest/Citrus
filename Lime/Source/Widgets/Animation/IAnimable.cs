@@ -63,7 +63,8 @@ namespace Lime
 				return;
 			}
 			foreach (var a in host.Animators) {
-				// Optimization: absence of `.` in path means its a node property being animated, so we never need to unbind it
+				// Optimization: absence of `.` in path means its a node property being
+				// animated, so we never need to unbind it
 				if (a.TargetPropertyPath.IndexOf('.') != -1) {
 					a.Unbind();
 				}
@@ -155,7 +156,9 @@ namespace Lime
 		{
 			var t = typeof(T);
 			if (!t.IsValueType && t != typeof(string) && !typeof(IAnimable).IsAssignableFrom(t)) {
-				throw new InvalidOperationException("T must be either value type, string or class implementing IAnimable");
+				throw new InvalidOperationException(
+					"T must be either value type, string or class implementing IAnimable"
+				);
 			}
 		}
 	}

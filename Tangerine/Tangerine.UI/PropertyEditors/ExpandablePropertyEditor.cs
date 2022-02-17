@@ -39,21 +39,23 @@ namespace Tangerine.UI
 			ExpandableContent = new ThemedFrame {
 				Padding = new Thickness(4),
 				Layout = new VBoxLayout(),
-				Visible = false
+				Visible = false,
 			};
 			ExpandButton = new ThemedExpandButton {
 				MinMaxSize = Vector2.One * 20f,
-				LayoutCell = new LayoutCell(Alignment.LeftCenter)
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
 			};
 			ExpandButton.Clicked += () => Expanded = !Expanded;
 			ContainerWidget.AddNode(ExpandableContent);
-			ExpandableContent.AddChangeWatcher(() => EditorContainer.GloballyEnabled,
+			ExpandableContent.AddChangeWatcher(
+				() => EditorContainer.GloballyEnabled,
 				enabled => ExpandableContent.Enabled = enabled);
 			LabelContainer.Nodes.Insert(0, ExpandButton);
 			editorPath = editorParams.PropertyPath;
-			Expanded = Expanded ||
-				CoreUserPreferences.Instance.InspectorExpandableEditorsState.TryGetValue(editorPath, out var isEnabled) &&
-				isEnabled;
+			Expanded = Expanded
+				|| CoreUserPreferences.Instance.InspectorExpandableEditorsState.TryGetValue(
+						editorPath, out var isEnabled
+				) && isEnabled;
 		}
 	}
 }

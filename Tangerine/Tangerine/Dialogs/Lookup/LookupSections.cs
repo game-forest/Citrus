@@ -94,7 +94,7 @@ namespace Tangerine
 			Push(section);
 			recentlySubmittedData = null;
 		}
-		
+
 		public void Push(LookupSection section)
 		{
 			stack.Push(section);
@@ -139,7 +139,9 @@ namespace Tangerine
 			lookupWidget.DataSource = section?.DataSource;
 			lookupWidget.Filter = section?.Filter;
 			lookupWidget.HintText = section?.HintText;
-			lookupWidget.SetBreadcrumbsNavigation(stack.Select(s => s.Breadcrumb).Reverse().Where(s => !string.IsNullOrEmpty(s)));
+			lookupWidget.SetBreadcrumbsNavigation(
+				stack.Select(s => s.Breadcrumb).Reverse().Where(s => !string.IsNullOrEmpty(s))
+			);
 		}
 
 		private void NavigatedBack()

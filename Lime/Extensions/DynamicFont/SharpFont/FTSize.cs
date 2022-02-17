@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2013, 2015-2016 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -34,8 +32,6 @@ namespace SharpFont
 	/// </summary>
 	public sealed class FTSize : IDisposable
 	{
-		#region Fields
-
 		private bool userAlloc;
 		private bool disposed;
 		private bool duplicate;
@@ -44,10 +40,6 @@ namespace SharpFont
 		private SizeRec rec;
 
 		private Face parentFace;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FTSize"/> class.
@@ -58,8 +50,9 @@ namespace SharpFont
 			IntPtr reference;
 			Error err = FT.FT_New_Size(parent.Reference, out reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 
 			Reference = reference;
 			userAlloc = true;
@@ -71,13 +64,10 @@ namespace SharpFont
 
 			this.userAlloc = userAlloc;
 
-			if (parentFace != null)
-			{
+			if (parentFace != null) {
 				this.parentFace = parentFace;
 				parentFace.AddChildSize(this);
-			}
-			else
-			{
+			} else {
 				duplicate = true;
 			}
 		}
@@ -90,18 +80,10 @@ namespace SharpFont
 			Dispose(false);
 		}
 
-		#endregion
-
-		#region Events
-
 		/// <summary>
 		/// Occurs when the size is disposed.
 		/// </summary>
 		public event EventHandler Disposed;
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets a value indicating whether the object has been disposed.
@@ -121,35 +103,39 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Face", "Cannot access a disposed object.");
+				}
 
 				return parentFace;
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets a typeless pointer, which is unused by the FreeType library or any of its drivers. It can be used by
-		/// client applications to link their own data to each size object.
+		/// Gets or sets a typeless pointer, which is unused by the FreeType library or any of its drivers.
+		/// It can be used by client applications to link their own data to each size object.
 		/// </summary>
 		[Obsolete("Use the Tag property and Disposed event instead.")]
 		public Generic Generic
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Generic", "Cannot access a disposed object.");
+				}
 
 				return new Generic(rec.generic);
 			}
 
 			set
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Generic", "Cannot access a disposed object.");
+				}
 
 				value.WriteToUnmanagedMemory(PInvokeHelper.AbsoluteOffsetOf<SizeRec>(Reference, "generic"));
-				Reference = reference; //update rec.
+				// update rec.
+				Reference = reference;
 			}
 		}
 
@@ -160,8 +146,9 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Metrics", "Cannot access a disposed object.");
+				}
 
 				return new SizeMetrics(rec.metrics);
 			}
@@ -181,25 +168,23 @@ namespace SharpFont
 		{
 			get
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				return reference;
 			}
 
 			set
 			{
-				if (disposed)
+				if (disposed) {
 					throw new ObjectDisposedException("Reference", "Cannot access a disposed object.");
+				}
 
 				reference = value;
 				this.rec = PInvokeHelper.PtrToStructure<SizeRec>(reference);
 			}
 		}
-
-		#endregion
-
-		#region Public Methods
 
 		/// <summary><para>
 		/// Even though it is possible to create several size objects for a given face (see
@@ -215,13 +200,15 @@ namespace SharpFont
 		/// </remarks>
 		public void Activate()
 		{
-			if (disposed)
+			if (disposed) {
 				throw new ObjectDisposedException("Activate", "Cannot access a disposed object.");
+			}
 
 			Error err = FT.FT_Activate_Size(Reference);
 
-			if (err != Error.Ok)
+			if (err != Error.Ok) {
 				throw new FreeTypeException(err);
+			}
 		}
 
 		/// <summary>
@@ -233,37 +220,31 @@ namespace SharpFont
 			GC.SuppressFinalize(this);
 		}
 
-		#endregion
-
-		#region Private Methods
-
 		private void Dispose(bool disposing)
 		{
-			if (!disposed)
-			{
+			if (!disposed) {
 				disposed = true;
 
-				//only dispose the user allocated sizes that are not duplicates.
-				if (userAlloc && !duplicate)
-				{
+				// only dispose the user allocated sizes that are not duplicates.
+				if (userAlloc && !duplicate) {
 					FT.FT_Done_Size(reference);
 				}
 
 				// removes itself from the parent Face, with a check to prevent this from happening when Face is
 				// being disposed (Face disposes all it's children with a foreach loop, this causes an
 				// InvalidOperationException for modifying a collection during enumeration)
-				if (parentFace != null && !parentFace.IsDisposed)
+				if (parentFace != null && !parentFace.IsDisposed) {
 					parentFace.RemoveChildSize(this);
+				}
 
 				reference = IntPtr.Zero;
 				rec = new SizeRec();
 
 				EventHandler handler = Disposed;
-				if (handler != null)
+				if (handler != null) {
 					handler(this, EventArgs.Empty);
+				}
 			}
 		}
-
-		#endregion
 	}
 }

@@ -14,9 +14,21 @@ namespace Tangerine.UI.Timeline
 	{
 		public static void Bind()
 		{
-			ConnectCommand(TimelineCommands.EnterNode, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
-			ConnectCommand(TimelineCommands.EnterNodeAlias, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
-			ConnectCommand(TimelineCommands.EnterNodeMouse, () => Timeline.Instance.Roll.TreeView.ActivateItem(), Document.HasCurrent);
+			ConnectCommand(
+				command: TimelineCommands.EnterNode,
+				action: () => Timeline.Instance.Roll.TreeView.ActivateItem(),
+				enableChecker: Document.HasCurrent
+			);
+			ConnectCommand(
+				command: TimelineCommands.EnterNodeAlias,
+				action: () => Timeline.Instance.Roll.TreeView.ActivateItem(),
+				enableChecker: Document.HasCurrent
+			);
+			ConnectCommand(
+				command: TimelineCommands.EnterNodeMouse,
+				action: () => Timeline.Instance.Roll.TreeView.ActivateItem(),
+				enableChecker: Document.HasCurrent
+			);
 			ConnectCommand(TimelineCommands.Expand, ExpandOrCollapse, Document.HasCurrent);
 			ConnectCommand(TimelineCommands.ExpandRecursively, ExpandOrCollapseRecursively, Document.HasCurrent);
 			ConnectCommand(TimelineCommands.RenameSceneItem, RenameCurrentSceneItem);
@@ -25,8 +37,14 @@ namespace Tangerine.UI.Timeline
 			ConnectCommand(TimelineCommands.ExitNodeMouse, LeaveNode.Perform);
 			ConnectCommand(TimelineCommands.ScrollUp, () => Timeline.Instance.Roll.TreeView.SelectPreviousItem());
 			ConnectCommand(TimelineCommands.ScrollDown, () => Timeline.Instance.Roll.TreeView.SelectNextItem());
-			ConnectCommand(TimelineCommands.SelectNodeUp, () => Timeline.Instance.Roll.TreeView.SelectRangePreviousItem());
-			ConnectCommand(TimelineCommands.SelectNodeDown, () => Timeline.Instance.Roll.TreeView.SelectRangeNextItem());
+			ConnectCommand(
+				TimelineCommands.SelectNodeUp,
+				() => Timeline.Instance.Roll.TreeView.SelectRangePreviousItem()
+			);
+			ConnectCommand(
+				TimelineCommands.SelectNodeDown,
+				() => Timeline.Instance.Roll.TreeView.SelectRangeNextItem()
+			);
 			ConnectCommand(TimelineCommands.ScrollLeft, () => AdvanceCurrentColumn(-1));
 			ConnectCommand(TimelineCommands.ScrollRight, () => AdvanceCurrentColumn(1));
 			ConnectCommand(TimelineCommands.FastScrollLeft, () => AdvanceCurrentColumn(-10));
@@ -173,12 +191,14 @@ namespace Tangerine.UI.Timeline
 			var timeline = Timeline.Instance;
 			var nearestMarker = Document.Current.Animation.Markers.LastOrDefault(
 				m => m.Frame < timeline.CurrentColumn && m.Action == MarkerAction.Play);
-			string markerId = (action == MarkerAction.Play) ? GenerateMarkerId(Document.Current.Animation.Markers, "Start") : "";
+			string markerId = (action == MarkerAction.Play)
+				? GenerateMarkerId(Document.Current.Animation.Markers, "Start")
+				: string.Empty;
 			var newMarker = new Marker(
 				markerId,
 				timeline.CurrentColumn,
 				action,
-				action == MarkerAction.Jump && nearestMarker != null ? nearestMarker.Id : ""
+				action == MarkerAction.Jump && nearestMarker != null ? nearestMarker.Id : string.Empty
 			);
 			SetMarker.Perform(newMarker, true);
 		}

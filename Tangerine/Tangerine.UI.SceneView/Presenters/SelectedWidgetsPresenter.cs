@@ -8,12 +8,14 @@ using Tangerine.UI.AnimeshEditor;
 
 namespace Tangerine.UI.SceneView
 {
-	class SelectedWidgetsPresenter
+	internal class SelectedWidgetsPresenter
 	{
 		private SceneView sceneView;
 
 		private readonly VisualHint selectedWidgetPivotVisualHint =
-			VisualHintsRegistry.Instance.Register("/All/Selected Widget Pivot", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+			VisualHintsRegistry.Instance.Register(
+				"/All/Selected Widget Pivot", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		public SelectedWidgetsPresenter(SceneView sceneView)
 		{
@@ -40,11 +42,12 @@ namespace Tangerine.UI.SceneView
 			pivot = pivot * sceneView.CalcTransitionFromSceneSpace(canvas);
 			// Render rectangles.
 			var locked = widgets.Any(w => w.GetTangerineFlag(TangerineFlags.Locked));
-			var color = locked ? ColorTheme.Current.SceneView.LockedWidgetBorder : ColorTheme.Current.SceneView.Selection;
+			var color = locked
+				? ColorTheme.Current.SceneView.LockedWidgetBorder
+				: ColorTheme.Current.SceneView.Selection;
 			if (
 				widgets.Count == 1 && widgets[0] is Animesh &&
-				AnimeshTools.State != AnimeshTools.ModificationState.Transformation
-			) {
+				AnimeshTools.State != AnimeshTools.ModificationState.Transformation) {
 				return;
 			}
 			for (int i = 0; i < 4; i++) {
@@ -77,14 +80,20 @@ namespace Tangerine.UI.SceneView
 					Renderer.DrawLine(a, b, ColorTheme.Current.SceneView.SelectedWidget, 1);
 				}
 				var p = widget.GlobalPivotPosition * sceneView.CalcTransitionFromSceneSpace(canvas);
-				Renderer.DrawSprite(t, ColorTheme.Current.SceneView.SelectedWidgetPivotOutline, p - iconSize / 2, iconSize, Vector2.Zero, Vector2.One);
+				Renderer.DrawSprite(
+					texture1: t,
+					color: ColorTheme.Current.SceneView.SelectedWidgetPivotOutline,
+					position: p - iconSize / 2,
+					size: iconSize,
+					uv0: Vector2.Zero,
+					uv1: Vector2.One
+				);
 				if (selectedWidgetPivotVisualHint.Enabled) {
 					Renderer.DrawRectOutline(
 						p - iconSize / 2 - 5 * Vector2.One,
 						p + iconSize / 2 + 5 * Vector2.One,
 						ColorTheme.Current.SceneView.SelectedWidgetPivotOutline,
-						2.0f
-					);
+						2.0f);
 				}
 			}
 			// Render multi-pivot mark.
@@ -93,14 +102,18 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		void DrawStretchMark(Vector2 position)
+		private void DrawStretchMark(Vector2 position)
 		{
-			Renderer.DrawRect(position - Vector2.One * 3, position + Vector2.One * 3, ColorTheme.Current.SceneView.Selection);
+			Renderer.DrawRect(
+				position - Vector2.One * 3, position + Vector2.One * 3, ColorTheme.Current.SceneView.Selection
+			);
 		}
 
-		void DrawMultiPivotMark(Vector2 position)
+		private void DrawMultiPivotMark(Vector2 position)
 		{
-			Renderer.DrawRect(position - Vector2.One * 5, position + Vector2.One * 5, ColorTheme.Current.SceneView.Selection);
+			Renderer.DrawRect(
+				position - Vector2.One * 5, position + Vector2.One * 5, ColorTheme.Current.SceneView.Selection
+			);
 		}
 	}
 }

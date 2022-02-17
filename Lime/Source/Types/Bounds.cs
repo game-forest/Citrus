@@ -4,7 +4,8 @@ using Yuzu;
 namespace Lime
 {
 	/// <summary>
-	/// An axis-aligned bounding box, or AABB for short, is a box aligned with coordinate axes and fully enclosing some object.
+	/// An axis-aligned bounding box, or AABB for short, is a box
+	/// aligned with coordinate axes and fully enclosing some object.
 	/// </summary>
 	[YuzuCompact]
 	public struct Bounds : IEquatable<Bounds>
@@ -84,7 +85,12 @@ namespace Lime
 
 		public bool Contains(Vector3 value)
 		{
-			return (value.X >= A.X) && (value.Y >= A.Y) && (value.Z >= A.Z) && (value.X < B.X) && (value.Y < B.Y) && (value.Z < B.Z);
+			return (value.X >= A.X)
+				&& (value.Y >= A.Y)
+				&& (value.Z >= A.Z)
+				&& (value.X < B.X)
+				&& (value.Y < B.Y)
+				&& (value.Z < B.Z);
 		}
 
 		public static Bounds Intersect(Bounds value1, Bounds value2)

@@ -28,12 +28,12 @@ namespace Tangerine.UI.FilesystemView
 				new Image {
 					LayoutCell = new LayoutCell {
 						Stretch = Vector2.Zero,
-						Alignment = new Alignment { X = HAlignment.Right, Y = VAlignment.Center }
+						Alignment = new Alignment { X = HAlignment.Right, Y = VAlignment.Center },
 					},
 					MinMaxSize = new Vector2(IconSize, IconSize),
 					Texture = SystemIconTextureProvider.Instance.GetTexture(FilesystemPath),
 				},
-				(text = new ThemedSimpleText {
+				text = new ThemedSimpleText {
 					ForceUncutText = false,
 					OverflowMode = TextOverflowMode.Ellipsis,
 					Text =
@@ -41,18 +41,21 @@ namespace Tangerine.UI.FilesystemView
 						FilesystemPath.Remove(FilesystemPath.Length - 1) :
 						Path.GetFileName(FilesystemPath),
 					LayoutCell = new LayoutCell {
-						Alignment = new Alignment { X = HAlignment.Right, Y = VAlignment.Bottom }
-					}
-				}),
+						Alignment = new Alignment { X = HAlignment.Right, Y = VAlignment.Bottom },
+					},
+				},
 				new Widget {
 					LayoutCell = new LayoutCell {
-						StretchX = float.MaxValue
+						StretchX = float.MaxValue,
 					},
 					MinWidth = 0,
-					HitTestTarget = true
+					HitTestTarget = true,
 				}
 			);
-			text.Width = text.MinMaxWidth = Mathf.Min(ItemWidth - (IconSize + ItemPadding * 2 + Spacing + 2), text.MeasureUncutText().X);
+			text.Width = text.MinMaxWidth = Mathf.Min(
+				ItemWidth - (IconSize + ItemPadding * 2 + Spacing + 2),
+				text.MeasureUncutText().X
+			);
 		}
 	}
 }

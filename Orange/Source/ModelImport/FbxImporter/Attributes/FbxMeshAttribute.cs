@@ -65,7 +65,7 @@ namespace Orange.FbxImporter
 			for (var i = 0; i < boneData.Length; i++) {
 				bones[i] = new FbxBone {
 					Name = boneData[i].Name,
-					Offset = boneData[i].OffsetMatrix.ToStruct<Mat4x4>().ToLime()
+					Offset = boneData[i].OffsetMatrix.ToStruct<Mat4x4>().ToLime(),
 				};
 			}
 
@@ -106,12 +106,18 @@ namespace Orange.FbxImporter
 						submesh.Vertices[j].UV1.Y = 1 - submesh.Vertices[j].UV1.Y;
 					}
 
-					if (weights.Length == 0) continue;
+					if (weights.Length == 0) {
+						continue;
+					}
+
 					byte idx;
 					float weight;
 					var weightData = weights[controlPointIndex];
 					for (var k = 0; k < ImportConfig.BoneLimit; k++) {
-						if (weightData.Weights[k] == NoWeight) continue;
+						if (weightData.Weights[k] == NoWeight) {
+							continue;
+						}
+
 						idx = weightData.Indices[k];
 						weight = weightData.Weights[k];
 						switch (k) {
@@ -233,27 +239,23 @@ namespace Orange.FbxImporter
 				meshAttribute1.SkinningMode : SkinningMode.DualQuaternion;
 			return new FbxMeshAttribute {
 				SkinningMode = skinningMode,
-				Submeshes = sm
+				Submeshes = sm,
 			};
 		}
 
-		#region Pinvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
-		private static extern MeshData FbxNodeGetMeshAttribute(IntPtr node, WindingOrder preferedWindingOrder, bool limitBoneWeights);
+		private static extern MeshData FbxNodeGetMeshAttribute(
+			IntPtr node, WindingOrder preferedWindingOrder, bool limitBoneWeights
+		);
 
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxNodeGetMeshMaterial(IntPtr pMesh, int idx);
-
-		#endregion
-
-		#region MarshalingStructures
 
 		private enum ReferenceMode
 		{
 			None,
 			ControlPoint,
-			PolygonVertex
+			PolygonVertex,
 		}
 
 		private enum FbxSkinningMode
@@ -265,7 +267,7 @@ namespace Orange.FbxImporter
 		private enum WindingOrder
 		{
 			CCW,
-			CW
+			CW,
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -314,7 +316,5 @@ namespace Orange.FbxImporter
 		{
 			public ReferenceMode Mode;
 		}
-
-		#endregion
 	}
 }

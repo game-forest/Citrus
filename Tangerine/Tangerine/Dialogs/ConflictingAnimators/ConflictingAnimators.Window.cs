@@ -23,7 +23,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 			);
 #endif
 
-			private readonly WindowWidget WindowWidget;
+			private readonly WindowWidget windowWidget;
 
 			public Window()
 			{
@@ -41,8 +41,8 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				window.DecoratedPosition = savedPosition ?? (displayCenter - window.DecoratedSize / 2f);
 				window.Closing += WindowClosing;
 
-				WindowWidget = new WindowWidget(window);
-				WindowWidget.SetFocus();
+				windowWidget = new WindowWidget(window);
+				windowWidget.SetFocus();
 
 				Project.Closing += ProjectClosing;
 				Project.Opening += ProjectOpening;
@@ -50,19 +50,19 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 
 			private void ProjectClosing()
 			{
-				WindowWidget.Window.Title = DefaultTitle;
+				windowWidget.Window.Title = DefaultTitle;
 			}
 
 			private void ProjectOpening(string path)
 			{
 				var proj = System.IO.Path.GetFileNameWithoutExtension(path);
-				WindowWidget.Window.Title = $"{proj} - {DefaultTitle}";
+				windowWidget.Window.Title = $"{proj} - {DefaultTitle}";
 			}
 
 			private bool WindowClosing(CloseReason reason)
 			{
-				savedPosition = WindowWidget?.Window?.DecoratedPosition;
-				WindowWidget?.UnlinkAndDispose();
+				savedPosition = windowWidget?.Window?.DecoratedPosition;
+				windowWidget?.UnlinkAndDispose();
 				Project.Closing -= ProjectClosing;
 				Project.Opening -= ProjectOpening;
 				return true;

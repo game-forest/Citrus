@@ -126,7 +126,10 @@ namespace Tangerine
 
 		private async void ApplyingLookupFilterAsync(LookupWidget lookupWidget, string text)
 		{
-			var filteredItemsLimit = CoreUserPreferences.Instance.LookupItemsLimit >= 1 ? CoreUserPreferences.Instance.LookupItemsLimit : 30;
+			var filteredItemsLimit =
+				CoreUserPreferences.Instance.LookupItemsLimit >= 1
+					? CoreUserPreferences.Instance.LookupItemsLimit
+					: 30;
 			var filteredItems = new List<LookupItem>();
 			var success = false;
 			applyingFilterCancellationSource = new CancellationTokenSource();
@@ -167,7 +170,10 @@ namespace Tangerine
 			applyingFilterCancellationSource = null;
 		}
 
-		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items) => items;
+		protected override IEnumerable<LookupItem> ApplyLookupFilter(string text, IReadOnlyList<LookupItem> items)
+		{
+			return items;
+		}
 	}
 
 	public class LookupSceneMenuSection : LookupSection

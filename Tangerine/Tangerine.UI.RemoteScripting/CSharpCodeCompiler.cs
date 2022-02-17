@@ -24,7 +24,8 @@ namespace Tangerine.UI.RemoteScripting
 			"System.Threading.Tasks"
 		);
 
-		public CSharpParseOptions ParseOptions { get; set; } = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp9);
+		public CSharpParseOptions ParseOptions { get; set; } =
+			CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp9);
 		public IEnumerable<string> ProjectReferences { get; set; }
 		public IEnumerable<string> Namespaces { get; set; } = DefaultNamespaces;
 		public OutputKind OutputKind { get; set; } = OutputKind.DynamicallyLinkedLibrary;
@@ -44,14 +45,15 @@ namespace Tangerine.UI.RemoteScripting
 						Success = emitResult.Success,
 						AssemblyRawBytes = emitResult.Success ? memoryStream.ToArray() : null,
 						PdbRawBytes = emitResult.Success ? memoryStreamForPdb.ToArray() : null,
-						Diagnostics = emitResult.Diagnostics
+						Diagnostics = emitResult.Diagnostics,
 					};
 				}
 			}
 		}
 
-		public EmitResult CompileAssembly(string assemblyName, IEnumerable<string> csFiles, Stream stream, Stream streamForPdb)
-		{
+		public EmitResult CompileAssembly(
+			string assemblyName, IEnumerable<string> csFiles, Stream stream, Stream streamForPdb
+		) {
 			var syntaxTrees = new List<SyntaxTree>();
 			foreach (var csFile in csFiles) {
 				var source = File.ReadAllText(csFile);

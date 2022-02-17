@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 
 namespace Lime
 {
 	public enum SoftKeyboardType
 	{
 		Default,
-		Numeric
+		Numeric,
 	}
-	
+
 	/// <summary>
 	/// Програмная клавиатура (для мобильных устройств)
 	/// </summary>
@@ -19,7 +19,8 @@ namespace Lime
 		bool Visible { get; }
 
 		/// <summary>
-		/// Высота клавиатуры. Значение устанавливается, когда клавиатура показана первый раз (до этого 0). Значение может меняться
+		/// Высота клавиатуры. Значение устанавливается, когда клавиатура показана первый раз (до этого 0).
+		/// Значение может меняться
 		/// </summary>
 		float Height { get; }
 
@@ -53,12 +54,12 @@ namespace Lime
 		public event Action Hidden;
 		public void Show(bool show, SoftKeyboardType type)
 		{
-			if (show)
+			if (show) {
 				Shown?.Invoke();
-			else
+			} else {
 				Hidden?.Invoke();
+			}
 		}
 		public bool Supported { get { return false; } }
 	}
 }
-

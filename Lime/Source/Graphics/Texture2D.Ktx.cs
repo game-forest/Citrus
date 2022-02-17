@@ -7,7 +7,7 @@ namespace Lime
 {
 	partial class Texture2D
 	{
-		public const UInt32 KTXMagic = 0x58544BAB;
+		public const uint KTXMagic = 0x58544BAB;
 
 		private void InitWithKTXTexture(BinaryReader reader)
 		{
@@ -46,7 +46,9 @@ namespace Lime
 			}
 			var expectedMipmapCount = GraphicsUtility.CalculateMipLevelCount(pixelWidth, pixelHeight);
 			if (numberOfMipmapLevels > 1 && numberOfMipmapLevels != expectedMipmapCount) {
-				throw new InvalidDataException($"Invalid mipmap count {numberOfMipmapLevels} expected {expectedMipmapCount}.");
+				throw new InvalidDataException(
+					$"Invalid mipmap count {numberOfMipmapLevels} expected {expectedMipmapCount}."
+				);
 			}
 			var format = ConvertGLFormat(glInternalFormat, glBaseInternalFormat, glFormat, glType);
 			var etcFormat =
@@ -60,7 +62,9 @@ namespace Lime
 			for (int level = 0; level < numberOfMipmapLevels; level++) {
 				var levelCopy = level;
 				var dataLength = reader.ReadInt32();
-				GraphicsUtility.CalculateMipLevelSize(levelCopy, pixelWidth, pixelHeight, out var levelWidth, out var levelHeight);
+				GraphicsUtility.CalculateMipLevelSize(
+					levelCopy, pixelWidth, pixelHeight, out var levelWidth, out var levelHeight
+				);
 				GraphicsUtility.EnsureTextureDataSizeValid(format, levelWidth, levelHeight, dataLength);
 				var data = ReadTextureData(reader, dataLength);
 				deferredCommands += () => {
@@ -71,7 +75,9 @@ namespace Lime
 						var rgba8Data = Marshal.AllocHGlobal(rgba8DataSize);
 						try {
 							Etc2Decoder.Decode(data, rgba8Data, levelWidth, levelHeight, format);
-							EnsurePlatformTexture(Format.R8G8B8A8_UNorm, pixelWidth, pixelHeight, numberOfMipmapLevels > 1);
+							EnsurePlatformTexture(
+								Format.R8G8B8A8_UNorm, pixelWidth, pixelHeight, numberOfMipmapLevels > 1
+							);
 							platformTexture.SetData(levelCopy, rgba8Data);
 						} finally {
 							Marshal.FreeHGlobal(rgba8Data);

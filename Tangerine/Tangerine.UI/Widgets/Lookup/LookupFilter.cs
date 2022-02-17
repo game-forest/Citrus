@@ -33,7 +33,10 @@ namespace Tangerine.UI
 
 		public virtual void Applying(LookupWidget lookupWidget, string text) => applying?.Invoke(lookupWidget, text);
 
-		public IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items) => apply?.Invoke(text, items);
+		public IEnumerable<LookupItem> Apply(string text, IReadOnlyList<LookupItem> items)
+		{
+			return apply?.Invoke(text, items);
+		}
 
 		public virtual void Applied(LookupWidget lookupWidget) => applied?.Invoke(lookupWidget);
 	}
@@ -50,7 +53,11 @@ namespace Tangerine.UI
 			if (!string.IsNullOrEmpty(text)) {
 				var matches = new List<int>(text.Length);
 				foreach (var item in items) {
-					if (fuzzyStringSearch.DoesTextMatch(item.Name.Text, text, matches, out var distance, out var gapCount)) {
+					if (
+						fuzzyStringSearch.DoesTextMatch(
+							item.Name.Text, text, matches, out var distance, out var gapCount
+						)
+					) {
 						itemsTemp.Add((item, distance, gapCount));
 						item.Name.HighlightSymbolsIndices = matches.ToArray();
 					} else {

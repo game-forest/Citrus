@@ -4,7 +4,8 @@ using System.Threading;
 
 namespace Lime
 {
-	public class WeakReferencePool<TKey, TValue> where TValue : class
+	public class WeakReferencePool<TKey, TValue>
+		where TValue : class
 	{
 		private const int ConcurrencyLevel = 37;
 
@@ -16,8 +17,9 @@ namespace Lime
 		public WeakReferencePool(CreateItemDelegate createItem)
 			: this(createItem, EqualityComparer<TKey>.Default, false) { }
 
-		public WeakReferencePool(CreateItemDelegate createItem, IEqualityComparer<TKey> comparer, bool trackResurrection)
-		{
+		public WeakReferencePool(
+			CreateItemDelegate createItem, IEqualityComparer<TKey> comparer, bool trackResurrection
+		) {
 			this.comparer = comparer;
 			stores = new Store[ConcurrencyLevel];
 			for (var i = 0; i < stores.Length; i++) {
@@ -43,7 +45,7 @@ namespace Lime
 			var index = (int)(unchecked((uint)prehashedKey.Hash) % stores.Length);
 			return (prehashedKey, index);
 		}
-		
+
 		private class Store
 		{
 			private const int MinCountUntilCleanUp = 4;
@@ -54,8 +56,9 @@ namespace Lime
 			private readonly object cacheLock = new object();
 			private int countUntilCleanUp = MinCountUntilCleanUp;
 
-			public Store(CreateItemDelegate createItem, IEqualityComparer<PrehashedKey> comparer, bool trackResurrection)
-			{
+			public Store(
+				CreateItemDelegate createItem, IEqualityComparer<PrehashedKey> comparer, bool trackResurrection
+			) {
 				cache = new Dictionary<PrehashedKey, CacheEntry>(comparer);
 				this.trackResurrection = trackResurrection;
 				this.createItem = createItem;

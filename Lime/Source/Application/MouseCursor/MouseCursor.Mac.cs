@@ -1,4 +1,4 @@
-﻿#if MAC || MONOMAC
+#if MAC || MONOMAC
 using System;
 
 #if MAC
@@ -14,7 +14,9 @@ namespace Lime
 		public MouseCursorImplementation(Bitmap bitmap, IntVector2 hotSpot)
 		{
 			var handle = bitmap.NativeBitmap;
-			var icon = new NSImage (bitmap.NativeBitmap, new CoreGraphics.CGSize (bitmap.NativeBitmap.Width, bitmap.NativeBitmap.Height));
+			var icon = new NSImage(
+				bitmap.NativeBitmap, new CoreGraphics.CGSize (bitmap.NativeBitmap.Width, bitmap.NativeBitmap.Height)
+			);
 			NativeCursor = new NSCursor (icon, new CoreGraphics.CGPoint (hotSpot.X, hotSpot.Y));
 		}
 

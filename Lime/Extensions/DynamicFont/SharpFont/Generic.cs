@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -54,13 +52,7 @@ namespace SharpFont
 	[Obsolete("Use the Tag property and Disposed event.")]
 	public class Generic
 	{
-		#region Fields
-
 		private GenericRec rec;
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Generic"/> class.
@@ -72,7 +64,7 @@ namespace SharpFont
 		public Generic(IntPtr data, GenericFinalizer finalizer)
 		{
 			rec.data = data;
-			//rec.finalizer = finalizer;
+			// rec.finalizer = finalizer;
 		}
 
 		internal Generic(GenericRec genInternal)
@@ -89,10 +81,6 @@ namespace SharpFont
 			: this(new IntPtr(reference.ToInt64() + offset))
 		{
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the size of a <see cref="Generic"/>, in bytes.
@@ -115,7 +103,7 @@ namespace SharpFont
 			{
 				return rec.data;
 			}
-			
+
 			set
 			{
 				rec.data = value;
@@ -139,18 +127,12 @@ namespace SharpFont
 			}
 		}*/
 
-		#endregion
-
-		#region Methods
-
-		//TODO make this private and build it into the setters if the reference isn't IntPtr.Zero.
+		// TODO make this private and build it into the setters if the reference isn't IntPtr.Zero.
 		internal void WriteToUnmanagedMemory(IntPtr location)
 		{
 			Marshal.WriteIntPtr(location, rec.data);
-			//Marshal.WriteIntPtr(location, IntPtr.Size, Marshal.GetFunctionPointerForDelegate(rec.finalizer));
+			// Marshal.WriteIntPtr(location, IntPtr.Size, Marshal.GetFunctionPointerForDelegate(rec.finalizer));
 			Marshal.WriteIntPtr(location, IntPtr.Size, rec.finalizer);
 		}
-
-		#endregion
 	}
 }

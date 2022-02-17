@@ -68,7 +68,11 @@ namespace Orange
 		private static void IncludeNewItems(XmlDocument doc, ref bool changed)
 		{
 			var compileItems = GetCompileItemGroup(doc);
-			foreach (var file in new ScanOptimizedFileEnumerator(".", SkipUnwantedDirectoriesPredicate).Enumerate(".cs")) {
+			foreach (
+				var file
+				in new ScanOptimizedFileEnumerator(".", SkipUnwantedDirectoriesPredicate)
+					.Enumerate(".cs")
+			) {
 				var path = ToWindowsSlashes(file);
 				if (Path.GetFileName(path).StartsWith("TemporaryGeneratedFile")) {
 					continue;

@@ -1,3 +1,4 @@
+#pragma warning disable MEN002 // Line is too long
 #if MAC
 using System;
 using System.Collections.Generic;
@@ -333,12 +334,15 @@ namespace Lime
 			};
 			window.DidResignKey += (sender, e) => {
 				// Clearing key state on deactivate is required so no keys will get stuck.
-				// If, for some reason, you need to transfer key state between windows use InputSimulator to hack it. See docking implementation in Tangerine.
+				// If, for some reason, you need to transfer key state between windows use InputSimulator to hack it.
+				// See docking implementation in Tangerine.
 				Input.ClearKeyState();
 				RaiseDeactivated();
 			};
 			window.DidMove += HandleMove;
-			NSNotificationCenter.DefaultCenter.AddObserver(NSWindow.WillStartLiveResizeNotification, OnWillStartLiveResize);
+			NSNotificationCenter.DefaultCenter.AddObserver(
+				NSWindow.WillStartLiveResizeNotification, OnWillStartLiveResize
+			);
 			NSNotificationCenter.DefaultCenter.AddObserver(NSWindow.DidEndLiveResizeNotification, OnDidEndLiveResize);
 			window.CollectionBehavior = NSWindowCollectionBehavior.FullScreenPrimary;
 			window.ContentView = View;
@@ -537,7 +541,10 @@ namespace Lime
 
 		private void RefreshMousePosition()
 		{
-			Application.Input.DesktopMousePosition = new Vector2((float) NSEvent.CurrentMouseLocation.X, (float) NSEvent.CurrentMouseLocation.Y);
+			Application.Input.DesktopMousePosition = new Vector2(
+				(float)NSEvent.CurrentMouseLocation.X,
+				(float)NSEvent.CurrentMouseLocation.Y
+			);
 			Application.Input.SetDesktopTouchPosition(0, Application.Input.DesktopMousePosition);
 		}
 
@@ -552,3 +559,4 @@ namespace Lime
 	}
 }
 #endif
+#pragma warning restore MEN002 // Line is too long

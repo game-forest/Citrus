@@ -16,4 +16,6 @@
     <ProjectReference Include="..\..\Yuzu\Yuzu.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\Analyzers.targets" />
+
 </Project>

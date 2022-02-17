@@ -12,7 +12,9 @@ namespace Tangerine.UI.SceneView
 		private List<Vector3> approximation = new List<Vector3>();
 
 		public readonly VisualHint AnimationPathHint =
-			VisualHintsRegistry.Instance.Register("/All/Animation Path", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened);
+			VisualHintsRegistry.Instance.Register(
+				"/All/Animation Path", hideRule: VisualHintsRegistry.HideRules.VisibleIfProjectOpened
+			);
 
 		protected override void InternalRender(Viewport3D viewport)
 		{
@@ -30,8 +32,7 @@ namespace Tangerine.UI.SceneView
 					}
 					if (
 						animator is Vector3Animator &&
-						animator.TargetPropertyPath == nameof(Node3D.Position)
-					) {
+						animator.TargetPropertyPath == nameof(Node3D.Position)) {
 						var keys = animator.ReadonlyKeys.ToList();
 						if (keys.Count == 0) {
 							continue;
@@ -48,13 +49,16 @@ namespace Tangerine.UI.SceneView
 							worldTransform = node.Parent.AsNode3D.GlobalTransform;
 						}
 						var sv = SceneView.Instance;
-						var viewportToSceneFrame = viewport.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
+						var viewportToSceneFrame = viewport.LocalToWorldTransform
+							* sv.CalcTransitionFromSceneSpace(sv.Frame);
 						sv.Frame.PrepareRendererState();
 						for (int i = 0; i < points.Count - 1; ++i) {
 							Approximate(i, i + 1, keys[i].Function, 10);
-							var start = (Vector2)viewport.WorldToViewportPoint(approximation[0] * worldTransform) * viewportToSceneFrame;
+							var start = (Vector2)viewport.WorldToViewportPoint(approximation[0] * worldTransform)
+								* viewportToSceneFrame;
 							for (int j = 1; j < approximation.Count; ++j) {
-								var end = (Vector2)viewport.WorldToViewportPoint(approximation[j] * worldTransform) * viewportToSceneFrame;
+								var end = (Vector2)viewport.WorldToViewportPoint(approximation[j] * worldTransform)
+									* viewportToSceneFrame;
 								Renderer.DrawDashedLine(
 									start, end, ColorTheme.Current.SceneView.PointObject, new Vector2(4, 1));
 								start = end;
@@ -89,9 +93,7 @@ namespace Tangerine.UI.SceneView
 						points[index0],
 						points[index1],
 						points[index2],
-						points[index3]
-					)
-				);
+						points[index3]));
 			}
 			approximation.Add(points[index2]);
 		}

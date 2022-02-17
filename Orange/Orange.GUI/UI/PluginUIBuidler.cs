@@ -52,7 +52,7 @@ namespace Orange
 		}
 	}
 
-	public class CheckBoxWithLabel: Widget
+	public class CheckBoxWithLabel : Widget
 	{
 		public CheckBoxWithLabel(string text)
 		{
@@ -60,7 +60,7 @@ namespace Orange
 			AddNode(CheckBox = new ThemedCheckBox());
 			Label = new ThemedSimpleText(text) {
 				HitTestTarget = true,
-				Clicked = CheckBox.Toggle
+				Clicked = CheckBox.Toggle,
 			};
 			AddNode(Label);
 		}

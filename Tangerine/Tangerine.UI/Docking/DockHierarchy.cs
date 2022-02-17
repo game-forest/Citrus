@@ -14,13 +14,13 @@ namespace Tangerine.UI.Docking
 		Top,
 		Right,
 		Bottom,
-		Fill
+		Fill,
 	}
 
 	public enum LinearPlacementDirection
 	{
 		Vertical,
-		Horizontal
+		Horizontal,
 	}
 
 	public class DockHierarchy
@@ -32,7 +32,13 @@ namespace Tangerine.UI.Docking
 		[YuzuMember]
 		public readonly List<WindowPlacement> WindowPlacements = new List<WindowPlacement>();
 
-		public IEnumerable<WindowPlacement> VisibleWindowPlacements => WindowPlacements.Where(p => p.WindowWidget != null);
+		public IEnumerable<WindowPlacement> VisibleWindowPlacements
+		{
+			get
+			{
+				return WindowPlacements.Where(p => p.WindowWidget != null);
+			}
+		}
 
 		private static DockHierarchy instance;
 		public static DockHierarchy Instance => instance ?? (instance = new DockHierarchy());
@@ -127,8 +133,9 @@ namespace Tangerine.UI.Docking
 			}
 		}
 
-		private static void DockPlacementTo(LinearPlacement placement, LinearPlacement target, int index = 0, float stretch = 0)
-		{
+		private static void DockPlacementTo(
+			LinearPlacement placement, LinearPlacement target, int index = 0, float stretch = 0
+		) {
 			if (placement.Direction == target.Direction) {
 				var placements = placement.Placements.ToList();
 				var stretches = placement.Stretches;
@@ -176,8 +183,9 @@ namespace Tangerine.UI.Docking
 			return currentStretch * 0.25f;
 		}
 
-		private static void ReplacePlacement(Placement old, LinearPlacement @new, DockSite site, ref float stretch, ref int index)
-		{
+		private static void ReplacePlacement(
+			Placement old, LinearPlacement @new, DockSite site, ref float stretch, ref int index
+		) {
 			var placement = old;
 			index = site == DockSite.Bottom || site == DockSite.Right ? 1 : 0;
 			stretch = stretch < 0 ? 0.25f : stretch;
@@ -232,7 +240,9 @@ namespace Tangerine.UI.Docking
 							case PanelPlacement _:
 								targetLinearPlacement.Placements.Add(placement);
 								targetLinearPlacement.Stretches.Add(
-									AdjustStretch(targetLinearPlacement, stretch, targetLinearPlacement.Placements.Count - 1));
+									AdjustStretch(
+										targetLinearPlacement, stretch, targetLinearPlacement.Placements.Count - 1)
+									);
 								break;
 						}
 					}
@@ -369,8 +379,7 @@ namespace Tangerine.UI.Docking
 			Action<TabBarPlacement> onTabBarPlacement = null,
 			Action<LinearPlacement> onLinearPlacement = null
 		) {
-			switch (this)
-			{
+			switch (this) {
 				case PanelPlacement panelPlacement:
 					onPanelPlacement?.Invoke(panelPlacement);
 					break;
@@ -449,7 +458,8 @@ namespace Tangerine.UI.Docking
 		}
 	}
 
-	public class PlacementList<TPlacement> : IList<TPlacement> where TPlacement : Placement
+	public class PlacementList<TPlacement> : IList<TPlacement>
+		where TPlacement : Placement
 	{
 		private readonly Placement owner;
 		private readonly List<TPlacement> placements = new List<TPlacement>();
@@ -521,7 +531,8 @@ namespace Tangerine.UI.Docking
 		public TPlacement this[int index]
 		{
 			get => placements[index];
-			set {
+			set
+			{
 				CheckBeforeInsertion(value);
 				value.Parent = owner;
 				placements[index] = value;
@@ -738,7 +749,11 @@ namespace Tangerine.UI.Docking
 			Id = id;
 			Title = title ?? id;
 			IsUndockable = undockable;
-			ContentWidget = new Frame { Id = "PanelContent", ClipChildren = ClipMethod.ScissorTest, Layout = new StackLayout() };
+			ContentWidget = new Frame {
+				Id = "PanelContent",
+				ClipChildren = ClipMethod.ScissorTest,
+				Layout = new StackLayout(),
+			};
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Tangerine
 				renderingBackend = RenderingBackend.Vulkan;
 			}
 			Application.Initialize(new ApplicationOptions {
-				RenderingBackend = renderingBackend
+				RenderingBackend = renderingBackend,
 			});
 			TangerineApp.Initialize(args);
 			Lime.Application.Run();

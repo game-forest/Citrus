@@ -11,16 +11,16 @@ namespace Tangerine.UI.Timeline
 {
 	public class RulerbarMouseScrollProcessor : ITaskProvider
 	{
-		private static Timeline timeline => Timeline.Instance;
+		private static Timeline Timeline => Timeline.Instance;
 
 		public IEnumerator<object> Task()
 		{
-			var rulerWidget = timeline.Ruler.RootWidget;
+			var rulerWidget = Timeline.Ruler.RootWidget;
 			var input = rulerWidget.Input;
 			while (true) {
 				if (input.WasMousePressed()) {
 					using (Document.Current.History.BeginTransaction()) {
-						int initialCurrentColumn = timeline.Ruler.CalcColumnUnderMouse();
+						int initialCurrentColumn = Timeline.Ruler.CalcColumnUnderMouse();
 						Document.Current.AnimationFrame = initialCurrentColumn;
 						var saved = CoreUserPreferences.Instance.StopAnimationOnCurrentFrame;
 						// Dirty hack: prevent creating RestoreAnimationsTimesComponent
@@ -39,11 +39,11 @@ namespace Tangerine.UI.Timeline
 							var cw = TimelineMetrics.ColWidth;
 							var mp = rulerWidget.LocalMousePosition().X;
 							if (mp > rulerWidget.Width - cw / 2) {
-								timeline.OffsetX += cw;
+								Timeline.OffsetX += cw;
 							} else if (mp < cw / 2) {
-								timeline.OffsetX = Math.Max(0, timeline.OffsetX - cw);
+								Timeline.OffsetX = Math.Max(0, Timeline.OffsetX - cw);
 							}
-							int newColumn = timeline.Ruler.CalcColumnUnderMouse();
+							int newColumn = Timeline.Ruler.CalcColumnUnderMouse();
 							if (newColumn == previousColumn) {
 								yield return null;
 								continue;
@@ -68,36 +68,44 @@ namespace Tangerine.UI.Timeline
 							if (newColumn != initialCurrentColumn) {
 								SetCurrentColumn.Perform(newColumn);
 							}
-							timeline.Ruler.MeasuredFrameDistance = timeline.CurrentColumn - initialCurrentColumn;
+							Timeline.Ruler.MeasuredFrameDistance = Timeline.CurrentColumn - initialCurrentColumn;
 							previousColumn = newColumn;
 							DockHierarchy.Instance.InvalidateWindows();
 							yield return null;
 						}
 						Document.Current.History.CommitTransaction();
-						timeline.Ruler.MeasuredFrameDistance = 0;
+						Timeline.Ruler.MeasuredFrameDistance = 0;
 					}
 				}
 				yield return null;
 			}
 		}
 
-		void ShiftTimeline(int destColumn)
+		private void ShiftTimeline(int destColumn)
 		{
-			var delta = destColumn - timeline.CurrentColumn;
+			var delta = destColumn - Timeline.CurrentColumn;
 			if (delta > 0) {
-				TimelineHorizontalShift.Perform(timeline.CurrentColumn, delta);
+				TimelineHorizontalShift.Perform(Timeline.CurrentColumn, delta);
 			} else if (delta < 0) {
-				foreach (var animator in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()) {
-					RemoveKeyframeRange.Perform(animator, destColumn, timeline.CurrentColumn - 1);
+				foreach (
+					var animator
+					in Document.Current.Animation.ValidatedEffectiveAnimators.OfType<IAnimator>().ToList()
+				) {
+					RemoveKeyframeRange.Perform(animator, destColumn, Timeline.CurrentColumn - 1);
 				}
-				foreach (var marker in Document.Current.Animation.Markers.Where(m => m.Frame >= destColumn && m.Frame < timeline.CurrentColumn).ToList()) {
+				foreach (
+					var marker
+					in Document.Current.Animation.Markers
+						.Where(m => m.Frame >= destColumn && m.Frame < Timeline.CurrentColumn)
+						.ToList()
+				) {
 					DeleteMarker.Perform(marker, removeDependencies: false);
 				}
 				TimelineHorizontalShift.Perform(destColumn, delta);
 			}
 		}
 
-		void DragMarker(Marker marker, int destColumn)
+		private void DragMarker(Marker marker, int destColumn)
 		{
 			var markerToRemove = Document.Current.Animation.Markers.FirstOrDefault(m => m.Frame == destColumn);
 			if (marker.Frame != destColumn && markerToRemove != null) {

@@ -24,7 +24,9 @@ namespace Lime
 		{
 			Behaviour.Content.Padding = new Thickness(4);
 			Behaviour.Content.Layout = new VBoxLayout();
-			Behaviour.Frame.CompoundPresenter.Add(new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder));
+			Behaviour.Frame.CompoundPresenter.Add(
+				new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder)
+			);
 		}
 
 		public void Append(string text)
@@ -41,7 +43,7 @@ namespace Lime
 					if (lastNonSentinelLine != null && lastNonSentinelLine.Text == l) {
 						lastNonSentinelLine.Components.Get<ThemedTextView.TextLineMultiplicity>().Multiplicity++;
 						lastNonSentinelLine.Invalidate();
-						//TODO: invalidate window only if it isn't docked
+						// TODO: invalidate window only if it isn't docked
 						(GetRoot() as WindowWidget)?.Window.Invalidate();
 						continue;
 					}
@@ -94,14 +96,16 @@ namespace Lime
 
 		public string DisplayText
 		{
-			get {
+			get
+			{
 				var sb = new StringBuilder();
 				foreach (var l in lines) {
 					sb.AppendLine(l.DisplayText);
 				}
 				return sb.ToString();
 			}
-			set {
+			set
+			{
 				Clear();
 				Append(value);
 			}

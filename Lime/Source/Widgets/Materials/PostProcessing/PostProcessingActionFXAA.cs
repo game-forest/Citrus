@@ -20,7 +20,9 @@ namespace Lime
 			ro.FXAAMaterial.MulReduce = ro.FXAAMulReduce;
 			ro.FXAAMaterial.MinReduce = ro.FXAAMinReduce;
 			ro.FXAAMaterial.MaxSpan = ro.FXAAMaxSpan;
-			ro.RenderToTexture(ro.FXAABuffer.Texture, ro.ProcessedTexture, ro.FXAAMaterial, Color4.White, ro.TextureClearingColor);
+			ro.RenderToTexture(
+				ro.FXAABuffer.Texture, ro.ProcessedTexture, ro.FXAAMaterial, Color4.White, ro.TextureClearingColor
+			);
 			ro.CurrentBufferSize = (Vector2)ro.FXAABuffer.Size;
 			ro.ProcessedUV1 = (Vector2)ro.ViewportSize / ro.CurrentBufferSize;
 

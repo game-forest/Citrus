@@ -151,7 +151,7 @@ namespace Lime
 				R = (byte)(Mathf.Clamp(r, 0, 1) * 255),
 				G = (byte)(Mathf.Clamp(g, 0, 1) * 255),
 				B = (byte)(Mathf.Clamp(b, 0, 1) * 255),
-				A = (byte)(Mathf.Clamp(a, 0, 1) * 255)
+				A = (byte)(Mathf.Clamp(a, 0, 1) * 255),
 			};
 		}
 
@@ -160,16 +160,19 @@ namespace Lime
 		/// </summary>
 		public static Color4 operator *(Color4 lhs, Color4 rhs)
 		{
-			if (lhs.ABGR == 0xFFFFFFFF)
+			if (lhs.ABGR == 0xFFFFFFFF) {
 				return rhs;
-			if (rhs.ABGR == 0xFFFFFFFF)
+			}
+
+			if (rhs.ABGR == 0xFFFFFFFF) {
 				return lhs;
-			return new Color4
-			{
-				R = (byte) ((rhs.R * ((lhs.R << 8) + lhs.R) + 255) >> 16),
-				G = (byte) ((rhs.G * ((lhs.G << 8) + lhs.G) + 255) >> 16),
-				B = (byte) ((rhs.B * ((lhs.B << 8) + lhs.B) + 255) >> 16),
-				A = (byte) ((rhs.A * ((lhs.A << 8) + lhs.A) + 255) >> 16)
+			}
+
+			return new Color4 {
+				R = (byte)((rhs.R * ((lhs.R << 8) + lhs.R) + 255) >> 16),
+				G = (byte)((rhs.G * ((lhs.G << 8) + lhs.G) + 255) >> 16),
+				B = (byte)((rhs.B * ((lhs.B << 8) + lhs.B) + 255) >> 16),
+				A = (byte)((rhs.A * ((lhs.A << 8) + lhs.A) + 255) >> 16),
 			};
 		}
 
@@ -232,12 +235,12 @@ namespace Lime
 			return ABGR == other.ABGR;
 		}
 
-		public static bool operator == (Color4 lhs, Color4 rhs)
+		public static bool operator ==(Color4 lhs, Color4 rhs)
 		{
 			return lhs.ABGR == rhs.ABGR;
 		}
 
-		public static bool operator != (Color4 lhs, Color4 rhs)
+		public static bool operator !=(Color4 lhs, Color4 rhs)
 		{
 			return lhs.ABGR != rhs.ABGR;
 		}
@@ -250,7 +253,7 @@ namespace Lime
 		public enum StringPresentation
 		{
 			Hex,
-			Dec
+			Dec,
 		}
 
 		public string ToString(StringPresentation presentation)

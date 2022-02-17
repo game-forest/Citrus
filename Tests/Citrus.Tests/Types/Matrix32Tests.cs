@@ -1,6 +1,6 @@
 ﻿namespace Citrus.Tests.Types
 {
-	class Matrix32Tests
+	internal class Matrix32Tests
 	{
 	}
 }

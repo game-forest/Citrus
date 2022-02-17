@@ -9,12 +9,11 @@ namespace Lime
 {
 	public sealed class TexturePool
 	{
-
 		public static event Texture2D.TextureMissingDelegate TextureMissing;
 
 		private readonly Dictionary<string, WeakReference> textures = new Dictionary<string, WeakReference>();
 
-		public readonly static TexturePool Instance = new TexturePool();
+		public static readonly TexturePool Instance = new TexturePool();
 
 		public delegate void TextureCreatingDelegate(string path);
 		public delegate void TextureCreatedDelegate(string path, ITexture texture);
@@ -22,7 +21,8 @@ namespace Lime
 		public event TextureCreatingDelegate TextureCreating;
 		public event TextureCreatedDelegate TextureCreated;
 
-		private TexturePool() {}
+		private TexturePool()
+		{ }
 
 		[Obsolete("Use DiscardTexturesUnderPressure()")]
 		public void DiscardUnusedTextures(int numCycles)
@@ -68,7 +68,6 @@ namespace Lime
 			}
 		}
 
-
 		public ITexture GetTexture(string path)
 		{
 			lock (textures) {
@@ -97,20 +96,20 @@ namespace Lime
 		private static ITexture CreateTexture(string path)
 		{
 			ITexture texture;
-			
+
 			if (string.IsNullOrEmpty(path)) {
 				texture = new Texture2D();
-				((Texture2D) texture).LoadStubImage(false);
+				((Texture2D)texture).LoadStubImage(false);
 				return texture;
 			}
-			
+
 			texture = TryCreateRenderTarget(path) ?? TryLoadTextureAtlasPart(path + ".atlasPart");
-			
+
 			if (texture == null) {
 				texture = new Texture2D();
-				((Texture2D) texture).LoadImage(path, TextureMissing);
+				((Texture2D)texture).LoadImage(path, TextureMissing);
 			}
-			
+
 			return texture;
 		}
 

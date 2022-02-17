@@ -27,11 +27,15 @@ namespace Lime
 	{
 		public static IKeyframe CreateForType(Type type)
 		{
-			return (IKeyframe)typeof(Keyframe<>).MakeGenericType(type).GetConstructor(new Type[0]).Invoke(new object[0]);
+			return (IKeyframe)typeof(Keyframe<>)
+				.MakeGenericType(type)
+				.GetConstructor(new Type[0])
+				.Invoke(new object[0]);
 		}
 
-		public static IKeyframe CreateForType(Type type, int frame, object value, KeyFunction function = KeyFunction.Linear)
-		{
+		public static IKeyframe CreateForType(
+			Type type, int frame, object value, KeyFunction function = KeyFunction.Linear
+		) {
 			var k = CreateForType(type);
 			k.Frame = frame;
 			k.Value = value;
@@ -66,9 +70,11 @@ namespace Lime
 		public int Frame { get; set; }
 
 		[YuzuMember]
-		public int PackedParams {
+		public int PackedParams
+		{
 			get => p.Packed;
-			set {
+			set
+			{
 				// Protect us if someone has used previous version of easings
 				if ((value & 255) >= (int)KeyFunction.ClosedSpline) {
 					value &= 7;
@@ -111,7 +117,7 @@ namespace Lime
 				Frame = Frame,
 				Function = Function,
 				Params = Params,
-				Value = Value
+				Value = Value,
 			};
 		}
 

@@ -33,16 +33,18 @@ namespace Tangerine.UI.Timeline
 				Padding = new Thickness { Top = 1, Bottom = 1 },
 				Layout = new VBoxLayout { Spacing = TimelineMetrics.RowSpacing },
 				Presenter = new SyncDelegatePresenter<Node>(RenderBackground),
-				PostPresenter = new SyncDelegatePresenter<Widget>(w => OnPostRender(w))
+				PostPresenter = new SyncDelegatePresenter<Widget>(w => OnPostRender(w)),
 			};
 			RootWidget.Updated += _ => {
 				RefreshItemWidths();
 				ContentWidget.Position = -timeline.Offset;
 			};
 			RootWidget.AddNode(ContentWidget);
-			RootWidget.AddChangeWatcher(() => RootWidget.Size,
+			RootWidget.AddChangeWatcher(
+				() => RootWidget.Size,
 				// Some document operation processors (e.g. ColumnCountUpdater) require up-to-date timeline dimensions.
-				_ => Core.Operations.Dummy.Perform(Document.Current.History));
+				_ => Core.Operations.Dummy.Perform(Document.Current.History)
+			);
 			OnPostRender += RenderSelection;
 			OnPostRender += RenderCursor;
 			DropFilesGesture = new DropFilesGesture();
@@ -65,7 +67,8 @@ namespace Tangerine.UI.Timeline
 				content.AddNode(widget);
 			}
 			RefreshItemWidths();
-			// Layout widgets in order to have valid row positions and sizes, which are used for rows visibility determination.
+			// Layout widgets in order to have valid row positions and sizes,
+			// which are used for rows visibility determination.
 			WidgetContext.Current.Root.LayoutManager.Layout();
 		}
 
@@ -108,7 +111,10 @@ namespace Tangerine.UI.Timeline
 		private void RenderVerticalLines()
 		{
 			var a = new Vector2(0, 1);
-			var b = new Vector2(0, Document.Current.VisibleSceneItems.Count * (TimelineMetrics.DefaultRowHeight + 1) + 1);
+			var b = new Vector2(
+				0,
+				Document.Current.VisibleSceneItems.Count * (TimelineMetrics.DefaultRowHeight + 1) + 1
+			);
 			timeline.GetVisibleColumnRange(out var minColumn, out var maxColumn);
 			var offset = Document.Current.Animation.IsCompound ? 0.5f : 0;
 			for (int columnIndex = minColumn; columnIndex <= maxColumn; columnIndex++) {
@@ -146,13 +152,17 @@ namespace Tangerine.UI.Timeline
 			var x = TimelineMetrics.ColWidth * (timeline.CurrentColumnEased + 0.5f);
 			ContentWidget.PrepareRendererState();
 			Renderer.DrawLine(
-				x, 0, x, ContentWidget.Height - 1,
-				Document.Current.PreviewScene ?
-				ColorTheme.Current.TimelineRuler.RunningCursor :
-				ColorTheme.Current.TimelineRuler.Cursor);
+				x0: x,
+				y0: 0,
+				x1: x,
+				y1: ContentWidget.Height - 1,
+				color: Document.Current.PreviewScene
+					? ColorTheme.Current.TimelineRuler.RunningCursor
+					: ColorTheme.Current.TimelineRuler.Cursor
+			);
 		}
 
-		void RenderSelection(Widget widget)
+		private void RenderSelection(Widget widget)
 		{
 			RenderSelection(widget, IntVector2.Zero);
 		}
@@ -218,8 +228,10 @@ namespace Tangerine.UI.Timeline
 						b = new Vector2(b.X - 0.5f, (gridWidgetBottom ?? b.Y) - 0.5f);
 						Renderer.DrawRect(
 							a: a + Vector2.Up * 0.5f,
-							b: b + new Vector2(1f + (isRightCellMissing ? 0 : 1),
-							y: (isBottomCellMissing ? 0 : 1)),
+							b: b + new Vector2(
+								x: 1f + (isRightCellMissing ? 0 : 1),
+								y: isBottomCellMissing ? 0 : 1
+							),
 							color: ColorTheme.Current.TimelineGrid.Selection
 						);
 						if (isLeftCellMissing) {
@@ -299,6 +311,9 @@ namespace Tangerine.UI.Timeline
 			return new IntVector2(x, Math.Max(0, Document.Current.VisibleSceneItems.Count - 1));
 		}
 
-		public bool IsMouseOverRow() => RootWidget.Input.MousePosition.Y - ContentWidget.GlobalPosition.Y < ContentSize.Y;
+		public bool IsMouseOverRow()
+		{
+			return RootWidget.Input.MousePosition.Y - ContentWidget.GlobalPosition.Y < ContentSize.Y;
+		}
 	}
 }

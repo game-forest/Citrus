@@ -35,8 +35,8 @@ namespace Lime
 		{
 			throw new NotImplementedException();
 		}
-		public void Invalidate() {}
-		public void Activate() {}
+		public void Invalidate() { }
+		public void Activate() { }
 #if MAC
 		public Platform.NSGameView NSGameView { get; set; }
 #elif WIN
@@ -44,7 +44,7 @@ namespace Lime
 #endif
 		public float PixelScale { get; set; }
 
-		public void ShowModal() {}
+		public void ShowModal() { }
 
 		public bool AllowDropFiles { get; set; }
 

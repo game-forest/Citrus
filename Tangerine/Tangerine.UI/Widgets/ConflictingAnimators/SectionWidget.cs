@@ -20,7 +20,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 		{
 			Layout = new VBoxLayout { Spacing = 0 };
 			ExpandButton = new ThemedExpandButton() {
-				Padding = new Thickness(bottom: 4)
+				Padding = new Thickness(bottom: 4),
 			};
 			ExpandButton.Clicked += () => content.Visible = ExpandButton.Expanded;
 			Description = new DescriptionWidget(text, iconTexture);
@@ -48,7 +48,7 @@ namespace Tangerine.UI.Widgets.ConflictingAnimators
 				Nodes = {
 					ExpandButton,
 					Description,
-				}
+				},
 			};
 		}
 		private Widget CreateContent()

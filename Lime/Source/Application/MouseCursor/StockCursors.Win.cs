@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Lime
 {
-	internal class StockCursors: IStockCursors
+	internal class StockCursors : IStockCursors
 	{
 		public StockCursors()
 		{

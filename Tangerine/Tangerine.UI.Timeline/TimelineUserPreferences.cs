@@ -40,6 +40,12 @@ namespace Tangerine.UI.Timeline
 
 		private static TimelineUserPreferences instance;
 
-		public static TimelineUserPreferences Instance => instance ?? (instance = Core.UserPreferences.Instance.GetOrAdd<TimelineUserPreferences>());
+		public static TimelineUserPreferences Instance
+		{
+			get
+			{
+				return instance ??= Core.UserPreferences.Instance.GetOrAdd<TimelineUserPreferences>();
+			}
+		}
 	}
 }

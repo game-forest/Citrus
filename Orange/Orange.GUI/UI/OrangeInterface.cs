@@ -10,7 +10,7 @@ using Orange.Source;
 
 namespace Orange
 {
-	public class OrangeInterface: UserInterface
+	public class OrangeInterface : UserInterface
 	{
 		private readonly Window window;
 		private readonly WindowWidget windowWidget;
@@ -49,27 +49,29 @@ namespace Orange
 				FixedSize = false,
 				Title = "Orange",
 #if WIN
-				Icon = new System.Drawing.Icon(new EmbeddedResource("Orange.GUI.Orange.ico", "Orange.GUI").GetResourceStream()),
+				Icon = new System.Drawing.Icon(
+					new EmbeddedResource("Orange.GUI.Orange.ico", "Orange.GUI").GetResourceStream()
+				),
 #endif // WIN
 			});
 			window.Closed += The.Workspace.Save;
 			windowWidget = new ThemedInvalidableWindowWidget(window) {
 				Id = "MainWindow",
 				Layout = new HBoxLayout {
-					Spacing = 6
+					Spacing = 6,
 				},
 				Padding = new Thickness(6),
-				Size = windowSize
+				Size = windowSize,
 			};
 			mainInterfaceWidget = new Widget {
 				Layout = new HBoxLayout {
-					Spacing = 6
-				}
+					Spacing = 6,
+				},
 			};
 			mainVBox = new Widget {
 				Layout = new VBoxLayout {
-					Spacing = 6
-				}
+					Spacing = 6,
+				},
 			};
 			mainVBox.AddNode(CreateHeaderSection());
 			mainVBox.AddNode(CreateTextView());
@@ -86,7 +88,10 @@ namespace Orange
 		private void CreateMenu()
 		{
 			// TODO Duplicates code from Tangerine.TangerineMenu.cs. Both should be presented at one file
-			cacheLocalAndRemote = new Command("Local &and remote", () => UpdateCacheModeCheckboxes(AssetCacheMode.Local | AssetCacheMode.Remote));
+			cacheLocalAndRemote = new Command(
+				"Local &and remote",
+				() => UpdateCacheModeCheckboxes(AssetCacheMode.Local | AssetCacheMode.Remote)
+			);
 			cacheRemote = new Command("&Remote", () => UpdateCacheModeCheckboxes(AssetCacheMode.Remote));
 			cacheLocal = new Command("&Local", () => UpdateCacheModeCheckboxes(AssetCacheMode.Local));
 			cacheNone = new Command("&None", () => UpdateCacheModeCheckboxes(AssetCacheMode.None));
@@ -94,12 +99,12 @@ namespace Orange
 
 			Application.MainMenu = new Menu {
 				new Command("&File", new Menu {
-					new Command("&Quit", () => { Application.Exit(); })
+					new Command("&Quit", () => { Application.Exit(); }),
 				}),
 				new Command("&View", new Menu {
 					new Command("&Panels", new Menu {
-						bundlePickerCommand
-					})
+						bundlePickerCommand,
+					}),
 				}),
 				(actionsCommand = new Command("&Actions", new Menu { })),
 				new Command("&Cache", new Menu {
@@ -108,15 +113,15 @@ namespace Orange
 								UploadCacheToServer.UploadCacheToServerAction();
 								return null;
 							}
-						))
+						)),
 					}),
 					new Command("&Mode", new Menu {
 						cacheLocalAndRemote,
 						cacheRemote,
 						cacheLocal,
-						cacheNone
-					})
-				})
+						cacheNone,
+					}),
+				}),
 			};
 		}
 
@@ -145,9 +150,9 @@ namespace Orange
 					ColumnDefaults = new List<DefaultLayoutCell> {
 						new DefaultLayoutCell { StretchX = 0 },
 						new DefaultLayoutCell { VerticalAlignment = VAlignment.Center },
-					}
+					},
 				},
-				LayoutCell = new LayoutCell { StretchY = 0 }
+				LayoutCell = new LayoutCell { StretchY = 0 },
 			};
 			AddPicker(header, "Target", targetPicker = new TargetPicker());
 			AddPicker(header, "Citrus Project", projectPicker = CreateProjectPicker());
@@ -160,7 +165,7 @@ namespace Orange
 		{
 			var label = new ThemedSimpleText(name) {
 				VAlignment = VAlignment.Center,
-				HAlignment = HAlignment.Left
+				HAlignment = HAlignment.Left,
 			};
 			label.MinHeight = Theme.Metrics.DefaultButtonSize.Y;
 			table.AddNode(label);
@@ -206,7 +211,7 @@ namespace Orange
 		{
 			footerSection = new Widget {
 				Layout = new HBoxLayout {
-					Spacing = 5
+					Spacing = 5,
 				},
 			};
 
@@ -219,12 +224,12 @@ namespace Orange
 			footerSection.AddNode(actionPicker);
 
 			goButton = new ThemedButton("Go");
-			goButton.Clicked += () => Execute((Func<string>) actionPicker.Value);
+			goButton.Clicked += () => Execute((Func<string>)actionPicker.Value);
 			footerSection.AddNode(goButton);
 
 			abortButton = new ThemedButton("Abort") {
 				Enabled = false,
-				Visible = false
+				Visible = false,
 			};
 			abortButton.Clicked += () => AssetCooker.CancelCook();
 			footerSection.AddNode(abortButton);
@@ -296,11 +301,13 @@ namespace Orange
 		private IEnumerator<object> ExecuteTask(Func<string> action)
 		{
 			var task = OrangeActionsHelper.ExecuteOrangeAction(
-				action, () => {
+				action,
+				() => {
 					The.Workspace.Save();
 					EnableControls(false);
 					textView.Clear();
-				}, () => {
+				},
+				() => {
 					EnableControls(true);
 					if (textView.ScrollPosition == textView.MaxScrollPosition) {
 						The.UI.ScrollLogToEnd();
@@ -538,7 +545,7 @@ namespace Orange
 				this.bundlePicker = bundlePicker;
 
 				Layout = new VBoxLayout {
-					Spacing = 6
+					Spacing = 6,
 				};
 				MaxWidth = 250f;
 
@@ -547,14 +554,14 @@ namespace Orange
 				scrollView = new ThemedScrollView();
 				scrollView.CompoundPostPresenter.Add(new WidgetBoundsPresenter(Lime.Theme.Colors.ControlBorder));
 				scrollView.Content.Layout = new VBoxLayout {
-					Spacing = 6
+					Spacing = 6,
 				};
 				scrollView.Content.Padding = new Thickness(6);
 				scrollView.CompoundPresenter.Add(new WidgetFlatFillPresenter(Color4.White));
 
 				selectButton = new ThemedButton {
 					Text = "Select all",
-					Clicked = SelectButtonClickHandler
+					Clicked = SelectButtonClickHandler,
 				};
 
 				refreshButton = new ThemedButton {
@@ -578,11 +585,16 @@ namespace Orange
 
 				var buttonLine = new Widget {
 					Layout = new HBoxLayout {
-						Spacing = 6
-					}
+						Spacing = 6,
+					},
 				};
 				AddNode(buttonLine);
-				buttonLine.AddNode(new Widget { LayoutCell = new LayoutCell { StretchX = float.MaxValue }, MaxHeight = 0 });
+				buttonLine.AddNode(
+					new Widget {
+						LayoutCell = new LayoutCell { StretchX = float.MaxValue },
+						MaxHeight = 0,
+					}
+				);
 				buttonLine.AddNode(refreshButton);
 				buttonLine.AddNode(selectButton);
 				selectButton.Tasks.Add(UpdateTextOfSelectButtonTask());
@@ -606,7 +618,7 @@ namespace Orange
 				checkboxes[bundle] = new ThemedCheckBox();
 				lines[bundle] = new Widget {
 					Layout = new HBoxLayout {
-						Spacing = 8
+						Spacing = 8,
 					},
 					Nodes = {
 						checkboxes[bundle],
@@ -617,13 +629,14 @@ namespace Orange
 									checkboxes[bundle].Checked =
 										bundlePicker.SetBundleSelection(bundle, !checkboxes[bundle].Checked);
 								}
-							}
-						}
-					}
+							},
+						},
+					},
 				};
 				scrollView.Content.AddNode(lines[bundle]);
 				checkboxes[bundle].Checked = true;
-				checkboxes[bundle].Changed += args => bundlePicker.SetBundleSelection(bundle, checkboxes[bundle].Checked);
+				checkboxes[bundle].Changed += args =>
+					bundlePicker.SetBundleSelection(bundle, checkboxes[bundle].Checked);
 			}
 
 			/// <summary>
@@ -745,8 +758,10 @@ namespace Orange
 				Layout = new LinearLayout(LayoutDirection.TopToBottom),
 				Nodes = {
 					(openButton = new ThemedButton("Open") {
-						Clicked = () => FileChooser.ShowOpenCitrusProjectDialog(The.Workspace.Open, recentProjects.FirstOrDefault()),
-					})
+						Clicked = () => FileChooser.ShowOpenCitrusProjectDialog(
+							The.Workspace.Open, recentProjects.FirstOrDefault()
+						),
+					}),
 				},
 			};
 			DecorateButton(openButton);
@@ -759,19 +774,22 @@ namespace Orange
 						Layout = new LinearLayout(LayoutDirection.LeftToRight),
 						Nodes = {
 							(openButton = new ThemedButton($"{projectName}\n at \"{projectPathBound}\"") {
-								// Uses InvokeOnNextUpdate because Workspace.Load will remove StartPage (clear window widget nodes)
-								// which leads to incorrect behavior update order. E.g. if plugin side panel will be enabled by plugin
+								// Uses InvokeOnNextUpdate because Workspace.Load will
+								// remove StartPage (clear window widget nodes)
+								// which leads to incorrect behavior update order.
+								// E.g. if plugin side panel will be enabled by plugin
 								// it will crash 50% of times.
-								Clicked = () => Application.InvokeOnNextUpdate(() => The.Workspace.Load(projectPathBound)),
+								Clicked = () => Application.InvokeOnNextUpdate(
+									() => The.Workspace.Load(projectPathBound)
+								),
 							}),
 							new ThemedButton("X") {
 								Clicked = () => {
 									Workspace.RemoveRecentProject(projectPathBound);
 									root.Nodes.Remove(f);
 								},
-							}
-						}
-
+							},
+						},
 					}
 				);
 				DecorateButton(openButton);
@@ -782,7 +800,7 @@ namespace Orange
 			{
 				b.MinSize = Vector2.Zero;
 				b.MaxSize = Vector2.PositiveInfinity;
-				var buttonText = (b["TextPresenter"] as SimpleText);
+				var buttonText = b["TextPresenter"] as SimpleText;
 				buttonText.FontHeight = 100;
 				buttonText.OverflowMode = TextOverflowMode.Minify;
 			}
@@ -813,7 +831,11 @@ namespace Orange
 #if DEBUG
 					System.Diagnostics.Debug.Write(value);
 #endif // DEBUG
-					if (autoscrollEnabled && !textView.Behaviour.IsScrolling() && !(textView.Behaviour as ScrollViewWithSlider).SliderIsDragging) {
+					if (
+						autoscrollEnabled
+						&& !textView.Behaviour.IsScrolling()
+						&& !(textView.Behaviour as ScrollViewWithSlider).SliderIsDragging
+					) {
 						textView.ScrollToEnd();
 					}
 					autoscrollEnabled = textView.ScrollPosition == textView.MaxScrollPosition;

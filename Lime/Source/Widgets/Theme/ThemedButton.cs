@@ -26,7 +26,7 @@ namespace Lime
 				OnRunAnimation = (animation, markerId, animationTimeCorrection) => {
 					presenter.SetState(markerId);
 					return true;
-				}
+				},
 			};
 			var caption = new SimpleText {
 				Id = "TextPresenter",
@@ -34,7 +34,7 @@ namespace Lime
 				FontHeight = Theme.Metrics.TextHeight,
 				HAlignment = HAlignment.Center,
 				VAlignment = VAlignment.Center,
-				OverflowMode = TextOverflowMode.Ellipsis
+				OverflowMode = TextOverflowMode.Ellipsis,
 			};
 			AddNode(caption);
 			TabTravesable = new TabTraversable();
@@ -59,18 +59,18 @@ namespace Lime
 			{
 				CommonWindow.Current.Invalidate();
 				switch (state) {
-				case "Press":
-					innerGradient = Theme.Colors.ButtonPress;
-					break;
-				case "Focus":
-					innerGradient = Theme.Colors.ButtonHover;
-					break;
-				case "Disable":
-					innerGradient = Theme.Colors.ButtonDisable;
-					break;
-				default:
-					innerGradient = Theme.Colors.ButtonDefault;
-					break;
+					case "Press":
+						innerGradient = Theme.Colors.ButtonPress;
+						break;
+					case "Focus":
+						innerGradient = Theme.Colors.ButtonHover;
+						break;
+					case "Disable":
+						innerGradient = Theme.Colors.ButtonDisable;
+						break;
+					default:
+						innerGradient = Theme.Colors.ButtonDefault;
+						break;
 				}
 			}
 

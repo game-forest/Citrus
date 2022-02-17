@@ -16,10 +16,10 @@ namespace Citrus.Tests.Widgets
 		[TestInitialize]
 		public void TestSetUp()
 		{
-			root = new TestNode {Id = "Root"};
-			child1 = new TestNode { Id = "Child1"};
-			child2 = new TestNode { Id = "Child2"};
-			grandChild = new TestNode { Id = "Grandchild"};
+			root = new TestNode { Id = "Root" };
+			child1 = new TestNode { Id = "Child1" };
+			child2 = new TestNode { Id = "Child2" };
+			grandChild = new TestNode { Id = "Grandchild" };
 			root.AddNode(child1);
 			root.AddNode(child2);
 			child1.AddNode(grandChild);
@@ -95,7 +95,7 @@ namespace Citrus.Tests.Widgets
 		public void RunAnimationWithMarkerAndIdTest()
 		{
 			var animation = new Animation {
-				Id = AnimationName
+				Id = AnimationName,
 			};
 			animation.Markers.Add(new Marker(MarkerName, 0, MarkerAction.Play));
 			root.Animations.Add(animation);
@@ -134,7 +134,7 @@ namespace Citrus.Tests.Widgets
 		[TestMethod]
 		public void ToStringTest()
 		{
-			root.Id = "";
+			root.Id = string.Empty;
 			child1.Tag = "Special";
 			Assert.AreEqual("TestNode", root.ToString());
 			Assert.AreEqual("'Child1' (Special) in TestNode", child1.ToString());
@@ -161,7 +161,7 @@ namespace Citrus.Tests.Widgets
 		[TestMethod]
 		public void UpdateTest()
 		{
-			var nodes = new List<Node> {root, child1, grandChild};
+			var nodes = new List<Node> { root, child1, grandChild };
 			foreach (var node in nodes) {
 				node.DefaultAnimation.Markers.Add(new Marker("Start", 0, MarkerAction.Play));
 				node.RunAnimation("Start");
@@ -289,7 +289,7 @@ namespace Citrus.Tests.Widgets
 			var node = new TestNode();
 			node.DefaultAnimation.Markers.Add(new Marker("Start", 0, MarkerAction.Play));
 			node.RunAnimation("Start");
-			const float FrameDelta = (float)(AnimationUtils.SecondsPerFrame);
+			const float FrameDelta = (float)AnimationUtils.SecondsPerFrame;
 			for (var i = 0; i < 100000; i++) {
 				node.DefaultAnimation.Advance(FrameDelta);
 				// this line was just i without + 1 before tests were ported to mstest

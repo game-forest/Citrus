@@ -8,8 +8,8 @@ namespace Tangerine.UI.SceneView
 {
 	public class Spline3DPresenter : SyncCustomPresenter<Viewport3D>
 	{
-		List<SplinePoint3D> emptySelection = new List<SplinePoint3D>();
-		List<Vector3> splineApproximation = new List<Vector3>();
+		private List<SplinePoint3D> emptySelection = new List<SplinePoint3D>();
+		private List<Vector3> splineApproximation = new List<Vector3>();
 
 		protected override void InternalRender(Viewport3D viewport)
 		{
@@ -20,8 +20,7 @@ namespace Tangerine.UI.SceneView
 			foreach (var spline in viewport.Descendants.OfType<Spline3D>()) {
 				if (
 					!VisualHintsRegistry.Instance.DisplayCondition(spline) &&
-					!selection.Contains(spline)
-				) {
+					!selection.Contains(spline)) {
 					continue;
 				}
 				Renderer.Flush();
@@ -33,7 +32,9 @@ namespace Tangerine.UI.SceneView
 					if (Document.Current.Container == spline) {
 						var selectedPoints = GetSelectedPoints();
 						foreach (var p in spline.Nodes) {
-							DrawSplinePoint((SplinePoint3D)p, viewport, spline.GlobalTransform, selectedPoints.Contains(p));
+							DrawSplinePoint(
+								(SplinePoint3D)p, viewport, spline.GlobalTransform, selectedPoints.Contains(p)
+							);
 						}
 					}
 
@@ -44,8 +45,9 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		void DrawSplinePoint(SplinePoint3D point, Viewport3D viewport, Matrix44 splineWorldMatrix, bool selected)
-		{
+		private void DrawSplinePoint(
+			SplinePoint3D point, Viewport3D viewport, Matrix44 splineWorldMatrix, bool selected
+		) {
 			var color = selected ? Color4.Green : Color4.Red;
 			var sv = SceneView.Instance;
 			var viewportToSceneFrame = viewport.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
@@ -53,13 +55,14 @@ namespace Tangerine.UI.SceneView
 			Renderer.DrawRect(a - Vector2.One * 3, a + Vector2.One * 3, color);
 			for (int i = 0; i < 2; i++) {
 				var t = i == 0 ? point.TangentA : point.TangentB;
-				var b = (Vector2)viewport.WorldToViewportPoint((point.Position + t) * splineWorldMatrix) * viewportToSceneFrame;
+				var b = (Vector2)viewport.WorldToViewportPoint((point.Position + t) * splineWorldMatrix)
+					* viewportToSceneFrame;
 				Renderer.DrawLine(a, b, color, 1);
 				Renderer.DrawRect(b - Vector2.One * 1.5f, b + Vector2.One * 1.5f, color);
 			}
 		}
 
-		List<SplinePoint3D> GetSelectedPoints()
+		private List<SplinePoint3D> GetSelectedPoints()
 		{
 			if (Document.Current.Container is Spline3D) {
 				return Document.Current.SelectedNodes().OfType<SplinePoint3D>().Editable().ToList();
@@ -67,7 +70,7 @@ namespace Tangerine.UI.SceneView
 			return emptySelection;
 		}
 
-		void DrawSpline(Spline3D spline, Viewport3D viewport)
+		private void DrawSpline(Spline3D spline, Viewport3D viewport)
 		{
 			var sv = SceneView.Instance;
 			var viewportToSceneFrame = viewport.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(sv.Frame);
@@ -76,11 +79,20 @@ namespace Tangerine.UI.SceneView
 				var n2 = (SplinePoint3D)spline.Nodes[i + 1];
 				splineApproximation.Clear();
 				splineApproximation.Add(n1.Position);
-				Approximate(n1.Position, n1.Position + n1.TangentA, n2.Position + n2.TangentB, n2.Position, 0.01f, 0, splineApproximation);
+				Approximate(
+					p1: n1.Position,
+					p2: n1.Position + n1.TangentA,
+					p3: n2.Position + n2.TangentB,
+					p4: n2.Position,
+					flatness: 0.01f,
+					level: 0,
+					points: splineApproximation
+				);
 				splineApproximation.Add(n2.Position);
 				var start = Vector2.Zero;
 				for (var j = 0; j < splineApproximation.Count; j++) {
-					var end = (Vector2)viewport.WorldToViewportPoint(splineApproximation[j] * spline.GlobalTransform) * viewportToSceneFrame;
+					var end = (Vector2)viewport.WorldToViewportPoint(splineApproximation[j] * spline.GlobalTransform)
+						* viewportToSceneFrame;
 					if (j > 0) {
 						SplinePresenter.DrawColoredLine(start, end, Color4.White, Color4.Black);
 					}
@@ -89,10 +101,13 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		void Approximate(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, float flatness, int level, List<Vector3> points)
-		{
-			if (level == 10)
+		private void Approximate(
+			Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, float flatness, int level, List<Vector3> points
+		) {
+			if (level == 10) {
 				return;
+			}
+
 			var d12 = p2 - p1;
 			var d13 = p3 - p1;
 			var d14 = p4 - p1;
@@ -102,8 +117,10 @@ namespace Tangerine.UI.SceneView
 			var bn2 = Vector3.CrossProduct(d14, n2);
 			var h1 = Mathf.Abs(Vector3.DotProduct(d12, bn1.Normalized));
 			var h2 = Mathf.Abs(Vector3.DotProduct(d13, bn2.Normalized));
-			if (h1 + h2 < flatness)
+			if (h1 + h2 < flatness) {
 				return;
+			}
+
 			var p12 = (p1 + p2) * 0.5f;
 			var p23 = (p2 + p3) * 0.5f;
 			var p34 = (p3 + p4) * 0.5f;

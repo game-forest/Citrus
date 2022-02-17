@@ -9,7 +9,7 @@ namespace Tangerine.UI.AnimeshEditor
 		public enum ModificationMode
 		{
 			Animation,
-			Setup
+			Setup,
 		}
 
 		public enum ModificationState

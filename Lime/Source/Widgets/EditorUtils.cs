@@ -65,10 +65,11 @@ namespace Lime
 				PrepareRenderState();
 				var b = Position + new Vector2(Width, FontHeight);
 				// Zero-width outline is still twice as wide.
-				if (Width <= 0)
+				if (Width <= 0) {
 					Renderer.DrawLine(Position, b, Color, Thickness);
-				else
+				} else {
 					Renderer.DrawRectOutline(Position, b, Color, Thickness);
+				}
 			}
 		}
 	}
@@ -138,9 +139,11 @@ namespace Lime
 		private SelectionParams selectionParams;
 
 		public SelectionPresenter(
-			Widget container, ICaretPosition selectionStart, ICaretPosition selectionEnd,
-			SelectionParams selectionParams)
-		{
+			Widget container,
+			ICaretPosition selectionStart,
+			ICaretPosition selectionEnd,
+			SelectionParams selectionParams
+		) {
 			this.selectionStart = selectionStart;
 			this.selectionEnd = selectionEnd;
 			this.selectionParams = selectionParams;
@@ -196,8 +199,10 @@ namespace Lime
 					rows.Add(new Rectangle(s, e + Vector2.Down * fontHeight));
 				} else { // Multi-line selection.
 					rows.Add(new Rectangle(s, new Vector2(float.PositiveInfinity, s.Y + fontHeight)));
-					if (s.Y + fontHeight < e.Y)
+					if (s.Y + fontHeight < e.Y) {
 						rows.Add(new Rectangle(0, s.Y + fontHeight, float.PositiveInfinity, e.Y));
+					}
+
 					rows.Add(new Rectangle(new Vector2(0, e.Y), e + Vector2.Down * fontHeight));
 				}
 				return rows;
@@ -212,15 +217,16 @@ namespace Lime
 					var r1 = r.ExpandedBy(new Thickness(OutlineThickness));
 					Renderer.DrawRectOutline(r1.A, r1.B, OutlineColor, OutlineThickness);
 				}
-				foreach (var r in rows)
+				foreach (var r in rows) {
 					Renderer.DrawRect(r.A, r.B, Color);
+				}
 			}
 		}
 	}
 
-	public class UndoHistory<T> where T : IEquatable<T>
+	public class UndoHistory<T>
+		where T : IEquatable<T>
 	{
-
 		private List<T> queue = new List<T>();
 		private int current;
 
@@ -228,10 +234,14 @@ namespace Lime
 
 		public void Add(T item)
 		{
-			if (queue.Count > 0 && item.Equals(queue[queue.Count - 1]))
+			if (queue.Count > 0 && item.Equals(queue[queue.Count - 1])) {
 				return;
-			if (current < queue.Count)
+			}
+
+			if (current < queue.Count) {
 				queue.RemoveRange(current, queue.Count - current);
+			}
+
 			var overflow = queue.Count - MaxDepth + 1;
 			if (MaxDepth > 0 && overflow > 0) {
 				queue.RemoveRange(0, overflow);
@@ -246,17 +256,23 @@ namespace Lime
 
 		public T Undo(T item)
 		{
-			if (!CanUndo())
+			if (!CanUndo()) {
 				throw new InvalidOperationException();
-			if (current == queue.Count && !item.Equals(queue[queue.Count - 1]))
+			}
+
+			if (current == queue.Count && !item.Equals(queue[queue.Count - 1])) {
 				queue.Add(item);
+			}
+
 			return queue[--current];
 		}
 
 		public T Redo()
 		{
-			if (!CanRedo())
+			if (!CanRedo()) {
 				throw new InvalidOperationException();
+			}
+
 			return queue[++current];
 		}
 
@@ -268,8 +284,10 @@ namespace Lime
 
 		public T ClearAndRestore()
 		{
-			if (!CanUndo())
+			if (!CanUndo()) {
 				throw new InvalidOperationException();
+			}
+
 			var result = queue[0];
 			queue.Clear();
 			current = 0;
@@ -327,14 +345,14 @@ namespace Lime
 		public bool IsAcceptableLines(int lines) => MaxLines <= 0 || lines <= MaxLines;
 		public bool IsAcceptableHeight(float height) => MaxHeight <= 0 || height <= MaxHeight;
 
-		public const NumberStyles numberStyle =
+		public const NumberStyles NumberStyle =
 			NumberStyles.AllowDecimalPoint |
 			NumberStyles.AllowLeadingSign;
 
 		public static bool AcceptNumber(string s)
 		{
 			double temp;
-			return s == "-" || Double.TryParse(s, numberStyle, CultureInfo.InvariantCulture, out temp);
+			return s == "-" || double.TryParse(s, NumberStyle, CultureInfo.InvariantCulture, out temp);
 		}
 	}
 
@@ -352,26 +370,43 @@ namespace Lime
 
 		private static CharClass GetCharClassAt(string text, int pos)
 		{
-			if (pos < 0) return CharClass.Begin;
-			if (pos >= text.Length) return CharClass.End;
+			if (pos < 0) {
+				return CharClass.Begin;
+			}
+
+			if (pos >= text.Length) {
+				return CharClass.End;
+			}
+
 			var ch = text[pos];
-			if (Char.IsWhiteSpace(ch)) return CharClass.Space;
-			if (Char.IsPunctuation(ch) || Char.IsSeparator(ch) || Char.IsSymbol(ch))
+			if (char.IsWhiteSpace(ch)) {
+				return CharClass.Space;
+			}
+
+			if (char.IsPunctuation(ch) || char.IsSeparator(ch) || char.IsSymbol(ch)) {
 				return CharClass.Punctuation;
-			if (Char.IsLetterOrDigit(ch))
+			}
+
+			if (char.IsLetterOrDigit(ch)) {
 				return CharClass.Word;
+			}
+
 			return CharClass.Other;
 		}
 
 		public static int PreviousWord(string text, int pos)
 		{
-			if (pos <= 0)
+			if (pos <= 0) {
 				return 0;
+			}
+
 			--pos;
 			for (var ccRight = GetCharClassAt(text, pos); pos > 0; --pos) {
 				var ccLeft = GetCharClassAt(text, pos - 1);
-				if (ccLeft != ccRight && ccRight != CharClass.Space)
+				if (ccLeft != ccRight && ccRight != CharClass.Space) {
 					break;
+				}
+
 				ccRight = ccLeft;
 			}
 			return pos;
@@ -379,32 +414,42 @@ namespace Lime
 
 		public static int NextWord(string text, int pos)
 		{
-			if (pos >= text.Length)
+			if (pos >= text.Length) {
 				return text.Length;
+			}
+
 			++pos;
 			for (var ccLeft = GetCharClassAt(text, pos - 1); pos < text.Length; ++pos) {
 				var ccRight = GetCharClassAt(text, pos);
-				if (ccRight != ccLeft && ccRight != CharClass.Space)
+				if (ccRight != ccLeft && ccRight != CharClass.Space) {
 					break;
+				}
+
 				ccLeft = ccRight;
 			}
 			return pos;
 		}
 
-		public struct IntRange { public int Left, Right; }
+		public struct IntRange
+		{
+			public int Left;
+			public int Right;
+		}
 
 		public static IntRange WordAt(string text, int pos)
 		{
 			var r = new IntRange { Left = pos, Right = pos };
 			var cc = GetCharClassAt(text, pos);
-			if (cc == CharClass.Space || cc == CharClass.End)
+			if (cc == CharClass.Space || cc == CharClass.End) {
 				cc = GetCharClassAt(text, pos - 1);
-			while (GetCharClassAt(text, r.Left - 1) == cc)
+			}
+			while (GetCharClassAt(text, r.Left - 1) == cc) {
 				--r.Left;
-			while (GetCharClassAt(text, r.Right) == cc)
+			}
+			while (GetCharClassAt(text, r.Right) == cc) {
 				++r.Right;
+			}
 			return r;
 		}
-
 	}
 }

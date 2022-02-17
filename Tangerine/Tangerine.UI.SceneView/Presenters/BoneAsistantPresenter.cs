@@ -1,9 +1,9 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
@@ -19,7 +19,7 @@ namespace Tangerine.UI.SceneView
 			sceneView.Frame.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(Render));
 		}
 
-		void Render(Widget canvas)
+		private void Render(Widget canvas)
 		{
 			if (!Document.Current.PreviewScene) {
 				var helper = SceneView.Instance.Components.Get<CreateBoneHelper>();

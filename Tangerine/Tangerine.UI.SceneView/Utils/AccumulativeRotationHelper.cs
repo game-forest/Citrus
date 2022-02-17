@@ -2,7 +2,6 @@ using Lime;
 
 namespace Tangerine.UI.SceneView
 {
-
 	public class AccumulativeRotationHelper
 	{
 		private readonly float rotationInitial;
@@ -24,7 +23,5 @@ namespace Tangerine.UI.SceneView
 			rotationPrevious = rotation;
 			rotationAccumulated += rotationDelta;
 		}
-
 	}
-
 }

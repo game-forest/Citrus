@@ -18,8 +18,10 @@ namespace Lime
 			}
 			set
 			{
-				if (name == value)
+				if (name == value) {
 					return;
+				}
+
 				name = value;
 				font = null;
 			}
@@ -29,17 +31,22 @@ namespace Lime
 		{
 			get
 			{
-				if (font == null)
+				if (font == null) {
 					font = FontPool.Instance[Name];
+				}
+
 				return font.About;
 			}
 		}
 
-		public float Spacing {
+		public float Spacing
+		{
 			get
 			{
-				if (font == null)
+				if (font == null) {
 					font = FontPool.Instance[Name];
+				}
+
 				return font.Spacing;
 			}
 		}
@@ -48,8 +55,10 @@ namespace Lime
 		{
 			get
 			{
-				if (font == null)
+				if (font == null) {
 					font = FontPool.Instance[Name];
+				}
+
 				return font.CharSource;
 			}
 		}
@@ -58,8 +67,10 @@ namespace Lime
 		{
 			get
 			{
-				if (font == null)
+				if (font == null) {
 					font = FontPool.Instance[Name];
+				}
+
 				return font.RoundCoordinates;
 			}
 		}
@@ -68,7 +79,7 @@ namespace Lime
 
 		public SerializableFont()
 		{
-			Name = "";
+			Name = string.Empty;
 		}
 
 		public SerializableFont(string name)
@@ -78,8 +89,10 @@ namespace Lime
 
 		public void ClearCache()
 		{
-			if (font == null)
+			if (font == null) {
 				font = FontPool.Instance[Name];
+			}
+
 			font.ClearCache();
 		}
 
@@ -114,18 +127,25 @@ namespace Lime
 		{
 			get
 			{
-				if (FontNameChanger != null)
+				if (FontNameChanger != null) {
 					name = FontNameChanger(name);
-				if (string.IsNullOrEmpty(name))
+				}
+
+				if (string.IsNullOrEmpty(name)) {
 					name = DefaultFontName;
+				}
+
 				IFont font;
-				if (fonts.TryGetValue(name, out font))
+				if (fonts.TryGetValue(name, out font)) {
 					return font;
+				}
+
 				if (AssetBundle.Initialized) {
 					if (TryGetOrUpdateBundleFontPath(name, out var fontPath, defaultFontExtensions)) {
 						font = InternalPersistence.Instance.ReadFromCurrentBundle<Font>(fontPath);
 					} else if (TryGetOrUpdateBundleFontPath(name, out var compoundFontPath, ".cft")) {
-						font = InternalPersistence.Instance.ReadFromCurrentBundle<SerializableCompoundFont>(compoundFontPath);
+						font = InternalPersistence.Instance
+							.ReadFromCurrentBundle<SerializableCompoundFont>(compoundFontPath);
 					} else {
 						return Null;
 					}
@@ -155,10 +175,12 @@ namespace Lime
 			}
 		}
 
-		public static bool TryGetOrUpdateBundleFontPath(string fontName, out string fontPath, params string[] extensions)
-		{
+		public static bool TryGetOrUpdateBundleFontPath(
+			string fontName, out string fontPath, params string[] extensions
+		) {
 			var ext = extensions.Any() ? extensions : defaultFontExtensions;
-			var fontPaths = AssetBundle.Current.EnumerateFiles(DefaultFontDirectory).Where(i => ext.Any(e => i.EndsWith(e)));
+			var fontPaths = AssetBundle.Current.EnumerateFiles(DefaultFontDirectory)
+				.Where(i => ext.Any(e => i.EndsWith(e)));
 			if (fontPaths.Contains(fontName)) {
 				fontPath = fontName;
 				return true;

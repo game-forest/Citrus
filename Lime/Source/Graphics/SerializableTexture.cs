@@ -14,7 +14,7 @@ namespace Lime
 		}
 
 		public SerializableTexture()
-			: this("")
+			: this(string.Empty)
 		{
 		}
 
@@ -24,7 +24,8 @@ namespace Lime
 		}
 
 		[YuzuMember]
-		public string SerializationPath {
+		public string SerializationPath
+		{
 			get => GetSerializationPath();
 			set => SetSerializationPath(value);
 		}
@@ -70,7 +71,8 @@ namespace Lime
 			}
 		}
 
-		public Size ImageSize {
+		public Size ImageSize
+		{
 			get
 			{
 				EnsureTexture();
@@ -78,7 +80,8 @@ namespace Lime
 			}
 		}
 
-		public Size SurfaceSize {
+		public Size SurfaceSize
+		{
 			get
 			{
 				EnsureTexture();
@@ -86,15 +89,19 @@ namespace Lime
 			}
 		}
 
-		public ITexture AtlasTexture {
-			get {
+		public ITexture AtlasTexture
+		{
+			get
+			{
 				EnsureTexture();
 				return texture.AtlasTexture;
 			}
 		}
 
-		public Rectangle AtlasUVRect {
-			get {
+		public Rectangle AtlasUVRect
+		{
+			get
+			{
 				EnsureTexture();
 				return texture.AtlasUVRect;
 			}

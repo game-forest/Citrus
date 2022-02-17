@@ -28,13 +28,17 @@ namespace Tangerine.UI
 				SetProperty(new SerializableFont((string)a.Value));
 			};
 			selector.AddLateChangeWatcher(CoalescedPropertyValue(), i => {
-				selector.Text = i.IsDefined ? GetFontName(i.Value): ManyValuesText;
+				selector.Text = i.IsDefined ? GetFontName(i.Value) : ManyValuesText;
 			});
 		}
 
 		private static string GetFontName(SerializableFont i)
 		{
-			return string.IsNullOrEmpty(i?.Name) ? "Default" : (i.Name.EndsWith(".fnt") || i.Name.EndsWith(".tft") || i.Name.EndsWith(".cft")) ? UpdateFontName(i.Name) : i.Name;
+			return string.IsNullOrEmpty(i?.Name)
+				? "Default"
+				: (i.Name.EndsWith(".fnt") || i.Name.EndsWith(".tft") || i.Name.EndsWith(".cft"))
+					? UpdateFontName(i.Name)
+					: i.Name;
 		}
 
 		private static string GetFontNameWithoutExtension(SerializableFont i)

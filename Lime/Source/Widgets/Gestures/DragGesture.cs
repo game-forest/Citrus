@@ -8,12 +8,12 @@ namespace Lime
 	{
 		Any,
 		Horizontal,
-		Vertical
+		Vertical,
 	}
 
 	public class DragGesture : Gesture
 	{
-		enum State
+		private enum State
 		{
 			Idle,
 			Recognizing,
@@ -38,19 +38,35 @@ namespace Lime
 		public bool Exclusive { get; set; }
 
 		public Vector2 MousePressPosition { get; private set; }
+
 		/// <summary>
 		/// MousePosition depends on DragDirection so (MousePosition - DragDirection).X or Y
 		/// will always be zero if DragDirection is Vertical or Horizontal respectively.
 		/// This fact is used when checking for threshold.
 		/// </summary>
-		public virtual Vector2 MousePosition => state == State.ChangingByMotion ? motionStrategy.Position : ClampMousePositionByDirection(Direction);
+		public virtual Vector2 MousePosition
+		{
+			get
+			{
+				return state == State.ChangingByMotion
+					? motionStrategy.Position
+					: ClampMousePositionByDirection(Direction);
+			}
+		}
 
 		public Vector2 TotalDragDistance => MousePosition - MousePressPosition;
 		public Vector2 LastDragDistance => MousePosition - PreviousMousePosition;
 		private float previousTime;
 		private Vector2 previousMousePosition;
-		protected virtual Vector2 PreviousMousePosition => state == State.ChangingByMotion ? previousMotionStrategyPosition : previousMousePosition;
-
+		protected virtual Vector2 PreviousMousePosition
+		{
+			get
+			{
+				return state == State.ChangingByMotion
+					? previousMotionStrategyPosition
+					: previousMousePosition;
+			}
+		}
 
 		private Vector2 ClampMousePositionByDirection(DragDirection direction)
 		{
@@ -101,6 +117,7 @@ namespace Lime
 			add { began.Handler += value; }
 			remove { began.Handler -= value; }
 		}
+
 		/// <summary>
 		/// Occurs if a user started gesture in a valid direction.
 		/// </summary>
@@ -109,6 +126,7 @@ namespace Lime
 			add { recognized.Handler += value; }
 			remove { recognized.Handler -= value; }
 		}
+
 		/// <summary>
 		/// Occurs when the drag is completed and the motion defined by motion strategy begins.
 		/// </summary>
@@ -117,6 +135,7 @@ namespace Lime
 			add => ending.Handler += value;
 			remove => ending.Handler -= value;
 		}
+
 		/// <summary>
 		/// Occurs when drag position is being changed by either user or motion strategy.
 		/// </summary>
@@ -125,6 +144,7 @@ namespace Lime
 			add { changed.Handler += value; }
 			remove { changed.Handler -= value; }
 		}
+
 		/// <summary>
 		/// Occurs when either a user released input or motion strategy is done.
 		/// </summary>
@@ -168,7 +188,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override void OnCancel(Gesture sender)
+		protected internal override void OnCancel(Gesture sender)
 		{
 			if (sender != null || state != State.ChangingByMotion) {
 				if (state == State.Changing || state == State.ChangingByMotion) {
@@ -178,7 +198,7 @@ namespace Lime
 			}
 		}
 
-		internal protected override bool OnUpdate()
+		protected internal override bool OnUpdate()
 		{
 			var result = false;
 			if (state == State.ChangingByMotion) {
@@ -187,9 +207,15 @@ namespace Lime
 					ended.Raise();
 				} else {
 					previousMotionStrategyPosition = motionStrategy.Position;
-					motionStrategy.Update(Min(WidgetContext.Current.GestureManager.AccumulatedDelta - motionStrategyStartTime, motionStrategy.Duration));
+					motionStrategy.Update(Min(
+						WidgetContext.Current.GestureManager.AccumulatedDelta - motionStrategyStartTime,
+						motionStrategy.Duration
+					));
 					changed.Raise();
-					if ((WidgetContext.Current.GestureManager.AccumulatedDelta - motionStrategyStartTime) > motionStrategy.Duration) {
+					if (
+						(WidgetContext.Current.GestureManager.AccumulatedDelta - motionStrategyStartTime)
+						> motionStrategy.Duration
+					) {
 						state = State.Idle;
 						ended.Raise();
 					}
@@ -244,7 +270,10 @@ namespace Lime
 					}
 				} else {
 					lastDragDelta = ClampMousePositionByDirection(Direction) - savedPreviousMousePosition;
-					touchHistory.Enqueue((lastDragDelta, WidgetContext.Current.GestureManager.AccumulatedDelta - previousTime));
+					touchHistory.Enqueue((
+						lastDragDelta,
+						WidgetContext.Current.GestureManager.AccumulatedDelta - previousTime
+					));
 					if (touchHistory.Count > MaxTouchHistorySize) {
 						touchHistory.Dequeue();
 					}
@@ -253,7 +282,6 @@ namespace Lime
 			return result;
 		}
 
-
 		/// <summary>
 		/// Defines a motion strategy.
 		/// </summary>
@@ -261,6 +289,7 @@ namespace Lime
 		{
 			Vector2 Position { get; }
 			float Duration { get; }
+
 			/// <summary>
 			/// Start position calculation.
 			/// </summary>
@@ -276,7 +305,8 @@ namespace Lime
 		}
 
 		/// <summary>
-		/// Motion damping based on Gauss error function. Duration is calculated so motion lasts until min speed reached.
+		/// Motion damping based on Gauss error function.
+		/// Duration is calculated so motion lasts until min speed reached.
 		/// </summary>
 		public class DampingMotionStrategy : IMotionStrategy
 		{
@@ -295,9 +325,14 @@ namespace Lime
 			public Vector2 Position { get; private set; }
 			public float Duration { get; private set; }
 
-			/// <param name="dampingFactor1">Initial speed damping factor. Should be in range (0; 1].
-			/// The lower the dampingFactor2, the lower damingFactor1 can be. Otherwise it may result in overflow.</param>
-			/// <param name="dampingFactor2">Damping factor applied to speed damping factor each frame. Valid range is (0; 1).</param>
+			/// <param name="dampingFactor1">
+			/// Initial speed damping factor. Should be in range (0; 1].
+			/// The lower the dampingFactor2, the lower damingFactor1 can be.
+			/// Otherwise it may result in overflow.
+			/// </param>
+			/// <param name="dampingFactor2">
+			/// Damping factor applied to speed damping factor each frame. Valid range is (0; 1).
+			/// </param>
 			/// <param name="minSpeed">The minimum speed that is considered a full stop.</param>
 			/// <param name="maxStartSpeed">Maximum initial speed of movement.</param>
 			public DampingMotionStrategy(
@@ -339,17 +374,24 @@ namespace Lime
 				return true;
 			}
 
-			public void Update(float time) =>
+			public void Update(float time)
+			{
 				Position = initialPosition + direction * (PositionOverTime(time, initialSpeed * k1, k2, k3) - p0);
+			}
 
 			// See https://www.desmos.com/calculator/imdpwcwylb for graphs with sliders
 			private static float PositionOverTime(float t, float a1, float a2, float a3) => a1 * Erf(a2 * t + a3);
 
-			private static float SpeedOverTime(float t, float a1, float a2, float a3) => 2 * a1 * a2 * Exp(-(a2 * t + a3).Sqr()) / Sqrt(Pi);
+			private static float SpeedOverTime(float t, float a1, float a2, float a3)
+			{
+				return 2 * a1 * a2 * Exp(-(a2 * t + a3).Sqr()) / Sqrt(Pi);
+			}
 
 			// Solves SpeedOverTime = targetSpeed for time
-			private static float CalcDurationUntilMinSpeedReached(float targetSpeed, float a1, float a2, float a3) =>
-				(Sqrt(-Log(Sqrt(Pi) * targetSpeed / (2.0f * a1 * a2))) - a3) / a2;
+			private static float CalcDurationUntilMinSpeedReached(float targetSpeed, float a1, float a2, float a3)
+			{
+				return (Sqrt(-Log(Sqrt(Pi) * targetSpeed / (2.0f * a1 * a2))) - a3) / a2;
+			}
 
 			private static (float k1, float k2, float k3) CalculateErfFactors(float d1, float d2)
 			{

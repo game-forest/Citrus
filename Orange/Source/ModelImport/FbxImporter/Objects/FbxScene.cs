@@ -19,14 +19,10 @@ namespace Orange.FbxImporter
 			Animations = new FbxSceneAnimations(ptr);
 		}
 
-		#region PInvokes
-
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr FbxSceneGetRootNode(IntPtr scene);
 
 		[DllImport(ImportConfig.LibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern void FbxSceneDestroy(IntPtr scene);
-
-		#endregion
 	}
 }

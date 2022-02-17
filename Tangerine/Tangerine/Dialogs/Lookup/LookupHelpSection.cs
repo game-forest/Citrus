@@ -30,7 +30,10 @@ namespace Tangerine
 		protected override void ApplyingLookupFilter(LookupWidget lookupWidget, string text)
 		{
 			foreach (var section in Sections.List) {
-				if (!string.IsNullOrEmpty(section.Prefix) && text.StartsWith(section.Prefix, StringComparison.InvariantCultureIgnoreCase)) {
+				if (
+					!string.IsNullOrEmpty(section.Prefix)
+					&& text.StartsWith(section.Prefix, StringComparison.InvariantCultureIgnoreCase)
+				) {
 					Sections.DropAndPush(section);
 					return;
 				}

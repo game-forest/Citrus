@@ -63,7 +63,11 @@ namespace Lime
 			var currentManifest = new PackedAssetBundle.Manifest();
 			// Build up deleted files list.
 			foreach (var file in inheritedFiles) {
-				if (inheritedFiles.Contains(file) && !currentBundle.FileExists(file) && file != PackedAssetBundle.Manifest.FileName) {
+				if (
+					inheritedFiles.Contains(file)
+					&& !currentBundle.FileExists(file)
+					&& file != PackedAssetBundle.Manifest.FileName
+				) {
 					currentManifest.DeletedAssets.Add(file);
 				}
 			}

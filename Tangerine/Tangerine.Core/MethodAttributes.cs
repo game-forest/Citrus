@@ -5,9 +5,10 @@ using System.Reflection;
 
 namespace Tangerine.Core
 {
-	public static class MethodAttributes<T> where T : Attribute
+	public static class MethodAttributes<T>
+		where T : Attribute
 	{
-		static readonly Dictionary<(Type, string, bool), T> map = new Dictionary<(Type, string, bool), T>();
+		private static readonly Dictionary<(Type, string, bool), T> map = new Dictionary<(Type, string, bool), T>();
 
 		public static T Get(MethodInfo method, bool inherit = false)
 		{

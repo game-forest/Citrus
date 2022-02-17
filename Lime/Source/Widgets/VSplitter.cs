@@ -24,7 +24,7 @@ namespace Lime
 			}
 			set
 			{
-				var l = (Layout as VSplitterLayout);
+				var l = Layout as VSplitterLayout;
 				if (l.Spacing != value) {
 					l.Spacing = value;
 					l.InvalidateArrangement();
@@ -94,7 +94,7 @@ namespace Lime
 			}
 		}
 
-		class SeparatorsRenderPresenter : SeparatorsRenderPresenterBase
+		private class SeparatorsRenderPresenter : SeparatorsRenderPresenterBase
 		{
 			public int SeparatorUnderMouse = -1;
 			public bool isSeparatorUnderMouseDrag;
@@ -108,13 +108,13 @@ namespace Lime
 						Start = new Vector2(w.X, y),
 						End = new Vector2(w.X + w.Width, y),
 						State = i == SeparatorUnderMouse ? (isSeparatorUnderMouseDrag ?
-							SplitterLineState.Drag : SplitterLineState.Highlight) : SplitterLineState.Default
+							SplitterLineState.Drag : SplitterLineState.Highlight) : SplitterLineState.Default,
 					});
 				}
 			}
 		}
 
-		class SeparatorsHitTestPresenter : IPresenter
+		private class SeparatorsHitTestPresenter : IPresenter
 		{
 			public int SeparatorUnderMouse { get; private set; }
 
@@ -127,7 +127,10 @@ namespace Lime
 					var widget = splitter.Nodes[i + 1].AsWidget;
 					var widgetPos = widget.GlobalPosition;
 					var mousePos = Window.Current.Input.MousePosition;
-					if (Mathf.Abs(mousePos.Y - (widgetPos.Y - splitter.SeparatorWidth * 0.5f)) < splitter.SeparatorActiveAreaWidth * 0.5f) {
+					if (
+						Mathf.Abs(mousePos.Y - (widgetPos.Y - splitter.SeparatorWidth * 0.5f))
+						< splitter.SeparatorActiveAreaWidth * 0.5f
+					) {
 						if (mousePos.X > widgetPos.X && mousePos.X < widgetPos.X + widget.Width) {
 							SeparatorUnderMouse = i;
 							args.Node = splitter;
@@ -141,7 +144,7 @@ namespace Lime
 		}
 
 		[YuzuDontGenerateDeserializer]
-		class VSplitterLayout : VBoxLayout
+		private class VSplitterLayout : VBoxLayout
 		{
 			public override void MeasureSizeConstraints()
 			{
@@ -149,7 +152,7 @@ namespace Lime
 				base.MeasureSizeConstraints();
 			}
 
-			void UpdateLayoutCells(Splitter splitter)
+			private void UpdateLayoutCells(Splitter splitter)
 			{
 				for (int i = 0; i < splitter.Nodes.Count; i++) {
 					var widget = (Widget)splitter.Nodes[i];

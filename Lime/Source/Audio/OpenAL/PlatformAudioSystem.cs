@@ -64,7 +64,8 @@ namespace Lime
 					}
 					Active = false;
 				} else if (args.InterruptionType == AVAudioSessionInterruptionType.Ended) {
-					// Do not restore the audio session here, because incoming call screen is still visible. Defer it until the first update.
+					// Do not restore the audio session here, because incoming call screen is still visible.
+					// Defer it until the first update.
 					audioSessionInterruptionEnded = true;
 				}
 			});
@@ -73,8 +74,8 @@ namespace Lime
 			// LoadLibrary() ivokes JNI_OnLoad()
 			Java.Lang.JavaSystem.LoadLibrary(Lib);
 
-			// Some devices can throw AudioContextException : The audio context could not be created with the specified parameters
-			// while AudioContext initializing. Try initialize context multiple times to avoid it.
+			// Some devices can throw AudioContextException : The audio context could not be created with the specified
+			// parameters while AudioContext initializing. Try initialize context multiple times to avoid it.
 			for (int i = 0; i < 3; i++) {
 				try {
 					context = new AudioContext();
@@ -85,7 +86,7 @@ namespace Lime
 				}
 			}
 #else
-			bool isDeviceAvailable = !String.IsNullOrEmpty(AudioContext.DefaultDevice);
+			bool isDeviceAvailable = !string.IsNullOrEmpty(AudioContext.DefaultDevice);
 			if (isDeviceAvailable && !CommandLineArgs.NoAudio) {
 				context = new AudioContext();
 			}
@@ -104,8 +105,9 @@ namespace Lime
 			}
 		}
 
-		private static void OnAudioChannelStateChanged(AudioChannel channel, AudioChannelState previousState, AudioChannelState newState)
-		{
+		private static void OnAudioChannelStateChanged(
+			AudioChannel channel, AudioChannelState previousState, AudioChannelState newState
+		) {
 			if (exclusiveChannels.Contains(channel)) {
 				if (newState == AudioChannelState.Stopped || newState == AudioChannelState.Paused) {
 					if (previousState != AudioChannelState.Initial) {
@@ -430,8 +432,7 @@ namespace Lime
 			float volume = 1f,
 			float pan = 0f,
 			float pitch = 1f
-		)
-		{
+		) {
 			var channel = GetAudioChannel(group, priority, volume, pan, pitch);
 			if (channel == null) {
 				return new Sound();
@@ -445,7 +446,7 @@ namespace Lime
 				decoder.Dispose();
 				return sound;
 			}
-			channel.SamplePath = "";
+			channel.SamplePath = string.Empty;
 			return sound;
 		}
 
@@ -502,8 +503,7 @@ namespace Lime
 			float volume = 1f,
 			float pan = 0f,
 			float pitch = 1f
-		)
-		{
+		) {
 			var channel = AllocateChannel(priority);
 			if (channel == null) {
 				return null;

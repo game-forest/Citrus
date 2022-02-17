@@ -1,7 +1,7 @@
-using Lime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.UI.Timeline.Operations;
@@ -24,7 +24,9 @@ namespace Tangerine.UI.Timeline
 					yield return null;
 					continue;
 				}
-				if (!GridSelection.GetSelectionBoundaries(out var boundaries) || boundaries.Right - boundaries.Left < 2) {
+				if (
+					!GridSelection.GetSelectionBoundaries(out var boundaries) || boundaries.Right - boundaries.Left < 2
+				) {
 					yield return null;
 					continue;
 				}
@@ -52,8 +54,8 @@ namespace Tangerine.UI.Timeline
 
 		private enum DragSide
 		{
-			Left, 
-			Right
+			Left,
+			Right,
 		}
 
 		private IEnumerator<object> Drag(IntRectangle boundaries, DragSide side)
@@ -121,7 +123,8 @@ namespace Tangerine.UI.Timeline
 				}
 				foreach (var key in saved) {
 					// Keyframes will be added back so animator doesn't need to be removed even if it is empty.
-					// Also, foreach is iterating over collection of animators and removing animator will cause "collection was modified" error.
+					// Also, foreach is iterating over collection of animators and removing
+					// animator will cause "collection was modified" error.
 					RemoveKeyframe.Perform(animator, key.Frame, removeEmptyAnimator: false);
 				}
 				foreach (var key in saved) {
@@ -135,10 +138,12 @@ namespace Tangerine.UI.Timeline
 					var newKey = key.Clone();
 					newKey.Frame = newFrame;
 					SetAnimableProperty.Perform(
-						host, animator.TargetPropertyPath, newKey.Value,
+						@object: host,
+						propertyPath: animator.TargetPropertyPath,
+						value: newKey.Value,
 						createAnimatorIfNeeded: true,
 						createInitialKeyframeForNewAnimator: false,
-						newKey.Frame
+						atFrame: newKey.Frame
 					);
 					SetKeyframe.Perform(host, animator.TargetPropertyPath, Document.Current.Animation, newKey);
 				}

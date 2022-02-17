@@ -154,8 +154,15 @@ namespace Lime
 			}
 		}
 
-		internal void RenderToTexture(ITexture renderTargetTexture, ITexture sourceTexture, IMaterial material, Color4 color, Color4 backgroundColor, Size? customViewportSize = null, Vector2? customUV1 = null)
-		{
+		internal void RenderToTexture(
+			ITexture renderTargetTexture,
+			ITexture sourceTexture,
+			IMaterial material,
+			Color4 color,
+			Color4 backgroundColor,
+			Size? customViewportSize = null,
+			Vector2? customUV1 = null
+		) {
 			var vs = customViewportSize ?? ViewportSize;
 			var uv1 = customUV1 ?? ProcessedUV1;
 			if (ProcessedViewport.Width != vs.Width || ProcessedViewport.Height != vs.Height) {
@@ -164,7 +171,18 @@ namespace Lime
 			renderTargetTexture.SetAsRenderTarget();
 			try {
 				Renderer.Clear(backgroundColor);
-				Renderer.DrawSprite(sourceTexture, null, material, color, Vector2.Zero, TextureSize, Vector2.Zero, uv1, Vector2.Zero, Vector2.Zero);
+				Renderer.DrawSprite(
+					texture1: sourceTexture,
+					texture2: null,
+					material: material,
+					color: color,
+					position: Vector2.Zero,
+					size: TextureSize,
+					uv0t1: Vector2.Zero,
+					uv1t1: uv1,
+					uv0t2: Vector2.Zero,
+					uv1t2: Vector2.Zero
+				);
 			} finally {
 				renderTargetTexture.RestoreRenderTarget();
 			}
@@ -174,7 +192,18 @@ namespace Lime
 		{
 			var uv1 = customUV1 ?? ProcessedUV1;
 			Renderer.Transform1 = LocalToWorldTransform;
-			Renderer.DrawSprite(texture, null, customMaterial ?? Material, Color, Position, Size, UV0 * uv1, UV1 * uv1, Vector2.Zero, Vector2.Zero);
+			Renderer.DrawSprite(
+				texture1: texture,
+				texture2: null,
+				material: customMaterial ?? Material,
+				color: Color,
+				position: Position,
+				size: Size,
+				uv0t1: UV0 * uv1,
+				uv1t1: UV1 * uv1,
+				uv0t2: Vector2.Zero,
+				uv1t2: Vector2.Zero
+			);
 		}
 
 		internal void PrepareOffscreenRendering(Vector2 orthogonalProjection)

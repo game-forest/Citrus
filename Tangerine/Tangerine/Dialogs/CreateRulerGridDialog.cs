@@ -28,14 +28,14 @@ namespace Tangerine
 				Title = "Create Rulers Preset",
 				Style = WindowStyle.Dialog,
 				ClientSize = new Vector2(300, 128),
-				Visible = false
+				Visible = false,
 			});
 			WindowWidget rootWidget = new ThemedInvalidableWindowWidget(window) {
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout(),
 				Nodes = {
 					(pane = new Widget {
-						Layout = new VBoxLayout { Spacing = 4 }
+						Layout = new VBoxLayout { Spacing = 4 },
 					}),
 					new Widget {
 						Padding = new Thickness { Top = 10 },
@@ -44,15 +44,15 @@ namespace Tangerine
 						Nodes = {
 							(okButton = new ThemedButton { Text = "Ok" }),
 							(cancelButton = new ThemedButton { Text = "Cancel" }),
-						}
-					}
-				}
+						},
+					},
+				},
 			};
 			editors.AddRange(new IPropertyEditor[] {
 				new Vector2PropertyEditor(
 					 new PropertyEditorParams(this, nameof(GridSize), displayName: "Grid Size")),
 				new Vector2PropertyEditor(
-					new PropertyEditorParams(this, nameof(GridSubdivision), displayName: "Grid Subdivision"))
+					new PropertyEditorParams(this, nameof(GridSubdivision), displayName: "Grid Subdivision")),
 			});
 			foreach (var e in editors) {
 				pane.AddNode(e.ContainerWidget);

@@ -9,7 +9,9 @@ namespace Tangerine.UI
 	{
 		public BezierEasingPropertyEditor(IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			EditorContainer.AddNode(new EasingEditorPanel(this, CoalescedPropertyValue(), (BezierEasing p) => SetProperty(p)).Widget);
+			EditorContainer.AddNode(
+				new EasingEditorPanel(this, CoalescedPropertyValue(), (BezierEasing p) => SetProperty(p)).Widget
+			);
 			EditorContainer.Gestures.Add(new ClickGesture(1, () => {
 				var reset = new Command("Reset", () => {
 					DoTransaction(() => SetProperty<BezierEasing>(_ => BezierEasing.Default));
@@ -46,17 +48,19 @@ namespace Tangerine.UI
 					MinMaxSize = new Vector2(160, 120),
 					Padding = new Thickness(6),
 					LayoutCell = new LayoutCell(Alignment.Center),
-					HitTestTarget = true
+					HitTestTarget = true,
 				};
 				Widget = new Frame {
 					ClipChildren = ClipMethod.ScissorTest,
 					Layout = new StackLayout(),
-					Nodes = { canvas, new Widget() }
+					Nodes = { canvas, new Widget() },
 				};
 				new BezierHandle(0, editor, valueProvider, propertySetter, canvas);
 				new BezierHandle(1, editor, valueProvider, propertySetter, canvas);
 				canvas.CompoundPostPresenter.Add(new SyncDelegatePresenter<Widget>(RenderSpline));
-				canvas.CompoundPostPresenter.Add(new WidgetBoundsPresenter(ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox));
+				canvas.CompoundPostPresenter.Add(
+					new WidgetBoundsPresenter(ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox)
+				);
 			}
 
 			private void RenderSpline(Widget widget)
@@ -67,7 +71,9 @@ namespace Tangerine.UI
 				var p0 = Vector2.Zero;
 				for (var t = 0f; t < 1; t += 0.01f) {
 					var p1 = new Vector2((float)bezier.SampleCurveX(t), (float)bezier.SampleCurveY(t));
-					Renderer.DrawLine(Project(canvas, p0), Project(canvas, p1), ColorTheme.Current.Inspector.EasingSpline, 2);
+					Renderer.DrawLine(
+						Project(canvas, p0), Project(canvas, p1), ColorTheme.Current.Inspector.EasingSpline, 2
+					);
 					p0 = p1;
 				}
 			}

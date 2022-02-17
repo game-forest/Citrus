@@ -8,8 +8,13 @@ namespace Lime.Source.Profilers.NodeProfilerHelpers
 {
 	public static class ResultExporter
 	{
-		public static Node CreateCloneForSerialization(Node node, long totalRenderTicks, long totalUpdateTicks, Action<Node> calculateUsageSummary, Action<Node> customOperation = null)
-		{
+		public static Node CreateCloneForSerialization(
+			Node node,
+			long totalRenderTicks,
+			long totalUpdateTicks,
+			Action<Node> calculateUsageSummary,
+			Action<Node> customOperation = null
+		) {
 			var clone = node.Clone();
 			calculateUsageSummary(clone);
 			foreach (var n in clone.Descendants) {

@@ -15,7 +15,9 @@ namespace Tangerine.UI.SceneView
 			var backgroundTexture = PrepareChessTexture(Color1, Color2);
 			var playButtonTexture = new Texture2D();
 
-			playButtonTexture.LoadImage(new Bitmap(new ThemedIconResource("SceneView.Play", "Tangerine").GetResourceStream()));
+			playButtonTexture.LoadImage(
+				new Bitmap(new ThemedIconResource("SceneView.Play", "Tangerine").GetResourceStream())
+			);
 			sceneView.Frame.AddChangeWatcher(
 				() => SceneUserPreferences.Instance.BackgroundColorA,
 				(v) => backgroundTexture = PrepareChessTexture(v, Color2));
@@ -45,12 +47,12 @@ namespace Tangerine.UI.SceneView
 							SceneUserPreferences.Instance.AnimationPreviewBackground);
 					} else {
 						var root = Core.Document.Current.RootNode as Widget;
-						Renderer.Transform1 = root.LocalToWorldTransform * SceneView.Instance.Scene.LocalToWorldTransform;
+						Renderer.Transform1 =
+							root.LocalToWorldTransform * SceneView.Instance.Scene.LocalToWorldTransform;
 						Renderer.DrawRect(Vector2.Zero, root.Size, RootWidgetBackgroundColor);
 					}
 				}
 			}));
-
 
 			sceneView.Scene.CompoundPostPresenter.Push(new SyncDelegatePresenter<Widget>(w => {
 				var frame = SceneView.Instance.Frame;
@@ -62,7 +64,9 @@ namespace Tangerine.UI.SceneView
 					var t2 = 1 / mtx.V.Length;
 					Renderer.Transform1 = mtx;
 					var sv = SceneView.Instance;
-					var rect = Document.Current.Container.AsWidget.CalcHull().Transform(sv.CalcTransitionFromSceneSpace(sv.Frame)).ToAABB();
+					var rect = Document.Current.Container.AsWidget.CalcHull()
+						.Transform(sv.CalcTransitionFromSceneSpace(sv.Frame))
+						.ToAABB();
 					Renderer.DrawLine(new Vector2(0, rect.A.Y), new Vector2(frame.Size.X, rect.A.Y), c, t1);
 					Renderer.DrawLine(new Vector2(0, rect.B.Y), new Vector2(frame.Size.X, rect.B.Y), c, t1);
 					Renderer.DrawLine(new Vector2(rect.A.X, 0), new Vector2(rect.A.X, frame.Size.Y), c, t2);
@@ -86,12 +90,10 @@ namespace Tangerine.UI.SceneView
 									pos,
 									(Vector2)playButtonTexture.ImageSize,
 									Vector2.Zero,
-									Vector2.One
-								);
+									Vector2.One);
 							}
 						}
-					}
-			));
+					}));
 			var renderChain = new RenderChain();
 			sceneView.Frame.CompoundPostPresenter.Push(
 				new SyncDelegatePresenter<Widget>(
@@ -101,9 +103,11 @@ namespace Tangerine.UI.SceneView
 								var widget = pair.Value;
 								if (ProjectUserPreferences.Instance.DisplayedOverlays.Contains(pair.Key)) {
 									if (widget.Components.Get<NodeCommandComponent>()?.Command.Checked ?? false) {
-										widget.Position = (Document.Current.RootNode.AsWidget.Position +
-											(Document.Current.RootNode.AsWidget.Size - widget.Size) / 2) *
-											Document.Current.RootNode.AsWidget.LocalToWorldTransform * SceneView.Instance.Scene.LocalToWorldTransform;
+										widget.Position = (
+												Document.Current.RootNode.AsWidget.Position
+												+ (Document.Current.RootNode.AsWidget.Size - widget.Size) / 2
+											) * Document.Current.RootNode.AsWidget.LocalToWorldTransform
+											* SceneView.Instance.Scene.LocalToWorldTransform;
 										widget.Scale = SceneView.Instance.Scene.Scale;
 										widget.RenderChainBuilder.AddToRenderChain(renderChain);
 									}
@@ -141,29 +145,53 @@ namespace Tangerine.UI.SceneView
 							new Rectangle(Vector2.Zero, new Vector2(aabb.Left, ctr.Height)).Normalized,
 							new Rectangle(new Vector2(aabb.Left, 0), new Vector2(aabb.Right, aabb.Top)).Normalized,
 							new Rectangle(new Vector2(aabb.Right, 0), ctr.Size).Normalized,
-							new Rectangle(new Vector2(aabb.Left, aabb.Bottom), new Vector2(aabb.Right, ctr.Height)).Normalized
+							new Rectangle(
+								new Vector2(aabb.Left, aabb.Bottom),
+								new Vector2(aabb.Right, ctr.Height)
+							).Normalized,
 						};
 						foreach (var rectangle in rectangles) {
-							Renderer.DrawRect(rectangle.A, rectangle.B, ColorTheme.Current.SceneView.ResolutionPreviewOuterSpace);
+							Renderer.DrawRect(
+								rectangle.A,
+								rectangle.B,
+								ColorTheme.Current.SceneView.ResolutionPreviewOuterSpace
+							);
 						}
 						const float FontHeight = 16;
-						var resolutionDescription = Document.Current.ResolutionPreview.Preset.GetDescription(Document.Current.ResolutionPreview.IsPortrait);
-						Renderer.DrawTextLine(aabb.Left, aabb.Top - FontHeight - 2, resolutionDescription, FontHeight, ColorTheme.Current.SceneView.ResolutionPreviewText, 0);
-					}
-			));
+						var resolutionDescription = Document.Current.ResolutionPreview.Preset.GetDescription(
+							Document.Current.ResolutionPreview.IsPortrait
+						);
+						Renderer.DrawTextLine(
+							x: aabb.Left,
+							y: aabb.Top - FontHeight - 2,
+							text: resolutionDescription,
+							fontHeight: FontHeight,
+							color: ColorTheme.Current.SceneView.ResolutionPreviewText,
+							letterSpacing: 0
+						);
+					}));
 		}
 
 		private void DrawRuler(Ruler ruler, Widget root)
 		{
-			var t = Document.Current.RootNode.AsWidget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(root);
+			var t = Document.Current.RootNode.AsWidget.LocalToWorldTransform
+				* SceneView.Instance.CalcTransitionFromSceneSpace(root);
 			var size = Document.Current.RootNode.AsWidget.Size / 2;
 			foreach (var line in ruler.Lines) {
 				if (line.RulerOrientation == RulerOrientation.Vertical) {
 					var val = (new Vector2(line.Value + (ruler.AnchorToRoot ? size.X : 0), 0) * t).X;
-					Renderer.DrawLine(new Vector2(val, 0), new Vector2(val, root.Size.Y), ColorTheme.Current.SceneView.Ruler);
+					Renderer.DrawLine(
+						a: new Vector2(val, 0),
+						b: new Vector2(val, root.Size.Y),
+						color: ColorTheme.Current.SceneView.Ruler
+					);
 				} else {
 					var val = (new Vector2(0, line.Value + (ruler.AnchorToRoot ? size.Y : 0)) * t).Y;
-					Renderer.DrawLine(new Vector2(0, val), new Vector2(root.Size.X, val), ColorTheme.Current.SceneView.Ruler);
+					Renderer.DrawLine(
+						a: new Vector2(0, val),
+						b: new Vector2(root.Size.X, val),
+						color: ColorTheme.Current.SceneView.Ruler
+					);
 				}
 			}
 		}

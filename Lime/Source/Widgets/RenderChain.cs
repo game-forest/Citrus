@@ -29,7 +29,8 @@ namespace Lime
 		private int currentLayer;
 		private List<Item> currentList;
 
-		public static readonly Rectangle DefaultClipRegion = new Rectangle(-float.MaxValue, -float.MaxValue, float.MaxValue, float.MaxValue);
+		public static readonly Rectangle DefaultClipRegion =
+			new Rectangle(-float.MaxValue, -float.MaxValue, float.MaxValue, float.MaxValue);
 
 		/// <summary>
 		/// The clip region. Usually represents viewport bounds in the coordinate space of the root widget.

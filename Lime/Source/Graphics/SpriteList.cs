@@ -127,7 +127,9 @@ namespace Lime
 					if (shaderProgramPass1 == null) {
 						shaderProgramPass1 = new ShaderProgram(
 							new Shader[] { new VertexShader(vs), new FragmentShader(fsPass1) },
-							ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers());
+							ShaderPrograms.Attributes.GetLocations(),
+							ShaderPrograms.GetSamplers()
+						);
 					}
 					PlatformRenderer.SetBlendState(Blending.LcdTextFirstPass.GetBlendState());
 					PlatformRenderer.SetShaderProgram(shaderProgramPass1);
@@ -135,7 +137,9 @@ namespace Lime
 					if (shaderProgramPass2 == null) {
 						shaderProgramPass2 = new ShaderProgram(
 							new Shader[] { new VertexShader(vs), new FragmentShader(fsPass2) },
-							ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers());
+							ShaderPrograms.Attributes.GetLocations(),
+							ShaderPrograms.GetSamplers()
+						);
 					}
 					PlatformRenderer.SetBlendState(Blending.LcdTextSecondPass.GetBlendState());
 					PlatformRenderer.SetShaderProgram(shaderProgramPass2);
@@ -181,7 +185,10 @@ namespace Lime
 			public Vector2 Size(float fontHeight)
 			{
 				var scale = fontHeight / FontChar.Height;
-				return new Vector2( scale * FontChar.PaddedWidth, fontHeight + scale * (2 * FontChar.Padding - FontChar.VerticalOffset));
+				return new Vector2(
+					scale * FontChar.PaddedWidth,
+					fontHeight + scale * (2 * FontChar.Padding - FontChar.VerticalOffset)
+				);
 			}
 		}
 
@@ -223,7 +230,10 @@ namespace Lime
 				if (Index >= buffer.Length) {
 					Array.Resize(ref buffer, (int)(buffer.Length * 1.5));
 				}
-				if (buffer[Index] == null) buffer[Index] = new Sprite();
+				if (buffer[Index] == null) {
+					buffer[Index] = new Sprite();
+				}
+
 				return buffer[Index++];
 			}
 

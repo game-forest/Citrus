@@ -41,8 +41,9 @@ namespace Lime
 			ApplyPositionAndSizeDelta(widget, positionDelta, sizeDelta);
 		}
 
-		private static void CalcXAndWidthDeltas(Widget widget, float parentWidthDelta, out float xDelta, out float widthDelta)
-		{
+		private static void CalcXAndWidthDeltas(
+			Widget widget, float parentWidthDelta, out float xDelta, out float widthDelta
+		) {
 			xDelta = 0;
 			widthDelta = 0;
 			if ((widget.Anchors & Anchors.CenterH) != 0) {
@@ -55,8 +56,9 @@ namespace Lime
 			}
 		}
 
-		private static void CalcYAndHeightDeltas(Widget widget, float parentHeightDelta, out float yDelta, out float heightDelta)
-		{
+		private static void CalcYAndHeightDeltas(
+			Widget widget, float parentHeightDelta, out float yDelta, out float heightDelta
+		) {
 			yDelta = 0;
 			heightDelta = 0;
 			if ((widget.Anchors & Anchors.CenterV) != 0) {

@@ -14,7 +14,7 @@ namespace Tangerine.UI.FilesystemView
 		{
 			get
 			{
-				var path = Project.Current.CitprojPath ?? "";
+				var path = Project.Current.CitprojPath ?? string.Empty;
 				if (!ViewRootPerProjectFile.ContainsKey(path)) {
 					ViewRootPerProjectFile.Add(path, new FSViewNode());
 				}
@@ -22,10 +22,16 @@ namespace Tangerine.UI.FilesystemView
 			}
 			set
 			{
-				ViewRootPerProjectFile[Project.Current.CitprojPath ?? ""] = value;
+				ViewRootPerProjectFile[Project.Current.CitprojPath ?? string.Empty] = value;
 			}
 		}
 
-		public static FilesystemUserPreferences Instance => Core.UserPreferences.Instance.GetOrAdd<FilesystemUserPreferences>();
+		public static FilesystemUserPreferences Instance
+		{
+			get
+			{
+				return Core.UserPreferences.Instance.GetOrAdd<FilesystemUserPreferences>();
+			}
+		}
 	}
 }

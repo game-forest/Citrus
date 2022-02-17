@@ -6,13 +6,13 @@ using System.Runtime.CompilerServices;
 
 namespace Lime
 {
-	public sealed class TriggerAttribute : Attribute {}
+	public sealed class TriggerAttribute : Attribute { }
 
 	public sealed class AnimatorList : IList<IAnimator>, IDisposable
 	{
 		private IAnimationHost owner;
 		private List<IAnimator> list;
-		
+
 		public int Count => list?.Count ?? 0;
 
 		public AnimatorList(IAnimationHost owner)
@@ -177,7 +177,7 @@ namespace Lime
 			item.Owner = null;
 			owner.OnAnimatorCollectionChanged();
 		}
-		
+
 		public int GetOverallDuration(string animationId = null)
 		{
 			int val = 0;

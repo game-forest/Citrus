@@ -1,3 +1,5 @@
+#pragma warning disable SA1027 // Use tabs correctly
+#pragma warning disable SA1005 // Single line comments should begin with single space
 //using System;
 //using System.Linq;
 //using System.Collections.Generic;
@@ -146,13 +148,17 @@
 //					}
 //					var morphTarget = new MorphableMesh.MorphTarget {
 //						Timestamp = time,
-//						PosColorBuffer = new VertexBuffer<MorphableMesh.PosColor> { Data = new MorphableMesh.PosColor[vertexCount] }
+//						PosColorBuffer = new VertexBuffer<MorphableMesh.PosColor> {
+//							Data = new MorphableMesh.PosColor[vertexCount]
+//						}
 //					};
 //					mesh.MorphTargets.Add(morphTarget);
 //					int currentVertex = 0;
 //					int currentIndex = 0;
 //					foreach (var batch in renderList.Batches) {
-//						CopyPosColorData(batch.VertexBuffer.Data, morphTarget.PosColorBuffer.Data, currentVertex, batch.LastVertex);
+//						CopyPosColorData(
+//							batch.VertexBuffer.Data, morphTarget.PosColorBuffer.Data, currentVertex, batch.LastVertex
+//						);
 //						throw new NotImplementedException();
 //						//if (isFirstTimeStamp) {
 //						//	var mbatch = new MorphableMesh.RenderBatch {
@@ -164,7 +170,13 @@
 //						//	};
 //						//	mesh.Batches.Add(mbatch);
 //						//	CopyUV1Data(batch.VertexBuffer.Data, mesh.UVBuffer.Data, currentVertex, batch.LastVertex);
-//						//	CopyIndices(batch.IndexBuffer.Data, mesh.IndexBuffer.Data, currentIndex, batch.LastIndex, (ushort)currentVertex);
+//						//	CopyIndices(
+//						//		batch.IndexBuffer.Data,
+//						//		mesh.IndexBuffer.Data,
+//						//		currentIndex,
+//						//		batch.LastIndex,
+//						//		(ushort)currentVertex
+//						//	);
 //						//}
 //						currentVertex += batch.LastVertex;
 //						currentIndex += batch.LastIndex;
@@ -271,8 +283,9 @@
 //			}
 //		}
 
-//		private void CopyPosColorData(Vertex[] vertices, MorphableMesh.PosColor[] destination, int destinationIndex, int length)
-//		{
+//		private void CopyPosColorData(
+//			Vertex[] vertices, MorphableMesh.PosColor[] destination, int destinationIndex, int length
+//		) {
 //			for (int i = 0; i < length; i++, destinationIndex++) {
 //				destination[destinationIndex].Position = vertices[i].Pos;
 //				destination[destinationIndex].Color = vertices[i].Color;
@@ -335,3 +348,5 @@
 //		}
 //	}
 //}
+#pragma warning restore SA1005 // Single line comments should begin with single space
+#pragma warning restore SA1027 // Use tabs correctly

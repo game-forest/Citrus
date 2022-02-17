@@ -36,7 +36,7 @@ namespace Lime
 	{
 		Butt,
 		Round,
-		Square
+		Square,
 	}
 
 #pragma warning disable CS0660, CS0661
@@ -50,13 +50,21 @@ namespace Lime
 		public IntVector2 Origin
 		{
 			get { return new IntVector2(X, Y); }
-			set { X = value.X; Y = value.Y; }
+			set
+			{
+				X = value.X;
+				Y = value.Y;
+			}
 		}
 
 		public IntVector2 Size
 		{
 			get { return new IntVector2(Width, Height); }
-			set { Width = value.X; Height = value.Y; }
+			set
+			{
+				Width = value.X;
+				Height = value.Y;
+			}
 		}
 
 		public static explicit operator IntRectangle(WindowRect r)
@@ -115,7 +123,7 @@ namespace Lime
 		private static Matrix32 transform2 = Matrix32.Identity;
 		private static Viewport viewport;
 		private static ColorWriteMask colorWriteEnabled = ColorWriteMask.All;
-		private static bool Transform2Active;
+		private static bool transform2Active;
 		private static CullMode cullMode;
 		private static DepthState depthState;
 		private static StencilState stencilState;
@@ -140,7 +148,8 @@ namespace Lime
 		public static Matrix44 World
 		{
 			get { return world; }
-			set {
+			set
+			{
 				world = value;
 				worldViewDirty = worldViewProjDirty = true;
 				FlushWVPMatrix();
@@ -150,7 +159,8 @@ namespace Lime
 		public static Matrix44 View
 		{
 			get { return view; }
-			set {
+			set
+			{
 				view = value;
 				viewProjDirty = worldViewDirty = worldViewProjDirty = true;
 				FlushWVPMatrix();
@@ -160,7 +170,8 @@ namespace Lime
 		public static Matrix44 Projection
 		{
 			get { return proj; }
-			set {
+			set
+			{
 				proj = value;
 				viewProjDirty = worldViewProjDirty = true;
 				Flush();
@@ -170,7 +181,8 @@ namespace Lime
 
 		public static Matrix44 WorldView
 		{
-			get {
+			get
+			{
 				if (worldViewDirty) {
 					worldViewDirty = false;
 					worldView = world * view;
@@ -181,7 +193,8 @@ namespace Lime
 
 		public static Matrix44 ViewProjection
 		{
-			get {
+			get
+			{
 				if (viewProjDirty) {
 					viewProjDirty = false;
 					viewProj = view * proj;
@@ -192,7 +205,8 @@ namespace Lime
 
 		public static Matrix44 WorldViewProjection
 		{
-			get {
+			get
+			{
 				if (worldViewProjDirty) {
 					worldViewProjDirty = false;
 					worldViewProj = world * ViewProjection;
@@ -204,16 +218,18 @@ namespace Lime
 		public static Matrix32 Transform2
 		{
 			get { return transform2; }
-			set {
+			set
+			{
 				transform2 = value;
-				Transform2Active = !value.IsIdentity();
+				transform2Active = !value.IsIdentity();
 			}
 		}
 
 		public static ScissorState ScissorState
 		{
 			private get { return scissorState; }
-			set {
+			set
+			{
 				RenderList.Flush();
 				scissorState = value;
 				PlatformRenderer.SetScissorState(value);
@@ -223,7 +239,8 @@ namespace Lime
 		public static StencilState StencilState
 		{
 			private get { return stencilState; }
-			set {
+			set
+			{
 				RenderList.Flush();
 				stencilState = value;
 				PlatformRenderer.SetStencilState(value);
@@ -233,7 +250,8 @@ namespace Lime
 		public static Viewport Viewport
 		{
 			get { return viewport; }
-			set {
+			set
+			{
 				RenderList.Flush();
 				viewport = value;
 				PlatformRenderer.SetViewport(value);
@@ -243,7 +261,8 @@ namespace Lime
 		public static DepthState DepthState
 		{
 			private get { return depthState; }
-			set {
+			set
+			{
 				RenderList.Flush();
 				depthState = value;
 				PlatformRenderer.SetDepthState(depthState);
@@ -253,7 +272,8 @@ namespace Lime
 		public static ColorWriteMask ColorWriteEnabled
 		{
 			private get { return colorWriteEnabled; }
-			set {
+			set
+			{
 				if (colorWriteEnabled != value) {
 					Flush();
 					colorWriteEnabled = value;
@@ -265,7 +285,8 @@ namespace Lime
 		public static CullMode CullMode
 		{
 			private get { return cullMode; }
-			set {
+			set
+			{
 				if (cullMode != value) {
 					cullMode = value;
 					Flush();
@@ -277,7 +298,8 @@ namespace Lime
 		public static FrontFace FrontFace
 		{
 			private get { return frontFace; }
-			set {
+			set
+			{
 				if (frontFace != value) {
 					Flush();
 					frontFace = value;
@@ -289,7 +311,8 @@ namespace Lime
 		public static Color4 ColorFactor
 		{
 			get { return colorFactor; }
-			set {
+			set
+			{
 				if (colorFactor != value) {
 					colorFactor = value;
 					GlobalShaderParams.Set(colorFactorParamKey, colorFactor.ToVector4());
@@ -318,7 +341,9 @@ namespace Lime
 		public static void SetScissorState(ScissorState value, bool intersectWithCurrent = false)
 		{
 			if (intersectWithCurrent && scissorState.Enable && value.Enable) {
-				value.Bounds = (WindowRect)IntRectangle.Intersect((IntRectangle)value.Bounds, (IntRectangle)scissorState.Bounds);
+				value.Bounds = (WindowRect)IntRectangle.Intersect(
+					(IntRectangle)value.Bounds, (IntRectangle)scissorState.Bounds
+				);
 			}
 			ScissorState = value;
 		}
@@ -349,40 +374,61 @@ namespace Lime
 			RenderList.Flush();
 		}
 
-		public static void DrawTextLine(float x, float y, string text, float fontHeight, Color4 color, float letterSpacing)
-		{
+		public static void DrawTextLine(
+			float x, float y, string text, float fontHeight, Color4 color, float letterSpacing
+		) {
 			DrawTextLine(new Vector2(x, y), text, fontHeight, color, letterSpacing);
 		}
 
-		public static void DrawTextLine(Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing)
-		{
+		public static void DrawTextLine(
+			Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing
+		) {
 			DrawTextLine(FontPool.Instance[null], position, text, fontHeight, color, letterSpacing);
 		}
 
-		public static void DrawTextLine(IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing)
-		{
+		public static void DrawTextLine(
+			IFont font, Vector2 position, string text, float fontHeight, Color4 color, float letterSpacing
+		) {
 			DrawTextLine(font, position, text, color, fontHeight, 0, text.Length, letterSpacing);
 		}
 
-		static SpriteList staticSpriteList = new SpriteList();
+		private static SpriteList staticSpriteList = new SpriteList();
 
-		public static void DrawTextLine(IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing)
-		{
+		public static void DrawTextLine(
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing
+		) {
 			DrawTextLine(font, position, text, color, fontHeight, start, length, letterSpacing, staticSpriteList);
 			staticSpriteList.Render(Color4.White, Blending, Shader);
 			staticSpriteList.Clear();
 		}
 
 		public static void DrawTextLine(
-			IFont font, Vector2 position, string text, Color4 color, float fontHeight, int start, int length, float letterSpacing,
-			SpriteList list, Action<int, Vector2, Vector2> onDrawChar = null, int tag = -1)
-		{
+			IFont font,
+			Vector2 position,
+			string text,
+			Color4 color,
+			float fontHeight,
+			int start,
+			int length,
+			float letterSpacing,
+			SpriteList list,
+			Action<int, Vector2, Vector2> onDrawChar = null,
+			int tag = -1
+		) {
 			int j = 0;
 			if (list != null) {
 				for (int i = 0; i < length; i++) {
 					char ch = text[i + start];
-					if (ch != '\n' && ch != '\r' && font.CharSource.Get(ch, fontHeight) != FontChar.Null)
+					if (ch != '\n' && ch != '\r' && font.CharSource.Get(ch, fontHeight) != FontChar.Null) {
 						++j;
+					}
 				}
 			}
 			// Use array instead of list to reduce memory consumption.
@@ -410,9 +456,17 @@ namespace Lime
 				var scale = fontChar.Height != 0.0f ? fontHeight / fontChar.Height : 0.0f;
 				// Pen Position + Bearing + Kerning gives a proper letter position
 				// but we have to subtract left padding in order to avoid extra spacing
-				position.X += scale * (fontChar.ACWidths.X + fontChar.Kerning(prevChar) + halfLetterSpacing - fontChar.Padding);
-				var size = new Vector2(scale * fontChar.PaddedWidth, fontHeight + scale * (fontChar.PaddedHeight - fontChar.VerticalOffset));
-				var charPosition = new Vector2(position.X, position.Y + scale * (fontChar.VerticalOffset - fontChar.Padding));
+				position.X += scale * (
+					fontChar.ACWidths.X + fontChar.Kerning(prevChar) + halfLetterSpacing - fontChar.Padding
+				);
+				var size = new Vector2(
+					scale * fontChar.PaddedWidth,
+					fontHeight + scale * (fontChar.PaddedHeight - fontChar.VerticalOffset)
+				);
+				var charPosition = new Vector2(
+					position.X,
+					position.Y + scale * (fontChar.VerticalOffset - fontChar.Padding)
+				);
 				if (font.RoundCoordinates) {
 					charPosition = new Vector2(charPosition.X.Round(), charPosition.Y.Round());
 				}
@@ -444,8 +498,9 @@ namespace Lime
 			DrawTriangleFan(texture1, texture2, material, vertices, numVertices);
 		}
 
-		public static void DrawTriangleFan(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)
-		{
+		public static void DrawTriangleFan(
+			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+		) {
 			if (numVertices == 0) {
 				return;
 			}
@@ -454,7 +509,7 @@ namespace Lime
 			int j = batch.LastIndex;
 			var indices = batch.Mesh.Indices;
 			for (int i = 1; i <= numVertices - 2; i++) {
-				indices[j++] = (ushort)(baseVertex);
+				indices[j++] = (ushort)baseVertex;
 				indices[j++] = (ushort)(baseVertex + i);
 				indices[j++] = (ushort)(baseVertex + i + 1);
 				batch.LastIndex += 3;
@@ -479,8 +534,9 @@ namespace Lime
 			DrawTriangleStrip(texture1, texture2, material, vertices, numVertices);
 		}
 
-		public static void DrawTriangleStrip(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)
-		{
+		public static void DrawTriangleStrip(
+			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+		) {
 			if (numVertices == 0) {
 				return;
 			}
@@ -499,8 +555,9 @@ namespace Lime
 			batch.Mesh.DirtyFlags |= MeshDirtyFlags.Indices;
 		}
 
-		private static RenderBatch<Vertex> DrawTrianglesHelper(ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices)
-		{
+		private static RenderBatch<Vertex> DrawTrianglesHelper(
+			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+		) {
 			var batch = RenderList.GetBatch<Vertex>(texture1, texture2, material, numVertices, (numVertices - 2) * 3);
 			var transform = GetEffectiveTransform();
 			var vd = batch.Mesh.Vertices;
@@ -516,24 +573,51 @@ namespace Lime
 			return batch;
 		}
 
-		public static void DrawSprite(ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)
-		{
+		public static void DrawSprite(
+			ITexture texture1, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1
+		) {
 			DrawSprite(texture1, null, color, position, size, uv0, uv1, Vector2.Zero, Vector2.Zero);
 		}
 
-		public static void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0, Vector2 uv1)
-		{
+		public static void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0,
+			Vector2 uv1
+		) {
 			DrawSprite(texture1, texture2, color, position, size, uv0, uv1, uv0, uv1);
 		}
 
-		public static void DrawSprite(ITexture texture1, ITexture texture2, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)
-		{
+		public static void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		) {
 			var material = GetMaterial(GetNumTextures(texture1, texture2));
 			DrawSprite(texture1, texture2, material, color, position, size, uv0t1, uv1t1, uv0t2, uv1t2);
 		}
 
-		public static void DrawSprite(ITexture texture1, ITexture texture2, IMaterial material, Color4 color, Vector2 position, Vector2 size, Vector2 uv0t1, Vector2 uv1t1, Vector2 uv0t2, Vector2 uv1t2)
-		{
+		public static void DrawSprite(
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Color4 color,
+			Vector2 position,
+			Vector2 size,
+			Vector2 uv0t1,
+			Vector2 uv1t1,
+			Vector2 uv0t2,
+			Vector2 uv1t2
+		) {
 			texture1?.TransformUVCoordinatesToAtlasSpace(ref uv0t1);
 			texture1?.TransformUVCoordinatesToAtlasSpace(ref uv1t1);
 			texture2?.TransformUVCoordinatesToAtlasSpace(ref uv0t2);
@@ -585,7 +669,7 @@ namespace Lime
 
 		private static Matrix32 GetEffectiveTransform()
 		{
-			if (Transform2Active) {
+			if (transform2Active) {
 				return Transform1 * Transform2;
 			} else {
 				return Transform1;
@@ -702,12 +786,12 @@ namespace Lime
 			// Get the scissor rectangle in 0,0 - 1,1 coordinate space
 			var vp = new Rectangle {
 				A = new Vector2(viewport.X, viewport.Y),
-				B = new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height)
+				B = new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height),
 			};
 			var r = (Rectangle)(IntRectangle)scissorState.Bounds;
 			var scissorRect = new Rectangle {
 				A = (r.A - vp.A) / vp.Size,
-				B = (r.B - vp.A) / vp.Size
+				B = (r.B - vp.A) / vp.Size,
 			};
 			// Transform it to the normalized OpenGL space
 			scissorRect.A = scissorRect.A * 2 - Vector2.One;
@@ -731,12 +815,13 @@ namespace Lime
 			return aabb;
 		}
 
-		public static void DrawLine(float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
-		{
+		public static void DrawLine(
+			float x0, float y0, float x1, float y1, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt
+		) {
 			DrawLine(new Vector2(x0, y0), new Vector2(x1, y1), color, thickness, cap);
 		}
 
-		static Vertex[] staticVertices = new Vertex[4];
+		private static Vertex[] staticVertices = new Vertex[4];
 
 		public static void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
 		{
@@ -758,7 +843,7 @@ namespace Lime
 			DrawTriangleFan(null, null, WidgetMaterial.Diffuse, staticVertices, 4);
 		}
 
-		static Vector2 GetVectorNormal(Vector2 v)
+		private static Vector2 GetVectorNormal(Vector2 v)
 		{
 			return new Vector2(-v.Y, v.X);
 		}
@@ -841,8 +926,9 @@ namespace Lime
 			DrawTriangleFan(null, null, WidgetMaterial.Diffuse, staticVertices, 4);
 		}
 
-		public static void FindMinMaxGradientPointColors(ColorGradient gradient, out Color4 minPointColor, out Color4 maxPointColor)
-		{
+		public static void FindMinMaxGradientPointColors(
+			ColorGradient gradient, out Color4 minPointColor, out Color4 maxPointColor
+		) {
 			var min = float.MaxValue;
 			var max = float.MinValue;
 			minPointColor = Color4.Zero;
@@ -890,13 +976,15 @@ namespace Lime
 			DrawVerticalGradientRect(a, b, new ColorGradient(topColor, bottomColor));
 		}
 
-		public static void DrawVerticalGradientRect(float x0, float y0, float x1, float y1, Color4 topColor, Color4 bottomColor)
-		{
+		public static void DrawVerticalGradientRect(
+			float x0, float y0, float x1, float y1, Color4 topColor, Color4 bottomColor
+		) {
 			DrawVerticalGradientRect(new Vector2(x0, y0), new Vector2(x1, y1), topColor, bottomColor);
 		}
 
-		public static void DrawRound(Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor)
-		{
+		public static void DrawRound(
+			Vector2 center, float radius, int numSegments, Color4 innerColor, Color4 outerColor
+		) {
 			if (staticVertices.Length < numSegments + 2) {
 				staticVertices = new Vertex[numSegments + 2];
 			}
@@ -958,7 +1046,7 @@ namespace Lime
 					UV1 = new Vector2(l / dashSize.X, 1),
 					UV2 = uv2,
 					Color = color,
-				}
+				},
 			};
 			DrawTriangleFan(null, null, DashedLineMaterial.Instance, vertices, vertices.Length);
 		}
@@ -989,9 +1077,9 @@ namespace Lime
 			Transform2 = transform * Transform2;
 		}
 
-		private static readonly Matrix44 vulkanClipspaceMatrix = Matrix44.CreateScale(1, -1, 0.5f) * Matrix44.CreateTranslation(0, 0, 0.5f);
+		private static readonly Matrix44 vulkanClipspaceMatrix =
+			Matrix44.CreateScale(1, -1, 0.5f) * Matrix44.CreateTranslation(0, 0, 0.5f);
 		private static readonly Matrix44 openglRenderTextureClipspaceMatrix = Matrix44.CreateScale(1, -1, 1);
-
 
 		public static Matrix44 FixupWVP(Matrix44 projection)
 		{
@@ -1169,7 +1257,7 @@ namespace Lime
 		World = 1 << 11,
 		View = 1 << 12,
 		Projection = 1 << 13,
-		All = ~0
+		All = ~0,
 	}
 
 	[YuzuCopyable]

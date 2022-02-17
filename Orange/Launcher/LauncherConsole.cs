@@ -32,7 +32,7 @@ namespace Launcher
 			set => Console.BackgroundColor = value;
 		}
 
-		public void ResetColor () => Console.ResetColor();
+		public void ResetColor() => Console.ResetColor();
 
 		public event ConsoleCancelEventHandler CancelKeyPress
 		{

@@ -1,7 +1,7 @@
-using Lime;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Lime;
 using Tangerine.Core;
 using Tangerine.Core.Operations;
 using Tangerine.UI.AnimeshEditor;
@@ -14,17 +14,18 @@ namespace Tangerine.UI.SceneView
 		private static SceneView SceneView => SceneView.Instance;
 
 		private static readonly int[] lookupPivotIndex = {
-			4, 5, 6, 7, 0, 1, 2, 3
+			4, 5, 6, 7, 0, 1, 2, 3,
 		};
+
 		private static readonly bool[][] lookupInvolvedAxes = {
-			new[] {true, true},
-			new[] {false, true},
-			new[] {true, true},
-			new[] {true, false},
-			new[] {true, true},
-			new[] {false, true},
-			new[] {true, true},
-			new[] {true, false},
+			new[] { true, true },
+			new[] { false, true },
+			new[] { true, true },
+			new[] { true, false },
+			new[] { true, true },
+			new[] { false, true },
+			new[] { true, true },
+			new[] { true, false },
 		};
 
 		public IEnumerator<object> Task()
@@ -50,7 +51,9 @@ namespace Tangerine.UI.SceneView
 						}
 						var b = hull[(i + 1) % 4];
 						if (SceneView.HitTestResizeControlPoint((a + b) / 2)) {
-							var cursor = (b.X - a.X).Abs() > (b.Y - a.Y).Abs() ? MouseCursor.SizeNS : MouseCursor.SizeWE;
+							var cursor = (b.X - a.X).Abs() > (b.Y - a.Y).Abs()
+								? MouseCursor.SizeNS
+								: MouseCursor.SizeWE;
 							Utils.ChangeCursorIfDefault(cursor);
 							if (SceneView.Input.ConsumeKeyPress(Key.Mouse0)) {
 								yield return Resize(hull, i * 2 + 1, pivot);
@@ -99,8 +102,7 @@ namespace Tangerine.UI.SceneView
 						prevMousePos: mouseStartPos,
 						proportional: proportional,
 						convertScaleToSize: !isChangingScale,
-						isRoundingMode: isRoundingMode
-					);
+						isRoundingMode: isRoundingMode);
 					if (areChildrenFrozen) {
 						transform *= Document.Current.Container.AsWidget.CalcTransitionToSpaceOf(toBeTransformed[0]);
 						RestoreChildrenPositions(toBeTransformed[0], transform, isRoundingMode);
@@ -172,8 +174,7 @@ namespace Tangerine.UI.SceneView
 			Vector2 prevMousePos,
 			bool proportional,
 			bool convertScaleToSize,
-			bool isRoundingMode
-		) {
+			bool isRoundingMode) {
 			WidgetTransformsHelper.ApplyTransformationToWidgetsGroupObb(
 				widgetsInParentSpace: widgets,
 				overridePivotInSceneSpace: pivotPoint,
@@ -189,8 +190,7 @@ namespace Tangerine.UI.SceneView
 							: deformedVectorInObbSpace.X / originalVectorInObbSpace.X,
 						y: Math.Abs(originalVectorInObbSpace.Y) < Mathf.ZeroTolerance
 							? 1
-							: deformedVectorInObbSpace.Y / originalVectorInObbSpace.Y
-					);
+							: deformedVectorInObbSpace.Y / originalVectorInObbSpace.Y);
 					if (!lookupInvolvedAxes[controlPointIndex][0]) {
 						deformationScaleInObbSpace.X = proportional
 							? deformationScaleInObbSpace.Y
@@ -200,13 +200,12 @@ namespace Tangerine.UI.SceneView
 							? deformationScaleInObbSpace.X
 							: 1;
 					} else if (proportional) {
-						deformationScaleInObbSpace.X = (deformationScaleInObbSpace.X + deformationScaleInObbSpace.Y) / 2;
+						deformationScaleInObbSpace.X =
+							(deformationScaleInObbSpace.X + deformationScaleInObbSpace.Y) / 2;
 						deformationScaleInObbSpace.Y = deformationScaleInObbSpace.X;
 					}
 					return new Transform2d(Vector2d.Zero, deformationScaleInObbSpace, 0);
-				}
-			);
+				});
 		}
-
 	}
 }

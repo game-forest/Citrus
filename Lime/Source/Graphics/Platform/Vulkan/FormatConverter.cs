@@ -145,7 +145,7 @@ namespace Lime.Graphics.Platform.Vulkan
 				((int)(color.R * 31) << 11) |
 				((int)(color.G * 31) << 6) |
 				((int)(color.B * 31) << 1) |
-				((int)(color.A)));
+				((int)color.A));
 		}
 
 		private static void Encode_R4G4B4A4_UNorm_Pack16(IntPtr data, ColorF color)

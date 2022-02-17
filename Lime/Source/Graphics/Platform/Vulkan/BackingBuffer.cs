@@ -21,8 +21,12 @@ namespace Lime.Graphics.Platform.Vulkan
 		internal ulong SliceSize => sliceSize;
 		internal int Generation;
 
-		public BackingBuffer(PlatformRenderContext context, SharpVulkan.BufferUsageFlags usage, SharpVulkan.MemoryPropertyFlags memoryPropertyFlags, ulong size)
-		{
+		public BackingBuffer(
+			PlatformRenderContext context,
+			SharpVulkan.BufferUsageFlags usage,
+			SharpVulkan.MemoryPropertyFlags memoryPropertyFlags,
+			ulong size
+		) {
 			this.context = context;
 			this.usage = usage;
 			this.memoryPropertyFlags = memoryPropertyFlags;
@@ -42,7 +46,9 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			ulong alignment = 1;
 			if ((usage & SharpVulkan.BufferUsageFlags.UniformBuffer) != 0) {
-				alignment = GraphicsUtility.CombineAlignment(alignment, ctx.PhysicalDeviceLimits.MinUniformBufferOffsetAlignment);
+				alignment = GraphicsUtility.CombineAlignment(
+					alignment, ctx.PhysicalDeviceLimits.MinUniformBufferOffsetAlignment
+				);
 			}
 			return alignment;
 		}
@@ -51,7 +57,7 @@ namespace Lime.Graphics.Platform.Vulkan
 		{
 			sliceQueue.Enqueue(new SliceEntry {
 				Offset = sliceOffset,
-				FenceValue = fenceValue
+				FenceValue = fenceValue,
 			});
 			if (!context.IsFenceCompleted(sliceQueue.Peek().FenceValue)) {
 				sliceCount *= 2;
@@ -88,14 +94,14 @@ namespace Lime.Graphics.Platform.Vulkan
 				StructureType = SharpVulkan.StructureType.BufferCreateInfo,
 				Size = bufferSize,
 				SharingMode = SharpVulkan.SharingMode.Exclusive,
-				Usage = usage
+				Usage = usage,
 			};
 			buffer = context.Device.CreateBuffer(ref createInfo);
 			memory = context.MemoryAllocator.Allocate(buffer, memoryPropertyFlags);
 			sliceQueue.Clear();
 			for (ulong i = 0; i < sliceCount; i++) {
 				sliceQueue.Enqueue(new SliceEntry {
-					Offset = i * alignedSliceSize
+					Offset = i * alignedSliceSize,
 				});
 			}
 			Generation++;

@@ -7,7 +7,7 @@ namespace Lime
 {
 	public class GradientMaterial : IMaterial
 	{
-		private const int gradientTextureWidth = 2048;
+		private const int GradientTextureWidth = 2048;
 		private int currentVersion;
 		private Color4[] pixels;
 		private ColorGradient gradient;
@@ -47,12 +47,12 @@ namespace Lime
 			angleParamKey = shaderParams.GetParamKey<float>("angle");
 			stretchParamKey = shaderParams.GetParamKey<float>("stretch");
 
-			pixels = new Color4[gradientTextureWidth];
+			pixels = new Color4[GradientTextureWidth];
 			GradientTexture = new Texture2D {
 				TextureParams = new TextureParams {
 					WrapMode = TextureWrapMode.Clamp,
 					MinMagFilter = TextureFilter.Linear,
-				}
+				},
 			};
 			Gradient = new ColorGradient(Color4.White, Color4.Black);
 		}
@@ -82,7 +82,7 @@ namespace Lime
 			if (forceInvalidate || currentVersion != hash) {
 				currentVersion = hash;
 				Gradient.Rasterize(ref pixels);
-				GradientTexture.LoadImage(pixels, width: gradientTextureWidth, height: 1);
+				GradientTexture.LoadImage(pixels, width: GradientTextureWidth, height: 1);
 			}
 			return true;
 		}
@@ -101,7 +101,8 @@ namespace Lime
 		LinearBurn,
 		ColorBurn,
 		ColorDodge,
-		Addition, // Linear Dodge
+		// Linear Dodge
+		Addition,
 		Subtract,
 		Divide,
 		Difference,
@@ -109,7 +110,7 @@ namespace Lime
 		Screen,
 		Overlay,
 		Lighten,
-		Darken
+		Darken,
 	}
 
 	public class GradientShaderProgram : ShaderProgram
@@ -241,9 +242,9 @@ namespace Lime
 		private const string FragmentBlendDarken = @"
 				gl_FragColor = color * vec4(min(c1.rgb, c2.rgb), c1.a * c2.a);
 			}";
-
+#pragma warning disable MEN002 // Line is too long
 		// More about blending: https://photoblogstop.com/photoshop/photoshop-blend-modes-explained#BlendModeDescriptions
-
+#pragma warning restore MEN002 // Line is too long
 		private GradientShaderProgram(GradientMaterialBlendMode blend)
 			: base(CreateShaders(blend), ShaderPrograms.Attributes.GetLocations(), ShaderPrograms.GetSamplers()) { }
 
@@ -305,7 +306,7 @@ namespace Lime
 
 			return new Shader[] {
 				new VertexShader(VertexShader),
-				new FragmentShader(fragmentShader.ToString())
+				new FragmentShader(fragmentShader.ToString()),
 			};
 		}
 	}

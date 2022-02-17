@@ -141,7 +141,7 @@ namespace Lime
 			Localizable = true;
 			Localizable = true;
 			TrimWhitespaces = true;
-			Text = "";
+			Text = string.Empty;
 		}
 
 		void IText.Submit()
@@ -256,8 +256,10 @@ namespace Lime
 
 		private TextRenderer PrepareRenderer()
 		{
-			if (renderer != null)
+			if (renderer != null) {
 				return renderer;
+			}
+
 			ParseText();
 			renderer = new TextRenderer(OverflowMode, WordSplitAllowed);
 			// Setup default style(take first one from node list or TextStyle.Default).
@@ -282,12 +284,13 @@ namespace Lime
 		public void RemoveUnusedStyles()
 		{
 			PrepareRenderer();
-			for (int i = 1; i < Nodes.Count; ) {
+			for (int i = 1; i < Nodes.Count;) {
 				var node = Nodes[i];
-				if (node is TextStyle && !renderer.HasStyle(node as TextStyle))
+				if (node is TextStyle && !renderer.HasStyle(node as TextStyle)) {
 					Nodes.RemoveAt(i);
-				else
+				} else {
 					++i;
+				}
 			}
 		}
 
@@ -380,11 +383,14 @@ namespace Lime
 			Invalidate();
 		}
 
-		public int MaxDisplayCharacters {
-			get {
+		public int MaxDisplayCharacters
+		{
+			get
+			{
 				return maxDisplayCharacters;
 			}
-			set {
+			set
+			{
 				// buz: предполагается, что это свойство выставляется много раз подряд, чтобы создать
 				// эффект "пропечатывания" символов, поэтому не делаем каждый раз полный Invalidate.
 				if (maxDisplayCharacters != value) {

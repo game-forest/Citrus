@@ -36,7 +36,8 @@ namespace Lime
 		public event Action Activated;
 		public event Action Deactivated;
 		public event Action LowMemory;
-		// This is a mandatory property. See https://developer.xamarin.com/api/type/MonoTouch.UIKit.UIApplicationDelegate/
+		// This is a mandatory property.
+		// See https://developer.xamarin.com/api/type/MonoTouch.UIKit.UIApplicationDelegate/
 		public override UIWindow Window { get; set; }
 
 		public AppDelegate()
@@ -45,8 +46,9 @@ namespace Lime
 			AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
 		}
 
-		public override UIInterfaceOrientationMask GetSupportedInterfaceOrientations(UIApplication application, UIWindow forWindow)
-		{
+		public override UIInterfaceOrientationMask GetSupportedInterfaceOrientations(
+			UIApplication application, UIWindow forWindow
+		) {
 			// Grisha: UIInterfaceOrientationMask.Portrait is required by GameCenter for iPhone in iOS 6.
 			// so, if your app works in Landscape mode, use AllButUpsideDown.
 			// read
@@ -56,8 +58,9 @@ namespace Lime
 		}
 
 		UIAlertView pleaseRateMessage = null;
-		public void ShowAlertMessage(string title, string text, string cancelTitle, string[] otherButtons, AlertClickHandler onClick)
-		{
+		public void ShowAlertMessage(
+			string title, string text, string cancelTitle, string[] otherButtons, AlertClickHandler onClick
+		) {
 			if (pleaseRateMessage == null) {
 				pleaseRateMessage = new UIAlertView(title, text, null, cancelTitle, otherButtons);
 				pleaseRateMessage.Show();
@@ -82,7 +85,9 @@ namespace Lime
 
 		static void GlobalExceptionHandler(object sender, UnhandledExceptionEventArgs e)
 		{
-			Logger.Write("========================= CRASH REPORT ============================\n" + e.ExceptionObject.ToString());
+			Logger.Write(
+				"========================= CRASH REPORT ============================\n" + e.ExceptionObject.ToString()
+			);
 		}
 
 		//iOS9 changed the function signature for OpenURL. This is the new signature. Fixes [WSAG-3193].
@@ -91,8 +96,9 @@ namespace Lime
 			return InvokeUrlOpenedDelegate(url);
 		}
 
-		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
-		{
+		public override bool OpenUrl (
+			UIApplication application, NSUrl url, string sourceApplication, NSObject annotation
+		) {
 			return InvokeUrlOpenedDelegate(url);
 		}
 

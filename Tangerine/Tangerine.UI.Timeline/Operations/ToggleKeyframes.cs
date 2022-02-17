@@ -1,6 +1,6 @@
-using Lime;
 using System;
 using System.Linq;
+using Lime;
 using Tangerine.Core;
 
 namespace Tangerine.UI.Timeline.Operations
@@ -34,7 +34,8 @@ namespace Tangerine.UI.Timeline.Operations
 
 	public static class KeyframeToggle
 	{
-		public static void Perform<T>(string propertyName, Func<T, object> valueGetter) where T: IAnimationHost
+		public static void Perform<T>(string propertyName, Func<T, object> valueGetter)
+			where T : IAnimationHost
 		{
 			Document.Current?.History.DoTransaction(() => {
 				bool hasKey = false;

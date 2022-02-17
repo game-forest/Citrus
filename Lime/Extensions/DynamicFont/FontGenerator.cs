@@ -18,9 +18,13 @@ namespace Lime
 		/// <param name="assetDirectory"> Path to asset directory. </param>
 		public static void UpdateCharSetsAndGenerateFont(string configPath, string assetDirectory)
 		{
-			var config = InternalPersistence.Instance.ReadFromFile<TftConfig>(AssetPath.Combine(assetDirectory, configPath));
+			var config = InternalPersistence.Instance.ReadFromFile<TftConfig>(
+				AssetPath.Combine(assetDirectory, configPath)
+			);
 			UpdateCharsets(config, assetDirectory);
-			InternalPersistence.Instance.WriteToFile(AssetPath.Combine(assetDirectory, configPath), config, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToFile(
+				AssetPath.Combine(assetDirectory, configPath), config, Persistence.Format.Json
+			);
 			GenerateFont(config, assetDirectory, Path.ChangeExtension(configPath, null));
 		}
 
@@ -31,7 +35,9 @@ namespace Lime
 		/// <param name="assetDirectory"> Path to asset directory. </param>
 		public static void GenerateFont(string configPath, string assetDirectory)
 		{
-			var config = InternalPersistence.Instance.ReadFromFile<TftConfig>(AssetPath.Combine(assetDirectory, configPath));
+			var config = InternalPersistence.Instance.ReadFromFile<TftConfig>(
+				AssetPath.Combine(assetDirectory, configPath)
+			);
 			GenerateFont(config, assetDirectory, Path.ChangeExtension(configPath, null));
 		}
 
@@ -90,13 +96,18 @@ namespace Lime
 					fontCharCollection.Add(fontChar);
 				}
 				if (missingCharacters.Count > 0) {
-					Console.WriteLine($"Characters: {string.Join("", missingCharacters)} -- are missing in font {charSet.Font}");
+					Console.WriteLine(
+						$"Characters: {string.Join(string.Empty, missingCharacters)} -- " +
+						$"are missing in font {charSet.Font}"
+					);
 				}
 			}
 			GenerateKerningPairs(fontCharCollection, charToFace, config);
 			if (config.IsSdf) {
 				foreach (var texture in fontCharCollection.Textures) {
-					SdfConverter.ConvertToSdf(texture.GetPixels(), texture.ImageSize.Width, texture.ImageSize.Height, config.Padding / 2);
+					SdfConverter.ConvertToSdf(
+						texture.GetPixels(), texture.ImageSize.Width, texture.ImageSize.Height, config.Padding / 2
+					);
 				}
 			}
 			using (var font = new Font(fontCharCollection)) {
@@ -178,7 +189,7 @@ namespace Lime
 		public static void UpdateCharsets(TftConfig config, string assetDirectory)
 		{
 			foreach (var charSet in config.CharSets) {
-				UpdateCharset(charSet, assetDirectory, sortByFrequency:true);
+				UpdateCharset(charSet, assetDirectory, sortByFrequency: true);
 			}
 		}
 
@@ -193,8 +204,11 @@ namespace Lime
 			foreach (var localization in charSet.ExtractFromDictionaries.Split(',')) {
 				// cause EN is default dictionary
 				var loc = localization == "EN" ? string.Empty : localization;
-				var dictPath = AssetPath.Combine(assetDirectory, Localization.DictionariesPath,
-					$"Dictionary.{loc}.txt".Replace("..", "."));
+				var dictPath = AssetPath.Combine(
+					assetDirectory,
+					Localization.DictionariesPath,
+					$"Dictionary.{loc}.txt".Replace("..", ".")
+				);
 				if (!File.Exists(dictPath)) {
 					Console.WriteLine($"Dictionary of {localization} localization is missing!: {dictPath}");
 					continue;
@@ -204,13 +218,15 @@ namespace Lime
 				}
 				ExtractCharacters(dict, characters, frequency);
 			}
-			charSet.Chars = string.Join("", sortByFrequency ?
+			charSet.Chars = string.Join(string.Empty, sortByFrequency ?
 				characters.OrderByDescending(c => frequency[c]) : characters.OrderBy(c => c));
 		}
 
-		private static void ExtractCharacters(LocalizationDictionary dictionary, HashSet<char> chars,
-			Dictionary<char, int> frequency)
-		{
+		private static void ExtractCharacters(
+			LocalizationDictionary dictionary,
+			HashSet<char> chars,
+			Dictionary<char, int> frequency
+		) {
 			foreach (var (_, value) in dictionary) {
 				if (value.Text == null) {
 					continue;
@@ -228,7 +244,10 @@ namespace Lime
 		{
 			var basePath = Path.ChangeExtension(path, null);
 			var absolutePath = AssetPath.Combine(assetDirectory, path);
-			foreach (var file in Directory.EnumerateFiles(Path.GetDirectoryName(absolutePath), $"{Path.GetFileName(path)}??.png")) {
+			foreach (
+				var file
+				in Directory.EnumerateFiles(Path.GetDirectoryName(absolutePath), $"{Path.GetFileName(path)}??.png")
+			) {
 				File.Delete(file);
 			}
 			for (int i = 0; i < font.Textures.Count; i++) {
@@ -247,9 +266,11 @@ namespace Lime
 						bm.SaveTo(AssetPath.Combine(assetDirectory, basePath + (i > 0 ? $"{i:00}.png" : ".png")));
 					}
 				}
-				font.Textures[i] = new SerializableTexture(basePath + (i > 0 ? $"{i:00}" : ""));
+				font.Textures[i] = new SerializableTexture(basePath + (i > 0 ? $"{i:00}" : string.Empty));
 			}
-			InternalPersistence.Instance.WriteToFile(Path.ChangeExtension(absolutePath, "tft"), font, Persistence.Format.Json);
+			InternalPersistence.Instance.WriteToFile(
+				Path.ChangeExtension(absolutePath, "tft"), font, Persistence.Format.Json
+			);
 		}
 	}
 }

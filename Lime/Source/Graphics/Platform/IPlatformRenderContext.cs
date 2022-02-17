@@ -12,8 +12,12 @@ namespace Lime.Graphics.Platform
 		bool PipelineCacheSupported { get; }
 
 		IPlatformBuffer CreateBuffer(BufferType bufferType, int size, bool dynamic);
-		IPlatformTexture2D CreateTexture2D(Format format, int width, int height, bool mipmaps, TextureParams textureParams);
-		IPlatformRenderTexture2D CreateRenderTexture2D(Format format, int width, int height, TextureParams textureParams);
+		IPlatformTexture2D CreateTexture2D(
+			Format format, int width, int height, bool mipmaps, TextureParams textureParams
+		);
+		IPlatformRenderTexture2D CreateRenderTexture2D(
+			Format format, int width, int height, TextureParams textureParams
+		);
 		IPlatformShader CreateShader(ShaderStageMask stage, string source);
 
 		IPlatformShaderProgram CreateShaderProgram(

@@ -1,4 +1,3 @@
-
 namespace Lime
 {
 	public enum AudioChannelState
@@ -14,7 +13,7 @@ namespace Lime
 	{
 		Effects,
 		Music,
-		Voice
+		Voice,
 	}
 
 	public interface IAudioChannel
@@ -50,9 +49,9 @@ namespace Lime
 		public AudioChannelState State { get { return AudioChannelState.Stopped; } }
 		public AudioChannelGroup Group { get; set; }
 		public float Pan { get { return 0; } set { } }
-		public void Resume(float fadeinTime = 0) {}
-		public void Stop(float fadeoutTime = 0) {}
-		public void Pause(float fadeoutTime = 0) {}
+		public void Resume(float fadeinTime = 0) { }
+		public void Stop(float fadeoutTime = 0) { }
+		public void Pause(float fadeoutTime = 0) { }
 		public PlayParameters Suspend(float fadeoutTime = 0) { return null; }
 		public float Volume { get { return 0; } set { } }
 		public float Pitch { get { return 1; } set { } }

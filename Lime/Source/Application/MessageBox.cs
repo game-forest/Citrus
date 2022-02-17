@@ -6,7 +6,7 @@ using WinForms = System.Windows.Forms;
 
 namespace Lime
 {
-	//Disable designer
+	// Disable designer
 	[System.ComponentModel.DesignerCategory("")]
 	internal class MessageBoxForm : Form
 	{

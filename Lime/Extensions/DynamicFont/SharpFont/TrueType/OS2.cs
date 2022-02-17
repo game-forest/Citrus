@@ -1,4 +1,3 @@
-﻿#region MIT License
 /*Copyright (c) 2012-2014 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
@@ -20,7 +19,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -38,23 +36,13 @@ namespace SharpFont.TrueType
 	/// </para></summary>
 	public class OS2
 	{
-		#region Fields
-
 		private IntPtr reference;
 		private OS2Rec rec;
-
-		#endregion
-
-		#region Constructors
 
 		internal OS2(IntPtr reference)
 		{
 			Reference = reference;
 		}
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// The version of this table.
@@ -116,7 +104,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for sizing glyphs (em square) to create subscripts when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for sizing glyphs (em square) to create
+		/// subscripts when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SubscriptSizeX
 		{
@@ -127,7 +116,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for sizing glyphs (em height) to create subscripts when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for sizing glyphs (em height) to create
+		/// subscripts when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SubscriptSizeY
 		{
@@ -138,7 +128,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for vertically positioning subscripts that are created when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for vertically positioning
+		/// subscripts that are created when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SubscriptOffsetX
 		{
@@ -149,7 +140,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for horizontally positioning subscripts that are created when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for horizontally positioning
+		/// subscripts that are created when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SubscriptOffsetY
 		{
@@ -160,7 +152,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for sizing glyphs (em square) to create superscripts when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for sizing glyphs (em square) to create
+		/// superscripts when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SuperscriptSizeX
 		{
@@ -171,7 +164,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for sizing glyphs (em height) to create superscripts when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for sizing glyphs (em height) to create
+		/// superscripts when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SuperscriptSizeY
 		{
@@ -182,7 +176,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for vertically positioning superscripts that are created when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for vertically positioning
+		/// superscripts that are created when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SuperscriptOffsetX
 		{
@@ -193,7 +188,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The font author's recommendation for horizontally positioning superscripts that are created when a glyph doesn't exist for a subscript.
+		/// The font author's recommendation for horizontally positioning
+		/// superscripts that are created when a glyph doesn't exist for a subscript.
 		/// </summary>
 		public short SuperscriptOffsetY
 		{
@@ -237,7 +233,8 @@ namespace SharpFont.TrueType
 			}
 		}
 
-		//TODO write a PANOSE class from TrueType spec?
+		// TODO write a PANOSE class from TrueType spec?
+
 		/// <summary>
 		/// The Panose values describe visual characteristics of the font.
 		/// Similar fonts can then be selected based on their Panose values.
@@ -246,7 +243,7 @@ namespace SharpFont.TrueType
 		{
 			get
 			{
-				return rec.panose;
+				return rec.Panose;
 			}
 		}
 
@@ -305,7 +302,7 @@ namespace SharpFont.TrueType
 		{
 			get
 			{
-				return rec.achVendID;
+				return rec.VendorId;
 			}
 		}
 
@@ -346,7 +343,7 @@ namespace SharpFont.TrueType
 				return rec.usLastCharIndex;
 			}
 		}
-		
+
 		/// <summary>
 		/// The ascender value, useful for computing a default line spacing in conjunction with unitsPerEm.
 		/// </summary>
@@ -357,7 +354,7 @@ namespace SharpFont.TrueType
 				return rec.sTypoAscender;
 			}
 		}
-		
+
 		/// <summary>
 		/// The descender value, useful for computing a default line spacing in conjunction with unitsPerEm.
 		/// </summary>
@@ -368,7 +365,7 @@ namespace SharpFont.TrueType
 				return rec.sTypoDescender;
 			}
 		}
-		
+
 		/// <summary>
 		/// The line gap value, useful for computing a default line spacing in conjunction with unitsPerEm.
 		/// </summary>
@@ -438,7 +435,7 @@ namespace SharpFont.TrueType
 				return rec.sxHeight;
 			}
 		}
-		
+
 		/// <summary>
 		/// The approximate height of uppercase letters relative to the baseline.
 		/// </summary>
@@ -451,7 +448,8 @@ namespace SharpFont.TrueType
 		}
 
 		/// <summary>
-		/// The Unicode index (character code)  of the glyph to use when a glyph doesn't exist for the requested character.
+		/// The Unicode index (character code) of the glyph to use when a glyph
+		/// doesn't exist for the requested character.
 		/// Since this value is limited to 0xFFFF, applications should not use this field.
 		/// </summary>
 		[CLSCompliant(false)]
@@ -526,7 +524,5 @@ namespace SharpFont.TrueType
 				rec = PInvokeHelper.PtrToStructure<OS2Rec>(reference);
 			}
 		}
-
-		#endregion
 	}
 }

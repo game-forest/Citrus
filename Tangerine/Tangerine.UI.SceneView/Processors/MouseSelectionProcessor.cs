@@ -39,8 +39,10 @@ namespace Tangerine.UI.SceneView
 						while (input.IsMousePressed()) {
 							rect.B = sceneView.MousePosition;
 							clicked &= (rect.B - rect.A).Length <= 5;
-							if (!clicked)
+							if (!clicked) {
 								RefreshSelectedNodes(rect, selectedNodes);
+							}
+
 							CommonWindow.Current.Invalidate();
 							yield return null;
 						}
@@ -50,8 +52,10 @@ namespace Tangerine.UI.SceneView
 
 						if (clicked) {
 							var controlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
-							if (!controlPressed)
+							if (!controlPressed) {
 								Core.Operations.ClearSceneItemSelection.Perform();
+							}
+
 							Node selectedNode = null;
 							foreach (var widget in WidgetsPivotMarkPresenter.WidgetsWithDisplayedPivot()) {
 								var pos = widget.GlobalPivotPosition;
@@ -69,7 +73,10 @@ namespace Tangerine.UI.SceneView
 								}
 							}
 							if (selectedNode != null) {
-								Core.Operations.SelectNode.Perform(selectedNode, !controlPressed || !Document.Current.SelectedNodes().Contains(selectedNode));
+								Core.Operations.SelectNode.Perform(
+									selectedNode,
+									!controlPressed || !Document.Current.SelectedNodes().Contains(selectedNode)
+								);
 							}
 						}
 						sceneView.Frame.CompoundPostPresenter.Remove(presenter);
@@ -82,7 +89,7 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		void RefreshSelectedNodes(Rectangle rect, IEnumerable<Node> originalSelection)
+		private void RefreshSelectedNodes(Rectangle rect, IEnumerable<Node> originalSelection)
 		{
 			var ctrlPressed = SceneView.Instance.Input.IsKeyPressed(Key.Control);
 			var currentSelection = Document.Current.SelectedNodes();
@@ -96,8 +103,8 @@ namespace Tangerine.UI.SceneView
 			}
 		}
 
-		bool Probe(Node node, Vector2 point) => Probers.Any(i => i.Probe(node, point));
-		bool Probe(Node node, Rectangle rectangle) => Probers.Any(i => i.Probe(node, rectangle));
+		private bool Probe(Node node, Vector2 point) => Probers.Any(i => i.Probe(node, point));
+		private bool Probe(Node node, Rectangle rectangle) => Probers.Any(i => i.Probe(node, rectangle));
 
 		public interface IProber
 		{
@@ -105,7 +112,9 @@ namespace Tangerine.UI.SceneView
 			bool Probe(Node node, Rectangle rectangle);
 		}
 
-		public abstract class Prober<T> : IProber where T : Node
+		public abstract class Prober<T>
+			: IProber
+			where T : Node
 		{
 			public bool Probe(Node node, Vector2 point) => (node is T) && ProbeInternal((T)node, point);
 			public bool Probe(Node node, Rectangle rectangle) => (node is T) && ProbeInternal((T)node, rectangle);
@@ -192,12 +201,14 @@ namespace Tangerine.UI.SceneView
 				return rectangle.Contains(CalcPositionInSceneViewSpace(splinePoint));
 			}
 
-			Vector2 CalcPositionInSceneViewSpace(SplinePoint3D splinePoint)
+			private Vector2 CalcPositionInSceneViewSpace(SplinePoint3D splinePoint)
 			{
 				var spline = (Spline3D)splinePoint.Parent;
 				var viewport = spline.Viewport;
 				var viewportToScene = viewport.LocalToWorldTransform;
-				return (Vector2)viewport.WorldToViewportPoint(splinePoint.Position * spline.GlobalTransform) * viewportToScene;
+				return (Vector2)viewport.WorldToViewportPoint(
+					splinePoint.Position * spline.GlobalTransform
+				) * viewportToScene;
 			}
 		}
 
@@ -208,7 +219,8 @@ namespace Tangerine.UI.SceneView
 				if (!mesh.GloballyVisible) {
 					return false;
 				}
-				return mesh.Controller(SceneView.Instance).HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
+				return mesh.Controller(SceneView.Instance)
+					.HitTest(point, SceneView.Instance.Scene.Scale.X, ignoreState: true);
 			}
 
 			protected override bool ProbeInternal(Lime.Animesh mesh, Rectangle rectangle)
@@ -216,16 +228,24 @@ namespace Tangerine.UI.SceneView
 				if (!mesh.GloballyVisible) {
 					return false;
 				}
-				var points = new[] { rectangle.A, new Vector2(rectangle.BX, rectangle.AY), rectangle.B, new Vector2(rectangle.AX, rectangle.BY) };
+				var points = new[] {
+					rectangle.A, new Vector2(rectangle.BX, rectangle.AY),
+					rectangle.B, new Vector2(rectangle.AX, rectangle.BY),
+				};
 				for (var i = 0; i < points.Length; ++i) {
 					foreach (var face in mesh.Faces.ToArray()) {
 						for (var j = 0; j < 3; ++j) {
-							var v0 = mesh.Controller(SceneView.Instance).Vertices[face[j]].Pos * mesh.LocalToWorldTransform;
-							var v1 = mesh.Controller(SceneView.Instance).Vertices[face[(j + 1) % 3]].Pos * mesh.LocalToWorldTransform;
+							var v0 = mesh.Controller(SceneView.Instance).Vertices[face[j]].Pos
+								* mesh.LocalToWorldTransform;
+							var v1 = mesh.Controller(SceneView.Instance).Vertices[face[(j + 1) % 3]].Pos
+								* mesh.LocalToWorldTransform;
 							if (
-								rectangle.Contains(v0) || rectangle.Contains(v1) ||
-								(points[(i + 1) % points.Length] - points[i]).Length >= 1f &&
-								AnimeshUtils.LineLineIntersection(points[i], points[(i + 1) % points.Length], v0, v1, out var p)
+								rectangle.Contains(v0)
+								|| rectangle.Contains(v1)
+								|| (points[(i + 1) % points.Length] - points[i]).Length >= 1f
+								&& AnimeshUtils.LineLineIntersection(
+									points[i], points[(i + 1) % points.Length], v0, v1, out var p
+								)
 							) {
 								return true;
 							}

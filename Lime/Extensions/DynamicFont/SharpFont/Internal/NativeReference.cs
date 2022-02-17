@@ -1,5 +1,4 @@
-﻿#region MIT License
-/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
+﻿/*Copyright (c) 2012-2013 Robert Rouhani <robert.rouhani@gmail.com>
 
 SharpFont based on Tao.FreeType, Copyright (c) 2003-2007 Tao Framework Team
 
@@ -20,39 +19,39 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.*/
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
 
 namespace SharpFont.Internal
 {
-    /// <summary>
-    /// Struct NativeReference
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NativeReference<T> where T : NativeObject
-    {
-        private readonly IntPtr memoryPtr;
+	/// <summary>
+	/// Struct NativeReference
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	[StructLayout(LayoutKind.Sequential)]
+	public struct NativeReference<T>
+		where T : NativeObject
+	{
+		private readonly IntPtr memoryPtr;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NativeReference{T}"/> struct.
-        /// </summary>
-        /// <param name="memoryPtr">The memory PTR.</param>
-        public NativeReference(IntPtr memoryPtr)
-        {
-            this.memoryPtr = memoryPtr;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NativeReference{T}"/> struct.
+		/// </summary>
+		/// <param name="memoryPtr">The memory PTR.</param>
+		public NativeReference(IntPtr memoryPtr)
+		{
+			this.memoryPtr = memoryPtr;
+		}
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Memory"/> to <see cref="NativeReference{T}"/>.
-        /// </summary>
-        /// <param name="memory">The memory.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator NativeReference<T>(T memory)
-        {
-            return new NativeReference<T>(memory.Reference);
-        }
-    }
+		/// <summary>
+		/// Performs an implicit conversion from <see cref="Memory"/> to <see cref="NativeReference{T}"/>.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns>The result of the conversion.</returns>
+		public static implicit operator NativeReference<T>(T memory)
+		{
+			return new NativeReference<T>(memory.Reference);
+		}
+	}
 }

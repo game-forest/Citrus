@@ -26,7 +26,7 @@ namespace Lime
 			Enable = true,
 			BlendFunc = BlendFunc.Add,
 			SrcBlend = Blend.One,
-			DstBlend = Blend.Zero
+			DstBlend = Blend.Zero,
 		};
 	}
 
@@ -39,29 +39,29 @@ namespace Lime
 		public static readonly DepthState Default = new DepthState {
 			Enable = false,
 			WriteEnable = true,
-			Comparison = CompareFunc.Less
+			Comparison = CompareFunc.Less,
 		};
 
 		public static readonly DepthState DepthDisabled = new DepthState {
-			Enable = false
+			Enable = false,
 		};
 
 		public static readonly DepthState DepthRead = new DepthState {
 			Enable = true,
 			Comparison = CompareFunc.Less,
-			WriteEnable = false
+			WriteEnable = false,
 		};
 
 		public static readonly DepthState DepthWrite = new DepthState {
 			Enable = true,
 			Comparison = CompareFunc.Always,
-			WriteEnable = true
+			WriteEnable = true,
 		};
 
 		public static readonly DepthState DepthReadWrite = new DepthState {
 			Enable = true,
 			Comparison = CompareFunc.Less,
-			WriteEnable = true
+			WriteEnable = true,
 		};
 	}
 
@@ -103,7 +103,7 @@ namespace Lime
 		public WindowRect Bounds;
 
 		public static readonly ScissorState Default = new ScissorState {
-			Enable = false
+			Enable = false,
 		};
 
 		public static readonly ScissorState ScissorDisabled = Default;
@@ -161,7 +161,7 @@ namespace Lime
 	{
 		Add,
 		Subtract,
-		ReverseSubtract
+		ReverseSubtract,
 	}
 
 	public enum Blend
@@ -178,7 +178,7 @@ namespace Lime
 		InverseSrcColor,
 		InverseSrcAlpha,
 		InverseDstColor,
-		InverseDstAlpha
+		InverseDstAlpha,
 	}
 
 	public enum CompareFunc
@@ -190,9 +190,9 @@ namespace Lime
 		Greater,
 		GreaterEqual,
 		Equal,
-		NotEqual
+		NotEqual,
 	}
-	
+
 	public enum StencilOp
 	{
 		Keep,
@@ -215,7 +215,7 @@ namespace Lime
 	public enum FrontFace
 	{
 		CW,
-		CCW
+		CCW,
 	}
 
 	[Flags]
@@ -226,7 +226,7 @@ namespace Lime
 		Green = 2,
 		Blue = 4,
 		Alpha = 8,
-		All = Red | Green | Blue | Alpha
+		All = Red | Green | Blue | Alpha,
 	}
 
 	[Flags]
@@ -236,18 +236,18 @@ namespace Lime
 		ColorBuffer = 1,
 		DepthBuffer = 2,
 		StencilBuffer = 4,
-		All = ColorBuffer | DepthBuffer | StencilBuffer
+		All = ColorBuffer | DepthBuffer | StencilBuffer,
 	}
 
 	public enum PrimitiveTopology
 	{
 		TriangleList,
-		TriangleStrip
+		TriangleStrip,
 	}
 
 	public enum IndexFormat
 	{
-		Index16Bits
+		Index16Bits,
 	}
 
 	public struct GLInfo
@@ -302,7 +302,7 @@ namespace Lime
 				info = new GLInfo {
 					ESProfile = glContext.ESProfile,
 					MajorVersion = glContext.GLMajorVersion,
-					MinorVersion = glContext.GLMinorVersion
+					MinorVersion = glContext.GLMinorVersion,
 				};
 				return true;
 			}
@@ -459,8 +459,10 @@ namespace Lime
 
 		private static void PreDraw(PrimitiveTopology topology)
 		{
-			if (shaderProgram != null)
+			if (shaderProgram != null) {
 				shaderProgram.SyncParams(shaderParamsArray, shaderParamsArrayCount);
+			}
+
 			Context.SetPrimitiveTopology(topology);
 		}
 

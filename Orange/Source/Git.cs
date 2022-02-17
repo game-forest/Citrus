@@ -12,14 +12,21 @@ namespace Orange
 		static Git()
 		{
 			try {
-				Exec("", "");
+				Exec(string.Empty, string.Empty);
 				IsGitInPath = true;
-			} catch (Exception) { }
+			} catch (Exception) {
+			}
 		}
 
 		public static bool Exec(string workingDirectory, string gitArgs, StringBuilder output = null)
 		{
-			return Process.Start("git", gitArgs, workingDirectory, Process.Options.RedirectErrors | Process.Options.RedirectOutput, output) == 0;
+			return Process.Start(
+				"git",
+				gitArgs,
+				workingDirectory,
+				Process.Options.RedirectErrors | Process.Options.RedirectOutput,
+				output
+			) == 0;
 		}
 
 		public static string GetCurrentBranch(string gitDir)

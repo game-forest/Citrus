@@ -1,5 +1,4 @@
 #if MAC || MONOMAC
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -24,7 +23,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 //  Created by Erik Ylvisaker on 3/17/08.
 
