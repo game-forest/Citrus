@@ -1,13 +1,13 @@
-using Lime;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using Lime;
 using Yuzu;
 
 namespace Orange
 {
-	static class SaveDeducedCookingRules
+	internal static class SaveDeducedCookingRules
 	{
 		// Yuzu can't into tuples
 		public class FileAndRules
@@ -36,7 +36,7 @@ namespace Orange
 			}
 			var dialog = new FileDialog {
 				Mode = FileDialogMode.SelectFolder,
-				Title = "Select a directory"
+				Title = "Select a directory",
 			};
 			bool? dialogCancelled = null;
 			// Showing UI must be executed on the UI thread.

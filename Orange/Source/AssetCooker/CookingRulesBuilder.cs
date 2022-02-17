@@ -302,7 +302,6 @@ namespace Orange
 				foreach (var target in The.Workspace.Targets) {
 					TargetRules[target].Ignore = value;
 				}
-				CommonRules.Ignore = value;
 				if (EffectiveRules != null) {
 					EffectiveRules.Ignore = value;
 				}
@@ -317,7 +316,6 @@ namespace Orange
 
 		public IEnumerable<(Target Target, ParticularCookingRules Rules)> Enumerate()
 		{
-			yield return (null, CommonRules);
 			foreach (var (k, v) in TargetRules) {
 				yield return (k, v);
 			}
@@ -331,22 +329,19 @@ namespace Orange
 			foreach (var t in The.Workspace.Targets) {
 				TargetRules.Add(t, ParticularCookingRules.GetDefault(t.Platform));
 			}
-			CommonRules = ParticularCookingRules.GetDefault(The.UI.GetActiveTarget().Platform);
 		}
 
-		public CookingRules InheritClone()
+		public CookingRules InheritClone(Target target)
 		{
 			var r = new CookingRules(false);
 			r.Parent = this;
 			foreach (var kv in TargetRules) {
 				r.TargetRules.Add(kv.Key, kv.Value.InheritClone());
 			}
-			if (EffectiveRules != null) {
-				r.CommonRules = EffectiveRules.InheritClone();
-				r.EffectiveRules = EffectiveRules.InheritClone();
-			} else {
-				r.CommonRules = CommonRules.InheritClone();
+			if (EffectiveRules == null) {
+				DeduceEffectiveRules(target);
 			}
+			r.EffectiveRules = EffectiveRules.InheritClone();
 			return r;
 		}
 
@@ -354,7 +349,6 @@ namespace Orange
 		{
 			using var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create);
 			using var sw = new StreamWriter(fs);
-			SaveCookingRules(sw, CommonRules, null);
 			foreach (var kv in TargetRules) {
 				SaveCookingRules(sw, kv.Value, kv.Key);
 			}
@@ -392,7 +386,7 @@ namespace Orange
 
 		private void SaveCookingRules(StreamWriter sw, ParticularCookingRules rules, Target target)
 		{
-			var targetString = target == null ? string.Empty : $"({target.Name})";
+			var targetString = target == Target.RootTarget ? string.Empty : $"({target.Name})";
 			foreach (var yi in rules.FieldOverrides) {
 				var value = yi.GetValue(rules);
 				var valueString = FieldValueToString(yi, value);
@@ -404,7 +398,7 @@ namespace Orange
 
 		public void DeduceEffectiveRules(Target target)
 		{
-			EffectiveRules = CommonRules.InheritClone();
+			EffectiveRules ??= TargetRules[Target.RootTarget].InheritClone();
 			if (target != null) {
 				var targetStack = new Stack<Target>();
 				var t = target;
@@ -441,7 +435,6 @@ namespace Orange
 		public bool HasOverrides()
 		{
 			var r = false;
-			r = r || CommonRules.FieldOverrides.Count > 0;
 			foreach (var cr in TargetRules) {
 				r = r || cr.Value.FieldOverrides.Count > 0;
 			}
@@ -522,7 +515,7 @@ namespace Orange
 					rules.SourcePath = filePath;
 					rulesStack.Push(rules);
 					// Add 'ignore' cooking rules for this #CookingRules.txt itself
-					var ignoreRules = rules.InheritClone();
+					var ignoreRules = rules.InheritClone(target);
 					ignoreRules.Ignore = true;
 					map[filePath] = ignoreRules;
 					var directoryName = pathStack.Peek();
@@ -547,7 +540,7 @@ namespace Orange
 						rules = ParseCookingRules(bundle, rulesStack.Peek(), rulesFile, target);
 						rules.SourcePath = rulesFile;
 						// Add 'ignore' cooking rules for this cooking rules text file
-						var ignoreRules = rules.InheritClone();
+						var ignoreRules = rules.InheritClone(target);
 						ignoreRules.Ignore = true;
 						map[rulesFile] = ignoreRules;
 					}
@@ -636,8 +629,7 @@ namespace Orange
 		private static CookingRules ParseCookingRules(
 			AssetBundle bundle, CookingRules basicRules, string path, Target target
 		) {
-			var rules = basicRules.InheritClone();
-			var currentRules = rules.CommonRules;
+			var rules = basicRules.InheritClone(target);
 			try {
 				using var s = bundle.OpenFile(path);
 				TextReader r = new StreamReader(s);
@@ -654,35 +646,28 @@ namespace Orange
 					foreach (ref var word in words.AsSpan()) {
 						word = word.Trim();
 					}
-					// target-specific cooking rules
+					var ruleTarget = Target.RootTarget;
 					if (words[0].EndsWith(")")) {
 						int cut = words[0].IndexOf('(');
 						if (cut >= 0) {
 							string targetName = words[0].Substring(cut + 1, words[0].Length - cut - 2);
 							words[0] = words[0].Substring(0, cut);
-							currentRules = null;
-							Target currentTarget = null;
 							foreach (var t in The.Workspace.Targets) {
 								if (targetName == t.Name) {
-									currentTarget = t;
+									ruleTarget = t;
+									break;
 								}
 							}
-							if (currentTarget == null) {
+							if (ruleTarget == Target.RootTarget) {
 								throw new Lime.Exception($"Invalid target: {targetName}");
 							}
-							currentRules = rules.TargetRules[currentTarget];
-							{
-								if (!CanSetRulePerTarget(words[0], currentTarget)) {
-									throw new Lime.Exception(
-										$"Invalid platform {target.Platform} for cooking rule {words[0]}"
-									);
-								}
-							}
 						}
-					} else {
-						currentRules = rules.CommonRules;
 					}
-					ParseRule(currentRules, words, path, bundle);
+					var targetRules = rules.TargetRules[ruleTarget];
+					if (ruleTarget != Target.RootTarget && !CanSetRulePerTarget(words[0], ruleTarget)) {
+						throw new Lime.Exception($"Invalid platform {target.Platform} for cooking rule {words[0]}");
+					}
+					ParseRule(targetRules, words, path, bundle);
 				}
 			} catch (Lime.Exception e) {
 				if (!Path.IsPathRooted(path)) {

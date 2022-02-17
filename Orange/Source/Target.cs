@@ -5,6 +5,17 @@ namespace Orange
 {
 	public class Target
 	{
+		public const string RootTargetName = "Any";
+
+		public static readonly Target RootTarget = new Target(
+			name: RootTargetName,
+			projectPath: null,
+			cleanBeforeBuild: null,
+			platform: null,
+			configuration: null,
+			hidden: true
+		);
+
 		/// <summary>
 		/// Target name.
 		/// Can be used to specify cooking rule only for this target in form
@@ -16,7 +27,7 @@ namespace Orange
 		/// <summary>
 		/// Relative to project directory or absolute path to *.csproj or *.sln file.
 		/// </summary>
-		public string ProjectPath => projectPath ?? BaseTarget.ProjectPath;
+		public string ProjectPath => projectPath ?? BaseTarget?.ProjectPath;
 
 		/// <summary>
 		/// Configuration name for build system.
@@ -31,7 +42,17 @@ namespace Orange
 		/// <summary>
 		/// Platform.
 		/// </summary>
-		public TargetPlatform Platform => platform ?? BaseTarget.Platform;
+		public TargetPlatform Platform
+		{
+			get
+			{
+				if (this == RootTarget) {
+					return The.UI.GetActiveTarget().Platform;
+				} else {
+					return platform ?? BaseTarget.Platform;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Target specific required bundles.

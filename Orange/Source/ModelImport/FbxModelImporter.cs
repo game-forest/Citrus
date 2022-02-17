@@ -163,13 +163,12 @@ namespace Orange.FbxImporter
 						? TextureWrapMode.Repeat
 						: TextureWrapMode.Clamp;
 				if (options.CookingRulesMap.ContainsKey(rulesPath)) {
-					var cookingRules =
-						options.CookingRulesMap[rulesPath] =
-						options.CookingRulesMap[rulesPath].InheritClone();
-					if (cookingRules.CommonRules.WrapMode != mode) {
-						cookingRules.CommonRules.WrapMode = mode;
+					var cookingRules = options.CookingRulesMap[rulesPath] =
+						options.CookingRulesMap[rulesPath].InheritClone(options.Target);
+					if (cookingRules.TargetRules[Target.RootTarget].WrapMode != mode) {
+						cookingRules.TargetRules[Target.RootTarget].WrapMode = mode;
 						cookingRules.SourcePath = rulesPath + ".txt";
-						cookingRules.CommonRules.Override(nameof(ParticularCookingRules.WrapMode));
+						cookingRules.TargetRules[Target.RootTarget].Override(nameof(ParticularCookingRules.WrapMode));
 						cookingRules.DeduceEffectiveRules(options.Target);
 						cookingRules.Save();
 					}

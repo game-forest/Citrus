@@ -18,7 +18,7 @@ namespace Tangerine
 
 		public OrangePluginUIBuilder PluginUIBuilder;
 
-		public readonly PlatformPicker PlatformPicker = new PlatformPicker();
+		public readonly TargetPicker TargetPicker = new TargetPicker();
 
 		public override void Initialize()
 		{
@@ -52,15 +52,16 @@ namespace Tangerine
 
 		public override Target GetActiveTarget()
 		{
-			return PlatformPicker.SelectedTarget;
+			return TargetPicker.SelectedTarget;
 		}
 
 		public override void SetActiveTarget(Target target)
 		{
-			PlatformPicker.Index = PlatformPicker.Items
-				.IndexOf(
-					PlatformPicker.Items.Where(i => i.Value as Target == target).First()
-				);
+			TargetPicker.Index = TargetPicker.Items.IndexOf(
+				TargetPicker.Items
+				.Where(i => (i.Value as Target == target))
+				.First()
+			);
 		}
 
 		public override EnvironmentType GetEnvironmentType()
@@ -81,7 +82,7 @@ namespace Tangerine
 
 		public override void OnWorkspaceOpened()
 		{
-			PlatformPicker.Reload();
+			TargetPicker.Reload();
 		}
 
 		public override void SetupProgressBar(int maxPosition) { }
@@ -106,9 +107,9 @@ namespace Tangerine
 		}
 	}
 
-	public class PlatformPicker : ThemedDropDownList
+	public class TargetPicker : ThemedDropDownList
 	{
-		public PlatformPicker()
+		public TargetPicker()
 		{
 			Reload();
 		}
@@ -119,6 +120,9 @@ namespace Tangerine
 			Index = -1;
 			Items.Clear();
 			foreach (var target in The.Workspace.Targets) {
+				if (target.Hidden) {
+					continue;
+				}
 				Items.Add(new Item(target.Name, target));
 			}
 			if (savedIndex >= 0 && savedIndex < Items.Count) {

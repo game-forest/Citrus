@@ -205,15 +205,20 @@ namespace Orange
 		private void FillDefaultTargets()
 		{
 			Targets.Clear();
+			Targets.Add(Target.RootTarget);
 			foreach (TargetPlatform platform in Enum.GetValues(typeof(TargetPlatform))) {
-				Targets.Add(new Target(
-					name: Enum.GetName(typeof(TargetPlatform), platform),
-					projectPath: GetDefaultProjectSolutionPath(platform),
-					cleanBeforeBuild: false,
-					platform: platform,
-					configuration: BuildConfiguration.Release,
-					hidden: false
-				));
+				Targets.Add(
+					new Target(
+						name: Enum.GetName(typeof(TargetPlatform), platform),
+						projectPath: GetDefaultProjectSolutionPath(platform),
+						cleanBeforeBuild: false,
+						platform: platform,
+						configuration: BuildConfiguration.Release,
+						hidden: false
+					) {
+						BaseTarget = Target.RootTarget,
+					}
+				);
 			}
 		}
 

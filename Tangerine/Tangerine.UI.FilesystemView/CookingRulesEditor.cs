@@ -44,7 +44,6 @@ namespace Tangerine.UI.FilesystemView
 					LayoutCell = new LayoutCell(Alignment.Center),
 				}
 			);
-			targetSelector.Items.Add(new CommonDropDownList.Item("None", null));
 			foreach (var t in Orange.The.Workspace.Targets) {
 				targetSelector.Items.Add(new CommonDropDownList.Item(t.Name, t));
 			}
@@ -207,9 +206,6 @@ namespace Tangerine.UI.FilesystemView
 					) {
 						return targetRules;
 					}
-				}
-				if (rules.CommonRules.FieldOverrides.Contains(yi)) {
-					return rules.CommonRules;
 				}
 				rules = rules.Parent;
 			}
@@ -470,14 +466,16 @@ namespace Tangerine.UI.FilesystemView
 
 		private static ParticularCookingRules RulesForTarget(CookingRules cookingRules, Target target)
 		{
-			return target == null ? cookingRules.CommonRules : cookingRules.TargetRules[target];
+			return target == null
+				? cookingRules.TargetRules[Target.RootTarget]
+				: cookingRules.TargetRules[target];
 		}
 
-		private static CookingRules GetAssociatedCookingRules(
+		private CookingRules GetAssociatedCookingRules(
 			CookingRulesMap rulesMap, string path, bool createIfNotExists = false
 		) {
 			Action<string, CookingRules> ignoreRules = (p, r) => {
-				r = r.InheritClone();
+				r = r.InheritClone(ActiveTarget);
 				r.Ignore = true;
 				rulesMap[NormalizePath(p)] = r;
 			};
@@ -491,7 +489,7 @@ namespace Tangerine.UI.FilesystemView
 					cookingRules = rulesMap[key];
 					if (cookingRules.SystemSourcePath != rulesPath) {
 						if (createIfNotExists) {
-							cookingRules = cookingRules.InheritClone();
+							cookingRules = cookingRules.InheritClone(ActiveTarget);
 							rulesMap[key] = cookingRules;
 							ignoreRules(rulesPath, cookingRules);
 						} else {
@@ -527,7 +525,7 @@ namespace Tangerine.UI.FilesystemView
 					} else if (!createIfNotExists) {
 						return null;
 					} else if (rulesMap.ContainsKey(NormalizePath(path))) {
-						cookingRules = rulesMap[NormalizePath(path)].InheritClone();
+						cookingRules = rulesMap[NormalizePath(path)].InheritClone(ActiveTarget);
 						cookingRules.SystemSourcePath = rulesPath;
 						ignoreRules(rulesPath, cookingRules);
 						rulesMap[key] = cookingRules;
