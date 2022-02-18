@@ -6,7 +6,7 @@ namespace Lime.NanoVG
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Paint
 	{
-		public Transform Transform;
+		public Matrix32 Transform;
 		public Vector2 Extent;
 		public float Radius;
 		public float Feather;
@@ -16,9 +16,9 @@ namespace Lime.NanoVG
 		
 		public Paint(Color4 color)
 		{
-			Transform = new Transform();
+			Transform = new Matrix32();
 			Extent = new Vector2();
-			Transform.SetIdentity();
+			Transform = Matrix32.Identity;
 			Radius = 0.0f;
 			Feather = 1.0f;
 			InnerColor = color;
@@ -51,12 +51,12 @@ namespace Lime.NanoVG
 				dx = 0;
 				dy = 1;
 			}
-			p.Transform.T1 = dy;
-			p.Transform.T2 = -dx;
-			p.Transform.T3 = dx;
-			p.Transform.T4 = dy;
-			p.Transform.T5 = startX - dx * large;
-			p.Transform.T6 = startY - dy * large;
+			p.Transform.UX = dy;
+			p.Transform.UY = -dx;
+			p.Transform.VX = dx;
+			p.Transform.VY = dy;
+			p.Transform.TX = startX - dx * large;
+			p.Transform.TY = startY - dy * large;
 			p.Extent.X = large;
 			p.Extent.Y = large + d * 0.5f;
 			p.Radius = 0.0f;
@@ -77,9 +77,9 @@ namespace Lime.NanoVG
 			var p = new Paint();
 			var r = (innerRadius + outerRadius) * 0.5f;
 			var f = outerRadius - innerRadius;
-			p.Transform.SetIdentity();
-			p.Transform.T5 = centerX;
-			p.Transform.T6 = centerY;
+			p.Transform = Matrix32.Identity;
+			p.Transform.TX = centerX;
+			p.Transform.TY = centerY;
 			p.Extent.X = r;
 			p.Extent.Y = r;
 			p.Radius = r;
@@ -100,9 +100,9 @@ namespace Lime.NanoVG
 			Color4 outerColor
 		) {
 			var p = new Paint();
-			p.Transform.SetIdentity();
-			p.Transform.T5 = x + width * 0.5f;
-			p.Transform.T6 = y + height * 0.5f;
+			p.Transform = Matrix32.Identity;
+			p.Transform.TX = x + width * 0.5f;
+			p.Transform.TY = y + height * 0.5f;
 			p.Extent.X = width * 0.5f;
 			p.Extent.Y = height * 0.5f;
 			p.Radius = radius;
@@ -115,9 +115,9 @@ namespace Lime.NanoVG
 		public static Paint ImagePattern(float cx, float cy, float w, float h, float angle, int image, float alpha)
 		{
 			var p = new Paint();
-			p.Transform.SetRotate(angle);
-			p.Transform.T5 = cx;
-			p.Transform.T6 = cy;
+			p.Transform = Matrix32.Rotation(angle);
+			p.Transform.TX = cx;
+			p.Transform.TY = cy;
 			p.Extent.X = w;
 			p.Extent.Y = h;
 			p.Image = image;

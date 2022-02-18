@@ -122,6 +122,26 @@ namespace Lime
 		}
 
 		/// <summary>
+		/// Returns skew x matrix.
+		/// </summary>
+		public static Matrix32 SkewX(float radians)
+		{
+			var m = Identity;
+			m.VX = MathF.Tan(radians);
+			return m;
+		}
+
+		/// <summary>
+		/// Returns skew y matrix.
+		/// </summary>
+		public static Matrix32 SkewY(float radians)
+		{
+			var m = Identity;
+			m.UY = MathF.Tan(radians);
+			return m;
+		}
+
+		/// <summary>
 		/// Returns scaling matrix.
 		/// </summary>
 		public static Matrix32 Scaling(Vector2 scaling)

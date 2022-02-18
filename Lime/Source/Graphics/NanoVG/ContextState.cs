@@ -13,7 +13,7 @@ namespace Lime.NanoVG
 		public LineCap LineJoin;
 		public LineCap LineCap;
 		public float Alpha;
-		public Transform Transform;
+		public Matrix32 Transform;
 		public Scissor Scissor;
 
 		public ContextState Clone()

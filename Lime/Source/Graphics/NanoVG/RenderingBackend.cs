@@ -96,12 +96,12 @@ namespace Lime.NanoVG
 				quad[3].Pos = new Vector2(bounds.AX, bounds.AY);
 				quad[0].UV1 = quad[1].UV1 = quad[2].UV1 = quad[3].UV1 = new Vector2(0.5f, 1.0f);
 				RenderTriangles(
-					ref paint, 
-					ref scissor, 
-					fringe, 
+					ref paint,
+					ref scissor,
 					fringe,
-					RenderingType.FillGradient, 
-					new ArraySegment<Vertex>(quad), 
+					fringe,
+					RenderingType.FillGradient,
+					new ArraySegment<Vertex>(quad),
 					PrimitiveType.TriangleStrip
 				);
 				Renderer.StencilState = StencilState.Default;
@@ -170,44 +170,44 @@ namespace Lime.NanoVG
 			var innerColor = Color4.PremulAlpha(paint.InnerColor);
 			var outerColor = Color4.PremulAlpha(paint.OuterColor);
 			var strokeMult = (width * 0.5f + fringe * 0.5f) / fringe;
-			var scissorTransform = new Transform();
+			var scissorTransform = new Matrix32();
 			var scissorExt = new Vector2();
 			var scissorScale = new Vector2();
 			if (scissor.Extent.X < -0.5f || scissor.Extent.Y < -0.5f) {
-				scissorTransform.Zero();
+				scissorTransform = new Matrix32();
 				scissorExt.X = 1.0f;
 				scissorExt.Y = 1.0f;
 				scissorScale.X = 1.0f;
 				scissorScale.Y = 1.0f;
 			} else {
-				scissorTransform = scissor.Transform.BuildInverse();
+				scissorTransform = scissor.Transform.CalcInversed();
 				scissorExt.X = scissor.Extent.X;
 				scissorExt.Y = scissor.Extent.Y;
 				scissorScale.X =
 					MathF.Sqrt(
-						scissor.Transform.T1 * scissor.Transform.T1 +
-						scissor.Transform.T3 * scissor.Transform.T3
+						scissor.Transform.UX * scissor.Transform.UX +
+						scissor.Transform.VX * scissor.Transform.VX
 					) / fringe;
 				scissorScale.Y =
 					MathF.Sqrt(
-						scissor.Transform.T2 * scissor.Transform.T2 + 
-					    scissor.Transform.T4 * scissor.Transform.T4
+						scissor.Transform.UY * scissor.Transform.UY +
+					    scissor.Transform.VY * scissor.Transform.VY
 					) / fringe;
 			}
-			var transform = paint.Transform.BuildInverse();
+			var transform = paint.Transform.CalcInversed();
 			var p = new FillParams();
-			p.ScissorU.X = scissorTransform.T1;
-			p.ScissorU.Y = scissorTransform.T2;
-			p.ScissorV.X = scissorTransform.T3;
-			p.ScissorV.Y = scissorTransform.T4;
-			p.ScissorT.X = scissorTransform.T5;
-			p.ScissorT.Y = scissorTransform.T6;
-			p.PaintU.X = transform.T1;
-			p.PaintU.Y = transform.T2;
-			p.PaintV.X = transform.T3;
-			p.PaintV.Y = transform.T4;
-			p.PaintT.X = transform.T5;
-			p.PaintT.Y = transform.T6;
+			p.ScissorU.X = scissorTransform.UX;
+			p.ScissorU.Y = scissorTransform.UY;
+			p.ScissorV.X = scissorTransform.VX;
+			p.ScissorV.Y = scissorTransform.VY;
+			p.ScissorT.X = scissorTransform.TX;
+			p.ScissorT.Y = scissorTransform.TY;
+			p.PaintU.X = transform.UX;
+			p.PaintU.Y = transform.UY;
+			p.PaintV.X = transform.VX;
+			p.PaintV.Y = transform.VY;
+			p.PaintT.X = transform.TX;
+			p.PaintT.Y = transform.TY;
 			p.InnerCol = innerColor.ToVector4();
 			p.OuterCol = outerColor.ToVector4();
 			p.ScissorExt = scissorExt;

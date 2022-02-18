@@ -77,7 +77,7 @@ namespace Lime.NanoVG
 			state.LineCap = Lime.LineCap.Butt;
 			state.LineJoin = Lime.LineCap.Miter;
 			state.Alpha = 1.0f;
-			state.Transform.SetIdentity();
+			state.Transform = Matrix32.Identity;
 			state.Scissor.Extent.X = -1.0f;
 			state.Scissor.Extent.Y = -1.0f;
 		}
@@ -118,66 +118,49 @@ namespace Lime.NanoVG
 			state.Alpha = alpha;
 		}
 
-		public void Transform(float a, float b, float c, float d, float e, float f)
+		public void Transform(Matrix32 transform)
 		{
 			var state = GetState();
-			Transform t;
-			t.T1 = a;
-			t.T2 = b;
-			t.T3 = c;
-			t.T4 = d;
-			t.T5 = e;
-			t.T6 = f;
-			state.Transform.Premultiply(ref t);
+			state.Transform = transform * state.Transform;
 		}
 
 		public void ResetTransform()
 		{
 			var state = GetState();
-			state.Transform.SetIdentity();
+			state.Transform = Matrix32.Identity;
 		}
 
 		public void Translate(float x, float y)
 		{
 			var state = GetState();
-			var t = new Transform();
-			t.SetTranslate(x, y);
-			state.Transform.Premultiply(ref t);
+			state.Transform = Matrix32.Translation(x, y) * state.Transform;
 		}
 
 		public void Rotate(float angle)
 		{
 			var state = GetState();
-			var t = new Transform();
-			t.SetRotate(angle);
-			state.Transform.Premultiply(ref t);
+			state.Transform = Matrix32.Rotation(angle) * state.Transform;
 		}
 
 		public void SkewX(float angle)
 		{
 			var state = GetState();
-			var t = new Transform();
-			t.SetSkewX(angle);
-			state.Transform.Premultiply(ref t);
+			state.Transform = Matrix32.SkewX(angle) * state.Transform;
 		}
 
 		public void SkewY(float angle)
 		{
 			var state = GetState();
-			var t = new Transform();
-			t.SetSkewY(angle);
-			state.Transform.Premultiply(ref t);
+			state.Transform = Matrix32.SkewY(angle) * state.Transform;
 		}
 
 		public void Scale(float x, float y)
 		{
 			var state = GetState();
-			var t = new Transform();
-			t.SetScale(x, y);
-			state.Transform.Premultiply(ref t);
+			state.Transform = Matrix32.Scaling(x, y) * state.Transform;
 		}
 
-		public void CurrentTransform(Transform transform)
+		public void CurrentTransform(Matrix32 transform)
 		{
 			var state = GetState();
 			state.Transform = transform;
@@ -193,7 +176,7 @@ namespace Lime.NanoVG
 		{
 			var state = GetState();
 			state.Stroke = paint;
-			state.Stroke.Transform.Multiply(ref state.Transform);
+			state.Stroke.Transform *= state.Transform;
 		}
 
 		public void FillColor(Color4 color)
@@ -206,17 +189,8 @@ namespace Lime.NanoVG
 		{
 			var state = GetState();
 			state.Fill = paint;
-			var rendererMatrix = Lime.Renderer.GetEffectiveTransform();
-			var rendererTransform = new Transform {
-				T1 = rendererMatrix.UX,
-				T2 = rendererMatrix.UY,
-				T3 = rendererMatrix.VX,
-				T4 = rendererMatrix.VY,
-				T5 = rendererMatrix.TX,
-				T6 = rendererMatrix.TY
-			};
-			state.Fill.Transform.Multiply(ref state.Transform);
-			state.Fill.Transform.Multiply(ref rendererTransform);
+			state.Fill.Transform *= state.Transform;
+			state.Fill.Transform *= Renderer.GetEffectiveTransform();
 		}
 
 		public int CreateImageRGBA(int w, int h, ImageFlags imageFlags, byte[] data)
@@ -245,10 +219,10 @@ namespace Lime.NanoVG
 			var state = GetState();
 			w = Math.Max(0.0f, w);
 			h = Math.Max(0.0f, h);
-			state.Scissor.Transform.SetIdentity();
-			state.Scissor.Transform.T5 = x + w * 0.5f;
-			state.Scissor.Transform.T6 = y + h * 0.5f;
-			state.Scissor.Transform.Multiply(ref state.Transform);
+			state.Scissor.Transform = Matrix32.Identity;
+			state.Scissor.Transform.TX = x + w * 0.5f;
+			state.Scissor.Transform.TY = y + h * 0.5f;
+			state.Scissor.Transform *= state.Transform;
 			state.Scissor.Extent.X = w * 0.5f;
 			state.Scissor.Extent.Y = h * 0.5f;
 		}
@@ -256,8 +230,8 @@ namespace Lime.NanoVG
 		public void IntersectScissor(float x, float y, float w, float h)
 		{
 			var state = GetState();
-			var pxform = new Transform();
-			var invxorm = new Transform();
+			var pxform = new Matrix32();
+			var invxorm = new Matrix32();
 			var rect = stackalloc float[4];
 			float ex = 0;
 			float ey = 0;
@@ -270,18 +244,18 @@ namespace Lime.NanoVG
 			pxform = state.Scissor.Transform;
 			ex = state.Scissor.Extent.X;
 			ey = state.Scissor.Extent.Y;
-			invxorm = state.Transform.BuildInverse();
-			pxform.Multiply(ref invxorm);
-			tex = ex * Math.Abs(pxform.T1) + ey * Math.Abs(pxform.T3);
-			tey = ex * Math.Abs(pxform.T2) + ey * Math.Abs(pxform.T4);
-			IntersectRectangles(rect, pxform.T5 - tex, pxform.T6 - tey, tex * 2, tey * 2, x, y, w, h);
+			invxorm = state.Transform.CalcInversed();
+			pxform *= invxorm;
+			tex = ex * Math.Abs(pxform.UX) + ey * Math.Abs(pxform.VX);
+			tey = ex * Math.Abs(pxform.UY) + ey * Math.Abs(pxform.VY);
+			IntersectRectangles(rect, pxform.TX - tex, pxform.TY - tey, tex * 2, tey * 2, x, y, w, h);
 			Scissor(rect[0], rect[1], rect[2], rect[3]);
 		}
 
 		public void ResetScissor()
 		{
 			var state = GetState();
-			state.Scissor.Transform.Zero();
+			state.Scissor.Transform = new Matrix32();
 			state.Scissor.Extent.X = -1.0f;
 			state.Scissor.Extent.Y = -1.0f;
 		}
@@ -716,17 +690,17 @@ namespace Lime.NanoVG
 				var cmd = vals[i];
 				switch ((CommandType)cmd) {
 					case CommandType.MoveTo:
-						state.Transform.TransformPoint(out vals[i + 1], out vals[i + 2], vals[i + 1], vals[i + 2]);
+						TransformPoint(ref state.Transform, ref vals[i + 1], ref vals[i + 2]);
 						i += 3;
 						break;
 					case CommandType.LineTo:
-						state.Transform.TransformPoint(out vals[i + 1], out vals[i + 2], vals[i + 1], vals[i + 2]);
+						TransformPoint(ref state.Transform, ref vals[i + 1], ref vals[i + 2]);
 						i += 3;
 						break;
 					case CommandType.BezierTo:
-						state.Transform.TransformPoint(out vals[i + 1], out vals[i + 2], vals[i + 1], vals[i + 2]);
-						state.Transform.TransformPoint(out vals[i + 3], out vals[i + 4], vals[i + 3], vals[i + 4]);
-						state.Transform.TransformPoint(out vals[i + 5], out vals[i + 6], vals[i + 5], vals[i + 6]);
+						TransformPoint(ref state.Transform, ref vals[i + 1], ref vals[i + 2]);
+						TransformPoint(ref state.Transform, ref vals[i + 3], ref vals[i + 4]);
+						TransformPoint(ref state.Transform, ref vals[i + 5], ref vals[i + 6]);
 						i += 7;
 						break;
 					case CommandType.Close:
@@ -742,6 +716,13 @@ namespace Lime.NanoVG
 			}
 			RawMemory.CopyMemory(&commands[commandsNumber], vals, nvals * sizeof(float));
 			commandsNumber += nvals;
+		}
+
+		private static void TransformPoint(ref Matrix32 t, ref float x, ref float y)
+		{
+			var tx = x * t.UX + y * t.VX + t.TX;
+			y = x * t.UY + y * t.VY + t.TY;
+			x = tx;
 		}
 
 		private void ClearPathCache()
@@ -1298,11 +1279,9 @@ namespace Lime.NanoVG
 			dst[3] = Math.Max(0.0f, maxy - miny);
 		}
 
-		private static float GetAverageScale(ref Transform t)
+		private static float GetAverageScale(ref Matrix32 t)
 		{
-			var sx = (float)Math.Sqrt(t.T1 * t.T1 + t.T3 * t.T3);
-			var sy = (float)Math.Sqrt(t.T2 * t.T2 + t.T4 * t.T4);
-			return (sx + sy) * 0.5f;
+			return (t.U.Length + t.V.Length) * 0.5f;
 		}
 
 		private static int CurveDivs(float r, float arc, float tol)
