@@ -122,7 +122,6 @@ namespace Lime.NanoVG
 					);
 				}
 			}
-			Renderer.Flush();
 		}
 
 		public void RenderStroke(ref Paint paint, ref Scissor scissor, float fringe, float strokeWidth, ArraySegment<Path> paths)
