@@ -708,10 +708,6 @@ namespace Tests.Types
 					);
 					break;
 			}
-			foreach (var mesh in meshes) {
-				ReleaseMesh(mesh);
-			}
-			meshes.Clear();
 			Mesh<Mesh3D.Vertex> currentMesh = null;
 			IMaterial currentMaterial = null;
 			foreach (var p in particles) {
@@ -753,7 +749,6 @@ namespace Tests.Types
 					ro.RenderData.Add((currentMesh, currentMaterial));
 					currentMaterial = material;
 					currentMesh = AcquireMesh();
-					meshes.Add(currentMesh);
 				}
 				var position = new Vector3(-Vector2.Half, 0);
 				var size = Vector2.One;
@@ -784,14 +779,12 @@ namespace Tests.Types
 			}
 			if (currentMesh != null && currentMesh.VertexCount > 0) {
 				currentMesh.DirtyFlags |= MeshDirtyFlags.Vertices;
-				meshes.Add(currentMesh);
 				ro.RenderData.Add((currentMesh, currentMaterial));
 			}
 			return ro;
 		}
 
 		private static Queue<Mesh<Mesh3D.Vertex>> meshPool = new Queue<Mesh<Mesh3D.Vertex>>();
-		private List<Mesh<Mesh3D.Vertex>> meshes = new List<Mesh<Mesh3D.Vertex>>();
 
 		private static Mesh<Mesh3D.Vertex> AcquireMesh()
 		{
@@ -827,12 +820,10 @@ namespace Tests.Types
 
 		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> mesh)
 		{
-			Window.Current.InvokeOnRendering(() => {
-				lock (meshPool) {
-					mesh.VertexCount = -1;
-					meshPool.Enqueue(mesh);
-				}
-			});
+			lock (meshPool) {
+				mesh.VertexCount = -1;
+				meshPool.Enqueue(mesh);
+			}
 		}
 
 		public void DeleteAllParticles()
@@ -891,6 +882,11 @@ namespace Tests.Types
 
 			protected override void OnRelease()
 			{
+				lock (meshPool) {
+					foreach (var (mesh, _) in RenderData) {
+						ReleaseMesh(mesh);
+					}
+				}
 				RenderData.Clear();
 			}
 		}
