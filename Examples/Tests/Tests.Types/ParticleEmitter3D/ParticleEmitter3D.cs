@@ -743,6 +743,7 @@ namespace Tests.Types
 				} else if (
 					currentMaterial != material
 					|| currentMesh.VertexCount + 4 > currentMesh.Vertices.Length
+					|| (currentMesh.VertexCount / 4 + 1) * 6 > currentMesh.Indices.Length
 				) {
 					currentMesh.DirtyFlags |= MeshDirtyFlags.Vertices;
 					ro.RenderData.Add((currentMesh, currentMaterial));
