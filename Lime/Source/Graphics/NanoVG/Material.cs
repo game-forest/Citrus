@@ -30,7 +30,7 @@ namespace Lime.NanoVG
 		private readonly ShaderParams[] shaderParamsArray;
 		private readonly ShaderParams shaderParams;
 		private readonly ShaderParamKey<Vector4> paramArrayKey;
-		
+
 		public string Id { get; set; }
 		public int PassCount => 1;
 
@@ -39,7 +39,7 @@ namespace Lime.NanoVG
 		public Material()
 		{
 			shaderParams = new ShaderParams();
-			shaderParamsArray = new[] { Lime.Renderer.GlobalShaderParams, shaderParams }; 
+			shaderParamsArray = new[] { Lime.Renderer.GlobalShaderParams, shaderParams };
 			paramArrayKey = shaderParams.GetParamKey<Vector4>("frag");
 		}
 
@@ -57,7 +57,7 @@ namespace Lime.NanoVG
 		{
 		}
 	}
-	
+
 	public class ShaderProgram : Lime.ShaderProgram
 	{
 		private static string vertexShaderText = @"
@@ -75,7 +75,7 @@ namespace Lime.NanoVG
 				color = inColor;
 				texCoords1 = inTexCoords1;
 			}";
-		
+
 		private static readonly string fragmentShaderText = @"
 			precision highp float;
 			uniform vec4 frag[11];
@@ -174,12 +174,12 @@ namespace Lime.NanoVG
 		private static ShaderProgram instance;
 
 		public static ShaderProgram GetInstance() => instance ??= new ShaderProgram();
-		
+
 		private static IEnumerable<Sampler> GetSamplers()
 		{
 			yield return new Sampler { Name = "tex", Stage = 0 };
 		}
-		
+
 		private static IEnumerable<Shader> CreateShaders()
 		{
 			yield return new VertexShader(vertexShaderText);

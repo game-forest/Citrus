@@ -102,7 +102,7 @@ namespace Lime
 					var paint = NanoVG.Paint.LinearGradient(
 						0, 0, 0, Size.Y, Gradient[0].Color, Gradient[1].Color
 					);
-					RendererNvg.DrawRoundedRectWithBorder(Vector2.Zero, Size, paint, BorderColor, 1,4);
+					RendererNvg.DrawRoundedRectWithBorder(Vector2.Zero, Size, paint, BorderColor, 1, 4);
 				}
 			}
 		}

@@ -5,7 +5,7 @@ namespace Lime.NanoVG
 	public unsafe class Context : IDisposable
 	{
 		public static readonly Context Instance = new Context();
-		
+
 		private readonly IRenderingBackend renderingBackend;
 		private PathCache cache;
 		private float* commands;
@@ -343,7 +343,7 @@ namespace Lime.NanoVG
 			if (
 				PointsAreEquals(x0, y0, x1, y1, distTol) != 0
 				|| PointsAreEquals(x1, y1, x2, y2, distTol) != 0
-			    || CalcDistanceFromPointToSegment(x1, y1, x0, y0, x2, y2) < distTol * distTol || radius < distTol
+				|| CalcDistanceFromPointToSegment(x1, y1, x0, y0, x2, y2) < distTol * distTol || radius < distTol
 			) {
 				LineTo(x1, y1);
 				return;
@@ -405,18 +405,18 @@ namespace Lime.NanoVG
 			var da = a1 - a0;
 			if (dir == Winding.ClockWise) {
 				if (Math.Abs(da) >= 3.14159274 * 2) {
-					da = (float) (3.14159274 * 2);
+					da = (float)(3.14159274 * 2);
 				} else {
 					while (da < 0.0f) {
-						da += (float) (3.14159274 * 2);
+						da += (float)(3.14159274 * 2);
 					}
 				}
 			} else {
 				if (Math.Abs(da) >= 3.14159274 * 2) {
-					da = (float) (-3.14159274 * 2);
+					da = (float)(-3.14159274 * 2);
 				} else {
 					while (da > 0.0f) {
-						da -= (float) (3.14159274 * 2);
+						da -= (float)(3.14159274 * 2);
 					}
 				}
 			}
@@ -653,7 +653,8 @@ namespace Lime.NanoVG
 			} else {
 				ExpandStroke(strokeWidth * 0.5f, 0.0f, state.LineCap, state.LineJoin, state.MiterLimit);
 			}
-			renderingBackend.RenderStroke(ref strokePaint, ref state.Scissor, fringeWidth, strokeWidth, cache.Paths.ToArraySegment());
+			renderingBackend.RenderStroke(
+				ref strokePaint, ref state.Scissor, fringeWidth, strokeWidth, cache.Paths.ToArraySegment());
 		}
 
 		private void SetDevicePixelRatio(float ratio)
@@ -743,7 +744,7 @@ namespace Lime.NanoVG
 		{
 			var newPath = new Path {
 				First = cache.PointsNumber,
-				Winding = Winding.CounterClockWise
+				Winding = Winding.CounterClockWise,
 			};
 			cache.Paths.Add(newPath);
 		}
@@ -889,8 +890,8 @@ namespace Lime.NanoVG
 							cp1 = &commands[i + 1];
 							cp2 = &commands[i + 3];
 							p = &commands[i + 5];
-							TesselateBezier(last->X, last->Y, cp1[0], cp1[1], cp2[0], cp2[1], p[0], p[1], 0,
-								PointFlags.Corner);
+							TesselateBezier(
+								last->X, last->Y, cp1[0], cp1[1], cp2[0], cp2[1], p[0], p[1], 0, PointFlags.Corner);
 						}
 						i += 7;
 						break;
@@ -921,10 +922,12 @@ namespace Lime.NanoVG
 				}
 				if (path.Count > 2) {
 					area = PolyArea(pts, path.Count);
-					if (path.Winding == Winding.CounterClockWise && area < 0.0f)
+					if (path.Winding == Winding.CounterClockWise && area < 0.0f) {
 						PolyReverse(pts, path.Count);
-					if (path.Winding == Winding.ClockWise && area > 0.0f)
+					}
+					if (path.Winding == Winding.ClockWise && area > 0.0f) {
 						PolyReverse(pts, path.Count);
+					}
 				}
 				for (i = 0; i < path.Count; i++) {
 					p0->DeltaX = p1->X - p0->X;
@@ -962,8 +965,9 @@ namespace Lime.NanoVG
 					var dmr2 = p1->Dmx * p1->Dmx + p1->Dmy * p1->Dmy;
 					if (dmr2 > 0.000001f) {
 						var scale = 1.0f / dmr2;
-						if (scale > 600.0f)
+						if (scale > 600.0f) {
 							scale = 600.0f;
+						}
 						p1->Dmx *= scale;
 						p1->Dmy *= scale;
 					}
@@ -975,18 +979,18 @@ namespace Lime.NanoVG
 					}
 					var limit = Math.Max(1.01f, Math.Min(p0->Length, p1->Length) * iw);
 					if (dmr2 * limit * limit < 1.0f) {
-						p1->Flags |= (byte) PointFlags.InnerBevel;
+						p1->Flags |= (byte)PointFlags.InnerBevel;
 					}
-					if ((p1->Flags & (byte) PointFlags.Corner) != 0) {
+					if ((p1->Flags & (byte)PointFlags.Corner) != 0) {
 						if (
 							dmr2 * miterLimit * miterLimit < 1.0f
 							|| lineJoin == Lime.LineCap.Bevel
 							|| lineJoin == Lime.LineCap.Round
 						) {
-							p1->Flags |= (byte) PointFlags.Bevel;
+							p1->Flags |= (byte)PointFlags.Bevel;
 						}
 					}
-					if ((p1->Flags & (byte) (PointFlags.Bevel | PointFlags.InnerBevel)) != 0) {
+					if ((p1->Flags & (byte)(PointFlags.Bevel | PointFlags.InnerBevel)) != 0) {
 						path.BevelCount++;
 					}
 					p0 = p1++;
@@ -1083,7 +1087,8 @@ namespace Lime.NanoVG
 					if (loop != 0) {
 						SetVertex(dst, verts.Array[verts.Offset].Pos4.X, verts.Array[verts.Offset].Pos4.Y, u0, 1);
 						dst++;
-						SetVertex(dst, verts.Array[verts.Offset + 1].Pos4.X, verts.Array[verts.Offset + 1].Pos4.Y, u1, 1);
+						SetVertex(
+							dst, verts.Array[verts.Offset + 1].Pos4.X, verts.Array[verts.Offset + 1].Pos4.Y, u1, 1);
 						dst++;
 					} else {
 						dx = p1->X - p0->X;
@@ -1197,7 +1202,8 @@ namespace Lime.NanoVG
 						}
 						SetVertex(dst, verts.Array[verts.Offset].Pos4.X, verts.Array[verts.Offset].Pos4.Y, lu, 1);
 						dst++;
-						SetVertex(dst, verts.Array[verts.Offset + 1].Pos4.X, verts.Array[verts.Offset + 1].Pos4.Y, ru, 1);
+						SetVertex(
+							dst, verts.Array[verts.Offset + 1].Pos4.X, verts.Array[verts.Offset + 1].Pos4.Y, ru, 1);
 						dst++;
 						path.Stroke = new ArraySegment<Vertex>(verts.Array, verts.Offset, (int)(dst - dst2));
 						var newPos = verts.Offset + path.Stroke.Value.Count;
@@ -1313,12 +1319,8 @@ namespace Lime.NanoVG
 			}
 		}
 
-		private static float Quantize(float a, float d)
-		{
-			return (int)(a / d + 0.5f) * d;
-		}
-
-		private static Vertex* RoundJoin(Vertex* dst, Point* p0, Point* p1, float lw, float rw, float lu, float ru, int ncap, float fringe)
+		private static Vertex* RoundJoin(
+			Vertex* dst, Point* p0, Point* p1, float lw, float rw, float lu, float ru, int ncap, float fringe)
 		{
 			var dlx0 = p0->DeltaY;
 			var dly0 = -p0->DeltaX;
@@ -1335,7 +1337,7 @@ namespace Lime.NanoVG
 				a0 = MathF.Atan2(-dly0, -dlx0);
 				a1 = MathF.Atan2(-dly1, -dlx1);
 				if (a1 > a0) {
-					a1 -= (float) (3.14159274 * 2);
+					a1 -= (float)(3.14159274 * 2);
 				}
 				SetVertex(dst, lx0, ly0, lu, 1);
 				dst++;
@@ -1343,7 +1345,7 @@ namespace Lime.NanoVG
 				dst++;
 				var n = Mathf.Clamp((int)MathF.Ceiling((float)((a0 - a1) / 3.14159274 * ncap)), 2, ncap);
 				for (var i = 0; i < n; i++) {
-					var u = i / (float) (n - 1);
+					var u = i / (float)(n - 1);
 					var a = a0 + u * (a1 - a0);
 					var rx = p1->X + MathF.Cos(a) * rw;
 					var ry = p1->Y + MathF.Sin(a) * rw;
@@ -1367,7 +1369,7 @@ namespace Lime.NanoVG
 				a0 = MathF.Atan2(dly0, dlx0);
 				a1 = MathF.Atan2(dly1, dlx1);
 				if (a1 < a0) {
-					a1 += (float) (3.14159274 * 2);
+					a1 += (float)(3.14159274 * 2);
 				}
 				SetVertex(dst, p1->X + dlx0 * rw, p1->Y + dly0 * rw, lu, 1);
 				dst++;

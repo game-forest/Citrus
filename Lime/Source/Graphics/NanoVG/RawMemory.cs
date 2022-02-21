@@ -17,14 +17,14 @@ namespace Lime.NanoVG
 
 		public static void CopyMemory(void* a, void* b, int size)
 		{
-			Lime.GraphicsUtility.CopyMemory((IntPtr)a, (IntPtr)b, size);
+			GraphicsUtility.CopyMemory((IntPtr)a, (IntPtr)b, size);
 		}
-		
+
 		public static void FillMemory(void* ptr, int value, int size)
 		{
-			Lime.GraphicsUtility.FillMemory((IntPtr)ptr, value, size);
+			GraphicsUtility.FillMemory((IntPtr)ptr, value, size);
 		}
-		
+
 		public static void* Realloc(void* a, int newSize)
 		{
 			if (a == null) {

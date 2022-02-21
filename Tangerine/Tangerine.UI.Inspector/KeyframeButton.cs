@@ -95,7 +95,8 @@ namespace Tangerine.UI.Inspector
 			Nodes.Add(fillImage);
 			Nodes.Add(image);
 			Layout = new StackLayout();
-			PostPresenter = new WidgetBoundsPresenter(ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox, cornerRadius: 2);
+			PostPresenter = new WidgetBoundsPresenter(
+				ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox, cornerRadius: 2);
 			Awoke += Awake;
 		}
 	}

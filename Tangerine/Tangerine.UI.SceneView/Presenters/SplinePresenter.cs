@@ -33,7 +33,8 @@ namespace Tangerine.UI.SceneView
 				SceneView.Instance.Frame.PrepareRendererState();
 				Renderer.Transform2 = Matrix32.Identity;
 				var transform =
-					spline.AsWidget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(SceneView.Instance.Frame);
+					spline.AsWidget.LocalToWorldTransform
+					* SceneView.Instance.CalcTransitionFromSceneSpace(SceneView.Instance.Frame);
 				var nvg = Lime.NanoVG.Context.Instance;
 				for (int i = 0; i < 2; i++) {
 					nvg.StrokeWidth(i == 1 ? 1 : 3);

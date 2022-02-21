@@ -4,13 +4,13 @@ namespace Lime.NanoVG
 	{
 		CounterClockWise = 1, // Winding for solid shapes
 		ClockWise = 2, // Winding for holes
-	};
+	}
 
 	public enum Solidity
 	{
 		Solid = 1, // CCW
 		Hole = 2, // CW
-	};
+	}
 
 	public enum ImageFlags
 	{
@@ -26,7 +26,7 @@ namespace Lime.NanoVG
 	{
 		Alpha = 0x01,
 		RGBA = 0x02,
-	};
+	}
 
 	internal enum CommandType
 	{

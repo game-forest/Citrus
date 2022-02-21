@@ -13,7 +13,7 @@ namespace Lime.NanoVG
 		public Color4 InnerColor;
 		public Color4 OuterColor;
 		public int Image;
-		
+
 		public Paint(Color4 color)
 		{
 			Transform = new Matrix32();

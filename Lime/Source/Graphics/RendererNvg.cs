@@ -2,7 +2,8 @@
 {
 	public static class RendererNvg
 	{
-		public static void DrawLine(Vector2 a, Vector2 b, NanoVG.Paint paint, float thickness = 1, LineCap cap = LineCap.Butt)
+		public static void DrawLine(
+			Vector2 a, Vector2 b, NanoVG.Paint paint, float thickness = 1, LineCap cap = LineCap.Butt)
 		{
 			var nvg = NanoVG.Context.Instance;
 			nvg.BeginPath();

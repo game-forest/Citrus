@@ -98,7 +98,7 @@ namespace Tangerine.UI.SceneView
 					nvg.BeginPath();
 					for (var j = 0; j < splineApproximation.Count; j++) {
 						var v =
-							(Vector2) viewport.WorldToViewportPoint(splineApproximation[j] * spline.GlobalTransform)
+							(Vector2)viewport.WorldToViewportPoint(splineApproximation[j] * spline.GlobalTransform)
 							* viewportToSceneFrame;
 						if (j == 0) {
 							nvg.MoveTo(v);

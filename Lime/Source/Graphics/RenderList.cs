@@ -23,9 +23,9 @@ namespace Lime
 			if (
 				b == null
 				|| b.Texture1 != atlas1
-			    || b.Texture2 != atlas2
-			    || b.Material != material
-			    || b.Material.PassCount != 1
+				|| b.Texture2 != atlas2
+				|| b.Material != material
+				|| b.Material.PassCount != 1
 				|| b.LastVertex + vertexCount > b.Mesh.Vertices.Length
 				|| b.LastIndex + indexCount > b.Mesh.Indices.Length
 			) {

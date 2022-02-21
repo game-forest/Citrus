@@ -20,9 +20,9 @@ namespace Lime.NanoVG
 			BackFaceComparison = CompareFunc.Always,
 			BackFaceFail = StencilOp.Keep,
 			BackFaceDepthFail = StencilOp.Keep,
-			BackFacePass = StencilOp.Decrement
+			BackFacePass = StencilOp.Decrement,
 		};
-		
+
 		private readonly StencilState applyStencilState = new StencilState
 		{
 			Enable = true,
@@ -36,7 +36,7 @@ namespace Lime.NanoVG
 			BackFaceComparison = CompareFunc.NotEqual,
 			BackFaceFail = StencilOp.Zero,
 			BackFaceDepthFail = StencilOp.Zero,
-			BackFacePass = StencilOp.Zero
+			BackFacePass = StencilOp.Zero,
 		};
 
 		public int CreateTexture(TextureType type, int width, int height, ImageFlags imageFlags, byte[] data)
@@ -61,8 +61,8 @@ namespace Lime.NanoVG
 
 		private readonly Vertex[] quad = new Vertex[4];
 
-		public void RenderFill(ref Paint paint, ref Scissor scissor, float fringe, Rectangle bounds,
-			ArraySegment<Path> paths)
+		public void RenderFill(
+			ref Paint paint, ref Scissor scissor, float fringe, Rectangle bounds, ArraySegment<Path> paths)
 		{
 			var isConvex = paths.Count == 1 && paths.Array[paths.Offset].Convex == 1;
 			RenderingType renderingType;
@@ -77,12 +77,12 @@ namespace Lime.NanoVG
 				var path = paths.Array[paths.Offset + i];
 				if (path.Fill != null) {
 					RenderTriangles(
-						ref paint, 
-						ref scissor, 
+						ref paint,
+						ref scissor,
 						fringe,
-						fringe, 
-						renderingType, 
-						path.Fill.Value, 
+						fringe,
+						renderingType,
+						path.Fill.Value,
 						PrimitiveType.TriangleFan
 					);
 				}
@@ -113,27 +113,28 @@ namespace Lime.NanoVG
 				if (path.Stroke != null) {
 					RenderTriangles(
 						ref paint,
-						ref scissor, 
+						ref scissor,
 						fringe,
 						fringe,
-						renderingType, 
-						path.Stroke.Value, 
+						renderingType,
+						path.Stroke.Value,
 						PrimitiveType.TriangleStrip
 					);
 				}
 			}
 		}
 
-		public void RenderStroke(ref Paint paint, ref Scissor scissor, float fringe, float strokeWidth, ArraySegment<Path> paths)
+		public void RenderStroke(
+			ref Paint paint, ref Scissor scissor, float fringe, float strokeWidth, ArraySegment<Path> paths)
 		{
-			for (var i = 0; i < paths.Count; ++i)  {
+			for (var i = 0; i < paths.Count; ++i) {
 				var path = paths.Array[paths.Offset + i];
 				if (path.Stroke != null) {
 					RenderTriangles(
-						ref paint, 
+						ref paint,
 						ref scissor,
-						strokeWidth, 
-						fringe, 
+						strokeWidth,
+						fringe,
 						paint.Image != 0 ? RenderingType.FillImage : RenderingType.FillGradient,
 						path.Stroke.Value,
 						PrimitiveType.TriangleStrip
@@ -149,16 +150,16 @@ namespace Lime.NanoVG
 			FillStencil,
 		}
 
-		enum PrimitiveType
+		private enum PrimitiveType
 		{
 			TriangleFan,
-			TriangleStrip
+			TriangleStrip,
 		}
-		
+
 		private unsafe void RenderTriangles(
 			ref Paint paint,
 			ref Scissor scissor,
-			float width, 
+			float width,
 			float fringe,
 			RenderingType renderingType,
 			ArraySegment<Vertex> vertices,
@@ -191,7 +192,7 @@ namespace Lime.NanoVG
 				scissorScale.Y =
 					MathF.Sqrt(
 						scissor.Transform.UY * scissor.Transform.UY +
-					    scissor.Transform.VY * scissor.Transform.VY
+						scissor.Transform.VY * scissor.Transform.VY
 					) / fringe;
 			}
 			var transform = paint.Transform.CalcInversed();

@@ -343,7 +343,7 @@ namespace Lime
 		internal class MouseHoverBorderPresenter : IPresenter
 		{
 			public bool Rounded { get; set; }
-			
+
 			public Lime.RenderObject GetRenderObject(Node node)
 			{
 				var widget = (Widget)node;
