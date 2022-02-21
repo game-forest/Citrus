@@ -1,6 +1,8 @@
 using Lime;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System;
 using Yuzu;
 
 namespace Tests.Types
@@ -25,10 +27,19 @@ namespace Tests.Types
 			public List<float> Us { get; } = new List<float>();
 		}
 
-		private static Queue<Mesh<Mesh3D.Vertex>> meshPool = new Queue<Mesh<Mesh3D.Vertex>>();
+		private static MeshPool<Mesh3D.Vertex> meshPool = new MeshPool<Mesh3D.Vertex>(
+			() => new Mesh<Mesh3D.Vertex> {
+				AttributeLocations = new int[] {
+					ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
+					ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
+					ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
+				},
+				DirtyFlags = MeshDirtyFlags.All,
+			}
+		);
 
 		private Presenter presenter;
-		private Mesh<Mesh3D.Vertex> mesh;
+		private PooledMesh<Mesh3D.Vertex> mesh;
 		private long hash = 0;
 
 		[YuzuMember]
@@ -64,11 +75,8 @@ namespace Tests.Types
 			if (newHash == hash) {
 				return;
 			}
-			var oldMesh = mesh;
-			mesh = AcquireMesh();
-			if (oldMesh != null) {
-				ReleaseMesh(mesh);
-			}
+			mesh?.Release();
+			mesh = meshPool.Acquire();
 			hash = newHash;
 			var spline = (Spline3D)Owner;
 			var savedTransform = spline.GlobalTransform;
@@ -95,13 +103,13 @@ namespace Tests.Types
 			ushort shapeVertexCount = (ushort)Shape.Vertices.Count;
 			var segmentCount = path.Count - 1;
 			var edgeLoopCount = path.Count;
-			mesh.VertexCount = shapeVertexCount * edgeLoopCount;
+			mesh.Mesh.VertexCount = shapeVertexCount * edgeLoopCount;
 			var triangleCount = Shape.Lines.Count * segmentCount;
-			mesh.IndexCount = triangleCount * 3;
-			var indicies = mesh.Indices == null || mesh.Indices.Length < mesh.IndexCount
-				? new ushort[mesh.IndexCount] : mesh.Indices;
-			var vertices = mesh.Vertices == null || mesh.Vertices.Length < mesh.VertexCount
-				? new Mesh3D.Vertex[mesh.VertexCount] : mesh.Vertices;
+			mesh.Mesh.IndexCount = triangleCount * 3;
+			var indicies = mesh.Mesh.Indices == null || mesh.Mesh.Indices.Length < mesh.Mesh.IndexCount
+				? new ushort[mesh.Mesh.IndexCount] : mesh.Mesh.Indices;
+			var vertices = mesh.Mesh.Vertices == null || mesh.Mesh.Vertices.Length < mesh.Mesh.VertexCount
+				? new Mesh3D.Vertex[mesh.Mesh.VertexCount] : mesh.Mesh.Vertices;
 			ushort offset = 0;
 			var vScale = 1f;
 			if (CompensationStrategy != VCompensationStrategy.Stretch) {
@@ -133,9 +141,9 @@ namespace Tests.Types
 				}
 				offset += shapeVertexCount;
 			}
-			mesh.Indices = indicies;
-			mesh.Vertices = vertices;
-			mesh.DirtyFlags = MeshDirtyFlags.VerticesIndices;
+			mesh.Mesh.Indices = indicies;
+			mesh.Mesh.Vertices = vertices;
+			mesh.Mesh.DirtyFlags = MeshDirtyFlags.VerticesIndices;
 			spline.SetGlobalTransform(savedTransform);
 		}
 
@@ -168,36 +176,58 @@ namespace Tests.Types
 			return hasher.End();
 		}
 
-		private static Mesh<Mesh3D.Vertex> AcquireMesh()
+		public class MeshPool<TVertex> where TVertex : unmanaged
 		{
-			Mesh<Mesh3D.Vertex> mesh;
-			lock (meshPool) {
-				if (meshPool.Count > 0) {
-					mesh = meshPool.Dequeue();
-				} else {
-					mesh = new Mesh<Mesh3D.Vertex> {
-						AttributeLocations = new[] {
-							ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
-							ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
-							ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
-						},
-						Topology = PrimitiveTopology.TriangleList,
-						DirtyFlags = MeshDirtyFlags.All,
-					};
-				}
+			private Stack<PooledMesh<TVertex>> freeMeshes = new Stack<PooledMesh<TVertex>>();
+			private Func<Mesh<TVertex>> meshFactory;
+
+			public MeshPool(Func<Mesh<TVertex>> meshFactory)
+			{
+				this.meshFactory = meshFactory;
 			}
-			mesh.VertexCount = 0;
-			mesh.IndexCount = 0;
-			return mesh;
+
+			public PooledMesh<TVertex> Acquire()
+			{
+				var m = freeMeshes.Count > 0
+					? freeMeshes.Pop()
+					: new PooledMesh<TVertex>(this, meshFactory());
+				m.AddRef();
+				return m;
+			}
+
+			internal void ReleaseInternal(PooledMesh<TVertex> m)
+			{
+				freeMeshes.Push(m);
+			}
 		}
 
-		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> mesh)
+		public class PooledMesh<TVertex> where TVertex : unmanaged
 		{
-			Window.Current.InvokeOnRendering(() => {
-				lock (meshPool) {
-					meshPool.Enqueue(mesh);
+			private MeshPool<TVertex> pool;
+			private int refCount;
+
+			public Mesh<TVertex> Mesh { get; }
+
+			internal PooledMesh(MeshPool<TVertex> pool, Mesh<TVertex> mesh)
+			{
+				this.pool = pool;
+				Mesh = mesh;
+			}
+
+			public void AddRef()
+			{
+				var newRefCount = Interlocked.Increment(ref refCount);
+				System.Diagnostics.Debug.Assert(newRefCount >= 1);
+			}
+
+			public void Release()
+			{
+				var newRefCount = Interlocked.Decrement(ref refCount);
+				System.Diagnostics.Debug.Assert(newRefCount >= 0);
+				if (newRefCount == 0) {
+					pool.ReleaseInternal(this);
 				}
-			});
+			}
 		}
 
 		protected override void OnOwnerChanged(Node oldOwner)
@@ -234,7 +264,7 @@ namespace Tests.Types
 		private class Presenter : IPresenter
 		{
 			public Matrix44 World;
-			public Mesh<Mesh3D.Vertex> Mesh;
+			public PooledMesh<Mesh3D.Vertex> Mesh;
 			public ITexture Texture;
 			public CommonMaterial Material = new CommonMaterial();
 			public CullMode CullMode;
@@ -251,6 +281,7 @@ namespace Tests.Types
 				ro.Material = Material;
 				ro.Opaque = true;
 				ro.CullMode = CullMode;
+				ro.Mesh.AddRef();
 				return ro;
 			}
 
@@ -262,7 +293,7 @@ namespace Tests.Types
 			private class RenderObject : Lime.RenderObject3D
 			{
 				public Matrix44 World;
-				public Mesh<Mesh3D.Vertex> Mesh;
+				public PooledMesh<Mesh3D.Vertex> Mesh;
 				public ITexture Texture;
 				public CommonMaterial Material;
 				public CullMode CullMode;
@@ -274,8 +305,13 @@ namespace Tests.Types
 					Renderer.World = World;
 					Material.DiffuseTexture = Texture;
 					Material.Apply(0);
-					Mesh.DrawIndexed(0, Mesh.IndexCount);
+					Mesh.Mesh.DrawIndexed(0, Mesh.Mesh.IndexCount);
 					Renderer.PopState();
+				}
+
+				protected override void OnRelease()
+				{
+					Mesh.Release();
 				}
 			}
 		}
