@@ -1,7 +1,5 @@
 using Lime;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System;
 using Yuzu;
 
@@ -176,7 +174,7 @@ namespace Tests.Types
 			return hasher.End();
 		}
 
-		public class MeshPool<TVertex> where TVertex : unmanaged
+		private class MeshPool<TVertex> where TVertex : unmanaged
 		{
 			private Stack<PooledMesh<TVertex>> freeMeshes = new Stack<PooledMesh<TVertex>>();
 			private Func<Mesh<TVertex>> meshFactory;
@@ -201,7 +199,7 @@ namespace Tests.Types
 			}
 		}
 
-		public class PooledMesh<TVertex> where TVertex : unmanaged
+		private class PooledMesh<TVertex> where TVertex : unmanaged
 		{
 			private MeshPool<TVertex> pool;
 			private int refCount;
@@ -216,15 +214,13 @@ namespace Tests.Types
 
 			public void AddRef()
 			{
-				var newRefCount = Interlocked.Increment(ref refCount);
-				System.Diagnostics.Debug.Assert(newRefCount >= 1);
+				refCount++;
 			}
 
 			public void Release()
 			{
-				var newRefCount = Interlocked.Decrement(ref refCount);
-				System.Diagnostics.Debug.Assert(newRefCount >= 0);
-				if (newRefCount == 0) {
+				refCount--;
+				if (refCount == 0) {
 					pool.ReleaseInternal(this);
 				}
 			}
