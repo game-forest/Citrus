@@ -399,11 +399,10 @@ namespace Tests.Types
 				// this.Number per second
 				particlesToSpawn += Number * delta;
 			}
-			var currentBoundingRect = new Rectangle();
 			while (particlesToSpawn >= 1f) {
 				Particle particle = AllocParticle();
 				if (GloballyEnabled && Nodes.Count > 0 && InitializeParticle(particle)) {
-					AdvanceParticle(particle, 0, ref currentBoundingRect);
+					AdvanceParticle(particle, 0);
 				} else {
 					FreeLastParticles(1);
 				}
@@ -413,7 +412,7 @@ namespace Tests.Types
 			int i = particles.Count - 1;
 			while (i >= 0) {
 				Particle particle = particles[i];
-				AdvanceParticle(particle, delta, ref currentBoundingRect);
+				AdvanceParticle(particle, delta);
 				if (!ImmortalParticles && particle.Age > particle.Lifetime) {
 					particles[i] = particles[particles.Count - particlesToFreeCount - 1];
 					particles[particles.Count - particlesToFreeCount - 1] = particle;
@@ -563,7 +562,7 @@ namespace Tests.Types
 			}
 		}
 
-		private void AdvanceParticle(Particle p, float delta, ref Rectangle boundingRect)
+		private void AdvanceParticle(Particle p, float delta)
 		{
 			p.Age += delta;
 			if (p.AgeToAnimationTime > 0) {
