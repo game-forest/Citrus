@@ -104,7 +104,7 @@ namespace Tangerine.UI.SceneView
 			var sv = SceneView.Instance;
 			var matrix = Owner.LocalToWorldTransform * sv.CalcTransitionFromSceneSpace(canvas);
 			CalcGeometry(matrix, out var a, out var b);
-			Renderer.DrawLine(a, b, Color4.Red, 2);
+			RendererNvg.DrawLine(a, b, Color4.Red, 2);
 		}
 
 		public bool HitTest(Vector2 point, Widget canvas, float radius = 20)
