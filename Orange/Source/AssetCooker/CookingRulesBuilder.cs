@@ -337,9 +337,10 @@ namespace Orange
 			}
 		}
 
-		public CookingRules InheritClone(Target target)
+		public CookingRules InheritClone(Target target, string sourcePath)
 		{
 			var r = new CookingRules(false);
+			r.SourcePath = sourcePath;
 			r.Parent = this;
 			foreach (var kv in TargetRules) {
 				r.TargetRules.Add(kv.Key, kv.Value.InheritClone());
@@ -518,10 +519,9 @@ namespace Orange
 					var dirName = AssetPath.GetDirectoryName(filePath);
 					pathStack.Push(dirName == string.Empty ? string.Empty : dirName + "/");
 					var rules = ParseCookingRules(bundle, rulesStack.Peek(), filePath, target);
-					rules.SourcePath = filePath;
 					rulesStack.Push(rules);
 					// Add 'ignore' cooking rules for this #CookingRules.txt itself
-					var ignoreRules = rules.InheritClone(target);
+					var ignoreRules = rules.InheritClone(target, filePath);
 					ignoreRules.Ignore = true;
 					map[filePath] = ignoreRules;
 					var directoryName = pathStack.Peek();
@@ -544,9 +544,8 @@ namespace Orange
 					var rules = rulesStack.Peek();
 					if (bundle.FileExists(rulesFile)) {
 						rules = ParseCookingRules(bundle, rulesStack.Peek(), rulesFile, target);
-						rules.SourcePath = rulesFile;
 						// Add 'ignore' cooking rules for this cooking rules text file
-						var ignoreRules = rules.InheritClone(target);
+						var ignoreRules = rules.InheritClone(target, rulesFile);
 						ignoreRules.Ignore = true;
 						map[rulesFile] = ignoreRules;
 					}
@@ -635,7 +634,7 @@ namespace Orange
 		private static CookingRules ParseCookingRules(
 			AssetBundle bundle, CookingRules basicRules, string path, Target target
 		) {
-			var rules = basicRules.InheritClone(target);
+			var rules = basicRules.InheritClone(target, path);
 			try {
 				using var s = bundle.OpenFile(path);
 				TextReader r = new StreamReader(s);
