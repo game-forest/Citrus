@@ -788,29 +788,27 @@ namespace Tests.Types
 		private static Mesh<Mesh3D.Vertex> AcquireMesh()
 		{
 			Mesh<Mesh3D.Vertex> mesh;
-			lock (meshPool) {
-				if (meshPool.Count > 0) {
-					mesh = meshPool.Dequeue();
-				} else {
-					mesh = new Mesh<Mesh3D.Vertex> {
-						AttributeLocations = new[] {
-							ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
-							ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
-							ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
-						},
-						Topology = PrimitiveTopology.TriangleList,
-						DirtyFlags = MeshDirtyFlags.All,
-						Vertices = new Mesh3D.Vertex[400],
-						Indices = new ushort[600],
-					};
-					for (ushort i = 0, index = 0; i < mesh.Indices.Length; i += 6, index += 4) {
-						mesh.Indices[i] = index;
-						mesh.Indices[i + 1] = (ushort)(index + 1);
-						mesh.Indices[i + 2] = (ushort)(index + 3);
-						mesh.Indices[i + 3] = (ushort)(index + 1);
-						mesh.Indices[i + 4] = (ushort)(index + 2);
-						mesh.Indices[i + 5] = (ushort)(index + 3);
-					}
+			if (meshPool.Count > 0) {
+				mesh = meshPool.Dequeue();
+			} else {
+				mesh = new Mesh<Mesh3D.Vertex> {
+					AttributeLocations = new[] {
+						ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.Color1, ShaderPrograms.Attributes.UV1,
+						ShaderPrograms.Attributes.BlendIndices, ShaderPrograms.Attributes.BlendWeights,
+						ShaderPrograms.Attributes.Normal, ShaderPrograms.Attributes.Tangent,
+					},
+					Topology = PrimitiveTopology.TriangleList,
+					DirtyFlags = MeshDirtyFlags.All,
+					Vertices = new Mesh3D.Vertex[400],
+					Indices = new ushort[600],
+				};
+				for (ushort i = 0, index = 0; i < mesh.Indices.Length; i += 6, index += 4) {
+					mesh.Indices[i] = index;
+					mesh.Indices[i + 1] = (ushort)(index + 1);
+					mesh.Indices[i + 2] = (ushort)(index + 3);
+					mesh.Indices[i + 3] = (ushort)(index + 1);
+					mesh.Indices[i + 4] = (ushort)(index + 2);
+					mesh.Indices[i + 5] = (ushort)(index + 3);
 				}
 			}
 			mesh.VertexCount = 0;
@@ -819,10 +817,8 @@ namespace Tests.Types
 
 		private static void ReleaseMesh(Mesh<Mesh3D.Vertex> mesh)
 		{
-			lock (meshPool) {
-				mesh.VertexCount = -1;
-				meshPool.Enqueue(mesh);
-			}
+			mesh.VertexCount = -1;
+			meshPool.Enqueue(mesh);
 		}
 
 		public void DeleteAllParticles()
