@@ -93,8 +93,8 @@ namespace Tangerine.UI.SceneView
 				splineApproximation.Add(n2.Position);
 				var nvg = Lime.NanoVG.Context.Instance;
 				for (int t = 0; t < 2; t++) {
-					nvg.StrokeWidth(t == 1 ? 1 : 2);
-					nvg.StrokeColor(t == 0 ? Color4.White : Color4.Black);
+					nvg.StrokeWidth(t == 1 ? 1 : 3);
+					nvg.StrokeColor(t == 0 ? Color4.FromFloats(1, 1, 1, 0.5f) : Color4.Black);
 					nvg.BeginPath();
 					for (var j = 0; j < splineApproximation.Count; j++) {
 						var v =

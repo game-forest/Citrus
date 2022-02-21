@@ -113,9 +113,10 @@ namespace Lime.NanoVG
 			}
 
 			// Stroke - from [0..1] to clipped pyramid, where the slope is 1px.
+			// pow() makes edges more smooth.
 			float strokeMask() 
 			{
-				return min(1.0, (1.0 - abs(texCoords1.x * 2.0 - 1.0)) * strokeMult) * min(1.0, texCoords1.y);
+				return pow(min(1.0, (1.0 - abs(texCoords1.x * 2.0 - 1.0)) * strokeMult) * min(1.0, texCoords1.y), 0.7);
 			}
 			
 			void main(void) 

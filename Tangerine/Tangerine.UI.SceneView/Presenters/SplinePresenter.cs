@@ -36,8 +36,8 @@ namespace Tangerine.UI.SceneView
 					spline.AsWidget.LocalToWorldTransform * SceneView.Instance.CalcTransitionFromSceneSpace(SceneView.Instance.Frame);
 				var nvg = Lime.NanoVG.Context.Instance;
 				for (int i = 0; i < 2; i++) {
-					nvg.StrokeWidth(i == 1 ? 1 : 2);
-					nvg.StrokeColor(i == 0 ? Color4.White : Color4.Black);
+					nvg.StrokeWidth(i == 1 ? 1 : 3);
+					nvg.StrokeColor(i == 0 ? Color4.FromFloats(1, 1, 1, 0.5f) : Color4.Black);
 					var j = 0;
 					var step = 7.0f / SceneView.Instance.Scene.Scale.X;
 					foreach (var v in spline.CalcPoints(step)) {
