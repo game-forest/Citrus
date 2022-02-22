@@ -177,7 +177,7 @@ namespace Lime
 	public sealed class TangerineFilePropertyAttribute : Attribute
 	{
 		public readonly string[] AllowedFileTypes;
-		public readonly bool SaveFileExtension;
+		public readonly bool TrimExtension;
 		private readonly string valueToStringMethodName;
 		private readonly string stringToValueMethodName;
 		private MethodInfo valueToStringMethod;
@@ -188,12 +188,12 @@ namespace Lime
 			string[] allowedFileTypes,
 			string valueToStringMethodName = null,
 			string stringToValueMethodName = null,
-			bool saveFileExtension = false
+			bool trimExtension = true
 		) {
 			AllowedFileTypes = allowedFileTypes;
 			this.stringToValueMethodName = stringToValueMethodName;
 			this.valueToStringMethodName = valueToStringMethodName;
-			this.SaveFileExtension = saveFileExtension;
+			this.TrimExtension = trimExtension;
 		}
 
 		public T StringToValueConverter<T>(Type type, string s)

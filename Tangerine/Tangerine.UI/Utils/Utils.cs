@@ -120,7 +120,7 @@ namespace Tangerine.UI
 			string filePath,
 			out string assetPath,
 			out string assetType,
-			bool includeExtension = false
+			bool trimExtension = true
 		) {
 			string path = AssetPath.CorrectSlashes(filePath);
 			string assetsPath = AssetPath.CorrectSlashes(Core.Project.Current.AssetsDirectory);
@@ -134,7 +134,7 @@ namespace Tangerine.UI
 					path = path.Substring(assetsPath.Length + 1);
 				}
 			}
-			assetPath = includeExtension ? path : Path.ChangeExtension(path, null);
+			assetPath = trimExtension ? Path.ChangeExtension(path, null) : path;
 			assetType = Path.GetExtension(path).ToLower();
 			return true;
 		}

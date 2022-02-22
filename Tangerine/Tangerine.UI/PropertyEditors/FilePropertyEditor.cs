@@ -23,7 +23,7 @@ namespace Tangerine.UI
 
 		public bool ShowPrefix { get; set; } = true;
 
-		protected virtual bool SaveFileExtension { get; set; } = false;
+		protected virtual bool TrimExtension { get; set; } = true;
 
 		protected FilePropertyEditor(IPropertyEditorParams editorParams, string[] allowedFileTypes)
 			: base(editorParams)
@@ -119,8 +119,8 @@ namespace Tangerine.UI
 					path,
 					out string asset,
 					out string type,
-					includeExtension: SaveFileExtension
-			) && Utils.AssertCurrentDocument(asset, type)
+					trimExtension: TrimExtension
+				) && Utils.AssertCurrentDocument(asset, type)
 			) {
 				if (!IsValid(asset)) {
 					AlertDialog.Show(
