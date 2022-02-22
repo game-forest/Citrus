@@ -22,8 +22,7 @@ namespace Tangerine.UI
 		private readonly PrefixData prefix = new PrefixData();
 
 		public bool ShowPrefix { get; set; } = true;
-
-		protected virtual bool TrimExtension { get; set; } = true;
+		protected bool TrimExtension { get; set; } = true;
 
 		protected FilePropertyEditor(IPropertyEditorParams editorParams, string[] allowedFileTypes)
 			: base(editorParams)
