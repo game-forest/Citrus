@@ -18,11 +18,13 @@ namespace Tangerine.Panels
 		private readonly Frame contentWidget;
 		private readonly EditBox searchStringEditor;
 		private readonly ThemedScrollView scrollView;
+		private readonly LcaSolver lcaSolver;
 		private TreeViewMode mode;
 
 		public AnimationsPanel(Widget panelWidget)
 		{
 			this.panelWidget = panelWidget;
+			lcaSolver = new LcaSolver();
 			panelWidget.TabTravesable = new TabTraversable();
 			ToolbarButton expandAll, collapseAll, showAll, showCurrent;
 			contentWidget = new Frame {
@@ -87,6 +89,7 @@ namespace Tangerine.Panels
 					SearchStringGetter = () => searchStringEditor.Text,
 				}
 			);
+			contentWidget.Tasks.Add(RebuildIfSelectedChangedTask(treeView, itemProvider));
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView, itemProvider));
 			expandAll.Clicked = () => ExpandAll(treeView.RootItem, true);
 			collapseAll.Clicked = () => ExpandAll(treeView.RootItem, false);
@@ -96,6 +99,29 @@ namespace Tangerine.Panels
 				RebuildTreeView(treeView, itemProvider);
 			};
 			showAll.AddChangeWatcher(() => mode, _ => showAll.Checked = mode == TreeViewMode.AllHierarchy);
+		}
+
+		private IEnumerator<object> RebuildIfSelectedChangedTask(TreeView treeView, TreeViewItemProvider provider)
+		{
+			long cachedHash = 0;
+			while (true) {
+				yield return null;
+				if (mode == TreeViewMode.AllHierarchy) {
+					continue;
+				}
+				var hasher = new Hasher();
+				hasher.Begin();
+				foreach (var i in Document.Current.SelectedSceneItems()) {
+					if (i.TryGetNode(out _) || i.TryGetAnimator(out _)) {
+						hasher.Write(i.GetHashCode());
+					}
+				}
+				var hash = hasher.End();
+				if (cachedHash != hash) {
+					cachedHash = hash;
+					RebuildTreeView(treeView, provider);
+				}
+			}
 		}
 
 		private void ExpandAll(TreeViewItem item, bool expand)
@@ -474,7 +500,9 @@ namespace Tangerine.Panels
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
 			if (mode == TreeViewMode.CurrentBranch) {
-				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(Document.Current.Container));
+				var commonRoot = lcaSolver.FindCommonAncestor(Document.Current.SelectedNodes());
+				commonRoot ??= Document.Current.Container;
+				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(commonRoot));
 			} else {
 				TraverseSceneTree(Document.Current.GetSceneItemForObject(Document.Current.RootNode));
 			}
@@ -904,7 +932,13 @@ namespace Tangerine.Panels
 				} else {
 					var x = (CalcIndent(parent) + 2) * IndentWidth;
 					var y = CalcDragCursorY(parent, childIndex);
-					Renderer.DrawRect(x, y - 0.5f, scrollWidget.Width, y + 1.5f, Theme.Colors.SeparatorDragColor);
+					Renderer.DrawRect(
+						x0: x,
+						y0: y - 0.5f,
+						x1: scrollWidget.Width,
+						y1: y + 1.5f,
+						color: Theme.Colors.SeparatorDragColor
+					);
 				}
 			}
 
@@ -1537,6 +1571,41 @@ namespace Tangerine.Panels
 						p.Label.Font = new SerializableFont(FontPool.DefaultFontName);
 					}
 				}
+			}
+		}
+
+		private class LcaSolver
+		{
+			private readonly List<Node> pathOne = new List<Node>();
+			private readonly List<Node> pathTwo = new List<Node>();
+
+			public Node FindCommonAncestor(IEnumerable<Node> nodes)
+			{
+				using var enumerator = nodes.GetEnumerator();
+				if (enumerator.MoveNext()) {
+					pathOne.AddRange(enumerator.Current.Ancestors);
+				}
+				int commonNodeIndex = pathOne.Count - 1;
+				while (enumerator.MoveNext()) {
+					pathTwo.AddRange(enumerator.Current.Ancestors);
+					int startIndex = Math.Min(
+						val1: commonNodeIndex,
+						val2: pathTwo.Count - 1
+					);
+					for (int i = 1 + startIndex; ; i--) {
+						if (pathTwo[^i] == pathOne[^i]) {
+							commonNodeIndex = i - 1;
+							break;
+						}
+					}
+					pathTwo.Clear();
+				}
+				if (pathOne.Count == 0) {
+					return null;
+				}
+				var node = pathOne[^(commonNodeIndex + 1)];
+				pathOne.Clear();
+				return node;
 			}
 		}
 	}
