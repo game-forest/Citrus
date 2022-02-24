@@ -257,6 +257,19 @@
     <Compile Include="Source\Graphics\IRenderer.cs" />
     <Compile Include="Source\Graphics\Mesh.cs" />
     <Compile Include="Source\Graphics\MeshUtils.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Buffer.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Context.cs" />
+    <Compile Include="Source\Graphics\NanoVG\ContextState.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Enums.cs" />
+    <Compile Include="Source\Graphics\NanoVG\IRenderingBackend.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Material.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Paint.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Path.cs" />
+    <Compile Include="Source\Graphics\NanoVG\PathCache.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Point.cs" />
+    <Compile Include="Source\Graphics\NanoVG\RawMemory.cs" />
+    <Compile Include="Source\Graphics\NanoVG\RenderingBackend.cs" />
+    <Compile Include="Source\Graphics\NanoVG\Scissor.cs" />
     <Compile Include="Source\Graphics\OgvDecoder.cs" />
     <Compile Include="Source\Graphics\OpacityMask.cs" />
     <Compile Include="Source\Graphics\PlatformRenderer.cs" />
@@ -299,6 +312,7 @@
     <Compile Include="Source\Graphics\Platform\Vulkan\VulkanHelper.cs" />
     <Compile Include="Source\Graphics\RenderBatch.cs" />
     <Compile Include="Source\Graphics\Renderer.cs" />
+    <Compile Include="Source\Graphics\RendererNvg.cs" />
     <Compile Include="Source\Graphics\RenderList.cs" />
     <Compile Include="Source\Graphics\RenderTexture.cs" />
     <Compile Include="Source\Graphics\Shader.cs" />
