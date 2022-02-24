@@ -195,7 +195,7 @@ namespace Lime.NanoVG
 						scissor.Transform.VY * scissor.Transform.VY
 					) / fringe;
 			}
-			var transform = paint.Transform.CalcInversed();
+			var transform = (paint.Transform * Renderer.GetEffectiveTransform()).CalcInversed();
 			var p = new FillParams();
 			p.ScissorU.X = scissorTransform.UX;
 			p.ScissorU.Y = scissorTransform.UY;

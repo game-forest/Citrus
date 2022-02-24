@@ -190,7 +190,6 @@ namespace Lime.NanoVG
 			var state = GetState();
 			state.Fill = paint;
 			state.Fill.Transform *= state.Transform;
-			state.Fill.Transform *= Renderer.GetEffectiveTransform();
 		}
 
 		public int CreateImageRGBA(int w, int h, ImageFlags imageFlags, byte[] data)
