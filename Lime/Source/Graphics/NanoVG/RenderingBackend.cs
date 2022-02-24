@@ -221,12 +221,14 @@ namespace Lime.NanoVG
 			p.TexType = 0;
 			p.Type = (float)renderingType;
 			var paramsChanged = false;
-			var p1 = (long*)Unsafe.AsPointer(ref material.FillParams);
-			var p2 = (long*)&p;
-			for (int i = sizeof(FillParams) / 8; i > 0; i--) {
-				if (*p1++ != *p2++) {
-					paramsChanged = true;
-					break;
+			fixed (void* ptr = &material.FillParams) {
+				var p1 = (long*)ptr;
+				var p2 = (long*)&p;
+				for (int i = sizeof(FillParams) / 8; i > 0; i--) {
+					if (*p1++ != *p2++) {
+						paramsChanged = true;
+						break;
+					}
 				}
 			}
 			if (paramsChanged) {
