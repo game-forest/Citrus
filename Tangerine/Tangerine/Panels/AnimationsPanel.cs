@@ -630,6 +630,36 @@ namespace Tangerine.Panels
 			contentWidget.Unlink();
 		}
 
+		private static void ScheduleHighlightAnimationFor(Node node)
+		{
+			if (node == Document.Current.RootNode) {
+				return;
+			}
+			Document.Current.History.DoTransaction(() => ExpandNodePathInTimeline.Perform(node));
+			Timeline.Instance.RootWidget.LateTasks.Add(ScrollToNodeTask(node));
+
+			static IEnumerator<object> ScrollToNodeTask(Node node)
+			{
+				var treeView = Timeline.Instance.Roll.TreeView;
+				// The timeline is rebuilt in a late update. This task may
+				// execute on the next update or may execute after one update.
+				for (int i = 0; i < 2; i++) {
+					var sceneItem = Document.Current.GetSceneItemForObject(node);
+					var treeViewItem = TreeViewComponent.GetTreeViewItem(sceneItem);
+					// Item may not have a widget. Widgets are created when the
+					// timeline is rebuilt, which happens at some point in the update.
+					// So we do it as part of the task.
+					var presentation = treeViewItem.Presentation as TreeViewItemPresentation;
+					if (presentation?.Widget.Visible ?? false) {
+						presentation.RunHighlightAnimation(Timeline.Instance.RootWidget);
+						treeView.ScrollToItem(treeViewItem, instantly: true);
+						yield break;
+					}
+					yield return null;
+				}
+			}
+		}
+
 		public class TreeViewItemState
 		{
 			public TreeViewItem TreeViewItem { get; set; }
@@ -1364,32 +1394,7 @@ namespace Tangerine.Panels
 			{
 				if (Application.Input.IsKeyPressed(Key.Alt)) {
 					var targetNode = ((NodeTreeViewItem)Item).Node;
-					if (targetNode == Document.Current.RootNode) {
-						return;
-					}
-					Document.Current.History.DoTransaction(() => ExpandPath.Perform(targetNode));
-					Timeline.Instance.RootWidget.LateTasks.Add(ScrollToNodeTask(targetNode));
-				}
-			}
-
-			private static IEnumerator<object> ScrollToNodeTask(Node node)
-			{
-				var treeView = Timeline.Instance.Roll.TreeView;
-				// The timeline is rebuilt in a late update. This task may
-				// execute on the next update or may execute after one update.
-				for (int i = 0; i < 2; i++) {
-					var sceneItem = Document.Current.GetSceneItemForObject(node);
-					var treeViewItem = TreeViewComponent.GetTreeViewItem(sceneItem);
-					// Item may not have a widget. Widgets are created when the
-					// timeline is rebuilt, which happens at some point in the update.
-					// So we do it as part of the task.
-					var presentation = treeViewItem.Presentation as TreeViewItemPresentation;
-					if (presentation?.Widget.Visible ?? false) {
-						presentation.RunHighlightAnimation(Timeline.Instance.RootWidget);
-						treeView.ScrollToItem(treeViewItem, instantly: true);
-						yield break;
-					}
-					yield return null;
+					ScheduleHighlightAnimationFor(targetNode);
 				}
 			}
 
