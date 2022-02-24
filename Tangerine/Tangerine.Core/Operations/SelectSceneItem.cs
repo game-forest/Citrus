@@ -18,7 +18,7 @@ namespace Tangerine.Core.Operations
 		}
 	}
 
-	public static class ExpandPath
+	public static class ExpandNodePathInTimeline
 	{
 		public static void Perform(Node node)
 		{
@@ -51,7 +51,7 @@ namespace Tangerine.Core.Operations
 		{
 			var sceneItem = Document.Current.GetSceneItemForObject(node);
 			if (select) {
-				ExpandPath.Perform(node);
+				ExpandNodePathInTimeline.Perform(node);
 			}
 			SelectSceneItem.Perform(sceneItem, select);
 		}
