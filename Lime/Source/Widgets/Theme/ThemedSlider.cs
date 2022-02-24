@@ -1,5 +1,6 @@
 #if !ANDROID && !iOS
 using System;
+using Lime.NanoVG;
 
 namespace Lime
 {
@@ -50,9 +51,9 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					var p = new Vector2(0, 2);
-					Renderer.DrawVerticalGradientRect(-p, p + Size, Gradient);
-					Renderer.DrawRectOutline(-p, p + Size, BorderColor);
+					var fillPaint = Paint.LinearGradient(0, 0,  0, Size.Y, Gradient[0].Color, Gradient[1].Color);
+					RendererNvg.DrawRound(Size / 2, Size.Y / 2 - 1, fillPaint);
+					RendererNvg.DrawCircle(Size / 2, Size.Y / 2 - 1, BorderColor, 2);
 				}
 			}
 		}
