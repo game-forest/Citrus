@@ -253,13 +253,27 @@ namespace Tangerine.Panels
 
 		private void ScrollToCurrentAnimation(TreeView treeView, TreeViewItemProvider provider)
 		{
+			var animation = Document.Current.Animation;
 			if (
 				mode == TreeViewMode.CurrentBranch &&
-				!SetKeyframe.CheckAnimationScope(Document.Current.Animation, Document.Current.Container)
+				!SetKeyframe.CheckAnimationScope(animation, Document.Current.Container)
 			) {
-				NavigateToAnimation.Perform(Document.Current.Animation);
+				NavigateToAnimation.Perform(animation);
 			}
-			var sceneItem = Document.Current.GetSceneItemForObject(Document.Current.Animation);
+			ClearSceneItemSelection.Perform();
+			if (animation.OwnerNode.Nodes.Count == 0) {
+				EnterNode.Perform(animation.OwnerNode);
+			} else {
+				ScheduleHighlightAnimationFor(animation.OwnerNode);
+				foreach (var node in animation.OwnerNode.Nodes) {
+					SelectNode.Perform(node, select: true);
+				}
+				if (mode == TreeViewMode.CurrentBranch) {
+					// Rebuild the TreeView immediately to scroll to the OwnerNode.
+					RebuildTreeView(treeView, provider);
+				}
+			}
+			var sceneItem = Document.Current.GetSceneItemForObject(animation);
 			var treeViewItem = provider.GetAnimationTreeViewItem(sceneItem);
 			if (treeViewItem.Parent != null) {
 				treeViewItem.Parent.Expanded = true;
