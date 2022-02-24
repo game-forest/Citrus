@@ -215,7 +215,7 @@ namespace Lime
 			}
 		}
 
-		private void RaiseChanged()
+		protected void RaiseChanged()
 		{
 			Changed?.Invoke();
 		}
