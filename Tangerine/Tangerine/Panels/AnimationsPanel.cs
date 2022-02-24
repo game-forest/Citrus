@@ -1560,9 +1560,10 @@ namespace Tangerine.Panels
 			public Node FindCommonAncestor(IEnumerable<Node> nodes)
 			{
 				using var enumerator = nodes.GetEnumerator();
-				if (enumerator.MoveNext()) {
-					pathOne.AddRange(enumerator.Current.Ancestors);
+				if (!enumerator.MoveNext()) {
+					return null;
 				}
+				pathOne.AddRange(enumerator.Current.Ancestors);
 				int commonNodeIndex = pathOne.Count - 1;
 				while (enumerator.MoveNext()) {
 					pathTwo.AddRange(enumerator.Current.Ancestors);
@@ -1577,9 +1578,6 @@ namespace Tangerine.Panels
 						}
 					}
 					pathTwo.Clear();
-				}
-				if (pathOne.Count == 0) {
-					return null;
 				}
 				var node = pathOne[^(commonNodeIndex + 1)];
 				pathOne.Clear();
