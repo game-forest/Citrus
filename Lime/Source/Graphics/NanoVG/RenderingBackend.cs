@@ -181,7 +181,7 @@ namespace Lime.NanoVG
 				scissorScale.X = 1.0f;
 				scissorScale.Y = 1.0f;
 			} else {
-				scissorTransform = scissor.Transform.CalcInversed();
+				scissorTransform = (scissor.Transform * Renderer.GetEffectiveTransform()).CalcInversed();
 				scissorExt.X = scissor.Extent.X;
 				scissorExt.Y = scissor.Extent.Y;
 				scissorScale.X =

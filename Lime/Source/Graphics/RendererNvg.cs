@@ -29,22 +29,35 @@
 			nvg.Fill();
 		}
 
-		public static void DrawRoundedRectWithBorder(
+		public static void DrawRoundedRect(
 			Vector2 a,
 			Vector2 b,
 			NanoVG.Paint paint,
-			Color4 border,
+			float cornerRadius
+		) {
+			var nvg = NanoVG.Context.Instance;
+			nvg.BeginPath();
+			nvg.RoundedRect(a.X + 0.5f, a.Y + 0.5f, b.X - a.X - 1, b.Y - a.Y - 1, cornerRadius - 0.5f);
+			nvg.FillPaint(paint);
+			nvg.Fill();
+		}
+
+		public static void DrawRoundedRectWithBorder(
+			Vector2 a,
+			Vector2 b,
+			NanoVG.Paint innerPaint,
+			NanoVG.Paint borderPaint,
 			float thickness,
 			float cornerRadius
 		) {
 			var nvg = NanoVG.Context.Instance;
 			nvg.BeginPath();
 			nvg.RoundedRect(a.X + 1, a.Y + 1, b.X - a.X - 2, b.Y - a.Y - 2, cornerRadius - 1);
-			nvg.FillPaint(paint);
+			nvg.FillPaint(innerPaint);
 			nvg.Fill();
 			nvg.BeginPath();
 			nvg.RoundedRect(a.X + 0.5f, a.Y + 0.5f, b.X - a.X - 1, b.Y - a.Y - 1, cornerRadius - 0.5f);
-			nvg.StrokeColor(border);
+			nvg.StrokePaint(borderPaint);
 			nvg.StrokeWidth(thickness);
 			nvg.Stroke();
 		}

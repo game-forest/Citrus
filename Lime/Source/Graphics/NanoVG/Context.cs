@@ -226,29 +226,30 @@ namespace Lime.NanoVG
 			state.Scissor.Extent.Y = h * 0.5f;
 		}
 
+		public void Scissor(Vector2 position, Vector2 size) => Scissor(position.X, position.Y, size.X, size.Y);
+
 		public void IntersectScissor(float x, float y, float w, float h)
 		{
 			var state = GetState();
-			var pxform = new Matrix32();
-			var invxorm = new Matrix32();
 			var rect = stackalloc float[4];
-			float ex = 0;
-			float ey = 0;
-			float tex = 0;
-			float tey = 0;
 			if (state.Scissor.Extent.X < 0) {
 				Scissor(x, y, w, h);
 				return;
 			}
-			pxform = state.Scissor.Transform;
-			ex = state.Scissor.Extent.X;
-			ey = state.Scissor.Extent.Y;
-			invxorm = state.Transform.CalcInversed();
+			var pxform = state.Scissor.Transform;
+			var ex = state.Scissor.Extent.X;
+			var ey = state.Scissor.Extent.Y;
+			var invxorm = state.Transform.CalcInversed();
 			pxform *= invxorm;
-			tex = ex * Math.Abs(pxform.UX) + ey * Math.Abs(pxform.VX);
-			tey = ex * Math.Abs(pxform.UY) + ey * Math.Abs(pxform.VY);
+			var tex = ex * Math.Abs(pxform.UX) + ey * Math.Abs(pxform.VX);
+			var tey = ex * Math.Abs(pxform.UY) + ey * Math.Abs(pxform.VY);
 			IntersectRectangles(rect, pxform.TX - tex, pxform.TY - tey, tex * 2, tey * 2, x, y, w, h);
 			Scissor(rect[0], rect[1], rect[2], rect[3]);
+		}
+
+		public void IntersectScissor(Vector2 position, Vector2 size)
+		{
+			IntersectScissor(position.X, position.Y, size.X, size.Y);
 		}
 
 		public void ResetScissor()
