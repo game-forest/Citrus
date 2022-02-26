@@ -459,11 +459,21 @@ namespace Tangerine.UI.Timeline
 				GenericCommands.ConvertTo,
 			};
 			if (NodeCompositionValidator.CanHaveChildren(Node.GetType())) {
-				menu.Insert(8, new Command("Propagate Markers", () => {
-					Document.Current.History.DoTransaction(() => {
-						PropagateMarkers.Perform(Node);
-					});
-				}));
+				menu.InsertRange(8, new[] {
+					TimelineCommands.AddAnimation,
+					TimelineCommands.AddCompoundAnimation,
+					TimelineCommands.AddZeroPoseAnimation,
+					Command.MenuSeparator,
+					new Command("Propagate Markers", () => {
+						Document.Current.History.DoTransaction(() => {
+							PropagateMarkers.Perform(Node);
+						});
+					}),
+				});
+				var data = new Tuple<Node, Action<SceneItem, SceneItem>>(Node, null);
+				TimelineCommands.AddAnimation.UserData = data;
+				TimelineCommands.AddCompoundAnimation.UserData = data;
+				TimelineCommands.AddZeroPoseAnimation.UserData = data;
 				menu.Insert(0, GenericCommands.InlineExternalScene);
 			}
 			menu.Popup();

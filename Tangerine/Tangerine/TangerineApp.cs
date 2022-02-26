@@ -801,6 +801,9 @@ namespace Tangerine
 			h.Connect(SceneViewCommands.ManageRulers, new ManageRulers());
 			h.Connect(SceneViewCommands.CreateRulerGrid, new CreateRulerGrid());
 			h.Connect(SceneViewCommands.GeneratePreview, new GeneratePreview());
+			h.Connect(TimelineCommands.AddAnimation, new AddAnimation(AddAnimation.AnimationType.Default));
+			h.Connect(TimelineCommands.AddCompoundAnimation, new AddAnimation(AddAnimation.AnimationType.Compound));
+			h.Connect(TimelineCommands.AddZeroPoseAnimation, new AddAnimation(AddAnimation.AnimationType.ZeroPose));
 			h.Connect(TimelineCommands.CutKeyframes, UI.Timeline.Operations.CutKeyframes.Perform);
 			h.Connect(TimelineCommands.CopyKeyframes, UI.Timeline.Operations.CopyKeyframes.Perform);
 			h.Connect(TimelineCommands.PasteKeyframes, UI.Timeline.Operations.PasteKeyframes.Perform);
