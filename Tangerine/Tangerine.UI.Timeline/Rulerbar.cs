@@ -186,10 +186,10 @@ namespace Tangerine.UI.Timeline
 
 		private static void ShowMarkerDialog(int frameUnderMouse)
 		{
+			var marker = Document.Current.Animation.Markers.GetByFrame(frameUnderMouse);
+			var newMarker = marker?.Clone() ?? new Marker { Frame = frameUnderMouse };
+			var r = new MarkerPropertiesDialog().Show(newMarker, canDelete: marker != null);
 			Document.Current.History.DoTransaction(() => {
-				var marker = Document.Current.Animation.Markers.GetByFrame(frameUnderMouse);
-				var newMarker = marker?.Clone() ?? new Marker { Frame = frameUnderMouse };
-				var r = new MarkerPropertiesDialog().Show(newMarker, canDelete: marker != null);
 				if (r == MarkerPropertiesDialog.Result.Ok) {
 					Core.Operations.SetMarker.Perform(newMarker, true);
 				} else if (r == MarkerPropertiesDialog.Result.Delete) {
