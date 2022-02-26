@@ -231,12 +231,12 @@
   
   
   <a id="Lime_TangerineFilePropertyAttribute__ctor_" data-uid="Lime.TangerineFilePropertyAttribute.#ctor*"></a>
-  <h4 id="Lime_TangerineFilePropertyAttribute__ctor_System_String___System_String_System_String_" data-uid="Lime.TangerineFilePropertyAttribute.#ctor(System.String[],System.String,System.String)">TangerineFilePropertyAttribute(String[], String, String)</h4>
+  <h4 id="Lime_TangerineFilePropertyAttribute__ctor_System_String___System_String_System_String_System_Boolean_" data-uid="Lime.TangerineFilePropertyAttribute.#ctor(System.String[],System.String,System.String,System.Boolean)">TangerineFilePropertyAttribute(String[], String, String, Boolean)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TangerineFilePropertyAttribute(string[] allowedFileTypes, string valueToStringMethodName = null, string stringToValueMethodName = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public TangerineFilePropertyAttribute(string[] allowedFileTypes, string valueToStringMethodName = null, string stringToValueMethodName = null, bool trimExtension = true)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -263,6 +263,11 @@
         <td><span class="parametername">stringToValueMethodName</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">trimExtension</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h3 id="fields">Fields
@@ -287,6 +292,30 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_TangerineFilePropertyAttribute_TrimExtension" data-uid="Lime.TangerineFilePropertyAttribute.TrimExtension">TrimExtension</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool TrimExtension</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
         <td></td>
       </tr>
     </tbody>

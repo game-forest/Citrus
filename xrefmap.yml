@@ -62726,15 +62726,15 @@ references:
   commentId: T:Lime.TangerineFilePropertyAttribute
   fullName: Lime.TangerineFilePropertyAttribute
   nameWithType: TangerineFilePropertyAttribute
-- uid: Lime.TangerineFilePropertyAttribute.#ctor(System.String[],System.String,System.String)
-  name: TangerineFilePropertyAttribute(String[], String, String)
-  href: api/Lime.TangerineFilePropertyAttribute.html#Lime_TangerineFilePropertyAttribute__ctor_System_String___System_String_System_String_
-  commentId: M:Lime.TangerineFilePropertyAttribute.#ctor(System.String[],System.String,System.String)
-  name.vb: TangerineFilePropertyAttribute(String(), String, String)
-  fullName: Lime.TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(System.String[], System.String, System.String)
-  fullName.vb: Lime.TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(System.String(), System.String, System.String)
-  nameWithType: TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(String[], String, String)
-  nameWithType.vb: TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(String(), String, String)
+- uid: Lime.TangerineFilePropertyAttribute.#ctor(System.String[],System.String,System.String,System.Boolean)
+  name: TangerineFilePropertyAttribute(String[], String, String, Boolean)
+  href: api/Lime.TangerineFilePropertyAttribute.html#Lime_TangerineFilePropertyAttribute__ctor_System_String___System_String_System_String_System_Boolean_
+  commentId: M:Lime.TangerineFilePropertyAttribute.#ctor(System.String[],System.String,System.String,System.Boolean)
+  name.vb: TangerineFilePropertyAttribute(String(), String, String, Boolean)
+  fullName: Lime.TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(System.String[], System.String, System.String, System.Boolean)
+  fullName.vb: Lime.TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(System.String(), System.String, System.String, System.Boolean)
+  nameWithType: TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(String[], String, String, Boolean)
+  nameWithType.vb: TangerineFilePropertyAttribute.TangerineFilePropertyAttribute(String(), String, String, Boolean)
 - uid: Lime.TangerineFilePropertyAttribute.#ctor*
   name: TangerineFilePropertyAttribute
   href: api/Lime.TangerineFilePropertyAttribute.html#Lime_TangerineFilePropertyAttribute__ctor_
@@ -62764,6 +62764,12 @@ references:
   fullName.vb: Lime.TangerineFilePropertyAttribute.StringToValueConverter(Of T)(System.Type, System.String)
   nameWithType: TangerineFilePropertyAttribute.StringToValueConverter<T>(Type, String)
   nameWithType.vb: TangerineFilePropertyAttribute.StringToValueConverter(Of T)(Type, String)
+- uid: Lime.TangerineFilePropertyAttribute.TrimExtension
+  name: TrimExtension
+  href: api/Lime.TangerineFilePropertyAttribute.html#Lime_TangerineFilePropertyAttribute_TrimExtension
+  commentId: F:Lime.TangerineFilePropertyAttribute.TrimExtension
+  fullName: Lime.TangerineFilePropertyAttribute.TrimExtension
+  nameWithType: TangerineFilePropertyAttribute.TrimExtension
 - uid: Lime.TangerineFilePropertyAttribute.ValueToStringConverter*
   name: ValueToStringConverter
   href: api/Lime.TangerineFilePropertyAttribute.html#Lime_TangerineFilePropertyAttribute_ValueToStringConverter_
