@@ -403,16 +403,22 @@ namespace Lime
 				var widget = ParentWidget;
 				while (widget != null) {
 					if (widget.Id == LinkageWidgetName) {
-								return widget;
-							}
-
-							widget = widget.ParentWidget;
+						return widget;
+					}
+					widget = widget.ParentWidget;
 				}
 				return null;
 			}
 			case ParticlesLinkage.Root:
+				// Root is either widget that doesn't have a parent
+				// or frame contained in WidgetAdapter3D.
+				var root = ParentWidget;
+				while (root.ParentWidget != null) {
+					root = root.ParentWidget;
+				}
+				return root;
 			default:
-				return (Parent != null) ? WidgetContext.Current.Root : null;
+				throw new NotImplementedException();
 			}
 		}
 
