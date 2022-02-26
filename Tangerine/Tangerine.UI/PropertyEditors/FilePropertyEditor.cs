@@ -22,6 +22,7 @@ namespace Tangerine.UI
 		private readonly PrefixData prefix = new PrefixData();
 
 		public bool ShowPrefix { get; set; } = true;
+		public bool TrimExtension { get; set; } = true;
 
 		protected FilePropertyEditor(IPropertyEditorParams editorParams, string[] allowedFileTypes)
 			: base(editorParams)
@@ -113,8 +114,12 @@ namespace Tangerine.UI
 		private void SetFilePath(string path)
 		{
 			if (
-				Utils.ExtractAssetPathOrShowAlert(path, out string asset, out string type)
-				&& Utils.AssertCurrentDocument(asset, type)
+				Utils.ExtractAssetPathOrShowAlert(
+					path,
+					out string asset,
+					out string type,
+					trimExtension: TrimExtension
+				) && Utils.AssertCurrentDocument(asset, type)
 			) {
 				if (!IsValid(asset)) {
 					AlertDialog.Show(

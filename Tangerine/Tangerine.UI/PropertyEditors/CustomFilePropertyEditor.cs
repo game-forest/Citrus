@@ -5,10 +5,12 @@ namespace Tangerine.UI
 	public sealed class CustomFilePropertyEditor<T> : FilePropertyEditor<T>
 	{
 		private TangerineFilePropertyAttribute filePropertyAttribute;
+
 		public CustomFilePropertyEditor(IPropertyEditorParams editorParams, TangerineFilePropertyAttribute attribute)
 			: base(editorParams, attribute.AllowedFileTypes)
 		{
 			this.filePropertyAttribute = attribute;
+			this.TrimExtension = filePropertyAttribute.TrimExtension;
 		}
 
 		protected override string ValueToStringConverter(T value)
