@@ -432,7 +432,7 @@ namespace Tangerine.UI
 				AnimationClip = new Color4(50, 50, 255, 80),
 				AnimationClipBorder = new Color4(50, 50, 255),
 				AnimationClipLabel = basic.BlackText,
-				OutOfAnimationScope = new Color4(54, 54, 57),
+				OutOfAnimationScope = new Color4(45, 45, 48).Lighten(0.065f),
 			};
 			var timelineCurveEditor = new TimelineCurveEditorColors {
 				Curves = new[] { Color4.Red, Color4.Green, Color4.Blue, Color4.Yellow },
@@ -610,7 +610,7 @@ namespace Tangerine.UI
 				AnimationClip = new Color4(50, 50, 255, 60),
 				AnimationClipBorder = new Color4(50, 50, 255),
 				AnimationClipLabel = basic.BlackText,
-				OutOfAnimationScope = new Color4(225, 225, 225),
+				OutOfAnimationScope = new Color4(210, 210, 210),
 			};
 			var timelineCurveEditor = new TimelineCurveEditorColors {
 				Curves = new[] { Color4.Red, Color4.Green, Color4.Blue, Color4.Yellow },
