@@ -314,7 +314,8 @@ namespace Lime
 
 		private bool firstUpdate = true;
 
-		private Vector2 previousPosition;
+		private Matrix32 previousTransform;
+
 		/// <summary>
 		/// Number of particles to generate on Update. Used to make particle count FPS independent
 		/// by accumulating fractional part of number of particles to spawn on given frame.
@@ -512,23 +513,21 @@ namespace Lime
 			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
 			}
-			var offsetPosition = Number > 0 && SpawnBetweenFrames
-				? (previousPosition - Position) / ((int)particlesToSpawn)
-				: Vector2.Zero;
-			previousPosition = Position;
-			var offsetDelta = delta / ((int)particlesToSpawn);
+			var lerpStep = Number > 0 && SpawnBetweenFrames ? 1f / ((int)particlesToSpawn) : 0f;
+			var deltaStep = delta / ((int)particlesToSpawn);
 			int particleIndex = 0;
 			int i = particles.Count - 1;
+			CalcInitialTransform(out var transform);
 			while (particlesToSpawn >= 1f) {
 				Particle particle = AllocParticle();
 				if (
 					GloballyEnabled &&
 					Nodes.Count > 0 &&
-					InitializeParticle(particle, offsetPosition * particleIndex)
+					InitializeParticle(particle, Matrix32.Lerp(lerpStep * particleIndex, transform, previousTransform))
 				) {
 					AdvanceParticle(
 						p: particle,
-						delta: offsetDelta * ((int)particlesToSpawn - particleIndex - 1),
+						delta: SpawnBetweenFrames ? deltaStep * particleIndex : 0f,
 						boundingRect: ref currentBoundingRect
 					);
 				} else {
@@ -537,6 +536,7 @@ namespace Lime
 				particlesToSpawn -= 1;
 				particleIndex++;
 			}
+			previousTransform = transform;
 			if (MagnetAmount.Median != 0 || MagnetAmount.Dispersion != 0) {
 				EnumerateMagnets();
 			}
@@ -751,7 +751,7 @@ namespace Lime
 			}
 			if (firstUpdate) {
 				firstUpdate = false;
-				previousPosition = Position;
+				CalcInitialTransform(out previousTransform);
 				const float ModellingStep = 0.04f;
 				delta = Math.Max(delta, TimeShift);
 				while (delta >= ModellingStep) {
@@ -793,9 +793,8 @@ namespace Lime
 			return result;
 		}
 
-		private bool InitializeParticle(Particle p, Vector2 offsetPosition)
+		private bool InitializeParticle(Particle p, Matrix32 transform)
 		{
-			CalcInitialTransform(out Matrix32 transform);
 			Vector2 emitterScale = new Vector2 {
 				X = transform.U.Length,
 				Y = transform.V.Length,
@@ -865,7 +864,7 @@ namespace Lime
 			default:
 				throw new Lime.Exception("Invalid particle emitter shape");
 			}
-			p.RegularPosition = transform.TransformVector(position) + offsetPosition;
+			p.RegularPosition = transform.TransformVector(position);
 			if (!TryGetRandomModifier(out p.Modifier)) {
 				return false;
 			}
