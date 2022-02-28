@@ -13,6 +13,7 @@ namespace Tests.Dialogs
 			Scene._Rotate.It.Clicked = RunRotateAnimation;
 			Scene._Side.It.Clicked = RunSideAnimation;
 			Scene._Up.It.Clicked = RunUpAnimation;
+			Scene._Dissolve.It.Clicked = RunDissolveAnimation;
 			// This line ensures this module depends on <project_name>.Types module.
 			// TODO: Leave that line only in TestProject and remove from all other examples.
 			var emptyComponent = Root.Components.Get<EmptyComponent>();
@@ -53,6 +54,10 @@ namespace Tests.Dialogs
 		private void RunUpAnimation()
 		{
 			Scene.RunAnimationUp();
+		}
+		private void RunDissolveAnimation()
+		{
+			Scene.RunAnimationDissolve();
 		}
 	}
 }
