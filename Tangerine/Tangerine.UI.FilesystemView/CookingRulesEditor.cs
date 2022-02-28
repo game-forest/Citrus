@@ -208,7 +208,15 @@ namespace Tangerine.UI.FilesystemView
 				foreach (var t in targets) {
 					if (rules.TargetRules.TryGetValue(t, out ParticularCookingRules targetRules)) {
 						foreach (var (k, (propagate, sourceRules)) in targetRules.FieldOverrides) {
-							if (k == yi && yi.GetValue(topmostRules.EffectiveRules).Equals(yi.GetValue(targetRules))) {
+							var topMostRulesValue = yi.GetValue(topmostRules.EffectiveRules);
+							var targetRulesValue = yi.GetValue(targetRules);
+							if (
+								k == yi
+								&& (
+									(topMostRulesValue != null && topMostRulesValue.Equals(targetRulesValue))
+									|| (topMostRulesValue == null && targetRulesValue == null)
+								)
+							) {
 								if (!propagate) {
 									return targetRules;
 								} else {
@@ -352,7 +360,7 @@ namespace Tangerine.UI.FilesystemView
 			} else {
 				var associatedRules = GetAssociatedCookingRules(rulesMap, path, true);
 				var targetRules = RulesForActiveTarget(associatedRules);
-				targetRules.Override(yi.Name, false, targetRules);
+				targetRules.Override(yi.Name, false, targetRules, yi.GetValue(targetRules));
 				associatedRules.Save();
 				addRemoveField.Texture = IconPool.GetTexture("Filesystem.Cross");
 				overridesWidget.AddNode(CreateOverridesWidgets(ActiveTarget, yi, associatedRules, true));
@@ -414,8 +422,7 @@ namespace Tangerine.UI.FilesystemView
 			var editorParams = new PropertyEditorParams(targetRules, yi.Name) {
 				ShowLabel = false,
 				PropertySetter = (owner, name, value) => {
-					yi.SetValue(owner, value);
-					targetRules.Override(name, false, targetRules);
+					targetRules.Override(name, false, targetRules, value);
 					rules.DeduceEffectiveRules(target);
 					rules.Save();
 				},

@@ -211,9 +211,18 @@ namespace Orange
 			}
 		}
 
-		public void Override(string fieldName, bool propagate, ParticularCookingRules source)
+		public void Override(string fieldName, bool propagate, ParticularCookingRules source, object value)
 		{
-			FieldOverrides[fieldNameToYuzuMetaItemCache[fieldName]] = (propagate, source);
+			var yi = fieldNameToYuzuMetaItemCache[fieldName];
+			if (!propagate && FieldOverrides.TryGetValue(yi, out var v) && v.Propagate) {
+				// If field being overridden is already overridden via rule force-propagation (`!` syntax)
+				// then it only can be overridden with another rule force-propagation.
+				// Per-cooking-rules-file scope rules (all the usual ones without `!`) can't get
+				// in the way if that's the case.
+				return;
+			}
+			FieldOverrides[yi] = (propagate, source);
+			yi.SetValue(this, value);
 		}
 
 		public static ParticularCookingRules GetDefault(TargetPlatform platform)
@@ -487,9 +496,8 @@ namespace Orange
 			CacheRecord cacheRecord = null;
 			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
 				var bundlePath = unpackedBundle.BaseDirectory;
-				var targetName = target?.Name ?? string.Empty;
-				if (!cache.TryGetValue((bundlePath, targetName), out cacheRecord)) {
-					cache.Add((bundlePath, targetName), cacheRecord = new CacheRecord(bundlePath));
+				if (!cache.TryGetValue((bundlePath, target.Name), out cacheRecord)) {
+					cache.Add((bundlePath, target.Name), cacheRecord = new CacheRecord(bundlePath));
 				} else {
 					if (!cacheRecord.Dirty) {
 						return cacheRecord.Map;
@@ -710,12 +718,13 @@ namespace Orange
 			AssetBundle bundle,
 			bool propagateRule
 		) {
+			object value;
 			try {
 				switch (words[0]) {
 				case "TextureAtlas":
 					switch (words[1]) {
 					case "None":
-						rules.TextureAtlas = null;
+						value = null;
 						break;
 					case DirectoryNameToken:
 						string atlasName = "#" + Lime.AssetPath.GetDirectoryName(path).Replace('/', '#');
@@ -723,83 +732,83 @@ namespace Orange
 							throw new Lime.Exception(
 								"Atlas directory is empty. Choose another atlas name");
 						}
-						rules.TextureAtlas = atlasName;
+						value = atlasName;
 						break;
 					default:
-						rules.TextureAtlas = words[1];
+						value = words[1];
 						break;
 					}
 					break;
 				case "MipMaps":
-					rules.MipMaps = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "HighQualityCompression":
-					rules.HighQualityCompression = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "GenerateOpacityMask":
-					rules.GenerateOpacityMask = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "PVRFormat":
-					rules.PVRFormat = ParsePVRFormat(words[1]);
+					value = ParsePVRFormat(words[1]);
 					break;
 				case "DDSFormat":
-					rules.DDSFormat = ParseDDSFormat(words[1]);
+					value = ParseDDSFormat(words[1]);
 					break;
 				case "Bundles":
-					rules.Bundles = words.Skip(1).ToArray();
+					value = words.Skip(1).ToArray();
 					break;
 				case "Ignore":
-					rules.Ignore = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "Only":
-					rules.Only = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "Alias":
 					// Alias is defined relative to the directory where cooking rules files is placed and
 					// left unexpanded. Cooking rules should't be modified when parsing them because that way
 					// cooking rules editor will save the modification.
-					rules.Alias = words[1];
+					value = words[1];
 					break;
 				case "ADPCMLimit":
-					rules.ADPCMLimit = int.Parse(words[1]);
+					value = int.Parse(words[1]);
 					break;
 				case "TextureScaleFactor":
-					rules.TextureScaleFactor = float.Parse(words[1]);
+					value = float.Parse(words[1]);
 					break;
 				case "AtlasOptimization":
-					rules.AtlasOptimization = ParseAtlasOptimization(words[1]);
+					value = ParseAtlasOptimization(words[1]);
 					break;
 				case "AtlasPacker":
-					rules.AtlasPacker = words[1];
+					value = words[1];
 					break;
 				case "ModelCompression":
-					rules.ModelCompression = ParseModelCompression(words[1]);
+					value = ParseModelCompression(words[1]);
 					break;
 				case "CustomRule":
-					rules.CustomRule = words[1];
+					value = words[1];
 					break;
 				case "WrapMode":
-					rules.WrapMode = ParseWrapMode(words[1]);
+					value = ParseWrapMode(words[1]);
 					break;
 				case "MinFilter":
-					rules.MinFilter = ParseTextureFilter(words[1]);
+					value = ParseTextureFilter(words[1]);
 					break;
 				case "MagFilter":
-					rules.MagFilter = ParseTextureFilter(words[1]);
+					value = ParseTextureFilter(words[1]);
 					break;
 				case "AtlasItemPadding":
-					rules.AtlasItemPadding = int.Parse(words[1]);
+					value = int.Parse(words[1]);
 					break;
 				case "AtlasDebug":
-					rules.AtlasDebug = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "MaxAtlasSize":
-					rules.MaxAtlasSize = int.Parse(words[1]);
+					value = int.Parse(words[1]);
 					break;
 				default:
 					throw new Lime.Exception("Unknown attribute {0}", words[0]);
 				}
-				rules.Override(words[0], propagateRule, rules);
+				rules.Override(words[0], propagateRule, rules, value);
 			} catch (System.Exception e) {
 				Debug.Write("Failed to parse cooking rules: {0} {1} {2}", string.Join(",", words), path, e);
 				throw;
