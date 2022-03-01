@@ -521,6 +521,7 @@ namespace Lime
 				}
 				i--;
 			}
+			ClearMagnets();
 			FreeLastParticles(particlesToFreeCount);
 			if (NumberPerBurst) {
 				particlesToSpawn = 0.0f;
