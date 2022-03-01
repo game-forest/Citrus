@@ -58,7 +58,7 @@ namespace Orange
 				SearchOption.TopDirectoryOnly);
 			return files
 				.Select(f => Path.GetFileName(f))
-				.Where(f => f.StartsWith("Dictionary"));
+				.Where(f => f.StartsWith("Dictionary") && !IsCookingRules(f));
 		}
 
 		private void CleanupAndSaveDictionary(string path)
@@ -277,5 +277,8 @@ namespace Orange
 			text.Replace("\\n", "\n")
 				.Replace("\\\"", "\"")
 				.Replace("\\'", "'");
+
+		private static bool IsCookingRules(string path) =>
+			path.EndsWith(CreateSerializer().GetFileExtension() + ".txt");
 	}
 }
