@@ -165,8 +165,7 @@ namespace Orange
 				if (!string.IsNullOrEmpty(directory) && !Directory.Exists(InputBundle.ToSystemPath(directory))) {
 					throw new InvalidOperationException($"Alias refers to non-existing directory '{directory}'");
 				}
-				if (rules.SourcePath == null || rules.Ignore) {
-					// This is a cooking rules entry itself or is ignored e.g. by Only.
+				if (rules.Ignore) {
 					continue;
 				}
 				if (path == expandedAlias) {

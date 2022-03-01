@@ -506,7 +506,7 @@ namespace Tangerine.Core
 
 		private void UpdateTextureParams()
 		{
-			var rules = CookingRulesBuilder.Build(AssetBundle.Current, null);
+			var rules = CookingRulesBuilder.Build(AssetBundle.Current, Target.RootTarget);
 			foreach (var (path, rule) in rules) {
 				if (path.EndsWith(".png")) {
 					var textureParamsPath = Path.Combine(

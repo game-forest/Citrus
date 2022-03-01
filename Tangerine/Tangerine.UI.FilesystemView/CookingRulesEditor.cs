@@ -44,18 +44,6 @@ namespace Tangerine.UI.FilesystemView
 					LayoutCell = new LayoutCell(Alignment.Center),
 				}
 			);
-			targetSelector.Items.Add(new CommonDropDownList.Item("None", null));
-			foreach (var t in Orange.The.Workspace.Targets) {
-				targetSelector.Items.Add(new CommonDropDownList.Item(t.Name, t));
-			}
-			targetSelector.Changed += (value) => {
-				if (value.ChangedByUser) {
-					ActiveTarget = (Target)value.Value;
-					Invalidate(savedFilesystemSelection);
-				}
-			};
-			targetSelector.Index = 0;
-			ActiveTarget = null;
 			RootWidget = new Widget {
 				Layout = new VBoxLayout(),
 				Nodes = {
@@ -63,12 +51,33 @@ namespace Tangerine.UI.FilesystemView
 					scrollView,
 				},
 			};
+			targetSelector.Changed += (value) => {
+				if (value.ChangedByUser) {
+					ActiveTarget = (Target)value.Value;
+					Invalidate(savedFilesystemSelection);
+				}
+			};
+			RootWidget.AddChangeWatcher(() => Project.Current, (p) => {
+				if (p == Project.Null) {
+					targetSelector.Items.Clear();
+					ActiveTarget = null;
+				} else {
+					foreach (var t in Orange.The.Workspace.Targets) {
+						targetSelector.Items.Add(new CommonDropDownList.Item(t.Name, t));
+					}
+					ActiveTarget = Orange.The.Workspace.Targets.First();
+				}
+				targetSelector.Index = 0;
+			});
 		}
 
 		public void Invalidate(FilesystemSelection filesystemSelection)
 		{
 			savedFilesystemSelection = filesystemSelection;
 			scrollView.Content.Nodes.Clear();
+			if (Project.Current == Project.Null) {
+				return;
+			}
 			if (RootWidget.Parent == null) {
 				return;
 			}
@@ -180,7 +189,7 @@ namespace Tangerine.UI.FilesystemView
 						rootAdded = true;
 						CreateHeaderWidgets(rulesMap, path, yi, headerWidget, overridesWidget, parent);
 					}
-					if (rules.FieldOverrides.Contains(yi)) {
+					if (rules.FieldOverrides.ContainsKey(yi)) {
 						overridesWidget.AddNode(CreateOverridesWidgets(target, yi, parent, rules == affectingRules));
 					}
 				}
@@ -191,25 +200,31 @@ namespace Tangerine.UI.FilesystemView
 		private ParticularCookingRules FindAffectingCookingRules(CookingRules topmostRules, Yuzu.Metadata.Meta.Item yi)
 		{
 			List<Target> targets = new List<Target>();
-			if (ActiveTarget != null) {
-				var t = ActiveTarget;
-				while (t != null) {
-					targets.Add(t);
-					t = t.BaseTarget;
-				}
+			for (var t = ActiveTarget; t != null; t = t.BaseTarget) {
+				targets.Add(t);
 			}
 			var rules = topmostRules;
 			while (rules != null) {
 				foreach (var t in targets) {
-					if (
-						rules.TargetRules.TryGetValue(t, out ParticularCookingRules targetRules)
-						&& targetRules.FieldOverrides.Contains(yi)
-					) {
-						return targetRules;
+					if (rules.TargetRules.TryGetValue(t, out ParticularCookingRules targetRules)) {
+						foreach (var (k, (propagate, sourceRules)) in targetRules.FieldOverrides) {
+							var topMostRulesValue = yi.GetValue(topmostRules.EffectiveRules);
+							var targetRulesValue = yi.GetValue(targetRules);
+							if (
+								k == yi
+								&& (
+									(topMostRulesValue != null && topMostRulesValue.Equals(targetRulesValue))
+									|| (topMostRulesValue == null && targetRulesValue == null)
+								)
+							) {
+								if (!propagate) {
+									return targetRules;
+								} else {
+									return sourceRules;
+								}
+							}
+						}
 					}
-				}
-				if (rules.CommonRules.FieldOverrides.Contains(yi)) {
-					return rules.CommonRules;
 				}
 				rules = rules.Parent;
 			}
@@ -323,7 +338,7 @@ namespace Tangerine.UI.FilesystemView
 				var targetRules = RulesForActiveTarget(rules);
 				targetRules.FieldOverrides.Remove(yi);
 				rules.Save();
-				if (!rules.HasOverrides()) {
+				if (!rules.HasOwnOverrides()) {
 					var acr = GetAssociatedCookingRules(rulesMap, rules.SystemSourcePath);
 					if (!acr.SystemSourcePath.EndsWith(key)) {
 						rulesMap[key] = rules.Parent;
@@ -345,7 +360,7 @@ namespace Tangerine.UI.FilesystemView
 			} else {
 				var associatedRules = GetAssociatedCookingRules(rulesMap, path, true);
 				var targetRules = RulesForActiveTarget(associatedRules);
-				targetRules.Override(yi.Name);
+				targetRules.Override(yi.Name, false, targetRules, yi.GetValue(targetRules));
 				associatedRules.Save();
 				addRemoveField.Texture = IconPool.GetTexture("Filesystem.Cross");
 				overridesWidget.AddNode(CreateOverridesWidgets(ActiveTarget, yi, associatedRules, true));
@@ -407,8 +422,7 @@ namespace Tangerine.UI.FilesystemView
 			var editorParams = new PropertyEditorParams(targetRules, yi.Name) {
 				ShowLabel = false,
 				PropertySetter = (owner, name, value) => {
-					yi.SetValue(owner, value);
-					targetRules.Override(name);
+					targetRules.Override(name, false, targetRules, value);
 					rules.DeduceEffectiveRules(target);
 					rules.Save();
 				},
@@ -460,7 +474,7 @@ namespace Tangerine.UI.FilesystemView
 		private bool IsOverridedByAssociatedCookingRules(CookingRulesMap rulesMap, string path, Meta.Item yi)
 		{
 			var rules = GetAssociatedCookingRules(rulesMap, path);
-			return rules != null && RulesForActiveTarget(rules).FieldOverrides.Contains(yi);
+			return rules != null && RulesForActiveTarget(rules).FieldOverrides.ContainsKey(yi);
 		}
 
 		private ParticularCookingRules RulesForActiveTarget(CookingRules cookingRules)
@@ -470,16 +484,19 @@ namespace Tangerine.UI.FilesystemView
 
 		private static ParticularCookingRules RulesForTarget(CookingRules cookingRules, Target target)
 		{
-			return target == null ? cookingRules.CommonRules : cookingRules.TargetRules[target];
+			return target == null
+				? cookingRules.TargetRules[Target.RootTarget]
+				: cookingRules.TargetRules[target];
 		}
 
-		private static CookingRules GetAssociatedCookingRules(
+		private CookingRules GetAssociatedCookingRules(
 			CookingRulesMap rulesMap, string path, bool createIfNotExists = false
 		) {
 			Action<string, CookingRules> ignoreRules = (p, r) => {
-				r = r.InheritClone();
+				p = NormalizePath(p);
+				r = r.InheritClone(ActiveTarget, p);
 				r.Ignore = true;
-				rulesMap[NormalizePath(p)] = r;
+				rulesMap[p] = r;
 			};
 			path = AssetPath.CorrectSlashes(path);
 			string key = NormalizePath(path);
@@ -491,7 +508,7 @@ namespace Tangerine.UI.FilesystemView
 					cookingRules = rulesMap[key];
 					if (cookingRules.SystemSourcePath != rulesPath) {
 						if (createIfNotExists) {
-							cookingRules = cookingRules.InheritClone();
+							cookingRules = cookingRules.InheritClone(ActiveTarget, NormalizePath(rulesPath));
 							rulesMap[key] = cookingRules;
 							ignoreRules(rulesPath, cookingRules);
 						} else {
@@ -527,7 +544,7 @@ namespace Tangerine.UI.FilesystemView
 					} else if (!createIfNotExists) {
 						return null;
 					} else if (rulesMap.ContainsKey(NormalizePath(path))) {
-						cookingRules = rulesMap[NormalizePath(path)].InheritClone();
+						cookingRules = rulesMap[NormalizePath(path)].InheritClone(ActiveTarget, NormalizePath(path));
 						cookingRules.SystemSourcePath = rulesPath;
 						ignoreRules(rulesPath, cookingRules);
 						rulesMap[key] = cookingRules;

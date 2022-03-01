@@ -175,7 +175,8 @@ namespace Orange
 
 		public SHA256 Hash => SHA256.Compute(Encoding.UTF8.GetBytes(yjs.Value.ToString(this)));
 
-		public HashSet<Meta.Item> FieldOverrides;
+		// Yuzu.Meta.Item for the field and flag if override should be propagated down the directory hierarchy
+		public Dictionary<Meta.Item, (bool Propagate, ParticularCookingRules Source)> FieldOverrides;
 
 		public ParticularCookingRules Parent;
 
@@ -210,9 +211,18 @@ namespace Orange
 			}
 		}
 
-		public void Override(string fieldName)
+		public void Override(string fieldName, bool propagate, ParticularCookingRules source, object value)
 		{
-			FieldOverrides.Add(fieldNameToYuzuMetaItemCache[fieldName]);
+			var yi = fieldNameToYuzuMetaItemCache[fieldName];
+			if (!propagate && FieldOverrides.TryGetValue(yi, out var v) && v.Propagate) {
+				// If field being overridden is already overridden via rule force-propagation (`!` syntax)
+				// then it only can be overridden with another rule force-propagation.
+				// Per-cooking-rules-file scope rules (all the usual ones without `!`) can't get
+				// in the way if that's the case.
+				return;
+			}
+			FieldOverrides[yi] = (propagate, source);
+			yi.SetValue(this, value);
 		}
 
 		public static ParticularCookingRules GetDefault(TargetPlatform platform)
@@ -235,7 +245,7 @@ namespace Orange
 				ADPCMLimit = 100,
 				AtlasOptimization = AtlasOptimization.Memory,
 				ModelCompression = ModelCompression.Deflate,
-				FieldOverrides = new HashSet<Meta.Item>(),
+				FieldOverrides = new Dictionary<Meta.Item, (bool, ParticularCookingRules)>(),
 				AtlasItemPadding = 1,
 				AtlasDebug = false,
 				MaxAtlasSize = 2048,
@@ -246,7 +256,12 @@ namespace Orange
 		public ParticularCookingRules InheritClone()
 		{
 			var r = (ParticularCookingRules)MemberwiseClone();
-			r.FieldOverrides = new HashSet<Meta.Item>();
+			r.FieldOverrides = new Dictionary<Meta.Item, (bool, ParticularCookingRules)>();
+			foreach (var (k, v) in FieldOverrides) {
+				if (v.Propagate) {
+					r.FieldOverrides.Add(k, v);
+				}
+			}
 			r.Parent = this;
 			return r;
 		}
@@ -302,7 +317,6 @@ namespace Orange
 				foreach (var target in The.Workspace.Targets) {
 					TargetRules[target].Ignore = value;
 				}
-				CommonRules.Ignore = value;
 				if (EffectiveRules != null) {
 					EffectiveRules.Ignore = value;
 				}
@@ -317,7 +331,6 @@ namespace Orange
 
 		public IEnumerable<(Target Target, ParticularCookingRules Rules)> Enumerate()
 		{
-			yield return (null, CommonRules);
 			foreach (var (k, v) in TargetRules) {
 				yield return (k, v);
 			}
@@ -331,22 +344,20 @@ namespace Orange
 			foreach (var t in The.Workspace.Targets) {
 				TargetRules.Add(t, ParticularCookingRules.GetDefault(t.Platform));
 			}
-			CommonRules = ParticularCookingRules.GetDefault(The.UI.GetActiveTarget().Platform);
 		}
 
-		public CookingRules InheritClone()
+		public CookingRules InheritClone(Target target, string sourcePath)
 		{
 			var r = new CookingRules(false);
+			r.SourcePath = sourcePath;
 			r.Parent = this;
 			foreach (var kv in TargetRules) {
 				r.TargetRules.Add(kv.Key, kv.Value.InheritClone());
 			}
-			if (EffectiveRules != null) {
-				r.CommonRules = EffectiveRules.InheritClone();
-				r.EffectiveRules = EffectiveRules.InheritClone();
-			} else {
-				r.CommonRules = CommonRules.InheritClone();
+			if (EffectiveRules == null) {
+				DeduceEffectiveRules(target);
 			}
+			r.EffectiveRules = EffectiveRules.InheritClone();
 			return r;
 		}
 
@@ -354,7 +365,6 @@ namespace Orange
 		{
 			using var fs = AssetBundle.Current.OpenFile(SourcePath, FileMode.Create);
 			using var sw = new StreamWriter(fs);
-			SaveCookingRules(sw, CommonRules, null);
 			foreach (var kv in TargetRules) {
 				SaveCookingRules(sw, kv.Value, kv.Key);
 			}
@@ -392,19 +402,19 @@ namespace Orange
 
 		private void SaveCookingRules(StreamWriter sw, ParticularCookingRules rules, Target target)
 		{
-			var targetString = target == null ? string.Empty : $"({target.Name})";
-			foreach (var yi in rules.FieldOverrides) {
+			var targetString = target == Target.RootTarget ? string.Empty : $"({target.Name})";
+			foreach (var (yi, (propagate, source)) in rules.FieldOverrides) {
 				var value = yi.GetValue(rules);
 				var valueString = FieldValueToString(yi, value);
-				if (!string.IsNullOrEmpty(valueString)) {
-					sw.Write($"{yi.Name}{targetString} {valueString}\n");
+				if (!string.IsNullOrEmpty(valueString) && source == rules) {
+					sw.Write($"{(propagate ? "!" : string.Empty)}{yi.Name}{targetString} {valueString}\n");
 				}
 			}
 		}
 
 		public void DeduceEffectiveRules(Target target)
 		{
-			EffectiveRules = CommonRules.InheritClone();
+			EffectiveRules ??= TargetRules[Target.RootTarget].InheritClone();
 			if (target != null) {
 				var targetStack = new Stack<Target>();
 				var t = target;
@@ -415,7 +425,7 @@ namespace Orange
 				while (targetStack.Count != 0) {
 					t = targetStack.Pop();
 					var targetRules = TargetRules[t];
-					foreach (var i in targetRules.FieldOverrides) {
+					foreach (var (i, propagate) in targetRules.FieldOverrides) {
 						i.SetValue(EffectiveRules, i.GetValue(targetRules));
 					}
 					// TODO: implement this workaround in a general way
@@ -438,12 +448,11 @@ namespace Orange
 			}
 		}
 
-		public bool HasOverrides()
+		public bool HasOwnOverrides()
 		{
 			var r = false;
-			r = r || CommonRules.FieldOverrides.Count > 0;
 			foreach (var cr in TargetRules) {
-				r = r || cr.Value.FieldOverrides.Count > 0;
+				r = r || cr.Value.FieldOverrides.Any(o => !o.Value.Propagate || o.Value.Source == cr.Value);
 			}
 			return r;
 		}
@@ -487,9 +496,8 @@ namespace Orange
 			CacheRecord cacheRecord = null;
 			if (bundle is UnpackedAssetBundle unpackedBundle && path == null) {
 				var bundlePath = unpackedBundle.BaseDirectory;
-				var targetName = target?.Name ?? string.Empty;
-				if (!cache.TryGetValue((bundlePath, targetName), out cacheRecord)) {
-					cache.Add((bundlePath, targetName), cacheRecord = new CacheRecord(bundlePath));
+				if (!cache.TryGetValue((bundlePath, target.Name), out cacheRecord)) {
+					cache.Add((bundlePath, target.Name), cacheRecord = new CacheRecord(bundlePath));
 				} else {
 					if (!cacheRecord.Dirty) {
 						return cacheRecord.Map;
@@ -519,10 +527,9 @@ namespace Orange
 					var dirName = AssetPath.GetDirectoryName(filePath);
 					pathStack.Push(dirName == string.Empty ? string.Empty : dirName + "/");
 					var rules = ParseCookingRules(bundle, rulesStack.Peek(), filePath, target);
-					rules.SourcePath = filePath;
 					rulesStack.Push(rules);
 					// Add 'ignore' cooking rules for this #CookingRules.txt itself
-					var ignoreRules = rules.InheritClone();
+					var ignoreRules = rules.InheritClone(target, filePath);
 					ignoreRules.Ignore = true;
 					map[filePath] = ignoreRules;
 					var directoryName = pathStack.Peek();
@@ -545,9 +552,8 @@ namespace Orange
 					var rules = rulesStack.Peek();
 					if (bundle.FileExists(rulesFile)) {
 						rules = ParseCookingRules(bundle, rulesStack.Peek(), rulesFile, target);
-						rules.SourcePath = rulesFile;
 						// Add 'ignore' cooking rules for this cooking rules text file
-						var ignoreRules = rules.InheritClone();
+						var ignoreRules = rules.InheritClone(target, rulesFile);
 						ignoreRules.Ignore = true;
 						map[rulesFile] = ignoreRules;
 					}
@@ -636,8 +642,7 @@ namespace Orange
 		private static CookingRules ParseCookingRules(
 			AssetBundle bundle, CookingRules basicRules, string path, Target target
 		) {
-			var rules = basicRules.InheritClone();
-			var currentRules = rules.CommonRules;
+			var rules = basicRules.InheritClone(target, path);
 			try {
 				using var s = bundle.OpenFile(path);
 				TextReader r = new StreamReader(s);
@@ -654,35 +659,33 @@ namespace Orange
 					foreach (ref var word in words.AsSpan()) {
 						word = word.Trim();
 					}
-					// target-specific cooking rules
+					var ruleTarget = Target.RootTarget;
+					bool propagateRule = false;
+					if (words[0].StartsWith("!")) {
+						words[0] = words[0][1..];
+						propagateRule = true;
+					}
 					if (words[0].EndsWith(")")) {
 						int cut = words[0].IndexOf('(');
 						if (cut >= 0) {
 							string targetName = words[0].Substring(cut + 1, words[0].Length - cut - 2);
 							words[0] = words[0].Substring(0, cut);
-							currentRules = null;
-							Target currentTarget = null;
 							foreach (var t in The.Workspace.Targets) {
 								if (targetName == t.Name) {
-									currentTarget = t;
+									ruleTarget = t;
+									break;
 								}
 							}
-							if (currentTarget == null) {
+							if (ruleTarget == Target.RootTarget) {
 								throw new Lime.Exception($"Invalid target: {targetName}");
 							}
-							currentRules = rules.TargetRules[currentTarget];
-							{
-								if (!CanSetRulePerTarget(words[0], currentTarget)) {
-									throw new Lime.Exception(
-										$"Invalid platform {target.Platform} for cooking rule {words[0]}"
-									);
-								}
-							}
 						}
-					} else {
-						currentRules = rules.CommonRules;
 					}
-					ParseRule(currentRules, words, path, bundle);
+					var targetRules = rules.TargetRules[ruleTarget];
+					if (ruleTarget != Target.RootTarget && !CanSetRulePerTarget(words[0], ruleTarget)) {
+						throw new Lime.Exception($"Invalid platform {target.Platform} for cooking rule {words[0]}");
+					}
+					ParseRule(targetRules, words, path, bundle, propagateRule);
 				}
 			} catch (Lime.Exception e) {
 				if (!Path.IsPathRooted(path)) {
@@ -709,14 +712,19 @@ namespace Orange
 		}
 
 		private static void ParseRule(
-			ParticularCookingRules rules, IReadOnlyList<string> words, string path, AssetBundle bundle
+			ParticularCookingRules rules,
+			IReadOnlyList<string> words,
+			string path,
+			AssetBundle bundle,
+			bool propagateRule
 		) {
+			object value;
 			try {
 				switch (words[0]) {
 				case "TextureAtlas":
 					switch (words[1]) {
 					case "None":
-						rules.TextureAtlas = null;
+						value = null;
 						break;
 					case DirectoryNameToken:
 						string atlasName = "#" + Lime.AssetPath.GetDirectoryName(path).Replace('/', '#');
@@ -724,83 +732,83 @@ namespace Orange
 							throw new Lime.Exception(
 								"Atlas directory is empty. Choose another atlas name");
 						}
-						rules.TextureAtlas = atlasName;
+						value = atlasName;
 						break;
 					default:
-						rules.TextureAtlas = words[1];
+						value = words[1];
 						break;
 					}
 					break;
 				case "MipMaps":
-					rules.MipMaps = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "HighQualityCompression":
-					rules.HighQualityCompression = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "GenerateOpacityMask":
-					rules.GenerateOpacityMask = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "PVRFormat":
-					rules.PVRFormat = ParsePVRFormat(words[1]);
+					value = ParsePVRFormat(words[1]);
 					break;
 				case "DDSFormat":
-					rules.DDSFormat = ParseDDSFormat(words[1]);
+					value = ParseDDSFormat(words[1]);
 					break;
 				case "Bundles":
-					rules.Bundles = words.Skip(1).ToArray();
+					value = words.Skip(1).ToArray();
 					break;
 				case "Ignore":
-					rules.Ignore = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "Only":
-					rules.Only = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "Alias":
 					// Alias is defined relative to the directory where cooking rules files is placed and
 					// left unexpanded. Cooking rules should't be modified when parsing them because that way
 					// cooking rules editor will save the modification.
-					rules.Alias = words[1];
+					value = words[1];
 					break;
 				case "ADPCMLimit":
-					rules.ADPCMLimit = int.Parse(words[1]);
+					value = int.Parse(words[1]);
 					break;
 				case "TextureScaleFactor":
-					rules.TextureScaleFactor = float.Parse(words[1]);
+					value = float.Parse(words[1]);
 					break;
 				case "AtlasOptimization":
-					rules.AtlasOptimization = ParseAtlasOptimization(words[1]);
+					value = ParseAtlasOptimization(words[1]);
 					break;
 				case "AtlasPacker":
-					rules.AtlasPacker = words[1];
+					value = words[1];
 					break;
 				case "ModelCompression":
-					rules.ModelCompression = ParseModelCompression(words[1]);
+					value = ParseModelCompression(words[1]);
 					break;
 				case "CustomRule":
-					rules.CustomRule = words[1];
+					value = words[1];
 					break;
 				case "WrapMode":
-					rules.WrapMode = ParseWrapMode(words[1]);
+					value = ParseWrapMode(words[1]);
 					break;
 				case "MinFilter":
-					rules.MinFilter = ParseTextureFilter(words[1]);
+					value = ParseTextureFilter(words[1]);
 					break;
 				case "MagFilter":
-					rules.MagFilter = ParseTextureFilter(words[1]);
+					value = ParseTextureFilter(words[1]);
 					break;
 				case "AtlasItemPadding":
-					rules.AtlasItemPadding = int.Parse(words[1]);
+					value = int.Parse(words[1]);
 					break;
 				case "AtlasDebug":
-					rules.AtlasDebug = ParseBool(words[1]);
+					value = ParseBool(words[1]);
 					break;
 				case "MaxAtlasSize":
-					rules.MaxAtlasSize = int.Parse(words[1]);
+					value = int.Parse(words[1]);
 					break;
 				default:
 					throw new Lime.Exception("Unknown attribute {0}", words[0]);
 				}
-				rules.Override(words[0]);
+				rules.Override(words[0], propagateRule, rules, value);
 			} catch (System.Exception e) {
 				Debug.Write("Failed to parse cooking rules: {0} {1} {2}", string.Join(",", words), path, e);
 				throw;
