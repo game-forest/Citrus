@@ -170,11 +170,12 @@ namespace EmptyProject.Types
 				}";
 
 			private const string FragmentShader = @"
+				precision highp float;
 				uniform lowp sampler2D tex1;
-				uniform lowp sampler2D tex2;
-				uniform lowp vec3 glowRange;
-				uniform lowp vec4 midColor;
-				uniform lowp vec4 edgeColor;
+				uniform highp sampler2D tex2;
+				uniform highp vec3 glowRange;
+				uniform highp vec4 midColor;
+				uniform highp vec4 edgeColor;
 				uniform highp vec3 cosPartOne;
 				uniform highp vec4 cosPartTwo;
 
@@ -198,16 +199,16 @@ namespace EmptyProject.Types
 				void main()
 				{
 					lowp vec4 imageColor = texture2D(tex1, texCoords1);
-					lowp float mask = texture2D(tex2, texCoords2).r;
+					highp float mask = texture2D(tex2, texCoords2).r;
 					// sgr - abbreviation for (s)tep (g)low (r)ange
 					// glowRange.x - start of the glowing interval
 					// glowRange.y - end of the glowing interval
 					// glowRange.z - middle of the glowing interval
-					lowp vec3 sgr = step(glowRange, vec3(mask));
+					highp vec3 sgr = step(glowRange, vec3(mask));
 					// 0 if the pixel does not belong to the glowing interval
 					// 1 if the pixel belongs to the glowing interval
 					lowp float glowFactor = sgr.x * (1.0 - sgr.y);
-					lowp float mixFactor = CustomCos(mask - glowRange.x);
+					highp float mixFactor = CustomCos(mask - glowRange.x);
 					// the end of the custom cos region }
 					lowp vec4 glowColor = mix(edgeColor, midColor, glowFactor * mixFactor);
 					// If the mask pixel belongs to the first half of the glowing interval 
