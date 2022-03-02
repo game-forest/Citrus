@@ -139,18 +139,6 @@ namespace Tangerine.UI.Timeline
 					offset.Offset = value;
 				}
 			});
-			RootWidget.AddChangeWatcher(
-				() => CurrentColumn,
-				v => Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>().CurrentColumn = v
-			);
-			RootWidget.AddChangeWatcher(
-				() => offsetX,
-				v => Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>().Offset[0] = v
-			);
-			RootWidget.AddChangeWatcher(
-				() => Roll.ScrollView.ScrollPosition,
-				v => Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>().Offset[1] = v
-			);
 			RootWidget.Gestures.Add(DropFilesGesture = new DropFilesGesture());
 			CreateFilesDropHandlers();
 			RootWidget.AddChangeWatcher(() => Document.Current?.Animation, _ => {
@@ -369,6 +357,13 @@ namespace Tangerine.UI.Timeline
 			if (top < Offset.Y) {
 				OffsetY = Math.Max(0, top);
 			}
+		}
+
+		public void SyncDocumentState()
+		{
+			var c = Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>();
+			c.CurrentColumn = CurrentColumn;
+			c.Offset = Offset;
 		}
 	}
 

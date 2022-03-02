@@ -17,6 +17,8 @@ namespace Tangerine.Core
 	{
 		void Detach();
 		void Attach();
+		void SyncDocumentState()
+		{ }
 	}
 
 	public enum DocumentFormat
@@ -62,7 +64,7 @@ namespace Tangerine.Core
 
 	public sealed class Document
 	{
-		private class GeneralDocumentStateComponent : Component
+		private class DocumentStateComponent : Component
 		{
 			public string AnimationId = null;
 			public string AnimationOwnerNodePath = null;
@@ -93,7 +95,6 @@ namespace Tangerine.Core
 		public bool SlowMotion { get; set; }
 		public bool ShowAnimators { get; set; }
 
-		public static event Action<Document> Reloading;
 		public static event Action<Document> AttachingViews;
 		public static event Action<Document, string> ShowingWarning;
 		public static Func<Document, CloseAction> CloseConfirmation;
@@ -154,8 +155,6 @@ namespace Tangerine.Core
 			{
 				if (container != value) {
 					container = value;
-					var component = DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>();
-					component.ContainerPath = PreservedDocumentState.GetNodeIndexPath(container);
 					BumpSceneTreeVersion();
 				}
 			}
@@ -276,11 +275,7 @@ namespace Tangerine.Core
 		public Node PreviewAnimationContainer { get; set; }
 		public bool ExpositionMode { get; set; }
 		public ResolutionPreview ResolutionPreview { get; set; } = new ResolutionPreview();
-		public bool InspectRootNode
-		{
-			get => DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>().InspectRootNode;
-			set => DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>().InspectRootNode = value;
-		}
+		public bool InspectRootNode { get; set; }
 
 		public Animation Animation
 		{
@@ -289,14 +284,8 @@ namespace Tangerine.Core
 			{
 				if (animation != value) {
 					animation = value;
-					var component = DocumentViewStateComponents.GetOrAdd<GeneralDocumentStateComponent>();
 					if (animation != null) {
-						component.AnimationId = animation.Id;
-						component.AnimationOwnerNodePath = PreservedDocumentState.GetNodeIndexPath(animation.OwnerNode);
 						animationFastForwarder.FastForwardSafe(animation, value.Frame, true);
-					} else {
-						component.AnimationId = null;
-						component.AnimationOwnerNodePath = null;
 					}
 					BumpSceneTreeVersion();
 				}
@@ -715,7 +704,7 @@ namespace Tangerine.Core
 			foreach (var component in preservedState.Components) {
 				DocumentViewStateComponents.Add(component);
 			}
-			var docState = preservedState.Components.GetOrAdd<GeneralDocumentStateComponent>();
+			var docState = preservedState.Components.GetOrAdd<DocumentStateComponent>();
 			InspectRootNode = docState.InspectRootNode;
 			if (preservedState.SelectedItems.Count > 0 ||
 				preservedState.ExpandedItems.Count > 0 ||
@@ -759,6 +748,19 @@ namespace Tangerine.Core
 
 		public PreservedDocumentState PreserveState()
 		{
+			var ds = DocumentViewStateComponents.GetOrAdd<DocumentStateComponent>();
+			ds.ContainerPath = PreservedDocumentState.GetNodeIndexPath(container);
+			ds.InspectRootNode = InspectRootNode;
+			if (animation != null) {
+				ds.AnimationId = animation.Id;
+				ds.AnimationOwnerNodePath = PreservedDocumentState.GetNodeIndexPath(animation.OwnerNode);
+			} else {
+				ds.AnimationId = null;
+				ds.AnimationOwnerNodePath = null;
+			}
+			foreach (var view in Views) {
+				view.SyncDocumentState();
+			}
 			var state = new PreservedDocumentState();
 			foreach (var component in DocumentViewStateComponents) {
 				state.Components.Add(component);

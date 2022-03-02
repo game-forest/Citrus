@@ -302,14 +302,6 @@ namespace Tangerine.UI.SceneView
 			CreateProcessors();
 			CreatePresenters();
 			CreateFilesDropHandlers();
-			Scene.AddChangeWatcher(
-				() => Scene.Scale,
-				v => Document.Current.DocumentViewStateComponents.GetOrAdd<SceneViewStateComponent>().Scale = v
-			);
-			Scene.AddChangeWatcher(
-				() => Scene.Position,
-				v => Document.Current.DocumentViewStateComponents.GetOrAdd<SceneViewStateComponent>().Position = v
-			);
 			Frame.Awoke += ArrangeDocumentRoot;
 			OnCreate?.Invoke(this);
 		}
@@ -329,7 +321,11 @@ namespace Tangerine.UI.SceneView
 			// enough to change Frame Size on LayoutManager.Layout()
 			// which will come at the end of the frame. Force it now to get accurate Frame.Size;
 			WidgetContext.Current.Root.LayoutManager.Layout();
-			if (!Document.Current.DocumentViewStateComponents.Contains<SceneViewStateComponent>()) {
+			if (Document.Current.DocumentViewStateComponents.Contains<SceneViewStateComponent>()) {
+				var state = Document.Current.DocumentViewStateComponents.Get<SceneViewStateComponent>();
+				Scene.Scale = state.Scale;
+				Scene.Position = state.Position;
+			} else {
 				var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
 				var widget = Document.Current.RootNode.AsWidget;
 				var frameWidth = Frame.Width - rulerSize;
@@ -347,11 +343,7 @@ namespace Tangerine.UI.SceneView
 				Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
 					+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
 					+ Vector2.One * rulerSize;
-				return;
 			}
-			var state = Document.Current.DocumentViewStateComponents.Get<SceneViewStateComponent>();
-			Scene.Scale = state.Scale;
-			Scene.Position = state.Position;
 		}
 
 		private void OnBeforeFilesDrop()
@@ -477,6 +469,13 @@ namespace Tangerine.UI.SceneView
 		public void DuplicateSelectedNodes()
 		{
 			DuplicateNodes();
+		}
+
+		public void SyncDocumentState()
+		{
+			var c = Document.Current.DocumentViewStateComponents.GetOrAdd<SceneViewStateComponent>();
+			c.Position = Scene.Position;
+			c.Scale = Scene.Scale;
 		}
 	}
 
