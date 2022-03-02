@@ -16,20 +16,33 @@ namespace Lime.NanoVG
 		public Matrix32 Transform;
 		public Scissor Scissor;
 
-		public ContextState Clone()
+		public void Reset()
 		{
-			return new ContextState {
-				ShapeAntiAlias = ShapeAntiAlias,
-				Fill = Fill,
-				Stroke = Stroke,
-				StrokeWidth = StrokeWidth,
-				MiterLimit = MiterLimit,
-				LineJoin = LineJoin,
-				LineCap = LineCap,
-				Alpha = Alpha,
-				Transform = Transform,
-				Scissor = Scissor,
-			};
+			Fill = new Paint(Color4.White);
+			Stroke = new Paint(Color4.Black);
+			ShapeAntiAlias = 1;
+			StrokeWidth = 1.0f;
+			MiterLimit = 10.0f;
+			LineCap = LineCap.Butt;
+			LineJoin = LineCap.Miter;
+			Alpha = 1.0f;
+			Transform = Matrix32.Identity;
+			Scissor.Extent.X = -1.0f;
+			Scissor.Extent.Y = -1.0f;
+		}
+
+		public void CloneTo(ContextState destination)
+		{
+			destination.ShapeAntiAlias = ShapeAntiAlias;
+			destination.Fill = Fill;
+			destination.Stroke = Stroke;
+			destination.StrokeWidth = StrokeWidth;
+			destination.MiterLimit = MiterLimit;
+			destination.LineJoin = LineJoin;
+			destination.LineCap = LineCap;
+			destination.Alpha = Alpha;
+			destination.Transform = Transform;
+			destination.Scissor = Scissor;
 		}
 	}
 }

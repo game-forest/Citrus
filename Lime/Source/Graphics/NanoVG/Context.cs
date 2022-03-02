@@ -17,7 +17,7 @@ namespace Lime.NanoVG
 		private readonly bool edgeAntiAlias;
 		private float fringeWidth;
 		private readonly ContextState[] states = new ContextState[32];
-		private int statesNumber;
+		private int stateCount;
 		private float tessTol;
 
 		public Context(bool edgeAntiAlias = true)
@@ -28,8 +28,10 @@ namespace Lime.NanoVG
 			commandsNumber = 0;
 			commandsCount = 256;
 			cache = new PathCache();
+			for (int i = 0; i < states.Length; i++) {
+				states[i] = new ContextState();
+			}
 			Save();
-			Reset();
 			SetDevicePixelRatio(1.0f);
 		}
 
@@ -47,40 +49,26 @@ namespace Lime.NanoVG
 
 		public void Save()
 		{
-			if (statesNumber >= 32) {
-				return;
+			if (stateCount >= states.Length) {
+				throw new InvalidOperationException();
 			}
-			if (statesNumber > 0) {
-				states[statesNumber] = states[statesNumber - 1].Clone();
+			if (stateCount > 0) {
+				states[stateCount - 1].CloneTo(states[stateCount]);
 			} else {
-				states[statesNumber] = new ContextState();
+				states[stateCount].Reset();
 			}
-			statesNumber++;
+			stateCount++;
 		}
 
 		public void Restore()
 		{
-			if (statesNumber <= 1) {
-				return;
+			if (stateCount <= 1) {
+				throw new InvalidOperationException();
 			}
-			statesNumber--;
+			stateCount--;
 		}
 
-		public void Reset()
-		{
-			var state = GetState();
-			state.Fill = new Paint(Color4.White);
-			state.Stroke = new Paint(Color4.Black);
-			state.ShapeAntiAlias = 1;
-			state.StrokeWidth = 1.0f;
-			state.MiterLimit = 10.0f;
-			state.LineCap = Lime.LineCap.Butt;
-			state.LineJoin = Lime.LineCap.Miter;
-			state.Alpha = 1.0f;
-			state.Transform = Matrix32.Identity;
-			state.Scissor.Extent.X = -1.0f;
-			state.Scissor.Extent.Y = -1.0f;
-		}
+		public void Reset() => GetState().Reset();
 
 		public void ShapeAntiAlias(int enabled)
 		{
@@ -664,10 +652,7 @@ namespace Lime.NanoVG
 			fringeWidth = 1.0f / ratio;
 		}
 
-		private ContextState GetState()
-		{
-			return states[statesNumber - 1];
-		}
+		private ContextState GetState() => states[stateCount - 1];
 
 		private void AppendCommands(float* vals, int nvals)
 		{
