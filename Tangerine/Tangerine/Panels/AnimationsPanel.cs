@@ -244,8 +244,7 @@ namespace Tangerine.Panels
 			contentWidget.AddChangeWatcher(
 				() => (
 					Document.Current?.SceneTreeVersion ?? 0,
-					Document.Current?.Container,
-					Document.Current?.AnimationFrame),
+					Document.Current?.Container),
 				_ => RebuildTreeView(treeView, provider));
 			RebuildTreeView(treeView, provider);
 			return treeView;
@@ -1379,6 +1378,19 @@ namespace Tangerine.Panels
 			) : base(treeView, item, options)
 			{
 				Widget.Gestures.Add(new ClickGesture(1, ShowContextMenu));
+				var marker = ((MarkerTreeViewItem)Item).Marker;
+				Widget.AddChangeWatcher(
+					getter: IsBoldFont,
+					action: _ => {
+						Label.Font = IsBoldFont() ?
+							new SerializableFont(FontPool.DefaultBoldFontName) :
+							new SerializableFont(FontPool.DefaultFontName);
+					}
+				);
+
+				bool IsBoldFont() =>
+					marker.Frame == Document.Current.AnimationFrame
+					&& marker.Owner == Document.Current.Animation;
 			}
 
 			private void ShowContextMenu()
@@ -1497,18 +1509,9 @@ namespace Tangerine.Panels
 			public void Process(ITreeViewItemPresentation presentation)
 			{
 				if (presentation is MarkerTreeViewItemPresentation p && p.Item is MarkerTreeViewItem mi) {
-					var isTimelineCursorOnMarker = mi.Marker.Frame == Document.Current.AnimationFrame;
-					var isBold = p.Label.Font.Name == FontPool.DefaultBoldFontName;
-					var parent = (AnimationTreeViewItem)mi.Parent;
-					var isCurrentAnimation = parent.Animation == Document.Current.Animation;
 					if (string.IsNullOrWhiteSpace(mi.Label)) {
 						p.Label.Text = mi.Marker.Action == MarkerAction.Stop ? "<Stop>" :
 							(mi.Marker.Action == MarkerAction.Jump ? "<Jump>" : "<Start>");
-					}
-					if (isTimelineCursorOnMarker && !isBold && isCurrentAnimation) {
-						p.Label.Font = new SerializableFont(FontPool.DefaultBoldFontName);
-					} else if (isBold && (!isCurrentAnimation || !isTimelineCursorOnMarker)) {
-						p.Label.Font = new SerializableFont(FontPool.DefaultFontName);
 					}
 				}
 			}
