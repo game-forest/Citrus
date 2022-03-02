@@ -756,25 +756,32 @@ namespace Tests.Types
 				var v1 = (position + new Vector3(size.X, 0, 0)) * transform;
 				var v2 = (position + new Vector3(size.X, size.Y, 0)) * transform;
 				var v3 = (position + new Vector3(0, size.Y, 0)) * transform;
+				var (a, b, c, d) = (Vector2.Zero, new Vector2(1, 0), Vector2.One, new Vector2(0, 1));
+				if (texture != null) {
+					texture.TransformUVCoordinatesToAtlasSpace(ref a);
+					texture.TransformUVCoordinatesToAtlasSpace(ref b);
+					texture.TransformUVCoordinatesToAtlasSpace(ref c);
+					texture.TransformUVCoordinatesToAtlasSpace(ref d);
+				}
 				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v0,
 					Color = color,
-					UV1 = Vector2.Zero,
+					UV1 = a,
 				};
 				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v1,
 					Color = color,
-					UV1 = new Vector2(1, 0),
+					UV1 = b,
 				};
 				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v2,
 					Color = color,
-					UV1 = Vector2.One,
+					UV1 = c,
 				};
 				currentMesh.Vertices[currentMesh.VertexCount++] = new Mesh3D.Vertex {
 					Pos = v3,
 					Color = color,
-					UV1 = new Vector2(0, 1),
+					UV1 = d,
 				};
 			}
 			if (currentMesh != null && currentMesh.VertexCount > 0) {
