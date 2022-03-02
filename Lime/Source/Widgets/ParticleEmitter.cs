@@ -46,6 +46,7 @@ namespace Lime
 	public enum EmitterAction
 	{
 		Burst,
+		Reset,
 	}
 
 	/// <summary>
@@ -486,6 +487,9 @@ namespace Lime
 				var action = (EmitterAction)value;
 				if (!GetTangerineFlag(TangerineFlags.Hidden)) {
 					switch (action) {
+						case EmitterAction.Reset:
+							firstUpdate = true;
+							break;
 						case EmitterAction.Burst:
 							burstOnUpdateOnce = true;
 							break;
@@ -502,6 +506,7 @@ namespace Lime
 			delta *= Speed;
 			var deltaDistance = previousPosition - Position;
 			previousPosition = Position;
+			int burstCount = 0;
 			if (NumberPerBurst) {
 				// Spawn this.Number of particles each time Action.Burst is triggered
 				if (burstOnUpdateOnce) {
@@ -520,9 +525,8 @@ namespace Lime
 			} else if (BurstDistance > 0f) {
 				cumulativeDistance += deltaDistance.Length;
 				if (cumulativeDistance >= BurstDistance) {
-					int n = (int)(cumulativeDistance / BurstDistance);
-					particlesToSpawn += Number * n;
-					cumulativeDistance -= n * BurstDistance;
+					burstCount = (int)(cumulativeDistance / BurstDistance);
+					particlesToSpawn = Number * burstCount;
 				}
 			} else {
 				// this.Number per second
@@ -532,9 +536,14 @@ namespace Lime
 			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
 			}
-			var lerpStep = Number > 0 && SpawnBetweenFrames ? 1f / ((int)particlesToSpawn) : 0f;
-			var deltaStep = delta / ((int)particlesToSpawn);
+			float maxLerpValue = burstCount > 0 ? burstCount * BurstDistance / cumulativeDistance : 1f;
+			float lerpStep = particlesToSpawn > 0 && (SpawnBetweenFrames || burstCount > 0)
+				? maxLerpValue / ((int)particlesToSpawn)
+				: 0f;
+			float deltaStep = delta / ((int)particlesToSpawn);
 			int particleIndex = 0;
+			int lerpIndex = 0;
+			int numberPerBurst = ((int)particlesToSpawn) / Math.Max(1, burstCount);
 			int i = particles.Count - 1;
 			CalcInitialTransform(out var transform);
 			while (particlesToSpawn >= 1f) {
@@ -542,11 +551,11 @@ namespace Lime
 				if (
 					GloballyEnabled &&
 					Nodes.Count > 0 &&
-					InitializeParticle(particle, Matrix32.Lerp(lerpStep * particleIndex, transform, previousTransform))
+					InitializeParticle(particle, Matrix32.Lerp(lerpStep * lerpIndex, previousTransform, transform))
 				) {
 					AdvanceParticle(
 						p: particle,
-						delta: SpawnBetweenFrames ? deltaStep * particleIndex : 0f,
+						delta: SpawnBetweenFrames ? deltaStep * ((int)particlesToSpawn - 1) : 0f,
 						boundingRect: ref currentBoundingRect
 					);
 				} else {
@@ -554,8 +563,18 @@ namespace Lime
 				}
 				particlesToSpawn -= 1;
 				particleIndex++;
+				if (SpawnBetweenFrames || burstCount == 0) {
+					lerpIndex++;
+				} else if (particleIndex % numberPerBurst == 0) {
+					lerpIndex += numberPerBurst;
+				}
 			}
-			previousTransform = transform;
+			if (BurstDistance == 0f) {
+				previousTransform = transform;
+			} else if (burstCount > 0) {
+				cumulativeDistance -= burstCount * BurstDistance;
+				previousTransform = Matrix32.Lerp(maxLerpValue, previousTransform, transform);
+			}
 			if (MagnetAmount.Median != 0 || MagnetAmount.Dispersion != 0) {
 				EnumerateMagnets();
 			}
@@ -771,6 +790,7 @@ namespace Lime
 			if (firstUpdate) {
 				firstUpdate = false;
 				previousPosition = Position;
+				cumulativeDistance = 0f;
 				CalcInitialTransform(out previousTransform);
 				const float ModellingStep = 0.04f;
 				delta = Math.Max(delta, TimeShift);
@@ -792,6 +812,7 @@ namespace Lime
 			return
 				Application.EnableParticleLimiter &&
 				GloballyVisible &&
+				BurstDistance == 0f &&
 				!NumberPerBurst && !ImmortalParticles &&
 				Manager != null &&
 				Manager.ServiceProvider.TryGetService(out particleLimiter);
