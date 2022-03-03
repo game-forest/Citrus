@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Lime;
 using Tangerine.Core;
-using Tangerine.Core.Components;
 using Tangerine.Core.Operations;
 using Tangerine.UI;
 using Tangerine.UI.Timeline;
@@ -19,13 +18,12 @@ namespace Tangerine.Panels
 		private readonly Frame contentWidget;
 		private readonly EditBox searchStringEditor;
 		private readonly ThemedScrollView scrollView;
-		private readonly LcaSolver lcaSolver;
+		private readonly TraverseTarget traverseTarget;
 		private TreeViewMode mode;
 
 		public AnimationsPanel(Widget panelWidget)
 		{
 			this.panelWidget = panelWidget;
-			lcaSolver = new LcaSolver();
 			panelWidget.TabTravesable = new TabTraversable();
 			ToolbarButton expandAll, collapseAll, showAll, showCurrent;
 			contentWidget = new Frame {
@@ -82,6 +80,7 @@ namespace Tangerine.Panels
 						});
 				},
 			};
+			traverseTarget = new TraverseTarget();
 			var treeView = CreateTreeView(
 				scrollView,
 				itemProvider,
@@ -90,7 +89,6 @@ namespace Tangerine.Panels
 					SearchStringGetter = () => searchStringEditor.Text,
 				}
 			);
-			contentWidget.Tasks.Add(RebuildIfSelectedChangedTask(treeView, itemProvider));
 			searchStringEditor.Tasks.Add(SearchStringDebounceTask(treeView, itemProvider));
 			expandAll.Clicked = () => ExpandAll(treeView.RootItem, true);
 			collapseAll.Clicked = () => ExpandAll(treeView.RootItem, false);
@@ -100,29 +98,6 @@ namespace Tangerine.Panels
 				RebuildTreeView(treeView, itemProvider);
 			};
 			showAll.AddChangeWatcher(() => mode, _ => showAll.Checked = mode == TreeViewMode.AllHierarchy);
-		}
-
-		private IEnumerator<object> RebuildIfSelectedChangedTask(TreeView treeView, TreeViewItemProvider provider)
-		{
-			long cachedHash = 0;
-			while (true) {
-				yield return null;
-				if (mode == TreeViewMode.AllHierarchy) {
-					continue;
-				}
-				var hasher = new Hasher();
-				hasher.Begin();
-				foreach (var i in Document.Current.SelectedSceneItems()) {
-					if (i.TryGetNode(out _) || i.TryGetAnimator(out _)) {
-						hasher.Write(i.GetHashCode());
-					}
-				}
-				var hash = hasher.End();
-				if (cachedHash != hash) {
-					cachedHash = hash;
-					RebuildTreeView(treeView, provider);
-				}
-			}
 		}
 
 		private void ExpandAll(TreeViewItem item, bool expand)
@@ -245,8 +220,8 @@ namespace Tangerine.Panels
 			contentWidget.AddChangeWatcher(
 				() => (
 					Document.Current?.SceneTreeVersion ?? 0,
-					Document.Current?.Container),
-				_ => RebuildTreeView(treeView, provider));
+					traverseTarget.Recalculate(mode)),
+				_ => RebuildTreeView(treeView, provider, (Node)traverseTarget));
 			RebuildTreeView(treeView, provider);
 			return treeView;
 		}
@@ -261,11 +236,12 @@ namespace Tangerine.Panels
 				NavigateToAnimation.Perform(animation);
 			}
 			ClearSceneItemSelection.Perform();
-			if (animation.OwnerNode.Nodes.Count == 0) {
+			var target = animation.OwnerNode;
+			if (target.Nodes.Count == 0) {
 				EnterNode.Perform(animation.OwnerNode);
 			} else {
-				ScheduleHighlightAnimationFor(animation.OwnerNode);
-				foreach (var node in animation.OwnerNode.Nodes) {
+				TryNavigateToNodeInTimeline(target);
+				foreach (var node in target.Nodes) {
 					SelectNode.Perform(node, select: true);
 				}
 				if (mode == TreeViewMode.CurrentBranch) {
@@ -504,7 +480,7 @@ namespace Tangerine.Panels
 
 		private Node previousContainer;
 
-		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider)
+		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider, Node traverseTarget = null)
 		{
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
@@ -513,12 +489,12 @@ namespace Tangerine.Panels
 			var nodeItems = new List<TreeViewItem>();
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
+			traverseTarget ??= this.traverseTarget.Recalculate(mode);
+			var targetSceneItem = Document.Current.GetSceneItemForObject(traverseTarget);
 			if (mode == TreeViewMode.CurrentBranch) {
-				var commonRoot = lcaSolver.FindCommonAncestor(Document.Current.SelectedNodes());
-				commonRoot ??= Document.Current.Container;
-				TraverseSceneTreeForCurrentBranch(Document.Current.GetSceneItemForObject(commonRoot));
+				TraverseSceneTreeForCurrentBranch(targetSceneItem);
 			} else {
-				TraverseSceneTree(Document.Current.GetSceneItemForObject(Document.Current.RootNode));
+				TraverseSceneTree(targetSceneItem);
 			}
 
 			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
@@ -630,15 +606,15 @@ namespace Tangerine.Panels
 			contentWidget.Unlink();
 		}
 
-		private static void ScheduleHighlightAnimationFor(Node node)
+		private static void TryNavigateToNodeInTimeline(Node node)
 		{
-			if (node == Document.Current.RootNode) {
+			if (!node.DescendantOf(Document.Current.Container)) {
 				return;
 			}
 			Document.Current.History.DoTransaction(() => ExpandNodePathInTimeline.Perform(node));
-			Timeline.Instance.RootWidget.LateTasks.Add(ScrollToNodeTask(node));
+			Timeline.Instance.RootWidget.LateTasks.Add(HighlightAndScrollToNodeTask(node));
 
-			static IEnumerator<object> ScrollToNodeTask(Node node)
+			static IEnumerator<object> HighlightAndScrollToNodeTask(Node node)
 			{
 				var treeView = Timeline.Instance.Roll.TreeView;
 				// The timeline is rebuilt in a late update. This task may
@@ -1394,7 +1370,7 @@ namespace Tangerine.Panels
 			{
 				if (Application.Input.IsKeyPressed(Key.Alt)) {
 					var targetNode = ((NodeTreeViewItem)Item).Node;
-					ScheduleHighlightAnimationFor(targetNode);
+					TryNavigateToNodeInTimeline(targetNode);
 				}
 			}
 
@@ -1571,36 +1547,90 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private class LcaSolver
+		private class TraverseTarget
 		{
-			private readonly List<Node> pathOne = new List<Node>();
-			private readonly List<Node> pathTwo = new List<Node>();
+			private readonly LcaSolver lcaSolver = new LcaSolver();
+			private readonly List<Node> selected = new List<Node>();
+			private int selectedCount;
 
-			public Node FindCommonAncestor(IEnumerable<Node> nodes)
+			private Node cachedTraverseTarget;
+
+			/// <summary>
+			/// Node that was returned by the last <see cref="Recalculate"/> call.
+			/// </summary>
+			public static explicit operator Node(TraverseTarget traverseTarget)
 			{
-				using var enumerator = nodes.GetEnumerator();
-				if (!enumerator.MoveNext()) {
-					return null;
+				return traverseTarget.cachedTraverseTarget;
+			}
+
+			public Node Recalculate(TreeViewMode mode)
+			{
+				if (mode == TreeViewMode.AllHierarchy) {
+					return cachedTraverseTarget = Document.Current.RootNode;
 				}
-				pathOne.AddRange(enumerator.Current.Ancestors);
-				int commonNodeIndex = pathOne.Count - 1;
-				while (enumerator.MoveNext()) {
-					pathTwo.AddRange(enumerator.Current.Ancestors);
-					int startIndex = Math.Min(
-						val1: commonNodeIndex,
-						val2: pathTwo.Count - 1
-					);
-					for (int i = 1 + startIndex; ; i--) {
-						if (pathTwo[^i] == pathOne[^i]) {
-							commonNodeIndex = i - 1;
-							break;
-						}
+				int selectedCount = 0;
+				bool selectionChanged = false;
+				foreach (var node in Document.Current.SelectedNodes()) {
+					if (selectedCount < selected.Count) {
+						selectionChanged |= selected[selectedCount] != node;
+						selected[selectedCount] = node;
+					} else {
+						selectionChanged = true;
+						selected.Add(node);
 					}
-					pathTwo.Clear();
+					selectedCount++;
 				}
-				var node = pathOne[^(commonNodeIndex + 1)];
-				pathOne.Clear();
-				return node;
+				selectionChanged |= this.selectedCount != selectedCount;
+				this.selectedCount = selectedCount;
+				for (int i = selectedCount; i < selected.Count; i++) {
+					selected[selectedCount] = null;
+				}
+				if (selectionChanged) {
+					var commonAncestor = lcaSolver.FindCommonAncestor(selected.Take(selectedCount));
+					if (commonAncestor != null) {
+						cachedTraverseTarget = commonAncestor;
+					}
+				}
+				if (
+					cachedTraverseTarget == null ||
+					!cachedTraverseTarget.SameOrDescendantOf(Document.Current.Container)
+				) {
+					cachedTraverseTarget = Document.Current.Container;
+				}
+				return cachedTraverseTarget;
+			}
+
+			private class LcaSolver
+			{
+				private readonly List<Node> pathOne = new List<Node>();
+				private readonly List<Node> pathTwo = new List<Node>();
+
+				public Node FindCommonAncestor(IEnumerable<Node> nodes)
+				{
+					using var enumerator = nodes.GetEnumerator();
+					if (!enumerator.MoveNext()) {
+						return null;
+					}
+					pathOne.AddRange(enumerator.Current.Ancestors);
+					int commonNodeIndex = pathOne.Count - 1;
+					while (enumerator.MoveNext()) {
+						pathTwo.AddRange(enumerator.Current.Ancestors);
+						int startIndex = Math.Min(
+							val1: commonNodeIndex,
+							val2: pathTwo.Count - 1
+						);
+						for (int i = 1 + startIndex; ; i--) {
+							if (pathTwo[^i] == pathOne[^i]) {
+								commonNodeIndex = i - 1;
+								break;
+							}
+						}
+						pathTwo.Clear();
+					}
+					var node = pathOne[^(commonNodeIndex + 1)];
+					pathOne.Clear();
+					return node;
+				}
 			}
 		}
 	}
