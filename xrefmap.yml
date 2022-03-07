@@ -47706,6 +47706,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.Shape
   nameWithType: ParticleEmitter.Shape
+- uid: Lime.ParticleEmitter.SpawnBetweenFrames
+  name: SpawnBetweenFrames
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_SpawnBetweenFrames
+  commentId: P:Lime.ParticleEmitter.SpawnBetweenFrames
+  fullName: Lime.ParticleEmitter.SpawnBetweenFrames
+  nameWithType: ParticleEmitter.SpawnBetweenFrames
+- uid: Lime.ParticleEmitter.SpawnBetweenFrames*
+  name: SpawnBetweenFrames
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_SpawnBetweenFrames_
+  commentId: Overload:Lime.ParticleEmitter.SpawnBetweenFrames
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.SpawnBetweenFrames
+  nameWithType: ParticleEmitter.SpawnBetweenFrames
 - uid: Lime.ParticleEmitter.Speed
   name: Speed
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_Speed
