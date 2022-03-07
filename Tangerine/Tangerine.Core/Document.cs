@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -15,6 +17,8 @@ namespace Tangerine.Core
 	{
 		void Detach();
 		void Attach();
+		void SyncDocumentState()
+		{ }
 	}
 
 	public enum DocumentFormat
@@ -29,8 +33,45 @@ namespace Tangerine.Core
 		void Generate(RenderTexture texture, Action callback);
 	}
 
+	public class PreservedDocumentState
+	{
+		public readonly ComponentCollection<Component> Components = new ComponentCollection<Component>();
+
+		public readonly HashSet<string> SelectedItems = new HashSet<string>();
+
+		public readonly HashSet<string> ExpandedItems = new HashSet<string>();
+
+		public static string GetSceneItemIndexPath(SceneItem item)
+		{
+			var builder = new StringBuilder(item.Id);
+			for (var i = item; i != null; i = i.Parent) {
+				builder.Append('/');
+				builder.Append(i.Parent == null ? -1 : i.Parent.SceneItems.IndexOf(i));
+			}
+			return builder.ToString();
+		}
+
+		public static string GetNodeIndexPath(Node node)
+		{
+			var builder = new StringBuilder(node.Id);
+			for (var p = node; p != null; p = p.Parent) {
+				builder.Append('/');
+				builder.Append(p.CollectionIndex());
+			}
+			return builder.ToString();
+		}
+	}
+
 	public sealed class Document
 	{
+		private class DocumentStateComponent : Component
+		{
+			public string AnimationId = null;
+			public string AnimationOwnerNodePath = null;
+			public string ContainerPath = null;
+			public bool InspectRootNode = false;
+		}
+
 		public enum CloseAction
 		{
 			Cancel,
@@ -62,6 +103,9 @@ namespace Tangerine.Core
 		public static Document Current { get; private set; }
 
 		public readonly DocumentHistory History = new DocumentHistory();
+
+		public readonly ComponentCollection<Component> DocumentViewStateComponents =
+			new ComponentCollection<Component>();
 		public bool IsModified => History.IsDocumentModified;
 
 		/// <summary>
@@ -649,6 +693,88 @@ namespace Tangerine.Core
 					}
 				}
 			}
+		}
+
+		public void RestoreState(PreservedDocumentState preservedState)
+		{
+			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
+				Load();
+			}
+			DocumentViewStateComponents.Clear();
+			foreach (var component in preservedState.Components) {
+				DocumentViewStateComponents.Add(component);
+			}
+			var docState = preservedState.Components.GetOrAdd<DocumentStateComponent>();
+			InspectRootNode = docState.InspectRootNode;
+			if (preservedState.SelectedItems.Count > 0 ||
+				preservedState.ExpandedItems.Count > 0 ||
+				docState.AnimationOwnerNodePath != null ||
+				docState.ContainerPath != null
+			) {
+				bool containerWasUpdated = false;
+				var states = new List<TimelineSceneItemStateComponent>();
+				foreach (var item in SceneTree.SelfAndDescendants()) {
+					var state = item.GetTimelineSceneItemState();
+					string itemPath = PreservedDocumentState.GetSceneItemIndexPath(item);
+					state.Selected = preservedState.SelectedItems.Contains(itemPath);
+					state.NodesExpanded = preservedState.ExpandedItems.Contains(itemPath);
+					if (state.Selected) {
+						states.Add(state);
+					}
+					var node = item.GetNode();
+					if (node == null) {
+						continue;
+					}
+					string nodePath = PreservedDocumentState.GetNodeIndexPath(node);
+					if (nodePath == docState.ContainerPath) {
+						Container = node;
+						containerWasUpdated = true;
+					}
+					if (nodePath == docState.AnimationOwnerNodePath) {
+						if (node.Animations.TryFind(docState.AnimationId, out var animation)) {
+							Animation = animation;
+						} else {
+							Animation = node.DefaultAnimation;
+						}
+					}
+				}
+				if (states.Count != preservedState.SelectedItems.Count || !containerWasUpdated) {
+					foreach (var state in states) {
+						state.Selected = false;
+					}
+				}
+			}
+		}
+
+		public PreservedDocumentState PreserveState()
+		{
+			var ds = DocumentViewStateComponents.GetOrAdd<DocumentStateComponent>();
+			ds.ContainerPath = PreservedDocumentState.GetNodeIndexPath(container);
+			ds.InspectRootNode = InspectRootNode;
+			if (animation != null) {
+				ds.AnimationId = animation.Id;
+				ds.AnimationOwnerNodePath = PreservedDocumentState.GetNodeIndexPath(animation.OwnerNode);
+			} else {
+				ds.AnimationId = null;
+				ds.AnimationOwnerNodePath = null;
+			}
+			foreach (var view in Views) {
+				view.SyncDocumentState();
+			}
+			var state = new PreservedDocumentState();
+			foreach (var component in DocumentViewStateComponents) {
+				state.Components.Add(component);
+			}
+			foreach (var item in SceneTree.SelfAndDescendants()) {
+				string itemPath = PreservedDocumentState.GetSceneItemIndexPath(item);
+				if (item.GetTimelineSceneItemState().Selected) {
+					state.SelectedItems.Add(itemPath);
+				}
+				if (item.GetTimelineSceneItemState().NodesExpanded) {
+					state.ExpandedItems.Add(itemPath);
+				}
+			}
+			return state;
 		}
 
 		private void AttachViews()

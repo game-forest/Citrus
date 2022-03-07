@@ -16,6 +16,12 @@ namespace Tangerine.UI.SceneView
 {
 	public class SceneView : IDocumentView, ISceneView
 	{
+		private class SceneViewStateComponent : Component
+		{
+			public Vector2 Position;
+			public Vector2 Scale;
+		}
+
 		private Vector2 mousePositionOnFilesDrop;
 
 		// Given panel.
@@ -296,7 +302,7 @@ namespace Tangerine.UI.SceneView
 			CreateProcessors();
 			CreatePresenters();
 			CreateFilesDropHandlers();
-			Frame.Awoke += CenterDocumentRoot;
+			Frame.Awoke += ArrangeDocumentRoot;
 			OnCreate?.Invoke(this);
 		}
 
@@ -309,27 +315,35 @@ namespace Tangerine.UI.SceneView
 				new Models3DDropHandler(OnBeforeFilesDrop, FilesDropNodePostProcessor).Handle;
 		}
 
-		private void CenterDocumentRoot(Node node)
+		private void ArrangeDocumentRoot(Node node)
 		{
 			// Before Frame awakens something is being changed on this frame
 			// enough to change Frame Size on LayoutManager.Layout()
 			// which will come at the end of the frame. Force it now to get accurate Frame.Size;
 			WidgetContext.Current.Root.LayoutManager.Layout();
-			var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
-			var widget = Document.Current.RootNode.AsWidget;
-			var frameWidth = Frame.Width - rulerSize;
-			var frameHeight = Frame.Height - ZoomWidget.FrameHeight - rulerSize;
-			var wantedZoom = Mathf.Clamp(
-				Mathf.Min(
-					frameWidth / (widget.Width * widget.Scale.X),
-					frameHeight / (widget.Height * widget.Scale.Y)),
-				0.0f,
-				1.0f);
-			var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
-			Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
-			Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
-				+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
-				+ Vector2.One * rulerSize;
+			if (Document.Current.DocumentViewStateComponents.Contains<SceneViewStateComponent>()) {
+				var state = Document.Current.DocumentViewStateComponents.Get<SceneViewStateComponent>();
+				Scene.Scale = state.Scale;
+				Scene.Position = state.Position;
+			} else {
+				var rulerSize = RulersWidget.RulerHeight * (RulersWidget.Visible ? 1 : 0);
+				var widget = Document.Current.RootNode.AsWidget;
+				var frameWidth = Frame.Width - rulerSize;
+				var frameHeight = Frame.Height - ZoomWidget.FrameHeight - rulerSize;
+				var wantedZoom = Mathf.Clamp(
+					Mathf.Min(
+						frameWidth / (widget.Width * widget.Scale.X),
+						frameHeight / (widget.Height * widget.Scale.Y)
+					),
+					0.0f,
+					1.0f
+				);
+				var zoomIndex = ZoomWidget.FindNearest(wantedZoom, 0, ZoomWidget.zoomTable.Count);
+				Scene.Scale = new Vector2(ZoomWidget.zoomTable[zoomIndex]);
+				Scene.Position = -(widget.Position + widget.Size * widget.Scale * 0.5f) * Scene.Scale
+					+ new Vector2(frameWidth * 0.5f, frameHeight * 0.5f)
+					+ Vector2.One * rulerSize;
+			}
 		}
 
 		private void OnBeforeFilesDrop()
@@ -455,6 +469,13 @@ namespace Tangerine.UI.SceneView
 		public void DuplicateSelectedNodes()
 		{
 			DuplicateNodes();
+		}
+
+		public void SyncDocumentState()
+		{
+			var c = Document.Current.DocumentViewStateComponents.GetOrAdd<SceneViewStateComponent>();
+			c.Position = Scene.Position;
+			c.Scale = Scene.Scale;
 		}
 	}
 

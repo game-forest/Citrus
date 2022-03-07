@@ -13,6 +13,12 @@ namespace Tangerine.UI.Timeline
 {
 	public class Timeline : IDocumentView
 	{
+		private class TimelineStateComponent : Component
+		{
+			public Vector2 Offset = Vector2.Zero;
+			public int CurrentColumn;
+		}
+
 		public static Timeline Instance { get; private set; }
 		public static Action<Timeline> OnCreate;
 
@@ -106,6 +112,8 @@ namespace Tangerine.UI.Timeline
 			typeof(EnsureSceneItemVisibleIfSelected),
 		};
 
+		private bool skipNextTimelineCentrify = false;
+
 		public Timeline(Panel panel)
 		{
 			RootWidget = new Widget();
@@ -135,10 +143,25 @@ namespace Tangerine.UI.Timeline
 			CreateFilesDropHandlers();
 			RootWidget.AddChangeWatcher(() => Document.Current?.Animation, _ => {
 				columnCount = 0;
-				CenterTimelineOnCurrentColumn.Perform();
+				if (skipNextTimelineCentrify) {
+					skipNextTimelineCentrify = false;
+				} else {
+					CenterTimelineOnCurrentColumn.Perform();
+				}
 			});
 			Document.Current.History.DocumentChanged += () => columnCount = 0;
+			RootWidget.Awoke += RestoreStateFromDocument;
 			OnCreate?.Invoke(this);
+		}
+
+		private void RestoreStateFromDocument(Node node)
+		{
+			var state = Document.Current.DocumentViewStateComponents.Get<TimelineStateComponent>();
+			if (state != null) {
+				skipNextTimelineCentrify = true;
+				Offset = state.Offset;
+				Document.Current.AnimationFrame = state.CurrentColumn;
+			}
 		}
 
 		private void DecorateSceneTree(SceneItem sceneTree)
@@ -334,6 +357,13 @@ namespace Tangerine.UI.Timeline
 			if (top < Offset.Y) {
 				OffsetY = Math.Max(0, top);
 			}
+		}
+
+		public void SyncDocumentState()
+		{
+			var c = Document.Current.DocumentViewStateComponents.GetOrAdd<TimelineStateComponent>();
+			c.CurrentColumn = CurrentColumn;
+			c.Offset = Offset;
 		}
 	}
 
