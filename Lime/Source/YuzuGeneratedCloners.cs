@@ -2924,6 +2924,7 @@ namespace YuzuGenerated
 			result.Shape = s.Shape;
 			result.SilentSize = s.SilentSize;
 			result.SkinningWeights = Clone_Lime__SkinningWeights(cl, s.SkinningWeights);
+			result.SpawnBetweenFrames = s.SpawnBetweenFrames;
 			result.Speed = s.Speed;
 			result.Spin = s.Spin;
 			result.Tag = s.Tag;
