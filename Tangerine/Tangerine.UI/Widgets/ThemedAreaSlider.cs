@@ -120,7 +120,8 @@ namespace Tangerine.UI
 				ro.RangeMin = slider.RangeMin;
 				ro.RangeMax = slider.RangeMax;
 				ro.Value = slider.Value;
-				ro.Size = slider.Size;
+				ro.Position = slider.ContentPosition;
+				ro.Size = slider.ContentSize;
 				ro.ShowSelectionRect = slider.IsFocused() || slider.IsMouseOverThisOrDescendant();
 				return ro;
 			}
@@ -130,6 +131,7 @@ namespace Tangerine.UI
 				public float RangeMin;
 				public float RangeMax;
 				public float Value;
+				public Vector2 Position;
 				public Vector2 Size;
 				public bool ShowSelectionRect;
 
@@ -140,13 +142,13 @@ namespace Tangerine.UI
 					var thumbPosition = (Value - RangeMin) / sliderRange * Size.X;
 					var nvg = Lime.NanoVG.Context.Instance;
 					RendererNvg.DrawRoundedRect(
-						Vector2.Zero, Size, Theme.Colors.WhiteBackground, 4);
+						Position, Size, Theme.Colors.WhiteBackground, 4);
 					nvg.Scissor(Vector2.Half, new Vector2(thumbPosition, Size.Y) - Vector2.One);
 					RendererNvg.DrawRoundedRect(
-						Vector2.Zero, Size, Theme.Colors.SelectedBackground, 4);
+						Position, Size, Theme.Colors.SelectedBackground, 4);
 					nvg.ResetScissor();
 					var borderColor = ShowSelectionRect ? Theme.Colors.KeyboardFocusBorder : Theme.Colors.ControlBorder;
-					RendererNvg.DrawRoundedRectOutline(Vector2.Zero, Size, borderColor, 1, 4);
+					RendererNvg.DrawRoundedRectOutline(Position, Size, borderColor, 1, 4);
 				}
 			}
 		}

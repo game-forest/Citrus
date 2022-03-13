@@ -490,7 +490,8 @@ namespace Tangerine.UI
 					var widget = (Widget)node;
 					var renderObject = RenderObjectPool<RenderObject>.Acquire();
 					renderObject.CaptureRenderState(widget);
-					renderObject.Size = widget.Size;
+					renderObject.Position = widget.ContentPosition + new Vector2(Theme.Metrics.SliderThumbWidth / 2, 0);
+					renderObject.Size = widget.ContentSize - new Vector2(Theme.Metrics.SliderThumbWidth, 0);
 					renderObject.BorderColor = Theme.Colors.ControlBorder;
 					renderObject.Pixels = pixels;
 					return renderObject;
@@ -501,6 +502,7 @@ namespace Tangerine.UI
 				{
 					private readonly Texture2D texture = new Texture2D();
 
+					public Vector2 Position;
 					public Vector2 Size;
 					public Color4 BorderColor;
 					public Color4[] Pixels;
@@ -512,12 +514,12 @@ namespace Tangerine.UI
 						Renderer.DrawSprite(
 							texture1: texture,
 							color: Color4.White,
-							position: Vector2.Zero,
+							position: Position,
 							size: Size,
 							uv0: new Vector2(1, 0),
 							uv1: new Vector2(0, 1)
 						);
-						Renderer.DrawRectOutline(a: Vector2.Zero, b: Size, color: BorderColor);
+						Renderer.DrawRectOutline(a: Position, b: Position + Size, color: BorderColor);
 					}
 				}
 			}

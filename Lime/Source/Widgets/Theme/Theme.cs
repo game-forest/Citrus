@@ -10,6 +10,7 @@ namespace Lime
 	{
 		public static class Metrics
 		{
+			public static readonly float SliderThumbWidth = 16;
 			public static readonly int TextHeight = 16;
 			public static readonly Vector2 CheckBoxSize = new Vector2(16, 16);
 			public static readonly Vector2 DefaultButtonSize = new Vector2(75, 22);
