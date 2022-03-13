@@ -33,6 +33,7 @@ namespace Tangerine.UI
 			AddNode(rail);
 			var thumb = new Widget {
 				Id = "Thumb",
+				LayoutCell = new LayoutCell { Ignore = true },
 				Size = Vector2.Zero,
 			};
 			this.AddChangeWatcher(() => (Value, LabelText), _ => UpdateTextWidgets());
