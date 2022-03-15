@@ -483,7 +483,7 @@ namespace Lime
 		public override void OnTrigger(string property, object value, double animationTimeCorrection = 0)
 		{
 			base.OnTrigger(property, value, animationTimeCorrection);
-			if (property == "Action") {
+			if (property == nameof(Action)) {
 				var action = (EmitterAction)value;
 				if (!GetTangerineFlag(TangerineFlags.Hidden)) {
 					switch (action) {
@@ -504,8 +504,10 @@ namespace Lime
 				RefreshCustomShape();
 			}
 			delta *= Speed;
-			var deltaDistance = previousPosition - Position;
-			previousPosition = Position;
+			CalcInitialTransform(out var transform);
+			var position = transform.TransformVector(Vector2.Zero);
+			var deltaDistance = previousPosition - position;
+			previousPosition = position;
 			int burstCount = 0;
 			if (NumberPerBurst) {
 				// Spawn this.Number of particles each time Action.Burst is triggered
@@ -536,22 +538,28 @@ namespace Lime
 			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
 			}
-			float maxLerpValue = burstCount > 0 ? burstCount * BurstDistance / cumulativeDistance : 1f;
+			// For NumberPerDistance and SpawnBetweenFrames modes we use linear-interpolation between transforms.
+			// availableLerpAmount is a total allowed amount to interpolate from previousTransform to current transform.
+			// It can be less that 1f for NumberPerDistance mode because we need accurate calculation of positions
+			// Where we spawn new particles.
+			float availableLerpAmount = burstCount > 0 ? burstCount * BurstDistance / cumulativeDistance : 1f;
 			float lerpStep = particlesToSpawn > 0 && (SpawnBetweenFrames || burstCount > 0)
-				? maxLerpValue / ((int)particlesToSpawn)
+				? availableLerpAmount / ((int)particlesToSpawn)
 				: 0f;
 			float deltaStep = delta / ((int)particlesToSpawn);
 			int particleIndex = 0;
 			int lerpIndex = 0;
 			int numberPerBurst = ((int)particlesToSpawn) / Math.Max(1, burstCount);
 			int i = particles.Count - 1;
-			CalcInitialTransform(out var transform);
 			while (particlesToSpawn >= 1f) {
 				Particle particle = AllocParticle();
 				if (
 					GloballyEnabled &&
 					Nodes.Count > 0 &&
-					InitializeParticle(particle, Matrix32.Lerp(lerpStep * lerpIndex, previousTransform, transform))
+					InitializeParticle(
+						particle,
+						lerpStep > 0f ? Matrix32.Lerp(lerpStep * lerpIndex, previousTransform, transform) : transform
+					)
 				) {
 					AdvanceParticle(
 						p: particle,
@@ -573,7 +581,7 @@ namespace Lime
 				previousTransform = transform;
 			} else if (burstCount > 0) {
 				cumulativeDistance -= burstCount * BurstDistance;
-				previousTransform = Matrix32.Lerp(maxLerpValue, previousTransform, transform);
+				previousTransform = Matrix32.Lerp(availableLerpAmount, previousTransform, transform);
 			}
 			if (MagnetAmount.Median != 0 || MagnetAmount.Dispersion != 0) {
 				EnumerateMagnets();
@@ -789,9 +797,9 @@ namespace Lime
 			}
 			if (firstUpdate) {
 				firstUpdate = false;
-				previousPosition = Position;
 				cumulativeDistance = 0f;
 				CalcInitialTransform(out previousTransform);
+				previousPosition = previousTransform.TransformVector(Vector2.Zero);
 				const float ModellingStep = 0.04f;
 				delta = Math.Max(delta, TimeShift);
 				while (delta >= ModellingStep) {
