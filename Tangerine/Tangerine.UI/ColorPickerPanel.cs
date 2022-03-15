@@ -653,11 +653,14 @@ namespace Tangerine.UI
 					{
 						var widget = node.AsWidget;
 						widget.PrepareRendererState();
-						RendererWrapper.Current.DrawRect(Vector2.Zero, widget.Size, Color4.White);
+						var position = widget.ContentPosition + new Vector2(Theme.Metrics.SliderThumbWidth / 2, 0);
+						var size = widget.ContentSize - new Vector2(Theme.Metrics.SliderThumbWidth, 0);
+						RendererWrapper.Current.DrawRect(position, size, Color4.White);
 						const int numChecks = 20;
-						var checkSize = new Vector2(widget.Width / numChecks, widget.Height / 2);
+						var checkSize = new Vector2(size.X / numChecks, size.Y / 2);
 						for (int i = 0; i < numChecks; i++) {
-							var checkPos = new Vector2(i * checkSize.X, (i % 2 == 0) ? 0 : checkSize.Y);
+							var checkPos = new Vector2(
+								i * checkSize.X + position.X, (i % 2 == 0) ? 0 : checkSize.Y);
 							Renderer.DrawRect(checkPos, checkPos + checkSize, Color4.Black);
 						}
 					}
