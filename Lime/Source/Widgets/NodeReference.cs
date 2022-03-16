@@ -4,12 +4,17 @@ using Yuzu;
 namespace Lime
 {
 	/// <summary>
+	/// This interface is used to determine if some object is a <see cref="NodeReference{T}"/>.
+	/// </summary>
+	internal interface INodeReference { }
+
+	/// <summary>
 	/// A node reference is used for referencing to a node within a serialized scene by the node Id.
 	/// </summary>
 	[YuzuSpecializeWith(typeof(Lime.Camera3D))]
 	[YuzuSpecializeWith(typeof(Lime.Spline))]
 	[YuzuSpecializeWith(typeof(Lime.Widget))]
-	public class NodeReference<T>
+	public class NodeReference<T> : INodeReference
 		where T : Node
 	{
 		private string id;
