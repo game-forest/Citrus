@@ -509,6 +509,7 @@ namespace Lime
 			var deltaDistance = previousPosition - position;
 			previousPosition = position;
 			int burstCount = 0;
+			bool isInterpolationRequired = false;
 			if (NumberPerBurst) {
 				// Spawn this.Number of particles each time Action.Burst is triggered
 				if (burstOnUpdateOnce) {
@@ -533,6 +534,7 @@ namespace Lime
 			} else {
 				// this.Number per second
 				particlesToSpawn += Number * delta;
+				isInterpolationRequired = SpawnBetweenFrames;
 			}
 			var currentBoundingRect = new Rectangle();
 			if (TryGetParticleLimiter(out var particleLimiter)) {
@@ -543,7 +545,7 @@ namespace Lime
 			// It can be less that 1f for NumberPerDistance mode because we need accurate calculation of positions
 			// Where we spawn new particles.
 			float availableLerpAmount = burstCount > 0 ? burstCount * BurstDistance / cumulativeDistance : 1f;
-			float lerpStep = particlesToSpawn > 0 && (SpawnBetweenFrames || burstCount > 0)
+			float lerpStep = particlesToSpawn > 0 && (isInterpolationRequired || burstCount > 0)
 				? availableLerpAmount / ((int)particlesToSpawn)
 				: 0f;
 			float deltaStep = delta / ((int)particlesToSpawn);
@@ -563,7 +565,7 @@ namespace Lime
 				) {
 					AdvanceParticle(
 						p: particle,
-						delta: SpawnBetweenFrames ? deltaStep * ((int)particlesToSpawn - 1) : 0f,
+						delta: isInterpolationRequired ? deltaStep * ((int)particlesToSpawn - 1) : 0f,
 						boundingRect: ref currentBoundingRect
 					);
 				} else {
@@ -571,7 +573,7 @@ namespace Lime
 				}
 				particlesToSpawn -= 1;
 				particleIndex++;
-				if (SpawnBetweenFrames || burstCount == 0) {
+				if (isInterpolationRequired || burstCount == 0) {
 					lerpIndex++;
 				} else if (particleIndex % numberPerBurst == 0) {
 					lerpIndex += numberPerBurst;
