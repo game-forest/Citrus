@@ -573,8 +573,10 @@ namespace Lime
 				}
 				particlesToSpawn -= 1;
 				particleIndex++;
+				// In NumberPerSecond+SpawnBetweenFrames mode we interpolate each particle between frames' transforms.
 				if (isInterpolationRequired || burstCount == 0) {
 					lerpIndex++;
+				// In BurstPerDistance we spawn groups of particles on equal distances.
 				} else if (particleIndex % numberPerBurst == 0) {
 					lerpIndex += numberPerBurst;
 				}
@@ -582,6 +584,8 @@ namespace Lime
 			if (BurstDistance == 0f) {
 				previousTransform = transform;
 			} else if (burstCount > 0) {
+				// In BurstPerDistance mode we should calculate cumulativeDistance and previousTransform very accurately
+				// We use availableLerpAmount to calculate REAL previousTransform where next particle should be spawned.
 				cumulativeDistance -= burstCount * BurstDistance;
 				previousTransform = Matrix32.Lerp(availableLerpAmount, previousTransform, transform);
 			}
