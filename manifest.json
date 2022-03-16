@@ -4098,7 +4098,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.LineCap.html",
-          "hash": "d4duoMGjT2QUM+aegLncWW+yzRPZ0KBWqJptj+sOKtc="
+          "hash": "ZAgSnwXU2Nypkk54PJfqu/vrF0uS+KKLwuiDVVBIXow="
         }
       },
       "is_incremental": false,
@@ -4338,7 +4338,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Matrix32.html",
-          "hash": "qsc5IiI2aY2IvJpUsCmWRIRt/p+2YDE5qz0ePBABDPo="
+          "hash": "FDu8iTUXpP+4So0xf+w25DKsouIFNJQKrziyNGHg1oA="
         }
       },
       "is_incremental": false,
@@ -4819,6 +4819,114 @@
         ".html": {
           "relative_path": "api/Lime.MultiCaretPosition.html",
           "hash": "pgZ9QlcMM8sfoEtPhj/yGqFkZi80tEmR6CjxYfqUXRo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.Context.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.Context.html",
+          "hash": "CbvgvIgtonZANJzHDHb3v+i7ImirCTm4emAHcAFRhAM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.FillParams.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.FillParams.html",
+          "hash": "4l2vJG2+otktqFzJ3WcKmbhQBzceCb+7bTyULqVfibY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.ImageFlags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.ImageFlags.html",
+          "hash": "artSaPIJ7wz8mpePD5d6j680jIwC2PeY2txU9NbQEaQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.Material.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.Material.html",
+          "hash": "59wIvU2uF1OfHiLOZpDkXitJ5v52jtk33COg7+S1cRs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.Paint.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.Paint.html",
+          "hash": "ENfq+fbDvtJD1y3U9lzslCchnhhWeyDCO9PPPmmUynw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.ShaderProgram.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.ShaderProgram.html",
+          "hash": "pIhexkL2imFlkNufKkZJMjU+GwF0kPw73i+CD+79EpE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.Solidity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.Solidity.html",
+          "hash": "f0OFWFPJDkH/TS8SeNAvDIqi99Pshya3CHPUcFAxLn4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.Winding.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.Winding.html",
+          "hash": "hRNYLUJx9dRzK9Ih4u5d7v1RdgX0cNHOObTdAm8o/Dg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.NanoVG.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.NanoVG.html",
+          "hash": "UYwaRJno4WMqe4k9XtO6QYf+FFRuVGIjrFk2jCdRcWQ="
         }
       },
       "is_incremental": false,
@@ -5742,19 +5850,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.RenderBatch-1.html",
-          "hash": "abgQGDzQv1xVHED5Dg+DUllZrByiOYwAdUQDj7bXrfA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Lime.RenderBatchLimits.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Lime.RenderBatchLimits.html",
-          "hash": "Ez0zUXwo887Lid4TjR9fR+ZNBL/lj8oio2dXsTpYex0="
+          "hash": "3LYrh8XkqNFIFs5L3JK3oc8RKAzYviupPbbQL+2anoA="
         }
       },
       "is_incremental": false,
@@ -6054,7 +6150,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Renderer.html",
-          "hash": "M4GaVk0T3mRniZWfHDtdecL5VrC4baWl+f6f9GUuSEY="
+          "hash": "bvniIN0jmHVOKwhYZiQaOtGqh/W6zH9C1uddNe+CnOI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.RendererNvg.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.RendererNvg.html",
+          "hash": "U18k6WIt3WYt7TFB8SNkfn79uPJXsnPhnj3CAy++oHs="
         }
       },
       "is_incremental": false,
@@ -6354,7 +6462,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ShaderParams.html",
-          "hash": "rbOwvppvgNg+WJJtf+tt0E4O6hoosp7fHpbOX1W3k3o="
+          "hash": "0BcK88mQlElAxj0Bxnw9J37Mzv78pF3f6Mme1IbnRaA="
         }
       },
       "is_incremental": false,
@@ -6390,7 +6498,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ShaderProgram.html",
-          "hash": "Xz1CyvIv1EPWo0BshdP9S4g1c+nB+4E5P2y2ctnE1Qw="
+          "hash": "eTMdnKVa3Bp+Ivo05K+0WS4zRah5Ftqe9mpDPzStLcc="
         }
       },
       "is_incremental": false,
@@ -6714,7 +6822,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Slider.html",
-          "hash": "YeCWbCrSf7rI1VkTcZ9fMJT2Dk0CU41K9rh2kYsivg4="
+          "hash": "eEh5O/w5CnNfakHVXQo0azIJydhcbzKDNzJqnkuO+DY="
         }
       },
       "is_incremental": false,
@@ -7926,7 +8034,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Theme.KeyboardFocusBorderPresenter.html",
-          "hash": "HqUn3Tu5BXuP9VUCvVEnQJl2hzkbG/4V6iRQ1dHisK8="
+          "hash": "E3zHW1xli0KXZNfrOxxrHZj0nLjTYwfiwqioplXh1ds="
         }
       },
       "is_incremental": false,
@@ -7938,7 +8046,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Theme.Metrics.html",
-          "hash": "q2nFzIkeWMAUbgqFwVMuHuTFf1FfVkJ/4xUC2hd566g="
+          "hash": "oHoMeQ8RcCwKG756b5hMibtL/9SougU4oFT1PMfyTJE="
         }
       },
       "is_incremental": false,
@@ -8166,7 +8274,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThemedSlider.html",
-          "hash": "zm7V3Mcyrh254ERED/dlJj45KtLt40uStguECPQ29jA="
+          "hash": "Wg/2u226C5WBBX6qs/kVYhNsvPtL/18j51KF3boY/Gc="
         }
       },
       "is_incremental": false,
@@ -9126,7 +9234,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.WidgetBoundsPresenter.html",
-          "hash": "3fziN2cA5j8hsQ1iKgLvvwEAUdESnOTMeQCnMI1Ht8Q="
+          "hash": "sxXpRnEZoIdAvN9jsvsNSB6szDsWmONlzaOgARanVp4="
         }
       },
       "is_incremental": false,
@@ -9366,7 +9474,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "lF3KS2YKvwI9VHxs+P62iIOpu5oDdlarh1oInC393/Y="
+          "hash": "/tYa7BDMJ/7j6f9v9ELoiFcwJyZBMpfFGypfFFsmL/Y="
         }
       },
       "is_incremental": false,
@@ -9414,7 +9522,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "uk4mSNVtuv1UV+mv4MkvxDwsf2Nt5x5O8inm70HyKeE="
+          "hash": "fDF6LIfASeePId5/n1F0g6hZWDw1ufEd2/lqUeKupWo="
         }
       },
       "is_incremental": false,
@@ -9715,7 +9823,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/citrus_project/windows_native_dependencies/windows_dependency_list.html",
-          "hash": "M6U7qFtYLt/iBY5O3jyrjHkpO5s67AGJtivcd33z6Ws="
+          "hash": "szhj2HjfjCaW1aIJbKEBSsWxUhXkyQs82RaDSLa55UA="
         }
       },
       "is_incremental": false,
@@ -11983,7 +12091,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 783,
+          "total_file_count": 792,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

@@ -34044,12 +34044,24 @@ references:
   commentId: T:Lime.LineCap
   fullName: Lime.LineCap
   nameWithType: LineCap
+- uid: Lime.LineCap.Bevel
+  name: Bevel
+  href: api/Lime.LineCap.html#Lime_LineCap_Bevel
+  commentId: F:Lime.LineCap.Bevel
+  fullName: Lime.LineCap.Bevel
+  nameWithType: LineCap.Bevel
 - uid: Lime.LineCap.Butt
   name: Butt
   href: api/Lime.LineCap.html#Lime_LineCap_Butt
   commentId: F:Lime.LineCap.Butt
   fullName: Lime.LineCap.Butt
   nameWithType: LineCap.Butt
+- uid: Lime.LineCap.Miter
+  name: Miter
+  href: api/Lime.LineCap.html#Lime_LineCap_Miter
+  commentId: F:Lime.LineCap.Miter
+  fullName: Lime.LineCap.Miter
+  nameWithType: LineCap.Miter
 - uid: Lime.LineCap.Round
   name: Round
   href: api/Lime.LineCap.html#Lime_LineCap_Round
@@ -37148,6 +37160,32 @@ references:
   isSpec: "True"
   fullName: Lime.Matrix32.Scaling
   nameWithType: Matrix32.Scaling
+- uid: Lime.Matrix32.SkewX(System.Single)
+  name: SkewX(Single)
+  href: api/Lime.Matrix32.html#Lime_Matrix32_SkewX_System_Single_
+  commentId: M:Lime.Matrix32.SkewX(System.Single)
+  fullName: Lime.Matrix32.SkewX(System.Single)
+  nameWithType: Matrix32.SkewX(Single)
+- uid: Lime.Matrix32.SkewX*
+  name: SkewX
+  href: api/Lime.Matrix32.html#Lime_Matrix32_SkewX_
+  commentId: Overload:Lime.Matrix32.SkewX
+  isSpec: "True"
+  fullName: Lime.Matrix32.SkewX
+  nameWithType: Matrix32.SkewX
+- uid: Lime.Matrix32.SkewY(System.Single)
+  name: SkewY(Single)
+  href: api/Lime.Matrix32.html#Lime_Matrix32_SkewY_System_Single_
+  commentId: M:Lime.Matrix32.SkewY(System.Single)
+  fullName: Lime.Matrix32.SkewY(System.Single)
+  nameWithType: Matrix32.SkewY(Single)
+- uid: Lime.Matrix32.SkewY*
+  name: SkewY
+  href: api/Lime.Matrix32.html#Lime_Matrix32_SkewY_
+  commentId: Overload:Lime.Matrix32.SkewY
+  isSpec: "True"
+  fullName: Lime.Matrix32.SkewY
+  nameWithType: Matrix32.SkewY
 - uid: Lime.Matrix32.T
   name: T
   href: api/Lime.Matrix32.html#Lime_Matrix32_T
@@ -41361,6 +41399,1112 @@ references:
   isSpec: "True"
   fullName: Lime.MultiCaretPosition.WorldPos
   nameWithType: MultiCaretPosition.WorldPos
+- uid: Lime.NanoVG
+  name: Lime.NanoVG
+  href: api/Lime.NanoVG.html
+  commentId: N:Lime.NanoVG
+  fullName: Lime.NanoVG
+  nameWithType: Lime.NanoVG
+- uid: Lime.NanoVG.Context
+  name: Context
+  href: api/Lime.NanoVG.Context.html
+  commentId: T:Lime.NanoVG.Context
+  fullName: Lime.NanoVG.Context
+  nameWithType: Context
+- uid: Lime.NanoVG.Context.#ctor(System.Boolean)
+  name: Context(Boolean)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context__ctor_System_Boolean_
+  commentId: M:Lime.NanoVG.Context.#ctor(System.Boolean)
+  fullName: Lime.NanoVG.Context.Context(System.Boolean)
+  nameWithType: Context.Context(Boolean)
+- uid: Lime.NanoVG.Context.#ctor*
+  name: Context
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context__ctor_
+  commentId: Overload:Lime.NanoVG.Context.#ctor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Context
+  nameWithType: Context.Context
+- uid: Lime.NanoVG.Context.Arc(System.Single,System.Single,System.Single,System.Single,System.Single,Lime.NanoVG.Winding)
+  name: Arc(Single, Single, Single, Single, Single, Winding)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Arc_System_Single_System_Single_System_Single_System_Single_System_Single_Lime_NanoVG_Winding_
+  commentId: M:Lime.NanoVG.Context.Arc(System.Single,System.Single,System.Single,System.Single,System.Single,Lime.NanoVG.Winding)
+  fullName: Lime.NanoVG.Context.Arc(System.Single, System.Single, System.Single, System.Single, System.Single, Lime.NanoVG.Winding)
+  nameWithType: Context.Arc(Single, Single, Single, Single, Single, Winding)
+- uid: Lime.NanoVG.Context.Arc*
+  name: Arc
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Arc_
+  commentId: Overload:Lime.NanoVG.Context.Arc
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Arc
+  nameWithType: Context.Arc
+- uid: Lime.NanoVG.Context.ArcTo(System.Single,System.Single,System.Single,System.Single,System.Single)
+  name: ArcTo(Single, Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ArcTo_System_Single_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.ArcTo(System.Single,System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.ArcTo(System.Single, System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.ArcTo(Single, Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.ArcTo*
+  name: ArcTo
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ArcTo_
+  commentId: Overload:Lime.NanoVG.Context.ArcTo
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.ArcTo
+  nameWithType: Context.ArcTo
+- uid: Lime.NanoVG.Context.BeginPath
+  name: BeginPath()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_BeginPath
+  commentId: M:Lime.NanoVG.Context.BeginPath
+  fullName: Lime.NanoVG.Context.BeginPath()
+  nameWithType: Context.BeginPath()
+- uid: Lime.NanoVG.Context.BeginPath*
+  name: BeginPath
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_BeginPath_
+  commentId: Overload:Lime.NanoVG.Context.BeginPath
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.BeginPath
+  nameWithType: Context.BeginPath
+- uid: Lime.NanoVG.Context.BezierTo(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)
+  name: BezierTo(Single, Single, Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_BezierTo_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.BezierTo(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.BezierTo(System.Single, System.Single, System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.BezierTo(Single, Single, Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.BezierTo*
+  name: BezierTo
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_BezierTo_
+  commentId: Overload:Lime.NanoVG.Context.BezierTo
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.BezierTo
+  nameWithType: Context.BezierTo
+- uid: Lime.NanoVG.Context.Circle(Lime.Vector2,System.Single)
+  name: Circle(Vector2, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Circle_Lime_Vector2_System_Single_
+  commentId: M:Lime.NanoVG.Context.Circle(Lime.Vector2,System.Single)
+  fullName: Lime.NanoVG.Context.Circle(Lime.Vector2, System.Single)
+  nameWithType: Context.Circle(Vector2, Single)
+- uid: Lime.NanoVG.Context.Circle(System.Single,System.Single,System.Single)
+  name: Circle(Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Circle_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Circle(System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Circle(System.Single, System.Single, System.Single)
+  nameWithType: Context.Circle(Single, Single, Single)
+- uid: Lime.NanoVG.Context.Circle*
+  name: Circle
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Circle_
+  commentId: Overload:Lime.NanoVG.Context.Circle
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Circle
+  nameWithType: Context.Circle
+- uid: Lime.NanoVG.Context.ClosePath
+  name: ClosePath()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ClosePath
+  commentId: M:Lime.NanoVG.Context.ClosePath
+  fullName: Lime.NanoVG.Context.ClosePath()
+  nameWithType: Context.ClosePath()
+- uid: Lime.NanoVG.Context.ClosePath*
+  name: ClosePath
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ClosePath_
+  commentId: Overload:Lime.NanoVG.Context.ClosePath
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.ClosePath
+  nameWithType: Context.ClosePath
+- uid: Lime.NanoVG.Context.CreateImageRGBA(System.Int32,System.Int32,Lime.NanoVG.ImageFlags,System.Byte[])
+  name: CreateImageRGBA(Int32, Int32, ImageFlags, Byte[])
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_CreateImageRGBA_System_Int32_System_Int32_Lime_NanoVG_ImageFlags_System_Byte___
+  commentId: M:Lime.NanoVG.Context.CreateImageRGBA(System.Int32,System.Int32,Lime.NanoVG.ImageFlags,System.Byte[])
+  name.vb: CreateImageRGBA(Int32, Int32, ImageFlags, Byte())
+  fullName: Lime.NanoVG.Context.CreateImageRGBA(System.Int32, System.Int32, Lime.NanoVG.ImageFlags, System.Byte[])
+  fullName.vb: Lime.NanoVG.Context.CreateImageRGBA(System.Int32, System.Int32, Lime.NanoVG.ImageFlags, System.Byte())
+  nameWithType: Context.CreateImageRGBA(Int32, Int32, ImageFlags, Byte[])
+  nameWithType.vb: Context.CreateImageRGBA(Int32, Int32, ImageFlags, Byte())
+- uid: Lime.NanoVG.Context.CreateImageRGBA*
+  name: CreateImageRGBA
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_CreateImageRGBA_
+  commentId: Overload:Lime.NanoVG.Context.CreateImageRGBA
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.CreateImageRGBA
+  nameWithType: Context.CreateImageRGBA
+- uid: Lime.NanoVG.Context.CurrentTransform(Lime.Matrix32)
+  name: CurrentTransform(Matrix32)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_CurrentTransform_Lime_Matrix32_
+  commentId: M:Lime.NanoVG.Context.CurrentTransform(Lime.Matrix32)
+  fullName: Lime.NanoVG.Context.CurrentTransform(Lime.Matrix32)
+  nameWithType: Context.CurrentTransform(Matrix32)
+- uid: Lime.NanoVG.Context.CurrentTransform*
+  name: CurrentTransform
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_CurrentTransform_
+  commentId: Overload:Lime.NanoVG.Context.CurrentTransform
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.CurrentTransform
+  nameWithType: Context.CurrentTransform
+- uid: Lime.NanoVG.Context.DeleteImage(System.Int32)
+  name: DeleteImage(Int32)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_DeleteImage_System_Int32_
+  commentId: M:Lime.NanoVG.Context.DeleteImage(System.Int32)
+  fullName: Lime.NanoVG.Context.DeleteImage(System.Int32)
+  nameWithType: Context.DeleteImage(Int32)
+- uid: Lime.NanoVG.Context.DeleteImage*
+  name: DeleteImage
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_DeleteImage_
+  commentId: Overload:Lime.NanoVG.Context.DeleteImage
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.DeleteImage
+  nameWithType: Context.DeleteImage
+- uid: Lime.NanoVG.Context.Dispose
+  name: Dispose()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Dispose
+  commentId: M:Lime.NanoVG.Context.Dispose
+  fullName: Lime.NanoVG.Context.Dispose()
+  nameWithType: Context.Dispose()
+- uid: Lime.NanoVG.Context.Dispose*
+  name: Dispose
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Dispose_
+  commentId: Overload:Lime.NanoVG.Context.Dispose
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Dispose
+  nameWithType: Context.Dispose
+- uid: Lime.NanoVG.Context.Ellipse(Lime.Vector2,System.Single,System.Single)
+  name: Ellipse(Vector2, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Ellipse_Lime_Vector2_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Ellipse(Lime.Vector2,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Ellipse(Lime.Vector2, System.Single, System.Single)
+  nameWithType: Context.Ellipse(Vector2, Single, Single)
+- uid: Lime.NanoVG.Context.Ellipse(System.Single,System.Single,System.Single,System.Single)
+  name: Ellipse(Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Ellipse_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Ellipse(System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Ellipse(System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.Ellipse(Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.Ellipse*
+  name: Ellipse
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Ellipse_
+  commentId: Overload:Lime.NanoVG.Context.Ellipse
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Ellipse
+  nameWithType: Context.Ellipse
+- uid: Lime.NanoVG.Context.Fill
+  name: Fill()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Fill
+  commentId: M:Lime.NanoVG.Context.Fill
+  fullName: Lime.NanoVG.Context.Fill()
+  nameWithType: Context.Fill()
+- uid: Lime.NanoVG.Context.Fill*
+  name: Fill
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Fill_
+  commentId: Overload:Lime.NanoVG.Context.Fill
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Fill
+  nameWithType: Context.Fill
+- uid: Lime.NanoVG.Context.FillColor(Lime.Color4)
+  name: FillColor(Color4)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_FillColor_Lime_Color4_
+  commentId: M:Lime.NanoVG.Context.FillColor(Lime.Color4)
+  fullName: Lime.NanoVG.Context.FillColor(Lime.Color4)
+  nameWithType: Context.FillColor(Color4)
+- uid: Lime.NanoVG.Context.FillColor*
+  name: FillColor
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_FillColor_
+  commentId: Overload:Lime.NanoVG.Context.FillColor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.FillColor
+  nameWithType: Context.FillColor
+- uid: Lime.NanoVG.Context.FillPaint(Lime.NanoVG.Paint)
+  name: FillPaint(Paint)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_FillPaint_Lime_NanoVG_Paint_
+  commentId: M:Lime.NanoVG.Context.FillPaint(Lime.NanoVG.Paint)
+  fullName: Lime.NanoVG.Context.FillPaint(Lime.NanoVG.Paint)
+  nameWithType: Context.FillPaint(Paint)
+- uid: Lime.NanoVG.Context.FillPaint*
+  name: FillPaint
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_FillPaint_
+  commentId: Overload:Lime.NanoVG.Context.FillPaint
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.FillPaint
+  nameWithType: Context.FillPaint
+- uid: Lime.NanoVG.Context.GlobalAlpha(System.Single)
+  name: GlobalAlpha(Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_GlobalAlpha_System_Single_
+  commentId: M:Lime.NanoVG.Context.GlobalAlpha(System.Single)
+  fullName: Lime.NanoVG.Context.GlobalAlpha(System.Single)
+  nameWithType: Context.GlobalAlpha(Single)
+- uid: Lime.NanoVG.Context.GlobalAlpha*
+  name: GlobalAlpha
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_GlobalAlpha_
+  commentId: Overload:Lime.NanoVG.Context.GlobalAlpha
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.GlobalAlpha
+  nameWithType: Context.GlobalAlpha
+- uid: Lime.NanoVG.Context.ImageSize(System.Int32,System.Int32@,System.Int32@)
+  name: ImageSize(Int32, out Int32, out Int32)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ImageSize_System_Int32_System_Int32__System_Int32__
+  commentId: M:Lime.NanoVG.Context.ImageSize(System.Int32,System.Int32@,System.Int32@)
+  name.vb: ImageSize(Int32, ByRef Int32, ByRef Int32)
+  fullName: Lime.NanoVG.Context.ImageSize(System.Int32, out System.Int32, out System.Int32)
+  fullName.vb: Lime.NanoVG.Context.ImageSize(System.Int32, ByRef System.Int32, ByRef System.Int32)
+  nameWithType: Context.ImageSize(Int32, out Int32, out Int32)
+  nameWithType.vb: Context.ImageSize(Int32, ByRef Int32, ByRef Int32)
+- uid: Lime.NanoVG.Context.ImageSize*
+  name: ImageSize
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ImageSize_
+  commentId: Overload:Lime.NanoVG.Context.ImageSize
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.ImageSize
+  nameWithType: Context.ImageSize
+- uid: Lime.NanoVG.Context.Instance
+  name: Instance
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Instance
+  commentId: F:Lime.NanoVG.Context.Instance
+  fullName: Lime.NanoVG.Context.Instance
+  nameWithType: Context.Instance
+- uid: Lime.NanoVG.Context.IntersectScissor(Lime.Vector2,Lime.Vector2)
+  name: IntersectScissor(Vector2, Vector2)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_IntersectScissor_Lime_Vector2_Lime_Vector2_
+  commentId: M:Lime.NanoVG.Context.IntersectScissor(Lime.Vector2,Lime.Vector2)
+  fullName: Lime.NanoVG.Context.IntersectScissor(Lime.Vector2, Lime.Vector2)
+  nameWithType: Context.IntersectScissor(Vector2, Vector2)
+- uid: Lime.NanoVG.Context.IntersectScissor(System.Single,System.Single,System.Single,System.Single)
+  name: IntersectScissor(Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_IntersectScissor_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.IntersectScissor(System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.IntersectScissor(System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.IntersectScissor(Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.IntersectScissor*
+  name: IntersectScissor
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_IntersectScissor_
+  commentId: Overload:Lime.NanoVG.Context.IntersectScissor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.IntersectScissor
+  nameWithType: Context.IntersectScissor
+- uid: Lime.NanoVG.Context.Line(Lime.Vector2,Lime.Vector2)
+  name: Line(Vector2, Vector2)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Line_Lime_Vector2_Lime_Vector2_
+  commentId: M:Lime.NanoVG.Context.Line(Lime.Vector2,Lime.Vector2)
+  fullName: Lime.NanoVG.Context.Line(Lime.Vector2, Lime.Vector2)
+  nameWithType: Context.Line(Vector2, Vector2)
+- uid: Lime.NanoVG.Context.Line(System.Single,System.Single,System.Single,System.Single)
+  name: Line(Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Line_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Line(System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Line(System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.Line(Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.Line*
+  name: Line
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Line_
+  commentId: Overload:Lime.NanoVG.Context.Line
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Line
+  nameWithType: Context.Line
+- uid: Lime.NanoVG.Context.LineCap(Lime.LineCap)
+  name: LineCap(LineCap)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineCap_Lime_LineCap_
+  commentId: M:Lime.NanoVG.Context.LineCap(Lime.LineCap)
+  fullName: Lime.NanoVG.Context.LineCap(Lime.LineCap)
+  nameWithType: Context.LineCap(LineCap)
+- uid: Lime.NanoVG.Context.LineCap*
+  name: LineCap
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineCap_
+  commentId: Overload:Lime.NanoVG.Context.LineCap
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.LineCap
+  nameWithType: Context.LineCap
+- uid: Lime.NanoVG.Context.LineJoin(Lime.LineCap)
+  name: LineJoin(LineCap)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineJoin_Lime_LineCap_
+  commentId: M:Lime.NanoVG.Context.LineJoin(Lime.LineCap)
+  fullName: Lime.NanoVG.Context.LineJoin(Lime.LineCap)
+  nameWithType: Context.LineJoin(LineCap)
+- uid: Lime.NanoVG.Context.LineJoin*
+  name: LineJoin
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineJoin_
+  commentId: Overload:Lime.NanoVG.Context.LineJoin
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.LineJoin
+  nameWithType: Context.LineJoin
+- uid: Lime.NanoVG.Context.LineTo(Lime.Vector2)
+  name: LineTo(Vector2)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineTo_Lime_Vector2_
+  commentId: M:Lime.NanoVG.Context.LineTo(Lime.Vector2)
+  fullName: Lime.NanoVG.Context.LineTo(Lime.Vector2)
+  nameWithType: Context.LineTo(Vector2)
+- uid: Lime.NanoVG.Context.LineTo(System.Single,System.Single)
+  name: LineTo(Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineTo_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.LineTo(System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.LineTo(System.Single, System.Single)
+  nameWithType: Context.LineTo(Single, Single)
+- uid: Lime.NanoVG.Context.LineTo*
+  name: LineTo
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_LineTo_
+  commentId: Overload:Lime.NanoVG.Context.LineTo
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.LineTo
+  nameWithType: Context.LineTo
+- uid: Lime.NanoVG.Context.MiterLimit(System.Single)
+  name: MiterLimit(Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_MiterLimit_System_Single_
+  commentId: M:Lime.NanoVG.Context.MiterLimit(System.Single)
+  fullName: Lime.NanoVG.Context.MiterLimit(System.Single)
+  nameWithType: Context.MiterLimit(Single)
+- uid: Lime.NanoVG.Context.MiterLimit*
+  name: MiterLimit
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_MiterLimit_
+  commentId: Overload:Lime.NanoVG.Context.MiterLimit
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.MiterLimit
+  nameWithType: Context.MiterLimit
+- uid: Lime.NanoVG.Context.MoveTo(Lime.Vector2)
+  name: MoveTo(Vector2)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_MoveTo_Lime_Vector2_
+  commentId: M:Lime.NanoVG.Context.MoveTo(Lime.Vector2)
+  fullName: Lime.NanoVG.Context.MoveTo(Lime.Vector2)
+  nameWithType: Context.MoveTo(Vector2)
+- uid: Lime.NanoVG.Context.MoveTo(System.Single,System.Single)
+  name: MoveTo(Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_MoveTo_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.MoveTo(System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.MoveTo(System.Single, System.Single)
+  nameWithType: Context.MoveTo(Single, Single)
+- uid: Lime.NanoVG.Context.MoveTo*
+  name: MoveTo
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_MoveTo_
+  commentId: Overload:Lime.NanoVG.Context.MoveTo
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.MoveTo
+  nameWithType: Context.MoveTo
+- uid: Lime.NanoVG.Context.PathWinding(Lime.NanoVG.Solidity)
+  name: PathWinding(Solidity)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_PathWinding_Lime_NanoVG_Solidity_
+  commentId: M:Lime.NanoVG.Context.PathWinding(Lime.NanoVG.Solidity)
+  fullName: Lime.NanoVG.Context.PathWinding(Lime.NanoVG.Solidity)
+  nameWithType: Context.PathWinding(Solidity)
+- uid: Lime.NanoVG.Context.PathWinding*
+  name: PathWinding
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_PathWinding_
+  commentId: Overload:Lime.NanoVG.Context.PathWinding
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.PathWinding
+  nameWithType: Context.PathWinding
+- uid: Lime.NanoVG.Context.QuadTo(System.Single,System.Single,System.Single,System.Single)
+  name: QuadTo(Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_QuadTo_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.QuadTo(System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.QuadTo(System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.QuadTo(Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.QuadTo*
+  name: QuadTo
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_QuadTo_
+  commentId: Overload:Lime.NanoVG.Context.QuadTo
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.QuadTo
+  nameWithType: Context.QuadTo
+- uid: Lime.NanoVG.Context.Rect(Lime.Vector2,Lime.Vector2)
+  name: Rect(Vector2, Vector2)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Rect_Lime_Vector2_Lime_Vector2_
+  commentId: M:Lime.NanoVG.Context.Rect(Lime.Vector2,Lime.Vector2)
+  fullName: Lime.NanoVG.Context.Rect(Lime.Vector2, Lime.Vector2)
+  nameWithType: Context.Rect(Vector2, Vector2)
+- uid: Lime.NanoVG.Context.Rect(System.Single,System.Single,System.Single,System.Single)
+  name: Rect(Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Rect_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Rect(System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Rect(System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.Rect(Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.Rect*
+  name: Rect
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Rect_
+  commentId: Overload:Lime.NanoVG.Context.Rect
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Rect
+  nameWithType: Context.Rect
+- uid: Lime.NanoVG.Context.Reset
+  name: Reset()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Reset
+  commentId: M:Lime.NanoVG.Context.Reset
+  fullName: Lime.NanoVG.Context.Reset()
+  nameWithType: Context.Reset()
+- uid: Lime.NanoVG.Context.Reset*
+  name: Reset
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Reset_
+  commentId: Overload:Lime.NanoVG.Context.Reset
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Reset
+  nameWithType: Context.Reset
+- uid: Lime.NanoVG.Context.ResetScissor
+  name: ResetScissor()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ResetScissor
+  commentId: M:Lime.NanoVG.Context.ResetScissor
+  fullName: Lime.NanoVG.Context.ResetScissor()
+  nameWithType: Context.ResetScissor()
+- uid: Lime.NanoVG.Context.ResetScissor*
+  name: ResetScissor
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ResetScissor_
+  commentId: Overload:Lime.NanoVG.Context.ResetScissor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.ResetScissor
+  nameWithType: Context.ResetScissor
+- uid: Lime.NanoVG.Context.ResetTransform
+  name: ResetTransform()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ResetTransform
+  commentId: M:Lime.NanoVG.Context.ResetTransform
+  fullName: Lime.NanoVG.Context.ResetTransform()
+  nameWithType: Context.ResetTransform()
+- uid: Lime.NanoVG.Context.ResetTransform*
+  name: ResetTransform
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ResetTransform_
+  commentId: Overload:Lime.NanoVG.Context.ResetTransform
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.ResetTransform
+  nameWithType: Context.ResetTransform
+- uid: Lime.NanoVG.Context.Restore
+  name: Restore()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Restore
+  commentId: M:Lime.NanoVG.Context.Restore
+  fullName: Lime.NanoVG.Context.Restore()
+  nameWithType: Context.Restore()
+- uid: Lime.NanoVG.Context.Restore*
+  name: Restore
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Restore_
+  commentId: Overload:Lime.NanoVG.Context.Restore
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Restore
+  nameWithType: Context.Restore
+- uid: Lime.NanoVG.Context.Rotate(System.Single)
+  name: Rotate(Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Rotate_System_Single_
+  commentId: M:Lime.NanoVG.Context.Rotate(System.Single)
+  fullName: Lime.NanoVG.Context.Rotate(System.Single)
+  nameWithType: Context.Rotate(Single)
+- uid: Lime.NanoVG.Context.Rotate*
+  name: Rotate
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Rotate_
+  commentId: Overload:Lime.NanoVG.Context.Rotate
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Rotate
+  nameWithType: Context.Rotate
+- uid: Lime.NanoVG.Context.RoundedRect(Lime.Vector2,Lime.Vector2,System.Single)
+  name: RoundedRect(Vector2, Vector2, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_RoundedRect_Lime_Vector2_Lime_Vector2_System_Single_
+  commentId: M:Lime.NanoVG.Context.RoundedRect(Lime.Vector2,Lime.Vector2,System.Single)
+  fullName: Lime.NanoVG.Context.RoundedRect(Lime.Vector2, Lime.Vector2, System.Single)
+  nameWithType: Context.RoundedRect(Vector2, Vector2, Single)
+- uid: Lime.NanoVG.Context.RoundedRect(System.Single,System.Single,System.Single,System.Single,System.Single)
+  name: RoundedRect(Single, Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_RoundedRect_System_Single_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.RoundedRect(System.Single,System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.RoundedRect(System.Single, System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.RoundedRect(Single, Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.RoundedRect*
+  name: RoundedRect
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_RoundedRect_
+  commentId: Overload:Lime.NanoVG.Context.RoundedRect
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.RoundedRect
+  nameWithType: Context.RoundedRect
+- uid: Lime.NanoVG.Context.RoundedRectVarying(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)
+  name: RoundedRectVarying(Single, Single, Single, Single, Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_RoundedRectVarying_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.RoundedRectVarying(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.RoundedRectVarying(System.Single, System.Single, System.Single, System.Single, System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.RoundedRectVarying(Single, Single, Single, Single, Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.RoundedRectVarying*
+  name: RoundedRectVarying
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_RoundedRectVarying_
+  commentId: Overload:Lime.NanoVG.Context.RoundedRectVarying
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.RoundedRectVarying
+  nameWithType: Context.RoundedRectVarying
+- uid: Lime.NanoVG.Context.Save
+  name: Save()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Save
+  commentId: M:Lime.NanoVG.Context.Save
+  fullName: Lime.NanoVG.Context.Save()
+  nameWithType: Context.Save()
+- uid: Lime.NanoVG.Context.Save*
+  name: Save
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Save_
+  commentId: Overload:Lime.NanoVG.Context.Save
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Save
+  nameWithType: Context.Save
+- uid: Lime.NanoVG.Context.Scale(System.Single,System.Single)
+  name: Scale(Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Scale_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Scale(System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Scale(System.Single, System.Single)
+  nameWithType: Context.Scale(Single, Single)
+- uid: Lime.NanoVG.Context.Scale*
+  name: Scale
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Scale_
+  commentId: Overload:Lime.NanoVG.Context.Scale
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Scale
+  nameWithType: Context.Scale
+- uid: Lime.NanoVG.Context.Scissor(Lime.Vector2,Lime.Vector2)
+  name: Scissor(Vector2, Vector2)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Scissor_Lime_Vector2_Lime_Vector2_
+  commentId: M:Lime.NanoVG.Context.Scissor(Lime.Vector2,Lime.Vector2)
+  fullName: Lime.NanoVG.Context.Scissor(Lime.Vector2, Lime.Vector2)
+  nameWithType: Context.Scissor(Vector2, Vector2)
+- uid: Lime.NanoVG.Context.Scissor(System.Single,System.Single,System.Single,System.Single)
+  name: Scissor(Single, Single, Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Scissor_System_Single_System_Single_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Scissor(System.Single,System.Single,System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Scissor(System.Single, System.Single, System.Single, System.Single)
+  nameWithType: Context.Scissor(Single, Single, Single, Single)
+- uid: Lime.NanoVG.Context.Scissor*
+  name: Scissor
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Scissor_
+  commentId: Overload:Lime.NanoVG.Context.Scissor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Scissor
+  nameWithType: Context.Scissor
+- uid: Lime.NanoVG.Context.ShapeAntiAlias(System.Int32)
+  name: ShapeAntiAlias(Int32)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ShapeAntiAlias_System_Int32_
+  commentId: M:Lime.NanoVG.Context.ShapeAntiAlias(System.Int32)
+  fullName: Lime.NanoVG.Context.ShapeAntiAlias(System.Int32)
+  nameWithType: Context.ShapeAntiAlias(Int32)
+- uid: Lime.NanoVG.Context.ShapeAntiAlias*
+  name: ShapeAntiAlias
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_ShapeAntiAlias_
+  commentId: Overload:Lime.NanoVG.Context.ShapeAntiAlias
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.ShapeAntiAlias
+  nameWithType: Context.ShapeAntiAlias
+- uid: Lime.NanoVG.Context.SkewX(System.Single)
+  name: SkewX(Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_SkewX_System_Single_
+  commentId: M:Lime.NanoVG.Context.SkewX(System.Single)
+  fullName: Lime.NanoVG.Context.SkewX(System.Single)
+  nameWithType: Context.SkewX(Single)
+- uid: Lime.NanoVG.Context.SkewX*
+  name: SkewX
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_SkewX_
+  commentId: Overload:Lime.NanoVG.Context.SkewX
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.SkewX
+  nameWithType: Context.SkewX
+- uid: Lime.NanoVG.Context.SkewY(System.Single)
+  name: SkewY(Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_SkewY_System_Single_
+  commentId: M:Lime.NanoVG.Context.SkewY(System.Single)
+  fullName: Lime.NanoVG.Context.SkewY(System.Single)
+  nameWithType: Context.SkewY(Single)
+- uid: Lime.NanoVG.Context.SkewY*
+  name: SkewY
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_SkewY_
+  commentId: Overload:Lime.NanoVG.Context.SkewY
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.SkewY
+  nameWithType: Context.SkewY
+- uid: Lime.NanoVG.Context.Stroke
+  name: Stroke()
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Stroke
+  commentId: M:Lime.NanoVG.Context.Stroke
+  fullName: Lime.NanoVG.Context.Stroke()
+  nameWithType: Context.Stroke()
+- uid: Lime.NanoVG.Context.Stroke*
+  name: Stroke
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Stroke_
+  commentId: Overload:Lime.NanoVG.Context.Stroke
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Stroke
+  nameWithType: Context.Stroke
+- uid: Lime.NanoVG.Context.StrokeColor(Lime.Color4)
+  name: StrokeColor(Color4)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_StrokeColor_Lime_Color4_
+  commentId: M:Lime.NanoVG.Context.StrokeColor(Lime.Color4)
+  fullName: Lime.NanoVG.Context.StrokeColor(Lime.Color4)
+  nameWithType: Context.StrokeColor(Color4)
+- uid: Lime.NanoVG.Context.StrokeColor*
+  name: StrokeColor
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_StrokeColor_
+  commentId: Overload:Lime.NanoVG.Context.StrokeColor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.StrokeColor
+  nameWithType: Context.StrokeColor
+- uid: Lime.NanoVG.Context.StrokePaint(Lime.NanoVG.Paint)
+  name: StrokePaint(Paint)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_StrokePaint_Lime_NanoVG_Paint_
+  commentId: M:Lime.NanoVG.Context.StrokePaint(Lime.NanoVG.Paint)
+  fullName: Lime.NanoVG.Context.StrokePaint(Lime.NanoVG.Paint)
+  nameWithType: Context.StrokePaint(Paint)
+- uid: Lime.NanoVG.Context.StrokePaint*
+  name: StrokePaint
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_StrokePaint_
+  commentId: Overload:Lime.NanoVG.Context.StrokePaint
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.StrokePaint
+  nameWithType: Context.StrokePaint
+- uid: Lime.NanoVG.Context.StrokeWidth(System.Single)
+  name: StrokeWidth(Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_StrokeWidth_System_Single_
+  commentId: M:Lime.NanoVG.Context.StrokeWidth(System.Single)
+  fullName: Lime.NanoVG.Context.StrokeWidth(System.Single)
+  nameWithType: Context.StrokeWidth(Single)
+- uid: Lime.NanoVG.Context.StrokeWidth*
+  name: StrokeWidth
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_StrokeWidth_
+  commentId: Overload:Lime.NanoVG.Context.StrokeWidth
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.StrokeWidth
+  nameWithType: Context.StrokeWidth
+- uid: Lime.NanoVG.Context.Transform(Lime.Matrix32)
+  name: Transform(Matrix32)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Transform_Lime_Matrix32_
+  commentId: M:Lime.NanoVG.Context.Transform(Lime.Matrix32)
+  fullName: Lime.NanoVG.Context.Transform(Lime.Matrix32)
+  nameWithType: Context.Transform(Matrix32)
+- uid: Lime.NanoVG.Context.Transform*
+  name: Transform
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Transform_
+  commentId: Overload:Lime.NanoVG.Context.Transform
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Transform
+  nameWithType: Context.Transform
+- uid: Lime.NanoVG.Context.Translate(System.Single,System.Single)
+  name: Translate(Single, Single)
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Translate_System_Single_System_Single_
+  commentId: M:Lime.NanoVG.Context.Translate(System.Single,System.Single)
+  fullName: Lime.NanoVG.Context.Translate(System.Single, System.Single)
+  nameWithType: Context.Translate(Single, Single)
+- uid: Lime.NanoVG.Context.Translate*
+  name: Translate
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_Translate_
+  commentId: Overload:Lime.NanoVG.Context.Translate
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.Translate
+  nameWithType: Context.Translate
+- uid: Lime.NanoVG.Context.UpdateImage(System.Int32,System.Byte[])
+  name: UpdateImage(Int32, Byte[])
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_UpdateImage_System_Int32_System_Byte___
+  commentId: M:Lime.NanoVG.Context.UpdateImage(System.Int32,System.Byte[])
+  name.vb: UpdateImage(Int32, Byte())
+  fullName: Lime.NanoVG.Context.UpdateImage(System.Int32, System.Byte[])
+  fullName.vb: Lime.NanoVG.Context.UpdateImage(System.Int32, System.Byte())
+  nameWithType: Context.UpdateImage(Int32, Byte[])
+  nameWithType.vb: Context.UpdateImage(Int32, Byte())
+- uid: Lime.NanoVG.Context.UpdateImage*
+  name: UpdateImage
+  href: api/Lime.NanoVG.Context.html#Lime_NanoVG_Context_UpdateImage_
+  commentId: Overload:Lime.NanoVG.Context.UpdateImage
+  isSpec: "True"
+  fullName: Lime.NanoVG.Context.UpdateImage
+  nameWithType: Context.UpdateImage
+- uid: Lime.NanoVG.FillParams
+  name: FillParams
+  href: api/Lime.NanoVG.FillParams.html
+  commentId: T:Lime.NanoVG.FillParams
+  fullName: Lime.NanoVG.FillParams
+  nameWithType: FillParams
+- uid: Lime.NanoVG.FillParams.Extent
+  name: Extent
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_Extent
+  commentId: F:Lime.NanoVG.FillParams.Extent
+  fullName: Lime.NanoVG.FillParams.Extent
+  nameWithType: FillParams.Extent
+- uid: Lime.NanoVG.FillParams.Feather
+  name: Feather
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_Feather
+  commentId: F:Lime.NanoVG.FillParams.Feather
+  fullName: Lime.NanoVG.FillParams.Feather
+  nameWithType: FillParams.Feather
+- uid: Lime.NanoVG.FillParams.InnerCol
+  name: InnerCol
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_InnerCol
+  commentId: F:Lime.NanoVG.FillParams.InnerCol
+  fullName: Lime.NanoVG.FillParams.InnerCol
+  nameWithType: FillParams.InnerCol
+- uid: Lime.NanoVG.FillParams.OuterCol
+  name: OuterCol
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_OuterCol
+  commentId: F:Lime.NanoVG.FillParams.OuterCol
+  fullName: Lime.NanoVG.FillParams.OuterCol
+  nameWithType: FillParams.OuterCol
+- uid: Lime.NanoVG.FillParams.PaintT
+  name: PaintT
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_PaintT
+  commentId: F:Lime.NanoVG.FillParams.PaintT
+  fullName: Lime.NanoVG.FillParams.PaintT
+  nameWithType: FillParams.PaintT
+- uid: Lime.NanoVG.FillParams.PaintU
+  name: PaintU
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_PaintU
+  commentId: F:Lime.NanoVG.FillParams.PaintU
+  fullName: Lime.NanoVG.FillParams.PaintU
+  nameWithType: FillParams.PaintU
+- uid: Lime.NanoVG.FillParams.PaintV
+  name: PaintV
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_PaintV
+  commentId: F:Lime.NanoVG.FillParams.PaintV
+  fullName: Lime.NanoVG.FillParams.PaintV
+  nameWithType: FillParams.PaintV
+- uid: Lime.NanoVG.FillParams.Radius
+  name: Radius
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_Radius
+  commentId: F:Lime.NanoVG.FillParams.Radius
+  fullName: Lime.NanoVG.FillParams.Radius
+  nameWithType: FillParams.Radius
+- uid: Lime.NanoVG.FillParams.ScissorExt
+  name: ScissorExt
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_ScissorExt
+  commentId: F:Lime.NanoVG.FillParams.ScissorExt
+  fullName: Lime.NanoVG.FillParams.ScissorExt
+  nameWithType: FillParams.ScissorExt
+- uid: Lime.NanoVG.FillParams.ScissorScale
+  name: ScissorScale
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_ScissorScale
+  commentId: F:Lime.NanoVG.FillParams.ScissorScale
+  fullName: Lime.NanoVG.FillParams.ScissorScale
+  nameWithType: FillParams.ScissorScale
+- uid: Lime.NanoVG.FillParams.ScissorT
+  name: ScissorT
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_ScissorT
+  commentId: F:Lime.NanoVG.FillParams.ScissorT
+  fullName: Lime.NanoVG.FillParams.ScissorT
+  nameWithType: FillParams.ScissorT
+- uid: Lime.NanoVG.FillParams.ScissorU
+  name: ScissorU
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_ScissorU
+  commentId: F:Lime.NanoVG.FillParams.ScissorU
+  fullName: Lime.NanoVG.FillParams.ScissorU
+  nameWithType: FillParams.ScissorU
+- uid: Lime.NanoVG.FillParams.ScissorV
+  name: ScissorV
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_ScissorV
+  commentId: F:Lime.NanoVG.FillParams.ScissorV
+  fullName: Lime.NanoVG.FillParams.ScissorV
+  nameWithType: FillParams.ScissorV
+- uid: Lime.NanoVG.FillParams.StrokeMult
+  name: StrokeMult
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_StrokeMult
+  commentId: F:Lime.NanoVG.FillParams.StrokeMult
+  fullName: Lime.NanoVG.FillParams.StrokeMult
+  nameWithType: FillParams.StrokeMult
+- uid: Lime.NanoVG.FillParams.StrokeThr
+  name: StrokeThr
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_StrokeThr
+  commentId: F:Lime.NanoVG.FillParams.StrokeThr
+  fullName: Lime.NanoVG.FillParams.StrokeThr
+  nameWithType: FillParams.StrokeThr
+- uid: Lime.NanoVG.FillParams.TexType
+  name: TexType
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_TexType
+  commentId: F:Lime.NanoVG.FillParams.TexType
+  fullName: Lime.NanoVG.FillParams.TexType
+  nameWithType: FillParams.TexType
+- uid: Lime.NanoVG.FillParams.Type
+  name: Type
+  href: api/Lime.NanoVG.FillParams.html#Lime_NanoVG_FillParams_Type
+  commentId: F:Lime.NanoVG.FillParams.Type
+  fullName: Lime.NanoVG.FillParams.Type
+  nameWithType: FillParams.Type
+- uid: Lime.NanoVG.ImageFlags
+  name: ImageFlags
+  href: api/Lime.NanoVG.ImageFlags.html
+  commentId: T:Lime.NanoVG.ImageFlags
+  fullName: Lime.NanoVG.ImageFlags
+  nameWithType: ImageFlags
+- uid: Lime.NanoVG.ImageFlags.FlipY
+  name: FlipY
+  href: api/Lime.NanoVG.ImageFlags.html#Lime_NanoVG_ImageFlags_FlipY
+  commentId: F:Lime.NanoVG.ImageFlags.FlipY
+  fullName: Lime.NanoVG.ImageFlags.FlipY
+  nameWithType: ImageFlags.FlipY
+- uid: Lime.NanoVG.ImageFlags.GenerateMipMaps
+  name: GenerateMipMaps
+  href: api/Lime.NanoVG.ImageFlags.html#Lime_NanoVG_ImageFlags_GenerateMipMaps
+  commentId: F:Lime.NanoVG.ImageFlags.GenerateMipMaps
+  fullName: Lime.NanoVG.ImageFlags.GenerateMipMaps
+  nameWithType: ImageFlags.GenerateMipMaps
+- uid: Lime.NanoVG.ImageFlags.Nearest
+  name: Nearest
+  href: api/Lime.NanoVG.ImageFlags.html#Lime_NanoVG_ImageFlags_Nearest
+  commentId: F:Lime.NanoVG.ImageFlags.Nearest
+  fullName: Lime.NanoVG.ImageFlags.Nearest
+  nameWithType: ImageFlags.Nearest
+- uid: Lime.NanoVG.ImageFlags.Premultiplied
+  name: Premultiplied
+  href: api/Lime.NanoVG.ImageFlags.html#Lime_NanoVG_ImageFlags_Premultiplied
+  commentId: F:Lime.NanoVG.ImageFlags.Premultiplied
+  fullName: Lime.NanoVG.ImageFlags.Premultiplied
+  nameWithType: ImageFlags.Premultiplied
+- uid: Lime.NanoVG.ImageFlags.RepeatX
+  name: RepeatX
+  href: api/Lime.NanoVG.ImageFlags.html#Lime_NanoVG_ImageFlags_RepeatX
+  commentId: F:Lime.NanoVG.ImageFlags.RepeatX
+  fullName: Lime.NanoVG.ImageFlags.RepeatX
+  nameWithType: ImageFlags.RepeatX
+- uid: Lime.NanoVG.ImageFlags.RepeatY
+  name: RepeatY
+  href: api/Lime.NanoVG.ImageFlags.html#Lime_NanoVG_ImageFlags_RepeatY
+  commentId: F:Lime.NanoVG.ImageFlags.RepeatY
+  fullName: Lime.NanoVG.ImageFlags.RepeatY
+  nameWithType: ImageFlags.RepeatY
+- uid: Lime.NanoVG.Material
+  name: Material
+  href: api/Lime.NanoVG.Material.html
+  commentId: T:Lime.NanoVG.Material
+  fullName: Lime.NanoVG.Material
+  nameWithType: Material
+- uid: Lime.NanoVG.Material.#ctor
+  name: Material()
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material__ctor
+  commentId: M:Lime.NanoVG.Material.#ctor
+  fullName: Lime.NanoVG.Material.Material()
+  nameWithType: Material.Material()
+- uid: Lime.NanoVG.Material.#ctor*
+  name: Material
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material__ctor_
+  commentId: Overload:Lime.NanoVG.Material.#ctor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Material.Material
+  nameWithType: Material.Material
+- uid: Lime.NanoVG.Material.Apply(System.Int32)
+  name: Apply(Int32)
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_Apply_System_Int32_
+  commentId: M:Lime.NanoVG.Material.Apply(System.Int32)
+  fullName: Lime.NanoVG.Material.Apply(System.Int32)
+  nameWithType: Material.Apply(Int32)
+- uid: Lime.NanoVG.Material.Apply*
+  name: Apply
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_Apply_
+  commentId: Overload:Lime.NanoVG.Material.Apply
+  isSpec: "True"
+  fullName: Lime.NanoVG.Material.Apply
+  nameWithType: Material.Apply
+- uid: Lime.NanoVG.Material.FillParams
+  name: FillParams
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_FillParams
+  commentId: F:Lime.NanoVG.Material.FillParams
+  fullName: Lime.NanoVG.Material.FillParams
+  nameWithType: Material.FillParams
+- uid: Lime.NanoVG.Material.Id
+  name: Id
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_Id
+  commentId: P:Lime.NanoVG.Material.Id
+  fullName: Lime.NanoVG.Material.Id
+  nameWithType: Material.Id
+- uid: Lime.NanoVG.Material.Id*
+  name: Id
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_Id_
+  commentId: Overload:Lime.NanoVG.Material.Id
+  isSpec: "True"
+  fullName: Lime.NanoVG.Material.Id
+  nameWithType: Material.Id
+- uid: Lime.NanoVG.Material.Invalidate
+  name: Invalidate()
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_Invalidate
+  commentId: M:Lime.NanoVG.Material.Invalidate
+  fullName: Lime.NanoVG.Material.Invalidate()
+  nameWithType: Material.Invalidate()
+- uid: Lime.NanoVG.Material.Invalidate*
+  name: Invalidate
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_Invalidate_
+  commentId: Overload:Lime.NanoVG.Material.Invalidate
+  isSpec: "True"
+  fullName: Lime.NanoVG.Material.Invalidate
+  nameWithType: Material.Invalidate
+- uid: Lime.NanoVG.Material.PassCount
+  name: PassCount
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_PassCount
+  commentId: P:Lime.NanoVG.Material.PassCount
+  fullName: Lime.NanoVG.Material.PassCount
+  nameWithType: Material.PassCount
+- uid: Lime.NanoVG.Material.PassCount*
+  name: PassCount
+  href: api/Lime.NanoVG.Material.html#Lime_NanoVG_Material_PassCount_
+  commentId: Overload:Lime.NanoVG.Material.PassCount
+  isSpec: "True"
+  fullName: Lime.NanoVG.Material.PassCount
+  nameWithType: Material.PassCount
+- uid: Lime.NanoVG.Paint
+  name: Paint
+  href: api/Lime.NanoVG.Paint.html
+  commentId: T:Lime.NanoVG.Paint
+  fullName: Lime.NanoVG.Paint
+  nameWithType: Paint
+- uid: Lime.NanoVG.Paint.#ctor(Lime.Color4)
+  name: Paint(Color4)
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint__ctor_Lime_Color4_
+  commentId: M:Lime.NanoVG.Paint.#ctor(Lime.Color4)
+  fullName: Lime.NanoVG.Paint.Paint(Lime.Color4)
+  nameWithType: Paint.Paint(Color4)
+- uid: Lime.NanoVG.Paint.#ctor*
+  name: Paint
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint__ctor_
+  commentId: Overload:Lime.NanoVG.Paint.#ctor
+  isSpec: "True"
+  fullName: Lime.NanoVG.Paint.Paint
+  nameWithType: Paint.Paint
+- uid: Lime.NanoVG.Paint.BoxGradient(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)
+  name: BoxGradient(Single, Single, Single, Single, Single, Single, Color4, Color4)
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_BoxGradient_System_Single_System_Single_System_Single_System_Single_System_Single_System_Single_Lime_Color4_Lime_Color4_
+  commentId: M:Lime.NanoVG.Paint.BoxGradient(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)
+  fullName: Lime.NanoVG.Paint.BoxGradient(System.Single, System.Single, System.Single, System.Single, System.Single, System.Single, Lime.Color4, Lime.Color4)
+  nameWithType: Paint.BoxGradient(Single, Single, Single, Single, Single, Single, Color4, Color4)
+- uid: Lime.NanoVG.Paint.BoxGradient*
+  name: BoxGradient
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_BoxGradient_
+  commentId: Overload:Lime.NanoVG.Paint.BoxGradient
+  isSpec: "True"
+  fullName: Lime.NanoVG.Paint.BoxGradient
+  nameWithType: Paint.BoxGradient
+- uid: Lime.NanoVG.Paint.Extent
+  name: Extent
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_Extent
+  commentId: F:Lime.NanoVG.Paint.Extent
+  fullName: Lime.NanoVG.Paint.Extent
+  nameWithType: Paint.Extent
+- uid: Lime.NanoVG.Paint.Feather
+  name: Feather
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_Feather
+  commentId: F:Lime.NanoVG.Paint.Feather
+  fullName: Lime.NanoVG.Paint.Feather
+  nameWithType: Paint.Feather
+- uid: Lime.NanoVG.Paint.Image
+  name: Image
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_Image
+  commentId: F:Lime.NanoVG.Paint.Image
+  fullName: Lime.NanoVG.Paint.Image
+  nameWithType: Paint.Image
+- uid: Lime.NanoVG.Paint.ImagePattern(System.Single,System.Single,System.Single,System.Single,System.Single,System.Int32,System.Single)
+  name: ImagePattern(Single, Single, Single, Single, Single, Int32, Single)
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_ImagePattern_System_Single_System_Single_System_Single_System_Single_System_Single_System_Int32_System_Single_
+  commentId: M:Lime.NanoVG.Paint.ImagePattern(System.Single,System.Single,System.Single,System.Single,System.Single,System.Int32,System.Single)
+  fullName: Lime.NanoVG.Paint.ImagePattern(System.Single, System.Single, System.Single, System.Single, System.Single, System.Int32, System.Single)
+  nameWithType: Paint.ImagePattern(Single, Single, Single, Single, Single, Int32, Single)
+- uid: Lime.NanoVG.Paint.ImagePattern*
+  name: ImagePattern
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_ImagePattern_
+  commentId: Overload:Lime.NanoVG.Paint.ImagePattern
+  isSpec: "True"
+  fullName: Lime.NanoVG.Paint.ImagePattern
+  nameWithType: Paint.ImagePattern
+- uid: Lime.NanoVG.Paint.InnerColor
+  name: InnerColor
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_InnerColor
+  commentId: F:Lime.NanoVG.Paint.InnerColor
+  fullName: Lime.NanoVG.Paint.InnerColor
+  nameWithType: Paint.InnerColor
+- uid: Lime.NanoVG.Paint.LinearGradient(System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)
+  name: LinearGradient(Single, Single, Single, Single, Color4, Color4)
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_LinearGradient_System_Single_System_Single_System_Single_System_Single_Lime_Color4_Lime_Color4_
+  commentId: M:Lime.NanoVG.Paint.LinearGradient(System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)
+  fullName: Lime.NanoVG.Paint.LinearGradient(System.Single, System.Single, System.Single, System.Single, Lime.Color4, Lime.Color4)
+  nameWithType: Paint.LinearGradient(Single, Single, Single, Single, Color4, Color4)
+- uid: Lime.NanoVG.Paint.LinearGradient*
+  name: LinearGradient
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_LinearGradient_
+  commentId: Overload:Lime.NanoVG.Paint.LinearGradient
+  isSpec: "True"
+  fullName: Lime.NanoVG.Paint.LinearGradient
+  nameWithType: Paint.LinearGradient
+- uid: Lime.NanoVG.Paint.op_Implicit(Lime.Color4)~Lime.NanoVG.Paint
+  name: Implicit(Color4 to Paint)
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_op_Implicit_Lime_Color4__Lime_NanoVG_Paint
+  commentId: M:Lime.NanoVG.Paint.op_Implicit(Lime.Color4)~Lime.NanoVG.Paint
+  name.vb: Widening(Color4 to Paint)
+  fullName: Lime.NanoVG.Paint.Implicit(Lime.Color4 to Lime.NanoVG.Paint)
+  fullName.vb: Lime.NanoVG.Paint.Widening(Lime.Color4 to Lime.NanoVG.Paint)
+  nameWithType: Paint.Implicit(Color4 to Paint)
+  nameWithType.vb: Paint.Widening(Color4 to Paint)
+- uid: Lime.NanoVG.Paint.op_Implicit*
+  name: Implicit
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_op_Implicit_
+  commentId: Overload:Lime.NanoVG.Paint.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: Lime.NanoVG.Paint.Implicit
+  fullName.vb: Lime.NanoVG.Paint.Widening
+  nameWithType: Paint.Implicit
+  nameWithType.vb: Paint.Widening
+- uid: Lime.NanoVG.Paint.OuterColor
+  name: OuterColor
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_OuterColor
+  commentId: F:Lime.NanoVG.Paint.OuterColor
+  fullName: Lime.NanoVG.Paint.OuterColor
+  nameWithType: Paint.OuterColor
+- uid: Lime.NanoVG.Paint.RadialGradient(System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)
+  name: RadialGradient(Single, Single, Single, Single, Color4, Color4)
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_RadialGradient_System_Single_System_Single_System_Single_System_Single_Lime_Color4_Lime_Color4_
+  commentId: M:Lime.NanoVG.Paint.RadialGradient(System.Single,System.Single,System.Single,System.Single,Lime.Color4,Lime.Color4)
+  fullName: Lime.NanoVG.Paint.RadialGradient(System.Single, System.Single, System.Single, System.Single, Lime.Color4, Lime.Color4)
+  nameWithType: Paint.RadialGradient(Single, Single, Single, Single, Color4, Color4)
+- uid: Lime.NanoVG.Paint.RadialGradient*
+  name: RadialGradient
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_RadialGradient_
+  commentId: Overload:Lime.NanoVG.Paint.RadialGradient
+  isSpec: "True"
+  fullName: Lime.NanoVG.Paint.RadialGradient
+  nameWithType: Paint.RadialGradient
+- uid: Lime.NanoVG.Paint.Radius
+  name: Radius
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_Radius
+  commentId: F:Lime.NanoVG.Paint.Radius
+  fullName: Lime.NanoVG.Paint.Radius
+  nameWithType: Paint.Radius
+- uid: Lime.NanoVG.Paint.Transform
+  name: Transform
+  href: api/Lime.NanoVG.Paint.html#Lime_NanoVG_Paint_Transform
+  commentId: F:Lime.NanoVG.Paint.Transform
+  fullName: Lime.NanoVG.Paint.Transform
+  nameWithType: Paint.Transform
+- uid: Lime.NanoVG.ShaderProgram
+  name: ShaderProgram
+  href: api/Lime.NanoVG.ShaderProgram.html
+  commentId: T:Lime.NanoVG.ShaderProgram
+  fullName: Lime.NanoVG.ShaderProgram
+  nameWithType: ShaderProgram
+- uid: Lime.NanoVG.ShaderProgram.GetInstance
+  name: GetInstance()
+  href: api/Lime.NanoVG.ShaderProgram.html#Lime_NanoVG_ShaderProgram_GetInstance
+  commentId: M:Lime.NanoVG.ShaderProgram.GetInstance
+  fullName: Lime.NanoVG.ShaderProgram.GetInstance()
+  nameWithType: ShaderProgram.GetInstance()
+- uid: Lime.NanoVG.ShaderProgram.GetInstance*
+  name: GetInstance
+  href: api/Lime.NanoVG.ShaderProgram.html#Lime_NanoVG_ShaderProgram_GetInstance_
+  commentId: Overload:Lime.NanoVG.ShaderProgram.GetInstance
+  isSpec: "True"
+  fullName: Lime.NanoVG.ShaderProgram.GetInstance
+  nameWithType: ShaderProgram.GetInstance
+- uid: Lime.NanoVG.Solidity
+  name: Solidity
+  href: api/Lime.NanoVG.Solidity.html
+  commentId: T:Lime.NanoVG.Solidity
+  fullName: Lime.NanoVG.Solidity
+  nameWithType: Solidity
+- uid: Lime.NanoVG.Solidity.Hole
+  name: Hole
+  href: api/Lime.NanoVG.Solidity.html#Lime_NanoVG_Solidity_Hole
+  commentId: F:Lime.NanoVG.Solidity.Hole
+  fullName: Lime.NanoVG.Solidity.Hole
+  nameWithType: Solidity.Hole
+- uid: Lime.NanoVG.Solidity.Solid
+  name: Solid
+  href: api/Lime.NanoVG.Solidity.html#Lime_NanoVG_Solidity_Solid
+  commentId: F:Lime.NanoVG.Solidity.Solid
+  fullName: Lime.NanoVG.Solidity.Solid
+  nameWithType: Solidity.Solid
+- uid: Lime.NanoVG.Winding
+  name: Winding
+  href: api/Lime.NanoVG.Winding.html
+  commentId: T:Lime.NanoVG.Winding
+  fullName: Lime.NanoVG.Winding
+  nameWithType: Winding
+- uid: Lime.NanoVG.Winding.ClockWise
+  name: ClockWise
+  href: api/Lime.NanoVG.Winding.html#Lime_NanoVG_Winding_ClockWise
+  commentId: F:Lime.NanoVG.Winding.ClockWise
+  fullName: Lime.NanoVG.Winding.ClockWise
+  nameWithType: Winding.ClockWise
+- uid: Lime.NanoVG.Winding.CounterClockWise
+  name: CounterClockWise
+  href: api/Lime.NanoVG.Winding.html#Lime_NanoVG_Winding_CounterClockWise
+  commentId: F:Lime.NanoVG.Winding.CounterClockWise
+  fullName: Lime.NanoVG.Winding.CounterClockWise
+  nameWithType: Winding.CounterClockWise
 - uid: Lime.NineGrid
   name: NineGrid
   href: api/Lime.NineGrid.html
@@ -52216,15 +53360,15 @@ references:
   fullName.vb: Lime.RenderBatch(Of TVertex)
   nameWithType: RenderBatch<TVertex>
   nameWithType.vb: RenderBatch(Of TVertex)
-- uid: Lime.RenderBatch`1.Acquire(Lime.RenderBatch{`0})
-  name: Acquire(RenderBatch<TVertex>)
-  href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_Acquire_Lime_RenderBatch__0__
-  commentId: M:Lime.RenderBatch`1.Acquire(Lime.RenderBatch{`0})
-  name.vb: Acquire(RenderBatch(Of TVertex))
-  fullName: Lime.RenderBatch<TVertex>.Acquire(Lime.RenderBatch<TVertex>)
-  fullName.vb: Lime.RenderBatch(Of TVertex).Acquire(Lime.RenderBatch(Of TVertex))
-  nameWithType: RenderBatch<TVertex>.Acquire(RenderBatch<TVertex>)
-  nameWithType.vb: RenderBatch(Of TVertex).Acquire(RenderBatch(Of TVertex))
+- uid: Lime.RenderBatch`1.Acquire(Lime.RenderBatch{`0},System.Int32,System.Int32)
+  name: Acquire(RenderBatch<TVertex>, Int32, Int32)
+  href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_Acquire_Lime_RenderBatch__0__System_Int32_System_Int32_
+  commentId: M:Lime.RenderBatch`1.Acquire(Lime.RenderBatch{`0},System.Int32,System.Int32)
+  name.vb: Acquire(RenderBatch(Of TVertex), Int32, Int32)
+  fullName: Lime.RenderBatch<TVertex>.Acquire(Lime.RenderBatch<TVertex>, System.Int32, System.Int32)
+  fullName.vb: Lime.RenderBatch(Of TVertex).Acquire(Lime.RenderBatch(Of TVertex), System.Int32, System.Int32)
+  nameWithType: RenderBatch<TVertex>.Acquire(RenderBatch<TVertex>, Int32, Int32)
+  nameWithType.vb: RenderBatch(Of TVertex).Acquire(RenderBatch(Of TVertex), Int32, Int32)
 - uid: Lime.RenderBatch`1.Acquire*
   name: Acquire
   href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_Acquire_
@@ -52285,6 +53429,14 @@ references:
   fullName.vb: Lime.RenderBatch(Of TVertex).Material
   nameWithType: RenderBatch<TVertex>.Material
   nameWithType.vb: RenderBatch(Of TVertex).Material
+- uid: Lime.RenderBatch`1.MaxIndices
+  name: MaxIndices
+  href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_MaxIndices
+  commentId: F:Lime.RenderBatch`1.MaxIndices
+  fullName: Lime.RenderBatch<TVertex>.MaxIndices
+  fullName.vb: Lime.RenderBatch(Of TVertex).MaxIndices
+  nameWithType: RenderBatch<TVertex>.MaxIndices
+  nameWithType.vb: RenderBatch(Of TVertex).MaxIndices
 - uid: Lime.RenderBatch`1.Mesh
   name: Mesh
   href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_Mesh
@@ -52302,6 +53454,22 @@ references:
   fullName.vb: Lime.RenderBatch(Of TVertex).Mesh
   nameWithType: RenderBatch<TVertex>.Mesh
   nameWithType.vb: RenderBatch(Of TVertex).Mesh
+- uid: Lime.RenderBatch`1.MinIndices
+  name: MinIndices
+  href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_MinIndices
+  commentId: F:Lime.RenderBatch`1.MinIndices
+  fullName: Lime.RenderBatch<TVertex>.MinIndices
+  fullName.vb: Lime.RenderBatch(Of TVertex).MinIndices
+  nameWithType: RenderBatch<TVertex>.MinIndices
+  nameWithType.vb: RenderBatch(Of TVertex).MinIndices
+- uid: Lime.RenderBatch`1.MinVertices
+  name: MinVertices
+  href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_MinVertices
+  commentId: F:Lime.RenderBatch`1.MinVertices
+  fullName: Lime.RenderBatch<TVertex>.MinVertices
+  fullName.vb: Lime.RenderBatch(Of TVertex).MinVertices
+  nameWithType: RenderBatch<TVertex>.MinVertices
+  nameWithType.vb: RenderBatch(Of TVertex).MinVertices
 - uid: Lime.RenderBatch`1.Release
   name: Release()
   href: api/Lime.RenderBatch-1.html#Lime_RenderBatch_1_Release
@@ -52387,24 +53555,6 @@ references:
   fullName.vb: Lime.RenderBatch(Of TVertex).Texture2
   nameWithType: RenderBatch<TVertex>.Texture2
   nameWithType.vb: RenderBatch(Of TVertex).Texture2
-- uid: Lime.RenderBatchLimits
-  name: RenderBatchLimits
-  href: api/Lime.RenderBatchLimits.html
-  commentId: T:Lime.RenderBatchLimits
-  fullName: Lime.RenderBatchLimits
-  nameWithType: RenderBatchLimits
-- uid: Lime.RenderBatchLimits.MaxIndices
-  name: MaxIndices
-  href: api/Lime.RenderBatchLimits.html#Lime_RenderBatchLimits_MaxIndices
-  commentId: F:Lime.RenderBatchLimits.MaxIndices
-  fullName: Lime.RenderBatchLimits.MaxIndices
-  nameWithType: RenderBatchLimits.MaxIndices
-- uid: Lime.RenderBatchLimits.MaxVertices
-  name: MaxVertices
-  href: api/Lime.RenderBatchLimits.html#Lime_RenderBatchLimits_MaxVertices
-  commentId: F:Lime.RenderBatchLimits.MaxVertices
-  fullName: Lime.RenderBatchLimits.MaxVertices
-  nameWithType: RenderBatchLimits.MaxVertices
 - uid: Lime.RenderChain
   name: RenderChain
   href: api/Lime.RenderChain.html
@@ -52909,15 +54059,15 @@ references:
   isSpec: "True"
   fullName: Lime.Renderer.DrawTextLine
   nameWithType: Renderer.DrawTextLine
-- uid: Lime.Renderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)
-  name: DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex[], Int32)
-  href: api/Lime.Renderer.html#Lime_Renderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_
-  commentId: M:Lime.Renderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)
-  name.vb: DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex(), Int32)
-  fullName: Lime.Renderer.DrawTriangleFan(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex[], System.Int32)
-  fullName.vb: Lime.Renderer.DrawTriangleFan(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex(), System.Int32)
-  nameWithType: Renderer.DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex[], Int32)
-  nameWithType.vb: Renderer.DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex(), Int32)
+- uid: Lime.Renderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32,System.Int32)
+  name: DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex[], Int32, Int32)
+  href: api/Lime.Renderer.html#Lime_Renderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_System_Int32_
+  commentId: M:Lime.Renderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32,System.Int32)
+  name.vb: DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex(), Int32, Int32)
+  fullName: Lime.Renderer.DrawTriangleFan(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex[], System.Int32, System.Int32)
+  fullName.vb: Lime.Renderer.DrawTriangleFan(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex(), System.Int32, System.Int32)
+  nameWithType: Renderer.DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex[], Int32, Int32)
+  nameWithType.vb: Renderer.DrawTriangleFan(ITexture, ITexture, IMaterial, Vertex(), Int32, Int32)
 - uid: Lime.Renderer.DrawTriangleFan(Lime.ITexture,Lime.ITexture,Lime.Vertex[],System.Int32)
   name: DrawTriangleFan(ITexture, ITexture, Vertex[], Int32)
   href: api/Lime.Renderer.html#Lime_Renderer_DrawTriangleFan_Lime_ITexture_Lime_ITexture_Lime_Vertex___System_Int32_
@@ -52952,15 +54102,15 @@ references:
   isSpec: "True"
   fullName: Lime.Renderer.DrawTriangleFan
   nameWithType: Renderer.DrawTriangleFan
-- uid: Lime.Renderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)
-  name: DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex[], Int32)
-  href: api/Lime.Renderer.html#Lime_Renderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_
-  commentId: M:Lime.Renderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32)
-  name.vb: DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex(), Int32)
-  fullName: Lime.Renderer.DrawTriangleStrip(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex[], System.Int32)
-  fullName.vb: Lime.Renderer.DrawTriangleStrip(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex(), System.Int32)
-  nameWithType: Renderer.DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex[], Int32)
-  nameWithType.vb: Renderer.DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex(), Int32)
+- uid: Lime.Renderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32,System.Int32)
+  name: DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex[], Int32, Int32)
+  href: api/Lime.Renderer.html#Lime_Renderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_IMaterial_Lime_Vertex___System_Int32_System_Int32_
+  commentId: M:Lime.Renderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.IMaterial,Lime.Vertex[],System.Int32,System.Int32)
+  name.vb: DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex(), Int32, Int32)
+  fullName: Lime.Renderer.DrawTriangleStrip(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex[], System.Int32, System.Int32)
+  fullName.vb: Lime.Renderer.DrawTriangleStrip(Lime.ITexture, Lime.ITexture, Lime.IMaterial, Lime.Vertex(), System.Int32, System.Int32)
+  nameWithType: Renderer.DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex[], Int32, Int32)
+  nameWithType.vb: Renderer.DrawTriangleStrip(ITexture, ITexture, IMaterial, Vertex(), Int32, Int32)
 - uid: Lime.Renderer.DrawTriangleStrip(Lime.ITexture,Lime.ITexture,Lime.Vertex[],System.Int32)
   name: DrawTriangleStrip(ITexture, ITexture, Vertex[], Int32)
   href: api/Lime.Renderer.html#Lime_Renderer_DrawTriangleStrip_Lime_ITexture_Lime_ITexture_Lime_Vertex___System_Int32_
@@ -53372,6 +54522,129 @@ references:
   isSpec: "True"
   fullName: Lime.Renderer.WorldViewProjection
   nameWithType: Renderer.WorldViewProjection
+- uid: Lime.RendererNvg
+  name: RendererNvg
+  href: api/Lime.RendererNvg.html
+  commentId: T:Lime.RendererNvg
+  fullName: Lime.RendererNvg
+  nameWithType: RendererNvg
+- uid: Lime.RendererNvg.DrawCircle(Lime.Vector2,System.Single,Lime.NanoVG.Paint,System.Single)
+  name: DrawCircle(Vector2, Single, Paint, Single)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawCircle_Lime_Vector2_System_Single_Lime_NanoVG_Paint_System_Single_
+  commentId: M:Lime.RendererNvg.DrawCircle(Lime.Vector2,System.Single,Lime.NanoVG.Paint,System.Single)
+  fullName: Lime.RendererNvg.DrawCircle(Lime.Vector2, System.Single, Lime.NanoVG.Paint, System.Single)
+  nameWithType: RendererNvg.DrawCircle(Vector2, Single, Paint, Single)
+- uid: Lime.RendererNvg.DrawCircle*
+  name: DrawCircle
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawCircle_
+  commentId: Overload:Lime.RendererNvg.DrawCircle
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawCircle
+  nameWithType: RendererNvg.DrawCircle
+- uid: Lime.RendererNvg.DrawLine(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,System.Single,Lime.LineCap)
+  name: DrawLine(Vector2, Vector2, Paint, Single, LineCap)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawLine_Lime_Vector2_Lime_Vector2_Lime_NanoVG_Paint_System_Single_Lime_LineCap_
+  commentId: M:Lime.RendererNvg.DrawLine(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,System.Single,Lime.LineCap)
+  fullName: Lime.RendererNvg.DrawLine(Lime.Vector2, Lime.Vector2, Lime.NanoVG.Paint, System.Single, Lime.LineCap)
+  nameWithType: RendererNvg.DrawLine(Vector2, Vector2, Paint, Single, LineCap)
+- uid: Lime.RendererNvg.DrawLine*
+  name: DrawLine
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawLine_
+  commentId: Overload:Lime.RendererNvg.DrawLine
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawLine
+  nameWithType: RendererNvg.DrawLine
+- uid: Lime.RendererNvg.DrawQuadrangle(Lime.Quadrangle,Lime.NanoVG.Paint)
+  name: DrawQuadrangle(Quadrangle, Paint)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawQuadrangle_Lime_Quadrangle_Lime_NanoVG_Paint_
+  commentId: M:Lime.RendererNvg.DrawQuadrangle(Lime.Quadrangle,Lime.NanoVG.Paint)
+  fullName: Lime.RendererNvg.DrawQuadrangle(Lime.Quadrangle, Lime.NanoVG.Paint)
+  nameWithType: RendererNvg.DrawQuadrangle(Quadrangle, Paint)
+- uid: Lime.RendererNvg.DrawQuadrangle*
+  name: DrawQuadrangle
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawQuadrangle_
+  commentId: Overload:Lime.RendererNvg.DrawQuadrangle
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawQuadrangle
+  nameWithType: RendererNvg.DrawQuadrangle
+- uid: Lime.RendererNvg.DrawQuadrangleOutline(Lime.Quadrangle,Lime.NanoVG.Paint,System.Single)
+  name: DrawQuadrangleOutline(Quadrangle, Paint, Single)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawQuadrangleOutline_Lime_Quadrangle_Lime_NanoVG_Paint_System_Single_
+  commentId: M:Lime.RendererNvg.DrawQuadrangleOutline(Lime.Quadrangle,Lime.NanoVG.Paint,System.Single)
+  fullName: Lime.RendererNvg.DrawQuadrangleOutline(Lime.Quadrangle, Lime.NanoVG.Paint, System.Single)
+  nameWithType: RendererNvg.DrawQuadrangleOutline(Quadrangle, Paint, Single)
+- uid: Lime.RendererNvg.DrawQuadrangleOutline*
+  name: DrawQuadrangleOutline
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawQuadrangleOutline_
+  commentId: Overload:Lime.RendererNvg.DrawQuadrangleOutline
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawQuadrangleOutline
+  nameWithType: RendererNvg.DrawQuadrangleOutline
+- uid: Lime.RendererNvg.DrawRect(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint)
+  name: DrawRect(Vector2, Vector2, Paint)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRect_Lime_Vector2_Lime_Vector2_Lime_NanoVG_Paint_
+  commentId: M:Lime.RendererNvg.DrawRect(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint)
+  fullName: Lime.RendererNvg.DrawRect(Lime.Vector2, Lime.Vector2, Lime.NanoVG.Paint)
+  nameWithType: RendererNvg.DrawRect(Vector2, Vector2, Paint)
+- uid: Lime.RendererNvg.DrawRect*
+  name: DrawRect
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRect_
+  commentId: Overload:Lime.RendererNvg.DrawRect
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawRect
+  nameWithType: RendererNvg.DrawRect
+- uid: Lime.RendererNvg.DrawRound(Lime.Vector2,System.Single,Lime.NanoVG.Paint)
+  name: DrawRound(Vector2, Single, Paint)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRound_Lime_Vector2_System_Single_Lime_NanoVG_Paint_
+  commentId: M:Lime.RendererNvg.DrawRound(Lime.Vector2,System.Single,Lime.NanoVG.Paint)
+  fullName: Lime.RendererNvg.DrawRound(Lime.Vector2, System.Single, Lime.NanoVG.Paint)
+  nameWithType: RendererNvg.DrawRound(Vector2, Single, Paint)
+- uid: Lime.RendererNvg.DrawRound*
+  name: DrawRound
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRound_
+  commentId: Overload:Lime.RendererNvg.DrawRound
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawRound
+  nameWithType: RendererNvg.DrawRound
+- uid: Lime.RendererNvg.DrawRoundedRect(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,System.Single)
+  name: DrawRoundedRect(Vector2, Vector2, Paint, Single)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRoundedRect_Lime_Vector2_Lime_Vector2_Lime_NanoVG_Paint_System_Single_
+  commentId: M:Lime.RendererNvg.DrawRoundedRect(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,System.Single)
+  fullName: Lime.RendererNvg.DrawRoundedRect(Lime.Vector2, Lime.Vector2, Lime.NanoVG.Paint, System.Single)
+  nameWithType: RendererNvg.DrawRoundedRect(Vector2, Vector2, Paint, Single)
+- uid: Lime.RendererNvg.DrawRoundedRect*
+  name: DrawRoundedRect
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRoundedRect_
+  commentId: Overload:Lime.RendererNvg.DrawRoundedRect
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawRoundedRect
+  nameWithType: RendererNvg.DrawRoundedRect
+- uid: Lime.RendererNvg.DrawRoundedRectOutline(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,System.Single,System.Single)
+  name: DrawRoundedRectOutline(Vector2, Vector2, Paint, Single, Single)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRoundedRectOutline_Lime_Vector2_Lime_Vector2_Lime_NanoVG_Paint_System_Single_System_Single_
+  commentId: M:Lime.RendererNvg.DrawRoundedRectOutline(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,System.Single,System.Single)
+  fullName: Lime.RendererNvg.DrawRoundedRectOutline(Lime.Vector2, Lime.Vector2, Lime.NanoVG.Paint, System.Single, System.Single)
+  nameWithType: RendererNvg.DrawRoundedRectOutline(Vector2, Vector2, Paint, Single, Single)
+- uid: Lime.RendererNvg.DrawRoundedRectOutline*
+  name: DrawRoundedRectOutline
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRoundedRectOutline_
+  commentId: Overload:Lime.RendererNvg.DrawRoundedRectOutline
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawRoundedRectOutline
+  nameWithType: RendererNvg.DrawRoundedRectOutline
+- uid: Lime.RendererNvg.DrawRoundedRectWithBorder(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,Lime.NanoVG.Paint,System.Single,System.Single)
+  name: DrawRoundedRectWithBorder(Vector2, Vector2, Paint, Paint, Single, Single)
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRoundedRectWithBorder_Lime_Vector2_Lime_Vector2_Lime_NanoVG_Paint_Lime_NanoVG_Paint_System_Single_System_Single_
+  commentId: M:Lime.RendererNvg.DrawRoundedRectWithBorder(Lime.Vector2,Lime.Vector2,Lime.NanoVG.Paint,Lime.NanoVG.Paint,System.Single,System.Single)
+  fullName: Lime.RendererNvg.DrawRoundedRectWithBorder(Lime.Vector2, Lime.Vector2, Lime.NanoVG.Paint, Lime.NanoVG.Paint, System.Single, System.Single)
+  nameWithType: RendererNvg.DrawRoundedRectWithBorder(Vector2, Vector2, Paint, Paint, Single, Single)
+- uid: Lime.RendererNvg.DrawRoundedRectWithBorder*
+  name: DrawRoundedRectWithBorder
+  href: api/Lime.RendererNvg.html#Lime_RendererNvg_DrawRoundedRectWithBorder_
+  commentId: Overload:Lime.RendererNvg.DrawRoundedRectWithBorder
+  isSpec: "True"
+  fullName: Lime.RendererNvg.DrawRoundedRectWithBorder
+  nameWithType: RendererNvg.DrawRoundedRectWithBorder
 - uid: Lime.RendererWrapper
   name: RendererWrapper
   href: api/Lime.RendererWrapper.html
@@ -57200,6 +58473,15 @@ references:
   fullName.vb: Lime.ShaderParams.Set(Of T)(Lime.ShaderParamKey(Of T), T)
   nameWithType: ShaderParams.Set<T>(ShaderParamKey<T>, T)
   nameWithType.vb: ShaderParams.Set(Of T)(ShaderParamKey(Of T), T)
+- uid: Lime.ShaderParams.Set``1(Lime.ShaderParamKey{``0},``0*,System.Int32)
+  name: Set<T>(ShaderParamKey<T>, T*, Int32)
+  href: api/Lime.ShaderParams.html#Lime_ShaderParams_Set__1_Lime_ShaderParamKey___0____0__System_Int32_
+  commentId: M:Lime.ShaderParams.Set``1(Lime.ShaderParamKey{``0},``0*,System.Int32)
+  name.vb: Set(Of T)(ShaderParamKey(Of T), T*, Int32)
+  fullName: Lime.ShaderParams.Set<T>(Lime.ShaderParamKey<T>, T*, System.Int32)
+  fullName.vb: Lime.ShaderParams.Set(Of T)(Lime.ShaderParamKey(Of T), T*, System.Int32)
+  nameWithType: ShaderParams.Set<T>(ShaderParamKey<T>, T*, Int32)
+  nameWithType.vb: ShaderParams.Set(Of T)(ShaderParamKey(Of T), T*, Int32)
 - uid: Lime.ShaderParams.Set``1(Lime.ShaderParamKey{``0},``0[],System.Int32)
   name: Set<T>(ShaderParamKey<T>, T[], Int32)
   href: api/Lime.ShaderParams.html#Lime_ShaderParams_Set__1_Lime_ShaderParamKey___0____0___System_Int32_
@@ -59901,6 +61183,19 @@ references:
   isSpec: "True"
   fullName: Lime.Slider.OnUpdate
   nameWithType: Slider.OnUpdate
+- uid: Lime.Slider.RaiseChanged
+  name: RaiseChanged()
+  href: api/Lime.Slider.html#Lime_Slider_RaiseChanged
+  commentId: M:Lime.Slider.RaiseChanged
+  fullName: Lime.Slider.RaiseChanged()
+  nameWithType: Slider.RaiseChanged()
+- uid: Lime.Slider.RaiseChanged*
+  name: RaiseChanged
+  href: api/Lime.Slider.html#Lime_Slider_RaiseChanged_
+  commentId: Overload:Lime.Slider.RaiseChanged
+  isSpec: "True"
+  fullName: Lime.Slider.RaiseChanged
+  nameWithType: Slider.RaiseChanged
 - uid: Lime.Slider.RangeMax
   name: RangeMax
   href: api/Lime.Slider.html#Lime_Slider_RangeMax
@@ -66458,12 +67753,12 @@ references:
   commentId: T:Lime.Theme.KeyboardFocusBorderPresenter
   fullName: Lime.Theme.KeyboardFocusBorderPresenter
   nameWithType: Theme.KeyboardFocusBorderPresenter
-- uid: Lime.Theme.KeyboardFocusBorderPresenter.#ctor(System.Single)
-  name: KeyboardFocusBorderPresenter(Single)
-  href: api/Lime.Theme.KeyboardFocusBorderPresenter.html#Lime_Theme_KeyboardFocusBorderPresenter__ctor_System_Single_
-  commentId: M:Lime.Theme.KeyboardFocusBorderPresenter.#ctor(System.Single)
-  fullName: Lime.Theme.KeyboardFocusBorderPresenter.KeyboardFocusBorderPresenter(System.Single)
-  nameWithType: Theme.KeyboardFocusBorderPresenter.KeyboardFocusBorderPresenter(Single)
+- uid: Lime.Theme.KeyboardFocusBorderPresenter.#ctor(System.Single,System.Boolean)
+  name: KeyboardFocusBorderPresenter(Single, Boolean)
+  href: api/Lime.Theme.KeyboardFocusBorderPresenter.html#Lime_Theme_KeyboardFocusBorderPresenter__ctor_System_Single_System_Boolean_
+  commentId: M:Lime.Theme.KeyboardFocusBorderPresenter.#ctor(System.Single,System.Boolean)
+  fullName: Lime.Theme.KeyboardFocusBorderPresenter.KeyboardFocusBorderPresenter(System.Single, System.Boolean)
+  nameWithType: Theme.KeyboardFocusBorderPresenter.KeyboardFocusBorderPresenter(Single, Boolean)
 - uid: Lime.Theme.KeyboardFocusBorderPresenter.#ctor*
   name: KeyboardFocusBorderPresenter
   href: api/Lime.Theme.KeyboardFocusBorderPresenter.html#Lime_Theme_KeyboardFocusBorderPresenter__ctor_
@@ -66590,6 +67885,12 @@ references:
   commentId: F:Lime.Theme.Metrics.MinTabSize
   fullName: Lime.Theme.Metrics.MinTabSize
   nameWithType: Theme.Metrics.MinTabSize
+- uid: Lime.Theme.Metrics.SliderThumbWidth
+  name: SliderThumbWidth
+  href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_SliderThumbWidth
+  commentId: F:Lime.Theme.Metrics.SliderThumbWidth
+  fullName: Lime.Theme.Metrics.SliderThumbWidth
+  nameWithType: Theme.Metrics.SliderThumbWidth
 - uid: Lime.Theme.Metrics.TextHeight
   name: TextHeight
   href: api/Lime.Theme.Metrics.html#Lime_Theme_Metrics_TextHeight
@@ -74984,12 +76285,12 @@ references:
   commentId: T:Lime.WidgetBoundsPresenter
   fullName: Lime.WidgetBoundsPresenter
   nameWithType: WidgetBoundsPresenter
-- uid: Lime.WidgetBoundsPresenter.#ctor(Lime.Color4,System.Single)
-  name: WidgetBoundsPresenter(Color4, Single)
-  href: api/Lime.WidgetBoundsPresenter.html#Lime_WidgetBoundsPresenter__ctor_Lime_Color4_System_Single_
-  commentId: M:Lime.WidgetBoundsPresenter.#ctor(Lime.Color4,System.Single)
-  fullName: Lime.WidgetBoundsPresenter.WidgetBoundsPresenter(Lime.Color4, System.Single)
-  nameWithType: WidgetBoundsPresenter.WidgetBoundsPresenter(Color4, Single)
+- uid: Lime.WidgetBoundsPresenter.#ctor(Lime.Color4,System.Single,System.Single)
+  name: WidgetBoundsPresenter(Color4, Single, Single)
+  href: api/Lime.WidgetBoundsPresenter.html#Lime_WidgetBoundsPresenter__ctor_Lime_Color4_System_Single_System_Single_
+  commentId: M:Lime.WidgetBoundsPresenter.#ctor(Lime.Color4,System.Single,System.Single)
+  fullName: Lime.WidgetBoundsPresenter.WidgetBoundsPresenter(Lime.Color4, System.Single, System.Single)
+  nameWithType: WidgetBoundsPresenter.WidgetBoundsPresenter(Color4, Single, Single)
 - uid: Lime.WidgetBoundsPresenter.#ctor*
   name: WidgetBoundsPresenter
   href: api/Lime.WidgetBoundsPresenter.html#Lime_WidgetBoundsPresenter__ctor_
@@ -75010,6 +76311,19 @@ references:
   isSpec: "True"
   fullName: Lime.WidgetBoundsPresenter.Color
   nameWithType: WidgetBoundsPresenter.Color
+- uid: Lime.WidgetBoundsPresenter.CornerRadius
+  name: CornerRadius
+  href: api/Lime.WidgetBoundsPresenter.html#Lime_WidgetBoundsPresenter_CornerRadius
+  commentId: P:Lime.WidgetBoundsPresenter.CornerRadius
+  fullName: Lime.WidgetBoundsPresenter.CornerRadius
+  nameWithType: WidgetBoundsPresenter.CornerRadius
+- uid: Lime.WidgetBoundsPresenter.CornerRadius*
+  name: CornerRadius
+  href: api/Lime.WidgetBoundsPresenter.html#Lime_WidgetBoundsPresenter_CornerRadius_
+  commentId: Overload:Lime.WidgetBoundsPresenter.CornerRadius
+  isSpec: "True"
+  fullName: Lime.WidgetBoundsPresenter.CornerRadius
+  nameWithType: WidgetBoundsPresenter.CornerRadius
 - uid: Lime.WidgetBoundsPresenter.GetRenderObject(Lime.Node)
   name: GetRenderObject(Node)
   href: api/Lime.WidgetBoundsPresenter.html#Lime_WidgetBoundsPresenter_GetRenderObject_Lime_Node_
