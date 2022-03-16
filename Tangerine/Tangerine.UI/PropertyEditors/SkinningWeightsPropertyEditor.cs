@@ -24,7 +24,7 @@ namespace Tangerine.UI
 			for (var i = 0; i <= 3; i++) {
 				indexEditors[i] = editorParams.NumericEditBoxFactory();
 				indexEditors[i].Step = 1;
-				weightsSliders[i] = new ThemedAreaSlider(range: new Vector2(0, 1), labelFormat: "0.00000");
+				weightsSliders[i] = new ThemedAreaSlider { NumericFormat = "0.00000", RangeMin = 0, RangeMax = 1 };
 				var wrapper = new Widget {
 					Layout = new HBoxLayout(),
 					LayoutCell = new LayoutCell { StretchY = 0 },
@@ -81,9 +81,7 @@ namespace Tangerine.UI
 				weightProvider,
 				v => {
 					weightEditor.Value = v.IsDefined ? v.Value : 0;
-					if (!v.IsDefined) {
-						weightEditor.LabelText = ManyValuesText;
-					}
+					weightEditor.LabelText = v.IsDefined ? null : ManyValuesText;
 				});
 			weightEditor.DragStarted += () => {
 				EditorParams.History?.BeginTransaction();

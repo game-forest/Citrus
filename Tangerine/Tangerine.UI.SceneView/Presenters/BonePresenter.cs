@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Lime;
 using Tangerine.Core;
@@ -84,10 +83,10 @@ namespace Tangerine.UI.SceneView
 			var hull = CalcHull(bone);
 			// Draw bone outline
 			Renderer.Flush();
-			Renderer.DrawRound(hull.V1 * t, 3, 10, color);
-			Renderer.DrawRound(hull.V3 * t, 3, 10, color);
-			Renderer.DrawQuadrangleOutline(hull * t, color);
-			Renderer.DrawQuadrangle(hull * t, ColorTheme.Current.SceneView.Bone);
+			RendererNvg.DrawRound(hull.V1 * t, 3, color);
+			RendererNvg.DrawRound(hull.V3 * t, 3, color);
+			RendererNvg.DrawQuadrangleOutline(hull * t, color);
+			RendererNvg.DrawQuadrangle(hull * t, ColorTheme.Current.SceneView.Bone);
 			// Draw parent link
 			if (bone.BaseIndex != 0) {
 				var p = bone.Parent.AsWidget.BoneArray[bone.BaseIndex].Tip * t;
@@ -120,14 +119,25 @@ namespace Tangerine.UI.SceneView
 		private static void DrawCapsule(
 			Vector2 a, Vector2 b, Vector2 n, Matrix32 t, int numSegments, Color4 color, float thickness = 1
 		) {
-			Renderer.DrawLine((a + n) * t, (b + n) * t, color, thickness);
-			Renderer.DrawLine((a - n) * t, (b - n) * t, color, thickness);
+			RendererNvg.DrawLine((a + n) * t, (b + n) * t, color, thickness);
+			RendererNvg.DrawLine((a - n) * t, (b - n) * t, color, thickness);
 			var step = 180 / numSegments;
-			for (var i = 0; i < numSegments; i++) {
-				var v1 = Vector2.RotateDeg(n, i * step);
-				var v2 = Vector2.RotateDeg(n, (i + 1) * step);
-				Renderer.DrawLine((v1 + a) * t, (v2 + a) * t, color, thickness);
-				Renderer.DrawLine((-v1 + b) * t, (-v2 + b) * t, color, thickness);
+			var nvg = Lime.NanoVG.Context.Instance;
+			nvg.StrokePaint(color);
+			nvg.StrokeWidth(thickness);
+			for (int j = 0; j < 2; j++) {
+				nvg.BeginPath();
+				for (var i = 0; i <= numSegments; i++) {
+					var v = j == 0 ?
+						(a + Vector2.RotateDeg(n, i * step)) * t :
+						(b - Vector2.RotateDeg(n, i * step)) * t;
+					if (i == 0) {
+						nvg.MoveTo(v);
+					} else {
+						nvg.LineTo(v);
+					}
+				}
+				nvg.Stroke();
 			}
 		}
 

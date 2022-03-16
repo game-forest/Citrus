@@ -4,88 +4,42 @@ using Tangerine.Core;
 
 namespace Tangerine.UI
 {
-	public class ThemedAreaSlider : Widget
+	public class ThemedAreaSlider : Slider
 	{
-		private readonly ThemedSlider slider;
-
-		/// <summary>
-		/// Label in front of the slider.
-		/// </summary>
-		public readonly ThemedSimpleText Label;
+		private readonly ThemedSimpleText label;
+		private readonly ClickGesture rightClickGesture;
 
 		/// <summary>
 		/// EditBox to set specific value.
 		/// </summary>
 		public readonly ThemedNumericEditBox Editor;
 
-		private readonly string labelFormat;
-
-		private float value;
+		/// <summary>
+		/// Specifies the numeric format for the value display.
+		/// </summary>
+		public string NumericFormat { get; set; } = "0.###";
 
 		/// <summary>
-		/// The current value of the slider.
-		/// May be outside of the range specified when creating the slider.
+		/// Used to override the text on the slider.
+		/// Null if the default numeric display is required.
 		/// </summary>
-		public float Value
+		public string LabelText { get; set; }
+
+		public ThemedAreaSlider()
 		{
-			get { return value; }
-			set
-			{
-				if (this.value != value) {
-					slider.Value = this.value = value;
-					UpdateTextWidgets();
-				}
-			}
-		}
-
-		/// <summary>
-		/// Returns the min value that can be set using the slider bar.
-		/// </summary>
-		public float RangeMin => slider.RangeMin;
-
-		/// <summary>
-		/// Returns the max value that can be set using the slider bar.
-		/// </summary>
-		public float RangeMax => slider.RangeMax;
-
-		/// <summary>
-		/// Used to set text to bypass the Value.
-		/// Changing the Value property will overwrite the text.
-		/// </summary>
-		public string LabelText
-		{
-			set => Editor.Text = Label.Text = value;
-		}
-
-		/// <summary>
-		/// Selected range color.
-		/// </summary>
-		public Color4 SelectedRangeColor { get; set; } = Theme.Colors.SelectedBackground;
-
-		/// <summary>
-		/// Called when changing Value.
-		/// </summary>
-		public Action Changed { get; set; }
-
-		public event Action DragStarted
-		{
-			add => slider.DragStarted += value;
-			remove => slider.DragStarted -= value;
-		}
-
-		public event Action DragEnded
-		{
-			add => slider.DragEnded += value;
-			remove => slider.DragEnded -= value;
-		}
-
-		public ThemedAreaSlider(Vector2 range, string labelFormat = "0.###")
-		{
-			if (range.X >= range.Y) {
-				throw new InvalidOperationException("Slider RangeMin >= RangeMax.");
-			}
-			this.labelFormat = labelFormat;
-			Label = new ThemedSimpleText {
+			var rail = new Spline { Id = "Rail" };
+			rail.AddNode(new SplinePoint { Position = new Vector2(0, 0.5f) });
+			rail.AddNode(new SplinePoint { Position = new Vector2(1, 0.5f) });
+			AddNode(rail);
+			var thumb = new Widget {
+				Id = "Thumb",
+				LayoutCell = new LayoutCell { Ignore = true },
+				Size = Vector2.Zero,
+			};
+			this.AddChangeWatcher(() => (Value, LabelText), _ => UpdateTextWidgets());
+			AddNode(thumb);
+			rail.ExpandToContainerWithAnchors();
+			label = new ThemedSimpleText {
 				HitTestTarget = false,
 				HAlignment = HAlignment.Left,
 				VAlignment = VAlignment.Bottom,
@@ -97,71 +51,60 @@ namespace Tangerine.UI
 				HitTestTarget = true,
 				MaxWidth = int.MaxValue,
 			};
-			slider = new ThemedSlider {
-				RangeMin = range.X,
-				RangeMax = range.Y,
-			};
-			slider.Thumb.HitTestTarget = false;
-			slider.Thumb.Size = new Vector2(1, slider.Thumb.Size.Y);
-			var rightClickGesture = new ClickGesture(buttonIndex: 1);
-			slider.Changed += () => {
-				Value = slider.Value;
-				Changed?.Invoke();
-			};
+			rightClickGesture = new ClickGesture(buttonIndex: 1);
 			Editor.FreezeInvisible = false;
 			Editor.Submitted += (text) => {
 				if (float.TryParse(Editor.Text, out float value)) {
 					Value = value;
-					Changed?.Invoke();
+					RaiseChanged();
 				}
 			};
-			Updating += (delta) => {
-				void EditorSetFocus()
-				{
-					Editor.SetFocus();
-					Editor.Text = Value.ToString();
-				}
-				if (IsFocused()) {
-					var focusScope = KeyboardFocusScope.GetEnclosingScope(this);
-					if (focusScope == null) {
-						Debug.Write("Error in ThemedAreaSlider: focusScope == null.");
-					} else {
-						if (focusScope.LastDirection == KeyboardFocusScope.Direction.Forward) {
-							EditorSetFocus();
-						} else {
-							if (Editor.Visible) {
-								focusScope.AdvanceFocus(KeyboardFocusScope.Direction.Backward);
-							} else {
-								EditorSetFocus();
-							}
-						}
-					}
-				}
-				if (rightClickGesture.WasRecognized()) {
-					EditorSetFocus();
-				}
-				Label.Visible = !(Editor.Visible = Editor.IsFocused());
-			};
-			MinSize = slider.MinSize;
-			Size = new Vector2(100000, slider.Size.Y);
+			Updating += OnUpdating;
 			Anchors = Anchors.LeftRight;
 			Layout = new StackLayout();
 			TabTravesable = new TabTraversable();
 			AddNode(Editor);
-			AddNode(Label);
-			AddNode(slider);
+			AddNode(label);
 			Editor.ExpandToContainerWithAnchors();
-			Label.ExpandToContainerWithAnchors();
+			label.ExpandToContainerWithAnchors();
 			Gestures.Add(rightClickGesture);
-			slider.CompoundPresenter.Insert(0, new SliderPresenter());
+			CompoundPresenter.Add(new SliderPresenter());
 			LateTasks.Add(Theme.MouseHoverInvalidationTask(this));
 			UpdateTextWidgets();
 		}
 
+		private void OnUpdating(float delta)
+		{
+			if (IsFocused()) {
+				var focusScope = KeyboardFocusScope.GetEnclosingScope(this);
+				if (focusScope != null) {
+					if (focusScope.LastDirection == KeyboardFocusScope.Direction.Forward) {
+						EditorSetFocus();
+					} else {
+						if (Editor.Visible) {
+							focusScope.AdvanceFocus(KeyboardFocusScope.Direction.Backward);
+						} else {
+							EditorSetFocus();
+						}
+					}
+				}
+			}
+			if (rightClickGesture.WasRecognized()) {
+				EditorSetFocus();
+			}
+			label.Visible = !(Editor.Visible = Editor.IsFocused());
+
+			void EditorSetFocus()
+			{
+				Editor.SetFocus();
+				Editor.Text = Value.ToString();
+			}
+		}
+
 		private void UpdateTextWidgets()
 		{
-			Label.Text = value.ToString(labelFormat);
-			Editor.Text = value.ToString();
+			label.Text = LabelText ?? Value.ToString(NumericFormat);
+			Editor.Text = Value.ToString();
 		}
 
 		public override bool IsNotDecorated() => false;
@@ -173,15 +116,14 @@ namespace Tangerine.UI
 			public Lime.RenderObject GetRenderObject(Node node)
 			{
 				var slider = (Slider)node;
-				var container = (ThemedAreaSlider)node.Parent;
 				var ro = RenderObjectPool<RenderObject>.Acquire();
 				ro.CaptureRenderState(slider);
 				ro.RangeMin = slider.RangeMin;
 				ro.RangeMax = slider.RangeMax;
 				ro.Value = slider.Value;
-				ro.WidgetSize = (Size)container.Size;
-				ro.RangeColor = container.SelectedRangeColor;
-				ro.ShowSelectionRect = container.IsFocused() || slider.IsMouseOverThisOrDescendant();
+				ro.Position = slider.ContentPosition;
+				ro.Size = slider.ContentSize;
+				ro.ShowSelectionRect = slider.IsFocused() || slider.IsMouseOverThisOrDescendant();
 				return ro;
 			}
 
@@ -190,22 +132,24 @@ namespace Tangerine.UI
 				public float RangeMin;
 				public float RangeMax;
 				public float Value;
-				public Size WidgetSize;
-				public Color4 RangeColor;
+				public Vector2 Position;
+				public Vector2 Size;
 				public bool ShowSelectionRect;
 
 				public override void Render()
 				{
-					float sliderRange = RangeMax - RangeMin;
-					float thumbPosition = (Value - RangeMin) / sliderRange * WidgetSize.Width;
-					if (thumbPosition > 1) {
-						RendererWrapper.Current.DrawRect(
-							Vector2.One, new Vector2(thumbPosition, WidgetSize.Height - 1), RangeColor);
-					}
-					if (ShowSelectionRect) {
-						var rectColor = Theme.Colors.KeyboardFocusBorder;
-						Renderer.DrawRectOutline(Vector2.Zero, (Vector2)WidgetSize, rectColor, thickness: 1);
-					}
+					PrepareRenderState();
+					var sliderRange = RangeMax - RangeMin;
+					var thumbPosition = (Value - RangeMin) / sliderRange * Size.X;
+					var nvg = Lime.NanoVG.Context.Instance;
+					RendererNvg.DrawRoundedRect(
+						Position, Size, Theme.Colors.WhiteBackground, 4);
+					nvg.Scissor(Vector2.Half, new Vector2(thumbPosition, Size.Y) - Vector2.One);
+					RendererNvg.DrawRoundedRect(
+						Position, Size, Theme.Colors.SelectedBackground, 4);
+					nvg.ResetScissor();
+					var borderColor = ShowSelectionRect ? Theme.Colors.KeyboardFocusBorder : Theme.Colors.ControlBorder;
+					RendererNvg.DrawRoundedRectOutline(Position, Size, borderColor, 1, 4);
 				}
 			}
 		}

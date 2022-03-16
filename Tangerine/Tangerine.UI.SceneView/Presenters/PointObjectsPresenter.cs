@@ -41,7 +41,7 @@ namespace Tangerine.UI.SceneView
 			}
 
 			var bounds = CalcExpandedHullInSpaceOf(selectedPointObjects, sv);
-			Renderer.DrawQuadrangleOutline(bounds, ColorTheme.Current.SceneView.Selection);
+			RendererNvg.DrawQuadrangleOutline(bounds, ColorTheme.Current.SceneView.Selection);
 			var hullSize = bounds[0] - bounds[2];
 			if (selectedPointObjects.Count() > 1) {
 				for (var i = 0; i < 4; i++) {
@@ -104,8 +104,8 @@ namespace Tangerine.UI.SceneView
 
 		private void DrawPointObject(Vector2 position, Color4 color)
 		{
-			Renderer.DrawRound(position, 6, 10, ColorTheme.Current.SceneView.SplineOutline);
-			Renderer.DrawRound(position, 4, 10, color);
+			RendererNvg.DrawRound(position, 6, ColorTheme.Current.SceneView.SplineOutline);
+			RendererNvg.DrawRound(position, 4, color);
 		}
 
 		private void DrawStretchMark(Vector2 position)

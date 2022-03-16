@@ -37,6 +37,8 @@ namespace Lime
 		Butt,
 		Round,
 		Square,
+		Bevel,
+		Miter,
 	}
 
 #pragma warning disable CS0660, CS0661
@@ -499,12 +501,17 @@ namespace Lime
 		}
 
 		public static void DrawTriangleFan(
-			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Vertex[] vertices,
+			int numVertices,
+			int offset = 0
 		) {
 			if (numVertices == 0) {
 				return;
 			}
-			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices);
+			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices, offset);
 			var baseVertex = batch.LastVertex;
 			int j = batch.LastIndex;
 			var indices = batch.Mesh.Indices;
@@ -535,12 +542,17 @@ namespace Lime
 		}
 
 		public static void DrawTriangleStrip(
-			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Vertex[] vertices,
+			int numVertices,
+			int offset = 0
 		) {
 			if (numVertices == 0) {
 				return;
 			}
-			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices);
+			var batch = DrawTrianglesHelper(texture1, texture2, material, vertices, numVertices, offset);
 			var vertex = batch.LastVertex;
 			int j = batch.LastIndex;
 			var indices = batch.Mesh.Indices;
@@ -556,7 +568,12 @@ namespace Lime
 		}
 
 		private static RenderBatch<Vertex> DrawTrianglesHelper(
-			ITexture texture1, ITexture texture2, IMaterial material, Vertex[] vertices, int numVertices
+			ITexture texture1,
+			ITexture texture2,
+			IMaterial material,
+			Vertex[] vertices,
+			int numVertices,
+			int offset = 0
 		) {
 			var batch = RenderList.GetBatch<Vertex>(texture1, texture2, material, numVertices, (numVertices - 2) * 3);
 			var transform = GetEffectiveTransform();
@@ -564,7 +581,7 @@ namespace Lime
 			batch.Mesh.DirtyFlags |= MeshDirtyFlags.Vertices;
 			int j = batch.LastVertex;
 			for (int i = 0; i < numVertices; i++, j++) {
-				var v = vertices[i];
+				var v = vertices[i + offset];
 				v.Pos = transform * v.Pos;
 				texture1?.TransformUVCoordinatesToAtlasSpace(ref v.UV1);
 				texture2?.TransformUVCoordinatesToAtlasSpace(ref v.UV2);
@@ -667,7 +684,7 @@ namespace Lime
 			vertices[v].UV2 = uv1t2;
 		}
 
-		private static Matrix32 GetEffectiveTransform()
+		internal static Matrix32 GetEffectiveTransform()
 		{
 			if (transform2Active) {
 				return Transform1 * Transform2;
@@ -721,8 +738,7 @@ namespace Lime
 					batchLength < batchedSprites.Length &&
 					s.Texture1 == batchedSprites[0].Texture1 && s.Texture2 == batchedSprites[0].Texture2 &&
 					s.Material == batchedSprites[0].Material &&
-					4 * (batchLength + 1) <= RenderBatchLimits.MaxVertices &&
-					6 * (batchLength + 1) <= RenderBatchLimits.MaxIndices
+					6 * (batchLength + 1) <= RenderBatch<Vertex>.MaxIndices
 				) {
 					batchedSprites[batchLength++] = s;
 					continue;
@@ -825,8 +841,8 @@ namespace Lime
 
 		public static void DrawLine(Vector2 a, Vector2 b, Color4 color, float thickness = 1, LineCap cap = LineCap.Butt)
 		{
-			if (cap == LineCap.Round) {
-				throw new NotImplementedException();
+			if (cap == LineCap.Round || cap == LineCap.Bevel || cap == LineCap.Miter) {
+				throw new NotImplementedException("Use RendererNvg.DrawLine() with the given LineCap");
 			}
 			var d = (b - a).Normalized * thickness * 0.5f;
 			Vector2 n = GetVectorNormal(d);

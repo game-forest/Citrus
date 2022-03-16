@@ -38,7 +38,8 @@ namespace Tangerine.UI.Inspector
 			image = new Image { Size = Size, Texture = new SerializableTexture(), Visible = false };
 			Nodes.Add(image);
 			Layout = new StackLayout();
-			PostPresenter = new WidgetBoundsPresenter(ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox);
+			PostPresenter = new WidgetBoundsPresenter(
+				ColorTheme.Current.Inspector.BorderAroundKeyframeColorbox, cornerRadius: 2);
 			Awoke += Awake;
 		}
 

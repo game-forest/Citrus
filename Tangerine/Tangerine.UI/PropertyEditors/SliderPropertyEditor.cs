@@ -11,7 +11,7 @@ namespace Tangerine.UI
 
 		public SliderPropertyEditor(Vector2 range, IPropertyEditorParams editorParams) : base(editorParams)
 		{
-			slider = new ThemedAreaSlider(range);
+			slider = new ThemedAreaSlider { RangeMin = range.X, RangeMax = range.Y };
 			EditorContainer.AddNode(slider);
 			var current = CoalescedPropertyValue();
 			slider.Changed += () => SetProperty(slider.Value);
@@ -29,9 +29,7 @@ namespace Tangerine.UI
 				current,
 				v => {
 					slider.Value = v.IsDefined ? v.Value : slider.RangeMin;
-					if (!v.IsDefined) {
-						slider.LabelText = ManyValuesText;
-					}
+					slider.LabelText = v.IsDefined ? null : ManyValuesText;
 				});
 			ManageManyValuesOnFocusChange(slider.Editor, current);
 		}

@@ -33,7 +33,7 @@ namespace Lime
 			float length = 0;
 			var segmentCount = GetSegmentCount();
 			for (int i = 0; i < segmentCount; i++) {
-				length += ((GetPoint(i + 1).Position - GetPoint(i).Position) * Size).Length;
+				length += ((GetPoint(i + 1).Position - GetPoint(i).Position) * ContentSize).Length;
 			}
 			return length;
 		}
@@ -63,13 +63,13 @@ namespace Lime
 		private float CalcSegmentLengthAccurate(SplinePoint point1, SplinePoint point2, int approximateCount)
 		{
 			float length = 0;
-			Vector2 prevPosition = point1.Position * Size;
+			var prevPosition = point1.Position * ContentSize;
 			for (int i = 1; i < approximateCount; i++) {
-				Vector2 curPosition = Interpolate(point1, point2, (float)i / approximateCount);
+				var curPosition = Interpolate(point1, point2, (float)i / approximateCount);
 				length += (curPosition - prevPosition).Length;
 				prevPosition = curPosition;
 			}
-			length += (point2.Position * Size - prevPosition).Length;
+			length += (point2.Position * ContentSize - prevPosition).Length;
 			return length;
 		}
 
@@ -172,10 +172,10 @@ namespace Lime
 				var start = GetPoint(i);
 				var end = GetPoint(i + 1);
 				if (polylineLengthFromBeginning < 0) {
-					return start.Position * Size;
+					return start.Position * ContentSize + ContentPosition;
 				}
 
-				float segLength = ((end.Position - start.Position) * Size).Length;
+				float segLength = ((end.Position - start.Position) * ContentSize).Length;
 				if (
 					segStart <= polylineLengthFromBeginning &&
 					polylineLengthFromBeginning <= segStart + segLength &&
@@ -186,7 +186,8 @@ namespace Lime
 				segStart += segLength;
 			}
 
-			return Nodes.Count > 0 ? GetPoint(segmentCount % Nodes.Count).Position * Size : Vector2.Zero;
+			return Nodes.Count > 0 ?
+				GetPoint(segmentCount % Nodes.Count).Position * ContentSize + ContentPosition : ContentPosition;
 		}
 
 		public Vector2 CalcDerivative(float polylineLengthFromBeginning)
@@ -197,10 +198,10 @@ namespace Lime
 				var start = GetPoint(i);
 				var end = GetPoint(i + 1);
 				if (polylineLengthFromBeginning < 0) {
-					return start.Position * Size;
+					return start.Position * ContentSize + ContentPosition;
 				}
 
-				float segLength = ((end.Position - start.Position) * Size).Length;
+				float segLength = ((end.Position - start.Position) * ContentSize).Length;
 				if (
 					segStart <= polylineLengthFromBeginning &&
 					polylineLengthFromBeginning <= segStart + segLength &&
@@ -211,7 +212,8 @@ namespace Lime
 				segStart += segLength;
 			}
 
-			return Nodes.Count > 0 ? GetPoint(segmentCount % Nodes.Count).Position * Size : Vector2.Zero;
+			return Nodes.Count > 0 ?
+				GetPoint(segmentCount % Nodes.Count).Position * ContentSize + ContentPosition : ContentPosition;
 		}
 
 		public IEnumerable<Vector2> CalcPoints(float step)
@@ -222,7 +224,7 @@ namespace Lime
 			for (int i = 0; i < segmentCount; i++) {
 				var start = GetPoint(i);
 				var end = GetPoint(i + 1);
-				float segLength = ((end.Position - start.Position) * Size).Length;
+				float segLength = ((end.Position - start.Position) * ContentSize).Length;
 				while (totalLength < segStart + segLength) {
 					var t = (totalLength - segStart) / segLength;
 					yield return Interpolate(start, end, t);
@@ -231,26 +233,26 @@ namespace Lime
 				segStart += segLength;
 			}
 			if (Nodes.Count > 0) {
-				yield return GetPoint(segmentCount % Nodes.Count).Position * Size;
+				yield return GetPoint(segmentCount % Nodes.Count).Position * ContentSize + ContentPosition;
 			}
 		}
 
 		private Vector2 Interpolate(SplinePoint v1, SplinePoint v2, float t)
 		{
 			if (!v1.Straight) {
-				Vector2 p1 = v1.Position * Size;
-				Vector2 p2 = v2.Position * Size;
+				var p1 = v1.Position * ContentSize + ContentPosition;
+				var p2 = v2.Position * ContentSize + ContentPosition;
 				float len = (p2 - p1).Length;
 				float ta1 = v1.TangentAngle * Mathf.DegToRad;
 				float ta2 = v2.TangentAngle * Mathf.DegToRad;
-				Vector2 t1 = Vector2.CosSinRough(ta1);
-				Vector2 t2 = Vector2.CosSinRough(ta2);
+				var t1 = Vector2.CosSinRough(ta1);
+				var t2 = Vector2.CosSinRough(ta2);
 				t1 *= len * v1.TangentWeight;
 				t2 *= len * v2.TangentWeight;
 				return Mathf.HermiteSpline(t, p1, t1, p2, t2);
 			} else {
-				Vector2 p1 = v1.Position * Size;
-				Vector2 p2 = v2.Position * Size;
+				var p1 = v1.Position * ContentSize + ContentPosition;
+				var p2 = v2.Position * ContentSize + ContentPosition;
 				return p1 + t * (p2 - p1);
 			}
 		}
@@ -258,8 +260,8 @@ namespace Lime
 		private Vector2 InterpolateDerivative(SplinePoint v1, SplinePoint v2, float t)
 		{
 			if (!v1.Straight) {
-				Vector2 p1 = v1.Position * Size;
-				Vector2 p2 = v2.Position * Size;
+				var p1 = v1.Position * ContentSize + ContentPosition;
+				var p2 = v2.Position * ContentSize + ContentPosition;
 				float len = (p2 - p1).Length;
 				float ta1 = v1.TangentAngle * Mathf.DegToRad;
 				float ta2 = v2.TangentAngle * Mathf.DegToRad;
@@ -269,8 +271,8 @@ namespace Lime
 				t2 *= len * v2.TangentWeight;
 				return Mathf.HermiteSplineDerivative(t, p1, t1, p2, t2);
 			} else {
-				Vector2 p1 = v1.Position * Size;
-				Vector2 p2 = v2.Position * Size;
+				var p1 = v1.Position * ContentSize + ContentPosition;
+				var p2 = v2.Position * ContentSize + ContentPosition;
 				return p1 + t * (p2 - p1);
 			}
 		}
@@ -285,7 +287,7 @@ namespace Lime
 			for (int i = 0; i < segmentCount; i++) {
 				var start = GetPoint(i);
 				var end = GetPoint(i + 1);
-				float segmentLength = ((end.Position - start.Position) * Size).Length;
+				float segmentLength = ((end.Position - start.Position) * ContentSize).Length;
 				float minDistance_, offset_;
 				if (CalcSplineLengthToNearestPointHelper(start, end, point, out minDistance_, out offset_)) {
 					if (minDistance_ < minDistance) {

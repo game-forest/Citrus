@@ -157,7 +157,7 @@ namespace Lime
 		{
 			var sin = value1.X * value2.Y - value2.X * value1.Y;
 			var cos = value1.X * value2.X + value1.Y * value2.Y;
-			return Mathf.Atan2(sin, cos);
+			return MathF.Atan2(sin, cos);
 		}
 
 		/// <summary>
@@ -302,7 +302,7 @@ namespace Lime
 		/// <param name="radians">Azimuth of direction (in radians).</param>
 		public static Vector2 CosSin(float radians)
 		{
-			return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+			return new Vector2(MathF.Cos(radians), MathF.Sin(radians));
 		}
 
 		/// <summary>
@@ -376,23 +376,14 @@ namespace Lime
 		/// <summary>
 		/// Returns the arctangent value of the current vector in the range of (-Pi, Pi].
 		/// </summary>
-		public float Atan2Rad
-		{
-			get { return Mathf.Atan2(Y, X); }
-		}
+		public float Atan2Rad => MathF.Atan2(Y, X);
 
 		/// <summary>
 		/// Returns the arctangent value of the current vector in the range of (-180, 180].
 		/// </summary>
-		public float Atan2Deg
-		{
-			get { return Mathf.Atan2(Y, X) * Mathf.RadToDeg; }
-		}
+		public float Atan2Deg => MathF.Atan2(Y, X) * Mathf.RadToDeg;
 
-		public float Length
-		{
-			get { return Mathf.Sqrt(X * X + Y * Y); }
-		}
+		public float Length => MathF.Sqrt(X * X + Y * Y);
 
 		/// <summary>
 		/// Returns this <see cref="Vector2"/> as a unit vector with the same direction.
@@ -411,10 +402,7 @@ namespace Lime
 			}
 		}
 
-		public float SqrLength
-		{
-			get { return X * X + Y * Y; }
-		}
+		public float SqrLength => X * X + Y * Y;
 
 		/// <summary>
 		/// Returns the <see cref="string"/> representation of this <see cref="Vector2"/>

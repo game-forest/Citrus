@@ -85,12 +85,14 @@ namespace Lime
 	{
 		public Color4 Color { get; set; }
 		public float Thickness { get; set; }
+		public float CornerRadius { get; set; }
 		public bool IgnorePadding { get; set; }
 
-		public WidgetBoundsPresenter(Color4 color, float thickness = 1)
+		public WidgetBoundsPresenter(Color4 color, float thickness = 1, float cornerRadius = 0)
 		{
 			Color = color;
 			Thickness = thickness;
+			CornerRadius = cornerRadius;
 		}
 
 		public Lime.RenderObject GetRenderObject(Node node)
@@ -100,6 +102,7 @@ namespace Lime
 			ro.CaptureRenderState(widget);
 			ro.Color = Color * widget.GlobalColor;
 			ro.Thickness = Thickness;
+			ro.CornerRadius = CornerRadius;
 			if (IgnorePadding) {
 				ro.Position = Vector2.Zero;
 				ro.Size = widget.Size;
@@ -118,11 +121,16 @@ namespace Lime
 			public Vector2 Size;
 			public Color4 Color;
 			public float Thickness;
+			public float CornerRadius;
 
 			public override void Render()
 			{
 				PrepareRenderState();
-				Renderer.DrawRectOutline(Position, Position + Size, Color, Thickness);
+				if (CornerRadius == 0) {
+					Renderer.DrawRectOutline(Position, Position + Size, Color, Thickness);
+				} else {
+					RendererNvg.DrawRoundedRectOutline(Position, Position + Size, Color, Thickness, CornerRadius);
+				}
 			}
 		}
 	}

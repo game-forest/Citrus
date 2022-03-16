@@ -47,8 +47,7 @@ namespace Lime
 			public override void Render()
 			{
 				PrepareRenderState();
-				Renderer.DrawRect(Vector2.Zero, Size, InnerColor);
-				Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+				RendererNvg.DrawRoundedRectWithBorder(Vector2.Zero, Size, InnerColor, BorderColor, 1, 2);
 			}
 		}
 	}

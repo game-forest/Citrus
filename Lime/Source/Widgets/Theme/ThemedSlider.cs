@@ -1,5 +1,6 @@
 #if !ANDROID && !iOS
 using System;
+using Lime.NanoVG;
 
 namespace Lime
 {
@@ -10,18 +11,18 @@ namespace Lime
 
 		public ThemedSlider()
 		{
-			var rail = new Spline { Id = "Rail" };
+			var rail = new Spline { Id = "Rail", Padding = new Thickness(Theme.Metrics.SliderThumbWidth / 2, 0) };
 			rail.AddNode(new SplinePoint { Position = new Vector2(0, 0.5f) });
 			rail.AddNode(new SplinePoint { Position = new Vector2(1, 0.5f) });
 			AddNode(rail);
 			rail.ExpandToContainerWithAnchors();
 			var thumb = new Widget {
 				Id = "Thumb",
-				Size = new Vector2(8, 16),
+				Size = new Vector2(Theme.Metrics.SliderThumbWidth),
 				Pivot = Vector2.Half,
 			};
 			AddNode(thumb);
-			MinSize = new Vector2(30, 16);
+			MinSize = new Vector2(30 + Theme.Metrics.SliderThumbWidth, Theme.Metrics.SliderThumbWidth);
 			thumb.CompoundPresenter.Add(new SliderThumbPresenter());
 			CompoundPresenter.Add(new SliderPresenter());
 		}
@@ -33,7 +34,7 @@ namespace Lime
 				var widget = (Widget)node;
 				var ro = RenderObjectPool<RenderObject>.Acquire();
 				ro.CaptureRenderState(widget);
-				ro.Size = widget.Size;
+				ro.Size = widget.ContentSize;
 				ro.Gradient = Theme.Colors.ButtonDefault;
 				ro.BorderColor = Theme.Colors.ControlBorder;
 				return ro;
@@ -50,9 +51,9 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					var p = new Vector2(0, 2);
-					Renderer.DrawVerticalGradientRect(-p, p + Size, Gradient);
-					Renderer.DrawRectOutline(-p, p + Size, BorderColor);
+					var fillPaint = Paint.LinearGradient(0, 0,  0, Size.Y, Gradient[0].Color, Gradient[1].Color);
+					RendererNvg.DrawRound(Size / 2, Size.Y / 2 - 1, fillPaint);
+					RendererNvg.DrawCircle(Size / 2, Size.Y / 2 - 1, BorderColor, 1);
 				}
 			}
 		}
@@ -64,7 +65,8 @@ namespace Lime
 				var widget = (Widget)node;
 				var ro = RenderObjectPool<RenderObject>.Acquire();
 				ro.CaptureRenderState(widget);
-				ro.Size = widget.Size;
+				ro.Position = widget.ContentPosition + new Vector2(Theme.Metrics.SliderThumbWidth / 2, 0);
+				ro.Size = widget.ContentSize - new Vector2(Theme.Metrics.SliderThumbWidth, 0);
 				ro.Color = Theme.Colors.WhiteBackground;
 				ro.BorderColor = Theme.Colors.ControlBorder;
 				return ro;
@@ -74,6 +76,7 @@ namespace Lime
 
 			private class RenderObject : WidgetRenderObject
 			{
+				public Vector2 Position;
 				public Vector2 Size;
 				public Color4 Color;
 				public Color4 BorderColor;
@@ -81,8 +84,7 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawRect(Vector2.Zero, Size, Color);
-					Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+					RendererNvg.DrawRoundedRectWithBorder(Position, Position + Size, Color, BorderColor, 1, 4);
 				}
 			}
 		}

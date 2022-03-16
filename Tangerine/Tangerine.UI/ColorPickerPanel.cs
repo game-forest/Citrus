@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Lime;
+using Lime.NanoVG;
 using Tangerine.Core;
+using Renderer = Lime.Renderer;
 
 namespace Tangerine.UI
 {
@@ -24,7 +26,7 @@ namespace Tangerine.UI
 
 		public Color4 Color
 		{
-			get => colorHsva.HsvaToRgb();
+			get => colorHsva.ToRgba();
 			set => colorHsva = ColorHsva.RgbToHsva(value);
 		}
 
@@ -182,12 +184,6 @@ namespace Tangerine.UI
 
 			private const float CenterX = OuterRadius;
 			private const float CenterY = OuterRadius;
-			private const float CursorRadius = (OuterRadius - InnerRadius * Margin) / 2;
-
-			private bool wasHueChanged = true;
-
-			private Texture2D texture = new Texture2D();
-			private Color4[] image;
 
 			public HsvTriangleColorWheel(Property<ColorHsva> color)
 			{
@@ -198,63 +194,141 @@ namespace Tangerine.UI
 					PostPresenter = new SyncDelegatePresenter<Widget>(Render),
 				};
 				Widget.Tasks.Add(SelectTask());
-				Widget.AddChangeWatcher(() => color.Value.H, _ => wasHueChanged = true);
 			}
 
 			private void Render(Widget widget)
 			{
 				widget.PrepareRendererState();
-				DrawControl();
-				DrawTriangleCursor();
-				DrawWheelCursor();
-			}
-
-			private void DrawTriangleCursor()
-			{
-				var cursor = new Vector2(
-					CenterX - InnerRadius * (1 - 3 * color.Value.S * color.Value.V) / 2,
-					CenterY + InnerRadius * Mathf.Sqrt(3) *
-					(color.Value.S * color.Value.V - 2 * color.Value.V + 1) / 2
-				);
-				Renderer.DrawCircle(cursor, CursorRadius, 20, Color4.Black);
-			}
-
-			private void DrawWheelCursor()
-			{
-				var cursor =
-					Vector2.CosSin(color.Value.H * Mathf.DegToRad) *
-					(InnerRadius * Margin + OuterRadius) / 2 +
-					Vector2.One * new Vector2(CenterX, CenterY);
-				Renderer.DrawCircle(cursor, CursorRadius, 20, Color4.Black);
-			}
-
-			private void DrawControl()
-			{
-				int size = (int)Math.Floor(OuterRadius * 2);
-				if (wasHueChanged) {
-					if (image == null) {
-						image = new Color4[size * size];
-					}
-					for (int y = 0; y < size; ++y) {
-						for (int x = 0; x < size; ++x) {
-							var pick = Pick(size - x - 1, y);
-							if (pick.Area == Area.Outside) {
-								image[y * size + x] = Color4.Transparent;
-							} else if (pick.Area == Area.Wheel) {
-								image[y * size + x] = new ColorHsva(pick.H.Value, 1, 1).HsvaToRgb();
-							} else {
-								image[y * size + x] = new ColorHsva(
-									color.Value.H, pick.S.Value, pick.V.Value
-								).HsvaToRgb();
-							}
-						}
-					}
-					texture.LoadImage(image, size, size);
-					wasHueChanged = false;
+				float ax, ay, bx, by;
+				var nvg = Lime.NanoVG.Context.Instance;
+				// Circle
+				nvg.Save();
+				var cx = CenterX;
+				var cy = CenterY;
+				var r1 = OuterRadius;
+				var r0 = InnerRadius * Margin;
+				var aeps = 0.5f / r1;
+				for (int i = 0; i < 6; i++) {
+					var a0 = i / 6.0f * MathF.PI * 2.0f - aeps;
+					var a1 = (i + 1.0f) / 6.0f * MathF.PI * 2.0f + aeps;
+					nvg.BeginPath();
+					nvg.Arc(cx, cy, r0, a0, a1, Winding.ClockWise);
+					nvg.Arc(cx, cy, r1, a1, a0, Winding.CounterClockWise);
+					nvg.ClosePath();
+					ax = cx + MathF.Cos(a0) * (r0 + r1) * 0.5f;
+					ay = cy + MathF.Sin(a0) * (r0 + r1) * 0.5f;
+					bx = cx + MathF.Cos(a1) * (r0 + r1) * 0.5f;
+					by = cy + MathF.Sin(a1) * (r0 + r1) * 0.5f;
+					nvg.FillPaint(
+						Paint.LinearGradient(
+							ax,
+							ay,
+							bx,
+							by,
+							new ColorHsva(Pick(ax, ay).H.Value, 1, 1, 1).ToRgba(),
+							new ColorHsva(Pick(bx, by).H.Value, 1, 1, 1).ToRgba()
+						)
+					);
+					nvg.Fill();
 				}
-				Renderer.DrawSprite(
-					texture, Color4.White, Vector2.Zero, Vector2.One * size, new Vector2(1, 0), new Vector2(0, 1)
+				nvg.BeginPath();
+				nvg.Circle(cx, cy, r0 - 0.5f);
+				nvg.Circle(cx, cy, r1 + 0.5f);
+				nvg.StrokeColor(new Color4(0, 0, 0, 64));
+				nvg.StrokeWidth(1.0f);
+				nvg.Stroke();
+
+				// Selection on the circle
+				nvg.Save();
+				nvg.Translate(cx, cy);
+				nvg.Rotate(color.Value.H / 360 * MathF.PI * 2);
+				nvg.StrokeWidth(2.0f);
+				nvg.BeginPath();
+				nvg.Rect(r0 - 1, -3, r1 - r0 + 2, 6);
+				nvg.StrokeColor(new Color4(255, 255, 255, 192));
+				nvg.Stroke();
+				nvg.BeginPath();
+				nvg.Rect(r0 - 2 - 10, -4 - 10, r1 - r0 + 4 + 20, 8 + 20);
+				nvg.Rect(r0 - 2, -4, r1 - r0 + 4, 8);
+				nvg.PathWinding(Solidity.Hole);
+				nvg.FillPaint(
+					Paint.BoxGradient(
+						r0 - 3,
+						-5,
+						r1 - r0 + 6,
+						10,
+						2,
+						4,
+						new Color4(0, 0, 0, 128),
+						Color4.Zero
+					));
+				nvg.Fill();
+				nvg.Restore();
+
+				// Triangle
+				nvg.Translate(cx, cy);
+				var r = r0 - 6;
+				var ta = 120.0f / 180.0f * MathF.PI;
+				ax = MathF.Cos(ta) * r;
+				ay = MathF.Sin(ta) * r;
+				bx = MathF.Cos(-ta) * r;
+				by = MathF.Sin(-ta) * r;
+				nvg.BeginPath();
+				nvg.MoveTo(r, 0);
+				nvg.LineTo(ax, ay);
+				nvg.LineTo(bx, by);
+				nvg.ClosePath();
+				nvg.FillPaint(
+					Paint.LinearGradient(
+						r,
+						0,
+						bx,
+						by,
+						new ColorHsva(color.Value.H, 1.0f, 1.0f).ToRgba(),
+						Color4.White
+					)
 				);
+				nvg.Fill();
+				nvg.FillPaint(
+					Paint.LinearGradient(
+						(r + bx) * 0.5f,
+						(0 + by) * 0.5f,
+						ax,
+						ay,
+						Color4.Zero,
+						new Color4(0, 0, 0, 255)
+					)
+				);
+				nvg.Fill();
+				nvg.StrokeColor(new Color4(0, 0, 0, 64));
+				nvg.Stroke();
+
+				// Circle on the triangle
+				ax = -InnerRadius * (1 - 3 * color.Value.S * color.Value.V) / 2;
+				ay = InnerRadius * Mathf.Sqrt(3) *
+					(color.Value.S * color.Value.V - 2 * color.Value.V + 1) / 2;
+				nvg.StrokeWidth(2.0f);
+				nvg.BeginPath();
+				nvg.Circle(ax, ay, 5);
+				nvg.StrokeColor(new Color4(255, 255, 255, 192));
+				nvg.Stroke();
+
+				nvg.BeginPath();
+				nvg.Rect(ax - 20, ay - 20, 40, 40);
+				nvg.Circle(ax, ay, 7);
+				nvg.PathWinding(Solidity.Hole);
+				nvg.FillPaint(
+					Paint.RadialGradient(
+					ax,
+					ay,
+					7,
+					9,
+					new Color4(0, 0, 0, 64),
+					Color4.Zero
+					)
+				);
+				nvg.Fill();
+				nvg.Restore();
 			}
 
 			private static void ShiftedCoordinates(float x, float y, out float nx, out float ny)
@@ -357,10 +431,10 @@ namespace Tangerine.UI
 
 			private struct Result
 			{
-				public Area Area { get; set; }
-				public float? H { get; set; }
-				public float? S { get; set; }
-				public float? V { get; set; }
+				public Area Area;
+				public float? H;
+				public float? S;
+				public float? V;
 			}
 		}
 
@@ -416,7 +490,8 @@ namespace Tangerine.UI
 					var widget = (Widget)node;
 					var renderObject = RenderObjectPool<RenderObject>.Acquire();
 					renderObject.CaptureRenderState(widget);
-					renderObject.Size = widget.Size;
+					renderObject.Position = widget.ContentPosition + new Vector2(Theme.Metrics.SliderThumbWidth / 2, 0);
+					renderObject.Size = widget.ContentSize - new Vector2(Theme.Metrics.SliderThumbWidth, 0);
 					renderObject.BorderColor = Theme.Colors.ControlBorder;
 					renderObject.Pixels = pixels;
 					return renderObject;
@@ -427,6 +502,7 @@ namespace Tangerine.UI
 				{
 					private readonly Texture2D texture = new Texture2D();
 
+					public Vector2 Position;
 					public Vector2 Size;
 					public Color4 BorderColor;
 					public Color4[] Pixels;
@@ -438,12 +514,12 @@ namespace Tangerine.UI
 						Renderer.DrawSprite(
 							texture1: texture,
 							color: Color4.White,
-							position: Vector2.Zero,
+							position: Position,
 							size: Size,
 							uv0: new Vector2(1, 0),
 							uv1: new Vector2(0, 1)
 						);
-						Renderer.DrawRectOutline(a: Vector2.Zero, b: Size, color: BorderColor);
+						Renderer.DrawRectOutline(a: Position, b: Position + Size, color: BorderColor);
 					}
 				}
 			}
@@ -509,13 +585,13 @@ namespace Tangerine.UI
 				int pixelCount,
 				string format
 			) : base(color, name, min, max, pixelCount, format) {
-				initialLAB = ColorLab.RgbToLab(color.Value.HsvaToRgb());
+				initialLAB = ColorLab.RgbToLab(color.Value.ToRgba());
 			}
 
 			protected override void OnColorValueChange()
 			{
-				if (SliderColor.Value.HsvaToRgb() != CurrentLab.LabToRgb()) {
-					var c = ColorLab.RgbToLab(SliderColor.Value.HsvaToRgb());
+				if (SliderColor.Value.ToRgba() != CurrentLab.LabToRgb()) {
+					var c = ColorLab.RgbToLab(SliderColor.Value.ToRgba());
 					CurrentLab = c;
 				}
 			}
@@ -564,7 +640,7 @@ namespace Tangerine.UI
 				protected override void OnColorValueChange()
 				{
 					Slider.Value = (byte)(SliderColor.Value.A * 255);
-					var color = SliderColor.Value.HsvaToRgb();
+					var color = SliderColor.Value.ToRgba();
 					for (int i = 0; i < PixelCount; i++) {
 						color.A = (byte)((float)i / PixelCount * 255);
 						Pixels[PixelCount - i - 1] = color;
@@ -577,11 +653,14 @@ namespace Tangerine.UI
 					{
 						var widget = node.AsWidget;
 						widget.PrepareRendererState();
-						RendererWrapper.Current.DrawRect(Vector2.Zero, widget.Size, Color4.White);
+						var position = widget.ContentPosition + new Vector2(Theme.Metrics.SliderThumbWidth / 2, 0);
+						var size = widget.ContentSize - new Vector2(Theme.Metrics.SliderThumbWidth, 0);
+						RendererWrapper.Current.DrawRect(position, size, Color4.White);
 						const int numChecks = 20;
-						var checkSize = new Vector2(widget.Width / numChecks, widget.Height / 2);
+						var checkSize = new Vector2(size.X / numChecks, size.Y / 2);
 						for (int i = 0; i < numChecks; i++) {
-							var checkPos = new Vector2(i * checkSize.X, (i % 2 == 0) ? 0 : checkSize.Y);
+							var checkPos = new Vector2(
+								i * checkSize.X + position.X, (i % 2 == 0) ? 0 : checkSize.Y);
 							Renderer.DrawRect(checkPos, checkPos + checkSize, Color4.Black);
 						}
 					}
@@ -611,7 +690,7 @@ namespace Tangerine.UI
 					: base(color, name: "H", min: 0, max: 360, PixelCount, format: "0.#")
 				{
 					for (var i = 0; i < PixelCount; i++) {
-						Pixels[PixelCount - i - 1] = new ColorHsva(hue: i, saturation: 1, value: 1).HsvaToRgb();
+						Pixels[PixelCount - i - 1] = new ColorHsva(hue: i, saturation: 1, value: 1).ToRgba();
 					}
 				}
 
@@ -655,7 +734,7 @@ namespace Tangerine.UI
 							saturation: i / (float)PixelCount,
 							value: SliderColor.Value.V,
 							alpha: 1
-						).HsvaToRgb();
+						).ToRgba();
 					}
 				}
 			}
@@ -687,7 +766,7 @@ namespace Tangerine.UI
 							saturation: SliderColor.Value.S,
 							value: i / (float)PixelCount,
 							alpha: 1
-						).HsvaToRgb();
+						).ToRgba();
 					}
 				}
 			}
@@ -719,14 +798,14 @@ namespace Tangerine.UI
 				protected override void OnSliderValueChange()
 				{
 					var sliderValue = (byte)Slider.Value;
-					var color = SliderColor.Value.HsvaToRgb();
+					var color = SliderColor.Value.ToRgba();
 					channel.SetValue(ref color, sliderValue);
 					SliderColor.Value = ColorHsva.RgbToHsva(color);
 				}
 
 				protected override void OnColorValueChange()
 				{
-					var color = SliderColor.Value.HsvaToRgb();
+					var color = SliderColor.Value.ToRgba();
 					Slider.Value = channel.GetValue(color);
 					color.A = 255;
 					for (var i = 0; i < PixelCount; i++) {
@@ -900,7 +979,7 @@ namespace Tangerine.UI
 				return c;
 			}
 
-			public Color4 HsvaToRgb()
+			public Color4 ToRgba()
 			{
 				var a = (byte)(A * 255);
 				int hi = Convert.ToInt32(Math.Floor(H / 60)) % 6;

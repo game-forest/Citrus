@@ -18,7 +18,7 @@ namespace Lime
 				VAlignment = VAlignment.Center,
 			};
 			CompoundPresenter.Add(new DropDownListPresenter());
-			PostPresenter = new Theme.MouseHoverBorderPresenter();
+			PostPresenter = new Theme.MouseHoverBorderPresenter { Rounded = true };
 			LateTasks.Add(Theme.MouseHoverInvalidationTask(this));
 			Padding = Theme.Metrics.ControlsPadding;
 			AddNode(text);
@@ -65,8 +65,10 @@ namespace Lime
 				public override void Render()
 				{
 					PrepareRenderState();
-					Renderer.DrawVerticalGradientRect(Vector2.Zero, Size, Gradient);
-					Renderer.DrawRectOutline(Vector2.Zero, Size, BorderColor);
+					var paint = NanoVG.Paint.LinearGradient(
+						0, 0, 0, Size.Y, Gradient[0].Color, Gradient[1].Color
+					);
+					RendererNvg.DrawRoundedRectWithBorder(Vector2.Zero, Size, paint, BorderColor, 1, 4);
 					var transform = Matrix32.Scaling(IconWidth, Size.Y) * Matrix32.Translation(Size.X - IconWidth, 0);
 					separator.Draw(transform);
 					icon.Draw(transform, IconColor);
