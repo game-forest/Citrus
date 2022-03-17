@@ -18,7 +18,7 @@ namespace Tangerine.Panels
 		private readonly Frame contentWidget;
 		private readonly EditBox searchStringEditor;
 		private readonly ThemedScrollView scrollView;
-		private readonly TraverseTarget traverseTarget;
+		private readonly TraverseRootManager traverseRootManager;
 		private TreeViewMode mode;
 
 		public AnimationsPanel(Widget panelWidget)
@@ -80,7 +80,7 @@ namespace Tangerine.Panels
 						});
 				},
 			};
-			traverseTarget = new TraverseTarget();
+			traverseRootManager = new TraverseRootManager();
 			var treeView = CreateTreeView(
 				scrollView,
 				itemProvider,
@@ -220,8 +220,8 @@ namespace Tangerine.Panels
 			contentWidget.AddChangeWatcher(
 				() => (
 					Document.Current?.SceneTreeVersion ?? 0,
-					traverseTarget.Recalculate(mode)),
-				_ => RebuildTreeView(treeView, provider, (Node)traverseTarget));
+					traverseRootManager.CalcTraverseRootNode(mode)),
+				_ => RebuildTreeView(treeView, provider));
 			RebuildTreeView(treeView, provider);
 			return treeView;
 		}
@@ -480,7 +480,7 @@ namespace Tangerine.Panels
 
 		private Node previousContainer;
 
-		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider, Node traverseTarget = null)
+		private void RebuildTreeView(TreeView treeView, TreeViewItemProvider provider)
 		{
 			if (treeView.RootItem != null) {
 				DestroyTree(treeView.RootItem);
@@ -489,12 +489,12 @@ namespace Tangerine.Panels
 			var nodeItems = new List<TreeViewItem>();
 			var filter = searchStringEditor.Text;
 			var initialTreeViewHeight = scrollView.Content.Height;
-			traverseTarget ??= this.traverseTarget.Recalculate(mode);
-			var targetSceneItem = Document.Current.GetSceneItemForObject(traverseTarget);
+			var traverseRoot = traverseRootManager.CalcTraverseRootNode(mode);
+			var rootSceneItem = Document.Current.GetSceneItemForObject(traverseRoot);
 			if (mode == TreeViewMode.CurrentBranch) {
-				TraverseSceneTreeForCurrentBranch(targetSceneItem);
+				TraverseSceneTreeForCurrentBranch(rootSceneItem);
 			} else {
-				TraverseSceneTree(targetSceneItem);
+				TraverseSceneTree(rootSceneItem);
 			}
 
 			treeView.RootItem = treeView.RootItem ?? new TreeViewItem();
@@ -917,6 +917,7 @@ namespace Tangerine.Panels
 				this.options = options;
 				Processors = new List<ITreeViewItemPresentationProcessor> {
 					new CommonTreeViewItemPresentationProcessor(),
+					new NodeTreeViewItemPresentationProcessor(),
 					new MarkerTreeViewItemPresentationProcessor(),
 					new AnimationTreeViewItemPresentationProcessor(),
 				};
@@ -1547,70 +1548,53 @@ namespace Tangerine.Panels
 			}
 		}
 
-		private class TraverseTarget
+		private class TraverseRootManager
 		{
-			private readonly LcaSolver lcaSolver = new LcaSolver();
-			private readonly List<Node> selected = new List<Node>();
-			private int selectedCount;
+			private List<Node> selected = new List<Node>();
+			private List<Node> emptyList = new List<Node>();
 
-			private Node cachedTraverseTarget;
+			private Node container;
+			private Node traverseRoot;
 
-			/// <summary>
-			/// Node that was returned by the last <see cref="Recalculate"/> call.
-			/// </summary>
-			public static explicit operator Node(TraverseTarget traverseTarget)
-			{
-				return traverseTarget.cachedTraverseTarget;
-			}
-
-			public Node Recalculate(TreeViewMode mode)
+			public Node CalcTraverseRootNode(TreeViewMode mode)
 			{
 				if (mode == TreeViewMode.AllHierarchy) {
-					return cachedTraverseTarget = Document.Current.RootNode;
+					return traverseRoot = Document.Current.RootNode;
 				}
-				int selectedCount = 0;
-				bool selectionChanged = false;
-				foreach (var node in Document.Current.SelectedNodes()) {
-					if (selectedCount < selected.Count) {
-						selectionChanged |= selected[selectedCount] != node;
-						selected[selectedCount] = node;
-					} else {
-						selectionChanged = true;
-						selected.Add(node);
-					}
-					selectedCount++;
-				}
-				selectionChanged |= this.selectedCount != selectedCount;
-				this.selectedCount = selectedCount;
-				for (int i = selectedCount; i < selected.Count; i++) {
-					selected[selectedCount] = null;
-				}
+				RecalculateSelection(out bool selectionChanged);
 				if (selectionChanged) {
-					var commonAncestor = lcaSolver.FindCommonAncestor(selected.Take(selectedCount));
-					if (commonAncestor != null) {
-						cachedTraverseTarget = commonAncestor;
-					}
+					// If no object is selected, show the animation stack for the last selected objects.
+					traverseRoot = Lca.Solve(selected) ?? traverseRoot;
 				}
 				if (
-					cachedTraverseTarget == null ||
-					!cachedTraverseTarget.SameOrDescendantOf(Document.Current.Container)
+					traverseRoot == null ||
+					(selectionChanged || container != Document.Current.Container) &&
+					!traverseRoot.SameOrDescendantOf(Document.Current.Container)
 				) {
-					cachedTraverseTarget = Document.Current.Container;
+					traverseRoot = Document.Current.Container;
 				}
-				return cachedTraverseTarget;
+				container = Document.Current.Container;
+				return traverseRoot;
 			}
 
-			private class LcaSolver
+			private void RecalculateSelection(out bool selectionChanged)
 			{
-				private readonly List<Node> pathOne = new List<Node>();
-				private readonly List<Node> pathTwo = new List<Node>();
+				emptyList.AddRange(Document.Current.SelectedNodes());
+				selectionChanged = selected.SequenceEqual(emptyList);
+				selected.Clear();
+				Toolbox.Swap(ref selected, ref emptyList);
+			}
 
-				public Node FindCommonAncestor(IEnumerable<Node> nodes)
+			private static class Lca
+			{
+				public static Node Solve(IEnumerable<Node> nodes)
 				{
 					using var enumerator = nodes.GetEnumerator();
 					if (!enumerator.MoveNext()) {
 						return null;
 					}
+					var pathOne = new List<Node>();
+					var pathTwo = new List<Node>();
 					pathOne.AddRange(enumerator.Current.Ancestors);
 					int commonNodeIndex = pathOne.Count - 1;
 					while (enumerator.MoveNext()) {
@@ -1627,9 +1611,7 @@ namespace Tangerine.Panels
 						}
 						pathTwo.Clear();
 					}
-					var node = pathOne[^(commonNodeIndex + 1)];
-					pathOne.Clear();
-					return node;
+					return pathOne[^(commonNodeIndex + 1)];
 				}
 			}
 		}
