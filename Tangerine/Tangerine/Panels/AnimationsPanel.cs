@@ -98,6 +98,7 @@ namespace Tangerine.Panels
 				RebuildTreeView(treeView, itemProvider);
 			};
 			showAll.AddChangeWatcher(() => mode, _ => showAll.Checked = mode == TreeViewMode.AllHierarchy);
+			contentWidget.AddChangeWatcher(() => Document.Current.Container, _ => treeView.Refresh());
 		}
 
 		private void ExpandAll(TreeViewItem item, bool expand)
@@ -999,7 +1000,7 @@ namespace Tangerine.Panels
 			public readonly Widget IndentationSpacer;
 			public readonly TreeView TreeView;
 			public Widget Widget { get; }
-			public Color4 MarkerColor { get; set; }
+			public Color4[] ColorMarks { get; set; }
 			public Color4 BackgroundColor { get; set; }
 
 			public CommonTreeViewItemPresentation(
@@ -1007,7 +1008,6 @@ namespace Tangerine.Panels
 			{
 				TreeView = treeView;
 				Item = item;
-				MarkerColor = Color4.Transparent;
 				BackgroundColor = HierarchyColors.DefaultBackground;
 				Widget = new Widget {
 					MinMaxHeight = TimelineMetrics.DefaultRowHeight,
@@ -1035,7 +1035,14 @@ namespace Tangerine.Panels
 							}
 							Renderer.PopState();
 						}
-						Renderer.DrawRect(Vector2.Zero, new Vector2(4, w.Size.Y), MarkerColor);
+						if (ColorMarks != null) {
+							float step = w.Height / ColorMarks.Length;
+							for (int i = 0; i < ColorMarks.Length; i++) {
+								var a = new Vector2(0, i * step);
+								var b = new Vector2(4, (i + 1) * step);
+								Renderer.DrawRect(a, b, ColorMarks[i]);
+							}
+						}
 						HighlightLabel(Widget, Label, options.SearchStringGetter?.Invoke());
 					}),
 				};
@@ -1361,7 +1368,7 @@ namespace Tangerine.Panels
 				Label.Components.Add(new TooltipComponent(() => ((NodeTreeViewItem)Item).Tooltip));
 				BackgroundColor = ColorTheme.Current.Animations.NodeBackground;
 				if (((NodeTreeViewItem)Item).Node == Document.Current.RootNode) {
-					MarkerColor = ColorTheme.Current.Animations.RootNodeMarker;
+					ColorMarks = new[] { ColorTheme.Current.Animations.RootNodeColorMark, };
 					BackgroundColor = ColorTheme.Current.Animations.RootBackground;
 					Label.TextColor = ColorTheme.Current.Animations.RootText;
 				}
@@ -1510,6 +1517,28 @@ namespace Tangerine.Panels
 			}
 		}
 
+		private class NodeTreeViewItemPresentationProcessor : ITreeViewItemPresentationProcessor
+		{
+			public void Process(ITreeViewItemPresentation presentation)
+			{
+				if (
+					presentation is NodeTreeViewItemPresentation nodePresentation &&
+					nodePresentation.Item is NodeTreeViewItem nodeItem
+				) {
+					nodePresentation.ColorMarks = nodeItem.Node == Document.Current.RootNode
+						? nodeItem.Node != Document.Current.Container
+							? new[] { ColorTheme.Current.Animations.RootNodeColorMark, }
+							: new[] {
+								ColorTheme.Current.Animations.RootNodeColorMark,
+								ColorTheme.Current.Animations.CurrentContainerColorMark,
+							}
+						: nodeItem.Node == Document.Current.Container
+							? new[] { ColorTheme.Current.Animations.CurrentContainerColorMark, }
+							: null;
+				}
+			}
+		}
+
 		private class AnimationTreeViewItemPresentationProcessor : ITreeViewItemPresentationProcessor
 		{
 			public void Process(ITreeViewItemPresentation presentation)
@@ -1524,11 +1553,11 @@ namespace Tangerine.Panels
 					}
 					if (isCurrentAnimation) {
 						p.BackgroundColor = ColorTheme.Current.Animations.CurrentAnimationBackground;
-						p.MarkerColor = ColorTheme.Current.Animations.CurrentAnimationMarker;
+						p.ColorMarks = new[] { ColorTheme.Current.Animations.CurrentAnimationColorMark, };
 						p.Label.TextColor = ColorTheme.Current.Animations.CurrentAnimationText;
 					} else {
 						p.BackgroundColor = ColorTheme.Current.Hierarchy.DefaultBackground;
-						p.MarkerColor = Color4.Transparent;
+						p.ColorMarks = new[] { Color4.Transparent, };
 						p.Label.TextColor = AppUserPreferences.Instance.LimeColorTheme.BlackText;
 					}
 				}
