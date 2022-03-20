@@ -144,6 +144,19 @@ namespace Lime
 			{
 				if (readonlyKeys != value) {
 					readonlyKeys?.Release();
+					// IsAssignableFrom is faster than GetGenericTypeDefinition.
+					// The results of the benchmark can be viewed in jira.
+					if (value != null && value.RefCount > 0 && typeof(INodeReference).IsAssignableFrom(typeof(T))) {
+						// Method "TypedKeyframeList<T>.Clone()" uses direct assignment when cloning values in
+						// keyframes. In turn, the NodeReference is a reference type, which can cause memory leaks.
+						var clonedKeyframes = new TypedKeyframeList<T>();
+						foreach (var i in value) {
+							var clone = i.Clone();
+							clone.Value = Cloner.Clone(clone.Value);
+							clonedKeyframes.Add(clone);
+						}
+						value = clonedKeyframes;
+					}
 					readonlyKeys = value;
 					readonlyKeys?.AddRef();
 					boxedKeys = null;
