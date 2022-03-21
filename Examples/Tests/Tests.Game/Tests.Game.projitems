@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Confirmation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\Dialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\DialogManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dialogs\SpriteMigrationCases.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\ShowContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\GameScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dialogs\MainMenu.cs" />
