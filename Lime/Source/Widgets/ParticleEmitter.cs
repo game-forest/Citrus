@@ -186,9 +186,12 @@ namespace Lime
 		[TangerineKeyframeColor(12)]
 		public string LinkageWidgetName { get; set; }
 		/// <summary>
-		/// Number of pixel to generate particles.
+		/// Pixel distance to trigger burst-generation of particles.
+		/// When BurstDistance > 0 ParticleEmitter will generate Number particles
+		/// for every BurstDistance pixels of ParticleEmitter's movement.
 		/// </summary>
 		[YuzuMember]
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
 		[TangerineKeyframeColor(7)]
 		public float BurstDistance { get; set; }
 		/// <summary>
@@ -321,8 +324,17 @@ namespace Lime
 
 		private bool firstUpdate = true;
 
+		/// <summary>
+		/// In NumberPerSecond it is previous ParticleEmitter's transform.
+		/// In BurstPerDistance it saves the precise location to spawn next burst.
+		/// For other modes it is currently useless.
+		/// </summary>
 		private Matrix32 previousTransform;
 
+		/// <summary>
+		/// Holds previous ParticleEmitter's position with respect to LinkageWidget.
+		/// Used for calculation of delta-distance during ParticleEmitter's movement.
+		/// </summary>
 		private Vector2 previousPosition;
 
 		/// <summary>
@@ -581,7 +593,7 @@ namespace Lime
 					lerpIndex += numberPerBurst;
 				}
 			}
-			if (BurstDistance == 0f) {
+			if (BurstDistance <= 0f) {
 				previousTransform = transform;
 			} else if (burstCount > 0) {
 				// In BurstPerDistance mode we should calculate cumulativeDistance and previousTransform very accurately
