@@ -26,6 +26,8 @@ namespace Tangerine.UI
 
 			public override Encoding Encoding { get; }
 
+			public bool IsAutoscrollEnabled;
+
 			public TextViewWriter(ThemedTextView textView)
 			{
 				this.textView = textView;
@@ -66,7 +68,9 @@ namespace Tangerine.UI
 						);
 					}
 					file?.Flush();
-					Application.InvokeOnNextUpdate(textView.ScrollToEnd);
+					if (IsAutoscrollEnabled) {
+						Application.InvokeOnNextUpdate(textView.ScrollToEnd);
+					}
 				}
 			}
 
@@ -192,6 +196,19 @@ namespace Tangerine.UI
 				() => isMatchingRegex,
 				_ => { regexButton.Checked = _; }
 			);
+			regexButton.Clicked += () => regexButton.Checked = !regexButton.Checked;
+			var autoscrollButton = new ToolbarButton {
+				MinMaxSize = new Vector2(24),
+				Size = new Vector2(24),
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+				Anchors = Anchors.Left,
+				Clicked = () => {
+					textWriter.IsAutoscrollEnabled = !textWriter.IsAutoscrollEnabled;
+				},
+				Texture = IconPool.GetTexture("Tools.ConsoleAutoscroll"),
+				Tooltip = "Autoscroll",
+			};
+			autoscrollButton.Clicked += () => autoscrollButton.Checked = !autoscrollButton.Checked;
 			return new Widget {
 				Layout = new HBoxLayout() {
 					Spacing = 4,
@@ -221,6 +238,7 @@ namespace Tangerine.UI
 					},
 					caseSensitiveButton,
 					regexButton,
+					autoscrollButton,
 					new ThemedSimpleText("Find: ") {
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 						Padding = new Thickness(left: 2, right: 2),
