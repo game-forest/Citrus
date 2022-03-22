@@ -1,0 +1,17 @@
+{
+	"class":"Lime.TftConfig, DynamicFont",
+	"CharSets":[
+		{
+			"Chars":"abcdefghijklmnopqrstuvwxyz",
+			"Font":"Fonts/RobotoMed.ttf"
+		},
+		{
+			"Chars":"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+			"Font":"Fonts/RussoOne.ttf"
+		}
+	],
+	"Height":170,
+	"IsSdf":true,
+	"Padding":36,
+	"TextureSize":[1024,1024]
+}
