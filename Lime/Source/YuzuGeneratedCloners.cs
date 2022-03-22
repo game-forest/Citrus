@@ -2871,6 +2871,7 @@ namespace YuzuGenerated
 			}
 			result.AspectRatio = s.AspectRatio;
 			result.Blending = s.Blending;
+			result.BurstDistance = s.BurstDistance;
 			if (s.IsNotDecorated()) {
 				result.Color = s.Color;
 			}

@@ -46,6 +46,7 @@ namespace Lime
 	public enum EmitterAction
 	{
 		Burst,
+		Reset,
 	}
 
 	/// <summary>
@@ -185,6 +186,15 @@ namespace Lime
 		[TangerineKeyframeColor(12)]
 		public string LinkageWidgetName { get; set; }
 		/// <summary>
+		/// Pixel distance to trigger burst-generation of particles.
+		/// When BurstDistance > 0 ParticleEmitter will generate Number particles
+		/// for every BurstDistance pixels of ParticleEmitter's movement.
+		/// </summary>
+		[YuzuMember]
+		[TangerineValidRange(0.0f, float.PositiveInfinity)]
+		[TangerineKeyframeColor(7)]
+		public float BurstDistance { get; set; }
+		/// <summary>
 		/// Number of particles generated per second.
 		/// </summary>
 		[YuzuMember]
@@ -314,13 +324,25 @@ namespace Lime
 
 		private bool firstUpdate = true;
 
+		/// <summary>
+		/// In NumberPerSecond it is previous ParticleEmitter's transform.
+		/// In BurstPerDistance it saves the precise location to spawn next burst.
+		/// For other modes it is currently useless.
+		/// </summary>
 		private Matrix32 previousTransform;
+
+		/// <summary>
+		/// Holds previous ParticleEmitter's position with respect to LinkageWidget.
+		/// Used for calculation of delta-distance during ParticleEmitter's movement.
+		/// </summary>
+		private Vector2 previousPosition;
 
 		/// <summary>
 		/// Number of particles to generate on Update. Used to make particle count FPS independent
 		/// by accumulating fractional part of number of particles to spawn on given frame.
 		/// </summary>
 		private float particlesToSpawn;
+		private float cumulativeDistance;
 		public List<Particle> particles = new List<Particle>();
 		private static readonly Stack<Particle> particlePool = new Stack<Particle>();
 		private static readonly object particlePoolSync = new object();
@@ -342,6 +364,7 @@ namespace Lime
 			Shape = EmitterShape.Point;
 			EmissionType = EmissionType.Outer;
 			ParticlesLinkage = ParticlesLinkage.Parent;
+			BurstDistance = 0;
 			Number = 100;
 			Speed = 1;
 			Orientation = new NumericRange(0, 360);
@@ -472,10 +495,13 @@ namespace Lime
 		public override void OnTrigger(string property, object value, double animationTimeCorrection = 0)
 		{
 			base.OnTrigger(property, value, animationTimeCorrection);
-			if (property == "Action") {
+			if (property == nameof(Action)) {
 				var action = (EmitterAction)value;
 				if (!GetTangerineFlag(TangerineFlags.Hidden)) {
 					switch (action) {
+						case EmitterAction.Reset:
+							firstUpdate = true;
+							break;
 						case EmitterAction.Burst:
 							burstOnUpdateOnce = true;
 							break;
@@ -490,6 +516,12 @@ namespace Lime
 				RefreshCustomShape();
 			}
 			delta *= Speed;
+			CalcInitialTransform(out var transform);
+			var position = transform.TransformVector(Vector2.Zero);
+			var deltaDistance = previousPosition - position;
+			previousPosition = position;
+			int burstCount = 0;
+			bool isInterpolationRequired = false;
 			if (NumberPerBurst) {
 				// Spawn this.Number of particles each time Action.Burst is triggered
 				if (burstOnUpdateOnce) {
@@ -505,29 +537,47 @@ namespace Lime
 				}
 				particlesToSpawn = Math.Min(particlesToSpawn, Number - particles.Count);
 				FreeLastParticles(particles.Count - (int)Number);
+			} else if (BurstDistance > 0f) {
+				cumulativeDistance += deltaDistance.Length;
+				if (cumulativeDistance >= BurstDistance) {
+					burstCount = (int)(cumulativeDistance / BurstDistance);
+					particlesToSpawn = Number * burstCount;
+				}
 			} else {
 				// this.Number per second
 				particlesToSpawn += Number * delta;
+				isInterpolationRequired = SpawnBetweenFrames;
 			}
 			var currentBoundingRect = new Rectangle();
 			if (TryGetParticleLimiter(out var particleLimiter)) {
 				particleLimiter.ApplyLimit(this, ref particlesToSpawn);
 			}
-			var lerpStep = Number > 0 && SpawnBetweenFrames ? 1f / ((int)particlesToSpawn) : 0f;
-			var deltaStep = delta / ((int)particlesToSpawn);
+			// For NumberPerDistance and SpawnBetweenFrames modes we use linear-interpolation between transforms.
+			// availableLerpAmount is a total allowed amount to interpolate from previousTransform to current transform.
+			// It can be less that 1f for NumberPerDistance mode because we need accurate calculation of positions
+			// Where we spawn new particles.
+			float availableLerpAmount = burstCount > 0 ? burstCount * BurstDistance / cumulativeDistance : 1f;
+			float lerpStep = particlesToSpawn > 0 && (isInterpolationRequired || burstCount > 0)
+				? availableLerpAmount / ((int)particlesToSpawn)
+				: 0f;
+			float deltaStep = delta / ((int)particlesToSpawn);
 			int particleIndex = 0;
+			int lerpIndex = 0;
+			int numberPerBurst = ((int)particlesToSpawn) / Math.Max(1, burstCount);
 			int i = particles.Count - 1;
-			CalcInitialTransform(out var transform);
 			while (particlesToSpawn >= 1f) {
 				Particle particle = AllocParticle();
 				if (
 					GloballyEnabled &&
 					Nodes.Count > 0 &&
-					InitializeParticle(particle, Matrix32.Lerp(lerpStep * particleIndex, transform, previousTransform))
+					InitializeParticle(
+						particle,
+						lerpStep > 0f ? Matrix32.Lerp(lerpStep * lerpIndex, previousTransform, transform) : transform
+					)
 				) {
 					AdvanceParticle(
 						p: particle,
-						delta: SpawnBetweenFrames ? deltaStep * particleIndex : 0f,
+						delta: isInterpolationRequired ? deltaStep * ((int)particlesToSpawn - 1) : 0f,
 						boundingRect: ref currentBoundingRect
 					);
 				} else {
@@ -535,8 +585,22 @@ namespace Lime
 				}
 				particlesToSpawn -= 1;
 				particleIndex++;
+				// In NumberPerSecond+SpawnBetweenFrames mode we interpolate each particle between frames' transforms.
+				if (isInterpolationRequired || burstCount == 0) {
+					lerpIndex++;
+				// In BurstPerDistance we spawn groups of particles on equal distances.
+				} else if (particleIndex % numberPerBurst == 0) {
+					lerpIndex += numberPerBurst;
+				}
 			}
-			previousTransform = transform;
+			if (BurstDistance <= 0f) {
+				previousTransform = transform;
+			} else if (burstCount > 0) {
+				// In BurstPerDistance mode we should calculate cumulativeDistance and previousTransform very accurately
+				// We use availableLerpAmount to calculate REAL previousTransform where next particle should be spawned.
+				cumulativeDistance -= burstCount * BurstDistance;
+				previousTransform = Matrix32.Lerp(availableLerpAmount, previousTransform, transform);
+			}
 			if (MagnetAmount.Median != 0 || MagnetAmount.Dispersion != 0) {
 				EnumerateMagnets();
 			}
@@ -751,7 +815,9 @@ namespace Lime
 			}
 			if (firstUpdate) {
 				firstUpdate = false;
+				cumulativeDistance = 0f;
 				CalcInitialTransform(out previousTransform);
+				previousPosition = previousTransform.TransformVector(Vector2.Zero);
 				const float ModellingStep = 0.04f;
 				delta = Math.Max(delta, TimeShift);
 				while (delta >= ModellingStep) {
@@ -772,6 +838,7 @@ namespace Lime
 			return
 				Application.EnableParticleLimiter &&
 				GloballyVisible &&
+				BurstDistance == 0f &&
 				!NumberPerBurst && !ImmortalParticles &&
 				Manager != null &&
 				Manager.ServiceProvider.TryGetService(out particleLimiter);
