@@ -289,7 +289,7 @@ namespace Tangerine.UI
 			textView = new ThemedTextView {
 				SquashDuplicateLines = true,
 			};
-			textView.Behaviour.OnMouseScroll = () => DisableAutoscroll();
+			textView.Behaviour.OnScrollPositionChangedByUser = () => DisableAutoscroll();
 			textWriter = new TextViewWriter(textView) {
 				SystemOut = System.Console.Out,
 			};
