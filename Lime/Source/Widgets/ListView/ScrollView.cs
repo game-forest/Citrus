@@ -35,6 +35,7 @@ namespace Lime
 			}
 		}
 		private bool scrollBySlider;
+		public Action OnMouseScroll;
 		public bool RejectOrtogonalSwipes { get; set; }
 		public float BounceZoneThickness = 100;
 		public float ScrollToItemVelocity = 800;
@@ -334,6 +335,7 @@ namespace Lime
 					var stepPerFrame = totalScrollAmount * Task.Current.Delta * wheelScrollingSpeedFactor;
 					var prevScrollPosition = ScrollPosition;
 					ScrollPosition = Mathf.Clamp(ScrollPosition + stepPerFrame, MinScrollPosition, MaxScrollPosition);
+					OnMouseScroll?.Invoke();
 					if (ScrollPosition == MinScrollPosition || ScrollPosition == MaxScrollPosition) {
 						totalScrollAmount = 0f;
 					} else {

@@ -55,6 +55,7 @@ namespace Lime
 								ScrollPosition = Mathf.Clamp(
 									(iniScrollPos + d).Round(), MinScrollPosition, MaxScrollPosition
 								);
+								OnMouseScroll?.Invoke();
 							}
 							yield return null;
 						}
