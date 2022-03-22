@@ -18821,6 +18821,12 @@ references:
   commentId: F:Lime.EmitterAction.Burst
   fullName: Lime.EmitterAction.Burst
   nameWithType: EmitterAction.Burst
+- uid: Lime.EmitterAction.Reset
+  name: Reset
+  href: api/Lime.EmitterAction.html#Lime_EmitterAction_Reset
+  commentId: F:Lime.EmitterAction.Reset
+  fullName: Lime.EmitterAction.Reset
+  nameWithType: EmitterAction.Reset
 - uid: Lime.EmitterShape
   name: EmitterShape
   href: api/Lime.EmitterShape.html
@@ -48237,6 +48243,19 @@ references:
   isSpec: "True"
   fullName: Lime.ParticleEmitter.AspectRatio
   nameWithType: ParticleEmitter.AspectRatio
+- uid: Lime.ParticleEmitter.BurstDistance
+  name: BurstDistance
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_BurstDistance
+  commentId: P:Lime.ParticleEmitter.BurstDistance
+  fullName: Lime.ParticleEmitter.BurstDistance
+  nameWithType: ParticleEmitter.BurstDistance
+- uid: Lime.ParticleEmitter.BurstDistance*
+  name: BurstDistance
+  href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_BurstDistance_
+  commentId: Overload:Lime.ParticleEmitter.BurstDistance
+  isSpec: "True"
+  fullName: Lime.ParticleEmitter.BurstDistance
+  nameWithType: ParticleEmitter.BurstDistance
 - uid: Lime.ParticleEmitter.ClearParticles
   name: ClearParticles()
   href: api/Lime.ParticleEmitter.html#Lime_ParticleEmitter_ClearParticles
