@@ -35,7 +35,12 @@ namespace Tangerine.Core
 		}
 
 		public static void RenderToTexture(
-			this Widget widget, ITexture texture, RenderChain renderChain, bool clearRenderTarget = true
+			this Widget widget,
+			ITexture texture,
+			RenderChain renderChain,
+			Vector2 leftTop,
+			Vector2 rightBottom,
+			bool clearRenderTarget = true
 		) {
 			if (widget.Width > 0 && widget.Height > 0) {
 				texture.SetAsRenderTarget();
@@ -55,7 +60,7 @@ namespace Tangerine.Core
 				}
 				Renderer.World = Matrix44.Identity;
 				Renderer.View = Matrix44.Identity;
-				Renderer.SetOrthogonalProjection(0, 0, widget.Width, widget.Height);
+				Renderer.SetOrthogonalProjection(leftTop, rightBottom);
 				Renderer.DepthState = DepthState.DepthDisabled;
 				Renderer.CullMode = CullMode.None;
 				Renderer.Transform2 = widget.LocalToWorldTransform.CalcInversed();
@@ -72,11 +77,11 @@ namespace Tangerine.Core
 			}
 		}
 
-		public static Bitmap ToBitmap(this Widget widget)
+		public static Bitmap ToBitmap(this Widget widget, Rectangle bounds)
 		{
 			var pixelScale = Window.Current.PixelScale;
-			var scaledWidth = (int)(widget.Width * pixelScale);
-			var scaledHeight = (int)(widget.Height * pixelScale);
+			var scaledWidth = (int)(bounds.Width * pixelScale);
+			var scaledHeight = (int)(bounds.Height * pixelScale);
 			var savedScale = widget.Scale;
 			var savedPosition = widget.Position;
 			var savedPivot = widget.Pivot;
@@ -86,17 +91,26 @@ namespace Tangerine.Core
 				widget.Position = Vector2.Zero;
 				widget.Pivot = Vector2.Zero;
 
-				using (var texture = new RenderTexture(scaledWidth, scaledHeight)) {
-					var renderChain = new RenderChain();
-					widget.RenderChainBuilder?.AddToRenderChain(renderChain);
-					widget.RenderToTexture(texture, renderChain);
-					return new Bitmap(texture.GetPixels(), scaledWidth, scaledHeight);
-				}
+				using var texture = new RenderTexture(scaledWidth, scaledHeight);
+				var renderChain = new RenderChain();
+				widget.RenderChainBuilder?.AddToRenderChain(renderChain);
+				widget.RenderToTexture(
+					texture,
+					renderChain,
+					new Vector2(bounds.Left, bounds.Top) * pixelScale,
+					new Vector2(bounds.Right, bounds.Bottom) * pixelScale
+				);
+				return new Bitmap(texture.GetPixels(), scaledWidth, scaledHeight);
 			} finally {
 				widget.Scale = savedScale;
 				widget.Position = savedPosition;
 				widget.Pivot = savedPivot;
 			}
+		}
+
+		public static Bitmap ToBitmap(this Widget widget)
+		{
+			return ToBitmap(widget, new Rectangle(Vector2.Zero, widget.Size));
 		}
 
 		public static void AddTransactionClickHandler(this Button button, Action clicked)
