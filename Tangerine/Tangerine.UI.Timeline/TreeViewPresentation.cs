@@ -76,6 +76,8 @@ namespace Tangerine.UI.Timeline
 
 		public Widget Widget { get; }
 
+		private HighlightAnimation highlightAnimation;
+
 		public TreeViewItemPresentation(
 			TreeView treeView, TreeViewItem item, SceneItem sceneItem, TreeViewItemPresentationOptions options
 		) {
@@ -95,17 +97,26 @@ namespace Tangerine.UI.Timeline
 					Renderer.DrawRect(Vector2.Zero, w.Size, ColorTheme.Current.Hierarchy.DefaultBackground);
 					bool isSelected = Item.Selected;
 					bool isHovered = Item == TreeView.HoveredItem;
-					if (isSelected | isHovered) {
+					bool isHighlightAnimation = highlightAnimation != null;
+					if (isSelected | isHovered | isHighlightAnimation) {
 						Renderer.PushState(RenderState.Blending);
 						Renderer.Blending = Blending.Add;
-						if (isSelected) {
-							var color = w.ParentWidget.IsFocused() ?
-								ColorTheme.Current.Hierarchy.SelectedBackground :
-								ColorTheme.Current.Hierarchy.SelectedInactiveBackground;
-							Renderer.DrawRect(Vector2.Zero, w.Size, color);
-						}
-						if (isHovered) {
-							Renderer.DrawRect(Vector2.Zero, w.Size, ColorTheme.Current.Hierarchy.HoveredBackground);
+						if (isHighlightAnimation) {
+							Renderer.DrawRect(Vector2.Zero, w.Size, highlightAnimation.BackgroundColor);
+							if (highlightAnimation.WasFinished) {
+								highlightAnimation = null;
+							}
+						} else {
+							if (isSelected) {
+								var color = w.ParentWidget.IsFocused() ?
+									ColorTheme.Current.Hierarchy.SelectedBackground :
+									ColorTheme.Current.Hierarchy.SelectedInactiveBackground;
+								Renderer.DrawRect(Vector2.Zero, w.Size, color);
+							}
+							if (isHovered) {
+								var hoveredBackground = ColorTheme.Current.Hierarchy.HoveredBackground;
+								Renderer.DrawRect(Vector2.Zero, w.Size, hoveredBackground);
+							}
 						}
 						Renderer.PopState();
 					}
@@ -146,6 +157,9 @@ namespace Tangerine.UI.Timeline
 			Widget.Nodes.Add(Spacer.HSpacer(3));
 			Widget.Nodes.Add(Label);
 		}
+
+		public void RunHighlightAnimation(Node taskContainer) =>
+			highlightAnimation = new HighlightAnimation(taskContainer);
 
 		private void HighlightLabel(string searchString)
 		{
@@ -252,6 +266,40 @@ namespace Tangerine.UI.Timeline
 			}
 			button.Components.Add(new DisableAncestralGesturesComponent());
 			return button;
+		}
+
+		private class HighlightAnimation
+		{
+			private const float AnimationDuration = 1f;
+
+			private float totalAnimationTime;
+
+			public bool WasFinished => totalAnimationTime > AnimationDuration;
+
+			public Color4 BackgroundColor { get; private set; }
+
+			public HighlightAnimation(Node taskContainer)
+			{
+				taskContainer.Tasks.Add(CountTimeTask);
+				BackgroundColor = Color4.Transparent;
+			}
+
+			private IEnumerator<object> CountTimeTask()
+			{
+				while (totalAnimationTime < AnimationDuration) {
+					totalAnimationTime += Task.Current.Delta;
+					var color = Theme.Colors.WarningBackground;
+					float time = totalAnimationTime;
+					float maxAlpha = 255 * (ColorTheme.Current.IsDark ? 0.4f : 0.9f);
+					const float HalfCycle = 0.3f;
+					color.A = time % (2 * HalfCycle) < HalfCycle
+						? (byte)(time % HalfCycle * (maxAlpha / HalfCycle))
+						: (byte)((HalfCycle - time % HalfCycle) * (maxAlpha / HalfCycle));
+					BackgroundColor = color;
+					Window.Current.Invalidate();
+					yield return null;
+				}
+			}
 		}
 	}
 

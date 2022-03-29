@@ -171,10 +171,7 @@ namespace Tangerine.Core.Operations
 	{
 		public static void Perform(Animation animation)
 		{
-			if (
-				animation.IsLegacy && Document.Current.Container != animation.OwnerNode ||
-				!animation.IsLegacy && !Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)
-			) {
+			if (ShouldNavigateToNode(animation)) {
 				var node = NavigateToNode.Perform(
 					animation.OwnerNode, enterInto: true, turnOnInspectRootNodeIfNeeded: false
 				);
@@ -185,6 +182,25 @@ namespace Tangerine.Core.Operations
 			Document.Current.History.DoTransaction(() => {
 				SetProperty.Perform(Document.Current, nameof(Document.Animation), animation, isChangingDocument: false);
 			});
+		}
+
+		private static bool ShouldNavigateToNode(Animation animation)
+		{
+			if (animation.IsLegacy) {
+				return Document.Current.Container != animation.OwnerNode;
+			}
+			if (!Document.Current.Container.SameOrDescendantOf(animation.OwnerNode)) {
+				for (var n = animation.OwnerNode; n != null; n = n.Parent) {
+					if (!string.IsNullOrEmpty(n.ContentsPath)) {
+						return true;
+					}
+					if (n == Document.Current.Container) {
+						return false;
+					}
+				}
+				return true;
+			}
+			return false;
 		}
 	}
 }
