@@ -22,9 +22,9 @@ namespace Lime
 
 		public ThemedTextView()
 		{
-			Behaviour.Content.Padding = new Thickness(4);
-			Behaviour.Content.Layout = new VBoxLayout();
-			Behaviour.Frame.CompoundPresenter.Add(
+			Behavior.Content.Padding = new Thickness(4);
+			Behavior.Content.Layout = new VBoxLayout();
+			Behavior.Frame.CompoundPresenter.Add(
 				new ThemedFramePresenter(Theme.Colors.WhiteBackground, Theme.Colors.ControlBorder)
 			);
 		}
@@ -59,7 +59,7 @@ namespace Lime
 					line.TextProcessor += ProcessTextLine;
 					line.Components.Add(new TextLineMultiplicity());
 					lines.Add(line);
-					Behaviour.Content.AddNode(line);
+					Behavior.Content.AddNode(line);
 				}
 			}
 		}
@@ -113,14 +113,14 @@ namespace Lime
 
 		public void ScrollToEnd()
 		{
-			Behaviour.ScrollPosition = Behaviour.MaxScrollPosition;
+			Behavior.ScrollPosition = Behavior.MaxScrollPosition;
 		}
 
 		public void Clear()
 		{
-			Behaviour.Content.Nodes.Clear();
+			Behavior.Content.Nodes.Clear();
 			lines.Clear();
-			Behaviour.ScrollPosition = 0;
+			Behavior.ScrollPosition = 0;
 		}
 	}
 }

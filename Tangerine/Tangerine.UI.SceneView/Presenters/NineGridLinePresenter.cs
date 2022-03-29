@@ -38,10 +38,10 @@ namespace Tangerine.UI.SceneView
 		public float Scale => nineGridScaleGetters[index % 2](Owner);
 
 		private readonly int index;
-		private int IndexA => indexes[index].Item1;
-		private int IndexB => indexes[index].Item2;
+		private int IndexA => indices[index].Item1;
+		private int IndexB => indices[index].Item2;
 
-		private static readonly Tuple<int, int>[] indexes = {
+		private static readonly Tuple<int, int>[] indices = {
 			Tuple.Create(5, 2),
 			Tuple.Create(7, 1),
 			Tuple.Create(1, 6),

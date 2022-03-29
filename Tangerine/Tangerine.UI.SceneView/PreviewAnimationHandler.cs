@@ -3,7 +3,7 @@ using Tangerine.Core;
 
 namespace Tangerine.UI.SceneView
 {
-	public enum PreviewAnimationBehaviour
+	public enum PreviewAnimationBehavior
 	{
 		Inherited,
 		StopOnCurrentFrame,
@@ -12,18 +12,18 @@ namespace Tangerine.UI.SceneView
 
 	public class PreviewAnimationHandler : DocumentCommandHandler
 	{
-		private PreviewAnimationBehaviour behaviour;
+		private PreviewAnimationBehavior behavior;
 
-		public PreviewAnimationHandler(PreviewAnimationBehaviour behaviour)
+		public PreviewAnimationHandler(PreviewAnimationBehavior behavior)
 		{
-			this.behaviour = behaviour;
+			this.behavior = behavior;
 		}
 
 		public override void ExecuteTransaction()
 		{
-			if (behaviour != PreviewAnimationBehaviour.Inherited) {
+			if (behavior != PreviewAnimationBehavior.Inherited) {
 				CoreUserPreferences.Instance.StopAnimationOnCurrentFrame =
-					behaviour == PreviewAnimationBehaviour.StopOnCurrentFrame;
+					behavior == PreviewAnimationBehavior.StopOnCurrentFrame;
 			}
 			Document.Current.TogglePreviewAnimation();
 		}

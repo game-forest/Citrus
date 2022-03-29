@@ -70,14 +70,14 @@ namespace SharpFont.TrueType.Internal
 		internal FT_ULong ulUnicodeRange3;
 		internal FT_ULong ulUnicodeRange4;
 
-		private fixed byte _achVendID[4];
+		private fixed byte _achVendId[4];
 		internal byte[] VendorId
 		{
 			get
 			{
 				var array = new byte[4];
 
-				fixed (byte* p = _achVendID) {
+				fixed (byte* p = _achVendId) {
 					for (int i = 0; i < array.Length; i++) {
 						array[i] = p[i];
 					}

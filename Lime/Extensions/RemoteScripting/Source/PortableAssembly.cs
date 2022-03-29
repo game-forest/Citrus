@@ -24,7 +24,9 @@ namespace RemoteScripting
 			foreach (var type in loadableTypes) {
 				MethodInfo[] loadableMethodsInfo;
 				try {
-					loadableMethodsInfo = type.GetMethods(BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Public);
+					loadableMethodsInfo = type.GetMethods(
+						BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Public
+					);
 				} catch (ReflectionTypeLoadException) {
 					continue;
 				}
@@ -44,8 +46,10 @@ namespace RemoteScripting
 						continue;
 					}
 					if (entryPointAttribute != null && loadableParametersInfo.Length == 0) {
-						var entryPoint = new PortableEntryPoint(type.FullName, methodInfo.Name, methodInfo, entryPointAttribute.Summary) {
-							Order = entryPointAttribute.Order
+						var entryPoint = new PortableEntryPoint(
+							type.FullName, methodInfo.Name, methodInfo, entryPointAttribute.Summary
+						) {
+							Order = entryPointAttribute.Order,
 						};
 						entryPoints.Add(entryPoint);
 					}

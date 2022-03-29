@@ -43,7 +43,8 @@ namespace RemoteScripting
 			stopWatch.Start();
 			while (!cancellationToken.IsCancellationRequested) {
 				while (Stream.DataAvailable) {
-					var message = await NetworkMessage.ReadMessageFromStreamAsync(Stream).ConfigureAwait(continueOnCapturedContext: false);
+					var message = await NetworkMessage.ReadMessageFromStreamAsync(Stream)
+						.ConfigureAwait(continueOnCapturedContext: false);
 					if (!(message is NetworkPing)) {
 						messagesReceiveQueue.Enqueue(message);
 					}
@@ -55,7 +56,8 @@ namespace RemoteScripting
 				}
 				while (messagesSendQueue.TryDequeue(out var message)) {
 					isSending = true;
-					await NetworkMessage.WriteMessageToStreamAsync(Stream, message).ConfigureAwait(continueOnCapturedContext: false);
+					await NetworkMessage.WriteMessageToStreamAsync(Stream, message)
+						.ConfigureAwait(continueOnCapturedContext: false);
 					isSending = false;
 				}
 				await Task.Delay(1, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);

@@ -33,23 +33,23 @@ namespace Orange
 				Mode = FileDialogMode.SelectFolder,
 				Title = "Select source example project",
 			};
-			bool? dialogCancelled = null;
+			bool? dialogCanceled = null;
 			// Showing UI must be executed on the UI thread.
-			Application.InvokeOnMainThread(() => dialogCancelled = !dialog.RunModal());
-			while (!dialogCancelled.HasValue) {
+			Application.InvokeOnMainThread(() => dialogCanceled = !dialog.RunModal());
+			while (!dialogCanceled.HasValue) {
 				System.Threading.Thread.Sleep(50);
 			}
-			if (dialogCancelled.Value) {
+			if (dialogCanceled.Value) {
 				return;
 			}
 			string sourceDirectory = NormalizePath(dialog.FileName);
 			dialog.Title = "Select new project directory. Directory name will be used as project name.";
-			dialogCancelled = null;
-			Application.InvokeOnMainThread(() => dialogCancelled = !dialog.RunModal());
-			while (!dialogCancelled.HasValue) {
+			dialogCanceled = null;
+			Application.InvokeOnMainThread(() => dialogCanceled = !dialog.RunModal());
+			while (!dialogCanceled.HasValue) {
 				System.Threading.Thread.Sleep(50);
 			}
-			if (dialogCancelled.Value) {
+			if (dialogCanceled.Value) {
 				return;
 			}
 			string targetDirectory = NormalizePath(dialog.FileName);

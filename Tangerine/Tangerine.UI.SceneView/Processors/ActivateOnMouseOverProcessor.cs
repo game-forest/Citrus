@@ -13,7 +13,7 @@ namespace Tangerine.UI.SceneView
 				if (
 					!SceneView.Instance.InputArea.IsFocused() &&
 					SceneView.Instance.InputArea.IsMouseOverThisOrDescendant() &&
-					!Docking.WindowDragBehaviour.IsActive &&
+					!Docking.WindowDragBehavior.IsActive &&
 					!(Widget.Focused is CommonEditBox)) {
 					var ww = SceneView.Instance.InputArea.GetRoot() as WindowWidget;
 					ww.Window.Activate();

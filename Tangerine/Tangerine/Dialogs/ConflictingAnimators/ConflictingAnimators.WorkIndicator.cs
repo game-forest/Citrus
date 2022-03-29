@@ -52,7 +52,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 						if (WorkProgress.IsException) {
 							backgroundPresenter.Color = new Color4(255, 87, 34);
 							textWidget.Text = "Exception";
-						} else if (WorkProgress.IsCancelled) {
+						} else if (WorkProgress.IsCanceled) {
 							backgroundPresenter.Color = new Color4(255, 152, 0);
 							textWidget.Text = $"Cancelled. {ConflictCountPrefix} {WorkProgress.CurrentConflictCount}";
 						} else {

@@ -166,7 +166,7 @@ namespace Tangerine.UI
 			currentColorString = selectedPointColorProperty
 				.DistinctUntilChanged()
 				.Select(i => i.ToString(Color4.StringPresentation.Dec));
-			colorEditor.Components.GetOrAdd<LateConsumeBehaviour>()
+			colorEditor.Components.GetOrAdd<LateConsumeBehavior>()
 				.Add(currentColorString.Consume(v => colorEditor.Text = v));
 			colorPanel.Color = selectedPointColorProperty.GetValue();
 			colorEditor.AddLateChangeWatcher(selectedPointColorProperty, v => {
@@ -174,7 +174,7 @@ namespace Tangerine.UI
 					colorPanel.Color = v;
 				}
 			});
-			positionEditor.Components.GetOrAdd<EarlyConsumeBehaviour>()
+			positionEditor.Components.GetOrAdd<EarlyConsumeBehavior>()
 				.Add(
 					selectedPointPositionProperty
 						.DistinctUntilChanged()

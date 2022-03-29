@@ -58,10 +58,10 @@ namespace Tangerine.UI.SceneView
 		{
 			ConnectCommand(
 				SceneViewCommands.PreviewOrStopAnimation,
-				new PreviewAnimationHandler(PreviewAnimationBehaviour.StopOnStartingFrame));
+				new PreviewAnimationHandler(PreviewAnimationBehavior.StopOnStartingFrame));
 			ConnectCommand(
 				SceneViewCommands.PreviewOrPauseAnimation,
-				new PreviewAnimationHandler(PreviewAnimationBehaviour.StopOnCurrentFrame));
+				new PreviewAnimationHandler(PreviewAnimationBehavior.StopOnCurrentFrame));
 			ConnectCommand(SceneViewCommands.ResolutionChanger, new ResolutionChangerHandler());
 			ConnectCommand(SceneViewCommands.ResolutionReverceChanger, new ResolutionChangerHandler(isReverse: true));
 			ConnectCommand(SceneViewCommands.ResolutionOrientation, new ResolutionOrientationHandler());

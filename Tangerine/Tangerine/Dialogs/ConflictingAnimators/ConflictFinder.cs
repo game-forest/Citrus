@@ -59,7 +59,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 				isException = false;
 			} finally {
 				if (cancellationToken.IsCancellationRequested) {
-					workProgress.MarkAsCancelled();
+					workProgress.MarkAsCanceled();
 				} else if (isException) {
 					workProgress.MarkAsException();
 				} else {
@@ -201,13 +201,13 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		public class WorkProgress
 		{
 			protected volatile bool isCompleted;
-			protected volatile bool isCancelled;
+			protected volatile bool isCanceled;
 			protected volatile bool isException;
 			protected volatile string currentFile;
 			protected volatile int currentConflictCount;
 
 			public bool IsCompleted => isCompleted;
-			public bool IsCancelled => isCancelled;
+			public bool IsCanceled => isCanceled;
 			public bool IsException => isException;
 			public string CurrentFile => currentFile;
 			public int CurrentConflictCount => currentConflictCount;
@@ -221,7 +221,7 @@ namespace Tangerine.Dialogs.ConflictingAnimators
 		private class WorkProgressSetter : WorkProgress
 		{
 			public void MarkAsCompleted() => isCompleted = true;
-			public void MarkAsCancelled() => isCompleted = isCancelled = true;
+			public void MarkAsCanceled() => isCompleted = isCanceled = true;
 			public void MarkAsException() => isCompleted = isException = true;
 			public void SetCurrentFile(string path) => currentFile = path;
 			public void IncrementConflictCount() => Interlocked.Increment(ref currentConflictCount);

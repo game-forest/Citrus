@@ -6,7 +6,7 @@ using Lime;
 
 namespace Tangerine.UI.Docking
 {
-	public class WindowDragBehaviour
+	public class WindowDragBehavior
 	{
 		private static DockHierarchy AppPlacement => DockHierarchy.Instance;
 		private DockSite requestedSite;
@@ -17,7 +17,7 @@ namespace Tangerine.UI.Docking
 		public static bool IsActive { get; private set; }
 		public WindowInput Input { get; }
 
-		private WindowDragBehaviour(Placement placement)
+		private WindowDragBehavior(Placement placement)
 		{
 			this.placement = placement;
 			windowPlacement = DockManager.Instance.Model.GetWindowByPlacement(placement);
@@ -46,7 +46,7 @@ namespace Tangerine.UI.Docking
 
 		public static void CreateFor(Placement placement, Vector2 positionOffset)
 		{
-			new WindowDragBehaviour(placement) {
+			new WindowDragBehavior(placement) {
 				positionOffset = positionOffset,
 			};
 			IsActive = true;
@@ -135,13 +135,13 @@ namespace Tangerine.UI.Docking
 		) {
 			var pos = (position - originRect.A) / originRect.Size;
 			site = DockSite.None;
-			const float offset = 0.25f;
+			const float Offset = 0.25f;
 			rect = new Rectangle();
-			var bottomRect = new Rectangle(new Vector2(0, 1 - offset), Vector2.One);
-			var leftRect = new Rectangle(Vector2.Zero, new Vector2(offset, 1));
-			var rightRect = new Rectangle(new Vector2(1 - offset, 0), Vector2.One);
-			var centerRect = new Rectangle(new Vector2(offset, offset), new Vector2(1 - offset, 1 - offset));
-			var topRect = new Rectangle(Vector2.Zero, new Vector2(1, offset));
+			var bottomRect = new Rectangle(new Vector2(0, 1 - Offset), Vector2.One);
+			var leftRect = new Rectangle(Vector2.Zero, new Vector2(Offset, 1));
+			var rightRect = new Rectangle(new Vector2(1 - Offset, 0), Vector2.One);
+			var centerRect = new Rectangle(new Vector2(Offset, Offset), new Vector2(1 - Offset, 1 - Offset));
+			var topRect = new Rectangle(Vector2.Zero, new Vector2(1, Offset));
 			if (centerRect.Contains(pos)) {
 				rect = new Rectangle(Vector2.Zero, Vector2.One);
 				site = DockSite.Fill;
@@ -165,7 +165,7 @@ namespace Tangerine.UI.Docking
 		}
 	}
 
-	public class DragBehaviour
+	public class DragBehavior
 	{
 		private readonly Widget inputWidget;
 		private readonly Widget contentWidget;
@@ -176,7 +176,7 @@ namespace Tangerine.UI.Docking
 
 		public event Action<Vector2, Vector2> OnUndock;
 
-		public DragBehaviour(Widget inputWidget, Widget contentWidget, Placement placement)
+		public DragBehavior(Widget inputWidget, Widget contentWidget, Placement placement)
 		{
 			this.inputWidget = inputWidget;
 			this.contentWidget = contentWidget;
@@ -203,7 +203,7 @@ namespace Tangerine.UI.Docking
 								if (diff.X >= DragThreshold || diff.Y >= DragThreshold) {
 									window.State = WindowState.Normal;
 									pressedPosition = new Vector2(window.ClientSize.X / 2, 10);
-									WindowDragBehaviour.CreateFor(placement, pressedPosition);
+									WindowDragBehavior.CreateFor(placement, pressedPosition);
 									break;
 								}
 								yield return null;
@@ -211,7 +211,7 @@ namespace Tangerine.UI.Docking
 							yield return null;
 							continue;
 						}
-						WindowDragBehaviour.CreateFor(placement, pressedPosition);
+						WindowDragBehavior.CreateFor(placement, pressedPosition);
 					} else {
 						var size = inputWidget.Parent.AsWidget.Size;
 						var initialPosition = LocalMousePosition;

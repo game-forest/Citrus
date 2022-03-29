@@ -89,7 +89,7 @@ namespace Tangerine.UI.RemoteScripting
 				return;
 			}
 			var isScrolledToEnd =
-				Mathf.Abs(Behaviour.ScrollPosition - Behaviour.MaxScrollPosition) < Mathf.ZeroTolerance;
+				Mathf.Abs(Behavior.ScrollPosition - Behavior.MaxScrollPosition) < Mathf.ZeroTolerance;
 			if (text.Length == 0 || text[^1] != '\n') {
 				text += '\n';
 			}
@@ -111,9 +111,9 @@ namespace Tangerine.UI.RemoteScripting
 			if (Content.Nodes.Count >= maxRowCount) {
 				Content.Nodes.RemoveRange(0, removeRowCount);
 			}
-			if (isScrolledToEnd || Behaviour.Content.LateTasks.AnyTagged(scrollToEndTaskTag)) {
-				Behaviour.Content.LateTasks.StopByTag(scrollToEndTaskTag);
-				Behaviour.Content.LateTasks.Add(DefferedScrollToEnd, scrollToEndTaskTag);
+			if (isScrolledToEnd || Behavior.Content.LateTasks.AnyTagged(scrollToEndTaskTag)) {
+				Behavior.Content.LateTasks.StopByTag(scrollToEndTaskTag);
+				Behavior.Content.LateTasks.Add(DefferedScrollToEnd, scrollToEndTaskTag);
 			}
 
 			IEnumerator<object> DefferedScrollToEnd()

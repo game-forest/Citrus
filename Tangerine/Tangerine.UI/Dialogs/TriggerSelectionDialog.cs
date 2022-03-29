@@ -141,9 +141,9 @@ namespace Tangerine.UI
 		private ThemedScrollView CreateScrollView()
 		{
 			var scrollView = new ThemedScrollView();
-			scrollView.Behaviour.Content.Padding = new Thickness(4);
-			scrollView.Behaviour.Content.Layout = new VBoxLayout();
-			scrollView.Behaviour.Content.LayoutCell = new LayoutCell(Alignment.Center);
+			scrollView.Behavior.Content.Padding = new Thickness(4);
+			scrollView.Behavior.Content.Layout = new VBoxLayout();
+			scrollView.Behavior.Content.LayoutCell = new LayoutCell(Alignment.Center);
 			scrollView.CompoundPresenter.Add(new SyncDelegatePresenter<Widget>((w) => {
 				w.PrepareRendererState();
 				Renderer.DrawRect(

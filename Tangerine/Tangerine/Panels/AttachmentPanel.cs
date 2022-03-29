@@ -169,7 +169,7 @@ namespace Tangerine
 					Top = AttachmentMetrics.Spacing,
 				},
 			};
-			list.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+			list.Components.Add(new CreateContentOnVisibleBehavior(() => {
 				var widgetFactory = new AttachmentWidgetFactory<TData>(
 				w => (TRow)Activator.CreateInstance(typeof(TRow), new object[] { w, source }), source);
 				widgetFactory.AddHeader(header);
@@ -456,7 +456,7 @@ namespace Tangerine
 			var container = CreateContentWrapper();
 			container.Content.Id = "MaterialsRemapScrollView";
 			container.Content.Padding = new Thickness(10, AttachmentMetrics.Spacing);
-			container.Content.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+			container.Content.Components.Add(new CreateContentOnVisibleBehavior(() => {
 				var content = new Widget {
 					Layout = new VBoxLayout(),
 				};
@@ -495,7 +495,7 @@ namespace Tangerine
 					Padding = new Thickness(10f, 5f),
 					Visible = false,
 				};
-				list.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+				list.Components.Add(new CreateContentOnVisibleBehavior(() => {
 					var widgetFactory = new AttachmentWidgetFactory<IMaterial>(
 					w => new SourceMaterialRow(w), sourceMaterials);
 					list.Components.Add(widgetFactory);
@@ -563,7 +563,7 @@ namespace Tangerine
 					Visible = false,
 				};
 				AddNode(wrapper);
-				wrapper.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+				wrapper.Components.Add(new CreateContentOnVisibleBehavior(() => {
 					wrapper.CompoundPostPresenter.Add(Presenters.WidgetBoundsPresenter);
 					var ic = new InspectorContent(wrapper) {
 						History = History,
@@ -642,7 +642,7 @@ namespace Tangerine
 		private static ThemedScrollView CreateComponentsPane(Model3DAttachment attachment)
 		{
 			var container = CreateContentWrapper();
-			container.Content.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+			container.Content.Components.Add(new CreateContentOnVisibleBehavior(() => {
 				var list = new Widget {
 					Layout = new VBoxLayout(),
 				};
@@ -713,7 +713,7 @@ namespace Tangerine
 		private static ThemedScrollView CreateNodeRemovalsPane(Model3DAttachment attachment)
 		{
 			var pane = CreateContentWrapper();
-			pane.Content.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+			pane.Content.Components.Add(new CreateContentOnVisibleBehavior(() => {
 				var list = new Widget {
 					Layout = new VBoxLayout(),
 				};
@@ -738,7 +738,7 @@ namespace Tangerine
 		{
 			var container = CreateContentWrapper();
 			container.Id = "AnimationsScrollView";
-			container.Content.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+			container.Content.Components.Add(new CreateContentOnVisibleBehavior(() => {
 				var list = new Widget {
 					Layout = new VBoxLayout(),
 				};
@@ -774,7 +774,7 @@ namespace Tangerine
 		private ThemedScrollView CreateMeshOptionsPane()
 		{
 			var container = CreateContentWrapper();
-			container.Content.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+			container.Content.Components.Add(new CreateContentOnVisibleBehavior(() => {
 				var list = new Widget {
 					Layout = new VBoxLayout(),
 				};
@@ -997,7 +997,7 @@ namespace Tangerine
 
 			private void AddChangeWatcher(Func<BlendingOption> getter, Action<BlendingOption> action)
 			{
-				Components.GetOrAdd<EarlyConsumeBehaviour>()
+				Components.GetOrAdd<EarlyConsumeBehavior>()
 					.Add(new DelegateDataflowProvider<BlendingOption>(getter)
 					.DistinctUntilChanged()
 					.Consume(action));
@@ -1198,7 +1198,7 @@ namespace Tangerine
 					},
 					Visible = false,
 				};
-				expandableContentWrapper.Components.Add(new CreateContentOnVisibleBehaviour(() => {
+				expandableContentWrapper.Components.Add(new CreateContentOnVisibleBehavior(() => {
 					BuildList<Model3DAttachment.MarkerData, MarkerRow>(
 					animation.Markers,
 					expandableContentWrapper,
@@ -1702,12 +1702,12 @@ namespace Tangerine
 			}
 		}
 
-		public class CreateContentOnVisibleBehaviour : NodeBehavior
+		public class CreateContentOnVisibleBehavior : NodeBehavior
 		{
 			private bool isBuilt;
 			private readonly Action builder;
 
-			public CreateContentOnVisibleBehaviour(Action builder)
+			public CreateContentOnVisibleBehavior(Action builder)
 			{
 				this.builder = builder;
 			}

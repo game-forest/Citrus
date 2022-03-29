@@ -11,7 +11,9 @@ namespace Tangerine.UI.FilesystemView
 		[ComImport()]
 		[Guid("000214F2-0000-0000-C000-000000000046")]
 		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+#pragma warning disable MEN015 // Use preferred terms
 		public interface IEnumIDList
+#pragma warning restore MEN015 // Use preferred terms
 		{
 			[PreserveSig()]
 			int Next(int celt, ref IntPtr rgelt, ref int pceltFetched);
@@ -148,7 +150,9 @@ namespace Tangerine.UI.FilesystemView
 			);
 
 			[PreserveSig]
+#pragma warning disable MEN015 // Use preferred terms
 			int EnumObjects(IntPtr hwnd, SHCONTF grfFlags, out IEnumIDList ppenumIDList);
+#pragma warning restore MEN015 // Use preferred terms
 
 			[PreserveSig]
 			int BindToObject(IntPtr pidl, IntPtr pbc, [In] ref Guid riid, out IntPtr ppv);
@@ -247,7 +251,9 @@ namespace Tangerine.UI.FilesystemView
 		public struct SHITEMID
 		{
 			public ushort cb;
+#pragma warning disable MEN015 // Use preferred terms
 			public byte[] abID;
+#pragma warning restore MEN015 // Use preferred terms
 		}
 
 		public enum CSIDL
@@ -696,7 +702,9 @@ namespace Tangerine.UI.FilesystemView
 			public string lpDirectory;
 			public int nShow;
 			public IntPtr hInstApp;
+#pragma warning disable MEN015 // Use preferred terms
 			public IntPtr lpIDList;
+#pragma warning restore MEN015 // Use preferred terms
 			public string lpClass;
 			public IntPtr hkeyClass;
 			public int dwHotKey;
@@ -781,7 +789,9 @@ namespace Tangerine.UI.FilesystemView
 		public static extern int ShellExecuteEx(ref SHELLEXECUTEINFO pExecInfo);
 
 		[DllImport("shell32.dll", SetLastError = true)]
+#pragma warning disable MEN015 // Use preferred terms
 		public static extern int SHGetKnownFolderIDList(
+#pragma warning restore MEN015 // Use preferred terms
 			[MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
 			KNOWN_FOLDER_FLAG dwFlags,
 			IntPtr hToken,
@@ -812,7 +822,9 @@ namespace Tangerine.UI.FilesystemView
 		);
 
 		[DllImport("shell32.dll", EntryPoint = "SHGetPathFromIDListW")]
+#pragma warning disable MEN015 // Use preferred terms
 		public static extern bool SHGetPathFromIDList(
+#pragma warning restore MEN015 // Use preferred terms
 			IntPtr pidl,
 			[MarshalAs(UnmanagedType.LPTStr)] StringBuilder pszPath
 		);
@@ -862,7 +874,9 @@ namespace Tangerine.UI.FilesystemView
 			GWL_STYLE = -16,
 			GWL_EXSTYLE = -20,
 			GWL_USERDATA = -21,
+#pragma warning disable MEN015 // Use preferred terms
 			GWL_ID = -12,
+#pragma warning restore MEN015 // Use preferred terms
 		}
 
 		public abstract class WindowStyles

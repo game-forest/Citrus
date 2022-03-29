@@ -8,28 +8,28 @@ namespace Lime
 	{
 		public override bool IsNotDecorated() => false;
 
-		public ScrollView Behaviour { get; set; }
+		public ScrollView Behavior { get; set; }
 		public ScrollDirection Direction;
 
 		public float ScrollPosition
 		{
-			get { return Behaviour.ScrollPosition; }
-			set { Behaviour.ScrollPosition = value; }
+			get { return Behavior.ScrollPosition; }
+			set { Behavior.ScrollPosition = value; }
 		}
 
 		public float MinScrollPosition
 		{
-			get { return Behaviour.MinScrollPosition; }
+			get { return Behavior.MinScrollPosition; }
 		}
 
 		public float MaxScrollPosition
 		{
-			get { return Behaviour.MaxScrollPosition; }
+			get { return Behavior.MaxScrollPosition; }
 		}
 
 		public Widget Content
 		{
-			get { return Behaviour.Content; }
+			get { return Behavior.Content; }
 		}
 
 		public ThemedScrollView(ScrollDirection scrollDirection = ScrollDirection.Vertical)
@@ -44,7 +44,7 @@ namespace Lime
 				return true;
 			};
 			slider.DefaultAnimation.AnimationEngine = ae;
-			Behaviour = new ScrollViewWithSlider(this, slider, scrollDirection) {
+			Behavior = new ScrollViewWithSlider(this, slider, scrollDirection) {
 				ScrollBySlider = true,
 			};
 		}

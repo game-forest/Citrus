@@ -2,38 +2,68 @@ root = true
 
 [*.cs]
 
-// cap_symbols
+# Code-style naming rules
+# https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/naming-rules
 
-dotnet_naming_rule.symbols_must_be_capitalized.symbols = cap_symbols
-dotnet_naming_rule.symbols_must_be_capitalized.style = cap_symbols_style
-dotnet_naming_symbols.cap_symbols.applicable_kinds = class,struct,interface,enum,property,method,event,delegate,field
-dotnet_naming_symbols.cap_symbols.applicable_accessibilities = public,internal
-dotnet_naming_style.cap_symbols_style.capitalization = pascal_case
+# Namespaces, classes, structs, enums, properties, methods, events, delegates, type parameters and local functions are PascalCase
+dotnet_naming_rule.capitalization_rule.severity = warning
+dotnet_naming_rule.capitalization_rule.symbols = capitalization_rule_groups
+dotnet_naming_rule.capitalization_rule.style = capitalization_rule_group_style
 
-// non_cap_symbols
+dotnet_naming_symbols.capitalization_rule_groups.applicable_kinds = namespace, class, struct, enum, property, method, event, delegate, type_parameter, local_function
+dotnet_naming_symbols.capitalization_rule_groups.applicable_accessibilities = *
 
-dotnet_naming_rule.symbols_must_not_be_capitalized.symbols = non_cap_symbols
-dotnet_naming_rule.symbols_must_not_be_capitalized.style = non_cap_symbols_style
-dotnet_naming_symbols.non_cap_symbols.applicable_kinds = field,parameter
-dotnet_naming_symbols.non_cap_symbols.applicable_accessibilities = private,protected
-dotnet_naming_style.non_cap_symbols_style.capitalization = camel_case
+dotnet_naming_style.capitalization_rule_group_style.capitalization = pascal_case
 
-// const_cap
+# Interfaces are PascalCase and start with "I"
+dotnet_naming_rule.interfaces_should_be_pascal_case.severity = warning
+dotnet_naming_rule.interfaces_should_be_pascal_case.symbols = interfaces
+dotnet_naming_rule.interfaces_should_be_pascal_case.style = interface_style
 
-dotnet_naming_rule.constants_must_be_capitalized.symbols = const_cap
-dotnet_naming_rule.constants_must_be_capitalized.style = const_cap_style
-dotnet_naming_symbols.const_cap.applicable_kinds = *
-dotnet_naming_symbols.const_cap.applicable_accessibilities = *
-dotnet_naming_symbols.const_cap.required_modifiers = const
-dotnet_naming_style.const_cap_style.capitalization = pascal_case
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
 
-// interface_i_prefix
+dotnet_naming_style.interface_style.capitalization = pascal_case
+dotnet_naming_style.interface_style.required_prefix = I
 
-dotnet_naming_rule.interfaces_must_be_prefixed_with_i.symbols = interface_i_prefix
-dotnet_naming_rule.interfaces_must_be_prefixed_with_i.style = interface_i_prefix_style
-dotnet_naming_symbols.interface_i_prefix.applicable_kinds = interface
-dotnet_naming_symbols.interface_i_prefix.applicable_accessibilities = *
-dotnet_naming_style.interface_i_prefix_style.required_prefix = I
+# Constants are PascalCase
+dotnet_naming_rule.constants_should_be_pascal_case.severity = warning
+dotnet_naming_rule.constants_should_be_pascal_case.symbols = constants
+dotnet_naming_rule.constants_should_be_pascal_case.style = constant_style
+
+dotnet_naming_symbols.constants.applicable_kinds = field, local
+dotnet_naming_symbols.constants.required_modifiers = const
+
+dotnet_naming_style.constant_style.capitalization = pascal_case
+
+# Non-public fields are camelCase
+dotnet_naming_rule.non_public_fields_should_be_camel_case.severity = warning
+dotnet_naming_rule.non_public_fields_should_be_camel_case.symbols = non_public_fields
+dotnet_naming_rule.non_public_fields_should_be_camel_case.style = non_public_field_style
+
+dotnet_naming_symbols.non_public_fields.applicable_kinds = field
+dotnet_naming_symbols.non_public_fields.applicable_accessibilities = private, protected, private_protected
+
+dotnet_naming_style.non_public_field_style.capitalization = camel_case
+
+# Public fields are PascalCase
+dotnet_naming_rule.public_fields_should_be_pascal_case.severity = warning
+dotnet_naming_rule.public_fields_should_be_pascal_case.symbols = public_fields
+dotnet_naming_rule.public_fields_should_be_pascal_case.style = public_field_style
+
+dotnet_naming_symbols.public_fields.applicable_kinds = field
+dotnet_naming_symbols.public_fields.applicable_accessibilities = public, internal, protected_internal
+
+dotnet_naming_style.public_field_style.capitalization = pascal_case
+
+# Locals and parameters are camelCase
+dotnet_naming_rule.locals_should_be_camel_case.severity = warning
+dotnet_naming_rule.locals_should_be_camel_case.symbols = locals_and_parameters
+dotnet_naming_rule.locals_should_be_camel_case.style = camel_case_style
+
+dotnet_naming_symbols.locals_and_parameters.applicable_kinds = parameter, local
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case
 
 // New line preferences
 csharp_new_line_before_catch = false
@@ -73,7 +103,7 @@ dotnet_diagnostic.SA1001.severity = error
 dotnet_diagnostic.SA1003.severity = error
 
 # SA1005: Single line comment should begin with a space.
-dotnet_diagnostic.SA1005.severity = error
+dotnet_diagnostic.SA1005.severity = warning
 
 # SA1008: Opening parenthesis should not be preceded by a space.
 dotnet_diagnostic.SA1008.severity = error
@@ -264,8 +294,118 @@ dotnet_diagnostic.SA1129.severity = silent
 dotnet_diagnostic.SA1300.severity = error
 dotnet_diagnostic.MEN010.severity=silent
 dotnet_diagnostic.SA1132.severity=error
+csharp_using_directive_placement = outside_namespace:silent
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_braces = true:silent
+csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_expression_bodied_methods = false:silent
+csharp_style_expression_bodied_constructors = false:silent
+csharp_style_expression_bodied_operators = false:silent
+csharp_style_expression_bodied_properties = true:silent
+csharp_style_expression_bodied_indexers = true:silent
+csharp_style_expression_bodied_accessors = true:silent
+csharp_style_expression_bodied_lambdas = true:silent
+csharp_style_expression_bodied_local_functions = false:silent
+csharp_style_throw_expression = true:suggestion
+csharp_style_prefer_null_check_over_type_check = true:suggestion
+csharp_prefer_simple_default_expression = true:suggestion
+csharp_style_prefer_local_over_anonymous_function = true:suggestion
+csharp_style_prefer_index_operator = true:suggestion
+csharp_style_prefer_range_operator = true:suggestion
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
+csharp_style_prefer_tuple_swap = true:suggestion
+csharp_style_inlined_variable_declaration = true:suggestion
+csharp_style_deconstructed_variable_declaration = true:suggestion
+csharp_style_unused_value_assignment_preference = discard_variable:suggestion
+csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+csharp_indent_labels = one_less_than_current
+csharp_space_around_binary_operators = before_and_after
+csharp_style_allow_embedded_statements_on_same_line_experimental = true:silent
+dotnet_diagnostic.MEN007.severity = silent
+dotnet_diagnostic.MEN004.severity = silent
+dotnet_diagnostic.MEN005.severity = silent
+dotnet_diagnostic.MEN006.severity = silent
+dotnet_diagnostic.MEN015.severity = error
+dotnet_diagnostic.MEN014.severity = silent
+dotnet_diagnostic.MEN013.severity = silent
+dotnet_diagnostic.SA1600.severity = silent
 
 # dotnet_diagnostic.IDE0055.severity = error
 
+# IDE1006: Naming styles
+dotnet_diagnostic.IDE1006.severity = warning
+dotnet_diagnostic.SA1118.severity = silent
+
 [*.{cs,vb}]
 dotnet_style_allow_multiple_blank_lines_experimental=true:error
+
+[*.{cs,vb}]
+#### Naming styles ####
+
+# Naming rules
+
+dotnet_naming_rule.interface_should_be_begins_with_i.severity = suggestion
+dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
+dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
+
+dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
+dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
+
+# Symbol specifications
+
+dotnet_naming_symbols.interface.applicable_kinds = interface
+dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.interface.required_modifiers = 
+
+dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
+dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.types.required_modifiers = 
+
+dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
+dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.non_field_members.required_modifiers = 
+
+# Naming styles
+
+dotnet_naming_style.begins_with_i.required_prefix = I
+dotnet_naming_style.begins_with_i.required_suffix = 
+dotnet_naming_style.begins_with_i.word_separator = 
+dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+dotnet_naming_style.pascal_case.required_prefix = 
+dotnet_naming_style.pascal_case.required_suffix = 
+dotnet_naming_style.pascal_case.word_separator = 
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_style.pascal_case.required_prefix = 
+dotnet_naming_style.pascal_case.required_suffix = 
+dotnet_naming_style.pascal_case.word_separator = 
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:silent
+dotnet_style_explicit_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+dotnet_style_prefer_compound_assignment = true:suggestion
+dotnet_style_prefer_simplified_interpolation = true:suggestion
+dotnet_style_namespace_match_folder = true:suggestion
+dotnet_style_readonly_field = true:suggestion
+dotnet_style_predefined_type_for_locals_parameters_members = true:silent
+dotnet_style_predefined_type_for_member_access = true:silent
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+tab_width = 4
+indent_size = 4
+end_of_line = lf
+dotnet_style_allow_statement_immediately_after_block_experimental = true:silent

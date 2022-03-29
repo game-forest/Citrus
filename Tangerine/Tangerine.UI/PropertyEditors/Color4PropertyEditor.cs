@@ -73,7 +73,7 @@ namespace Tangerine.UI
 				history?.EndTransaction();
 			}
 			colorBoxButton.Clicked += SwitchAlpha;
-			panel.EditorsWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(currentColor.Consume(v => {
+			panel.EditorsWidget.Components.GetOrAdd<LateConsumeBehavior>().Add(currentColor.Consume(v => {
 				if (panel.Color != v.Value) {
 					panel.Color = v.Value;
 					Changed?.Invoke();
