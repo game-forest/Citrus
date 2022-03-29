@@ -519,11 +519,11 @@ namespace Tangerine.Panels
 				var rootAtTheBottom = CoreUserPreferences.Instance.AnimationsPanelDisplayRootAtTheEnd;
 				var treeViewHeightDelta = scrollView.Content.Height - initialTreeViewHeight;
 				var savedScrollPosition = rootAtTheBottom
-						? scrollView.Behaviour.ScrollPosition
+						? scrollView.Behavior.ScrollPosition
 						: scrollView.Content.Height - scrollView.Height;
-				scrollView.Behaviour.ScrollPosition += rootAtTheBottom ? treeViewHeightDelta : 0;
-				scrollView.Behaviour.ScrollToItemVelocity = Math.Abs(treeViewHeightDelta * 5);
-				scrollView.Behaviour.ScrollTo(savedScrollPosition);
+				scrollView.Behavior.ScrollPosition += rootAtTheBottom ? treeViewHeightDelta : 0;
+				scrollView.Behavior.ScrollToItemVelocity = Math.Abs(treeViewHeightDelta * 5);
+				scrollView.Behavior.ScrollTo(savedScrollPosition);
 			}
 
 			void TraverseSceneTreeForCurrentBranch(SceneItem sceneTree)

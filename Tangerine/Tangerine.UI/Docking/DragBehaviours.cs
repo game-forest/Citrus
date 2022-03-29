@@ -6,7 +6,7 @@ using Lime;
 
 namespace Tangerine.UI.Docking
 {
-	public class WindowDragBehaviour
+	public class WindowDragBehavior
 	{
 		private static DockHierarchy AppPlacement => DockHierarchy.Instance;
 		private DockSite requestedSite;
@@ -17,7 +17,7 @@ namespace Tangerine.UI.Docking
 		public static bool IsActive { get; private set; }
 		public WindowInput Input { get; }
 
-		private WindowDragBehaviour(Placement placement)
+		private WindowDragBehavior(Placement placement)
 		{
 			this.placement = placement;
 			windowPlacement = DockManager.Instance.Model.GetWindowByPlacement(placement);
@@ -46,7 +46,7 @@ namespace Tangerine.UI.Docking
 
 		public static void CreateFor(Placement placement, Vector2 positionOffset)
 		{
-			new WindowDragBehaviour(placement) {
+			new WindowDragBehavior(placement) {
 				positionOffset = positionOffset,
 			};
 			IsActive = true;
@@ -165,7 +165,7 @@ namespace Tangerine.UI.Docking
 		}
 	}
 
-	public class DragBehaviour
+	public class DragBehavior
 	{
 		private readonly Widget inputWidget;
 		private readonly Widget contentWidget;
@@ -176,7 +176,7 @@ namespace Tangerine.UI.Docking
 
 		public event Action<Vector2, Vector2> OnUndock;
 
-		public DragBehaviour(Widget inputWidget, Widget contentWidget, Placement placement)
+		public DragBehavior(Widget inputWidget, Widget contentWidget, Placement placement)
 		{
 			this.inputWidget = inputWidget;
 			this.contentWidget = contentWidget;
@@ -203,7 +203,7 @@ namespace Tangerine.UI.Docking
 								if (diff.X >= DragThreshold || diff.Y >= DragThreshold) {
 									window.State = WindowState.Normal;
 									pressedPosition = new Vector2(window.ClientSize.X / 2, 10);
-									WindowDragBehaviour.CreateFor(placement, pressedPosition);
+									WindowDragBehavior.CreateFor(placement, pressedPosition);
 									break;
 								}
 								yield return null;
@@ -211,7 +211,7 @@ namespace Tangerine.UI.Docking
 							yield return null;
 							continue;
 						}
-						WindowDragBehaviour.CreateFor(placement, pressedPosition);
+						WindowDragBehavior.CreateFor(placement, pressedPosition);
 					} else {
 						var size = inputWidget.Parent.AsWidget.Size;
 						var initialPosition = LocalMousePosition;

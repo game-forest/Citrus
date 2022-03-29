@@ -230,7 +230,7 @@ namespace Tangerine.UI
 #else // WIN
 			var toggleSelectionModificator = Key.Control;
 #endif
-			scrollView.Behaviour.ScrollToItemVelocity = ScrollSpeed;
+			scrollView.Behavior.ScrollToItemVelocity = ScrollSpeed;
 			this.scrollView = scrollView;
 			this.presentation = presentation;
 			currentItems = new List<TreeViewItem>();
@@ -708,9 +708,9 @@ namespace Tangerine.UI
 			var itemTop = item.Presentation.Widget.Y;
 			var itemBottom = item.Presentation.Widget.Y + item.Presentation.Widget.Height;
 			if (itemTop - scrollView.ScrollPosition < 0) {
-				scrollView.Behaviour.ScrollTo(itemTop, instantly);
+				scrollView.Behavior.ScrollTo(itemTop, instantly);
 			} else if (itemBottom - scrollView.ScrollPosition > scrollView.Height) {
-				scrollView.Behaviour.ScrollTo(itemBottom - scrollView.Height, instantly);
+				scrollView.Behavior.ScrollTo(itemBottom - scrollView.Height, instantly);
 			}
 		}
 

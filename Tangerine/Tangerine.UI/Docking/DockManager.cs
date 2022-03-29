@@ -274,7 +274,7 @@ namespace Tangerine.UI.Docking
 					Refresh();
 				};
 				title.Text = "Tangerine";
-				CreateDragBehaviour(placement, rootWidget.Nodes[0].AsWidget, rootWidget);
+				CreateDragBehavior(placement, rootWidget.Nodes[0].AsWidget, rootWidget);
 			}
 			container.Stretches.Add(stretch);
 			container.Nodes.Add(rootWidget);
@@ -347,7 +347,7 @@ namespace Tangerine.UI.Docking
 					Model.FindPanelPlacement(panel.Id).Hidden = true;
 					Refresh();
 				};
-				CreateDragBehaviour(placement, rootWidget.Nodes[0].AsWidget, widget);
+				CreateDragBehavior(placement, rootWidget.Nodes[0].AsWidget, widget);
 				widget = rootWidget;
 			}
 			panel.PanelWidget = widget;
@@ -391,7 +391,7 @@ namespace Tangerine.UI.Docking
 					placement.Placements.Where(p => !p.Hidden).ElementAt(tabbedWidget.ActiveTabIndex).Hidden = true;
 					Refresh();
 				};
-				CreateDragBehaviour(placement, rootWidget.Nodes[0].AsWidget, rootWidget);
+				CreateDragBehavior(placement, rootWidget.Nodes[0].AsWidget, rootWidget);
 			}
 			foreach (var panelPlacement in placement.Placements) {
 				var panel = Model.Panels.First(pan => pan.Id == panelPlacement.Id);
@@ -418,7 +418,7 @@ namespace Tangerine.UI.Docking
 					},
 					isActive: true
 				);
-				CreateDragBehaviour(panelPlacement, tab, panel.ContentWidget);
+				CreateDragBehavior(panelPlacement, tab, panel.ContentWidget);
 				panel.PanelWidget = rootWidget;
 			}
 			tabbedWidget.ActiveTabIndex = placement.ActiveTabIndex;
@@ -430,9 +430,9 @@ namespace Tangerine.UI.Docking
 			container.Stretches.Add(stretch);
 		}
 
-		private void CreateDragBehaviour(Placement placement, Widget inputWidget, Widget contentWidget)
+		private void CreateDragBehavior(Placement placement, Widget inputWidget, Widget contentWidget)
 		{
-			var db = new DragBehaviour(inputWidget, contentWidget, placement);
+			var db = new DragBehavior(inputWidget, contentWidget, placement);
 			db.OnUndock += (positionOffset, windowPosition) => {
 				if (CoreUserPreferences.Instance.LockLayout) {
 					return;
@@ -462,7 +462,7 @@ namespace Tangerine.UI.Docking
 					CreateFloatingWindow(wrapper);
 					RefreshWindow(wrapper);
 				}
-				WindowDragBehaviour.CreateFor(placement, positionOffset);
+				WindowDragBehavior.CreateFor(placement, positionOffset);
 			};
 		}
 

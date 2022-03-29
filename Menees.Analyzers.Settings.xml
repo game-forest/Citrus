@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Menees.Analyzers.Settings>
   <TabSize>4</TabSize>
-  <!-- Note: The rest of these values are intentionally set small for unit testing.  Production values should be larger. -->
   <MaxLineColumns>120</MaxLineColumns>
   <!-- <MaxMethodLines>5</MaxMethodLines> -->
   <!-- <MaxPropertyAccessorLines>5</MaxPropertyAccessorLines> -->
@@ -36,10 +35,12 @@
 
   <PreferredTerms>
     <Term Avoid="Cancelled" Prefer="Canceled" />
-    <Term Avoid="Colour" Prefer="Color"/>
+    <Term Avoid="Colour" Prefer="Color" />
     <Term Avoid="ID" Prefer="Id" />
-    <Term Avoid="Indices" Prefer="Indexes" />
-    <Term Avoid="Kustom" Prefer="Custom"/>
-    <Term Avoid="Behaviour" Prefer="Behavior"/>
+    <Term Avoid="Indexes" Prefer="Indices" />
+    <Term Avoid="Vertexes" Prefer="Vertices" />
+    <Term Avoid="Kustom" Prefer="Custom" />
+    <Term Avoid="Behaviour" Prefer="Behavior" />
+    <Term Avoid="Matrixes" Prefer="Matrices" />
   </PreferredTerms>
 </Menees.Analyzers.Settings>

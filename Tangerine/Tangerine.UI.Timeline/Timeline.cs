@@ -258,8 +258,8 @@ namespace Tangerine.UI.Timeline
 				new GridContextMenuProcessor(),
 				new CompoundAnimations.GridContextMenuProcessor()
 			);
-			RootWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(ShowCurveEditorTask());
-			RootWidget.Components.GetOrAdd<LateConsumeBehaviour>().Add(PanelTitleUpdater());
+			RootWidget.Components.GetOrAdd<LateConsumeBehavior>().Add(ShowCurveEditorTask());
+			RootWidget.Components.GetOrAdd<LateConsumeBehavior>().Add(PanelTitleUpdater());
 		}
 
 		private int CalcColumnCount()

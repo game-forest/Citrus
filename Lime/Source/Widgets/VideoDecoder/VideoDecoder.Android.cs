@@ -557,7 +557,7 @@ namespace Lime
 			// <- IMPORTANT for surface texture!!!
 			private const TextureTarget TextureTarget = (TextureTarget)All.TextureExternalOes;
 
-			private static VertexPosUV[] meshVertexes = new VertexPosUV[] {
+			private static VertexPosUV[] meshVertices = new VertexPosUV[] {
 					new VertexPosUV() { UV1 = new Vector2(0, 0), Pos = new Vector2(-1, 1) },
 					new VertexPosUV() { UV1 = new Vector2(1, 0), Pos = new Vector2(1, 1) },
 					new VertexPosUV() { UV1 = new Vector2(1, 1), Pos = new Vector2(1, -1) },
@@ -571,7 +571,7 @@ namespace Lime
 				mesh.Indices = new ushort[] {
 					0, 1, 2, 2, 3, 0
 				};
-				mesh.Vertices = meshVertexes;
+				mesh.Vertices = meshVertices;
 				mesh.AttributeLocations = new[] { ShaderPrograms.Attributes.Pos1, ShaderPrograms.Attributes.UV1 };
 				mesh.DirtyFlags = MeshDirtyFlags.All;
 				CreateSurface();

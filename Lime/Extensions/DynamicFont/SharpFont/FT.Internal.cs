@@ -340,7 +340,9 @@ namespace SharpFont
 		);
 
 		[DllImport(FreetypeDll, CallingConvention = CallConvention)]
+#pragma warning disable MEN015 // Use preferred terms
 		internal static extern uint FT_Get_CMap_Language_ID(IntPtr charmap);
+#pragma warning restore MEN015 // Use preferred terms
 
 		[DllImport(FreetypeDll, CallingConvention = CallConvention)]
 		internal static extern int FT_Get_CMap_Format(IntPtr charmap);
@@ -375,7 +377,9 @@ namespace SharpFont
 			BestFitMapping = false,
 			ThrowOnUnmappableChar = true
 		)]
+#pragma warning disable MEN015 // Use preferred terms
 		internal static extern Error FT_Get_BDF_Charset_ID(
+#pragma warning restore MEN015 // Use preferred terms
 			IntPtr face, out string acharset_encoding, out string acharset_registry
 		);
 
@@ -776,7 +780,9 @@ namespace SharpFont
 		internal static extern void FTC_Node_Unref(IntPtr node, IntPtr manager);
 
 		[DllImport(FreetypeDll, CallingConvention = CallConvention)]
+#pragma warning disable MEN015 // Use preferred terms
 		internal static extern void FTC_Manager_RemoveFaceID(IntPtr manager, IntPtr face_id);
+#pragma warning restore MEN015 // Use preferred terms
 
 		[DllImport(FreetypeDll, CallingConvention = CallConvention)]
 		internal static extern Error FTC_CMapCache_New(IntPtr manager, out IntPtr acache);

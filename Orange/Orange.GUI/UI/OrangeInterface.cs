@@ -815,7 +815,7 @@ namespace Orange
 			{
 				this.consoleOutput = consoleOutput;
 				this.textView = textView;
-				this.textView.Behaviour.Content.Gestures.Add(new DragGesture());
+				this.textView.Behavior.Content.Gestures.Add(new DragGesture());
 			}
 
 			public override void WriteLine(string value)
@@ -833,8 +833,8 @@ namespace Orange
 #endif // DEBUG
 					if (
 						autoscrollEnabled
-						&& !textView.Behaviour.IsScrolling()
-						&& !(textView.Behaviour as ScrollViewWithSlider).SliderIsDragging
+						&& !textView.Behavior.IsScrolling()
+						&& !(textView.Behavior as ScrollViewWithSlider).SliderIsDragging
 					) {
 						textView.ScrollToEnd();
 					}

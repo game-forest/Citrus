@@ -429,9 +429,9 @@ namespace Tangerine
 						FocusedLabel.Color = Theme.Colors.KeyboardFocusBorder;
 						if (focusedLabel is DocumentLabel documentLabel) {
 							var labelsList = documentLabel.Parent.AsWidget;
-							if (!FilesView.Behaviour.IsItemFullyOnscreen(labelsList)) {
-								var position = FilesView.Behaviour.PositionToViewFully(labelsList);
-								FilesView.Behaviour.ScrollTo(position);
+							if (!FilesView.Behavior.IsItemFullyOnscreen(labelsList)) {
+								var position = FilesView.Behavior.PositionToViewFully(labelsList);
+								FilesView.Behavior.ScrollTo(position);
 							}
 							SetFilePathCaption(documentLabel.Document.FullPath);
 						}

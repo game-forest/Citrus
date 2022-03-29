@@ -46,19 +46,19 @@ namespace Lime
 		public WaveIMA4Decoder(Stream stream)
 		{
 			this.stream = stream;
-			if (ReadID() != "RIFF") {
+			if (ReadId() != "RIFF") {
 				throw Abort("Invalid RIFF header");
 			}
 
 			ReadInt32();
-			if (ReadID() != "WAVE") {
+			if (ReadId() != "WAVE") {
 				throw Abort("Wave type is expected");
 			}
 
 			int fmtSize = 0;
 			dataSize = 0;
 			while (stream.Position < stream.Length) {
-				switch (ReadID()) {
+				switch (ReadId()) {
 					case "fmt ":
 						fmtSize = ReadInt32();
 						uint fmt = ReadUInt16();
@@ -205,7 +205,7 @@ namespace Lime
 			return ret;
 		}
 
-		private string ReadID()
+		private string ReadId()
 		{
 			return Encoding.UTF8.GetString(ReadBytes(4), 0, 4);
 		}
