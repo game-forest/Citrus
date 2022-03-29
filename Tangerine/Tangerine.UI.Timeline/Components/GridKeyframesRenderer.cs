@@ -35,9 +35,12 @@ namespace Tangerine.UI.Timeline.Components
 
 		public void GenerateCells(Node node, Animation animation)
 		{
-			var effectiveAnimatorsSet = animation.ValidatedEffectiveAnimatorsSet;
-			foreach (var animator in node.Animators) {
-				if (!effectiveAnimatorsSet.Contains(animator) || animator.IsZombie) {
+			var effectiveAnimatorsPerHost = animation.ValidatedEffectiveAnimatorsPerHost;
+			if (!effectiveAnimatorsPerHost.TryGetValue(node, out var animators)) {
+				return;
+			}
+			foreach (var abstractAnimator in animators) {
+				if (!(abstractAnimator is IAnimator animator) || animator.IsZombie) {
 					continue;
 				}
 				for (var j = 0; j < animator.ReadonlyKeys.Count; j++) {

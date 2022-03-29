@@ -208,9 +208,18 @@ namespace Lime
 				BuildEffectiveAnimatorsForSimpleAnimation(animation);
 			}
 #if TANGERINE
-			(animation.EffectiveAnimatorsSet ??= new HashSet<IAbstractAnimator>()).Clear();
+			var effectiveAnimatorsPerHost =
+				animation.EffectiveAnimatorsPerHost ??=
+					new Dictionary<IAnimationHost, HashSet<IAbstractAnimator>>();
+			effectiveAnimatorsPerHost.Clear();
 			foreach (var animator in animation.EffectiveAnimators) {
-				animation.EffectiveAnimatorsSet.Add(animator);
+				var host = animator.Animable.GetAnimationHost();
+				if (effectiveAnimatorsPerHost.TryGetValue(host, out var animators)) {
+					animators.Add(animator);
+				} else {
+					animators = new HashSet<IAbstractAnimator> { animator };
+					effectiveAnimatorsPerHost.Add(host, animators);
+				}
 			}
 #endif
 		}

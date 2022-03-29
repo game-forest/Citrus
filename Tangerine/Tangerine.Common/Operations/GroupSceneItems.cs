@@ -166,7 +166,7 @@ namespace Tangerine.Common.Operations
 			while (true) {
 				if (
 					node.Animations.TryFind(animationId, out var a)
-					&& a.ValidatedEffectiveAnimatorsSet.Contains(animator)
+					&& a.ValidatedEffectiveAnimatorsPerHost.Contains(animator)
 				) {
 					return a;
 				}

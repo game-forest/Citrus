@@ -197,18 +197,18 @@ namespace Tangerine.Core
 
 				void TraverseSceneTree(SceneItem sceneTree, bool addNodes)
 				{
-					var currentAnimation = Animation;
 					var timelineItemState = sceneTree.GetTimelineSceneItemState();
 					timelineItemState.NodesExpandable = false;
 					timelineItemState.AnimatorsExpandable = false;
 					var containerSceneItem = GetSceneItemForObject(Container);
+					var effectiveAnimatorsPerHost = animation.ValidatedEffectiveAnimatorsPerHost;
 					foreach (var i in sceneTree.SceneItems) {
 						i.GetTimelineSceneItemState().Index = cachedVisibleSceneItems.Count;
 						if (i.TryGetAnimator(out var animator)) {
 							if (
 								sceneTree != containerSceneItem &&
 								!animator.IsZombie &&
-								currentAnimation.ValidatedEffectiveAnimatorsSet.Contains(animator)
+								effectiveAnimatorsPerHost.Contains(animator)
 							) {
 								timelineItemState.AnimatorsExpandable = true;
 								if (ShowAnimators || timelineItemState.AnimatorsExpanded) {

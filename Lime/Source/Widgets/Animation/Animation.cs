@@ -34,16 +34,16 @@ namespace Lime
 		public List<IAbstractAnimator> EffectiveAnimators;
 
 #if TANGERINE
-		public HashSet<IAbstractAnimator> EffectiveAnimatorsSet;
+		public Dictionary<IAnimationHost, HashSet<IAbstractAnimator>> EffectiveAnimatorsPerHost;
 
-		public HashSet<IAbstractAnimator> ValidatedEffectiveAnimatorsSet
+		public Dictionary<IAnimationHost, HashSet<IAbstractAnimator>> ValidatedEffectiveAnimatorsPerHost
 		{
 			get
 			{
 				if (!AnimationEngine.AreEffectiveAnimatorsValid(this)) {
 					AnimationEngine.BuildEffectiveAnimators(this);
 				}
-				return EffectiveAnimatorsSet;
+				return EffectiveAnimatorsPerHost;
 			}
 		}
 #endif
@@ -348,7 +348,7 @@ namespace Lime
 			}
 		}
 
-		public class AnimationBezierEasingCalculator
+		public class AnimationBezierEasingCalculator : IEasingCalculator
 		{
 			private readonly Animation owner;
 			private readonly MarkerList markers;
@@ -441,6 +441,15 @@ namespace Lime
 				}
 				return easedCurrentTime;
 			}
+		}
+	}
+
+	public static class AnimationExtensionMethods
+	{
+		public static bool Contains(
+			this Dictionary<IAnimationHost, HashSet<IAbstractAnimator>> animatorsPerHost, IAnimator animator)
+		{
+			return animatorsPerHost.TryGetValue(animator.Owner, out var animators) && animators.Contains(animator);
 		}
 	}
 }

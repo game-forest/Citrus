@@ -36,6 +36,7 @@ namespace Tangerine.UI.Timeline.Operations
 			int startCol = spans.First().A;
 			int animationHostIndex = -1;
 			IAnimationHost previousAnimationHost = null;
+			var effectiveAnimatorsPerHost = Document.Current.Animation.ValidatedEffectiveAnimatorsPerHost;
 
 			foreach (var item in Document.Current.SelectedSceneItems()) {
 				spans = item.Components.Get<GridSpanListComponent>()?.Spans;
@@ -57,7 +58,7 @@ namespace Tangerine.UI.Timeline.Operations
 				}
 				void ProcessAnimator(IAnimator animator)
 				{
-					if (!Document.Current.Animation.ValidatedEffectiveAnimatorsSet.Contains(animator)) {
+					if (!effectiveAnimatorsPerHost.Contains(animator)) {
 						return;
 					}
 					foreach (var keyframe in animator.Keys.Where(i => spans.Any(j => j.Contains(i.Frame)))) {
