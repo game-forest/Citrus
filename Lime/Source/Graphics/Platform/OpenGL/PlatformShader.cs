@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 #if !iOS && !MAC && !ANDROID
 using OpenTK.Graphics.ES20;
 #endif
@@ -6,6 +7,12 @@ namespace Lime.Graphics.Platform.OpenGL
 {
 	internal class PlatformShader : IPlatformShader
 	{
+		/// <summary>
+		/// Matches default precision qualifiers and precision qualifier for type specifiers.
+		/// </summary>
+		private static readonly Regex precisionQualifiers = new Regex(
+			pattern: @"lowp |mediump |highp |precision \w+ \w+;", RegexOptions.Compiled);
+
 		internal int GLShader;
 
 		public PlatformRenderContext Context { get; }
@@ -48,10 +55,7 @@ namespace Lime.Graphics.Platform.OpenGL
 		private string ProcessSource(string source)
 		{
 			if (!Context.ESProfile) {
-				source = source
-					.Replace("lowp", string.Empty)
-					.Replace("mediump", string.Empty)
-					.Replace("highp", string.Empty);
+				source = precisionQualifiers.Replace(source, string.Empty);
 			}
 			return source;
 		}
