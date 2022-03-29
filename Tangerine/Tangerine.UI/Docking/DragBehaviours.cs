@@ -135,13 +135,13 @@ namespace Tangerine.UI.Docking
 		) {
 			var pos = (position - originRect.A) / originRect.Size;
 			site = DockSite.None;
-			const float offset = 0.25f;
+			const float Offset = 0.25f;
 			rect = new Rectangle();
-			var bottomRect = new Rectangle(new Vector2(0, 1 - offset), Vector2.One);
-			var leftRect = new Rectangle(Vector2.Zero, new Vector2(offset, 1));
-			var rightRect = new Rectangle(new Vector2(1 - offset, 0), Vector2.One);
-			var centerRect = new Rectangle(new Vector2(offset, offset), new Vector2(1 - offset, 1 - offset));
-			var topRect = new Rectangle(Vector2.Zero, new Vector2(1, offset));
+			var bottomRect = new Rectangle(new Vector2(0, 1 - Offset), Vector2.One);
+			var leftRect = new Rectangle(Vector2.Zero, new Vector2(Offset, 1));
+			var rightRect = new Rectangle(new Vector2(1 - Offset, 0), Vector2.One);
+			var centerRect = new Rectangle(new Vector2(Offset, Offset), new Vector2(1 - Offset, 1 - Offset));
+			var topRect = new Rectangle(Vector2.Zero, new Vector2(1, Offset));
 			if (centerRect.Contains(pos)) {
 				rect = new Rectangle(Vector2.Zero, Vector2.One);
 				site = DockSite.Fill;
