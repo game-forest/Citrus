@@ -195,6 +195,13 @@ namespace Lime
 
 		public override void BuildEffectiveAnimators(Animation animation)
 		{
+			animation.EffectiveAnimators ??= new List<IAbstractAnimator>();
+			foreach (var animator in animation.EffectiveAnimators) {
+				animator.EasingCalculator = null;
+			}
+			animation.EffectiveAnimators.Clear();
+			(animation.EffectiveTriggerableAnimators ??= new List<IAbstractAnimator>()).Clear();
+
 			if (animation.IsCompound) {
 				BuildEffectiveAnimatorsForCompoundAnimation(animation);
 			} else {
@@ -210,8 +217,6 @@ namespace Lime
 
 		private static void BuildEffectiveAnimatorsForCompoundAnimation(Animation animation)
 		{
-			(animation.EffectiveAnimators ??= new List<IAbstractAnimator>()).Clear();
-			(animation.EffectiveTriggerableAnimators ??= new List<IAbstractAnimator>()).Clear();
 #if TANGERINE
 			// Necessary to edit track weights in the inspector.
 			animation.EffectiveAnimatorsVersion++;
@@ -264,9 +269,8 @@ namespace Lime
 			foreach (var b in animationBindings.Values) {
 				var a = b.Animator;
 				if (animation.HasEasings()) {
-					var a2 = AnimatorRegistry.Instance.CreateEasedAnimator(a.ValueType);
-					a2.Initialize(animation, a);
-					a = a2;
+					a.EasingCalculator =
+						animation.HasEasings() ? animation.BezierEasingCalculator : null;
 				}
 				animation.EffectiveAnimators.Add(a);
 				if (a.IsTriggerable) {
@@ -305,8 +309,6 @@ namespace Lime
 
 		private static void BuildEffectiveAnimatorsForSimpleAnimation(Animation animation)
 		{
-			(animation.EffectiveAnimators ??= new List<IAbstractAnimator>()).Clear();
-			(animation.EffectiveTriggerableAnimators ??= new List<IAbstractAnimator>()).Clear();
 			animation.EffectiveAnimatorsVersion = animation.OwnerNode.DescendantAnimatorsVersion;
 			AddEffectiveAnimatorsRecursively(animation.OwnerNode);
 
@@ -326,15 +328,11 @@ namespace Lime
 					if (child.Animators.Count > 0) {
 						foreach (var a in child.Animators) {
 							if (a.AnimationId == animation.Id) {
-								var a2 = (IAbstractAnimator)a;
-								if (animation.HasEasings()) {
-									var a3 = AnimatorRegistry.Instance.CreateEasedAnimator(a.ValueType);
-									a3.Initialize(animation, a);
-									a2 = a3;
-								}
-								animation.EffectiveAnimators.Add(a2);
-								if (a2.IsTriggerable) {
-									animation.EffectiveTriggerableAnimators.Add(a2);
+								a.EasingCalculator =
+									animation.HasEasings() ? animation.BezierEasingCalculator : null;
+								animation.EffectiveAnimators.Add(a);
+								if (a.IsTriggerable) {
+									animation.EffectiveTriggerableAnimators.Add(a);
 								}
 							}
 						}

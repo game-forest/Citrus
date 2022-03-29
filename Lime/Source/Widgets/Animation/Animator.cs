@@ -13,8 +13,14 @@ namespace Lime
 		int Duration { get; }
 		bool IsTriggerable { get; }
 		Type ValueType { get; }
+		IEasingCalculator EasingCalculator { get; set; }
 		void Apply(double time);
 		void ExecuteTriggersInRange(double minTime, double maxTime, bool executeTriggerAtMaxTime);
+	}
+
+	public interface IEasingCalculator
+	{
+		double EaseTime(double time);
 	}
 
 	internal interface IAbstractAnimator<T> : IAbstractAnimator
@@ -171,6 +177,8 @@ namespace Lime
 
 		IAbstractAnimatorSetter<T> IAbstractAnimator<T>.Setter => this;
 
+		public IEasingCalculator EasingCalculator { get; set; }
+
 		public Animator()
 		{
 			ReadonlyKeys = new TypedKeyframeList<T>();
@@ -256,6 +264,10 @@ namespace Lime
 			if (!Enabled || IsZombie || !IsTriggerable || Owner == null) {
 				return;
 			}
+			if (EasingCalculator != null) {
+				minTime = EasingCalculator.EaseTime(minTime);
+				maxTime = EasingCalculator.EaseTime(maxTime);
+			}
 			int minFrame = AnimationUtils.SecondsToFramesCeiling(minTime);
 			int maxFrame = AnimationUtils.SecondsToFramesCeiling(maxTime) + (executeTriggerAtMaxTime ? 1 : 0);
 			if (minFrame >= maxFrame) {
@@ -324,6 +336,9 @@ namespace Lime
 
 		public T CalcValue(double time)
 		{
+			if (EasingCalculator != null) {
+				time = EasingCalculator.EaseTime(time);
+			}
 			if (time < minTime || time >= maxTime) {
 				CacheInterpolationParameters(time);
 			}

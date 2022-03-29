@@ -54,7 +54,7 @@ namespace Lime
 		/// <see cref="ValidatedEffectiveTriggerableAnimators"/>.
 		/// </summary>
 		public List<IAbstractAnimator> EffectiveTriggerableAnimators;
-		public AnimationBezierEasingCalculator BezierEasingCalculator { get; private set; }
+		public AnimationBezierEasingCalculator BezierEasingCalculator { get; }
 		public AnimationEngine AnimationEngine = DefaultAnimationEngine.Instance;
 		private AnimationComponent owner;
 

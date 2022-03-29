@@ -15,11 +15,6 @@ namespace Lime
 			return GetFactory(propertyType).CreateAnimator();
 		}
 
-		public IEasedAnimator CreateEasedAnimator(Type propertyType)
-		{
-			return GetFactory(propertyType).CreateEasedAnimator();
-		}
-
 		public IChainedAnimator CreateChainedAnimator(Type propertyType)
 		{
 			return GetFactory(propertyType).CreateChainedAnimator();
@@ -96,7 +91,6 @@ namespace Lime
 		public interface IAnimatorFactory
 		{
 			IAnimator CreateAnimator();
-			IEasedAnimator CreateEasedAnimator();
 			IChainedAnimator CreateChainedAnimator();
 			IBlendedAnimator CreateBlendedAnimator();
 		}
@@ -104,7 +98,6 @@ namespace Lime
 		public class AnimatorFactory<T> : IAnimatorFactory
 		{
 			public virtual IAnimator CreateAnimator() => new Animator<T>();
-			public virtual IEasedAnimator CreateEasedAnimator() => new EasedAnimator<T>();
 			public virtual IChainedAnimator CreateChainedAnimator() => new ChainedAnimator<T>();
 			public virtual IBlendedAnimator CreateBlendedAnimator() => new BlendedAnimator<T>();
 		}
@@ -166,14 +159,12 @@ namespace Lime
 		public class EnumAnimatorFactory : IAnimatorFactory
 		{
 			private readonly Func<IAbstractAnimator> animatorFactory;
-			private readonly Func<IAbstractAnimator> easedAnimatorFactory;
 			private readonly Func<IAbstractAnimator> chainedAnimatorFactory;
 			private readonly Func<IAbstractAnimator> blendedAnimatorFactory;
 
 			public EnumAnimatorFactory(Type enumType)
 			{
 				animatorFactory = CreateDelegate(typeof(Animator<>), enumType);
-				easedAnimatorFactory = CreateDelegate(typeof(EasedAnimator<>), enumType);
 				chainedAnimatorFactory = CreateDelegate(typeof(ChainedAnimator<>), enumType);
 				blendedAnimatorFactory = CreateDelegate(typeof(BlendedAnimator<>), enumType);
 			}
@@ -186,7 +177,6 @@ namespace Lime
 			}
 
 			public IAnimator CreateAnimator() => (IAnimator)animatorFactory();
-			public IEasedAnimator CreateEasedAnimator() => (IEasedAnimator)easedAnimatorFactory();
 			public IChainedAnimator CreateChainedAnimator() => (IChainedAnimator)chainedAnimatorFactory();
 			public IBlendedAnimator CreateBlendedAnimator() => (IBlendedAnimator)blendedAnimatorFactory();
 		}
