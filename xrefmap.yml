@@ -68460,19 +68460,19 @@ references:
   isSpec: "True"
   fullName: Lime.ThemedScrollView.ThemedScrollView
   nameWithType: ThemedScrollView.ThemedScrollView
-- uid: Lime.ThemedScrollView.Behaviour
-  name: Behaviour
-  href: api/Lime.ThemedScrollView.html#Lime_ThemedScrollView_Behaviour
-  commentId: P:Lime.ThemedScrollView.Behaviour
-  fullName: Lime.ThemedScrollView.Behaviour
-  nameWithType: ThemedScrollView.Behaviour
-- uid: Lime.ThemedScrollView.Behaviour*
-  name: Behaviour
-  href: api/Lime.ThemedScrollView.html#Lime_ThemedScrollView_Behaviour_
-  commentId: Overload:Lime.ThemedScrollView.Behaviour
+- uid: Lime.ThemedScrollView.Behavior
+  name: Behavior
+  href: api/Lime.ThemedScrollView.html#Lime_ThemedScrollView_Behavior
+  commentId: P:Lime.ThemedScrollView.Behavior
+  fullName: Lime.ThemedScrollView.Behavior
+  nameWithType: ThemedScrollView.Behavior
+- uid: Lime.ThemedScrollView.Behavior*
+  name: Behavior
+  href: api/Lime.ThemedScrollView.html#Lime_ThemedScrollView_Behavior_
+  commentId: Overload:Lime.ThemedScrollView.Behavior
   isSpec: "True"
-  fullName: Lime.ThemedScrollView.Behaviour
-  nameWithType: ThemedScrollView.Behaviour
+  fullName: Lime.ThemedScrollView.Behavior
+  nameWithType: ThemedScrollView.Behavior
 - uid: Lime.ThemedScrollView.Content
   name: Content
   href: api/Lime.ThemedScrollView.html#Lime_ThemedScrollView_Content
