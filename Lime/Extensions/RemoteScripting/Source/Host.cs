@@ -15,7 +15,8 @@ namespace RemoteScripting
 		private readonly CancellationTokenSource abortTokenSource;
 		private readonly CancellationTokenSource cancellationTokenSource;
 		private readonly CancellationToken cancellationToken;
-		private readonly ConcurrentDictionary<HostClient, object> clients = new ConcurrentDictionary<HostClient, object>();
+		private readonly ConcurrentDictionary<HostClient, object> clients =
+			new ConcurrentDictionary<HostClient, object>();
 		public IEnumerable<HostClient> Clients => clients.Keys.Where(c => c.WasVerified);
 
 		public Host(CancellationTokenSource abortTokenSource)
@@ -29,10 +30,11 @@ namespace RemoteScripting
 		public async void Start()
 		{
 			listener.Start();
-			
+
 			while (!cancellationToken.IsCancellationRequested) {
 				try {
-					var tcpClient = await listener.AcceptTcpClientAsync().ConfigureAwait(continueOnCapturedContext: false);
+					var tcpClient = await listener.AcceptTcpClientAsync()
+						.ConfigureAwait(continueOnCapturedContext: false);
 					CreateClient(tcpClient);
 				} catch (ObjectDisposedException) {
 					// Suppress
@@ -50,8 +52,6 @@ namespace RemoteScripting
 		private async void CreateClient(TcpClient tcpClient)
 		{
 			var client = new HostClient(tcpClient);
-
-			void EnqueueClientException(Exception exception) => client.EnqueueReceivedMessage(new NetworkText($"\nClient disconnected with exception:\n{exception}"));
 
 			try {
 				if (!clients.TryAdd(client, null)) {
@@ -77,6 +77,11 @@ namespace RemoteScripting
 					throw new InvalidOperationException();
 				}
 				client.Close();
+			}
+
+			void EnqueueClientException(Exception exception)
+			{
+				client.EnqueueReceivedMessage(new NetworkText($"\nClient disconnected with exception:\n{exception}"));
 			}
 		}
 

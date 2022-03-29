@@ -26,7 +26,8 @@ namespace RemoteScripting
 		private const int ProtocolVersionBufferLength = 2;
 		private const int MessageTypeBufferLength = 2;
 		private const int BodyLengthBufferLength = 4;
-		private const int HeaderLength = MagicConstBufferLength + ProtocolVersionBufferLength + MessageTypeBufferLength + BodyLengthBufferLength;
+		private const int HeaderLength =
+			MagicConstBufferLength + ProtocolVersionBufferLength + MessageTypeBufferLength + BodyLengthBufferLength;
 
 		private static readonly byte[] magicConstBuffer = BitConverter.GetBytes(MagicConst);
 		private static readonly byte[] protocolVersionBuffer = BitConverter.GetBytes(ProtocolVersion);
@@ -58,7 +59,8 @@ namespace RemoteScripting
 
 		public static async Task<NetworkMessage> ReadMessageFromStreamAsync(NetworkStream stream)
 		{
-			var headerBuffer = await ReadFromStreamAsync(stream, HeaderLength).ConfigureAwait(continueOnCapturedContext: false);
+			var headerBuffer = await ReadFromStreamAsync(stream, HeaderLength)
+				.ConfigureAwait(continueOnCapturedContext: false);
 
 			var cursor = 0;
 			var magicConst = BitConverter.ToInt16(headerBuffer, cursor);
@@ -99,11 +101,16 @@ namespace RemoteScripting
 			var lengthBuffer = BitConverter.GetBytes(bodyBuffer.Length);
 			var messageTypeBuffer = BitConverter.GetBytes((short)message.MessageType);
 
-			await stream.WriteAsync(magicConstBuffer, 0, MagicConstBufferLength).ConfigureAwait(continueOnCapturedContext: false);
-			await stream.WriteAsync(protocolVersionBuffer, 0, ProtocolVersionBufferLength).ConfigureAwait(continueOnCapturedContext: false);
-			await stream.WriteAsync(lengthBuffer, 0, lengthBuffer.Length).ConfigureAwait(continueOnCapturedContext: false);
-			await stream.WriteAsync(messageTypeBuffer, 0, messageTypeBuffer.Length).ConfigureAwait(continueOnCapturedContext: false);
-			await stream.WriteAsync(bodyBuffer, 0, bodyBuffer.Length).ConfigureAwait(continueOnCapturedContext: false);
+			await stream.WriteAsync(magicConstBuffer, 0, MagicConstBufferLength)
+				.ConfigureAwait(continueOnCapturedContext: false);
+			await stream.WriteAsync(protocolVersionBuffer, 0, ProtocolVersionBufferLength)
+				.ConfigureAwait(continueOnCapturedContext: false);
+			await stream.WriteAsync(lengthBuffer, 0, lengthBuffer.Length)
+				.ConfigureAwait(continueOnCapturedContext: false);
+			await stream.WriteAsync(messageTypeBuffer, 0, messageTypeBuffer.Length)
+				.ConfigureAwait(continueOnCapturedContext: false);
+			await stream.WriteAsync(bodyBuffer, 0, bodyBuffer.Length)
+				.ConfigureAwait(continueOnCapturedContext: false);
 		}
 
 		private static async Task<byte[]> ReadFromStreamAsync(NetworkStream stream, int nbytes)
@@ -111,7 +118,8 @@ namespace RemoteScripting
 			var buf = new byte[nbytes];
 			var readpos = 0;
 			while (readpos < nbytes) {
-				readpos += await stream.ReadAsync(buf, readpos, nbytes - readpos).ConfigureAwait(continueOnCapturedContext: false);
+				readpos += await stream.ReadAsync(buf, readpos, nbytes - readpos)
+					.ConfigureAwait(continueOnCapturedContext: false);
 			}
 			return buf;
 		}

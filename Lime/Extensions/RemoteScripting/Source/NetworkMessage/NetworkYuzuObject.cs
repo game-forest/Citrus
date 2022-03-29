@@ -4,9 +4,11 @@ using Lime;
 
 namespace RemoteScripting
 {
-	public abstract class NetworkYuzuObject<T> : NetworkMessage where T : class, new()
+	public abstract class NetworkYuzuObject<T> : NetworkMessage
+		where T : class, new()
 	{
-		private static readonly ThreadLocal<Persistence> persistence = new ThreadLocal<Persistence>(() => new Persistence());
+		private static readonly ThreadLocal<Persistence> persistence =
+			new ThreadLocal<Persistence>(() => new Persistence());
 
 		public readonly T Data;
 
