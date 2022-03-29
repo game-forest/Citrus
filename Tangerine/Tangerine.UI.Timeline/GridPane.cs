@@ -19,9 +19,12 @@ namespace Tangerine.UI.Timeline
 		public Vector2 Size => RootWidget.Size;
 		public Vector2 ContentSize => ContentWidget.Size;
 
+		private readonly ItemsInAnimationScope itemsInAnimationScope;
+
 		public GridPane(Timeline timeline)
 		{
 			this.timeline = timeline;
+			itemsInAnimationScope = new ItemsInAnimationScope();
 			RootWidget = new Frame {
 				Id = nameof(GridPane),
 				Layout = new StackLayout { HorizontallySizeable = true, VerticallySizeable = true },
@@ -70,6 +73,7 @@ namespace Tangerine.UI.Timeline
 			// Layout widgets in order to have valid row positions and sizes,
 			// which are used for rows visibility determination.
 			WidgetContext.Current.Root.LayoutManager.Layout();
+			itemsInAnimationScope.CalculateAnimationScope();
 		}
 
 		private void RefreshItemWidths()
@@ -86,9 +90,10 @@ namespace Tangerine.UI.Timeline
 			Renderer.DrawRect(Vector2.Zero, RootWidget.Size, ColorTheme.Current.TimelineGrid.Lines);
 			if (ContentWidget.Nodes.Count > 0) {
 				ContentWidget.PrepareRendererState();
-				Renderer.DrawRect(Vector2.Zero, ContentWidget.Size, Theme.Colors.WhiteBackground);
+				Renderer.DrawRect(Vector2.Zero, ContentWidget.Size, ColorTheme.Current.TimelineGrid.Background);
 				RenderSelectedItemsBackground();
 			}
+			RenderAnimationScope();
 			RenderVerticalLines();
 			RenderHorizontalLines();
 			RenderMarkerRulers();
@@ -105,6 +110,19 @@ namespace Tangerine.UI.Timeline
 					y1: gridWidget.Bottom(),
 					color: ColorTheme.Current.TimelineGrid.SelectedRowBackground
 				);
+			}
+		}
+
+		private void RenderAnimationScope()
+		{
+			int itemIndex = 0;
+			foreach (var item in Document.Current.VisibleSceneItems) {
+				if (!itemsInAnimationScope.IsItemInAnimationScope(itemIndex++)) {
+					var w = item.GridWidget();
+					var a = new Vector2(0.0f, w.Y);
+					var b = new Vector2(ContentWidget.Width, w.Y + w.Height);
+					Renderer.DrawRect(a, b, ColorTheme.Current.TimelineGrid.OutOfAnimationScope);
+				}
 			}
 		}
 
@@ -314,6 +332,56 @@ namespace Tangerine.UI.Timeline
 		public bool IsMouseOverRow()
 		{
 			return RootWidget.Input.MousePosition.Y - ContentWidget.GlobalPosition.Y < ContentSize.Y;
+		}
+
+		private class ItemsInAnimationScope
+		{
+			private readonly List<Node> pathToContainer;
+			private readonly HashSet<Node> nodesInAnimationScope;
+			private readonly List<bool> itemsInAnimationScope;
+
+			public ItemsInAnimationScope()
+			{
+				pathToContainer = new List<Node>();
+				nodesInAnimationScope = new HashSet<Node>();
+				itemsInAnimationScope = new List<bool>();
+			}
+
+			public bool IsItemInAnimationScope(int indexOfVisibleSceneItem)
+			{
+				return itemsInAnimationScope[indexOfVisibleSceneItem];
+			}
+
+			public void CalculateAnimationScope()
+			{
+				itemsInAnimationScope.Clear();
+				var animation = Document.Current.Animation;
+				for (var node = Document.Current.Container; node != null; node = node.Parent) {
+					pathToContainer.Add(node);
+				}
+				for (int i = pathToContainer.Count - 1; i >= 0; i--) {
+					IsNodeInAnimationScope(pathToContainer[i]);
+				}
+				foreach (var item in Document.Current.VisibleSceneItems) {
+					var node = item.TryGetAnimator(out _) ? item.Parent.GetNode() : item.GetNode();
+					itemsInAnimationScope.Add(node != null && IsNodeInAnimationScope(node));
+				}
+				nodesInAnimationScope.Clear();
+				pathToContainer.Clear();
+
+				bool IsNodeInAnimationScope(Node node)
+				{
+					var parent = node.Parent;
+					if (
+						(nodesInAnimationScope.Contains(parent) || parent == animation.OwnerNode) &&
+						parent.Animations.All(a => a == animation || a.Id != animation.Id)
+					) {
+						nodesInAnimationScope.Add(node);
+						return true;
+					}
+					return false;
+				}
+			}
 		}
 	}
 }

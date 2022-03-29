@@ -110,6 +110,8 @@ namespace Tangerine.UI
 		public class TimelineGridColors : Theme.DefaultColors
 		{
 			[YuzuOptional]
+			public Color4 Background { get; set; }
+			[YuzuOptional]
 			public Color4 PropertyRowBackground { get; set; }
 			[YuzuOptional]
 			public Color4 Lines { get; set; }
@@ -143,6 +145,8 @@ namespace Tangerine.UI
 			public Color4 AnimationClipBorder { get; set; }
 			[YuzuOptional]
 			public Color4 AnimationClipLabel { get; set; }
+			[YuzuOptional]
+			public Color4 OutOfAnimationScope { get; set; }
 		}
 
 		public class TimelineCurveEditorColors : Theme.DefaultColors
@@ -410,6 +414,7 @@ namespace Tangerine.UI
 				EmitterCustomShapeLine = Color4.White.Darken(0.05f),
 			};
 			var timelineGrid = new TimelineGridColors {
+				Background = new Color4(67, 67, 67),
 				PropertyRowBackground = Color4.White.Transparentify(0.95f),
 				Lines = new Color4(45, 45, 48),
 				LinesLight = new Color4(45, 45, 48).Lighten(0.065f),
@@ -427,6 +432,7 @@ namespace Tangerine.UI
 				AnimationClip = new Color4(50, 50, 255, 80),
 				AnimationClipBorder = new Color4(50, 50, 255),
 				AnimationClipLabel = basic.BlackText,
+				OutOfAnimationScope = new Color4(45, 45, 48).Lighten(0.065f),
 			};
 			var timelineCurveEditor = new TimelineCurveEditorColors {
 				Curves = new[] { Color4.Red, Color4.Green, Color4.Blue, Color4.Yellow },
@@ -586,6 +592,7 @@ namespace Tangerine.UI
 				FrameProgressionEndColor = new Color4(255, 0, 0, 100),
 			};
 			var timelineGrid = new TimelineGridColors {
+				Background = new Color4(245, 245, 245),
 				PropertyRowBackground = Color4.Black.Transparentify(0.95f),
 				Lines = new Color4(160, 160, 160),
 				LinesLight = new Color4(210, 210, 210),
@@ -595,14 +602,15 @@ namespace Tangerine.UI
 				RunningCursor = Color4.Green.Lighten(0.4f),
 				WaveformColor = new Color4(140, 170, 255),
 				WaveformBackground = new Color4(255, 200, 140, 60),
-				AnimatedRangeBackground = new Color4(240, 240, 240),
-				SelectedRowBackground = new Color4(225, 225, 225),
+				AnimatedRangeBackground = new Color4(225, 225, 225),
+				SelectedRowBackground = new Color4(255, 255, 255),
 				SelectionBorder = new Color4(255, 0, 128),
 				AnimationTrackWeightCurveKey = new Color4(0, 100, 100, 200),
 				AnimationTrackWeightCurve = new Color4(20, 200, 200, 100),
 				AnimationClip = new Color4(50, 50, 255, 60),
 				AnimationClipBorder = new Color4(50, 50, 255),
 				AnimationClipLabel = basic.BlackText,
+				OutOfAnimationScope = new Color4(210, 210, 210),
 			};
 			var timelineCurveEditor = new TimelineCurveEditorColors {
 				Curves = new[] { Color4.Red, Color4.Green, Color4.Blue, Color4.Yellow },
