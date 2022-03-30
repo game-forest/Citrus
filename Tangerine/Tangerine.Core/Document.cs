@@ -748,6 +748,9 @@ namespace Tangerine.Core
 
 		public PreservedDocumentState PreserveState()
 		{
+			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
+				Load();
+			}
 			var ds = DocumentViewStateComponents.GetOrAdd<DocumentStateComponent>();
 			ds.ContainerPath = PreservedDocumentState.GetNodeIndexPath(container);
 			ds.InspectRootNode = InspectRootNode;
