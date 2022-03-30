@@ -46,7 +46,6 @@ namespace Tangerine.MainMenu
 			var end = AnimationUtils.FramesToSeconds(max);
 			var delta = 1f / options.FPS;
 			var animation = Document.Current.Animation;
-			animation.IsRunning = true;
 			var savedDebugDraw = Document.Current.PreviewScene;
 			var containerWidget = Document.Current.Container.AsWidget;
 			var bitmapBounds = new Rectangle(Vector2.Zero, containerWidget.Size);
@@ -55,6 +54,7 @@ namespace Tangerine.MainMenu
 			}
 			var i = 0;
 			var current = start;
+			animation.IsRunning = true;
 			Document.Current.AnimationFrame = min;
 			Document.Current.PreviewScene = true;
 			while (current < end) {
@@ -75,7 +75,7 @@ namespace Tangerine.MainMenu
 			{
 				var current = start;
 				Document.Current.AnimationFrame = min;
-				var widgets = Document.Current.Container.Nodes
+				var widgets = containerWidget.Nodes
 					.Where(node => !node.GetTangerineFlag(TangerineFlags.Hidden))
 					.OfType<Widget>();
 				Rectangle? result = null;
