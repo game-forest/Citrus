@@ -41,6 +41,8 @@ namespace Tangerine.Core
 
 		public readonly HashSet<string> ExpandedItems = new HashSet<string>();
 
+		public static readonly PreservedDocumentState Null = new PreservedDocumentState();
+
 		public static string GetSceneItemIndexPath(SceneItem item)
 		{
 			var builder = new StringBuilder(item.Id);
@@ -697,9 +699,6 @@ namespace Tangerine.Core
 
 		public void RestoreState(PreservedDocumentState preservedState)
 		{
-			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
-				Load();
-			}
 			DocumentViewStateComponents.Clear();
 			foreach (var component in preservedState.Components) {
 				DocumentViewStateComponents.Add(component);
@@ -711,6 +710,9 @@ namespace Tangerine.Core
 				docState.AnimationOwnerNodePath != null ||
 				docState.ContainerPath != null
 			) {
+				if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
+					Load();
+				}
 				bool containerWasUpdated = false;
 				var states = new List<TimelineSceneItemStateComponent>();
 				foreach (var item in SceneTree.SelfAndDescendants()) {
@@ -749,7 +751,7 @@ namespace Tangerine.Core
 		public PreservedDocumentState PreserveState()
 		{
 			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
-				Load();
+				return PreservedDocumentState.Null;
 			}
 			var ds = DocumentViewStateComponents.GetOrAdd<DocumentStateComponent>();
 			ds.ContainerPath = PreservedDocumentState.GetNodeIndexPath(container);
