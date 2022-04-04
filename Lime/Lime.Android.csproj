@@ -361,7 +361,6 @@
     <Compile Include="Source\Widgets\Animation\BoxedKeyframeList.cs" />
     <Compile Include="Source\Widgets\Animation\ChainedAnimator.cs" />
     <Compile Include="Source\Widgets\Animation\CubicBezier.cs" />
-    <Compile Include="Source\Widgets\Animation\EasedAnimator.cs" />
     <Compile Include="Source\Widgets\Animation\IAnimable.cs" />
     <Compile Include="Source\Widgets\Animation\Keyframe.cs" />
     <Compile Include="Source\Widgets\Animation\TypedKeyframeList.cs" />

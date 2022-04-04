@@ -34,6 +34,8 @@ namespace Lime
 
 		public Type ValueType => typeof(T);
 
+		public IEasingCalculator EasingCalculator { get; set; }
+
 		public void Apply(double time)
 		{
 			Setter?.SetValue(CalcValue(time));
@@ -59,6 +61,9 @@ namespace Lime
 
 		public T CalcValue(double time)
 		{
+			if (EasingCalculator != null) {
+				time = EasingCalculator.EaseTime(time);
+			}
 			if (time < currentClipBegin || time >= nextClipBegin) {
 				currentItem = null;
 				for (var i = listHead; i != null; i = i.Next) {
@@ -83,6 +88,10 @@ namespace Lime
 
 		public void ExecuteTriggersInRange(double minTime, double maxTime, bool executeTriggerAtMaxTime)
 		{
+			if (EasingCalculator != null) {
+				minTime = EasingCalculator.EaseTime(minTime);
+				maxTime = EasingCalculator.EaseTime(maxTime);
+			}
 			for (var i = listHead; i != null; i = i.Next) {
 				var nextClipBegin = i.Next?.Clip.BeginTime ?? double.PositiveInfinity;
 				if (nextClipBegin + AnimationUtils.Threshold < minTime) {

@@ -6,6 +6,7 @@ namespace Lime
 {
 	public interface IBlendedAnimator : IAbstractAnimator
 	{
+		IEasingCalculator EasingCalculator { get; set; }
 		void Add(AnimationTrack track, IAbstractAnimator animator);
 	}
 
@@ -32,6 +33,8 @@ namespace Lime
 
 		public Type ValueType => typeof(T);
 
+		public IEasingCalculator EasingCalculator { get; set; }
+
 		public void Apply(double time)
 		{
 			Setter?.SetValue(CalcValue(time));
@@ -48,6 +51,9 @@ namespace Lime
 
 		public T CalcValue(double time)
 		{
+			if (EasingCalculator != null) {
+				time = EasingCalculator.EaseTime(time);
+			}
 			var totalWeight = 0f;
 			var value = default(T);
 			for (var item = listHead; item != null; item = item.Next) {
@@ -75,6 +81,10 @@ namespace Lime
 
 		public void ExecuteTriggersInRange(double minTime, double maxTime, bool executeTriggerAtMaxTime)
 		{
+			if (EasingCalculator != null) {
+				minTime = EasingCalculator.EaseTime(minTime);
+				maxTime = EasingCalculator.EaseTime(maxTime);
+			}
 			for (var item = listHead; item != null; item = item.Next) {
 				item.Animator.ExecuteTriggersInRange(minTime, maxTime, executeTriggerAtMaxTime);
 			}

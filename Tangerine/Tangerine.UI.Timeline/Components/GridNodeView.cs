@@ -48,11 +48,13 @@ namespace Tangerine.UI.Timeline.Components
 		{
 			var hashCode = 1568519108;
 			unchecked {
-				var effectiveAnimatorsSet = Document.Current.Animation.ValidatedEffectiveAnimatorsSet;
-				foreach (var animator in node.Animators) {
-					if (effectiveAnimatorsSet.Contains(animator)) {
-						hashCode = hashCode * -1521134295 + animator.GetHashCode();
-						hashCode = hashCode * -1521134295 + animator.Version;
+				var effectiveAnimatorsPerHost = Document.Current.Animation.ValidatedEffectiveAnimatorsPerHost;
+				if (effectiveAnimatorsPerHost.TryGetValue(node, out var animators)) {
+					foreach (var abstractAnimator in animators) {
+						if (abstractAnimator is IAnimator animator) {
+							hashCode = hashCode * -1521134295 + animator.GetHashCode();
+							hashCode = hashCode * -1521134295 + animator.Version;
+						}
 					}
 				}
 			}

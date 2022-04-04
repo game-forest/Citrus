@@ -77,14 +77,14 @@ namespace Tangerine.Core
 				}
 			}
 
-			bool ShouldProcessAnimator(IAbstractAnimator animator)
+			bool ShouldProcessAnimator(IAnimator animator)
 			{
 				return processed.Add(animator) && CanAccessAnimator(animator);
 			}
 
-			static bool CanAccessAnimator(IAbstractAnimator animator)
+			static bool CanAccessAnimator(IAnimator animator)
 			{
-				return Document.Current.Animation.ValidatedEffectiveAnimatorsSet.Contains(animator);
+				return Document.Current.Animation.ValidatedEffectiveAnimatorsPerHost.Contains(animator);
 			}
 		}
 	}
