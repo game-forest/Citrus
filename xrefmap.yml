@@ -3193,6 +3193,28 @@ references:
   isSpec: "True"
   fullName: Lime.AnimationEngineDelegate.TryRunAnimation
   nameWithType: AnimationEngineDelegate.TryRunAnimation
+- uid: Lime.AnimationExtensionMethods
+  name: AnimationExtensionMethods
+  href: api/Lime.AnimationExtensionMethods.html
+  commentId: T:Lime.AnimationExtensionMethods
+  fullName: Lime.AnimationExtensionMethods
+  nameWithType: AnimationExtensionMethods
+- uid: Lime.AnimationExtensionMethods.Contains(System.Collections.Generic.Dictionary{Lime.IAnimationHost,System.Collections.Generic.HashSet{Lime.IAbstractAnimator}},Lime.IAnimator)
+  name: Contains(Dictionary<IAnimationHost, HashSet<IAbstractAnimator>>, IAnimator)
+  href: api/Lime.AnimationExtensionMethods.html#Lime_AnimationExtensionMethods_Contains_System_Collections_Generic_Dictionary_Lime_IAnimationHost_System_Collections_Generic_HashSet_Lime_IAbstractAnimator___Lime_IAnimator_
+  commentId: M:Lime.AnimationExtensionMethods.Contains(System.Collections.Generic.Dictionary{Lime.IAnimationHost,System.Collections.Generic.HashSet{Lime.IAbstractAnimator}},Lime.IAnimator)
+  name.vb: Contains(Dictionary(Of IAnimationHost, HashSet(Of IAbstractAnimator)), IAnimator)
+  fullName: Lime.AnimationExtensionMethods.Contains(System.Collections.Generic.Dictionary<Lime.IAnimationHost, System.Collections.Generic.HashSet<Lime.IAbstractAnimator>>, Lime.IAnimator)
+  fullName.vb: Lime.AnimationExtensionMethods.Contains(System.Collections.Generic.Dictionary(Of Lime.IAnimationHost, System.Collections.Generic.HashSet(Of Lime.IAbstractAnimator)), Lime.IAnimator)
+  nameWithType: AnimationExtensionMethods.Contains(Dictionary<IAnimationHost, HashSet<IAbstractAnimator>>, IAnimator)
+  nameWithType.vb: AnimationExtensionMethods.Contains(Dictionary(Of IAnimationHost, HashSet(Of IAbstractAnimator)), IAnimator)
+- uid: Lime.AnimationExtensionMethods.Contains*
+  name: Contains
+  href: api/Lime.AnimationExtensionMethods.html#Lime_AnimationExtensionMethods_Contains_
+  commentId: Overload:Lime.AnimationExtensionMethods.Contains
+  isSpec: "True"
+  fullName: Lime.AnimationExtensionMethods.Contains
+  nameWithType: AnimationExtensionMethods.Contains
 - uid: Lime.AnimationProcessor
   name: AnimationProcessor
   href: api/Lime.AnimationProcessor.html
@@ -3985,6 +4007,23 @@ references:
   fullName.vb: Lime.Animator(Of T).Duration
   nameWithType: Animator<T>.Duration
   nameWithType.vb: Animator(Of T).Duration
+- uid: Lime.Animator`1.EasingCalculator
+  name: EasingCalculator
+  href: api/Lime.Animator-1.html#Lime_Animator_1_EasingCalculator
+  commentId: P:Lime.Animator`1.EasingCalculator
+  fullName: Lime.Animator<T>.EasingCalculator
+  fullName.vb: Lime.Animator(Of T).EasingCalculator
+  nameWithType: Animator<T>.EasingCalculator
+  nameWithType.vb: Animator(Of T).EasingCalculator
+- uid: Lime.Animator`1.EasingCalculator*
+  name: EasingCalculator
+  href: api/Lime.Animator-1.html#Lime_Animator_1_EasingCalculator_
+  commentId: Overload:Lime.Animator`1.EasingCalculator
+  isSpec: "True"
+  fullName: Lime.Animator<T>.EasingCalculator
+  fullName.vb: Lime.Animator(Of T).EasingCalculator
+  nameWithType: Animator<T>.EasingCalculator
+  nameWithType.vb: Animator(Of T).EasingCalculator
 - uid: Lime.Animator`1.Enabled
   name: Enabled
   href: api/Lime.Animator-1.html#Lime_Animator_1_Enabled
@@ -4784,23 +4823,6 @@ references:
   fullName.vb: Lime.AnimatorRegistry.AnimatorFactory(Of T).CreateChainedAnimator
   nameWithType: AnimatorRegistry.AnimatorFactory<T>.CreateChainedAnimator
   nameWithType.vb: AnimatorRegistry.AnimatorFactory(Of T).CreateChainedAnimator
-- uid: Lime.AnimatorRegistry.AnimatorFactory`1.CreateEasedAnimator
-  name: CreateEasedAnimator()
-  href: api/Lime.AnimatorRegistry.AnimatorFactory-1.html#Lime_AnimatorRegistry_AnimatorFactory_1_CreateEasedAnimator
-  commentId: M:Lime.AnimatorRegistry.AnimatorFactory`1.CreateEasedAnimator
-  fullName: Lime.AnimatorRegistry.AnimatorFactory<T>.CreateEasedAnimator()
-  fullName.vb: Lime.AnimatorRegistry.AnimatorFactory(Of T).CreateEasedAnimator()
-  nameWithType: AnimatorRegistry.AnimatorFactory<T>.CreateEasedAnimator()
-  nameWithType.vb: AnimatorRegistry.AnimatorFactory(Of T).CreateEasedAnimator()
-- uid: Lime.AnimatorRegistry.AnimatorFactory`1.CreateEasedAnimator*
-  name: CreateEasedAnimator
-  href: api/Lime.AnimatorRegistry.AnimatorFactory-1.html#Lime_AnimatorRegistry_AnimatorFactory_1_CreateEasedAnimator_
-  commentId: Overload:Lime.AnimatorRegistry.AnimatorFactory`1.CreateEasedAnimator
-  isSpec: "True"
-  fullName: Lime.AnimatorRegistry.AnimatorFactory<T>.CreateEasedAnimator
-  fullName.vb: Lime.AnimatorRegistry.AnimatorFactory(Of T).CreateEasedAnimator
-  nameWithType: AnimatorRegistry.AnimatorFactory<T>.CreateEasedAnimator
-  nameWithType.vb: AnimatorRegistry.AnimatorFactory(Of T).CreateEasedAnimator
 - uid: Lime.AnimatorRegistry.Contains(System.Type)
   name: Contains(Type)
   href: api/Lime.AnimatorRegistry.html#Lime_AnimatorRegistry_Contains_System_Type_
@@ -4853,19 +4875,6 @@ references:
   isSpec: "True"
   fullName: Lime.AnimatorRegistry.CreateChainedAnimator
   nameWithType: AnimatorRegistry.CreateChainedAnimator
-- uid: Lime.AnimatorRegistry.CreateEasedAnimator(System.Type)
-  name: CreateEasedAnimator(Type)
-  href: api/Lime.AnimatorRegistry.html#Lime_AnimatorRegistry_CreateEasedAnimator_System_Type_
-  commentId: M:Lime.AnimatorRegistry.CreateEasedAnimator(System.Type)
-  fullName: Lime.AnimatorRegistry.CreateEasedAnimator(System.Type)
-  nameWithType: AnimatorRegistry.CreateEasedAnimator(Type)
-- uid: Lime.AnimatorRegistry.CreateEasedAnimator*
-  name: CreateEasedAnimator
-  href: api/Lime.AnimatorRegistry.html#Lime_AnimatorRegistry_CreateEasedAnimator_
-  commentId: Overload:Lime.AnimatorRegistry.CreateEasedAnimator
-  isSpec: "True"
-  fullName: Lime.AnimatorRegistry.CreateEasedAnimator
-  nameWithType: AnimatorRegistry.CreateEasedAnimator
 - uid: Lime.AnimatorRegistry.EnumAnimatorFactory
   name: AnimatorRegistry.EnumAnimatorFactory
   href: api/Lime.AnimatorRegistry.EnumAnimatorFactory.html
@@ -4924,19 +4933,6 @@ references:
   isSpec: "True"
   fullName: Lime.AnimatorRegistry.EnumAnimatorFactory.CreateChainedAnimator
   nameWithType: AnimatorRegistry.EnumAnimatorFactory.CreateChainedAnimator
-- uid: Lime.AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator
-  name: CreateEasedAnimator()
-  href: api/Lime.AnimatorRegistry.EnumAnimatorFactory.html#Lime_AnimatorRegistry_EnumAnimatorFactory_CreateEasedAnimator
-  commentId: M:Lime.AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator
-  fullName: Lime.AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator()
-  nameWithType: AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator()
-- uid: Lime.AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator*
-  name: CreateEasedAnimator
-  href: api/Lime.AnimatorRegistry.EnumAnimatorFactory.html#Lime_AnimatorRegistry_EnumAnimatorFactory_CreateEasedAnimator_
-  commentId: Overload:Lime.AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator
-  isSpec: "True"
-  fullName: Lime.AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator
-  nameWithType: AnimatorRegistry.EnumAnimatorFactory.CreateEasedAnimator
 - uid: Lime.AnimatorRegistry.EnumerateRegisteredTypes
   name: EnumerateRegisteredTypes()
   href: api/Lime.AnimatorRegistry.html#Lime_AnimatorRegistry_EnumerateRegisteredTypes
@@ -4995,19 +4991,6 @@ references:
   isSpec: "True"
   fullName: Lime.AnimatorRegistry.IAnimatorFactory.CreateChainedAnimator
   nameWithType: AnimatorRegistry.IAnimatorFactory.CreateChainedAnimator
-- uid: Lime.AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator
-  name: CreateEasedAnimator()
-  href: api/Lime.AnimatorRegistry.IAnimatorFactory.html#Lime_AnimatorRegistry_IAnimatorFactory_CreateEasedAnimator
-  commentId: M:Lime.AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator
-  fullName: Lime.AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator()
-  nameWithType: AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator()
-- uid: Lime.AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator*
-  name: CreateEasedAnimator
-  href: api/Lime.AnimatorRegistry.IAnimatorFactory.html#Lime_AnimatorRegistry_IAnimatorFactory_CreateEasedAnimator_
-  commentId: Overload:Lime.AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator
-  isSpec: "True"
-  fullName: Lime.AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator
-  nameWithType: AnimatorRegistry.IAnimatorFactory.CreateEasedAnimator
 - uid: Lime.AnimatorRegistry.Instance
   name: Instance
   href: api/Lime.AnimatorRegistry.html#Lime_AnimatorRegistry_Instance
@@ -24346,6 +24329,19 @@ references:
   isSpec: "True"
   fullName: Lime.IAbstractAnimator.Duration
   nameWithType: IAbstractAnimator.Duration
+- uid: Lime.IAbstractAnimator.EasingCalculator
+  name: EasingCalculator
+  href: api/Lime.IAbstractAnimator.html#Lime_IAbstractAnimator_EasingCalculator
+  commentId: P:Lime.IAbstractAnimator.EasingCalculator
+  fullName: Lime.IAbstractAnimator.EasingCalculator
+  nameWithType: IAbstractAnimator.EasingCalculator
+- uid: Lime.IAbstractAnimator.EasingCalculator*
+  name: EasingCalculator
+  href: api/Lime.IAbstractAnimator.html#Lime_IAbstractAnimator_EasingCalculator_
+  commentId: Overload:Lime.IAbstractAnimator.EasingCalculator
+  isSpec: "True"
+  fullName: Lime.IAbstractAnimator.EasingCalculator
+  nameWithType: IAbstractAnimator.EasingCalculator
 - uid: Lime.IAbstractAnimator.ExecuteTriggersInRange(System.Double,System.Double,System.Boolean)
   name: ExecuteTriggersInRange(Double, Double, Boolean)
   href: api/Lime.IAbstractAnimator.html#Lime_IAbstractAnimator_ExecuteTriggersInRange_System_Double_System_Double_System_Boolean_
@@ -24869,6 +24865,19 @@ references:
   isSpec: "True"
   fullName: Lime.IBlendedAnimator.Add
   nameWithType: IBlendedAnimator.Add
+- uid: Lime.IBlendedAnimator.EasingCalculator
+  name: EasingCalculator
+  href: api/Lime.IBlendedAnimator.html#Lime_IBlendedAnimator_EasingCalculator
+  commentId: P:Lime.IBlendedAnimator.EasingCalculator
+  fullName: Lime.IBlendedAnimator.EasingCalculator
+  nameWithType: IBlendedAnimator.EasingCalculator
+- uid: Lime.IBlendedAnimator.EasingCalculator*
+  name: EasingCalculator
+  href: api/Lime.IBlendedAnimator.html#Lime_IBlendedAnimator_EasingCalculator_
+  commentId: Overload:Lime.IBlendedAnimator.EasingCalculator
+  isSpec: "True"
+  fullName: Lime.IBlendedAnimator.EasingCalculator
+  nameWithType: IBlendedAnimator.EasingCalculator
 - uid: Lime.ICaretParams
   name: ICaretParams
   href: api/Lime.ICaretParams.html
@@ -25540,25 +25549,25 @@ references:
   isSpec: "True"
   fullName: Lime.IDisplay.Size
   nameWithType: IDisplay.Size
-- uid: Lime.IEasedAnimator
-  name: IEasedAnimator
-  href: api/Lime.IEasedAnimator.html
-  commentId: T:Lime.IEasedAnimator
-  fullName: Lime.IEasedAnimator
-  nameWithType: IEasedAnimator
-- uid: Lime.IEasedAnimator.Initialize(Lime.Animation,Lime.IAbstractAnimator)
-  name: Initialize(Animation, IAbstractAnimator)
-  href: api/Lime.IEasedAnimator.html#Lime_IEasedAnimator_Initialize_Lime_Animation_Lime_IAbstractAnimator_
-  commentId: M:Lime.IEasedAnimator.Initialize(Lime.Animation,Lime.IAbstractAnimator)
-  fullName: Lime.IEasedAnimator.Initialize(Lime.Animation, Lime.IAbstractAnimator)
-  nameWithType: IEasedAnimator.Initialize(Animation, IAbstractAnimator)
-- uid: Lime.IEasedAnimator.Initialize*
-  name: Initialize
-  href: api/Lime.IEasedAnimator.html#Lime_IEasedAnimator_Initialize_
-  commentId: Overload:Lime.IEasedAnimator.Initialize
+- uid: Lime.IEasingCalculator
+  name: IEasingCalculator
+  href: api/Lime.IEasingCalculator.html
+  commentId: T:Lime.IEasingCalculator
+  fullName: Lime.IEasingCalculator
+  nameWithType: IEasingCalculator
+- uid: Lime.IEasingCalculator.EaseTime(System.Double)
+  name: EaseTime(Double)
+  href: api/Lime.IEasingCalculator.html#Lime_IEasingCalculator_EaseTime_System_Double_
+  commentId: M:Lime.IEasingCalculator.EaseTime(System.Double)
+  fullName: Lime.IEasingCalculator.EaseTime(System.Double)
+  nameWithType: IEasingCalculator.EaseTime(Double)
+- uid: Lime.IEasingCalculator.EaseTime*
+  name: EaseTime
+  href: api/Lime.IEasingCalculator.html#Lime_IEasingCalculator_EaseTime_
+  commentId: Overload:Lime.IEasingCalculator.EaseTime
   isSpec: "True"
-  fullName: Lime.IEasedAnimator.Initialize
-  nameWithType: IEasedAnimator.Initialize
+  fullName: Lime.IEasingCalculator.EaseTime
+  nameWithType: IEasingCalculator.EaseTime
 - uid: Lime.IEditorParams
   name: IEditorParams
   href: api/Lime.IEditorParams.html

@@ -174,7 +174,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animation.AnimationBezierEasingCalculator.html",
-          "hash": "7osGM1lecLs2odCSC5QSEGetfmQb01dehUVFd3jCyks="
+          "hash": "2wDJVgJl6cUHyW7iHfbRNaYTUGzqk+w++i2NV1cdIxo="
         }
       },
       "is_incremental": false,
@@ -338,6 +338,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.AnimationExtensionMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.AnimationExtensionMethods.html",
+          "hash": "BmoCACgKZ8g6dpcFeXKf5RmmJufLpZQAkiWNKFo0MKA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.AnimationProcessor.yml",
       "output": {
         ".html": {
@@ -402,7 +414,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Animator-1.html",
-          "hash": "b+VyBLzWfddqIlZ2GIvplT3gUaoETcYwHnAZ7Du/uVA="
+          "hash": "wFTqdidv+qQ9SMXuFcThIZi2tPhRjVk6LF1FZwAgD5g="
         }
       },
       "is_incremental": false,
@@ -426,7 +438,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimatorRegistry.AnimatorFactory-1.html",
-          "hash": "m+TBx8TnpRtOnvHwn4oWPQ05uw5JEwmn3pUE0YKH+wM="
+          "hash": "SzeoGedNRk+wmndMF+O+tUs65It40C6QyMMx1zcLIzk="
         }
       },
       "is_incremental": false,
@@ -438,7 +450,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimatorRegistry.EnumAnimatorFactory.html",
-          "hash": "skHg2PABdE0K7m44GRou/IvuWE6QOCDohSnRkfNGBgE="
+          "hash": "LjRiZgtxdqw3S1JM5Y5B8Ed8nfeQjso+LeIC7sW4HBc="
         }
       },
       "is_incremental": false,
@@ -450,7 +462,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimatorRegistry.IAnimatorFactory.html",
-          "hash": "IcwXXG+rOleaO2NzRpDpm1/K3840OBH7ixFLbqBC8Qo="
+          "hash": "mM04vVLYEdeJFA8k6CA5fwlTu2VolnITH9fP+dr89Iw="
         }
       },
       "is_incremental": false,
@@ -462,7 +474,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimatorRegistry.html",
-          "hash": "V9U1zS8nK1tcLDnlnRyJL5ZOGS7Z5e2Qc8YhqUmhlvY="
+          "hash": "iIbm+FrfaUTcUfJa9/nxPDn25uDL0L1bxJCkg4CKjoQ="
         }
       },
       "is_incremental": false,
@@ -1374,7 +1386,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Color4Animator.html",
-          "hash": "mAjMlBdMpyPjF7a6US6NUzm07/ac9/umJ/820m1Ifz0="
+          "hash": "pn/AB1QGCdiS9Z4u8iwSwV0bzWCxxstFe/Y9uexdH6w="
         }
       },
       "is_incremental": false,
@@ -3078,7 +3090,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IAbstractAnimator.html",
-          "hash": "A7KS6GOjRscMbeumPsLeJyYK/E7p/0yVBZxjr/uBwkI="
+          "hash": "yC01ZE5ZeqkhSo+lgLja1WfMeGVX8TkzMV8Yn0DmB6A="
         }
       },
       "is_incremental": false,
@@ -3126,7 +3138,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IAnimator.html",
-          "hash": "egjdWlCyGPmPX4HqpCS40AXFLRhFGkrPAnYgCug6p0g="
+          "hash": "/2xDZIXV8/kgbAhsR9vrV/9u08bfgQrzPGXcyxoZVc4="
         }
       },
       "is_incremental": false,
@@ -3162,7 +3174,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IBlendedAnimator.html",
-          "hash": "hI1pzFvYz1txiUoZe5P3FW655vDOWB022lrvov3ULG8="
+          "hash": "iEP4orvPFhEBxU2j4bv+3PFGM1rwiyHyym8lEYQTKRw="
         }
       },
       "is_incremental": false,
@@ -3210,7 +3222,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IChainedAnimator.html",
-          "hash": "xyj3TFmNg0MRvEdaFrbRUmDoStJau+04Ce5VV8edynU="
+          "hash": "/5ek+X88lV51HShWDyioyr7LuTDPwYn4t/xI7phBxoM="
         }
       },
       "is_incremental": false,
@@ -3254,11 +3266,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Lime.IEasedAnimator.yml",
+      "source_relative_path": "api/Lime.IEasingCalculator.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Lime.IEasedAnimator.html",
-          "hash": "iiL6Ocui5sFB5AExNQe2hacXx2jAXPCM4wrQsDm0sPM="
+          "relative_path": "api/Lime.IEasingCalculator.html",
+          "hash": "YfjO7SALj9yuzqnnQ80jpfPfOu5mhKAanGdvGQ0U4sU="
         }
       },
       "is_incremental": false,
@@ -3798,7 +3810,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IntAnimator.html",
-          "hash": "siIbdpLVRt89rt25e1ayss40d6Q60J4E0r+AdkR5Noo="
+          "hash": "zztsW6bkxFSvBlvhsijCOHTFwwl2fsKNIJ8bcZg/ibw="
         }
       },
       "is_incremental": false,
@@ -4362,7 +4374,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Matrix44Animator.html",
-          "hash": "E1YPL0kSBlwciRn2A9BuV5F7gKQhxgrQ5RRXFc9W7Yk="
+          "hash": "mFKSz43mOz4pvuLWuy+gTms1Md9OkQBjdF2XQs1wV84="
         }
       },
       "is_incremental": false,
@@ -5262,7 +5274,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NumericAnimator.html",
-          "hash": "g35XN5M3pLVHx64vVkGnhQkaX6rv05ZrAvJZMgfwZwE="
+          "hash": "6z9xzKUbayvQCZ7e/prNrsc18PFhBXwBROveOXCYF/w="
         }
       },
       "is_incremental": false,
@@ -5310,7 +5322,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NumericRangeAnimator.html",
-          "hash": "HFvk7Cer1SRKfc8RvrDXqsCfjaa5bNA53c1HHIvenxI="
+          "hash": "E8jzPrjKPuWzU8jwe7wnwtJdW6mAjVo5lnZ66d2eaPc="
         }
       },
       "is_incremental": false,
@@ -5802,7 +5814,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.QuaternionAnimator.html",
-          "hash": "0BaKbkIhGXWTDRdy7ly7H8ahFz6+OVvJVsNleJUKNVA="
+          "hash": "fXGZbxIXZgin984sLR8oUUH+JTC6Ge2g0IDB0e923QE="
         }
       },
       "is_incremental": false,
@@ -6786,7 +6798,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SkinnedVertexListAnimator.html",
-          "hash": "TTBFV2b5KfXdgpwdf0CknCI1QpQ9cANanchxjiYw7yE="
+          "hash": "Oc740ziS1b61Z1dDKNbz2UHZhHH4bHctoHg6qCXrUoY="
         }
       },
       "is_incremental": false,
@@ -8370,7 +8382,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ThicknessAnimator.html",
-          "hash": "2hN+aYkuuGjbtQd6rP5n716BV6YZGeVZR9v/mx09ZvQ="
+          "hash": "P3rDGp6w0iEvKDXPSkW9ZJRlOnDZDMqTBBGYEsUBwYE="
         }
       },
       "is_incremental": false,
@@ -8790,7 +8802,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Vector2Animator.html",
-          "hash": "txLMaRNX8VZ7emi5KGTk/IKfN98zELNZMBmz5u32hMI="
+          "hash": "EMNeVGjCvx/Ce2leH2znw1kF+QkeWJvIpyk9z0/2HWs="
         }
       },
       "is_incremental": false,
@@ -8814,7 +8826,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Vector3Animator.html",
-          "hash": "PJAGiDXdYifE4ZvEy03PhhlfAll/dyHZKtQFJYkL9FU="
+          "hash": "X+YyWZyOlEHf6Wp+r/YB40sgeoEJPxTRhkaObyAWnjk="
         }
       },
       "is_incremental": false,
@@ -9474,7 +9486,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "/tYa7BDMJ/7j6f9v9ELoiFcwJyZBMpfFGypfFFsmL/Y="
+          "hash": "NTpKQTbTo33lvUfLEPbFyNIGnLZ3Ao7/kU5yacrdTlk="
         }
       },
       "is_incremental": false,
@@ -9522,7 +9534,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "fDF6LIfASeePId5/n1F0g6hZWDw1ufEd2/lqUeKupWo="
+          "hash": "1Elji082GZAR3v0sRQiPQEV9QIAt/kPPWyRK8HuEbcA="
         }
       },
       "is_incremental": false,
@@ -12091,7 +12103,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 792,
+          "total_file_count": 793,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {
