@@ -751,6 +751,10 @@ namespace Tangerine.Core
 		public PreservedDocumentState PreserveState()
 		{
 			if (!Loaded && (Project.Current.GetFullPath(Path, out _) || preloadedSceneStream != null)) {
+				// This is a kludge solution because even if we return some empty state the document will be loaded.
+				// This method is used in Project.ReloadDocument which will always load document even if it's not used.
+				// The only good thing about it is that we are loading the document only once but still it's not right.
+				// We should fix reloading of not loaded documents to solve the root of the problem.
 				return PreservedDocumentState.Null;
 			}
 			var ds = DocumentViewStateComponents.GetOrAdd<DocumentStateComponent>();
