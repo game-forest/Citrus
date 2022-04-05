@@ -17,6 +17,7 @@ namespace Tangerine.MainMenu
 		{
 			command.Enabled = Document.Current != null;
 		}
+
 		public override void Execute()
 		{
 			if (!GridSelection.GetSelectionBoundaries(out var gs)) {
@@ -42,28 +43,68 @@ namespace Tangerine.MainMenu
 			int max
 		) {
 			var start = AnimationUtils.FramesToSeconds(min);
-			Document.Current.AnimationFrame = min;
 			var end = AnimationUtils.FramesToSeconds(max);
 			var delta = 1f / options.FPS;
-			var i = 0;
 			var animation = Document.Current.Animation;
-			animation.IsRunning = true;
 			var savedDebugDraw = Document.Current.PreviewScene;
+			var containerWidget = Document.Current.Container.AsWidget;
+			var bitmapBounds = new Rectangle(Vector2.Zero, containerWidget.Size);
+			if (options.CropByContent && CalcAnimationAABB() is { } aabb) {
+				bitmapBounds = aabb;
+			}
+			var i = 0;
+			var current = start;
+			animation.IsRunning = true;
+			Document.Current.AnimationFrame = min;
 			Document.Current.PreviewScene = true;
-			while (start < end) {
+			while (current < end) {
 				currentWindow.InvokeOnRendering(() => {
-					var bitmap = Document.Current.Container.AsWidget.ToBitmap();
+					using var bitmap = containerWidget.ToBitmap(bitmapBounds);
 					bitmap.SaveTo(Path.Combine(options.Folder, $"{i:D3}.png"));
-					bitmap.Dispose();
 				});
 				yield return null;
 				animation.OwnerNode.Update(delta);
-				start += delta;
+				current += delta;
 				Application.InvalidateWindows();
 				i += 1;
 			}
 			Document.Current.PreviewScene = savedDebugDraw;
 			animation.IsRunning = false;
+
+			Rectangle? CalcAnimationAABB()
+			{
+				var current = start;
+				Document.Current.AnimationFrame = min;
+				var widgets = containerWidget.Nodes
+					.Where(node => !node.GetTangerineFlag(TangerineFlags.Hidden))
+					.OfType<Widget>();
+				Rectangle? result = null;
+				while (current < end) {
+					if (result is { } old) {
+						if (CalcAABBInSpaceof(containerWidget, widgets) is { } young) {
+							result = Rectangle.Bounds(young, old);
+						}
+					} else {
+						result = CalcAABBInSpaceof(containerWidget, widgets);
+					}
+					animation.OwnerNode.Update(delta);
+					current += delta;
+				}
+				return result;
+			}
+
+			Rectangle? CalcAABBInSpaceof(Widget container, IEnumerable<Widget> widgets)
+			{
+				Rectangle? result = null;
+				foreach (var widget in widgets) {
+					if (result is { } old) {
+						result = Rectangle.Bounds(widget.CalcAABBInSpaceOf(container), old);
+					} else {
+						result = widget.CalcAABBInSpaceOf(container);
+					}
+				}
+				return result;
+			}
 		}
 	}
 }

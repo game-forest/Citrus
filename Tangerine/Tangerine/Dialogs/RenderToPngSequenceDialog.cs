@@ -20,6 +20,7 @@ namespace Tangerine.Dialogs
 
 			[TangerineValidRange(1, 1000, WarningLevel = ValidationResult.Error)]
 			public int FPS { get; set; }
+			public bool CropByContent { get; set; }
 
 			private string folder =
 				LastOpenedDirectory ?? Path.GetDirectoryName(Project.Current?.CitprojPath ?? "C:\\");
@@ -48,7 +49,7 @@ namespace Tangerine.Dialogs
 				LayoutBasedWindowSize = true,
 				Padding = new Thickness(8),
 				Layout = new VBoxLayout { Spacing = 16f },
-				MinSize = new Vector2(256, 0),
+				MinSize = new Vector2(320, 0),
 				Nodes = {
 					(inspectorPanel = new Widget {
 						Layout = new VBoxLayout { Spacing = 2f },
@@ -71,20 +72,28 @@ namespace Tangerine.Dialogs
 					window.Close();
 				}
 			));
-			IPropertyEditor editor = new IntPropertyEditor(new PropertyEditorParams(options, "FPS") {
+			var propertyName = nameof(RenderToPngSequenceOptions.FPS);
+			IPropertyEditor editor = new IntPropertyEditor(new PropertyEditorParams(options, propertyName) {
 				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions)o).FPS = (int)value,
 				DisplayName = "FPS",
-				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(nameof(RenderToPngSequenceOptions.FPS)),
+				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(propertyName),
 			});
 			inspectorPanel.AddNode(editor.ContainerWidget);
-			editor = new FolderPropertyEditor(new PropertyEditorParams(options, "Folder") {
+			propertyName = nameof(RenderToPngSequenceOptions.Folder);
+			editor = new FolderPropertyEditor(new PropertyEditorParams(options, propertyName) {
 				PropertySetter = (o, name, value) => ((RenderToPngSequenceOptions)o).Folder = (string)value,
 				DisplayName = "Folder",
-				PropertyInfo = typeof(RenderToPngSequenceOptions)
-					.GetProperty(nameof(RenderToPngSequenceOptions.Folder)),
+				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(propertyName),
 			}) {
 				ShowPrefix = false,
 			};
+			inspectorPanel.AddNode(editor.ContainerWidget);
+			propertyName = nameof(RenderToPngSequenceOptions.CropByContent);
+			editor = new BooleanPropertyEditor(new PropertyEditorParams(options, propertyName) {
+				PropertySetter = (o, _, value) => ((RenderToPngSequenceOptions)o).CropByContent = (bool)value,
+				DisplayName = "Crop by Content",
+				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(propertyName),
+			});
 			inspectorPanel.AddNode(editor.ContainerWidget);
 			okButton.Clicked += () => {
 				result = Result.Ok;
