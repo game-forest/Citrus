@@ -64,14 +64,7 @@ namespace Tangerine.Core
 				Renderer.DepthState = DepthState.DepthDisabled;
 				Renderer.CullMode = CullMode.None;
 				Renderer.Transform2 = widget.LocalToWorldTransform.CalcInversed();
-				try {
-					for (var node = widget.FirstChild; node != null; node = node.NextSibling) {
-						node.RenderChainBuilder?.AddToRenderChain(renderChain);
-					}
-					renderChain.Render();
-				} finally {
-					renderChain.Clear();
-				}
+				renderChain.RenderAndClear();
 				Renderer.PopState();
 				texture.RestoreRenderTarget();
 			}
