@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Lime;
 
 namespace Tangerine.Core
@@ -70,7 +71,7 @@ namespace Tangerine.Core
 			}
 		}
 
-		public static Bitmap ToBitmap(this Widget widget, Rectangle bounds)
+		public static Bitmap ToBitmap(this Widget widget, Rectangle bounds, bool demultiplyAlpha = false)
 		{
 			var pixelScale = Window.Current.PixelScale;
 			var scaledWidth = (int)(bounds.Width * pixelScale);
@@ -93,7 +94,23 @@ namespace Tangerine.Core
 					new Vector2(bounds.Left, bounds.Top) * pixelScale,
 					new Vector2(bounds.Right, bounds.Bottom) * pixelScale
 				);
-				return new Bitmap(texture.GetPixels(), scaledWidth, scaledHeight);
+				var pixels = texture.GetPixels();
+				if (demultiplyAlpha) {
+					pixels = pixels.Select(pixel => {
+						if (pixel.A == 0) {
+							return pixel;
+						}
+						float alpha = pixel.A / 255f;
+						return
+							new Color4(
+								(byte)(pixel.R / alpha),
+								(byte)(pixel.G / alpha),
+								(byte)(pixel.B / alpha),
+								pixel.A
+							);
+					}).ToArray();
+				}
+				return new Bitmap(pixels, scaledWidth, scaledHeight);
 			} finally {
 				widget.Scale = savedScale;
 				widget.Position = savedPosition;
@@ -101,9 +118,9 @@ namespace Tangerine.Core
 			}
 		}
 
-		public static Bitmap ToBitmap(this Widget widget)
+		public static Bitmap ToBitmap(this Widget widget, bool demultiplyAlpha = false)
 		{
-			return ToBitmap(widget, new Rectangle(Vector2.Zero, widget.Size));
+			return ToBitmap(widget, new Rectangle(Vector2.Zero, widget.Size), demultiplyAlpha);
 		}
 
 		public static void AddTransactionClickHandler(this Button button, Action clicked)

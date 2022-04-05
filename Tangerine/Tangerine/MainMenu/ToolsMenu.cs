@@ -59,7 +59,7 @@ namespace Tangerine.MainMenu
 			Document.Current.PreviewScene = true;
 			while (current < end) {
 				currentWindow.InvokeOnRendering(() => {
-					using var bitmap = containerWidget.ToBitmap(bitmapBounds);
+					using var bitmap = containerWidget.ToBitmap(bitmapBounds, options.DemultiplyAlpha);
 					bitmap.SaveTo(Path.Combine(options.Folder, $"{i:D3}.png"));
 				});
 				yield return null;
