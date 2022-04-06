@@ -38,12 +38,13 @@ namespace Tangerine.Core
 		public static void RenderToTexture(
 			this Widget widget,
 			ITexture texture,
-			RenderChain renderChain,
 			Vector2 leftTop,
 			Vector2 rightBottom,
 			bool clearRenderTarget = true
 		) {
 			if (widget.Width > 0 && widget.Height > 0) {
+				var renderChain = new RenderChain();
+				widget.RenderChainBuilder?.AddToRenderChain(renderChain);
 				texture.SetAsRenderTarget();
 				Renderer.PushState(
 					RenderState.ScissorState |
@@ -86,29 +87,25 @@ namespace Tangerine.Core
 				widget.Pivot = Vector2.Zero;
 
 				using var texture = new RenderTexture(scaledWidth, scaledHeight);
-				var renderChain = new RenderChain();
-				widget.RenderChainBuilder?.AddToRenderChain(renderChain);
 				widget.RenderToTexture(
 					texture,
-					renderChain,
 					new Vector2(bounds.Left, bounds.Top) * pixelScale,
 					new Vector2(bounds.Right, bounds.Bottom) * pixelScale
 				);
 				var pixels = texture.GetPixels();
 				if (demultiplyAlpha) {
-					pixels = pixels.Select(pixel => {
-						if (pixel.A == 0) {
-							return pixel;
-						}
-						float alpha = pixel.A / 255f;
-						return
-							new Color4(
+					for (int i = 0; i < pixels.Length; i++) {
+						var pixel = pixels[i];
+						if (pixel.A > 0) {
+							float alpha = pixel.A / 255f;
+							pixels[i] = new Color4(
 								(byte)(pixel.R / alpha),
 								(byte)(pixel.G / alpha),
 								(byte)(pixel.B / alpha),
 								pixel.A
 							);
-					}).ToArray();
+						}
+					}
 				}
 				return new Bitmap(pixels, scaledWidth, scaledHeight);
 			} finally {
