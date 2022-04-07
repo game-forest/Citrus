@@ -699,7 +699,7 @@ namespace Orange
 
 		public static bool CanSetRulePerTarget(string cookingRulePropertyName, Target target)
 		{
-			if (target == null) {
+			if (target == null || target == Target.RootTarget) {
 				return true;
 			}
 			var targetPlatformAttribute = (TargetPlatformsAttribute)typeof(ICookingRules)
