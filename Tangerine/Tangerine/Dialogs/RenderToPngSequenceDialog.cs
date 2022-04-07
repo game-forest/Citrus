@@ -20,6 +20,7 @@ namespace Tangerine.Dialogs
 
 			[TangerineValidRange(1, 1000, WarningLevel = ValidationResult.Error)]
 			public int FPS { get; set; }
+			public bool DemultiplyAlpha { get; set; }
 			public bool CropByContent { get; set; }
 
 			private string folder =
@@ -87,6 +88,13 @@ namespace Tangerine.Dialogs
 			}) {
 				ShowPrefix = false,
 			};
+			inspectorPanel.AddNode(editor.ContainerWidget);
+			propertyName = nameof(RenderToPngSequenceOptions.DemultiplyAlpha);
+			editor = new BooleanPropertyEditor(new PropertyEditorParams(options, propertyName) {
+				PropertySetter = (o, _, value) => ((RenderToPngSequenceOptions)o).DemultiplyAlpha = (bool)value,
+				DisplayName = "Demultiply Alpha",
+				PropertyInfo = typeof(RenderToPngSequenceOptions).GetProperty(propertyName),
+			});
 			inspectorPanel.AddNode(editor.ContainerWidget);
 			propertyName = nameof(RenderToPngSequenceOptions.CropByContent);
 			editor = new BooleanPropertyEditor(new PropertyEditorParams(options, propertyName) {
