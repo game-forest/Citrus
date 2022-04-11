@@ -1,4 +1,3 @@
-using System.Linq;
 using System.ComponentModel.Composition;
 
 namespace Orange

@@ -95,7 +95,9 @@ namespace Orange
 				if (UserInterface.Instance.ShouldUnpackBundles()) {
 					foreach (var bundle in bundles) {
 						Console.WriteLine($"Unpacking bundle '{bundle}'.");
-						UnpackBundle(bundle);
+						var sourcePath = The.Workspace.GetBundlePath(Target.Platform, bundle);
+						var destinationPath = sourcePath + ".Unpacked";
+						BundleUtils.UnpackBundle(sourcePath, destinationPath);
 						UserInterface.Instance.IncreaseProgressBar();
 					}
 				}
@@ -175,65 +177,6 @@ namespace Orange
 				result.Add(path, expandedAlias);
 			}
 			return result;
-		}
-
-		private void UnpackBundle(string bundleName)
-		{
-			var destinationPath = The.Workspace.GetBundlePath(Target.Platform, bundleName) + ".Unpacked";
-			if (!Directory.Exists(destinationPath)) {
-				Directory.CreateDirectory(destinationPath);
-			}
-			using (var source = CreateOutputBundle(bundleName))
-			using (var destination = new VerboseAssetBundle(new UnpackedAssetBundle(destinationPath))) {
-				foreach (var file in destination.EnumerateFiles()) {
-					if (!source.FileExists(file)) {
-						try {
-							destination.DeleteFile(file);
-						} catch (System.Exception e) {
-							Console.WriteLine($"Error: caught an exception when deleting file '{file}': {e}");
-						}
-					}
-				}
-				foreach (var file in source.EnumerateFiles()) {
-					var exists = destination.FileExists(file);
-					if (!exists || destination.GetFileContentsHash(file) != source.GetFileContentsHash(file)) {
-						try {
-							if (exists) {
-								destination.DeleteFile(file);
-							}
-							using var sourceStream = source.OpenFile(file);
-							destination.ImportFile(
-								file,
-								sourceStream,
-								source.GetFileCookingUnitHash(file),
-								source.GetFileAttributes(file)
-							);
-						} catch (System.Exception e) {
-							Console.WriteLine(
-								$"Error: caught an exception when unpacking bundle '{bundleName}', file '{file}': {e}"
-							);
-						}
-					}
-				}
-				try {
-					DeleteEmptyDirectories(destinationPath);
-				} catch (System.Exception e) {
-					Console.WriteLine(
-						$"Error: caught an exception when deleting empty directories at '{destinationPath}': '{e}'."
-					);
-				}
-			}
-
-			static void DeleteEmptyDirectories(string baseDirectory)
-			{
-				foreach (var directory in Directory.GetDirectories(baseDirectory)) {
-					DeleteEmptyDirectories(directory);
-					if (Directory.GetFiles(directory).Length == 0 &&
-						Directory.GetDirectories(directory).Length == 0) {
-						Directory.Delete(directory, false);
-					}
-				}
-			}
 		}
 
 		private void GetBundlesToCook(
@@ -369,43 +312,6 @@ namespace Orange
 				} finally {
 					AssetBundle.SetCurrent(savedInputBundle);
 					BundleBeingCookedName = null;
-				}
-			}
-		}
-
-		private class VerboseAssetBundle : WrappedAssetBundle
-		{
-			private readonly Dictionary<string, SHA256> deletedFiles = new Dictionary<string, SHA256>();
-			public VerboseAssetBundle(AssetBundle bundle) : base(bundle)
-			{ }
-
-			public override void DeleteFile(string path)
-			{
-				deletedFiles.Add(path, GetFileContentsHash(path));
-				base.DeleteFile(path);
-			}
-
-			public override void ImportFile(
-				string path, Stream stream, SHA256 cookingUnitHash, AssetAttributes attributes
-			) {
-				base.ImportFile(path, stream, cookingUnitHash, attributes);
-				if (deletedFiles.TryGetValue(path, out var hash)) {
-					if (hash != GetFileContentsHash(path)) {
-						Console.WriteLine("* " + path);
-					} else {
-						Console.WriteLine("= " + path);
-					}
-					deletedFiles.Remove(path);
-				} else {
-					Console.WriteLine("+ " + path);
-				}
-			}
-
-			public override void Dispose()
-			{
-				base.Dispose();
-				foreach (var (path, _) in deletedFiles) {
-					Console.WriteLine("- " + path);
 				}
 			}
 		}
