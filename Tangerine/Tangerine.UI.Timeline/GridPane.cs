@@ -115,6 +115,9 @@ namespace Tangerine.UI.Timeline
 
 		private void RenderAnimationScope()
 		{
+			if (Document.Current.Animation.IsCompound) {
+				return;
+			}
 			int itemIndex = 0;
 			foreach (var item in Document.Current.VisibleSceneItems) {
 				if (!itemsInAnimationScope.IsItemInAnimationScope(itemIndex++)) {
@@ -356,6 +359,9 @@ namespace Tangerine.UI.Timeline
 			{
 				itemsInAnimationScope.Clear();
 				var animation = Document.Current.Animation;
+				if (animation.IsCompound) {
+					return;
+				}
 				for (var node = Document.Current.Container; node != null; node = node.Parent) {
 					pathToContainer.Add(node);
 				}
