@@ -26,6 +26,8 @@ namespace Tangerine.UI
 
 			public override Encoding Encoding { get; }
 
+			public bool IsAutoscrollEnabled = true;
+
 			public TextViewWriter(ThemedTextView textView)
 			{
 				this.textView = textView;
@@ -66,8 +68,15 @@ namespace Tangerine.UI
 						);
 					}
 					file?.Flush();
-					Application.InvokeOnNextUpdate(textView.ScrollToEnd);
+					if (IsAutoscrollEnabled) {
+						ScrollToEnd();
+					}
 				}
+			}
+
+			public void ScrollToEnd()
+			{
+				Application.InvokeOnNextUpdate(textView.ScrollToEnd);
 			}
 
 			private void ProjectOpening(string projectFilePath)
@@ -121,6 +130,7 @@ namespace Tangerine.UI
 		private float currentFontHeight;
 		private readonly float defaultFontHeight;
 		private List<(Rectangle rect, int line)> highlights;
+		private ToolbarButton autoscrollButton;
 
 		public Console(Panel panel)
 		{
@@ -192,6 +202,21 @@ namespace Tangerine.UI
 				() => isMatchingRegex,
 				_ => { regexButton.Checked = _; }
 			);
+			regexButton.Clicked += () => regexButton.Checked = !regexButton.Checked;
+			autoscrollButton = new ToolbarButton {
+				MinMaxSize = new Vector2(24),
+				Size = new Vector2(24),
+				LayoutCell = new LayoutCell(Alignment.LeftCenter),
+				Anchors = Anchors.Left,
+				Clicked = () => {
+					ToggleAutoscroll();
+					if (textWriter.IsAutoscrollEnabled) {
+						textWriter.ScrollToEnd();
+					}
+				},
+				Texture = IconPool.GetTexture("Tools.ConsoleAutoscroll"),
+				Tooltip = "Autoscroll",
+			};
 			return new Widget {
 				Layout = new HBoxLayout() {
 					Spacing = 4,
@@ -199,6 +224,7 @@ namespace Tangerine.UI
 				Padding = Theme.Metrics.ControlsPadding,
 				LayoutCell = new LayoutCell { StretchX = 2 },
 				Nodes = {
+					autoscrollButton,
 					new ToolbarButton {
 						MinMaxSize = new Vector2(24),
 						Size = new Vector2(24),
@@ -246,14 +272,28 @@ namespace Tangerine.UI
 			};
 		}
 
+		private void ToggleAutoscroll()
+		{
+			textWriter.IsAutoscrollEnabled = !textWriter.IsAutoscrollEnabled;
+			autoscrollButton.Checked = !autoscrollButton.Checked;
+		}
+
+		private void DisableAutoscroll()
+		{
+			textWriter.IsAutoscrollEnabled = false;
+			autoscrollButton.Checked = false;
+		}
+
 		private Widget CreateTextView()
 		{
 			textView = new ThemedTextView {
 				SquashDuplicateLines = true,
 			};
+			textView.Behavior.OnScrollPositionChangedByUser = () => DisableAutoscroll();
 			textWriter = new TextViewWriter(textView) {
 				SystemOut = System.Console.Out,
 			};
+			autoscrollButton.Checked = textWriter.IsAutoscrollEnabled;
 			System.Console.SetOut(textWriter);
 			System.Console.SetError(textWriter);
 			textView.Tasks.Add(ManageTextViewTask);
