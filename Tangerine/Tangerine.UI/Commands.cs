@@ -725,11 +725,21 @@ namespace Tangerine.UI
 	public static class ConsoleCommands
 	{
 		public static readonly ICommand Clear = new Command("Clear", new Shortcut(Modifiers.Command, Key.Delete));
-		public static readonly ICommand ZoomIn = new Command("Zoom In", new Shortcut(Modifiers.Command, Key.Up)) { Icon = IconPool.GetIcon("SceneView.ZoomIn") };
-		public static readonly ICommand ZoomOut = new Command("Zoom Out", new Shortcut(Modifiers.Command, Key.Down)) { Icon = IconPool.GetIcon("SceneView.ZoomOut") };
-		public static readonly ICommand ResetZoom = new Command("Reset Zoom", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.R));
-		public static readonly ICommand RegexMatching = new Command("Regex Matching") { Icon = IconPool.GetIcon("Tools.ConsoleRegex") };
-		public static readonly ICommand CaseSensitiveMatching = new Command("Case Sensitive Matching") { Icon = IconPool.GetIcon("Tools.ConsoleCaseSensitive") };
+		public static readonly ICommand ZoomIn = new Command("Zoom In", new Shortcut(Modifiers.Command, Key.Up)) {
+			Icon = IconPool.GetIcon("SceneView.ZoomIn"),
+		};
+		public static readonly ICommand ZoomOut = new Command("Zoom Out", new Shortcut(Modifiers.Command, Key.Down)) {
+			Icon = IconPool.GetIcon("SceneView.ZoomOut"),
+		};
+		public static readonly ICommand ResetZoom = new Command(
+			"Reset Zoom", new Shortcut(Modifiers.Command | Modifiers.Shift, Key.R)
+		);
+		public static readonly ICommand RegexMatching = new Command("Regex Matching") {
+			Icon = IconPool.GetIcon("Tools.ConsoleRegex"),
+		};
+		public static readonly ICommand CaseSensitiveMatching = new Command("Case Sensitive Matching") {
+			Icon = IconPool.GetIcon("Tools.ConsoleCaseSensitive"),
+		};
 	}
 
 	public static class OrangeCommands
