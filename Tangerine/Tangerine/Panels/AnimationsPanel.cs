@@ -1640,7 +1640,7 @@ namespace Tangerine.Panels
 						}
 						pathTwo.Clear();
 					}
-					return pathOne[^(commonNodeIndex + 1)];
+					return commonNodeIndex == -1 ? null : pathOne[^(commonNodeIndex + 1)];
 				}
 			}
 		}
