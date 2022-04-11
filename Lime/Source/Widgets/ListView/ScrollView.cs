@@ -335,7 +335,9 @@ namespace Lime
 					var stepPerFrame = totalScrollAmount * Task.Current.Delta * wheelScrollingSpeedFactor;
 					var prevScrollPosition = ScrollPosition;
 					ScrollPosition = Mathf.Clamp(ScrollPosition + stepPerFrame, MinScrollPosition, MaxScrollPosition);
-					OnScrollPositionChangedByUser?.Invoke();
+					if (ScrollPosition != prevScrollPosition) {
+						OnScrollPositionChangedByUser?.Invoke();
+					}
 					if (ScrollPosition == MinScrollPosition || ScrollPosition == MaxScrollPosition) {
 						totalScrollAmount = 0f;
 					} else {

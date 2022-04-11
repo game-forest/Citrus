@@ -224,6 +224,7 @@ namespace Tangerine.UI
 				Padding = Theme.Metrics.ControlsPadding,
 				LayoutCell = new LayoutCell { StretchX = 2 },
 				Nodes = {
+					autoscrollButton,
 					new ToolbarButton {
 						MinMaxSize = new Vector2(24),
 						Size = new Vector2(24),
@@ -246,7 +247,6 @@ namespace Tangerine.UI
 					},
 					caseSensitiveButton,
 					regexButton,
-					autoscrollButton,
 					new ThemedSimpleText("Find: ") {
 						LayoutCell = new LayoutCell(Alignment.LeftCenter),
 						Padding = new Thickness(left: 2, right: 2),
@@ -289,7 +289,7 @@ namespace Tangerine.UI
 			textView = new ThemedTextView {
 				SquashDuplicateLines = true,
 			};
-			textView.Behaviour.OnScrollPositionChangedByUser = () => DisableAutoscroll();
+			textView.Behavior.OnScrollPositionChangedByUser = () => DisableAutoscroll();
 			textWriter = new TextViewWriter(textView) {
 				SystemOut = System.Console.Out,
 			};
