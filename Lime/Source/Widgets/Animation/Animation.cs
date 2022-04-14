@@ -449,7 +449,9 @@ namespace Lime
 		public static bool Contains(
 			this Dictionary<IAnimationHost, HashSet<IAbstractAnimator>> animatorsPerHost, IAnimator animator)
 		{
-			return animatorsPerHost.TryGetValue(animator.Owner, out var animators) && animators.Contains(animator);
+			return animator.Owner != null
+				&& animatorsPerHost.TryGetValue(animator.Owner, out var animators)
+				&& animators.Contains(animator);
 		}
 	}
 }
