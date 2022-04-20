@@ -132,8 +132,11 @@
       <Version>33.0.3</Version>
     </PackageReference>
     <Compile Include="Source\Actions\SaveDeducedCookingRules.cs" />
+    <Compile Include="Source\Actions\UnpackBundle.cs" />
     <Compile Include="Source\AssetCooker\MemoryAssetBundle.cs" />
     <Compile Include="Source\Builder\Dotnet.cs" />
+    <Compile Include="Source\Bundles\BundleUtils.cs" />
+    <Compile Include="Source\Bundles\VerboseAssetBundle.cs" />
     <Compile Include="Source\Plugins\AssemblyTracker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
