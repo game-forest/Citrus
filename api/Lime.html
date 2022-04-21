@@ -347,6 +347,26 @@ does not exist in provided list of files.</p>
       <section></section>
       <h4><a class="xref" href="Lime.DistortionShaderProgram.html">DistortionShaderProgram</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.DocumentHeader.html">DocumentHeader</a></h4>
+      <section><p>When any given citrus document is serialized <a class="xref" href="Lime.DocumentHeader.html">DocumentHeader</a> is serialized
+into the output stream before the document itself.</p>
+<p>Lime.* contains several serializable classes. Some of them (or their derived classes)
+are serialized directly while others are used as elements of those serialized.
+Directly serialized ones determine document root type. So Node is root type of a <code>*.tan</code> document.</p>
+<p>Examples of citrus documents are:</p>
+<ul>
+<li><a class="xref" href="Lime.Node.html">Node</a> (tangerine scene, *.tan),</li>
+<li><a class="xref" href="Lime.Model3DAttachmentParser.ModelAttachmentFormat.html">Model3DAttachmentParser.ModelAttachmentFormat</a> (*.txt),</li>
+<li><a class="xref" href="Lime.TextureAtlasElement.Params.html">TextureAtlasElement.Params</a> (*.atlasPart, but will be renamed to Sprite *.sprite),</li>
+<li><a class="xref" href="Lime.Font.html">Font</a> (*.tft).</li>
+<li><code>Lime.TftConfig</code> (*.tftconf) (defined in Lime/Extensions/DynamicFont)</li>
+<li><a class="xref" href="Lime.PackedAssetBundle.Manifest.html">PackedAssetBundle.Manifest</a> (.Manifest)</li>
+<li><a class="xref" href="Lime.TextureParams.html">TextureParams</a> (*.texture)</li>
+<li><a class="xref" href="Lime.SerializableCompoundFont.html">SerializableCompoundFont</a> (*.cft)</li>
+<li><a class="xref" href="Lime.Animation.AnimationData.html">Animation.AnimationData</a> (*.ant)</li>
+<li><a class="xref" href="Lime.Model3D.html">Model3D</a> (*.t3d) (actually also Node* kind of document)</li>
+</ul>
+</section>
       <h4><a class="xref" href="Lime.DoubleClickGesture.html">DoubleClickGesture</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.DragGesture.html">DragGesture</a></h4>
@@ -476,10 +496,23 @@ Duration is calculated so motion lasts until min speed reached.</p>
       <section></section>
       <h4><a class="xref" href="Lime.Keyframe-1.html">Keyframe&lt;T&gt;</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.LambdaEqualityComparer-1.html">LambdaEqualityComparer&lt;T&gt;</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.LateTasksBehavior.html">LateTasksBehavior</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.LateUpdateStage.html">LateUpdateStage</a></h4>
       <section><p>Identifier for late update stage.</p>
+</section>
+      <h4><a class="xref" href="Lime.LayerMetadata.html">LayerMetadata</a></h4>
+      <section><p>LayerMetadata stores all layer-version pairs of a document.
+For example when scene is serialized
+it may contain Lime.Node derived types from Lime.* as well as application's
+types derived from Lime.Node. Thus such document's metadata should contain
+layer metadata for Citrus e.g. (layer: &quot;citrus&quot;, version: 29) as well as
+layer metadata for an application (e.g. layer: &quot;game&quot;, version: 17).</p>
+</section>
+      <h4><a class="xref" href="Lime.LayerMetadata.LayerVersion.html">LayerMetadata.LayerVersion</a></h4>
+      <section><p>Data structure for compact serialization of layer-version pairs.</p>
 </section>
       <h4><a class="xref" href="Lime.Layout.html">Layout</a></h4>
       <section></section>
@@ -499,7 +532,11 @@ Duration is calculated so motion lasts until min speed reached.</p>
       <section></section>
       <h4><a class="xref" href="Lime.LegacyLateBehaviorContainer.html">LegacyLateBehaviorContainer</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.LimePersistenceContext.html">LimePersistenceContext</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.LinearLayout.html">LinearLayout</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.LinqExtensions.html">LinqExtensions</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.ListView.html">ListView</a></h4>
       <section></section>
@@ -550,6 +587,9 @@ Duration is calculated so motion lasts until min speed reached.</p>
       <section></section>
       <h4><a class="xref" href="Lime.MeshUtils.html">MeshUtils</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.Metadata.html">Metadata</a></h4>
+      <section><p>Metadata for serialized documents.</p>
+</section>
       <h4><a class="xref" href="Lime.Model3D.html">Model3D</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.Model3D.MeshData.html">Model3D.MeshData</a></h4>
@@ -683,6 +723,10 @@ disables rendering of a subtree (including owner) of child objects in the main r
       <section></section>
       <h4><a class="xref" href="Lime.Persistence.html">Persistence</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.PersistenceContext.html">PersistenceContext</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.PersistenceContext.ReadData.html">PersistenceContext.ReadData</a></h4>
+      <section></section>
       <h4><a class="xref" href="Lime.PinchGesture.html">PinchGesture</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.PlatformRenderer.html">PlatformRenderer</a></h4>
@@ -720,6 +764,11 @@ disables rendering of a subtree (including owner) of child objects in the main r
       <section></section>
       <h4><a class="xref" href="Lime.PresenterComponent-1.html">PresenterComponent&lt;T&gt;</a></h4>
       <section></section>
+      <h4><a class="xref" href="Lime.PreserveAttribute.html">PreserveAttribute</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.PreviewMetadata.html">PreviewMetadata</a></h4>
+      <section><p>Stores base-64 encoded document preview.</p>
+</section>
       <h4><a class="xref" href="Lime.PropertyAttributes-1.html">PropertyAttributes&lt;T&gt;</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.QuaternionAnimator.html">QuaternionAnimator</a></h4>
@@ -1418,6 +1467,10 @@ aligned with coordinate axes and fully enclosing some object.</p>
       <h4><a class="xref" href="Lime.IMenu.html">IMenu</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.IMesh.html">IMesh</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.IPersistenceContext.html">IPersistenceContext</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lime.IPersistenceReadData.html">IPersistenceReadData</a></h4>
       <section></section>
       <h4><a class="xref" href="Lime.IPresenter.html">IPresenter</a></h4>
       <section></section>

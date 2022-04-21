@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TextureParams
+    <title>Class CompositeDescriptor
    | Citrus Engine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TextureParams
+    <meta name="title" content="Class CompositeDescriptor
    | Citrus Engine ">
     <meta name="generator" content="docfx 2.58.9.0">
     
@@ -78,24 +78,27 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Lime.TextureParams">
+            <article class="content wrap" id="_content" data-uid="Lime.Schema.CompositeDescriptor">
   
   
-  <h1 id="Lime_TextureParams" data-uid="Lime.TextureParams" class="text-break">Class TextureParams
+  <h1 id="Lime_Schema_CompositeDescriptor" data-uid="Lime.Schema.CompositeDescriptor" class="text-break">Class CompositeDescriptor
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">TextureParams</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IEquatable</span>&lt;<a class="xref" href="Lime.TextureParams.html">TextureParams</a>&gt;</div>
+    <div class="level1"><a class="xref" href="Lime.Schema.BasicDescriptor.html">BasicDescriptor</a></div>
+    <div class="level2"><span class="xref">CompositeDescriptor</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lime.Schema.BasicDescriptor.html#Lime_Schema_BasicDescriptor_Name">BasicDescriptor.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="Lime.Schema.BasicDescriptor.html#Lime_Schema_BasicDescriptor_Attributes">BasicDescriptor.Attributes</a>
+    </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
@@ -118,22 +121,23 @@
       <span class="xref">System.Object.ToString()</span>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.html">Lime</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lime.Schema.html">Lime.Schema</a></h6>
   <h6><strong>Assembly</strong>: Lime.dll</h6>
-  <h5 id="Lime_TextureParams_syntax">Syntax</h5>
+  <h5 id="Lime_Schema_CompositeDescriptor_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class TextureParams : IEquatable&lt;TextureParams&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class CompositeDescriptor : BasicDescriptor</code></pre>
   </div>
   <h3 id="fields">Fields
   </h3>
   
   
-  <h4 id="Lime_TextureParams_Default" data-uid="Lime.TextureParams.Default">Default</h4>
+  <h4 id="Lime_Schema_CompositeDescriptor_BaseTypeName" data-uid="Lime.Schema.CompositeDescriptor.BaseTypeName">BaseTypeName</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static TextureParams Default</code></pre>
+    <pre><code class="lang-csharp hljs">[YuzuMember]
+public string BaseTypeName</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -145,225 +149,47 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Lime.TextureParams.html">TextureParams</a></td>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="properties">Properties
-  </h3>
   
   
-  <a id="Lime_TextureParams_MagFilter_" data-uid="Lime.TextureParams.MagFilter*"></a>
-  <h4 id="Lime_TextureParams_MagFilter" data-uid="Lime.TextureParams.MagFilter">MagFilter</h4>
+  <h4 id="Lime_Schema_CompositeDescriptor_Kind" data-uid="Lime.Schema.CompositeDescriptor.Kind">Kind</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuRequired]
+public CompositeKind Kind</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Schema.CompositeKind.html">CompositeKind</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="Lime_Schema_CompositeDescriptor_Sealed" data-uid="Lime.Schema.CompositeDescriptor.Sealed">Sealed</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[YuzuMember]
-public TextureFilter MagFilter { get; set; }</code></pre>
+public bool Sealed</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureFilter.html">TextureFilter</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TextureParams_MinFilter_" data-uid="Lime.TextureParams.MinFilter*"></a>
-  <h4 id="Lime_TextureParams_MinFilter" data-uid="Lime.TextureParams.MinFilter">MinFilter</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[YuzuMember]
-public TextureFilter MinFilter { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureFilter.html">TextureFilter</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TextureParams_MinMagFilter_" data-uid="Lime.TextureParams.MinMagFilter*"></a>
-  <h4 id="Lime_TextureParams_MinMagFilter" data-uid="Lime.TextureParams.MinMagFilter">MinMagFilter</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TextureFilter MinMagFilter { set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureFilter.html">TextureFilter</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TextureParams_MipmapMode_" data-uid="Lime.TextureParams.MipmapMode*"></a>
-  <h4 id="Lime_TextureParams_MipmapMode" data-uid="Lime.TextureParams.MipmapMode">MipmapMode</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[YuzuMember]
-public TextureMipmapMode MipmapMode { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureMipmapMode.html">TextureMipmapMode</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TextureParams_WrapMode_" data-uid="Lime.TextureParams.WrapMode*"></a>
-  <h4 id="Lime_TextureParams_WrapMode" data-uid="Lime.TextureParams.WrapMode">WrapMode</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TextureWrapMode WrapMode { set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureWrapMode.html">TextureWrapMode</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TextureParams_WrapModeU_" data-uid="Lime.TextureParams.WrapModeU*"></a>
-  <h4 id="Lime_TextureParams_WrapModeU" data-uid="Lime.TextureParams.WrapModeU">WrapModeU</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[YuzuMember]
-[TangerineKeyframeColor(5)]
-public TextureWrapMode WrapModeU { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureWrapMode.html">TextureWrapMode</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Lime_TextureParams_WrapModeV_" data-uid="Lime.TextureParams.WrapModeV*"></a>
-  <h4 id="Lime_TextureParams_WrapModeV" data-uid="Lime.TextureParams.WrapModeV">WrapModeV</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[YuzuMember]
-[TangerineKeyframeColor(6)]
-public TextureWrapMode WrapModeV { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureWrapMode.html">TextureWrapMode</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
-  <a id="Lime_TextureParams_Equals_" data-uid="Lime.TextureParams.Equals*"></a>
-  <h4 id="Lime_TextureParams_Equals_Lime_TextureParams_" data-uid="Lime.TextureParams.Equals(Lime.TextureParams)">Equals(TextureParams)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Equals(TextureParams other)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Lime.TextureParams.html">TextureParams</a></td>
-        <td><span class="parametername">other</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
+  <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -378,10 +204,86 @@ public TextureWrapMode WrapModeV { get; set; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IEquatable&lt;T&gt;</span>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="Lime_Schema_CompositeDescriptor_DefaultValues_" data-uid="Lime.Schema.CompositeDescriptor.DefaultValues*"></a>
+  <h4 id="Lime_Schema_CompositeDescriptor_DefaultValues" data-uid="Lime.Schema.CompositeDescriptor.DefaultValues">DefaultValues</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuMember]
+public Dictionary&lt;string, string&gt; DefaultValues { get; }</code></pre>
   </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Schema_CompositeDescriptor_InterfaceTypeNames_" data-uid="Lime.Schema.CompositeDescriptor.InterfaceTypeNames*"></a>
+  <h4 id="Lime_Schema_CompositeDescriptor_InterfaceTypeNames" data-uid="Lime.Schema.CompositeDescriptor.InterfaceTypeNames">InterfaceTypeNames</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuMember]
+public List&lt;string&gt; InterfaceTypeNames { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Schema_CompositeDescriptor_Members_" data-uid="Lime.Schema.CompositeDescriptor.Members*"></a>
+  <h4 id="Lime_Schema_CompositeDescriptor_Members" data-uid="Lime.Schema.CompositeDescriptor.Members">Members</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[YuzuRequired]
+public List&lt;MemberDescriptor&gt; Members { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="Lime.Schema.MemberDescriptor.html">MemberDescriptor</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           

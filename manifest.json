@@ -162,7 +162,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimableList-1.html",
-          "hash": "RZMuzy+Ek+Rod+l2g6NgPBIqMsnHlchZ88t/5Pk3YUk="
+          "hash": "B+dn6gvJfCVRo7BTI9xxBrOZ8yl85AUfOi9S8iCzoG0="
         }
       },
       "is_incremental": false,
@@ -282,7 +282,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimationClipList.html",
-          "hash": "OFt3K9AbiWnSE2lqlx2oz7zrHFqQVFx3aHkwKIeXopk="
+          "hash": "T04GngqIi7NQIFWWZT7qSqdCGmuBonhl1N6juamrjcw="
         }
       },
       "is_incremental": false,
@@ -294,7 +294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimationCollection.html",
-          "hash": "ZvGsTnyZG6QNfwh9c4Dvzkj4yta6tn5ZnrvI59pIxMY="
+          "hash": "p5670sQu88cfhsXEWE1mquB93P71STnv+GFrgQK1nI0="
         }
       },
       "is_incremental": false,
@@ -378,7 +378,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimationTrackList.html",
-          "hash": "/9i6+FMtAEpytTWWgiSYo4Gv3qYJ2AkNa4xubs8QHMw="
+          "hash": "iNvOnFfy+WaevMHGth+7i1666YuMH4Zrbu6lMNLLt98="
         }
       },
       "is_incremental": false,
@@ -426,7 +426,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.AnimatorList.html",
-          "hash": "naGF9yMumUeKwjZI/pN0RZ2fZOe0FzBwCYQVT1VfZSo="
+          "hash": "gP2wk6RYUphSX2kRdICeyj55chRuSlioDcp8T/CwvWU="
         }
       },
       "is_incremental": false,
@@ -510,7 +510,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Application.html",
-          "hash": "aevewacHGr8EAfAnh1NeyRgkmmLHkXWCU476pM0qenM="
+          "hash": "CR/CzfLsgxSWKHut/l1CTY1wzsOVy/ht5LI5LuCY1us="
         }
       },
       "is_incremental": false,
@@ -1074,7 +1074,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.BoxedKeyframeList-1.html",
-          "hash": "FFcDnPjsC3vd/mANVPKTMRGEtizKpEK0fmPA2HzD/sw="
+          "hash": "uOngi4AEHs0SI3aqzt4w6CNQuFalE4WbJvMarRFxlgs="
         }
       },
       "is_incremental": false,
@@ -1422,7 +1422,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ColorGradient.html",
-          "hash": "WuMsM70u828Jd+4r8p3XgvgdfXzzRDGBxGR3+EOTzQk="
+          "hash": "05dNe8iNwWQTy8lGFw2gh5jbvwKXQIxSMko+gX6IFCM="
         }
       },
       "is_incremental": false,
@@ -1674,7 +1674,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.ComponentCollection-1.html",
-          "hash": "1W+F/dNWV8DNdoPG6h3CekjKpLBigzh1rHU+HsJe4Kw="
+          "hash": "SDeAYDSDE3wB0y0ZF7Cr+PL9FCwk7OZGlZS20Jtjsi0="
         }
       },
       "is_incremental": false,
@@ -1698,7 +1698,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.CompoundPresenter.html",
-          "hash": "P/F0T1IeKLq61KjOD68JQkkHmQTbfAqL3yCx6Pdg/BI="
+          "hash": "Z0qJ2FXb7ahB39wlVjkvh6QMatItJqetorGtFohsP+w="
         }
       },
       "is_incremental": false,
@@ -2071,6 +2071,18 @@
         ".html": {
           "relative_path": "api/Lime.DistortionShaderProgram.html",
           "hash": "Wne44h/BS1I52WDHqQV6xFHpXxbv+8Eyqyp3JDFmK0Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.DocumentHeader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.DocumentHeader.html",
+          "hash": "L/SYl2PeclZNizz1UCO8SC6F+eLGXuZupagIei93MxA="
         }
       },
       "is_incremental": false,
@@ -2454,7 +2466,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.FolderList.html",
-          "hash": "qkaARW8RjZ379u3AY053LOxD8gizN8FWuujvtI8k5iI="
+          "hash": "Yc6R+OQ3teKSAiRl8JOGVv/hPBvId/MyQF7jioWdc9A="
         }
       },
       "is_incremental": false,
@@ -2466,7 +2478,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Font.html",
-          "hash": "bXUE4woLVIlzT18aiOcZLHConOQdYEOPPHYgvqcenTQ="
+          "hash": "QZYytNYyYx/iiIAsfcY4fCrYDVg1ZTKf20XBUug8teQ="
         }
       },
       "is_incremental": false,
@@ -2490,7 +2502,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.FontCharCollection.html",
-          "hash": "hPrWixcYBdeHNzGr89HHCzFnuXLIV6MzbcaqAy31p0I="
+          "hash": "BB+XtDkXE+J9JtycGL492pvrJ3Ma59lDsiOI/t7JZII="
         }
       },
       "is_incremental": false,
@@ -2646,7 +2658,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.GestureList.html",
-          "hash": "iOjXaVVI2C/E0ijzLMvFzslp+3DaO82B4sUvNBXrVy8="
+          "hash": "9OMcoRzyyT9T9zxL0gh8BNJIQCkaAQeSSKggXoyDySo="
         }
       },
       "is_incremental": false,
@@ -3366,7 +3378,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IKeyframeList.html",
-          "hash": "amPvXAoaBHefwWL3Xmsb55+C+umtFbpQR9NLIebEUk8="
+          "hash": "lHDQgu73UYTqV4XTm3PWFWlTLGI3tWZYlHwTKHoAkZ0="
         }
       },
       "is_incremental": false,
@@ -3462,7 +3474,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.IMenu.html",
-          "hash": "Z0BJV9G5X2f4rfvg81FcAR2TynN7KSw4MYqX1I+DY7k="
+          "hash": "U/bgy5+B4DFRIy9ZIy/8DMqEgaa4kM6aFQw77YeeD44="
         }
       },
       "is_incremental": false,
@@ -3475,6 +3487,30 @@
         ".html": {
           "relative_path": "api/Lime.IMesh.html",
           "hash": "fq9AL3NgoCLVNRowBzXJ97BX8zgnH7jxA+3SjCRj2TA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.IPersistenceContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.IPersistenceContext.html",
+          "hash": "66bk67uy+ZD0tUzbHlCSOLIYrCvGHDwRNdN/r9WkltE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.IPersistenceReadData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.IPersistenceReadData.html",
+          "hash": "M6Vk3RKDx8/OmK/UiSiaXUZ7itdWAkTEkLHT98/vh8Y="
         }
       },
       "is_incremental": false,
@@ -3974,6 +4010,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.LambdaEqualityComparer-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.LambdaEqualityComparer-1.html",
+          "hash": "UMLoyMxqZnICfQoajCPKEz587oo3aVWGDzl89HFpSFg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.LateTasksBehavior.yml",
       "output": {
         ".html": {
@@ -3991,6 +4039,30 @@
         ".html": {
           "relative_path": "api/Lime.LateUpdateStage.html",
           "hash": "PJusrnFFgJUaIHlBUGru2NrnPbqguaZO5tdR7e51wkY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.LayerMetadata.LayerVersion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.LayerMetadata.LayerVersion.html",
+          "hash": "EleVUeVW/09zunhGhK5QXH9TGSGlc0WIFd1XchmpniE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.LayerMetadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.LayerMetadata.html",
+          "hash": "pEuWBbErbxaDB60Gv3Qm0M0nwVMao4WFk5XMBMqy5X4="
         }
       },
       "is_incremental": false,
@@ -4118,6 +4190,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.LimePersistenceContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.LimePersistenceContext.html",
+          "hash": "J/uXMDAxUn8S8UM4NPdMiOIdUXtKe3sebH8NIwXcNM0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.LineCap.yml",
       "output": {
         ".html": {
@@ -4142,11 +4226,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.LinqExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.LinqExtensions.html",
+          "hash": "z8dEmzCzxOaZFWKDhBJ3x9pr8QmNcx8FRdVdXK5Lixw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.ListView.yml",
       "output": {
         ".html": {
           "relative_path": "api/Lime.ListView.html",
-          "hash": "bC6YoLDVcyCcKEE6dRQB/GILOs/JSm0iIYnG/KYU0/0="
+          "hash": "2/weTJw0sfHESlqnp9CSI/FP+zrLnU4eJ7h6N9Tyd5U="
         }
       },
       "is_incremental": false,
@@ -4170,7 +4266,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.LocalizationDictionary.html",
-          "hash": "RVKve9HNVg0dCPaVT1QW3LrAC0aKCgn2CJw8M4iZRlg="
+          "hash": "t529Ri9zY6RX2uOuPfNkr+HjVF+QVCyEiH3bUPa7Qvs="
         }
       },
       "is_incremental": false,
@@ -4278,7 +4374,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.MarkerList.html",
-          "hash": "KnABnyE0+exfKk82I3F6qcqZtT5HXXY7QiRO3rUrBs0="
+          "hash": "N5IaDkTwo0IpWDN2Pw+lsooT7Z2r7nCR5+bTtNbF8C0="
         }
       },
       "is_incremental": false,
@@ -4422,7 +4518,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Menu.html",
-          "hash": "c7yBUHhxgU0Bcvd+CvUhzqTG9iDgTl58G8WO/GNdiUY="
+          "hash": "NrLABZj4c5KeNZOgy9DQdNPFCVpIay3/JlzwZP2fMSk="
         }
       },
       "is_incremental": false,
@@ -4519,6 +4615,18 @@
         ".html": {
           "relative_path": "api/Lime.MeshUtils.html",
           "hash": "8JUpvRFJux4X1Y3KQf0JUfe6xt0lEc6FpC5OPWo61SE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Metadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Metadata.html",
+          "hash": "c7KH2k/YvEM9oOe4a2vw61vc4vH+lYD+j8zpNku0Ly8="
         }
       },
       "is_incremental": false,
@@ -5094,7 +5202,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeComponentCollection.html",
-          "hash": "UIA+iEKVfjOzIHGaaNcZpwLeVDqYjzDCaCu8WthXN+U="
+          "hash": "v+NHTLOiQrMZNzpx4klTrpfV+J8o1zFsX94QZ9noJzQ="
         }
       },
       "is_incremental": false,
@@ -5154,7 +5262,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeList.html",
-          "hash": "PuECnkI5IZK5raLfGMDBT2XYIOZlBFdTy83An5CKYv8="
+          "hash": "PBnx5caITFvf/hrsHYbu2w7WwQWqnBe/ZPabsheA2C8="
         }
       },
       "is_incremental": false,
@@ -5190,7 +5298,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeManagerProcessorCollection.html",
-          "hash": "DnCt+E8c1jyEY9+LILC8PRBAIOcVRkPsP4cddf9Lfts="
+          "hash": "2R0TodS+3uWdlNDPUJt66oQRNiM/id46ciCFuGa4qOw="
         }
       },
       "is_incremental": false,
@@ -5214,7 +5322,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.NodeManagerRootNodeCollection.html",
-          "hash": "nxGpAM6gutiz+2e6rHiAVAS6BWdOHQ4u1Lcwb1BaHt4="
+          "hash": "WQwSFWRxkNXd/u5nTs7AsILMebEfYWf3jXCEIorkEdY="
         }
       },
       "is_incremental": false,
@@ -5406,7 +5514,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.PackedAssetBundle.Manifest.html",
-          "hash": "ihBtJcvVKvq1ldGwggJRQltSHDo9CR0ZJHlLTFboW3c="
+          "hash": "K/ce6YB+IRACuNMAE+kep0/sUsKN209OEH1Gz1I8ISA="
         }
       },
       "is_incremental": false,
@@ -5550,7 +5658,31 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Persistence.html",
-          "hash": "WMaCYUyv89eCBkk2tJlxbV2TeZR5tcFj+HxQOnz4tYk="
+          "hash": "Kf3eXH6Okq/DDStmU/8JEhtUL2Wj+6ZqGkeUKiTfQ8s="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.PersistenceContext.ReadData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.PersistenceContext.ReadData.html",
+          "hash": "dFARe4mvmcQMribm8O60p/F5Kaa9V1loJrmIOrzSdtI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.PersistenceContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.PersistenceContext.html",
+          "hash": "NJWes7QcK9+vmQLlfLXnLCREFz4c/XA8ixQjMb204lo="
         }
       },
       "is_incremental": false,
@@ -5786,6 +5918,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Lime.PreserveAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.PreserveAttribute.html",
+          "hash": "ZCKHkN5kMKsCusIESfe5N7ooPTED3WvAS3r9x69S56w="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.PreviewMetadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.PreviewMetadata.html",
+          "hash": "XDcBro5inZ9sFVmSMr9VX5QlA8eQjDO75dLRusDBKBQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Lime.PrimitiveTopology.yml",
       "output": {
         ".html": {
@@ -5814,7 +5970,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Quadrangle.html",
-          "hash": "AVVyBjt06jWIihNcDuiypVsmObpCYKPuNr7q5Euo6H8="
+          "hash": "HSSTUkihvh6agRjEZQWexcoRqo/cWit3A9Zy+PExdrY="
         }
       },
       "is_incremental": false,
@@ -5946,7 +6102,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.RenderObjectList.html",
-          "hash": "KvPD9OmvbadLi/YO/uXiMGhCPTi7lWZjkablmKnZbNM="
+          "hash": "nn8eyMzVDPfYcQFU0JrnoclvWn8CM91uBiIsCNi8OO0="
         }
       },
       "is_incremental": false,
@@ -6271,6 +6427,126 @@
         ".html": {
           "relative_path": "api/Lime.SafeAreaInsetsChangedDelegate.html",
           "hash": "Tm4dGkBWJYSB/c+aOhMHBw4tcA41yo2Q1cpCWE7zJXY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.BasicDescriptor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.BasicDescriptor.html",
+          "hash": "B7pGmAu9vMlireoNjP6rpAhs3q2/u9hSquMRs174d1E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.CompositeDescriptor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.CompositeDescriptor.html",
+          "hash": "KC+JTcoxpE3sxqusOIjA2Pdj+c9z5y1jFoBIKBtGzWk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.CompositeKind.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.CompositeKind.html",
+          "hash": "bUhPh2lWa+JkFu71ZlcAZnsg+BOi3YQZghBoN+EJ70k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.EnumDescriptor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.EnumDescriptor.html",
+          "hash": "O0qKrBG6DGgasC0tFIbiJIgigSC47AWL//sEUn3be/k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.EnumValueDescriptor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.EnumValueDescriptor.html",
+          "hash": "Z5JGvTXjmxzLUtIFq+x2gLsi/ZAuzHzBpCcc99QPdF0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.LayerMetadata.LayerVersion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.LayerMetadata.LayerVersion.html",
+          "hash": "4botzQPX+9cGXt+6OuBFevBwE8hwtS7otNuOGDf99Ao="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.LayerMetadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.LayerMetadata.html",
+          "hash": "wGxX+TTLN6F/tuc33a9yqzBHKfdc657FQhpUABji5XU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.MemberDescriptor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.MemberDescriptor.html",
+          "hash": "SSpV/CzDaofxpnzKQ7W47FVcAZqgu3fo8lzCWQdmxqA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.SchemaStorage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.SchemaStorage.html",
+          "hash": "OeuWP/L1XxF76ix5+B1aZy3Qiur1UwPYrHtC7Tsq1Ag="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Lime.Schema.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Lime.Schema.html",
+          "hash": "ITWMF/ZRJxUnpJLBMAu0NIkCjem+0ofUklKWVkEXpYQ="
         }
       },
       "is_incremental": false,
@@ -6786,7 +7062,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.SignedDistanceFieldComponent.ShadowCollection.html",
-          "hash": "MwcnraQgkVviBl44BPso9RdCq8WSo62kiDj633Xo19c="
+          "hash": "odHS/x+I4DqJ9iqmmOGZKMGjHf7W9SjQFmvf5Yh4h4U="
         }
       },
       "is_incremental": false,
@@ -7218,7 +7494,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Submesh3DCollection.html",
-          "hash": "8jx0huStLS8wYalQe97hoBk1Ozhvmf/s2SA5tbDWRjE="
+          "hash": "ly22Nwk3HdpFlXVUddfm/RlLndMvveZ3soaH2oq44oE="
         }
       },
       "is_incremental": false,
@@ -7710,7 +7986,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TaskList.html",
-          "hash": "+ibzHGgZW0AVVFmdD75FuaJ+2JB07a+J+4EvHBPKjec="
+          "hash": "NYJnMQOO8hDj1GwzxYM8iFSEDDyTIMGQ12VmXbcgVa4="
         }
       },
       "is_incremental": false,
@@ -7914,7 +8190,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TextureParams.html",
-          "hash": "i3PAjDIEYwabq52ZQx56/Ibtm5s1Wk/IILsjnp0LhJQ="
+          "hash": "eoh5BtoQc7NRw5YLji5r45BuNtG8s/w5rw69zDiX7QI="
         }
       },
       "is_incremental": false,
@@ -8538,7 +8814,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.TypedKeyframeList-1.html",
-          "hash": "NePRCJ29Rq9fwv66gA7RIpZqA+qa/sRfkTWOIY/t0Fc="
+          "hash": "RqBszQVswZ5OosxqYlJi8k6FJJB9nh44h76ivNxtUZA="
         }
       },
       "is_incremental": false,
@@ -9126,7 +9402,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.VectorShape.html",
-          "hash": "YxUvjJ1m0c1wVtoLRfh5l0ZnpqDr6s/SsMmmtHdslwk="
+          "hash": "NpGr6zcT3II4VFwdgh/vwjj0UO0IH8UK4cFQ7tm8CZA="
         }
       },
       "is_incremental": false,
@@ -9150,7 +9426,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.Version.html",
-          "hash": "GQBRhb5LiXY2EDFqstK6l3W3DDQc6tf3os+7AqbGA4c="
+          "hash": "c0TWWmz1jFWd8xraXsnImRxGO4PbmBTsQw02JuoY6aI="
         }
       },
       "is_incremental": false,
@@ -9738,7 +10014,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Lime.html",
-          "hash": "KDbIlLf0Yp/totAxsJRRroQtan1XDiNODm+87n7il7k="
+          "hash": "YLmlIFJaDO7U7I/el2pbYyFOaNQm/ynxXSVF8I6LwsI="
         }
       },
       "is_incremental": false,
@@ -9750,7 +10026,7 @@
       "output": {
         ".html": {
           "relative_path": "api/YuzuGenerated.LimeCloner.html",
-          "hash": "+XseR+Ie/TAVw9ALXQGEaAVQW16DSA8R2fn/t9ubllE="
+          "hash": "QB928NDqw9C098epiEA4exBO+SP5UqIxowidmNk6JnI="
         }
       },
       "is_incremental": false,
@@ -9786,7 +10062,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "4tJPfRk5rhAgq/xN9P6OKlwPljMqccIIC9sY2RRQ/1s="
+          "hash": "AClkgMhnlDa1TDS/s/1ASLtoQF2DrtMeWugR1qsWeiQ="
         }
       },
       "is_incremental": false,
@@ -12355,7 +12631,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 814,
+          "total_file_count": 837,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

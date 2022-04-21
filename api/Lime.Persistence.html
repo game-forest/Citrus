@@ -168,6 +168,30 @@
   </h3>
   
   
+  <h4 id="Lime_Persistence_Context" data-uid="Lime.Persistence.Context">Context</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IPersistenceContext Context</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.IPersistenceContext.html">IPersistenceContext</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <h4 id="Lime_Persistence_YuzuJsonOptions" data-uid="Lime.Persistence.YuzuJsonOptions">YuzuJsonOptions</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
@@ -260,51 +284,9 @@
   </table>
   
   
-  <a id="Lime_Persistence_CheckBinarySignature_" data-uid="Lime.Persistence.CheckBinarySignature*"></a>
-  <h4 id="Lime_Persistence_CheckBinarySignature_System_IO_Stream_" data-uid="Lime.Persistence.CheckBinarySignature(System.IO.Stream)">CheckBinarySignature(Stream)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected static bool CheckBinarySignature(Stream stream)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">stream</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
   <a id="Lime_Persistence_Clone_" data-uid="Lime.Persistence.Clone*"></a>
   <h4 id="Lime_Persistence_Clone_System_Object_" data-uid="Lime.Persistence.Clone(System.Object)">Clone(Object)</h4>
-  <div class="markdown level1 summary"><p>Clone object using serialization scheme.</p>
+  <div class="markdown level1 summary"><p>Clone object using Yuzu.Clone.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -348,7 +330,7 @@
   
   <a id="Lime_Persistence_Clone_" data-uid="Lime.Persistence.Clone*"></a>
   <h4 id="Lime_Persistence_Clone__1___0_" data-uid="Lime.Persistence.Clone``1(``0)">Clone&lt;T&gt;(T)</h4>
-  <div class="markdown level1 summary"><p>Clone object using serialization scheme.</p>
+  <div class="markdown level1 summary"><p>Clone object using Yuzu.Clone.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -401,6 +383,48 @@
         <td><span class="parametername">T</span></td>
         <td><p>A type of object that need to be returned.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_DeduceFormat_" data-uid="Lime.Persistence.DeduceFormat*"></a>
+  <h4 id="Lime_Persistence_DeduceFormat_System_IO_Stream_" data-uid="Lime.Persistence.DeduceFormat(System.IO.Stream)">DeduceFormat(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static Persistence.Format DeduceFormat(Stream stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.Persistence.Format.html">Persistence.Format</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -715,6 +739,258 @@
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadMetadataFromCurrentBundle_" data-uid="Lime.Persistence.ReadMetadataFromCurrentBundle*"></a>
+  <h4 id="Lime_Persistence_ReadMetadataFromCurrentBundle_System_String_" data-uid="Lime.Persistence.ReadMetadataFromCurrentBundle(System.String)">ReadMetadataFromCurrentBundle(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Metadata&gt; ReadMetadataFromCurrentBundle(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Metadata.html">Metadata</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadMetadataFromFile_" data-uid="Lime.Persistence.ReadMetadataFromFile*"></a>
+  <h4 id="Lime_Persistence_ReadMetadataFromFile_System_String_" data-uid="Lime.Persistence.ReadMetadataFromFile(System.String)">ReadMetadataFromFile(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Metadata&gt; ReadMetadataFromFile(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Metadata.html">Metadata</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_ReadMetadataFromStream_" data-uid="Lime.Persistence.ReadMetadataFromStream*"></a>
+  <h4 id="Lime_Persistence_ReadMetadataFromStream_System_IO_Stream_" data-uid="Lime.Persistence.ReadMetadataFromStream(System.IO.Stream)">ReadMetadataFromStream(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Metadata&gt; ReadMetadataFromStream(Stream stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lime.Metadata.html">Metadata</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_TryReadDocumentHeaderFromCurrentBundle_" data-uid="Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle*"></a>
+  <h4 id="Lime_Persistence_TryReadDocumentHeaderFromCurrentBundle_System_String_" data-uid="Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle(System.String)">TryReadDocumentHeaderFromCurrentBundle(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocumentHeader TryReadDocumentHeaderFromCurrentBundle(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.DocumentHeader.html">DocumentHeader</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_TryReadDocumentHeaderFromFile_" data-uid="Lime.Persistence.TryReadDocumentHeaderFromFile*"></a>
+  <h4 id="Lime_Persistence_TryReadDocumentHeaderFromFile_System_String_" data-uid="Lime.Persistence.TryReadDocumentHeaderFromFile(System.String)">TryReadDocumentHeaderFromFile(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocumentHeader TryReadDocumentHeaderFromFile(string path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.DocumentHeader.html">DocumentHeader</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Lime_Persistence_TryReadDocumentHeaderFromStream_" data-uid="Lime.Persistence.TryReadDocumentHeaderFromStream*"></a>
+  <h4 id="Lime_Persistence_TryReadDocumentHeaderFromStream_System_IO_Stream_" data-uid="Lime.Persistence.TryReadDocumentHeaderFromStream(System.IO.Stream)">TryReadDocumentHeaderFromStream(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocumentHeader TryReadDocumentHeaderFromStream(Stream stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lime.DocumentHeader.html">DocumentHeader</a></td>
         <td></td>
       </tr>
     </tbody>

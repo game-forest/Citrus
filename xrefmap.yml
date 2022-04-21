@@ -5479,6 +5479,22 @@ references:
   isSpec: "True"
   fullName: Lime.Application.Platform
   nameWithType: Application.Platform
+- uid: Lime.Application.RegisterDataLayers(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name: RegisterDataLayers(IEnumerable<(String Layer, Int32 Version)>)
+  href: api/Lime.Application.html#Lime_Application_RegisterDataLayers_System_Collections_Generic_IEnumerable_System_ValueTuple_System_String_System_Int32___
+  commentId: M:Lime.Application.RegisterDataLayers(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name.vb: RegisterDataLayers(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+  fullName: Lime.Application.RegisterDataLayers(System.Collections.Generic.IEnumerable<System.ValueTuple<System.String, System.Int32>>)
+  fullName.vb: Lime.Application.RegisterDataLayers(System.Collections.Generic.IEnumerable(Of System.ValueTuple(Of System.String, System.Int32)))
+  nameWithType: Application.RegisterDataLayers(IEnumerable<(String Layer, Int32 Version)>)
+  nameWithType.vb: Application.RegisterDataLayers(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+- uid: Lime.Application.RegisterDataLayers*
+  name: RegisterDataLayers
+  href: api/Lime.Application.html#Lime_Application_RegisterDataLayers_
+  commentId: Overload:Lime.Application.RegisterDataLayers
+  isSpec: "True"
+  fullName: Lime.Application.RegisterDataLayers
+  nameWithType: Application.RegisterDataLayers
 - uid: Lime.Application.RenderingBackend
   name: RenderingBackend
   href: api/Lime.Application.html#Lime_Application_RenderingBackend
@@ -17061,6 +17077,18 @@ references:
   isSpec: "True"
   fullName: Lime.DistortionShaderProgram.GetInstance
   nameWithType: DistortionShaderProgram.GetInstance
+- uid: Lime.DocumentHeader
+  name: DocumentHeader
+  href: api/Lime.DocumentHeader.html
+  commentId: T:Lime.DocumentHeader
+  fullName: Lime.DocumentHeader
+  nameWithType: DocumentHeader
+- uid: Lime.DocumentHeader.Metadata
+  name: Metadata
+  href: api/Lime.DocumentHeader.html#Lime_DocumentHeader_Metadata
+  commentId: F:Lime.DocumentHeader.Metadata
+  fullName: Lime.DocumentHeader.Metadata
+  nameWithType: DocumentHeader.Metadata
 - uid: Lime.DoubleClickGesture
   name: DoubleClickGesture
   href: api/Lime.DoubleClickGesture.html
@@ -29206,6 +29234,108 @@ references:
   isSpec: "True"
   fullName: Lime.InvalidBundleVersionException.InvalidBundleVersionException
   nameWithType: InvalidBundleVersionException.InvalidBundleVersionException
+- uid: Lime.IPersistenceContext
+  name: IPersistenceContext
+  href: api/Lime.IPersistenceContext.html
+  commentId: T:Lime.IPersistenceContext
+  fullName: Lime.IPersistenceContext
+  nameWithType: IPersistenceContext
+- uid: Lime.IPersistenceContext.AfterRead*
+  name: AfterRead
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_AfterRead_
+  commentId: Overload:Lime.IPersistenceContext.AfterRead
+  isSpec: "True"
+  fullName: Lime.IPersistenceContext.AfterRead
+  nameWithType: IPersistenceContext.AfterRead
+- uid: Lime.IPersistenceContext.AfterRead``1(Lime.IPersistenceReadData,System.Object)
+  name: AfterRead<T>(IPersistenceReadData, Object)
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_AfterRead__1_Lime_IPersistenceReadData_System_Object_
+  commentId: M:Lime.IPersistenceContext.AfterRead``1(Lime.IPersistenceReadData,System.Object)
+  name.vb: AfterRead(Of T)(IPersistenceReadData, Object)
+  fullName: Lime.IPersistenceContext.AfterRead<T>(Lime.IPersistenceReadData, System.Object)
+  fullName.vb: Lime.IPersistenceContext.AfterRead(Of T)(Lime.IPersistenceReadData, System.Object)
+  nameWithType: IPersistenceContext.AfterRead<T>(IPersistenceReadData, Object)
+  nameWithType.vb: IPersistenceContext.AfterRead(Of T)(IPersistenceReadData, Object)
+- uid: Lime.IPersistenceContext.BeforeRead*
+  name: BeforeRead
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_BeforeRead_
+  commentId: Overload:Lime.IPersistenceContext.BeforeRead
+  isSpec: "True"
+  fullName: Lime.IPersistenceContext.BeforeRead
+  nameWithType: IPersistenceContext.BeforeRead
+- uid: Lime.IPersistenceContext.BeforeRead``1(Lime.Persistence,Yuzu.AbstractDeserializer,System.IO.Stream,Lime.Persistence.Format)
+  name: BeforeRead<T>(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_BeforeRead__1_Lime_Persistence_Yuzu_AbstractDeserializer_System_IO_Stream_Lime_Persistence_Format_
+  commentId: M:Lime.IPersistenceContext.BeforeRead``1(Lime.Persistence,Yuzu.AbstractDeserializer,System.IO.Stream,Lime.Persistence.Format)
+  name.vb: BeforeRead(Of T)(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  fullName: Lime.IPersistenceContext.BeforeRead<T>(Lime.Persistence, Yuzu.AbstractDeserializer, System.IO.Stream, Lime.Persistence.Format)
+  fullName.vb: Lime.IPersistenceContext.BeforeRead(Of T)(Lime.Persistence, Yuzu.AbstractDeserializer, System.IO.Stream, Lime.Persistence.Format)
+  nameWithType: IPersistenceContext.BeforeRead<T>(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  nameWithType.vb: IPersistenceContext.BeforeRead(Of T)(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+- uid: Lime.IPersistenceContext.BeforeWrite(Lime.Persistence,Yuzu.AbstractWriterSerializer,System.IO.Stream,System.Object,Lime.Persistence.Format)
+  name: BeforeWrite(Persistence, AbstractWriterSerializer, Stream, Object, Persistence.Format)
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_BeforeWrite_Lime_Persistence_Yuzu_AbstractWriterSerializer_System_IO_Stream_System_Object_Lime_Persistence_Format_
+  commentId: M:Lime.IPersistenceContext.BeforeWrite(Lime.Persistence,Yuzu.AbstractWriterSerializer,System.IO.Stream,System.Object,Lime.Persistence.Format)
+  fullName: Lime.IPersistenceContext.BeforeWrite(Lime.Persistence, Yuzu.AbstractWriterSerializer, System.IO.Stream, System.Object, Lime.Persistence.Format)
+  nameWithType: IPersistenceContext.BeforeWrite(Persistence, AbstractWriterSerializer, Stream, Object, Persistence.Format)
+- uid: Lime.IPersistenceContext.BeforeWrite*
+  name: BeforeWrite
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_BeforeWrite_
+  commentId: Overload:Lime.IPersistenceContext.BeforeWrite
+  isSpec: "True"
+  fullName: Lime.IPersistenceContext.BeforeWrite
+  nameWithType: IPersistenceContext.BeforeWrite
+- uid: Lime.IPersistenceContext.StoreMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata})
+  name: StoreMetadata(Object, List<Metadata>)
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_StoreMetadata_System_Object_System_Collections_Generic_List_Lime_Metadata__
+  commentId: M:Lime.IPersistenceContext.StoreMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata})
+  name.vb: StoreMetadata(Object, List(Of Metadata))
+  fullName: Lime.IPersistenceContext.StoreMetadata(System.Object, System.Collections.Generic.List<Lime.Metadata>)
+  fullName.vb: Lime.IPersistenceContext.StoreMetadata(System.Object, System.Collections.Generic.List(Of Lime.Metadata))
+  nameWithType: IPersistenceContext.StoreMetadata(Object, List<Metadata>)
+  nameWithType.vb: IPersistenceContext.StoreMetadata(Object, List(Of Metadata))
+- uid: Lime.IPersistenceContext.StoreMetadata*
+  name: StoreMetadata
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_StoreMetadata_
+  commentId: Overload:Lime.IPersistenceContext.StoreMetadata
+  isSpec: "True"
+  fullName: Lime.IPersistenceContext.StoreMetadata
+  nameWithType: IPersistenceContext.StoreMetadata
+- uid: Lime.IPersistenceContext.TryGetMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata}@)
+  name: TryGetMetadata(Object, out List<Metadata>)
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_TryGetMetadata_System_Object_System_Collections_Generic_List_Lime_Metadata___
+  commentId: M:Lime.IPersistenceContext.TryGetMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata}@)
+  name.vb: TryGetMetadata(Object, ByRef List(Of Metadata))
+  fullName: Lime.IPersistenceContext.TryGetMetadata(System.Object, out System.Collections.Generic.List<Lime.Metadata>)
+  fullName.vb: Lime.IPersistenceContext.TryGetMetadata(System.Object, ByRef System.Collections.Generic.List(Of Lime.Metadata))
+  nameWithType: IPersistenceContext.TryGetMetadata(Object, out List<Metadata>)
+  nameWithType.vb: IPersistenceContext.TryGetMetadata(Object, ByRef List(Of Metadata))
+- uid: Lime.IPersistenceContext.TryGetMetadata*
+  name: TryGetMetadata
+  href: api/Lime.IPersistenceContext.html#Lime_IPersistenceContext_TryGetMetadata_
+  commentId: Overload:Lime.IPersistenceContext.TryGetMetadata
+  isSpec: "True"
+  fullName: Lime.IPersistenceContext.TryGetMetadata
+  nameWithType: IPersistenceContext.TryGetMetadata
+- uid: Lime.IPersistenceReadData
+  name: IPersistenceReadData
+  href: api/Lime.IPersistenceReadData.html
+  commentId: T:Lime.IPersistenceReadData
+  fullName: Lime.IPersistenceReadData
+  nameWithType: IPersistenceReadData
+- uid: Lime.IPersistenceReadData.ReplacedStream
+  name: ReplacedStream
+  href: api/Lime.IPersistenceReadData.html#Lime_IPersistenceReadData_ReplacedStream
+  commentId: P:Lime.IPersistenceReadData.ReplacedStream
+  fullName: Lime.IPersistenceReadData.ReplacedStream
+  nameWithType: IPersistenceReadData.ReplacedStream
+- uid: Lime.IPersistenceReadData.ReplacedStream*
+  name: ReplacedStream
+  href: api/Lime.IPersistenceReadData.html#Lime_IPersistenceReadData_ReplacedStream_
+  commentId: Overload:Lime.IPersistenceReadData.ReplacedStream
+  isSpec: "True"
+  fullName: Lime.IPersistenceReadData.ReplacedStream
+  nameWithType: IPersistenceReadData.ReplacedStream
 - uid: Lime.IPresenter
   name: IPresenter
   href: api/Lime.IPresenter.html
@@ -33180,6 +33310,76 @@ references:
   commentId: F:Lime.KeyFunction.Step
   fullName: Lime.KeyFunction.Step
   nameWithType: KeyFunction.Step
+- uid: Lime.LambdaEqualityComparer`1
+  name: LambdaEqualityComparer<T>
+  href: api/Lime.LambdaEqualityComparer-1.html
+  commentId: T:Lime.LambdaEqualityComparer`1
+  name.vb: LambdaEqualityComparer(Of T)
+  fullName: Lime.LambdaEqualityComparer<T>
+  fullName.vb: Lime.LambdaEqualityComparer(Of T)
+  nameWithType: LambdaEqualityComparer<T>
+  nameWithType.vb: LambdaEqualityComparer(Of T)
+- uid: Lime.LambdaEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean})
+  name: LambdaEqualityComparer(Func<T, T, Boolean>)
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1__ctor_System_Func__0__0_System_Boolean__
+  commentId: M:Lime.LambdaEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean})
+  name.vb: LambdaEqualityComparer(Func(Of T, T, Boolean))
+  fullName: Lime.LambdaEqualityComparer<T>.LambdaEqualityComparer(System.Func<T, T, System.Boolean>)
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).LambdaEqualityComparer(System.Func(Of T, T, System.Boolean))
+  nameWithType: LambdaEqualityComparer<T>.LambdaEqualityComparer(Func<T, T, Boolean>)
+  nameWithType.vb: LambdaEqualityComparer(Of T).LambdaEqualityComparer(Func(Of T, T, Boolean))
+- uid: Lime.LambdaEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})
+  name: LambdaEqualityComparer(Func<T, T, Boolean>, Func<T, Int32>)
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1__ctor_System_Func__0__0_System_Boolean__System_Func__0_System_Int32__
+  commentId: M:Lime.LambdaEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})
+  name.vb: LambdaEqualityComparer(Func(Of T, T, Boolean), Func(Of T, Int32))
+  fullName: Lime.LambdaEqualityComparer<T>.LambdaEqualityComparer(System.Func<T, T, System.Boolean>, System.Func<T, System.Int32>)
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).LambdaEqualityComparer(System.Func(Of T, T, System.Boolean), System.Func(Of T, System.Int32))
+  nameWithType: LambdaEqualityComparer<T>.LambdaEqualityComparer(Func<T, T, Boolean>, Func<T, Int32>)
+  nameWithType.vb: LambdaEqualityComparer(Of T).LambdaEqualityComparer(Func(Of T, T, Boolean), Func(Of T, Int32))
+- uid: Lime.LambdaEqualityComparer`1.#ctor*
+  name: LambdaEqualityComparer
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1__ctor_
+  commentId: Overload:Lime.LambdaEqualityComparer`1.#ctor
+  isSpec: "True"
+  fullName: Lime.LambdaEqualityComparer<T>.LambdaEqualityComparer
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).LambdaEqualityComparer
+  nameWithType: LambdaEqualityComparer<T>.LambdaEqualityComparer
+  nameWithType.vb: LambdaEqualityComparer(Of T).LambdaEqualityComparer
+- uid: Lime.LambdaEqualityComparer`1.Equals(`0,`0)
+  name: Equals(T, T)
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1_Equals__0__0_
+  commentId: M:Lime.LambdaEqualityComparer`1.Equals(`0,`0)
+  fullName: Lime.LambdaEqualityComparer<T>.Equals(T, T)
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).Equals(T, T)
+  nameWithType: LambdaEqualityComparer<T>.Equals(T, T)
+  nameWithType.vb: LambdaEqualityComparer(Of T).Equals(T, T)
+- uid: Lime.LambdaEqualityComparer`1.Equals*
+  name: Equals
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1_Equals_
+  commentId: Overload:Lime.LambdaEqualityComparer`1.Equals
+  isSpec: "True"
+  fullName: Lime.LambdaEqualityComparer<T>.Equals
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).Equals
+  nameWithType: LambdaEqualityComparer<T>.Equals
+  nameWithType.vb: LambdaEqualityComparer(Of T).Equals
+- uid: Lime.LambdaEqualityComparer`1.GetHashCode(`0)
+  name: GetHashCode(T)
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1_GetHashCode__0_
+  commentId: M:Lime.LambdaEqualityComparer`1.GetHashCode(`0)
+  fullName: Lime.LambdaEqualityComparer<T>.GetHashCode(T)
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).GetHashCode(T)
+  nameWithType: LambdaEqualityComparer<T>.GetHashCode(T)
+  nameWithType.vb: LambdaEqualityComparer(Of T).GetHashCode(T)
+- uid: Lime.LambdaEqualityComparer`1.GetHashCode*
+  name: GetHashCode
+  href: api/Lime.LambdaEqualityComparer-1.html#Lime_LambdaEqualityComparer_1_GetHashCode_
+  commentId: Overload:Lime.LambdaEqualityComparer`1.GetHashCode
+  isSpec: "True"
+  fullName: Lime.LambdaEqualityComparer<T>.GetHashCode
+  fullName.vb: Lime.LambdaEqualityComparer(Of T).GetHashCode
+  nameWithType: LambdaEqualityComparer<T>.GetHashCode
+  nameWithType.vb: LambdaEqualityComparer(Of T).GetHashCode
 - uid: Lime.LateTasksBehavior
   name: LateTasksBehavior
   href: api/Lime.LateTasksBehavior.html
@@ -33257,6 +33457,158 @@ references:
   commentId: T:Lime.LateUpdateStage
   fullName: Lime.LateUpdateStage
   nameWithType: LateUpdateStage
+- uid: Lime.LayerMetadata
+  name: LayerMetadata
+  href: api/Lime.LayerMetadata.html
+  commentId: T:Lime.LayerMetadata
+  fullName: Lime.LayerMetadata
+  nameWithType: LayerMetadata
+- uid: Lime.LayerMetadata.#ctor
+  name: LayerMetadata()
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata__ctor
+  commentId: M:Lime.LayerMetadata.#ctor
+  fullName: Lime.LayerMetadata.LayerMetadata()
+  nameWithType: LayerMetadata.LayerMetadata()
+- uid: Lime.LayerMetadata.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name: LayerMetadata(IEnumerable<(String Layer, Int32 Version)>)
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata__ctor_System_Collections_Generic_IEnumerable_System_ValueTuple_System_String_System_Int32___
+  commentId: M:Lime.LayerMetadata.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name.vb: LayerMetadata(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+  fullName: Lime.LayerMetadata.LayerMetadata(System.Collections.Generic.IEnumerable<System.ValueTuple<System.String, System.Int32>>)
+  fullName.vb: Lime.LayerMetadata.LayerMetadata(System.Collections.Generic.IEnumerable(Of System.ValueTuple(Of System.String, System.Int32)))
+  nameWithType: LayerMetadata.LayerMetadata(IEnumerable<(String Layer, Int32 Version)>)
+  nameWithType.vb: LayerMetadata.LayerMetadata(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+- uid: Lime.LayerMetadata.#ctor*
+  name: LayerMetadata
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata__ctor_
+  commentId: Overload:Lime.LayerMetadata.#ctor
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.LayerMetadata
+  nameWithType: LayerMetadata.LayerMetadata
+- uid: Lime.LayerMetadata.GetEnumerator
+  name: GetEnumerator()
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_GetEnumerator
+  commentId: M:Lime.LayerMetadata.GetEnumerator
+  fullName: Lime.LayerMetadata.GetEnumerator()
+  nameWithType: LayerMetadata.GetEnumerator()
+- uid: Lime.LayerMetadata.GetEnumerator*
+  name: GetEnumerator
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_GetEnumerator_
+  commentId: Overload:Lime.LayerMetadata.GetEnumerator
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.GetEnumerator
+  nameWithType: LayerMetadata.GetEnumerator
+- uid: Lime.LayerMetadata.Item(System.String)
+  name: Item[String]
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_Item_System_String_
+  commentId: P:Lime.LayerMetadata.Item(System.String)
+  name.vb: Item(String)
+  fullName: Lime.LayerMetadata.Item[System.String]
+  fullName.vb: Lime.LayerMetadata.Item(System.String)
+  nameWithType: LayerMetadata.Item[String]
+  nameWithType.vb: LayerMetadata.Item(String)
+- uid: Lime.LayerMetadata.Item*
+  name: Item
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_Item_
+  commentId: Overload:Lime.LayerMetadata.Item
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.Item
+  nameWithType: LayerMetadata.Item
+- uid: Lime.LayerMetadata.Layers
+  name: Layers
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_Layers
+  commentId: P:Lime.LayerMetadata.Layers
+  fullName: Lime.LayerMetadata.Layers
+  nameWithType: LayerMetadata.Layers
+- uid: Lime.LayerMetadata.Layers*
+  name: Layers
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_Layers_
+  commentId: Overload:Lime.LayerMetadata.Layers
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.Layers
+  nameWithType: LayerMetadata.Layers
+- uid: Lime.LayerMetadata.LayerVersion
+  name: LayerMetadata.LayerVersion
+  href: api/Lime.LayerMetadata.LayerVersion.html
+  commentId: T:Lime.LayerMetadata.LayerVersion
+  fullName: Lime.LayerMetadata.LayerVersion
+  nameWithType: LayerMetadata.LayerVersion
+- uid: Lime.LayerMetadata.LayerVersion.#ctor
+  name: LayerVersion()
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion__ctor
+  commentId: M:Lime.LayerMetadata.LayerVersion.#ctor
+  fullName: Lime.LayerMetadata.LayerVersion.LayerVersion()
+  nameWithType: LayerMetadata.LayerVersion.LayerVersion()
+- uid: Lime.LayerMetadata.LayerVersion.#ctor*
+  name: LayerVersion
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion__ctor_
+  commentId: Overload:Lime.LayerMetadata.LayerVersion.#ctor
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.LayerVersion.LayerVersion
+  nameWithType: LayerMetadata.LayerVersion.LayerVersion
+- uid: Lime.LayerMetadata.LayerVersion.Deconstruct(System.String@,System.Int32@)
+  name: Deconstruct(out String, out Int32)
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion_Deconstruct_System_String__System_Int32__
+  commentId: M:Lime.LayerMetadata.LayerVersion.Deconstruct(System.String@,System.Int32@)
+  name.vb: Deconstruct(ByRef String, ByRef Int32)
+  fullName: Lime.LayerMetadata.LayerVersion.Deconstruct(out System.String, out System.Int32)
+  fullName.vb: Lime.LayerMetadata.LayerVersion.Deconstruct(ByRef System.String, ByRef System.Int32)
+  nameWithType: LayerMetadata.LayerVersion.Deconstruct(out String, out Int32)
+  nameWithType.vb: LayerMetadata.LayerVersion.Deconstruct(ByRef String, ByRef Int32)
+- uid: Lime.LayerMetadata.LayerVersion.Deconstruct*
+  name: Deconstruct
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion_Deconstruct_
+  commentId: Overload:Lime.LayerMetadata.LayerVersion.Deconstruct
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.LayerVersion.Deconstruct
+  nameWithType: LayerMetadata.LayerVersion.Deconstruct
+- uid: Lime.LayerMetadata.LayerVersion.Layer
+  name: Layer
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion_Layer
+  commentId: F:Lime.LayerMetadata.LayerVersion.Layer
+  fullName: Lime.LayerMetadata.LayerVersion.Layer
+  nameWithType: LayerMetadata.LayerVersion.Layer
+- uid: Lime.LayerMetadata.LayerVersion.op_Implicit(System.ValueTuple{System.String,System.Int32})~Lime.LayerMetadata.LayerVersion
+  name: Implicit((String Layer, Int32 Version) to LayerMetadata.LayerVersion)
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion_op_Implicit_System_ValueTuple_System_String_System_Int32___Lime_LayerMetadata_LayerVersion
+  commentId: M:Lime.LayerMetadata.LayerVersion.op_Implicit(System.ValueTuple{System.String,System.Int32})~Lime.LayerMetadata.LayerVersion
+  name.vb: Widening((Layer As String, Version As Int32)(Of String, Int32) to LayerMetadata.LayerVersion)
+  fullName: Lime.LayerMetadata.LayerVersion.Implicit(System.ValueTuple<System.String, System.Int32> to Lime.LayerMetadata.LayerVersion)
+  fullName.vb: Lime.LayerMetadata.LayerVersion.Widening(System.ValueTuple(Of System.String, System.Int32) to Lime.LayerMetadata.LayerVersion)
+  nameWithType: LayerMetadata.LayerVersion.Implicit((String Layer, Int32 Version) to LayerMetadata.LayerVersion)
+  nameWithType.vb: LayerMetadata.LayerVersion.Widening((Layer As String, Version As Int32)(Of String, Int32) to LayerMetadata.LayerVersion)
+- uid: Lime.LayerMetadata.LayerVersion.op_Implicit*
+  name: Implicit
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion_op_Implicit_
+  commentId: Overload:Lime.LayerMetadata.LayerVersion.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: Lime.LayerMetadata.LayerVersion.Implicit
+  fullName.vb: Lime.LayerMetadata.LayerVersion.Widening
+  nameWithType: LayerMetadata.LayerVersion.Implicit
+  nameWithType.vb: LayerMetadata.LayerVersion.Widening
+- uid: Lime.LayerMetadata.LayerVersion.Version
+  name: Version
+  href: api/Lime.LayerMetadata.LayerVersion.html#Lime_LayerMetadata_LayerVersion_Version
+  commentId: F:Lime.LayerMetadata.LayerVersion.Version
+  fullName: Lime.LayerMetadata.LayerVersion.Version
+  nameWithType: LayerMetadata.LayerVersion.Version
+- uid: Lime.LayerMetadata.TryGetLayerVersion(System.String,System.Int32@)
+  name: TryGetLayerVersion(String, out Int32)
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_TryGetLayerVersion_System_String_System_Int32__
+  commentId: M:Lime.LayerMetadata.TryGetLayerVersion(System.String,System.Int32@)
+  name.vb: TryGetLayerVersion(String, ByRef Int32)
+  fullName: Lime.LayerMetadata.TryGetLayerVersion(System.String, out System.Int32)
+  fullName.vb: Lime.LayerMetadata.TryGetLayerVersion(System.String, ByRef System.Int32)
+  nameWithType: LayerMetadata.TryGetLayerVersion(String, out Int32)
+  nameWithType.vb: LayerMetadata.TryGetLayerVersion(String, ByRef Int32)
+- uid: Lime.LayerMetadata.TryGetLayerVersion*
+  name: TryGetLayerVersion
+  href: api/Lime.LayerMetadata.html#Lime_LayerMetadata_TryGetLayerVersion_
+  commentId: Overload:Lime.LayerMetadata.TryGetLayerVersion
+  isSpec: "True"
+  fullName: Lime.LayerMetadata.TryGetLayerVersion
+  nameWithType: LayerMetadata.TryGetLayerVersion
 - uid: Lime.Layout
   name: Layout
   href: api/Lime.Layout.html
@@ -33995,6 +34347,109 @@ references:
   isSpec: "True"
   fullName: Lime.LegacyLateBehaviorContainer.UpdateBehavior
   nameWithType: LegacyLateBehaviorContainer.UpdateBehavior
+- uid: Lime.LimePersistenceContext
+  name: LimePersistenceContext
+  href: api/Lime.LimePersistenceContext.html
+  commentId: T:Lime.LimePersistenceContext
+  fullName: Lime.LimePersistenceContext
+  nameWithType: LimePersistenceContext
+- uid: Lime.LimePersistenceContext.#ctor
+  name: LimePersistenceContext()
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext__ctor
+  commentId: M:Lime.LimePersistenceContext.#ctor
+  fullName: Lime.LimePersistenceContext.LimePersistenceContext()
+  nameWithType: LimePersistenceContext.LimePersistenceContext()
+- uid: Lime.LimePersistenceContext.#ctor*
+  name: LimePersistenceContext
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext__ctor_
+  commentId: Overload:Lime.LimePersistenceContext.#ctor
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.LimePersistenceContext
+  nameWithType: LimePersistenceContext.LimePersistenceContext
+- uid: Lime.LimePersistenceContext.BeforeRead*
+  name: BeforeRead
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_BeforeRead_
+  commentId: Overload:Lime.LimePersistenceContext.BeforeRead
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.BeforeRead
+  nameWithType: LimePersistenceContext.BeforeRead
+- uid: Lime.LimePersistenceContext.BeforeRead``1(Lime.Persistence,Yuzu.AbstractDeserializer,System.IO.Stream,Lime.Persistence.Format)
+  name: BeforeRead<T>(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_BeforeRead__1_Lime_Persistence_Yuzu_AbstractDeserializer_System_IO_Stream_Lime_Persistence_Format_
+  commentId: M:Lime.LimePersistenceContext.BeforeRead``1(Lime.Persistence,Yuzu.AbstractDeserializer,System.IO.Stream,Lime.Persistence.Format)
+  name.vb: BeforeRead(Of T)(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  fullName: Lime.LimePersistenceContext.BeforeRead<T>(Lime.Persistence, Yuzu.AbstractDeserializer, System.IO.Stream, Lime.Persistence.Format)
+  fullName.vb: Lime.LimePersistenceContext.BeforeRead(Of T)(Lime.Persistence, Yuzu.AbstractDeserializer, System.IO.Stream, Lime.Persistence.Format)
+  nameWithType: LimePersistenceContext.BeforeRead<T>(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  nameWithType.vb: LimePersistenceContext.BeforeRead(Of T)(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+- uid: Lime.LimePersistenceContext.BeforeWrite(Lime.Persistence,Yuzu.AbstractWriterSerializer,System.IO.Stream,System.Object,Lime.Persistence.Format)
+  name: BeforeWrite(Persistence, AbstractWriterSerializer, Stream, Object, Persistence.Format)
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_BeforeWrite_Lime_Persistence_Yuzu_AbstractWriterSerializer_System_IO_Stream_System_Object_Lime_Persistence_Format_
+  commentId: M:Lime.LimePersistenceContext.BeforeWrite(Lime.Persistence,Yuzu.AbstractWriterSerializer,System.IO.Stream,System.Object,Lime.Persistence.Format)
+  fullName: Lime.LimePersistenceContext.BeforeWrite(Lime.Persistence, Yuzu.AbstractWriterSerializer, System.IO.Stream, System.Object, Lime.Persistence.Format)
+  nameWithType: LimePersistenceContext.BeforeWrite(Persistence, AbstractWriterSerializer, Stream, Object, Persistence.Format)
+- uid: Lime.LimePersistenceContext.BeforeWrite*
+  name: BeforeWrite
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_BeforeWrite_
+  commentId: Overload:Lime.LimePersistenceContext.BeforeWrite
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.BeforeWrite
+  nameWithType: LimePersistenceContext.BeforeWrite
+- uid: Lime.LimePersistenceContext.EnumerateDataLayers
+  name: EnumerateDataLayers()
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_EnumerateDataLayers
+  commentId: M:Lime.LimePersistenceContext.EnumerateDataLayers
+  fullName: Lime.LimePersistenceContext.EnumerateDataLayers()
+  nameWithType: LimePersistenceContext.EnumerateDataLayers()
+- uid: Lime.LimePersistenceContext.EnumerateDataLayers*
+  name: EnumerateDataLayers
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_EnumerateDataLayers_
+  commentId: Overload:Lime.LimePersistenceContext.EnumerateDataLayers
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.EnumerateDataLayers
+  nameWithType: LimePersistenceContext.EnumerateDataLayers
+- uid: Lime.LimePersistenceContext.GetDataLayersHash
+  name: GetDataLayersHash()
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_GetDataLayersHash
+  commentId: M:Lime.LimePersistenceContext.GetDataLayersHash
+  fullName: Lime.LimePersistenceContext.GetDataLayersHash()
+  nameWithType: LimePersistenceContext.GetDataLayersHash()
+- uid: Lime.LimePersistenceContext.GetDataLayersHash*
+  name: GetDataLayersHash
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_GetDataLayersHash_
+  commentId: Overload:Lime.LimePersistenceContext.GetDataLayersHash
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.GetDataLayersHash
+  nameWithType: LimePersistenceContext.GetDataLayersHash
+- uid: Lime.LimePersistenceContext.IsDocumentHeaderServiced(System.Type)
+  name: IsDocumentHeaderServiced(Type)
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_IsDocumentHeaderServiced_System_Type_
+  commentId: M:Lime.LimePersistenceContext.IsDocumentHeaderServiced(System.Type)
+  fullName: Lime.LimePersistenceContext.IsDocumentHeaderServiced(System.Type)
+  nameWithType: LimePersistenceContext.IsDocumentHeaderServiced(Type)
+- uid: Lime.LimePersistenceContext.IsDocumentHeaderServiced*
+  name: IsDocumentHeaderServiced
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_IsDocumentHeaderServiced_
+  commentId: Overload:Lime.LimePersistenceContext.IsDocumentHeaderServiced
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.IsDocumentHeaderServiced
+  nameWithType: LimePersistenceContext.IsDocumentHeaderServiced
+- uid: Lime.LimePersistenceContext.RegisterDataLayers(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name: RegisterDataLayers(IEnumerable<(String Layer, Int32 Version)>)
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_RegisterDataLayers_System_Collections_Generic_IEnumerable_System_ValueTuple_System_String_System_Int32___
+  commentId: M:Lime.LimePersistenceContext.RegisterDataLayers(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name.vb: RegisterDataLayers(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+  fullName: Lime.LimePersistenceContext.RegisterDataLayers(System.Collections.Generic.IEnumerable<System.ValueTuple<System.String, System.Int32>>)
+  fullName.vb: Lime.LimePersistenceContext.RegisterDataLayers(System.Collections.Generic.IEnumerable(Of System.ValueTuple(Of System.String, System.Int32)))
+  nameWithType: LimePersistenceContext.RegisterDataLayers(IEnumerable<(String Layer, Int32 Version)>)
+  nameWithType.vb: LimePersistenceContext.RegisterDataLayers(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+- uid: Lime.LimePersistenceContext.RegisterDataLayers*
+  name: RegisterDataLayers
+  href: api/Lime.LimePersistenceContext.html#Lime_LimePersistenceContext_RegisterDataLayers_
+  commentId: Overload:Lime.LimePersistenceContext.RegisterDataLayers
+  isSpec: "True"
+  fullName: Lime.LimePersistenceContext.RegisterDataLayers
+  nameWithType: LimePersistenceContext.RegisterDataLayers
 - uid: Lime.LinearLayout
   name: LinearLayout
   href: api/Lime.LinearLayout.html
@@ -34108,6 +34563,60 @@ references:
   commentId: F:Lime.LineCap.Square
   fullName: Lime.LineCap.Square
   nameWithType: LineCap.Square
+- uid: Lime.LinqExtensions
+  name: LinqExtensions
+  href: api/Lime.LinqExtensions.html
+  commentId: T:Lime.LinqExtensions
+  fullName: Lime.LinqExtensions
+  nameWithType: LinqExtensions
+- uid: Lime.LinqExtensions.Distinct*
+  name: Distinct
+  href: api/Lime.LinqExtensions.html#Lime_LinqExtensions_Distinct_
+  commentId: Overload:Lime.LinqExtensions.Distinct
+  isSpec: "True"
+  fullName: Lime.LinqExtensions.Distinct
+  nameWithType: LinqExtensions.Distinct
+- uid: Lime.LinqExtensions.Distinct``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Boolean})
+  name: Distinct<TSource>(IEnumerable<TSource>, Func<TSource, TSource, Boolean>)
+  href: api/Lime.LinqExtensions.html#Lime_LinqExtensions_Distinct__1_System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__
+  commentId: M:Lime.LinqExtensions.Distinct``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Boolean})
+  name.vb: Distinct(Of TSource)(IEnumerable(Of TSource), Func(Of TSource, TSource, Boolean))
+  fullName: Lime.LinqExtensions.Distinct<TSource>(System.Collections.Generic.IEnumerable<TSource>, System.Func<TSource, TSource, System.Boolean>)
+  fullName.vb: Lime.LinqExtensions.Distinct(Of TSource)(System.Collections.Generic.IEnumerable(Of TSource), System.Func(Of TSource, TSource, System.Boolean))
+  nameWithType: LinqExtensions.Distinct<TSource>(IEnumerable<TSource>, Func<TSource, TSource, Boolean>)
+  nameWithType.vb: LinqExtensions.Distinct(Of TSource)(IEnumerable(Of TSource), Func(Of TSource, TSource, Boolean))
+- uid: Lime.LinqExtensions.Except*
+  name: Except
+  href: api/Lime.LinqExtensions.html#Lime_LinqExtensions_Except_
+  commentId: Overload:Lime.LinqExtensions.Except
+  isSpec: "True"
+  fullName: Lime.LinqExtensions.Except
+  nameWithType: LinqExtensions.Except
+- uid: Lime.LinqExtensions.Except``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Boolean})
+  name: Except<TSource>(IEnumerable<TSource>, IEnumerable<TSource>, Func<TSource, TSource, Boolean>)
+  href: api/Lime.LinqExtensions.html#Lime_LinqExtensions_Except__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__
+  commentId: M:Lime.LinqExtensions.Except``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Boolean})
+  name.vb: Except(Of TSource)(IEnumerable(Of TSource), IEnumerable(Of TSource), Func(Of TSource, TSource, Boolean))
+  fullName: Lime.LinqExtensions.Except<TSource>(System.Collections.Generic.IEnumerable<TSource>, System.Collections.Generic.IEnumerable<TSource>, System.Func<TSource, TSource, System.Boolean>)
+  fullName.vb: Lime.LinqExtensions.Except(Of TSource)(System.Collections.Generic.IEnumerable(Of TSource), System.Collections.Generic.IEnumerable(Of TSource), System.Func(Of TSource, TSource, System.Boolean))
+  nameWithType: LinqExtensions.Except<TSource>(IEnumerable<TSource>, IEnumerable<TSource>, Func<TSource, TSource, Boolean>)
+  nameWithType.vb: LinqExtensions.Except(Of TSource)(IEnumerable(Of TSource), IEnumerable(Of TSource), Func(Of TSource, TSource, Boolean))
+- uid: Lime.LinqExtensions.Intersect*
+  name: Intersect
+  href: api/Lime.LinqExtensions.html#Lime_LinqExtensions_Intersect_
+  commentId: Overload:Lime.LinqExtensions.Intersect
+  isSpec: "True"
+  fullName: Lime.LinqExtensions.Intersect
+  nameWithType: LinqExtensions.Intersect
+- uid: Lime.LinqExtensions.Intersect``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Boolean})
+  name: Intersect<T>(IEnumerable<T>, IEnumerable<T>, Func<T, T, Boolean>)
+  href: api/Lime.LinqExtensions.html#Lime_LinqExtensions_Intersect__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEnumerable___0__System_Func___0___0_System_Boolean__
+  commentId: M:Lime.LinqExtensions.Intersect``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Boolean})
+  name.vb: Intersect(Of T)(IEnumerable(Of T), IEnumerable(Of T), Func(Of T, T, Boolean))
+  fullName: Lime.LinqExtensions.Intersect<T>(System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerable<T>, System.Func<T, T, System.Boolean>)
+  fullName.vb: Lime.LinqExtensions.Intersect(Of T)(System.Collections.Generic.IEnumerable(Of T), System.Collections.Generic.IEnumerable(Of T), System.Func(Of T, T, System.Boolean))
+  nameWithType: LinqExtensions.Intersect<T>(IEnumerable<T>, IEnumerable<T>, Func<T, T, Boolean>)
+  nameWithType.vb: LinqExtensions.Intersect(Of T)(IEnumerable(Of T), IEnumerable(Of T), Func(Of T, T, Boolean))
 - uid: Lime.ListView
   name: ListView
   href: api/Lime.ListView.html
@@ -39566,6 +40075,12 @@ references:
   fullName.vb: Lime.MeshUtils.VertexProcessor(Of T)
   nameWithType: MeshUtils.VertexProcessor<T>
   nameWithType.vb: MeshUtils.VertexProcessor(Of T)
+- uid: Lime.Metadata
+  name: Metadata
+  href: api/Lime.Metadata.html
+  commentId: T:Lime.Metadata
+  fullName: Lime.Metadata
+  nameWithType: Metadata
 - uid: Lime.Model3D
   name: Model3D
   href: api/Lime.Model3D.html
@@ -49619,19 +50134,6 @@ references:
   isSpec: "True"
   fullName: Lime.Persistence.CalcObjectCheckSum
   nameWithType: Persistence.CalcObjectCheckSum
-- uid: Lime.Persistence.CheckBinarySignature(System.IO.Stream)
-  name: CheckBinarySignature(Stream)
-  href: api/Lime.Persistence.html#Lime_Persistence_CheckBinarySignature_System_IO_Stream_
-  commentId: M:Lime.Persistence.CheckBinarySignature(System.IO.Stream)
-  fullName: Lime.Persistence.CheckBinarySignature(System.IO.Stream)
-  nameWithType: Persistence.CheckBinarySignature(Stream)
-- uid: Lime.Persistence.CheckBinarySignature*
-  name: CheckBinarySignature
-  href: api/Lime.Persistence.html#Lime_Persistence_CheckBinarySignature_
-  commentId: Overload:Lime.Persistence.CheckBinarySignature
-  isSpec: "True"
-  fullName: Lime.Persistence.CheckBinarySignature
-  nameWithType: Persistence.CheckBinarySignature
 - uid: Lime.Persistence.Clone(System.Object)
   name: Clone(Object)
   href: api/Lime.Persistence.html#Lime_Persistence_Clone_System_Object_
@@ -49654,6 +50156,25 @@ references:
   fullName.vb: Lime.Persistence.Clone(Of T)(T)
   nameWithType: Persistence.Clone<T>(T)
   nameWithType.vb: Persistence.Clone(Of T)(T)
+- uid: Lime.Persistence.Context
+  name: Context
+  href: api/Lime.Persistence.html#Lime_Persistence_Context
+  commentId: F:Lime.Persistence.Context
+  fullName: Lime.Persistence.Context
+  nameWithType: Persistence.Context
+- uid: Lime.Persistence.DeduceFormat(System.IO.Stream)
+  name: DeduceFormat(Stream)
+  href: api/Lime.Persistence.html#Lime_Persistence_DeduceFormat_System_IO_Stream_
+  commentId: M:Lime.Persistence.DeduceFormat(System.IO.Stream)
+  fullName: Lime.Persistence.DeduceFormat(System.IO.Stream)
+  nameWithType: Persistence.DeduceFormat(Stream)
+- uid: Lime.Persistence.DeduceFormat*
+  name: DeduceFormat
+  href: api/Lime.Persistence.html#Lime_Persistence_DeduceFormat_
+  commentId: Overload:Lime.Persistence.DeduceFormat
+  isSpec: "True"
+  fullName: Lime.Persistence.DeduceFormat
+  nameWithType: Persistence.DeduceFormat
 - uid: Lime.Persistence.Format
   name: Persistence.Format
   href: api/Lime.Persistence.Format.html
@@ -49752,6 +50273,84 @@ references:
   fullName.vb: Lime.Persistence.ReadFromString(Of T)(System.String, System.Object)
   nameWithType: Persistence.ReadFromString<T>(String, Object)
   nameWithType.vb: Persistence.ReadFromString(Of T)(String, Object)
+- uid: Lime.Persistence.ReadMetadataFromCurrentBundle(System.String)
+  name: ReadMetadataFromCurrentBundle(String)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadMetadataFromCurrentBundle_System_String_
+  commentId: M:Lime.Persistence.ReadMetadataFromCurrentBundle(System.String)
+  fullName: Lime.Persistence.ReadMetadataFromCurrentBundle(System.String)
+  nameWithType: Persistence.ReadMetadataFromCurrentBundle(String)
+- uid: Lime.Persistence.ReadMetadataFromCurrentBundle*
+  name: ReadMetadataFromCurrentBundle
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadMetadataFromCurrentBundle_
+  commentId: Overload:Lime.Persistence.ReadMetadataFromCurrentBundle
+  isSpec: "True"
+  fullName: Lime.Persistence.ReadMetadataFromCurrentBundle
+  nameWithType: Persistence.ReadMetadataFromCurrentBundle
+- uid: Lime.Persistence.ReadMetadataFromFile(System.String)
+  name: ReadMetadataFromFile(String)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadMetadataFromFile_System_String_
+  commentId: M:Lime.Persistence.ReadMetadataFromFile(System.String)
+  fullName: Lime.Persistence.ReadMetadataFromFile(System.String)
+  nameWithType: Persistence.ReadMetadataFromFile(String)
+- uid: Lime.Persistence.ReadMetadataFromFile*
+  name: ReadMetadataFromFile
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadMetadataFromFile_
+  commentId: Overload:Lime.Persistence.ReadMetadataFromFile
+  isSpec: "True"
+  fullName: Lime.Persistence.ReadMetadataFromFile
+  nameWithType: Persistence.ReadMetadataFromFile
+- uid: Lime.Persistence.ReadMetadataFromStream(System.IO.Stream)
+  name: ReadMetadataFromStream(Stream)
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadMetadataFromStream_System_IO_Stream_
+  commentId: M:Lime.Persistence.ReadMetadataFromStream(System.IO.Stream)
+  fullName: Lime.Persistence.ReadMetadataFromStream(System.IO.Stream)
+  nameWithType: Persistence.ReadMetadataFromStream(Stream)
+- uid: Lime.Persistence.ReadMetadataFromStream*
+  name: ReadMetadataFromStream
+  href: api/Lime.Persistence.html#Lime_Persistence_ReadMetadataFromStream_
+  commentId: Overload:Lime.Persistence.ReadMetadataFromStream
+  isSpec: "True"
+  fullName: Lime.Persistence.ReadMetadataFromStream
+  nameWithType: Persistence.ReadMetadataFromStream
+- uid: Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle(System.String)
+  name: TryReadDocumentHeaderFromCurrentBundle(String)
+  href: api/Lime.Persistence.html#Lime_Persistence_TryReadDocumentHeaderFromCurrentBundle_System_String_
+  commentId: M:Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle(System.String)
+  fullName: Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle(System.String)
+  nameWithType: Persistence.TryReadDocumentHeaderFromCurrentBundle(String)
+- uid: Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle*
+  name: TryReadDocumentHeaderFromCurrentBundle
+  href: api/Lime.Persistence.html#Lime_Persistence_TryReadDocumentHeaderFromCurrentBundle_
+  commentId: Overload:Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle
+  isSpec: "True"
+  fullName: Lime.Persistence.TryReadDocumentHeaderFromCurrentBundle
+  nameWithType: Persistence.TryReadDocumentHeaderFromCurrentBundle
+- uid: Lime.Persistence.TryReadDocumentHeaderFromFile(System.String)
+  name: TryReadDocumentHeaderFromFile(String)
+  href: api/Lime.Persistence.html#Lime_Persistence_TryReadDocumentHeaderFromFile_System_String_
+  commentId: M:Lime.Persistence.TryReadDocumentHeaderFromFile(System.String)
+  fullName: Lime.Persistence.TryReadDocumentHeaderFromFile(System.String)
+  nameWithType: Persistence.TryReadDocumentHeaderFromFile(String)
+- uid: Lime.Persistence.TryReadDocumentHeaderFromFile*
+  name: TryReadDocumentHeaderFromFile
+  href: api/Lime.Persistence.html#Lime_Persistence_TryReadDocumentHeaderFromFile_
+  commentId: Overload:Lime.Persistence.TryReadDocumentHeaderFromFile
+  isSpec: "True"
+  fullName: Lime.Persistence.TryReadDocumentHeaderFromFile
+  nameWithType: Persistence.TryReadDocumentHeaderFromFile
+- uid: Lime.Persistence.TryReadDocumentHeaderFromStream(System.IO.Stream)
+  name: TryReadDocumentHeaderFromStream(Stream)
+  href: api/Lime.Persistence.html#Lime_Persistence_TryReadDocumentHeaderFromStream_System_IO_Stream_
+  commentId: M:Lime.Persistence.TryReadDocumentHeaderFromStream(System.IO.Stream)
+  fullName: Lime.Persistence.TryReadDocumentHeaderFromStream(System.IO.Stream)
+  nameWithType: Persistence.TryReadDocumentHeaderFromStream(Stream)
+- uid: Lime.Persistence.TryReadDocumentHeaderFromStream*
+  name: TryReadDocumentHeaderFromStream
+  href: api/Lime.Persistence.html#Lime_Persistence_TryReadDocumentHeaderFromStream_
+  commentId: Overload:Lime.Persistence.TryReadDocumentHeaderFromStream
+  isSpec: "True"
+  fullName: Lime.Persistence.TryReadDocumentHeaderFromStream
+  nameWithType: Persistence.TryReadDocumentHeaderFromStream
 - uid: Lime.Persistence.WriteToBundle(Lime.AssetBundle,System.String,System.Object,Lime.Persistence.Format,Lime.SHA256,Lime.AssetAttributes)
   name: WriteToBundle(AssetBundle, String, Object, Persistence.Format, SHA256, AssetAttributes)
   href: api/Lime.Persistence.html#Lime_Persistence_WriteToBundle_Lime_AssetBundle_System_String_System_Object_Lime_Persistence_Format_Lime_SHA256_Lime_AssetAttributes_
@@ -49816,6 +50415,169 @@ references:
   commentId: F:Lime.Persistence.YuzuOptions
   fullName: Lime.Persistence.YuzuOptions
   nameWithType: Persistence.YuzuOptions
+- uid: Lime.PersistenceContext
+  name: PersistenceContext
+  href: api/Lime.PersistenceContext.html
+  commentId: T:Lime.PersistenceContext
+  fullName: Lime.PersistenceContext
+  nameWithType: PersistenceContext
+- uid: Lime.PersistenceContext.AfterRead*
+  name: AfterRead
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_AfterRead_
+  commentId: Overload:Lime.PersistenceContext.AfterRead
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.AfterRead
+  nameWithType: PersistenceContext.AfterRead
+- uid: Lime.PersistenceContext.AfterRead``1(Lime.IPersistenceReadData,System.Object)
+  name: AfterRead<T>(IPersistenceReadData, Object)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_AfterRead__1_Lime_IPersistenceReadData_System_Object_
+  commentId: M:Lime.PersistenceContext.AfterRead``1(Lime.IPersistenceReadData,System.Object)
+  name.vb: AfterRead(Of T)(IPersistenceReadData, Object)
+  fullName: Lime.PersistenceContext.AfterRead<T>(Lime.IPersistenceReadData, System.Object)
+  fullName.vb: Lime.PersistenceContext.AfterRead(Of T)(Lime.IPersistenceReadData, System.Object)
+  nameWithType: PersistenceContext.AfterRead<T>(IPersistenceReadData, Object)
+  nameWithType.vb: PersistenceContext.AfterRead(Of T)(IPersistenceReadData, Object)
+- uid: Lime.PersistenceContext.BeforeRead*
+  name: BeforeRead
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_BeforeRead_
+  commentId: Overload:Lime.PersistenceContext.BeforeRead
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.BeforeRead
+  nameWithType: PersistenceContext.BeforeRead
+- uid: Lime.PersistenceContext.BeforeRead``1(Lime.Persistence,Yuzu.AbstractDeserializer,System.IO.Stream,Lime.Persistence.Format)
+  name: BeforeRead<T>(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_BeforeRead__1_Lime_Persistence_Yuzu_AbstractDeserializer_System_IO_Stream_Lime_Persistence_Format_
+  commentId: M:Lime.PersistenceContext.BeforeRead``1(Lime.Persistence,Yuzu.AbstractDeserializer,System.IO.Stream,Lime.Persistence.Format)
+  name.vb: BeforeRead(Of T)(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  fullName: Lime.PersistenceContext.BeforeRead<T>(Lime.Persistence, Yuzu.AbstractDeserializer, System.IO.Stream, Lime.Persistence.Format)
+  fullName.vb: Lime.PersistenceContext.BeforeRead(Of T)(Lime.Persistence, Yuzu.AbstractDeserializer, System.IO.Stream, Lime.Persistence.Format)
+  nameWithType: PersistenceContext.BeforeRead<T>(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+  nameWithType.vb: PersistenceContext.BeforeRead(Of T)(Persistence, AbstractDeserializer, Stream, Persistence.Format)
+- uid: Lime.PersistenceContext.BeforeWrite(Lime.Persistence,Yuzu.AbstractWriterSerializer,System.IO.Stream,System.Object,Lime.Persistence.Format)
+  name: BeforeWrite(Persistence, AbstractWriterSerializer, Stream, Object, Persistence.Format)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_BeforeWrite_Lime_Persistence_Yuzu_AbstractWriterSerializer_System_IO_Stream_System_Object_Lime_Persistence_Format_
+  commentId: M:Lime.PersistenceContext.BeforeWrite(Lime.Persistence,Yuzu.AbstractWriterSerializer,System.IO.Stream,System.Object,Lime.Persistence.Format)
+  fullName: Lime.PersistenceContext.BeforeWrite(Lime.Persistence, Yuzu.AbstractWriterSerializer, System.IO.Stream, System.Object, Lime.Persistence.Format)
+  nameWithType: PersistenceContext.BeforeWrite(Persistence, AbstractWriterSerializer, Stream, Object, Persistence.Format)
+- uid: Lime.PersistenceContext.BeforeWrite*
+  name: BeforeWrite
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_BeforeWrite_
+  commentId: Overload:Lime.PersistenceContext.BeforeWrite
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.BeforeWrite
+  nameWithType: PersistenceContext.BeforeWrite
+- uid: Lime.PersistenceContext.CreateDocumentHeader(System.Object)
+  name: CreateDocumentHeader(Object)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_CreateDocumentHeader_System_Object_
+  commentId: M:Lime.PersistenceContext.CreateDocumentHeader(System.Object)
+  fullName: Lime.PersistenceContext.CreateDocumentHeader(System.Object)
+  nameWithType: PersistenceContext.CreateDocumentHeader(Object)
+- uid: Lime.PersistenceContext.CreateDocumentHeader*
+  name: CreateDocumentHeader
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_CreateDocumentHeader_
+  commentId: Overload:Lime.PersistenceContext.CreateDocumentHeader
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.CreateDocumentHeader
+  nameWithType: PersistenceContext.CreateDocumentHeader
+- uid: Lime.PersistenceContext.CreateDocumentHeader``1
+  name: CreateDocumentHeader<T>()
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_CreateDocumentHeader__1
+  commentId: M:Lime.PersistenceContext.CreateDocumentHeader``1
+  name.vb: CreateDocumentHeader(Of T)()
+  fullName: Lime.PersistenceContext.CreateDocumentHeader<T>()
+  fullName.vb: Lime.PersistenceContext.CreateDocumentHeader(Of T)()
+  nameWithType: PersistenceContext.CreateDocumentHeader<T>()
+  nameWithType.vb: PersistenceContext.CreateDocumentHeader(Of T)()
+- uid: Lime.PersistenceContext.EnumerateDataLayers
+  name: EnumerateDataLayers()
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_EnumerateDataLayers
+  commentId: M:Lime.PersistenceContext.EnumerateDataLayers
+  fullName: Lime.PersistenceContext.EnumerateDataLayers()
+  nameWithType: PersistenceContext.EnumerateDataLayers()
+- uid: Lime.PersistenceContext.EnumerateDataLayers*
+  name: EnumerateDataLayers
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_EnumerateDataLayers_
+  commentId: Overload:Lime.PersistenceContext.EnumerateDataLayers
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.EnumerateDataLayers
+  nameWithType: PersistenceContext.EnumerateDataLayers
+- uid: Lime.PersistenceContext.IsDocumentHeaderServiced(System.Type)
+  name: IsDocumentHeaderServiced(Type)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_IsDocumentHeaderServiced_System_Type_
+  commentId: M:Lime.PersistenceContext.IsDocumentHeaderServiced(System.Type)
+  fullName: Lime.PersistenceContext.IsDocumentHeaderServiced(System.Type)
+  nameWithType: PersistenceContext.IsDocumentHeaderServiced(Type)
+- uid: Lime.PersistenceContext.IsDocumentHeaderServiced*
+  name: IsDocumentHeaderServiced
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_IsDocumentHeaderServiced_
+  commentId: Overload:Lime.PersistenceContext.IsDocumentHeaderServiced
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.IsDocumentHeaderServiced
+  nameWithType: PersistenceContext.IsDocumentHeaderServiced
+- uid: Lime.PersistenceContext.ReadData
+  name: PersistenceContext.ReadData
+  href: api/Lime.PersistenceContext.ReadData.html
+  commentId: T:Lime.PersistenceContext.ReadData
+  fullName: Lime.PersistenceContext.ReadData
+  nameWithType: PersistenceContext.ReadData
+- uid: Lime.PersistenceContext.ReadData.DocumentHeader
+  name: DocumentHeader
+  href: api/Lime.PersistenceContext.ReadData.html#Lime_PersistenceContext_ReadData_DocumentHeader
+  commentId: P:Lime.PersistenceContext.ReadData.DocumentHeader
+  fullName: Lime.PersistenceContext.ReadData.DocumentHeader
+  nameWithType: PersistenceContext.ReadData.DocumentHeader
+- uid: Lime.PersistenceContext.ReadData.DocumentHeader*
+  name: DocumentHeader
+  href: api/Lime.PersistenceContext.ReadData.html#Lime_PersistenceContext_ReadData_DocumentHeader_
+  commentId: Overload:Lime.PersistenceContext.ReadData.DocumentHeader
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.ReadData.DocumentHeader
+  nameWithType: PersistenceContext.ReadData.DocumentHeader
+- uid: Lime.PersistenceContext.ReadData.ReplacedStream
+  name: ReplacedStream
+  href: api/Lime.PersistenceContext.ReadData.html#Lime_PersistenceContext_ReadData_ReplacedStream
+  commentId: P:Lime.PersistenceContext.ReadData.ReplacedStream
+  fullName: Lime.PersistenceContext.ReadData.ReplacedStream
+  nameWithType: PersistenceContext.ReadData.ReplacedStream
+- uid: Lime.PersistenceContext.ReadData.ReplacedStream*
+  name: ReplacedStream
+  href: api/Lime.PersistenceContext.ReadData.html#Lime_PersistenceContext_ReadData_ReplacedStream_
+  commentId: Overload:Lime.PersistenceContext.ReadData.ReplacedStream
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.ReadData.ReplacedStream
+  nameWithType: PersistenceContext.ReadData.ReplacedStream
+- uid: Lime.PersistenceContext.StoreMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata})
+  name: StoreMetadata(Object, List<Metadata>)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_StoreMetadata_System_Object_System_Collections_Generic_List_Lime_Metadata__
+  commentId: M:Lime.PersistenceContext.StoreMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata})
+  name.vb: StoreMetadata(Object, List(Of Metadata))
+  fullName: Lime.PersistenceContext.StoreMetadata(System.Object, System.Collections.Generic.List<Lime.Metadata>)
+  fullName.vb: Lime.PersistenceContext.StoreMetadata(System.Object, System.Collections.Generic.List(Of Lime.Metadata))
+  nameWithType: PersistenceContext.StoreMetadata(Object, List<Metadata>)
+  nameWithType.vb: PersistenceContext.StoreMetadata(Object, List(Of Metadata))
+- uid: Lime.PersistenceContext.StoreMetadata*
+  name: StoreMetadata
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_StoreMetadata_
+  commentId: Overload:Lime.PersistenceContext.StoreMetadata
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.StoreMetadata
+  nameWithType: PersistenceContext.StoreMetadata
+- uid: Lime.PersistenceContext.TryGetMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata}@)
+  name: TryGetMetadata(Object, out List<Metadata>)
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_TryGetMetadata_System_Object_System_Collections_Generic_List_Lime_Metadata___
+  commentId: M:Lime.PersistenceContext.TryGetMetadata(System.Object,System.Collections.Generic.List{Lime.Metadata}@)
+  name.vb: TryGetMetadata(Object, ByRef List(Of Metadata))
+  fullName: Lime.PersistenceContext.TryGetMetadata(System.Object, out System.Collections.Generic.List<Lime.Metadata>)
+  fullName.vb: Lime.PersistenceContext.TryGetMetadata(System.Object, ByRef System.Collections.Generic.List(Of Lime.Metadata))
+  nameWithType: PersistenceContext.TryGetMetadata(Object, out List<Metadata>)
+  nameWithType.vb: PersistenceContext.TryGetMetadata(Object, ByRef List(Of Metadata))
+- uid: Lime.PersistenceContext.TryGetMetadata*
+  name: TryGetMetadata
+  href: api/Lime.PersistenceContext.html#Lime_PersistenceContext_TryGetMetadata_
+  commentId: Overload:Lime.PersistenceContext.TryGetMetadata
+  isSpec: "True"
+  fullName: Lime.PersistenceContext.TryGetMetadata
+  nameWithType: PersistenceContext.TryGetMetadata
 - uid: Lime.PinchGesture
   name: PinchGesture
   href: api/Lime.PinchGesture.html
@@ -51965,6 +52727,43 @@ references:
   fullName.vb: Lime.PresenterComponent(Of T).OnOwnerChanged
   nameWithType: PresenterComponent<T>.OnOwnerChanged
   nameWithType.vb: PresenterComponent(Of T).OnOwnerChanged
+- uid: Lime.PreserveAttribute
+  name: PreserveAttribute
+  href: api/Lime.PreserveAttribute.html
+  commentId: T:Lime.PreserveAttribute
+  fullName: Lime.PreserveAttribute
+  nameWithType: PreserveAttribute
+- uid: Lime.PreserveAttribute.AllMembers
+  name: AllMembers
+  href: api/Lime.PreserveAttribute.html#Lime_PreserveAttribute_AllMembers
+  commentId: F:Lime.PreserveAttribute.AllMembers
+  fullName: Lime.PreserveAttribute.AllMembers
+  nameWithType: PreserveAttribute.AllMembers
+- uid: Lime.PreserveAttribute.Conditional
+  name: Conditional
+  href: api/Lime.PreserveAttribute.html#Lime_PreserveAttribute_Conditional
+  commentId: F:Lime.PreserveAttribute.Conditional
+  fullName: Lime.PreserveAttribute.Conditional
+  nameWithType: PreserveAttribute.Conditional
+- uid: Lime.PreviewMetadata
+  name: PreviewMetadata
+  href: api/Lime.PreviewMetadata.html
+  commentId: T:Lime.PreviewMetadata
+  fullName: Lime.PreviewMetadata
+  nameWithType: PreviewMetadata
+- uid: Lime.PreviewMetadata.Preview
+  name: Preview
+  href: api/Lime.PreviewMetadata.html#Lime_PreviewMetadata_Preview
+  commentId: P:Lime.PreviewMetadata.Preview
+  fullName: Lime.PreviewMetadata.Preview
+  nameWithType: PreviewMetadata.Preview
+- uid: Lime.PreviewMetadata.Preview*
+  name: Preview
+  href: api/Lime.PreviewMetadata.html#Lime_PreviewMetadata_Preview_
+  commentId: Overload:Lime.PreviewMetadata.Preview
+  isSpec: "True"
+  fullName: Lime.PreviewMetadata.Preview
+  nameWithType: PreviewMetadata.Preview
 - uid: Lime.PrimitiveTopology
   name: PrimitiveTopology
   href: api/Lime.PrimitiveTopology.html
@@ -56925,6 +57724,307 @@ references:
   commentId: T:Lime.SafeAreaInsetsChangedDelegate
   fullName: Lime.SafeAreaInsetsChangedDelegate
   nameWithType: SafeAreaInsetsChangedDelegate
+- uid: Lime.Schema
+  name: Lime.Schema
+  href: api/Lime.Schema.html
+  commentId: N:Lime.Schema
+  fullName: Lime.Schema
+  nameWithType: Lime.Schema
+- uid: Lime.Schema.BasicDescriptor
+  name: BasicDescriptor
+  href: api/Lime.Schema.BasicDescriptor.html
+  commentId: T:Lime.Schema.BasicDescriptor
+  fullName: Lime.Schema.BasicDescriptor
+  nameWithType: BasicDescriptor
+- uid: Lime.Schema.BasicDescriptor.Attributes
+  name: Attributes
+  href: api/Lime.Schema.BasicDescriptor.html#Lime_Schema_BasicDescriptor_Attributes
+  commentId: P:Lime.Schema.BasicDescriptor.Attributes
+  fullName: Lime.Schema.BasicDescriptor.Attributes
+  nameWithType: BasicDescriptor.Attributes
+- uid: Lime.Schema.BasicDescriptor.Attributes*
+  name: Attributes
+  href: api/Lime.Schema.BasicDescriptor.html#Lime_Schema_BasicDescriptor_Attributes_
+  commentId: Overload:Lime.Schema.BasicDescriptor.Attributes
+  isSpec: "True"
+  fullName: Lime.Schema.BasicDescriptor.Attributes
+  nameWithType: BasicDescriptor.Attributes
+- uid: Lime.Schema.BasicDescriptor.Name
+  name: Name
+  href: api/Lime.Schema.BasicDescriptor.html#Lime_Schema_BasicDescriptor_Name
+  commentId: F:Lime.Schema.BasicDescriptor.Name
+  fullName: Lime.Schema.BasicDescriptor.Name
+  nameWithType: BasicDescriptor.Name
+- uid: Lime.Schema.CompositeDescriptor
+  name: CompositeDescriptor
+  href: api/Lime.Schema.CompositeDescriptor.html
+  commentId: T:Lime.Schema.CompositeDescriptor
+  fullName: Lime.Schema.CompositeDescriptor
+  nameWithType: CompositeDescriptor
+- uid: Lime.Schema.CompositeDescriptor.BaseTypeName
+  name: BaseTypeName
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_BaseTypeName
+  commentId: F:Lime.Schema.CompositeDescriptor.BaseTypeName
+  fullName: Lime.Schema.CompositeDescriptor.BaseTypeName
+  nameWithType: CompositeDescriptor.BaseTypeName
+- uid: Lime.Schema.CompositeDescriptor.DefaultValues
+  name: DefaultValues
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_DefaultValues
+  commentId: P:Lime.Schema.CompositeDescriptor.DefaultValues
+  fullName: Lime.Schema.CompositeDescriptor.DefaultValues
+  nameWithType: CompositeDescriptor.DefaultValues
+- uid: Lime.Schema.CompositeDescriptor.DefaultValues*
+  name: DefaultValues
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_DefaultValues_
+  commentId: Overload:Lime.Schema.CompositeDescriptor.DefaultValues
+  isSpec: "True"
+  fullName: Lime.Schema.CompositeDescriptor.DefaultValues
+  nameWithType: CompositeDescriptor.DefaultValues
+- uid: Lime.Schema.CompositeDescriptor.InterfaceTypeNames
+  name: InterfaceTypeNames
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_InterfaceTypeNames
+  commentId: P:Lime.Schema.CompositeDescriptor.InterfaceTypeNames
+  fullName: Lime.Schema.CompositeDescriptor.InterfaceTypeNames
+  nameWithType: CompositeDescriptor.InterfaceTypeNames
+- uid: Lime.Schema.CompositeDescriptor.InterfaceTypeNames*
+  name: InterfaceTypeNames
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_InterfaceTypeNames_
+  commentId: Overload:Lime.Schema.CompositeDescriptor.InterfaceTypeNames
+  isSpec: "True"
+  fullName: Lime.Schema.CompositeDescriptor.InterfaceTypeNames
+  nameWithType: CompositeDescriptor.InterfaceTypeNames
+- uid: Lime.Schema.CompositeDescriptor.Kind
+  name: Kind
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_Kind
+  commentId: F:Lime.Schema.CompositeDescriptor.Kind
+  fullName: Lime.Schema.CompositeDescriptor.Kind
+  nameWithType: CompositeDescriptor.Kind
+- uid: Lime.Schema.CompositeDescriptor.Members
+  name: Members
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_Members
+  commentId: P:Lime.Schema.CompositeDescriptor.Members
+  fullName: Lime.Schema.CompositeDescriptor.Members
+  nameWithType: CompositeDescriptor.Members
+- uid: Lime.Schema.CompositeDescriptor.Members*
+  name: Members
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_Members_
+  commentId: Overload:Lime.Schema.CompositeDescriptor.Members
+  isSpec: "True"
+  fullName: Lime.Schema.CompositeDescriptor.Members
+  nameWithType: CompositeDescriptor.Members
+- uid: Lime.Schema.CompositeDescriptor.Sealed
+  name: Sealed
+  href: api/Lime.Schema.CompositeDescriptor.html#Lime_Schema_CompositeDescriptor_Sealed
+  commentId: F:Lime.Schema.CompositeDescriptor.Sealed
+  fullName: Lime.Schema.CompositeDescriptor.Sealed
+  nameWithType: CompositeDescriptor.Sealed
+- uid: Lime.Schema.CompositeKind
+  name: CompositeKind
+  href: api/Lime.Schema.CompositeKind.html
+  commentId: T:Lime.Schema.CompositeKind
+  fullName: Lime.Schema.CompositeKind
+  nameWithType: CompositeKind
+- uid: Lime.Schema.CompositeKind.Class
+  name: Class
+  href: api/Lime.Schema.CompositeKind.html#Lime_Schema_CompositeKind_Class
+  commentId: F:Lime.Schema.CompositeKind.Class
+  fullName: Lime.Schema.CompositeKind.Class
+  nameWithType: CompositeKind.Class
+- uid: Lime.Schema.CompositeKind.Interface
+  name: Interface
+  href: api/Lime.Schema.CompositeKind.html#Lime_Schema_CompositeKind_Interface
+  commentId: F:Lime.Schema.CompositeKind.Interface
+  fullName: Lime.Schema.CompositeKind.Interface
+  nameWithType: CompositeKind.Interface
+- uid: Lime.Schema.CompositeKind.Struct
+  name: Struct
+  href: api/Lime.Schema.CompositeKind.html#Lime_Schema_CompositeKind_Struct
+  commentId: F:Lime.Schema.CompositeKind.Struct
+  fullName: Lime.Schema.CompositeKind.Struct
+  nameWithType: CompositeKind.Struct
+- uid: Lime.Schema.EnumDescriptor
+  name: EnumDescriptor
+  href: api/Lime.Schema.EnumDescriptor.html
+  commentId: T:Lime.Schema.EnumDescriptor
+  fullName: Lime.Schema.EnumDescriptor
+  nameWithType: EnumDescriptor
+- uid: Lime.Schema.EnumDescriptor.Items
+  name: Items
+  href: api/Lime.Schema.EnumDescriptor.html#Lime_Schema_EnumDescriptor_Items
+  commentId: P:Lime.Schema.EnumDescriptor.Items
+  fullName: Lime.Schema.EnumDescriptor.Items
+  nameWithType: EnumDescriptor.Items
+- uid: Lime.Schema.EnumDescriptor.Items*
+  name: Items
+  href: api/Lime.Schema.EnumDescriptor.html#Lime_Schema_EnumDescriptor_Items_
+  commentId: Overload:Lime.Schema.EnumDescriptor.Items
+  isSpec: "True"
+  fullName: Lime.Schema.EnumDescriptor.Items
+  nameWithType: EnumDescriptor.Items
+- uid: Lime.Schema.EnumDescriptor.UnderlyingTypeName
+  name: UnderlyingTypeName
+  href: api/Lime.Schema.EnumDescriptor.html#Lime_Schema_EnumDescriptor_UnderlyingTypeName
+  commentId: F:Lime.Schema.EnumDescriptor.UnderlyingTypeName
+  fullName: Lime.Schema.EnumDescriptor.UnderlyingTypeName
+  nameWithType: EnumDescriptor.UnderlyingTypeName
+- uid: Lime.Schema.EnumValueDescriptor
+  name: EnumValueDescriptor
+  href: api/Lime.Schema.EnumValueDescriptor.html
+  commentId: T:Lime.Schema.EnumValueDescriptor
+  fullName: Lime.Schema.EnumValueDescriptor
+  nameWithType: EnumValueDescriptor
+- uid: Lime.Schema.EnumValueDescriptor.Name
+  name: Name
+  href: api/Lime.Schema.EnumValueDescriptor.html#Lime_Schema_EnumValueDescriptor_Name
+  commentId: F:Lime.Schema.EnumValueDescriptor.Name
+  fullName: Lime.Schema.EnumValueDescriptor.Name
+  nameWithType: EnumValueDescriptor.Name
+- uid: Lime.Schema.EnumValueDescriptor.Value
+  name: Value
+  href: api/Lime.Schema.EnumValueDescriptor.html#Lime_Schema_EnumValueDescriptor_Value
+  commentId: F:Lime.Schema.EnumValueDescriptor.Value
+  fullName: Lime.Schema.EnumValueDescriptor.Value
+  nameWithType: EnumValueDescriptor.Value
+- uid: Lime.Schema.LayerMetadata
+  name: LayerMetadata
+  href: api/Lime.Schema.LayerMetadata.html
+  commentId: T:Lime.Schema.LayerMetadata
+  fullName: Lime.Schema.LayerMetadata
+  nameWithType: LayerMetadata
+- uid: Lime.Schema.LayerMetadata.#ctor
+  name: LayerMetadata()
+  href: api/Lime.Schema.LayerMetadata.html#Lime_Schema_LayerMetadata__ctor
+  commentId: M:Lime.Schema.LayerMetadata.#ctor
+  fullName: Lime.Schema.LayerMetadata.LayerMetadata()
+  nameWithType: LayerMetadata.LayerMetadata()
+- uid: Lime.Schema.LayerMetadata.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name: LayerMetadata(IEnumerable<(String Layer, Int32 Version)>)
+  href: api/Lime.Schema.LayerMetadata.html#Lime_Schema_LayerMetadata__ctor_System_Collections_Generic_IEnumerable_System_ValueTuple_System_String_System_Int32___
+  commentId: M:Lime.Schema.LayerMetadata.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Int32}})
+  name.vb: LayerMetadata(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+  fullName: Lime.Schema.LayerMetadata.LayerMetadata(System.Collections.Generic.IEnumerable<System.ValueTuple<System.String, System.Int32>>)
+  fullName.vb: Lime.Schema.LayerMetadata.LayerMetadata(System.Collections.Generic.IEnumerable(Of System.ValueTuple(Of System.String, System.Int32)))
+  nameWithType: LayerMetadata.LayerMetadata(IEnumerable<(String Layer, Int32 Version)>)
+  nameWithType.vb: LayerMetadata.LayerMetadata(IEnumerable(Of (Layer As String, Version As Int32)(Of String, Int32)))
+- uid: Lime.Schema.LayerMetadata.#ctor*
+  name: LayerMetadata
+  href: api/Lime.Schema.LayerMetadata.html#Lime_Schema_LayerMetadata__ctor_
+  commentId: Overload:Lime.Schema.LayerMetadata.#ctor
+  isSpec: "True"
+  fullName: Lime.Schema.LayerMetadata.LayerMetadata
+  nameWithType: LayerMetadata.LayerMetadata
+- uid: Lime.Schema.LayerMetadata.Layers
+  name: Layers
+  href: api/Lime.Schema.LayerMetadata.html#Lime_Schema_LayerMetadata_Layers
+  commentId: P:Lime.Schema.LayerMetadata.Layers
+  fullName: Lime.Schema.LayerMetadata.Layers
+  nameWithType: LayerMetadata.Layers
+- uid: Lime.Schema.LayerMetadata.Layers*
+  name: Layers
+  href: api/Lime.Schema.LayerMetadata.html#Lime_Schema_LayerMetadata_Layers_
+  commentId: Overload:Lime.Schema.LayerMetadata.Layers
+  isSpec: "True"
+  fullName: Lime.Schema.LayerMetadata.Layers
+  nameWithType: LayerMetadata.Layers
+- uid: Lime.Schema.LayerMetadata.LayerVersion
+  name: LayerMetadata.LayerVersion
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html
+  commentId: T:Lime.Schema.LayerMetadata.LayerVersion
+  fullName: Lime.Schema.LayerMetadata.LayerVersion
+  nameWithType: LayerMetadata.LayerVersion
+- uid: Lime.Schema.LayerMetadata.LayerVersion.#ctor
+  name: LayerVersion()
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html#Lime_Schema_LayerMetadata_LayerVersion__ctor
+  commentId: M:Lime.Schema.LayerMetadata.LayerVersion.#ctor
+  fullName: Lime.Schema.LayerMetadata.LayerVersion.LayerVersion()
+  nameWithType: LayerMetadata.LayerVersion.LayerVersion()
+- uid: Lime.Schema.LayerMetadata.LayerVersion.#ctor*
+  name: LayerVersion
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html#Lime_Schema_LayerMetadata_LayerVersion__ctor_
+  commentId: Overload:Lime.Schema.LayerMetadata.LayerVersion.#ctor
+  isSpec: "True"
+  fullName: Lime.Schema.LayerMetadata.LayerVersion.LayerVersion
+  nameWithType: LayerMetadata.LayerVersion.LayerVersion
+- uid: Lime.Schema.LayerMetadata.LayerVersion.Layer
+  name: Layer
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html#Lime_Schema_LayerMetadata_LayerVersion_Layer
+  commentId: F:Lime.Schema.LayerMetadata.LayerVersion.Layer
+  fullName: Lime.Schema.LayerMetadata.LayerVersion.Layer
+  nameWithType: LayerMetadata.LayerVersion.Layer
+- uid: Lime.Schema.LayerMetadata.LayerVersion.op_Implicit(System.ValueTuple{System.String,System.Int32})~Lime.Schema.LayerMetadata.LayerVersion
+  name: Implicit((String Layer, Int32 Version) to LayerMetadata.LayerVersion)
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html#Lime_Schema_LayerMetadata_LayerVersion_op_Implicit_System_ValueTuple_System_String_System_Int32___Lime_Schema_LayerMetadata_LayerVersion
+  commentId: M:Lime.Schema.LayerMetadata.LayerVersion.op_Implicit(System.ValueTuple{System.String,System.Int32})~Lime.Schema.LayerMetadata.LayerVersion
+  name.vb: Widening((Layer As String, Version As Int32)(Of String, Int32) to LayerMetadata.LayerVersion)
+  fullName: Lime.Schema.LayerMetadata.LayerVersion.Implicit(System.ValueTuple<System.String, System.Int32> to Lime.Schema.LayerMetadata.LayerVersion)
+  fullName.vb: Lime.Schema.LayerMetadata.LayerVersion.Widening(System.ValueTuple(Of System.String, System.Int32) to Lime.Schema.LayerMetadata.LayerVersion)
+  nameWithType: LayerMetadata.LayerVersion.Implicit((String Layer, Int32 Version) to LayerMetadata.LayerVersion)
+  nameWithType.vb: LayerMetadata.LayerVersion.Widening((Layer As String, Version As Int32)(Of String, Int32) to LayerMetadata.LayerVersion)
+- uid: Lime.Schema.LayerMetadata.LayerVersion.op_Implicit*
+  name: Implicit
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html#Lime_Schema_LayerMetadata_LayerVersion_op_Implicit_
+  commentId: Overload:Lime.Schema.LayerMetadata.LayerVersion.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: Lime.Schema.LayerMetadata.LayerVersion.Implicit
+  fullName.vb: Lime.Schema.LayerMetadata.LayerVersion.Widening
+  nameWithType: LayerMetadata.LayerVersion.Implicit
+  nameWithType.vb: LayerMetadata.LayerVersion.Widening
+- uid: Lime.Schema.LayerMetadata.LayerVersion.Version
+  name: Version
+  href: api/Lime.Schema.LayerMetadata.LayerVersion.html#Lime_Schema_LayerMetadata_LayerVersion_Version
+  commentId: F:Lime.Schema.LayerMetadata.LayerVersion.Version
+  fullName: Lime.Schema.LayerMetadata.LayerVersion.Version
+  nameWithType: LayerMetadata.LayerVersion.Version
+- uid: Lime.Schema.MemberDescriptor
+  name: MemberDescriptor
+  href: api/Lime.Schema.MemberDescriptor.html
+  commentId: T:Lime.Schema.MemberDescriptor
+  fullName: Lime.Schema.MemberDescriptor
+  nameWithType: MemberDescriptor
+- uid: Lime.Schema.MemberDescriptor.IsSetterNonPublic
+  name: IsSetterNonPublic
+  href: api/Lime.Schema.MemberDescriptor.html#Lime_Schema_MemberDescriptor_IsSetterNonPublic
+  commentId: F:Lime.Schema.MemberDescriptor.IsSetterNonPublic
+  fullName: Lime.Schema.MemberDescriptor.IsSetterNonPublic
+  nameWithType: MemberDescriptor.IsSetterNonPublic
+- uid: Lime.Schema.MemberDescriptor.IsVirtual
+  name: IsVirtual
+  href: api/Lime.Schema.MemberDescriptor.html#Lime_Schema_MemberDescriptor_IsVirtual
+  commentId: F:Lime.Schema.MemberDescriptor.IsVirtual
+  fullName: Lime.Schema.MemberDescriptor.IsVirtual
+  nameWithType: MemberDescriptor.IsVirtual
+- uid: Lime.Schema.MemberDescriptor.MemberKind
+  name: MemberKind
+  href: api/Lime.Schema.MemberDescriptor.html#Lime_Schema_MemberDescriptor_MemberKind
+  commentId: F:Lime.Schema.MemberDescriptor.MemberKind
+  fullName: Lime.Schema.MemberDescriptor.MemberKind
+  nameWithType: MemberDescriptor.MemberKind
+- uid: Lime.Schema.MemberDescriptor.TypeName
+  name: TypeName
+  href: api/Lime.Schema.MemberDescriptor.html#Lime_Schema_MemberDescriptor_TypeName
+  commentId: F:Lime.Schema.MemberDescriptor.TypeName
+  fullName: Lime.Schema.MemberDescriptor.TypeName
+  nameWithType: MemberDescriptor.TypeName
+- uid: Lime.Schema.SchemaStorage
+  name: SchemaStorage
+  href: api/Lime.Schema.SchemaStorage.html
+  commentId: T:Lime.Schema.SchemaStorage
+  fullName: Lime.Schema.SchemaStorage
+  nameWithType: SchemaStorage
+- uid: Lime.Schema.SchemaStorage.TypeDescriptors
+  name: TypeDescriptors
+  href: api/Lime.Schema.SchemaStorage.html#Lime_Schema_SchemaStorage_TypeDescriptors
+  commentId: P:Lime.Schema.SchemaStorage.TypeDescriptors
+  fullName: Lime.Schema.SchemaStorage.TypeDescriptors
+  nameWithType: SchemaStorage.TypeDescriptors
+- uid: Lime.Schema.SchemaStorage.TypeDescriptors*
+  name: TypeDescriptors
+  href: api/Lime.Schema.SchemaStorage.html#Lime_Schema_SchemaStorage_TypeDescriptors_
+  commentId: Overload:Lime.Schema.SchemaStorage.TypeDescriptors
+  isSpec: "True"
+  fullName: Lime.Schema.SchemaStorage.TypeDescriptors
+  nameWithType: SchemaStorage.TypeDescriptors
 - uid: Lime.ScissorState
   name: ScissorState
   href: api/Lime.ScissorState.html
@@ -73412,19 +74512,18 @@ references:
   commentId: T:Lime.Version
   fullName: Lime.Version
   nameWithType: Version
-- uid: Lime.Version.GetBundleFormatVersion
-  name: GetBundleFormatVersion()
-  href: api/Lime.Version.html#Lime_Version_GetBundleFormatVersion
-  commentId: M:Lime.Version.GetBundleFormatVersion
-  fullName: Lime.Version.GetBundleFormatVersion()
-  nameWithType: Version.GetBundleFormatVersion()
-- uid: Lime.Version.GetBundleFormatVersion*
-  name: GetBundleFormatVersion
-  href: api/Lime.Version.html#Lime_Version_GetBundleFormatVersion_
-  commentId: Overload:Lime.Version.GetBundleFormatVersion
-  isSpec: "True"
-  fullName: Lime.Version.GetBundleFormatVersion
-  nameWithType: Version.GetBundleFormatVersion
+- uid: Lime.Version.BundleFormatVersion
+  name: BundleFormatVersion
+  href: api/Lime.Version.html#Lime_Version_BundleFormatVersion
+  commentId: F:Lime.Version.BundleFormatVersion
+  fullName: Lime.Version.BundleFormatVersion
+  nameWithType: Version.BundleFormatVersion
+- uid: Lime.Version.LimePersistenceSchemaVersion
+  name: LimePersistenceSchemaVersion
+  href: api/Lime.Version.html#Lime_Version_LimePersistenceSchemaVersion
+  commentId: F:Lime.Version.LimePersistenceSchemaVersion
+  fullName: Lime.Version.LimePersistenceSchemaVersion
+  nameWithType: Version.LimePersistenceSchemaVersion
 - uid: Lime.Vertex
   name: Vertex
   href: api/Lime.Vertex.html
@@ -80124,6 +81223,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__DistortionMeshPoint
   nameWithType: LimeCloner.Clone_Lime__DistortionMeshPoint
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__DocumentHeader(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__DocumentHeader(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__DocumentHeader_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__DocumentHeader(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__DocumentHeader(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__DocumentHeader(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__DocumentHeader*
+  name: Clone_Lime__DocumentHeader
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__DocumentHeader_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__DocumentHeader
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__DocumentHeader
+  nameWithType: LimeCloner.Clone_Lime__DocumentHeader
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__EmitterShapePoint(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__EmitterShapePoint(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__EmitterShapePoint_Yuzu_Clone_Cloner_System_Object_
@@ -80748,6 +81860,32 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime__Keyframe_Vector3
   nameWithType: LimeCloner.Clone_Lime__Keyframe_Vector3
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__LayerMetadata(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__LayerMetadata_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__LayerMetadata(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata*
+  name: Clone_Lime__LayerMetadata
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__LayerMetadata_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata
+  nameWithType: LimeCloner.Clone_Lime__LayerMetadata
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata__LayerVersion(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime__LayerMetadata__LayerVersion(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__LayerMetadata__LayerVersion_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata__LayerVersion(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata__LayerVersion(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime__LayerMetadata__LayerVersion(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata__LayerVersion*
+  name: Clone_Lime__LayerMetadata__LayerVersion
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__LayerMetadata__LayerVersion_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata__LayerVersion
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime__LayerMetadata__LayerVersion
+  nameWithType: LimeCloner.Clone_Lime__LayerMetadata__LayerVersion
 - uid: YuzuGenerated.LimeCloner.Clone_Lime__LayoutCell(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime__LayoutCell(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime__LayoutCell_Yuzu_Clone_Cloner_System_Object_
@@ -81762,6 +82900,19 @@ references:
   isSpec: "True"
   fullName: YuzuGenerated.LimeCloner.Clone_Lime_RenderOptimizer__ContentSizeComponent
   nameWithType: LimeCloner.Clone_Lime_RenderOptimizer__ContentSizeComponent
+- uid: YuzuGenerated.LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion(Yuzu.Clone.Cloner,System.Object)
+  name: Clone_Lime_Schema__LayerMetadata__LayerVersion(Cloner, Object)
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime_Schema__LayerMetadata__LayerVersion_Yuzu_Clone_Cloner_System_Object_
+  commentId: M:YuzuGenerated.LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion(Yuzu.Clone.Cloner,System.Object)
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion(Yuzu.Clone.Cloner, System.Object)
+  nameWithType: LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion(Cloner, Object)
+- uid: YuzuGenerated.LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion*
+  name: Clone_Lime_Schema__LayerMetadata__LayerVersion
+  href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime_Schema__LayerMetadata__LayerVersion_
+  commentId: Overload:YuzuGenerated.LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion
+  isSpec: "True"
+  fullName: YuzuGenerated.LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion
+  nameWithType: LimeCloner.Clone_Lime_Schema__LayerMetadata__LayerVersion
 - uid: YuzuGenerated.LimeCloner.Clone_Lime_SignedDistanceField__SDFInnerShadowMaterial(Yuzu.Clone.Cloner,System.Object)
   name: Clone_Lime_SignedDistanceField__SDFInnerShadowMaterial(Cloner, Object)
   href: api/YuzuGenerated.LimeCloner.html#YuzuGenerated_LimeCloner_Clone_Lime_SignedDistanceField__SDFInnerShadowMaterial_Yuzu_Clone_Cloner_System_Object_
